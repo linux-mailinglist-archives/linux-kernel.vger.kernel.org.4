@@ -2,99 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 033166178B9
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 09:33:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D82676178BB
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 09:34:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230307AbiKCIde (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 04:33:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40706 "EHLO
+        id S230368AbiKCIeM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 04:34:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229733AbiKCIdc (ORCPT
+        with ESMTP id S229579AbiKCIeJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 04:33:32 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D40B91163;
-        Thu,  3 Nov 2022 01:33:30 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 2D09222207;
-        Thu,  3 Nov 2022 08:33:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1667464409; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=lW8tq5oEp8fEH7EtnVZjUEBjsnMp73rXze5VdCAXOxQ=;
-        b=mjIZMVd0ZM7fO7d9A8eqEbCu3XQ0/sd59ol7mHMNaRGHy0Of/euQC66bED81re4A0KCFab
-        TDbjQg5fsNt3tBE0niyv724ac843sr3ZVZhtGVHqB017EkaVf7RYqZLcjXl5ofldOSFUsD
-        GOkHicyNXmmyDVz7wXXYq5hJwXR3wdc=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1667464409;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=lW8tq5oEp8fEH7EtnVZjUEBjsnMp73rXze5VdCAXOxQ=;
-        b=mMWuZH57DHFGF2PA9VSi7g2hTnHZ9xbv9Og+AUP02fWcp83Y657n9sx9EEbh5Yj4y8qWmH
-        j2BJEyTOiqt3dVDA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D8B7013AAF;
-        Thu,  3 Nov 2022 08:33:28 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id MvsjNNh8Y2MrPQAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Thu, 03 Nov 2022 08:33:28 +0000
-Message-ID: <f88a5d34-de05-25d7-832d-36b3a3eddd72@suse.cz>
-Date:   Thu, 3 Nov 2022 09:33:28 +0100
+        Thu, 3 Nov 2022 04:34:09 -0400
+Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B6F9B7A
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 01:34:08 -0700 (PDT)
+Received: by mail-io1-xd35.google.com with SMTP id e189so782947iof.1
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 01:34:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=6Oq+O6Y47SDFAKlhB0chB1Q+ihH1iVVVwZ1Mnyqq/3c=;
+        b=RCMa416sd+N+H7/6zfSu9DcS7tvcqYyTk7thNsfqy1OUnzywMYOG3khagDoQrEyxd1
+         HkSV8bQMKfA4+ptP5biWvTwcXM9/RKjttya06encqfAhIwh74Plb5TF7PMXhdiLusdMT
+         JkUOiTjn10IsxhSf1FgoRxYQEtfIGiKHCRuT0yOoql1wYQCssujoVV1WvB+4UF2yzrqr
+         gd6JNepfwkI/K0VwiHgUfLOW67wM5rQmoVjOy2k6F3uq6PhBWsnKmVRzontb40N1lGoR
+         RPt3vXJ3/vG91Bga+sqgCzGNF88abe651nR4T77h3gliXf3crSLA5DQfwXPfv1cni1yF
+         t5/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6Oq+O6Y47SDFAKlhB0chB1Q+ihH1iVVVwZ1Mnyqq/3c=;
+        b=LiBWjb4FaA8gdIEOg8zW9jXwc1i9Ey623hJRrp1mjiH449CJGEPDIHCFtyIaXft57J
+         FdysLytjYrj+S/0hgY3k8tae7q1ZbQhSbnzSxkWpztUMsgyS1HnT1ESHD8Ih6f4gCy1r
+         r0OeAxQa79TxgCU3kkEkqD3c5kx37kZP1t+Uix9MlAldkrf2pHy62b+C8+bBJ2GuTTQj
+         s1pi1R5k/yNFgv+y10ebUy91z8sdHd5my5c7leG5DE+yzt9NHvq+787cN4MaUJvUNbL9
+         yNnS9thUGCCxq6zsSyxb9/QcQQ62R2HSV9qt0W1tYZE77FBh2kCGTLPP9PU1+31ZGa08
+         mgVg==
+X-Gm-Message-State: ACrzQf3CimRTdOCaAHjjq0roHj4ko5vTKlT5+haNrdGmBPi9yS54qehX
+        jKLmwck3q1ftJ85xap8DgcEIgnJU3mPy4CvHln76cA==
+X-Google-Smtp-Source: AMsMyM4RlfafqvelIHRzdV01sypmXD0mWkZass0TYEGiW7YygSgr7RDmb4wBHXm+0MIwNr3E+8faEsfgR0t99I2bWXc=
+X-Received: by 2002:a02:aa91:0:b0:375:4ccf:cf52 with SMTP id
+ u17-20020a02aa91000000b003754ccfcf52mr14345528jai.55.1667464447514; Thu, 03
+ Nov 2022 01:34:07 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH v6 1/4] mm/slub: enable debugging memory wasting of
- kmalloc
-To:     Feng Tang <feng.tang@intel.com>
-Cc:     John Thomson <lists@johnthomson.fastmail.com.au>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        "Hansen, Dave" <dave.hansen@intel.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kasan-dev@googlegroups.com" <kasan-dev@googlegroups.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        John Garry <john.garry@huawei.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
-References: <af2ba83d-c3f4-c6fb-794e-c2c7c0892c44@suse.cz>
- <Y180l6zUnNjdCoaE@feng-clx>
- <c4285caf-277c-45fd-8fc7-8a1d61685ce8@app.fastmail.com>
- <Y1+0sbQ3R4DB46NX@feng-clx>
- <9b71ae3e-7f53-4c9e-90c4-79d3d649f94c@app.fastmail.com>
- <Y2DReuPHZungAGsU@feng-clx>
- <53b53476-bb1e-402e-9f65-fd7f0ecf94c2@app.fastmail.com>
- <Y2DngwUc7cLB0dG7@hyeyoo>
- <29271a2b-cf19-4af9-bfe5-5bcff8a23fda@app.fastmail.com>
- <097d8fba-bd10-a312-24a3-a4068c4f424c@suse.cz> <Y2NXiiAF6V2DnBrB@feng-clx>
-Content-Language: en-US
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <Y2NXiiAF6V2DnBrB@feng-clx>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=ham autolearn_force=no
+References: <20221102035301.512892-1-zhangsong34@huawei.com>
+ <CAKfTPtCcYySw2ZC_pr8=3KFPmAAVN=1h8=5jWkW5YXyy11sehg@mail.gmail.com> <b45f96b6-e0b2-22bb-eda1-2468d6fbe104@huawei.com>
+In-Reply-To: <b45f96b6-e0b2-22bb-eda1-2468d6fbe104@huawei.com>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Thu, 3 Nov 2022 09:33:55 +0100
+Message-ID: <CAKfTPtDrWCenxtVcunjS3pGD81TdLf2EkhO_YcdfxnUHXpVF3w@mail.gmail.com>
+Subject: Re: [PATCH] sched/fair: Introduce priority load balance for CFS
+To:     Song Zhang <zhangsong34@huawei.com>
+Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        mcgrof@kernel.org, keescook@chromium.org, yzaikin@google.com,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -102,96 +71,367 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/3/22 06:54, Feng Tang wrote:
-> On Wed, Nov 02, 2022 at 04:22:37PM +0800, Vlastimil Babka wrote:
->> On 11/1/22 11:33, John Thomson wrote:
-> [...]
->> > 
->> > [    0.000000] Linux version 6.1.0-rc3+ (john@john) (mipsel-buildroot-linux-gnu-gcc.br_real (Buildroot 2021.11-4428-g6b6741b) 12.2.0, GNU ld (GNU Binutils) 2.39) #62 SMP Tue Nov  1 19:49:52 AEST 2022
->> > [    0.000000] slub: __kmem_cache_alloc_lru called with kmem_cache ptr: 0x0
->> > [    0.000000] CPU: 0 PID: 0 Comm: swapper Not tainted 6.1.0-rc3+ #62
->> > [    0.000000] Stack : 810fff78 80084d98 80889d00 00000004 00000000 00000000 80889d5c 80c90000
->> > [    0.000000]         80920000 807bd380 8089d368 80923bd3 00000000 00000001 80889d08 00000000
->> > [    0.000000]         00000000 00000000 807bd380 8084bd51 00000002 00000002 00000001 6d6f4320
->> > [    0.000000]         00000000 80c97ce9 80c97d14 fffffffc 807bd380 00000000 00000003 00000dc0
->> > [    0.000000]         00000000 a0000000 80910000 8110a0b4 00000000 00000020 80010000 80010000
->> > [    0.000000]         ...
->> > [    0.000000] Call Trace:
->> > [    0.000000] [<80008260>] show_stack+0x28/0xf0
->> > [    0.000000] [<8070cdc0>] dump_stack_lvl+0x60/0x80
->> > [    0.000000] [<801c1428>] kmem_cache_alloc+0x5c0/0x740
->> > [    0.000000] [<8092856c>] prom_soc_init+0x1fc/0x2b4
->> > [    0.000000] [<80928060>] prom_init+0x44/0xf0
->> > [    0.000000] [<80929214>] setup_arch+0x4c/0x6a8
->> > [    0.000000] [<809257e0>] start_kernel+0x88/0x7c0
->> > [    0.000000] 
->> > [    0.000000] SoC Type: MediaTek MT7621 ver:1 eco:3
->> 
->> The stack means CONFIG_TRACING=n, is that right?
->  
-> Yes, from the kconfig, CONFIG_TRACING is not set.
-> 
->> That would mean
->> prom_soc_init()
->>   soc_dev_init()
->>     kzalloc() -> kmalloc()
->>       kmalloc_trace()  // after #else /* CONFIG_TRACING */
->>         kmem_cache_alloc(s, flags);
->> 
->> Looks like this path is a small bug in the wasting detection patch, as we
->> throw away size there.
-> 
-> Yes, from the code reading and log from John, it is.
-> 
-> One strange thing is, I reset the code to v6.0, and found that 
-> __kmem_cache_alloc_lru() also access the 's->object_size'
-> 
-> void *__kmem_cache_alloc_lru(struct kmem_cache *s, struct list_lru *lru,
-> 			     gfp_t gfpflags)
+On Thu, 3 Nov 2022 at 04:01, Song Zhang <zhangsong34@huawei.com> wrote:
+>
+> Thanks for your reply!
+>
+> On 2022/11/3 2:01, Vincent Guittot wrote:
+> > On Wed, 2 Nov 2022 at 04:54, Song Zhang <zhangsong34@huawei.com> wrote:
+> >>
+> >
+> > This really looks like a v3 of
+> > https://lore.kernel.org/all/20220810015636.3865248-1-zhangsong34@huawei.com/
+> >
+> > Please keep versioning.
+> >
+> >> Add a new sysctl interface:
+> >> /proc/sys/kernel/sched_prio_load_balance_enabled
+> >
+> > We don't want to add more sysctl knobs for the scheduler, we even
+> > removed some. Knob usually means that you want to fix your use case
+> > but the solution doesn't make sense for all cases.
+> >
+>
+> OK, I will remove this knobs later.
+>
+> >>
+> >> 0: default behavior
+> >> 1: enable priority load balance for CFS
+> >>
+> >> For co-location with idle and non-idle tasks, when CFS do load balance,
+> >> it is reasonable to prefer migrating non-idle tasks and migrating idle
+> >> tasks lastly. This will reduce the interference by SCHED_IDLE tasks
+> >> as much as possible.
+> >
+> > I don't agree that it's always the best choice to migrate a non-idle task 1st.
+> >
+> > CPU0 has 1 non idle task and CPU1 has 1 non idle task and hundreds of
+> > idle task and there is an imbalance between the 2 CPUS: migrating the
+> > non idle task from CPU1 to CPU0 is not the best choice
+> >
+>
+> If the non idle task on CPU1 is running or cache hot, it cannot be
+> migrated and idle tasks can also be migrated from CPU1 to CPU0. So I
+> think it does not matter.
+
+What I mean is that migrating non idle tasks first is not a universal
+win and not always what we want.
+
+>
+> >>
+> >> Testcase:
+> >> - Spawn large number of idle(SCHED_IDLE) tasks occupy CPUs
+> >
+> > What do you mean by a large number ?
+> >
+> >> - Let non-idle tasks compete with idle tasks for CPU time.
+> >>
+> >> Using schbench to test non-idle tasks latency:
+> >> $ ./schbench -m 1 -t 10 -r 30 -R 200
+> >
+> > How many CPUs do you have ?
+> >
+>
+> OK, some details may not be mentioned.
+> My virtual machine has 8 CPUs running with a schbench process and 5000
+> idle tasks. The idle task is a while dead loop process below:
+
+How can you care about latency when you start 10 workers on 8 vCPUs
+with 5000 non idle threads ?
+
+>
+> $ cat idle_process.c
+> int main()
 > {
-> 	void *ret = slab_alloc(s, lru, gfpflags, _RET_IP_, s->object_size);
-> 	...
+>          int i = 0;
+>          while(1) {
+>                  usleep(500);
+>                  for(i = 0; i < 1000000; i++);
+>          }
 > }
-> 
-> And from John's dump_stack() info, this call is also where the NULL pointer
-> happens, which I still can't figue out.
-> 
->> AFAICS before this patch, we "survive" "kmem_cache *s" being NULL as
->> slab_pre_alloc_hook() will happen to return NULL and we bail out from
->> slab_alloc_node(). But this is a side-effect, not an intended protection.
->> Also the CONFIG_TRACING variant of kmalloc_trace() would have called
->> trace_kmalloc dereferencing s->size anyway even before this patch.
->> 
->> I don't think we should add WARNS in the slab hot paths just to prevent this
->> rare error of using slab too early. At most VM_WARN... would be acceptable
->> but still not necessary as crashing immediately from a NULL pointer is
->> sufficient.
->> 
->> So IMHO mips should fix their soc init, 
-> 
-> Yes, for the mips fix, John has proposed to defer the calling of prom_soc_init(),
-> which looks reasonable.
-> 
->> and we should look into the
->> CONFIG_TRACING=n variant of kmalloc_trace(), to pass orig_size properly.
-> 
-> You mean check if the pointer is NULL and bail out early. 
-
-No I mean here:
-
-#else /* CONFIG_TRACING */
-/* Save a function call when CONFIG_TRACING=n */
-static __always_inline __alloc_size(3)                                   
-void *kmalloc_trace(struct kmem_cache *s, gfp_t flags, size_t size)
-{       
-        void *ret = kmem_cache_alloc(s, flags);
-                    
-        ret = kasan_kmalloc(s, ret, size, flags);
-        return ret;
-}
-
-we call kmem_cache_alloc() and discard the size parameter, so it will assume
-s->object_size (and as the side-effect, crash if s is NULL). We shouldn't
-add "s is NULL?" checks, but fix passing the size - probably switch to
-__kmem_cache_alloc_node()? and in the following kmalloc_node_trace() analogically.
-
+>
+> You can compile and spawn 5000 idle(SCHED_IDLE) tasks occupying 8 CPUs
+> and execute schbench command to test it.
+>
+> >>
+> >> Test result:
+> >> 1.Default behavior
+> >> Latency percentiles (usec) runtime 30 (s) (4562 total samples)
+> >>          50.0th: 62528 (2281 samples)
+> >>          75.0th: 623616 (1141 samples)
+> >>          90.0th: 764928 (687 samples)
+> >>          95.0th: 824320 (225 samples)
+> >>          *99.0th: 920576 (183 samples)
+> >>          99.5th: 953344 (23 samples)
+> >>          99.9th: 1008640 (18 samples)
+> >>          min=9, max=1074466
+> >>
+> >> 2.Enable priority load balance
+> >> Latency percentiles (usec) runtime 30 (s) (4391 total samples)
+> >>          50.0th: 22624 (2204 samples)
+> >>          75.0th: 48832 (1092 samples)
+> >>          90.0th: 85376 (657 samples)
+> >>          95.0th: 113280 (220 samples)
+> >>          *99.0th: 182528 (175 samples)
+> >>          99.5th: 206592 (22 samples)
+> >>          99.9th: 290304 (17 samples)
+> >>          min=6, max=351815
+> >>
+> >>  From percentile details, we see the benefit of priority load balance
+> >> that 95% of non-idle tasks latencies stays no more than 113ms, while
+> >
+> > But even 113ms seems quite a large number if there is anything else
+> > but 10 schbench workers and a bunch of idle threads that are running.
+> >
+> >> non-idle tasks latencies has got almost 50% over 600ms if priority
+> >> load balance not enabled.
+> >
+> > Als have you considered enabling sched_feature LB_MIN ?
+> >
+>
+> I have tried to echo LB_MIN > /sys/kernel/debug/sched/features, but this
+> feature seems make no sense.
+>
+> >>
+> >> Signed-off-by: Song Zhang <zhangsong34@huawei.com>
+> >> ---
+> >>   include/linux/sched/sysctl.h |  4 +++
+> >>   init/Kconfig                 | 10 ++++++
+> >>   kernel/sched/core.c          |  3 ++
+> >>   kernel/sched/fair.c          | 61 +++++++++++++++++++++++++++++++++++-
+> >>   kernel/sched/sched.h         |  3 ++
+> >>   kernel/sysctl.c              | 11 +++++++
+> >>   6 files changed, 91 insertions(+), 1 deletion(-)
+> >>
+> >> diff --git a/include/linux/sched/sysctl.h b/include/linux/sched/sysctl.h
+> >> index 303ee7dd0c7e..9b3673269ecc 100644
+> >> --- a/include/linux/sched/sysctl.h
+> >> +++ b/include/linux/sched/sysctl.h
+> >> @@ -32,6 +32,10 @@ extern unsigned int sysctl_numa_balancing_promote_rate_limit;
+> >>   #define sysctl_numa_balancing_mode     0
+> >>   #endif
+> >>
+> >> +#ifdef CONFIG_SCHED_PRIO_LB
+> >> +extern unsigned int sysctl_sched_prio_load_balance_enabled;
+> >> +#endif
+> >> +
+> >>   int sysctl_numa_balancing(struct ctl_table *table, int write, void *buffer,
+> >>                  size_t *lenp, loff_t *ppos);
+> >>
+> >> diff --git a/init/Kconfig b/init/Kconfig
+> >> index 694f7c160c9c..b0dfe6701218 100644
+> >> --- a/init/Kconfig
+> >> +++ b/init/Kconfig
+> >> @@ -1026,6 +1026,16 @@ config CFS_BANDWIDTH
+> >>            restriction.
+> >>            See Documentation/scheduler/sched-bwc.rst for more information.
+> >>
+> >> +config SCHED_PRIO_LB
+> >> +       bool "Priority load balance for CFS"
+> >> +       depends on SMP
+> >> +       default n
+> >> +       help
+> >> +         This feature enable CFS priority load balance to reduce
+> >> +         non-idle tasks latency interferenced by SCHED_IDLE tasks.
+> >> +         It prefer migrating non-idle tasks firstly and
+> >> +         migrating SCHED_IDLE tasks lastly.
+> >> +
+> >>   config RT_GROUP_SCHED
+> >>          bool "Group scheduling for SCHED_RR/FIFO"
+> >>          depends on CGROUP_SCHED
+> >> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+> >> index 5800b0623ff3..9be35431fdd5 100644
+> >> --- a/kernel/sched/core.c
+> >> +++ b/kernel/sched/core.c
+> >> @@ -9731,6 +9731,9 @@ void __init sched_init(void)
+> >>                  rq->max_idle_balance_cost = sysctl_sched_migration_cost;
+> >>
+> >>                  INIT_LIST_HEAD(&rq->cfs_tasks);
+> >> +#ifdef CONFIG_SCHED_PRIO_LB
+> >> +               INIT_LIST_HEAD(&rq->cfs_idle_tasks);
+> >> +#endif
+> >>
+> >>                  rq_attach_root(rq, &def_root_domain);
+> >>   #ifdef CONFIG_NO_HZ_COMMON
+> >> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> >> index e4a0b8bd941c..bdeb04324f0c 100644
+> >> --- a/kernel/sched/fair.c
+> >> +++ b/kernel/sched/fair.c
+> >> @@ -139,6 +139,10 @@ static int __init setup_sched_thermal_decay_shift(char *str)
+> >>   }
+> >>   __setup("sched_thermal_decay_shift=", setup_sched_thermal_decay_shift);
+> >>
+> >> +#ifdef CONFIG_SCHED_PRIO_LB
+> >> +unsigned int sysctl_sched_prio_load_balance_enabled;
+> >> +#endif
+> >> +
+> >>   #ifdef CONFIG_SMP
+> >>   /*
+> >>    * For asym packing, by default the lower numbered CPU has higher priority.
+> >> @@ -3199,6 +3203,21 @@ static inline void update_scan_period(struct task_struct *p, int new_cpu)
+> >>
+> >>   #endif /* CONFIG_NUMA_BALANCING */
+> >>
+> >> +#ifdef CONFIG_SCHED_PRIO_LB
+> >> +static void
+> >> +adjust_rq_cfs_tasks(
+> >> +       void (*list_op)(struct list_head *, struct list_head *),
+> >> +       struct rq *rq,
+> >> +       struct sched_entity *se)
+> >> +{
+> >> +       if (sysctl_sched_prio_load_balance_enabled &&
+> >> +               task_has_idle_policy(task_of(se)))
+> >> +               (*list_op)(&se->group_node, &rq->cfs_idle_tasks);
+> >> +       else
+> >> +               (*list_op)(&se->group_node, &rq->cfs_tasks);
+> >> +}
+> >> +#endif
+> >> +
+> >>   static void
+> >>   account_entity_enqueue(struct cfs_rq *cfs_rq, struct sched_entity *se)
+> >>   {
+> >> @@ -3208,7 +3227,11 @@ account_entity_enqueue(struct cfs_rq *cfs_rq, struct sched_entity *se)
+> >>                  struct rq *rq = rq_of(cfs_rq);
+> >>
+> >>                  account_numa_enqueue(rq, task_of(se));
+> >> +#ifdef CONFIG_SCHED_PRIO_LB
+> >> +               adjust_rq_cfs_tasks(list_add, rq, se);
+> >> +#else
+> >>                  list_add(&se->group_node, &rq->cfs_tasks);
+> >> +#endif
+> >>          }
+> >>   #endif
+> >>          cfs_rq->nr_running++;
+> >> @@ -7631,7 +7654,11 @@ done: __maybe_unused;
+> >>           * the list, so our cfs_tasks list becomes MRU
+> >>           * one.
+> >>           */
+> >> +#ifdef CONFIG_SCHED_PRIO_LB
+> >> +       adjust_rq_cfs_tasks(list_move, rq, &p->se);
+> >> +#else
+> >>          list_move(&p->se.group_node, &rq->cfs_tasks);
+> >> +#endif
+> >>   #endif
+> >>
+> >>          if (hrtick_enabled_fair(rq))
+> >> @@ -8156,11 +8183,18 @@ static void detach_task(struct task_struct *p, struct lb_env *env)
+> >>   static struct task_struct *detach_one_task(struct lb_env *env)
+> >>   {
+> >>          struct task_struct *p;
+> >> +       struct list_head *tasks = &env->src_rq->cfs_tasks;
+> >> +#ifdef CONFIG_SCHED_PRIO_LB
+> >> +       bool has_detach_idle_tasks = false;
+> >> +#endif
+> >>
+> >>          lockdep_assert_rq_held(env->src_rq);
+> >>
+> >> +#ifdef CONFIG_SCHED_PRIO_LB
+> >> +again:
+> >> +#endif
+> >>          list_for_each_entry_reverse(p,
+> >> -                       &env->src_rq->cfs_tasks, se.group_node) {
+> >> +                       tasks, se.group_node) {
+> >>                  if (!can_migrate_task(p, env))
+> >>                          continue;
+> >>
+> >> @@ -8175,6 +8209,13 @@ static struct task_struct *detach_one_task(struct lb_env *env)
+> >>                  schedstat_inc(env->sd->lb_gained[env->idle]);
+> >>                  return p;
+> >>          }
+> >> +#ifdef CONFIG_SCHED_PRIO_LB
+> >> +       if (sysctl_sched_prio_load_balance_enabled && !has_detach_idle_tasks) {
+> >> +               has_detach_idle_tasks = true;
+> >> +               tasks = &env->src_rq->cfs_idle_tasks;
+> >> +               goto again;
+> >> +       }
+> >> +#endif
+> >>          return NULL;
+> >>   }
+> >>
+> >> @@ -8190,6 +8231,9 @@ static int detach_tasks(struct lb_env *env)
+> >>          unsigned long util, load;
+> >>          struct task_struct *p;
+> >>          int detached = 0;
+> >> +#ifdef CONFIG_SCHED_PRIO_LB
+> >> +       bool has_detach_idle_tasks = false;
+> >> +#endif
+> >>
+> >>          lockdep_assert_rq_held(env->src_rq);
+> >>
+> >> @@ -8205,6 +8249,9 @@ static int detach_tasks(struct lb_env *env)
+> >>          if (env->imbalance <= 0)
+> >>                  return 0;
+> >>
+> >> +#ifdef CONFIG_SCHED_PRIO_LB
+> >> +again:
+> >> +#endif
+> >>          while (!list_empty(tasks)) {
+> >>                  /*
+> >>                   * We don't want to steal all, otherwise we may be treated likewise,
+> >> @@ -8310,6 +8357,14 @@ static int detach_tasks(struct lb_env *env)
+> >>                  list_move(&p->se.group_node, tasks);
+> >>          }
+> >>
+> >> +#ifdef CONFIG_SCHED_PRIO_LB
+> >> +       if (sysctl_sched_prio_load_balance_enabled &&
+> >> +               !has_detach_idle_tasks && env->imbalance > 0) {
+> >> +               has_detach_idle_tasks = true;
+> >> +               tasks = &env->src_rq->cfs_idle_tasks;
+> >> +               goto again;
+> >> +       }
+> >> +#endif
+> >>          /*
+> >>           * Right now, this is one of only two places we collect this stat
+> >>           * so we can safely collect detach_one_task() stats here rather
+> >> @@ -11814,7 +11869,11 @@ static void set_next_task_fair(struct rq *rq, struct task_struct *p, bool first)
+> >>                   * Move the next running task to the front of the list, so our
+> >>                   * cfs_tasks list becomes MRU one.
+> >>                   */
+> >> +#ifdef CONFIG_SCHED_PRIO_LB
+> >> +               adjust_rq_cfs_tasks(list_move, rq, se);
+> >> +#else
+> >>                  list_move(&se->group_node, &rq->cfs_tasks);
+> >> +#endif
+> >>          }
+> >>   #endif
+> >>
+> >> diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+> >> index 1644242ecd11..1b831c05ba30 100644
+> >> --- a/kernel/sched/sched.h
+> >> +++ b/kernel/sched/sched.h
+> >> @@ -1053,6 +1053,9 @@ struct rq {
+> >>          int                     online;
+> >>
+> >>          struct list_head cfs_tasks;
+> >> +#ifdef CONFIG_SCHED_PRIO_LB
+> >> +       struct list_head cfs_idle_tasks;
+> >> +#endif
+> >>
+> >>          struct sched_avg        avg_rt;
+> >>          struct sched_avg        avg_dl;
+> >> diff --git a/kernel/sysctl.c b/kernel/sysctl.c
+> >> index 188c305aeb8b..5fc0f9ffb675 100644
+> >> --- a/kernel/sysctl.c
+> >> +++ b/kernel/sysctl.c
+> >> @@ -2090,6 +2090,17 @@ static struct ctl_table kern_table[] = {
+> >>                  .extra1         = SYSCTL_ONE,
+> >>                  .extra2         = SYSCTL_INT_MAX,
+> >>          },
+> >> +#endif
+> >> +#ifdef CONFIG_SCHED_PRIO_LB
+> >> +       {
+> >> +               .procname       = "sched_prio_load_balance_enabled",
+> >> +               .data           = &sysctl_sched_prio_load_balance_enabled,
+> >> +               .maxlen         = sizeof(unsigned int),
+> >> +               .mode           = 0644,
+> >> +               .proc_handler   = proc_dointvec_minmax,
+> >> +               .extra1         = SYSCTL_ZERO,
+> >> +               .extra2         = SYSCTL_ONE,
+> >> +       },
+> >>   #endif
+> >>          { }
+> >>   };
+> >> --
+> >> 2.27.0
+> >>
+> > .
