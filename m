@@ -2,142 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC232617D9F
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 14:13:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE76A617D98
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 14:12:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231655AbiKCNNI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 09:13:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51706 "EHLO
+        id S230465AbiKCNM5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 09:12:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231355AbiKCNM6 (ORCPT
+        with ESMTP id S231283AbiKCNMw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 09:12:58 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5728140F2
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 06:12:56 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id v1so2676155wrt.11
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 06:12:56 -0700 (PDT)
+        Thu, 3 Nov 2022 09:12:52 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25F616366
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 06:12:50 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id v4-20020a17090a088400b00212cb0ed97eso1740303pjc.5
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 06:12:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        d=linuxfoundation.org; s=google;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=DMCevN2t3u4efqzCq1N5+13ZhEiTNq+v0n0oSnn+yyc=;
-        b=a+kjRi4JO19KMObVrE9NrlM7N8rOXaA0DSi+sAFEBct1LRvXh2vtZaN4eos5JRwjfc
-         GIh69g8n6LAGXk+tUPgoRDFmEXEPYOLuQHgtgkiCjW1m5Pesq8BZKhdOQmG9nJMeq+D+
-         /7KpbvasuXFi/kH1C7BHHQt0vZ24VZ7TeZpED+ekjXso09V+OpK6f7F7/M/N3vFaio3r
-         oW2xS5NydmXQRUQY+F49uQmDdnZRk1KCb95ZleeMBuMVJRsDGlh56WwpAxETFGcsSgGW
-         2xh3n8NYRRrT32HpycNiYfYoe1a/uTukXsDpDDwbTTKMnb5XkTz8yTrAglduh/gX7vtJ
-         h9TA==
+        bh=qW4gA4/+DJWMLlFKdym0SavPVOtUXQ/aM3xm/iknIAY=;
+        b=ZodLdYP8lVPofd3B+oGsbQc367anhy5Z1zIbLllCkCs5hrPGWsNZeaDVg6iqggLZ2X
+         PYHvImabBOwQdJXpwvWpcjQxHPsozq0dVT8tpOtk7pP9hgu/jQz5p4ypTfeL3kzdzyRe
+         H5I2Gc7OMVjcDdDmfMh+Oam2ryPHSQt4/OMQc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=DMCevN2t3u4efqzCq1N5+13ZhEiTNq+v0n0oSnn+yyc=;
-        b=SxIZWf4sT3mjEFVBBck8+b3XkutGfv82Lr97AAmv+wiy8xazOOrZ8RFlYNw4XY4bj9
-         5FsCtpIMqle0/BBm+Z5q4RfVBCdc/ngQYdqo7tqm3DX5yjKPLhBxcmdDcQz/Lo1bkjJZ
-         /4X2V8fQyv1eBdaBInadO/wMibW7ALsxIUy4boD3OiYOiExsibDCtucRcYHn1SLw6XBE
-         wbgFVmg5/QsK18bzlgBOGxRbcX4l1Bu15Fnz1QjnrNlJ8Tz2CJtulfU3HWiSUo51Te+I
-         C36ymnpEJxz8l9SruJlu/ayt8HKf1z9yBX26xUI+cOKaFWyDeyzFyMm+Ec42JgbZy8kt
-         SZyQ==
-X-Gm-Message-State: ACrzQf3ftgRuO25LpXRKKQJ9L2Z4eQEG3R9FUvetQqHfoNB7LML0hYSZ
-        IYDMg05qYPGLqudIhaiUMPebLTA382PghF+c
-X-Google-Smtp-Source: AMsMyM4FLskXFFfmgc8C4mbNPem7m0JVrbmyMOJf4JYBCDCqX67gaH3asI2ftJOlpRErjLr2R76NSQ==
-X-Received: by 2002:a05:6000:1ac7:b0:232:8c6c:6c4a with SMTP id i7-20020a0560001ac700b002328c6c6c4amr18775577wry.455.1667481175055;
-        Thu, 03 Nov 2022 06:12:55 -0700 (PDT)
-Received: from usaari01.cust.communityfibre.co.uk ([2a02:6b6a:b4d7:0:e42f:dffe:32d3:8bf2])
-        by smtp.gmail.com with ESMTPSA id z8-20020a056000110800b002383e977920sm765813wrw.110.2022.11.03.06.12.54
+        bh=qW4gA4/+DJWMLlFKdym0SavPVOtUXQ/aM3xm/iknIAY=;
+        b=orV7wggx8/khq8KWLbsGnRcv+4BSQzZ/gpASmbnBJQvYN7ETN4mc1Sk1LdTjnmNOek
+         D/zQ7N4qxBLR7R3s7z62y5bDd7oR34qvgXwDxe7AxrkbcEAAEbRiJpLDkmdQ4Ssi+CWU
+         J+8DIItXUQHIgRLSbaWku9/vdM1caf9kuRB15rSIqwgWKkW1i00u+uUNU0/NTO1rLVwi
+         tcKtOleY0PMc+5jfti+cGDZNiv2LTkLdDYkiWMVcczjdSaoDKj8lt1y9flqbB1wCww2o
+         5sKnJ/kCpqtXIKlwxmYiMzBFiiHorTuOme4H17wtugV+//9MQ8CABBlkNM7qnyhwlsD/
+         4tPg==
+X-Gm-Message-State: ACrzQf3zi/Mx9TYV2dxjf2JnHL5Y7gcNrVhsKHGnALKazahT4ibcwK4J
+        wY/m+OFmo+MRrG5BDwai8Xza4A==
+X-Google-Smtp-Source: AMsMyM7bFYT5XNLn8m3prIt0FA0POqOU3cUEsL0nsCNLmS94LTYBXYnQNl/5s1+8joJQPsF2fQMb5w==
+X-Received: by 2002:a17:90a:17eb:b0:212:8210:c92e with SMTP id q98-20020a17090a17eb00b002128210c92emr47687897pja.62.1667481169633;
+        Thu, 03 Nov 2022 06:12:49 -0700 (PDT)
+Received: from shuah-tx13.. ([103.99.10.63])
+        by smtp.gmail.com with ESMTPSA id p8-20020a1709027ec800b0018703bf3ec9sm647871plb.61.2022.11.03.06.12.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Nov 2022 06:12:54 -0700 (PDT)
-From:   Usama Arif <usama.arif@bytedance.com>
-To:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        kvmarm@lists.cs.columbia.edu, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, linux@armlinux.org.uk,
-        yezengruan@huawei.com, catalin.marinas@arm.com, will@kernel.org,
-        maz@kernel.org, steven.price@arm.com, mark.rutland@arm.com,
-        bagasdotme@gmail.com
-Cc:     fam.zheng@bytedance.com, liangma@liangbit.com,
-        punit.agrawal@bytedance.com, Usama Arif <usama.arif@bytedance.com>
-Subject: [PATCH] kvm/arm: Fix pvtime documentation
-Date:   Thu,  3 Nov 2022 13:12:10 +0000
-Message-Id: <20221103131210.3603385-1-usama.arif@bytedance.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 03 Nov 2022 06:12:48 -0700 (PDT)
+From:   Shuah Khan <skhan@linuxfoundation.org>
+To:     shuah@kernel.org, valentina.manea.m@gmail.com
+Cc:     Shuah Khan <skhan@linuxfoundation.org>, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/2] Fix uninit and signed integer overflow errors
+Date:   Thu,  3 Nov 2022 07:12:41 -0600
+Message-Id: <cover.1667480280.git.skhan@linuxfoundation.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This includes table format and using reST labels for
-cross-referencing to vcpu.rst.
+Fix uninitialized variable and signed integer overflow errors reported
+by cppcheck.
 
-Suggested-by:  Bagas Sanjaya <bagasdotme@gmail.com>
-Signed-off-by: Usama Arif <usama.arif@bytedance.com>
----
- Documentation/virt/kvm/arm/pvtime.rst   | 14 ++++++++------
- Documentation/virt/kvm/devices/vcpu.rst |  2 ++
- 2 files changed, 10 insertions(+), 6 deletions(-)
+Shuah Khan (2):
+  usb/usbip: fix uninitialized variables errors
+  usb/usbip: Fix v_recv_cmd_submit() to use PIPE_BULK define
 
-diff --git a/Documentation/virt/kvm/arm/pvtime.rst b/Documentation/virt/kvm/arm/pvtime.rst
-index 392521af7c90..e88b34e586be 100644
---- a/Documentation/virt/kvm/arm/pvtime.rst
-+++ b/Documentation/virt/kvm/arm/pvtime.rst
-@@ -23,21 +23,23 @@ the PV_TIME_FEATURES hypercall should be probed using the SMCCC 1.1
- ARCH_FEATURES mechanism before calling it.
- 
- PV_TIME_FEATURES
--    ============= ========    ==========
-+
-+    ============= ========    =================================================
-     Function ID:  (uint32)    0xC5000020
-     PV_call_id:   (uint32)    The function to query for support.
-                               Currently only PV_TIME_ST is supported.
-     Return value: (int64)     NOT_SUPPORTED (-1) or SUCCESS (0) if the relevant
-                               PV-time feature is supported by the hypervisor.
--    ============= ========    ==========
-+    ============= ========    =================================================
- 
- PV_TIME_ST
--    ============= ========    ==========
-+
-+    ============= ========    ==============================================
-     Function ID:  (uint32)    0xC5000021
-     Return value: (int64)     IPA of the stolen time data structure for this
-                               VCPU. On failure:
-                               NOT_SUPPORTED (-1)
--    ============= ========    ==========
-+    ============= ========    ==============================================
- 
- The IPA returned by PV_TIME_ST should be mapped by the guest as normal memory
- with inner and outer write back caching attributes, in the inner shareable
-@@ -76,5 +78,5 @@ It is advisable that one or more 64k pages are set aside for the purpose of
- these structures and not used for other purposes, this enables the guest to map
- the region using 64k pages and avoids conflicting attributes with other memory.
- 
--For the user space interface see Documentation/virt/kvm/devices/vcpu.rst
--section "3. GROUP: KVM_ARM_VCPU_PVTIME_CTRL".
-+For the user space interface see
-+:ref:`Documentation/virt/kvm/devices/vcpu.rst <kvm_arm_vcpu_pvtime_ctrl>`.
-\ No newline at end of file
-diff --git a/Documentation/virt/kvm/devices/vcpu.rst b/Documentation/virt/kvm/devices/vcpu.rst
-index 716aa3edae14..31f14ec4a65b 100644
---- a/Documentation/virt/kvm/devices/vcpu.rst
-+++ b/Documentation/virt/kvm/devices/vcpu.rst
-@@ -171,6 +171,8 @@ configured values on other VCPUs.  Userspace should configure the interrupt
- numbers on at least one VCPU after creating all VCPUs and before running any
- VCPUs.
- 
-+.. _kvm_arm_vcpu_pvtime_ctrl:
-+
- 3. GROUP: KVM_ARM_VCPU_PVTIME_CTRL
- ==================================
- 
+ drivers/usb/usbip/stub_main.c     | 2 +-
+ drivers/usb/usbip/stub_rx.c       | 4 ++--
+ drivers/usb/usbip/stub_tx.c       | 4 ++--
+ drivers/usb/usbip/usbip_event.c   | 2 +-
+ drivers/usb/usbip/vhci_hcd.c      | 2 +-
+ drivers/usb/usbip/vhci_rx.c       | 2 +-
+ drivers/usb/usbip/vhci_tx.c       | 4 ++--
+ drivers/usb/usbip/vudc_dev.c      | 2 +-
+ drivers/usb/usbip/vudc_rx.c       | 7 +++++--
+ drivers/usb/usbip/vudc_transfer.c | 4 ++--
+ 10 files changed, 18 insertions(+), 15 deletions(-)
+
 -- 
-2.25.1
+2.34.1
 
