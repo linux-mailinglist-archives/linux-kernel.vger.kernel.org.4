@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8936A6173DC
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 02:48:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 418796173DF
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 02:51:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230294AbiKCBsy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 21:48:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46354 "EHLO
+        id S230311AbiKCBvr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 21:51:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229516AbiKCBsv (ORCPT
+        with ESMTP id S229516AbiKCBvo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 21:48:51 -0400
-Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEBF511458
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 18:48:49 -0700 (PDT)
-Received: by mail-qk1-x730.google.com with SMTP id l9so300040qkk.11
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 18:48:49 -0700 (PDT)
+        Wed, 2 Nov 2022 21:51:44 -0400
+Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3933811462
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 18:51:42 -0700 (PDT)
+Received: by mail-qv1-xf2f.google.com with SMTP id x15so266944qvp.1
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 18:51:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=lFObYSeYZinOp60nCg2L3aJtb9foCl68/mYnD6Lzi6g=;
-        b=lcUcFgxRrwew3Oon/jVlgeHO+sKO2Ca2bCA9HEge6ww0BiKdo3ZObvfJ+IP9jYF0mQ
-         NhA8NlbHoksdLMF/9A3a3l2GauCYwRbyZorbinDwoVCKGHrITlYMhjAW3rTLFEdLTQr5
-         0O4o4HuxspV3llc/da5EQEWR1/qIIxMS94nJcdb0d1wWmSjzwag8z9Bxetq95Kes1Msa
-         vRxJ/u2jmBRiSYEX/jn2FO6i65KAUkYHC9gcdHnft0dkCSuet3hRdGwdeP7Dl4xa6w3+
-         NS2tantoXseSV4YDHKkbc7A0xeDgW8aG+jAcZZ0sSJ3jOLAbzgXi8zykH0xIpwq0ftGG
-         kpWw==
+        bh=nrl6S05W22u20FHCCunI78BM8DeB3M7AjvD0RR/SjhU=;
+        b=qOWmQ7WW6uvqdHABUpFe1kaB03SbJVt0Q5fJ91YUE4+gax+G9jYWzshfF0Ayt3qwS2
+         pe50gQUYXuJ70Fb+eCy2Jfpd0M+aZ3P/JOUP/bsgMCG1Z9fbFOwJxs7WuQb5+DYRr4Kv
+         aA9bJ9e3aK9iZMYKC4CEyFSt9SUC6ocJl2fzrMQ8ntB0E/L/7Ixof5wdF+zIIshT1sTZ
+         HxUtmeNScX4WQf3kqzGXS43gvpwkfh49DRnoKgXYiMtlU+f30raJTPXVsMSt/0SCmvmn
+         AvmlTDFrFiItDuWyzVVSFQvd9sqmLVas6X31lvp0lIWINKvziEavwsb+/cjJurxSpftR
+         YDxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lFObYSeYZinOp60nCg2L3aJtb9foCl68/mYnD6Lzi6g=;
-        b=XYnzVm8XYrtFlq6SjLK1BT9dbRXgudCGrK78UcinrZp24Qbi1egViJsGwNlEM1j1Bo
-         REA+PKdceB+OZWh8e0UWztSSLBitcbuEESnCGfirqJnN3qAQDJroNY+/w393k2qSqv4J
-         Y1BpisyQ6+g5rKRqqU+vH94lv8PcdIuc3dZOZ243LVZ+KwZ7G0DG9kmuHGJNq4Mlot8y
-         /516Njcwv5R8cRqTbYS4jf6SAOVIvFlG+VeR7gKy6+FuM55W7lezWYZvDTLSv4cUbGbX
-         VsEdZP269W1lWsX8SJbDVjflsPQ8VwB/neyp/fIHacZyEBJHJS0FaE+mtFHzbr/C+DCL
-         BxKQ==
-X-Gm-Message-State: ACrzQf2pqvEHs7RJOX+rugKRryg1xuMGJVVbJchVCM6Pxf23/6tPmtvT
-        PsEpu/hRNbBQQquO0HMGHWVdOA==
-X-Google-Smtp-Source: AMsMyM6r1BIrwQArKW07MgHk9/bQhL+BXmYLJYlMn0qhPu4IbSG6u6T6eBwuUucLX9+Apz/5e3gAOg==
-X-Received: by 2002:a37:6945:0:b0:6f4:ae0f:648b with SMTP id e66-20020a376945000000b006f4ae0f648bmr19914995qkc.329.1667440128767;
-        Wed, 02 Nov 2022 18:48:48 -0700 (PDT)
+        bh=nrl6S05W22u20FHCCunI78BM8DeB3M7AjvD0RR/SjhU=;
+        b=ZGpElerBAxUvKsHzYgoYQjTMU0gDKfvg4M62vAlyUwS7I04+k6N/gIrgd3wSH0Do15
+         k5PTjCgqZK/d4HmgpjxTR/q8oxVBtRzVLWqiiM/kdyj3oOgMOX4Tl6M9fQPp/dw7+RZ0
+         19kcI27ZhUgIJ+ayKNzoizqYsrzZF0KxUhmgxRxA/ZniiHAqhVRVp3bi8ul6ACsiMJQV
+         FTWaRuYbkZHfaY66SWu55iEC247KNyXFnyF11MZg+ApOffyph3+xRqVGaOAj6fb9dd+L
+         eefBRvgohnU1jTivt2U1Ss6cPrsNnnmjFGX+L/T5uokviLYmne2nH680UHJNt7nqORsw
+         zgpQ==
+X-Gm-Message-State: ACrzQf2JN8rloQJrsNGhijC5d6Z0zjggAtWkLOJdTQmj6CCcey0PZySB
+        r2gq4/IBUVUHu2Wkd3S2vHx+2w==
+X-Google-Smtp-Source: AMsMyM5yofnhAKFjSqf5630o2cZc3m8jkM0vU/myDS4CcOWeE2eq5rMvnFVybJQj8isIORuXK1zoKg==
+X-Received: by 2002:a05:6214:27c1:b0:4b4:9f69:dd5e with SMTP id ge1-20020a05621427c100b004b49f69dd5emr24354308qvb.56.1667440301045;
+        Wed, 02 Nov 2022 18:51:41 -0700 (PDT)
 Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id f11-20020ac8498b000000b00399ad646794sm7554072qtq.41.2022.11.02.18.48.46
+        by smtp.gmail.com with ESMTPSA id x13-20020ac86b4d000000b003988b3d5280sm7499601qts.70.2022.11.02.18.51.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Nov 2022 18:48:48 -0700 (PDT)
-Date:   Wed, 2 Nov 2022 18:48:45 -0700 (PDT)
+        Wed, 02 Nov 2022 18:51:40 -0700 (PDT)
+Date:   Wed, 2 Nov 2022 18:51:38 -0700 (PDT)
 From:   Hugh Dickins <hughd@google.com>
 X-X-Sender: hugh@ripple.attlocal.net
 To:     Andrew Morton <akpm@linux-foundation.org>
@@ -67,9 +67,9 @@ cc:     "Kirill A. Shutemov" <kirill@shutemov.name>,
         James Houghton <jthoughton@google.com>,
         Zach O'Keefe <zokeefe@google.com>,
         linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: [PATCH 1/3] mm,hugetlb: use folio fields in second tail page
+Subject: [PATCH 2/3] mm,thp,rmap: simplify compound page mapcount handling
 In-Reply-To: <5f52de70-975-e94f-f141-543765736181@google.com>
-Message-ID: <3818cc9a-9999-d064-d778-9c94c5911e6@google.com>
+Message-ID: <47ad693-717-79c8-e1ba-46c3a6602e48@google.com>
 References: <5f52de70-975-e94f-f141-543765736181@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -84,324 +84,936 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We want to declare one more int in the first tail of a compound page:
-that first tail page being valuable property, since every compound page
-has a first tail, but perhaps no more than that.
+Compound page (folio) mapcount calculations have been different for
+anon and file (or shmem) THPs, and involved the obscure PageDoubleMap
+flag.  And each huge mapping and unmapping of a file (or shmem) THP
+involved atomically incrementing and decrementing the mapcount of every
+subpage of that huge page, dirtying many struct page cachelines.
 
-No problem on 64-bit: there is already space for it.  No problem with
-32-bit THPs: 5.18 commit 5232c63f46fd ("mm: Make compound_pincount always
-available") kindly cleared the space for it, apparently not realizing
-that only 64-bit architectures enable CONFIG_THP_SWAP (whose use of tail
-page->private might conflict) - but make sure of that in its Kconfig.
+Add subpages_mapcount field to the struct folio and first tail page,
+so that the total of subpage mapcounts is available in one place near
+the head: then page_mapcount() and total_mapcount() and page_mapped(),
+and their folio equivalents, are so quick that anon and file and hugetlb
+don't need to be optimized differently. Delete the unloved PageDoubleMap.
 
-But hugetlb pages use tail page->private of the first tail page for a
-subpool pointer, which will conflict; and they also use page->private
-of the 2nd, 3rd and 4th tails.
+page_add and page_remove rmap functions must now maintain the
+subpages_mapcount as well as the subpage _mapcount, when dealing with
+pte mappings of huge pages; and correct maintenance of NR_ANON_MAPPED
+and NR_FILE_MAPPED statistics still needs reading through the subpages,
+using nr_subpages_unmapped() - but only when first or last pmd mapping
+finds subpages_mapcount raised (double-map case, not the common case).
 
-Undo "mm: add private field of first tail to struct page and struct
-folio"'s recent addition of private_1 to the folio tail: instead add
-hugetlb_subpool, hugetlb_cgroup, hugetlb_cgroup_rsvd, hugetlb_hwpoison
-to a second tail page of the folio: THP has long been using several
-fields of that tail, so make better use of it for hugetlb too.
-This is not how a generic folio should be declared in future,
-but it is an effective transitional way to make use of it.
+But are those counts (used to decide when to split an anon THP, and
+in vmscan's pagecache_reclaimable heuristic) correctly maintained?
+Not quite: since page_remove_rmap() (and also split_huge_pmd()) is
+often called without page lock, there can be races when a subpage pte
+mapcount 0<->1 while compound pmd mapcount 0<->1 is scanning - races
+which the previous implementation had prevented. The statistics might
+become inaccurate, and even drift down until they underflow through 0.
+That is not good enough, but is better dealt with in a followup patch.
 
-Delete the SUBPAGE_INDEX stuff, but keep __NR_USED_SUBPAGE: now 3.
+Update a few comments on first and second tail page overlaid fields.
+hugepage_add_new_anon_rmap() has to "increment" compound_mapcount, but
+subpages_mapcount and compound_pincount are already correctly at 0,
+so delete its reinitialization of compound_pincount.
+
+A simple 100 X munmap(mmap(2GB, MAP_SHARED|MAP_POPULATE, tmpfs), 2GB)
+took 18 seconds on small pages, and used to take 1 second on huge pages,
+but now takes 119 milliseconds on huge pages.  Mapping by pmds a second
+time used to take 860ms and now takes 92ms; mapping by pmds after mapping
+by ptes (when the scan is needed) used to take 870ms and now takes 495ms.
+But there might be some benchmarks which would show a slowdown, because
+tail struct pages now fall out of cache until final freeing checks them.
 
 Signed-off-by: Hugh Dickins <hughd@google.com>
 ---
- include/linux/hugetlb.h        | 23 +++--------
- include/linux/hugetlb_cgroup.h | 31 +++++----------
- include/linux/mm_types.h       | 72 ++++++++++++++++++++++------------
- mm/Kconfig                     |  2 +-
- mm/memory-failure.c            |  5 +--
- 5 files changed, 65 insertions(+), 68 deletions(-)
+ Documentation/mm/transhuge.rst |  18 -----
+ include/linux/mm.h             |  85 ++++++++++++++------
+ include/linux/mm_types.h       |  21 ++++-
+ include/linux/page-flags.h     |  21 -----
+ include/linux/rmap.h           |   2 +
+ mm/debug.c                     |   5 +-
+ mm/folio-compat.c              |   6 --
+ mm/huge_memory.c               |  36 ++-------
+ mm/hugetlb.c                   |   2 +
+ mm/khugepaged.c                |  11 +--
+ mm/page_alloc.c                |  27 ++++---
+ mm/rmap.c                      | 142 +++++++++++++++++++--------------
+ mm/util.c                      |  79 ------------------
+ 13 files changed, 194 insertions(+), 261 deletions(-)
 
-diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
-index 65ea34022aa2..03ecf1c5e46f 100644
---- a/include/linux/hugetlb.h
-+++ b/include/linux/hugetlb.h
-@@ -33,22 +33,9 @@ typedef struct { unsigned long pd; } hugepd_t;
+diff --git a/Documentation/mm/transhuge.rst b/Documentation/mm/transhuge.rst
+index 216db1d67d04..a560e0c01b16 100644
+--- a/Documentation/mm/transhuge.rst
++++ b/Documentation/mm/transhuge.rst
+@@ -125,24 +125,6 @@ pages:
+     ->_mapcount of all sub-pages in order to have race-free detection of
+     last unmap of subpages.
+ 
+-PageDoubleMap() indicates that the page is *possibly* mapped with PTEs.
+-
+-For anonymous pages, PageDoubleMap() also indicates ->_mapcount in all
+-subpages is offset up by one. This additional reference is required to
+-get race-free detection of unmap of subpages when we have them mapped with
+-both PMDs and PTEs.
+-
+-This optimization is required to lower the overhead of per-subpage mapcount
+-tracking. The alternative is to alter ->_mapcount in all subpages on each
+-map/unmap of the whole compound page.
+-
+-For anonymous pages, we set PG_double_map when a PMD of the page is split
+-for the first time, but still have a PMD mapping. The additional references
+-go away with the last compound_mapcount.
+-
+-File pages get PG_double_map set on the first map of the page with PTE and
+-goes away when the page gets evicted from the page cache.
+-
+ split_huge_page internally has to distribute the refcounts in the head
+ page to the tail pages before clearing all PG_head/tail bits from the page
+ structures. It can be done easily for refcounts taken by page table
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index 25ff9a14a777..5b99e3216a23 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -818,8 +818,8 @@ static inline int is_vmalloc_or_module_addr(const void *x)
  /*
-  * For HugeTLB page, there are more metadata to save in the struct page. But
-  * the head struct page cannot meet our needs, so we have to abuse other tail
-- * struct page to store the metadata. In order to avoid conflicts caused by
-- * subsequent use of more tail struct pages, we gather these discrete indexes
-- * of tail struct page here.
-+ * struct page to store the metadata.
+  * How many times the entire folio is mapped as a single unit (eg by a
+  * PMD or PUD entry).  This is probably not what you want, except for
+- * debugging purposes; look at folio_mapcount() or page_mapcount()
+- * instead.
++ * debugging purposes - it does not include PTE-mapped sub-pages; look
++ * at folio_mapcount() or page_mapcount() or total_mapcount() instead.
   */
--enum {
--	SUBPAGE_INDEX_SUBPOOL = 1,	/* reuse page->private */
--#ifdef CONFIG_CGROUP_HUGETLB
--	SUBPAGE_INDEX_CGROUP,		/* reuse page->private */
--	SUBPAGE_INDEX_CGROUP_RSVD,	/* reuse page->private */
--	__MAX_CGROUP_SUBPAGE_INDEX = SUBPAGE_INDEX_CGROUP_RSVD,
+ static inline int folio_entire_mapcount(struct folio *folio)
+ {
+@@ -829,12 +829,20 @@ static inline int folio_entire_mapcount(struct folio *folio)
+ 
+ /*
+  * Mapcount of compound page as a whole, does not include mapped sub-pages.
+- *
+- * Must be called only for compound pages.
++ * Must be called only on head of compound page.
+  */
+-static inline int compound_mapcount(struct page *page)
++static inline int head_compound_mapcount(struct page *head)
+ {
+-	return folio_entire_mapcount(page_folio(page));
++	return atomic_read(compound_mapcount_ptr(head)) + 1;
++}
++
++/*
++ * Sum of mapcounts of sub-pages, does not include compound mapcount.
++ * Must be called only on head of compound page.
++ */
++static inline int head_subpages_mapcount(struct page *head)
++{
++	return atomic_read(subpages_mapcount_ptr(head));
+ }
+ 
+ /*
+@@ -847,11 +855,9 @@ static inline void page_mapcount_reset(struct page *page)
+ 	atomic_set(&(page)->_mapcount, -1);
+ }
+ 
+-int __page_mapcount(struct page *page);
+-
+ /*
+  * Mapcount of 0-order page; when compound sub-page, includes
+- * compound_mapcount().
++ * compound_mapcount of compound_head of page.
+  *
+  * Result is undefined for pages which cannot be mapped into userspace.
+  * For example SLAB or special types of pages. See function page_has_type().
+@@ -859,25 +865,61 @@ int __page_mapcount(struct page *page);
+  */
+ static inline int page_mapcount(struct page *page)
+ {
+-	if (unlikely(PageCompound(page)))
+-		return __page_mapcount(page);
+-	return atomic_read(&page->_mapcount) + 1;
+-}
++	int mapcount = atomic_read(&page->_mapcount) + 1;
+ 
+-int folio_mapcount(struct folio *folio);
++	if (likely(!PageCompound(page)))
++		return mapcount;
++	page = compound_head(page);
++	return head_compound_mapcount(page) + mapcount;
++}
+ 
+-#ifdef CONFIG_TRANSPARENT_HUGEPAGE
+ static inline int total_mapcount(struct page *page)
+ {
+-	return folio_mapcount(page_folio(page));
++	if (likely(!PageCompound(page)))
++		return atomic_read(&page->_mapcount) + 1;
++	page = compound_head(page);
++	return head_compound_mapcount(page) + head_subpages_mapcount(page);
+ }
+ 
+-#else
+-static inline int total_mapcount(struct page *page)
++/*
++ * Return true if this page is mapped into pagetables.
++ * For compound page it returns true if any subpage of compound page is mapped,
++ * even if this particular subpage is not itself mapped by any PTE or PMD.
++ */
++static inline bool page_mapped(struct page *page)
+ {
+-	return page_mapcount(page);
++	return total_mapcount(page) > 0;
++}
++
++/**
++ * folio_mapcount() - Calculate the number of mappings of this folio.
++ * @folio: The folio.
++ *
++ * A large folio tracks both how many times the entire folio is mapped,
++ * and how many times each individual page in the folio is mapped.
++ * This function calculates the total number of times the folio is
++ * mapped.
++ *
++ * Return: The number of times this folio is mapped.
++ */
++static inline int folio_mapcount(struct folio *folio)
++{
++	if (likely(!folio_test_large(folio)))
++		return atomic_read(&folio->_mapcount) + 1;
++	return atomic_read(folio_mapcount_ptr(folio)) + 1 +
++		atomic_read(folio_subpages_mapcount_ptr(folio));
++}
++
++/**
++ * folio_mapped - Is this folio mapped into userspace?
++ * @folio: The folio.
++ *
++ * Return: True if any page in this folio is referenced by user page tables.
++ */
++static inline bool folio_mapped(struct folio *folio)
++{
++	return folio_mapcount(folio) > 0;
+ }
 -#endif
--#ifdef CONFIG_MEMORY_FAILURE
--	SUBPAGE_INDEX_HWPOISON,
--#endif
--	__NR_USED_SUBPAGE,
--};
-+#define __NR_USED_SUBPAGE 3
  
- struct hugepage_subpool {
- 	spinlock_t lock;
-@@ -722,11 +709,11 @@ extern unsigned int default_hstate_idx;
- 
- static inline struct hugepage_subpool *hugetlb_folio_subpool(struct folio *folio)
+ static inline struct page *virt_to_head_page(const void *x)
  {
--	return (void *)folio_get_private_1(folio);
-+	return folio->_hugetlb_subpool;
+@@ -1770,9 +1812,6 @@ static inline pgoff_t page_index(struct page *page)
+ 	return page->index;
  }
  
+-bool page_mapped(struct page *page);
+-bool folio_mapped(struct folio *folio);
+-
  /*
-- * hugetlb page subpool pointer located in hpage[1].private
-+ * hugetlb page subpool pointer located in hpage[2].hugetlb_subpool
-  */
- static inline struct hugepage_subpool *hugetlb_page_subpool(struct page *hpage)
- {
-@@ -736,7 +723,7 @@ static inline struct hugepage_subpool *hugetlb_page_subpool(struct page *hpage)
- static inline void hugetlb_set_folio_subpool(struct folio *folio,
- 					struct hugepage_subpool *subpool)
- {
--	folio_set_private_1(folio, (unsigned long)subpool);
-+	folio->_hugetlb_subpool = subpool;
- }
- 
- static inline void hugetlb_set_page_subpool(struct page *hpage,
-diff --git a/include/linux/hugetlb_cgroup.h b/include/linux/hugetlb_cgroup.h
-index c70f92fe493e..f706626a8063 100644
---- a/include/linux/hugetlb_cgroup.h
-+++ b/include/linux/hugetlb_cgroup.h
-@@ -24,12 +24,10 @@ struct file_region;
- #ifdef CONFIG_CGROUP_HUGETLB
- /*
-  * Minimum page order trackable by hugetlb cgroup.
-- * At least 4 pages are necessary for all the tracking information.
-- * The second tail page (hpage[SUBPAGE_INDEX_CGROUP]) is the fault
-- * usage cgroup. The third tail page (hpage[SUBPAGE_INDEX_CGROUP_RSVD])
-- * is the reservation usage cgroup.
-+ * At least 3 pages are necessary for all the tracking information.
-+ * The second tail page contains all of the hugetlb-specific fields.
-  */
--#define HUGETLB_CGROUP_MIN_ORDER order_base_2(__MAX_CGROUP_SUBPAGE_INDEX + 1)
-+#define HUGETLB_CGROUP_MIN_ORDER order_base_2(__NR_USED_SUBPAGE)
- 
- enum hugetlb_memory_event {
- 	HUGETLB_MAX,
-@@ -69,21 +67,13 @@ struct hugetlb_cgroup {
- static inline struct hugetlb_cgroup *
- __hugetlb_cgroup_from_folio(struct folio *folio, bool rsvd)
- {
--	struct page *tail;
--
- 	VM_BUG_ON_FOLIO(!folio_test_hugetlb(folio), folio);
- 	if (folio_order(folio) < HUGETLB_CGROUP_MIN_ORDER)
- 		return NULL;
--
--	if (rsvd) {
--		tail = folio_page(folio, SUBPAGE_INDEX_CGROUP_RSVD);
--		return (void *)page_private(tail);
--	}
--
--	else {
--		tail = folio_page(folio, SUBPAGE_INDEX_CGROUP);
--		return (void *)page_private(tail);
--	}
-+	if (rsvd)
-+		return folio->_hugetlb_cgroup_rsvd;
-+	else
-+		return folio->_hugetlb_cgroup;
- }
- 
- static inline struct hugetlb_cgroup *hugetlb_cgroup_from_folio(struct folio *folio)
-@@ -101,15 +91,12 @@ static inline void __set_hugetlb_cgroup(struct folio *folio,
- 				       struct hugetlb_cgroup *h_cg, bool rsvd)
- {
- 	VM_BUG_ON_FOLIO(!folio_test_hugetlb(folio), folio);
--
- 	if (folio_order(folio) < HUGETLB_CGROUP_MIN_ORDER)
- 		return;
- 	if (rsvd)
--		set_page_private(folio_page(folio, SUBPAGE_INDEX_CGROUP_RSVD),
--				 (unsigned long)h_cg);
-+		folio->_hugetlb_cgroup_rsvd = h_cg;
- 	else
--		set_page_private(folio_page(folio, SUBPAGE_INDEX_CGROUP),
--				 (unsigned long)h_cg);
-+		folio->_hugetlb_cgroup = h_cg;
- }
- 
- static inline void set_hugetlb_cgroup(struct folio *folio,
+  * Return true only if the page has been allocated with
+  * ALLOC_NO_WATERMARKS and the low watermark was not
 diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
-index 834022721bc6..728eb6089bba 100644
+index 728eb6089bba..069620826a19 100644
 --- a/include/linux/mm_types.h
 +++ b/include/linux/mm_types.h
-@@ -145,15 +145,22 @@ struct page {
+@@ -142,6 +142,7 @@ struct page {
+ 			unsigned char compound_dtor;
+ 			unsigned char compound_order;
+ 			atomic_t compound_mapcount;
++			atomic_t subpages_mapcount;
  			atomic_t compound_pincount;
  #ifdef CONFIG_64BIT
  			unsigned int compound_nr; /* 1 << compound_order */
--			unsigned long _private_1;
- #endif
- 		};
--		struct {	/* Second tail page of compound page */
-+		struct {	/* Second tail page of transparent huge page */
- 			unsigned long _compound_pad_1;	/* compound_head */
- 			unsigned long _compound_pad_2;
- 			/* For both global and memcg */
- 			struct list_head deferred_list;
- 		};
-+		struct {	/* Second tail page of hugetlb page */
-+			unsigned long _hugetlb_pad_1;	/* compound_head */
-+			void *hugetlb_subpool;
-+			void *hugetlb_cgroup;
-+			void *hugetlb_cgroup_rsvd;
-+			void *hugetlb_hwpoison;
-+			/* No more space on 32-bit: use third tail if more */
-+		};
- 		struct {	/* Page table pages */
- 			unsigned long _pt_pad_1;	/* compound_head */
- 			pgtable_t pmd_huge_pte; /* protected by page->ptl */
-@@ -260,13 +267,16 @@ struct page {
-  *    to find how many references there are to this folio.
-  * @memcg_data: Memory Control Group data.
-  * @_flags_1: For large folios, additional page flags.
-- * @__head: Points to the folio.  Do not use.
-+ * @_head_1: Points to the folio.  Do not use.
+@@ -270,7 +271,8 @@ struct page {
+  * @_head_1: Points to the folio.  Do not use.
   * @_folio_dtor: Which destructor to use for this folio.
   * @_folio_order: Do not use directly, call folio_order().
-  * @_total_mapcount: Do not use directly, call folio_entire_mapcount().
+- * @_total_mapcount: Do not use directly, call folio_entire_mapcount().
++ * @_compound_mapcount: Do not use directly, call folio_entire_mapcount().
++ * @_subpages_mapcount: Do not use directly, call folio_mapcount().
   * @_pincount: Do not use directly, call folio_maybe_dma_pinned().
   * @_folio_nr_pages: Do not use directly, call folio_nr_pages().
-- * @_private_1: Do not use directly, call folio_get_private_1().
-+ * @_hugetlb_subpool: Do not use directly, use accessor in hugetlb.h.
-+ * @_hugetlb_cgroup: Do not use directly, use accessor in hugetlb_cgroup.h.
-+ * @_hugetlb_cgroup_rsvd: Do not use directly, use accessor in hugetlb_cgroup.h.
-+ * @_hugetlb_hwpoison: Do not use directly, call raw_hwp_list_head().
-  *
-  * A folio is a physically, virtually and logically contiguous set
-  * of bytes.  It is a power-of-two in size, and it is aligned to that
-@@ -305,16 +315,31 @@ struct folio {
- 		};
- 		struct page page;
- 	};
--	unsigned long _flags_1;
--	unsigned long __head;
--	unsigned char _folio_dtor;
--	unsigned char _folio_order;
--	atomic_t _total_mapcount;
--	atomic_t _pincount;
-+	union {
-+		struct {
-+			unsigned long _flags_1;
-+			unsigned long _head_1;
-+			unsigned char _folio_dtor;
-+			unsigned char _folio_order;
-+			atomic_t _total_mapcount;
-+			atomic_t _pincount;
+  * @_hugetlb_subpool: Do not use directly, use accessor in hugetlb.h.
+@@ -321,7 +323,8 @@ struct folio {
+ 			unsigned long _head_1;
+ 			unsigned char _folio_dtor;
+ 			unsigned char _folio_order;
+-			atomic_t _total_mapcount;
++			atomic_t _compound_mapcount;
++			atomic_t _subpages_mapcount;
+ 			atomic_t _pincount;
  #ifdef CONFIG_64BIT
--	unsigned int _folio_nr_pages;
-+			unsigned int _folio_nr_pages;
- #endif
--	unsigned long _private_1;
-+		};
-+		struct page page_1;
-+	};
-+	union {
-+		struct {
-+			unsigned long _flags_2;
-+			unsigned long _head_2;
-+			void *_hugetlb_subpool;
-+			void *_hugetlb_cgroup;
-+			void *_hugetlb_cgroup_rsvd;
-+			void *_hugetlb_hwpoison;
-+		};
-+		struct page page_2;
-+	};
- };
- 
- #define FOLIO_MATCH(pg, fl)						\
-@@ -335,16 +360,25 @@ FOLIO_MATCH(memcg_data, memcg_data);
- 	static_assert(offsetof(struct folio, fl) ==			\
- 			offsetof(struct page, pg) + sizeof(struct page))
- FOLIO_MATCH(flags, _flags_1);
--FOLIO_MATCH(compound_head, __head);
-+FOLIO_MATCH(compound_head, _head_1);
+ 			unsigned int _folio_nr_pages;
+@@ -363,7 +366,8 @@ FOLIO_MATCH(flags, _flags_1);
+ FOLIO_MATCH(compound_head, _head_1);
  FOLIO_MATCH(compound_dtor, _folio_dtor);
  FOLIO_MATCH(compound_order, _folio_order);
- FOLIO_MATCH(compound_mapcount, _total_mapcount);
+-FOLIO_MATCH(compound_mapcount, _total_mapcount);
++FOLIO_MATCH(compound_mapcount, _compound_mapcount);
++FOLIO_MATCH(subpages_mapcount, _subpages_mapcount);
  FOLIO_MATCH(compound_pincount, _pincount);
  #ifdef CONFIG_64BIT
  FOLIO_MATCH(compound_nr, _folio_nr_pages);
--FOLIO_MATCH(_private_1, _private_1);
+@@ -386,11 +390,22 @@ static inline atomic_t *folio_mapcount_ptr(struct folio *folio)
+ 	return &tail->compound_mapcount;
+ }
+ 
++static inline atomic_t *folio_subpages_mapcount_ptr(struct folio *folio)
++{
++	struct page *tail = &folio->page + 1;
++	return &tail->subpages_mapcount;
++}
++
+ static inline atomic_t *compound_mapcount_ptr(struct page *page)
+ {
+ 	return &page[1].compound_mapcount;
+ }
+ 
++static inline atomic_t *subpages_mapcount_ptr(struct page *page)
++{
++	return &page[1].subpages_mapcount;
++}
++
+ static inline atomic_t *compound_pincount_ptr(struct page *page)
+ {
+ 	return &page[1].compound_pincount;
+diff --git a/include/linux/page-flags.h b/include/linux/page-flags.h
+index 0b0ae5084e60..e42c55a7e012 100644
+--- a/include/linux/page-flags.h
++++ b/include/linux/page-flags.h
+@@ -176,9 +176,6 @@ enum pageflags {
+ 	/* SLOB */
+ 	PG_slob_free = PG_private,
+ 
+-	/* Compound pages. Stored in first tail page's flags */
+-	PG_double_map = PG_workingset,
+-
+ #ifdef CONFIG_MEMORY_FAILURE
+ 	/*
+ 	 * Compound pages. Stored in first tail page's flags.
+@@ -874,29 +871,11 @@ static inline int PageTransTail(struct page *page)
+ {
+ 	return PageTail(page);
+ }
+-
+-/*
+- * PageDoubleMap indicates that the compound page is mapped with PTEs as well
+- * as PMDs.
+- *
+- * This is required for optimization of rmap operations for THP: we can postpone
+- * per small page mapcount accounting (and its overhead from atomic operations)
+- * until the first PMD split.
+- *
+- * For the page PageDoubleMap means ->_mapcount in all sub-pages is offset up
+- * by one. This reference will go away with last compound_mapcount.
+- *
+- * See also __split_huge_pmd_locked() and page_remove_anon_compound_rmap().
+- */
+-PAGEFLAG(DoubleMap, double_map, PF_SECOND)
+-	TESTSCFLAG(DoubleMap, double_map, PF_SECOND)
+ #else
+ TESTPAGEFLAG_FALSE(TransHuge, transhuge)
+ TESTPAGEFLAG_FALSE(TransCompound, transcompound)
+ TESTPAGEFLAG_FALSE(TransCompoundMap, transcompoundmap)
+ TESTPAGEFLAG_FALSE(TransTail, transtail)
+-PAGEFLAG_FALSE(DoubleMap, double_map)
+-	TESTSCFLAG_FALSE(DoubleMap, double_map)
  #endif
- #undef FOLIO_MATCH
-+#define FOLIO_MATCH(pg, fl)						\
-+	static_assert(offsetof(struct folio, fl) ==			\
-+			offsetof(struct page, pg) + 2 * sizeof(struct page))
-+FOLIO_MATCH(flags, _flags_2);
-+FOLIO_MATCH(compound_head, _head_2);
-+FOLIO_MATCH(hugetlb_subpool, _hugetlb_subpool);
-+FOLIO_MATCH(hugetlb_cgroup, _hugetlb_cgroup);
-+FOLIO_MATCH(hugetlb_cgroup_rsvd, _hugetlb_cgroup_rsvd);
-+FOLIO_MATCH(hugetlb_hwpoison, _hugetlb_hwpoison);
-+#undef FOLIO_MATCH
  
- static inline atomic_t *folio_mapcount_ptr(struct folio *folio)
+ #if defined(CONFIG_MEMORY_FAILURE) && defined(CONFIG_TRANSPARENT_HUGEPAGE)
+diff --git a/include/linux/rmap.h b/include/linux/rmap.h
+index bd3504d11b15..1973649e8f93 100644
+--- a/include/linux/rmap.h
++++ b/include/linux/rmap.h
+@@ -206,6 +206,8 @@ void hugepage_add_new_anon_rmap(struct page *, struct vm_area_struct *,
+ 
+ static inline void __page_dup_rmap(struct page *page, bool compound)
  {
-@@ -388,16 +422,6 @@ static inline void *folio_get_private(struct folio *folio)
- 	return folio->private;
++	if (!compound && PageCompound(page))
++		atomic_inc(subpages_mapcount_ptr(compound_head(page)));
+ 	atomic_inc(compound ? compound_mapcount_ptr(page) : &page->_mapcount);
  }
  
--static inline void folio_set_private_1(struct folio *folio, unsigned long private)
--{
--	folio->_private_1 = private;
--}
--
--static inline unsigned long folio_get_private_1(struct folio *folio)
--{
--	return folio->_private_1;
--}
--
- struct page_frag_cache {
- 	void * va;
- #if (PAGE_SIZE < PAGE_FRAG_CACHE_MAX_SIZE)
-diff --git a/mm/Kconfig b/mm/Kconfig
-index 57e1d8c5b505..bc7e7dacfcd5 100644
---- a/mm/Kconfig
-+++ b/mm/Kconfig
-@@ -775,7 +775,7 @@ endchoice
+diff --git a/mm/debug.c b/mm/debug.c
+index 0fd15ba70d16..7f8e5f744e42 100644
+--- a/mm/debug.c
++++ b/mm/debug.c
+@@ -94,9 +94,10 @@ static void __dump_page(struct page *page)
+ 			page, page_ref_count(head), mapcount, mapping,
+ 			page_to_pgoff(page), page_to_pfn(page));
+ 	if (compound) {
+-		pr_warn("head:%p order:%u compound_mapcount:%d compound_pincount:%d\n",
++		pr_warn("head:%p order:%u compound_mapcount:%d subpages_mapcount:%d compound_pincount:%d\n",
+ 				head, compound_order(head),
+-				folio_entire_mapcount(folio),
++				head_compound_mapcount(head),
++				head_subpages_mapcount(head),
+ 				head_compound_pincount(head));
+ 	}
  
- config THP_SWAP
- 	def_bool y
--	depends on TRANSPARENT_HUGEPAGE && ARCH_WANTS_THP_SWAP && SWAP
-+	depends on TRANSPARENT_HUGEPAGE && ARCH_WANTS_THP_SWAP && SWAP && 64BIT
- 	help
- 	  Swap transparent huge pages in one piece, without splitting.
- 	  XXX: For now, swap cluster backing transparent huge page
-diff --git a/mm/memory-failure.c b/mm/memory-failure.c
-index 779a426d2cab..63d8501001c6 100644
---- a/mm/memory-failure.c
-+++ b/mm/memory-failure.c
-@@ -1687,8 +1687,7 @@ EXPORT_SYMBOL_GPL(mf_dax_kill_procs);
- #ifdef CONFIG_HUGETLB_PAGE
- /*
-  * Struct raw_hwp_page represents information about "raw error page",
-- * constructing singly linked list originated from ->private field of
-- * SUBPAGE_INDEX_HWPOISON-th tail page.
-+ * constructing singly linked list from ->_hugetlb_hwpoison field of folio.
-  */
- struct raw_hwp_page {
- 	struct llist_node node;
-@@ -1697,7 +1696,7 @@ struct raw_hwp_page {
+diff --git a/mm/folio-compat.c b/mm/folio-compat.c
+index bac2a366aada..cbfe51091c39 100644
+--- a/mm/folio-compat.c
++++ b/mm/folio-compat.c
+@@ -39,12 +39,6 @@ void wait_for_stable_page(struct page *page)
+ }
+ EXPORT_SYMBOL_GPL(wait_for_stable_page);
  
- static inline struct llist_head *raw_hwp_list_head(struct page *hpage)
+-bool page_mapped(struct page *page)
+-{
+-	return folio_mapped(page_folio(page));
+-}
+-EXPORT_SYMBOL(page_mapped);
+-
+ void mark_page_accessed(struct page *page)
  {
--	return (struct llist_head *)&page_private(hpage + SUBPAGE_INDEX_HWPOISON);
-+	return (struct llist_head *)&page_folio(hpage)->_hugetlb_hwpoison;
+ 	folio_mark_accessed(page_folio(page));
+diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+index a524db74e9e6..23ff175768c3 100644
+--- a/mm/huge_memory.c
++++ b/mm/huge_memory.c
+@@ -2093,6 +2093,7 @@ static void __split_huge_pmd_locked(struct vm_area_struct *vma, pmd_t *pmd,
+ 
+ 		VM_BUG_ON_PAGE(!page_count(page), page);
+ 		page_ref_add(page, HPAGE_PMD_NR - 1);
++		atomic_add(HPAGE_PMD_NR, subpages_mapcount_ptr(page));
+ 
+ 		/*
+ 		 * Without "freeze", we'll simply split the PMD, propagating the
+@@ -2173,33 +2174,8 @@ static void __split_huge_pmd_locked(struct vm_area_struct *vma, pmd_t *pmd,
+ 		pte_unmap(pte);
+ 	}
+ 
+-	if (!pmd_migration) {
+-		/*
+-		 * Set PG_double_map before dropping compound_mapcount to avoid
+-		 * false-negative page_mapped().
+-		 */
+-		if (compound_mapcount(page) > 1 &&
+-		    !TestSetPageDoubleMap(page)) {
+-			for (i = 0; i < HPAGE_PMD_NR; i++)
+-				atomic_inc(&page[i]._mapcount);
+-		}
+-
+-		lock_page_memcg(page);
+-		if (atomic_add_negative(-1, compound_mapcount_ptr(page))) {
+-			/* Last compound_mapcount is gone. */
+-			__mod_lruvec_page_state(page, NR_ANON_THPS,
+-						-HPAGE_PMD_NR);
+-			if (TestClearPageDoubleMap(page)) {
+-				/* No need in mapcount reference anymore */
+-				for (i = 0; i < HPAGE_PMD_NR; i++)
+-					atomic_dec(&page[i]._mapcount);
+-			}
+-		}
+-		unlock_page_memcg(page);
+-
+-		/* Above is effectively page_remove_rmap(page, vma, true) */
+-		munlock_vma_page(page, vma, true);
+-	}
++	if (!pmd_migration)
++		page_remove_rmap(page, vma, true);
+ 
+ 	smp_wmb(); /* make pte visible before pmd */
+ 	pmd_populate(mm, pmd, pgtable);
+@@ -2401,7 +2377,7 @@ static void __split_huge_page_tail(struct page *head, int tail,
+ 			 (1L << PG_dirty) |
+ 			 LRU_GEN_MASK | LRU_REFS_MASK));
+ 
+-	/* ->mapping in first tail page is compound_mapcount */
++	/* ->mapping in first and second tail page is replaced by other uses */
+ 	VM_BUG_ON_PAGE(tail > 2 && page_tail->mapping != TAIL_MAPPING,
+ 			page_tail);
+ 	page_tail->mapping = head->mapping;
+@@ -2411,6 +2387,10 @@ static void __split_huge_page_tail(struct page *head, int tail,
+ 	 * page->private should not be set in tail pages with the exception
+ 	 * of swap cache pages that store the swp_entry_t in tail pages.
+ 	 * Fix up and warn once if private is unexpectedly set.
++	 *
++	 * What of 32-bit systems, on which head[1].compound_pincount overlays
++	 * head[1].private?  No problem: THP_SWAP is not enabled on 32-bit, and
++	 * compound_pincount must be 0 for folio_ref_freeze() to have succeeded.
+ 	 */
+ 	if (!folio_test_swapcache(page_folio(head))) {
+ 		VM_WARN_ON_ONCE_PAGE(page_tail->private != 0, page_tail);
+diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+index b27caef538f9..f8355360b3cd 100644
+--- a/mm/hugetlb.c
++++ b/mm/hugetlb.c
+@@ -1333,6 +1333,7 @@ static void __destroy_compound_gigantic_page(struct page *page,
+ 	struct page *p;
+ 
+ 	atomic_set(compound_mapcount_ptr(page), 0);
++	atomic_set(subpages_mapcount_ptr(page), 0);
+ 	atomic_set(compound_pincount_ptr(page), 0);
+ 
+ 	for (i = 1; i < nr_pages; i++) {
+@@ -1850,6 +1851,7 @@ static bool __prep_compound_gigantic_page(struct page *page, unsigned int order,
+ 			set_compound_head(p, page);
+ 	}
+ 	atomic_set(compound_mapcount_ptr(page), -1);
++	atomic_set(subpages_mapcount_ptr(page), 0);
+ 	atomic_set(compound_pincount_ptr(page), 0);
+ 	return true;
+ 
+diff --git a/mm/khugepaged.c b/mm/khugepaged.c
+index ea0d186bc9d4..564f996c388d 100644
+--- a/mm/khugepaged.c
++++ b/mm/khugepaged.c
+@@ -1242,15 +1242,8 @@ static int hpage_collapse_scan_pmd(struct mm_struct *mm,
+ 		/*
+ 		 * Check if the page has any GUP (or other external) pins.
+ 		 *
+-		 * Here the check is racy it may see total_mapcount > refcount
+-		 * in some cases.
+-		 * For example, one process with one forked child process.
+-		 * The parent has the PMD split due to MADV_DONTNEED, then
+-		 * the child is trying unmap the whole PMD, but khugepaged
+-		 * may be scanning the parent between the child has
+-		 * PageDoubleMap flag cleared and dec the mapcount.  So
+-		 * khugepaged may see total_mapcount > refcount.
+-		 *
++		 * Here the check may be racy:
++		 * it may see total_mapcount > refcount in some cases?
+ 		 * But such case is ephemeral we could always retry collapse
+ 		 * later.  However it may report false positive if the page
+ 		 * has excessive GUP pins (i.e. 512).  Anyway the same check
+diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+index 7192ded44ad0..f7a63684e6c4 100644
+--- a/mm/page_alloc.c
++++ b/mm/page_alloc.c
+@@ -798,6 +798,7 @@ static void prep_compound_head(struct page *page, unsigned int order)
+ 	set_compound_page_dtor(page, COMPOUND_PAGE_DTOR);
+ 	set_compound_order(page, order);
+ 	atomic_set(compound_mapcount_ptr(page), -1);
++	atomic_set(subpages_mapcount_ptr(page), 0);
+ 	atomic_set(compound_pincount_ptr(page), 0);
  }
  
- static unsigned long __free_raw_hwp_pages(struct page *hpage, bool move_flag)
+@@ -1324,11 +1325,19 @@ static int free_tail_pages_check(struct page *head_page, struct page *page)
+ 	}
+ 	switch (page - head_page) {
+ 	case 1:
+-		/* the first tail page: ->mapping may be compound_mapcount() */
+-		if (unlikely(compound_mapcount(page))) {
++		/* the first tail page: these may be in place of ->mapping */
++		if (unlikely(head_compound_mapcount(head_page))) {
+ 			bad_page(page, "nonzero compound_mapcount");
+ 			goto out;
+ 		}
++		if (unlikely(head_subpages_mapcount(head_page))) {
++			bad_page(page, "nonzero subpages_mapcount");
++			goto out;
++		}
++		if (unlikely(head_compound_pincount(head_page))) {
++			bad_page(page, "nonzero compound_pincount");
++			goto out;
++		}
+ 		break;
+ 	case 2:
+ 		/*
+@@ -1433,10 +1442,8 @@ static __always_inline bool free_pages_prepare(struct page *page,
+ 
+ 		VM_BUG_ON_PAGE(compound && compound_order(page) != order, page);
+ 
+-		if (compound) {
+-			ClearPageDoubleMap(page);
++		if (compound)
+ 			ClearPageHasHWPoisoned(page);
+-		}
+ 		for (i = 1; i < (1 << order); i++) {
+ 			if (compound)
+ 				bad += free_tail_pages_check(page, page + i);
+@@ -6871,13 +6878,11 @@ static void __ref memmap_init_compound(struct page *head,
+ 		set_page_count(page, 0);
+ 
+ 		/*
+-		 * The first tail page stores compound_mapcount_ptr() and
+-		 * compound_order() and the second tail page stores
+-		 * compound_pincount_ptr(). Call prep_compound_head() after
+-		 * the first and second tail pages have been initialized to
+-		 * not have the data overwritten.
++		 * The first tail page stores important compound page info.
++		 * Call prep_compound_head() after the first tail page has
++		 * been initialized, to not have the data overwritten.
+ 		 */
+-		if (pfn == head_pfn + 2)
++		if (pfn == head_pfn + 1)
+ 			prep_compound_head(head, order);
+ 	}
+ }
+diff --git a/mm/rmap.c b/mm/rmap.c
+index 3b2d18bbdc44..f43339ea4970 100644
+--- a/mm/rmap.c
++++ b/mm/rmap.c
+@@ -1085,6 +1085,24 @@ int pfn_mkclean_range(unsigned long pfn, unsigned long nr_pages, pgoff_t pgoff,
+ 	return page_vma_mkclean_one(&pvmw);
+ }
+ 
++/*
++ * When mapping a THP's first pmd, or unmapping its last pmd, if that THP
++ * also has pte mappings, then those must be discounted: in order to maintain
++ * NR_ANON_MAPPED and NR_FILE_MAPPED statistics exactly, without any drift,
++ * and to decide when an anon THP should be put on the deferred split queue.
++ */
++static int nr_subpages_unmapped(struct page *head, int nr_subpages)
++{
++	int nr = nr_subpages;
++	int i;
++
++	/* Discount those subpages mapped by pte */
++	for (i = 0; i < nr_subpages; i++)
++		if (atomic_read(&head[i]._mapcount) >= 0)
++			nr--;
++	return nr;
++}
++
+ /**
+  * page_move_anon_rmap - move a page to our anon_vma
+  * @page:	the page to move to our anon_vma
+@@ -1194,6 +1212,7 @@ static void __page_check_anon_rmap(struct page *page,
+ void page_add_anon_rmap(struct page *page,
+ 	struct vm_area_struct *vma, unsigned long address, rmap_t flags)
+ {
++	int nr, nr_pages;
+ 	bool compound = flags & RMAP_COMPOUND;
+ 	bool first;
+ 
+@@ -1202,28 +1221,32 @@ void page_add_anon_rmap(struct page *page,
+ 	else
+ 		VM_BUG_ON_PAGE(!PageLocked(page), page);
+ 
+-	if (compound) {
++	if (compound && PageTransHuge(page)) {
+ 		atomic_t *mapcount;
+ 		VM_BUG_ON_PAGE(!PageLocked(page), page);
+-		VM_BUG_ON_PAGE(!PageTransHuge(page), page);
+ 		mapcount = compound_mapcount_ptr(page);
+ 		first = atomic_inc_and_test(mapcount);
++
++		nr = nr_pages = thp_nr_pages(page);
++		if (first && head_subpages_mapcount(page))
++			nr = nr_subpages_unmapped(page, nr_pages);
+ 	} else {
++		nr = 1;
++		if (PageTransCompound(page)) {
++			struct page *head = compound_head(page);
++
++			atomic_inc(subpages_mapcount_ptr(head));
++			nr = !head_compound_mapcount(head);
++		}
+ 		first = atomic_inc_and_test(&page->_mapcount);
+ 	}
++
+ 	VM_BUG_ON_PAGE(!first && (flags & RMAP_EXCLUSIVE), page);
+ 	VM_BUG_ON_PAGE(!first && PageAnonExclusive(page), page);
+ 
+ 	if (first) {
+-		int nr = compound ? thp_nr_pages(page) : 1;
+-		/*
+-		 * We use the irq-unsafe __{inc|mod}_zone_page_stat because
+-		 * these counters are not modified in interrupt context, and
+-		 * pte lock(a spinlock) is held, which implies preemption
+-		 * disabled.
+-		 */
+ 		if (compound)
+-			__mod_lruvec_page_state(page, NR_ANON_THPS, nr);
++			__mod_lruvec_page_state(page, NR_ANON_THPS, nr_pages);
+ 		__mod_lruvec_page_state(page, NR_ANON_MAPPED, nr);
+ 	}
+ 
+@@ -1265,8 +1288,6 @@ void page_add_new_anon_rmap(struct page *page,
+ 		VM_BUG_ON_PAGE(!PageTransHuge(page), page);
+ 		/* increment count (starts at -1) */
+ 		atomic_set(compound_mapcount_ptr(page), 0);
+-		atomic_set(compound_pincount_ptr(page), 0);
+-
+ 		__mod_lruvec_page_state(page, NR_ANON_THPS, nr);
+ 	} else {
+ 		/* increment count (starts at -1) */
+@@ -1287,29 +1308,19 @@ void page_add_new_anon_rmap(struct page *page,
+ void page_add_file_rmap(struct page *page,
+ 	struct vm_area_struct *vma, bool compound)
+ {
+-	int i, nr = 0;
++	int nr = 0;
+ 
+ 	VM_BUG_ON_PAGE(compound && !PageTransHuge(page), page);
+ 	lock_page_memcg(page);
+ 	if (compound && PageTransHuge(page)) {
+-		int nr_pages = thp_nr_pages(page);
++		int nr_pages;
+ 
+-		for (i = 0; i < nr_pages; i++) {
+-			if (atomic_inc_and_test(&page[i]._mapcount))
+-				nr++;
+-		}
+ 		if (!atomic_inc_and_test(compound_mapcount_ptr(page)))
+ 			goto out;
+ 
+-		/*
+-		 * It is racy to ClearPageDoubleMap in page_remove_file_rmap();
+-		 * but page lock is held by all page_add_file_rmap() compound
+-		 * callers, and SetPageDoubleMap below warns if !PageLocked:
+-		 * so here is a place that DoubleMap can be safely cleared.
+-		 */
+-		VM_WARN_ON_ONCE(!PageLocked(page));
+-		if (nr == nr_pages && PageDoubleMap(page))
+-			ClearPageDoubleMap(page);
++		nr = nr_pages = thp_nr_pages(page);
++		if (head_subpages_mapcount(page))
++			nr = nr_subpages_unmapped(page, nr_pages);
+ 
+ 		if (PageSwapBacked(page))
+ 			__mod_lruvec_page_state(page, NR_SHMEM_PMDMAPPED,
+@@ -1318,11 +1329,15 @@ void page_add_file_rmap(struct page *page,
+ 			__mod_lruvec_page_state(page, NR_FILE_PMDMAPPED,
+ 						nr_pages);
+ 	} else {
+-		if (PageTransCompound(page) && page_mapping(page)) {
+-			VM_WARN_ON_ONCE(!PageLocked(page));
+-			SetPageDoubleMap(compound_head(page));
++		bool pmd_mapped = false;
++
++		if (PageTransCompound(page)) {
++			struct page *head = compound_head(page);
++
++			atomic_inc(subpages_mapcount_ptr(head));
++			pmd_mapped = head_compound_mapcount(head);
+ 		}
+-		if (atomic_inc_and_test(&page->_mapcount))
++		if (atomic_inc_and_test(&page->_mapcount) && !pmd_mapped)
+ 			nr++;
+ 	}
+ out:
+@@ -1335,7 +1350,7 @@ void page_add_file_rmap(struct page *page,
+ 
+ static void page_remove_file_rmap(struct page *page, bool compound)
+ {
+-	int i, nr = 0;
++	int nr = 0;
+ 
+ 	VM_BUG_ON_PAGE(compound && !PageHead(page), page);
+ 
+@@ -1348,14 +1363,15 @@ static void page_remove_file_rmap(struct page *page, bool compound)
+ 
+ 	/* page still mapped by someone else? */
+ 	if (compound && PageTransHuge(page)) {
+-		int nr_pages = thp_nr_pages(page);
++		int nr_pages;
+ 
+-		for (i = 0; i < nr_pages; i++) {
+-			if (atomic_add_negative(-1, &page[i]._mapcount))
+-				nr++;
+-		}
+ 		if (!atomic_add_negative(-1, compound_mapcount_ptr(page)))
+-			goto out;
++			return;
++
++		nr = nr_pages = thp_nr_pages(page);
++		if (head_subpages_mapcount(page))
++			nr = nr_subpages_unmapped(page, nr_pages);
++
+ 		if (PageSwapBacked(page))
+ 			__mod_lruvec_page_state(page, NR_SHMEM_PMDMAPPED,
+ 						-nr_pages);
+@@ -1363,17 +1379,25 @@ static void page_remove_file_rmap(struct page *page, bool compound)
+ 			__mod_lruvec_page_state(page, NR_FILE_PMDMAPPED,
+ 						-nr_pages);
+ 	} else {
+-		if (atomic_add_negative(-1, &page->_mapcount))
++		bool pmd_mapped = false;
++
++		if (PageTransCompound(page)) {
++			struct page *head = compound_head(page);
++
++			atomic_dec(subpages_mapcount_ptr(head));
++			pmd_mapped = head_compound_mapcount(head);
++		}
++		if (atomic_add_negative(-1, &page->_mapcount) && !pmd_mapped)
+ 			nr++;
+ 	}
+-out:
++
+ 	if (nr)
+ 		__mod_lruvec_page_state(page, NR_FILE_MAPPED, -nr);
+ }
+ 
+ static void page_remove_anon_compound_rmap(struct page *page)
+ {
+-	int i, nr;
++	int nr, nr_pages;
+ 
+ 	if (!atomic_add_negative(-1, compound_mapcount_ptr(page)))
+ 		return;
+@@ -1385,27 +1409,19 @@ static void page_remove_anon_compound_rmap(struct page *page)
+ 	if (!IS_ENABLED(CONFIG_TRANSPARENT_HUGEPAGE))
+ 		return;
+ 
+-	__mod_lruvec_page_state(page, NR_ANON_THPS, -thp_nr_pages(page));
++	nr = nr_pages = thp_nr_pages(page);
++	__mod_lruvec_page_state(page, NR_ANON_THPS, -nr);
+ 
+-	if (TestClearPageDoubleMap(page)) {
+-		/*
+-		 * Subpages can be mapped with PTEs too. Check how many of
+-		 * them are still mapped.
+-		 */
+-		for (i = 0, nr = 0; i < thp_nr_pages(page); i++) {
+-			if (atomic_add_negative(-1, &page[i]._mapcount))
+-				nr++;
+-		}
++	if (head_subpages_mapcount(page)) {
++		nr = nr_subpages_unmapped(page, nr_pages);
+ 
+ 		/*
+ 		 * Queue the page for deferred split if at least one small
+ 		 * page of the compound page is unmapped, but at least one
+ 		 * small page is still mapped.
+ 		 */
+-		if (nr && nr < thp_nr_pages(page))
++		if (nr && nr < nr_pages)
+ 			deferred_split_huge_page(page);
+-	} else {
+-		nr = thp_nr_pages(page);
+ 	}
+ 
+ 	if (nr)
+@@ -1423,6 +1439,8 @@ static void page_remove_anon_compound_rmap(struct page *page)
+ void page_remove_rmap(struct page *page,
+ 	struct vm_area_struct *vma, bool compound)
+ {
++	bool pmd_mapped = false;
++
+ 	lock_page_memcg(page);
+ 
+ 	if (!PageAnon(page)) {
+@@ -1435,15 +1453,17 @@ void page_remove_rmap(struct page *page,
+ 		goto out;
+ 	}
+ 
++	if (PageTransCompound(page)) {
++		struct page *head = compound_head(page);
++
++		atomic_dec(subpages_mapcount_ptr(head));
++		pmd_mapped = head_compound_mapcount(head);
++	}
++
+ 	/* page still mapped by someone else? */
+-	if (!atomic_add_negative(-1, &page->_mapcount))
++	if (!atomic_add_negative(-1, &page->_mapcount) || pmd_mapped)
+ 		goto out;
+ 
+-	/*
+-	 * We use the irq-unsafe __{inc|mod}_zone_page_stat because
+-	 * these counters are not modified in interrupt context, and
+-	 * pte lock(a spinlock) is held, which implies preemption disabled.
+-	 */
+ 	__dec_lruvec_page_state(page, NR_ANON_MAPPED);
+ 
+ 	if (PageTransCompound(page))
+@@ -2569,8 +2589,8 @@ void hugepage_add_new_anon_rmap(struct page *page,
+ 			struct vm_area_struct *vma, unsigned long address)
+ {
+ 	BUG_ON(address < vma->vm_start || address >= vma->vm_end);
++	/* increment count (starts at -1) */
+ 	atomic_set(compound_mapcount_ptr(page), 0);
+-	atomic_set(compound_pincount_ptr(page), 0);
+ 	ClearHPageRestoreReserve(page);
+ 	__page_set_anon_rmap(page, vma, address, 1);
+ }
+diff --git a/mm/util.c b/mm/util.c
+index 12984e76767e..b56c92fb910f 100644
+--- a/mm/util.c
++++ b/mm/util.c
+@@ -717,32 +717,6 @@ void *page_rmapping(struct page *page)
+ 	return folio_raw_mapping(page_folio(page));
+ }
+ 
+-/**
+- * folio_mapped - Is this folio mapped into userspace?
+- * @folio: The folio.
+- *
+- * Return: True if any page in this folio is referenced by user page tables.
+- */
+-bool folio_mapped(struct folio *folio)
+-{
+-	long i, nr;
+-
+-	if (!folio_test_large(folio))
+-		return atomic_read(&folio->_mapcount) >= 0;
+-	if (atomic_read(folio_mapcount_ptr(folio)) >= 0)
+-		return true;
+-	if (folio_test_hugetlb(folio))
+-		return false;
+-
+-	nr = folio_nr_pages(folio);
+-	for (i = 0; i < nr; i++) {
+-		if (atomic_read(&folio_page(folio, i)->_mapcount) >= 0)
+-			return true;
+-	}
+-	return false;
+-}
+-EXPORT_SYMBOL(folio_mapped);
+-
+ struct anon_vma *folio_anon_vma(struct folio *folio)
+ {
+ 	unsigned long mapping = (unsigned long)folio->mapping;
+@@ -783,59 +757,6 @@ struct address_space *folio_mapping(struct folio *folio)
+ }
+ EXPORT_SYMBOL(folio_mapping);
+ 
+-/* Slow path of page_mapcount() for compound pages */
+-int __page_mapcount(struct page *page)
+-{
+-	int ret;
+-
+-	ret = atomic_read(&page->_mapcount) + 1;
+-	/*
+-	 * For file THP page->_mapcount contains total number of mapping
+-	 * of the page: no need to look into compound_mapcount.
+-	 */
+-	if (!PageAnon(page) && !PageHuge(page))
+-		return ret;
+-	page = compound_head(page);
+-	ret += atomic_read(compound_mapcount_ptr(page)) + 1;
+-	if (PageDoubleMap(page))
+-		ret--;
+-	return ret;
+-}
+-EXPORT_SYMBOL_GPL(__page_mapcount);
+-
+-/**
+- * folio_mapcount() - Calculate the number of mappings of this folio.
+- * @folio: The folio.
+- *
+- * A large folio tracks both how many times the entire folio is mapped,
+- * and how many times each individual page in the folio is mapped.
+- * This function calculates the total number of times the folio is
+- * mapped.
+- *
+- * Return: The number of times this folio is mapped.
+- */
+-int folio_mapcount(struct folio *folio)
+-{
+-	int i, compound, nr, ret;
+-
+-	if (likely(!folio_test_large(folio)))
+-		return atomic_read(&folio->_mapcount) + 1;
+-
+-	compound = folio_entire_mapcount(folio);
+-	if (folio_test_hugetlb(folio))
+-		return compound;
+-	ret = compound;
+-	nr = folio_nr_pages(folio);
+-	for (i = 0; i < nr; i++)
+-		ret += atomic_read(&folio_page(folio, i)->_mapcount) + 1;
+-	/* File pages has compound_mapcount included in _mapcount */
+-	if (!folio_test_anon(folio))
+-		return ret - compound * nr;
+-	if (folio_test_double_map(folio))
+-		ret -= nr;
+-	return ret;
+-}
+-
+ /**
+  * folio_copy - Copy the contents of one folio to another.
+  * @dst: Folio to copy to.
 -- 
 2.35.3
 
