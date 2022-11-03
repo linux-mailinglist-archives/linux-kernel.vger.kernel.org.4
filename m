@@ -2,99 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6ADD36175CC
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 05:52:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A2DB06175CD
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 05:54:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230305AbiKCEwc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 00:52:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37742 "EHLO
+        id S230314AbiKCEyx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 00:54:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230153AbiKCEw3 (ORCPT
+        with ESMTP id S229579AbiKCEys (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 00:52:29 -0400
-Received: from out28-73.mail.aliyun.com (out28-73.mail.aliyun.com [115.124.28.73])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 109ED175B4;
-        Wed,  2 Nov 2022 21:52:26 -0700 (PDT)
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.4049321|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_system_inform|0.00908338-0.000475167-0.990441;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047202;MF=frank.sae@motor-comm.com;NM=1;PH=DS;RN=16;RT=16;SR=0;TI=SMTPD_---.Q-Azxru_1667451137;
-Received: from sunhua.motor-comm.com(mailfrom:Frank.Sae@motor-comm.com fp:SMTPD_---.Q-Azxru_1667451137)
-          by smtp.aliyun-inc.com;
-          Thu, 03 Nov 2022 12:52:23 +0800
-From:   Frank <Frank.Sae@motor-comm.com>
-To:     Peter Geis <pgwipeout@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     yinghong.zhang@motor-comm.com, fei.zhang@motor-comm.com,
-        hua.sun@motor-comm.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Frank <Frank.Sae@motor-comm.com>,
-        kernel test robot <lkp@intel.com>,
-        Julia Lawall <julia.lawall@lip6.fr>
-Subject: [PATCH net-next v1.1] net: phy: fix yt8521 duplicated argument to & or |
-Date:   Thu,  3 Nov 2022 12:52:32 +0800
-Message-Id: <20221103045232.833-1-Frank.Sae@motor-comm.com>
-X-Mailer: git-send-email 2.31.0.windows.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 3 Nov 2022 00:54:48 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00F7317AAA
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 21:54:47 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id h9-20020a25e209000000b006cbc4084f2eso1076005ybe.23
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 21:54:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=jZXowGsurJE+s3+HfBZ6GT+6g7K96tSBIPyO+vNCcsA=;
+        b=NxXkPe3pHcYT8iN7ya3pJumFi+pQ0vkHaIriviOdmvPthV36Y5/415d2g41J5VldXl
+         WQ8ILJP0mmK8scFWbpLeRf3cPnKM0ktYsPaaIPcBU/2yYdwFDwkAEtUVtU9FutGvJ81Z
+         og9FRK7xk9I9WPZsv3H/fnCJNmGcbyN1oc+FREMP61iWQKUCdwJQ7Sz1/+1eXI+oKVSv
+         OoclwxiwCBCXSv+1uJDQc/IzPL7kZBvAsodPlJwaHbAuBW63OeLXfFo3/GwP6qNh5D7M
+         fpWFMFamJD/hFyEDZ8iRGyDIxLrMz4ysj5Q0WwN7pmWqcbb+IMC58wX1oVfkE+L4KRz1
+         po5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=jZXowGsurJE+s3+HfBZ6GT+6g7K96tSBIPyO+vNCcsA=;
+        b=HEYGZIEl1Wnl/NVDspADRw7eGX2Akrx28mSwADTi3SeZo9H1gwTOzHD+oSl4QQmKof
+         9yd3W3n18z/k6ZzP2qEZeD+nVaKykTAmDP+39HlfdzYjjTO9ToFqRcvdVZqHYfdSjwFT
+         Igr0Sq+wrVJeNIXwbTyiPivCnoqOUyz5qMHUAOXd3wwwpXHXjOexP4uNZnDh2LWaDVZa
+         IctLDrpyM1ot2p/6VlJzyLM2F+dAsrSZciqclvrrzDrARZPSWrSTbxzQuYlTCgsSs/QC
+         miTR9dNqK0itALzR0pdK4NJWebchQV2RpxroScqv98LCMgpCRc2ypz5/LgzBePQb0Fog
+         7uIQ==
+X-Gm-Message-State: ACrzQf0gsSiErGmSqJfNXM/Zh3nm+ka1ya5PZaGYSN4IMlsWKROpFACh
+        VH4OzZU5P6Q9uZVruZpWvIqsFfLgYbSq
+X-Google-Smtp-Source: AMsMyM5gQLmkoq2wQlEnKPsDCXgEFk1fpShBi3BSXv4S72Lx55H99KGCQPG78W+rGnj5gX7yY6U9qKtx776d
+X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:8a9d:7f38:6465:2d7b])
+ (user=irogers job=sendgmr) by 2002:a25:6dc4:0:b0:6c1:822b:391f with SMTP id
+ i187-20020a256dc4000000b006c1822b391fmr25547855ybc.586.1667451287286; Wed, 02
+ Nov 2022 21:54:47 -0700 (PDT)
+Date:   Wed,  2 Nov 2022 21:54:30 -0700
+Message-Id: <20221103045437.163510-1-irogers@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.38.1.273.g43a17bfeac-goog
+Subject: [PATCH v1 0/7] Fix perf trace libbpf 1.0+ compatibility
+From:   Ian Rogers <irogers@google.com>
+To:     Leo Yan <leo.yan@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Stephane Eranian <eranian@google.com>,
+        Ian Rogers <irogers@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-cocci warnings: (new ones prefixed by >>)
->> drivers/net/phy/motorcomm.c:1122:8-35: duplicated argument to & or |
-  drivers/net/phy/motorcomm.c:1126:8-35: duplicated argument to & or |
-  drivers/net/phy/motorcomm.c:1130:8-34: duplicated argument to & or |
-  drivers/net/phy/motorcomm.c:1134:8-34: duplicated argument to & or |
+Perf trace can augment system calls with a BPF program passed as an
+event. The BPF code for this lives in examples. This patch fixes the
+example code to not used deprecated/removed APIs in libbpf. As libbpf
+has similar header files to tools/perf/include/bpf the code is
+transitioned to use the more standard libbpf code and the perf BPF
+header files removed.
 
- The second YT8521_RC1R_GE_TX_DELAY_xx should be YT8521_RC1R_FE_TX_DELAY_xx.
+Ian Rogers (7):
+  perf trace: Raw augmented syscalls fix libbpf 1.0+ compatibility
+  perf trace: Etcsnoop fix libbpf 1.0+ compatibility
+  perf trace: Augmented syscalls fix libbpf 1.0+ compatibility
+  perf trace: hello fix libbpf 1.0+ compatibility
+  perf trace: empty fix libbpf 1.0+ compatibility
+  perf trace: 5sec fix libbpf 1.0+ compatibility
+  perf bpf: Remove now unused BPF headers
 
- Fixes: 70479a40954c ("[net-next,v8.2] net: phy: Add driver for Motorcomm yt8521 gigabit ethernet phy")
-Reported-by: kernel test robot <lkp@intel.com>
-Reported-by: Julia Lawall <julia.lawall@lip6.fr>
-Signed-off-by: Frank <Frank.Sae@motor-comm.com>
----
-v1.1
- -change PATCH net to PATCH net-next
- -add warnings info
- 
- drivers/net/phy/motorcomm.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ tools/perf/Makefile.perf                      |  5 --
+ tools/perf/examples/bpf/5sec.c                |  8 +-
+ .../examples/bpf/augmented_raw_syscalls.c     | 75 ++++++++++++++-----
+ tools/perf/examples/bpf/augmented_syscalls.c  | 58 +++++++++-----
+ tools/perf/examples/bpf/empty.c               | 13 +++-
+ tools/perf/examples/bpf/etcsnoop.c            | 41 ++++++++--
+ tools/perf/examples/bpf/hello.c               | 24 +++++-
+ tools/perf/include/bpf/bpf.h                  | 70 -----------------
+ tools/perf/include/bpf/linux/socket.h         | 24 ------
+ tools/perf/include/bpf/pid_filter.h           | 21 ------
+ tools/perf/include/bpf/stdio.h                | 16 ----
+ tools/perf/include/bpf/unistd.h               | 10 ---
+ 12 files changed, 169 insertions(+), 196 deletions(-)
+ delete mode 100644 tools/perf/include/bpf/bpf.h
+ delete mode 100644 tools/perf/include/bpf/linux/socket.h
+ delete mode 100644 tools/perf/include/bpf/pid_filter.h
+ delete mode 100644 tools/perf/include/bpf/stdio.h
+ delete mode 100644 tools/perf/include/bpf/unistd.h
 
-diff --git a/drivers/net/phy/motorcomm.c b/drivers/net/phy/motorcomm.c
-index c7593f224177..bd1ab5d0631f 100644
---- a/drivers/net/phy/motorcomm.c
-+++ b/drivers/net/phy/motorcomm.c
-@@ -1119,19 +1119,19 @@ static int yt8521_config_init(struct phy_device *phydev)
- 
- 	switch (phydev->interface) {
- 	case PHY_INTERFACE_MODE_RGMII:
--		val = YT8521_RC1R_GE_TX_DELAY_DIS | YT8521_RC1R_GE_TX_DELAY_DIS;
-+		val = YT8521_RC1R_GE_TX_DELAY_DIS | YT8521_RC1R_FE_TX_DELAY_DIS;
- 		val |= YT8521_RC1R_RX_DELAY_DIS;
- 		break;
- 	case PHY_INTERFACE_MODE_RGMII_RXID:
--		val = YT8521_RC1R_GE_TX_DELAY_DIS | YT8521_RC1R_GE_TX_DELAY_DIS;
-+		val = YT8521_RC1R_GE_TX_DELAY_DIS | YT8521_RC1R_FE_TX_DELAY_DIS;
- 		val |= YT8521_RC1R_RX_DELAY_EN;
- 		break;
- 	case PHY_INTERFACE_MODE_RGMII_TXID:
--		val = YT8521_RC1R_GE_TX_DELAY_EN | YT8521_RC1R_GE_TX_DELAY_EN;
-+		val = YT8521_RC1R_GE_TX_DELAY_EN | YT8521_RC1R_FE_TX_DELAY_EN;
- 		val |= YT8521_RC1R_RX_DELAY_DIS;
- 		break;
- 	case PHY_INTERFACE_MODE_RGMII_ID:
--		val = YT8521_RC1R_GE_TX_DELAY_EN | YT8521_RC1R_GE_TX_DELAY_EN;
-+		val = YT8521_RC1R_GE_TX_DELAY_EN | YT8521_RC1R_FE_TX_DELAY_EN;
- 		val |= YT8521_RC1R_RX_DELAY_EN;
- 		break;
- 	case PHY_INTERFACE_MODE_SGMII:
 -- 
-2.31.0.windows.1
+2.38.1.273.g43a17bfeac-goog
 
