@@ -2,113 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B66A617F38
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 15:16:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74F2C617F55
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 15:22:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230435AbiKCOQV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 10:16:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36594 "EHLO
+        id S231376AbiKCOVw convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 3 Nov 2022 10:21:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231715AbiKCOPl (ORCPT
+        with ESMTP id S231458AbiKCOVr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 10:15:41 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34E6F13F07
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 07:14:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667484877;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=FT9aNXqnuKXbR3StefJr7RNDWsInEBudWILSzsOk6wI=;
-        b=alSGSvKr+WORyuxK6qzt7U9rnJVBew5MzTl0DcjKFrAfbQjSVJ7Y7jbUPPQYf3FfNKIvGQ
-        IdVagG2hx2EdYunpyLFadGtmYI9Dey3tCd9lfhj288klCYN3aPPW0NFKEcC5PK3FZdYXNG
-        WynhUzu8MiTaDZbnlzur5JeqfPwfk84=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-108-8Qpk1q88NTOADxqZAGJhHA-1; Thu, 03 Nov 2022 10:14:35 -0400
-X-MC-Unique: 8Qpk1q88NTOADxqZAGJhHA-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D2C662A2AD7D;
-        Thu,  3 Nov 2022 14:14:33 +0000 (UTC)
-Received: from amdlaptop.tlv.redhat.com (dhcp-4-238.tlv.redhat.com [10.35.4.238])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id E9E4640C6EC3;
-        Thu,  3 Nov 2022 14:14:29 +0000 (UTC)
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     kvm@vger.kernel.org
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Chenyi Qiang <chenyi.qiang@intel.com>,
-        Yang Zhong <yang.zhong@intel.com>, x86@kernel.org,
-        Shuah Khan <shuah@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        Colton Lewis <coltonlewis@google.com>,
-        Borislav Petkov <bp@alien8.de>, Peter Xu <peterx@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Jim Mattson <jmattson@google.com>,
-        linux-kselftest@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
-        Wei Wang <wei.w.wang@intel.com>,
-        David Matlack <dmatlack@google.com>, stable@vger.kernel.org
-Subject: [PATCH v2 9/9] KVM: x86: remove exit_int_info warning in svm_handle_exit
-Date:   Thu,  3 Nov 2022 16:13:51 +0200
-Message-Id: <20221103141351.50662-10-mlevitsk@redhat.com>
-In-Reply-To: <20221103141351.50662-1-mlevitsk@redhat.com>
-References: <20221103141351.50662-1-mlevitsk@redhat.com>
+        Thu, 3 Nov 2022 10:21:47 -0400
+Received: from relay.hostedemail.com (smtprelay0011.hostedemail.com [216.40.44.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B23811A2F;
+        Thu,  3 Nov 2022 07:21:44 -0700 (PDT)
+Received: from omf09.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay01.hostedemail.com (Postfix) with ESMTP id BA2A51C6E3C;
+        Thu,  3 Nov 2022 14:15:28 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf09.hostedemail.com (Postfix) with ESMTPA id 6C49E20028;
+        Thu,  3 Nov 2022 14:15:25 +0000 (UTC)
+Message-ID: <aec9ee4b771b70d0839d51b836e6301f0a2a1276.camel@perches.com>
+Subject: Re: [PATCH] cpufreq: longhaul: Make array speeds static const
+From:   Joe Perches <joe@perches.com>
+To:     Colin Ian King <colin.i.king@gmail.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        linux-pm@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Thu, 03 Nov 2022 07:15:24 -0700
+In-Reply-To: <20221103132141.79671-1-colin.i.king@gmail.com>
+References: <20221103132141.79671-1-colin.i.king@gmail.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Stat-Signature: juf6noichzo31sn5pnmdnohcwbefk415
+X-Rspamd-Server: rspamout06
+X-Rspamd-Queue-Id: 6C49E20028
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_NONE,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
+        version=3.4.6
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX1+0rYv0RZQBQuYXkqWzGykvjJA0douUVFc=
+X-HE-Tag: 1667484925-846150
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It is valid to receive external interrupt and have broken IDT entry,
-which will lead to #GP with exit_int_into that will contain the index of
-the IDT entry (e.g any value).
+On Thu, 2022-11-03 at 13:21 +0000, Colin Ian King wrote:
+> Don't populate the read-only array speeds on the stack but instead
+> make it static. Also makes the object code a little smaller.
+[]
+> diff --git a/drivers/cpufreq/longhaul.c b/drivers/cpufreq/longhaul.c
+[]
+> @@ -407,7 +407,7 @@ static int guess_fsb(int mult)
+>  {
+>  	int speed = cpu_khz / 1000;
+>  	int i;
+> -	int speeds[] = { 666, 1000, 1333, 2000 };
+> +	static const int speeds[] = { 666, 1000, 1333, 2000 };
+>  	int f_max, f_min;
+>  
+>  	for (i = 0; i < 4; i++) {
 
-Other exceptions can happen as well, like #NP or #SS
-(if stack switch fails).
+style trivia:  the loop test is probably better using ARRAY_SIZE
 
-Thus this warning can be user triggred and has very little value.
-
-Cc: stable@vger.kernel.org
-Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
----
- arch/x86/kvm/svm/svm.c | 9 ---------
- 1 file changed, 9 deletions(-)
-
-diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-index e9cec1b692051c..36f651ce842174 100644
---- a/arch/x86/kvm/svm/svm.c
-+++ b/arch/x86/kvm/svm/svm.c
-@@ -3428,15 +3428,6 @@ static int svm_handle_exit(struct kvm_vcpu *vcpu, fastpath_t exit_fastpath)
- 		return 0;
- 	}
- 
--	if (is_external_interrupt(svm->vmcb->control.exit_int_info) &&
--	    exit_code != SVM_EXIT_EXCP_BASE + PF_VECTOR &&
--	    exit_code != SVM_EXIT_NPF && exit_code != SVM_EXIT_TASK_SWITCH &&
--	    exit_code != SVM_EXIT_INTR && exit_code != SVM_EXIT_NMI)
--		printk(KERN_ERR "%s: unexpected exit_int_info 0x%x "
--		       "exit_code 0x%x\n",
--		       __func__, svm->vmcb->control.exit_int_info,
--		       exit_code);
--
- 	if (exit_fastpath != EXIT_FASTPATH_NONE)
- 		return 1;
- 
--- 
-2.34.3
+	for (i = 0; i < ARRAY_SIZE(speeds); i++)
 
