@@ -2,68 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0ED6618688
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 18:47:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A10BA61868C
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 18:48:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230222AbiKCRqo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 13:46:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53596 "EHLO
+        id S231168AbiKCRsm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 13:48:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231639AbiKCRqH (ORCPT
+        with ESMTP id S231779AbiKCRsU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 13:46:07 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD3691AF2A
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 10:46:06 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id f5so7328771ejc.5
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 10:46:06 -0700 (PDT)
+        Thu, 3 Nov 2022 13:48:20 -0400
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 882F61DDE6
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 10:47:48 -0700 (PDT)
+Received: by mail-pj1-x104a.google.com with SMTP id b1-20020a17090a10c100b0020da29fa5e5so1252187pje.2
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 10:47:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=e2vl8ggBQ4DSKIkQaxbrvGPJDtNwTTQXpx+tZPGGN8o=;
-        b=EvIvCAkWd7vySy5cybOo5dSXSJUaPIRJpDjtFYj0STk5LWyLct9eEPK12BRCKIM4My
-         hlj1AFu66Ep6lPBqlahaJCW60VORMqxez5xD42rPr1ctZtSaMN8uSMAZ0vtW9eTRptvg
-         xxxRIzJQA7M48Nakd+z8C85wbXZkjlB39cw4TQU3xealVdjmdXTbizLcmbOdbnMqTgEZ
-         TaqfBSiA17CVScCYMsl12JAAdoHjoRnCR088mCY8d7oTQxEkuv2W60H7s838DkbV8K2Q
-         S+E3um0kNwwvIYbAlAg88uVNQxqCCH+2neQniHsISDN0QsvmvBdgUxyvf0qFGQE0JenR
-         wSMA==
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=x5UDPV/B3DbeeLLd5UNbXGu4AbVddR846UKz8icVwAg=;
+        b=ARL1Z+nO3QvcQjmNyeaET5LfZwzcYuge5A11iFR6e70VYgXXlHx0UmBGpYP+zmGc6G
+         q9yFicoNpr1w5MlK6VCq3mcp7j7kvFdNBKYDrty3rK5Hnaj+v+lSK8WQDBmnkhyRA1LW
+         sg4hbNrm7x+kJUaUyva3scLdS7rV6Vs9Q18AYTOYF2p9NTo8oE9y8xjMECrv1eR9fHo7
+         k4WAemX/5vei32E7ZnfyM+v2Kyatx8MOsT9Mxsk6Y+wbWIK+ItpVhSmafBOwCv4rrRV8
+         U4qyVaL/hEuq5tQj3ALAv4vAopBQ/kq9AyRbPEijppOJ/N1Xc8x3Wj13MP9SOGCtFzu7
+         Ztww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=e2vl8ggBQ4DSKIkQaxbrvGPJDtNwTTQXpx+tZPGGN8o=;
-        b=vDYhuVG1M7nzcGsej1QD+E6A4TMNqt2xM6/ejxtV0qBwiYdsPMCdEMzCEc9/ed2r8b
-         6X6H8sOta/zValv8J54k2DHBWwkQLUB/koQD2aOcFUCI38eAgJQJlu5A/cUUCmZc7cdB
-         LSQ+SY2hxAPJFHt9GgOdkreRu/ilbl2SLuLC1G06B9EndLmJJIc3cr1t1Wlnw/zHy4zL
-         671ylJRL8iEZ1Io/UxdvoplWJkJPEKyrD9GDVTdY2uwuEtMhIzbI5dYeyfymlBHh14QZ
-         bbHEny+l6xuxstTwfmb8yCzj+A+WhoxIGi6Bjxf5txIsGjOA9OqhbfLTuyDT+cC/6Wtq
-         kfqA==
-X-Gm-Message-State: ACrzQf24krQX06utvQdBvv5QJ1twtbHSLmogxoiA7an15GJUUmv//NI2
-        hbs/lpuLlfWX5xRFgsJtY9aaaMc5ZtbaN2LSRddCXQ==
-X-Google-Smtp-Source: AMsMyM5OdMT8h0r9sTXgL/pREiL0rU9mrqoPbLfTmrZFu/cEpJpgbnldnZzM/kekiYV9zZ7TUEYWUeDGduEIA++yJnk=
-X-Received: by 2002:a17:907:7d8f:b0:78e:2cba:560f with SMTP id
- oz15-20020a1709077d8f00b0078e2cba560fmr30429617ejc.173.1667497565298; Thu, 03
- Nov 2022 10:46:05 -0700 (PDT)
-MIME-Version: 1.0
-References: <20221102164005.2516646-1-dlatypov@google.com> <20221102164005.2516646-2-dlatypov@google.com>
- <CABVgOSki2WnA_JyYTwdzQJB+fJDPkFRWjmwW60vih+aEJ2QmLg@mail.gmail.com>
-In-Reply-To: <CABVgOSki2WnA_JyYTwdzQJB+fJDPkFRWjmwW60vih+aEJ2QmLg@mail.gmail.com>
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=x5UDPV/B3DbeeLLd5UNbXGu4AbVddR846UKz8icVwAg=;
+        b=lcvRlkjqSu8EYtWfDVrdz/YNNBHD3pvsxKgFXoRzyV1zEjUhuye4PGL+kqoepBW3yr
+         EdmT03KXtPukiIbE50tT5rY4KjOJMtWVMon2H4jTpuPlahYdKRY68EfB6ZX+Yr82drUw
+         IpJ6k79KIdFtECk7amsMSjkKD9Tax+v6lFaXtu4Ip/K73b0hfWb+8oGLvbHfoM3T5T/r
+         Bsr0HvknKRLn/aG9fl7v4S7t7PdqQy7fFN3FOe07HR1HFen71m7529UxEOvTYtyg6v6n
+         d+StzBee4qVlEJifQnG+rpoKsnFU8f31oyLo5A/pvpjUmQAgeXCi/OESf2CK03n7Q7a/
+         u0IA==
+X-Gm-Message-State: ACrzQf0sbmCLyPCM6q/R8zJTx5MwxPyR56uQxiwR5fSdeOIm6OjPa1gx
+        rr2RiZpiWcdlvceZbzb0SE0TnZj7XyMSHA==
+X-Google-Smtp-Source: AMsMyM4oTyeetb2fHUi/IMTtVZJbETiXu+iiifYy2OyaOkeY2IKWBmMNsJS3S8pcU87mpdisnUTHwNVbGpHEGw==
+X-Received: from dlatypov-spec.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:3f35])
+ (user=dlatypov job=sendgmr) by 2002:a17:902:c949:b0:187:2be9:9f0a with SMTP
+ id i9-20020a170902c94900b001872be99f0amr18975485pla.58.1667497668055; Thu, 03
+ Nov 2022 10:47:48 -0700 (PDT)
+Date:   Thu,  3 Nov 2022 10:47:38 -0700
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
+Message-ID: <20221103174740.3492603-1-dlatypov@google.com>
+Subject: [PATCH v2 1/3] kunit: tool: make TestCounts a dataclass
 From:   Daniel Latypov <dlatypov@google.com>
-Date:   Thu, 3 Nov 2022 10:45:53 -0700
-Message-ID: <CAGS_qxpVvM825nxi2Vw3WcSAbbHJKPCk0Thx9LGgnz5FtPgxNQ@mail.gmail.com>
-Subject: Re: [PATCH 2/3] kunit: tool: unit tests all check parser errors,
- standardize formatting a bit
-To:     David Gow <davidgow@google.com>
-Cc:     brendanhiggins@google.com, rmoar@google.com,
-        linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org
+To:     brendanhiggins@google.com, davidgow@google.com
+Cc:     rmoar@google.com, linux-kernel@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        skhan@linuxfoundation.org, Daniel Latypov <dlatypov@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,31 +67,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 2, 2022 at 11:38 PM David Gow <davidgow@google.com> wrote:
->
-> On Thu, Nov 3, 2022 at 12:40 AM 'Daniel Latypov' via KUnit Development
-> <kunit-dev@googlegroups.com> wrote:
-> >
-> > Let's verify that the parser isn't reporting any errors for valid
-> > inputs.
-> >
-> > This change also
-> > * does result.status checking on one line
-> > * makes sure we consistently do it outside of the `with` block
-> >
-> > Signed-off-by: Daniel Latypov <dlatypov@google.com>
-> > ---
->
-> Looks good, thanks.
->
-> Note that this patch does conflict with "kunit: tool: print summary of
-> failed tests if a few failed out of a lot":
-> https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git/commit/?h=kunit&id=f19dd011d8de6f0c1d20abea5158aa4f5d9cea44
-> It's only a context line issue, though.
->
-> Reviewed-by: David Gow <davidgow@google.com>
+Since we're using Python 3.7+, we can use dataclasses to tersen the
+code.
 
-Oh huh, I rebased onto the kunit branch and it managed to merge cleanly.
-I guess `git am` is more picky than `git rebase`.
+It also lets us create pre-populated TestCounts() objects and compare
+them in our unit test. (Before, you could only create empty ones).
 
-I'll send a v2 that's rebased to avoid issues applying them.
+Signed-off-by: Daniel Latypov <dlatypov@google.com>
+Reviewed-by: David Gow <davidgow@google.com>
+---
+v1 -> v2: just rebased onto linux-kselftest/kunit
+---
+ tools/testing/kunit/kunit_parser.py    | 25 ++++++++-----------------
+ tools/testing/kunit/kunit_tool_test.py |  4 +---
+ 2 files changed, 9 insertions(+), 20 deletions(-)
+
+diff --git a/tools/testing/kunit/kunit_parser.py b/tools/testing/kunit/kunit_parser.py
+index 94dba66feec5..a56c75a973b5 100644
+--- a/tools/testing/kunit/kunit_parser.py
++++ b/tools/testing/kunit/kunit_parser.py
+@@ -10,6 +10,7 @@
+ # Author: Rae Moar <rmoar@google.com>
+ 
+ from __future__ import annotations
++from dataclasses import dataclass
+ import re
+ import sys
+ 
+@@ -71,27 +72,17 @@ class TestStatus(Enum):
+ 	NO_TESTS = auto()
+ 	FAILURE_TO_PARSE_TESTS = auto()
+ 
++@dataclass
+ class TestCounts:
+ 	"""
+ 	Tracks the counts of statuses of all test cases and any errors within
+ 	a Test.
+-
+-	Attributes:
+-	passed : int - the number of tests that have passed
+-	failed : int - the number of tests that have failed
+-	crashed : int - the number of tests that have crashed
+-	skipped : int - the number of tests that have skipped
+-	errors : int - the number of errors in the test and subtests
+-	"""
+-	def __init__(self):
+-		"""Creates TestCounts object with counts of all test
+-		statuses and test errors set to 0.
+-		"""
+-		self.passed = 0
+-		self.failed = 0
+-		self.crashed = 0
+-		self.skipped = 0
+-		self.errors = 0
++	"""
++	passed: int = 0
++	failed: int = 0
++	crashed: int = 0
++	skipped: int = 0
++	errors: int = 0
+ 
+ 	def __str__(self) -> str:
+ 		"""Returns the string representation of a TestCounts object."""
+diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
+index 7dcd67003b23..440a273f1d21 100755
+--- a/tools/testing/kunit/kunit_tool_test.py
++++ b/tools/testing/kunit/kunit_tool_test.py
+@@ -182,9 +182,7 @@ class KUnitParserTest(unittest.TestCase):
+ 				kunit_parser.extract_tap_lines(
+ 				file.readlines()))
+ 		# A missing test plan is not an error.
+-		self.assertEqual(0, result.counts.errors)
+-		# All tests should be accounted for.
+-		self.assertEqual(10, result.counts.total())
++		self.assertEqual(result.counts, kunit_parser.TestCounts(passed=10, errors=0))
+ 		self.assertEqual(
+ 			kunit_parser.TestStatus.SUCCESS,
+ 			result.status)
+
+base-commit: 29ad37f740d302d0f27374edaf85fe8978e45ba9
+-- 
+2.38.1.431.g37b22c650d-goog
+
