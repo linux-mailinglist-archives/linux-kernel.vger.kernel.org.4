@@ -2,73 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E94F8617639
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 06:37:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9A9D61763B
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 06:38:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229964AbiKCFho (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 01:37:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59484 "EHLO
+        id S230415AbiKCFiE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 01:38:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229733AbiKCFhl (ORCPT
+        with ESMTP id S229733AbiKCFiB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 01:37:41 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C87BD2DE3
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 22:37:40 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id t25so2405012ejb.8
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 22:37:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=N6yuz4vaBpXGDDofkp9biEi/JZM9rALV78sm7Rm0mFs=;
-        b=nIKDt+21vRMTOrnwSIevXDaFC6NEbImnogX/D4tvD0xfn1Pj7HmpQIpHuD8vZKnsjT
-         tyU3gGqazU0vZWd6lemwHKRiic4xZqjRpEZYVZrDfUgzHGcky3HMFZcanNgKOuff3IcN
-         Pzd+Zc0mS7047vA2ELUq+6AYPoE0NqyVpI/MWOrPMH6GOsxzYhUH8cxbFq4Us3RT2IYb
-         zTJtJC0438wwYAVzf0fTckqgGlq3dT/+0U/bjLnuHWGshgUlOTNTc0Z/8Iit/UTNJaJB
-         JyuD/uf2g0y5O8lWfrl5wgnZio2iHAWX6nXuJz1xV8gxqSYH8T8QuwK/cincf0Mk2XAW
-         gHFA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=N6yuz4vaBpXGDDofkp9biEi/JZM9rALV78sm7Rm0mFs=;
-        b=Dx50F5E8MqHPNQNmbU8CEJTJvkNdWrt9KJdLtk7XOA7ZUNxD0/ghRyk9+caEtIDfV9
-         31yXKlIVJfcaMdTfNB058wYBz7j6v4bbmm52AXZp5fZop4CC3RxukGmYdSKkHHiuIMc/
-         RmRP0AY8k2YEOU1mNjPoL1KW2qon/JPSh7cYKVSFWlCLpwdZQewP67ql1J8u2wAbpYo7
-         jAHeD9XSNUodN6+yDjfIf1g0mPamzxuKVCdbYMTpGob1nBtQHWHdOCU/HDSmpVTPg13V
-         PjEcuqchP9FMYa9KakqySJzQQ5rTNASGRike/lGACe+vl+m8U6RbabplzwoRqckkoNh2
-         A6kQ==
-X-Gm-Message-State: ACrzQf1eQ79qAfrRb6y620prSJN0HcssFSxWCWwzguE6C0/3ZwrTYwL3
-        YNGwvJ+fq1p6Ig9525bUAY6vEblsGBo=
-X-Google-Smtp-Source: AMsMyM40GLHvYKeS3BzkTPHm0n5pKPvj/IL9FROYw3v0be2+HGt7yHQWxBCrrmwFgnOOpHxbdPo1/A==
-X-Received: by 2002:a17:907:3f95:b0:7a2:36c7:31bd with SMTP id hr21-20020a1709073f9500b007a236c731bdmr27738226ejc.353.1667453859321;
-        Wed, 02 Nov 2022 22:37:39 -0700 (PDT)
-Received: from [192.168.0.101] (ip5f5abb6c.dynamic.kabel-deutschland.de. [95.90.187.108])
-        by smtp.gmail.com with ESMTPSA id lb18-20020a170907785200b00741a0c3f4cdsm11090ejc.189.2022.11.02.22.37.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Nov 2022 22:37:38 -0700 (PDT)
-Message-ID: <2e065cba-8094-3900-67e6-3a647bec3a7c@gmail.com>
-Date:   Thu, 3 Nov 2022 06:37:38 +0100
+        Thu, 3 Nov 2022 01:38:01 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDA562DE4;
+        Wed,  2 Nov 2022 22:37:59 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4N2swk2fs3z4xP9;
+        Thu,  3 Nov 2022 16:37:58 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1667453878;
+        bh=FNYmxgIkNSWN5NQQMV3yQPmQJmWGtWG9QK3nm8/y/RU=;
+        h=Date:From:To:Cc:Subject:From;
+        b=TfPjM+0RlKXndU8ODniDEBb+6WJ4DQvhW1vQVAh0NsKUzS6UvgbN2cYonP7Ys9YDd
+         2X3URh1kroXHKnXlk9PKn3uhHmo7O8QWQUFlHJDw7w6O81KGhjnSHCNThiX2/mSAFy
+         j3T6JfuPAppuuWaHRUMBhBWqwwsPeRoNK3exHTo/zmrVUK+gQN8hjsNHhxJLvO/Nyf
+         RHpolSdVTRyxCP2ctLuvyeSWUgod2LxdIQrrnBYUC5/y8G6h7gZPx7x8mGKikDLlOc
+         tB1DfKhPtnGyZbzlgOGAM19MvCBmhTWGQy//Lcc7IOS9tb3SQgqPvzFMKdL8sxZ/oJ
+         6XIC6AxcQw01w==
+Date:   Thu, 3 Nov 2022 16:37:57 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Joel Stanley <joel@jms.id.au>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Signed-off-by missing for commit in the aspeed tree
+Message-ID: <20221103163757.1b6219a9@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH] staging: r8188eu: change return type of
- rtw_set_802_11_disassociate to void
-Content-Language: en-US
-To:     Phillip Potter <phil@philpotter.co.uk>, gregkh@linuxfoundation.org
-Cc:     Larry.Finger@lwfinger.net, paskripkin@gmail.com,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-References: <20221102233637.6648-1-phil@philpotter.co.uk>
-From:   Michael Straube <straube.linux@gmail.com>
-In-Reply-To: <20221102233637.6648-1-phil@philpotter.co.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: multipart/signed; boundary="Sig_/e7IVy5M_L9LZoUIrD0mX70n";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,44 +50,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Phillip,
+--Sig_/e7IVy5M_L9LZoUIrD0mX70n
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On 11/3/22 00:36, Phillip Potter wrote:
-> Change return type of rtw_set_802_11_disassociate to void. This function
-> always returns 'true' no matter what, so there is no need to return a
-> value, and no need to check for it in the two call sites within
-> rtw_wx_set_mlme.
-> 
-> Signed-off-by: Phillip Potter <phil@philpotter.co.uk>
-> ---
->   drivers/staging/r8188eu/core/rtw_ioctl_set.c    | 4 +---
->   drivers/staging/r8188eu/include/rtw_ioctl_set.h | 2 +-
->   drivers/staging/r8188eu/os_dep/ioctl_linux.c    | 6 ++----
->   3 files changed, 4 insertions(+), 8 deletions(-)
-> 
+Hi all,
 
-<snip>
+Commit
 
-> --- a/drivers/staging/r8188eu/os_dep/ioctl_linux.c
-> +++ b/drivers/staging/r8188eu/os_dep/ioctl_linux.c
-> @@ -1020,12 +1020,10 @@ static int rtw_wx_set_mlme(struct net_device *dev,
->   
->   	switch (mlme->cmd) {
->   	case IW_MLME_DEAUTH:
-> -		if (!rtw_set_802_11_disassociate(padapter))
-> -			ret = -1;
-> +		rtw_set_802_11_disassociate(padapter);
->   		break;
->   	case IW_MLME_DISASSOC:
-> -		if (!rtw_set_802_11_disassociate(padapter))
-> -			ret = -1;
-> +		rtw_set_802_11_disassociate(padapter);
->   		break;
->   	default:
->   		return -EOPNOTSUPP;
+  e5bf0d36698a ("soc: nuvoton: Add SoC info driver for WPCM450")
 
-You could also remove the ret variable and return 0 directly, since ret
-is not changed anymore in the function.
+is missing a Signed-off-by from its committer.
 
-regards,
-Michael
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/e7IVy5M_L9LZoUIrD0mX70n
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNjU7UACgkQAVBC80lX
+0GwBeggAjzH6RQZT3k0nBNHCU70T3BU/lN4mvt6cRIt/FHGUHARTeSbGfu5MiyJj
+qDjI9SAGbJAIQoPpIkq4HrAUlNgYX3fFhmDWzQvRNNOXKupYVcBXBe0IAJ8zTVnh
+DPHU69lXf1bgAih2qo5hXa2PtwyRvqVL6i1xoPNA+7uZNTuW2FHRyRCYpc9n/9s9
+muxlVFRFSYZ2B2fJVxXEsyZNK7S9ENUzDXMIsxcxSVms/qUpGny1oZ8eR5PeCb3h
+3fYpxeSklHUsSh3eF9jxDhnK0j+zOHWudnVTwkFFbSRa4aNNPYX2s1iHbN4letYw
+tcCA1JShoE4hHyL+F+OVH7iaaBSNpw==
+=7e63
+-----END PGP SIGNATURE-----
+
+--Sig_/e7IVy5M_L9LZoUIrD0mX70n--
