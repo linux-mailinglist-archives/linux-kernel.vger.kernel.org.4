@@ -2,88 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD1E66186A0
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 18:52:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCEB76186A4
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 18:52:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231732AbiKCRwQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 13:52:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59532 "EHLO
+        id S231781AbiKCRwt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 13:52:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231735AbiKCRwM (ORCPT
+        with ESMTP id S230473AbiKCRwq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 13:52:12 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B9441C43B;
-        Thu,  3 Nov 2022 10:52:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EE461B82530;
-        Thu,  3 Nov 2022 17:52:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96A7AC433D6;
-        Thu,  3 Nov 2022 17:52:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667497927;
-        bh=Zenn+6jbnDODhRSDzC9hBVXh9GHEta/CVzhrCuwWHCw=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=bM+a0APFONgHxxLGMHR74xUMwtAbmWQagYge35W9x3ufuaTzP/XZx8clzl60ayDeM
-         p9QnMLukruWAVK8OMu7V+yzrHdhbefidqHVRin2/KdxKN9mOxu6iOBl+95FXMoeHUL
-         70BBB3vn+y6IWTNzUg79uNN/jDH6eJFlNwXMMtTigia0xJzLgSe7zSgdPuWnH+IH9g
-         i2WF93WjE+y6nkVpqeITk0XQa9fMkbpel2vhVR+dqQCSvxLxZIF9hhW4HvBIDVPMoZ
-         JKuKl2vCSShnWcAfi02JXqkJc6+xMVz4r8o+bgqq9MPv/1uXEgghT06LxGAWuheREo
-         pGEcZibH+pX4Q==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 3F86E5C097E; Thu,  3 Nov 2022 10:52:07 -0700 (PDT)
-Date:   Thu, 3 Nov 2022 10:52:07 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Uladzislau Rezki <urezki@gmail.com>
-Cc:     Joel Fernandes <joel@joelfernandes.org>, rcu@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RFC] rcu/kfree: Do not request RCU when not needed
-Message-ID: <20221103175207.GC5600@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20221102184911.GP5600@paulmck-ThinkPad-P17-Gen-1>
- <755B5ED1-653D-4E57-B114-77CDE10A9033@joelfernandes.org>
- <20221102202813.GR5600@paulmck-ThinkPad-P17-Gen-1>
- <CAEXW_YQ+SxBoNUkPHhC3O0DJNQtZomN_4GPtvaWuDs5sSU4FAw@mail.gmail.com>
- <20221102223516.GT5600@paulmck-ThinkPad-P17-Gen-1>
- <Y2O3w3d3qmTg6VAP@pc638.lan>
+        Thu, 3 Nov 2022 13:52:46 -0400
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08E64B4E;
+        Thu,  3 Nov 2022 10:52:45 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.west.internal (Postfix) with ESMTP id 461D93200805;
+        Thu,  3 Nov 2022 13:52:43 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Thu, 03 Nov 2022 13:52:44 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1667497962; x=1667584362; bh=/jl6iy49gLxL3OPiwyn4XeKNHfG6
+        xbi+bJ/ciZbyZA8=; b=QGP52SJRBMNSAg3g5OYqX4Egb+NRp6yOkpi+D2ZDl2jr
+        quA3BWYUowucf+XGBHEAfQ58WFvh5hDpvnRqkT84mIgSI1/KL0z2E4Pm+mZqo1Ls
+        Ot3s6pmaVI6OzFOmCaXVEdJysEN7mmW8g/xU7gutqJkCnZosDd3WGco/aP7m2JZR
+        B9gVNoW8armmum6yRew1EUOxS8rKH+0C3yJ+Zst6JcU1eHrRbQ81JY+snyDf1qiL
+        7psccSKpzKAxBTFBfuKhqGFJE0OpUDttqWlkKblFWZG44Rcub944ABvFu4Po/TZi
+        7P6KZbY+alCJbaRjR2Q2TOOMRQCJqhFyjtsI2n0Zhw==
+X-ME-Sender: <xms:6f9jY-vLKWKGirAscceibg1va3_4zvlzOnrPbo4WzBzgBkfntRpV2A>
+    <xme:6f9jYzcRm2etw4Vhm1POJunQoXMjhKObO7HRcUDLiBpCWOW37ldtkuf0hzFe9zXRe
+    QplfLYfxh_Lv4Q>
+X-ME-Received: <xmr:6f9jY5wWkvYKfzKNKw60TsVqSTY9ywyB8hZ-riP_nbmG8G6ycpoowfVszaVeNgsostXhSLj6QWVJFPEO7DGPffzqjUWavA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrudelgddutdduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepkfguohcu
+    ufgthhhimhhmvghluceoihguohhstghhsehiughoshgthhdrohhrgheqnecuggftrfgrth
+    htvghrnhepvddufeevkeehueegfedtvdevfefgudeifeduieefgfelkeehgeelgeejjeeg
+    gefhnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepih
+    guohhstghhsehiughoshgthhdrohhrgh
+X-ME-Proxy: <xmx:6f9jY5M0N6EI6kyCV5XwpfaOLIObBDFjuh2HHqapPSfHGczBu5HUgA>
+    <xmx:6f9jY-84hWs54ecc36CR4gOoqpfhsTo-F2x2B-1argPcFn_J-5gtkA>
+    <xmx:6f9jYxWUGrj1ObH3jwX_PJHfrgnVQsfcRexpYfnUv8LsAgRIVzmqkQ>
+    <xmx:6v9jYweBDjkIUBwIp4-Wee-Yg9sQRZCPa2alWJsTLPXA3-Y7nstNUQ>
+Feedback-ID: i494840e7:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 3 Nov 2022 13:52:40 -0400 (EDT)
+Date:   Thu, 3 Nov 2022 19:52:31 +0200
+From:   Ido Schimmel <idosch@idosch.org>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Roman Gushchin <roman.gushchin@linux.dev>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Andy Ren <andy.ren@getcruise.com>, netdev@vger.kernel.org,
+        richardbgobert@gmail.com, davem@davemloft.net,
+        wsa+renesas@sang-engineering.com, edumazet@google.com,
+        petrm@nvidia.com, pabeni@redhat.com, corbet@lwn.net,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        David Ahern <dsahern@gmail.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>
+Subject: Re: [PATCH net-next v2] netconsole: Enable live renaming for network
+ interfaces used by netconsole
+Message-ID: <Y2P/33wfWmQ/xC3n@shredder>
+References: <20221102002420.2613004-1-andy.ren@getcruise.com>
+ <Y2G+SYXyZAB/r3X0@lunn.ch>
+ <20221101204006.75b46660@kernel.org>
+ <Y2KlfhfijyNl8yxT@P9FQF9L96D.corp.robot.car>
+ <20221102125418.272c4381@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y2O3w3d3qmTg6VAP@pc638.lan>
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221102125418.272c4381@kernel.org>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 03, 2022 at 01:44:51PM +0100, Uladzislau Rezki wrote:
+On Wed, Nov 02, 2022 at 12:54:18PM -0700, Jakub Kicinski wrote:
+> On Wed, 2 Nov 2022 10:14:38 -0700 Roman Gushchin wrote:
+> > > Agreed. BTW I wonder if we really want to introduce a netconsole
+> > > specific uAPI for this or go ahead with something more general.  
 > > 
-> > > Though I am thinking, workqueue context is normally used to invoke
-> > > code that can block, and would the issue you mentioned affect those as
-> > > well, or affect RCU when those non-RCU work items block. So for
-> > > example, when other things in the system that can queue things on the
-> > > system_wq and block.  (I might be throwing darts in the dark).
+> > Netconsole is a bit special because it brings an interface up very early.
+> > E.g. in our case without the netconsole the renaming is happening before
+> > the interface is brought up.
+> > 
+> > I wonder if the netconsole-specific flag should allow renaming only once.
+> >  
+> > > A sysctl for global "allow UP rename"?  
+> > 
+> > This will work for us, but I've no idea what it will break for other users
+> > and how to check it without actually trying to break :) And likely we won't
+> > learn about it for quite some time, asssuming they don't run net-next.
+> 
+> Then again IFF_LIVE_RENAME_OK was added in 5.2 so quite a while back.
+> 
+> > > We added the live renaming for failover a while back and there were 
+> > > no reports of user space breaking as far as I know. So perhaps nobody
+> > > actually cares and we should allow renaming all interfaces while UP?
+> > > For backwards compat we can add a sysctl as mentioned or a rtnetlink 
+> > > "I know what I'm doing" flag? 
 > > > 
-> > > To be safe, we can implement your suggestion which is basically a form
-> > > of my initial patch.
+> > > Maybe print an info message into the logs for a few releases to aid
+> > > debug?
 > > > 
-> > > Should we add Tejun to the thread?
+> > > IOW either there is a reason we don't allow rename while up, and
+> > > netconsole being bound to an interface is immaterial. Or there is 
+> > > no reason and we should allow all.  
 > > 
-> > Let's get organized first, but that would be a good thing.  Or I could
-> > reach out to Tejun internally.
-> > 
-> > For but one thing to get organized about, maybe kfree_rcu() should be
-> > using a workqueue with the WQ_MEM_RECLAIM flag set.
-> > 
-> It can be as an option to consider. Because such workqueue has some
-> special priority for better handling of memory releasing. I can have
-> a look at it closer to see how kvfree_rcu() works if it goes with WQ_MEM_RECLAIM.
+> > My understanding is that it's not an issue for the kernel, but might be
+> > an issue for some userspace apps which do not expect it.
+> 
+> There are in-kernel notifier users which could cache the name on up /
+> down. But yes, the user space is the real worry.
+> 
+> > If you prefer to go with the 'global sysctl' approach, how the path forward
+> > should look like?
+> 
+> That's the question. The sysctl would really just be to cover our back
+> sides, and be able to tell the users "you opted in by setting that
+> sysctl, we didn't break backward compat". But practically speaking, 
+> its a different entity that'd be flipping the sysctl (e.g. management
+> daemon) and different entity that'd be suffering (e.g. routing daemon).
+> So the sysctl doesn't actually help anyone :/
+> 
+> So maybe we should just risk it and wonder about workarounds once
+> complains surface, if they do. Like generate fake down/up events.
+> Or create some form of "don't allow live renames now" lock-like
+> thing a process could take.
+> 
+> Adding a couple more CCs and if nobody screams at us I vote we just
+> remove the restriction instead of special casing.
 
-Sounds good, thank you!
-
-							Thanx, Paul
+Tried looking at history.git to understand the reasoning behind this
+restriction. I guess it's because back then it was only possible via
+IOCTL and user space wouldn't be notified about such a change. Nowadays
+user space gets a notification regardless of the administrative state of
+the netdev (see rtnetlink_event()). At least in-kernel listeners to
+NETDEV_CHANGENAME do not seem to care if the netdev is administratively
+up or not. So, FWIW, the suggested approach sounds sane to me.
