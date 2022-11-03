@@ -2,30 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7ACF617825
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 08:57:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A56C617824
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 08:57:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231639AbiKCH5M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 03:57:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44690 "EHLO
+        id S231542AbiKCH5G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 03:57:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231514AbiKCH4S (ORCPT
+        with ESMTP id S231516AbiKCH4S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 3 Nov 2022 03:56:18 -0400
 Received: from mail.nearlyone.de (mail.nearlyone.de [46.163.114.145])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A4CDAE4E;
-        Thu,  3 Nov 2022 00:55:54 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id E204261E1F;
-        Thu,  3 Nov 2022 08:55:52 +0100 (CET)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAE8C5FEC;
+        Thu,  3 Nov 2022 00:55:55 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 0AB2861E22;
+        Thu,  3 Nov 2022 08:55:54 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=monom.org; s=dkim;
-        t=1667462153; h=from:subject:date:message-id:to:cc:mime-version:
+        t=1667462154; h=from:subject:date:message-id:to:cc:mime-version:
          content-transfer-encoding:in-reply-to:references;
-        bh=5LucOqU2x9EBByrXZ+ibDrA1kTOF1CUG460+GIlO/2E=;
-        b=In7q2bsUyStHQIy7MjdnWi169beCyyeRVrKjb+nbN+jyP7QYFDtKqanyFYVYOHrl3CW4Y9
-        8esQfBTuTIE/4KMOPEVM1rjzPHZZMLHXclWo2TDQEQTagQy6HtvF8+1Be3xAu5ZzxtKtp3
-        vUbrA8Bu0IUdGbzxD7bx0zwxEnqxHdkh7eeSp1zmDbanq0+P39En6gTQqWsCq54hgvXAQL
-        lVXu7ubfs4tf5CRjtdZblDIkRypbm3eVJNnuLhmOtSvpL8EfT9pwBg2o2CAkYthF3ZDa7s
-        jj9JEurMdA8uYdl3vSMJ05+0fuYYuWF815pOn5tnywQXq10iCyTfpTSS/o5dlA==
+        bh=ZxhjYU0O0vxXngLgbF21571m+6DO7DnQnlwU/VKcYWA=;
+        b=l9EmVc+WeSb+UvTMwVrqzYARLhTPxntmczs/zvkZtqfZWpqVzdgGB3/8iajkWfVFM4XiU6
+        nqPYAqBUXdSuxXK0Wr971eDapJQJdU8KJaaLNCwGS3IV0pEMHKJ4pO8udXx3C+F3kA+qs4
+        /WfaK1n5RBXWVN3CeSSB+JQNeU9stZfTXI2juTt3Z5ybdrDTFFEIKQL7TlysZM0vC0meJX
+        shpw+bIByCt5toSOT6gHP7f74HCY2D5Sgdzgy3Id/CX3eapDYkNMZwtcui8pwIBYLMnPyY
+        lxYS4KYAX64B83Vh2pJFPkjA/NK9QYHIoMMPa+DFf+BpYq4rYFq9bB+Zp02AGg==
 From:   Daniel Wagner <wagi@monom.org>
 To:     LKML <linux-kernel@vger.kernel.org>,
         linux-rt-users <linux-rt-users@vger.kernel.org>,
@@ -37,12 +37,10 @@ To:     LKML <linux-kernel@vger.kernel.org>,
         Tom Zanussi <tom.zanussi@linux.intel.com>,
         Clark Williams <williams@redhat.com>,
         Pavel Machek <pavel@denx.de>
-Cc:     syzbot+aa7c2385d46c5eba0b89@syzkaller.appspotmail.com,
-        syzbot+abea4558531bae1ba9fe@syzkaller.appspotmail.com,
-        stable@vger.kernel.org, Daniel Wagner <wagi@monom.org>
-Subject: [PATCH RT 2/4] timers: Move clearing of base::timer_running under base:: Lock
-Date:   Thu,  3 Nov 2022 08:55:46 +0100
-Message-Id: <20221103075548.6477-3-wagi@monom.org>
+Cc:     Mike Galbraith <efault@gmx.de>, Daniel Wagner <wagi@monom.org>
+Subject: [PATCH RT 3/4] timers: Don't block on ->expiry_lock for TIMER_IRQSAFE timers
+Date:   Thu,  3 Nov 2022 08:55:47 +0100
+Message-Id: <20221103075548.6477-4-wagi@monom.org>
 In-Reply-To: <20221103075548.6477-1-wagi@monom.org>
 References: <20221103075548.6477-1-wagi@monom.org>
 MIME-Version: 1.0
@@ -57,7 +55,7 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Thomas Gleixner <tglx@linutronix.de>
+From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 
 v4.19.255-rt114-rc2 stable review patch.
 If anyone has any objections, please let me know.
@@ -65,86 +63,68 @@ If anyone has any objections, please let me know.
 -----------
 
 
-Upstream commit bb7262b295472eb6858b5c49893954794027cd84
+Upstream commit c725dafc95f1b37027840aaeaa8b7e4e9cd20516
 
-syzbot reported KCSAN data races vs. timer_base::timer_running being set to
-NULL without holding base::lock in expire_timers().
+PREEMPT_RT does not spin and wait until a running timer completes its
+callback but instead it blocks on a sleeping lock to prevent a livelock in
+the case that the task waiting for the callback completion preempted the
+callback.
 
-This looks innocent and most reads are clearly not problematic, but
-Frederic identified an issue which is:
+This cannot be done for timers flagged with TIMER_IRQSAFE. These timers can
+be canceled from an interrupt disabled context even on RT kernels.
 
- int data = 0;
+The expiry callback of such timers is invoked with interrupts disabled so
+there is no need to use the expiry lock mechanism because obviously the
+callback cannot be preempted even on RT kernels.
 
- void timer_func(struct timer_list *t)
- {
-    data = 1;
- }
+Do not use the timer_base::expiry_lock mechanism when waiting for a running
+callback to complete if the timer is flagged with TIMER_IRQSAFE.
 
- CPU 0                                            CPU 1
- ------------------------------                   --------------------------
- base = lock_timer_base(timer, &flags);           raw_spin_unlock(&base->lock);
- if (base->running_timer != timer)                call_timer_fn(timer, fn, baseclk);
-   ret = detach_if_pending(timer, base, true);    base->running_timer = NULL;
- raw_spin_unlock_irqrestore(&base->lock, flags);  raw_spin_lock(&base->lock);
+Also add a lockdep assertion for RT kernels to validate that the expiry
+lock mechanism is always invoked in preemptible context.
 
- x = data;
+[ bigeasy: Dropping that lockdep_assert_preemption_enabled() check in
+           backport ]
 
-If the timer has previously executed on CPU 1 and then CPU 0 can observe
-base->running_timer == NULL and returns, assuming the timer has completed,
-but it's not guaranteed on all architectures. The comment for
-del_timer_sync() makes that guarantee. Moving the assignment under
-base->lock prevents this.
-
-For non-RT kernel it's performance wise completely irrelevant whether the
-store happens before or after taking the lock. For an RT kernel moving the
-store under the lock requires an extra unlock/lock pair in the case that
-there is a waiter for the timer, but that's not the end of the world.
-
-Reported-by: syzbot+aa7c2385d46c5eba0b89@syzkaller.appspotmail.com
-Reported-by: syzbot+abea4558531bae1ba9fe@syzkaller.appspotmail.com
-Fixes: 030dcdd197d7 ("timers: Prepare support for PREEMPT_RT")
+Reported-by: Mike Galbraith <efault@gmx.de>
+Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Tested-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Link: https://lore.kernel.org/r/87lfea7gw8.fsf@nanos.tec.linutronix.de
-Cc: stable@vger.kernel.org
+Link: https://lore.kernel.org/r/20201103190937.hga67rqhvknki3tp@linutronix.de
 Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 Signed-off-by: Daniel Wagner <wagi@monom.org>
 ---
- kernel/time/timer.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ kernel/time/timer.c | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
 diff --git a/kernel/time/timer.c b/kernel/time/timer.c
-index b859ecf6424b..603985720f54 100644
+index 603985720f54..8c7bfcee9609 100644
 --- a/kernel/time/timer.c
 +++ b/kernel/time/timer.c
-@@ -1282,8 +1282,10 @@ static inline void timer_base_unlock_expiry(struct timer_base *base)
- static void timer_sync_wait_running(struct timer_base *base)
- {
- 	if (atomic_read(&base->timer_waiters)) {
-+		raw_spin_unlock_irq(&base->lock);
- 		spin_unlock(&base->expiry_lock);
- 		spin_lock(&base->expiry_lock);
-+		raw_spin_lock_irq(&base->lock);
- 	}
- }
+@@ -1304,7 +1304,7 @@ static void del_timer_wait_running(struct timer_list *timer)
+ 	u32 tf;
  
-@@ -1458,14 +1460,14 @@ static void expire_timers(struct timer_base *base, struct hlist_head *head)
- 		if (timer->flags & TIMER_IRQSAFE) {
- 			raw_spin_unlock(&base->lock);
- 			call_timer_fn(timer, fn);
--			base->running_timer = NULL;
- 			raw_spin_lock(&base->lock);
-+			base->running_timer = NULL;
- 		} else {
- 			raw_spin_unlock_irq(&base->lock);
- 			call_timer_fn(timer, fn);
-+			raw_spin_lock_irq(&base->lock);
- 			base->running_timer = NULL;
- 			timer_sync_wait_running(base);
--			raw_spin_lock_irq(&base->lock);
- 		}
- 	}
- }
+ 	tf = READ_ONCE(timer->flags);
+-	if (!(tf & TIMER_MIGRATING)) {
++	if (!(tf & (TIMER_MIGRATING | TIMER_IRQSAFE))) {
+ 		struct timer_base *base = get_timer_base(tf);
+ 
+ 		/*
+@@ -1388,6 +1388,15 @@ int del_timer_sync(struct timer_list *timer)
+ 	 */
+ 	WARN_ON(in_irq() && !(timer->flags & TIMER_IRQSAFE));
+ 
++	/*
++	 * Must be able to sleep on PREEMPT_RT because of the slowpath in
++	 * del_timer_wait_running().
++	 */
++#if 0
++	if (IS_ENABLED(CONFIG_PREEMPT_RT) && !(timer->flags & TIMER_IRQSAFE))
++		lockdep_assert_preemption_enabled();
++#endif
++
+ 	do {
+ 		ret = try_to_del_timer_sync(timer);
+ 
 -- 
 2.38.0
 
