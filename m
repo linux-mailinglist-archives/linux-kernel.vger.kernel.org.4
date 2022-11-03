@@ -2,51 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1B4A617390
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 02:07:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89FE6617392
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 02:10:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230168AbiKCBHo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 21:07:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59042 "EHLO
+        id S230139AbiKCBKs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 21:10:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbiKCBHl (ORCPT
+        with ESMTP id S229459AbiKCBKp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 21:07:41 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87C64265B;
-        Wed,  2 Nov 2022 18:07:40 -0700 (PDT)
-Received: from canpemm500004.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4N2lq414gkzRny0;
-        Thu,  3 Nov 2022 09:02:40 +0800 (CST)
-Received: from [10.174.179.106] (10.174.179.106) by
- canpemm500004.china.huawei.com (7.192.104.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 3 Nov 2022 09:07:38 +0800
-Subject: Re: [PATCH next v3 1/2] gpio: hisi: Add initial device tree support
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
-CC:     <f.fangjian@huawei.com>, <linus.walleij@linaro.org>,
-        <yangyicong@hisilicon.com>, <xuwei5@huawei.com>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-gpio@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>
-References: <20221101082442.263448-1-chenweilong@huawei.com>
- <CAMRc=Mdi2ASr1Wq66YTQKTvW+ysU4bw=eN4=9tYUxcJWLPGNaQ@mail.gmail.com>
-From:   chenweilong <chenweilong@huawei.com>
-Message-ID: <a65d1bc5-16e3-7041-dfd1-665ee1dfa00a@huawei.com>
-Date:   Thu, 3 Nov 2022 09:07:37 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.9.0
-MIME-Version: 1.0
-In-Reply-To: <CAMRc=Mdi2ASr1Wq66YTQKTvW+ysU4bw=eN4=9tYUxcJWLPGNaQ@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Originating-IP: [10.174.179.106]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- canpemm500004.china.huawei.com (7.192.104.92)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Wed, 2 Nov 2022 21:10:45 -0400
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1736B5FBD
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 18:10:45 -0700 (PDT)
+Received: by mail-pj1-x1049.google.com with SMTP id m1-20020a17090a5a4100b002138550729dso95959pji.2
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 18:10:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=Mx+leU/OWscSldITB3zFpjjWetd6P6K/f9rRzitMlcU=;
+        b=FB7DqmA0EsKuQjHGYVy6dlGV3LQmMHrxbEDBmyNUCU0nLo9tWvbXVXq2p8EX9pt5RT
+         L0AZX85Pyhm88hzJOo+TL3Tj2ZSVpPOluVWzkIn7h2G02+a8vLAPujhjqpOOkEb2eI8T
+         082tPzndK3fvZ5dOL53kZpS/0v/UB6PROEdVvpRhxQxSIBMViXPwm/B9+bBI9Wb6kk/n
+         0VZ/kr8PlIErWquySXarbqhYBrWDHG1PF7JYhgSGQ2pvUpOkGXGUVTf/lm8WIDMP35gz
+         Rkn+3dbPmgzAMuxH7fqTBjfdMZteVDG0d17wQgqn9UW3BxHQSnUUL/f6Q6QFt0q0kMyY
+         Hbfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Mx+leU/OWscSldITB3zFpjjWetd6P6K/f9rRzitMlcU=;
+        b=VCj6qlRCL41NsxJxFf+oqoSOx8A3YkelKI3m2V8njQo6svYiZ3uZHghQ2Day1BfIWn
+         1QMwLqxT7XPiTl/iVG/ZgxnU+Dy6wMLAgR+VxzjOx+f8fS8/rqq2/g4hIgCnRg9+QmLz
+         zkPV1bn1iWw7gyKMCkcOdQqEeonPnqWqjFbBxOi0DsgtEA49GBCdeDw0M8xYPIQKfwaQ
+         Y4V3qxND2Nryg/5Ff5gVZWbJnMomCGmT+A4GTo6kFuHaQbwXHNpV7ZDA0cLualExs3k1
+         Wk2VyzNicExiSZVkKPp9afov4xrSK1f8+5gsWpsBHfSzk1RopEsnCRww7nSQ2bgi2G9g
+         MMQQ==
+X-Gm-Message-State: ACrzQf30Xgei5AwLztGonazBScnsBdPfFicJVNVXaQuvTPyRPyEYexxK
+        uH26Rn1FqrcVvwARY3F35eRh7Wjhr+LDrR+7xVSK9+DXFyiTX/UokVumHgDW7QEEYXEqkppeI88
+        0cJFKqJX4NFwesY/TxIfuFpshE915TW4KWYUxAK8tRjmJK9KDdfxoWAdaEFvZX8gJu1576pjZdz
+        gCEdoMRdg=
+X-Google-Smtp-Source: AMsMyM6LQPFEEDWa1HxlDiQdxXwRLqDZ8gpD+dwgBslOOmaFS6lpe2gPi0IogW1VyhReiElJZgVwxhwegBxMdsfoFA==
+X-Received: from dionnaglaze.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:2ee6])
+ (user=dionnaglaze job=sendgmr) by 2002:a17:90b:3901:b0:213:dfd5:a75f with
+ SMTP id ob1-20020a17090b390100b00213dfd5a75fmr19732129pjb.233.1667437844445;
+ Wed, 02 Nov 2022 18:10:44 -0700 (PDT)
+Date:   Thu,  3 Nov 2022 01:10:34 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.38.1.273.g43a17bfeac-goog
+Message-ID: <20221103011038.1542614-1-dionnaglaze@google.com>
+Subject: [PATCH v6 0/4] Add throttling detection to sev-guest
+From:   Dionna Glaze <dionnaglaze@google.com>
+To:     linux-kernel@vger.kernel.org, x86@kernel.org
+Cc:     Dionna Glaze <dionnaglaze@google.com>,
+        Tom Lendacky <Thomas.Lendacky@amd.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        Peter Gonda <pgonda@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,36 +73,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/11/2 20:49, Bartosz Golaszewski wrote:
-> On Tue, Nov 1, 2022 at 9:17 AM Weilong Chen <chenweilong@huawei.com> wrote:
->> Add support for HiSilicon GPIO controller in embedded platform, which
->> boot from devicetree.
->>
->> Signed-off-by: Weilong Chen <chenweilong@huawei.com>
->> ---
-> This is v3 - just like the previous version. Are there any changes?
+The guest request synchronous API from SEV-SNP VMs to the host's security
+processor consumes a global resource. For this reason, AMD's docs
+recommend that the host implements a throttling mechanism. In order for
+the guest to know it's been throttled and should try its request again,
+we need some good-faith communication from the host that the request
+has been throttled.
 
-Hi, v3 is the same with v2, but v2 had a lot change to v1.
+These patches work with the existing /dev/sev-guest ABI to detect a
+throttling code.
 
-Link for v2: https://lore.kernel.org/lkml/20221028022453.163186-2-chenweilong@huawei.com/
+Changes from v5:
+  * Fixed commit prefix text
+  * Added all get_maintainers.pl folks to commits' Cc tags
+  * Changed SET_RET_NO_FW_CALL commit's metadata to show pgonda signs
+    off and is the author.
+Changes from v4:
+  * Clarified comment on SEV_RET_NO_FW_CALL
+  * Changed ratelimit loop to use sleep_timeout_interruptible
+Changes from v3:
+  * sev-guest ratelimits itself to one request twice a second.
+  * Fixed a type signature to use u64 instead of unsigned int
+  * Set *exitinfo2 unconditionally after the ghcb_hv_call.
+Changes from v2:
+  * Codified the non-firmware-call firmware error code as (u32)-1.
+  * Changed sev_issue_guest_request unsigned long *fw_err argument to
+    u64 *exitinfo2 to more accurately and type-safely describe the
+    value that it outputs.
+  * Changed sev_issue_guest_request to always set its exitinfo2
+    argument to either the non-firmware-call error code, the
+    EXIT_INFO_2 returned from the VMM if the request failed, or 0 on
+    success. This fixes a bug that returned uninitialized kernel stack
+    memory to the user when there is no error.
+  * Changed the throttle behavior to retry in the driver instead of
+    returning -EAGAIN, due to possible message sequence number reuse
+    on different message contents.
 
-There's a change log in commit message to describe the changes.
+Changes from v1:
+  * Changed throttle error code to 2
 
+Cc: Tom Lendacky <Thomas.Lendacky@amd.com>
+Cc: Paolo Bonzini <pbonzini@redhat.com>
+Cc: Joerg Roedel <jroedel@suse.de>
+Cc: Peter Gonda <pgonda@google.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
 
-I send v3 patch to fix problem of the other patch in the series:
+Signed-off-by: Dionna Glaze <dionnaglaze@google.com>
 
-Link is: https://lore.kernel.org/lkml/791619d1-a227-477a-99c6-7ba15b4a28df@huawei.com/
+Dionna Glaze (3):
+  x86/sev: Change snp_guest_issue_request's fw_err
+  virt: sev-guest: Remove err in handle_guest_request
+  virt: sev-guest: interpret VMM errors from guest request
 
->
-> Also: you don't need that -next in your patch tag.
+Peter Gonda (1):
+  crypto: ccp - Name -1 return value as SEV_RET_NO_FW_CALL
 
-Thanks for the advice, I will adjust it in subsequent  work.
+ arch/x86/include/asm/sev.h              |  4 +-
+ arch/x86/kernel/sev.c                   | 10 +++--
+ drivers/crypto/ccp/sev-dev.c            |  2 +-
+ drivers/virt/coco/sev-guest/sev-guest.c | 57 ++++++++++++++++++++-----
+ include/uapi/linux/psp-sev.h            |  7 +++
+ include/uapi/linux/sev-guest.h          | 18 +++++++-
+ 6 files changed, 78 insertions(+), 20 deletions(-)
 
-Thanks.
-
->
-> Bart
->
-> .
-
+-- 
+2.38.1.273.g43a17bfeac-goog
 
