@@ -2,100 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F11A26186A7
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 18:53:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6895F6186AD
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 18:53:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231688AbiKCRxg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 13:53:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60940 "EHLO
+        id S231806AbiKCRxo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 13:53:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230473AbiKCRxd (ORCPT
+        with ESMTP id S231796AbiKCRxj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 13:53:33 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2051B1A238
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 10:53:33 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id b185so2304038pfb.9
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 10:53:33 -0700 (PDT)
+        Thu, 3 Nov 2022 13:53:39 -0400
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CDD51C116
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 10:53:36 -0700 (PDT)
+Received: by mail-pg1-x52e.google.com with SMTP id h193so2298642pgc.10
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 10:53:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=9elements.com; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Gh4tHwGdYqiA6FfBVtb4eaTZECdeDr+dtEfH6mIg700=;
-        b=WiDvzWb07Nd95ou0RXLpYHaRo0kqVVVo4n0ExPUJKESfL6TOqXt408h6C23wWmKp30
-         y53OsxEJOr2nNl1zjx+MOeonIGReZVmncVdT3AKaX4T6VpduRz0TcpNeGPdLMLAcc8ZJ
-         lYAGFpMAvDJnVY3BpApDarK+s8PlKyvls1lTwv4JzGXxExA2TERW6nphT5UI8TuNNMYP
-         pLC4P26Jt+2epBkG4bCuqbsG5jospL06fhiTw4JmaCpPJ80cIFRXmw2bCJVbdb5H1W9E
-         hHt7GfPG4A4Myu29eLDVDtCCi3OmiQaW5ZyqRjv3BpAzuKQXeDQi/XEOrn7jGfVtDo9k
-         b9MA==
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=3tXwq1v6tJCedr2VtV8ELYd8BpIXTKwmGjuY8weIxs8=;
+        b=gjqnoLy192oz/Zxvag+BlBreQGGSfkeJOmpmCEx7rtJpm2GzAgZsoDzOerCZhLAwiY
+         s4s7ScvfoZl8zwg6HI1Ymb7QpOkn2NxzwKs5NTcMl1wbeFQ/hmv3VmCXwSollG4iohk8
+         ZfCLF4UOQot0TZFoB2ZSgy0wzT2PFfm47J97NCOCE8O1C25eIzJzc1jTDAryWTakKtb6
+         +QR4ykcFsYtONZVST62uH0g9I4NSfzwB8k/a9JLQz8I+tNs7JhVckzNuFRTBv1+mgFsk
+         IdkM799qrsruF4xx+MeYDtb4Sd8Y4cxbHh++70LJo94wIuv8aLLKYeYlUVyl7mOC3bBK
+         Ww4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Gh4tHwGdYqiA6FfBVtb4eaTZECdeDr+dtEfH6mIg700=;
-        b=7nkaOUQvAVInzXeORoOOjQvTnZ1WCbChB6CoNM/t0ulA2cfz0Far7DViGYGLb5NoUS
-         TMwQ0QrNhUvwG0hPhg7mWHyafBnRVoRkc36plk1Jk9wfqowOEO7/DMgJZFVWW/nRtEgo
-         miFiNKMBAZxg9XccWqhdbfsvlntXhBt/sqjQLnkdPPNFvN53pW6kNH7DFh8r+BtUVKCi
-         wWkoPsimfMgmb2PmBySwSIsyXA6MKYGruNhPJesr/p1awrYDiMUcD+z5yy8XSSSyHOpd
-         kN6pAAWhHklNQ1kgnMPjutzjVgNatC0lYIIkeHnpQ6z91KgASL7+jNk5vnE0NQ10MjEe
-         76mg==
-X-Gm-Message-State: ACrzQf16lEyebVUYHXaLQ7Z6ETd5g3nW6cuTKTXyafui0D1YbOA4u5Nl
-        ciFnyg8CxOBm5yWUbXUdbbElko5kx5Jyj2gW
-X-Google-Smtp-Source: AMsMyM4ulepeXPsIA0hp3ORHkqmjCQ+/YpaBJ+3a+Y7uY7qnn6UlIRDNR9vuLc2PYRku4Evi49vFsg==
-X-Received: by 2002:a63:f50e:0:b0:470:274b:53a2 with SMTP id w14-20020a63f50e000000b00470274b53a2mr2355814pgh.524.1667498012612;
-        Thu, 03 Nov 2022 10:53:32 -0700 (PDT)
-Received: from ?IPV6:2405:201:d02f:da6a:d4a2:1253:adfc:370? ([2405:201:d02f:da6a:d4a2:1253:adfc:370])
-        by smtp.gmail.com with ESMTPSA id o12-20020a170902d4cc00b00180cf894b67sm972393plg.130.2022.11.03.10.53.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Nov 2022 10:53:32 -0700 (PDT)
-Message-ID: <dc6c8f79-9830-dd1b-a064-3b25a3b74a35@9elements.com>
-Date:   Thu, 3 Nov 2022 23:23:28 +0530
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3tXwq1v6tJCedr2VtV8ELYd8BpIXTKwmGjuY8weIxs8=;
+        b=bzEak8l3kA4AcW6IHFG22RpcAgH2YCnPQ+YhTkInwXbz/BuVSBsnWAIRxtSF0SJeBO
+         SlDmoIyvTn25+KDy9cE1dQqaEPmHDDLFse9mMZZsv+nBuLJmryuPdRuoxcbqOAAoNNdP
+         HTsXasGI7Y2KqAdYpDxfslVij20tubAPbVhEhwq3oWwP1xiO7gLC8ixVBOjZl4AAAE7W
+         CHZkB+nsiUtYVZCuHVzNp01BIawyMSP+PL3HB99U034+0cK4IfkUSnBFzbm/GySeuQyB
+         JsFwTpWzsuG7w8LZvDptDnALb1fRGvO43KGQcD5U5n6opNNAJxY92JS8zJRexE/R6KOR
+         FD3Q==
+X-Gm-Message-State: ACrzQf0KKipJYrrWUFqjNw0AqS/b67rmE42STFxyqnGraJ8hgO8wZ6Ld
+        gcVXCsbqbWm40/Z2PpLD0n/thg==
+X-Google-Smtp-Source: AMsMyM5pSkjZTiut6RFho0StQnuo7qAiklz26C63x768BJpOt4UV7sKT8fcspUYyR/B7P1xdFXKPhA==
+X-Received: by 2002:a05:6a00:999:b0:56c:3d0d:96fe with SMTP id u25-20020a056a00099900b0056c3d0d96femr31657100pfg.12.1667498015565;
+        Thu, 03 Nov 2022 10:53:35 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id e20-20020a63e014000000b0045ff216a0casm1080329pgh.3.2022.11.03.10.53.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Nov 2022 10:53:35 -0700 (PDT)
+Date:   Thu, 3 Nov 2022 17:53:31 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Marc Zyngier <maz@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Anup Patel <anup@brainfault.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        Eric Farman <farman@linux.ibm.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Atish Patra <atishp@atishpatra.org>,
+        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Isaku Yamahata <isaku.yamahata@intel.com>,
+        Fabiano Rosas <farosas@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Chao Gao <chao.gao@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Yuan Yao <yuan.yao@intel.com>
+Subject: Re: [PATCH 39/44] KVM: Drop kvm_count_lock and instead protect
+ kvm_usage_count with kvm_lock
+Message-ID: <Y2QAG0wCPNv7atC/@google.com>
+References: <20221102231911.3107438-1-seanjc@google.com>
+ <20221102231911.3107438-40-seanjc@google.com>
+ <7b6ce80e-7f1f-11cd-8bde-8d8fa9fd7e1d@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH v6 1/2] dt-bindings: mfd: Add bindings for MAX5970 and
- MAX5978
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Patrick Rudolph <patrick.rudolph@9elements.com>
-Cc:     Marcello Sylvester Bauer <sylv@sylv.io>
-References: <20221103080545.1400424-1-Naresh.Solanki@9elements.com>
- <20221103080545.1400424-2-Naresh.Solanki@9elements.com>
- <0c23e569-61e1-3eba-f9fc-4b42ed228b52@linaro.org>
-Content-Language: en-US
-From:   Naresh Solanki <naresh.solanki@9elements.com>
-In-Reply-To: <0c23e569-61e1-3eba-f9fc-4b42ed228b52@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7b6ce80e-7f1f-11cd-8bde-8d8fa9fd7e1d@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
+On Thu, Nov 03, 2022, Paolo Bonzini wrote:
+> On 11/3/22 00:19, Sean Christopherson wrote:
+> > +- kvm_lock is taken outside kvm->mmu_lock
+> 
+> Not surprising since one is a mutex and one is an rwlock. :)
 
-On 03-11-2022 06:43 pm, Krzysztof Kozlowski wrote:
->> +examples:
->> +  - |
->> +    i2c {
->> +        #address-cells = <1>;
->> +        #size-cells = <0>;
->> +        regulator@3a {
->> +           compatible = "maxim,max5978";
->> +           reg = <0x3a>;
->> +           vss1-supply = <&p3v3>;
->> +
->> +           regulators {
->> +               sw0_ref_0: SW0 {
-> No improvements here.
-I've addressed 4 space indentation, bindings are matched, compatible is 
-moved to first, then reg then the rest.
+Heh, 
+
+  Signed-off-by: Captain Obvious <seanjc@google.com>
+
+> You can drop this hunk as well as the "Opportunistically update KVM's locking
+> documentation" sentence in the commit message.
+
+Will do.
+
+> >   - vcpu->mutex is taken outside kvm->arch.hyperv.hv_lock
+> >   - kvm->arch.mmu_lock is an rwlock.  kvm->arch.tdp_mmu_pages_lock and
+> > @@ -216,15 +220,11 @@ time it will be set using the Dirty tracking mechanism described above.
+> >   :Type:		mutex
+> >   :Arch:		any
+> >   :Protects:	- vm_list
+> > -
+> > -``kvm_count_lock``
+> > -^^^^^^^^^^^^^^^^^^
+> > -
+> > -:Type:		raw_spinlock_t
+> > -:Arch:		any
+> > -:Protects:	- hardware virtualization enable/disable
+> > -:Comment:	'raw' because hardware enabling/disabling must be atomic /wrt
+> > -		migration.
+> > +		- kvm_usage_count
+> > +		- hardware virtualization enable/disable
+> > +		- module probing (x86 only)
+> 
+> What do you mean exactly by "module probing"?  Is it anything else than what
+> is serialized by vendor_module_lock?
+
+Ooh, I forgot to update this patch after switching to vendor_module_lock.  I
+added the above after fixing the first deadlock between kvm_lock and cpu_hotplug_lock,
+but later gave up on trying to use kvm_lock after deadlock #2, which is when I
+when I realized piggybacking kvm_lock was going to be a maintainance nightmare due.
