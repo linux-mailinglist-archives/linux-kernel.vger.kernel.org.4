@@ -2,175 +2,447 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CDDA6179D6
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 10:26:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD3D56179E6
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 10:28:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230491AbiKCJZX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 05:25:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43688 "EHLO
+        id S231222AbiKCJ0y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 05:26:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231239AbiKCJYf (ORCPT
+        with ESMTP id S230502AbiKCJ0c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 05:24:35 -0400
-Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74D10DF70
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 02:24:18 -0700 (PDT)
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20221103092416euoutp0100548b40ff5a18e6d7cc180ff0d3c371~kCNEgn3z32743427434euoutp01V
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 09:24:16 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20221103092416euoutp0100548b40ff5a18e6d7cc180ff0d3c371~kCNEgn3z32743427434euoutp01V
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1667467456;
-        bh=Ddh26orYRAYNJerEl/3JP/sYHJVF9lF3hIUMDAi0xyA=;
-        h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
-        b=ExjR063UpBxqGmFl2hOQq+tHMHnAgVdxE6qX5Oa4waIdRVVPkH320CfH4Bv5+E1hq
-         gQofJvq3w3eLnzSElUxmNayD+2gLpoZ2ZluHM9jt66HEMZriNHCYnoV33SYNNqQ+I/
-         ZMT84oTLqHpWfuxKbpAUi+zI5gveOeD6TeNhAR3I=
-Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20221103092415eucas1p116ab2f43d2b6cae938a0dfe7a19c93d8~kCND_YxIm0690006900eucas1p1W;
-        Thu,  3 Nov 2022 09:24:15 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-        eusmges1new.samsung.com (EUCPMTA) with SMTP id 48.B8.29727.FB883636; Thu,  3
-        Nov 2022 09:24:15 +0000 (GMT)
-Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20221103092414eucas1p238e12476df9f45bc1ed0871dac7e11e9~kCNC59WaA2630526305eucas1p25;
-        Thu,  3 Nov 2022 09:24:14 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20221103092414eusmtrp15dea484713ffc314402ac426648a7727~kCNC42TDE0963009630eusmtrp1d;
-        Thu,  3 Nov 2022 09:24:14 +0000 (GMT)
-X-AuditID: cbfec7f2-205ff7000001741f-0a-636388bfa880
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-        eusmgms1.samsung.com (EUCPMTA) with SMTP id FD.C5.07473.EB883636; Thu,  3
-        Nov 2022 09:24:14 +0000 (GMT)
-Received: from [106.210.134.192] (unknown [106.210.134.192]) by
-        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20221103092413eusmtip16c4d5fcf9ede54be69536950aec347a7~kCNByeUzJ1461114611eusmtip1M;
-        Thu,  3 Nov 2022 09:24:13 +0000 (GMT)
-Message-ID: <3580cfe7-a5a5-e81d-ce45-572b6bf3dde8@samsung.com>
-Date:   Thu, 3 Nov 2022 10:24:13 +0100
+        Thu, 3 Nov 2022 05:26:32 -0400
+Received: from smtp.smtpout.orange.fr (smtp-14.smtpout.orange.fr [80.12.242.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3147010049
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 02:26:01 -0700 (PDT)
+Received: from [192.168.1.18] ([86.243.100.34])
+        by smtp.orange.fr with ESMTPA
+        id qWU1o1NhYBDYDqWU1ooLnz; Thu, 03 Nov 2022 10:25:59 +0100
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Thu, 03 Nov 2022 10:25:59 +0100
+X-ME-IP: 86.243.100.34
+Message-ID: <8c54d305-c4fb-e0ab-3812-1a9debf05896@wanadoo.fr>
+Date:   Thu, 3 Nov 2022 10:25:56 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0)
-        Gecko/20100101 Thunderbird/102.4.1
-Subject: Re: [PATCH 1/3] arm64: exynos: Add new compatible string for
- Exynos3250 SoC.
-Content-Language: en-US
-To:     Aakarsh Jain <aakarsh.jain@samsung.com>,
-        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Cc:     andrzej.hajda@intel.com, mchehab@kernel.org,
-        hverkuil-cisco@xs4all.nl, ezequiel@vanguardiasur.com.ar,
-        jernej.skrabec@gmail.com, benjamin.gaignard@collabora.com,
-        krzysztof.kozlowski+dt@linaro.org, stanimir.varbanov@linaro.org,
-        dillon.minfei@gmail.com, david.plowman@raspberrypi.com,
-        mark.rutland@arm.com, robh+dt@kernel.org, krzk+dt@kernel.org,
-        andi@etezian.org, alim.akhtar@samsung.com,
-        aswani.reddy@samsung.com, pankaj.dubey@samsung.com,
-        smitha.t@samsung.com
-From:   Marek Szyprowski <m.szyprowski@samsung.com>
-In-Reply-To: <20221102130602.48969-1-aakarsh.jain@samsung.com>
-Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA01SbUxTVxjeuff2tjSWXQqzZyqyNk43FnAYF0/CZnRhy3VfmmgwcSSzK3fI
-        Rgtri2UmizURKZWwbohKFYqAqKwBqVDAQdACgnxUEFM+pKJVqFSZQPGLbXVtr278e57nfZ/z
-        vO+bw8OFx8llvFSFmlEqpGkSkk9Yrzy3x7TqZLL3u3si0URjEQfdLrGSqPyZG0Pj5V4C2S7U
-        c1HdjRM4OtN5iYNM7XYOarjsIlDtfX91oMhJILepGqAp4y0S5d+/gyPLXQcHDV48SaK88/Uc
-        dHpoAEOVlr8xVFY/z0XZLe1c5Gy2AnTwUDu2SUSbS8yAbnRWAHqoYg6nm4xOLl3ePIXRlqpc
-        kh5zNJP0hYr9dHbHAkHn11UBWt8+RNJey0q6+7GXu02wi/9hMpOWupdRrt24m7/H3j1IZJRQ
-        Wc/cZqAFdQI9COFBaj188kjH1QM+T0idBdB0qpBkyTyAPnc/YIkXwMmZQvyV5bxtBmMLZwAs
-        ftFGsGQWwBNOV7BLQG2Erq5hLIAJahV8aNKRrB4GrxbdIwL4DSoZ/nHYGsTh1E7Yqm0BAYxT
-        Ijh6zxRMiKDMAM52ZAfnwKmbODzXdDr4EknFQf20PohD/GlPR/Qv3VGwYfokHjBAKp8PfRVj
-        GDt4AvQ+GQMsDoeezjoui1fAnoI8gjXkAFj61zjGEgOAWvfoS0c8HLMv+ON4/oh3Yc3Ftay8
-        Gd6+O0kEZEiFwuHpMHaIUPib9RjOygKoOyRku1dDY2f1f7GX+6/jBiAxLjqMcdEBjIvWMf6f
-        WwqIKiBiMlXyFEYVp2A0sSqpXJWpSImVpcstwP95e3ydc42g2DMbawMYD9gA5OGSCMH+vq9l
-        QkGy9Kd9jDL9G2VmGqOygeU8QiISkMejZUIqRapmfmCYDEb5qorxQpZpsS8nD+ckivVJe3Pf
-        KeyNF4Rt2B3z+4L587I+taYsyeMMfZgb2bfvVm2XOt9TMFxqX+Fo1nXlfWaMGOR8DOe1CUdX
-        hrdlv73DF779TU3GdG/7wKWdv0xcA+OcytVHv4uUpl1XrRc9iN2aNVOd7rYdmXPUikUqzZao
-        6CVNFFZ0kHp+LEJtEJ/9IElmfVE6Uiy+AX0FR1y7Rr+60nZgarmhJicqwTf+/WPD1SWKO6Ks
-        wR+f/vpey9LETyt/jpd3bG3o6DmQ07smKVKeuk1AI31N/EfktZHETZvX/Nm1zv2to/+Lc0Kx
-        LGNDy7rQf4wCV+vEW4+WZq163f3gtVOf3JQYYjxUmFkjIVR7pHHRuFIl/RfEFTCKKwQAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrJKsWRmVeSWpSXmKPExsVy+t/xu7r7OpKTDX7tlLN4umMmq8WDedvY
-        LBb/eM5kcX/xZxaLQ5u3sltsuTKb2WL58QOsFvOPnGO12H7wEYvFxhdA2Ysz77JYPJ+/jtHi
-        5ax7bBZ9Lx4yW2x6fI3V4vKuOWwWPRu2slosvX6RyWLZpj9MFou2fmG3aN17hN3i7p5tjBYt
-        bUeYHMQ91sxbw+ix4+4SRo/rSz4xe+ycdZfdY/Gel0wem1Z1snncubaHzWPzknqP1qO/WDz6
-        tqxi9Og6cp3N4/MmOY9TXz+zB/BG6dkU5ZeWpCpk5BeX2CpFG1oY6RlaWugZmVjqGRqbx1oZ
-        mSrp29mkpOZklqUW6dsl6GWcO3WZpWCeQMWP52sYGxi38HYxcnJICJhIbDj0gamLkYtDSGAp
-        o8S6Lx3MEAkZiZPTGlghbGGJP9e62CCK3jNKfN68iB0kwStgJ/HoxA0mEJtFQEXizfwONoi4
-        oMTJmU9Yuhg5OEQFUiS+nasDCQsLhEvsb9jLCGIzC4hL3HoyH2yxiMAaRomHK3aAOcwCt5kl
-        zq+fzA6xbSKjxKSW1SwgLWwChhJdb7vANnACbf5+swtqlJlE11YYW15i+9s5zBMYhWYhOWQW
-        ko2zkLTMQtKygJFlFaNIamlxbnpusaFecWJucWleul5yfu4mRmCa2Xbs5+YdjPNefdQ7xMjE
-        wXiIUYKDWUmEt/5sdLIQb0piZVVqUX58UWlOavEhRlNgaExklhJNzgcmurySeEMzA1NDEzNL
-        A1NLM2MlcV7Pgo5EIYH0xJLU7NTUgtQimD4mDk6pBqZFc4wm3Z24c+GHvlW3+TJXW+W23/NS
-        qG41vnN5xfxjErtuW875Z3L7rt6jqsse2t/6NjTurp796O1ffz3/z0cLL8dKrc3Yo8YQfj8x
-        I/iJu+ODOK6gGskzPzvYFn3h2y/xnbVikcHOjUse6G4S/7bkXW/mVS3vhi+X0r13nFcXOxLd
-        sIe/QzNW11lZf7U4i7245U+pgy3HgusfMQhfmvQh9G2fVN0ZA2G5aYu0bjuyXNQJVrr467DU
-        okTvSrZll1sui+zfpiunyfTsa4fLaee764IOBjszp1g1VzXr8D72fn7Q3CJLecNE1RKflykv
-        GPf3S4neP69xK/3OmUdf9p8QjXl7M279jLlXqnfGpxUosRRnJBpqMRcVJwIAHN0NR7wDAAA=
-X-CMS-MailID: 20221103092414eucas1p238e12476df9f45bc1ed0871dac7e11e9
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20221102125810epcas5p36e6caf41f602debe17f25f13969fd6dc
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20221102125810epcas5p36e6caf41f602debe17f25f13969fd6dc
-References: <CGME20221102125810epcas5p36e6caf41f602debe17f25f13969fd6dc@epcas5p3.samsung.com>
-        <20221102130602.48969-1-aakarsh.jain@samsung.com>
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v10 1/2] thermal: loongson-2: add thermal management
+ support
+Content-Language: fr
+To:     zhuyinbo@loongson.cn
+Cc:     amitk@kernel.org, daniel.lezcano@linaro.org,
+        devicetree@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        liupeibao@loongson.cn, rafael@kernel.org, robh+dt@kernel.org,
+        rui.zhang@intel.com, zhanghongchen@loongson.cn
+References: <20221103083407.4039-1-zhuyinbo@loongson.cn>
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <20221103083407.4039-1-zhuyinbo@loongson.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi
+Le 03/11/2022 à 09:34, Yinbo Zhu a écrit :
+> This patch adds the support for Loongson-2 thermal sensor controller,
+> which can support maximum 4 sensors.
+> 
+> It's based on thermal of framework:
+>   - Trip points defined in device tree.
+>   - Cpufreq as cooling device registered in Loongson-2 cpufreq driver.
+>   - Pwm fan as cooling device registered in hwmon pwm-fan driver.
+> 
+> Signed-off-by: zhanghongchen <zhanghongchen-cXZgJK919ebM1kAEIRd3EQ@public.gmane.org>
+> Signed-off-by: Yinbo Zhu <zhuyinbo-cXZgJK919ebM1kAEIRd3EQ@public.gmane.org>
 
-On 02.11.2022 14:06, Aakarsh Jain wrote:
-> Exynos3250 uses the same compatible as Exynos5420, but both
-> the MFC IPs found in these SoC are different interms of clock
-> property. So using same compatible for both SoC is not correct.
-> Lets have a separate compatible for Exynos3250 and Exynos5420
-> to differentiate these SoCs.
->
-> Suggested-by: Alim Akhtar <alim.akhtar@samsung.com>
-> Signed-off-by: Aakarsh Jain <aakarsh.jain@samsung.com>
-
-Minor issue, Exynos3250 is based on ARM 32bit not ARM 64bit (see the 
-patch subject).
+Hi,
+a few nit below, should there be a v11.
 
 > ---
->   Documentation/devicetree/bindings/media/s5p-mfc.txt | 7 ++++---
->   1 file changed, 4 insertions(+), 3 deletions(-)
->
-> We are already in process of converting this txt file to yaml.
-> https://patchwork.kernel.org/project/linux-media/patch/
-> 20221011122516.32135-2-aakarsh.jain@samsung.com/
-> modifying this txt binding for completeness.
->
-> diff --git a/Documentation/devicetree/bindings/media/s5p-mfc.txt b/Documentation/devicetree/bindings/media/s5p-mfc.txt
-> index aa54c8159d9f..4ff1898e5a51 100644
-> --- a/Documentation/devicetree/bindings/media/s5p-mfc.txt
-> +++ b/Documentation/devicetree/bindings/media/s5p-mfc.txt
-> @@ -11,9 +11,10 @@ Required properties:
->   	(a) "samsung,mfc-v5" for MFC v5 present in Exynos4 SoCs
->   	(b) "samsung,mfc-v6" for MFC v6 present in Exynos5 SoCs
->   	(c) "samsung,mfc-v7" for MFC v7 present in Exynos5420 SoC
-> -	(d) "samsung,mfc-v8" for MFC v8 present in Exynos5800 SoC
-> -	(e) "samsung,exynos5433-mfc" for MFC v8 present in Exynos5433 SoC
-> -	(f) "samsung,mfc-v10" for MFC v10 present in Exynos7880 SoC
-> +	(d) "samsung,exynos3250-mfc" for MFC v7 present in Exynos3250 SoC
-> +	(e) "samsung,mfc-v8" for MFC v8 present in Exynos5800 SoC
-> +	(f) "samsung,exynos5433-mfc" for MFC v8 present in Exynos5433 SoC
-> +	(g) "samsung,mfc-v10" for MFC v10 present in Exynos7880 SoC
+> Change in v10:
+> 		1. Add all history change log information.
+> Change in v9:
+> 		1. Switch new API that use devm_thermal_of_zone_register
+> 		   to replace previous interfaces.
+> 		2. Add depend on LOONGARCH || COMPILE_TEST.
+> Change in v8:
+>                  1. Replace string loongson2/Loongson2/LOONGSON2 with loongson-2/
+>                     Loongson-2/LOONGSON-2 in Kconfig and commit log and MAINTAINERS
+> 		   files.
+> Change in v7:
+> 		1. Split the modification of patch 3 and merge it into this patch.
+> 		2. Remove the unless code annotation to fix the compile warning
+> 		   when compile C code with W=1.
+> Change in v6:
+> 		1. NO change, but other patch in this series of patches set has
+> 		   changes.
+> Change in v5:
+> 		1. NO change, but other patch in this series of patches set has
+> 		   changes.
+> Change in v4:
+> 		1. Fixup the compatible.
+> Change in v3:
+> 		1. Add a function to gain sensor id an remove dts id.
+> Change in v2:
+> 		1. Remove error msg printing when addr ioremap has error.
+> 		2. Make loongson2 thermal driver was built-in by default.
+> 		3. Replace ls2k with loongson2.
+> 		4. Remove CONFIG_PM_SLEEP and set pm function type was
+> 		   __maybe_unused.
+> 
+>   MAINTAINERS                         |   7 +
+>   drivers/thermal/Kconfig             |  10 ++
+>   drivers/thermal/Makefile            |   1 +
+>   drivers/thermal/loongson2_thermal.c | 266 ++++++++++++++++++++++++++++
+>   4 files changed, 284 insertions(+)
+>   create mode 100644 drivers/thermal/loongson2_thermal.c
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 379945f82a64..37ab451d9258 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -12010,6 +12010,13 @@ F:	drivers/*/*loongarch*
+>   F:	Documentation/loongarch/
+>   F:	Documentation/translations/zh_CN/loongarch/
 >   
->     - reg : Physical base address of the IP registers and length of memory
->   	  mapped region.
+> +LOONGSON-2 SOC SERIES THERMAL DRIVER
+> +M:	zhanghongchen <zhanghongchen-cXZgJK919ebM1kAEIRd3EQ@public.gmane.org>
+> +M:	Yinbo Zhu <zhuyinbo-cXZgJK919ebM1kAEIRd3EQ@public.gmane.org>
+> +L:	linux-pm-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
+> +S:	Maintained
+> +F:	drivers/thermal/loongson2_thermal.c
+> +
+>   LSILOGIC MPT FUSION DRIVERS (FC/SAS/SPI)
+>   M:	Sathya Prakash <sathya.prakash-dY08KVG/lbpWk0Htik3J/w@public.gmane.org>
+>   M:	Sreekanth Reddy <sreekanth.reddy-dY08KVG/lbpWk0Htik3J/w@public.gmane.org>
+> diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
+> index e052dae614eb..93d84bcb16dd 100644
+> --- a/drivers/thermal/Kconfig
+> +++ b/drivers/thermal/Kconfig
+> @@ -504,4 +504,14 @@ config KHADAS_MCU_FAN_THERMAL
+>   	  If you say yes here you get support for the FAN controlled
+>   	  by the Microcontroller found on the Khadas VIM boards.
+>   
+> +config LOONGSON2_THERMAL
+> +	tristate "Loongson-2 SoC series thermal driver"
+> +	depends on LOONGARCH || COMPILE_TEST
+> +	depends on OF
+> +	help
+> +	  Support for Thermal driver found on Loongson-2 SoC series platforms.
+> +	  It supports one critical trip point and one passive trip point. The
+> +	  cpufreq and the pwm fan is used as the cooling device to throttle
+> +	  CPUs when the passive trip is crossed.
+> +
+>   endif
+> diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
+> index 2506c6c8ca83..02f3db809858 100644
+> --- a/drivers/thermal/Makefile
+> +++ b/drivers/thermal/Makefile
+> @@ -61,3 +61,4 @@ obj-$(CONFIG_UNIPHIER_THERMAL)	+= uniphier_thermal.o
+>   obj-$(CONFIG_AMLOGIC_THERMAL)     += amlogic_thermal.o
+>   obj-$(CONFIG_SPRD_THERMAL)	+= sprd_thermal.o
+>   obj-$(CONFIG_KHADAS_MCU_FAN_THERMAL)	+= khadas_mcu_fan.o
+> +obj-$(CONFIG_LOONGSON2_THERMAL)	+= loongson2_thermal.o
+> diff --git a/drivers/thermal/loongson2_thermal.c b/drivers/thermal/loongson2_thermal.c
+> new file mode 100644
+> index 000000000000..87b07731f17e
+> --- /dev/null
+> +++ b/drivers/thermal/loongson2_thermal.c
+> @@ -0,0 +1,266 @@
+> +// SPDX-License-Identifier: GPL-2.0+
+> +/*
+> + * Author: zhanghongchen <zhanghongchen-cXZgJK919ebM1kAEIRd3EQ@public.gmane.org>
+> + *         Yinbo Zhu <zhuyinbo-cXZgJK919ebM1kAEIRd3EQ@public.gmane.org>
+> + * Copyright (C) 2022-2023 Loongson Technology Corporation Limited
+> + */
+> +
+> +#include <linux/cpufreq.h>
+> +#include <linux/delay.h>
+> +#include <linux/interrupt.h>
+> +#include <linux/module.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/io.h>
+> +#include <linux/of_device.h>
+> +#include <linux/thermal.h>
+> +#include "thermal_hwmon.h"
+> +
+> +#define LOONGSON2_SOC_MAX_SENSOR_NUM			4
+> +
+> +#define LOONGSON2_TSENSOR_CTRL_HI			0x0
+> +#define LOONGSON2_TSENSOR_CTRL_LO			0x8
+> +#define LOONGSON2_TSENSOR_STATUS			0x10
+> +#define LOONGSON2_TSENSOR_OUT				0x14
+> +
+> +struct loongson2_thermal_data {
+> +	struct thermal_zone_device *tzd;
+> +	int irq;
+> +	int id;
+> +	void __iomem *regs;
+> +	struct platform_device *pdev;
+> +	u16 ctrl_low_val;
+> +	u16 ctrl_hi_val;
+> +};
+> +
+> +static int loongson2_thermal_set(struct loongson2_thermal_data *data,
+> +					int low, int high, bool enable)
+> +{
+> +	u64 reg_ctrl = 0;
+> +	int reg_off = data->id * 2;
+> +
+> +	if (low > high)
+> +		return -EINVAL;
+> +
+> +	low = low < -100 ? -100 : low;
 
-Best regards
--- 
-Marek Szyprowski, PhD
-Samsung R&D Institute Poland
+max()?
+
+> +	high = high > 155 ? 155 : high;
+
+min()?
+
+> +
+> +	low += 100;
+> +	high += 100;
+> +
+> +	reg_ctrl |= low;
+> +	reg_ctrl |= enable ? 0x100 : 0;
+> +	writew(reg_ctrl, data->regs + LOONGSON2_TSENSOR_CTRL_LO + reg_off);
+> +
+> +	reg_ctrl = 0;
+> +	reg_ctrl |= high;
+> +	reg_ctrl |= enable ? 0x100 : 0;
+> +	writew(reg_ctrl, data->regs + LOONGSON2_TSENSOR_CTRL_HI + reg_off);
+> +
+> +	return 0;
+> +}
+> +
+> +static int loongson2_thermal_get_temp(struct thermal_zone_device *tz, int *temp)
+> +{
+> +	u32 reg_val;
+> +	struct loongson2_thermal_data *data = tz->devdata;
+> +
+> +	reg_val = readl(data->regs + LOONGSON2_TSENSOR_OUT);
+> +	*temp = ((reg_val & 0xff) - 100) * 1000;
+> +
+> +	return 0;
+> +}
+> +
+> +static int loongson2_thermal_get_sensor_id(void)
+> +{
+> +	int ret, id;
+> +	struct of_phandle_args sensor_specs;
+> +	struct device_node *np, *sensor_np;
+> +
+> +	np = of_find_node_by_name(NULL, "thermal-zones");
+> +	if (!np)
+> +		return -ENODEV;
+> +
+> +	sensor_np = of_get_next_child(np, NULL);
+> +	ret = of_parse_phandle_with_args(sensor_np, "thermal-sensors",
+> +			"#thermal-sensor-cells",
+> +			0, &sensor_specs);
+> +	if (ret) {
+> +		of_node_put(np);
+> +		of_node_put(sensor_np);
+> +		return ret;
+> +	}
+> +
+> +	if (sensor_specs.args_count >= 1) {
+> +		id = sensor_specs.args[0];
+> +		WARN(sensor_specs.args_count > 1,
+> +				"%s: too many cells in sensor specifier %d\n",
+> +				sensor_specs.np->name, sensor_specs.args_count);
+> +	} else {
+> +		id = 0;
+> +	}
+> +
+> +	of_node_put(np);
+> +	of_node_put(sensor_np);
+> +
+> +	return id;
+> +}
+> +
+> +static irqreturn_t loongson2_thermal_alarm_irq(int irq, void *dev)
+> +{
+> +	struct loongson2_thermal_data *data = dev;
+> +
+> +	/* clear interrupt */
+> +	writeb(0x3, data->regs + LOONGSON2_TSENSOR_STATUS);
+> +
+> +	disable_irq_nosync(irq);
+> +
+> +	return IRQ_WAKE_THREAD;
+> +}
+> +
+> +static irqreturn_t loongson2_thermal_irq_thread(int irq, void *dev)
+> +{
+> +	struct loongson2_thermal_data *data = dev;
+> +
+> +	thermal_zone_device_update(data->tzd,
+> +				   THERMAL_EVENT_UNSPECIFIED);
+> +	enable_irq(data->irq);
+> +
+> +	return IRQ_HANDLED;
+> +}
+> +
+> +static int loongson2_thermal_set_trips(struct thermal_zone_device *tz, int low, int high)
+> +{
+> +	struct loongson2_thermal_data *data = tz->devdata;
+> +
+> +	return loongson2_thermal_set(data, low/1000, high/1000, true);
+> +}
+> +
+> +static const struct thermal_zone_device_ops loongson2_of_thermal_ops = {
+> +	.get_temp = loongson2_thermal_get_temp,
+> +	.set_trips = loongson2_thermal_set_trips,
+> +};
+> +
+> +static int loongson2_thermal_probe(struct platform_device *pdev)
+> +{
+> +	struct device *dev = &pdev->dev;
+> +	struct resource *res;
+> +	struct loongson2_thermal_data *data;
+> +	int ret;
+> +
+> +	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
+> +	if (!data)
+> +		return -ENOMEM;
+> +
+> +	data->pdev = pdev;
+> +	platform_set_drvdata(pdev, data);
+> +
+> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> +	data->regs = devm_ioremap(dev, res->start, resource_size(res));
+> +	if (IS_ERR(data->regs))
+> +		return PTR_ERR(data->regs);
+> +
+> +	/* get irq */
+> +	data->irq = platform_get_irq(pdev, 0);
+> +	if (data->irq < 0)
+> +		return data->irq;
+> +
+> +	/* get id */
+> +	data->id = loongson2_thermal_get_sensor_id();
+> +	if (data->id > LOONGSON2_SOC_MAX_SENSOR_NUM - 1 || data->id < 0) {
+> +		dev_err(dev, "sensor id error,must be in <0 ~ %d>\n",
+> +				LOONGSON2_SOC_MAX_SENSOR_NUM - 1);
+> +		return -EINVAL;
+> +	}
+> +
+> +	writeb(0xff, data->regs + LOONGSON2_TSENSOR_STATUS);
+> +
+> +	loongson2_thermal_set(data, 0, 0, false);
+> +
+> +	data->tzd = devm_thermal_of_zone_register(&pdev->dev,
+> +							   data->id, data,
+> +							   &loongson2_of_thermal_ops);
+> +	if (IS_ERR(data->tzd)) {
+> +		ret = PTR_ERR(data->tzd);
+> +		data->tzd = NULL;
+
+I don't think that NULLifying is needed here, PTR_ERR(data->tzd) could 
+be used as-is in dev_err_probe(), ...
+
+> +		dev_err(&pdev->dev, "failed to register %d\n", ret);
+
+... here.
+return dev_err_probe() saves a few lines of code.
+
+> +		return ret;
+> +	}
+> +
+> +	ret = devm_request_threaded_irq(dev, data->irq,
+> +			loongson2_thermal_alarm_irq, loongson2_thermal_irq_thread,
+> +			IRQF_ONESHOT, "loongson2_thermal", data);
+> +	if (ret < 0) {
+> +		dev_err(dev, "failed to request alarm irq: %d\n", ret);
+> +		return ret;
+
+return dev_err_probe() saves a few lines of code.
+
+> +	}
+> +
+> +	/*
+> +	 * Thermal_zone doesn't enable hwmon as default,
+> +	 * enable it here
+> +	 */
+> +	data->tzd->tzp->no_hwmon = false;
+> +	ret = thermal_add_hwmon_sysfs(data->tzd);
+
+devm_thermal_add_hwmon_sysfs()?
+
+> +	if (ret) {
+> +		dev_err(dev, "failed to add hwmon sysfs interface %d\n", ret);
+> +		return ret;
+
+return dev_err_probe() saves a few lines of code.
+
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int loongson2_thermal_remove(struct platform_device *pdev)
+> +{
+> +	struct loongson2_thermal_data *data = platform_get_drvdata(pdev);
+> +	int reg_off = data->id * 2;
+> +
+> +	/* disable interrupt */
+> +	writew(0, data->regs + LOONGSON2_TSENSOR_CTRL_LO + reg_off);
+> +	writew(0, data->regs + LOONGSON2_TSENSOR_CTRL_HI + reg_off);
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct of_device_id of_loongson2_thermal_match[] = {
+> +	{ .compatible = "loongson,ls2k-thermal",},
+> +	{ /* end */ }
+> +};
+> +MODULE_DEVICE_TABLE(of, of_loongson2_thermal_match);
+> +
+> +static int __maybe_unused loongson2_thermal_suspend(struct device *dev)
+> +{
+> +	struct loongson2_thermal_data *data = dev_get_drvdata(dev);
+> +	int reg_off = data->id * 2;
+> +
+> +	data->ctrl_low_val = readw(data->regs + LOONGSON2_TSENSOR_CTRL_LO + reg_off);
+> +	data->ctrl_hi_val = readw(data->regs + LOONGSON2_TSENSOR_CTRL_HI + reg_off);
+> +
+> +	writew(0, data->regs + LOONGSON2_TSENSOR_CTRL_LO + reg_off);
+> +	writew(0, data->regs + LOONGSON2_TSENSOR_CTRL_HI + reg_off);
+> +
+> +	return 0;
+> +}
+> +
+> +static int __maybe_unused loongson2_thermal_resume(struct device *dev)
+> +{
+> +	struct loongson2_thermal_data *data = dev_get_drvdata(dev);
+> +	int reg_off = data->id * 2;
+> +
+> +	writew(data->ctrl_low_val, data->regs + LOONGSON2_TSENSOR_CTRL_LO + reg_off);
+> +	writew(data->ctrl_hi_val, data->regs + LOONGSON2_TSENSOR_CTRL_HI + reg_off);
+> +
+> +	return 0;
+> +}
+> +
+> +static SIMPLE_DEV_PM_OPS(loongson2_thermal_pm_ops,
+> +			 loongson2_thermal_suspend, loongson2_thermal_resume);
+> +
+> +static struct platform_driver loongson2_thermal_driver = {
+> +	.driver = {
+> +		.name		= "loongson2_thermal",
+> +		.pm = &loongson2_thermal_pm_ops,
+> +		.of_match_table = of_loongson2_thermal_match,
+> +	},
+> +	.probe	= loongson2_thermal_probe,
+> +	.remove	= loongson2_thermal_remove,
+> +};
+> +module_platform_driver(loongson2_thermal_driver);
 
