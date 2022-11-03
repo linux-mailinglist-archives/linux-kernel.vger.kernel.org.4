@@ -2,55 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64525617699
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 07:08:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 173456176BE
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 07:29:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230314AbiKCGIF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 02:08:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44562 "EHLO
+        id S230203AbiKCG3Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 02:29:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229699AbiKCGIC (ORCPT
+        with ESMTP id S229531AbiKCG3V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 02:08:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2E5E193C4;
-        Wed,  2 Nov 2022 23:08:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6E31961D53;
-        Thu,  3 Nov 2022 06:08:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4230C433D6;
-        Thu,  3 Nov 2022 06:07:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667455680;
-        bh=P1Zq6cY6WSNCfWyU+WHaR/g7Cg93v+I3gcBJVViYx7I=;
-        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
-        b=MSd1/IYVOvc1P362zJPZ5hBXNs5v+k2toHZjHZLwsC+233Vogc/h8gxvcFSr69tQ8
-         0zRyf9JTSRGpLyJ0dxX8dP7NfxuNExk7dihZoK1ZgDzqOEtgj9yO7EaMxPhbOB/6RF
-         OL4FcrjeIlI1IPQ1JfAe112CkqyqJoWesieKoAmQDGHs8llkfrr9i1j8ra5oRK6XtS
-         WfqVbMN8srwAPR1a1izQlj4l7ARMWQDDpcABAEzwS3+HhN1gI+mbFkLEcWjuKcgElH
-         Rc1PKr7GHmW0StFWidl4uMgLg58tO7UcG3iT/qNwR7IsNJrIipH6X4tyhS5Ph7Xl5+
-         RzGrMl5Rg0Ppw==
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH v2] wifi: ath11k: Make QMI message rules const
-From:   Kalle Valo <kvalo@kernel.org>
-In-Reply-To: <20220915002303.12206-1-quic_jjohnson@quicinc.com>
-References: <20220915002303.12206-1-quic_jjohnson@quicinc.com>
-To:     Jeff Johnson <quic_jjohnson@quicinc.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, <ath11k@lists.infradead.org>,
-        <linux-wireless@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-User-Agent: pwcli/0.1.1-git (https://github.com/kvalo/pwcli/) Python/3.7.3
-Message-ID: <166745567687.21329.1292963060399122337.kvalo@kernel.org>
-Date:   Thu,  3 Nov 2022 06:07:58 +0000 (UTC)
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        Thu, 3 Nov 2022 02:29:21 -0400
+Received: from inva021.nxp.com (inva021.nxp.com [92.121.34.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2AF4BE12;
+        Wed,  2 Nov 2022 23:29:20 -0700 (PDT)
+Received: from inva021.nxp.com (localhost [127.0.0.1])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 3FB8A201444;
+        Thu,  3 Nov 2022 07:29:19 +0100 (CET)
+Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 091C4201440;
+        Thu,  3 Nov 2022 07:29:19 +0100 (CET)
+Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
+        by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id ADCA51802201;
+        Thu,  3 Nov 2022 14:29:17 +0800 (+08)
+From:   Richard Zhu <hongxing.zhu@nxp.com>
+To:     l.stach@pengutronix.de, bhelgaas@google.com,
+        lorenzo.pieralisi@arm.com
+Cc:     hongxing.zhu@nxp.com, linux-pci@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel@pengutronix.de, linux-imx@nxp.com
+Subject: [PATCH v1] PCI: imx6: Keep the GPIO regulator always on
+Date:   Thu,  3 Nov 2022 14:08:18 +0800
+Message-Id: <1667455698-14578-1-git-send-email-hongxing.zhu@nxp.com>
+X-Mailer: git-send-email 2.7.4
+X-Virus-Scanned: ClamAV using ClamSMTP
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,23 +43,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jeff Johnson <quic_jjohnson@quicinc.com> wrote:
+Since vpcie regulator is one GPIO regulator, used to control the
+VPCIe_3V3 and power up remote PCIe EP device.
 
-> Commit ff6d365898d4 ("soc: qcom: qmi: use const for struct
-> qmi_elem_info") allows QMI message encoding/decoding rules to be
-> const, so do that for ath11k.
-> 
-> Compile tested only.
-> 
-> Signed-off-by: Jeff Johnson <quic_jjohnson@quicinc.com>
-> Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
+Some WIFI modules load their firmware once in probe, and can't be
+powered off during suspend. Otherwise, these WIFI modules wouldn't be
+functional anymore after resume back.
 
-Patch applied to ath-next branch of ath.git, thanks.
+So, keep this regulator always on in the probe.
 
-93c1592889fc wifi: ath11k: Make QMI message rules const
+Fixes: a4bb720eeb1e ("PCI: imx6: Turn off regulator when system is in suspend mode")
+Signed-off-by: Richard Zhu <hongxing.zhu@nxp.com>
+---
+ drivers/pci/controller/dwc/pci-imx6.c | 24 ++++++++----------------
+ 1 file changed, 8 insertions(+), 16 deletions(-)
 
+diff --git a/drivers/pci/controller/dwc/pci-imx6.c b/drivers/pci/controller/dwc/pci-imx6.c
+index 2616585ca5f8..94a89bbf381d 100644
+--- a/drivers/pci/controller/dwc/pci-imx6.c
++++ b/drivers/pci/controller/dwc/pci-imx6.c
+@@ -926,22 +926,13 @@ static int imx6_pcie_host_init(struct dw_pcie_rp *pp)
+ 	struct imx6_pcie *imx6_pcie = to_imx6_pcie(pci);
+ 	int ret;
+ 
+-	if (imx6_pcie->vpcie) {
+-		ret = regulator_enable(imx6_pcie->vpcie);
+-		if (ret) {
+-			dev_err(dev, "failed to enable vpcie regulator: %d\n",
+-				ret);
+-			return ret;
+-		}
+-	}
+-
+ 	imx6_pcie_assert_core_reset(imx6_pcie);
+ 	imx6_pcie_init_phy(imx6_pcie);
+ 
+ 	ret = imx6_pcie_clk_enable(imx6_pcie);
+ 	if (ret) {
+ 		dev_err(dev, "unable to enable pcie clocks: %d\n", ret);
+-		goto err_reg_disable;
++		return ret;
+ 	}
+ 
+ 	if (imx6_pcie->phy) {
+@@ -974,9 +965,6 @@ static int imx6_pcie_host_init(struct dw_pcie_rp *pp)
+ 		phy_exit(imx6_pcie->phy);
+ err_clk_disable:
+ 	imx6_pcie_clk_disable(imx6_pcie);
+-err_reg_disable:
+-	if (imx6_pcie->vpcie)
+-		regulator_disable(imx6_pcie->vpcie);
+ 	return ret;
+ }
+ 
+@@ -991,9 +979,6 @@ static void imx6_pcie_host_exit(struct dw_pcie_rp *pp)
+ 		phy_exit(imx6_pcie->phy);
+ 	}
+ 	imx6_pcie_clk_disable(imx6_pcie);
+-
+-	if (imx6_pcie->vpcie)
+-		regulator_disable(imx6_pcie->vpcie);
+ }
+ 
+ static const struct dw_pcie_host_ops imx6_pcie_host_ops = {
+@@ -1263,6 +1248,13 @@ static int imx6_pcie_probe(struct platform_device *pdev)
+ 		if (PTR_ERR(imx6_pcie->vpcie) != -ENODEV)
+ 			return PTR_ERR(imx6_pcie->vpcie);
+ 		imx6_pcie->vpcie = NULL;
++	} else {
++		ret = regulator_enable(imx6_pcie->vpcie);
++		if (ret) {
++			dev_err(dev, "failed to enable vpcie regulator: %d\n",
++				ret);
++			return ret;
++		}
+ 	}
+ 
+ 	imx6_pcie->vph = devm_regulator_get_optional(&pdev->dev, "vph");
 -- 
-https://patchwork.kernel.org/project/linux-wireless/patch/20220915002303.12206-1-quic_jjohnson@quicinc.com/
-
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+2.25.1
 
