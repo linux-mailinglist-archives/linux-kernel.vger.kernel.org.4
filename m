@@ -2,172 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C8A76186B3
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 18:57:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD6446186C6
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 18:59:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231550AbiKCR5S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 13:57:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34018 "EHLO
+        id S231401AbiKCR7N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 13:59:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230222AbiKCR5N (ORCPT
+        with ESMTP id S231703AbiKCR7G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 13:57:13 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D22581B9F2;
-        Thu,  3 Nov 2022 10:57:12 -0700 (PDT)
-Received: from frapeml500008.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4N3BHD2x4tz67M3B;
-        Fri,  4 Nov 2022 01:55:04 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
- frapeml500008.china.huawei.com (7.182.85.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 3 Nov 2022 18:57:10 +0100
-Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Thu, 3 Nov
- 2022 17:57:10 +0000
-Date:   Thu, 3 Nov 2022 17:57:09 +0000
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
-CC:     <linux-efi@vger.kernel.org>, <linux-cxl@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
-        "Alison Schofield" <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Ben Widawsky <bwidawsk@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        "Yazen Ghannam" <yazen.ghannam@amd.com>
-Subject: Re: [PATCH v2 2/2] efi/cper, cxl: Decode CXL Error Log
-Message-ID: <20221103175709.00000591@Huawei.com>
-In-Reply-To: <20221028200950.67505-3-Smita.KoralahalliChannabasappa@amd.com>
-References: <20221028200950.67505-1-Smita.KoralahalliChannabasappa@amd.com>
-        <20221028200950.67505-3-Smita.KoralahalliChannabasappa@amd.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        Thu, 3 Nov 2022 13:59:06 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAAAB1C438
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 10:58:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1667498283;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=yqxXm7t2WOic9y4ISYxOwK8KmYTr1cBIHzcg/Vydbzs=;
+        b=jWZhqk8Op8xpXKAf/bD9sAMgGMuTwu77yjU+nJdXulwU4p/Bfp6uw+TcRz7WB71gAZvASb
+        xezkYofgI8ZsVM5gbZ0j+wpUAv+gawAp797zb9ETmY4AU7jgzuPzDBRg4Sk4Qjyj/2W2Hp
+        cNkIKN7w1FI5U5aIlp+PMpdAlVEifUw=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-494-BQGZ6zoPNgKT6r1Z6gAfrg-1; Thu, 03 Nov 2022 13:58:01 -0400
+X-MC-Unique: BQGZ6zoPNgKT6r1Z6gAfrg-1
+Received: by mail-ej1-f69.google.com with SMTP id qk31-20020a1709077f9f00b00791a3e02c80so1751570ejc.21
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 10:58:00 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=yqxXm7t2WOic9y4ISYxOwK8KmYTr1cBIHzcg/Vydbzs=;
+        b=hRnR0FCYkBILWhiFJCbAuEO/Mx+eUSxeq6m1NaPmJ8ojxSAhNYoslX2fsyvweoeWy/
+         JJMmHYuRt8hMXZJom0vXVcizp9mj9sdEQjwpv5Z8vv7d/NAYLNwwiE7cEBlnekVAIuPo
+         2ZNW75lyL80rZqIkrFdxUB+1g6qKQRfEDjzzT8VeDd97TNcdGANiKegFm9VHpHjWPzhv
+         UkEAztft1KjQtMwPiq41D89D5HaVdylp6nrqISut0BJfGFyLLX/FZ+t8ek+T4qimH6+F
+         A9q8HG1umsa8DAYL1oYKkf5K9H+B+f4CZT9M2rEyLrHKTCpEWh7xawCtMM0rC6C/NILk
+         D/mQ==
+X-Gm-Message-State: ACrzQf0r5fFOAI4MYTsGAyrObqlKnr1v/wXYzMGQMbZX/q2hOGUHc2vk
+        PB/HPVB8Qv7v40t1QXwx34Es+Hq37kAwPEVOzijG9Zn9WytGZ6KhEg9yUieTDvLB4bsFp/Di5X5
+        RXST691zxh521EE7nXjvcPI9g
+X-Received: by 2002:a17:907:a087:b0:7ad:a2ec:1afa with SMTP id hu7-20020a170907a08700b007ada2ec1afamr30061862ejc.151.1667498280032;
+        Thu, 03 Nov 2022 10:58:00 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM6QZmNq5hCph1jlllZl0PdTQdpFjKynjhfU4TqqXsTy2ri356CZrCrEtJkVH+I+gMfL+O9fNA==
+X-Received: by 2002:a17:907:a087:b0:7ad:a2ec:1afa with SMTP id hu7-20020a170907a08700b007ada2ec1afamr30061831ejc.151.1667498279805;
+        Thu, 03 Nov 2022 10:57:59 -0700 (PDT)
+Received: from ?IPV6:2001:b07:6468:f312:1c09:f536:3de6:228c? ([2001:b07:6468:f312:1c09:f536:3de6:228c])
+        by smtp.googlemail.com with ESMTPSA id l3-20020a170907914300b0078d76ee7543sm734215ejs.222.2022.11.03.10.57.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 03 Nov 2022 10:57:58 -0700 (PDT)
+Message-ID: <1fd2e729-6e46-b0bf-d89e-f5d1b4dbde77@redhat.com>
+Date:   Thu, 3 Nov 2022 18:57:55 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH 36/44] KVM: x86: Do compatibility checks when onlining CPU
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Marc Zyngier <maz@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Anup Patel <anup@brainfault.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        Eric Farman <farman@linux.ibm.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Atish Patra <atishp@atishpatra.org>,
+        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Isaku Yamahata <isaku.yamahata@intel.com>,
+        Fabiano Rosas <farosas@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Chao Gao <chao.gao@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Yuan Yao <yuan.yao@intel.com>
+References: <20221102231911.3107438-1-seanjc@google.com>
+ <20221102231911.3107438-37-seanjc@google.com>
+ <23bfd709-f99a-5a74-e4b9-1381b88453f1@redhat.com>
+ <Y2P+E+631c0TNcK7@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <Y2P+E+631c0TNcK7@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.227.76]
-X-ClientProxiedBy: lhrpeml100006.china.huawei.com (7.191.160.224) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 28 Oct 2022 20:09:50 +0000
-Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com> wrote:
+On 11/3/22 18:44, Sean Christopherson wrote:
+>>> Do compatibility checks when enabling hardware to effectively add
+>>> compatibility checks when onlining a CPU.  Abort enabling, i.e. the
+>>> online process, if the (hotplugged) CPU is incompatible with the known
+>>> good setup.
+>>
+>> This paragraph is not true with this patch being before "KVM: Rename and
+>> move CPUHP_AP_KVM_STARTING to ONLINE section".
+>
+> Argh, good eyes.  Getting the ordering correct in this series has been quite the
+> struggle.  Assuming there are no subtle dependencies between x86 and common KVM,
+> the ordering should be something like this:
 
-> Print the CXL Error Log field as found in CXL Protocol Error Section.
+It's not a problem to keep the ordering in this v1, just fix the commit 
+message like "Do compatibility checks when enabling hardware to 
+effectively add compatibility checks on CPU hotplug.  For now KVM is 
+using a STARTING hook, which makes it impossible to abort the hotplug if 
+the new CPU is incompatible with the known good setup; switching to an 
+ONLINE hook will fix this."
+
+Paolo
+
+>    KVM: Opt out of generic hardware enabling on s390 and PPC
+>    KVM: Register syscore (suspend/resume) ops early in kvm_init()
+>    KVM: x86: Do compatibility checks when onlining CPU
+>    KVM: SVM: Check for SVM support in CPU compatibility checks
+>    KVM: VMX: Shuffle support checks and hardware enabling code around
+>    KVM: x86: Do VMX/SVM support checks directly in vendor code
+>    KVM: x86: Unify pr_fmt to use module name for all KVM modules
+>    KVM: x86: Use KBUILD_MODNAME to specify vendor module name
+>    KVM: Make hardware_enable_failed a local variable in the "enable all" path
+>    KVM: Use a per-CPU variable to track which CPUs have enabled virtualization
+>    KVM: Remove on_each_cpu(hardware_disable_nolock) in kvm_exit()
+>    KVM: Drop kvm_count_lock and instead protect kvm_usage_count with kvm_lock
+>    KVM: Disable CPU hotplug during hardware enabling
+>    KVM: Rename and move CPUHP_AP_KVM_STARTING to ONLINE section
+>    KVM: Drop kvm_arch_check_processor_compat() hook
 > 
-> The CXL RAS Capability structure will be reused by OS First Handling
-> and the duplication/appropriate placement will be addressed eventually.
-> 
-> Signed-off-by: Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
-Hi Smita,
-
-Ah.  Now I see why stuff wasn't in patch 1 that I expected to be there.
-
-LGTM
-
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-
-
-
-
-> ---
-> v2:
-> 	Printed all fields separately.
-> 	Printed cap_control.
-> 	Prefix cxl_.
-> 	Provided the reference.
-> ---
->  drivers/firmware/efi/cper_cxl.c | 27 +++++++++++++++++++++++++++
->  include/linux/cxl_err.h         | 22 ++++++++++++++++++++++
->  2 files changed, 49 insertions(+)
->  create mode 100644 include/linux/cxl_err.h
-> 
-> diff --git a/drivers/firmware/efi/cper_cxl.c b/drivers/firmware/efi/cper_cxl.c
-> index 6c94af234be9..53e435c4f310 100644
-> --- a/drivers/firmware/efi/cper_cxl.c
-> +++ b/drivers/firmware/efi/cper_cxl.c
-> @@ -9,6 +9,7 @@
->  
->  #include <linux/cper.h>
->  #include "cper_cxl.h"
-> +#include <linux/cxl_err.h>
->  
->  #define PROT_ERR_VALID_AGENT_TYPE		BIT_ULL(0)
->  #define PROT_ERR_VALID_AGENT_ADDRESS		BIT_ULL(1)
-> @@ -16,6 +17,7 @@
->  #define PROT_ERR_VALID_SERIAL_NUMBER		BIT_ULL(3)
->  #define PROT_ERR_VALID_CAPABILITY		BIT_ULL(4)
->  #define PROT_ERR_VALID_DVSEC			BIT_ULL(5)
-> +#define PROT_ERR_VALID_ERROR_LOG		BIT_ULL(6)
->  
->  static const char * const prot_err_agent_type_strs[] = {
->  	"Restricted CXL Device",
-> @@ -149,4 +151,29 @@ void cper_print_prot_err(const char *pfx, const struct cper_sec_prot_err *prot_e
->  		print_hex_dump(pfx, "", DUMP_PREFIX_OFFSET, 16, 4, (prot_err + 1),
->  			       prot_err->dvsec_len, 0);
->  	}
-> +
-> +	if (prot_err->valid_bits & PROT_ERR_VALID_ERROR_LOG) {
-> +		size_t size = sizeof(*prot_err) + prot_err->dvsec_len;
-> +		struct cxl_ras_capability_regs *cxl_ras;
-> +
-> +		pr_info("%s Error log length: 0x%04x\n", pfx, prot_err->err_len);
-> +
-> +		pr_info("%s CXL Error Log:\n", pfx);
-> +		cxl_ras = (struct cxl_ras_capability_regs *)((long)prot_err + size);
-> +		pr_info("%s cxl_ras_uncor_status: 0x%08x", pfx,
-> +			cxl_ras->uncor_status);
-> +		pr_info("%s cxl_ras_uncor_mask: 0x%08x\n", pfx,
-> +			cxl_ras->uncor_mask);
-> +		pr_info("%s cxl_ras_uncor_severity: 0x%08x\n", pfx,
-> +			cxl_ras->uncor_severity);
-> +		pr_info("%s cxl_ras_cor_status: 0x%08x", pfx,
-> +			cxl_ras->cor_status);
-> +		pr_info("%s cxl_ras_cor_mask: 0x%08x\n", pfx,
-> +			cxl_ras->cor_mask);
-> +		pr_info("%s cap_control: 0x%08x\n", pfx,
-> +			cxl_ras->cap_control);
-> +		pr_info("%s Header Log Registers:\n", pfx);
-> +		print_hex_dump(pfx, "", DUMP_PREFIX_OFFSET, 16, 4, cxl_ras->header_log,
-> +			       sizeof(cxl_ras->header_log), 0);
-> +	}
->  }
-> diff --git a/include/linux/cxl_err.h b/include/linux/cxl_err.h
-> new file mode 100644
-> index 000000000000..629e1bdeda44
-> --- /dev/null
-> +++ b/include/linux/cxl_err.h
-> @@ -0,0 +1,22 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
-> +/*
-> + * Copyright (C) 2022 Advanced Micro Devices, Inc.
-> + *
-> + * Author: Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
-> + */
-> +
-> +#ifndef LINUX_CXL_ERR_H
-> +#define LINUX_CXL_ERR_H
-> +
-> +/* CXL RAS Capability Structure, CXL v3.1 sec 8.2.4.16 */
-> +struct cxl_ras_capability_regs {
-> +	u32 uncor_status;
-> +	u32 uncor_mask;
-> +	u32 uncor_severity;
-> +	u32 cor_status;
-> +	u32 cor_mask;
-> +	u32 cap_control;
-> +	u32 header_log[16];
-> +};
-> +
-> +#endif //__CXL_ERR_
 
