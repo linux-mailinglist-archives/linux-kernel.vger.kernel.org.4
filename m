@@ -2,176 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DD1D61834B
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 16:53:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5438661834C
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 16:53:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232025AbiKCPw6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 11:52:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57092 "EHLO
+        id S232158AbiKCPxf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 11:53:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230157AbiKCPwy (ORCPT
+        with ESMTP id S231770AbiKCPxd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 11:52:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3801D65DD;
-        Thu,  3 Nov 2022 08:52:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C8CE661F3D;
-        Thu,  3 Nov 2022 15:52:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 059A9C433D6;
-        Thu,  3 Nov 2022 15:52:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667490772;
-        bh=4E16EIE6fAutftaw+daIrJ0Wt1QN/Av8Zfs90PmDMK4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pOwMD/vT7LIbQ0mJw0QJULI2hdA21Be0vAMcOLfe5btDLUsA8y+FngQ118whcaZ1T
-         Fz/Q17H7o5EsTIbRVYDBMYOOLJI3cA4Y/LoEJhR8mepewIOOLEO/GL2ZycClei23jf
-         HumFdI4hkqbNTKYG1scNM++qeStg5y9t4gT5mIi3YC0eNOoAM/QhBZk+4i4TixSMQv
-         xmDNA1j5FHvLXWm5KHbP/Ns9mmH1o+d1UBV9qZ8C62Ggza+yO4h0VMg8HgTaB4wMlc
-         6TvNlGpkz+hhIVBp8bwgx/PduVJ1Bc9q3K7CNJYjZ9NQi5J4RoHm/HlnvNdcJApplq
-         e23sAG+srvh+Q==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id C0FD14034E; Thu,  3 Nov 2022 12:52:48 -0300 (-03)
-Date:   Thu, 3 Nov 2022 12:52:48 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Ian Rogers <irogers@google.com>
-Cc:     Leo Yan <leo.yan@linaro.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Stephane Eranian <eranian@google.com>
-Subject: Re: [PATCH v1 6/7] perf trace: 5sec fix libbpf 1.0+ compatibility
-Message-ID: <Y2Pj0KVbbw9rMcPH@kernel.org>
-References: <20221103045437.163510-1-irogers@google.com>
- <20221103045437.163510-7-irogers@google.com>
- <Y2PgBPeZsd9+YWB4@kernel.org>
- <Y2Pgz7luG77Wr+Ci@kernel.org>
+        Thu, 3 Nov 2022 11:53:33 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8854D167DA
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 08:53:32 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id s196so2032162pgs.3
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 08:53:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=iefhXYcFca+HyMrTaCiWzQ24fHFIs/brIYiJSEqSUcQ=;
+        b=mnEgPRYk2PPB666Mwc6QMzwxTKX+rHctMioHYBKj2e0+U0kbTQLPG0Vk5U7nmSb9wV
+         PISe2i9oNNIXplC90+WVjOWIs8l49/kPSfcN5II4Ot73q+9bAJawAHd55MYPSnkXs/qj
+         FIRWz0djKi2SgpHLqSCp3pK9HC57ylPOzHGkWmSRlY6zO929FS1SFMnoj31Gdvi6PF9V
+         JSPUHze4LGYGvzrfdncqMAS65bVQF/8vr7ji42neU0tBUIHYsKx7ATT+TXTyhdDxBW6g
+         OIvvRJPvZqzRKqXvqCisKq8OrHP5H5/DI8tUlmMMR+ZE8FtbzYgWXqDHgm6CsU4OuH85
+         VXIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=iefhXYcFca+HyMrTaCiWzQ24fHFIs/brIYiJSEqSUcQ=;
+        b=T1/SHSAjDqMDRdf55d4/koayv4KiaKaFIAOW3WF+7Cx0l2xtElhnG8vKSE6NkIiT0b
+         ULDYL30Y1fYDzweGplZEgZO1RtsU5Wm01FhqsBcyWY309atEHytCYjiY80PpEV5btlUn
+         C4sGeZvXkesgjROL76Cm25lhWLRdsB3lJuZ5ovKWGi3ev3qnbJd+b8dxOdLX1ZI+mdVl
+         FnJ6lDQH0EfBbC5IbbzU1u8DCQm6WyCFwg7luLQeI3t8JrSrZ3qVYO28qJuIz6WqAHJ3
+         hwL8MNQ0aoqIoWXCiqExNFPFMuisahioHfjx+7u8jRPpShKzGWgxTWTAURmaDxPZtysw
+         c//w==
+X-Gm-Message-State: ACrzQf0046LuXWdvWX7GRss15uZ1IWfVku+G3yoU32UhcLUlNIchcwQA
+        bgwCkyv1l1KqFSwxLcnGU6ZFFi0+W8c=
+X-Google-Smtp-Source: AMsMyM4fr0j5T3py3yG/3/HWamAEHR9CXTW4h3U6KJORTNzMY9j5TYUF1eC9OhTEn2s6p+YvKd5f9w==
+X-Received: by 2002:a63:e007:0:b0:46f:d715:3704 with SMTP id e7-20020a63e007000000b0046fd7153704mr15322741pgh.108.1667490811941;
+        Thu, 03 Nov 2022 08:53:31 -0700 (PDT)
+Received: from google.com ([2620:15c:211:201:3d65:7dc2:c62a:5d98])
+        by smtp.gmail.com with ESMTPSA id k9-20020a17090a3cc900b00212d9a06edcsm125728pjd.42.2022.11.03.08.53.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Nov 2022 08:53:31 -0700 (PDT)
+Sender: Minchan Kim <minchan.kim@gmail.com>
+Date:   Thu, 3 Nov 2022 08:53:29 -0700
+From:   Minchan Kim <minchan@kernel.org>
+To:     Johannes Weiner <hannes@cmpxchg.org>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Nhat Pham <nphamcs@gmail.com>, akpm@linux-foundation.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        ngupta@vflare.org, sjenning@redhat.com, ddstreet@ieee.org,
+        vitaly.wool@konsulko.com
+Subject: Re: [PATCH 2/5] zsmalloc: Consolidate zs_pool's migrate_lock and
+ size_class's locks
+Message-ID: <Y2Pj+fuON8lTMcmn@google.com>
+References: <20221026200613.1031261-1-nphamcs@gmail.com>
+ <20221026200613.1031261-3-nphamcs@gmail.com>
+ <Y2Hj+H4VzlN/fcmR@google.com>
+ <Y2Li412OGB6g8ARA@google.com>
+ <Y2PbrOqRMLDsYev0@cmpxchg.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y2Pgz7luG77Wr+Ci@kernel.org>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y2PbrOqRMLDsYev0@cmpxchg.org>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        FSL_HELO_FAKE,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Thu, Nov 03, 2022 at 12:39:59PM -0300, Arnaldo Carvalho de Melo escreveu:
-> Em Thu, Nov 03, 2022 at 12:36:36PM -0300, Arnaldo Carvalho de Melo escreveu:
-> > [root@quaco ~]# perf trace -e /home/acme/git/perf/tools/perf/examples/bpf/5sec.c
-> > /home/acme/git/perf/tools/perf/examples/bpf/5sec.c:42:10: fatal error: 'bpf/bpf_helpers.h' file not found
-> > #include <bpf/bpf_helpers.h>
-> >          ^~~~~~~~~~~~~~~~~~~
-> > 1 error generated.
-> > ERROR:	unable to compile /home/acme/git/perf/tools/perf/examples/bpf/5sec.c
-> > Hint:	Check error message shown above.
-> > Hint:	You can also pre-compile it into .o using:
-> >      		clang -target bpf -O2 -c /home/acme/git/perf/tools/perf/examples/bpf/5sec.c
-> >      	with proper -I and -D options.
-> > event syntax error: '/home/acme/git/perf/tools/perf/examples/bpf/5sec.c'
-> >                      \___ Failed to load /home/acme/git/perf/tools/perf/examples/bpf/5sec.c from source: Error when compiling BPF scriptlet
-> > 
-> > (add -v to see detail)
-> > Run 'perf list' for a list of valid events
-> > 
-> >  Usage: perf trace [<options>] [<command>]
-> >     or: perf trace [<options>] -- <command> [<options>]
-> >     or: perf trace record [<options>] [<command>]
-> >     or: perf trace record [<options>] -- <command> [<options>]
-> > 
-> >     -e, --event <event>   event/syscall selector. use 'perf list' to list available events
-> > [root@quaco ~]#
-> > 
-> > It is not even finding it, in this machine I have libbpf 0.7.0, so there
-> > is a /usr/include/bpf/bpf_helpers.h, but probably that isn't in the
-> > include path set up to build the tools/perf/examples/bpf/ files, perhaps
-> > it should use:
-> > 
-> > -Itools/lib/  so that it gets tools/lib/bpf_helpers.h?
-> > 
-> > Trying to get this tested...
+On Thu, Nov 03, 2022 at 11:18:04AM -0400, Johannes Weiner wrote:
+> On Wed, Nov 02, 2022 at 02:36:35PM -0700, Minchan Kim wrote:
+> > On Wed, Nov 02, 2022 at 12:28:56PM +0900, Sergey Senozhatsky wrote:
+> > > On (22/10/26 13:06), Nhat Pham wrote:
+> > > >  struct size_class {
+> > > > -	spinlock_t lock;
+> > > >  	struct list_head fullness_list[NR_ZS_FULLNESS];
+> > > >  	/*
+> > > >  	 * Size of objects stored in this class. Must be multiple
+> > > > @@ -247,8 +245,7 @@ struct zs_pool {
+> > > >  #ifdef CONFIG_COMPACTION
+> > > >  	struct work_struct free_work;
+> > > >  #endif
+> > > > -	/* protect page/zspage migration */
+> > > > -	rwlock_t migrate_lock;
+> > > > +	spinlock_t lock;
+> > > >  };
+> > > 
+> > > I'm not in love with this, to be honest. One big pool lock instead
+> > > of 255 per-class locks doesn't look attractive, as one big pool lock
+> > > is going to be hammered quite a lot when zram is used, e.g. as a regular
+> > > block device with a file system and is under heavy parallel writes/reads.
 > 
-> Running with -v:
+> TBH the class always struck me as an odd scope to split the lock. Lock
+> contention depends on how variable the compression rate is of the
+> hottest incoming data, which is unpredictable from a user POV.
 > 
-> llvm compiling command : /usr/lib64/ccache/clang -D__KERNEL__ -D__NR_CPUS__=8 -DLINUX_VERSION_CODE=0x51310 -g -I/home/acme/lib/perf/include/bpf -nostdinc -I./arch/x86/include -I./arch/x86/include/generated  -I./include -I./arch/x86/include/uapi -I./arch/x86/include/generated/uapi -I./include/uapi -I./include/generated/uapi -include ./include/linux/compiler-version.h -include ./include/linux/kconfig.h  -Wno-unused-value -Wno-pointer-sign -working-directory /lib/modules/5.19.16-200.fc36.x86_64/build -c /home/acme/git/perf/tools/perf/examples/bpf/5sec.c -target bpf  -g -O2 -o -
-> /home/acme/git/perf/tools/perf/examples/bpf/5sec.c:42:10: fatal error: 'bpf/bpf_helpers.h' file not found
+> My understanding is that the primary usecase for zram is swapping, and
+> the pool lock is the same granularity as the swap locking.
+
+People uses the zram to store caching object files in build server.
+
 > 
-> There is still that -I/home/acme/lib/perf/include/bpf, I'll remove it
-> from the include path and try to replace it with the libbpf path...
+> Regardless, we'll do some benchmarks with filesystems to understand
+> what a reasonable tradeoff would be between overhead and complexity.
 
-Ok, works with the patch below, that needs some more renaming from "perf_" to
-"libbpf_", etc:
+Thanks.
 
-[root@quaco ~]# perf trace -e /home/acme/git/perf/tools/perf/examples/bpf/5sec.c  sleep 5
-     0.000 sleep/160828 perf_bpf_probe:hrtimer_nanosleep(__probe_ip: -1474734416, rqtp: 5000000000)
-[root@quaco ~]#
+> Do you have a particular one in mind? (I'm thinking journaled ones are
+> not of much interest, since their IO tends to be fairly serialized.)
+> 
+> btrfs?
 
-Since I have:
+I am not sure what FSes others are using but at least for me, just
+plain ext4.
 
-[root@quaco ~]# cat ~/.perfconfig
-[llvm]
-	dump-obj = true
-	clang-opt = -g
-#
+> 
+> > I am also worry about that LRU stuff should be part of allocator
+> > instead of higher level.
+> 
+> I'm sorry, but that's not a reasonable objection.
+> 
+> These patches implement a core feature of being a zswap backend, using
+> standard LRU and locking techniques established by the other backends.
+> 
+> I don't disagree that it would nicer if zswap had a strong abstraction
+> for backend pages and a generalized LRU. But that is major surgery on
+> a codebase of over 6,500 lines. It's not a reasonable ask to change
+> all that first before implementing a basic feature that's useful now.
 
-I end up with:
+With same logic, folks added the LRU logic into their allocators
+without the effort considering moving the LRU into upper layer.
 
-[root@quaco ~]# ls -la /home/acme/git/perf/tools/perf/examples/bpf/5sec.o
--rw-r--r--. 1 root root 3696 Nov  3 12:47 /home/acme/git/perf/tools/perf/examples/bpf/5sec.o
-[root@quaco ~]# file /home/acme/git/perf/tools/perf/examples/bpf/5sec.o
-/home/acme/git/perf/tools/perf/examples/bpf/5sec.o: ELF 64-bit LSB relocatable, eBPF, version 1 (SYSV), with debug_info, not stripped
-[root@quaco ~]#
+And then trend is still going on since I have seen multiple times
+people are trying to add more allocators. So if it's not a reasonable
+ask to consier, we couldn't stop the trend in the end.
 
-and can test with the pre-built .o eBPF bytecode + capped backtrace:
+> 
+> I get that your main interest is zram, and so this feature isn't of
+> interest to you. But zram isn't the only user, nor is it the primary
 
-[root@quaco ~]# perf trace -e /home/acme/git/perf/tools/perf/examples/bpf/5sec.o/max-stack=6/  sleep 5
-     0.000 sleep/161037 perf_bpf_probe:hrtimer_nanosleep(__probe_ip: -1474734416, rqtp: 5000000000)
-                                       hrtimer_nanosleep ([kernel.kallsyms])
-                                       common_nsleep ([kernel.kallsyms])
-                                       __x64_sys_clock_nanosleep ([kernel.kallsyms])
-                                       do_syscall_64 ([kernel.kallsyms])
-                                       entry_SYSCALL_64_after_hwframe ([kernel.kallsyms])
-                                       __GI___clock_nanosleep (/usr/lib64/libc.so.6)
-[root@quaco ~]#
-
-I'll test the other examples with these changes after I drive Pedro to
-school and get back to the office.
-
-- Arnaldo
-
-diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
-index d3d3c13a9f25b55c..067a6e56eeacc9fc 100644
---- a/tools/perf/Makefile.config
-+++ b/tools/perf/Makefile.config
-@@ -1239,7 +1239,7 @@ includedir = $(abspath $(prefix)/$(includedir_relative))
- mandir = share/man
- infodir = share/info
- perfexecdir = libexec/perf-core
--perf_include_dir = lib/perf/include
-+perf_include_dir = /usr/include
- perf_examples_dir = lib/perf/examples
- sharedir = $(prefix)/share
- template_dir = share/perf-core/templates
-diff --git a/tools/perf/util/llvm-utils.c b/tools/perf/util/llvm-utils.c
-index 2dc7970074196ca8..a5cac85783d8711f 100644
---- a/tools/perf/util/llvm-utils.c
-+++ b/tools/perf/util/llvm-utils.c
-@@ -495,7 +495,7 @@ int llvm__compile_bpf(const char *path, void **p_obj_buf,
- 
- 	snprintf(linux_version_code_str, sizeof(linux_version_code_str),
- 		 "0x%x", kernel_version);
--	if (asprintf(&perf_bpf_include_opts, "-I%s/bpf", perf_include_dir) < 0)
-+	if (asprintf(&perf_bpf_include_opts, "-I%s/", perf_include_dir) < 0)
- 		goto errout;
- 	force_set_env("NR_CPUS", nr_cpus_avail_str);
- 	force_set_env("LINUX_VERSION_CODE", linux_version_code_str);
+I am interest to the feature but my interest is more of general swap
+layer to manage the LRU so that it could support any hierarchy among
+swap devices, not only zswap.
