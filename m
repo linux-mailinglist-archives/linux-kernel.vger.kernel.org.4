@@ -2,181 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18DB0617DCC
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 14:22:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8ECCA617DD3
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 14:24:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229548AbiKCNWx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 09:22:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58944 "EHLO
+        id S231603AbiKCNYG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 09:24:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231728AbiKCNWr (ORCPT
+        with ESMTP id S231470AbiKCNYD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 09:22:47 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 435EB13EA6
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 06:22:46 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 024A421CC5;
-        Thu,  3 Nov 2022 13:22:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1667481765; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=YtYsfzILl9NFjCGNIVUBOY8T67uNUFh0psRXTfGqcis=;
-        b=elGhjAFW5ss47byBOpk4ELod1blDLy/XCyHAgzAo7XZS4KMs6+hmUCJoWS/Zqs/luZptLr
-        OEI65F4mehkANJFi3AtUkK/k/V0fnpsXbkipu2GTLJvGpb+ER8VzeDKMEBHDX3JI1YWYth
-        YJcT7aeWygn4hYQNjRxSutasIJsypTE=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A5B1713480;
-        Thu,  3 Nov 2022 13:22:44 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id tbkUJqTAY2OSWgAAMHmgww
-        (envelope-from <jgross@suse.com>); Thu, 03 Nov 2022 13:22:44 +0000
-Message-ID: <eb487a30-7491-1ef3-fb11-4dff342215bc@suse.com>
-Date:   Thu, 3 Nov 2022 14:22:44 +0100
+        Thu, 3 Nov 2022 09:24:03 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C3C910B9
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 06:24:02 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id m6so1622367pfb.0
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 06:24:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=XrHkiVdh+qB5p2Sw2z7czeCm3PU3sfVYaV65IQbO0PU=;
+        b=GckebTsM5Af16DqURlc/Nk6EqDA1yWwlUEZUnmFCufGlYsJq7EN5hk8iaWXuyYu87L
+         a4pY5j+sghuYrvVbi+AE5Cey+7OBhp3ltyN0dzzgXBAe5uCkMOiuJ6/XCaT3u2McLQN9
+         zM49chGJm65xj1uyXFPxzKne2YcxbEb8qjpgmvthOf5EmFQwJU8HHKYUTrR8P20+wQUw
+         FzbPw024UiRRdQd4R7yZEkRkCR3RTwI8NINJS2JgPYhoqObGl89eWapH0vKZPMX+fTNz
+         v7qpnSZVc2L/Z1JZj7TrY8bPfNz82WQJgf+BJZgPrlwVhIcbEVC4mGWoUVxLaCOGMARK
+         txFA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XrHkiVdh+qB5p2Sw2z7czeCm3PU3sfVYaV65IQbO0PU=;
+        b=BM8w6jQ7VCumG5wq7X5CCC3BCgjY/xyIht8qMbGy2bnvz8TH5dYl9NS1rf6q5KQT4N
+         UgXVvG5XvUWSbWn1SOOWMNODAAUl52K1/XdZg01vsrUI6pzDnVrjvT0w7cgq7t3ZvLyB
+         rfLLgvcMSGx9BTUSAlsY8DiAdDrZJxSmMkQ1JpAz8Hq2uEJnKFuDNq98KVhlkxuvuT1F
+         FKKEwerVuzIKGQmw0YPC6P1vrNStj2h+a0aXz5tjUM9/zJpEOGcGSp5F2M9HWzhoWvxL
+         kxTOdiOKaELFoEueW4bxI4I1ZHf/JHeVJfcz3FBqjuqETuwjvisSvBJ2I4dXBunmL+uc
+         6Kjg==
+X-Gm-Message-State: ACrzQf2xfK7iETnAHwC10MGpkk6rqPkF0Y5bMdcnYN3sJ4p3slBNxHjp
+        sytGsbNpARkNMfHykm9r1RY=
+X-Google-Smtp-Source: AMsMyM79JtxqP7QPxDsd1kRRmNFm8mQSnZb7l9ngiFkoEpvsK/cLZZXbTypytMz3gUgO5X6xJqdqNQ==
+X-Received: by 2002:a62:a503:0:b0:56b:cb10:2d87 with SMTP id v3-20020a62a503000000b0056bcb102d87mr30453796pfm.79.1667481841750;
+        Thu, 03 Nov 2022 06:24:01 -0700 (PDT)
+Received: from hyeyoo ([114.29.91.56])
+        by smtp.gmail.com with ESMTPSA id nm1-20020a17090b19c100b00209a12b3879sm949113pjb.37.2022.11.03.06.23.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Nov 2022 06:24:00 -0700 (PDT)
+Date:   Thu, 3 Nov 2022 22:23:52 +0900
+From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
+To:     Liu Shixin <liushixin2@huawei.com>
+Cc:     Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Roman Gushchin <roman.gushchin@linux.dev>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/3] Refactor __kmem_cache_create() and fix memory leak
+Message-ID: <Y2PA6JBklwwtLlST@hyeyoo>
+References: <20221031134747.3049593-1-liushixin2@huawei.com>
+ <Y2IgUwTH/dO06Tot@hyeyoo>
+ <c03620e3-6159-1c46-c472-c15186f4ccae@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH] locking/paravirt: Fix performance regression on core
- bonded vCPU
-Content-Language: en-US
-To:     johnnyaiai <arafatms@outlook.com>
-Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com,
-        linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        johnnyaiai <johnnyaiai@tencent.com>
-References: <MEYP282MB402614DB5A4625255B689F06C3389@MEYP282MB4026.AUSP282.PROD.OUTLOOK.COM>
-From:   Juergen Gross <jgross@suse.com>
-In-Reply-To: <MEYP282MB402614DB5A4625255B689F06C3389@MEYP282MB4026.AUSP282.PROD.OUTLOOK.COM>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------btJwKHoQI5NXfyaxGDGNodDN"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c03620e3-6159-1c46-c472-c15186f4ccae@huawei.com>
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------btJwKHoQI5NXfyaxGDGNodDN
-Content-Type: multipart/mixed; boundary="------------NN7hXR4D40ZMGlq70IZotIEC";
- protected-headers="v1"
-From: Juergen Gross <jgross@suse.com>
-To: johnnyaiai <arafatms@outlook.com>
-Cc: tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
- dave.hansen@linux.intel.com, hpa@zytor.com, linux-kernel@vger.kernel.org,
- virtualization@lists.linux-foundation.org,
- johnnyaiai <johnnyaiai@tencent.com>
-Message-ID: <eb487a30-7491-1ef3-fb11-4dff342215bc@suse.com>
-Subject: Re: [PATCH] locking/paravirt: Fix performance regression on core
- bonded vCPU
-References: <MEYP282MB402614DB5A4625255B689F06C3389@MEYP282MB4026.AUSP282.PROD.OUTLOOK.COM>
-In-Reply-To: <MEYP282MB402614DB5A4625255B689F06C3389@MEYP282MB4026.AUSP282.PROD.OUTLOOK.COM>
+On Wed, Nov 02, 2022 at 04:53:08PM +0800, Liu Shixin wrote:
+> On 2022/11/2 15:46, Hyeonggon Yoo wrote:
+> > On Mon, Oct 31, 2022 at 09:47:44PM +0800, Liu Shixin wrote:
+> >> I found a memory leak of kobj->name in sysfs_slab_add() which is introduced
+> >> by 80da026a8e5d ("mm/slub: fix slab double-free in case of duplicate sysfs filename").
+> >> Following the rules stated in the comment for kobject_init_and_add():
+> > Thank you for reporting this! Indeed it seems tried to fix double free but
+> > introduced a leak.
+> >
+> >>  If this function returns an error, kobject_put() must be called to
+> >>  properly clean up the memory associated with the object.
+> >>
+> >> We should use kobject_put() to free kobject.
+> > But what to do if a cache is created early and later sysfs_slab_add() failed?
+> > (Which is unlikely on normal condition)
+> >
+> > With this series it introduces use-after-free if sysfs_slab_add() in
+> > slab_sysfs_init() failed.  Should we just call BUG() or something like that?
+>
+> Thanks for your discovery, what I missed.
 
---------------NN7hXR4D40ZMGlq70IZotIEC
-Content-Type: multipart/mixed; boundary="------------ziqOgnjwh30plMs8D7OtdS02"
+You're welcome.
 
---------------ziqOgnjwh30plMs8D7OtdS02
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+> I prefer to panic directly, just as create_boot_cache() does.
 
-T24gMDMuMTEuMjIgMTM6MTMsIGpvaG5ueWFpYWkgd3JvdGU6DQo+IEZyb206IGpvaG5ueWFp
-YWkgPGpvaG5ueWFpYWlAdGVuY2VudC5jb20+DQo+IA0KPiB2aXJ0X3NwaW5fbG9jaygpIGlz
-IHByZWZlcnJlZCBvdmVyIG5hdGl2ZSBxc3BpbmxvY2sgd2hlbg0KPiB2Q1BVIGlzIHByZWVt
-cHRlZC4gQnV0IGJyaW5ncyBhIGxvdCBvZiByZWdyZXNzaW9uIHdoaWxlDQo+IHZDUFUgaXMg
-bm90IHByZWVtcHRlZC4gUHJvdmlkZSBhIGVhcmx5IHBhcmFtICdub3ZpcnRsb2NrJw0KPiB0
-byBjaG9vc2Ugd291bGQgYmUgYmV0dGVyLg0KPiANCj4gd2lsbC1pdC1zY2FsZS9sb2NrMl90
-aHJlYWRzIC1zIDEwIC10IDY0DQo+IGJhc2VsaW5lICAgIGFmdGVycGF0Y2gNCj4gNTU5OTM4
-ICAgICAgIDIxNjYxMzUNCj4gDQo+IFNpZ25lZC1vZmYtYnk6IGpvaG5ueWFpYWkgPGpvaG5u
-eWFpYWlAdGVuY2VudC5jb20+DQoNClRoYXQgaXMgZXhhY3RseSB0aGUgcHVycG9zZSBvZiB0
-aGUgZXhpc3Rpbmcgbm9wdnNwaW4gcGFyYW1ldGVyLg0KDQoNCkp1ZXJnZW4NCg==
---------------ziqOgnjwh30plMs8D7OtdS02
-Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Description: OpenPGP public key
-Content-Transfer-Encoding: quoted-printable
+IMHO that should be nothing serious. but let's hear maintainers' opinion.
 
------BEGIN PGP PUBLIC KEY BLOCK-----
+> Of couse, if you want the system to continue booting, I think it's possible to distinguish them
+> by slab_state.
 
-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
-jR/i1DG86lem3iBDXzXsZDn8R38=3D
-=3D2wuH
------END PGP PUBLIC KEY BLOCK-----
+I'm afraid to make it more complex :(
 
---------------ziqOgnjwh30plMs8D7OtdS02--
+> Looking forward to your advice.
+> Thanks,
+> >
+> >> But we can't simply add kobject_put() since it will free kmem_cache too.
+> >> If we use kobject_put(), we need to skip other release functions.
+> >>
+> >> In this series, We refactor the code to separate sysfs_slab_add() and
+> >> debugfs_slab_add() from __kmem_cache_create(), and then use kobject_put()
+> >> to free kobject in sysfs_slab_add(). This can fix the memory leak of
+> >> kobject->name.
+> >>
+> >> v1->v2: Fix build error reported by kernel test robot <lkp@intel.com>.
+> >>
+> >> Liu Shixin (3):
+> >>   mm/slab_common: Move cache_name to create_cache()
+> >>   mm/slub: Refactor __kmem_cache_create()
+> >>   mm/slub: Fix memory leak of kobj->name in sysfs_slab_add()
+> >>
+> >>  include/linux/slub_def.h | 11 +++++++++
+> >>  mm/slab_common.c         | 44 ++++++++++++++++++----------------
+> >>  mm/slub.c                | 52 ++++++++++------------------------------
+> >>  3 files changed, 48 insertions(+), 59 deletions(-)
+> >>
+> >> -- 
+> >> 2.25.1
+> >>
+> 
 
---------------NN7hXR4D40ZMGlq70IZotIEC--
-
---------------btJwKHoQI5NXfyaxGDGNodDN
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmNjwKQFAwAAAAAACgkQsN6d1ii/Ey9V
-fwf/VuX3gqrDOiYvH85Jr/a02gIdch7et+ZzpO1pJGaG0cLENWl4AEn/cVVSRhdK/9Fd9DB7DoNO
-bXT6PrUr4E7/wgu/W0GJsbGBOOrd6bbl7GhnPFzBWgkGYA3eLBIPHNhOQCHE9p/6RtsLNiDZq+7O
-ZtV36TUGIeA3ejd6ZCWP+qE2aRit6iiUiiB59esRPujhcusDqeQglkBBElWOmSwcvZATk3MoB0+J
-/Kh8bSYcRo03+BYLjR6Zj2Hw4ICpqIQuPu0RcjjgIODtkSUs3SoSrWT2iHHDRS1dhVMRF5u7/zdw
-VeKjUY/8I/rd3VS4Sa0ElenVOx+buodyyTLbH+BWKg==
-=bmVM
------END PGP SIGNATURE-----
-
---------------btJwKHoQI5NXfyaxGDGNodDN--
+-- 
+Thanks,
+Hyeonggon
