@@ -2,190 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B8F86174CE
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 04:14:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 161366174CA
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 04:13:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231185AbiKCDN5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 23:13:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57118 "EHLO
+        id S230208AbiKCDNM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 23:13:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231226AbiKCDNd (ORCPT
+        with ESMTP id S229548AbiKCDNE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 23:13:33 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B69C01035;
-        Wed,  2 Nov 2022 20:13:28 -0700 (PDT)
-Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4N2pjs43DQzmVFC;
-        Thu,  3 Nov 2022 11:13:21 +0800 (CST)
-Received: from kwepemm600010.china.huawei.com (7.193.23.86) by
- dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 3 Nov 2022 11:13:26 +0800
-Received: from ubuntu1804.huawei.com (10.67.174.174) by
- kwepemm600010.china.huawei.com (7.193.23.86) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 3 Nov 2022 11:13:25 +0800
-From:   Li Huafei <lihuafei1@huawei.com>
-To:     <rostedt@goodmis.org>
-CC:     <mhiramat@kernel.org>, <mark.rutland@arm.com>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-trace-kernel@vger.kernel.org>, <lihuafei1@huawei.com>
-Subject: [PATCH v2] ftrace: Fix use-after-free for dynamic ftrace_ops
-Date:   Thu, 3 Nov 2022 11:10:10 +0800
-Message-ID: <20221103031010.166498-1-lihuafei1@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        Wed, 2 Nov 2022 23:13:04 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 452031402B;
+        Wed,  2 Nov 2022 20:12:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667445181; x=1698981181;
+  h=message-id:subject:from:reply-to:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=K0vI5uOf/x137Tle9H7IRzeDNxM47nec6nZEZGKSQEc=;
+  b=BJgtm6+RP+ibeDtXJMZcYtN5o3UX0WNp9oElYehs3GW4p729ai/3Dv+5
+   UZAyks4qURAKXcz0gyqGz6nuORsNQa9a0vXNC6ZmetWLO73wZInvq2wD3
+   dGE8VAns/xwJIPocZZABZhgMJt/xLtltIgeoY18FjaeDke9JXKY9m4vMF
+   oT/ZXMEx8AclOi4NHOIHtyLA0GPlrakDs+OLF6mbGn4LeEET5Q2QrkDiT
+   bK2R7be90lB3P3FJat7P/zmNuo9bEhNDTl2uATB0dCNyGbZQPsx9IcvXw
+   F/bN1s0d5/E3qCrnBcC2eC675HRLe7I7ChrIuA0xQ9vCvnPFeIu1ASLz0
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10519"; a="297027442"
+X-IronPort-AV: E=Sophos;i="5.95,235,1661842800"; 
+   d="scan'208";a="297027442"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Nov 2022 20:12:59 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10519"; a="723787972"
+X-IronPort-AV: E=Sophos;i="5.95,235,1661842800"; 
+   d="scan'208";a="723787972"
+Received: from linux.intel.com ([10.54.29.200])
+  by FMSMGA003.fm.intel.com with ESMTP; 02 Nov 2022 20:12:58 -0700
+Received: from dshivaku-MOBL.amr.corp.intel.com (unknown [10.212.195.54])
+        by linux.intel.com (Postfix) with ESMTP id 794A4580D42;
+        Wed,  2 Nov 2022 20:12:58 -0700 (PDT)
+Message-ID: <f33ef0981a808e9f1c9a4446f68ddbe3c2497a68.camel@linux.intel.com>
+Subject: Re: [PATCH 3/9] platform/x86/intel/sdsi: Support different GUIDs
+From:   "David E. Box" <david.e.box@linux.intel.com>
+Reply-To: david.e.box@linux.intel.com
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     hdegoede@redhat.com, markgross@kernel.org,
+        srinivas.pandruvada@intel.com, platform-driver-x86@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Wed, 02 Nov 2022 20:12:58 -0700
+In-Reply-To: <Y2JKEjSridtRubSm@smile.fi.intel.com>
+References: <20221101191023.4150315-1-david.e.box@linux.intel.com>
+         <20221101191023.4150315-4-david.e.box@linux.intel.com>
+         <Y2JKEjSridtRubSm@smile.fi.intel.com>
+Organization: David E. Box
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.174.174]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemm600010.china.huawei.com (7.193.23.86)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-KASAN reported a use-after-free with ftrace ops [1]. It was found from
-vmcore that perf had registered two ops with the same content
-successively, both dynamic. After unregistering the second ops, a
-use-after-free occurred.
+On Wed, 2022-11-02 at 12:44 +0200, Andy Shevchenko wrote:
+> On Tue, Nov 01, 2022 at 12:10:17PM -0700, David E. Box wrote:
+> > Newer versions of Intel On Demand hardware may have an expanded list of
+> > registers to support new features. The register layout is identified by a
+> > unique GUID that's read during driver probe. Add support for handling
+> > different GUIDs and add support for current GUIDs [1].
+> > [1] https://github.com/intel/intel-sdsi/blob/master/os-interface.rst
+> 
+> Link: tag?
 
-In ftrace_shutdown(), when the second ops is unregistered, the
-FTRACE_UPDATE_CALLS command is not set because there is another enabled
-ops with the same content.  Also, both ops are dynamic and the ftrace
-callback function is ftrace_ops_list_func, so the
-FTRACE_UPDATE_TRACE_FUNC command will not be set. Eventually the value
-of 'command' will be 0 and ftrace_shutdown() will skip the rcu
-synchronization.
+Ack
 
-However, ftrace may be activated. When the ops is released, another CPU
-may be accessing the ops.  Add the missing synchronization to fix this
-problem.
+> 
+> ...
+> 
+> >  #define SDSI_MIN_SIZE_DWORDS		276
+> > -#define SDSI_SIZE_CONTROL		8
+> >  #define SDSI_SIZE_MAILBOX		1024
+> > -#define SDSI_SIZE_REGS			72
+> > +#define SDSI_SIZE_REGS			80
+> >  #define SDSI_SIZE_CMD			sizeof(u64)
+> > +#define SDSI_SIZE_MAILBOX		1024
+> 
+> Why do you need this second time?
 
-[1]
-BUG: KASAN: use-after-free in __ftrace_ops_list_func kernel/trace/ftrace.c:7020 [inline]
-BUG: KASAN: use-after-free in ftrace_ops_list_func+0x2b0/0x31c kernel/trace/ftrace.c:7049
-Read of size 8 at addr ffff56551965bbc8 by task syz-executor.2/14468
+typo
 
-CPU: 1 PID: 14468 Comm: syz-executor.2 Not tainted 5.10.0 #7
-Hardware name: linux,dummy-virt (DT)
-Call trace:
- dump_backtrace+0x0/0x40c arch/arm64/kernel/stacktrace.c:132
- show_stack+0x30/0x40 arch/arm64/kernel/stacktrace.c:196
- __dump_stack lib/dump_stack.c:77 [inline]
- dump_stack+0x1b4/0x248 lib/dump_stack.c:118
- print_address_description.constprop.0+0x28/0x48c mm/kasan/report.c:387
- __kasan_report mm/kasan/report.c:547 [inline]
- kasan_report+0x118/0x210 mm/kasan/report.c:564
- check_memory_region_inline mm/kasan/generic.c:187 [inline]
- __asan_load8+0x98/0xc0 mm/kasan/generic.c:253
- __ftrace_ops_list_func kernel/trace/ftrace.c:7020 [inline]
- ftrace_ops_list_func+0x2b0/0x31c kernel/trace/ftrace.c:7049
- ftrace_graph_call+0x0/0x4
- __might_sleep+0x8/0x100 include/linux/perf_event.h:1170
- __might_fault mm/memory.c:5183 [inline]
- __might_fault+0x58/0x70 mm/memory.c:5171
- do_strncpy_from_user lib/strncpy_from_user.c:41 [inline]
- strncpy_from_user+0x1f4/0x4b0 lib/strncpy_from_user.c:139
- getname_flags+0xb0/0x31c fs/namei.c:149
- getname+0x2c/0x40 fs/namei.c:209
- [...]
+> 
+> ...
+> 
+> > +static int sdsi_get_layout(struct sdsi_priv *priv, struct disc_table
+> > *table)
+> > +{
+> > +	switch (table->guid) {
+> > +	case SDSI_GUID_V1:
+> > +		priv->control_size = 8;
+> > +		priv->registers_size = 72;
+> > +		break;
+> > +	case SDSI_GUID_V2:
+> > +		priv->control_size = 16;
+> > +		priv->registers_size = 80;
+> 
+> Maybe it makes sense to use previously defined constants here instead of
+> magics?
 
-Allocated by task 14445:
- kasan_save_stack+0x24/0x50 mm/kasan/common.c:48
- kasan_set_track mm/kasan/common.c:56 [inline]
- __kasan_kmalloc mm/kasan/common.c:479 [inline]
- __kasan_kmalloc.constprop.0+0x110/0x13c mm/kasan/common.c:449
- kasan_kmalloc+0xc/0x14 mm/kasan/common.c:493
- kmem_cache_alloc_trace+0x440/0x924 mm/slub.c:2950
- kmalloc include/linux/slab.h:563 [inline]
- kzalloc include/linux/slab.h:675 [inline]
- perf_event_alloc.part.0+0xb4/0x1350 kernel/events/core.c:11230
- perf_event_alloc kernel/events/core.c:11733 [inline]
- __do_sys_perf_event_open kernel/events/core.c:11831 [inline]
- __se_sys_perf_event_open+0x550/0x15f4 kernel/events/core.c:11723
- __arm64_sys_perf_event_open+0x6c/0x80 kernel/events/core.c:11723
- [...]
+The constant is used for the file size, which since is static is set to the max.
+But I'll add defines for these.
 
-Freed by task 14445:
- kasan_save_stack+0x24/0x50 mm/kasan/common.c:48
- kasan_set_track+0x24/0x34 mm/kasan/common.c:56
- kasan_set_free_info+0x20/0x40 mm/kasan/generic.c:358
- __kasan_slab_free.part.0+0x11c/0x1b0 mm/kasan/common.c:437
- __kasan_slab_free mm/kasan/common.c:445 [inline]
- kasan_slab_free+0x2c/0x40 mm/kasan/common.c:446
- slab_free_hook mm/slub.c:1569 [inline]
- slab_free_freelist_hook mm/slub.c:1608 [inline]
- slab_free mm/slub.c:3179 [inline]
- kfree+0x12c/0xc10 mm/slub.c:4176
- perf_event_alloc.part.0+0xa0c/0x1350 kernel/events/core.c:11434
- perf_event_alloc kernel/events/core.c:11733 [inline]
- __do_sys_perf_event_open kernel/events/core.c:11831 [inline]
- __se_sys_perf_event_open+0x550/0x15f4 kernel/events/core.c:11723
- [...]
-
-Fixes: edb096e00724f ("ftrace: Fix memleak when unregistering dynamic ops when tracing disabled")
-Cc: stable@vger.kernel.org
-Suggested-by: Steven Rostedt <rostedt@goodmis.org>
-Signed-off-by: Li Huafei <lihuafei1@huawei.com>
----
-v1: https://lore.kernel.org/lkml/20221101064146.69551-1-lihuafei1@huawei.com/
-
-Changlog in v1 -> v2:
- - Cc the stable list as suggested by Masami. I did not add Masami's
-   Review-by due to some differences from v1. If the new changes are
-   still okay, please let me know. Thanks to Masami!
- - Add Fixes tag as suggested by Steve.
- - Remove the 'ftrace_enabled' check.
-
- kernel/trace/ftrace.c | 16 +++-------------
- 1 file changed, 3 insertions(+), 13 deletions(-)
-
-diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
-index fbf2543111c0..7dc023641bf1 100644
---- a/kernel/trace/ftrace.c
-+++ b/kernel/trace/ftrace.c
-@@ -3028,18 +3028,8 @@ int ftrace_shutdown(struct ftrace_ops *ops, int command)
- 		command |= FTRACE_UPDATE_TRACE_FUNC;
- 	}
- 
--	if (!command || !ftrace_enabled) {
--		/*
--		 * If these are dynamic or per_cpu ops, they still
--		 * need their data freed. Since, function tracing is
--		 * not currently active, we can just free them
--		 * without synchronizing all CPUs.
--		 */
--		if (ops->flags & FTRACE_OPS_FL_DYNAMIC)
--			goto free_ops;
--
--		return 0;
--	}
-+	if (!command || !ftrace_enabled)
-+		goto out;
- 
- 	/*
- 	 * If the ops uses a trampoline, then it needs to be
-@@ -3076,6 +3066,7 @@ int ftrace_shutdown(struct ftrace_ops *ops, int command)
- 	removed_ops = NULL;
- 	ops->flags &= ~FTRACE_OPS_FL_REMOVING;
- 
-+out:
- 	/*
- 	 * Dynamic ops may be freed, we must make sure that all
- 	 * callers are done before leaving this function.
-@@ -3103,7 +3094,6 @@ int ftrace_shutdown(struct ftrace_ops *ops, int command)
- 		if (IS_ENABLED(CONFIG_PREEMPTION))
- 			synchronize_rcu_tasks();
- 
-- free_ops:
- 		ftrace_trampoline_free(ops);
- 	}
- 
--- 
-2.17.1
+> 
+> > +		break;
+> > +	default:
+> > +		dev_err(priv->dev, "Unrecognized GUID 0x%x\n", table->guid);
+> > +		return -EINVAL;
+> > +	}
+> > +	return 0;
+> > +}
 
