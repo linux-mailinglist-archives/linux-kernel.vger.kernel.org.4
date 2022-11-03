@@ -2,148 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCEB76186A4
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 18:52:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F11A26186A7
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 18:53:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231781AbiKCRwt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 13:52:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60018 "EHLO
+        id S231688AbiKCRxg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 13:53:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230473AbiKCRwq (ORCPT
+        with ESMTP id S230473AbiKCRxd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 13:52:46 -0400
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08E64B4E;
-        Thu,  3 Nov 2022 10:52:45 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.west.internal (Postfix) with ESMTP id 461D93200805;
-        Thu,  3 Nov 2022 13:52:43 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Thu, 03 Nov 2022 13:52:44 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1667497962; x=1667584362; bh=/jl6iy49gLxL3OPiwyn4XeKNHfG6
-        xbi+bJ/ciZbyZA8=; b=QGP52SJRBMNSAg3g5OYqX4Egb+NRp6yOkpi+D2ZDl2jr
-        quA3BWYUowucf+XGBHEAfQ58WFvh5hDpvnRqkT84mIgSI1/KL0z2E4Pm+mZqo1Ls
-        Ot3s6pmaVI6OzFOmCaXVEdJysEN7mmW8g/xU7gutqJkCnZosDd3WGco/aP7m2JZR
-        B9gVNoW8armmum6yRew1EUOxS8rKH+0C3yJ+Zst6JcU1eHrRbQ81JY+snyDf1qiL
-        7psccSKpzKAxBTFBfuKhqGFJE0OpUDttqWlkKblFWZG44Rcub944ABvFu4Po/TZi
-        7P6KZbY+alCJbaRjR2Q2TOOMRQCJqhFyjtsI2n0Zhw==
-X-ME-Sender: <xms:6f9jY-vLKWKGirAscceibg1va3_4zvlzOnrPbo4WzBzgBkfntRpV2A>
-    <xme:6f9jYzcRm2etw4Vhm1POJunQoXMjhKObO7HRcUDLiBpCWOW37ldtkuf0hzFe9zXRe
-    QplfLYfxh_Lv4Q>
-X-ME-Received: <xmr:6f9jY5wWkvYKfzKNKw60TsVqSTY9ywyB8hZ-riP_nbmG8G6ycpoowfVszaVeNgsostXhSLj6QWVJFPEO7DGPffzqjUWavA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrudelgddutdduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepkfguohcu
-    ufgthhhimhhmvghluceoihguohhstghhsehiughoshgthhdrohhrgheqnecuggftrfgrth
-    htvghrnhepvddufeevkeehueegfedtvdevfefgudeifeduieefgfelkeehgeelgeejjeeg
-    gefhnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepih
-    guohhstghhsehiughoshgthhdrohhrgh
-X-ME-Proxy: <xmx:6f9jY5M0N6EI6kyCV5XwpfaOLIObBDFjuh2HHqapPSfHGczBu5HUgA>
-    <xmx:6f9jY-84hWs54ecc36CR4gOoqpfhsTo-F2x2B-1argPcFn_J-5gtkA>
-    <xmx:6f9jYxWUGrj1ObH3jwX_PJHfrgnVQsfcRexpYfnUv8LsAgRIVzmqkQ>
-    <xmx:6v9jYweBDjkIUBwIp4-Wee-Yg9sQRZCPa2alWJsTLPXA3-Y7nstNUQ>
-Feedback-ID: i494840e7:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 3 Nov 2022 13:52:40 -0400 (EDT)
-Date:   Thu, 3 Nov 2022 19:52:31 +0200
-From:   Ido Schimmel <idosch@idosch.org>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Roman Gushchin <roman.gushchin@linux.dev>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Andy Ren <andy.ren@getcruise.com>, netdev@vger.kernel.org,
-        richardbgobert@gmail.com, davem@davemloft.net,
-        wsa+renesas@sang-engineering.com, edumazet@google.com,
-        petrm@nvidia.com, pabeni@redhat.com, corbet@lwn.net,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        David Ahern <dsahern@gmail.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>
-Subject: Re: [PATCH net-next v2] netconsole: Enable live renaming for network
- interfaces used by netconsole
-Message-ID: <Y2P/33wfWmQ/xC3n@shredder>
-References: <20221102002420.2613004-1-andy.ren@getcruise.com>
- <Y2G+SYXyZAB/r3X0@lunn.ch>
- <20221101204006.75b46660@kernel.org>
- <Y2KlfhfijyNl8yxT@P9FQF9L96D.corp.robot.car>
- <20221102125418.272c4381@kernel.org>
+        Thu, 3 Nov 2022 13:53:33 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2051B1A238
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 10:53:33 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id b185so2304038pfb.9
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 10:53:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=9elements.com; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Gh4tHwGdYqiA6FfBVtb4eaTZECdeDr+dtEfH6mIg700=;
+        b=WiDvzWb07Nd95ou0RXLpYHaRo0kqVVVo4n0ExPUJKESfL6TOqXt408h6C23wWmKp30
+         y53OsxEJOr2nNl1zjx+MOeonIGReZVmncVdT3AKaX4T6VpduRz0TcpNeGPdLMLAcc8ZJ
+         lYAGFpMAvDJnVY3BpApDarK+s8PlKyvls1lTwv4JzGXxExA2TERW6nphT5UI8TuNNMYP
+         pLC4P26Jt+2epBkG4bCuqbsG5jospL06fhiTw4JmaCpPJ80cIFRXmw2bCJVbdb5H1W9E
+         hHt7GfPG4A4Myu29eLDVDtCCi3OmiQaW5ZyqRjv3BpAzuKQXeDQi/XEOrn7jGfVtDo9k
+         b9MA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Gh4tHwGdYqiA6FfBVtb4eaTZECdeDr+dtEfH6mIg700=;
+        b=7nkaOUQvAVInzXeORoOOjQvTnZ1WCbChB6CoNM/t0ulA2cfz0Far7DViGYGLb5NoUS
+         TMwQ0QrNhUvwG0hPhg7mWHyafBnRVoRkc36plk1Jk9wfqowOEO7/DMgJZFVWW/nRtEgo
+         miFiNKMBAZxg9XccWqhdbfsvlntXhBt/sqjQLnkdPPNFvN53pW6kNH7DFh8r+BtUVKCi
+         wWkoPsimfMgmb2PmBySwSIsyXA6MKYGruNhPJesr/p1awrYDiMUcD+z5yy8XSSSyHOpd
+         kN6pAAWhHklNQ1kgnMPjutzjVgNatC0lYIIkeHnpQ6z91KgASL7+jNk5vnE0NQ10MjEe
+         76mg==
+X-Gm-Message-State: ACrzQf16lEyebVUYHXaLQ7Z6ETd5g3nW6cuTKTXyafui0D1YbOA4u5Nl
+        ciFnyg8CxOBm5yWUbXUdbbElko5kx5Jyj2gW
+X-Google-Smtp-Source: AMsMyM4ulepeXPsIA0hp3ORHkqmjCQ+/YpaBJ+3a+Y7uY7qnn6UlIRDNR9vuLc2PYRku4Evi49vFsg==
+X-Received: by 2002:a63:f50e:0:b0:470:274b:53a2 with SMTP id w14-20020a63f50e000000b00470274b53a2mr2355814pgh.524.1667498012612;
+        Thu, 03 Nov 2022 10:53:32 -0700 (PDT)
+Received: from ?IPV6:2405:201:d02f:da6a:d4a2:1253:adfc:370? ([2405:201:d02f:da6a:d4a2:1253:adfc:370])
+        by smtp.gmail.com with ESMTPSA id o12-20020a170902d4cc00b00180cf894b67sm972393plg.130.2022.11.03.10.53.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 03 Nov 2022 10:53:32 -0700 (PDT)
+Message-ID: <dc6c8f79-9830-dd1b-a064-3b25a3b74a35@9elements.com>
+Date:   Thu, 3 Nov 2022 23:23:28 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221102125418.272c4381@kernel.org>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH v6 1/2] dt-bindings: mfd: Add bindings for MAX5970 and
+ MAX5978
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Patrick Rudolph <patrick.rudolph@9elements.com>
+Cc:     Marcello Sylvester Bauer <sylv@sylv.io>
+References: <20221103080545.1400424-1-Naresh.Solanki@9elements.com>
+ <20221103080545.1400424-2-Naresh.Solanki@9elements.com>
+ <0c23e569-61e1-3eba-f9fc-4b42ed228b52@linaro.org>
+Content-Language: en-US
+From:   Naresh Solanki <naresh.solanki@9elements.com>
+In-Reply-To: <0c23e569-61e1-3eba-f9fc-4b42ed228b52@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 02, 2022 at 12:54:18PM -0700, Jakub Kicinski wrote:
-> On Wed, 2 Nov 2022 10:14:38 -0700 Roman Gushchin wrote:
-> > > Agreed. BTW I wonder if we really want to introduce a netconsole
-> > > specific uAPI for this or go ahead with something more general.  
-> > 
-> > Netconsole is a bit special because it brings an interface up very early.
-> > E.g. in our case without the netconsole the renaming is happening before
-> > the interface is brought up.
-> > 
-> > I wonder if the netconsole-specific flag should allow renaming only once.
-> >  
-> > > A sysctl for global "allow UP rename"?  
-> > 
-> > This will work for us, but I've no idea what it will break for other users
-> > and how to check it without actually trying to break :) And likely we won't
-> > learn about it for quite some time, asssuming they don't run net-next.
-> 
-> Then again IFF_LIVE_RENAME_OK was added in 5.2 so quite a while back.
-> 
-> > > We added the live renaming for failover a while back and there were 
-> > > no reports of user space breaking as far as I know. So perhaps nobody
-> > > actually cares and we should allow renaming all interfaces while UP?
-> > > For backwards compat we can add a sysctl as mentioned or a rtnetlink 
-> > > "I know what I'm doing" flag? 
-> > > 
-> > > Maybe print an info message into the logs for a few releases to aid
-> > > debug?
-> > > 
-> > > IOW either there is a reason we don't allow rename while up, and
-> > > netconsole being bound to an interface is immaterial. Or there is 
-> > > no reason and we should allow all.  
-> > 
-> > My understanding is that it's not an issue for the kernel, but might be
-> > an issue for some userspace apps which do not expect it.
-> 
-> There are in-kernel notifier users which could cache the name on up /
-> down. But yes, the user space is the real worry.
-> 
-> > If you prefer to go with the 'global sysctl' approach, how the path forward
-> > should look like?
-> 
-> That's the question. The sysctl would really just be to cover our back
-> sides, and be able to tell the users "you opted in by setting that
-> sysctl, we didn't break backward compat". But practically speaking, 
-> its a different entity that'd be flipping the sysctl (e.g. management
-> daemon) and different entity that'd be suffering (e.g. routing daemon).
-> So the sysctl doesn't actually help anyone :/
-> 
-> So maybe we should just risk it and wonder about workarounds once
-> complains surface, if they do. Like generate fake down/up events.
-> Or create some form of "don't allow live renames now" lock-like
-> thing a process could take.
-> 
-> Adding a couple more CCs and if nobody screams at us I vote we just
-> remove the restriction instead of special casing.
+Hi Krzysztof,
 
-Tried looking at history.git to understand the reasoning behind this
-restriction. I guess it's because back then it was only possible via
-IOCTL and user space wouldn't be notified about such a change. Nowadays
-user space gets a notification regardless of the administrative state of
-the netdev (see rtnetlink_event()). At least in-kernel listeners to
-NETDEV_CHANGENAME do not seem to care if the netdev is administratively
-up or not. So, FWIW, the suggested approach sounds sane to me.
+On 03-11-2022 06:43 pm, Krzysztof Kozlowski wrote:
+>> +examples:
+>> +  - |
+>> +    i2c {
+>> +        #address-cells = <1>;
+>> +        #size-cells = <0>;
+>> +        regulator@3a {
+>> +           compatible = "maxim,max5978";
+>> +           reg = <0x3a>;
+>> +           vss1-supply = <&p3v3>;
+>> +
+>> +           regulators {
+>> +               sw0_ref_0: SW0 {
+> No improvements here.
+I've addressed 4 space indentation, bindings are matched, compatible is 
+moved to first, then reg then the rest.
