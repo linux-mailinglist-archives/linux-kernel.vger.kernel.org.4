@@ -2,93 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B8A86189D7
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 21:47:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 483EF6189DF
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 21:47:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229553AbiKCUrL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 16:47:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48630 "EHLO
+        id S229667AbiKCUra (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 16:47:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230338AbiKCUrD (ORCPT
+        with ESMTP id S231171AbiKCUrY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 16:47:03 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A8C820BDC;
-        Thu,  3 Nov 2022 13:47:03 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id e7-20020a17090a77c700b00216928a3917so1554590pjs.4;
-        Thu, 03 Nov 2022 13:47:03 -0700 (PDT)
+        Thu, 3 Nov 2022 16:47:24 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 006FF205D0
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 13:47:22 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id gw22so2788496pjb.3
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 13:47:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=fromorbit-com.20210112.gappssmtp.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=zvWv7py5M+cpuNli8vw2OLBU1voxtMB9/LTt5ZmUfQU=;
-        b=JvSaRJzb7KxQBZ9I5GR60ZkQEIVeMaZ5YOYp6rdau38npwjLIJJj+uq8pTHPxyQ1zI
-         3NYz9vX7/YDfrHF2AJjI8TGJH4JEU2qFNMBM/Ua4Yei1F1L30tNQiE+Os9yGG1aCwUkW
-         c7+dIDRsbYyU+kLZtdMuK+kYlt60LGL1auM3ppfbMIoDm48ug8Pa3MS4GueeHAUj5Sul
-         Jo16wsZjueXh87EgWSuA2I/vuvxDLufPs+h+G6ZSZt/D2hTe2RAlFZ/X0beeZa7AD17q
-         ceNdX9xIyEP66zeAEc3kZPtisLxEtsMkjVpn9GxGhu+2eSObu/E0P6I1pgjq8aJnKQFq
-         Tr+Q==
+        bh=MxS/4UcS9QV06TA42jz+n7cPJ0B1Da1lpvr3ubjc6GY=;
+        b=cuP5UtrVPLmPkgDyIU7nXUWip6wPNwEQX83eaiYzuSaa/NwaBOHxdiCCYvHyd3mrWb
+         UX4IYw78zXIF0mMu0R7qDreIqrr7PvviOTacDCidW9f3UUssGYk9RosDNLvY+hm88Tz8
+         hEooCKFouHczA6F3wBjXPLYrpYIszUEwnYnlDxkOvhuNi8oE//fz5w1SOEhhUUoWt77E
+         pAHn5L/ZZzWw3HkpcasZr6hnf6O/XMcGhjxvLwJ33vohngsJ1KBKVvIfn+XAYIa1YRVX
+         Vkpw4CNDgLSlpQfjW7+15/HKqs/xOt8+2WdHOo1jGBPReCKhIlOzYbvvyYROh/eydkAD
+         rc0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=zvWv7py5M+cpuNli8vw2OLBU1voxtMB9/LTt5ZmUfQU=;
-        b=Xa2JK+tYidtLf8fCVtog6d/l4AO2IwQI56YIoa4ICt+gr+l3RfBvxUeQ48auBJwBCE
-         ATPjAABrt16uXf9eEWjDa8mlrYnP5Hkpscce1xSrV5I5NPm9jA/pmVkg3w189HwP2tja
-         c4qg6TTpUTDCgGykEUNCPV+qOjYSAK5yOL75kuhF/ie6BFBoD81JjbRMtY9Ef4T2jKU3
-         DIX7IHYYEl75AzmC93BCLNjT/CGijfn/OiLKzt7ActtrHjL6n8EHSw+qqMrUiEvDoTCf
-         FePtCdSUbuAFdCIHLY+u4XroKNV+hj+Xk8nQaV7H1GEQ12qU6KWKRUMXHmhLA8ffWNGk
-         yVkA==
-X-Gm-Message-State: ACrzQf0DyJTl/1jb32Vv+SqW2qq0+4MiNRmYLL3zMd5pR4PK+ofrylQE
-        4/VZg9w2pUiRObmnSyN+BB4=
-X-Google-Smtp-Source: AMsMyM50LQ7X2DdQ87M3IejBmk4+j4HCY2M2XeDa0MHv1bRjGnWJQuCM9bnPNrGymDvHzAy2Q/0wtA==
-X-Received: by 2002:a17:90a:4283:b0:214:1329:dede with SMTP id p3-20020a17090a428300b002141329dedemr15972157pjg.149.1667508422363;
-        Thu, 03 Nov 2022 13:47:02 -0700 (PDT)
-Received: from google.com ([2620:15c:9d:2:a6ae:11ff:fe11:fcc3])
-        by smtp.gmail.com with ESMTPSA id c189-20020a624ec6000000b00561beff1e09sm1155143pfb.164.2022.11.03.13.47.01
+        bh=MxS/4UcS9QV06TA42jz+n7cPJ0B1Da1lpvr3ubjc6GY=;
+        b=HTix0m1blfx7SRxeNjS1YtmszY3HJr/InEzv2NId9gp0wmObA4swB5wStaV9f7oZS9
+         Vy8NRQMf+wzdJgZhf1M6fQUAgm/UuuKKXReZzqmZS1XWhmSah1U8Fvy2Ot5ayfvMsbaG
+         6jtZfvogu6dOzN5ck2pd1E8PHYstySR7SaJhT/ZcC6sv0puZZOEmmgun8jSuT/S50+8F
+         s6hB4yLK023ABiPXUs8YtJeqod0+xEIYjrF3+SH1DtocpFJh4m4uy1tF0w7nAoX2Ebqn
+         TJoOGjy9zkvVz9lOlerDma6fnqVc6JZza4sNzOc+qb/nglw4H5gld8joOGaRojzgzKCk
+         QUDA==
+X-Gm-Message-State: ACrzQf0UEeQdmY/DsXKEzokv/8nwB4PnnNr+Rlke6gMGWJ54+OxufbCc
+        kyx+gBaGVqeJaiP0aJxtgzPbXA==
+X-Google-Smtp-Source: AMsMyM5GUtVQUrVsmSVgFmsiPB/ae+Y5AFUcecj0KBZFMpN2UeC1Le+3w3RaW8dan20LGNVVX2XxhA==
+X-Received: by 2002:a17:90a:5781:b0:20a:9962:bb4a with SMTP id g1-20020a17090a578100b0020a9962bb4amr49118773pji.185.1667508442530;
+        Thu, 03 Nov 2022 13:47:22 -0700 (PDT)
+Received: from dread.disaster.area (pa49-181-106-210.pa.nsw.optusnet.com.au. [49.181.106.210])
+        by smtp.gmail.com with ESMTPSA id y12-20020aa78f2c000000b00561b455267fsm1205656pfr.27.2022.11.03.13.47.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Nov 2022 13:47:01 -0700 (PDT)
-Date:   Thu, 3 Nov 2022 13:46:58 -0700
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-input@vger.kernel.org
-Subject: Re: [PATCH 12/30] input: Use kstrtobool() instead of strtobool()
-Message-ID: <Y2Qowvjn+7jT767t@google.com>
-References: <cover.1667336095.git.christophe.jaillet@wanadoo.fr>
- <4311e9cb62687449f4175e2b062abcd77aada059.1667336095.git.christophe.jaillet@wanadoo.fr>
+        Thu, 03 Nov 2022 13:47:22 -0700 (PDT)
+Received: from dave by dread.disaster.area with local (Exim 4.92.3)
+        (envelope-from <david@fromorbit.com>)
+        id 1oqh7P-009uXX-4a; Fri, 04 Nov 2022 07:47:19 +1100
+Date:   Fri, 4 Nov 2022 07:47:19 +1100
+From:   Dave Chinner <david@fromorbit.com>
+To:     Vishal Moola <vishal.moola@gmail.com>
+Cc:     linux-fsdevel@vger.kernel.org, linux-afs@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-btrfs@vger.kernel.org,
+        ceph-devel@vger.kernel.org, linux-cifs@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
+        cluster-devel@redhat.com, linux-nilfs@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: Re: [PATCH v4 00/23] Convert to filemap_get_folios_tag()
+Message-ID: <20221103204719.GY2703033@dread.disaster.area>
+References: <20221102161031.5820-1-vishal.moola@gmail.com>
+ <20221103070807.GX2703033@dread.disaster.area>
+ <CAOzc2pzFMU-XiGZ9bsp40JkpYVSzQuxs2VXgfw_p9abkj4GrFw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <4311e9cb62687449f4175e2b062abcd77aada059.1667336095.git.christophe.jaillet@wanadoo.fr>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FSL_HELO_FAKE,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAOzc2pzFMU-XiGZ9bsp40JkpYVSzQuxs2VXgfw_p9abkj4GrFw@mail.gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 01, 2022 at 10:14:00PM +0100, Christophe JAILLET wrote:
-> strtobool() is the same as kstrtobool().
-> However, the latter is more used within the kernel.
+On Thu, Nov 03, 2022 at 09:38:48AM -0700, Vishal Moola wrote:
+> On Thu, Nov 3, 2022 at 12:08 AM Dave Chinner <david@fromorbit.com> wrote:
+> >
+> > On Wed, Nov 02, 2022 at 09:10:08AM -0700, Vishal Moola (Oracle) wrote:
+> > > This patch series replaces find_get_pages_range_tag() with
+> > > filemap_get_folios_tag(). This also allows the removal of multiple
+> > > calls to compound_head() throughout.
+> > > It also makes a good chunk of the straightforward conversions to folios,
+> > > and takes the opportunity to introduce a function that grabs a folio
+> > > from the pagecache.
+> > >
+> > > F2fs and Ceph have quite a lot of work to be done regarding folios, so
+> > > for now those patches only have the changes necessary for the removal of
+> > > find_get_pages_range_tag(), and only support folios of size 1 (which is
+> > > all they use right now anyways).
+> > >
+> > > I've run xfstests on btrfs, ext4, f2fs, and nilfs2, but more testing may be
+> > > beneficial. The page-writeback and filemap changes implicitly work. Testing
+> > > and review of the other changes (afs, ceph, cifs, gfs2) would be appreciated.
+> >
+> > Same question as last time: have you tested this with multipage
+> > folios enabled? If you haven't tested XFS, then I'm guessing the
+> > answer is no, and you haven't fixed the bug I pointed out in
+> > the write_cache_pages() implementation....
+> >
 > 
-> In order to remove strtobool() and slightly simplify kstrtox.h, switch to
-> the other function name.
+> I haven't tested the series with multipage folios or XFS.
 > 
-> While at it, include the corresponding header file (<linux/kstrtox.h>)
-> 
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> I don't seem to have gotten your earlier comments, and I
+> can't seem to find them on the mailing lists. Could you
+> please send them again so I can take a look?
 
-Acked-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+They are in the lore -fsdevel archive - no idea why you couldn't
+find them....
 
-Please feel free to merge with the rest of the series. Or let me know if
-you want me to pick just this one through my tree.
+https://lore.kernel.org/linux-fsdevel/20221018210152.GH2703033@dread.disaster.area/
+https://lore.kernel.org/linux-fsdevel/20221018214544.GI2703033@dread.disaster.area/
 
-Thanks.
-
+-Dave.
 -- 
-Dmitry
+Dave Chinner
+david@fromorbit.com
