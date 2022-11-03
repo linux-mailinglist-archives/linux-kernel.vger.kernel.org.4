@@ -2,180 +2,259 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2D5E6186C9
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 18:59:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 815DB6186E6
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 19:04:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231945AbiKCR73 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 13:59:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36110 "EHLO
+        id S229570AbiKCSEQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 14:04:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231935AbiKCR7K (ORCPT
+        with ESMTP id S230525AbiKCSD5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 13:59:10 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0E70D264F;
-        Thu,  3 Nov 2022 10:59:05 -0700 (PDT)
-Received: from skinsburskii-cloud-desktop.internal.cloudapp.net (unknown [20.120.152.163])
-        by linux.microsoft.com (Postfix) with ESMTPSA id CB3D120C3338;
-        Thu,  3 Nov 2022 10:59:04 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com CB3D120C3338
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1667498344;
-        bh=++SExWSpMkq0Dv7lblZI7lZBKKts6IU3NqmxJpdUgoo=;
-        h=Subject:From:Cc:Date:In-Reply-To:References:From;
-        b=bJcsAsXG7mKa0C51B997E5v1xmj3NZw0x86iDTf8jVX4gDFtfc8GZUBIDCyTJkjJx
-         eyvs8bOHYj0dcHpu4RpJS/EZ5ZR+2cPmWECzeSSxTd6ppWsIsyyqeb9O5Ju9sN6k2p
-         pOh8ETzkwWKr2nZfT9V4iI9vQZh2cErZ4T/njDpo=
-Subject: [PATCH v3 4/4] drivers/clocksource/hyper-v: Add TSC page support for
- root partition
-From:   Stanislav Kinsburskii <skinsburskii@linux.microsoft.com>
-Cc:     Stanislav Kinsburskiy <stanislav.kinsburskiy@gmail.com>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mikelley@microsoft.com
-Date:   Thu, 03 Nov 2022 17:59:04 +0000
-Message-ID: <166749834466.218190.3482871684875422987.stgit@skinsburskii-cloud-desktop.internal.cloudapp.net>
-In-Reply-To: <166749827889.218190.12775118554387271641.stgit@skinsburskii-cloud-desktop.internal.cloudapp.net>
-References: <166749827889.218190.12775118554387271641.stgit@skinsburskii-cloud-desktop.internal.cloudapp.net>
-User-Agent: StGit/0.19
+        Thu, 3 Nov 2022 14:03:57 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02AF52316E
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 11:01:37 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id h14so2388370pjv.4
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 11:01:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=we5sGRgeZfmiFwJlXRzMaUU1kYxW1X5nCMITmEl34Rs=;
+        b=Kq6Bj/FL8nuh60ks1BQiKahd6V4pWny3fxV6iEgxy2pFv78eAfevsv4OJyz5VsL+ht
+         rm3NW/7+kbgnxI4es0cLSJvuSAte0IIlpsjaygXTHiwMOMjBXV3o4DpY7nh/rjv5+9zK
+         hLF3Azra8sUrIvaGsQ0ceLKhAQIYeDsvvKFGo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=we5sGRgeZfmiFwJlXRzMaUU1kYxW1X5nCMITmEl34Rs=;
+        b=kzRHPmgbDtJ/m1J9OWsFdAw0c699wBlyuXOjQT5YBApIP5ArGr8IkE1dXQEUqAmSFP
+         GwUvxDlFbM9SAlxL2BSb/XXtruFiHOqkcKqWPs2hh/F0IVx2Af2tfY8nBTCYMYsLjx/i
+         IJG5zsJzJaKDlyq4G9JNQlvgkKN1nri35y5va9dxnmFwR/caqCBIPqZydQsXETY0dd93
+         xunPzCow0Kl94WX/oWcZnpiPei1IxBlFeelng2Rzx5BBA0qGHE0oC17jUJcfLaTImlSn
+         0W0e6qZwRL6K0XbPjEKJe+4IKThinPFAZPxg+nBLlPz5EAuIVo+zQscm/ieaJXVGCsp/
+         n0CQ==
+X-Gm-Message-State: ACrzQf2rZFCCVIE4ZoFQceCdg7/hq4QP9R6fCj/SnKmPXiFa3CjqCUNf
+        uXXnhEpHtyG3UsqQZWNbEK6RKRmzh8AdC7wL
+X-Google-Smtp-Source: AMsMyM6pJ+WHoxy7JrmybugEwNm3RYa+8+Uvc7wfkCiQEh8cdwxjvdHYYa4Krbf8KHv6hakd6k78Fw==
+X-Received: by 2002:a17:90a:4a0f:b0:213:f398:ed20 with SMTP id e15-20020a17090a4a0f00b00213f398ed20mr20866017pjh.110.1667498496170;
+        Thu, 03 Nov 2022 11:01:36 -0700 (PDT)
+Received: from evgreen-glaptop.lan ([98.45.28.95])
+        by smtp.gmail.com with ESMTPSA id t12-20020a1709027fcc00b00177fb862a87sm1000277plb.20.2022.11.03.11.01.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Nov 2022 11:01:35 -0700 (PDT)
+From:   Evan Green <evgreen@chromium.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     corbet@lwn.net, linux-pm@vger.kernel.org, rjw@rjwysocki.net,
+        gwendal@chromium.org, apronin@chromium.org,
+        Pavel Machek <pavel@ucw.cz>, Kees Cook <keescook@chromium.org>,
+        Matthew Garrett <mgarrett@aurora.tech>,
+        linux-integrity@vger.kernel.org, jejb@linux.ibm.com,
+        zohar@linux.ibm.com, dlunev@google.com,
+        Eric Biggers <ebiggers@kernel.org>,
+        Ben Boeckel <me@benboeckel.net>, jarkko@kernel.org,
+        Evan Green <evgreen@chromium.org>,
+        David Howells <dhowells@redhat.com>,
+        James Morris <jmorris@namei.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Len Brown <len.brown@intel.com>,
+        Matthew Garrett <matthewgarrett@google.com>,
+        Paul Moore <paul@paul-moore.com>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>, axelj <axelj@axis.com>,
+        keyrings@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Subject: [PATCH v4 00/11] Encrypted Hibernation
+Date:   Thu,  3 Nov 2022 11:01:08 -0700
+Message-Id: <20221103180120.752659-1-evgreen@chromium.org>
+X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-18.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,MISSING_HEADERS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Stanislav Kinsburskiy <stanislav.kinsburskiy@gmail.com>
+We are exploring enabling hibernation in some new scenarios. However,
+our security team has a few requirements, listed below:
+1. The hibernate image must be encrypted with protection derived from
+   both the platform (eg TPM) and user authentication data (eg
+   password).
+2. Hibernation must not be a vector by which a malicious userspace can
+   escalate to the kernel.
 
-Microsoft Hypervisor root partition has to map the TSC page specified
-by the hypervisor, instead of providing the page to the hypervisor like
-it's done in the guest partitions.
+Requirement #1 can be achieved solely with uswsusp, however requirement
+2 necessitates mechanisms in the kernel to guarantee integrity of the
+hibernate image. The kernel needs a way to authenticate that it generated
+the hibernate image being loaded, and that the image has not been tampered
+with. Adding support for in-kernel AEAD encryption with a TPM-sealed key
+allows us to achieve both requirements with a single computation pass.
 
-However, it's too early to map the page when the clock is initialized, so, the
-actual mapping is happening later.
+Matthew Garrett published a series [1] that aligns closely with this
+goal. His series utilized the fact that PCR23 is a resettable PCR that
+can be blocked from access by usermode. The TPM can create a sealed key
+tied to PCR23 in two ways. First, the TPM can attest to the value of
+PCR23 when the key was created, which the kernel can use on resume to
+verify that the kernel must have created the key (since it is the only
+one capable of modifying PCR23). It can also create a policy that enforces
+PCR23 be set to a specific value as a condition of unsealing the key,
+preventing usermode from unsealing the key by talking directly to the
+TPM.
 
-Signed-off-by: Stanislav Kinsburskiy <stanislav.kinsburskiy@gmail.com>
-CC: "K. Y. Srinivasan" <kys@microsoft.com>
-CC: Haiyang Zhang <haiyangz@microsoft.com>
-CC: Wei Liu <wei.liu@kernel.org>
-CC: Dexuan Cui <decui@microsoft.com>
-CC: Thomas Gleixner <tglx@linutronix.de>
-CC: Ingo Molnar <mingo@redhat.com>
-CC: Borislav Petkov <bp@alien8.de>
-CC: Dave Hansen <dave.hansen@linux.intel.com>
-CC: x86@kernel.org
-CC: "H. Peter Anvin" <hpa@zytor.com>
-CC: Daniel Lezcano <daniel.lezcano@linaro.org>
-CC: linux-hyperv@vger.kernel.org
-CC: linux-kernel@vger.kernel.org
----
- arch/x86/hyperv/hv_init.c          |    2 ++
- drivers/clocksource/hyperv_timer.c |   38 +++++++++++++++++++++++++++---------
- include/clocksource/hyperv_timer.h |    1 +
- 3 files changed, 32 insertions(+), 9 deletions(-)
+This series adopts that primitive as a foundation, tweaking and building
+on it a bit. Where Matthew's series used the TPM-backed key to encrypt a
+hash of the image, this series uses the key directly as a gcm(aes)
+encryption key, which the kernel uses to encrypt and decrypt the
+hibernate image in chunks of 16 pages. This provides both encryption and
+integrity, which turns out to be a noticeable performance improvement over
+separate passes for encryption and hashing.
 
-diff --git a/arch/x86/hyperv/hv_init.c b/arch/x86/hyperv/hv_init.c
-index f49bc3ec76e6..89954490af93 100644
---- a/arch/x86/hyperv/hv_init.c
-+++ b/arch/x86/hyperv/hv_init.c
-@@ -464,6 +464,8 @@ void __init hyperv_init(void)
- 		BUG_ON(!src);
- 		memcpy_to_page(pg, 0, src, HV_HYP_PAGE_SIZE);
- 		memunmap(src);
-+
-+		hv_remap_tsc_clocksource();
- 	} else {
- 		hypercall_msr.guest_physical_address = vmalloc_to_pfn(hv_hypercall_pg);
- 		wrmsrl(HV_X64_MSR_HYPERCALL, hypercall_msr.as_uint64);
-diff --git a/drivers/clocksource/hyperv_timer.c b/drivers/clocksource/hyperv_timer.c
-index 9445a1558fe9..dec7ad3b85ba 100644
---- a/drivers/clocksource/hyperv_timer.c
-+++ b/drivers/clocksource/hyperv_timer.c
-@@ -509,9 +509,6 @@ static bool __init hv_init_tsc_clocksource(void)
- 	if (!(ms_hyperv.features & HV_MSR_REFERENCE_TSC_AVAILABLE))
- 		return false;
- 
--	if (hv_root_partition)
--		return false;
--
- 	/*
- 	 * If Hyper-V offers TSC_INVARIANT, then the virtualized TSC correctly
- 	 * handles frequency and offset changes due to live migration,
-@@ -529,16 +526,22 @@ static bool __init hv_init_tsc_clocksource(void)
- 	}
- 
- 	hv_read_reference_counter = read_hv_clock_tsc;
--	tsc_pfn = HVPFN_DOWN(virt_to_phys(tsc_page));
- 
- 	/*
--	 * The Hyper-V TLFS specifies to preserve the value of reserved
--	 * bits in registers. So read the existing value, preserve the
--	 * low order 12 bits, and add in the guest physical address
--	 * (which already has at least the low 12 bits set to zero since
--	 * it is page aligned). Also set the "enable" bit, which is bit 0.
-+	 * TSC page mapping works differently in root compared to guest.
-+	 * - In guest partition the guest PFN has to be passed to the
-+	 *   hypervisor.
-+	 * - In root partition it's other way around: it has to map the PFN
-+	 *   provided by the hypervisor.
-+	 *   But it can't be mapped right here as it's too early and MMU isn't
-+	 *   ready yet. So, we only set the enable bit here and will remap the
-+	 *   page later in hv_remap_tsc_clocksource().
- 	 */
- 	tsc_msr.as_uint64 = hv_get_register(HV_REGISTER_REFERENCE_TSC);
-+	if (hv_root_partition)
-+		tsc_pfn = tsc_msr.pfn;
-+	else
-+		tsc_pfn = HVPFN_DOWN(virt_to_phys(tsc_page));
- 	tsc_msr.enable = 1;
- 	tsc_msr.pfn = tsc_pfn;
- 	hv_set_register(HV_REGISTER_REFERENCE_TSC, tsc_msr.as_uint64);
-@@ -573,3 +576,20 @@ void __init hv_init_clocksource(void)
- 	hv_sched_clock_offset = hv_read_reference_counter();
- 	hv_setup_sched_clock(read_hv_sched_clock_msr);
- }
-+
-+void __init hv_remap_tsc_clocksource(void)
-+{
-+	if (!(ms_hyperv.features & HV_MSR_REFERENCE_TSC_AVAILABLE))
-+		return;
-+
-+	if (!hv_root_partition) {
-+		WARN(1, "%s: attempt to remap TSC page in guest partition\n",
-+		     __func__);
-+		return;
-+	}
-+
-+	tsc_page = memremap(tsc_pfn << HV_HYP_PAGE_SHIFT, sizeof(tsc_pg),
-+			    MEMREMAP_WB);
-+	if (!tsc_page)
-+		pr_err("Failed to remap Hyper-V TSC page.\n");
-+}
-diff --git a/include/clocksource/hyperv_timer.h b/include/clocksource/hyperv_timer.h
-index 3078d23faaea..783701a2102d 100644
---- a/include/clocksource/hyperv_timer.h
-+++ b/include/clocksource/hyperv_timer.h
-@@ -31,6 +31,7 @@ extern void hv_stimer_global_cleanup(void);
- extern void hv_stimer0_isr(void);
- 
- extern void hv_init_clocksource(void);
-+extern void hv_remap_tsc_clocksource(void);
- 
- extern unsigned long hv_get_tsc_pfn(void);
- extern struct ms_hyperv_tsc_page *hv_get_tsc_page(void);
+The series also introduces the concept of mixing user key material into
+the encryption key. This allows usermode to introduce key material
+based on unspecified external authentication data (in our case derived
+from something like the user password or PIN), without requiring
+usermode to do a separate encryption pass.
 
+Matthew also documented issues his series had [2] related to generating
+fake images by booting alternate kernels without the PCR23 limiting.
+With access to PCR23 on the same machine, usermode can create fake
+hibernate images that are indistinguishable to the new kernel from
+genuine ones. His post outlines a solution that involves adding more
+PCRs into the creation data and policy, with some gyrations to make this
+work well on a standard PC.
+
+Our approach would be similar: on our machines PCR 0 indicates whether
+the system is booted in secure/verified mode or developer mode. By
+adding PCR0 to the policy, we can reject hibernate images made in
+developer mode while in verified mode (or vice versa).
+
+Additionally, mixing in the user authentication data limits both
+data exfiltration attacks (eg a stolen laptop) and forged hibernation
+image attacks to attackers that already know the authentication data (eg
+user's password). This, combined with our relatively sealed userspace
+(dm-verity on the rootfs), and some judicious clearing of the hibernate
+image (such as across an OS update) further reduce the risk of an online
+attack. The remaining attack space of a forgery from someone with
+physical access to the device and knowledge of the authentication data
+is out of scope for us, given that flipping to developer mode or
+reflashing RO firmware trivially achieves the same thing.
+
+A couple of patches still need to be written on top of this series. The
+generalized functionality to OR in additional PCRs via Kconfig (like PCR
+0 or 5) still needs to be added. We'll also need a patch that disallows
+unencrypted forms of resume from hibernation, to fully close the door
+to malicious userspace. However, I wanted to get this series out first
+and get reactions from upstream before continuing to add to it.
+
+[1] https://patchwork.kernel.org/project/linux-pm/cover/20210220013255.1083202-1-matthewgarrett@google.com/
+[2] https://mjg59.dreamwidth.org/58077.html
+
+Changes in v4:
+ - Open code tpm2_pcr_reset implementation in tpm-interface.c (Jarkko)
+ - Rename interface symbol to tpm2_pcr_reset, fix kerneldocs (Jarkko)
+ - Augment the commit message (Jarkko)
+ - Local ordering and whitespace changes (Jarkko)
+ - s/tpm_pcr_reset/tpm2_pcr_reset/ due to change in other patch
+ - Variable ordering and whitespace fixes (Jarkko)
+ - Add NULL check explanation in teardown (Jarkko)
+ - Change strlen+1 to sizeof for static buffer (Jarkko)
+ - Fix nr_allocated_banks loop overflow (found via KASAN)
+ - Local variable reordering (Jarkko)
+ - Local variable ordering (Jarkko)
+
+Changes in v3:
+ - Unify tpm1/2_pcr_reset prototypes (Jarkko)
+ - Wait no, remove the TPM1 stuff altogether (Jarkko)
+ - Remove extra From tag and blank in commit msg (Jarkko).
+ - Split find_and_validate_cc() export to its own patch (Jarkko)
+ - Rename tpm_find_and_validate_cc() to tpm2_find_and_validate_cc().
+ - Fix up commit message (Jarkko)
+ - tpm2_find_and_validate_cc() was split (Jarkko)
+ - Simply fully restrict TPM1 since v2 failed to account for tunnelled
+   transport sessions (Stefan and Jarkko).
+ - Fix SoB and -- note ordering (Kees)
+ - Add comments describing the TPM2 spec type names for the new fields
+   in tpm2key.asn1 (Kees)
+ - Add len buffer checks in tpm2_key_encode() (Kees)
+ - Clarified creationpcrs documentation (Ben)
+ - Changed funky tag to suggested-by (Kees). Matthew, holler if you want
+   something different.
+ - ENCRYPTED_HIBERNATION needs TRUSTED_KEYS builtin for
+   key_type_trusted.
+ - Remove KEYS dependency since it's covered by TRUSTED_KEYS (Kees)
+ - Changed funky tag to Co-developed-by (Kees). Matthew, holler if you
+   want something different.
+ - Changed funky tag to Co-developed-by (Kees)
+
+Changes in v2:
+ - Fixed sparse warnings
+ - Adjust hash len by 2 due to new ASN.1 storage, and add underflow
+   check.
+ - Rework load/create_kernel_key() to eliminate a label (Andrey)
+ - Call put_device() needed from calling tpm_default_chip().
+ - Add missing static on snapshot_encrypted_byte_count()
+ - Fold in only the used kernel key bytes to the user key.
+ - Make the user key length 32 (Eric)
+ - Use CRYPTO_LIB_SHA256 for less boilerplate (Eric)
+ - Fixed some sparse warnings
+ - Use CRYPTO_LIB_SHA256 to get rid of sha256_data() (Eric)
+ - Adjusted offsets due to new ASN.1 format, and added a creation data
+   length check.
+ - Fix sparse warnings
+ - Fix session type comment (Andrey)
+ - Eliminate extra label in get/create_kernel_key() (Andrey)
+ - Call tpm_try_get_ops() before calling tpm2_flush_context().
+
+Evan Green (8):
+  tpm: Export and rename tpm2_find_and_validate_cc()
+  security: keys: trusted: Include TPM2 creation data
+  security: keys: trusted: Verify creation data
+  PM: hibernate: Add kernel-based encryption
+  PM: hibernate: Use TPM-backed keys to encrypt image
+  PM: hibernate: Mix user key in encrypted hibernate
+  PM: hibernate: Verify the digest encryption key
+  PM: hibernate: seal the encryption key with a PCR policy
+
+Matthew Garrett (3):
+  tpm: Add support for in-kernel resetting of PCRs
+  tpm: Allow PCR 23 to be restricted to kernel-only use
+  security: keys: trusted: Allow storage of PCR values in creation data
+
+ Documentation/power/userland-swsusp.rst       |    8 +
+ .../security/keys/trusted-encrypted.rst       |    6 +
+ drivers/char/tpm/Kconfig                      |   12 +
+ drivers/char/tpm/tpm-dev-common.c             |    8 +
+ drivers/char/tpm/tpm-interface.c              |   47 +
+ drivers/char/tpm/tpm.h                        |   22 +
+ drivers/char/tpm/tpm1-cmd.c                   |   13 +
+ drivers/char/tpm/tpm2-cmd.c                   |   29 +-
+ drivers/char/tpm/tpm2-space.c                 |    8 +-
+ include/keys/trusted-type.h                   |    9 +
+ include/linux/tpm.h                           |   19 +
+ include/uapi/linux/suspend_ioctls.h           |   28 +-
+ kernel/power/Kconfig                          |   15 +
+ kernel/power/Makefile                         |    1 +
+ kernel/power/power.h                          |    1 +
+ kernel/power/snapenc.c                        | 1043 +++++++++++++++++
+ kernel/power/snapshot.c                       |    5 +
+ kernel/power/user.c                           |   44 +-
+ kernel/power/user.h                           |  116 ++
+ security/keys/trusted-keys/tpm2key.asn1       |   15 +-
+ security/keys/trusted-keys/trusted_tpm1.c     |    9 +
+ security/keys/trusted-keys/trusted_tpm2.c     |  318 ++++-
+ 22 files changed, 1724 insertions(+), 52 deletions(-)
+ create mode 100644 kernel/power/snapenc.c
+ create mode 100644 kernel/power/user.h
+
+-- 
+2.38.1.431.g37b22c650d-goog
 
