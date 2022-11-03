@@ -2,80 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11F5A617780
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 08:20:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4515A617785
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 08:20:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229980AbiKCHT4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 03:19:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54478 "EHLO
+        id S231161AbiKCHUU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 03:20:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229699AbiKCHTx (ORCPT
+        with ESMTP id S230271AbiKCHUN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 03:19:53 -0400
-Received: from cmccmta2.chinamobile.com (cmccmta2.chinamobile.com [221.176.66.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CA6FDFC7;
-        Thu,  3 Nov 2022 00:19:48 -0700 (PDT)
-X-RM-TagInfo: emlType=0                                       
-X-RM-SPAM-FLAG: 00000000
-Received: from spf.mail.chinamobile.com (unknown[172.16.121.97])
-        by rmmx-syy-dmz-app05-12005 (RichMail) with SMTP id 2ee563636b913d6-f6bf7;
-        Thu, 03 Nov 2022 15:19:46 +0800 (CST)
-X-RM-TRANSID: 2ee563636b913d6-f6bf7
-X-RM-TagInfo: emlType=0                                       
-X-RM-SPAM-FLAG: 00000000
-Received: from localhost.localdomain (unknown[223.108.79.100])
-        by rmsmtp-syy-appsvrnew09-12034 (RichMail) with SMTP id 2f0263636b8f318-b48e2;
-        Thu, 03 Nov 2022 15:19:45 +0800 (CST)
-X-RM-TRANSID: 2f0263636b8f318-b48e2
-From:   Tang Bin <tangbin@cmss.chinamobile.com>
-To:     jiawenwu@trustnetic.com, mengyuanlou@net-swift.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Tang Bin <tangbin@cmss.chinamobile.com>
-Subject: [PATCH] net: libwx: Remove variable dev to simplify code
-Date:   Thu,  3 Nov 2022 15:19:56 +0800
-Message-Id: <20221103071956.17480-1-tangbin@cmss.chinamobile.com>
-X-Mailer: git-send-email 2.20.1.windows.1
+        Thu, 3 Nov 2022 03:20:13 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D6F36406
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 00:20:09 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id a14so1309310wru.5
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 00:20:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=yWamQQEiXwuUaXnbl6PlP555HrcaEY3+l7Gw0jB534c=;
+        b=eMrmoHwsidAITYv+vZDTWUffj0xdVr6f9Irj4fYthgmDb2BtaKGEsFELQu2H6bnkWP
+         kvYw40kYqV8j7+KID6Jv8TSwG2Jdrk3L2i6NZZnW1qKtWYQv3oDxv2zGF+cGC9qJEynl
+         Q3HGYurZ4Dh8OnDMCMVGhftsWYYclQysAxS0McddFHROl75oHtCo1tssLi3inAUUaVcx
+         fUR6nDRn+ryNrHgMilhwWNuUUGNT/fA+7xVLj81AQOwbU9CL+I5tsAtyXoOgw2iEFCeq
+         61/G+FvjBXJZUKkwTCZRxbrU1QIQmLSBOvOReMSizUzMvu13QKzBhMJ0mgPECH0jRV1d
+         jpMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=yWamQQEiXwuUaXnbl6PlP555HrcaEY3+l7Gw0jB534c=;
+        b=ebH7k4izeqaGmpNkTYWL9coLpXpVABUQJwLAzuKL+FP5tHE89l9nf0URgji0o0vJBY
+         GQ3qoKvSo4kXIGLyV9n1bDLXI1pInhyg6tT3F9/Q5PjF94lVVUvAnbfbEQ862al0pc8b
+         oP7Yc/OrLWpZ7dIXC34ZFktV8PEhuz5FH6KJJqMhFlf/vtkY3g5+fq5rTqXL2PxNUq5U
+         ImmBY3QX7kVfCE/CkYfpZW437s22hIE7clnUVjx+Ib3p7oafJSTKvs5C0O4gdJxtsbNE
+         l45w02GGwKj3gueiyCWAMazOHfVcZGZuwcPMuFKOc5PwBpbXPtH3R1p4dsueBNcGtlaK
+         z8HQ==
+X-Gm-Message-State: ACrzQf15RLlAASJ55hsavH/ORLllfFD2DABwsiPM+SqzcyAmVBchHryG
+        ExP34grnvt0/M/SZyTTtshbd1A==
+X-Google-Smtp-Source: AMsMyM6CSjH/RTBpmDd/QhMZZkOx7oc3nNeJrTJLnMoKwCsW0evNR4jvL0bJpuI6uqT433DOly9rxA==
+X-Received: by 2002:a5d:5744:0:b0:236:5c21:177f with SMTP id q4-20020a5d5744000000b002365c21177fmr17331121wrw.449.1667460007685;
+        Thu, 03 Nov 2022 00:20:07 -0700 (PDT)
+Received: from [192.168.11.175] (216.red-88-29-181.dynamicip.rima-tde.net. [88.29.181.216])
+        by smtp.gmail.com with ESMTPSA id fc19-20020a05600c525300b003cf57329221sm5884991wmb.14.2022.11.03.00.20.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 03 Nov 2022 00:20:07 -0700 (PDT)
+Message-ID: <3a2d1d5e-b105-11ed-413b-4ad2dbba058e@linaro.org>
+Date:   Thu, 3 Nov 2022 08:20:03 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.4.1
+Subject: Re: [PATCH 30/44] KVM: Drop kvm_arch_check_processor_compat() hook
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Anup Patel <anup@brainfault.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        Eric Farman <farman@linux.ibm.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc:     James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Atish Patra <atishp@atishpatra.org>,
+        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Isaku Yamahata <isaku.yamahata@intel.com>,
+        Fabiano Rosas <farosas@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Chao Gao <chao.gao@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Yuan Yao <yuan.yao@intel.com>
+References: <20221102231911.3107438-1-seanjc@google.com>
+ <20221102231911.3107438-31-seanjc@google.com>
+From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
+In-Reply-To: <20221102231911.3107438-31-seanjc@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In the function wx_get_pcie_msix_counts(), the variable dev
-is redundant, so remove it.
+On 3/11/22 00:18, Sean Christopherson wrote:
+> Drop kvm_arch_check_processor_compat() and its support code now that all
+> architecture implementations are nops.
+> 
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> ---
+>   arch/arm64/kvm/arm.c       |  7 +------
+>   arch/mips/kvm/mips.c       |  7 +------
+>   arch/powerpc/kvm/book3s.c  |  2 +-
+>   arch/powerpc/kvm/e500.c    |  2 +-
+>   arch/powerpc/kvm/e500mc.c  |  2 +-
+>   arch/powerpc/kvm/powerpc.c |  5 -----
+>   arch/riscv/kvm/main.c      |  7 +------
+>   arch/s390/kvm/kvm-s390.c   |  7 +------
+>   arch/x86/kvm/svm/svm.c     |  4 ++--
+>   arch/x86/kvm/vmx/vmx.c     |  4 ++--
+>   arch/x86/kvm/x86.c         |  5 -----
+>   include/linux/kvm_host.h   |  4 +---
+>   virt/kvm/kvm_main.c        | 24 +-----------------------
+>   13 files changed, 13 insertions(+), 67 deletions(-)
 
-Signed-off-by: Tang Bin <tangbin@cmss.chinamobile.com>
----
- drivers/net/ethernet/wangxun/libwx/wx_hw.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
-
-diff --git a/drivers/net/ethernet/wangxun/libwx/wx_hw.c b/drivers/net/ethernet/wangxun/libwx/wx_hw.c
-index 1eb7388f1..a7d79490e 100644
---- a/drivers/net/ethernet/wangxun/libwx/wx_hw.c
-+++ b/drivers/net/ethernet/wangxun/libwx/wx_hw.c
-@@ -883,13 +883,12 @@ EXPORT_SYMBOL(wx_reset_misc);
- int wx_get_pcie_msix_counts(struct wx_hw *wxhw, u16 *msix_count, u16 max_msix_count)
- {
- 	struct pci_dev *pdev = wxhw->pdev;
--	struct device *dev = &pdev->dev;
- 	int pos;
- 
- 	*msix_count = 1;
- 	pos = pci_find_capability(pdev, PCI_CAP_ID_MSIX);
- 	if (!pos) {
--		dev_err(dev, "Unable to find MSI-X Capabilities\n");
-+		dev_err(&pdev->dev, "Unable to find MSI-X Capabilities\n");
- 		return -EINVAL;
- 	}
- 	pci_read_config_word(pdev,
--- 
-2.27.0
-
-
+Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
 
