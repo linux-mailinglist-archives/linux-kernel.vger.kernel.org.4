@@ -2,199 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43EF6618B11
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 23:02:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA5BD618B1B
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 23:06:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231516AbiKCWCv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 18:02:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34742 "EHLO
+        id S231561AbiKCWGx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 18:06:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231356AbiKCWCr (ORCPT
+        with ESMTP id S229770AbiKCWGu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 18:02:47 -0400
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C023022528
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 15:02:45 -0700 (PDT)
-Received: by mail-il1-f197.google.com with SMTP id h6-20020a92c266000000b00300624bf414so2567376ild.14
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 15:02:45 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=GVARKb7zF83xm+IZ/oAc3ebiPFtdApDZn5ViNG7PZuU=;
-        b=RhPXjBpul8gAgdybBKYdcPFuXpafxsuAWrwS8y9rn0Cp2EiywtVg70LvLyW2t0ekcq
-         2WfGDQ/zoDPDnFkBzfpxl3dsVDKkq4J0TCyiNetwtYqZuj8yQ5V2Tinq2uajeEZAUy5a
-         kaoslUA/0EQB6FITbhSvGX9SYSMPeFX+52B7g3j2nSrG3H+cT9STv4AeDk6FREFrtAmW
-         RsdPsMoRwhs+aUMYSi+SRjQXGL1nrIUPYMaWx5vmMfwAGIOx5kTdQhwd28IaXPHI10e0
-         A9Q6w7rudV3QYbm5ikyUraPHB/FCahNayxoSG1YNqwYmd4pbdn29yEZlczLxFD82vSji
-         l6oA==
-X-Gm-Message-State: ACrzQf1NxsHenoQYuWj0xOI3eiph9vhNNyIRKwToGMM0KoJb+CuQwDVT
-        irCfwJ69U/KxauDtN7Q14oWHnJO04bhPDFIB2Iz0HO9WwM3K
-X-Google-Smtp-Source: AMsMyM5dk0ij5Ze9fjmvR02E92/3zeBKTNYXcghNYFbR+40i5JMZdsJ2Er+gkWH9V3w6OksQ6/Nmy32mtRdbJ6bnG0u8NZm+TcGK
+        Thu, 3 Nov 2022 18:06:50 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D563F22293;
+        Thu,  3 Nov 2022 15:06:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=v4cHUAKIN1alQhVRV36kZWuJBkfRVyQW/FYiebl3tq8=; b=1mhhdmhlzvYWloNOey+D2i8JgM
+        91UFtRrqSK/mkAGorKaZEdD5UWadNP2o1zk/EGSnAbI7YjzEGWRTHPzeA5Ubf/Zb+35h6da4u/AhW
+        kJP7UbkRlgCWC6ZsNOMYIWIZSv3VnBckU4ZMP2WUCzW4f6jn63Ltb/XNznNY5RzdrquE=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1oqiL4-001Lyy-Pq; Thu, 03 Nov 2022 23:05:30 +0100
+Date:   Thu, 3 Nov 2022 23:05:30 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>
+Cc:     Rob Herring <robh@kernel.org>, Chester Lin <clin@suse.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jan Petrous <jan.petrous@nxp.com>, netdev@vger.kernel.org,
+        s32@nxp.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Matthias Brugger <mbrugger@suse.com>
+Subject: Re: [PATCH 2/5] dt-bindings: net: add schema for NXP S32CC dwmac
+ glue driver
+Message-ID: <Y2Q7KtYkvpRz76tn@lunn.ch>
+References: <20221031101052.14956-1-clin@suse.com>
+ <20221031101052.14956-3-clin@suse.com>
+ <20221102155515.GA3959603-robh@kernel.org>
+ <2a7ebef4-77cc-1c26-ec6d-86db5ee5a94b@suse.de>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:378a:b0:6d3:a804:7912 with SMTP id
- be10-20020a056602378a00b006d3a8047912mr8757189iob.25.1667512965154; Thu, 03
- Nov 2022 15:02:45 -0700 (PDT)
-Date:   Thu, 03 Nov 2022 15:02:45 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000f250a605ec981d41@google.com>
-Subject: [syzbot] possible deadlock in mnt_want_write_file
-From:   syzbot <syzbot+1047e42179f502f2b0a2@syzkaller.appspotmail.com>
-To:     linux-kernel@vger.kernel.org, reiserfs-devel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2a7ebef4-77cc-1c26-ec6d-86db5ee5a94b@suse.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+> > > +      - description: Main GMAC clock
+> > > +      - description: Peripheral registers clock
+> > > +      - description: Transmit SGMII clock
+> > > +      - description: Transmit RGMII clock
+> > > +      - description: Transmit RMII clock
+> > > +      - description: Transmit MII clock
+> > > +      - description: Receive SGMII clock
+> > > +      - description: Receive RGMII clock
+> > > +      - description: Receive RMII clock
+> > > +      - description: Receive MII clock
+> > > +      - description:
+> > > +          PTP reference clock. This clock is used for programming the
+> > > +          Timestamp Addend Register. If not passed then the system
+> > > +          clock will be used.
 
-syzbot found the following issue on:
+> Not clear to me has been whether the PHY mode can be switched at runtime
+> (like DPAA2 on Layerscape allows for SFPs) or whether this is fixed by board
+> design.
 
-HEAD commit:    f2f32f8af2b0 Merge tag 'for-6.1-rc3-tag' of git://git.kern..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=164d52ca880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=f7e100ed8aaa828e
-dashboard link: https://syzkaller.appspot.com/bug?extid=1047e42179f502f2b0a2
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+Does the hardware support 1000BaseX? Often the hardware implementing
+SGMII can also do 1000BaseX, since SGMII is an extended/hacked up
+1000BaseX.
 
-Unfortunately, I don't have any reproducer for this issue yet.
+If you have an SFP connected to the SERDES, a fibre module will want
+1000BaseX and a copper module will want SGMII. phylink will tell you
+what phy-mode you need to use depending on what module is in the
+socket. This however might be a mute point, since both of these are
+probably using the SGMII clocks.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/ea126f52b953/disk-f2f32f8a.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/815b36048854/vmlinux-f2f32f8a.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/b7d04bb936fd/bzImage-f2f32f8a.xz
+Of the other MII modes listed, it is very unlikely a runtime swap will
+occur.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+1047e42179f502f2b0a2@syzkaller.appspotmail.com
-
-======================================================
-WARNING: possible circular locking dependency detected
-6.1.0-rc3-syzkaller-00152-gf2f32f8af2b0 #0 Not tainted
-------------------------------------------------------
-syz-executor.3/17174 is trying to acquire lock:
-ffff88807eba6460 (sb_writers#30){.+.+}-{0:0}, at: mnt_want_write_file+0x5a/0x1f0 fs/namespace.c:437
-
-but task is already holding lock:
-ffff88804aba9090 (&sbi->lock){+.+.}-{3:3}, at: reiserfs_write_lock+0x77/0xd0 fs/reiserfs/lock.c:27
-
-which lock already depends on the new lock.
-
-
-the existing dependency chain (in reverse order) is:
-
--> #2 (&sbi->lock){+.+.}-{3:3}:
-       lock_acquire+0x182/0x3c0 kernel/locking/lockdep.c:5668
-       __mutex_lock_common+0x1bd/0x26e0 kernel/locking/mutex.c:603
-       __mutex_lock kernel/locking/mutex.c:747 [inline]
-       mutex_lock_nested+0x17/0x20 kernel/locking/mutex.c:799
-       reiserfs_write_lock+0x77/0xd0 fs/reiserfs/lock.c:27
-       reiserfs_lookup+0x147/0x490 fs/reiserfs/namei.c:364
-       __lookup_hash+0x115/0x240 fs/namei.c:1601
-       filename_create+0x25f/0x4f0 fs/namei.c:3807
-       do_mkdirat+0xb5/0x550 fs/namei.c:4050
-       __do_sys_mkdirat fs/namei.c:4075 [inline]
-       __se_sys_mkdirat fs/namei.c:4073 [inline]
-       __x64_sys_mkdirat+0x85/0x90 fs/namei.c:4073
-       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-       do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
-       entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
--> #1 (&type->i_mutex_dir_key#21/1){+.+.}-{3:3}:
-       lock_acquire+0x182/0x3c0 kernel/locking/lockdep.c:5668
-       down_write_nested+0xa2/0x280 kernel/locking/rwsem.c:1672
-       inode_lock_nested include/linux/fs.h:791 [inline]
-       filename_create+0x22a/0x4f0 fs/namei.c:3806
-       do_mkdirat+0xb5/0x550 fs/namei.c:4050
-       __do_sys_mkdirat fs/namei.c:4075 [inline]
-       __se_sys_mkdirat fs/namei.c:4073 [inline]
-       __x64_sys_mkdirat+0x85/0x90 fs/namei.c:4073
-       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-       do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
-       entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
--> #0 (sb_writers#30){.+.+}-{0:0}:
-       check_prev_add kernel/locking/lockdep.c:3097 [inline]
-       check_prevs_add kernel/locking/lockdep.c:3216 [inline]
-       validate_chain+0x1898/0x6ae0 kernel/locking/lockdep.c:3831
-       __lock_acquire+0x1292/0x1f60 kernel/locking/lockdep.c:5055
-       lock_acquire+0x182/0x3c0 kernel/locking/lockdep.c:5668
-       percpu_down_read include/linux/percpu-rwsem.h:51 [inline]
-       __sb_start_write include/linux/fs.h:1826 [inline]
-       sb_start_write+0x4d/0x1a0 include/linux/fs.h:1901
-       mnt_want_write_file+0x5a/0x1f0 fs/namespace.c:437
-       reiserfs_ioctl+0x16e/0x340 fs/reiserfs/ioctl.c:103
-       vfs_ioctl fs/ioctl.c:51 [inline]
-       __do_sys_ioctl fs/ioctl.c:870 [inline]
-       __se_sys_ioctl+0xfb/0x170 fs/ioctl.c:856
-       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-       do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
-       entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-other info that might help us debug this:
-
-Chain exists of:
-  sb_writers#30 --> &type->i_mutex_dir_key#21/1 --> &sbi->lock
-
- Possible unsafe locking scenario:
-
-       CPU0                    CPU1
-       ----                    ----
-  lock(&sbi->lock);
-                               lock(&type->i_mutex_dir_key#21/1);
-                               lock(&sbi->lock);
-  lock(sb_writers#30);
-
- *** DEADLOCK ***
-
-1 lock held by syz-executor.3/17174:
- #0: ffff88804aba9090 (&sbi->lock){+.+.}-{3:3}, at: reiserfs_write_lock+0x77/0xd0 fs/reiserfs/lock.c:27
-
-stack backtrace:
-CPU: 0 PID: 17174 Comm: syz-executor.3 Not tainted 6.1.0-rc3-syzkaller-00152-gf2f32f8af2b0 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/11/2022
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x1b1/0x28e lib/dump_stack.c:106
- check_noncircular+0x2cc/0x390 kernel/locking/lockdep.c:2177
- check_prev_add kernel/locking/lockdep.c:3097 [inline]
- check_prevs_add kernel/locking/lockdep.c:3216 [inline]
- validate_chain+0x1898/0x6ae0 kernel/locking/lockdep.c:3831
- __lock_acquire+0x1292/0x1f60 kernel/locking/lockdep.c:5055
- lock_acquire+0x182/0x3c0 kernel/locking/lockdep.c:5668
- percpu_down_read include/linux/percpu-rwsem.h:51 [inline]
- __sb_start_write include/linux/fs.h:1826 [inline]
- sb_start_write+0x4d/0x1a0 include/linux/fs.h:1901
- mnt_want_write_file+0x5a/0x1f0 fs/namespace.c:437
- reiserfs_ioctl+0x16e/0x340 fs/reiserfs/ioctl.c:103
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:870 [inline]
- __se_sys_ioctl+0xfb/0x170 fs/ioctl.c:856
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f7f6ee8b5a9
-Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f7f6e1de168 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 00007f7f6efac050 RCX: 00007f7f6ee8b5a9
-RDX: 0000000020000080 RSI: 0000000040087602 RDI: 0000000000000007
-RBP: 00007f7f6eee67b0 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffdcec8c8df R14: 00007f7f6e1de300 R15: 0000000000022000
- </TASK>
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+	Andrew
