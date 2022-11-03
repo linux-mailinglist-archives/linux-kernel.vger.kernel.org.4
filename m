@@ -2,83 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BF596179BD
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 10:22:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 027876179B6
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 10:21:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231605AbiKCJW3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 05:22:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39376 "EHLO
+        id S229655AbiKCJVN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 05:21:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230435AbiKCJV3 (ORCPT
+        with ESMTP id S231519AbiKCJUr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 05:21:29 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 462F9FACA
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 02:20:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667467207;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=wbad5tDvhcv43HWv7jT8y7cJ3wMs2qgB8vEI3ZPussk=;
-        b=FQikdIED2xW4iEzf9ZVYp+UtDTAHqU/AY00PU7I74JcsDqaKLTNBgtg5jkPvmNAP1O8c2c
-        ebwPZPtCzohEMjhpQBxcqIqWGZbSb44fsPSjdUJCEeNN19xn3eKjwI3ltgcLhhVEbsdeoV
-        Q/7CaRaKYowOjWIaXPsCxqrjTz8m/NU=
-Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
- [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-471-uePdfvXePcaRImYPEFYw8w-1; Thu, 03 Nov 2022 05:20:03 -0400
-X-MC-Unique: uePdfvXePcaRImYPEFYw8w-1
-Received: by mail-qv1-f69.google.com with SMTP id q16-20020a0ce210000000b004ba8976d3aaso950460qvl.5
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 02:20:03 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:user-agent:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=wbad5tDvhcv43HWv7jT8y7cJ3wMs2qgB8vEI3ZPussk=;
-        b=swzrijL7sFb1COdDwDU4nwKKWXFwouqdsqpveftyyuFNYZ1JrPv5fJzcjkJ1ZtELqY
-         SmkHH3hdee4+Gn5dVB5EkcW+OnQlmgcmLsxcRPar2DcJH9gK5RUeeBmrchPSwRn0nb+z
-         pxkYLHdO4BgJSSV98ZPy5YmV/RybqiUg4i5XgIw52g5lN6NaEQDxhCHTHlpD2VyEKHlX
-         QCwexP/VChITEegDgSPUtBFCkBvE05+5rtOb9olxLlFyT4gWOoaEfoYwHgvFE27TPjg5
-         Ywzp+0+unPdHKk8w/Co6AxRsmrsM7R2EKs3iXhweqBFiPC0f9HGrKSFWsUQQ9bBAUoxA
-         EBGg==
-X-Gm-Message-State: ACrzQf1wuxJzVusZI5KbZ2752GRt1ZFSEA7bR7fSjONWbfxyNSx33+Fn
-        c70aqVgj5q/jfrT6Wm0SUI6RrOFxT1PIzSDeyQUWYsTHdaQhKqDwKjKALjA1vVPmAzvVZqIRH5A
-        urqK4KjXAvIuoBzek1WIJCoFK
-X-Received: by 2002:a05:622a:260d:b0:3a5:2545:38b with SMTP id ci13-20020a05622a260d00b003a52545038bmr17249336qtb.609.1667467203105;
-        Thu, 03 Nov 2022 02:20:03 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM6B1Ii3RI07fwLoqBnrK0tODg0oSZZJR4RZQZSy/p4D5L/8Mm66Xi7oMHXzSgOeWL3/AWFgaA==
-X-Received: by 2002:a05:622a:260d:b0:3a5:2545:38b with SMTP id ci13-20020a05622a260d00b003a52545038bmr17249315qtb.609.1667467202788;
-        Thu, 03 Nov 2022 02:20:02 -0700 (PDT)
-Received: from gerbillo.redhat.com (146-241-100-54.dyn.eolo.it. [146.241.100.54])
-        by smtp.gmail.com with ESMTPSA id h18-20020a05620a401200b006ee8874f5fasm391544qko.53.2022.11.03.02.19.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Nov 2022 02:20:01 -0700 (PDT)
-Message-ID: <4968ca694f800ad4cd5bc0659a13b82758a01b27.camel@redhat.com>
-Subject: Re: [PATCH v3 1/1] net: fec: add initial XDP support
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Shenwei Wang <shenwei.wang@nxp.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        imx@lists.linux.dev, kernel test robot <lkp@intel.com>
-Date:   Thu, 03 Nov 2022 10:19:58 +0100
-In-Reply-To: <20221031185350.2045675-1-shenwei.wang@nxp.com>
-References: <20221031185350.2045675-1-shenwei.wang@nxp.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+        Thu, 3 Nov 2022 05:20:47 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 188E9DFFE;
+        Thu,  3 Nov 2022 02:20:24 -0700 (PDT)
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4N2ysG0TN5zmVbC;
+        Thu,  3 Nov 2022 17:20:18 +0800 (CST)
+Received: from dggpemm500014.china.huawei.com (7.185.36.153) by
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 3 Nov 2022 17:20:23 +0800
+Received: from [10.174.178.93] (10.174.178.93) by
+ dggpemm500014.china.huawei.com (7.185.36.153) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 3 Nov 2022 17:20:22 +0800
+Message-ID: <4bad43c0-40a4-dc39-7214-f2c3321a47ee@huawei.com>
+Date:   Thu, 3 Nov 2022 17:20:22 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] sched/fair: Introduce priority load balance for CFS
+Content-Language: en-US
+To:     Vincent Guittot <vincent.guittot@linaro.org>
+CC:     <mingo@redhat.com>, <peterz@infradead.org>,
+        <juri.lelli@redhat.com>, <mcgrof@kernel.org>,
+        <keescook@chromium.org>, <yzaikin@google.com>,
+        <dietmar.eggemann@arm.com>, <rostedt@goodmis.org>,
+        <bsegall@google.com>, <mgorman@suse.de>, <bristot@redhat.com>,
+        <vschneid@redhat.com>, <linux-kernel@vger.kernel.org>,
+        <linux-fsdevel@vger.kernel.org>
+References: <20221102035301.512892-1-zhangsong34@huawei.com>
+ <CAKfTPtCcYySw2ZC_pr8=3KFPmAAVN=1h8=5jWkW5YXyy11sehg@mail.gmail.com>
+ <b45f96b6-e0b2-22bb-eda1-2468d6fbe104@huawei.com>
+ <CAKfTPtDrWCenxtVcunjS3pGD81TdLf2EkhO_YcdfxnUHXpVF3w@mail.gmail.com>
+From:   Song Zhang <zhangsong34@huawei.com>
+In-Reply-To: <CAKfTPtDrWCenxtVcunjS3pGD81TdLf2EkhO_YcdfxnUHXpVF3w@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+X-Originating-IP: [10.174.178.93]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpemm500014.china.huawei.com (7.185.36.153)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,290 +62,383 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-10-31 at 13:53 -0500, Shenwei Wang wrote:
-> This patch adds the initial XDP support to Freescale driver. It supports
-> XDP_PASS, XDP_DROP and XDP_REDIRECT actions. Upcoming patches will add
-> support for XDP_TX and Zero Copy features.
-> 
-> As the patch is rather large, the part of codes to collect the
-> statistics is separated and will prepare a dedicated patch for that
-> part.
-> 
-> I just tested with the application of xdpsock.
->   -- Native here means running command of "xdpsock -i eth0"
->   -- SKB-Mode means running command of "xdpsock -S -i eth0"
-> 
-> The following are the testing result relating to XDP mode:
-> 
-> root@imx8qxpc0mek:~/bpf# ./xdpsock -i eth0
->  sock0@eth0:0 rxdrop xdp-drv
->                    pps            pkts           1.00
-> rx                 371347         2717794
-> tx                 0              0
-> 
-> root@imx8qxpc0mek:~/bpf# ./xdpsock -S -i eth0
->  sock0@eth0:0 rxdrop xdp-skb
->                    pps            pkts           1.00
-> rx                 202229         404528
-> tx                 0              0
-> 
-> root@imx8qxpc0mek:~/bpf# ./xdp2 eth0
-> proto 0:     496708 pkt/s
-> proto 0:     505469 pkt/s
-> proto 0:     505283 pkt/s
-> proto 0:     505443 pkt/s
-> proto 0:     505465 pkt/s
-> 
-> root@imx8qxpc0mek:~/bpf# ./xdp2 -S eth0
-> proto 0:          0 pkt/s
-> proto 17:     118778 pkt/s
-> proto 17:     118989 pkt/s
-> proto 0:          1 pkt/s
-> proto 17:     118987 pkt/s
-> proto 0:          0 pkt/s
-> proto 17:     118943 pkt/s
-> proto 17:     118976 pkt/s
-> proto 0:          1 pkt/s
-> proto 17:     119006 pkt/s
-> proto 0:          0 pkt/s
-> proto 17:     119071 pkt/s
-> proto 17:     119092 pkt/s
-> 
-> Signed-off-by: Shenwei Wang <shenwei.wang@nxp.com>
-> Reported-by: kernel test robot <lkp@intel.com>
-> ---
->  changes in V3:
->  - remove the codes to update the RX ring size to avoid potential risk.
->  - update the testing data based on the new implementation.
-> 
->  changes in V2:
->  - Get rid of the expensive fec_net_close/open function calls during
->    XDP/Normal Mode switch.
->  - Update the testing data on i.mx8qxp mek board.
->  - fix the compile issue reported by kernel_test_robot
-> 
->  drivers/net/ethernet/freescale/fec.h      |   4 +-
->  drivers/net/ethernet/freescale/fec_main.c | 224 +++++++++++++++++++++-
->  2 files changed, 226 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/net/ethernet/freescale/fec.h b/drivers/net/ethernet/freescale/fec.h
-> index 476e3863a310..61e847b18343 100644
-> --- a/drivers/net/ethernet/freescale/fec.h
-> +++ b/drivers/net/ethernet/freescale/fec.h
-> @@ -348,7 +348,6 @@ struct bufdesc_ex {
->   */
-> 
->  #define FEC_ENET_XDP_HEADROOM	(XDP_PACKET_HEADROOM)
-> -
->  #define FEC_ENET_RX_PAGES	256
->  #define FEC_ENET_RX_FRSIZE	(PAGE_SIZE - FEC_ENET_XDP_HEADROOM \
->  		- SKB_DATA_ALIGN(sizeof(struct skb_shared_info)))
-> @@ -663,6 +662,9 @@ struct fec_enet_private {
-> 
->  	struct imx_sc_ipc *ipc_handle;
-> 
-> +	/* XDP BPF Program */
-> +	struct bpf_prog *xdp_prog;
-> +
->  	u64 ethtool_stats[];
->  };
-> 
-> diff --git a/drivers/net/ethernet/freescale/fec_main.c b/drivers/net/ethernet/freescale/fec_main.c
-> index 6986b74fb8af..6b062a0663f4 100644
-> --- a/drivers/net/ethernet/freescale/fec_main.c
-> +++ b/drivers/net/ethernet/freescale/fec_main.c
-> @@ -89,6 +89,11 @@ static const u16 fec_enet_vlan_pri_to_queue[8] = {0, 0, 1, 1, 1, 2, 2, 2};
->  #define FEC_ENET_OPD_V	0xFFF0
->  #define FEC_MDIO_PM_TIMEOUT  100 /* ms */
-> 
-> +#define FEC_ENET_XDP_PASS          0
-> +#define FEC_ENET_XDP_CONSUMED      BIT(0)
-> +#define FEC_ENET_XDP_TX            BIT(1)
-> +#define FEC_ENET_XDP_REDIR         BIT(2)
-> +
->  struct fec_devinfo {
->  	u32 quirks;
->  };
-> @@ -418,13 +423,14 @@ static int
->  fec_enet_create_page_pool(struct fec_enet_private *fep,
->  			  struct fec_enet_priv_rx_q *rxq, int size)
->  {
-> +	struct bpf_prog *xdp_prog = READ_ONCE(fep->xdp_prog);
->  	struct page_pool_params pp_params = {
->  		.order = 0,
->  		.flags = PP_FLAG_DMA_MAP | PP_FLAG_DMA_SYNC_DEV,
->  		.pool_size = size,
->  		.nid = dev_to_node(&fep->pdev->dev),
->  		.dev = &fep->pdev->dev,
-> -		.dma_dir = DMA_FROM_DEVICE,
-> +		.dma_dir = xdp_prog ? DMA_BIDIRECTIONAL : DMA_FROM_DEVICE,
->  		.offset = FEC_ENET_XDP_HEADROOM,
->  		.max_len = FEC_ENET_RX_FRSIZE,
->  	};
-> @@ -1499,6 +1505,59 @@ static void fec_enet_update_cbd(struct fec_enet_priv_rx_q *rxq,
->  	bdp->cbd_bufaddr = cpu_to_fec32(phys_addr);
->  }
-> 
-> +static u32
-> +fec_enet_run_xdp(struct fec_enet_private *fep, struct bpf_prog *prog,
-> +		 struct xdp_buff *xdp, struct fec_enet_priv_rx_q *rxq, int index)
-> +{
-> +	unsigned int sync, len = xdp->data_end - xdp->data;
-> +	u32 ret = FEC_ENET_XDP_PASS;
-> +	struct page *page;
-> +	int err;
-> +	u32 act;
-> +
-> +	act = bpf_prog_run_xdp(prog, xdp);
-> +
-> +	/* Due xdp_adjust_tail: DMA sync for_device cover max len CPU touch */
-> +	sync = xdp->data_end - xdp->data_hard_start - FEC_ENET_XDP_HEADROOM;
-> +	sync = max(sync, len);
-> +
-> +	switch (act) {
-> +	case XDP_PASS:
-> +		ret = FEC_ENET_XDP_PASS;
-> +		break;
-> +
-> +	case XDP_REDIRECT:
-> +		err = xdp_do_redirect(fep->netdev, xdp, prog);
-> +		if (!err) {
-> +			ret = FEC_ENET_XDP_REDIR;
-> +		} else {
-> +			ret = FEC_ENET_XDP_CONSUMED;
-> +			page = virt_to_head_page(xdp->data);
-> +			page_pool_put_page(rxq->page_pool, page, sync, true);
-> +		}
-> +		break;
-> +
-> +	default:
-> +		bpf_warn_invalid_xdp_action(fep->netdev, prog, act);
-> +		fallthrough;
-> +
-> +	case XDP_TX:
-> +		bpf_warn_invalid_xdp_action(fep->netdev, prog, act);
-> +		fallthrough;
-> +
-> +	case XDP_ABORTED:
-> +		fallthrough;    /* handle aborts by dropping packet */
-> +
-> +	case XDP_DROP:
-> +		ret = FEC_ENET_XDP_CONSUMED;
-> +		page = virt_to_head_page(xdp->data);
-> +		page_pool_put_page(rxq->page_pool, page, sync, true);
-> +		break;
-> +	}
-> +
-> +	return ret;
-> +}
-> +
->  /* During a receive, the bd_rx.cur points to the current incoming buffer.
->   * When we update through the ring, if the next incoming buffer has
->   * not been given to the system, we just set the empty indicator,
-> @@ -1520,6 +1579,9 @@ fec_enet_rx_queue(struct net_device *ndev, int budget, u16 queue_id)
->  	u16	vlan_tag;
->  	int	index = 0;
->  	bool	need_swap = fep->quirks & FEC_QUIRK_SWAP_FRAME;
-> +	struct bpf_prog *xdp_prog = READ_ONCE(fep->xdp_prog);
-> +	u32 ret, xdp_result = FEC_ENET_XDP_PASS;
-> +	struct xdp_buff xdp;
->  	struct page *page;
-> 
->  #ifdef CONFIG_M532x
-> @@ -1531,6 +1593,7 @@ fec_enet_rx_queue(struct net_device *ndev, int budget, u16 queue_id)
->  	 * These get messed up if we get called due to a busy condition.
->  	 */
->  	bdp = rxq->bd.cur;
-> +	xdp_init_buff(&xdp, PAGE_SIZE, &rxq->xdp_rxq);
-> 
->  	while (!((status = fec16_to_cpu(bdp->cbd_sc)) & BD_ENET_RX_EMPTY)) {
-> 
-> @@ -1580,6 +1643,17 @@ fec_enet_rx_queue(struct net_device *ndev, int budget, u16 queue_id)
->  		prefetch(page_address(page));
->  		fec_enet_update_cbd(rxq, bdp, index);
-> 
-> +		if (xdp_prog) {
-> +			xdp_buff_clear_frags_flag(&xdp);
-> +			xdp_prepare_buff(&xdp, page_address(page),
-> +					 FEC_ENET_XDP_HEADROOM, pkt_len, false);
-> +
-> +			ret = fec_enet_run_xdp(fep, xdp_prog, &xdp, rxq, index);
-> +			xdp_result |= ret;
-> +			if (ret != FEC_ENET_XDP_PASS)
-> +				goto rx_processing_done;
-> +		}
-> +
->  		/* The packet length includes FCS, but we don't want to
->  		 * include that when passing upstream as it messes up
->  		 * bridging applications.
-> @@ -1675,6 +1749,10 @@ fec_enet_rx_queue(struct net_device *ndev, int budget, u16 queue_id)
->  		writel(0, rxq->bd.reg_desc_active);
->  	}
->  	rxq->bd.cur = bdp;
-> +
-> +	if (xdp_result & FEC_ENET_XDP_REDIR)
-> +		xdp_do_flush_map();
-> +
->  	return pkt_received;
->  }
-> 
-> @@ -3476,6 +3554,148 @@ static u16 fec_enet_select_queue(struct net_device *ndev, struct sk_buff *skb,
->  	return fec_enet_vlan_pri_to_queue[vlan_tag >> 13];
->  }
-> 
-> +static int fec_enet_bpf(struct net_device *dev, struct netdev_bpf *bpf)
-> +{
-> +	struct fec_enet_private *fep = netdev_priv(dev);
-> +	bool is_run = netif_running(dev);
-> +	struct bpf_prog *old_prog;
-> +
-> +	switch (bpf->command) {
-> +	case XDP_SETUP_PROG:
-> +		if (is_run) {
-> +			napi_disable(&fep->napi);
-> +			netif_tx_disable(dev);
-> +		}
-> +
-> +		old_prog = xchg(&fep->xdp_prog, bpf->prog);
-> +		fec_restart(dev);
-> +
-> +		if (is_run) {
-> +			napi_enable(&fep->napi);
-> +			netif_tx_start_all_queues(dev);
-> +		}
-> +
-> +		if (old_prog)
-> +			bpf_prog_put(old_prog);
-> +
-> +		return 0;
-> +
-> +	case XDP_SETUP_XSK_POOL:
-> +		return -EOPNOTSUPP;
-> +
-> +	default:
-> +		return -EOPNOTSUPP;
-> +	}
-> +}
-> +
-> +static int
-> +fec_enet_xdp_get_tx_queue(struct fec_enet_private *fep, int cpu)
-> +{
-> +	int index = cpu;
-> +
-> +	if (unlikely(index < 0))
-> +		index = 0;
-> +
-> +	while (index >= fep->num_tx_queues)
-> +		index -= fep->num_tx_queues;
-
-Not a big deal, but I think kind of optimizations are not worthy and
-potentially dangerous since late '90 ;)
-
-You could consider switching to a simpler '%', but IMHO it's not
-blocking.
 
 
-Cheers,
+On 2022/11/3 16:33, Vincent Guittot wrote:
+> On Thu, 3 Nov 2022 at 04:01, Song Zhang <zhangsong34@huawei.com> wrote:
+>>
+>> Thanks for your reply!
+>>
+>> On 2022/11/3 2:01, Vincent Guittot wrote:
+>>> On Wed, 2 Nov 2022 at 04:54, Song Zhang <zhangsong34@huawei.com> wrote:
+>>>>
+>>>
+>>> This really looks like a v3 of
+>>> https://lore.kernel.org/all/20220810015636.3865248-1-zhangsong34@huawei.com/
+>>>
+>>> Please keep versioning.
+>>>
+>>>> Add a new sysctl interface:
+>>>> /proc/sys/kernel/sched_prio_load_balance_enabled
+>>>
+>>> We don't want to add more sysctl knobs for the scheduler, we even
+>>> removed some. Knob usually means that you want to fix your use case
+>>> but the solution doesn't make sense for all cases.
+>>>
+>>
+>> OK, I will remove this knobs later.
+>>
+>>>>
+>>>> 0: default behavior
+>>>> 1: enable priority load balance for CFS
+>>>>
+>>>> For co-location with idle and non-idle tasks, when CFS do load balance,
+>>>> it is reasonable to prefer migrating non-idle tasks and migrating idle
+>>>> tasks lastly. This will reduce the interference by SCHED_IDLE tasks
+>>>> as much as possible.
+>>>
+>>> I don't agree that it's always the best choice to migrate a non-idle task 1st.
+>>>
+>>> CPU0 has 1 non idle task and CPU1 has 1 non idle task and hundreds of
+>>> idle task and there is an imbalance between the 2 CPUS: migrating the
+>>> non idle task from CPU1 to CPU0 is not the best choice
+>>>
+>>
+>> If the non idle task on CPU1 is running or cache hot, it cannot be
+>> migrated and idle tasks can also be migrated from CPU1 to CPU0. So I
+>> think it does not matter.
+> 
+> What I mean is that migrating non idle tasks first is not a universal
+> win and not always what we want.
+> 
 
-Paolo
+But migrating online tasks first is mostly a trade-off that 
+non-idle(Latency Sensitive) tasks can obtain more CPU time and minimize 
+the interference caused by IDLE tasks. I think this makes sense in most 
+cases, or you can point out what else I need to think about it ?
 
+Best regards.
+
+>>
+>>>>
+>>>> Testcase:
+>>>> - Spawn large number of idle(SCHED_IDLE) tasks occupy CPUs
+>>>
+>>> What do you mean by a large number ?
+>>>
+>>>> - Let non-idle tasks compete with idle tasks for CPU time.
+>>>>
+>>>> Using schbench to test non-idle tasks latency:
+>>>> $ ./schbench -m 1 -t 10 -r 30 -R 200
+>>>
+>>> How many CPUs do you have ?
+>>>
+>>
+>> OK, some details may not be mentioned.
+>> My virtual machine has 8 CPUs running with a schbench process and 5000
+>> idle tasks. The idle task is a while dead loop process below:
+> 
+> How can you care about latency when you start 10 workers on 8 vCPUs
+> with 5000 non idle threads ?
+> 
+
+No no no... spawn 5000 idle(SCHED_IDLE) processes not 5000 non-idle 
+threads, and with 10 non-idle schbench workers on 8 vCPUs.
+
+>>
+>> $ cat idle_process.c
+>> int main()
+>> {
+>>           int i = 0;
+>>           while(1) {
+>>                   usleep(500);
+>>                   for(i = 0; i < 1000000; i++);
+>>           }
+>> }
+>>
+>> You can compile and spawn 5000 idle(SCHED_IDLE) tasks occupying 8 CPUs
+>> and execute schbench command to test it.
+>>
+>>>>
+>>>> Test result:
+>>>> 1.Default behavior
+>>>> Latency percentiles (usec) runtime 30 (s) (4562 total samples)
+>>>>           50.0th: 62528 (2281 samples)
+>>>>           75.0th: 623616 (1141 samples)
+>>>>           90.0th: 764928 (687 samples)
+>>>>           95.0th: 824320 (225 samples)
+>>>>           *99.0th: 920576 (183 samples)
+>>>>           99.5th: 953344 (23 samples)
+>>>>           99.9th: 1008640 (18 samples)
+>>>>           min=9, max=1074466
+>>>>
+>>>> 2.Enable priority load balance
+>>>> Latency percentiles (usec) runtime 30 (s) (4391 total samples)
+>>>>           50.0th: 22624 (2204 samples)
+>>>>           75.0th: 48832 (1092 samples)
+>>>>           90.0th: 85376 (657 samples)
+>>>>           95.0th: 113280 (220 samples)
+>>>>           *99.0th: 182528 (175 samples)
+>>>>           99.5th: 206592 (22 samples)
+>>>>           99.9th: 290304 (17 samples)
+>>>>           min=6, max=351815
+>>>>
+>>>>   From percentile details, we see the benefit of priority load balance
+>>>> that 95% of non-idle tasks latencies stays no more than 113ms, while
+>>>
+>>> But even 113ms seems quite a large number if there is anything else
+>>> but 10 schbench workers and a bunch of idle threads that are running.
+>>>
+>>>> non-idle tasks latencies has got almost 50% over 600ms if priority
+>>>> load balance not enabled.
+>>>
+>>> Als have you considered enabling sched_feature LB_MIN ?
+>>>
+>>
+>> I have tried to echo LB_MIN > /sys/kernel/debug/sched/features, but this
+>> feature seems make no sense.
+>>
+>>>>
+>>>> Signed-off-by: Song Zhang <zhangsong34@huawei.com>
+>>>> ---
+>>>>    include/linux/sched/sysctl.h |  4 +++
+>>>>    init/Kconfig                 | 10 ++++++
+>>>>    kernel/sched/core.c          |  3 ++
+>>>>    kernel/sched/fair.c          | 61 +++++++++++++++++++++++++++++++++++-
+>>>>    kernel/sched/sched.h         |  3 ++
+>>>>    kernel/sysctl.c              | 11 +++++++
+>>>>    6 files changed, 91 insertions(+), 1 deletion(-)
+>>>>
+>>>> diff --git a/include/linux/sched/sysctl.h b/include/linux/sched/sysctl.h
+>>>> index 303ee7dd0c7e..9b3673269ecc 100644
+>>>> --- a/include/linux/sched/sysctl.h
+>>>> +++ b/include/linux/sched/sysctl.h
+>>>> @@ -32,6 +32,10 @@ extern unsigned int sysctl_numa_balancing_promote_rate_limit;
+>>>>    #define sysctl_numa_balancing_mode     0
+>>>>    #endif
+>>>>
+>>>> +#ifdef CONFIG_SCHED_PRIO_LB
+>>>> +extern unsigned int sysctl_sched_prio_load_balance_enabled;
+>>>> +#endif
+>>>> +
+>>>>    int sysctl_numa_balancing(struct ctl_table *table, int write, void *buffer,
+>>>>                   size_t *lenp, loff_t *ppos);
+>>>>
+>>>> diff --git a/init/Kconfig b/init/Kconfig
+>>>> index 694f7c160c9c..b0dfe6701218 100644
+>>>> --- a/init/Kconfig
+>>>> +++ b/init/Kconfig
+>>>> @@ -1026,6 +1026,16 @@ config CFS_BANDWIDTH
+>>>>             restriction.
+>>>>             See Documentation/scheduler/sched-bwc.rst for more information.
+>>>>
+>>>> +config SCHED_PRIO_LB
+>>>> +       bool "Priority load balance for CFS"
+>>>> +       depends on SMP
+>>>> +       default n
+>>>> +       help
+>>>> +         This feature enable CFS priority load balance to reduce
+>>>> +         non-idle tasks latency interferenced by SCHED_IDLE tasks.
+>>>> +         It prefer migrating non-idle tasks firstly and
+>>>> +         migrating SCHED_IDLE tasks lastly.
+>>>> +
+>>>>    config RT_GROUP_SCHED
+>>>>           bool "Group scheduling for SCHED_RR/FIFO"
+>>>>           depends on CGROUP_SCHED
+>>>> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+>>>> index 5800b0623ff3..9be35431fdd5 100644
+>>>> --- a/kernel/sched/core.c
+>>>> +++ b/kernel/sched/core.c
+>>>> @@ -9731,6 +9731,9 @@ void __init sched_init(void)
+>>>>                   rq->max_idle_balance_cost = sysctl_sched_migration_cost;
+>>>>
+>>>>                   INIT_LIST_HEAD(&rq->cfs_tasks);
+>>>> +#ifdef CONFIG_SCHED_PRIO_LB
+>>>> +               INIT_LIST_HEAD(&rq->cfs_idle_tasks);
+>>>> +#endif
+>>>>
+>>>>                   rq_attach_root(rq, &def_root_domain);
+>>>>    #ifdef CONFIG_NO_HZ_COMMON
+>>>> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+>>>> index e4a0b8bd941c..bdeb04324f0c 100644
+>>>> --- a/kernel/sched/fair.c
+>>>> +++ b/kernel/sched/fair.c
+>>>> @@ -139,6 +139,10 @@ static int __init setup_sched_thermal_decay_shift(char *str)
+>>>>    }
+>>>>    __setup("sched_thermal_decay_shift=", setup_sched_thermal_decay_shift);
+>>>>
+>>>> +#ifdef CONFIG_SCHED_PRIO_LB
+>>>> +unsigned int sysctl_sched_prio_load_balance_enabled;
+>>>> +#endif
+>>>> +
+>>>>    #ifdef CONFIG_SMP
+>>>>    /*
+>>>>     * For asym packing, by default the lower numbered CPU has higher priority.
+>>>> @@ -3199,6 +3203,21 @@ static inline void update_scan_period(struct task_struct *p, int new_cpu)
+>>>>
+>>>>    #endif /* CONFIG_NUMA_BALANCING */
+>>>>
+>>>> +#ifdef CONFIG_SCHED_PRIO_LB
+>>>> +static void
+>>>> +adjust_rq_cfs_tasks(
+>>>> +       void (*list_op)(struct list_head *, struct list_head *),
+>>>> +       struct rq *rq,
+>>>> +       struct sched_entity *se)
+>>>> +{
+>>>> +       if (sysctl_sched_prio_load_balance_enabled &&
+>>>> +               task_has_idle_policy(task_of(se)))
+>>>> +               (*list_op)(&se->group_node, &rq->cfs_idle_tasks);
+>>>> +       else
+>>>> +               (*list_op)(&se->group_node, &rq->cfs_tasks);
+>>>> +}
+>>>> +#endif
+>>>> +
+>>>>    static void
+>>>>    account_entity_enqueue(struct cfs_rq *cfs_rq, struct sched_entity *se)
+>>>>    {
+>>>> @@ -3208,7 +3227,11 @@ account_entity_enqueue(struct cfs_rq *cfs_rq, struct sched_entity *se)
+>>>>                   struct rq *rq = rq_of(cfs_rq);
+>>>>
+>>>>                   account_numa_enqueue(rq, task_of(se));
+>>>> +#ifdef CONFIG_SCHED_PRIO_LB
+>>>> +               adjust_rq_cfs_tasks(list_add, rq, se);
+>>>> +#else
+>>>>                   list_add(&se->group_node, &rq->cfs_tasks);
+>>>> +#endif
+>>>>           }
+>>>>    #endif
+>>>>           cfs_rq->nr_running++;
+>>>> @@ -7631,7 +7654,11 @@ done: __maybe_unused;
+>>>>            * the list, so our cfs_tasks list becomes MRU
+>>>>            * one.
+>>>>            */
+>>>> +#ifdef CONFIG_SCHED_PRIO_LB
+>>>> +       adjust_rq_cfs_tasks(list_move, rq, &p->se);
+>>>> +#else
+>>>>           list_move(&p->se.group_node, &rq->cfs_tasks);
+>>>> +#endif
+>>>>    #endif
+>>>>
+>>>>           if (hrtick_enabled_fair(rq))
+>>>> @@ -8156,11 +8183,18 @@ static void detach_task(struct task_struct *p, struct lb_env *env)
+>>>>    static struct task_struct *detach_one_task(struct lb_env *env)
+>>>>    {
+>>>>           struct task_struct *p;
+>>>> +       struct list_head *tasks = &env->src_rq->cfs_tasks;
+>>>> +#ifdef CONFIG_SCHED_PRIO_LB
+>>>> +       bool has_detach_idle_tasks = false;
+>>>> +#endif
+>>>>
+>>>>           lockdep_assert_rq_held(env->src_rq);
+>>>>
+>>>> +#ifdef CONFIG_SCHED_PRIO_LB
+>>>> +again:
+>>>> +#endif
+>>>>           list_for_each_entry_reverse(p,
+>>>> -                       &env->src_rq->cfs_tasks, se.group_node) {
+>>>> +                       tasks, se.group_node) {
+>>>>                   if (!can_migrate_task(p, env))
+>>>>                           continue;
+>>>>
+>>>> @@ -8175,6 +8209,13 @@ static struct task_struct *detach_one_task(struct lb_env *env)
+>>>>                   schedstat_inc(env->sd->lb_gained[env->idle]);
+>>>>                   return p;
+>>>>           }
+>>>> +#ifdef CONFIG_SCHED_PRIO_LB
+>>>> +       if (sysctl_sched_prio_load_balance_enabled && !has_detach_idle_tasks) {
+>>>> +               has_detach_idle_tasks = true;
+>>>> +               tasks = &env->src_rq->cfs_idle_tasks;
+>>>> +               goto again;
+>>>> +       }
+>>>> +#endif
+>>>>           return NULL;
+>>>>    }
+>>>>
+>>>> @@ -8190,6 +8231,9 @@ static int detach_tasks(struct lb_env *env)
+>>>>           unsigned long util, load;
+>>>>           struct task_struct *p;
+>>>>           int detached = 0;
+>>>> +#ifdef CONFIG_SCHED_PRIO_LB
+>>>> +       bool has_detach_idle_tasks = false;
+>>>> +#endif
+>>>>
+>>>>           lockdep_assert_rq_held(env->src_rq);
+>>>>
+>>>> @@ -8205,6 +8249,9 @@ static int detach_tasks(struct lb_env *env)
+>>>>           if (env->imbalance <= 0)
+>>>>                   return 0;
+>>>>
+>>>> +#ifdef CONFIG_SCHED_PRIO_LB
+>>>> +again:
+>>>> +#endif
+>>>>           while (!list_empty(tasks)) {
+>>>>                   /*
+>>>>                    * We don't want to steal all, otherwise we may be treated likewise,
+>>>> @@ -8310,6 +8357,14 @@ static int detach_tasks(struct lb_env *env)
+>>>>                   list_move(&p->se.group_node, tasks);
+>>>>           }
+>>>>
+>>>> +#ifdef CONFIG_SCHED_PRIO_LB
+>>>> +       if (sysctl_sched_prio_load_balance_enabled &&
+>>>> +               !has_detach_idle_tasks && env->imbalance > 0) {
+>>>> +               has_detach_idle_tasks = true;
+>>>> +               tasks = &env->src_rq->cfs_idle_tasks;
+>>>> +               goto again;
+>>>> +       }
+>>>> +#endif
+>>>>           /*
+>>>>            * Right now, this is one of only two places we collect this stat
+>>>>            * so we can safely collect detach_one_task() stats here rather
+>>>> @@ -11814,7 +11869,11 @@ static void set_next_task_fair(struct rq *rq, struct task_struct *p, bool first)
+>>>>                    * Move the next running task to the front of the list, so our
+>>>>                    * cfs_tasks list becomes MRU one.
+>>>>                    */
+>>>> +#ifdef CONFIG_SCHED_PRIO_LB
+>>>> +               adjust_rq_cfs_tasks(list_move, rq, se);
+>>>> +#else
+>>>>                   list_move(&se->group_node, &rq->cfs_tasks);
+>>>> +#endif
+>>>>           }
+>>>>    #endif
+>>>>
+>>>> diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+>>>> index 1644242ecd11..1b831c05ba30 100644
+>>>> --- a/kernel/sched/sched.h
+>>>> +++ b/kernel/sched/sched.h
+>>>> @@ -1053,6 +1053,9 @@ struct rq {
+>>>>           int                     online;
+>>>>
+>>>>           struct list_head cfs_tasks;
+>>>> +#ifdef CONFIG_SCHED_PRIO_LB
+>>>> +       struct list_head cfs_idle_tasks;
+>>>> +#endif
+>>>>
+>>>>           struct sched_avg        avg_rt;
+>>>>           struct sched_avg        avg_dl;
+>>>> diff --git a/kernel/sysctl.c b/kernel/sysctl.c
+>>>> index 188c305aeb8b..5fc0f9ffb675 100644
+>>>> --- a/kernel/sysctl.c
+>>>> +++ b/kernel/sysctl.c
+>>>> @@ -2090,6 +2090,17 @@ static struct ctl_table kern_table[] = {
+>>>>                   .extra1         = SYSCTL_ONE,
+>>>>                   .extra2         = SYSCTL_INT_MAX,
+>>>>           },
+>>>> +#endif
+>>>> +#ifdef CONFIG_SCHED_PRIO_LB
+>>>> +       {
+>>>> +               .procname       = "sched_prio_load_balance_enabled",
+>>>> +               .data           = &sysctl_sched_prio_load_balance_enabled,
+>>>> +               .maxlen         = sizeof(unsigned int),
+>>>> +               .mode           = 0644,
+>>>> +               .proc_handler   = proc_dointvec_minmax,
+>>>> +               .extra1         = SYSCTL_ZERO,
+>>>> +               .extra2         = SYSCTL_ONE,
+>>>> +       },
+>>>>    #endif
+>>>>           { }
+>>>>    };
+>>>> --
+>>>> 2.27.0
+>>>>
+>>> .
+> .
