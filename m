@@ -2,34 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42D796184FA
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 17:41:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DAD976184FD
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 17:41:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232477AbiKCQlN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 12:41:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39698 "EHLO
+        id S232473AbiKCQlg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 12:41:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232297AbiKCQkd (ORCPT
+        with ESMTP id S231778AbiKCQke (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 12:40:33 -0400
+        Thu, 3 Nov 2022 12:40:34 -0400
 Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 601941CB1F;
-        Thu,  3 Nov 2022 09:37:35 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 779EF2099A;
+        Thu,  3 Nov 2022 09:37:37 -0700 (PDT)
 Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 4ED7D2000F;
-        Thu,  3 Nov 2022 16:37:32 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id 26D3120018;
+        Thu,  3 Nov 2022 16:37:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1667493454;
+        t=1667493456;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=kv2JvZM0Bu8PSNm3CYtYunuWc63u0ZjgDdQoHhob8lE=;
-        b=jIqi8qkmBIpR1Etyfv94auxeGB1qx9IY/jUoMmiP/H02rSSl3hEjIN2SMYPfEG8p5IKfW8
-        nXppenVIY5zA2Qr+kxxRH4sz5I7rsqfb6QCU3tthA+rHWEwqAaq1enf8r6Gkvixnhe0GT4
-        7dbvfOkohOhrBDo2Bq4qdX5O683zX99ueYyxPYIA+X7vNddmoeUMdq5HZMJxCTMZoeoEiP
-        dOH2E7grVukr2GJWPrTRKP080EXmedFbvVVdRp8axmCb0GDJsH9F1XubDtRw0r3UBxrBj0
-        rP9iqbtmYUjmPmf3s+CoYGLV/QlIJjZhUayg85PGhVn+sXFJMbrlTzdQWKaPNQ==
+        bh=F6s4c74SxXJbBSOMmWDVfiGEdOBtE4A7u6CQQkHhb+Y=;
+        b=pM2/tBPY6eFkXDH6mAF1yACM/xVJelMCsD5skiNrr3wzKfnHYVZChydwGGckp3uoYY5r8r
+        jiETah85UHx19PDzfgUCm+rz2uWqElcyzX47WwADtW118w+eR2p2iuK0XVkfAAtfZIDyYT
+        mwtEVHQ7/xyTZcGc/C/rPgfVPusrjXaPrTPUCV4V+QJTNJCYqnDrpzSynMnU9ScSvvalEE
+        0xG9X10eI+GcuQsn6w1gRdgHKRisC2tsXpMsDC214XvMlKEbSQI8ullmZQY3fukSKY1zV1
+        +cKVjo/50ZRQU/g3wuwIow51fG07Ewa0hNQ8e+5bKQcxapyi4rb/Nn6oKmD8Qw==
 From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 To:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
@@ -46,9 +46,9 @@ Cc:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Maxime Ripard <mripard@kernel.org>,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: [PATCH v8 4/6] MAINTAINERS: Add entry for the Allwinner A31 ISP driver
-Date:   Thu,  3 Nov 2022 17:37:15 +0100
-Message-Id: <20221103163717.246217-5-paul.kocialkowski@bootlin.com>
+Subject: [PATCH v8 5/6] media: sun6i-csi: Detect the availability of the ISP
+Date:   Thu,  3 Nov 2022 17:37:16 +0100
+Message-Id: <20221103163717.246217-6-paul.kocialkowski@bootlin.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221103163717.246217-1-paul.kocialkowski@bootlin.com>
 References: <20221103163717.246217-1-paul.kocialkowski@bootlin.com>
@@ -63,34 +63,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add myself as maintainer of the Allwinner A31 ISP media driver.
+Add a helper to detect whether the ISP is available and connected
+and store the indication in the driver-specific device structure.
 
 Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- MAINTAINERS | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ .../platform/sunxi/sun6i-csi/sun6i_csi.c      | 34 +++++++++++++++++++
+ .../platform/sunxi/sun6i-csi/sun6i_csi.h      |  3 ++
+ 2 files changed, 37 insertions(+)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index aeb53085d40a..91d08cdfab99 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -784,6 +784,15 @@ T:	git git://linuxtv.org/media_tree.git
- F:	Documentation/devicetree/bindings/media/allwinner,sun6i-a31-csi.yaml
- F:	drivers/media/platform/sunxi/sun6i-csi/
+diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
+index 00521f966cee..046fc9d018eb 100644
+--- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
++++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
+@@ -24,6 +24,36 @@
+ #include "sun6i_csi_capture.h"
+ #include "sun6i_csi_reg.h"
  
-+ALLWINNER A31 ISP DRIVER
-+M:	Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-+L:	linux-media@vger.kernel.org
-+S:	Maintained
-+T:	git git://linuxtv.org/media_tree.git
-+F:	Documentation/devicetree/bindings/media/allwinner,sun6i-a31-isp.yaml
-+F:	drivers/staging/media/sunxi/sun6i-isp/
-+F:	drivers/staging/media/sunxi/sun6i-isp/uapi/sun6i-isp-config.h
++/* ISP */
 +
- ALLWINNER A31 MIPI CSI-2 BRIDGE DRIVER
- M:	Paul Kocialkowski <paul.kocialkowski@bootlin.com>
- L:	linux-media@vger.kernel.org
++static int sun6i_csi_isp_detect(struct sun6i_csi_device *csi_dev)
++{
++	struct device *dev = csi_dev->dev;
++	struct fwnode_handle *handle;
++
++	/*
++	 * ISP is not available if not connected via fwnode graph.
++	 * This will also check that the remote parent node is available.
++	 */
++	handle = fwnode_graph_get_endpoint_by_id(dev_fwnode(dev),
++						 SUN6I_CSI_PORT_ISP, 0,
++						 FWNODE_GRAPH_ENDPOINT_NEXT);
++	if (!handle)
++		return 0;
++
++	fwnode_handle_put(handle);
++
++	if (!IS_ENABLED(CONFIG_VIDEO_SUN6I_ISP)) {
++		dev_warn(dev,
++			 "ISP link is detected but not enabled in kernel config!");
++		return 0;
++	}
++
++	csi_dev->isp_available = true;
++
++	return 0;
++}
++
+ /* Media */
+ 
+ static const struct media_device_ops sun6i_csi_media_ops = {
+@@ -290,6 +320,10 @@ static int sun6i_csi_probe(struct platform_device *platform_dev)
+ 	if (ret)
+ 		return ret;
+ 
++	ret = sun6i_csi_isp_detect(csi_dev);
++	if (ret)
++		goto error_resources;
++
+ 	ret = sun6i_csi_v4l2_setup(csi_dev);
+ 	if (ret)
+ 		goto error_resources;
+diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h
+index e611bdd6e9b2..8e232cd91ebe 100644
+--- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h
++++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h
+@@ -21,6 +21,7 @@
+ enum sun6i_csi_port {
+ 	SUN6I_CSI_PORT_PARALLEL		= 0,
+ 	SUN6I_CSI_PORT_MIPI_CSI2	= 1,
++	SUN6I_CSI_PORT_ISP		= 2,
+ };
+ 
+ struct sun6i_csi_buffer {
+@@ -44,6 +45,8 @@ struct sun6i_csi_device {
+ 	struct clk			*clock_mod;
+ 	struct clk			*clock_ram;
+ 	struct reset_control		*reset;
++
++	bool				isp_available;
+ };
+ 
+ struct sun6i_csi_variant {
 -- 
 2.38.1
 
