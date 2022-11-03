@@ -2,51 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93AFB617CC5
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 13:37:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4436C617CC9
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 13:39:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231759AbiKCMhf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 08:37:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54794 "EHLO
+        id S231174AbiKCMjK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 08:39:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231754AbiKCMhH (ORCPT
+        with ESMTP id S231744AbiKCMiv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 08:37:07 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C379014036;
-        Thu,  3 Nov 2022 05:36:58 -0700 (PDT)
-Received: from canpemm500009.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4N33822hZFzpW8Y;
-        Thu,  3 Nov 2022 20:33:22 +0800 (CST)
-Received: from [10.67.102.169] (10.67.102.169) by
- canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 3 Nov 2022 20:36:56 +0800
-CC:     <linux-gpio@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linus.walleij@linaro.org>,
-        <brgl@bgdev.pl>, <xuwei5@huawei.com>,
-        <krzysztof.kozlowski+dt@linaro.org>, <robh+dt@kernel.org>,
-        <yangyicong@hisilicon.com>
-Subject: Re: [PATCH next v3 2/2] dt-bindings: gpio: add entry for
- hisilicon,ascend910-gpio
-To:     Weilong Chen <chenweilong@huawei.com>, <f.fangjian@huawei.com>
-References: <20221101082442.263448-1-chenweilong@huawei.com>
- <20221101082442.263448-2-chenweilong@huawei.com>
-From:   Yicong Yang <yangyicong@huawei.com>
-Message-ID: <322c65cf-2b89-a73c-ba7e-983ac8fb8b3e@huawei.com>
-Date:   Thu, 3 Nov 2022 20:36:56 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.1
+        Thu, 3 Nov 2022 08:38:51 -0400
+Received: from mail2-relais-roc.national.inria.fr (mail2-relais-roc.national.inria.fr [192.134.164.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4156B140D3
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 05:38:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=inria.fr; s=dc;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=B8CXOE4IBhnP/UwGXPbiJS7DwU6NzAK3VAxg643ZQgc=;
+  b=FHJqE1l2/am+OPTdJOYYmxKVDqUQBlffMeuBu96hNrLxJZpMIR2mCRv6
+   09utJyqld/2vBux6SnenNjPsdv44E1x001RW4OykKGY1TvoiJCwcNVAiv
+   Anvj3m0vrP4SkW3k7LbaUQdkznvBkUl2Df0L0zLjNCeR35rSkNXB6a/Kg
+   g=;
+Authentication-Results: mail2-relais-roc.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
+X-IronPort-AV: E=Sophos;i="5.95,235,1661810400"; 
+   d="scan'208";a="72819154"
+Received: from dt-lawall.paris.inria.fr ([128.93.67.65])
+  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2022 13:38:00 +0100
+Date:   Thu, 3 Nov 2022 13:38:00 +0100 (CET)
+From:   Julia Lawall <julia.lawall@inria.fr>
+To:     Tanjuate Brunostar <tanjubrunostar0@gmail.com>
+cc:     gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org, outreachy@lists.linux.dev
+Subject: Re: [PATCH] staging: vt6655: change the function name
+ s_vFillRTSHead
+In-Reply-To: <Y2OPStg4jXtWpJcd@elroy-temp-vm.gaiao0uenmiufjlowqgp5yxwdh.gvxx.internal.cloudapp.net>
+Message-ID: <d0d6d613-174b-f7dd-7d45-45eecd26a850@inria.fr>
+References: <Y2OPStg4jXtWpJcd@elroy-temp-vm.gaiao0uenmiufjlowqgp5yxwdh.gvxx.internal.cloudapp.net>
 MIME-Version: 1.0
-In-Reply-To: <20221101082442.263448-2-chenweilong@huawei.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.102.169]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- canpemm500009.china.huawei.com (7.192.105.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,106 +51,126 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/11/1 16:24, Weilong Chen wrote:
-> Add the new compatible for HiSilicon gpio controller driver.
-> 
-> Signed-off-by: Weilong Chen <chenweilong@huawei.com>
 
-Looks good to me,
 
-Reviewed-by: Yicong Yang <yangyicong@hisilicon.com>
+On Thu, 3 Nov 2022, Tanjuate Brunostar wrote:
 
+> Remove the use of Hungarian notation, which is not used in the Linux
+> kernel. Reported by checkpatch
+>
+> Fix checkpatch error related to code line ends with a '(', by joining
+> some lines and indenting correctly. This improves visibility
+
+I don't think it will be appreciated to do two things at once.
+
+>
+> Signed-off-by: Tanjuate Brunostar <tanjubrunostar0@gmail.com>
 > ---
-> Change since v2:
-> - No change.
-> Link: https://lore.kernel.org/lkml/20221028022453.163186-2-chenweilong@huawei.com/
-> 
-> Change since v1:
-> - Drop "Device Tree Bindings" and reg's description
-> - Move description in top-level description.
-> - Add gpio-cells to required
-> - Use additionalProperties and decimal numbers
-> - Use IRQ flags
-> - Use vendor,soc-ipblock format
-> Link: https://lore.kernel.org/lkml/20221026034219.172880-2-chenweilong@huawei.com/
-> 
->  .../gpio/hisilicon,ascend910-gpio.yaml        | 56 +++++++++++++++++++
->  MAINTAINERS                                   |  1 +
->  2 files changed, 57 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/gpio/hisilicon,ascend910-gpio.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/gpio/hisilicon,ascend910-gpio.yaml b/Documentation/devicetree/bindings/gpio/hisilicon,ascend910-gpio.yaml
-> new file mode 100644
-> index 000000000000..735d97d645a0
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/gpio/hisilicon,ascend910-gpio.yaml
-> @@ -0,0 +1,56 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/gpio/hisilicon,ascend910-gpio.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: HiSilicon common GPIO controller
-> +
-> +maintainers:
-> +  - Jay Fang <f.fangjian@huawei.com>
-> +
-> +description:
-> +  The HiSilicon common GPIO controller can be used for many different
-> +  types of SoC such as Huawei Ascend AI series chips.
-> +
-> +properties:
-> +  compatible:
-> +    const: hisilicon,ascend910-gpio
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  gpio-controller: true
-> +
-> +  "#gpio-cells":
-> +    const: 2
-> +
-> +  ngpios:
-> +    minimum: 1
-> +    maximum: 32
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - gpio-controller
-> +  - "#gpio-cells"
-> +  - ngpios
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +
-> +    gpio@840d0000 {
-> +      compatible = "hisilicon,ascend910-gpio";
-> +      reg = <0x840d0000 0x1000>;
-> +      ngpios = <32>;
-> +      gpio-controller;
-> +      #gpio-cells = <2>;
-> +      interrupts = <GIC_SPI 33 IRQ_TYPE_LEVEL_HIGH>;
-> +    };
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index d42e34d1e8e2..74ac2e7a8e4b 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -9212,6 +9212,7 @@ HISILICON GPIO DRIVER
->  M:	Jay Fang <f.fangjian@huawei.com>
->  L:	linux-gpio@vger.kernel.org
->  S:	Maintained
-> +F:	Documentation/devicetree/bindings/gpio/hisilicon,ascend910-gpio.yaml
->  F:	drivers/gpio/gpio-hisi.c
->  
->  HISILICON HIGH PERFORMANCE RSA ENGINE DRIVER (HPRE)
-> 
+>  drivers/staging/vt6655/rxtx.c | 48 ++++++++++++++++-------------------
+>  1 file changed, 22 insertions(+), 26 deletions(-)
+>
+> diff --git a/drivers/staging/vt6655/rxtx.c b/drivers/staging/vt6655/rxtx.c
+> index 31ae99b3cb35..debc5d5daede 100644
+> --- a/drivers/staging/vt6655/rxtx.c
+> +++ b/drivers/staging/vt6655/rxtx.c
+> @@ -23,7 +23,7 @@
+>   *      s_uGetTxRsvTime- get frame reserved time
+>   *      s_vFillCTSHead- fulfill CTS ctl header
+>   *      s_vFillFragParameter- Set fragment ctl parameter.
+> - *      s_vFillRTSHead- fulfill RTS ctl header
+> + *      fill_rts_header- fulfill RTS ctl header
+>   *      s_vFillTxKey- fulfill tx encrypt key
+>   *      s_vSWencryption- Software encrypt header
+>   *      vDMA0_tx_80211- tx 802.11 frame via dma0
+> @@ -85,15 +85,15 @@ static const unsigned short fb_opt1[2][5] = {
+>  #define DATADUR_A_F1    13
+>
+>  /*---------------------  Static Functions  --------------------------*/
+> -static void s_vFillRTSHead(struct vnt_private *pDevice,
+> -			   unsigned char byPktType,
+> -			   void *pvRTS,
+> -			   unsigned int	cbFrameLength,
+> -			   bool bNeedAck,
+> -			   bool bDisCRC,
+> -			   struct ieee80211_hdr *hdr,
+> -			   unsigned short wCurrentRate,
+> -			   unsigned char byFBOption);
+> +static void fill_rts_header(struct vnt_private *pDevice,
+> +			    unsigned char byPktType,
+> +			    void *pvRTS,
+> +			    unsigned int	cbFrameLength,
+
+Strange spacing in the above parameter declaration.  Maybe there is a tab
+that should be a space?
+
+julia
+
+> +			    bool bNeedAck,
+> +			    bool bDisCRC,
+> +			    struct ieee80211_hdr *hdr,
+> +			    unsigned short wCurrentRate,
+> +			    unsigned char byFBOption);
+>
+>  static void s_vGenerateTxParameter(struct vnt_private *pDevice,
+>  				   unsigned char byPktType,
+> @@ -555,19 +555,15 @@ s_uFillDataHead(
+>  	return buf->duration;
+>  }
+>
+> -static
+> -void
+> -s_vFillRTSHead(
+> -	struct vnt_private *pDevice,
+> -	unsigned char byPktType,
+> -	void *pvRTS,
+> -	unsigned int cbFrameLength,
+> -	bool bNeedAck,
+> -	bool bDisCRC,
+> -	struct ieee80211_hdr *hdr,
+> -	unsigned short wCurrentRate,
+> -	unsigned char byFBOption
+> -)
+> +static void fill_rts_header(struct vnt_private *pDevice,
+> +			    unsigned char byPktType,
+> +			    void *pvRTS,
+> +			    unsigned int cbFrameLength,
+> +			    bool bNeedAck,
+> +			    bool bDisCRC,
+> +			    struct ieee80211_hdr *hdr,
+> +			    unsigned short wCurrentRate,
+> +			    unsigned char byFBOption)
+>  {
+>  	unsigned int uRTSFrameLen = 20;
+>
+> @@ -912,7 +908,7 @@ s_vGenerateTxParameter(
+>  			buf->rrv_time_a = vnt_rxtx_rsvtime_le16(pDevice, byPktType, cbFrameSize, wCurrentRate, bNeedACK);
+>  			buf->rrv_time_b = vnt_rxtx_rsvtime_le16(pDevice, PK_TYPE_11B, cbFrameSize, pDevice->byTopCCKBasicRate, bNeedACK);
+>
+> -			s_vFillRTSHead(pDevice, byPktType, pvRTS, cbFrameSize, bNeedACK, bDisCRC, psEthHeader, wCurrentRate, byFBOption);
+> +			fill_rts_header(pDevice, byPktType, pvRTS, cbFrameSize, bNeedACK, bDisCRC, psEthHeader, wCurrentRate, byFBOption);
+>  		} else {/* RTS_needless, PCF mode */
+>  			struct vnt_rrv_time_cts *buf = pvRrvTime;
+>
+> @@ -931,7 +927,7 @@ s_vGenerateTxParameter(
+>  			buf->rrv_time = vnt_rxtx_rsvtime_le16(pDevice, byPktType, cbFrameSize, wCurrentRate, bNeedACK);
+>
+>  			/* Fill RTS */
+> -			s_vFillRTSHead(pDevice, byPktType, pvRTS, cbFrameSize, bNeedACK, bDisCRC, psEthHeader, wCurrentRate, byFBOption);
+> +			fill_rts_header(pDevice, byPktType, pvRTS, cbFrameSize, bNeedACK, bDisCRC, psEthHeader, wCurrentRate, byFBOption);
+>  		} else if (!pvRTS) {/* RTS_needless, non PCF mode */
+>  			struct vnt_rrv_time_ab *buf = pvRrvTime;
+>
+> @@ -945,7 +941,7 @@ s_vGenerateTxParameter(
+>  			buf->rrv_time = vnt_rxtx_rsvtime_le16(pDevice, PK_TYPE_11B, cbFrameSize, wCurrentRate, bNeedACK);
+>
+>  			/* Fill RTS */
+> -			s_vFillRTSHead(pDevice, byPktType, pvRTS, cbFrameSize, bNeedACK, bDisCRC, psEthHeader, wCurrentRate, byFBOption);
+> +			fill_rts_header(pDevice, byPktType, pvRTS, cbFrameSize, bNeedACK, bDisCRC, psEthHeader, wCurrentRate, byFBOption);
+>  		} else { /* RTS_needless, non PCF mode */
+>  			struct vnt_rrv_time_ab *buf = pvRrvTime;
+>
+> --
+> 2.34.1
+>
+>
+>
