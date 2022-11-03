@@ -2,136 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 157726187E3
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 19:47:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 104AE6187EB
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 19:48:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231201AbiKCSrb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 14:47:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41034 "EHLO
+        id S231208AbiKCSsg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 14:48:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbiKCSr1 (ORCPT
+        with ESMTP id S229992AbiKCSsb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 14:47:27 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AC2365A5
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 11:46:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667501188;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=KUvqpmismHtbPDi1RWOVBVQOlTCkIOX4rr6fY8m3qi8=;
-        b=EabJpTwfu8tjjAfHEkBVi7bBq+lrfUWFHawhyEB1UMCeQZXnLUaK5P9HsuBOfU3j6e6noZ
-        SJRT20RiiiB+HpCjpj0Hhrm05HM7kb7Wpu9MwqIEstj4N4izzUjgBuNbbsO4PblKrwrYHN
-        iuCVN8/aEt7ngeIDwuH4QtswA1pOwKY=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-280-cQ_KIlBhMn-6lj3pSVRhhQ-1; Thu, 03 Nov 2022 14:46:27 -0400
-X-MC-Unique: cQ_KIlBhMn-6lj3pSVRhhQ-1
-Received: by mail-ed1-f70.google.com with SMTP id y14-20020a056402440e00b0044301c7ccd9so1951707eda.19
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 11:46:27 -0700 (PDT)
+        Thu, 3 Nov 2022 14:48:31 -0400
+Received: from mail-qv1-f50.google.com (mail-qv1-f50.google.com [209.85.219.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC4AE17048;
+        Thu,  3 Nov 2022 11:48:30 -0700 (PDT)
+Received: by mail-qv1-f50.google.com with SMTP id mi9so1752686qvb.8;
+        Thu, 03 Nov 2022 11:48:30 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KUvqpmismHtbPDi1RWOVBVQOlTCkIOX4rr6fY8m3qi8=;
-        b=zuryX1VzHwzlLMfi6i77sfjgjEWIQouU/Rm3etj3nxd/gpLs3eJwMksNJMOTWk3nVt
-         d5Fop+S1opxEaAFy8mFbvVV9sE2rhCLg1ISpgeL4Yp14m6OQg+p6ICyhNBsGX6kDx3I6
-         Zz2qrtfq3z2/rNQ6RYRYNuZ212V/joLOxY6hgLPdSEiT0yu662aSeUEnygrej1ko5Vpl
-         jKXmMoxYlyxWeoIOK33etbCkfWgR9wCCGMBxKB6ugc7mo9xk4uGwW6Ui1VAL+K9IzIY0
-         YFpLven2bSLZrfjO6siu+Hd2/6KNlEgAH7s714Mye5DZISH9OhGF+wv03uGhrt/6RVhr
-         aPNQ==
-X-Gm-Message-State: ACrzQf0u7HuuTkspNHfEC17ndt7yLBICTdT96bzEV2Hf6UmAJcS8jnTo
-        RyJgeL6ssNSvnIfSTew8dKQnABWC2wrnhXlItPcCPpEo359HP57/a4am9bSN6LjW8LWeZcXR08Z
-        9cPf3wQnB/tZVwltKn392apja
-X-Received: by 2002:a17:907:31c9:b0:740:ef93:2ffd with SMTP id xf9-20020a17090731c900b00740ef932ffdmr30301719ejb.584.1667501186299;
-        Thu, 03 Nov 2022 11:46:26 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM6jngiF1WMeYDLzQRcIfcwEai0RoBStUb1QJ9IQKOY38atIN4TLSIas8P4CJc6XubwxUck1WA==
-X-Received: by 2002:a17:907:31c9:b0:740:ef93:2ffd with SMTP id xf9-20020a17090731c900b00740ef932ffdmr30301665ejb.584.1667501186012;
-        Thu, 03 Nov 2022 11:46:26 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:1c09:f536:3de6:228c? ([2001:b07:6468:f312:1c09:f536:3de6:228c])
-        by smtp.googlemail.com with ESMTPSA id 2-20020a170906218200b0078246b1360fsm799044eju.131.2022.11.03.11.46.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Nov 2022 11:46:25 -0700 (PDT)
-Message-ID: <c29e7d40-ddb9-def0-f944-a921a05a4bb2@redhat.com>
-Date:   Thu, 3 Nov 2022 19:46:22 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qFFj0YnqgTVbsW45BjHNbWg4SjPrNwZE8AOD83zKJ74=;
+        b=Ue83nvM49wxmIJpeW0OdsHD3NSvihD3GyzcevI5S7uiJNIjY+Ud+7eAp3rb+X+S0PR
+         KcAdJrR6FtS+MFBh7QuRpQ4ouO1vEKlg3cLtlQNk8cGUntKbT9y7LMuJClvOeUWGOCQg
+         gVVwUKpUnES7wma6SAPNy3srUgd4nrtt3K/PiMttvc8+4HPNgqfVWwA0hkj4dhni+LQl
+         +83k2EoB0FHv6u7xFh6V886k5VYAZWS/SflmxWB44v3TGzi79KVetJrkTKSz4cRKlFZh
+         A900vMp3zMbR7BDjgRwiNDjbUsNBr+M47xlxrKfDpTtaHhcg60K21MXJjLimqFTNSjXx
+         6l1g==
+X-Gm-Message-State: ACrzQf2SAkYYZsOgrtVdRcAk5Dv+cpiFrsUlgo5ih+YVfDFl9WKJcrLp
+        Oirq8ExSKPB2JPAYMNadb1PLF2JrvRMB2va2Qhnfrcky
+X-Google-Smtp-Source: AMsMyM5ByWBOLNaWU6upUbPGJQZXvuckz/Axld8j4XIsJqWWxPKRr6T3ZjvryDDlHqoJOyOQI58Wmx/N/Sqtel0PzrE=
+X-Received: by 2002:a0c:c684:0:b0:4bb:fc53:5ad9 with SMTP id
+ d4-20020a0cc684000000b004bbfc535ad9mr19725144qvj.3.1667501309876; Thu, 03 Nov
+ 2022 11:48:29 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH 33/44] KVM: x86: Do VMX/SVM support checks directly in
- vendor code
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Marc Zyngier <maz@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Anup Patel <anup@brainfault.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        Eric Farman <farman@linux.ibm.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Atish Patra <atishp@atishpatra.org>,
-        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Isaku Yamahata <isaku.yamahata@intel.com>,
-        Fabiano Rosas <farosas@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Chao Gao <chao.gao@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Yuan Yao <yuan.yao@intel.com>
-References: <20221102231911.3107438-1-seanjc@google.com>
- <20221102231911.3107438-34-seanjc@google.com>
- <bfa98587-3b36-3834-a4b9-585a0e0aa56a@redhat.com>
- <Y2QJ2TuyZImbFFvi@google.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <Y2QJ2TuyZImbFFvi@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <cover.1667336095.git.christophe.jaillet@wanadoo.fr>
+ <57396f1eacfacdb589127499f8ff64225a39e110.1667336095.git.christophe.jaillet@wanadoo.fr>
+ <Y2JVhffdmXkkrIRN@smile.fi.intel.com>
+In-Reply-To: <Y2JVhffdmXkkrIRN@smile.fi.intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 3 Nov 2022 19:48:19 +0100
+Message-ID: <CAJZ5v0hdzYuiKECEdXFB0vmz=6Z697DRp0Xx5jwyqHH4SGrLCA@mail.gmail.com>
+Subject: Re: [PATCH 09/30] ACPI: sysfs: Use kstrtobool() instead of strtobool()
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, linux-acpi@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/3/22 19:35, Sean Christopherson wrote:
-> It's technically required.  IA32_FEAT_CTL and thus KVM_INTEL depends on any of
-> CPU_SUP_{INTEL,CENATUR,ZHAOXIN}, but init_ia32_feat_ctl() is invoked if and only
-> if the actual CPU type matches one of the aforementioned CPU_SUP_*.
-> 
-> E.g. running a kernel built with
-> 
->    CONFIG_CPU_SUP_INTEL=y
->    CONFIG_CPU_SUP_AMD=y
->    # CONFIG_CPU_SUP_HYGON is not set
->    # CONFIG_CPU_SUP_CENTAUR is not set
->    # CONFIG_CPU_SUP_ZHAOXIN is not set
-> 
-> on a Cenatur or Zhaoxin CPU will leave X86_FEATURE_VMX set but not set
-> X86_FEATURE_MSR_IA32_FEAT_CTL.  If VMX isn't enabled in MSR_IA32_FEAT_CTL, KVM
-> will get unexpected #UDs when trying to enable VMX.
+On Wed, Nov 2, 2022 at 12:33 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> On Tue, Nov 01, 2022 at 10:13:57PM +0100, Christophe JAILLET wrote:
+> > strtobool() is the same as kstrtobool().
+> > However, the latter is more used within the kernel.
+> >
+> > In order to remove strtobool() and slightly simplify kstrtox.h, switch to
+> > the other function name.
+> >
+> > While at it, include the corresponding header file (<linux/kstrtox.h>)
+>
+> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+>
+> > Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> > ---
+> > This patch is part of a serie that axes all usages of strtobool().
+> > Each patch can be applied independently from the other ones.
+> >
+> > The last patch of the serie removes the definition of strtobool().
+> >
+> > You may not be in copy of the cover letter. So, if needed, it is available
+> > at [1].
+> >
+> > [1]: https://lore.kernel.org/all/cover.1667336095.git.christophe.jaillet@wanadoo.fr/
+> > ---
+> >  drivers/acpi/sysfs.c | 3 ++-
+> >  1 file changed, 2 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/acpi/sysfs.c b/drivers/acpi/sysfs.c
+> > index cc2fe0618178..2d81c742e4d2 100644
+> > --- a/drivers/acpi/sysfs.c
+> > +++ b/drivers/acpi/sysfs.c
+> > @@ -9,6 +9,7 @@
+> >  #include <linux/bitmap.h>
+> >  #include <linux/init.h>
+> >  #include <linux/kernel.h>
+> > +#include <linux/kstrtox.h>
+> >  #include <linux/moduleparam.h>
+> >
+> >  #include "internal.h"
+> > @@ -992,7 +993,7 @@ static ssize_t force_remove_store(struct kobject *kobj,
+> >       bool val;
+> >       int ret;
+> >
+> > -     ret = strtobool(buf, &val);
+> > +     ret = kstrtobool(buf, &val);
+> >       if (ret < 0)
+> >               return ret;
+> >
+> > --
 
-Oh, I see.  Perhaps X86_FEATURE_VMX and X86_FEATURE_SGX should be moved 
-to one of the software words instead of using cpuid.  Nothing that you 
-should care about for this series though.
-
-Paolo
-
+Applied as 6.2 material, thanks!
