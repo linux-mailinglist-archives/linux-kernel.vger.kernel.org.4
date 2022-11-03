@@ -2,70 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1A30617440
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 03:33:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F27B661744E
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 03:35:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231130AbiKCCdC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 22:33:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32896 "EHLO
+        id S230452AbiKCCfX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 22:35:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229624AbiKCCdA (ORCPT
+        with ESMTP id S229992AbiKCCfT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 22:33:00 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 437B9261F;
-        Wed,  2 Nov 2022 19:32:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D949EB82521;
-        Thu,  3 Nov 2022 02:32:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC81BC433D7;
-        Thu,  3 Nov 2022 02:32:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667442776;
-        bh=chLCZ4O5F8L5nLqWIjg2FNqEgzk68hIq5LLfsxgk5kE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=j3IMlGLi4p/ue9t+XSptU3IIF0xzvLodD8JWWFLXzOf/lmYDPF56KPu0fq/KQClct
-         5g2WA9GAQrJjTh7ZNDhJTCmYlWxnHpe3QVi5hOh31h/O0N3TRiJcFTx3bkPoxrBCUM
-         eZnM7Ze+KqqsRvDU9xlDD8+a+dLT1MEe5XqWrCegjeXa2ep3fdaob7Gh/LD/43W1KK
-         HsFvRwoTajxlvpGGjYtj1aIHOpFqoh8Qm5o3uqGZn3EUwYU9wMhjnvtBjDEyHUNpUm
-         ugozH7ejAHrh70cu/5bcBNy6UnIdjMbzyU1EEJcs3a0V7ZM93dCO+mo3G44nP3p/zY
-         7/JIDEI0qbxxQ==
-Date:   Wed, 2 Nov 2022 19:32:53 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Shenwei Wang <shenwei.wang@nxp.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "imx@lists.linux.dev" <imx@lists.linux.dev>,
-        kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH v3 1/1] net: fec: add initial XDP support
-Message-ID: <20221102193253.3c51a4ec@kernel.org>
-In-Reply-To: <PAXPR04MB9185320671668838B48B575389389@PAXPR04MB9185.eurprd04.prod.outlook.com>
-References: <20221031185350.2045675-1-shenwei.wang@nxp.com>
-        <PAXPR04MB9185320671668838B48B575389389@PAXPR04MB9185.eurprd04.prod.outlook.com>
+        Wed, 2 Nov 2022 22:35:19 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99C2312A95;
+        Wed,  2 Nov 2022 19:35:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667442918; x=1698978918;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=qijP8nV44V8zutbFDZIO/Mf+o2BCycasqhn7uJt8cGs=;
+  b=oIpOm9CtQ9VRxWBdAM/byt3DohYPSjgr0K5JykGP43d5IV6hCnKO0Hd3
+   bvdlaFoj2sih4bZTbr0BGUsVY0DKAyhyLKAJnZLlTbMyabj3mUha9vvzT
+   Y4R6FEoL4O3ZnOonjwuEGyglK2g2OQ1PLJ4KeTcpYcrYwYYTAD1Ubo9w0
+   /c+evCIq5RP/s2d3mXxk3wfeM3jbWDgIaW+sfK1yVz7UtBblIAZoJjV5c
+   nbbAGvvKHyaJ/e0s7cq8q69SqZ6cnwrlQRWeWJhBrUHgfAlKkbz65ZyE/
+   JFaHJDRCua5nKf0ZH6wHrb/Vxvtqs15h9r7bIiZWP2Lrrm44KDkx03onG
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10519"; a="309566806"
+X-IronPort-AV: E=Sophos;i="5.95,235,1661842800"; 
+   d="scan'208";a="309566806"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Nov 2022 19:35:18 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10519"; a="759775361"
+X-IronPort-AV: E=Sophos;i="5.95,235,1661842800"; 
+   d="scan'208";a="759775361"
+Received: from jiaxiche-mobl.ccr.corp.intel.com (HELO [10.238.2.23]) ([10.238.2.23])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Nov 2022 19:35:12 -0700
+Message-ID: <e4a17902-e11b-fe1e-30b8-16eefd443883@linux.intel.com>
+Date:   Thu, 3 Nov 2022 10:35:04 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH 1/6] x86: KVM: Enable CMPccXADD CPUID and expose it to
+ guest
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Borislav Petkov <bp@alien8.de>, kvm@vger.kernel.org,
+        tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
+        x86@kernel.org, hpa@zytor.com, pbonzini@redhat.com,
+        ndesaulniers@google.com, alexandre.belloni@bootlin.com,
+        peterz@infradead.org, jpoimboe@kernel.org,
+        chang.seok.bae@intel.com, pawan.kumar.gupta@linux.intel.com,
+        babu.moger@amd.com, jmattson@google.com, sandipan.das@amd.com,
+        tony.luck@intel.com, sathyanarayanan.kuppuswamy@linux.intel.com,
+        fenghua.yu@intel.com, keescook@chromium.org,
+        jane.malalane@citrix.com, nathan@kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221019084734.3590760-1-jiaxi.chen@linux.intel.com>
+ <20221019084734.3590760-2-jiaxi.chen@linux.intel.com>
+ <Y1AUhlwWjIkKfZHA@google.com>
+ <cce514da-32b4-3b84-cfad-67a05705bc9f@linux.intel.com>
+ <Y1lrGgyIcgweVGup@zn.tnic>
+ <ad24c33d-8f07-4d73-136f-ad16bb2b1981@linux.intel.com>
+ <Y2E2G9Q2wKJnc8dx@google.com>
+From:   Jiaxi Chen <jiaxi.chen@linux.intel.com>
+In-Reply-To: <Y2E2G9Q2wKJnc8dx@google.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 3 Nov 2022 02:07:19 +0000 Shenwei Wang wrote:
-> A kind ping. =F0=9F=98=8A
 
-Pong.
+On 11/1/2022 11:07 PM, Sean Christopherson wrote:
+> On Tue, Nov 01, 2022, Jiaxi Chen wrote:
+>>
+>>
+>> On 10/27/2022 1:15 AM, Borislav Petkov wrote:
+>>> On Wed, Oct 26, 2022 at 11:40:31AM +0800, Jiaxi Chen wrote:
+>>>>> What do you think about moving CPUID_7_1_EAX to be a KVM-only leaf too?  AFAICT,
+>>>>> KVM passthrough is the only reason the existing features are defined.
+>>>
+>>> Yap, looking at the patches which added those 2 feature flags upstream,
+>>> they don't look like some particular use was the goal but rather to
+>>> expose it to guests. Besides, AVX512 apps do their own CPUID detection.
+>>>
+>>>> Since CPUID_7_1_EAX has only 5 features now, it is a big waste,       
+>>>> should we move it to KVM-only leaf as Sean suggested. What's your     
+>>>> opinion about this?                                                   
+>>>
+>>> Yes, pls do.
+>>>
+>>> And when you do, make sure to undo what
+>>>
+>>>   b302e4b176d0 ("x86/cpufeatures: Enumerate the new AVX512 BFLOAT16 instructions")
+>>>
+>>> added.
+>>>
+>>> Thx.
+>>>
+>> Hi Sean and Boris,
+>>
+>> Just realized moving CPUID_7_1_EAX to kvm-only leaf will not save space
+>> in enum cpuid_leafs[]. CPUID_7_1_EAX is indeed removed, but someone
+>> else, ie. CPUID_DUMMY needs to take the place, otherwise the cpuid_leafs
+>> array would be deranged. Therefore, the length of x86 cpuid leaves is
+>> not decreased.
+> 
+> The order of "enum cpuid_leafs" is completely arbitrary.
+> 
+> After replacing CPUID_7_1_EAX with CPUID_DUMMY, replace CPUID_DUMMY with the last
+> leaf, which is currently CPUID_8000_001F_EAX, and update the #defines accordingly.
+> Alternatively, Boris may prefer skipping the intermediate CPUID_DUMMY step and
+> just replace CPUID_7_1_EAX with CPUID_8000_001F_EAX straightaway.
 
-Don't top post.
+Yes, thanks for Sean's kind suggestion. I think use CPUID_DUMMY as the
+transition leaf will make the code logic and commit message clearer.
+Will change it in v2.
+-- 
+Regards,
+Jiaxi
