@@ -2,201 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 637836178AB
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 09:28:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A13F86178AE
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 09:28:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230262AbiKCI2N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 04:28:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38572 "EHLO
+        id S230301AbiKCI2P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 04:28:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229771AbiKCI15 (ORCPT
+        with ESMTP id S229830AbiKCI2J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 04:27:57 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92E9F64FA;
-        Thu,  3 Nov 2022 01:27:56 -0700 (PDT)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2A34rkAw015686;
-        Thu, 3 Nov 2022 08:27:48 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=OpdPFbda9j2kt9BTHRfHVxmgMJKtvg8swA1CM+MAqqM=;
- b=mAGFsv0FbaH38FtBKq5DJylIrSwq8/LaRnun1twd0irkSvRFrNMhpGgng26uKQuyG8Ln
- gUfCYVYLwim3jvSnDTJ1BjBPlqae8IZV9Nc7xRPzL+mZ84oGLoc6NwIkQ9cmz5F+KPZV
- VeiXeTo8jBTqu7PkmxpLGZpMze9UN/2NMvOqmXZOFWv14RzU6yG8smHc9J47rFfOGWOx
- E8pqeYIALyeeOWDv9myn//hwmf7iq1gGvgsAr04Z41YdGUTlh/UCeBBOdR01Oe64BUWp
- awRJmmeC87qHUcN5uSZX2b1eQ8Q4lwrwVWuw8UuWbF4pKwADeHAwcjxo4OzIRJhh/taH Qw== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3km7018s1v-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 03 Nov 2022 08:27:47 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2A38RkFT019501
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 3 Nov 2022 08:27:46 GMT
-Received: from [10.206.64.67] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Thu, 3 Nov 2022
- 01:27:44 -0700
-Message-ID: <b1d79689-da3e-403b-647a-679fe7225a20@quicinc.com>
-Date:   Thu, 3 Nov 2022 13:57:41 +0530
+        Thu, 3 Nov 2022 04:28:09 -0400
+Received: from ironport.ite.com.tw (60-251-196-230.hinet-ip.hinet.net [60.251.196.230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D81775F46;
+        Thu,  3 Nov 2022 01:28:06 -0700 (PDT)
+Received: from unknown (HELO mse.ite.com.tw) ([192.168.35.30])
+  by ironport.ite.com.tw with ESMTP; 03 Nov 2022 16:28:04 +0800
+Received: from CSBMAIL1.internal.ite.com.tw (CSBMAIL1.internal.ite.com.tw [192.168.65.58])
+        by mse.ite.com.tw with ESMTP id 2A38RwWI072844;
+        Thu, 3 Nov 2022 16:27:58 +0800 (GMT-8)
+        (envelope-from allen.chen@ite.com.tw)
+Received: from CSBMAIL1.internal.ite.com.tw (192.168.65.58) by
+ CSBMAIL1.internal.ite.com.tw (192.168.65.58) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2176.14; Thu, 3 Nov 2022 16:27:58 +0800
+Received: from CSBMAIL1.internal.ite.com.tw ([fe80::dd22:b444:859b:61c7]) by
+ CSBMAIL1.internal.ite.com.tw ([fe80::dd22:b444:859b:61c7%18]) with mapi id
+ 15.01.2176.014; Thu, 3 Nov 2022 16:27:58 +0800
+From:   <allen.chen@ite.com.tw>
+To:     <krzysztof.kozlowski@linaro.org>
+CC:     <treapking@chromium.org>, <Jau-Chih.Tseng@ite.com.tw>,
+        <Hermes.Wu@ite.com.tw>, <Kenneth.Hung@ite.com.tw>,
+        <andrzej.hajda@intel.com>, <narmstrong@baylibre.com>,
+        <robert.foss@linaro.org>, <Laurent.pinchart@ideasonboard.com>,
+        <jonas@kwiboo.se>, <jernej.skrabec@gmail.com>, <airlied@linux.ie>,
+        <daniel@ffwll.ch>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>,
+        <dri-devel@lists.freedesktop.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v6 1/2] dt-bindings: it6505: add properties to restrict
+ output bandwidth
+Thread-Topic: [PATCH v6 1/2] dt-bindings: it6505: add properties to restrict
+ output bandwidth
+Thread-Index: AQHY6nDorSjdzmskUUWkM7FpU3Wft64rCzswgABLlgCAAZBVsA==
+Date:   Thu, 3 Nov 2022 08:27:58 +0000
+Message-ID: <df7f841e07764433b87085eeaef5733f@ite.com.tw>
+References: <20221027030155.59238-1-allen.chen@ite.com.tw>
+ <20221027030155.59238-2-allen.chen@ite.com.tw>
+ <d6f14e09-0c24-e19a-0951-bb3ca2219e79@linaro.org>
+ <18659f5a5b2c4fd7b76731836aeb713d@ite.com.tw>
+ <30ce6ed4-cbea-7b82-cca5-8920fc1eddad@linaro.org>
+In-Reply-To: <30ce6ed4-cbea-7b82-cca5-8920fc1eddad@linaro.org>
+Accept-Language: en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [192.168.70.46]
+x-tm-snts-smtp: 2BDF71C3B6F730D79AF473E1C57B57AB6758B3A083D2EB534B4436160364AF662002:8
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.0.2
-Subject: Re: [PATCH] wifi: ath11k: Trigger sta disconnect on hardware restart
-Content-Language: en-US
-To:     Kalle Valo <kvalo@kernel.org>
-CC:     <ath11k@lists.infradead.org>, <linux-wireless@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <quic_mpubbise@quicinc.com>
-References: <20221102061423.1032-1-quic_youghand@quicinc.com>
- <166740851734.26077.10462970085577578665.kvalo@kernel.org>
-From:   "Youghandhar Chintala (Temp)" <quic_youghand@quicinc.com>
-In-Reply-To: <166740851734.26077.10462970085577578665.kvalo@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 1Lqaolrq8fMbLyCXVaXjsYFhtoNYJ6Bm
-X-Proofpoint-GUID: 1Lqaolrq8fMbLyCXVaXjsYFhtoNYJ6Bm
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-02_15,2022-11-02_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 adultscore=0
- mlxlogscore=999 impostorscore=0 spamscore=0 suspectscore=0
- lowpriorityscore=0 mlxscore=0 clxscore=1015 bulkscore=0 malwarescore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211030059
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MAIL: mse.ite.com.tw 2A38RwWI072844
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,PDS_RDNS_DYNAMIC_FP,
+        RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 11/2/2022 10:32 PM, Kalle Valo wrote:
-> Youghandhar Chintala <quic_youghand@quicinc.com> wrote:
->
->> Currently after the hardware restart triggered from the driver, the
->> station interface connection remains intact, since a disconnect trigger
->> is not sent to userspace. This can lead to a problem in targets where
->> the wifi mac sequence is added by the firmware.
->>
->> After the target restart, its wifi mac sequence number gets reset to
->> zero. Hence AP to which our device is connected will receive frames with
->> a  wifi mac sequence number jump to the past, thereby resulting in the
->> AP dropping all these frames, until the frame arrives with a wifi mac
->> sequence number which AP was expecting.
->>
->> To avoid such frame drops, its better to trigger a station disconnect
->> upon target hardware restart which can be done with API
->> ieee80211_reconfig_disconnect exposed to mac80211.
->>
->> The other targets are not affected by this change, since the hardware
->> params flag is not set.
->>
->> Tested-on: WCN6750 hw1.0 AHB WLAN.MSL.1.0.1-00887-QCAMSLSWPLZ-1
->>
->> Signed-off-by: Youghandhar Chintala <quic_youghand@quicinc.com>
-> Fails to compile:
->
-> In file included from ./include/linux/wait.h:7,
->                   from ./include/linux/wait_bit.h:8,
->                   from ./include/linux/fs.h:6,
->                   from ./include/linux/highmem.h:5,
->                   from ./include/linux/bvec.h:10,
->                   from ./include/linux/skbuff.h:17,
->                   from ./include/linux/if_ether.h:19,
->                   from ./include/net/mac80211.h:18,
->                   from drivers/net/wireless/ath/ath11k/mac.c:7:
-> drivers/net/wireless/ath/ath11k/mac.c: In function 'ath11k_mac_op_reconfig_complete':
-> drivers/net/wireless/ath/ath11k/mac.c:8049:45: error: 'arvif' undeclared (first use in this function)
->   8049 |                         list_for_each_entry(arvif, &ar->arvifs, list) {
->        |                                             ^~~~~
-> ./include/linux/list.h:674:14: note: in definition of macro 'list_for_each_entry'
->    674 |         for (pos = list_first_entry(head, typeof(*pos), member);        \
->        |              ^~~
-> drivers/net/wireless/ath/ath11k/mac.c:8049:45: note: each undeclared identifier is reported only once for each function it appears in
->   8049 |                         list_for_each_entry(arvif, &ar->arvifs, list) {
->        |                                             ^~~~~
-> ./include/linux/list.h:674:14: note: in definition of macro 'list_for_each_entry'
->    674 |         for (pos = list_first_entry(head, typeof(*pos), member);        \
->        |              ^~~
-> In file included from ./include/linux/bits.h:22,
->                   from ./include/linux/ratelimit_types.h:5,
->                   from ./include/linux/printk.h:9,
->                   from ./include/asm-generic/bug.h:22,
->                   from ./arch/x86/include/asm/bug.h:87,
->                   from ./include/linux/bug.h:5,
->                   from ./include/net/mac80211.h:16:
-> ././include/linux/compiler_types.h:298:27: error: expression in static assertion is not an integer
->    298 | #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
->        |                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> ./include/linux/build_bug.h:78:56: note: in definition of macro '__static_assert'
->     78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
->        |                                                        ^~~~
-> ./include/linux/container_of.h:19:9: note: in expansion of macro 'static_assert'
->     19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
->        |         ^~~~~~~~~~~~~
-> ./include/linux/container_of.h:19:23: note: in expansion of macro '__same_type'
->     19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
->        |                       ^~~~~~~~~~~
-> ./include/linux/list.h:520:9: note: in expansion of macro 'container_of'
->    520 |         container_of(ptr, type, member)
->        |         ^~~~~~~~~~~~
-> ./include/linux/list.h:531:9: note: in expansion of macro 'list_entry'
->    531 |         list_entry((ptr)->next, type, member)
->        |         ^~~~~~~~~~
-> ./include/linux/list.h:674:20: note: in expansion of macro 'list_first_entry'
->    674 |         for (pos = list_first_entry(head, typeof(*pos), member);        \
->        |                    ^~~~~~~~~~~~~~~~
-> drivers/net/wireless/ath/ath11k/mac.c:8049:25: note: in expansion of macro 'list_for_each_entry'
->   8049 |                         list_for_each_entry(arvif, &ar->arvifs, list) {
->        |                         ^~~~~~~~~~~~~~~~~~~
-> ././include/linux/compiler_types.h:298:27: error: expression in static assertion is not an integer
->    298 | #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
->        |                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> ./include/linux/build_bug.h:78:56: note: in definition of macro '__static_assert'
->     78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
->        |                                                        ^~~~
-> ./include/linux/container_of.h:19:9: note: in expansion of macro 'static_assert'
->     19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
->        |         ^~~~~~~~~~~~~
-> ./include/linux/container_of.h:19:23: note: in expansion of macro '__same_type'
->     19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
->        |                       ^~~~~~~~~~~
-> ./include/linux/list.h:520:9: note: in expansion of macro 'container_of'
->    520 |         container_of(ptr, type, member)
->        |         ^~~~~~~~~~~~
-> ./include/linux/list.h:564:9: note: in expansion of macro 'list_entry'
->    564 |         list_entry((pos)->member.next, typeof(*(pos)), member)
->        |         ^~~~~~~~~~
-> ./include/linux/list.h:676:20: note: in expansion of macro 'list_next_entry'
->    676 |              pos = list_next_entry(pos, member))
->        |                    ^~~~~~~~~~~~~~~
-> drivers/net/wireless/ath/ath11k/mac.c:8049:25: note: in expansion of macro 'list_for_each_entry'
->   8049 |                         list_for_each_entry(arvif, &ar->arvifs, list) {
->        |                         ^~~~~~~~~~~~~~~~~~~
-> make[6]: *** [scripts/Makefile.build:250: drivers/net/wireless/ath/ath11k/mac.o] Error 1
-> make[5]: *** [scripts/Makefile.build:500: drivers/net/wireless/ath/ath11k] Error 2
-> make[4]: *** [scripts/Makefile.build:500: drivers/net/wireless/ath] Error 2
-> make[3]: *** [scripts/Makefile.build:500: drivers/net/wireless] Error 2
-> make[2]: *** [scripts/Makefile.build:500: drivers/net] Error 2
-> make[1]: *** [scripts/Makefile.build:500: drivers] Error 2
-> make: *** [Makefile:1992: .] Error 2
->
-> Patch set to Changes Requested.
-
-
-Apologies Kalle. Will post next version of patch with fix.
-
-Regards,
-
-Youghandhar
-
+aGkNCg0KLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCkZyb206IEtyenlzenRvZiBLb3psb3dz
+a2kgPGtyenlzenRvZi5rb3psb3dza2lAbGluYXJvLm9yZz4gDQpTZW50OiBUaHVyc2RheSwgTm92
+ZW1iZXIgMywgMjAyMiAxMjozNCBBTQ0KVG86IEFsbGVuIENoZW4gKOmZs+afj+WuhykgPGFsbGVu
+LmNoZW5AaXRlLmNvbS50dz4NCkNjOiB0cmVhcGtpbmdAY2hyb21pdW0ub3JnOyBKYXUtQ2hpaCBU
+c2VuZyAo5pu+5pit5pm6KSA8SmF1LUNoaWguVHNlbmdAaXRlLmNvbS50dz47IEhlcm1lcyBXdSAo
+5ZCz5L2z5a6PKSA8SGVybWVzLld1QGl0ZS5jb20udHc+OyBLZW5uZXRoIEh1bmcgKOa0quWutuWA
+qykgPEtlbm5ldGguSHVuZ0BpdGUuY29tLnR3PjsgYW5kcnplai5oYWpkYUBpbnRlbC5jb207IG5h
+cm1zdHJvbmdAYmF5bGlicmUuY29tOyByb2JlcnQuZm9zc0BsaW5hcm8ub3JnOyBMYXVyZW50LnBp
+bmNoYXJ0QGlkZWFzb25ib2FyZC5jb207IGpvbmFzQGt3aWJvby5zZTsgamVybmVqLnNrcmFiZWNA
+Z21haWwuY29tOyBhaXJsaWVkQGxpbnV4LmllOyBkYW5pZWxAZmZ3bGwuY2g7IHJvYmgrZHRAa2Vy
+bmVsLm9yZzsga3J6eXN6dG9mLmtvemxvd3NraStkdEBsaW5hcm8ub3JnOyBkcmktZGV2ZWxAbGlz
+dHMuZnJlZWRlc2t0b3Aub3JnOyBkZXZpY2V0cmVlQHZnZXIua2VybmVsLm9yZzsgbGludXgta2Vy
+bmVsQHZnZXIua2VybmVsLm9yZw0KU3ViamVjdDogUmU6IFtQQVRDSCB2NiAxLzJdIGR0LWJpbmRp
+bmdzOiBpdDY1MDU6IGFkZCBwcm9wZXJ0aWVzIHRvIHJlc3RyaWN0IG91dHB1dCBiYW5kd2lkdGgN
+Cg0KT24gMDIvMTEvMjAyMiAwMjo1NCwgYWxsZW4uY2hlbkBpdGUuY29tLnR3IHdyb3RlOg0KPiBP
+biAyNi8xMC8yMDIyIDIzOjAxLCBhbGxlbiB3cm90ZToNCj4+IEZyb206IGFsbGVuIGNoZW4gPGFs
+bGVuLmNoZW5AaXRlLmNvbS50dz4NCj4+DQo+PiBBZGQgcHJvcGVydGllcyB0byByZXN0cmljdCBk
+cCBvdXRwdXQgZGF0YS1sYW5lcyBhbmQgY2xvY2suDQo+IA0KPiBUaGlzIGlzIGEgZnJpZW5kbHkg
+cmVtaW5kZXIgZHVyaW5nIHRoZSByZXZpZXcgcHJvY2Vzcy4NCj4gDQo+IEl0IHNlZW1zIG15IHBy
+ZXZpb3VzIGNvbW1lbnRzIHdlcmUgbm90IGZ1bGx5IGFkZHJlc3NlZC4gTWF5YmUgbXkgZmVlZGJh
+Y2sgZ290IGxvc3QgYmV0d2VlbiB0aGUgcXVvdGVzLCBtYXliZSB5b3UganVzdCBmb3Jnb3QgdG8g
+YXBwbHkgaXQuDQo+IFBsZWFzZSBnbyBiYWNrIHRvIHRoZSBwcmV2aW91cyBkaXNjdXNzaW9uIGFu
+ZCBlaXRoZXIgaW1wbGVtZW50IGFsbCByZXF1ZXN0ZWQgY2hhbmdlcyBvciBrZWVwIGRpc2N1c3Np
+bmcgdGhlbS4NCj4gDQo+IFRoYW5rIHlvdS4NCj4gDQo+ID09PiBJIGFtIHNvcnJ5IEkgZGlkbid0
+IGZpbmQgdGhlIG1pc3NpbmcgYWR2aWNlIHlvdSBzYWlkLiBDb3VsZCB5b3UgZXhwbGFpbiBpdCBh
+Z2Fpbj8NCj4gDQo+IFJvYiBhc2tlZCAtIENvbW1pdCBtc2cgc2hvdWxkIGV4cGxhaW4gcmVhc29u
+IGZvciBicmVha2luZyB1c2Vycy4NCg0KQW5kIHdoZXJlIGlzIHRoZSByZWFzb24/IEkgc2F3IG9u
+bHkgb25lIHNlbnRlbmNlICJBZGQgcHJvcGVydGllcyB0byByZXN0cmljdCBkcCBvdXRwdXQgZGF0
+YS1sYW5lcyBhbmQgY2xvY2suIg0KPT0+IEkgd2lsbCBhZGQgdGhlIGNvbW1pdCBtc2cgaW4gdjcu
+IFRoYW5rcyBmb3IgdGhlIHN1Z2dlc3Rpb24uDQoNCkJlc3QgcmVnYXJkcywNCktyenlzenRvZg0K
+DQo=
