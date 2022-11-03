@@ -2,113 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7893B617EB3
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 15:00:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D10D0617E8D
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 14:58:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230336AbiKCOAT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 10:00:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52476 "EHLO
+        id S231555AbiKCN6R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 09:58:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231818AbiKCN7b (ORCPT
+        with ESMTP id S231144AbiKCN55 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 09:59:31 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AFA0DCA
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 06:58:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667483901;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=FT9aNXqnuKXbR3StefJr7RNDWsInEBudWILSzsOk6wI=;
-        b=LJNLoV4IPoIND3RY+cVzMcZrujo59nUjZqG22K14+YSCHMZtYpvhmXtTYqq93ob2tG7rGk
-        h5NWCN5NxuwoYS/TXsogWHw1TMSNwivcf0Q/eAXPcigqyD3v8J33QMVZyoZUv6ycFS5FZk
-        bdCWqCsNII9HltvwfnvOeWF5/9JJdk8=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-381-1eUDsmvBMwWsz4l23RjwKw-1; Thu, 03 Nov 2022 09:58:16 -0400
-X-MC-Unique: 1eUDsmvBMwWsz4l23RjwKw-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9F115101A528;
-        Thu,  3 Nov 2022 13:58:15 +0000 (UTC)
-Received: from amdlaptop.tlv.redhat.com (dhcp-4-238.tlv.redhat.com [10.35.4.238])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 352B740C83AD;
-        Thu,  3 Nov 2022 13:58:12 +0000 (UTC)
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     kvm@vger.kernel.org
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>,
-        Yang Zhong <yang.zhong@intel.com>,
-        Wei Wang <wei.w.wang@intel.com>,
-        Colton Lewis <coltonlewis@google.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Jim Mattson <jmattson@google.com>,
-        Chenyi Qiang <chenyi.qiang@intel.com>,
-        Borislav Petkov <bp@alien8.de>, linux-kernel@vger.kernel.org,
-        x86@kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        David Matlack <dmatlack@google.com>,
-        Peter Xu <peterx@redhat.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        linux-kselftest@vger.kernel.org, stable@vger.kernel.org
-Subject: [PATCH 9/9] KVM: x86: remove exit_int_info warning in svm_handle_exit
-Date:   Thu,  3 Nov 2022 15:57:36 +0200
-Message-Id: <20221103135736.42295-10-mlevitsk@redhat.com>
-In-Reply-To: <20221103135736.42295-1-mlevitsk@redhat.com>
-References: <20221103135736.42295-1-mlevitsk@redhat.com>
+        Thu, 3 Nov 2022 09:57:57 -0400
+Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56DAD15719;
+        Thu,  3 Nov 2022 06:57:56 -0700 (PDT)
+Received: by mail-qk1-x731.google.com with SMTP id f8so1143051qkg.3;
+        Thu, 03 Nov 2022 06:57:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=6zKL0p3k+0bFPIxIyqcrWd3FoCp9vRs2pREmUvTJ8Mc=;
+        b=babiasjMmhUjUIckFVWjAZtfE17QYWSm+6fjmgKMKmggCs6wXlXlJVICsnMg1GEozV
+         3/xUu0VB83OyZjeiJiTsQbEuxjiHs9Re7Mc27IjSaL+Uwelsgq+NQ0E25p6rAeF8svBt
+         Y5TldH4xoWYk07OTl2gaj3xstddjsS3ZlLeJket0UWkSCgbW0hNfYNPUX66v/F3/oTx7
+         Pqz5VqOjPPYPM5lVeUuECyHI74r68sbbwmu6mpb660rEPs0oADd4iT+HYjOEzCj5CgVy
+         24Tx6QO/y9EvxwnF0QD23l0XDevvN7Xue7SO3sDI4uiRoZuzuO727WJCaazaKY8MumXG
+         rqtg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6zKL0p3k+0bFPIxIyqcrWd3FoCp9vRs2pREmUvTJ8Mc=;
+        b=cUE3M8rVTsugIGiHUnmvedW5isnOVWHCRjN5gkObnj9zQz9MzZ5blirZbC2GAJhnO0
+         V3F+HX2sB2Mur+OG548Rh2k/P4LGboDE39uYOShv6EEgxpzaULw/Bi6dX2p3GkMD1w3G
+         eWeE5235VCTLZa4d6Ds6qsjC+oOYuySQ2EaeLqdTVp1mNJj6Q3Mm+YztfW94ekbNf7d+
+         nVYQ27yCpFmGfagXvAyFltckl+MyBMbh9eiRckMqaFyVN9YVPZ0QgRmxAz7L8mOYVG1+
+         yCAASlDy5nInDJ0Ga4/qOr7gwLMAyzG1AIqJPwwpsPcrm+jCvqAD75M6wNZ+dc+Dylgv
+         pIEw==
+X-Gm-Message-State: ACrzQf00NAzrin5WADeq+L3eCcYV0tXCshUg23kGOEMhnZSgeQY3BxLW
+        /I2imONsK2tEmdGHcN/Ho3EW8AgR5tA=
+X-Google-Smtp-Source: AMsMyM5OjJFpnvG0CrG681z650uDRYhzp0315WTUy7x1FFYputrefBMPa/HEuOkVvGzEoNSOv1ohpQ==
+X-Received: by 2002:a05:620a:84a:b0:6fa:2f1d:2ec with SMTP id u10-20020a05620a084a00b006fa2f1d02ecmr16069592qku.669.1667483875447;
+        Thu, 03 Nov 2022 06:57:55 -0700 (PDT)
+Received: from fionn.redhat.com (bras-base-rdwyon0600w-grc-08-184-147-142-10.dsl.bell.ca. [184.147.142.10])
+        by smtp.gmail.com with ESMTPSA id u12-20020a05620a430c00b006b640efe6dasm763495qko.132.2022.11.03.06.57.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Nov 2022 06:57:53 -0700 (PDT)
+Sender: John Kacur <jkacur@gmail.com>
+From:   John Kacur <jkacur@redhat.com>
+To:     Steven Rostedt <rostedt@goodmis.org>,
+        Daniel Bristot de Oliveria <bristot@redhat.com>
+Cc:     linux-trace-devel@vger.kernel.org,
+        lkml <linux-kernel@vger.kernel.org>,
+        Clark Williams <williams@redhat.com>,
+        Chang Yin <cyin@redhat.com>, John Kacur <jkacur@redhat.com>
+Subject: [PATCH] rtla: Fix exit status when returning from calls to usage()
+Date:   Thu,  3 Nov 2022 09:57:42 -0400
+Message-Id: <20221103135742.9523-1-jkacur@redhat.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It is valid to receive external interrupt and have broken IDT entry,
-which will lead to #GP with exit_int_into that will contain the index of
-the IDT entry (e.g any value).
+rtla_usage(), osnoise_usage() and timerlat_usage() all exit with an
+error status
 
-Other exceptions can happen as well, like #NP or #SS
-(if stack switch fails).
+However when these are called from help, they should exit with a
+non-error status.
 
-Thus this warning can be user triggred and has very little value.
+Fix this by passing the exit status to the functions
 
-Cc: stable@vger.kernel.org
-Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
+Note, although we remove the subsequent call to exit after calling
+usage, we leave it in at the end of a function to supress the compiler
+warning "control reaches end of a non-void function"
+
+Signed-off-by: John Kacur <jkacur@redhat.com>
 ---
- arch/x86/kvm/svm/svm.c | 9 ---------
- 1 file changed, 9 deletions(-)
+ tools/tracing/rtla/src/osnoise.c  |  9 ++++-----
+ tools/tracing/rtla/src/rtla.c     | 12 +++++-------
+ tools/tracing/rtla/src/timerlat.c |  9 ++++-----
+ 3 files changed, 13 insertions(+), 17 deletions(-)
 
-diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-index e9cec1b692051c..36f651ce842174 100644
---- a/arch/x86/kvm/svm/svm.c
-+++ b/arch/x86/kvm/svm/svm.c
-@@ -3428,15 +3428,6 @@ static int svm_handle_exit(struct kvm_vcpu *vcpu, fastpath_t exit_fastpath)
- 		return 0;
+diff --git a/tools/tracing/rtla/src/osnoise.c b/tools/tracing/rtla/src/osnoise.c
+index b8ec6c15bccb..4dee343909b1 100644
+--- a/tools/tracing/rtla/src/osnoise.c
++++ b/tools/tracing/rtla/src/osnoise.c
+@@ -903,7 +903,7 @@ struct osnoise_tool *osnoise_init_trace_tool(char *tracer)
+ 	return NULL;
+ }
+ 
+-static void osnoise_usage(void)
++static void osnoise_usage(int err)
+ {
+ 	int i;
+ 
+@@ -923,7 +923,7 @@ static void osnoise_usage(void)
+ 
+ 	for (i = 0; msg[i]; i++)
+ 		fprintf(stderr, "%s\n", msg[i]);
+-	exit(1);
++	exit(err);
+ }
+ 
+ int osnoise_main(int argc, char *argv[])
+@@ -941,8 +941,7 @@ int osnoise_main(int argc, char *argv[])
  	}
  
--	if (is_external_interrupt(svm->vmcb->control.exit_int_info) &&
--	    exit_code != SVM_EXIT_EXCP_BASE + PF_VECTOR &&
--	    exit_code != SVM_EXIT_NPF && exit_code != SVM_EXIT_TASK_SWITCH &&
--	    exit_code != SVM_EXIT_INTR && exit_code != SVM_EXIT_NMI)
--		printk(KERN_ERR "%s: unexpected exit_int_info 0x%x "
--		       "exit_code 0x%x\n",
--		       __func__, svm->vmcb->control.exit_int_info,
--		       exit_code);
--
- 	if (exit_fastpath != EXIT_FASTPATH_NONE)
- 		return 1;
+ 	if ((strcmp(argv[1], "-h") == 0) || (strcmp(argv[1], "--help") == 0)) {
+-		osnoise_usage();
+-		exit(0);
++		osnoise_usage(0);
+ 	} else if (strncmp(argv[1], "-", 1) == 0) {
+ 		/* the user skipped the tool, call the default one */
+ 		osnoise_top_main(argc, argv);
+@@ -956,6 +955,6 @@ int osnoise_main(int argc, char *argv[])
+ 	}
  
+ usage:
+-	osnoise_usage();
++	osnoise_usage(1);
+ 	exit(1);
+ }
+diff --git a/tools/tracing/rtla/src/rtla.c b/tools/tracing/rtla/src/rtla.c
+index 09bd21b8af81..52e8f1825281 100644
+--- a/tools/tracing/rtla/src/rtla.c
++++ b/tools/tracing/rtla/src/rtla.c
+@@ -14,7 +14,7 @@
+ /*
+  * rtla_usage - print rtla usage
+  */
+-static void rtla_usage(void)
++static void rtla_usage(int err)
+ {
+ 	int i;
+ 
+@@ -33,7 +33,7 @@ static void rtla_usage(void)
+ 
+ 	for (i = 0; msg[i]; i++)
+ 		fprintf(stderr, "%s\n", msg[i]);
+-	exit(1);
++	exit(err);
+ }
+ 
+ /*
+@@ -70,11 +70,9 @@ int main(int argc, char *argv[])
+ 		goto usage;
+ 
+ 	if (strcmp(argv[1], "-h") == 0) {
+-		rtla_usage();
+-		exit(0);
++		rtla_usage(0);
+ 	} else if (strcmp(argv[1], "--help") == 0) {
+-		rtla_usage();
+-		exit(0);
++		rtla_usage(0);
+ 	}
+ 
+ 	retval = run_command(argc, argv, 1);
+@@ -82,6 +80,6 @@ int main(int argc, char *argv[])
+ 		exit(0);
+ 
+ usage:
+-	rtla_usage();
++	rtla_usage(1);
+ 	exit(1);
+ }
+diff --git a/tools/tracing/rtla/src/timerlat.c b/tools/tracing/rtla/src/timerlat.c
+index 97abbf494fee..21cdcc5c4a29 100644
+--- a/tools/tracing/rtla/src/timerlat.c
++++ b/tools/tracing/rtla/src/timerlat.c
+@@ -14,7 +14,7 @@
+ 
+ #include "timerlat.h"
+ 
+-static void timerlat_usage(void)
++static void timerlat_usage(int err)
+ {
+ 	int i;
+ 
+@@ -34,7 +34,7 @@ static void timerlat_usage(void)
+ 
+ 	for (i = 0; msg[i]; i++)
+ 		fprintf(stderr, "%s\n", msg[i]);
+-	exit(1);
++	exit(err);
+ }
+ 
+ int timerlat_main(int argc, char *argv[])
+@@ -52,8 +52,7 @@ int timerlat_main(int argc, char *argv[])
+ 	}
+ 
+ 	if ((strcmp(argv[1], "-h") == 0) || (strcmp(argv[1], "--help") == 0)) {
+-		timerlat_usage();
+-		exit(0);
++		timerlat_usage(0);
+ 	} else if (strncmp(argv[1], "-", 1) == 0) {
+ 		/* the user skipped the tool, call the default one */
+ 		timerlat_top_main(argc, argv);
+@@ -67,6 +66,6 @@ int timerlat_main(int argc, char *argv[])
+ 	}
+ 
+ usage:
+-	timerlat_usage();
++	timerlat_usage(1);
+ 	exit(1);
+ }
 -- 
-2.34.3
+2.38.1
 
