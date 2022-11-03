@@ -2,26 +2,26 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 347EB618BAD
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 23:40:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B76B5618BB1
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 23:40:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231280AbiKCWkW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 18:40:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55322 "EHLO
+        id S229805AbiKCWkc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 18:40:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231406AbiKCWkR (ORCPT
+        with ESMTP id S231737AbiKCWkX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 18:40:17 -0400
+        Thu, 3 Nov 2022 18:40:23 -0400
 Received: from relmlie6.idc.renesas.com (relmlor2.renesas.com [210.160.252.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 38C731EEC7;
-        Thu,  3 Nov 2022 15:40:16 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 980BF1EEF9;
+        Thu,  3 Nov 2022 15:40:21 -0700 (PDT)
 X-IronPort-AV: E=Sophos;i="5.96,135,1665414000"; 
-   d="scan'208";a="141405070"
+   d="scan'208";a="141405084"
 Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
-  by relmlie6.idc.renesas.com with ESMTP; 04 Nov 2022 07:40:15 +0900
+  by relmlie6.idc.renesas.com with ESMTP; 04 Nov 2022 07:40:21 +0900
 Received: from mulinux.home (unknown [10.226.92.174])
-        by relmlir5.idc.renesas.com (Postfix) with ESMTP id 41EFA400A8BF;
-        Fri,  4 Nov 2022 07:40:09 +0900 (JST)
+        by relmlir5.idc.renesas.com (Postfix) with ESMTP id E4BA0400A8BF;
+        Fri,  4 Nov 2022 07:40:15 +0900 (JST)
 From:   Fabrizio Castro <fabrizio.castro.jz@renesas.com>
 To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -38,9 +38,9 @@ Cc:     Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
         Fabrizio Castro <fabrizio.castro@bp.renesas.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Jacopo Mondi <jacopo@jmondi.org>
-Subject: [PATCH 1/3] watchdog: rzg2l_wdt: Fix reboot for RZ/V2M
-Date:   Thu,  3 Nov 2022 22:39:54 +0000
-Message-Id: <20221103223956.50575-2-fabrizio.castro.jz@renesas.com>
+Subject: [PATCH 2/3] arm64: dts: renesas: r9a09g011: Add watchdog node
+Date:   Thu,  3 Nov 2022 22:39:55 +0000
+Message-Id: <20221103223956.50575-3-fabrizio.castro.jz@renesas.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221103223956.50575-1-fabrizio.castro.jz@renesas.com>
 References: <20221103223956.50575-1-fabrizio.castro.jz@renesas.com>
@@ -54,52 +54,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The setting for the RZ/V2M watchdog cannot be changed once
-the watchdog has been enabled, unless the IP gets reset.
-The current implementation of the restart callback assumes
-that the watchdog is not enabled, but that's not always the
-case, and it leads to longer than necessary reboot times if
-the watchdog is already running.
+The r9a09g011 (a.k.a. RZ/V2M) comes with two watchdog IPs,
+but Linux is only allowed one.
 
-Always reset the RZ/V2M watchdog first, so that we can always
-restart quickly.
+Add a node for the watchdog allowed to Linux to the SoC
+specific dtsi.
 
-Fixes: ec122fd94eeb ("watchdog: rzg2l_wdt: Add rzv2m support")
 Signed-off-by: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
 ---
- drivers/watchdog/rzg2l_wdt.c | 11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
+ arch/arm64/boot/dts/renesas/r9a09g011.dtsi | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-diff --git a/drivers/watchdog/rzg2l_wdt.c b/drivers/watchdog/rzg2l_wdt.c
-index 974a4194a8fd..00438ceed17a 100644
---- a/drivers/watchdog/rzg2l_wdt.c
-+++ b/drivers/watchdog/rzg2l_wdt.c
-@@ -145,10 +145,10 @@ static int rzg2l_wdt_restart(struct watchdog_device *wdev,
- {
- 	struct rzg2l_wdt_priv *priv = watchdog_get_drvdata(wdev);
+diff --git a/arch/arm64/boot/dts/renesas/r9a09g011.dtsi b/arch/arm64/boot/dts/renesas/r9a09g011.dtsi
+index fb1a97202c38..9859c717bd10 100644
+--- a/arch/arm64/boot/dts/renesas/r9a09g011.dtsi
++++ b/arch/arm64/boot/dts/renesas/r9a09g011.dtsi
+@@ -161,6 +161,19 @@ uart0: serial@a4040000 {
+ 			status = "disabled";
+ 		};
  
--	clk_prepare_enable(priv->pclk);
--	clk_prepare_enable(priv->osc_clk);
--
- 	if (priv->devtype == WDT_RZG2L) {
-+		clk_prepare_enable(priv->pclk);
-+		clk_prepare_enable(priv->osc_clk);
++		wdt0: watchdog@a4050000 {
++			compatible = "renesas,r9a09g011-wdt",
++				     "renesas,rzv2m-wdt";
++			reg = <0 0xa4050000 0 0x80>;
++			clocks = <&cpg CPG_MOD R9A09G011_WDT0_PCLK>,
++				 <&cpg CPG_MOD R9A09G011_WDT0_CLK>;
++			clock-names = "pclk", "oscclk";
++			interrupts = <GIC_SPI 43 IRQ_TYPE_LEVEL_HIGH>;
++			resets = <&cpg R9A09G011_WDT0_PRESETN>;
++			power-domains = <&cpg>;
++			status = "disabled";
++		};
 +
- 		/* Generate Reset (WDTRSTB) Signal on parity error */
- 		rzg2l_wdt_write(priv, 0, PECR);
- 
-@@ -157,6 +157,11 @@ static int rzg2l_wdt_restart(struct watchdog_device *wdev,
- 	} else {
- 		/* RZ/V2M doesn't have parity error registers */
- 
-+		reset_control_reset(priv->rstc);
-+
-+		clk_prepare_enable(priv->pclk);
-+		clk_prepare_enable(priv->osc_clk);
-+
- 		wdev->timeout = 0;
- 
- 		/* Initialize time out */
+ 		pinctrl: pinctrl@b6250000 {
+ 			compatible = "renesas,r9a09g011-pinctrl";
+ 			reg = <0 0xb6250000 0 0x800>;
 -- 
 2.34.1
 
