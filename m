@@ -2,103 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4125C6180A9
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 16:10:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D49B6180AA
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 16:10:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232099AbiKCPJ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 11:09:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50392 "EHLO
+        id S231945AbiKCPKD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 11:10:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232094AbiKCPJ1 (ORCPT
+        with ESMTP id S232047AbiKCPJb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 11:09:27 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 789F45FBA;
-        Thu,  3 Nov 2022 08:08:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 31F8BB828DB;
-        Thu,  3 Nov 2022 15:08:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25534C433D6;
-        Thu,  3 Nov 2022 15:08:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667488102;
-        bh=KhRW53DoqMIL02J6y2okdVdA8j0iIM0VREqjEufLwkM=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=BggIhs21AGl3tcUI1M35R8FkXZUaa16Ldc6OBqymKfDnolM+r30o6tE6zI+/qzHdU
-         m4xkeaLBPUANkFqc3ZUGCc8SKB5iuCZ9SUF5Hbyp2SMPYTXoNwrGg/X3ls5A3SV8Og
-         0XaWZJLVcnUu73kof2GiMUkOwj950T2ocNPnRxgYBQENcYWmiEn7nWjKmalul1JY9r
-         mZhk8jGuEYR8/9N5QkSdYgyHtkxmtBRIc5BdLIVec1gpJvul7kpifhP+gdBEFcws98
-         ZiI0osnH+g0aOzEOBVZ9AicdMxchQnL80eMSc18YVKDjX678KCCbT4WBOnP2h5F2K0
-         OIGDqup0y4QHw==
-From:   Mark Brown <broonie@kernel.org>
-To:     Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Sean Nyekjaer <sean@geanix.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Alain Volmat <alain.volmat@foss.st.com>
-Cc:     linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20221103080043.3033414-1-sean@geanix.com>
-References: <20221103080043.3033414-1-sean@geanix.com>
-Subject: Re: [PATCH] spi: stm32: fix stm32_spi_prepare_mbr() that halves spi clk for every run
-Message-Id: <166748810082.250043.8488161005893728423.b4-ty@kernel.org>
-Date:   Thu, 03 Nov 2022 15:08:20 +0000
+        Thu, 3 Nov 2022 11:09:31 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37600165B6;
+        Thu,  3 Nov 2022 08:08:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667488106; x=1699024106;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version:content-id;
+  bh=yeW9eeJhsyvz9FzwMMUudELqRBI7Xek1EfSMp8Ul2nw=;
+  b=BW3RwmU+snPa8vkBFIgICQq1H4gCCfBGceuO9h2MEaFINqSXefS8VL3R
+   9rEew6p2mK3SO5pXkwVSI6S6NMVP/xtKBwN1bz0KIMFxYM2RGjNA3ezmn
+   Hkk1yHMxsebYO6Z9oHbtP0kvZv36w0ZLJvShJW+gWU5WTUORst9HDz9WN
+   NgdxNt0pfegB1GYpJl1FShnK5ILRhyyXuADeaKWTEv39U7G6VvYmTYJtQ
+   aIROiAsXaX2Pc5xN7xLwlwfqeYV1+e6qYJObMAfnFI/u8/eYic26sr7MU
+   YyDCpP5uFeGTgjcbFqwkKZqjTSm1zUqe4AWM6OlKIr9yuHeKYImSXSXCL
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10520"; a="309704952"
+X-IronPort-AV: E=Sophos;i="5.96,235,1665471600"; 
+   d="scan'208";a="309704952"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2022 08:08:25 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10520"; a="666003047"
+X-IronPort-AV: E=Sophos;i="5.96,235,1665471600"; 
+   d="scan'208";a="666003047"
+Received: from jsentis-mobl.ger.corp.intel.com ([10.251.215.225])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2022 08:08:23 -0700
+Date:   Thu, 3 Nov 2022 17:08:20 +0200 (EET)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     "D. Starke" <daniel.starke@siemens.com>
+cc:     linux-serial <linux-serial@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 3/3] tty: n_gsm: add parameter negotiation support
+In-Reply-To: <20221103091743.2119-3-daniel.starke@siemens.com>
+Message-ID: <ca6a13b-2bb-6bfb-3720-41677fcaea96@linux.intel.com>
+References: <20221103091743.2119-1-daniel.starke@siemens.com> <20221103091743.2119-3-daniel.starke@siemens.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.10.0-dev-fc921
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; BOUNDARY="8323329-2136426116-1667487869=:1757"
+Content-ID: <ca68bd6b-a3e8-76e-e3ae-2e2415aeefff@linux.intel.com>
+X-Spam-Status: No, score=-8.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 3 Nov 2022 09:00:42 +0100, Sean Nyekjaer wrote:
-> When this driver is used with a driver that uses preallocated spi_transfer
-> structs. The speed_hz is halved by every run. This results in:
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
+
+--8323329-2136426116-1667487869=:1757
+Content-Type: text/plain; CHARSET=ISO-8859-15
+Content-Transfer-Encoding: 8BIT
+Content-ID: <4441385a-4cbd-aff5-5cf1-29398bc7f055@linux.intel.com>
+
+On Thu, 3 Nov 2022, D. Starke wrote:
+
+> From: Daniel Starke <daniel.starke@siemens.com>
 > 
-> spi_stm32 44004000.spi: SPI transfer setup failed
-> ads7846 spi0.0: SPI transfer failed: -22
+> n_gsm is based on the 3GPP 07.010 and its newer version is the 3GPP 27.010.
+> See https://portal.3gpp.org/desktopmodules/Specifications/SpecificationDetails.aspx?specificationId=1516
+> The changes from 07.010 to 27.010 are non-functional. Therefore, I refer to
+> the newer 27.010 here. Chapter 5.1.8.1.1 describes the parameter negotiation
+> messages and parameters. Chapter 5.4.1 states that the default parameters
+> are to be used if no negotiation is performed. Chapter 5.4.6.3.1 describes
+> the encoding of the parameter negotiation message. The meaning of the
+> parameters and allowed value ranges can be found in chapter 5.7.
 > 
-> Example when running with DIV_ROUND_UP():
-> - First run; speed_hz = 1000000, spi->clk_rate 125000000
->   div 125 -> mbrdiv = 7, cur_speed = 976562
-> - Second run; speed_hz = 976562
->   div 128,00007 (roundup to 129) -> mbrdiv = 8, cur_speed = 488281
-> - Third run; speed_hz = 488281
->   div 256,000131072067109 (roundup to 257) and then -EINVAL is returned.
+> Add parameter negotiation support accordingly. DLCI specific parameter
+> configuration by the user requires additional ioctls. This is subject to
+> another patch.
 > 
-> [...]
+> Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
 
-Applied to
+Thanks.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+For all three patches:
 
-Thanks!
+Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 
-[1/1] spi: stm32: fix stm32_spi_prepare_mbr() that halves spi clk for every run
-      commit: 62aa1a344b0904549f6de7af958e8a1136fd5228
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+BTW, you should have carried the Reviewed-bys over in patches 1-2 since I 
+already gave those tags for you for v2. Please try to remember to collect 
+the tags next time if you end up resubmitting a series.
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+-- 
+ i.
+--8323329-2136426116-1667487869=:1757--
