@@ -2,115 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEE0E61829E
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 16:25:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57BBE6182A4
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 16:25:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229805AbiKCPZQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 11:25:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34914 "EHLO
+        id S232069AbiKCPZk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 11:25:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232186AbiKCPZD (ORCPT
+        with ESMTP id S230261AbiKCPZe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 11:25:03 -0400
-Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20A4322C
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 08:24:56 -0700 (PDT)
-Received: by mail-qk1-x72c.google.com with SMTP id x18so1339961qki.4
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 08:24:56 -0700 (PDT)
+        Thu, 3 Nov 2022 11:25:34 -0400
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98883D5A;
+        Thu,  3 Nov 2022 08:25:33 -0700 (PDT)
+Received: by mail-pg1-x536.google.com with SMTP id v3so1955805pgh.4;
+        Thu, 03 Nov 2022 08:25:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=+GK+kN47VRDh5Rd9IAtghxyhLdbPgGlBTCLcifjdKfY=;
-        b=CuVdKrpYE2rQRg37FPIg+JZrk4NzKKxt219BGe3CMQvQo8Lmp2ckSDbzhj0bEEUIDL
-         fxTOSuzkB/5KrS//gXY6ySrTmRgRg8/Y7fvynh6m65Zh2OXxQ4VX2GSRl9UBvObPXaiB
-         +vOZCa0xjXVbfTNBKAzOFM+Bk77Hb1sPLlBuXe4pMZ5UDc+2YdWojicrTPpwK/H61Iio
-         yq7H5MfkITJRWQYoPFpDcBb9983wRkk5uycAbX1edw4j+1IfEOYvTWUb0TabE5T1YL68
-         HomjjXu09Q9xuXt2iGFj5ybrYfCG6zH2HK1fcjAIOuAUFslSMbvF1EvI5XH6vconk6NT
-         K1+A==
+        bh=WUQgPY5LlhEQkDbEFu400GoVmGB8P4bd1+MGak4qYKo=;
+        b=Gor4YRFoxRJZT9UaDxUxYPqsA24bFRjGhIXCXIW/UDjSUkzD0J3VLUiYKKR1i9alm1
+         sJTz8Fz0P1VeBrVxc8Ql0OatGP907sfKFk8N2Eu/jw1bWtcU3AMYxN/LD50yjBPIw+ex
+         ucLRjmt6/fOFtnS0Z5VVgeh3WQ0CIOmmPAzc2YySqXd4CZM/F7NaQ0ojQRuMEbstlJfv
+         hmTLZ3RWVhBkehdr99oFys8hz8RGkv59dnmgOHdWP4Za30Rt673SnDDSLS88tlArfq4D
+         DeNXStoXGM7ExTcA7tjTyQ7pECuQysemEZ5UbA0Hx2fntNx6AfdsGXKhc6zuAIlA/haF
+         bCrg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+        h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+GK+kN47VRDh5Rd9IAtghxyhLdbPgGlBTCLcifjdKfY=;
-        b=fx+7j2zD7SNZ9Ua6o9OUHIiP+QRB7gtPd1XzrAGOM1ZlEeqgXo47fVeMfLEEneYzwP
-         O8Hkslp2l+ZGiYMqYZkGUQ3P5u4YdHC4A0pqgsLXJKRdJydEdidruZpJQ0/CQPr4nTUX
-         F8jbX9utcUlmdB14BzurgPjlUViqyGnhG8ThaRg8n6/7zyepvjDit5J4YYyySNRobwyU
-         PD9evdSF8AR0BX8BW+WjlDsbx8FJEHP/cmE3lpK5E3deDsZdJmRD500ZeFlWxqEme9ML
-         riurRps6mqY+rXXy+LfT8Bd8t3mPIk2ebJY04fN+rXFxqk20vZd7tGER7Km1Xwf4/DJ1
-         ha2w==
-X-Gm-Message-State: ACrzQf2siDs288nK2THMaNQmUKibQKmSR935Ml0w3iASeNZBem9S08Cg
-        yrU1PyZ20z3qft0QpeAlc9H87g==
-X-Google-Smtp-Source: AMsMyM4JfQZmP8W7rxOWSLWL8ATCWGxBIJQoz0Nkbogfi2BmdP8tf0y5Xg2ivz3gto0bPNF2tfnghQ==
-X-Received: by 2002:a05:620a:1256:b0:6fa:4c67:4d9c with SMTP id a22-20020a05620a125600b006fa4c674d9cmr10696457qkl.713.1667489095268;
-        Thu, 03 Nov 2022 08:24:55 -0700 (PDT)
-Received: from ?IPV6:2601:586:5000:570:a35d:9f85:e3f7:d9fb? ([2601:586:5000:570:a35d:9f85:e3f7:d9fb])
-        by smtp.gmail.com with ESMTPSA id p20-20020a05620a15f400b006b953a7929csm907379qkm.73.2022.11.03.08.24.53
+        bh=WUQgPY5LlhEQkDbEFu400GoVmGB8P4bd1+MGak4qYKo=;
+        b=octXuNykNaLr3V3uVcCNHD4tjzV3aQ3uh9wS0ELSWVPn+XBSJ2WeZ6s0iX+3PmbLyM
+         8rR5cmZ/icTPTGTfZJtAUgIRO6mnhYjjUdybDtQvhah5J36lPL7ICARus7hsLgJXIsnR
+         cOPUpFFwa6m5zrtdMVSDB4kQdl766F8Pm47phaP0E0Zu6glBUyDGWIqoHZk6Et3ZVVme
+         7AXBpj+HwtN5dHvIhzSrFZZPRIjYt994ZY6EQtgJh/TnRqOVrZazT+mwYhqqNhCtEBr/
+         BXzqbJ7vvNu1gzoAPWUTZbSpFXulO5T7sRtVZz6V9k6ndlSMwtHe9szugsx8KgBRyiZv
+         9vag==
+X-Gm-Message-State: ACrzQf3GRBopNjOSDhExBqepdO6zLm71snIpq5SKpsKcMGruIQYAIZTR
+        5zAP7eqQUKjP1epQ5KhTtbM=
+X-Google-Smtp-Source: AMsMyM7RlBAEQPJB/ysiIbhg6yyEIGOXEXML6b/Ot1TWySn1fJWemfKUcS+hMg3DQj0gpM9hVmYQxg==
+X-Received: by 2002:a05:6a00:88f:b0:530:dec:81fd with SMTP id q15-20020a056a00088f00b005300dec81fdmr30822569pfj.64.1667489133099;
+        Thu, 03 Nov 2022 08:25:33 -0700 (PDT)
+Received: from ?IPV6:2404:f801:0:5:8000::75b? ([2404:f801:9000:1a:efea::75b])
+        by smtp.gmail.com with ESMTPSA id bi11-20020a170902bf0b00b001866a019010sm815765plb.97.2022.11.03.08.25.20
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Nov 2022 08:24:54 -0700 (PDT)
-Message-ID: <a2b1ffe3-e2bc-25d5-f665-363db09bd959@linaro.org>
-Date:   Thu, 3 Nov 2022 11:24:53 -0400
+        Thu, 03 Nov 2022 08:25:32 -0700 (PDT)
+Message-ID: <941fe781-674c-ad08-3f33-b99d1c7e3539@gmail.com>
+Date:   Thu, 3 Nov 2022 23:25:19 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.1
-Subject: Re: [PATCH v2 02/12] dt-bindings: display: mediatek: add MT8195 hdmi
- bindings
+Subject: Re: [PATCH 10/12] Drivers: hv: Don't remap addresses that are above
+ shared_gpa_boundary
 Content-Language: en-US
-To:     Guillaume Ranquet <granquet@baylibre.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        David Airlie <airlied@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Jitao shi <jitao.shi@mediatek.com>, CK Hu <ck.hu@mediatek.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     stuart.lee@mediatek.com, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        linux-kernel@vger.kernel.org, mac.shen@mediatek.com,
-        linux-mediatek@lists.infradead.org, dri-devel@lists.freedesktop.org
-References: <20220919-v2-0-8419dcf4f09d@baylibre.com>
- <20220919-v2-2-8419dcf4f09d@baylibre.com>
- <c91ee3ce-3f30-a3ef-bb38-8571e488b6b6@linaro.org>
- <CABnWg9t3w4o4rmNosvYCpqG-h8DESerajH7OsXEYofRf2kr1Xg@mail.gmail.com>
- <6bb3ab49-1c12-6863-a49a-2fd1f34de561@linaro.org>
- <CABnWg9uDki0ZtkxU1BPZq0ZU1mi4zFjasw+e3pQYb+Nv1MThLA@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CABnWg9uDki0ZtkxU1BPZq0ZU1mi4zFjasw+e3pQYb+Nv1MThLA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Michael Kelley <mikelley@microsoft.com>, hpa@zytor.com,
+        kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
+        wei.liu@kernel.org, decui@microsoft.com, luto@kernel.org,
+        peterz@infradead.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, lpieralisi@kernel.org,
+        robh@kernel.org, kw@linux.com, bhelgaas@google.com, arnd@arndb.de,
+        hch@infradead.org, m.szyprowski@samsung.com, robin.murphy@arm.com,
+        thomas.lendacky@amd.com, brijesh.singh@amd.com, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        Tianyu.Lan@microsoft.com, kirill.shutemov@linux.intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, ak@linux.intel.com,
+        isaku.yamahata@intel.com, dan.j.williams@intel.com,
+        jane.chu@oracle.com, seanjc@google.com, tony.luck@intel.com,
+        x86@kernel.org, linux-kernel@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-arch@vger.kernel.org,
+        iommu@lists.linux.dev
+References: <1666288635-72591-1-git-send-email-mikelley@microsoft.com>
+ <1666288635-72591-11-git-send-email-mikelley@microsoft.com>
+From:   Tianyu Lan <ltykernel@gmail.com>
+In-Reply-To: <1666288635-72591-11-git-send-email-mikelley@microsoft.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/11/2022 11:17, Guillaume Ranquet wrote:
-> On Thu, 03 Nov 2022 13:45, Krzysztof Kozlowski
->>> This is an i2c adapter, not a device.
->>> And as it lives inside the HDMI hw block, I've omitted using an address here.
->>>
->>> Is this valid? or should this be expressed differently?
->>
->> What is an I2C adapter? Did you mean I2C controller (master)?
+On 10/21/2022 1:57 AM, Michael Kelley wrote:
+> With the vTOM bit now treated as a protection flag and not part of
+> the physical address, avoid remapping physical addresses with vTOM set
+> since technically such addresses aren't valid.  Use ioremap_cache()
+> instead of memremap() to ensure that the mapping provides decrypted
+> access, which will correctly set the vTOM bit as a protection flag.
 > 
-> Yes, a controller.
-> This is an I2C controller connected to the HDMI connector, it is used
-> to exchange data on the Display Data Channel with
-> the display (such as EDID).
+> While this change is not required for correctness with the current
+> implementation of memremap(), for general code hygiene it's better to
+> not depend on the mapping functions doing something reasonable with
+> a physical address that is out-of-range.
+> 
+> While here, fix typos in two error messages.
+> 
+> Signed-off-by: Michael Kelley<mikelley@microsoft.com>
+> ---
 
-OK, then the node name is "i2c".
-
-Best regards,
-Krzysztof
-
+Reviewed-by: Tianyu Lan <Tianyu.Lan@microsoft.com>
