@@ -2,443 +2,249 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 027876179B6
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 10:21:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CAD296179BC
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 10:22:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229655AbiKCJVN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 05:21:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39578 "EHLO
+        id S231587AbiKCJWX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 05:22:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231519AbiKCJUr (ORCPT
+        with ESMTP id S231230AbiKCJVV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 05:20:47 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 188E9DFFE;
-        Thu,  3 Nov 2022 02:20:24 -0700 (PDT)
-Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4N2ysG0TN5zmVbC;
-        Thu,  3 Nov 2022 17:20:18 +0800 (CST)
-Received: from dggpemm500014.china.huawei.com (7.185.36.153) by
- dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 3 Nov 2022 17:20:23 +0800
-Received: from [10.174.178.93] (10.174.178.93) by
- dggpemm500014.china.huawei.com (7.185.36.153) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 3 Nov 2022 17:20:22 +0800
-Message-ID: <4bad43c0-40a4-dc39-7214-f2c3321a47ee@huawei.com>
-Date:   Thu, 3 Nov 2022 17:20:22 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] sched/fair: Introduce priority load balance for CFS
-Content-Language: en-US
+        Thu, 3 Nov 2022 05:21:21 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1E663DF0C
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 02:21:19 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B979D23A;
+        Thu,  3 Nov 2022 02:21:25 -0700 (PDT)
+Received: from e120937-lin (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8FD193F5A1;
+        Thu,  3 Nov 2022 02:21:17 -0700 (PDT)
+Date:   Thu, 3 Nov 2022 09:21:10 +0000
+From:   Cristian Marussi <cristian.marussi@arm.com>
 To:     Vincent Guittot <vincent.guittot@linaro.org>
-CC:     <mingo@redhat.com>, <peterz@infradead.org>,
-        <juri.lelli@redhat.com>, <mcgrof@kernel.org>,
-        <keescook@chromium.org>, <yzaikin@google.com>,
-        <dietmar.eggemann@arm.com>, <rostedt@goodmis.org>,
-        <bsegall@google.com>, <mgorman@suse.de>, <bristot@redhat.com>,
-        <vschneid@redhat.com>, <linux-kernel@vger.kernel.org>,
-        <linux-fsdevel@vger.kernel.org>
-References: <20221102035301.512892-1-zhangsong34@huawei.com>
- <CAKfTPtCcYySw2ZC_pr8=3KFPmAAVN=1h8=5jWkW5YXyy11sehg@mail.gmail.com>
- <b45f96b6-e0b2-22bb-eda1-2468d6fbe104@huawei.com>
- <CAKfTPtDrWCenxtVcunjS3pGD81TdLf2EkhO_YcdfxnUHXpVF3w@mail.gmail.com>
-From:   Song Zhang <zhangsong34@huawei.com>
-In-Reply-To: <CAKfTPtDrWCenxtVcunjS3pGD81TdLf2EkhO_YcdfxnUHXpVF3w@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.93]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpemm500014.china.huawei.com (7.185.36.153)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        sudeep.holla@arm.com, james.quinlan@broadcom.com,
+        Jonathan.Cameron@huawei.com, f.fainelli@gmail.com,
+        etienne.carriere@linaro.org, souvik.chakravarty@arm.com,
+        wleavitt@marvell.com, peter.hilber@opensynergy.com,
+        nicola.mazzucato@arm.com, tarek.el-sherbiny@arm.com,
+        quic_kshivnan@quicinc.com
+Subject: Re: [PATCH v4 0/11] Introduce a unified API for SCMI Server testing
+Message-ID: <Y2OIBkdOXb7NIF7k@e120937-lin>
+References: <20221019204626.3813043-1-cristian.marussi@arm.com>
+ <CAKfTPtBJy4SdbYUNHFn2ZXEO_pnaMPYibfjXWNBnXy49P2h78Q@mail.gmail.com>
+ <Y1vvPBw4xB7m23wY@e120937-lin>
+ <CAKfTPtAfuqtCee7f4bREsLqb5KJcLWw1Y=-0Y+2t+3XfX_YctQ@mail.gmail.com>
+ <Y1wKHoxcWTz6VXyh@e120937-lin>
+ <CAKfTPtAcEiqBDr5BXBS8Q9HzBWg544YR0eZkkaF3u_9EowZJcQ@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAKfTPtAcEiqBDr5BXBS8Q9HzBWg544YR0eZkkaF3u_9EowZJcQ@mail.gmail.com>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2022/11/3 16:33, Vincent Guittot wrote:
-> On Thu, 3 Nov 2022 at 04:01, Song Zhang <zhangsong34@huawei.com> wrote:
->>
->> Thanks for your reply!
->>
->> On 2022/11/3 2:01, Vincent Guittot wrote:
->>> On Wed, 2 Nov 2022 at 04:54, Song Zhang <zhangsong34@huawei.com> wrote:
->>>>
->>>
->>> This really looks like a v3 of
->>> https://lore.kernel.org/all/20220810015636.3865248-1-zhangsong34@huawei.com/
->>>
->>> Please keep versioning.
->>>
->>>> Add a new sysctl interface:
->>>> /proc/sys/kernel/sched_prio_load_balance_enabled
->>>
->>> We don't want to add more sysctl knobs for the scheduler, we even
->>> removed some. Knob usually means that you want to fix your use case
->>> but the solution doesn't make sense for all cases.
->>>
->>
->> OK, I will remove this knobs later.
->>
->>>>
->>>> 0: default behavior
->>>> 1: enable priority load balance for CFS
->>>>
->>>> For co-location with idle and non-idle tasks, when CFS do load balance,
->>>> it is reasonable to prefer migrating non-idle tasks and migrating idle
->>>> tasks lastly. This will reduce the interference by SCHED_IDLE tasks
->>>> as much as possible.
->>>
->>> I don't agree that it's always the best choice to migrate a non-idle task 1st.
->>>
->>> CPU0 has 1 non idle task and CPU1 has 1 non idle task and hundreds of
->>> idle task and there is an imbalance between the 2 CPUS: migrating the
->>> non idle task from CPU1 to CPU0 is not the best choice
->>>
->>
->> If the non idle task on CPU1 is running or cache hot, it cannot be
->> migrated and idle tasks can also be migrated from CPU1 to CPU0. So I
->> think it does not matter.
+On Wed, Nov 02, 2022 at 09:54:50AM +0100, Vincent Guittot wrote:
+> On Fri, 28 Oct 2022 at 18:58, Cristian Marussi <cristian.marussi@arm.com> wrote:
+> >
+> > On Fri, Oct 28, 2022 at 06:18:52PM +0200, Vincent Guittot wrote:
+> > > On Fri, 28 Oct 2022 at 17:04, Cristian Marussi <cristian.marussi@arm.com> wrote:
+> > > >
+> > > > On Fri, Oct 28, 2022 at 04:40:02PM +0200, Vincent Guittot wrote:
+> > > > > On Wed, 19 Oct 2022 at 22:46, Cristian Marussi <cristian.marussi@arm.com> wrote:
+> > > > > >
+> > > > > > Hi all,
+> > > > > >
+> > > >
+> > > > Hi Vincent,
+> > > >
+> > > > > > This series aims to introduce a new SCMI unified userspace interface meant
+> > > > > > to ease testing an SCMI Server implementation for compliance, fuzzing etc.,
+> > > > > > from the perspective of the OSPM agent (non-secure world only ...)
+> > > > > >
+> > >
+> > > [ snip]
+> > >
+> > > > > Hi Cristian,
+> > > > >
+> > > > > I have tested your series with an optee message transport layer and
+> > > > > been able to send raw messages to the scmi server PTA
+> > > > >
+> > > > > FWIW
+> > > > >
+> > > > > Tested-by: Vincent Guittot <vincent.guittot@linaro.org>
+> > > > >
+> > > >
+> > > > Thanks a lot for your test and feedback !
+> > > >
+> > > > ... but I was going to reply to this saying that I spotted another issue
+> > > > with the current SCMI Raw implementation (NOT related to optee/smc) so
+> > > > that I'll post a V5 next week :P
+> > > >
+> > > > Anyway, the issue is much related to the debugfs root used by SCMI Raw,
+> > > > i.e.:
+> > > >
+> > > >         /sys/kernel/debug/scmi_raw/
+> > > >
+> > > > ..this works fine unless you run it on a system sporting multiple DT-defined
+> > > > server instances ...that is not officially supported but....ehm...a little
+> > > > bird told these system with multiple servers do exists :D
+> > >
+> > > ;-)
+> > >
+> > > >
+> > > > In such a case the SCMI core stack is probed multiuple times and so it
+> > > > will try to register multiple debugfs Raw roots: there is no chanche to
+> > > > root the SCMI Raw entries at the same point clearly ... and then anyway
+> > > > there is the issue of recognizing which server is rooted where ... with
+> > > > the additional pain that a server CANNOT be recognized by querying...cause
+> > > > there is only one by teh spec with agentID ZERO ... in theory :D...
+> > > >
+> > > > So my tentaive solution for V5 would be:
+> > > >
+> > > > - change the Raw root debugfs as:
+> > > >
+> > > >         /sys/kernel/debug/scmi_raw/0/... (first server defined)
+> > > >
+> > > >         /sys/kernel/debug/scmi_raw/1/... (possible additional server(s)..)
+> > > >
+> > > > - expose the DT scmi-server root-node name of the server somewhere under
+> > > >   that debugfs root like:
+> > > >
+> > > >         ..../scmi_raw/0/transport_name -> 'scmi-mbx'
+> > > >
+> > > >         ..../scmi_raw/1/transport_name -> 'scmi-virtio'
+> > >
+> > > I was about to say that you would display the server name but that
+> > > means that you have send a request to the server which probably
+> > > defeats the purpose of the raw mode
+> > >
+> > > >
+> > > >   so that if you know HOW you have configured your own system in the DT
+> > > >   (maybe multiple servers with different kind of transports ?), you can
+> > > >   easily select programmatically which one is which, and so decide
+> > > >   which Raw debugfs fs to use...
+> > > >
+> > > > ... I plan to leave the SCMI ACS suite use by default the first system
+> > > > rooted at /sys/kernel/debug/scmi_raw/0/...maybe adding a commandline
+> > > > option to choose an alternative path for SCMI Raw.
+> > > >
+> > > > Does all of this sound reasonable ?
+> > >
+> > > Yes, adding an index looks good to me.
+> >
+> > Ok, I'll rework accordingly.
+> >
+> > >
+> > > As we are there, should we consider adding a per channel entry in the
+> > > tree when there are several channels shared with the same server ?
+> > >
+> >
+> > So, I was thinking about this and, even though, it seems not strictly
+> > needed for Compliance testing (as discussed offline) I do think that
+> > could be a sensible option to have as an additional mean to stress the
+> > server transport implementation (as you wish).
 > 
-> What I mean is that migrating non idle tasks first is not a universal
-> win and not always what we want.
+> Thanks
+> 
+> >
+> > Having said that, this week, I was reasoning about an alternative
+> > interface to do this, i.e. to avoid to add even more debugfs entries
+> > for this chosen-channel config or possibly in the future to ask for
+> > transport polling mode (if supported by the underlying transport)
+> >
+> > My idea (not thought fully through as of now eh..) would be as follows:
+> >
+> > since the current Raw implementation enforces a minimum size of 4 bytes
+> > for the injected message (more on this later down below in NOTE), I was
+> > thinking about using less-than-4-bytes-sized messages to sort of
+> > pre-configure the Raw stack.
+> >
+> > IOW, instead of having a number of new additional entries like
+> >
+> >         ../message_ch10
+> >         ../message_ch13
+> >         ../message_poll
+> >
+> > we could design a sort of API (in the API :D) that defines how
+> > 3-bytes message payload are to be interpreted, so that in normal usage
+> > everything will go on as it is now, while if a 3-bytes message is
+> > injected by a specially crafted testcase, it would be used to configure
+> > the behaviour stack for the subsequent set of Raw transactions
+> > (i.e. for the currently opened fd...) like:
+> >
+> > - open message fd
+> >
+> > - send a configure message:
+> >
+> >         | proto_chan_#  |     flags (polling..)  |
+> >         ------------------------------------------
+> >         0               7                       21
+> >
+> > - send/receive your test messages
+> >
+> > - repeat or close (then the config will vanish...)
+> >
+> > This would mean adding some sort entry under scmi_raw to expose the
+> > configured available channels on the system though.
+> >
+> > [maybe the flags above could also include an async flag and avoid
+> >  also to add the message_async entries...]
+> >
+> > I discarded the idea to run the above config process via IOCTLs since
+> > it seemed to me even more frowned upon to use IOCTLs on a debugfs entry
+> > :P...but I maybe wrong ah...
+> >
+> > All of this is still to be explored anyway, any thoughts ? or evident
+> > drawbacks ? (beside having to clearly define an API for these message
+> > config machinery)
+> 
+> TBH, I'm not a fan of adding a protocol on top of the SCMI one. This
+> interface aims to test the SCMI servers and their channels so we
+> should focus on this and make it simple to use. IMHO, adding some
+> special bytes before the real scmi message is prone to create
+> complexity and error in the use of this debug interface.
 > 
 
-But migrating online tasks first is mostly a trade-off that 
-non-idle(Latency Sensitive) tasks can obtain more CPU time and minimize 
-the interference caused by IDLE tasks. I think this makes sense in most 
-cases, or you can point out what else I need to think about it ?
+Indeed, even if only for transport-related tests, the risk is to make
+more complicate to use the interface.
 
-Best regards.
+Agreed, just wanted to have some feedback. I'll revert to some based on
+debugfs trying to minimize entries and improper usage...maybe something
+like grouping on per-channel subdirs when different channels are
+available.
 
->>
->>>>
->>>> Testcase:
->>>> - Spawn large number of idle(SCHED_IDLE) tasks occupy CPUs
->>>
->>> What do you mean by a large number ?
->>>
->>>> - Let non-idle tasks compete with idle tasks for CPU time.
->>>>
->>>> Using schbench to test non-idle tasks latency:
->>>> $ ./schbench -m 1 -t 10 -r 30 -R 200
->>>
->>> How many CPUs do you have ?
->>>
->>
->> OK, some details may not be mentioned.
->> My virtual machine has 8 CPUs running with a schbench process and 5000
->> idle tasks. The idle task is a while dead loop process below:
-> 
-> How can you care about latency when you start 10 workers on 8 vCPUs
-> with 5000 non idle threads ?
-> 
+E.g. on a system with a dedicated PERF channel I could have
 
-No no no... spawn 5000 idle(SCHED_IDLE) processes not 5000 non-idle 
-threads, and with 10 non-idle schbench workers on 8 vCPUs.
 
->>
->> $ cat idle_process.c
->> int main()
->> {
->>           int i = 0;
->>           while(1) {
->>                   usleep(500);
->>                   for(i = 0; i < 1000000; i++);
->>           }
->> }
->>
->> You can compile and spawn 5000 idle(SCHED_IDLE) tasks occupying 8 CPUs
->> and execute schbench command to test it.
->>
->>>>
->>>> Test result:
->>>> 1.Default behavior
->>>> Latency percentiles (usec) runtime 30 (s) (4562 total samples)
->>>>           50.0th: 62528 (2281 samples)
->>>>           75.0th: 623616 (1141 samples)
->>>>           90.0th: 764928 (687 samples)
->>>>           95.0th: 824320 (225 samples)
->>>>           *99.0th: 920576 (183 samples)
->>>>           99.5th: 953344 (23 samples)
->>>>           99.9th: 1008640 (18 samples)
->>>>           min=9, max=1074466
->>>>
->>>> 2.Enable priority load balance
->>>> Latency percentiles (usec) runtime 30 (s) (4391 total samples)
->>>>           50.0th: 22624 (2204 samples)
->>>>           75.0th: 48832 (1092 samples)
->>>>           90.0th: 85376 (657 samples)
->>>>           95.0th: 113280 (220 samples)
->>>>           *99.0th: 182528 (175 samples)
->>>>           99.5th: 206592 (22 samples)
->>>>           99.9th: 290304 (17 samples)
->>>>           min=6, max=351815
->>>>
->>>>   From percentile details, we see the benefit of priority load balance
->>>> that 95% of non-idle tasks latencies stays no more than 113ms, while
->>>
->>> But even 113ms seems quite a large number if there is anything else
->>> but 10 schbench workers and a bunch of idle threads that are running.
->>>
->>>> non-idle tasks latencies has got almost 50% over 600ms if priority
->>>> load balance not enabled.
->>>
->>> Als have you considered enabling sched_feature LB_MIN ?
->>>
->>
->> I have tried to echo LB_MIN > /sys/kernel/debug/sched/features, but this
->> feature seems make no sense.
->>
->>>>
->>>> Signed-off-by: Song Zhang <zhangsong34@huawei.com>
->>>> ---
->>>>    include/linux/sched/sysctl.h |  4 +++
->>>>    init/Kconfig                 | 10 ++++++
->>>>    kernel/sched/core.c          |  3 ++
->>>>    kernel/sched/fair.c          | 61 +++++++++++++++++++++++++++++++++++-
->>>>    kernel/sched/sched.h         |  3 ++
->>>>    kernel/sysctl.c              | 11 +++++++
->>>>    6 files changed, 91 insertions(+), 1 deletion(-)
->>>>
->>>> diff --git a/include/linux/sched/sysctl.h b/include/linux/sched/sysctl.h
->>>> index 303ee7dd0c7e..9b3673269ecc 100644
->>>> --- a/include/linux/sched/sysctl.h
->>>> +++ b/include/linux/sched/sysctl.h
->>>> @@ -32,6 +32,10 @@ extern unsigned int sysctl_numa_balancing_promote_rate_limit;
->>>>    #define sysctl_numa_balancing_mode     0
->>>>    #endif
->>>>
->>>> +#ifdef CONFIG_SCHED_PRIO_LB
->>>> +extern unsigned int sysctl_sched_prio_load_balance_enabled;
->>>> +#endif
->>>> +
->>>>    int sysctl_numa_balancing(struct ctl_table *table, int write, void *buffer,
->>>>                   size_t *lenp, loff_t *ppos);
->>>>
->>>> diff --git a/init/Kconfig b/init/Kconfig
->>>> index 694f7c160c9c..b0dfe6701218 100644
->>>> --- a/init/Kconfig
->>>> +++ b/init/Kconfig
->>>> @@ -1026,6 +1026,16 @@ config CFS_BANDWIDTH
->>>>             restriction.
->>>>             See Documentation/scheduler/sched-bwc.rst for more information.
->>>>
->>>> +config SCHED_PRIO_LB
->>>> +       bool "Priority load balance for CFS"
->>>> +       depends on SMP
->>>> +       default n
->>>> +       help
->>>> +         This feature enable CFS priority load balance to reduce
->>>> +         non-idle tasks latency interferenced by SCHED_IDLE tasks.
->>>> +         It prefer migrating non-idle tasks firstly and
->>>> +         migrating SCHED_IDLE tasks lastly.
->>>> +
->>>>    config RT_GROUP_SCHED
->>>>           bool "Group scheduling for SCHED_RR/FIFO"
->>>>           depends on CGROUP_SCHED
->>>> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
->>>> index 5800b0623ff3..9be35431fdd5 100644
->>>> --- a/kernel/sched/core.c
->>>> +++ b/kernel/sched/core.c
->>>> @@ -9731,6 +9731,9 @@ void __init sched_init(void)
->>>>                   rq->max_idle_balance_cost = sysctl_sched_migration_cost;
->>>>
->>>>                   INIT_LIST_HEAD(&rq->cfs_tasks);
->>>> +#ifdef CONFIG_SCHED_PRIO_LB
->>>> +               INIT_LIST_HEAD(&rq->cfs_idle_tasks);
->>>> +#endif
->>>>
->>>>                   rq_attach_root(rq, &def_root_domain);
->>>>    #ifdef CONFIG_NO_HZ_COMMON
->>>> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
->>>> index e4a0b8bd941c..bdeb04324f0c 100644
->>>> --- a/kernel/sched/fair.c
->>>> +++ b/kernel/sched/fair.c
->>>> @@ -139,6 +139,10 @@ static int __init setup_sched_thermal_decay_shift(char *str)
->>>>    }
->>>>    __setup("sched_thermal_decay_shift=", setup_sched_thermal_decay_shift);
->>>>
->>>> +#ifdef CONFIG_SCHED_PRIO_LB
->>>> +unsigned int sysctl_sched_prio_load_balance_enabled;
->>>> +#endif
->>>> +
->>>>    #ifdef CONFIG_SMP
->>>>    /*
->>>>     * For asym packing, by default the lower numbered CPU has higher priority.
->>>> @@ -3199,6 +3203,21 @@ static inline void update_scan_period(struct task_struct *p, int new_cpu)
->>>>
->>>>    #endif /* CONFIG_NUMA_BALANCING */
->>>>
->>>> +#ifdef CONFIG_SCHED_PRIO_LB
->>>> +static void
->>>> +adjust_rq_cfs_tasks(
->>>> +       void (*list_op)(struct list_head *, struct list_head *),
->>>> +       struct rq *rq,
->>>> +       struct sched_entity *se)
->>>> +{
->>>> +       if (sysctl_sched_prio_load_balance_enabled &&
->>>> +               task_has_idle_policy(task_of(se)))
->>>> +               (*list_op)(&se->group_node, &rq->cfs_idle_tasks);
->>>> +       else
->>>> +               (*list_op)(&se->group_node, &rq->cfs_tasks);
->>>> +}
->>>> +#endif
->>>> +
->>>>    static void
->>>>    account_entity_enqueue(struct cfs_rq *cfs_rq, struct sched_entity *se)
->>>>    {
->>>> @@ -3208,7 +3227,11 @@ account_entity_enqueue(struct cfs_rq *cfs_rq, struct sched_entity *se)
->>>>                   struct rq *rq = rq_of(cfs_rq);
->>>>
->>>>                   account_numa_enqueue(rq, task_of(se));
->>>> +#ifdef CONFIG_SCHED_PRIO_LB
->>>> +               adjust_rq_cfs_tasks(list_add, rq, se);
->>>> +#else
->>>>                   list_add(&se->group_node, &rq->cfs_tasks);
->>>> +#endif
->>>>           }
->>>>    #endif
->>>>           cfs_rq->nr_running++;
->>>> @@ -7631,7 +7654,11 @@ done: __maybe_unused;
->>>>            * the list, so our cfs_tasks list becomes MRU
->>>>            * one.
->>>>            */
->>>> +#ifdef CONFIG_SCHED_PRIO_LB
->>>> +       adjust_rq_cfs_tasks(list_move, rq, &p->se);
->>>> +#else
->>>>           list_move(&p->se.group_node, &rq->cfs_tasks);
->>>> +#endif
->>>>    #endif
->>>>
->>>>           if (hrtick_enabled_fair(rq))
->>>> @@ -8156,11 +8183,18 @@ static void detach_task(struct task_struct *p, struct lb_env *env)
->>>>    static struct task_struct *detach_one_task(struct lb_env *env)
->>>>    {
->>>>           struct task_struct *p;
->>>> +       struct list_head *tasks = &env->src_rq->cfs_tasks;
->>>> +#ifdef CONFIG_SCHED_PRIO_LB
->>>> +       bool has_detach_idle_tasks = false;
->>>> +#endif
->>>>
->>>>           lockdep_assert_rq_held(env->src_rq);
->>>>
->>>> +#ifdef CONFIG_SCHED_PRIO_LB
->>>> +again:
->>>> +#endif
->>>>           list_for_each_entry_reverse(p,
->>>> -                       &env->src_rq->cfs_tasks, se.group_node) {
->>>> +                       tasks, se.group_node) {
->>>>                   if (!can_migrate_task(p, env))
->>>>                           continue;
->>>>
->>>> @@ -8175,6 +8209,13 @@ static struct task_struct *detach_one_task(struct lb_env *env)
->>>>                   schedstat_inc(env->sd->lb_gained[env->idle]);
->>>>                   return p;
->>>>           }
->>>> +#ifdef CONFIG_SCHED_PRIO_LB
->>>> +       if (sysctl_sched_prio_load_balance_enabled && !has_detach_idle_tasks) {
->>>> +               has_detach_idle_tasks = true;
->>>> +               tasks = &env->src_rq->cfs_idle_tasks;
->>>> +               goto again;
->>>> +       }
->>>> +#endif
->>>>           return NULL;
->>>>    }
->>>>
->>>> @@ -8190,6 +8231,9 @@ static int detach_tasks(struct lb_env *env)
->>>>           unsigned long util, load;
->>>>           struct task_struct *p;
->>>>           int detached = 0;
->>>> +#ifdef CONFIG_SCHED_PRIO_LB
->>>> +       bool has_detach_idle_tasks = false;
->>>> +#endif
->>>>
->>>>           lockdep_assert_rq_held(env->src_rq);
->>>>
->>>> @@ -8205,6 +8249,9 @@ static int detach_tasks(struct lb_env *env)
->>>>           if (env->imbalance <= 0)
->>>>                   return 0;
->>>>
->>>> +#ifdef CONFIG_SCHED_PRIO_LB
->>>> +again:
->>>> +#endif
->>>>           while (!list_empty(tasks)) {
->>>>                   /*
->>>>                    * We don't want to steal all, otherwise we may be treated likewise,
->>>> @@ -8310,6 +8357,14 @@ static int detach_tasks(struct lb_env *env)
->>>>                   list_move(&p->se.group_node, tasks);
->>>>           }
->>>>
->>>> +#ifdef CONFIG_SCHED_PRIO_LB
->>>> +       if (sysctl_sched_prio_load_balance_enabled &&
->>>> +               !has_detach_idle_tasks && env->imbalance > 0) {
->>>> +               has_detach_idle_tasks = true;
->>>> +               tasks = &env->src_rq->cfs_idle_tasks;
->>>> +               goto again;
->>>> +       }
->>>> +#endif
->>>>           /*
->>>>            * Right now, this is one of only two places we collect this stat
->>>>            * so we can safely collect detach_one_task() stats here rather
->>>> @@ -11814,7 +11869,11 @@ static void set_next_task_fair(struct rq *rq, struct task_struct *p, bool first)
->>>>                    * Move the next running task to the front of the list, so our
->>>>                    * cfs_tasks list becomes MRU one.
->>>>                    */
->>>> +#ifdef CONFIG_SCHED_PRIO_LB
->>>> +               adjust_rq_cfs_tasks(list_move, rq, se);
->>>> +#else
->>>>                   list_move(&se->group_node, &rq->cfs_tasks);
->>>> +#endif
->>>>           }
->>>>    #endif
->>>>
->>>> diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
->>>> index 1644242ecd11..1b831c05ba30 100644
->>>> --- a/kernel/sched/sched.h
->>>> +++ b/kernel/sched/sched.h
->>>> @@ -1053,6 +1053,9 @@ struct rq {
->>>>           int                     online;
->>>>
->>>>           struct list_head cfs_tasks;
->>>> +#ifdef CONFIG_SCHED_PRIO_LB
->>>> +       struct list_head cfs_idle_tasks;
->>>> +#endif
->>>>
->>>>           struct sched_avg        avg_rt;
->>>>           struct sched_avg        avg_dl;
->>>> diff --git a/kernel/sysctl.c b/kernel/sysctl.c
->>>> index 188c305aeb8b..5fc0f9ffb675 100644
->>>> --- a/kernel/sysctl.c
->>>> +++ b/kernel/sysctl.c
->>>> @@ -2090,6 +2090,17 @@ static struct ctl_table kern_table[] = {
->>>>                   .extra1         = SYSCTL_ONE,
->>>>                   .extra2         = SYSCTL_INT_MAX,
->>>>           },
->>>> +#endif
->>>> +#ifdef CONFIG_SCHED_PRIO_LB
->>>> +       {
->>>> +               .procname       = "sched_prio_load_balance_enabled",
->>>> +               .data           = &sysctl_sched_prio_load_balance_enabled,
->>>> +               .maxlen         = sizeof(unsigned int),
->>>> +               .mode           = 0644,
->>>> +               .proc_handler   = proc_dointvec_minmax,
->>>> +               .extra1         = SYSCTL_ZERO,
->>>> +               .extra2         = SYSCTL_ONE,
->>>> +       },
->>>>    #endif
->>>>           { }
->>>>    };
->>>> --
->>>> 2.27.0
->>>>
->>> .
-> .
+	../scmi_raw/0/message             <<< usual auto channel selection
+		     /message_async 
+		     ...
+
+		     /chan_0x10/message   <<< use default channel (base proto)
+		     	       /message_async
+			       ....
+
+		     /chan_0x13/message  <<< use PERF channel
+		     	       /message_async
+			       ....
+
+The alternative would be to have a common single entry to configure the usage
+of the a single batch of message/message_async entries BUT that seems to
+me more prone to error, e.g. if you dont clear the special config at the
+end of your special testcase you could endup using custom channels conf also
+with any following regular test which expects to benefit from the
+automatic channel selection (which I still think should be default way of
+running these tests..)
+
+Thoughts ?
+
+Thanks for the feedback.
+Cristian
