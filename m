@@ -2,213 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AD6D6186D7
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 19:00:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A2D5E6186C9
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 18:59:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231800AbiKCSA5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 14:00:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37118 "EHLO
+        id S231945AbiKCR73 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 13:59:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231625AbiKCR7b (ORCPT
+        with ESMTP id S231935AbiKCR7K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 13:59:31 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2B1B60CE
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 10:59:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667498363; x=1699034363;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=99EX+KA4C5DAnZxHjIR5rQZoeQgiDfbcKnY78sWqUNw=;
-  b=EPdtqU23Iur7VVr/x6qJUeCZIQFc4qTv4YYz6tiAFTKMpfAo7TOEt9PM
-   kbcFKi5f9xcQPfRpDwzVDTU+sXXDce1acraUx5tIL+6YUFRPcR7QhLMrh
-   yYHhDrjcnP+J6uW8GZQrmBBXqD5dKZEgZI8KFw0dXC8VGdIeN4t+PADYB
-   yh+eFfluvw+DIESm8zxSujC9FfOpVQyCQ6D+P7XFIv5PHlIsZ573A+KTz
-   lTJRrqdtrRadiEzoW2RyE+LVCVDsofIciRwCbdYW055ub/bh0jWcc3K4B
-   CJe702jqRsP+5sA3LWsWA6RADQPwtaG0o3NjyxluABliZAOe9+2++oD6s
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10520"; a="308476975"
-X-IronPort-AV: E=Sophos;i="5.96,134,1665471600"; 
-   d="scan'208";a="308476975"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2022 10:59:19 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10520"; a="809762577"
-X-IronPort-AV: E=Sophos;i="5.96,134,1665471600"; 
-   d="scan'208";a="809762577"
-Received: from araj-dh-work.jf.intel.com ([10.165.157.158])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2022 10:59:18 -0700
-From:   Ashok Raj <ashok.raj@intel.com>
-To:     Borislav Petkov <bp@alien8.de>,
-        Thomas Gleixner <tglx@linutronix.de>
-Cc:     "LKML Mailing List" <linux-kernel@vger.kernel.org>,
-        X86-kernel <x86@kernel.org>, Tony Luck <tony.luck@intel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Arjan van de Ven <arjan.van.de.ven@intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Jacon Jun Pan <jacob.jun.pan@intel.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Andrew Cooper <andrew.cooper3@citrix.com>,
-        Ashok Raj <ashok.raj@intel.com>
-Subject: [v2 13/13] x86/microcode/intel: Add ability to update microcode even if rev is unchanged
-Date:   Thu,  3 Nov 2022 17:59:01 +0000
-Message-Id: <20221103175901.164783-14-ashok.raj@intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221103175901.164783-1-ashok.raj@intel.com>
-References: <20221103175901.164783-1-ashok.raj@intel.com>
+        Thu, 3 Nov 2022 13:59:10 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0E70D264F;
+        Thu,  3 Nov 2022 10:59:05 -0700 (PDT)
+Received: from skinsburskii-cloud-desktop.internal.cloudapp.net (unknown [20.120.152.163])
+        by linux.microsoft.com (Postfix) with ESMTPSA id CB3D120C3338;
+        Thu,  3 Nov 2022 10:59:04 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com CB3D120C3338
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1667498344;
+        bh=++SExWSpMkq0Dv7lblZI7lZBKKts6IU3NqmxJpdUgoo=;
+        h=Subject:From:Cc:Date:In-Reply-To:References:From;
+        b=bJcsAsXG7mKa0C51B997E5v1xmj3NZw0x86iDTf8jVX4gDFtfc8GZUBIDCyTJkjJx
+         eyvs8bOHYj0dcHpu4RpJS/EZ5ZR+2cPmWECzeSSxTd6ppWsIsyyqeb9O5Ju9sN6k2p
+         pOh8ETzkwWKr2nZfT9V4iI9vQZh2cErZ4T/njDpo=
+Subject: [PATCH v3 4/4] drivers/clocksource/hyper-v: Add TSC page support for
+ root partition
+From:   Stanislav Kinsburskii <skinsburskii@linux.microsoft.com>
+Cc:     Stanislav Kinsburskiy <stanislav.kinsburskiy@gmail.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mikelley@microsoft.com
+Date:   Thu, 03 Nov 2022 17:59:04 +0000
+Message-ID: <166749834466.218190.3482871684875422987.stgit@skinsburskii-cloud-desktop.internal.cloudapp.net>
+In-Reply-To: <166749827889.218190.12775118554387271641.stgit@skinsburskii-cloud-desktop.internal.cloudapp.net>
+References: <166749827889.218190.12775118554387271641.stgit@skinsburskii-cloud-desktop.internal.cloudapp.net>
+User-Agent: StGit/0.19
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,PDS_OTHER_BAD_TLD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-18.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,MISSING_HEADERS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This comes in handy for testing without the need for a new microcode file.
-Default is OFF. It can be switched dynamically at run time via debugfs file
-/sys/kernel/debug/microcode/load_same.
+From: Stanislav Kinsburskiy <stanislav.kinsburskiy@gmail.com>
 
-NOT_FOR_INCLUSION:
-Leave it to the discretion of Boris if its suitable for inclusion. It will
-at least serve to validate some parts of the series without the need for a
-new microcode, since it goes through all the renedezvous parts except not
-updating the microcode itself.
+Microsoft Hypervisor root partition has to map the TSC page specified
+by the hypervisor, instead of providing the page to the hypervisor like
+it's done in the guest partitions.
 
-Reviewed-by: Tony Luck <tony.luck@intel.com>
-Signed-off-by: Ashok Raj <ashok.raj@intel.com>
+However, it's too early to map the page when the clock is initialized, so, the
+actual mapping is happening later.
+
+Signed-off-by: Stanislav Kinsburskiy <stanislav.kinsburskiy@gmail.com>
+CC: "K. Y. Srinivasan" <kys@microsoft.com>
+CC: Haiyang Zhang <haiyangz@microsoft.com>
+CC: Wei Liu <wei.liu@kernel.org>
+CC: Dexuan Cui <decui@microsoft.com>
+CC: Thomas Gleixner <tglx@linutronix.de>
+CC: Ingo Molnar <mingo@redhat.com>
+CC: Borislav Petkov <bp@alien8.de>
+CC: Dave Hansen <dave.hansen@linux.intel.com>
+CC: x86@kernel.org
+CC: "H. Peter Anvin" <hpa@zytor.com>
+CC: Daniel Lezcano <daniel.lezcano@linaro.org>
+CC: linux-hyperv@vger.kernel.org
+CC: linux-kernel@vger.kernel.org
 ---
- arch/x86/include/asm/microcode.h      |  2 ++
- arch/x86/kernel/cpu/microcode/amd.c   |  2 +-
- arch/x86/kernel/cpu/microcode/core.c  | 23 ++++++++++++++++++-----
- arch/x86/kernel/cpu/microcode/intel.c |  4 ++--
- 4 files changed, 23 insertions(+), 8 deletions(-)
+ arch/x86/hyperv/hv_init.c          |    2 ++
+ drivers/clocksource/hyperv_timer.c |   38 +++++++++++++++++++++++++++---------
+ include/clocksource/hyperv_timer.h |    1 +
+ 3 files changed, 32 insertions(+), 9 deletions(-)
 
-diff --git a/arch/x86/include/asm/microcode.h b/arch/x86/include/asm/microcode.h
-index 6286b4056792..a356a6a5207e 100644
---- a/arch/x86/include/asm/microcode.h
-+++ b/arch/x86/include/asm/microcode.h
-@@ -47,6 +47,8 @@ struct ucode_patch {
- 
- extern struct list_head microcode_cache;
- 
-+extern bool ucode_load_same;
+diff --git a/arch/x86/hyperv/hv_init.c b/arch/x86/hyperv/hv_init.c
+index f49bc3ec76e6..89954490af93 100644
+--- a/arch/x86/hyperv/hv_init.c
++++ b/arch/x86/hyperv/hv_init.c
+@@ -464,6 +464,8 @@ void __init hyperv_init(void)
+ 		BUG_ON(!src);
+ 		memcpy_to_page(pg, 0, src, HV_HYP_PAGE_SIZE);
+ 		memunmap(src);
 +
- struct cpu_signature {
- 	unsigned int sig;
- 	unsigned int pf;
-diff --git a/arch/x86/kernel/cpu/microcode/amd.c b/arch/x86/kernel/cpu/microcode/amd.c
-index b103d5e5f447..802212e194b3 100644
---- a/arch/x86/kernel/cpu/microcode/amd.c
-+++ b/arch/x86/kernel/cpu/microcode/amd.c
-@@ -694,7 +694,7 @@ static enum ucode_state apply_microcode_amd(int cpu)
- 	rdmsr(MSR_AMD64_PATCH_LEVEL, rev, dummy);
++		hv_remap_tsc_clocksource();
+ 	} else {
+ 		hypercall_msr.guest_physical_address = vmalloc_to_pfn(hv_hypercall_pg);
+ 		wrmsrl(HV_X64_MSR_HYPERCALL, hypercall_msr.as_uint64);
+diff --git a/drivers/clocksource/hyperv_timer.c b/drivers/clocksource/hyperv_timer.c
+index 9445a1558fe9..dec7ad3b85ba 100644
+--- a/drivers/clocksource/hyperv_timer.c
++++ b/drivers/clocksource/hyperv_timer.c
+@@ -509,9 +509,6 @@ static bool __init hv_init_tsc_clocksource(void)
+ 	if (!(ms_hyperv.features & HV_MSR_REFERENCE_TSC_AVAILABLE))
+ 		return false;
  
- 	/* need to apply patch? */
--	if (rev >= mc_amd->hdr.patch_id) {
-+	if (rev >= mc_amd->hdr.patch_id && !ucode_load_same) {
- 		ret = UCODE_OK;
- 		goto out;
- 	}
-diff --git a/arch/x86/kernel/cpu/microcode/core.c b/arch/x86/kernel/cpu/microcode/core.c
-index a7d0cbbb2505..2d0cd8ca3ea2 100644
---- a/arch/x86/kernel/cpu/microcode/core.c
-+++ b/arch/x86/kernel/cpu/microcode/core.c
-@@ -23,6 +23,7 @@
- #include <linux/miscdevice.h>
- #include <linux/capability.h>
- #include <linux/firmware.h>
-+#include <linux/debugfs.h>
- #include <linux/kernel.h>
- #include <linux/delay.h>
- #include <linux/mutex.h>
-@@ -48,6 +49,7 @@
- 
- static struct microcode_ops	*microcode_ops;
- static bool dis_ucode_ldr = true;
-+bool ucode_load_same;
- 
- bool initrd_gone;
- 
-@@ -490,11 +492,12 @@ static int __reload_late(void *info)
- 		goto wait_for_siblings;
- 	}
- 
--	if (err >= UCODE_NFOUND) {
--		if (err == UCODE_ERROR)
-+	if (ret || err >= UCODE_NFOUND) {
-+		if (err == UCODE_ERROR ||
-+		    (err == UCODE_NFOUND && !ucode_load_same)) {
- 			pr_warn("Error reloading microcode on CPU %d\n", cpu);
+-	if (hv_root_partition)
+-		return false;
 -
--		ret = -1;
-+			ret = -1;
-+		}
+ 	/*
+ 	 * If Hyper-V offers TSC_INVARIANT, then the virtualized TSC correctly
+ 	 * handles frequency and offset changes due to live migration,
+@@ -529,16 +526,22 @@ static bool __init hv_init_tsc_clocksource(void)
  	}
  
- wait_for_siblings:
-@@ -632,9 +635,13 @@ static ssize_t reload_store(struct device *dev,
- 	}
+ 	hv_read_reference_counter = read_hv_clock_tsc;
+-	tsc_pfn = HVPFN_DOWN(virt_to_phys(tsc_page));
  
- 	tmp_ret = microcode_ops->request_microcode_fw(bsp, &microcode_pdev->dev);
--	if (tmp_ret != UCODE_NEW)
-+	if (tmp_ret == UCODE_ERROR ||
-+	    (tmp_ret != UCODE_NEW && !ucode_load_same))
- 		goto put;
- 
-+	if (tmp_ret != UCODE_NEW)
-+		pr_info("Force loading ucode\n");
-+
- 	mutex_lock(&microcode_mutex);
- 	ret = microcode_reload_late();
- 	mutex_unlock(&microcode_mutex);
-@@ -781,6 +788,7 @@ static const struct attribute_group cpu_root_microcode_group = {
- static int __init microcode_init(void)
- {
- 	struct cpuinfo_x86 *c = &boot_cpu_data;
-+	static struct dentry *dentry_ucode;
- 	int error;
- 
- 	if (dis_ucode_ldr)
-@@ -815,7 +823,12 @@ static int __init microcode_init(void)
- 	cpuhp_setup_state_nocalls(CPUHP_AP_ONLINE_DYN, "x86/microcode:online",
- 				  mc_cpu_online, mc_cpu_down_prep);
- 
-+	dentry_ucode = debugfs_create_dir("microcode", NULL);
-+	debugfs_create_bool("load_same", 0644, dentry_ucode, &ucode_load_same);
-+
- 	pr_info("Microcode Update Driver: v%s.", DRIVER_VERSION);
-+	pr_info("ucode_load_same is %s\n",
-+		ucode_load_same ? "enabled" : "disabled");
- 
- 	return 0;
- 
-diff --git a/arch/x86/kernel/cpu/microcode/intel.c b/arch/x86/kernel/cpu/microcode/intel.c
-index 7086670da606..08ba6e009d54 100644
---- a/arch/x86/kernel/cpu/microcode/intel.c
-+++ b/arch/x86/kernel/cpu/microcode/intel.c
-@@ -763,7 +763,7 @@ static enum ucode_state apply_microcode_intel(int cpu)
- 	 * already.
+ 	/*
+-	 * The Hyper-V TLFS specifies to preserve the value of reserved
+-	 * bits in registers. So read the existing value, preserve the
+-	 * low order 12 bits, and add in the guest physical address
+-	 * (which already has at least the low 12 bits set to zero since
+-	 * it is page aligned). Also set the "enable" bit, which is bit 0.
++	 * TSC page mapping works differently in root compared to guest.
++	 * - In guest partition the guest PFN has to be passed to the
++	 *   hypervisor.
++	 * - In root partition it's other way around: it has to map the PFN
++	 *   provided by the hypervisor.
++	 *   But it can't be mapped right here as it's too early and MMU isn't
++	 *   ready yet. So, we only set the enable bit here and will remap the
++	 *   page later in hv_remap_tsc_clocksource().
  	 */
- 	rev = intel_get_microcode_revision();
--	if (rev >= mc->hdr.rev) {
-+	if (rev >= mc->hdr.rev && !ucode_load_same) {
- 		ret = UCODE_OK;
- 		goto out;
- 	}
-@@ -782,7 +782,7 @@ static enum ucode_state apply_microcode_intel(int cpu)
- 		return UCODE_ERROR;
- 	}
+ 	tsc_msr.as_uint64 = hv_get_register(HV_REGISTER_REFERENCE_TSC);
++	if (hv_root_partition)
++		tsc_pfn = tsc_msr.pfn;
++	else
++		tsc_pfn = HVPFN_DOWN(virt_to_phys(tsc_page));
+ 	tsc_msr.enable = 1;
+ 	tsc_msr.pfn = tsc_pfn;
+ 	hv_set_register(HV_REGISTER_REFERENCE_TSC, tsc_msr.as_uint64);
+@@ -573,3 +576,20 @@ void __init hv_init_clocksource(void)
+ 	hv_sched_clock_offset = hv_read_reference_counter();
+ 	hv_setup_sched_clock(read_hv_sched_clock_msr);
+ }
++
++void __init hv_remap_tsc_clocksource(void)
++{
++	if (!(ms_hyperv.features & HV_MSR_REFERENCE_TSC_AVAILABLE))
++		return;
++
++	if (!hv_root_partition) {
++		WARN(1, "%s: attempt to remap TSC page in guest partition\n",
++		     __func__);
++		return;
++	}
++
++	tsc_page = memremap(tsc_pfn << HV_HYP_PAGE_SHIFT, sizeof(tsc_pg),
++			    MEMREMAP_WB);
++	if (!tsc_page)
++		pr_err("Failed to remap Hyper-V TSC page.\n");
++}
+diff --git a/include/clocksource/hyperv_timer.h b/include/clocksource/hyperv_timer.h
+index 3078d23faaea..783701a2102d 100644
+--- a/include/clocksource/hyperv_timer.h
++++ b/include/clocksource/hyperv_timer.h
+@@ -31,6 +31,7 @@ extern void hv_stimer_global_cleanup(void);
+ extern void hv_stimer0_isr(void);
  
--	if (bsp && rev != prev_rev) {
-+	if (bsp && (rev != prev_rev || ucode_load_same)) {
- 		pr_info("update 0x%x -> 0x%x, date = %04x-%02x-%02x\n",
- 			prev_rev, rev,
- 			mc->hdr.date & 0xffff,
--- 
-2.34.1
+ extern void hv_init_clocksource(void);
++extern void hv_remap_tsc_clocksource(void);
+ 
+ extern unsigned long hv_get_tsc_pfn(void);
+ extern struct ms_hyperv_tsc_page *hv_get_tsc_page(void);
+
 
