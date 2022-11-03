@@ -2,184 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7360F617591
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 05:30:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C2E961759E
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 05:32:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230426AbiKCEaF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 00:30:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56064 "EHLO
+        id S231146AbiKCEci (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 00:32:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230398AbiKCE3E (ORCPT
+        with ESMTP id S231217AbiKCEcJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 00:29:04 -0400
-Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E24617A8E;
-        Wed,  2 Nov 2022 21:28:35 -0700 (PDT)
-Received: from pps.filterd (m0148663.ppops.net [127.0.0.1])
-        by mx0a-002e3701.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2A33VbuI014797;
-        Thu, 3 Nov 2022 04:28:28 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pps0720;
- bh=G7u1zUhzEy2Z3v9+f98yVaQ73+U2QkY+yVwx1BjgOZE=;
- b=HLKouWUMYSWw7quRf3qPuFiXZblLqMTPqpxKEJhH0YseFfrq34bXknRLDWqsk2YFuB+M
- r3shCI+TQ9I7+vybntd4lkHcUHwctFcTE52WoI6ijEdXqtWLuiQo+S4Z1zC/q5lo6MtL
- 2aMmzVdHPLqV1i39WWg1306vsR1DnRkjLSzu6y2v9v2LISIEYRy5qGBKnZZLRSryqnVj
- tz1k9pOQMgJkVmhp2ftwtindcywpbrb1BvZd5pB0eRI3CiZVOhw186Ika4TBA8lh3dho
- rq8yEmuyC/BtmT3tFb+qJpOdU0kKcQ0vOCeUNdleUbnofc9pfesaCptRk+KyPvgGgXf2 EQ== 
-Received: from p1lg14881.it.hpe.com (p1lg14881.it.hpe.com [16.230.97.202])
-        by mx0a-002e3701.pphosted.com (PPS) with ESMTPS id 3km5tn8a1a-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 03 Nov 2022 04:28:28 +0000
-Received: from p1lg14886.dc01.its.hpecorp.net (unknown [10.119.18.237])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by p1lg14881.it.hpe.com (Postfix) with ESMTPS id 055FD80472B;
-        Thu,  3 Nov 2022 04:28:28 +0000 (UTC)
-Received: from adevxp033-sys.us.rdlabs.hpecorp.net (unknown [16.231.227.36])
-        by p1lg14886.dc01.its.hpecorp.net (Postfix) with ESMTP id 85C0D808EB8;
-        Thu,  3 Nov 2022 04:28:27 +0000 (UTC)
-From:   Robert Elliott <elliott@hpe.com>
-To:     herbert@gondor.apana.org.au, davem@davemloft.net,
-        tim.c.chen@linux.intel.com, ap420073@gmail.com, ardb@kernel.org,
-        Jason@zx2c4.com, David.Laight@ACULAB.COM, ebiggers@kernel.org,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Robert Elliott <elliott@hpe.com>
-Subject: [PATCH v3 17/17] crypto: x86/nhpoly1305, poly1305 - load based on CPU features
-Date:   Wed,  2 Nov 2022 23:27:40 -0500
-Message-Id: <20221103042740.6556-18-elliott@hpe.com>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221103042740.6556-1-elliott@hpe.com>
-References: <20221012215931.3896-1-elliott@hpe.com>
- <20221103042740.6556-1-elliott@hpe.com>
+        Thu, 3 Nov 2022 00:32:09 -0400
+Received: from mail-oa1-x36.google.com (mail-oa1-x36.google.com [IPv6:2001:4860:4864:20::36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 182CC1B78A;
+        Wed,  2 Nov 2022 21:30:36 -0700 (PDT)
+Received: by mail-oa1-x36.google.com with SMTP id 586e51a60fabf-13c569e5ff5so944253fac.6;
+        Wed, 02 Nov 2022 21:30:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=beWe+uN+ON3DnKB4aGPZ3xvAANzoMjyW6vf2PFY929c=;
+        b=jacehTQdxGORVtrgfvg0hPn0N5GQ2IUEGiL/11ZLmE5QRgqMbF6clRydJ/bAvwS1O8
+         8Z9UR6DiWWKEVePi87bU5voHcQV4UUftDtF/6e95DaD5ELfNE8JHWHhWwkraGlHT/ig8
+         jVeu1W283oM+9PRjGW7YZCKVy6Y+RNb+STI4bXXVQI/4SK3STy0z5ozLwJ7779WSKKvP
+         z84gR7ImXU45qb4g7G4KfA4XepQw63t0iJzOVlrVzotBWrSuaJOIJalsiBwyDhXJ4jTV
+         aSlLd0jNwOjRv85WYRIR5emtjHLsA7hQuNulGRxDWHQkyM41tHOLr/kpaknE0i/eknpt
+         Ok4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=beWe+uN+ON3DnKB4aGPZ3xvAANzoMjyW6vf2PFY929c=;
+        b=bqEmPCVjQrPK3v+sR3q4UHv/hJR2FIk38nBo1gdcbRwhdpaDPMFgLjxJv3gNFYcw56
+         7pmgJf7t3b8CRkGL3okCmRB7elEDHFL2wcqYh+1D52u0QasMNt5pQJwN/oSvSJM9W9aF
+         RyP7DE3Xjc7tDb64UEwpMpGdEIwb5BEzKGXjTHDlfC0YzFTy8xDyah6ggHjVR6fMoMt6
+         W5ssvjUP4ZOnQTHf3OLhkpbQ1SwJKsG1QphpgfCnSTcozJiCRHMag+oFW12yndHAEZBd
+         emdpXs/xHwdisNeC7kp+h14RAi1JIWjQ+V4ZYKeh6bfia9F8qfJyvi1pQN2GLTxYYrDj
+         6bag==
+X-Gm-Message-State: ACrzQf1h1CZjIDXpv/HmDSf+X9v3vTMyXeAriAipf6wrS0ExNl5C3rNK
+        48qpivtizkrfRM6cjcVKMXbtI0FnxPY=
+X-Google-Smtp-Source: AMsMyM5/TXw3maOdtX+B4EYEcC9BeJj3uMEM0QxNLDKW/206hGsoRzr8X5YYyqpVqpk3jT6Tc3lf4w==
+X-Received: by 2002:a05:6870:2487:b0:131:4fee:aec2 with SMTP id s7-20020a056870248700b001314feeaec2mr26066038oaq.69.1667449835919;
+        Wed, 02 Nov 2022 21:30:35 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id i3-20020a4addc3000000b0049201e2b8f4sm5150583oov.4.2022.11.02.21.30.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Nov 2022 21:30:35 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 2 Nov 2022 21:30:34 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Billy Tsai <billy_tsai@aspeedtech.com>
+Cc:     "jdelvare@suse.com" <jdelvare@suse.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "joel@jms.id.au" <joel@jms.id.au>,
+        "andrew@aj.id.au" <andrew@aj.id.au>,
+        "lee.jones@linaro.org" <lee.jones@linaro.org>,
+        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
+        "u.kleine-koenig@pengutronix.de" <u.kleine-koenig@pengutronix.de>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-pwm@vger.kernel.org" <linux-pwm@vger.kernel.org>,
+        BMC-SW <BMC-SW@aspeedtech.com>,
+        "garnermic@meta.com" <garnermic@meta.com>
+Subject: Re: [v2 3/3] hwmon: Add Aspeed ast2600 TACH support
+Message-ID: <20221103043034.GA2113834@roeck-us.net>
+References: <20221101095156.30591-1-billy_tsai@aspeedtech.com>
+ <20221101095156.30591-4-billy_tsai@aspeedtech.com>
+ <20221101131456.GA1310110@roeck-us.net>
+ <271C521D-8F20-4C86-B3DA-9C0AD74242D4@aspeedtech.com>
+ <20221102170138.GA2913353@roeck-us.net>
+ <F1166366-99CC-4A36-A0A2-4965C787E60B@aspeedtech.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: LvU7jicmIURC_DCUpBkpWM2HsYBXp38r
-X-Proofpoint-ORIG-GUID: LvU7jicmIURC_DCUpBkpWM2HsYBXp38r
-X-HPE-SCL: -1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-02_15,2022-11-02_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- suspectscore=0 impostorscore=0 phishscore=0 adultscore=0
- priorityscore=1501 clxscore=1015 mlxscore=0 spamscore=0 mlxlogscore=999
- bulkscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211030031
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <F1166366-99CC-4A36-A0A2-4965C787E60B@aspeedtech.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Like commit aa031b8f702e ("crypto: x86/sha512 - load based on CPU
-features"), add module aliases for x86-optimized crypto modules:
-    nhpoly1305, poly1305
-based on CPU feature bits so udev gets a chance to load them later
-in the boot process when the filesystems are all running.
+On Thu, Nov 03, 2022 at 03:52:59AM +0000, Billy Tsai wrote:
+> 
+> Can't I use a min/max RPM to let the driver know a reasonable timeout/polling period when
+> the driver is trying to get RPM?
+> Beacause that our tach controller have the falg to indicates the hardware detected the change
+> in the input signal. I need the proper timout to rule out slow RPMs.
+> 
 
-Signed-off-by: Robert Elliott <elliott@hpe.com>
----
- arch/x86/crypto/nhpoly1305-avx2-glue.c | 10 ++++++++++
- arch/x86/crypto/nhpoly1305-sse2-glue.c | 10 ++++++++++
- arch/x86/crypto/poly1305_glue.c        | 12 ++++++++++++
- 3 files changed, 32 insertions(+)
+If the chip measures the fan speed continuously, why would that ever be a
+problem, and why wait in the first place instead of just taking the most
+recent result ?
 
-diff --git a/arch/x86/crypto/nhpoly1305-avx2-glue.c b/arch/x86/crypto/nhpoly1305-avx2-glue.c
-index f7dc9c563bb5..15f98b53bfda 100644
---- a/arch/x86/crypto/nhpoly1305-avx2-glue.c
-+++ b/arch/x86/crypto/nhpoly1305-avx2-glue.c
-@@ -11,6 +11,7 @@
- #include <crypto/nhpoly1305.h>
- #include <linux/module.h>
- #include <linux/sizes.h>
-+#include <asm/cpu_device_id.h>
- #include <asm/simd.h>
- 
- /* avoid kernel_fpu_begin/end scheduler/rcu stalls */
-@@ -60,8 +61,17 @@ static struct shash_alg nhpoly1305_alg = {
- 	.descsize		= sizeof(struct nhpoly1305_state),
- };
- 
-+static const struct x86_cpu_id module_cpu_ids[] = {
-+	X86_MATCH_FEATURE(X86_FEATURE_AVX2, NULL),
-+	{}
-+};
-+MODULE_DEVICE_TABLE(x86cpu, module_cpu_ids);
-+
- static int __init nhpoly1305_mod_init(void)
- {
-+	if (!x86_match_cpu(module_cpu_ids))
-+		return -ENODEV;
-+
- 	if (!boot_cpu_has(X86_FEATURE_AVX2) ||
- 	    !boot_cpu_has(X86_FEATURE_OSXSAVE))
- 		return -ENODEV;
-diff --git a/arch/x86/crypto/nhpoly1305-sse2-glue.c b/arch/x86/crypto/nhpoly1305-sse2-glue.c
-index daffcc7019ad..533db3e0e06f 100644
---- a/arch/x86/crypto/nhpoly1305-sse2-glue.c
-+++ b/arch/x86/crypto/nhpoly1305-sse2-glue.c
-@@ -11,6 +11,7 @@
- #include <crypto/nhpoly1305.h>
- #include <linux/module.h>
- #include <linux/sizes.h>
-+#include <asm/cpu_device_id.h>
- #include <asm/simd.h>
- 
- /* avoid kernel_fpu_begin/end scheduler/rcu stalls */
-@@ -60,8 +61,17 @@ static struct shash_alg nhpoly1305_alg = {
- 	.descsize		= sizeof(struct nhpoly1305_state),
- };
- 
-+static const struct x86_cpu_id module_cpu_ids[] = {
-+	X86_MATCH_FEATURE(X86_FEATURE_XMM2, NULL),
-+	{}
-+};
-+MODULE_DEVICE_TABLE(x86cpu, module_cpu_ids);
-+
- static int __init nhpoly1305_mod_init(void)
- {
-+	if (!x86_match_cpu(module_cpu_ids))
-+		return -ENODEV;
-+
- 	if (!boot_cpu_has(X86_FEATURE_XMM2))
- 		return -ENODEV;
- 
-diff --git a/arch/x86/crypto/poly1305_glue.c b/arch/x86/crypto/poly1305_glue.c
-index 16831c036d71..2ff4358e4b3f 100644
---- a/arch/x86/crypto/poly1305_glue.c
-+++ b/arch/x86/crypto/poly1305_glue.c
-@@ -12,6 +12,7 @@
- #include <linux/kernel.h>
- #include <linux/module.h>
- #include <linux/sizes.h>
-+#include <asm/cpu_device_id.h>
- #include <asm/intel-family.h>
- #include <asm/simd.h>
- 
-@@ -268,8 +269,19 @@ static struct shash_alg alg = {
- 	},
- };
- 
-+static const struct x86_cpu_id module_cpu_ids[] = {
-+	X86_MATCH_FEATURE(X86_FEATURE_AVX2, NULL),
-+	X86_MATCH_FEATURE(X86_FEATURE_AVX, NULL),
-+	X86_MATCH_FEATURE(X86_FEATURE_AVX512F, NULL),
-+	{}
-+};
-+MODULE_DEVICE_TABLE(x86cpu, module_cpu_ids);
-+
- static int __init poly1305_simd_mod_init(void)
- {
-+	if (!x86_match_cpu(module_cpu_ids))
-+		return -ENODEV;
-+
- 	if (boot_cpu_has(X86_FEATURE_AVX) &&
- 	    cpu_has_xfeatures(XFEATURE_MASK_SSE | XFEATURE_MASK_YMM, NULL))
- 		static_branch_enable(&poly1305_use_avx);
--- 
-2.37.3
+Pretty much every other driver is doing that, so I really don't understand
+why that would not work here.
 
+Guenter
