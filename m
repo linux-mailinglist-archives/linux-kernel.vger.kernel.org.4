@@ -2,146 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1C80618B36
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 23:14:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AF31618B41
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 23:19:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231655AbiKCWOr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 18:14:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40384 "EHLO
+        id S231222AbiKCWTJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 18:19:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230489AbiKCWOn (ORCPT
+        with ESMTP id S229575AbiKCWTG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 18:14:43 -0400
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36F5221269
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 15:14:40 -0700 (PDT)
-Received: by mail-io1-f71.google.com with SMTP id w16-20020a6b4a10000000b006a5454c789eso1921764iob.20
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 15:14:40 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=b+vj0ESjG5r4BIvswDDDboZ1laiioRVaHJ/TmUfSzc4=;
-        b=XTjc/qqOQYsI9J3NCOSZkfmzsUjnW/pPjZ+g+p8MEPs+6Mwi3vi5dD6TZ8YSKCyCe/
-         hu47YMGOS4gMMwHpSgMflg72o0cbSntHqJ13oTlpSbrwW/vvgS0QBsm2oEs/112FjX3G
-         Cpk6iUTwqQyZNGx6FwEK5R6IuW1MT05ZovmKY0GDEp6TbbBLd+Q49U/mQMYXNjVIaWYC
-         8B/mFkOVcARGEUSroWxXFond19HegMC79chf0VLFgyNMFP5yxdE0sciLMT+pAEoVOJsJ
-         +/0JcFF7qDZcYvIhc9//DNsZoRaOAFNnYIrUWXwlkacxYFmHbK42d1M3urYGemPxsLv8
-         DFuQ==
-X-Gm-Message-State: ACrzQf0eWEheDLdrKBZ6lu7rbuyPKcIamtfMataNTOxpN92Qavesqivr
-        j1T7UNJkP+TRdSvo0p+uvywK3ZlHYlUx4wvCmR5TorJZd2xT
-X-Google-Smtp-Source: AMsMyM4eMH14ozcQ0xczpTX2Mp2+FyiTYDUqAsExiEsaPiJ+i/x28Ew3iMKu6PAmTQRewZIp/QUUaNy5gfLO2HTUW9p3AQjJYRzg
+        Thu, 3 Nov 2022 18:19:06 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B6F511C16
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 15:19:04 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4N3J7j4yHJz4x1G;
+        Fri,  4 Nov 2022 09:18:57 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1667513939;
+        bh=VR6Mm9ZHp7WtU2Fa2nUanqpeKXo980HrZ6AWhIqgPP8=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=R7HTBz4l7NOogMvdkkYnluPBOStvtLJb5Kjm54ZcVKtSUxohHMPydfXwVamBQvux+
+         kWILI3eGk8inAfxlkK3Zuy4GCckJRcN19RV87u19RkO3cWYbWn4WXdFYoQULPYr97d
+         3OiqJodFQ6p33NpSw1vnbbYntsT/lRnq/sMbdV0kaE90G1WUJevDYm4trxn/WCQaYV
+         G+kbYmjjidV2kxWM707p1x0Vlcf1tbkKuHgSCjSma6s9d8+VnJxF9/NJFyqiNzychW
+         n9ETDtlJQCjWuDRSMrXcrJ88soYBZhH7nbRfSNSo1p7mg8R+Vto6z7eNE+CtxAH9ze
+         Q1TRR9azQ7HJw==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        schwab@linux-m68k.org, palmer@dabbelt.com,
+        linux-riscv@lists.infradead.org, guoren@kernel.org, arnd@arndb.de
+Subject: Re: [GIT PULL] Please pull powerpc/linux.git powerpc-6.1-4 tag
+In-Reply-To: <CAHk-=wh87aGtg3eJPkA31V0Pn22hah0DWRc8oWsQ__5P2SXaTw@mail.gmail.com>
+References: <87o7tossaa.fsf@mpe.ellerman.id.au>
+ <CAHk-=wh87aGtg3eJPkA31V0Pn22hah0DWRc8oWsQ__5P2SXaTw@mail.gmail.com>
+Date:   Fri, 04 Nov 2022 09:18:54 +1100
+Message-ID: <87iljvsmup.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-X-Received: by 2002:a02:6a2e:0:b0:363:a0a4:bf24 with SMTP id
- l46-20020a026a2e000000b00363a0a4bf24mr19955068jac.204.1667513679569; Thu, 03
- Nov 2022 15:14:39 -0700 (PDT)
-Date:   Thu, 03 Nov 2022 15:14:39 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000876b4405ec984835@google.com>
-Subject: [syzbot] memory leak in __insert_pending
-From:   syzbot <syzbot+05a0f0ccab4a25626e38@syzkaller.appspotmail.com>
-To:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        tytso@mit.edu
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Linus Torvalds <torvalds@linux-foundation.org> writes:
+> On Wed, Nov 2, 2022 at 7:09 PM Michael Ellerman <mpe@ellerman.id.au> wrote:
+>>
+>>  - Fix an endian thinko in the asm-generic compat_arg_u64() which led to syscall arguments
+>>    being swapped for some compat syscalls.
+>
+> Am I mis-reading this, or did this bug (introduced in this merge
+> window by commit 43d5de2b67d7 "asm-generic: compat: Support BE for
+> long long args in 32-bit ABIs") break *every* architecture?
 
-syzbot found the following issue on:
+No. Just RISC-V and powerpc.
 
-HEAD commit:    882ad2a2a8ff Merge tag 'random-6.1-rc3-for-linus' of git:/..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=14aad446880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=8e0c1dbca40c1f1d
-dashboard link: https://syzkaller.appspot.com/bug?extid=05a0f0ccab4a25626e38
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11dc2096880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13a9300a880000
+> And people just didn't scream, because 32-bit code has just become so rare?
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/f8f0ce1c9534/disk-882ad2a2.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/206eb0f33f01/vmlinux-882ad2a2.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/13e639ad2934/bzImage-882ad2a2.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/7347d92c0f64/mount_0.gz
+I had two systems and several VMs that booted happily with the bug
+present, so there's some luck involved as to whether your userspace
+trips over the bug in a way that matters.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+05a0f0ccab4a25626e38@syzkaller.appspotmail.com
+But we did have people scream eventually :/
 
-BUG: memory leak
-unreferenced object 0xffff888111c8a1e0 (size 32):
-  comm "syz-executor114", pid 3614, jiffies 4294956785 (age 12.710s)
-  hex dump (first 32 bytes):
-    01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffff8178729a>] __insert_pending.isra.0+0xaa/0xf0 fs/ext4/extents_status.c:1895
-    [<ffffffff8178b044>] ext4_es_insert_delayed_block+0x224/0x230 fs/ext4/extents_status.c:2018
-    [<ffffffff817a7ae5>] ext4_insert_delayed_block fs/ext4/inode.c:1704 [inline]
-    [<ffffffff817a7ae5>] ext4_da_map_blocks fs/ext4/inode.c:1796 [inline]
-    [<ffffffff817a7ae5>] ext4_da_get_block_prep+0x3a5/0x7e0 fs/ext4/inode.c:1860
-    [<ffffffff81653016>] __block_write_begin_int+0x1d6/0x9d0 fs/buffer.c:1991
-    [<ffffffff8179cf7b>] ext4_da_convert_inline_data_to_extent fs/ext4/inline.c:877 [inline]
-    [<ffffffff8179cf7b>] ext4_da_write_inline_data_begin+0x39b/0xb10 fs/ext4/inline.c:939
-    [<ffffffff817b0307>] ext4_da_write_begin+0x477/0x4e0 fs/ext4/inode.c:2986
-    [<ffffffff8148755f>] generic_perform_write+0xff/0x2b0 mm/filemap.c:3753
-    [<ffffffff8178c54b>] ext4_buffered_write_iter+0xbb/0x1d0 fs/ext4/file.c:285
-    [<ffffffff8178c71f>] ext4_file_write_iter+0xbf/0xbf0 fs/ext4/file.c:700
-    [<ffffffff815d8517>] call_write_iter include/linux/fs.h:2191 [inline]
-    [<ffffffff815d8517>] do_iter_readv_writev+0x147/0x210 fs/read_write.c:735
-    [<ffffffff815d9afc>] do_iter_write+0xdc/0x300 fs/read_write.c:861
-    [<ffffffff815d9d59>] vfs_iter_write+0x39/0x60 fs/read_write.c:902
-    [<ffffffff8163eb44>] iter_file_splice_write+0x434/0x660 fs/splice.c:686
-    [<ffffffff8163c57b>] do_splice_from fs/splice.c:764 [inline]
-    [<ffffffff8163c57b>] direct_splice_actor+0x4b/0x70 fs/splice.c:931
-    [<ffffffff8163cd19>] splice_direct_to_actor+0x149/0x350 fs/splice.c:886
-    [<ffffffff8163d008>] do_splice_direct+0xe8/0x150 fs/splice.c:974
+> Or is it just because those compat macros are effectively not used
+> elsewhere, and x86 has its own versions? Looks like possibly mainly
+> RISC-V?
 
-BUG: memory leak
-unreferenced object 0xffff888111c8a260 (size 32):
-  comm "syz-executor114", pid 3618, jiffies 4294957317 (age 7.390s)
-  hex dump (first 32 bytes):
-    01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffff8178729a>] __insert_pending.isra.0+0xaa/0xf0 fs/ext4/extents_status.c:1895
-    [<ffffffff8178b044>] ext4_es_insert_delayed_block+0x224/0x230 fs/ext4/extents_status.c:2018
-    [<ffffffff817a7ae5>] ext4_insert_delayed_block fs/ext4/inode.c:1704 [inline]
-    [<ffffffff817a7ae5>] ext4_da_map_blocks fs/ext4/inode.c:1796 [inline]
-    [<ffffffff817a7ae5>] ext4_da_get_block_prep+0x3a5/0x7e0 fs/ext4/inode.c:1860
-    [<ffffffff81653016>] __block_write_begin_int+0x1d6/0x9d0 fs/buffer.c:1991
-    [<ffffffff8179cf7b>] ext4_da_convert_inline_data_to_extent fs/ext4/inline.c:877 [inline]
-    [<ffffffff8179cf7b>] ext4_da_write_inline_data_begin+0x39b/0xb10 fs/ext4/inline.c:939
-    [<ffffffff817b0307>] ext4_da_write_begin+0x477/0x4e0 fs/ext4/inode.c:2986
-    [<ffffffff8148755f>] generic_perform_write+0xff/0x2b0 mm/filemap.c:3753
-    [<ffffffff8178c54b>] ext4_buffered_write_iter+0xbb/0x1d0 fs/ext4/file.c:285
-    [<ffffffff8178c71f>] ext4_file_write_iter+0xbf/0xbf0 fs/ext4/file.c:700
-    [<ffffffff815d8517>] call_write_iter include/linux/fs.h:2191 [inline]
-    [<ffffffff815d8517>] do_iter_readv_writev+0x147/0x210 fs/read_write.c:735
-    [<ffffffff815d9afc>] do_iter_write+0xdc/0x300 fs/read_write.c:861
-    [<ffffffff815d9d59>] vfs_iter_write+0x39/0x60 fs/read_write.c:902
-    [<ffffffff8163eb44>] iter_file_splice_write+0x434/0x660 fs/splice.c:686
-    [<ffffffff8163c57b>] do_splice_from fs/splice.c:764 [inline]
-    [<ffffffff8163c57b>] direct_splice_actor+0x4b/0x70 fs/splice.c:931
-    [<ffffffff8163cd19>] splice_direct_to_actor+0x149/0x350 fs/splice.c:886
-    [<ffffffff8163d008>] do_splice_direct+0xe8/0x150 fs/splice.c:974
+Yeah. Although compat_arg_u64() is defined for all arches, it's only
+used in places guarded by __ARCH_WANT_COMPAT_FOO macros, and those are
+only selected by RISC-V and powerpc.
+
+Full list is:
+
+  __ARCH_WANT_COMPAT_FADVISE64_64       riscv
+  __ARCH_WANT_COMPAT_FALLOCATE          riscv, powerpc
+  __ARCH_WANT_COMPAT_FTRUNCATE64        riscv
+  __ARCH_WANT_COMPAT_PREAD64            riscv
+  __ARCH_WANT_COMPAT_PWRITE64           riscv
+  __ARCH_WANT_COMPAT_READAHEAD          riscv
+  __ARCH_WANT_COMPAT_SYNC_FILE_RANGE    riscv
+  __ARCH_WANT_COMPAT_TRUNCATE64         riscv
 
 
+> Side note: why is it doing
+>
+>         #ifndef compat_arg_u64
+>
+> at all? That macro is not actually defined anywhere else, so that
+> #ifdef seems to be just confused.
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+That goes back to the original submission:
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+  59c10c52f573 ("riscv: compat: syscall: Add compat_sys_call_table implementation")
+
+I guess it was following the example in asm-generic/compat.h where a
+bunch of other things are guarded by ifndefs. But agree it's
+unnecessarily flexible in this case until we have another definition.
+
+cheers
