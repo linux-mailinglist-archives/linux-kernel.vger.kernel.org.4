@@ -2,110 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 850126183D3
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 17:08:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BD056183BC
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 17:08:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231401AbiKCQIx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 12:08:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36746 "EHLO
+        id S230099AbiKCQIL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 12:08:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232088AbiKCQII (ORCPT
+        with ESMTP id S229935AbiKCQHp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 12:08:08 -0400
-Received: from mx0b-002e3701.pphosted.com (mx0b-002e3701.pphosted.com [148.163.143.35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4765518384;
-        Thu,  3 Nov 2022 09:08:02 -0700 (PDT)
-Received: from pps.filterd (m0134423.ppops.net [127.0.0.1])
-        by mx0b-002e3701.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2A3G233X030852;
-        Thu, 3 Nov 2022 16:07:37 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : subject :
- date : message-id : in-reply-to : references; s=pps0720;
- bh=tdhKJ2aYYACy4JMxuIyet/qH+YIKSSsy28N/XIgDXIU=;
- b=MhjG5Q7ZuQ3zGYLwItaAOB2OkEUO3Wpiv8Uy/y2VhipJmKswyZK0zvotmvaYkQQR0DAi
- sXk6UlKlHEmnhUTugCkTpr0kb+cAYSUXdfks5xwrDrKJH11AsoQvemy6aQXpFGdw25vX
- 5PSmJwhLS80Sn7CGrfPsoYJrRPlAleLIVTf3S68IHqnnudY/mlMOdHPSN9qHhLlAlUi0
- 1NVLGjgSuoPDRMjJhXPWaV7iQzPifw+GHoFqmYEhmwuOLcr/fjysn19GmZoWKt1XIxhs
- 1TXfsbf0tLWSwDK8ei4vl5pBK6g41HIyvi5FOGW0BRh7OUSHszROWMLFmKMSEZJ5Frjn Vg== 
-Received: from p1lg14878.it.hpe.com (p1lg14878.it.hpe.com [16.230.97.204])
-        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3kmg5h0f7j-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 03 Nov 2022 16:07:37 +0000
-Received: from p1lg14885.dc01.its.hpecorp.net (unknown [10.119.18.236])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by p1lg14878.it.hpe.com (Postfix) with ESMTPS id E4AA6D264;
-        Thu,  3 Nov 2022 16:07:36 +0000 (UTC)
-Received: from hpe.com (unknown [16.231.227.36])
-        by p1lg14885.dc01.its.hpecorp.net (Postfix) with ESMTP id 550FF803A9B;
-        Thu,  3 Nov 2022 16:07:36 +0000 (UTC)
-From:   richard.yu@hpe.com
-To:     verdun@hpe.com, nick.hawkins@hpe.com, richard.yu@hpe.com,
-        gregkh@linuxfoundation.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux@armlinux.org.uk,
-        balbi@kernel.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v1 7/7] MAINTAINERS: add USB support to GXP
-Date:   Thu,  3 Nov 2022 11:06:25 -0500
-Message-Id: <20221103160625.15574-8-richard.yu@hpe.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20221103160625.15574-1-richard.yu@hpe.com>
-References: <20221103160625.15574-1-richard.yu@hpe.com>
-X-Proofpoint-GUID: FK084rG75kcI_4xmpb2qxKpRtqrmaDPv
-X-Proofpoint-ORIG-GUID: FK084rG75kcI_4xmpb2qxKpRtqrmaDPv
-X-HPE-SCL: -1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-03_04,2022-11-03_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 adultscore=0
- malwarescore=0 spamscore=0 phishscore=0 mlxlogscore=835 clxscore=1015
- bulkscore=0 suspectscore=0 impostorscore=0 priorityscore=1501
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211030107
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 3 Nov 2022 12:07:45 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5EF81705F;
+        Thu,  3 Nov 2022 09:07:21 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id u6so2338443plq.12;
+        Thu, 03 Nov 2022 09:07:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ObeLcsj3nE9gnGWSU04jueaoflUbLzWwQVpy0WCWEUg=;
+        b=Ydy4NwzRVs+sKAteh+nyUyz52gUutmhusxHJwQH9FMye8SKVC5WA1kdkQ98hTeWT43
+         w7LbJCyJlUmmcfIbs+trw7uxcKaNPb8tTxFiZmBWcm7+n+6hxxcjGOJUR+TixFyYoSip
+         9goUSWAQ/FrIyQwhli4NEPCZ397seRc+ahfKT/nvSldrU/hlsufE6eS/V+ur8TMQLwWo
+         /cCkF/RtwKSAbzplVZ1HqWTCLNycCeflRkfQmgG2MePwpbc0w96VDcmBZ1FZFmgOmD2W
+         Y1a3t5Cjpya7+n6Dw8g2DqGScG3syFpAbehDtqj3R2lTrA0NW/mbHuRNLn0H7TSqmyAy
+         Z+dA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ObeLcsj3nE9gnGWSU04jueaoflUbLzWwQVpy0WCWEUg=;
+        b=jPzLQ9LfeGL14ZqjyVYn6JiJH6T7ZRRLIhdrOphXXaB1rT3Wf0Hv1XSu9TIPvOZwbh
+         Nb/5v2f0Psss7KecIPL9ewjQbAH89oqO9+S8bX/Vu70VFvlRd9cGYyrZsutcio35PEX4
+         6ZU/+RUGyZJZPyp33H9AoJ710M3MQHdC3NUls6IO/ni7NHOn0cdlt8+KMHzMT3pQiD7F
+         6na5x0ACCi6O4lZlf0aCeb70LoS1W7kms3mEYn890sgkhFhvdcumSaAYHV1EHet/wjVB
+         IwsqoqY7/P5UaWMv1i+Xk6ViEBPV2qUqrmuWQlo0hr1xNlirNUlvr+yem3txf1kG8q6P
+         G9vQ==
+X-Gm-Message-State: ACrzQf1Yn1s/KXjpsT/EcK8IDlVLfaDm89Kc2vnAABtAS5slxABuINui
+        dJzG6woHHHBu7Yok2tQh2M0=
+X-Google-Smtp-Source: AMsMyM4AspEOOfYu1TOrjbycqVKFRnhD6LEjYnSnNrzdmQhhrtoarPaLPkLM6np/pZIb1yaYehHjBA==
+X-Received: by 2002:a17:90b:1982:b0:212:fe7f:4a49 with SMTP id mv2-20020a17090b198200b00212fe7f4a49mr49645540pjb.156.1667491641125;
+        Thu, 03 Nov 2022 09:07:21 -0700 (PDT)
+Received: from localhost ([223.104.41.9])
+        by smtp.gmail.com with ESMTPSA id nw1-20020a17090b254100b00205db4ff6dfsm138640pjb.46.2022.11.03.09.07.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Nov 2022 09:07:20 -0700 (PDT)
+From:   Hawkins Jiawei <yin31149@gmail.com>
+To:     kuba@kernel.org
+Cc:     18801353760@163.com, davem@davemloft.net, edumazet@google.com,
+        jhs@mojatatu.com, jiri@resnulli.us, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, pabeni@redhat.com,
+        syzbot+232ebdbd36706c965ebf@syzkaller.appspotmail.com,
+        syzkaller-bugs@googlegroups.com, xiyou.wangcong@gmail.com,
+        yin31149@gmail.com
+Subject: Re: [PATCH] net: sched: fix memory leak in tcindex_set_parms
+Date:   Fri,  4 Nov 2022 00:07:00 +0800
+Message-Id: <20221103160659.22581-1-yin31149@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20221102202604.0d316982@kernel.org>
+References: <20221102202604.0d316982@kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Richard Yu <richard.yu@hpe.com>
+Hi Jakub,
+On Thu, 3 Nov 2022 at 11:26, Jakub Kicinski <kuba@kernel.org> wrote:
+>
+> On Mon, 31 Oct 2022 14:08:35 +0800 Hawkins Jiawei wrote:
+> > Kernel will uses tcindex_change() to change an existing
+>
+> s/will//
+>
+> > traffic-control-indices filter properties. During the
+> > process of changing, kernel will clears the old
+>
+> s/will//
+>
+> > traffic-control-indices filter result, and updates it
+> > by RCU assigning new traffic-control-indices data.
+> >
+> > Yet the problem is that, kernel will clears the old
+>
+> s/will//
+Thanks for the suggestion. I will amend these in the v2 patch.
 
-Add the usb driver and dt-binding documents
+>
+> > traffic-control-indices filter result, without destroying
+> > its tcf_exts structure, which triggers the above
+> > memory leak.
+> >
+> > This patch solves it by using tcf_exts_destroy() to
+> > destroy the tcf_exts structure in old
+> > traffic-control-indices filter result.
+> >
+>
+> Please provide a Fixes tag to where the problem was introduced
+> (or the initial git commit).
+Thanks for reminding, it seems that the problem was 
+introduced by commit 
+b9a24bb76bf6 ("net_sched: properly handle failure case of tcf_exts_init()"),
+because it was in this commit that kernel allocated the struct tcf_exts
+for new traffic-control-indices filter result in tcindex_alloc_perfect_hash().
 
-Signed-off-by: Richard Yu <richard.yu@hpe.com>
----
- MAINTAINERS | 5 +++++
- 1 file changed, 5 insertions(+)
+I will add the tag in the v2 patch.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 56ff555ed5a4..b7280eb2dacd 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -2176,15 +2176,20 @@ F:	arch/arm/mach-sa1100/jornada720.c
- ARM/HPE GXP ARCHITECTURE
- M:	Jean-Marie Verdun <verdun@hpe.com>
- M:	Nick Hawkins <nick.hawkins@hpe.com>
-+M:	Richard Yu <richard.yu@hpe.com>
- S:	Maintained
- F:	Documentation/devicetree/bindings/arm/hpe,gxp.yaml
- F:	Documentation/devicetree/bindings/spi/hpe,gxp-spifi.yaml
- F:	Documentation/devicetree/bindings/timer/hpe,gxp-timer.yaml
-+F:	Documentation/devicetree/bindings/usb/hpe,gxp-udc.yaml
-+F:	Documentation/devicetree/bindings/usb/hpe,gxp-udcg.yaml
-+F:	Documentation/devicetree/bindings/usb/hpe,gxp-uvhc.yaml
- F:	arch/arm/boot/dts/hpe-bmc*
- F:	arch/arm/boot/dts/hpe-gxp*
- F:	arch/arm/mach-hpe/
- F:	drivers/clocksource/timer-gxp.c
- F:	drivers/spi/spi-gxp.c
-+F:	drivers/usb/gadget/udc/gxp_udc.c
- F:	drivers/watchdog/gxp-wdt.c
- 
- ARM/IGEP MACHINE SUPPORT
--- 
-2.17.1
+>
+> > Link: https://lore.kernel.org/all/0000000000001de5c505ebc9ec59@google.com/
+> > Reported-by: syzbot+232ebdbd36706c965ebf@syzkaller.appspotmail.com
+> > Tested-by: syzbot+232ebdbd36706c965ebf@syzkaller.appspotmail.com
+> > Signed-off-by: Hawkins Jiawei <yin31149@gmail.com>
+> > ---
+> >  net/sched/cls_tcindex.c | 14 ++++++++++++++
+> >  1 file changed, 14 insertions(+)
+> >
+> > diff --git a/net/sched/cls_tcindex.c b/net/sched/cls_tcindex.c
+> > index 1c9eeb98d826..dc872a794337 100644
+> > --- a/net/sched/cls_tcindex.c
+> > +++ b/net/sched/cls_tcindex.c
+> > @@ -338,6 +338,9 @@ tcindex_set_parms(struct net *net, struct tcf_proto *tp, unsigned long base,
+> >       struct tcf_result cr = {};
+> >       int err, balloc = 0;
+> >       struct tcf_exts e;
+> > +#ifdef CONFIG_NET_CLS_ACT
+> > +     struct tcf_exts old_e = {};
+> > +#endif
+>
+> Why all the ifdefs?
+Thanks for suggestion, it seems that these ifdefs are not needed.
+I will delete these in the v2 patch.
 
+>
+> >       err = tcf_exts_init(&e, net, TCA_TCINDEX_ACT, TCA_TCINDEX_POLICE);
+> >       if (err < 0)
+> > @@ -479,6 +482,14 @@ tcindex_set_parms(struct net *net, struct tcf_proto *tp, unsigned long base,
+> >       }
+> >
+> >       if (old_r && old_r != r) {
+> > +#ifdef CONFIG_NET_CLS_ACT
+> > +             /* r->exts is not copied from old_r->exts, and
+> > +              * the following code will clears the old_r, so
+> > +              * we need to destroy it after updating the tp->root,
+> > +              * to avoid memory leak bug.
+> > +              */
+> > +             old_e = old_r->exts;
+> > +#endif
+>
+> Can't you localize all the changes to this if block?
+>
+> Maybe add a function called tcindex_filter_result_reinit()
+> which will act more appropriately?
+I think we shouldn't put the tcf_exts_destroy(&old_e)
+into this if block, or other RCU readers may derefer the
+freed memory (Please correct me If I am wrong).
+
+So I put the tcf_exts_destroy(&old_e) near the tcindex 
+destroy work, after the RCU updateing.
+
+>
+> >               err = tcindex_filter_result_init(old_r, cp, net);
+> >               if (err < 0) {
+> >                       kfree(f);
+> > @@ -510,6 +521,9 @@ tcindex_set_parms(struct net *net, struct tcf_proto *tp, unsigned long base,
+> >               tcf_exts_destroy(&new_filter_result.exts);
+> >       }
+> >
+> > +#ifdef CONFIG_NET_CLS_ACT
+> > +     tcf_exts_destroy(&old_e);
+> > +#endif
+> >       if (oldp)
+> >               tcf_queue_work(&oldp->rwork, tcindex_partial_destroy_work);
+> >       return 0;
