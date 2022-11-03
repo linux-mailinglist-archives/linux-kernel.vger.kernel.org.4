@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCAC5617D43
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 14:01:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C313C617D4A
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 14:01:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231750AbiKCNBn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 09:01:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41954 "EHLO
+        id S231743AbiKCNB4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 09:01:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230209AbiKCNB1 (ORCPT
+        with ESMTP id S231679AbiKCNB2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 09:01:27 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B96B51408F;
-        Thu,  3 Nov 2022 06:01:17 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id f7so2866887edc.6;
-        Thu, 03 Nov 2022 06:01:17 -0700 (PDT)
+        Thu, 3 Nov 2022 09:01:28 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E45901409E;
+        Thu,  3 Nov 2022 06:01:18 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id 13so5033616ejn.3;
+        Thu, 03 Nov 2022 06:01:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=W9sx36prwxLbye8vg1FZsE+HqNZsZkJYCt0cI8Qm494=;
-        b=KTiaba50N29jX2UkZnmaka1xRvjrcNtTCGvO3h91tgkH3BhhNk0oyZ6V37fdBIqEoZ
-         plMlJjWQGcfusNqMaPDp5x5FMjoyvADXYq1G8ibCspG4W+M26v2dD1vPqDPPz3mYRk+3
-         REAtdTfrM98hIwqld8A0Rk2pYA/SAqctrMOXLwLhMxC5FQg1RRndW94RAphXBoLB6azU
-         DRrF0Et2P7Oh86ZG+609nNg5n9iVHduxTxOV4k5w7uqrniiw1G5Y653rJcJeCUDU4ILE
-         f8E83PR8pWVoGmBcM0ZYCYzeRw1+RVx3+/tsxnIZUbp3tQL3g4dglcMjfnc+NoMvXxq0
-         qn1A==
+        bh=jneUenFAcWaeUzGS8zwAmnQ28hpu+G2lRJYvSOqR+rA=;
+        b=FQoGpcoO6SNTCG7a4PT8aZFLsJq6p2rpARp1dFtrfHtREnC0ZfYFjxHX1eRT8lmjD5
+         02P2Nd8wKtBEcvYGHdUk/FUAtQpTcN9Y/v7MNNaJLKV0OSTVYOt27op9Xg3/empK9DX/
+         5l9i/2C8c8cQRvQxp54gq2n0S8+QkPPik2DTUguCTfeiU9ZbeCWDUl5vYeQAjjl9DtrX
+         VoVklDtBlPzQFeWmfuKhBHzXCGdqO3VBmDuSHYtPLd1Km4HLysV70o6YQU8KLGGqJ7nQ
+         sCo721AYojF5tCdBrczQdvkRys2/1Wx3SrpXxrhGMTY2bJQqV6fU9jQA0Lk5eVqbHUhV
+         +smA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=W9sx36prwxLbye8vg1FZsE+HqNZsZkJYCt0cI8Qm494=;
-        b=DEhXRS7in24pMvs6t2XKQSbeO+n7C295Tf2TMR1Oft62WPY8a5UBFOKc/mcOf65EsT
-         TFSkx8dy39S+tI6bmlgqtG+5FOcJy1XnhGV3Obl8tXQcx2eY5dD/kh8me1ZyQZHvf/15
-         Ed61+CfDIddJph16AHfM/Ige3VzEFBmUpLChDK7Fr2FH5aL9Pucq7v3xsmP9rwVjHp6A
-         qs3U7LFlsc3HSFS+BkOoNa/l/3zoiAScITtnnT//CmgtFPKjMAuKOtqLb7PZnznbTmDa
-         rMx0nvUpd+erMDmqWdSfN/0B+POOty1guU7IgQpC8036DbCmo7VSuCxMTQVp/++uPOhA
-         NzEA==
-X-Gm-Message-State: ACrzQf2dkVDT7h2FlRHhjJspSJXa3+peBkm225L2KJAo2I5hGs0ySuaI
-        8mcDBCyhd3Yjis8/Y9UDpTQ=
-X-Google-Smtp-Source: AMsMyM4544HZ76Tphf61ukxzTc2C9Oij+slH/HIi1GJQHThrY/UDu9jklvdIez5gXI4jvYq4dSKCqA==
-X-Received: by 2002:a50:ec0a:0:b0:461:c0ca:a0bc with SMTP id g10-20020a50ec0a000000b00461c0caa0bcmr30078641edr.306.1667480475556;
-        Thu, 03 Nov 2022 06:01:15 -0700 (PDT)
+        bh=jneUenFAcWaeUzGS8zwAmnQ28hpu+G2lRJYvSOqR+rA=;
+        b=LAmYSHj42hqT2QQpTIAMAChKIUDHKXMxMzH2rZfvZWpyd+pRvBoM8tJsMBujNVlaBf
+         JiWL/fNGMoccrTJOeKmvecp8ldSm4SAawyS8MfzlK0zmsdZpeAMtOG9fYYqDHFibN2ab
+         TLLKlVeldMprgCwjknf1JFaG8vQiZeF5iQ7mvcjyWdhp6WTk3knqQccONC/ZcsdNEtO1
+         Kt39tarXX99kpYtdt7rP2DtjsgE/gDMacdSasqJFBCwXFJ+rm1DwDaWAbJVQ56I1X9p3
+         gof/jCqguC21eb30FDlFcyY4ieUgPX/+AfIPonNAIfplmZQVAAtKVTu7EmyPjg5QQbX5
+         Tzxg==
+X-Gm-Message-State: ACrzQf3P7YfXC3DeQ7OaaW89fwi99v+pqeNqP3gNeuiBUxQP+DGcmqJL
+        0G85GeXfO3tQ5uGKEe6tyl8=
+X-Google-Smtp-Source: AMsMyM7sZgPXG4IfYApBR7EtWm56vMwYw+9gZ74/U1dAieQgpn552B8x7OLbD0GgH4DDtyjmJ5ockA==
+X-Received: by 2002:a17:906:5a6b:b0:7ad:bc80:bffe with SMTP id my43-20020a1709065a6b00b007adbc80bffemr23790198ejc.578.1667480477442;
+        Thu, 03 Nov 2022 06:01:17 -0700 (PDT)
 Received: from localhost.localdomain ([5.2.194.157])
-        by smtp.gmail.com with ESMTPSA id q12-20020a17090676cc00b00779a605c777sm451829ejn.192.2022.11.03.06.01.13
+        by smtp.gmail.com with ESMTPSA id q12-20020a17090676cc00b00779a605c777sm451829ejn.192.2022.11.03.06.01.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Nov 2022 06:01:15 -0700 (PDT)
+        Thu, 03 Nov 2022 06:01:17 -0700 (PDT)
 From:   Cosmin Tanislav <demonsingur@gmail.com>
 Cc:     Lars-Peter Clausen <lars@metafoo.de>,
         Michael Hennerich <Michael.Hennerich@analog.com>,
@@ -60,9 +60,9 @@ Cc:     Lars-Peter Clausen <lars@metafoo.de>,
         linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Cosmin Tanislav <cosmin.tanislav@analog.com>
-Subject: [PATCH v4 04/13] dt-bindings: iio: temperature: ltc2983: remove qutations from phandle ref
-Date:   Thu,  3 Nov 2022 15:00:32 +0200
-Message-Id: <20221103130041.2153295-5-demonsingur@gmail.com>
+Subject: [PATCH v4 05/13] dt-bindings: iio: temperature: ltc2983: describe matrix items
+Date:   Thu,  3 Nov 2022 15:00:33 +0200
+Message-Id: <20221103130041.2153295-6-demonsingur@gmail.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221103130041.2153295-1-demonsingur@gmail.com>
 References: <20221103130041.2153295-1-demonsingur@gmail.com>
@@ -81,44 +81,75 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Cosmin Tanislav <cosmin.tanislav@analog.com>
 
-Not needed, so why have them?
+Give a little bit of information on what each item in the matrix is
+supposed to be.
+
+Also, some matrices put the 'minItems' and 'maxItems' keywords in the
+wrong level. They should be on the same level as the 'items' keyword.
+Fix it.
 
 Signed-off-by: Cosmin Tanislav <cosmin.tanislav@analog.com>
 ---
- .../devicetree/bindings/iio/temperature/adi,ltc2983.yaml    | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ .../bindings/iio/temperature/adi,ltc2983.yaml | 23 ++++++++++---------
+ 1 file changed, 12 insertions(+), 11 deletions(-)
 
 diff --git a/Documentation/devicetree/bindings/iio/temperature/adi,ltc2983.yaml b/Documentation/devicetree/bindings/iio/temperature/adi,ltc2983.yaml
-index 29f6fa5e2529..6b3a20448f78 100644
+index 6b3a20448f78..4f26b337c957 100644
 --- a/Documentation/devicetree/bindings/iio/temperature/adi,ltc2983.yaml
 +++ b/Documentation/devicetree/bindings/iio/temperature/adi,ltc2983.yaml
-@@ -112,7 +112,7 @@ patternProperties:
-         description:
-           Phandle which points to a sensor object responsible for measuring
-           the thermocouple cold junction temperature.
--        $ref: "/schemas/types.yaml#/definitions/phandle"
-+        $ref: /schemas/types.yaml#/definitions/phandle
+@@ -126,8 +126,9 @@ patternProperties:
+         minItems: 3
+         maxItems: 64
+         items:
+-          minItems: 2
+-          maxItems: 2
++          items:
++            - description: Voltage point in nV, signed.
++            - description: Temperature point in uK.
  
-       adi,custom-thermocouple:
-         description:
-@@ -204,7 +204,7 @@ patternProperties:
-       adi,rsense-handle:
-         description:
-           Phandle pointing to a rsense object associated with this RTD.
--        $ref: "/schemas/types.yaml#/definitions/phandle"
-+        $ref: /schemas/types.yaml#/definitions/phandle
+   "^diode@":
+     type: object
+@@ -249,12 +250,12 @@ patternProperties:
+           resistance(ohm)-temperature(K). The entries added here are in uohm
+           and uK. For more details values look at table 74 and 75.
+         $ref: /schemas/types.yaml#/definitions/uint64-matrix
++        minItems: 3
++        maxItems: 64
+         items:
+-          minItems: 3
+-          maxItems: 64
+           items:
+-            minItems: 2
+-            maxItems: 2
++            - description: Resistance point in uOhms.
++            - description: Temperature point in uK.
  
-       adi,number-of-wires:
-         description:
-@@ -288,7 +288,7 @@ patternProperties:
-         description:
-           Phandle pointing to a rsense object associated with this
-           thermistor.
--        $ref: "/schemas/types.yaml#/definitions/phandle"
-+        $ref: /schemas/types.yaml#/definitions/phandle
+     required:
+       - adi,rsense-handle
+@@ -328,8 +329,9 @@ patternProperties:
+         minItems: 3
+         maxItems: 64
+         items:
+-          minItems: 2
+-          maxItems: 2
++          items:
++            - description: Resistance point in uOhms.
++            - description: Temperature point in uK.
  
-       adi,single-ended:
+       adi,custom-steinhart:
          description:
+@@ -338,9 +340,8 @@ patternProperties:
+           Steinhart sensors the coefficients are given in the raw
+           format. Look at table 82 for more information.
+         $ref: /schemas/types.yaml#/definitions/uint32-array
+-        items:
+-          minItems: 6
+-          maxItems: 6
++        minItems: 6
++        maxItems: 6
+ 
+     required:
+       - adi,rsense-handle
 -- 
 2.38.1
 
