@@ -2,48 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37D3D617C67
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 13:19:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC785617C69
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 13:20:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231611AbiKCMTs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 08:19:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45034 "EHLO
+        id S231616AbiKCMUb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 08:20:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230005AbiKCMTp (ORCPT
+        with ESMTP id S230460AbiKCMU1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 08:19:45 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53A13278;
-        Thu,  3 Nov 2022 05:19:44 -0700 (PDT)
-Received: from canpemm500009.china.huawei.com (unknown [172.30.72.56])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4N32mv4S8nzJnL4;
-        Thu,  3 Nov 2022 20:16:47 +0800 (CST)
-Received: from [10.67.102.169] (10.67.102.169) by
- canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 3 Nov 2022 20:19:42 +0800
-CC:     <linux-gpio@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linus.walleij@linaro.org>,
-        <brgl@bgdev.pl>, <yangyicong@hisilicon.com>, <robh+dt@kernel.org>,
-        <xuwei5@huawei.com>, <krzysztof.kozlowski+dt@linaro.org>
-Subject: Re: [PATCH next v3 1/2] gpio: hisi: Add initial device tree support
-To:     Weilong Chen <chenweilong@huawei.com>, <f.fangjian@huawei.com>
-References: <20221101082442.263448-1-chenweilong@huawei.com>
-From:   Yicong Yang <yangyicong@huawei.com>
-Message-ID: <bb081979-10d6-5d6e-8e87-9a317fb09455@huawei.com>
-Date:   Thu, 3 Nov 2022 20:19:42 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.1
+        Thu, 3 Nov 2022 08:20:27 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCD381084;
+        Thu,  3 Nov 2022 05:20:26 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id l14so2520048wrw.2;
+        Thu, 03 Nov 2022 05:20:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=mw4/Yfvrzn2p7M0QFJNU9GmrUVeholUQiOtl00+DcHU=;
+        b=DhKquTefpxZY3+yipjtQ1egrvF2ZYXjn2VQXNUVx4SmushbHOBXmli8ZgG9Nz/+jtr
+         4Cvs1J+sVFgzt7j/9ti17tMqzdBou/v3NylqQ0sr3CwQpTQgJbGoMVxqRGmpYx1BbvA8
+         XwRZ20b0HqmSy3I0p2Uqcx3aXooLzHGZWVyj7dIsyv+BrcyD0wXBTcclHscZw+Dvxwi4
+         gpcxcRcXzA2rbYyniECLPbyfUvWjYpp7O/zE9jgAFAe4dc8NJluKaJwMH966pAAkW++B
+         Hc8HgZw6fpMi9pgZuXNGDkXJpDP9z8fc5LyGqwwITcGfrXQEDwehM8j0nn5mNsBpViwh
+         ikfQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mw4/Yfvrzn2p7M0QFJNU9GmrUVeholUQiOtl00+DcHU=;
+        b=PnVmQo6nyR/cd7Cd01499TEHgUqDssPpEqvNycJsmxSB4Av2gAIVnQNafI0yyGBG9Y
+         qkzOBiWubesl2PwO9ok/cV+9QXfssOKMfsGw9uAWaJ5iiWwQpNYGHdijHiX9VOvV7oXA
+         WG/tfRyc+w9C3kq1iJQO0Lfq+5UHqWSwhNn1F/l63cyeG/Ei7jzgcjW1axE98/JC4ei3
+         XhU3obQiXk7qqzHiHrbjC2JRlVZdfeO00k9yLM12+2qZD7cqTW6dQoKhInbuuLFf5yhf
+         uLJ4t73sgHLCr6aMTdJpd9+wdSrETw2NhBSUGEwyAmmokMWP2400K23cSrT6CsV36Mw7
+         UPJA==
+X-Gm-Message-State: ACrzQf17JMrIEi018dflEQc7of50OPU30xrJutaYFPO4Jbj9+8AuOMKs
+        0UvtLRG0B4ufY2OWaa61d+o=
+X-Google-Smtp-Source: AMsMyM7Ga5AcXFy9woPmxBiXYGjqxPJhkR+yThQ3lHxs6eqnpvgQFVxfUm3r0tbxywFQ4nRj1/kl9w==
+X-Received: by 2002:adf:e3cc:0:b0:235:95b1:2124 with SMTP id k12-20020adfe3cc000000b0023595b12124mr18912757wrm.693.1667478025320;
+        Thu, 03 Nov 2022 05:20:25 -0700 (PDT)
+Received: from debian (host-78-150-37-98.as13285.net. [78.150.37.98])
+        by smtp.gmail.com with ESMTPSA id d19-20020adfa353000000b002366553eca7sm697825wrb.83.2022.11.03.05.20.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Nov 2022 05:20:25 -0700 (PDT)
+Date:   Thu, 3 Nov 2022 12:20:23 +0000
+From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com, srw@sladewatkins.net
+Subject: Re: [PATCH 5.10 00/91] 5.10.153-rc1 review
+Message-ID: <Y2OyB5m9padrnGr7@debian>
+References: <20221102022055.039689234@linuxfoundation.org>
 MIME-Version: 1.0
-In-Reply-To: <20221101082442.263448-1-chenweilong@huawei.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.102.169]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- canpemm500009.china.huawei.com (7.192.105.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221102022055.039689234@linuxfoundation.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,59 +74,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/11/1 16:24, Weilong Chen wrote:
-> Add support for HiSilicon GPIO controller in embedded platform, which
-> boot from devicetree.
-> 
-> Signed-off-by: Weilong Chen <chenweilong@huawei.com>
+Hi Greg,
 
-Reviewed-by: Yicong Yang <yangyicong@hisilicon.com>
+On Wed, Nov 02, 2022 at 03:32:43AM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.10.153 release.
+> There are 91 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Fri, 04 Nov 2022 02:20:38 +0000.
+> Anything received after that time might be too late.
 
-> ---
-> Change since v2:
-> - Drop wrong use ACPI_PTR/of_match_ptr
-> Link: https://lore.kernel.org/lkml/20221028022453.163186-1-chenweilong@huawei.com/
-> 
->  drivers/gpio/Kconfig     | 2 +-
->  drivers/gpio/gpio-hisi.c | 7 +++++++
->  2 files changed, 8 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
-> index e034f752e7ce..71a7880af59d 100644
-> --- a/drivers/gpio/Kconfig
-> +++ b/drivers/gpio/Kconfig
-> @@ -310,7 +310,7 @@ config GPIO_GRGPIO
->  
->  config GPIO_HISI
->  	tristate "HiSilicon GPIO controller driver"
-> -	depends on (ARM64 && ACPI) || COMPILE_TEST
-> +	depends on ARM64 || COMPILE_TEST
->  	select GPIO_GENERIC
->  	select GPIOLIB_IRQCHIP
->  	help
-> diff --git a/drivers/gpio/gpio-hisi.c b/drivers/gpio/gpio-hisi.c
-> index 3caabef5c7a2..55bd69043bf4 100644
-> --- a/drivers/gpio/gpio-hisi.c
-> +++ b/drivers/gpio/gpio-hisi.c
-> @@ -221,6 +221,12 @@ static const struct acpi_device_id hisi_gpio_acpi_match[] = {
->  };
->  MODULE_DEVICE_TABLE(acpi, hisi_gpio_acpi_match);
->  
-> +static const struct of_device_id hisi_gpio_dts_match[] = {
-> +	{ .compatible = "hisilicon,ascend910-gpio", },
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(of, hisi_gpio_dts_match);
-> +
->  static void hisi_gpio_get_pdata(struct device *dev,
->  				struct hisi_gpio *hisi_gpio)
->  {
-> @@ -311,6 +317,7 @@ static struct platform_driver hisi_gpio_driver = {
->  	.driver		= {
->  		.name	= HISI_GPIO_DRIVER_NAME,
->  		.acpi_match_table = hisi_gpio_acpi_match,
-> +		.of_match_table = hisi_gpio_dts_match,
->  	},
->  	.probe		= hisi_gpio_probe,
->  };
-> 
+Build test (gcc version 11.3.1 20221016):
+mips: 63 configs -> no failure
+arm: 104 configs -> no failure
+arm64: 3 configs -> no failure
+x86_64: 4 configs -> no failure
+alpha allmodconfig -> no failure
+powerpc allmodconfig -> no failure
+riscv allmodconfig -> no failure
+s390 allmodconfig -> no failure
+xtensa allmodconfig -> no failure
+
+Boot test:
+x86_64: Booted on my test laptop. No regression.
+x86_64: Booted on qemu. No regression. [1]
+arm64: Booted on rpi4b (4GB model). No regression. [2]
+
+[1]. https://openqa.qa.codethink.co.uk/tests/2091
+[2]. https://openqa.qa.codethink.co.uk/tests/2094
+
+
+Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
+
+-- 
+Regards
+Sudip
