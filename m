@@ -2,103 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E7806183F9
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 17:17:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DC2161840E
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 17:18:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231527AbiKCQRf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 12:17:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45712 "EHLO
+        id S231657AbiKCQSj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 12:18:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229708AbiKCQRc (ORCPT
+        with ESMTP id S230341AbiKCQSf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 12:17:32 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45FCE18363;
-        Thu,  3 Nov 2022 09:17:31 -0700 (PDT)
-Received: from nicolas-tpx395.localdomain (192-222-136-102.qc.cable.ebox.net [192.222.136.102])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: nicolas)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 66FEB6602962;
-        Thu,  3 Nov 2022 16:17:27 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1667492249;
-        bh=UF8gcf9Zdsra79jQbu7uASjF23J3RPW5N777RLTHhuY=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=BuefWQlJf8M4p09e0/uP4GwZBjBH8QwGMfRznG/AwyOlcJj/RN64+2lpdnSV4cTNK
-         n+huZqFNDDR3di5xNQ/VMT5NhuiG0V9Xq/50r3FVSBLnY/VAeg4HPpl7iryOOPFazz
-         xAnb4V7qFNpJVHZbEDNFS3VSkWY7jWTXdyl3tAv29BtVo17G0BMwKR9/mKBxAGtK1B
-         UXEf5yEGt8vDymhc5wEnFfMFhj2wmOPe1NFdWOejaPwclO+ASdD+i+K4HNwIF0RE4X
-         accQfnWvEhuO/Ph1cAufgt6fTa0P1fuXvZ/alaa5/rrH2zX55/ezcLRmhhh6u3qgTi
-         WogQ4pHX/hJ4A==
-Message-ID: <df2676f0e4dce565d483ce2149b2c54da05b34a5.camel@collabora.com>
-Subject: Re: [PATCH v2] vcodec: mediatek: add check for NULL for
-From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
-To:     Anastasia Belova <abelova@astralinux.ru>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     Tiffany Lin <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Yunfei Dong <yunfei.dong@mediatek.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, lvc-project@linuxtesting.org
-Date:   Thu, 03 Nov 2022 12:17:17 -0400
-In-Reply-To: <20221102121027.4285-1-abelova@astralinux.ru>
-References: <20221102121027.4285-1-abelova@astralinux.ru>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
+        Thu, 3 Nov 2022 12:18:35 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C8DD2656
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 09:18:34 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id f7so3822856edc.6
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 09:18:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=2Lg2UqtA5ubSwaY82upgpYgIeAri2st+rw+ftxb/tfY=;
+        b=wnRRKdL9HHArzn7VH6dv74vlZUwBr10F8BsAqBLZB9cUVAJJg4Q79h3hvBjPNer+5i
+         AaP5fyZbS3a299CXhCkOEZWwr1oMTSqTN1O6Gn38vS1ywphAuTeDOuUKsXWvr4MuSK8K
+         TpR1sXfLzk0uOLrvMwFVY+XGxASueH6bDhQgG8GuYuR7NFeap6wiQz4kcL5wLrqVZN/A
+         DYek1eALMezvv/LOvaBZvpoVCY05cT0R+VZV7jzGzkZreHhqWL1nXi9ZpY8NjNieC7JV
+         JuhkWueJdSqyHJrxSxDRuXfALU8exDTDJRSZZuDfxdk0PzJBc3Czx5amYWy8Gb1l51Fq
+         zv/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2Lg2UqtA5ubSwaY82upgpYgIeAri2st+rw+ftxb/tfY=;
+        b=fcysshHTgZx+rlrnXAQ3VfxKj5h01F/bIm6nhtRRR2QkqSqHTT4xduRrq7fjrMxHpB
+         Wa7MUnwY/29iOC0eWHMVow/ayl0RZEYsQsvfsD1djBEg2nqtS9rux2NKJBKnFVTTby7D
+         tJWb+XgPpdLGyKPGUgtIXO+9J5UdkdtWjqAObMB3ukJa71xqGOXCHArC670LfMlxZ7E9
+         h5AD3Uae929Dlk26xT8G4CBcfUum7et8Gr1BD/7c0DHS+UKuL7VIsfUKxqNrHB/qPR0E
+         NSm71aUF+oOHazPDTugDYvhORZQJlUO2lH/NBphFtVh2e8Bcn19jZmxHov1Q/4hTl9Hb
+         Jr6w==
+X-Gm-Message-State: ACrzQf3Plj9pSb3wjliuD+EPUBwi0LKScKxa5Mw5nU3KzTfGxcsHvjY/
+        rARnRwNwn/rZnceD0GcIgdvELYsN0AH+N3/ukWTLbg==
+X-Google-Smtp-Source: AMsMyM4e8z84xV9gGUnPbPjZ4Y/FoDNwAMKpTQT6uovGKYdP0eIdPxpKv++HkcVTEwpFvEGwkh6krSYFSzZQC4knIEQ=
+X-Received: by 2002:aa7:d385:0:b0:461:8cd3:b38b with SMTP id
+ x5-20020aa7d385000000b004618cd3b38bmr31178725edq.172.1667492312948; Thu, 03
+ Nov 2022 09:18:32 -0700 (PDT)
 MIME-Version: 1.0
+References: <20220912132501.1812575-1-georgepee@gmail.com>
+In-Reply-To: <20220912132501.1812575-1-georgepee@gmail.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Thu, 3 Nov 2022 17:18:21 +0100
+Message-ID: <CACRpkdY96uPTKgxK_LkQjTuqtd3GU=VYmGDg1zWqsyoxo0Twog@mail.gmail.com>
+Subject: Re: [PATCH v2] ARM : Support for optional ARMv8.2 half-precision
+ floating point extension
+To:     george pee <georgepee@gmail.com>, Mark Brown <broonie@kernel.org>
+Cc:     Russell King <linux@armlinux.org.uk>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Nicolas Pitre <nico@fluxnic.net>,
+        Keith Packard <keithpac@amazon.com>,
+        Austin Kim <austindh.kim@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le mercredi 02 novembre 2022 =C3=A0 15:10 +0300, Anastasia Belova a =C3=A9c=
-rit=C2=A0:
-> Any time calling vp9_is_sf_ref_fb we need fb !=3D NULL after checks.
->=20
-> Found by Linux Verification Center (linuxtesting.org) with SVACE.
->=20
-> Fixes: f77e89854b3e ("[media] vcodec: mediatek: Add Mediatek VP9 Video De=
-coder Driver")
+Sorry for top-posting but provding context.
 
-As Angelo said, this change is a no-op in practice, for this reason I would
-suggest to drop the `Fixes` tag (not worth the effort of back-porting this)=
-.
+Please CC Mark Brown om FP extensions, he is looking after these.
+Now add on To:
 
->=20
-> Signed-off-by: Anastasia Belova <abelova@astralinux.ru>
+Yours,
+Linus Walleij
 
-Reviewed-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+On Mon, Sep 12, 2022 at 3:25 PM george pee <georgepee@gmail.com> wrote:
 
+> Report feature /proc/cpuinfo as fphp to be consistent with arm64
+>
+> Signed-off-by: george pee <georgepee@gmail.com>
 > ---
->  drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_if.c | 3 +++
->  1 file changed, 3 insertions(+)
->=20
-> diff --git a/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_if.c b/=
-drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_if.c
-> index 70b8383f7c8e..776468cd834a 100644
-> --- a/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_if.c
-> +++ b/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_if.c
-> @@ -208,6 +208,9 @@ static bool vp9_is_sf_ref_fb(struct vdec_vp9_inst *in=
-st, struct vdec_fb *fb)
->  	int i;
->  	struct vdec_vp9_vsi *vsi =3D inst->vsi;
-> =20
-> +	if (!fb)
-> +		return true;
-> +
->  	for (i =3D 0; i < ARRAY_SIZE(vsi->sf_ref_fb); i++) {
->  		if (fb =3D=3D &vsi->sf_ref_fb[i].fb)
->  			return true;
-
+>  arch/arm/include/uapi/asm/hwcap.h | 1 +
+>  arch/arm/kernel/entry-armv.S      | 3 ++-
+>  arch/arm/kernel/setup.c           | 1 +
+>  arch/arm/vfp/vfpmodule.c          | 2 ++
+>  4 files changed, 6 insertions(+), 1 deletion(-)
+>
+> diff --git a/arch/arm/include/uapi/asm/hwcap.h b/arch/arm/include/uapi/asm/hwcap.h
+> index 990199d8b7c6..5d635dce8853 100644
+> --- a/arch/arm/include/uapi/asm/hwcap.h
+> +++ b/arch/arm/include/uapi/asm/hwcap.h
+> @@ -37,5 +37,6 @@
+>  #define HWCAP2_SHA1    (1 << 2)
+>  #define HWCAP2_SHA2    (1 << 3)
+>  #define HWCAP2_CRC32   (1 << 4)
+> +#define HWCAP2_FPHP    (1 << 5)
+>
+>  #endif /* _UAPI__ASMARM_HWCAP_H */
+> diff --git a/arch/arm/kernel/entry-armv.S b/arch/arm/kernel/entry-armv.S
+> index c39303e5c234..161f8df852e1 100644
+> --- a/arch/arm/kernel/entry-armv.S
+> +++ b/arch/arm/kernel/entry-armv.S
+> @@ -625,11 +625,12 @@ call_fpe:
+>         ret.w   lr                              @ CP#6
+>         ret.w   lr                              @ CP#7
+>         ret.w   lr                              @ CP#8
+> -       ret.w   lr                              @ CP#9
+>  #ifdef CONFIG_VFP
+> +       W(b)    do_vfp                          @ CP#9  (VFP/FP16)
+>         W(b)    do_vfp                          @ CP#10 (VFP)
+>         W(b)    do_vfp                          @ CP#11 (VFP)
+>  #else
+> +       ret.w   lr                              @ CP#9
+>         ret.w   lr                              @ CP#10 (VFP)
+>         ret.w   lr                              @ CP#11 (VFP)
+>  #endif
+> diff --git a/arch/arm/kernel/setup.c b/arch/arm/kernel/setup.c
+> index 1e8a50a97edf..8887d0f447d6 100644
+> --- a/arch/arm/kernel/setup.c
+> +++ b/arch/arm/kernel/setup.c
+> @@ -1258,6 +1258,7 @@ static const char *hwcap2_str[] = {
+>         "sha1",
+>         "sha2",
+>         "crc32",
+> +       "fphp",
+>         NULL
+>  };
+>
+> diff --git a/arch/arm/vfp/vfpmodule.c b/arch/arm/vfp/vfpmodule.c
+> index 2cb355c1b5b7..0806b0b1f2c7 100644
+> --- a/arch/arm/vfp/vfpmodule.c
+> +++ b/arch/arm/vfp/vfpmodule.c
+> @@ -831,6 +831,8 @@ static int __init vfp_init(void)
+>
+>                         if ((fmrx(MVFR1) & 0xf0000000) == 0x10000000)
+>                                 elf_hwcap |= HWCAP_VFPv4;
+> +                       if ((fmrx(MVFR1) & 0x0f000000) == 0x03000000)
+> +                               elf_hwcap2 |= HWCAP2_FPHP;
+>                 }
+>         /* Extract the architecture version on pre-cpuid scheme */
+>         } else {
+> --
+> 2.37.3
+>
