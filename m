@@ -2,141 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 844656182E9
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 16:31:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C5016182ED
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 16:31:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230273AbiKCPbT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 11:31:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37742 "EHLO
+        id S230132AbiKCPbf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 11:31:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232202AbiKCPao (ORCPT
+        with ESMTP id S232254AbiKCPav (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 11:30:44 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B8E151CB3C;
-        Thu,  3 Nov 2022 08:30:25 -0700 (PDT)
-Received: from anrayabh-desk (unknown [167.220.238.193])
-        by linux.microsoft.com (Postfix) with ESMTPSA id A3C65205DA30;
-        Thu,  3 Nov 2022 08:30:20 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com A3C65205DA30
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1667489425;
-        bh=LVBwdOCgh5S6moCYBOoLpAcgiJqiRXPqQN4nBFQUFc4=;
+        Thu, 3 Nov 2022 11:30:51 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26DB21C12F;
+        Thu,  3 Nov 2022 08:30:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8A885B828EB;
+        Thu,  3 Nov 2022 15:30:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8BD4EC433D6;
+        Thu,  3 Nov 2022 15:30:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667489435;
+        bh=mgyY0R29mGntIOfFVnfmgFP7RctremcB5vzLO4Yx5X0=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=EKj6uG4ALhiUoBACqTyMJgoglFkzdtbwaHbNPafkQqBy8VihwsnkHXpXGBqq/BEVU
-         +XbhLL+Jd3q/81THSkWW0JFeg1/0S5/cmK/uiA59yi9HCD5xyw7OYEAWlR38ysRRU5
-         N897vK30B2PQdT0BPVi5a5sfNc/n/SMoqoR4VhAQ=
-Date:   Thu, 3 Nov 2022 21:00:15 +0530
-From:   Anirudh Rayabharam <anrayabh@linux.microsoft.com>
-To:     Wei Liu <wei.liu@kernel.org>
-Cc:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Dexuan Cui <decui@microsoft.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
-        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "stanislav.kinsburskiy@gmail.com" <stanislav.kinsburskiy@gmail.com>,
-        "kumarpraveen@linux.microsoft.com" <kumarpraveen@linux.microsoft.com>,
-        "mail@anirudhrb.com" <mail@anirudhrb.com>
-Subject: Re: [PATCH v2 1/2] clocksource/drivers/hyperv: add data structure
- for reference TSC MSR
-Message-ID: <Y2Peh/+kz8FtlnAm@anrayabh-desk>
-References: <20221027095729.1676394-1-anrayabh@linux.microsoft.com>
- <20221027095729.1676394-2-anrayabh@linux.microsoft.com>
- <BYAPR21MB1688E0040710DF040BB7FCCDD7339@BYAPR21MB1688.namprd21.prod.outlook.com>
- <BYAPR21MB168844A39612131C920DA954D7399@BYAPR21MB1688.namprd21.prod.outlook.com>
- <Y2PPBREz76rMyhnx@liuwe-devbox-debian-v2>
+        b=Uz4RgduU8VABIxZ+tLEpWtmE5xF7WA468KZf1RKzsHa7bo44FeXFGClazxNq/6pba
+         IzEhb2TeVZQ9V5PCjLCl0sVdx7WzYoyzbBIz1kn8lAgPvh3tEiSNpgqfY7hoBR5BsS
+         rSDxUVVWkXxhz4uDaZSfepO3Wt2IiOajTB87+35VPCHEBe7SB0vuWPDlJH46d+B6LW
+         ZDc8duntrmAalwuRUBVfEYl54d+qWrk/FxAid3QI8UFJf3Zo2f/uirz07t25ZIn/U3
+         UibZs7ViYNB5vkFS7ejmRRjaVEZW3H+q6PDrKzbudrMYx+QYWQDja+e1Sj0ZgkxDDb
+         om9VcqDqdDqFA==
+Date:   Thu, 3 Nov 2022 16:30:30 +0100
+From:   Christian Brauner <brauner@kernel.org>
+To:     Ondrej Mosnacek <omosnace@redhat.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        linux-fsdevel@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Martin Pitt <mpitt@redhat.com>
+Subject: Re: [PATCH v2] fs: don't audit the capability check in
+ simple_xattr_list()
+Message-ID: <20221103153030.ep5rqq2uetpclm3z@wittgenstein>
+References: <20221103151205.702826-1-omosnace@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Y2PPBREz76rMyhnx@liuwe-devbox-debian-v2>
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221103151205.702826-1-omosnace@redhat.com>
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 03, 2022 at 02:24:05PM +0000, Wei Liu wrote:
-> On Wed, Nov 02, 2022 at 08:33:31PM +0000, Michael Kelley (LINUX) wrote:
-> > From: Michael Kelley (LINUX) <mikelley@microsoft.com> Sent: Thursday, October 27, 2022 6:43 AM
-> > > From: Anirudh Rayabharam <anrayabh@linux.microsoft.com> Sent: Thursday,
-> > > October 27, 2022 2:57 AM
-> > > >
-> > > > Add a data structure to represent the reference TSC MSR similar to
-> > > > other MSRs. This simplifies the code for updating the MSR.
-> > > >
-> > > > Signed-off-by: Anirudh Rayabharam <anrayabh@linux.microsoft.com>
-> > > > ---
-> > > >  drivers/clocksource/hyperv_timer.c | 28 ++++++++++++++--------------
-> > > >  include/asm-generic/hyperv-tlfs.h  |  9 +++++++++
-> > > >  2 files changed, 23 insertions(+), 14 deletions(-)
-> > > >
-> > > > diff --git a/drivers/clocksource/hyperv_timer.c
-> > > b/drivers/clocksource/hyperv_timer.c
-> > > > index bb47610bbd1c..11332c82d1af 100644
-> > > > --- a/drivers/clocksource/hyperv_timer.c
-> > > > +++ b/drivers/clocksource/hyperv_timer.c
-> > > > @@ -395,25 +395,25 @@ static u64 notrace read_hv_sched_clock_tsc(void)
-> > > >
-> > > >  static void suspend_hv_clock_tsc(struct clocksource *arg)
-> > > >  {
-> > > > -	u64 tsc_msr;
-> > > > +	union hv_reference_tsc_msr tsc_msr;
-> > > >
-> > > >  	/* Disable the TSC page */
-> > > > -	tsc_msr = hv_get_register(HV_REGISTER_REFERENCE_TSC);
-> > > > -	tsc_msr &= ~BIT_ULL(0);
-> > > > -	hv_set_register(HV_REGISTER_REFERENCE_TSC, tsc_msr);
-> > > > +	tsc_msr.as_uint64 = hv_get_register(HV_REGISTER_REFERENCE_TSC);
-> > > > +	tsc_msr.enable = 0;
-> > > > +	hv_set_register(HV_REGISTER_REFERENCE_TSC, tsc_msr.as_uint64);
-> > > >  }
-> > > >
-> > > >
-> > > >  static void resume_hv_clock_tsc(struct clocksource *arg)
-> > > >  {
-> > > >  	phys_addr_t phys_addr = virt_to_phys(&tsc_pg);
-> > > > -	u64 tsc_msr;
-> > > > +	union hv_reference_tsc_msr tsc_msr;
-> > > >
-> > > >  	/* Re-enable the TSC page */
-> > > > -	tsc_msr = hv_get_register(HV_REGISTER_REFERENCE_TSC);
-> > > > -	tsc_msr &= GENMASK_ULL(11, 0);
-> > > > -	tsc_msr |= BIT_ULL(0) | (u64)phys_addr;
-> > > > -	hv_set_register(HV_REGISTER_REFERENCE_TSC, tsc_msr);
-> > > > +	tsc_msr.as_uint64 = hv_get_register(HV_REGISTER_REFERENCE_TSC);
-> > > > +	tsc_msr.enable = 1;
-> > > > +	tsc_msr.pfn = __phys_to_pfn(phys_addr);
-> > 
-> > My previous review missed a problem here (and in the similar line below).
-> > __phys_to_pfn() will return a PFN based on the guest page size, which might
-> > be different from Hyper-V's page size that is always 4K.  This needs to be a
-> > Hyper-V PFN, and we have virt_to_hvpfn() available to do just that, assuming
-> > that function is safe to use here and in the case below. 
+On Thu, Nov 03, 2022 at 04:12:05PM +0100, Ondrej Mosnacek wrote:
+> The check being unconditional may lead to unwanted denials reported by
+> LSMs when a process has the capability granted by DAC, but denied by an
+> LSM. In the case of SELinux such denials are a problem, since they can't
+> be effectively filtered out via the policy and when not silenced, they
+> produce noise that may hide a true problem or an attack.
 > 
-> Anirudh, please take a look.
-
-Just sent a fix for this using HVPFN_DOWN() which looks safe to use
-here.
-
-Thanks,
-Anirudh.
-
+> Checking for the capability only if any trusted xattr is actually
+> present wouldn't really address the issue, since calling listxattr(2) on
+> such node on its own doesn't indicate an explicit attempt to see the
+> trusted xattrs. Additionally, it could potentially leak the presence of
+> trusted xattrs to an unprivileged user if they can check for the denials
+> (e.g. through dmesg).
 > 
-> I'm holding off sending hyperv-fixes to Linus for now.
+> Therefore, it's best (and simplest) to keep the check unconditional and
+> instead use ns_capable_noaudit() that will silence any associated LSM
+> denials.
 > 
-> Thanks,
-> Wei.
+> Fixes: 38f38657444d ("xattr: extract simple_xattr code from tmpfs")
+> Reported-by: Martin Pitt <mpitt@redhat.com>
+> Suggested-by: Christian Brauner (Microsoft) <brauner@kernel.org>
+> Signed-off-by: Ondrej Mosnacek <omosnace@redhat.com>
+> ---
+
+Looks good,
+Reviewed-by: Christian Brauner (Microsoft) <brauner@kernel.org>
