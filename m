@@ -2,142 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F4E36187F2
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 19:50:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BA406187AB
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 19:38:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231185AbiKCSuR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 14:50:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42866 "EHLO
+        id S230175AbiKCSij (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 14:38:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbiKCSuM (ORCPT
+        with ESMTP id S229445AbiKCSig (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 14:50:12 -0400
-Received: from isilmar-4.linta.de (isilmar-4.linta.de [136.243.71.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9523F7E;
-        Thu,  3 Nov 2022 11:50:10 -0700 (PDT)
-X-isilmar-external: YES
-X-isilmar-external: YES
-X-isilmar-external: YES
-X-isilmar-external: YES
-X-isilmar-external: YES
-X-isilmar-external: YES
-X-isilmar-external: YES
-X-isilmar-external: YES
-X-isilmar-external: YES
-X-isilmar-external: YES
-X-isilmar-external: YES
-X-isilmar-external: YES
-X-isilmar-external: YES
-X-isilmar-external: YES
-X-isilmar-external: YES
-X-isilmar-external: YES
-X-isilmar-external: YES
-X-isilmar-external: YES
-X-isilmar-external: YES
-X-isilmar-external: YES
-X-isilmar-external: YES
-X-isilmar-external: YES
-X-isilmar-external: YES
-X-isilmar-external: YES
-X-isilmar-external: YES
-X-isilmar-external: YES
-X-isilmar-external: YES
-X-isilmar-external: YES
-X-isilmar-external: YES
-Received: from owl.dominikbrodowski.net (owl.brodo.linta [10.2.0.111])
-        by isilmar-4.linta.de (Postfix) with ESMTPSA id A7E69201457;
-        Thu,  3 Nov 2022 18:50:07 +0000 (UTC)
-Received: by owl.dominikbrodowski.net (Postfix, from userid 1000)
-        id 564FF801F1; Thu,  3 Nov 2022 19:38:07 +0100 (CET)
-Date:   Thu, 3 Nov 2022 19:38:07 +0100
-From:   Dominik Brodowski <linux@dominikbrodowski.net>
-To:     Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Juergen Gross <jgross@suse.com>, linux-kernel@vger.kernel.org,
-        linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        sparclinux@vger.kernel.org, linux-pci@vger.kernel.org,
-        xen-devel@lists.xenproject.org, Miguel Ojeda <ojeda@kernel.org>,
-        Richard Henderson <richard.henderson@linaro.org>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "David S. Miller" <davem@davemloft.net>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
-Subject: Re: [PATCH v2 4/4] pcmcia: Convert to use
- pci_bus_for_each_resource_p()
-Message-ID: <Y2QKjzL+nH6Zabg7@owl.dominikbrodowski.net>
-References: <20221103164644.70554-1-andriy.shevchenko@linux.intel.com>
- <20221103164644.70554-5-andriy.shevchenko@linux.intel.com>
- <Y2P0XCNJvTVuziO7@owl.dominikbrodowski.net>
- <Y2P2ja26ikNecTsv@smile.fi.intel.com>
- <Y2QImB0OLakzz1+F@rocinante>
+        Thu, 3 Nov 2022 14:38:36 -0400
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C7EA100;
+        Thu,  3 Nov 2022 11:38:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=usdmuKgaw6HvzvZzrbDExUhrQ+AzRsmA0SxS+bw7TRg=; b=i8oWZ4jiHrfGDlWuxM9FXtsIx+
+        qex8oBVYNKtqgYHSKx9/CKulKavnkdFrAFa24PdrsIhYh4xaD3LR8WHQ8gxp5S0mNasIZMpNohVH0
+        u/l0r98E4vxszXYbKXgU/8ghlOsJtRThyZXmyCcGtqcxES1PpBcNrtBPr602XEsmhzQHHtY015rp3
+        oA8BPWJElXcJEl+FYxh++dMhzBgrs1eU4Gi/LOLSczQzQ1VEZzROMFGH8WkoR1UA578nCo6iWthQl
+        3N0vtkzhQPUftgZS0tseM4wfLqKXBYT1KVekQNJRbrjSJpk+OquMNrQUsbugY4Y1Nh+9TSWyj9sjd
+        vehFk/eA==;
+Received: from [177.102.148.33] (helo=[192.168.1.60])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1oqf6i-00BsMN-Q9; Thu, 03 Nov 2022 19:38:29 +0100
+Message-ID: <aac42f75-413b-c247-1a35-5d140ef38ff8@igalia.com>
+Date:   Thu, 3 Nov 2022 15:38:19 -0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Y2QImB0OLakzz1+F@rocinante>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH V3] efi: pstore: Add module parameter for setting the
+ record size
+Content-Language: en-US
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-efi@vger.kernel.org,
+        kernel-dev@igalia.com, kernel@gpiccoli.net, keescook@chromium.org,
+        anton@enomsg.org, ccross@android.com, tony.luck@intel.com
+References: <20221101184808.80747-1-gpiccoli@igalia.com>
+ <CAMj1kXH5B0Op7Aab45x_tdkM1YsoSJ9euNqLMzeJg4uK++ojJQ@mail.gmail.com>
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+In-Reply-To: <CAMj1kXH5B0Op7Aab45x_tdkM1YsoSJ9euNqLMzeJg4uK++ojJQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Fri, Nov 04, 2022 at 03:29:44AM +0900 schrieb Krzysztof Wilczyński:
-> Hello,
-> 
+On 03/11/2022 14:04, Ard Biesheuvel wrote:
 > [...]
-> > > > -
-> > > > -	for (i = 0; i < PCI_BRIDGE_RESOURCE_NUM; i++) {
-> > > > -		res = s->cb_dev->bus->resource[i];
-> > > > -#else
-> > > > -	pci_bus_for_each_resource(s->cb_dev->bus, res, i) {
-> > > >  #endif
-> > > > +
-> > > > +	pci_bus_for_each_resource_p(s->cb_dev->bus, res) {
-> > > >  		if (!res)
-> > > >  			continue;
-> > > 
-> > > Doesn't this remove the proper iterator for X86? Even if that is the right
-> > > thing to do, it needs an explict explanation.
-> > 
-> > I dunno what was in 2010, but reading code now I have found no differences in
-> > the logic on how resources are being iterated in these two pieces of code.
-> 
-> This code is over a decade old (13 years old to be precise) and there was
-> something odd between Bjorn's and Jesse's patches, as per:
-> 
->   89a74ecccd1f ("PCI: add pci_bus_for_each_resource(), remove direct bus->resource[] refs")
->   cf26e8dc4194 ("pcmcia: do not autoadd root PCI bus resources")
-> 
-> > But fine, I will add a line to a commit message about this change.
-> 
-> I wouldn't, personally.  The change you are proposing is self-explanatory
-> and somewhat in-line with what is there already - unless I am also reading
-> the current implementation wrong.
-> 
-> That said, Dominik is the maintainer of PCMCIA driver, so his is the last
-> word, so to speak. :)
-> 
-> > Considering this is done, can you issue your conditional tag so I will
-> > incorporate it in v3?
-> 
-> No need, really.  Again, unless Dominik thinks otherwise.
+> Thanks, I'll queue this up for v6.2
 
-Ah, thanks for the correction. Then v2 is perfectly fine.
-
-Thanks,
-	Dominik
+Thanks a lot for all the discussions Ard, it was very informative =)
