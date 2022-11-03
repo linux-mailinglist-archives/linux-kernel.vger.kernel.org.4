@@ -2,135 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB39F61879E
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 19:35:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F14586187A1
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 19:36:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229882AbiKCSfO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 14:35:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35320 "EHLO
+        id S230096AbiKCSgj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 14:36:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230096AbiKCSfK (ORCPT
+        with ESMTP id S229481AbiKCSge (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 14:35:10 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3BA5F14
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 11:35:09 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id u8-20020a17090a5e4800b002106dcdd4a0so6096765pji.1
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 11:35:09 -0700 (PDT)
+        Thu, 3 Nov 2022 14:36:34 -0400
+Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F6F5C29
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 11:36:33 -0700 (PDT)
+Received: by mail-qv1-xf2a.google.com with SMTP id n18so1715964qvt.11
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 11:36:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=dgoOqWPJe20h3F3t+kWJTAR37+M7sNOsPG89iz5Bulk=;
-        b=Pm4Lr3kAm7G9yhV3E+texinWexF8/BykknHnX+41QMhdAJg8Q6KGdsZlwDR9KsaQ03
-         q0oiA6QGnfMNaCLi6FwippomEY2Gxx8DIbtsls7Wm3K9Y5ntAz6T/fo5rOOGqR0XZexV
-         IMpIarVZKtd2r4wbd6pBH2HWWgUKLdmEcjKjz7hr2eZWqilU2ZOjSL0LQYBIbuLk+an3
-         F080UdTs/Pl//2c4Y7M3MC5aXIj0L8ze9uKQnOS3RTfUxOdNjPBYkRT7wM2xznbkkPNf
-         k6rWzEiCMkA6YZikO6kTaZUjEx2R8QJERpkjNDf1cNtL0uRiWX1pfQEgD4PMO8IN1GPi
-         cqnA==
+        d=joelfernandes.org; s=google;
+        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
+         :from:content-transfer-encoding:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=S380dCKKg+A8bwJUTQWjtqzaOyXFXP7JJeY17NUMHEs=;
+        b=asnCQKbz6DWupBln1HDqgQERBYic/Pm9wz9FThG1CSb8qOWiTFSvEmXfjKa99bCrzr
+         lFRci5S3aBNk/W0a9BWdgW7InK1B8yKgXLpK0sU0+2QSE3am4qIPQFJvo/YTDzMSL/Ul
+         d2xHPkqUQiCEPxHHtPufwo5NPvtzuNipmn/p4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dgoOqWPJe20h3F3t+kWJTAR37+M7sNOsPG89iz5Bulk=;
-        b=YRDfLzgcEZiGUXVXi14kzP7MLzc+wKj5SbLgt30MbIHJ/owkkfmzhW1c5DIyqSfePl
-         4Uu+MZq/jobJcUn4kauSeU6sG9ne9rbNDw8A4PJNEDdscxQ+orN7sw+tQlRCaRQGx120
-         doIWOgWtBZ3ySN/bwKujcrYO2T+YccdqXFgMOWMZ9GeHgynf0XMHo5dG3XfUVgClFWwu
-         JyMZ+vjVZmx51fIvFWBA3+HGe3jiJmE4Q1JSbBZnOEEcSVaD8a35N7WWJU4/iZik3gEQ
-         XaAxCsZJEYtJpT16WWI7Wpz6qjqwQvJPTXeBdCW7Konr2vzeDt5Io2C7JqiX9Ok1sDb+
-         4FTg==
-X-Gm-Message-State: ACrzQf2kTASm5+zQBB2ZAHfxb/zo4PSYzlOuIYDW0q3BIvNygIsA5Jp3
-        V/6Wr1SnZNUpCZB91oAXrxnLTg==
-X-Google-Smtp-Source: AMsMyM7An2PKDpytAFzn8oRI/SQJomdGS1nTfx9CsrnDxhHyyoY4AD/5FsaR2YoYMTMl2oHfbxu0kQ==
-X-Received: by 2002:a17:903:1250:b0:185:40c6:3c2c with SMTP id u16-20020a170903125000b0018540c63c2cmr31387342plh.64.1667500509087;
-        Thu, 03 Nov 2022 11:35:09 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id z4-20020a1709027e8400b0017da2798025sm914686pla.295.2022.11.03.11.35.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Nov 2022 11:35:08 -0700 (PDT)
-Date:   Thu, 3 Nov 2022 18:35:05 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Marc Zyngier <maz@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Anup Patel <anup@brainfault.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        Eric Farman <farman@linux.ibm.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Atish Patra <atishp@atishpatra.org>,
-        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Isaku Yamahata <isaku.yamahata@intel.com>,
-        Fabiano Rosas <farosas@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Chao Gao <chao.gao@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Yuan Yao <yuan.yao@intel.com>
-Subject: Re: [PATCH 33/44] KVM: x86: Do VMX/SVM support checks directly in
- vendor code
-Message-ID: <Y2QJ2TuyZImbFFvi@google.com>
-References: <20221102231911.3107438-1-seanjc@google.com>
- <20221102231911.3107438-34-seanjc@google.com>
- <bfa98587-3b36-3834-a4b9-585a0e0aa56a@redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <bfa98587-3b36-3834-a4b9-585a0e0aa56a@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
+         :from:content-transfer-encoding:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=S380dCKKg+A8bwJUTQWjtqzaOyXFXP7JJeY17NUMHEs=;
+        b=mEfZEhf5I6IcxcxRRTYTKZ6qXCyftrEGUqXvFJCRawIQsr8EsoPBp6EX6CTajPqCEV
+         8ubmX7DiJHc4LTrE8LRU5i6aDo8MO/MXKRkTnQE4F/zLCOKmbv1K9ehNbDzysyHdBKTD
+         DF8/moB6SSDvtYqQS+QEgtDCHHgftGynWrdze5wC7GuQefg8+TQlRj682Q3hMg57sj30
+         w9PXsFphGoojbpChnhCMvMOioH4bKROF/j7EHJipsSAzwM9fRRgeq0Bp1TzT1p8pSh98
+         dPX9LONjf4xO1kqTXDJNg1tJLh9L/JItPrmxYv406IMWOtPxESEjAE/1e5/cxB0P0M5Z
+         jndA==
+X-Gm-Message-State: ACrzQf0TU4ddwsMgiQuK0q2WYdirbkfbVdYPoZ/uTunNbez81Ins4PCr
+        tZ1ZM1F4PxBgHFmbbe6yMj1KZQ==
+X-Google-Smtp-Source: AMsMyM4u7w/stQ68aks1Ab43yVkPtehYePGVAMOabmDSVp/Q6qrfXEGSPeAEJVHddhzsweSth9H51w==
+X-Received: by 2002:ad4:5d41:0:b0:4b8:9fd2:c7e2 with SMTP id jk1-20020ad45d41000000b004b89fd2c7e2mr28669239qvb.91.1667500592421;
+        Thu, 03 Nov 2022 11:36:32 -0700 (PDT)
+Received: from smtpclient.apple (c-73-148-104-166.hsd1.va.comcast.net. [73.148.104.166])
+        by smtp.gmail.com with ESMTPSA id c10-20020ac86e8a000000b003a54a19c550sm947652qtv.57.2022.11.03.11.36.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 03 Nov 2022 11:36:31 -0700 (PDT)
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+From:   Joel Fernandes <joel@joelfernandes.org>
+Mime-Version: 1.0 (1.0)
+Subject: Re: [PATCH RFC] rcu/kfree: Do not request RCU when not needed
+Date:   Thu, 3 Nov 2022 14:36:30 -0400
+Message-Id: <ACF5E134-0C17-484B-AF9E-D4E6FAC9535F@joelfernandes.org>
+References: <20221103175143.GB5600@paulmck-ThinkPad-P17-Gen-1>
+Cc:     Uladzislau Rezki <urezki@gmail.com>, rcu@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20221103175143.GB5600@paulmck-ThinkPad-P17-Gen-1>
+To:     paulmck@kernel.org
+X-Mailer: iPhone Mail (19G82)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 03, 2022, Paolo Bonzini wrote:
-> On 11/3/22 00:19, Sean Christopherson wrote:
-> > +	if (!boot_cpu_has(X86_FEATURE_MSR_IA32_FEAT_CTL) ||
-> > +	    !boot_cpu_has(X86_FEATURE_VMX)) {
-> > +		pr_err("VMX not enabled in MSR_IA32_FEAT_CTL\n");
-> > +		return false;
-> 
-> I think the reference to the BIOS should remain in these messages and in
-> svm.c (even though these days it's much less common for vendors to default
-> to disabled virtualization in the system setup).
 
-Ya, I'll figure out a way to mention BIOS/firmware.
 
-> The check for X86_FEATURE_MSR_IA32_FEAT_CTL is not needed because
-> init_ia32_feat_ctl() will clear X86_FEATURE_VMX if the rdmsr fail (and not
-> set X86_FEATURE_MSR_IA32_FEAT_CTL).
+> On Nov 3, 2022, at 1:51 PM, Paul E. McKenney <paulmck@kernel.org> wrote:
+>=20
+> =EF=BB=BFOn Thu, Nov 03, 2022 at 01:41:43PM +0100, Uladzislau Rezki wrote:=
 
-It's technically required.  IA32_FEAT_CTL and thus KVM_INTEL depends on any of
-CPU_SUP_{INTEL,CENATUR,ZHAOXIN}, but init_ia32_feat_ctl() is invoked if and only
-if the actual CPU type matches one of the aforementioned CPU_SUP_*.
+>>>>>> /**
+>>>>>> @@ -3066,10 +3068,12 @@ static void kfree_rcu_work(struct work_struct=
+ *work)
+>>>>>>   struct kfree_rcu_cpu_work *krwp;
+>>>>>>   int i, j;
+>>>>>>=20
+>>>>>> -    krwp =3D container_of(to_rcu_work(work),
+>>>>>> +    krwp =3D container_of(work,
+>>>>>>               struct kfree_rcu_cpu_work, rcu_work);
+>>>>>>   krcp =3D krwp->krcp;
+>>>>>>=20
+>>>>>> +    cond_synchronize_rcu(krwp->gp_snap);
+>>>>>=20
+>>>>> Might this provoke OOMs in case of callback flooding?
+>>>>>=20
+>>>>> An alternative might be something like this:
+>>>>>=20
+>>>>>   if (!poll_state_synchronize_rcu(krwp->gp_snap)) {
+>>>>>       queue_rcu_work(system_wq, &krwp->rcu_work);
+>>>>>       return;
+>>>>>   }
+>>>>>=20
+>>>>> Either way gets you a non-lazy callback in the case where a grace
+>>>>> period has not yet elapsed.
+>>>>> Or am I missing something that prevents OOMs here?
+>>>>=20
+>>>> The memory consumptions appears to be much less in his testing with the=
+ onslaught of kfree, which makes OOM probably less likely.
+>>>>=20
+>>>> Though, was your reasoning that in case of a grace period not elapsing,=
+ we need a non lazy callback queued, so as to make the reclaim happen sooner=
+?
+>>>>=20
+>>>> If so, the cond_synchronize_rcu() should already be conditionally queue=
+ing non-lazy CB since we don=E2=80=99t make synchronous users wait for secon=
+ds. Or did I miss something?
+>>>=20
+>>> My concern is that the synchronize_rcu() will block a kworker kthread
+>>> for some time, and that in callback-flood situations this might slow
+>>> things down due to exhausting the supply of kworkers.
+>>>=20
+>> This concern works in both cases. I mean in default configuration and
+>> with a posted patch. The reclaim work, which name is kfree_rcu_work() onl=
+y
+>> does a progress when a gp is passed so the rcu_work_rcufn() can queue
+>> our reclaim kworker.
+>>=20
+>> As it is now:
+>>=20
+>> 1. Collect pointers, then we decide to drop them we queue the
+>>   monitro_work() worker to the system_wq.
+>>=20
+>> 2. The monitor work, kfree_rcu_work(), tries to attach or saying
+>> it by another words bypass a "backlog" to "free" channels.
+>>=20
+>> 3. It invokes the queue_rcu_work() that does call_rcu_flush() and
+>> in its turn it queues our worker from the handler. So the worker
+>> is run after GP is passed.
+>=20
+> So as it is now, we are not tying up a kworker kthread while waiting
+> for the grace period, correct?  We instead have an RCU callback queued
+> during that time, and the kworker kthread gets involved only after the
+> grace period ends.
+>=20
+>> With a patch:=20
+>>=20
+>> [1] and [2] steps are the same. But on third step we do:
+>>=20
+>> 1. Record the GP status for last in channel;
+>> 2. Directly queue the drain work without any call_rcu() helpers;
+>> 3. On the reclaim worker entry we check if GP is passed;
+>> 4. If not it invokes synchronize_rcu().
+>=20
+> And #4 changes that, by (sometimes) tying up a kworker kthread for the
+> full grace period.
+>=20
+>> The patch eliminates extra steps by not going via RCU-core route
+>> instead it directly invokes the reclaim worker where it either
+>> proceed or wait a GP if needed.
+>=20
+> I agree that the use of the polled API could be reducing delays, which
+> is a good thing.  Just being my usual greedy self and asking "Why not
+> both?", that is use queue_rcu_work() instead of synchronize_rcu() in
+> conjunction with the polled APIs so as to avoid both the grace-period
+> delay and the tying up of the kworker kthread.
+>=20
+> Or am I missing something here?
 
-E.g. running a kernel built with
+Yeah I am with Paul on this, NAK on =E2=80=9Cblocking in kworker=E2=80=9D in=
+stead of =E2=80=9Cchecking for grace period + queuing either regular work or=
+ RCU work=E2=80=9D. Note that blocking also adds a pointless and fully avoid=
+able scheduler round trip.
 
-  CONFIG_CPU_SUP_INTEL=y
-  CONFIG_CPU_SUP_AMD=y
-  # CONFIG_CPU_SUP_HYGON is not set
-  # CONFIG_CPU_SUP_CENTAUR is not set
-  # CONFIG_CPU_SUP_ZHAOXIN is not set
+ - Joel
 
-on a Cenatur or Zhaoxin CPU will leave X86_FEATURE_VMX set but not set
-X86_FEATURE_MSR_IA32_FEAT_CTL.  If VMX isn't enabled in MSR_IA32_FEAT_CTL, KVM
-will get unexpected #UDs when trying to enable VMX.
+
+>=20
+>                            Thanx, Paul
