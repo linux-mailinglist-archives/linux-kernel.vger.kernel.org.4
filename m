@@ -2,145 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46EBF617F5F
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 15:24:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40CB2617F68
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 15:25:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230295AbiKCOYV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 10:24:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45354 "EHLO
+        id S231331AbiKCOZK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 10:25:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229667AbiKCOYR (ORCPT
+        with ESMTP id S231307AbiKCOZI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 10:24:17 -0400
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C49815838;
-        Thu,  3 Nov 2022 07:24:16 -0700 (PDT)
-Received: by mail-wm1-f49.google.com with SMTP id l16-20020a05600c4f1000b003c6c0d2a445so1294771wmq.4;
-        Thu, 03 Nov 2022 07:24:16 -0700 (PDT)
+        Thu, 3 Nov 2022 10:25:08 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E35A767A
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 07:25:07 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id g12so2990536wrs.10
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 07:25:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=yyXCEm+SN4JTuAX2T0R90Ie6jT6YR0PIuexybyKvkXE=;
+        b=WTZ/fhxMJ71jLlitDHXKYaXGnn95ODQizEyx4pjZLu/FU2YdbKeNAo0B/NktNH9Hif
+         0ihHLDxTp8U29NT+XMIjwbpXih+rDpGbzPso+IRrM4OQEis6MRNHdhg2+L+2iQ5ZiErf
+         H2C2UNKqEdpYeg1ou6yBgu5uGp5t6In0MkSQENq2IWAYTPdvvddzhf9M2SUHCjdkNqlP
+         pTfB+d1W2bpoY+NqsMD0CmY3+w2XyTZf6ZrvG8psupb3sY6BjQWTaeaT9RFdOarIdWjn
+         Jj663Dqz2gYFZNCYKSrBaU2MDDJrY91RmxP0f4HXzCqrYeVlqsItUMv2dSlq4XkDrWmi
+         x2Hw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=X1LT03bLiRuIHRMNZ/VBHuLAuNEKFfSIdBpGFc2+9sA=;
-        b=r1t3vLWxamxM4coqto9QOkOiy1is0Ax+3QyuRBz5axMJZeDIgRWLJOw9n+uoSB1T7K
-         Kq+HOX3D+9un5owkZN5X7gN75ZqwazJ4FeuE0ZBjam3vfx+7XlBp4RgHDKCEbt27A76J
-         4sNY4+3912HqeZ55Ty+RkP7H6dT2YBjlVFE8DnWPsSYmzEgyrNjyqixdv1jOERcSm6X7
-         2cvG5j3Rz6WQONgdpNQInMhW9aIpMD1nm3/dUjgLRtUNIt7oeR4+ITLFpxsGgudI51ot
-         wGz/OWr9OUvls81h+PmxEDHw7i5zUP+THIBavlyrwxFV1IRk4NuT6PRgEAgDXfbVpptW
-         jSjg==
-X-Gm-Message-State: ACrzQf2p72c4spr+BjXbjYdQtVaGYAhpWBRq6xhVcOVNYpzcvMV3oLf1
-        pz7piTNkhIERo/wEa3rpemY=
-X-Google-Smtp-Source: AMsMyM4ke2iyyMAnoCrhGCzCaGHhhDeyDynNHBdskVE6dhi6oDEpiIQ2fWHmd9zmf+pjyz4RpsKJsA==
-X-Received: by 2002:a05:600c:4fcf:b0:3c6:cdb9:b68f with SMTP id o15-20020a05600c4fcf00b003c6cdb9b68fmr30684663wmq.73.1667485454723;
-        Thu, 03 Nov 2022 07:24:14 -0700 (PDT)
-Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
-        by smtp.gmail.com with ESMTPSA id fc15-20020a05600c524f00b003cf57329221sm47245wmb.14.2022.11.03.07.24.13
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=yyXCEm+SN4JTuAX2T0R90Ie6jT6YR0PIuexybyKvkXE=;
+        b=Ufz2f/vYNZl626GJdAc5jO7qLAFpVeniDYua+FEsmMFf3X8T8t2ZFl9VSDNyuRjO22
+         v9iJtvLnATABhvvq7rMQAKjbUnvX4zUZVkGRk9tsdLDvWkQrkbvs9/luwEr56TTPyeoo
+         aTWRSKfGeQ70YNzGv5VpDhmcl+24jJELmvdERvRFBSOvanoKw41m2c80If2dVcFCiLgp
+         v7M8XDQXqfTDWFQNpejxtU1nfTjpI9I6wFGlMDeUei1fl50gC9wF9pS1AUYqQvDqV2FT
+         eucz5lIuIjyJVZfbO/bsrnFvRcp8WlR2vB0BukadjCMfKS1bcXLuW2RWbS/EIAsP+puZ
+         aucw==
+X-Gm-Message-State: ACrzQf3DWCnE9T9QXmkrN0EMkqYzaw5jskXEIpfK543FDKON8e8An9oe
+        gDBuNMb0jni0EUzLX/DpCrFVHA==
+X-Google-Smtp-Source: AMsMyM5hdXBUu8yo8VO7zyELnZCeDW54TPy5bvl1rmzeZB7u0GPP01rGpP4zIsPcikd5aOtl3C5pdw==
+X-Received: by 2002:a5d:654d:0:b0:235:197d:72d1 with SMTP id z13-20020a5d654d000000b00235197d72d1mr18800468wrv.680.1667485505908;
+        Thu, 03 Nov 2022 07:25:05 -0700 (PDT)
+Received: from localhost (2001-1ae9-1c2-4c00-748-2a9a-a2a6-1362.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:748:2a9a:a2a6:1362])
+        by smtp.gmail.com with ESMTPSA id z7-20020a5d6547000000b0023662245d3csm992994wrv.95.2022.11.03.07.25.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Nov 2022 07:24:14 -0700 (PDT)
-Date:   Thu, 3 Nov 2022 14:24:05 +0000
-From:   Wei Liu <wei.liu@kernel.org>
-To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-Cc:     Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        Dexuan Cui <decui@microsoft.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
-        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "stanislav.kinsburskiy@gmail.com" <stanislav.kinsburskiy@gmail.com>,
-        "kumarpraveen@linux.microsoft.com" <kumarpraveen@linux.microsoft.com>,
-        "mail@anirudhrb.com" <mail@anirudhrb.com>
-Subject: Re: [PATCH v2 1/2] clocksource/drivers/hyperv: add data structure
- for reference TSC MSR
-Message-ID: <Y2PPBREz76rMyhnx@liuwe-devbox-debian-v2>
-References: <20221027095729.1676394-1-anrayabh@linux.microsoft.com>
- <20221027095729.1676394-2-anrayabh@linux.microsoft.com>
- <BYAPR21MB1688E0040710DF040BB7FCCDD7339@BYAPR21MB1688.namprd21.prod.outlook.com>
- <BYAPR21MB168844A39612131C920DA954D7399@BYAPR21MB1688.namprd21.prod.outlook.com>
+        Thu, 03 Nov 2022 07:25:05 -0700 (PDT)
+From:   Andrew Jones <ajones@ventanamicro.com>
+To:     x86@kernel.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Yury Norov <yury.norov@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Jonas Bonn <jonas@southpole.se>,
+        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+        Stafford Horne <shorne@gmail.com>,
+        openrisc@lists.librecores.org,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        linuxppc-dev@lists.ozlabs.org, Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        linux-s390@vger.kernel.org
+Subject: [PATCH v4 0/1] Fix /proc/cpuinfo cpumask warning
+Date:   Thu,  3 Nov 2022 15:25:03 +0100
+Message-Id: <20221103142504.278543-1-ajones@ventanamicro.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <BYAPR21MB168844A39612131C920DA954D7399@BYAPR21MB1688.namprd21.prod.outlook.com>
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 02, 2022 at 08:33:31PM +0000, Michael Kelley (LINUX) wrote:
-> From: Michael Kelley (LINUX) <mikelley@microsoft.com> Sent: Thursday, October 27, 2022 6:43 AM
-> > From: Anirudh Rayabharam <anrayabh@linux.microsoft.com> Sent: Thursday,
-> > October 27, 2022 2:57 AM
-> > >
-> > > Add a data structure to represent the reference TSC MSR similar to
-> > > other MSRs. This simplifies the code for updating the MSR.
-> > >
-> > > Signed-off-by: Anirudh Rayabharam <anrayabh@linux.microsoft.com>
-> > > ---
-> > >  drivers/clocksource/hyperv_timer.c | 28 ++++++++++++++--------------
-> > >  include/asm-generic/hyperv-tlfs.h  |  9 +++++++++
-> > >  2 files changed, 23 insertions(+), 14 deletions(-)
-> > >
-> > > diff --git a/drivers/clocksource/hyperv_timer.c
-> > b/drivers/clocksource/hyperv_timer.c
-> > > index bb47610bbd1c..11332c82d1af 100644
-> > > --- a/drivers/clocksource/hyperv_timer.c
-> > > +++ b/drivers/clocksource/hyperv_timer.c
-> > > @@ -395,25 +395,25 @@ static u64 notrace read_hv_sched_clock_tsc(void)
-> > >
-> > >  static void suspend_hv_clock_tsc(struct clocksource *arg)
-> > >  {
-> > > -	u64 tsc_msr;
-> > > +	union hv_reference_tsc_msr tsc_msr;
-> > >
-> > >  	/* Disable the TSC page */
-> > > -	tsc_msr = hv_get_register(HV_REGISTER_REFERENCE_TSC);
-> > > -	tsc_msr &= ~BIT_ULL(0);
-> > > -	hv_set_register(HV_REGISTER_REFERENCE_TSC, tsc_msr);
-> > > +	tsc_msr.as_uint64 = hv_get_register(HV_REGISTER_REFERENCE_TSC);
-> > > +	tsc_msr.enable = 0;
-> > > +	hv_set_register(HV_REGISTER_REFERENCE_TSC, tsc_msr.as_uint64);
-> > >  }
-> > >
-> > >
-> > >  static void resume_hv_clock_tsc(struct clocksource *arg)
-> > >  {
-> > >  	phys_addr_t phys_addr = virt_to_phys(&tsc_pg);
-> > > -	u64 tsc_msr;
-> > > +	union hv_reference_tsc_msr tsc_msr;
-> > >
-> > >  	/* Re-enable the TSC page */
-> > > -	tsc_msr = hv_get_register(HV_REGISTER_REFERENCE_TSC);
-> > > -	tsc_msr &= GENMASK_ULL(11, 0);
-> > > -	tsc_msr |= BIT_ULL(0) | (u64)phys_addr;
-> > > -	hv_set_register(HV_REGISTER_REFERENCE_TSC, tsc_msr);
-> > > +	tsc_msr.as_uint64 = hv_get_register(HV_REGISTER_REFERENCE_TSC);
-> > > +	tsc_msr.enable = 1;
-> > > +	tsc_msr.pfn = __phys_to_pfn(phys_addr);
-> 
-> My previous review missed a problem here (and in the similar line below).
-> __phys_to_pfn() will return a PFN based on the guest page size, which might
-> be different from Hyper-V's page size that is always 4K.  This needs to be a
-> Hyper-V PFN, and we have virt_to_hvpfn() available to do just that, assuming
-> that function is safe to use here and in the case below. 
+Commit 78e5a3399421 ("cpumask: fix checking valid cpu range") started
+issuing warnings[1] when cpu indices equal to nr_cpu_ids - 1 were passed
+to cpumask_next* functions. The commit has since been reverted with
+commit 80493877d7d0 ("Revert "cpumask: fix checking valid cpu range"."),
+which raises the question as to how much this proposed patch is needed.
+Additionally, there's some discussion as to whether or not cpumask_next()
+should even be validating its inputs[2]. So, with that in mind, I'm fine
+with the patch being dropped. However, it may still be reasonable to add
+the checking to /proc/cpuinfo until cpumask_next has made changes and
+better documented its API.
 
-Anirudh, please take a look.
+[1] Warnings will only appear with DEBUG_PER_CPU_MAPS enabled.
+[2] https://lore.kernel.org/all/CAHk-=wihz-GXx66MmEyaADgS1fQE_LDcB9wrHAmkvXkd8nx9tA@mail.gmail.com/
 
-I'm holding off sending hyperv-fixes to Linus for now.
+This series addresses the issue for x86. riscv has already merged an
+equivalent patch (v3 of this series). Also, from a quick grep of cpuinfo
+seq operations, I think at least openrisc, powerpc, and s390 could get an
+equivalent patch. While the test is simple (see next paragraph) I'm not
+equipped to test on each architecture.
 
-Thanks,
-Wei.
+To test, just build a kernel with DEBUG_PER_CPU_MAPS enabled, boot to
+a shell, do 'cat /proc/cpuinfo', and look for a kernel warning.
+
+v4:
+  - The riscv patch has already been merged.
+  - Mostly rewrote the cover letter as the situation has changed since
+    78e5a3399421 was reverted.
+  - Rewrote the commit message in order to try an better clarify things
+    and also to add the reference to the revert commit, which results in
+    the commit no longer claiming its a 'fix' in its summary. [Boris]
+
+v3:
+  - Change condition from >= to == in order to still get a warning
+    for > as that's unexpected. [Yury]
+  - Picked up tags on the riscv patch
+
+v2:
+  - Added all the information I should have in the first place
+    to the commit message [Boris]
+  - Changed style of fix [Boris]
+
+Andrew Jones (1):
+  x86: cpuinfo: Ensure inputs to cpumask_next are valid
+
+ arch/x86/kernel/cpu/proc.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+-- 
+2.37.3
+
