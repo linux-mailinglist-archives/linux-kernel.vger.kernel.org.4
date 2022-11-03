@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9416D617680
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 07:00:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5B7A617681
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 07:01:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231136AbiKCGAp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 02:00:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39928 "EHLO
+        id S231297AbiKCGA6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 02:00:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231128AbiKCGAa (ORCPT
+        with ESMTP id S230500AbiKCGAb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 02:00:30 -0400
+        Thu, 3 Nov 2022 02:00:31 -0400
 Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14FD613E29
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 23:00:26 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CAF4192B8
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 23:00:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667455227; x=1698991227;
+  t=1667455229; x=1698991229;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=mc4vIypOieSvndflKVouNXUuy0SMzFwZmqjwCHrfFLg=;
-  b=dhF7x3oYXgpO5/HqdXRwpb07PUvY4+PHeTnRiPlYy3trtqQLGjOE3RKv
-   vvut8SEzZuSxjG7mZYX2Ol8nVO9q0Y5ZBSCmKGR2s+WPO+YfIEea900N7
-   iNuv8qtZQW6QHvQBGe0ZQqOTf8lCXpQbIs4k0tJB4sOwkaiOQGyKV2g1+
-   9Wu5g2XuaOND9LppdnpQMLzzJFdRVB9dAqTtDrBg1OpV5ZOuof8sN1zfb
-   4JQyYe1liShp0Pn5zZoMQVm13EpJtZn5An5LQ54XUFWjogpWjtiYnjU7V
-   59mVVIoignUqq9tOd2TwnZuugB+ZLWxqojrXfcawIeuZ3m/zpfxaRCRRH
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10519"; a="311322518"
+  bh=QiRpo85cqFxjJ5iqjYeKDVL1Wbqll0BYbdczDs6g2tI=;
+  b=LQI0xOI9afimDO727BrC7yvR9N/5/2QRDC2f6dIgF92DUuTcgidqPZMD
+   N2jnwFjmgso5U/9n5eX0EmYtnSncZWXiErH3Ys+L4lDAm4Q6ZqmaDL4EA
+   25LFmu4XqrPZ/FL31LHMWXidPWiUUoAbsPcICzmrqcvNYGSfWDh4f+bFK
+   SSNrRUImv/6bM7uTzDexaLwaiJs5hD6Q6kExvc3CZMVWFCndX3snZ5zKy
+   rX37FUxaDqVaqyn6rSzt6OHqzJvmR2lxVQ7cDj1T0Vk8A5SL/Fzf8Xvdv
+   4Su6zIdCVbo+Tm0DDVCMn3jpi0SxG4c3XdNhz3e855iiIW9bWRzgH2kRv
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10519"; a="311322528"
 X-IronPort-AV: E=Sophos;i="5.95,235,1661842800"; 
-   d="scan'208";a="311322518"
+   d="scan'208";a="311322528"
 Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Nov 2022 23:00:26 -0700
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Nov 2022 23:00:28 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10519"; a="723819319"
+X-IronPort-AV: E=McAfee;i="6500,9779,10519"; a="723819324"
 X-IronPort-AV: E=Sophos;i="5.95,235,1661842800"; 
-   d="scan'208";a="723819319"
+   d="scan'208";a="723819324"
 Received: from allen-box.sh.intel.com ([10.239.159.48])
-  by FMSMGA003.fm.intel.com with ESMTP; 02 Nov 2022 23:00:24 -0700
+  by FMSMGA003.fm.intel.com with ESMTP; 02 Nov 2022 23:00:26 -0700
 From:   Lu Baolu <baolu.lu@linux.intel.com>
 To:     iommu@lists.linux.dev
 Cc:     Joerg Roedel <joro@8bytes.org>, Kevin Tian <kevin.tian@intel.com>,
@@ -47,9 +47,9 @@ Cc:     Joerg Roedel <joro@8bytes.org>, Kevin Tian <kevin.tian@intel.com>,
         Liu Yi L <yi.l.liu@intel.com>,
         Jacob jun Pan <jacob.jun.pan@intel.com>,
         linux-kernel@vger.kernel.org, Lu Baolu <baolu.lu@linux.intel.com>
-Subject: [PATCH 5/7] iommu/vt-d: Rename domain_add_dev_info()
-Date:   Thu,  3 Nov 2022 13:53:27 +0800
-Message-Id: <20221103055329.633052-6-baolu.lu@linux.intel.com>
+Subject: [PATCH 6/7] iommu/vt-d: Remove unnecessary domain_context_mapped()
+Date:   Thu,  3 Nov 2022 13:53:28 +0800
+Message-Id: <20221103055329.633052-7-baolu.lu@linux.intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221103055329.633052-1-baolu.lu@linux.intel.com>
 References: <20221103055329.633052-1-baolu.lu@linux.intel.com>
@@ -64,37 +64,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-dmar_domain_attach_device() is more meaningful according to what this
-helper does.
+The device_domain_info::domain accurately records the domain attached to
+the device. It is unnecessary to check whether the context is present in
+the attach_dev path. Remove it to make the code neat.
 
 Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
 ---
- drivers/iommu/intel/iommu.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/iommu/intel/iommu.c | 47 +++----------------------------------
+ 1 file changed, 3 insertions(+), 44 deletions(-)
 
 diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
-index 393e07ac4c21..6ec5dd4e461b 100644
+index 6ec5dd4e461b..5c7a574fad38 100644
 --- a/drivers/iommu/intel/iommu.c
 +++ b/drivers/iommu/intel/iommu.c
-@@ -2456,7 +2456,8 @@ static int __init si_domain_init(int hw)
- 	return 0;
+@@ -780,19 +780,6 @@ static void domain_flush_cache(struct dmar_domain *domain,
+ 		clflush_cache_range(addr, size);
  }
  
--static int domain_add_dev_info(struct dmar_domain *domain, struct device *dev)
-+static int dmar_domain_attach_device(struct dmar_domain *domain,
-+				     struct device *dev)
+-static int device_context_mapped(struct intel_iommu *iommu, u8 bus, u8 devfn)
+-{
+-	struct context_entry *context;
+-	int ret = 0;
+-
+-	spin_lock(&iommu->lock);
+-	context = iommu_context_addr(iommu, bus, devfn, 0);
+-	if (context)
+-		ret = context_present(context);
+-	spin_unlock(&iommu->lock);
+-	return ret;
+-}
+-
+ static void free_context_table(struct intel_iommu *iommu)
  {
- 	struct device_domain_info *info = dev_iommu_priv_get(dev);
- 	struct intel_iommu *iommu;
-@@ -4266,7 +4267,7 @@ static int intel_iommu_attach_device(struct iommu_domain *domain,
- 	if (ret)
- 		return ret;
- 
--	return domain_add_dev_info(to_dmar_domain(domain), dev);
-+	return dmar_domain_attach_device(to_dmar_domain(domain), dev);
+ 	struct context_entry *context;
+@@ -2100,30 +2087,6 @@ domain_context_mapping(struct dmar_domain *domain, struct device *dev)
+ 				      &domain_context_mapping_cb, &data);
  }
  
- static int intel_iommu_map(struct iommu_domain *domain,
+-static int domain_context_mapped_cb(struct pci_dev *pdev,
+-				    u16 alias, void *opaque)
+-{
+-	struct intel_iommu *iommu = opaque;
+-
+-	return !device_context_mapped(iommu, PCI_BUS_NUM(alias), alias & 0xff);
+-}
+-
+-static int domain_context_mapped(struct device *dev)
+-{
+-	struct intel_iommu *iommu;
+-	u8 bus, devfn;
+-
+-	iommu = device_to_iommu(dev, &bus, &devfn);
+-	if (!iommu)
+-		return -ENODEV;
+-
+-	if (!dev_is_pci(dev))
+-		return device_context_mapped(iommu, bus, devfn);
+-
+-	return !pci_for_each_dma_alias(to_pci_dev(dev),
+-				       domain_context_mapped_cb, iommu);
+-}
+-
+ /* Returns a number of VTD pages, but aligned to MM page size */
+ static inline unsigned long aligned_nrpages(unsigned long host_addr,
+ 					    size_t size)
+@@ -4247,6 +4210,7 @@ static int prepare_domain_attach_device(struct iommu_domain *domain,
+ static int intel_iommu_attach_device(struct iommu_domain *domain,
+ 				     struct device *dev)
+ {
++	struct device_domain_info *info = dev_iommu_priv_get(dev);
+ 	int ret;
+ 
+ 	if (domain->type == IOMMU_DOMAIN_UNMANAGED &&
+@@ -4255,13 +4219,8 @@ static int intel_iommu_attach_device(struct iommu_domain *domain,
+ 		return -EPERM;
+ 	}
+ 
+-	/* normally dev is not mapped */
+-	if (unlikely(domain_context_mapped(dev))) {
+-		struct device_domain_info *info = dev_iommu_priv_get(dev);
+-
+-		if (info->domain)
+-			device_block_translation(dev);
+-	}
++	if (info->domain)
++		device_block_translation(dev);
+ 
+ 	ret = prepare_domain_attach_device(domain, dev);
+ 	if (ret)
 -- 
 2.34.1
 
