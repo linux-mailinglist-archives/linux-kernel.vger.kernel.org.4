@@ -2,181 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C7F7618AAA
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 22:36:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6EB1618AAF
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 22:36:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231535AbiKCVgB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 17:36:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50086 "EHLO
+        id S231605AbiKCVgp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 17:36:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231185AbiKCVf5 (ORCPT
+        with ESMTP id S230435AbiKCVgl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 17:35:57 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0748205C2;
-        Thu,  3 Nov 2022 14:35:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 911F9B829FD;
-        Thu,  3 Nov 2022 21:35:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B741EC433D6;
-        Thu,  3 Nov 2022 21:35:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667511353;
-        bh=Ye7uiUhhSoKe2Mbv2vReU5Mf0bR28buafzRYMzEpkAs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=P5EgxMeuDjDj0YPijG9FZaJqLoojK157SzP+7+pcltxwXw2Izgd7y9njhp5iQp+tJ
-         7K199QsJg0GTYNy3UfaBBfEdRAnUn/8MD2KPPz3R8YX3eEtMhnfA1Pnaefiby15OeP
-         JAs5YTEhGuoJP6fEACpYkeR5rjhZ0NoEdiqEtA2CVDVtzgfJRiSwsRGGTALmXF+wUe
-         41tMStGKLlXKyHWcLVQ9kiu2emX7+5iHuj1ceQzrOL+fgYe2t50+INhyqEaFHvyBAo
-         aZ1ggkzszlNMXmopqpLArslZRwkz8uYcspqAyMIC+HgoEL/uvOccVm1kDFyeiyFIim
-         jpsGhXvn4gnBA==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id D0DD74034E; Thu,  3 Nov 2022 18:35:49 -0300 (-03)
-Date:   Thu, 3 Nov 2022 18:35:49 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Ian Rogers <irogers@google.com>
-Cc:     Leo Yan <leo.yan@linaro.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Stephane Eranian <eranian@google.com>
-Subject: Re: [PATCH v1 6/7] perf trace: 5sec fix libbpf 1.0+ compatibility
-Message-ID: <Y2Q0NSeoEqwUztFe@kernel.org>
-References: <20221103045437.163510-1-irogers@google.com>
- <20221103045437.163510-7-irogers@google.com>
- <Y2PgBPeZsd9+YWB4@kernel.org>
- <Y2Pgz7luG77Wr+Ci@kernel.org>
- <Y2Pj0KVbbw9rMcPH@kernel.org>
- <CAP-5=fXkM52E5VvX9s2CfvF8ckQvcbSm8N_7BCfhW3dyuH7YUg@mail.gmail.com>
- <Y2QcgdJNXE/bVZvk@kernel.org>
+        Thu, 3 Nov 2022 17:36:41 -0400
+Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62CF021E05
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 14:36:40 -0700 (PDT)
+Received: by mail-il1-x134.google.com with SMTP id i5so1306139ilc.12
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 14:36:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=T8kDk3Ehgf1gzFSlGbvkxEAeD+uNpPbTDTXM3slIxjc=;
+        b=G4s4ejetLbgpFsZdlVs+MoXrOedbrKOESJI7Vi9TtQANICEYbIG2T7ey2S2edzqbt0
+         3vH7X03WhPudcU7jZsnYZ7LzpNggJi3B8IGmVQWnwwOaEG+k3mkrg+dhfbHZvNwNkRmB
+         ZrHu1uPGwEorcBcnRONrpLqCs3Kee1TYp05mfs0dZS/gTPfi2cYxlZjVBQ9tqDapqG3a
+         zDsgvaYxFDPzoLbByjJuNXOh0X7o/KzVZ+nHcT5PxWPNTqpkwuzrkyc7rmgROzDT/DBe
+         fuBFbMjp/nRdWQZroqwv7Lvj4IfatMy4A6djXZ1OUeDu6f4SSc7UWR7Sm4H03J5t7gIr
+         fE6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=T8kDk3Ehgf1gzFSlGbvkxEAeD+uNpPbTDTXM3slIxjc=;
+        b=dhSxmlZZEbOGCr1kMmbFByuRhRwawlas3GetpQ4u5HnrzSMUW3bYPBmqLOa+dFJF+g
+         VlYKVXDFjArBnLOqNlPaCI9S6m5VI6bxw4aFRYECp0R3A9VhH9tLrzoJFa7at8+bu1wN
+         am8eKdGcFIjE4f65UOHpt5dyxa0evMDCe/hQv7Lp4svecSxUB7yT+83ZEnLfDa27mbj3
+         J/Se6RGoD5QndsPdFJA9hN4rMSHwYNWgicABG9r4lN6CfPS3Yvx2HQksKSqj4cmdMfnQ
+         clKEAZxNoe4+nghpVfAjq6VQrJsadVRJqyMmMbaM7IOy3iMN3vDSTV/zh7ItAcF13UGN
+         bziQ==
+X-Gm-Message-State: ACrzQf2WCPO5xlwqNC19UMJmHLd28fCHHGmhSJDcYy57HW6tf1OJM7J/
+        j6htSVkFJ/QQnXAih/DikF6nd2es5RNHt0jin2cOlQ==
+X-Google-Smtp-Source: AMsMyM6BFQFqv9R9EjkEEJOdZt0wpbGudAfs35w4GJMsRY1C2CDMeIvVTZb3HQi2Yd7I8TFbWmpuntJY34zYG6WlRmM=
+X-Received: by 2002:a92:5204:0:b0:300:d0b8:5184 with SMTP id
+ g4-20020a925204000000b00300d0b85184mr5617868ilb.118.1667511399568; Thu, 03
+ Nov 2022 14:36:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y2QcgdJNXE/bVZvk@kernel.org>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220715115559.139691-1-shaozhengchao@huawei.com> <f0bb3cd6-6986-6ca1-aa40-7a10302c8586@linux.dev>
+In-Reply-To: <f0bb3cd6-6986-6ca1-aa40-7a10302c8586@linux.dev>
+From:   Stanislav Fomichev <sdf@google.com>
+Date:   Thu, 3 Nov 2022 14:36:28 -0700
+Message-ID: <CAKH8qBvLGaX_+ye5Wdmj1FS+p8K8gBsKUEDRb1x8KzxQE+oDuA@mail.gmail.com>
+Subject: Re: [PATCH v4,bpf-next] bpf: Don't redirect packets with invalid pkt_len
+To:     Martin KaFai Lau <martin.lau@linux.dev>
+Cc:     Zhengchao Shao <shaozhengchao@huawei.com>, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, song@kernel.org,
+        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
+        bigeasy@linutronix.de, imagedong@tencent.com, petrm@nvidia.com,
+        arnd@arndb.de, dsahern@kernel.org, talalahmad@google.com,
+        keescook@chromium.org, haoluo@google.com, jolsa@kernel.org,
+        weiyongjun1@huawei.com, yuehaibing@huawei.com, bpf@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, hawk@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With this:
+On Thu, Nov 3, 2022 at 2:07 PM Martin KaFai Lau <martin.lau@linux.dev> wrote:
+>
+> On 7/15/22 4:55 AM, Zhengchao Shao wrote:
+> > Syzbot found an issue [1]: fq_codel_drop() try to drop a flow whitout any
+> > skbs, that is, the flow->head is null.
+> > The root cause, as the [2] says, is because that bpf_prog_test_run_skb()
+> > run a bpf prog which redirects empty skbs.
+> > So we should determine whether the length of the packet modified by bpf
+> > prog or others like bpf_prog_test is valid before forwarding it directly.
+> >
+> > LINK: [1] https://syzkaller.appspot.com/bug?id=0b84da80c2917757915afa89f7738a9d16ec96c5
+> > LINK: [2] https://www.spinics.net/lists/netdev/msg777503.html
+> >
+> > Reported-by: syzbot+7a12909485b94426aceb@syzkaller.appspotmail.com
+> > Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
+> > ---
+> > v3: modify debug print
+> > v2: need move checking to convert___skb_to_skb and add debug info
+> > v1: should not check len in fast path
+> >
+> >   include/linux/skbuff.h | 8 ++++++++
+> >   net/bpf/test_run.c     | 3 +++
+> >   net/core/dev.c         | 1 +
+> >   3 files changed, 12 insertions(+)
+> >
+> > diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
+> > index f6a27ab19202..82e8368ba6e6 100644
+> > --- a/include/linux/skbuff.h
+> > +++ b/include/linux/skbuff.h
+> > @@ -2459,6 +2459,14 @@ static inline void skb_set_tail_pointer(struct sk_buff *skb, const int offset)
+> >
+> >   #endif /* NET_SKBUFF_DATA_USES_OFFSET */
+> >
+> > +static inline void skb_assert_len(struct sk_buff *skb)
+> > +{
+> > +#ifdef CONFIG_DEBUG_NET
+> > +     if (WARN_ONCE(!skb->len, "%s\n", __func__))
+> > +             DO_ONCE_LITE(skb_dump, KERN_ERR, skb, false);
+> > +#endif /* CONFIG_DEBUG_NET */
+> > +}
+> > +
+> >   /*
+> >    *  Add data to an sk_buff
+> >    */
+> > diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
+> > index 2ca96acbc50a..dc9dc0bedca0 100644
+> > --- a/net/bpf/test_run.c
+> > +++ b/net/bpf/test_run.c
+> > @@ -955,6 +955,9 @@ static int convert___skb_to_skb(struct sk_buff *skb, struct __sk_buff *__skb)
+> >   {
+> >       struct qdisc_skb_cb *cb = (struct qdisc_skb_cb *)skb->cb;
+> >
+> > +     if (!skb->len)
+> > +             return -EINVAL;
+>
+>  From another recent report [0], I don't think this change is fixing the report
+> from syzbot.  It probably makes sense to revert this patch.
+>
+> afaict, This '!skb->len' test is done after
+>         if (is_l2)
+>                 __skb_push(skb, hh_len);
+>
+> Hence, skb->len is not zero in convert___skb_to_skb().  The proper place to test
+> skb->len is before __skb_push() to ensure there is some network header after the
+> mac or may as well ensure "data_size_in > ETH_HLEN" at the beginning.
 
-diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
-index d3d3c13a9f25b55c..067a6e56eeacc9fc 100644
---- a/tools/perf/Makefile.config
-+++ b/tools/perf/Makefile.config
-@@ -1239,7 +1239,7 @@ includedir = $(abspath $(prefix)/$(includedir_relative))
- mandir = share/man
- infodir = share/info
- perfexecdir = libexec/perf-core
--perf_include_dir = lib/perf/include
-+perf_include_dir = /usr/include
- perf_examples_dir = lib/perf/examples
- sharedir = $(prefix)/share
- template_dir = share/perf-core/templates
-diff --git a/tools/perf/examples/bpf/augmented_raw_syscalls.c b/tools/perf/examples/bpf/augmented_raw_syscalls.c
-index 13c72fd602c307e4..98a2731c011339ba 100644
---- a/tools/perf/examples/bpf/augmented_raw_syscalls.c
-+++ b/tools/perf/examples/bpf/augmented_raw_syscalls.c
-@@ -17,8 +17,9 @@
- #include <linux/bpf.h>
- #include <bpf/bpf_helpers.h>
- #include <linux/limits.h>
--#include <stdbool.h>
--#include <sys/socket.h>
-+
-+typedef char bool;
-+typedef int pid_t;
- 
- /* bpf-output associated map */
- struct __augmented_syscalls__ {
-@@ -94,6 +95,30 @@ struct pids_filtered {
- 	__uint(max_entries, 64);
- } pids_filtered SEC(".maps");
- 
-+/*
-+ * Desired design of maximum size and alignment (see RFC2553)
-+ */
-+#define _K_SS_MAXSIZE   128     /* Implementation specific max size */
-+
-+typedef unsigned short sa_family_t;
-+
-+/*
-+ * The definition uses anonymous union and struct in order to control the
-+ * default alignment.
-+ */
-+struct sockaddr_storage {
-+        union {
-+                struct {
-+                        sa_family_t    ss_family; /* address family */
-+                        /* Following field(s) are implementation specific */
-+                        char __data[_K_SS_MAXSIZE - sizeof(unsigned short)];
-+                                /* space to achieve desired size, */
-+                                /* _SS_MAXSIZE value minus size of ss_family */
-+                };
-+                void *__align; /* implementation specific desired alignment */
-+        };
-+};
-+
- struct augmented_args_payload {
-        struct syscall_enter_args args;
-        union {
-diff --git a/tools/perf/examples/bpf/empty.c b/tools/perf/examples/bpf/empty.c
-index 3e296c0c53d7d8e2..e4872c48a484f218 100644
---- a/tools/perf/examples/bpf/empty.c
-+++ b/tools/perf/examples/bpf/empty.c
-@@ -7,6 +7,6 @@ struct syscall_enter_args;
- SEC("raw_syscalls:sys_enter")
- int sys_enter(struct syscall_enter_args *args)
- {
--	return 0;
-+	return 1;
- }
- char _license[] SEC("license") = "GPL";
-diff --git a/tools/perf/util/llvm-utils.c b/tools/perf/util/llvm-utils.c
-index 2dc7970074196ca8..a5cac85783d8711f 100644
---- a/tools/perf/util/llvm-utils.c
-+++ b/tools/perf/util/llvm-utils.c
-@@ -495,7 +495,7 @@ int llvm__compile_bpf(const char *path, void **p_obj_buf,
- 
- 	snprintf(linux_version_code_str, sizeof(linux_version_code_str),
- 		 "0x%x", kernel_version);
--	if (asprintf(&perf_bpf_include_opts, "-I%s/bpf", perf_include_dir) < 0)
-+	if (asprintf(&perf_bpf_include_opts, "-I%s/", perf_include_dir) < 0)
- 		goto errout;
- 	force_set_env("NR_CPUS", nr_cpus_avail_str);
- 	force_set_env("LINUX_VERSION_CODE", linux_version_code_str);
+When is_l2==true, __skb_push will result in non-zero skb->len, so we
+should be good, right?
+The only issue is when we do bpf_redirect into a tunneling device and
+do __skb_pull, but that's now fixed by [0].
 
+When is_l2==false, the existing check in convert___skb_to_skb will
+make sure there is something in the l3 headers.
 
-The connect calls gets served, tomorrow, if you don't beat me I'll apply
-the series after adding these minimal changes so that we have this
-working with libbpf 1.0 and then we can move from there, with a switch
-to a BPF skel, simplest things first, then deal with faults at pointer
-payload copy, which is another avenue, AFAIK with solutions already.
+So it seems like this patch is still needed. Or am I missing something?
 
-Thanks,
-
-- Arnaldo
-
-[root@quaco perf]# perf trace -e /home/acme/git/perf/tools/perf/examples/bpf/augmented_raw_syscalls.c,connect* --max-events 10
-     0.000 ( 0.074 ms): fetchmail/175578 connect(fd: 3, uservaddr: { .family: LOCAL, path: /run/systemd/resolve/io.systemd.Resolve }, addrlen: 42) = 0
-     0.397 ( 0.011 ms): systemd-resolv/973 connect(fd: 23, uservaddr: { .family: INET, port: 53, addr: 127.0.0.1 }, addrlen: 16) = 0
-     0.532 ( 0.006 ms): systemd-resolv/973 connect(fd: 24, uservaddr: { .family: INET, port: 53, addr: 127.0.0.1 }, addrlen: 16) = 0
-     0.910 ( 0.007 ms): systemd-resolv/973 connect(fd: 23, uservaddr: { .family: INET, port: 53, addr: 127.0.0.1 }, addrlen: 16) = 0
-     0.962 ( 0.003 ms): systemd-resolv/973 connect(fd: 24, uservaddr: { .family: INET, port: 53, addr: 127.0.0.1 }, addrlen: 16) = 0
-     1.337 ( 0.007 ms): fetchmail/175578 connect(fd: 3, uservaddr: { .family: INET, port: 0, addr: 67.195.176.151 }, addrlen: 16) = 0
-     1.348 ( 0.014 ms): fetchmail/175578 connect(fd: 3, uservaddr: { .family: UNSPEC }, addrlen: 16)           = 0
-     1.363 ( 0.003 ms): fetchmail/175578 connect(fd: 3, uservaddr: { .family: INET, port: 0, addr: 76.13.33.33 }, addrlen: 16) = 0
-     1.527 ( 0.014 ms): fetchmail/175578 connect(fd: 3, uservaddr: { .family: LOCAL, path: /run/systemd/resolve/io.systemd.Resolve }, addrlen: 42) = 0
-     1.726 ( 0.008 ms): systemd-resolv/973 connect(fd: 23, uservaddr: { .family: INET, port: 53, addr: 127.0.0.1 }, addrlen: 16) = 0
-[root@quaco perf]#
+> The fix in [0] is applied.  If it turns out there are other cases caused by the
+> skb generated by test_run that needs extra fixes in bpf_redirect_*,  it needs to
+> revisit an earlier !skb->len check mentioned above and the existing test cases
+> outside of test_progs would have to adjust accordingly.
+>
+> [0]: https://lore.kernel.org/bpf/20221027225537.353077-1-sdf@google.com/
+>
+> > +
+> >       if (!__skb)
+> >               return 0;
+> >
+> > diff --git a/net/core/dev.c b/net/core/dev.c
+> > index d588fd0a54ce..716df64fcfa5 100644
+> > --- a/net/core/dev.c
+> > +++ b/net/core/dev.c
+> > @@ -4168,6 +4168,7 @@ int __dev_queue_xmit(struct sk_buff *skb, struct net_device *sb_dev)
+> >       bool again = false;
+> >
+> >       skb_reset_mac_header(skb);
+> > +     skb_assert_len(skb);
+> >
+> >       if (unlikely(skb_shinfo(skb)->tx_flags & SKBTX_SCHED_TSTAMP))
+> >               __skb_tstamp_tx(skb, NULL, NULL, skb->sk, SCM_TSTAMP_SCHED);
+>
