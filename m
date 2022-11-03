@@ -2,175 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86D38618B2C
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 23:10:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1958C618B2E
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 23:11:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231688AbiKCWKQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 18:10:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38348 "EHLO
+        id S231674AbiKCWLk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 18:11:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231648AbiKCWKL (ORCPT
+        with ESMTP id S231637AbiKCWLi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 18:10:11 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81FC412E;
-        Thu,  3 Nov 2022 15:10:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1667513410; x=1699049410;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=xZE61lAZEQfrRgZey91ekR4uYDbgET9M8wWEPonC8yE=;
-  b=OHzcDnsQr1oaIffsQHHIWhROXELVY8cAQsmuaszxRDIIEuhN0gKGvfcB
-   /mNkKOiu8OjXpm1s1/WceIAChR+SAXcXNwX82Dfrkbn17xIVFPGBe6nRm
-   eA2HxXY2q7s2tlkQU6LWcdMlEawnKmcX6BmGYHE2XypZMt1Gte52fDKfc
-   M=;
-Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 03 Nov 2022 15:10:10 -0700
-X-QCInternal: smtphost
-Received: from nasanex01b.na.qualcomm.com ([10.46.141.250])
-  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2022 15:10:10 -0700
-Received: from [10.110.42.219] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Thu, 3 Nov 2022
- 15:10:07 -0700
-Message-ID: <25174792-4b8e-9c0d-0272-8b5010406365@quicinc.com>
-Date:   Thu, 3 Nov 2022 15:10:07 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [PATCH v6 13/21] gunyah: vm_mgr: Introduce basic VM Manager
-Content-Language: en-US
-To:     Arnd Bergmann <arnd@arndb.de>,
-        Bjorn Andersson <quic_bjorande@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-CC:     Murali Nalajala <quic_mnalajal@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
-        Carl van Schaik <quic_cvanscha@quicinc.com>,
-        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
+        Thu, 3 Nov 2022 18:11:38 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A31622B06;
+        Thu,  3 Nov 2022 15:11:36 -0700 (PDT)
+Received: from notapiano (unknown [IPv6:2600:4041:5b1a:cd00:524d:e95d:1a9c:492a])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: nfraprado)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 88186660295F;
+        Thu,  3 Nov 2022 22:11:33 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1667513495;
+        bh=pgY0dvtyM8FwNva19FmPelXivw7RaAAO4XKizZMcieY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=CFxur4ptUBDg7nGhx6dDOLzWzdzgMgpxTlSmAPSCP55GF1G+wVuCCHQeFU6+igc2b
+         jOhlKLfU2M0GUXM+S0c6g/JTL6GBReHOEz3BEbJsm9rTAe9hkY9ASLOMVKu9HY+y1T
+         H8YQpaU63a+D1cbi+B2YA5wUoFHz0n+L+rUTdURifcJPTfF0vf8BOmGrfAquN1YTsc
+         5LLR36LQ7R30Ony0YDIp59ut26FmT5HX79waVCxst2/XyNkDt+Pkb5gVHmRRKDaXKZ
+         1bHzhBQtXoHsmBvyRI6thybjEcHTPudxLp360clRIl7OlICUHJj+uVW2GcAxHHkEQ9
+         Qv6dp8PWOTxEw==
+Date:   Thu, 3 Nov 2022 18:11:30 -0400
+From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
+        <nfraprado@collabora.com>
+To:     Rex-BC Chen =?utf-8?B?KOmZs+afj+i+sCk=?= 
+        <Rex-BC.Chen@mediatek.com>
+Cc:     "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+        "sboyd@kernel.org" <sboyd@kernel.org>,
+        "angelogioacchino.delregno@collabora.com" 
+        <angelogioacchino.delregno@collabora.com>,
+        "mturquette@baylibre.com" <mturquette@baylibre.com>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "wenst@chromium.org" <wenst@chromium.org>,
+        Runyang Chen =?utf-8?B?KOmZiOa2pua0iyk=?= 
+        <Runyang.Chen@mediatek.com>,
+        Project_Global_Chrome_Upstream_Group 
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        "linux-arm-kernel@lists.infradead.org" 
         <linux-arm-kernel@lists.infradead.org>,
-        "Mark Rutland" <mark.rutland@arm.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        "Marc Zyngier" <maz@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Amol Maheshwari <amahesh@qti.qualcomm.com>,
-        Kalle Valo <kvalo@kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-doc@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20221026185846.3983888-1-quic_eberman@quicinc.com>
- <20221026185846.3983888-14-quic_eberman@quicinc.com>
- <c1f86c53-1d9f-4faf-9313-de86d33e3739@app.fastmail.com>
- <7c59a115-36c5-c954-5610-ef5ef1dbb83e@quicinc.com>
- <a3754259-9989-495e-a6bd-5501daff06a2@app.fastmail.com>
-From:   Elliot Berman <quic_eberman@quicinc.com>
-In-Reply-To: <a3754259-9989-495e-a6bd-5501daff06a2@app.fastmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Miles Chen =?utf-8?B?KOmZs+awkeaouik=?= 
+        <Miles.Chen@mediatek.com>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>
+Subject: Re: [PATCH v6 1/3] reset: mediatek: Move MediaTek system clock reset
+ to reset/mediatek
+Message-ID: <20221103221130.eosmwl2vjo36va6c@notapiano>
+References: <20221021104804.21391-1-rex-bc.chen@mediatek.com>
+ <20221021104804.21391-2-rex-bc.chen@mediatek.com>
+ <8b73e38b-ae78-1f85-f5f0-f13bce6e45de@collabora.com>
+ <bcfd608b029377565dc656adf24effeba95d2433.camel@mediatek.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <bcfd608b029377565dc656adf24effeba95d2433.camel@mediatek.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Oct 31, 2022 at 05:14:40AM +0000, Rex-BC Chen (陳柏辰) wrote:
+> On Tue, 2022-10-25 at 12:36 +0200, AngeloGioacchino Del Regno wrote:
+> > Il 21/10/22 12:48, Bo-Chen Chen ha scritto:
+[..]
+> > > --- a/drivers/clk/mediatek/Kconfig
+> > > +++ b/drivers/clk/mediatek/Kconfig
+> > > @@ -8,6 +8,7 @@ menu "Clock driver for MediaTek SoC"
+> > >   config COMMON_CLK_MEDIATEK
+> > >   	tristate
+> > >   	select RESET_CONTROLLER
+> > > +	select RESET_MEDIATEK_SYSCLK
+> > >   	help
+> > >   	  MediaTek SoCs' clock support.
+> > >   
+> > 
+> > ..snip..
+> > 
+> > > diff --git a/drivers/reset/Makefile b/drivers/reset/Makefile
+> > > index 3e7e5fd633a8..5cef7ccc9a7d 100644
+> > > --- a/drivers/reset/Makefile
+> > > +++ b/drivers/reset/Makefile
+> > > @@ -1,6 +1,7 @@
+> > >   # SPDX-License-Identifier: GPL-2.0
+> > >   obj-y += core.o
+> > >   obj-y += hisilicon/
+> > > +obj-y += mediatek/
+> > 
+> > I'd be more for
+> > 
+> > obj-$(CONFIG_ARCH_MEDIATEK) += mediatek/
+> > 
+> > as there's no reason to even compile these if MTK support isn't
+> > enabled at all.
+> > 
+> 
+> Hello Angelo,
+> 
+> thanks for your review.
+> I obj-y += mediatek/ because if I don't write like this, it will build
+> fail for x86.
+> Is there any suggestion for this?
+> 
+> /tmp/src_kernel/prebuilt/toolchain/0day/gcc/x86_64-linux/bin/x86_64-
+> linux-ld: vmlinux.o: in function `mtk_pericfg_init':
+> clk-mt8135.c:(.init.text+0x12a2b7): undefined reference to
+> `mtk_reset_init_with_node'
+> /tmp/src_kernel/prebuilt/toolchain/0day/gcc/x86_64-linux/bin/x86_64-
+> linux-ld: vmlinux.o: in function `mtk_infrasys_init':
+> clk-mt8135.c:(.init.text+0x12a3bb): undefined reference to
+> `mtk_reset_init_with_node'
+> /tmp/src_kernel/prebuilt/toolchain/0day/gcc/x86_64-linux/bin/x86_64-
+> linux-ld: vmlinux.o: in function `mtk_infrasys_init':
+> clk-mt8173.c:(.init.text+0x12ac47): undefined reference to
+> `mtk_reset_init_with_node'
+> /tmp/src_kernel/prebuilt/toolchain/0day/gcc/x86_64-linux/bin/x86_64-
+> linux-ld: vmlinux.o: in function `mtk_pericfg_init':
+> clk-mt8173.c:(.init.text+0x12ad25): undefined reference to
+> `mtk_reset_init_with_node'
+> /tmp/src_kernel/kernel/mediatek/scripts/Makefile.vmlinux:34: recipe for
+> target 'vmlinux' failed
+> make[3]: *** [vmlinux] Error 1
+> make[3]: Target '__default' not remade because of errors.
+> /tmp/src_kernel/kernel/mediatek/Makefile:1236: recipe for target
+> 'vmlinux' failed
+> make[2]: *** [vmlinux] Error 2
+> make[2]: Target '__all' not remade because of errors.
+> make[2]: Leaving directory '/tmp/out_kernel/out/allyesconfig.x86_64'
+> Makefile:231: recipe for target '__sub-make' failed
+> make[1]: *** [__sub-make] Error 2
+> make[1]: Target '__all' not remade because of errors.
+> make[1]: Leaving directory '/tmp/src_kernel/kernel/mediatek'
+> build/core/kbuild_test.mk:61: recipe for target 'all' failed
+> make: *** [all] Error 2
+> [11:44:04] Error: failed to build allyesconfig.x86_64
 
+From the errors it seems like you're compiling the clock drivers (like
+clk-mt8135.c) but not the sysclk reset driver (reset-mediatek-sysclk.c). Given
+that this happened when you added CONFIG_ARCH_MEDIATEK to that Makefile, then it
+must mean that that config is disabled, which would make sense for a x86 build.
+But then the fact that the clock driver was built even in this case must mean
+that you have COMPILE_TEST enabled.
 
-On 11/3/2022 2:39 AM, Arnd Bergmann wrote:
-> On Wed, Nov 2, 2022, at 19:44, Elliot Berman wrote:
->> On 11/2/2022 12:31 AM, Arnd Bergmann wrote:
->>>> +static long gh_dev_ioctl_create_vm(unsigned long arg)
->>>> +{
->>>> +	struct gunyah_vm *ghvm;
->>>> +	struct file *file;
->>>> +	int fd, err;
->>>> +
->>>> +	/* arg reserved for future use. */
->>>> +	if (arg)
->>>> +		return -EINVAL;
->>>
->>> Do you have something specific in mind here? If 'create'
->>> is the only command you support, and it has no arguments,
->>> it would be easier to do it implicitly during open() and
->>> have each fd opened from /dev/gunyah represent a new VM.
->>>
->>
->> I'd like the argument here to support different types of virtual
->> machines. I want to leave open what "different types" can be in case
->> something new comes up in the future, but immediately "different type"
->> would correspond to a few different authentication mechanisms for
->> virtual machines that Gunyah supports.
->>
->> In this series, I'm only supporting unauthenticated virtual machines
->> because they are the simplest to get up and running from a Linux
->> userspace. When I introduce the other authentication mechanisms, I'll
->> expand much more on how they work, but I'll give quick overview here.
->> Other authentication mechanisms that are currently supported by Gunyah
->> are "protected VM" and, on Qualcomm platforms, "PIL/carveout VMs".
->> Protected VMs are *loosely* similar to the protected firmware design for
->> KVM and intended to support Android virtualization use cases.
->> PIL/carevout VMs are special virtual machines that can run on Qualcomm
->> firmware which authenticate in a way similar to remoteproc firmware (MDT
->> loader).
-> 
-> Ok, thanks for the background. Having different types of virtual
-> machines does mean that you may need some complexity, but I would
-> still lean towards using the simpler context management of opening
-> the /dev/gunyah device node to get a new context, and then using
-> ioctls on each fd to manage that context, instead of going through
-> the extra indirection of having a secondary 'open context' command
-> that always requires opening two file descriptors.
-> 
->>> I'm correct, you can just turn the entire bus/device/driver
->>> structure within your code into simple function calls, where
->>> the main code calls vm_mgr_probe() as an exported function
->>> instead of creating a device.
->>
->> Ack. I can do this, although I am nervous about this snowballing into a
->> situation where I have a mega-module.
->>
->>   > Please stop beating everything in a single module.
->>
->> https://lore.kernel.org/all/250945d2-3940-9830-63e5-beec5f44010b@linaro.org/
-> 
-> I see you concern, but I wasn't suggesting having everything
-> in one module either. There are three common ways of splitting
-> things into separate modules:
-> 
-> - I suggested having the vm_mgr module as a library block that
->    exports a few symbols which get used by the core module. The
->    module doesn't do anything on its own, but loading the core
->    module forces loading the vm_mgr.
-> 
+I guess in order to have a working COMPILE_TEST=y build, you do need to have
+obj-y += mediatek/, and on the Kconfig below...
 
-Got the idea, I'll do this.
-
-- Elliot
-
-> - Alternatively one can do the opposite, and have symbols
->    exported by the core module, with the vm_mgr module using
->    it. This would make sense if you commonly have the core
->    module loaded on virtual machines that do not need to manage
->    other VMs.
 > 
-> - The method you have is to have a lower "bus" level that
->    abstracts device providers from consumers, with both sides
->    hooking into the bus. This makes sense for physical buses
->    like PCI or USB where both the host driver and the function
->    driver are unaware of implementation details of the other,
->    but in your case it does not seem like a good fit.
-> 
->          Arnd
+> > >   obj-$(CONFIG_ARCH_STI) += sti/
+> > >   obj-$(CONFIG_ARCH_TEGRA) += tegra/
+> > >   obj-$(CONFIG_RESET_A10SR) += reset-a10sr.o
+> > > diff --git a/drivers/reset/mediatek/Kconfig
+> > > b/drivers/reset/mediatek/Kconfig
+> > > new file mode 100644
+> > > index 000000000000..a416cb938753
+> > > --- /dev/null
+> > > +++ b/drivers/reset/mediatek/Kconfig
+> > > @@ -0,0 +1,5 @@
+> > > +# SPDX-License-Identifier: GPL-2.0-only
+> > 
+> > Similarly, we should at this point also do....
+> > 
+> > if ARCH_MEDIATEK
+
+... have instead
+
+if ARCH_MEDIATEK || COMPILE_TEST
+
+I think that should fix the issue.
+
+Thanks,
+Nícolas
+
+> > 
+> > > +config RESET_MEDIATEK_SYSCLK
+> > > +	tristate "MediaTek System Clock Reset Driver"
+> > > +	help
+> > > +	  This enables the system clock reset driver for MediaTek SoCs.
+> > 
+> > endif # ARCH_MEDIATEK
