@@ -2,122 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF31D617B89
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 12:32:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E16E617B8E
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 12:33:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230504AbiKCLcI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 07:32:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45378 "EHLO
+        id S230509AbiKCLdB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 07:33:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229823AbiKCLcF (ORCPT
+        with ESMTP id S229823AbiKCLc7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 07:32:05 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BAEF511838;
-        Thu,  3 Nov 2022 04:32:04 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D034823A;
-        Thu,  3 Nov 2022 04:32:10 -0700 (PDT)
-Received: from FVFF77S0Q05N (unknown [10.57.69.97])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D7ECE3F5A1;
-        Thu,  3 Nov 2022 04:32:02 -0700 (PDT)
-Date:   Thu, 3 Nov 2022 11:31:55 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        "H . Peter Anvin" <hpa@zytor.com>, Paul Turner <pjt@google.com>,
-        linux-api@vger.kernel.org, Peter Oskolkov <posk@posk.io>
-Subject: Re: [PATCH] rseq: Use pr_warn_once() when deprecated/unknown ABI
- flags are encountered
-Message-ID: <Y2Omq9KCe/wvtJpu@FVFF77S0Q05N>
-References: <20221102130635.7379-1-mathieu.desnoyers@efficios.com>
+        Thu, 3 Nov 2022 07:32:59 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C92C411A32;
+        Thu,  3 Nov 2022 04:32:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 27025CE257D;
+        Thu,  3 Nov 2022 11:32:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E85BC433B5;
+        Thu,  3 Nov 2022 11:32:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667475175;
+        bh=uiqDMEcOZwxNGgwDvcubrHmOWMlm8hOhW9gFyMNNyPY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=r0NkacfzR2k1n5fDpBBmGuncSGs0MH0QZrO5qNaUx3jd+LjIXankFdyHLEO68UxAG
+         PK2IIKCwj7OOXynyd7o/b5XXseG5Nt1cEQyUE6cCHY6czxN/I7AYEXCM26IOQlRsWL
+         900z0KtlkbOK6XwvYQKfk00GMMxvjeL7FyBb/cKkG7nI7K9TV7SPFpVX+Xzp/rF08N
+         ySrkqOn1jEZL0HSsB9ldMPm37hDjwRtz/GCbrYCRO7VxjZjgrJGcL0NS70ZCUpyOeS
+         kLK4QT4tTUDR6UrmydH4vkTqftGlU9M1Pg8u4g1xw94NpCY5XOuvoYfqxqoU++f29O
+         IbaV7uK8L6XNw==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1oqYSa-0006lO-TC; Thu, 03 Nov 2022 12:32:37 +0100
+Date:   Thu, 3 Nov 2022 12:32:36 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     andersson@kernel.org, konrad.dybcio@somainline.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        johan+linaro@kernel.org, quic_jprakash@quicinc.com,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, steev@kali.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v4 11/12] arm64: dts: qcom: sc8280xp-x13s: Add
+ PM8280_{1/2} ADC_TM5 channels
+Message-ID: <Y2Om1N8X/Qkr9rYI@hovoldconsulting.com>
+References: <20221103095810.64606-1-manivannan.sadhasivam@linaro.org>
+ <20221103095810.64606-12-manivannan.sadhasivam@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221102130635.7379-1-mathieu.desnoyers@efficios.com>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221103095810.64606-12-manivannan.sadhasivam@linaro.org>
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 02, 2022 at 09:06:35AM -0400, Mathieu Desnoyers wrote:
-> These commits use WARN_ON_ONCE() and kill the offending processes when
-> deprecated and unknown flags are encountered:
+On Thu, Nov 03, 2022 at 03:28:09PM +0530, Manivannan Sadhasivam wrote:
+> Add ADC_TM5 channels of PM8280_{1/2} for monitoring the temperature from
+> external thermistors connected to AMUX pins. The temperature measurements
+> are collected from the PMK8280's VADC channels that expose the
+> measurements from secondary PMICs PM8280_{1/2}.
 > 
-> commit c17a6ff93213 ("rseq: Kill process when unknown flags are encountered in ABI structures")
-> commit 0190e4198e47 ("rseq: Deprecate RSEQ_CS_FLAG_NO_RESTART_ON_* flags")
-> 
-> The WARN_ON_ONCE() triggered by userspace input prevents use of
-> Syzkaller to fuzz the rseq system call.
-> 
-> Replace this WARN_ON_ONCE() by pr_warn_once() messages which contain
-> actually useful information.
-> 
-> Reported-by: Mark Rutland <mark.rutland@arm.com>
-> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> Acked-by: Mark Rutland <mark.rutland@arm.com>
-> Acked-by: Paul E. McKenney <paulmck@kernel.org>
-
-It would be nice ot have this merged; my Syzkaller runs are still hitting the
-WARN_ON_ONCE() periodically, preventing some useful fuzzing.
-
-Is the plan still for this to go via -tip?
-
-Thanks,
-Mark.
-
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Reviewed-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 > ---
->  kernel/rseq.c | 19 +++++++++++++++++--
->  1 file changed, 17 insertions(+), 2 deletions(-)
+>  .../qcom/sc8280xp-lenovo-thinkpad-x13s.dts    | 68 +++++++++++++++++++
+>  1 file changed, 68 insertions(+)
 > 
-> diff --git a/kernel/rseq.c b/kernel/rseq.c
-> index bda8175f8f99..d38ab944105d 100644
-> --- a/kernel/rseq.c
-> +++ b/kernel/rseq.c
-> @@ -171,12 +171,27 @@ static int rseq_get_rseq_cs(struct task_struct *t, struct rseq_cs *rseq_cs)
->  	return 0;
->  }
+> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
+> index 7677fe5cf28e..bdaacf1abf9f 100644
+> --- a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
+> +++ b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
+> @@ -254,6 +254,74 @@ pmic-die-temp@403 {
+>  	};
+>  };
 >  
-> +static bool rseq_warn_flags(const char *str, u32 flags)
-> +{
-> +	u32 test_flags;
-> +
-> +	if (!flags)
-> +		return false;
-> +	test_flags = flags & RSEQ_CS_NO_RESTART_FLAGS;
-> +	if (test_flags)
-> +		pr_warn_once("Deprecated flags (%u) in %s ABI structure", test_flags, str);
-> +	test_flags = flags & ~RSEQ_CS_NO_RESTART_FLAGS;
-> +	if (test_flags)
-> +		pr_warn_once("Unknown flags (%u) in %s ABI structure", test_flags, str);
-> +	return true;
-> +}
-> +
->  static int rseq_need_restart(struct task_struct *t, u32 cs_flags)
->  {
->  	u32 flags, event_mask;
->  	int ret;
->  
-> -	if (WARN_ON_ONCE(cs_flags & RSEQ_CS_NO_RESTART_FLAGS) || cs_flags)
-> +	if (rseq_warn_flags("rseq_cs", cs_flags))
->  		return -EINVAL;
->  
->  	/* Get thread flags. */
-> @@ -184,7 +199,7 @@ static int rseq_need_restart(struct task_struct *t, u32 cs_flags)
->  	if (ret)
->  		return ret;
->  
-> -	if (WARN_ON_ONCE(flags & RSEQ_CS_NO_RESTART_FLAGS) || flags)
-> +	if (rseq_warn_flags("rseq", flags))
->  		return -EINVAL;
->  
->  	/*
-> -- 
-> 2.30.2
-> 
+> +&pmk8280_adc_tm {
+
+Please try to keep the nodes sorted alphabetically (e.g. this one should
+go before &pmk8280_pon_pwrkey).
+
+Johan
