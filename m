@@ -2,99 +2,251 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFC96617D04
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 13:49:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6520B617D08
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 13:50:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230513AbiKCMtf convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 3 Nov 2022 08:49:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36386 "EHLO
+        id S231234AbiKCMuK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 08:50:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229704AbiKCMtd (ORCPT
+        with ESMTP id S231183AbiKCMuB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 08:49:33 -0400
-Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com [209.85.222.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D48EDB98;
-        Thu,  3 Nov 2022 05:49:27 -0700 (PDT)
-Received: by mail-qk1-f171.google.com with SMTP id k26so1007446qkg.2;
-        Thu, 03 Nov 2022 05:49:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=COmpkeGuuNrJHAgtC1xywonBxmmPoZsg3DPh2rk8H2A=;
-        b=GtOFzofKcoEAZzI5sdc9C2hVURP+n1TICq1/zcItdr9YwDWIf6SzIDQdYvQwKr3kcA
-         LXnTSqf8E/V2pri+wf9wt4j7CInEQGTRWQY0VV5YWRp1EXU2CoovAd/QpCdC++cQMMAu
-         sahHha36jV9u/TZuWgo6+hEK3MaIByfZaIN9sBv9k4MwL9NA3dt37B/N3oNjRgZYF+qg
-         gO0ED5CW5v5d61/DqGvp1JPr5AJMh5dYaWY3Kbc23Iq9KMBHcz/eT7fVyq+iz4q8xNA5
-         zoKSXsofG9GAB1kxV8NEPE+awkEGvogzXKAK0gzFgBnRcVQt28b2U5wrmC9SCHkQEZM1
-         1vbg==
-X-Gm-Message-State: ACrzQf3068iwhkge70565aUI8NADy9dsMCZFk7vCqMe48m1R8bjRxkib
-        w4Q6rfmKUDcAuT+32waLOg==
-X-Google-Smtp-Source: AMsMyM6aySgZsmREOs3vK2QOeZBzOrRIBDDOY+gafuKEaUiPkl4B+pDHQL7AfIYYv89RzZs19l9uSQ==
-X-Received: by 2002:a05:620a:c8c:b0:6fa:6402:4d00 with SMTP id q12-20020a05620a0c8c00b006fa64024d00mr5707929qki.164.1667479766715;
-        Thu, 03 Nov 2022 05:49:26 -0700 (PDT)
-Received: from [192.168.75.138] (c-68-32-72-208.hsd1.mi.comcast.net. [68.32.72.208])
-        by smtp.gmail.com with ESMTPSA id h18-20020a05620a401200b006ee8874f5fasm704008qko.53.2022.11.03.05.49.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Nov 2022 05:49:26 -0700 (PDT)
-Message-ID: <229b424a647bfbd18942eefef4cbf6332607ca2b.camel@kernel.org>
-Subject: Re: [PATCH] sunrpc: svc: Remove unnecessary (void*) conversions
-From:   Trond Myklebust <trondmy@kernel.org>
-To:     Li zeming <zeming@nfschina.com>, chuck.lever@oracle.com,
-        jlayton@kernel.org, trond.myklebust@hammerspace.com,
-        anna@kernel.org
-Cc:     linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Thu, 03 Nov 2022 08:49:24 -0400
-In-Reply-To: <20221103013510.3062-1-zeming@nfschina.com>
-References: <20221103013510.3062-1-zeming@nfschina.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
+        Thu, 3 Nov 2022 08:50:01 -0400
+Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11EEDDEF4
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 05:50:00 -0700 (PDT)
+Received: from epcas1p1.samsung.com (unknown [182.195.41.45])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20221103124957epoutp04217b2c2eeddcf34baf4b00ecc83c36d5~kFAqTxzYC1886318863epoutp04X
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 12:49:57 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20221103124957epoutp04217b2c2eeddcf34baf4b00ecc83c36d5~kFAqTxzYC1886318863epoutp04X
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1667479797;
+        bh=znlX5RKHDJ+ayCJjCIHaQMPd9t4Q8Zsw6ook6gubUo4=;
+        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
+        b=o2nYGsjmM/emJ5qauRRZT1Hr+InraTSdkDm61LZMoY77eZd3IeiTJzIAhXuc/2LCM
+         g0YmYfees+0nWuNquvxFeS6Mk89SRbO1TirzHKC5ipYppqsC2evR14ZULthuB+P8Qm
+         2EI1FJf5YXy8fllXdOXSolt2i3MBjLHqspCiyQMk=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas1p4.samsung.com (KnoxPortal) with ESMTP id
+        20221103124957epcas1p486a3c4e9dcf8615b09c5de59600cbba0~kFAqAvbGu2192821928epcas1p4K;
+        Thu,  3 Nov 2022 12:49:57 +0000 (GMT)
+Received: from epsmges1p5.samsung.com (unknown [182.195.38.248]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 4N33W904Jdz4x9Pp; Thu,  3 Nov
+        2022 12:49:57 +0000 (GMT)
+Received: from epcas1p2.samsung.com ( [182.195.41.46]) by
+        epsmges1p5.samsung.com (Symantec Messaging Gateway) with SMTP id
+        2C.87.20046.4F8B3636; Thu,  3 Nov 2022 21:49:56 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas1p3.samsung.com (KnoxPortal) with ESMTPA id
+        20221103124956epcas1p34c9cf3f29114e4f11f387b2ce5952eb7~kFAo1XFfz2280622806epcas1p3k;
+        Thu,  3 Nov 2022 12:49:56 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20221103124956epsmtrp15805e2e3b1d08c0ed1606472b433fe15~kFAo0ohKq1786917869epsmtrp1U;
+        Thu,  3 Nov 2022 12:49:56 +0000 (GMT)
+X-AuditID: b6c32a39-35fff70000004e4e-ba-6363b8f4189d
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        07.F4.18644.3F8B3636; Thu,  3 Nov 2022 21:49:56 +0900 (KST)
+Received: from W10PB11329 (unknown [10.253.152.129]) by epsmtip1.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20221103124955epsmtip124ca3bf71747c139b0cbfdbadfd23e00~kFAosm77m2497524975epsmtip1Y;
+        Thu,  3 Nov 2022 12:49:55 +0000 (GMT)
+From:   "Sungjong Seo" <sj1557.seo@samsung.com>
+To:     "'Namjae Jeon'" <linkinjeon@kernel.org>
+Cc:     "'linux-kernel'" <linux-kernel@vger.kernel.org>,
+        "'linux-fsdevel'" <linux-fsdevel@vger.kernel.org>,
+        <sj1557.seo@samsung.com>
+In-Reply-To: <PUZPR04MB6316C6A981A51EA6C079455D81399@PUZPR04MB6316.apcprd04.prod.outlook.com>
+Subject: RE: [PATCH v2 1/2] exfat: simplify empty entry hint
+Date:   Thu, 3 Nov 2022 21:49:55 +0900
+Message-ID: <4ea901d8ef82$c64b7310$52e25930$@samsung.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook 15.0
+Thread-Index: AQHcv1k1HOc4p1+ptDfeX3TNB2EsPgGzhLa+rhfn5CA=
+Content-Language: ko
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrIJsWRmVeSWpSXmKPExsWy7bCmnu6XHcnJBudmmlpMnLaU2WLP3pMs
+        Fpd3zWGz2PLvCKsDi8emVZ1sHn1bVjF6fN4kF8Ac1cBok1iUnJFZlqqQmpecn5KZl26rFBri
+        pmuhpJCRX1xiqxRtaGikZ2hgrmdkZKRnbBlrZWSqpJCXmJtqq1ShC9WrpFCUXABUm1tZDDQg
+        J1UPKq5XnJqX4pCVXwpyol5xYm5xaV66XnJ+rpJCWWJOKdAIJf2Eb4wZBy/2shf8latY9CWo
+        gfG7eBcjJ4eEgInE+jNNrF2MXBxCAjsYJX4v+MoMkhAS+MQo8eVuHUTiM6PEkfWXWGE6Ht77
+        zAyR2MUoMW3CaSjnJaPEsSNTmECq2AR0JZ7c+AmU4OAQEdCWuP8iHaSGWaCJUeLq7xNgNZwC
+        sRJrjn9iB7GFBWwkFpz4CbaaRUBFYt3PH4wgNq+ApcSK+/fYIGxBiZMzn7CA2MwC8hLb385h
+        hrhIQWL3p6Ng14kIWEmsXXeYDaJGRGJ2ZxtUzVd2iV1vRUHukRBwkThyxA4iLCzx6vgWdghb
+        SuJlfxuU3c0o8eccL8jNEgITGCVa7pyF+t5Y4tPnz4wgc5gFNCXW79KHCCtK7Pw9lxHCFpQ4
+        fa2bGeIEPol3X3tYIdbySnS0CUGUqEh8/7CTZQKj8iwkj81C8tgsJA/MQli2gJFlFaNYakFx
+        bnpqsWGBKXJsb2IEp04tyx2M099+0DvEyMTBeIhRgoNZSYT307bkZCHelMTKqtSi/Pii0pzU
+        4kOMycCgnsgsJZqcD0zeeSXxhibGBgZGwERobmluTISwpYGJmZGJhbGlsZmSOG/DDK1kIYH0
+        xJLU7NTUgtQimC1MHJxSDUwq/+2E5974z3VKqag6o3fO7F8LlMLmuleteb846Gnv3A+fZn2W
+        6Ei+VXvK/I7j7Gtnuv8d3x6Y/KVC/OrJBVftp+l2SnVZat6+8Ft8tVLqq4xzRX6LPryYcjB4
+        W1XwD+0Zc055Js3MvNNb23bIJnZBee0rptB3ZUKLqto49G2mJ2t7LAl3vbrN9aFU1Bm2rW31
+        czSZNlpNmvGq/OCS2Qfrk9+KRk68fvfI27TA2/a+EydVl3zca7vhmnn0u7MeKUe4pvmwH+/r
+        reeKDHAUrlkr8+3T6cJ7MbKTA668T9xwWlazVuDFJZX6eeH5x8+LdDO9vhp+zNiwvqR7SV/F
+        3EnVq5ecjvi7KNLncrMI8xQLJZbijERDLeai4kQASnCvSlQEAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrBLMWRmVeSWpSXmKPExsWy7bCSnO6XHcnJBpe+M1lMnLaU2WLP3pMs
+        Fpd3zWGz2PLvCKsDi8emVZ1sHn1bVjF6fN4kF8AcxWWTkpqTWZZapG+XwJVx8GIve8FfuYpF
+        X4IaGL+LdzFyckgImEg8vPeZuYuRi0NIYAejxPzl9xi7GDmAElISB/dpQpjCEocPF0OUPGeU
+        6Fu1iRmkl01AV+LJjZ/MIDUiAtoS91+kg9QwC7QwSsxqfMYG0bCOUaJ11mRWkAZOgViJNcc/
+        sYPYwgI2EgtO/AQbxCKgIrHu5w9GEJtXwFJixf17bBC2oMTJmU9YQGxmoAW9D1sZIWx5ie1v
+        5zBDPKAgsfvTUbD5IgJWEmvXHWaDqBGRmN3ZxjyBUXgWklGzkIyahWTULCQtCxhZVjFKphYU
+        56bnFhsWGOWllusVJ+YWl+al6yXn525iBEeGltYOxj2rPugdYmTiYDzEKMHBrCTC+2lbcrIQ
+        b0piZVVqUX58UWlOavEhRmkOFiVx3gtdJ+OFBNITS1KzU1MLUotgskwcnFINTGozZmyVaPze
+        f+Tz0/iDgQ+9ylZt3jb92y7eufMjJYQ5ao8+K3JL9pbTjetnesHXF/Q8aLl/3KGnfQHOGWdt
+        d+iUHeUoVRI5FH6h1XFRa8+xuSdrr6rlnYpzr+EqdTlTP3/6nvebT6rF/Je3PK7/cYW0wKrw
+        yP0sK78eeVatvUb+mYescLXLj9xv/Ucmsoq7HTokIKV4Qkb3pKm5SRkTwzt25xc13atUJRYF
+        zS1mD9MoLTM+2bIs4ULzNA0frTOOLjGMFsumlW+vXsi14NquT1kTxSN+rt6a+vyA9c7yLD2n
+        NSo2l8M1zl+bx3+K/aebdSnbyQXmcldTVuz5+evRzGPvVZYsW1BlNHPifH33OUosxRmJhlrM
+        RcWJAHsTd1P7AgAA
+X-CMS-MailID: 20221103124956epcas1p34c9cf3f29114e4f11f387b2ce5952eb7
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: SVC_REQ_APPROVE
+X-ArchiveUser: EV
+CMS-TYPE: 101P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20221102071135epcas1p2ef12631e6b239dded4224aa795ee5166
+References: <CGME20221102071135epcas1p2ef12631e6b239dded4224aa795ee5166@epcas1p2.samsung.com>
+        <PUZPR04MB6316C6A981A51EA6C079455D81399@PUZPR04MB6316.apcprd04.prod.outlook.com>
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-11-03 at 09:35 +0800, Li zeming wrote:
-> The iov_base pointer does not need to cast the type.
+> This commit adds exfat_set_empty_hint()/exfat_reset_empty_hint()
+> to reduce code complexity and make code more readable.
 > 
-> Signed-off-by: Li zeming <zeming@nfschina.com>
+> Signed-off-by: Yuezhang Mo <Yuezhang.Mo@sony.com>
+> Reviewed-by: Andy Wu <Andy.Wu@sony.com>
+> Reviewed-by: Aoyama Wataru <wataru.aoyama@sony.com>
+
+Reviewed-by: Sungjong Seo <sj1557.seo@samsung.com>
+
+Looks good. Thanks!
+
 > ---
->  include/linux/sunrpc/svc.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  fs/exfat/dir.c | 58 +++++++++++++++++++++++++++-----------------------
+>  1 file changed, 31 insertions(+), 27 deletions(-)
 > 
-> diff --git a/include/linux/sunrpc/svc.h b/include/linux/sunrpc/svc.h
-> index daecb009c05b..4b0eead91c94 100644
-> --- a/include/linux/sunrpc/svc.h
-> +++ b/include/linux/sunrpc/svc.h
-> @@ -222,7 +222,7 @@ static inline __be32 svc_getu32(struct kvec *iov)
->  
->  static inline void svc_ungetu32(struct kvec *iov)
->  {
-> -       __be32 *vp = (__be32 *)iov->iov_base;
-> +       __be32 *vp = iov->iov_base;
->         iov->iov_base = (void *)(vp - 1);
->         iov->iov_len += sizeof(*vp);
->  }
-
-If you're going to submit a patch just in order to strip unnecessary
-casts, then why are you leaving the equally unnecessary cast in the
-next line?
-
-That said, why waste time "fixing" an inlined function that is not
-actually called anywhere in the kernel? svc_ungetu32() should just be
-removed.
-
--- 
-Trond Myklebust
-Linux NFS client maintainer, Hammerspace
-trond.myklebust@hammerspace.com
-
+> diff --git a/fs/exfat/dir.c b/fs/exfat/dir.c index
+> a27b55ec060a..9f9b8435baca 100644
+> --- a/fs/exfat/dir.c
+> +++ b/fs/exfat/dir.c
+> @@ -897,6 +897,29 @@ struct exfat_entry_set_cache
+> *exfat_get_dentry_set(struct super_block *sb,
+>  	return NULL;
+>  }
+> 
+> +static inline void exfat_reset_empty_hint(struct exfat_hint_femp
+> +*hint_femp) {
+> +	hint_femp->eidx = EXFAT_HINT_NONE;
+> +	hint_femp->count = 0;
+> +}
+> +
+> +static inline void exfat_set_empty_hint(struct exfat_inode_info *ei,
+> +		struct exfat_hint_femp *candi_empty, struct exfat_chain *clu,
+> +		int dentry, int num_entries)
+> +{
+> +	if (ei->hint_femp.eidx == EXFAT_HINT_NONE ||
+> +	    ei->hint_femp.eidx > dentry) {
+> +		if (candi_empty->count == 0) {
+> +			candi_empty->cur = *clu;
+> +			candi_empty->eidx = dentry;
+> +		}
+> +
+> +		candi_empty->count++;
+> +		if (candi_empty->count == num_entries)
+> +			ei->hint_femp = *candi_empty;
+> +	}
+> +}
+> +
+>  enum {
+>  	DIRENT_STEP_FILE,
+>  	DIRENT_STEP_STRM,
+> @@ -921,7 +944,7 @@ int exfat_find_dir_entry(struct super_block *sb,
+> struct exfat_inode_info *ei,  {
+>  	int i, rewind = 0, dentry = 0, end_eidx = 0, num_ext = 0, len;
+>  	int order, step, name_len = 0;
+> -	int dentries_per_clu, num_empty = 0;
+> +	int dentries_per_clu;
+>  	unsigned int entry_type;
+>  	unsigned short *uniname = NULL;
+>  	struct exfat_chain clu;
+> @@ -939,10 +962,13 @@ int exfat_find_dir_entry(struct super_block *sb,
+> struct exfat_inode_info *ei,
+>  		end_eidx = dentry;
+>  	}
+> 
+> -	candi_empty.eidx = EXFAT_HINT_NONE;
+> +	exfat_reset_empty_hint(&ei->hint_femp);
+> +
+>  rewind:
+>  	order = 0;
+>  	step = DIRENT_STEP_FILE;
+> +	exfat_reset_empty_hint(&candi_empty);
+> +
+>  	while (clu.dir != EXFAT_EOF_CLUSTER) {
+>  		i = dentry & (dentries_per_clu - 1);
+>  		for (; i < dentries_per_clu; i++, dentry++) { @@ -962,26
+> +988,8 @@ int exfat_find_dir_entry(struct super_block *sb, struct
+> exfat_inode_info *ei,
+>  			    entry_type == TYPE_DELETED) {
+>  				step = DIRENT_STEP_FILE;
+> 
+> -				num_empty++;
+> -				if (candi_empty.eidx == EXFAT_HINT_NONE &&
+> -						num_empty == 1) {
+> -					exfat_chain_set(&candi_empty.cur,
+> -						clu.dir, clu.size, clu.flags);
+> -				}
+> -
+> -				if (candi_empty.eidx == EXFAT_HINT_NONE &&
+> -						num_empty >= num_entries) {
+> -					candi_empty.eidx =
+> -						dentry - (num_empty - 1);
+> -					WARN_ON(candi_empty.eidx < 0);
+> -					candi_empty.count = num_empty;
+> -
+> -					if (ei->hint_femp.eidx ==
+> -							EXFAT_HINT_NONE ||
+> -						candi_empty.eidx <=
+> -							 ei->hint_femp.eidx)
+> -						ei->hint_femp = candi_empty;
+> -				}
+> +				exfat_set_empty_hint(ei, &candi_empty, &clu,
+> +						dentry, num_entries);
+> 
+>  				brelse(bh);
+>  				if (entry_type == TYPE_UNUSED)
+> @@ -989,8 +997,7 @@ int exfat_find_dir_entry(struct super_block *sb,
+> struct exfat_inode_info *ei,
+>  				continue;
+>  			}
+> 
+> -			num_empty = 0;
+> -			candi_empty.eidx = EXFAT_HINT_NONE;
+> +			exfat_reset_empty_hint(&candi_empty);
+> 
+>  			if (entry_type == TYPE_FILE || entry_type == TYPE_DIR)
+> {
+>  				step = DIRENT_STEP_FILE;
+> @@ -1090,9 +1097,6 @@ int exfat_find_dir_entry(struct super_block *sb,
+> struct exfat_inode_info *ei,
+>  		rewind = 1;
+>  		dentry = 0;
+>  		clu.dir = p_dir->dir;
+> -		/* reset empty hint */
+> -		num_empty = 0;
+> -		candi_empty.eidx = EXFAT_HINT_NONE;
+>  		goto rewind;
+>  	}
+> 
+> --
+> 2.25.1
 
