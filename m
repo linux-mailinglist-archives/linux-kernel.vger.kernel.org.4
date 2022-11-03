@@ -2,71 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F019618642
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 18:35:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10A4D618645
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 18:35:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231346AbiKCRfX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 13:35:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49704 "EHLO
+        id S229694AbiKCRfh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 13:35:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229694AbiKCRfU (ORCPT
+        with ESMTP id S231401AbiKCRfc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 13:35:20 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 571791055C
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 10:35:19 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id b2so4040735lfp.6
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 10:35:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=nbc5sLo4GtFM3+CrjPxJa3FUz65TVuj3idceDshPhx4=;
-        b=Gn5IZG7BOHVOBTuMOBcjNXxPjeolIRNHRVpauV2nqG9N5UUKknJaArW6gDsufzjd0L
-         gVL0m43iclxR+zBnj9MMlyKToMT+/mimOdJyztrBuRcSy7sxCwBS9lS0wATTWIORIjGW
-         XvaDl8tm8xEdFZca6VSXMudYB/kz0siWXxNy/UEuwYTCqEPaDk/wKBFVr3oNcQPoSIqh
-         0rmI0KUq0E4QXyAhmYIde2LLM4evQ2C2oAnx/26L4RNDXvrSZ/8WJ6gTAPXrZbe1ay9T
-         Bmt5oEvcukzbI4Rezy4U5PTu3bubW4clu2rHJRwG8oCYCNzwn5SBHTyFCzchnMHyaCdU
-         Q73g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=nbc5sLo4GtFM3+CrjPxJa3FUz65TVuj3idceDshPhx4=;
-        b=Sx+JUnpST3cidvQ/4KPwpIRxRhyuCyEpNPCxU83OrEoccSf2NH61BqutlcVrxcOUXg
-         qvpf3/HdtQVNG5yAggIb90kAKrwXzgn1haJiB9Pf6KfB7fTgbMLzyVDqTQCYoWlrxoDk
-         N8GgCOVMgrjmmIUFBEQ9XQQg9txr+GToU/0HmvYuXlW+v6c2btsoF9gMp+WOAHdB5/X7
-         lCwwlWO2KRlDIokobFv+4gLybLRkHKCKVZMh02esJZGf0SD/XyhQYsCXXT/gow9WqhYq
-         ZoA21jV1IZUe/7Pg0wjfCXGZzlwP5aiZxclPq8V1VJ6i7ipdnUHuezJfYnIHf9g3TbrF
-         hgsg==
-X-Gm-Message-State: ACrzQf3yxVifm7x1fsWg23UBAlRVsHqDUCzDDzJ5c7KvgSoLx32moSbE
-        ivBsfgK5UVZrU9sgMV8MEGSBoafXoOw1b2Mv8y6Y3Q==
-X-Google-Smtp-Source: AMsMyM7EJNOVEGyOCeEHgo74cDzxE4T1yFulU/v18cx9x7m6GcDlFRNGIcw4cn8WGmS4u1u9Xxkff71gyckQBcqL+L4=
-X-Received: by 2002:a05:6512:110f:b0:4a2:697f:c39a with SMTP id
- l15-20020a056512110f00b004a2697fc39amr11456204lfg.685.1667496916076; Thu, 03
- Nov 2022 10:35:16 -0700 (PDT)
+        Thu, 3 Nov 2022 13:35:32 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4EFDD13D1E;
+        Thu,  3 Nov 2022 10:35:29 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4CEAB1FB;
+        Thu,  3 Nov 2022 10:35:35 -0700 (PDT)
+Received: from [10.57.36.87] (unknown [10.57.36.87])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B14143F5A1;
+        Thu,  3 Nov 2022 10:35:26 -0700 (PDT)
+Message-ID: <4cae5c8d-d6e9-79dc-670d-22ec9fda10a2@arm.com>
+Date:   Thu, 3 Nov 2022 17:35:19 +0000
 MIME-Version: 1.0
-References: <20221101175326.13265-1-vishal.moola@gmail.com>
- <20221101175326.13265-4-vishal.moola@gmail.com> <Y2Fl/pZyLSw/ddZY@casper.infradead.org>
- <Y2K+y7wnhC4vbnP2@x1n> <Y2LDL8zjgxDPCzH9@casper.infradead.org> <Y2LWonzCdWkDwyyr@x1n>
-In-Reply-To: <Y2LWonzCdWkDwyyr@x1n>
-From:   Axel Rasmussen <axelrasmussen@google.com>
-Date:   Thu, 3 Nov 2022 10:34:38 -0700
-Message-ID: <CAJHvVcj-j6EWm5vQ74Uv1YWHbmg6-BP0hOEO2L9jRADJPEwb1A@mail.gmail.com>
-Subject: Re: [PATCH 3/5] userfualtfd: Replace lru_cache functions with
- folio_add functions
-To:     Peter Xu <peterx@redhat.com>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        "Vishal Moola (Oracle)" <vishal.moola@gmail.com>,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, akpm@linux-foundation.org,
-        Hugh Dickins <hughd@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH v10 1/4] iommu: Always define struct iommu_fwspec
+Content-Language: en-GB
+To:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>
+Cc:     Prathamesh Shete <pshete@nvidia.com>, joro@8bytes.org,
+        adrian.hunter@intel.com, jonathanh@nvidia.com,
+        p.zabel@pengutronix.de, linux-mmc@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
+        will@kernel.org, iommu@lists.linux.dev, anrao@nvidia.com,
+        smangipudi@nvidia.com, kyarlagadda@nvidia.com,
+        Thierry Reding <treding@nvidia.com>
+References: <CAPDyKFqJdiCDkAfrONfnBVKw1v8=jZ+hEJiKGK70EQ4o7BSxaQ@mail.gmail.com>
+ <20221103043852.24718-1-pshete@nvidia.com>
+ <6be39bae-f325-12e0-374b-a27c9ee2ef2b@arm.com> <Y2PJq27wkVwPg6rp@orome>
+ <CAPDyKFq8szzryFBNkw20wFoPTbAa8YDy0wJnb57yckZ-HFTAMw@mail.gmail.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <CAPDyKFq8szzryFBNkw20wFoPTbAa8YDy0wJnb57yckZ-HFTAMw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,60 +54,112 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 2, 2022 at 1:44 PM Peter Xu <peterx@redhat.com> wrote:
->
-> On Wed, Nov 02, 2022 at 07:21:19PM +0000, Matthew Wilcox wrote:
-> > On Wed, Nov 02, 2022 at 03:02:35PM -0400, Peter Xu wrote:
-> > > Does the patch attached look reasonable to you?
-> >
-> > Mmm, no.  If the page is in the swap cache, this will be "true".
->
-> It will not happen in practise, right?
->
-> I mean, shmem_get_folio() should have done the swap-in, and we should have
-> the page lock held at the meantime.
->
-> For anon, mcopy_atomic_pte() is the only user and it's passing in a newly
-> allocated page here.
->
-> >
-> > > diff --git a/mm/userfaultfd.c b/mm/userfaultfd.c
-> > > index 3d0fef3980b3..650ab6cfd5f4 100644
-> > > --- a/mm/userfaultfd.c
-> > > +++ b/mm/userfaultfd.c
-> > > @@ -64,7 +64,7 @@ int mfill_atomic_install_pte(struct mm_struct *dst_mm, pmd_t *dst_pmd,
-> > >     pte_t _dst_pte, *dst_pte;
-> > >     bool writable = dst_vma->vm_flags & VM_WRITE;
-> > >     bool vm_shared = dst_vma->vm_flags & VM_SHARED;
-> > > -   bool page_in_cache = page->mapping;
-> > > +   bool page_in_cache = page_mapping(page);
-> >
-> > We could do:
-> >
-> >       struct page *head = compound_head(page);
-> >       bool page_in_cache = head->mapping && !PageMappingFlags(head);
->
-> Sounds good to me, but it just gets a bit complicated.
->
-> If page_mapping() doesn't sound good, how about we just pass that over from
-> callers?  We only have three, so quite doable too.
+On 2022-11-03 14:55, Ulf Hansson wrote:
+> On Thu, 3 Nov 2022 at 15:01, Thierry Reding <thierry.reding@gmail.com> wrote:
+>>
+>> On Thu, Nov 03, 2022 at 12:23:20PM +0000, Robin Murphy wrote:
+>>> On 2022-11-03 04:38, Prathamesh Shete wrote:
+>>>> In order to fully make use of the !IOMMU_API stub functions, make the
+>>>> struct iommu_fwspec always available so that users of the stubs can keep
+>>>> using the structure's internals without causing compile failures.
+>>>
+>>> I'm really in two minds about this... fwspecs are an internal detail of the
+>>> IOMMU API that are meant to be private between individual drivers and
+>>> firmware code, so anything poking at them arguably does and should depend on
+>>> CONFIG_IOMMU_API. It looks like the stub for dev_iommu_fwspec_get() was only
+>>> added for the sake of one driver that was misusing it where it really wanted
+>>> device_iommu_mapped(), and has since been fixed, so if anything my
+>>> preference would be to remove that stub :/
+>>
+>> Tegra has been using this type of weak dependency on IOMMU_API mainly in
+>> order to allow building without the IOMMU support on some old platforms
+>> where people may actually care about the kernel size (Tegra20 systems
+>> were sometimes severely constrained and don't have anything that we'd
+>> call an IOMMU today).
+>>
+>> We have similar stubs in place for most other major subsystems in order
+>> to allow code to simply compile out if the subsystem is disabled, which
+>> is quite convenient for sharing code between platforms that may want a
+>> given feature and other platforms that may not want it, without causing
+>> too much of a hassle with compile-testing.
+> 
+> I agree with the above.
+> 
+> Moreover, the stubs make the code more portable/scalable and so it
+> becomes easier to maintain.
 
-For what it's worth, I think I like Matthew's version better than the
-original patch. This is because, although page_mapping() looks simpler
-here, looking into the definition of page_mapping() I feel it's
-handling several cases, not all of which are relevant here (or, as
-Matthew points out, would actually be wrong if it were possible to
-reach those cases here).
+Are you suggesting that having the same thing open-coded slightly 
+differently (with bugs) in 8 different places is somehow more 
+maintainable than abstracting it into a single centralised implementation?
 
-It's not clear to me what is meant by "pass that over from callers"?
-Do you mean, have callers pass in true/false for page_in_cache
-directly?
+Is it "easier to maintain" when already seemingly every thing I try to 
+clean up or refactor in the IOMMU API at the moment is stymied by 
+finding Tegra drivers doing unexpected (and often questionable) things? 
+Is it "more scalable" to make it even easier for people to copy 
+questionable code without a second thought, leaving API maintainers to 
+play an ever-expanding game of whack-a-mole to clean it up? No. No it 
+chuffing well isn't :(
 
-That could work, but I still think I prefer Matthew's version slightly
-better, if only because this function already takes a lot of
-arguments.
+>>> I don't technically have much objection to this patch in isolation, but what
+>>> I don't like is the direction of travel it implies. I see the anti-pattern
+>>> is only spread across Tegra drivers, making Tegra-specific assumptions, so
+>>> in my view the best answer would be to abstract that fwpsec dependency into
+>>> a single Tegra-specific helper, which would better represent the nature of
+>>> what's really going on here.
+>>
+>> I don't see how this is an anti-pattern. It might not be common for
+>> drivers to need to reach into iommu_fwspec, so that might indeed be
+>> specific to Tegra (for whatever reason our IP seems to want extra
+>> flexibility), but the general pattern of using stubs is wide-spread,
+>> so I don't see why IOMMU_API would need to be special.
+> 
+> Again, I agree.
 
->
-> --
-> Peter Xu
->
+The anti-pattern is reaching into some other driver's private data 
+assuming a particular format, with zero indication of the huge degree of 
+assumption involved, and half the time not even checking that what's 
+being dereferenced is valid.
+
+> Moreover, a "git grep CONFIG_IOMMU_API" indicates that the problem
+> isn't specific to Tegra. The "#ifdef CONFIG_IOMMU_API" seems to be
+> sprinkled across the kernel. I think it would be nice if we could
+> improve the situation. So far, using stubs along with what the
+> $subject patch proposes, seems to me to be the best approach.
+
+Yes, there is plenty of code through the tree that is only relevant to 
+the IOMMU API and would be a complete waste of space without it, that is 
+not the point in question here. Grep for dev_iommu_fwspec_get; outside 
+drivers/iommu, the only users are IOMMU-API-specific parts of ACPI code, 
+as intended, plus 8 random Tegra drivers.
+
+Now, there does happen to be a tacit contract between the ACPI IORT code 
+and the Arm SMMU drivers for how SMMU StreamIDs are encoded in their 
+respective fwspecs, but it was never intended for wider consumption. If 
+Tegra drivers want to have a special relationship with arm-smmu then 
+fair enough, but they can do the same as MSM and formalise it somewhere 
+that the SMMU driver maintainers are at least aware of, rather than 
+holding the whole generic IOMMU API hostage.
+
+Since apparently it wasn't clear, what I was proposing is a driver 
+helper at least something like this:
+
+int tegra_arm_smmu_streamid(struct device *dev)
+{
+#ifdef CONFIG_IOMMU_API
+	struct iommu_fwspec *fwspec = dev_iommu_fwspec_get(dev)
+
+	if (fwspec && fwspec->num_ids == 1)
+		return fwspec->ids[0] & 0xffff;
+#endif
+	return -EINVAL;
+}
+
+Now THAT is scalable and maintainable; any number of random drivers can 
+call it without any preconditions, it's a lot clearer what's going on, 
+and I won't have to swear profusely while herding patches through half a 
+dozen different trees if, when my ops rework gets to the point of 
+refactoring iommu_fwspec with dev_iommu, it ends up changing anything 
+significant.
+
+Thanks,
+Robin.
