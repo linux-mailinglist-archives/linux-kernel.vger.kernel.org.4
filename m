@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 247B96189C2
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 21:43:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C7896189C6
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 21:44:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230193AbiKCUnt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 16:43:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46862 "EHLO
+        id S231143AbiKCUo2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 16:44:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbiKCUnq (ORCPT
+        with ESMTP id S230415AbiKCUo0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 16:43:46 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79ED81CFD4
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 13:43:44 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id l2so3017846pld.13
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 13:43:44 -0700 (PDT)
+        Thu, 3 Nov 2022 16:44:26 -0400
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92F771CFD9
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 13:44:24 -0700 (PDT)
+Received: by mail-pg1-x536.google.com with SMTP id q71so2681256pgq.8
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 13:44:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=isovalent-com.20210112.gappssmtp.com; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
         bh=AxKD7HF4VVY6C126pnDDCJGczug2CgC+SjyJrp+YveA=;
-        b=VeAQSesJwEH64QODI0Yl5C9dKS3LZi8MR8WaYRl2vBDnGQXOmKvh2o4b787hoZOS9T
-         hULp9P//nxDgNnGT7lwRcfPoA7xGxlLLURCtf9w0wHwPrrCryBuTz7CASdoBisFrv3Cl
-         CitYzycCIFl1Jn5xSQvT4yNtxfTkNsZx/fs8ZI3fgunXk4sRET894FS4HzWuOc98F0Rj
-         Wgao2k/74FToyVATc/ECzlYGOixVKwdPPIHkywol/dUZt8I9nRMWGBCsPkAM7tfGFupx
-         TGCkR7QZvgWdc6/FBen1wpXkdXmJ5KihpLpQ5AP5hEL6T2zIZH5Jmn7deB+D/6teUOTh
-         9lfQ==
+        b=Qqajwshc86+H88ho7BNzEiH4HfWO6BWtwZg+QECAgNELOi+NRoU2gBEpbjU4xSbu+i
+         5+6ra/YuVXRpQ3DDcAqdEwRaqcDmfSE+GommNahY2cHmTYDo9tj8Yp3rZC4UdSnBWLWE
+         HGBJ7717HIAtkMrIFLFp2BVU3wXt1Yjj8EV34kihRmljJA+TROErZnVB+musMDBXIZAq
+         X0iy6Mk6ES/vi+FobKUBNyyyuXQe88Xnsq8iOniSbJEQ0T0BFZjwoi/RWBljUBZYMGLD
+         4jlJGf3LTE/0qb4MWQtOd68n3MJm5EmfA7UOyuuU3zRfs8uEjJP1HGAY0kME9Zmmvofh
+         NyyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
         bh=AxKD7HF4VVY6C126pnDDCJGczug2CgC+SjyJrp+YveA=;
-        b=zJsQ1kRa7yUr5rHdYWalFxhtBd29/vClxo38QyWtV2wGDh/bPwBfqXIVYzai/zkpDY
-         WxXMdhStnFnTNYi80Cgxai9v4K4zNq5KXQIL5tYnfKL8NnT6Y+o2dQgwSaZhWIwk8MbY
-         9nC2mI0f/S2hMlgpA1u/6mWOa6HHI3xEj+3AfM2rGWpBb7lUHQT9JhFlq4/aVJZDorY0
-         tWF3e528w54k96SpIlhnQcfkIyj1/JLBdw2jeKDFRsZIFZYnxM5LJpxAV0KzJU6D4uaw
-         lkU7dQ8UIu0A5F5q8CI7oMpeOXF13WLI0Z6QXfw4dgyOwCQJjjQ/ftnfqAlD/IChvwQH
-         nirg==
-X-Gm-Message-State: ACrzQf3vQ9F6uNVqFxmNe0jRnPs+QeUXIeh8nmPhs18rjQGaCVnljrbo
-        BpeaH3ptWHXgv/rvzeFkH15UkA==
-X-Google-Smtp-Source: AMsMyM4v6+6Us6YKO91yjeNjYrHRSjLkkemcfViaksLbMh647KaWDorG6N96eyQ+K+P+ZBud9m8wGw==
-X-Received: by 2002:a17:902:64c1:b0:186:827e:a0da with SMTP id y1-20020a17090264c100b00186827ea0damr32197813pli.94.1667508223855;
-        Thu, 03 Nov 2022 13:43:43 -0700 (PDT)
+        b=k2yu0537U7CQrbP+tCBMMw212ZmFbPz1lMJ4eyBeIFpfxCnaOU0lIgPwCQJY5Y2VhJ
+         /l70s4lNk/DhexgAfgJewi9TZJwMeqYJDtglSU6wK9MS+tIAf2khe9K1f8ceKQ38lWYb
+         swbi7AAB8Jnw/8r9pzxWisW7YnmVPQ6brl9/EaxxRxsp6LH7ZBzW4AZzGRQCSATA0raT
+         c212lqnVlGxwIr7kiaDYd+hKYAaYvnKbZDKdsyC58Jpzm86bhzroD+d1aiYegSHG0AFE
+         BK89fitBARMQjiCjBjTYIFz9RxIf0Nzb1/CnEiuvCrz2hogittAlwPhy3u2svKSxDVpW
+         yN7A==
+X-Gm-Message-State: ACrzQf2SlMvBIEm9SQzN+CwilDQFqD3G6qvQtL0k+VuxbagmjdNMEJqW
+        D2qVNRMkYpkBcVOsoxikLSB9ig==
+X-Google-Smtp-Source: AMsMyM6CiPa+5R/TyGlp/rFsDqFmZ6NUHGpvAHAw4AwR7B8fo5DynfVKBb5lUBsYWDpyZVeasAHESQ==
+X-Received: by 2002:a05:6a00:2409:b0:54e:a3ad:d32d with SMTP id z9-20020a056a00240900b0054ea3add32dmr31953902pfh.70.1667508263919;
+        Thu, 03 Nov 2022 13:44:23 -0700 (PDT)
 Received: from localhost.localdomain (c-73-93-5-123.hsd1.ca.comcast.net. [73.93.5.123])
-        by smtp.gmail.com with ESMTPSA id 2-20020a17090a0cc200b00212daa6f41dsm403110pjt.28.2022.11.03.13.43.42
+        by smtp.gmail.com with ESMTPSA id z23-20020a17090ad79700b0020ab246ac79sm391009pju.47.2022.11.03.13.44.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Nov 2022 13:43:43 -0700 (PDT)
+        Thu, 03 Nov 2022 13:44:23 -0700 (PDT)
 From:   Joe Stringer <joe@isovalent.com>
 To:     bpf@vger.kernel.org
 Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
         ast@kernel.org, corbet@lwn.net, martin.lau@linux.dev
-Subject: [PATCH] docs/bpf: Add LRU internals description and graph
-Date:   Thu,  3 Nov 2022 13:43:29 -0700
-Message-Id: <20221103204330.3257910-1-joe@isovalent.com>
+Subject: [PATCH bpf-next] docs/bpf: Add LRU internals description and graph
+Date:   Thu,  3 Nov 2022 13:44:18 -0700
+Message-Id: <20221103204419.3259331-1-joe@isovalent.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
