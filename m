@@ -2,46 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80867617492
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 03:55:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B345561749B
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 03:56:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231404AbiKCCzi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 22:55:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43804 "EHLO
+        id S229700AbiKCC4f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 22:56:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230137AbiKCCzS (ORCPT
+        with ESMTP id S230075AbiKCC4X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 22:55:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 787D513F96;
-        Wed,  2 Nov 2022 19:54:47 -0700 (PDT)
+        Wed, 2 Nov 2022 22:56:23 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09DD41116B;
+        Wed,  2 Nov 2022 19:56:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 13B9161CF4;
-        Thu,  3 Nov 2022 02:54:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D9E9C433C1;
-        Thu,  3 Nov 2022 02:54:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1667444086;
-        bh=4KHUanK4Eb1jeTKJdS189VeKoR1cBDb90sED4WqUSPU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cffox6kD0l4pbNz+Sgn+ZsQKAETP+3Ml6lKhXxyg9Zhh4SWrcKx6Oy23PkTWQl20t
-         3RE4KLtOvIAzJZJ2hjicbCkCaQNRhJhvIYYGPV8tgY8GA0JF6vWXHTOFee2hZHePG/
-         WaJjkpYkqG6obxXY9rJc8hCjSoCn4lcvTyMny3t8=
-Date:   Thu, 3 Nov 2022 03:55:42 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc:     linux-serial@vger.kernel.org, Jiri Slaby <jirislaby@kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] tty: Convert tty_buffer flags to bool
-Message-ID: <Y2Mtricfx/HxiEHc@kroah.com>
-References: <20221019105504.16800-1-ilpo.jarvinen@linux.intel.com>
+        by sin.source.kernel.org (Postfix) with ESMTPS id 71CBACE24F1;
+        Thu,  3 Nov 2022 02:56:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB88CC433D6;
+        Thu,  3 Nov 2022 02:56:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667444178;
+        bh=tD7HISYbOkSJc2+ZVHlEVkAOqJHo5AkPqZ+MZ6h6daU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=nM6ajyfyLprHH/c2CXEK4niMZiDKOw0wjQmQRIR18HHlgpdfMgNBCY+4cO6qUxOK2
+         Jd8YjyLkNjH/bWK+DfFaPcxdKxBrwwdCKzEK3bCGUmn+OWyv5fPeKzeJSWc5yBfPza
+         v5z3VGza6WHThHKCY8kRuCAnHgv1GG8PW/ef30EF71mtMl2fDHIUgQ44XfhO3ouong
+         vhE2nvLUEl3QzKc8KTZHiZ4A+nqvdMRWKzZqm+89dI7KFsiptfcxzglwA6IqTGXuth
+         XGgqrw9K4k2Q0DPMy4uXB6X/o+a9c3XdjT1OShC/ZRdvgDfAX4Jc35HMbKY7Nm1cp7
+         x5CRcT5j6hi7w==
+Date:   Wed, 2 Nov 2022 19:56:16 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Valentin Schneider <vschneid@redhat.com>
+Cc:     netdev@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Saeed Mahameed <saeedm@nvidia.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Yury Norov <yury.norov@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Gal Pressman <gal@nvidia.com>,
+        Tariq Toukan <tariqt@nvidia.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>
+Subject: Re: [PATCH v6 0/3] sched, net: NUMA-aware CPU spreading interface
+Message-ID: <20221102195616.6f55c894@kernel.org>
+In-Reply-To: <20221028164959.1367250-1-vschneid@redhat.com>
+References: <20221028164959.1367250-1-vschneid@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221019105504.16800-1-ilpo.jarvinen@linux.intel.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -51,89 +73,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 19, 2022 at 01:55:03PM +0300, Ilpo Järvinen wrote:
-> The struct tty_buffer has flags which is only used for storing TTYB_NORMAL.
-> There is also a few quite confusing operations for checking the presense
-> of TTYB_NORMAL. Simplify things by converting flags to bool.
+On Fri, 28 Oct 2022 17:49:56 +0100 Valentin Schneider wrote:
+> Tariq pointed out in [1] that drivers allocating IRQ vectors would benefit
+> from having smarter NUMA-awareness (cpumask_local_spread() doesn't quite cut
+> it).
 > 
-> Despite the name remaining the same, the meaning of "flags" is altered
-> slightly by this change. Previously it referred to flags of the buffer
-> (only TTYB_NORMAL being used as a flag). After this change, flags tell
-> whether the buffer contains/should be allocated with flags array along
-> with character data array. It is much more suitable name that
-> TTYB_NORMAL was for this purpose, thus the name remains.
+> The proposed interface involved an array of CPUs and a temporary cpumask, and
+> being my difficult self what I'm proposing here is an interface that doesn't
+> require any temporary storage other than some stack variables (at the cost of
+> one wild macro).
 > 
-> Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-> ---
-> 
-> v2:
-> - Make it more obvious why flags is not renamed (both in kerneldoc
->   comment and commit message).
-> 
->  drivers/tty/tty_buffer.c   | 28 ++++++++++++++--------------
->  include/linux/tty_buffer.h |  5 +----
->  include/linux/tty_flip.h   |  4 ++--
->  3 files changed, 17 insertions(+), 20 deletions(-)
-> 
-> diff --git a/drivers/tty/tty_buffer.c b/drivers/tty/tty_buffer.c
-> index 5e287dedce01..b408d830fcbc 100644
-> --- a/drivers/tty/tty_buffer.c
-> +++ b/drivers/tty/tty_buffer.c
-> @@ -107,7 +107,7 @@ static void tty_buffer_reset(struct tty_buffer *p, size_t size)
->  	p->commit = 0;
->  	p->lookahead = 0;
->  	p->read = 0;
-> -	p->flags = 0;
-> +	p->flags = true;
->  }
->  
->  /**
-> @@ -249,7 +249,7 @@ void tty_buffer_flush(struct tty_struct *tty, struct tty_ldisc *ld)
->   * __tty_buffer_request_room	-	grow tty buffer if needed
->   * @port: tty port
->   * @size: size desired
-> - * @flags: buffer flags if new buffer allocated (default = 0)
-> + * @flags: buffer has to store flags along character data
->   *
->   * Make at least @size bytes of linear space available for the tty buffer.
->   *
-> @@ -260,19 +260,19 @@ void tty_buffer_flush(struct tty_struct *tty, struct tty_ldisc *ld)
->   * Returns: the size we managed to find.
->   */
->  static int __tty_buffer_request_room(struct tty_port *port, size_t size,
-> -				     int flags)
-> +				     bool flags)
->  {
->  	struct tty_bufhead *buf = &port->buf;
->  	struct tty_buffer *b, *n;
->  	int left, change;
->  
->  	b = buf->tail;
-> -	if (b->flags & TTYB_NORMAL)
-> +	if (!b->flags)
->  		left = 2 * b->size - b->used;
->  	else
->  		left = b->size - b->used;
->  
-> -	change = (b->flags & TTYB_NORMAL) && (~flags & TTYB_NORMAL);
-> +	change = !b->flags && flags;
->  	if (change || left < size) {
->  		/* This is the slow path - looking for new buffers to use */
->  		n = tty_buffer_alloc(port, size);
-> @@ -300,7 +300,7 @@ static int __tty_buffer_request_room(struct tty_port *port, size_t size,
->  
->  int tty_buffer_request_room(struct tty_port *port, size_t size)
->  {
-> -	return __tty_buffer_request_room(port, size, 0);
-> +	return __tty_buffer_request_room(port, size, true);
+> [1]: https://lore.kernel.org/all/20220728191203.4055-1-tariqt@nvidia.com/
 
-Did this logic just get inverted?
+Not sure who's expected to take these, no preference here so:
 
-Maybe it's the jet-lag, but this feels like it's not correct anymore.
+Acked-by: Jakub Kicinski <kuba@kernel.org>
 
-Maybe a commet up above where you calculate "left" would make more sense
-as to what is going on?
-
-thanks,
-
-greg k-h
+Thanks for ironing it out!
