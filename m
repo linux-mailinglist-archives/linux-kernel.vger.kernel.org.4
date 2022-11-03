@@ -2,145 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D6206182C4
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 16:28:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BAD896182D2
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 16:29:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232026AbiKCP2a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 11:28:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38200 "EHLO
+        id S232249AbiKCP3j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 11:29:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232217AbiKCP2E (ORCPT
+        with ESMTP id S231891AbiKCP27 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 11:28:04 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F2761AF22
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 08:28:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net; s=s31663417;
-        t=1667489264; bh=91iatK0bFe164TIbmDTaQyHZyVvPOTcArPtTqSE8u4w=;
-        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=j+gAjkAD6A/tF7e+qfh2/rtCGHI637bbBEDhiEKyN4Zp3YYmESdb5ijOgDBvfAO2C
-         chfmNhp6jI84lWYpQeT8y8jfhtNw7jHfO5I597APb1GD9xh27b3dE5eXOFxPPO0SP1
-         +PONSQSRc4Bb6t2zk2+FBLtwV3jkXuDFSI/bALQkmMscyjiSYyF8a8rBZoH94ZkEhY
-         UHZhkGaYDwg924w88Uxwhe2BxpKG/QyZSUUDZaOwi74EfFCVZnslDb8jmlPVJZOzrX
-         BCUOHUXBDXNmqfQNjDD2XYmLHc2/DRHqb48s5frAcZtkFmzEQwXZmEzwBjHCd98eDP
-         Ja2XrNUJiCPlA==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from probook ([78.34.126.36]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MKsj7-1obxOf08bt-00LELe; Thu, 03
- Nov 2022 16:27:44 +0100
-Date:   Thu, 3 Nov 2022 16:27:42 +0100
-From:   Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-To:     Joel Stanley <joel@jms.id.au>
-Cc:     Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        openbmc@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Russell King <linux@armlinux.org.uk>
-Subject: Re: [PATCH v3] ARM: Add wpcm450_defconfig for Nuvoton WPCM450
-Message-ID: <Y2Pd7vIkOu0ptVMb@probook>
-References: <20221101112134.673869-1-j.neuschaefer@gmx.net>
- <CACPK8XfnRExua7ZhyAkMNUNwUtmcXrBL3phf9ZMCzpBMN452hw@mail.gmail.com>
+        Thu, 3 Nov 2022 11:28:59 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B15A21ADA5
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 08:27:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1667489275;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=xCSLioTknXwq+ek9x4fiuIn1LdVr/LliQOq4IIs2CLE=;
+        b=NZ3fF7TxqELuNFxzBWYoUexywm/lT8kIbKbKohyUpTBbq3FCShWRW+6COii9KwpFnmptp9
+        hyvToGLdDDbpcM40ZbarMvN5EzStTHRyJ/kBOeg87+AcCd8ScXR40xQppiwcelGgDxPyNA
+        xH6d6+ycZSRf4OF5jyYVNyAKI8uRHu4=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-257-l3WKcMlzOr6GOUtYXUmStQ-1; Thu, 03 Nov 2022 11:27:52 -0400
+X-MC-Unique: l3WKcMlzOr6GOUtYXUmStQ-1
+Received: by mail-ed1-f72.google.com with SMTP id m7-20020a056402430700b0045daff6ee5dso1622485edc.10
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 08:27:51 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=xCSLioTknXwq+ek9x4fiuIn1LdVr/LliQOq4IIs2CLE=;
+        b=7eKSrZHBXibDZnX9gKa5l/634rdAypCk9kwqaHZRzHfLjeJTlOSOt/y2suiKcjPAx9
+         pl4pMibEvrWW5hNBiXA8EJ4A7F0nNh7eDBT9uaMEMAGA++ycTXZXIZPaNbBOqwbc4v70
+         DZZRkvHqa1EGFYbjlsrUiZ/ePRww9hwLLLDPPX6IndFP9MYXcL+CuEhyYmG6x57nloWv
+         7f8/7epZK90Kjcvb8k9obVfEE+6uecPohZ5OxhjLvadCB9Zwrklh5Xit7Ao5TNmL/7d3
+         DtCo4P72JDAdeY5XSYw9pEnljHD8ILEUCb/pgwl8hjEOcT6SXDnJyzxSnG+/CZM8JIM+
+         4DRQ==
+X-Gm-Message-State: ACrzQf0zUMrpik/ZFlqMysbjel5J5XZteLbzc946s774400cpT+07ooN
+        al4jbzrHTE+R7LpwjQ6NK6dqIsuxdIOOYHuhGi5ObKwZIulfgZUl6PKljv30SflHYn4eFwOLnTS
+        +SF+u+rcOwqq9FanL99gONhsh
+X-Received: by 2002:a17:907:2dab:b0:78d:fc4b:7e31 with SMTP id gt43-20020a1709072dab00b0078dfc4b7e31mr28147777ejc.531.1667489270832;
+        Thu, 03 Nov 2022 08:27:50 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM7u9a9PiI+1WXKEKW1T9dxImTSTFhIKArq6MPRri6hHxMVLdP9Ji+9iwit/AYCn6duMyFkDdg==
+X-Received: by 2002:a17:907:2dab:b0:78d:fc4b:7e31 with SMTP id gt43-20020a1709072dab00b0078dfc4b7e31mr28147732ejc.531.1667489270591;
+        Thu, 03 Nov 2022 08:27:50 -0700 (PDT)
+Received: from ?IPV6:2001:b07:6468:f312:1c09:f536:3de6:228c? ([2001:b07:6468:f312:1c09:f536:3de6:228c])
+        by smtp.googlemail.com with ESMTPSA id 15-20020a508e4f000000b00463bc1ddc76sm657729edx.28.2022.11.03.08.27.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 03 Nov 2022 08:27:49 -0700 (PDT)
+Message-ID: <82df23f2-b049-8bee-8bb8-608645b918d8@redhat.com>
+Date:   Thu, 3 Nov 2022 16:27:47 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="RxxJ9eg+2o8pr/p9"
-Content-Disposition: inline
-In-Reply-To: <CACPK8XfnRExua7ZhyAkMNUNwUtmcXrBL3phf9ZMCzpBMN452hw@mail.gmail.com>
-X-Provags-ID: V03:K1:6/15tKCEE1SgwOughob2r71Cgpa2Iy2CW+UvY3wS41dgyU3QgPB
- nN17U46GHNzgiDywo9D6t1u3pWZxjR2c8/PxNuwet0hmqsMCvFUr3I+FOaCOhDhIATtUNsG
- iaGWaQNpPvz+SA1cFuRO9hBCqmkS6DPS/mOZFFLDW/d05D/YVBlvRt60o5lO+G5bFr9zhSn
- YhXVtMrZZoQJopX/ndiYg==
-UI-OutboundReport: notjunk:1;M01:P0:N1LbXc4a9XE=;WrOyN4FTith+9lFxFza3HlLqBVL
- O+WJQplvss8Wpf6fW5ff6DI1Mkb6wsTEc4u+daSJCR+HGldi5tucOYxNZ1vboj/Q4S4GC68EW
- lPXsOVC5ru0xaRXL7yHuN0FtBWgFjoACpW8pBCKwCGlkVram0vD2TZFHqT22Jf8aK85RaIGTt
- Tf2VJ2sV2QIhE4bOEysehcvDMvw/gqwfNk+3hluW0PS1EQ2lRwF9lKKfIgv68KaSlfKLmIbkZ
- boAnkXCpK9OI9bcoY9y24O6v0XoByLWuBiJUHDT7F+OvBFje2RCOE1x/ue3mdPq/iQGFftJZ0
- w9huIFHq79KKRnMFKrs1leCO14+gw/9gqC72KOKuHlZ0aw+tMSNSfcP20FgAsLLVuGEwaWyQj
- O8m7we1GoF/sDqP4/Rz3Ef7kw8qlvg0yp3dAl7YgF452/ZMK1eyw6dif/wDfY1kV2fZfqUDXu
- 0mwRKtSsx25Cb1UZqb7RMHml0CJOgcAYhwsNKz0Mds439ACyCaLUFUZCRw4goCrWCWMUJyzFF
- amA4sYOaow4ikitTP8PJgYFIvAdSakYjCZ+IeWzjdteMFsZUYWK5IyzF4BkOUycG3TVBNjfV5
- ZddbRCfHuXS1f9Ixb/rY/64qF1mgcHzAWyRBnsra8U/HvGpp6gfY1Gx87zeheN4KaPPICG4kP
- 1x650I0YFWYIH2gH5xZ+WXGicFfhXmQoz+itNaJP9RMmY+8aPZGKyB+PpPyGCOFLzHxYsQi/v
- OzIbWWra6aM9KX9OkAkJHLpXlBwhOgC3soJumljqdQg6WEsCEd174gxaozKJFMuktS2iRhyoi
- dQ71eYnMxwdcDdvoO3YjZ/r2aSQjmEashl4ujUKNag3mV+FnFK5BoFQLajgpZ5fQ1LQsUFL0z
- MS0PJ9M8MrNaq89lAnlaQn17QRngcKsIFQm86s+JycI6/4suL23A8vaXHWjvtyom5zUbrqu4L
- zAp//XP/wusY3TAGCH5nTtJshww=
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH 00/44] KVM: Rework kvm_init() and hardware enabling
+Content-Language: en-US
+To:     Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Anup Patel <anup@brainfault.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        Eric Farman <farman@linux.ibm.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc:     James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Atish Patra <atishp@atishpatra.org>,
+        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Isaku Yamahata <isaku.yamahata@intel.com>,
+        Fabiano Rosas <farosas@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Chao Gao <chao.gao@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Yuan Yao <yuan.yao@intel.com>
+References: <20221102231911.3107438-1-seanjc@google.com>
+ <b37267a9-c0b4-9841-71af-d8eab9baeb60@linux.ibm.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <b37267a9-c0b4-9841-71af-d8eab9baeb60@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 11/3/22 13:08, Christian Borntraeger wrote:
+>> There are bug fixes throughout this series.  They are more scattered than
+>> I would usually prefer, but getting the sequencing correct was a gigantic
+>> pain for many of the x86 fixes due to needing to fix common code in order
+>> for the x86 fix to have any meaning.  And while the bugs are often fatal,
+>> they aren't all that interesting for most users as they either require a
+>> malicious admin or broken hardware, i.e. aren't likely to be encountered
+>> by the vast majority of KVM users.  So unless someone _really_ wants a
+>> particular fix isolated for backporting, I'm not planning on shuffling
+>> patches.
+>>
+>> Tested on x86.  Lightly tested on arm64.  Compile tested only on all 
+>> other architectures.
+> 
+> Some sniff tests seem to work ok on s390.
 
---RxxJ9eg+2o8pr/p9
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Thanks.  There are just a couple nits, and MIPS/PPC/RISC-V have very 
+small changes.  Feel free to send me a pull request once Marc acks.
 
-On Wed, Nov 02, 2022 at 10:29:58PM +0000, Joel Stanley wrote:
-> On Tue, 1 Nov 2022 at 11:22, Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.=
-net> wrote:
-> >
-> > This defconfig aims to offer a reasonable set of defaults for all
-> > systems running on a Nuvoton WPCM450 chip.
->=20
-> I was going to ask if we could instead have a common nuvoton
-> defconfig, but this is an ARMv5 part so we can't also select the ARMv7
-> npcm750.
+Paolo
 
-Correct.
-
->=20
-> Reviewed-by: Joel Stanley <joel@jms.id.au>
->=20
-
-
-> > +CONFIG_ARM_APPENDED_DTB=3Dy
->=20
-> Do you use this? OpenBMC systems tend to just use FIT, so we don't
-> need this option.
-
-I use this, because there is no modern U-Boot port for WPCM450 yet
-(as far as I'm aware).
-
-> > +CONFIG_KEXEC=3Dy
-
-I also use kexec, it's useful during development, but I see that it's
-not so useful for the BMC usecase.
-
-> > +CONFIG_CPU_FREQ=3Dy
->=20
-> Does the wpcm do frequency scaling? If not you could disable this.
-
-No, as it currently stands the clock driver is read-only except for the
-clock gates, and there is no cpufreq. I'll disable this option.
-
-CPU_IDLE could plausibly be implemented on WPCM450, but currently isn't.
-
-
-Thanks,
-Jonathan
-
---RxxJ9eg+2o8pr/p9
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEvHAHGBBjQPVy+qvDCDBEmo7zX9sFAmNj3c0ACgkQCDBEmo7z
-X9s1ig//cf6cPlBR4q5XbP91hHqmEBlAhpVFYFjdtzHlcqJgZlhbhtwwEa3OiPoP
-5JBodEaW2k3YWU6t2hM7UxiltcBNNCrz7uEhDscO1NHS6S04Dq43DU4rqyNGpVIS
-+KC4WQJz7TAliY5ejuwfmS0b5iipVVA8piG8iXXl9nKe0i09cepbQHID7twJ3xZo
-uMAWSVUJvu5Kv1qusulgjnI3O47QnZdR+cCHH3s0PyP0pox74+VKjfj6PzjOOw+Z
-LqqggLiymX4o3OAeYZlGbemhWzfTgoln/FhcNMjZbMof/wjtu/lZxVbLmQ/el7LN
-hVEuj+ViS/lZ1CO+y+K5effZPvMTURCxRDBzQalyynPSCrsEswVtIT/QQoI5uwP9
-wbyFv09N+HItJIn7TRNl+lRI6I7PMmalMrHEFfGQRYPfPJomq2w68M+XvwVpOTr7
-cVzAzLtr9KUjkHug/ILgN5qaUWn99oGkNXV1yyHhsOfWDc3hwwjEUsmoj8yI/Jg4
-Q22mTyqwU1LlYc05cvJiJ9jbZYaQeuRHxqb2m+WIQd20IZM6jUuTFzIZhNgLVOSL
-0+KKPRtGfUs0hjUzi3aXTC3N3Ibl/huFCv0/9zWQZhETouS5DHwZly1tZ8dXn0rd
-Yeh45DKjbux/qtDyS53ZNeEWadaoI9/+MPehpDy1RfMtiNxmeEo=
-=GC/b
------END PGP SIGNATURE-----
-
---RxxJ9eg+2o8pr/p9--
