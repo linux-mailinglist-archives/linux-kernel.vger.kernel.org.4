@@ -2,156 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92AC961880C
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 19:58:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C0D7618816
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 19:59:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231295AbiKCS60 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 14:58:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45402 "EHLO
+        id S230507AbiKCS7u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 14:59:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230047AbiKCS6W (ORCPT
+        with ESMTP id S229954AbiKCS7p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 14:58:22 -0400
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EAC6C6E
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 11:58:21 -0700 (PDT)
-Received: by mail-pg1-x529.google.com with SMTP id g129so2459378pgc.7
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 11:58:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=OgBlWniGTXEnPcASGuNFCxIZuwOSNaqHJ+Eb2HtkZ3A=;
-        b=crtTNSDLBpNcvDSxofCENmrvtDvGgpUzGCkxI3/S4zR915QtnPiMfGmQ1bfa1+IphI
-         JYKHG76keqoKUqskuvBrM1m0JyELxmvNXlZ4KiPUOKMYgaWfFysvap9RGXI963+2hoeq
-         HHT/GX+S1XBR2PYehjOUxetwVpL78GGV9aYozWyKXyCWQQP6iGe8zgNPOME2bv1qjA9e
-         apMslXORbm1rWkX1K/6OQ1RCG98VSwtHOf2J04nfLy9jITyFIIcn6ieZ9TY4AUm1gsGc
-         eyQU7zbjJP0kGKm2zN/8wgEWv2C3dUA3cPXDwDYFGn1wLuJmRxozNVKQFEnfavfSL6Lx
-         ZqXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OgBlWniGTXEnPcASGuNFCxIZuwOSNaqHJ+Eb2HtkZ3A=;
-        b=XuvDt1Xm+ysrRP/7SkLDCVaj7/0J0W1s7mfjGBArB9rnZRGlFvaEj1a04YhHMLr9UK
-         Aknmy3Jt4y/JchWur/09AcMB4LDGEMIbSd11+BnNmsoeqUZ/UL6WULRIY82NQnwA+hzl
-         BT4tacNHGUvkaUDmJctyCV8tpTa1Lg3c5Pj7iBxiMuSyQRNdEdnaryGxsG2bq+5fJjUF
-         oNohBR357hIYLQyPpZzm02LyRdqztCsBSdCrOYI2iifEsj54dgefn0oExqIHHBDX+D6d
-         X7rYevGiNxKlnkgu0xk1totchpxP2ZfNqYTxj16lxwP/Oanp+tiBBcOHdWWhTpMIj4lJ
-         ID8A==
-X-Gm-Message-State: ACrzQf1h5Ziqn4CyIy4HqKXQaY3ANK4N3vYF9oeSGDhWQs+lOoBfj23C
-        eWLRl3keU3i2nDWYbBEh/S08OA==
-X-Google-Smtp-Source: AMsMyM7lUXjnrFRO+e+xTY8enXMXmh/YC+M/IqwbxJRPxqwsuhxb3fUJPK1b1MpOBO3HsUEvz+aKuA==
-X-Received: by 2002:aa7:81cf:0:b0:561:7d72:73ef with SMTP id c15-20020aa781cf000000b005617d7273efmr31655060pfn.16.1667501900762;
-        Thu, 03 Nov 2022 11:58:20 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id c20-20020a17090ad91400b00209a12b3879sm309308pjv.37.2022.11.03.11.58.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Nov 2022 11:58:20 -0700 (PDT)
-Date:   Thu, 3 Nov 2022 18:58:16 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Marc Zyngier <maz@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Anup Patel <anup@brainfault.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        Eric Farman <farman@linux.ibm.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Atish Patra <atishp@atishpatra.org>,
-        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Isaku Yamahata <isaku.yamahata@intel.com>,
-        Fabiano Rosas <farosas@linux.ibm.com>,
+        Thu, 3 Nov 2022 14:59:45 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B1B7FD3C;
+        Thu,  3 Nov 2022 11:59:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667501985; x=1699037985;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=iDzJkwIYDgDj9s9QyYyQqMun6Fj8NrFnD6UKX0fcnAs=;
+  b=U1Umt9qku3GYocruQL5t/15455Rny7EXR4FHjNANVPsZL25YbnUAmdw7
+   qIzTFjDWCpBgRXNs3Vbg1eHClJd1/n5Wa49RgzySMT3ePursA7PQg7cXD
+   sLjdAwNydWb/Vt1ChnQmxLcAQf95L6jvAT4KX6UtC4kwn8aujIzJrWwQS
+   bKdewFI+vEeeGUC9VHlUrHdjxCqn0dn86Rca8THquoXv8VgMtdbmbVFFA
+   w1kxOgKcc3YhgFBkK3NoJ0GO4PBXfg2QNkTCPW9PFJjwIfH5yf9PfE5vf
+   IVlV/x38M2FJ9Zjdqc1379zmLj14WK/LfvvHm6CIVsSp/Xex+l6bFwfEf
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10520"; a="293099746"
+X-IronPort-AV: E=Sophos;i="5.96,135,1665471600"; 
+   d="scan'208";a="293099746"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2022 11:59:44 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10520"; a="724055696"
+X-IronPort-AV: E=Sophos;i="5.96,135,1665471600"; 
+   d="scan'208";a="724055696"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by FMSMGA003.fm.intel.com with ESMTP; 03 Nov 2022 11:59:37 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1oqfR8-006zVP-0o;
+        Thu, 03 Nov 2022 20:59:34 +0200
+Date:   Thu, 3 Nov 2022 20:59:33 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>
+Cc:     Dominik Brodowski <linux@dominikbrodowski.net>,
+        =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
         Michael Ellerman <mpe@ellerman.id.au>,
-        Chao Gao <chao.gao@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Yuan Yao <yuan.yao@intel.com>
-Subject: Re: [PATCH 33/44] KVM: x86: Do VMX/SVM support checks directly in
- vendor code
-Message-ID: <Y2QPSK1/6esl61wQ@google.com>
-References: <20221102231911.3107438-1-seanjc@google.com>
- <20221102231911.3107438-34-seanjc@google.com>
- <bfa98587-3b36-3834-a4b9-585a0e0aa56a@redhat.com>
- <Y2QJ2TuyZImbFFvi@google.com>
- <c29e7d40-ddb9-def0-f944-a921a05a4bb2@redhat.com>
+        Arnd Bergmann <arnd@arndb.de>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Juergen Gross <jgross@suse.com>, linux-kernel@vger.kernel.org,
+        linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        sparclinux@vger.kernel.org, linux-pci@vger.kernel.org,
+        xen-devel@lists.xenproject.org, Miguel Ojeda <ojeda@kernel.org>,
+        Richard Henderson <richard.henderson@linaro.org>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "David S. Miller" <davem@davemloft.net>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
+Subject: Re: [PATCH v2 4/4] pcmcia: Convert to use
+ pci_bus_for_each_resource_p()
+Message-ID: <Y2QPlZ0mhLvKw7X5@smile.fi.intel.com>
+References: <20221103164644.70554-1-andriy.shevchenko@linux.intel.com>
+ <20221103164644.70554-5-andriy.shevchenko@linux.intel.com>
+ <Y2P0XCNJvTVuziO7@owl.dominikbrodowski.net>
+ <Y2P2ja26ikNecTsv@smile.fi.intel.com>
+ <Y2QImB0OLakzz1+F@rocinante>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <c29e7d40-ddb9-def0-f944-a921a05a4bb2@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Y2QImB0OLakzz1+F@rocinante>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 03, 2022, Paolo Bonzini wrote:
-> On 11/3/22 19:35, Sean Christopherson wrote:
-> > It's technically required.  IA32_FEAT_CTL and thus KVM_INTEL depends on any of
-> > CPU_SUP_{INTEL,CENATUR,ZHAOXIN}, but init_ia32_feat_ctl() is invoked if and only
-> > if the actual CPU type matches one of the aforementioned CPU_SUP_*.
+On Fri, Nov 04, 2022 at 03:29:44AM +0900, Krzysztof Wilczyński wrote:
+
+> > > > -
+> > > > -	for (i = 0; i < PCI_BRIDGE_RESOURCE_NUM; i++) {
+> > > > -		res = s->cb_dev->bus->resource[i];
+> > > > -#else
+> > > > -	pci_bus_for_each_resource(s->cb_dev->bus, res, i) {
+> > > >  #endif
+> > > > +
+> > > > +	pci_bus_for_each_resource_p(s->cb_dev->bus, res) {
+> > > >  		if (!res)
+> > > >  			continue;
+> > > 
+> > > Doesn't this remove the proper iterator for X86? Even if that is the right
+> > > thing to do, it needs an explict explanation.
 > > 
-> > E.g. running a kernel built with
-> > 
-> >    CONFIG_CPU_SUP_INTEL=y
-> >    CONFIG_CPU_SUP_AMD=y
-> >    # CONFIG_CPU_SUP_HYGON is not set
-> >    # CONFIG_CPU_SUP_CENTAUR is not set
-> >    # CONFIG_CPU_SUP_ZHAOXIN is not set
-> > 
-> > on a Cenatur or Zhaoxin CPU will leave X86_FEATURE_VMX set but not set
-> > X86_FEATURE_MSR_IA32_FEAT_CTL.  If VMX isn't enabled in MSR_IA32_FEAT_CTL, KVM
-> > will get unexpected #UDs when trying to enable VMX.
+> > I dunno what was in 2010, but reading code now I have found no differences in
+> > the logic on how resources are being iterated in these two pieces of code.
 > 
-> Oh, I see.  Perhaps X86_FEATURE_VMX and X86_FEATURE_SGX should be moved to
-> one of the software words instead of using cpuid.  Nothing that you should
-> care about for this series though.
+> This code is over a decade old (13 years old to be precise) and there was
+> something odd between Bjorn's and Jesse's patches, as per:
+> 
+>   89a74ecccd1f ("PCI: add pci_bus_for_each_resource(), remove direct bus->resource[] refs")
+>   cf26e8dc4194 ("pcmcia: do not autoadd root PCI bus resources")
 
-Or maybe something like this?
+Yeah, thanks for pointing out to the other patch from the same 2010 year.
+It seems the code was completely identical that time, now it uses more
+sophisticated way of getting bus resources, but it's kept the same for
+the resources under PCI_BRIDGE_RESOURCE_NUM threshold.
 
-diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
-index 3e508f239098..ebe617ab0b37 100644
---- a/arch/x86/kernel/cpu/common.c
-+++ b/arch/x86/kernel/cpu/common.c
-@@ -191,6 +191,8 @@ static void default_init(struct cpuinfo_x86 *c)
-                        strcpy(c->x86_model_id, "386");
-        }
- #endif
-+
-+       clear_cpu_cap(c, X86_FEATURE_MSR_IA32_FEAT_CTL);
- }
- 
- static const struct cpu_dev default_cpu = {
-diff --git a/arch/x86/kernel/cpu/cpuid-deps.c b/arch/x86/kernel/cpu/cpuid-deps.c
-index c881bcafba7d..3a7ae67f5a5e 100644
---- a/arch/x86/kernel/cpu/cpuid-deps.c
-+++ b/arch/x86/kernel/cpu/cpuid-deps.c
-@@ -72,6 +72,8 @@ static const struct cpuid_dep cpuid_deps[] = {
-        { X86_FEATURE_AVX512_FP16,              X86_FEATURE_AVX512BW  },
-        { X86_FEATURE_ENQCMD,                   X86_FEATURE_XSAVES    },
-        { X86_FEATURE_PER_THREAD_MBA,           X86_FEATURE_MBA       },
-+       { X86_FEATURE_VMX,                      X86_FEATURE_MSR_IA32_FEAT_CTL         },
-+       { X86_FEATURE_SGX,                      X86_FEATURE_MSR_IA32_FEAT_CTL         },
-        { X86_FEATURE_SGX_LC,                   X86_FEATURE_SGX       },
-        { X86_FEATURE_SGX1,                     X86_FEATURE_SGX       },
-        { X86_FEATURE_SGX2,                     X86_FEATURE_SGX1      },
+> > But fine, I will add a line to a commit message about this change.
+> 
+> I wouldn't, personally.  The change you are proposing is self-explanatory
+> and somewhat in-line with what is there already - unless I am also reading
+> the current implementation wrong.
+
+But it wouldn't be harmful either.
+
+> That said, Dominik is the maintainer of PCMCIA driver, so his is the last
+> word, so to speak. :)
+> 
+> > Considering this is done, can you issue your conditional tag so I will
+> > incorporate it in v3?
+> 
+> No need, really.  Again, unless Dominik thinks otherwise.
+
+I think that what is wanted to have to get his tag.
+
+Thanks for review, both of you, guys!
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
 
