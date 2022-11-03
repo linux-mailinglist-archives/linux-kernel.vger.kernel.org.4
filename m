@@ -2,193 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB0E26184DB
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 17:38:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EB066184ED
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 17:40:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232312AbiKCQio (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 12:38:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60410 "EHLO
+        id S232459AbiKCQkx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 12:40:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232363AbiKCQiT (ORCPT
+        with ESMTP id S232004AbiKCQkc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 12:38:19 -0400
-Received: from mx.cjr.nz (mx.cjr.nz [51.158.111.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C0D21DA72;
-        Thu,  3 Nov 2022 09:35:06 -0700 (PDT)
-Received: from authenticated-user (mx.cjr.nz [51.158.111.142])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: pc)
-        by mx.cjr.nz (Postfix) with ESMTPSA id 9F6BC7FC21;
-        Thu,  3 Nov 2022 16:34:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cjr.nz; s=dkim;
-        t=1667493261;
+        Thu, 3 Nov 2022 12:40:32 -0400
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A71751DA68;
+        Thu,  3 Nov 2022 09:37:27 -0700 (PDT)
+Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id EDAED2000D;
+        Thu,  3 Nov 2022 16:37:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1667493446;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=L7oeyOE9y+SCE0Fp1mehfx0R2Rb8YrWpiTFfBzwVnbE=;
-        b=A/1/IKG1KpNtZhg+9WqvL6/jgQa6rGajHLy3ic5Bme0VfEK1IHzSnukadQAEuBZ28Gu7+B
-        8jiA1IiBGxC9W2ymqpOFxlp7g/ckpa+u+bCDt+5XnsJBUqo15qEKdMh9WmvqcFHfOwlcl1
-        xardnrPb3Ah1qZ08IIbGaDHIctH5rlEfe05yvHZwLscMCxQJMomFFQgAuezfaQXgaejG5+
-        vTyzkQJYiCFgpfeZGEHea0YMGv/tlGvzdR3J6orRmax8in0OnE0cjzzRHlDu5UiF5hYSXa
-        PYuHrPtSGMTP1WlYRpMn4KTytQjHAugGjUGlKcmE3dCATYu1POmvpeCKgsQhUA==
-From:   Paulo Alcantara <pc@cjr.nz>
-To:     ChenXiaoSong <chenxiaosong2@huawei.com>, sfrench@samba.org,
-        lsahlber@redhat.com
-Cc:     linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
-        linux-kernel@vger.kernel.org, chenxiaosong2@huawei.com,
-        yi.zhang@huawei.com, zhangxiaoxu5@huawei.com
-Subject: Re: [PATCH] cifs: fix use-after-free on the link name
-In-Reply-To: <20221102061659.920334-1-chenxiaosong2@huawei.com>
-References: <20221102061659.920334-1-chenxiaosong2@huawei.com>
-Date:   Thu, 03 Nov 2022 13:35:30 -0300
-Message-ID: <875yfw0ze5.fsf@cjr.nz>
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=zTw0rJyfzCU40CW+dZ1YvahU2CazOwg5lrh3lQQZgCU=;
+        b=RUbwfgNxPWLD/qMctemXMvGjRP1/wxqMt5r9TQo6ojqaLuHkNv3SJossKCkglMWsQRtrV5
+        LKIUh2N0Rg4bs1cukYfX1Ewb5oARubepBf/G2SaNWzPu2cU4elm3rOusZSStAT33Yh1Hp5
+        go/iZsrGkIOx/DIZM0r3Ro/5xfrnMX3LK28N3ZHfCbFpyOn9+6H1pU/nYQo7hcoL95Vzt8
+        yeG0xkRjlquAGvkOND4FoJolX+of89lCC4VG7vR3++xNIteflDWjlgSs3MzJAK+2Lcafj6
+        5NFZK1NOhF8SYKz49WCzcSQVTXugd5l8Ipn+cA+dG3X6lY8Mr+SPSkLSll6QFw==
+From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+To:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev
+Cc:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hans Verkuil <hans.verkuil@cisco.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: [PATCH v8 0/6] Allwinner A31/A83T MIPI CSI-2 and A31 ISP / ISP Driver
+Date:   Thu,  3 Nov 2022 17:37:11 +0100
+Message-Id: <20221103163717.246217-1-paul.kocialkowski@bootlin.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ChenXiaoSong <chenxiaosong2@huawei.com> writes:
+This part only concerns the introduction of the new ISP driver and related
+adaptation of the CSI driver.
 
-> xfstests generic/011 reported use-after-free bug as follows:
->
->   BUG: KASAN: use-after-free in __d_alloc+0x269/0x859
->   Read of size 15 at addr ffff8880078933a0 by task dirstress/952
->
->   CPU: 1 PID: 952 Comm: dirstress Not tainted 6.1.0-rc3+ #77
->   Call Trace:
->    __dump_stack+0x23/0x29
->    dump_stack_lvl+0x51/0x73
->    print_address_description+0x67/0x27f
->    print_report+0x3e/0x5c
->    kasan_report+0x7b/0xa8
->    kasan_check_range+0x1b2/0x1c1
->    memcpy+0x22/0x5d
->    __d_alloc+0x269/0x859
->    d_alloc+0x45/0x20c
->    d_alloc_parallel+0xb2/0x8b2
->    lookup_open+0x3b8/0x9f9
->    open_last_lookups+0x63d/0xc26
->    path_openat+0x11a/0x261
->    do_filp_open+0xcc/0x168
->    do_sys_openat2+0x13b/0x3f7
->    do_sys_open+0x10f/0x146
->    __se_sys_creat+0x27/0x2e
->    __x64_sys_creat+0x55/0x6a
->    do_syscall_64+0x40/0x96
->    entry_SYSCALL_64_after_hwframe+0x63/0xcd
->
->   Allocated by task 952:
->    kasan_save_stack+0x1f/0x42
->    kasan_set_track+0x21/0x2a
->    kasan_save_alloc_info+0x17/0x1d
->    __kasan_kmalloc+0x7e/0x87
->    __kmalloc_node_track_caller+0x59/0x155
->    kstrndup+0x60/0xe6
->    parse_mf_symlink+0x215/0x30b
->    check_mf_symlink+0x260/0x36a
->    cifs_get_inode_info+0x14e1/0x1690
->    cifs_revalidate_dentry_attr+0x70d/0x964
->    cifs_revalidate_dentry+0x36/0x62
->    cifs_d_revalidate+0x162/0x446
->    lookup_open+0x36f/0x9f9
->    open_last_lookups+0x63d/0xc26
->    path_openat+0x11a/0x261
->    do_filp_open+0xcc/0x168
->    do_sys_openat2+0x13b/0x3f7
->    do_sys_open+0x10f/0x146
->    __se_sys_creat+0x27/0x2e
->    __x64_sys_creat+0x55/0x6a
->    do_syscall_64+0x40/0x96
->    entry_SYSCALL_64_after_hwframe+0x63/0xcd
->
->   Freed by task 950:
->    kasan_save_stack+0x1f/0x42
->    kasan_set_track+0x21/0x2a
->    kasan_save_free_info+0x1c/0x34
->    ____kasan_slab_free+0x1c1/0x1d5
->    __kasan_slab_free+0xe/0x13
->    __kmem_cache_free+0x29a/0x387
->    kfree+0xd3/0x10e
->    cifs_fattr_to_inode+0xb6a/0xc8c
->    cifs_get_inode_info+0x3cb/0x1690
->    cifs_revalidate_dentry_attr+0x70d/0x964
->    cifs_revalidate_dentry+0x36/0x62
->    cifs_d_revalidate+0x162/0x446
->    lookup_open+0x36f/0x9f9
->    open_last_lookups+0x63d/0xc26
->    path_openat+0x11a/0x261
->    do_filp_open+0xcc/0x168
->    do_sys_openat2+0x13b/0x3f7
->    do_sys_open+0x10f/0x146
->    __se_sys_creat+0x27/0x2e
->    __x64_sys_creat+0x55/0x6a
->    do_syscall_64+0x40/0x96
->    entry_SYSCALL_64_after_hwframe+0x63/0xcd
->
-> When opened a symlink, link name is from 'inode->i_link', but it may be
-> reset to a new value when revalidate the dentry. If some processes get the
-> link name on the race scenario, then UAF will happen on link name.
->
-> Fix this by implementing 'get_link' interface to duplicate the link name.
->
-> Fixes: 76894f3e2f71 ("cifs: improve symlink handling for smb2+")
-> Signed-off-by: ChenXiaoSong <chenxiaosong2@huawei.com>
-> ---
->  fs/cifs/cifsfs.c | 21 ++++++++++++++++++++-
->  fs/cifs/inode.c  |  5 -----
->  2 files changed, 20 insertions(+), 6 deletions(-)
+Most non-dt patches still need reviewing but should be pretty straightforward.
+The ISP driver itself was thoroughly discussed and the concerns that were
+raised about it have been resolved. Since this multi-part series has been going
+on for a while, it would be great to see it merged soon!
 
-Good catch.  I was also able to reproduce it with CONFIG_KASAN=y when
-running xfstests generic/011 multiple times.
+Changes since v7:
+- Rebased on the latest media tree;
+- Followed media/video pipeline helpers changes.
 
-> diff --git a/fs/cifs/cifsfs.c b/fs/cifs/cifsfs.c
-> index d0b9fec111aa..bb9592594fcc 100644
-> --- a/fs/cifs/cifsfs.c
-> +++ b/fs/cifs/cifsfs.c
-> @@ -1143,8 +1143,27 @@ const struct inode_operations cifs_file_inode_ops = {
->  	.fiemap = cifs_fiemap,
->  };
->  
-> +const char *cifs_get_link(struct dentry *dentry, struct inode *inode,
-> +			    struct delayed_call *done)
-> +{
+Changes since v6:
+- Added a per-compatible check for the required port in dt binding;
+- Reworded ISP output port description in dt binding;
+- Reversed ISP detection order to have fwnode first;
+- Removed info print when ISP link is detected;
+- Added warn print when ISP is linked but not enabled in config;
+- Fixed sun6i_csi_isp_detect return type;
+- Removed useless initialization in sun6i_csi_isp_detect;
+- Fixed typo in sun6i_csi_isp_detect;
+- Added collected tags;
 
-Aren't you supposed to return ERR_PTR(-ECHILD) when !dentry
-(e.g. rcu-walk mode)?
+Changes since v5:
+- Rebased on latest media tree;
+- Added collected tag;
+- Switched to using media_pad_remote_pad_first;
+- Switched to using media_pad_remote_pad_unique.
 
-> +	char *target_path = NULL;
-> +
-> +	spin_lock(&inode->i_lock);
-> +	if (likely(CIFS_I(inode)->symlink_target))
-> +		target_path = kstrdup(CIFS_I(inode)->symlink_target,
-> +				      GFP_ATOMIC);
-> +	spin_unlock(&inode->i_lock);
+Changes since v4:
+- Fixed device-tree binding indent-align;
+- Added collected tag;
+- Rebased on latest media tree;
 
-Can't you get rid of above kmalloc() inside spin lock and do something
-like
+Changes since v3:
+- Removed the v4l2 controls handler from the driver;
+- Added variant structure for table sizes;
+- Removed the info message about video device registration;
+- Removed comments in uAPI header;
+- Used '/schemas/graph.yaml#/properties/port' whenever possible in bindings;
+- Added CSI patches dependent on the ISP driver;
+- Rebased on the latest media tree;
 
-        target_path = kmalloc(PATH_MAX, GFP_KERNEL);
-        if (!target_path)
-                return ERR_PTR(-ENOMEM);
+Changes since all-in-one v2:
+- Updated Kconfig to follow the latest media-wide changes;
+- Reworked async subdev handling with a dedicated structure holding the
+  corresponding source to avoid matching in the driver;
+- Switched to clock-managed regmap mmio;
+- Used helper to get a single enabled link for an entity's pad, to replace
+  source selection at link_validate time and select the remote source at
+  stream on time instead;
+- Added mutex for mbus format serialization;
+- Used endpoint-base instead of video-interface for "internal" endpoints
+  in device-tree schema;
+- Added TODO with unstaging requirements;
+- Various cosmetic cleanups;
+- Updated copyright years;
 
-        spin_lock(&inode->i_lock);
-        if (likely(CIFS_I(inode)->symlink_target))
-                strscpy(target_path, CIFS_I(inode)->symlink_target, PATH_MAX);
-        else {
-                kfree(target_path);
-                target_path = ERR_PTR(-EOPNOTSUPP);
-        }
-        spin_unlock(&inode->i_lock);
 
-        if (!IS_ERR(target_path))
-                set_delayed_call(done, kfree_link, target_path);
+Paul Kocialkowski (6):
+  dt-bindings: media: Add Allwinner A31 ISP bindings documentation
+  dt-bindings: media: sun6i-a31-csi: Add internal output port to the ISP
+  staging: media: Add support for the Allwinner A31 ISP
+  MAINTAINERS: Add entry for the Allwinner A31 ISP driver
+  media: sun6i-csi: Detect the availability of the ISP
+  media: sun6i-csi: Add support for hooking to the isp devices
 
-        return target_path;
+ .../media/allwinner,sun6i-a31-csi.yaml        |   4 +
+ .../media/allwinner,sun6i-a31-isp.yaml        | 101 +++
+ MAINTAINERS                                   |   9 +
+ .../platform/sunxi/sun6i-csi/sun6i_csi.c      |  75 +-
+ .../platform/sunxi/sun6i-csi/sun6i_csi.h      |  10 +
+ .../sunxi/sun6i-csi/sun6i_csi_bridge.c        |  32 +-
+ .../sunxi/sun6i-csi/sun6i_csi_capture.c       |  19 +-
+ .../sunxi/sun6i-csi/sun6i_csi_capture.h       |   1 +
+ drivers/staging/media/sunxi/Kconfig           |   1 +
+ drivers/staging/media/sunxi/Makefile          |   1 +
+ drivers/staging/media/sunxi/sun6i-isp/Kconfig |  15 +
+ .../staging/media/sunxi/sun6i-isp/Makefile    |   4 +
+ .../staging/media/sunxi/sun6i-isp/TODO.txt    |   6 +
+ .../staging/media/sunxi/sun6i-isp/sun6i_isp.c | 555 +++++++++++++
+ .../staging/media/sunxi/sun6i-isp/sun6i_isp.h |  90 +++
+ .../media/sunxi/sun6i-isp/sun6i_isp_capture.c | 742 ++++++++++++++++++
+ .../media/sunxi/sun6i-isp/sun6i_isp_capture.h |  78 ++
+ .../media/sunxi/sun6i-isp/sun6i_isp_params.c  | 566 +++++++++++++
+ .../media/sunxi/sun6i-isp/sun6i_isp_params.h  |  52 ++
+ .../media/sunxi/sun6i-isp/sun6i_isp_proc.c    | 577 ++++++++++++++
+ .../media/sunxi/sun6i-isp/sun6i_isp_proc.h    |  66 ++
+ .../media/sunxi/sun6i-isp/sun6i_isp_reg.h     | 275 +++++++
+ .../sunxi/sun6i-isp/uapi/sun6i-isp-config.h   |  43 +
+ 23 files changed, 3309 insertions(+), 13 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/media/allwinner,sun6i-a31-isp.yaml
+ create mode 100644 drivers/staging/media/sunxi/sun6i-isp/Kconfig
+ create mode 100644 drivers/staging/media/sunxi/sun6i-isp/Makefile
+ create mode 100644 drivers/staging/media/sunxi/sun6i-isp/TODO.txt
+ create mode 100644 drivers/staging/media/sunxi/sun6i-isp/sun6i_isp.c
+ create mode 100644 drivers/staging/media/sunxi/sun6i-isp/sun6i_isp.h
+ create mode 100644 drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_capture.c
+ create mode 100644 drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_capture.h
+ create mode 100644 drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_params.c
+ create mode 100644 drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_params.h
+ create mode 100644 drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_proc.c
+ create mode 100644 drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_proc.h
+ create mode 100644 drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_reg.h
+ create mode 100644 drivers/staging/media/sunxi/sun6i-isp/uapi/sun6i-isp-config.h
+
+-- 
+2.38.1
+
