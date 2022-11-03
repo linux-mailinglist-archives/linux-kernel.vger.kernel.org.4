@@ -2,119 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCF76617ED0
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 15:04:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1C29617EC8
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 15:03:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231680AbiKCOEM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 10:04:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53092 "EHLO
+        id S231215AbiKCODd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 10:03:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230504AbiKCOD2 (ORCPT
+        with ESMTP id S231297AbiKCODD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 10:03:28 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 326AF178B6
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 07:01:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667484101;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Gp3ZE1TCS6qUf/W2wfyFuvz85/MTtwzsFfwWgQFj3ps=;
-        b=fQS/nLBdaHWVIG+/q9jytDU2ZmGbGKLB7hLmQhPcse30avoaU16J0gWr4xLjPsb9Oom43+
-        7TeFd3TmvbOJgDLjEKO2tMwsjCR5W7H6aAR4mJRsehPK5+b7ZGSRLJQmfu8NyhfiB6XkQ2
-        Iw4E+D1UosToyKLgQbkVEt6ZS8lu1wg=
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
- [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-669-NQhS9trFOR29tOaIjnfBJQ-1; Thu, 03 Nov 2022 10:01:31 -0400
-X-MC-Unique: NQhS9trFOR29tOaIjnfBJQ-1
-Received: by mail-ej1-f70.google.com with SMTP id oz34-20020a1709077da200b007adc8d68e90so1320220ejc.11
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 07:01:30 -0700 (PDT)
+        Thu, 3 Nov 2022 10:03:03 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F039713F47;
+        Thu,  3 Nov 2022 07:02:16 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id 130so1677769pfu.8;
+        Thu, 03 Nov 2022 07:02:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=UmKtxb5OIdkWe/R42yb7p4DATx2KVmP2uBy4ix5SL3w=;
+        b=ItTrAM24WZEiC8Ky9WnJQCTlZMzBIecLFNEpS86ROXS56KND+C+iSHEB0LphFw/bOS
+         /TZemYdwY+iz4QUyuoMXL/mUd4x+Y/gbsJv/kxbRxx2DJgRjxjgzGzcpBVsjpxFlFdIv
+         yRso6xlHeYP1rT2ZJRwlLQJi9GJxHxZbuqek69cm2i8Du8VSh2ye4CvXwh3plOWYnQ2z
+         RtSKajMt5Jqe36A6fbI5fbWtRSRjWdx0vzwhd3TgeBnquQvIkEXrGRvLORB0N2JH7miF
+         hhuTPP5+4X/3giaFjO92svuoiqhrYZFpCBo0nMZmFo8CU2InbLakRuRrU8NcGZnzgZXf
+         dtkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+        h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Gp3ZE1TCS6qUf/W2wfyFuvz85/MTtwzsFfwWgQFj3ps=;
-        b=Bqa4Bnv2PzFN0peq8Zuh+aqvaJ4XRXT2eb+1i0OxnwSR0x8KU56L2jqinVqNGTmGaH
-         tSSg0mtucYiRtcMDGEox9pPNB9s0gmaCmRc27F1JUpl+Ej1pt2EtTqU+nyHJC23dAMWC
-         PWzwhcpzjEKeAghXuzYzIemHWMDeERophsVn60d3B9FByTf+vHGx+Ep1sxRc0k1WWnt0
-         HEVikM0EnqjZNmCa5qJkg9nuX5YQxk4tWHCHeDIhz+vezklDnstMsiK/TC5CveooVXJC
-         oVz7rBMOhDcKXd956ZgHk3va+NfUmDKe0x6nJI4Msw3BHdYZ644kCsqJ6lMAQJxpjBy9
-         Xa5g==
-X-Gm-Message-State: ACrzQf3Df5qQV4T4lLp2q+ZlgCVJEwddY7JeHHe7b+k141c4Bsq5bJ4Z
-        lSNaGbkFr+5uPbDtM4tocvJCRKlW7NJPB702CRU79nEHKh9Al2uu4ds8ZNSKy9ar8GARZEFr3Aa
-        xOSh5PWa3vWy8iEFDEqUB2rEr
-X-Received: by 2002:a17:907:7e9e:b0:7ad:bc80:c003 with SMTP id qb30-20020a1709077e9e00b007adbc80c003mr25375007ejc.198.1667484089152;
-        Thu, 03 Nov 2022 07:01:29 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM573p4EUrag9CU7KGeV5DPwqVdO4hG3cdn9PAejBOFdAvPNF2Pfj2lgSHDnk+0puoAwMgBkew==
-X-Received: by 2002:a17:907:7e9e:b0:7ad:bc80:c003 with SMTP id qb30-20020a1709077e9e00b007adbc80c003mr25374580ejc.198.1667484084861;
-        Thu, 03 Nov 2022 07:01:24 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:1c09:f536:3de6:228c? ([2001:b07:6468:f312:1c09:f536:3de6:228c])
-        by smtp.googlemail.com with ESMTPSA id a7-20020a17090640c700b007305d408b3dsm532188ejk.78.2022.11.03.07.01.22
+        bh=UmKtxb5OIdkWe/R42yb7p4DATx2KVmP2uBy4ix5SL3w=;
+        b=TDlXclZoG3bM1gOeFMbf7b4pe0xxwS/C9CJwjqMZdwhx0j6PpdPQK/BVlyZe57r37s
+         M6ePVjgvHYSNPqGhTNBKw/wbnYimBm/d7kp5+4GPVZKMlLm43GHkSRy4yetHgZS1QtcY
+         LXA64c50rTZEONEHpNXCshdVzDXlz0ZnvJAaR5PqFRsmVJjllEQxh1qhDSQKqGjaJtK0
+         ts4hEQ0yhvU35YYbfP1N5i0I5caekCDlPz4Yil4dt4Gurt9IT/0ggOQ1GV0Yn9qd0iso
+         Q7Xy8DPm5XFmGGpgn1p9CN+EUfJowXhGU1AajCYBygH2nLIcSR2Q7kcLgoRACxsio+ba
+         y4sA==
+X-Gm-Message-State: ACrzQf3P4FRqK2F3uhL3mKdZZpJXj1xy3d3QGwHa8tO0aQ8Td02hzj1V
+        WY4hhWylSwjY+qkozBmvKZc=
+X-Google-Smtp-Source: AMsMyM6hTWrvx/G4NV/Gh8+VQ4bQZEN0PapYoFKkqk6dwNvAYm8qSewAomRKP+TEOnqe0uRmr+9DAw==
+X-Received: by 2002:a63:6b49:0:b0:46a:fcba:308f with SMTP id g70-20020a636b49000000b0046afcba308fmr26467136pgc.8.1667484136455;
+        Thu, 03 Nov 2022 07:02:16 -0700 (PDT)
+Received: from ?IPV6:2404:f801:0:5:8000::75b? ([2404:f801:9000:18:efec::75b])
+        by smtp.gmail.com with ESMTPSA id i20-20020aa796f4000000b0056164b52bd8sm807658pfq.32.2022.11.03.07.02.02
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Nov 2022 07:01:23 -0700 (PDT)
-Message-ID: <d641088f-87d9-da77-7e98-92d1a9de6493@redhat.com>
-Date:   Thu, 3 Nov 2022 15:01:21 +0100
+        Thu, 03 Nov 2022 07:02:14 -0700 (PDT)
+Message-ID: <abeab056-84d6-4fd6-3611-9090eca6a359@gmail.com>
+Date:   Thu, 3 Nov 2022 22:02:02 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH 10/44] KVM: VMX: Clean up eVMCS enabling if KVM
- initialization fails
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH 04/12] Drivers: hv: Explicitly request decrypted in
+ vmap_pfn() calls
 Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Anup Patel <anup@brainfault.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        Eric Farman <farman@linux.ibm.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc:     James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Atish Patra <atishp@atishpatra.org>,
-        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Isaku Yamahata <isaku.yamahata@intel.com>,
-        Fabiano Rosas <farosas@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Chao Gao <chao.gao@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Yuan Yao <yuan.yao@intel.com>
-References: <20221102231911.3107438-1-seanjc@google.com>
- <20221102231911.3107438-11-seanjc@google.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20221102231911.3107438-11-seanjc@google.com>
+To:     Michael Kelley <mikelley@microsoft.com>, hpa@zytor.com,
+        kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
+        wei.liu@kernel.org, decui@microsoft.com, luto@kernel.org,
+        peterz@infradead.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, lpieralisi@kernel.org,
+        robh@kernel.org, kw@linux.com, bhelgaas@google.com, arnd@arndb.de,
+        hch@infradead.org, m.szyprowski@samsung.com, robin.murphy@arm.com,
+        thomas.lendacky@amd.com, brijesh.singh@amd.com, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        Tianyu.Lan@microsoft.com, kirill.shutemov@linux.intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, ak@linux.intel.com,
+        isaku.yamahata@intel.com, dan.j.williams@intel.com,
+        jane.chu@oracle.com, seanjc@google.com, tony.luck@intel.com,
+        x86@kernel.org, linux-kernel@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-arch@vger.kernel.org,
+        iommu@lists.linux.dev
+References: <1666288635-72591-1-git-send-email-mikelley@microsoft.com>
+ <1666288635-72591-5-git-send-email-mikelley@microsoft.com>
+From:   Tianyu Lan <ltykernel@gmail.com>
+In-Reply-To: <1666288635-72591-5-git-send-email-mikelley@microsoft.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/3/22 00:18, Sean Christopherson wrote:
-> +static void hv_cleanup_evmcs(void)
+On 10/21/2022 1:57 AM, Michael Kelley wrote:
+> In preparation for a subsequent patch, update vmap_pfn() calls to
+> explicitly request that the mapping be for decrypted access to
+> the memory.  There's no change in functionality since the PFNs
+> passed to vmap_pfn() are above the shared_gpa_boundary, implicitly
+> producing a decrypted mapping. But explicitly requesting decrypted
+> allows the code to work before and after a subsequent patch
+> that will cause vmap_pfn() to mask the PFNs to being below the
+> shared_gpa_boundary. While another subsesquent patch removes the
+> vmap_pfn() calls entirely, this temporary tweak avoids the need
+> for a large patch that makes all the changes at once.
+> 
+> Signed-off-by: Michael Kelley<mikelley@microsoft.com>
+> ---
 
-This needs to be __init.
-
-Paolo
-
+Reviewed-by: Tianyu Lan <Tianyu.Lan@microsoft.com>
