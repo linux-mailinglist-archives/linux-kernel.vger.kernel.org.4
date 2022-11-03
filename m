@@ -2,127 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A3CE6173DA
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 02:45:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1420A6173CB
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 02:40:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230348AbiKCBpx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 21:45:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45364 "EHLO
+        id S230098AbiKCBki (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 21:40:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229770AbiKCBpu (ORCPT
+        with ESMTP id S229459AbiKCBkf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 21:45:50 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02BC412088;
-        Wed,  2 Nov 2022 18:45:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667439949; x=1698975949;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Sln4k5J/uP9rg3q9ZfFqzdN1uhd3yeOy4OBz6rjRhlQ=;
-  b=SRHQ4S7lW68nfJ4wGdk+OvnLleJO2qnJHr4PiSfum+y29ABf2MB+7qo2
-   VvR4XRmpOzNK1M0QMqnoxoTvmgYdEKGcUUD750tV+e76GnuN6DDE/YYhd
-   +jx6nMwxyOmZ/kqnZMz42oAk0cqkvnyq+Or9ys8UvcbJnA9CRgSbnHsIt
-   yVWiIwmYi2FwFxZxu4OyWi82Yx4hPQb8Ja4g2rNCY9WIYHspOPJ89iKm4
-   F6v09LBzgZLIEjiS063gEZ8uVbkrHXkl38ftvPal6b4VkEYD0HQcpLUN7
-   p/H3uZII5jV+1QYOxDMAu2v1ckw0C5LD4zrVw9cKy9i3ipcp77DTVTmh6
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10519"; a="307177385"
-X-IronPort-AV: E=Sophos;i="5.95,235,1661842800"; 
-   d="scan'208";a="307177385"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Nov 2022 18:45:49 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10519"; a="612462262"
-X-IronPort-AV: E=Sophos;i="5.95,235,1661842800"; 
-   d="scan'208";a="612462262"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by orsmga006.jf.intel.com with ESMTP; 02 Nov 2022 18:45:45 -0700
-Date:   Thu, 3 Nov 2022 09:36:33 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     matthew.gerlach@linux.intel.com
-Cc:     hao.wu@intel.com, russell.h.weight@intel.com,
-        basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
-        mdf@kernel.org, linux-fpga@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tianfei.zhang@intel.com, corbet@lwn.net, jirislaby@kernel.org,
-        geert+renesas@glider.be, andriy.shevchenko@linux.intel.com,
-        niklas.soderlund+renesas@ragnatech.se, macro@orcam.me.uk,
-        johan@kernel.org, lukas@wunner.de, ilpo.jarvinen@linux.intel.com,
-        marpagan@redhat.com
-Subject: Re: [PATCH v4 3/4] fpga: dfl: add basic support DFHv1
-Message-ID: <Y2MbIV5lJBgIsA4D@yilunxu-OptiPlex-7050>
-References: <20221020212610.697729-1-matthew.gerlach@linux.intel.com>
- <20221020212610.697729-4-matthew.gerlach@linux.intel.com>
- <Y10l3NkIn0gsdVZq@yilunxu-OptiPlex-7050>
- <alpine.DEB.2.22.394.2210290739540.2504975@rhweight-WRK1>
- <alpine.DEB.2.22.394.2211011520290.2767909@rhweight-WRK1>
+        Wed, 2 Nov 2022 21:40:35 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09F441114D
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 18:40:34 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id v17so555954plo.1
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 18:40:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=EvT5dgXSYKBpxcVTYD1qf8cSHTUWaJZF8xGQfaZD+ZU=;
+        b=a/RROOv1Lf+Wm2fr9D3eQRp6ISUL4AOlQae9HPGthkEBzMVudH/Ngx9bXGynny5St8
+         g0gYbfl3i3N9mbrpII9cqdelc6e1jWDzwrnmemcXg1eQTOPVbzFlUqRFvUfpWh4Ma511
+         97Sta3HSo6BKDK7nmnjJrX5BWxK3RqZtOqATk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=EvT5dgXSYKBpxcVTYD1qf8cSHTUWaJZF8xGQfaZD+ZU=;
+        b=opeFk1AxNcC3bBrLKCxzm13aauOiJg84aTocKzcatr7dlBIhUc+E++RRzkxhC/ofiM
+         tUYze0b+/PpqbuY+r1hyQlSg6GkhTRvJo63sMO8Wie4uWT3Q9CcTQ22OcfATf6o6SARr
+         vVltvkq6HRp+L+dLYZQNMj41lef279ylqaDNbFZUIZYrgNnToiaRFNkxqxwByF8fFcV/
+         ncP9yUqYtbdj8mRO4AdsibNuOntJzaZ0u/cQ1n3phENNa8QrtEEOOEyTGRw8sr6xr4Ji
+         PoTXzAWUTpmmB8QqBt49Wydxx+IHUJZq6d2dpoLADFwE9TbHvhcNQWYyPzl0C8OrJYjo
+         CCyA==
+X-Gm-Message-State: ACrzQf2b5OaqGNclKfW+MMCc/WH3Gj8xVXdjxs7kqGJvLJvBYLj9S0CN
+        CntG+6rMyhtZ1Iw1o6LOJ5l/bA==
+X-Google-Smtp-Source: AMsMyM4ZFU8NcuZa/IfoFF63mPChzAEuhWPz1vj/wKLxX3Xb12k+P70KW+/SFtCOkYmRgW38mDWg/w==
+X-Received: by 2002:a17:90a:2a02:b0:214:247a:c185 with SMTP id i2-20020a17090a2a0200b00214247ac185mr8234172pjd.226.1667439633589;
+        Wed, 02 Nov 2022 18:40:33 -0700 (PDT)
+Received: from khazhy-linux.svl.corp.google.com ([2620:15c:2d4:203:1464:23cb:dead:55d3])
+        by smtp.gmail.com with ESMTPSA id x8-20020a17090abc8800b0020ad86f4c54sm2091370pjr.16.2022.11.02.18.40.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Nov 2022 18:40:33 -0700 (PDT)
+From:   Khazhismel Kumykov <khazhy@chromium.org>
+X-Google-Original-From: Khazhismel Kumykov <khazhy@google.com>
+To:     Paolo Valente <paolo.valente@linaro.org>,
+        Jens Axboe <axboe@kernel.dk>
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Khazhismel Kumykov <khazhy@google.com>
+Subject: [RFC PATCH] bfq: fix waker_bfqq inconsistency crash
+Date:   Wed,  2 Nov 2022 18:39:37 -0700
+Message-Id: <20221103013937.603626-1-khazhy@google.com>
+X-Mailer: git-send-email 2.38.1.273.g43a17bfeac-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <alpine.DEB.2.22.394.2211011520290.2767909@rhweight-WRK1>
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-11-01 at 15:37:19 -0700, matthew.gerlach@linux.intel.com wrote:
-> 
-> 
-> On Sat, 29 Oct 2022, matthew.gerlach@linux.intel.com wrote:
-> 
-> > 
-> > > 
-> > > >  	if (!finfo)
-> > > >  		return -ENOMEM;
-> > > > 
-> > > > +	if (dfh_psize > 0) {
-> > > > +		memcpy_fromio(finfo->params,
-> > > > +			      binfo->ioaddr + ofst + DFHv1_PARAM_HDR, dfh_psize);
-> > > > +		finfo->param_size = dfh_psize;
-> > > > +	}
-> > > > +
-> > > >  	finfo->fid = fid;
-> > > >  	finfo->revision = revision;
-> > > > -	finfo->mmio_res.start = binfo->start + ofst;
-> > > > -	finfo->mmio_res.end = finfo->mmio_res.start + size - 1;
-> > > > +	finfo->dfh_version = dfh_ver;
-> > > >  	finfo->mmio_res.flags = IORESOURCE_MEM;
-> > > > -	finfo->irq_base = irq_base;
-> > > > -	finfo->nr_irqs = nr_irqs;
-> > > > +	if (dfh_ver == 1) {
-> > > > +		v = readq(binfo->ioaddr + ofst + DFHv1_CSR_ADDR);
-> > > > +		if (v & DFHv1_CSR_ADDR_REL)
-> > > > +			finfo->mmio_res.start = v & ~DFHv1_CSR_ADDR_REL;
-> > > > +		else
-> > > > +			finfo->mmio_res.start = binfo->start + ofst +
-> > > > +					       FIELD_GET(DFHv1_CSR_ADDR_MASK, v);
-> > > > +
-> > > > +		v = readq(binfo->ioaddr + ofst + DFHv1_CSR_SIZE_GRP);
-> > > > +		finfo->mmio_res.end = finfo->mmio_res.start +
-> > > > +				      FIELD_GET(DFHv1_CSR_SIZE_GRP_SIZE, v) - 1;
-> > > 
-> > > So for dflv1, no feature header resource for dfl_device, is it a problem
-> > > for dfl_uio? Does userspace driver need the raw feature header?
-> > These are two very good questions.  The dfl_uio driver question is
-> > particularly relevent because user space is looking at the GUIDs.
-> > 
-> 
-> In the case of dfl_uio driver, user space will definitely want to look at
-> the feature header for the GUID and the parameters.  Since DFHv1 can have
-> the DFH header and the feature registers in non-contiguous memory locations,
-> a resource for the dfl_device will be required.  In earlier
-> revisions of this patch set, a second resource was added called csr_res
-> pointing to the feature's register while mmio_res pointed at the header.
-> Do we just need better names or do we need an array of named resources?
+This fixes crashes in bfq_add_bfqq_busy due to waker_bfqq being NULL,
+but woken_list_node still being hashed. This would happen when
+bfq_init_rq() expects a brand new allocated queue to be returned from
+bfq_get_bfqq_handle_split() and unconditionally updates waker_bfqq
+without resetting woken_list_node. Since we can always return oom_bfqq
+when attempting to allocate, we cannot assume waker_bfqq starts as NULL.
+We must either reset woken_list_node, or avoid setting woken_list at all
+for oom_bfqq - opt to do the former.
 
-Either is OK, you could also name a resource element in an array by
-struct resource:name. But my concern is still no overlapping.
+Crashes would have a stacktrace like:
+[160595.656560]  bfq_add_bfqq_busy+0x110/0x1ec
+[160595.661142]  bfq_add_request+0x6bc/0x980
+[160595.666602]  bfq_insert_request+0x8ec/0x1240
+[160595.671762]  bfq_insert_requests+0x58/0x9c
+[160595.676420]  blk_mq_sched_insert_request+0x11c/0x198
+[160595.682107]  blk_mq_submit_bio+0x270/0x62c
+[160595.686759]  __submit_bio_noacct_mq+0xec/0x178
+[160595.691926]  submit_bio+0x120/0x184
+[160595.695990]  ext4_mpage_readpages+0x77c/0x7c8
+[160595.701026]  ext4_readpage+0x60/0xb0
+[160595.705158]  filemap_read_page+0x54/0x114
+[160595.711961]  filemap_fault+0x228/0x5f4
+[160595.716272]  do_read_fault+0xe0/0x1f0
+[160595.720487]  do_fault+0x40/0x1c8
 
-Thanks,
-Yilun
+Tested by injecting random failures into bfq_get_queue, crashes go away
+completely.
+
+Fixes: 8ef3fc3a043c ("block, bfq: make shared queues inherit wakers")
+Signed-off-by: Khazhismel Kumykov <khazhy@google.com>
+---
+RFC mainly because it's not clear to me the best policy here - but the
+patch is tested and fixes a real crash we started seeing in 5.15
+
+This is following up my ramble over at
+https://lore.kernel.org/lkml/CACGdZYLMnfcqwbAXDx+x9vUOMn2cz55oc+8WySBS3J2Xd_q7Lg@mail.gmail.com/
+
+ block/bfq-iosched.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
+index 7ea427817f7f..5d2861119d20 100644
+--- a/block/bfq-iosched.c
++++ b/block/bfq-iosched.c
+@@ -6793,7 +6793,12 @@ static struct bfq_queue *bfq_init_rq(struct request *rq)
+ 				 * reset. So insert new_bfqq into the
+ 				 * woken_list of the waker. See
+ 				 * bfq_check_waker for details.
++				 *
++				 * Also, if we got oom_bfqq, we must check if
++				 * it's already in a woken_list
+ 				 */
++				if (unlikely(!hlist_unhashed(&bfqq->woken_list_node)))
++					hlist_del_init(&bfqq->woken_list_node);
+ 				if (bfqq->waker_bfqq)
+ 					hlist_add_head(&bfqq->woken_list_node,
+ 						       &bfqq->waker_bfqq->woken_list);
+-- 
+2.38.1.273.g43a17bfeac-goog
+
