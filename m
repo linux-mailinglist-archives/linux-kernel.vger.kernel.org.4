@@ -2,122 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 483EF6189DF
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 21:47:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00D4A6189E1
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 21:47:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229667AbiKCUra (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 16:47:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48910 "EHLO
+        id S229950AbiKCUrv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 16:47:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231171AbiKCUrY (ORCPT
+        with ESMTP id S230165AbiKCUrn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 16:47:24 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 006FF205D0
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 13:47:22 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id gw22so2788496pjb.3
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 13:47:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fromorbit-com.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=MxS/4UcS9QV06TA42jz+n7cPJ0B1Da1lpvr3ubjc6GY=;
-        b=cuP5UtrVPLmPkgDyIU7nXUWip6wPNwEQX83eaiYzuSaa/NwaBOHxdiCCYvHyd3mrWb
-         UX4IYw78zXIF0mMu0R7qDreIqrr7PvviOTacDCidW9f3UUssGYk9RosDNLvY+hm88Tz8
-         hEooCKFouHczA6F3wBjXPLYrpYIszUEwnYnlDxkOvhuNi8oE//fz5w1SOEhhUUoWt77E
-         pAHn5L/ZZzWw3HkpcasZr6hnf6O/XMcGhjxvLwJ33vohngsJ1KBKVvIfn+XAYIa1YRVX
-         Vkpw4CNDgLSlpQfjW7+15/HKqs/xOt8+2WdHOo1jGBPReCKhIlOzYbvvyYROh/eydkAD
-         rc0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MxS/4UcS9QV06TA42jz+n7cPJ0B1Da1lpvr3ubjc6GY=;
-        b=HTix0m1blfx7SRxeNjS1YtmszY3HJr/InEzv2NId9gp0wmObA4swB5wStaV9f7oZS9
-         Vy8NRQMf+wzdJgZhf1M6fQUAgm/UuuKKXReZzqmZS1XWhmSah1U8Fvy2Ot5ayfvMsbaG
-         6jtZfvogu6dOzN5ck2pd1E8PHYstySR7SaJhT/ZcC6sv0puZZOEmmgun8jSuT/S50+8F
-         s6hB4yLK023ABiPXUs8YtJeqod0+xEIYjrF3+SH1DtocpFJh4m4uy1tF0w7nAoX2Ebqn
-         TJoOGjy9zkvVz9lOlerDma6fnqVc6JZza4sNzOc+qb/nglw4H5gld8joOGaRojzgzKCk
-         QUDA==
-X-Gm-Message-State: ACrzQf0UEeQdmY/DsXKEzokv/8nwB4PnnNr+Rlke6gMGWJ54+OxufbCc
-        kyx+gBaGVqeJaiP0aJxtgzPbXA==
-X-Google-Smtp-Source: AMsMyM5GUtVQUrVsmSVgFmsiPB/ae+Y5AFUcecj0KBZFMpN2UeC1Le+3w3RaW8dan20LGNVVX2XxhA==
-X-Received: by 2002:a17:90a:5781:b0:20a:9962:bb4a with SMTP id g1-20020a17090a578100b0020a9962bb4amr49118773pji.185.1667508442530;
-        Thu, 03 Nov 2022 13:47:22 -0700 (PDT)
-Received: from dread.disaster.area (pa49-181-106-210.pa.nsw.optusnet.com.au. [49.181.106.210])
-        by smtp.gmail.com with ESMTPSA id y12-20020aa78f2c000000b00561b455267fsm1205656pfr.27.2022.11.03.13.47.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Nov 2022 13:47:22 -0700 (PDT)
-Received: from dave by dread.disaster.area with local (Exim 4.92.3)
-        (envelope-from <david@fromorbit.com>)
-        id 1oqh7P-009uXX-4a; Fri, 04 Nov 2022 07:47:19 +1100
-Date:   Fri, 4 Nov 2022 07:47:19 +1100
-From:   Dave Chinner <david@fromorbit.com>
-To:     Vishal Moola <vishal.moola@gmail.com>
-Cc:     linux-fsdevel@vger.kernel.org, linux-afs@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-btrfs@vger.kernel.org,
-        ceph-devel@vger.kernel.org, linux-cifs@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
-        cluster-devel@redhat.com, linux-nilfs@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: Re: [PATCH v4 00/23] Convert to filemap_get_folios_tag()
-Message-ID: <20221103204719.GY2703033@dread.disaster.area>
-References: <20221102161031.5820-1-vishal.moola@gmail.com>
- <20221103070807.GX2703033@dread.disaster.area>
- <CAOzc2pzFMU-XiGZ9bsp40JkpYVSzQuxs2VXgfw_p9abkj4GrFw@mail.gmail.com>
+        Thu, 3 Nov 2022 16:47:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8E632099A
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 13:47:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 50D7761FEF
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 20:47:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD0C2C433D6;
+        Thu,  3 Nov 2022 20:47:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667508461;
+        bh=oqB9T2bu1tM/srukG0Yi/N8D4Z0pS3imx2as+1NNehY=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=Ww4fEFfpAhBTyrYGbNJipbnAVNrWmEyw5LGHkqVF/hbZGJtCx4V2wac6lXFMlk1zI
+         UCzMMLzbVUQq3bFjHOfr8+NT/LQ1jJv28Yk33Lm4zP96umAjoAn1OZzR3MQxNBIY3I
+         U/sdQ4OQoZbQDPVV6FFNrQr45nYv+zYdNyZjLmLfZCclElVfHljxVQ9g3ck1hCCN8d
+         bSGrjikr+F69GN8SvXSIKUtNGUaNupYRGAXtTYG5ZwQyTxECoTWtUufm6+82a6BKpk
+         xKDgqAyCycgprFzvMbfe+7M+bIIngc5Ygwo9clgwHDW++F/NNwgcyCpta7EJQdql9U
+         qSxtklgOIfYcQ==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 5B9155C097E; Thu,  3 Nov 2022 13:47:41 -0700 (PDT)
+Date:   Thu, 3 Nov 2022 13:47:41 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Waiman Long <longman@redhat.com>
+Cc:     tglx@linutronix.de, linux-kernel@vger.kernel.org,
+        john.stultz@linaro.org, sboyd@kernel.org, corbet@lwn.net,
+        Mark.Rutland@arm.com, maz@kernel.org, kernel-team@meta.com,
+        neeraju@codeaurora.org, ak@linux.intel.com, feng.tang@intel.com,
+        zhengjun.xing@intel.com, John Stultz <jstultz@google.com>
+Subject: Re: [PATCH clocksource 1/2] clocksource: Add comments to classify
+ bogus measurements
+Message-ID: <20221103204741.GE5600@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20221102184001.GA1306489@paulmck-ThinkPad-P17-Gen-1>
+ <20221102184009.1306751-1-paulmck@kernel.org>
+ <7339298b-1156-2d24-7dd9-e7fae690773c@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAOzc2pzFMU-XiGZ9bsp40JkpYVSzQuxs2VXgfw_p9abkj4GrFw@mail.gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <7339298b-1156-2d24-7dd9-e7fae690773c@redhat.com>
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 03, 2022 at 09:38:48AM -0700, Vishal Moola wrote:
-> On Thu, Nov 3, 2022 at 12:08 AM Dave Chinner <david@fromorbit.com> wrote:
-> >
-> > On Wed, Nov 02, 2022 at 09:10:08AM -0700, Vishal Moola (Oracle) wrote:
-> > > This patch series replaces find_get_pages_range_tag() with
-> > > filemap_get_folios_tag(). This also allows the removal of multiple
-> > > calls to compound_head() throughout.
-> > > It also makes a good chunk of the straightforward conversions to folios,
-> > > and takes the opportunity to introduce a function that grabs a folio
-> > > from the pagecache.
-> > >
-> > > F2fs and Ceph have quite a lot of work to be done regarding folios, so
-> > > for now those patches only have the changes necessary for the removal of
-> > > find_get_pages_range_tag(), and only support folios of size 1 (which is
-> > > all they use right now anyways).
-> > >
-> > > I've run xfstests on btrfs, ext4, f2fs, and nilfs2, but more testing may be
-> > > beneficial. The page-writeback and filemap changes implicitly work. Testing
-> > > and review of the other changes (afs, ceph, cifs, gfs2) would be appreciated.
-> >
-> > Same question as last time: have you tested this with multipage
-> > folios enabled? If you haven't tested XFS, then I'm guessing the
-> > answer is no, and you haven't fixed the bug I pointed out in
-> > the write_cache_pages() implementation....
-> >
+On Wed, Nov 02, 2022 at 10:23:25PM -0400, Waiman Long wrote:
+> On 11/2/22 14:40, Paul E. McKenney wrote:
+> > An extremely busy system can delay the clocksource watchdog, so that
+> > the corresponding too-long bogus-measurement error does not necessarily
+> > imply an error in the system.  However, a too-short bogus-measurement
+> > error likely indicates a bug in hardware, firmware or software.
+> > 
+> > Therefore, add comments clarifying these bogus-measurement pr_warn()s.
+> > 
+> > Reported-by: Feng Tang <feng.tang@intel.com>
+> > Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> > Cc: John Stultz <jstultz@google.com>
+> > Cc: Thomas Gleixner <tglx@linutronix.de>
+> > Cc: Stephen Boyd <sboyd@kernel.org>
+> > Cc: Feng Tang <feng.tang@intel.com>
+> > Cc: Waiman Long <longman@redhat.com>
+> > ---
+> >   kernel/time/clocksource.c | 2 ++
+> >   1 file changed, 2 insertions(+)
+> > 
+> > diff --git a/kernel/time/clocksource.c b/kernel/time/clocksource.c
+> > index dcaf38c062161..3f5317faf891f 100644
+> > --- a/kernel/time/clocksource.c
+> > +++ b/kernel/time/clocksource.c
+> > @@ -443,10 +443,12 @@ static void clocksource_watchdog(struct timer_list *unused)
+> >   		/* Check for bogus measurements. */
+> >   		wdi = jiffies_to_nsecs(WATCHDOG_INTERVAL);
+> >   		if (wd_nsec < (wdi >> 2)) {
+> > +			/* This usually indicates broken timer code or hardware. */
+> >   			pr_warn("timekeeping watchdog on CPU%d: Watchdog clocksource '%s' advanced only %lld ns during %d-jiffy time interval, skipping watchdog check.\n", smp_processor_id(), watchdog->name, wd_nsec, WATCHDOG_INTERVAL);
+> >   			continue;
+> >   		}
+> >   		if (wd_nsec > (wdi << 2)) {
+> > +			/* This can happen on busy systems, which can delay the watchdog. */
+> >   			pr_warn("timekeeping watchdog on CPU%d: Watchdog clocksource '%s' advanced an excessive %lld ns during %d-jiffy time interval, probable CPU overutilization, skipping watchdog check.\n", smp_processor_id(), watchdog->name, wd_nsec, WATCHDOG_INTERVAL);
+> >   			continue;
+> >   		}
 > 
-> I haven't tested the series with multipage folios or XFS.
+> Looks good.
 > 
-> I don't seem to have gotten your earlier comments, and I
-> can't seem to find them on the mailing lists. Could you
-> please send them again so I can take a look?
+> Reviewed-by: Waiman Long <longman@redhat.com>
 
-They are in the lore -fsdevel archive - no idea why you couldn't
-find them....
+Applied, thank you!
 
-https://lore.kernel.org/linux-fsdevel/20221018210152.GH2703033@dread.disaster.area/
-https://lore.kernel.org/linux-fsdevel/20221018214544.GI2703033@dread.disaster.area/
-
--Dave.
--- 
-Dave Chinner
-david@fromorbit.com
+							Thanx, Paul
