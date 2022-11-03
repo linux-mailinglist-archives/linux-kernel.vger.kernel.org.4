@@ -2,85 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C05E617523
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 04:38:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B724A617529
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 04:40:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231274AbiKCDij (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 23:38:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37944 "EHLO
+        id S230494AbiKCDkb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 23:40:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231180AbiKCDie (ORCPT
+        with ESMTP id S229637AbiKCDkS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 23:38:34 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08005140CE;
-        Wed,  2 Nov 2022 20:38:33 -0700 (PDT)
-Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4N2qGp38ctzmVCW;
-        Thu,  3 Nov 2022 11:38:26 +0800 (CST)
-Received: from kwepemm600010.china.huawei.com (7.193.23.86) by
- dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 3 Nov 2022 11:38:31 +0800
-Received: from [10.67.110.237] (10.67.110.237) by
- kwepemm600010.china.huawei.com (7.193.23.86) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 3 Nov 2022 11:38:30 +0800
-Subject: Re: [PATCH v2] ftrace: Fix use-after-free for dynamic ftrace_ops
-To:     Steven Rostedt <rostedt@goodmis.org>
-CC:     <mhiramat@kernel.org>, <mark.rutland@arm.com>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-trace-kernel@vger.kernel.org>
-References: <20221103031010.166498-1-lihuafei1@huawei.com>
- <20221102232334.0c1ae93b@rorschach.local.home>
- <20221102232437.6e2b1ebd@rorschach.local.home>
-From:   Li Huafei <lihuafei1@huawei.com>
-Message-ID: <e925893e-1099-777e-7485-6dc8f1f37333@huawei.com>
-Date:   Thu, 3 Nov 2022 11:38:30 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.9.0
-MIME-Version: 1.0
-In-Reply-To: <20221102232437.6e2b1ebd@rorschach.local.home>
+        Wed, 2 Nov 2022 23:40:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 493A315811;
+        Wed,  2 Nov 2022 20:40:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6180861D14;
+        Thu,  3 Nov 2022 03:40:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id BB284C433D7;
+        Thu,  3 Nov 2022 03:40:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667446815;
+        bh=0NKeaCYrU2jNni7HwYo04jq1StIICoq2UhkqZuEtBA0=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=X7H/+cP4OPogr+Iue5/ZCpii8yTuLDTMExyeBssRzT2Rjwr0qdLLIWaLuVKelyftI
+         d0VdVTocJnMF3vHf+Lwf5bue94++mVWm8EfvlQbcda/2ASsmjxi0BzUv08WVYwO/yF
+         OBRLWxKgR2Wk5Uoac10Zz7MhU76cHHnigYVIFSzEknnw/sXH/3T4wNRqyP4ddKj9m/
+         o+mMjS2IbFj8n/emTPStY/pxIoGpa0ZF0p08ofrFLyUpOrp2hy1RNLuwRxM16oI/BH
+         NwY3HuWuVF+l76vYNWx8HNskHdA4m4RXQaYhDn7LNZzwH2HZZwQFHxCjgVloLRaooW
+         tZBRx8tFYWEvA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 9D786C41621;
+        Thu,  3 Nov 2022 03:40:15 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.110.237]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemm600010.china.huawei.com (7.193.23.86)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] stmmac: dwmac-loongson: fix invalid mdio_node
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166744681563.6035.13467517612411156605.git-patchwork-notify@kernel.org>
+Date:   Thu, 03 Nov 2022 03:40:15 +0000
+References: <20221101060218.16453-1-liupeibao@loongson.cn>
+In-Reply-To: <20221101060218.16453-1-liupeibao@loongson.cn>
+To:     Liu Peibao <liupeibao@loongson.cn>
+Cc:     peppe.cavallaro@st.com, alexandre.torgue@foss.st.com,
+        joabreu@synopsys.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, jiaxun.yang@flygoat.com,
+        chenhuacai@loongson.cn, lvjianmin@loongson.cn,
+        zhuyinbo@loongson.cn, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello:
+
+This patch was applied to netdev/net.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Tue,  1 Nov 2022 14:02:18 +0800 you wrote:
+> In current code "plat->mdio_node" is always NULL, the mdio
+> support is lost as there is no "mdio_bus_data". The original
+> driver could work as the "mdio" variable is never set to
+> false, which is described in commit <b0e03950dd71> ("stmmac:
+> dwmac-loongson: fix uninitialized variable ......"). And
+> after this commit merged, the "mdio" variable is always
+> false, causing the mdio supoort logic lost.
+> 
+> [...]
+
+Here is the summary with links:
+  - stmmac: dwmac-loongson: fix invalid mdio_node
+    https://git.kernel.org/netdev/net/c/2ae34111fe4e
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
-On 2022/11/3 11:24, Steven Rostedt wrote:
-> On Wed, 2 Nov 2022 23:23:34 -0400
-> Steven Rostedt <rostedt@goodmis.org> wrote:
-> 
->> I think you misunderstood me. What I was suggesting was to get rid of
->> the ftrace_enabled check. The DYNAMIC part is most definitely needed.
->>
->> 	if (!command) {
->> 		if (ops->flags & FTRACE_OPS_FL_DYNAMIC)
->> 			goto out;
->> 		return 0;
->> 	}
-> 
-> 
-> Nevermind, I forgot that the out is before the DYNAMIC check.
-> 
->    ;-)
-> 
-
-Yes. There we have the DYNAMIC check.
-
-> -- Steve
-> 
-> .
-> 
