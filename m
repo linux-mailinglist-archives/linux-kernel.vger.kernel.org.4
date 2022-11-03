@@ -2,269 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BB87618D09
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 00:58:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ACC36618D0D
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 00:59:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230333AbiKCX6L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 19:58:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37054 "EHLO
+        id S230381AbiKCX7N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 19:59:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbiKCX6H (ORCPT
+        with ESMTP id S229496AbiKCX7K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 19:58:07 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 931B51DF23
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 16:58:06 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id 4so3469489pli.0
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 16:58:06 -0700 (PDT)
+        Thu, 3 Nov 2022 19:59:10 -0400
+Received: from mx0b-003ede02.pphosted.com (mx0b-003ede02.pphosted.com [205.220.181.153])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8855322293
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 16:59:09 -0700 (PDT)
+Received: from pps.filterd (m0286619.ppops.net [127.0.0.1])
+        by mx0b-003ede02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2A3Nx8Np010305
+        for <linux-kernel@vger.kernel.org>; Thu, 3 Nov 2022 16:59:08 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=getcruise.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding;
+ s=ppemail; bh=ouJbkpR6+J4Encuu8K7QZ3Tg66Y2gZ1ROektz28aaQ8=;
+ b=qNuSTQHrlG29WMBEKCzuEhwbZzxB6GY99xiOvuj5BHHRWga2x6p/B5hkz2cx60hHH75P
+ 6JgW+zYu7qrkQRFfopmZG6DydatjSDuk30xktVeUBzNWjOtNYU4efSalYV5Wy11vAkPP
+ pO6Fnu/wBPXcqrC760wvGd90QU2jNam0+qw/NGPPS9CGtG5jMgWarrBKRAbf4eW2mj+V
+ pNeDmiejgUciOLFV8xF9XLoxdfDXcV1BSaUo8A8VCiZaaAADZYtnfAqiU/iLCdPH+3w9
+ EfYdDJgAblXO8Ckiqaj6Fcz3zM04HqSyNL4W+h+eFkOUevHtCpbavh2CgQywvydhxNSu tg== 
+Received: from mail-pl1-f198.google.com (mail-pl1-f198.google.com [209.85.214.198])
+        by mx0b-003ede02.pphosted.com (PPS) with ESMTPS id 3kmq5nr097-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 16:59:08 -0700
+Received: by mail-pl1-f198.google.com with SMTP id x18-20020a170902ec9200b001869f20da7eso2295438plg.10
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 16:59:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=caIkGO4tLNLGZYOqGews9YjV3/Xeu1Urs/paPcqE4u0=;
-        b=gncVQ2ibapGM657f3pM0seh2su0K+edIr1NO9NkQqx2VAFxVA1DmKBPFZMT+ecPDi2
-         2+VVOafLED2V9jm5zMUB0W8cw27F1PA6EDxp30VIRfwdZ0w0AkVtOxhXC1DIDKpWaxES
-         HTIy3rWmGfzUjZ5mkTGcqfub4gRludxFsu3VH7ETlLJkok7mPqVYdSrQKWLkAnU0waUJ
-         xFjGaZXPvpiPsSVInSK8oMWRTmA7gR7JPGjg5ZPtCsLxAP8/tzZ3RPt1iuGGKsCjgtCE
-         84Vc7X+1ypORPzAdkRpRfglXki7giAtFQT77MPYk7ApTH3CIU9/bQ0MWQAzC3oWiKxCw
-         nvEg==
+        d=getcruise.com; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ouJbkpR6+J4Encuu8K7QZ3Tg66Y2gZ1ROektz28aaQ8=;
+        b=OAKCB1UKkJMmowNucXL/9mtiqjd2rHIVEgvHyojJcdPvsFIoahcervOah+E2d6sia3
+         J7XRoq3KFs7WCY5YF7n35fC5DipAjvx5leflRZQH5RegAef2zIVv2Zh+YewQhWUfoZhK
+         kGJV6i6uHGrLGi/dwKivK+r9+hLARwnd6HR5RlUNarGUpNSpKvSd/lpQyaAbFqbrhtRR
+         8JVPGW+JRo7kzYFgmUqrmO4OZhGIh+ccHoxeBfsmJiakVUl6d4kRc6SP1HOY4cg/Vuvh
+         DjKGlJxGYUYy8uS9H8gc9BaZoUGsPtpiIjPuulUlaph5lWzGiZipll0Up0op302Btj+O
+         05cQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=caIkGO4tLNLGZYOqGews9YjV3/Xeu1Urs/paPcqE4u0=;
-        b=MwoYLeknTKy/2To1Mamlhe4sD+Ng+ff+qNJqCgEYSzJEQOvNRt9SCgYiGEu+6tdivS
-         4OX3VFlUlIr52/7B9p28htRc44Im69fqAotH5YzuW0klf5LLQ3Wy1/SLqTnUNQ7OqXdT
-         +XAeUKi4lYQAMHjeT9HJZ9G837SwT7OwbrsmHRfp0T2YrXW0VW76KEFn+LwrO+DrvLEY
-         Qvzf15SRwu7qSah+CdCBbL171XMX+A391+jjPLGmxiHaUJOrVGnlV/6ZPqwwNRSZ8WUp
-         d7BPH6lXF/yRihEZTetZhdOvvNC8dXOKftk+fai3bJOuNJ95wEA5M+bOkzBEs9SwP9vY
-         +uxA==
-X-Gm-Message-State: ACrzQf387uGuVX/84OfoZx65Q7tkN1I/MzOxnIqRwKVIBs6q2xAyrKno
-        0sGhz/QsNPWMTySTbwPNkAo95QiNo+hoNA==
-X-Google-Smtp-Source: AMsMyM7JaJxQI+vGozir4TiXoBa57nXGubugzECel+ALy0oUWxqBMdPV3oG+Dqhe5kDwUOzOOnPGsQ==
-X-Received: by 2002:a17:90a:198a:b0:213:8a8:dbb with SMTP id 10-20020a17090a198a00b0021308a80dbbmr33753229pji.73.1667519885755;
-        Thu, 03 Nov 2022 16:58:05 -0700 (PDT)
-Received: from google.com (33.5.83.34.bc.googleusercontent.com. [34.83.5.33])
-        by smtp.gmail.com with ESMTPSA id x8-20020aa78f08000000b005625d5ae760sm1399049pfr.11.2022.11.03.16.58.04
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ouJbkpR6+J4Encuu8K7QZ3Tg66Y2gZ1ROektz28aaQ8=;
+        b=PH9vcFBa3MAVNdmHFIYnEbKWck2ODNANUIX28ptW2xCgsKafeWNxwpzNGeR+9OF9YT
+         mqUrilogpNh859qUkog1aepjs1HzaylxG7lfp2IVMsTjVZcMBGgFac7xauKxiI65FfXD
+         jB2BaDYSpruPdY4qVEM4RuISwKP21u8oHbfu3d/fP3enQAP9F/ByVssdWBDIJCCifGN9
+         k2520xzjv0r318UsEfDzGp/feBMJqI0LamjMYqjiKkDGnsSJljelxBWAfQQHIaz9m7/d
+         bow+37Iwq1znL+OLHBjUAN734NnIIBCU2IjF693FOEoToHGAnXutfPiQ7GHnbZQUaO9s
+         wKrg==
+X-Gm-Message-State: ACrzQf1UlLUuWSTeWCNq586Gf5M1A73cgUhNCGmWuDWE9R4/G/Vr00Qf
+        CSk8BITo709wALHh0rwlD0e2QKbxlH1rc8n5CiqW4fcha5t+Ia3zi+7/k1HtqbuUHfykJV1WBFi
+        qdvTZeBVH3kk/Vpe6jgcZqeU=
+X-Received: by 2002:a17:90b:152:b0:213:dfd6:3e5e with SMTP id em18-20020a17090b015200b00213dfd63e5emr24109785pjb.229.1667519947143;
+        Thu, 03 Nov 2022 16:59:07 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM7SppjLEvoSfBSakmBLmRXOSm7cpqMiL0FcJeujJFX7yxnb9wtBbX+fAhrpea0RWwUGxQoOYQ==
+X-Received: by 2002:a17:90b:152:b0:213:dfd6:3e5e with SMTP id em18-20020a17090b015200b00213dfd63e5emr24109771pjb.229.1667519946882;
+        Thu, 03 Nov 2022 16:59:06 -0700 (PDT)
+Received: from 4VPLMR2-DT.corp.robot.car ([199.73.125.241])
+        by smtp.gmail.com with ESMTPSA id j6-20020a170902c08600b00183ba0fd54dsm1152555pld.262.2022.11.03.16.59.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Nov 2022 16:58:05 -0700 (PDT)
-Date:   Thu, 3 Nov 2022 16:58:01 -0700
-From:   Zach O'Keefe <zokeefe@google.com>
-To:     Yang Shi <shy828301@gmail.com>
-Cc:     mhocko@suse.com, akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [v2 PATCH 1/2] mm: khugepaged: allow page allocation fallback to
- eligible nodes
-Message-ID: <Y2RViRKdDQw2cONa@google.com>
-References: <20221103213641.7296-1-shy828301@gmail.com>
+        Thu, 03 Nov 2022 16:59:06 -0700 (PDT)
+From:   Andy Ren <andy.ren@getcruise.com>
+To:     netdev@vger.kernel.org
+Cc:     richardbgobert@gmail.com, davem@davemloft.net,
+        wsa+renesas@sang-engineering.com, edumazet@google.com,
+        petrm@nvidia.com, kuba@kernel.org, pabeni@redhat.com,
+        corbet@lwn.net, andrew@lunn.ch, dsahern@gmail.com,
+        sthemmin@microsoft.com, idosch@idosch.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        roman.gushchin@linux.dev, Andy Ren <andy.ren@getcruise.com>
+Subject: [PATCH net-next] net/core: Allow live renaming when an interface is up
+Date:   Thu,  3 Nov 2022 16:58:47 -0700
+Message-Id: <20221103235847.3919772-1-andy.ren@getcruise.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221103213641.7296-1-shy828301@gmail.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-ORIG-GUID: SpyiRmP4xGSvEG-JU__BN9Yp4eW-R705
+X-Proofpoint-GUID: SpyiRmP4xGSvEG-JU__BN9Yp4eW-R705
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-03_04,2022-11-03_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=786 bulkscore=0
+ spamscore=0 phishscore=0 lowpriorityscore=0 priorityscore=1501
+ adultscore=0 mlxscore=0 impostorscore=0 suspectscore=0 malwarescore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211030163
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Nov 03 14:36, Yang Shi wrote:
-> Syzbot reported the below splat:
-> 
-> WARNING: CPU: 1 PID: 3646 at include/linux/gfp.h:221 __alloc_pages_node include/linux/gfp.h:221 [inline]
-> WARNING: CPU: 1 PID: 3646 at include/linux/gfp.h:221 hpage_collapse_alloc_page mm/khugepaged.c:807 [inline]
-> WARNING: CPU: 1 PID: 3646 at include/linux/gfp.h:221 alloc_charge_hpage+0x802/0xaa0 mm/khugepaged.c:963
-> Modules linked in:
-> CPU: 1 PID: 3646 Comm: syz-executor210 Not tainted 6.1.0-rc1-syzkaller-00454-ga70385240892 #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/11/2022
-> RIP: 0010:__alloc_pages_node include/linux/gfp.h:221 [inline]
-> RIP: 0010:hpage_collapse_alloc_page mm/khugepaged.c:807 [inline]
-> RIP: 0010:alloc_charge_hpage+0x802/0xaa0 mm/khugepaged.c:963
-> Code: e5 01 4c 89 ee e8 6e f9 ae ff 4d 85 ed 0f 84 28 fc ff ff e8 70 fc ae ff 48 8d 6b ff 4c 8d 63 07 e9 16 fc ff ff e8 5e fc ae ff <0f> 0b e9 96 fa ff ff 41 bc 1a 00 00 00 e9 86 fd ff ff e8 47 fc ae
-> RSP: 0018:ffffc90003fdf7d8 EFLAGS: 00010293
-> RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
-> RDX: ffff888077f457c0 RSI: ffffffff81cd8f42 RDI: 0000000000000001
-> RBP: ffff888079388c0c R08: 0000000000000001 R09: 0000000000000000
-> R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000000
-> R13: dffffc0000000000 R14: 0000000000000000 R15: 0000000000000000
-> FS:  00007f6b48ccf700(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 00007f6b48a819f0 CR3: 00000000171e7000 CR4: 00000000003506e0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> Call Trace:
->  <TASK>
->  collapse_file+0x1ca/0x5780 mm/khugepaged.c:1715
->  hpage_collapse_scan_file+0xd6c/0x17a0 mm/khugepaged.c:2156
->  madvise_collapse+0x53a/0xb40 mm/khugepaged.c:2611
->  madvise_vma_behavior+0xd0a/0x1cc0 mm/madvise.c:1066
->  madvise_walk_vmas+0x1c7/0x2b0 mm/madvise.c:1240
->  do_madvise.part.0+0x24a/0x340 mm/madvise.c:1419
->  do_madvise mm/madvise.c:1432 [inline]
->  __do_sys_madvise mm/madvise.c:1432 [inline]
->  __se_sys_madvise mm/madvise.c:1430 [inline]
->  __x64_sys_madvise+0x113/0x150 mm/madvise.c:1430
->  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
->  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> RIP: 0033:0x7f6b48a4eef9
-> Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 b1 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-> RSP: 002b:00007f6b48ccf318 EFLAGS: 00000246 ORIG_RAX: 000000000000001c
-> RAX: ffffffffffffffda RBX: 00007f6b48af0048 RCX: 00007f6b48a4eef9
-> RDX: 0000000000000019 RSI: 0000000000600003 RDI: 0000000020000000
-> RBP: 00007f6b48af0040 R08: 0000000000000000 R09: 0000000000000000
-> R10: 0000000000000000 R11: 0000000000000246 R12: 00007f6b48aa53a4
-> R13: 00007f6b48bffcbf R14: 00007f6b48ccf400 R15: 0000000000022000
->  </TASK>
-> 
-> The khugepaged code would pick up the node with the most hit as the preferred
-> node, and also tries to do some balance if several nodes have the same
-> hit record.  Basically it does conceptually:
->     * If the target_node <= last_target_node, then iterate from
-> last_target_node + 1 to MAX_NUMNODES (1024 on default config)
->     * If the max_value == node_load[nid], then target_node = nid
-> 
-> But there is a corner case, paritucularly for MADV_COLLAPSE, that the
-> non-existing node may be returned as preferred node.
-> 
-> Assuming the system has 2 nodes, the target_node is 0 and the
-> last_target_node is 1, if MADV_COLLAPSE path is hit, the max_value may
-> be 0, then it may return 2 for target_node, but it is actually not
-> existing (offline), so the warn is triggered.
-> 
-> The node balance was introduced by commit 9f1b868a13ac ("mm: thp:
-> khugepaged: add policy for finding target node") to satisfy
-> "numactl --interleave=all".  But interleaving is a mere hint rather than
-> something that has hard requirements.
-> 
-> So use nodemask to record the nodes which have the same hit record, the
-> hugepage allocation could fallback to those nodes.  And remove
-> __GFP_THISNODE since it does disallow fallback.  And if nodemask is
-> empty (no node is set), it means there is one single node has the most
-> hist record, the nodemask approach actually behaves like __GFP_THISNODE.
-> 
-> Reported-by: syzbot+0044b22d177870ee974f@syzkaller.appspotmail.com
-> Suggested-by: Zach O'Keefe <zokeefe@google.com>
-> Suggested-by: Michal Hocko <mhocko@suse.com>
-> Signed-off-by: Yang Shi <shy828301@gmail.com>
+This patch allows a network interface to be renamed when the interface
+is up.
 
-Reviewed-by: Zach O'Keefe <zokeefe@googel.com>
+Live renaming was added as a failover in the past, and there has been no
+arising issues of user space breaking. Furthermore, it seems that this
+flag was added because in the past, IOCTL was used for renaming, which
+would not notify the user space. Nowadays, it appears that the user
+space receives notifications regardless of the state of the network
+device (e.g. rtnetlink_event()). The listeners for NETDEV_CHANGENAME
+also do not strictly ensure that the netdev is up or not.
 
-> ---
->  mm/khugepaged.c | 32 ++++++++++++++------------------
->  1 file changed, 14 insertions(+), 18 deletions(-)
-> 
-> diff --git a/mm/khugepaged.c b/mm/khugepaged.c
-> index ea0d186bc9d4..572ce7dbf4b0 100644
-> --- a/mm/khugepaged.c
-> +++ b/mm/khugepaged.c
-> @@ -97,8 +97,8 @@ struct collapse_control {
->  	/* Num pages scanned per node */
->  	u32 node_load[MAX_NUMNODES];
->  
-> -	/* Last target selected in hpage_collapse_find_target_node() */
-> -	int last_target_node;
-> +	/* nodemask for allocation fallback */
-> +	nodemask_t alloc_nmask;
->  };
->  
->  /**
-> @@ -734,7 +734,6 @@ static void khugepaged_alloc_sleep(void)
->  
->  struct collapse_control khugepaged_collapse_control = {
->  	.is_khugepaged = true,
-> -	.last_target_node = NUMA_NO_NODE,
->  };
->  
->  static bool hpage_collapse_scan_abort(int nid, struct collapse_control *cc)
-> @@ -783,16 +782,11 @@ static int hpage_collapse_find_target_node(struct collapse_control *cc)
->  			target_node = nid;
->  		}
->  
-> -	/* do some balance if several nodes have the same hit record */
-> -	if (target_node <= cc->last_target_node)
-> -		for (nid = cc->last_target_node + 1; nid < MAX_NUMNODES;
-> -		     nid++)
-> -			if (max_value == cc->node_load[nid]) {
-> -				target_node = nid;
-> -				break;
-> -			}
-> +	for_each_online_node(nid) {
-> +		if (max_value == cc->node_load[nid])
-> +			node_set(nid, cc->alloc_nmask);
-> +	}
->  
-> -	cc->last_target_node = target_node;
->  	return target_node;
->  }
->  #else
-> @@ -802,9 +796,10 @@ static int hpage_collapse_find_target_node(struct collapse_control *cc)
->  }
->  #endif
->  
-> -static bool hpage_collapse_alloc_page(struct page **hpage, gfp_t gfp, int node)
-> +static bool hpage_collapse_alloc_page(struct page **hpage, gfp_t gfp, int node,
-> +				      nodemask_t *nmask)
->  {
-> -	*hpage = __alloc_pages_node(node, gfp, HPAGE_PMD_ORDER);
-> +	*hpage = __alloc_pages(gfp, HPAGE_PMD_ORDER, node, nmask);
->  	if (unlikely(!*hpage)) {
->  		count_vm_event(THP_COLLAPSE_ALLOC_FAILED);
->  		return false;
-> @@ -955,12 +950,11 @@ static int __collapse_huge_page_swapin(struct mm_struct *mm,
->  static int alloc_charge_hpage(struct page **hpage, struct mm_struct *mm,
->  			      struct collapse_control *cc)
->  {
-> -	/* Only allocate from the target node */
->  	gfp_t gfp = (cc->is_khugepaged ? alloc_hugepage_khugepaged_gfpmask() :
-> -		     GFP_TRANSHUGE) | __GFP_THISNODE;
-> +		     GFP_TRANSHUGE);
->  	int node = hpage_collapse_find_target_node(cc);
->  
-> -	if (!hpage_collapse_alloc_page(hpage, gfp, node))
-> +	if (!hpage_collapse_alloc_page(hpage, gfp, node, &cc->alloc_nmask))
->  		return SCAN_ALLOC_HUGE_PAGE_FAIL;
->  	if (unlikely(mem_cgroup_charge(page_folio(*hpage), mm, gfp)))
->  		return SCAN_CGROUP_CHARGE_FAIL;
-> @@ -1144,6 +1138,7 @@ static int hpage_collapse_scan_pmd(struct mm_struct *mm,
->  		goto out;
->  
->  	memset(cc->node_load, 0, sizeof(cc->node_load));
-> +	nodes_clear(cc->alloc_nmask);
->  	pte = pte_offset_map_lock(mm, pmd, address, &ptl);
->  	for (_address = address, _pte = pte; _pte < pte + HPAGE_PMD_NR;
->  	     _pte++, _address += PAGE_SIZE) {
-> @@ -2078,6 +2073,7 @@ static int hpage_collapse_scan_file(struct mm_struct *mm, unsigned long addr,
->  	present = 0;
->  	swap = 0;
->  	memset(cc->node_load, 0, sizeof(cc->node_load));
-> +	nodes_clear(cc->alloc_nmask);
->  	rcu_read_lock();
->  	xas_for_each(&xas, page, start + HPAGE_PMD_NR - 1) {
->  		if (xas_retry(&xas, page))
-> @@ -2581,7 +2577,6 @@ int madvise_collapse(struct vm_area_struct *vma, struct vm_area_struct **prev,
->  	if (!cc)
->  		return -ENOMEM;
->  	cc->is_khugepaged = false;
-> -	cc->last_target_node = NUMA_NO_NODE;
->  
->  	mmgrab(mm);
->  	lru_add_drain_all();
-> @@ -2607,6 +2602,7 @@ int madvise_collapse(struct vm_area_struct *vma, struct vm_area_struct **prev,
->  		}
->  		mmap_assert_locked(mm);
->  		memset(cc->node_load, 0, sizeof(cc->node_load));
-> +		nodes_clear(cc->alloc_nmask);
->  		if (IS_ENABLED(CONFIG_SHMEM) && vma->vm_file) {
->  			struct file *file = get_file(vma->vm_file);
->  			pgoff_t pgoff = linear_page_index(vma, addr);
-> -- 
-> 2.26.3
-> 
+Hence, this patch seeks to remove the live renaming flag and checks due
+to the aforementioned reasons.
 
-Thanks for the patch, Yang! Looks good. khugepaged selftest is good too.
+The changes are of following:
+- Remove IFF_LIVE_RENAME_OK flag declarations
+- Remove check in dev_change_name that checks whether device is up and
+if IFF_LIVE_RENAME_OK is set by the network device's priv_flags
+- Remove references of IFF_LIVE_RENAME_OK in the failover module
+
+Signed-off-by: Andy Ren <andy.ren@getcruise.com>
+---
+ include/linux/netdevice.h |  3 ---
+ net/core/dev.c            | 16 ----------------
+ net/core/failover.c       |  6 +++---
+ 3 files changed, 3 insertions(+), 22 deletions(-)
+
+diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
+index 4b5052db978f..e2ff45aa17f5 100644
+--- a/include/linux/netdevice.h
++++ b/include/linux/netdevice.h
+@@ -1655,7 +1655,6 @@ struct net_device_ops {
+  * @IFF_FAILOVER: device is a failover master device
+  * @IFF_FAILOVER_SLAVE: device is lower dev of a failover master device
+  * @IFF_L3MDEV_RX_HANDLER: only invoke the rx handler of L3 master device
+- * @IFF_LIVE_RENAME_OK: rename is allowed while device is up and running
+  * @IFF_TX_SKB_NO_LINEAR: device/driver is capable of xmitting frames with
+  *	skb_headlen(skb) == 0 (data starts from frag0)
+  * @IFF_CHANGE_PROTO_DOWN: device supports setting carrier via IFLA_PROTO_DOWN
+@@ -1691,7 +1690,6 @@ enum netdev_priv_flags {
+ 	IFF_FAILOVER			= 1<<27,
+ 	IFF_FAILOVER_SLAVE		= 1<<28,
+ 	IFF_L3MDEV_RX_HANDLER		= 1<<29,
+-	IFF_LIVE_RENAME_OK		= 1<<30,
+ 	IFF_TX_SKB_NO_LINEAR		= BIT_ULL(31),
+ 	IFF_CHANGE_PROTO_DOWN		= BIT_ULL(32),
+ };
+@@ -1726,7 +1724,6 @@ enum netdev_priv_flags {
+ #define IFF_FAILOVER			IFF_FAILOVER
+ #define IFF_FAILOVER_SLAVE		IFF_FAILOVER_SLAVE
+ #define IFF_L3MDEV_RX_HANDLER		IFF_L3MDEV_RX_HANDLER
+-#define IFF_LIVE_RENAME_OK		IFF_LIVE_RENAME_OK
+ #define IFF_TX_SKB_NO_LINEAR		IFF_TX_SKB_NO_LINEAR
+ 
+ /* Specifies the type of the struct net_device::ml_priv pointer */
+diff --git a/net/core/dev.c b/net/core/dev.c
+index 2e4f1c97b59e..a2d650ae15d7 100644
+--- a/net/core/dev.c
++++ b/net/core/dev.c
+@@ -1163,22 +1163,6 @@ int dev_change_name(struct net_device *dev, const char *newname)
+ 
+ 	net = dev_net(dev);
+ 
+-	/* Some auto-enslaved devices e.g. failover slaves are
+-	 * special, as userspace might rename the device after
+-	 * the interface had been brought up and running since
+-	 * the point kernel initiated auto-enslavement. Allow
+-	 * live name change even when these slave devices are
+-	 * up and running.
+-	 *
+-	 * Typically, users of these auto-enslaving devices
+-	 * don't actually care about slave name change, as
+-	 * they are supposed to operate on master interface
+-	 * directly.
+-	 */
+-	if (dev->flags & IFF_UP &&
+-	    likely(!(dev->priv_flags & IFF_LIVE_RENAME_OK)))
+-		return -EBUSY;
+-
+ 	down_write(&devnet_rename_sem);
+ 
+ 	if (strncmp(newname, dev->name, IFNAMSIZ) == 0) {
+diff --git a/net/core/failover.c b/net/core/failover.c
+index 864d2d83eff4..655411c4ca51 100644
+--- a/net/core/failover.c
++++ b/net/core/failover.c
+@@ -80,14 +80,14 @@ static int failover_slave_register(struct net_device *slave_dev)
+ 		goto err_upper_link;
+ 	}
+ 
+-	slave_dev->priv_flags |= (IFF_FAILOVER_SLAVE | IFF_LIVE_RENAME_OK);
++	slave_dev->priv_flags |= IFF_FAILOVER_SLAVE;
+ 
+ 	if (fops && fops->slave_register &&
+ 	    !fops->slave_register(slave_dev, failover_dev))
+ 		return NOTIFY_OK;
+ 
+ 	netdev_upper_dev_unlink(slave_dev, failover_dev);
+-	slave_dev->priv_flags &= ~(IFF_FAILOVER_SLAVE | IFF_LIVE_RENAME_OK);
++	slave_dev->priv_flags &= ~IFF_FAILOVER_SLAVE;
+ err_upper_link:
+ 	netdev_rx_handler_unregister(slave_dev);
+ done:
+@@ -121,7 +121,7 @@ int failover_slave_unregister(struct net_device *slave_dev)
+ 
+ 	netdev_rx_handler_unregister(slave_dev);
+ 	netdev_upper_dev_unlink(slave_dev, failover_dev);
+-	slave_dev->priv_flags &= ~(IFF_FAILOVER_SLAVE | IFF_LIVE_RENAME_OK);
++	slave_dev->priv_flags &= ~IFF_FAILOVER_SLAVE;
+ 
+ 	if (fops && fops->slave_unregister &&
+ 	    !fops->slave_unregister(slave_dev, failover_dev))
+-- 
+2.38.1
+
