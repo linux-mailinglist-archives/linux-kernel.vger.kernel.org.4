@@ -2,303 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3162617905
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 09:46:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E07B0617907
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 09:47:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231331AbiKCIqz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 04:46:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50138 "EHLO
+        id S231266AbiKCIrv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 04:47:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbiKCIqt (ORCPT
+        with ESMTP id S229461AbiKCIrr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 04:46:49 -0400
-Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73EB3D104
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 01:46:48 -0700 (PDT)
-Received: by mail-io1-xd34.google.com with SMTP id n191so760683iod.13
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 01:46:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=iVznVwjNnxmxkHGi35RNXtQvHg4FnNzn0yY5sswcfEQ=;
-        b=n8BgjwSbklE3TACcByaFnSkBYihCZBp+TQoUWXKqdp/3WQll+OidmszrdxQBbt4kBm
-         9SBrsiNRT45O2auOPOU7XdmVnZSTfs8MYjvt2gQQsoGVdz6zJWs2R1+QeYyTecj5fiek
-         Q/hiJK15sFvzBiwk4y6YGHLA+0Usb7446L47908c8vJGBqTVFfG8tl5OhTXpHkllZPca
-         8bWJXOJBzS97d2ODew8RQ1l2RC6vQMfuy3XIJ0f0+KDb9u/9lZoTpESXwbYLBHfWKd+n
-         /tc+SjRrw8EQF+/+u2El75tCu5oSOXfFog8AMitNe+hKz6UbW10NP5C9LXyiz4wbBx3y
-         nQ6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=iVznVwjNnxmxkHGi35RNXtQvHg4FnNzn0yY5sswcfEQ=;
-        b=HV9d3aErXxHv8p2twl2hf6gLQAgXndJa9xNX2oOn1A7fKj9bfd6uAPhyufXPX4MrWs
-         +LZz0zS5jK5+SFJYFagNTjEAS4y6bbx57OFQT9BFuTx3ZjqBjTo/kizBrW5vi5kZlX8+
-         6pRxaBBeHyYY3ziYSMO3w7HGR2D+EkbxKxXCiYq/J8QzIY+1HbQxrf8aYK79pwaPwqFS
-         ZxgOX7mbtg0sap2P5IYdz1uidV/tWNTnaRkhp3Yq1b67t7PoRnIYVUxmL662ro/yJIfd
-         Z4++XRJt4K+dRMMb+AwFvRxSkxRXqw5JSPDkc7flwif9VJoeBnLpaQvuCQcUlsjJmw3m
-         e+yg==
-X-Gm-Message-State: ACrzQf1uMUGscoTE5qU3iQ/fyw8CX3rrGFHnmuuQeGixEFTBYDax2rjn
-        Qdukc5Ms1u+8iLBf4IdCk0HBb6gPm2yVqy41RPtb2A==
-X-Google-Smtp-Source: AMsMyM4vdDJc1zgDhdTKbfkt9mj0Jppu1YDS/iPAksMERWVidTDuWO7iNxLuc1sr+W2ZClV4CUfs3xXLlw460I+NTBw=
-X-Received: by 2002:a05:6602:2f02:b0:6a4:5b5d:9dbb with SMTP id
- q2-20020a0566022f0200b006a45b5d9dbbmr18342864iow.32.1667465207697; Thu, 03
- Nov 2022 01:46:47 -0700 (PDT)
+        Thu, 3 Nov 2022 04:47:47 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8B50D115;
+        Thu,  3 Nov 2022 01:47:46 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 645A81F900;
+        Thu,  3 Nov 2022 08:47:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1667465265; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=6UFonw8deFLmtRHNYH88DPQPqP/PgWsObLPhXUH/f0A=;
+        b=R96pGX9gZDxTVYt1z/U805Y6gh5WdSMcAqF6csDart8vuTnWVlopmGmqNfpV6SsdtEIAVu
+        H5oJ4LIXzCa/QRcNJY6OVU+0UquwfCPeFmLpsUVkoNVg8vrsyt4XEGdE6n5ApGMRimf1Sk
+        hJHHl+JWv3WpXmoxkOPD8TRDL28yK/0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1667465265;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=6UFonw8deFLmtRHNYH88DPQPqP/PgWsObLPhXUH/f0A=;
+        b=zvqPxzF2hrdvtsfA/r9PYM+HWJqahq54o2e9Zq4/3dXU50jFf37w74Ez5nboCyEk0H8TQJ
+        odW/TWDs7lW6zDBA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5247D13480;
+        Thu,  3 Nov 2022 08:47:45 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id B/MJFDGAY2NXRAAAMHmgww
+        (envelope-from <jack@suse.cz>); Thu, 03 Nov 2022 08:47:45 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id D7C0DA0700; Thu,  3 Nov 2022 09:47:44 +0100 (CET)
+Date:   Thu, 3 Nov 2022 09:47:44 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     Khazhy Kumykov <khazhy@chromium.org>,
+        Paolo Valente <paolo.valente@linaro.org>,
+        Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, "yukuai (C)" <yukuai3@huawei.com>,
+        Jan Kara <jack@suse.cz>
+Subject: Re: [RFC PATCH] bfq: fix waker_bfqq inconsistency crash
+Message-ID: <20221103084744.xsvoul3hjgz7yyo7@quack3>
+References: <20221103013937.603626-1-khazhy@google.com>
+ <3c0df3fa-8731-5863-ccc5-f2e60601dbf9@huaweicloud.com>
+ <CACGdZYJ0WH+Y9sdchXy30UVTQgPCEo=fW+W9atZh1Ki7Ov4_Gw@mail.gmail.com>
+ <f83404b4-84a4-de4e-fa4d-9ce38900d91c@huaweicloud.com>
 MIME-Version: 1.0
-References: <20221028093403.6673-1-vincent.guittot@linaro.org>
- <20221028093403.6673-7-vincent.guittot@linaro.org> <20221101192848.pjns3um7dnrwrk5p@airbuntu>
-In-Reply-To: <20221101192848.pjns3um7dnrwrk5p@airbuntu>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Thu, 3 Nov 2022 09:46:36 +0100
-Message-ID: <CAKfTPtA=vJQA_=6Un1CqwzMUaOxMeFGTKUZnj8qyqvqmSdYBAg@mail.gmail.com>
-Subject: Re: [PATCH v7 6/9] sched/fair: Add sched group latency support
-To:     Qais Yousef <qyousef@layalina.io>
-Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        linux-kernel@vger.kernel.org, parth@linux.ibm.com,
-        qais.yousef@arm.com, chris.hyser@oracle.com,
-        patrick.bellasi@matbug.net, David.Laight@aculab.com,
-        pjt@google.com, pavel@ucw.cz, tj@kernel.org, qperret@google.com,
-        tim.c.chen@linux.intel.com, joshdon@google.com, timj@gnu.org,
-        kprateek.nayak@amd.com, yu.c.chen@intel.com,
-        youssefesmat@chromium.org, joel@joelfernandes.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <f83404b4-84a4-de4e-fa4d-9ce38900d91c@huaweicloud.com>
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 1 Nov 2022 at 20:28, Qais Yousef <qyousef@layalina.io> wrote:
->
-> On 10/28/22 11:34, Vincent Guittot wrote:
-> > Task can set its latency priority with sched_setattr(), which is then used
-> > to set the latency offset of its sched_enity, but sched group entities
-> > still have the default latency offset value.
-> >
-> > Add a latency.nice field in cpu cgroup controller to set the latency
-> > priority of the group similarly to sched_setattr(). The latency priority
-> > is then used to set the offset of the sched_entities of the group.
-> >
-> > Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
-> > ---
-> >  Documentation/admin-guide/cgroup-v2.rst |  8 ++++
-> >  kernel/sched/core.c                     | 52 +++++++++++++++++++++++++
-> >  kernel/sched/fair.c                     | 33 ++++++++++++++++
-> >  kernel/sched/sched.h                    |  4 ++
-> >  4 files changed, 97 insertions(+)
-> >
-> > diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
-> > index be4a77baf784..d8ae7e411f9c 100644
-> > --- a/Documentation/admin-guide/cgroup-v2.rst
-> > +++ b/Documentation/admin-guide/cgroup-v2.rst
-> > @@ -1095,6 +1095,14 @@ All time durations are in microseconds.
-> >          values similar to the sched_setattr(2). This maximum utilization
-> >          value is used to clamp the task specific maximum utilization clamp.
-> >
-> > +  cpu.latency.nice
-> > +     A read-write single value file which exists on non-root
-> > +     cgroups.  The default is "0".
-> > +
-> > +     The nice value is in the range [-20, 19].
-> > +
-> > +     This interface file allows reading and setting latency using the
-> > +     same values used by sched_setattr(2).
->
-> I'm still not sure about this [1].
+On Thu 03-11-22 11:51:15, Yu Kuai wrote:
+> Hi,
+> 
+> 在 2022/11/03 11:05, Khazhy Kumykov 写道:
+> > On Wed, Nov 2, 2022 at 7:56 PM Yu Kuai <yukuai1@huaweicloud.com> wrote:
+> > > 
+> > > Hi,
+> > > 
+> > > 在 2022/11/03 9:39, Khazhismel Kumykov 写道:
+> > > > This fixes crashes in bfq_add_bfqq_busy due to waker_bfqq being NULL,
+> > > > but woken_list_node still being hashed. This would happen when
+> > > > bfq_init_rq() expects a brand new allocated queue to be returned from
+> > > 
+> > >   From what I see, bfqq->waker_bfqq is updated in bfq_init_rq() only if
+> > > 'new_queue' is false, but if 'new_queue' is false, the returned 'bfqq'
+> > > from bfq_get_bfqq_handle_split() will never be oom_bfqq, so I'm confused
+> > > here...
+> > There's two calls for bfq_get_bfqq_handle_split in this function - the
+> > second one is after the check you mentioned, and is the problematic
+> > one.
+> Yes, thanks for the explanation. Now I understand how the problem
+> triggers.
+> 
+> > > 
+> > > > bfq_get_bfqq_handle_split() and unconditionally updates waker_bfqq
+> > > > without resetting woken_list_node. Since we can always return oom_bfqq
+> > > > when attempting to allocate, we cannot assume waker_bfqq starts as NULL.
+> > > > We must either reset woken_list_node, or avoid setting woken_list at all
+> > > > for oom_bfqq - opt to do the former.
+> > > 
+> > > Once oom_bfqq is used, I think the io is treated as issued from root
+> > > group. Hence I don't think it's necessary to set woken_list or
+> > > waker_bfqq for oom_bfqq.
+> > Ack, I was wondering what's right here since, evidently, *someone* had
+> > already set oom_bfqq->waker_bfqq to *something* (although... maybe it
+> > was an earlier init_rq). But maybe it's better to do nothing if we
+> > *know* it's oom_bfqq.
+> 
+> I need to have a check how oom_bfqq get involved with waker_bfqq, and
+> then see if it's reasonable.
+> 
+> Probably Jan and Paolo will have better view on this.
 
-I'm still not sure about what you are trying to say here ...
+Thanks for the CC Kuai and thanks to Khazy for spotting the bug. The
+oom_bfqq is just a fallback bfqq and as such it should be extempted from
+all special handling like waker detection etc. All this stuff is just for
+optimizing performance and when we are OOM, we have far larger troubles
+than to optimize performance.
 
-This is about setting a latency nice prio to a group level.
+So how I think we should really fix this is that we extempt oom_bfqq from
+waker detection in bfq_check_waker() by adding:
 
->
-> In some scenarios we'd like to get the effective latency_nice of the task. How
-> will the task inherit the cgroup value or be impacted by it?
->
-> For example if there are tasks that belong to a latency sensitive cgroup; and
-> I'd like to skip some searches in EAS to improve that latency sensitivity - how
-> would I extract this info in EAS path given these tasks are using default
-> latency_nice value? And if should happen if their latency_nice is set to
-> something else other than default?
->
-> [1] https://lore.kernel.org/lkml/20221012160734.hrkb5jcjdq7r23pr@wubuntu/
+	bfqq == bfqd->oom_bfqq ||
+ 	bfqd->last_completed_rq_bfq == bfqd->oom_bfqq)
 
-Hmm so you are speaking about something that is not part of the patch.
-Let focus on the patchset for now
+to the initial check and then also if bfq_get_bfqq_handle_split() returns
+oom_bfqq we should just skip carrying over the waker information.
 
->
->
-> Thanks
->
-> --
-> Qais Yousef
->
-> >
-> >
-> >  Memory
-> > diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> > index caf54e54a74f..3f42b1f61a7e 100644
-> > --- a/kernel/sched/core.c
-> > +++ b/kernel/sched/core.c
-> > @@ -10890,6 +10890,47 @@ static int cpu_idle_write_s64(struct cgroup_subsys_state *css,
-> >  {
-> >       return sched_group_set_idle(css_tg(css), idle);
-> >  }
-> > +
-> > +static s64 cpu_latency_nice_read_s64(struct cgroup_subsys_state *css,
-> > +                                 struct cftype *cft)
-> > +{
-> > +     int prio, delta, last_delta = INT_MAX;
-> > +     s64 weight;
-> > +
-> > +     weight = css_tg(css)->latency_offset * NICE_LATENCY_WEIGHT_MAX;
-> > +     weight = div_s64(weight, get_sched_latency(false));
-> > +
-> > +     /* Find the closest nice value to the current weight */
-> > +     for (prio = 0; prio < ARRAY_SIZE(sched_latency_to_weight); prio++) {
-> > +             delta = abs(sched_latency_to_weight[prio] - weight);
-> > +             if (delta >= last_delta)
-> > +                     break;
-> > +             last_delta = delta;
-> > +     }
-> > +
-> > +     return LATENCY_TO_NICE(prio-1);
-> > +}
-> > +
-> > +static int cpu_latency_nice_write_s64(struct cgroup_subsys_state *css,
-> > +                                  struct cftype *cft, s64 nice)
-> > +{
-> > +     s64 latency_offset;
-> > +     long weight;
-> > +     int idx;
-> > +
-> > +     if (nice < MIN_LATENCY_NICE || nice > MAX_LATENCY_NICE)
-> > +             return -ERANGE;
-> > +
-> > +     idx = NICE_TO_LATENCY(nice);
-> > +     idx = array_index_nospec(idx, LATENCY_NICE_WIDTH);
-> > +     weight = sched_latency_to_weight[idx];
-> > +
-> > +     latency_offset = weight * get_sched_latency(false);
-> > +     latency_offset = div_s64(latency_offset, NICE_LATENCY_WEIGHT_MAX);
-> > +
-> > +     return sched_group_set_latency(css_tg(css), latency_offset);
-> > +}
-> > +
-> >  #endif
-> >
-> >  static struct cftype cpu_legacy_files[] = {
-> > @@ -10904,6 +10945,11 @@ static struct cftype cpu_legacy_files[] = {
-> >               .read_s64 = cpu_idle_read_s64,
-> >               .write_s64 = cpu_idle_write_s64,
-> >       },
-> > +     {
-> > +             .name = "latency.nice",
-> > +             .read_s64 = cpu_latency_nice_read_s64,
-> > +             .write_s64 = cpu_latency_nice_write_s64,
-> > +     },
-> >  #endif
-> >  #ifdef CONFIG_CFS_BANDWIDTH
-> >       {
-> > @@ -11121,6 +11167,12 @@ static struct cftype cpu_files[] = {
-> >               .read_s64 = cpu_idle_read_s64,
-> >               .write_s64 = cpu_idle_write_s64,
-> >       },
-> > +     {
-> > +             .name = "latency.nice",
-> > +             .flags = CFTYPE_NOT_ON_ROOT,
-> > +             .read_s64 = cpu_latency_nice_read_s64,
-> > +             .write_s64 = cpu_latency_nice_write_s64,
-> > +     },
-> >  #endif
-> >  #ifdef CONFIG_CFS_BANDWIDTH
-> >       {
-> > diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> > index 4299d5108dc7..9583936ce30c 100644
-> > --- a/kernel/sched/fair.c
-> > +++ b/kernel/sched/fair.c
-> > @@ -11764,6 +11764,7 @@ int alloc_fair_sched_group(struct task_group *tg, struct task_group *parent)
-> >               goto err;
-> >
-> >       tg->shares = NICE_0_LOAD;
-> > +     tg->latency_offset = 0;
-> >
-> >       init_cfs_bandwidth(tg_cfs_bandwidth(tg));
-> >
-> > @@ -11862,6 +11863,9 @@ void init_tg_cfs_entry(struct task_group *tg, struct cfs_rq *cfs_rq,
-> >       }
-> >
-> >       se->my_q = cfs_rq;
-> > +
-> > +     se->latency_offset = tg->latency_offset;
-> > +
-> >       /* guarantee group entities always have weight */
-> >       update_load_set(&se->load, NICE_0_LOAD);
-> >       se->parent = parent;
-> > @@ -11992,6 +11996,35 @@ int sched_group_set_idle(struct task_group *tg, long idle)
-> >       return 0;
-> >  }
-> >
-> > +int sched_group_set_latency(struct task_group *tg, s64 latency)
-> > +{
-> > +     int i;
-> > +
-> > +     if (tg == &root_task_group)
-> > +             return -EINVAL;
-> > +
-> > +     if (abs(latency) > sysctl_sched_latency)
-> > +             return -EINVAL;
-> > +
-> > +     mutex_lock(&shares_mutex);
-> > +
-> > +     if (tg->latency_offset == latency) {
-> > +             mutex_unlock(&shares_mutex);
-> > +             return 0;
-> > +     }
-> > +
-> > +     tg->latency_offset = latency;
-> > +
-> > +     for_each_possible_cpu(i) {
-> > +             struct sched_entity *se = tg->se[i];
-> > +
-> > +             WRITE_ONCE(se->latency_offset, latency);
-> > +     }
-> > +
-> > +     mutex_unlock(&shares_mutex);
-> > +     return 0;
-> > +}
-> > +
-> >  #else /* CONFIG_FAIR_GROUP_SCHED */
-> >
-> >  void free_fair_sched_group(struct task_group *tg) { }
-> > diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-> > index 99f10b4dc230..95d4be4f3af6 100644
-> > --- a/kernel/sched/sched.h
-> > +++ b/kernel/sched/sched.h
-> > @@ -407,6 +407,8 @@ struct task_group {
-> >
-> >       /* A positive value indicates that this is a SCHED_IDLE group. */
-> >       int                     idle;
-> > +     /* latency constraint of the group. */
-> > +     int                     latency_offset;
-> >
-> >  #ifdef       CONFIG_SMP
-> >       /*
-> > @@ -517,6 +519,8 @@ extern int sched_group_set_shares(struct task_group *tg, unsigned long shares);
-> >
-> >  extern int sched_group_set_idle(struct task_group *tg, long idle);
-> >
-> > +extern int sched_group_set_latency(struct task_group *tg, s64 latency);
-> > +
-> >  #ifdef CONFIG_SMP
-> >  extern void set_task_rq_fair(struct sched_entity *se,
-> >                            struct cfs_rq *prev, struct cfs_rq *next);
-> > --
-> > 2.17.1
-> >
+								Honza
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
