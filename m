@@ -2,297 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5A15618C64
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 00:02:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D615C618CE1
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 00:37:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231136AbiKCXCk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 19:02:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39686 "EHLO
+        id S229992AbiKCXhb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 19:37:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbiKCXCh (ORCPT
+        with ESMTP id S229548AbiKCXh3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 19:02:37 -0400
-Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC64A1EEDA
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 16:02:34 -0700 (PDT)
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20221103230230euoutp02da5ced3ccc8441793e3447619fc723ea~kNXfbt2R62473224732euoutp02J
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 23:02:30 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20221103230230euoutp02da5ced3ccc8441793e3447619fc723ea~kNXfbt2R62473224732euoutp02J
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1667516550;
-        bh=GgmDiNIKp8jFyJidlrez4FYexY7EQaf+jMXza+lnTLQ=;
-        h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
-        b=BFxQRxjw1XKU0YAE+AFN6OW1VMF/Hz5UbOfdeRKzhNyAetnYkPc2DVHj1TdmOEtgc
-         auicKEkjW+BZoW9YcyxgqOtK8YDmq8n2LdgicAtn/ETwFt8OavT3fvE2lff+mqBd0Y
-         OMYm72bEMdSCpfdDqYgS9dcrs46189GJVaCDoNN4=
-Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20221103230230eucas1p2b5795555b7c9466295afb2520b2e4049~kNXfQgzYO3136331363eucas1p2B;
-        Thu,  3 Nov 2022 23:02:30 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-        eusmges1new.samsung.com (EUCPMTA) with SMTP id 46.15.29727.68844636; Thu,  3
-        Nov 2022 23:02:30 +0000 (GMT)
-Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20221103230230eucas1p115f8b914489b768b67b8b8fb3c315922~kNXesscxN2595125951eucas1p1t;
-        Thu,  3 Nov 2022 23:02:30 +0000 (GMT)
-Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
-        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20221103230230eusmtrp1bff8f917010ae6e713cde4899aa6fe3a~kNXesEPiw0465204652eusmtrp1j;
-        Thu,  3 Nov 2022 23:02:30 +0000 (GMT)
-X-AuditID: cbfec7f2-205ff7000001741f-48-6364488637dc
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-        eusmgms2.samsung.com (EUCPMTA) with SMTP id 26.0D.10862.68844636; Thu,  3
-        Nov 2022 23:02:30 +0000 (GMT)
-Received: from [106.210.134.192] (unknown [106.210.134.192]) by
-        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20221103230229eusmtip1724124d991ad515d555f77e466f950b1~kNXeYf88S1884018840eusmtip1-;
-        Thu,  3 Nov 2022 23:02:29 +0000 (GMT)
-Message-ID: <38797f54-3287-496f-a65e-755c1f025e0a@samsung.com>
-Date:   Fri, 4 Nov 2022 00:02:30 +0100
+        Thu, 3 Nov 2022 19:37:29 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2A62B11834;
+        Thu,  3 Nov 2022 16:37:28 -0700 (PDT)
+Received: from skinsburskii.localdomain (c-67-170-100-148.hsd1.wa.comcast.net [67.170.100.148])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 885E020B929F;
+        Thu,  3 Nov 2022 16:37:27 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 885E020B929F
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1667518647;
+        bh=/rfJILvAT4i/EgTl3AmpD42cdDe9dV7YPr+q0fK0ydw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=BJWI+qmY2K/Heu5Kedkp/BV3G8zE1b50oHWeOmdUbcK6P0aykR6yvlvBBpFT4lqPI
+         3gvjdeTlk/CNMxPpzdil1FHaAxiLoD8Qm+A3ENc9RRwTz3aGGhtSt/Al2LF1uM4opX
+         kfI7KfkX/L8J6y7Mwn7pbSYpoCjuktRM+qeHq38Y=
+Date:   Wed, 2 Nov 2022 18:37:05 -0700
+From:   Stanislav Kinsburskii <skinsburskii@linux.microsoft.com>
+To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+Cc:     Stanislav Kinsburskiy <stanislav.kinsburskiy@gmail.com>,
+        KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 4/4] drivers/clocksource/hyper-v: Add TSC page support
+ for root partition
+Message-ID: <20221103013705.GA1922@skinsburskii.localdomain>
+References: <166749827889.218190.12775118554387271641.stgit@skinsburskii-cloud-desktop.internal.cloudapp.net>
+ <166749834466.218190.3482871684875422987.stgit@skinsburskii-cloud-desktop.internal.cloudapp.net>
+ <BYAPR21MB1688F63C2410904F92B1F75FD7389@BYAPR21MB1688.namprd21.prod.outlook.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0)
-        Gecko/20100101 Thunderbird/102.4.1
-Subject: Re: [PATCH] mm: convert mm's rss stats into percpu_counter
-Content-Language: en-US
-To:     Shakeel Butt <shakeelb@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-From:   Marek Szyprowski <m.szyprowski@samsung.com>
-In-Reply-To: <20221103171407.ydubp43x7tzahriq@google.com>
-Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA02Sa0hTYRjHe3fO5lGbnObtaXadYjRsuorSLEuKGtGHoCLppmM7mDhvm7M7
-        WZKmFW6apkNzYbaa4mjFMiPL1ZwiSN5CzcyY4CVHOSVyYuV2uvjt9/yf//M+F14C4+QxuURS
-        aiYlTxXLeCwv3NQy27EhVySVRFjMwZEVhjpWZHdjBStyqO4XM7L5/Re0CxdpjUqR0VHkIWot
-        m8NF08ZVB/FjXtullCwpi5KHxyR4ne6YrmWkv4o6+8MwzMhGI4ICRBBAbgZNS1wB8iI45EME
-        5c67TDqYQVDaUYjTwTSCku965t+K4rJMWtch+KZyLJg8F4IpBG2P/V3MJmPg5mwVy8U4GQJX
-        xm5htL4M2spH3H5/Ugovbpjc7EvuhpaaEjdjZCAMjFQxXOxHhsK0rgjRuhjmSwweLmaRQiiw
-        F7jf9ySjYKYpF6M9q+GZvQJzDQfkawJUxk53Asg9cKth2INmX5iwPv3DK6C9+CZOF+Qh0M59
-        YtCBCkH26ACiXdEw2OFkudbHyPVgaAyn5Vjora/E6av4QJ99GT2EDxSZ7mC0zIbruRzaHQoa
-        a/2/ts3vujAV4mkWnUWzaH3NonU0//tqEa5HgZRSkZJIKYSp1BmBQpyiUKYmCiRpKUa08Ffa
-        f1odDahyYkpgRgwCmREQGM+P7TBJJBy2VHzuPCVPi5crZZTCjIIInBfIZpXxJRwyUZxJJVNU
-        OiX/m2UQntxsxpLkmIwdg+J+2ezxi1M1eN/dlepTV5OacvJxywe7D7Oyuud8y1bT2tvnWn/c
-        60QPgvuwd9y9/SYsT3Cvj6qJH6396r0x385fvvJzkHdhY+zD7ksZnfn3+dVadVj6be5k0MDl
-        r4U1xZYeXZK0a4vBmqOaKr/20mbbdVCNujNOktLA9f0T6w6YA1j7xoZ8J2YOWeZ56p7oJwZH
-        cqmQ8dzybNtO55LeNegaU/tGueXtDnvO5AVZwFa1pjpOnz/prEsIyfqo21+1m+t5VIdmQmeP
-        VZ9M0Dd01/oqg5vbS21H+NtPLJ0UgE0zULrGozE2azxief2js2HC/ZvGbf7OwwF7ebjitFjI
-        x+QK8W8A5kHlmgMAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprJIsWRmVeSWpSXmKPExsVy+t/xu7ptHinJBnemslrMWb+GzeLyrjls
-        FvfW/Ge1OHjtNaMDi8eCTaUemz5NYvc4MeM3i8fnTXIBLFF6NkX5pSWpChn5xSW2StGGFkZ6
-        hpYWekYmlnqGxuaxVkamSvp2NimpOZllqUX6dgl6Gec+r2Yq2G9Z8WP9A6YGxid6XYwcHBIC
-        JhKTZ5R0MXJxCAksZZR4PPkeYxcjJ1BcRuLktAZWCFtY4s+1LjaIoveMEg/6TrCBJHgF7CR6
-        fs4Hs1kEVCQaX/QyQ8QFJU7OfMICskBUIEXi27k6kLCwgLPEsaVTWUBsZgFxiVtP5jOB2CIC
-        ahKfl09ihIgnSvT2fAbbKyTwiVGi4SdYDZuAoUTX2y6wVZwClhJf9rUxQ9SbSXRt7YLqlZfY
-        /nYO8wRGoVlIrpiFZN0sJC2zkLQsYGRZxSiSWlqcm55bbKRXnJhbXJqXrpecn7uJERhH2479
-        3LKDceWrj3qHGJk4GA8xSnAwK4nwftqWnCzEm5JYWZValB9fVJqTWnyI0RQYFBOZpUST84GR
-        nFcSb2hmYGpoYmZpYGppZqwkzutZ0JEoJJCeWJKanZpakFoE08fEwSnVwNQ0mW/Z0xeRO087
-        eF8qtFScwvlB+NysYKvDWRdOGYeF/e9/dyJwbdLGpuU+eUYTVJM7bmyZ67f0p7fztvoM898+
-        Gqtn7/iVJ6+v8kRyYXTCMcbHB5sbZn1rqwj+OW/S03zJzsuGb6oUE4/+kDc4eGH+818Oy5IE
-        PJ57vdwwz6Lko1/dd+ONL/QCr9x5sXT2La937vMD5ZI6PvdMddiYFtnQHTozcO++30lVb+Wt
-        r50XrFBetFXxYrePpmSEhkzfjtmrWSrrBaQbLqScVnqfHuhlvc1t6e0YIxOb63pCf+e8ulxk
-        ccDU1OnjTZHUxCyrtId1fP0//G9UynCeOPPBRuCLQ86ZO0lewer3H82NNVFiKc5INNRiLipO
-        BABva52GLAMAAA==
-X-CMS-MailID: 20221103230230eucas1p115f8b914489b768b67b8b8fb3c315922
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20221102210957eucas1p2915f88d8b923ccf79f0e8770d208a1bd
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20221102210957eucas1p2915f88d8b923ccf79f0e8770d208a1bd
-References: <20221024052841.3291983-1-shakeelb@google.com>
-        <CGME20221102210957eucas1p2915f88d8b923ccf79f0e8770d208a1bd@eucas1p2.samsung.com>
-        <fb370ccf-d22a-7885-1773-da85c9d7ea8c@samsung.com>
-        <20221103171407.ydubp43x7tzahriq@google.com>
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <BYAPR21MB1688F63C2410904F92B1F75FD7389@BYAPR21MB1688.namprd21.prod.outlook.com>
+X-Spam-Status: No, score=-18.8 required=5.0 tests=BAYES_00,DATE_IN_PAST_12_24,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Thu, Nov 03, 2022 at 08:33:40PM +0000, Michael Kelley (LINUX) wrote:
+> From: Stanislav Kinsburskii <skinsburskii@linux.microsoft.com> Sent: Thursday, November 3, 2022 10:59 AM
+> > 
+> > Microsoft Hypervisor root partition has to map the TSC page specified
+> > by the hypervisor, instead of providing the page to the hypervisor like
+> > it's done in the guest partitions.
+> > 
+> > However, it's too early to map the page when the clock is initialized, so, the
+> > actual mapping is happening later.
+> > 
+> > Signed-off-by: Stanislav Kinsburskiy <stanislav.kinsburskiy@gmail.com>
+> > CC: "K. Y. Srinivasan" <kys@microsoft.com>
+> > CC: Haiyang Zhang <haiyangz@microsoft.com>
+> > CC: Wei Liu <wei.liu@kernel.org>
+> > CC: Dexuan Cui <decui@microsoft.com>
+> > CC: Thomas Gleixner <tglx@linutronix.de>
+> > CC: Ingo Molnar <mingo@redhat.com>
+> > CC: Borislav Petkov <bp@alien8.de>
+> > CC: Dave Hansen <dave.hansen@linux.intel.com>
+> > CC: x86@kernel.org
+> > CC: "H. Peter Anvin" <hpa@zytor.com>
+> > CC: Daniel Lezcano <daniel.lezcano@linaro.org>
+> > CC: linux-hyperv@vger.kernel.org
+> > CC: linux-kernel@vger.kernel.org
+> > ---
+> >  arch/x86/hyperv/hv_init.c          |    2 ++
+> >  drivers/clocksource/hyperv_timer.c |   38 +++++++++++++++++++++++++++---------
+> >  include/clocksource/hyperv_timer.h |    1 +
+> >  3 files changed, 32 insertions(+), 9 deletions(-)
+> > 
+> > diff --git a/arch/x86/hyperv/hv_init.c b/arch/x86/hyperv/hv_init.c
+> > index f49bc3ec76e6..89954490af93 100644
+> > --- a/arch/x86/hyperv/hv_init.c
+> > +++ b/arch/x86/hyperv/hv_init.c
+> > @@ -464,6 +464,8 @@ void __init hyperv_init(void)
+> >  		BUG_ON(!src);
+> >  		memcpy_to_page(pg, 0, src, HV_HYP_PAGE_SIZE);
+> >  		memunmap(src);
+> > +
+> > +		hv_remap_tsc_clocksource();
+> >  	} else {
+> >  		hypercall_msr.guest_physical_address =
+> > vmalloc_to_pfn(hv_hypercall_pg);
+> >  		wrmsrl(HV_X64_MSR_HYPERCALL, hypercall_msr.as_uint64);
+> > diff --git a/drivers/clocksource/hyperv_timer.c b/drivers/clocksource/hyperv_timer.c
+> > index 9445a1558fe9..dec7ad3b85ba 100644
+> > --- a/drivers/clocksource/hyperv_timer.c
+> > +++ b/drivers/clocksource/hyperv_timer.c
+> > @@ -509,9 +509,6 @@ static bool __init hv_init_tsc_clocksource(void)
+> >  	if (!(ms_hyperv.features & HV_MSR_REFERENCE_TSC_AVAILABLE))
+> >  		return false;
+> > 
+> > -	if (hv_root_partition)
+> > -		return false;
+> > -
+> >  	/*
+> >  	 * If Hyper-V offers TSC_INVARIANT, then the virtualized TSC correctly
+> >  	 * handles frequency and offset changes due to live migration,
+> > @@ -529,16 +526,22 @@ static bool __init hv_init_tsc_clocksource(void)
+> >  	}
+> > 
+> >  	hv_read_reference_counter = read_hv_clock_tsc;
+> > -	tsc_pfn = HVPFN_DOWN(virt_to_phys(tsc_page));
+> > 
+> >  	/*
+> > -	 * The Hyper-V TLFS specifies to preserve the value of reserved
+> > -	 * bits in registers. So read the existing value, preserve the
+> > -	 * low order 12 bits, and add in the guest physical address
+> > -	 * (which already has at least the low 12 bits set to zero since
+> > -	 * it is page aligned). Also set the "enable" bit, which is bit 0.
+> > +	 * TSC page mapping works differently in root compared to guest.
+> > +	 * - In guest partition the guest PFN has to be passed to the
+> > +	 *   hypervisor.
+> > +	 * - In root partition it's other way around: it has to map the PFN
+> > +	 *   provided by the hypervisor.
+> > +	 *   But it can't be mapped right here as it's too early and MMU isn't
+> > +	 *   ready yet. So, we only set the enable bit here and will remap the
+> > +	 *   page later in hv_remap_tsc_clocksource().
+> >  	 */
+> >  	tsc_msr.as_uint64 = hv_get_register(HV_REGISTER_REFERENCE_TSC);
+> > +	if (hv_root_partition)
+> > +		tsc_pfn = tsc_msr.pfn;
+> > +	else
+> > +		tsc_pfn = HVPFN_DOWN(virt_to_phys(tsc_page));
+> >  	tsc_msr.enable = 1;
+> >  	tsc_msr.pfn = tsc_pfn;
+> >  	hv_set_register(HV_REGISTER_REFERENCE_TSC, tsc_msr.as_uint64);
+> 
+> There's a subtlety here that was nagging me, and I think I see it now.
+> 
+> At this point, the code has enabled the Reference TSC, and if we're the root
+> partition, the Reference TSC Page is the page supplied by the hypervisor.
+> tsc_pfn has been updated to reflect that hypervisor supplied page.
+> 
+> But tsc_page has not been updated to be in sync with tsc_pfn because we
+> can't do the memremap() here.  tsc_page still points to tsc_pg, which is a
+> global variable in Linux.  tsc_page and tsc_pfn will be out-of- sync until
+> hv_remap_tsc_clocksource() is called later in the boot process.  During
+> this interval, calls to get the Hyper-V Reference TSC value will use tsc_pg,
+> not on the Reference TSC Page that the hypervisor is using.  Fortunately,
+> the function hv_read_tsc_page_tsc(), which actually reads the Reference
+> TSC Page, treats a zero value for tsc_sequence as a special case meaning
+> that the Reference TSC page isn't valid.  read_hv_clock_tsc() then falls
+> back to reading a hypervisor provided synthetic MSR to get the correct
+> Reference TSC value.  That fallback is fine -- it's just slower because it
+> traps to the hypervisor.  And the fallback will no longer be used once 
+> tsc_page is updated by hv_remap_tsc_clocksource().
+> 
+> So the code works. Presumably this subtlety was already understood, but
+> it really should be called out in a comment, as it is far from obvious.  I
+> know this code pretty well and I just figured it out. :-(
+> 
 
-On 03.11.2022 18:14, Shakeel Butt wrote:
-> On Wed, Nov 02, 2022 at 10:09:57PM +0100, Marek Szyprowski wrote:
->> On 24.10.2022 07:28, Shakeel Butt wrote:
->>> Currently mm_struct maintains rss_stats which are updated on page fault
->>> and the unmapping codepaths. For page fault codepath the updates are
->>> cached per thread with the batch of TASK_RSS_EVENTS_THRESH which is 64.
->>> The reason for caching is performance for multithreaded applications
->>> otherwise the rss_stats updates may become hotspot for such
->>> applications.
->>>
->>> However this optimization comes with the cost of error margin in the rss
->>> stats. The rss_stats for applications with large number of threads can
->>> be very skewed. At worst the error margin is (nr_threads * 64) and we
->>> have a lot of applications with 100s of threads, so the error margin can
->>> be very high. Internally we had to reduce TASK_RSS_EVENTS_THRESH to 32.
->>>
->>> Recently we started seeing the unbounded errors for rss_stats for
->>> specific applications which use TCP rx0cp. It seems like
->>> vm_insert_pages() codepath does not sync rss_stats at all.
->>>
->>> This patch converts the rss_stats into percpu_counter to convert the
->>> error margin from (nr_threads * 64) to approximately (nr_cpus ^ 2).
->>> However this conversion enable us to get the accurate stats for
->>> situations where accuracy is more important than the cpu cost. Though
->>> this patch does not make such tradeoffs.
->>>
->>> Signed-off-by: Shakeel Butt <shakeelb@google.com>
->> This patch landed recently in linux-next as commit d59f19a7a068 ("mm:
->> convert mm's rss stats into percpu_counter"). Unfortunately it causes a
->> regression on my test systems. I've noticed that it triggers a 'BUG: Bad
->> rss-counter state' warning from time to time for random processes. This
->> is somehow related to CPU hot-plug and/or system suspend/resume. The
->> easiest way to reproduce this issue (although not always) on my test
->> systems (ARM or ARM64 based) is to run the following commands:
->>
->> root@target:~# for i in /sys/devices/system/cpu/cpu[1-9]; do echo 0
->>   >$i/online;
->> BUG: Bad rss-counter state mm:f04c7160 type:MM_FILEPAGES val:1
->> BUG: Bad rss-counter state mm:50f1f502 type:MM_FILEPAGES val:2
->> BUG: Bad rss-counter state mm:50f1f502 type:MM_ANONPAGES val:15
->> BUG: Bad rss-counter state mm:63660fd0 type:MM_FILEPAGES val:2
->> BUG: Bad rss-counter state mm:63660fd0 type:MM_ANONPAGES val:15
->>
->> Let me know if I can help debugging this somehow or testing a fix.
->>
-> Hi Marek,
->
-> Thanks for the report. It seems like there is a race between
-> for_each_online_cpu() in __percpu_counter_sum() and
-> percpu_counter_cpu_dead()/cpu-offlining. Normally this race is fine for
-> percpu_counter users but for check_mm() is not happy with this race. Can
-> you please try the following patch:
->
->
-> From: Shakeel Butt <shakeelb@google.com>
-> Date: Thu, 3 Nov 2022 06:05:13 +0000
-> Subject: [PATCH] mm: percpu_counter: use race free percpu_counter sum
->   interface
->
-> percpu_counter_sum can race with cpu offlining. Add a new interface
-> which does not race with it and use that for check_mm().
-> ---
->   include/linux/percpu_counter.h | 11 +++++++++++
->   kernel/fork.c                  |  2 +-
->   lib/percpu_counter.c           | 24 ++++++++++++++++++------
->   3 files changed, 30 insertions(+), 7 deletions(-)
+You are absolutely right in everything above.
+Moreover, this imlementation will update the tsc_pfn early and will keep
+it the same regardless of the result of the memremap call in
+hv_remap_tsc_clocksource().
 
+This in turn can lead to an interesting (although quite unprobable)
+situation: kernel fails to remap TSC page (and thus use MSR registers as
+fallback), while user space process can successfully map the TSC page
+and use it instead.
 
-Yes, this seems to fix the issue I've reported. Feel free to add:
+The code can be changed to be, I'd say, more evident (by assigning
+tsc_pfn to the hypervisor PFN only if remapping succeede), but the current
+implementation is the most efficient from the performance point of view,
+so I'd keep it as is (even so it's not very obvious).
 
-Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
+Stas
 
-Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
-
-
-> diff --git a/include/linux/percpu_counter.h b/include/linux/percpu_counter.h
-> index bde6c4c1f405..3070c1043acf 100644
-> --- a/include/linux/percpu_counter.h
-> +++ b/include/linux/percpu_counter.h
-> @@ -45,6 +45,7 @@ void percpu_counter_set(struct percpu_counter *fbc, s64 amount);
->   void percpu_counter_add_batch(struct percpu_counter *fbc, s64 amount,
->   			      s32 batch);
->   s64 __percpu_counter_sum(struct percpu_counter *fbc);
-> +s64 __percpu_counter_sum_all(struct percpu_counter *fbc);
->   int __percpu_counter_compare(struct percpu_counter *fbc, s64 rhs, s32 batch);
->   void percpu_counter_sync(struct percpu_counter *fbc);
->   
-> @@ -85,6 +86,11 @@ static inline s64 percpu_counter_sum(struct percpu_counter *fbc)
->   	return __percpu_counter_sum(fbc);
->   }
->   
-> +static inline s64 percpu_counter_sum_all(struct percpu_counter *fbc)
-> +{
-> +	return __percpu_counter_sum_all(fbc);
-> +}
-> +
->   static inline s64 percpu_counter_read(struct percpu_counter *fbc)
->   {
->   	return fbc->count;
-> @@ -193,6 +199,11 @@ static inline s64 percpu_counter_sum(struct percpu_counter *fbc)
->   	return percpu_counter_read(fbc);
->   }
->   
-> +static inline s64 percpu_counter_sum_all(struct percpu_counter *fbc)
-> +{
-> +	return percpu_counter_read(fbc);
-> +}
-> +
->   static inline bool percpu_counter_initialized(struct percpu_counter *fbc)
->   {
->   	return true;
-> diff --git a/kernel/fork.c b/kernel/fork.c
-> index 9c32f593ef11..7d6f510cf397 100644
-> --- a/kernel/fork.c
-> +++ b/kernel/fork.c
-> @@ -756,7 +756,7 @@ static void check_mm(struct mm_struct *mm)
->   			 "Please make sure 'struct resident_page_types[]' is updated as well");
->   
->   	for (i = 0; i < NR_MM_COUNTERS; i++) {
-> -		long x = percpu_counter_sum(&mm->rss_stat[i]);
-> +		long x = percpu_counter_sum_all(&mm->rss_stat[i]);
->   
->   		if (unlikely(x))
->   			pr_alert("BUG: Bad rss-counter state mm:%p type:%s val:%ld\n",
-> diff --git a/lib/percpu_counter.c b/lib/percpu_counter.c
-> index ed610b75dc32..f26a1a5df399 100644
-> --- a/lib/percpu_counter.c
-> +++ b/lib/percpu_counter.c
-> @@ -117,11 +117,8 @@ void percpu_counter_sync(struct percpu_counter *fbc)
->   }
->   EXPORT_SYMBOL(percpu_counter_sync);
->   
-> -/*
-> - * Add up all the per-cpu counts, return the result.  This is a more accurate
-> - * but much slower version of percpu_counter_read_positive()
-> - */
-> -s64 __percpu_counter_sum(struct percpu_counter *fbc)
-> +static s64 __percpu_counter_sum_mask(struct percpu_counter *fbc,
-> +			      const struct cpumask *cpu_mask)
->   {
->   	s64 ret;
->   	int cpu;
-> @@ -129,15 +126,30 @@ s64 __percpu_counter_sum(struct percpu_counter *fbc)
->   
->   	raw_spin_lock_irqsave(&fbc->lock, flags);
->   	ret = fbc->count;
-> -	for_each_online_cpu(cpu) {
-> +	for_each_cpu(cpu, cpu_mask) {
->   		s32 *pcount = per_cpu_ptr(fbc->counters, cpu);
->   		ret += *pcount;
->   	}
->   	raw_spin_unlock_irqrestore(&fbc->lock, flags);
->   	return ret;
->   }
-> +
-> +/*
-> + * Add up all the per-cpu counts, return the result.  This is a more accurate
-> + * but much slower version of percpu_counter_read_positive()
-> + */
-> +s64 __percpu_counter_sum(struct percpu_counter *fbc)
-> +{
-> +	return __percpu_counter_sum_mask(fbc, cpu_online_mask);
-> +}
->   EXPORT_SYMBOL(__percpu_counter_sum);
->   
-> +s64 __percpu_counter_sum_all(struct percpu_counter *fbc)
-> +{
-> +	return __percpu_counter_sum_mask(fbc, cpu_possible_mask);
-> +}
-> +EXPORT_SYMBOL(__percpu_counter_sum_all);
-> +
->   int __percpu_counter_init(struct percpu_counter *fbc, s64 amount, gfp_t gfp,
->   			  struct lock_class_key *key)
->   {
-
-Best regards
--- 
-Marek Szyprowski, PhD
-Samsung R&D Institute Poland
-
+> Michael
+> 
