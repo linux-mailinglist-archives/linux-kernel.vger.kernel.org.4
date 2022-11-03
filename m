@@ -2,86 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 600EB6187ED
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 19:49:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19B856187FE
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 19:54:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230244AbiKCStQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 14:49:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42454 "EHLO
+        id S231205AbiKCSx7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 14:53:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbiKCStN (ORCPT
+        with ESMTP id S229699AbiKCSx6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 14:49:13 -0400
-Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2572A5FCB;
-        Thu,  3 Nov 2022 11:49:11 -0700 (PDT)
-Received: by mail-qv1-xf30.google.com with SMTP id i12so1766246qvs.2;
-        Thu, 03 Nov 2022 11:49:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=RgFweYo8BPv/simqwg3LitRGCnbkeK6PBgZnWlFwSt0=;
-        b=YfVj6TbmVYuK4sXs/J284r/DTNdatQdTQnYEdrpdPPb1Rd+uB3g4jXDJjcd0bOglOj
-         FcKnolF5l1VbZGm7mQDVQe1FeoFtcVj1dYIyfdqWn8PB78ZiOLH2GXIESIMRUr2r+QYg
-         Kp7T0PXMWJmhlzrAdNvmMOCxqLC1GPSHDtuJoiAUempt+gdRuWpyPb/lkWICxO8z2U7x
-         pT1qJ8Mydrdlo+02kXP96jrT00bqGKLiZmSfqtrC1sevb9eYZcoRRLJ7CSGccLw5RKWh
-         IMBlMYsOUiR/wuhxBiLJHUjzj1fNwHxgjO4ey0Tas3ZUnwJz0wpmSgdau9KqYwygThaU
-         sjag==
+        Thu, 3 Nov 2022 14:53:58 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3DF7F7E
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 11:53:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1667501584;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=AqzuI69gQNwIQyN1bVrCnvnBiSoLwcFO0iBFEG4BdBo=;
+        b=DvrGlhzfdV32KfcRoS5YNUj1FZO5kIKdaZgQCsEG4hmn4LwxD6l7D4lYUoLDDG9EglG/r1
+        7kxKs9/s5FUERLRuoPDzhMI0teCvUlsT6ehToztej/qe7gpvx07AkWPFy/hD/O+Ta1MO/z
+        ibT+zp550eVSZ3dRfkSTXuJSP0iGhMA=
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
+ [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-303-Crfc_Md8P3Sa25W1s_0vfQ-1; Thu, 03 Nov 2022 14:53:03 -0400
+X-MC-Unique: Crfc_Md8P3Sa25W1s_0vfQ-1
+Received: by mail-qk1-f200.google.com with SMTP id br12-20020a05620a460c00b006fa52448320so2752666qkb.0
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 11:53:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RgFweYo8BPv/simqwg3LitRGCnbkeK6PBgZnWlFwSt0=;
-        b=SBf9Ui8AC0ftax8JZ6nI+Da4sR721N6a56VU668lEcIxz6fC3/HP4FClY7Glc+dtNL
-         SMF2ehkjgoihE3Z63Liol3CDofRqxQDIUzdSCK8ceYHDtkiLMym6yR+MhcQFJWF8fAn6
-         /aoDzPkz7w2bnHvcizH22vTKvjmFbb+ctR0bdl16zXAQIjEgjU2p2xwYGvomYxYD16Jc
-         wv6yxWuHcO4WhrTRpR/ZPHAlxAZ/yQOHt8jJ5/7ugubxtDZXTa6epfmQna2+QG7HMsDT
-         hmb2rjmT+OXsQDT3rXih2nFoul8F+os/P/BACLHuMfg+gkb7M5gH4xFBB66JQt8I8gmM
-         MaDg==
-X-Gm-Message-State: ACrzQf3f6FYqOLeLtDhPoFO6nJpVRhIbBqj7C2iySTz3+ZDCLe4784S4
-        x0rqdAkz9uUztFSl6CvRoFk=
-X-Google-Smtp-Source: AMsMyM7H34w6zt9aB0ytsxTAd8VZba1ZEApMzwB9wYsRBodisO4s/uNaNVjJLHnbJXdZb1+CXDxpBw==
-X-Received: by 2002:ad4:5963:0:b0:4bc:1a6b:2011 with SMTP id eq3-20020ad45963000000b004bc1a6b2011mr11235383qvb.79.1667501350205;
-        Thu, 03 Nov 2022 11:49:10 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id bl12-20020a05620a1a8c00b006ed61f18651sm1280476qkb.16.2022.11.03.11.49.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Nov 2022 11:49:09 -0700 (PDT)
-Message-ID: <6535ae14-3b09-3b17-d121-b75f433045fb@gmail.com>
-Date:   Thu, 3 Nov 2022 11:48:56 -0700
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AqzuI69gQNwIQyN1bVrCnvnBiSoLwcFO0iBFEG4BdBo=;
+        b=lbW7chJeq+f3ym8gQBzzz8Z78NgyeTHjqsI2Z9z25rVDWmyQkHvRrD7iJObPngyfkg
+         1ywC0Fvcz8mWgP8Vx7qeqwe3SBOz/nQGUeJefBvcD4jQMgWXQtKpkSKTLHYgl+QvU1bD
+         kMkBt9o7ssqxTWK2e4LpInJ2D6ko3jzlqRaquYfa6LIMIPl1UAnjcWwq8D6sKiTq6GUh
+         q16QJXtUL4QlHfvD11wjw5kxsvTLJNEs5HQBUzHxUhFORQB4yyXMgC/kDcDXfYy1uses
+         UzcCTpIg4E772kH18xRhGED6Np2vaPCdCIf0NmkFBsKxFMnj1FmoELRh3B8L4pGAazGy
+         /fwA==
+X-Gm-Message-State: ACrzQf18UUyddcREC6ZubfrFseksAJ0M9pZ6FVpo5Eb3LlFkpI0yXOuO
+        WK7kx3wmNUrTFErHoY2VmDxp9cse7gIZzLkHbbb8NsAhCkfuZtmC+4TYfOujXhw6jPludPrE+U/
+        nG1v6qWXkbaPVzwqUX+kAxuEw
+X-Received: by 2002:a05:622a:620b:b0:3a5:30c2:bf0d with SMTP id hj11-20020a05622a620b00b003a530c2bf0dmr16996678qtb.306.1667501583438;
+        Thu, 03 Nov 2022 11:53:03 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM5QkyI/NSOnvv19pCgS3K/W8SwFYEZHIYC9AjRoZ7kVkM71dJl9o/BUr2Kqg80BDoHJ3Hz6RA==
+X-Received: by 2002:a05:622a:620b:b0:3a5:30c2:bf0d with SMTP id hj11-20020a05622a620b00b003a530c2bf0dmr16996664qtb.306.1667501583234;
+        Thu, 03 Nov 2022 11:53:03 -0700 (PDT)
+Received: from halaney-x13s (068-188-102-130.biz.spectrum.com. [68.188.102.130])
+        by smtp.gmail.com with ESMTPSA id ch3-20020a05622a40c300b0039d085a2571sm965235qtb.55.2022.11.03.11.53.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Nov 2022 11:53:02 -0700 (PDT)
+Date:   Thu, 3 Nov 2022 13:53:00 -0500
+From:   Andrew Halaney <ahalaney@redhat.com>
+To:     Bjorn Andersson <quic_bjorande@quicinc.com>
+Cc:     Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Johan Hovold <johan@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] pinctrl: qcom: sc8280xp: Rectify UFS reset pins
+Message-ID: <20221103185300.qlmp7syopca5qmgx@halaney-x13s>
+References: <20221103181051.26912-1-quic_bjorande@quicinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v2 5/5] PCI: brcmstb: Set RCB_{MPS,64B}_MODE bits
-Content-Language: en-US
-To:     Bjorn Helgaas <helgaas@kernel.org>,
-        Jim Quinlan <james.quinlan@broadcom.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>
-Cc:     Jim Quinlan <jim2101024@gmail.com>, linux-pci@vger.kernel.org,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Cyril Brulebois <kibi@debian.org>,
-        bcm-kernel-feedback-list@broadcom.com,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-rpi-kernel@lists.infradead.org>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20221014192730.GA3488778@bhelgaas>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20221014192730.GA3488778@bhelgaas>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221103181051.26912-1-quic_bjorande@quicinc.com>
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,31 +81,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/14/22 12:27, Bjorn Helgaas wrote:
-> On Fri, Oct 14, 2022 at 03:16:35PM -0400, Jim Quinlan wrote:
->> On Thu, Oct 13, 2022 at 10:12 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
->>> On Tue, Oct 11, 2022 at 02:42:10PM -0400, Jim Quinlan wrote:
->>>> Set RCB_MPS mode bit so that data for PCIe read requests up to the size of
->>>> the Maximum Payload Size (MPS) are returned in one completion, and data for
->>>> PCIe read requests greater than the MPS are split at the specified Read
->>>> Completion Boundary setting.
->>>>
->>>> Set RCB_64B so that the Read Compeletion Boundary is 64B.
->>>
->>> s/Compeletion/Completion/
->>
->> Hi Bjorn,
->>
->> TIL that checkpatch.pl only flags misspelled words only if they match
->> its list of misspelled words.
->> I've modified my checkpatch.pl wrapper script to use aspell to better
->> address my typos.
->> At any rate, do you mind if I add some new commits for V3?
+On Thu, Nov 03, 2022 at 11:10:51AM -0700, Bjorn Andersson wrote:
+> From: Anjana Hari <quic_ahari@quicinc.com>
 > 
-> Fine with me, I think Lorenzo will look at these again after v6.1-rc1
-> is tagged this weekend.
+> UFS reset pin offsets are wrongly configured for SC8280XP,
+> correcting the same for both UFS instances here.
+> 
+> Signed-off-by: Anjana Hari <quic_ahari@quicinc.com>
+> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
 
-Lorenzo, any chance to get those patches reviewed and/or merged? Thanks!
--- 
-Florian
+Reviewed-by: Andrew Halaney <ahalaney@redhat.com>
+Tested-by: Andrew Halaney <ahalaney@redhat.com> # QDrive3
+
+Functionally I saw no difference using ufs_mem_hc that I can notice.
+
+From what I see in the downstream source the prior diff looks proper,
+but I found a hardware document that says after diff is proper,
+hence the R-B. I'll trust the hardware doc.
+
+Thanks,
+Andrew
+
+> ---
+>  drivers/pinctrl/qcom/pinctrl-sc8280xp.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/pinctrl/qcom/pinctrl-sc8280xp.c b/drivers/pinctrl/qcom/pinctrl-sc8280xp.c
+> index aa2075390f3e..e96c00686a25 100644
+> --- a/drivers/pinctrl/qcom/pinctrl-sc8280xp.c
+> +++ b/drivers/pinctrl/qcom/pinctrl-sc8280xp.c
+> @@ -1873,8 +1873,8 @@ static const struct msm_pingroup sc8280xp_groups[] = {
+>  	[225] = PINGROUP(225, hs3_mi2s, phase_flag, _, _, _, _, egpio),
+>  	[226] = PINGROUP(226, hs3_mi2s, phase_flag, _, _, _, _, egpio),
+>  	[227] = PINGROUP(227, hs3_mi2s, phase_flag, _, _, _, _, egpio),
+> -	[228] = UFS_RESET(ufs_reset, 0xf1004),
+> -	[229] = UFS_RESET(ufs1_reset, 0xf3004),
+> +	[228] = UFS_RESET(ufs_reset, 0xf1000),
+> +	[229] = UFS_RESET(ufs1_reset, 0xf3000),
+>  	[230] = SDC_QDSD_PINGROUP(sdc2_clk, 0xe8000, 14, 6),
+>  	[231] = SDC_QDSD_PINGROUP(sdc2_cmd, 0xe8000, 11, 3),
+>  	[232] = SDC_QDSD_PINGROUP(sdc2_data, 0xe8000, 9, 0),
+> -- 
+> 2.17.1
+> 
 
