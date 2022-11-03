@@ -2,213 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89787618BDE
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 23:47:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 117AB618BC6
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 23:47:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230370AbiKCWrk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 18:47:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58834 "EHLO
+        id S229950AbiKCWq5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 18:46:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231217AbiKCWrT (ORCPT
+        with ESMTP id S229547AbiKCWqy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 18:47:19 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BC1821812;
-        Thu,  3 Nov 2022 15:47:18 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id p21so3294522plr.7;
-        Thu, 03 Nov 2022 15:47:18 -0700 (PDT)
+        Thu, 3 Nov 2022 18:46:54 -0400
+Received: from mx0b-003ede02.pphosted.com (mx0b-003ede02.pphosted.com [205.220.181.153])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95A736572
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 15:46:53 -0700 (PDT)
+Received: from pps.filterd (m0286618.ppops.net [127.0.0.1])
+        by mx0b-003ede02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2A3Md7ZD019716
+        for <linux-kernel@vger.kernel.org>; Thu, 3 Nov 2022 15:46:52 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=getcruise.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding;
+ s=ppemail; bh=sVRvJGC5sqfEU9QZsnMrtFLb8qHeVXrcogKO2S26elc=;
+ b=e417fwl08gleF8laXRckpIak7JgIEoxf8SRYn7re0PnyECuMD5K9sMuYxoj5Y0I0y3ia
+ O0bd/LTLy57bjMnSajlyVwTy1qjf8d2ioCo/oNngSqHd1sijTjVQX0QpMBhkdCV4XTp/
+ yTjOiSj2oIX9pemx7WLZ0YV8YpyOAHWe8lbp6BlyfUbbyS0ZJ6ZjnbZayxxi2tRvC81Q
+ NfVl20W3QVsfeQiokeukkD7Z4xGoC1otqA2RF5GcUJOLtDKiDTME9R71B4usgD+BXe/m
+ l7wrs0GZxb1PQVSjgR0W/1hkSjrRRuTcwtEBUan6lpTYIBa3pJVs/5K5thzK/yDjNwaL ig== 
+Received: from mail-pl1-f197.google.com (mail-pl1-f197.google.com [209.85.214.197])
+        by mx0b-003ede02.pphosted.com (PPS) with ESMTPS id 3kh1vwhe6j-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 15:46:52 -0700
+Received: by mail-pl1-f197.google.com with SMTP id d18-20020a170902ced200b001871dab2d59so2177618plg.22
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 15:46:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=360BA1N82fMOIR4MGY8NpQ3UKE6w+RNZ+cfUPneC8BU=;
-        b=ASrot3lv/nM77+VsSVY+NZQ0quYbS12Gh6I2u8OmVJS7XtmilwVNyjBFYVkiupuLc8
-         qVTTyNMG7ON+uGwfKsLN6ma8bjjS6YLeBaQvHQqxkU7SWnpd71a1EKE5gTy5wcOeRC04
-         SMX39ScFx7GAgjnguz45yiktIj83MAmDE6TQzBmYPqmB8v29aIKe2rGgiZbfoQc3XTyP
-         7FjJe8/E/IogGcZstVH+0ufkoQJLTp0oW6MFp0RrHktNhzVSOKqs0b7A4AfDdQne5SvI
-         MLvcmFkHaTS58KHZs0iuW4yeQCLfo2u7i3JVGokmJGzLbRsl6G3D2dgj1eUeKNEtrcZh
-         2Z4g==
+        d=getcruise.com; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=sVRvJGC5sqfEU9QZsnMrtFLb8qHeVXrcogKO2S26elc=;
+        b=d8vNySAns775Y5vlpQ9BAqKXmMmw5Rd/++77lMlVDGHLko9chcCuI4F/xBzN4ugNB1
+         R5Z12nHI6aoZO1klxUYm7kfEVrs8GIGER55Wy/izmkurKbmxHaVqa0u/PqG+EapaLXsf
+         9jMKNcBfS34e1s8NOeUAzjX4MBuL7xR+VynQ5UWfqQM9Ntz1cNlHXs3kjWs4c+IBIKjg
+         z/zfCIJtH+d/nPQ7n+B49V9+07vE1C1sZzTmu+hCCiOnnE5uafjPQgEddYeNODb2TgJn
+         JEDMJx29MKfCzQZxjxZWZfKFc5EoZcLrBFLDvWS7x3yvdmg860BKuC+z1Ye+01dQ6SeT
+         lRZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=360BA1N82fMOIR4MGY8NpQ3UKE6w+RNZ+cfUPneC8BU=;
-        b=PcSIINmJne+tnWCxlJXH/FsnR1BzV8TqlCpMKFDRJKIsAr8R/0LOKU7mpqe4nO4byQ
-         3PGaWYlN2BIiHn038LdU+rCw9f3iI7gRhS2Xvvp6ccSZH0x/xQmthNecuoxOK3UH9RGM
-         FYvLte6+nDV+WQndM1tptIP2XqA+5fbn2H1vTflsRtCkuh7P5T6YjQp6EOoZgmaQBgqO
-         v38EzsUlFyKVS+JNdvDJ/58OBADMtESBZ2D9knK/WOGJZCkoJRwaafEe22LDVJZkIGrx
-         yHpXt8sqOuPyZXTpV7/LzATC+zvtTc9jKkrvZEhP6pnrkv0hOQ6NBoxwc4L+CCZ/1lrv
-         k2EQ==
-X-Gm-Message-State: ACrzQf1kO+aGDIJnOLu4PJg54poCU+7M1JD02xnz40IzSs0LfZG8Z70r
-        angcgI3OvHP1gb90GWpIqUs=
-X-Google-Smtp-Source: AMsMyM5NCQUfBI0EA/kHy7qG4MsohP9o8SyxERK26P0fCpNSvmKwFFsH4jMo3ml7rN0r60SiWJI/MA==
-X-Received: by 2002:a17:902:d2c9:b0:186:afd7:56d5 with SMTP id n9-20020a170902d2c900b00186afd756d5mr31629516plc.2.1667515637913;
-        Thu, 03 Nov 2022 15:47:17 -0700 (PDT)
-Received: from dtor-ws.mtv.corp.google.com ([2620:15c:9d:2:a6ae:11ff:fe11:fcc3])
-        by smtp.gmail.com with ESMTPSA id g13-20020aa796ad000000b0056be1d7d4a3sm1280421pfk.73.2022.11.03.15.47.15
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=sVRvJGC5sqfEU9QZsnMrtFLb8qHeVXrcogKO2S26elc=;
+        b=rYfSea0QBieXJ7n/QiMnl+f6JLXiayBWxDmZ+t1pZj3s/e8o8Maz3yL7j7JsE+e0BH
+         wx36nHG1pSQYovYFmlMyMwG72rWqn/g4wNi7JxbLKwYBPjSYQmsq/VH4aJzV4HQq70v3
+         HxHwwIa9BKallF/yuo7d3+s8CGW0kHJju+6OCKXw3KrgzyZNrXVUkoRbh8tG2M5wMf9v
+         LxU5Suo3miLIGiKCVoaWuljY9dY3K7383/Q98E0bun62ZtWW3JVi/xjBCwKMgn2ArVDS
+         y2XlcQcc1etlvQ+VPU7o7AeWNO6wiop5SCcjGX3ECn535GnCLsHTVkrP2HKu1Tgbbyus
+         jcQQ==
+X-Gm-Message-State: ACrzQf1QEgJg1qxYLr9IFN00AjuQjINVG/m+DPHW+wds7Xkh2xpxZtpj
+        9Ofn6CcZjlKQRlfByjUHGfgABO6dTj1U1oPgrIMYlgyGgHYA7ZRpJYAy6FBEvmmEHZWKlkTw5FG
+        zQXkAQAatpDfPPA/fWrvCX+U=
+X-Received: by 2002:a17:90a:ca13:b0:213:b85a:3bdb with SMTP id x19-20020a17090aca1300b00213b85a3bdbmr29368295pjt.97.1667515611446;
+        Thu, 03 Nov 2022 15:46:51 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM7TqjNmXDLkrEaa7CvwsAzH3YBoAkgB7TIg2KbN6E40Y4/gtA1Oa05aE4lEPo3NhAQo8vJ1vA==
+X-Received: by 2002:a17:90a:ca13:b0:213:b85a:3bdb with SMTP id x19-20020a17090aca1300b00213b85a3bdbmr29368271pjt.97.1667515611102;
+        Thu, 03 Nov 2022 15:46:51 -0700 (PDT)
+Received: from 4VPLMR2-DT.corp.robot.car ([199.73.125.241])
+        by smtp.gmail.com with ESMTPSA id x188-20020a6331c5000000b0043941566481sm1250977pgx.39.2022.11.03.15.46.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Nov 2022 15:47:16 -0700 (PDT)
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-        Helge Deller <deller@gmx.de>, Tony Lindgren <tony@atomide.com>,
-        Sebastian Reichel <sre@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        linux-omap@vger.kernel.org, dri-devel@lists.freedesktop.org
-Subject: [PATCH 04/13] omapfb: encoder-tfp410: switch to using gpiod API
-Date:   Thu,  3 Nov 2022 15:46:43 -0700
-Message-Id: <20221103-omapfb-gpiod-v1-4-c3d53ca7988f@gmail.com>
-X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
-In-Reply-To: <20221103-omapfb-gpiod-v1-0-c3d53ca7988f@gmail.com>
-References: <20221103-omapfb-gpiod-v1-0-c3d53ca7988f@gmail.com>
+        Thu, 03 Nov 2022 15:46:50 -0700 (PDT)
+From:   Andy Ren <andy.ren@getcruise.com>
+To:     netdev@vger.kernel.org
+Cc:     richardbgobert@gmail.com, davem@davemloft.net,
+        wsa+renesas@sang-engineering.com, edumazet@google.com,
+        petrm@nvidia.com, kuba@kernel.org, pabeni@redhat.com,
+        corbet@lwn.net, andrew@lunn.ch, dsahern@gmail.com,
+        sthemmin@microsoft.com, idosch@idosch.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        roman.gushchin@linux.dev, Andy Ren <andy.ren@getcruise.com>
+Subject: [PATCH net-next] net/core: Allow live renaming when an interface is up
+Date:   Thu,  3 Nov 2022 15:46:44 -0700
+Message-Id: <20221103224644.3806447-1-andy.ren@getcruise.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-X-Mailer: b4 0.11.0-dev-5166b
 Content-Transfer-Encoding: 8bit
+X-Proofpoint-ORIG-GUID: svy6Xolguz32VdRxdAI0kD4LyMaV5eXt
+X-Proofpoint-GUID: svy6Xolguz32VdRxdAI0kD4LyMaV5eXt
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-03_04,2022-11-03_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 clxscore=1015
+ mlxscore=0 priorityscore=1501 adultscore=0 mlxlogscore=697 bulkscore=0
+ spamscore=0 phishscore=0 malwarescore=0 lowpriorityscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
+ definitions=main-2211030156
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Switch the driver from legacy gpio API that is deprecated to the newer
-gpiod API that respects line polarities described in ACPI/DT.
+This patch allows a network interface to be renamed when the interface
+is up.
 
-Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Live renaming was added as a failover in the past, and there has been no
+arising issues of user space breaking. Furthermore, it seems that this
+flag was added because in the past, IOCTL was used for renaming, which
+would not notify the user space. Nowadays, it appears that the user
+space receives notifications regardless of the state of the network
+device (e.g. rtnetlink_event()). The listeners for NETDEV_CHANGENAME
+also do not strictly ensure that the netdev is up or not.
+
+Hence, this patch seeks to remove the live renaming flag and checks due
+to the aforementioned reasons.
+
+The changes are of following:
+- Remove IFF_LIVE_RENAME_OK flag declarations
+- Remove check in dev_change_name that checks whether device is up and
+if IFF_LIVE_RENAME_OK is set by the network device's priv_flags
+- Remove references of IFF_LIVE_RENAME_OK in the failover module
+
+Signed-off-by: Andy Ren <andy.ren@getcruise.com>
 ---
- .../fbdev/omap2/omapfb/displays/encoder-tfp410.c   | 67 +++++++---------------
- 1 file changed, 22 insertions(+), 45 deletions(-)
+ include/linux/netdevice.h | 3 ---
+ net/core/dev.c            | 4 ----
+ net/core/failover.c       | 6 +++---
+ 3 files changed, 3 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/video/fbdev/omap2/omapfb/displays/encoder-tfp410.c b/drivers/video/fbdev/omap2/omapfb/displays/encoder-tfp410.c
-index 09a59bd93d61..7bac420169a6 100644
---- a/drivers/video/fbdev/omap2/omapfb/displays/encoder-tfp410.c
-+++ b/drivers/video/fbdev/omap2/omapfb/displays/encoder-tfp410.c
-@@ -6,11 +6,12 @@
-  * Author: Tomi Valkeinen <tomi.valkeinen@ti.com>
-  */
- 
--#include <linux/gpio.h>
-+#include <linux/err.h>
-+#include <linux/gpio/consumer.h>
- #include <linux/module.h>
-+#include <linux/mod_devicetable.h>
- #include <linux/platform_device.h>
- #include <linux/slab.h>
--#include <linux/of_gpio.h>
- 
- #include <video/omapfb_dss.h>
- 
-@@ -18,7 +19,8 @@ struct panel_drv_data {
- 	struct omap_dss_device dssdev;
- 	struct omap_dss_device *in;
- 
--	int pd_gpio;
-+	struct gpio_desc *pd_gpio;
-+
- 	int data_lines;
- 
- 	struct omap_video_timings timings;
-@@ -86,8 +88,8 @@ static int tfp410_enable(struct omap_dss_device *dssdev)
- 	if (r)
- 		return r;
- 
--	if (gpio_is_valid(ddata->pd_gpio))
--		gpio_set_value_cansleep(ddata->pd_gpio, 1);
-+	if (ddata->pd_gpio)
-+		gpiod_set_value_cansleep(ddata->pd_gpio, 0);
- 
- 	dssdev->state = OMAP_DSS_DISPLAY_ACTIVE;
- 
-@@ -102,8 +104,8 @@ static void tfp410_disable(struct omap_dss_device *dssdev)
- 	if (!omapdss_device_is_enabled(dssdev))
- 		return;
- 
--	if (gpio_is_valid(ddata->pd_gpio))
--		gpio_set_value_cansleep(ddata->pd_gpio, 0);
-+	if (ddata->pd_gpio)
-+		gpiod_set_value_cansleep(ddata->pd_gpio, 1);
- 
- 	in->ops.dpi->disable(in);
- 
-@@ -162,33 +164,6 @@ static const struct omapdss_dvi_ops tfp410_dvi_ops = {
- 	.get_timings	= tfp410_get_timings,
+diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
+index 4b5052db978f..e2ff45aa17f5 100644
+--- a/include/linux/netdevice.h
++++ b/include/linux/netdevice.h
+@@ -1655,7 +1655,6 @@ struct net_device_ops {
+  * @IFF_FAILOVER: device is a failover master device
+  * @IFF_FAILOVER_SLAVE: device is lower dev of a failover master device
+  * @IFF_L3MDEV_RX_HANDLER: only invoke the rx handler of L3 master device
+- * @IFF_LIVE_RENAME_OK: rename is allowed while device is up and running
+  * @IFF_TX_SKB_NO_LINEAR: device/driver is capable of xmitting frames with
+  *	skb_headlen(skb) == 0 (data starts from frag0)
+  * @IFF_CHANGE_PROTO_DOWN: device supports setting carrier via IFLA_PROTO_DOWN
+@@ -1691,7 +1690,6 @@ enum netdev_priv_flags {
+ 	IFF_FAILOVER			= 1<<27,
+ 	IFF_FAILOVER_SLAVE		= 1<<28,
+ 	IFF_L3MDEV_RX_HANDLER		= 1<<29,
+-	IFF_LIVE_RENAME_OK		= 1<<30,
+ 	IFF_TX_SKB_NO_LINEAR		= BIT_ULL(31),
+ 	IFF_CHANGE_PROTO_DOWN		= BIT_ULL(32),
  };
+@@ -1726,7 +1724,6 @@ enum netdev_priv_flags {
+ #define IFF_FAILOVER			IFF_FAILOVER
+ #define IFF_FAILOVER_SLAVE		IFF_FAILOVER_SLAVE
+ #define IFF_L3MDEV_RX_HANDLER		IFF_L3MDEV_RX_HANDLER
+-#define IFF_LIVE_RENAME_OK		IFF_LIVE_RENAME_OK
+ #define IFF_TX_SKB_NO_LINEAR		IFF_TX_SKB_NO_LINEAR
  
--static int tfp410_probe_of(struct platform_device *pdev)
--{
--	struct panel_drv_data *ddata = platform_get_drvdata(pdev);
--	struct device_node *node = pdev->dev.of_node;
--	struct omap_dss_device *in;
--	int gpio;
+ /* Specifies the type of the struct net_device::ml_priv pointer */
+diff --git a/net/core/dev.c b/net/core/dev.c
+index 2e4f1c97b59e..dd373b86b3d2 100644
+--- a/net/core/dev.c
++++ b/net/core/dev.c
+@@ -1175,10 +1175,6 @@ int dev_change_name(struct net_device *dev, const char *newname)
+ 	 * they are supposed to operate on master interface
+ 	 * directly.
+ 	 */
+-	if (dev->flags & IFF_UP &&
+-	    likely(!(dev->priv_flags & IFF_LIVE_RENAME_OK)))
+-		return -EBUSY;
 -
--	gpio = of_get_named_gpio(node, "powerdown-gpios", 0);
--
--	if (gpio_is_valid(gpio) || gpio == -ENOENT) {
--		ddata->pd_gpio = gpio;
--	} else {
--		dev_err(&pdev->dev, "failed to parse PD gpio\n");
--		return gpio;
--	}
--
--	in = omapdss_of_find_source_for_first_ep(node);
--	if (IS_ERR(in)) {
--		dev_err(&pdev->dev, "failed to find video source\n");
--		return PTR_ERR(in);
--	}
--
--	ddata->in = in;
--
--	return 0;
--}
--
- static int tfp410_probe(struct platform_device *pdev)
- {
- 	struct panel_drv_data *ddata;
-@@ -204,18 +179,21 @@ static int tfp410_probe(struct platform_device *pdev)
+ 	down_write(&devnet_rename_sem);
  
- 	platform_set_drvdata(pdev, ddata);
- 
--	r = tfp410_probe_of(pdev);
--	if (r)
-+	ddata->pd_gpio = devm_gpiod_get_optional(&pdev->dev, "powerdown",
-+						 GPIOD_OUT_HIGH);
-+	r = PTR_ERR_OR_ZERO(ddata->pd_gpio);
-+	if (r) {
-+		dev_err(&pdev->dev, "Failed to request PD GPIO: %d\n", r);
- 		return r;
-+	}
-+
-+	gpiod_set_consumer_name(ddata->pd_gpio, "tfp410 PD");
- 
--	if (gpio_is_valid(ddata->pd_gpio)) {
--		r = devm_gpio_request_one(&pdev->dev, ddata->pd_gpio,
--				GPIOF_OUT_INIT_LOW, "tfp410 PD");
--		if (r) {
--			dev_err(&pdev->dev, "Failed to request PD GPIO %d\n",
--					ddata->pd_gpio);
--			goto err_gpio;
--		}
-+	ddata->in = omapdss_of_find_source_for_first_ep(pdev->dev.of_node);
-+	r = PTR_ERR_OR_ZERO(ddata->in);
-+	if (r) {
-+		dev_err(&pdev->dev, "failed to find video source: %d\n", r);
-+		return r;
+ 	if (strncmp(newname, dev->name, IFNAMSIZ) == 0) {
+diff --git a/net/core/failover.c b/net/core/failover.c
+index 864d2d83eff4..655411c4ca51 100644
+--- a/net/core/failover.c
++++ b/net/core/failover.c
+@@ -80,14 +80,14 @@ static int failover_slave_register(struct net_device *slave_dev)
+ 		goto err_upper_link;
  	}
  
- 	dssdev = &ddata->dssdev;
-@@ -235,7 +213,6 @@ static int tfp410_probe(struct platform_device *pdev)
+-	slave_dev->priv_flags |= (IFF_FAILOVER_SLAVE | IFF_LIVE_RENAME_OK);
++	slave_dev->priv_flags |= IFF_FAILOVER_SLAVE;
  
- 	return 0;
- err_reg:
--err_gpio:
- 	omap_dss_put_device(ddata->in);
- 	return r;
- }
-
+ 	if (fops && fops->slave_register &&
+ 	    !fops->slave_register(slave_dev, failover_dev))
+ 		return NOTIFY_OK;
+ 
+ 	netdev_upper_dev_unlink(slave_dev, failover_dev);
+-	slave_dev->priv_flags &= ~(IFF_FAILOVER_SLAVE | IFF_LIVE_RENAME_OK);
++	slave_dev->priv_flags &= ~IFF_FAILOVER_SLAVE;
+ err_upper_link:
+ 	netdev_rx_handler_unregister(slave_dev);
+ done:
+@@ -121,7 +121,7 @@ int failover_slave_unregister(struct net_device *slave_dev)
+ 
+ 	netdev_rx_handler_unregister(slave_dev);
+ 	netdev_upper_dev_unlink(slave_dev, failover_dev);
+-	slave_dev->priv_flags &= ~(IFF_FAILOVER_SLAVE | IFF_LIVE_RENAME_OK);
++	slave_dev->priv_flags &= ~IFF_FAILOVER_SLAVE;
+ 
+ 	if (fops && fops->slave_unregister &&
+ 	    !fops->slave_unregister(slave_dev, failover_dev))
 -- 
-b4 0.11.0-dev-5166b
+2.38.1
+
