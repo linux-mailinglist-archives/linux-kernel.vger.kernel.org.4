@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8B16617D4E
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 14:02:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DAFE617D53
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 14:02:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231741AbiKCNCD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 09:02:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42702 "EHLO
+        id S230182AbiKCNCU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 09:02:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231778AbiKCNBv (ORCPT
+        with ESMTP id S231664AbiKCNBx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 09:01:51 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80F56140B7;
-        Thu,  3 Nov 2022 06:01:23 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id f27so5048996eje.1;
-        Thu, 03 Nov 2022 06:01:23 -0700 (PDT)
+        Thu, 3 Nov 2022 09:01:53 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5276D1573C;
+        Thu,  3 Nov 2022 06:01:27 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id a13so2948604edj.0;
+        Thu, 03 Nov 2022 06:01:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Wl5YV1yuldlFg2w/72zvpuZsJu+kXHIm+tqTSmy2/d8=;
-        b=CPONfOgiGcvco/Rskk0DdFbIZ6HfBYRnFSFdPUAnHEC+XwcCXJCsupfbw3rVgS3WNv
-         BaS1aWtcXN6CYybLmhEOjR+zwsqQmER5EQZb4WwjGlJwUD3uKQKaU7y6raDhT5HKa12G
-         SNyARbOgA/gLJkgyoe7Yp/poxlzsPLjmK2XlYmtmqgZ4yE8u2etgLAdQl2YEZJzJGYU8
-         1Bg/Eqc63Xs+Qa6K7xfCwZ8OeUZzyCLTyiUnU2J5ngw/bn/GJksblf7OAZXriwGgmagC
-         BQWpu6cqpULKzsIISCWL1+yzx2Ou+axpQNFD6XLQsVLaw972Z/n4+eSHoT77VG2ab0Mc
-         OQpw==
+        bh=04P2tRolwIvSbGhfQHq/FrE12nmgNU3RtNHs+uPtM2g=;
+        b=dnHmCO97bGIC+Jyy8IQWvR4BsWXIVI7TyKHdjynNho/G131BVkZyxhiXxiUXhtg6qZ
+         WlWB+5jSWuYufmxwacrxsXL8AV0st9h0CPq4juKwfK4dZi0vuYNaJcMt7hGCTdLoxJzK
+         TaRP+Zc2sMXdW4jEp7urqTPOTIIZ9v+romaTT9dJQSW92ek+9dWp5fUNIb00yW7kjLAd
+         pjgBXIrAgtCDrHm7Ay8ug+e189LJgyIqCnm95ZRFEHMIYmk+YXYJHV8YI4oWBA0A2EKl
+         RemBWGE/x0AUa7GvXgrydHuR0W3skmdDOGSY17J6xrFz7yX1g3SzR+lfoqLI7Dm6suRw
+         kgSA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Wl5YV1yuldlFg2w/72zvpuZsJu+kXHIm+tqTSmy2/d8=;
-        b=7z2TEYa7f9NCiHUioV13N2whYO057UsoNHppPkXESXVX6yrUEfceIh/0a0iYcFRT6H
-         TPVa/ijNLSZK9Qo+BOKVQs0AwFHTfze7Wvmr6BfcwPgAVrggDhs8ryAJKUFHswvho4TA
-         IQQ1VrGI0gC4Rt6ungR08jDufrwBFuuOYsKKeZ7BIrxHUJPHfc0wDJqGUrHxYJfkwuzW
-         2HVqVr669iYO8KBHt+jWbZWDWYsvgazatOtz1ysEbAJAj9V9KGYeG1rJpXg0aY8Uzn+A
-         f/4UIzy9EokN79qAt9BjcSYjjNaYFIcTsNh0eW3zssFjyLika1IvCOdbqD/vxnWZG9ln
-         NNng==
-X-Gm-Message-State: ACrzQf2rhuM55+O+fDFVLSOcTBVc2Wf4oS/NwDi9sL8ou7AdVNxaEoxS
-        5GKFxCzhJcC9e2W88YW9gCQ=
-X-Google-Smtp-Source: AMsMyM7gPXzJcckBUMqFFsZth/J4/WP/0PALvoZxooUDuYJmORo94PSzkWl3TrmVl08Shg3SeMiOHg==
-X-Received: by 2002:a17:907:7617:b0:7ad:c0d5:bdf1 with SMTP id jx23-20020a170907761700b007adc0d5bdf1mr23207559ejc.211.1667480481889;
-        Thu, 03 Nov 2022 06:01:21 -0700 (PDT)
+        bh=04P2tRolwIvSbGhfQHq/FrE12nmgNU3RtNHs+uPtM2g=;
+        b=ouHCspE9eXU3xGhibx64XAp3myQwHddVeamIyefz5YFvFPqvejYCFffSHEtUkUm8zb
+         EpYYvUCUiXwHuXukEa9bVsaXuvBqFQMYK//qUgxnd2khzPQ7bYr/CGlQ8tAFxwgRJX+3
+         wREAmRp1RX+tW/jAA+gddgNSj0xGvDGKyIPX7chfCz12C6l+iwcR8GdKJItCNrPAqVbu
+         Z84xpVRxV1v7/wX7bYKhCjumn247BgV90C186g0qxCG5Gx7olVBfF0WLlFcfWUT8Zyfs
+         W2JBtFIr17NRudbsgNRvNF3TxlidVvmqIKK/yZTwCPtXxFDYhjfXhZb3jmwYSZotwWJW
+         HszQ==
+X-Gm-Message-State: ACrzQf17CO7NvlJ9tbjXTqqwOnyd5OgEu7r4G4GZlUyERPFmbrO6nFe0
+        tIpPk41xmfuhhGpJP9nhE2g=
+X-Google-Smtp-Source: AMsMyM6p8HJee76lS+w8VExqd223CIGj17t8m0B1NxMkBiW+5H7HtValuPZRh2P23VIrm2VWOb4Mag==
+X-Received: by 2002:a05:6402:2994:b0:453:4c5c:d31c with SMTP id eq20-20020a056402299400b004534c5cd31cmr29918522edb.412.1667480485718;
+        Thu, 03 Nov 2022 06:01:25 -0700 (PDT)
 Received: from localhost.localdomain ([5.2.194.157])
-        by smtp.gmail.com with ESMTPSA id q12-20020a17090676cc00b00779a605c777sm451829ejn.192.2022.11.03.06.01.20
+        by smtp.gmail.com with ESMTPSA id q12-20020a17090676cc00b00779a605c777sm451829ejn.192.2022.11.03.06.01.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Nov 2022 06:01:21 -0700 (PDT)
+        Thu, 03 Nov 2022 06:01:25 -0700 (PDT)
 From:   Cosmin Tanislav <demonsingur@gmail.com>
 Cc:     Lars-Peter Clausen <lars@metafoo.de>,
         Michael Hennerich <Michael.Hennerich@analog.com>,
@@ -60,9 +60,9 @@ Cc:     Lars-Peter Clausen <lars@metafoo.de>,
         linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Cosmin Tanislav <cosmin.tanislav@analog.com>
-Subject: [PATCH v4 07/13] dt-bindings: iio: temperature: ltc2983: require 4 wire rtd for current rotate
-Date:   Thu,  3 Nov 2022 15:00:35 +0200
-Message-Id: <20221103130041.2153295-8-demonsingur@gmail.com>
+Subject: [PATCH v4 08/13] dt-bindings: iio: temperature: ltc2983: change default excitation for custom thermistors
+Date:   Thu,  3 Nov 2022 15:00:36 +0200
+Message-Id: <20221103130041.2153295-9-demonsingur@gmail.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221103130041.2153295-1-demonsingur@gmail.com>
 References: <20221103130041.2153295-1-demonsingur@gmail.com>
@@ -81,58 +81,43 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Cosmin Tanislav <cosmin.tanislav@analog.com>
 
-The driver will error out when current rotation is enabled but the RTD
-is not 4-wire. Require it in the binding too.
+Excitation cannot be set to auto-range when using a custom thermistor
+or Steinhart sensor type. Default it to 1000nA to match the driver
+and remove the auto-range value from the enum.
 
 Signed-off-by: Cosmin Tanislav <cosmin.tanislav@analog.com>
 ---
- .../bindings/iio/temperature/adi,ltc2983.yaml | 25 +++++++++++--------
- 1 file changed, 15 insertions(+), 10 deletions(-)
+ .../bindings/iio/temperature/adi,ltc2983.yaml          | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
 diff --git a/Documentation/devicetree/bindings/iio/temperature/adi,ltc2983.yaml b/Documentation/devicetree/bindings/iio/temperature/adi,ltc2983.yaml
-index bbac5f5cfbb3..b603219fb0c9 100644
+index b603219fb0c9..1b6a11f2aa9d 100644
 --- a/Documentation/devicetree/bindings/iio/temperature/adi,ltc2983.yaml
 +++ b/Documentation/devicetree/bindings/iio/temperature/adi,ltc2983.yaml
-@@ -230,13 +230,6 @@ patternProperties:
-           resistor is used for multiple 2-, 3-, and/or 4-wire RTDs.
-         type: boolean
- 
--      adi,current-rotate:
--        description:
--          Boolean property which enables excitation current rotation to
--          automatically remove parasitic thermocouple effects. Note that
--          this property is not allowed for 2- and 3-wire RTDs.
--        type: boolean
--
-       adi,excitation-current-microamp:
-         description:
-           This property controls the magnitude of the excitation current
-@@ -269,10 +262,22 @@ patternProperties:
-     required:
-       - adi,rsense-handle
- 
--    dependencies:
--      adi,current-rotate: [ "adi,rsense-share" ]
--
-     allOf:
-+      - if:
-+          properties:
-+            adi,number-of-wires:
-+              const: 4
-+        then:
-+          properties:
-+            adi,current-rotate:
-+              description:
-+                Whether to enable excitation current rotation to automatically
-+                remove parasitic thermocouple effects.
-+              type: boolean
-+
-+          dependencies:
-+            adi,current-rotate: [ "adi,rsense-share" ]
-+
-       - if:
-           properties:
+@@ -378,6 +378,11 @@ patternProperties:
              adi,sensor-type:
+               const: 26
+         then:
++          properties:
++            adi,excitation-current-nanoamp:
++              enum: [250, 500, 1000, 5000, 10000, 25000, 50000, 100000,
++                     250000, 500000, 1000000]
++              default: 1000
+           required:
+             - adi,custom-steinhart
+       - if:
+@@ -385,6 +390,11 @@ patternProperties:
+             adi,sensor-type:
+               const: 27
+         then:
++          properties:
++            adi,excitation-current-nanoamp:
++              enum: [250, 500, 1000, 5000, 10000, 25000, 50000, 100000,
++                     250000, 500000, 1000000]
++              default: 1000
+           required:
+             - adi,custom-thermistor
+ 
 -- 
 2.38.1
 
