@@ -2,158 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 330946182DC
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 16:30:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CEE0E61829E
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 16:25:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231523AbiKCPaP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 11:30:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39014 "EHLO
+        id S229805AbiKCPZQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 11:25:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231801AbiKCP3n (ORCPT
+        with ESMTP id S232186AbiKCPZD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 11:29:43 -0400
-Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97052167C4;
-        Thu,  3 Nov 2022 08:29:14 -0700 (PDT)
-From:   =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=weissschuh.net;
-        s=mail; t=1667489352;
-        bh=PZByBmsOolWMq3HddyC3qa9xFMg1ubeZTofhZPwh6dU=;
-        h=From:To:Cc:Subject:Date:From;
-        b=UpfoN0634Tdc0FuIrNGCbUamoyuSTtDZbAwWz8a4BCoRn7haOurZLRe2Tdyf9QjHn
-         UY5Bb+FCaVDRXVuQIDXIzGNlwYVV+aCniBlt6JUuMaAPUnVCl8TPiGZaGF94ScseXJ
-         +txdOwwgFAPoNDH/ngArRZvvG+MJm/b4ZPp+zTDo=
-To:     Greg KH <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Karel Zak <kzak@redhat.com>,
-        Masatake YAMATO <yamato@redhat.com>, linux-api@vger.kernel.org
-Subject: [PATCH v3] kernel/ksysfs.c: export kernel cpu byteorder
-Date:   Thu,  3 Nov 2022 16:24:07 +0100
-Message-Id: <20221103152407.3348-1-linux@weissschuh.net>
-X-Mailer: git-send-email 2.38.1
+        Thu, 3 Nov 2022 11:25:03 -0400
+Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20A4322C
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 08:24:56 -0700 (PDT)
+Received: by mail-qk1-x72c.google.com with SMTP id x18so1339961qki.4
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 08:24:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+GK+kN47VRDh5Rd9IAtghxyhLdbPgGlBTCLcifjdKfY=;
+        b=CuVdKrpYE2rQRg37FPIg+JZrk4NzKKxt219BGe3CMQvQo8Lmp2ckSDbzhj0bEEUIDL
+         fxTOSuzkB/5KrS//gXY6ySrTmRgRg8/Y7fvynh6m65Zh2OXxQ4VX2GSRl9UBvObPXaiB
+         +vOZCa0xjXVbfTNBKAzOFM+Bk77Hb1sPLlBuXe4pMZ5UDc+2YdWojicrTPpwK/H61Iio
+         yq7H5MfkITJRWQYoPFpDcBb9983wRkk5uycAbX1edw4j+1IfEOYvTWUb0TabE5T1YL68
+         HomjjXu09Q9xuXt2iGFj5ybrYfCG6zH2HK1fcjAIOuAUFslSMbvF1EvI5XH6vconk6NT
+         K1+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+GK+kN47VRDh5Rd9IAtghxyhLdbPgGlBTCLcifjdKfY=;
+        b=fx+7j2zD7SNZ9Ua6o9OUHIiP+QRB7gtPd1XzrAGOM1ZlEeqgXo47fVeMfLEEneYzwP
+         O8Hkslp2l+ZGiYMqYZkGUQ3P5u4YdHC4A0pqgsLXJKRdJydEdidruZpJQ0/CQPr4nTUX
+         F8jbX9utcUlmdB14BzurgPjlUViqyGnhG8ThaRg8n6/7zyepvjDit5J4YYyySNRobwyU
+         PD9evdSF8AR0BX8BW+WjlDsbx8FJEHP/cmE3lpK5E3deDsZdJmRD500ZeFlWxqEme9ML
+         riurRps6mqY+rXXy+LfT8Bd8t3mPIk2ebJY04fN+rXFxqk20vZd7tGER7Km1Xwf4/DJ1
+         ha2w==
+X-Gm-Message-State: ACrzQf2siDs288nK2THMaNQmUKibQKmSR935Ml0w3iASeNZBem9S08Cg
+        yrU1PyZ20z3qft0QpeAlc9H87g==
+X-Google-Smtp-Source: AMsMyM4JfQZmP8W7rxOWSLWL8ATCWGxBIJQoz0Nkbogfi2BmdP8tf0y5Xg2ivz3gto0bPNF2tfnghQ==
+X-Received: by 2002:a05:620a:1256:b0:6fa:4c67:4d9c with SMTP id a22-20020a05620a125600b006fa4c674d9cmr10696457qkl.713.1667489095268;
+        Thu, 03 Nov 2022 08:24:55 -0700 (PDT)
+Received: from ?IPV6:2601:586:5000:570:a35d:9f85:e3f7:d9fb? ([2601:586:5000:570:a35d:9f85:e3f7:d9fb])
+        by smtp.gmail.com with ESMTPSA id p20-20020a05620a15f400b006b953a7929csm907379qkm.73.2022.11.03.08.24.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 03 Nov 2022 08:24:54 -0700 (PDT)
+Message-ID: <a2b1ffe3-e2bc-25d5-f665-363db09bd959@linaro.org>
+Date:   Thu, 3 Nov 2022 11:24:53 -0400
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH v2 02/12] dt-bindings: display: mediatek: add MT8195 hdmi
+ bindings
+Content-Language: en-US
+To:     Guillaume Ranquet <granquet@baylibre.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        David Airlie <airlied@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Jitao shi <jitao.shi@mediatek.com>, CK Hu <ck.hu@mediatek.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     stuart.lee@mediatek.com, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        linux-kernel@vger.kernel.org, mac.shen@mediatek.com,
+        linux-mediatek@lists.infradead.org, dri-devel@lists.freedesktop.org
+References: <20220919-v2-0-8419dcf4f09d@baylibre.com>
+ <20220919-v2-2-8419dcf4f09d@baylibre.com>
+ <c91ee3ce-3f30-a3ef-bb38-8571e488b6b6@linaro.org>
+ <CABnWg9t3w4o4rmNosvYCpqG-h8DESerajH7OsXEYofRf2kr1Xg@mail.gmail.com>
+ <6bb3ab49-1c12-6863-a49a-2fd1f34de561@linaro.org>
+ <CABnWg9uDki0ZtkxU1BPZq0ZU1mi4zFjasw+e3pQYb+Nv1MThLA@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CABnWg9uDki0ZtkxU1BPZq0ZU1mi4zFjasw+e3pQYb+Nv1MThLA@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1667489045; l=3398; s=20211113; h=from:subject; bh=PZByBmsOolWMq3HddyC3qa9xFMg1ubeZTofhZPwh6dU=; b=v15hMi/ivTX5CWvpzMcrySqQJkPXO7/fXMBiavSMAxGqtvwsL8eF+Mp4fP0ecL1SX2Iwzmu4fohL FraMLAZ9DpcuMeJIWm+xwp7YEopLU1TeDLC3VXEdM/sZGLXRwIdj
-X-Developer-Key: i=linux@weissschuh.net; a=ed25519; pk=9LP6KM4vD/8CwHW7nouRBhWLyQLcK1MkP6aTZbzUlj4=
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Certain files in procfs are formatted in byteorder-dependent formats.
-For example the IP addresses in /proc/net/udp.
+On 03/11/2022 11:17, Guillaume Ranquet wrote:
+> On Thu, 03 Nov 2022 13:45, Krzysztof Kozlowski
+>>> This is an i2c adapter, not a device.
+>>> And as it lives inside the HDMI hw block, I've omitted using an address here.
+>>>
+>>> Is this valid? or should this be expressed differently?
+>>
+>> What is an I2C adapter? Did you mean I2C controller (master)?
+> 
+> Yes, a controller.
+> This is an I2C controller connected to the HDMI connector, it is used
+> to exchange data on the Display Data Channel with
+> the display (such as EDID).
 
-When using emulation like qemu-user, applications are not guaranteed to
-be using the same byteorder as the kernel.
-Therefore the kernel needs to provide a way for applications to discover
-the byteorder used in API-filesystems.
-Using systemcalls is not enough because these are intercepted and
-translated by the emulation.
+OK, then the node name is "i2c".
 
-Also this makes it easier for non-compiled applications like
-shellscripts to discover the byteorder.
-
-Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
-
----
-
-Development of userspace part: https://github.com/util-linux/util-linux/pull/1872
-
-Changelog:
-
-v1: https://lore.kernel.org/lkml/20221101005043.1791-1-linux@weissschuh.net/
-v1->v2:
-  * Move file to /sys/kernel/byteorder
-v2: https://lore.kernel.org/lkml/20221101130401.1841-1-linux@weissschuh.net/
-v2->v3:
-  * Fix commit title to mention sysfs
-  * Use explicit cpu_byteorder name
-  * Use sysfs_emit
-  * Use myself as Contact
-  * Reword commit message
----
- .../ABI/testing/sysfs-kernel-cpu_byteorder     | 12 ++++++++++++
- kernel/ksysfs.c                                | 18 ++++++++++++++++++
- 2 files changed, 30 insertions(+)
- create mode 100644 Documentation/ABI/testing/sysfs-kernel-cpu_byteorder
-
-diff --git a/Documentation/ABI/testing/sysfs-kernel-cpu_byteorder b/Documentation/ABI/testing/sysfs-kernel-cpu_byteorder
-new file mode 100644
-index 000000000000..f0e6ac1b5356
---- /dev/null
-+++ b/Documentation/ABI/testing/sysfs-kernel-cpu_byteorder
-@@ -0,0 +1,12 @@
-+What:		/sys/kernel/cpu_byteorder
-+Date:		February 2023
-+KernelVersion:	6.2
-+Contact:	Thomas Weißschuh <linux@weissschuh.net>
-+Description:
-+		The endianness of the running kernel.
-+
-+		Access: Read
-+
-+		Valid values:
-+			"little", "big"
-+Users:		util-linux
-diff --git a/kernel/ksysfs.c b/kernel/ksysfs.c
-index 65dba9076f31..2df00b789b90 100644
---- a/kernel/ksysfs.c
-+++ b/kernel/ksysfs.c
-@@ -6,6 +6,7 @@
-  * Copyright (C) 2004 Kay Sievers <kay.sievers@vrfy.org>
-  */
- 
-+#include <asm/byteorder.h>
- #include <linux/kobject.h>
- #include <linux/string.h>
- #include <linux/sysfs.h>
-@@ -20,6 +21,14 @@
- 
- #include <linux/rcupdate.h>	/* rcu_expedited and rcu_normal */
- 
-+#if defined(__LITTLE_ENDIAN)
-+#define CPU_BYTEORDER_STRING	"little"
-+#elif defined(__BIG_ENDIAN)
-+#define CPU_BYTEORDER_STRING	"big"
-+#else
-+#error Unknown byteorder
-+#endif
-+
- #define KERNEL_ATTR_RO(_name) \
- static struct kobj_attribute _name##_attr = __ATTR_RO(_name)
- 
-@@ -34,6 +43,14 @@ static ssize_t uevent_seqnum_show(struct kobject *kobj,
- }
- KERNEL_ATTR_RO(uevent_seqnum);
- 
-+/* cpu byteorder */
-+static ssize_t cpu_byteorder_show(struct kobject *kobj,
-+				  struct kobj_attribute *attr, char *buf)
-+{
-+	return sysfs_emit(buf, "%s\n", CPU_BYTEORDER_STRING);
-+}
-+KERNEL_ATTR_RO(cpu_byteorder);
-+
- #ifdef CONFIG_UEVENT_HELPER
- /* uevent helper program, used during early boot */
- static ssize_t uevent_helper_show(struct kobject *kobj,
-@@ -215,6 +232,7 @@ EXPORT_SYMBOL_GPL(kernel_kobj);
- static struct attribute * kernel_attrs[] = {
- 	&fscaps_attr.attr,
- 	&uevent_seqnum_attr.attr,
-+	&cpu_byteorder_attr.attr,
- #ifdef CONFIG_UEVENT_HELPER
- 	&uevent_helper_attr.attr,
- #endif
-
-base-commit: 8e5423e991e8cd0988d0c4a3f4ac4ca1af7d148a
--- 
-2.38.1
+Best regards,
+Krzysztof
 
