@@ -2,165 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAB00617D78
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 14:06:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A149617D7D
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 14:06:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231684AbiKCNGO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 09:06:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42250 "EHLO
+        id S230497AbiKCNGx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 09:06:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231174AbiKCNFU (ORCPT
+        with ESMTP id S231221AbiKCNGA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 09:05:20 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2443118B2E;
-        Thu,  3 Nov 2022 06:04:36 -0700 (PDT)
-Received: from jinankjain-dranzer.zrrkmle5drku1h0apvxbr2u2ee.ix.internal.cloudapp.net (unknown [20.188.121.5])
-        by linux.microsoft.com (Postfix) with ESMTPSA id CC4CC20C28BD;
-        Thu,  3 Nov 2022 06:04:31 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com CC4CC20C28BD
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1667480676;
-        bh=Jgq8nB4XqD5KLtaoujuXvIgLdqXF2Xi2KbIzYn1bdsU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=H8W3voboWecpdhn4XVxcH8lzgnCSoI5XimYpbrwR5lla119BNM+QJsxNtN+r6xqJZ
-         +vJSbnBKfagL6TPDfsbOenrdT1h809b0eXILw7z5nUhaniNk3HPQPDIUeSbZTeAo6+
-         QfFhFWz1xNB4XZ063QjrLJIZjq75YrdkrXzty1uI=
-From:   Jinank Jain <jinankjain@linux.microsoft.com>
-To:     jinankjain@microsoft.com
-Cc:     kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
-        decui@microsoft.com, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, arnd@arndb.de, peterz@infradead.org,
-        jpoimboe@kernel.org, jinankjain@linux.microsoft.com,
-        seanjc@google.com, kirill.shutemov@linux.intel.com,
-        ak@linux.intel.com, sathyanarayanan.kuppuswamy@linux.intel.com,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, anrayabh@linux.microsoft.com,
-        mikelley@microsoft.com
-Subject: [PATCH v3 5/5] x86/hyperv: Change interrupt vector for nested root partition
-Date:   Thu,  3 Nov 2022 13:04:07 +0000
-Message-Id: <049589c0d5dec0d286f3cab4051594fe8c50808d.1667480257.git.jinankjain@linux.microsoft.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1667480257.git.jinankjain@linux.microsoft.com>
-References: <cover.1667480257.git.jinankjain@linux.microsoft.com>
+        Thu, 3 Nov 2022 09:06:00 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B006E15832
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 06:05:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=bQ7wVo9azd1UxJDp0M0W17Go7DfIYKRa93Ql2gb2yls=; b=rWtbiUXrcvPtR/CkSaSaL600BG
+        w20/IKgmhTs5futklTUnbJiOnPXnWKIeChR9q96iH1/zFfhijjWR46ruO0FcDKrONot/6g+PKPG60
+        Db0D2oxKaMVFob7dSaj8J5W5yK7sjgJ0Ne997pkz8h1SRYg2QzdGkvkt2/RflOVhP6VcPeki435E2
+        FlaLy50Ocd46Otc8m2GkN4bAD7aaAU9Z+BpHMSZoci7zhEhmHfuYMKi4AgVW70UZYXDQI3fET7WUe
+        hP1Wf3XeIV86Q0m/VT9rpW3IhmUXc1zq79FAKjNxIQAyzWm3gW6uS3z+0RaehbN5peIJTG9Jsm9V6
+        Kg8HkfFw==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oqZtn-008gi0-Vk; Thu, 03 Nov 2022 13:04:48 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 8BDAD300130;
+        Thu,  3 Nov 2022 14:04:43 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 72F1720AB9A11; Thu,  3 Nov 2022 14:04:43 +0100 (CET)
+Date:   Thu, 3 Nov 2022 14:04:43 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Chen Yu <yu.c.chen@intel.com>
+Cc:     Vincent Guittot <vincent.guittot@linaro.org>,
+        Tim Chen <tim.c.chen@intel.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Rik van Riel <riel@surriel.com>,
+        Aaron Lu <aaron.lu@intel.com>,
+        Abel Wu <wuyun.abel@bytedance.com>,
+        K Prateek Nayak <kprateek.nayak@amd.com>,
+        Yicong Yang <yangyicong@hisilicon.com>,
+        "Gautham R . Shenoy" <gautham.shenoy@amd.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Hillf Danton <hdanton@sina.com>,
+        Honglei Wang <wanghonglei@didichuxing.com>,
+        Len Brown <len.brown@intel.com>,
+        Chen Yu <yu.chen.surf@gmail.com>, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH v2 2/2] sched/fair: Choose the CPU where short task
+ is running during wake up
+Message-ID: <Y2O8a/Ohk1i1l8ao@hirez.programming.kicks-ass.net>
+References: <cover.1666531576.git.yu.c.chen@intel.com>
+ <1a34e009de0dbe5900c7b2c6074c8e0c04e8596a.1666531576.git.yu.c.chen@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1a34e009de0dbe5900c7b2c6074c8e0c04e8596a.1666531576.git.yu.c.chen@intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Traditionally we have been using the HYPERVISOR_CALLBACK_VECTOR to relay
-the VMBus interrupt. But this does not work in case of nested
-hypervisor. Microsoft Hypervisor reserves 0x31 to 0x34 as the interrupt
-vector range for VMBus and thus we have to use one of the vectors from
-that range and setup the IDT accordingly.
+On Sun, Oct 23, 2022 at 11:33:39PM +0800, Chen Yu wrote:
+> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> index 8820d0d14519..3a8ee6232c59 100644
+> --- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
+> @@ -6249,6 +6249,11 @@ wake_affine_idle(int this_cpu, int prev_cpu, int sync)
+>  	if (available_idle_cpu(prev_cpu))
+>  		return prev_cpu;
+>  
+> +	/* The only running task is a short duration one. */
+> +	if (cpu_rq(this_cpu)->nr_running == 1 &&
+> +	    is_short_task(cpu_curr(this_cpu)))
+> +		return this_cpu;
+> +
+>  	return nr_cpumask_bits;
+>  }
 
-Signed-off-by: Jinank Jain <jinankjain@linux.microsoft.com>
----
- arch/x86/include/asm/idtentry.h    |  2 ++
- arch/x86/include/asm/irq_vectors.h |  6 ++++++
- arch/x86/kernel/cpu/mshyperv.c     | 15 +++++++++++++++
- arch/x86/kernel/idt.c              |  9 +++++++++
- drivers/hv/vmbus_drv.c             |  3 ++-
- 5 files changed, 34 insertions(+), 1 deletion(-)
+This is very close to using is_short_task() as dynamic WF_SYNC hint, no?
 
-diff --git a/arch/x86/include/asm/idtentry.h b/arch/x86/include/asm/idtentry.h
-index 72184b0b2219..c0648e3e4d4a 100644
---- a/arch/x86/include/asm/idtentry.h
-+++ b/arch/x86/include/asm/idtentry.h
-@@ -686,6 +686,8 @@ DECLARE_IDTENTRY_SYSVEC(POSTED_INTR_NESTED_VECTOR,	sysvec_kvm_posted_intr_nested
- DECLARE_IDTENTRY_SYSVEC(HYPERVISOR_CALLBACK_VECTOR,	sysvec_hyperv_callback);
- DECLARE_IDTENTRY_SYSVEC(HYPERV_REENLIGHTENMENT_VECTOR,	sysvec_hyperv_reenlightenment);
- DECLARE_IDTENTRY_SYSVEC(HYPERV_STIMER0_VECTOR,	sysvec_hyperv_stimer0);
-+DECLARE_IDTENTRY_SYSVEC(HYPERV_INTR_NESTED_VMBUS_VECTOR,
-+			sysvec_hyperv_nested_vmbus_intr);
- #endif
- 
- #if IS_ENABLED(CONFIG_ACRN_GUEST)
-diff --git a/arch/x86/include/asm/irq_vectors.h b/arch/x86/include/asm/irq_vectors.h
-index 43dcb9284208..729d19eab7f5 100644
---- a/arch/x86/include/asm/irq_vectors.h
-+++ b/arch/x86/include/asm/irq_vectors.h
-@@ -102,6 +102,12 @@
- #if IS_ENABLED(CONFIG_HYPERV)
- #define HYPERV_REENLIGHTENMENT_VECTOR	0xee
- #define HYPERV_STIMER0_VECTOR		0xed
-+/*
-+ * FIXME: Change this, once Microsoft Hypervisor changes its assumption
-+ * around VMBus interrupt vector allocation for nested root partition.
-+ * Or provides a better interface to detect this instead of hardcoding.
-+ */
-+#define HYPERV_INTR_NESTED_VMBUS_VECTOR	0x31
- #endif
- 
- #define LOCAL_TIMER_VECTOR		0xec
-diff --git a/arch/x86/kernel/cpu/mshyperv.c b/arch/x86/kernel/cpu/mshyperv.c
-index 9a4204139490..703642bce423 100644
---- a/arch/x86/kernel/cpu/mshyperv.c
-+++ b/arch/x86/kernel/cpu/mshyperv.c
-@@ -61,6 +61,21 @@ DEFINE_IDTENTRY_SYSVEC(sysvec_hyperv_callback)
- 	set_irq_regs(old_regs);
- }
- 
-+DEFINE_IDTENTRY_SYSVEC(sysvec_hyperv_nested_vmbus_intr)
-+{
-+	struct pt_regs *old_regs = set_irq_regs(regs);
-+
-+	inc_irq_stat(irq_hv_callback_count);
-+
-+	if (vmbus_handler)
-+		vmbus_handler();
-+
-+	if (ms_hyperv.hints & HV_DEPRECATING_AEOI_RECOMMENDED)
-+		ack_APIC_irq();
-+
-+	set_irq_regs(old_regs);
-+}
-+
- void hv_setup_vmbus_handler(void (*handler)(void))
- {
- 	vmbus_handler = handler;
-diff --git a/arch/x86/kernel/idt.c b/arch/x86/kernel/idt.c
-index a58c6bc1cd68..ace648856a0b 100644
---- a/arch/x86/kernel/idt.c
-+++ b/arch/x86/kernel/idt.c
-@@ -160,6 +160,15 @@ static const __initconst struct idt_data apic_idts[] = {
- # endif
- 	INTG(SPURIOUS_APIC_VECTOR,		asm_sysvec_spurious_apic_interrupt),
- 	INTG(ERROR_APIC_VECTOR,			asm_sysvec_error_interrupt),
-+#ifdef CONFIG_HYPERV
-+	/*
-+	 * This is a hack because we cannot install this interrupt handler via alloc_intr_gate
-+	 * as it does not allow interrupt vector less than FIRST_SYSTEM_VECTORS. And hyperv
-+	 * does not want anything other than 0x31-0x34 as the interrupt vector for vmbus
-+	 * interrupt in case of nested setup.
-+	 */
-+	INTG(HYPERV_INTR_NESTED_VMBUS_VECTOR, asm_sysvec_hyperv_nested_vmbus_intr),
-+#endif
- #endif
- };
- 
-diff --git a/drivers/hv/vmbus_drv.c b/drivers/hv/vmbus_drv.c
-index 2f0cf75e811b..e6fb77fb44b9 100644
---- a/drivers/hv/vmbus_drv.c
-+++ b/drivers/hv/vmbus_drv.c
-@@ -2746,7 +2746,8 @@ static int __init hv_acpi_init(void)
- 	 * normal Linux IRQ mechanism is not used in this case.
- 	 */
- #ifdef HYPERVISOR_CALLBACK_VECTOR
--	vmbus_interrupt = HYPERVISOR_CALLBACK_VECTOR;
-+	vmbus_interrupt = hv_nested ? HYPERV_INTR_NESTED_VMBUS_VECTOR :
-+					    HYPERVISOR_CALLBACK_VECTOR;
- 	vmbus_irq = -1;
- #endif
- 
--- 
-2.25.1
+> @@ -6623,6 +6628,23 @@ static int select_idle_cpu(struct task_struct *p, struct sched_domain *sd, bool
+>  			/* overloaded LLC is unlikely to have idle cpu/core */
+>  			if (nr == 1)
+>  				return -1;
+> +
+> +			/*
+> +			 * If nr is smaller than 60% of llc_weight, it
+> +			 * indicates that the util_avg% is higher than 50%.
+> +			 * This is calculated by SIS_UTIL in
+> +			 * update_idle_cpu_scan(). The 50% util_avg indicates
+> +			 * a half-busy LLC domain. System busier than this
+> +			 * level could lower its bar to choose a compromised
+> +			 * "idle" CPU, so as to avoid the overhead of cross
+> +			 * CPU wakeup. If the task on target CPU is a short
+> +			 * duration one, and it is the only running task, pick
+> +			 * target directly.
+> +			 */
+> +			if (!has_idle_core && (5 * nr < 3 * sd->span_weight) &&
+> +			    cpu_rq(target)->nr_running == 1 &&
+> +			    is_short_task(cpu_curr(target)))
+> +				return target;
+>  		}
+>  	}
 
+And here you're basically saying that if the domain is 'busy' and the
+task is short, don't spend time searching for a better location.
+
+Should we perhaps only consider shortness; after all, spending more time
+searching for an idle cpu than the task would've taken to run is daft.
+Business of the domain seems unrelated to that.
+
+
+Also, I'm not sure on your criteria for short; but I don't have enough
+thoughts on that yet.
