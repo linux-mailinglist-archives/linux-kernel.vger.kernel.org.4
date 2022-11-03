@@ -2,134 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AB4F6185A0
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 18:03:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BC626185AE
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 18:04:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232016AbiKCRC7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 13:02:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58006 "EHLO
+        id S231830AbiKCREB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 13:04:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231732AbiKCRCV (ORCPT
+        with ESMTP id S232141AbiKCRDL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 13:02:21 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5671910B64
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 10:02:19 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id m29-20020a05600c3b1d00b003c6bf423c71so3833330wms.0
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 10:02:19 -0700 (PDT)
+        Thu, 3 Nov 2022 13:03:11 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6F7F1D0C3;
+        Thu,  3 Nov 2022 10:03:00 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id v27so4050881eda.1;
+        Thu, 03 Nov 2022 10:03:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=F2qRvwVUVIRjIeHt35WXksU2jyggEsNFCmKZPYDREH0=;
-        b=Pmd1ZWzYe+9SBpCupib/Vm+0gUhLu8QSGX/WqY3HSwPPcz/YftVTkl2CwTIsYVb2Hx
-         iRxgZBzpaLdzKE/udwF49ml/0ZOmV8GOKe5cRb3RCVRE301p8jITcfGm9WjywIF2g8Xe
-         MS6trBTW1PmNZdD0n+5BgFXLdJi4vJOhUJewZepcExh858lg/tAnC5mZ/FzGESnoAx39
-         SJc5IQEC3TBkHm8T93+qRVKTEUQfZyr2TcS0Afxpukqt78dlah6VmkALLMAJ724Whi8k
-         z9gRB5ylFALOFIvbVwditPZkNd+WnVAr9vAP+gQP40+vcngbYtGlIDsrQz2dI7qnkGTw
-         A4FA==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=sMe/w1piolBGnVahRqgDlvg03nMiDV17ymksE4asAgo=;
+        b=byOUMkMoSgwsPdgJfElh/+HW2anWgLMSKtMVUdskPaVMPCfFYA+NulTZxzxduj5LuJ
+         A9DTSRintzRdCI0OSXQ8EouZ48eZ9RnW/fXrNuWN31LrHFn01josAvt8V9F3E1T3vDl0
+         q7n1JjkOJuqYUE5jdtX2UouAmrwtPsL416fQu66aUTZV5IguYiAzF4HKXOeYRVfa5j4Q
+         1k8h2fDV8zG7+qXriBJ3OlfsAtWwo8EXD+gXYbxrUafVYxdfGscxyiDKtsEDa1yQ0yag
+         +U89X4QWgMRD0pMWz1sug6L5lHzKysTpOb7bkoISYA1P8MS1QX6NZjf3XNPJpv9kX8BY
+         aaIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=F2qRvwVUVIRjIeHt35WXksU2jyggEsNFCmKZPYDREH0=;
-        b=5yX40MX8eMBBh5baYjVgOJNmm1+85H8AXcg76QdtCDqV7EoyDJSQZK2/OgmdPcnizG
-         Cq0E4qDDQ78bd0T67+SpjbJYH0YQhyguY3+jGYG9aeqbYBhLEPRJte3SK7YjqodiXf3Y
-         5h6f7FEU0OFTCMKPySuXbgR56DTQgI0v4QfQTZWX/ZC+PwXui7E3kSh0DKYWlOG9K4O9
-         LuFlwItLDZu8/ETUi/Y7hToM9IPzYdNN4suy7wWp2PcWUiKK64MB4u8pj03rayDE9o1F
-         ViUkBhD6cIllkNHmOZ7OQN7BkP/58123QGEjOmLU3+OfZJtDq9AXuLZKWp1RQC5F5ZHd
-         7oxg==
-X-Gm-Message-State: ACrzQf0+itQSReFhtxd0bDiuuOKaqWpA0vzZ4drOICOsa8oUJf5ZEcI2
-        HTbIKlEzNklUrmUUJ4aCshNDfw==
-X-Google-Smtp-Source: AMsMyM4+lDbFeMavFHov8ficnEgR3S1GzKaz2JGhFH/Khbt/MtSp6mpNbtemn0R9Nx3Ih2ByL4LE9g==
-X-Received: by 2002:a1c:440b:0:b0:3cf:4db1:d741 with SMTP id r11-20020a1c440b000000b003cf4db1d741mr20754947wma.197.1667494934967;
-        Thu, 03 Nov 2022 10:02:14 -0700 (PDT)
-Received: from ryzen.lan (79-73-69-252.dynamic.dsl.as9105.com. [79.73.69.252])
-        by smtp.gmail.com with ESMTPSA id i15-20020adfa50f000000b002366c3eefccsm1286342wrb.109.2022.11.03.10.02.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Nov 2022 10:02:14 -0700 (PDT)
-From:   Peter Griffin <peter.griffin@linaro.org>
-Cc:     Peter Griffin <peter.griffin@linaro.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Miklos Szeredi <mszeredi@redhat.com>, stable@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Will McVicker <willmcvicker@google.com>,
-        Peter Griffin <gpeter@google.com>
-Subject: [PATCH] vfs: vfs_tmpfile: ensure O_EXCL flag is enforced
-Date:   Thu,  3 Nov 2022 17:02:10 +0000
-Message-Id: <20221103170210.464155-1-peter.griffin@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        bh=sMe/w1piolBGnVahRqgDlvg03nMiDV17ymksE4asAgo=;
+        b=J6FTqvM76erDbgETjPCm/OHeT6HQxlxxVFLWtM6y0rf2CaAlG8+KDEy1wqDF9Kf+zk
+         2tYuGemJOqot2XYNYbzMxHbemqr66S8086GOhHu7iJn7Fg+6i2a/HMG5e4JpShCk73QP
+         vlzGK0zQlx/o6inhoV6F+j/FbmgSUGo8ryApN3dk+HogX+AqvHjtfhnCfyeN6VVRQtT+
+         UgXEMKhGX3HxkVECd6qs+7wy2e9juf5TocthCt6KCo1wF/CYi+cF07d9kyBpPevdojAM
+         h9vLuhVTKZOP15Lm4dTXva42Yq4I8TcaBtOI6JDsowqfer3t65ksjRsJtQnlPdCi9tn0
+         2JpA==
+X-Gm-Message-State: ACrzQf3GCNullmP8RglMqqstXTrehDI10Pfy3V2U963pUK+x5+2HMQR3
+        pMRATSISSXCdWgrGhAMHeaqqpE+VYM9IRqtoTOY=
+X-Google-Smtp-Source: AMsMyM7m60RCHrSwiShzF46g7SlxeqpGdr6nzQ8fYR6zzn6NuZzEosn31fOOq69vNhjz11pxmXSaxcZnUtU2V3pG2cY=
+X-Received: by 2002:a50:ee0a:0:b0:463:4055:9db4 with SMTP id
+ g10-20020a50ee0a000000b0046340559db4mr25325777eds.421.1667494979022; Thu, 03
+ Nov 2022 10:02:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20221103091100.246115-1-yangjihong1@huawei.com>
+In-Reply-To: <20221103091100.246115-1-yangjihong1@huawei.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Thu, 3 Nov 2022 10:02:47 -0700
+Message-ID: <CAADnVQJTZdDCEVL0ZuieGvTYEPOEqvdScnr77Nnb+tbBuFwx3g@mail.gmail.com>
+Subject: Re: [PATCH net v2] uapi: Add missing linux/stddef.h header file to in.h
+To:     Yang Jihong <yangjihong1@huawei.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Kees Cook <keescook@chromium.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If O_EXCL is *not* specified, then linkat() can be
-used to link the temporary file into the filesystem.
-If O_EXCL is specified then linkat() should fail (-1).
+On Thu, Nov 3, 2022 at 2:16 AM Yang Jihong <yangjihong1@huawei.com> wrote:
+>
+> commit 5854a09b4957 ("net/ipv4: Use __DECLARE_FLEX_ARRAY() helper") does
+> not include "linux/stddef.h" header file, and tools headers update
+> linux/in.h copy, BPF prog fails to be compiled:
+>
+>     CLNG-BPF [test_maps] bpf_flow.bpf.o
+>     CLNG-BPF [test_maps] cgroup_skb_sk_lookup_kern.bpf.o
+>   In file included from progs/cgroup_skb_sk_lookup_kern.c:9:
+>   /root/linux/tools/include/uapi/linux/in.h:199:3: error: type name requires a specifier or qualifier
+>                   __DECLARE_FLEX_ARRAY(__be32, imsf_slist_flex);
+>                   ^
+>   /root/linux/tools/include/uapi/linux/in.h:199:32: error: type specifier missing, defaults to 'int' [-Werror,-Wimplicit-int]
+>                   __DECLARE_FLEX_ARRAY(__be32, imsf_slist_flex);
+>                                                ^
+>   2 errors generated.
+>
+> To maintain consistency, add missing header file to kernel.
+>
+> Fixes: 5854a09b4957 ("net/ipv4: Use __DECLARE_FLEX_ARRAY() helper")
+> Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
+> ---
+>
+> Changes since v1:
+>  - 'Fixes' tag separates by the commit message by a blank line
+>  - Remove the empty line between 'Fixes' and SoB.
+>  - Specify the target tree to "net" in title
+>  - Wrap the commit message text to 75 chars per line (except build output)
 
-After commit 863f144f12ad ("vfs: open inside ->tmpfile()")
-the O_EXCL flag is no longer honored by the vfs layer for
-tmpfile, which means the file can be linked even if O_EXCL
-flag is specified, which is a change in behaviour for
-userspace!
+Since it's bpf related please always use [PATCH bpf] in the subject.
+Please monitor the tree and mailing lists as well.
+In this case the proper fix is already in bpf tree.
+https://lore.kernel.org/bpf/20221102182517.2675301-1-andrii@kernel.org/
 
-The open flags was previously passed as a parameter, so it
-was uneffected by the changes to file->f_flags caused by
-finish_open(). This patch fixes the issue by storing
-file->f_flags in a local variable so the O_EXCL test
-logic is restored.
-
-This regression was detected by Android CTS Bionic fcntl()
-tests running on android-mainline [1].
-
-[1] https://android.googlesource.com/platform/bionic/+/
-    refs/heads/master/tests/fcntl_test.cpp#352
-
-Fixes: 863f144f12ad ("vfs: open inside ->tmpfile()")
-To: lkml <linux-kernel@vger.kernel.org>
-Cc: Alexander Viro <viro@zeniv.linux.org.uk>
-Cc: Miklos Szeredi <mszeredi@redhat.com>
-Cc: stable@vger.kernel.org
-Cc: linux-fsdevel@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Cc: Will McVicker <willmcvicker@google.com>
-Cc: Peter Griffin <gpeter@google.com>
-Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
----
- fs/namei.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/fs/namei.c b/fs/namei.c
-index 578c2110df02..9155ecb547ce 100644
---- a/fs/namei.c
-+++ b/fs/namei.c
-@@ -3591,6 +3591,7 @@ static int vfs_tmpfile(struct user_namespace *mnt_userns,
- 	struct inode *dir = d_inode(parentpath->dentry);
- 	struct inode *inode;
- 	int error;
-+	int open_flag = file->f_flags;
- 
- 	/* we want directory to be writable */
- 	error = inode_permission(mnt_userns, dir, MAY_WRITE | MAY_EXEC);
-@@ -3613,7 +3614,7 @@ static int vfs_tmpfile(struct user_namespace *mnt_userns,
- 	if (error)
- 		return error;
- 	inode = file_inode(file);
--	if (!(file->f_flags & O_EXCL)) {
-+	if (!(open_flag & O_EXCL)) {
- 		spin_lock(&inode->i_lock);
- 		inode->i_state |= I_LINKABLE;
- 		spin_unlock(&inode->i_lock);
--- 
-2.34.1
-
+Your fix alone is incomplete. See patch 2 in the fix above.
