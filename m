@@ -2,62 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A987F617CA1
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 13:35:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C416617CA4
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 13:35:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230408AbiKCMfB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 08:35:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52462 "EHLO
+        id S231512AbiKCMfU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 08:35:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230194AbiKCMe6 (ORCPT
+        with ESMTP id S231680AbiKCMfM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 08:34:58 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49D4EBF44;
-        Thu,  3 Nov 2022 05:34:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DBD9EB82531;
-        Thu,  3 Nov 2022 12:34:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2EB3EC433D7;
-        Thu,  3 Nov 2022 12:34:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667478894;
-        bh=kwC8c9iT4n97Y2z/Aic1ez2OXO1eBSULeJPMuCVAFHk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=i+lBS+leXHEf+hVhQsl2MUuothos7zrXn3fV78WVA7Rz1NdP++RewaodJWcx0wGqw
-         KNJOiKhjMHxW91ky6p7QwsCMz3/TVgfyO0C1895eCJXJL0jU3DxtzB7RgH6k3C2vMe
-         ASP6ieuPaYsu3NlxmoOL2d0r+fazbakWt8HIBOpOSQzmSnicSCbj/0oHG0dcBdUwWw
-         S6CHDDGkCIEa/lBwbsZEmES6GKVK5XZ2afcSajObfyNZlXwBQJS8IzvhT1++nKxh5I
-         58KiqO4Ffz/96ArZM0fbkHj8xo6ZHla8KXJAmBb5NAAzmro5wAhgc2gG4mV6k76EoG
-         QLARRfpFtkaWA==
-Date:   Thu, 3 Nov 2022 18:04:44 +0530
-From:   Manivannan Sadhasivam <mani@kernel.org>
-To:     Johan Hovold <johan+linaro@kernel.org>
-Cc:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        stanimir.k.varbanov@gmail.com, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Brian Masney <bmasney@redhat.com>,
-        linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Georgi Djakov <djakov@kernel.org>
-Subject: Re: [PATCH v3 2/2] PCI: qcom: Add basic interconnect support
-Message-ID: <20221103123444.GE8434@thinkpad>
-References: <20221102090705.23634-1-johan+linaro@kernel.org>
- <20221102090705.23634-3-johan+linaro@kernel.org>
+        Thu, 3 Nov 2022 08:35:12 -0400
+Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCFB2BF7D
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 05:35:09 -0700 (PDT)
+Received: by mail-qt1-x830.google.com with SMTP id l15so1082666qtv.4
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 05:35:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=AIhE5tTAyhN78d6a2N8YuzGDstI/Nrsk3pPBZ8RS5Yk=;
+        b=YYxU3yG4i+301n1Yz40+nRHTTCJgk1T3Tym8Fiq6TDBNv+1KQ4YVl6p/PAtepKSRD/
+         AIuaoJN05BZEoSv/ZELW0H8b95Yj6W8Pfqke5EVawTofFSVabfowL6RiNCh8h0Mnfauw
+         Jo6HIrq42XRW2eoecTxq7xKJl6vSQCEAsPKnJS35EL5OhpMOzofeqXHyv3m4EyVFWoSq
+         yXqs1qabKHqDSDOGe1/5dZ0G3CLWkvLyJru+ZQPcJOwCJ4i+OpC2VQ7YtkI/+8j6qpr2
+         1MmZTTMG/XDpeZoV8ZpuELpevhdvTClO6G2jAgSPmKgf9BLX/7lXlAi01DBFSsUWkIxh
+         NrWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=AIhE5tTAyhN78d6a2N8YuzGDstI/Nrsk3pPBZ8RS5Yk=;
+        b=ofyaTAUWlh6bE++g/x+Ppadd+oH+I6rq6TLDs0hA9qg5t6ohDqq/UJqxoSignhcX6L
+         FmjxGSZCXpTEpqr8tJlZVUs1BdSgaxECcBE3g6Xns6az7KGy1cenPcaUprfbHl64WQSG
+         4JhtXuGqwpS0bdn2l0mkOZnr6Y0bKHaFNy4XG2wbQ2ogeyExFziY5cUkhteaG38WR1OO
+         HtF0/HSHepULLJu1J57pi3uVSsh7SYafi5NcbGLOcs6w+2e+CngREcAnfDsg+60o9H40
+         Rjc0X5M7AMIOy5nxZ9Z45fGOz0AV+04ObuGNu59dFziHWMESRw1qv0EPeKeSbMT69/+w
+         0gpg==
+X-Gm-Message-State: ACrzQf2fF6NIUIrukgWg7lHBvJnBIj4yyy83QInDp0IJ3xrqly3EZeLk
+        vg8YHNV1y6hhA9lf97d5p60o0w==
+X-Google-Smtp-Source: AMsMyM7xMUwtyr9tB3lj38zP1zS2TpQYq3vUnnA9LpvU4xyURUGwzF3DryKpyfcka2lcnVJDZ1anMg==
+X-Received: by 2002:a05:622a:5d1:b0:3a5:3818:a067 with SMTP id d17-20020a05622a05d100b003a53818a067mr12241551qtb.574.1667478908921;
+        Thu, 03 Nov 2022 05:35:08 -0700 (PDT)
+Received: from ?IPV6:2601:586:5000:570:a35d:9f85:e3f7:d9fb? ([2601:586:5000:570:a35d:9f85:e3f7:d9fb])
+        by smtp.gmail.com with ESMTPSA id c11-20020ac8054b000000b003a527d29a41sm424304qth.75.2022.11.03.05.35.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 03 Nov 2022 05:35:08 -0700 (PDT)
+Message-ID: <c55d29d2-a70a-f2ae-b605-1c63051202bf@linaro.org>
+Date:   Thu, 3 Nov 2022 08:35:06 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221102090705.23634-3-johan+linaro@kernel.org>
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH 2/3] media: s5p-mfc:Add variant data for MFC v7 hardware
+ for Exynos 3250 SOC
+Content-Language: en-US
+To:     Aakarsh Jain <aakarsh.jain@samsung.com>,
+        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     m.szyprowski@samsung.com, andrzej.hajda@intel.com,
+        mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
+        ezequiel@vanguardiasur.com.ar, jernej.skrabec@gmail.com,
+        benjamin.gaignard@collabora.com, krzysztof.kozlowski+dt@linaro.org,
+        stanimir.varbanov@linaro.org, dillon.minfei@gmail.com,
+        david.plowman@raspberrypi.com, mark.rutland@arm.com,
+        robh+dt@kernel.org, krzk+dt@kernel.org, andi@etezian.org,
+        alim.akhtar@samsung.com, aswani.reddy@samsung.com,
+        pankaj.dubey@samsung.com, smitha.t@samsung.com
+References: <20221102130602.48969-1-aakarsh.jain@samsung.com>
+ <CGME20221102125813epcas5p40a38f17a267276ff8b2bc5861b5d450d@epcas5p4.samsung.com>
+ <20221102130602.48969-2-aakarsh.jain@samsung.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221102130602.48969-2-aakarsh.jain@samsung.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,155 +86,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 02, 2022 at 10:07:05AM +0100, Johan Hovold wrote:
-> On Qualcomm platforms like SC8280XP and SA8540P, interconnect bandwidth
-> must be requested before enabling interconnect clocks.
-> 
-> Add basic support for managing an optional "pcie-mem" interconnect path
-> by setting a low constraint before enabling clocks and updating it after
-> the link is up.
-> 
-> Note that it is not possible for a controller driver to set anything but
-> a maximum peak bandwidth as expected average bandwidth will vary with
-> use case and actual use (and power policy?). This very much remains an
-> unresolved problem with the interconnect framework.
-> 
-> Also note that no constraint is set for the SC8280XP/SA8540P "cpu-pcie"
-> path for now as it is not clear what an appropriate constraint would be
-> (and the system does not crash when left unspecified).
-> 
-> Fixes: 70574511f3fc ("PCI: qcom: Add support for SC8280XP")
-> Reviewed-by: Brian Masney <bmasney@redhat.com>
-> Acked-by: Georgi Djakov <djakov@kernel.org>
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+On 02/11/2022 09:06, Aakarsh Jain wrote:
+> commit "5441e9dafdfc6dc40fa" which adds mfc v7 support for
 
-Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
+Please run scripts/checkpatch.pl and fix reported warnings.
 
-Thanks,
-Mani
+> Exynos3250 and used the same compatible string as used by
+> Exynos5240 but both the IPs are a bit different in terms of
+> IP clock.
+> Lets add variant driver data based on the new compatible string
+> "samsung,exynos3250-mfc" for Exynos3250 SoC.
 
-> ---
->  drivers/pci/controller/dwc/pcie-qcom.c | 76 ++++++++++++++++++++++++++
->  1 file changed, 76 insertions(+)
-> 
-> diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
-> index 7db94a22238d..91b113d0c02a 100644
-> --- a/drivers/pci/controller/dwc/pcie-qcom.c
-> +++ b/drivers/pci/controller/dwc/pcie-qcom.c
-> @@ -12,6 +12,7 @@
->  #include <linux/crc8.h>
->  #include <linux/delay.h>
->  #include <linux/gpio/consumer.h>
-> +#include <linux/interconnect.h>
->  #include <linux/interrupt.h>
->  #include <linux/io.h>
->  #include <linux/iopoll.h>
-> @@ -224,6 +225,7 @@ struct qcom_pcie {
->  	union qcom_pcie_resources res;
->  	struct phy *phy;
->  	struct gpio_desc *reset;
-> +	struct icc_path *icc_mem;
->  	const struct qcom_pcie_cfg *cfg;
->  };
->  
-> @@ -1644,6 +1646,74 @@ static const struct dw_pcie_ops dw_pcie_ops = {
->  	.start_link = qcom_pcie_start_link,
->  };
->  
-> +static int qcom_pcie_icc_init(struct qcom_pcie *pcie)
-> +{
-> +	struct dw_pcie *pci = pcie->pci;
-> +	int ret;
-> +
-> +	pcie->icc_mem = devm_of_icc_get(pci->dev, "pcie-mem");
-> +	if (IS_ERR(pcie->icc_mem))
-> +		return PTR_ERR(pcie->icc_mem);
-> +
-> +	/*
-> +	 * Some Qualcomm platforms require interconnect bandwidth constraints
-> +	 * to be set before enabling interconnect clocks.
-> +	 *
-> +	 * Set an initial peak bandwidth corresponding to single-lane Gen 1
-> +	 * for the pcie-mem path.
-> +	 */
-> +	ret = icc_set_bw(pcie->icc_mem, 0, MBps_to_icc(250));
-> +	if (ret) {
-> +		dev_err(pci->dev, "failed to set interconnect bandwidth: %d\n",
-> +			ret);
-> +		return ret;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static void qcom_pcie_icc_update(struct qcom_pcie *pcie)
-> +{
-> +	struct dw_pcie *pci = pcie->pci;
-> +	u32 offset, status, bw;
-> +	int speed, width;
-> +	int ret;
-> +
-> +	if (!pcie->icc_mem)
-> +		return;
-> +
-> +	offset = dw_pcie_find_capability(pci, PCI_CAP_ID_EXP);
-> +	status = readw(pci->dbi_base + offset + PCI_EXP_LNKSTA);
-> +
-> +	/* Only update constraints if link is up. */
-> +	if (!(status & PCI_EXP_LNKSTA_DLLLA))
-> +		return;
-> +
-> +	speed = FIELD_GET(PCI_EXP_LNKSTA_CLS, status);
-> +	width = FIELD_GET(PCI_EXP_LNKSTA_NLW, status);
-> +
-> +	switch (speed) {
-> +	case 1:
-> +		bw = MBps_to_icc(250);
-> +		break;
-> +	case 2:
-> +		bw = MBps_to_icc(500);
-> +		break;
-> +	default:
-> +		WARN_ON_ONCE(1);
-> +		fallthrough;
-> +	case 3:
-> +		bw = MBps_to_icc(985);
-> +		break;
-> +	}
-> +
-> +	ret = icc_set_bw(pcie->icc_mem, 0, width * bw);
-> +	if (ret) {
-> +		dev_err(pci->dev, "failed to set interconnect bandwidth: %d\n",
-> +			ret);
-> +	}
-> +}
-> +
->  static int qcom_pcie_probe(struct platform_device *pdev)
->  {
->  	struct device *dev = &pdev->dev;
-> @@ -1704,6 +1774,10 @@ static int qcom_pcie_probe(struct platform_device *pdev)
->  		goto err_pm_runtime_put;
->  	}
->  
-> +	ret = qcom_pcie_icc_init(pcie);
-> +	if (ret)
-> +		goto err_pm_runtime_put;
-> +
->  	ret = pcie->cfg->ops->get_resources(pcie);
->  	if (ret)
->  		goto err_pm_runtime_put;
-> @@ -1722,6 +1796,8 @@ static int qcom_pcie_probe(struct platform_device *pdev)
->  		goto err_phy_exit;
->  	}
->  
-> +	qcom_pcie_icc_update(pcie);
-> +
->  	return 0;
->  
->  err_phy_exit:
-> -- 
-> 2.37.3
-> 
+Aren't you just missing the clock on Exynos3250?
 
--- 
-மணிவண்ணன் சதாசிவம்
+Best regards,
+Krzysztof
+
