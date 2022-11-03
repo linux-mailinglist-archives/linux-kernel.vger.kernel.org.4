@@ -2,51 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A314861740A
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 03:11:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 156CE61740C
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 03:13:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230314AbiKCCL3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 22:11:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54018 "EHLO
+        id S230197AbiKCCNb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 22:13:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229993AbiKCCL0 (ORCPT
+        with ESMTP id S229954AbiKCCN2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 22:11:26 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6689713D1F;
-        Wed,  2 Nov 2022 19:11:25 -0700 (PDT)
-Received: from kwepemi500015.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4N2nDc6bvXzRnsN;
-        Thu,  3 Nov 2022 10:06:24 +0800 (CST)
-Received: from [10.174.178.171] (10.174.178.171) by
- kwepemi500015.china.huawei.com (7.221.188.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 3 Nov 2022 10:11:22 +0800
-Subject: Re: [patch net v3] tcp: prohibit TCP_REPAIR_OPTIONS if data was
- already sent
-To:     Neal Cardwell <ncardwell@google.com>
-CC:     <edumazet@google.com>, <davem@davemloft.net>,
-        <yoshfuji@linux-ipv6.org>, <dsahern@kernel.org>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <xemul@parallels.com>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20221102132811.70858-1-luwei32@huawei.com>
- <CADVnQy=uE68AWKuSddKEt3T2X=HUYzs0SQPX31+HgafuysJzkA@mail.gmail.com>
-From:   "luwei (O)" <luwei32@huawei.com>
-Message-ID: <ef5c0948-1a40-e4b7-5b1b-629cfcad1c37@huawei.com>
-Date:   Thu, 3 Nov 2022 10:11:22 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        Wed, 2 Nov 2022 22:13:28 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC6EB64C1
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 19:13:27 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id c15-20020a17090a1d0f00b0021365864446so501519pjd.4
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 19:13:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=shopee.com; s=shopee.com;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sMzrvYyYy/W+4cGhBZeoRUR17rUZ1JZqGeV1907ajb4=;
+        b=POmg/14cGPQ2xtPMaiDVwNaxOFfwYJ9iR4Zycxg3geAV9EKyOz0uySgFDDvmaKTUZi
+         alFKmuXoeHA1Xjf3nZ8ZTFhTKuwtUpI0Tcd+uu8g8qKOqz6dZO3k0ewtWNsbJwLT5PJ5
+         370knaA+E40T7Z0QQYhOPZRpZJWH9vBpz59pW0NxDgxiqCQeFGPGGxcacctuBI0/vaYx
+         wD+/+thF2Cko0M7CE6Tgv0oy6f54p6hVyvF24DOOMmbt4bpw/s+gVc7a0ELFUKyAGONu
+         JtM7NGmWmBZQ/8zJHs0JB2AJAN8PkH8DXimsaHM+0wxggkJi7WlFDE0Bmz1iNE0oB7N1
+         J8Ug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=sMzrvYyYy/W+4cGhBZeoRUR17rUZ1JZqGeV1907ajb4=;
+        b=6W7mJ8chnjnV/4wp6hlElyO3R0DlEuD7VdLLD7D78/rRMtzpSz0jQg+dQmcO8mqUKl
+         PcpX60gJZRXvl72O7BPA7Y7E8jLhPdFcQP28L9r+4viXy4501VmYmpO5DbQ3qcKNr5JN
+         S77GkqqAWGJkg3cJ4U0M+zqR+KgcJjahy4SJ6aHsgCBKUbnqZ9W6P+61dSSPmMgytcHR
+         kcJhaK3yoepaUIygVv8XjbBY8ThYJ80pbqpynrWdAyVHN6V/v0xYP1+NHBJd+3f/ERuB
+         LytCW2VCE5GDCB5JX84A2abc06HDdvVGRT7BMeyKGL/MmHl9Ac4LooRj9jMtXaz+eRGl
+         S/4g==
+X-Gm-Message-State: ACrzQf3MnIrCN+QDruHfoV4YMyaInXrzvZIeiWphNwvrti0eS5/8YIBE
+        7tU2s6fGildFQm2U83pRTzjJFQ==
+X-Google-Smtp-Source: AMsMyM4wN6ENNIHkjKzh3K5hVR2wMizxKLh91CM6oTBdnA/UT+wzV72bTZtdZ1YIoPYb1ikd77eijg==
+X-Received: by 2002:a17:902:ce82:b0:187:3591:edac with SMTP id f2-20020a170902ce8200b001873591edacmr12545688plg.153.1667441607226;
+        Wed, 02 Nov 2022 19:13:27 -0700 (PDT)
+Received: from [10.54.24.49] ([143.92.118.2])
+        by smtp.gmail.com with ESMTPSA id z5-20020a170903018500b00186ff402525sm3464941plg.213.2022.11.02.19.13.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 02 Nov 2022 19:13:26 -0700 (PDT)
+Message-ID: <25f6a188-4cc6-dace-1468-fd5645711515@shopee.com>
+Date:   Thu, 3 Nov 2022 10:13:22 +0800
 MIME-Version: 1.0
-In-Reply-To: <CADVnQy=uE68AWKuSddKEt3T2X=HUYzs0SQPX31+HgafuysJzkA@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.4.0
+Subject: Re: [PATCH] cgroup: Simplify code in css_set_move_task
+To:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
+Cc:     tj@kernel.org, lizefan.x@bytedance.com, hannes@cmpxchg.org,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221020074701.84326-1-haifeng.xu@shopee.com>
+ <20221027080558.GA23269@blackbody.suse.cz>
+ <adb7418c-39a2-6202-970a-a039ad8201dd@shopee.com>
+ <20221031131140.GC27841@blackbody.suse.cz>
+From:   Haifeng Xu <haifeng.xu@shopee.com>
+In-Reply-To: <20221031131140.GC27841@blackbody.suse.cz>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.178.171]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemi500015.china.huawei.com (7.221.188.92)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -54,108 +77,38 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-在 2022/11/2 10:46 PM, Neal Cardwell 写道:
-> On Wed, Nov 2, 2022 at 8:23 AM Lu Wei <luwei32@huawei.com> wrote:
->> If setsockopt with option name of TCP_REPAIR_OPTIONS and opt_code
->> of TCPOPT_SACK_PERM is called to enable sack after data is sent
->> and before data is acked, ...
-> This "before data is acked" phrase does not quite seem to match the
-> sequence below, AFAICT?
->
-> How about something like:
->
->   If setsockopt TCP_REPAIR_OPTIONS with opt_code TCPOPT_SACK_PERM
->   is called to enable SACK after data is sent and the data sender receives a
->   dupack, ...
-      yes, thanks for suggestion
->
->
->> ... it will trigger a warning in function
->> tcp_verify_left_out() as follows:
->>
->> ============================================
->> WARNING: CPU: 8 PID: 0 at net/ipv4/tcp_input.c:2132
->> tcp_timeout_mark_lost+0x154/0x160
->> tcp_enter_loss+0x2b/0x290
->> tcp_retransmit_timer+0x50b/0x640
->> tcp_write_timer_handler+0x1c8/0x340
->> tcp_write_timer+0xe5/0x140
->> call_timer_fn+0x3a/0x1b0
->> __run_timers.part.0+0x1bf/0x2d0
->> run_timer_softirq+0x43/0xb0
->> __do_softirq+0xfd/0x373
->> __irq_exit_rcu+0xf6/0x140
->>
->> The warning is caused in the following steps:
->> 1. a socket named socketA is created
->> 2. socketA enters repair mode without build a connection
->> 3. socketA calls connect() and its state is changed to TCP_ESTABLISHED
->>     directly
->> 4. socketA leaves repair mode
->> 5. socketA calls sendmsg() to send data, packets_out and sack_outs(dup
->>     ack receives) increase
->> 6. socketA enters repair mode again
->> 7. socketA calls setsockopt with TCPOPT_SACK_PERM to enable sack
->> 8. retransmit timer expires, it calls tcp_timeout_mark_lost(), lost_out
->>     increases
->> 9. sack_outs + lost_out > packets_out triggers since lost_out and
->>     sack_outs increase repeatly
->>
->> In function tcp_timeout_mark_lost(), tp->sacked_out will be cleared if
->> Step7 not happen and the warning will not be triggered. As suggested by
->> Denis and Eric, TCP_REPAIR_OPTIONS should be prohibited if data was
->> already sent. So this patch checks tp->segs_out, only TCP_REPAIR_OPTIONS
->> can be set only if tp->segs_out is 0.
->>
->> socket-tcp tests in CRIU has been tested as follows:
->> $ sudo ./test/zdtm.py run -t zdtm/static/socket-tcp*  --keep-going \
->>         --ignore-taint
->>
->> socket-tcp* represent all socket-tcp tests in test/zdtm/static/.
->>
->> Fixes: b139ba4e90dc ("tcp: Repair connection-time negotiated parameters")
->> Signed-off-by: Lu Wei <luwei32@huawei.com>
->> ---
->>   net/ipv4/tcp.c | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
->> index ef14efa1fb70..1f5cc32cf0cc 100644
->> --- a/net/ipv4/tcp.c
->> +++ b/net/ipv4/tcp.c
->> @@ -3647,7 +3647,7 @@ int do_tcp_setsockopt(struct sock *sk, int level, int optname,
->>          case TCP_REPAIR_OPTIONS:
->>                  if (!tp->repair)
->>                          err = -EINVAL;
->> -               else if (sk->sk_state == TCP_ESTABLISHED)
->> +               else if (sk->sk_state == TCP_ESTABLISHED && !tp->segs_out)
-> The tp->segs_out field is only 32 bits wide. By my math, at 200
-> Gbit/sec with 1500 byte MTU it can wrap roughly every 260 secs. So a
-> caller could get unlucky or carefully sequence its call to
-> TCP_REPAIR_OPTIONS (based on packets sent so far) to mess up the
-> accounting and trigger the kernel warning.
->
-> How about using some other method to determine if this is safe?
-> Perhaps using tp->bytes_sent, which is a 64-bit field, which by my
-> math would take 23 years to wrap at 200 Gbit/sec?
->
-> If we're more paranoid about wrapping we could also check
-> tp->packets_out, and refuse to allow TCP_REPAIR_OPTIONS if either
-> tp->bytes_sent or tp->packets_out are non-zero. (Or if we're even more
-> paranoid I suppose we could have a special new bit to track whether
-> we've ever sent something, but that probably seems like overkill?)
->
-> neal
-> .
 
-I didn't notice that u32 will be easily wrapped in huge network throughput,
-thank you neal.
+On 2022/10/31 21:11, Michal Koutný wrote:
+> Hello.
+> 
+>> 1) If calls 'css_set_update_populated' , the cset is either getting the
+>> first task or losing the last. There is a need to update the populated
+>> state of the cset only when 'css_set_populated' returns false.
+>> In other words, the last has been deleted from from_cset and the first
+>> hasn't been added to to_cset yet.
+> 
+> I've likely misread the condition previously. I see how this works now
+> (update happens after "from_cset" but before "to_cset" migration).
+> 
+>> 3) In order to update the populated state of to_cset the same way
+>> from_cset does, 'css_set_update_populated' is also invoked during the
+>> process of moving a task to to_cset.
+> 
+> As I think more about this in the context of vertical migrations
+> (ancestor<->descendant, such as during controller dis- or enablement),
+> I'm afraid the inverted order would lead to "spurious" emptiness
+> notifications in ancestors (in the case a there is just a single task
+> that migrates parent->child, parent/cgroup.populated would generate and
+> event that'd be nullified by the subsequent population of the child).
+Hi, Michal.
 
-But tcp->packets_out shoud not be used because tp->packets_out can decrease
-when expected ack is received, so it can decrease to 0 and this is the common
-condition.
+I understand your worries. Can I just check the populated state of
+css_set in 'css_set_update_populated' and don't change the order any
+more? I think it can also streamline 'css_set_move_task' a bit.
 
--- 
-Best Regards,
-Lu Wei
-
+Thanks,
+Hiafeng.
+> 
+> So I'm not sure the change is worth it.
+> 
+> Michal
