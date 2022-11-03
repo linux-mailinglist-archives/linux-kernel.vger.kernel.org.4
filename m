@@ -2,286 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 112536175D5
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 05:56:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 423B96175D7
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 05:58:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231201AbiKCE4T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 00:56:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39732 "EHLO
+        id S229600AbiKCE6M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 00:58:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230315AbiKCEzt (ORCPT
+        with ESMTP id S229459AbiKCE6J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 00:55:49 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D28818E06
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 21:55:44 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id e8-20020a5b0cc8000000b006bca0fa3ab6so1190198ybr.0
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 21:55:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=MUgYFeR5VfNnBAi81qTIwK/qXUSt8bp2iygLv7fkD0I=;
-        b=LeDk8/TRVg8xXxlznJRt+RCwNDDHza+JEdecE94JgWkd3rGy6uwrw8Yl4PaThYu5/+
-         z9HRGBHP8ToxGpa0HXQxp2QPs/Za8onmkLQ+zdmhIipKdGwVMCBQ+3PeBRYDFLRVsuOp
-         ZphtKT5sO1e7s3qj+sBndvEzn4724j7Z/17Be8qF/nz/HcIX0k+z1MsHxxzVl03i+U5D
-         5p/j/ttFlA0+J25pxMBFmkkQEyFmyq70sI/rwRTGBxAzZwsrkw2L1Njc3zNo78Ova3iZ
-         mGoc91qD+Q8jtGjU7M+QvzbFRoWNs+w9DpHqOhWjdEM1bJhBTbXskj5df5j5Rr+rXYPL
-         s0rA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=MUgYFeR5VfNnBAi81qTIwK/qXUSt8bp2iygLv7fkD0I=;
-        b=hnqTRMDaOjZjJiJiaRRS2Xk3Qry0HCPDqo/9e5xyebrqIVlpT5uAub/5BF2GBwCszj
-         z8HydQvF2+I8AZMiBJknymT4ue9zn5gFu+Ci4gaysYD/GesqGkYjPjeXwOXZPZBYuccT
-         eT6y8YWByqwlTMywTVLmxv6MICRA27P/KKE6UyzUnOIRAek3rfCwB1g8g27tHnw96ROt
-         G3S8YQQv3KQ/yQXVGoICVpDNDPpo1GSWYHDjaPAmQK9l6PLO1+8X7/i2SSaRhg+knNAY
-         UhbrBaaqvGCXxetcrhyw6MrJ0mYvmx1BkQK5FuuauZYfiSNRLu2h+govz6xEcZIrjnlG
-         6mZQ==
-X-Gm-Message-State: ACrzQf2ayFwmcCQkSrw9Fxlts9piXLNFKboDTba/iFV86P3SbR1Q6fyK
-        mwPZcthsMPTQ9ShpY1sPCl+OzaQut+nF
-X-Google-Smtp-Source: AMsMyM7Y111fR7xKROa1RHADLVwif/tfIJe5C17IVuQjIhJqnZ3Zpotw2FwXO9aSGAPUssk+c+tONkUubZEg
-X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:8a9d:7f38:6465:2d7b])
- (user=irogers job=sendgmr) by 2002:a25:a08c:0:b0:6cf:e475:2b41 with SMTP id
- y12-20020a25a08c000000b006cfe4752b41mr7693876ybh.326.1667451343895; Wed, 02
- Nov 2022 21:55:43 -0700 (PDT)
-Date:   Wed,  2 Nov 2022 21:54:37 -0700
-In-Reply-To: <20221103045437.163510-1-irogers@google.com>
-Message-Id: <20221103045437.163510-8-irogers@google.com>
-Mime-Version: 1.0
-References: <20221103045437.163510-1-irogers@google.com>
-X-Mailer: git-send-email 2.38.1.273.g43a17bfeac-goog
-Subject: [PATCH v1 7/7] perf bpf: Remove now unused BPF headers
-From:   Ian Rogers <irogers@google.com>
-To:     Leo Yan <leo.yan@linaro.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Stephane Eranian <eranian@google.com>,
-        Ian Rogers <irogers@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 3 Nov 2022 00:58:09 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2F4F17E1A
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 21:58:08 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2A34w3Tj104573;
+        Wed, 2 Nov 2022 23:58:03 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1667451483;
+        bh=4iQp2SQBUEk5ytWus0w+Z76aptO8qBE/W1pEv83Jcic=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=dsRDT8YkE9DTPiUGjpbH79k4PCs4zsEmGgQE89Y44KSyaRQ7TtNxF0SM3/0IeUc0U
+         ZGkGctdnZi2rM6DBGOJsA0bjT2rwLgjkwJoLPdnMp1D8z7702hGyH8Q8YEMQ7t4aIf
+         MDFcFECP/Kk6lPy8BBilNf5ZM0GeYeB5J/V77VOI=
+Received: from DFLE107.ent.ti.com (dfle107.ent.ti.com [10.64.6.28])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2A34w3ib007369
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 2 Nov 2022 23:58:03 -0500
+Received: from DFLE114.ent.ti.com (10.64.6.35) by DFLE107.ent.ti.com
+ (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Wed, 2 Nov
+ 2022 23:58:02 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE114.ent.ti.com
+ (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
+ Frontend Transport; Wed, 2 Nov 2022 23:58:02 -0500
+Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2A34w2TT036424;
+        Wed, 2 Nov 2022 23:58:02 -0500
+Date:   Wed, 2 Nov 2022 23:58:02 -0500
+From:   Nishanth Menon <nm@ti.com>
+To:     <zhang.songyi@zte.com.cn>
+CC:     <kristo@kernel.org>, <ssantosh@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <jiang.xuexin@zte.com.cn>,
+        <xue.zhihong@zte.com.cn>
+Subject: Re: [PATCH linux-next] firmware: ti_sci: Use
+ of_device_get_match_data()
+Message-ID: <20221103045802.xtjiclljnficcmxc@bulginess>
+References: <202211021657454006946@zte.com.cn>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <202211021657454006946@zte.com.cn>
+User-Agent: NeoMutt/20171215
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Example code has migrated to use standard BPF header files, remove
-unnecessary perf equivalents. Update install step to not try to copy
-these.
+On 16:57-20221102, zhang.songyi@zte.com.cn wrote:
+> From 18dbde082d02c871453c5be8c762b6383a2f9641 Mon Sep 17 00:00:00 2001
+> From: zhang songyi <zhang.songyi@zte.com.cn>
+> Date: Wed, 2 Nov 2022 16:17:54 +0800
+> Subject: [PATCH linux-next] firmware: ti_sci: Use of_device_get_match_data()
+> 
+> Use of_device_get_match_data() to simplify the code.
+> 
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
+> Signed-off-by: zhang songyi <zhang.songyi@zte.com.cn>
+> ---
+>  drivers/firmware/ti_sci.c | 6 ++----
+>  1 file changed, 2 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/firmware/ti_sci.c b/drivers/firmware/ti_sci.c
+> index 6d2fd0ff7ff3..7db7d840fbb2 100644
+> --- a/drivers/firmware/ti_sci.c
+> +++ b/drivers/firmware/ti_sci.c
+> @@ -3340,7 +3340,6 @@ MODULE_DEVICE_TABLE(of, ti_sci_of_match);
+>  static int ti_sci_probe(struct platform_device *pdev)
+>  {
+>     struct device *dev = &pdev->dev;
+> -   const struct of_device_id *of_id;
+>     const struct ti_sci_desc *desc;
+>     struct ti_sci_xfer *xfer;
+>     struct ti_sci_info *info = NULL;
+> @@ -3351,12 +3350,11 @@ static int ti_sci_probe(struct platform_device *pdev)
+>     int reboot = 0;
+>     u32 h_id;
+> 
+> -   of_id = of_match_device(ti_sci_of_match, dev);
+> -   if (!of_id) {
+> +   desc = of_device_get_match_data(dev);
+> +   if (!desc) {
+>         dev_err(dev, "OF data missing\n");
+>         return -EINVAL;
+>     }
+> -   desc = of_id->data;
+> 
+>     info = devm_kzalloc(dev, sizeof(*info), GFP_KERNEL);
+>     if (!info)
+> --
+> 2.15.2
 
-Signed-off-by: Ian Rogers <irogers@google.com>
----
- tools/perf/Makefile.perf              |  5 --
- tools/perf/include/bpf/bpf.h          | 70 ---------------------------
- tools/perf/include/bpf/linux/socket.h | 24 ---------
- tools/perf/include/bpf/pid_filter.h   | 21 --------
- tools/perf/include/bpf/stdio.h        | 16 ------
- tools/perf/include/bpf/unistd.h       | 10 ----
- 6 files changed, 146 deletions(-)
- delete mode 100644 tools/perf/include/bpf/bpf.h
- delete mode 100644 tools/perf/include/bpf/linux/socket.h
- delete mode 100644 tools/perf/include/bpf/pid_filter.h
- delete mode 100644 tools/perf/include/bpf/stdio.h
- delete mode 100644 tools/perf/include/bpf/unistd.h
 
-diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
-index a432e59afc42..67819f905611 100644
---- a/tools/perf/Makefile.perf
-+++ b/tools/perf/Makefile.perf
-@@ -960,11 +960,6 @@ endif
- 	$(call QUIET_INSTALL, libexec) \
- 		$(INSTALL) -d -m 755 '$(DESTDIR_SQ)$(perfexec_instdir_SQ)'
- ifndef NO_LIBBPF
--	$(call QUIET_INSTALL, bpf-headers) \
--		$(INSTALL) -d -m 755 '$(DESTDIR_SQ)$(perf_include_instdir_SQ)/bpf'; \
--		$(INSTALL) -d -m 755 '$(DESTDIR_SQ)$(perf_include_instdir_SQ)/bpf/linux'; \
--		$(INSTALL) include/bpf/*.h -m 644 -t '$(DESTDIR_SQ)$(perf_include_instdir_SQ)/bpf'; \
--		$(INSTALL) include/bpf/linux/*.h -m 644 -t '$(DESTDIR_SQ)$(perf_include_instdir_SQ)/bpf/linux'
- 	$(call QUIET_INSTALL, bpf-examples) \
- 		$(INSTALL) -d -m 755 '$(DESTDIR_SQ)$(perf_examples_instdir_SQ)/bpf'; \
- 		$(INSTALL) examples/bpf/*.c -m 644 -t '$(DESTDIR_SQ)$(perf_examples_instdir_SQ)/bpf'
-diff --git a/tools/perf/include/bpf/bpf.h b/tools/perf/include/bpf/bpf.h
-deleted file mode 100644
-index b422aeef5339..000000000000
---- a/tools/perf/include/bpf/bpf.h
-+++ /dev/null
-@@ -1,70 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0
--#ifndef _PERF_BPF_H
--#define _PERF_BPF_H
--
--#include <uapi/linux/bpf.h>
--
--/*
-- * A helper structure used by eBPF C program to describe map attributes to
-- * elf_bpf loader, taken from tools/testing/selftests/bpf/bpf_helpers.h:
-- */
--struct bpf_map {
--        unsigned int type;
--        unsigned int key_size;
--        unsigned int value_size;
--        unsigned int max_entries;
--        unsigned int map_flags;
--        unsigned int inner_map_idx;
--        unsigned int numa_node;
--};
--
--#define bpf_map(name, _type, type_key, type_val, _max_entries)	\
--struct bpf_map SEC("maps") name = {				\
--	.type	     = BPF_MAP_TYPE_##_type,			\
--	.key_size    = sizeof(type_key),			\
--	.value_size  = sizeof(type_val),			\
--	.max_entries = _max_entries,				\
--};								\
--struct ____btf_map_##name {					\
--	type_key key;						\
--	type_val value;                                 	\
--};								\
--struct ____btf_map_##name __attribute__((section(".maps." #name), used)) \
--	____btf_map_##name = { }
--
--/*
-- * FIXME: this should receive .max_entries as a parameter, as careful
-- *	  tuning of these limits is needed to avoid hitting limits that
-- *	  prevents other BPF constructs, such as tracepoint handlers,
-- *	  to get installed, with cryptic messages from libbpf, etc.
-- *	  For the current need, 'perf trace --filter-pids', 64 should
-- *	  be good enough, but this surely needs to be revisited.
-- */
--#define pid_map(name, value_type) bpf_map(name, HASH, pid_t, value_type, 64)
--
--static int (*bpf_map_update_elem)(struct bpf_map *map, void *key, void *value, u64 flags) = (void *)BPF_FUNC_map_update_elem;
--static void *(*bpf_map_lookup_elem)(struct bpf_map *map, void *key) = (void *)BPF_FUNC_map_lookup_elem;
--
--static void (*bpf_tail_call)(void *ctx, void *map, int index) = (void *)BPF_FUNC_tail_call;
--
--#define SEC(NAME) __attribute__((section(NAME),  used))
--
--#define probe(function, vars) \
--	SEC(#function "=" #function " " #vars) function
--
--#define syscall_enter(name) \
--	SEC("syscalls:sys_enter_" #name) syscall_enter_ ## name
--
--#define syscall_exit(name) \
--	SEC("syscalls:sys_exit_" #name) syscall_exit_ ## name
--
--#define license(name) \
--char _license[] SEC("license") = #name; \
--int _version SEC("version") = LINUX_VERSION_CODE;
--
--static int (*probe_read)(void *dst, int size, const void *unsafe_addr) = (void *)BPF_FUNC_probe_read;
--static int (*probe_read_str)(void *dst, int size, const void *unsafe_addr) = (void *)BPF_FUNC_probe_read_str;
--
--static int (*perf_event_output)(void *, struct bpf_map *, int, void *, unsigned long) = (void *)BPF_FUNC_perf_event_output;
--
--#endif /* _PERF_BPF_H */
-diff --git a/tools/perf/include/bpf/linux/socket.h b/tools/perf/include/bpf/linux/socket.h
-deleted file mode 100644
-index 7f844568dab8..000000000000
---- a/tools/perf/include/bpf/linux/socket.h
-+++ /dev/null
-@@ -1,24 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
--#ifndef _UAPI_LINUX_SOCKET_H
--#define _UAPI_LINUX_SOCKET_H
--
--/*
-- * Desired design of maximum size and alignment (see RFC2553)
-- */
--#define _K_SS_MAXSIZE	128	/* Implementation specific max size */
--#define _K_SS_ALIGNSIZE	(__alignof__ (struct sockaddr *))
--				/* Implementation specific desired alignment */
--
--typedef unsigned short __kernel_sa_family_t;
--
--struct __kernel_sockaddr_storage {
--	__kernel_sa_family_t	ss_family;		/* address family */
--	/* Following field(s) are implementation specific */
--	char		__data[_K_SS_MAXSIZE - sizeof(unsigned short)];
--				/* space to achieve desired size, */
--				/* _SS_MAXSIZE value minus size of ss_family */
--} __attribute__ ((aligned(_K_SS_ALIGNSIZE)));	/* force desired alignment */
--
--#define sockaddr_storage __kernel_sockaddr_storage
--
--#endif /* _UAPI_LINUX_SOCKET_H */
-diff --git a/tools/perf/include/bpf/pid_filter.h b/tools/perf/include/bpf/pid_filter.h
-deleted file mode 100644
-index 6e61c4bdf548..000000000000
---- a/tools/perf/include/bpf/pid_filter.h
-+++ /dev/null
-@@ -1,21 +0,0 @@
--// SPDX-License-Identifier: LGPL-2.1
--
--#ifndef _PERF_BPF_PID_FILTER_
--#define _PERF_BPF_PID_FILTER_
--
--#include <bpf.h>
--
--#define pid_filter(name) pid_map(name, bool)
--
--static int pid_filter__add(struct bpf_map *pids, pid_t pid)
--{
--	bool value = true;
--	return bpf_map_update_elem(pids, &pid, &value, BPF_NOEXIST);
--}
--
--static bool pid_filter__has(struct bpf_map *pids, pid_t pid)
--{
--	return bpf_map_lookup_elem(pids, &pid) != NULL;
--}
--
--#endif // _PERF_BPF_PID_FILTER_
-diff --git a/tools/perf/include/bpf/stdio.h b/tools/perf/include/bpf/stdio.h
-deleted file mode 100644
-index 316af5b2ff35..000000000000
---- a/tools/perf/include/bpf/stdio.h
-+++ /dev/null
-@@ -1,16 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0
--
--#include <bpf.h>
--
--struct bpf_map SEC("maps") __bpf_stdout__ = {
--       .type = BPF_MAP_TYPE_PERF_EVENT_ARRAY,
--       .key_size = sizeof(int),
--       .value_size = sizeof(u32),
--       .max_entries = __NR_CPUS__,
--};
--
--#define puts(from) \
--	({ const int __len = sizeof(from); \
--	   char __from[__len] = from; \
--	   perf_event_output(args, &__bpf_stdout__, BPF_F_CURRENT_CPU, \
--			  &__from, __len & (sizeof(from) - 1)); })
-diff --git a/tools/perf/include/bpf/unistd.h b/tools/perf/include/bpf/unistd.h
-deleted file mode 100644
-index ca7877f9a976..000000000000
---- a/tools/perf/include/bpf/unistd.h
-+++ /dev/null
-@@ -1,10 +0,0 @@
--// SPDX-License-Identifier: LGPL-2.1
--
--#include <bpf.h>
--
--static int (*bpf_get_current_pid_tgid)(void) = (void *)BPF_FUNC_get_current_pid_tgid;
--
--static pid_t getpid(void)
--{
--	return bpf_get_current_pid_tgid();
--}
+Could you please use git send-email to post patch following guidelines?
+
 -- 
-2.38.1.273.g43a17bfeac-goog
-
+Regards,
+Nishanth Menon
+Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
