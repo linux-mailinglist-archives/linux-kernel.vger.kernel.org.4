@@ -2,71 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6176617B6F
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 12:21:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3849617B70
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 12:22:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229993AbiKCLV0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 07:21:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41954 "EHLO
+        id S230165AbiKCLVy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 07:21:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbiKCLVX (ORCPT
+        with ESMTP id S229379AbiKCLVw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 07:21:23 -0400
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4B5610FCC
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 04:21:22 -0700 (PDT)
-Received: by mail-io1-f70.google.com with SMTP id i6-20020a5d88c6000000b006d088a0e518so829443iol.19
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 04:21:22 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rHnXEf0M9YsxOsLvkyf2QDTjUwvP7IxH0p7vNmDb/q0=;
-        b=eV3iZwzf7L81QJSoe2HySjsEM9JQ23QnYLhSdGywuhN/oxGmjO36M/VxhIZ8g2M477
-         Tg22QNTKNRiHI+jY4DwcgGOg0b5v4gl5pkfonqkdPl4aaVQlwgHBdJfMnZ65p4Pc0zJt
-         9syySDpD9C2fdDU1X9Yt/YmxQ8EWk4un4NxSbE+8nn7GoBKLxFkSZ7kYqFf9sV9Xsoak
-         sHpeJF+uaPNLaEdDcXWBK0yoEmBAUpsLx1L0WABeKVL2ZaJVOSDnCeSL8gF6lYeySjxz
-         aD2Lb1nIULVSnCJTu5OpiiZbXWmSNyXpX6DfHTOSQ95Id808qpoTgSDe9tGyiCvZH47J
-         zTgw==
-X-Gm-Message-State: ACrzQf0cFhibbYa/BjkyZALh1rJIYHV6b4NfGrxjfwGiTlL7DbNUiBfT
-        lDC/VouSuzkVhTakOdJaBjWFQsBpQrha+n5rnHiRm2CRBJdS
-X-Google-Smtp-Source: AMsMyM4NgnZoi5ORikvhzVJB/yNelYixw83omSUCIaLsic73GYFHOVcw1J1rtrHVc3Jcsp/leA9a4PGLokFVwq6F8NwaCbamX4I2
+        Thu, 3 Nov 2022 07:21:52 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 99C8210FCC
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 04:21:51 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 981A01FB;
+        Thu,  3 Nov 2022 04:21:57 -0700 (PDT)
+Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 716973F5A1;
+        Thu,  3 Nov 2022 04:21:49 -0700 (PDT)
+Date:   Thu, 3 Nov 2022 11:21:47 +0000
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     Cristian Marussi <cristian.marussi@arm.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        james.quinlan@broadcom.com, Jonathan.Cameron@Huawei.com,
+        etienne.carriere@linaro.org, vincent.guittot@linaro.org,
+        souvik.chakravarty@arm.com, wleavitt@marvell.com,
+        peter.hilber@opensynergy.com, nicola.mazzucato@arm.com,
+        tarek.el-sherbiny@arm.com, quic_kshivnan@quicinc.com,
+        Sudeep Holla <sudeep.holla@arm.com>
+Subject: Re: [PATCH v4 0/11] Introduce a unified API for SCMI Server testing
+Message-ID: <20221103112147.rq2v7dwte577kmb4@bogus>
+References: <20221019204626.3813043-1-cristian.marussi@arm.com>
+ <fc09a68c-bd6d-0328-4052-88d40b50077d@gmail.com>
 MIME-Version: 1.0
-X-Received: by 2002:a92:b07:0:b0:300:e141:40cc with SMTP id
- b7-20020a920b07000000b00300e14140ccmr828785ilf.309.1667474482198; Thu, 03 Nov
- 2022 04:21:22 -0700 (PDT)
-Date:   Thu, 03 Nov 2022 04:21:22 -0700
-In-Reply-To: <20221103001520.4011-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000002f013b05ec8f28bd@google.com>
-Subject: Re: [syzbot] possible deadlock in static_key_slow_inc (2)
-From:   syzbot <syzbot+c39682e86c9d84152f93@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <fc09a68c-bd6d-0328-4052-88d40b50077d@gmail.com>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Fri, Oct 28, 2022 at 07:38:25PM -0700, Florian Fainelli wrote:
+> Hi Christian,
+> 
+> On 10/19/2022 1:46 PM, Cristian Marussi wrote:
+> [snip]
+> 
+> > In V2 the runtime enable/disable switching capability has been removed
+> > (for now) since still not deemed to be stable/reliable enough: as a
+> > consequence when SCMI Raw support is compiled in, the regular SCMI stack
+> > drivers are now inhibited permanently for that Kernel.
+> 
+> For our platforms (ARCH_BRCMSTB) we would need to have the ability to start
+> with the regular SCMI stack to satisfy if nothing else, all clock consumers
+> otherwise it makes it fairly challenging for us to boot to a prompt as we
+> purposely turn off all unnecessary peripherals to conserve power. We could
+> introduce a "full on" mode to remove the clock provider dependency, but I
+> suspect others on "real" silicon may suffer from the same short comings.
+>
 
-syzbot tried to test the proposed patch but the build/boot failed:
+Fair enough. But if we are doing SCMI firmware testing or conformance via
+the $subject proposed way, can these drivers survive if the userspace do
+a random or a torture test changing the clock configurations ? Not sure
+how to deal with that as the intention here is to do the testing from the
+user-space and anything can happen. How do we avoid bring the entire system
+down while doing this testing. Can we unbind all the drivers using scmi on
+your platform ? I guess no. Let me know.
 
-kernel/cgroup/legacy_freezer.c:355:35: error: passing argument 1 of 'static_key_slow_inc_cpuslocked' from incompatible pointer type [-Werror=incompatible-pointer-types]
-kernel/cgroup/legacy_freezer.c:366:36: error: passing argument 1 of 'static_key_slow_dec_cpuslocked' from incompatible pointer type [-Werror=incompatible-pointer-types]
+> Once user-space is reached, I suppose we could find a way to unbind from all
+> SCMI consumers, and/or ensure that runtime PM is disabled, cpufreq is in a
+> governor that won't do any active frequency switching etc.
+>
+> What do you think?
 
+Yes, Cristian always wanted to support that but I am the one trying to
+convince him not to unless there is a strong requirement for it. You seem
+to suggest that you have such a requirement, but that just opens loads of
+questions and how to we deal with that. Few of them are as stated above, I
+need to recall all the conversations I had with Cristian around that and why
+handling it may be bit complex.
 
-Tested on:
-
-commit:         a2c65a9d net: dsa: fall back to default tagger if we c..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git
-dashboard link: https://syzkaller.appspot.com/bug?extid=c39682e86c9d84152f93
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=140c7046880000
-
+--
+Regards,
+Sudeep
