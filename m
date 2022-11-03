@@ -2,57 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99FDC6184D5
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 17:37:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 394DD6184E3
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 17:39:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232038AbiKCQhq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 12:37:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57506 "EHLO
+        id S232221AbiKCQj0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 12:39:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231913AbiKCQh1 (ORCPT
+        with ESMTP id S230301AbiKCQjD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 12:37:27 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48EAF2250D;
-        Thu,  3 Nov 2022 09:34:31 -0700 (PDT)
+        Thu, 3 Nov 2022 12:39:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FC3D1EC4A;
+        Thu,  3 Nov 2022 09:35:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 52273CE25AB;
-        Thu,  3 Nov 2022 16:34:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 889ADC433D6;
-        Thu,  3 Nov 2022 16:34:08 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5D5E161F5D;
+        Thu,  3 Nov 2022 16:34:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC8E7C433D6;
+        Thu,  3 Nov 2022 16:34:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667493248;
-        bh=1Bv/v+/mHhcB6d9gI+g/4wnALLUDPHN6sTCbpCCTzvw=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=XU+OyksUyUuh3tc8EVx/z2kSZ4uZlvXpl6koVetu7U1KasNMooKH3geBdAKDVec/4
-         6CXOMS18/injViwiAMxK3lzncXVgEe/I1G7462u8e3gfNz1Q2P/Ij81+wkeoGH1D54
-         ay+1DJwfd7JQi5+21N3DHf2UAoc3sVygu2Yx9ntTlFlyiyl+y8Dow0GL4h3305CN86
-         F2jlcvnP6sc1Ox4SFLt8Uoc4OtukJFy693hka9wD/at0/cCNAH5D/7Iqf+c3Ujy+bW
-         wpnd5Mgq5MJ6tYGfi6eRP5kw6Orokn2tiQru89ZQ7L+E2Hd/3O24GD4oKqAGr1jQy/
-         Af885LPFDSMAA==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 2A8FD5C097E; Thu,  3 Nov 2022 09:34:08 -0700 (PDT)
-Date:   Thu, 3 Nov 2022 09:34:08 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Uladzislau Rezki <urezki@gmail.com>
-Cc:     Joel Fernandes <joel@joelfernandes.org>, rcu@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RFC] rcu/kfree: Do not request RCU when not needed
-Message-ID: <20221103163408.GU5600@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20221102184911.GP5600@paulmck-ThinkPad-P17-Gen-1>
- <755B5ED1-653D-4E57-B114-77CDE10A9033@joelfernandes.org>
- <20221102202813.GR5600@paulmck-ThinkPad-P17-Gen-1>
- <CAEXW_YQ+SxBoNUkPHhC3O0DJNQtZomN_4GPtvaWuDs5sSU4FAw@mail.gmail.com>
- <20221102223516.GT5600@paulmck-ThinkPad-P17-Gen-1>
- <Y2O3w3d3qmTg6VAP@pc638.lan>
- <Y2O8k2U+ACr1N6Fe@pc638.lan>
+        s=k20201202; t=1667493294;
+        bh=/ccW2ZLYtie//iuE3Z0X9cbimEJCwup/DH2xpMNHLnI=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=UWukCzRGudBv919/sH+I74MEzypxqLqYpIvPo+K0bDcfXWiWyDMyD6iMuQPIhOtL0
+         j4uh5dfTRvuifo39nRCKLeELXdhbUdvDqp21GVSiXdyeYPTq93n+WF0rgsyWbgCfXD
+         SBXLEtYj4br6ie5vVw7sXYuK7VX9ER1WKdtTmoHv4fjpuDQft3x17gxRFgbtk+xi0b
+         Im+Y5+cO63sgDPY0pjSa3QvILW1IVRqPFAI4hfcCI4+l3d9bGe8h6OEh4OomJuuWoJ
+         JRp0TswL+av9oAc+vtrBb0x1OV0OrmhaqdYrH7EPDTDMHp8DMNF8tXUaLv/Ia2g7IF
+         sH9N9pR0bXD3A==
+From:   Mark Brown <broonie@kernel.org>
+To:     Liam Girdwood <liam.r.girdwood@linux.intel.com>,
+        Colin Ian King <colin.i.king@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Brent Lu <brent.lu@intel.com>,
+        Cezary Rojewski <cezary.rojewski@intel.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        alsa-devel@alsa-project.org,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Takashi Iwai <tiwai@suse.com>,
+        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20221103120624.72583-1-colin.i.king@gmail.com>
+References: <20221103120624.72583-1-colin.i.king@gmail.com>
+Subject: Re: [PATCH] ASoC: Intel: cirrus-common: Make const array uid_strings static
+Message-Id: <166749329166.480833.13410330883416925257.b4-ty@kernel.org>
+Date:   Thu, 03 Nov 2022 16:34:51 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y2O8k2U+ACr1N6Fe@pc638.lan>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.10.0-dev-fc921
 X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -62,37 +64,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 03, 2022 at 02:05:23PM +0100, Uladzislau Rezki wrote:
-> On Thu, Nov 03, 2022 at 01:44:51PM +0100, Uladzislau Rezki wrote:
-> > > 
-> > > > Though I am thinking, workqueue context is normally used to invoke
-> > > > code that can block, and would the issue you mentioned affect those as
-> > > > well, or affect RCU when those non-RCU work items block. So for
-> > > > example, when other things in the system that can queue things on the
-> > > > system_wq and block.  (I might be throwing darts in the dark).
-> > > > 
-> > > > To be safe, we can implement your suggestion which is basically a form
-> > > > of my initial patch.
-> > > > 
-> > > > Should we add Tejun to the thread?
-> > > 
-> > > Let's get organized first, but that would be a good thing.  Or I could
-> > > reach out to Tejun internally.
-> > > 
-> > > For but one thing to get organized about, maybe kfree_rcu() should be
-> > > using a workqueue with the WQ_MEM_RECLAIM flag set.
-> > > 
-> > It can be as an option to consider. Because such workqueue has some
-> > special priority for better handling of memory releasing. I can have
-> > a look at it closer to see how kvfree_rcu() works if it goes with WQ_MEM_RECLAIM.
-> > 
-> An extra note. It would work well with posted patch because we can
-> directly queue the reclaim work to the WQ_MEM_RECLAIM queue.
+On Thu, 3 Nov 2022 12:06:24 +0000, Colin Ian King wrote:
+> Don't populate the read-only const array uid_strings on the stack but
+> instead make it static. Also makes the object code a little smaller.
 > 
-> As for now RCU-core kthreads like: rcugp, rcuop use "regular"
-> queue. I think system_wq one.
+> 
 
-Agreed, it is the expedited grace period that uses WQ_MEM_RECLAIM
-workqueues.
+Applied to
 
-							Thanx, Paul
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+
+Thanks!
+
+[1/1] ASoC: Intel: cirrus-common: Make const array uid_strings static
+      commit: b43d0c0a42b2c44da824b3de0364d73be722a8c7
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
