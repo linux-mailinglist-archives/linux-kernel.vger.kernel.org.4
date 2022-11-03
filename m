@@ -2,116 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0B646179EE
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 10:29:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75BB7617A05
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 10:34:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230301AbiKCJ3B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 05:29:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47172 "EHLO
+        id S229770AbiKCJdr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 05:33:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230005AbiKCJ2R (ORCPT
+        with ESMTP id S229501AbiKCJdp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 05:28:17 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A8E21057D;
-        Thu,  3 Nov 2022 02:27:19 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id j12so1366162plj.5;
-        Thu, 03 Nov 2022 02:27:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=aF9SCZOYOqwuCRWtDO+Kri8E5TpMnho7XD2CtgbqYc0=;
-        b=b7EcIXacH91Qelc+VV9DqHnM4gDYc/WCC8Wnf1U1iRRrIjiZ3Gd5a0nTM83zBRoqXR
-         aCrWJ/V0udsrsR65dS3rIv/ijySbIV6jez/PP3gLdDGe0lAduO12P5OJYw6/5kDkEqkw
-         qAjj0zi7LdOxrXrOzoq0TAIpAjIDNNzf7dtanfCTvhwCaIYpqRwokCmHMRTHerrL+Pvw
-         dV+vjZkWaR2RbWbIHuVkh7KVHkWXOhUYq/nuBOVGnPohp41bBr7ndbDdwTPR9AmLoqzm
-         YtyM1RapXaVytwfy7Zkaz2WjLQd3oKznS03+JcPT0jH5KSBhQ7KwfpP0OvB5Vx6+xbQp
-         gsFA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=aF9SCZOYOqwuCRWtDO+Kri8E5TpMnho7XD2CtgbqYc0=;
-        b=UFUvdePw+eGp4CeO/jJU0Btm+ZaYXY2n/jkns5girJUCVkJcIR7ygHEJNfyKR5kolu
-         3X5LeIhdxa7cTec52VFRE4X/fAyAELkCucKEu0UCeEObMOD9bstrX/mTwMsUoZDVuPUI
-         O9jRDqubJbFhoY7AnSpH2Zj70QcrrDfAA404zHsEXru2TQ+P2ecbFKEH8iN+rWQS1/ZE
-         6WI3Tr4WfP+adnI/5CCmPkv1rludvGS3R9CFFQRToxbRLR7gSYpOn7APk8M09T2v3XTn
-         oaRhacXUQ5EtIxGOhPmoeeoKuJIDcT8/hSfJiRjPMshVEJyUUyeZWTbdanLM87Y3tS7P
-         h5yw==
-X-Gm-Message-State: ACrzQf23tZI8P14VaWR1iR+EbGDjdOJGulwwELpr8KNvcXTCIH7E7fAr
-        p0Wa6DFeGg8PuUvsF6XlVls=
-X-Google-Smtp-Source: AMsMyM4+zqTTSGTgjqft+ak4Qp7b8N8HRL45G/Q5OKiqSymM2orthr0wi99Ls53bPdY7HFIK/hPByQ==
-X-Received: by 2002:a17:903:1112:b0:178:a030:5f72 with SMTP id n18-20020a170903111200b00178a0305f72mr29324771plh.12.1667467638702;
-        Thu, 03 Nov 2022 02:27:18 -0700 (PDT)
-Received: from ubuntu.localdomain ([118.73.150.53])
-        by smtp.gmail.com with ESMTPSA id s4-20020a170902ea0400b00186727e5f5csm82129plg.248.2022.11.03.02.27.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Nov 2022 02:27:17 -0700 (PDT)
-From:   Donglin Peng <dolinux.peng@gmail.com>
-To:     peterz@infradead.org, acme@kernel.org, adrian.hunter@intel.com
-Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        Donglin Peng <dolinux.peng@gmail.com>
-Subject: [PATCH v2] perf tools: exclude the include/perf/ directory
-Date:   Thu,  3 Nov 2022 02:27:04 -0700
-Message-Id: <20221103092704.173391-1-dolinux.peng@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 3 Nov 2022 05:33:45 -0400
+Received: from msg-1.mailo.com (msg-1.mailo.com [213.182.54.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9DF22AD4
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 02:33:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
+        t=1667468017; bh=u4ZMyCJTtwT9XM0J3JSr+5jhaUWlQ9C7oJqTqy8JPvU=;
+        h=X-EA-Auth:Date:From:To:Subject:Message-ID:MIME-Version:
+         Content-Type;
+        b=P48xDqiYtixEd4xMotP9apBBx9fXFI+Q3FCAS+DxRKaF6v1+m8U1nw2J+TO8WbGJZ
+         DyY7ASx9Vlk5OX29eAyRWaLefK4O0tTX7hf7H8cY6y0fW6aTKbxz5Xc5QpLz6XhEoH
+         2TP8bUaRlUYHQR+MBoW9bDdYd+/BR8lpopI4FPjU=
+Received: by b-5.in.mailobj.net [192.168.90.15] with ESMTP
+        via [213.182.55.206]
+        Thu,  3 Nov 2022 10:33:37 +0100 (CET)
+X-EA-Auth: hF2FJLaDPFT0hZmNHvh6y/Itb5Izeetu6Xp6eqBJ5RVBeGH4W2bLWnm02z/QsIonphbvwWNdqcVqTMIMy6QTHSVvpmEoNdsX
+Date:   Thu, 3 Nov 2022 15:03:29 +0530
+From:   Deepak R Varma <drv@mailo.com>
+To:     outreachy@lists.linux.dev,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] staging: rtl8723bs: Use min/max macros for variable
+ comparison
+Message-ID: <Y2OK6fcIkH3S2/1f@qemulion>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 3af1dfdd51e0 ("perf build: Move perf_dlfilters.h in the
-source tree") moved perf_dlfilters.h to the include/perf/ directory
-while include/perf is ignored because it has 'perf' in the name.
-Newly created files in the include/perf/ directory will be ignored.
+Simplify code by using min and max helper macros in place of lengthy
+if/else block oriented logical evaluation and value assignment. This
+issue is identified by coccicheck using the minmax.cocci file.
 
-Can check:
-
-Before:
-$ touch tools/perf/include/perf/junk
-$ git status | grep junk
-$ git check-ignore -v tools/perf/include/perf/junk
-tools/perf/.gitignore:6:perf    tools/perf/include/perf/junk
-
-After:
-$ git status | grep junk
-tools/perf/include/perf/junk
-$ git check-ignore -v tools/perf/include/perf/junk
-
-Add !include/perf/ to perf's .gitignore file.
-
-Fixes: 3af1dfdd51e0 ("perf build: Move perf_dlfilters.h in the source tree")
-Signed-off-by: Donglin Peng <dolinux.peng@gmail.com>
-Acked-by: Adrian Hunter <adrian.hunter@intel.com>
+Signed-off-by: Deepak R Varma <drv@mailo.com>
 ---
+
 Changes in v2:
-- add 'Fixes:' tag in commit message
-- make commit message more clearer
----
- tools/perf/.gitignore | 1 +
- 1 file changed, 1 insertion(+)
+   1. Remove unnecessary parenthesis around the min/max macro arguments as
+      suggested by julia.lawall@inria.fr
 
-diff --git a/tools/perf/.gitignore b/tools/perf/.gitignore
-index a653311d9693..fd7a6ff9e7aa 100644
---- a/tools/perf/.gitignore
-+++ b/tools/perf/.gitignore
-@@ -4,6 +4,7 @@ PERF-GUI-VARS
- PERF-VERSION-FILE
- FEATURE-DUMP
- perf
-+!include/perf/
- perf-read-vdso32
- perf-read-vdsox32
- perf-help
--- 
-2.25.1
+Please note:
+   1. Using min for max_AMPDU_len computation warning was NOT auto generated by
+      the coccicheck command. This was caught while surround code review and
+      was manually changed.
+   2. Checkpatch script continues to complaint about min_MPDU_spacing
+      computation line being more than 100 character in length. I did not find a
+      better formatting that will address this checkpatch warning. Any
+      suggestions are most welcome.
+   3. Proposed changes are compile tested only on my x86 based VM.
+
+
+ drivers/staging/rtl8723bs/core/rtw_wlan_util.c | 12 ++++--------
+ drivers/staging/rtl8723bs/hal/odm_DIG.c        |  5 +----
+ 2 files changed, 5 insertions(+), 12 deletions(-)
+
+diff --git a/drivers/staging/rtl8723bs/core/rtw_wlan_util.c b/drivers/staging/rtl8723bs/core/rtw_wlan_util.c
+index 18ba846c0b7b..ba39c8b1a9ae 100644
+--- a/drivers/staging/rtl8723bs/core/rtw_wlan_util.c
++++ b/drivers/staging/rtl8723bs/core/rtw_wlan_util.c
+@@ -986,15 +986,11 @@ void HT_caps_handler(struct adapter *padapter, struct ndis_80211_var_ie *pIE)
+ 			pmlmeinfo->HT_caps.u.HT_cap[i] &= (pIE->data[i]);
+ 		} else {
+ 			/* modify from  fw by Thomas 2010/11/17 */
+-			if ((pmlmeinfo->HT_caps.u.HT_cap_element.AMPDU_para & 0x3) > (pIE->data[i] & 0x3))
+-				max_AMPDU_len = (pIE->data[i] & 0x3);
+-			else
+-				max_AMPDU_len = (pmlmeinfo->HT_caps.u.HT_cap_element.AMPDU_para & 0x3);
++			max_AMPDU_len = min(pmlmeinfo->HT_caps.u.HT_cap_element.AMPDU_para & 0x3,
++					    pIE->data[i] & 0x3);
+
+-			if ((pmlmeinfo->HT_caps.u.HT_cap_element.AMPDU_para & 0x1c) > (pIE->data[i] & 0x1c))
+-				min_MPDU_spacing = (pmlmeinfo->HT_caps.u.HT_cap_element.AMPDU_para & 0x1c);
+-			else
+-				min_MPDU_spacing = (pIE->data[i] & 0x1c);
++			min_MPDU_spacing = max(pmlmeinfo->HT_caps.u.HT_cap_element.AMPDU_para & 0x1c,
++					       pIE->data[i] & 0x1c);
+
+ 			pmlmeinfo->HT_caps.u.HT_cap_element.AMPDU_para = max_AMPDU_len | min_MPDU_spacing;
+ 		}
+diff --git a/drivers/staging/rtl8723bs/hal/odm_DIG.c b/drivers/staging/rtl8723bs/hal/odm_DIG.c
+index 07edf74ccfe5..97a51546463a 100644
+--- a/drivers/staging/rtl8723bs/hal/odm_DIG.c
++++ b/drivers/staging/rtl8723bs/hal/odm_DIG.c
+@@ -598,10 +598,7 @@ void odm_DIGbyRSSI_LPS(void *pDM_VOID)
+ 	/* Lower bound checking */
+
+ 	/* RSSI Lower bound check */
+-	if ((pDM_Odm->RSSI_Min-10) > DM_DIG_MIN_NIC)
+-		RSSI_Lower = pDM_Odm->RSSI_Min-10;
+-	else
+-		RSSI_Lower = DM_DIG_MIN_NIC;
++	RSSI_Lower = max(pDM_Odm->RSSI_Min - 10, DM_DIG_MIN_NIC);
+
+ 	/* Upper and Lower Bound checking */
+ 	if (CurrentIGI > DM_DIG_MAX_NIC)
+--
+2.34.1
+
+
 
