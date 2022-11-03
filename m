@@ -2,116 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20153618794
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 19:33:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B99E61878B
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 19:32:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232094AbiKCSdI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 14:33:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60212 "EHLO
+        id S232005AbiKCScm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 14:32:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231907AbiKCScj (ORCPT
+        with ESMTP id S232013AbiKCScZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 14:32:39 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 293131DDFE
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 11:31:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667500269;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=96DwOq7bRZmj3BKNU2gLHyg7G0DUiTS1PVMxGzvJh30=;
-        b=HtaaUpn5EIAiH/KzQwpu/weLpQbTY6I4qTiVVGYHve/Wpy7GqLVFgnu6FrdbdexQLIKt6g
-        0jRzezpYw/hJJOuONWHDlJxsrSa7tKPr0Cd/b4H3sEYhXcGzPHTsLZxaBNth1LobJIWeJ8
-        lR3FLgN4DJ/MVDY5LZm9aJgXru0v/1M=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-341-qtvi-ILtOYa-FQVTwu_3NA-1; Thu, 03 Nov 2022 14:31:07 -0400
-X-MC-Unique: qtvi-ILtOYa-FQVTwu_3NA-1
-Received: by mail-wr1-f70.google.com with SMTP id u13-20020adfa18d000000b00236566b5b40so724434wru.9
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 11:31:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=96DwOq7bRZmj3BKNU2gLHyg7G0DUiTS1PVMxGzvJh30=;
-        b=t90I5ceKZH+lcqI7BP6eKqap1Accl4NXprzbLX7KkTUTndekgz+P1cJpdsZgQXmyWM
-         i61DnYp85cz/aHv8raLEksrezacGtZY/NpPQR98P4YPCc/hEmiLLmjZbWSNvl7EGXQC0
-         1kxPAjA0lcXs+rlVXVCiqFOHqssQjuWgWzfKG6CWVW5Hc4W7jiUccX5QQc3OMFWawLEk
-         ehn6p1j04AMvGA8ooVYCAooE6SI6FYNBcLWQtjs0PUryJYVb1mNKAkfr/0h2rhu3swyX
-         vgG1SbVJ4z3nMJGJE7GQJSCtC0bxAXxaovkKzMlXEtLwjI9hi439TmQAqEmNJZ6+2ECa
-         717w==
-X-Gm-Message-State: ACrzQf3nLb7/7z9DsuWIb3zvKFK29Rq97iymXU1sVul73YveX7N+bbsn
-        A+oKtdslb8T61i8RlDSQ9JhYXhVEPpqI86qEOCdVhRkf/1xUyLkwDgYQddnmxo1njySzNnlVhcK
-        vk/IlAV6G9CjpByg1RtIuMZmG
-X-Received: by 2002:a05:600c:314f:b0:3c6:f3fa:cfec with SMTP id h15-20020a05600c314f00b003c6f3facfecmr30397332wmo.68.1667500266792;
-        Thu, 03 Nov 2022 11:31:06 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM743biIUOhZ1cFkZY+y9Lx/XeNUQXdC75sHCosLEhgjYu6ofOamZkBxiiogbiBHGP4vmIMSiA==
-X-Received: by 2002:a05:600c:314f:b0:3c6:f3fa:cfec with SMTP id h15-20020a05600c314f00b003c6f3facfecmr30397319wmo.68.1667500266585;
-        Thu, 03 Nov 2022 11:31:06 -0700 (PDT)
-Received: from [192.168.1.130] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id d4-20020adff2c4000000b002366b17ca8bsm1665923wrp.108.2022.11.03.11.31.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Nov 2022 11:31:06 -0700 (PDT)
-Message-ID: <c8c7baad-e8ce-7683-933a-1d5f98f9c843@redhat.com>
-Date:   Thu, 3 Nov 2022 19:31:05 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH] drm: rcar_du: DRM_RCAR_DU optionally depends on
- RCAR_MIPI_DSI
-Content-Language: en-US
-To:     Randy Dunlap <rdunlap@infradead.org>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Thu, 3 Nov 2022 14:32:25 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 766F02180E
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 11:31:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 19F52B80B03
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 18:31:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id C32E9C433D6;
+        Thu,  3 Nov 2022 18:31:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667500292;
+        bh=2NyA4ERgTsQNrECcBYv8TSkJKybWzWdNA4MPIH0N2G4=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=IoCAnSJnLuvF8NAMTfZIrgj+qKcQaiKHeE2VyVTg2JXvDEwiCKwqEK7QvK1ITuOM8
+         B+AK+hcsj5pmqKNQTHvKb62isswoPTZ78bUyXeJHmFqMTKxbjc/5qS5OiCVoEz5od/
+         SnKoZqkYTdzvQoveh6JTFL6CEG56LzVQcALb1R7oKSAwdRQnHhUI36CYhiBN1ynfu5
+         cG4jaPkd4Cc0aF99sOBeqCP12DHICviyvuLkC71MDPL2l3pAEuHxU9R3mxwOS6W+gv
+         5RSReckjTDI1RYlCuT2W0QXh/xKlyJq+LJOKDvpzHl/ahL2tb+qoT18dfQpfyLfYRr
+         S/vsSE2w0U7DA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B1237C41621;
+        Thu,  3 Nov 2022 18:31:32 +0000 (UTC)
+Subject: Re: [GIT PULL] Please pull powerpc/linux.git powerpc-6.1-4 tag
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <87o7tossaa.fsf@mpe.ellerman.id.au>
+References: <87o7tossaa.fsf@mpe.ellerman.id.au>
+X-PR-Tracked-List-Id: Linux on PowerPC Developers Mail List <linuxppc-dev.lists.ozlabs.org>
+X-PR-Tracked-Message-Id: <87o7tossaa.fsf@mpe.ellerman.id.au>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git tags/powerpc-6.1-4
+X-PR-Tracked-Commit-Id: 02a771c9a68a9f08cce4ec5e324fb1bc4dce7202
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 4d74039149e0062e4ed25738d6e3e06970a38809
+Message-Id: <166750029271.3912.5527083554346380023.pr-tracker-bot@kernel.org>
+Date:   Thu, 03 Nov 2022 18:31:32 +0000
+To:     Michael Ellerman <mpe@ellerman.id.au>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        schwab@linux-m68k.org, linux-riscv@lists.infradead.org,
+        palmer@dabbelt.com, linuxppc-dev@lists.ozlabs.org,
         linux-kernel@vger.kernel.org
-Cc:     linux-renesas-soc@vger.kernel.org,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        LUU HOAI <hoai.luu.ub@renesas.com>,
-        dri-devel@lists.freedesktop.org,
-        Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
-References: <20221018181828.19528-1-rdunlap@infradead.org>
- <a68a24a0-eda3-8711-21c1-334289eca0d3@infradead.org>
- <166747314442.3962897.9754510086268412956@Monstersaurus>
- <c9064cc6-2a9d-1094-53fb-cf56f9cbf191@redhat.com>
- <f5a46aef-780e-6fec-85b4-82549fb7a7a1@infradead.org>
-From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <f5a46aef-780e-6fec-85b4-82549fb7a7a1@infradead.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/3/22 17:26, Randy Dunlap wrote:
+The pull request you sent on Thu, 03 Nov 2022 13:09:17 +1100:
 
-[...]
+> https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git tags/powerpc-6.1-4
 
->>
->> Randy, I think that it's more idiomatic though to it express as following:
->>
->> depends on DRM_RCAR_MIPI_DSI || !DRM_RCAR_MIPI_DSI
-> 
-> I count just over 200 of each idiom (but my grep strings could be
-> too crude). I guess that you want a v2 with that change?
-> 
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/4d74039149e0062e4ed25738d6e3e06970a38809
 
-I believe Kieran was happy with either so no objections from
-me. I don't have a strong opinion, I just thought the latter
-was more idiomatic but you said that both are used alike.
+Thank you!
 
 -- 
-Best regards,
-
-Javier Martinez Canillas
-Core Platforms
-Red Hat
-
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
