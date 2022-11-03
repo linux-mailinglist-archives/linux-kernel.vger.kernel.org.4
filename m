@@ -2,219 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8490E617CE8
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 13:45:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DD43617CE3
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 13:45:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231475AbiKCMpH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 08:45:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60250 "EHLO
+        id S231168AbiKCMo7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 08:44:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230094AbiKCMpA (ORCPT
+        with ESMTP id S230094AbiKCMoz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 08:45:00 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F146A10B5C;
-        Thu,  3 Nov 2022 05:44:59 -0700 (PDT)
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2A3CX835020205;
-        Thu, 3 Nov 2022 12:44:25 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=pp1;
- bh=uYDsL2AQLo2gEk9VMtnHMz5LcVdQt/v0CP0hVvqvaOs=;
- b=fQBQSq4M9hUH6hNCROmGwAedSYH9ER8bHfHCPj0cCnKvVlHIlxWk/0wVP5/3zwqiuuc2
- ANE0sKOM7mryjhS+H8v0Tm4/1obUDMop3BsqyWHwnoi77A2nLHSFQYENpt+kJ50/UCuW
- z8mBFAFnJN4Xb1jr0J6+7psniFA/+y5nlA9C9iWRddzKhblyjvITFClY/wicbPA/GOek
- AiFuUOIZ+8i1zgbUEYLKwpSfg6jTnv3DWSpYGfeNao51BGy9bx2nE9fi+afM6FPS9MFO
- MrmPJMnBfg11O+jpwBwwNPMy5RT+dSHFcvHqw7cHGjozWT0zUEwcG0OdqAzLNSfPusnM ng== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3km6pgwuns-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 03 Nov 2022 12:44:25 +0000
-Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2A3BZkjw024656;
-        Thu, 3 Nov 2022 12:44:24 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3km6pgwum9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 03 Nov 2022 12:44:23 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2A3Cad2W023877;
-        Thu, 3 Nov 2022 12:44:21 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma04ams.nl.ibm.com with ESMTP id 3kgut98raf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 03 Nov 2022 12:44:21 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2A3CiIcr28902062
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 3 Nov 2022 12:44:18 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5221CA404D;
-        Thu,  3 Nov 2022 12:44:18 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 54AA9A4040;
-        Thu,  3 Nov 2022 12:44:17 +0000 (GMT)
-Received: from p-imbrenda (unknown [9.152.224.56])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu,  3 Nov 2022 12:44:17 +0000 (GMT)
-Date:   Thu, 3 Nov 2022 13:44:15 +0100
-From:   Claudio Imbrenda <imbrenda@linux.ibm.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Anup Patel <anup@brainfault.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        Eric Farman <farman@linux.ibm.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Atish Patra <atishp@atishpatra.org>,
-        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Isaku Yamahata <isaku.yamahata@intel.com>,
-        Fabiano Rosas <farosas@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Chao Gao <chao.gao@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Yuan Yao <yuan.yao@intel.com>
-Subject: Re: [PATCH 25/44] KVM: s390: Do s390 specific init without bouncing
- through kvm_init()
-Message-ID: <20221103134415.5b277ce9@p-imbrenda>
-In-Reply-To: <20221102231911.3107438-26-seanjc@google.com>
-References: <20221102231911.3107438-1-seanjc@google.com>
-        <20221102231911.3107438-26-seanjc@google.com>
-Organization: IBM
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+        Thu, 3 Nov 2022 08:44:55 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C806F101EF;
+        Thu,  3 Nov 2022 05:44:54 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id d26so4822390eje.10;
+        Thu, 03 Nov 2022 05:44:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=m1DVWcK/fPvxwYKjOU/YI+rXNMZdzDbCW84zWy8prE4=;
+        b=H5fIzf9eK0AjkszI67lchy3AV48ysJKI18cu/KsnSygYiagzdB6hDcxlgV644EbUOf
+         xWuKOLU8GHJDkJy4wjcIe6JNzEzbc+idLVlioTCdwuzQIFmB/cXPVV8RVHK+vfenkWSr
+         gC2LPzyXDP5xn3nUgfJPCYPOqniYMH4ZovzOSevgIUEVjU2NMpj/TWittDGuN8zicnvX
+         dgnVa29c/HMfcJ2krTNMdflND3jUIGd8epI21piYQUAS6LLnJuTRkWhxrUQXWpqEf8dl
+         4VhrnIRMC89N8vAp2ChrXfuTxpWgPmPIMVs40iZSt5D9ZZjqzMBQW6FtHllwn9wmu0d2
+         Ob4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=m1DVWcK/fPvxwYKjOU/YI+rXNMZdzDbCW84zWy8prE4=;
+        b=0ewwAQJPZN1O0DmQ6hOTRKrquV7nVenYEoYSlmUqAZPKvgFa5Uy+a1lDplI0Af3mPB
+         EXDSR98jgoZe1Wgq46pXwb7c2hsFNTJciMBC9V33p6WN4+vLrLBCjd4tuKsIz2yANuIF
+         Wm5hQusvUKs0Wfi+LVO6zZIn3GlgURyC9EvypE8+zuV9W1SsPyc+VmHWPwdd3KFkRa60
+         d6Li+n+aNgDDGK+scrQyDhzq3CCiFW3f9oyfCwo6yjQTHqjqWfr2TEenaMB0adTnatys
+         BTVf/Eqj0jQwvG2sAO0ypFs6BAZpeIwF5tNUWCodnoSc8Wpb3oddlwxldrq9bcVkhZno
+         mKoQ==
+X-Gm-Message-State: ACrzQf0t8L843a463C1kHh1ll1Eu8+LMOZebHFkzcJ5xL8f2E1w0Ujlw
+        8fdTfe6yqMs/2bRGh1IkiPE=
+X-Google-Smtp-Source: AMsMyM5QaKNutgTeV3yG2v5UgXmJ9MxmPLRixJKR5Md9zyqeXWU6KmQDHm0pJmMonDg7w3EQmuQSPQ==
+X-Received: by 2002:a17:907:97d5:b0:7ac:5f72:6c1a with SMTP id js21-20020a17090797d500b007ac5f726c1amr28561297ejc.126.1667479493163;
+        Thu, 03 Nov 2022 05:44:53 -0700 (PDT)
+Received: from pc638.lan ([155.137.26.201])
+        by smtp.gmail.com with ESMTPSA id p23-20020a056402155700b004615e1bbaf4sm460429edx.87.2022.11.03.05.44.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Nov 2022 05:44:52 -0700 (PDT)
+From:   Uladzislau Rezki <urezki@gmail.com>
+X-Google-Original-From: Uladzislau Rezki <urezki@pc638.lan>
+Date:   Thu, 3 Nov 2022 13:44:51 +0100
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Joel Fernandes <joel@joelfernandes.org>,
+        Uladzislau Rezki <urezki@gmail.com>, rcu@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RFC] rcu/kfree: Do not request RCU when not needed
+Message-ID: <Y2O3w3d3qmTg6VAP@pc638.lan>
+References: <20221102184911.GP5600@paulmck-ThinkPad-P17-Gen-1>
+ <755B5ED1-653D-4E57-B114-77CDE10A9033@joelfernandes.org>
+ <20221102202813.GR5600@paulmck-ThinkPad-P17-Gen-1>
+ <CAEXW_YQ+SxBoNUkPHhC3O0DJNQtZomN_4GPtvaWuDs5sSU4FAw@mail.gmail.com>
+ <20221102223516.GT5600@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: SwDaMXKcGFWnDzzjhR0txYibgdG-twbu
-X-Proofpoint-GUID: 0Npk1PRgqNMEn0PTY6WCgakx0jlYm4dr
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-03_02,2022-11-03_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011
- lowpriorityscore=0 priorityscore=1501 phishscore=0 spamscore=0
- impostorscore=0 mlxlogscore=851 mlxscore=0 malwarescore=0 adultscore=0
- suspectscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211030086
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221102223516.GT5600@paulmck-ThinkPad-P17-Gen-1>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed,  2 Nov 2022 23:18:52 +0000
-Sean Christopherson <seanjc@google.com> wrote:
-
-> Move the guts of kvm_arch_init() into a new helper, __kvm_s390_init(),
-> and invoke the new helper directly from kvm_s390_init() instead of
-> bouncing through kvm_init().  Invoking kvm_arch_init() is the very
-> first action performed by kvm_init(), i.e. this is a glorified nop.
 > 
-> Moving setup to __kvm_s390_init() will allow tagging more functions as
-> __init, and emptying kvm_arch_init() will allow dropping the hook
-> entirely once all architecture implementations are nops.
+> > Though I am thinking, workqueue context is normally used to invoke
+> > code that can block, and would the issue you mentioned affect those as
+> > well, or affect RCU when those non-RCU work items block. So for
+> > example, when other things in the system that can queue things on the
+> > system_wq and block.  (I might be throwing darts in the dark).
+> > 
+> > To be safe, we can implement your suggestion which is basically a form
+> > of my initial patch.
+> > 
+> > Should we add Tejun to the thread?
 > 
-> No functional change intended.
+> Let's get organized first, but that would be a good thing.  Or I could
+> reach out to Tejun internally.
 > 
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> ---
->  arch/s390/kvm/kvm-s390.c | 29 +++++++++++++++++++++++++----
->  1 file changed, 25 insertions(+), 4 deletions(-)
+> For but one thing to get organized about, maybe kfree_rcu() should be
+> using a workqueue with the WQ_MEM_RECLAIM flag set.
 > 
-> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
-> index 7fcd2d3b3558..e1c9980aae78 100644
-> --- a/arch/s390/kvm/kvm-s390.c
-> +++ b/arch/s390/kvm/kvm-s390.c
-> @@ -461,7 +461,7 @@ static void kvm_s390_cpu_feat_init(void)
->  	 */
->  }
->  
-> -int kvm_arch_init(void *opaque)
-> +static int __kvm_s390_init(void)
->  {
->  	int rc = -ENOMEM;
->  
-> @@ -519,7 +519,7 @@ int kvm_arch_init(void *opaque)
->  	return rc;
->  }
->  
-> -void kvm_arch_exit(void)
-> +static void __kvm_s390_exit(void)
->  {
->  	gmap_unregister_pte_notifier(&gmap_notifier);
->  	gmap_unregister_pte_notifier(&vsie_gmap_notifier);
-> @@ -533,6 +533,16 @@ void kvm_arch_exit(void)
->  	debug_unregister(kvm_s390_dbf_uv);
->  }
->  
-> +int kvm_arch_init(void *opaque)
-> +{
-> +	return 0;
-> +}
-> +
-> +void kvm_arch_exit(void)
-> +{
-> +
-> +}
-> +
+It can be as an option to consider. Because such workqueue has some
+special priority for better handling of memory releasing. I can have
+a look at it closer to see how kvfree_rcu() works if it goes with WQ_MEM_RECLAIM.
 
-I wonder at this point if it's possible to define kvm_arch_init and
-kvm_arch_exit directly in kvm_main.c with __weak
-
->  /* Section: device related */
->  long kvm_arch_dev_ioctl(struct file *filp,
->  			unsigned int ioctl, unsigned long arg)
-> @@ -5634,7 +5644,7 @@ static inline unsigned long nonhyp_mask(int i)
->  
->  static int __init kvm_s390_init(void)
->  {
-> -	int i;
-> +	int i, r;
->  
->  	if (!sclp.has_sief2) {
->  		pr_info("SIE is not available\n");
-> @@ -5650,12 +5660,23 @@ static int __init kvm_s390_init(void)
->  		kvm_s390_fac_base[i] |=
->  			stfle_fac_list[i] & nonhyp_mask(i);
->  
-> -	return kvm_init(NULL, sizeof(struct kvm_vcpu), 0, THIS_MODULE);
-> +	r = __kvm_s390_init();
-> +	if (r)
-> +		return r;
-> +
-> +	r = kvm_init(NULL, sizeof(struct kvm_vcpu), 0, THIS_MODULE);
-> +	if (r) {
-> +		__kvm_s390_exit();
-> +		return r;
-> +	}
-> +	return 0;
->  }
->  
->  static void __exit kvm_s390_exit(void)
->  {
->  	kvm_exit();
-> +
-> +	__kvm_s390_exit();
->  }
->  
->  module_init(kvm_s390_init);
-
+--
+Uladzislau Rezki
