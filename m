@@ -2,107 +2,327 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25F0E6183DA
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 17:10:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB3BE6183DC
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 17:11:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231778AbiKCQJ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 12:09:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37436 "EHLO
+        id S232079AbiKCQKx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 12:10:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232296AbiKCQJf (ORCPT
+        with ESMTP id S232033AbiKCQK2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 12:09:35 -0400
-Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B99D61D0D3
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 09:09:08 -0700 (PDT)
-Received: by mail-qv1-xf2d.google.com with SMTP id e15so1439153qvo.4
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 09:09:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=rdupXZP9IFvwGILZVl/bXkxyiQBrd2eY1VoR9aqF3f8=;
-        b=kU9c5IXpOAFVRhtLb9VD0DkbGRRrvofFv5ZaV90ha/Z5Pjkds75ssplzse/sexzY2G
-         t4ryGbivPIq5eSqm2hV/0dAwUzPEMCCIJ7IJRnzOREaD1PNNjDgXONaIUuG5SH/QjqQR
-         3dv/jK1oPs2gFsxHCbY/35BjVKfQcu1hH2SrX4u02/Pgev80Go7zikIubUdilCydjnb4
-         uS+ZTwvF+YU7OOrP+9J53OwRZvWgphfr/OKoqL8LwDCAjuNGqCtpBaTKOeVQdumMuMzl
-         DuT9fb/j515nbCluQBt4Ica6G2qsI6tmDSlLeDAcXAD2dMbVsBU2/uToc6o34YF6j2Zl
-         38WA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rdupXZP9IFvwGILZVl/bXkxyiQBrd2eY1VoR9aqF3f8=;
-        b=rvHwImRz07GUh2DhoE4gbemlSuDS0IXxmlPMESw0ih9f/xsNE7EpVvHIBrHU6g3Gr5
-         KC3h7OqQ2o7TMqp2hbhb8ayjyIyK0lLbBJJrFdRPa0bM/z43RisE1rHqXEmoJ9tVRvNy
-         i4WzIPVEVKTE/1XlKJYjtmILGba+u2JI/t6U43t5YrgR2YcDVOvwRvm3RlCQPXnYe/2i
-         cqCvWaUOmUUQXJaKtbwqKEOzEASt6//i+a8TQRC6D3c59y8cEU6nEI3xTolUEvTw8tCR
-         8ILNcbxXYKas8bl6gGJwHUFC8hV0LuJgUd0ksBJ12idf8loXitVTo3cfWoSULLaQbR1o
-         FcsA==
-X-Gm-Message-State: ACrzQf17k/JzFqmQUAX0JqOtCeHtNS8sLMUitTC4DlZ0Dbr77uKDKS+B
-        sVkaRRVdmmxNp7HfZGF824ZLgg==
-X-Google-Smtp-Source: AMsMyM4Na22MQCEkYmNGL/H4cHE5jOAZx/Jxn3T2uL4LmjrXMvv/w3qjaGdleg7s97ZnEYStiL1OmA==
-X-Received: by 2002:a05:6214:194c:b0:4bb:6d2f:3e7c with SMTP id q12-20020a056214194c00b004bb6d2f3e7cmr27602892qvk.4.1667491747673;
-        Thu, 03 Nov 2022 09:09:07 -0700 (PDT)
-Received: from ?IPV6:2601:586:5000:570:a35d:9f85:e3f7:d9fb? ([2601:586:5000:570:a35d:9f85:e3f7:d9fb])
-        by smtp.gmail.com with ESMTPSA id h18-20020a05620a401200b006ee8874f5fasm1018291qko.53.2022.11.03.09.09.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Nov 2022 09:09:07 -0700 (PDT)
-Message-ID: <287a41ec-b004-54a7-1ac3-07cc4db5fbbf@linaro.org>
-Date:   Thu, 3 Nov 2022 12:09:05 -0400
+        Thu, 3 Nov 2022 12:10:28 -0400
+Received: from smtp-8faa.mail.infomaniak.ch (smtp-8faa.mail.infomaniak.ch [IPv6:2001:1600:4:17::8faa])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C523E1C13C
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 09:09:42 -0700 (PDT)
+Received: from smtp-3-0001.mail.infomaniak.ch (unknown [10.4.36.108])
+        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4N37xc16zjzMpnTN;
+        Thu,  3 Nov 2022 17:09:40 +0100 (CET)
+Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
+        by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4N37xb0B4pzMpphG;
+        Thu,  3 Nov 2022 17:09:38 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
+        s=20191114; t=1667491780;
+        bh=nAGLkQKdFqX2PHeLP/p0EHiQdszCz61dANsujoabcoE=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=N7JAAHTsCzpwdAZCamgd480C38UUIhZj3IfHifZ6XxGhVbPNmHSl2t+xd5RM0pd4N
+         nysRkw+4JwMCVFCimEIVztaYcX+x8aVW6VVR32kJzfgONL7ANm79koMM6v/xpbXARF
+         YUybVOVwr/vVCprWG+Psou276VsbNqzCQODLb/cs=
+Message-ID: <1fe5c84d-6f85-9ee8-76d4-d184a47ebff2@digikod.net>
+Date:   Thu, 3 Nov 2022 17:09:38 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH v4 1/3] dt-bindings: qcom-iommu: Add Qualcomm MSM8953
- compatible
+User-Agent: 
+Subject: Re: [PATCH v2] LSM: Better reporting of actual LSMs at boot
 Content-Language: en-US
-To:     Luca Weiss <luca@z3ntu.xyz>, linux-arm-msm@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Rob Herring <robh@kernel.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        iommu@lists.linux.dev, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221016161554.673006-1-luca@z3ntu.xyz>
- <20221016161554.673006-2-luca@z3ntu.xyz> <5615419.DvuYhMxLoT@g550jk>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <5615419.DvuYhMxLoT@g550jk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+To:     Kees Cook <keescook@chromium.org>, Paul Moore <paul@paul-moore.com>
+Cc:     James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+References: <20221102000525.gonna.409-kees@kernel.org>
+From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+In-Reply-To: <20221102000525.gonna.409-kees@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 31/10/2022 12:26, Luca Weiss wrote:
-> Hi all,
-> 
-> On Sonntag, 16. Oktober 2022 18:15:51 CET Luca Weiss wrote:
->> Document the compatible used for IOMMU on the msm8953 SoC.
->>
->> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
->> Acked-by: Rob Herring <robh@kernel.org>
-> 
-> Could someone please pick up this patch?
-> 
-> Looking at the file history, there's not much but maybe @Rob could you take 
-> this? Or maybe Bjorn?
-> 
 
-Use "iommu:" in the subject (dt-bindings: iommu: qcom:) so IOMMU
-maintainers notice it...
+On 02/11/2022 01:05, Kees Cook wrote:
+> Enhance the details reported by "lsm.debug" in several ways:
+> 
+> - report contents of "security="
+> - report contents of "CONFIG_LSM"
+> - report contents of "lsm="
+> - report any early LSM details
+> - whitespace-align the output of similar phases for easier visual parsing
+> - change "disabled" to more accurate "skipped"
+> - explain what "skipped" and "ignored" mean in a parenthetical
+> 
+> Upgrade the "security= is ignored" warning from pr_info to pr_warn,
+> and include full arguments list to make the cause even more clear.
+> 
+> Replace static "Security Framework initializing" pr_info with specific
+> list of the resulting order of enabled LSMs.
+> 
+> For example, if the kernel is built with:
+> 
+> CONFIG_SECURITY_SELINUX=y
+> CONFIG_SECURITY_APPARMOR=y
+> CONFIG_SECURITY_LOADPIN=y
+> CONFIG_SECURITY_YAMA=y
+> CONFIG_SECURITY_SAFESETID=y
+> CONFIG_SECURITY_LOCKDOWN_LSM=y
+> CONFIG_SECURITY_LANDLOCK=y
+> CONFIG_INTEGRITY=y
+> CONFIG_BPF_LSM=y
+> CONFIG_DEFAULT_SECURITY_APPARMOR=y
+> CONFIG_LSM="landlock,lockdown,yama,loadpin,safesetid,integrity,selinux,smack,tomoyo,apparmor,bpf"
+> 
+> Booting without options will show:
+> 
+> LSM: initializing lsm=lockdown,capability,landlock,yama,loadpin,safesetid,integrity,selinux,bpf
+> landlock: Up and running.
+> Yama: becoming mindful.
+> LoadPin: ready to pin (currently not enforcing)
+> SELinux:  Initializing.
+> LSM support for eBPF active
+> 
+> Boot with "lsm.debug" will show:
+> 
+> LSM: legacy security= *unspecified*
+> LSM: CONFIG_LSM=landlock,lockdown,yama,loadpin,safesetid,integrity,selinux,smack,tomoyo,apparmor,bpf
+> LSM: boot arg lsm= *unspecified*
+> LSM:   early started: lockdown (enabled)
+> LSM:   first ordered: capability (enabled)
+> LSM: builtin ordered: landlock (enabled)
+> LSM: builtin ignored: lockdown (not built into kernel)
+> LSM: builtin ordered: yama (enabled)
+> LSM: builtin ordered: loadpin (enabled)
+> LSM: builtin ordered: safesetid (enabled)
+> LSM: builtin ordered: integrity (enabled)
+> LSM: builtin ordered: selinux (enabled)
+> LSM: builtin ignored: smack (not built into kernel)
+> LSM: builtin ignored: tomoyo (not built into kernel)
+> LSM: builtin ordered: apparmor (enabled)
+> LSM: builtin ordered: bpf (enabled)
+> LSM: exclusive chosen:   selinux
+> LSM: exclusive disabled: apparmor
+> LSM: initializing lsm=lockdown,capability,landlock,yama,loadpin,safesetid,integrity,selinux,bpf
+> LSM: cred blob size       = 32
+> LSM: file blob size       = 16
+> LSM: inode blob size      = 72
+> LSM: ipc blob size        = 8
+> LSM: msg_msg blob size    = 4
+> LSM: superblock blob size = 80
+> LSM: task blob size       = 8
+> LSM: initializing capability
+> LSM: initializing landlock
+> landlock: Up and running.
+> LSM: initializing yama
+> Yama: becoming mindful.
+> LSM: initializing loadpin
+> LoadPin: ready to pin (currently not enforcing)
+> LSM: initializing safesetid
+> LSM: initializing integrity
+> LSM: initializing selinux
+> SELinux:  Initializing.
+> LSM: initializing bpf
+> LSM support for eBPF active
+> 
+> And some examples of how the lsm.debug ordering report changes...
+> 
+> With "lsm.debug security=selinux":
+> 
+> LSM: legacy security=selinux
+> LSM: CONFIG_LSM=landlock,lockdown,yama,loadpin,safesetid,integrity,selinux,smack,tomoyo,apparmor,bpf
+> LSM: boot arg lsm= *unspecified*
+> LSM:   early started: lockdown (enabled)
+> LSM:   first ordered: capability (enabled)
+> LSM: security=selinux disabled: apparmor (only one legacy major LSM)
+> LSM: builtin ordered: landlock (enabled)
+> LSM: builtin ignored: lockdown (not built into kernel)
+> LSM: builtin ordered: yama (enabled)
+> LSM: builtin ordered: loadpin (enabled)
+> LSM: builtin ordered: safesetid (enabled)
+> LSM: builtin ordered: integrity (enabled)
+> LSM: builtin ordered: selinux (enabled)
+> LSM: builtin ignored: smack (not built into kernel)
+> LSM: builtin ignored: tomoyo (not built into kernel)
+> LSM: builtin ordered: apparmor (disabled)
+> LSM: builtin ordered: bpf (enabled)
+> LSM: exclusive chosen:   selinux
+> LSM: initializing lsm=lockdown,capability,landlock,yama,loadpin,safesetid,integrity,selinux,bpf
+> 
+> With "lsm.debug lsm=integrity,selinux,loadpin,crabability,bpf,loadpin,loadpin":
+> 
+> LSM: legacy security= *unspecified*
+> LSM: CONFIG_LSM=landlock,lockdown,yama,loadpin,safesetid,integrity,selinux,smack,tomoyo,apparmor,bpf
+> LSM: boot arg lsm=integrity,selinux,loadpin,capability,bpf,loadpin,loadpin
+> LSM:   early started: lockdown (enabled)
+> LSM:   first ordered: capability (enabled)
+> LSM: cmdline ordered: integrity (enabled)
+> LSM: cmdline ordered: selinux (enabled)
+> LSM: cmdline ordered: loadpin (enabled)
+> LSM: cmdline ignored: crabability (not built into kernel)
+> LSM: cmdline ordered: bpf (enabled)
+> LSM: cmdline skipped: apparmor (not in requested order)
+> LSM: cmdline skipped: yama (not in requested order)
+> LSM: cmdline skipped: safesetid (not in requested order)
+> LSM: cmdline skipped: landlock (not in requested order)
+> LSM: exclusive chosen:   selinux
+> LSM: initializing lsm=lockdown,capability,integrity,selinux,loadpin,bpf
+> 
+> Cc: Paul Moore <paul@paul-moore.com>
+> Cc: James Morris <jmorris@namei.org>
+> Cc: "Serge E. Hallyn" <serge@hallyn.com>
+> Cc: linux-security-module@vger.kernel.org
+> Signed-off-by: Kees Cook <keescook@chromium.org>
 
-Best regards,
-Krzysztof
+I think this change would be useful to help users debug their LSM 
+configuration. I'm not sure about the whitespace-aligned output though, 
+I guess it could break some scripts, but it is not part of the ABI and 
+only relevant for debug purpose.
 
+Acked-by: Mickaël Salaün <mic@digikod.net>
+
+
+> ---
+> v2: en/dis-enabled expanded, example output in commit log, use pr_cont.
+> v1: https://lore.kernel.org/lkml/20221018064825.never.323-kees@kernel.org/
+> ---
+>   security/security.c | 45 ++++++++++++++++++++++++++++++++++++---------
+>   1 file changed, 36 insertions(+), 9 deletions(-)
+> 
+> diff --git a/security/security.c b/security/security.c
+> index 79d82cb6e469..abceabda103d 100644
+> --- a/security/security.c
+> +++ b/security/security.c
+> @@ -161,8 +161,8 @@ static void __init append_ordered_lsm(struct lsm_info *lsm, const char *from)
+>   		lsm->enabled = &lsm_enabled_true;
+>   	ordered_lsms[last_lsm++] = lsm;
+>   
+> -	init_debug("%s ordering: %s (%sabled)\n", from, lsm->name,
+> -		   is_enabled(lsm) ? "en" : "dis");
+> +	init_debug("%s ordered: %s (%s)\n", from, lsm->name,
+> +		   is_enabled(lsm) ? "enabled" : "disabled");
+>   }
+>   
+>   /* Is an LSM allowed to be initialized? */
+> @@ -224,7 +224,7 @@ static void __init prepare_lsm(struct lsm_info *lsm)
+>   	if (enabled) {
+>   		if ((lsm->flags & LSM_FLAG_EXCLUSIVE) && !exclusive) {
+>   			exclusive = lsm;
+> -			init_debug("exclusive chosen: %s\n", lsm->name);
+> +			init_debug("exclusive chosen:   %s\n", lsm->name);
+>   		}
+>   
+>   		lsm_set_blob_sizes(lsm->blobs);
+> @@ -252,7 +252,7 @@ static void __init ordered_lsm_parse(const char *order, const char *origin)
+>   	/* LSM_ORDER_FIRST is always first. */
+>   	for (lsm = __start_lsm_info; lsm < __end_lsm_info; lsm++) {
+>   		if (lsm->order == LSM_ORDER_FIRST)
+> -			append_ordered_lsm(lsm, "first");
+> +			append_ordered_lsm(lsm, "  first");
+>   	}
+>   
+>   	/* Process "security=", if given. */
+> @@ -270,7 +270,7 @@ static void __init ordered_lsm_parse(const char *order, const char *origin)
+>   			if ((major->flags & LSM_FLAG_LEGACY_MAJOR) &&
+>   			    strcmp(major->name, chosen_major_lsm) != 0) {
+>   				set_enabled(major, false);
+> -				init_debug("security=%s disabled: %s\n",
+> +				init_debug("security=%s disabled: %s (only one legacy major LSM)\n",
+>   					   chosen_major_lsm, major->name);
+>   			}
+>   		}
+> @@ -291,7 +291,8 @@ static void __init ordered_lsm_parse(const char *order, const char *origin)
+>   		}
+>   
+>   		if (!found)
+> -			init_debug("%s ignored: %s\n", origin, name);
+> +			init_debug("%s ignored: %s (not built into kernel)\n",
+> +				   origin, name);
+>   	}
+>   
+>   	/* Process "security=", if given. */
+> @@ -309,7 +310,8 @@ static void __init ordered_lsm_parse(const char *order, const char *origin)
+>   		if (exists_ordered_lsm(lsm))
+>   			continue;
+>   		set_enabled(lsm, false);
+> -		init_debug("%s disabled: %s\n", origin, lsm->name);
+> +		init_debug("%s skipped: %s (not in requested order)\n",
+> +			   origin, lsm->name);
+>   	}
+>   
+>   	kfree(sep);
+> @@ -320,6 +322,24 @@ static void __init lsm_early_task(struct task_struct *task);
+>   
+>   static int lsm_append(const char *new, char **result);
+>   
+> +static void __init report_lsm_order(void)
+> +{
+> +	struct lsm_info **lsm, *early;
+> +	int first = 0;
+> +
+> +	pr_info("initializing lsm=");
+> +
+> +	/* Report each enabled LSM name, comma separated. */
+> +	for (early = __start_early_lsm_info; early < __end_early_lsm_info; early++)
+> +		if (is_enabled(early))
+> +			pr_cont("%s%s", first++ == 0 ? "" : ",", early->name);
+> +	for (lsm = ordered_lsms; *lsm; lsm++)
+> +		if (is_enabled(*lsm))
+> +			pr_cont("%s%s", first++ == 0 ? "" : ",", (*lsm)->name);
+> +
+> +	pr_cont("\n");
+> +}
+> +
+>   static void __init ordered_lsm_init(void)
+>   {
+>   	struct lsm_info **lsm;
+> @@ -329,7 +349,8 @@ static void __init ordered_lsm_init(void)
+>   
+>   	if (chosen_lsm_order) {
+>   		if (chosen_major_lsm) {
+> -			pr_info("security= is ignored because it is superseded by lsm=\n");
+> +			pr_warn("security=%s is ignored because it is superseded by lsm=%s\n",
+> +				chosen_major_lsm, chosen_lsm_order);
+>   			chosen_major_lsm = NULL;
+>   		}
+>   		ordered_lsm_parse(chosen_lsm_order, "cmdline");
+> @@ -339,6 +360,8 @@ static void __init ordered_lsm_init(void)
+>   	for (lsm = ordered_lsms; *lsm; lsm++)
+>   		prepare_lsm(*lsm);
+>   
+> +	report_lsm_order();
+> +
+>   	init_debug("cred blob size       = %d\n", blob_sizes.lbs_cred);
+>   	init_debug("file blob size       = %d\n", blob_sizes.lbs_file);
+>   	init_debug("inode blob size      = %d\n", blob_sizes.lbs_inode);
+> @@ -395,13 +418,17 @@ int __init security_init(void)
+>   {
+>   	struct lsm_info *lsm;
+>   
+> -	pr_info("Security Framework initializing\n");
+> +	init_debug("legacy security=%s\n", chosen_major_lsm ?: " *unspecified*");
+> +	init_debug("  CONFIG_LSM=%s\n", builtin_lsm_order);
+> +	init_debug("boot arg lsm=%s\n", chosen_lsm_order ?: " *unspecified*");
+>   
+>   	/*
+>   	 * Append the names of the early LSM modules now that kmalloc() is
+>   	 * available
+>   	 */
+>   	for (lsm = __start_early_lsm_info; lsm < __end_early_lsm_info; lsm++) {
+> +		init_debug("  early started: %s (%s)\n", lsm->name,
+> +			   is_enabled(lsm) ? "enabled" : "disabled");
+>   		if (lsm->enabled)
+>   			lsm_append(lsm->name, &lsm_names);
+>   	}
