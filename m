@@ -2,192 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F256618B01
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 23:02:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3276B618B00
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 23:02:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231493AbiKCWCC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 18:02:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33498 "EHLO
+        id S229764AbiKCWB6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 18:01:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231637AbiKCWBo (ORCPT
+        with ESMTP id S229487AbiKCWBg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 18:01:44 -0400
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF16D22B3F
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 15:01:42 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id 7058E5C00C3;
-        Thu,  3 Nov 2022 18:01:40 -0400 (EDT)
-Received: from imap50 ([10.202.2.100])
-  by compute5.internal (MEProxy); Thu, 03 Nov 2022 18:01:40 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=serhei.io; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:message-id
-        :mime-version:reply-to:sender:subject:subject:to:to; s=fm3; t=
-        1667512900; x=1667599300; bh=/qXxDCY82+Tq7gdknZkmxloD/1sIUhD7xka
-        fuRuU+mI=; b=K5bL8PJNKWehcTGjAC8Bkebq9ArZhHxeX0+CUqDV8SRZ6qAkl0B
-        XVwViOeW+6b2g0sp/XkZvBZl7qc5KsC1fZNZM6lbt5ugEW+6siEpBY1aCwTHhoGv
-        UFNuLFfaL9hCOF2a7qaTUP/+LZizArrcrzVouf4zivKXyl2yhw/JOGA6GwZXpL0L
-        QBT3ehADs4dO9DW/aUn1M2Nn7W9kAesjdIHOi1Tt25Y0/mFZVAwCACkxnkkG+avr
-        CyM4+DDnxQk7mMdsbuvv2yBSpHnCsc+feTWRXMeYbc4AA4VSWNJDjARkc3+rRctG
-        Wgj2sAmDDgPli/5CHeNMLzSIXnnjO2gZBjg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:message-id:mime-version
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1667512900; x=
-        1667599300; bh=/qXxDCY82+Tq7gdknZkmxloD/1sIUhD7xkafuRuU+mI=; b=U
-        sbhwwrdUj8DLwG6Y23PTWsooxH9Mrj02/yTmny4NnRbD80NawY9n36mo+1E8zNXZ
-        Z+45dPpgjiuDkY51wSuYwBGtO3/HEkGcXSLw8khhMBntKyin+JgdS5iBil+a/Ab3
-        jGOhG7f6aBKaee5BCfoYTpGpEZczJFCibcG4XuzuAxHkkLaNLXAHDUZvRDkHez1h
-        kukxC6q8tyEgDd6TDPdNUbKaKQDNGxMYBk0c8bDuk1IGl/+Y8ru6i3ydw+ccRIZj
-        GiW0gj1kjw01Xe0dlJWYDfw+PaC0uWGiFDtaKCNdpILTPc0IPSKT6hWDqZ0Y+PJI
-        o0eIrAa16LFPUOTHu3tbw==
-X-ME-Sender: <xms:QzpkY1VCwmoW74FJN29QRveA74mMruiOzsEAkyAAi7u6PhC7SkSsdg>
-    <xme:QzpkY1m4oCDi3CKzVaz896e5INY0ysa6LESPoik6btjcyC95ptXZm6gQxkLb6BQun
-    egFUNLIGh42erZyuw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrudelgdduhedtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucenucfjughrpefofgggkfffhffvvefutgesthdtre
-    dtreertdenucfhrhhomhepfdfuvghrhhgvihcuofgrkhgrrhhovhdfuceoshgvrhhhvghi
-    sehsvghrhhgvihdrihhoqeenucggtffrrghtthgvrhhnpeeuleduuddtheehfffgffekie
-    etkeettdelgfefffehvedvheduffffleduvdefgeenucffohhmrghinhepshhouhhrtggv
-    figrrhgvrdhorhhgpdhfvgguohhrrghprhhojhgvtghtrdhorhhgpdhgihhthhhusgdrtg
-    homhdpvggsphhfrdhmugenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgr
-    ihhlfhhrohhmpehsvghrhhgvihesshgvrhhhvghirdhioh
-X-ME-Proxy: <xmx:QzpkYxbMemF3amQ-23syX4BmuAgZ8IKM0DE39nqgs8HplrbyqiyAUg>
-    <xmx:QzpkY4UV0FGGRVqcd5wBqyIzUrqE_QmjT5fiFxJv2TuieyziXU8SAA>
-    <xmx:QzpkY_lrzjFVSniRzaoTZyvy1HTXezTbI1tuj-0PZMyhDRcxdo-3Cw>
-    <xmx:RDpkY-sVESew-b3ak63q8IDc4t1WdGYNkJfE0fDp4lKP3O2V-rFxVg>
-Feedback-ID: i572946fc:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 8A4D41700089; Thu,  3 Nov 2022 18:01:39 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1087-g968661d8e1-fm-20221021.001-g968661d8
-Mime-Version: 1.0
-Message-Id: <3d2f6b92-d2fb-4e79-9d87-00cd90c2b588@app.fastmail.com>
-Date:   Thu, 03 Nov 2022 18:01:19 -0400
-From:   "Serhei Makarov" <serhei@serhei.io>
-To:     systemtap <systemtap@sourceware.org>
-Cc:     linux-kernel@vger.kernel.org, lwn@lwn.net
-Subject: SystemTap release 4.8
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 3 Nov 2022 18:01:36 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F0372253D
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 15:01:35 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id cl5so4679102wrb.9
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 15:01:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=UZ7x0KoatrNsQBAKNEtYf8iZiEhkwWW3bWsu00YDlKM=;
+        b=DsyHj/9seydbC1Xxo7NHLggirL7MR+qsEjXxdz/rK1TFa0oehqh2GJzSFlv2KTnLJp
+         XGQSTiM99H6QTmPmlxaVaaDhK8NLhBDtaPOzy2ewhv13aA2S1bzkm0ZjdL1MEqBtG9+D
+         H1hiNGR/OAIRNqymzFmPq9BOeJ+OaSJWXxe6rYD6uOj9l4hkw7PaO131wKTCuBBVR7XI
+         duhdzX4L5gRcDHkdJInRxJNDXiJ51C9hDCjbURkxQp3yTWjgRkGObxvZMLAfNKNQEyRs
+         AzSHAZX177OUDrN7tqIKYgqZH1lZoYKSLoCq6c/MRBWyb/oSlFCH21bb6UERbnrNEnzI
+         vAVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UZ7x0KoatrNsQBAKNEtYf8iZiEhkwWW3bWsu00YDlKM=;
+        b=6fy42wZprxtNrzZqXzQ9lTg7yuiykb5NGdMb4hlP1nsWqsBXUaLD6JPXFEh9rQFhAp
+         M38W9w4e9vSk1QcRNsecxzKLrzW2jx3bCE2R1SzikI+7D1cpEOZybHwIXwEYmbpt2yMl
+         V3o+PXoHwtj/jEsu06uDiw1PI6YPPYciTvARefVEQDJyjuJHTw8cL9urWqx+uyiYaIF1
+         E2pkOWDk9V6nHupXus7wuVM+x0fRAYzyjYJQMrPidaokj4J6J4mUibOZrXPDpId35+sN
+         P79VViq0Sh1SwNJytTglWeEThNhFi6h9Y6kq/zn2FE9naGw4Y9Qy6IGfBso6ZFkl2l5K
+         /RGg==
+X-Gm-Message-State: ACrzQf0Y0S2uuhtW+LjBeBFx3/MjOQJL1sFiHD+AX5f02jsMH7FbwoBQ
+        TTsTqk9PRVCHpdyZjimlVt2/sF+jlB6N+dMsvKD98Q==
+X-Google-Smtp-Source: AMsMyM5ViidOdfiQuz4+SdhtzHErfLcA/uiwq42gdb2Bgm6MRwqiigt7O8jg82SV7KgcYnGV277Wu/MzMKYntcn1Wss=
+X-Received: by 2002:a5d:47a6:0:b0:236:7854:246d with SMTP id
+ 6-20020a5d47a6000000b002367854246dmr19849157wrb.300.1667512893374; Thu, 03
+ Nov 2022 15:01:33 -0700 (PDT)
+MIME-Version: 1.0
+References: <20221103045437.163510-1-irogers@google.com> <20221103045437.163510-7-irogers@google.com>
+ <Y2PgBPeZsd9+YWB4@kernel.org> <Y2Pgz7luG77Wr+Ci@kernel.org>
+ <Y2Pj0KVbbw9rMcPH@kernel.org> <CAP-5=fXkM52E5VvX9s2CfvF8ckQvcbSm8N_7BCfhW3dyuH7YUg@mail.gmail.com>
+ <Y2QcgdJNXE/bVZvk@kernel.org> <Y2Q0NSeoEqwUztFe@kernel.org>
+In-Reply-To: <Y2Q0NSeoEqwUztFe@kernel.org>
+From:   Ian Rogers <irogers@google.com>
+Date:   Thu, 3 Nov 2022 15:01:21 -0700
+Message-ID: <CAP-5=fUcawweX-n2nmGg5+ZEo5nG7QuRN7yyVtz-FmUGctrEjw@mail.gmail.com>
+Subject: Re: [PATCH v1 6/7] perf trace: 5sec fix libbpf 1.0+ compatibility
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Leo Yan <leo.yan@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Stephane Eranian <eranian@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The SystemTap team announces release 4.8
+On Thu, Nov 3, 2022 at 2:35 PM Arnaldo Carvalho de Melo <acme@kernel.org> wrote:
+>
+> With this:
+>
+> diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
+> index d3d3c13a9f25b55c..067a6e56eeacc9fc 100644
+> --- a/tools/perf/Makefile.config
+> +++ b/tools/perf/Makefile.config
+> @@ -1239,7 +1239,7 @@ includedir = $(abspath $(prefix)/$(includedir_relative))
+>  mandir = share/man
+>  infodir = share/info
+>  perfexecdir = libexec/perf-core
+> -perf_include_dir = lib/perf/include
+> +perf_include_dir = /usr/include
+>  perf_examples_dir = lib/perf/examples
+>  sharedir = $(prefix)/share
+>  template_dir = share/perf-core/templates
+> diff --git a/tools/perf/examples/bpf/augmented_raw_syscalls.c b/tools/perf/examples/bpf/augmented_raw_syscalls.c
+> index 13c72fd602c307e4..98a2731c011339ba 100644
+> --- a/tools/perf/examples/bpf/augmented_raw_syscalls.c
+> +++ b/tools/perf/examples/bpf/augmented_raw_syscalls.c
+> @@ -17,8 +17,9 @@
+>  #include <linux/bpf.h>
+>  #include <bpf/bpf_helpers.h>
+>  #include <linux/limits.h>
+> -#include <stdbool.h>
+> -#include <sys/socket.h>
+> +
+> +typedef char bool;
+> +typedef int pid_t;
+>
+>  /* bpf-output associated map */
+>  struct __augmented_syscalls__ {
+> @@ -94,6 +95,30 @@ struct pids_filtered {
+>         __uint(max_entries, 64);
+>  } pids_filtered SEC(".maps");
+>
+> +/*
+> + * Desired design of maximum size and alignment (see RFC2553)
+> + */
+> +#define _K_SS_MAXSIZE   128     /* Implementation specific max size */
+> +
+> +typedef unsigned short sa_family_t;
+> +
+> +/*
+> + * The definition uses anonymous union and struct in order to control the
+> + * default alignment.
+> + */
+> +struct sockaddr_storage {
+> +        union {
+> +                struct {
+> +                        sa_family_t    ss_family; /* address family */
+> +                        /* Following field(s) are implementation specific */
+> +                        char __data[_K_SS_MAXSIZE - sizeof(unsigned short)];
+> +                                /* space to achieve desired size, */
+> +                                /* _SS_MAXSIZE value minus size of ss_family */
+> +                };
+> +                void *__align; /* implementation specific desired alignment */
+> +        };
+> +};
+> +
+>  struct augmented_args_payload {
+>         struct syscall_enter_args args;
+>         union {
+> diff --git a/tools/perf/examples/bpf/empty.c b/tools/perf/examples/bpf/empty.c
+> index 3e296c0c53d7d8e2..e4872c48a484f218 100644
+> --- a/tools/perf/examples/bpf/empty.c
+> +++ b/tools/perf/examples/bpf/empty.c
+> @@ -7,6 +7,6 @@ struct syscall_enter_args;
+>  SEC("raw_syscalls:sys_enter")
+>  int sys_enter(struct syscall_enter_args *args)
+>  {
+> -       return 0;
+> +       return 1;
+>  }
+>  char _license[] SEC("license") = "GPL";
+> diff --git a/tools/perf/util/llvm-utils.c b/tools/perf/util/llvm-utils.c
+> index 2dc7970074196ca8..a5cac85783d8711f 100644
+> --- a/tools/perf/util/llvm-utils.c
+> +++ b/tools/perf/util/llvm-utils.c
+> @@ -495,7 +495,7 @@ int llvm__compile_bpf(const char *path, void **p_obj_buf,
+>
+>         snprintf(linux_version_code_str, sizeof(linux_version_code_str),
+>                  "0x%x", kernel_version);
+> -       if (asprintf(&perf_bpf_include_opts, "-I%s/bpf", perf_include_dir) < 0)
+> +       if (asprintf(&perf_bpf_include_opts, "-I%s/", perf_include_dir) < 0)
+>                 goto errout;
+>         force_set_env("NR_CPUS", nr_cpus_avail_str);
+>         force_set_env("LINUX_VERSION_CODE", linux_version_code_str);
+>
+>
+> The connect calls gets served, tomorrow, if you don't beat me I'll apply
+> the series after adding these minimal changes so that we have this
+> working with libbpf 1.0 and then we can move from there, with a switch
+> to a BPF skel, simplest things first, then deal with faults at pointer
+> payload copy, which is another avenue, AFAIK with solutions already.
 
-Enhancements to this release include: kernel runtime improvements
-on multi-CPU systems, python3 tapset support through python3.11,
-tapset and template script for cve livepatching, bpf backend
-embedded-code assembler improvements
+So I was trying to be clean and not redefine too much. My clang
+command line was:
 
-= Where to get it
+clang -target bpf -O2 -g -c -I/usr/include/x86_64-linux-gnu
+-D__NR_CPUS__=16 -D__x86_64__=1
 
-  https://sourceware.org/systemtap/ - our project page
-  https://sourceware.org/systemtap/ftp/releases/
-  https://koji.fedoraproject.org/koji/packageinfo?packageID=615
-  git tag release-4.8 (commit b176afb2e49119ef844d193d27b0752a6d84fe8f)
+It'd be nice to just drop the need for __NR_CPUS__ and have it be
+dynamic, the skeleton approach would require this. Not sure how to
+workaround the x86 define and path :-/ Perhaps send out your changes
+for review and I can look at and test them.
 
-  There have been over 95 commits since the last release.
-  There have been 10+ bugs fixed / features added since the last release.
+Thanks,
+Ian
 
-= SystemTap backend changes
-
-- The kernel runtime now uses much less memory when the number of
-  "possible CPUs" are way more than the online ones. For example,
-  VMWare guests usually have 128 "possible CPUs" while fewer
-  CPUs are actually present or online in the guest system.
-
-- The memory allocation size is now irrelevant to the value of
-  NR_CPUS of the current kernel. It is only subject to the number
-  of "possible CPUs" or "online CPUs".
-
-- CPU hotplug is supported to the extent that there won't be any
-  kernel panics or memory corruptions.
-
-= SystemTap frontend (stap) changes
-
-- DWARF-related probes (.function, .statement) now merge DWARF and
-  non-DWARF symbol-table based matches, rather than being either-or.
-
-- The bpf backend's embedded-code assembler has been improved to
-  support more conventional assembly syntax with named opcodes. The
-  opcode names are based on the iovisor bpf-docs documentation at
-  https://github.com/iovisor/bpf-docs/blob/master/eBPF.md
-
-= SystemTap tapset changes
-
-- A template cve band-aid script is now included, which demonstrates
-  how to use a new 'livepatch.stp' tapset to standardize activation,
-  interactive control, and monitoring of systemtap cve band-aids.
-
-- The python3 tapset was extended to support python3 3.9, 3.10, and 3.11.
-  See stapprobes(3stap) for further details on probing python functions.
-
-- New tapsets:
-
-  livepatch.stp
-  The new tapset for creating security band-aid scripts.
-
-= SystemTap sample scripts
-
-- All 180+ examples can be found at https://sourceware.org/systemtap/examples/
-
-- New sample scripts:
-
-  general/pyexample.stp
-  Combined version of the py2example.stp and py3example.stp sample scripts.
-
-  security-band-aids/security-bandaid-template.stp
-  The new template for creating security band-aid scripts.
-
-  security-band-aids/cve-2016-0728-templatized.stp
-  security-band-aids/cve-2018-6485-templatized.stp
-  Example band-aid scripts based on the new template, for historical purposes only.
-
-= Examples of tested kernel versions
-
-  2.6.32 (RHEL6 x86_64, i686)
-  4.18.0 (RHEL8 + CentOS Stream 8 x86_64, aarch64, ppc64le, s390x)
-  5.14.0 (RHEL9 + CentOS Stream 9 x86_64, aarch64, ppc64le, s390x)
-  5.19.9 (Fedora 35 x86_64)
-  5.19.16 (Fedora 36,37 x86_64)
-  6.0.0-rc5, 6.1.0-rc2, 6.1.0-rc3 (Fedora rawhide x86_64)
-
-= Known issues with this release
-
-- There are intermittent buffer transmission failures for high-trace-rate
-  scripts.  Bulk mode (stap -b) helps. (see PR29108)
-
-- There are known issues on kernel 5.10+ after adapting to set_fs()
-  removal, with some memory accesses that previously returned valid data
-  instead returning -EFAULT. (see PR26811)
-
-= Contributors for this release
-
-Sultan Alsawaf, Lumir Balhar*, Martin Cermak, William Cohen, Stan Cox,
-Frank Ch. Eigler, Ryan Goldberg*, Serhei Makarov, Noah Sanci,
-yaowenbin*, Yichun Zhang (agentzh)
-
-Special thanks to new contributors, marked with '*' above.
-
-= Bugs fixed for this release <https://sourceware.org/PR#####>
-
-29676     wildcard function/symbol expansion inconsistent in debuginfo vs nondebuginfo cases
-29246     sdt probes can fail inside a c++ method
-27728     at_*.exp regressions (from bunsen data)
-27730     abort.exp minor regressions (from bunsen data)
-28634     ioscheduler.stp broken with new kernel 5.16.0-0.rc2
-29037     Systemtap unable to find struct bitfield members for gcc11 compiled code
-29507     update sample python interface tapset to rely on @cast auto context
-29570     Standardized template stap script for security band-aids
-29577     NULL pointer dereference in kernel tracepoint int3 execution
-29661     default --rlimit-as is too small
-29668     The make rpm target broken 
+> Thanks,
+>
+> - Arnaldo
+>
+> [root@quaco perf]# perf trace -e /home/acme/git/perf/tools/perf/examples/bpf/augmented_raw_syscalls.c,connect* --max-events 10
+>      0.000 ( 0.074 ms): fetchmail/175578 connect(fd: 3, uservaddr: { .family: LOCAL, path: /run/systemd/resolve/io.systemd.Resolve }, addrlen: 42) = 0
+>      0.397 ( 0.011 ms): systemd-resolv/973 connect(fd: 23, uservaddr: { .family: INET, port: 53, addr: 127.0.0.1 }, addrlen: 16) = 0
+>      0.532 ( 0.006 ms): systemd-resolv/973 connect(fd: 24, uservaddr: { .family: INET, port: 53, addr: 127.0.0.1 }, addrlen: 16) = 0
+>      0.910 ( 0.007 ms): systemd-resolv/973 connect(fd: 23, uservaddr: { .family: INET, port: 53, addr: 127.0.0.1 }, addrlen: 16) = 0
+>      0.962 ( 0.003 ms): systemd-resolv/973 connect(fd: 24, uservaddr: { .family: INET, port: 53, addr: 127.0.0.1 }, addrlen: 16) = 0
+>      1.337 ( 0.007 ms): fetchmail/175578 connect(fd: 3, uservaddr: { .family: INET, port: 0, addr: 67.195.176.151 }, addrlen: 16) = 0
+>      1.348 ( 0.014 ms): fetchmail/175578 connect(fd: 3, uservaddr: { .family: UNSPEC }, addrlen: 16)           = 0
+>      1.363 ( 0.003 ms): fetchmail/175578 connect(fd: 3, uservaddr: { .family: INET, port: 0, addr: 76.13.33.33 }, addrlen: 16) = 0
+>      1.527 ( 0.014 ms): fetchmail/175578 connect(fd: 3, uservaddr: { .family: LOCAL, path: /run/systemd/resolve/io.systemd.Resolve }, addrlen: 42) = 0
+>      1.726 ( 0.008 ms): systemd-resolv/973 connect(fd: 23, uservaddr: { .family: INET, port: 53, addr: 127.0.0.1 }, addrlen: 16) = 0
+> [root@quaco perf]#
