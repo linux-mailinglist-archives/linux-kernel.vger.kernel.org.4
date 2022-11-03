@@ -2,44 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD3F4617AEC
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 11:37:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F169617AEE
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 11:39:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229445AbiKCKhf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 06:37:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52406 "EHLO
+        id S230366AbiKCKjU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 06:39:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbiKCKhc (ORCPT
+        with ESMTP id S229950AbiKCKjR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 06:37:32 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4953CD103;
-        Thu,  3 Nov 2022 03:37:31 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3C5D71FB;
-        Thu,  3 Nov 2022 03:37:37 -0700 (PDT)
-Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4A74C3F5A1;
-        Thu,  3 Nov 2022 03:37:29 -0700 (PDT)
-Date:   Thu, 3 Nov 2022 10:37:26 +0000
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Sibi Sankar <quic_sibis@quicinc.com>
-Cc:     andersson@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        robh+dt@kernel.org, cristian.marussi@arm.com, agross@kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, konrad.dybcio@somainline.org,
-        quic_avajid@quicinc.com, Souvik.Chakravarty@arm.com,
-        Sudeep Holla <sudeep.holla@arm.com>
-Subject: Re: [RFC 2/2] firmware: arm_scmi: Add SCMI QTI Memlat vendor protocol
-Message-ID: <20221103103726.kdepm7jeb2gnncnb@bogus>
-References: <1667451512-9655-1-git-send-email-quic_sibis@quicinc.com>
- <1667451512-9655-3-git-send-email-quic_sibis@quicinc.com>
- <20221103102444.c5ngcxupohwdzntf@bogus>
+        Thu, 3 Nov 2022 06:39:17 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67CD1EE0D
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 03:39:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667471954; x=1699007954;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=lKTs3HKC67lJRxw2Qo8sOAALkXqfnnNZFUy86V4w+k0=;
+  b=BDA69GwgfMyiyuMG+cYchiLlyYoPN8ndcuX2r8J0mBWzCbX34Cna3rPm
+   ZbByXQ4CZ6AhLLZ9q+i89uxAmHycgfV/Bo/g26iFf042xLw0rvG8dyyn2
+   QpPepbH0tsw1xFEore69CL64tRtHflHCyZlNEJCUu3+/sr6Ii47BLUes2
+   DXoATEkQO60hXEge08doc59DDdrD6aZtoVDmmNAltcEqNRgOKLeOZrmym
+   yiUHtARP5ZZ3Mvt92vzxozZADlvKwpGQLyIiA9+D+W1XnenpwArZqTFhY
+   Z0ZjaR7YkBKYe1DUzDxrwJlqZQwAMyjiknCelogtnAAplD2vhSFwbb3Rw
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10519"; a="311377029"
+X-IronPort-AV: E=Sophos;i="5.95,235,1661842800"; 
+   d="scan'208";a="311377029"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2022 03:38:58 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10519"; a="585749639"
+X-IronPort-AV: E=Sophos;i="5.95,235,1661842800"; 
+   d="scan'208";a="585749639"
+Received: from lkp-server02.sh.intel.com (HELO b6d29c1a0365) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 03 Nov 2022 03:38:56 -0700
+Received: from kbuild by b6d29c1a0365 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oqXce-000Fpi-0R;
+        Thu, 03 Nov 2022 10:38:56 +0000
+Date:   Thu, 03 Nov 2022 18:38:10 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:perf/urgent] BUILD SUCCESS
+ 6f8faf471446844bb9c318e0340221049d5c19f4
+Message-ID: <63639a12.Zj2RMM8/Yg9KopA0%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221103102444.c5ngcxupohwdzntf@bogus>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,66 +63,129 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 03, 2022 at 10:24:44AM +0000, Sudeep Holla wrote:
-> On Thu, Nov 03, 2022 at 10:28:32AM +0530, Sibi Sankar wrote:
-> > Add support for the SCMI QTI memlat (memory latency) vendor protocol.
-> > The QTI memlat vendor protocol takes in several tuneables including the
-> > IPM ratio (Instructions Per Miss), bus bandwidth requirements and PMU
-> > maps to enable frequency scaling of various buses (L3/LLCC/DDR) performed
-> > by the memory latency governor running on the CPUSS Control Processor.
-> > 
-> > Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
-> > ---
-> >  drivers/firmware/arm_scmi/Kconfig              |  10 +
-> >  drivers/firmware/arm_scmi/Makefile             |   1 +
-> >  drivers/firmware/arm_scmi/qcom_memlat_vendor.c | 269 +++++++++++++++++++++++++
-> >  include/linux/scmi_protocol.h                  |  36 ++++
-> >  4 files changed, 316 insertions(+)
-> >  create mode 100644 drivers/firmware/arm_scmi/qcom_memlat_vendor.c
-> > 
-> > diff --git a/drivers/firmware/arm_scmi/Kconfig b/drivers/firmware/arm_scmi/Kconfig
-> > index a14f65444b35..814a3fc37dc1 100644
-> > --- a/drivers/firmware/arm_scmi/Kconfig
-> > +++ b/drivers/firmware/arm_scmi/Kconfig
-> > @@ -136,6 +136,16 @@ config ARM_SCMI_TRANSPORT_VIRTIO_ATOMIC_ENABLE
-> >  
-> >  endif #ARM_SCMI_PROTOCOL
-> >  
-> > +config QTI_SCMI_MEMLAT_PROTOCOL
-> > +	tristate "Qualcomm Technologies, Inc. SCMI MEMLAT vendor Protocol"
-> > +	depends on ARM_SCMI_PROTOCOL && QCOM_CPUCP_MBOX
-> 
-> If you have set the transport correctly, there should be no need for any
-> such dependency.
-> 
-> > +	help
-> > +	  The SCMI QTI memlat vendor protocol adds support for the frequency
-> > +	  scaling of buses (L3/LLCC/DDR) by the QTI HW memlat governor running
-> > +	  on the CPUSS Control Processor (CPUCP).
-> > +
-> > +	  Say Y here if you want to build this driver.
-> > +
-> 
-> I don't think it is scalable to have a config option for each vendor+protocol
-> Kconfig. IMO just one config for all qcom vendor protocol please.
-> 
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git perf/urgent
+branch HEAD: 6f8faf471446844bb9c318e0340221049d5c19f4  perf/x86/intel: Add Cooper Lake stepping to isolation_ucodes[]
 
-Sorry pressed send too early before I could write the main part :(.
-Can you please also add the driver using this protocol in the next revision.
-What framework does that fit in ? Devfreq ? I am very much interested in
-that as it helps in distributing the responsibility across these correctly.
-I think that could be one of the reason I don't like all the information
-dump you have in the DT binding proposed in the provider node. It needs to
-move out but in order to understand where to, we need full picture here.
-So please provide the same. 
+elapsed time: 720m
 
-Also it doesn't hurt to describe in detail: what theses "several tuneables"
-are and where are they expected to arrive from or targeted to ?
-Is CPUSS Control Processor responsible for CPU DVFS or not ?
-Does it just control DVFS of L3/LLCC and DDR or is there a bigger list ?
-All these information matters as your current DT proposal seem to be
-tightly coupled with only few of these.
+configs tested: 107
+configs skipped: 2
 
---
-Regards,
-Sudeep
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+um                             i386_defconfig
+um                           x86_64_defconfig
+arc                                 defconfig
+ia64                             allmodconfig
+alpha                               defconfig
+x86_64                          rhel-8.3-func
+x86_64                    rhel-8.3-kselftests
+x86_64                              defconfig
+x86_64                           allyesconfig
+x86_64                               rhel-8.3
+s390                                defconfig
+s390                             allmodconfig
+s390                             allyesconfig
+powerpc                           allnoconfig
+mips                             allyesconfig
+powerpc                          allmodconfig
+sh                               allmodconfig
+i386                             allyesconfig
+i386                                defconfig
+x86_64                           rhel-8.3-kvm
+x86_64                           rhel-8.3-syz
+x86_64                         rhel-8.3-kunit
+i386                          randconfig-a012
+i386                          randconfig-a014
+i386                          randconfig-a016
+mips                     decstation_defconfig
+powerpc                   motionpro_defconfig
+parisc                generic-32bit_defconfig
+riscv             nommu_k210_sdcard_defconfig
+sh                               alldefconfig
+x86_64                        randconfig-a006
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+m68k                             allyesconfig
+m68k                             allmodconfig
+arc                              allyesconfig
+alpha                            allyesconfig
+arm64                            allyesconfig
+arm                                 defconfig
+arm                              allyesconfig
+arm                        multi_v7_defconfig
+arm                         s3c6400_defconfig
+sh                        apsh4ad0a_defconfig
+arm                           tegra_defconfig
+sh                          rsk7203_defconfig
+i386                          randconfig-c001
+arm                            pleb_defconfig
+sh                        edosk7760_defconfig
+arm                       aspeed_g5_defconfig
+um                                  defconfig
+riscv                               defconfig
+arm                        keystone_defconfig
+openrisc                    or1ksim_defconfig
+powerpc                      mgcoge_defconfig
+m68k                          sun3x_defconfig
+arc                            hsdk_defconfig
+powerpc                     mpc83xx_defconfig
+riscv                            allmodconfig
+sh                             sh03_defconfig
+powerpc                   currituck_defconfig
+sh                           se7712_defconfig
+arm                        clps711x_defconfig
+csky                                defconfig
+powerpc                     stx_gp3_defconfig
+sh                      rts7751r2d1_defconfig
+mips                       bmips_be_defconfig
+m68k                       m5208evb_defconfig
+powerpc                         wii_defconfig
+m68k                       m5275evb_defconfig
+m68k                           sun3_defconfig
+arm                         nhk8815_defconfig
+loongarch                           defconfig
+loongarch                         allnoconfig
+loongarch                        allmodconfig
+i386                          debian-10.3-kvm
+i386                        debian-10.3-kunit
+i386                         debian-10.3-func
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_k210_defconfig
+riscv                             allnoconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+arm                  randconfig-c002-20221102
+x86_64                        randconfig-c001
+
+clang tested configs:
+x86_64                        randconfig-a005
+x86_64                        randconfig-a003
+x86_64                        randconfig-a001
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+riscv                    nommu_virt_defconfig
+mips                       rbtx49xx_defconfig
+arm                         socfpga_defconfig
+riscv                randconfig-r042-20221103
+hexagon              randconfig-r041-20221103
+hexagon              randconfig-r045-20221103
+s390                 randconfig-r044-20221103
+powerpc                  mpc885_ads_defconfig
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+hexagon              randconfig-r041-20221102
+hexagon              randconfig-r045-20221102
+x86_64                        randconfig-k001
+mips                     loongson1c_defconfig
+mips                           mtx1_defconfig
+powerpc               mpc834x_itxgp_defconfig
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
