@@ -2,179 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52F56618863
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 20:15:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B599C618869
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 20:16:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231459AbiKCTP0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 15:15:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55076 "EHLO
+        id S231390AbiKCTQw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 15:16:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231382AbiKCTPK (ORCPT
+        with ESMTP id S230041AbiKCTQu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 15:15:10 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 672EE1F63E
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 12:15:07 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id p8so4418999lfu.11
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 12:15:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=YCCC/aaN0XwGV5+u45rOCEbVu+I1nibQFzTI08X/CaE=;
-        b=VFQpT11C9r1bia/G9DdHNF9ckFzQSI3EmESar5wRAdAUX6Cyp0dhYYqk/vDA4KJXHS
-         DrvB6y4K9uy73vrA1dN94MD/D9kA4sMFW6oDQg/NimpDud6epm/ykPmd1E3SqNbqQVIP
-         0gaGiZ8PUuB7TWPwnHxjwzYdrxBw+HC1JszdeV5F6LugdYs5S5sfyrGB42tfKpr7t62O
-         7TBapxU5oBGQv56G178SOTiiw6yqjwKfuLu1/moJLY3yUkXbR2RrQq6UdkbmPKC4jgPj
-         vdgZJ8ja0L1DjrWfWV+Gg4u8UvQopDkV0HO4VMH2sjLX6nMzMPns2vSP3HKrQPgU5a37
-         IWhw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=YCCC/aaN0XwGV5+u45rOCEbVu+I1nibQFzTI08X/CaE=;
-        b=DeBR0hbgniNkvyBZHZQWteSewRkop7RtGaN1jF832wmRfmYMyKvIaJoLx0QV/g7Grk
-         tO/vPaGAte0FHITmBCUHqWmdDPRaHEGG89fab0Ncee9+n8Wh1xJ6kx21xPrMo8U+m0M/
-         i+T8VWvjTUsMGi/wpX9PfMuMuuslG7K+SMFuk64izL9FYuMVClAt0RKu/vwICvEzdBVk
-         RghiIO+XuJJYyzjQgSlbruJqTBoAQVw01jannHJ0JvDy6mDnNwj+v2vOTtGQd85aPC9u
-         oYlzu97JQdquVTek1nP3ifiYjHbqzzi8JQBsfk17YBpNOo/ebWswMEm1y3oE0tCTQJpC
-         wn8g==
-X-Gm-Message-State: ACrzQf0+r0touUy5jjfPT6TJMynKaCYSWp3BKNQOoUYJ6X2sehHPGUzM
-        oW8nCnf/2ohGfmIta6c043B4YLGxs48y/A==
-X-Google-Smtp-Source: AMsMyM46lQfxV3ZaoyE1faX/QFWspK66kSoUq+qUSmUIDQ3IfPmTr7YS5n5+u3Cl5uh9hzQSYXxAmQ==
-X-Received: by 2002:a05:6512:b0e:b0:4ae:23c9:1b32 with SMTP id w14-20020a0565120b0e00b004ae23c91b32mr11629860lfu.246.1667502905605;
-        Thu, 03 Nov 2022 12:15:05 -0700 (PDT)
-Received: from elroy-temp-vm ([20.240.130.248])
-        by smtp.gmail.com with ESMTPSA id c4-20020ac244a4000000b004a47a92ff4csm218348lfm.193.2022.11.03.12.15.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Nov 2022 12:15:05 -0700 (PDT)
-Date:   Thu, 3 Nov 2022 19:15:04 +0000
-From:   Tanjuate Brunostar <tanjubrunostar0@gmail.com>
-To:     gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org, outreachy@lists.linux.dev
-Subject: [PATCH v2] staging: vt6655: change the function name s_vFillRTSHead
-Message-ID: <Y2QTON8cjU/D0GqO@elroy-temp-vm.gaiao0uenmiufjlowqgp5yxwdh.gvxx.internal.cloudapp.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 3 Nov 2022 15:16:50 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DECFF1D306;
+        Thu,  3 Nov 2022 12:16:48 -0700 (PDT)
+Received: by linux.microsoft.com (Postfix, from userid 1004)
+        id 9DBBE20B9F81; Thu,  3 Nov 2022 12:16:48 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 9DBBE20B9F81
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linuxonhyperv.com;
+        s=default; t=1667503008;
+        bh=kadn+aTf3nW20UCiL7FSGugZ1f36OZduTmq6RjMWCWQ=;
+        h=From:To:Cc:Subject:Date:Reply-To:From;
+        b=EPwRK0Eu0s1m8QfOiv2DXRMPZhHvxaaLj88sjHqt59UdZ5H7vMKf/MqKc1CvgcvLA
+         5jIsw7cU+k7hI3HKH0nr7P/7ycaj6g/D800LCw9j7vsIaoz7e2zNCCPqTUjeJh7fTs
+         tKKIlrnFi2COMblXApZYP4EARmd75etsD21y8lSU=
+From:   longli@linuxonhyperv.com
+To:     "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Leon Romanovsky <leon@kernel.org>, edumazet@google.com,
+        shiraz.saleem@intel.com, Ajay Sharma <sharmaajay@microsoft.com>
+Cc:     linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
+        Long Li <longli@microsoft.com>
+Subject: [Patch v10 00/12] Introduce Microsoft Azure Network Adapter (MANA) RDMA driver
+Date:   Thu,  3 Nov 2022 12:16:18 -0700
+Message-Id: <1667502990-2559-1-git-send-email-longli@linuxonhyperv.com>
+X-Mailer: git-send-email 1.8.3.1
+Reply-To: longli@microsoft.com
+X-Spam-Status: No, score=-11.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove the use of Hungarian notation, which is not used in the Linux
-kernel. Reported by checkpatch
+From: Long Li <longli@microsoft.com>
 
-Add indentation to the affected function headers to follow the Linux
-kernel coding style
+This patchset implements a RDMA driver for Microsoft Azure Network
+Adapter (MANA). In MANA, the RDMA device is modeled as an auxiliary device
+to the Ethernet device.
 
-Signed-off-by: Tanjuate Brunostar <tanjubrunostar0@gmail.com>
----
+The first 11 patches modify the MANA Ethernet driver to support RDMA driver.
+The last patch implementes the RDMA driver.
 
-v2: corrected confusing changlog message on this patch
+The user-mode of the driver is being reviewed at:
+https://github.com/linux-rdma/rdma-core/pull/1177
 
- drivers/staging/vt6655/rxtx.c | 48 ++++++++++++++++-------------------
- 1 file changed, 22 insertions(+), 26 deletions(-)
+Ajay Sharma (3):
+  net: mana: Set the DMA device max segment size
+  net: mana: Define and process GDMA response code
+    GDMA_STATUS_MORE_ENTRIES
+  net: mana: Define data structures for protection domain and memory
+    registration
 
-diff --git a/drivers/staging/vt6655/rxtx.c b/drivers/staging/vt6655/rxtx.c
-index 31ae99b3cb35..debc5d5daede 100644
---- a/drivers/staging/vt6655/rxtx.c
-+++ b/drivers/staging/vt6655/rxtx.c
-@@ -23,7 +23,7 @@
-  *      s_uGetTxRsvTime- get frame reserved time
-  *      s_vFillCTSHead- fulfill CTS ctl header
-  *      s_vFillFragParameter- Set fragment ctl parameter.
-- *      s_vFillRTSHead- fulfill RTS ctl header
-+ *      fill_rts_header- fulfill RTS ctl header
-  *      s_vFillTxKey- fulfill tx encrypt key
-  *      s_vSWencryption- Software encrypt header
-  *      vDMA0_tx_80211- tx 802.11 frame via dma0
-@@ -85,15 +85,15 @@ static const unsigned short fb_opt1[2][5] = {
- #define DATADUR_A_F1    13
- 
- /*---------------------  Static Functions  --------------------------*/
--static void s_vFillRTSHead(struct vnt_private *pDevice,
--			   unsigned char byPktType,
--			   void *pvRTS,
--			   unsigned int	cbFrameLength,
--			   bool bNeedAck,
--			   bool bDisCRC,
--			   struct ieee80211_hdr *hdr,
--			   unsigned short wCurrentRate,
--			   unsigned char byFBOption);
-+static void fill_rts_header(struct vnt_private *pDevice,
-+			    unsigned char byPktType,
-+			    void *pvRTS,
-+			    unsigned int cbFrameLength,
-+			    bool bNeedAck,
-+			    bool bDisCRC,
-+			    struct ieee80211_hdr *hdr,
-+			    unsigned short wCurrentRate,
-+			    unsigned char byFBOption);
- 
- static void s_vGenerateTxParameter(struct vnt_private *pDevice,
- 				   unsigned char byPktType,
-@@ -555,19 +555,15 @@ s_uFillDataHead(
- 	return buf->duration;
- }
- 
--static
--void
--s_vFillRTSHead(
--	struct vnt_private *pDevice,
--	unsigned char byPktType,
--	void *pvRTS,
--	unsigned int cbFrameLength,
--	bool bNeedAck,
--	bool bDisCRC,
--	struct ieee80211_hdr *hdr,
--	unsigned short wCurrentRate,
--	unsigned char byFBOption
--)
-+static void fill_rts_header(struct vnt_private *pDevice,
-+			    unsigned char byPktType,
-+			    void *pvRTS,
-+			    unsigned int cbFrameLength,
-+			    bool bNeedAck,
-+			    bool bDisCRC,
-+			    struct ieee80211_hdr *hdr,
-+			    unsigned short wCurrentRate,
-+			    unsigned char byFBOption)
- {
- 	unsigned int uRTSFrameLen = 20;
- 
-@@ -912,7 +908,7 @@ s_vGenerateTxParameter(
- 			buf->rrv_time_a = vnt_rxtx_rsvtime_le16(pDevice, byPktType, cbFrameSize, wCurrentRate, bNeedACK);
- 			buf->rrv_time_b = vnt_rxtx_rsvtime_le16(pDevice, PK_TYPE_11B, cbFrameSize, pDevice->byTopCCKBasicRate, bNeedACK);
- 
--			s_vFillRTSHead(pDevice, byPktType, pvRTS, cbFrameSize, bNeedACK, bDisCRC, psEthHeader, wCurrentRate, byFBOption);
-+			fill_rts_header(pDevice, byPktType, pvRTS, cbFrameSize, bNeedACK, bDisCRC, psEthHeader, wCurrentRate, byFBOption);
- 		} else {/* RTS_needless, PCF mode */
- 			struct vnt_rrv_time_cts *buf = pvRrvTime;
- 
-@@ -931,7 +927,7 @@ s_vGenerateTxParameter(
- 			buf->rrv_time = vnt_rxtx_rsvtime_le16(pDevice, byPktType, cbFrameSize, wCurrentRate, bNeedACK);
- 
- 			/* Fill RTS */
--			s_vFillRTSHead(pDevice, byPktType, pvRTS, cbFrameSize, bNeedACK, bDisCRC, psEthHeader, wCurrentRate, byFBOption);
-+			fill_rts_header(pDevice, byPktType, pvRTS, cbFrameSize, bNeedACK, bDisCRC, psEthHeader, wCurrentRate, byFBOption);
- 		} else if (!pvRTS) {/* RTS_needless, non PCF mode */
- 			struct vnt_rrv_time_ab *buf = pvRrvTime;
- 
-@@ -945,7 +941,7 @@ s_vGenerateTxParameter(
- 			buf->rrv_time = vnt_rxtx_rsvtime_le16(pDevice, PK_TYPE_11B, cbFrameSize, wCurrentRate, bNeedACK);
- 
- 			/* Fill RTS */
--			s_vFillRTSHead(pDevice, byPktType, pvRTS, cbFrameSize, bNeedACK, bDisCRC, psEthHeader, wCurrentRate, byFBOption);
-+			fill_rts_header(pDevice, byPktType, pvRTS, cbFrameSize, bNeedACK, bDisCRC, psEthHeader, wCurrentRate, byFBOption);
- 		} else { /* RTS_needless, non PCF mode */
- 			struct vnt_rrv_time_ab *buf = pvRrvTime;
- 
+Long Li (9):
+  net: mana: Add support for auxiliary device
+  net: mana: Record the physical address for doorbell page region
+  net: mana: Handle vport sharing between devices
+  net: mana: Export Work Queue functions for use by RDMA driver
+  net: mana: Record port number in netdev
+  net: mana: Move header files to a common location
+  net: mana: Define max values for SGL entries
+  net: mana: Define data structures for allocating doorbell page from
+    GDMA
+  RDMA/mana_ib: Add a driver for Microsoft Azure Network Adapter
+
+ MAINTAINERS                                   |  10 +
+ drivers/infiniband/Kconfig                    |   1 +
+ drivers/infiniband/hw/Makefile                |   1 +
+ drivers/infiniband/hw/mana/Kconfig            |  10 +
+ drivers/infiniband/hw/mana/Makefile           |   4 +
+ drivers/infiniband/hw/mana/cq.c               |  79 +++
+ drivers/infiniband/hw/mana/device.c           | 117 ++++
+ drivers/infiniband/hw/mana/main.c             | 521 ++++++++++++++++++
+ drivers/infiniband/hw/mana/mana_ib.h          | 162 ++++++
+ drivers/infiniband/hw/mana/mr.c               | 197 +++++++
+ drivers/infiniband/hw/mana/qp.c               | 506 +++++++++++++++++
+ drivers/infiniband/hw/mana/wq.c               | 115 ++++
+ drivers/net/ethernet/microsoft/Kconfig        |   1 +
+ .../net/ethernet/microsoft/mana/gdma_main.c   |  40 +-
+ .../net/ethernet/microsoft/mana/hw_channel.c  |   6 +-
+ .../net/ethernet/microsoft/mana/mana_bpf.c    |   2 +-
+ drivers/net/ethernet/microsoft/mana/mana_en.c | 175 +++++-
+ .../ethernet/microsoft/mana/mana_ethtool.c    |   2 +-
+ .../net/ethernet/microsoft/mana/shm_channel.c |   2 +-
+ .../microsoft => include/net}/mana/gdma.h     | 158 +++++-
+ .../net}/mana/hw_channel.h                    |   0
+ .../microsoft => include/net}/mana/mana.h     |  23 +-
+ include/net/mana/mana_auxiliary.h             |  10 +
+ .../net}/mana/shm_channel.h                   |   0
+ include/uapi/rdma/ib_user_ioctl_verbs.h       |   1 +
+ include/uapi/rdma/mana-abi.h                  |  66 +++
+ 26 files changed, 2164 insertions(+), 45 deletions(-)
+ create mode 100644 drivers/infiniband/hw/mana/Kconfig
+ create mode 100644 drivers/infiniband/hw/mana/Makefile
+ create mode 100644 drivers/infiniband/hw/mana/cq.c
+ create mode 100644 drivers/infiniband/hw/mana/device.c
+ create mode 100644 drivers/infiniband/hw/mana/main.c
+ create mode 100644 drivers/infiniband/hw/mana/mana_ib.h
+ create mode 100644 drivers/infiniband/hw/mana/mr.c
+ create mode 100644 drivers/infiniband/hw/mana/qp.c
+ create mode 100644 drivers/infiniband/hw/mana/wq.c
+ rename {drivers/net/ethernet/microsoft => include/net}/mana/gdma.h (80%)
+ rename {drivers/net/ethernet/microsoft => include/net}/mana/hw_channel.h (100%)
+ rename {drivers/net/ethernet/microsoft => include/net}/mana/mana.h (95%)
+ create mode 100644 include/net/mana/mana_auxiliary.h
+ rename {drivers/net/ethernet/microsoft => include/net}/mana/shm_channel.h (100%)
+ create mode 100644 include/uapi/rdma/mana-abi.h
+
 -- 
-2.34.1
+2.17.1
 
