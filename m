@@ -2,121 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BB54617BE8
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 12:50:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A39AF617BF9
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 12:54:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231318AbiKCLuz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 07:50:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57132 "EHLO
+        id S231374AbiKCLyU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 07:54:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230491AbiKCLuv (ORCPT
+        with ESMTP id S231310AbiKCLyQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 07:50:51 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 722731261B;
-        Thu,  3 Nov 2022 04:50:50 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id bj12so4401279ejb.13;
-        Thu, 03 Nov 2022 04:50:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=keJ5l0jb4yVbNlSnZAlwlDsuTe9ejUBhSqY4hGrZAt0=;
-        b=PQ4YP2wRUJxZdyyz6zZSZj+OjTKLdQbjnJkxjyIB0AC5p9wCBSenX4q6mmPCPucfLz
-         gDMwV3i1aFqKEh5YPlxigWY1bvKvPlUXkwPnhWHjwjjye79ZdICdVxB4Zftj9DJEytlN
-         q771MkVQ5MXnmIadjxvf8TbGbFXv8VQhRZ8edPRJDeMOyNH8tg6R2p1oCo9eABQy6QoU
-         GuOc+ZylXDYkX5N9L2qZ4YrABRwVE2lPD5u2XqB6c6dFDVgqLx6hIV5K3nyY6D5+4D+e
-         8VUcEhsp7ptRiQ4ShGElO1mjJ8Pk6zCV0A+EtDhi/6TUIGuafFpfUciZ1WTb7yraBE/2
-         s2zg==
+        Thu, 3 Nov 2022 07:54:16 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F890120B1
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 04:53:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1667476398;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=v84JZEMOTpneHRjU+4aahq00pj4cEi9BPmEyqyDwNuI=;
+        b=Tydubu4eDB+HzdnqYqKcKCVwi/yA2MdR/EyH3xnbdUcWgmCqi2Mm3KzSKJAe9iuAJLR+xY
+        4XWB62lENQ/TYFo/XyBFn2piMOjMi1hlqvjzyRe37jIPIqHia6xeVEg7maJkCyO5X4EGD8
+        9o5Jp3i8dG1/epLbOvNxYdo9NYx/qL0=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-175-VXb4GRuaOmOxXRPrfBgmBw-1; Thu, 03 Nov 2022 07:53:17 -0400
+X-MC-Unique: VXb4GRuaOmOxXRPrfBgmBw-1
+Received: by mail-wm1-f69.google.com with SMTP id c5-20020a1c3505000000b003c56da8e894so2534723wma.0
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 04:53:17 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=keJ5l0jb4yVbNlSnZAlwlDsuTe9ejUBhSqY4hGrZAt0=;
-        b=YJEo8tCrwnjUBgzVnKKLTnrEd5t27/6G1186HPE8erzDfve4wMqZB2yKu5x+roNlTA
-         qeZBGnzZXDGypLy4MHL16iWmq9yUvd0NhG6n6U8pDvqEHaH4GEvUgtNNFsNZgVhJOQfn
-         OjW5CJ5eMApB68MicKnjncPvOyh11NCnEFmNQv/1rW7rUOA9D7zvSGxKFwij16oZV3+l
-         U13E3L0/Ypj7nvY7vnMoe2sl4TKS0o7FXHZp9iyG4auHD6XCE8dgNHVgnZu74FV4a1Ci
-         B7hXvzuJYoakBNABSiF3zpcuCAb+1KoLducaLe14lULj+1p7Z5fO9k54Wf63DmZ0fJ5k
-         6uMQ==
-X-Gm-Message-State: ACrzQf2MR0Uzu9yA1smcc8KjSuHytRN0lMx1XcYCS8JBni54ols91701
-        GdnIa8c3YtaVTxqSr0yQqi0=
-X-Google-Smtp-Source: AMsMyM4Q2CWz7BX9ZdLC6MF66A9EF7pbiXpl8t0scbNUjX7cAVd2Z79MgxCmVq5bwXHVpkFCAbco8Q==
-X-Received: by 2002:a17:906:7119:b0:7ad:fc15:24be with SMTP id x25-20020a170906711900b007adfc1524bemr9395473ejj.199.1667476248950;
-        Thu, 03 Nov 2022 04:50:48 -0700 (PDT)
-Received: from orome (p200300e41f201d00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f20:1d00:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id b18-20020a1709063cb200b0078d4e39d87esm378334ejh.225.2022.11.03.04.50.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Nov 2022 04:50:47 -0700 (PDT)
-Date:   Thu, 3 Nov 2022 12:50:46 +0100
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Sandipan Patra <spatra@nvidia.com>
-Cc:     jonathanh@nvidia.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bbasu@nvidia.com, kyarlagadda@nvidia.com
-Subject: Re: [PATCH v5 2/3] arm64: tegra: Add PWM controllers on Tegra234
-Message-ID: <Y2OrFj8sLbzaFCgE@orome>
-References: <20220919141455.31084-1-spatra@nvidia.com>
- <20220919141455.31084-2-spatra@nvidia.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=v84JZEMOTpneHRjU+4aahq00pj4cEi9BPmEyqyDwNuI=;
+        b=xsB+PINAJ1L9tv49/JcKxQ5ziLpk1w3P0rAwsCdRx/eRwwlLyyYw/r+e8KVEFbcBcl
+         gis5xa/KK3+kbq9W7VbdytUIXUp2Oe7jwk5nmJ84z0HOxiGhChFp0+lVzUKfdml+r9f9
+         qF2H2gera/tPqktygfOIwoo8Dvfy0QuMxZeo5amSVFMBJtTykbVM24d4wXBDA+yH4UdK
+         J8F53HW8hK42lFu36meEO+4qbYFyjB6jxQ9zr4IdkwdR3vIQ5NgROyO36M+guEJlCnbf
+         dnYEAwEfCAvuJwmqQ4xmod8Sq610zB04prrvDpoSlfBZjdoxAbFhqFxBfk0t0lBXXjVL
+         YB/A==
+X-Gm-Message-State: ACrzQf0bdLhgf/bk0Y/4wBIzlSQ8EyaWF55wxivJKnF7oG9duHJ7KrIX
+        W+qnyAKRJkXb5abVkqQ3n6Z1gfIwjgYbrOAyIri8MNzBvgCzv2UkWuNl8k3KebPcvt8ZagyNjNr
+        xmxVXASy3sg/YZR0bDcCmVgd3
+X-Received: by 2002:adf:e446:0:b0:236:773b:c6f0 with SMTP id t6-20020adfe446000000b00236773bc6f0mr18747870wrm.55.1667476396432;
+        Thu, 03 Nov 2022 04:53:16 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM7tg9WlNqpEeBsorrVmfpoW8aMy3ZwDl4qGsf1OwV7SMXeHd0xrPDtiVhqzBhDK3nBqxF0o6A==
+X-Received: by 2002:adf:e446:0:b0:236:773b:c6f0 with SMTP id t6-20020adfe446000000b00236773bc6f0mr18747848wrm.55.1667476396133;
+        Thu, 03 Nov 2022 04:53:16 -0700 (PDT)
+Received: from [192.168.1.130] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id bg41-20020a05600c3ca900b003a3170a7af9sm1167582wmb.4.2022.11.03.04.53.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 03 Nov 2022 04:53:15 -0700 (PDT)
+Message-ID: <c9064cc6-2a9d-1094-53fb-cf56f9cbf191@redhat.com>
+Date:   Thu, 3 Nov 2022 12:53:14 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="Aw3zPKjSVKby1eZq"
-Content-Disposition: inline
-In-Reply-To: <20220919141455.31084-2-spatra@nvidia.com>
-User-Agent: Mutt/2.2.7 (2022-08-07)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [PATCH] drm: rcar_du: DRM_RCAR_DU optionally depends on
+ RCAR_MIPI_DSI
+Content-Language: en-US
+To:     Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        linux-kernel@vger.kernel.org
+Cc:     Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        dri-devel@lists.freedesktop.org, linux-renesas-soc@vger.kernel.org,
+        Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>,
+        LUU HOAI <hoai.luu.ub@renesas.com>
+References: <20221018181828.19528-1-rdunlap@infradead.org>
+ <a68a24a0-eda3-8711-21c1-334289eca0d3@infradead.org>
+ <166747314442.3962897.9754510086268412956@Monstersaurus>
+From:   Javier Martinez Canillas <javierm@redhat.com>
+In-Reply-To: <166747314442.3962897.9754510086268412956@Monstersaurus>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello Kieran,
 
---Aw3zPKjSVKby1eZq
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 11/3/22 11:59, Kieran Bingham wrote:
+> Hi Randy,
+> 
+> Quoting Randy Dunlap (2022-11-03 06:06:45)
+>> ping. I have verified (on linux-next-20221103) that this is still needed.
+>> Thanks.
+>>
+>> On 10/18/22 11:18, Randy Dunlap wrote:
+>>> When CONFIG_DRM_RCAR_DU=y and CONFIG_DRM_RCAR_MIPI_DSI=m, calls
+>>> from the builtin driver to the mipi driver fail due to linker
+>>> errors.
+>>> Since the RCAR_MIPI_DSI driver is not always required, fix the
+>>> build error by making DRM_RCAR_DU optionally depend on the
+>>> RCAR_MIPI_DSI Kconfig symbol. This prevents the problematic
+>>> kconfig combination without requiring that RCAR_MIPI_DSI always
+>>> be enabled.
+>>>
+>>> aarch64-linux-ld: drivers/gpu/drm/rcar-du/rcar_du_crtc.o: in function `rcar_du_crtc_atomic_enable':
+>>> rcar_du_crtc.c:(.text+0x3a18): undefined reference to `rcar_mipi_dsi_pclk_enable'
+>>> aarch64-linux-ld: drivers/gpu/drm/rcar-du/rcar_du_crtc.o: in function `rcar_du_crtc_atomic_disable':
+>>> rcar_du_crtc.c:(.text+0x47cc): undefined reference to `rcar_mipi_dsi_pclk_disable'
+>>>
+>>> Fixes: 957fe62d7d15 ("drm: rcar-du: Fix DSI enable & disable sequence")
+>>> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+>>> Cc: Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
+>>> Cc: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+>>> Cc: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+>>> Cc: LUU HOAI <hoai.luu.ub@renesas.com>
+>>> Cc: dri-devel@lists.freedesktop.org
+>>> Cc: linux-renesas-soc@vger.kernel.org
+>>> Cc: David Airlie <airlied@gmail.com>
+>>> Cc: Daniel Vetter <daniel@ffwll.ch>
+>>> ---
+>>>  drivers/gpu/drm/rcar-du/Kconfig |    1 +
+>>>  1 file changed, 1 insertion(+)
+>>>
+>>> diff -- a/drivers/gpu/drm/rcar-du/Kconfig b/drivers/gpu/drm/rcar-du/Kconfig
+>>> --- a/drivers/gpu/drm/rcar-du/Kconfig
+>>> +++ b/drivers/gpu/drm/rcar-du/Kconfig
+>>> @@ -4,6 +4,7 @@ config DRM_RCAR_DU
+>>>       depends on DRM && OF
+>>>       depends on ARM || ARM64
+>>>       depends on ARCH_RENESAS || COMPILE_TEST
+>>> +     depends on DRM_RCAR_MIPI_DSI || DRM_RCAR_MIPI_DSI=n
+> 
+> Please forgive my ignorance, but I don't understand how this works.
+> Could you explain what this is doing please?
+> 
+> I know you've explained above that it fixes it to optionally depend on
+> DRM_RCAR_MIPI_DSI ... but it's not making sense to me.
+> 
+> To me - this is saying we depend on DRM_RCAR_MIPI_DSI being enabled, or
+> not being enabled ... ? Which is like saying if (0 || 1) ?
+> 
+> I'm guessing I'm missing something obvious :-S
+>
 
-On Mon, Sep 19, 2022 at 07:44:54PM +0530, Sandipan Patra wrote:
-> Tegra234 has eight single-channel PWM controllers, one of them in the
-> AON block.
->=20
-> Signed-off-by: Sandipan Patra <spatra@nvidia.com>
-> ---
-> V4->V5: Update compatable with Tegra234 and fallback
->=20
->  arch/arm64/boot/dts/nvidia/tegra234.dtsi | 88 +++++++++++++++++++++++-
->  1 file changed, 86 insertions(+), 2 deletions(-)
+What this Kconfig expression is saying is that it depends on DRM_RCAR_MIPI_DSI=y
+if DRM_RCAR_DU=y and DRM_RCAR_MIPI_DSI=m if DRM_RCAR_DU=m. But that the it can
+also be satisfied if is not set DRM_RCAR_MIPI_DSI.
 
-I've merged this with Jon's changes that also added these.
+This is usually used to make sure that you don't end with a configuration where
+DRM_RCAR_MIPI_DSI=y and DRM_RCAR_DU=m or DRM_RCAR_MIPI_DSI=m and DRM_RCAR_DU=y.
 
-Thanks,
-Thierry
+Randy, I think that it's more idiomatic though to it express as following:
 
---Aw3zPKjSVKby1eZq
-Content-Type: application/pgp-signature; name="signature.asc"
+depends on DRM_RCAR_MIPI_DSI || !DRM_RCAR_MIPI_DSI
 
------BEGIN PGP SIGNATURE-----
+-- 
+Best regards,
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmNjqxYACgkQ3SOs138+
-s6GV1xAAgnvX4bDU3E6GnC3hIepbicVjUN+ipYXeyeC2gAbc1KwfHoa4hoQkBo5f
-Lma1kyaPrh0gBNblea7DuwQNNqnHsWg5UY+FRLsWDifSCs3f488FXKQKOCbDgVDB
-zJR/zGIiLKuwS0Evmvsno9n4r8bBJ6qlmpGPtTcqsUkCG2jYvqEifePnCllk2Xcu
-jgHaqgSS2u1iZ40UFouOYj1XKjXcmAO0n9+OH3aYxdY9CU2KlSpJExtBFkHpDZGY
-XNoDyr/h+Y2Thp3lNmpIjS1U50drOU2CeY+KBPOUBj66sqbVWLPffwDXH1l6xsak
-po0WiyfLIuEo98qzyIt7L4haAGMKt9HnuRa47Jo3XkJq8ULoITDQKvmW1FteH0xx
-sm2J5SFJ9bglLbv55GZtgbwROl9GM2K6Z4v3KWBVzVtGljhPZiPpjLjqUrrGapii
-LdKqqFwjf6SjRuKJsX5MSjRLiPcvPttcCNEqnpAANKcC4RI73mPl31DF0YkTmz8W
-oawg3pc8OJzz9sDc2ZSuc18zkzNpfmdmya6V5dqh62a23sP+CIwbn4lbeYmwGElW
-28u8gJa5EO6TEVxvBwcAKGdICRYg9AVwpoSbwqiSkZ0/btQ6sINkf3ojT13CDKkC
-hJCrD+TrqVtBJnKJjrbjjtAXdJZzj33tQVnyVty2QO2GUNay1wU=
-=/9V0
------END PGP SIGNATURE-----
+Javier Martinez Canillas
+Core Platforms
+Red Hat
 
---Aw3zPKjSVKby1eZq--
