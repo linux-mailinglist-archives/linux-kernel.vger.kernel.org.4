@@ -2,106 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FE53617F5C
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 15:23:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46EBF617F5F
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 15:24:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231140AbiKCOXw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 10:23:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45106 "EHLO
+        id S230295AbiKCOYV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 10:24:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229667AbiKCOXs (ORCPT
+        with ESMTP id S229667AbiKCOYR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 10:23:48 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E107226DC;
-        Thu,  3 Nov 2022 07:23:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 4BB9DCE2722;
-        Thu,  3 Nov 2022 14:23:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E0DDC433D6;
-        Thu,  3 Nov 2022 14:23:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667485424;
-        bh=1mb0UurHHrNFqj2sHmybUCJt4bkS5HY4Ovca4anNFkc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XY6qTuHKDTt2JcS/mXxzCs2mTyv6ktexk/jwHBkomRWhGgdujJzF7NM/ANfK0EKGv
-         u2CUjFR7jiCpEKXUUXVAckSw9ayh/tFVvscGbr2Xz/7cvywSZz87T6Ub900CRx8Upd
-         FQ+sFbnhx6cCq2f/EnzTJrWNsTvsYpEIev2IrpLwroR3pI940YOoYIq2unsvG2pqFR
-         DcVNhKJ5bQgA6sCCeVN0zZK/tL7yLNm/TSqQKKndGti8QmXciB28MEieQwHsLi2HTx
-         zOPQgr3Ftc00LRdHzpyX2/9JS6lSVpAmt27EO1fRjSnSzxGEQJ4ngFXnXNHKv4fnz4
-         2PyDKFNb9i+xQ==
-Date:   Thu, 3 Nov 2022 15:23:40 +0100
-From:   Christian Brauner <brauner@kernel.org>
-To:     syzbot <syzbot+3f6ef1c4586bb6fd1f61@syzkaller.appspotmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-unionfs@vger.kernel.org,
-        miklos@szeredi.hu, syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] BUG: unable to handle kernel paging request in
- ovl_set_acl
-Message-ID: <20221103142340.6qc23fgvchtmrv6z@wittgenstein>
-References: <20221103072557.qc2hsowoaatstrbh@wittgenstein>
- <0000000000002d057805ec8f6cb5@google.com>
+        Thu, 3 Nov 2022 10:24:17 -0400
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C49815838;
+        Thu,  3 Nov 2022 07:24:16 -0700 (PDT)
+Received: by mail-wm1-f49.google.com with SMTP id l16-20020a05600c4f1000b003c6c0d2a445so1294771wmq.4;
+        Thu, 03 Nov 2022 07:24:16 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=X1LT03bLiRuIHRMNZ/VBHuLAuNEKFfSIdBpGFc2+9sA=;
+        b=r1t3vLWxamxM4coqto9QOkOiy1is0Ax+3QyuRBz5axMJZeDIgRWLJOw9n+uoSB1T7K
+         Kq+HOX3D+9un5owkZN5X7gN75ZqwazJ4FeuE0ZBjam3vfx+7XlBp4RgHDKCEbt27A76J
+         4sNY4+3912HqeZ55Ty+RkP7H6dT2YBjlVFE8DnWPsSYmzEgyrNjyqixdv1jOERcSm6X7
+         2cvG5j3Rz6WQONgdpNQInMhW9aIpMD1nm3/dUjgLRtUNIt7oeR4+ITLFpxsGgudI51ot
+         wGz/OWr9OUvls81h+PmxEDHw7i5zUP+THIBavlyrwxFV1IRk4NuT6PRgEAgDXfbVpptW
+         jSjg==
+X-Gm-Message-State: ACrzQf2p72c4spr+BjXbjYdQtVaGYAhpWBRq6xhVcOVNYpzcvMV3oLf1
+        pz7piTNkhIERo/wEa3rpemY=
+X-Google-Smtp-Source: AMsMyM4ke2iyyMAnoCrhGCzCaGHhhDeyDynNHBdskVE6dhi6oDEpiIQ2fWHmd9zmf+pjyz4RpsKJsA==
+X-Received: by 2002:a05:600c:4fcf:b0:3c6:cdb9:b68f with SMTP id o15-20020a05600c4fcf00b003c6cdb9b68fmr30684663wmq.73.1667485454723;
+        Thu, 03 Nov 2022 07:24:14 -0700 (PDT)
+Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
+        by smtp.gmail.com with ESMTPSA id fc15-20020a05600c524f00b003cf57329221sm47245wmb.14.2022.11.03.07.24.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Nov 2022 07:24:14 -0700 (PDT)
+Date:   Thu, 3 Nov 2022 14:24:05 +0000
+From:   Wei Liu <wei.liu@kernel.org>
+To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+Cc:     Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
+        KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        Dexuan Cui <decui@microsoft.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
+        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "stanislav.kinsburskiy@gmail.com" <stanislav.kinsburskiy@gmail.com>,
+        "kumarpraveen@linux.microsoft.com" <kumarpraveen@linux.microsoft.com>,
+        "mail@anirudhrb.com" <mail@anirudhrb.com>
+Subject: Re: [PATCH v2 1/2] clocksource/drivers/hyperv: add data structure
+ for reference TSC MSR
+Message-ID: <Y2PPBREz76rMyhnx@liuwe-devbox-debian-v2>
+References: <20221027095729.1676394-1-anrayabh@linux.microsoft.com>
+ <20221027095729.1676394-2-anrayabh@linux.microsoft.com>
+ <BYAPR21MB1688E0040710DF040BB7FCCDD7339@BYAPR21MB1688.namprd21.prod.outlook.com>
+ <BYAPR21MB168844A39612131C920DA954D7399@BYAPR21MB1688.namprd21.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <0000000000002d057805ec8f6cb5@google.com>
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <BYAPR21MB168844A39612131C920DA954D7399@BYAPR21MB1688.namprd21.prod.outlook.com>
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 03, 2022 at 04:40:22AM -0700, syzbot wrote:
-> Hello,
+On Wed, Nov 02, 2022 at 08:33:31PM +0000, Michael Kelley (LINUX) wrote:
+> From: Michael Kelley (LINUX) <mikelley@microsoft.com> Sent: Thursday, October 27, 2022 6:43 AM
+> > From: Anirudh Rayabharam <anrayabh@linux.microsoft.com> Sent: Thursday,
+> > October 27, 2022 2:57 AM
+> > >
+> > > Add a data structure to represent the reference TSC MSR similar to
+> > > other MSRs. This simplifies the code for updating the MSR.
+> > >
+> > > Signed-off-by: Anirudh Rayabharam <anrayabh@linux.microsoft.com>
+> > > ---
+> > >  drivers/clocksource/hyperv_timer.c | 28 ++++++++++++++--------------
+> > >  include/asm-generic/hyperv-tlfs.h  |  9 +++++++++
+> > >  2 files changed, 23 insertions(+), 14 deletions(-)
+> > >
+> > > diff --git a/drivers/clocksource/hyperv_timer.c
+> > b/drivers/clocksource/hyperv_timer.c
+> > > index bb47610bbd1c..11332c82d1af 100644
+> > > --- a/drivers/clocksource/hyperv_timer.c
+> > > +++ b/drivers/clocksource/hyperv_timer.c
+> > > @@ -395,25 +395,25 @@ static u64 notrace read_hv_sched_clock_tsc(void)
+> > >
+> > >  static void suspend_hv_clock_tsc(struct clocksource *arg)
+> > >  {
+> > > -	u64 tsc_msr;
+> > > +	union hv_reference_tsc_msr tsc_msr;
+> > >
+> > >  	/* Disable the TSC page */
+> > > -	tsc_msr = hv_get_register(HV_REGISTER_REFERENCE_TSC);
+> > > -	tsc_msr &= ~BIT_ULL(0);
+> > > -	hv_set_register(HV_REGISTER_REFERENCE_TSC, tsc_msr);
+> > > +	tsc_msr.as_uint64 = hv_get_register(HV_REGISTER_REFERENCE_TSC);
+> > > +	tsc_msr.enable = 0;
+> > > +	hv_set_register(HV_REGISTER_REFERENCE_TSC, tsc_msr.as_uint64);
+> > >  }
+> > >
+> > >
+> > >  static void resume_hv_clock_tsc(struct clocksource *arg)
+> > >  {
+> > >  	phys_addr_t phys_addr = virt_to_phys(&tsc_pg);
+> > > -	u64 tsc_msr;
+> > > +	union hv_reference_tsc_msr tsc_msr;
+> > >
+> > >  	/* Re-enable the TSC page */
+> > > -	tsc_msr = hv_get_register(HV_REGISTER_REFERENCE_TSC);
+> > > -	tsc_msr &= GENMASK_ULL(11, 0);
+> > > -	tsc_msr |= BIT_ULL(0) | (u64)phys_addr;
+> > > -	hv_set_register(HV_REGISTER_REFERENCE_TSC, tsc_msr);
+> > > +	tsc_msr.as_uint64 = hv_get_register(HV_REGISTER_REFERENCE_TSC);
+> > > +	tsc_msr.enable = 1;
+> > > +	tsc_msr.pfn = __phys_to_pfn(phys_addr);
 > 
-> syzbot tried to test the proposed patch but the build/boot failed:
+> My previous review missed a problem here (and in the similar line below).
+> __phys_to_pfn() will return a PFN based on the guest page size, which might
+> be different from Hyper-V's page size that is always 4K.  This needs to be a
+> Hyper-V PFN, and we have virt_to_hvpfn() available to do just that, assuming
+> that function is safe to use here and in the case below. 
 
-Unrelated failure. I've reproduced the issue manually and verified that
-the patch I wanted to test fixes it. Patch is in the relevant branch an
-in for-next:
+Anirudh, please take a look.
 
-https://git.kernel.org/pub/scm/linux/kernel/git/vfs/idmapping.git/commit/?h=fs.acl.rework&id=5b52aebef8954cadff29918bb61d7fdc7be07837
+I'm holding off sending hyperv-fixes to Linus for now.
 
-This is only relevant for the next mw so nothing in ovl in mainline.
-Fwiw, this is the fix:
-
-From 5b52aebef8954cadff29918bb61d7fdc7be07837 Mon Sep 17 00:00:00 2001
-From: Christian Brauner <brauner@kernel.org>
-Date: Thu, 3 Nov 2022 08:18:46 +0100
-Subject: [PATCH] ovl: call posix_acl_release() after error checking
-
-The current placement of posix_acl_release() in ovl_set_or_remove_acl()
-means it can be called on an error pointer instead of actual acls.
-Fix this by moving the posix_acl_release() call after the error handling.
-
-Fixes: 0e641857322f ("ovl: implement set acl method") # mainline only
-Reported-by: syzbot+3f6ef1c4586bb6fd1f61@syzkaller.appspotmail.com
-Signed-off-by: Christian Brauner (Microsoft) <brauner@kernel.org>
----
- fs/overlayfs/inode.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/fs/overlayfs/inode.c b/fs/overlayfs/inode.c
-index 77a77fd7a77b..ee6dfa577c93 100644
---- a/fs/overlayfs/inode.c
-+++ b/fs/overlayfs/inode.c
-@@ -621,11 +621,11 @@ static int ovl_set_or_remove_acl(struct dentry *dentry, struct inode *inode,
- 		real_acl = vfs_get_acl(mnt_user_ns(realpath.mnt), realdentry,
- 				       acl_name);
- 		revert_creds(old_cred);
--		posix_acl_release(real_acl);
- 		if (IS_ERR(real_acl)) {
- 			err = PTR_ERR(real_acl);
- 			goto out_drop_write;
- 		}
-+		posix_acl_release(real_acl);
- 	}
- 
- 	if (!upperdentry) {
--- 
-2.34.1
-
+Thanks,
+Wei.
