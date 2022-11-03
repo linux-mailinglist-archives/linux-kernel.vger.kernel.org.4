@@ -2,271 +2,330 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D66D3617DD8
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 14:25:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D7A5617DE0
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 14:25:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231713AbiKCNZH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 09:25:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60956 "EHLO
+        id S231375AbiKCNZj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 09:25:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231565AbiKCNZA (ORCPT
+        with ESMTP id S230165AbiKCNZe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 09:25:00 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A9C813EA6
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 06:24:59 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id BD4EC1F8AC;
-        Thu,  3 Nov 2022 13:24:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1667481897; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=9QUBuAHAGVF7m7eXHendyTsjI0pf2J3nOGew5yAs+24=;
-        b=esQdGQ0tva4WxTGogmfCC1IScUwpk1vEqHcXc5keyuCapEtn1EXqCwmkYMdUdot1N6qq25
-        S2NhndoR+fNVtIRdKegZjGz194e49WFuD5g7WzWFA/2hXL1gOboZdcXw/ox+NbBibcZvdt
-        FZ0S1SeXeKqqhdi7Uxlxi/vbSqqLEBA=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5330213480;
-        Thu,  3 Nov 2022 13:24:57 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id BRiJEinBY2PIWwAAMHmgww
-        (envelope-from <jgross@suse.com>); Thu, 03 Nov 2022 13:24:57 +0000
-Message-ID: <55fd2726-b54a-73a7-49ec-e66e025699a7@suse.com>
-Date:   Thu, 3 Nov 2022 14:24:56 +0100
+        Thu, 3 Nov 2022 09:25:34 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8E000C53;
+        Thu,  3 Nov 2022 06:25:33 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 32C751FB;
+        Thu,  3 Nov 2022 06:25:39 -0700 (PDT)
+Received: from [10.1.39.27] (e122027.cambridge.arm.com [10.1.39.27])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 654313F534;
+        Thu,  3 Nov 2022 06:25:29 -0700 (PDT)
+Message-ID: <76f59579-b701-a243-2a50-72a1401d3a65@arm.com>
+Date:   Thu, 3 Nov 2022 13:25:27 +0000
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH 4/4] x86: switch to cpu_feature_enabled() for
- X86_FEATURE_XENPV
-Content-Language: en-US
-To:     Brian Gerst <brgerst@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, xen-devel@lists.xenproject.org,
-        x86@kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Pu Wen <puwen@hygon.cn>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>
-References: <20221103113636.25543-1-jgross@suse.com>
- <20221103113636.25543-5-jgross@suse.com>
- <CAMzpN2hynmZ39ByCRg4ibm=Mz+5LbLps77k9Vhb+c+VmVUO1=A@mail.gmail.com>
-From:   Juergen Gross <jgross@suse.com>
-In-Reply-To: <CAMzpN2hynmZ39ByCRg4ibm=Mz+5LbLps77k9Vhb+c+VmVUO1=A@mail.gmail.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------VyAi3UNXOOv0ZoAGGUlMSoRG"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+ Thunderbird/102.2.2
+Subject: Re: [RFC 5/6] KVM: arm64: Support the VCPU preemption check
+Content-Language: en-GB
+To:     Usama Arif <usama.arif@bytedance.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        kvmarm@lists.cs.columbia.edu, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, linux@armlinux.org.uk,
+        yezengruan@huawei.com, catalin.marinas@arm.com, will@kernel.org,
+        maz@kernel.org, mark.rutland@arm.com
+Cc:     fam.zheng@bytedance.com, liangma@liangbit.com,
+        punit.agrawal@bytedance.com
+References: <20221102161340.2982090-1-usama.arif@bytedance.com>
+ <20221102161340.2982090-6-usama.arif@bytedance.com>
+From:   Steven Price <steven.price@arm.com>
+In-Reply-To: <20221102161340.2982090-6-usama.arif@bytedance.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------VyAi3UNXOOv0ZoAGGUlMSoRG
-Content-Type: multipart/mixed; boundary="------------q41ebvyIk77bWh0cY3Pf4Dl3";
- protected-headers="v1"
-From: Juergen Gross <jgross@suse.com>
-To: Brian Gerst <brgerst@gmail.com>
-Cc: linux-kernel@vger.kernel.org, xen-devel@lists.xenproject.org,
- x86@kernel.org, Thomas Gleixner <tglx@linutronix.de>,
- Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
- Dave Hansen <dave.hansen@linux.intel.com>, "H. Peter Anvin" <hpa@zytor.com>,
- Pu Wen <puwen@hygon.cn>, Andy Lutomirski <luto@kernel.org>,
- Peter Zijlstra <peterz@infradead.org>
-Message-ID: <55fd2726-b54a-73a7-49ec-e66e025699a7@suse.com>
-Subject: Re: [PATCH 4/4] x86: switch to cpu_feature_enabled() for
- X86_FEATURE_XENPV
-References: <20221103113636.25543-1-jgross@suse.com>
- <20221103113636.25543-5-jgross@suse.com>
- <CAMzpN2hynmZ39ByCRg4ibm=Mz+5LbLps77k9Vhb+c+VmVUO1=A@mail.gmail.com>
-In-Reply-To: <CAMzpN2hynmZ39ByCRg4ibm=Mz+5LbLps77k9Vhb+c+VmVUO1=A@mail.gmail.com>
+On 02/11/2022 16:13, Usama Arif wrote:
+> Support the vcpu_is_preempted() functionality under KVM/arm64. This will
+> enhance lock performance on overcommitted hosts (more runnable VCPUs
+> than physical CPUs in the system) as doing busy waits for preempted
+> VCPUs will hurt system performance far worse than early yielding.
+> 
+> Signed-off-by: Zengruan Ye <yezengruan@huawei.com>
+> Signed-off-by: Usama Arif <usama.arif@bytedance.com>
+> ---
+>  arch/arm64/include/asm/paravirt.h |   2 +
+>  arch/arm64/include/asm/spinlock.h |  16 +++-
+>  arch/arm64/kernel/paravirt.c      | 126 ++++++++++++++++++++++++++++++
+>  arch/arm64/kernel/setup.c         |   3 +
+>  include/linux/cpuhotplug.h        |   1 +
+>  5 files changed, 147 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm64/include/asm/paravirt.h b/arch/arm64/include/asm/paravirt.h
+> index 9aa193e0e8f2..4ccb4356c56b 100644
+> --- a/arch/arm64/include/asm/paravirt.h
+> +++ b/arch/arm64/include/asm/paravirt.h
+> @@ -19,10 +19,12 @@ static inline u64 paravirt_steal_clock(int cpu)
+>  }
+>  
+>  int __init pv_time_init(void);
+> +int __init pv_lock_init(void);
+>  
+>  #else
+>  
+>  #define pv_time_init() do {} while (0)
+> +#define pv_lock_init() do {} while (0)
+>  
+>  #endif // CONFIG_PARAVIRT
+>  
+> diff --git a/arch/arm64/include/asm/spinlock.h b/arch/arm64/include/asm/spinlock.h
+> index 0525c0b089ed..7023efa4de96 100644
+> --- a/arch/arm64/include/asm/spinlock.h
+> +++ b/arch/arm64/include/asm/spinlock.h
+> @@ -10,7 +10,20 @@
+>  
+>  /* See include/linux/spinlock.h */
+>  #define smp_mb__after_spinlock()	smp_mb()
+> +#define vcpu_is_preempted vcpu_is_preempted
+> +
+> +#ifdef CONFIG_PARAVIRT
+> +#include <linux/static_call_types.h>
+> +
+> +bool dummy_vcpu_is_preempted(int cpu);
+>  
+> +DECLARE_STATIC_CALL(pv_vcpu_is_preempted, dummy_vcpu_is_preempted);
+> +static inline bool vcpu_is_preempted(int cpu)
+> +{
+> +	return static_call(pv_vcpu_is_preempted)(cpu);
+> +}
+> +
+> +#else
+>  /*
+>   * Changing this will break osq_lock() thanks to the call inside
+>   * smp_cond_load_relaxed().
+> @@ -18,10 +31,11 @@
+>   * See:
+>   * https://lore.kernel.org/lkml/20200110100612.GC2827@hirez.programming.kicks-ass.net
+>   */
+> -#define vcpu_is_preempted vcpu_is_preempted
+>  static inline bool vcpu_is_preempted(int cpu)
+>  {
+>  	return false;
+>  }
+>  
+> +#endif /* CONFIG_PARAVIRT */
+> +
+>  #endif /* __ASM_SPINLOCK_H */
+> diff --git a/arch/arm64/kernel/paravirt.c b/arch/arm64/kernel/paravirt.c
+> index 57c7c211f8c7..45bcca87bed7 100644
+> --- a/arch/arm64/kernel/paravirt.c
+> +++ b/arch/arm64/kernel/paravirt.c
+> @@ -22,6 +22,7 @@
+>  
+>  #include <asm/paravirt.h>
+>  #include <asm/pvclock-abi.h>
+> +#include <asm/pvlock-abi.h>
+>  #include <asm/smp_plat.h>
+>  
+>  struct static_key paravirt_steal_enabled;
+> @@ -38,7 +39,12 @@ struct pv_time_stolen_time_region {
+>  	struct pvclock_vcpu_stolen_time __rcu *kaddr;
+>  };
+>  
+> +struct pv_lock_state_region {
+> +	struct pvlock_vcpu_state __rcu *kaddr;
+> +};
+> +
+>  static DEFINE_PER_CPU(struct pv_time_stolen_time_region, stolen_time_region);
+> +static DEFINE_PER_CPU(struct pv_lock_state_region, lock_state_region);
+>  
+>  static bool steal_acc = true;
+>  static int __init parse_no_stealacc(char *arg)
+> @@ -178,3 +184,123 @@ int __init pv_time_init(void)
+>  
+>  	return 0;
+>  }
+> +
+> +static bool native_vcpu_is_preempted(int cpu)
+> +{
+> +	return false;
+> +}
+> +
+> +DEFINE_STATIC_CALL(pv_vcpu_is_preempted, native_vcpu_is_preempted);
+> +
+> +static bool para_vcpu_is_preempted(int cpu)
+> +{
+> +	struct pv_lock_state_region *reg;
+> +	__le64 preempted_le;
+> +
+> +	reg = per_cpu_ptr(&lock_state_region, cpu);
+> +	if (!reg->kaddr) {
+> +		pr_warn_once("PV lock enabled but not configured for cpu %d\n",
+> +			     cpu);
+> +		return false;
+> +	}
+> +
+> +	preempted_le = le64_to_cpu(READ_ONCE(reg->kaddr->preempted));
+> +
+> +	return !!(preempted_le);
+> +}
+> +
+> +static int pvlock_vcpu_state_dying_cpu(unsigned int cpu)
+> +{
+> +	struct pv_lock_state_region *reg;
+> +
+> +	reg = this_cpu_ptr(&lock_state_region);
+> +	if (!reg->kaddr)
+> +		return 0;
+> +
+> +	memunmap(reg->kaddr);
+> +	memset(reg, 0, sizeof(*reg));
+> +
+> +	return 0;
+> +}
+> +
+> +static int init_pvlock_vcpu_state(unsigned int cpu)
+> +{
+> +	struct pv_lock_state_region *reg;
+> +	struct arm_smccc_res res;
+> +
+> +	reg = this_cpu_ptr(&lock_state_region);
+> +
+> +	arm_smccc_1_1_invoke(ARM_SMCCC_HV_PV_LOCK_PREEMPTED, &res);
+> +
+> +	if (res.a0 == SMCCC_RET_NOT_SUPPORTED) {
+> +		pr_warn("Failed to init PV lock data structure\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	reg->kaddr = memremap(res.a0,
+> +			      sizeof(struct pvlock_vcpu_state),
+> +			      MEMREMAP_WB);
+> +
+> +	if (!reg->kaddr) {
+> +		pr_warn("Failed to map PV lock data structure\n");
+> +		return -ENOMEM;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int kvm_arm_init_pvlock(void)
+> +{
+> +	int ret;
+> +
+> +	ret = cpuhp_setup_state(CPUHP_AP_ARM_KVM_PVLOCK_STARTING,
+> +				"hypervisor/arm/pvlock:starting",
+> +				init_pvlock_vcpu_state,
+> +				pvlock_vcpu_state_dying_cpu);
+> +	if (ret < 0) {
+> +		pr_warn("PV-lock init failed\n");
+> +		return ret;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static bool has_kvm_pvlock(void)
+> +{
+> +	struct arm_smccc_res res;
+> +
+> +	/* To detect the presence of PV lock support we require SMCCC 1.1+ */
+> +	if (arm_smccc_1_1_get_conduit() == SMCCC_CONDUIT_NONE)
+> +		return false;
 
---------------q41ebvyIk77bWh0cY3Pf4Dl3
-Content-Type: multipart/mixed; boundary="------------F1B2CDT0BNIzH628RfrxfcCc"
+This is unnecessary as arm_smccc_1_1_invoke() will return failure if
+there's no conduit (or pre-SMCCC 1.1). I suspect this was a copy/paste
+from has_pv_steal_clock() which also has the unnecessary check (patch
+welcome ;) ).
 
---------------F1B2CDT0BNIzH628RfrxfcCc
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+> +
+> +	arm_smccc_1_1_invoke(ARM_SMCCC_ARCH_FEATURES_FUNC_ID,
+> +			     ARM_SMCCC_HV_PV_LOCK_FEATURES, &res);
 
-T24gMDMuMTEuMjIgMTQ6MTksIEJyaWFuIEdlcnN0IHdyb3RlOg0KPiBPbiBUaHUsIE5vdiAz
-LCAyMDIyIGF0IDg6MzcgQU0gSnVlcmdlbiBHcm9zcyA8amdyb3NzQHN1c2UuY29tPiB3cm90
-ZToNCj4+DQo+PiBDb252ZXJ0IHRoZSByZW1haW5pbmcgY2FzZXMgb2Ygc3RhdGljX2NwdV9o
-YXMoWDg2X0ZFQVRVUkVfWEVOUFYpIGFuZA0KPj4gYm9vdF9jcHVfaGFzKFg4Nl9GRUFUVVJF
-X1hFTlBWKSB0byB1c2UgY3B1X2ZlYXR1cmVfZW5hYmxlZCgpLCBhbGxvd2luZw0KPj4gbW9y
-ZSBlZmZpY2llbnQgY29kZSBpbiBjYXNlIHRoZSBrZXJuZWwgaXMgY29uZmlndXJlZCB3aXRo
-b3V0DQo+PiBDT05GSUdfWEVOX1BWLg0KPj4NCj4+IFNpZ25lZC1vZmYtYnk6IEp1ZXJnZW4g
-R3Jvc3MgPGpncm9zc0BzdXNlLmNvbT4NCj4+IC0tLQ0KPj4gICBhcmNoL3g4Ni9rZXJuZWwv
-Y3B1L2FtZC5jICAgIHwgMiArLQ0KPj4gICBhcmNoL3g4Ni9rZXJuZWwvY3B1L2J1Z3MuYyAg
-IHwgMiArLQ0KPj4gICBhcmNoL3g4Ni9rZXJuZWwvY3B1L2h5Z29uLmMgIHwgMiArLQ0KPj4g
-ICBhcmNoL3g4Ni9rZXJuZWwvcHJvY2Vzc182NC5jIHwgNCArKy0tDQo+PiAgIGFyY2gveDg2
-L2tlcm5lbC90b3BvbG9neS5jICAgfCAyICstDQo+PiAgIGFyY2gveDg2L21tL2NwdV9lbnRy
-eV9hcmVhLmMgfCAyICstDQo+PiAgIDYgZmlsZXMgY2hhbmdlZCwgNyBpbnNlcnRpb25zKCsp
-LCA3IGRlbGV0aW9ucygtKQ0KPj4NCj4+IGRpZmYgLS1naXQgYS9hcmNoL3g4Ni9rZXJuZWwv
-Y3B1L2FtZC5jIGIvYXJjaC94ODYva2VybmVsL2NwdS9hbWQuYw0KPj4gaW5kZXggODYwYjYw
-MjczZGYzLi42OTdmZTg4MWU5NjcgMTAwNjQ0DQo+PiAtLS0gYS9hcmNoL3g4Ni9rZXJuZWwv
-Y3B1L2FtZC5jDQo+PiArKysgYi9hcmNoL3g4Ni9rZXJuZWwvY3B1L2FtZC5jDQo+PiBAQCAt
-OTg1LDcgKzk4NSw3IEBAIHN0YXRpYyB2b2lkIGluaXRfYW1kKHN0cnVjdCBjcHVpbmZvX3g4
-NiAqYykNCj4+ICAgICAgICAgICAgICAgICAgICAgICAgICBzZXRfY3B1X2NhcChjLCBYODZf
-RkVBVFVSRV8zRE5PV1BSRUZFVENIKTsNCj4+DQo+PiAgICAgICAgICAvKiBBTUQgQ1BVcyBk
-b24ndCByZXNldCBTUyBhdHRyaWJ1dGVzIG9uIFNZU1JFVCwgWGVuIGRvZXMuICovDQo+PiAt
-ICAgICAgIGlmICghY3B1X2hhcyhjLCBYODZfRkVBVFVSRV9YRU5QVikpDQo+PiArICAgICAg
-IGlmICghY3B1X2ZlYXR1cmVfZW5hYmxlZChYODZfRkVBVFVSRV9YRU5QVikpDQo+PiAgICAg
-ICAgICAgICAgICAgIHNldF9jcHVfYnVnKGMsIFg4Nl9CVUdfU1lTUkVUX1NTX0FUVFJTKTsN
-Cj4+DQo+PiAgICAgICAgICAvKg0KPj4gZGlmZiAtLWdpdCBhL2FyY2gveDg2L2tlcm5lbC9j
-cHUvYnVncy5jIGIvYXJjaC94ODYva2VybmVsL2NwdS9idWdzLmMNCj4+IGluZGV4IGRhN2Mz
-NjFmNDdlMC4uN2Y3OGUxNTI3YzVlIDEwMDY0NA0KPj4gLS0tIGEvYXJjaC94ODYva2VybmVs
-L2NwdS9idWdzLmMNCj4+ICsrKyBiL2FyY2gveDg2L2tlcm5lbC9jcHUvYnVncy5jDQo+PiBA
-QCAtMTMwMiw3ICsxMzAyLDcgQEAgc3RhdGljIGVudW0gc3BlY3RyZV92Ml9taXRpZ2F0aW9u
-X2NtZCBfX2luaXQgc3BlY3RyZV92Ml9wYXJzZV9jbWRsaW5lKHZvaWQpDQo+PiAgICAgICAg
-ICAgICAgICAgIHJldHVybiBTUEVDVFJFX1YyX0NNRF9BVVRPOw0KPj4gICAgICAgICAgfQ0K
-Pj4NCj4+IC0gICAgICAgaWYgKGNtZCA9PSBTUEVDVFJFX1YyX0NNRF9JQlJTICYmIGJvb3Rf
-Y3B1X2hhcyhYODZfRkVBVFVSRV9YRU5QVikpIHsNCj4+ICsgICAgICAgaWYgKGNtZCA9PSBT
-UEVDVFJFX1YyX0NNRF9JQlJTICYmIGNwdV9mZWF0dXJlX2VuYWJsZWQoWDg2X0ZFQVRVUkVf
-WEVOUFYpKSB7DQo+PiAgICAgICAgICAgICAgICAgIHByX2VycigiJXMgc2VsZWN0ZWQgYnV0
-IHJ1bm5pbmcgYXMgWGVuUFYgZ3Vlc3QuIFN3aXRjaGluZyB0byBBVVRPIHNlbGVjdFxuIiwN
-Cj4+ICAgICAgICAgICAgICAgICAgICAgICAgIG1pdGlnYXRpb25fb3B0aW9uc1tpXS5vcHRp
-b24pOw0KPj4gICAgICAgICAgICAgICAgICByZXR1cm4gU1BFQ1RSRV9WMl9DTURfQVVUTzsN
-Cj4+IGRpZmYgLS1naXQgYS9hcmNoL3g4Ni9rZXJuZWwvY3B1L2h5Z29uLmMgYi9hcmNoL3g4
-Ni9rZXJuZWwvY3B1L2h5Z29uLmMNCj4+IGluZGV4IDIxZmQ0MjUwODhmZS4uMWMyNzY0NWZk
-NDI5IDEwMDY0NA0KPj4gLS0tIGEvYXJjaC94ODYva2VybmVsL2NwdS9oeWdvbi5jDQo+PiAr
-KysgYi9hcmNoL3g4Ni9rZXJuZWwvY3B1L2h5Z29uLmMNCj4+IEBAIC0zMzksNyArMzM5LDcg
-QEAgc3RhdGljIHZvaWQgaW5pdF9oeWdvbihzdHJ1Y3QgY3B1aW5mb194ODYgKmMpDQo+PiAg
-ICAgICAgICBzZXRfY3B1X2NhcChjLCBYODZfRkVBVFVSRV9BUkFUKTsNCj4+DQo+PiAgICAg
-ICAgICAvKiBIeWdvbiBDUFVzIGRvbid0IHJlc2V0IFNTIGF0dHJpYnV0ZXMgb24gU1lTUkVU
-LCBYZW4gZG9lcy4gKi8NCj4+IC0gICAgICAgaWYgKCFjcHVfaGFzKGMsIFg4Nl9GRUFUVVJF
-X1hFTlBWKSkNCj4+ICsgICAgICAgaWYgKCFjcHVfZmVhdHVyZV9lbmFibGVkKFg4Nl9GRUFU
-VVJFX1hFTlBWKSkNCj4+ICAgICAgICAgICAgICAgICAgc2V0X2NwdV9idWcoYywgWDg2X0JV
-R19TWVNSRVRfU1NfQVRUUlMpOw0KPj4NCj4+ICAgICAgICAgIGNoZWNrX251bGxfc2VnX2Ns
-ZWFyc19iYXNlKGMpOw0KPj4gZGlmZiAtLWdpdCBhL2FyY2gveDg2L2tlcm5lbC9wcm9jZXNz
-XzY0LmMgYi9hcmNoL3g4Ni9rZXJuZWwvcHJvY2Vzc182NC5jDQo+PiBpbmRleCA2YjM0MThi
-ZmYzMjYuLmUyZjQ2OTE3NWJlOCAxMDA2NDQNCj4+IC0tLSBhL2FyY2gveDg2L2tlcm5lbC9w
-cm9jZXNzXzY0LmMNCj4+ICsrKyBiL2FyY2gveDg2L2tlcm5lbC9wcm9jZXNzXzY0LmMNCj4+
-IEBAIC0xNjUsNyArMTY1LDcgQEAgc3RhdGljIG5vaW5zdHIgdW5zaWduZWQgbG9uZyBfX3Jk
-Z3NiYXNlX2luYWN0aXZlKHZvaWQpDQo+Pg0KPj4gICAgICAgICAgbG9ja2RlcF9hc3NlcnRf
-aXJxc19kaXNhYmxlZCgpOw0KPj4NCj4+IC0gICAgICAgaWYgKCFzdGF0aWNfY3B1X2hhcyhY
-ODZfRkVBVFVSRV9YRU5QVikpIHsNCj4+ICsgICAgICAgaWYgKCFjcHVfZmVhdHVyZV9lbmFi
-bGVkKFg4Nl9GRUFUVVJFX1hFTlBWKSkgew0KPj4gICAgICAgICAgICAgICAgICBuYXRpdmVf
-c3dhcGdzKCk7DQo+PiAgICAgICAgICAgICAgICAgIGdzYmFzZSA9IHJkZ3NiYXNlKCk7DQo+
-PiAgICAgICAgICAgICAgICAgIG5hdGl2ZV9zd2FwZ3MoKTsNCj4+IEBAIC0xOTAsNyArMTkw
-LDcgQEAgc3RhdGljIG5vaW5zdHIgdm9pZCBfX3dyZ3NiYXNlX2luYWN0aXZlKHVuc2lnbmVk
-IGxvbmcgZ3NiYXNlKQ0KPj4gICB7DQo+PiAgICAgICAgICBsb2NrZGVwX2Fzc2VydF9pcnFz
-X2Rpc2FibGVkKCk7DQo+Pg0KPj4gLSAgICAgICBpZiAoIXN0YXRpY19jcHVfaGFzKFg4Nl9G
-RUFUVVJFX1hFTlBWKSkgew0KPj4gKyAgICAgICBpZiAoIWNwdV9mZWF0dXJlX2VuYWJsZWQo
-WDg2X0ZFQVRVUkVfWEVOUFYpKSB7DQo+PiAgICAgICAgICAgICAgICAgIG5hdGl2ZV9zd2Fw
-Z3MoKTsNCj4+ICAgICAgICAgICAgICAgICAgd3Jnc2Jhc2UoZ3NiYXNlKTsNCj4+ICAgICAg
-ICAgICAgICAgICAgbmF0aXZlX3N3YXBncygpOw0KPj4gZGlmZiAtLWdpdCBhL2FyY2gveDg2
-L2tlcm5lbC90b3BvbG9neS5jIGIvYXJjaC94ODYva2VybmVsL3RvcG9sb2d5LmMNCj4+IGlu
-ZGV4IDg2MTdkMWVkOWQzMS4uMWI4MzM3NzI3NGI4IDEwMDY0NA0KPj4gLS0tIGEvYXJjaC94
-ODYva2VybmVsL3RvcG9sb2d5LmMNCj4+ICsrKyBiL2FyY2gveDg2L2tlcm5lbC90b3BvbG9n
-eS5jDQo+PiBAQCAtMTA2LDcgKzEwNiw3IEBAIGludCBhcmNoX3JlZ2lzdGVyX2NwdShpbnQg
-bnVtKQ0KPj4gICAgICAgICAgICogWGVuIFBWIGd1ZXN0cyBkb24ndCBzdXBwb3J0IENQVTAg
-aG90cGx1ZyBhdCBhbGwuDQo+PiAgICAgICAgICAgKi8NCj4+ICAgICAgICAgIGlmIChjLT54
-ODZfdmVuZG9yICE9IFg4Nl9WRU5ET1JfSU5URUwgfHwNCj4+IC0gICAgICAgICAgIGJvb3Rf
-Y3B1X2hhcyhYODZfRkVBVFVSRV9YRU5QVikpDQo+PiArICAgICAgICAgICBjcHVfZmVhdHVy
-ZV9lbmFibGVkKFg4Nl9GRUFUVVJFX1hFTlBWKSkNCj4+ICAgICAgICAgICAgICAgICAgY3B1
-MF9ob3RwbHVnZ2FibGUgPSAwOw0KPj4NCj4+ICAgICAgICAgIC8qDQo+PiBkaWZmIC0tZ2l0
-IGEvYXJjaC94ODYvbW0vY3B1X2VudHJ5X2FyZWEuYyBiL2FyY2gveDg2L21tL2NwdV9lbnRy
-eV9hcmVhLmMNCj4+IGluZGV4IDZjMmYxYjc2YTBiNi4uYzgzNzk5NzUzZDQ0IDEwMDY0NA0K
-Pj4gLS0tIGEvYXJjaC94ODYvbW0vY3B1X2VudHJ5X2FyZWEuYw0KPj4gKysrIGIvYXJjaC94
-ODYvbW0vY3B1X2VudHJ5X2FyZWEuYw0KPj4gQEAgLTE0Nyw3ICsxNDcsNyBAQCBzdGF0aWMg
-dm9pZCBfX2luaXQgc2V0dXBfY3B1X2VudHJ5X2FyZWEodW5zaWduZWQgaW50IGNwdSkNCj4+
-ICAgICAgICAgICAqIE9uIFhlbiBQViwgdGhlIEdEVCBtdXN0IGJlIHJlYWQtb25seSBiZWNh
-dXNlIHRoZSBoeXBlcnZpc29yDQo+PiAgICAgICAgICAgKiByZXF1aXJlcyBpdC4NCj4+ICAg
-ICAgICAgICAqLw0KPj4gLSAgICAgICBwZ3Byb3RfdCBnZHRfcHJvdCA9IGJvb3RfY3B1X2hh
-cyhYODZfRkVBVFVSRV9YRU5QVikgPw0KPj4gKyAgICAgICBwZ3Byb3RfdCBnZHRfcHJvdCA9
-IGNwdV9mZWF0dXJlX2VuYWJsZWQoWDg2X0ZFQVRVUkVfWEVOUFYpID8NCj4+ICAgICAgICAg
-ICAgICAgICAgUEFHRV9LRVJORUxfUk8gOiBQQUdFX0tFUk5FTDsNCj4+ICAgICAgICAgIHBn
-cHJvdF90IHRzc19wcm90ID0gUEFHRV9LRVJORUw7DQo+PiAgICNlbmRpZg0KPiANCj4gVGhp
-cyBpcyBhbm90aGVyIGNhc2UgdGhhdCBjYW4gYmUgcmVtb3ZlZCBiZWNhdXNlIGl0J3MgZm9y
-IDMyLWJpdC4NCg0KT2ggeWVzLCBpbmRlZWQuIFRoYW5rcyBmb3Igbm90aWNpbmcuDQoNCg0K
-SnVlcmdlbg0KDQo=
---------------F1B2CDT0BNIzH628RfrxfcCc
-Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Description: OpenPGP public key
-Content-Transfer-Encoding: quoted-printable
+Since this is a 'OWNER_VENDOR_HYP' call this should really be preceded
+by a check that we're running under the expected hypervisor. See e.g.
+kvm_init_hyp_services().
 
------BEGIN PGP PUBLIC KEY BLOCK-----
+Of course for KVM we already have a (different) discovery mechanism and
+this could be included as a ARM_SMCCC_KVM_FUNC_xxx feature. This
+has_kvm_pvlock() function would then simply be:
 
-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
-jR/i1DG86lem3iBDXzXsZDn8R38=3D
-=3D2wuH
------END PGP PUBLIC KEY BLOCK-----
+static bool has_kvm_pvlock(void)
+{
+	return kvm_arm_hyp_service_available(ARM_SMCC_KVM_FUNC_PVLOCK);
+}
 
---------------F1B2CDT0BNIzH628RfrxfcCc--
+Steve
 
---------------q41ebvyIk77bWh0cY3Pf4Dl3--
+> +
+> +	if (res.a0 != SMCCC_RET_SUCCESS)
+> +		return false;
+> +
+> +	arm_smccc_1_1_invoke(ARM_SMCCC_HV_PV_LOCK_FEATURES,
+> +			     ARM_SMCCC_HV_PV_LOCK_PREEMPTED, &res);
+> +
+> +	return (res.a0 == SMCCC_RET_SUCCESS);
+> +}
+> +
+> +int __init pv_lock_init(void)
+> +{
+> +	int ret;
+> +
+> +	if (is_hyp_mode_available())
+> +		return 0;
+> +
+> +	if (!has_kvm_pvlock())
+> +		return 0;
+> +
+> +	ret = kvm_arm_init_pvlock();
+> +	if (ret)
+> +		return ret;
+> +
+> +	static_call_update(pv_vcpu_is_preempted, para_vcpu_is_preempted);
+> +	pr_info("using PV-lock preempted\n");
+> +
+> +	return 0;
+> +}
+> \ No newline at end of file
+> diff --git a/arch/arm64/kernel/setup.c b/arch/arm64/kernel/setup.c
+> index fea3223704b6..05ca07ac5800 100644
+> --- a/arch/arm64/kernel/setup.c
+> +++ b/arch/arm64/kernel/setup.c
+> @@ -42,6 +42,7 @@
+>  #include <asm/cpu_ops.h>
+>  #include <asm/kasan.h>
+>  #include <asm/numa.h>
+> +#include <asm/paravirt.h>
+>  #include <asm/sections.h>
+>  #include <asm/setup.h>
+>  #include <asm/smp_plat.h>
+> @@ -360,6 +361,8 @@ void __init __no_sanitize_address setup_arch(char **cmdline_p)
+>  	smp_init_cpus();
+>  	smp_build_mpidr_hash();
+>  
+> +	pv_lock_init();
+> +
+>  	/* Init percpu seeds for random tags after cpus are set up. */
+>  	kasan_init_sw_tags();
+>  
+> diff --git a/include/linux/cpuhotplug.h b/include/linux/cpuhotplug.h
+> index f61447913db9..c0ee11855c73 100644
+> --- a/include/linux/cpuhotplug.h
+> +++ b/include/linux/cpuhotplug.h
+> @@ -192,6 +192,7 @@ enum cpuhp_state {
+>  	/* Must be the last timer callback */
+>  	CPUHP_AP_DUMMY_TIMER_STARTING,
+>  	CPUHP_AP_ARM_XEN_STARTING,
+> +	CPUHP_AP_ARM_KVM_PVLOCK_STARTING,
+>  	CPUHP_AP_ARM_CORESIGHT_STARTING,
+>  	CPUHP_AP_ARM_CORESIGHT_CTI_STARTING,
+>  	CPUHP_AP_ARM64_ISNDEP_STARTING,
 
---------------VyAi3UNXOOv0ZoAGGUlMSoRG
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmNjwSgFAwAAAAAACgkQsN6d1ii/Ey9S
-Qwf8DAg2WORBlH4UtVe5sxilRRF+JJ/5DXToY6JWvsLa+H0nNrvRdrkL1SN/J7UZdv98T1e9faOM
-pu4RYI3jzPItVJOD6/g9bjm3ip0a/iiWWbCCOPMJ7P88DBGgYL/+YlFTJTp2UkfeJ4UEYJcNGsEr
-MSOdgELW8YBEKtlETTKnfMW1MR5pC6ejzJMtdF6XJsiyPkUCXXCy6IipnXiS5VkFOzrcht1rQ6Er
-FB/7JBor8jG1npjSlnQhgEkdvglmZdv87bMeaPkvaWe/d2TajUqSrreJ1rmv0eqnIFRKhhXDzw6u
-3Lg7Eiw0Tce4vvPk1bOLjPl/Yg095U76OJ2GSIShag==
-=bQOZ
------END PGP SIGNATURE-----
-
---------------VyAi3UNXOOv0ZoAGGUlMSoRG--
