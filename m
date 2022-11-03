@@ -2,110 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7B6961832F
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 16:44:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49F31618332
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 16:45:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232207AbiKCPoc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 11:44:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52024 "EHLO
+        id S231512AbiKCPps (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 11:45:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231744AbiKCPoM (ORCPT
+        with ESMTP id S230494AbiKCPpg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 11:44:12 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DBC61B7BA;
-        Thu,  3 Nov 2022 08:44:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667490251; x=1699026251;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Z/HJ+bj6Eo7qiPd6yeWolEz7ykFhuBQJvEbNeL9/IcA=;
-  b=dWpMi6y41EeVuh3OS1hVLK+6SfkyzuztoUw7lAJJJJ7l4XRX+fB82o0b
-   RP/i9RmColt7BB54k/KP4KQCQUnj3Infx7X0UBq20aHvbBMzr2aNshxbv
-   IyaEB1pawMj3lc1O+FxiLy5wbBjt4uQr4CE8IGV0CWo5zqb2wRsxVvZCi
-   D2/PdgGLNUhsIKzYUGj02g9OO8l0V/guQnMO9dKbz15i3jMpy21RVeWig
-   HebCeLktc+8/mz0B18y6k6e+zHGvlisWohpvgryAF8K/8wQj/hlsoiJRW
-   03cf5VWHhgk6yNCr8DkptItewsT/QmQvzzKWr3o7tPMJKRMsfhCE99vIg
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10520"; a="308436630"
-X-IronPort-AV: E=Sophos;i="5.96,235,1665471600"; 
-   d="scan'208";a="308436630"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2022 08:44:11 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10520"; a="777351032"
-X-IronPort-AV: E=Sophos;i="5.96,134,1665471600"; 
-   d="scan'208";a="777351032"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 03 Nov 2022 08:43:53 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 03 Nov 2022 17:43:52 +0200
-Date:   Thu, 3 Nov 2022 17:43:52 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Sven Peter <sven@svenpeter.dev>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thu, 3 Nov 2022 11:45:36 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17D02BF1
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 08:45:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net; s=s31663417;
+        t=1667490307; bh=D2NeIitACzdIeTwQNCj4aXAQCOyb03SsB/bk9aAJFbg=;
+        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=BeI4ExSzbLn/NzfReS6EG9pS4/PI4JHh51EC9Bm652qnenuMq7QNbozkEWRgfzA0k
+         zMsPXiAKID8TzuZuPc0Hwyz4744XiQapeDvdW+BEsEcWcFVj2FnetXammZqkZr8Ph/
+         HG+Euil4hJmmzA9C3srOQ8Bkk9RZnrTvdn2hJ6zzFe4WOPGocg/CKHBP+RhqkKM8lh
+         yWmbahlG+rECBJQOg5S17r9ftXDYnlCEucsOFACZkpEcsUSbdued2rygftTH9Kbz3M
+         slUW3cxkYqkm/RQADzFU8OoDpg/NlmuS87oOZb92kHTUaqLs0unqbSESKa40zB361U
+         tKQyKKND1njhA==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from probook ([78.34.126.36]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MQvD5-1ode7w0h2l-00O31Z; Thu, 03
+ Nov 2022 16:45:07 +0100
+Date:   Thu, 3 Nov 2022 16:45:04 +0100
+From:   Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+To:     Tomer Maimon <tmaimon77@gmail.com>
+Cc:     Joel Stanley <joel@jms.id.au>,
+        Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
+        Paul Menzel <pmenzel@molgen.mpg.de>,
         Hector Martin <marcan@marcan.st>,
-        Guido =?iso-8859-1?Q?G=FCnther?= <agx@sigxcpu.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        asahi@lists.linux.dev
-Subject: Re: [PATCH] usb: typec: tipd: Prevent uninitialized event{1,2} in
- IRQ handler
-Message-ID: <Y2PhuIM7OJ/Xjsf8@kuha.fi.intel.com>
-References: <20221102161542.30669-1-sven@svenpeter.dev>
+        Arnd Bergmann <arnd@arndb.de>, Sven Peter <sven@svenpeter.dev>,
+        openbmc@lists.ozlabs.org, Brian Norris <briannorris@chromium.org>,
+        linux-kernel@vger.kernel.org,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Lubomir Rintel <lkundrak@v3.sk>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>
+Subject: Re: [PATCH v5 RESEND] soc: nuvoton: Add SoC info driver for WPCM450
+Message-ID: <Y2PiAKBTtnAjlToY@probook>
+References: <20221031223926.241641-1-j.neuschaefer@gmx.net>
+ <CACPK8Xfa=SPaYogqfUpCG61J7U-Z8pE2Oycicd_D=4vJsZcaSw@mail.gmail.com>
+ <CAP6Zq1iHOm1sQTHshmVobzy9yX_REt6OL5qyFz+R77vYw=7yBg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="z9Gk8xtTBSjinse8"
 Content-Disposition: inline
-In-Reply-To: <20221102161542.30669-1-sven@svenpeter.dev>
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAP6Zq1iHOm1sQTHshmVobzy9yX_REt6OL5qyFz+R77vYw=7yBg@mail.gmail.com>
+X-Provags-ID: V03:K1:B74ShnSYqz3yjVKmNIwYvGyYzNI7c8HwuxQD3aZX01toJPb15Ae
+ 4XwHcweCb/XUa4MVguYVI6juos6+bvAT8feskwRRoF99B/6+XWEF80EMU2bgY2usjhtnb2u
+ ojQvTZ8W1rXDOc83fuayVlAvzjUYcfZPS9gV0YQ9T8F5pWprJ4SbK9sl+jcEKhUmmWQcnhK
+ DlExVDGkswz3Aj6BOSuhQ==
+UI-OutboundReport: notjunk:1;M01:P0:la8mB4y0vLQ=;etpPBLNCdJNEMYZHWh/q4+MyA9c
+ fmJeWOsda5DRiI8cxtRDiXs+IvTC8WM0aAYvQNhHXvNyc9UY67w+Sk6cbapdRmFXvLKJjZw4b
+ S/pyjDkKMApi1H59/EhQ4YH+Zh0WHWLr/XyXbHb6PeZ+Xy2BhhIy5LEYFm8p8Kp/+ZDx3T0ZO
+ gApG2BRUyt6np8Us2gmhfVycJvQhj1eed7ecoWH6f/zhjxO4R0Bu3xbd8YN1JKpSSzpLeZK80
+ JtvQOChiUlQ9oP51ufMmSQOKLVmGr/flF0NqPfi6xK+HZHStaQxP6+2FmOtm/DzoM7M0BBgzg
+ +rrGtGILnrR/qWSubrYS7eNVrSv7iaVjHEZT5RlCIElKL4LNpjLT6kYozw1vtc1iNw1kbMdDl
+ +LJTcKIR2FjJuV+sSh5hoRPTA0J6p32IaLTaJYQuma/ekFLS0O8B5A0KO670dMhvPYBeZGs0Y
+ S8dPDjtLeMZJSoRrJRIKvxnLYlHNY6Lkrv//qB3HngI6VfwjgI6zYpPOJzOJsZ9yN0UQVlDXM
+ rWAc3dMiDFMMCdHhjnaTBXsdhXhg7oc9g7Y/Z4ayqRjWFbvOmMwsl8C7rKCdbJK1awNTuLk4D
+ alth1x40yLP+qvgN0xJ7IG6X3iteY36/M0O3PIHzy4PPk27gHLC8LpDTtIXtHetfELsqTTYn4
+ ZndFzlS+n+hquVUTtRIw+SLibyBlYfSJapbjoXBzVeIEzFyYx3HyI5S4T8Snc42oU4wHWX879
+ 3SwCD11LF8H5SvdMKNCHcEDf94KwuL/FybFaewptNWSyyIZ4OZIn3vIXVpocGWDHgTVnXccaY
+ WtzYW/nKBVRY30RYln3vFnvyyXbBiiWuitEqrA1KHaK40MHy1MDc6yDVpYnQOHj2t/Avihlvj
+ UZoAA5zkYGpUyP1H1YLiJQu9Kcz+bEpqvSPT4Z8F2OD1UisrI2HtGrWqz9X8lAbFgKXmtYuuO
+ 80oPjd1NU/eAfZC8txIECdpAL8s=
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 02, 2022 at 05:15:42PM +0100, Sven Peter wrote:
-> If reading TPS_REG_INT_EVENT1/2 fails in the interrupt handler event1
-> and event2 may be uninitialized when they are used to determine
-> IRQ_HANDLED vs. IRQ_NONE in the error path.
-> 
-> Fixes: c7260e29dd20 ("usb: typec: tipd: Add short-circuit for no irqs")
-> Fixes: 45188f27b3d0 ("usb: typec: tipd: Add support for Apple CD321X")
-> Signed-off-by: Sven Peter <sven@svenpeter.dev>
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+--z9Gk8xtTBSjinse8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> ---
->  drivers/usb/typec/tipd/core.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
-> index b637e8b378b3..2a77bab948f5 100644
-> --- a/drivers/usb/typec/tipd/core.c
-> +++ b/drivers/usb/typec/tipd/core.c
-> @@ -474,7 +474,7 @@ static void tps6598x_handle_plug_event(struct tps6598x *tps, u32 status)
->  static irqreturn_t cd321x_interrupt(int irq, void *data)
->  {
->  	struct tps6598x *tps = data;
-> -	u64 event;
-> +	u64 event = 0;
->  	u32 status;
->  	int ret;
->  
-> @@ -519,8 +519,8 @@ static irqreturn_t cd321x_interrupt(int irq, void *data)
->  static irqreturn_t tps6598x_interrupt(int irq, void *data)
->  {
->  	struct tps6598x *tps = data;
-> -	u64 event1;
-> -	u64 event2;
-> +	u64 event1 = 0;
-> +	u64 event2 = 0;
->  	u32 status;
->  	int ret;
->  
+On Thu, Nov 03, 2022 at 09:11:08AM +0200, Tomer Maimon wrote:
+> Hi Jonathan,
+>=20
+> Thanks for your patch.
+>=20
+> On Thu, 3 Nov 2022 at 01:09, Joel Stanley <joel@jms.id.au> wrote:
+> >
+> > On Mon, 31 Oct 2022 at 22:40, Jonathan Neusch=C3=A4fer <j.neuschaefer@g=
+mx.net> wrote:
+> > >
+> > > Add a SoC information driver for Nuvoton WPCM450 SoCs. It provides
+> > > information such as the SoC revision.
+[...]
+> > > +++ b/drivers/soc/nuvoton/Kconfig
+> > > @@ -0,0 +1,11 @@
+> > > +# SPDX-License-Identifier: GPL-2.0
+> > > +menuconfig WPCM450_SOC
+> > > +       tristate "Nuvoton WPCM450 SoC driver"
+> > > +       default y if ARCH_WPCM450
+> > > +       select SOC_BUS
+> >
+> > Sorry for not noticing this earlier. This is a bit confusing. If we
+> > have a menu option, the soc driver should appear under it. Or we could
+> > do without the menu all together, as there's only one driver so far.
 
-thanks,
+Good point.
 
--- 
-heikki
+> >
+> > We also should select REGMAP, as you're using it,
+
+I'll add it.
+
+> > and hide the option behind ARCH_WPCM450 || COMPILE_TEST.
+> >
+> > How about this:
+> >
+> > if ARCH_WPCM450 || COMPILE_TEST
+> These days we working on LPC BPC driver for NPCM7xx and NPCM8xx that
+> will be placed in nuvoton soc folder.
+> we will use:
+>=20
+> if ARCH_NPCM || COMPILE_TEST
+>=20
+> menu "NPCM SoC drivers"
+
+That sounds reasonable, I'll do something similar.
+
+> Maybe you should remove
+> if ARCH_WPCM450 || COMPILE_TEST
+>=20
+> and add ARCH_WPCM450 dependency in the WPCM450_SOCINFO driver configurati=
+on.
+
+The WPCM450_SOCINFO driver would build fine on other NPCM SoC, it just
+wouldn't be very useful, so I think the current "default y if ARCH_WPCM450"
+solution is sufficient.
+
+>=20
+> >
+> > config WPCM450_SOCINFO
+> >         tristate "Nuvoton WPCM450 SoC driver"
+> >         default y if ARCH_WPCM450
+> >         select SOC_BUS
+> >         select REGMAP
+> >         help
+> >           Say Y here to compile the SoC information driver for Nuvoton
+> >           WPCM450 SoCs.
+> >
+> >           This driver provides information such as the SoC model and
+> >           revision.
+> >
+> > endif
+
+
+Thank you both,
+Jonathan
+
+--z9Gk8xtTBSjinse8
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEvHAHGBBjQPVy+qvDCDBEmo7zX9sFAmNj4ccACgkQCDBEmo7z
+X9ssaA//eNzqncSzzvszShSHI+DKqydLRmZ2jZkKhjTh1QyYswkvH+4APbIvIYK0
+DWSJiXDouzNR3lpqDq2AzPbXclfWnBS2nU52n64svRf3BDTczNqkHEhUCeCo2o00
+RQ+pToPS1aqhjrAg5aZB4XU2fVPUZ4OTce00NeQs+5w/8EyTKxc6knsd/H6uxkb7
+2dIU9Qll+FfXF6QYJMUw73QEYgT5kzuvCkZ65G0FzCZR8uTzjS2Wole4DBp+3rvP
+4Jmykgqnh9lif1+L24L6Bf6O/mplQG1poMNrIK98oXLhB22lKB4s6ShQQxWFT+Zu
+saW3jxwX3Rp8Bb8nWAVG48wcRAFu+OZUREvBye6nDwV6XEFdS+MR+lLQXCpDfONm
+XHtIUvUMWvpVIRYN3wgIAqCvIfjIu4QuDYCuR3gz8YEBoeyDw14ha/QWt8J2nUmQ
+GfVF7LAqTvhdqP+UEr1nHHNl9i6pf9f90WYbXwuvIPuV09QTHjS9F2D63aTR0z6H
+nPi1u5HyPFaNPJZXsWTgUmzNXJYrUQWWeRLCcsmDV7Jot7ZS2semcUKL3xZuRFCM
+ahN/K2b01hhsl1SiiBJNGgRMvW2rek644WaWk7z+eJQPzQlHIXo384h0+wAsmqlV
+6P6EQFA7nqPji1tnQydxduZIySHQhve39m04g7zQCCmce9jYGSc=
+=Y2a2
+-----END PGP SIGNATURE-----
+
+--z9Gk8xtTBSjinse8--
