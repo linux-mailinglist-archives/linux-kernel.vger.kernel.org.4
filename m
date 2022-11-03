@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 731A7618A82
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 22:25:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B1C5618A84
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 22:25:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231144AbiKCVZm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 17:25:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43496 "EHLO
+        id S230394AbiKCVZs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 17:25:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229672AbiKCVZf (ORCPT
+        with ESMTP id S229591AbiKCVZg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 17:25:35 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9818820357
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 14:25:34 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id p16so1942764wmc.3
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 14:25:34 -0700 (PDT)
+        Thu, 3 Nov 2022 17:25:36 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFF9319001
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 14:25:35 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id l39-20020a05600c1d2700b003cf93c8156dso526464wms.4
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 14:25:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=arista.com; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=U6S2ZuEt0qgPUGG0AsxALXCScYxrmWzDM+6UP32zeuQ=;
-        b=fa588U08aZVtksAr+gYqOxxYcKUoAQbyf6hqFyde0R9jc6mJqGkUElkSV19yh8wm2V
-         BYtD7MoE/9JFWnZ2oTOMFwSYs1pEHNicUINDb3w22/NZfCE6MEGWiEqz6ORR8MAKz0hC
-         JrJGsA0aZsT49K5vTQwU0UBXpM3qOkGdU7tSWD2TcPjwlbyxMrEuuvHw0HhN/yK7Z/UG
-         sLtGOJvP25h9lcR02tNgi2A2CBXLJIkbspY1usDF50IsqvvjTVEDfN6V74v3640VCGBn
-         DzCDfDutQY1VRKdXLtk2ch8ZoF1N/cdFsrQ6K0LZajNGZ1kb3W9bYa7VroHa4DwMQ2rk
-         rtow==
+        bh=CbvR8VuafE8eZOle2gcxzJnLTEWWuPtnJ8HojgPG8FI=;
+        b=i0Pj5NJz6BQy2jzDSR6PRBtsI8yVo2CSGPtcH20TBjjb0Eigv4jxwlEhO8yQewQ8gH
+         TiLzklJ8a4fuq4UgSoiR2bKq7VKewD+BleRukwzDpX1pYCq+a763u7xPO494HGRUESdb
+         uCMqWOEDMDvnt59ZJl6Lu3qptYJFIetxLTzlixabS9d/g32OMDUMUy0QxG3j4EZqLJQ2
+         UkQj2eezhrK20k+ck1D+w6CBq+Uuql8KexWefgZ/0mlOFTpbmvlCU1baxTy+BfgbNqkX
+         GcdLXy2/MiPCllet8CvSMCeoOB5MFDDQ+VzLD2WhRFeTp0lxZ9L+Zci9j6OemjU3GezS
+         VlIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=U6S2ZuEt0qgPUGG0AsxALXCScYxrmWzDM+6UP32zeuQ=;
-        b=ntGmSnrp4trY+/5PEbfzIm/Ni7XM/w4cmqVZOYVDhyefhJzqpMcX9muEBjEU7fqX2m
-         jAfjehsyXkOKgG34cPfuuJ95iFvg8qTBKCTeyKUP9XcXmpQ7lif0kln9Z92fN9SPGEeM
-         BxKEchD0r0wd1tzAievJSHRGssTyO2rbdLYFPRjx8SjTxbzY1LoWSS5kFEVgM/SXYhFz
-         TJUu5ETpwmhD1mnBXZrU17gS+zzRtmUH1Y1o7JNO412wMQi7VtLokGarwDqtKkOaLqP7
-         YTu9p3VPsDlNhY4Js/wNPIF4ihIFbbrcWglow8ICMC3MtkKJp2AFjZlm/cPmin1vvYUt
-         YKPA==
-X-Gm-Message-State: ACrzQf0a7s6c2aHSQmX8HgHyV3Ubj3tMvC0IPf+1ZWhqhIiFmNEq9dKW
-        mM1rsyEXzKedaKliRDornOqn4mcl3MLRxw==
-X-Google-Smtp-Source: AMsMyM69sea+RU7JIrUWgRP7XqWuZaaVpXvzXVvAeW4ilhVchMlFeWLl0aKjUGNk3ZQmBCZeaYpgPg==
-X-Received: by 2002:a1c:a4c5:0:b0:3cf:56dc:fd14 with SMTP id n188-20020a1ca4c5000000b003cf56dcfd14mr20431140wme.180.1667510732944;
-        Thu, 03 Nov 2022 14:25:32 -0700 (PDT)
+        bh=CbvR8VuafE8eZOle2gcxzJnLTEWWuPtnJ8HojgPG8FI=;
+        b=rLFhNCBhfr8EWUSeg0NnocW+6EPuIPTIqDijxAMD7ERfAmpiQ5v8vUjRIU8Xm+sfZO
+         srZvyeLZi1tz3nKUIim5f3RcSw3rodNaeSOYPAR3G4T3IUiMv+V19EP5+jdTKNKwAkPQ
+         TGsiOMxXG+9XKoUuaOEVu8GqZtTLniz3TmcVWthNXL/P1FIzH7uBt3Vza38xyTnnMWLr
+         LVobAbDyXWkywj1soZ7dkR33Bu2t0+jVkUXIeRszygFc32oTZi+CaRTRi9fdEFoECY4B
+         d87ZUDa2K35Sk579E3gNHFK9oCeH1Ct1mP+T1Qpsy9889WJox8eqNk7VYx+qrfgMTjZS
+         xnXQ==
+X-Gm-Message-State: ACrzQf21AzxyrrMJZETY1Qcv/6OIDI4Tw6yUFgiYNJcnvfjX60QfO5i2
+        vORwGrWeZo59ASxAbQTeq0rGUGDphee9kw==
+X-Google-Smtp-Source: AMsMyM4bseqKfK3bTLh/t5jbhrShEK9i2dZWcfeLz21e0CvKezlCw+x6zmm3+Zs63xkXsOu2bL25ng==
+X-Received: by 2002:a05:600c:689b:b0:3c2:fd6e:1fe5 with SMTP id fn27-20020a05600c689b00b003c2fd6e1fe5mr21011103wmb.99.1667510734087;
+        Thu, 03 Nov 2022 14:25:34 -0700 (PDT)
 Received: from Mindolluin.ire.aristanetworks.com ([217.173.96.166])
-        by smtp.gmail.com with ESMTPSA id t18-20020a05600c199200b003a601a1c2f7sm1038652wmq.19.2022.11.03.14.25.31
+        by smtp.gmail.com with ESMTPSA id t18-20020a05600c199200b003a601a1c2f7sm1038652wmq.19.2022.11.03.14.25.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Nov 2022 14:25:32 -0700 (PDT)
+        Thu, 03 Nov 2022 14:25:33 -0700 (PDT)
 From:   Dmitry Safonov <dima@arista.com>
 To:     linux-kernel@vger.kernel.org, David Ahern <dsahern@kernel.org>,
         Eric Dumazet <edumazet@google.com>
@@ -62,14 +62,10 @@ Cc:     Dmitry Safonov <dima@arista.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Paolo Abeni <pabeni@redhat.com>,
         Salam Noureddine <noureddine@arista.com>,
-        netdev@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
-        Jason Baron <jbaron@akamai.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Steven Rostedt <rostedt@goodmis.org>
-Subject: [PATCH v2 1/3] jump_label: Add static_key_fast_inc()
-Date:   Thu,  3 Nov 2022 21:25:22 +0000
-Message-Id: <20221103212524.865762-2-dima@arista.com>
+        netdev@vger.kernel.org
+Subject: [PATCH v2 2/3] net/tcp: Separate tcp_md5sig_info allocation into tcp_md5sig_info_add()
+Date:   Thu,  3 Nov 2022 21:25:23 +0000
+Message-Id: <20221103212524.865762-3-dima@arista.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221103212524.865762-1-dima@arista.com>
 References: <20221103212524.865762-1-dima@arista.com>
@@ -85,72 +81,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A helper to add another user for an existing enabled static key.
+Add a helper to allocate tcp_md5sig_info, that will help later to
+do/allocate things when info allocated, once per socket.
 
-Cc: Ard Biesheuvel <ardb@kernel.org>
-Cc: Jason Baron <jbaron@akamai.com>
-Cc: Josh Poimboeuf <jpoimboe@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Steven Rostedt <rostedt@goodmis.org>
-Suggested-by: Eric Dumazet <edumazet@google.com>
 Signed-off-by: Dmitry Safonov <dima@arista.com>
+Reviewed-by: Eric Dumazet <edumazet@google.com>
 ---
- include/linux/jump_label.h | 21 ++++++++++++++++++---
- 1 file changed, 18 insertions(+), 3 deletions(-)
+ net/ipv4/tcp_ipv4.c | 30 +++++++++++++++++++++---------
+ 1 file changed, 21 insertions(+), 9 deletions(-)
 
-diff --git a/include/linux/jump_label.h b/include/linux/jump_label.h
-index 570831ca9951..cb6c722c4816 100644
---- a/include/linux/jump_label.h
-+++ b/include/linux/jump_label.h
-@@ -75,6 +75,8 @@
+diff --git a/net/ipv4/tcp_ipv4.c b/net/ipv4/tcp_ipv4.c
+index 87d440f47a70..fae80b1a1796 100644
+--- a/net/ipv4/tcp_ipv4.c
++++ b/net/ipv4/tcp_ipv4.c
+@@ -1172,6 +1172,24 @@ struct tcp_md5sig_key *tcp_v4_md5_lookup(const struct sock *sk,
+ }
+ EXPORT_SYMBOL(tcp_v4_md5_lookup);
  
- #include <linux/types.h>
- #include <linux/compiler.h>
-+#include <linux/atomic.h>
-+#include <linux/bug.h>
- 
- extern bool static_key_initialized;
- 
-@@ -235,6 +237,21 @@ extern void static_key_enable_cpuslocked(struct static_key *key);
- extern void static_key_disable_cpuslocked(struct static_key *key);
- extern enum jump_label_type jump_label_init_type(struct jump_entry *entry);
- 
-+/***
-+ * static_key_fast_inc - adds a user for a static key
-+ * @key: static key that must be already enabled
-+ *
-+ * The caller must make sure that the static key can't get disabled while
-+ * in this function. It doesn't patch jump labels, only adds a user to
-+ * an already enabled static key.
-+ */
-+static inline void static_key_fast_inc(struct static_key *key)
++static int tcp_md5sig_info_add(struct sock *sk, gfp_t gfp)
 +{
-+	STATIC_KEY_CHECK_USE(key);
-+	WARN_ON_ONCE(atomic_read(&key->enabled) < 1);
-+	atomic_inc(&key->enabled);
++	struct tcp_sock *tp = tcp_sk(sk);
++	struct tcp_md5sig_info *md5sig;
++
++	if (rcu_dereference_protected(tp->md5sig_info, lockdep_sock_is_held(sk)))
++		return 0;
++
++	md5sig = kmalloc(sizeof(*md5sig), gfp);
++	if (!md5sig)
++		return -ENOMEM;
++
++	sk_gso_disable(sk);
++	INIT_HLIST_HEAD(&md5sig->head);
++	rcu_assign_pointer(tp->md5sig_info, md5sig);
++	return 0;
 +}
 +
- /*
-  * We should be using ATOMIC_INIT() for initializing .enabled, but
-  * the inclusion of atomic.h is problematic for inclusion of jump_label.h
-@@ -251,9 +268,6 @@ extern enum jump_label_type jump_label_init_type(struct jump_entry *entry);
+ /* This can be called on a newly created socket, from other files */
+ int tcp_md5_do_add(struct sock *sk, const union tcp_md5_addr *addr,
+ 		   int family, u8 prefixlen, int l3index, u8 flags,
+@@ -1202,17 +1220,11 @@ int tcp_md5_do_add(struct sock *sk, const union tcp_md5_addr *addr,
+ 		return 0;
+ 	}
  
- #else  /* !CONFIG_JUMP_LABEL */
- 
--#include <linux/atomic.h>
--#include <linux/bug.h>
++	if (tcp_md5sig_info_add(sk, gfp))
++		return -ENOMEM;
++
+ 	md5sig = rcu_dereference_protected(tp->md5sig_info,
+ 					   lockdep_sock_is_held(sk));
+-	if (!md5sig) {
+-		md5sig = kmalloc(sizeof(*md5sig), gfp);
+-		if (!md5sig)
+-			return -ENOMEM;
 -
- static __always_inline int static_key_count(struct static_key *key)
- {
- 	return arch_atomic_read(&key->enabled);
-@@ -290,6 +304,7 @@ static inline void static_key_slow_dec(struct static_key *key)
- 	atomic_dec(&key->enabled);
- }
+-		sk_gso_disable(sk);
+-		INIT_HLIST_HEAD(&md5sig->head);
+-		rcu_assign_pointer(tp->md5sig_info, md5sig);
+-	}
  
-+#define static_key_fast_inc(key) static_key_slow_inc(key)
- #define static_key_slow_inc_cpuslocked(key) static_key_slow_inc(key)
- #define static_key_slow_dec_cpuslocked(key) static_key_slow_dec(key)
- 
+ 	key = sock_kmalloc(sk, sizeof(*key), gfp | __GFP_ZERO);
+ 	if (!key)
 -- 
 2.38.1
 
