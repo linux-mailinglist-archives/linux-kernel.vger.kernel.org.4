@@ -2,40 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 256FE6186CC
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 19:00:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0558B6186D0
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 19:00:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231539AbiKCSAE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 14:00:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35804 "EHLO
+        id S232113AbiKCSAW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 14:00:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231942AbiKCR71 (ORCPT
+        with ESMTP id S232059AbiKCR73 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 13:59:27 -0400
+        Thu, 3 Nov 2022 13:59:29 -0400
 Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD6EC219B
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 10:59:19 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAE662BE9
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 10:59:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667498359; x=1699034359;
+  t=1667498360; x=1699034360;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=0V5W1QoeZ7jgTpO6yb+rrh5iM/UlFsilbmyJNleFWWA=;
-  b=ar9go5MU9n8Up/U4gf0nzQpEQzOMzRgdQfWwkvQgxEdfI0JCIxnUUh+y
-   ytyrzLsBpQhk+CpOlxZCpfnMOdfZL8rK73Q0Gw4R26s6HWEh9F5KSDbZC
-   gZzpY6o2B9fzkNua25EucdxRVJZ3kZHYcIQZOERvCGxmQWXvdl3JHuW9I
-   pwr7pzHShrfILTGa5AebMSqo+zoBI5jErx1o86CxaYdSNWaeX46HnPdv4
-   n7SVpAzbPRHnU96ILYt6wwN1JHaCeJG6dtQwZRkb1IYts+qHzXf0ZjGa1
-   J1J3W28yKBeiEfTFSnMcEZ0ajZMJcK5uKyg34P6sKMLIfPcYZwAexKlD8
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10520"; a="310878483"
+  bh=tprEQhizZvNJCMWGXO2qdM0qzd8PBoK3akX16cVKTX0=;
+  b=S0IhcWb82g6gPmeGXgWVm8G8YpKbKEoNpaWSdjG0t4iuJSBLCTMZR7BM
+   SHWCFga6P2Bajv0dM13PE2we5ZsZ7tdhhqMidPTZb82HS0dFPDIP4iHUz
+   x/5/wDSZs2LzLXkOc2OscVPxoffkurZpmwCjpBA7z25pfZ2pgT9d3C6y5
+   lK32tE2D15+V+Jw+6GWfl75jOvgjo/JWNUWMXZrGc/AiCK2VGZ313hSGm
+   StFKDdam9JUdvoYLOjZcoIIwpcOm9H9UEQHkUvGUeVxp7PDbbYW4LzE8S
+   Z58ABG2ZendIBDnAlYQ1VXGQGBFQjhFvfIuGo6g87S8ZAnvbVbGVB3HbL
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10520"; a="310878484"
 X-IronPort-AV: E=Sophos;i="5.96,134,1665471600"; 
-   d="scan'208";a="310878483"
+   d="scan'208";a="310878484"
 Received: from orsmga005.jf.intel.com ([10.7.209.41])
   by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2022 10:59:19 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10520"; a="809762571"
+X-IronPort-AV: E=McAfee;i="6500,9779,10520"; a="809762574"
 X-IronPort-AV: E=Sophos;i="5.96,134,1665471600"; 
-   d="scan'208";a="809762571"
+   d="scan'208";a="809762574"
 Received: from araj-dh-work.jf.intel.com ([10.165.157.158])
   by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2022 10:59:18 -0700
 From:   Ashok Raj <ashok.raj@intel.com>
@@ -51,9 +51,9 @@ Cc:     "LKML Mailing List" <linux-kernel@vger.kernel.org>,
         Kai Huang <kai.huang@intel.com>,
         Andrew Cooper <andrew.cooper3@citrix.com>,
         Ashok Raj <ashok.raj@intel.com>
-Subject: [v2 11/13] x86/microcode/intel: Drop wbinvd() from microcode loading
-Date:   Thu,  3 Nov 2022 17:58:59 +0000
-Message-Id: <20221103175901.164783-12-ashok.raj@intel.com>
+Subject: [v2 12/13] x86/microcode: Display revisions only when update is successful
+Date:   Thu,  3 Nov 2022 17:59:00 +0000
+Message-Id: <20221103175901.164783-13-ashok.raj@intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221103175901.164783-1-ashok.raj@intel.com>
 References: <20221103175901.164783-1-ashok.raj@intel.com>
@@ -69,47 +69,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some older processors had a bad interaction when updating microcode if the
-caches were dirty causing machine checks. The wbinvd() was added to
-mitigate that before performing microcode updates. Now that Linux checks
-for the minimum version before performing an update, those microcode
-revisions can't be loaded. Remove calls to wbinvd().
+Display the update message only when its successful
 
 Reviewed-by: Tony Luck <tony.luck@intel.com>
 Signed-off-by: Ashok Raj <ashok.raj@intel.com>
 ---
- arch/x86/kernel/cpu/microcode/intel.c | 11 -----------
- 1 file changed, 11 deletions(-)
+ arch/x86/kernel/cpu/microcode/core.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/arch/x86/kernel/cpu/microcode/intel.c b/arch/x86/kernel/cpu/microcode/intel.c
-index 5d2ee76cd36c..7086670da606 100644
---- a/arch/x86/kernel/cpu/microcode/intel.c
-+++ b/arch/x86/kernel/cpu/microcode/intel.c
-@@ -541,11 +541,6 @@ static int apply_microcode_early(struct ucode_cpu_info *uci, bool early)
- 	}
+diff --git a/arch/x86/kernel/cpu/microcode/core.c b/arch/x86/kernel/cpu/microcode/core.c
+index 17dba13d397d..a7d0cbbb2505 100644
+--- a/arch/x86/kernel/cpu/microcode/core.c
++++ b/arch/x86/kernel/cpu/microcode/core.c
+@@ -591,11 +591,11 @@ static int microcode_reload_late(void)
+ 	if (ret == 0)
+ 		microcode_check(&info);
  
- 	old_rev = rev;
--	/*
--	 * Writeback and invalidate caches before updating microcode to avoid
--	 * internal issues depending on what the microcode is updating.
--	 */
--	native_wbinvd();
- 
- 	/* write microcode via MSR 0x79 */
- 	native_wrmsrl(MSR_IA32_UCODE_WRITE, (unsigned long)mc->bits);
-@@ -776,12 +771,6 @@ static enum ucode_state apply_microcode_intel(int cpu)
- 	if (!prev_rev)
- 		prev_rev = rev;
- 
--	/*
--	 * Writeback and invalidate caches before updating microcode to avoid
--	 * internal issues depending on what the microcode is updating.
--	 */
--	native_wbinvd();
+-	pr_info("Reload completed, microcode revision: 0x%x -> 0x%x\n",
+-		old, boot_cpu_data.microcode);
 -
- 	/* write microcode via MSR 0x79 */
- 	wrmsrl(MSR_IA32_UCODE_WRITE, (unsigned long)mc->bits);
+ 	unregister_nmi_handler(NMI_LOCAL, "ucode_nmi");
  
++	if (!ret)
++		pr_info("Reload completed, microcode revision: 0x%x -> 0x%x\n",
++			old, boot_cpu_data.microcode);
+ done:
+ 	return ret;
+ }
 -- 
 2.34.1
 
