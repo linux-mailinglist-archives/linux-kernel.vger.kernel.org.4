@@ -2,150 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7852B618349
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 16:51:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DD1D61834B
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 16:53:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232069AbiKCPvT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 11:51:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56436 "EHLO
+        id S232025AbiKCPw6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 11:52:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230333AbiKCPvP (ORCPT
+        with ESMTP id S230157AbiKCPwy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 11:51:15 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD51165DD
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 08:50:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667490617;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=/Kf9rvim63yuVg7xQXPf25qL1fvNeKXI/1pKoooV9l0=;
-        b=EXFY43vz/vEWBS02r7l6eTcOTdBAwSKi2r+6CeogwLUbrmycz/RcA0JbLSNpREQxtGRC3U
-        rvcm+mdtPZRyDs/vjGFPpxEZUrZ5ZmEOGzVINLXUvq3tij1AlgF4G/aCQLib9uAbCPdDLz
-        qn8noheYzMJW42z5HGO4kBWogwFtaxw=
-Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
- [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-612-p1Q8BnhWM1uiTtMT09h0qg-1; Thu, 03 Nov 2022 11:50:15 -0400
-X-MC-Unique: p1Q8BnhWM1uiTtMT09h0qg-1
-Received: by mail-qv1-f71.google.com with SMTP id g12-20020a0cfdcc000000b004ad431ceee0so1544524qvs.7
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 08:50:09 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/Kf9rvim63yuVg7xQXPf25qL1fvNeKXI/1pKoooV9l0=;
-        b=p8ybsm14jAlqjjgXLC4p/gjsRSg3UHpNPLkV5sU7kKwbQhpizkCMFIEfXujkBqkbdc
-         RFO91TROJpnQWIah4GanNMkftHpDFSIHgWwHDC2YejprKlLeFbRX7KQZiaD8BvS7mIUE
-         epqCycc0wwiBGtPkBD64waPeqp4KRXZMMStrmAaIv5CsKMo/u7dLlRhcZPCJOhCs7hfX
-         y825Cte8s6sXWq3xOOw7rgGdHqYEBLD+lSljIUXiSOwA55cbkvW7iLPQysyhfhF5cdJ3
-         wQ8S+d1evNorVhuY1Y2KqtjdbJkbfZMti8HahSwLdt8Kj+xVtYtILpzHY1uvUfsossIt
-         EVIw==
-X-Gm-Message-State: ACrzQf2gwGoRUbTQzm+/pJkCId8BsSzeKeDWWQ0clDRaKiwJAXHF6VoT
-        v7w1L/jvD8jsbgV+sFaeLmcpmGuzQ3YaibhlNkrnqlSCx1yGtHjJn1ApBU0UP8u4qLkQjTsXfFK
-        HLIDfklm9toiLgKT2SKk84NqG
-X-Received: by 2002:a05:6214:238e:b0:4b4:3392:ced6 with SMTP id fw14-20020a056214238e00b004b43392ced6mr26580275qvb.38.1667490608516;
-        Thu, 03 Nov 2022 08:50:08 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM4/UckPGDZ8wo2iosYYoH1J3/hz8LOZ3kGO84B6ybEZcp6AooCtTlIRzEq1qK9gh1+opKmHbA==
-X-Received: by 2002:a05:6214:238e:b0:4b4:3392:ced6 with SMTP id fw14-20020a056214238e00b004b43392ced6mr26580247qvb.38.1667490608300;
-        Thu, 03 Nov 2022 08:50:08 -0700 (PDT)
-Received: from x1n (bras-base-aurron9127w-grc-46-70-31-27-79.dsl.bell.ca. [70.31.27.79])
-        by smtp.gmail.com with ESMTPSA id f21-20020ac87f15000000b003a5430ee366sm732000qtk.60.2022.11.03.08.50.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Nov 2022 08:50:07 -0700 (PDT)
-Date:   Thu, 3 Nov 2022 11:50:06 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     James Houghton <jthoughton@google.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        David Hildenbrand <david@redhat.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Rik van Riel <riel@surriel.com>
-Subject: Re: [PATCH RFC 07/10] mm/hugetlb: Make hugetlb_follow_page_mask()
- RCU-safe
-Message-ID: <Y2PjLlJaBVWDd2bn@x1n>
-References: <20221030212929.335473-1-peterx@redhat.com>
- <20221030212929.335473-8-peterx@redhat.com>
- <CADrL8HUJZMGaWtyVCcXUfmU3neTO4Q6e=3Fi5=osiEVH9jRZ=w@mail.gmail.com>
+        Thu, 3 Nov 2022 11:52:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3801D65DD;
+        Thu,  3 Nov 2022 08:52:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C8CE661F3D;
+        Thu,  3 Nov 2022 15:52:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 059A9C433D6;
+        Thu,  3 Nov 2022 15:52:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667490772;
+        bh=4E16EIE6fAutftaw+daIrJ0Wt1QN/Av8Zfs90PmDMK4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=pOwMD/vT7LIbQ0mJw0QJULI2hdA21Be0vAMcOLfe5btDLUsA8y+FngQ118whcaZ1T
+         Fz/Q17H7o5EsTIbRVYDBMYOOLJI3cA4Y/LoEJhR8mepewIOOLEO/GL2ZycClei23jf
+         HumFdI4hkqbNTKYG1scNM++qeStg5y9t4gT5mIi3YC0eNOoAM/QhBZk+4i4TixSMQv
+         xmDNA1j5FHvLXWm5KHbP/Ns9mmH1o+d1UBV9qZ8C62Ggza+yO4h0VMg8HgTaB4wMlc
+         6TvNlGpkz+hhIVBp8bwgx/PduVJ1Bc9q3K7CNJYjZ9NQi5J4RoHm/HlnvNdcJApplq
+         e23sAG+srvh+Q==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id C0FD14034E; Thu,  3 Nov 2022 12:52:48 -0300 (-03)
+Date:   Thu, 3 Nov 2022 12:52:48 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     Leo Yan <leo.yan@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Stephane Eranian <eranian@google.com>
+Subject: Re: [PATCH v1 6/7] perf trace: 5sec fix libbpf 1.0+ compatibility
+Message-ID: <Y2Pj0KVbbw9rMcPH@kernel.org>
+References: <20221103045437.163510-1-irogers@google.com>
+ <20221103045437.163510-7-irogers@google.com>
+ <Y2PgBPeZsd9+YWB4@kernel.org>
+ <Y2Pgz7luG77Wr+Ci@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CADrL8HUJZMGaWtyVCcXUfmU3neTO4Q6e=3Fi5=osiEVH9jRZ=w@mail.gmail.com>
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Y2Pgz7luG77Wr+Ci@kernel.org>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 02, 2022 at 11:24:57AM -0700, James Houghton wrote:
-> On Sun, Oct 30, 2022 at 2:29 PM Peter Xu <peterx@redhat.com> wrote:
-> >
-> > RCU makes sure the pte_t* won't go away from under us.  Please refer to the
-> > comment above huge_pte_offset() for more information.
-> >
-> > Signed-off-by: Peter Xu <peterx@redhat.com>
-> > ---
-> >  mm/hugetlb.c | 6 +++++-
-> >  1 file changed, 5 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-> > index 9869c12e6460..85214095fb85 100644
-> > --- a/mm/hugetlb.c
-> > +++ b/mm/hugetlb.c
-> > @@ -6229,10 +6229,12 @@ struct page *hugetlb_follow_page_mask(struct vm_area_struct *vma,
-> >         if (WARN_ON_ONCE(flags & FOLL_PIN))
-> >                 return NULL;
-> >
-> > +       /* For huge_pte_offset() */
-> > +       rcu_read_lock();
-> >  retry:
-> >         pte = huge_pte_offset(mm, haddr, huge_page_size(h));
-> >         if (!pte)
-> > -               return NULL;
-> > +               goto out_rcu;
-> >
-> >         ptl = huge_pte_lock(h, mm, pte);
+Em Thu, Nov 03, 2022 at 12:39:59PM -0300, Arnaldo Carvalho de Melo escreveu:
+> Em Thu, Nov 03, 2022 at 12:36:36PM -0300, Arnaldo Carvalho de Melo escreveu:
+> > [root@quaco ~]# perf trace -e /home/acme/git/perf/tools/perf/examples/bpf/5sec.c
+> > /home/acme/git/perf/tools/perf/examples/bpf/5sec.c:42:10: fatal error: 'bpf/bpf_helpers.h' file not found
+> > #include <bpf/bpf_helpers.h>
+> >          ^~~~~~~~~~~~~~~~~~~
+> > 1 error generated.
+> > ERROR:	unable to compile /home/acme/git/perf/tools/perf/examples/bpf/5sec.c
+> > Hint:	Check error message shown above.
+> > Hint:	You can also pre-compile it into .o using:
+> >      		clang -target bpf -O2 -c /home/acme/git/perf/tools/perf/examples/bpf/5sec.c
+> >      	with proper -I and -D options.
+> > event syntax error: '/home/acme/git/perf/tools/perf/examples/bpf/5sec.c'
+> >                      \___ Failed to load /home/acme/git/perf/tools/perf/examples/bpf/5sec.c from source: Error when compiling BPF scriptlet
+> > 
+> > (add -v to see detail)
+> > Run 'perf list' for a list of valid events
+> > 
+> >  Usage: perf trace [<options>] [<command>]
+> >     or: perf trace [<options>] -- <command> [<options>]
+> >     or: perf trace record [<options>] [<command>]
+> >     or: perf trace record [<options>] -- <command> [<options>]
+> > 
+> >     -e, --event <event>   event/syscall selector. use 'perf list' to list available events
+> > [root@quaco ~]#
+> > 
+> > It is not even finding it, in this machine I have libbpf 0.7.0, so there
+> > is a /usr/include/bpf/bpf_helpers.h, but probably that isn't in the
+> > include path set up to build the tools/perf/examples/bpf/ files, perhaps
+> > it should use:
+> > 
+> > -Itools/lib/  so that it gets tools/lib/bpf_helpers.h?
+> > 
+> > Trying to get this tested...
 > 
-> Just to make sure -- this huge_pte_lock doesn't count as "blocking"
-> (for the purposes of what is allowed in an RCU read-side critical
-> section), right? If so, great!
+> Running with -v:
+> 
+> llvm compiling command : /usr/lib64/ccache/clang -D__KERNEL__ -D__NR_CPUS__=8 -DLINUX_VERSION_CODE=0x51310 -g -I/home/acme/lib/perf/include/bpf -nostdinc -I./arch/x86/include -I./arch/x86/include/generated  -I./include -I./arch/x86/include/uapi -I./arch/x86/include/generated/uapi -I./include/uapi -I./include/generated/uapi -include ./include/linux/compiler-version.h -include ./include/linux/kconfig.h  -Wno-unused-value -Wno-pointer-sign -working-directory /lib/modules/5.19.16-200.fc36.x86_64/build -c /home/acme/git/perf/tools/perf/examples/bpf/5sec.c -target bpf  -g -O2 -o -
+> /home/acme/git/perf/tools/perf/examples/bpf/5sec.c:42:10: fatal error: 'bpf/bpf_helpers.h' file not found
+> 
+> There is still that -I/home/acme/lib/perf/include/bpf, I'll remove it
+> from the include path and try to replace it with the libbpf path...
 
-Yeah I think spinlock should be fine, iiuc it'll be fine as long as we
-don't proactively yield with any form of sleeping locks.
+Ok, works with the patch below, that needs some more renaming from "perf_" to
+"libbpf_", etc:
 
-For RT sleepable spinlock should also be fine in this case, as explicitly
-mentioned in the RCU docs:
+[root@quaco ~]# perf trace -e /home/acme/git/perf/tools/perf/examples/bpf/5sec.c  sleep 5
+     0.000 sleep/160828 perf_bpf_probe:hrtimer_nanosleep(__probe_ip: -1474734416, rqtp: 5000000000)
+[root@quaco ~]#
 
-b.	What about the -rt patchset?  If readers would need to block
-	in an non-rt kernel, you need SRCU.  If readers would block
-	in a -rt kernel, but not in a non-rt kernel, SRCU is not
-	necessary.  (The -rt patchset turns spinlocks into sleeplocks,
-	hence this distinction.)
+Since I have:
 
-> But I think we need to call `rcu_read_unlock` before entering
-> `__migration_entry_wait_huge`, as that function really can block.
+[root@quaco ~]# cat ~/.perfconfig
+[llvm]
+	dump-obj = true
+	clang-opt = -g
+#
 
-Right, let me revisit this after I figure out how to do with the
-hugetlb_fault() path first, as you commented in the other patch.
+I end up with:
 
-Actually here I really think we should just remove the migration chunk and
-return with page==NULL, since I really don't think follow_page_mask should
-block at all.. then for !sleep cases (FOLL_NOWAIT) or follow_page we'll
-return the NULL upwards early, while for generic GUP (__get_user_pages)
-we'll just wait in the upcoming faultin_page().  That's afaict what we do
-with non-hugetlb memories too (after the recent removal of FOLL_MIGRATE in
-4a0499782a).
+[root@quaco ~]# ls -la /home/acme/git/perf/tools/perf/examples/bpf/5sec.o
+-rw-r--r--. 1 root root 3696 Nov  3 12:47 /home/acme/git/perf/tools/perf/examples/bpf/5sec.o
+[root@quaco ~]# file /home/acme/git/perf/tools/perf/examples/bpf/5sec.o
+/home/acme/git/perf/tools/perf/examples/bpf/5sec.o: ELF 64-bit LSB relocatable, eBPF, version 1 (SYSV), with debug_info, not stripped
+[root@quaco ~]#
 
--- 
-Peter Xu
+and can test with the pre-built .o eBPF bytecode + capped backtrace:
 
+[root@quaco ~]# perf trace -e /home/acme/git/perf/tools/perf/examples/bpf/5sec.o/max-stack=6/  sleep 5
+     0.000 sleep/161037 perf_bpf_probe:hrtimer_nanosleep(__probe_ip: -1474734416, rqtp: 5000000000)
+                                       hrtimer_nanosleep ([kernel.kallsyms])
+                                       common_nsleep ([kernel.kallsyms])
+                                       __x64_sys_clock_nanosleep ([kernel.kallsyms])
+                                       do_syscall_64 ([kernel.kallsyms])
+                                       entry_SYSCALL_64_after_hwframe ([kernel.kallsyms])
+                                       __GI___clock_nanosleep (/usr/lib64/libc.so.6)
+[root@quaco ~]#
+
+I'll test the other examples with these changes after I drive Pedro to
+school and get back to the office.
+
+- Arnaldo
+
+diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
+index d3d3c13a9f25b55c..067a6e56eeacc9fc 100644
+--- a/tools/perf/Makefile.config
++++ b/tools/perf/Makefile.config
+@@ -1239,7 +1239,7 @@ includedir = $(abspath $(prefix)/$(includedir_relative))
+ mandir = share/man
+ infodir = share/info
+ perfexecdir = libexec/perf-core
+-perf_include_dir = lib/perf/include
++perf_include_dir = /usr/include
+ perf_examples_dir = lib/perf/examples
+ sharedir = $(prefix)/share
+ template_dir = share/perf-core/templates
+diff --git a/tools/perf/util/llvm-utils.c b/tools/perf/util/llvm-utils.c
+index 2dc7970074196ca8..a5cac85783d8711f 100644
+--- a/tools/perf/util/llvm-utils.c
++++ b/tools/perf/util/llvm-utils.c
+@@ -495,7 +495,7 @@ int llvm__compile_bpf(const char *path, void **p_obj_buf,
+ 
+ 	snprintf(linux_version_code_str, sizeof(linux_version_code_str),
+ 		 "0x%x", kernel_version);
+-	if (asprintf(&perf_bpf_include_opts, "-I%s/bpf", perf_include_dir) < 0)
++	if (asprintf(&perf_bpf_include_opts, "-I%s/", perf_include_dir) < 0)
+ 		goto errout;
+ 	force_set_env("NR_CPUS", nr_cpus_avail_str);
+ 	force_set_env("LINUX_VERSION_CODE", linux_version_code_str);
