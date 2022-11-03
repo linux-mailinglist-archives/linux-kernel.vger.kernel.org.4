@@ -2,152 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1A65618304
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 16:40:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CDDF0618306
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 16:40:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231664AbiKCPkN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 11:40:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48610 "EHLO
+        id S231683AbiKCPk0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 11:40:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231355AbiKCPkG (ORCPT
+        with ESMTP id S231694AbiKCPkU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 11:40:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EC01BC94;
-        Thu,  3 Nov 2022 08:40:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 36C7261F37;
-        Thu,  3 Nov 2022 15:40:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 648C4C433C1;
-        Thu,  3 Nov 2022 15:40:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667490003;
-        bh=7cNJ3eImJN9ggcpVDNFcQ1cXwlPLaUGnXqZBgd/8k9Q=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fRILNxQcN5dT9cnjWyrxeHJUgZbPQXB5o++XUXdWDnmQBR0fKvgY4nFIaP7Y+xQlY
-         lzrblDkmdS7FCE5aLmyitObJvc6/R2hBR+3qWMd3Y5d1wJzrW+Au4lYQ8ThyHXU5OS
-         O9YgtQ23TTw+gRmlu/vRk5dc+6uNovHr+vZnYkRx4bNdySxHfUiCVQQgdenmDyGR22
-         DcqQbb8E2EZCi+jXIZ7HPIHyIL4ynH5QInIRPMYSV9Zz1Pfv/eu3Db8ri1f+pyAno5
-         5Lt7aPtH1TVQzXCx6soMErAkQEGbBQkkFKd+5DqO4XX4CQr3WzCHTRnr6E/PAfRTmM
-         CNLQyWNrscAgg==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id DD9864034E; Thu,  3 Nov 2022 12:39:59 -0300 (-03)
-Date:   Thu, 3 Nov 2022 12:39:59 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Ian Rogers <irogers@google.com>
-Cc:     Leo Yan <leo.yan@linaro.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Stephane Eranian <eranian@google.com>
-Subject: Re: [PATCH v1 6/7] perf trace: 5sec fix libbpf 1.0+ compatibility
-Message-ID: <Y2Pgz7luG77Wr+Ci@kernel.org>
-References: <20221103045437.163510-1-irogers@google.com>
- <20221103045437.163510-7-irogers@google.com>
- <Y2PgBPeZsd9+YWB4@kernel.org>
+        Thu, 3 Nov 2022 11:40:20 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE92817592
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 08:40:14 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id i5-20020a1c3b05000000b003cf47dcd316so3627200wma.4
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 08:40:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=arista.com; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=heCsF5+oksMkKllVhJuNqNh9mZu8ZtuLSZhGNPkuZUU=;
+        b=awPwB40AqRzdI+kaKO27twDciZZUa4wRghMQ5H/0a2587mmwsT8ce5/+TwRPtir9qb
+         Ue4YnZR0stUuot+GTLmCKAQphR/mSEXhy+ubpz8KJfPCEJzJVhMRNMXQCXLb6NJpUHTL
+         UetbKMthucTcZE/68dqbYKFRtCiOee/L6nb3Ze3h2kWMdIE0zcxUoR/hGw/N9NFbiGxh
+         pzv6WKvTAziZPBzbuivwaweJUDDVw3um7ka3zOz4dyEpmzTL/4Yn6NxxO0srkyX8p2W+
+         NS7wLNG8qRLep0Q7rjQQ9JHVAvJWTrOGOAAgfs6Ly7geOJFMcz0P1WxaVFbFyAgd1EZi
+         CAPA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=heCsF5+oksMkKllVhJuNqNh9mZu8ZtuLSZhGNPkuZUU=;
+        b=hzTXLMWHFb712YaFOif9h+00pTPY7U95ei577QhoK8fQvLVs5mVH4XK10AkBxuw3/k
+         yTxi7xejTQdRcXNunnkOURdR4fElvgKQpdnuBa/MR383ddX0i88za70abETit2E9wGdS
+         r2u9Phkcz5trcy3AtOV6xhyhDKA3pQb+p9BHE9JVfhJRZUX0fI83HfLvQMxcJw7JGHqH
+         XFI/9XESDkJRVjSa7aXZ3+7yABJqG74jbnv5BDVZ3rBD7/WivYN6ju1IEXeuxteMlL3o
+         FPSQIVELv5BMZK0HMqdbq4ZS6s5lqbAD4FF7lt2m2JiPdyHQIVKwMyl6isiS5Gxyn4gL
+         TR/g==
+X-Gm-Message-State: ACrzQf3jv2iH9OTFrhszpSfCeVDvhSogDnbVHjmmJfto8GsFRPCPHCXy
+        DB58fMc3TXhSj2UZFOhqrjc7YQ==
+X-Google-Smtp-Source: AMsMyM5W3IK+XSPxncETUlmZfWRiaYwnj6m0Q7dFp4g0bufxPolS3y/IKY4/UkTiEiUWOM8xAdLSvw==
+X-Received: by 2002:a05:600c:35cf:b0:3c6:e957:b403 with SMTP id r15-20020a05600c35cf00b003c6e957b403mr31542271wmq.162.1667490013382;
+        Thu, 03 Nov 2022 08:40:13 -0700 (PDT)
+Received: from [10.83.37.24] ([217.173.96.166])
+        by smtp.gmail.com with ESMTPSA id v20-20020adfa1d4000000b002238ea5750csm1459001wrv.72.2022.11.03.08.40.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 03 Nov 2022 08:40:12 -0700 (PDT)
+Message-ID: <ad9be7ae-aeec-b208-8252-7a566534ded4@arista.com>
+Date:   Thu, 3 Nov 2022 15:40:11 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y2PgBPeZsd9+YWB4@kernel.org>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Subject: Re: [PATCH 2/2] net/tcp: Disable TCP-MD5 static key on
+ tcp_md5sig_info destruction
+Content-Language: en-US
+To:     Eric Dumazet <edumazet@google.com>
+Cc:     linux-kernel@vger.kernel.org, David Ahern <dsahern@kernel.org>,
+        Bob Gilligan <gilligan@arista.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        Francesco Ruggeri <fruggeri@arista.com>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Salam Noureddine <noureddine@arista.com>,
+        netdev@vger.kernel.org
+References: <20221102211350.625011-1-dima@arista.com>
+ <20221102211350.625011-3-dima@arista.com>
+ <CANn89iLbOikuG9+Tna9M0Gr-diF2vFpfMV8MDP8rBuN49+Mwrg@mail.gmail.com>
+ <483848f5-8807-fd97-babc-44740db96db4@arista.com>
+ <CANn89i+XyQhh0eNMJWNn6NNLDaMtrzX3sq9Atu-ic7P5uqDODg@mail.gmail.com>
+ <CANn89i+UxgHwm9apzBXV-afpcfXfuX2S+6i4vPzF2ec4Dr6X0A@mail.gmail.com>
+From:   Dmitry Safonov <dima@arista.com>
+In-Reply-To: <CANn89i+UxgHwm9apzBXV-afpcfXfuX2S+6i4vPzF2ec4Dr6X0A@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Thu, Nov 03, 2022 at 12:36:36PM -0300, Arnaldo Carvalho de Melo escreveu:
-> Em Wed, Nov 02, 2022 at 09:54:36PM -0700, Ian Rogers escreveu:
-> > Avoid use of tools/perf/include/bpf/bpf.h and use the more regular BPF
-> > headers.
-> > 
-> > Note, on testing the probe was unable to attach and the program failed.
+On 11/2/22 21:53, Eric Dumazet wrote:
+> On Wed, Nov 2, 2022 at 2:49 PM Eric Dumazet <edumazet@google.com> wrote:
 > 
-> Humm, trying to test:
+>>
+>> Are you sure ?
+>>
+>> static_branch_inc() is what we want here, it is a nice wrapper around
+>> the correct internal details,
+>> and ultimately boils to an atomic_inc(). It is safe for all contexts.
+>>
+>> But if/when jump labels get refcount_t one day, we will not have to
+>> change TCP stack because
+>> it made some implementation assumptions.
 > 
-> [root@quaco ~]# perf trace -e /home/acme/git/perf/tools/perf/examples/bpf/5sec.c |& head -15
-> In file included from /home/acme/git/perf/tools/perf/examples/bpf/5sec.c:42:
-> In file included from /lib/modules/5.19.16-200.fc36.x86_64/build/./include/linux/bpf.h:9:
-> In file included from /lib/modules/5.19.16-200.fc36.x86_64/build/./include/linux/workqueue.h:9:
-> In file included from /lib/modules/5.19.16-200.fc36.x86_64/build/./include/linux/timer.h:6:
-> In file included from /lib/modules/5.19.16-200.fc36.x86_64/build/./include/linux/ktime.h:24:
-> In file included from /lib/modules/5.19.16-200.fc36.x86_64/build/./include/linux/time.h:6:
-> In file included from /lib/modules/5.19.16-200.fc36.x86_64/build/./include/linux/math64.h:6:
-> In file included from /lib/modules/5.19.16-200.fc36.x86_64/build/./include/linux/math.h:6:
-> /lib/modules/5.19.16-200.fc36.x86_64/build/./arch/x86/include/asm/div64.h:85:28: error: invalid output constraint '=a' in asm
->         asm ("mulq %2; divq %3" : "=a" (q)
->                                   ^
-> In file included from /home/acme/git/perf/tools/perf/examples/bpf/5sec.c:42:
-> In file included from /lib/modules/5.19.16-200.fc36.x86_64/build/./include/linux/bpf.h:9:
-> In file included from /lib/modules/5.19.16-200.fc36.x86_64/build/./include/linux/workqueue.h:9:
-> In file included from /lib/modules/5.19.16-200.fc36.x86_64/build/./include/linux/timer.h:6:
-> [root@quaco ~]#
+> Oh, I think I understand this better now.
 > 
-> So I go and try to remove that <linux/bpf.h>:
+> Please provide a helper like
 > 
-> [acme@quaco perf]$ git diff
-> diff --git a/tools/perf/examples/bpf/5sec.c b/tools/perf/examples/bpf/5sec.c
-> index 3bd7fc17631f0440..e0d5525c6a1374ae 100644
-> --- a/tools/perf/examples/bpf/5sec.c
-> +++ b/tools/perf/examples/bpf/5sec.c
-> @@ -39,7 +39,6 @@
->     Copyright (C) 2018 Red Hat, Inc., Arnaldo Carvalho de Melo <acme@redhat.com>
->  */
+> static inline void static_key_fast_inc(struct static_key *key)
+> {
+>        atomic_inc(&key->enabled);
+> }
 > 
-> -#include <linux/bpf.h>
->  #include <bpf/bpf_helpers.h>
-> 
->  #define NSEC_PER_SEC   1000000000L
-> [acme@quaco perf]$
-> 
-> [root@quaco ~]# perf trace -e /home/acme/git/perf/tools/perf/examples/bpf/5sec.c
-> /home/acme/git/perf/tools/perf/examples/bpf/5sec.c:42:10: fatal error: 'bpf/bpf_helpers.h' file not found
-> #include <bpf/bpf_helpers.h>
->          ^~~~~~~~~~~~~~~~~~~
-> 1 error generated.
-> ERROR:	unable to compile /home/acme/git/perf/tools/perf/examples/bpf/5sec.c
-> Hint:	Check error message shown above.
-> Hint:	You can also pre-compile it into .o using:
->      		clang -target bpf -O2 -c /home/acme/git/perf/tools/perf/examples/bpf/5sec.c
->      	with proper -I and -D options.
-> event syntax error: '/home/acme/git/perf/tools/perf/examples/bpf/5sec.c'
->                      \___ Failed to load /home/acme/git/perf/tools/perf/examples/bpf/5sec.c from source: Error when compiling BPF scriptlet
-> 
-> (add -v to see detail)
-> Run 'perf list' for a list of valid events
-> 
->  Usage: perf trace [<options>] [<command>]
->     or: perf trace [<options>] -- <command> [<options>]
->     or: perf trace record [<options>] [<command>]
->     or: perf trace record [<options>] -- <command> [<options>]
-> 
->     -e, --event <event>   event/syscall selector. use 'perf list' to list available events
-> [root@quaco ~]#
-> 
-> It is not even finding it, in this machine I have libbpf 0.7.0, so there
-> is a /usr/include/bpf/bpf_helpers.h, but probably that isn't in the
-> include path set up to build the tools/perf/examples/bpf/ files, perhaps
-> it should use:
-> 
-> -Itools/lib/  so that it gets tools/lib/bpf_helpers.h?
-> 
-> Trying to get this tested...
+> Something like that.
 
-Running with -v:
+Sure, that sounds like a better thing to do, rather than the hack I had.
 
-llvm compiling command : /usr/lib64/ccache/clang -D__KERNEL__ -D__NR_CPUS__=8 -DLINUX_VERSION_CODE=0x51310 -g -I/home/acme/lib/perf/include/bpf -nostdinc -I./arch/x86/include -I./arch/x86/include/generated  -I./include -I./arch/x86/include/uapi -I./arch/x86/include/generated/uapi -I./include/uapi -I./include/generated/uapi -include ./include/linux/compiler-version.h -include ./include/linux/kconfig.h  -Wno-unused-value -Wno-pointer-sign -working-directory /lib/modules/5.19.16-200.fc36.x86_64/build -c /home/acme/git/perf/tools/perf/examples/bpf/5sec.c -target bpf  -g -O2 -o -
-/home/acme/git/perf/tools/perf/examples/bpf/5sec.c:42:10: fatal error: 'bpf/bpf_helpers.h' file not found
+Thanks, will send v2 soon,
+          Dmitry
 
-There is still that -I/home/acme/lib/perf/include/bpf, I'll remove it
-from the include path and try to replace it with the libbpf path...
-
-- Arnaldo
