@@ -2,125 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C06D617F3D
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 15:18:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BAF4617F40
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 15:18:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229791AbiKCOSQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 10:18:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35622 "EHLO
+        id S231639AbiKCOSw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 10:18:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231404AbiKCORy (ORCPT
+        with ESMTP id S230511AbiKCOSJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 10:17:54 -0400
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC57326DC;
-        Thu,  3 Nov 2022 07:16:47 -0700 (PDT)
-Received: by mail-wr1-f52.google.com with SMTP id bk15so2937822wrb.13;
-        Thu, 03 Nov 2022 07:16:47 -0700 (PDT)
+        Thu, 3 Nov 2022 10:18:09 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE4D612772
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 07:17:19 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-36f8318e4d0so19736737b3.20
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 07:17:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=l+u2K0t45cnZAV/GDs5HtBlAaa6X3vs/zsHgWN6LaqE=;
+        b=juRhD6PIzWr9gunWjN+/OEJc/ZeFnRt6uXgZqrX+tyP/MuwYUuxI+iOrCg80P5eOsF
+         n2gLGVJ/MR7HCVyyQgNawgEeNpSyN9eEZdtKq12MHstMZaFUqCrXxdup4hh6QsTA+nnY
+         FiQXN2FxA2SSqfoba3NN1Zbpdex6zzPMbT8Qip+ETXWEXH7W4bK4BNi7y/U0qZk2zhQ1
+         aLCvmWcGiYcQOGotts4FyjyDcBYCbtq4qT/kLBwTgOWxeFQo7N+EfU0rKQMmczEhnSAh
+         Yh6sTi39bvuAQj0ikaC8B6gcbbofyIRSppN0SQRQM6H9DeZ7Cyp24OoO7Uarf8o9JnlE
+         1seA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=80B2b1bMn1FZmClWYd3FX65ywdaYJT+10GImN40lUiM=;
-        b=YtiSEalBmGnnNRutR6EHaozR1TvbreGBqzWUT6T+5vejXH40Dj9xEEg7PQivKifH+u
-         yTUItl/Wxqz7LpYeOs2ZroRxSGVdVGyLcHkUzJX5DaxM4mM71qs0y5x0bsIDpaqvgNa1
-         Y3Ahk3zvSJcwF2zOUD5d2/GHtGzhgOxSWL3Bt48bDhBBVhCP8lJMDo71sbwKEDXDkS+S
-         emY4D2Np80NB5Q5N6HA/4gLFAEDkOk0Ben4EcrkXXRa7AhnBv7S20PdLf8YS0lhbmoEv
-         q4wISvqGWDlXvsxga8vCd1iDodODIB051CfXgoqYSXxOwG0ujuMj5/mfmrzg7r6kiVu2
-         owuw==
-X-Gm-Message-State: ACrzQf3s9YgT7dHW95H3VJbsTBQy03LqntsLJVU45yWUr2QuD1ckWxpF
-        AWBPqtC58D/me8cQvh+nJoE=
-X-Google-Smtp-Source: AMsMyM7on/BQsGLd9/ikyaypEllg8CbAEx0xNHuurebxCLJjdkjrBl+DoN6mhjxyOUzqX2ta/wscow==
-X-Received: by 2002:a5d:4cca:0:b0:236:aecc:60cb with SMTP id c10-20020a5d4cca000000b00236aecc60cbmr18748510wrt.11.1667485006250;
-        Thu, 03 Nov 2022 07:16:46 -0700 (PDT)
-Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
-        by smtp.gmail.com with ESMTPSA id l6-20020a5d5266000000b00236a16c00ffsm1032357wrc.43.2022.11.03.07.16.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Nov 2022 07:16:45 -0700 (PDT)
-Date:   Thu, 3 Nov 2022 14:16:36 +0000
-From:   Wei Liu <wei.liu@kernel.org>
-To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-Cc:     Jinank Jain <jinankjain@linux.microsoft.com>,
-        Jinank Jain <jinankjain@microsoft.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        "sthemmin@microsoft.com" <sthemmin@microsoft.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        Dexuan Cui <decui@microsoft.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "jpoimboe@kernel.org" <jpoimboe@kernel.org>,
-        "seanjc@google.com" <seanjc@google.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
-Subject: Re: [PATCH v2 4/5] hv: Enable vmbus driver for nested root partition
-Message-ID: <Y2PNRKLTnbHUPPFq@liuwe-devbox-debian-v2>
-References: <cover.1667406350.git.jinankjain@linux.microsoft.com>
- <b5ea40f7e84e17a4338a313ab74292a293b1efa4.1667406350.git.jinankjain@linux.microsoft.com>
- <BYAPR21MB16880A610264D54C141B7D79D7389@BYAPR21MB1688.namprd21.prod.outlook.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <BYAPR21MB16880A610264D54C141B7D79D7389@BYAPR21MB1688.namprd21.prod.outlook.com>
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=l+u2K0t45cnZAV/GDs5HtBlAaa6X3vs/zsHgWN6LaqE=;
+        b=oH5aFpGd3yaakx1M9c7yhXxZIkCuuOcdw6fWn9s2dQrXGRHABDfyf6XUTcxTju46ZH
+         cWhoGlfuQVAFOD1jxJw0DeFYovtVxPm35THojLE0k0KASJWWjj9YuVpH3k5K+fyrx6pm
+         KngrnoBoo5TllGE3DyBLvrD+OXeIoWNdSbzYE/54i/HfNOdZkFqU4p1Ss9fxyUOMey9v
+         ATnuD7O+LumUTpoEXKBTBJCufaVAFn+4xyXtZE3bWT7afaEyBWZnl0soYiOWgEeAclSq
+         xUZlaTT7OVGoNemhmOU3ncrBtxbsKAS8p42Hspjft9IiNDoauli/fmT/Oiym7coIvniN
+         MEaA==
+X-Gm-Message-State: ACrzQf23vtSTkhZgafvlQdpKSkk9mB7vrPGDcUGW4VFJwyjpSxjP2nkl
+        cTGDUgUO9c3JFoy/K4VgKtdVq6bwzYveiFXaJg==
+X-Google-Smtp-Source: AMsMyM5kWqCm/p3o1fRxmzalbPvYaKOrhMuNZeGIB1vMsK34bpSbNee8Mdzd3eZQTOAhiSRlHBeTKP+yLMo+7z+J1w==
+X-Received: from peternewman10.zrh.corp.google.com ([2a00:79e0:9d:6:5fe6:648d:f013:835f])
+ (user=peternewman job=sendgmr) by 2002:a0d:d549:0:b0:36e:a0f2:a475 with SMTP
+ id x70-20020a0dd549000000b0036ea0f2a475mr29593896ywd.38.1667485039009; Thu,
+ 03 Nov 2022 07:17:19 -0700 (PDT)
+Date:   Thu,  3 Nov 2022 15:16:40 +0100
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.38.1.273.g43a17bfeac-goog
+Message-ID: <20221103141641.3055981-1-peternewman@google.com>
+Subject: [PATCH 0/1] x86/resctrl: fix task CLOSID update race
+From:   Peter Newman <peternewman@google.com>
+To:     Reinette Chatre <reinette.chatre@intel.com>,
+        Fenghua Yu <fenghua.yu@intel.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        linux-kernel@vger.kernel.org, jannh@google.com, eranian@google.com,
+        kpsingh@google.com, derkling@google.com, james.morse@arm.com,
+        Peter Newman <peternewman@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 03, 2022 at 03:30:35AM +0000, Michael Kelley (LINUX) wrote:
-> From: Jinank Jain <jinankjain@linux.microsoft.com> Sent: Wednesday, November 2, 2022 9:36 AM
-> > 
-> > Currently VMBus driver is not initialized for root partition but we need
-> > to enable the VMBus driver for nested root partition. This is required
-> > to expose VMBus devices to the L2 guest in the nested setup.
-> > 
-> > Signed-off-by: Jinank Jain <jinankjain@linux.microsoft.com>
-> > ---
-> >  drivers/hv/vmbus_drv.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/hv/vmbus_drv.c b/drivers/hv/vmbus_drv.c
-> > index 8b2e413bf19c..2f0cf75e811b 100644
-> > --- a/drivers/hv/vmbus_drv.c
-> > +++ b/drivers/hv/vmbus_drv.c
-> > @@ -2723,7 +2723,7 @@ static int __init hv_acpi_init(void)
-> >  	if (!hv_is_hyperv_initialized())
-> >  		return -ENODEV;
-> > 
-> > -	if (hv_root_partition)
-> > +	if (hv_root_partition && !hv_nested)
-> 
-> Note that this code must compile and run when Linux is built
-> to run as a guest on Hyper-V for ARM64.  There's currently
-> no definition for hv_nested on the ARM64 side, so the compile
-> will fail.  But per my comments in Patch 1 in this series, using the
-> same technique as for hv_root_partition in hv_common.c should
-> solve the ARM64 problem as well.
+Hi Reinette, Fenghua,
 
-Jinank, you can use the following commands to cross-compile Linux.
+Below is my patch to address the IPI race we discussed in the container
+move RFD thread[1].
 
-  make ARCH=arm64 mshv_defconfig
-  make -j$(nproc) ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- Image
+The patch below uses the new task_call_func() interface to serialize
+updating closid and rmid with any context switch of the task. AFAICT,
+the implementation of this function acts like a mutex with context
+switch, but I'm not certain whether it is intended to be one. If this is
+not how task_call_func() is meant to be used, I will instead move the
+code performing the update under sched/ where it can be done holding the
+task_rq_lock() explicitly, as Reinette has suggested before[2].
 
-I think there are some follow-up patches in the internal tree which
-fixed the arm64 build. You may be able to squash some of those patches
-into series.
+From my own measurements, this change will double the time to complete a
+mass-move operation, such as rmdir on an rdtgroup with a large task
+list. But to the best of my knowedge, these large-scale reconfigurations
+of the control groups are infrequent, and the baseline I'm measuring
+against is racy anyways.
 
-Thanks,
-Wei.
+What's still unclear to me is, when processing a large task list, is
+obtaining the pi/rq locks for thousands of tasks (all while read-locking
+the tasklist_lock) better than just blindly notifying all CPUs? My guess
+is that the situation where notifying all CPUs would be better is
+uncommon for most users and probably more likely in Google's use case
+than most others, as we have a use case for moving large container jobs
+to a different MBA group.
+
+Thanks!
+-Peter
+
+[1] https://lore.kernel.org/all/CALPaoCg2-9ARbK+MEgdvdcjJtSy_2H6YeRkLrT97zgy8Aro3Vg@mail.gmail.com/
+[2] https://lore.kernel.org/lkml/d3c06fa3-83a4-7ade-6b08-3a7259aa6c4b@intel.com/
+
+Peter Newman (1):
+  x86/resctrl: serialize task CLOSID update with task_call_func()
+
+ arch/x86/include/asm/resctrl.h         | 11 ++--
+ arch/x86/kernel/cpu/resctrl/rdtgroup.c | 83 +++++++++++++++-----------
+ 2 files changed, 51 insertions(+), 43 deletions(-)
+
+-- 
+2.38.1.273.g43a17bfeac-goog
+
