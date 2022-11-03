@@ -2,64 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52B5D617A91
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 11:04:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3815A617A97
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 11:07:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231320AbiKCKEd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 06:04:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41682 "EHLO
+        id S230513AbiKCKHl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 06:07:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230098AbiKCKE2 (ORCPT
+        with ESMTP id S229523AbiKCKHg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 06:04:28 -0400
-Received: from cpanel.siel.si (cpanel.siel.si [46.19.9.99])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99E31B1F0;
-        Thu,  3 Nov 2022 03:04:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=norik.com;
-        s=default; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:
-        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=HL/7H+fZFpuFCnct+yiKKIoU0SNeD7m+YyJFOGqoENc=; b=CcrPiQK4f5PZRgeY78c3T/U/WR
-        ElZnDHm8q36yYziBlYFuYjhH1soN7aL5DLt2ydiqk+Y0vpdQd5/ekKV2eCHdmNz/ysffIGUQ+P2TM
-        R6vfLLa/D82RQlB+f+u1qo7O5adHCf0tHCO3BYrlDcqdfHKOFfcGaB2udsCs6M0DqIdwrVVQQqh87
-        Iko4e3JaqbyRr4PipF0Um+KYNE/UVQu6QR/krNk8HCTq0hVPqbNrIlonq3yQdUe7IEXLX1aAt1lf9
-        CKcYncV2XZdThWpvSOMYlGKSLmeGhSb4TpJ7rla7Ld56xrgSopGyzrDFw9lllK+StO2cgZ1/QlKA7
-        ztmtG5Iw==;
-Received: from 89-212-21-243.static.t-2.net ([89.212.21.243]:37996 helo=localhost.localdomain)
-        by cpanel.siel.si with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.95)
-        (envelope-from <andrej.picej@norik.com>)
-        id 1oqX52-008HsM-LI;
-        Thu, 03 Nov 2022 11:04:20 +0100
-From:   Andrej Picej <andrej.picej@norik.com>
-To:     linux-watchdog@vger.kernel.org
-Cc:     wim@linux-watchdog.org, linux@roeck-us.net, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        linux-imx@nxp.com, Anson.Huang@nxp.com, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 3/3] ARM: dts: imx6ul/ull: suspend i.MX6UL watchdog in wait mode
-Date:   Thu,  3 Nov 2022 11:03:58 +0100
-Message-Id: <20221103100358.176099-4-andrej.picej@norik.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221103100358.176099-1-andrej.picej@norik.com>
-References: <20221103100358.176099-1-andrej.picej@norik.com>
+        Thu, 3 Nov 2022 06:07:36 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04319BC01;
+        Thu,  3 Nov 2022 03:07:34 -0700 (PDT)
+Received: from zn.tnic (p200300ea9733e7e7329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e7e7:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 8F96C1EC0430;
+        Thu,  3 Nov 2022 11:07:33 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1667470053;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=B3oC+sm+mZZMeOEYpf8Tq9AGJhevA/jEHtXi9pF4QRE=;
+        b=mH1GBeKDk90+OFcvgAlEFRDb+DAZib1e1gQXGU/SJ9A/UCqlpmc9Ixv2pdz3aIBcRJVbgF
+        VTsYXtEGn5Zu42UgOZrJXrXuR9a/qf5XBFywYQtJz61R+oYB2h3hNmmjhZxsoEu6xbsSR1
+        dNUid1ypgJErY6EdSsaFCVcuNOSmd7c=
+Date:   Thu, 3 Nov 2022 11:07:28 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     silviazhao-oc <silviazhao-oc@zhaoxin.com>
+Cc:     peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
+        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
+        jolsa@kernel.org, namhyung@kernel.org, tglx@linutronix.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        cobechen@zhaoxin.com, louisqi@zhaoxin.com, silviazhao@zhaoxin.com,
+        8vvbbqzo567a@nospam.xutrox.com
+Subject: Re: [PATCH] x86/perf: Fixed kernel panic during boot on Nano
+ processor.
+Message-ID: <Y2OS4PgqfavavMKY@zn.tnic>
+References: <20221103032304.27753-1-silviazhao-oc@zhaoxin.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - cpanel.siel.si
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - norik.com
-X-Get-Message-Sender-Via: cpanel.siel.si: authenticated_id: andrej.picej@norik.com
-X-Authenticated-Sender: cpanel.siel.si: andrej.picej@norik.com
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20221103032304.27753-1-silviazhao-oc@zhaoxin.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_NONE
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,37 +56,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It was discovered that the watchdog triggers when the device is put into
-"Suspend-To-Idle"/"freeze" low-power mode. Setting WDW bit disables
-watchdog when the device is put into WAIT mode.
+On Thu, Nov 03, 2022 at 11:23:04AM +0800, silviazhao-oc wrote:
+> Nano processor may not fully support rdpmc instruction,
 
-Signed-off-by: Andrej Picej <andrej.picej@norik.com>
-Reviewed-by: Fabio Estevam <festevam@gmail.com>
----
-Changes in v3:
- - no changes
+What does that even mean? Not fully support?
 
-Changes in v2:
- - no changes
----
- arch/arm/boot/dts/imx6ul-phytec-phycore-som.dtsi | 4 ++++
- 1 file changed, 4 insertions(+)
+> it works well for reading general pmc counter, but will lead
+> GP(general protection) when accessing fixed pmc counter.
 
-diff --git a/arch/arm/boot/dts/imx6ul-phytec-phycore-som.dtsi b/arch/arm/boot/dts/imx6ul-phytec-phycore-som.dtsi
-index 3cddc68917a0..5168ed0ffec3 100644
---- a/arch/arm/boot/dts/imx6ul-phytec-phycore-som.dtsi
-+++ b/arch/arm/boot/dts/imx6ul-phytec-phycore-som.dtsi
-@@ -102,6 +102,10 @@ &usdhc2 {
- 	status = "disabled";
- };
- 
-+&wdog1 {
-+	fsl,suspend-in-wait;
-+};
-+
- &iomuxc {
- 	pinctrl_enet1: enet1grp {
- 		fsl,pins = <
+RDPMC will #GP when the perf counter specified cannot be read.
+
+AFAICT, that is RCX: 0000000040000001 which looks like perf counter
+index 1 with INTEL_PMC_FIXED_RDPMC_BASE ORed in.
+
+> Furthermore, family/mode information is same between Nano processor
+> and ZX-C processor, it leads to zhaoxin pmu driver is wrongly loaded
+> for Nano processor, which resulting boot kernal fail.
+
+So *that* is the real problem - it tries to access perf counters
+thinking it is running on architectural perf counters implementation but
+nano doesn't have that.
+
+> To solve this problem, stepping information will be checked to distinguish
+> between Nano processor and ZX-C processor.
+
+Why doesn't that ZXC thing doesn't have a CPUID flag to check instead of
+looking at models and steppings and thus confusing it with a nano CPU?
+
+> [https://bugzilla.kernel.org/show_bug.cgi?id=212389]
+> 
+> Reported-by: Arjan <8vvbbqzo567a@nospam.xutrox.com>
+
+Does Arjan have a last name?
+
+> Signed-off-by: silviazhao-oc <silviazhao-oc@zhaoxin.com>
+
+I'm assuming your name is properly spelled "Silvia Zhao" and not in a
+single word with a "-oc" string appended at the end, yes?
+
+Thx.
+
 -- 
-2.25.1
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
