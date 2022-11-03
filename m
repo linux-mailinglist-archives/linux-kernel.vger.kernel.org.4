@@ -2,68 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3713E617943
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 09:59:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 305A461794C
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 10:00:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231364AbiKCI7y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 04:59:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57434 "EHLO
+        id S231431AbiKCJAy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 05:00:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231356AbiKCI7l (ORCPT
+        with ESMTP id S230376AbiKCJAs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 04:59:41 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE473DE86;
-        Thu,  3 Nov 2022 01:59:40 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id E11BC6600366;
-        Thu,  3 Nov 2022 08:59:37 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1667465979;
-        bh=yyA4nshyOejFruW2qTCDX0nI9Crc4tmHokItn82rW+k=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=PSxgdhGag8XE9XK1B8mnVZNqTZgJqYvHfsY6M/w7vbYXSfwg5wEBe2fcxRHdEnAtw
-         eH2tk7CntQM2Sq2k/5WGSqqdihck3cW3gTa+HyapP8VbDiGGhedTgj8crQAfBt3JZD
-         DSlP0Vna11jsKz2p5ZWY+0RPOXRSWpkP9VEUWg4z+BUgeoQOIt/8L5n4MzRlN2AxYG
-         Zx75XWGTnh7eFoTtz3mFSPwAxJjbI8RuizPdnv3uZpUePnrnp/7HS3NtC7sWD5YXnw
-         Fm8gAYD2gcPWfPqq8fYgERwbcfCRvm7gKhsON8Ddz7T41ju1DUz5KLF5MDPvGyv+ld
-         z9Cyi8mG96KWQ==
-Message-ID: <128d8f47-1e60-bb64-e457-d61ceb17c176@collabora.com>
-Date:   Thu, 3 Nov 2022 09:59:35 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [PATCH v6 2/2] ASoC: mediatek: mt8186-rt5682: Modify machine
- driver for two DMICs case
-To:     Ajye Huang <ajye_huang@compal.corp-partner.google.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Thu, 3 Nov 2022 05:00:48 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8FF1C5F66;
+        Thu,  3 Nov 2022 02:00:46 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.77])
+        by gateway (Coremail) with SMTP id _____8Axjrc9g2Nj3zAEAA--.9608S3;
+        Thu, 03 Nov 2022 17:00:45 +0800 (CST)
+Received: from loongson-PC.loongson.cn (unknown [10.20.42.77])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxoOI4g2NjSJMLAA--.33260S2;
+        Thu, 03 Nov 2022 17:00:44 +0800 (CST)
+From:   Liu Peibao <liupeibao@loongson.cn>
+To:     Bjorn Helgaas <bhelgaas@google.com>,
         Rob Herring <robh+dt@kernel.org>,
-        linux-mediatek@lists.infradead.org,
-        "chunxu . li" <chunxu.li@mediatek.com>,
-        Takashi Iwai <tiwai@suse.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Jiaxin Yu <jiaxin.yu@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        =?UTF-8?Q?N=c3=adcolas_F_=2e_R_=2e_A_=2e_Prado?= 
-        <nfraprado@collabora.com>, linux-arm-kernel@lists.infradead.org,
-        devicetree@vger.kernel.org, alsa-devel@alsa-project.org
-References: <20221102125936.2176748-1-ajye_huang@compal.corp-partner.google.com>
- <20221102125936.2176748-3-ajye_huang@compal.corp-partner.google.com>
-Content-Language: en-US
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20221102125936.2176748-3-ajye_huang@compal.corp-partner.google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     chenhuacai@loongson.cn, lvjianmin@loongson.cn,
+        zhuyinbo@loongson.cn, liupeibao@loongson.cn,
+        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] PCI: loongson: add skip-scan property for child DT node
+Date:   Thu,  3 Nov 2022 17:00:39 +0800
+Message-Id: <20221103090040.836-1-liupeibao@loongson.cn>
+X-Mailer: git-send-email 2.20.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8BxoOI4g2NjSJMLAA--.33260S2
+X-CM-SenderInfo: xolx1vpled0qxorr0wxvrqhubq/1tbiAQATCmNiXeMWTAADs+
+X-Coremail-Antispam: 1Uk129KBjvJXoWxZF15JFW7Zr1xtw48tFyxZrb_yoW5ZryxpF
+        W5Aay3Kr48Kr1IgwnYq3yUCr1a9an7Z3s3JFZ7C3sFgr9Iv340gry8JF1Yy3ySkrW8WF4a
+        qryqgr48CF4UAF7anT9S1TB71UUUUjUqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bfAYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
+        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26F4UJVW0owAa
+        w2AFwI0_Jrv_JF1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44
+        I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JF0_Jw1lYx0Ex4A2
+        jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCY1x0262
+        kKe7AKxVWUAVWUtwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km
+        07C267AKxVWUXVWUAwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r
+        1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWU
+        JVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r
+        1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUv
+        cSsGvfC2KfnxnUUI43ZEXa7IU8HKZJUUUUU==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,17 +65,118 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 02/11/22 13:59, Ajye Huang ha scritto:
-> Having two DMICs, a front DMIC and a Rear DMIC,
-> but only host audio input AUX port0 is used for these two Dmics.
-> A "dmic-gpios" property is used for a mixer control to switch
-> the dmic signal source between the Front and Rear Dmic.
-> 
-> Refer to this one as an example,
-> commit 3cfbf07c6d27
-> ("ASoC: qcom: sc7180: Modify machine driver for 2mic")
-> 
-> Signed-off-by: Ajye Huang <ajye_huang@compal.corp-partner.google.com>
+The PCI Controller of 2k1000 could not mask devices by
+setting vender id & device id in configuration space header
+as invalid values. When there are pins shareble between
+the platform device and PCI device, if the platform device
+is preferred, we should not scan this PCI device. In the
+above scene, add "skip-scan" property in DT node of this
+PCI device.
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Signed-off-by: Liu Peibao <liupeibao@loongson.cn>
+---
+ drivers/pci/controller/pci-loongson.c | 62 +++++++++++++++++++++++++++
+ 1 file changed, 62 insertions(+)
+
+diff --git a/drivers/pci/controller/pci-loongson.c b/drivers/pci/controller/pci-loongson.c
+index 05c50408f13b..4b97963977c7 100644
+--- a/drivers/pci/controller/pci-loongson.c
++++ b/drivers/pci/controller/pci-loongson.c
+@@ -40,11 +40,21 @@ struct loongson_pci_data {
+ 	struct pci_ops *ops;
+ };
+ 
++#ifdef CONFIG_OF
++struct mask_entry {
++	struct list_head entry;
++	unsigned int devfn;
++};
++#endif
++
+ struct loongson_pci {
+ 	void __iomem *cfg0_base;
+ 	void __iomem *cfg1_base;
+ 	struct platform_device *pdev;
+ 	const struct loongson_pci_data *data;
++#ifdef CONFIG_OF
++	struct list_head masklist;
++#endif
+ };
+ 
+ /* Fixup wrong class code in PCIe bridges */
+@@ -194,6 +204,20 @@ static void __iomem *pci_loongson_map_bus(struct pci_bus *bus,
+ 			return NULL;
+ 	}
+ 
++#ifdef CONFIG_OF
++	/* Don't access devices in masklist */
++	if (pci_is_root_bus(bus)) {
++		struct list_head *list;
++		struct mask_entry *entry;
++
++		list_for_each(list, &priv->masklist) {
++			entry = list_entry(list, struct mask_entry, entry);
++			if (devfn == entry->devfn)
++				return NULL;
++		}
++	}
++#endif
++
+ 	/* CFG0 can only access standard space */
+ 	if (where < PCI_CFG_SPACE_SIZE && priv->cfg0_base)
+ 		return cfg0_map(priv, bus, devfn, where);
+@@ -206,6 +230,41 @@ static void __iomem *pci_loongson_map_bus(struct pci_bus *bus,
+ }
+ 
+ #ifdef CONFIG_OF
++/*
++ * The PCI Controller of 2k1000 could not mask devices by
++ * setting vender id & device id in configuration space
++ * header as invalid values. When there are pins shareble
++ * between the platform device and PCI device, if the
++ * platform device is preferred, we should not scan this
++ * PCI device. In the above scene, add "skip-scan" property
++ * in the device tree node of this PCI device.
++ */
++static int setup_masklist(struct loongson_pci *priv)
++{
++	struct device *dev = &priv->pdev->dev;
++	struct device_node *dn, *parent = dev->of_node;
++	struct mask_entry *entry;
++	int devfn;
++
++	INIT_LIST_HEAD(&priv->masklist);
++
++	for_each_child_of_node(parent, dn) {
++		if (of_property_read_bool(dn, "skip-scan")) {
++			devfn = of_pci_get_devfn(dn);
++			if (devfn < 0)
++				continue;
++
++			entry = devm_kzalloc(dev, sizeof(entry), GFP_KERNEL);
++			if (!entry)
++				return -ENOMEM;
++
++			entry->devfn = devfn;
++			list_add_tail(&entry->entry, &priv->masklist);
++		}
++	}
++
++	return 0;
++}
+ 
+ static int loongson_map_irq(const struct pci_dev *dev, u8 slot, u8 pin)
+ {
+@@ -305,6 +364,9 @@ static int loongson_pci_probe(struct platform_device *pdev)
+ 		}
+ 	}
+ 
++	if (setup_masklist(priv))
++		return -ENOMEM;
++
+ 	bridge->sysdata = priv;
+ 	bridge->ops = priv->data->ops;
+ 	bridge->map_irq = loongson_map_irq;
+-- 
+2.20.1
 
