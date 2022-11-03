@@ -2,118 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CFA4618CD3
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 00:33:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4096618CDE
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 00:34:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230496AbiKCXd2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 19:33:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54540 "EHLO
+        id S230527AbiKCXe3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 19:34:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229694AbiKCXdY (ORCPT
+        with ESMTP id S230261AbiKCXeZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 19:33:24 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 713775FDB;
-        Thu,  3 Nov 2022 16:33:23 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id 13so9348935ejn.3;
-        Thu, 03 Nov 2022 16:33:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=UQYI60HPFAeQV3YgrEAYhfzgwL+NL+uq4fz1h8XP5dY=;
-        b=fVmN0B/VlowI6Xn6+GPMC+FIrSh+IcVpVD1CnIcvpBt4BaY+TeHDofCBqwtyTpYSj4
-         mEXXoYTTIOazczI1l0VrX3UkYfaiPgetWGwxJhGetTpdEcmh8VHxewPtzb5JJflZbdvv
-         VdDsQmCJnJkkA/UEZ1Xr9t+EpfU0UuUNwI+u3LQt6X7gVwsWjAk3PklTLgIiDJ8casoQ
-         jUcJCc0uIBNSIWNxFMfH/Xtum0VUwO5r1vBNS5jqDkojQOrRuI8aJTJeZvY/aVhHFVPi
-         teiZy9b9ebqaZuzNYQ8AGkCw84Af5WSkSfqv5PyZxU2XCae6TG5ZwpVTu/dFX5JRQrL0
-         LlbA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UQYI60HPFAeQV3YgrEAYhfzgwL+NL+uq4fz1h8XP5dY=;
-        b=aLuIFkZMXNL6wvNeWs2V5ZnvqgKGaPnAuprbTkVDImWsV9dPNhDXo9YWVMNVRp3009
-         2l8XO9tFij/YqX2DQNQHQBDEUS/QBMfItrc3R5kmnV8D6rEoamzIBNcaLnP9/SamyeIm
-         yAe4TRRByVQIKhX1ufwcKqrxCbN3NsAmu1yvckepAgnMLN2XOrQ+ceTdu1hyk/xOAwzz
-         HVF5vR7CHm9/9mvVbM3shscA56axQBDjCfJlsWKX5iCFi1TN0MMjHiq2+oIN3HvsJKXg
-         +3YJ568vm+Owh/1Ote+/jlmo7KGutvsTgLKaXd7c/QcRf8oq47zuTGI5pNdhBCUIZ2W4
-         fKTw==
-X-Gm-Message-State: ACrzQf2Y/2j8Xzth2/DCze4bz6Ku4+QE5TGTCD50a8PET1OO6jHodf4v
-        pqvokkdm9pis4Gf5dYdYj8hLsRtGXvHN6R4P
-X-Google-Smtp-Source: AMsMyM558McdR6z3sk0s8EHwfqs7lwfHYIHx/lvR6x55rn3hWrQqaTXqK0OJ4I25i/zAejh+DDlvxQ==
-X-Received: by 2002:a17:906:7d8c:b0:7ae:159d:1146 with SMTP id v12-20020a1709067d8c00b007ae159d1146mr6347842ejo.528.1667518401916;
-        Thu, 03 Nov 2022 16:33:21 -0700 (PDT)
-Received: from skbuf ([188.27.184.197])
-        by smtp.gmail.com with ESMTPSA id s28-20020a056402037c00b0045bccd8ab83sm1131934edw.1.2022.11.03.16.33.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Nov 2022 16:33:21 -0700 (PDT)
-Date:   Fri, 4 Nov 2022 01:33:19 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] dt-bindings: net: nxp,sja1105: document spi-cpol/cpha
-Message-ID: <20221103233319.m2wq5o2w3ccvw5cu@skbuf>
-References: <20221102185232.131168-1-krzysztof.kozlowski@linaro.org>
+        Thu, 3 Nov 2022 19:34:25 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C5A42182D;
+        Thu,  3 Nov 2022 16:34:25 -0700 (PDT)
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2A3Mfv1A016506;
+        Thu, 3 Nov 2022 23:34:19 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=e2YtRtcv00QA3VMD6/NiGd3rTfVXWoJoDthWJy2wGMw=;
+ b=KHPXALBtDhTkPETF8EFIA6wO4L/wOF0EqFc8K4y9jQoq/8X3d+AyNjq4qT4Qu3qHf5Zj
+ T1Rws7+3VcGiON8u6GGxQPwdG9WWPDjF/6qZAURNim/1MJaL6ILfB508en5sSkkIPTLe
+ AzusSyb2NanVTdAZplhUjyMP6iIw6OPYMzlFA6mM2zt3OrHy9tYcjHMGVz5Ruehb2T+d
+ 07Jx6eB+PT4j7J1XYe4l8WWvfi/4enr4dKRSY1vkbbA1EtBvKcrq4XcPgIqK0hQqb2GC
+ 1ACgzQmyu6g+qGyULxOve4EaaF+X0DHsIv2AotV3z6PYsbm1PC8oU5ZQRFTWvRqk5z8W +A== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kmphjsb0e-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 03 Nov 2022 23:34:18 +0000
+Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2A3NYHbE025695;
+        Thu, 3 Nov 2022 23:34:17 GMT
+Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kmphjsayx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 03 Nov 2022 23:34:17 +0000
+Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
+        by ppma02wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2A3NJpnN032583;
+        Thu, 3 Nov 2022 23:34:16 GMT
+Received: from b01cxnp22034.gho.pok.ibm.com (b01cxnp22034.gho.pok.ibm.com [9.57.198.24])
+        by ppma02wdc.us.ibm.com with ESMTP id 3kgutammh9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 03 Nov 2022 23:34:16 +0000
+Received: from smtpav03.wdc07v.mail.ibm.com ([9.208.128.112])
+        by b01cxnp22034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2A3NYE6N7865054
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 3 Nov 2022 23:34:15 GMT
+Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7A87358054;
+        Thu,  3 Nov 2022 23:34:14 +0000 (GMT)
+Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 04B4058058;
+        Thu,  3 Nov 2022 23:34:07 +0000 (GMT)
+Received: from [9.65.206.126] (unknown [9.65.206.126])
+        by smtpav03.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Thu,  3 Nov 2022 23:34:06 +0000 (GMT)
+Message-ID: <c4285d52-4886-a243-d641-1006e0b23994@linux.ibm.com>
+Date:   Thu, 3 Nov 2022 19:34:06 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221102185232.131168-1-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH v2 7/7] vfio: Remove vfio_free_device
+Content-Language: en-US
+To:     Eric Farman <farman@linux.ibm.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Kevin Tian <kevin.tian@intel.com>, Yi Liu <yi.l.liu@intel.com>
+Cc:     Zhenyu Wang <zhenyuw@linux.intel.com>,
+        Zhi Wang <zhi.a.wang@intel.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Halil Pasic <pasic@linux.ibm.com>,
+        Vineeth Vijayan <vneethv@linux.ibm.com>,
+        Peter Oberparleiter <oberpar@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Tony Krowiak <akrowiak@linux.ibm.com>,
+        Jason Herne <jjherne@linux.ibm.com>,
+        Harald Freudenberger <freude@linux.ibm.com>,
+        Diana Craciun <diana.craciun@oss.nxp.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        Kirti Wankhede <kwankhede@nvidia.com>,
+        Abhishek Sahu <abhsahu@nvidia.com>,
+        Yishai Hadas <yishaih@nvidia.com>,
+        intel-gvt-dev@lists.freedesktop.org,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org,
+        kvm@vger.kernel.org
+References: <20221102150152.2521475-1-farman@linux.ibm.com>
+ <20221102150152.2521475-8-farman@linux.ibm.com>
+From:   Matthew Rosato <mjrosato@linux.ibm.com>
+In-Reply-To: <20221102150152.2521475-8-farman@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: MEv8iFkDuzR_598RYz20f1sckapX54K5
+X-Proofpoint-GUID: mwX7xaEAcnKaJAimpUOkrctyTnDjPKAH
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-03_04,2022-11-03_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ adultscore=0 mlxlogscore=999 phishscore=0 spamscore=0 clxscore=1015
+ bulkscore=0 priorityscore=1501 impostorscore=0 mlxscore=0 suspectscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211030161
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
+On 11/2/22 11:01 AM, Eric Farman wrote:
+> With the "mess" sorted out, we should be able to inline the
+> vfio_free_device call introduced by commit cb9ff3f3b84c
+> ("vfio: Add helpers for unifying vfio_device life cycle")
+> and remove them from driver release callbacks.
+> 
+> Signed-off-by: Eric Farman <farman@linux.ibm.com>
+> Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
+> Reviewed-by: Kevin Tian <kevin.tian@intel.com>
 
-On Wed, Nov 02, 2022 at 02:52:32PM -0400, Krzysztof Kozlowski wrote:
-> Some boards use SJA1105 Ethernet Switch with SPI CPOL and CPHA, so
-> document this to fix dtbs_check warnings:
-> 
->   arch/arm64/boot/dts/freescale/fsl-lx2160a-bluebox3.dtb: ethernet-switch@0: Unevaluated properties are not allowed ('spi-cpol' was unexpected)
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
-> ---
-> 
-> Changes since v1:
-> 1. Add also cpha
-> ---
->  Documentation/devicetree/bindings/net/dsa/nxp,sja1105.yaml | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/net/dsa/nxp,sja1105.yaml b/Documentation/devicetree/bindings/net/dsa/nxp,sja1105.yaml
-> index 1e26d876d146..3debbf0f3789 100644
-> --- a/Documentation/devicetree/bindings/net/dsa/nxp,sja1105.yaml
-> +++ b/Documentation/devicetree/bindings/net/dsa/nxp,sja1105.yaml
-> @@ -36,6 +36,9 @@ properties:
->    reg:
->      maxItems: 1
->  
-> +  spi-cpha: true
-> +  spi-cpol: true
-> +
->    # Optional container node for the 2 internal MDIO buses of the SJA1110
->    # (one for the internal 100base-T1 PHYs and the other for the single
->    # 100base-TX PHY). The "reg" property does not have physical significance.
-> -- 
-> 2.34.1
-> 
+Reviewed-by: Matthew Rosato <mjrosato@linux.ibm.com>
 
-Don't these belong to spi-peripheral-props.yaml?
+
