@@ -2,99 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C150B6187D8
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 19:45:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D7C66187DF
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 19:46:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230306AbiKCSp2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 14:45:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40448 "EHLO
+        id S231161AbiKCSqN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 14:46:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbiKCSpZ (ORCPT
+        with ESMTP id S229501AbiKCSqK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 14:45:25 -0400
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 636B665A5
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 11:45:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:
-        Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
-        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=stQoeni8g1ouTppLMWkElI0A2/tlqOJ/VPPxbiTBNoQ=; b=IPG36VN9SfNk4SE38mDa03um9V
-        rdAThTQ2XUKJyeBmjL2aA2zHnI6iGG+ASzg5uDDqgEjfv4mlwantbI00sk338dCNZEdfRDtfvfn9U
-        wt1J0R0q6gyFWtWXlWJ/Xg2Z6uUKoDgLnl5EYz+oXx9IE9liAVKXWQavFui7LHaXAmCm8IL3CoJtV
-        o4b+zliJWbGF8W0HncqKu4QScfxoFYKLkfzXTc/rETDgUNzKpmfCZvNpO58cz3oogoZE7Mh+5VRAO
-        1i4yxj0K0g4kfp78rNYKGi80W57Z5nclWKewb3lqvXmbHQcx3dj70HlcCC/3LCpXcTjqQIbtABALP
-        NEfJ2kng==;
-Received: from [186.214.188.198] (helo=localhost.localdomain)
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-        id 1oqfDJ-00BsY3-PN; Thu, 03 Nov 2022 19:45:18 +0100
-From:   Melissa Wen <mwen@igalia.com>
-To:     harry.wentland@amd.com, sunpeng.li@amd.com,
-        Rodrigo.Siqueira@amd.com, alexander.deucher@amd.com,
-        christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@linux.ie,
-        daniel@ffwll.ch
-Cc:     Nicholas.Choi@amd.com, Nicholas.Kazlauskas@amd.com,
-        kernel-dev@igalia.com, Melissa Wen <mwen@igalia.com>,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] drm/amd/display: don't enable DRM CRTC degamma property for DCE
-Date:   Thu,  3 Nov 2022 17:45:00 -0100
-Message-Id: <20221103184500.14450-1-mwen@igalia.com>
-X-Mailer: git-send-email 2.35.1
+        Thu, 3 Nov 2022 14:46:10 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BB5665A5;
+        Thu,  3 Nov 2022 11:46:09 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id kt23so7720377ejc.7;
+        Thu, 03 Nov 2022 11:46:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=j7j8fpatI7hctDB5/Xg8uKnBvlsg/p0ILGC2iV1ZV2A=;
+        b=hCqDEquaJ67YeB5YKBtZIw6MJmrflZUVmeB9yq8dKG/7vmN6+d+HZTxq9Axoy9HLlF
+         u74YOUQgT5nkxKIZzeQgN+KtzXCD2Wvi1eRO/2/nbbFoLO3FtIZHcjFgawPnHoI2eElp
+         sxelnry0JgKt650KBcf0bYQvUaITsMPjvjVAikOGIkVxcg2DkyeQxchHTsIrE3G7CNLH
+         b1izBh6XYWuRN8SGs8aMY3yqmA3xHpXl6Yq3U0M/MJDoxAI6/hf05JPtZujYJ/vBreSB
+         0ju9rhvARCQH84DVd38mPgLMIGABZwBF08hi9HZz+LRVnSPflqvgqGluGXkDeERRxb2B
+         MqUw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=j7j8fpatI7hctDB5/Xg8uKnBvlsg/p0ILGC2iV1ZV2A=;
+        b=eYw+57F3/EEG69GS0G2yotlkmIE28+4uDN7r2dl+zsnxqueCWJnZKfLp1Z5A2LCIAQ
+         V54LzOZrOTDn8htIgM+3iykUaEy2WQbLGehZNqEAVy8WY09iLLdKaRlTF+b0iWL7p4W1
+         K2UTqEN4YCQG2lLDX3kVTolQwGv1dmS9HGiOGLes1rWzQgKNU5M8bUpnIX1GBVhRznS4
+         oQIPGLHpckC4uyPoLf3LT+HrrBYFhimg4Z566jsdgD7KfXiYPUiLK5eBaI2YNOGirvHo
+         jxYbmXHe5RH7WgK1qIguuhWOUAPKUl3D1dcoXRhTS6m1oohJbvIk23sL3AuZQFYptlqr
+         0Cjw==
+X-Gm-Message-State: ACrzQf0yDwPTG60YLsIjJRhCVMQWPk17GjGM+VGQPER3fFMtmYvO9EUV
+        BVwjtQtgAR4oZ4kP6M0Q2boDgq//X9K3yYesV/8=
+X-Google-Smtp-Source: AMsMyM5cjPmhfzKuklASWFxdj0kWtKrTHOk3PK6YwTu2zs13KaHE/C6O3pHb86S8ygc/dU1ydWZyVC//abeOaSKhgnU=
+X-Received: by 2002:a17:907:9705:b0:7ad:b14f:d89e with SMTP id
+ jg5-20020a170907970500b007adb14fd89emr29242135ejc.745.1667501167813; Thu, 03
+ Nov 2022 11:46:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <fe0e300f-a857-dc42-f9f8-c524be6b212f@iogearbox.net> <tencent_B91CA31B889B06CF4292592F97892A53AF08@qq.com>
+In-Reply-To: <tencent_B91CA31B889B06CF4292592F97892A53AF08@qq.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Thu, 3 Nov 2022 11:45:55 -0700
+Message-ID: <CAEf4BzYAcGgM93r5YfF2ZQWjAnc4k=aN5C3in-bZ-6n+Jrn1vw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] selftests/bpf: cgroup_helpers.c: Fix strncpy()
+ fortify warning
+To:     Rong Tao <rtoax@foxmail.com>
+Cc:     daniel@iogearbox.net, andrii@kernel.org, ast@kernel.org,
+        bpf@vger.kernel.org, david.laight@aculab.com, haoluo@google.com,
+        john.fastabend@gmail.com, jolsa@kernel.org, kpsingh@kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        martin.lau@linux.dev, mykolal@fb.com, rongtao@cestc.cn,
+        sdf@google.com, shuah@kernel.org, song@kernel.org, yhs@fb.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DM maps DRM CRTC degamma to DPP (pre-blending) degamma block, but DCE doesn't
-support programmable degamma curve anywhere. Currently, a custom degamma is
-accepted by DM but just ignored by DCE driver and degamma correction isn't
-actually applied. There is no way to map custom degamma in DCE, therefore, DRM
-CRTC degamma property shouldn't be enabled for DCE drivers.
+On Wed, Nov 2, 2022 at 5:59 AM Rong Tao <rtoax@foxmail.com> wrote:
+>
+> From: Rong Tao <rongtao@cestc.cn>
+>
+> Move libbpf_strlcpy() to libbpf_common.h, and replace strncpy() with
+> libbpf_strlcpy(), fix compile warning.
+>
+> We can't use libbpf_internal.h directly, because it introduces a lot of
+> header dependency issues. So move libbpf_strlcpy() into libbpf_common.h,
+> and if you need to use the libbpf_strlcpy() function, you need to include
+> the header file libbpf.h
 
-Signed-off-by: Melissa Wen <mwen@igalia.com>
----
- drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_crtc.c | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+well, no, we should make libbpf_strlcpy as a public API, it's internal
+helper. libbpf_common.h is part of libbpf's UAPI.
 
-diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_crtc.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_crtc.c
-index 9ac2805c5d63..b3eadfc61555 100644
---- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_crtc.c
-+++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_crtc.c
-@@ -415,7 +415,7 @@ int amdgpu_dm_crtc_init(struct amdgpu_display_manager *dm,
- {
- 	struct amdgpu_crtc *acrtc = NULL;
- 	struct drm_plane *cursor_plane;
--
-+	bool is_dcn;
- 	int res = -ENOMEM;
- 
- 	cursor_plane = kzalloc(sizeof(*cursor_plane), GFP_KERNEL);
-@@ -453,8 +453,14 @@ int amdgpu_dm_crtc_init(struct amdgpu_display_manager *dm,
- 	acrtc->otg_inst = -1;
- 
- 	dm->adev->mode_info.crtcs[crtc_index] = acrtc;
--	drm_crtc_enable_color_mgmt(&acrtc->base, MAX_COLOR_LUT_ENTRIES,
-+
-+	/* Don't enable DRM CRTC degamma property for DCE since it doesn't
-+	 * support programmable degamma anywhere.
-+	 */
-+	is_dcn = dm->adev->dm.dc->caps.color.dpp.dcn_arch;
-+	drm_crtc_enable_color_mgmt(&acrtc->base, is_dcn ? MAX_COLOR_LUT_ENTRIES : 0,
- 				   true, MAX_COLOR_LUT_ENTRIES);
-+
- 	drm_mode_crtc_set_gamma_size(&acrtc->base, MAX_COLOR_LEGACY_LUT_ENTRIES);
- 
- 	return 0;
--- 
-2.35.1
+So don't touch libbpf, please. Name the function as _strlcpy or
+something like that, put it into bpf_util.h and use that from
+selftests.
 
+>
+> How to reproduce this compilation warning:
+>
+> $ make -C samples/bpf
+> cgroup_helpers.c: In function =E2=80=98__enable_controllers=E2=80=99:
+> cgroup_helpers.c:80:17: warning: =E2=80=98strncpy=E2=80=99 specified boun=
+d 4097 equals destination size [-Wstringop-truncation]
+>    80 |                 strncpy(enable, controllers, sizeof(enable));
+>       |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>
+> Signed-off-by: Rong Tao <rongtao@cestc.cn>
+> ---
+>  tools/lib/bpf/libbpf_common.h                | 19 +++++++++++++++++++
+>  tools/lib/bpf/libbpf_internal.h              | 19 -------------------
+>  tools/testing/selftests/bpf/cgroup_helpers.c |  3 ++-
+>  tools/testing/selftests/bpf/xsk.c            | 19 -------------------
+>  4 files changed, 21 insertions(+), 39 deletions(-)
+>
+
+[...]
