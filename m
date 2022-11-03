@@ -2,162 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FFBE617433
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 03:29:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E699617437
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 03:31:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230220AbiKCC3H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 22:29:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59070 "EHLO
+        id S229531AbiKCCbj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 22:31:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229587AbiKCC3E (ORCPT
+        with ESMTP id S229457AbiKCCbg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 22:29:04 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A57513D47
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 19:28:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667442490;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=v5nZZgveC2PTuRPjJi9xjT+244TM4nAFvJacQmawNfo=;
-        b=fRTMkZ9tuYdTAw0LKEHipZzo3OSDgHaZVdr2CKdZzjBnfJK8Hobd4jIh3Q9KyVAR0jrJbM
-        jDh0eGpY1eS+Qokjl7yUUhi21NXQshV18mOdo9Ri/uYivKqKUvJUIZD1qaWCwX++7DL1d5
-        b2pvGl2Q1nuiw6GRDW/lRc+srS0Dscg=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-590-PPa-VNn5Mo6of6c8OMZf3A-1; Wed, 02 Nov 2022 22:28:06 -0400
-X-MC-Unique: PPa-VNn5Mo6of6c8OMZf3A-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 13FBF29AA3B9;
-        Thu,  3 Nov 2022 02:28:06 +0000 (UTC)
-Received: from [10.22.32.82] (unknown [10.22.32.82])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 80B36140EBF5;
-        Thu,  3 Nov 2022 02:28:05 +0000 (UTC)
-Message-ID: <1fdbdf78-cdca-975f-7f57-e391263d0aec@redhat.com>
-Date:   Wed, 2 Nov 2022 22:28:05 -0400
+        Wed, 2 Nov 2022 22:31:36 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B79E1CCA;
+        Wed,  2 Nov 2022 19:31:35 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id m14-20020a17090a3f8e00b00212dab39bcdso3939139pjc.0;
+        Wed, 02 Nov 2022 19:31:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=cWur7HMVd8Ke8GikOufYnkHwwFXOwHuL2p1d2EaRZQ4=;
+        b=LHg0QvuIyTZaP2L3VKH46Q9HpSocgocqW64wr5w9rN7A1/45tQRuzDepB3CuHT0ewX
+         rf5d45xvbFIIurHHUmIN783brPGJl/6JAIj9Vqtmb+f/i+2TSwFnRwe6vvhdHvkdVDdg
+         fsUyyhAM43SrXN5uTLLssApnXPbw+YhBQhSKdhD6faQG8mwhlJUNjvBjNXch7g0O3/yA
+         W+EZ+Vu6dwPlKBhGkJDOidgUKpCnwNfuAp3Jgh35C6rCVO8NY4GW1PRi3dCgI39VP3DR
+         OrFLnuaW1R2a24OoNBABG+uQqHtxZkBN6EwP0zq+SuvGQqgor/p446gJtzbBjOJCHVIs
+         RdrQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=cWur7HMVd8Ke8GikOufYnkHwwFXOwHuL2p1d2EaRZQ4=;
+        b=p3wJe+gE8sI0e7DWW/wiLeX2Txr8ob2EpIkgiGz2P/7vVYAyZshFU4YIdHr2btlPE4
+         PfFQsDsrbu+M4nezGhWLKz/P8Hmq+VREeLkBB+FlGLxOkMKUMCiU3k81FKW4a5HQjO3U
+         5D0OVYugO2hA74e8RcgYlcua1a11WLLPZ228fWnbLimC6NxRLh/yUN53RJuYX8LR7deE
+         6Z/wcalE6+k520oBIFL2KE5ctYpmmQECCDjoyNgztBXCDobKVDuoKfEnmUJxuIzpjMYb
+         J0SqQOC65aPowYomNXRXdkiPP8WuLb2eqdCSz+glIQZC6ZFDm7/OunXmS2xbuvgy9PRj
+         Q5XQ==
+X-Gm-Message-State: ACrzQf2Hlya0606dEcq0KHpIMIZqJcPz+jYPMCydS9kcTHnVa+Ty/pP8
+        mNhSEWeNVPp5vLs9y9zU/00=
+X-Google-Smtp-Source: AMsMyM5Bk7ipWNRGqH2CUxQVlGb+fIzltpqkUGvhDMvQRPiQtlVOJd8FJYSwMxSn+YOWZ5T85LZNIQ==
+X-Received: by 2002:a17:90a:311:b0:214:143b:c7ab with SMTP id 17-20020a17090a031100b00214143bc7abmr10942799pje.21.1667442695034;
+        Wed, 02 Nov 2022 19:31:35 -0700 (PDT)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id v10-20020a17090abb8a00b002137030f652sm2147447pjr.12.2022.11.02.19.31.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Nov 2022 19:31:34 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Wed, 2 Nov 2022 16:31:33 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Haifeng Xu <haifeng.xu@shopee.com>
+Cc:     Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+        lizefan.x@bytedance.com, hannes@cmpxchg.org,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] cgroup: Simplify code in css_set_move_task
+Message-ID: <Y2MoBeJGU1Exg6cX@slm.duckdns.org>
+References: <20221020074701.84326-1-haifeng.xu@shopee.com>
+ <20221027080558.GA23269@blackbody.suse.cz>
+ <adb7418c-39a2-6202-970a-a039ad8201dd@shopee.com>
+ <20221031131140.GC27841@blackbody.suse.cz>
+ <25f6a188-4cc6-dace-1468-fd5645711515@shopee.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH clocksource 2/2] clocksource: Exponential backoff for
- load-induced bogus watchdog reads
-Content-Language: en-US
-To:     "Paul E. McKenney" <paulmck@kernel.org>, tglx@linutronix.de
-Cc:     linux-kernel@vger.kernel.org, john.stultz@linaro.org,
-        sboyd@kernel.org, corbet@lwn.net, Mark.Rutland@arm.com,
-        maz@kernel.org, kernel-team@meta.com, neeraju@codeaurora.org,
-        ak@linux.intel.com, feng.tang@intel.com, zhengjun.xing@intel.com,
-        John Stultz <jstultz@google.com>
-References: <20221102184001.GA1306489@paulmck-ThinkPad-P17-Gen-1>
- <20221102184009.1306751-2-paulmck@kernel.org>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <20221102184009.1306751-2-paulmck@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <25f6a188-4cc6-dace-1468-fd5645711515@shopee.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/2/22 14:40, Paul E. McKenney wrote:
-> The clocksource watchdog will reject measurements that are excessively
-> delayed, that is, by more than 1.5 seconds beyond the intended 0.5-second
-> watchdog interval.  On an extremely busy system, this can result in a
-> console message being printed every two seconds.  This is excessively
-> noisy for a non-error condition.
->
-> Therefore, apply exponential backoff to these messages.  This exponential
-> backoff is capped at 1024 times the watchdog interval, which comes to
-> not quite one message per ten minutes.
->
-> Please note that the bogus watchdog reads that occur when the watchdog
-> interval is less than 0.125 seconds are still printed unconditionally
-> because these likely correspond to a serious error condition in the
-> timer code or hardware.
->
-> [ paulmck: Apply Feng Tang feedback. ]
->
-> Reported-by: Waiman Long <longman@redhat.com>
-> Reported-by: Feng Tang <feng.tang@intel.com>
-> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-> Cc: John Stultz <jstultz@google.com>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Stephen Boyd <sboyd@kernel.org>
-> Cc: Feng Tang <feng.tang@intel.com>
-> Cc: Waiman Long <longman@redhat.com>
-> ---
->   include/linux/clocksource.h |  4 ++++
->   kernel/time/clocksource.c   | 31 +++++++++++++++++++++++++------
->   2 files changed, 29 insertions(+), 6 deletions(-)
->
-> diff --git a/include/linux/clocksource.h b/include/linux/clocksource.h
-> index 1d42d4b173271..daac05aedf56a 100644
-> --- a/include/linux/clocksource.h
-> +++ b/include/linux/clocksource.h
-> @@ -125,6 +125,10 @@ struct clocksource {
->   	struct list_head	wd_list;
->   	u64			cs_last;
->   	u64			wd_last;
-> +	u64			wd_last_bogus;
-> +	int			wd_bogus_shift;
-> +	unsigned long		wd_bogus_count;
-> +	unsigned long		wd_bogus_count_last;
->   #endif
->   	struct module		*owner;
->   };
-> diff --git a/kernel/time/clocksource.c b/kernel/time/clocksource.c
-> index 3f5317faf891f..de8047b6720f5 100644
-> --- a/kernel/time/clocksource.c
-> +++ b/kernel/time/clocksource.c
-> @@ -442,14 +442,33 @@ static void clocksource_watchdog(struct timer_list *unused)
->   
->   		/* Check for bogus measurements. */
->   		wdi = jiffies_to_nsecs(WATCHDOG_INTERVAL);
-> -		if (wd_nsec < (wdi >> 2)) {
-> -			/* This usually indicates broken timer code or hardware. */
-> -			pr_warn("timekeeping watchdog on CPU%d: Watchdog clocksource '%s' advanced only %lld ns during %d-jiffy time interval, skipping watchdog check.\n", smp_processor_id(), watchdog->name, wd_nsec, WATCHDOG_INTERVAL);
-> +		if (wd_nsec > (wdi << 2) || cs_nsec > (wdi << 2)) {
-> +			bool needwarn = false;
-> +			u64 wd_lb;
-> +
-> +			cs->wd_bogus_count++;
-> +			if (!cs->wd_bogus_shift) {
-> +				needwarn = true;
-> +			} else {
-> +				delta = clocksource_delta(wdnow, cs->wd_last_bogus, watchdog->mask);
-> +				wd_lb = clocksource_cyc2ns(delta, watchdog->mult, watchdog->shift);
-> +				if ((1 << cs->wd_bogus_shift) * wdi <= wd_lb)
-> +					needwarn = true;
-> +			}
-> +			if (needwarn) {
-> +				/* This can happen on busy systems, which can delay the watchdog. */
-> +				pr_warn("timekeeping watchdog on CPU%d: Watchdog clocksource '%s' advanced an excessive %lld ns during %d-jiffy time interval (%lu additional), probable CPU overutilization, skipping watchdog check.\n", smp_processor_id(), watchdog->name, wd_nsec, WATCHDOG_INTERVAL, cs->wd_bogus_count - cs->wd_bogus_count_last);
-> +				cs->wd_last_bogus = wdnow;
-> +				if (cs->wd_bogus_shift < 10)
-> +					cs->wd_bogus_shift++;
-> +				cs->wd_bogus_count_last = cs->wd_bogus_count;
+On Thu, Nov 03, 2022 at 10:13:22AM +0800, Haifeng Xu wrote:
+> I understand your worries. Can I just check the populated state of
+> css_set in 'css_set_update_populated' and don't change the order any
+> more? I think it can also streamline 'css_set_move_task' a bit.
 
-I don't think you need to keep 2 counters to store the number of skipped 
-warnings. How about just use a single wd_bogus_skip_count like
+FWIW, I don't see much value in the proposed change. The resulting code
+isn't better in any noticeable way. Even if the change were straightforward,
+the value of the patch would seem questionable. There's no point in creating
+code churns like this. Nothing is improved in any material way while
+creating completely unnecessary risk for subtle breakages.
 
-If (needwarn) {
-     pr_warn("... %lu additonal ...", ... cs->wd_bogus_skip_count);
-     cs->wd_bogus_skip_count = 0:
-} else {
-     cs->wd_bogus_skip_count++;
-}
+Thanks.
 
-Cheers,
-Longman
-
-
+-- 
+tejun
