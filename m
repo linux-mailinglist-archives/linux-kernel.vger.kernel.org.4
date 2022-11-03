@@ -2,127 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA75B618516
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 17:47:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 728CA618526
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 17:47:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231545AbiKCQr2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 12:47:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43226 "EHLO
+        id S232268AbiKCQrn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 12:47:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232476AbiKCQrE (ORCPT
+        with ESMTP id S232529AbiKCQrK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 12:47:04 -0400
-Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C757711465
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 09:45:51 -0700 (PDT)
-Received: by mail-qk1-x72a.google.com with SMTP id v8so1492800qkg.12
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 09:45:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=fKMy7vvG6YYF5wQMm1icsLnPedAtQwFXPokV8+4Z/ZY=;
-        b=DoPOEida6LMHH/oOiunX8ZlYSM9Ag6JVBBT+cH03AOIBHPHSvwvIFUJxyY4Wm8k+rB
-         epNUt009h7ImXwPJmq8qDnwGfcdSqu9ms1Dy+L3iFSNsMZ046dqeTCpOuzpvEk1Oiejw
-         Wz1LHhNUGrOHBgm5ENt1Zku6YICthcN5SLgf4hqpZtHlff5C27EvIXeNxNk4IcqZSg0y
-         3joiy0EwFc6iLhNp8cdZ5N6yxLBjUgku3uGs099KVn2ZVgIzpo3B2i4BtzDPdEVM7+Jn
-         4LPRSqdBFRHM9i9w7lHT2SQPLk0Zi/zcIKpOMXFeZRPqRE62Rdrvrf8o49TLtciLTLmR
-         zl8w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fKMy7vvG6YYF5wQMm1icsLnPedAtQwFXPokV8+4Z/ZY=;
-        b=vhiPXMQrw9LxXwvrITcVaspMtn8Va9ShUp2LBP4fWFQkqn4aT4mEDzBoT9PyQhwWNB
-         wBgMtcm054T+nhxiDJKMjU7UeL5SQbj+rUpPmOZyazPGLxbOK6iKuDFh5Mbi4QI9U3AC
-         bX34mqlGWfD74+SLLPyjfpwDb+70fI/bndszkt2FkcIzp0yKVUADjP59ID1v9pH2Kw6K
-         lB0aWpLYCq6x8IWFnrg3cDu1XA09byDuVIE4LXCCtGwssO6a7kYpkDb7N/iANN0jEyBX
-         y78hnSVFjK478oSDjqvqtY5/mA8L9bVUxLuHfEQGiCL0WTPh+6q40C+eL1ijZcZwCobE
-         xnRA==
-X-Gm-Message-State: ACrzQf0AWVAeV7m2G15eN5YdhZAQrzMpqDwY4fELTP/6LcE961Ndy/5o
-        SygqQStsPXMHm6p+BtA47jgGQQ==
-X-Google-Smtp-Source: AMsMyM56KZrea0ChiCMU96BUzboc1+CVBBe8qAsK5/QKtTIG02vtCiQnEQcLQByfZMV9Lx4vhwZ0CA==
-X-Received: by 2002:ae9:f714:0:b0:6fa:43e5:4be0 with SMTP id s20-20020ae9f714000000b006fa43e54be0mr12684824qkg.243.1667493950999;
-        Thu, 03 Nov 2022 09:45:50 -0700 (PDT)
-Received: from localhost ([2620:10d:c091:480::25f1])
-        by smtp.gmail.com with ESMTPSA id k8-20020ac86048000000b0039a08c0a594sm778017qtm.82.2022.11.03.09.45.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Nov 2022 09:45:50 -0700 (PDT)
-Date:   Thu, 3 Nov 2022 12:45:53 -0400
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     Sergey Senozhatsky <senozhatsky@chromium.org>
-Cc:     Nhat Pham <nphamcs@gmail.com>, akpm@linux-foundation.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        minchan@kernel.org, ngupta@vflare.org, sjenning@redhat.com,
-        ddstreet@ieee.org, vitaly.wool@konsulko.com
-Subject: Re: [PATCH v2 5/5] zsmalloc: Implement writeback mechanism for
- zsmalloc
-Message-ID: <Y2PwQTk016ngDKhc@cmpxchg.org>
-References: <202210272158.7swYwd23-lkp@intel.com>
- <20221027182736.513530-1-nphamcs@gmail.com>
- <Y2HuhiyorAHFO+Ss@google.com>
+        Thu, 3 Nov 2022 12:47:10 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BB0819C2C;
+        Thu,  3 Nov 2022 09:46:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667493997; x=1699029997;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=6sEwb2LvPX9v9prH3mu2nEGi0LVqQc1+Me9tIfh9Gsk=;
+  b=FSAajs9mYEpAxwK1E+Kao7vQC/qmjWPLx+u/6kzAraWx6TeMe8tnDsLB
+   g9o+1xrusrovOrcx7ToF5XANKPmAHc/1ZQ+Ms9pYKXlY+/x8i1zyEmYaw
+   G6WRv0n8FJ8b/fnKRrCandQ+ULlB/HwEaHm2mUmnrpPE/TC6oj35Fgf/v
+   YqCcJc/1s2ZszfDUGLDVGl4ufvcn06A7YJlj7sljN5Bv9w5nDhTXE1XCv
+   JG13K+P6z4q27Bci4Ks+ohpmCH2umHYgK1Jsgf0E2lATSPvhpxc3l+EX/
+   43+4a2eyGaxbbNxnksIZ8k/cbnCJJAXSoAKXimAsXFLNOov1GqpkbJHHk
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10520"; a="373970810"
+X-IronPort-AV: E=Sophos;i="5.96,134,1665471600"; 
+   d="scan'208";a="373970810"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2022 09:46:36 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10520"; a="629408020"
+X-IronPort-AV: E=Sophos;i="5.96,134,1665471600"; 
+   d="scan'208";a="629408020"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga007.jf.intel.com with ESMTP; 03 Nov 2022 09:46:29 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 858A5F7; Thu,  3 Nov 2022 18:46:52 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Juergen Gross <jgross@suse.com>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org,
+        linux-pci@vger.kernel.org, xen-devel@lists.xenproject.org
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Richard Henderson <richard.henderson@linaro.org>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "David S. Miller" <davem@davemloft.net>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
+Subject: [PATCH v2 0/4] PCI: Add pci_dev_for_each_resource() helper and refactor bus one
+Date:   Thu,  3 Nov 2022 18:46:40 +0200
+Message-Id: <20221103164644.70554-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y2HuhiyorAHFO+Ss@google.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 02, 2022 at 01:13:58PM +0900, Sergey Senozhatsky wrote:
-> On (22/10/27 11:27), Nhat Pham wrote:
-> > +
-> > +static int zs_zpool_shrink(void *pool, unsigned int pages,
-> > +			unsigned int *reclaimed)
-> > +{
-> > +	unsigned int total = 0;
-> > +	int ret = -EINVAL;
-> > +
-> > +	while (total < pages) {
-> > +		ret = zs_reclaim_page(pool, 8);
-> > +		if (ret < 0)
-> > +			break;
-> > +		total++;
-> > +	}
-> > +
-> > +	if (reclaimed)
-> > +		*reclaimed = total;
-> > +
-> > +	return ret;
-> > +}
-> 
-> The name collides with shrinker callbacks (compaction). That's a bit
-> confusing, took me some time.
+Provide two new helper macros to iterate over PCI device resources and
+convert users.
 
-Yeah this tripped us up too.
+Looking at it, refactor existing pci_bus_for_each_resource() and convert
+users accordingly.
 
-Unfortunately, this is inherited from the zpool API:
+This applies on top of this patch Mika sent out earlier:
+https://lore.kernel.org/linux-pci/20221103103254.30497-1-mika.westerberg@linux.intel.com/
 
-> > @@ -482,6 +504,7 @@ static struct zpool_driver zs_zpool_driver = {
-> >  	.malloc_support_movable = true,
-> >  	.malloc =		  zs_zpool_malloc,
-> >  	.free =			  zs_zpool_free,
-> > +	.shrink =     zs_zpool_shrink,
+Changelog v2:
+- refactor to have two macros
+- refactor existing pci_bus_for_each_resource() in the same way and
+  convert users
 
-There is another terminology collision around "compaction" and
-"migration": There is zs_page_migrate() which is called from physical
-page migration and compaction to switch out backing struct pages of
-the zspage. Then there is migrate_zspage() which is called from a
-*shrinker* through *zs_compact()*, and it consolidates the objects
-from partially used zspages into full ones.
+Andy Shevchenko (3):
+  PCI: Split pci_bus_for_each_resource_p() out of
+    pci_bus_for_each_resource()
+  EISA: Convert to use pci_bus_for_each_resource_p()
+  pcmcia: Convert to use pci_bus_for_each_resource_p()
 
-We're collecting these issues and want to clean them up separately. It
-seems this codebase hasn't had a lot of TLC recently, which makes it
-harder to make needed changes :/ We try to clean up as we go, but some
-of these issues (like the .shrink callback) run through all backends,
-zpool and zswap, so they'd be better off in separate cleanup patches.
+Mika Westerberg (1):
+  PCI: Introduce pci_dev_for_each_resource()
 
-The out-of-control locking complexity in zsmalloc is another one of
-these issues that we hoped we could clean up along the way, as you
-have noticed...
+ .clang-format                      |  3 +++
+ arch/alpha/kernel/pci.c            |  5 ++---
+ arch/arm/kernel/bios32.c           | 16 ++++++-------
+ arch/mips/pci/pci-legacy.c         |  3 +--
+ arch/powerpc/kernel/pci-common.c   |  5 ++---
+ arch/sparc/kernel/leon_pci.c       |  5 ++---
+ arch/sparc/kernel/pci.c            | 10 ++++-----
+ arch/sparc/kernel/pcic.c           |  5 ++---
+ drivers/eisa/pci_eisa.c            |  4 ++--
+ drivers/pci/bus.c                  |  7 +++---
+ drivers/pci/hotplug/shpchp_sysfs.c |  8 +++----
+ drivers/pci/pci.c                  |  5 ++---
+ drivers/pci/probe.c                |  2 +-
+ drivers/pci/remove.c               |  5 ++---
+ drivers/pci/setup-bus.c            | 36 ++++++++++++------------------
+ drivers/pci/setup-res.c            |  4 +---
+ drivers/pci/xen-pcifront.c         |  4 +---
+ drivers/pcmcia/rsrc_nonstatic.c    |  9 +++-----
+ drivers/pcmcia/yenta_socket.c      |  3 +--
+ include/linux/pci.h                | 25 +++++++++++++++++----
+ 20 files changed, 78 insertions(+), 86 deletions(-)
+
+-- 
+2.35.1
+
