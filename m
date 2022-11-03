@@ -2,138 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87F886186BF
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 18:59:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AE8E6186D5
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 19:00:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231819AbiKCR7A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 13:59:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36150 "EHLO
+        id S232140AbiKCSAn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 14:00:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231625AbiKCR6z (ORCPT
+        with ESMTP id S232072AbiKCR73 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 13:58:55 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8C152100C;
-        Thu,  3 Nov 2022 10:58:54 -0700 (PDT)
-Received: from skinsburskii-cloud-desktop.internal.cloudapp.net (unknown [20.120.152.163])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 4986520C28B1;
-        Thu,  3 Nov 2022 10:58:54 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 4986520C28B1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1667498334;
-        bh=2oxuhDe5kV6GjYNF8LuxN2eAqqYyKVRUxh3NgSYoyro=;
-        h=Subject:From:Cc:Date:In-Reply-To:References:From;
-        b=JtO1ihxob+SsrhIVYTkWVTsjV7gq4+H3B+vaZm7VECZafo13jgTiSkJMxL4eMzgxl
-         ysZwGbCvQQB0vqTrvA/roMYBcVli7TiT5gtv7f0ZW5vOPO0WzdUEGo0Lyx7WZLIMjR
-         2qB0HCpnLe3NKPPLYrTs6KrneWDt7cPfb1LZSZJU=
-Subject: [PATCH v3 2/4] drivers/clocksource/hyper-v: Introduce TSC PFN getter
-From:   Stanislav Kinsburskii <skinsburskii@linux.microsoft.com>
-Cc:     Stanislav Kinsburskiy <stanislav.kinsburskiy@gmail.com>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mikelley@microsoft.com
-Date:   Thu, 03 Nov 2022 17:58:54 +0000
-Message-ID: <166749833420.218190.2102763345349472395.stgit@skinsburskii-cloud-desktop.internal.cloudapp.net>
-In-Reply-To: <166749827889.218190.12775118554387271641.stgit@skinsburskii-cloud-desktop.internal.cloudapp.net>
-References: <166749827889.218190.12775118554387271641.stgit@skinsburskii-cloud-desktop.internal.cloudapp.net>
-User-Agent: StGit/0.19
+        Thu, 3 Nov 2022 13:59:29 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7107E5F97
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 10:59:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667498362; x=1699034362;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=OZimIu89EeGi5tqLMGLYWDXCZnDY709jANJn7l/dlDM=;
+  b=Mpx6SJJZHPkR7EsUdeLIiScHl6ObAm4/NLI9wgNZcQJJcNmBFCe8Nl5u
+   2BsdYZMKpQ5W6VF2+kgw0xuSB6PU8Q7yb0/A3YjNHcl/lsE2Je445wBDo
+   fBdNHNWctgZeShvO8hK3UPEyrSrYQNt7GDjO2N4zvln1rnOnzPCN5ItvN
+   NnBK8Hch3qUxuF3B7jG33sK3oTQzsLI0A5XoSKY1NcJxNwVobsWI9gWOL
+   3FyjBrprcT+VRX8hZj6NAaMicXj5Wi/JaF7Zk2sH6f/NDryWx/fWQ3VKO
+   EsV3fNZXODjIjY+YJpyvrKg5O35vjZxvZdVF4yuNAuxhrAknYLO4Y4ctd
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10520"; a="308476972"
+X-IronPort-AV: E=Sophos;i="5.96,134,1665471600"; 
+   d="scan'208";a="308476972"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2022 10:59:18 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10520"; a="809762556"
+X-IronPort-AV: E=Sophos;i="5.96,134,1665471600"; 
+   d="scan'208";a="809762556"
+Received: from araj-dh-work.jf.intel.com ([10.165.157.158])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2022 10:59:18 -0700
+From:   Ashok Raj <ashok.raj@intel.com>
+To:     Borislav Petkov <bp@alien8.de>,
+        Thomas Gleixner <tglx@linutronix.de>
+Cc:     "LKML Mailing List" <linux-kernel@vger.kernel.org>,
+        X86-kernel <x86@kernel.org>, Tony Luck <tony.luck@intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Arjan van de Ven <arjan.van.de.ven@intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Jacon Jun Pan <jacob.jun.pan@intel.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Kai Huang <kai.huang@intel.com>,
+        Andrew Cooper <andrew.cooper3@citrix.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        Ashok Raj <ashok.raj@intel.com>
+Subject: [v2 06/13] x86/ipi: Support sending NMI_VECTOR as self ipi
+Date:   Thu,  3 Nov 2022 17:58:54 +0000
+Message-Id: <20221103175901.164783-7-ashok.raj@intel.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20221103175901.164783-1-ashok.raj@intel.com>
+References: <20221103175901.164783-1-ashok.raj@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-18.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,MISSING_HEADERS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Stanislav Kinsburskiy <stanislav.kinsburskiy@gmail.com>
+From: Jacob Pan <jacob.jun.pan@linux.intel.com>
 
-And rework the code to use it instead of the physical address, which isn't
-required by itself.
+apic->send_IPI_self() can be used to send any general vector as a self IPI.
+The function uses a SHORTCUT specifier, but it can't be used to send a
+vector with delivery mode as NMI. Chapter 10, Advanved Programmable
+Interrupt Controller (APIC) Table 10-3 indicates that the shortcut isn't a
+legal combination for NMI delivery. The same is true for x2apic
+implementations as well, the self IPI MSR can only specify the vector
+number, but no delivery mode.
 
-This is a cleanup and precursor patch for upcoming support for TSC page
-mapping into Microsoft Hypervisor root partition, where TSC PFN will be
-defined by the hypervisor and not by the kernel.
+The helper adds proper handling if the vector is NMI_VECTOR.
 
-Signed-off-by: Stanislav Kinsburskiy <stanislav.kinsburskiy@gmail.com>
-CC: "K. Y. Srinivasan" <kys@microsoft.com>
-CC: Haiyang Zhang <haiyangz@microsoft.com>
-CC: Wei Liu <wei.liu@kernel.org>
-CC: Dexuan Cui <decui@microsoft.com>
-CC: Daniel Lezcano <daniel.lezcano@linaro.org>
-CC: Thomas Gleixner <tglx@linutronix.de>
-CC: linux-hyperv@vger.kernel.org
-CC: linux-kernel@vger.kernel.org
+Suggested-by: Ashok Raj <ashok.raj@intel.com>
+Signed-off-by: Jacob Pan <jacob.jun.pan@linux.intel.com>
+Co-developed-by: Ashok Raj <ashok.raj@intel.com>
+Reviewed-by: Tony Luck <tony.luck@intel.com>
+Signed-off-by: Ashok Raj <ashok.raj@intel.com>
 ---
- drivers/clocksource/hyperv_timer.c |   14 +++++++++-----
- 1 file changed, 9 insertions(+), 5 deletions(-)
+ arch/x86/kernel/apic/ipi.c         |  6 +++++-
+ arch/x86/kernel/apic/x2apic_phys.c |  6 +++++-
+ arch/x86/kernel/nmi_selftest.c     | 32 ++++++++++++++++++++++++++++++
+ 3 files changed, 42 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/clocksource/hyperv_timer.c b/drivers/clocksource/hyperv_timer.c
-index b0b5df576e17..b7af19d06b51 100644
---- a/drivers/clocksource/hyperv_timer.c
-+++ b/drivers/clocksource/hyperv_timer.c
-@@ -368,6 +368,12 @@ static union {
- } tsc_pg __aligned(PAGE_SIZE);
+diff --git a/arch/x86/kernel/apic/ipi.c b/arch/x86/kernel/apic/ipi.c
+index 2a6509e8c840..e967c49609ef 100644
+--- a/arch/x86/kernel/apic/ipi.c
++++ b/arch/x86/kernel/apic/ipi.c
+@@ -239,7 +239,11 @@ void default_send_IPI_all(int vector)
  
- static struct ms_hyperv_tsc_page *tsc_page = &tsc_pg.page;
-+static unsigned long tsc_pfn;
-+
-+static unsigned long hv_get_tsc_pfn(void)
-+{
-+	return tsc_pfn;
-+}
- 
- struct ms_hyperv_tsc_page *hv_get_tsc_page(void)
+ void default_send_IPI_self(int vector)
  {
-@@ -409,13 +415,12 @@ static void suspend_hv_clock_tsc(struct clocksource *arg)
- 
- static void resume_hv_clock_tsc(struct clocksource *arg)
- {
--	phys_addr_t phys_addr = virt_to_phys(tsc_page);
- 	union hv_reference_tsc_msr tsc_msr;
- 
- 	/* Re-enable the TSC page */
- 	tsc_msr.as_uint64 = hv_get_register(HV_REGISTER_REFERENCE_TSC);
- 	tsc_msr.enable = 1;
--	tsc_msr.pfn = HVPFN_DOWN(phys_addr);
-+	tsc_msr.pfn = tsc_pfn;
- 	hv_set_register(HV_REGISTER_REFERENCE_TSC, tsc_msr.as_uint64);
+-	__default_send_IPI_shortcut(APIC_DEST_SELF, vector);
++	if (unlikely(vector == NMI_VECTOR))
++		apic->send_IPI_mask(cpumask_of(smp_processor_id()),
++				    NMI_VECTOR);
++	else
++		__default_send_IPI_shortcut(APIC_DEST_SELF, vector);
  }
  
-@@ -499,7 +504,6 @@ static __always_inline void hv_setup_sched_clock(void *sched_clock) {}
- static bool __init hv_init_tsc_clocksource(void)
+ #ifdef CONFIG_X86_32
+diff --git a/arch/x86/kernel/apic/x2apic_phys.c b/arch/x86/kernel/apic/x2apic_phys.c
+index 6bde05a86b4e..cf187f1906b2 100644
+--- a/arch/x86/kernel/apic/x2apic_phys.c
++++ b/arch/x86/kernel/apic/x2apic_phys.c
+@@ -149,7 +149,11 @@ int x2apic_phys_pkg_id(int initial_apicid, int index_msb)
+ 
+ void x2apic_send_IPI_self(int vector)
  {
- 	union hv_reference_tsc_msr tsc_msr;
--	phys_addr_t	phys_addr;
+-	apic_write(APIC_SELF_IPI, vector);
++	if (unlikely(vector == NMI_VECTOR))
++		apic->send_IPI_mask(cpumask_of(smp_processor_id()),
++				    NMI_VECTOR);
++	else
++		apic_write(APIC_SELF_IPI, vector);
+ }
  
- 	if (!(ms_hyperv.features & HV_MSR_REFERENCE_TSC_AVAILABLE))
- 		return false;
-@@ -524,7 +528,7 @@ static bool __init hv_init_tsc_clocksource(void)
- 	}
+ static struct apic apic_x2apic_phys __ro_after_init = {
+diff --git a/arch/x86/kernel/nmi_selftest.c b/arch/x86/kernel/nmi_selftest.c
+index a1a96df3dff1..f4b813821208 100644
+--- a/arch/x86/kernel/nmi_selftest.c
++++ b/arch/x86/kernel/nmi_selftest.c
+@@ -105,6 +105,36 @@ static void __init local_ipi(void)
+ 	test_nmi_ipi(to_cpumask(nmi_ipi_mask));
+ }
  
- 	hv_read_reference_counter = read_hv_clock_tsc;
--	phys_addr = virt_to_phys(hv_get_tsc_page());
-+	tsc_pfn = HVPFN_DOWN(virt_to_phys(tsc_page));
++static void __init self_nmi_test(void)
++{
++	unsigned long timeout;
++
++	cpumask_clear(to_cpumask(nmi_ipi_mask));
++	cpumask_set_cpu(smp_processor_id(), to_cpumask(nmi_ipi_mask));
++
++	if (register_nmi_handler(NMI_LOCAL, test_nmi_ipi_callback,
++				 NMI_FLAG_FIRST, "nmi_selftest", __initdata)) {
++		nmi_fail = FAILURE;
++		return;
++	}
++
++	/* sync above data before sending NMI */
++	wmb();
++
++	apic->send_IPI_self(NMI_VECTOR);
++
++	/* Don't wait longer than a second */
++	timeout = USEC_PER_SEC;
++	while (!cpumask_empty(to_cpumask(nmi_ipi_mask)) && --timeout)
++		udelay(1);
++
++	/* What happens if we timeout, do we still unregister?? */
++	unregister_nmi_handler(NMI_LOCAL, "nmi_selftest");
++
++	if (!timeout)
++		nmi_fail = TIMEOUT;
++}
++
+ static void __init reset_nmi(void)
+ {
+ 	nmi_fail = 0;
+@@ -157,6 +187,8 @@ void __init nmi_selftest(void)
+ 	print_testname("local IPI");
+ 	dotest(local_ipi, SUCCESS);
+ 	printk(KERN_CONT "\n");
++	print_testname("Self NMI IPI");
++	dotest(self_nmi_test, SUCCESS);
  
- 	/*
- 	 * The Hyper-V TLFS specifies to preserve the value of reserved
-@@ -535,7 +539,7 @@ static bool __init hv_init_tsc_clocksource(void)
- 	 */
- 	tsc_msr.as_uint64 = hv_get_register(HV_REGISTER_REFERENCE_TSC);
- 	tsc_msr.enable = 1;
--	tsc_msr.pfn = HVPFN_DOWN(phys_addr);
-+	tsc_msr.pfn = tsc_pfn;
- 	hv_set_register(HV_REGISTER_REFERENCE_TSC, tsc_msr.as_uint64);
+ 	cleanup_nmi_testsuite();
  
- 	clocksource_register_hz(&hyperv_cs_tsc, NSEC_PER_SEC/100);
-
+-- 
+2.34.1
 
