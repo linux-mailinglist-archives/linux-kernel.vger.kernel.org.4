@@ -2,107 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2A906186D3
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 19:00:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87F886186BF
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 18:59:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232070AbiKCSAe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 14:00:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37640 "EHLO
+        id S231819AbiKCR7A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 13:59:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232068AbiKCR73 (ORCPT
+        with ESMTP id S231625AbiKCR6z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 13:59:29 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 317262DFB
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 10:59:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667498361; x=1699034361;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=KpdhtG2RZ4I61tK91zuLU/1Q/Ncurh7LzYmq24qDOyw=;
-  b=GkUHW4+hgeuoIMhUC4SaeyzCgnd/fW3eQyscCCXthi3AhGne7qYHujOT
-   qXqNltNdnsYHcVC1c/KztdR/7KuVEydKa5eFHkw0GMdHLASg0UYW6luLW
-   nVly9a01Su3Fh6pLTxLH69Jwu+Q2QWfzahA+UHtviKZyjesrEiIDX2b0W
-   hLitQdiLT9TNFeI+65op+zQoFFrCf3kindQfya534jfQJh+6SFdLGDPI7
-   urE4F/PLhYbdgXdHKxRQ+omvhNVCf5/3gjp28MEr5WxP2TjlKH2/mDDYU
-   M9LJhI6AgIyBGnOsb470PVeTXnClYFA6c38zEXXhZE8wiC5k/9/jyoUCk
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10520"; a="308476968"
-X-IronPort-AV: E=Sophos;i="5.96,134,1665471600"; 
-   d="scan'208";a="308476968"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2022 10:59:18 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10520"; a="809762553"
-X-IronPort-AV: E=Sophos;i="5.96,134,1665471600"; 
-   d="scan'208";a="809762553"
-Received: from araj-dh-work.jf.intel.com ([10.165.157.158])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2022 10:59:18 -0700
-From:   Ashok Raj <ashok.raj@intel.com>
-To:     Borislav Petkov <bp@alien8.de>,
-        Thomas Gleixner <tglx@linutronix.de>
-Cc:     "LKML Mailing List" <linux-kernel@vger.kernel.org>,
-        X86-kernel <x86@kernel.org>, Tony Luck <tony.luck@intel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Arjan van de Ven <arjan.van.de.ven@intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Jacon Jun Pan <jacob.jun.pan@intel.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Andrew Cooper <andrew.cooper3@citrix.com>,
-        Ashok Raj <ashok.raj@intel.com>
-Subject: [v2 05/13] x86/microcode: Move late-load warning to earlier where kernel taint happens
-Date:   Thu,  3 Nov 2022 17:58:53 +0000
-Message-Id: <20221103175901.164783-6-ashok.raj@intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221103175901.164783-1-ashok.raj@intel.com>
-References: <20221103175901.164783-1-ashok.raj@intel.com>
+        Thu, 3 Nov 2022 13:58:55 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8C152100C;
+        Thu,  3 Nov 2022 10:58:54 -0700 (PDT)
+Received: from skinsburskii-cloud-desktop.internal.cloudapp.net (unknown [20.120.152.163])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 4986520C28B1;
+        Thu,  3 Nov 2022 10:58:54 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 4986520C28B1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1667498334;
+        bh=2oxuhDe5kV6GjYNF8LuxN2eAqqYyKVRUxh3NgSYoyro=;
+        h=Subject:From:Cc:Date:In-Reply-To:References:From;
+        b=JtO1ihxob+SsrhIVYTkWVTsjV7gq4+H3B+vaZm7VECZafo13jgTiSkJMxL4eMzgxl
+         ysZwGbCvQQB0vqTrvA/roMYBcVli7TiT5gtv7f0ZW5vOPO0WzdUEGo0Lyx7WZLIMjR
+         2qB0HCpnLe3NKPPLYrTs6KrneWDt7cPfb1LZSZJU=
+Subject: [PATCH v3 2/4] drivers/clocksource/hyper-v: Introduce TSC PFN getter
+From:   Stanislav Kinsburskii <skinsburskii@linux.microsoft.com>
+Cc:     Stanislav Kinsburskiy <stanislav.kinsburskiy@gmail.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mikelley@microsoft.com
+Date:   Thu, 03 Nov 2022 17:58:54 +0000
+Message-ID: <166749833420.218190.2102763345349472395.stgit@skinsburskii-cloud-desktop.internal.cloudapp.net>
+In-Reply-To: <166749827889.218190.12775118554387271641.stgit@skinsburskii-cloud-desktop.internal.cloudapp.net>
+References: <166749827889.218190.12775118554387271641.stgit@skinsburskii-cloud-desktop.internal.cloudapp.net>
+User-Agent: StGit/0.19
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-18.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,MISSING_HEADERS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Move where the late loading warning is being issued to earlier in the call.
-This would put the warn and taint in the same function.
+From: Stanislav Kinsburskiy <stanislav.kinsburskiy@gmail.com>
 
-Just a tidy thing, no functional changes.
+And rework the code to use it instead of the physical address, which isn't
+required by itself.
 
-Reviewed-by: Tony Luck <tony.luck@intel.com>
-Signed-off-by: Ashok Raj <ashok.raj@intel.com>
+This is a cleanup and precursor patch for upcoming support for TSC page
+mapping into Microsoft Hypervisor root partition, where TSC PFN will be
+defined by the hypervisor and not by the kernel.
+
+Signed-off-by: Stanislav Kinsburskiy <stanislav.kinsburskiy@gmail.com>
+CC: "K. Y. Srinivasan" <kys@microsoft.com>
+CC: Haiyang Zhang <haiyangz@microsoft.com>
+CC: Wei Liu <wei.liu@kernel.org>
+CC: Dexuan Cui <decui@microsoft.com>
+CC: Daniel Lezcano <daniel.lezcano@linaro.org>
+CC: Thomas Gleixner <tglx@linutronix.de>
+CC: linux-hyperv@vger.kernel.org
+CC: linux-kernel@vger.kernel.org
 ---
- arch/x86/kernel/cpu/microcode/core.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/clocksource/hyperv_timer.c |   14 +++++++++-----
+ 1 file changed, 9 insertions(+), 5 deletions(-)
 
-diff --git a/arch/x86/kernel/cpu/microcode/core.c b/arch/x86/kernel/cpu/microcode/core.c
-index 9ed1f6e138d6..d41207e50ee6 100644
---- a/arch/x86/kernel/cpu/microcode/core.c
-+++ b/arch/x86/kernel/cpu/microcode/core.c
-@@ -487,9 +487,6 @@ static int microcode_reload_late(void)
- 	int old = boot_cpu_data.microcode, ret;
- 	struct cpuinfo_x86 info;
+diff --git a/drivers/clocksource/hyperv_timer.c b/drivers/clocksource/hyperv_timer.c
+index b0b5df576e17..b7af19d06b51 100644
+--- a/drivers/clocksource/hyperv_timer.c
++++ b/drivers/clocksource/hyperv_timer.c
+@@ -368,6 +368,12 @@ static union {
+ } tsc_pg __aligned(PAGE_SIZE);
  
--	pr_err("Attempting late microcode loading - it is dangerous and taints the kernel.\n");
--	pr_err("You should switch to early loading, if possible.\n");
--
- 	atomic_set(&late_cpus_in,  0);
- 	atomic_set(&late_cpus_out, 0);
- 
-@@ -530,6 +527,9 @@ static ssize_t reload_store(struct device *dev,
- 	if (tmp_ret != UCODE_NEW)
- 		goto put;
- 
-+	pr_err("Attempting late microcode loading - it is dangerous and taints the kernel.\n");
-+	pr_err("You should switch to early loading, if possible.\n");
+ static struct ms_hyperv_tsc_page *tsc_page = &tsc_pg.page;
++static unsigned long tsc_pfn;
 +
- 	mutex_lock(&microcode_mutex);
- 	ret = microcode_reload_late();
- 	mutex_unlock(&microcode_mutex);
--- 
-2.34.1
++static unsigned long hv_get_tsc_pfn(void)
++{
++	return tsc_pfn;
++}
+ 
+ struct ms_hyperv_tsc_page *hv_get_tsc_page(void)
+ {
+@@ -409,13 +415,12 @@ static void suspend_hv_clock_tsc(struct clocksource *arg)
+ 
+ static void resume_hv_clock_tsc(struct clocksource *arg)
+ {
+-	phys_addr_t phys_addr = virt_to_phys(tsc_page);
+ 	union hv_reference_tsc_msr tsc_msr;
+ 
+ 	/* Re-enable the TSC page */
+ 	tsc_msr.as_uint64 = hv_get_register(HV_REGISTER_REFERENCE_TSC);
+ 	tsc_msr.enable = 1;
+-	tsc_msr.pfn = HVPFN_DOWN(phys_addr);
++	tsc_msr.pfn = tsc_pfn;
+ 	hv_set_register(HV_REGISTER_REFERENCE_TSC, tsc_msr.as_uint64);
+ }
+ 
+@@ -499,7 +504,6 @@ static __always_inline void hv_setup_sched_clock(void *sched_clock) {}
+ static bool __init hv_init_tsc_clocksource(void)
+ {
+ 	union hv_reference_tsc_msr tsc_msr;
+-	phys_addr_t	phys_addr;
+ 
+ 	if (!(ms_hyperv.features & HV_MSR_REFERENCE_TSC_AVAILABLE))
+ 		return false;
+@@ -524,7 +528,7 @@ static bool __init hv_init_tsc_clocksource(void)
+ 	}
+ 
+ 	hv_read_reference_counter = read_hv_clock_tsc;
+-	phys_addr = virt_to_phys(hv_get_tsc_page());
++	tsc_pfn = HVPFN_DOWN(virt_to_phys(tsc_page));
+ 
+ 	/*
+ 	 * The Hyper-V TLFS specifies to preserve the value of reserved
+@@ -535,7 +539,7 @@ static bool __init hv_init_tsc_clocksource(void)
+ 	 */
+ 	tsc_msr.as_uint64 = hv_get_register(HV_REGISTER_REFERENCE_TSC);
+ 	tsc_msr.enable = 1;
+-	tsc_msr.pfn = HVPFN_DOWN(phys_addr);
++	tsc_msr.pfn = tsc_pfn;
+ 	hv_set_register(HV_REGISTER_REFERENCE_TSC, tsc_msr.as_uint64);
+ 
+ 	clocksource_register_hz(&hyperv_cs_tsc, NSEC_PER_SEC/100);
+
 
