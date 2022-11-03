@@ -2,104 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60176617D9E
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 14:13:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DFFB6617DA2
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 14:13:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231608AbiKCNNE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 09:13:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51384 "EHLO
+        id S231802AbiKCNNz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 09:13:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231318AbiKCNM4 (ORCPT
+        with ESMTP id S231831AbiKCNNh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 09:12:56 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E08DE1409E
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 06:12:55 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id u8-20020a17090a5e4800b002106dcdd4a0so5154271pji.1
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 06:12:55 -0700 (PDT)
+        Thu, 3 Nov 2022 09:13:37 -0400
+Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com [IPv6:2607:f8b0:4864:20::f33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D09B1FE3
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 06:13:21 -0700 (PDT)
+Received: by mail-qv1-xf33.google.com with SMTP id c8so1036485qvn.10
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 06:13:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=f7xraXG/GileYO3tPwQFVcfRIK9dP1/TT5c9Q1u4UMU=;
-        b=QHWz+PU8C9ejrxpJjFKO8yxQAEIOfgWd0jmIVuiJkFcZu8Xcg8SJAg/+iDGWyC3T8a
-         uhf19QtvGRTBzoqKI0cjFaUxOA7BZtOxTDoXpLvTFoOdsMvjoHCkalG+oQC8lSMQv6IT
-         iXiwMMO3N5SpjomNi02WrWy6ckVRsfvt4+DfQ=
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=VAwv5pVuHPh2HWRN8QElP8yISKr8Z4y4F+eLXOpxHSw=;
+        b=N7k7ZCf/Z56m45wIbweMUAbkl4/OdW3aPhkdTk3WKcemN0fhRFG8pQ9uo8xQfm5/mZ
+         SEX0toaGhFjEoVyaDB8edQYAFOrBuAvrf3nPff0QUXCSE71JNPUCN6HRxsfuiLgNIsJB
+         LhW61T0Eu6ZVVunvIB+l4s3HVzHhpvt6XNVBXr5wT1+UQUSMUTVSipYtakO2vva7HKe/
+         5Tg/LKE1Bkjxg5qIpqjOWczatOsOTg+IIsghM9pPt6qnKaUSI+M/L/WYLB0ufisJ3C/G
+         0K/JJmOKWC17dQbfM6AJ2kMAiS26VS73SDlsuZRGkQu4izl/3QO3x9v6tboYXwDqmMve
+         +rLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=f7xraXG/GileYO3tPwQFVcfRIK9dP1/TT5c9Q1u4UMU=;
-        b=D17w1C29/TRxC43SI72uE0a+a34pNU4eVvmlhqQB0Vanh6zZAT4wOF1HvAH+ptf5WF
-         vNDbY3VBoRZSLC2ESkwmVx04v+Dd8zjaebrU+VUNkbM3qOX/+pMf/m05wCjZcLTHRwRH
-         +A2oLEKPtc7q5XR7ZhILfVtcnVVGvpam2EJr1lOZtgjF8bsIM+j6Ovy3OUVwRIso6M7B
-         PFpQdgUrFZOD9RWWA16OvZQuzHfJfueRDrCBaXchb8GFl/dqDD9Kgi6QjCQg4iwFxQ0t
-         t8Wo7+x3lsr5YFz9fGOGSusy2du4a02+hUYryPvl5AIgIiGjMx8cxqgDcq6mc5dKxgcP
-         9PRA==
-X-Gm-Message-State: ACrzQf2OuNhXE7TJEz3ypZzqGoboCJ/p+OYWObt2pclQ02sqVRxsOiiB
-        0Q8VnfEbmmX6Bi+TGCLA3E5UUQ==
-X-Google-Smtp-Source: AMsMyM4eVD/pPFuOp8pOkpzHdfAlJMtNs8StKlglQPlCXRJTor/oOOiYEc9zhsQmFlv8jkxNfPePlw==
-X-Received: by 2002:a17:90a:930b:b0:20b:a5d:35d6 with SMTP id p11-20020a17090a930b00b0020b0a5d35d6mr48008379pjo.146.1667481175341;
-        Thu, 03 Nov 2022 06:12:55 -0700 (PDT)
-Received: from shuah-tx13.. ([103.99.10.63])
-        by smtp.gmail.com with ESMTPSA id p8-20020a1709027ec800b0018703bf3ec9sm647871plb.61.2022.11.03.06.12.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Nov 2022 06:12:54 -0700 (PDT)
-From:   Shuah Khan <skhan@linuxfoundation.org>
-To:     shuah@kernel.org, valentina.manea.m@gmail.com
-Cc:     Shuah Khan <skhan@linuxfoundation.org>, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] usb/usbip: Fix v_recv_cmd_submit() to use PIPE_BULK define
-Date:   Thu,  3 Nov 2022 07:12:43 -0600
-Message-Id: <c9790c485bfe31c55bbd2f9b270548ecefddc91a.1667480280.git.skhan@linuxfoundation.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <cover.1667480280.git.skhan@linuxfoundation.org>
-References: <cover.1667480280.git.skhan@linuxfoundation.org>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=VAwv5pVuHPh2HWRN8QElP8yISKr8Z4y4F+eLXOpxHSw=;
+        b=Qub7n/cfYphwCG0S5nCuAQ7wuZg+xtj+Cmq4TT32xPJ6gJyBmCXq9Jdc/zXo2PvW55
+         eOGXAixqbZmNVmVoIt/wVqpKxwuWl1/WqPXh3HmiyqyADEdhy4n0nI8zO2l4PTPN+yHg
+         RqlPZ98TkWH9ix464b1yGJRiWGBG8YnWl50jXZ7UglvWfc7dhwixDeY4VONYg3Nrxjny
+         MKwOScJIrOG0e5U9+mfBQqsTQZu8iM0uvED8Gg7eVgjMCLc1c39fAy/gtsVJT4HGBIhF
+         djDUO0Eskb85xJPGialAWwdIvB6euYLTvXUkvarYWq+ImoDh1CrPDnTW54tGDFoYbM0l
+         QKUA==
+X-Gm-Message-State: ACrzQf2trISwHkQB5m8jqwIS1rheJ+mPl2C/52T2fb/9K5vS1mlIrLga
+        D0tyTu1Yia8om1f8M5RvVp7bSA==
+X-Google-Smtp-Source: AMsMyM4zBsi1eFnqnwyIs3CkXy7J5tFp34bs+8/IFq4ef7X6E3Wbe46k4jkzwfs9g9CmbIRSjJa94g==
+X-Received: by 2002:ad4:5fc5:0:b0:4bb:6360:e80 with SMTP id jq5-20020ad45fc5000000b004bb63600e80mr26039109qvb.63.1667481200638;
+        Thu, 03 Nov 2022 06:13:20 -0700 (PDT)
+Received: from ?IPV6:2601:586:5000:570:a35d:9f85:e3f7:d9fb? ([2601:586:5000:570:a35d:9f85:e3f7:d9fb])
+        by smtp.gmail.com with ESMTPSA id v20-20020a05622a189400b003a540320070sm535368qtc.6.2022.11.03.06.13.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 03 Nov 2022 06:13:20 -0700 (PDT)
+Message-ID: <0c23e569-61e1-3eba-f9fc-4b42ed228b52@linaro.org>
+Date:   Thu, 3 Nov 2022 09:13:18 -0400
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH v6 1/2] dt-bindings: mfd: Add bindings for MAX5970 and
+ MAX5978
+Content-Language: en-US
+To:     Naresh Solanki <naresh.solanki@9elements.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Patrick Rudolph <patrick.rudolph@9elements.com>
+Cc:     Marcello Sylvester Bauer <sylv@sylv.io>
+References: <20221103080545.1400424-1-Naresh.Solanki@9elements.com>
+ <20221103080545.1400424-2-Naresh.Solanki@9elements.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221103080545.1400424-2-Naresh.Solanki@9elements.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix v_recv_cmd_submit() to use PIPE_BULK define instead of hard coded
-values. This also fixes the following signed integer overflow error
-reported by cppcheck. This is not an issue since pipe is unsigned int.
-However, this change improves the code to use proper define.
+On 03/11/2022 04:05, Naresh Solanki wrote:
+> From: Marcello Sylvester Bauer <sylv@sylv.io>
+> 
+> The MAX597x is a hot swap controller with configurable fault protection.
+> It also has 10bit ADC for current & voltage measurements.
+> 
+> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
+> Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
+> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+> ---
+>  .../bindings/mfd/maxim,max5970.yaml           | 164 ++++++++++++++++++
+>  1 file changed, 164 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/mfd/maxim,max5970.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/mfd/maxim,max5970.yaml b/Documentation/devicetree/bindings/mfd/maxim,max5970.yaml
+> new file mode 100644
+> index 000000000000..fc9d6d3647b3
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/mfd/maxim,max5970.yaml
+> @@ -0,0 +1,164 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/mfd/max5970.yaml#
 
-drivers/usb/usbip/vudc_rx.c:152:26: error: Signed integer overflow for expression '3<<30'. [integerOverflow]
- urb_p->urb->pipe &= ~(3 << 30);
+Does not look like you tested the bindings. Please run `make
+dt_binding_check` (see
+Documentation/devicetree/bindings/writing-schema.rst for instructions).
 
-In addition, add a sanity check for PIPE_BULK != 3 as the code path depends
-on PIPE_BULK = 3.
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Regulator for MAX5970 smart switch from Maxim Integrated.
+> +
+> +maintainers:
+> +  - Patrick Rudolph <patrick.rudolph@9elements.com>
+> +
+> +description: |
+> +  The smart switch provides no output regulation, but independent fault protection
+> +  and voltage and current sensing.
+> +  Programming is done through I2C bus.
+> +
+> +  Datasheets:
+> +    https://datasheets.maximintegrated.com/en/ds/MAX5970.pdf
+> +    https://datasheets.maximintegrated.com/en/ds/MAX5978.pdf
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - maxim,max5970
+> +      - maxim,max5978
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  leds:
+> +    type: object
+> +    description:
+> +      Properties for single channel.
+> +
+> +    patternProperties:
+> +      "^led@[0-3]$":
+> +        $ref: /schemas/leds/common.yaml#
+> +        type: object
+> +
+> +    additionalProperties: true
+> +
+> +  vss1-supply:
+> +    description: Supply of the first channel.
+> +
+> +  vss2-supply:
+> +    description: Supply of the first channel.
+> +
+> +  "#io-channel-cells":
+> +    const: 1
+> +
+> +  regulators:
+> +    type: object
+> +    description:
+> +      Properties for single channel.
+> +
+> +    patternProperties:
+> +      "^(sw[0-1])$":
+> +        $ref: /schemas/regulator/regulator.yaml#
+> +        type: object
+> +
+> +      shunt-resistor-micro-ohms:
+> +        description: |
+> +          The value of curent sense resistor in microohms.
+> +          Must be specified for each channel.
+> +
+> +    additionalProperties: true
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - regulators
+> +  - vss1-supply
+> +
+> +
 
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
----
- drivers/usb/usbip/vudc_rx.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+Just one blank line.
 
-diff --git a/drivers/usb/usbip/vudc_rx.c b/drivers/usb/usbip/vudc_rx.c
-index a6ca27f10b68..e7e0eb6bbca0 100644
---- a/drivers/usb/usbip/vudc_rx.c
-+++ b/drivers/usb/usbip/vudc_rx.c
-@@ -149,7 +149,10 @@ static int v_recv_cmd_submit(struct vudc *udc,
- 	urb_p->urb->status = -EINPROGRESS;
- 
- 	/* FIXME: more pipe setup to please usbip_common */
--	urb_p->urb->pipe &= ~(3 << 30);
-+#if PIPE_BULK != 3
-+#error "Sanity check failed, this code presumes PIPE_... to range from 0 to 3"
-+#endif
-+	urb_p->urb->pipe &= ~(PIPE_BULK << 30);
- 	switch (urb_p->ep->type) {
- 	case USB_ENDPOINT_XFER_BULK:
- 		urb_p->urb->pipe |= (PIPE_BULK << 30);
--- 
-2.34.1
+> +allOf:
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          enum:
+> +            - maxim,max5970
+> +    then:
+> +      properties:
+> +        io-channels:
+> +          items:
+> +            - description: voltage first channel
+> +            - description: current first channel
+> +            - description: voltage second channel
+> +            - description: current second channel
+> +          description: |
+> +            Voltage and current for first and second channel.
+> +      required:
+> +        - vss2-supply
+> +    else:
+> +      properties:
+> +        io-channels:
+> +          items:
+> +            - description: voltage first channel
+> +            - description: current first channel
+> +          description: |
+> +            Voltage and current for first channel.
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    i2c {
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +        regulator@3a {
+> +           compatible = "maxim,max5978";
+> +           reg = <0x3a>;
+> +           vss1-supply = <&p3v3>;
+> +
+> +           regulators {
+> +               sw0_ref_0: SW0 {
+
+No improvements here.
+
+Best regards,
+Krzysztof
 
