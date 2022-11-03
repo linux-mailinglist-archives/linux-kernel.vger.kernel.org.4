@@ -2,65 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9822F617B39
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 12:01:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89CC0617B3F
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 12:01:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231299AbiKCLBV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 07:01:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35042 "EHLO
+        id S231394AbiKCLBo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 07:01:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229935AbiKCLBR (ORCPT
+        with ESMTP id S231355AbiKCLBa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 07:01:17 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB657B7DB
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 04:01:16 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id u6so1536441plq.12
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 04:01:16 -0700 (PDT)
+        Thu, 3 Nov 2022 07:01:30 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3743BE0A
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 04:01:27 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id g62so1237072pfb.10
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 04:01:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ay8rIDfAS1vKzFBT8OPzZHG4KC+WK17k+CTXHHbF524=;
-        b=F7u8vLHf3k4t6Ojxj0wPVNF0odVtSYGzJ7dal3LBHzOzk0NP6WfWAoqERZUf/n/lyy
-         ro+jSMxTAhkSGSq25iMQbPtlIPrwh3oCl6vTw9Lg95AeMQvH22HLht+fOW1U8GPlC6Si
-         6BNw7+oJJAFgCrFvGdwQ5mhW2G0tEk/+96qJngXj7L5JFjdWGtTwbQ2kHEBXWE1Qsh43
-         sO4FCbk8xnS/2ho9xjGjd7nk/hUpeKtlB2tiHqCLWBtebcRor8a9dvrffix9a1Pzj8fL
-         iaheCXDz7uZaNZF2o2ZdXErpkQCGNE1EsdiBp+vwpskuCQbp0UaqlNvsOif7TSOs0X6J
-         cmSQ==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rdlSJiSDdFVNFGf7aj1iVzyqCpSjnjyK7zZt5V+eoFk=;
+        b=UAmCLml2yroJcnFXFQvvkzy2aNsqlmSGQS5t8dAlzArMlFBKaJvBqOYgjVuzPCG/bE
+         L2WuZiDJamaQQHF2ZtSeEUW7/i0igpivEDO/H0L4WEvA96KyIp4Ir6RN5mH65cTc+2M7
+         uSNZPqD1dPevSMC1cs4iZuhIbno4Gm1Rqm0SPA93wu+ObgvakF0ME6NX0J9HsYvsCZvF
+         gYm49A8S1d6ELns4/t72kFySs2bKD4wSQcIFa2W4uAii1H6TKDUFwRr3OI63qafeKe4t
+         1/WNmtSiTXdFO7DIb5EO1TUOV4ctgbAKuGeVs62PKSYpI4fPzdnAVRZR26VNUsmsW+eI
+         RMcA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Ay8rIDfAS1vKzFBT8OPzZHG4KC+WK17k+CTXHHbF524=;
-        b=ktU96WY46GQUhe1EFHGd/KvE7ge2C7L6AvWcoTfFhDKyMoeAbtRi6URdYhauiNiO2b
-         znaNdO4vo3tiuYwgD8zOajR6UPS2U/GDdTwAEb2FtTQEZw2lN2yovmuSXV+zKwXazDgw
-         Eb1g5/e7Ap+T9MFwFSAvYdlZh1e46S56ccuuEJx1mt8pKK1OW1fjGa4lNUUChS1akNrb
-         6zoSYpLRMWPNvYL555E/lk4auwD+jiSwycCgat2faGXRXx+JEIr7kZVxpCZUH0G6Bade
-         31L3sPVDKoDQoLTwG1Ww+qJPQFg1+2hkvhNHjTg0Qhn6YsWmTSCdY9SDkrOOmIF2ILhx
-         5MCw==
-X-Gm-Message-State: ACrzQf23nropSqRGU+bQBeSHsxzMSTzh5Gyyr95AT5zHwVy5x9WGj/dd
-        Hums6r61PwwO6bgWZ+G+sjJCug==
-X-Google-Smtp-Source: AMsMyM6YB+L8bLYmn+hlc1I5brGQsvzfYouZ8a2S+xu0StVwOU25oSYcJOX2kxEwJeAgcOxQ9BS6WA==
-X-Received: by 2002:a17:903:cd:b0:186:878e:3b08 with SMTP id x13-20020a17090300cd00b00186878e3b08mr29228986plc.93.1667473276274;
-        Thu, 03 Nov 2022 04:01:16 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rdlSJiSDdFVNFGf7aj1iVzyqCpSjnjyK7zZt5V+eoFk=;
+        b=W2r/71qAsUwW6QwRQglHv0UJVSmy6mFthXDS/BW7btkGd9lsZbBij8+wTgPkHUAoiX
+         k4kcvliKX1ZnN1XyiZn9oSLw2tsUgg8g5ZIUCqM1g/19P3hSs29ONfQUEdFgggFsxnzu
+         F1zWkOhXfORxn3GIxrQ0EbCYq+mWyMPeM/GJo4voqhokJkuXw2G7SftwiMnsjP3W1AGT
+         P9EbfAzwTIWRPvyr+pwIBLMofNAvedERFrHkrnpl4Fk7X96oKqe0KdzmccowqwYr/3ZZ
+         LfQqCCaI83VI5H7S+4sru4y8R3PNdygXNvXE64RZkqi9AfHHz2tyoFrvk1H2OBa6W9LR
+         BJRg==
+X-Gm-Message-State: ACrzQf04aI0gpdnS5slXBd3FmwRXQzxtLvjpoK9R/6s5AXEbSv04e53P
+        80Bng5gslIkac0t2iKGVwXvGyw==
+X-Google-Smtp-Source: AMsMyM5Tmy8uLzzWKsj3p8zB/Bu8mxxZ/K6C/aTTqngKlL9AKMx2cTWBUah3RAb1oXK+BGWrxzA2qQ==
+X-Received: by 2002:a05:6a00:140f:b0:56e:1190:e731 with SMTP id l15-20020a056a00140f00b0056e1190e731mr7920554pfu.39.1667473287402;
+        Thu, 03 Nov 2022 04:01:27 -0700 (PDT)
 Received: from localhost ([122.172.84.80])
-        by smtp.gmail.com with ESMTPSA id x15-20020a170902ec8f00b001868bf6a7b8sm363976plg.146.2022.11.03.04.01.15
+        by smtp.gmail.com with ESMTPSA id gm22-20020a17090b101600b002132f3e71c6sm684726pjb.52.2022.11.03.04.01.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Nov 2022 04:01:15 -0700 (PDT)
+        Thu, 03 Nov 2022 04:01:22 -0700 (PDT)
 From:   Viresh Kumar <viresh.kumar@linaro.org>
 To:     James Calligeros <jcalligeros99@gmail.com>,
-        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
-        Viresh Kumar <vireshk@kernel.org>
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>
 Cc:     Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org,
         Vincent Guittot <vincent.guittot@linaro.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 0/5] OPP: Allow power/current values without voltage
-Date:   Thu,  3 Nov 2022 16:31:03 +0530
-Message-Id: <cover.1667473008.git.viresh.kumar@linaro.org>
+Subject: [PATCH 1/5] dt-bindings: opp: Fix usage of current in microwatt property
+Date:   Thu,  3 Nov 2022 16:31:04 +0530
+Message-Id: <f7eefa76db8c7d01b4bdaafa6acc4cb84c193fe0.1667473008.git.viresh.kumar@linaro.org>
 X-Mailer: git-send-email 2.31.1.272.g89b43f80a514
+In-Reply-To: <cover.1667473008.git.viresh.kumar@linaro.org>
+References: <cover.1667473008.git.viresh.kumar@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -73,38 +76,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+The bindings mentions "current" instead of "power". Fix it.
 
-Some platforms, such as Apple Silicon, do not describe their device's
-voltage regulators in the DT as they cannot be controlled by the kernel
-and/or rely on opaque firmware algorithms to control their voltage and
-current characteristics at runtime. They can, however, experimentally
-determine the power consumption of a given device at a given OPP, taking
-advantage of opp-microwatt to provide EAS on such devices as was initially
-intended.
+Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+---
+ Documentation/devicetree/bindings/opp/opp-v2-base.yaml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-But the OPP core currently doesn't parse the opp-microwatt property if
-opp-microvolt isn't present. This patch series targets to change this approach.
-
-This first fixes few mistakes in the DT bindings, followed by code
-reorganization. And the last commit, from James, fixes the problem at hand.
-
-I have tested all combinations on my Hikey board, hope it doesn't break
-anything.
-
-James Calligeros (1):
-  OPP: decouple dt properties in opp_parse_supplies()
-
-Viresh Kumar (4):
-  dt-bindings: opp: Fix usage of current in microwatt property
-  dt-bindings: opp: Fix named microwatt property
-  OPP: Parse named opp-microwatt property too
-  OPP: Simplify opp_parse_supplies() by restructuring it
-
- .../devicetree/bindings/opp/opp-v2-base.yaml  |   6 +-
- drivers/opp/of.c                              | 228 ++++++++----------
- 2 files changed, 102 insertions(+), 132 deletions(-)
-
+diff --git a/Documentation/devicetree/bindings/opp/opp-v2-base.yaml b/Documentation/devicetree/bindings/opp/opp-v2-base.yaml
+index 66d0ec763f0b..cb025b0a346d 100644
+--- a/Documentation/devicetree/bindings/opp/opp-v2-base.yaml
++++ b/Documentation/devicetree/bindings/opp/opp-v2-base.yaml
+@@ -108,7 +108,7 @@ select: false
+           The power for the OPP in micro-Watts.
+ 
+           Entries for multiple regulators shall be provided in the same field
+-          separated by angular brackets <>. If current values aren't required
++          separated by angular brackets <>. If power values aren't required
+           for a regulator, then it shall be filled with 0. If power values
+           aren't required for any of the regulators, then this field is not
+           required. The OPP binding doesn't provide any provisions to relate the
 -- 
 2.31.1.272.g89b43f80a514
 
