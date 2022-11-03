@@ -2,80 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 752CB61794F
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 10:02:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FC4F61795D
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 10:07:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231446AbiKCJCM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 05:02:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58950 "EHLO
+        id S229450AbiKCJHN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 05:07:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231419AbiKCJCG (ORCPT
+        with ESMTP id S230435AbiKCJHJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 05:02:06 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AA31DE97;
-        Thu,  3 Nov 2022 02:02:05 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id BD62166028FD;
-        Thu,  3 Nov 2022 09:02:02 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1667466123;
-        bh=510sRv24hOV1wpfQEDVR+KdeGI/4GV2/R4TwmE7oPTo=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=b7JGsFlCs/MU7fEVavBB6XxS8v6BhCjRuqpMmoKIDO0a9l1RNaXW2L6iFe3r/bG1m
-         X4j4kgy+y0d4+zrajo5whvXJtsV0DikSKzE1O0Uec1JtRvpNfbkvz7+1Wg3WkL3laY
-         7t1A28s7Am24y3vQ9ob45CGTcv7KATTpkQVdQB/V7mptozX1qdg/UJjC3qhXFe0DwA
-         B3TMK4xzBt9x+72LdAZoLXYZD1NTtF0jXy9/FAfQzwtEgjOlZShw1SWYhICP+oVd3E
-         F4IVMalJrfqjvG+0qsBie820NHmgh3y7yEG+zoJtNsI29MndXzqYpo65JIebFAnuMo
-         GQH+u99wHyRHw==
-Message-ID: <c1b8df00-2be6-9cf2-0e1e-b4c838fd12cc@collabora.com>
-Date:   Thu, 3 Nov 2022 10:02:00 +0100
+        Thu, 3 Nov 2022 05:07:09 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DAC4D122;
+        Thu,  3 Nov 2022 02:07:08 -0700 (PDT)
+Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.56])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4N2yYy1DMqz15MKK;
+        Thu,  3 Nov 2022 17:07:02 +0800 (CST)
+Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
+ dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 3 Nov 2022 17:07:06 +0800
+Received: from ubuntu1804.huawei.com (10.67.175.36) by
+ dggpemm500013.china.huawei.com (7.185.36.172) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 3 Nov 2022 17:07:06 +0800
+From:   Chen Zhongjin <chenzhongjin@huawei.com>
+To:     <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>
+CC:     <davem@davemloft.net>, <yoshfuji@linux-ipv6.org>,
+        <dsahern@kernel.org>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <lorenzo@google.com>,
+        <chenzhongjin@huawei.com>
+Subject: [PATCH net] net: ping6: Fix possible leaked pernet namespace in pingv6_init()
+Date:   Thu, 3 Nov 2022 17:03:45 +0800
+Message-ID: <20221103090345.187989-1-chenzhongjin@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [PATCH v6 1/2] ASoC: mediatek: dt-bindings: modify machine
- bindings for two MICs case
-Content-Language: en-US
-To:     Ajye Huang <ajye_huang@compal.corp-partner.google.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-mediatek@lists.infradead.org,
-        "chunxu . li" <chunxu.li@mediatek.com>,
-        Takashi Iwai <tiwai@suse.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Jiaxin Yu <jiaxin.yu@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        =?UTF-8?Q?N=c3=adcolas_F_=2e_R_=2e_A_=2e_Prado?= 
-        <nfraprado@collabora.com>, linux-arm-kernel@lists.infradead.org,
-        devicetree@vger.kernel.org, alsa-devel@alsa-project.org
-References: <20221102125936.2176748-1-ajye_huang@compal.corp-partner.google.com>
- <20221102125936.2176748-2-ajye_huang@compal.corp-partner.google.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20221102125936.2176748-2-ajye_huang@compal.corp-partner.google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.67.175.36]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpemm500013.china.huawei.com (7.185.36.172)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 02/11/22 13:59, Ajye Huang ha scritto:
-> Add a property "dmic-gpios" for switching between two MICs.
-> 
-> Signed-off-by: Ajye Huang <ajye_huang@compal.corp-partner.google.com>
+When IPv6 module initializing in pingv6_init(), inet6_register_protosw()
+is possible to fail but returns without any error cleanup.
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+This leaves wild ops in namespace list and when another module tries to
+add or delete pernet namespace it triggers page fault.
+Although IPv6 cannot be unloaded now, this error should still be handled
+to avoid kernel panic during IPv6 initialization.
 
+BUG: unable to handle page fault for address: fffffbfff80bab69
+CPU: 0 PID: 434 Comm: modprobe
+RIP: 0010:unregister_pernet_operations+0xc9/0x450
+Call Trace:
+ <TASK>
+ unregister_pernet_subsys+0x31/0x3e
+ nf_tables_module_exit+0x44/0x6a [nf_tables]
+ __do_sys_delete_module.constprop.0+0x34f/0x5b0
+ ...
+
+Fix it by adding error handling in pingv6_init(), and add a helper
+function pingv6_ops_unset to avoid duplicate code.
+
+Fixes: d862e5461423 ("net: ipv6: Implement /proc/net/icmp6.")
+Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
+---
+ net/ipv6/ping.c | 30 ++++++++++++++++++++++--------
+ 1 file changed, 22 insertions(+), 8 deletions(-)
+
+diff --git a/net/ipv6/ping.c b/net/ipv6/ping.c
+index 86c26e48d065..5df688dd5208 100644
+--- a/net/ipv6/ping.c
++++ b/net/ipv6/ping.c
+@@ -277,10 +277,21 @@ static struct pernet_operations ping_v6_net_ops = {
+ };
+ #endif
+ 
++static void pingv6_ops_unset(void)
++{
++	pingv6_ops.ipv6_recv_error = dummy_ipv6_recv_error;
++	pingv6_ops.ip6_datagram_recv_common_ctl = dummy_ip6_datagram_recv_ctl;
++	pingv6_ops.ip6_datagram_recv_specific_ctl = dummy_ip6_datagram_recv_ctl;
++	pingv6_ops.icmpv6_err_convert = dummy_icmpv6_err_convert;
++	pingv6_ops.ipv6_icmp_error = dummy_ipv6_icmp_error;
++	pingv6_ops.ipv6_chk_addr = dummy_ipv6_chk_addr;
++}
++
+ int __init pingv6_init(void)
+ {
++	int ret;
+ #ifdef CONFIG_PROC_FS
+-	int ret = register_pernet_subsys(&ping_v6_net_ops);
++	ret = register_pernet_subsys(&ping_v6_net_ops);
+ 	if (ret)
+ 		return ret;
+ #endif
+@@ -291,7 +302,15 @@ int __init pingv6_init(void)
+ 	pingv6_ops.icmpv6_err_convert = icmpv6_err_convert;
+ 	pingv6_ops.ipv6_icmp_error = ipv6_icmp_error;
+ 	pingv6_ops.ipv6_chk_addr = ipv6_chk_addr;
+-	return inet6_register_protosw(&pingv6_protosw);
++
++	ret = inet6_register_protosw(&pingv6_protosw);
++	if (ret) {
++		pingv6_ops_unset();
++#ifdef CONFIG_PROC_FS
++		unregister_pernet_subsys(&ping_v6_net_ops);
++#endif
++	}
++	return ret;
+ }
+ 
+ /* This never gets called because it's not possible to unload the ipv6 module,
+@@ -299,12 +318,7 @@ int __init pingv6_init(void)
+  */
+ void pingv6_exit(void)
+ {
+-	pingv6_ops.ipv6_recv_error = dummy_ipv6_recv_error;
+-	pingv6_ops.ip6_datagram_recv_common_ctl = dummy_ip6_datagram_recv_ctl;
+-	pingv6_ops.ip6_datagram_recv_specific_ctl = dummy_ip6_datagram_recv_ctl;
+-	pingv6_ops.icmpv6_err_convert = dummy_icmpv6_err_convert;
+-	pingv6_ops.ipv6_icmp_error = dummy_ipv6_icmp_error;
+-	pingv6_ops.ipv6_chk_addr = dummy_ipv6_chk_addr;
++	pingv6_ops_unset();
+ #ifdef CONFIG_PROC_FS
+ 	unregister_pernet_subsys(&ping_v6_net_ops);
+ #endif
+-- 
+2.17.1
 
