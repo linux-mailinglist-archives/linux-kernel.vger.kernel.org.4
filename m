@@ -2,105 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0DD46185D9
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 18:11:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3302C6185EA
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 18:12:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232017AbiKCRLm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 13:11:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37714 "EHLO
+        id S232036AbiKCRM3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 13:12:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231907AbiKCRKr (ORCPT
+        with ESMTP id S231411AbiKCRLe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 13:10:47 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A5B12706
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 10:10:46 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id c2so2512354plz.11
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 10:10:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/Zw/xbrx1mfYNmLCyYGWO3RwLiclCaks9djofi27mHQ=;
-        b=Y3+twozvFsaxlvdGpWADTdQU3zUwjGsS2nxkmdv6zVXX4LBt31WCsHVISg4/3lopgM
-         KyLl5QDy60CRumW9iiYkm76Nz8jXVNx5ExoUV8OEl8uAMg2ytTWn/NnASUwNxQfPoQw5
-         2Wb5y+FbNiM40s3VaiatAIiqlbyR24Cl1Fwp8AqTmm/33aJy2rWJRo900bwT6vGcE2TP
-         uLwbznp1CMg7CwGexGPli7T8ZICgQwFkTod7srBnp5tO2PIotLLVCYMYubH9r5eSG5DH
-         LE8eVKT2CKnzBDAvVl5q6KWk8PDKI0B63mtwxDrLIp7EsWf/KXbNrAzYU2+jR8GSbrMm
-         f21A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/Zw/xbrx1mfYNmLCyYGWO3RwLiclCaks9djofi27mHQ=;
-        b=SdN/ljBT7m/+kAnwCvGAqRa9HiA2c/GP9Jz0cqVVc9yv65vnuATs5BMznkVB4Ewqi4
-         fl2gZpTl/+nNmY3cQ/wAUZr0RpuobOQXdgd05ZgivKtFqtqdQP9/iW01a+heMDqrhEDK
-         2xRmg7Vh9HKvsjIZF5TDogtZWPuiO4wToNSC8mpBotzew6aYl5SPulDXDUD5FNPD0G5U
-         88Us1T8QUzTmDsxSvkxU8JB6bKU/rEyeBWAXv08SPDRlntmRR0I94n+u06jzsr4BmZrw
-         +eJ3EhObAq7dcu+We4y7UdJeAXIujyfMP/zCdUT3Z9lvOWGXs3JIfowF9nWK3LKxD1JT
-         4Atw==
-X-Gm-Message-State: ACrzQf35B+nrI/uv1aZqa6BEuMEBp70fT88k0i5vvbdCoPqS0yIU8eR8
-        9DLzgoDhCBT3aqkWu9QPpNU=
-X-Google-Smtp-Source: AMsMyM4DEgOZ5StLPoF3czSLE+zMqwxW+raJTUzURNiiYqiiy+SeY2VS8B6fRLlQ1Rz61sjl+zn5sw==
-X-Received: by 2002:a17:902:e402:b0:186:6f1d:b463 with SMTP id m2-20020a170902e40200b001866f1db463mr30548171ple.23.1667495445609;
-        Thu, 03 Nov 2022 10:10:45 -0700 (PDT)
-Received: from google.com ([2620:15c:211:201:3d65:7dc2:c62a:5d98])
-        by smtp.gmail.com with ESMTPSA id w8-20020aa79a08000000b0056d98e31439sm1011141pfj.140.2022.11.03.10.10.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Nov 2022 10:10:44 -0700 (PDT)
-Sender: Minchan Kim <minchan.kim@gmail.com>
-Date:   Thu, 3 Nov 2022 10:10:42 -0700
-From:   Minchan Kim <minchan@kernel.org>
-To:     Sergey Senozhatsky <senozhatsky@chromium.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Nitin Gupta <ngupta@vflare.org>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: Re: [PATCHv4 2/9] zram: Add recompression algorithm sysfs knob
-Message-ID: <Y2P2EhgSCyeFqMBj@google.com>
-References: <20221018045533.2396670-1-senozhatsky@chromium.org>
- <20221018045533.2396670-3-senozhatsky@chromium.org>
- <Y2LP0OWF/WTnkSne@google.com>
- <Y2Mv4l+V9iCv9EMg@google.com>
- <Y2M7g9fFWoa+MPh/@google.com>
+        Thu, 3 Nov 2022 13:11:34 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99FFE1A23B;
+        Thu,  3 Nov 2022 10:11:06 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 515BE21C4A;
+        Thu,  3 Nov 2022 17:11:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1667495465; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=X3iAPKntN8bwEwSZKuEYeP/9JRqwBa3SZbFPVF6pxVM=;
+        b=vR9OkHI9NPjlluxOknVMsYrw7uh/arpCvfU0ytSr/PsFpF6U/ETxnLg2UHflMUAuADAW+I
+        ycrlTizsIHpIQIZbievRSrhD34q0EctoUFu5NpadeIwhQQlWXYkzGVEn8eSA83aQU5UoBa
+        9hUN13smcE8Sdloq56qPpTViFXOWxkQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1667495465;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=X3iAPKntN8bwEwSZKuEYeP/9JRqwBa3SZbFPVF6pxVM=;
+        b=Pcpy6hkqntziw2oZvSI3CC7+3FS6jLwCGOqP6YiDvIvCa/balcuTqKiSIXCBTzid2FRHHE
+        eNtlYnCDW03B35DQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 2580A13AAF;
+        Thu,  3 Nov 2022 17:11:05 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id VFWXCCn2Y2PvWQAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Thu, 03 Nov 2022 17:11:05 +0000
+Message-ID: <fccfaa2a-07f0-7d4d-027b-ec283a1cb748@suse.cz>
+Date:   Thu, 3 Nov 2022 18:11:04 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y2M7g9fFWoa+MPh/@google.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        FSL_HELO_FAKE,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH] mm/slab_common: repair kernel-doc for __ksize()
+Content-Language: en-US
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Kees Cook <keescook@chromium.org>, linux-mm@kvack.org
+Cc:     Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221031092920.976-1-lukas.bulwahn@gmail.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20221031092920.976-1-lukas.bulwahn@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 03, 2022 at 12:54:43PM +0900, Sergey Senozhatsky wrote:
-> On (22/11/03 12:05), Sergey Senozhatsky wrote:
-> > [..]
-> > > Just open question(I might be too paranoid?)
-> > > 
-> > > I am thinking someone want to add third comp algorithm in future
-> > > to balance decompression and memory efficiency.
-> > > 
-> > > If it's not too crazy idea, let's think about the interface.
-> > > Maybe, could we make the recomp knobs works like list?
-> > > 
-> > > # A primary comp
-> > > echo "A" > /zram/comp_algo
-> > > 
-> > > # Multiple secondary comps
-> > > echo "B threshold" > /zram/add_recomp_algo
-> > > echo "C threshold" > /zram/add_recomp_algo
-> > > echo "D threshold" > /zram/add_recomp_algo
+On 10/31/22 10:29, Lukas Bulwahn wrote:
+> Commit 445d41d7a7c1 ("Merge branch 'slab/for-6.1/kmalloc_size_roundup' into
+> slab/for-next") resolved a conflict of two concurrent changes to __ksize().
 > 
-> As a side note:
-> The way it's implemented currently is that comps is an array, so we
-> can store more comps there. I sort of was thinking that we probably
-> can have more than two algos at some point the in the future (hence
-> the MULTI_COMPRESS config option).
+> However, it did not adjust the kernel-doc comment of __ksize(), while the
+> name of the argument to __ksize() was renamed.
+> 
+> Hence, ./scripts/ kernel-doc -none mm/slab_common.c warns about it.
+> 
+> Adjust the kernel-doc comment for __ksize() for make W=1 happiness.
+> 
+> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
 
-Sure.
+Thanks! Adding to slab/for-6.1-rc4/fixes
+
+Vlastimil
+
+> ---
+>  mm/slab_common.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/mm/slab_common.c b/mm/slab_common.c
+> index 33b1886b06eb..74a991fd9d31 100644
+> --- a/mm/slab_common.c
+> +++ b/mm/slab_common.c
+> @@ -1010,7 +1010,7 @@ EXPORT_SYMBOL(kfree);
+>  
+>  /**
+>   * __ksize -- Report full size of underlying allocation
+> - * @objp: pointer to the object
+> + * @object: pointer to the object
+>   *
+>   * This should only be used internally to query the true size of allocations.
+>   * It is not meant to be a way to discover the usable size of an allocation
+> @@ -1018,7 +1018,7 @@ EXPORT_SYMBOL(kfree);
+>   * the originally requested allocation size may trigger KASAN, UBSAN_BOUNDS,
+>   * and/or FORTIFY_SOURCE.
+>   *
+> - * Return: size of the actual memory used by @objp in bytes
+> + * Return: size of the actual memory used by @object in bytes
+>   */
+>  size_t __ksize(const void *object)
+>  {
+
