@@ -2,128 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 457D76180AE
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 16:10:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4125C6180A9
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 16:10:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232100AbiKCPKq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 11:10:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49178 "EHLO
+        id S232099AbiKCPJ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 11:09:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232086AbiKCPKT (ORCPT
+        with ESMTP id S232094AbiKCPJ1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 11:10:19 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AC621C91D
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 08:08:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667488098;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=MLzJVyRQvNMkBYTyqF+CAZ1OHQes3dhnjH8NkXHBEKk=;
-        b=FrT37/qLSZklV8qCdqtQsv9474p7GTCJhbbybK9bc+vrslLQCAQK/k/u/bsdbFk105jplt
-        UBjAVWSBgEHOpseZeSoeYMzPjyT20BNcH+UKBwOiCT45q2Xy2iXNeKoV0/AZfWIRMcf1aF
-        n+oNKLgnKTIk7iXNQwZgHgXgLi+wetk=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-342-tCysd6cGOlWq9lY8z3IViA-1; Thu, 03 Nov 2022 11:08:17 -0400
-X-MC-Unique: tCysd6cGOlWq9lY8z3IViA-1
-Received: by mail-ed1-f72.google.com with SMTP id y20-20020a056402271400b004630f3a32c3so1587313edd.15
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 08:08:16 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=MLzJVyRQvNMkBYTyqF+CAZ1OHQes3dhnjH8NkXHBEKk=;
-        b=S3W3pcFTdHGsENPZwj6rqzUdoKZO8JwQmKoAUi3QsNgd4jow7w6pLAg/YIy04rjLN2
-         svf5i91soauuy/YqNGlc+L87TFSAq1M5wJ5TWT/M+dwsn8Tpt5C5fMcz6A4LTAoDqj6/
-         HbA9lSIeNLComAwTsKbUGFd/4gTlRWcq40hBCSBFiolnCf8MifLXvqp0P93ma1qBDHeQ
-         N3b/1CRuQja1cGo260p0XzpiPjJ4sq9ds99nvSQBDB4cPIs03JmbPaflM7kPjeNKPCjl
-         QC52RT1cPhLg9QdXBfSlwQPgYXNLOxF0pZSXO2O9BMXBb5J3JsGtOO/cnwecMW0Gc8Hg
-         3nvQ==
-X-Gm-Message-State: ACrzQf0vNiASIOm7r/lAFu+5KTctz+k3Wcks75zRDBeSol6dsX3rd4Sw
-        0l0sBDZG2pGNXkUbDYcNjR+9PO5SBsQALWjNi0hI9ql41dESUdnp88w9p5GcII+uSD2XyzIZdOr
-        qYlyW+8u+uBVH0e0sFfc5CULg
-X-Received: by 2002:a05:6402:550e:b0:456:f79f:2bed with SMTP id fi14-20020a056402550e00b00456f79f2bedmr31117697edb.106.1667488092994;
-        Thu, 03 Nov 2022 08:08:12 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM6ksX1XHskAylW8hRvHj1WJtzsGVm4o7GE4R3Qlz1mullFc3dI571812AyMzkQixxOznTrmOg==
-X-Received: by 2002:a05:6402:550e:b0:456:f79f:2bed with SMTP id fi14-20020a056402550e00b00456f79f2bedmr31117664edb.106.1667488092781;
-        Thu, 03 Nov 2022 08:08:12 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:1c09:f536:3de6:228c? ([2001:b07:6468:f312:1c09:f536:3de6:228c])
-        by smtp.googlemail.com with ESMTPSA id s28-20020a056402037c00b0045bccd8ab83sm646641edw.1.2022.11.03.08.08.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Nov 2022 08:08:11 -0700 (PDT)
-Message-ID: <bfa98587-3b36-3834-a4b9-585a0e0aa56a@redhat.com>
-Date:   Thu, 3 Nov 2022 16:08:09 +0100
+        Thu, 3 Nov 2022 11:09:27 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 789F45FBA;
+        Thu,  3 Nov 2022 08:08:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 31F8BB828DB;
+        Thu,  3 Nov 2022 15:08:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25534C433D6;
+        Thu,  3 Nov 2022 15:08:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667488102;
+        bh=KhRW53DoqMIL02J6y2okdVdA8j0iIM0VREqjEufLwkM=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=BggIhs21AGl3tcUI1M35R8FkXZUaa16Ldc6OBqymKfDnolM+r30o6tE6zI+/qzHdU
+         m4xkeaLBPUANkFqc3ZUGCc8SKB5iuCZ9SUF5Hbyp2SMPYTXoNwrGg/X3ls5A3SV8Og
+         0XaWZJLVcnUu73kof2GiMUkOwj950T2ocNPnRxgYBQENcYWmiEn7nWjKmalul1JY9r
+         mZhk8jGuEYR8/9N5QkSdYgyHtkxmtBRIc5BdLIVec1gpJvul7kpifhP+gdBEFcws98
+         ZiI0osnH+g0aOzEOBVZ9AicdMxchQnL80eMSc18YVKDjX678KCCbT4WBOnP2h5F2K0
+         OIGDqup0y4QHw==
+From:   Mark Brown <broonie@kernel.org>
+To:     Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Sean Nyekjaer <sean@geanix.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Alain Volmat <alain.volmat@foss.st.com>
+Cc:     linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20221103080043.3033414-1-sean@geanix.com>
+References: <20221103080043.3033414-1-sean@geanix.com>
+Subject: Re: [PATCH] spi: stm32: fix stm32_spi_prepare_mbr() that halves spi clk for every run
+Message-Id: <166748810082.250043.8488161005893728423.b4-ty@kernel.org>
+Date:   Thu, 03 Nov 2022 15:08:20 +0000
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH 33/44] KVM: x86: Do VMX/SVM support checks directly in
- vendor code
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Anup Patel <anup@brainfault.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        Eric Farman <farman@linux.ibm.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc:     James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Atish Patra <atishp@atishpatra.org>,
-        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Isaku Yamahata <isaku.yamahata@intel.com>,
-        Fabiano Rosas <farosas@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Chao Gao <chao.gao@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Yuan Yao <yuan.yao@intel.com>
-References: <20221102231911.3107438-1-seanjc@google.com>
- <20221102231911.3107438-34-seanjc@google.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20221102231911.3107438-34-seanjc@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.10.0-dev-fc921
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/3/22 00:19, Sean Christopherson wrote:
-> +	if (!boot_cpu_has(X86_FEATURE_MSR_IA32_FEAT_CTL) ||
-> +	    !boot_cpu_has(X86_FEATURE_VMX)) {
-> +		pr_err("VMX not enabled in MSR_IA32_FEAT_CTL\n");
-> +		return false;
+On Thu, 3 Nov 2022 09:00:42 +0100, Sean Nyekjaer wrote:
+> When this driver is used with a driver that uses preallocated spi_transfer
+> structs. The speed_hz is halved by every run. This results in:
+> 
+> spi_stm32 44004000.spi: SPI transfer setup failed
+> ads7846 spi0.0: SPI transfer failed: -22
+> 
+> Example when running with DIV_ROUND_UP():
+> - First run; speed_hz = 1000000, spi->clk_rate 125000000
+>   div 125 -> mbrdiv = 7, cur_speed = 976562
+> - Second run; speed_hz = 976562
+>   div 128,00007 (roundup to 129) -> mbrdiv = 8, cur_speed = 488281
+> - Third run; speed_hz = 488281
+>   div 256,000131072067109 (roundup to 257) and then -EINVAL is returned.
+> 
+> [...]
 
-I think the reference to the BIOS should remain in these messages and in 
-svm.c (even though these days it's much less common for vendors to 
-default to disabled virtualization in the system setup).
+Applied to
 
-The check for X86_FEATURE_MSR_IA32_FEAT_CTL is not needed because 
-init_ia32_feat_ctl() will clear X86_FEATURE_VMX if the rdmsr fail (and 
-not set X86_FEATURE_MSR_IA32_FEAT_CTL).
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-Paolo
+Thanks!
 
+[1/1] spi: stm32: fix stm32_spi_prepare_mbr() that halves spi clk for every run
+      commit: 62aa1a344b0904549f6de7af958e8a1136fd5228
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
