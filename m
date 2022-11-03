@@ -2,189 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD3A661768A
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 07:04:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0903617690
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 07:06:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229770AbiKCGD6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 02:03:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43020 "EHLO
+        id S229591AbiKCGG1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 02:06:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229875AbiKCGDy (ORCPT
+        with ESMTP id S229531AbiKCGGU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 02:03:54 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BA4A19280
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 23:03:53 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id o7so716868pjj.1
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 23:03:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=vcRPdTV+WHrAGCtQC2DiKk2qf+ALI9TLfQTYJZ4jJzU=;
-        b=nHMjJVtMxmTIzf2SCJTSZI8zPM1b+mG2EXn9V6MK0pgbT7qfY3VOu+H/BmRcHFvppS
-         9Un+JTe85Imf4beW1yi4D9Ips5UD9pcQk82+5ZOPH3hh4QF8UUfYCS2ibY1R/hLdGkMs
-         yywa47cffiRjPj6E2Ai5H2WJ84Pn7cyrNqhas=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vcRPdTV+WHrAGCtQC2DiKk2qf+ALI9TLfQTYJZ4jJzU=;
-        b=PZqnL3wjhmtSUbxmLCHSz61Kc4Ab2jgFw81UBDg88COBZvGCbjEl/W2jEJKQ+47sGQ
-         jZ8l28Cb2+7x9i85VONuevolCfP6iz3dKnrBvzyBRZLRXVVlxD8AieGwR5eFTBHtnXfN
-         9Q4bcvszf/Wdd+IfYFnZdEwEHbhhX3z+07dTy3EPWpO1F6m+PeskejqhZwu6/0a8Y8Wv
-         otq0XSxMVUs3R2sbiX6Og5nBm+ZadbKswuDpx84iyWrzbqBw/C0dqhnsbp/7JUqLKRnm
-         ZAf+4FAbcE3lFCXY6j8amfcW+74Sm6ju1MmrBNuzr4F0MYZKeMnN6RP+h9vqw842vJrT
-         BAEg==
-X-Gm-Message-State: ACrzQf0LrsNycpQHh/Ztq8Pz2WQZtfK+zaU/sD8i35lN0dR42l5v3QnG
-        Wxz6Gmql4a4WwS2Q8PvrClOQfQ==
-X-Google-Smtp-Source: AMsMyM5Lgg4d1HWZx4U9r1HuArlLezm+6Cgwa2h+aatIn3Tt+M5tHsQPX4DWSi3/GzOXxo4OXBxTtA==
-X-Received: by 2002:a17:902:ce92:b0:187:2938:2fca with SMTP id f18-20020a170902ce9200b0018729382fcamr16935349plg.7.1667455432892;
-        Wed, 02 Nov 2022 23:03:52 -0700 (PDT)
-Received: from google.com ([240f:75:7537:3187:f22:e30:374d:5a2b])
-        by smtp.gmail.com with ESMTPSA id q16-20020a17090311d000b001745662d568sm9359633plh.278.2022.11.02.23.03.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Nov 2022 23:03:52 -0700 (PDT)
-Date:   Thu, 3 Nov 2022 15:03:48 +0900
-From:   Sergey Senozhatsky <senozhatsky@chromium.org>
-To:     Minchan Kim <minchan@kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Nitin Gupta <ngupta@vflare.org>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, Sergey Senozhatsky <senozhatsky@chromium.org>
-Subject: Re: [PATCHv4 4/9] zram: Introduce recompress sysfs knob
-Message-ID: <Y2NZxD5SpHEObPaE@google.com>
-References: <20221018045533.2396670-1-senozhatsky@chromium.org>
- <20221018045533.2396670-5-senozhatsky@chromium.org>
- <Y2Lbxp6to4QNYyGe@google.com>
- <Y2M0t5etyJiUfeQi@google.com>
+        Thu, 3 Nov 2022 02:06:20 -0400
+Received: from mx0b-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA2B3192B8;
+        Wed,  2 Nov 2022 23:06:18 -0700 (PDT)
+Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
+        by mx0a-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2A35Jk7l028197;
+        Wed, 2 Nov 2022 23:06:04 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=pfpt0220; bh=aUwPKMHMtxeBcSQnf7JFwYu10iJp0Z7AtIcoHeJlaZA=;
+ b=DP28xSZ3/UoG+0VaSJtdWzeNL0A0VX8iG272KUXbgoCfcJLznlm5M6vBI5effajt5k72
+ Dfp3I5dJ3uJGzZDTsdmDNhIa554gYcoCd6laOr8p/FLQz//PWkB/34ZAfkJawBJceKjU
+ FNbDbuUM7l+qsfkdlSd4Lgbbfad9J8nZg0GMM6HT3l3wf3nQGZkLsKYWQyF3TZ/1loVh
+ 2GBXCJiyUIk6HGOyJfAaDwJNAUvzvOZ/+aj6nqGMm8/lX1RtWK2AhJ+ycNhe9leUJ6ny
+ trBgXxH9prurLPkx/CiXCiasODprkINSNSu4IGL+Erm9wFF3YOgSFv4Dy2PRAGo37iR5 EQ== 
+Received: from dc5-exch02.marvell.com ([199.233.59.182])
+        by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 3km7da05g3-4
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Wed, 02 Nov 2022 23:06:03 -0700
+Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH02.marvell.com
+ (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Wed, 2 Nov
+ 2022 23:06:02 -0700
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
+ (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.18 via Frontend
+ Transport; Wed, 2 Nov 2022 23:06:02 -0700
+Received: from sburla-PowerEdge-T630.caveonetworks.com (unknown [10.106.27.217])
+        by maili.marvell.com (Postfix) with ESMTP id 3179A3F70FA;
+        Wed,  2 Nov 2022 23:06:02 -0700 (PDT)
+From:   Veerasenareddy Burru <vburru@marvell.com>
+To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <lironh@marvell.com>, <aayarekar@marvell.com>,
+        <sedara@marvell.com>, <sburla@marvell.com>
+CC:     <linux-doc@vger.kernel.org>,
+        Veerasenareddy Burru <vburru@marvell.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "Jonathan Corbet" <corbet@lwn.net>
+Subject: [PATCH net-next v4] octeon_ep: support Octeon device CNF95N
+Date:   Wed, 2 Nov 2022 23:05:57 -0700
+Message-ID: <20221103060600.1858-1-vburru@marvell.com>
+X-Mailer: git-send-email 2.36.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y2M0t5etyJiUfeQi@google.com>
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: pwUKfBp_NGNOlz2YE4KrArP1yccwGy2H
+X-Proofpoint-GUID: pwUKfBp_NGNOlz2YE4KrArP1yccwGy2H
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-02_15,2022-11-02_01,2022-06-22_01
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On (22/11/03 12:25), Sergey Senozhatsky wrote:
-> > or we can introduce the threshold with action item.
-> >   
-> >   echo "idle 888" > /sys/block/zram0/recompress
-> >   echo "huge 888" > /sys/block/zram0/recompress
-> >   echo "normal 888" > /sys/block/zram0/recompress
-> 
-> I like the latter one, when threshold is an optional argument.
-> I probably would even go a bit further and add keywords:
-> 
-> 	type=STRING threshold=INT
+Add support for Octeon device CNF95N.
+CNF95N is a Octeon Fusion family product with same PCI NIC
+characteristics as CN93 which is currently supported by the driver.
 
-E.g. recompress support for type= and optional threshold=
+update supported device list in Documentation.
 
-We kind of don't have a use case of type=normal, as it is an equivalent
-of no type. So we have huge, idle, huge_idle and no param means all
-pages (which is sort of logical). threshold is optional.
-
+Signed-off-by: Veerasenareddy Burru <vburru@marvell.com>
 ---
- drivers/block/zram/zram_drv.c | 55 ++++++++++++++++++++++-------------
- 1 file changed, 34 insertions(+), 21 deletions(-)
+V3 -> V4:
+  - fix the lines exceeding 80 columns
+V2 -> V3:
+  - fixed the prefix in subject: "net-next PATCH" to "PATCH net-next".
+V1 -> V2:
+  - update supported device list in Documentation.
 
-diff --git a/drivers/block/zram/zram_drv.c b/drivers/block/zram/zram_drv.c
-index 9a614253de07..12f03745baf9 100644
---- a/drivers/block/zram/zram_drv.c
-+++ b/drivers/block/zram/zram_drv.c
-@@ -1688,7 +1688,7 @@ static int zram_bvec_write(struct zram *zram, struct bio_vec *bvec,
-  * Corresponding ZRAM slot should be locked.
-  */
- static int zram_recompress(struct zram *zram, u32 index, struct page *page,
--			   int size_watermark)
-+			   int size_threshold)
- {
- 	unsigned long handle_prev;
- 	unsigned long handle_next;
-@@ -1708,7 +1708,7 @@ static int zram_recompress(struct zram *zram, u32 index, struct page *page,
- 	/*
- 	 * Do not recompress objects that are already "small enough".
- 	 */
--	if (comp_len_prev < size_watermark)
-+	if (comp_len_prev < size_threshold)
- 		return 0;
+ .../ethernet/marvell/octeon_ep.rst            |  1 +
+ .../ethernet/marvell/octeon_ep/octep_main.c   | 20 ++++++++++++++++---
+ .../ethernet/marvell/octeon_ep/octep_main.h   |  2 ++
+ 3 files changed, 20 insertions(+), 3 deletions(-)
+
+diff --git a/Documentation/networking/device_drivers/ethernet/marvell/octeon_ep.rst b/Documentation/networking/device_drivers/ethernet/marvell/octeon_ep.rst
+index bc562c49011b..cad96c8d1f97 100644
+--- a/Documentation/networking/device_drivers/ethernet/marvell/octeon_ep.rst
++++ b/Documentation/networking/device_drivers/ethernet/marvell/octeon_ep.rst
+@@ -23,6 +23,7 @@ Supported Devices
+ =================
+ Currently, this driver support following devices:
+  * Network controller: Cavium, Inc. Device b200
++ * Network controller: Cavium, Inc. Device b400
  
- 	ret = zram_read_from_zspool(zram, page, index);
-@@ -1780,29 +1780,42 @@ static ssize_t recompress_store(struct device *dev,
- {
- 	struct zram *zram = dev_to_zram(dev);
- 	unsigned long nr_pages = zram->disksize >> PAGE_SHIFT;
-+	char *args, *param, *val;
- 	unsigned long index;
- 	struct page *page;
- 	ssize_t ret;
--	int mode, size_watermark = 0;
--
--	if (sysfs_streq(buf, "idle")) {
--		mode = RECOMPRESS_IDLE;
--	} else if (sysfs_streq(buf, "huge")) {
--		mode = RECOMPRESS_HUGE;
--	} else if (sysfs_streq(buf, "huge_idle")) {
--		mode = RECOMPRESS_IDLE | RECOMPRESS_HUGE;
--	} else {
--		/*
--		 * We will re-compress only idle objects equal or greater
--		 * in size than watermark.
--		 */
--		ret = kstrtoint(buf, 10, &size_watermark);
--		if (ret)
--			return ret;
--		mode = RECOMPRESS_IDLE;
-+	int mode = 0, size_threshold = 0;
-+
-+	args = skip_spaces(buf);
-+	while (*args) {
-+		args = next_arg(args, &param, &val);
-+
-+		if (!*val)
-+			return -EINVAL;
-+
-+		if (!strcmp(param, "type")) {
-+			if (!strcmp(val, "idle"))
-+				mode = RECOMPRESS_IDLE;
-+			if (!strcmp(val, "huge"))
-+				mode = RECOMPRESS_HUGE;
-+			if (!strcmp(val, "huge_idle"))
-+				mode = RECOMPRESS_IDLE | RECOMPRESS_HUGE;
-+			continue;
-+		}
-+
-+		if (!strcmp(param, "threshold")) {
-+			/*
-+			 * We will re-compress only idle objects equal or
-+			 * greater in size than watermark.
-+			 */
-+			ret = kstrtoint(val, 10, &size_threshold);
-+			if (ret)
-+				return ret;
-+			continue;
-+		}
+ Interface Control
+ =================
+diff --git a/drivers/net/ethernet/marvell/octeon_ep/octep_main.c b/drivers/net/ethernet/marvell/octeon_ep/octep_main.c
+index 9089adcb75f9..1cbfa800a8af 100644
+--- a/drivers/net/ethernet/marvell/octeon_ep/octep_main.c
++++ b/drivers/net/ethernet/marvell/octeon_ep/octep_main.c
+@@ -23,6 +23,7 @@ struct workqueue_struct *octep_wq;
+ /* Supported Devices */
+ static const struct pci_device_id octep_pci_id_tbl[] = {
+ 	{PCI_DEVICE(PCI_VENDOR_ID_CAVIUM, OCTEP_PCI_DEVICE_ID_CN93_PF)},
++	{PCI_DEVICE(PCI_VENDOR_ID_CAVIUM, OCTEP_PCI_DEVICE_ID_CNF95N_PF)},
+ 	{0, },
+ };
+ MODULE_DEVICE_TABLE(pci, octep_pci_id_tbl);
+@@ -907,6 +908,18 @@ static void octep_ctrl_mbox_task(struct work_struct *work)
  	}
+ }
  
--	if (size_watermark > PAGE_SIZE)
-+	if (size_threshold > PAGE_SIZE)
- 		return -EINVAL;
++static const char *octep_devid_to_str(struct octep_device *oct)
++{
++	switch (oct->chip_id) {
++	case OCTEP_PCI_DEVICE_ID_CN93_PF:
++		return "CN93XX";
++	case OCTEP_PCI_DEVICE_ID_CNF95N_PF:
++		return "CNF95N";
++	default:
++		return "Unsupported";
++	}
++}
++
+ /**
+  * octep_device_setup() - Setup Octeon Device.
+  *
+@@ -939,9 +952,10 @@ int octep_device_setup(struct octep_device *oct)
  
- 	down_read(&zram->init_lock);
-@@ -1841,7 +1854,7 @@ static ssize_t recompress_store(struct device *dev,
- 		    zram_test_flag(zram, index, ZRAM_RECOMP_SKIP))
- 			goto next;
+ 	switch (oct->chip_id) {
+ 	case OCTEP_PCI_DEVICE_ID_CN93_PF:
+-		dev_info(&pdev->dev,
+-			 "Setting up OCTEON CN93XX PF PASS%d.%d\n",
+-			 OCTEP_MAJOR_REV(oct), OCTEP_MINOR_REV(oct));
++	case OCTEP_PCI_DEVICE_ID_CNF95N_PF:
++		dev_info(&pdev->dev, "Setting up OCTEON %s PF PASS%d.%d\n",
++			 octep_devid_to_str(oct), OCTEP_MAJOR_REV(oct),
++			 OCTEP_MINOR_REV(oct));
+ 		octep_device_setup_cn93_pf(oct);
+ 		break;
+ 	default:
+diff --git a/drivers/net/ethernet/marvell/octeon_ep/octep_main.h b/drivers/net/ethernet/marvell/octeon_ep/octep_main.h
+index 025626a61383..123ffc13754d 100644
+--- a/drivers/net/ethernet/marvell/octeon_ep/octep_main.h
++++ b/drivers/net/ethernet/marvell/octeon_ep/octep_main.h
+@@ -21,6 +21,8 @@
+ #define  OCTEP_PCI_DEVICE_ID_CN93_PF 0xB200
+ #define  OCTEP_PCI_DEVICE_ID_CN93_VF 0xB203
  
--		err = zram_recompress(zram, index, page, size_watermark);
-+		err = zram_recompress(zram, index, page, size_threshold);
- next:
- 		zram_slot_unlock(zram, index);
- 		if (err) {
++#define  OCTEP_PCI_DEVICE_ID_CNF95N_PF 0xB400    //95N PF
++
+ #define  OCTEP_MAX_QUEUES   63
+ #define  OCTEP_MAX_IQ       OCTEP_MAX_QUEUES
+ #define  OCTEP_MAX_OQ       OCTEP_MAX_QUEUES
+
+base-commit: d3a4706339da26633316357efe7ab9a92ff29b2a
 -- 
-2.38.1.273.g43a17bfeac-goog
+2.36.0
 
