@@ -2,172 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C770C6178C0
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 09:34:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A6D66178C6
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 09:35:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231128AbiKCIeY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 04:34:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40976 "EHLO
+        id S231169AbiKCIfP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 04:35:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230383AbiKCIeP (ORCPT
+        with ESMTP id S230271AbiKCIfN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 04:34:15 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 063AF2705;
-        Thu,  3 Nov 2022 01:34:13 -0700 (PDT)
-Received: from loongson.cn (unknown [10.180.13.64])
-        by gateway (Coremail) with SMTP id _____8BxXbcFfWNjzy8EAA--.5317S3;
-        Thu, 03 Nov 2022 16:34:13 +0800 (CST)
-Received: from localhost.localdomain (unknown [10.180.13.64])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxV1cAfWNjsYcLAA--.15570S3;
-        Thu, 03 Nov 2022 16:34:12 +0800 (CST)
-From:   Yinbo Zhu <zhuyinbo@loongson.cn>
-To:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     zhanghongchen <zhanghongchen@loongson.cn>,
-        Liu Peibao <liupeibao@loongson.cn>,
-        Yinbo Zhu <zhuyinbo@loongson.cn>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v10 2/2] dt-bindings: thermal: add loongson-2 thermal
-Date:   Thu,  3 Nov 2022 16:34:07 +0800
-Message-Id: <20221103083407.4039-2-zhuyinbo@loongson.cn>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20221103083407.4039-1-zhuyinbo@loongson.cn>
-References: <20221103083407.4039-1-zhuyinbo@loongson.cn>
+        Thu, 3 Nov 2022 04:35:13 -0400
+Received: from FRA01-PR2-obe.outbound.protection.outlook.com (mail-eopbgr120047.outbound.protection.outlook.com [40.107.12.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 106C8194;
+        Thu,  3 Nov 2022 01:35:12 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=gooRMgRinuDhDC8Hxe5aRP3UTKMzDJamvwzCyUBY4D+QPbyrj4+r75A9nA+1uj9Mm2DAgDsgCDH21bmUNATzjrIW/nVnJc91kDmXahmOiZtaza+Htp95ivSCGEoJj9JA0/i/9MHzXRWPmlcg97a8Uhfganml8kc5rq2FkWIXMYnNENM5436TXmDuP2eD0YRP6kwa0H6oWOA44U3gfLFNV22l9MSbtazbcPI529sXNK+zV8VniCIAqtTuuPIUOrzrVkCbzLUsLdQk52a+zQhDAeCnfKRiu7ifZvF7/TzSrIQc5L/KA7UAIbAEZ/X1rNvJ/kxvRPBhynB6NcYNf+qufg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=gqgrrBynTpVKstNLANA12SDZl75rhVI6jsYQgax9UPM=;
+ b=eAApkjPefJySGhNCjjHnKTwTo0wXp7r1A8oLWjFCtRnrQzdpI5WT7r8g0Liysx1Bz3sp6adgA4IN6YEaRPbqpccBkIR8gkCx8vrMosl45fy9OjIbU0RW/cZQDjgNXXH3t3BnZ2pxSJiDAY3QdO2FIrQRU679GIIHsJXVU6XGR3Q7KSUuMfEivD//vtZvmgYGmQ7LuXXSaFfnw3iaS1STF+/olYW1nIYBa8P0/24+VAR9t2XMeVrhlt4L2FlwE55m8MNgzu5ntG7fll/70Ql4usWCtK4utNWXltI7DBKgn3EchbJsnjM6TR0LdEilAER6ZEj50gIRnT6mdeNq1mjvFg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
+ dkim=pass header.d=csgroup.eu; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=csgroup.eu;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=gqgrrBynTpVKstNLANA12SDZl75rhVI6jsYQgax9UPM=;
+ b=rLRDc6j/OuofDIF8wTLwMk95WMapxfOYuiF5mHd2x9if4CiHwxHYa2AeTBulZT5/7DMSNFBSo+3+Din/r7e1fL3bzNk2/U40ELFU6164n4dZWWBOlDJL+sofWbnTR/y0Pq4GAUIMq6N+v8Hpr92olngLeMS/P9XNSkFhVlUmpALz5mRn9EKSQfn7nJ8sJw1DwMYgoKSO1u0ydLQ1OYzDnLWVgNVqCEXhgdhoypDfwpQzfAlo0TwTFUtmW3SpyBqCB2bKDWYICORVi/BNuzslXr2QH3dmvOrxa7BZiBqeK17va33J7UxwIgkiDRcPFHGJXIV15XVM0CdLz1AyEkn6MQ==
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
+ by PAZP264MB3072.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:1e7::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.22; Thu, 3 Nov
+ 2022 08:35:09 +0000
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::8bbc:32cb:956d:88e8]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::8bbc:32cb:956d:88e8%2]) with mapi id 15.20.5769.021; Thu, 3 Nov 2022
+ 08:35:09 +0000
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Nicholas Piggin <npiggin@gmail.com>,
+        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Jessica Yu <jeyu@kernel.org>,
+        Luis Chamberlain <mcgrof@kernel.org>
+Subject: Re: [PATCH v5 2/2] powerpc/64: Add module check for ELF ABI version
+Thread-Topic: [PATCH v5 2/2] powerpc/64: Add module check for ELF ABI version
+Thread-Index: AQHY7SFuQ3YDvt40Qkm2SePGxQaP6a4s5BWA
+Date:   Thu, 3 Nov 2022 08:35:09 +0000
+Message-ID: <513e1973-a1d4-c698-1441-9c7d0f5205ed@csgroup.eu>
+References: <20221031120733.3956781-1-npiggin@gmail.com>
+ <20221031120733.3956781-3-npiggin@gmail.com>
+In-Reply-To: <20221031120733.3956781-3-npiggin@gmail.com>
+Accept-Language: fr-FR, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=csgroup.eu;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MRZP264MB2988:EE_|PAZP264MB3072:EE_
+x-ms-office365-filtering-correlation-id: 3c41d88f-24e1-446b-541a-08dabd765130
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 74cAy01cyAa5ax4HtrOfhx8S74m8it1XwC0/qShryRPgUhSrL+HMyfwqSQp2uJ8YEB3BTugGPmcAcbwsBONrHZTLwZQUpIRO8DSaXHIKAEPxiSfXtFpC5EkMGVHV+YpRXNCDBQxSMRuYko0opDeYchTpbdAgC7RwHkl3UH6YPBO7/a0RllHzEe+SvD8g+cW0fUj86k1IFAmX7Te4LrQQaDiLkIds4vDy7rdwGk1GYJCxvQl4o54iuZOQN4EfRoibizi30NwXtzvm/qToPBGYIU0rKo2ojYw0i/BqwBKhGhgT4Uh46pT7CSB2tPByY7Htab8ezR7+nbrkcX6U+YRkvIwwvqYhVCsSGT4lGRXLVyrbPZq2cJSewj92pMqWbW9Q22UUovaicIXYekeBBVA/VyS6Nr08PohMLieh0C8ILjDc6jspqy3vqmCTSPJLakuX3LOqKyXO7MkdwHvdGBU770B9eemTxrNEhqE6RSPYk3P+pr7S+6w5wK7hAwElrlq0L/3InCfkqnZxqEX4illHvCKpTs7ln3vhwk6aCjOZdJixgVGb6chDQgpJVYk6c4Sek8K+5Jv9NSy76cpGZX5Gcx2fx47g7ajmRP2y/KB/8BEeZK/A1D/fBwc3OPVC01kHEoWL3YIirgG+w8L8fkzNb43TFkHXKJ6WbSVlmGKtSnyZshVj0fvtfhyM456W1Gg5vkFZkAjzvNoMIJuVRrHwlYL9raMWvvEt6uF+V02dg/AcpRvvfpatqh8elsbJRssbTs4FOw6ny9AYKVyNNxKUSvgLQUzVXmvCdHaZU5MCj7kAZ2E+q4dLZbwvfWMcOCuvLwi1J+btwPMz8Fu5fed+zQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(39850400004)(346002)(376002)(136003)(366004)(451199015)(64756008)(76116006)(66946007)(41300700001)(4326008)(66446008)(66476007)(66556008)(8676002)(91956017)(2906002)(5660300002)(44832011)(316002)(6512007)(8936002)(54906003)(26005)(6506007)(2616005)(186003)(71200400001)(6486002)(110136005)(478600001)(66574015)(36756003)(122000001)(31696002)(38100700002)(86362001)(38070700005)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?RmRubjhFa0puM1ZhZnVxTERIK2lBTkkzWTROYUZuUm1ER21qd25FUGlTVWJa?=
+ =?utf-8?B?RHdGcjV0ZUNobnBxSUwvZHNWcmZ4UWdQL0FmWXdVL2pIQVpWZGNXRG9KQW9o?=
+ =?utf-8?B?WU8xNE50VDNNTnU2M3FTazlhd0VYVy93OG05YjVTdkd2QmE1U042WUw3UHhW?=
+ =?utf-8?B?TUpyUnhETW5EQ3M5TUpIcUd2czVMaWk4Wmw0OEpGVDRDNktOcjUvclRGVkll?=
+ =?utf-8?B?N080bi8yTGtSVXpvdk9WQ2hXd2RxQXplelhoVm44QjlpRmd4ejB2Y2hOenJM?=
+ =?utf-8?B?bU1MdmtZTjNJOHM1M21jdnU3K25BTmo3bllKcWRERWpxYytPak5iakZYRXJK?=
+ =?utf-8?B?RC8walRBUExTRjhIZHJPMjUwYTNtR3FCVGNYTmY4WlBwcnkvSGJET3VjZ05u?=
+ =?utf-8?B?YlpFSWhDVGYxMWt0RjlwMEJSNkU0bE1kS01LWGs0ZXdZczRESU4xYm02YXIz?=
+ =?utf-8?B?bERaNEJQNFlBRkhRcU9vRmdVOWdJbWFaZ0Y1eVNGZFBjNUs5YlJuMzNwdVly?=
+ =?utf-8?B?eXFrb2ZvTERFTTR1YTR6YUZYWDRRK2gwQ2xocmU1cHNXaWVmWTNjV0VIMDZp?=
+ =?utf-8?B?eXV5RUs1TG1GWUVpRjVld0JmVENFUGh0NzlvQkNYSDQyUXhYWEpjVy9DcnRN?=
+ =?utf-8?B?VUY2cWhtOXdLMWg1N2Q4VWZGVytybXdTbTlFbTk2V1kxS01OL1kyWWhHWEd2?=
+ =?utf-8?B?QTR2QzgyTzc2YjVIVHJSNFBFbFNYd3RIdUdISmtRWXYxZldGN2l3c3QyY0E5?=
+ =?utf-8?B?UHd3L0dYRTZSTEc5RXdiMFozQ3FIeTVHSFE5VlhOSUNWYnhnbUszQkJDNFJo?=
+ =?utf-8?B?cCtvdTM5Z3J1TGhjNjVNSVpJRWlKb0NuRXhyendSVzdTM3dDYjkxTEhpYTdp?=
+ =?utf-8?B?ay94Z1lvbXNXWGtjTU8rdUl2WG9aZHdlRFJ2MnQ5dXVWSlI2Nm5Wd0hNcHFk?=
+ =?utf-8?B?d3h6WDFxRk92U2djdGJCRWxQY1hGMTBkc0tFdkJXcStlMkxQMXBzSSttRk95?=
+ =?utf-8?B?ZHZWSEcvSTVqT05aNFo3OHdlaCtoLzhVbHRjM3N6UFZoTythZjF3SW1uRXNB?=
+ =?utf-8?B?VTdTWjJEVldDT0VhVFptamdqVzcybXFYUkpRRm9lbm1JeG5vWXU3RnVWYUxD?=
+ =?utf-8?B?MVJPR0VHeVRnbWhocXZMbFBDSWlocUVGRVQ4QlZpSXB4VTBxbnpsZDc0NVJ1?=
+ =?utf-8?B?dkltbXZxZzFNRnRmY1J3V3ZKbDhoc0hRZEp4clk4RTVJWVgxMHRrZitPTmt1?=
+ =?utf-8?B?MFFRdW52QXJwZ2c5ZWhxV1RzYlpQcXo5Y0N3TlpHSmFXVG5KREpmMmt5ekpX?=
+ =?utf-8?B?cFl4bTd1K2RRQzlwMVp3bzFta2k2bXBmK0Z0TVVzQXRiaFgrdXRYQm8xd2RQ?=
+ =?utf-8?B?bTdFKzN0ZkZoWjR3Skp4RDVTNHpJWm5HZDdWSVQyd0xwaTdWNXRDakgzeVlT?=
+ =?utf-8?B?ZHc4UEp5V2NML2M4a3JWb3dRWUZsb3dLbFlicXFmOEhzQ3VSUGJhWlI4RjUr?=
+ =?utf-8?B?dDFoUURGMjRHeWlHcHhLRWNkMVZGNS9tL3FpZ1BLZmxOTmZMeW5HTkdLYWxU?=
+ =?utf-8?B?bjJiY05DNHdzc0cwRlIzaGlySVlTRHJZR2tHUWpMTjBVaU5YdHBZeXo5TkNj?=
+ =?utf-8?B?MHk1QWgzNnJrVjVwQmZ0TUVBdEgrWVFCSFIzN1ZrdTlBbE55aUtaQ3BuSDNJ?=
+ =?utf-8?B?VW9qZWFNZ3F6aVMzTmkxMGoyZmJBV05Yb1YwK1VsZ3RCaXhtcWU4eWdJMWY2?=
+ =?utf-8?B?RkFLSFpGdkpjbVdYRVBGaFZnR2N2cFIvK1ZFUmg3VkhxUmsrTzZtTmVmcitQ?=
+ =?utf-8?B?MVBwbi9SWkptZnRJQnBmbm0wWlhKeVB1c2Y2bTJPK3RJWG56NjlodVc3RGNu?=
+ =?utf-8?B?RklzQ1NoNnZxWjB1NkxGZE5QWEwvenkxK2VOQVpTRlFoam1yWkNDRDd0VFIw?=
+ =?utf-8?B?Znluc29td21WenJoZWdQaFBFVkN6a1Y0QVl3dGFQRThyRU5tNHVCTU5KZlJN?=
+ =?utf-8?B?OVJPQ2hrZWtQdjNSVXlOaEtUaHNESnY5cFd6eVZ6M3E4UjVFK0Z3TStXdThS?=
+ =?utf-8?B?bXVrSmxNNG1HVkxTMFJvV21MOW1vN0JRb2hmY2p4Q1BNR3U5ZFF3MVBiK1pO?=
+ =?utf-8?B?VmJBWUVHQk1PZDJuNnpNTnF4OWV5eDgzU0lzOWc5WFBIUlhZRm1ScEpuWDhH?=
+ =?utf-8?Q?OipfWQWlY+7RUqL/C8mI/+Q=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <AC173E3E2FFD7B47A1A2C3F250DF8373@FRAP264.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8BxV1cAfWNjsYcLAA--.15570S3
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxXF47tF4rWr1DJr47trW5ZFb_yoW5CrW3pF
-        47C3WDJrWv9F17uanIkFyxArsYvFnYyFZrXrs7Kw15Kr98Xa4aq3y7K3WDu393Wr1jgFWU
-        uFySkr4UCF1DArJanT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bSxFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUAVWUZwA2ocxC64
-        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28E
-        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJw
-        A2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAaw2AFwI0_Jrv_JF1le2I262IYc4CY
-        6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrV
-        C2j2WlYx0E2Ix0cI8IcVAFwI0_JF0_Jw1lYx0Ex4A2jsIE14v26F4j6r4UJwAm72CE4IkC
-        6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lc7CjxVAaw2AFwI0_JF0_Jw1l42xK82IYc2
-        Ij64vIr41l42xK82IY6x8ErcxFaVAv8VWrMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI
-        1I0E14v26r1Y6r17MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_Jr
-        Wlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1I
-        6r4UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr
-        0_JF4lIxAIcVC2z280aVAFwI0_Cr0_Gr1UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4U
-        JbIYCTnIWIevJa73UjIFyTuYvjxUzrcfUUUUU
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-OriginatorOrg: csgroup.eu
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3c41d88f-24e1-446b-541a-08dabd765130
+X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Nov 2022 08:35:09.1946
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: VCIYrlxm3tmyitGVSplBOqi+TFb3dWwemiYWTKu2kt66YeFK1hMd8L2pBrQ3XJU6vczy3+7bGGwuQ2fk7JVpDWGC1ItAL1rO+xlBrQtivg4=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAZP264MB3072
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the Loongson-2 thermal binding with DT schema format using
-json-schema.
-
-Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
-Change in v10:
-		1. Add all history change log information.
-Change in v9:
-		1. NO change, but other patch in this series of patches set
-		   has changes.
-Change in v8:
-                1. Replace string Loongson2/loongson2 with Loongson-2/loongson-2.
-Change in v7:
-		1. Split the modification of patch 3 and merge it into this patch.
-Change in v6:
-		1. Fix the warning "reg: [[0, 534779136], [0, 48]] is too long"
-		   when compile the yaml.
-Change in v5:
-		1. Keep use same quotes "'" in all places. 
-Change in v4:
-		1. Fixup the compatible.
-		2. Update the binding file name.
-		3. Include irq.h to fix compile issue.
-Change in v3:
-		1. Remove the sensor id.
-		2. Remove the interrupt-parent in thermal required property.
-		3. Update the thermal binding file name.
-		4. Fixup the commit log information.
-Change in v2:
-		1. Add description and type about the "id".	
-		2. Make the filename was based on compatible.
-
- .../thermal/loongson,ls2k-thermal.yaml        | 43 +++++++++++++++++++
- MAINTAINERS                                   |  1 +
- 2 files changed, 44 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/thermal/loongson,ls2k-thermal.yaml
-
-diff --git a/Documentation/devicetree/bindings/thermal/loongson,ls2k-thermal.yaml b/Documentation/devicetree/bindings/thermal/loongson,ls2k-thermal.yaml
-new file mode 100644
-index 000000000000..c0637e2d6d57
---- /dev/null
-+++ b/Documentation/devicetree/bindings/thermal/loongson,ls2k-thermal.yaml
-@@ -0,0 +1,43 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/thermal/loongson,ls2k-thermal.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Thermal sensors on Loongson-2 SoCs
-+
-+maintainers:
-+  - zhanghongchen <zhanghongchen@loongson.cn>
-+  - Yinbo Zhu <zhuyinbo@loongson.cn>
-+
-+properties:
-+  compatible:
-+    const: loongson,ls2k-thermal
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  '#thermal-sensor-cells':
-+    const: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - '#thermal-sensor-cells'
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+    thermal: thermal-sensor@1fe01500 {
-+        compatible = "loongson,ls2k-thermal";
-+        reg = <0x1fe01500 0x30>;
-+        interrupt-parent = <&liointc0>;
-+        interrupts = <7 IRQ_TYPE_LEVEL_LOW>;
-+        #thermal-sensor-cells = <1>;
-+    };
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 37ab451d9258..3aff8b8723b1 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -12015,6 +12015,7 @@ M:	zhanghongchen <zhanghongchen@loongson.cn>
- M:	Yinbo Zhu <zhuyinbo@loongson.cn>
- L:	linux-pm@vger.kernel.org
- S:	Maintained
-+F:	Documentation/devicetree/bindings/thermal/loongson,ls2k-thermal.yaml
- F:	drivers/thermal/loongson2_thermal.c
- 
- LSILOGIC MPT FUSION DRIVERS (FC/SAS/SPI)
--- 
-2.33.0
-
+DQoNCkxlIDMxLzEwLzIwMjIgw6AgMTM6MDcsIE5pY2hvbGFzIFBpZ2dpbiBhIMOpY3JpdMKgOg0K
+PiBPdmVycmlkZSB0aGUgZ2VuZXJpYyBtb2R1bGUgRUxGIGNoZWNrIHRvIHByb3ZpZGUgYSBjaGVj
+ayBmb3IgdGhlIEVMRiBBQkkNCj4gdmVyc2lvbi4gVGhpcyBiZWNvbWVzIGltcG9ydGFudCBpZiB3
+ZSBhbGxvdyBiaWctZW5kaWFuIEVMRiBBQkkgVjIgYnVpbGRzDQo+IGJ1dCBpdCBkb2Vzbid0IGh1
+cnQgdG8gY2hlY2sgbm93Lg0KPiANCj4gQ2M6IEplc3NpY2EgWXUgPGpleXVAa2VybmVsLm9yZz4N
+Cj4gU2lnbmVkLW9mZi1ieTogTWljaGFlbCBFbGxlcm1hbiA8bXBlQGVsbGVybWFuLmlkLmF1Pg0K
+PiBbbnA6IHNwbGl0IHBhdGNoLCBhZGRlZCBjaGFuZ2Vsb2csIGFkanVzdCB0byBKZXNzaWNhJ3Mg
+cHJvcG9zYWxdDQo+IFNpZ25lZC1vZmYtYnk6IE5pY2hvbGFzIFBpZ2dpbiA8bnBpZ2dpbkBnbWFp
+bC5jb20+DQo+IC0tLQ0KPiAgIGFyY2gvcG93ZXJwYy9rZXJuZWwvbW9kdWxlLmMgfCAxNyArKysr
+KysrKysrKysrKysrKw0KPiAgIDEgZmlsZSBjaGFuZ2VkLCAxNyBpbnNlcnRpb25zKCspDQo+IA0K
+PiBkaWZmIC0tZ2l0IGEvYXJjaC9wb3dlcnBjL2tlcm5lbC9tb2R1bGUuYyBiL2FyY2gvcG93ZXJw
+Yy9rZXJuZWwvbW9kdWxlLmMNCj4gaW5kZXggZjZkNmFlMGExNjkyLi5kNDZiZjliZmRhMjYgMTAw
+NjQ0DQo+IC0tLSBhL2FyY2gvcG93ZXJwYy9rZXJuZWwvbW9kdWxlLmMNCj4gKysrIGIvYXJjaC9w
+b3dlcnBjL2tlcm5lbC9tb2R1bGUuYw0KPiBAQCAtMTksNiArMTksMjMgQEANCj4gICANCj4gICBz
+dGF0aWMgTElTVF9IRUFEKG1vZHVsZV9idWdfbGlzdCk7DQo+ICAgDQo+ICsjaWZkZWYgQ09ORklH
+X1BQQzY0DQoNCkNhbiBpdCBnbyBpbiBhcmNoL3Bvd2VycGMva2VybmVsL21vZHVsZV82NC5jIGlu
+c3RlYWQgPw0KDQo+ICtib29sIG1vZHVsZV9lbGZfY2hlY2tfYXJjaChFbGZfRWhkciAqaGRyKQ0K
+PiArew0KPiArCXVuc2lnbmVkIGxvbmcgYWJpX2xldmVsID0gaGRyLT5lX2ZsYWdzICYgMHgzOw0K
+PiArDQo+ICsJaWYgKElTX0VOQUJMRUQoQ09ORklHX1BQQzY0X0VMRl9BQklfVjIpKSB7DQo+ICsJ
+CWlmIChhYmlfbGV2ZWwgIT0gMikNCj4gKwkJCXJldHVybiBmYWxzZTsNCj4gKwl9IGVsc2Ugew0K
+PiArCQlpZiAoYWJpX2xldmVsID49IDIpDQo+ICsJCQlyZXR1cm4gZmFsc2U7DQo+ICsJfQ0KPiAr
+DQo+ICsJcmV0dXJuIHRydWU7DQoNCkNhbiBiZSBzaW1wbGVyOg0KDQoJaWYgKElTX0VOQUJMRUQo
+Q09ORklHX1BQQzY0X0VMRl9BQklfVjIpKQ0KCQlyZXR1cm4gYWJpX2xldmVsID09IDI7DQoJZWxz
+ZQ0KCQlyZXR1cm4gYWJpX2xldmVsIDwgMjsNCg0KDQo+ICt9DQo+ICsjZW5kaWYNCj4gKw0KPiAg
+IHN0YXRpYyBjb25zdCBFbGZfU2hkciAqZmluZF9zZWN0aW9uKGNvbnN0IEVsZl9FaGRyICpoZHIs
+DQo+ICAgCQkJCSAgICBjb25zdCBFbGZfU2hkciAqc2VjaGRycywNCj4gICAJCQkJICAgIGNvbnN0
+IGNoYXIgKm5hbWUp
