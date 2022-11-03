@@ -2,284 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F60D618350
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 16:55:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08F0E618355
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 16:56:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231611AbiKCPzw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 11:55:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58286 "EHLO
+        id S231803AbiKCP41 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 11:56:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231154AbiKCPzu (ORCPT
+        with ESMTP id S231648AbiKCP4Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 11:55:50 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E06F41277B
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 08:55:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667490949; x=1699026949;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=2GSng2hGG6jHOCi+5AN55mKC5fLajgoO92GOMSvYwTY=;
-  b=BbGS9mkosjrFR8WeQAojk9gh6Fs2pTDuacx5yydFA724a7P40OOFuUmL
-   mtkQB3v5XUK05TOL/kLDWcwqDPJwqSSTBu0TIpoKh/qQB1HQD+InLhddb
-   65suleUDtb8nQ0sX/Yvzgsd9fXcpaq8i9ZUQ0+1CYHTnSPRlIQWHxLw3u
-   w6d6ZJt2u9FfHfkc3cf2zR+TxdjF5u8l86fl62l4r1LlnueIrhZkRZx0U
-   WSbqVr9bpgSKxAyU2RaGiKVvykRZnlrJkTBe7rB+6zkfx8AIvVaKE/1KA
-   +mU2Hs+p2K6Er9B3xM1dj5zW5pDh7Ks6r7IkC7e0p9xiGLO9u1b88TZn2
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10520"; a="336419482"
-X-IronPort-AV: E=Sophos;i="5.96,134,1665471600"; 
-   d="scan'208";a="336419482"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2022 08:55:49 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10520"; a="629390301"
-X-IronPort-AV: E=Sophos;i="5.96,134,1665471600"; 
-   d="scan'208";a="629390301"
-Received: from sannilnx.jer.intel.com ([10.12.26.175])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2022 08:55:46 -0700
-From:   Alexander Usyskin <alexander.usyskin@intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-Cc:     Tomas Winkler <tomas.winkler@intel.com>,
-        Alexander Usyskin <alexander.usyskin@intel.com>,
-        Vitaly Lubart <vitaly.lubart@intel.com>,
-        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] mei: add timeout to send
-Date:   Thu,  3 Nov 2022 17:55:34 +0200
-Message-Id: <20221103155534.1966589-1-alexander.usyskin@intel.com>
-X-Mailer: git-send-email 2.34.1
+        Thu, 3 Nov 2022 11:56:24 -0400
+Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8120213E29
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 08:56:23 -0700 (PDT)
+Received: by mail-qk1-x736.google.com with SMTP id 8so1420054qka.1
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 08:56:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=tEdlO2eJHCWVqpq9ZVmfFrHoK+b5oUGHwUErbKgRbJo=;
+        b=ehxT8BnUuWvvgFR/WyjOn0EeBKCALG1yZXrAqTz8QVo/bXbWOKQimZ7PSY02mWw3eR
+         6Gyd99eRGa1Ay7XFHF5zwJ4JKbJtqYcY2es1g8JbRs0H6VceGJqd89HZq8RLTN3a8pRC
+         aZAM2E+sh9MkRwyXCuO1zVngZotQEmRnkr6oZclSbcdxB1lG1+dVicvR0lDkjNrteQ1h
+         ODlv68plAFnp9sDypLOyy3KbFtrCEqIdLS62H2tdQR4rsb4haernYYt11LUnH7vfimht
+         3dGZJUx0NVimXDkQsJWV5xJR0RXfkaQ0QLf1E9ellUyKCsmJRGrKQWstv7TjA8/OuKBy
+         58/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=tEdlO2eJHCWVqpq9ZVmfFrHoK+b5oUGHwUErbKgRbJo=;
+        b=i1gJrorCAvlecnVuhhcucxnS3QXUlyot/jvd8krurtFiEZusZgoLGu0DjZyCa43iep
+         tDRMu8mhztwt17w6U5aHRLfA5ccYwvB0hM4RII3HGMRZyLFyYiEhbT0ASQewboHv6B6h
+         pI+XAveGMIKjxluhybo0uzjMqcNfCPQmoTbxnYtDRpRX3ty3Lz8oh1To6P+nyWDKO5gb
+         Ite6Ujf0EepJ8inKt9pUuT4oAcp1/9K6Fvhv0fNZ3XBjQrpxRv55Z/UyVeu9KtK0TiGq
+         jbc9gJq6BGfxO2ql3E6mQ2cOo6WpKi4tNcO+6J2si4daHL/ezxbGeNUkFJn5DwFq3b9/
+         hc9A==
+X-Gm-Message-State: ACrzQf1hG8qvwD/liMqOGtwu3kJ4gCzAqgg8++CBV7ALCapbxgYT4MWF
+        0o4xU6ulZIDh22aBpHgpsgMKJGiqtBTTJw==
+X-Google-Smtp-Source: AMsMyM49ONOs/YLVOtSG+GQhfYXHOv4K5GNKWD8MYoE8uTvwxAimwbp/ySZ0z8Zm/a1vmY+uuIF0BA==
+X-Received: by 2002:a37:6588:0:b0:6fa:3046:7f8b with SMTP id z130-20020a376588000000b006fa30467f8bmr15690041qkb.752.1667490982649;
+        Thu, 03 Nov 2022 08:56:22 -0700 (PDT)
+Received: from ?IPV6:2601:586:5000:570:a35d:9f85:e3f7:d9fb? ([2601:586:5000:570:a35d:9f85:e3f7:d9fb])
+        by smtp.gmail.com with ESMTPSA id ey21-20020a05622a4c1500b003988b3d5280sm725662qtb.70.2022.11.03.08.56.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 03 Nov 2022 08:56:22 -0700 (PDT)
+Message-ID: <910c152d-5e1a-4667-2f0a-a1524f51958c@linaro.org>
+Date:   Thu, 3 Nov 2022 11:56:20 -0400
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH 05/10] dt-bindings: interconnect: Add sm8350, sc8280xp and
+ generic OSM L3 compatibles
+To:     Bjorn Andersson <andersson@kernel.org>
+Cc:     Bjorn Andersson <quic_bjorande@quicinc.com>,
+        Georgi Djakov <djakov@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sibi Sankar <quic_sibis@quicinc.com>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Mike Tipton <quic_mdtipton@quicinc.com>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221028034155.5580-1-quic_bjorande@quicinc.com>
+ <20221028034155.5580-6-quic_bjorande@quicinc.com>
+ <a364b343-fa19-348c-bc38-e8b44061890b@linaro.org>
+ <20221103034410.GB5525@core-thresher1.qualcomm.com>
+ <f3882934-9f95-39f1-83e4-6ce9efeb089c@linaro.org>
+ <20221103154653.67mgsey57uvdcvx3@builder.lan>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221103154653.67mgsey57uvdcvx3@builder.lan>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When driver wakes up the firmware from the low power stand,
-it is sending a memory ready message.
-The send is done via synchronous/blocking function to ensure
-that firmware is in ready state. However firmware might be
-in unstable state and send might be block forever.
-To address this issue a timeout is added to blocking write command on
-the internal bus.
+On 03/11/2022 11:46, Bjorn Andersson wrote:
+> On Thu, Nov 03, 2022 at 08:25:17AM -0400, Krzysztof Kozlowski wrote:
+>> On 02/11/2022 23:44, Bjorn Andersson wrote:
+>>> On Fri, Oct 28, 2022 at 06:12:29PM -0400, Krzysztof Kozlowski wrote:
+>>>> On 27/10/2022 23:41, Bjorn Andersson wrote:
+>>>>> Add EPSS L3 compatibles for sm8350 and sc8280xp, but while at it also
+>>>>> introduce generic compatible for both qcom,osm-l3 and qcom,epss-l3.
+>>>>>
+>>>>> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
+>>>>> ---
+>>>>>  .../bindings/interconnect/qcom,osm-l3.yaml    | 22 +++++++++++++------
+>>>>>  1 file changed, 15 insertions(+), 7 deletions(-)
+>>>>>
+>>>>> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml b/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml
+>>>>> index bf538c0c5a81..ae0995341a78 100644
+>>>>> --- a/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml
+>>>>> +++ b/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml
+>>>>> @@ -16,13 +16,21 @@ description:
+>>>>>  
+>>>>>  properties:
+>>>>>    compatible:
+>>>>> -    enum:
+>>>>> -      - qcom,sc7180-osm-l3
+>>>>> -      - qcom,sc7280-epss-l3
+>>>>> -      - qcom,sc8180x-osm-l3
+>>>>> -      - qcom,sdm845-osm-l3
+>>>>> -      - qcom,sm8150-osm-l3
+>>>>> -      - qcom,sm8250-epss-l3
+>>>>> +    oneOf:
+>>>>> +      items:
+>>>>
+>>>> oneOf expects a list, so this should be "    - items"
+>>>>
+>>>
+>>> Ahh, thanks. Must have missed running the dt_binding_check on this one.
+>>>
+>>>>> +        - enum:
+>>>>> +            - qcom,sc7180-osm-l3
+>>>>> +            - qcom,sc8180x-osm-l3
+>>>>> +            - qcom,sdm845-osm-l3
+>>>>> +            - qcom,sm8150-osm-l3
+>>>>> +        - const: qcom,osm-l3
+>>>>
+>>>> The concept is good, but are you sure all SoCs will be compatible with
+>>>> generic osm-l3?
+>>>
+>>> Per the current implementation yes, worst case if one or more of them isn't the
+>>> more specific compatible can be used to alter the behavior of that platform.
+>>>
+>>>> Why not using dedicated compatible of one soc, e.g. the
+>>>> oldest here? We already did like that for BWMON, DMA and few others.
+>>>>
+>>>
+>>> Because if we say compatible = "qcom,sc8180x-osm-l3", "qcom,sdm845-osm-l3" and
+>>> there is a quirk needed for "qcom,sdm845-osm-l3" we're forced to add a "special
+>>> case" every other *-osm-l3 in the driver.
+>>>
+>>> This way we can have a generic implementation for the qcom,osm-l3 and if we
+>>> realize that we need to quirk something for the oldest platform, we can do so
+>>> without affecting the others.
+>>
+>> True. This also means we do not really know which one is the generic
+>> implementation :)
+>>
+> 
+> There currently is an implementation without platform specific quirks, I
+> call that the generic implementation and suggest that we refer to that
+> using "qcom,osm-l3".>
+> If we instead were to use sdm845 as the generic compatible, and there
+> turns out to be a need for a quirk for this platform, you:
+> 
+> 1) no longer have a generic implementation, but 4 platform-specific
+>    implementations
 
-Signed-off-by: Alexander Usyskin <alexander.usyskin@intel.com>
----
- drivers/misc/mei/bus-fixup.c | 19 +++++++++++--------
- drivers/misc/mei/bus.c       |  9 +++++----
- drivers/misc/mei/client.c    | 21 +++++++++++++++++----
- drivers/misc/mei/client.h    |  2 +-
- drivers/misc/mei/main.c      |  2 +-
- drivers/misc/mei/mei_dev.h   |  2 +-
- 6 files changed, 36 insertions(+), 19 deletions(-)
+It's okay because there is no such thing anymore as "generic
+implementation". If this happened, your generic compatible is not
+specific enough. It does not represent any specific hardware.
 
-diff --git a/drivers/misc/mei/bus-fixup.c b/drivers/misc/mei/bus-fixup.c
-index 71fbf0bc8453..3174cad8a5cc 100644
---- a/drivers/misc/mei/bus-fixup.c
-+++ b/drivers/misc/mei/bus-fixup.c
-@@ -128,7 +128,7 @@ static int mei_osver(struct mei_cl_device *cldev)
- 	os_ver = (struct mei_os_ver *)fwcaps->data;
- 	os_ver->os_type = OSTYPE_LINUX;
- 
--	return __mei_cl_send(cldev->cl, buf, size, 0, mode);
-+	return __mei_cl_send(cldev->cl, buf, size, 0, mode, 0);
- }
- 
- #define MKHI_FWVER_BUF_LEN (sizeof(struct mkhi_msg_hdr) + \
-@@ -149,7 +149,7 @@ static int mei_fwver(struct mei_cl_device *cldev)
- 	req.hdr.command = MKHI_GEN_GET_FW_VERSION_CMD;
- 
- 	ret = __mei_cl_send(cldev->cl, (u8 *)&req, sizeof(req), 0,
--			    MEI_CL_IO_TX_BLOCKING);
-+			    MEI_CL_IO_TX_BLOCKING, 0);
- 	if (ret < 0) {
- 		dev_err(&cldev->dev, "Could not send ReqFWVersion cmd\n");
- 		return ret;
-@@ -188,17 +188,19 @@ static int mei_fwver(struct mei_cl_device *cldev)
- 	return ret;
- }
- 
-+#define GFX_MEMORY_READY_TIMEOUT 200
-+
- static int mei_gfx_memory_ready(struct mei_cl_device *cldev)
- {
- 	struct mkhi_gfx_mem_ready req = {0};
--	unsigned int mode = MEI_CL_IO_TX_INTERNAL;
-+	unsigned int mode = MEI_CL_IO_TX_INTERNAL | MEI_CL_IO_TX_BLOCKING;
- 
- 	req.hdr.group_id = MKHI_GROUP_ID_GFX;
- 	req.hdr.command = MKHI_GFX_MEMORY_READY_CMD_REQ;
- 	req.flags = MKHI_GFX_MEM_READY_PXP_ALLOWED;
- 
- 	dev_dbg(&cldev->dev, "Sending memory ready command\n");
--	return __mei_cl_send(cldev->cl, (u8 *)&req, sizeof(req), 0, mode);
-+	return __mei_cl_send(cldev->cl, (u8 *)&req, sizeof(req), 0, mode, GFX_MEMORY_READY_TIMEOUT);
- }
- 
- static void mei_mkhi_fix(struct mei_cl_device *cldev)
-@@ -263,12 +265,13 @@ static void mei_gsc_mkhi_fix_ver(struct mei_cl_device *cldev)
- 
- 	if (cldev->bus->pxp_mode == MEI_DEV_PXP_INIT) {
- 		ret = mei_gfx_memory_ready(cldev);
--		if (ret < 0)
-+		if (ret < 0) {
- 			dev_err(&cldev->dev, "memory ready command failed %d\n", ret);
--		else
-+		} else {
- 			dev_dbg(&cldev->dev, "memory ready command sent\n");
-+			cldev->bus->pxp_mode = MEI_DEV_PXP_SETUP;
-+		}
- 		/* we go to reset after that */
--		cldev->bus->pxp_mode = MEI_DEV_PXP_SETUP;
- 		goto out;
- 	}
- 
-@@ -374,7 +377,7 @@ static int mei_nfc_if_version(struct mei_cl *cl,
- 	WARN_ON(mutex_is_locked(&bus->device_lock));
- 
- 	ret = __mei_cl_send(cl, (u8 *)&cmd, sizeof(cmd), 0,
--			    MEI_CL_IO_TX_BLOCKING);
-+			    MEI_CL_IO_TX_BLOCKING, 0);
- 	if (ret < 0) {
- 		dev_err(bus->dev, "Could not send IF version cmd\n");
- 		return ret;
-diff --git a/drivers/misc/mei/bus.c b/drivers/misc/mei/bus.c
-index 1fbe127ff633..136b45192904 100644
---- a/drivers/misc/mei/bus.c
-+++ b/drivers/misc/mei/bus.c
-@@ -29,11 +29,12 @@
-  * @length: buffer length
-  * @vtag: virtual tag
-  * @mode: sending mode
-+ * @timeout: send timeout for blocking writes, 0 for infinite timeout
-  *
-  * Return: written size bytes or < 0 on error
-  */
- ssize_t __mei_cl_send(struct mei_cl *cl, const u8 *buf, size_t length, u8 vtag,
--		      unsigned int mode)
-+		      unsigned int mode, unsigned long timeout)
- {
- 	struct mei_device *bus;
- 	struct mei_cl_cb *cb;
-@@ -108,7 +109,7 @@ ssize_t __mei_cl_send(struct mei_cl *cl, const u8 *buf, size_t length, u8 vtag,
- 		cb->buf.size = 0;
- 	}
- 
--	rets = mei_cl_write(cl, cb);
-+	rets = mei_cl_write(cl, cb, timeout);
- 
- 	if (mode & MEI_CL_IO_SGL && rets == 0)
- 		rets = length;
-@@ -254,7 +255,7 @@ ssize_t mei_cldev_send_vtag(struct mei_cl_device *cldev, const u8 *buf,
- {
- 	struct mei_cl *cl = cldev->cl;
- 
--	return __mei_cl_send(cl, buf, length, vtag, MEI_CL_IO_TX_BLOCKING);
-+	return __mei_cl_send(cl, buf, length, vtag, MEI_CL_IO_TX_BLOCKING, 0);
- }
- EXPORT_SYMBOL_GPL(mei_cldev_send_vtag);
- 
-@@ -924,7 +925,7 @@ ssize_t mei_cldev_send_gsc_command(struct mei_cl_device *cldev,
- 	}
- 
- 	/* send the message to GSC */
--	ret = __mei_cl_send(cl, (u8 *)ext_hdr, buf_sz, 0, MEI_CL_IO_SGL);
-+	ret = __mei_cl_send(cl, (u8 *)ext_hdr, buf_sz, 0, MEI_CL_IO_SGL, 0);
- 	if (ret < 0) {
- 		dev_err(bus->dev, "__mei_cl_send failed, returned %zd\n", ret);
- 		goto end;
-diff --git a/drivers/misc/mei/client.c b/drivers/misc/mei/client.c
-index 6c8b71ae32c8..68f2e23b8ae5 100644
---- a/drivers/misc/mei/client.c
-+++ b/drivers/misc/mei/client.c
-@@ -1954,10 +1954,11 @@ int mei_cl_irq_write(struct mei_cl *cl, struct mei_cl_cb *cb,
-  *
-  * @cl: host client
-  * @cb: write callback with filled data
-+ * @timeout: send timeout for blocking writes, 0 for infinite timeout
-  *
-  * Return: number of bytes sent on success, <0 on failure.
-  */
--ssize_t mei_cl_write(struct mei_cl *cl, struct mei_cl_cb *cb)
-+ssize_t mei_cl_write(struct mei_cl *cl, struct mei_cl_cb *cb, unsigned long timeout)
- {
- 	struct mei_device *dev;
- 	struct mei_msg_data *buf;
-@@ -2081,9 +2082,21 @@ ssize_t mei_cl_write(struct mei_cl *cl, struct mei_cl_cb *cb)
- 	if (blocking && cl->writing_state != MEI_WRITE_COMPLETE) {
- 
- 		mutex_unlock(&dev->device_lock);
--		rets = wait_event_interruptible(cl->tx_wait,
--				cl->writing_state == MEI_WRITE_COMPLETE ||
--				(!mei_cl_is_connected(cl)));
-+		if (timeout) {
-+			rets = wait_event_interruptible_timeout(cl->tx_wait,
-+					cl->writing_state == MEI_WRITE_COMPLETE ||
-+					(!mei_cl_is_connected(cl)),
-+					msecs_to_jiffies(timeout));
-+			if (rets == 0)
-+				rets = -ETIME;
-+			if (rets > 0)
-+				rets = 0;
-+		} else {
-+			rets = wait_event_interruptible(cl->tx_wait,
-+					cl->writing_state == MEI_WRITE_COMPLETE ||
-+					(!mei_cl_is_connected(cl)));
-+		}
-+
- 		mutex_lock(&dev->device_lock);
- 		/* wait_event_interruptible returns -ERESTARTSYS */
- 		if (rets) {
-diff --git a/drivers/misc/mei/client.h b/drivers/misc/mei/client.h
-index 418056fb1489..9052860bcfe0 100644
---- a/drivers/misc/mei/client.h
-+++ b/drivers/misc/mei/client.h
-@@ -246,7 +246,7 @@ int mei_cl_connect(struct mei_cl *cl, struct mei_me_client *me_cl,
- int mei_cl_irq_connect(struct mei_cl *cl, struct mei_cl_cb *cb,
- 		       struct list_head *cmpl_list);
- int mei_cl_read_start(struct mei_cl *cl, size_t length, const struct file *fp);
--ssize_t mei_cl_write(struct mei_cl *cl, struct mei_cl_cb *cb);
-+ssize_t mei_cl_write(struct mei_cl *cl, struct mei_cl_cb *cb, unsigned long timeout);
- int mei_cl_irq_write(struct mei_cl *cl, struct mei_cl_cb *cb,
- 		     struct list_head *cmpl_list);
- 
-diff --git a/drivers/misc/mei/main.c b/drivers/misc/mei/main.c
-index 930887e7e38d..311c6a34aeb8 100644
---- a/drivers/misc/mei/main.c
-+++ b/drivers/misc/mei/main.c
-@@ -383,7 +383,7 @@ static ssize_t mei_write(struct file *file, const char __user *ubuf,
- 		goto out;
- 	}
- 
--	rets = mei_cl_write(cl, cb);
-+	rets = mei_cl_write(cl, cb, 0);
- out:
- 	mutex_unlock(&dev->device_lock);
- 	return rets;
-diff --git a/drivers/misc/mei/mei_dev.h b/drivers/misc/mei/mei_dev.h
-index 8d8018428d9d..799ea95e2bb8 100644
---- a/drivers/misc/mei/mei_dev.h
-+++ b/drivers/misc/mei/mei_dev.h
-@@ -378,7 +378,7 @@ struct mei_hw_ops {
- void mei_cl_bus_rescan_work(struct work_struct *work);
- void mei_cl_bus_dev_fixup(struct mei_cl_device *dev);
- ssize_t __mei_cl_send(struct mei_cl *cl, const u8 *buf, size_t length, u8 vtag,
--		      unsigned int mode);
-+		      unsigned int mode, unsigned long timeout);
- ssize_t __mei_cl_recv(struct mei_cl *cl, u8 *buf, size_t length, u8 *vtag,
- 		      unsigned int mode, unsigned long timeout);
- bool mei_cl_bus_rx_event(struct mei_cl *cl);
--- 
-2.34.1
+Adding generic compatibles just to make driver binding easier, is a bit
+in contrast with DT which should focus on hardware description.
+
+> 
+> 2) have 3 platforms claiming to be compatible with the quirked (now
+>    specialized) implementation, which they clearly aren't anymore
+
+Yes, that's the problem and this is why I mentioned that we do not know
+the generic implementation. If we knew that sdm845 is the generic, we
+would not expect specific quirks for it.
+
+If you cannot make sdm845 generic because of unknown quirk, then you
+just do not know which one is generic implementation and that compatible
+is not specific enough... Or it is specific only to current Linux driver.
+
+> Therefor I favor using generic names for generic compatibles.
+
+They make driver development easier but they hide the real match between
+hardware and compatible.
+
+Best regards,
+Krzysztof
 
