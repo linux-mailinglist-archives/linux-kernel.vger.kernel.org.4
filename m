@@ -2,149 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6BFE6177C5
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 08:41:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCE836177E9
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 08:46:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231192AbiKCHlC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 03:41:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37924 "EHLO
+        id S230415AbiKCHqg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 03:46:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230302AbiKCHkt (ORCPT
+        with ESMTP id S229481AbiKCHqe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 03:40:49 -0400
-Received: from FRA01-PR2-obe.outbound.protection.outlook.com (mail-eopbgr120041.outbound.protection.outlook.com [40.107.12.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 913CB2ACB
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 00:40:48 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PmVLoRPfJbN8p+aAFH72wY9IRyE+TON9JeMUOVElztU3+8QocLTWOZ7064avF9M7ZU5YjjeVZl+w3G9aCJMKSbGhjdNvRIV1GqJB3dSmzIuGF64PD/DL0X7aCZTbORgBZXEg/qIxR5qpRwHvLsOMRNy+SUFFV4l6vF6iy0ZwrW/8cIRQJeR9sgqumHIWR/LDinK4fOZyUqhlrEPSE6EYacFiwxOc7FYA6XscX36RS/XbdJKWXuS8lI4wBNCOBn6mHVcDh2qP+a8cGjpxZPs8LEd/5EqDB51a0wAJk2IYzRboNNMGz6k+za+rWP/szOxZU35n7vKzte/B+1zsovnyZg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=6qnGvTGzB2WBtLO+riOzlatqGx1cqUdcLdj5glxQi34=;
- b=bBJKzRuPwchF3GTiU3ltEBAvOiuNvahOaCl1tQJDAGPMiRtOZpbPPFHFfW2pSbj+YBT+sFpM8QPe1WUyMs06ycGkgrXa/5McR5v/oO5nBP4yYqLfYhk1sX41T6qgSlU82hmRmrWkBr+cuQFg3AS51gej8mAy5dWC6Zg+l6D+rXu4jsRz36AQ+9Te8EdXxwz2w40hQJ5l4+LWIuJJGrMTIkIe981pduX4KNo50Uy39f59h9OFhYY8B6bXwP6Rh33bjE4lc14laW6XNLT8yY3Eq4Z/cSYngQ9tfL6wPj2m+/xUCMEsluD3wYYYzGG5dXuqKMEPT/65WSu9VvpkyNeb1w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
- dkim=pass header.d=csgroup.eu; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=csgroup.eu;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=6qnGvTGzB2WBtLO+riOzlatqGx1cqUdcLdj5glxQi34=;
- b=xqZvAIQw/d5sOsktUDU/D540lgOtpowX+gSOjokQGb7+vbPZVseXa6dY8I2pm4BA7xM7zhvbdykE56ARc4Qyvp+yPn+3IQU2ils1ytSBAycREeaNCRw61Aq/2CF2WhkZx/jh/loDxkf1AIC4U0yYa51WczrQAIvn/mgcgWp6Xl1riob8uEdBVYwmYH99JRoXGx+JOkBgD49VHtrhAql4C4nUgnmh+FBtlUZzcFJPOkK09X/ID8dBj5WZGZS7I4XrFYSlY/r99hbTORUrjLwNjattq/O4NoHB5WE/RaiNZDlgvCNFt8vhKAiD93WTxKAeqGP9F5dyYxzIaO37b+Ov7w==
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
- by PR0P264MB2202.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:16c::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.22; Thu, 3 Nov
- 2022 07:40:45 +0000
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::8bbc:32cb:956d:88e8]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::8bbc:32cb:956d:88e8%2]) with mapi id 15.20.5769.021; Thu, 3 Nov 2022
- 07:40:45 +0000
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     wangjianli <wangjianli@cdjrlc.com>,
-        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
-        "benh@kernel.crashing.org" <benh@kernel.crashing.org>
-CC:     "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] powerpc/kernel: fix repeated words in comments
-Thread-Topic: [PATCH] powerpc/kernel: fix repeated words in comments
-Thread-Index: AQHY5dXaa29CQM/ddkC7kLSe4nETaa4s43SA
-Date:   Thu, 3 Nov 2022 07:40:45 +0000
-Message-ID: <30acd155-963b-b8c1-a555-dec017c8af74@csgroup.eu>
-References: <20221022051247.64377-1-wangjianli@cdjrlc.com>
-In-Reply-To: <20221022051247.64377-1-wangjianli@cdjrlc.com>
-Accept-Language: fr-FR, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=csgroup.eu;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MRZP264MB2988:EE_|PR0P264MB2202:EE_
-x-ms-office365-filtering-correlation-id: 57c586a3-44dd-434c-551b-08dabd6eb7e1
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: OBf1gqEEjBcPfAHHith+wfrYSXj/VwnCXY591L//mEd63cYDuEjgVqxHwGyqqh7U9aAulC4n8fsUYGWn/7ADZ1xF5Sta3WOEEiA6vQb0cVlq0jqzxU1twBJeQM4m0utr76tE23Qm/5Xk3IbwYcYs88t3IfvvPuD29bHM5DP7YEdw+mbfDYCg8U+Qviq70LMEEaL76kPU5xfwwv3sdFxINPYCIOwPgJbd7nWiYAHUQKIxUvHmpo3nPkpHTfBnXCo6OyKNZ96hFwaMqZLvcsnstO7FOZ2BmtXu8XnAQM2AojJO3bcvS2zULfVMb9LSRLit1yNvYVasnMQtSuMSKo4beJHUhI+fHHFlzEXRIt5R0OuCxzh8iWQu61r3m5BYuKloky2nABjIe6XqURcf5jLEQU1umU/FlJN+HB3dCLZNgnU9j+DAcnaidrCryUTpQT8irsp/I6Ne8dqkNoHXsOfc9s2w5Ft6//hwgT55coPSf31N5n29avx0axCR2yyX5sbrtP+TE9Ls5vSFgKjPQ8injfL4avILbyJltpbAJmMu0pvUELs+glk6ppLGesS6u8dCNRaRUnR5fMWydDG56EFH2S7khvVT38VzNbavuvS4VSykhFvntIGDcCFdSiI4Q1PEUAHlGqQjGvOphmsJ+hjqOu/DyQw8/3rJCWnBLUCjA9VdQ5yq5Q3meTxSIywRlSpKce8yaM57dF8PyWcAjDGjWkZYhvPAAljUOVQSpGA2z2OeUoSz2Xu08yAqMKT7tuKIt8m5R58pW0cwFAh7CZmCsAcVGHGfHDQjsGYVPQLFVmbpq0rWNK9UyfazrkIGha7jlJ/bS7hd6IkzcDIpL7SzIQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39850400004)(346002)(366004)(136003)(376002)(396003)(451199015)(71200400001)(2906002)(31686004)(316002)(6486002)(54906003)(478600001)(110136005)(6506007)(38070700005)(76116006)(66946007)(8936002)(41300700001)(66556008)(66446008)(66476007)(91956017)(36756003)(8676002)(26005)(4326008)(64756008)(6512007)(186003)(5660300002)(2616005)(44832011)(38100700002)(4744005)(66574015)(83380400001)(31696002)(86362001)(122000001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?VEp1TGJvdFZPZ0grNngvRjN6MnBlOUF6ZGM0N1RUMVMzbE1sWU5hSnhkTHhx?=
- =?utf-8?B?VHRMME5aOExsYnl6OTdNdUNsNVZkM3ZaYkJKb3d2aGlPNUdtL3N5QjNYZG5X?=
- =?utf-8?B?TGRCYmNkdlRacENnUU42RTJwMWpVRWVRaTdRQTNONnk3WGZwbUlPV2YzTVBl?=
- =?utf-8?B?TklRd0E3cDgwVDd0NVhTcVFOdVRiWDhFQVZhdVY3Y250cVJlOEJBcnYwK0k4?=
- =?utf-8?B?c01GNlhPQ1NEVzdQVlpYSVMwbXMrd3J6VlA1TWNQY3pFYkFVNE1ocUxnQjF0?=
- =?utf-8?B?ZlllMi9PSWJOL3JCYVlEREJ2MG5qdVRyZkh6bzFGZ0E0K25pS2VCclI0Wmdq?=
- =?utf-8?B?RGFkN1RydC8ybThBdHh2YlJvYy9zV0h1RzFMZ2VFL2llQzRWbGlreFRVdmV3?=
- =?utf-8?B?QkUyQlYxVVlHa1JodWZ3L3czazB4eDdpdHJPT3ZDQWRqc2w1cXVPbUpyYWNV?=
- =?utf-8?B?WmZaYTBYNlBmdUppNFYzSHF2dUpDclpBeWJEQ0RaQ3ZsaDdXYmM4MmVyT0lW?=
- =?utf-8?B?eERrMTNmNnV4ZEYyK3ZiVGxGQ0QrUlBIcFFMTjZoSGFCYytSYWgyM0I0ZE5K?=
- =?utf-8?B?ak5ZaDhYS1Y3UTFxcGdTY0xueE04QUZCQnBwVU16TzQxN0VjdGthNW5iTjNH?=
- =?utf-8?B?VGh0UWxTUHdRY1RJNWZxTmdVc3J5UEQ4VTdjWGd5Y244WXlJRHN1UzFZbUNM?=
- =?utf-8?B?ZlRBa2lubXJ1NTJ1QUx1WDRXQ0VtcGRkOFlIMHp0UDRqT1lwalFndGpIOG4r?=
- =?utf-8?B?bGY5M2dwL1FvL3dlQzRMbmozZVNDajBtQ3A2bTZIMWxjclBjSmx4RFNWbGto?=
- =?utf-8?B?bHlDNVRPbGRwUVVKbmRQUXNYQ3NGaTdYODA0Z0Q5bndTZXlHTWIreFpjWHpv?=
- =?utf-8?B?S3pVUHJwWlJnZ2lyd2RjZmF6b2FodnoyWkhuL2libTdOWEpSd2hndmFidm5Y?=
- =?utf-8?B?ektZT3dCODYvMFN3UjJDSFd5UzNIRDRNYkFGZ2R2UHdoNFNnUk91MnpnazAx?=
- =?utf-8?B?Rm9YeGkyOWw2TDRZdWE5c0pGQUd3VlVZNUdEU0duQVR1dzh1YUxVRTlaVGNQ?=
- =?utf-8?B?UU1qdVZHV0d4ODJ3bnlUU2h3YXAzWE92Tmw5UGRUemtwUkNmeGRSZjFkd1Yw?=
- =?utf-8?B?NTUxandMOHFlVTQ4T0plMWZXK1FWZzVYL2pncmtITFBMVHpNdTlvL0NBR1Fl?=
- =?utf-8?B?Mlh2cm9BNUdxTXh5bk8yR3JmazB3SVBSaDdXbWYweEMxZ2x4ajdyT3gxQ283?=
- =?utf-8?B?NEZkbHBzL3RMa0ZHZ3Z2L2JyU2xmR3kyQndWRTI3UHdsVEpTcXB4b2ppbG5a?=
- =?utf-8?B?VGIyS2x4VVVSeUVtaEVBQi9PNysvUEVtVWV3OVFFV1k3UHZManZDV2dza3VT?=
- =?utf-8?B?RmR1bzFDZ3FhWnJmNXFjZlJYemsrVHlDN1RZbCs5VDBWaFlHK2llY2xsejAv?=
- =?utf-8?B?Q00zcitqMUZHOVVPUU5hZzlodkFVd1RYWUowQnFGQ1h2YjdQSStMTU5GdVV5?=
- =?utf-8?B?L0s5Y2NlL3Y4NlZTY0hYSlFmdGk4WmhxanRNSHNwUSt6c1JIaVlFS0k1T1J3?=
- =?utf-8?B?ZGJtM25MZ2hxdWs3UnZra2RKZjRtci9tSEt1emNqWEVFVTlxS09YMjBZb01O?=
- =?utf-8?B?K053ejJLNGZLTXdKdEdRRXZXaWU3dEtMdTBSaGNXTG1VTG9GbTAyMWF6eTkx?=
- =?utf-8?B?RWFGUFk3Nzg2WVJBZU81NjJ2aVBQaG5GcXI4blRtWmphdnJlUng3bEdWK3JU?=
- =?utf-8?B?ZDZtbDB6Y0FZK2pMYnY1OFlxK3BhUzVySXpSOCtxTzR5WmxUZm9nZEtiQytM?=
- =?utf-8?B?Q2lPaC9taVZtSTV6d1F3eU1MeFNQRlNndk9kRWdxTmpXOXlnRVlHbFF4TnFj?=
- =?utf-8?B?T0V1L0svdlI3QUpWdW9aYUFSV1F0bkFSUERxWjR2VE5Jb3B0R3FreC9CQ01a?=
- =?utf-8?B?K1QzTXh1eGY0eGV5bEVUaytUcFNmajArYm40cEJWTFZpa1gzNFk0QzlxWDY1?=
- =?utf-8?B?OFc0VHFjTzRSK0ZLNVh1WDhSR3VtRnJ1WCtieHpia2lFbFQzNldUVFRlWDdP?=
- =?utf-8?B?Y0cxYXNGNkljcVhHS2dTbmE2SUpqVC9aNUpNM1hzaHhmSEdtNWFlS3VpMjlT?=
- =?utf-8?B?ZTIyWDRaODhXN280bGxHUk9WMkRjdk9EVkd4RnpBTThEL0ZsdmsxV0Y4dkVw?=
- =?utf-8?Q?cVGNqDWc9XkWX+qrgDvRdUI=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <34AFCE607CB3144A9CDAB16D0635FBDC@FRAP264.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
-MIME-Version: 1.0
-X-OriginatorOrg: csgroup.eu
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 57c586a3-44dd-434c-551b-08dabd6eb7e1
-X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Nov 2022 07:40:45.5084
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: R5pYpsHJ38I214jNabXxynDu4SdwosWROwD1t4slJ4+zFoysPc0Evh5AES5pyzFFGoMjwVq4Y0sj3KYKKLdH+j+qQNI5y00l4hHAgTF68HQ=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR0P264MB2202
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 3 Nov 2022 03:46:34 -0400
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D6902ACB;
+        Thu,  3 Nov 2022 00:46:31 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id D690D5C00DF;
+        Thu,  3 Nov 2022 03:46:28 -0400 (EDT)
+Received: from imap46 ([10.202.2.96])
+  by compute5.internal (MEProxy); Thu, 03 Nov 2022 03:46:28 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fastmail.com.au;
+         h=cc:cc:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1667461588; x=1667547988; bh=UJ
+        Z0UysFtjqjPIhOXvrXl9HpVojGVqoZMb7srL4hqgM=; b=FC+Hvo6gBuNfJFvN7t
+        PepS2kfLAqKwLgZ1E8jMfgBPVrUgq2h7ZoZfLx1Fr3xjTWMwltpi5DCIBgcQtMb0
+        hCfPWTE5Dxcaehj6B7AnmqSP1D6ac5WnSZOP1hg+01aTNKFoj1FVy51WaDEoNd1M
+        yWgrvoUk9hWWg95tlY86MFO9cOGnC1AwgUkPpsAFl3HjMrUEla+J8IwNYlLKhbTQ
+        gSCESpSg7cf2wUhMnsEzgsPwsw+NcUCBklJKrQXJjpGDlRtYwdG/sCVy7NecTG06
+        oPgkHpF+CMmiWB2LtrGs+whg7LOYy3XjYIMFZRcdlz1Zk0BS8vjrVx7EjLOiIY2l
+        7bzA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1667461588; x=1667547988; bh=UJZ0UysFtjqjPIhOXvrXl9HpVojG
+        VqoZMb7srL4hqgM=; b=cvCkb37chz2XVByqN5aIh7DmQTkZ63n8jLJVAkpFhJKf
+        nKS0iw65gibFD75Xu/u4ZupnHxPfRZ0oCNQwTO8r5oHXLxRrPvJt10xZ4+QnO9ra
+        4zZ7//UQN7jhu0gnoaiEowAEXebyqthKOiWghcGwU94ARMEr+n5gGvrQcloKcMvf
+        J16A476mIBVkSfICJSBEujTf4hFncE7OLFV0TG6yUkpmwQYYuW7eJgkMC9w42Pbj
+        W6EK1/fqruup/LL+rIIZz4PsOGpncVFuTjgkV1kO4KySRnvlRKcMVzgz7cTS9Quy
+        HDEk6EY9d3Ur3A27UlTPjpi2pE8TYYHNFPblleYoBQ==
+X-ME-Sender: <xms:03FjY7b1CAJwEuzluTxLif4B88JXlNghnCfO2eG1MaKSB7A_FCm-mg>
+    <xme:03FjY6Y-UIo2Aau6fJrpHEbbm2WcFjVhtUvcGRn14177hNBSvwZXLMc3UQu2XLaSf
+    bc1GyQwGL4woAhdAA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrudekgdduuddtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedflfho
+    hhhnucfvhhhomhhsohhnfdcuoehlihhsthhssehjohhhnhhthhhomhhsohhnrdhfrghsth
+    hmrghilhdrtghomhdrrghuqeenucggtffrrghtthgvrhhnpeejjeefieelgfeftdekkeef
+    keffgeelteelhfehkeelgefgtddtveevudehteetgfenucffohhmrghinhepkhgvrhhnvg
+    hlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhho
+    mheplhhishhtshesjhhohhhnthhhohhmshhonhdrfhgrshhtmhgrihhlrdgtohhmrdgruh
+X-ME-Proxy: <xmx:03FjY98o3Kiu4I6CSH9uilu0NoH7Ih6mkFGolflG5k3i8TCRM2Z6-w>
+    <xmx:03FjYxot7QbczOxt5fdS2BWXeauqOf_ZLQ8VXESEdWvC7vBA8paBhw>
+    <xmx:03FjY2pUvWU4z2LA7p-0jmUCKmvuQjFQwiMjDY0pFM_MJ0yvrvmhHQ>
+    <xmx:1HFjY6oCruZq-H7sCgY9ssAM3LduTSZ-Pv_fsrM3Ec4HIMvHFnJQ8w>
+Feedback-ID: ia7894244:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 3C91C2A20085; Thu,  3 Nov 2022 03:46:27 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1087-g968661d8e1-fm-20221021.001-g968661d8
+Mime-Version: 1.0
+Message-Id: <f479b9cc-1301-410c-a36e-80c365964566@app.fastmail.com>
+In-Reply-To: <Y2NrRt5FF+zi4Vf1@feng-clx>
+References: <9b71ae3e-7f53-4c9e-90c4-79d3d649f94c@app.fastmail.com>
+ <Y2DReuPHZungAGsU@feng-clx>
+ <53b53476-bb1e-402e-9f65-fd7f0ecf94c2@app.fastmail.com>
+ <Y2DngwUc7cLB0dG7@hyeyoo>
+ <29271a2b-cf19-4af9-bfe5-5bcff8a23fda@app.fastmail.com>
+ <Y2D4D52h5VVa8QpE@hyeyoo> <Y2ElURkvmGD5csMc@feng-clx>
+ <70002fbe-34ec-468e-af67-97e4bf97819b@app.fastmail.com>
+ <Y2IJSR6NLVyVTsDY@feng-clx> <Y2IZNqpABkdxxPjv@hyeyoo>
+ <Y2NrRt5FF+zi4Vf1@feng-clx>
+Date:   Thu, 03 Nov 2022 07:45:49 +0000
+From:   "John Thomson" <lists@johnthomson.fastmail.com.au>
+To:     "Feng Tang" <feng.tang@intel.com>,
+        "Hyeonggon Yoo" <42.hyeyoo@gmail.com>
+Cc:     "Vlastimil Babka" <vbabka@suse.cz>,
+        "Andrew Morton" <akpm@linux-foundation.org>,
+        "Christoph Lameter" <cl@linux.com>,
+        "Pekka Enberg" <penberg@kernel.org>,
+        "David Rientjes" <rientjes@google.com>,
+        "Joonsoo Kim" <iamjoonsoo.kim@lge.com>,
+        "Roman Gushchin" <roman.gushchin@linux.dev>,
+        "Dmitry Vyukov" <dvyukov@google.com>,
+        "Jonathan Corbet" <corbet@lwn.net>,
+        "Andrey Konovalov" <andreyknvl@gmail.com>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kasan-dev@googlegroups.com" <kasan-dev@googlegroups.com>,
+        "Robin Murphy" <robin.murphy@arm.com>,
+        "John Garry" <john.garry@huawei.com>,
+        "Kefeng Wang" <wangkefeng.wang@huawei.com>,
+        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+        "John Crispin" <john@phrozen.org>,
+        "Matthias Brugger" <matthias.bgg@gmail.com>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
+Subject: Re: [PATCH v6 1/4] mm/slub: enable debugging memory wasting of kmalloc
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCkxlIDIyLzEwLzIwMjIgw6AgMDc6MTIsIHdhbmdqaWFubGkgYSDDqWNyaXTCoDoNCj4gRGVs
-ZXRlIHRoZSByZWR1bmRhbnQgd29yZCAndGhlJy4NCj4gDQo+IFNpZ25lZC1vZmYtYnk6IHdhbmdq
-aWFubGkgPHdhbmdqaWFubGlAY2RqcmxjLmNvbT4NCj4gLS0tDQo+ICAgYXJjaC9wb3dlcnBjL2tl
-cm5lbC9wcm9jZXNzLmMgfCAyICstDQo+ICAgMSBmaWxlIGNoYW5nZWQsIDEgaW5zZXJ0aW9uKCsp
-LCAxIGRlbGV0aW9uKC0pDQo+IA0KPiBkaWZmIC0tZ2l0IGEvYXJjaC9wb3dlcnBjL2tlcm5lbC9w
-cm9jZXNzLmMgYi9hcmNoL3Bvd2VycGMva2VybmVsL3Byb2Nlc3MuYw0KPiBpbmRleCBlZTA0MzM4
-MDk2MjEuLmFiNzg2ZGE4YzMwYiAxMDA2NDQNCj4gLS0tIGEvYXJjaC9wb3dlcnBjL2tlcm5lbC9w
-cm9jZXNzLmMNCj4gKysrIGIvYXJjaC9wb3dlcnBjL2tlcm5lbC9wcm9jZXNzLmMNCj4gQEAgLTE3
-Myw3ICsxNzMsNyBAQCB2b2lkIGdpdmV1cF9mcHUoc3RydWN0IHRhc2tfc3RydWN0ICp0c2spDQo+
-ICAgRVhQT1JUX1NZTUJPTChnaXZldXBfZnB1KTsNCj4gICANCj4gICAvKg0KPiAtICogTWFrZSBz
-dXJlIHRoZSBmbG9hdGluZy1wb2ludCByZWdpc3RlciBzdGF0ZSBpbiB0aGUNCj4gKyAqIE1ha2Ug
-c3VyZSB0aGUgZmxvYXRpbmctcG9pbnQgcmVnaXN0ZXIgc3RhdGUgaW4NCj4gICAgKiB0aGUgdGhy
-ZWFkX3N0cnVjdCBpcyB1cCB0byBkYXRlIGZvciB0YXNrIHRzay4NCg0KSSB0aGluayBhbGwgInRo
-ZSIgY2FuIGZseSBhd2F5IDoNCg0KCU1ha2Ugc3VyZSBmbG9hdGluZy1wb2ludCByZWdpc3RlciBz
-dGF0ZSBpbiB0aHJlYWRfc3RydWN0IGlzIHVwIHRvIGRhdGUgDQpmb3IgdGFzayB0c2suDQoNCg0K
-PiAgICAqLw0KPiAgIHZvaWQgZmx1c2hfZnBfdG9fdGhyZWFkKHN0cnVjdCB0YXNrX3N0cnVjdCAq
-dHNrKQ==
+On Thu, 3 Nov 2022, at 07:18, Feng Tang wrote:
+> On Wed, Nov 02, 2022 at 04:16:06PM +0900, Hyeonggon Yoo wrote:
+>> On Wed, Nov 02, 2022 at 02:08:09PM +0800, Feng Tang wrote:
+> [...]
+>> > > transfer started ......................................... transfer ok, time=2.11s
+>> > > setting up elf image... OK
+>> > > jumping to kernel code
+>> > > zimage at:     80B842A0 810B4BC0
+>> > > 
+>> > > Uncompressing Linux at load address 80001000
+>> > > 
+>> > > Copy device tree to address  80B80EE0
+>> > > 
+>> > > Now, booting the kernel...
+>> > > 
+>> > > [    0.000000] Linux version 6.1.0-rc3+ (john@john) (mipsel-buildroot-linux-gnu-gcc.br_real (Buildroot 2021.11-4428-g6b6741b) 12.2.0, GNU ld (GNU Binutils) 2.39) #73 SMP Wed Nov  2 05:10:01 AEST 2022
+>> > > [    0.000000] ------------[ cut here ]------------
+>> > > [    0.000000] WARNING: CPU: 0 PID: 0 at mm/slub.c:3416 kmem_cache_alloc+0x5a4/0x5e8
+>> > > [    0.000000] Modules linked in:
+>> > > [    0.000000] CPU: 0 PID: 0 Comm: swapper Not tainted 6.1.0-rc3+ #73
+>> > > [    0.000000] Stack : 810fff78 80084d98 00000000 00000004 00000000 00000000 80889d04 80c90000
+>> > > [    0.000000]         80920000 807bd328 8089d368 80923bd3 00000000 00000001 80889cb0 00000000
+>> > > [    0.000000]         00000000 00000000 807bd328 8084bcb1 00000002 00000002 00000001 6d6f4320
+>> > > [    0.000000]         00000000 80c97d3d 80c97d68 fffffffc 807bd328 00000000 00000000 00000000
+>> > > [    0.000000]         00000000 a0000000 80910000 8110a0b4 00000000 00000020 80010000 80010000
+>> > > [    0.000000]         ...
+>> > > [    0.000000] Call Trace:
+>> > > [    0.000000] [<80008260>] show_stack+0x28/0xf0
+>> > > [    0.000000] [<8070c958>] dump_stack_lvl+0x60/0x80
+>> > > [    0.000000] [<8002e184>] __warn+0xc4/0xf8
+>> > > [    0.000000] [<8002e210>] warn_slowpath_fmt+0x58/0xa4
+>> > > [    0.000000] [<801c0fac>] kmem_cache_alloc+0x5a4/0x5e8
+>> > > [    0.000000] [<8092856c>] prom_soc_init+0x1fc/0x2b4
+>> > > [    0.000000] [<80928060>] prom_init+0x44/0xf0
+>> > > [    0.000000] [<80929214>] setup_arch+0x4c/0x6a8
+>> > > [    0.000000] [<809257e0>] start_kernel+0x88/0x7c0
+>> > > [    0.000000] 
+>> > > [    0.000000] ---[ end trace 0000000000000000 ]---
+>> > > [    0.000000] SoC Type: MediaTek MT7621 ver:1 eco:3
+>> > > [    0.000000] printk: bootconsole [early0] enabled
+>> > > 
+>> > > Thank you for working through this with me.
+>> > > I will try to address the root cause in mt7621.c.
+>> > > It looks like other arch/** soc_device_register users use postcore_initcall, device_initcall,
+>> > > or the ARM DT_MACHINE_START .init_machine. A quick hack to use postcore_initcall in mt7621
+>> > > avoided this zero ptr kmem_cache passed to kmem_cache_alloc_lru.
+>> > 
+>> > If IIUC, the prom_soc_init() is only called once in kernel, can the
+>> > 'soc_dev_attr' just be defined as a global data structure instead
+>> > of calling kzalloc(), as its size is small only containing 7 pointers.
+>> 
+>> But soc_device_registers() too uses kmalloc. I think calling it
+>> after slab initialization will be best solution - if that is correct.
+>
+> Yes, you are right, there is other kmalloc() down the call chain.
+>
+> Hi John,
+>
+> Will you verify and submit a patch for your proposal of deferring
+> calling prom_soc_init()? thanks
+>
+> - Feng
+
+Hi Feng,
+
+My proposed mt7621.c changes are RFC here:
+https://lore.kernel.org/lkml/20221103050538.1930758-1-git@johnthomson.fastmail.com.au/
+That series lets me boot the v6.1-rc3 kernel. I have only tried it with my config (as sent earlier). If there are other suspect config settings that I should test, please let me know?
+I used device_initcall, but postcore_initcall also works fine.
+I rephrased Vlastimil's explanation and used it in patch 3 description.
+I have not referenced a Fixes tag yet (unsure which/if any I should use)
+
+Cheers,
+-- 
+  John Thomson
