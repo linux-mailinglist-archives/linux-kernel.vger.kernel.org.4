@@ -2,102 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA0746182C0
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 16:28:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D6206182C4
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 16:28:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231208AbiKCP2P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 11:28:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37894 "EHLO
+        id S232026AbiKCP2a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 11:28:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232182AbiKCP1n (ORCPT
+        with ESMTP id S232217AbiKCP2E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 11:27:43 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 339221B9CB;
-        Thu,  3 Nov 2022 08:27:41 -0700 (PDT)
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2A3F8ll6022285;
-        Thu, 3 Nov 2022 15:27:33 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=6wCipEvp9ampmbBGbfyYVCsuiKJVysmr33s+ba/f0TY=;
- b=kkdLZKt/C8bEnxBfn7+WFcjR9KsLMTHsA32/mFHkLI/Kpp7bSjbt+HXmHprWCGdi7E0d
- TAZUAcL9abbpc+JZjvatlgh3zxkz8qmbdrphFAmwJPr9jDUWakpevwyRV0hMBnNqySHu
- prpaG8OdU3AyYJ0WuN0IUaQziJssoT3F7PgnucBp6iId6HUXJ5DNB6uVKOWHTiygyptQ
- HDPCT+wfZ02M9sNp/pVVSe/ZJ3bKU2qY4yTwKsaSum0bjqE1KIipKJXw3LkUcidlh+YT
- WWAODkiR9Vx6v6ELllkGGy8A03zLYoVBVzN0TZNhdCVW21kB/vsblzgikRKm3dYDkC3f gQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kmf9r2td1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 03 Nov 2022 15:27:33 +0000
-Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2A3FA7fm030157;
-        Thu, 3 Nov 2022 15:27:32 GMT
-Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kmf9r2tbt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 03 Nov 2022 15:27:32 +0000
-Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
-        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2A3F5eI3014295;
-        Thu, 3 Nov 2022 15:27:30 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma04fra.de.ibm.com with ESMTP id 3kgut8xqrh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 03 Nov 2022 15:27:30 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2A3FRR0C6226564
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 3 Nov 2022 15:27:27 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E7F85AE04D;
-        Thu,  3 Nov 2022 15:27:26 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 76D29AE045;
-        Thu,  3 Nov 2022 15:27:26 +0000 (GMT)
-Received: from [9.152.224.241] (unknown [9.152.224.241])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu,  3 Nov 2022 15:27:26 +0000 (GMT)
-Message-ID: <7c5f70bd-c7a5-cf43-8ce9-f97dbba59a15@linux.ibm.com>
-Date:   Thu, 3 Nov 2022 16:27:26 +0100
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.4.1
-Subject: Re: [PATCH 3/3] s390/lcs: Fix return type of lcs_start_xmit()
-Content-Language: en-US
-To:     Nathan Chancellor <nathan@kernel.org>,
-        Wenjia Zhang <wenjia@linux.ibm.com>
-Cc:     Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        linux-s390@vger.kernel.org, netdev@vger.kernel.org,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, Kees Cook <keescook@chromium.org>,
-        Sami Tolvanen <samitolvanen@google.com>, llvm@lists.linux.dev,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev
-References: <20221102163252.49175-1-nathan@kernel.org>
- <20221102163252.49175-3-nathan@kernel.org>
-From:   Alexandra Winter <wintera@linux.ibm.com>
-In-Reply-To: <20221102163252.49175-3-nathan@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 0JkxIsgOHNAoaozpH7FELDEopzUm619D
-X-Proofpoint-ORIG-GUID: UgUdqCnUmOghft52R9yJJ-fHv2FECiVd
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Thu, 3 Nov 2022 11:28:04 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F2761AF22
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 08:28:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net; s=s31663417;
+        t=1667489264; bh=91iatK0bFe164TIbmDTaQyHZyVvPOTcArPtTqSE8u4w=;
+        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=j+gAjkAD6A/tF7e+qfh2/rtCGHI637bbBEDhiEKyN4Zp3YYmESdb5ijOgDBvfAO2C
+         chfmNhp6jI84lWYpQeT8y8jfhtNw7jHfO5I597APb1GD9xh27b3dE5eXOFxPPO0SP1
+         +PONSQSRc4Bb6t2zk2+FBLtwV3jkXuDFSI/bALQkmMscyjiSYyF8a8rBZoH94ZkEhY
+         UHZhkGaYDwg924w88Uxwhe2BxpKG/QyZSUUDZaOwi74EfFCVZnslDb8jmlPVJZOzrX
+         BCUOHUXBDXNmqfQNjDD2XYmLHc2/DRHqb48s5frAcZtkFmzEQwXZmEzwBjHCd98eDP
+         Ja2XrNUJiCPlA==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from probook ([78.34.126.36]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MKsj7-1obxOf08bt-00LELe; Thu, 03
+ Nov 2022 16:27:44 +0100
+Date:   Thu, 3 Nov 2022 16:27:42 +0100
+From:   Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+To:     Joel Stanley <joel@jms.id.au>
+Cc:     Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        openbmc@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Russell King <linux@armlinux.org.uk>
+Subject: Re: [PATCH v3] ARM: Add wpcm450_defconfig for Nuvoton WPCM450
+Message-ID: <Y2Pd7vIkOu0ptVMb@probook>
+References: <20221101112134.673869-1-j.neuschaefer@gmx.net>
+ <CACPK8XfnRExua7ZhyAkMNUNwUtmcXrBL3phf9ZMCzpBMN452hw@mail.gmail.com>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-03_04,2022-11-03_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
- lowpriorityscore=0 malwarescore=0 bulkscore=0 impostorscore=0 spamscore=0
- mlxscore=0 priorityscore=1501 mlxlogscore=999 suspectscore=0 phishscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211030101
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="RxxJ9eg+2o8pr/p9"
+Content-Disposition: inline
+In-Reply-To: <CACPK8XfnRExua7ZhyAkMNUNwUtmcXrBL3phf9ZMCzpBMN452hw@mail.gmail.com>
+X-Provags-ID: V03:K1:6/15tKCEE1SgwOughob2r71Cgpa2Iy2CW+UvY3wS41dgyU3QgPB
+ nN17U46GHNzgiDywo9D6t1u3pWZxjR2c8/PxNuwet0hmqsMCvFUr3I+FOaCOhDhIATtUNsG
+ iaGWaQNpPvz+SA1cFuRO9hBCqmkS6DPS/mOZFFLDW/d05D/YVBlvRt60o5lO+G5bFr9zhSn
+ YhXVtMrZZoQJopX/ndiYg==
+UI-OutboundReport: notjunk:1;M01:P0:N1LbXc4a9XE=;WrOyN4FTith+9lFxFza3HlLqBVL
+ O+WJQplvss8Wpf6fW5ff6DI1Mkb6wsTEc4u+daSJCR+HGldi5tucOYxNZ1vboj/Q4S4GC68EW
+ lPXsOVC5ru0xaRXL7yHuN0FtBWgFjoACpW8pBCKwCGlkVram0vD2TZFHqT22Jf8aK85RaIGTt
+ Tf2VJ2sV2QIhE4bOEysehcvDMvw/gqwfNk+3hluW0PS1EQ2lRwF9lKKfIgv68KaSlfKLmIbkZ
+ boAnkXCpK9OI9bcoY9y24O6v0XoByLWuBiJUHDT7F+OvBFje2RCOE1x/ue3mdPq/iQGFftJZ0
+ w9huIFHq79KKRnMFKrs1leCO14+gw/9gqC72KOKuHlZ0aw+tMSNSfcP20FgAsLLVuGEwaWyQj
+ O8m7we1GoF/sDqP4/Rz3Ef7kw8qlvg0yp3dAl7YgF452/ZMK1eyw6dif/wDfY1kV2fZfqUDXu
+ 0mwRKtSsx25Cb1UZqb7RMHml0CJOgcAYhwsNKz0Mds439ACyCaLUFUZCRw4goCrWCWMUJyzFF
+ amA4sYOaow4ikitTP8PJgYFIvAdSakYjCZ+IeWzjdteMFsZUYWK5IyzF4BkOUycG3TVBNjfV5
+ ZddbRCfHuXS1f9Ixb/rY/64qF1mgcHzAWyRBnsra8U/HvGpp6gfY1Gx87zeheN4KaPPICG4kP
+ 1x650I0YFWYIH2gH5xZ+WXGicFfhXmQoz+itNaJP9RMmY+8aPZGKyB+PpPyGCOFLzHxYsQi/v
+ OzIbWWra6aM9KX9OkAkJHLpXlBwhOgC3soJumljqdQg6WEsCEd174gxaozKJFMuktS2iRhyoi
+ dQ71eYnMxwdcDdvoO3YjZ/r2aSQjmEashl4ujUKNag3mV+FnFK5BoFQLajgpZ5fQ1LQsUFL0z
+ MS0PJ9M8MrNaq89lAnlaQn17QRngcKsIFQm86s+JycI6/4suL23A8vaXHWjvtyom5zUbrqu4L
+ zAp//XP/wusY3TAGCH5nTtJshww=
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -105,60 +74,73 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+--RxxJ9eg+2o8pr/p9
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 02.11.22 17:32, Nathan Chancellor wrote:
-> With clang's kernel control flow integrity (kCFI, CONFIG_CFI_CLANG),
-> indirect call targets are validated against the expected function
-> pointer prototype to make sure the call target is valid to help mitigate
-> ROP attacks. If they are not identical, there is a failure at run time,
-> which manifests as either a kernel panic or thread getting killed. A
-> proposed warning in clang aims to catch these at compile time, which
-> reveals:
-> 
->   drivers/s390/net/lcs.c:2090:21: error: incompatible function pointer types initializing 'netdev_tx_t (*)(struct sk_buff *, struct net_device *)' (aka 'enum netdev_tx (*)(struct sk_buff *, struct net_device *)') with an expression of type 'int (struct sk_buff *, struct net_device *)' [-Werror,-Wincompatible-function-pointer-types-strict]
->           .ndo_start_xmit         = lcs_start_xmit,
->                                     ^~~~~~~~~~~~~~
->   drivers/s390/net/lcs.c:2097:21: error: incompatible function pointer types initializing 'netdev_tx_t (*)(struct sk_buff *, struct net_device *)' (aka 'enum netdev_tx (*)(struct sk_buff *, struct net_device *)') with an expression of type 'int (struct sk_buff *, struct net_device *)' [-Werror,-Wincompatible-function-pointer-types-strict]
->           .ndo_start_xmit         = lcs_start_xmit,
->                                     ^~~~~~~~~~~~~~
-> 
-> ->ndo_start_xmit() in 'struct net_device_ops' expects a return type of
-> 'netdev_tx_t', not 'int'. Adjust the return type of lcs_start_xmit() to
-> match the prototype's to resolve the warning and potential CFI failure,
-> should s390 select ARCH_SUPPORTS_CFI_CLANG in the future.
-> 
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1750
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> ---
->  drivers/s390/net/lcs.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/s390/net/lcs.c b/drivers/s390/net/lcs.c
-> index 84c8981317b4..4cbb9802bf22 100644
-> --- a/drivers/s390/net/lcs.c
-> +++ b/drivers/s390/net/lcs.c
-> @@ -1519,7 +1519,7 @@ lcs_txbuffer_cb(struct lcs_channel *channel, struct lcs_buffer *buffer)
->  /*
->   * Packet transmit function called by network stack
->   */
-> -static int
-> +static netdev_tx_t
->  __lcs_start_xmit(struct lcs_card *card, struct sk_buff *skb,
->  		 struct net_device *dev)
->  {
-> @@ -1582,7 +1582,7 @@ __lcs_start_xmit(struct lcs_card *card, struct sk_buff *skb,
->  	return rc;
->  }
->  
-> -static int
-> +static netdev_tx_t
->  lcs_start_xmit(struct sk_buff *skb, struct net_device *dev)
->  {
->  	struct lcs_card *card;
+On Wed, Nov 02, 2022 at 10:29:58PM +0000, Joel Stanley wrote:
+> On Tue, 1 Nov 2022 at 11:22, Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.=
+net> wrote:
+> >
+> > This defconfig aims to offer a reasonable set of defaults for all
+> > systems running on a Nuvoton WPCM450 chip.
+>=20
+> I was going to ask if we could instead have a common nuvoton
+> defconfig, but this is an ARMv5 part so we can't also select the ARMv7
+> npcm750.
 
-Thanks a lot for the fix.
-Could you please also fix the indentation of these lines?
-With that:
-Reviewed-by: Alexandra Winter <wintera@linux.ibm.com>
+Correct.
+
+>=20
+> Reviewed-by: Joel Stanley <joel@jms.id.au>
+>=20
 
 
+> > +CONFIG_ARM_APPENDED_DTB=3Dy
+>=20
+> Do you use this? OpenBMC systems tend to just use FIT, so we don't
+> need this option.
+
+I use this, because there is no modern U-Boot port for WPCM450 yet
+(as far as I'm aware).
+
+> > +CONFIG_KEXEC=3Dy
+
+I also use kexec, it's useful during development, but I see that it's
+not so useful for the BMC usecase.
+
+> > +CONFIG_CPU_FREQ=3Dy
+>=20
+> Does the wpcm do frequency scaling? If not you could disable this.
+
+No, as it currently stands the clock driver is read-only except for the
+clock gates, and there is no cpufreq. I'll disable this option.
+
+CPU_IDLE could plausibly be implemented on WPCM450, but currently isn't.
+
+
+Thanks,
+Jonathan
+
+--RxxJ9eg+2o8pr/p9
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEvHAHGBBjQPVy+qvDCDBEmo7zX9sFAmNj3c0ACgkQCDBEmo7z
+X9s1ig//cf6cPlBR4q5XbP91hHqmEBlAhpVFYFjdtzHlcqJgZlhbhtwwEa3OiPoP
+5JBodEaW2k3YWU6t2hM7UxiltcBNNCrz7uEhDscO1NHS6S04Dq43DU4rqyNGpVIS
++KC4WQJz7TAliY5ejuwfmS0b5iipVVA8piG8iXXl9nKe0i09cepbQHID7twJ3xZo
+uMAWSVUJvu5Kv1qusulgjnI3O47QnZdR+cCHH3s0PyP0pox74+VKjfj6PzjOOw+Z
+LqqggLiymX4o3OAeYZlGbemhWzfTgoln/FhcNMjZbMof/wjtu/lZxVbLmQ/el7LN
+hVEuj+ViS/lZ1CO+y+K5effZPvMTURCxRDBzQalyynPSCrsEswVtIT/QQoI5uwP9
+wbyFv09N+HItJIn7TRNl+lRI6I7PMmalMrHEFfGQRYPfPJomq2w68M+XvwVpOTr7
+cVzAzLtr9KUjkHug/ILgN5qaUWn99oGkNXV1yyHhsOfWDc3hwwjEUsmoj8yI/Jg4
+Q22mTyqwU1LlYc05cvJiJ9jbZYaQeuRHxqb2m+WIQd20IZM6jUuTFzIZhNgLVOSL
+0+KKPRtGfUs0hjUzi3aXTC3N3Ibl/huFCv0/9zWQZhETouS5DHwZly1tZ8dXn0rd
+Yeh45DKjbux/qtDyS53ZNeEWadaoI9/+MPehpDy1RfMtiNxmeEo=
+=GC/b
+-----END PGP SIGNATURE-----
+
+--RxxJ9eg+2o8pr/p9--
