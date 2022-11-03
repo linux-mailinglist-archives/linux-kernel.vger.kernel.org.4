@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A641C617D4D
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 14:02:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8B16617D4E
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 14:02:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231789AbiKCNCB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 09:02:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41692 "EHLO
+        id S231741AbiKCNCD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 09:02:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231740AbiKCNBh (ORCPT
+        with ESMTP id S231778AbiKCNBv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 09:01:37 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5CF714D08;
-        Thu,  3 Nov 2022 06:01:21 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id a5so2834830edb.11;
-        Thu, 03 Nov 2022 06:01:21 -0700 (PDT)
+        Thu, 3 Nov 2022 09:01:51 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80F56140B7;
+        Thu,  3 Nov 2022 06:01:23 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id f27so5048996eje.1;
+        Thu, 03 Nov 2022 06:01:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Zzx2/3zXVy+XSamreVFgLFmkVq8rfCdvsS38b4AXRWY=;
-        b=X1CPalRZEolGGCg7hNs9GpAz8NcvoKOm73Glkl6rdeCTYeNycT8nGqnS4slOaXXcUP
-         sQHQcKYJiArOGahmozpOM/uq3pjz0CracaSSKah4t6XDy6W8NzHSuGdbJ2C/ah4tezPO
-         jfPnX8gO6pt1IKhFQA6swYZM2UQjqREJzy7/SshzvXSKP8AsR8AzGcyRNzex9pAycfGW
-         dd5DA71qJv+QL8MBGppz3JG+qejX96opwqOIdyhyL+ngT+87YCORC3zCxtuKzLRRvm5I
-         MYzySPiHaDehn95AGczZe0oZxouHGQUecRo6MKht7i4U7j7NnuRtA7s13fZCXUQjLhD1
-         aSEg==
+        bh=Wl5YV1yuldlFg2w/72zvpuZsJu+kXHIm+tqTSmy2/d8=;
+        b=CPONfOgiGcvco/Rskk0DdFbIZ6HfBYRnFSFdPUAnHEC+XwcCXJCsupfbw3rVgS3WNv
+         BaS1aWtcXN6CYybLmhEOjR+zwsqQmER5EQZb4WwjGlJwUD3uKQKaU7y6raDhT5HKa12G
+         SNyARbOgA/gLJkgyoe7Yp/poxlzsPLjmK2XlYmtmqgZ4yE8u2etgLAdQl2YEZJzJGYU8
+         1Bg/Eqc63Xs+Qa6K7xfCwZ8OeUZzyCLTyiUnU2J5ngw/bn/GJksblf7OAZXriwGgmagC
+         BQWpu6cqpULKzsIISCWL1+yzx2Ou+axpQNFD6XLQsVLaw972Z/n4+eSHoT77VG2ab0Mc
+         OQpw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Zzx2/3zXVy+XSamreVFgLFmkVq8rfCdvsS38b4AXRWY=;
-        b=jpQZXjdSbj7vlPFMwwjx4ITUhgSMnJO/0Sjj9n/kbea4+wWwMikP7HGMHSEpzIPj0/
-         XKvx66hMOlCvhmxOGC6zTdDJ+xUL/E6asmOFFuxgc3cha/6ixLKh1C+Qq2TLJ+zv8xvQ
-         PeOgoe2hSCZKaSh9hqWOovtEMuKFAQbajGXCtC6xB66Zi5QeQ2OJngjSblk/qnTxkp1U
-         M7iEm0Eypu4xcbFITd5BXOj+DiJDcsRkv267z2aBesiHP3RqPwPQpAbyLBwatSFLbC69
-         af1pSPDN9VNR+pQqc5JWA/xt8uNiEh3n+e89nBtmoGUpfzr7yyrMOWjyMthmsbu1CY3+
-         u2dA==
-X-Gm-Message-State: ACrzQf3QAMC4rbHThG6z2xHOnVAw9d5moHAhEW9CzHDyEojarcBV0Tcl
-        5IfkEx487hFOuaNbuE2bDpI=
-X-Google-Smtp-Source: AMsMyM6DsMozimHmhUJyME6ejc3SLsFmDriKX9DT06PElS5EWi1V+J1RouazjREIIwXK17XrSeXo1Q==
-X-Received: by 2002:a05:6402:5107:b0:462:3014:3d73 with SMTP id m7-20020a056402510700b0046230143d73mr30160511edd.177.1667480480236;
-        Thu, 03 Nov 2022 06:01:20 -0700 (PDT)
+        bh=Wl5YV1yuldlFg2w/72zvpuZsJu+kXHIm+tqTSmy2/d8=;
+        b=7z2TEYa7f9NCiHUioV13N2whYO057UsoNHppPkXESXVX6yrUEfceIh/0a0iYcFRT6H
+         TPVa/ijNLSZK9Qo+BOKVQs0AwFHTfze7Wvmr6BfcwPgAVrggDhs8ryAJKUFHswvho4TA
+         IQQ1VrGI0gC4Rt6ungR08jDufrwBFuuOYsKKeZ7BIrxHUJPHfc0wDJqGUrHxYJfkwuzW
+         2HVqVr669iYO8KBHt+jWbZWDWYsvgazatOtz1ysEbAJAj9V9KGYeG1rJpXg0aY8Uzn+A
+         f/4UIzy9EokN79qAt9BjcSYjjNaYFIcTsNh0eW3zssFjyLika1IvCOdbqD/vxnWZG9ln
+         NNng==
+X-Gm-Message-State: ACrzQf2rhuM55+O+fDFVLSOcTBVc2Wf4oS/NwDi9sL8ou7AdVNxaEoxS
+        5GKFxCzhJcC9e2W88YW9gCQ=
+X-Google-Smtp-Source: AMsMyM7gPXzJcckBUMqFFsZth/J4/WP/0PALvoZxooUDuYJmORo94PSzkWl3TrmVl08Shg3SeMiOHg==
+X-Received: by 2002:a17:907:7617:b0:7ad:c0d5:bdf1 with SMTP id jx23-20020a170907761700b007adc0d5bdf1mr23207559ejc.211.1667480481889;
+        Thu, 03 Nov 2022 06:01:21 -0700 (PDT)
 Received: from localhost.localdomain ([5.2.194.157])
-        by smtp.gmail.com with ESMTPSA id q12-20020a17090676cc00b00779a605c777sm451829ejn.192.2022.11.03.06.01.19
+        by smtp.gmail.com with ESMTPSA id q12-20020a17090676cc00b00779a605c777sm451829ejn.192.2022.11.03.06.01.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Nov 2022 06:01:20 -0700 (PDT)
+        Thu, 03 Nov 2022 06:01:21 -0700 (PDT)
 From:   Cosmin Tanislav <demonsingur@gmail.com>
 Cc:     Lars-Peter Clausen <lars@metafoo.de>,
         Michael Hennerich <Michael.Hennerich@analog.com>,
@@ -60,9 +60,9 @@ Cc:     Lars-Peter Clausen <lars@metafoo.de>,
         linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Cosmin Tanislav <cosmin.tanislav@analog.com>
-Subject: [PATCH v4 06/13] dt-bindings: iio: temperature: ltc2983: require custom sensor tables
-Date:   Thu,  3 Nov 2022 15:00:34 +0200
-Message-Id: <20221103130041.2153295-7-demonsingur@gmail.com>
+Subject: [PATCH v4 07/13] dt-bindings: iio: temperature: ltc2983: require 4 wire rtd for current rotate
+Date:   Thu,  3 Nov 2022 15:00:35 +0200
+Message-Id: <20221103130041.2153295-8-demonsingur@gmail.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221103130041.2153295-1-demonsingur@gmail.com>
 References: <20221103130041.2153295-1-demonsingur@gmail.com>
@@ -81,73 +81,58 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Cosmin Tanislav <cosmin.tanislav@analog.com>
 
-The driver will error out when a custom sensor type is used but a
-custom sensor table is not provided. Require it in the binding too.
+The driver will error out when current rotation is enabled but the RTD
+is not 4-wire. Require it in the binding too.
 
 Signed-off-by: Cosmin Tanislav <cosmin.tanislav@analog.com>
 ---
- .../bindings/iio/temperature/adi,ltc2983.yaml | 34 +++++++++++++++++++
- 1 file changed, 34 insertions(+)
+ .../bindings/iio/temperature/adi,ltc2983.yaml | 25 +++++++++++--------
+ 1 file changed, 15 insertions(+), 10 deletions(-)
 
 diff --git a/Documentation/devicetree/bindings/iio/temperature/adi,ltc2983.yaml b/Documentation/devicetree/bindings/iio/temperature/adi,ltc2983.yaml
-index 4f26b337c957..bbac5f5cfbb3 100644
+index bbac5f5cfbb3..b603219fb0c9 100644
 --- a/Documentation/devicetree/bindings/iio/temperature/adi,ltc2983.yaml
 +++ b/Documentation/devicetree/bindings/iio/temperature/adi,ltc2983.yaml
-@@ -130,6 +130,15 @@ patternProperties:
-             - description: Voltage point in nV, signed.
-             - description: Temperature point in uK.
+@@ -230,13 +230,6 @@ patternProperties:
+           resistor is used for multiple 2-, 3-, and/or 4-wire RTDs.
+         type: boolean
  
-+    allOf:
-+      - if:
-+          properties:
-+            adi,sensor-type:
-+              const: 9
-+        then:
-+          required:
-+            - adi,custom-thermocouple
-+
-   "^diode@":
-     type: object
-     description:
-@@ -263,6 +272,15 @@ patternProperties:
-     dependencies:
-       adi,current-rotate: [ "adi,rsense-share" ]
+-      adi,current-rotate:
+-        description:
+-          Boolean property which enables excitation current rotation to
+-          automatically remove parasitic thermocouple effects. Note that
+-          this property is not allowed for 2- and 3-wire RTDs.
+-        type: boolean
+-
+       adi,excitation-current-microamp:
+         description:
+           This property controls the magnitude of the excitation current
+@@ -269,10 +262,22 @@ patternProperties:
+     required:
+       - adi,rsense-handle
  
-+    allOf:
+-    dependencies:
+-      adi,current-rotate: [ "adi,rsense-share" ]
+-
+     allOf:
 +      - if:
 +          properties:
-+            adi,sensor-type:
-+              const: 18
++            adi,number-of-wires:
++              const: 4
 +        then:
-+          required:
-+            - adi,custom-rtd
++          properties:
++            adi,current-rotate:
++              description:
++                Whether to enable excitation current rotation to automatically
++                remove parasitic thermocouple effects.
++              type: boolean
 +
-   "^thermistor@":
-     type: object
-     description:
-@@ -349,6 +367,22 @@ patternProperties:
-     dependencies:
-       adi,current-rotate: [ "adi,rsense-share" ]
- 
-+    allOf:
-+      - if:
-+          properties:
-+            adi,sensor-type:
-+              const: 26
-+        then:
-+          required:
-+            - adi,custom-steinhart
-+      - if:
-+          properties:
-+            adi,sensor-type:
-+              const: 27
-+        then:
-+          required:
-+            - adi,custom-thermistor
++          dependencies:
++            adi,current-rotate: [ "adi,rsense-share" ]
 +
-   "^adc@":
-     type: object
-     description: Represents a channel which is being used as a direct adc.
+       - if:
+           properties:
+             adi,sensor-type:
 -- 
 2.38.1
 
