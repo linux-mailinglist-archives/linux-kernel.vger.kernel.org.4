@@ -2,77 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CE796194D2
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 11:51:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75EF46194D3
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 11:51:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231806AbiKDKvB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 06:51:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60982 "EHLO
+        id S231837AbiKDKvS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 06:51:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231776AbiKDKu6 (ORCPT
+        with ESMTP id S231807AbiKDKvK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 06:50:58 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 965992B272;
-        Fri,  4 Nov 2022 03:50:57 -0700 (PDT)
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2A4AOC3j013740;
-        Fri, 4 Nov 2022 10:50:44 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=A9giptHeWqvr+ADTpesZYe1XkQ6LUW6iP/WTxkN+epo=;
- b=EALXttxRlgQ2YaNw73CqA+RdkEDfOWHG0Q31evrdFdGQaGlRF4GrsAdC+UQiHwymdPjM
- jFtDsiltl1qYs8SruyiBrZbqjEEgYLiCxd/BtWviEoRcS4i0P50Gestzrd5m0GCYvq/Y
- MI0E/NHZt0kZS4ls74MYjb/tnbwygZEC4r0R8+lpagAYMpCVBfkXQKAdxU+EnoO85jLQ
- dlGvuZPimUzD0YCCOqw8MqD6A/fi3SorXcyEVA4YI6fz0xiAO+lRnkkDpKkyD1kNdkaM
- nfv/pPrFYsyJKEs9ps6ClbB1CAC5Mxw+tpJO6TxliLjb7AFiq+wKw9NKsBbMOtIJ8/oi 0Q== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kmvgk8m87-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 04 Nov 2022 10:50:44 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2A4AohMu000518
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 4 Nov 2022 10:50:43 GMT
-Received: from [10.206.64.67] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Fri, 4 Nov 2022
- 03:50:41 -0700
-Message-ID: <eb549cdc-01ef-2f9b-719c-3c2857e43313@quicinc.com>
-Date:   Fri, 4 Nov 2022 16:20:39 +0530
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH v2] wifi: ath11k: Trigger sta disconnect on hardware
- restart
-To:     Kalle Valo <kvalo@kernel.org>
-CC:     <ath11k@lists.infradead.org>, <linux-wireless@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, kernel test robot <lkp@intel.com>
-References: <20221104085403.11025-1-quic_youghand@quicinc.com>
- <166755883456.9892.7557940279708188243.kvalo@kernel.org>
-Content-Language: en-US
-From:   "Youghandhar Chintala (Temp)" <quic_youghand@quicinc.com>
-In-Reply-To: <166755883456.9892.7557940279708188243.kvalo@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 6YEEfO5i_0bg_y_rdCcZG6yrRNg9Ft6S
-X-Proofpoint-GUID: 6YEEfO5i_0bg_y_rdCcZG6yrRNg9Ft6S
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-04_07,2022-11-03_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- suspectscore=0 impostorscore=0 lowpriorityscore=0 malwarescore=0
- spamscore=0 clxscore=1015 bulkscore=0 mlxlogscore=999 phishscore=0
- mlxscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211040071
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        Fri, 4 Nov 2022 06:51:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A78B2BB13
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 03:51:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E708362150
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 10:51:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7539C433D7;
+        Fri,  4 Nov 2022 10:51:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667559067;
+        bh=4Bt3wT7yXYgAiC80JzTz8HYvGVPTyhH/6jt4qkLU5C4=;
+        h=In-Reply-To:References:Date:From:To:Cc:Subject:From;
+        b=TBGLLB0Mkp6lWt4L6AVAi9kYEdV6CeTFgjzRq2iTVXD7dhW26SK7IXRBhgk5rQj6R
+         zbyHjw41OsJKZcfzvEbvefYl4UK0K1Gu9bqTBGCsel5TK9g1O4rmd3kw9BSd5bgOzW
+         nOHffAzUTGF6x7kiCgfMsrH2SaB02Rf48BPLprmaYSOMOCESzFrravtxJAqEJT/t35
+         K9p7cifssD/I14P84MDJzHqypnfevL1+nvKZNlGwIDfBLyJujziCkHUvfwtKoI4yX8
+         hDVElXeLnK45I90wCtBf+oLvVCocgteXbtw1NKXVvp/hkfCDROsTiqRALESiDR+8qP
+         E3QSHeXSsPP8A==
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailauth.nyi.internal (Postfix) with ESMTP id 800A927C0054;
+        Fri,  4 Nov 2022 06:51:05 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute3.internal (MEProxy); Fri, 04 Nov 2022 06:51:05 -0400
+X-ME-Sender: <xms:mO5kYwEsTyMVN-gDGgC0LOBuklZazLy6D9eMxrm9MfUJOlEo9OzNGw>
+    <xme:mO5kY5W-IOHcMNweON5UHHEopi0QBS7OX4oGehMZRwWsMqEhK-TkqNolxuBRPpUqy
+    hqhUbkUv49GKBaMlvY>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrvddugddulecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvvefutgfgsehtqhertderreejnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusehkvghrnhgvlhdrohhrgheqnecuggftrf
+    grthhtvghrnhepgeelhfelvdelheehteffjeehkeduvdeggeekieefleeuteeluddufeek
+    gedtuefhnecuffhomhgrihhnpehlfihnrdhnvghtnecuvehluhhsthgvrhfuihiivgeptd
+    enucfrrghrrghmpehmrghilhhfrhhomheprghrnhguodhmvghsmhhtphgruhhthhhpvghr
+    shhonhgrlhhithihqdduvdekhedujedtvdegqddvkeejtddtvdeigedqrghrnhgupeepkh
+    gvrhhnvghlrdhorhhgsegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:mO5kY6Jb5yTe2noLlLmM4pQ5vL39RyQKj6soIoB-XzfeUcuNtarX3w>
+    <xmx:mO5kYyH8EM2NbRWlK376BAUms-nnyvvAB0i0e0c5-TtONxvj9eHfGA>
+    <xmx:mO5kY2XEcNvkj4Eb86GyYrYoyoWtX4qzxI8zPSvPzYBl9azGry2P8Q>
+    <xmx:me5kY9MG3AvCnTNi3iQvHr73nyaszfQ9KTNBmaVv44MioVb92YhrJQ>
+Feedback-ID: i36794607:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id DB4F5B603ED; Fri,  4 Nov 2022 06:51:04 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1087-g968661d8e1-fm-20221021.001-g968661d8
+Mime-Version: 1.0
+Message-Id: <ed2d2ea7-4a8c-4616-bca4-c78e6f260ba9@app.fastmail.com>
+In-Reply-To: <8bd1dc3b-e1f0-e7f9-bf65-8d243c65adb5@opensynergy.com>
+References: <20220825134449.18803-1-harald.mommer@opensynergy.com>
+ <CAK8P3a1biW1qygRS8Mf0F5n8e6044+W-5v+Gnv+gh+Cyzj-Vjg@mail.gmail.com>
+ <8bd1dc3b-e1f0-e7f9-bf65-8d243c65adb5@opensynergy.com>
+Date:   Fri, 04 Nov 2022 11:50:45 +0100
+From:   "Arnd Bergmann" <arnd@kernel.org>
+To:     "Harald Mommer" <hmo@opensynergy.com>,
+        "Harald Mommer" <harald.mommer@opensynergy.com>
+Cc:     virtio-dev@lists.oasis-open.org, linux-can@vger.kernel.org,
+        Netdev <netdev@vger.kernel.org>, linux-kernel@vger.kernel.org,
+        "Wolfgang Grandegger" <wg@grandegger.com>,
+        "Marc Kleine-Budde" <mkl@pengutronix.de>,
+        "David S . Miller" <davem@davemloft.net>,
+        "Eric Dumazet" <edumazet@google.com>,
+        "Jakub Kicinski" <kuba@kernel.org>,
+        "Paolo Abeni" <pabeni@redhat.com>,
+        "Dariusz Stojaczyk" <Dariusz.Stojaczyk@opensynergy.com>,
+        "Stratos Mailing List" <stratos-dev@op-lists.linaro.org>
+Subject: Re: [virtio-dev] [RFC PATCH 1/1] can: virtio: Initial virtio CAN driver.
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,43 +91,190 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 11/4/2022 4:17 PM, Kalle Valo wrote:
-> Youghandhar Chintala <quic_youghand@quicinc.com> wrote:
+On Thu, Nov 3, 2022, at 13:26, Harald Mommer wrote:
+> On 25.08.22 20:21, Arnd Bergmann wrote:
+>>
+...
+> The messages are not necessarily processed in sequence by the CAN stac=
+k.=20
+> CAN is priority based. The lower the CAN ID the higher the priority. S=
+o=20
+> a message with CAN ID 0x100 can surpass a message with ID 0x123 if the=20
+> hardware is not just simple basic CAN controller using a single TX=20
+> mailbox with a FIFO queue on top of it.
 >
->> Currently after the hardware restart triggered from the driver, the
->> station interface connection remains intact, since a disconnect trigger
->> is not sent to userspace. This can lead to a problem in targets where
->> the wifi mac sequence is added by the firmware.
->>
->> After the target restart, its wifi mac sequence number gets reset to
->> zero. Hence AP to which our device is connected will receive frames with
->> a  wifi mac sequence number jump to the past, thereby resulting in the
->> AP dropping all these frames, until the frame arrives with a wifi mac
->> sequence number which AP was expecting.
->>
->> To avoid such frame drops, its better to trigger a station disconnect
->> upon target hardware restart which can be done with API
->> ieee80211_reconfig_disconnect exposed to mac80211.
->>
->> The other targets are not affected by this change, since the hardware
->> params flag is not set.
->>
->> Reported-by: kernel test robot <lkp@intel.com>
->>
->> Tested-on: WCN6750 hw1.0 AHB WLAN.MSL.1.0.1-00887-QCAMSLSWPLZ-1
->>
->> Signed-off-by: Youghandhar Chintala <quic_youghand@quicinc.com>
->> Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
-> This had a new warning:
+> Thinking about this the code becomes more complex with the array. What=
+ I=20
+> get from the device when the message has been processed is a pointer t=
+o=20
+> the processed message by virtqueue_get_buf(). I can then simply do a=20
+> list_del(), free the message and done.
+
+Ok
+
+>>> +#ifdef DEBUG
+>>> +static void __attribute__((unused))
+>>> +virtio_can_hexdump(const void *data, size_t length, size_t base)
+>>> +{
+>>> +#define VIRTIO_CAN_MAX_BYTES_PER_LINE 16u
+>> This seems to duplicate print_hex_dump(), maybe just use that?
+> Checked where it's still used. The code is not disabled by #ifdef DEBU=
+G=20
+> but simply commented out. Under this circumstances it's for now best t=
+o=20
+> simply remove the code now and also the commented out places where is=20
+> was used at some time in the past.
+
+Even better.
+
+>>> +
+>>> +       while (!virtqueue_get_buf(vq, &len) && !virtqueue_is_broken(=
+vq))
+>>> +               cpu_relax();
+>>> +
+>>> +       mutex_unlock(&priv->ctrl_lock);
+>> A busy loop is probably not what you want here. Maybe just
+>> wait_for_completion() until the callback happens?
 >
-> drivers/net/wireless/ath/ath11k/mac.c:8056: Blank lines aren't necessary before a close brace '}'
+> Was done in the same way as elsewhere=20
+> (virtio_console.c/__send_control_msg() &=20
+> virtio_net.c/virtnet_send_command()). Yes, wait_for_completion() is=20
+> better, this avoids polling.
+
+Ok. FWIW, The others seem to do it like this because they
+are in non-atomic context where it is not allowed to call
+wait_for_completion(), but since you already have the
+mutex here, you know that sleeping is permitted.=20
+
+>>> +       /* Push loopback echo. Will be looped back on TX interrupt/T=
+X NAPI */
+>>> +       can_put_echo_skb(skb, dev, can_tx_msg->putidx, 0);
+>>> +
+>>> +       err =3D virtqueue_add_sgs(vq, sgs, 1u, 1u, can_tx_msg, GFP_A=
+TOMIC);
+>>> +       if (err !=3D 0) {
+>>> +               list_del(&can_tx_msg->list);
+>>> +               virtio_can_free_tx_idx(priv, can_tx_msg->prio,
+>>> +                                      can_tx_msg->putidx);
+>>> +               netif_stop_queue(dev);
+>>> +               spin_unlock_irqrestore(&priv->tx_lock, flags);
+>>> +               kfree(can_tx_msg);
+>>> +               if (err =3D=3D -ENOSPC)
+>>> +                       netdev_info(dev, "TX: Stop queue, no space l=
+eft\n");
+>>> +               else
+>>> +                       netdev_warn(dev, "TX: Stop queue, reason =3D=
+ %d\n", err);
+>>> +               return NETDEV_TX_BUSY;
+>>> +       }
+>>> +
+>>> +       if (!virtqueue_kick(vq))
+>>> +               netdev_err(dev, "%s(): Kick failed\n", __func__);
+>>> +
+>>> +       spin_unlock_irqrestore(&priv->tx_lock, flags);
+>> There should not be a need for a spinlock or disabling interrupts
+>> in the xmit function. What exactly are you protecting against here?
 >
-> I fixed it in the pending branch.
+> I'm using 2 NAPIs, one for TX and one for RX. The RX NAPI just receive=
+s=20
+> RX messages and is of no interest here. The TX NAPI handles the TX=20
+> messages which have been processed by the virtio CAN device in=20
+> virtio_can_read_tx_queue(). If this was done without the TX NAPI this=20
+> would have been done by the TX interrupt directly, no difference.
+>
+> In virtio_can_start_xmit()
+>
+> * Reserve putidx - done by an own mechanism using list operations in=20
+> tx_putidx_list
+>
+> Could be that it's simpler to use idr_alloc() and friends getting thos=
+e=20
+> numbers to get rid of this own mechanism, not sure yet. But this needs=
+ a=20
+> locks as it's based on a linked list and the list operation has to be=20
+> protected.
 
-Thank you Kalle.
+Right, makes sense. Lockless transmission should generally work
+if your transmission queue is a strictly ordered ring buffer
+where you just need to atomically update the index, but you are
+right that this doesn't work with a linked list.
 
-Regards,
+This probably directly ties into the specification of your
+tx virtqueue: if the device could guarantee that any descriptors
+are processed in sequence, you could avoid the spinlock in the
+tx path for a small performance optimization, but then you have
+to decide on the sequence in the driver already, which impacts
+the latency for high-priority frames that get queued to the
+device. It's possible that the reordering in the device would
+not be as critical if you correctly implement the byte queue
+limits.
 
-Youghandhar
+>>> +       kfree(can_tx_msg);
+>>> +
+>>> +       /* Flow control */
+>>> +       if (netif_queue_stopped(dev)) {
+>>> +               netdev_info(dev, "TX ACK: Wake up stopped queue\n");
+>>> +               netif_wake_queue(dev);
+>>> +       }
+>> You may want to add netdev_sent_queue()/netdev_completed_queue()
+>> based BQL flow control here as well, so you don't have to rely on the
+>> queue filling up completely.
+> Not addressed, not yet completely understood.
 
+https://lwn.net/Articles/454390/ is an older article but should still
+explain the background. Without byte queue limits, you risk introducing
+unbounded TX latency on a congested interface.
+
+Ideally, the host device implementation should only send
+back the 'completed' interrupt after a frame has left the
+physical hardware. In this case, BQL will manage both the
+TX queue in the guest driver and the queue in the host
+device to keep the total queue length short enough to
+guarantee low latency even for low-priority frames but
+long enough to maintain wire-speed throughput.
+
+>>> +
+>>> +       register_virtio_can_dev(dev);
+>>> +
+>>> +       /* Initialize virtqueues */
+>>> +       err =3D virtio_can_find_vqs(priv);
+>>> +       if (err !=3D 0)
+>>> +               goto on_failure;
+>> Should the register_virtio_can_dev() be done here? I would expect thi=
+s to be
+>> the last thing after setting up the queues.
+>
+> Doing so makes the code somewhat simpler and shorter =3D better.
+
+The problem is that as soon as an interface is registered,
+you can have userspace sending data to it. This may be
+a short race, but I fear that this would cause data corruption
+if data gets queued before the device is fully operational.
+
+>>> +#ifdef CONFIG_PM_SLEEP
+>>> +       .freeze =3D       virtio_can_freeze,
+>>> +       .restore =3D      virtio_can_restore,
+>>> +#endif
+>> You can remove the #ifdef here and above, and replace that with the
+>> pm_sleep_ptr() macro in the assignment.
+>
+> This pm_sleep_ptr(_ptr) macro returns either the argument when=20
+> CONFIG_PM_SLEEP is defined or NULL. But in struct virtio_driver there =
+is
+>
+> #ifdef CONFIG_PM =C2=A0 int(*freeze) ...; =C2=A0 int(*restore) ...; #e=
+ndif
+>
+> so without CONFIG_PM there are no freeze and restore structure members.
+>
+> So
+>
+>  =C2=A0 .freeze =3D pm_sleep_ptr(virtio_can_freeze)
+>
+> won't work.
+
+I think this is a mistake in the virtio_driver definition,
+it would be best to send a small patch that removes this
+#ifdef along with your driver.
+
+       Arnd
