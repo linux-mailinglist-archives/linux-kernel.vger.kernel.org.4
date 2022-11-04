@@ -2,78 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6704619481
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 11:37:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE60961948A
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 11:37:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231724AbiKDKhU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 06:37:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53596 "EHLO
+        id S231539AbiKDKhm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 06:37:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230074AbiKDKhQ (ORCPT
+        with ESMTP id S230029AbiKDKhi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 06:37:16 -0400
-Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0815264B9
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 03:37:15 -0700 (PDT)
-Received: by mail-il1-x129.google.com with SMTP id x16so2388609ilm.5
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 03:37:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OG1ttL9ewGmsGATx0jj/rue5KngBOTueLt43dOoL/uQ=;
-        b=kadj1+RpkpN3OMqgTy6SkFPGUnDo5lbPAW26e8ZG/Wru6PyS5yzWbkYKm7rKWvJAcj
-         8yfFz5T1SrrdC8LweKJqia21PXMqZJz43jjexsFNIS7qG6olNGNTwe+sUJ+/qbC2H9h2
-         UPSvGFtAhDYv1AFAUCWQdSEuHo7z6pmIsTrpddErdkz1A84cUzTaFMERy3NVnjlynpDS
-         ARtP2ZqjKVng555jT2pEqRtTfvvunhD+In41uHjJICjDKEZa2MU6Qlr6qzycGqgr7ojI
-         zvrCJzDPpg3t8pyXqb2MRI/L4qgkMdLr68Zqp2x060iLnUX+9Za0bvrISdVz+0700d45
-         ekaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=OG1ttL9ewGmsGATx0jj/rue5KngBOTueLt43dOoL/uQ=;
-        b=ONL+v7/gqpAd0gTs6CUtxMYPIkG7ZqZpA2u2OH/4S38wmkYpDEiIYnMi1MXQj4KY6M
-         M0m0+X85sHbWwe3PU86rAYhNBG0TIPa93SbhxP9vJlUkjkc41imGvsopvsmdecwaiXJB
-         mvH326U3LjU608IlTWgJm5WbQwiu7Mmu5OAAyZF3KpcNxiPwnDQk8761ThUnaORGBMDa
-         UPbGEzph16VB4valc8Dft6dotezBhHLz2B7Ap2a4/ERCSQ86t4pdcVFqTFxUzBbvazN2
-         QstkX/z8NRRzzfZLzyqgRa3dvHuJR7YzPO6lLmP9RIK+kq6qjlXiGq8hrDNLQ32AreUC
-         v9HQ==
-X-Gm-Message-State: ACrzQf2IV9KAiNeMgXqKTY3dBDHdLLW2M5q6Jl1Uvu+6rT+O5qgC31NC
-        EJTP/AfcTDbUYV2WEXWEwTr3dOk5Ui3W3apeAPnhjQ==
-X-Google-Smtp-Source: AMsMyM5bdxxX/B3p+dGzMVa9PvhoxBYILQz8c3lJUlNFYN1MuKw3YxaYc+MFlvxZD/fUrBq9xvhomYOgrimsfscLWfk=
-X-Received: by 2002:a92:4449:0:b0:2de:95f1:8b80 with SMTP id
- a9-20020a924449000000b002de95f18b80mr20015373ilm.232.1667558234932; Fri, 04
- Nov 2022 03:37:14 -0700 (PDT)
+        Fri, 4 Nov 2022 06:37:38 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 398632A276;
+        Fri,  4 Nov 2022 03:37:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net; s=s31663417;
+        t=1667558242; bh=HHObUMqxyzm1pOX3j1YUDl912OP6TjeEK87qob5XEvI=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=iH8kwCkg/nplgQGH2SaUH4Ole0QBH2YU9fUpOe+jxs/u2fr1jsbcWm3Z+fLwx+rox
+         3CtWl9gDGd7Ip+30FVTNWRlsWH/t2ntQ+o4uo7AAHABMwS46WkUNPS1qTW2x1YDPhs
+         Fia9HFhSIMVG2RTt9se1YIund6qRPY8/9DX0XCdgrAPiD3qCRIiyguKLFTe6P6b8mx
+         mO9P6VS8s0QukSWhoRZpijWcWF1jx+N7I/OTGX4/aZHihg5QecfqApP/BDMSdDIDSb
+         YkpzX4jnHooqevhIbGKULq29r1F0GKOtl+26hziUqKQtu6PdTWgZ4xTmZ4TvkIjdm4
+         0ZZjacCvJrShQ==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from probook ([95.223.44.31]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MSKu0-1oSaoz3RTE-00SizJ; Fri, 04
+ Nov 2022 11:37:21 +0100
+From:   =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+To:     linux-serial@vger.kernel.org
+Cc:     =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH] serial: Fix a typo ("ignorning")
+Date:   Fri,  4 Nov 2022 11:37:19 +0100
+Message-Id: <20221104103719.2234098-1-j.neuschaefer@gmx.net>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20221028093403.6673-1-vincent.guittot@linaro.org>
- <20221028093403.6673-7-vincent.guittot@linaro.org> <20221101192848.pjns3um7dnrwrk5p@airbuntu>
- <CAKfTPtA=vJQA_=6Un1CqwzMUaOxMeFGTKUZnj8qyqvqmSdYBAg@mail.gmail.com>
- <20221103142732.m5ibwkuymvhcdxkn@airbuntu> <CAKfTPtDu=c-psGnHkoWSPRWoh1Z0VBBfsN++g+krv4B1SJmFjg@mail.gmail.com>
- <CAEXW_YQd2y9=RHw3Sge7ghnhBz0AyR+B-U4zG10LXuSbg5bGSA@mail.gmail.com>
-In-Reply-To: <CAEXW_YQd2y9=RHw3Sge7ghnhBz0AyR+B-U4zG10LXuSbg5bGSA@mail.gmail.com>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Fri, 4 Nov 2022 11:37:03 +0100
-Message-ID: <CAKfTPtBJQOY7UUkm1=wvG18UWgLLiTW0dr3bTGUJY=siM_LLxQ@mail.gmail.com>
-Subject: Re: [PATCH v7 6/9] sched/fair: Add sched group latency support
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     Qais Yousef <qyousef@layalina.io>, mingo@redhat.com,
-        peterz@infradead.org, juri.lelli@redhat.com,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        linux-kernel@vger.kernel.org, parth@linux.ibm.com,
-        qais.yousef@arm.com, chris.hyser@oracle.com,
-        patrick.bellasi@matbug.net, David.Laight@aculab.com,
-        pjt@google.com, pavel@ucw.cz, tj@kernel.org, qperret@google.com,
-        tim.c.chen@linux.intel.com, joshdon@google.com, timj@gnu.org,
-        kprateek.nayak@amd.com, yu.c.chen@intel.com,
-        youssefesmat@chromium.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+X-Provags-ID: V03:K1:otl6u0ZQ35bKG7n+pC1q1iP1p25Az/OuifD0UevnC6sKvY2prte
+ wQSHkOQEjp5e9PBxsOMsxzdov/8EJT3vSDYHNrVPcRD7j9F/fCGjQB80N9FmGguirmqSNm9
+ SBAdgBegNTXIcDK42bryMEXGEWlMjcoJtq63qq9rOZamBK8r1P2jRErkf1iHICMxZiwZXkp
+ gQHf4id5kgdVko5bigSsw==
+UI-OutboundReport: notjunk:1;M01:P0:FSci/EGaBjQ=;xwJPKEQHdoIWHKtOK//YN59N/X2
+ U7X+M9HORDae4rSIK+I90VU7bVlz2u/ncv2vyC95k5regeYuAvyIY2uLINtqBO163eYBlofFa
+ 4OY+Lw6GogZCnZjH/Lc+wJCU4zG/AHnoQpfrVUIvMOitnl2KwXQZC/78hrMq1yLpGhzYKTPpN
+ zt9M+AV6yx1Awo3juvjvS5K4danSqpINixJhplKGN216LGQGjyE+DkkstRWRGg0Lgi4lU0Bg9
+ fZF4Os+NcGLguE1+54uFx8E7+QLHpMFAVyIxW7y/OeFfP/c4tTUrYTRDVq7emrPDVBzW9Rc/N
+ rqACvIi0tWReJ+G036av23ZJIeaMEq6yorBKTHBfASKQLsMJyOoitkc650MZVU+mYSJ8XWhbo
+ D4Yuq5sg9fnwv+jh47LNerEqch7du9Il4u89W02tjpmhAf/Kx5vELWhlkCT6fvthBcScZTjrk
+ FIIIsbVQtA5bFfA+PnjQ4RSSK29opmF8Crld30hYI60TQHNmWW4F4jYQ8N7MjE0icYGHXCqZo
+ NZg9UnSC88eL/6KWD741sFtmq/GMVPJ/S4s2yHGEJFdADvyNJ1nrSGXj+NDfweTh5YY4Hgk0f
+ /n2YjKMb+Faak+DVgOFcTmsI0Yhq0Odpv8a006pjd/HSmLFcFsuqvZH5QL5xbW3WkyX0BNjlV
+ xEbUNqRyjlCqmFpAEqS4BlVLaiAGK7Oc3WutWhEDpMtK4qHKxaXmnWGvmcF7gMgJ+nO/52/TH
+ bNKT22X306MSjdAaMW0vEr99nuPlxtxK8aL2k0S9Ysc6DyCx/WDCn1lT0hJFrxWWknHp9ubu4
+ njWbBFmeOj688NEgcS6UN+0JrKDVgiR0tYSlTu9/+rVJxT+PvtWcvQy9rI17RhwQiRIayphzk
+ JPhby2PDkgXkFBg9aDIO4T9BfuhzMCmfGfV4+3uMbQG10NM3s9zgxWStXZLsXn7cwJobNPrnj
+ rdaRXNUrj2SieagadD6KxZSmrEw=
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,160 +73,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 4 Nov 2022 at 11:15, Joel Fernandes <joel@joelfernandes.org> wrote:
->
-> On Thu, Nov 3, 2022 at 5:03 PM Vincent Guittot
-> <vincent.guittot@linaro.org> wrote:
-> >
-> > On Thu, 3 Nov 2022 at 15:27, Qais Yousef <qyousef@layalina.io> wrote:
-> > >
-> > > On 11/03/22 09:46, Vincent Guittot wrote:
-> > > > On Tue, 1 Nov 2022 at 20:28, Qais Yousef <qyousef@layalina.io> wrot=
-e:
-> > > > >
-> > > > > On 10/28/22 11:34, Vincent Guittot wrote:
-> > > > > > Task can set its latency priority with sched_setattr(), which i=
-s then used
-> > > > > > to set the latency offset of its sched_enity, but sched group e=
-ntities
-> > > > > > still have the default latency offset value.
-> > > > > >
-> > > > > > Add a latency.nice field in cpu cgroup controller to set the la=
-tency
-> > > > > > priority of the group similarly to sched_setattr(). The latency=
- priority
-> > > > > > is then used to set the offset of the sched_entities of the gro=
-up.
-> > > > > >
-> > > > > > Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
-> > > > > > ---
-> > > > > >  Documentation/admin-guide/cgroup-v2.rst |  8 ++++
-> > > > > >  kernel/sched/core.c                     | 52 +++++++++++++++++=
-++++++++
-> > > > > >  kernel/sched/fair.c                     | 33 ++++++++++++++++
-> > > > > >  kernel/sched/sched.h                    |  4 ++
-> > > > > >  4 files changed, 97 insertions(+)
-> > > > > >
-> > > > > > diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Document=
-ation/admin-guide/cgroup-v2.rst
-> > > > > > index be4a77baf784..d8ae7e411f9c 100644
-> > > > > > --- a/Documentation/admin-guide/cgroup-v2.rst
-> > > > > > +++ b/Documentation/admin-guide/cgroup-v2.rst
-> > > > > > @@ -1095,6 +1095,14 @@ All time durations are in microseconds.
-> > > > > >          values similar to the sched_setattr(2). This maximum u=
-tilization
-> > > > > >          value is used to clamp the task specific maximum utili=
-zation clamp.
-> > > > > >
-> > > > > > +  cpu.latency.nice
-> > > > > > +     A read-write single value file which exists on non-root
-> > > > > > +     cgroups.  The default is "0".
-> > > > > > +
-> > > > > > +     The nice value is in the range [-20, 19].
-> > > > > > +
-> > > > > > +     This interface file allows reading and setting latency us=
-ing the
-> > > > > > +     same values used by sched_setattr(2).
-> > > > >
-> > > > > I'm still not sure about this [1].
-> > > >
-> > > > I'm still not sure about what you are trying to say here ...
-> > > >
-> > > > This is about setting a latency nice prio to a group level.
-> > > >
-> > > > >
-> > > > > In some scenarios we'd like to get the effective latency_nice of =
-the task. How
-> > > > > will the task inherit the cgroup value or be impacted by it?
-> > > > >
-> > > > > For example if there are tasks that belong to a latency sensitive=
- cgroup; and
-> > > > > I'd like to skip some searches in EAS to improve that latency sen=
-sitivity - how
-> > > > > would I extract this info in EAS path given these tasks are using=
- default
-> > > > > latency_nice value? And if should happen if their latency_nice is=
- set to
-> > > > > something else other than default?
-> > > > >
-> > > > > [1] https://lore.kernel.org/lkml/20221012160734.hrkb5jcjdq7r23pr@=
-wubuntu/
-> > > >
-> > > > Hmm so you are speaking about something that is not part of the pat=
-ch.
-> > > > Let focus on the patchset for now
-> > >
-> > > I am focusing on this patchset. Isn't this an essential part of the d=
-esign?
-> > > Once the interface is out we can't change it. As it stands, I can't s=
-ee how it
-> >
-> > So, are you speaking about the interface i.e. setting a value between [=
--20:19]
-> >
-> > > can be used to replace prefer_idle in cgroup as used in Android. I ca=
-n't see
-> > > how this could happen if we don't define how the task will inherit th=
-e cgroup
-> > > value. If we can, mind elaborating how please?
-> >
-> > Or how to take into account the value set for a cgroup ?
-> >
-> > Regarding the behavior, the rule remains the same that a sched_entity
-> > attached to a cgroup will not get more (latency in this case) than
-> > what has been set for the group entity.
->
-> I think the interface solves a different problem which is latency of
-> task or cgroup wrt other group. Vincent, you are setting this for a
-> =E2=80=9Ctop app=E2=80=9D group in android in your tests, and seeing impr=
-ovement
-> correct? AFAICS, this improvement comes because of lower latency
+Fix the two instances of this typo present in the MSM and VT8500 serial
+drivers.
 
-Yes Top app and display group
+Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
+=2D--
+ drivers/tty/serial/msm_serial.c    | 2 +-
+ drivers/tty/serial/vt8500_serial.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> during *same CPU* competition between different groups by juggling
-> around the wakeup-preemption window -- which maybe is good for
-> Android.
->
-> OTOH, the =E2=80=9Cprefer idle=E2=80=9D flag in android that Qais is refe=
-rring to,
-> will need a completely different method as I cannot see how a nice
-> value can communicate that (that can complement Vincent's changes
-> here). And it will need to have a per-task interface as well. We have
+diff --git a/drivers/tty/serial/msm_serial.c b/drivers/tty/serial/msm_seri=
+al.c
+index 7dd19a2815794..d9a3aa941427c 100644
+=2D-- a/drivers/tty/serial/msm_serial.c
++++ b/drivers/tty/serial/msm_serial.c
+@@ -819,7 +819,7 @@ static void msm_handle_rx(struct uart_port *port)
+ 			port->icount.rx++;
+ 		}
 
-Why a negative latency_nice value condition can't be used ? or latency -20 =
- ?
+-		/* Mask conditions we're ignorning. */
++		/* Mask conditions we're ignoring. */
+ 		sr &=3D port->read_status_mask;
 
-> something in ChromeOS as well, which is a proc knob and also
-> out-of-tree patch for that [1]. Without [1] we fail Android CTS
-> testing on a recent ARM64 ChromeOS device.
-> [1] https://chromium-review.googlesource.com/c/chromiumos/third_party/ker=
-nel/+/3884575
-> The changelog in [1] also has a detailed description of the ChromeOS usec=
-ase.
->
-> Qais, any other reason you can see why Vincent's change will not be a
-> good thing for Android? Since you 1 CGroup for the whole user-facing
-> app (top app), you can just set that to a low "latency_nice" and get
-> better wake-up latency for that.
->
-> (Side rant about latency and CFS -- IMHO a better long term solution
-> for lower latency is to use RT but don't throttle -- rather demote. Or
-> break CFS into multiple tiers, and apply demotion. This is in a way
-> what Vincent is doing, as the task becomes more CPU bound'ish, he's
-> taking away the latency boost. Vincent/Qais, somebody was working on
-> the RT demotion vs throttling a while back, any idea on the latest on
-> that?).
->
-> thanks,
->
->  - Joel
->
->
-> >
-> > >
-> > >
-> > > Thanks
-> > >
-> > > --
-> > > Qais Yousef
+ 		if (sr & MSM_UART_SR_RX_BREAK)
+diff --git a/drivers/tty/serial/vt8500_serial.c b/drivers/tty/serial/vt850=
+0_serial.c
+index 10fbdb09965f3..37c8a55b48eda 100644
+=2D-- a/drivers/tty/serial/vt8500_serial.c
++++ b/drivers/tty/serial/vt8500_serial.c
+@@ -168,7 +168,7 @@ static void handle_rx(struct uart_port *port)
+
+ 		c =3D readw(port->membase + VT8500_RXFIFO) & 0x3ff;
+
+-		/* Mask conditions we're ignorning. */
++		/* Mask conditions we're ignoring. */
+ 		c &=3D ~port->read_status_mask;
+
+ 		if (c & FER) {
+=2D-
+2.35.1
+
