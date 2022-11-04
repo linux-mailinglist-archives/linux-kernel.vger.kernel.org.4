@@ -2,88 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38C9C6193B3
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 10:39:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E764F6193B6
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 10:41:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229978AbiKDJjr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 05:39:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54952 "EHLO
+        id S230165AbiKDJl0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 05:41:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230306AbiKDJjm (ORCPT
+        with ESMTP id S229600AbiKDJlY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 05:39:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BB2A2250B;
-        Fri,  4 Nov 2022 02:39:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 4 Nov 2022 05:41:24 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85ECA26578
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 02:40:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1667554828;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=CAzZhBjfROyNAW8yS7Aao6wSD/awgyWEX4D/3kHQqS4=;
+        b=C2jMK6e85WzI694Ur8Qgkwonu3SffF4R9zeiluwVqwhuA4DhbLv+eUchQaMQ0YTfmJgGO4
+        zcsvb11IaNapkmTi4ncOxa7Y4x2Sxl8tcmV2nENK5BpQH5Djy9FIZATPYEE0YlosffHR64
+        NFDQOR2uU8PDuTk4vSMoHMPACyLPBdo=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-561-fC2TeQ-_NQ-4q2nLoxm0bQ-1; Fri, 04 Nov 2022 05:40:25 -0400
+X-MC-Unique: fC2TeQ-_NQ-4q2nLoxm0bQ-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CF15C62113;
-        Fri,  4 Nov 2022 09:39:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36916C433D6;
-        Fri,  4 Nov 2022 09:39:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667554780;
-        bh=vBRE2zaNk9N2+qpe0TEUqPTS+nFtRWARCQHJUnRfQFQ=;
-        h=From:To:Cc:Subject:Date:From;
-        b=TQMFVP0DnwjC5bCpvwoumZ69nBPt7Pwp8dEuwdxMjH31qncebTLneyvwX/QPwfpBK
-         Z4EIpr949jgEpHSYhOgZmN3DwhMwJYikFIQAc+jeHyi+3K7omux6QAeI4bpq62gQry
-         ZzKAOWazoY0Sn0OZHR1GRyPBFDFZzE7YqQxTcIwv4NadBE1D4o2FsqCmLGIkRhUHOm
-         vM27Yx8QI2fhcghxjQgNPWbvU9PJeZLBBFfgV8VDNn2u8oqfeNPkOgWr+KVNo8Qj1E
-         1ZIksIdBveqqnZ0eQjQT0qM5BqWTCwcI9GIk5n7ipSE4UMnDb9U0hZADsBSg4U6heZ
-         LoD8/2TSRTr4w==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan+linaro@kernel.org>)
-        id 1oqtAX-00064k-QT; Fri, 04 Nov 2022 10:39:22 +0100
-From:   Johan Hovold <johan+linaro@kernel.org>
-To:     Manivannan Sadhasivam <mani@kernel.org>
-Cc:     Hemant Kumar <quic_hemantk@quicinc.com>, mhi@lists.linux.dev,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH v2] mhi: pci_generic: add support for sc8280xp-crd SDX55 variant
-Date:   Fri,  4 Nov 2022 10:39:13 +0100
-Message-Id: <20221104093913.23347-1-johan+linaro@kernel.org>
-X-Mailer: git-send-email 2.37.3
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D2A013815D34;
+        Fri,  4 Nov 2022 09:40:24 +0000 (UTC)
+Received: from samus.usersys.redhat.com (unknown [10.43.17.26])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 882944A9254;
+        Fri,  4 Nov 2022 09:40:23 +0000 (UTC)
+From:   Artem Savkov <asavkov@redhat.com>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
+        netdev@vger.kernel.org
+Cc:     ykaliuta@redhat.com, linux-kernel@vger.kernel.org,
+        Artem Savkov <asavkov@redhat.com>
+Subject: [PATCH bpf-next] selftests/bpf: fix build-id for liburandom_read.so
+Date:   Fri,  4 Nov 2022 10:40:16 +0100
+Message-Id: <20221104094016.102049-1-asavkov@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The SC8280XP Compute Reference Design (CRD) has an on-PCB SDX55 modem
-which uses MBIM.
+lld produces "fast" style build-ids by default, which is inconsistent
+with ld's "sha1" style. Explicitly specify build-id style to be "sha1"
+when linking liburandom_read.so the same way it is already done for
+urandom_read.
 
-The exact channel configuration is not known but the Foxconn SDX55
-configuration allows the modem to be used so reuse that one for now.
-
-Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+Signed-off-by: Artem Savkov <asavkov@redhat.com>
 ---
+ tools/testing/selftests/bpf/Makefile | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Changes in v2
- - drop comment describing this variant (Mani)
-
-
- drivers/bus/mhi/host/pci_generic.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/drivers/bus/mhi/host/pci_generic.c b/drivers/bus/mhi/host/pci_generic.c
-index caa4ce28cf9e..7dcd0ef3184a 100644
---- a/drivers/bus/mhi/host/pci_generic.c
-+++ b/drivers/bus/mhi/host/pci_generic.c
-@@ -542,6 +542,8 @@ static const struct mhi_pci_dev_info mhi_telit_fn990_info = {
- static const struct pci_device_id mhi_pci_id_table[] = {
- 	{ PCI_DEVICE(PCI_VENDOR_ID_QCOM, 0x0304),
- 		.driver_data = (kernel_ulong_t) &mhi_qcom_sdx24_info },
-+	{ PCI_DEVICE_SUB(PCI_VENDOR_ID_QCOM, 0x0306, PCI_VENDOR_ID_QCOM, 0x010c),
-+		.driver_data = (kernel_ulong_t) &mhi_foxconn_sdx55_info },
- 	/* EM919x (sdx55), use the same vid:pid as qcom-sdx55m */
- 	{ PCI_DEVICE_SUB(PCI_VENDOR_ID_QCOM, 0x0306, 0x18d7, 0x0200),
- 		.driver_data = (kernel_ulong_t) &mhi_sierra_em919x_info },
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index 79edef1dbda4..5a792987df66 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -182,7 +182,8 @@ endif
+ $(OUTPUT)/liburandom_read.so: urandom_read_lib1.c urandom_read_lib2.c
+ 	$(call msg,LIB,,$@)
+ 	$(Q)$(CLANG) $(filter-out -static,$(CFLAGS) $(LDFLAGS)) $^ $(LDLIBS)   \
+-		     -fuse-ld=$(LLD) -Wl,-znoseparate-code -fPIC -shared -o $@
++		     -fuse-ld=$(LLD) -Wl,-znoseparate-code -Wl,--build-id=sha1 \
++		     -fPIC -shared -o $@
+ 
+ $(OUTPUT)/urandom_read: urandom_read.c urandom_read_aux.c $(OUTPUT)/liburandom_read.so
+ 	$(call msg,BINARY,,$@)
 -- 
-2.37.3
+2.38.1
 
