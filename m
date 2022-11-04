@@ -2,144 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FD7F6196AB
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 13:57:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9520B6196B3
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 13:58:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231960AbiKDM5Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 08:57:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37562 "EHLO
+        id S230035AbiKDM61 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 08:58:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231652AbiKDM5V (ORCPT
+        with ESMTP id S229745AbiKDM6Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 08:57:21 -0400
-Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F4642E6BD
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 05:57:19 -0700 (PDT)
-Received: by mail-qt1-x830.google.com with SMTP id e15so2954417qts.1
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 05:57:19 -0700 (PDT)
+        Fri, 4 Nov 2022 08:58:24 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F2992E683
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 05:58:19 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id i5-20020a1c3b05000000b003cf47dcd316so5353389wma.4
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 05:58:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=A0qIuh5pcMXJdmuz1nC0ZXRTGE6QwNg6SLzVqinQUAU=;
-        b=rMarUNEI9SNHqM/Raj6LT0ux2rPS6RMPaEAaLrNu4RgLxmpTF8rW1z2UwSW+TPx5PG
-         jpY5GnRu6+EWr5o9/q+mrsgXWW7MyCE8gfNy7dZRfhkVE/vFI+tmmkSS+/8PAqA/0kU5
-         w6JAejA1t8n+dIcaoOHlAHgWs+ZTKAodIFCwX0ENYJugmZeUG4/gPPiiWTRx348f/2Sw
-         2WrU9Ut4T6DOsxmcHp8P4nZ8HzbTdNzLT2Uu4hj80M1qjTfSeiJuRBbsKlPndpNimg5y
-         lWvl/zdksWKxWgW4Oz1/o8e9oA1aj3TDLG4rxxdO3OsiSNvsrANDNuBCaFuyyucg7o/8
-         2xtg==
+        bh=ZwyHad34mlqqMFn53iMCM8+Gqhzyvbyy9wGcSB66m8s=;
+        b=neP1+M2g3j63Zk6HSrC43BrOUyCjmbe3/+IvveBVBi7gFujI/d+PxhgurHM3X/AWLP
+         on484xeONjUN3C9AolgI+T10FS8j8TopMXBAWO14HZuYKvgO+eycy2CHuIVgGsjBsj7g
+         2kurz8SrJM1ePJrlnrfcMAM7ZH5JyzdEaaw8uCXdV5U9EjrNc/yUX4lYJXYRLBMhNI8P
+         FvWZYCEUmwfcwmQUGEJI8WrkGqvfdKiqJ1OUHYs4EhJQOzi0INPeOvoLxoO8Lgg/yLNQ
+         8O8srjXkSmkuXFCQ59OJG1nXKFKtfI1xxMqqwlm+ryU15Z7qxmhTysmN8vSxZh0lNuQB
+         jAkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=A0qIuh5pcMXJdmuz1nC0ZXRTGE6QwNg6SLzVqinQUAU=;
-        b=kwnNfnShbyEvxvf43JUDx+MAgnDMVuLZvKH9gwPZsqG9Td0gEHBKZrWttr8S/lc0dw
-         LsgiIFuCvfzgp6O78mv9M3dUy7bH11W6qnUVo1Pz5HQk1EeFTMs+2ZxkaC0h6xmifGZI
-         tTR2kVbwzKT2yIk55Vb0AK5Q6mLZ16wb5T9L40Kr/zk6wC10qFpSAc/k0c08+uk1FTk6
-         wo0ALG2WTbbMwv9SXZM3dTWyjbCQhbA2Y8yVjCdf0JVq/JDclZBLF/nPWV4TGTneXFba
-         +UnOSd0ahgAn9f+wZvyhRLH55coya+nkLvLAH5kBnwIJik2RYOIK7XHyCGsRLnoOvA4R
-         bpaQ==
-X-Gm-Message-State: ACrzQf3oi4zcDEkOcOnixOT5tRf5Mi7kkeoHPzrTxXfANvvNWEVLR8zB
-        CTc1IPx4iWVYaNqPYz1HH/dn3g==
-X-Google-Smtp-Source: AMsMyM4TJoZbhcfSN3z+lJWHiQ/lHlKWeBmuMkIbyCGvSyAAFBmxolZjQaGby8V8Bi81RMETddaC4g==
-X-Received: by 2002:a05:622a:19a2:b0:39c:ba6d:5d6d with SMTP id u34-20020a05622a19a200b0039cba6d5d6dmr28478486qtc.358.1667566638498;
-        Fri, 04 Nov 2022 05:57:18 -0700 (PDT)
-Received: from ?IPV6:2601:586:5000:570:aad6:acd8:4ed9:299b? ([2601:586:5000:570:aad6:acd8:4ed9:299b])
-        by smtp.gmail.com with ESMTPSA id u23-20020ac87517000000b0039a372fbaa5sm2357409qtq.69.2022.11.04.05.57.17
+        bh=ZwyHad34mlqqMFn53iMCM8+Gqhzyvbyy9wGcSB66m8s=;
+        b=x+FoPsohV/Pq2yNRzM10Vc9WEHzJW0c3AXKoYJVefJ8v3FqEpQ/lQNYrNvMhtC1VqM
+         9sy9knbErSyvrrI3k4GCNrK20rafdvcnL/YDvWPQbf6FZfOTYUWqzttyADGxPx5Bmrny
+         h2UDU25dkuDH+hd9IXeyYwDIz1pyh/KN68cDlhZ40FOTh1UO7uXH9fmTyc8x9Fhp1YlS
+         f0ssD/Yil1N/4Fy/mbIh4639N/l6/W0a2IT/OrFpnZmmwfjn87y+EUDp5ktunZin+bb2
+         HMQRc1dVbFqvmeVf0/2RH5uPCecyi9EdaKqiXf5eYPE19RRIweNun7z89OoXZBhCy3ZV
+         JTHg==
+X-Gm-Message-State: ACrzQf0vB/Mys+di5vLdDnnydyRUpS9rOGmvonW70gAcbd9L/5wHBIqE
+        8ePgqg/t8+hXYazTphn4Apg8Tw==
+X-Google-Smtp-Source: AMsMyM4PSqJTDG/ErJjBhO/AmAS5cO82QRykgTTHga1nzb8GnNE2KHwmgXPc7rwm6thvlMQoPRjSCA==
+X-Received: by 2002:a05:600c:1819:b0:3cf:63fe:944a with SMTP id n25-20020a05600c181900b003cf63fe944amr23041803wmp.17.1667566697875;
+        Fri, 04 Nov 2022 05:58:17 -0700 (PDT)
+Received: from [10.101.1.4] (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.gmail.com with ESMTPSA id p10-20020a05600c1d8a00b003c6bd91caa5sm2941833wms.17.2022.11.04.05.58.15
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 04 Nov 2022 05:57:17 -0700 (PDT)
-Message-ID: <bf6bef84-8f67-4bde-e7d1-4f98e3a45455@linaro.org>
-Date:   Fri, 4 Nov 2022 08:57:16 -0400
+        Fri, 04 Nov 2022 05:58:17 -0700 (PDT)
+Message-ID: <1383fd22-c720-811e-a2bb-be2151675089@baylibre.com>
+Date:   Fri, 4 Nov 2022 13:58:13 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2 1/2] dt-bindings: net: Add ICSSG Ethernet Driver
- bindings
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v6 4/6] mfd: tps65219: Add driver for TI TPS65219 PMIC
 Content-Language: en-US
-To:     Md Danish Anwar <a0501179@ti.com>, linux-kernel@vger.kernel.org
-Cc:     davem@davemloft.net, edumazet@google.com,
-        krzysztof.kozlowski+dt@linaro.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, nm@ti.com, ssantosh@kernel.org,
-        s-anna@ti.com, linux-arm-kernel@lists.infradead.org,
-        rogerq@kernel.org, vigneshr@ti.com, kishon@ti.com,
-        robh+dt@kernel.org, afd@ti.com, andrew@lunn.ch
-References: <20220531095108.21757-1-p-mohan@ti.com>
- <20220531095108.21757-2-p-mohan@ti.com>
- <4ccba38a-ccde-83cd-195b-77db7a64477c@linaro.org>
- <41d5952b-51f8-bbc6-2e81-22d6f66320ee@ti.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <41d5952b-51f8-bbc6-2e81-22d6f66320ee@ti.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+To:     Lee Jones <lee@kernel.org>
+Cc:     lgirdwood@gmail.com, broonie@kernel.org, robh+dt@kernel.org,
+        nm@ti.com, kristo@kernel.org, dmitry.torokhov@gmail.com,
+        krzysztof.kozlowski+dt@linaro.org, catalin.marinas@arm.com,
+        will@kernel.org, tony@atomide.com, vigneshr@ti.com,
+        bjorn.andersson@linaro.org, shawnguo@kernel.org,
+        geert+renesas@glider.be, dmitry.baryshkov@linaro.org,
+        marcel.ziswiler@toradex.com, vkoul@kernel.org,
+        biju.das.jz@bp.renesas.com, arnd@arndb.de, jeff@labundy.com,
+        afd@ti.com, khilman@baylibre.com, narmstrong@baylibre.com,
+        msp@baylibre.com, j-keerthy@ti.com, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-input@vger.kernel.org, linux-omap@vger.kernel.org
+References: <20221011140549.16761-1-jneanne@baylibre.com>
+ <20221011140549.16761-5-jneanne@baylibre.com> <Y1+q2Usm9ecicXqp@google.com>
+From:   jerome Neanne <jneanne@baylibre.com>
+In-Reply-To: <Y1+q2Usm9ecicXqp@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/11/2022 03:28, Md Danish Anwar wrote:
->>> * It includes indentation, formatting, and other minor changes.
->>> ---
->>>  .../bindings/net/ti,icssg-prueth.yaml         | 181 ++++++++++++++++++
->>>  1 file changed, 181 insertions(+)
->>>  create mode 100644 Documentation/devicetree/bindings/net/ti,icssg-prueth.yaml
->>>
->>> diff --git a/Documentation/devicetree/bindings/net/ti,icssg-prueth.yaml b/Documentation/devicetree/bindings/net/ti,icssg-prueth.yaml
->>> new file mode 100644
->>> index 000000000000..40af968e9178
->>> --- /dev/null
->>> +++ b/Documentation/devicetree/bindings/net/ti,icssg-prueth.yaml
->>> @@ -0,0 +1,181 @@
->>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->>> +%YAML 1.2
->>> +---
->>> +$id: http://devicetree.org/schemas/net/ti,icssg-prueth.yaml#
->>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>> +
->>> +title: |+
->>
->> Missed Rob's comment.
->>
-> 
-> I'll remove this in the next version of this series.
-> 
->>> +  Texas Instruments ICSSG PRUSS Ethernet
->>> +
->>> +maintainers:
->>> +  - Puranjay Mohan <p-mohan@ti.com>
->>> +
->>> +description:
->>> +  Ethernet based on the Programmable Real-Time
->>> +  Unit and Industrial Communication Subsystem.
->>> +
->>> +allOf:
->>> +  - $ref: /schemas/remoteproc/ti,pru-consumer.yaml#
->>> +
->>> +properties:
->>> +  compatible:
->>> +    enum:
->>> +      - ti,am654-icssg-prueth  # for AM65x SoC family
->>> +
->>> +  pinctrl-0:
->>> +    maxItems: 1
->>> +
->>> +  pinctrl-names:
->>> +    items:
->>> +      - const: default
->>
->> You do not need these usually, they are coming from schema.
->>
-> Here from what I understand, I need to delete the below block, right?
 
-Yes, entire pinctrl-0 and pinctr-names are not needed. You specify them
-ony if they differ from usual.
 
-Best regards,
-Krzysztof
+On 31/10/2022 12:00, Lee Jones wrote:
+>> diff --git a/include/linux/mfd/tps65219.h b/include/linux/mfd/tps65219.h
+>> new file mode 100644
+>> index 000000000000..2c1cf92e92ac
+>> --- /dev/null
+>> +++ b/include/linux/mfd/tps65219.h
+
+>> +/**
+>> + * struct tps65219 - tps65219 sub-driver chip access routines
+>> + *
+>> + * Device data may be used to access the TPS65219 chip
+>> + *
+>> + * @dev MFD device
+>> + * @regmap Regmap for accessing the device registers
+>> + * @irq_data Regmap irq data used for the irq chip
+>> + * @nb notifier block for the restart handler
+>> + */
+> 
+> This header needs work.
+I'm not sure to get your point here. Just something like below to match 
+format or do you expect more:
+
+/**
+  * struct tps65219 - tps65219 sub-driver chip access routines
+  *
+  * Device data may be used to access the TPS65219 chip
+  *
+  * @dev: MFD device
+  * @regmap: Regmap for accessing the device registers
+  * @irq_data: Regmap irq data used for the irq chip
+  * @nb: notifier block for the restart handler
+  */
+
+> 
+> Can you try an compile with W=1 please.
+This raise one warning on mfd:
+drivers/mfd/tps65219.c:28:12: warning: ‘tps65219_soft_shutdown’ defined 
+but not used [-Wunused-function]
+    28 | static int tps65219_soft_shutdown(struct tps65219 *tps)
+       |            ^~~~~~~~~~~~~~~~~~~~~~
+soft_shutdown has been validated and is used in TI baseline even if not 
+hooked in upstream version further to this review:
+https://lore.kernel.org/lkml/20220825150224.826258-5-msp@baylibre.com/
+
+It was a TI requirement to implement it...
+Let me know if you want me to remove this function or if we can keep it 
+like this.
 
