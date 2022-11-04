@@ -2,57 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E764F6193B6
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 10:41:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DFD1B6193BB
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 10:41:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230165AbiKDJl0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 05:41:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55446 "EHLO
+        id S230340AbiKDJl5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 05:41:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229600AbiKDJlY (ORCPT
+        with ESMTP id S230139AbiKDJlw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 05:41:24 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85ECA26578
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 02:40:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667554828;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=CAzZhBjfROyNAW8yS7Aao6wSD/awgyWEX4D/3kHQqS4=;
-        b=C2jMK6e85WzI694Ur8Qgkwonu3SffF4R9zeiluwVqwhuA4DhbLv+eUchQaMQ0YTfmJgGO4
-        zcsvb11IaNapkmTi4ncOxa7Y4x2Sxl8tcmV2nENK5BpQH5Djy9FIZATPYEE0YlosffHR64
-        NFDQOR2uU8PDuTk4vSMoHMPACyLPBdo=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-561-fC2TeQ-_NQ-4q2nLoxm0bQ-1; Fri, 04 Nov 2022 05:40:25 -0400
-X-MC-Unique: fC2TeQ-_NQ-4q2nLoxm0bQ-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Fri, 4 Nov 2022 05:41:52 -0400
+Received: from relay06.th.seeweb.it (relay06.th.seeweb.it [5.144.164.167])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F53326578;
+        Fri,  4 Nov 2022 02:41:51 -0700 (PDT)
+Received: from [192.168.31.208] (unknown [194.29.137.22])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D2A013815D34;
-        Fri,  4 Nov 2022 09:40:24 +0000 (UTC)
-Received: from samus.usersys.redhat.com (unknown [10.43.17.26])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 882944A9254;
-        Fri,  4 Nov 2022 09:40:23 +0000 (UTC)
-From:   Artem Savkov <asavkov@redhat.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
-        netdev@vger.kernel.org
-Cc:     ykaliuta@redhat.com, linux-kernel@vger.kernel.org,
-        Artem Savkov <asavkov@redhat.com>
-Subject: [PATCH bpf-next] selftests/bpf: fix build-id for liburandom_read.so
-Date:   Fri,  4 Nov 2022 10:40:16 +0100
-Message-Id: <20221104094016.102049-1-asavkov@redhat.com>
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id CC786401FC;
+        Fri,  4 Nov 2022 10:41:48 +0100 (CET)
+Message-ID: <a7489c04-4aa6-5ec5-315b-fcdf93f1ea7b@somainline.org>
+Date:   Fri, 4 Nov 2022 10:41:48 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.4.1
+Subject: Re: [PATCH 2/2] arm64: dts: qcom: sc8280xp: update UFS PHY nodes
+To:     Johan Hovold <johan+linaro@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Brian Masney <bmasney@redhat.com>,
+        Shazad Hussain <quic_shazhuss@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221104092045.17410-1-johan+linaro@kernel.org>
+ <20221104092045.17410-3-johan+linaro@kernel.org>
+From:   Konrad Dybcio <konrad.dybcio@somainline.org>
+In-Reply-To: <20221104092045.17410-3-johan+linaro@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,30 +50,112 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-lld produces "fast" style build-ids by default, which is inconsistent
-with ld's "sha1" style. Explicitly specify build-id style to be "sha1"
-when linking liburandom_read.so the same way it is already done for
-urandom_read.
 
-Signed-off-by: Artem Savkov <asavkov@redhat.com>
----
- tools/testing/selftests/bpf/Makefile | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+On 04/11/2022 10:20, Johan Hovold wrote:
+> Update the UFS PHY nodes to match the new binding.
+>
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> ---
 
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 79edef1dbda4..5a792987df66 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -182,7 +182,8 @@ endif
- $(OUTPUT)/liburandom_read.so: urandom_read_lib1.c urandom_read_lib2.c
- 	$(call msg,LIB,,$@)
- 	$(Q)$(CLANG) $(filter-out -static,$(CFLAGS) $(LDFLAGS)) $^ $(LDLIBS)   \
--		     -fuse-ld=$(LLD) -Wl,-znoseparate-code -fPIC -shared -o $@
-+		     -fuse-ld=$(LLD) -Wl,-znoseparate-code -Wl,--build-id=sha1 \
-+		     -fPIC -shared -o $@
- 
- $(OUTPUT)/urandom_read: urandom_read.c urandom_read_aux.c $(OUTPUT)/liburandom_read.so
- 	$(call msg,BINARY,,$@)
--- 
-2.38.1
+Reviewed-by: Konrad Dybcio <konrad.dybcio@somainline.org>
 
+
+Konrad
+
+>   arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 49 +++++++++-----------------
+>   1 file changed, 17 insertions(+), 32 deletions(-)
+>
+> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> index e0d0fb6994b5..1b309fa93484 100644
+> --- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> @@ -896,7 +896,7 @@ ufs_mem_hc: ufs@1d84000 {
+>   				     "jedec,ufs-2.0";
+>   			reg = <0 0x01d84000 0 0x3000>;
+>   			interrupts = <GIC_SPI 265 IRQ_TYPE_LEVEL_HIGH>;
+> -			phys = <&ufs_mem_phy_lanes>;
+> +			phys = <&ufs_mem_phy>;
+>   			phy-names = "ufsphy";
+>   			lanes-per-direction = <2>;
+>   			#reset-cells = <1>;
+> @@ -937,27 +937,20 @@ ufs_mem_hc: ufs@1d84000 {
+>   
+>   		ufs_mem_phy: phy@1d87000 {
+>   			compatible = "qcom,sc8280xp-qmp-ufs-phy";
+> -			reg = <0 0x01d87000 0 0x1c8>;
+> -			#address-cells = <2>;
+> -			#size-cells = <2>;
+> -			ranges;
+> -			clock-names = "ref",
+> -				      "ref_aux";
+> +			reg = <0 0x01d87000 0 0x1000>;
+> +
+>   			clocks = <&gcc GCC_UFS_CARD_CLKREF_CLK>,
+>   				 <&gcc GCC_UFS_PHY_PHY_AUX_CLK>;
+> +			clock-names = "ref", "ref_aux";
+> +
+> +			power-domains = <&gcc UFS_PHY_GDSC>;
+>   
+>   			resets = <&ufs_mem_hc 0>;
+>   			reset-names = "ufsphy";
+> -			status = "disabled";
+>   
+> -			ufs_mem_phy_lanes: phy@1d87400 {
+> -				reg = <0 0x01d87400 0 0x108>,
+> -				      <0 0x01d87600 0 0x1e0>,
+> -				      <0 0x01d87c00 0 0x1dc>,
+> -				      <0 0x01d87800 0 0x108>,
+> -				      <0 0x01d87a00 0 0x1e0>;
+> -				#phy-cells = <0>;
+> -			};
+> +			#phy-cells = <0>;
+> +
+> +			status = "disabled";
+>   		};
+>   
+>   		ufs_card_hc: ufs@1da4000 {
+> @@ -965,7 +958,7 @@ ufs_card_hc: ufs@1da4000 {
+>   				     "jedec,ufs-2.0";
+>   			reg = <0 0x01da4000 0 0x3000>;
+>   			interrupts = <GIC_SPI 125 IRQ_TYPE_LEVEL_HIGH>;
+> -			phys = <&ufs_card_phy_lanes>;
+> +			phys = <&ufs_card_phy>;
+>   			phy-names = "ufsphy";
+>   			lanes-per-direction = <2>;
+>   			#reset-cells = <1>;
+> @@ -1005,28 +998,20 @@ ufs_card_hc: ufs@1da4000 {
+>   
+>   		ufs_card_phy: phy@1da7000 {
+>   			compatible = "qcom,sc8280xp-qmp-ufs-phy";
+> -			reg = <0 0x01da7000 0 0x1c8>;
+> -			#address-cells = <2>;
+> -			#size-cells = <2>;
+> -			ranges;
+> -			clock-names = "ref",
+> -				      "ref_aux";
+> +			reg = <0 0x01da7000 0 0x1000>;
+> +
+>   			clocks = <&gcc GCC_UFS_1_CARD_CLKREF_CLK>,
+>   				 <&gcc GCC_UFS_CARD_PHY_AUX_CLK>;
+> +			clock-names = "ref", "ref_aux";
+> +
+> +			power-domains = <&gcc UFS_CARD_GDSC>;
+>   
+>   			resets = <&ufs_card_hc 0>;
+>   			reset-names = "ufsphy";
+>   
+> -			status = "disabled";
+> +			#phy-cells = <0>;
+>   
+> -			ufs_card_phy_lanes: phy@1da7400 {
+> -				reg = <0 0x01da7400 0 0x108>,
+> -				      <0 0x01da7600 0 0x1e0>,
+> -				      <0 0x01da7c00 0 0x1dc>,
+> -				      <0 0x01da7800 0 0x108>,
+> -				      <0 0x01da7a00 0 0x1e0>;
+> -				#phy-cells = <0>;
+> -			};
+> +			status = "disabled";
+>   		};
+>   
+>   		tcsr_mutex: hwlock@1f40000 {
