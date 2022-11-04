@@ -2,127 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC936619254
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 09:01:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A7AC61925C
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 09:03:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231346AbiKDIBt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 04:01:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40106 "EHLO
+        id S231398AbiKDIDr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 04:03:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229539AbiKDIBo (ORCPT
+        with ESMTP id S229995AbiKDIDn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 04:01:44 -0400
-Received: from msg-2.mailo.com (msg-2.mailo.com [213.182.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D91825E90
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 01:01:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
-        t=1667548891; bh=ZXbEFO3vszBBy6fk5O/FA9iq9h+aX2yhtD8lxQvGyyY=;
-        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:References:
-         MIME-Version:Content-Type:In-Reply-To;
-        b=GW/j562SKvbtefjP1da8C0bPUhXMdhSu+WiSuZqa0eGV0Rxv9CgfM/sSN45a+dsWr
-         ghPCXresOipC1pAgzV+xRAUfOaevRNjMDNEXAe5cSdojbvpcVCMpUfJQFQvZEFU4/i
-         1cX8raOMQ3wTTj9WvW7RKoxEtvsvW887NKQcERRQ=
-Received: by b-4.in.mailobj.net [192.168.90.14] with ESMTP
-        via ip-206.mailobj.net [213.182.55.206]
-        Fri,  4 Nov 2022 09:01:31 +0100 (CET)
-X-EA-Auth: TUR8vkepu6ByoPiTb+uNlOvt9qpGRr7QafjQ7F7kzVZlMHyVldXK0bfWPOhHlnqBQIWdY5EGAPyjjPVaNYhh/eEZ9L3B/oI5
-Date:   Fri, 4 Nov 2022 13:31:21 +0530
-From:   Deepak R Varma <drv@mailo.com>
-To:     Dan Carpenter <error27@gmail.com>
-Cc:     David Laight <David.Laight@aculab.com>,
-        "outreachy@lists.linux.dev" <outreachy@lists.linux.dev>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-staging@lists.linux.dev" <linux-staging@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] staging: rtl8192e: Use min_t/max_t macros for variable
- comparison
-Message-ID: <Y2TG0ain2dzfq76V@qemulion>
-References: <Y2LxC2kziM1TznhO@qemulion>
- <d8fa86bf71694f23b8f175245722e86f@AcuMS.aculab.com>
- <Y2OBmWIwhRMOk6V/@kadam>
- <Y2OHVoXD82CIHL8R@qemulion>
- <Y2OTUAo1OliSFCJh@kadam>
+        Fri, 4 Nov 2022 04:03:43 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18C562655E
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 01:02:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1667548958;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=QJu1Z+r/Jj1Q22H/Z28kMZfifRbtSqoNatlqDbaYr8M=;
+        b=Ht881+Jlk5g+JMhSSLNDUJyiPl1UFMFDxFF9LzjwLU9xxQgu9oKJvvXsOJj+Pzlzgrs21E
+        J6OWFWTWg6jrvcXwWk8vnmUSA/DI3Gv4bwgJ5W2BUCe0SyMptQeSs7A7RaSLTJfhITqF2S
+        C16Sm+gvNoncb4hATdNLsdRfOpIH/fg=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-425-nOPAPYFpO8yLmdVu6LAL-w-1; Fri, 04 Nov 2022 04:02:37 -0400
+X-MC-Unique: nOPAPYFpO8yLmdVu6LAL-w-1
+Received: by mail-ed1-f72.google.com with SMTP id b14-20020a056402278e00b004621a2642d7so2979395ede.1
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 01:02:36 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=QJu1Z+r/Jj1Q22H/Z28kMZfifRbtSqoNatlqDbaYr8M=;
+        b=q40BJjp6SE8VkzGO2MYw5IApsylPtLGG6vV5pq/wDgovabK11cu40CtitBaTdXXkIV
+         ynx5WvMY13kbiNCRBJy1ym0pE6RhzGw9nKyUe2j+e6PA2sb2FrcmBdkxJagLGrk3mOOc
+         5vnXRYcu08x5nMbpmKW0NRCZX09IDzFf/GohedYt08Mlu7gHKR+6gBnWR5uewbXwy/bj
+         JnylT39y4gdzA9ZNJDKhzO4DeRAsPWoeo8GXWFgQHjUcQUerVFFatYdNlegI0gD7BqQl
+         QXvgU3seRmL5pP9URkmpVA2eQafzd6O7Bai083iPzg6GIzjPdaCSJV2WZFQobmiuWnPn
+         Vpsg==
+X-Gm-Message-State: ACrzQf1tofsbAkhhVRvuNcN0rZ8v35vZg1MyA9d+Yy2dz/p2I2hLPnZA
+        TLgGHJbUtYNnsI/XWjkphvGn50G7VVpTiBViEItHoEsSyGMnWANfsEzN+mq1q+1flccKQvLSdK3
+        UUv6kYgHDFz+h39Oi/0NtKqcw
+X-Received: by 2002:a17:907:1dda:b0:7a6:8ffc:7dc with SMTP id og26-20020a1709071dda00b007a68ffc07dcmr33676998ejc.163.1667548955854;
+        Fri, 04 Nov 2022 01:02:35 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM5ZNqKb/aQP9ibAQb8G5uHFxFpKasjpH84kkwoGMwJiLbxjg9Lh2wolUrwViafofx0ss1frxA==
+X-Received: by 2002:a17:907:1dda:b0:7a6:8ffc:7dc with SMTP id og26-20020a1709071dda00b007a68ffc07dcmr33676971ejc.163.1667548955613;
+        Fri, 04 Nov 2022 01:02:35 -0700 (PDT)
+Received: from ?IPV6:2001:b07:6468:f312:4783:a68:c1ee:15c5? ([2001:b07:6468:f312:4783:a68:c1ee:15c5])
+        by smtp.googlemail.com with ESMTPSA id tz14-20020a170907c78e00b0078ddb518a90sm1433630ejc.223.2022.11.04.01.02.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 04 Nov 2022 01:02:34 -0700 (PDT)
+Message-ID: <6c71fcca-c17f-5979-e15e-afcf08899064@redhat.com>
+Date:   Fri, 4 Nov 2022 09:02:32 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y2OTUAo1OliSFCJh@kadam>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH 33/44] KVM: x86: Do VMX/SVM support checks directly in
+ vendor code
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Marc Zyngier <maz@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Anup Patel <anup@brainfault.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        Eric Farman <farman@linux.ibm.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Atish Patra <atishp@atishpatra.org>,
+        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Isaku Yamahata <isaku.yamahata@intel.com>,
+        Fabiano Rosas <farosas@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Chao Gao <chao.gao@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Yuan Yao <yuan.yao@intel.com>
+References: <20221102231911.3107438-1-seanjc@google.com>
+ <20221102231911.3107438-34-seanjc@google.com>
+ <bfa98587-3b36-3834-a4b9-585a0e0aa56a@redhat.com>
+ <Y2QJ2TuyZImbFFvi@google.com>
+ <c29e7d40-ddb9-def0-f944-a921a05a4bb2@redhat.com>
+ <Y2QPSK1/6esl61wQ@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <Y2QPSK1/6esl61wQ@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 03, 2022 at 01:09:20PM +0300, Dan Carpenter wrote:
-> On Thu, Nov 03, 2022 at 02:48:35PM +0530, Deepak R Varma wrote:
-> > On Thu, Nov 03, 2022 at 11:53:45AM +0300, Dan Carpenter wrote:
-> > > On Thu, Nov 03, 2022 at 08:24:15AM +0000, David Laight wrote:
-> > > > > --- a/drivers/staging/rtl8192e/rtl819x_HTProc.c
-> > > > > +++ b/drivers/staging/rtl8192e/rtl819x_HTProc.c
-> > > > > @@ -587,17 +587,12 @@ void HTOnAssocRsp(struct rtllib_device *ieee)
-> > > > >  			else
-> > > > >  				pHTInfo->CurrentAMPDUFactor = HT_AGG_SIZE_64K;
-> > > > >  		} else {
-> > > > > -			if (pPeerHTCap->MaxRxAMPDUFactor < HT_AGG_SIZE_32K)
-> > > > > -				pHTInfo->CurrentAMPDUFactor =
-> > > > > -						 pPeerHTCap->MaxRxAMPDUFactor;
-> > > > > -			else
-> > > > > -				pHTInfo->CurrentAMPDUFactor = HT_AGG_SIZE_32K;
-> > > > > +			pHTInfo->CurrentAMPDUFactor = min_t(u32, pPeerHTCap->MaxRxAMPDUFactor,
-> > > > > +							    HT_AGG_SIZE_32K);
-> > > >
-> > > > For min() to fail there must be a signed v unsigned mismatch.
-> > > > Maybe that ought to be fixed.
-> > > >
-> > >
-> > > u32 is the right choice here.
-> > >
-> > > I'm having a hard time understanding your email.  You might be saying
-> > > we could declare HT_AGG_SIZE_32K as a u32 so then we could use min()
-> > > instead of min_t()?  HT_AGG_SIZE_32K is an enum.
-> > >
-> > > pPeerHTCap->MaxRxAMPDUFactor is a bitfield.
-> > >
-> > > 	u8 MaxRxAMPDUFactor:2;
-> > >
-> > > We will never be able to use min().
-> >
-> > I think we could do min((u32)a, (u32)b), but it is just unwrapped min_t
-> > if I understand David's comment.
-> >
->
-> No.  Do not do that.  I think it's a checkpatch warning.  What you have
-> is fine.
->
-> > >
-> > > > >  		}
-> > > > >  	}
-> > > > > -	if (pHTInfo->MPDU_Density > pPeerHTCap->MPDUDensity)
-> > > > > -		pHTInfo->current_mpdu_density = pHTInfo->MPDU_Density;
-> > > > > -	else
-> > > > > -		pHTInfo->current_mpdu_density = pPeerHTCap->MPDUDensity;
-> > > > > +	pHTInfo->current_mpdu_density = max_t(u8, pHTInfo->MPDU_Density,
-> > > > > +					      pPeerHTCap->MPDUDensity);
-> > > >
-> > > > Using u8 with max_t() really doesn't make any sense.
-> > >
-> > > Using u8 looks wrong because you would worry that one of the types is
-> > > larger than U8_MAX.  But it's actually fine.  The types are u8 vs another
-> > > bitfield.  I would probably have gone with u32 here as well.
-> > I will take your advise and upgrade the type to u32 as a revision.
->
-> Sounds good.  It's not something I would have asked you to redo the
-> patch over, but it would have been my personal preference.
+On 11/3/22 19:58, Sean Christopherson wrote:
+> 
+> diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
+> index 3e508f239098..ebe617ab0b37 100644
+> --- a/arch/x86/kernel/cpu/common.c
+> +++ b/arch/x86/kernel/cpu/common.c
+> @@ -191,6 +191,8 @@ static void default_init(struct cpuinfo_x86 *c)
+>                          strcpy(c->x86_model_id, "386");
+>          }
+>   #endif
+> +
+> +       clear_cpu_cap(c, X86_FEATURE_MSR_IA32_FEAT_CTL);
+>   }
+>   
+>   static const struct cpu_dev default_cpu = {
 
-That is no problem. I am waiting on David to elaborate on his feedback and
-accordingly plan a consolidated revision.
+Not needed I think?  default_init does not call init_ia32_feat_ctl.
 
->
-> regards,
-> dan carpenter
->
->
+> diff --git a/arch/x86/kernel/cpu/cpuid-deps.c b/arch/x86/kernel/cpu/cpuid-deps.c
+> index c881bcafba7d..3a7ae67f5a5e 100644
+> --- a/arch/x86/kernel/cpu/cpuid-deps.c
+> +++ b/arch/x86/kernel/cpu/cpuid-deps.c
+> @@ -72,6 +72,8 @@ static const struct cpuid_dep cpuid_deps[] = {
+>          { X86_FEATURE_AVX512_FP16,              X86_FEATURE_AVX512BW  },
+>          { X86_FEATURE_ENQCMD,                   X86_FEATURE_XSAVES    },
+>          { X86_FEATURE_PER_THREAD_MBA,           X86_FEATURE_MBA       },
+> +       { X86_FEATURE_VMX,                      X86_FEATURE_MSR_IA32_FEAT_CTL         },
+> +       { X86_FEATURE_SGX,                      X86_FEATURE_MSR_IA32_FEAT_CTL         },
+>          { X86_FEATURE_SGX_LC,                   X86_FEATURE_SGX       },
+>          { X86_FEATURE_SGX1,                     X86_FEATURE_SGX       },
+>          { X86_FEATURE_SGX2,                     X86_FEATURE_SGX1      },
+> 
 
+Yes, good idea.
+
+Paolo
 
