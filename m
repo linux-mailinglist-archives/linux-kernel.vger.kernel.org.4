@@ -2,135 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F25D2619992
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 15:22:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EE8761999A
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 15:24:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232076AbiKDOWt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 10:22:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35020 "EHLO
+        id S231845AbiKDOYJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 10:24:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232068AbiKDOW3 (ORCPT
+        with ESMTP id S231697AbiKDOXp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 10:22:29 -0400
-Received: from relay06.th.seeweb.it (relay06.th.seeweb.it [5.144.164.167])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A900E2ED47
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 07:21:21 -0700 (PDT)
-Received: from [192.168.31.208] (unknown [194.29.137.22])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 841903F70C;
-        Fri,  4 Nov 2022 15:21:19 +0100 (CET)
-Message-ID: <89994dc6-52f8-752e-04ae-42c8df3e9615@somainline.org>
-Date:   Fri, 4 Nov 2022 15:21:18 +0100
+        Fri, 4 Nov 2022 10:23:45 -0400
+Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CA8C2FFE2
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 07:22:08 -0700 (PDT)
+Received: by mail-qv1-xf2b.google.com with SMTP id w10so3280360qvr.3
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 07:22:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=POLyPFhcRrWc7CPsHxZIScHcqeGIL/i1T9EVfkZiKf8=;
+        b=iyGPSuH4knMUpOAbTKKY7ANdDoLZLwu4D+gzuk4mhBolJyamFMeXtlWs4LrOfvrgGx
+         pENZp8WidziwYuVlQEJQFYuRrILiPHx04k2voWxCxKFCcVsolZG/DStHot0UsbHx/P2k
+         A5vrebvl/Y3mruegKlQGmDF5NcRCP12PkeYAI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=POLyPFhcRrWc7CPsHxZIScHcqeGIL/i1T9EVfkZiKf8=;
+        b=yPF+vFVlQGy50ckmB7wkFfSkP7pY9z7UlLKSNPR7OI9jYS1jTlGsn+ANHCNcjE7WKa
+         d6/aMOcSF6PiORCcCQtnc4WoAgUXBMVWEG0dFsV7k3vwDVfcw06mSvpPFLRdsKAa2/p1
+         bYLtkKgQ9dJouchUIIuLvbuYLDiqQLpwCkXVGcvcBUYJbOVKyJziYSPCEtViKWSrmAb0
+         3nl9UP/LO3MMWu4V36U9mLb/wHgVNGCOSmJXuIwHOqB4Xc8zqyJe6Thp5fIXNWLrd7PW
+         neAslwrOHLKSuR6pOCH3HczKacIIKIfW1kPG+icgrtsCYxumMAO29f6BuyWCFQntDjmi
+         T6wQ==
+X-Gm-Message-State: ACrzQf0pEKZQzFJw8pFK/t0UXjF2RYL/+EW9Ftm6g8+H7C6rfEFhlo+E
+        8+2AYhwvIEEzYUPWSlU+WuPdJg==
+X-Google-Smtp-Source: AMsMyM74mAYB0QeEPZy+GC+hs9tCCRCf8SdtJWAcDNRwzluyiQU2DDeg5VBRxOMxJKVkr+hfp29IWQ==
+X-Received: by 2002:a05:6214:c64:b0:4bc:33f:4515 with SMTP id t4-20020a0562140c6400b004bc033f4515mr23747253qvj.44.1667571719562;
+        Fri, 04 Nov 2022 07:21:59 -0700 (PDT)
+Received: from joelboxx.c.googlers.com.com (228.221.150.34.bc.googleusercontent.com. [34.150.221.228])
+        by smtp.gmail.com with ESMTPSA id d16-20020a05620a241000b006bb29d932e1sm3081423qkn.105.2022.11.04.07.21.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Nov 2022 07:21:59 -0700 (PDT)
+From:   "Joel Fernandes (Google)" <joel@joelfernandes.org>
+To:     rcu@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, urezki@gmail.com, paulmck@kernel.org,
+        "Joel Fernandes (Google)" <joel@joelfernandes.org>
+Subject: [PATCH v2] rcu/kfree: Do not request RCU when not needed
+Date:   Fri,  4 Nov 2022 14:21:35 +0000
+Message-Id: <20221104142135.991888-1-joel@joelfernandes.org>
+X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.4.1
-Subject: Re: [PATCH v2 3/3] arm64: dts: qcom: msm8916-alcatel-idol347: add LED
- indicator
-To:     Vincent Knecht <vincent.knecht@mailoo.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221104132400.1763218-1-vincent.knecht@mailoo.org>
- <20221104132400.1763218-4-vincent.knecht@mailoo.org>
-From:   Konrad Dybcio <konrad.dybcio@somainline.org>
-In-Reply-To: <20221104132400.1763218-4-vincent.knecht@mailoo.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLACK autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On ChromeOS, using this with the increased timeout, we see that we almost always
+never need to initiate a new grace period. Testing also shows this frees large
+amounts of unreclaimed memory, under intense kfree_rcu() pressure.
 
-On 04/11/2022 14:24, Vincent Knecht wrote:
-> Add si-en,sn3190 LED controller to enable white LED indicator.
->
-> This requires adding the additional "enable" gpio that the OEM
-> choose to use, despite it not being mentioned in si-en,sn3190
-> datasheet nor supported by the driver.
->
-> Signed-off-by: Vincent Knecht <vincent.knecht@mailoo.org>
-> ---
->   .../boot/dts/qcom/msm8916-alcatel-idol347.dts | 44 +++++++++++++++++++
->   1 file changed, 44 insertions(+)
->
-> diff --git a/arch/arm64/boot/dts/qcom/msm8916-alcatel-idol347.dts b/arch/arm64/boot/dts/qcom/msm8916-alcatel-idol347.dts
-> index eadeb1a445fd..701a5585d77e 100644
-> --- a/arch/arm64/boot/dts/qcom/msm8916-alcatel-idol347.dts
-> +++ b/arch/arm64/boot/dts/qcom/msm8916-alcatel-idol347.dts
-> @@ -130,6 +130,27 @@ gyroscope@68 {
->   	};
->   };
->   
-> +&blsp_i2c6 {
-> +	status = "okay";
-> +
-> +	led-controller@68 {
-> +		compatible = "si-en,sn3190";
-> +		reg = <0x68>;
-> +		shutdown-gpios = <&msmgpio 89 GPIO_ACTIVE_HIGH>;
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&led_enable_default &led_shutdown_default>;
-> +		#address-cells = <1>;
-> +		#size-cells = <0>;
-> +
-> +		led@1 {
-> +			reg = <1>;
-> +			led-max-microamp = <5000>;
-> +			function = LED_FUNCTION_INDICATOR;
-> +			color = <LED_COLOR_ID_WHITE>;
-> +		};
-> +	};
-> +};
-> +
->   &pm8916_resin {
->   	status = "okay";
->   	linux,code = <KEY_VOLUMEDOWN>;
-> @@ -306,6 +327,29 @@ gyro_int_default: gyro-int-default-state {
->   		bias-disable;
->   	};
->   
-> +	/*
-> +	 * The OEM wired an additional GPIO to be asserted so that
-> +	 * the si-en,sn3190 LED IC works. Since this GPIO is not
-> +	 * part of the IC datasheet nor supported by the driver,
-> +	 * force it asserted here.
-> +	 */
+Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+---
+v1->v2: Same logic but use polled grace periods instead of sampling gp_seq.
 
-Looks like the least problematic way to handle this.
+ kernel/rcu/tree.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
+diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+index 591187b6352e..ed41243f7a49 100644
+--- a/kernel/rcu/tree.c
++++ b/kernel/rcu/tree.c
+@@ -2935,6 +2935,7 @@ struct kfree_rcu_cpu_work {
+ 
+ /**
+  * struct kfree_rcu_cpu - batch up kfree_rcu() requests for RCU grace period
++ * @gp_snap: The GP snapshot recorded at the last scheduling of monitor work.
+  * @head: List of kfree_rcu() objects not yet waiting for a grace period
+  * @bkvhead: Bulk-List of kvfree_rcu() objects not yet waiting for a grace period
+  * @krw_arr: Array of batches of kfree_rcu() objects waiting for a grace period
+@@ -2964,6 +2965,7 @@ struct kfree_rcu_cpu {
+ 	struct kfree_rcu_cpu_work krw_arr[KFREE_N_BATCHES];
+ 	raw_spinlock_t lock;
+ 	struct delayed_work monitor_work;
++	unsigned long gp_snap;
+ 	bool initialized;
+ 	int count;
+ 
+@@ -3167,6 +3169,7 @@ schedule_delayed_monitor_work(struct kfree_rcu_cpu *krcp)
+ 			mod_delayed_work(system_wq, &krcp->monitor_work, delay);
+ 		return;
+ 	}
++	krcp->gp_snap = get_state_synchronize_rcu();
+ 	queue_delayed_work(system_wq, &krcp->monitor_work, delay);
+ }
+ 
+@@ -3217,7 +3220,10 @@ static void kfree_rcu_monitor(struct work_struct *work)
+ 			// be that the work is in the pending state when
+ 			// channels have been detached following by each
+ 			// other.
+-			queue_rcu_work(system_wq, &krwp->rcu_work);
++			if (poll_state_synchronize_rcu(krcp->gp_snap))
++				queue_work(system_wq, &krwp->rcu_work.work);
++			else
++				queue_rcu_work(system_wq, &krwp->rcu_work);
+ 		}
+ 	}
+ 
+-- 
+2.38.1.431.g37b22c650d-goog
 
-Reviewed-by: Konrad Dybcio <konrad.dybcio@somainline.org>
-
-
-Konrad
-
-> +	led_enable_default: led-enable-default-state {
-> +		pins = "gpio102";
-> +		function = "gpio";
-> +
-> +		drive-strength = <2>;
-> +		bias-disable;
-> +		output-high;
-> +	};
-> +
-> +	led_shutdown_default: led-shutdown-default-state {
-> +		pins = "gpio89";
-> +		function = "gpio";
-> +
-> +		drive-strength = <2>;
-> +		bias-disable;
-> +	};
-> +
->   	mag_reset_default: mag-reset-default-state {
->   		pins = "gpio8";
->   		function = "gpio";
