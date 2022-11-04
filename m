@@ -2,93 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54160619B30
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 16:15:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D698E619B32
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 16:15:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232437AbiKDPPk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 11:15:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57840 "EHLO
+        id S232466AbiKDPPv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 11:15:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230139AbiKDPPg (ORCPT
+        with ESMTP id S232461AbiKDPPr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 11:15:36 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CCC5710D9;
-        Fri,  4 Nov 2022 08:15:34 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id ACD4F1FB;
-        Fri,  4 Nov 2022 08:15:40 -0700 (PDT)
-Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E331F3F703;
-        Fri,  4 Nov 2022 08:15:32 -0700 (PDT)
-Date:   Fri, 4 Nov 2022 15:15:30 +0000
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Robbie King <robbiek@xsightlabs.com>
-Cc:     "lihuisong (C)" <lihuisong@huawei.com>, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, rafael@kernel.org,
-        rafael.j.wysocki@intel.com, wanghuiqiang@huawei.com,
-        huangdaode@huawei.com, tanxiaofei@huawei.com,
-        Sudeep Holla <sudeep.holla@arm.com>
-Subject: Re: [RFC] ACPI: PCC: Support shared interrupt for multiple subspaces
-Message-ID: <20221104151530.44sms3fnarqnvvsl@bogus>
-References: <20221016034043.52227-1-lihuisong@huawei.com>
- <20221027155323.7xmpjfrh7qmil6o3@bogus>
- <f0c408a6-cd94-4963-d4d7-e7d08b6150be@huawei.com>
- <20221031104036.bv6a7i6hxrmtpj23@bogus>
- <925f360d-e6b3-6004-de22-f39eaa86a750@huawei.com>
- <d0b178d3-a036-399f-fb0c-bb7f8c52995c@xsightlabs.com>
+        Fri, 4 Nov 2022 11:15:47 -0400
+Received: from mail-ua1-x92c.google.com (mail-ua1-x92c.google.com [IPv6:2607:f8b0:4864:20::92c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DA1D10D9
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 08:15:45 -0700 (PDT)
+Received: by mail-ua1-x92c.google.com with SMTP id y20so2488513uao.8
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 08:15:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=9gUe2GRAVKoiYpIM7yredmbOYdTCdjHwW2lhwEHBk3Y=;
+        b=jWA2aTtqx9PzQx8sCJ0jNhj2FZJztGbN29wQUAcTzcSNYe562qGjyp9iNV5EMpsKu+
+         ifyRRdhN3SVTFODK61j9iiyfZJL7yNHy1zwmFdsYQ3K324kQzVLpvvlBxV0+krKyIE5a
+         8yRpnKJJNODmtJEzb2Nwej8AlEWamkF7NC8ZpHJtt/U8mMMv/Riiq/Le4a0sG4Z3E4Wq
+         tDOzhG+EdVXLhpU5snWdFf6IEno/MzcoDyx6yDruUkicSAaz58XVwJKh0nY7Z7V20Drl
+         M7joL0fdyHAqzZxU2eyDMysZcLPOkFXxOmXM203+bxoki0wGA1C/wO/VyBSFE4+Eyp2z
+         nH/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9gUe2GRAVKoiYpIM7yredmbOYdTCdjHwW2lhwEHBk3Y=;
+        b=yPQfBbnb+Gak7ok2rSO6OEzUT3IDgXFD/rg6L01F9hXsL/uSVfVkP05nJz9bzEflTJ
+         CvUZuyJltbvXjty6+/5NnnebywEtaaVK8oGtqrphB988abzB/gltZg/RYPB1oorFw1mD
+         M81MlpWikxyUFTi0IC9nEW/v3ao+LE1Ur/VIjFbiv6wONu21R07S312Dy4VI8pNFhrX0
+         BlfXvIylggiScHx3+wCTf/0EX8IqrBwxbjwfqAsYHSgqLvrfVbJITFp13uEi8ow5R3/W
+         egXN4DyPquGXOtXMa0Q6FA8guIGQtaCz8P+Ylq3ya5VqvCOBXN/sPtN/UuOx6TKp2ZAl
+         16Mw==
+X-Gm-Message-State: ACrzQf0oabJjF4SeLSiYHldxxNJxUNKCzQq5oKyzcyn/Thh3Mf9m7orn
+        jGNyQhYzjn9nmNv1qqwy0RBGPIzzrHdKyx2r1Ig9Cw==
+X-Google-Smtp-Source: AMsMyM6MkHHYI1BCn9c3vvP6ychNUPWyfxEtH09gBAYttruLdRR+2ZyJUJFkbdrWvZM1IN+Z8djHghIXcJcQhYk/lUU=
+X-Received: by 2002:ab0:4326:0:b0:411:56dc:1db5 with SMTP id
+ k35-20020ab04326000000b0041156dc1db5mr8364053uak.92.1667574944501; Fri, 04
+ Nov 2022 08:15:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d0b178d3-a036-399f-fb0c-bb7f8c52995c@xsightlabs.com>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20221030044047.423859-1-dmitry.torokhov@gmail.com>
+In-Reply-To: <20221030044047.423859-1-dmitry.torokhov@gmail.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Fri, 4 Nov 2022 16:15:33 +0100
+Message-ID: <CAMRc=McwPzAo7f-edYFRd_RABT4GM4H6CPEzo8iON2CZUryjrw@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] gpiolib: of: factor out quirk setting polarity via
+ separate property
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 04, 2022 at 11:04:22AM -0400, Robbie King wrote:
-> Hello Huisong, your raising of the shared interrupt issue is very timely, I
-> am working to implement "Extended PCC subspaces (types 3 and 4)" using PCC
-> on the ARM RDN2 reference platform as a proof of concept, and encountered
-> this issue as well.  FWIW, I am currently testing using Sudeep's patch with
-> the "chan_in_use" flag removed, and so far have not encountered any issues.
+On Sun, Oct 30, 2022 at 5:40 AM Dmitry Torokhov
+<dmitry.torokhov@gmail.com> wrote:
 >
-
-Interesting, do you mean the patch I post in this thread but without the
-whole chan_in_use flag ?
-
-> I think the RDN2 may provide an example of a write only interrupt
-> acknowledge mechanism mentioned by Sudeep.
+> Several legacy bindings use a separate property to specify polarity of
+> GPIOs instead of specifying it directly in the GPIO property. Factor
+> out this code to make it easier to add more such cases.
 >
+> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+> ---
 
-Yes.
+Both patches applied, thanks!
 
-> The RDN2 reference design uses the MHUv2 IP for the doorbell mechanism.  If
-> my implementation is correct (and it quite possibly is not), acknowledging
-> the DB interrupt from the platform is accomplished by writing a 1 to the
-> appropriate bit in the receiver channel window CH_CLR register, which is
-> documented as:
->
->   Channel flag clear.
->   Write 0b1 to a bit clears the corresponding bit in the CH_ST and CH_ST_MSK.
->   Writing 0b0 has no effect.
->   Each bit always reads as 0b0.
->
-
-Correct, on this MHUv[1-2], it is write only register and it reads zero.
-So basically you will ignore the interrupt if we apply the logic Huisong
-proposed initially.
-
-> in the "Arm Corstone SSE-700 Subsystem Technical Reference Manual".
->
-> Apologies if I am off in the weeds here as I have only been working with
-> PCC/SCMI for a very short period of time.
-
-Good to know info :).
-
--- 
-Regards,
-Sudeep
+Bartosz
