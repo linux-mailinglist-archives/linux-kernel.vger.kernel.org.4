@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AB52618DCA
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 02:48:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68C87618DCC
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 02:49:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231180AbiKDBsy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 21:48:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43576 "EHLO
+        id S231208AbiKDBt3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 21:49:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230185AbiKDBsu (ORCPT
+        with ESMTP id S230131AbiKDBt2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 21:48:50 -0400
+        Thu, 3 Nov 2022 21:49:28 -0400
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F66324083;
-        Thu,  3 Nov 2022 18:48:47 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AD1023BEA;
+        Thu,  3 Nov 2022 18:49:27 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4N3Nnn6lwFz4xGQ;
-        Fri,  4 Nov 2022 12:48:44 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4N3NpZ04wbz4xGQ;
+        Fri,  4 Nov 2022 12:49:24 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1667526526;
-        bh=Sw8ahRMEJhKbsmXfbRquLX9VUEUzLmgtYJuC3Xv2+IE=;
+        s=201702; t=1667526566;
+        bh=YF6g3NMiz2XuJjBE/5QtHdP17D6vrSLTuUEPImyPtZM=;
         h=Date:From:To:Cc:Subject:From;
-        b=dsYfepOk79XuQf+UoGXkBoA87aUNf1Keu0OKqyDdNwEfuSo5aa2kgSxHtFubtQwgM
-         goqImN/x+icdDCHc06GkOXiIt0xiCOJiBA5FPRsZVAVZpxzjCgo0CihJFz3nmjhVve
-         6kRz9it/t1mKAYS5JuTZ7YE2PSjeeXgKAssZe8zD4rBOaLZy4VnvR53UqLSOS1eZwv
-         G9O71r9pNUOET3mki9LzGbLxIJ9lzdecAsAhRqPOJY7211vXo3mYZJ4THnhMnw/BFZ
-         8R9tSW0ruCO2I758d2h8j2aAYNf5ZGFMkN7d17oDfKBTYUTHJrorgMqtU3kKvWkg04
-         FI6ox3dWUypvg==
-Date:   Fri, 4 Nov 2022 12:48:40 +1100
+        b=lkp/KSZL2U0RWbNVod6XsD2QPNiCO0H7HmeKlNXDQGuEWlEx42DKCdvKSf1Og4pMw
+         8rnIqkWtYjE2MYspsfBDPk4bMlP1Sd9RSwZMhsiMusKnMl6zbZ2U3EwJCA1natkV+H
+         iBBDXextDZbOuRnagtNuAlGKoaDaTzraLCZ0IkgFxoj8QrSfzLHm0mbbO8Yw9q4h1u
+         wgY9vnBiDg2JrZfdMhLH9b/lRCWfrkhXbsMrarWoeKdoxo9J8KDcU0Ciyt2DAO32uA
+         TPoGOrLxIUzHJG8S62IY8zAlXUQHcdvbh/9QuwSfDTDuzTZAr4mUfGscoJjqNdRx8u
+         1ifmxC0MFQR2w==
+Date:   Fri, 4 Nov 2022 12:49:22 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Corey Minyard <cminyard@mvista.com>
-Cc:     "Steven Rostedt (Google)" <rostedt@goodmis.org>,
+To:     Jonathan Cameron <Jonathan.Cameron@Huawei.com>,
+        Rob Herring <robherring2@gmail.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the ipmi tree
-Message-ID: <20221104124840.51ab5b5c@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Rob Herring <robh@kernel.org>
+Subject: linux-next: manual merge of the iio tree with the devicetree tree
+Message-ID: <20221104124922.499bdece@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/ca7G/cqBi.HxMd8M3bO8V7c";
+Content-Type: multipart/signed; boundary="Sig_/l1gY7jIs4abwCp_cP=YN8Pq";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
@@ -51,57 +53,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/ca7G/cqBi.HxMd8M3bO8V7c
+--Sig_/l1gY7jIs4abwCp_cP=YN8Pq
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the ipmi tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
+Today's linux-next merge of the iio tree got a conflict in:
 
-drivers/char/ipmi/ipmi_ssif.c: In function 'shutdown_ssif':
-drivers/char/ipmi/ipmi_ssif.c:1276:9: error: implicit declaration of functi=
-on 'del_timer_shutdown'; did you mean 'device_shutdown'? [-Werror=3Dimplici=
-t-function-declaration]
- 1276 |         del_timer_shutdown(&ssif_info->watch_timer);
-      |         ^~~~~~~~~~~~~~~~~~
-      |         device_shutdown
-cc1: all warnings being treated as errors
-drivers/char/ipmi/ipmi_msghandler.c: In function 'cleanup_ipmi':
-drivers/char/ipmi/ipmi_msghandler.c:5547:17: error: implicit declaration of=
- function 'del_timer_shutdown'; did you mean 'device_shutdown'? [-Werror=3D=
-implicit-function-declaration]
- 5547 |                 del_timer_shutdown(&ipmi_timer);
-      |                 ^~~~~~~~~~~~~~~~~~
-      |                 device_shutdown
-cc1: all warnings being treated as errors
+  Documentation/devicetree/bindings/iio/addac/adi,ad74413r.yaml
 
-Caused by commit
+between commit:
 
-  306ab2918b4c ("timers: ipmi: Use del_timer_shutdown() before freeing time=
-r")
+  c9adc3bd1180 ("dt-bindings: Remove "status" from schema examples, again")
 
-I have used the ipmi tree from next-20221103 for today.
+from the devicetree tree and commit:
+
+  a4728fe6b58b ("dt-bindings: iio: addac: adi,ad74413r: improve example")
+
+from the iio tree.
+
+I fixed it up (I just used the latter whic included the former change
+to this file) and can carry the fix as necessary. This is now fixed as
+far as linux-next is concerned, but any non trivial conflicts should be
+mentioned to your upstream maintainer when your tree is submitted for
+merging.  You may also want to consider cooperating with the maintainer
+of the conflicting tree to minimise any particularly complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/ca7G/cqBi.HxMd8M3bO8V7c
+--Sig_/l1gY7jIs4abwCp_cP=YN8Pq
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNkb3gACgkQAVBC80lX
-0Gz69gf9FtzKZYfPo3f059cujYxPvcVZNh4xMK00Q8BeHMa/H89WaUBAwFJpqx/h
-rI6v59BT2nr6ofMbq3x8qNn587/1a/qBnY7zxy+/stiQU89fiwC0PsYwamgBXCGe
-rtgulLUVEOm+n3fIxDv/Y3+KGYJZ7PIZW7ZIXYieqtV9wlnMX0cly8QPGFcmgTn6
-1V0EMJnnzVJT8ZWTedOri6y4qtx8vFu9ReoWHtPqFCKUnWwvHoF7vdBzNQwtayM7
-KZd+lfiFAvToJaR92LWuWqQk41BApMzjg+YXL16RR8WyHjD7QSDISkf37hzvd8lv
-fz0b1ZB52qMIJvqD15mQA4E6NUmeTQ==
-=ujV8
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNkb6IACgkQAVBC80lX
+0Gyy8Qf/UyUG5s/rsgbzd+HpXFiuMDPgWihb6VuipQ7F3NbAy95UMqZaVsFiqDUD
+/+TZmGNZQTUdf9u18gN9EiWV6f1AL+vnTKGChBYedeia4aDlejDfG/QEbYldJC52
+BI1ISJfLv2dZmlhRtLIQoe8tUjBx6sWbhCCWo0/+oPYksvQSB3/3k19Cz2H7gapF
+zDZ3VqzQO/r+m9oxqATwRXES7r/dtSX9H+NS1J5wp83JdyeECE3N/Og8d1qolzDP
+hdOcZtV7UMnxfQyclH2WuFM/SSIhJU4ZU//BYCK1Hr50G9D3lm5VCttU1yFa2NDK
+uviXWsYxlKrVvoHAlAUI7uFVPb6LIw==
+=ZOMy
 -----END PGP SIGNATURE-----
 
---Sig_/ca7G/cqBi.HxMd8M3bO8V7c--
+--Sig_/l1gY7jIs4abwCp_cP=YN8Pq--
