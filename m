@@ -2,127 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 263FA6193B0
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 10:39:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38C9C6193B3
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 10:39:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231477AbiKDJjT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 05:39:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54686 "EHLO
+        id S229978AbiKDJjr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 05:39:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229637AbiKDJjR (ORCPT
+        with ESMTP id S230306AbiKDJjm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 05:39:17 -0400
-Received: from formenos.hmeau.com (helcar.hmeau.com [216.24.177.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ED66625B;
-        Fri,  4 Nov 2022 02:39:16 -0700 (PDT)
-Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
-        by formenos.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
-        id 1oqt9Z-00A29z-2P; Fri, 04 Nov 2022 17:38:58 +0800
-Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Fri, 04 Nov 2022 17:38:57 +0800
-Date:   Fri, 4 Nov 2022 17:38:57 +0800
-From:   Herbert Xu <herbert@gondor.apana.org.au>
-To:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Jussi Kivilinna <jussi.kivilinna@iki.fi>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Eric Biggers <ebiggers@kernel.org>,
-        linux-crypto@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com
-Subject: Re: [PATCH v3 00/13] Optimizing SM3 and SM4 algorithms using arm64
- NEON/CE instructions
-Message-ID: <Y2TdseEBpJ7cu2Vg@gondor.apana.org.au>
-References: <20221027065505.15306-1-tianjia.zhang@linux.alibaba.com>
+        Fri, 4 Nov 2022 05:39:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BB2A2250B;
+        Fri,  4 Nov 2022 02:39:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CF15C62113;
+        Fri,  4 Nov 2022 09:39:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36916C433D6;
+        Fri,  4 Nov 2022 09:39:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667554780;
+        bh=vBRE2zaNk9N2+qpe0TEUqPTS+nFtRWARCQHJUnRfQFQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=TQMFVP0DnwjC5bCpvwoumZ69nBPt7Pwp8dEuwdxMjH31qncebTLneyvwX/QPwfpBK
+         Z4EIpr949jgEpHSYhOgZmN3DwhMwJYikFIQAc+jeHyi+3K7omux6QAeI4bpq62gQry
+         ZzKAOWazoY0Sn0OZHR1GRyPBFDFZzE7YqQxTcIwv4NadBE1D4o2FsqCmLGIkRhUHOm
+         vM27Yx8QI2fhcghxjQgNPWbvU9PJeZLBBFfgV8VDNn2u8oqfeNPkOgWr+KVNo8Qj1E
+         1ZIksIdBveqqnZ0eQjQT0qM5BqWTCwcI9GIk5n7ipSE4UMnDb9U0hZADsBSg4U6heZ
+         LoD8/2TSRTr4w==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan+linaro@kernel.org>)
+        id 1oqtAX-00064k-QT; Fri, 04 Nov 2022 10:39:22 +0100
+From:   Johan Hovold <johan+linaro@kernel.org>
+To:     Manivannan Sadhasivam <mani@kernel.org>
+Cc:     Hemant Kumar <quic_hemantk@quicinc.com>, mhi@lists.linux.dev,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Johan Hovold <johan+linaro@kernel.org>
+Subject: [PATCH v2] mhi: pci_generic: add support for sc8280xp-crd SDX55 variant
+Date:   Fri,  4 Nov 2022 10:39:13 +0100
+Message-Id: <20221104093913.23347-1-johan+linaro@kernel.org>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221027065505.15306-1-tianjia.zhang@linux.alibaba.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 27, 2022 at 02:54:52PM +0800, Tianjia Zhang wrote:
-> Hi folks,
-> 
-> This series of patches uses different arm64 instruction sets to optimize
-> the SM3 and SM4 algorithms, as well as the optimization of different
-> modes of SM4.
-> 
-> patch 1-2:   NEON instruction set optimization for SM3
-> patch 3:     Refactored and streamlined SM4 NEON instruction implementation
-> patch 4-5:   support test for new SM4 mode
-> patch 6-8:   Refactored and streamlined SM4 CE instruction implementation
-> patch 9-10:  CE accelerated implementation of SM4 CTS/XTS
-> patch 11:    CE accelerated implementation of SM4 CMAC/XCBC/CBCMAC
-> patch 12-13: CE accelerated implementation of SM4 CCM/GCM
-> 
-> v3 change:
->   - As Eric said, remove the code for ESSIV, including testmgr and tcrypt
-> 
-> v2 changes:
->   - remove ARMv9 SVE acceleration implementation
->   - rebase onto v6.1-rc1
-> 
-> Cheers,
-> Tianjia
-> 
-> Tianjia Zhang (13):
->   crypto: arm64/sm3 - raise the priority of the CE implementation
->   crypto: arm64/sm3 - add NEON assembly implementation
->   crypto: arm64/sm4 - refactor and simplify NEON implementation
->   crypto: testmgr - add SM4 cts-cbc/xts/xcbc test vectors
->   crypto: tcrypt - add SM4 cts-cbc/xts/xcbc test
->   crypto: arm64/sm4 - refactor and simplify CE implementation
->   crypto: arm64/sm4 - simplify sm4_ce_expand_key() of CE implementation
->   crypto: arm64/sm4 - export reusable CE acceleration functions
->   crypto: arm64/sm4 - add CE implementation for CTS-CBC mode
->   crypto: arm64/sm4 - add CE implementation for XTS mode
->   crypto: arm64/sm4 - add CE implementation for cmac/xcbc/cbcmac
->   crypto: arm64/sm4 - add CE implementation for CCM mode
->   crypto: arm64/sm4 - add CE implementation for GCM mode
-> 
->  arch/arm64/crypto/Kconfig           |   47 +-
->  arch/arm64/crypto/Makefile          |    9 +
->  arch/arm64/crypto/sm3-ce-glue.c     |    2 +-
->  arch/arm64/crypto/sm3-neon-core.S   |  600 +++++++++++++
->  arch/arm64/crypto/sm3-neon-glue.c   |  103 +++
->  arch/arm64/crypto/sm4-ce-asm.h      |  209 +++++
->  arch/arm64/crypto/sm4-ce-ccm-core.S |  328 ++++++++
->  arch/arm64/crypto/sm4-ce-ccm-glue.c |  303 +++++++
->  arch/arm64/crypto/sm4-ce-core.S     | 1205 ++++++++++++++++++---------
->  arch/arm64/crypto/sm4-ce-gcm-core.S |  741 ++++++++++++++++
->  arch/arm64/crypto/sm4-ce-gcm-glue.c |  286 +++++++
->  arch/arm64/crypto/sm4-ce-glue.c     |  575 ++++++++++++-
->  arch/arm64/crypto/sm4-ce.h          |   16 +
->  arch/arm64/crypto/sm4-neon-core.S   |  630 +++++++++-----
->  arch/arm64/crypto/sm4-neon-glue.c   |  172 +---
->  crypto/tcrypt.c                     |   21 +
->  crypto/testmgr.c                    |   19 +
->  crypto/testmgr.h                    |  977 ++++++++++++++++++++++
->  18 files changed, 5478 insertions(+), 765 deletions(-)
->  create mode 100644 arch/arm64/crypto/sm3-neon-core.S
->  create mode 100644 arch/arm64/crypto/sm3-neon-glue.c
->  create mode 100644 arch/arm64/crypto/sm4-ce-asm.h
->  create mode 100644 arch/arm64/crypto/sm4-ce-ccm-core.S
->  create mode 100644 arch/arm64/crypto/sm4-ce-ccm-glue.c
->  create mode 100644 arch/arm64/crypto/sm4-ce-gcm-core.S
->  create mode 100644 arch/arm64/crypto/sm4-ce-gcm-glue.c
->  create mode 100644 arch/arm64/crypto/sm4-ce.h
-> 
-> -- 
-> 2.24.3 (Apple Git-128)
+The SC8280XP Compute Reference Design (CRD) has an on-PCB SDX55 modem
+which uses MBIM.
 
-All applied.  Thanks.
+The exact channel configuration is not known but the Foxconn SDX55
+configuration allows the modem to be used so reuse that one for now.
+
+Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+---
+
+Changes in v2
+ - drop comment describing this variant (Mani)
+
+
+ drivers/bus/mhi/host/pci_generic.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/bus/mhi/host/pci_generic.c b/drivers/bus/mhi/host/pci_generic.c
+index caa4ce28cf9e..7dcd0ef3184a 100644
+--- a/drivers/bus/mhi/host/pci_generic.c
++++ b/drivers/bus/mhi/host/pci_generic.c
+@@ -542,6 +542,8 @@ static const struct mhi_pci_dev_info mhi_telit_fn990_info = {
+ static const struct pci_device_id mhi_pci_id_table[] = {
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_QCOM, 0x0304),
+ 		.driver_data = (kernel_ulong_t) &mhi_qcom_sdx24_info },
++	{ PCI_DEVICE_SUB(PCI_VENDOR_ID_QCOM, 0x0306, PCI_VENDOR_ID_QCOM, 0x010c),
++		.driver_data = (kernel_ulong_t) &mhi_foxconn_sdx55_info },
+ 	/* EM919x (sdx55), use the same vid:pid as qcom-sdx55m */
+ 	{ PCI_DEVICE_SUB(PCI_VENDOR_ID_QCOM, 0x0306, 0x18d7, 0x0200),
+ 		.driver_data = (kernel_ulong_t) &mhi_sierra_em919x_info },
 -- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+2.37.3
+
