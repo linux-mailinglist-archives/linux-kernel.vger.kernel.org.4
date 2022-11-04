@@ -2,109 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01D51619014
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 06:41:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 140A2619076
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 06:50:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231206AbiKDFld (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 01:41:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52380 "EHLO
+        id S231773AbiKDFuf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 01:50:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230377AbiKDFl3 (ORCPT
+        with ESMTP id S231339AbiKDFsy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 01:41:29 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C94A8275CD;
-        Thu,  3 Nov 2022 22:41:28 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id k22so3615158pfd.3;
-        Thu, 03 Nov 2022 22:41:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=S9+wd/d26nPzxPMD3za/Xjqe3tTkigkq7OyKBI7dvzc=;
-        b=pNnLMLpBzc+72sVwLQ4rebigm5zWOx4LYczRbHPQpI7CDybS5XeVsceGIwLeSpM7iT
-         qikW5kfEFH0tn4B3m0b8GBR+xb64tfFFQN1sBE+4ZpNe5FrTozqrXThq5FeSgqctCGUV
-         sEDRCq5byPTXSz/yigP8CyE+iM/G76pQ9LoveN4Aod8jUCYpqpCddm7oPxlT7HipBHsA
-         9KL6bCRRbkZFLXEbagVgott+y+tlk5CIcRDsxFpxOFGUJjiwjvRyzLJjLcXZ0uPpc5nE
-         mu20rOG63OERUuwa7Obmq+ZPzK2Td0Os0Q0BhxdusOoJ4ecigPbuXx7txImUyGbkrc6I
-         8H2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=S9+wd/d26nPzxPMD3za/Xjqe3tTkigkq7OyKBI7dvzc=;
-        b=UTZEJIPHdhV+6FXCPXDqC1FtpvJQzsR4YlCTlQxq1+TqvuoAaJCzJIpZ85NMTg4jSx
-         qvNqjzYYLEG/YNg1CNaYnCn92ZShEmCn8F1YB6ioXQwUhzw0MCUGFJ1b8elCroKxMuO+
-         G3YGFZhMtH5BbFmwHmG9XqwFIJYnAZh5odfp+yjt8iem7f+RHOg1dWU8S+Xd/9iJIIZv
-         Dv1FtYvrg0YAqXk8foMrGnFUQajlV2bGY63ubFsQcsig1NxkWjsPdh1Caqmtqq9Kc2A2
-         NKMOp5F0lYV/Bx08RrJVXu0uWYxlvLftfmeatD+krOwzJ9JGz19DgTU2vSyJ4HAXAT5Q
-         yeXw==
-X-Gm-Message-State: ACrzQf005+rrUEhGcnFTsyrNPvnMPNBMZ6z91tzkgdBTlZqm1Y3pD21x
-        p+HmbCNSm0Sd1Nk8+qv1P8U=
-X-Google-Smtp-Source: AMsMyM5+xDjLH+Oq7iEZdYP59T9pKYUB8E3/RSYRSrK0qf1eCZuQMh+V6Dlt7ivSiulzcBS9lGdCpQ==
-X-Received: by 2002:a05:6a00:1905:b0:566:2a02:e1a1 with SMTP id y5-20020a056a00190500b005662a02e1a1mr34370199pfi.1.1667540488374;
-        Thu, 03 Nov 2022 22:41:28 -0700 (PDT)
-Received: from localhost.localdomain ([116.128.244.169])
-        by smtp.gmail.com with ESMTPSA id q15-20020aa7960f000000b0056bdc3f5b29sm1684043pfg.186.2022.11.03.22.41.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Nov 2022 22:41:27 -0700 (PDT)
-From:   TGSP <tgsp002@gmail.com>
-To:     rafael@kernel.org, len.brown@intel.com, pavel@ucw.cz,
-        huanglei@kylinos.cn
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        xiongxin <xiongxin@kylinos.cn>, stable@vger.kernel.org
-Subject: [PATCH v2 1/2] PM: hibernate: fix spelling mistake for annotation
-Date:   Fri,  4 Nov 2022 13:41:18 +0800
-Message-Id: <20221104054119.1946073-2-tgsp002@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221104054119.1946073-1-tgsp002@gmail.com>
-References: <20221104054119.1946073-1-tgsp002@gmail.com>
+        Fri, 4 Nov 2022 01:48:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E86B28E00;
+        Thu,  3 Nov 2022 22:48:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3EBBF620D9;
+        Fri,  4 Nov 2022 05:48:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B239C433C1;
+        Fri,  4 Nov 2022 05:48:50 +0000 (UTC)
+Received: from rostedt by gandalf.local.home with local (Exim 4.96)
+        (envelope-from <rostedt@goodmis.org>)
+        id 1oqpZs-0071Bq-22;
+        Fri, 04 Nov 2022 01:49:16 -0400
+Message-ID: <20221104054916.464295277@goodmis.org>
+User-Agent: quilt/0.66
+Date:   Fri, 04 Nov 2022 01:41:18 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Anna-Maria Gleixner <anna-maria@linutronix.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Nilesh Javali <njavali@marvell.com>,
+        GR-QLogic-Storage-Upstream@marvell.com,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org
+Subject: [RFC][PATCH v3 25/33] timers: scsi: Use timer_shutdown_sync() and timer_shutdown() before
+ freeing timer
+References: <20221104054053.431922658@goodmis.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: xiongxin <xiongxin@kylinos.cn>
+From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
 
-The actual calculation formula in the code below is:
+Before a timer is freed, timer_shutdown_sync() must be called, or
+timer_shutdown() if it's already known that the timer is disabled.
 
-max_size = (count - (size + PAGES_FOR_IO)) / 2
-	    - 2 * DIV_ROUND_UP(reserved_size, PAGE_SIZE);
+Link: https://lore.kernel.org/all/20220407161745.7d6754b3@gandalf.local.home/
 
-But function comments are written differently, the comment is wrong?
-
-By the way, what exactly do the "/ 2" and "2 *" mean?
-
-Cc: stable@vger.kernel.org
-Signed-off-by: xiongxin <xiongxin@kylinos.cn>
+Cc: Nilesh Javali <njavali@marvell.com>
+Cc: GR-QLogic-Storage-Upstream@marvell.com
+Cc: "James E.J. Bottomley" <jejb@linux.ibm.com>
+Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc: linux-scsi@vger.kernel.org
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 ---
- kernel/power/snapshot.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/scsi/qla2xxx/qla_edif.c | 4 ++--
+ drivers/scsi/scsi_lib.c         | 1 +
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/kernel/power/snapshot.c b/kernel/power/snapshot.c
-index 2a406753af90..c20ca5fb9adc 100644
---- a/kernel/power/snapshot.c
-+++ b/kernel/power/snapshot.c
-@@ -1723,8 +1723,8 @@ static unsigned long minimum_image_size(unsigned long saveable)
-  * /sys/power/reserved_size, respectively).  To make this happen, we compute the
-  * total number of available page frames and allocate at least
-  *
-- * ([page frames total] + PAGES_FOR_IO + [metadata pages]) / 2
-- *  + 2 * DIV_ROUND_UP(reserved_size, PAGE_SIZE)
-+ * ([page frames total] - PAGES_FOR_IO - [metadata pages]) / 2
-+ *  - 2 * DIV_ROUND_UP(reserved_size, PAGE_SIZE)
-  *
-  * of them, which corresponds to the maximum size of a hibernation image.
-  *
+diff --git a/drivers/scsi/qla2xxx/qla_edif.c b/drivers/scsi/qla2xxx/qla_edif.c
+index 00ccc41cef14..7f3a3c8673b5 100644
+--- a/drivers/scsi/qla2xxx/qla_edif.c
++++ b/drivers/scsi/qla2xxx/qla_edif.c
+@@ -416,7 +416,7 @@ static void __qla2x00_release_all_sadb(struct scsi_qla_host *vha,
+ 				 */
+ 				if (edif_entry->delete_sa_index !=
+ 						INVALID_EDIF_SA_INDEX) {
+-					del_timer(&edif_entry->timer);
++					timer_shutdown_sync(&edif_entry->timer);
+ 
+ 					/* build and send the aen */
+ 					fcport->edif.rx_sa_set = 1;
+@@ -2799,7 +2799,7 @@ qla28xx_sa_update_iocb_entry(scsi_qla_host_t *v, struct req_que *req,
+ 			    "%s: removing edif_entry %p, new sa_index: 0x%x\n",
+ 			    __func__, edif_entry, pkt->sa_index);
+ 			qla_edif_list_delete_sa_index(sp->fcport, edif_entry);
+-			del_timer(&edif_entry->timer);
++			timer_shutdown_sync(&edif_entry->timer);
+ 
+ 			ql_dbg(ql_dbg_edif, vha, 0x5033,
+ 			    "%s: releasing edif_entry %p, new sa_index: 0x%x\n",
+diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c
+index 8b89fab7c420..e6cd1efb9eca 100644
+--- a/drivers/scsi/scsi_lib.c
++++ b/drivers/scsi/scsi_lib.c
+@@ -558,6 +558,7 @@ static bool scsi_end_request(struct request *req, blk_status_t error,
+ 	 */
+ 	destroy_rcu_head(&cmd->rcu);
+ 
++	timer_shutdown(&cmd->abort_work.timer);
+ 	/*
+ 	 * In the MQ case the command gets freed by __blk_mq_end_request,
+ 	 * so we have to do all cleanup that depends on it earlier.
 -- 
-2.25.1
-
+2.35.1
