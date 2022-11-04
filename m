@@ -2,143 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0B9F61A556
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 00:06:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84E7B61A55A
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 00:07:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229681AbiKDXGA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 19:06:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40320 "EHLO
+        id S229677AbiKDXH0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 19:07:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229591AbiKDXF4 (ORCPT
+        with ESMTP id S229627AbiKDXHW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 19:05:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A9E642999
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 16:05:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 07CB261A59
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 23:05:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45F69C433D7;
-        Fri,  4 Nov 2022 23:05:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1667603153;
-        bh=Rw/MCWcvLjCJ/UWizKXePGmZvqTCn6fbSwOgN113JjU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=MjklJDPHV10dl3G3Mc3kX/3WBeuIFfo+ldITzNm0LKr27MJrZLTXB0dA6tQLoVdLu
-         YiqFyit8Xt8MmuzxlgmCoREIG472Rm/9MGgnBHaR6aG+JQNAEUI3P8M0/ulLEZ1o5i
-         jnM3C0OVq++n5h8Jk3dy5fh8BWTma5R0EiSRMUTw=
-Date:   Fri, 4 Nov 2022 16:05:52 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Shakeel Butt <shakeelb@google.com>
-Cc:     Marek Szyprowski <m.szyprowski@samsung.com>, linux-mm@kvack.org,
+        Fri, 4 Nov 2022 19:07:22 -0400
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35ED51E3F7;
+        Fri,  4 Nov 2022 16:07:22 -0700 (PDT)
+Received: from sslproxy04.your-server.de ([78.46.152.42])
+        by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1or5mO-000Lae-8C; Sat, 05 Nov 2022 00:07:16 +0100
+Received: from [85.1.206.226] (helo=linux.home)
+        by sslproxy04.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1or5mO-0003mm-3w; Sat, 05 Nov 2022 00:07:16 +0100
+Subject: Re: [PATCH bpf-next] selftests/bpf: fix build-id for
+ liburandom_read.so
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     KP Singh <kpsingh@kernel.org>, Artem Savkov <asavkov@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
+        netdev@vger.kernel.org, ykaliuta@redhat.com,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mm: convert mm's rss stats into percpu_counter
-Message-Id: <20221104160552.c249397512c5c7f8b293869f@linux-foundation.org>
-In-Reply-To: <20221103171407.ydubp43x7tzahriq@google.com>
-References: <20221024052841.3291983-1-shakeelb@google.com>
-        <CGME20221102210957eucas1p2915f88d8b923ccf79f0e8770d208a1bd@eucas1p2.samsung.com>
-        <fb370ccf-d22a-7885-1773-da85c9d7ea8c@samsung.com>
-        <20221103171407.ydubp43x7tzahriq@google.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+References: <20221104094016.102049-1-asavkov@redhat.com>
+ <CACYkzJ4E37F9iyPU0Qux4ZazHMxz0oV=dANOaDNZ4O8cuWVYhg@mail.gmail.com>
+ <5e6b5345-fc44-b577-e379-cedfe3263066@iogearbox.net>
+ <CAEf4BzZO+4znx4VzQ9LwzFXv0=NfQL4DKBZCGB36ojYNbRoCzQ@mail.gmail.com>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <385ce274-712f-e1fb-8de6-f4441728c225@iogearbox.net>
+Date:   Sat, 5 Nov 2022 00:07:15 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
+MIME-Version: 1.0
+In-Reply-To: <CAEf4BzZO+4znx4VzQ9LwzFXv0=NfQL4DKBZCGB36ojYNbRoCzQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.7/26710/Fri Nov  4 08:53:05 2022)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 3 Nov 2022 17:14:07 +0000 Shakeel Butt <shakeelb@google.com> wrote:
-
+On 11/4/22 11:58 PM, Andrii Nakryiko wrote:
+> On Fri, Nov 4, 2022 at 10:38 AM Daniel Borkmann <daniel@iogearbox.net> wrote:
+>>
+>> Hi Artem,
+>>
+>> On 11/4/22 2:29 PM, KP Singh wrote:
+>>> On Fri, Nov 4, 2022 at 10:41 AM Artem Savkov <asavkov@redhat.com> wrote:
+>>>>
+>>>> lld produces "fast" style build-ids by default, which is inconsistent
+>>>> with ld's "sha1" style. Explicitly specify build-id style to be "sha1"
+>>>> when linking liburandom_read.so the same way it is already done for
+>>>> urandom_read.
+>>>>
+>>>> Signed-off-by: Artem Savkov <asavkov@redhat.com>
+>>>
+>>> Acked-by: KP Singh <kpsingh@kernel.org>
+>>>
+>>> This was done in
+>>> https://lore.kernel.org/bpf/20200922232140.1994390-1-morbo@google.com
+>>
+>> When you say "fix", does it actually fix a failing test case or is it more
+>> of a cleanup to align liburandom_read build with urandom_read? From glancing
+>> at the code, we only check build id for urandom_read.
 > 
-> ...
->
-> Thanks for the report. It seems like there is a race between
-> for_each_online_cpu() in __percpu_counter_sum() and
-> percpu_counter_cpu_dead()/cpu-offlining. Normally this race is fine for
-> percpu_counter users but for check_mm() is not happy with this race. Can
-> you please try the following patch:
+> I reworded the subject to "selftests/bpf: Use consistent build-id type
+> for liburandom_read.so" and pushed. Thanks!
 
-percpu-counters supposedly avoid such races via the hotplup notifier. 
-So can you please fully describe the race and let's see if it can be
-fixed at the percpu_counter level?
-
-> 
-> From: Shakeel Butt <shakeelb@google.com>
-> Date: Thu, 3 Nov 2022 06:05:13 +0000
-> Subject: [PATCH] mm: percpu_counter: use race free percpu_counter sum
->  interface
-> 
-> percpu_counter_sum can race with cpu offlining. Add a new interface
-> which does not race with it and use that for check_mm().
-
-I'll grab this version for now, as others might be seeing this issue.
-
-
-> ---
->  include/linux/percpu_counter.h | 11 +++++++++++
->  kernel/fork.c                  |  2 +-
->  lib/percpu_counter.c           | 24 ++++++++++++++++++------
->  3 files changed, 30 insertions(+), 7 deletions(-)
-> 
-> diff --git a/include/linux/percpu_counter.h b/include/linux/percpu_counter.h
-> index bde6c4c1f405..3070c1043acf 100644
-> --- a/include/linux/percpu_counter.h
-> +++ b/include/linux/percpu_counter.h
-> @@ -45,6 +45,7 @@ void percpu_counter_set(struct percpu_counter *fbc, s64 amount);
->  void percpu_counter_add_batch(struct percpu_counter *fbc, s64 amount,
->  			      s32 batch);
->  s64 __percpu_counter_sum(struct percpu_counter *fbc);
-> +s64 __percpu_counter_sum_all(struct percpu_counter *fbc);
->  int __percpu_counter_compare(struct percpu_counter *fbc, s64 rhs, s32 batch);
->  void percpu_counter_sync(struct percpu_counter *fbc);
->  
-> @@ -85,6 +86,11 @@ static inline s64 percpu_counter_sum(struct percpu_counter *fbc)
->  	return __percpu_counter_sum(fbc);
->  }
->  
-> +static inline s64 percpu_counter_sum_all(struct percpu_counter *fbc)
-> +{
-> +	return __percpu_counter_sum_all(fbc);
-> +}
-
-We haven't been good about documenting these interfaces.  Can we please
-start now? ;)
-
->
-> ...
->
-> +
-> +/*
-> + * Add up all the per-cpu counts, return the result.  This is a more accurate
-> + * but much slower version of percpu_counter_read_positive()
-> + */
-> +s64 __percpu_counter_sum(struct percpu_counter *fbc)
-> +{
-> +	return __percpu_counter_sum_mask(fbc, cpu_online_mask);
-> +}
->  EXPORT_SYMBOL(__percpu_counter_sum);
->  
-> +s64 __percpu_counter_sum_all(struct percpu_counter *fbc)
-> +{
-> +	return __percpu_counter_sum_mask(fbc, cpu_possible_mask);
-> +}
-> +EXPORT_SYMBOL(__percpu_counter_sum_all);
-
-Probably here is a good place to document it.
-
-Is there any point in having the
-percpu_counter_sum_all()->__percpu_counter_sum_all() inlined wrapper? 
-Why not name this percpu_counter_sum_all() directly?
-
->  int __percpu_counter_init(struct percpu_counter *fbc, s64 amount, gfp_t gfp,
->  			  struct lock_class_key *key)
->  {
-> -- 
-> 2.38.1.431.g37b22c650d-goog
+Ack, sgtm!
