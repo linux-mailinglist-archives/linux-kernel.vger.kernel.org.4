@@ -2,173 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51766619E1F
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 18:07:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4B03619E2A
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 18:08:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231302AbiKDRHB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 13:07:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53556 "EHLO
+        id S230428AbiKDRIr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 13:08:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229600AbiKDRGs (ORCPT
+        with ESMTP id S229954AbiKDRIm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 13:06:48 -0400
-Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3459E30F62
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 10:06:44 -0700 (PDT)
-Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-3704852322fso49141807b3.8
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 10:06:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Uh2Soqcix5NF4+gCA5HXepCepNj3tY45FfqIOXMoSa0=;
-        b=ogeWQukOaRtpW/g5+B8JjKag8ZQd2pKV7FnS1McLPACz4Fl7GCI1jzTDRlTVtMTN/v
-         CeFaqhO4h/paTdV9pAcLhWvVuX6IWxdlw1d98k65P4WYuZ5wN9pgH9H+BInFuJTBvyz3
-         ZWwTo5TEQcKq50mRoc7vH24ad+gxRVqenCH1UQn0cxen5Lwqc7lqthHJptv6Q7fynV16
-         CDrXyEmvybW6EzxA8sVwZ7wbUg+rtuGzSP9wcau/OjhcJbrvqwqd75kXhjlQ4Wx0AaLL
-         9bb0+thT8ugs3NvsuexF+OPLyh0vUC90BjeUsJkq22K/Uc4U1OVBe1MYRhlcjILM4UTl
-         FtnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Uh2Soqcix5NF4+gCA5HXepCepNj3tY45FfqIOXMoSa0=;
-        b=a+aYDB2SxhF8PZ/Ertzvu0TVctIHN5KVtHykiCukHzPxCX2aIfHQ6NRiohXTiRBrFt
-         6g3u+9/yCF0YV8FREaXnJ9+5HJGAQc8/VVEpLjgyb7dHuX4KN3NxhkFr7ANszhwMVkdQ
-         mpCugVRoXZqKxDY7lewgsu5JPOw9vvc4gZSYsX8GVDKqLb2sbLZIX1CH52qrguFE5tck
-         HKXU+tUAgDUOIc3UwjPFquQHPbZKYTDJprvg8lYJFO+oDX3XBVzPQQdZzQYmmwWmRTPN
-         Sp0zH9Ion6GFO7Hh2VyjwmcaBBQncAkS1jqc3dMXckqw1b1e2d4bL29CIFHPkEkm9Gs8
-         Ok/g==
-X-Gm-Message-State: ACrzQf364RsMaYz7HAbu0T54ayzlStDl9lUNGPSqiybS7VK7mLVOfHSR
-        wNfR09hU2A8OjrzTStLVeO/2HKv4UNxBhTIfNCG02Q==
-X-Google-Smtp-Source: AMsMyM5fulznOy0WkME0p6/ckcRkBb2ufpSlRYzkvA0Cr6xRpbyJ7kzo/KNTsjaMAUh3HbHLY/xWtfl+i7078Lfe3uE=
-X-Received: by 2002:a81:4811:0:b0:368:e6a7:6b38 with SMTP id
- v17-20020a814811000000b00368e6a76b38mr35079787ywa.20.1667581603227; Fri, 04
- Nov 2022 10:06:43 -0700 (PDT)
+        Fri, 4 Nov 2022 13:08:42 -0400
+Received: from smtp.smtpout.orange.fr (smtp-27.smtpout.orange.fr [80.12.242.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28D5B31F8F
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 10:08:37 -0700 (PDT)
+Received: from [192.168.1.18] ([86.243.100.34])
+        by smtp.orange.fr with ESMTPA
+        id r0BAoZiZatUbyr0BAodujg; Fri, 04 Nov 2022 18:08:34 +0100
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Fri, 04 Nov 2022 18:08:34 +0100
+X-ME-IP: 86.243.100.34
+Message-ID: <dc5a7c79-af45-0e64-80fa-9f1ca8907033@wanadoo.fr>
+Date:   Fri, 4 Nov 2022 18:08:28 +0100
 MIME-Version: 1.0
-References: <20221102081620.1465154-1-zhongbaisong@huawei.com>
-In-Reply-To: <20221102081620.1465154-1-zhongbaisong@huawei.com>
-From:   Alexander Potapenko <glider@google.com>
-Date:   Fri, 4 Nov 2022 18:06:05 +0100
-Message-ID: <CAG_fn=UDAjNd2xFrRxSVyLTZOAGapjSq2Zu5Xht12JNq-A7S=A@mail.gmail.com>
-Subject: Re: [PATCH -next,v2] bpf, test_run: fix alignment problem in bpf_prog_test_run_skb()
-To:     Baisong Zhong <zhongbaisong@huawei.com>, elver@google.com,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>
-Cc:     edumazet@google.com, keescook@chromium.org, kuba@kernel.org,
-        ast@kernel.org, daniel@iogearbox.net, davem@davemloft.net,
-        pabeni@redhat.com, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH -next v2] checkpatch: Add check for array allocator family
+ argument order
+Content-Language: fr
+To:     Liao Chang <liaochang1@huawei.com>, apw@canonical.com,
+        joe@perches.com, dwaipayanray1@gmail.com, lukas.bulwahn@gmail.com
+Cc:     linux-kernel@vger.kernel.org, bagasdotme@gmail.com,
+        pbonzini@redhat.com
+References: <20221104070523.60296-1-liaochang1@huawei.com>
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <20221104070523.60296-1-liaochang1@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 2, 2022 at 9:16 AM Baisong Zhong <zhongbaisong@huawei.com> wrot=
-e:
->
-> we got a syzkaller problem because of aarch64 alignment fault
-> if KFENCE enabled.
->
-> When the size from user bpf program is an odd number, like
-> 399, 407, etc, it will cause the struct skb_shared_info's
-> unaligned access. As seen below:
->
-> BUG: KFENCE: use-after-free read in __skb_clone+0x23c/0x2a0 net/core/skbu=
-ff.c:1032
-
-It's interesting that KFENCE is reporting a UAF without a deallocation
-stack here.
-
-Looks like an unaligned access to 0xffff6254fffac077 causes the ARM
-CPU to throw a fault handled by __do_kernel_fault()
-This isn't technically a page fault, but anyway the access address
-gets passed to kfence_handle_page_fault(), which defaults to a
-use-after-free, because the address belongs to the object page, not
-the redzone page.
-
-Catalin, Mark, what is the right way to only handle traps caused by
-reading/writing to a page for which `set_memory_valid(addr, 1, 0)` was
-called?
-
-> Use-after-free read at 0xffff6254fffac077 (in kfence-#213):
->  __lse_atomic_add arch/arm64/include/asm/atomic_lse.h:26 [inline]
->  arch_atomic_add arch/arm64/include/asm/atomic.h:28 [inline]
->  arch_atomic_inc include/linux/atomic-arch-fallback.h:270 [inline]
->  atomic_inc include/asm-generic/atomic-instrumented.h:241 [inline]
->  __skb_clone+0x23c/0x2a0 net/core/skbuff.c:1032
->  skb_clone+0xf4/0x214 net/core/skbuff.c:1481
->  ____bpf_clone_redirect net/core/filter.c:2433 [inline]
->  bpf_clone_redirect+0x78/0x1c0 net/core/filter.c:2420
->  bpf_prog_d3839dd9068ceb51+0x80/0x330
->  bpf_dispatcher_nop_func include/linux/bpf.h:728 [inline]
->  bpf_test_run+0x3c0/0x6c0 net/bpf/test_run.c:53
->  bpf_prog_test_run_skb+0x638/0xa7c net/bpf/test_run.c:594
->  bpf_prog_test_run kernel/bpf/syscall.c:3148 [inline]
->  __do_sys_bpf kernel/bpf/syscall.c:4441 [inline]
->  __se_sys_bpf+0xad0/0x1634 kernel/bpf/syscall.c:4381
->
-> kfence-#213: 0xffff6254fffac000-0xffff6254fffac196, size=3D407, cache=3Dk=
-malloc-512
->
-> allocated by task 15074 on cpu 0 at 1342.585390s:
->  kmalloc include/linux/slab.h:568 [inline]
->  kzalloc include/linux/slab.h:675 [inline]
->  bpf_test_init.isra.0+0xac/0x290 net/bpf/test_run.c:191
->  bpf_prog_test_run_skb+0x11c/0xa7c net/bpf/test_run.c:512
->  bpf_prog_test_run kernel/bpf/syscall.c:3148 [inline]
->  __do_sys_bpf kernel/bpf/syscall.c:4441 [inline]
->  __se_sys_bpf+0xad0/0x1634 kernel/bpf/syscall.c:4381
->  __arm64_sys_bpf+0x50/0x60 kernel/bpf/syscall.c:4381
->
-> To fix the problem, we adjust @size so that (@size + @hearoom) is a
-> multiple of SMP_CACHE_BYTES. So we make sure the struct skb_shared_info
-> is aligned to a cache line.
->
-> Fixes: 1cf1cae963c2 ("bpf: introduce BPF_PROG_TEST_RUN command")
-> Signed-off-by: Baisong Zhong <zhongbaisong@huawei.com>
+Le 04/11/2022 à 08:05, Liao Chang a écrit :
+> These array allocator family are sometimes misused with the first and
+> second arguments switchted.
+> 
+> Same issue with calloc, kvcalloc, kvmalloc_array etc.
+> 
+> Bleat if sizeof is the first argument.
+> 
+> Link: https://lore.kernel.org/lkml/5374345c-7973-6a3c-d559-73bf4ac15079@redhat.com/
+> Signed-off-by: Liao Chang <liaochang1@huawei.com>
+> Acked-by: Joe Perches <joe@perches.com>
 > ---
-> v2: use SKB_DATA_ALIGN instead kmalloc_size_roundup
+> v2:
+> 1. Acked-by Joe Perches.
+> 2. Use lore links in Link tag.
+> 
 > ---
->  net/bpf/test_run.c | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
-> index 4b855af267b1..bfdd7484b93f 100644
-> --- a/net/bpf/test_run.c
-> +++ b/net/bpf/test_run.c
-> @@ -259,6 +259,7 @@ static void *bpf_test_init(const union bpf_attr *katt=
-r, u32 size,
->         if (user_size > size)
->                 return ERR_PTR(-EMSGSIZE);
->
-> +       size =3D SKB_DATA_ALIGN(size);
->         data =3D kzalloc(size + headroom + tailroom, GFP_USER);
->         if (!data)
->                 return ERR_PTR(-ENOMEM);
-> --
-> 2.25.1
->
+>   scripts/checkpatch.pl | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
+> index 1e5e66ae5a52..a9a9dc277cff 100755
+> --- a/scripts/checkpatch.pl
+> +++ b/scripts/checkpatch.pl
+> @@ -7128,7 +7128,7 @@ sub process {
+>   		}
+>   
+>   # check for alloc argument mismatch
+> -		if ($line =~ /\b((?:devm_)?(?:kcalloc|kmalloc_array))\s*\(\s*sizeof\b/) {
+> +		if ($line =~ /\b((?:devm_)?((?:k|kv)?(calloc|malloc_array)(?:_node)?))\s*\(\s*sizeof\b/) {
+>   			WARN("ALLOC_ARRAY_ARGS",
+>   			     "$1 uses number as first arg, sizeof is generally wrong\n" . $herecurr);
+>   		}
 
+Hi,
 
---
-Alexander Potapenko
-Software Engineer
+Should the devm_ and not devm_ cases be separated?
 
-Google Germany GmbH
-Erika-Mann-Stra=C3=9Fe, 33
-80636 M=C3=BCnchen
+In the devm_case, sizeof will never be just after the first '('.
 
-Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Liana Sebastian
-Registergericht und -nummer: Hamburg, HRB 86891
-Sitz der Gesellschaft: Hamburg
+CJ
