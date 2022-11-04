@@ -2,443 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F122F6199A7
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 15:25:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A627B6199A3
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 15:24:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229804AbiKDOZA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 10:25:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41910 "EHLO
+        id S232060AbiKDOYe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 10:24:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230381AbiKDOYR (ORCPT
+        with ESMTP id S232042AbiKDOYB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 10:24:17 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 069CB30574;
-        Fri,  4 Nov 2022 07:22:39 -0700 (PDT)
-Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 8B78A6600358;
-        Fri,  4 Nov 2022 14:22:11 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1667571732;
-        bh=xNg0SNItxjGsiR/gFaIlZ+1Kk5BlfQgLz3URm5tmWPU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=A4r6uPszue2axeUE3DbV1M7a54MEFtuX/1ImhN6iR9h3lWV5IGFWuaSwucNPJnQVg
-         xgT9ThuVRVR6xj9xkEAL/0BJumZxjJxt4wCu4sqmOFiCxfHFvzbrvScTAX++7Je7vw
-         kx3TPqStRezetCFctwqeQvGV4LX9KyLmwcEFgi4Jkeu0KmOXoi3OoqPCU/T6x2aGo7
-         kaBmbAs4IqD1BAfL9YrmHlIXcIFDgt+cO2WTj+/VY/No/R/CzNGCklna3adgn4Uqjh
-         FiHpUXp+joYpGKhernC3hhxgX/TPsX+lmrm9PWwT/U4HKwXwIoCCP1iqLDoi4X2meL
-         nvbm/4K07CwOA==
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-To:     agross@kernel.org
-Cc:     andersson@kernel.org, konrad.dybcio@somainline.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        angelogioacchino.delregno@collabora.com,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, marijn.suijten@somainline.org,
-        kernel@collabora.com
-Subject: [PATCH v2 2/2] soc: qcom: Add Qualcomm Ramp Controller driver
-Date:   Fri,  4 Nov 2022 15:22:04 +0100
-Message-Id: <20221104142204.156333-3-angelogioacchino.delregno@collabora.com>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20221104142204.156333-1-angelogioacchino.delregno@collabora.com>
-References: <20221104142204.156333-1-angelogioacchino.delregno@collabora.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 4 Nov 2022 10:24:01 -0400
+Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7FD631F85
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 07:22:25 -0700 (PDT)
+Received: by mail-pg1-x549.google.com with SMTP id a33-20020a630b61000000b00429d91cc649so2595963pgl.8
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 07:22:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=GJuNcXrLdCJM1KRVKwlMJhT9Ctl3812baupy3AQpKHQ=;
+        b=NvxTKOjydC+TNUTauQOMqIoVQIhy8wyIsJQZgTbtv4gowJBgmNmHsQZ2uQT4jOpJpu
+         cgOLSN/XknwgE8zS2VEZ6Xu/+QDoiwpwedkgzSP6I7VtqFN8rdxNtywdyqbQfWyTNp+E
+         C5P0a/SDyqh4CoDhXiVBzpx0c2rYGpOCfTx2GN8h4yZSn0IraIJLVDAau3g1QCNC3HQ+
+         uNZ4jeFwSaeob8aFCnBxhvSDhs3aTJo+G/CSqUNHIEj63GVy1z6xDDJEP5Gb3P80gd1r
+         iccq3ssoZuxqPZKTFhBtHpU6nlFX8HZUt3vCeMd36Uv5yqXvQBwioLA3HdIbDntifi9Y
+         6lVA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=GJuNcXrLdCJM1KRVKwlMJhT9Ctl3812baupy3AQpKHQ=;
+        b=XEuXVVgJElxMYmMMy1H4FP6kYzYYojTXP3Mkn7/eT/qgTyqW3OBq88YuS1Wuft7+Gx
+         DepQmK0OBknJz7U+wtAh0oxfTQ8KduDuHcNYQZJWi/kdkwS3U49UlbEppLvppyTjiKhC
+         2vya/hsoISP9oPIcP/fAeVIp0bj+Z34WE53KeKFapcUG8PSThvSn41QZolG4R5StH54T
+         w0r5UrTPrS6w0c3oYC1qpoU4Srs75JPioe/i9ViEI734XrcLl82Qhds9u7wY9hO64U/v
+         SsbB0xZyyiBlL4WWJbj7y0AU/zEX0hGSOUxgi0edRmcgIqW/UWS7qZEgq/2McmpbEr5q
+         b3rg==
+X-Gm-Message-State: ACrzQf2J3LUhe2fEDLqbEiTv9YSP+Bx1QBr9qVGtNEEc0xhUnJMUwfC1
+        4Zi81pgcxfgcbSY7eHHnj2kWtlsViWs=
+X-Google-Smtp-Source: AMsMyM7APxzliBT+2nrygcTS7QRBB3ogpOju/PR6BNlZJYsbIaOBK5IhCO5PdyHqejsXaFp5Snjobz9INoI=
+X-Received: from pgonda1.kir.corp.google.com ([2620:0:1008:11:45e5:86a8:76c:1f1c])
+ (user=pgonda job=sendgmr) by 2002:a05:6a00:22cf:b0:56d:1c55:45d0 with SMTP id
+ f15-20020a056a0022cf00b0056d1c5545d0mr33328315pfj.54.1667571744258; Fri, 04
+ Nov 2022 07:22:24 -0700 (PDT)
+Date:   Fri,  4 Nov 2022 07:22:20 -0700
+Message-Id: <20221104142220.469452-1-pgonda@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
+Subject: [PATCH V2] KVM: SVM: Only dump VSMA to klog for debugging
+From:   Peter Gonda <pgonda@google.com>
+To:     jarkko@kernel.org
+Cc:     Peter Gonda <pgonda@google.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Harald Hoyer <harald@profian.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Ramp Controller is used to program the sequence ID for pulse
-swallowing, enable sequence and linking sequence IDs for the CPU
-cores on some Qualcomm SoCs.
+Explicitly print the VMSA dump at KERN_DEBUG log level, KERN_CONT uses
+KERNEL_DEFAULT if the previous log line has a newline, i.e. if there's
+nothing to continuing, and as a result the VMSA gets dumped when it
+shouldn't.
 
-Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+The KERN_CONT documentation says it defaults back to KERNL_DEFAULT if the
+previous log line has a newline. So switch from KERN_CONT to
+print_hex_dump_debug().
+
+Jarkko pointed this out in reference to the original patch. See:
+https://lore.kernel.org/all/YuPMeWX4uuR1Tz3M@kernel.org/
+print_hex_dump(KERN_DEBUG, ...) was pointed out there, but
+print_hex_dump_debug() should similar.
+
+Fixes: 6fac42f127b8 ("KVM: SVM: Dump Virtual Machine Save Area (VMSA) to klog")
+Signed-off-by: Peter Gonda <pgonda@google.com>
+Reviewed-by: Sean Christopherson <seanjc@google.com>
+Cc: Jarkko Sakkinen <jarkko@kernel.org>
+Cc: Harald Hoyer <harald@profian.com>
+Cc: Paolo Bonzini <pbonzini@redhat.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: x86@kernel.org
+Cc: "H. Peter Anvin" <hpa@zytor.com>
+Cc: kvm@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: stable@vger.kernel.org
 ---
- drivers/soc/qcom/Kconfig           |   9 +
- drivers/soc/qcom/Makefile          |   1 +
- drivers/soc/qcom/ramp_controller.c | 331 +++++++++++++++++++++++++++++
- 3 files changed, 341 insertions(+)
- create mode 100644 drivers/soc/qcom/ramp_controller.c
+ arch/x86/kvm/svm/sev.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/soc/qcom/Kconfig b/drivers/soc/qcom/Kconfig
-index 024e420f1bb7..1e681f98bad4 100644
---- a/drivers/soc/qcom/Kconfig
-+++ b/drivers/soc/qcom/Kconfig
-@@ -95,6 +95,15 @@ config QCOM_QMI_HELPERS
- 	tristate
- 	depends on NET
+diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
+index c0c9ed5e279cb..9b8db157cf773 100644
+--- a/arch/x86/kvm/svm/sev.c
++++ b/arch/x86/kvm/svm/sev.c
+@@ -605,7 +605,7 @@ static int sev_es_sync_vmsa(struct vcpu_svm *svm)
+ 	save->dr6  = svm->vcpu.arch.dr6;
  
-+config QCOM_RAMP_CTRL
-+	tristate "Qualcomm Ramp Controller driver"
-+	depends on ARCH_QCOM || COMPILE_TEST
-+	help
-+	  The Ramp Controller is used to program the sequence ID for pulse
-+	  swallowing, enable sequence and link sequence IDs for the CPU
-+	  cores on some Qualcomm SoCs.
-+	  Say y here to enable support for the ramp controller.
-+
- config QCOM_RMTFS_MEM
- 	tristate "Qualcomm Remote Filesystem memory driver"
- 	depends on ARCH_QCOM
-diff --git a/drivers/soc/qcom/Makefile b/drivers/soc/qcom/Makefile
-index d66604aff2b0..6e02333c4080 100644
---- a/drivers/soc/qcom/Makefile
-+++ b/drivers/soc/qcom/Makefile
-@@ -10,6 +10,7 @@ obj-$(CONFIG_QCOM_OCMEM)	+= ocmem.o
- obj-$(CONFIG_QCOM_PDR_HELPERS)	+= pdr_interface.o
- obj-$(CONFIG_QCOM_QMI_HELPERS)	+= qmi_helpers.o
- qmi_helpers-y	+= qmi_encdec.o qmi_interface.o
-+obj-$(CONFIG_QCOM_RAMP_CTRL)	+= ramp_controller.o
- obj-$(CONFIG_QCOM_RMTFS_MEM)	+= rmtfs_mem.o
- obj-$(CONFIG_QCOM_RPMH)		+= qcom_rpmh.o
- qcom_rpmh-y			+= rpmh-rsc.o
-diff --git a/drivers/soc/qcom/ramp_controller.c b/drivers/soc/qcom/ramp_controller.c
-new file mode 100644
-index 000000000000..b403493f3541
---- /dev/null
-+++ b/drivers/soc/qcom/ramp_controller.c
-@@ -0,0 +1,331 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Qualcomm Ramp Controller driver
-+ * Copyright (c) 2022, AngeloGioacchino Del Regno
-+ *                     <angelogioacchino.delregno@collabora.com>
-+ */
-+
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/of.h>
-+#include <linux/of_platform.h>
-+#include <linux/platform_device.h>
-+#include <linux/regmap.h>
-+#include <linux/types.h>
-+
-+#define RC_UPDATE_EN		BIT(0)
-+#define RC_ROOT_EN		BIT(1)
-+
-+#define RC_REG_CFG_UPDATE	0x60
-+#define RC_CFG_UPDATE_EN	BIT(8)
-+#define RC_CFG_ACK		GENMASK(31, 16)
-+
-+#define RC_DCVS_CFG_SID		2
-+#define RC_LINK_SID		3
-+#define RC_LMH_SID		6
-+#define RC_DFS_SID		14
-+
-+#define RC_UPDATE_TIMEOUT_US	500
-+
-+/**
-+ * struct qcom_ramp_controller_desc - SoC specific parameters
-+ * @cfg_dfs_sid:      Dynamic Frequency Scaling SID configuration
-+ * @cfg_link_sid:     Link SID configuration
-+ * @cfg_lmh_sid:      Limits Management hardware SID configuration
-+ * @cfg_ramp_pre_en:  Ramp Controller pre-enable sequence
-+ * @cfg_ramp_en:      Ramp Controller enable sequence
-+ * @cfg_ramp_post_en: Ramp Controller post-enable sequence
-+ * @cfg_ramp_dis:     Ramp Controller disable sequence
-+ * @cmd_reg:          Command register offset
-+ * @num_dfs_sids:     Number of DFS SIDs (max 8)
-+ * @num_link_sids:    Number of Link SIDs (max 3)
-+ * @num_lmh_sids:     Number of LMh SIDs (max 8)
-+ */
-+struct qcom_ramp_controller_desc {
-+	const struct reg_sequence *cfg_dfs_sid;
-+	const struct reg_sequence *cfg_link_sid;
-+	const struct reg_sequence *cfg_lmh_sid;
-+	const struct reg_sequence *cfg_ramp_pre_en;
-+	const struct reg_sequence *cfg_ramp_en;
-+	const struct reg_sequence *cfg_ramp_post_en;
-+	const struct reg_sequence *cfg_ramp_dis;
-+	u8 cmd_reg;
-+	u8 num_dfs_sids;
-+	u8 num_link_sids;
-+	u8 num_lmh_sids;
-+};
-+
-+/**
-+ * struct qcom_ramp_controller - Main driver structure
-+ * @regmap: Regmap handle
-+ * @desc:   SoC specific parameters
-+ */
-+struct qcom_ramp_controller {
-+	struct regmap *regmap;
-+	const struct qcom_ramp_controller_desc *desc;
-+};
-+
-+/**
-+ * rc_wait_for_update() - Wait for Ramp Controller root update
-+ * @qrc: Main driver structure
-+ *
-+ * Return: Zero for success or negative number for failure
-+ */
-+static int rc_wait_for_update(struct qcom_ramp_controller *qrc)
-+{
-+	const struct qcom_ramp_controller_desc *d = qrc->desc;
-+	struct regmap *r = qrc->regmap;
-+	u32 val;
-+	int ret;
-+
-+	ret = regmap_set_bits(r, d->cmd_reg, RC_ROOT_EN);
-+	if (ret)
-+		return ret;
-+
-+	return regmap_read_poll_timeout(r, d->cmd_reg, val, !(val & RC_UPDATE_EN),
-+					1, RC_UPDATE_TIMEOUT_US);
-+}
-+
-+/**
-+ * rc_set_cfg_update() - Ramp Controller configuration update
-+ * @qrc: Main driver structure
-+ * @ce: Configuration entry to update
-+ *
-+ * Return: Zero for success or negative number for failure
-+ */
-+static int rc_set_cfg_update(struct qcom_ramp_controller *qrc, u8 ce)
-+{
-+	const struct qcom_ramp_controller_desc *d = qrc->desc;
-+	struct regmap *r = qrc->regmap;
-+	u32 ack, val;
-+	int ret;
-+
-+	/* The ack bit is between bits 16-31 of RC_REG_CFG_UPDATE */
-+	ack = FIELD_PREP(RC_CFG_ACK, BIT(ce));
-+
-+	/* Write the configuration type first... */
-+	ret = regmap_set_bits(r, d->cmd_reg + RC_REG_CFG_UPDATE, ce);
-+	if (ret)
-+		return ret;
-+
-+	/* ...and after that, enable the update bit to sync the changes */
-+	ret = regmap_set_bits(r, d->cmd_reg + RC_REG_CFG_UPDATE, RC_CFG_UPDATE_EN);
-+	if (ret)
-+		return ret;
-+
-+	/* Wait for the changes to go through */
-+	ret = regmap_read_poll_timeout(r, d->cmd_reg + RC_REG_CFG_UPDATE, val,
-+				       val & ack, 1, RC_UPDATE_TIMEOUT_US);
-+	if (ret)
-+		return ret;
-+
-+	/*
-+	 * Configuration update success! The CFG_UPDATE register will not be
-+	 * cleared automatically upon applying the configuration, so we have
-+	 * to do that manually in order to leave the ramp controller in a
-+	 * predictable and clean state.
-+	 */
-+	ret = regmap_write(r, d->cmd_reg + RC_REG_CFG_UPDATE, 0);
-+	if (ret)
-+		return ret;
-+
-+	/* Wait for the update bit cleared ack */
-+	return regmap_read_poll_timeout(r, d->cmd_reg + RC_REG_CFG_UPDATE,
-+					val, !(val & RC_CFG_ACK), 1,
-+					RC_UPDATE_TIMEOUT_US);
-+}
-+
-+/**
-+ * rc_write_cfg - Send configuration sequence
-+ * @qrc: Main driver structure
-+ * @seq: Register sequence to send before asking for update
-+ * @ce: Configuration SID
-+ * @nsids: Total number of SIDs
-+ *
-+ * Returns: Zero for success or negative number for error
-+ */
-+static int rc_write_cfg(struct qcom_ramp_controller *qrc,
-+			const struct reg_sequence *seq,
-+			u16 ce, u8 nsids)
-+{
-+	int ret;
-+	u8 i;
-+
-+	/* Check if, and wait until the ramp controller is ready */
-+	ret = rc_wait_for_update(qrc);
-+	if (ret)
-+		return ret;
-+
-+	/* Write the sequence */
-+	ret = regmap_multi_reg_write(qrc->regmap, seq, nsids);
-+	if (ret)
-+		return ret;
-+
-+	/* Pull the trigger: do config update starting from the last sid */
-+	for (i = 0; i < nsids; i++) {
-+		ret = rc_set_cfg_update(qrc, (u8)ce - i);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+/**
-+ * rc_ramp_ctrl_enable() - Enable Ramp up/down Control
-+ * @qrc: Main driver structure
-+ *
-+ * Return: Zero for success or negative number for error
-+ */
-+static int rc_ramp_ctrl_enable(struct qcom_ramp_controller *qrc)
-+{
-+	const struct qcom_ramp_controller_desc *d = qrc->desc;
-+	int ret;
-+
-+	ret = rc_write_cfg(qrc, d->cfg_ramp_pre_en, RC_DCVS_CFG_SID, 1);
-+	if (ret)
-+		return ret;
-+
-+	ret = rc_write_cfg(qrc, d->cfg_ramp_en, RC_DCVS_CFG_SID, 1);
-+	if (ret)
-+		return ret;
-+
-+	return rc_write_cfg(qrc, d->cfg_ramp_post_en, RC_DCVS_CFG_SID, 1);
-+}
-+
-+/**
-+ * qcom_ramp_controller_start() - Initialize and start the ramp controller
-+ * @qrc: Main driver structure
-+ *
-+ * The Ramp Controller needs to be initialized by programming the relevant
-+ * registers with SoC-specific configuration: once programming is done,
-+ * the hardware will take care of the rest (no further handling required).
-+ *
-+ * Return: Zero for success or negative number for error
-+ */
-+static int qcom_ramp_controller_start(struct qcom_ramp_controller *qrc)
-+{
-+	const struct qcom_ramp_controller_desc *d = qrc->desc;
-+	int ret;
-+
-+	/* Program LMH, DFS, Link SIDs */
-+	ret = rc_write_cfg(qrc, d->cfg_lmh_sid, RC_LMH_SID, d->num_lmh_sids);
-+	if (ret)
-+		return ret;
-+
-+	ret = rc_write_cfg(qrc, d->cfg_dfs_sid, RC_DFS_SID, d->num_dfs_sids);
-+	if (ret)
-+		return ret;
-+
-+	ret = rc_write_cfg(qrc, d->cfg_link_sid, RC_LINK_SID, d->num_link_sids);
-+	if (ret)
-+		return ret;
-+
-+	/* Everything is ready! Enable the ramp up/down control */
-+	return rc_ramp_ctrl_enable(qrc);
-+}
-+
-+static const struct regmap_config qrc_regmap_config = {
-+	.reg_bits = 32,
-+	.reg_stride = 4,
-+	.val_bits = 32,
-+	.max_register =	0x68,
-+	.fast_io = true,
-+};
-+
-+static const struct qcom_ramp_controller_desc msm8976_rc_cfg = {
-+	.cfg_dfs_sid = (const struct reg_sequence[]) {
-+		{ 0x10, 0xfefebff7 },
-+		{ 0x14, 0xfdff7fef },
-+		{ 0x18, 0xfbffdefb },
-+		{ 0x1c, 0xb69b5555 },
-+		{ 0x20, 0x24929249 },
-+		{ 0x24, 0x49241112 },
-+		{ 0x28, 0x11112111 },
-+		{ 0x2c, 0x8102 },
-+	},
-+	.cfg_link_sid = (const struct reg_sequence[]) {
-+		{ 0x40, 0xfc987 },
-+	},
-+	.cfg_lmh_sid = (const struct reg_sequence[]) {
-+		{ 0x30, 0x77706db },
-+		{ 0x34, 0x5550249 },
-+		{ 0x38, 0x111 },
-+	},
-+	.cfg_ramp_pre_en = (const struct reg_sequence[]) {
-+		{ 0x50, 0x800 },
-+	},
-+	.cfg_ramp_en = (const struct reg_sequence[]) {
-+		{ 0x50, 0xc00 },
-+	},
-+	.cfg_ramp_post_en = (const struct reg_sequence[]) {
-+		{ 0x50, 0x400 },
-+	},
-+	.cfg_ramp_dis = (const struct reg_sequence[]) {
-+		{ 0x50, 0x0 },
-+	},
-+	.cmd_reg = 0x0,
-+
-+	.num_dfs_sids = 8,
-+	.num_lmh_sids = 3,
-+	.num_link_sids = 1,
-+};
-+
-+static int qcom_ramp_controller_probe(struct platform_device *pdev)
-+{
-+	struct qcom_ramp_controller *qrc;
-+	void __iomem *base;
-+
-+	base = devm_platform_ioremap_resource(pdev, 0);
-+	if (IS_ERR(base))
-+		return PTR_ERR(base);
-+
-+	qrc = devm_kmalloc(&pdev->dev, sizeof(*qrc), GFP_KERNEL);
-+	if (!qrc)
-+		return -ENOMEM;
-+
-+	qrc->desc = device_get_match_data(&pdev->dev);
-+	if (!qrc)
-+		return -EINVAL;
-+
-+	qrc->regmap = devm_regmap_init_mmio(&pdev->dev, base, &qrc_regmap_config);
-+	if (IS_ERR(qrc->regmap))
-+		return PTR_ERR(qrc->regmap);
-+
-+	platform_set_drvdata(pdev, qrc);
-+
-+	return qcom_ramp_controller_start(qrc);
-+}
-+
-+static int qcom_ramp_controller_remove(struct platform_device *pdev)
-+{
-+	struct qcom_ramp_controller *qrc = platform_get_drvdata(pdev);
-+
-+	return rc_write_cfg(qrc, qrc->desc->cfg_ramp_dis, RC_DCVS_CFG_SID, 1);
-+}
-+
-+static const struct of_device_id qcom_ramp_controller_match_table[] = {
-+	{ .compatible = "qcom,msm8976-ramp-controller", .data = &msm8976_rc_cfg },
-+	{ /* sentinel */ }
-+};
-+MODULE_DEVICE_TABLE(of, qcom_ramp_controller_match_table);
-+
-+static struct platform_driver qcom_ramp_controller_driver = {
-+	.driver = {
-+		.name = "qcom-ramp-controller",
-+		.of_match_table = qcom_ramp_controller_match_table,
-+		.suppress_bind_attrs = true,
-+	},
-+	.probe  = qcom_ramp_controller_probe,
-+	.remove = qcom_ramp_controller_remove,
-+};
-+
-+static int __init qcom_ramp_controller_init(void)
-+{
-+	return platform_driver_register(&qcom_ramp_controller_driver);
-+}
-+arch_initcall(qcom_ramp_controller_init);
-+
-+MODULE_AUTHOR("AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>");
-+MODULE_DESCRIPTION("Qualcomm Ramp Controller driver");
-+MODULE_LICENSE("GPL");
+ 	pr_debug("Virtual Machine Save Area (VMSA):\n");
+-	print_hex_dump(KERN_CONT, "", DUMP_PREFIX_NONE, 16, 1, save, sizeof(*save), false);
++	print_hex_dump_debug("", DUMP_PREFIX_NONE, 16, 1, save, sizeof(*save), false);
+ 
+ 	return 0;
+ }
 -- 
-2.37.2
+2.38.1.431.g37b22c650d-goog
 
