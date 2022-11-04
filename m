@@ -2,75 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C49F0618E8D
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 04:03:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C482618E97
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 04:11:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230096AbiKDDD1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 23:03:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48968 "EHLO
+        id S230182AbiKDDLu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 23:11:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229756AbiKDDDW (ORCPT
+        with ESMTP id S229591AbiKDDLr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 23:03:22 -0400
-Received: from out30-42.freemail.mail.aliyun.com (out30-42.freemail.mail.aliyun.com [115.124.30.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCCB61F2DD;
-        Thu,  3 Nov 2022 20:03:18 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0VTv7Wur_1667530994;
-Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0VTv7Wur_1667530994)
-          by smtp.aliyun-inc.com;
-          Fri, 04 Nov 2022 11:03:15 +0800
-From:   Yang Li <yang.lee@linux.alibaba.com>
-To:     bagasdotme@gmail.com
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, richardcochran@gmail.com,
-        netdev@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Yang Li <yang.lee@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH -next v2] net: ethernet: Simplify bool conversion
-Date:   Fri,  4 Nov 2022 11:03:13 +0800
-Message-Id: <20221104030313.81670-1-yang.lee@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
+        Thu, 3 Nov 2022 23:11:47 -0400
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB8C61FCF8
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 20:11:46 -0700 (PDT)
+Received: by mail-pg1-x52a.google.com with SMTP id g129so3314969pgc.7
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 20:11:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=vqS/yz0aw2H8laNC7qyVrEjItnxNWWPJNDD2KyB5XOc=;
+        b=ira7ETQhGBo1xK1mfWU+o97eA9SnMiBm//tP8O/hreuUL1grlsaayJwcTYk44NiV9U
+         MjlcTXe8CQDguqjrcKQziyBeSNfzFURjrJHSgV9tCqouz4Mz4oXojBmWtwnVX9f7YUHC
+         zW3xm1cYFk1AVk1Ts98oqJz+vGDhxbvE6S+MA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vqS/yz0aw2H8laNC7qyVrEjItnxNWWPJNDD2KyB5XOc=;
+        b=I1Ogn+Kx2JUofnx2L5ZD58G6xItCQo3Hpt/H+YVx9FqEGiQeQkJrjU3DlPfXkCWDCY
+         qg2/I9ai+adW572l9NvWvcr6R5gjOX2bsKTrg/XUS6YM81mz6MgXsyfp4OuhiHBVVsbR
+         atSGiFPPC5TrvHC5TvCqz9/Rr4e3uTWclxBChRsz4Pt5lk7Z6Yv8P6ZDgqcP801rIEhm
+         Mpqd0K1069wbkEdRbOY/ZxGu6u+kDdrfsYFRus0UxHu3dNkzj54CBb6VgmQ6Slex/Acb
+         5sLO+9unU5TnI+BsJodocTToXxLM6Ms1kWdGkQWWpZ7/qF8oOg6WMZV2qVrJ3THFbtz2
+         gWjA==
+X-Gm-Message-State: ACrzQf0xPwBRKf/xNyU1SNaWi4hK6mluI+6Y0eFaCzy7zeb4A3i9t00k
+        +Y4s3YU9mJhaU0TvFHVuMV4D3bGLS1o4Vw==
+X-Google-Smtp-Source: AMsMyM5wBdxcNp6ncALzrrN8eB8FDrP6lbH+A3h+sbG0l48kVb+qEH1X5DQlzVVm7Zlt9rbe3BllCA==
+X-Received: by 2002:a05:6a00:4c93:b0:56e:55de:986e with SMTP id eb19-20020a056a004c9300b0056e55de986emr5506341pfb.42.1667531506328;
+        Thu, 03 Nov 2022 20:11:46 -0700 (PDT)
+Received: from google.com ([240f:75:7537:3187:f2f6:8f5:87c8:3aeb])
+        by smtp.gmail.com with ESMTPSA id x3-20020a170902ea8300b00176ab6a0d5fsm1424596plb.54.2022.11.03.20.11.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Nov 2022 20:11:45 -0700 (PDT)
+Date:   Fri, 4 Nov 2022 12:11:41 +0900
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+To:     Deming Wang <wangdeming@inspur.com>
+Cc:     minchan@kernel.org, ngupta@vflare.org, akpm@linux-foundation.org,
+        senozhatsky@chromium.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] zsmalloc: replace IS_ERR() with IS_ERR_VALUE()
+Message-ID: <Y2SC7UMxQq0Vvzs9@google.com>
+References: <20221104023818.1728-1-wangdeming@inspur.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221104023818.1728-1-wangdeming@inspur.com>
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FSL_HELO_FAKE,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The result of 'scaled_ppm < 0' is Boolean, and the question mark
-expression is redundant, remove it to clear the below warning:
+On (22/11/03 22:38), Deming Wang wrote:
+> Avoid typecasts that are needed for IS_ERR() and use IS_ERR_VALUE()
+> instead.
+> 
+> Signed-off-by: Deming Wang <wangdeming@inspur.com>
 
-./drivers/net/ethernet/renesas/rcar_gen4_ptp.c:32:40-45: WARNING: conversion to bool not needed here
-
-Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=2729
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
----
-
-change in v2:
---According to Bagas's suggestion, describe what this patch does to fix this warning. 
-
- drivers/net/ethernet/renesas/rcar_gen4_ptp.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/net/ethernet/renesas/rcar_gen4_ptp.c b/drivers/net/ethernet/renesas/rcar_gen4_ptp.c
-index c007e33c47e1..37f7359678e5 100644
---- a/drivers/net/ethernet/renesas/rcar_gen4_ptp.c
-+++ b/drivers/net/ethernet/renesas/rcar_gen4_ptp.c
-@@ -29,7 +29,7 @@ static const struct rcar_gen4_ptp_reg_offset s4_offs = {
- static int rcar_gen4_ptp_adjfine(struct ptp_clock_info *ptp, long scaled_ppm)
- {
- 	struct rcar_gen4_ptp_private *ptp_priv = ptp_to_priv(ptp);
--	bool neg_adj = scaled_ppm < 0 ? true : false;
-+	bool neg_adj = scaled_ppm < 0;
- 	s64 addend = ptp_priv->default_addend;
- 	s64 diff;
- 
--- 
-2.20.1.7.g153144c
-
+Reviewed-by: Sergey Senozhatsky <senozhatsky@chromium.org>
