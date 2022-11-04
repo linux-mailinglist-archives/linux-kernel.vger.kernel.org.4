@@ -2,34 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2868619DB8
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 17:48:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0E86619DB9
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 17:49:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231989AbiKDQsy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 12:48:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38950 "EHLO
+        id S231995AbiKDQs7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 12:48:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231949AbiKDQrr (ORCPT
+        with ESMTP id S231963AbiKDQrr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 4 Nov 2022 12:47:47 -0400
 Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 192C14AF05;
-        Fri,  4 Nov 2022 09:47:37 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F9B64045F;
+        Fri,  4 Nov 2022 09:47:39 -0700 (PDT)
 Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id D92CB40003;
-        Fri,  4 Nov 2022 16:47:35 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id 054A640010;
+        Fri,  4 Nov 2022 16:47:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1667580456;
+        t=1667580458;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=I4XXOMBEfkOnV0QqjTL56rdfmw5ub9qZ5YqwWMsqScM=;
-        b=kACEsRxzfU7VRr3rXIFdBQuRKCNwXA/whF8DcKXCqTUeTFQ3e3W5msdthKkpzSBrUpMRJy
-        atsfrvsau1gDCjGTk2uov+YZlkdvqTTfC7h4TPZIVcUCoLrfNqUlSdpgv1uOICC46hF5F8
-        LFGy6zX7/NUWmkbNoNdSuwnifcjVD9EPgXSz/s+L0rywdOq6hYPo4v/okslvgXFgR/lQv3
-        44rCmB2dQXYaZICplkg4B+NQI91NMz/FHT6Xptkc22toY3dnQl8uvccj3ZIK32v2IposLc
-        vEh14j7OYkskKv0xJSMttYiN+qlDl4NQFMp9vnWqexlqBRgG3SugyJq7cLq8xg==
+        bh=p+yDyoG2qKYEY8YhhZqOq33UNeQMIcC6DN9z91vnmHU=;
+        b=UmO901a52ytowHIFKqWsssrz0q2L1duxwvZJhYgieKG9bUocsqFTtvElJWVaGB8ddioOWN
+        ZuabgYv/+9tp0CoJl3yt+Xzm0XI+MaJsUkakpt6gbP6Gs0b+i2/J9WuKi3xoal9jXY+w41
+        QsPcXaLoeXxHSCdtGVTBdG21tToL+LZlJUnetwXh5/wHIZeeKPTv09kx5fo4XclY/Sz9Y+
+        0ynrzEsuVga93VrFPYrDYCmmWHKN7C19v1qSp3WWw8vtN5LeYWvZpvA7RupK6TavdWm3Mu
+        LylqSslmYbU40+Xv932L+ucAk8cBfSSeV3flgDLV2iGvYvUOKJXRRZyFCSqIuw==
 From:   Miquel Raynal <miquel.raynal@bootlin.com>
 To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzk+dt@kernel.org>,
@@ -45,9 +45,9 @@ Cc:     Richard Weinberger <richard@nod.at>,
         <linux-kernel@vger.kernel.org>,
         Miquel Raynal <miquel.raynal@bootlin.com>,
         Rob Herring <robh@kernel.org>
-Subject: [PATCH v2 15/17] dt-bindings: mtd: Argue in favor of keeping additionalProperties set to true
-Date:   Fri,  4 Nov 2022 17:47:16 +0100
-Message-Id: <20221104164718.1290859-16-miquel.raynal@bootlin.com>
+Subject: [PATCH v2 16/17] dt-bindings: mtd: Drop object types when referencing other files
+Date:   Fri,  4 Nov 2022 17:47:17 +0100
+Message-Id: <20221104164718.1290859-17-miquel.raynal@bootlin.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221104164718.1290859-1-miquel.raynal@bootlin.com>
 References: <20221104164718.1290859-1-miquel.raynal@bootlin.com>
@@ -64,62 +64,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In most cases we try to avoid it but in some cases this is
-needed. Clarify why by adding a small comment.
+Setting an object type is redundant when a reference is made, so drop
+these useless lines.
 
 Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
 Reviewed-by: Rob Herring <robh@kernel.org>
 ---
- Documentation/devicetree/bindings/mtd/mtd.yaml                  | 1 +
- Documentation/devicetree/bindings/mtd/nand-chip.yaml            | 1 +
- Documentation/devicetree/bindings/mtd/nand-controller.yaml      | 1 +
- Documentation/devicetree/bindings/mtd/partitions/partition.yaml | 1 +
- 4 files changed, 4 insertions(+)
+ Documentation/devicetree/bindings/mtd/mtd.yaml | 1 -
+ 1 file changed, 1 deletion(-)
 
 diff --git a/Documentation/devicetree/bindings/mtd/mtd.yaml b/Documentation/devicetree/bindings/mtd/mtd.yaml
-index 2494ec2d80e3..9ee285b7d162 100644
+index 9ee285b7d162..78da129e9985 100644
 --- a/Documentation/devicetree/bindings/mtd/mtd.yaml
 +++ b/Documentation/devicetree/bindings/mtd/mtd.yaml
-@@ -60,6 +60,7 @@ patternProperties:
-     required:
-       - compatible
+@@ -43,7 +43,6 @@ patternProperties:
+     deprecated: true
  
-+# This is a generic file other binding inherit from
- additionalProperties: true
+   "^otp(-[0-9]+)?$":
+-    type: object
+     $ref: ../nvmem/nvmem.yaml#
  
- examples:
-diff --git a/Documentation/devicetree/bindings/mtd/nand-chip.yaml b/Documentation/devicetree/bindings/mtd/nand-chip.yaml
-index 8d5d2d3ef56b..6e2dc025d694 100644
---- a/Documentation/devicetree/bindings/mtd/nand-chip.yaml
-+++ b/Documentation/devicetree/bindings/mtd/nand-chip.yaml
-@@ -70,4 +70,5 @@ properties:
- required:
-   - reg
- 
-+# This file can be referenced by more specific devices (like spi-nands)
- additionalProperties: true
-diff --git a/Documentation/devicetree/bindings/mtd/nand-controller.yaml b/Documentation/devicetree/bindings/mtd/nand-controller.yaml
-index 3f2a1480e1eb..220aa2c8c0b5 100644
---- a/Documentation/devicetree/bindings/mtd/nand-controller.yaml
-+++ b/Documentation/devicetree/bindings/mtd/nand-controller.yaml
-@@ -129,6 +129,7 @@ required:
-   - "#address-cells"
-   - "#size-cells"
- 
-+# This is a generic file other binding inherit from and extend
- additionalProperties: true
- 
- examples:
-diff --git a/Documentation/devicetree/bindings/mtd/partitions/partition.yaml b/Documentation/devicetree/bindings/mtd/partitions/partition.yaml
-index f1a02d840b12..8bdec706ba9b 100644
---- a/Documentation/devicetree/bindings/mtd/partitions/partition.yaml
-+++ b/Documentation/devicetree/bindings/mtd/partitions/partition.yaml
-@@ -60,4 +60,5 @@ then:
-     $nodename:
-       pattern: '^partition-.*$'
- 
-+# This is a generic file other binding inherit from and extend
- additionalProperties: true
+     description: |
 -- 
 2.34.1
 
