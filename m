@@ -2,66 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B70B461A25A
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 21:41:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07AB161A25B
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 21:41:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229649AbiKDUlL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 16:41:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39740 "EHLO
+        id S229949AbiKDUlR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 16:41:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229574AbiKDUlA (ORCPT
+        with ESMTP id S229640AbiKDUlB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 16:41:00 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4947845ED2
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 13:40:59 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id d59-20020a17090a6f4100b00213202d77e1so9278978pjk.2
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 13:40:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=f/Mzrdh822ICr7apu8JxzHNEOBsO25I9fYrSs9HSUig=;
-        b=M/cVmBv5EUeUoHlgfUMn062PCK/nUCt7P5kcuK24V2c3qSGOkDGOoy2HaI3BCo38sl
-         8ZQ91fmCQyWPmu4Lfk74NSGZmHfPS/INBakCG6hKjaLBI0hVZL7sAWIMAl64nzJlm2Il
-         5e7SJcpdrh3KsfgxcXdxb8GgVfOiPxV4Yjc5PKCxixHsx+jDhJjf2oVzgvV90oSTxzf0
-         pWrAA8CVh6QI+fOU5YIUICzgwOURHv0yRCxnZayfd7ELVH7HkbC3gLtNGx8Bec/RIMs9
-         bsa6R77BbT62r9O+r70Zk6ZogFHxgZEupF3JAqWnJXz766AxEWlvaMXlkhHweEaXDQx+
-         8olQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=f/Mzrdh822ICr7apu8JxzHNEOBsO25I9fYrSs9HSUig=;
-        b=SPgknbPirUGMhUiPVNh+WNoJ8utAcnRPAo9GCYXMZc7sjYYf4FmnJ+qr7Y15UsaZT2
-         fNVduBZMn8YdMmS/gjIi7g5ZrVnFhQ4055jOaOza7FOqBrSw6d1+96suNKfp/W8VeTGx
-         klwBJNmDr2JPfYrh/kPRBf7IE67HXegBCzkF1xU7PQI7EVnom+WEm7ucbDuUMVheA37+
-         94PZk9UGeRZnET/SmMay2jWKlf0etcC0EmqdwNIK3tdA2fARKcQnSr8YySneKj6or7Im
-         pVWa/1BzoHhqfC7f89H6jKMS5sOBa2DCx0jVXLaAxbNYccJzO7BddBIi92zpKuz1YEWB
-         B3Ow==
-X-Gm-Message-State: ACrzQf1YEhUOHfdRXy1V7Pk+6kKlPWAg/IIraDVgGTUViIcWvogsSkfL
-        fSlwWteBl6y1u+GnmUtozY+WGan8NsTIHwX8IpM=
-X-Google-Smtp-Source: AMsMyM4GQd/lvcm+kS15IzTwdqa5kVDpo+qFV5baEq1ahq5KFiTh/C9iuTn2VUNwhFP7Psh8xBwAqpd7y5ZlUeQvWOA=
-X-Received: by 2002:a17:902:d512:b0:181:f1f4:fcb4 with SMTP id
- b18-20020a170902d51200b00181f1f4fcb4mr37749838plg.102.1667594458762; Fri, 04
- Nov 2022 13:40:58 -0700 (PDT)
+        Fri, 4 Nov 2022 16:41:01 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2083.outbound.protection.outlook.com [40.107.94.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D3D645ECA;
+        Fri,  4 Nov 2022 13:41:00 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=VFTkhTsBQwAVXu4jxy/GrjnJvuqsipEFx2tWVn76oa/hb21//gwwSFtdVB9gLhBDKbo3EHfn6RAMBZA9PupW8g3hJwBvIeL37KnLlhMukBgeeOud7/4IdVWTycHSIYl8ANuJeDMy44cBU3u84zrojnGDOlvUjr4PwrvM+71H4dprb9bCyle8FxAXUPq9bClRdVNNzG/TiEAGFP0zLYBPGZdo/fazLGd88LybaSNbQCQ5x+2kqN4X1hkU5Xq5UN6QIg1IDCy81/c1eO/DdwxOC6f00ZlQgg399bAIjibO0aO6E1pU6zNigXeuPruI+djVhbdg+s+nM2KTiiIri6PM3g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=bHlrOdQgG7aVh9xfrr999Erl0ZXVcYTq0Iltks3NldI=;
+ b=HN2EQuXgtRoHp/cnUaSyFHS6WYh8fyL1V3G2+J1AOl0SFIMfKbtXqzuNOyt+0n/0ADYpw2KoRRv6w4zCVsJfTRbpvegqo82Y6AglnQGRw1ToD5Zpn/VhqhHJdeaYZrZ6ut1KdXLB1APGBTMjFD4ReNw31OkkKR9yDcolMKsg0sm8WY7kib2knbaT41zaGuo9RvTjkU1FIEJEHj3RVBQGdYrkesrDhpT545ITYunhVtsnU1e0Vx0MTxfAGEtfkDHccnzAWbTfgfDOS9TSJ42EW0rb6Mkl6BJxtJUH5kbX/eelXGZBKBiW7ZiL+sOchX4to+Akgna98SzhJe5RgrBCbQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=bHlrOdQgG7aVh9xfrr999Erl0ZXVcYTq0Iltks3NldI=;
+ b=4m0ruVuGDLq4D30kIHQWWaKojBa69W39ybYMm6eYrKmMxQTRFBkeg1Qy49taoi/wOTRIXhF7Cp87JIlRpH1gZACXJ7D1pLLgHmTK/mHgJAm/0FEA7gftKTuxRgTHAuQ87AHuZxgBTGCww6YJKOHHq4LV+Vw2w1bn24EID1YyQkY=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN9PR12MB5115.namprd12.prod.outlook.com (2603:10b6:408:118::14)
+ by BL1PR12MB5995.namprd12.prod.outlook.com (2603:10b6:208:39b::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.20; Fri, 4 Nov
+ 2022 20:40:55 +0000
+Received: from BN9PR12MB5115.namprd12.prod.outlook.com
+ ([fe80::5d8:f3f2:d940:5350]) by BN9PR12MB5115.namprd12.prod.outlook.com
+ ([fe80::5d8:f3f2:d940:5350%3]) with mapi id 15.20.5791.022; Fri, 4 Nov 2022
+ 20:40:55 +0000
+Message-ID: <8bca88b8-e7cb-8458-01e9-544de44302b8@amd.com>
+Date:   Fri, 4 Nov 2022 16:40:52 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: Coverity: kfd_parse_subtype_cache(): Memory - corruptions
+Content-Language: en-US
+To:     coverity-bot <keescook@chromium.org>,
+        Harish Kasiviswanathan <Harish.Kasiviswanathan@amd.com>,
+        "Ma, Jun" <Jun.Ma2@amd.com>
+Cc:     Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        amd-gfx@lists.freedesktop.org, Oded Gabbay <oded.gabbay@gmail.com>,
+        Jay Cornwall <Jay.Cornwall@amd.com>, Ben Goz <ben.goz@amd.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Kent Russell <kent.russell@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Amber Lin <Amber.Lin@amd.com>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        linux-next@vger.kernel.org, linux-hardening@vger.kernel.org
+References: <202211041239.2B98F280@keescook>
+From:   Felix Kuehling <felix.kuehling@amd.com>
+Organization: AMD Inc.
+In-Reply-To: <202211041239.2B98F280@keescook>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: CH0PR03CA0107.namprd03.prod.outlook.com
+ (2603:10b6:610:cd::22) To BN9PR12MB5115.namprd12.prod.outlook.com
+ (2603:10b6:408:118::14)
 MIME-Version: 1.0
-References: <20221103213641.7296-1-shy828301@gmail.com> <Y2TOAdHk97pPYwJY@dhcp22.suse.cz>
- <CAHbLzkpPioG8kiTHtepEtTC8sr8JAc2JTJk0s7WQH+fCh6YFKA@mail.gmail.com> <Y2VuRplhVmKiabR9@dhcp22.suse.cz>
-In-Reply-To: <Y2VuRplhVmKiabR9@dhcp22.suse.cz>
-From:   Yang Shi <shy828301@gmail.com>
-Date:   Fri, 4 Nov 2022 13:40:46 -0700
-Message-ID: <CAHbLzkqzHmRtk-46KuBGM6swQe4r20_LtSku-CZvmf+gxOhKCg@mail.gmail.com>
-Subject: Re: [v2 PATCH 1/2] mm: khugepaged: allow page allocation fallback to
- eligible nodes
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     zokeefe@google.com, akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN9PR12MB5115:EE_|BL1PR12MB5995:EE_
+X-MS-Office365-Filtering-Correlation-Id: d07c513a-f7e9-4f4b-4f8f-08dabea4deec
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: WkEKMRGZLvyczkXEIxFQNshKOjzYmU7ng67QigAUYfSXpIj0UwZXuqDSs/AkXR8vwE11hu5KjgAhhBpux5x3OuDoMIwii9UR3L4wj0YtlOu7bZIuKTSo3Chr1LV2gCnxk+dxSsgFuDL88+M8q0SW5WPFQhWURpx2Q0rGGl2M9cRSOv05sCIWpurCOeAfi2fLosTo1ldriiHcgMNYafjdSqzEFrDqBipifu7B9IE/gpLeg3YPN+iTjwOteu7LIhgXibopI+hHuSzSvHkw+o0ze/6dFuhQlOla5h7o8KWQOGBCWJN+HW/JbzUzo1TwbcfaB5lwADBq1aDbm0J3/48uAf90PiMb7InCJ/DLcSVLeY6HCB5XMBVTu/ozBIF7Tk/uMXy2tFyQEDNFO/Cpcwj42cXiCBQwV8Q3wCORVuAXrbetL/Tc1v5cfV1IOuhJ19MO3AxoblTCBlr9aSfsyNQtwldEA1p4MbIzX3T5v2BWrh4N/V7SimGk1zM3XWYi+RgGM+5uAhjpy31rUUW+Dalgz/CfHG4E7/G3eMIgzanPf5C2/jtKR1p7xx/+b48H5P4sCodKlYweoUDsdEo78oxTiihHF5KpX9b7taF4Bgv0q9pw0KrasEngv32sfK4nLlk5/vyF1iCExUVMyeVPaGKEVcktMkdcAUhvSfQInOr0RXIpvE7L7Llkcruj7NBnWF8dyZd8V1NrVgf+nSGWtTgbHRd+0NbLQgJGcR13a4vcc0w4NPlEY1BHe8MSQpZEX6yPekL1pOkh1Erj5K6sevKWslhrw0P71BRYgqARFJmJlp+G/5G8sHIv4vvAa3Y5suu4Uini/M/c/7bfYFn4lyFgjA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR12MB5115.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(366004)(376002)(136003)(39860400002)(396003)(451199015)(38100700002)(83380400001)(31696002)(5660300002)(6636002)(86362001)(44832011)(2906002)(7416002)(8936002)(66476007)(41300700001)(4326008)(110136005)(53546011)(6506007)(6666004)(26005)(54906003)(316002)(186003)(478600001)(2616005)(6512007)(66946007)(66556008)(8676002)(36916002)(966005)(6486002)(31686004)(36756003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cnV6N2FOOU1tWWJuSmhvMnJzcEtnYUc0YWFOUUkxNWc0ZCt5eEk1L2JUdE5a?=
+ =?utf-8?B?bUYxams4MXd1Zzk3VUtLeTZTTmZyWVBBYmhQSFpBMWgxdUE0cU4xTTAvZ3ZQ?=
+ =?utf-8?B?MnUzYW9iNG9DTlVFWUhDdzdUdFkwaURLUGlzSmVsd0VDZzVhWDNVYThHZkR6?=
+ =?utf-8?B?amRucDJJeFJtVXpxVlNCK05jdm05UnVaUFQ4SDR0M3A4TVplUkltR25uTTkw?=
+ =?utf-8?B?Y2RURlEwdTBmQXRUVGViYWgyZVFvWi9QSXIyN1U5cHR6aUpST0ljYnJSb3lh?=
+ =?utf-8?B?N3dvd0xUbGV5eFJlOUxuVGJGNFVmRVgxcFhHYWtjMXdEdm9tN2pwZnBHU0hj?=
+ =?utf-8?B?ZHZlZVViVWhhK09mR21YQzkwSStsdjhyTmhIc04yY2JUdmZQRTVaS0Z5eXd5?=
+ =?utf-8?B?Mll2MkVvdjg3dC9ONFVjMHZzc3IrTHZscFYvUkhnZkRSUlBiS0ZmdldjSmxF?=
+ =?utf-8?B?ZDBQNjNIUlpWSG1nUDNXUGdVRWNQUHZFL0M1ck9nTWlEU0VrY2RRNm1idGFk?=
+ =?utf-8?B?RG5VUHNwbzF3cXBMSGtYdkRZZCt3UFpQMGlnYWIwQzRaQ2IwcDJXaHpiTkRj?=
+ =?utf-8?B?azZUbkFPMFRxZ3JBaVFvdGpNZCswOUhCcytZVVMwd28vc3A0NnMxQkJvTG1O?=
+ =?utf-8?B?YlBxV3VXcnFjNTA2QTI0eEQrd3BGL1dqOUE3ZlFHYldrYU1CZFAwbUdxWG9M?=
+ =?utf-8?B?Y0JLWXpUeE5ObCtxbVJqeUJ1Rm1wQkg5Z1NieWpnbzNUaWw2NUJKekZYb2lt?=
+ =?utf-8?B?TWNLbXdMQ0t6KzVJTTBhdS9oU3lmcGpqMGN2Z1RlWkJrcWxXaGU0bk94cDV2?=
+ =?utf-8?B?bjd6dkg5dUhrTVI4SkorOE5rS1pWdldVcjhWMHJydHB3R3JISXY4YW9QeGNV?=
+ =?utf-8?B?Y2IrT1JydXl0a3hsbDQ5VHF5dlZLVWorOHZ3REkvNXNZTW1tNzdvUm1yMkZV?=
+ =?utf-8?B?UWVqNWNRbkVoeWVGWUMvb3RWcENsT2RQNDd3SU52MTJSU1VvNi9seDd5S2J2?=
+ =?utf-8?B?SCtvT1krdHYwWGJpRWsvTFJJeUR2NzJxTStNL2psMG9UZCtwNnBZZWFTdW1P?=
+ =?utf-8?B?a3R1cW9INnRueDRvQ3FyWDJ1blR6bnpNZ1ZtVEZncmVFQjJ0dDYwS0lLS0F5?=
+ =?utf-8?B?ZTF6K1hqQ1k2d0lLUzdyMm0yZDJnQ0puK2N5OVBueTk1RnRzdTVrbllDWC9r?=
+ =?utf-8?B?QnNLOXJST1ptbFVwWlZPVnBraGsrb1FZTmxRRTdRb05Lbk1oTFJhQ1IwNzQz?=
+ =?utf-8?B?S1JZL0NIMnltN3QvZkc5ZEdiU0x3Q1EvVWNZbGpUWHQveXlOcUpMRVJtNC9G?=
+ =?utf-8?B?UTBYQ05JNU1hY0VWQ2hZQWJLWTV1Vmh2QXpIZm5EeWtZbDlBS214YUwwNUlw?=
+ =?utf-8?B?VzVTUFUxdFdpUnhCVHJ1TU5mUUNrYlM5VkZ5U3FnZXBva2xRbGJSVzA4a1Ra?=
+ =?utf-8?B?K09Ib01kcllKMVhlQkJsSHFHc1BGd2ZrWk14MWlacERqenlsemRmZmw1djA2?=
+ =?utf-8?B?YUdONHkxNnhJWlZnUmNRc3p6WCtHT0JvR2tsbVNQK3dRZWtXdEpiSENLR3hI?=
+ =?utf-8?B?UEhZdU9iZms3VFBPeGlXWVRpd3g4MTN1NHFrMUpHb20yNVYzMXArRWVIK1gx?=
+ =?utf-8?B?cHhDS3Y2NVhBRTJyV29IOWpCUE1UUUE2VitLSldtZVJaaGFoWDhQV2NCWmtx?=
+ =?utf-8?B?a0UxWmVQWGo3TGVxaVZ5MzlDVy84ZkJxUmpaaFhSVldXdjhUb3h4NTZWNGRS?=
+ =?utf-8?B?bDNXVlZHeG9kYmo5bWdGMHVuL2RvYW1pOVRvNzdybXZOUE5UWFJKMmpPdUZy?=
+ =?utf-8?B?L2ZDU1NWUGVBYk56V1dQUjRxVVZjd2M1UE9LdDQzZWlLMHJrS1RGS29VVE9z?=
+ =?utf-8?B?dmJ6dlBkZlVtK3pBbkY1ZlZEZkU0cWp5YmtpWjhtWHVKSDhUL2NnM1hqU2Ry?=
+ =?utf-8?B?WGxuZEtiSTZVVE81eDFWRC9kYTM2VnZDZk1IU3RaaDBHWnVDRnNRMXJ5bnI4?=
+ =?utf-8?B?azlLNGw1QkZEaTUyUnBRNk9FSTdvYXRFK3JkNXpnL04rS3FkTjZsTHp6Rk9C?=
+ =?utf-8?B?N1pPK0pxVk43R0h3QmUwbm56aDhTdEJ2VkdYRnBDdXl6eVlTRDU1eDZQOXRp?=
+ =?utf-8?Q?h511NYdFaeMhGxmgiYE4FtTdh?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d07c513a-f7e9-4f4b-4f8f-08dabea4deec
+X-MS-Exchange-CrossTenant-AuthSource: BN9PR12MB5115.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Nov 2022 20:40:55.2007
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: JBtH/OOIwZBppAhswGrWjs0vfVKfkdzaNbDzarqWqlG6JUwKne2MKSxiSEL8Sp3ao9fggRmw5BoY2rNuZsH/EQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5995
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,63 +136,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 4, 2022 at 12:55 PM Michal Hocko <mhocko@suse.com> wrote:
+On 2022-11-04 15:41, coverity-bot wrote:
+> Hello!
 >
-> On Fri 04-11-22 10:37:39, Yang Shi wrote:
-> > On Fri, Nov 4, 2022 at 1:32 AM Michal Hocko <mhocko@suse.com> wrote:
-> > >
-> > > On Thu 03-11-22 14:36:40, Yang Shi wrote:
-> > > [...]
-> > > > So use nodemask to record the nodes which have the same hit record, the
-> > > > hugepage allocation could fallback to those nodes.  And remove
-> > > > __GFP_THISNODE since it does disallow fallback.  And if nodemask is
-> > > > empty (no node is set), it means there is one single node has the most
-> > > > hist record, the nodemask approach actually behaves like __GFP_THISNODE.
-> > > >
-> > > > Reported-by: syzbot+0044b22d177870ee974f@syzkaller.appspotmail.com
-> > > > Suggested-by: Zach O'Keefe <zokeefe@google.com>
-> > > > Suggested-by: Michal Hocko <mhocko@suse.com>
-> > > > Signed-off-by: Yang Shi <shy828301@gmail.com>
-> > > > ---
-> > > >  mm/khugepaged.c | 32 ++++++++++++++------------------
-> > > >  1 file changed, 14 insertions(+), 18 deletions(-)
-> > > >
-> > > > diff --git a/mm/khugepaged.c b/mm/khugepaged.c
-> > > > index ea0d186bc9d4..572ce7dbf4b0 100644
-> > > > --- a/mm/khugepaged.c
-> > > > +++ b/mm/khugepaged.c
-> > > > @@ -97,8 +97,8 @@ struct collapse_control {
-> > > >       /* Num pages scanned per node */
-> > > >       u32 node_load[MAX_NUMNODES];
-> > > >
-> > > > -     /* Last target selected in hpage_collapse_find_target_node() */
-> > > > -     int last_target_node;
-> > > > +     /* nodemask for allocation fallback */
-> > > > +     nodemask_t alloc_nmask;
-> > >
-> > > This will eat another 1k on the stack on most configurations
-> > > (NODE_SHIFT=10). Along with 4k of node_load this is quite a lot even
-> > > on shallow call chains like madvise resp. khugepaged.  I would just
-> > > add a follow up patch which changes both node_load and alloc_nmask to
-> > > dynamically allocated objects.
-> >
-> > The collapse_control is allocated by kmalloc dynamically for
-> > MADV_COLLAPSE path, and defined as a global variable for khugepaged
-> > (khugepaged_collapse_control). So it is not on stack.
+> This is an experimental semi-automated report about issues detected by
+> Coverity from a scan of next-20221104 as part of the linux-next scan project:
+> https://scan.coverity.com/projects/linux-next-weekly-scan
 >
-> Dang, I must have been blind because I _think_ I have seen it as a local
-> stack defined. Maybe I just implicitly put that to the same bucket as
-> othe $foo_control (e.g. scan_control, oom_control etc) which leave on the
-> stack usually. Sorry about the confusion. Sorry for the noise.
+> You're getting this email because you were associated with the identified
+> lines of code (noted below) that were touched by commits:
+>
+>    Fri Dec 8 23:08:59 2017 -0500
+>      3a87177eb141 ("drm/amdkfd: Add topology support for dGPUs")
+>
+> Coverity reported the following:
+>
+> *** CID 1527133:  Memory - corruptions  (OVERRUN)
+> drivers/gpu/drm/amd/amdkfd/kfd_crat.c:1113 in kfd_parse_subtype_cache()
+> 1107     			props->cache_size = cache->cache_size;
+> 1108     			props->cacheline_size = cache->cache_line_size;
+> 1109     			props->cachelines_per_tag = cache->lines_per_tag;
+> 1110     			props->cache_assoc = cache->associativity;
+> 1111     			props->cache_latency = cache->cache_latency;
+> 1112
+> vvv     CID 1527133:  Memory - corruptions  (OVERRUN)
+> vvv     Overrunning array "cache->sibling_map" of 32 bytes by passing it to a function which accesses it at byte offset 63 using argument "64UL". [Note: The source code implementation of the function has been overridden by a builtin model.]
+> 1113     			memcpy(props->sibling_map, cache->sibling_map,
+> 1114     					sizeof(props->sibling_map));
+> 1115
+> 1116     			/* set the sibling_map_size as 32 for CRAT from ACPI */
+> 1117     			props->sibling_map_size = CRAT_SIBLINGMAP_SIZE;
+> 1118
+>
+> If this is a false positive, please let us know so we can mark it as
+> such, or teach the Coverity rules to be smarter. If not, please make
+> sure fixes get into linux-next. :) For patches fixing this, please
+> include these lines (but double-check the "Fixes" first):
+>
+> Reported-by: coverity-bot <keescook+coverity-bot@chromium.org>
+> Addresses-Coverity-ID: 1527133 ("Memory - corruptions")
+> Fixes: 3a87177eb141 ("drm/amdkfd: Add topology support for dGPUs")
+>
+> I'm not sure why this suddenly appeared after 5 years, but the read
+> over-run looks legit:
 
-It doesn't matter. It was not put on the stack due to its size when
-Zach was adding MADV_COLLAPSE.
+
+I think this was introduced by a more recent patch that was in fact 
+meant to fix an array overrun on HW that is outgrowing the CRAT sibling 
+map size:
+
+> commit 0938fbeb6f53fc44bc9b19784dee28496e68ba0c
+> Author: Ma Jun <Jun.Ma2@amd.com>
+> Date:   Wed Nov 2 15:53:26 2022 +0800
+>
+>     drm/amdkfd: Fix the warning of array-index-out-of-bounds
+>
+>     For some GPUs with more CUs, the original sibling_map[32]
+>     in struct crat_subtype_cache is not enough
+>     to save the cache information when create the VCRAT table,
+>     so skip filling the struct crat_subtype_cache info instead
+>     fill struct kfd_cache_properties directly to fix this problem.
+>
+>     Signed-off-by: Ma Jun <Jun.Ma2@amd.com>
+>     Reviewed-by: Felix Kuehling <Felix.Kuehling@amd.com>
+>     Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+I added Ma Jun to the email.
+
+Regards,
+   Felix
+
 
 >
-> Acked-by: Michal Hocko <mhocko@suse.com>
-
-Thanks.
-
-> --
-> Michal Hocko
-> SUSE Labs
+> struct crat_subtype_cache {
+>          ...
+>          uint8_t         sibling_map[CRAT_SIBLINGMAP_SIZE];
+>
+> #define CRAT_SIBLINGMAP_SIZE    32
+>
+>
+> struct kfd_cache_properties {
+>          ...
+>          uint8_t                 sibling_map[CACHE_SIBLINGMAP_SIZE];
+>
+> #define CACHE_SIBLINGMAP_SIZE 64
+>
+> Thanks for your attention!
+>
