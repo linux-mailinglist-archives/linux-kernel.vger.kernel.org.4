@@ -2,133 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FC1E618DBB
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 02:44:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F052618DC1
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 02:47:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231230AbiKDBom (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 21:44:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41854 "EHLO
+        id S229823AbiKDBr3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 21:47:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230527AbiKDBok (ORCPT
+        with ESMTP id S229481AbiKDBr0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 21:44:40 -0400
-Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A49623E99
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 18:44:39 -0700 (PDT)
-Received: by mail-qt1-x833.google.com with SMTP id hh9so2318973qtb.13
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 18:44:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=hT/SdExSBeWqGOeMZwtQU19dNytAw9YzFepcl5M2oEk=;
-        b=neFQ5rRku0m2X/CoRDbttH0T1FU8Ki1HUIm33wwuxFuMgcmYJ0Bq8v55tKfyGcoCK2
-         gx7JSZVX9JqB814QYB2IIcSj8e8cXoSkrywiz0UlrceD49+buzK4hRPxNZqUx9jZwtHU
-         EiiiUo3rOAOZjgikzCH6d5GW4z2rs4EwQTihUZu5fKuSVvkhYjnsZVfouV1WSbiwnJKK
-         xT2rjoVTPQe/rRyhs8Jrj3mQmvMhybHt8/BqkuA6rXFs9UL4lVmKu4b9Ha0xGW551ZSG
-         6mwfbRStcXBeC6dNx+teMZTJ201vBD93uuASMWN/FHy/5/Ju6POZ9HZkvt6fxRcQD72X
-         ABig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hT/SdExSBeWqGOeMZwtQU19dNytAw9YzFepcl5M2oEk=;
-        b=TVcvoYJMOAhTCtXQOnCD5HDXhhn58Ya5kx/Y64dGPzPcVFIqnKPJ/QsP8YaTaYprEz
-         RdRWd4w4dz4CHsv72cR1f/1vWdnNx/lmOXfVCLZABm7LKAzY0qYB7BBcveXK7lZR5Ju7
-         UXEka2RMskEKPR+pCP0lFY/o08RBGazru3bAD1+/Puq5CfvKUj02Ub6yIoiBQeWzZiQ/
-         bMzg38mQB+lKtUE/yg9iJg5C4wFDnmLsmKAPBfECbmuj8FD9VWbXrQctcwj5Lb4BPEVW
-         5QcAHPZpllmM0Zxs434Y++1KwkCvbKYyfNlEmgVeNBCV2m4/DjXEtZjGmWc/Ou04neOl
-         HUrg==
-X-Gm-Message-State: ACrzQf3IOOVNzOEMQhbLnI0uznb7IJy2PNJSnC2LQ633u0aNmjIi5aTt
-        /Cu6DAsYyP0NhQvh7WdAzE+Z8w==
-X-Google-Smtp-Source: AMsMyM7xuhq1LGXH/kQemlpHlPzDAD7owpPUuxiWYLVIH0ajBJJssFMA1FgIs507/84qI4l8IJrIOA==
-X-Received: by 2002:a05:622a:1cc9:b0:3a5:1f48:5048 with SMTP id bc9-20020a05622a1cc900b003a51f485048mr22591599qtb.552.1667526278181;
-        Thu, 03 Nov 2022 18:44:38 -0700 (PDT)
-Received: from ?IPV6:2601:586:5000:570:da2a:9e7e:ddb5:dfa1? ([2601:586:5000:570:da2a:9e7e:ddb5:dfa1])
-        by smtp.gmail.com with ESMTPSA id u32-20020a05622a19a000b00398a7c860c2sm1629113qtc.4.2022.11.03.18.44.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Nov 2022 18:44:37 -0700 (PDT)
-Message-ID: <698c3a72-f694-01ac-80ba-13bd40bb6534@linaro.org>
-Date:   Thu, 3 Nov 2022 21:44:36 -0400
+        Thu, 3 Nov 2022 21:47:26 -0400
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72384233AB;
+        Thu,  3 Nov 2022 18:47:25 -0700 (PDT)
+From:   =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=weissschuh.net;
+        s=mail; t=1667526441;
+        bh=zA6BOM4Lon4YmACr2oprtmCrkYDcna5kP8A9nDzjIyQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Rti15vTqHTmnoxSOumHx9nR+wOhVCzHGsJIGz/GjeEvqALRluQ4JmqaFTXSR9/ZsO
+         3Wgf3vdUZBQe9fpW+3MtGDX6/yarLXYRxp4YHXHnQ05fMtpqMwKoPt8eSdrMdvwUiQ
+         Oi/xQpDov5sB+8j+Hp15a3fPfUhB5X52ZKdxs920=
+To:     David Howells <dhowells@redhat.com>,
+        David Woodhouse <dwmw2@infradead.org>
+Cc:     =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>,
+        keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@linux.microsoft.com>
+Subject: [PATCH] certs: Prevent spurious errors on repeated blacklisting
+Date:   Fri,  4 Nov 2022 02:47:04 +0100
+Message-Id: <20221104014704.3469-1-linux@weissschuh.net>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH v2] dt-bindings: net: nxp,sja1105: document spi-cpol/cpha
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221102185232.131168-1-krzysztof.kozlowski@linaro.org>
- <20221103233319.m2wq5o2w3ccvw5cu@skbuf>
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221103233319.m2wq5o2w3ccvw5cu@skbuf>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1667526395; l=1345; s=20211113; h=from:subject; bh=zA6BOM4Lon4YmACr2oprtmCrkYDcna5kP8A9nDzjIyQ=; b=klhYPd0ukYGk28HhUv7Q+VCjWvIYNkiMK7eI+uQbQZQrX6nT9RAW7Usn0s9WXbbblQ8jFYeFg58y 3tOqsWOzDZ96hlDb8JcaHzxd+HDEHfWnSNhGJxtB3pcyTuA8wN5K
+X-Developer-Key: i=linux@weissschuh.net; a=ed25519; pk=9LP6KM4vD/8CwHW7nouRBhWLyQLcK1MkP6aTZbzUlj4=
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/11/2022 19:33, Vladimir Oltean wrote:
-> Hi Krzysztof,
-> 
-> On Wed, Nov 02, 2022 at 02:52:32PM -0400, Krzysztof Kozlowski wrote:
->> Some boards use SJA1105 Ethernet Switch with SPI CPOL and CPHA, so
->> document this to fix dtbs_check warnings:
->>
->>   arch/arm64/boot/dts/freescale/fsl-lx2160a-bluebox3.dtb: ethernet-switch@0: Unevaluated properties are not allowed ('spi-cpol' was unexpected)
->>
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>
->> ---
->>
->> Changes since v1:
->> 1. Add also cpha
->> ---
->>  Documentation/devicetree/bindings/net/dsa/nxp,sja1105.yaml | 3 +++
->>  1 file changed, 3 insertions(+)
->>
->> diff --git a/Documentation/devicetree/bindings/net/dsa/nxp,sja1105.yaml b/Documentation/devicetree/bindings/net/dsa/nxp,sja1105.yaml
->> index 1e26d876d146..3debbf0f3789 100644
->> --- a/Documentation/devicetree/bindings/net/dsa/nxp,sja1105.yaml
->> +++ b/Documentation/devicetree/bindings/net/dsa/nxp,sja1105.yaml
->> @@ -36,6 +36,9 @@ properties:
->>    reg:
->>      maxItems: 1
->>  
->> +  spi-cpha: true
->> +  spi-cpol: true
->> +
->>    # Optional container node for the 2 internal MDIO buses of the SJA1110
->>    # (one for the internal 100base-T1 PHYs and the other for the single
->>    # 100base-TX PHY). The "reg" property does not have physical significance.
->> -- 
->> 2.34.1
->>
-> 
-> Don't these belong to spi-peripheral-props.yaml?
+When the blacklist keyring was changed to allow updates from the root
+user it gained an ->update() function that disallows all updates.
+When the a hash is blacklisted multiple times from the builtin or
+firmware-provided blacklist this spams prominent logs during boot:
 
-No, they are device specific, not controller specific. Every device
-requiring them must explicitly include them.
+[    0.890814] blacklist: Problem blacklisting hash (-13)
 
-See:
-https://lore.kernel.org/all/20220816124321.67817-1-krzysztof.kozlowski@linaro.org/
+As all these repeated calls to mark_raw_hash_blacklisted() would create
+the same keyring entry again anyways these errors can be safely ignored.
 
-Best regards,
-Krzysztof
+Fixes: 6364d106e041 ("certs: Allow root user to append signed hashes to the blacklist keyring")
+Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+---
+ certs/blacklist.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/certs/blacklist.c b/certs/blacklist.c
+index 41f10601cc72..5f7f2882ced7 100644
+--- a/certs/blacklist.c
++++ b/certs/blacklist.c
+@@ -191,7 +191,9 @@ static int mark_raw_hash_blacklisted(const char *hash)
+ 				   BLACKLIST_KEY_PERM,
+ 				   KEY_ALLOC_NOT_IN_QUOTA |
+ 				   KEY_ALLOC_BUILT_IN);
+-	if (IS_ERR(key)) {
++
++	/* Blacklisting the same hash twice fails but would be idempotent */
++	if (IS_ERR(key) && PTR_ERR(key) != -EACCES) {
+ 		pr_err("Problem blacklisting hash (%ld)\n", PTR_ERR(key));
+ 		return PTR_ERR(key);
+ 	}
+
+base-commit: ee6050c8af96bba2f81e8b0793a1fc2f998fcd20
+-- 
+2.38.1
 
