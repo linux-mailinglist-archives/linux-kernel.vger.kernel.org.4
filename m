@@ -2,104 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25DB9619935
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 15:18:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF04B619938
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 15:18:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231663AbiKDOSj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 10:18:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60152 "EHLO
+        id S231992AbiKDOS4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 10:18:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231358AbiKDOSP (ORCPT
+        with ESMTP id S230051AbiKDOSn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 10:18:15 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA6C327CC0;
-        Fri,  4 Nov 2022 07:18:03 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 34A3F6602987;
-        Fri,  4 Nov 2022 14:18:02 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1667571482;
-        bh=86qaHxIG8Cvcil1Rrk7cDBPZwLxA2xYMfKOOsIa0Ypo=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=OkzByyiIxQ/LQOyvVT2VjdyUbVVxApMuu+6dcbLeQPciJF4ShyHzuGIeNIWJjI2iS
-         AjOayrd+JQcKttXCAR1EJlAb4NtcREMmXIRl+PZUIfrjuEv/HSHt7PelSaN7BdWet9
-         D5Qdx5ZM31mN/lFtImWSneE4dH7wW+V2A4zSw1ELNwsmdFE60I3NTjd3C+WXMdGVWV
-         D0SHvLXHDyWzXV4Gzvo3aM9XL+d7FFUIDQDpRgEXAmT+5S9X7bbPZZ0A3qyatVkzAA
-         UnIISWSEk4oVq140GJedxmHB0xLA+pTLk2Md1jBJQYJKkncd0CAoUcjQkzqg8EHGu4
-         6PMSYYq6wDJ4w==
-Message-ID: <3af810a7-0490-da36-f263-e74cd3553c84@collabora.com>
-Date:   Fri, 4 Nov 2022 15:18:00 +0100
+        Fri, 4 Nov 2022 10:18:43 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59D8A2B248;
+        Fri,  4 Nov 2022 07:18:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1667571520; x=1699107520;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=SaywjCO5H3xFPsbNlrBx1X+9egfqjODkQ9l6pNxCoIY=;
+  b=BNO1SRSKgLH+Q/7OHR3W1yFqiODabB3WqdyYOnIK61/QKcHR3rhQgRCl
+   EWC2mYZD44FZW3/ic9sfTB74F5Vk5qYs5oTmeR57uqItIgxntiiFm4k4x
+   fXvRMVOwgplaU5X7JepmsUju/Fg99kYf3NAtQE6m3BK4ocrySIGp/I0U4
+   bhtXK+oVcVhcKhsRHPCeMMbssJniMS7Re9o5xP2xHs86jhCKQgNnSCVHB
+   yZW3HG24x3RuFhFkiHgerWlAuH8d/+Imuqo/v5Bjy+6lZiqybrem/SU7s
+   sRz+RJr6L0wAE4JFxgr3uj3Q5M76T959fv8TD0wQ8KtZ3pAfEbKWQz5Ar
+   g==;
+X-IronPort-AV: E=Sophos;i="5.96,137,1665471600"; 
+   d="scan'208";a="181977469"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 04 Nov 2022 07:18:39 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Fri, 4 Nov 2022 07:18:38 -0700
+Received: from den-dk-m31857.microchip.com (10.10.115.15) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
+ 15.1.2507.12 via Frontend Transport; Fri, 4 Nov 2022 07:18:35 -0700
+From:   Steen Hegelund <steen.hegelund@microchip.com>
+To:     "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+CC:     Steen Hegelund <steen.hegelund@microchip.com>,
+        <UNGLinuxDriver@microchip.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Casper Andersson" <casper.casan@gmail.com>,
+        Russell King <rmk+kernel@armlinux.org.uk>,
+        Wan Jiabing <wanjiabing@vivo.com>,
+        "Nathan Huckleberry" <nhuck@google.com>,
+        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        "Daniel Machon" <daniel.machon@microchip.com>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>,
+        Lars Povlsen <lars.povlsen@microchip.com>
+Subject: [PATCH net-next v5 0/8] Extend TC key support for Sparx5 IS2 VCAP
+Date:   Fri, 4 Nov 2022 15:18:22 +0100
+Message-ID: <20221104141830.1527159-1-steen.hegelund@microchip.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [PATCH 2/2] soc: qcom: Add Qualcomm Ramp Controller driver
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        agross@kernel.org
-Cc:     andersson@kernel.org, konrad.dybcio@somainline.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, marijn.suijten@somainline.org,
-        kernel@collabora.com,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>
-References: <20221104133506.131316-1-angelogioacchino.delregno@collabora.com>
- <20221104133506.131316-3-angelogioacchino.delregno@collabora.com>
- <cf1a15c5-a16b-2d23-8f6c-b3892c141c34@linaro.org>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <cf1a15c5-a16b-2d23-8f6c-b3892c141c34@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 04/11/22 15:04, Krzysztof Kozlowski ha scritto:
-> On 04/11/2022 09:35, AngeloGioacchino Del Regno wrote:
->> From: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
->>
->> The Ramp Controller is used to program the sequence ID for pulse
->> swallowing, enable sequence and linking sequence IDs for the CPU
->> cores on some Qualcomm SoCs.
->>
->> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
->> ---
->>   drivers/soc/qcom/Kconfig           |   9 +
->>   drivers/soc/qcom/Makefile          |   1 +
->>   drivers/soc/qcom/ramp_controller.c | 330 +++++++++++++++++++++++++++++
->>   3 files changed, 340 insertions(+)
->>   create mode 100644 drivers/soc/qcom/ramp_controller.c
->>
->> diff --git a/drivers/soc/qcom/Kconfig b/drivers/soc/qcom/Kconfig
->> index 024e420f1bb7..1e681f98bad4 100644
->> --- a/drivers/soc/qcom/Kconfig
->> +++ b/drivers/soc/qcom/Kconfig
->> @@ -95,6 +95,15 @@ config QCOM_QMI_HELPERS
->>   	tristate
->>   	depends on NET
->>   
->> +config QCOM_RAMP_CTRL
->> +	tristate "Qualcomm Ramp Controller driver"
->> +	depends on ARCH_QCOM
-> 
-> I propose:
-> depends on ARCH_QCOM && ARM || COMPILE_TEST
-> 
-> I don't think it is used on ARM64 SoCs, so let's make life of distros
-> easier.
+This provides extended tc flower filter key support for the Sparx5 VCAP
+functionality.
 
-Forgot to reply to this one: MSM8956 and MSM8976 are ARM64 SoCs :-)
+It builds on top of the initial IS2 VCAP support found in this series:
 
-Cheers,
-Angelo
+https://lore.kernel.org/all/20221020130904.1215072-1-steen.hegelund@microchip.com/
+
+Overview:
+=========
+
+The added flower filter key (dissector) support is this:
+
+- ipv4_addr (sip and dip)
+- ipv6_addr (sip and dip)
+- control (IPv4 fragments)
+- portnum (tcp and udp port numbers)
+- basic (L3 and L4 protocol)
+- vlan (outer vlan tag info)
+- tcp (tcp flags)
+- ip (tos field)
+
+The IS2 VCAP supports classified VLAN information which amounts to the
+outer VLAN info in case of multiple tags.
+
+Functionality:
+==============
+
+Before frames can match IS2 VCAP rules with e.g an IPv4 source address, the
+IS2 VCAPs keyset configuration must include keyset that contains a IPv4
+source address and this must be configured for the lookup/port/traffic-type
+that you want to match on.
+
+The Sparx5 IS2 VCAP has the following traffic types:
+
+- Non-Ethernet frames
+- IPv4 Unicast frames
+- IPv4 Multicast frames
+- IPv6 Unicast frames
+- IPv6 Multicast frames
+- ARP frames
+
+So to cover IPv4 traffic the two IPv4 categories must be configured with a
+keyset that contains IPv4 address information such as the
+VCAP_KFS_IP4_TCP_UDP keyset.
+
+The IPv4 and IPv6 traffic types are configured with useful default keysets,
+in later series we will use the tc template functionality when we want to
+change these defaults.
+
+The flower filter must contain a goto action as its last action and the
+chain id must specify the chain id of the next lookup in a VCAP or a
+destination outside the VCAP ranges.
+
+To activate the VCAP lookups on a port you must add a TC matchall filter on
+the port containing a single goto action that points to the chain id of the
+first lookup in the IS2 VCAP.
+
+From then on frames arriving on this port will be matched against the
+rules in the IS2 VCAP lookups.
+
+Removing the matchall filter will deactivate the IS2 lookups, but will
+leave the VCAP rules in the memory of the VCAP instance, and from then in
+frames will no longer be matched against the rules the in IS2 VCAP.
+
+If the matchall rule is added back again the IS2 rules will be active
+once more.
+
+Delivery:
+=========
+
+This is current plan for delivering the full VCAP feature set of Sparx5:
+
+- TC flower filter statistics and rule order by size and priority
+- debugfs support for inspecting rules
+- support for TC protocol all
+- Sparx5 IS0 VCAP support
+- add TC policer and drop action support (depends on the Sparx5 QoS support
+  upstreamed separately)
+- Sparx5 ES0 VCAP support
+- TC flower template support
+- TC matchall filter support for mirroring and policing ports
+- TC flower filter mirror action support
+- Sparx5 ES2 VCAP support
+
+
+Version History:
+================
+v5      Add support for a TC matchall filter with a single goto action
+        which will activate the lookups of the VCAP.  Removing this filter
+        will deactivate the VCAP lookups again.
+
+v4      Add support for TC flower filter goto action and a check of the
+        actions: check action combinations and the goto chain id.
+
+v3      Add some more details to the explanation in the commit message
+        about support for MAC_ETYPE keysets and "protocol all" as well as
+        the classified VLAN information.  This is done to help testing the
+        feature.
+        No implementation changes in this version.
+
+v2      Split one of the KUNIT tests into 3 tests to fix a kernel robot
+        build warning.
+
+v1      Initial version
+
+Steen Hegelund (8):
+  net: microchip: sparx5: Differentiate IPv4 and IPv6 traffic in keyset
+    config
+  net: microchip: sparx5: Adding more tc flower keys for the IS2 VCAP
+  net: microchip: sparx5: Find VCAP lookup from chain id
+  net: microchip: sparx5: Adding TC goto action and action checking
+  net: microchip: sparx5: Match keys in configured port keysets
+  net: microchip: sparx5: Let VCAP API validate added key- and
+    actionfields
+  net: microchip: sparx5: Add tc matchall filter and enable VCAP lookups
+  net: microchip: sparx5: Adding KUNIT tests of key/action values in
+    VCAP API
+
+ .../net/ethernet/microchip/sparx5/Makefile    |   2 +-
+ .../net/ethernet/microchip/sparx5/sparx5_tc.c |   9 +-
+ .../net/ethernet/microchip/sparx5/sparx5_tc.h |   5 +
+ .../microchip/sparx5/sparx5_tc_flower.c       | 480 +++++++++++++-
+ .../microchip/sparx5/sparx5_tc_matchall.c     |  97 +++
+ .../microchip/sparx5/sparx5_vcap_impl.c       | 197 +++++-
+ .../net/ethernet/microchip/vcap/vcap_api.c    | 424 ++++++++++++-
+ .../net/ethernet/microchip/vcap/vcap_api.h    |   6 +
+ .../ethernet/microchip/vcap/vcap_api_client.h |  21 +
+ .../ethernet/microchip/vcap/vcap_api_kunit.c  | 592 ++++++++++++++++++
+ 10 files changed, 1783 insertions(+), 50 deletions(-)
+ create mode 100644 drivers/net/ethernet/microchip/sparx5/sparx5_tc_matchall.c
+
+-- 
+2.38.1
+
