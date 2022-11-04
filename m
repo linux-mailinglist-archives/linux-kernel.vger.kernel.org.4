@@ -2,81 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FE61619194
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 08:08:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB9A7619199
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 08:12:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229995AbiKDHIn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 03:08:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47080 "EHLO
+        id S230064AbiKDHMS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 03:12:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229532AbiKDHIl (ORCPT
+        with ESMTP id S229481AbiKDHMP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 03:08:41 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29943275EA
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 00:08:40 -0700 (PDT)
-Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4N3Wpk5JCJzpWBv;
-        Fri,  4 Nov 2022 15:05:02 +0800 (CST)
-Received: from huawei.com (10.67.174.53) by kwepemi500012.china.huawei.com
- (7.221.188.12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Fri, 4 Nov
- 2022 15:08:37 +0800
-From:   Liao Chang <liaochang1@huawei.com>
-To:     <apw@canonical.com>, <joe@perches.com>, <dwaipayanray1@gmail.com>,
-        <lukas.bulwahn@gmail.com>
-CC:     <linux-kernel@vger.kernel.org>, <liaochang1@huawei.com>,
-        <bagasdotme@gmail.com>, <pbonzini@redhat.com>
-Subject: [PATCH -next v2] checkpatch: Add check for array allocator family argument order
-Date:   Fri, 4 Nov 2022 15:05:23 +0800
-Message-ID: <20221104070523.60296-1-liaochang1@huawei.com>
-X-Mailer: git-send-email 2.17.1
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.174.53]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemi500012.china.huawei.com (7.221.188.12)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 4 Nov 2022 03:12:15 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDA45275ED
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 00:12:10 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 74189218EC;
+        Fri,  4 Nov 2022 07:12:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1667545929; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=LL81uK+aN/ZrKn6tbUNDzuG9HRl0DQASNkhSw6+aLmc=;
+        b=BY2yVzACwB90mWdPCYz9d1X1ku3aW2bk2FO9Yu5vxQm6npnMNtZl1aYwbb46dxqr/FgZlY
+        qe4rb+eRmnHQesf5UrL3l9qvYiug0UFfIBRMNIwJF5toSpNzXV64vnzE+kHQWu7g8quftc
+        5UiY/nexb4sebI8xITrB4AJA/b55EoE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1667545929;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=LL81uK+aN/ZrKn6tbUNDzuG9HRl0DQASNkhSw6+aLmc=;
+        b=qLts6ezm1XNxQFDyHqVvR55kcHURKxjLzrqNpVRIWPX+eU9HMhpsCjEX8BY9VrA7qrs3HA
+        oIsnsCVCxOJqU1Dg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 53FFC1346F;
+        Fri,  4 Nov 2022 07:12:09 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id EkfRE0m7ZGMwOgAAMHmgww
+        (envelope-from <tiwai@suse.de>); Fri, 04 Nov 2022 07:12:09 +0000
+Date:   Fri, 04 Nov 2022 08:12:08 +0100
+Message-ID: <874jvfkxbr.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     aichao <aichao@kylinos.cn>
+Cc:     perex@perex.cz, tiwai@suse.com, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ALSA: usb-audio: fix usb camero disconnect issue
+In-Reply-To: <20221104013236.3480427-1-aichao@kylinos.cn>
+References: <20221104013236.3480427-1-aichao@kylinos.cn>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-These array allocator family are sometimes misused with the first and
-second arguments switchted.
+On Fri, 04 Nov 2022 02:32:36 +0100,
+aichao wrote:
+> 
+> When current rate is different from the runtime rate,
+> snd_usb_endpoint stop and close endpoint to resetting rate.
+> if snd_usb_endpoint close the endpoint, sometimes usb will
+>  disconnect the device.
 
-Same issue with calloc, kvcalloc, kvmalloc_array etc.
+What do you mean...?  snd_usb_endpoint_close() never disconnects the
+device by itself.
 
-Bleat if sizeof is the first argument.
+Please elaborate the problem.
 
-Link: https://lore.kernel.org/lkml/5374345c-7973-6a3c-d559-73bf4ac15079@redhat.com/
-Signed-off-by: Liao Chang <liaochang1@huawei.com>
-Acked-by: Joe Perches <joe@perches.com>
----
-v2:
-1. Acked-by Joe Perches.
-2. Use lore links in Link tag.
 
----
- scripts/checkpatch.pl | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Takashi
 
-diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
-index 1e5e66ae5a52..a9a9dc277cff 100755
---- a/scripts/checkpatch.pl
-+++ b/scripts/checkpatch.pl
-@@ -7128,7 +7128,7 @@ sub process {
- 		}
- 
- # check for alloc argument mismatch
--		if ($line =~ /\b((?:devm_)?(?:kcalloc|kmalloc_array))\s*\(\s*sizeof\b/) {
-+		if ($line =~ /\b((?:devm_)?((?:k|kv)?(calloc|malloc_array)(?:_node)?))\s*\(\s*sizeof\b/) {
- 			WARN("ALLOC_ARRAY_ARGS",
- 			     "$1 uses number as first arg, sizeof is generally wrong\n" . $herecurr);
- 		}
--- 
-2.17.1
-
+> 
+> Signed-off-by: aichao <aichao@kylinos.cn>
+> ---
+>  sound/usb/pcm.c | 5 -----
+>  1 file changed, 5 deletions(-)
+> 
+> diff --git a/sound/usb/pcm.c b/sound/usb/pcm.c
+> index 5dc9266180e3..2ae4a55cbaa8 100644
+> --- a/sound/usb/pcm.c
+> +++ b/sound/usb/pcm.c
+> @@ -517,7 +517,6 @@ static int snd_usb_hw_params(struct snd_pcm_substream *substream,
+>  		if (snd_usb_endpoint_compatible(chip, subs->data_endpoint,
+>  						fmt, hw_params))
+>  			goto unlock;
+> -		close_endpoints(chip, subs);
+>  	}
+>  
+>  	subs->data_endpoint = snd_usb_endpoint_open(chip, fmt, hw_params, false);
+> @@ -546,9 +545,6 @@ static int snd_usb_hw_params(struct snd_pcm_substream *substream,
+>  	ret = configure_endpoints(chip, subs);
+>  
+>   unlock:
+> -	if (ret < 0)
+> -		close_endpoints(chip, subs);
+> -
+>  	snd_usb_unlock_shutdown(chip);
+>   stop_pipeline:
+>  	if (ret < 0)
+> @@ -574,7 +570,6 @@ static int snd_usb_hw_free(struct snd_pcm_substream *substream)
+>  	if (!snd_usb_lock_shutdown(chip)) {
+>  		if (stop_endpoints(subs))
+>  			sync_pending_stops(subs);
+> -		close_endpoints(chip, subs);
+>  		snd_usb_unlock_shutdown(chip);
+>  	}
+>  
+> -- 
+> 2.25.1
+> 
