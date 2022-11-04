@@ -2,179 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45DF36191A7
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 08:16:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B27F36191AE
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 08:17:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230240AbiKDHQG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 03:16:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48706 "EHLO
+        id S230358AbiKDHRJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 03:17:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbiKDHQE (ORCPT
+        with ESMTP id S229496AbiKDHRH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 03:16:04 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2055.outbound.protection.outlook.com [40.107.237.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5644B492;
-        Fri,  4 Nov 2022 00:16:02 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fEEiUEnQtkJ7xm0pRQI9Civ8oahu6f2WFmN2RxaHWIcIjMGORlRDKPNkjxXMMzLciIPHH8JtWgHAflCOb8J5VsjAWthPYyVczouy45NZku7ckPeHcezASms1vxBHm0TIKl/y2mOANALDZEm9Uz2faEJo4jn8Esbk5+4f/p/WKCmfWG7BDOdWw9cnrIdI5JIG+2J+zlW0VkGkqW+0t1qFpvcZrOuz2dmrDc8fX0ikfVEpBdGq4DZgD1xuAzCcpyWcSn2TdjbuLX+gW2M1VKg7G4l/MvPC+E7lfN9GzZloiYnbt5zyIsKXvwhEkUzo3qmblk0Qh4Wv3H7sHs5Pc/uv1w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=TXhNyRBaZTa/C9vLIsGWsT/MfokGSvA3sN1IzjGeDa0=;
- b=nTzmhAR71WIzsnknzV1gV3tyQ/WL0kudwAJEGRPh7M9t/fWiNIcWnmisturRo9nt8V5CKs8cTb4L2aNDg2vYhsX7PN4Q7ybXv2LX9hruduiWQPNeCaQkz8uDmMokkm60RTc114GswLAmRoYDrfN/Q/3IEdEg6TTMPADoCbIGi8XuobD/iMO9+xbhSUMz8M/Ithwq47ppiNhz5jfuOH1hVWzMheXdNV2WfrSgyJD5C1dWgvlGr3zBhLf8zlRqHqFlEw0dpUBOn5bAppj7T041jIScPkJ7/mqVUVc1ygZeYWFbU51Yi3/yuPPJFsJVJWLCqvR7v0G72GeTYyXn3hiIBQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=TXhNyRBaZTa/C9vLIsGWsT/MfokGSvA3sN1IzjGeDa0=;
- b=AveR1RJD/OxpH2E3DOLQ4aalWG7VmoLF1Y3mnrcBxI3avR2xywwfq9WRTwVd0q3CsvM4zTMVGTvX7QWXmOa5GmjIiICPXE8lIz0g2D5DqUMwyERNllt8qgYjR0K70lQY0SSIQCMfWWqEq4eVI76gF7MKLYbwQbqbpPqVlKc0PH0=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
- by CY8PR12MB7313.namprd12.prod.outlook.com (2603:10b6:930:53::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.22; Fri, 4 Nov
- 2022 07:16:00 +0000
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::7d43:3f30:4caf:7421]) by BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::7d43:3f30:4caf:7421%7]) with mapi id 15.20.5791.020; Fri, 4 Nov 2022
- 07:16:00 +0000
-Message-ID: <d916e29d-d098-c3f3-940a-37be6772ecb5@amd.com>
-Date:   Fri, 4 Nov 2022 08:15:53 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [RFC][PATCH v3 12/33] timers: dma-buf: Use timer_shutdown_sync()
- before freeing timer
-Content-Language: en-US
-To:     Steven Rostedt <rostedt@goodmis.org>, linux-kernel@vger.kernel.org
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Anna-Maria Gleixner <anna-maria@linutronix.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org
-References: <20221104054053.431922658@goodmis.org>
- <20221104054914.085569465@goodmis.org>
- <20221104015444.57f73efb@rorschach.local.home>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-In-Reply-To: <20221104015444.57f73efb@rorschach.local.home>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: PAZP264CA0188.FRAP264.PROD.OUTLOOK.COM
- (2603:10a6:102:236::17) To BN8PR12MB3587.namprd12.prod.outlook.com
- (2603:10b6:408:43::13)
+        Fri, 4 Nov 2022 03:17:07 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 393C527B22;
+        Fri,  4 Nov 2022 00:17:06 -0700 (PDT)
+Received: from anrayabh-desk (unknown [167.220.238.193])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 74FC520B929F;
+        Fri,  4 Nov 2022 00:17:02 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 74FC520B929F
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1667546225;
+        bh=gUsw9l1YgzwD8/vdmQ6V2u48HygOiqCRw+PBW96+Iok=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ZjS+NTKqeOEP+QFMydBJpHpxc9rKu3jECpcQMxRS0tEXCB+JeJelMp6v65ci+HGbb
+         R8cYjIN3lQv8BbWtaKGsyeUKBjGOddhZI+Q7cyuIma1bems0LD5xWQS4Q78wJq67fB
+         lkYrqQl/zFs6No3eKHQz4JrBsi80inzycGkqZGww=
+Date:   Fri, 4 Nov 2022 12:46:57 +0530
+From:   Anirudh Rayabharam <anrayabh@linux.microsoft.com>
+To:     Saurabh Sengar <ssengar@linux.microsoft.com>
+Cc:     ssengar@microsoft.com, kys@microsoft.com, haiyangz@microsoft.com,
+        wei.liu@kernel.org, decui@microsoft.com,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mikelley@microsoft.com, tglx@linutronix.de, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com
+Subject: Re: [PATCH] x86/Hyper-V: Expand definition of struct
+ hv_vp_assist_page
+Message-ID: <Y2S8aT7ltuqcHGVN@anrayabh-desk>
+References: <1667537814-15939-1-git-send-email-ssengar@linux.microsoft.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8PR12MB3587:EE_|CY8PR12MB7313:EE_
-X-MS-Office365-Filtering-Correlation-Id: ef7c8681-3113-408e-b74e-08dabe346ce6
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: oqHmCBG2R4oH4/GN1E52N2Wb/VwSAmjqMYlO//M6llZB9lth528OvmkR2RFzE4OKlnzQUlF+/fuL7zOnMzkHgtuXhiyNWeyQK5Pdghr3DuKrmMlxm+Yc4+5GmWiJDJbIyrwYovqyzWS2RRIGzEgIef4GjDOQO83OlMFmldURQQqDB1KlF7PloBlgH3iXwTKH6t5o+XqBWOfp9bZ5h8xkvmFO2EFwQj2atjdfoWjS5qzY++dbXIltyfJkkZMbxRsZT7g4Xe6O48eG1coTmejzqzt6O36AkI3ENPhoobxX8t5aYEWSzWWJmH3sT/L0NyYEpxl6KJhTF2oCa5q4K+bcdIMVdnJF+ZdCR1gRpK1AlqDW7fyGkW9j/djnBJFL5Pv0Xz/vlbVZa27SoaNcH/K2DaczrSaWrkOdwri3P5c5s3lIb/1mPMzbgqp91v39fxsdPj9X3Lc5S3vIc9CUyoHjsv2KcMAhAD7deDtH2RpnB8WupYQpfww80Ces59KOmn0kEhuoawzFFqbmJ5KhSn1g9Bw26v8EbiyGyZ8s1rRy1hZ1ox+vhBn8+lFEOp/e9slumeT9MGjvYkBafPPcibNwpUpexEE1lEz57dIcOp9AQdhiuKhsBAM2JWpLrc7sO3GSToco9bATeSSphs3GJLtYjyRYU3Yxsz10Ap4apij2iVV/iMVe3AhQqryHVo+miqn7BDNIV24XteHuBXtuaESKRS1NwJlsMqKczIYRrtDJkxp50ioqRnoZ6GjyhM4uQE/gRt/h1bvELPeZMSZ4MmLTCj59BhvVbw46wLzYDO+fPv6A6804uhC3qB8p4EbsW5Qr+yfZ2hZuoTEaL4SWs2/6qw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(396003)(376002)(366004)(39860400002)(346002)(451199015)(36756003)(45080400002)(2906002)(186003)(66556008)(66574015)(66476007)(6666004)(7416002)(478600001)(83380400001)(86362001)(6486002)(54906003)(41300700001)(5660300002)(316002)(966005)(8936002)(31696002)(31686004)(38100700002)(6512007)(8676002)(6506007)(66946007)(2616005)(4326008)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?aXRQRDZjZE1LdW4rUEdadHdrYS9qK0lnQnh1QUU2Ujc1TCsycyttaGovR0Vr?=
- =?utf-8?B?MkNGRk1oUGFUdmVnUEw1emVoUEtvR2hKWmRSOGMrQjhldzhJVm5YS2krMkJ4?=
- =?utf-8?B?S1dzNk1UZXZldk1HMVBzU1VaOGt2UXR1Ti90ckVQNmNNendlS3Z3MUU0Zk0v?=
- =?utf-8?B?RGRmQUtoSytvdWJndjV3dEVVQ0FTb28xa0NsdXdmQ1Q5VzF2K2dJU0llWmZu?=
- =?utf-8?B?SndKRTRhT25FY1diTzhKR0FJeU0zV3BvNEJHZnhZSWJKbWtmNkNReE15d1FR?=
- =?utf-8?B?N0VxUm1OSnNHQWxLMExqSG9EUmxFWTZrWkpHcHlRbkJ5cnhYcmcrc0JzSG5s?=
- =?utf-8?B?Vmt1VWlQSFVFM0t2NWRBUHFtdk4wTlYreXJqOWxwcHNONmNVbkxqM2J6ZU0v?=
- =?utf-8?B?RC9jbGRBSERBOXlramYxL3YzZFVlVnZ4cERQc1B4SUhmTzdoenlpWGF1NWJX?=
- =?utf-8?B?Sloyd3ZlMmZCZGhnbE1SUjc1QUZMZWpQOXhoYTNHOHlyUGhVOGd2amZITE9y?=
- =?utf-8?B?aDYwYkR1bHArRFpETW1ZdFF6cWtBcDJkOFIzTWw4bmppM3hqbDZGTGgxdDVW?=
- =?utf-8?B?SGlLak9xb0xWcXNWSFBUUitKbjljUW93NC9BcFdaVTZnR1ljeXJKWmZMVTQ4?=
- =?utf-8?B?ODdxWXU3bURLcmdQd1ZLK2tZbTZYRW9EUnJKRnpUZnlvWnRPYjRZcTdOQkc4?=
- =?utf-8?B?RVBXTjNsRWg4TGozRFhsSWYwVUFKbmFmSkpQTW1LSVBSMkJuTklGZ1BIejhC?=
- =?utf-8?B?RzcvTEFjNWhmSUdCZk91Tm5ERlBody9Fb3dqODhKc0VoQWMyQWlMenQwVFlY?=
- =?utf-8?B?aDBmd0UxUUlKbHBlUGwvWng2YVdxNVJJWGhZTklWTHd5c2lQclFPa1lmaFh2?=
- =?utf-8?B?aUIyYVpGS25aREZOTmxKVStRdGUxbllQZFFsVjBtNWFweHFNTG95N2ZXNFZR?=
- =?utf-8?B?UVRhOWZtOU12SDRoU2tkbjc3K0U3b0RnZ2RvRTErMnUwNVhCRjJMNGNBeVI5?=
- =?utf-8?B?U3NFQ1MyMjc1YlgzZU91cG4yQlpQbFJTYTdHOVp4N040Sy9TWW5nUkhxRHVm?=
- =?utf-8?B?UnAwYWcrYkxKbUFqRG1rMGw2eklrYnpQamVxTUJEeEFNMkJkWTd5ZWx6Y3dx?=
- =?utf-8?B?VVpPUU8vL1A1VUpTNXFkRVJseU5JbXRQNHhHbXkvRzBOdnhVRVJFZkFGcTRF?=
- =?utf-8?B?OHN3UEFUV3BGaTBvNGhEdkpzSHNKMTBwRHFjSWEybnBiNjdWSGprUFRnb1Rp?=
- =?utf-8?B?eXB3ZW9US0tyYzVRdlp5dmdmcnN4cW9iNVVSbDVKV2o2R0l5WXR1dlBXVnB4?=
- =?utf-8?B?S2dHR1BoL0RwVTVPMU9TVHpmNHNhcUk5WjJQQ3NIaWdWd3RrNTdLeGJTWjBH?=
- =?utf-8?B?RjFqeWVIbWMyVXhROElCb2dPME8xdm1Qay9GajRSQXE0VFBZNm92VVJ5K2ZR?=
- =?utf-8?B?Sjh0K2tJVWwzQzNsTnlrQmo4elZkMDhZYjF6dm1BdFVJRm5kN3czNWQ0bDls?=
- =?utf-8?B?ZVpsLzYxaGlVekJ3K3ZwRVlXZWFWRkRNVkNIZUZUOGg4eTZZWFBBVmxBNGdY?=
- =?utf-8?B?WUQ4akloT2pFaHBMQW4vZ3ZiZXlVNmwvTHkwUnM3MVpidkVkOVM4ZlRBb1lL?=
- =?utf-8?B?WEpyd08xSEhPV3l6SVBjNEtXUlpQbGRrWXVoVHFYRVRkb3pxNjJSUEVoU0NG?=
- =?utf-8?B?eEVRV0RZc05WblJGOEx1dUNvelZNTnRQemJNZlBqZ21LRkFLWHM2QnZBQWt5?=
- =?utf-8?B?M2RicDNKdlB6RzdFNmp3VnJ5QkQzNDBVbGV1YmNBZ3hKcEQyYU41cVQyNFRX?=
- =?utf-8?B?djl1a2tvWVoySmVNNDZ2bDBITEpIajlsQ1owRXdEK2NGVFZnMEM3YnFJN3dL?=
- =?utf-8?B?cGZnUGllemRTWnRhSVBqRnNDZ1gxWWNMc1RFZEFjKzdNZEtjaTRISGRzdTh6?=
- =?utf-8?B?Um5FdHFyampoNU9aU2c2SHF5WFRqZ25tNzFSTFR2SXZFTlJXVy9oNTM4OXZW?=
- =?utf-8?B?WFcyS3VUVmhjcmozS05QdmlPM3dLazFXMEhxRW9CcndPbjhqMTlRTjVmMEw2?=
- =?utf-8?B?RHhMQThEL1NQVVpESTRoZUN2eWU0VGdnNWhkQ1FuQWRTYWk4MG9xTDNIeFhy?=
- =?utf-8?B?ZXk4Nkk5WG93bkRrTTVpNG1SMFlqaGI2Y0k5Y2tKS25NVG50WWsvSkN3ODhD?=
- =?utf-8?Q?ncFWzBpSJ3JG9/Jl44Q/fwoP+TFr4XJ6NI6QHK92hPAx?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ef7c8681-3113-408e-b74e-08dabe346ce6
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Nov 2022 07:16:00.3638
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: +dcXcbWYGOQ8ul8fe3ZuZT5sdNvF+fchI5W6rGHiwUsLifaD2ckwjYKzvqmLkWnI
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB7313
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1667537814-15939-1-git-send-email-ssengar@linux.microsoft.com>
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 04.11.22 um 06:54 schrieb Steven Rostedt:
-> [ Once again, quilt fails the MIME coding ]
->
-> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
->
-> Before a timer is freed, timer_shutdown_sync() must be called.
->
-> Link: https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Flore.kernel.org%2Fall%2F20220407161745.7d6754b3%40gandalf.local.home%2F&amp;data=05%7C01%7Cchristian.koenig%40amd.com%7Ca18ff1d0a7e442a1283808dabe29148d%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C638031380931371691%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=XZgwOy0u20L1AxOjhUpWICodbSn2VYhh6YGSykjUegQ%3D&amp;reserved=0
->
-> Cc: Sumit Semwal <sumit.semwal@linaro.org>
-> Cc: "Christian König" <christian.koenig@amd.com>
-> Cc: linux-media@vger.kernel.org
-> Cc: dri-devel@lists.freedesktop.org
-> Cc: linaro-mm-sig@lists.linaro.org
-> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+On Thu, Nov 03, 2022 at 09:56:54PM -0700, Saurabh Sengar wrote:
+> The struct hv_vp_assist_page has 24 bytes which is defined as u64[3],
+> expand that to expose vtl_entry_reason, vtl_ret_x64rax and vtl_ret_x64rcx
+> field. vtl_entry_reason is updated by hypervisor for the entry reason as
+> to why the VTL was entered on the virtual processor.
+> Guest updates the vtl_ret_* fields to provide the register values to
+> restore on VTL return. The specific register values that are restored
+> which will be updated on vtl_ret_x64rax and vtl_ret_x64rcx.
+> Also added the missing fields for synthetic_time_unhalted_timer_expired,
+> virtualization_fault_information and intercept_message.
+> 
+> Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
 > ---
->   drivers/dma-buf/st-dma-fence.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/dma-buf/st-dma-fence.c b/drivers/dma-buf/st-dma-fence.c
-> index fb6e0a6ae2c9..5d3e7b503501 100644
-> --- a/drivers/dma-buf/st-dma-fence.c
-> +++ b/drivers/dma-buf/st-dma-fence.c
-> @@ -412,7 +412,7 @@ static int test_wait_timeout(void *arg)
->   
->   	err = 0;
->   err_free:
-> -	del_timer_sync(&wt.timer);
-> +	timer_shutdown_sync(&wt.timer);
+>  arch/x86/include/asm/hyperv-tlfs.h | 11 ++++++++++-
+>  1 file changed, 10 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/x86/include/asm/hyperv-tlfs.h b/arch/x86/include/asm/hyperv-tlfs.h
+> index f769b9db4630..b3d0f42853d2 100644
+> --- a/arch/x86/include/asm/hyperv-tlfs.h
+> +++ b/arch/x86/include/asm/hyperv-tlfs.h
+> @@ -377,11 +377,20 @@ struct hv_nested_enlightenments_control {
+>  struct hv_vp_assist_page {
+>  	__u32 apic_assist;
+>  	__u32 reserved1;
+> -	__u64 vtl_control[3];
+> +	__u8  vtl_entry_reason;
 
-Mhm, what exactly is the benefit of renaming the function?
+This is defined as an enum in the TLFS [1]. We should do the same.
+And since the TLFS defines it as an enum it is a 32 bit value and
+not a u8.
 
-Not that I'm against the change, but my thinking is more if there are 
-more functions which don't re-arm the time than those which do that then 
-why not forbid it in general?
+> +	__u8  vtl_reserved[7];
+> +	__u64 vtl_ret_x64rax;
+> +	__u64 vtl_ret_x64rcx;
 
-Regards,
-Christian.
+The TLFS groups the above VTL related fields into a struct
+HV_VP_VTL_CONTROL. Any reason to not do the same?
 
->   	destroy_timer_on_stack(&wt.timer);
->   	dma_fence_signal(wt.f);
->   	dma_fence_put(wt.f);
+[1] https://learn.microsoft.com/en-us/virtualization/hyper-v-on-windows/tlfs/datatypes/hv_vp_vtl_control
 
+Thanks,
+Anirudh.
+
+>  	struct hv_nested_enlightenments_control nested_control;
+>  	__u8 enlighten_vmentry;
+>  	__u8 reserved2[7];
+>  	__u64 current_nested_vmcs;
+> +	__u8 synthetic_time_unhalted_timer_expired;
+> +	__u8 reserved3[7];
+> +	__u8 virtualization_fault_information[40];
+> +	__u8 reserved4[8];
+> +	__u8 intercept_message[256];
+> +	__u8 vtl_ret_actions[256];
+>  } __packed;
+>  
+>  struct hv_enlightened_vmcs {
+> -- 
+> 2.34.1
