@@ -2,104 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14F7F6194C5
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 11:49:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D755E6194EB
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 11:57:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231617AbiKDKs7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 06:48:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60100 "EHLO
+        id S231756AbiKDK5L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 06:57:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbiKDKs4 (ORCPT
+        with ESMTP id S229770AbiKDK4x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 06:48:56 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 952182A1
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 03:48:54 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id i21so6967419edj.10
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 03:48:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ACk6vStBBSLwltQvQYGOjLG1IfGMIIYahN3E1+0kWF4=;
-        b=oRsClose6x79L1fumJ+Tc8Nnr3s7PipIPLGr6C6VYD26X9A23IihgSC8CVCs96++Dm
-         hbRaE7X93NVY/Ec1f3Q9uNWsbGFJ0BoM/5LjBX43yyO4J4dzQsY6I1UmfBOCyFwpm6VF
-         hJx6r9zzAG/o+F2y71C+15emGOyDW4D/cQwJs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ACk6vStBBSLwltQvQYGOjLG1IfGMIIYahN3E1+0kWF4=;
-        b=TfB8mnewtZgIz2hV+m5IvoejWzPonN9t4l+m6qJxbugAcaWXiOysweO6yrfQ77K2Qk
-         Nf14/3ORV9HBDXc21SSLBcJmfR6JTqrCEjkoZlxTCtzywLPHhQL51mIA0A3zBWhvzCSQ
-         VAtLzxbVXdN8vudTvljqHHqYJNlaFD+WSrhktuehSw2sGaSdbCLrZZ3jWEDl5/nOqaOd
-         r0UwhKwf+V/ZyVgOLvAN1dcBqxhmjen0dOOydcr7dxyq1MTonwXaR+p2lp4+az8+Afef
-         jt/1sHvt6B27/mZct2EItsLUmVkyj9Un8X0nMHHYTfcqzBEpVNLytzPeeilQbmvfz0VD
-         ej0w==
-X-Gm-Message-State: ACrzQf1s36IDed2Pu7bIMDTA3ADxpCnQJlxQ2cXpyRo3LuFXhf0xP+dl
-        r8XIFrR8Y3t37J4kmzepTr7AbgTrEqdARNOr8f/TOg==
-X-Google-Smtp-Source: AMsMyM6j9PScCUhbebhbA0bhtKHpwJgN1jSCm6blTTUVCLtqpq/M+2Q7y5Zp5HG+AQVb5yckf2M9Q2cTYu3wqF2qjH8=
-X-Received: by 2002:aa7:de9a:0:b0:44d:8191:44c5 with SMTP id
- j26-20020aa7de9a000000b0044d819144c5mr34002064edv.232.1667558933159; Fri, 04
- Nov 2022 03:48:53 -0700 (PDT)
+        Fri, 4 Nov 2022 06:56:53 -0400
+Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12DBC2BB26
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 03:56:50 -0700 (PDT)
+Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20221104105648epoutp019a86701db046d653e097816220de41b7~kXHJVG4Y_2811928119epoutp01V
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 10:56:48 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20221104105648epoutp019a86701db046d653e097816220de41b7~kXHJVG4Y_2811928119epoutp01V
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1667559408;
+        bh=ByXREw6U9UT1fb8v/UjL6hHxBiGSezGiu+UpEJA3n18=;
+        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
+        b=NTWy6irBUsGDnFJwafP2dGF8aYAtgwvsqXxMxhGJKJwi1fJ8XY1x1MYVMle2wYeOf
+         MdpdEFHIyOFt9V6Xwf0OZ3R31bhpQ5ckkgdj5otBS/sd96bSNw1nslNjruaZoHQI6/
+         ayJQ0btUkhJqihhZlEn1MhN+WXvOqxw8j3MmNwds=
+Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
+        epcas5p3.samsung.com (KnoxPortal) with ESMTP id
+        20221104105647epcas5p33945ca8e853b0a5d209c4f8b61370f1d~kXHIvOBXh1487914879epcas5p3Z;
+        Fri,  4 Nov 2022 10:56:47 +0000 (GMT)
+Received: from epsmges5p3new.samsung.com (unknown [182.195.38.174]) by
+        epsnrtp2.localdomain (Postfix) with ESMTP id 4N3cy43wFyz4x9Pw; Fri,  4 Nov
+        2022 10:56:44 +0000 (GMT)
+Received: from epcas5p3.samsung.com ( [182.195.41.41]) by
+        epsmges5p3new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        0E.0E.56352.CEFE4636; Fri,  4 Nov 2022 19:56:44 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas5p1.samsung.com (KnoxPortal) with ESMTPA id
+        20221104104928epcas5p1ba76f35fd33e3a68ced972d0489c98af~kXAwPxlxh3116031160epcas5p1s;
+        Fri,  4 Nov 2022 10:49:28 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20221104104928epsmtrp1a42a0fb098eadb759fba8e4670993741~kXAwNrjXu2514725147epsmtrp14;
+        Fri,  4 Nov 2022 10:49:28 +0000 (GMT)
+X-AuditID: b6c32a4b-383ff7000001dc20-1c-6364efec4840
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        2D.A9.14392.83EE4636; Fri,  4 Nov 2022 19:49:28 +0900 (KST)
+Received: from FDSFTE308 (unknown [107.122.81.79]) by epsmtip2.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20221104104925epsmtip284347302a3441e4cd072520eda44e503~kXAtELaC42615726157epsmtip2W;
+        Fri,  4 Nov 2022 10:49:25 +0000 (GMT)
+From:   "Aakarsh Jain" <aakarsh.jain@samsung.com>
+To:     "'Krzysztof Kozlowski'" <krzysztof.kozlowski@linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>
+Cc:     <m.szyprowski@samsung.com>, <andrzej.hajda@intel.com>,
+        <mchehab@kernel.org>, <hverkuil-cisco@xs4all.nl>,
+        <ezequiel@vanguardiasur.com.ar>, <jernej.skrabec@gmail.com>,
+        <benjamin.gaignard@collabora.com>,
+        <krzysztof.kozlowski+dt@linaro.org>,
+        <stanimir.varbanov@linaro.org>, <dillon.minfei@gmail.com>,
+        <david.plowman@raspberrypi.com>, <mark.rutland@arm.com>,
+        <robh+dt@kernel.org>, <krzk+dt@kernel.org>, <andi@etezian.org>,
+        <alim.akhtar@samsung.com>, <aswani.reddy@samsung.com>,
+        <pankaj.dubey@samsung.com>, <smitha.t@samsung.com>
+In-Reply-To: <352e31de-cb79-f08e-b817-2712d97b84f1@linaro.org>
+Subject: RE: [PATCH 3/3] arm64: dts: exynos: Rename compatible string
+ property from version to SOC specific
+Date:   Fri, 4 Nov 2022 16:19:24 +0530
+Message-ID: <000001d8f03b$1cd111f0$567335d0$@samsung.com>
 MIME-Version: 1.0
-References: <20221028093403.6673-1-vincent.guittot@linaro.org>
- <20221028093403.6673-7-vincent.guittot@linaro.org> <20221101192848.pjns3um7dnrwrk5p@airbuntu>
- <CAKfTPtA=vJQA_=6Un1CqwzMUaOxMeFGTKUZnj8qyqvqmSdYBAg@mail.gmail.com>
- <20221103142732.m5ibwkuymvhcdxkn@airbuntu> <CAKfTPtDu=c-psGnHkoWSPRWoh1Z0VBBfsN++g+krv4B1SJmFjg@mail.gmail.com>
- <CAEXW_YQd2y9=RHw3Sge7ghnhBz0AyR+B-U4zG10LXuSbg5bGSA@mail.gmail.com> <CAKfTPtBJQOY7UUkm1=wvG18UWgLLiTW0dr3bTGUJY=siM_LLxQ@mail.gmail.com>
-In-Reply-To: <CAKfTPtBJQOY7UUkm1=wvG18UWgLLiTW0dr3bTGUJY=siM_LLxQ@mail.gmail.com>
-From:   Joel Fernandes <joel@joelfernandes.org>
-Date:   Fri, 4 Nov 2022 10:48:42 +0000
-Message-ID: <CAEXW_YTcmbPg+UCacb4Vy0LeYuorT-yECoa39pqtw5wPUkzsvQ@mail.gmail.com>
-Subject: Re: [PATCH v7 6/9] sched/fair: Add sched group latency support
-To:     Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     Qais Yousef <qyousef@layalina.io>, mingo@redhat.com,
-        peterz@infradead.org, juri.lelli@redhat.com,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        linux-kernel@vger.kernel.org, parth@linux.ibm.com,
-        qais.yousef@arm.com, chris.hyser@oracle.com,
-        patrick.bellasi@matbug.net, David.Laight@aculab.com,
-        pjt@google.com, pavel@ucw.cz, tj@kernel.org, qperret@google.com,
-        tim.c.chen@linux.intel.com, joshdon@google.com, timj@gnu.org,
-        kprateek.nayak@amd.com, yu.c.chen@intel.com,
-        youssefesmat@chromium.org
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQIVsoyS1LfNYjvTRsU3iIkRJvur6AJ2XG6BApeHKxICO7c5fa16oSiA
+Content-Language: en-in
+X-Brightmail-Tracker: H4sIAAAAAAAAA02Te0xbdRTH97v39gGuemFFfqvM1CpEikALFC/yckKWS9gcwTgNIZau3ADS
+        V9oiMpc4CZvIGLMqC3RYYGUYnpsMOthKBFbYaBiOjMeidLymUEocoUOZW5wtBeW/z/me7/md
+        3zm//Jio7zkGh5mn0FJqhUTGo3tjphvBwaErD7OlgsnyfcSswUQnjBuLCDFjdGLEwJUuBtE5
+        fh4lfrjZRyNqLaM04mr/PEb8uOTKjlXbMGKxth0Qdv19OlGxNIcSvQ5XRcfCJI24e62GTpRf
+        7qIRbRYbg7g4NYYQjR1PEeJC1yMGcbLXwiBsZhMgSk5ZkLch2WpoBWS3rQGQUw1rKNmjtzFI
+        o9mOkB3NX9HJ6UkznbzS8Dl5cvBvjKzobAZkmWWKTjo7Xiat605GGisjPy6XkmRTai6lkCqz
+        8xQ58bzU98RJYlG0QBgqjCHe5HEVEjkVz0s+mBZ6IE/mWgGP+4lEVuCS0iQaDS88IU6tLNBS
+        3FylRhvPo1TZMlWUKkwjkWsKFDlhCkr7llAgiBC5jFn5ubW3ZhDVWb9P7/UtME4Ah08Z8GJC
+        PAq2NRXT3OyLXwfw7mhRGfB28RqATT06hif4E8DBn/9ibFcMPW2iexK9AK6a2rfKFwFsK/dy
+        Mx0PhzPWcprbxMYHAZztnEPdAYrXYnCyeJXudnnhCbBuo8TlYjL34HJotr3hljH8Ndha8Tvm
+        ZhYeA68OlSAe9oHD1Q82dRQPgY31DtRzIy58/Fvj5jFs/ACsLQ7yWPzh4OPyzbYQt3rBZ3/c
+        3vInw/mWbd4Dl292bk3Ggfazp7ZYChcu2Lc8MnjJ/B3m4UTYN16DuXuheDC8dC3cI++DldZ2
+        xNP3eXjmyQPEo7Ngt2Gbg2DN9AbNwwHwRstF8DXg6XdMpt8xmX7HCPr/u9UBrBnspVQaeQ6l
+        EakiFVThf+8tVco7wOYH4ad2g/nZ1bABgDDBAIBMlMdmrZmkUl9WtqToGKVWitUFMkozAESu
+        detQjp9U6fphCq1YGBUjiIqOjo6KiYwW8vxZxiq+1BfPkWipfIpSUertOoTpxTmBNBStZNHl
+        CLm7wifReSz9Nj6exup+d+a0Rfdxj2A9dr0yJetIysEXU3JnAwIbHjm837nOiSvQix7eYYP0
+        Umdglc5sJxtfXda+1PKRMXbvkmQIcPqLIzITUvlziUlhxxvRI0f9A4yHL3+wHJfq9zo37d6w
+        wRw5PLZRmBkakPHsl5HytV8LV0y3+tvbFr7sEyZ02fdvGKyV91l1Od+GVMGajIUXztH+MXwR
+        PM86NOYQT1j5ERPUE35z6OGjPk3CTvZPVGacZVegbPdI9ffTVeuH6v2S75QG6XS29JDjPs+x
+        haNJi212EnGWfhiv1taPiCvPTJw+/5ljYlfsKzLR+4Oqb3iYJlci5KNqjeRfngN2vKkEAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmpgleLIzCtJLcpLzFFi42LZdlhJXtfiXUqywd8zOhYP5m1js1j84zmT
+        xf3Fn1ksDm3eym6x5cpsZovlxw+wWsw/co7VYvvBRywWG18AZS/OvMti8Xz+OkaLl7PusVn0
+        vXjIbLH3NVDHpsfXWC0u75rDZtGzYSurxdojd9ktll6/yGSxbNMfJotFW7+wW7TuPcJucXfP
+        NkaLlrYjTA4SHmvmrWH02HF3CaPH9SWfmD12zrrL7rF4z0smj02rOtk87lzbw+axeUm9R+vR
+        XywefVtWMXp0HbnO5vF5k5zHqa+f2QN4o7hsUlJzMstSi/TtErgy5q9+xFawSqTi8Pt/TA2M
+        HYJdjJwcEgImEsf+rGTrYuTiEBLYzSixa+MxNoiEjMT/tmPsELawxMp/z9khip4ySkzf9pUR
+        JMEmoC9x/1QPK0hCROAko0T/mRYwh1lgM4vE2tY9LBAtnxklVszfDtbCKWAnseAHSBUHh7BA
+        tsTO7gyQMIuAisSavmcsIDavgKXE9mMtTBC2oMTJmU/A4swC2hJPbz6Fs5ctfM0McZ6CxM+n
+        y8BGigi4ScxvUoMoEZc4+rOHeQKj8Cwkk2YhmTQLyaRZSFoWMLKsYpRMLSjOTc8tNiwwzEst
+        1ytOzC0uzUvXS87P3cQITiRamjsYt6/6oHeIkYmD8RCjBAezkgjvp23JyUK8KYmVValF+fFF
+        pTmpxYcYpTlYlMR5L3SdjBcSSE8sSc1OTS1ILYLJMnFwSjUw6dedFbPwnaPBofE5SMR5h32T
+        k/vdlSKbLj5w3uVwttvmFV/3vA5hta/uNxf9uZptu/vOGvt/93deu5n4o+Lde7++781VU2Nv
+        Sop9l22bXf+MIcv2VO/3faovMjcsKCmxO/BdeEPNGe6sK98X/BKu5nQriUxqVbkbl+5YNl1r
+        02XRA8flZNOvb3CtDBNlvDqPcaJ1Xry8meye3Ocv6v+eE9DcHH5zF2NT6KFI9oudSf/WqIo8
+        2/7p6FWHKY3PVrdatzw0Xn7stChffkcLz2FxiV6juEB5QcOGyfYviiMXb3b4Y+z/4PrVtlVp
+        cm6HkpfvtRM8Z+f2W+2+QmMY+9vsP2sX6TyXYU/0VrZfc/ahEktxRqKhFnNRcSIA1WgV4JMD
+        AAA=
+X-CMS-MailID: 20221104104928epcas5p1ba76f35fd33e3a68ced972d0489c98af
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: REQ_APPROVE
+CMS-TYPE: 105P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20221102125816epcas5p23e16fefd6b820e7dd7d9a93f0d48f40d
+References: <20221102130602.48969-1-aakarsh.jain@samsung.com>
+        <CGME20221102125816epcas5p23e16fefd6b820e7dd7d9a93f0d48f40d@epcas5p2.samsung.com>
+        <20221102130602.48969-3-aakarsh.jain@samsung.com>
+        <352e31de-cb79-f08e-b817-2712d97b84f1@linaro.org>
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 4, 2022 at 10:37 AM Vincent Guittot
-<vincent.guittot@linaro.org> wrote:
-[...]
-> > during *same CPU* competition between different groups by juggling
-> > around the wakeup-preemption window -- which maybe is good for
-> > Android.
+
+
+> -----Original Message-----
+> From: Krzysztof Kozlowski =5Bmailto:krzysztof.kozlowski=40linaro.org=5D
+> Sent: 03 November 2022 18:04
+> To: Aakarsh Jain <aakarsh.jain=40samsung.com>; linux-arm-
+> kernel=40lists.infradead.org; linux-media=40vger.kernel.org; linux-
+> kernel=40vger.kernel.org; devicetree=40vger.kernel.org
+> Cc: m.szyprowski=40samsung.com; andrzej.hajda=40intel.com;
+> mchehab=40kernel.org; hverkuil-cisco=40xs4all.nl;
+> ezequiel=40vanguardiasur.com.ar; jernej.skrabec=40gmail.com;
+> benjamin.gaignard=40collabora.com; krzysztof.kozlowski+dt=40linaro.org;
+> stanimir.varbanov=40linaro.org; dillon.minfei=40gmail.com;
+> david.plowman=40raspberrypi.com; mark.rutland=40arm.com;
+> robh+dt=40kernel.org; krzk+dt=40kernel.org; andi=40etezian.org;
+> alim.akhtar=40samsung.com; aswani.reddy=40samsung.com;
+> pankaj.dubey=40samsung.com; smitha.t=40samsung.com
+> Subject: Re: =5BPATCH 3/3=5D arm64: dts: exynos: Rename compatible string
+> property from version to SOC specific
+>=20
+> On 02/11/2022 09:06, Aakarsh Jain wrote:
+> > commit =22752d3a23d1f68de87e3c=22 which adds MFC codec device node for
+> > exynos3250 SOC. Since exynos3250.dtsi and exynos5420.dtsi are using
+> > same compatible string as =22samsung,mfc-v7=22 but their node propertie=
+s
+> > are different.As both SoCs have MFC v7 hardware module but with
+> > different clock hierarchy and complexity.
+> > So renaming compatible string from version specific to SOC based.
 > >
-> > OTOH, the =E2=80=9Cprefer idle=E2=80=9D flag in android that Qais is re=
-ferring to,
-> > will need a completely different method as I cannot see how a nice
-> > value can communicate that (that can complement Vincent's changes
-> > here). And it will need to have a per-task interface as well. We have
->
-> Why a negative latency_nice value condition can't be used ? or latency -2=
-0  ?
+> > Suggested-by: Alim Akhtar <alim.akhtar=40samsung.com>
+> > Fixes: 752d3a23d1f6 (=22ARM: dts: add MFC codec device node for
+> > exynos3250=22)
+>=20
+> There is no bug to fix and backporting is forbidden as it breaks the usag=
+e of
+> DTS in older kernel.
+>=20
+Okay will remove this Fix tag in next series.
+> > Signed-off-by: Aakarsh Jain <aakarsh.jain=40samsung.com>
+> > ---
+> >  arch/arm/boot/dts/exynos3250.dtsi =7C 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/arch/arm/boot/dts/exynos3250.dtsi
+> > b/arch/arm/boot/dts/exynos3250.dtsi
+> > index 326b9e0ed8d3..98105c64f7d9 100644
+> > --- a/arch/arm/boot/dts/exynos3250.dtsi
+> > +++ b/arch/arm/boot/dts/exynos3250.dtsi
+> > =40=40 -485,7 +485,7 =40=40
+> >  		=7D;
+> >
+> >  		mfc: codec=4013400000 =7B
+> > -			compatible =3D =22samsung,mfc-v7=22;
+> > +			compatible =3D =22samsung,exynos3250-mfc=22;
+>=20
+> The change is non-bisectable and breaks using DTS in older kernel.
+>=20
+Right, so what is your suggestion on this?
+I can see two ways here:
+1> To squash patch2 and patch3 in one?
+2> Have a warning about this breakage in the patch-3 commit message?
 
-That's overloading the meaning of a value, the whole nice thing is
-supposed to be "relative to something". So you are being nice to
-something else. Here -20 means you are not being nice. But in fact you
-are, because you are avoiding hurting something else by going to an
-idle CPU. So it becomes really weird.
+> Best regards,
+> Krzysztof
 
-Also, why would -19 or -18 not be a value instead to cause wakeup to
-prefer an idle CPU? It confuses the user on how to choose value and we
-should refrain from that IMHO.
+
+Thanks for the review.
+
+
