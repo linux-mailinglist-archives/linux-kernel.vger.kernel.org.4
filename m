@@ -2,137 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADB12618DDC
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 03:02:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 076A5618DDF
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 03:03:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230504AbiKDCCI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 22:02:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47598 "EHLO
+        id S229560AbiKDCDf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 22:03:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbiKDCCG (ORCPT
+        with ESMTP id S229496AbiKDCDc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 22:02:06 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF29F14D37;
-        Thu,  3 Nov 2022 19:02:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667527325; x=1699063325;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=PbDcGd2txZZjxfqbiNRIeanByco2lscQZW9KH00uNFo=;
-  b=jSs6cPavenLFemU1mIScN/aVfzriqn6NY3fBy3A6DMsK4EhLwj1QHlqz
-   +CpYmAAPRdTNlmoyCzy5k8W8ELbihrwJLlfhAiHiWcqVImwL1d1QWWyoN
-   LnmmKJqERlfkctWgSBTpq/e0URHO2VWWlrBmjopF7iTiqB9KWyln1M88R
-   4tLR5bhct642LzETdJo4u4kaADvBoX6lTUOOBC573+XCAbeMuMGfYuObF
-   Nyla1FO0Vh5ZpvmDF8oFK0nuVAqWSrZfWf1CmA8RgzRMZZDzrT0marYnG
-   SHNSv2yQLo2/4QVVEDQmjl57AnMkTfdA5zd1Mf38+PmK4lCsQNB8whn2S
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10520"; a="293178852"
-X-IronPort-AV: E=Sophos;i="5.96,135,1665471600"; 
-   d="scan'208";a="293178852"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2022 19:02:04 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10520"; a="698466214"
-X-IronPort-AV: E=Sophos;i="5.96,135,1665471600"; 
-   d="scan'208";a="698466214"
-Received: from jiaxiche-mobl.ccr.corp.intel.com (HELO [10.238.2.23]) ([10.238.2.23])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2022 19:01:57 -0700
-Message-ID: <9197a0a4-4c15-1e6e-a44b-a8036c2104c4@linux.intel.com>
-Date:   Fri, 4 Nov 2022 10:01:55 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH v2 1/8] x86: KVM: Move existing x86 CPUID leaf
- [CPUID_7_1_EAX] to kvm-only leaf
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     kvm@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        seanjc@google.com, pbonzini@redhat.com, ndesaulniers@google.com,
-        alexandre.belloni@bootlin.com, peterz@infradead.org,
-        jpoimboe@kernel.org, chang.seok.bae@intel.com,
-        pawan.kumar.gupta@linux.intel.com, babu.moger@amd.com,
-        jmattson@google.com, sandipan.das@amd.com, tony.luck@intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, fenghua.yu@intel.com,
-        keescook@chromium.org, nathan@kernel.org,
+        Thu, 3 Nov 2022 22:03:32 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB7311AD99;
+        Thu,  3 Nov 2022 19:03:30 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id a67so5645481edf.12;
+        Thu, 03 Nov 2022 19:03:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=pLPCK9Uug0ilNvdlZMrezqOyWNOcVsx4Hwp/j3a6Hv8=;
+        b=d2bJwyvfrsIRK8UlUGWQma+1B3Kqzs/Pgf0maBdb7MUrdSpA/XA+zBwCy2Tmixq+Jj
+         sJoey6ghXpHD82G+7zMwqJE6UoDtmf5Vij92L8JW9LPnb5naseayxkezoZPCBMAE1xKB
+         j8hYf+mQU0fbLjkI0VO2kpXt3BpqsafJD/HA5+g6s4+l/Wikp85pz2GOaMqq46TlqGkw
+         FFs229BaXrojCKCQZh8WmVvtXRvVACwenHwRkF0P/yWYO0rKSSwgta9Cu0LHQq9k2hlZ
+         uanIG1zJd3oPUrnrIExAGfz4C2ahCDSubpY32SahIZbn7Ea8byCZ14WTo97AKoUg+CYY
+         RfMQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pLPCK9Uug0ilNvdlZMrezqOyWNOcVsx4Hwp/j3a6Hv8=;
+        b=uu0JLRvbZK7ytJcBXYJB6Xx9pdeg1kiSx1OUOFTMR7VxHyrDoASkwzjbaNdWyMoGHZ
+         3Q38W9fImmOHHHyM427VLvGNNBsfCUa2Pg/rnlo95U1fvPrl/ED9gMGMk6E9RoJ8SO56
+         Fv9wete7+bFyes1WGfYBsKB+GVS5KOlKudkqJr1qyGv0P9wt+8AEzcfL6lz5Ec8OemOX
+         layRsYycL3LD7cQHMERP0DkGg8kjYc1/X7fW/x7d48A8+X3kE889PWUpYLNrZMrK7O7w
+         gRlshcTEMyETcQGh49jlzBtBtu1snHLQczYl82U2YYxvSrvPcGQXzIW1AU9rkAqlnpXq
+         9XdQ==
+X-Gm-Message-State: ACrzQf2ESFyvF1GRIvaoGbuDdHI7EPIZJuYXfnhNtaf+z0kFWihXok5h
+        HizJ2c1xwchjBYnlbXi/4/4=
+X-Google-Smtp-Source: AMsMyM7Pw02m8msJ4P0TLH9cYFfz2LrxPUMowLkmarpEinPrYpjgd5BkNcWz7exI440Q++aZZGQ5Yw==
+X-Received: by 2002:a05:6402:5cb:b0:452:e416:2bc4 with SMTP id n11-20020a05640205cb00b00452e4162bc4mr32584677edx.114.1667527409188;
+        Thu, 03 Nov 2022 19:03:29 -0700 (PDT)
+Received: from skbuf ([188.27.184.197])
+        by smtp.gmail.com with ESMTPSA id u5-20020a17090626c500b00781dbdb292asm1151270ejc.155.2022.11.03.19.03.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Nov 2022 19:03:28 -0700 (PDT)
+Date:   Fri, 4 Nov 2022 04:03:26 +0200
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <20221103025030.78371-1-jiaxi.chen@linux.intel.com>
- <20221103025030.78371-2-jiaxi.chen@linux.intel.com>
- <Y2N/peaVRIjTMyrw@zn.tnic>
-From:   Jiaxi Chen <jiaxi.chen@linux.intel.com>
-In-Reply-To: <Y2N/peaVRIjTMyrw@zn.tnic>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v2] dt-bindings: net: nxp,sja1105: document spi-cpol/cpha
+Message-ID: <20221104020326.4l63prl7vxgi3od7@skbuf>
+References: <20221102185232.131168-1-krzysztof.kozlowski@linaro.org>
+ <20221103233319.m2wq5o2w3ccvw5cu@skbuf>
+ <698c3a72-f694-01ac-80ba-13bd40bb6534@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <698c3a72-f694-01ac-80ba-13bd40bb6534@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 11/3/2022 4:45 PM, Borislav Petkov wrote:
-> On Thu, Nov 03, 2022 at 10:50:23AM +0800, Jiaxi Chen wrote:
->> diff --git a/arch/x86/include/asm/cpufeature.h b/arch/x86/include/asm/cpufeature.h
->> index 1a85e1fb0922..fbb4e7bd2288 100644
->> --- a/arch/x86/include/asm/cpufeature.h
->> +++ b/arch/x86/include/asm/cpufeature.h
->> @@ -24,7 +24,7 @@ enum cpuid_leafs
->>  	CPUID_7_0_EBX,
->>  	CPUID_D_1_EAX,
->>  	CPUID_LNX_4,
->> -	CPUID_7_1_EAX,
->> +	CPUID_DUMMY,
->>  	CPUID_8000_0008_EBX,
->>  	CPUID_6_EAX,
->>  	CPUID_8000_000A_EDX,
+On Thu, Nov 03, 2022 at 09:44:36PM -0400, Krzysztof Kozlowski wrote:
+> > Don't these belong to spi-peripheral-props.yaml?
 > 
-> No, do this (diff ontop):
+> No, they are device specific, not controller specific. Every device
+> requiring them must explicitly include them.
 > 
-> diff --git a/arch/x86/include/asm/cpufeature.h b/arch/x86/include/asm/cpufeature.h
-> index fbb4e7bd2288..b2905ddd7ab4 100644
-> --- a/arch/x86/include/asm/cpufeature.h
-> +++ b/arch/x86/include/asm/cpufeature.h
-> @@ -24,7 +24,7 @@ enum cpuid_leafs
->  	CPUID_7_0_EBX,
->  	CPUID_D_1_EAX,
->  	CPUID_LNX_4,
-> -	CPUID_DUMMY,
-> +	CPUID_LNX_5,
->  	CPUID_8000_0008_EBX,
->  	CPUID_6_EAX,
->  	CPUID_8000_000A_EDX,
-> diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
-> index 91acf8b8e493..5c9023438e57 100644
-> --- a/arch/x86/include/asm/cpufeatures.h
-> +++ b/arch/x86/include/asm/cpufeatures.h
-> @@ -306,6 +306,8 @@
->  #define X86_FEATURE_RSB_VMEXIT_LITE	(11*32+17) /* "" Fill RSB on VM exit when EIBRS is enabled */
->  #define X86_FEATURE_CALL_DEPTH		(11*32+18) /* "" Call depth tracking for RSB stuffing */
->  
-> +/* Linux-defined mapping, word 12 */
-> +
->  /* AMD-defined CPU features, CPUID level 0x80000008 (EBX), word 13 */
->  #define X86_FEATURE_CLZERO		(13*32+ 0) /* CLZERO instruction */
->  #define X86_FEATURE_IRPERF		(13*32+ 1) /* Instructions Retired Count */
+> See:
+> https://lore.kernel.org/all/20220816124321.67817-1-krzysztof.kozlowski@linaro.org/
 > 
-> ---
-> 
-> I'm pretty sure we'll need new bits soon so let's reuse that one for
-> Linux-defined flags.
-> 
-> Then you can drop patch 2.
+> Best regards,
+> Krzysztof
 > 
 
-Hi Boris,
+I think you really mean to link to:
+https://lore.kernel.org/all/20220718220012.GA3625497-robh@kernel.org/
 
-Yes, that's reasonable. I understand the goodnees of putting CPUID_LNX_5
-here is to avoid changing the array length [NCAPINTS] and other parts twice.
-But before new bits come, word 12 is empty in this gap. Is that ok?
+oh and btw, doesn't that mean that the patch is missing
+Fixes: 233363aba72a ("spi/panel: dt-bindings: drop CPHA and CPOL from common properties")
+?
 
--- 
-Regards,
-Jiaxi
+but I'm not sure I understand the reasoning? I mean, from the
+perspective of the common schema, isn't it valid to put "spi-cpha" on a
+SPI peripheral OF node even if the hardware doesn't support it, in the
+same way that it's valid to put spi-max-frequency = 1 GHz even if the
+hardware doesn't support it? Or maybe I'm missing the point of
+spi-peripheral-props.yaml entirely? Since when is stacked-memories/
+parallel-memories something that should be accepted by all schemas of
+all SPI peripherals (for example here, an Ethernet switch)?
+I think that spi-cpha/spi-cpol belongs to spi-peripheral-props.yaml just
+as much as the others do.
+
+The distinction "device specific, not controller specific" is arbitrary
+to me. These are settings that the controller has to make in order to
+talk to that specific peripheral. Same as many others in that file.
