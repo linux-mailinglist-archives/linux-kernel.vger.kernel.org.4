@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08106619561
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 12:32:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE3E8619563
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 12:32:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229481AbiKDLcJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 07:32:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52220 "EHLO
+        id S231486AbiKDLcL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 07:32:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231689AbiKDLbu (ORCPT
+        with ESMTP id S231795AbiKDLb6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 07:31:50 -0400
+        Fri, 4 Nov 2022 07:31:58 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2936F25C77
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 04:30:51 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3786A25C7A
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 04:30:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667561450;
+        s=mimecast20190719; t=1667561457;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=RevsFdiPw/fb8SaWA4i0OScuHjqawmx3PhXyedjj5ck=;
-        b=PasuLHhZ5wWoFvZd9dKacp8HT+tQgmNnTf0JDe0kzzJgP9XVvRss8a/jZZK3qf0/i24j+Z
-        F0eu7RVcS1K/73k2xTgWFot6tS8F6XqieGfNv4Xos7OZov2ktTBi59LNG9xWSvyXby7EuB
-        UW3IQYDXRuc3xxq7FuzEp39bWdgbOMA=
-Received: from mail-pl1-f197.google.com (mail-pl1-f197.google.com
- [209.85.214.197]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=tChygk51qSEpKRajoEIhCZC1g4gkmcKbQyIR3WZ7WJ0=;
+        b=dcF+UL2P5nCXwo0ot/00Mv/qf5kfYUpVejnG8KUFgpWKZYqLgFnUX9fIPO9LVM50eOFGw0
+        1vibVVCSZPx1MX08p07ahDThBvZv0tHS48Bqhczq2ioskBq3Mkbs84/YnbPy6khhLqS/F/
+        /TJkv13gaCPSDD+7jDUOwZ21BHFbVKY=
+Received: from mail-pj1-f71.google.com (mail-pj1-f71.google.com
+ [209.85.216.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-240-vfqosuPYM1ih1a8_K5f1BQ-1; Fri, 04 Nov 2022 07:30:46 -0400
-X-MC-Unique: vfqosuPYM1ih1a8_K5f1BQ-1
-Received: by mail-pl1-f197.google.com with SMTP id a6-20020a170902ecc600b00186f035ed74so3409701plh.12
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 04:30:46 -0700 (PDT)
+ us-mta-670-7ZKJU8moOMiwfrUNU4MnHQ-1; Fri, 04 Nov 2022 07:30:55 -0400
+X-MC-Unique: 7ZKJU8moOMiwfrUNU4MnHQ-1
+Received: by mail-pj1-f71.google.com with SMTP id q1-20020a17090aa00100b002139a592adbso5430142pjp.1
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 04:30:54 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=RevsFdiPw/fb8SaWA4i0OScuHjqawmx3PhXyedjj5ck=;
-        b=X5LljYiUcY/Ybg8r62sn9hUfBgVbdYb//La/+oA0XF70ibJtJAmzXaRHWJee8fvpeA
-         BJ1asoh/uQ7ZhvaT2OsdWmi7dYHrANHV3FEpLRw44QtQBjczO5ZVMCSRiSrgFpce4Grg
-         qKoNFMs+B6M4bbmXRvxCHONR+FZPJjEcAmyTsqTdwTx5j/chrsLHbFGOE0Rs3L/RJOjO
-         6qD41DJRwhfzGDzuzwznDeui/NEOVccpUGqVm7NJi050sJ9FS4rNEsZYTb+hojJP8Xst
-         mD3qQow4+g30G0fmAHJjJ6VIALxLZCctLBUuIXQKc7xHuYxhpw+bgjX/yFQKCsMDUui8
-         qw8g==
-X-Gm-Message-State: ACrzQf0jGaMq1JPbntgWzUWhHv8vAG43WPT1biIzdwPJthdWh+80kTwD
-        AxMoxKAO/EBzQ1m5qHPiLRuFfa1fvozDY2pFVZBmQqPbq1GGAntQVzS7L+Fg2cCDiE+4n9qolS3
-        OvmkTTQLrvvL0aYTPBYh0Rajy
-X-Received: by 2002:a17:90a:6d22:b0:213:7e1e:9be0 with SMTP id z31-20020a17090a6d2200b002137e1e9be0mr35804895pjj.17.1667561445708;
-        Fri, 04 Nov 2022 04:30:45 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM51CDYLEqWginckV/rN0elEiAXD4s8pR8U6DdMP+NZPO37JWjN6xDUyvoO9upVjiEVTkeoywQ==
-X-Received: by 2002:a17:90a:6d22:b0:213:7e1e:9be0 with SMTP id z31-20020a17090a6d2200b002137e1e9be0mr35804871pjj.17.1667561445499;
-        Fri, 04 Nov 2022 04:30:45 -0700 (PDT)
+        bh=tChygk51qSEpKRajoEIhCZC1g4gkmcKbQyIR3WZ7WJ0=;
+        b=YxWvzygzYV/IbGd8tZaTFRSGWAL4i3vx8Jsk3bT+gERa8zchozDAKubkV1D59l0BzU
+         CN/kMvoof7Vny4dgZsig60f5uF4/WOUSOrff+VM5O3edMKdtYJIuIllddseW6bTbcL5s
+         vni4jk5TPqGyM2d//ZIrHf6XGLEvL9RUTize6b3AUEGKNGBGRSvfo+bkEyFVkHCKwNtR
+         wSPI+vKtTHcUgZW1DZLtAVFkYqDm8saBUSJTKRvbKm7Ac9nqESeP5xymt9rYvgmZc1ZR
+         tomjrfr8Y0lcyoZnXAWr8RnAf22350+If69KPSoXGurWcMbUdaV18XTk52rxO7PqMfuM
+         1jQQ==
+X-Gm-Message-State: ACrzQf3VxyRYLjIASg37YjPteq+BExnw2YuWPhpFN5BDppXUgA5zfT22
+        nukYFXO2Nf38OC7WbeAuYdxwGZwdTuW/I5HYOHXdHL+BhefaCZ3JGSyh0PIPvjKP6jAEflOgeg6
+        hhUfMrp9AgxR0oub1AmjrR5tH
+X-Received: by 2002:a05:6a00:3698:b0:56d:3180:e88f with SMTP id dw24-20020a056a00369800b0056d3180e88fmr32007698pfb.66.1667561454068;
+        Fri, 04 Nov 2022 04:30:54 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM6/YFb404UDQuedNToGLAqLTqEInClQiUntzz+pWfWaKxI00OswIw7b6D7Q0zuVJH1Lqg4s3g==
+X-Received: by 2002:a05:6a00:3698:b0:56d:3180:e88f with SMTP id dw24-20020a056a00369800b0056d3180e88fmr32007679pfb.66.1667561453799;
+        Fri, 04 Nov 2022 04:30:53 -0700 (PDT)
 Received: from localhost ([209.132.188.80])
-        by smtp.gmail.com with ESMTPSA id c5-20020a056a00008500b005629b6a8b53sm2609597pfj.15.2022.11.04.04.30.43
+        by smtp.gmail.com with ESMTPSA id ca8-20020a17090af30800b0020669c8bd87sm1483003pjb.36.2022.11.04.04.30.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Nov 2022 04:30:45 -0700 (PDT)
+        Fri, 04 Nov 2022 04:30:53 -0700 (PDT)
 From:   Coiby Xu <coxu@redhat.com>
 To:     kexec@lists.infradead.org
 Cc:     Milan Broz <gmazyland@gmail.com>,
@@ -64,14 +64,10 @@ Cc:     Milan Broz <gmazyland@gmail.com>,
         Jan Pazdziora <jpazdziora@redhat.com>,
         Pingfan Liu <kernelfans@gmail.com>,
         Baoquan He <bhe@redhat.com>, Dave Young <dyoung@redhat.com>,
-        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        x86@kernel.org (maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)),
-        "H. Peter Anvin" <hpa@zytor.com>
-Subject: [RFC v2 4/5] x86/crash: make the page that stores the LUKS volume key inaccessible
-Date:   Fri,  4 Nov 2022 19:29:59 +0800
-Message-Id: <20221104113000.487098-5-coxu@redhat.com>
+        linux-kernel@vger.kernel.org, Vivek Goyal <vgoyal@redhat.com>
+Subject: [RFC v2 5/5] crash_dump: retrieve LUKS volume key in kdump kernel
+Date:   Fri,  4 Nov 2022 19:30:00 +0800
+Message-Id: <20221104113000.487098-6-coxu@redhat.com>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20221104113000.487098-1-coxu@redhat.com>
 References: <20221104113000.487098-1-coxu@redhat.com>
@@ -87,45 +83,191 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This adds an addition layer of protection for the saved copy of LUKS
-volume key. Trying to access the saved copy will cause page fault.
+Crash kernel will retrieve the LUKS volume key based on the
+luksvolumekey command line parameter. When libcryptsetup writes the key
+description to /sys/kernel/crash_luks_volume_key, crash kernel will
+create a thread keyring and add a logon key.
 
-Suggested-by: Pingfan Liu <kernelfans@gmail.com>
 Signed-off-by: Coiby Xu <coxu@redhat.com>
 ---
- arch/x86/kernel/machine_kexec_64.c | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+ include/linux/crash_dump.h |   2 +
+ kernel/crash_dump.c        | 116 ++++++++++++++++++++++++++++++++++++-
+ 2 files changed, 116 insertions(+), 2 deletions(-)
 
-diff --git a/arch/x86/kernel/machine_kexec_64.c b/arch/x86/kernel/machine_kexec_64.c
-index 0611fd83858e..f3d51c38a1c9 100644
---- a/arch/x86/kernel/machine_kexec_64.c
-+++ b/arch/x86/kernel/machine_kexec_64.c
-@@ -557,9 +557,25 @@ static void kexec_mark_crashkres(bool protect)
- 	kexec_mark_range(control, crashk_res.end, protect);
- }
+diff --git a/include/linux/crash_dump.h b/include/linux/crash_dump.h
+index 0f3a656293b0..bc848e058c64 100644
+--- a/include/linux/crash_dump.h
++++ b/include/linux/crash_dump.h
+@@ -15,6 +15,8 @@
+ extern unsigned long long elfcorehdr_addr;
+ extern unsigned long long elfcorehdr_size;
  
-+static void kexec_mark_luks_volume_key_inaccessible(void)
-+{
-+	unsigned long start, end;
-+	struct page *page;
-+	unsigned int nr_pages;
++extern unsigned long long luks_volume_key_addr;
 +
-+	if (kexec_crash_image->luks_volume_key_addr) {
-+		start = kexec_crash_image->luks_volume_key_addr;
-+		end = start + kexec_crash_image->luks_volume_key_sz - 1;
-+		page = pfn_to_page(start >> PAGE_SHIFT);
-+		nr_pages = (end >> PAGE_SHIFT) - (start >> PAGE_SHIFT) + 1;
-+		set_memory_np((unsigned long)page_address(page), nr_pages);
-+	}
+ #ifdef CONFIG_CRASH_DUMP
+ extern int elfcorehdr_alloc(unsigned long long *addr, unsigned long long *size);
+ extern void elfcorehdr_free(unsigned long long addr);
+diff --git a/kernel/crash_dump.c b/kernel/crash_dump.c
+index 9c202bffbb8d..77a6b84415e8 100644
+--- a/kernel/crash_dump.c
++++ b/kernel/crash_dump.c
+@@ -5,7 +5,10 @@
+ #include <linux/errno.h>
+ #include <linux/export.h>
+ 
++#include <linux/key.h>
++#include <linux/keyctl.h>
+ #include <keys/user-type.h>
++
+ /*
+  * stores the physical address of elf header of crash image
+  *
+@@ -16,6 +19,8 @@
+ unsigned long long elfcorehdr_addr = ELFCORE_ADDR_MAX;
+ EXPORT_SYMBOL_GPL(elfcorehdr_addr);
+ 
++unsigned long long luks_volume_key_addr;
++EXPORT_SYMBOL_GPL(luks_volume_key_addr);
+ /*
+  * stores the size of elf header of crash image
+  */
+@@ -41,6 +46,76 @@ static int __init setup_elfcorehdr(char *arg)
+ }
+ early_param("elfcorehdr", setup_elfcorehdr);
+ 
++static int __init setup_luksvolumekey(char *arg)
++{
++	char *end;
++
++	if (!arg)
++		return -EINVAL;
++	luks_volume_key_addr = memparse(arg, &end);
++	if (end > arg)
++		return 0;
++
++	luks_volume_key_addr = 0;
++	return -EINVAL;
 +}
 +
- void arch_kexec_protect_crashkres(void)
- {
- 	kexec_mark_crashkres(true);
-+	kexec_mark_luks_volume_key_inaccessible();
- }
++early_param("luksvolumekey", setup_luksvolumekey);
++
++/*
++ * Architectures may override this function to read LUKS master key
++ */
++ssize_t __weak luks_key_read(char *buf, size_t count, u64 *ppos)
++{
++	struct kvec kvec = { .iov_base = buf, .iov_len = count };
++	struct iov_iter iter;
++
++	iov_iter_kvec(&iter, READ, &kvec, 1, count);
++	return read_from_oldmem(&iter, count, ppos, false);
++}
++
++static int retrive_kdump_luks_volume_key(u8 *buffer, unsigned int *sz)
++{
++	unsigned int key_size;
++	size_t lukskeybuf_sz;
++	unsigned int *size_ptr;
++	char *lukskeybuf;
++	u64 addr;
++	int r;
++
++	if (luks_volume_key_addr == 0) {
++		pr_debug("LUKS master key memory address inaccessible");
++		return -EINVAL;
++	}
++
++	addr = luks_volume_key_addr;
++
++	/* Read LUKS master key size */
++	r = luks_key_read((char *)&key_size, sizeof(unsigned int), &addr);
++
++	if (r < 0)
++		return r;
++
++	pr_debug("Retrieve LUKS master key: size=%u\n", key_size);
++	/* Read in LUKS maste rkey */
++	lukskeybuf_sz = sizeof(unsigned int) + key_size * sizeof(u8);
++	lukskeybuf = (void *)__get_free_pages(GFP_KERNEL | __GFP_ZERO,
++					      get_order(lukskeybuf_sz));
++	if (!lukskeybuf)
++		return -ENOMEM;
++
++	addr = luks_volume_key_addr;
++	r = luks_key_read((char *)lukskeybuf, lukskeybuf_sz, &addr);
++
++	if (r < 0)
++		return r;
++	size_ptr = (unsigned int *)lukskeybuf;
++	memcpy(buffer, size_ptr + 1, key_size * sizeof(u8));
++	pr_debug("Retrieve LUKS master key (size=%u): %48ph...\n", key_size, buffer);
++	*sz = key_size;
++	return 0;
++}
++
+ static u8 *luks_volume_key;
+ static unsigned int luks_volume_key_size;
  
- void arch_kexec_unprotect_crashkres(void)
+@@ -62,12 +137,48 @@ static DECLARE_DELAYED_WORK(wipe_luks_volume_key_work, _wipe_luks_volume_key);
+ 
+ static unsigned __read_mostly wipe_key_delay = 3600; /* 1 hour */
+ 
++static int retore_luks_volume_key_to_thread_keyring(const char *key_desc)
++{
++	key_ref_t keyring_ref, key_ref;
++	int ret;
++
++	/* find the target keyring (which must be writable) */
++	keyring_ref = lookup_user_key(KEY_SPEC_THREAD_KEYRING, 0x01, KEY_NEED_WRITE);
++	if (IS_ERR(keyring_ref)) {
++		pr_alert("Failed to get keyring");
++		return PTR_ERR(keyring_ref);
++	}
++
++	luks_volume_key = kmalloc(128, GFP_KERNEL);
++	ret = retrive_kdump_luks_volume_key(luks_volume_key, &luks_volume_key_size);
++	if (ret) {
++		kfree(luks_volume_key);
++		return ret;
++	}
++
++	/* create or update the requested key and add it to the target keyring */
++	key_ref = key_create_or_update(keyring_ref, "logon", key_desc,
++				       luks_volume_key, luks_volume_key_size,
++				       KEY_PERM_UNDEF, KEY_ALLOC_IN_QUOTA);
++
++	if (!IS_ERR(key_ref)) {
++		ret = key_ref_to_ptr(key_ref)->serial;
++		key_ref_put(key_ref);
++		pr_alert("Success adding key %s", key_desc);
++	} else {
++		ret = PTR_ERR(key_ref);
++		pr_alert("Error when adding key");
++	}
++
++	key_ref_put(keyring_ref);
++	return ret;
++}
++
+ static int crash_save_temp_luks_volume_key(const char *key_desc, size_t count)
+ {
+ 	const struct user_key_payload *ukp;
+ 	struct key *key;
+ 
+-
+ 	if (luks_volume_key) {
+ 		memset(luks_volume_key, 0, luks_volume_key_size * sizeof(u8));
+ 		kfree(luks_volume_key);
+@@ -100,7 +211,8 @@ int crash_sysfs_luks_volume_key_write(const char *key_desc, size_t count)
+ {
+ 	if (!is_kdump_kernel())
+ 		return crash_save_temp_luks_volume_key(key_desc, count);
+-	return -EINVAL;
++	else
++		return retore_luks_volume_key_to_thread_keyring(key_desc);
+ }
+ EXPORT_SYMBOL(crash_sysfs_luks_volume_key_write);
+ 
 -- 
 2.37.3
 
