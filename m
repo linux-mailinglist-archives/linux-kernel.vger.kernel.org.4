@@ -2,195 +2,269 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AB67619385
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 10:30:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05F7861938C
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 10:31:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230021AbiKDJaT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 05:30:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48176 "EHLO
+        id S230008AbiKDJbK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 05:31:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231487AbiKDJaJ (ORCPT
+        with ESMTP id S229539AbiKDJbH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 05:30:09 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D46EA29C83;
-        Fri,  4 Nov 2022 02:30:07 -0700 (PDT)
-X-UUID: 1437655087dd4a7bb0c37852c02d2085-20221104
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=MIME-Version:Content-Transfer-Encoding:Content-ID:Content-Type:In-Reply-To:References:Message-ID:Date:Subject:CC:To:From; bh=ifAkFgayZ+HglADRXWl4b+GXWLqFUfaI6oTizHqzR3E=;
-        b=Vk+ckm3E0D2reFLB2Q77bLgis7jcwY85s4mHdBoKSFxsSqANVI0mR4pkkRum77TpyZq3tgQiOw6mi/c5NWAJU0ghdk5gQcRlhzGFsM5IZ8PGOyd3vABU7Cqhw+QwLVEH35HcrFjbFK5C68SjVQwB7W7IJxDYbGrpLG8mk59oFUM=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.12,REQID:5ddd34f1-23bd-4ac8-b504-45a8ed5f1e96,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-        release,TS:0
-X-CID-META: VersionHash:62cd327,CLOUDID:f11f72eb-84ac-4628-a416-bc50d5503da6,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: 1437655087dd4a7bb0c37852c02d2085-20221104
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
-        (envelope-from <nancy.lin@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1096290544; Fri, 04 Nov 2022 17:30:01 +0800
-Received: from mtkmbs10n1.mediatek.inc (172.21.101.34) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Fri, 4 Nov 2022 17:30:01 +0800
-Received: from APC01-TYZ-obe.outbound.protection.outlook.com (172.21.101.239)
- by mtkmbs10n1.mediatek.com (172.21.101.34) with Microsoft SMTP Server id
- 15.2.792.15 via Frontend Transport; Fri, 4 Nov 2022 17:30:01 +0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=A6tRwE/kRxfN6r2HIhKgY+dB0+0dN+zHv5TJx6NjQVEHRWFX4qxxs/j5R7cJv8gB2kT+GqAq6+GraQIoB0082UFH5MTKAb3788pmjEcc6p9bxZB3zsFqdTd/70jP3O0JXX8n8RDhtvQ4XftCyrfsgLEioW0ZEFKri87fVQx70zZ1WkJCJnNSiLNLPEUCXiUwys6A780pDUDrGvRdxll1OH/0CYqWo3dNVqv6WxgVSd4oohtlfd9A6NObDDQN9FuQqDqgDB8rzWj+szySSC+jkDQux4f1kn0omjCC2o82ygPB1mrWk9u7C/d2LdG/Q+Rz04JgXlQYDcSijsysyonIRQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ifAkFgayZ+HglADRXWl4b+GXWLqFUfaI6oTizHqzR3E=;
- b=EcKAf26yvEDwkmQVctSEfJtRuEVCHuxB/+anthnDDZlML5cQbylll59wC8rs7hphEiBq4+gyEbWySPhhaevh5c/FReWgsTnUj9wKOQ7R75A+2G+NmyPGBLeQZzAQ+r+FOOj0dN9SYtox+CUgS7tDzf0pWDGp0EYmrW9Zfo6QbJ2LXldMmKTRTIGMZ0tqjmM3mNZd0I9SC6ftd3SH9IqKptfbaK2ikoqOk8FGATWmkAEBHZISiXWITOyyvCSqU0+VR+HCJ0Vu4bn5YqGagzN5u6etBKMRcNIQwayzExu/eHOJn8+bppQZSi6gfRoTESvFrNdIA9wb57f064c6Kd0cWg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=mediatek.com; dmarc=pass action=none header.from=mediatek.com;
- dkim=pass header.d=mediatek.com; arc=none
+        Fri, 4 Nov 2022 05:31:07 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B1A72655E;
+        Fri,  4 Nov 2022 02:31:06 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id h193so3884444pgc.10;
+        Fri, 04 Nov 2022 02:31:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mediateko365.onmicrosoft.com; s=selector2-mediateko365-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ifAkFgayZ+HglADRXWl4b+GXWLqFUfaI6oTizHqzR3E=;
- b=EA2Wi0JtJG9iYdPTS1LVDZqso6ft/34fA/2lUStw/ZSQmQ5Tp8kKcd156U4X3GOrZC4iBgSZ2ZM7mUNMqMSWoZumY5NTOSPynTF/8C/q75QKTgJgl2MlsT9VBf755qmWnrCEuZPxjBS4hvpc5hZXto5em6UOmsZZvS7gGTEvoLA=
-Received: from KL1PR03MB5175.apcprd03.prod.outlook.com (2603:1096:820:8::11)
- by PUZPR03MB6966.apcprd03.prod.outlook.com (2603:1096:301:f9::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.9; Fri, 4 Nov
- 2022 09:29:58 +0000
-Received: from KL1PR03MB5175.apcprd03.prod.outlook.com
- ([fe80::8cda:5c09:3c2e:19]) by KL1PR03MB5175.apcprd03.prod.outlook.com
- ([fe80::8cda:5c09:3c2e:19%7]) with mapi id 15.20.5791.020; Fri, 4 Nov 2022
- 09:29:56 +0000
-From:   =?utf-8?B?TmFuY3kgTGluICjmnpfmrKPonqIp?= <Nancy.Lin@mediatek.com>
-To:     "nfraprado@collabora.com" <nfraprado@collabora.com>
-CC:     "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
-        =?utf-8?B?WW9uZ3FpYW5nIE5pdSAo54mb5rC45by6KQ==?= 
-        <yongqiang.niu@mediatek.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        =?utf-8?B?U2luZ28gQ2hhbmcgKOW8teiIiOWciyk=?= 
-        <Singo.Chang@mediatek.com>,
-        "nathan@kernel.org" <nathan@kernel.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "chunkuang.hu@kernel.org" <chunkuang.hu@kernel.org>,
-        =?utf-8?B?SmFzb24tSkggTGluICjmnpfnnb/npaUp?= 
-        <Jason-JH.Lin@mediatek.com>,
-        "linux@roeck-us.net" <linux@roeck-us.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "daniel@ffwll.ch" <daniel@ffwll.ch>,
-        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        Project_Global_Chrome_Upstream_Group 
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        "airlied@linux.ie" <airlied@linux.ie>,
-        "angelogioacchino.delregno@collabora.com" 
-        <angelogioacchino.delregno@collabora.com>,
-        "ndesaulniers@google.com" <ndesaulniers@google.com>
-Subject: Re: [PATCH v27 05/11] soc: mediatek: refine code to use
- mtk_mmsys_update_bits API
-Thread-Topic: [PATCH v27 05/11] soc: mediatek: refine code to use
- mtk_mmsys_update_bits API
-Thread-Index: AQHY7zP8IB9OrEnPxka4DzE4Bd/13K4tqGsAgADZKwA=
-Date:   Fri, 4 Nov 2022 09:29:55 +0000
-Message-ID: <d4a204f74810e2a6445fe12dbf3b71695aa9b755.camel@mediatek.com>
-References: <20221103032512.9144-1-nancy.lin@mediatek.com>
-         <20221103032512.9144-6-nancy.lin@mediatek.com>
-         <20221103203238.fryjwpgjtwccnjwu@notapiano>
-In-Reply-To: <20221103203238.fryjwpgjtwccnjwu@notapiano>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=mediatek.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: KL1PR03MB5175:EE_|PUZPR03MB6966:EE_
-x-ms-office365-filtering-correlation-id: 068e749a-7316-4b13-e426-08dabe4722aa
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 7B6peN2c+hWIZa5fw+jrdDWLsFe7FWuYBSblymi9bqVsiyqHQibjeu2uqsLC1Gh/uRHMMTv8GZlfkJCP9Xr2rfqIFyXXUnhLgrjOHqIa+EpCPT5qhikwL7F/mIeR1y83bx4T+AYSkbVloTUD8X7Kkxa2AnV2VKXiKr+e+nsQ+3rQW2OzCrPjJTnaVCZ2QX6EGbj0OPKl74LXRALY2f1kq5nH+k6m1e/HnpIyvV/qFzDQK7GkaD1Tw9iuybw7bec1zDKFgwoo1VFoF5noqsltYYQ6ILVgfrtYto/ozLHoImXp7TLm0EUq9dHvdCKINQHYGP7xrJFNWlzY5Y0s5p3QqqcvctQDCZxhpJ9ve51GhWGjEUbjj2lt5ClRnLayPLKxVMy3wmX/0CbkRFfQHsFnD3OQQubF24aydt+r0VHrPgYJi9woNVjLGHEAwhZtL0AmYab88qrbg4LgZg3LsWyqaKcpRTqHfW/gvTbLe3Q72fHql4Vuu8Kq7SZ7/pTogr9cfunYA2B1ws3gvL7nBzf9e8I6Is9IwWkaTl07al1oIsOpJZfTotrL1VQIovbtGpJuPzS+tJ5SJ8MlKEOfVSoJikdiOYvDdrdNhhhLZ5QIu32Mi4xTlnsw6hkt6Pcq44UAZPYJ1vBi8HFzWw68ziodTcnikrk1OqLy6TD3r9ugYioSCCY8BNvHJmnASdAaE2/6pkds+La2/KEqymA7xYneYnQZlXQz2vhhfcYww+jdThBGji/EzQaT3CHa1XxdiO1Fr4zXPnFbfd/L4JjnEUlWKi989vpVrbCwHRBBZac71K9tTD5ofeFWfE6E4v+8GGrm
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:KL1PR03MB5175.apcprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(376002)(136003)(39860400002)(396003)(366004)(451199015)(7416002)(4326008)(71200400001)(5660300002)(41300700001)(8676002)(38070700005)(66946007)(86362001)(66446008)(83380400001)(6486002)(66574015)(186003)(2616005)(122000001)(26005)(6512007)(91956017)(38100700002)(478600001)(64756008)(4744005)(76116006)(6916009)(316002)(66476007)(66556008)(54906003)(8936002)(2906002)(6506007)(85182001)(36756003);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?c2VvMlZ5eUZFL1p3cDE1enNvem9RTlV2NVVlRVRZRVFDTDlUQkYzbWVjcktO?=
- =?utf-8?B?M3dxQjEyR3RuOUVHNWFzYlJEVFNOdXlweXBsRzRXMmx1R0RpTWUzOHVIUEVQ?=
- =?utf-8?B?TjQ1dVAxNjZ5a01VQWh2SzBXdTVwOWd3bDdzVUVlT0NscVdhTzhaaG9ZVEYr?=
- =?utf-8?B?OFZYWUNRSE9zUlhONEJrcnFqMkJxNDRSU3NCcnJoWnZlWWdCOEhiVWNUQkZi?=
- =?utf-8?B?dDllazdienMrNWlqL3BFSmNFalBOY3AzK3M2c3JGVEhZRVpnSk4rVlg0STdz?=
- =?utf-8?B?dm94SG4wMmpKWVptZ29ScmNlNllrdGpTL1lRbnFybGV5T0Rkek05cVJLd0RH?=
- =?utf-8?B?Q3B5Ym9NaG9LT0o1VGhsYnBZV1JzSENlQjZJT05SSndTUllDRjVtdERVRTZv?=
- =?utf-8?B?L2ovK3JCZnJlZ281bFdlRzBaTmNqcjk2QlMzTlJuTzZmK3hPaUgxRFBQeExm?=
- =?utf-8?B?b2F4dG9kTkkrc041d1FxbEZsRFZQRmtLaFNGUTlLWWpBaGFYeFhjbUlXUDUx?=
- =?utf-8?B?UkNGYUxmWWlrYjVsVXo4cktpSXBhZWZHQkpMeGhQcUhEdDN2c0Y2dE9BL0Vq?=
- =?utf-8?B?S2E5Q29MSTRUZGJzYWp4RnlEc3JvbTZiR2h2bkJoaytvZCtTZlZMNm44bzFy?=
- =?utf-8?B?OHBGZ2dwNEVaNWwwTkxqZ2JNUExmZUM0cnRvNmlNRHJ0WEZLZVZUYU9GVkp4?=
- =?utf-8?B?YjJIa1pTNVczUzJvNnl2OFd1MlkxbmVDQUpCR0s4eFpOcTJtdTJIUm9EZUhR?=
- =?utf-8?B?UC9CaHRIT0xReEZrQWl1ellFNXcwcG14dm1FdGNmZEtGbHZKM21QSTI5OFRn?=
- =?utf-8?B?aEtlU0RWMHZxQ0JITXh6S0trNWJWV1B2VHJMSDhpaHhSLzMrTlllU0RFNkNV?=
- =?utf-8?B?cHJiak1SaERENVZtampVSjlhYVRHWXBPQm5adUhSanFCbWFaaVMvb1Nud3FD?=
- =?utf-8?B?Tjg0bWxKSGY1WEQzRE5LL0FodmkreTF5V2VLYjlmZXhmWnRRdnowNitiblhv?=
- =?utf-8?B?UDJZNGNldGQzTHl2MU1lKzRYQy90NitocFFVRlBlOURwZ3YvbWtUMjdobzdj?=
- =?utf-8?B?MldCdjVWWDU1dHd5YWpmbXVIZGh2OVRuT1c0aFZua1ZlSUduM3FQbDQwTEx4?=
- =?utf-8?B?bkxDZFhTeXltdXBRZ1RtVWZqN01Mbk9IQ2tGRFc2VFlyT1dlR2dqRjF2VWs0?=
- =?utf-8?B?T2c0U3JWdUdhTFJxWUVvNmtPZlhlTzVWT1FzOUdzMklNS0RLVDJQN0RtTDB0?=
- =?utf-8?B?YTJRM2lpU01CQ2RnOU5DTTdOS3NBZWttMzZZS1R4WSt1TnUybERldGpWeVhI?=
- =?utf-8?B?OWZ3MmNlbWlKeE9lOE8xajJnWjlrNHg4QjZuOU1rTEE3R2RFajRUajEyK1lL?=
- =?utf-8?B?cTBIMkI5RFBqYkhkejBlZitTQUgrQ3pUVWlCNUd1Y0RFMmUrWk9CTWFjbkh6?=
- =?utf-8?B?OTVqNnR0TkZyWkc2aTFxb3ZCSDFKa1o2cWVWT0ZwRDhHMlVZRUlLbElyY2xs?=
- =?utf-8?B?THlsajhEY05peUhidzcrMTNONVlmK3c5SE1mRlFBYm1Ka0lSa2VJcmRzUWdN?=
- =?utf-8?B?MG1obHA3RVB3NDcxc2hYaUJSR3lqNnpmOHplaXRXSTYrWVZtdTFMN0dEZ3RS?=
- =?utf-8?B?ZTJNT3YzdEV1eFY2YmxGYjF2clRSUTRtSjQ0UHF2TC9IYkFjK21CRG9sMFBi?=
- =?utf-8?B?L2UrRmZUNFN6SlphYXFIUlB1MlNWNnRteDY1eC9UeUswSHhodnU4bzRyWEti?=
- =?utf-8?B?RGNLbFA2MVJlQUlPSG9RRWVSK1RoVm5sRkV5MGd0dFR4OVJyTFQ0MU9iUWFZ?=
- =?utf-8?B?Q3dHaGxBc25HU2huVWxRaXBEdkYwbEV0MHE5dVNMa2dFb0NIOUxqVVA5d1hu?=
- =?utf-8?B?VFR5Ny8wN1JFV0NPaGRnNzZwb3kxWEJHWWlFa2xmM2lVNHJ1bHhSWVhlYjBI?=
- =?utf-8?B?YlplUzAxZWpGdXNFWEEvdGpGbXQybFdBV00rRHE1enVmSWx6NXg5dUp2aDM0?=
- =?utf-8?B?QUFNS3JPa0JzU3pPRitkc0Y2QVhwR0EvYm1zQ01JRjArbXQxQ2NNb0xrVEwy?=
- =?utf-8?B?MjMxbW5HNFFCMjVlUTZxMnNXbWpRcm9TdVc2VHZ4MjRucUhIaFJySGs5RS9F?=
- =?utf-8?B?Wjh2MnNKU2UvdllRRHNQcFJlTWhyWG43TXZqU2JVZElTUGhJMzd5YTJyN29y?=
- =?utf-8?B?SHc9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <BE24ADF31E211C43BB3130CC2DF340EA@apcprd03.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=TFugYYD0BR8hWyBRF4DKWEpDwNwTVF4Yxa7IWquEXJ4=;
+        b=KIUkIiCYoWIFXnawtI9t/7B8BBplMPyLCetFJ9mK+2mI6lzrPhjf5SYdaiOqYqQrnN
+         GMwVTIUs0r6528mtxJ0h8FlD8trC1agoBLpjclO9L0NLm1CIDCEl7XBypabi9QnLRnda
+         t3sEtHqq/QseoFdIVwLmL6ONBkZO5XapLbDQrpDQhCFetTp+zhYZ9/fAxb8GCJDLm1Po
+         y7+Y57NBuf8Xyifc5/JxefeJa1F6f6wKbzBfc3MB1M5ZrHezBrGGDyStvyUfFi7pn+aV
+         j+ak1Kf0kPZKd9yH0mbTvCjlZLRxzr73sK4e0hZieWEXY+JkXNUBnDjbNz7CcR6Q+wun
+         mMqg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=TFugYYD0BR8hWyBRF4DKWEpDwNwTVF4Yxa7IWquEXJ4=;
+        b=5WjlQKtLUvOA+3o/ixJZOqGxaOEAdhrOMdfIzs9WGoGFUHcrC+ZBAzn6kIA7i5GhIP
+         IIxPheymyV9PJrh8HoNXsUmWwggWCw3YyFZbIwJDTYXaGXE05M2IDEUx4PLmNRY9Tg+S
+         orvZjSmoKkep0HXrkVL4OMlxB6lHn4zMN2gSX/odjNRGsNX8h02spYrSpphHzm9iXl2T
+         WBxMc/AA8nBuX8YbjwskPrFDeGKbWrH/nEvqSxvPqGQFT+La0M4Kr3XCOa13//mYUgKG
+         EUbZVsqg1rMBqRFd91y0RhdF5Zn3iSTgom3DUFwcXvsYLCUjHCKZk7luVBEaRdrqbP/p
+         dMsA==
+X-Gm-Message-State: ACrzQf0q32Qx8ybRWpETrkkPfO1bYg17O2uDzzzdNh2CdjTLzaXK5jn/
+        4GlrfB9EDFLRIMlr9vPhYfk=
+X-Google-Smtp-Source: AMsMyM7GrYlstaszFAsFUeDSF1MKxyp1tmcLADtVROUAt9PkVyYVUOK+wK/YvtFh2QDgGvoBvChRkA==
+X-Received: by 2002:a05:6a00:1ac6:b0:56d:ad2c:e803 with SMTP id f6-20020a056a001ac600b0056dad2ce803mr21029480pfv.59.1667554265648;
+        Fri, 04 Nov 2022 02:31:05 -0700 (PDT)
+Received: from [192.168.43.80] (subs02-180-214-232-93.three.co.id. [180.214.232.93])
+        by smtp.gmail.com with ESMTPSA id w188-20020a627bc5000000b005672daedc8fsm2245142pfc.81.2022.11.04.02.31.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 04 Nov 2022 02:31:05 -0700 (PDT)
+Message-ID: <101ab00c-5fa7-c3ee-63bd-f235e7c4d398@gmail.com>
+Date:   Fri, 4 Nov 2022 16:31:02 +0700
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: KL1PR03MB5175.apcprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 068e749a-7316-4b13-e426-08dabe4722aa
-X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Nov 2022 09:29:55.9614
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: a7687ede-7a6b-4ef6-bace-642f677fbe31
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: eGkJvOiWzYKypcSPAShQJXHdldLC/ijsy4cD9NNoH6bkvp4vsgNLlXLO3j9x78B40ZpfF2Ck2HAIq2hUtFxscw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PUZPR03MB6966
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH bpf-next v2] docs/bpf: Add LRU internals description and
+ graph
+To:     Joe Stringer <joe@isovalent.com>, bpf@vger.kernel.org
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ast@kernel.org, corbet@lwn.net, martin.lau@linux.dev
+References: <20221103205010.3266865-1-joe@isovalent.com>
+Content-Language: en-US
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <20221103205010.3266865-1-joe@isovalent.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RGVhciBOaWNvbGFzLA0KDQpUaGFua3MgZm9yIHRoZSByZXZpZXcuDQoNCk9uIFRodSwgMjAyMi0x
-MS0wMyBhdCAxNjozMiAtMDQwMCwgTsOtY29sYXMgRi4gUi4gQS4gUHJhZG8gd3JvdGU6DQo+IE9u
-IFRodSwgTm92IDAzLCAyMDIyIGF0IDExOjI1OjA2QU0gKzA4MDAsIE5hbmN5LkxpbiB3cm90ZToN
-Cj4gWy4uXQ0KPiA+IC0tLSBhL2RyaXZlcnMvc29jL21lZGlhdGVrL210ay1tbXN5cy5jDQo+ID4g
-KysrIGIvZHJpdmVycy9zb2MvbWVkaWF0ZWsvbXRrLW1tc3lzLmMNCj4gDQo+IFsuLl0NCj4gPiAr
-c3RhdGljIHZvaWQgbXRrX21tc3lzX3VwZGF0ZV9iaXRzKHN0cnVjdCBtdGtfbW1zeXMgKm1tc3lz
-LCB1MzINCj4gPiBvZmZzZXQsIHUzMiBtYXNrLCB1MzIgdmFsKQ0KPiA+ICt7DQo+ID4gKwl1MzIg
-dG1wOw0KPiA+ICsNCj4gPiArCXRtcCA9IHJlYWRsX3JlbGF4ZWQobW1zeXMtPnJlZ3MgKyBvZmZz
-ZXQpOw0KPiA+ICsJdG1wID0gKHRtcCAmIH5tYXNrKSB8IHZhbDsNCj4gDQo+IFlvdSBzaG91bGQg
-bWFzayB0aGUgdmFsdWUgYmVmb3JlIHdyaXRpbmcgdG8gcHJldmVudCBiYWQgdmFsdWVzIGZyb20N
-Cj4gb3ZlcndyaXRpbmcNCj4gYml0cyBvdXRzaWRlIHRoZSBtYXNrLg0KPiANCj4gCXRtcCA9ICh0
-bXAgJiB+bWFzaykgfCAodmFsICYgbWFzayk7DQo+IA0KPiBXaXRoIHRoYXQsDQo+IA0KPiBSZXZp
-ZXdlZC1ieTogTsOtY29sYXMgRi4gUi4gQS4gUHJhZG8gPG5mcmFwcmFkb0Bjb2xsYWJvcmEuY29t
-Pg0KPiANCj4gVGhhbmtzLA0KPiBOw61jb2xhcw0KDQpPSywgSSB3aWxsIGZpeCBpdCBpbiB0aGUg
-bmV4dCByZXZpc2lvbi4NCg0KVGhhbmtzLA0KTmFuY3kNCg==
+On 11/4/22 03:50, Joe Stringer wrote:
+> +An LRU hashmap type consists of two properties: Firstly, it is a hash map and
+> +hence is indexable by key for constant time lookups. Secondly, when at map
+> +capacity, map updates will trigger eviction of old entries based on the age of
+> +the elements in a set of lists. Each of these properties may be either global
+> +or per-CPU, depending on the map type and flags used to create the map:
+> +
+> +.. flat-table:: Comparison of map properties by map type (x-axis) and flags
+> +   (y-axis)
+> +
+> +   * -
+> +     - ``BPF_MAP_TYPE_LRU_HASH``
+> +     - ``BPF_MAP_TYPE_LRU_PERCPU_HASH``
+> +
+> +   * - ``BPF_NO_COMMON_LRU``
+> +     - Per-CPU LRU, global map
+> +     - Per-CPU LRU, per-cpu map
+> +
+> +   * - ``!BPF_NO_COMMON_LRU``
+> +     - Global LRU, global map
+> +     - Global LRU, per-cpu map
+> +
+
+Shouldn't the table be written in reST table syntax instead?
+
+> +The commit message for LRU map support provides a general overview of the
+> +underlying LRU algorithm used for entry eviction when the table is full:
+> +
+> +::
+> +
+> +    commit 3a08c2fd763450a927d1130de078d6f9e74944fb
+> +    Author: Martin KaFai Lau <kafai@fb.com>
+> +    Date:   Fri Nov 11 10:55:06 2016 -0800
+> +
+> +        bpf: LRU List
+> +
+> +        Introduce bpf_lru_list which will provide LRU capability to
+> +        the bpf_htab in the later patch.
+> +
+> +        * General Thoughts:
+> +        1. Target use case.  Read is more often than update.
+> +           (i.e. bpf_lookup_elem() is more often than bpf_update_elem()).
+> +           If bpf_prog does a bpf_lookup_elem() first and then an in-place
+> +           update, it still counts as a read operation to the LRU list concern.
+> +        2. It may be useful to think of it as a LRU cache
+> +        3. Optimize the read case
+> +           3.1 No lock in read case
+> +           3.2 The LRU maintenance is only done during bpf_update_elem()
+> +        4. If there is a percpu LRU list, it will lose the system-wise LRU
+> +           property.  A completely isolated percpu LRU list has the best
+> +           performance but the memory utilization is not ideal considering
+> +           the work load may be imbalance.
+> +        5. Hence, this patch starts the LRU implementation with a global LRU
+> +           list with batched operations before accessing the global LRU list.
+> +           As a LRU cache, #read >> #update/#insert operations, it will work well.
+> +        6. There is a local list (for each cpu) which is named
+> +           'struct bpf_lru_locallist'.  This local list is not used to sort
+> +           the LRU property.  Instead, the local list is to batch enough
+> +           operations before acquiring the lock of the global LRU list.  More
+> +           details on this later.
+> +        7. In the later patch, it allows a percpu LRU list by specifying a
+> +           map-attribute for scalability reason and for use cases that need to
+> +           prepare for the worst (and pathological) case like DoS attack.
+> +           The percpu LRU list is completely isolated from each other and the
+> +           LRU nodes (including free nodes) cannot be moved across the list.  The
+> +           following description is for the global LRU list but mostly applicable
+> +           to the percpu LRU list also.
+> +
+> +        * Global LRU List:
+> +        1. It has three sub-lists: active-list, inactive-list and free-list.
+> +        2. The two list idea, active and inactive, is borrowed from the
+> +           page cache.
+> +        3. All nodes are pre-allocated and all sit at the free-list (of the
+> +           global LRU list) at the beginning.  The pre-allocation reasoning
+> +           is similar to the existing BPF_MAP_TYPE_HASH.  However,
+> +           opting-out prealloc (BPF_F_NO_PREALLOC) is not supported in
+> +           the LRU map.
+> +
+> +        * Active/Inactive List (of the global LRU list):
+> +        1. The active list, as its name says it, maintains the active set of
+> +           the nodes.  We can think of it as the working set or more frequently
+> +           accessed nodes.  The access frequency is approximated by a ref-bit.
+> +           The ref-bit is set during the bpf_lookup_elem().
+> +        2. The inactive list, as its name also says it, maintains a less
+> +           active set of nodes.  They are the candidates to be removed
+> +           from the bpf_htab when we are running out of free nodes.
+> +        3. The ordering of these two lists is acting as a rough clock.
+> +           The tail of the inactive list is the older nodes and
+> +           should be released first if the bpf_htab needs free element.
+> +
+> +        * Rotating the Active/Inactive List (of the global LRU list):
+> +        1. It is the basic operation to maintain the LRU property of
+> +           the global list.
+> +        2. The active list is only rotated when the inactive list is running
+> +           low.  This idea is similar to the current page cache.
+> +           Inactive running low is currently defined as
+> +           "# of inactive < # of active".
+> +        3. The active list rotation always starts from the tail.  It moves
+> +           node without ref-bit set to the head of the inactive list.
+> +           It moves node with ref-bit set back to the head of the active
+> +           list and then clears its ref-bit.
+> +        4. The inactive rotation is pretty simply.
+> +           It walks the inactive list and moves the nodes back to the head of
+> +           active list if its ref-bit is set. The ref-bit is cleared after moving
+> +           to the active list.
+> +           If the node does not have ref-bit set, it just leave it as it is
+> +           because it is already in the inactive list.
+> +
+> +        * Shrinking the Inactive List (of the global LRU list):
+> +        1. Shrinking is the operation to get free nodes when the bpf_htab is
+> +           full.
+> +        2. It usually only shrinks the inactive list to get free nodes.
+> +        3. During shrinking, it will walk the inactive list from the tail,
+> +           delete the nodes without ref-bit set from bpf_htab.
+> +        4. If no free node found after step (3), it will forcefully get
+> +           one node from the tail of inactive or active list.  Forcefully is
+> +           in the sense that it ignores the ref-bit.
+> +
+> +        * Local List:
+> +        1. Each CPU has a 'struct bpf_lru_locallist'.  The purpose is to
+> +           batch enough operations before acquiring the lock of the
+> +           global LRU.
+> +        2. A local list has two sub-lists, free-list and pending-list.
+> +        3. During bpf_update_elem(), it will try to get from the free-list
+> +           of (the current CPU local list).
+> +        4. If the local free-list is empty, it will acquire from the
+> +           global LRU list.  The global LRU list can either satisfy it
+> +           by its global free-list or by shrinking the global inactive
+> +           list.  Since we have acquired the global LRU list lock,
+> +           it will try to get at most LOCAL_FREE_TARGET elements
+> +           to the local free list.
+> +        5. When a new element is added to the bpf_htab, it will
+> +           first sit at the pending-list (of the local list) first.
+> +           The pending-list will be flushed to the global LRU list
+> +           when it needs to acquire free nodes from the global list
+> +           next time.
+> +
+> +        * Lock Consideration:
+> +        The LRU list has a lock (lru_lock).  Each bucket of htab has a
+> +        lock (buck_lock).  If both locks need to be acquired together,
+> +        the lock order is always lru_lock -> buck_lock and this only
+> +        happens in the bpf_lru_list.c logic.
+> +
+> +        In hashtab.c, both locks are not acquired together (i.e. one
+> +        lock is always released first before acquiring another lock).
+> +
+> +        Signed-off-by: Martin KaFai Lau <kafai@fb.com>
+> +        Acked-by: Alexei Starovoitov <ast@kernel.org>
+> +        Signed-off-by: David S. Miller <davem@davemloft.net>
+> +
+
+What about just writing the pointer ("See commit 3a08c2fd7634 ("bpf: LRU List")")
+instead?
+
+> +Notably, there are various steps that the update algorithm attempts in order to
+> +enforce the LRU property which have increasing impacts on other CPUs involved
+> +in the operations:
+> +
+> +- Attempt to use CPU-local state to batch operations
+> +- Attempt to fetch free nodes from global lists
+> +- Attempt to pull any node from a global list and remove it from the hashmap
+> +- Attempt to pull any node from any CPU's list and remove it from the hashmap
+> +
+
+Better say "... other CPUs involved in the following operation attempts:"
+
+> +Even if an LRU node may be acquired, maps of type ``BPF_MAP_TYPE_LRU_HASH``
+> +may fail to insert the entry into the map if other CPUs are heavily contending
+> +on the global hashmap lock.
+> +
+> +This algorithm is described visually in the following diagram:
+> +
+> +.. kernel-figure::  map_lru_hash_update.dot
+> +   :alt:    Diagram outlining the LRU eviction steps taken during map update
+> +
+> +   LRU hash eviction during map update for ``BPF_MAP_TYPE_LRU_HASH`` and
+> +   variants
+> +
+<snipped>...
+> +
+> +The dot file source for the above diagram is uses internal kernel function
+> +names for the node names in order to make the corresponding logic easier to
+> +find. See ``Documentation/bpf/map_lru_hash_update.dot`` for more details.
+
+Since it references the same figure, just say "See the figure above for more
+details".
+
+Otherwise LGTM, thanks.
+
+-- 
+An old man doll... just what I always wanted! - Clara
+
