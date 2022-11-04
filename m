@@ -2,78 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37AFD619490
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 11:38:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3561619491
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 11:38:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231776AbiKDKiF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 06:38:05 -0400
+        id S231769AbiKDKiK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 06:38:10 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230474AbiKDKiD (ORCPT
+        with ESMTP id S231610AbiKDKiE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 06:38:03 -0400
-Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C0152B24D
+        Fri, 4 Nov 2022 06:38:04 -0400
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE72726547
         for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 03:38:02 -0700 (PDT)
-Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-367b8adf788so39823637b3.2
+Received: by mail-il1-f198.google.com with SMTP id 15-20020a056e0220cf00b0030099e75602so3532459ilq.21
         for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 03:38:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=gcUeaG6JKzsxRdmnLqdsuH4lvt90A/Xm+f8OuGUNx2g=;
-        b=lifVXrJ64+/dFQ55o6QJG9bfmyr5u1WHnkUjB/BEPp4bwyLC2jsd5Ot2P7Kq+afJQD
-         Su0nuZxTHwBvDImCVCFEUtmaSnZKHxvLUHGDg58RQELH++HOTW8K0QWx36LjdYCFjf4F
-         2UF7qvnOssOdri7mk5daZe3qHYZiwwMpGyBKrmebxK/Oz60Fqe70R1pq7upF2TlYexiH
-         KB4vaNLdgkNBsy0kOhH8cJKMXvp5T+wKt9Np/jANdxkDAJzzyxO+J/PUiAeGgpYOi25z
-         EpBKclOxzzWRyLeZk5Zf3z7F6Dg1Z/BHhgZie9HUPmLsHUlMH97pTYmYY502125s1qbP
-         SP8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=gcUeaG6JKzsxRdmnLqdsuH4lvt90A/Xm+f8OuGUNx2g=;
-        b=vWD3n5kwa5pXMnBeMOJu2EmY4NRqbw8oeTOzFngStuDOs1oQLrt3wjISw000SE3WeI
-         SJbbx4uuX+CrPAqVoaMunctWSAfYbpPP7RaR3tPrX98/B5Vq08H8OKSr8iIFITUd7+Wy
-         33V2hTuMJsZ9MkHEd0toCK8ZUFRHAgfHnLtX8Cp1qj5a3kz8zZRC8gj1LbZfeGp02R0c
-         c8OK8lon/oOwo2omUL8BhMDffJ1ipKO+NQY1pkltKqj+xp782lW/HF1OqD4SxJNlmUe4
-         jBvSkQfEa8DSrCmPjoOY3pDMmFIVusswunlBrb5ldDk6+0Qd3MqXLCB9F12e1wTWzVf4
-         ps+w==
-X-Gm-Message-State: ACrzQf2L3Ajc7ykdVNXRV0KBySrva6bRprt7JKXub+Gs+YZ/IHavxOFC
-        2NbZS9dNfcNeFTmG5OdoGYx+noWBkuIS/JX3EtgJEg==
-X-Google-Smtp-Source: AMsMyM69d9R7kJhwGNFv2ZLuCly3ihyNUT3PUT+aXZiEBSBo7oOnRn4WUjfOdGHH6UBxOLmqozRcyr4tBPT67HdCpD0=
-X-Received: by 2002:a81:4811:0:b0:368:e6a7:6b38 with SMTP id
- v17-20020a814811000000b00368e6a76b38mr33471525ywa.20.1667558281502; Fri, 04
- Nov 2022 03:38:01 -0700 (PDT)
+        h=cc:to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=xwwbHVqJA6b/WaoXynWZOPz9nibzpmlhsBICyuCZYx0=;
+        b=xRBSrOK7E6ziIRv5BD1mORycdUBWi4f9UE5o7M4qlZB2HuqOrMnXTMKbUBlOgAa4+/
+         4r8co13r01FKxTIMSCA8ZrY6Mjf90g3Y4ApQooIJdCKZfE9RZ7I1bgXynDngPhsm+qc8
+         Z1X4Ag1vADXYORgqG6uPurNK9qFBs5gNXXVxSotQxxubp9X/RU/Cmunn+bHMzhMFeNF/
+         uKE2QMNg57TOJmJkC1L88QgQ6u9jl4NINgujgrjgAuRUlFDq5uZJ075GNtUYfs9EIBQF
+         1ZoINrmmlKDKb2BWRrzWikrPUsidFofUO+EKmFB8W3UQFbiZyMvBEH9gep+8f0IvaYik
+         y4LA==
+X-Gm-Message-State: ACrzQf3ZoZfYBa72cfwYpjira9FG8ldtfycVLpkKWPNLZW+Grf+L/Q46
+        m6i8RMvbpZt+694jEvFOj35oSusnoyFYEs+WyhVwV7LVSUmW
+X-Google-Smtp-Source: AMsMyM5tBYbEB/tIc1vyNY36bmsMJqJ4+y57wYe1YbRmlCCFcmHl14cXR1t5a3eyIjn37px1nw/ITPfPHm9L2fdsV/7f2uMV78FJ
 MIME-Version: 1.0
-References: <20221104103216.2576427-1-glider@google.com>
-In-Reply-To: <20221104103216.2576427-1-glider@google.com>
-From:   Alexander Potapenko <glider@google.com>
-Date:   Fri, 4 Nov 2022 11:37:25 +0100
-Message-ID: <CAG_fn=WhGa21EVCPNFp6BO3=CMzHFYNfwpXK+S0m6oxPr9xdrg@mail.gmail.com>
+X-Received: by 2002:a6b:6010:0:b0:6d6:e9b0:5d2a with SMTP id
+ r16-20020a6b6010000000b006d6e9b05d2amr2776731iog.198.1667558282167; Fri, 04
+ Nov 2022 03:38:02 -0700 (PDT)
+Date:   Fri, 04 Nov 2022 03:38:02 -0700
+In-Reply-To: <CAG_fn=WhGa21EVCPNFp6BO3=CMzHFYNfwpXK+S0m6oxPr9xdrg@mail.gmail.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000000d0b9b05eca2ab68@google.com>
 Subject: Re: [PATCH] ipv6: addrlabel: fix infoleak when sending struct
  ifaddrlblmsg to network
-To:     glider@google.com
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        davem@davemloft.net, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
-        syzbot+3553517af6020c4f2813f1003fe76ef3cbffe98d@syzkaller.appspotmail.com
+From:   syzbot 
+        <syzbot+3553517af6020c4f2813f1003fe76ef3cbffe98d@syzkaller.appspotmail.com>
+To:     Alexander Potapenko <glider@google.com>
+Cc:     davem@davemloft.net, dsahern@kernel.org, glider@google.com,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        yoshfuji@linux-ipv6.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+>>
+>> This patch ensures that the reserved field is always initialized.
+>>
+>> Reported-by: syzbot+3553517af6020c4f2813f1003fe76ef3cbffe98d@syzkaller.appspotmail.com
 >
-> This patch ensures that the reserved field is always initialized.
->
-> Reported-by: syzbot+3553517af6020c4f2813f1003fe76ef3cbffe98d@syzkaller.appspotmail.com
+> My bad, should be:
+>   Reported-by: syzbot+fa5414772d5c445dac3c@syzkaller.appspotmail.com
 
-My bad, should be:
-  Reported-by: syzbot+fa5414772d5c445dac3c@syzkaller.appspotmail.com
+I see the command but can't find the corresponding bug.
+The email is sent to  syzbot+HASH@syzkaller.appspotmail.com address
+but the HASH does not correspond to any known bug.
+Please double check the address.
+
