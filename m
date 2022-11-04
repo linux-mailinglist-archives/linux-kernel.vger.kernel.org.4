@@ -2,102 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22741619E5E
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 18:21:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16893619E67
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 18:22:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231398AbiKDRVJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 13:21:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33724 "EHLO
+        id S231417AbiKDRWB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 13:22:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231618AbiKDRVA (ORCPT
+        with ESMTP id S230035AbiKDRV7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 13:21:00 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E280541995;
-        Fri,  4 Nov 2022 10:20:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667582458; x=1699118458;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=fXSKXTbaflS2uuSmlIGEbT7emXcpOfZgNSVzxTrME1M=;
-  b=hwrXcLVdlr3eLzAXQtV5WjhOzVARdcDr/hGXw0lihSX8ESQ0R5jl9VE4
-   CPuAwP/IfWEUL8fWRohbgmxClafXGNiv4yaYkk4ZRMlcyRsC5xn9hQdBH
-   2wlvdBLlkSbEfNJaECwLX4/nCOGyEwBKsmRGEmSlovFhLyiPjZPYIWkiu
-   p1ylTcTSPce4C1LkVMHNC4q40WsQStptWERl7ufQU0Vp5IyfgjlqA7I1+
-   LK9WaFAC4Z7Pp1tnqNMfN9l7txgoOodvFTPQnAsIw3+HM/+QUrH24+iFy
-   QSf9ctLycu/P2e+iz7WPMYgzObR4k/jbDtfQ0jmiU4gB/DlFUVmMWT1QP
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10521"; a="374261849"
-X-IronPort-AV: E=Sophos;i="5.96,138,1665471600"; 
-   d="scan'208";a="374261849"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2022 10:20:57 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10521"; a="740699853"
-X-IronPort-AV: E=Sophos;i="5.96,138,1665471600"; 
-   d="scan'208";a="740699853"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga002.fm.intel.com with ESMTP; 04 Nov 2022 10:20:55 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1or0NB-007Syj-1S;
-        Fri, 04 Nov 2022 19:20:53 +0200
-Date:   Fri, 4 Nov 2022 19:20:53 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        linux-gpio@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: Re: [rft, PATCH v2 1/1] gpiolib: Get rid of not used of_node member
-Message-ID: <Y2VJ9ZLEitrJsT7c@smile.fi.intel.com>
-References: <20221103180643.79352-1-andriy.shevchenko@linux.intel.com>
- <CAMRc=McicB36evBh5thWPtnMPuzbfY+4m29i6Mp-1tJSw9OvjQ@mail.gmail.com>
+        Fri, 4 Nov 2022 13:21:59 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA1CFAE5A;
+        Fri,  4 Nov 2022 10:21:58 -0700 (PDT)
+Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 0C36B6602989;
+        Fri,  4 Nov 2022 17:21:55 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1667582516;
+        bh=R/MBlJBNY8EYBt6oZqjxP8TEcbb7lnlRlY2DZ7434zU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Ku0bwUVtf5oKlMLP0ahGkM/AFF1NVvTK4xSv08D6bDpoArwk7fNUVX4up8i7p+YS6
+         WYrOAkqaccZpd+oaLAiY6Ar/q++RvqReKQX4DoxIjAmVuVNG4GjKc1P9nsptV/qTry
+         fO/9xoBfP6Fe2KUuOnbg0KciaFngjlPyxceVz0aygW5fdg0kTOe207ImIimWwaj+8I
+         c/JLmjU7DXdI1qr+B8jWvJ7lVkPiq+U3fNvcRPvcf3wQ03oottMi2qAEsC+bClQ0EW
+         inX+4W/B9XPKzo6kWvJgQBTRMCKkOHDjQ557fzpi6e/7KlREFMyxoq6MVsZM7R5LBv
+         wiLqQNjOVMKAg==
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+To:     agross@kernel.org
+Cc:     andersson@kernel.org, konrad.dybcio@somainline.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        lee@kernel.org, ulf.hansson@linaro.org,
+        srinivas.kandagatla@linaro.org, jic23@kernel.org, lars@metafoo.de,
+        keescook@chromium.org, tony.luck@intel.com, gpiccoli@igalia.com,
+        bhupesh.sharma@linaro.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-hardening@vger.kernel.org, marijn.suijten@somainline.org,
+        kernel@collabora.com, luca@z3ntu.xyz, a39.skl@gmail.com,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Subject: [PATCH 0/9] MSM8956/76 and Sony Xperia X / X Compact support
+Date:   Fri,  4 Nov 2022 18:21:13 +0100
+Message-Id: <20221104172122.252761-1-angelogioacchino.delregno@collabora.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMRc=McicB36evBh5thWPtnMPuzbfY+4m29i6Mp-1tJSw9OvjQ@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 04, 2022 at 04:09:59PM +0100, Bartosz Golaszewski wrote:
-> On Thu, Nov 3, 2022 at 7:06 PM Andy Shevchenko
-> <andriy.shevchenko@linux.intel.com> wrote:
-> >
-> > All new drivers should use fwnode and / or parent to provide the
-> > necessary information to the GPIO library.
+This series adds basic support for MSM8976 and its lower spec variant
+MSM8956, along with two devices: the Sony Xperia X and X Compact.
 
-...
+For now, even though I do have a tree in which these two devices are
+fully booting, only a basic console boot is provided as the rest is
+awaiting cleanup and some more dependencies.
+Especially every device requiring IOMMU support, like MDSS, MDP and
+Adreno GPU cannot work with the current qcom_iommu driver, as it
+needs some code to get the ASIDs right for MSM8956/76.
 
-> This looks good to me.
+This series depends on [1].
 
+Tested on both Xperia X and X Compact.
 
-Thank you!
+[1]: https://patchwork.kernel.org/project/linux-arm-msm/list/?series=690889
 
-> I'm thinking about just applying it and giving
-> it a spin in next right away.
+AngeloGioacchino Del Regno (7):
+  dt-bindings: iio: qcom-spmi-vadc: Add definitions for USB DP/DM VADCs
+  dt-bindings: soc: qcom: qcom,smd-rpm: Use qcom,smd-channels on MSM8976
+  dt-bindings: mmc: sdhci-msm: Document compatible for MSM8976
+  dt-bindings: mfd: qcom,tcsr: Add compatible for MSM8976
+  arm64: dts: qcom: Add configuration for PM8950 peripheral
+  arm64: dts: qcom: Add DTS for MSM8976 and MSM8956 SoCs
+  arm64: dts: qcom: Add support for SONY Xperia X/X Compact
 
-I would like to split it, one patch, btw, had been already sent separately.
+Marijn Suijten (2):
+  dt-bindings: nvmem: Add compatible for MSM8976
+  dt-bindings: arm: qcom: Document msm8956 and msm8976 SoC and devices
 
-So, if you are going for the Linux Next, I would like to ask for rebasing
-later on.
-
-Also note, it requires patches that are in Linus' W. and mine trees.
-It will fail if you apply without those to be proceeded first.
-
-> Linus: any objections?
+ .../devicetree/bindings/arm/qcom.yaml         |   10 +
+ .../devicetree/bindings/mfd/qcom,tcsr.yaml    |    1 +
+ .../devicetree/bindings/mmc/sdhci-msm.yaml    |    1 +
+ .../bindings/nvmem/qcom,qfprom.yaml           |    1 +
+ .../bindings/soc/qcom/qcom,smd-rpm.yaml       |    1 +
+ arch/arm64/boot/dts/qcom/Makefile             |    2 +
+ .../qcom/msm8956-sony-xperia-loire-kugo.dts   |   36 +
+ .../qcom/msm8956-sony-xperia-loire-suzu.dts   |   17 +
+ .../dts/qcom/msm8956-sony-xperia-loire.dtsi   |  269 ++++
+ arch/arm64/boot/dts/qcom/msm8956.dtsi         |   18 +
+ arch/arm64/boot/dts/qcom/msm8976.dtsi         | 1208 +++++++++++++++++
+ arch/arm64/boot/dts/qcom/pm8950.dtsi          |  165 +++
+ include/dt-bindings/iio/qcom,spmi-vadc.h      |    3 +
+ 13 files changed, 1732 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/qcom/msm8956-sony-xperia-loire-kugo.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/msm8956-sony-xperia-loire-suzu.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/msm8956-sony-xperia-loire.dtsi
+ create mode 100644 arch/arm64/boot/dts/qcom/msm8956.dtsi
+ create mode 100644 arch/arm64/boot/dts/qcom/msm8976.dtsi
+ create mode 100644 arch/arm64/boot/dts/qcom/pm8950.dtsi
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.37.2
 
