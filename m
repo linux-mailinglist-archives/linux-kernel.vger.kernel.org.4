@@ -2,458 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C257618DE2
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 03:06:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0EAC618DE4
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 03:06:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230324AbiKDCF7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 22:05:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49086 "EHLO
+        id S231244AbiKDCGp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 22:06:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230504AbiKDCF4 (ORCPT
+        with ESMTP id S230301AbiKDCGn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 22:05:56 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABF93240AA;
-        Thu,  3 Nov 2022 19:05:53 -0700 (PDT)
-Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4N3P9P3Z70zmVfd;
-        Fri,  4 Nov 2022 10:05:45 +0800 (CST)
-Received: from dggpemm500014.china.huawei.com (7.185.36.153) by
- dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
+        Thu, 3 Nov 2022 22:06:43 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA1C51C124
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 19:06:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667527602; x=1699063602;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=vig1I1atZqlo7SLbaSWJMnNRgMzTydrsVPOg7nBseU4=;
+  b=dG0pxRscholiaR12r+BTl+ezXWRJKE1SQbBoGfod7Wgq5mZWs2ZXKuDo
+   zIL7eDixnK23o3JOU7S9lqYNO0KOhfMhZ3Xeo6z2inAIBGfXcrD3l6cB7
+   tCCQtIVg6TZ3Ern9OHp+oamz3jj6+QSN2UBtSx/mLfb/ax4zdQ2SZ85TB
+   JZy07Yi3VqGepvmv2YEp6I9pzZFof8LfZXTOo++UPLykXwO43GGIxz6vW
+   Wm6L4tiq4TQk7UkT7I/ya1qXrxWFr+q4EwkxpbCtRoSGdyEPhkWeuE2qT
+   2M5o1ShtVjBQwtdUjO5BImjHZdRcshFhLSt2VqymZ9lksDWAgXexAea5d
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10520"; a="374092410"
+X-IronPort-AV: E=Sophos;i="5.96,135,1665471600"; 
+   d="scan'208";a="374092410"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2022 19:06:42 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10520"; a="666199092"
+X-IronPort-AV: E=Sophos;i="5.96,135,1665471600"; 
+   d="scan'208";a="666199092"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by orsmga008.jf.intel.com with ESMTP; 03 Nov 2022 19:06:42 -0700
+Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 4 Nov 2022 10:05:51 +0800
-Received: from [10.174.178.93] (10.174.178.93) by
- dggpemm500014.china.huawei.com (7.185.36.153) with Microsoft SMTP Server
+ 15.1.2375.31; Thu, 3 Nov 2022 19:06:41 -0700
+Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 4 Nov 2022 10:05:50 +0800
-Message-ID: <049fa470-41e8-1516-c7bf-a2bc67824abd@huawei.com>
-Date:   Fri, 4 Nov 2022 10:05:50 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] sched/fair: Introduce priority load balance for CFS
+ 15.1.2375.31; Thu, 3 Nov 2022 19:06:41 -0700
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31 via Frontend Transport; Thu, 3 Nov 2022 19:06:41 -0700
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.176)
+ by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2375.31; Thu, 3 Nov 2022 19:06:25 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=dj6LmISZLnCgvwKZLtpAT69AwhZJXjNJ+lh34t8krOQrzZRMFvTlRboPtqmot/9CyNuMMsOqR9mx8MpZXDxGCGyF3KGkzUL9qgPoxcd7BvKfhA6MND0lIrliOu1PMPDzAwIZq225KF5dfcVkrGlVVY/84os3KNdBCYaU5WbdkXokpwZcSDYn/O5eFp4twwyUJgqAtWWbhQY3daoik0sDcet5X2eE7RCoc9gw4lm0PbG6zqRc83UvA48lO7lclbijegGTT6Kf/bLrVOGcMI7rNqS3UYib5NxLgAJ/4i7sP4Rj9kp6IdGTOnV9TAS3qJR1el6TvKTwOPkceBSVEtCEgQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=rXgl7FXM8gVMIWRplzDfvLGmxVe6zKJzqPHh0jxqFzM=;
+ b=QyzFICQ4ec5sPiM+rQEeYv625lcFeslxX+m1CK3fvzkqyaluV7u1GjUKANZBWV7/cAv6k+zGvlbqyOqe17x8hQL44mP0m3dpZEi/88x0j8AVt30Rpo9+y66QicF8/3fz7Zc9UVZweGOL0VZTHay2tKnWw6NAa6tpGPYcAQl/U6oXYj7DSDsfiCfykvyhaqLKZzP0mfuAvcd0VzbRbdnOoFX4uI2DTf7HRHp5sLQaPlRwDCxlq5WCNVtRkSN7FWZjBEg7ZIp2pc6ZfD7wN5ZO39YYMf4qtzGKvTrgPrlXoKf/Yp/OqQBvpyHLqAIiQSAGjL0Z7wLXyVjg/Y7RcQzM4w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
+ by SJ0PR11MB5104.namprd11.prod.outlook.com (2603:10b6:a03:2db::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.22; Fri, 4 Nov
+ 2022 02:06:10 +0000
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::737e:211a:bb53:4cd7]) by BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::737e:211a:bb53:4cd7%5]) with mapi id 15.20.5791.022; Fri, 4 Nov 2022
+ 02:06:09 +0000
+From:   "Tian, Kevin" <kevin.tian@intel.com>
+To:     Lu Baolu <baolu.lu@linux.intel.com>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>
+CC:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        "Robin Murphy" <robin.murphy@arm.com>,
+        "Liu, Yi L" <yi.l.liu@intel.com>,
+        "Pan, Jacob jun" <jacob.jun.pan@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH 1/7] iommu/vt-d: Allocate pasid table in device probe path
+Thread-Topic: [PATCH 1/7] iommu/vt-d: Allocate pasid table in device probe
+ path
+Thread-Index: AQHY70mafo0sf+eGQk2VRBjKoctuoK4uBUSg
+Date:   Fri, 4 Nov 2022 02:06:09 +0000
+Message-ID: <BN9PR11MB52765902DF41858EF445E5BC8C3B9@BN9PR11MB5276.namprd11.prod.outlook.com>
+References: <20221103055329.633052-1-baolu.lu@linux.intel.com>
+ <20221103055329.633052-2-baolu.lu@linux.intel.com>
+In-Reply-To: <20221103055329.633052-2-baolu.lu@linux.intel.com>
+Accept-Language: en-US
 Content-Language: en-US
-To:     Vincent Guittot <vincent.guittot@linaro.org>
-CC:     <mingo@redhat.com>, <peterz@infradead.org>,
-        <juri.lelli@redhat.com>, <mcgrof@kernel.org>,
-        <keescook@chromium.org>, <yzaikin@google.com>,
-        <dietmar.eggemann@arm.com>, <rostedt@goodmis.org>,
-        <bsegall@google.com>, <mgorman@suse.de>, <bristot@redhat.com>,
-        <vschneid@redhat.com>, <linux-kernel@vger.kernel.org>,
-        <linux-fsdevel@vger.kernel.org>
-References: <20221102035301.512892-1-zhangsong34@huawei.com>
- <CAKfTPtCcYySw2ZC_pr8=3KFPmAAVN=1h8=5jWkW5YXyy11sehg@mail.gmail.com>
- <b45f96b6-e0b2-22bb-eda1-2468d6fbe104@huawei.com>
- <CAKfTPtDrWCenxtVcunjS3pGD81TdLf2EkhO_YcdfxnUHXpVF3w@mail.gmail.com>
- <4bad43c0-40a4-dc39-7214-f2c3321a47ee@huawei.com>
- <CAKfTPtCwUvkqnzs9n0G+cyE5h5QdgwoKF-gNu+4A5g4NHNRe9w@mail.gmail.com>
-From:   Song Zhang <zhangsong34@huawei.com>
-In-Reply-To: <CAKfTPtCwUvkqnzs9n0G+cyE5h5QdgwoKF-gNu+4A5g4NHNRe9w@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.93]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpemm500014.china.huawei.com (7.185.36.153)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BN9PR11MB5276:EE_|SJ0PR11MB5104:EE_
+x-ms-office365-filtering-correlation-id: e951465b-5e4b-46f6-186e-08dabe09240c
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: pUDtkgsicDC0xdfHJKZdjEW66hSSigsBB4n5cEGTGsHa8acsdYxmfYR/g+eAUBNv2IQNVBWWnDFgamZGAEVCEZwKKwOChOGKvuoDSNvC+IdL64fhvHqCqwxBIaucpimqzeihinRneCpkleWSdYl3IxHfGVzKFekpUcj+/PTACl6cTzgOJSLxn2q1zJYzOosj8snYLZdgqz87uUiyN031hr5hIIz4Hca8njm25CyYe03KEe/yLNzCiKXMAJe3svyYIMJkYbnRsb9++Bx5uVyvHmjICrEkhaYB+dnmScKMkTxbyFtWKJk8vwTAKBf92gCI1mM/zLPF8Uefujv0DaDqvFm09iMT4nQGxO4YFQIiBKDAKgKu9eiIYF9T9Lp1fswhxcQtiQvM6WvMTo87nLzASyPUHKcjFwfYimkdH/6rTjZDnj75aDR6s1i3TGSre6PRHLgD9ZEWcSjS0Kh5ExQYQWm0Pq80If7e9Kg52DGI39oph9RXfmPAy19muqWvNZqLXaqnBJvgkraKSX4t+5+Lcg/kbbfvqm9Py2oHHjtHuMkV9dzFWI9tnJmBr//kXb68Hbh1mPe/OwCLuJ9AGvciP0k/Cryh/AB2jUeTIVT2Qq+c1t79IJQNTr1cv3xEJf/YkZKSSUcn/MCdSISkhqSBtTi7EhcdDhGc5XujhPjX6HTX6AIGcZHyamjadLI0L2x4BjOHMwUdO+PYcXXYHQHb5DE7PpOhbB09zMyNnIRc17yIQ2bDNQsBvqQ2KHTBROjgA8b6YCwfY2wRQ9dNvqq+OA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(39860400002)(396003)(136003)(376002)(366004)(346002)(451199015)(2906002)(4326008)(38100700002)(5660300002)(66556008)(55016003)(4744005)(64756008)(122000001)(66476007)(66946007)(8676002)(66446008)(316002)(52536014)(54906003)(71200400001)(8936002)(41300700001)(33656002)(82960400001)(110136005)(7696005)(38070700005)(86362001)(76116006)(186003)(26005)(6506007)(9686003)(478600001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?CJROaTKQDwjbIGQL5J01M0GNBZyYG59DCvp2gfj37eqShasZm/KopD/NWK7D?=
+ =?us-ascii?Q?rarwqLl80eRjIn9RSZGp3qJD+m02+SxcOlDlPdHIMphj9l6zzyIbvlpluRLW?=
+ =?us-ascii?Q?rUUiAn1uGZSDQI2H5RkHAIV5qN1DwvodUu0CIbHaaoa91rxXsP5jY1AQMEwu?=
+ =?us-ascii?Q?eA4V1GPo8BuZssZnNgAExUqvW1XRahLEqLk6tW51omh6p8n/IfkUWCfB18CQ?=
+ =?us-ascii?Q?ptySdlgB1+fUJgdH451Lbj5Pen7h/3le9PWGVo9I+VF1PlwGZRYmZX1YnGBf?=
+ =?us-ascii?Q?Z5YeoYra8ASViWayT7WfAWnKtqhRpN2atanX6Cb5pX2iSnKnxTZ+QU6b2x4u?=
+ =?us-ascii?Q?4jZI8Uwf8zYDFugRVcAmZ5RiyUJ3Vn67uRJC+fuV94WSL4qP6slwxmsfevc3?=
+ =?us-ascii?Q?LGCozEoBmE/WI6w7JABhb/MF5Kp9uL9/wSTG600Wj5qOFqhAXgrfNw147xbK?=
+ =?us-ascii?Q?ZatqhiR5Q2J7xexc7N3NmCWNmQfjwb20b31D9XXu0KpWnW210WVPZePwdFjl?=
+ =?us-ascii?Q?fd3/AAxl4NDoOO7hH4MSLsioWOug3w0eJA9OyG4kyXJMqwCvAI3mw+MwTpgl?=
+ =?us-ascii?Q?Z9aKsAshheH0LNmPSnIbO7K3v1vuiqRZdmH9pB0FW93LWPzwLN8oN1qCiy1B?=
+ =?us-ascii?Q?gHiWZp8Vdk7LgOZayScNY09jjNFVdn2gmu2P3/NSZrp63uiccNUJRG5DMH8k?=
+ =?us-ascii?Q?LxEcIUD43OEfpvFW2zqbuYbbZAuHcG2tC/9V5k+2lH+qWHGWhXaKpzhtVWVN?=
+ =?us-ascii?Q?XoXo7zP5UbDr/WFll9V7Xd8P1oKF94xGaXkx926zPxCr0KbZ/Tp+cFuVZula?=
+ =?us-ascii?Q?jCPxb4kn5bHdKnRWkf4eXz6/BemfDx1dpD4Dm5Ef8bAVx0btc+9ikEV6UpWU?=
+ =?us-ascii?Q?oVr3L7IKuTBJa8BoJHtmcBdpxk6tySomhNfGrgQHu8mTsz3w+OvgQeYflPAx?=
+ =?us-ascii?Q?P2qn8RzfTSOaw9KIF8QdmosStu/PA6N4IeXRfb2bFOOWDVYWVnkcE8qmzUVC?=
+ =?us-ascii?Q?s7vMo6yEU0RkTAfgWV0uY4j8y2HCj9BIp5RLnisc812gelHfv5p92gQwU6HU?=
+ =?us-ascii?Q?Jb8NGmyJ3uYzUVCMQS13U9k8I7BVRYQrQktxLAVeBUOLg6azHrVTNHQgWO7f?=
+ =?us-ascii?Q?5Pf76Q5UdeVZs/JvjuMbgMvU51m9fIyAqUCt5U1PtomkOwo34jQei4gbvCMs?=
+ =?us-ascii?Q?bv1RA0PQ5OfK+prfhlw96rYoHDwr25Nvf8iWegt/GyeNkZ8kiUZErmT1e3QE?=
+ =?us-ascii?Q?m7sNxADitHO7RWs90bZuYWeTNJ0AErN6gs0fHEVcDrTTTmUFOYehRZ0W62qJ?=
+ =?us-ascii?Q?BARFm/f6bvUvuN3CWa1GQwR2A2R1zmHf1tg8VrCWCd5RXT5KBiXJZFwnIzpE?=
+ =?us-ascii?Q?Qb61DeltoQZJpwn3rRCcHlHHyTztQyS1f0gAuvkztOz+F2JrpQmQBl5YfP/z?=
+ =?us-ascii?Q?PWyZ7pwJTEfVh5RiXAi5n78ELrwAh98/muHfB04PaSIstSWPNgCSB6Va3N9D?=
+ =?us-ascii?Q?h/p2K1tgAJd7lJJI6KkGXZO6KtRuSLzuFGx2T6QgEQa5kp8bW/eJo/0LHesZ?=
+ =?us-ascii?Q?gI8LZIwmAAO6ktkSWusCZvwBb28W8499Mo8qRToR?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e951465b-5e4b-46f6-186e-08dabe09240c
+X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Nov 2022 02:06:09.4945
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: soch3TBtleyFdp2uZPJQN5JTY7CIhia7InBBFgbvpGnsFy0d+0ZFQgs12wm3M4IOcXizrYexQHLfBZje5+sAPA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR11MB5104
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+> From: Lu Baolu <baolu.lu@linux.intel.com>
+> Sent: Thursday, November 3, 2022 1:53 PM
+>=20
+> @@ -4513,6 +4506,16 @@ static struct iommu_device
+> *intel_iommu_probe_device(struct device *dev)
+>=20
+>  	dev_iommu_priv_set(dev, info);
+>=20
+> +	if (sm_supported(iommu) && !dev_is_real_dma_subdevice(dev)) {
+> +		ret =3D intel_pasid_alloc_table(dev);
+> +		if (ret) {
+> +			dev_err(dev, "PASID table allocation failed\n");
+> +			dev_iommu_priv_set(dev, NULL);
+> +			kfree(info);
+> +			return ERR_PTR(ret);
+> +		}
+> +	}
+> +
 
-
-On 2022/11/3 17:22, Vincent Guittot wrote:
-> On Thu, 3 Nov 2022 at 10:20, Song Zhang <zhangsong34@huawei.com> wrote:
->>
->>
->>
->> On 2022/11/3 16:33, Vincent Guittot wrote:
->>> On Thu, 3 Nov 2022 at 04:01, Song Zhang <zhangsong34@huawei.com> wrote:
->>>>
->>>> Thanks for your reply!
->>>>
->>>> On 2022/11/3 2:01, Vincent Guittot wrote:
->>>>> On Wed, 2 Nov 2022 at 04:54, Song Zhang <zhangsong34@huawei.com> wrote:
->>>>>>
->>>>>
->>>>> This really looks like a v3 of
->>>>> https://lore.kernel.org/all/20220810015636.3865248-1-zhangsong34@huawei.com/
->>>>>
->>>>> Please keep versioning.
->>>>>
->>>>>> Add a new sysctl interface:
->>>>>> /proc/sys/kernel/sched_prio_load_balance_enabled
->>>>>
->>>>> We don't want to add more sysctl knobs for the scheduler, we even
->>>>> removed some. Knob usually means that you want to fix your use case
->>>>> but the solution doesn't make sense for all cases.
->>>>>
->>>>
->>>> OK, I will remove this knobs later.
->>>>
->>>>>>
->>>>>> 0: default behavior
->>>>>> 1: enable priority load balance for CFS
->>>>>>
->>>>>> For co-location with idle and non-idle tasks, when CFS do load balance,
->>>>>> it is reasonable to prefer migrating non-idle tasks and migrating idle
->>>>>> tasks lastly. This will reduce the interference by SCHED_IDLE tasks
->>>>>> as much as possible.
->>>>>
->>>>> I don't agree that it's always the best choice to migrate a non-idle task 1st.
->>>>>
->>>>> CPU0 has 1 non idle task and CPU1 has 1 non idle task and hundreds of
->>>>> idle task and there is an imbalance between the 2 CPUS: migrating the
->>>>> non idle task from CPU1 to CPU0 is not the best choice
->>>>>
->>>>
->>>> If the non idle task on CPU1 is running or cache hot, it cannot be
->>>> migrated and idle tasks can also be migrated from CPU1 to CPU0. So I
->>>> think it does not matter.
->>>
->>> What I mean is that migrating non idle tasks first is not a universal
->>> win and not always what we want.
->>>
->>
->> But migrating online tasks first is mostly a trade-off that
->> non-idle(Latency Sensitive) tasks can obtain more CPU time and minimize
->> the interference caused by IDLE tasks. I think this makes sense in most
->> cases, or you can point out what else I need to think about it ?
->>
->> Best regards.
->>
->>>>
->>>>>>
->>>>>> Testcase:
->>>>>> - Spawn large number of idle(SCHED_IDLE) tasks occupy CPUs
->>>>>
->>>>> What do you mean by a large number ?
->>>>>
->>>>>> - Let non-idle tasks compete with idle tasks for CPU time.
->>>>>>
->>>>>> Using schbench to test non-idle tasks latency:
->>>>>> $ ./schbench -m 1 -t 10 -r 30 -R 200
->>>>>
->>>>> How many CPUs do you have ?
->>>>>
->>>>
->>>> OK, some details may not be mentioned.
->>>> My virtual machine has 8 CPUs running with a schbench process and 5000
->>>> idle tasks. The idle task is a while dead loop process below:
->>>
->>> How can you care about latency when you start 10 workers on 8 vCPUs
->>> with 5000 non idle threads ?
->>>
->>
->> No no no... spawn 5000 idle(SCHED_IDLE) processes not 5000 non-idle
->> threads, and with 10 non-idle schbench workers on 8 vCPUs.
-> 
-> yes spawn 5000 idle tasks but my point remains the same
-> 
-
-But I really don't understand what you are most focused on, and what 
-else should I do.
-
->>
->>>>
->>>> $ cat idle_process.c
->>>> int main()
->>>> {
->>>>            int i = 0;
->>>>            while(1) {
->>>>                    usleep(500);
->>>>                    for(i = 0; i < 1000000; i++);
->>>>            }
->>>> }
->>>>
->>>> You can compile and spawn 5000 idle(SCHED_IDLE) tasks occupying 8 CPUs
->>>> and execute schbench command to test it.
->>>>
->>>>>>
->>>>>> Test result:
->>>>>> 1.Default behavior
->>>>>> Latency percentiles (usec) runtime 30 (s) (4562 total samples)
->>>>>>            50.0th: 62528 (2281 samples)
->>>>>>            75.0th: 623616 (1141 samples)
->>>>>>            90.0th: 764928 (687 samples)
->>>>>>            95.0th: 824320 (225 samples)
->>>>>>            *99.0th: 920576 (183 samples)
->>>>>>            99.5th: 953344 (23 samples)
->>>>>>            99.9th: 1008640 (18 samples)
->>>>>>            min=9, max=1074466
->>>>>>
->>>>>> 2.Enable priority load balance
->>>>>> Latency percentiles (usec) runtime 30 (s) (4391 total samples)
->>>>>>            50.0th: 22624 (2204 samples)
->>>>>>            75.0th: 48832 (1092 samples)
->>>>>>            90.0th: 85376 (657 samples)
->>>>>>            95.0th: 113280 (220 samples)
->>>>>>            *99.0th: 182528 (175 samples)
->>>>>>            99.5th: 206592 (22 samples)
->>>>>>            99.9th: 290304 (17 samples)
->>>>>>            min=6, max=351815
->>>>>>
->>>>>>    From percentile details, we see the benefit of priority load balance
->>>>>> that 95% of non-idle tasks latencies stays no more than 113ms, while
->>>>>
->>>>> But even 113ms seems quite a large number if there is anything else
->>>>> but 10 schbench workers and a bunch of idle threads that are running.
->>>>>
->>>>>> non-idle tasks latencies has got almost 50% over 600ms if priority
->>>>>> load balance not enabled.
->>>>>
->>>>> Als have you considered enabling sched_feature LB_MIN ?
->>>>>
->>>>
->>>> I have tried to echo LB_MIN > /sys/kernel/debug/sched/features, but this
->>>> feature seems make no sense.
->>>>
->>>>>>
->>>>>> Signed-off-by: Song Zhang <zhangsong34@huawei.com>
->>>>>> ---
->>>>>>     include/linux/sched/sysctl.h |  4 +++
->>>>>>     init/Kconfig                 | 10 ++++++
->>>>>>     kernel/sched/core.c          |  3 ++
->>>>>>     kernel/sched/fair.c          | 61 +++++++++++++++++++++++++++++++++++-
->>>>>>     kernel/sched/sched.h         |  3 ++
->>>>>>     kernel/sysctl.c              | 11 +++++++
->>>>>>     6 files changed, 91 insertions(+), 1 deletion(-)
->>>>>>
->>>>>> diff --git a/include/linux/sched/sysctl.h b/include/linux/sched/sysctl.h
->>>>>> index 303ee7dd0c7e..9b3673269ecc 100644
->>>>>> --- a/include/linux/sched/sysctl.h
->>>>>> +++ b/include/linux/sched/sysctl.h
->>>>>> @@ -32,6 +32,10 @@ extern unsigned int sysctl_numa_balancing_promote_rate_limit;
->>>>>>     #define sysctl_numa_balancing_mode     0
->>>>>>     #endif
->>>>>>
->>>>>> +#ifdef CONFIG_SCHED_PRIO_LB
->>>>>> +extern unsigned int sysctl_sched_prio_load_balance_enabled;
->>>>>> +#endif
->>>>>> +
->>>>>>     int sysctl_numa_balancing(struct ctl_table *table, int write, void *buffer,
->>>>>>                    size_t *lenp, loff_t *ppos);
->>>>>>
->>>>>> diff --git a/init/Kconfig b/init/Kconfig
->>>>>> index 694f7c160c9c..b0dfe6701218 100644
->>>>>> --- a/init/Kconfig
->>>>>> +++ b/init/Kconfig
->>>>>> @@ -1026,6 +1026,16 @@ config CFS_BANDWIDTH
->>>>>>              restriction.
->>>>>>              See Documentation/scheduler/sched-bwc.rst for more information.
->>>>>>
->>>>>> +config SCHED_PRIO_LB
->>>>>> +       bool "Priority load balance for CFS"
->>>>>> +       depends on SMP
->>>>>> +       default n
->>>>>> +       help
->>>>>> +         This feature enable CFS priority load balance to reduce
->>>>>> +         non-idle tasks latency interferenced by SCHED_IDLE tasks.
->>>>>> +         It prefer migrating non-idle tasks firstly and
->>>>>> +         migrating SCHED_IDLE tasks lastly.
->>>>>> +
->>>>>>     config RT_GROUP_SCHED
->>>>>>            bool "Group scheduling for SCHED_RR/FIFO"
->>>>>>            depends on CGROUP_SCHED
->>>>>> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
->>>>>> index 5800b0623ff3..9be35431fdd5 100644
->>>>>> --- a/kernel/sched/core.c
->>>>>> +++ b/kernel/sched/core.c
->>>>>> @@ -9731,6 +9731,9 @@ void __init sched_init(void)
->>>>>>                    rq->max_idle_balance_cost = sysctl_sched_migration_cost;
->>>>>>
->>>>>>                    INIT_LIST_HEAD(&rq->cfs_tasks);
->>>>>> +#ifdef CONFIG_SCHED_PRIO_LB
->>>>>> +               INIT_LIST_HEAD(&rq->cfs_idle_tasks);
->>>>>> +#endif
->>>>>>
->>>>>>                    rq_attach_root(rq, &def_root_domain);
->>>>>>     #ifdef CONFIG_NO_HZ_COMMON
->>>>>> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
->>>>>> index e4a0b8bd941c..bdeb04324f0c 100644
->>>>>> --- a/kernel/sched/fair.c
->>>>>> +++ b/kernel/sched/fair.c
->>>>>> @@ -139,6 +139,10 @@ static int __init setup_sched_thermal_decay_shift(char *str)
->>>>>>     }
->>>>>>     __setup("sched_thermal_decay_shift=", setup_sched_thermal_decay_shift);
->>>>>>
->>>>>> +#ifdef CONFIG_SCHED_PRIO_LB
->>>>>> +unsigned int sysctl_sched_prio_load_balance_enabled;
->>>>>> +#endif
->>>>>> +
->>>>>>     #ifdef CONFIG_SMP
->>>>>>     /*
->>>>>>      * For asym packing, by default the lower numbered CPU has higher priority.
->>>>>> @@ -3199,6 +3203,21 @@ static inline void update_scan_period(struct task_struct *p, int new_cpu)
->>>>>>
->>>>>>     #endif /* CONFIG_NUMA_BALANCING */
->>>>>>
->>>>>> +#ifdef CONFIG_SCHED_PRIO_LB
->>>>>> +static void
->>>>>> +adjust_rq_cfs_tasks(
->>>>>> +       void (*list_op)(struct list_head *, struct list_head *),
->>>>>> +       struct rq *rq,
->>>>>> +       struct sched_entity *se)
->>>>>> +{
->>>>>> +       if (sysctl_sched_prio_load_balance_enabled &&
->>>>>> +               task_has_idle_policy(task_of(se)))
->>>>>> +               (*list_op)(&se->group_node, &rq->cfs_idle_tasks);
->>>>>> +       else
->>>>>> +               (*list_op)(&se->group_node, &rq->cfs_tasks);
->>>>>> +}
->>>>>> +#endif
->>>>>> +
->>>>>>     static void
->>>>>>     account_entity_enqueue(struct cfs_rq *cfs_rq, struct sched_entity *se)
->>>>>>     {
->>>>>> @@ -3208,7 +3227,11 @@ account_entity_enqueue(struct cfs_rq *cfs_rq, struct sched_entity *se)
->>>>>>                    struct rq *rq = rq_of(cfs_rq);
->>>>>>
->>>>>>                    account_numa_enqueue(rq, task_of(se));
->>>>>> +#ifdef CONFIG_SCHED_PRIO_LB
->>>>>> +               adjust_rq_cfs_tasks(list_add, rq, se);
->>>>>> +#else
->>>>>>                    list_add(&se->group_node, &rq->cfs_tasks);
->>>>>> +#endif
->>>>>>            }
->>>>>>     #endif
->>>>>>            cfs_rq->nr_running++;
->>>>>> @@ -7631,7 +7654,11 @@ done: __maybe_unused;
->>>>>>             * the list, so our cfs_tasks list becomes MRU
->>>>>>             * one.
->>>>>>             */
->>>>>> +#ifdef CONFIG_SCHED_PRIO_LB
->>>>>> +       adjust_rq_cfs_tasks(list_move, rq, &p->se);
->>>>>> +#else
->>>>>>            list_move(&p->se.group_node, &rq->cfs_tasks);
->>>>>> +#endif
->>>>>>     #endif
->>>>>>
->>>>>>            if (hrtick_enabled_fair(rq))
->>>>>> @@ -8156,11 +8183,18 @@ static void detach_task(struct task_struct *p, struct lb_env *env)
->>>>>>     static struct task_struct *detach_one_task(struct lb_env *env)
->>>>>>     {
->>>>>>            struct task_struct *p;
->>>>>> +       struct list_head *tasks = &env->src_rq->cfs_tasks;
->>>>>> +#ifdef CONFIG_SCHED_PRIO_LB
->>>>>> +       bool has_detach_idle_tasks = false;
->>>>>> +#endif
->>>>>>
->>>>>>            lockdep_assert_rq_held(env->src_rq);
->>>>>>
->>>>>> +#ifdef CONFIG_SCHED_PRIO_LB
->>>>>> +again:
->>>>>> +#endif
->>>>>>            list_for_each_entry_reverse(p,
->>>>>> -                       &env->src_rq->cfs_tasks, se.group_node) {
->>>>>> +                       tasks, se.group_node) {
->>>>>>                    if (!can_migrate_task(p, env))
->>>>>>                            continue;
->>>>>>
->>>>>> @@ -8175,6 +8209,13 @@ static struct task_struct *detach_one_task(struct lb_env *env)
->>>>>>                    schedstat_inc(env->sd->lb_gained[env->idle]);
->>>>>>                    return p;
->>>>>>            }
->>>>>> +#ifdef CONFIG_SCHED_PRIO_LB
->>>>>> +       if (sysctl_sched_prio_load_balance_enabled && !has_detach_idle_tasks) {
->>>>>> +               has_detach_idle_tasks = true;
->>>>>> +               tasks = &env->src_rq->cfs_idle_tasks;
->>>>>> +               goto again;
->>>>>> +       }
->>>>>> +#endif
->>>>>>            return NULL;
->>>>>>     }
->>>>>>
->>>>>> @@ -8190,6 +8231,9 @@ static int detach_tasks(struct lb_env *env)
->>>>>>            unsigned long util, load;
->>>>>>            struct task_struct *p;
->>>>>>            int detached = 0;
->>>>>> +#ifdef CONFIG_SCHED_PRIO_LB
->>>>>> +       bool has_detach_idle_tasks = false;
->>>>>> +#endif
->>>>>>
->>>>>>            lockdep_assert_rq_held(env->src_rq);
->>>>>>
->>>>>> @@ -8205,6 +8249,9 @@ static int detach_tasks(struct lb_env *env)
->>>>>>            if (env->imbalance <= 0)
->>>>>>                    return 0;
->>>>>>
->>>>>> +#ifdef CONFIG_SCHED_PRIO_LB
->>>>>> +again:
->>>>>> +#endif
->>>>>>            while (!list_empty(tasks)) {
->>>>>>                    /*
->>>>>>                     * We don't want to steal all, otherwise we may be treated likewise,
->>>>>> @@ -8310,6 +8357,14 @@ static int detach_tasks(struct lb_env *env)
->>>>>>                    list_move(&p->se.group_node, tasks);
->>>>>>            }
->>>>>>
->>>>>> +#ifdef CONFIG_SCHED_PRIO_LB
->>>>>> +       if (sysctl_sched_prio_load_balance_enabled &&
->>>>>> +               !has_detach_idle_tasks && env->imbalance > 0) {
->>>>>> +               has_detach_idle_tasks = true;
->>>>>> +               tasks = &env->src_rq->cfs_idle_tasks;
->>>>>> +               goto again;
->>>>>> +       }
->>>>>> +#endif
->>>>>>            /*
->>>>>>             * Right now, this is one of only two places we collect this stat
->>>>>>             * so we can safely collect detach_one_task() stats here rather
->>>>>> @@ -11814,7 +11869,11 @@ static void set_next_task_fair(struct rq *rq, struct task_struct *p, bool first)
->>>>>>                     * Move the next running task to the front of the list, so our
->>>>>>                     * cfs_tasks list becomes MRU one.
->>>>>>                     */
->>>>>> +#ifdef CONFIG_SCHED_PRIO_LB
->>>>>> +               adjust_rq_cfs_tasks(list_move, rq, se);
->>>>>> +#else
->>>>>>                    list_move(&se->group_node, &rq->cfs_tasks);
->>>>>> +#endif
->>>>>>            }
->>>>>>     #endif
->>>>>>
->>>>>> diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
->>>>>> index 1644242ecd11..1b831c05ba30 100644
->>>>>> --- a/kernel/sched/sched.h
->>>>>> +++ b/kernel/sched/sched.h
->>>>>> @@ -1053,6 +1053,9 @@ struct rq {
->>>>>>            int                     online;
->>>>>>
->>>>>>            struct list_head cfs_tasks;
->>>>>> +#ifdef CONFIG_SCHED_PRIO_LB
->>>>>> +       struct list_head cfs_idle_tasks;
->>>>>> +#endif
->>>>>>
->>>>>>            struct sched_avg        avg_rt;
->>>>>>            struct sched_avg        avg_dl;
->>>>>> diff --git a/kernel/sysctl.c b/kernel/sysctl.c
->>>>>> index 188c305aeb8b..5fc0f9ffb675 100644
->>>>>> --- a/kernel/sysctl.c
->>>>>> +++ b/kernel/sysctl.c
->>>>>> @@ -2090,6 +2090,17 @@ static struct ctl_table kern_table[] = {
->>>>>>                    .extra1         = SYSCTL_ONE,
->>>>>>                    .extra2         = SYSCTL_INT_MAX,
->>>>>>            },
->>>>>> +#endif
->>>>>> +#ifdef CONFIG_SCHED_PRIO_LB
->>>>>> +       {
->>>>>> +               .procname       = "sched_prio_load_balance_enabled",
->>>>>> +               .data           = &sysctl_sched_prio_load_balance_enabled,
->>>>>> +               .maxlen         = sizeof(unsigned int),
->>>>>> +               .mode           = 0644,
->>>>>> +               .proc_handler   = proc_dointvec_minmax,
->>>>>> +               .extra1         = SYSCTL_ZERO,
->>>>>> +               .extra2         = SYSCTL_ONE,
->>>>>> +       },
->>>>>>     #endif
->>>>>>            { }
->>>>>>     };
->>>>>> --
->>>>>> 2.27.0
->>>>>>
->>>>> .
->>> .
-> .
+move the added lines before dev_iommu_priv_set()
