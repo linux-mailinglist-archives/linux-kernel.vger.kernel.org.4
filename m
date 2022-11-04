@@ -2,103 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36D2061A00E
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 19:34:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5720C61A011
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 19:35:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232144AbiKDSen (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 14:34:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53802 "EHLO
+        id S232163AbiKDSfM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 14:35:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232077AbiKDSeg (ORCPT
+        with ESMTP id S231897AbiKDSfK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 14:34:36 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F27082BEA
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 11:34:32 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id y203so5239322pfb.4
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 11:34:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=fFlgEoQ+2ARPKvzYCLdvHvwC3pq/RnzvVojet0DXLgg=;
-        b=nJ8Xa/ROHn8AT1PIg/dhjRMINqphLAL/bOrhvxGaJRCtDh1l/knL1nNHyUgybie2+i
-         4/4cKvfd0kb4xC00W02DHqwHRJlnuzWSqU376vzNvl9FZx33yev9vWF/3XjSBccf27dl
-         Emj5vMOkiP2lYyhiVng01hYuCLd3maODPa/LI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fFlgEoQ+2ARPKvzYCLdvHvwC3pq/RnzvVojet0DXLgg=;
-        b=Feki/ufZyUdKze5e5NkLt0tgKmqngxS4sNkAdQbaGHIttIh3rkh/5DKMzRvG8hJSTk
-         G6QikGeKM5yycoEZAyTehP9TojR19nsh6cOgqVexfioncdvBRVvGU2QaF1zyKbxX/Twj
-         fixZCy9LvqrSHAIkowvrzXDrn9qdL3i3CkFB9iKaK4pUKCDIeCzMOYO3BNpayr3+eN5p
-         JDrqKJNCmLjC4dwz5CVSOaKjJXzgtfBvDsb5WKU4ty2B1/dqe/P7wS4YgCS9yDySWqvP
-         GLfUvzDVGV3PWFmRGVAREBtY1DwZmKMHt9pDIgBXffT1cI30v4lNclRuDMhNJ2pLSkH5
-         p0+w==
-X-Gm-Message-State: ACrzQf01c/l4P/A+AUbD3O5OHopxri55OJQriDEvSS64pOXqqOMW/BVc
-        MEK5gPpUkm/bJ3R+jPRiVedZqQ==
-X-Google-Smtp-Source: AMsMyM6S7zxtJ4UwzgqjmSKGYJg8U3NwTZne4WYB2avbtJ8sShe6lVSGKAHshLFa5m0rqJszHDmCRw==
-X-Received: by 2002:a63:1206:0:b0:470:18c:1489 with SMTP id h6-20020a631206000000b00470018c1489mr14766650pgl.357.1667586872547;
-        Fri, 04 Nov 2022 11:34:32 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id b9-20020aa79509000000b0056bc30e618dsm3071068pfp.38.2022.11.04.11.34.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Nov 2022 11:34:32 -0700 (PDT)
-Date:   Fri, 4 Nov 2022 11:34:31 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Evan Green <evgreen@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, corbet@lwn.net,
-        linux-pm@vger.kernel.org, rjw@rjwysocki.net, gwendal@chromium.org,
-        apronin@chromium.org, Pavel Machek <pavel@ucw.cz>,
-        Matthew Garrett <mgarrett@aurora.tech>,
-        linux-integrity@vger.kernel.org, jejb@linux.ibm.com,
-        zohar@linux.ibm.com, dlunev@google.com,
-        Eric Biggers <ebiggers@kernel.org>,
-        Ben Boeckel <me@benboeckel.net>, jarkko@kernel.org,
-        Matthew Garrett <matthewgarrett@google.com>,
-        Matthew Garrett <mjg59@google.com>,
-        Ben Boeckel <linux@me.benboeckel.net>,
-        David Howells <dhowells@redhat.com>,
-        James Morris <jmorris@namei.org>,
-        Paul Moore <paul@paul-moore.com>,
-        "Serge E. Hallyn" <serge@hallyn.com>, keyrings@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-security-module@vger.kernel.org
-Subject: Re: [PATCH v4 05/11] security: keys: trusted: Allow storage of PCR
- values in creation data
-Message-ID: <202211041134.927C258@keescook>
-References: <20221103180120.752659-1-evgreen@chromium.org>
- <20221103105558.v4.5.I32591db064b6cdc91850d777f363c9d05c985b39@changeid>
+        Fri, 4 Nov 2022 14:35:10 -0400
+Received: from msg-2.mailo.com (msg-2.mailo.com [213.182.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AA5012F
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 11:35:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
+        t=1667586901; bh=hp0FgrNepDKLSNCKZLrPBSzkRWyWgrFj8BHfBxyz8Ds=;
+        h=X-EA-Auth:Date:From:To:Subject:Message-ID:References:MIME-Version:
+         Content-Type:In-Reply-To;
+        b=mk6+ezgaLY4F7HfP3LNQvNUj7KQfYv16P21dszAGgTINmX5jjRQsOau8dEMRkoAOy
+         cpA668cLDqi4y2A+rjqpxLXYtU1TzVyQjcyYRKnaFnj5opINE2PW3FaCogZjzPt09p
+         QMyVN2OTdVGmLXLW9HAr5RrlblYKMkeTpOywE1Xk=
+Received: by b-6.in.mailobj.net [192.168.90.16] with ESMTP
+        via ip-206.mailobj.net [213.182.55.206]
+        Fri,  4 Nov 2022 19:35:01 +0100 (CET)
+X-EA-Auth: Mf2Unhvy4C6KZ0+FTvygUlpAP2szYr3OpQncwjcpdnKHkp+ZTvwxP4GYPJfKhSzlN2+evs3xGSpLXe1jKjzuFCVBufeArKhQ
+Date:   Sat, 5 Nov 2022 00:04:56 +0530
+From:   Deepak R Varma <drv@mailo.com>
+To:     outreachy@lists.linux.dev,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] staging: rtl8723bs: Simplify underutilized 2D array to
+ 1D array
+Message-ID: <4fb8d9783553d15a58e774d7137519d46e58ee3a.1667586648.git.drv@mailo.com>
+References: <cover.1667586648.git.drv@mailo.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221103105558.v4.5.I32591db064b6cdc91850d777f363c9d05c985b39@changeid>
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <cover.1667586648.git.drv@mailo.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 03, 2022 at 11:01:13AM -0700, Evan Green wrote:
-> From: Matthew Garrett <matthewgarrett@google.com>
-> 
-> When TPMs generate keys, they can also generate some information
-> describing the state of the PCRs at creation time. This data can then
-> later be certified by the TPM, allowing verification of the PCR values.
-> This allows us to determine the state of the system at the time a key
-> was generated. Add an additional argument to the trusted key creation
-> options, allowing the user to provide the set of PCRs that should have
-> their values incorporated into the creation data.
-> 
-> Link: https://lore.kernel.org/lkml/20210220013255.1083202-6-matthewgarrett@google.com/
-> Signed-off-by: Matthew Garrett <mjg59@google.com>
+Member variable "Value" of structure iqk_matrix_regs_setting is
+declared to be a 2D array of [3][IQK_Matrix_REG_NUM] grid. However
+the primary index of this array is only used for index 0, the other
+two elements are never used. Simplify this array to a one dimension
+degree. The resultant code is simpler and is easy to maintain.
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
+Suggested-by: Dan Carpenter <error27@gmail.com>
+Signed-off-by: Deepak R Varma <drv@mailo.com>
+---
+ drivers/staging/rtl8723bs/hal/HalPhyRf_8723B.c | 18 +++++++++---------
+ drivers/staging/rtl8723bs/hal/odm.h            |  2 +-
+ 2 files changed, 10 insertions(+), 10 deletions(-)
 
--- 
-Kees Cook
+diff --git a/drivers/staging/rtl8723bs/hal/HalPhyRf_8723B.c b/drivers/staging/rtl8723bs/hal/HalPhyRf_8723B.c
+index a52748f7b56e..9317a4462c02 100644
+--- a/drivers/staging/rtl8723bs/hal/HalPhyRf_8723B.c
++++ b/drivers/staging/rtl8723bs/hal/HalPhyRf_8723B.c
+@@ -244,8 +244,8 @@ void ODM_TxPwrTrackSetPwr_8723B(
+ 			Final_CCK_Swing_Index = 0;
+
+ 		setIqkMatrix_8723B(pDM_Odm, Final_OFDM_Swing_Index, RFPath,
+-			pDM_Odm->RFCalibrateInfo.IQKMatrixRegSetting[ChannelMappedIndex].Value[0][0],
+-			pDM_Odm->RFCalibrateInfo.IQKMatrixRegSetting[ChannelMappedIndex].Value[0][1]);
++			pDM_Odm->RFCalibrateInfo.IQKMatrixRegSetting[ChannelMappedIndex].Value[0],
++			pDM_Odm->RFCalibrateInfo.IQKMatrixRegSetting[ChannelMappedIndex].Value[1]);
+
+ 		setCCKFilterCoefficient(pDM_Odm, Final_CCK_Swing_Index);
+
+@@ -257,8 +257,8 @@ void ODM_TxPwrTrackSetPwr_8723B(
+ 			pDM_Odm->Remnant_OFDMSwingIdx[RFPath] = Final_OFDM_Swing_Index - PwrTrackingLimit_OFDM;
+
+ 			setIqkMatrix_8723B(pDM_Odm, PwrTrackingLimit_OFDM, RFPath,
+-				pDM_Odm->RFCalibrateInfo.IQKMatrixRegSetting[ChannelMappedIndex].Value[0][0],
+-				pDM_Odm->RFCalibrateInfo.IQKMatrixRegSetting[ChannelMappedIndex].Value[0][1]);
++				pDM_Odm->RFCalibrateInfo.IQKMatrixRegSetting[ChannelMappedIndex].Value[0],
++				pDM_Odm->RFCalibrateInfo.IQKMatrixRegSetting[ChannelMappedIndex].Value[1]);
+
+ 			pDM_Odm->Modify_TxAGC_Flag_PathA = true;
+ 			PHY_SetTxPowerIndexByRateSection(Adapter, RFPath, pHalData->CurrentChannel, OFDM);
+@@ -267,16 +267,16 @@ void ODM_TxPwrTrackSetPwr_8723B(
+ 			pDM_Odm->Remnant_OFDMSwingIdx[RFPath] = Final_OFDM_Swing_Index;
+
+ 			setIqkMatrix_8723B(pDM_Odm, 0, RFPath,
+-				pDM_Odm->RFCalibrateInfo.IQKMatrixRegSetting[ChannelMappedIndex].Value[0][0],
+-				pDM_Odm->RFCalibrateInfo.IQKMatrixRegSetting[ChannelMappedIndex].Value[0][1]);
++				pDM_Odm->RFCalibrateInfo.IQKMatrixRegSetting[ChannelMappedIndex].Value[0],
++				pDM_Odm->RFCalibrateInfo.IQKMatrixRegSetting[ChannelMappedIndex].Value[1]);
+
+ 			pDM_Odm->Modify_TxAGC_Flag_PathA = true;
+ 			PHY_SetTxPowerIndexByRateSection(Adapter, RFPath, pHalData->CurrentChannel, OFDM);
+ 			PHY_SetTxPowerIndexByRateSection(Adapter, RFPath, pHalData->CurrentChannel, HT_MCS0_MCS7);
+ 		} else {
+ 			setIqkMatrix_8723B(pDM_Odm, Final_OFDM_Swing_Index, RFPath,
+-				pDM_Odm->RFCalibrateInfo.IQKMatrixRegSetting[ChannelMappedIndex].Value[0][0],
+-				pDM_Odm->RFCalibrateInfo.IQKMatrixRegSetting[ChannelMappedIndex].Value[0][1]);
++				pDM_Odm->RFCalibrateInfo.IQKMatrixRegSetting[ChannelMappedIndex].Value[0],
++				pDM_Odm->RFCalibrateInfo.IQKMatrixRegSetting[ChannelMappedIndex].Value[1]);
+
+ 			if (pDM_Odm->Modify_TxAGC_Flag_PathA) { /* If TxAGC has changed, reset TxAGC again */
+ 				pDM_Odm->Remnant_OFDMSwingIdx[RFPath] = 0;
+@@ -1760,7 +1760,7 @@ void PHY_IQCalibrate_8723B(
+ /* by sherry 20120321 */
+ 	if (final_candidate < 4) {
+ 		for (i = 0; i < IQK_Matrix_REG_NUM; i++)
+-			pDM_Odm->RFCalibrateInfo.IQKMatrixRegSetting[0].Value[0][i] = result[final_candidate][i];
++			pDM_Odm->RFCalibrateInfo.IQKMatrixRegSetting[0].Value[i] = result[final_candidate][i];
+ 		pDM_Odm->RFCalibrateInfo.IQKMatrixRegSetting[0].bIQKDone = true;
+ 	}
+
+diff --git a/drivers/staging/rtl8723bs/hal/odm.h b/drivers/staging/rtl8723bs/hal/odm.h
+index fe9782d2d4fd..e16a769850c5 100644
+--- a/drivers/staging/rtl8723bs/hal/odm.h
++++ b/drivers/staging/rtl8723bs/hal/odm.h
+@@ -481,7 +481,7 @@ enum odm_type_alna_e { /* tag_ODM_TYPE_ALNA_Definition */
+
+ struct iqk_matrix_regs_setting { /* _IQK_MATRIX_REGS_SETTING */
+ 	bool bIQKDone;
+-	s32 Value[3][IQK_Matrix_REG_NUM];
++	s32 Value[IQK_Matrix_REG_NUM];
+ 	bool bBWIqkResultSaved[3];
+ };
+
+--
+2.34.1
+
+
+
