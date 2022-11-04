@@ -2,483 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ED82619CB0
+	by mail.lfdr.de (Postfix) with ESMTP id EACAE619CB1
 	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 17:11:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232050AbiKDQLp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 12:11:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42708 "EHLO
+        id S232382AbiKDQLt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 12:11:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229749AbiKDQLi (ORCPT
+        with ESMTP id S232343AbiKDQLk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 12:11:38 -0400
-Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AC444731E
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 09:11:36 -0700 (PDT)
-Received: by mail-qk1-x72e.google.com with SMTP id x21so3372527qkj.0
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 09:11:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Q2wrmGopd2SuEHcPg0XIzd7mEf4bj5oOXYDEQoz+QeQ=;
-        b=ENfr+rnAZZUl1MFe62UhyhC4eug1BbPGSx8LFrPPsHBkVH6h+IiDjDi558eIhJDbfy
-         5NVI4bhwfI0c+Bp+EvMU6u5glpHaDO21sGIvtqHPt3C4CDDrCXlOV99odayX3+LkF/hx
-         S9P9kKuPUj2m+Y4IiUOtKrwAhb7QcevvEkh7KBF4hmOJPshO1yBDzl5avS3kTXbhnnr9
-         uaQ7KDidNl9I2GWjrvg2f3uzCB8zBpjlTExxs10AyalD7cIV9CbTgRBg03udr+KMQjB1
-         eUiEUzCw2XhFF2c4St/YI+hrwbYwCcTLfvpbyl/ld497IjYa1+2PEh2LVmmoMMNS2lRy
-         Sbzg==
+        Fri, 4 Nov 2022 12:11:40 -0400
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95387286D3
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 09:11:39 -0700 (PDT)
+Received: by mail-io1-f72.google.com with SMTP id r197-20020a6b8fce000000b006c3fc33424dso3259251iod.5
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 09:11:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Q2wrmGopd2SuEHcPg0XIzd7mEf4bj5oOXYDEQoz+QeQ=;
-        b=PJtMvsggg+9HubCWZNXb9kw/BtFmVbKGzNqfBNH7yio5htcd3+6FVK8m99sIkQ167T
-         YfqM+t/t+qNLlcNvQv7V6kWdn1LiAuWzeBrzpf76YQmYYNqmdDChMVl6nIAIjRQlNc79
-         BgelGV2zVI/QvJJ/eXRbBHpBg4UfRefmLiytpZgM+zk0jVZ5b5DhK6ge2Ym53Zq6snjy
-         U7Ug1xxbUNJZxx1rXalcGB9gYlf5ZIxCga3BNWiookrpte4yLiY2ALPY2AOUZy5LN4wZ
-         aJMH+4eBVBTJeVkPXHf5Ko2l9pmHTAVZfayC8Oow4Evw82K5fx6j2gCfSVod1KHEBSM7
-         pqGQ==
-X-Gm-Message-State: ACrzQf1UHZMC/fcfZFALGjdCjlBdWzx3H+AvoKgiUyBCenTz9xe5dJW1
-        QoWUQxxFHyLrzEM18N/gQWeitQ==
-X-Google-Smtp-Source: AMsMyM5WD9eMuPHxfO29pIb1PAKf+911s8monr4hGIJU3TIXYi/5NSpkcUV3PbcNwPd4Uin3ZsZAjA==
-X-Received: by 2002:a37:8981:0:b0:6f1:1560:ac7d with SMTP id l123-20020a378981000000b006f11560ac7dmr27050562qkd.659.1667578295581;
-        Fri, 04 Nov 2022 09:11:35 -0700 (PDT)
-Received: from krzk-bin.. ([2601:586:5000:570:aad6:acd8:4ed9:299b])
-        by smtp.gmail.com with ESMTPSA id b6-20020a05620a0cc600b006e6a7c2a269sm3125370qkj.22.2022.11.04.09.11.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Nov 2022 09:11:35 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 2/2] dt-bindings: pinctrl: qcom,qcs404: convert to dtschema
-Date:   Fri,  4 Nov 2022 12:11:31 -0400
-Message-Id: <20221104161131.57719-2-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221104161131.57719-1-krzysztof.kozlowski@linaro.org>
-References: <20221104161131.57719-1-krzysztof.kozlowski@linaro.org>
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=6hVJXuTFQBtDnEunFerABAeJSDQzBLOgQs4tefvCO+Y=;
+        b=xI3r/VJ/Y0+pjufjtKtSakASCNuT7PDI+vL20CFmNdN3lREzF70JsCGz2ywnLLJtTD
+         NNk+WuHEueY6YtF+iTAEPfotKoatRjqlGLC4k7HBUsnaYMIxpy84pbgBwNEi8QGm+Pj4
+         RsEgoWxaqwT8xIPDY1YB1txpdTe8y58nx7lVdqkKXfQ4DzCOTV6je0C1UyhsEkAz7/G9
+         o19ghuKG+6bRU8EwkC5iVCkxRcFrkrw3MgRVRVFqKLHIYshOsvS6YL548tJ/wmM1KK4o
+         NSIzVHYSGO7y54t+XdvvUcSuOy7rFK4W3pVlYK2FYXq7UY/LSOmV1MctVXcgiisyZa/2
+         kzwg==
+X-Gm-Message-State: ACrzQf22MvkyhrZCIZileypOeOJNWV4oHrkgIVwdjaT4MltU5Y44A+HT
+        WYoDwHWVnhyfuCoQcI/+pMmlUD1FOSOZuTEiem3YZwYFM0G/
+X-Google-Smtp-Source: AMsMyM5rwpNIhl7AFVDDGlfSPxemvJzCe1+solre5RUwTI/7t9fqeMMmvwmi/Gp5Zhfuvt1Yutg9Cq8i0NxGslOaKGTkuoPMPBsX
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6638:2103:b0:375:2ba6:b5d8 with SMTP id
+ n3-20020a056638210300b003752ba6b5d8mr23187939jaj.27.1667578298920; Fri, 04
+ Nov 2022 09:11:38 -0700 (PDT)
+Date:   Fri, 04 Nov 2022 09:11:38 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000002473fd05eca7540a@google.com>
+Subject: [syzbot] WARNING in kernfs_find_and_get_node_by_id
+From:   syzbot <syzbot+2fdf66e68f5f882c1074@syzkaller.appspotmail.com>
+To:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, tj@kernel.org,
+        zhouchengming@bytedance.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert Qualcomm QCS404 pin controller bindings to DT schema.  Keep the
-parsing of pin configuration subnodes consistent with other Qualcomm
-schemas (children named with '-state' suffix, their children with
-'-pins').
+Hello,
 
-Changes during conversion: add sdc1_rclk pins (used in qcs404-evb.dtsi).
+syzbot found the following issue on:
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+HEAD commit:    f2f32f8af2b0 Merge tag 'for-6.1-rc3-tag' of git://git.kern..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=101fe196880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=f7e100ed8aaa828e
+dashboard link: https://syzkaller.appspot.com/bug?extid=2fdf66e68f5f882c1074
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14aa1051880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10a863a6880000
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/ea126f52b953/disk-f2f32f8a.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/815b36048854/vmlinux-f2f32f8a.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/b7d04bb936fd/bzImage-f2f32f8a.xz
+
+The issue was bisected to:
+
+commit c25491747b21536bd56dccb82a109754bbc8d52c
+Author: Tejun Heo <tj@kernel.org>
+Date:   Sun Aug 28 05:04:37 2022 +0000
+
+    kernfs: Add KERNFS_REMOVING flags
+
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=106731ee880000
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=126731ee880000
+console output: https://syzkaller.appspot.com/x/log.txt?x=146731ee880000
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+2fdf66e68f5f882c1074@syzkaller.appspotmail.com
+Fixes: c25491747b21 ("kernfs: Add KERNFS_REMOVING flags")
+
+------------[ cut here ]------------
+WARNING: CPU: 1 PID: 3608 at fs/kernfs/dir.c:36 kernfs_find_and_get_node_by_id+0x1f0/0x270 fs/kernfs/dir.c:708
+Modules linked in:
+CPU: 1 PID: 3608 Comm: syz-executor714 Not tainted 6.1.0-rc3-syzkaller-00152-gf2f32f8af2b0 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/11/2022
+RIP: 0010:kernfs_active fs/kernfs/dir.c:36 [inline]
+RIP: 0010:kernfs_find_and_get_node_by_id+0x1f0/0x270 fs/kernfs/dir.c:708
+Code: e8 25 fc 29 08 4c 89 f0 5b 41 5c 41 5e 41 5f 5d c3 e8 94 c9 74 ff e9 35 ff ff ff e8 8a c9 74 ff e9 2b ff ff ff e8 80 c9 74 ff <0f> 0b e9 2c ff ff ff 48 c7 c1 d4 e8 0d 8e 80 e1 07 80 c1 03 38 c1
+RSP: 0018:ffffc90003cdfb58 EFLAGS: 00010293
+RAX: ffffffff821316a0 RBX: 0000000000000000 RCX: ffff88802937d7c0
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000000
+RBP: dffffc0000000000 R08: ffffffff821315ab R09: fffff5200079bf5c
+R10: fffff5200079bf5d R11: 1ffff9200079bf5c R12: dffffc0000000000
+R13: 0000000000000002 R14: ffff8881400f4570 R15: 0000000000000005
+FS:  00005555572ef300(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000020000000 CR3: 000000007806e000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ __kernfs_fh_to_dentry fs/kernfs/mount.c:102 [inline]
+ kernfs_fh_to_dentry+0x129/0x1d0 fs/kernfs/mount.c:128
+ exportfs_decode_fh_raw+0x115/0x600 fs/exportfs/expfs.c:435
+ exportfs_decode_fh+0x38/0x70 fs/exportfs/expfs.c:575
+ do_handle_to_path fs/fhandle.c:152 [inline]
+ handle_to_path fs/fhandle.c:207 [inline]
+ do_handle_open+0x485/0x950 fs/fhandle.c:223
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f3991d2bbe9
+Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007fff8481e4e8 EFLAGS: 00000246 ORIG_RAX: 0000000000000130
+RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f3991d2bbe9
+RDX: 0000000000000000 RSI: 00000000200000c0 RDI: 0000000000000005
+RBP: 00007f3991cefd90 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 00007f3991cefe20
+R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+ </TASK>
+
+
 ---
- .../bindings/pinctrl/qcom,qcs404-pinctrl.txt  | 199 ------------------
- .../bindings/pinctrl/qcom,qcs404-pinctrl.yaml | 176 ++++++++++++++++
- 2 files changed, 176 insertions(+), 199 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,qcs404-pinctrl.txt
- create mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,qcs404-pinctrl.yaml
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,qcs404-pinctrl.txt b/Documentation/devicetree/bindings/pinctrl/qcom,qcs404-pinctrl.txt
-deleted file mode 100644
-index a50e74684195..000000000000
---- a/Documentation/devicetree/bindings/pinctrl/qcom,qcs404-pinctrl.txt
-+++ /dev/null
-@@ -1,199 +0,0 @@
--Qualcomm QCS404 TLMM block
--
--This binding describes the Top Level Mode Multiplexer block found in the
--QCS404 platform.
--
--- compatible:
--	Usage: required
--	Value type: <string>
--	Definition: must be "qcom,qcs404-pinctrl"
--
--- reg:
--	Usage: required
--	Value type: <prop-encoded-array>
--	Definition: the base address and size of the north, south and east TLMM
--		    tiles.
--
--- reg-names:
--	Usage: required
--	Value type: <stringlist>
--	Defintiion: names for the cells of reg, must contain "north", "south"
--		    and "east".
--
--- interrupts:
--	Usage: required
--	Value type: <prop-encoded-array>
--	Definition: should specify the TLMM summary IRQ.
--
--- interrupt-controller:
--	Usage: required
--	Value type: <none>
--	Definition: identifies this node as an interrupt controller
--
--- #interrupt-cells:
--	Usage: required
--	Value type: <u32>
--	Definition: must be 2. Specifying the pin number and flags, as defined
--		    in <dt-bindings/interrupt-controller/irq.h>
--
--- gpio-controller:
--	Usage: required
--	Value type: <none>
--	Definition: identifies this node as a gpio controller
--
--- #gpio-cells:
--	Usage: required
--	Value type: <u32>
--	Definition: must be 2. Specifying the pin number and flags, as defined
--		    in <dt-bindings/gpio/gpio.h>
--
--- gpio-ranges:
--	Usage: required
--	Definition:  see ../gpio/gpio.txt
--
--Please refer to ../gpio/gpio.txt and ../interrupt-controller/interrupts.txt for
--a general description of GPIO and interrupt bindings.
--
--Please refer to pinctrl-bindings.txt in this directory for details of the
--common pinctrl bindings used by client devices, including the meaning of the
--phrase "pin configuration node".
--
--The pin configuration nodes act as a container for an arbitrary number of
--subnodes. Each of these subnodes represents some desired configuration for a
--pin, a group, or a list of pins or groups. This configuration can include the
--mux function to select on those pin(s)/group(s), and various pin configuration
--parameters, such as pull-up, drive strength, etc.
--
--
--PIN CONFIGURATION NODES:
--
--The name of each subnode is not important; all subnodes should be enumerated
--and processed purely based on their content.
--
--Each subnode only affects those parameters that are explicitly listed. In
--other words, a subnode that lists a mux function but no pin configuration
--parameters implies no information about any pin configuration parameters.
--Similarly, a pin subnode that describes a pullup parameter implies no
--information about e.g. the mux function.
--
--
--The following generic properties as defined in pinctrl-bindings.txt are valid
--to specify in a pin configuration subnode:
--
--- pins:
--	Usage: required
--	Value type: <string-array>
--	Definition: List of gpio pins affected by the properties specified in
--		    this subnode.
--
--		    Valid pins are:
--		      gpio0-gpio119
--		        Supports mux, bias and drive-strength
--
--		      sdc1_clk, sdc1_cmd, sdc1_data, sdc2_clk, sdc2_cmd,
--		      sdc2_data
--		        Supports bias and drive-strength
--
--		      ufs_reset
--		        Supports bias and drive-strength
--
--- function:
--	Usage: required
--	Value type: <string>
--	Definition: Specify the alternative function to be configured for the
--		    specified pins. Functions are only valid for gpio pins.
--		    Valid values are:
--
--		    gpio, hdmi_tx, hdmi_ddc, blsp_uart_tx_a2, blsp_spi2, m_voc,
--		    qdss_cti_trig_in_a0, blsp_uart_rx_a2, qdss_tracectl_a,
--		    blsp_uart2, aud_cdc, blsp_i2c_sda_a2, qdss_tracedata_a,
--		    blsp_i2c_scl_a2, qdss_tracectl_b, qdss_cti_trig_in_b0,
--		    blsp_uart1, blsp_spi_mosi_a1, blsp_spi_miso_a1,
--		    qdss_tracedata_b, blsp_i2c1, blsp_spi_cs_n_a1, gcc_plltest,
--		    blsp_spi_clk_a1, rgb_data0, blsp_uart5, blsp_spi5,
--		    adsp_ext, rgb_data1, prng_rosc, rgb_data2, blsp_i2c5,
--		    gcc_gp1_clk_b, rgb_data3, gcc_gp2_clk_b, blsp_spi0,
--		    blsp_uart0, gcc_gp3_clk_b, blsp_i2c0, qdss_traceclk_b,
--		    pcie_clk, nfc_irq, blsp_spi4, nfc_dwl, audio_ts, rgb_data4,
--		    spi_lcd, blsp_uart_tx_b2, gcc_gp3_clk_a, rgb_data5,
--		    blsp_uart_rx_b2, blsp_i2c_sda_b2, blsp_i2c_scl_b2,
--		    pwm_led11, i2s_3_data0_a, ebi2_lcd, i2s_3_data1_a,
--		    i2s_3_data2_a, atest_char, pwm_led3, i2s_3_data3_a,
--		    pwm_led4, i2s_4, ebi2_a, dsd_clk_b, pwm_led5, pwm_led6,
--		    pwm_led7, pwm_led8, pwm_led24, spkr_dac0, blsp_i2c4,
--		    pwm_led9, pwm_led10, spdifrx_opt, pwm_led12, pwm_led13,
--		    pwm_led14, wlan1_adc1, rgb_data_b0, pwm_led15,
--		    blsp_spi_mosi_b1, wlan1_adc0, rgb_data_b1, pwm_led16,
--		    blsp_spi_miso_b1, qdss_cti_trig_out_b0, wlan2_adc1,
--		    rgb_data_b2, pwm_led17, blsp_spi_cs_n_b1, wlan2_adc0,
--		    rgb_data_b3, pwm_led18, blsp_spi_clk_b1, rgb_data_b4,
--		    pwm_led19, ext_mclk1_b, qdss_traceclk_a, rgb_data_b5,
--		    pwm_led20, atest_char3, i2s_3_sck_b, ldo_update, bimc_dte0,
--		    rgb_hsync, pwm_led21, i2s_3_ws_b, dbg_out, rgb_vsync,
--		    i2s_3_data0_b, ldo_en, hdmi_dtest, rgb_de, i2s_3_data1_b,
--		    hdmi_lbk9, rgb_clk, atest_char1, i2s_3_data2_b, ebi_cdc,
--		    hdmi_lbk8, rgb_mdp, atest_char0, i2s_3_data3_b, hdmi_lbk7,
--		    rgb_data_b6, rgb_data_b7, hdmi_lbk6, rgmii_int, cri_trng1,
--		    rgmii_wol, cri_trng0, gcc_tlmm, rgmii_ck, rgmii_tx,
--		    hdmi_lbk5, hdmi_pixel, hdmi_rcv, hdmi_lbk4, rgmii_ctl,
--		    ext_lpass, rgmii_rx, cri_trng, hdmi_lbk3, hdmi_lbk2,
--		    qdss_cti_trig_out_b1, rgmii_mdio, hdmi_lbk1, rgmii_mdc,
--		    hdmi_lbk0, ir_in, wsa_en, rgb_data6, rgb_data7,
--		    atest_char2, ebi_ch0, blsp_uart3, blsp_spi3, sd_write,
--		    blsp_i2c3, gcc_gp1_clk_a, qdss_cti_trig_in_b1,
--		    gcc_gp2_clk_a, ext_mclk0, mclk_in1, i2s_1, dsd_clk_a,
--		    qdss_cti_trig_in_a1, rgmi_dll1, pwm_led22, pwm_led23,
--		    qdss_cti_trig_out_a0, rgmi_dll2, pwm_led1,
--		    qdss_cti_trig_out_a1, pwm_led2, i2s_2, pll_bist,
--		    ext_mclk1_a, mclk_in2, bimc_dte1, i2s_3_sck_a, i2s_3_ws_a
--
--- bias-disable:
--	Usage: optional
--	Value type: <none>
--	Definition: The specified pins should be configured as no pull.
--
--- bias-pull-down:
--	Usage: optional
--	Value type: <none>
--	Definition: The specified pins should be configured as pull down.
--
--- bias-pull-up:
--	Usage: optional
--	Value type: <none>
--	Definition: The specified pins should be configured as pull up.
--
--- output-high:
--	Usage: optional
--	Value type: <none>
--	Definition: The specified pins are configured in output mode, driven
--		    high.
--		    Not valid for sdc pins.
--
--- output-low:
--	Usage: optional
--	Value type: <none>
--	Definition: The specified pins are configured in output mode, driven
--		    low.
--		    Not valid for sdc pins.
--
--- drive-strength:
--	Usage: optional
--	Value type: <u32>
--	Definition: Selects the drive strength for the specified pins, in mA.
--		    Valid values are: 2, 4, 6, 8, 10, 12, 14 and 16
--
--Example:
--
--	tlmm: pinctrl@1000000 {
--		compatible = "qcom,qcs404-pinctrl";
--		reg = <0x01000000 0x200000>,
--		      <0x01300000 0x200000>,
--		      <0x07b00000 0x200000>;
--		reg-names = "south", "north", "east";
--		interrupts = <GIC_SPI 208 IRQ_TYPE_LEVEL_HIGH>;
--		gpio-controller;
--		#gpio-cells = <2>;
--		gpio-ranges = <&tlmm 0 0 120>;
--		interrupt-controller;
--		#interrupt-cells = <2>;
--	};
-diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,qcs404-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/qcom,qcs404-pinctrl.yaml
-new file mode 100644
-index 000000000000..3d314458bf84
---- /dev/null
-+++ b/Documentation/devicetree/bindings/pinctrl/qcom,qcs404-pinctrl.yaml
-@@ -0,0 +1,176 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/pinctrl/qcom,qcs404-pinctrl.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Qualcomm SCS404 TLMM pin controller
-+
-+maintainers:
-+  - Bjorn Andersson <andersson@kernel.org>
-+  - Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-+
-+description:
-+  Top Level Mode Multiplexer pin controller in Qualcomm QCS404 SoC.
-+
-+properties:
-+  compatible:
-+    const: qcom,qcs404-pinctrl
-+
-+  reg:
-+    maxItems: 3
-+
-+  reg-names:
-+    items:
-+      - const: south
-+      - const: north
-+      - const: east
-+
-+  interrupts: true
-+  interrupt-controller: true
-+  "#interrupt-cells": true
-+  gpio-controller: true
-+  "#gpio-cells": true
-+  gpio-ranges: true
-+  wakeup-parent: true
-+
-+  gpio-reserved-ranges:
-+    minItems: 1
-+    maxItems: 60
-+
-+  gpio-line-names:
-+    maxItems: 120
-+
-+patternProperties:
-+  "-state$":
-+    oneOf:
-+      - $ref: "#/$defs/qcom-qcs404-tlmm-state"
-+      - patternProperties:
-+          "-pins$":
-+            $ref: "#/$defs/qcom-qcs404-tlmm-state"
-+        additionalProperties: false
-+
-+$defs:
-+  qcom-qcs404-tlmm-state:
-+    type: object
-+    description:
-+      Pinctrl node's client devices use subnodes for desired pin configuration.
-+      Client device subnodes use below standard properties.
-+    $ref: qcom,tlmm-common.yaml#/$defs/qcom-tlmm-state
-+
-+    properties:
-+      pins:
-+        description:
-+          List of gpio pins affected by the properties specified in this
-+          subnode.
-+        items:
-+          oneOf:
-+            - pattern: "^gpio([0-9]|[1-9][0-9]|1[0-1][0-9])$"
-+            - enum: [ sdc1_clk, sdc1_cmd, sdc1_data, sdc1_rclk, sdc2_clk,
-+                      sdc2_cmd, sdc2_data, ufs_reset ]
-+        minItems: 1
-+        maxItems: 36
-+
-+      function:
-+        description:
-+          Specify the alternative function to be configured for the specified
-+          pins.
-+
-+        enum: [ gpio, adsp_ext, atest_char, atest_char0, atest_char1,
-+                atest_char2, atest_char3, aud_cdc, audio_ts, bimc_dte0,
-+                bimc_dte1, blsp_i2c0, blsp_i2c1, blsp_i2c3, blsp_i2c4,
-+                blsp_i2c5, blsp_i2c_scl_a2, blsp_i2c_scl_b2, blsp_i2c_sda_a2,
-+                blsp_i2c_sda_b2, blsp_spi0, blsp_spi2, blsp_spi3, blsp_spi4,
-+                blsp_spi5, blsp_spi_clk_a1, blsp_spi_clk_b1, blsp_spi_cs_n_a1,
-+                blsp_spi_cs_n_b1, blsp_spi_miso_a1, blsp_spi_miso_b1,
-+                blsp_spi_mosi_a1, blsp_spi_mosi_b1, blsp_uart0, blsp_uart1,
-+                blsp_uart2, blsp_uart3, blsp_uart5, blsp_uart_rx_a2,
-+                blsp_uart_rx_b2, blsp_uart_tx_a2, blsp_uart_tx_b2, cri_trng,
-+                cri_trng0, cri_trng1, dbg_out, dsd_clk_a, dsd_clk_b, ebi2_a,
-+                ebi2_lcd, ebi_cdc, ebi_ch0, ext_lpass, ext_mclk0, ext_mclk1_a,
-+                ext_mclk1_b, gcc_gp1_clk_a, gcc_gp1_clk_b, gcc_gp2_clk_a,
-+                gcc_gp2_clk_b, gcc_gp3_clk_a, gcc_gp3_clk_b, gcc_plltest,
-+                gcc_tlmm, hdmi_ddc, hdmi_dtest, hdmi_lbk0, hdmi_lbk1,
-+                hdmi_lbk2, hdmi_lbk3, hdmi_lbk4, hdmi_lbk5, hdmi_lbk6,
-+                hdmi_lbk7, hdmi_lbk8, hdmi_lbk9, hdmi_pixel, hdmi_rcv, hdmi_tx,
-+                i2s_1, i2s_2, i2s_3_data0_a, i2s_3_data0_b, i2s_3_data1_a,
-+                i2s_3_data1_b, i2s_3_data2_a, i2s_3_data2_b, i2s_3_data3_a,
-+                i2s_3_data3_b, i2s_3_sck_a, i2s_3_sck_b, i2s_3_ws_a,
-+                i2s_3_ws_b, i2s_4, ir_in, ldo_en, ldo_update, mclk_in1,
-+                mclk_in2, m_voc, nfc_dwl, nfc_irq, pcie_clk, pll_bist,
-+                prng_rosc, pwm_led1, pwm_led10, pwm_led11, pwm_led12,
-+                pwm_led13, pwm_led14, pwm_led15, pwm_led16, pwm_led17,
-+                pwm_led18, pwm_led19, pwm_led2, pwm_led20, pwm_led21,
-+                pwm_led22, pwm_led23, pwm_led24, pwm_led3, pwm_led4, pwm_led5,
-+                pwm_led6, pwm_led7, pwm_led8, pwm_led9, qdss_cti_trig_in_a0,
-+                qdss_cti_trig_in_a1, qdss_cti_trig_in_b0, qdss_cti_trig_in_b1,
-+                qdss_cti_trig_out_a0, qdss_cti_trig_out_a1,
-+                qdss_cti_trig_out_b0, qdss_cti_trig_out_b1, qdss_traceclk_a,
-+                qdss_traceclk_b, qdss_tracectl_a, qdss_tracectl_b,
-+                qdss_tracedata_a, qdss_tracedata_b, rgb_clk, rgb_data0,
-+                rgb_data1, rgb_data2, rgb_data3, rgb_data4, rgb_data5,
-+                rgb_data6, rgb_data7, rgb_data_b0, rgb_data_b1, rgb_data_b2,
-+                rgb_data_b3, rgb_data_b4, rgb_data_b5, rgb_data_b6,
-+                rgb_data_b7, rgb_de, rgb_hsync, rgb_mdp, rgb_vsync, rgmi_dll1,
-+                rgmi_dll2, rgmii_ck, rgmii_ctl, rgmii_int, rgmii_mdc,
-+                rgmii_mdio, rgmii_rx, rgmii_tx, rgmii_wol, sd_write,
-+                spdifrx_opt, spi_lcd, spkr_dac0, wlan1_adc0, wlan1_adc1,
-+                wlan2_adc0, wlan2_adc1, wsa_en ]
-+
-+      bias-pull-down: true
-+      bias-pull-up: true
-+      bias-disable: true
-+      drive-strength: true
-+      input-enable: true
-+      output-high: true
-+      output-low: true
-+
-+    required:
-+      - pins
-+
-+    additionalProperties: false
-+
-+allOf:
-+  - $ref: /schemas/pinctrl/qcom,tlmm-common.yaml#
-+
-+required:
-+  - compatible
-+  - reg
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+
-+    tlmm: pinctrl@1000000 {
-+        compatible = "qcom,qcs404-pinctrl";
-+        reg = <0x01000000 0x200000>,
-+              <0x01300000 0x200000>,
-+              <0x07b00000 0x200000>;
-+        reg-names = "south", "north", "east";
-+        interrupts = <GIC_SPI 208 IRQ_TYPE_LEVEL_HIGH>;
-+        gpio-ranges = <&tlmm 0 0 120>;
-+        gpio-controller;
-+        #gpio-cells = <2>;
-+        interrupt-controller;
-+        #interrupt-cells = <2>;
-+
-+
-+        blsp1-i2c1-default-state {
-+            pins = "gpio24", "gpio25";
-+            function = "blsp_i2c1";
-+        };
-+
-+        blsp1-i2c2-default-state {
-+            sda-pins {
-+                pins = "gpio19";
-+                function = "blsp_i2c_sda_a2";
-+            };
-+
-+            scl-pins {
-+                pins = "gpio20";
-+                function = "blsp_i2c_scl_a2";
-+            };
-+        };
-+    };
--- 
-2.34.1
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
