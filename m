@@ -2,55 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49DCF618FB7
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 06:00:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C120618FC0
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 06:00:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229493AbiKDFAd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 01:00:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36716 "EHLO
+        id S230454AbiKDFAn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 01:00:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229553AbiKDFA3 (ORCPT
+        with ESMTP id S230001AbiKDFA3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 4 Nov 2022 01:00:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B22571C924;
-        Thu,  3 Nov 2022 22:00:28 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 334FA165BA;
+        Thu,  3 Nov 2022 22:00:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 461A8620B0;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C1E0B6202D;
         Fri,  4 Nov 2022 05:00:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 32C6AC43157;
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 789D3C43155;
         Fri,  4 Nov 2022 05:00:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1667538027;
-        bh=VK8OQwdbUlsqJ5yUa+HWLi4zK1xxr2oNAnBk6r6xGVI=;
+        bh=ZHfBYU+UqBBWzQCD0LvBgUi3WgENgVy3SC2izp4q7l4=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=XY1JaOrYbRWaaDeoQRQesK2/i96xwmtLloyoMvavFi1HJnHMk46aXeaXkx2V0qRoq
-         nObM1giOSBF1DB+glRhBzW05LHgxCsfsXmpiwtAKf86mI9xy8XxQAevRiM0YqUqd2j
-         qTt8QZzizPE+nJ1LQ3zxM6zQFlZdRLIaldqogdkj+MC+ZHNeWlT2lGjpBIFaYlORbW
-         queI1rgNKTf+dPV0ZmGXaKxmY6ECIIU5BJjg5OwMX2bnuqmw8PX1nCrP/TmUYNNWBf
-         wwqgWr3k/AdXF8J2rYCcUF6GrIoHtOWpiRDuY+SsB4ApU5oMEMLKsj7y+9/tQ1qX1r
-         DVn62V8jLYu4Q==
+        b=G3K6QJ4DzKMuNQpDA5CwL9jjZOlepXsX8K8If1AkJHDPd4hbsxtTsGhv76izWofdB
+         ysOfH3q8ehqipKSpCTZGWzs+UA6qZhQtZMStIQnYXkm5pIw2KBfe/sbCFMLWKTtH1j
+         Hhk3aOPC2n9VPcPA79IZaoJAYIefqz9s/Tjh075T7S+Xmr4tclCQfxPijJzXTzJbUt
+         gGaZqxB2ogqadpzARPKRb2ZVISVmJrOHCbUqxGVZyzFuZTef7NWhAzOtuZfzbP4+ar
+         o2ol7Y7HEyr1s7iYuFG0uLODkA2CMyuDIl5mk1lCU6Tpsr3dIBGaaONAiY73+TeffQ
+         hlzztRIm6moLA==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 087A6E5256C;
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 13179E5250A;
         Fri,  4 Nov 2022 05:00:27 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] hamradio: baycom_epp: Fix return type of baycom_send_packet()
+Subject: Re: [PATCH net-next RESEND] net: usb: Use kstrtobool() instead of
+ strtobool()
 From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166753802702.27738.11594925007780721329.git-patchwork-notify@kernel.org>
+Message-Id: <166753802707.27738.6412621287669031939.git-patchwork-notify@kernel.org>
 Date:   Fri, 04 Nov 2022 05:00:27 +0000
-References: <20221102160610.1186145-1-nathan@kernel.org>
-In-Reply-To: <20221102160610.1186145-1-nathan@kernel.org>
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     t.sailer@alumni.ethz.ch, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, linux-hams@vger.kernel.org,
-        netdev@vger.kernel.org, ndesaulniers@google.com, trix@redhat.com,
-        keescook@chromium.org, samitolvanen@google.com,
-        llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev
+References: <d4432a67b6f769cac0a9ec910ac725298b64e102.1667336095.git.christophe.jaillet@wanadoo.fr>
+In-Reply-To: <d4432a67b6f769cac0a9ec910ac725298b64e102.1667336095.git.christophe.jaillet@wanadoo.fr>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     oliver@neukum.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, bjorn@mork.no,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-usb@vger.kernel.org, netdev@vger.kernel.org
 X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -65,20 +64,20 @@ Hello:
 This patch was applied to netdev/net-next.git (master)
 by Jakub Kicinski <kuba@kernel.org>:
 
-On Wed,  2 Nov 2022 09:06:10 -0700 you wrote:
-> With clang's kernel control flow integrity (kCFI, CONFIG_CFI_CLANG),
-> indirect call targets are validated against the expected function
-> pointer prototype to make sure the call target is valid to help mitigate
-> ROP attacks. If they are not identical, there is a failure at run time,
-> which manifests as either a kernel panic or thread getting killed. A
-> proposed warning in clang aims to catch these at compile time, which
-> reveals:
+On Wed,  2 Nov 2022 07:36:23 +0100 you wrote:
+> strtobool() is the same as kstrtobool().
+> However, the latter is more used within the kernel.
+> 
+> In order to remove strtobool() and slightly simplify kstrtox.h, switch to
+> the other function name.
+> 
+> While at it, include the corresponding header file (<linux/kstrtox.h>).
 > 
 > [...]
 
 Here is the summary with links:
-  - hamradio: baycom_epp: Fix return type of baycom_send_packet()
-    https://git.kernel.org/netdev/net-next/c/c5733e5b15d9
+  - [net-next,RESEND] net: usb: Use kstrtobool() instead of strtobool()
+    https://git.kernel.org/netdev/net-next/c/c2cce3a6e8eb
 
 You are awesome, thank you!
 -- 
