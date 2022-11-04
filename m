@@ -2,133 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D755E6194EB
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 11:57:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA0656194C8
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 11:50:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231756AbiKDK5L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 06:57:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36032 "EHLO
+        id S231665AbiKDKuD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 06:50:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229770AbiKDK4x (ORCPT
+        with ESMTP id S229489AbiKDKt7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 06:56:53 -0400
-Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12DBC2BB26
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 03:56:50 -0700 (PDT)
-Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20221104105648epoutp019a86701db046d653e097816220de41b7~kXHJVG4Y_2811928119epoutp01V
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 10:56:48 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20221104105648epoutp019a86701db046d653e097816220de41b7~kXHJVG4Y_2811928119epoutp01V
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1667559408;
-        bh=ByXREw6U9UT1fb8v/UjL6hHxBiGSezGiu+UpEJA3n18=;
-        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
-        b=NTWy6irBUsGDnFJwafP2dGF8aYAtgwvsqXxMxhGJKJwi1fJ8XY1x1MYVMle2wYeOf
-         MdpdEFHIyOFt9V6Xwf0OZ3R31bhpQ5ckkgdj5otBS/sd96bSNw1nslNjruaZoHQI6/
-         ayJQ0btUkhJqihhZlEn1MhN+WXvOqxw8j3MmNwds=
-Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
-        epcas5p3.samsung.com (KnoxPortal) with ESMTP id
-        20221104105647epcas5p33945ca8e853b0a5d209c4f8b61370f1d~kXHIvOBXh1487914879epcas5p3Z;
-        Fri,  4 Nov 2022 10:56:47 +0000 (GMT)
-Received: from epsmges5p3new.samsung.com (unknown [182.195.38.174]) by
-        epsnrtp2.localdomain (Postfix) with ESMTP id 4N3cy43wFyz4x9Pw; Fri,  4 Nov
-        2022 10:56:44 +0000 (GMT)
-Received: from epcas5p3.samsung.com ( [182.195.41.41]) by
-        epsmges5p3new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        0E.0E.56352.CEFE4636; Fri,  4 Nov 2022 19:56:44 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas5p1.samsung.com (KnoxPortal) with ESMTPA id
-        20221104104928epcas5p1ba76f35fd33e3a68ced972d0489c98af~kXAwPxlxh3116031160epcas5p1s;
-        Fri,  4 Nov 2022 10:49:28 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20221104104928epsmtrp1a42a0fb098eadb759fba8e4670993741~kXAwNrjXu2514725147epsmtrp14;
-        Fri,  4 Nov 2022 10:49:28 +0000 (GMT)
-X-AuditID: b6c32a4b-383ff7000001dc20-1c-6364efec4840
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        2D.A9.14392.83EE4636; Fri,  4 Nov 2022 19:49:28 +0900 (KST)
-Received: from FDSFTE308 (unknown [107.122.81.79]) by epsmtip2.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20221104104925epsmtip284347302a3441e4cd072520eda44e503~kXAtELaC42615726157epsmtip2W;
-        Fri,  4 Nov 2022 10:49:25 +0000 (GMT)
-From:   "Aakarsh Jain" <aakarsh.jain@samsung.com>
-To:     "'Krzysztof Kozlowski'" <krzysztof.kozlowski@linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>
-Cc:     <m.szyprowski@samsung.com>, <andrzej.hajda@intel.com>,
-        <mchehab@kernel.org>, <hverkuil-cisco@xs4all.nl>,
-        <ezequiel@vanguardiasur.com.ar>, <jernej.skrabec@gmail.com>,
-        <benjamin.gaignard@collabora.com>,
-        <krzysztof.kozlowski+dt@linaro.org>,
-        <stanimir.varbanov@linaro.org>, <dillon.minfei@gmail.com>,
-        <david.plowman@raspberrypi.com>, <mark.rutland@arm.com>,
-        <robh+dt@kernel.org>, <krzk+dt@kernel.org>, <andi@etezian.org>,
-        <alim.akhtar@samsung.com>, <aswani.reddy@samsung.com>,
-        <pankaj.dubey@samsung.com>, <smitha.t@samsung.com>
-In-Reply-To: <352e31de-cb79-f08e-b817-2712d97b84f1@linaro.org>
-Subject: RE: [PATCH 3/3] arm64: dts: exynos: Rename compatible string
- property from version to SOC specific
-Date:   Fri, 4 Nov 2022 16:19:24 +0530
-Message-ID: <000001d8f03b$1cd111f0$567335d0$@samsung.com>
+        Fri, 4 Nov 2022 06:49:59 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6A9A62B24C;
+        Fri,  4 Nov 2022 03:49:58 -0700 (PDT)
+Received: from anrayabh-desk (unknown [167.220.238.193])
+        by linux.microsoft.com (Postfix) with ESMTPSA id A4CC220B929B;
+        Fri,  4 Nov 2022 03:49:52 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com A4CC220B929B
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1667558998;
+        bh=2xtFBcRWDWUgb1O5tv1Wxinj7VDOrkrvZo9nr2w/dWw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LcyRZOZT4uwhubWfNY1avDSNnScQlJOXFoRMziEB1j/gVVHrJdwPuKSLC35L6tIh4
+         C6LHoMDparOAnaHiW0zZ/ytXBSS1W1t7YcJPbWbN9sKJWEHNnn3Ic9jBrffLyTyAwL
+         pcXHcCq4h0h6nE8uRmOcD5U/zcbaQt1eQSyUZETk=
+Date:   Fri, 4 Nov 2022 16:19:48 +0530
+From:   Anirudh Rayabharam <anrayabh@linux.microsoft.com>
+To:     Jinank Jain <jinankjain@linux.microsoft.com>
+Cc:     jinankjain@microsoft.com, kys@microsoft.com,
+        haiyangz@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        arnd@arndb.de, peterz@infradead.org, jpoimboe@kernel.org,
+        seanjc@google.com, kirill.shutemov@linux.intel.com,
+        ak@linux.intel.com, sathyanarayanan.kuppuswamy@linux.intel.com,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, mikelley@microsoft.com
+Subject: Re: [PATCH v3 3/5] x86/hyperv: Add an interface to do nested
+ hypercalls
+Message-ID: <Y2TuTOBfbot/fmEd@anrayabh-desk>
+References: <cover.1667480257.git.jinankjain@linux.microsoft.com>
+ <10fdfe01578e691e4815e3427e09e64b45c4af58.1667480257.git.jinankjain@linux.microsoft.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQIVsoyS1LfNYjvTRsU3iIkRJvur6AJ2XG6BApeHKxICO7c5fa16oSiA
-Content-Language: en-in
-X-Brightmail-Tracker: H4sIAAAAAAAAA02Te0xbdRTH97v39gGuemFFfqvM1CpEikALFC/yckKWS9gcwTgNIZau3ADS
-        V9oiMpc4CZvIGLMqC3RYYGUYnpsMOthKBFbYaBiOjMeidLymUEocoUOZW5wtBeW/z/me7/md
-        3zm//Jio7zkGh5mn0FJqhUTGo3tjphvBwaErD7OlgsnyfcSswUQnjBuLCDFjdGLEwJUuBtE5
-        fh4lfrjZRyNqLaM04mr/PEb8uOTKjlXbMGKxth0Qdv19OlGxNIcSvQ5XRcfCJI24e62GTpRf
-        7qIRbRYbg7g4NYYQjR1PEeJC1yMGcbLXwiBsZhMgSk5ZkLch2WpoBWS3rQGQUw1rKNmjtzFI
-        o9mOkB3NX9HJ6UkznbzS8Dl5cvBvjKzobAZkmWWKTjo7Xiat605GGisjPy6XkmRTai6lkCqz
-        8xQ58bzU98RJYlG0QBgqjCHe5HEVEjkVz0s+mBZ6IE/mWgGP+4lEVuCS0iQaDS88IU6tLNBS
-        3FylRhvPo1TZMlWUKkwjkWsKFDlhCkr7llAgiBC5jFn5ubW3ZhDVWb9P7/UtME4Ah08Z8GJC
-        PAq2NRXT3OyLXwfw7mhRGfB28RqATT06hif4E8DBn/9ibFcMPW2iexK9AK6a2rfKFwFsK/dy
-        Mx0PhzPWcprbxMYHAZztnEPdAYrXYnCyeJXudnnhCbBuo8TlYjL34HJotr3hljH8Ndha8Tvm
-        ZhYeA68OlSAe9oHD1Q82dRQPgY31DtRzIy58/Fvj5jFs/ACsLQ7yWPzh4OPyzbYQt3rBZ3/c
-        3vInw/mWbd4Dl292bk3Ggfazp7ZYChcu2Lc8MnjJ/B3m4UTYN16DuXuheDC8dC3cI++DldZ2
-        xNP3eXjmyQPEo7Ngt2Gbg2DN9AbNwwHwRstF8DXg6XdMpt8xmX7HCPr/u9UBrBnspVQaeQ6l
-        EakiFVThf+8tVco7wOYH4ad2g/nZ1bABgDDBAIBMlMdmrZmkUl9WtqToGKVWitUFMkozAESu
-        detQjp9U6fphCq1YGBUjiIqOjo6KiYwW8vxZxiq+1BfPkWipfIpSUertOoTpxTmBNBStZNHl
-        CLm7wifReSz9Nj6exup+d+a0Rfdxj2A9dr0yJetIysEXU3JnAwIbHjm837nOiSvQix7eYYP0
-        Umdglc5sJxtfXda+1PKRMXbvkmQIcPqLIzITUvlziUlhxxvRI0f9A4yHL3+wHJfq9zo37d6w
-        wRw5PLZRmBkakPHsl5HytV8LV0y3+tvbFr7sEyZ02fdvGKyV91l1Od+GVMGajIUXztH+MXwR
-        PM86NOYQT1j5ERPUE35z6OGjPk3CTvZPVGacZVegbPdI9ffTVeuH6v2S75QG6XS29JDjPs+x
-        haNJi212EnGWfhiv1taPiCvPTJw+/5ljYlfsKzLR+4Oqb3iYJlci5KNqjeRfngN2vKkEAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmpgleLIzCtJLcpLzFFi42LZdlhJXtfiXUqywd8zOhYP5m1js1j84zmT
-        xf3Fn1ksDm3eym6x5cpsZovlxw+wWsw/co7VYvvBRywWG18AZS/OvMti8Xz+OkaLl7PusVn0
-        vXjIbLH3NVDHpsfXWC0u75rDZtGzYSurxdojd9ktll6/yGSxbNMfJotFW7+wW7TuPcJucXfP
-        NkaLlrYjTA4SHmvmrWH02HF3CaPH9SWfmD12zrrL7rF4z0smj02rOtk87lzbw+axeUm9R+vR
-        XywefVtWMXp0HbnO5vF5k5zHqa+f2QN4o7hsUlJzMstSi/TtErgy5q9+xFawSqTi8Pt/TA2M
-        HYJdjJwcEgImEsf+rGTrYuTiEBLYzSixa+MxNoiEjMT/tmPsELawxMp/z9khip4ySkzf9pUR
-        JMEmoC9x/1QPK0hCROAko0T/mRYwh1lgM4vE2tY9LBAtnxklVszfDtbCKWAnseAHSBUHh7BA
-        tsTO7gyQMIuAisSavmcsIDavgKXE9mMtTBC2oMTJmU/A4swC2hJPbz6Fs5ctfM0McZ6CxM+n
-        y8BGigi4ScxvUoMoEZc4+rOHeQKj8Cwkk2YhmTQLyaRZSFoWMLKsYpRMLSjOTc8tNiwwzEst
-        1ytOzC0uzUvXS87P3cQITiRamjsYt6/6oHeIkYmD8RCjBAezkgjvp23JyUK8KYmVValF+fFF
-        pTmpxYcYpTlYlMR5L3SdjBcSSE8sSc1OTS1ILYLJMnFwSjUw6dedFbPwnaPBofE5SMR5h32T
-        k/vdlSKbLj5w3uVwttvmFV/3vA5hta/uNxf9uZptu/vOGvt/93deu5n4o+Lde7++781VU2Nv
-        Sop9l22bXf+MIcv2VO/3faovMjcsKCmxO/BdeEPNGe6sK98X/BKu5nQriUxqVbkbl+5YNl1r
-        02XRA8flZNOvb3CtDBNlvDqPcaJ1Xry8meye3Ocv6v+eE9DcHH5zF2NT6KFI9oudSf/WqIo8
-        2/7p6FWHKY3PVrdatzw0Xn7stChffkcLz2FxiV6juEB5QcOGyfYviiMXb3b4Y+z/4PrVtlVp
-        cm6HkpfvtRM8Z+f2W+2+QmMY+9vsP2sX6TyXYU/0VrZfc/ahEktxRqKhFnNRcSIA1WgV4JMD
-        AAA=
-X-CMS-MailID: 20221104104928epcas5p1ba76f35fd33e3a68ced972d0489c98af
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: REQ_APPROVE
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20221102125816epcas5p23e16fefd6b820e7dd7d9a93f0d48f40d
-References: <20221102130602.48969-1-aakarsh.jain@samsung.com>
-        <CGME20221102125816epcas5p23e16fefd6b820e7dd7d9a93f0d48f40d@epcas5p2.samsung.com>
-        <20221102130602.48969-3-aakarsh.jain@samsung.com>
-        <352e31de-cb79-f08e-b817-2712d97b84f1@linaro.org>
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <10fdfe01578e691e4815e3427e09e64b45c4af58.1667480257.git.jinankjain@linux.microsoft.com>
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -136,72 +57,119 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Nov 03, 2022 at 01:04:05PM +0000, Jinank Jain wrote:
+> According to TLFS, in order to communicate to L0 hypervisor there needs
+> to be an additional bit set in the control register. This communication
+> is required to perform priviledged instructions which can only be
+> performed by L0 hypervisor. An example of that could be setting up the
+> VMBus infrastructure.
+> 
+> Signed-off-by: Jinank Jain <jinankjain@linux.microsoft.com>
+> ---
+>  arch/x86/include/asm/hyperv-tlfs.h |  3 ++-
+>  arch/x86/include/asm/mshyperv.h    | 42 +++++++++++++++++++++++++++---
+>  include/asm-generic/hyperv-tlfs.h  |  1 +
+>  3 files changed, 41 insertions(+), 5 deletions(-)
+> 
+> diff --git a/arch/x86/include/asm/hyperv-tlfs.h b/arch/x86/include/asm/hyperv-tlfs.h
+> index 0319091e2019..fd066226f12b 100644
+> --- a/arch/x86/include/asm/hyperv-tlfs.h
+> +++ b/arch/x86/include/asm/hyperv-tlfs.h
+> @@ -380,7 +380,8 @@ struct hv_nested_enlightenments_control {
+>  		__u32 reserved:31;
+>  	} features;
+>  	struct {
+> -		__u32 reserved;
+> +		__u32 inter_partition_comm:1;
+> +		__u32 reserved:31;
+>  	} hypercallControls;
+>  } __packed;
+>  
+> diff --git a/arch/x86/include/asm/mshyperv.h b/arch/x86/include/asm/mshyperv.h
+> index b0f16d06a0c5..32f6bed68e88 100644
+> --- a/arch/x86/include/asm/mshyperv.h
+> +++ b/arch/x86/include/asm/mshyperv.h
+> @@ -76,10 +76,16 @@ static inline u64 hv_do_hypercall(u64 control, void *input, void *output)
+>  	return hv_status;
+>  }
+>  
+> +/* Hypercall to the L0 hypervisor */
+> +static inline u64 hv_do_nested_hypercall(u64 control, void *input, void *output)
+> +{
+> +	return hv_do_hypercall(control | HV_HYPERCALL_NESTED, input, output);
+> +}
+> +
+>  /* Fast hypercall with 8 bytes of input and no output */
+> -static inline u64 hv_do_fast_hypercall8(u16 code, u64 input1)
+> +static inline u64 _hv_do_fast_hypercall8(u64 control, u16 code, u64 input1)
+>  {
+> -	u64 hv_status, control = (u64)code | HV_HYPERCALL_FAST_BIT;
+> +	u64 hv_status;
+>  
+>  #ifdef CONFIG_X86_64
+>  	{
+> @@ -107,10 +113,24 @@ static inline u64 hv_do_fast_hypercall8(u16 code, u64 input1)
+>  		return hv_status;
+>  }
+>  
+> +static inline u64 hv_do_fast_hypercall8(u16 code, u64 input1)
+> +{
+> +	u64 control = (u64)code | HV_HYPERCALL_FAST_BIT;
+> +
+> +	return _hv_do_fast_hypercall8(control, code, input1);
+> +}
+> +
+> +static inline u64 hv_do_fast_nested_hypercall8(u16 code, u64 input1)
+> +{
+> +	u64 control = (u64)code | HV_HYPERCALL_FAST_BIT | HV_HYPERCALL_NESTED;
+> +
+> +	return _hv_do_fast_hypercall8(control, code, input1);
+> +}
+> +
+>  /* Fast hypercall with 16 bytes of input */
+> -static inline u64 hv_do_fast_hypercall16(u16 code, u64 input1, u64 input2)
+> +static inline u64 _hv_do_fast_hypercall16(u64 control, u16 code, u64 input1, u64 input2)
+>  {
+> -	u64 hv_status, control = (u64)code | HV_HYPERCALL_FAST_BIT;
+> +	u64 hv_status;
+>  
+>  #ifdef CONFIG_X86_64
+>  	{
+> @@ -141,6 +161,20 @@ static inline u64 hv_do_fast_hypercall16(u16 code, u64 input1, u64 input2)
+>  	return hv_status;
+>  }
+>  
+> +static inline u64 hv_do_fast_hypercall16(u16 code, u64 input1, u64 input2)
+> +{
+> +	u64 control = (u64)code | HV_HYPERCALL_FAST_BIT;
+> +
+> +	return _hv_do_fast_hypercall16(control, code, input1, input2);
+> +}
+> +
+> +static inline u64 hv_do_fast_nested_hypercall16(u16 code, u64 input1, u64 input2)
+> +{
+> +	u64 control = (u64)code | HV_HYPERCALL_FAST_BIT | HV_HYPERCALL_NESTED;
+> +
+> +	return _hv_do_fast_hypercall16(control, code, input1, input2);
+> +}
+> +
+>  extern struct hv_vp_assist_page **hv_vp_assist_page;
+>  
+>  static inline struct hv_vp_assist_page *hv_get_vp_assist_page(unsigned int cpu)
+> diff --git a/include/asm-generic/hyperv-tlfs.h b/include/asm-generic/hyperv-tlfs.h
+> index fdce7a4cfc6f..3840958201cd 100644
+> --- a/include/asm-generic/hyperv-tlfs.h
+> +++ b/include/asm-generic/hyperv-tlfs.h
+> @@ -185,6 +185,7 @@ enum HV_GENERIC_SET_FORMAT {
+>  #define HV_HYPERCALL_VARHEAD_OFFSET	17
+>  #define HV_HYPERCALL_VARHEAD_MASK	GENMASK_ULL(26, 17)
+>  #define HV_HYPERCALL_RSVD0_MASK		GENMASK_ULL(31, 27)
+> +#define HV_HYPERCALL_NESTED		BIT_ULL(31)
+>  #define HV_HYPERCALL_REP_COMP_OFFSET	32
+>  #define HV_HYPERCALL_REP_COMP_1		BIT_ULL(32)
+>  #define HV_HYPERCALL_REP_COMP_MASK	GENMASK_ULL(43, 32)
+> -- 
+> 2.25.1
 
-
-> -----Original Message-----
-> From: Krzysztof Kozlowski =5Bmailto:krzysztof.kozlowski=40linaro.org=5D
-> Sent: 03 November 2022 18:04
-> To: Aakarsh Jain <aakarsh.jain=40samsung.com>; linux-arm-
-> kernel=40lists.infradead.org; linux-media=40vger.kernel.org; linux-
-> kernel=40vger.kernel.org; devicetree=40vger.kernel.org
-> Cc: m.szyprowski=40samsung.com; andrzej.hajda=40intel.com;
-> mchehab=40kernel.org; hverkuil-cisco=40xs4all.nl;
-> ezequiel=40vanguardiasur.com.ar; jernej.skrabec=40gmail.com;
-> benjamin.gaignard=40collabora.com; krzysztof.kozlowski+dt=40linaro.org;
-> stanimir.varbanov=40linaro.org; dillon.minfei=40gmail.com;
-> david.plowman=40raspberrypi.com; mark.rutland=40arm.com;
-> robh+dt=40kernel.org; krzk+dt=40kernel.org; andi=40etezian.org;
-> alim.akhtar=40samsung.com; aswani.reddy=40samsung.com;
-> pankaj.dubey=40samsung.com; smitha.t=40samsung.com
-> Subject: Re: =5BPATCH 3/3=5D arm64: dts: exynos: Rename compatible string
-> property from version to SOC specific
->=20
-> On 02/11/2022 09:06, Aakarsh Jain wrote:
-> > commit =22752d3a23d1f68de87e3c=22 which adds MFC codec device node for
-> > exynos3250 SOC. Since exynos3250.dtsi and exynos5420.dtsi are using
-> > same compatible string as =22samsung,mfc-v7=22 but their node propertie=
-s
-> > are different.As both SoCs have MFC v7 hardware module but with
-> > different clock hierarchy and complexity.
-> > So renaming compatible string from version specific to SOC based.
-> >
-> > Suggested-by: Alim Akhtar <alim.akhtar=40samsung.com>
-> > Fixes: 752d3a23d1f6 (=22ARM: dts: add MFC codec device node for
-> > exynos3250=22)
->=20
-> There is no bug to fix and backporting is forbidden as it breaks the usag=
-e of
-> DTS in older kernel.
->=20
-Okay will remove this Fix tag in next series.
-> > Signed-off-by: Aakarsh Jain <aakarsh.jain=40samsung.com>
-> > ---
-> >  arch/arm/boot/dts/exynos3250.dtsi =7C 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/arch/arm/boot/dts/exynos3250.dtsi
-> > b/arch/arm/boot/dts/exynos3250.dtsi
-> > index 326b9e0ed8d3..98105c64f7d9 100644
-> > --- a/arch/arm/boot/dts/exynos3250.dtsi
-> > +++ b/arch/arm/boot/dts/exynos3250.dtsi
-> > =40=40 -485,7 +485,7 =40=40
-> >  		=7D;
-> >
-> >  		mfc: codec=4013400000 =7B
-> > -			compatible =3D =22samsung,mfc-v7=22;
-> > +			compatible =3D =22samsung,exynos3250-mfc=22;
->=20
-> The change is non-bisectable and breaks using DTS in older kernel.
->=20
-Right, so what is your suggestion on this?
-I can see two ways here:
-1> To squash patch2 and patch3 in one?
-2> Have a warning about this breakage in the patch-3 commit message?
-
-> Best regards,
-> Krzysztof
-
-
-Thanks for the review.
-
+Reviewed-by: <anrayabh@linux.microsoft.com>
 
