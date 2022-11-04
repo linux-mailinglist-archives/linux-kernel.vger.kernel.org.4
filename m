@@ -2,34 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFB89619D77
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 17:39:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A962C619D7F
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 17:39:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231861AbiKDQis (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 12:38:48 -0400
+        id S231891AbiKDQjW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 12:39:22 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230297AbiKDQik (ORCPT
+        with ESMTP id S231752AbiKDQim (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 12:38:40 -0400
+        Fri, 4 Nov 2022 12:38:42 -0400
 Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 810E82EF5E;
-        Fri,  4 Nov 2022 09:38:39 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB17D25EA4;
+        Fri,  4 Nov 2022 09:38:40 -0700 (PDT)
 Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 389D9C000D;
-        Fri,  4 Nov 2022 16:38:37 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id 67D3BC0009;
+        Fri,  4 Nov 2022 16:38:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1667579918;
+        t=1667579919;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=O4AM4lnV2gTii8655Tt65FHVrgfOcRYc0nYRGkNgVIU=;
-        b=DqU/oCr8N0GTdjVft/L1DgvUTSld6b0y64b8fQwnjGFy4ty36q1VizpqfgH8oBFVCM9NwR
-        GsrZSdlkvQ2faePej+qjegC+om6gU7PLqW1G6A5KTvMJ0d+/07IopJ7Z1Mh0tPJ89vVGMA
-        Wbi28EL8rEVDAZslj4WTUlWB/DlN16zZmJXKmVJuMOe/avytQvVXqZceK/Z2YzRv9ptz6x
-        7Jc0YNHtAVbRYKpH1QRJKTYi3tA1EArKHtGFuub6K1I3Rz8eqI6mh7ywdPsT4ztzvlLX9D
-        WnIVmCSbS+wRa1B5gQnPnz1uuMKDcSfjokG7XP8B155cS1WVbZewbkEiB3vKJw==
+        bh=/RuwsiKOoT3RSiv0ATWGMePKlt2FePql8/L/NJA2t6w=;
+        b=n9oVsDaT4roOwYop7LYboPhnBKi8zEtj89MtGR9NiyT9IZ3gJZonBS3xoZfgIq1AKHJtC9
+        d7akW49OR4Tvgaaw0haHKSbNuuI+9IAOtL1v6WPfOuTB9DBHmyJeS8M8smfTNvPM6XbndT
+        q6Hg/Dv/EwedvTSZxrtw2XNdjFflR93YyfHMlG/GnaTuotK8hXgsp4LauHF03M3R6gXxB1
+        ac3EqjkusVMfBJQhafOz4M9h6XstfGt8ZMQc0SK9Ev2tXVoj96Kxj3L9BDF46yCDhAtA5V
+        HWlAZ/3Yj4GkjaUwZkPn64bEj/ooohClq8Bbdy/bLVLqaAcwxrpsT+UPXFAJpg==
 From:   Miquel Raynal <miquel.raynal@bootlin.com>
 To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzk+dt@kernel.org>,
@@ -45,9 +45,9 @@ Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
         Christian Eggers <ceggers@arri.de>,
         Cory Tusar <cory.tusar@pid1solutions.com>,
         Miquel Raynal <miquel.raynal@bootlin.com>
-Subject: [PATCH v3 2/6] dt-bindings: nvmem: Introduce the nvmem-layout container
-Date:   Fri,  4 Nov 2022 17:38:29 +0100
-Message-Id: <20221104163833.1289857-3-miquel.raynal@bootlin.com>
+Subject: [PATCH v3 3/6] dt-bindings: eeprom: Inherit from nvmem.yaml
+Date:   Fri,  4 Nov 2022 17:38:30 +0100
+Message-Id: <20221104163833.1289857-4-miquel.raynal@bootlin.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221104163833.1289857-1-miquel.raynal@bootlin.com>
 References: <20221104163833.1289857-1-miquel.raynal@bootlin.com>
@@ -64,137 +64,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The nvmem devices description works like this:
-
-* Most cases (EEPROM & co):
-
-eeprom@x {
-	 compatible = "<eeprom-compatible>";
-	 ...
-};
-
-* MTD case:
-
-flash@y {
-	compatible = "<flash-compatible>";
-	...
-	otp {
-		compatible = "user-otp"; /* or "factory-otp" */
-		...
-	};
-};
-
-In the former case, the nvmem device is "eeprom@x", while in the latter
-case the nvmem device is "otp".
-
-Nvmem devices can produce nvmem cells. The current way to describe nvmem
-cells is to locate them by providing their static byte and bit offset
-and length. These information are stored in subnodes of the nvmem
-device.
-
-It is now a fact that such description does not fit more advanced use
-cases where the location or the size of the cells may vary. There are
-currently three known situations which require being described
-differently: Kontron's SL28 VPD, ONIE's TLV table and U-Boot's
-environment variables.
-
-Hence, we need a way to describe the parsers that must be used in order
-to make the dynamic discovery of the nvmem cells. This new description
-must fit both use cases (the generic situation and the MTD case).
-
-Let's create in both cases a container node named nvmem-layout whose
-content will depend on the parser. Right now nvmem-layout.yaml is
-"empty", but references to additional layout parser bindings will be
-inserted in the near future. The final goal being something that looks
-like:
-
-* Most cases (EEPROM & co):
-
-eeprom@x {
-	compatible = "<eeprom-compatible>";
-	...
-	nvmem-layout {
-		compatible = "<parser-compatible>";
-		...
-	};
-};
-
-* MTD case:
-
-flash@y {
-	compatible = "<flash-compatible>";
-	...
-	otp {
-		compatible = "user-otp"; /* or "factory-otp" */
-		...
-		nvmem-layout {
-			compatible = "<parser-compatible>";
-			...
-		};
-	};
-};
+EEPROMs can be nvmem providers. Let's make all EEPROM bindings
+reference nvmem.yaml as they should, so that nvmem cells and layout
+parsers can be safely described within the EEPROM nodes.
 
 Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
 ---
- .../bindings/nvmem/layouts/nvmem-layout.yaml  | 30 +++++++++++++++++++
- .../devicetree/bindings/nvmem/nvmem.yaml      |  7 +++++
- 2 files changed, 37 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/nvmem/layouts/nvmem-layout.yaml
+ Documentation/devicetree/bindings/eeprom/at24.yaml           | 5 ++++-
+ Documentation/devicetree/bindings/eeprom/at25.yaml           | 1 +
+ .../devicetree/bindings/eeprom/microchip,93lc46b.yaml        | 1 +
+ 3 files changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/nvmem/layouts/nvmem-layout.yaml b/Documentation/devicetree/bindings/nvmem/layouts/nvmem-layout.yaml
-new file mode 100644
-index 000000000000..ecc7c37cbc1f
---- /dev/null
-+++ b/Documentation/devicetree/bindings/nvmem/layouts/nvmem-layout.yaml
-@@ -0,0 +1,30 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/nvmem/layouts/nvmem-layout.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: NVMEM (Non Volatile Memory) layouts
-+
-+maintainers:
-+  - Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-+  - Michael Walle <michael@walle.cc>
-+  - Miquel Raynal <miquel.raynal@bootlin.com>
-+
-+description: |
-+  Most NVMEM layouts are static and thus do not require additional description
-+  besides the bytes/bits offset and length. Other layouts can be less statically
-+  define and might require dynamic reading of the NVMEM device in order to
-+  perform their parsing. The nvmem-layout container is here to describe these.
-+
-+properties:
-+  compatible: true
-+
-+  '#address-cells': false
-+
-+  '#size-cells': false
-+
-+required:
-+  - compatible
-+
-+unevaluatedProperties: false
-diff --git a/Documentation/devicetree/bindings/nvmem/nvmem.yaml b/Documentation/devicetree/bindings/nvmem/nvmem.yaml
-index 0455506fc30f..75bb93dda9df 100644
---- a/Documentation/devicetree/bindings/nvmem/nvmem.yaml
-+++ b/Documentation/devicetree/bindings/nvmem/nvmem.yaml
-@@ -39,6 +39,13 @@ properties:
-       when it's driven low (logical '0') to allow writing.
-     maxItems: 1
+diff --git a/Documentation/devicetree/bindings/eeprom/at24.yaml b/Documentation/devicetree/bindings/eeprom/at24.yaml
+index d14e0accbda8..84af0d5f52aa 100644
+--- a/Documentation/devicetree/bindings/eeprom/at24.yaml
++++ b/Documentation/devicetree/bindings/eeprom/at24.yaml
+@@ -10,6 +10,9 @@ title: I2C EEPROMs compatible with Atmel's AT24
+ maintainers:
+   - Bartosz Golaszewski <bgolaszewski@baylibre.com>
  
-+  nvmem-layout:
-+    $ref: /schemas/nvmem/layouts/nvmem-layout.yaml
-+    description:
-+      Alternative to the statically defined nvmem cells, this
-+      container may reference more advanced (dynamic) layout
-+      parsers.
++allOf:
++  - $ref: /schemas/nvmem/nvmem.yaml
 +
- patternProperties:
-   "@[0-9a-f]+(,[0-7])?$":
-     type: object
+ select:
+   properties:
+     compatible:
+@@ -183,7 +186,7 @@ required:
+   - compatible
+   - reg
+ 
+-additionalProperties: false
++unevaluatedProperties: false
+ 
+ examples:
+   - |
+diff --git a/Documentation/devicetree/bindings/eeprom/at25.yaml b/Documentation/devicetree/bindings/eeprom/at25.yaml
+index 8b1c997caac1..0f5a8ef996d3 100644
+--- a/Documentation/devicetree/bindings/eeprom/at25.yaml
++++ b/Documentation/devicetree/bindings/eeprom/at25.yaml
+@@ -104,6 +104,7 @@ required:
+ 
+ allOf:
+   - $ref: /schemas/spi/spi-peripheral-props.yaml#
++  - $ref: /schemas/nvmem/nvmem.yaml
+   - if:
+       properties:
+         compatible:
+diff --git a/Documentation/devicetree/bindings/eeprom/microchip,93lc46b.yaml b/Documentation/devicetree/bindings/eeprom/microchip,93lc46b.yaml
+index 0c2f5ddb79c5..64cfd971c9c5 100644
+--- a/Documentation/devicetree/bindings/eeprom/microchip,93lc46b.yaml
++++ b/Documentation/devicetree/bindings/eeprom/microchip,93lc46b.yaml
+@@ -47,6 +47,7 @@ required:
+ 
+ allOf:
+   - $ref: /schemas/spi/spi-peripheral-props.yaml#
++  - $ref: /schemas/nvmem/nvmem.yaml
+ 
+ unevaluatedProperties: false
+ 
 -- 
 2.34.1
 
