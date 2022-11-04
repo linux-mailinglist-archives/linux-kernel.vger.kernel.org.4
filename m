@@ -2,67 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE2F26190B1
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 07:10:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BAB3B6190B2
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 07:10:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230382AbiKDGKe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 02:10:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43452 "EHLO
+        id S230415AbiKDGKo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 02:10:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230008AbiKDGKW (ORCPT
+        with ESMTP id S230021AbiKDGKY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 02:10:22 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 376C028E30;
-        Thu,  3 Nov 2022 23:10:21 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id u8-20020a17090a5e4800b002106dcdd4a0so7322170pji.1;
-        Thu, 03 Nov 2022 23:10:21 -0700 (PDT)
+        Fri, 4 Nov 2022 02:10:24 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E116A28E36;
+        Thu,  3 Nov 2022 23:10:22 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id u6so3977862plq.12;
+        Thu, 03 Nov 2022 23:10:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=TLME7jH56C8D1+m0LNBApvFwrtLDMdDD21KTM6uwzsE=;
-        b=I4A3+fMFdFrw1ItUiXAMXyb/dpRXhGT7joIpaNMQ0W+htpFOy8qm0RnLufRDNI/oee
-         ui0A4rrd/yjdVcAr7RIQRAC8GqqUe6MjpRyPsyE5xs9v5xj+RlqS4CKsYpmj+ZubOiXz
-         Gx3wkPoK/VqHXweC6RPk2oIOTW2xe7RrZON67KUHnXdUOaQbl5Z5wtboxg1mljZNhuNr
-         tOxTvYcCQwEdwhMXmSqOlptpeIaCOuKQ5h6PtRtWQyeQuWyuVbo7TZb85bxWRsk7mzGJ
-         WPPhy3mzkTrHkv94sEzsV4VUHaxz8Ij20JKxnCkC/id7+pDZmsMTKYMqav5JH7+eyWOQ
-         McpQ==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0bbqffuj8GDPgiTExwtSV/0E3fSitJ002WmiZw+SKCw=;
+        b=USWpivDglRC74Px6hvCW6cz8r58wFAGm88yHE+C+6P0tyq4Bcfl705uegGlbut0fIV
+         bPr4byregreBm6NnlhcmPP1XuuGcO5Y9qUyjBuSX1V4Mc+D152+Es00EDLtwqFVvKTXM
+         ONAGCRFuAT4IwPVwEqsbjYgPoyDvLWXW/AnRYVRxeUkTJFu+/GbBzc8u/NQ0zYRb8Y68
+         +cdmpfTCl25exYPp0YmmYGwHFA9Sv/IFzD97s7H3lPkCEpjujmaXr4pABYTnnI7gxpli
+         cuwkVeBY4AbMsYvRVzHeV+ivyt4fhwX/wmWNOeXLXKB9IrNcBVzegZtyYqcSG2od9F6h
+         tluQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=TLME7jH56C8D1+m0LNBApvFwrtLDMdDD21KTM6uwzsE=;
-        b=d85n0d9umkbTZ+cHMkAKSw7mWVP2z+qrd634cOLQ+DuoxNL+7MoKJC9V9ddp4lJfDW
-         Z01YuS/+s/iZukx2FgrDU3jMC9ox74uxgl6fDROo9cM3IyFRrScd7FnysYgJeiVgczht
-         i1joncTdCdx5bEZmK6YpQI+xfGwXmFffIueqmAOrHaz2WQ9hC3NNTb2Qk7KUrqANyQ5E
-         GVK7nxc1HlMj+akcfJkuYLYXZ5XUhSkSxAYsTmlIUztLlq4xnhxNbyecrBVTlM/pAhxz
-         fc2IKz64rTRTRQk1CqEVFqK8ZAvhIGqyVl3L1QS2oEvrgi+gVFA83Vbrr4kSgXeZcuhz
-         d/Ww==
-X-Gm-Message-State: ACrzQf2gSFDWxhAQ4ePyVST8Qps71GJY6zoyhyoOnWymZqSBAB+mzsTE
-        1oVl9BqXDNrKefck8RzHejA=
-X-Google-Smtp-Source: AMsMyM6BNQnQnQmZJJmsIBLNwFI6ds2hXPvf65DlA882GVt+r1tc2tqiMseTvUiQJJMHn6UWrZ3epA==
-X-Received: by 2002:a17:90a:9c6:b0:213:b346:21dc with SMTP id 64-20020a17090a09c600b00213b34621dcmr32914249pjo.166.1667542220641;
-        Thu, 03 Nov 2022 23:10:20 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=0bbqffuj8GDPgiTExwtSV/0E3fSitJ002WmiZw+SKCw=;
+        b=bL9wPqXWzp1cwX/NYvjVJib5NicdhKy/5D47K133ZZMaPit5JmV3GHb/fndLO+sxbM
+         kIB/fL8AlO+HT/T3k5DrLllfYBHe2st0FbLLBKtpa2+uY0+2yKtkMOp2z/YhWDcf+jnw
+         kbHzfDvij5Qoi0yoVzc0/KBwEteBTiYBe3IBc/+YYZPvlOa/Jejw26a1pOaF9cwgjKKg
+         vGzTiX0BIa4hklHucrpcXWD+Qt/8fyF1FoY2OmYa3kPEIMxPBsmUVcSZaJGPBkfTW3+3
+         QaxlVqGL0I0Ft8o0jQIC9rJUt4FeViAAD0q3+XXo5tfdBCdWK4hTaXNPwUGh6EB3/7He
+         40yg==
+X-Gm-Message-State: ACrzQf0RTgV9ZtQJLR3GJwZ1tNKFyHn4T0B8LwzW6Kj9QbGFaWL78MvK
+        +ZHQuR8gbG/pZiU8wG1K1QHbuX18Tyo=
+X-Google-Smtp-Source: AMsMyM78QLEAJK5f93YKlQITbBw7m6d1c432NDZDxCNnKU7GiLgehaSt1CKczX/69Th/BVuncP7fjw==
+X-Received: by 2002:a17:90b:4a92:b0:213:2421:5f38 with SMTP id lp18-20020a17090b4a9200b0021324215f38mr35950804pjb.10.1667542222248;
+        Thu, 03 Nov 2022 23:10:22 -0700 (PDT)
 Received: from dtor-ws.mtv.corp.google.com ([2620:15c:9d:2:a6ae:11ff:fe11:fcc3])
-        by smtp.gmail.com with ESMTPSA id x5-20020aa79ac5000000b0056bfd4a2702sm1791411pfp.45.2022.11.03.23.10.19
+        by smtp.gmail.com with ESMTPSA id x5-20020aa79ac5000000b0056bfd4a2702sm1791411pfp.45.2022.11.03.23.10.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Nov 2022 23:10:19 -0700 (PDT)
+        Thu, 03 Nov 2022 23:10:21 -0700 (PDT)
 From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
 To:     Linus Walleij <linus.walleij@linaro.org>,
         Bartosz Golaszewski <brgl@bgdev.pl>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Cc:     linux-acpi@vger.kernel.org, linux-gpio@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 0/6] Add support for software nodes to gpiolib
-Date:   Thu,  3 Nov 2022 23:10:10 -0700
-Message-Id: <20221031-gpiolib-swnode-v1-0-a0ab48d229c7@gmail.com>
+Subject: [PATCH 1/6] gpiolib: of: change of_find_gpio() to accept device node
+Date:   Thu,  3 Nov 2022 23:10:11 -0700
+Message-Id: <20221031-gpiolib-swnode-v1-1-a0ab48d229c7@gmail.com>
 X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
+In-Reply-To: <20221031-gpiolib-swnode-v1-0-a0ab48d229c7@gmail.com>
+References: <20221031-gpiolib-swnode-v1-0-a0ab48d229c7@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 X-Mailer: b4 0.11.0-dev-28747
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -73,73 +76,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This series attempts to add support for software nodes to gpiolib, using=0D
-software node references. This allows us to convert more drivers to the=0D
-generic device properties and drop support for custom platform data.=0D
-=0D
-To describe a GPIO via software nodes we can create the following data=0D
-items:=0D
-=0D
-/* Node representing the GPIO controller/GPIO bank */=0D
-static const struct software_node gpio_bank_b_node =3D {=0D
-        .name =3D "B",=0D
-};=0D
-=0D
-/*=0D
- * Properties that will be assigned to a software node assigned to=0D
- * the devicei that used platform data.=0D
- */=0D
-static const struct property_entry simone_key_enter_props[] =3D {=0D
-        PROPERTY_ENTRY_U32("linux,code", KEY_ENTER),=0D
-        PROPERTY_ENTRY_STRING("label", "enter"),=0D
-        PROPERTY_ENTRY_REF("gpios", &gpio_bank_b_node, 123, GPIO_ACTIVE_LOW=
-),=0D
-        { }=0D
-};=0D
-=0D
-The code in gpiolib handling software nodes uses the name in the=0D
-software node representing GPIO controller to locate the actual instance=0D
-of GPIO controller.=0D
-=0D
-Note that kbuild robot is likely to complain about this patchset because=0D
-it depends on patches removing [devm_]gpiod_get_from_of_node() and=0D
-devm_fwnode_get_[index_]gpiod_from_child() APIs that are still pending.=0D
-I pushed them to=0D
-=0D
-git://git.kernel.org/pub/scm/linux/kernel/git/dtor/input.git tmp-gpiolib=0D
-=0D
-for your reference.=0D
-=0D
-To: Linus Walleij <linus.walleij@linaro.org>=0D
-To: Bartosz Golaszewski <brgl@bgdev.pl>=0D
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>=0D
-Cc: linux-gpio@vger.kernel.org=0D
-Cc: linux-kernel@vger.kernel.org=0D
-Cc: linux-acpi@vger.kernel.org=0D
-=0D
----=0D
-Dmitry Torokhov (6):=0D
-      gpiolib: of: change of_find_gpio() to accept device node=0D
-      gpiolib: acpi: change acpi_find_gpio() to accept firmware node=0D
-      gpiolib: acpi: teach acpi_find_gpio() to handle data-only nodes=0D
-      gpiolib: acpi: avoid leaking ACPI details into upper gpiolib layers=0D
-      gpiolib: consolidate GPIO lookups=0D
-      gpiolib: add support for software nodes=0D
-=0D
- drivers/gpio/Makefile         |   1 +=0D
- drivers/gpio/gpiolib-acpi.c   | 132 +++++++++++++----------=0D
- drivers/gpio/gpiolib-acpi.h   |  54 +---------=0D
- drivers/gpio/gpiolib-of.c     |  52 +--------=0D
- drivers/gpio/gpiolib-of.h     |  16 +--=0D
- drivers/gpio/gpiolib-swnode.c | 106 +++++++++++++++++++=0D
- drivers/gpio/gpiolib-swnode.h |  13 +++=0D
- drivers/gpio/gpiolib.c        | 239 ++++++++++++++++++++------------------=
-----=0D
- 8 files changed, 316 insertions(+), 297 deletions(-)=0D
----=0D
-base-commit: dc04f5ab1b1114aa19b9026f816fc01ca9c9941d=0D
-change-id: 20221031-gpiolib-swnode-948203f49b23=0D
-=0D
--- =0D
-Dmitry=0D
-=0D
+In preparation of switching all OF-based GPIO lookups to go through
+of_find_gpio() let's change it to accept device node as its argument as
+we do not always have access to device structure.
+
+Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+---
+ drivers/gpio/gpiolib-of.c | 7 +++----
+ drivers/gpio/gpiolib-of.h | 4 ++--
+ drivers/gpio/gpiolib.c    | 5 +++--
+ 3 files changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/gpio/gpiolib-of.c b/drivers/gpio/gpiolib-of.c
+index 012e66344b56..607bf4358ff7 100644
+--- a/drivers/gpio/gpiolib-of.c
++++ b/drivers/gpio/gpiolib-of.c
+@@ -605,7 +605,7 @@ static const of_find_gpio_quirk of_find_gpio_quirks[] = {
+ 	NULL
+ };
+ 
+-struct gpio_desc *of_find_gpio(struct device *dev, const char *con_id,
++struct gpio_desc *of_find_gpio(struct device_node *np, const char *con_id,
+ 			       unsigned int idx, unsigned long *flags)
+ {
+ 	char prop_name[32]; /* 32 is max size of property name */
+@@ -623,8 +623,7 @@ struct gpio_desc *of_find_gpio(struct device *dev, const char *con_id,
+ 			snprintf(prop_name, sizeof(prop_name), "%s",
+ 				 gpio_suffixes[i]);
+ 
+-		desc = of_get_named_gpiod_flags(dev->of_node, prop_name, idx,
+-						&of_flags);
++		desc = of_get_named_gpiod_flags(np, prop_name, idx, &of_flags);
+ 
+ 		if (!gpiod_not_found(desc))
+ 			break;
+@@ -632,7 +631,7 @@ struct gpio_desc *of_find_gpio(struct device *dev, const char *con_id,
+ 
+ 	/* Properly named GPIO was not found, try workarounds */
+ 	for (q = of_find_gpio_quirks; gpiod_not_found(desc) && *q; q++)
+-		desc = (*q)(dev->of_node, con_id, idx, &of_flags);
++		desc = (*q)(np, con_id, idx, &of_flags);
+ 
+ 	if (IS_ERR(desc))
+ 		return desc;
+diff --git a/drivers/gpio/gpiolib-of.h b/drivers/gpio/gpiolib-of.h
+index 22d314229bbd..c44be0f285f3 100644
+--- a/drivers/gpio/gpiolib-of.h
++++ b/drivers/gpio/gpiolib-of.h
+@@ -17,7 +17,7 @@ struct gpio_desc;
+ struct gpio_device;
+ 
+ #ifdef CONFIG_OF_GPIO
+-struct gpio_desc *of_find_gpio(struct device *dev,
++struct gpio_desc *of_find_gpio(struct device_node *np,
+ 			       const char *con_id,
+ 			       unsigned int idx,
+ 			       unsigned long *lookupflags);
+@@ -31,7 +31,7 @@ struct gpio_desc *gpiod_get_from_of_node(const struct device_node *node,
+ 					 enum gpiod_flags dflags,
+ 					 const char *label);
+ #else
+-static inline struct gpio_desc *of_find_gpio(struct device *dev,
++static inline struct gpio_desc *of_find_gpio(struct device_node *np,
+ 					     const char *con_id,
+ 					     unsigned int idx,
+ 					     unsigned long *lookupflags)
+diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
+index e8faedca6b14..c5a80def8be4 100644
+--- a/drivers/gpio/gpiolib.c
++++ b/drivers/gpio/gpiolib.c
+@@ -4070,14 +4070,15 @@ struct gpio_desc *__must_check gpiod_get_index(struct device *dev,
+ 	int ret;
+ 	/* Maybe we have a device name, maybe not */
+ 	const char *devname = dev ? dev_name(dev) : "?";
+-	const struct fwnode_handle *fwnode = dev ? dev_fwnode(dev) : NULL;
++	struct fwnode_handle *fwnode = dev ? dev_fwnode(dev) : NULL;
+ 
+ 	dev_dbg(dev, "GPIO lookup for consumer %s\n", con_id);
+ 
+ 	/* Using device tree? */
+ 	if (is_of_node(fwnode)) {
+ 		dev_dbg(dev, "using device tree for GPIO lookup\n");
+-		desc = of_find_gpio(dev, con_id, idx, &lookupflags);
++		desc = of_find_gpio(to_of_node(fwnode),
++				    con_id, idx, &lookupflags);
+ 	} else if (is_acpi_node(fwnode)) {
+ 		dev_dbg(dev, "using ACPI for GPIO lookup\n");
+ 		desc = acpi_find_gpio(dev, con_id, idx, &flags, &lookupflags);
+
+-- 
+b4 0.11.0-dev-28747
