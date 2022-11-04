@@ -2,103 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE94F619B23
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 16:13:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E15BD619B28
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 16:14:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230324AbiKDPNL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 11:13:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55262 "EHLO
+        id S232448AbiKDPOX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 11:14:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232433AbiKDPMp (ORCPT
+        with ESMTP id S232433AbiKDPOU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 11:12:45 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17C072528C;
-        Fri,  4 Nov 2022 08:12:44 -0700 (PDT)
-From:   John Ogness <john.ogness@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1667574762;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=9fNXuNAZIaRVYddQx+KbxBq3ufFg5G5ZaGpH6NBeNLI=;
-        b=pkMNdG7uiZXWqiVdAog5eC2NPfFgSkwaQvl8wX9eLkqhULG5dycMkgKBoLN7gf3Qjd6WG/
-        om8O0BNVcnC31uXSvZfxQzSWEFAa4uFRLHnSOTjbcT9TUPVYisPJRU7yz7Yf93Gxii8qMC
-        CvedxxjC+JsAZlrdVD4ennVxtqcEXAJA8q/ljeKbK2frUxtHlAli8GS+DOzuNojzLuXT+6
-        W5LS1pftuVsvXaXs3erI3PnZyzqpFMgC3L6W0n2UWIJuhr7TSLxZHBdVEjfrx9lp4vhTCA
-        4W8unTP8/wTQ+O4UiWw+b3/BwBtjxCFMVpSiD15Er+Q8M9ZviJvNnblIoNhuag==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1667574762;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=9fNXuNAZIaRVYddQx+KbxBq3ufFg5G5ZaGpH6NBeNLI=;
-        b=3rtLf7E3Mjf6OgBJQQOzDJcuCaGZpMFzQdicfMP9Q9BndJybusy4Qo0qD43T6Ti79mKfSz
-        UC/Vjz0+22funYAA==
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org
-Subject: Re: [PATCH printk v2 09/38] netconsole: use console_is_enabled()
-In-Reply-To: <Y1KbU2r09bEm2rHX@alley>
-References: <20221019145600.1282823-1-john.ogness@linutronix.de>
- <20221019145600.1282823-10-john.ogness@linutronix.de>
- <Y1KbU2r09bEm2rHX@alley>
-Date:   Fri, 04 Nov 2022 16:18:41 +0106
-Message-ID: <87h6ze7nyu.fsf@jogness.linutronix.de>
+        Fri, 4 Nov 2022 11:14:20 -0400
+Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B60E65582
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 08:14:16 -0700 (PDT)
+Received: by mail-qk1-x72a.google.com with SMTP id k2so3222251qkk.7
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 08:14:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ZSAQ8HyevbU1SRu/HWCnDYZ7sesPwd2iwJjeHcOhri0=;
+        b=p9CminsN53qrFplpvggdvKqaLyOKNBrntrAp19vf9oPCrthGfFnypEKUwZg9xGCMK4
+         tlAkh8aPlPv6bgVXnI5olTf9u/Jk3rpBLNGmBUk91noqbdvwrZpf2j+aV2dTz+9PhwK4
+         +Ox755t9PDNDs+dx3ML4giDlVS5Mg55PCenbf87phpCV68riMhHT7ZLZcGZxvWVOstDC
+         P46DQiP2YhibJHquAwbiwmnurl22WpSdPMvsQuY28y/29wsdM9RlKYMyEzBTV1X2Coxj
+         nRQR27JtXxOwDZPkoCu95H2QrUb7E4jwsH7jm2Zhnz+qwD/bN7hNDaxtbe+eMo2s11wI
+         xEYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZSAQ8HyevbU1SRu/HWCnDYZ7sesPwd2iwJjeHcOhri0=;
+        b=1kjPXoMULSrS6B6S+MA8UJljwSjf7/GISXNchew6yb5haBdiOdvRgK+X6kxtlneDhT
+         2uj9KZAKW8QCdgocm8YdAjkAoaImG+lLIYYWcBndHpwhph47pqYx33r2/F2yeaBTu5Jd
+         +OjxuunRerkpUcT+IZwLvnBOn287bisv7kWL4jgONxoIiMuYuqveafE7LQdRLGoYHDMB
+         KHFoB5t/a8UP6MaRfUAPpqmGrIpzPhVIqNlGtzL7TOjCwM5Nnw3Kqw+Ned/JigmGvU0b
+         nmvLo4uQme3wdsLTZAUXmt/3tuPxdDgp2Xw8FgJ9hJFCbEYTUSlqTOTNAfFpKuUTXJhs
+         T0zQ==
+X-Gm-Message-State: ACrzQf3et0ZFUHpMX1a4EWujEaVrTIKovW8gkbL4VS9fndg+qM+NVw7m
+        VpRID0uH8zochwNtvcBXcfO0cA==
+X-Google-Smtp-Source: AMsMyM6iKfQ55uRl1/mtMB2lg88XM5Tn9yhOcXnHuhJnX4Ds+U0VSJAiSVrSxyVuJsRIDOFlmYrIxw==
+X-Received: by 2002:a37:a8d2:0:b0:6f9:75d0:fddb with SMTP id r201-20020a37a8d2000000b006f975d0fddbmr27055868qke.101.1667574855536;
+        Fri, 04 Nov 2022 08:14:15 -0700 (PDT)
+Received: from ?IPV6:2601:586:5000:570:aad6:acd8:4ed9:299b? ([2601:586:5000:570:aad6:acd8:4ed9:299b])
+        by smtp.gmail.com with ESMTPSA id e22-20020a05622a111600b003996aa171b9sm2579338qty.97.2022.11.04.08.14.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 04 Nov 2022 08:14:14 -0700 (PDT)
+Message-ID: <e17dbc8c-b2ba-6acf-7b56-85a246aaa765@linaro.org>
+Date:   Fri, 4 Nov 2022 11:14:12 -0400
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v3 1/2] dt-bindings: PCI: xilinx-pcie: Convert to YAML
+ schemas of Xilinx AXI PCIe Root Port Bridge
+Content-Language: en-US
+To:     Thippeswamy Havalige <thippeswamy.havalige@amd.com>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Cc:     bhelgaas@google.com, michals@xilinx.com, robh+dt@kernel.org,
+        nagaradhesh.yeleswarapu@amd.com, bharat.kumar.gogada@amd.com
+References: <20221104044135.469797-1-thippeswamy.havalige@amd.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221104044135.469797-1-thippeswamy.havalige@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-10-21, Petr Mladek <pmladek@suse.com> wrote:
->> diff --git a/drivers/net/netconsole.c b/drivers/net/netconsole.c
->> index bdff9ac5056d..073e59a06f21 100644
->> --- a/drivers/net/netconsole.c
->> +++ b/drivers/net/netconsole.c
->> @@ -332,7 +332,7 @@ static ssize_t enabled_store(struct config_item *item,
->>  	}
->>  
->>  	if (enabled) {	/* true */
->> -		if (nt->extended && !(netconsole_ext.flags & CON_ENABLED)) {
->> +		if (nt->extended && !console_is_enabled(&netconsole_ext)) {
->>  			netconsole_ext.flags |= CON_ENABLED;
->>  			register_console(&netconsole_ext);
->>  		}
->> @@ -915,7 +915,7 @@ static int __init init_netconsole(void)
->>  	if (err)
->>  		goto undonotifier;
->>  
->> -	if (netconsole_ext.flags & CON_ENABLED)
->> +	if (console_is_enabled(&netconsole_ext))
->>  		register_console(&netconsole_ext);
->>  	register_console(&netconsole);
->>  	pr_info("network logging started\n");
->
-> This looks like a (mis)use of CON_ENABLED flag.
+On 04/11/2022 00:41, Thippeswamy Havalige wrote:
+> Convert to YAML dtschemas of Xilinx AXI PCIe Root Port Bridge
+> dt binding.
+> 
+> Signed-off-by: Thippeswamy Havalige <thippeswamy.havalige@amd.com>
+> ---
 
-Yes. When @netconsole_ext is registered, CON_ENABLED is always set. So
-it should be set in the static initialization. The first hunk should be
-using the new console_is_registered(). The second hunk should be using a
-local @extended bool variable. Also, in cleanup_netconsole() it should
-check if the console is registered:
 
-if (console_is_registered(&netconsole_ext))
-        unregister_console(&netconsole_ext);
+> +
+> +title: Xilinx AXI PCIe Root Port Bridge
+> +
+> +maintainers:
+> +  - Thippeswamy Havalige <thippeswamy.havalige@amd.com>
+> +
+> +allOf:
+> +  - $ref: /schemas/pci/pci-bus.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    const: xlnx,axi-pcie-host-1.00.a
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  ranges:
+> +    items:
+> +      - description: |
+> +          ranges for the PCI memory regions (I/O space region is not
+> +          supported by hardware)
+> +
+> +  "#interrupt-cells":
+> +    const: 1
+> +
+> +  interrupt-controller:
+> +    description: identifies the node as an interrupt controller
+> +    type: object
+> +    properties:
+> +      interrupt-controller: true
+> +
+> +      "#address-cells":
+> +        const: 0
+> +
+> +      "#interrupt-cells":
+> +        const: 1
+> +
+> +    required:
+> +      - 'interrupt-controller'
+> +      - '#address-cells'
+> +      - '#interrupt-cells'
 
-I will make all of these changes for v3. Then there will be no
-checking/setting of CON_ENABLED in the driver.
+Use same style of quotes as in other places, either ' or "
 
-John Ogness
+> +
+> +    additionalProperties: false
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - ranges
+> +  - interrupts
+> +  - interrupt-map
+> +  - "#interrupt-cells"
+> +  - interrupt-controller
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +
+> +    pcie@50000000 {
+> +        compatible = "xlnx,axi-pcie-host-1.00.a";
+> +        reg = < 0x50000000 0x1000000 >;
+
+Still wrong - no spaces around <>
+
+Best regards,
+Krzysztof
+
