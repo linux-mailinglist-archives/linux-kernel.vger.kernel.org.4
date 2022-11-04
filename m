@@ -2,133 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECAC9618D9E
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 02:28:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FEDA618DA1
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 02:28:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229598AbiKDB2D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 21:28:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35038 "EHLO
+        id S230423AbiKDB2R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 21:28:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbiKDB16 (ORCPT
+        with ESMTP id S229863AbiKDB2G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 21:27:58 -0400
-Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5385423392;
-        Thu,  3 Nov 2022 18:27:57 -0700 (PDT)
-Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-12c8312131fso4172088fac.4;
-        Thu, 03 Nov 2022 18:27:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=aUilUaHJkRjMTuKpx9KuulcmPnQFwe0ZTOEMgpM9EUs=;
-        b=Qiuj1zxH72t4rljyyB3fSEkfn0epewXXoN357R0R6Usp3EKlWrx8iU6hpHUzfKpX1N
-         jWUvsrLP7T+/T1HTqFmsPXuwFA3OhGOVpq/6hknV2wHSHf8vxvD0SjqSU9ikQYMusbVh
-         Ibvt/VUaZO27SjIcQQsqhhHansMDWkRhoZJ25wlaEJFLerIHLY9Z6gt6gBWracbEq52v
-         WyLK4J9IOWlBKdFWafyeUCtKH3Grw4/GJa2RKMtb5uDabXtgzXtRP9PcMO11bAgO+rcE
-         8vVYN3Y5hRUttjbnXz/13kwYZdkqigq9lG1nsPlZIePUhTXp23fp7wrjIrx9Cim5/XWG
-         SHNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=aUilUaHJkRjMTuKpx9KuulcmPnQFwe0ZTOEMgpM9EUs=;
-        b=cFiQjEvUumk5ghW4GWmY+37rM48BwHcDg8M2BNAClxyUxVo3wjuXkw2x+MRS8bOKgD
-         wUcOU/gKupzfEc9gaVEkEZ2nnw6vYJUHZq6PlMGI9vuwroVobBtl2FbH/Mu8uv9PGTe5
-         tnuv4rXrxOMezr/l1FtHTwZwr3wtcZqHv6OanqkyTC1N1VsVJhnoxY0nveJMnm2ZONZK
-         zeoWl9WlLkdpoQWI0uH7E93yEcxScziMAz67+hgOyR+xfHVQFfUB8cV76AUPMe2VHTaD
-         LqOBcFNpnBNpeWpN7YIMnCODbpdq79p6DH6VsfldU/mXGDZQEOgn/Ah5GbzNHUi3tA7K
-         9Row==
-X-Gm-Message-State: ACrzQf3FeyRszoUeUQ6DM8M0Zh/RidMcxTk8v5GBFLPUwffAfWQnoNQD
-        8lxaEga3lngW+qkMsECFl1U=
-X-Google-Smtp-Source: AMsMyM7mnS5ut6p2YgNYUONLq0d80He/REUIRQ+G4m7m1O1dcQUT/Jn8NnVdFxbGwgr+wi1xKLrmPg==
-X-Received: by 2002:a05:6870:3414:b0:13c:787e:15ba with SMTP id g20-20020a056870341400b0013c787e15bamr19114631oah.164.1667525276643;
-        Thu, 03 Nov 2022 18:27:56 -0700 (PDT)
-Received: from localhost.localdomain ([216.130.59.33])
-        by smtp.gmail.com with ESMTPSA id b6-20020a9d6b86000000b0066c75a2643asm924675otq.66.2022.11.03.18.27.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Nov 2022 18:27:56 -0700 (PDT)
-Sender: Larry Finger <larry.finger@gmail.com>
-From:   Larry Finger <Larry.Finger@lwfinger.net>
-To:     gregkh@linuxfoundation.org
-Cc:     phil@philpotter.co.uk, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org,
-        Larry Finger <Larry.Finger@lwfinger.net>,
-        Randy Dunlap <rdunlap@infradead.org>
-Subject: [PATCH v2] staging: rtl8192e: Fix divide fault when calculating beacon age
-Date:   Thu,  3 Nov 2022 20:27:50 -0500
-Message-Id: <20221104012750.2076-1-Larry.Finger@lwfinger.net>
-X-Mailer: git-send-email 2.38.0
+        Thu, 3 Nov 2022 21:28:06 -0400
+Received: from out203-205-221-235.mail.qq.com (out203-205-221-235.mail.qq.com [203.205.221.235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDBAC23396;
+        Thu,  3 Nov 2022 18:28:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1667525281;
+        bh=97NTQrGjhU6NxW3LqmcxEye1WtDELGVVc3QpdO5C//o=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=v1FxifU306S8S8Al31LWzWHZMKyyXCwi13rfsB6dl1JLnNX+Pl5SAKzohHX6TET2U
+         lZET6/vS4AzNjJsTclyfA/lc1xWiDof2V8m2ABEMhUIH97xTz67/bJ15bZk4Ijxu/f
+         BUXKuf1iz5L8N6OAhNUImyWL4kR5ML0cIyHi7fRY=
+Received: from localhost.localdomain ([39.156.73.13])
+        by newxmesmtplogicsvrszc2-1.qq.com (NewEsmtp) with SMTP
+        id 6F83B809; Fri, 04 Nov 2022 09:27:56 +0800
+X-QQ-mid: xmsmtpt1667525276t86v0w579
+Message-ID: <tencent_469D8AF32BD56816A29981BED06E96D22506@qq.com>
+X-QQ-XMAILINFO: NQR8mRxMnur9CuKnjIQclbzLKdKQoECHB/HARwfNKMRd1slsqwmunFhqL46bBi
+         Kjk1ejNtv+INL6fZOO7emYHBshwONKKXj9zr/u4gUQJtiYrlG6cRFcCH6kZtpzp8oR897CbzxNAf
+         si3v7PwUyKPZR3TTTA/9Cav/0W9DwlzZVX9tgYDSctJy7xRsaEIed0lrMYiQKaqt8bdykduYvre9
+         D+jeweGGKv1CT7qMQPh6/IeL7lZB+MMD9oJFE9P/PvIqbHS0MuqFiF4oPegTHWgOb0aST+e5lrKd
+         6V1rZbcGIKSxaNO4Bvp8rCq5ETlhIsBTwzc2Xqtwh6bOvH4YLEvwCIXNXn/dU/UGH1nddplnLS5K
+         5DexdWjet36EwMRA8XfE5HAXoGO2dY6xTkgZEv8X5aQitUOb9zBbYTjpjJmlqUhoBqwLOcEzUUco
+         whUaRxrAftgscP3PV8zxejCkQ+M2ZMtF+UocUma3++/9arhU6iLhetF4QWLPbBZ3on3bXHvzfG7X
+         WSO3Qy1mdoUy1mSrQhPkbv+zfcPr1D7H4WLpJFlq22UzMnPnBVI1H2gYPsKRsG3Ux3z3cnSv9dwk
+         NQh1ZOLJSd8E1zSD3ziPCpXcnhbgb6jcKwAyv8RhKsxHNCL7aWYNEO11cR549imsaJLpkyhwqtv4
+         ITFQfsapBz4jjJsvXO2jU72HK2lpNeScqx9OMglSNBwmYB7biCKiJZd3A2lAk4nhv8yGshxngOy7
+         d4zHMZ0MH6fUQwjcRUsKQBlBAIHfZ25uZQ5fWTSVeoxJtLcBU1vbUNJX+j7Hx+RJmQCVj/5ykP2R
+         27hrAp0c8yqGnMCK2rLIeXrPewDtD4QHEZPUwaJNpi2b/J5SQ6u4ZYPj4lDY1rx4FENxefbeFnsz
+         Jq3mzaHN3dJWbNhfHOatXT9wt56GbWvuDn4UoDMFivHfY6ie0/wzGZrjgFlZ2KRtoHa34Z0+3ZTm
+         zt/8QDIVimZti6JQWKyC7qd5ljCat+1UZgoniPVRyafEu01Vrnpw==
+From:   Rong Tao <rtoax@foxmail.com>
+To:     andrii.nakryiko@gmail.com
+Cc:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
+        daniel@iogearbox.net, david.laight@aculab.com, haoluo@google.com,
+        john.fastabend@gmail.com, jolsa@kernel.org, kpsingh@kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        martin.lau@linux.dev, mykolal@fb.com, rongtao@cestc.cn,
+        rtoax@foxmail.com, sdf@google.com, shuah@kernel.org,
+        song@kernel.org, yhs@fb.com
+Subject: [PATCH bpf-next] selftests/bpf: cgroup_helpers.c: Fix strncpy() fortify warning
+Date:   Fri,  4 Nov 2022 09:27:54 +0800
+X-OQ-MSGID: <20221104012754.651653-1-rtoax@foxmail.com>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <CAEf4BzYAcGgM93r5YfF2ZQWjAnc4k=aN5C3in-bZ-6n+Jrn1vw@mail.gmail.com>
+References: <CAEf4BzYAcGgM93r5YfF2ZQWjAnc4k=aN5C3in-bZ-6n+Jrn1vw@mail.gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RDNS_DYNAMIC,SORTED_RECIPS,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When the configuration parameter CONFIG_HZ is less that 100, the compiler
-generates an error as follows:
+From: Rong Tao <rongtao@cestc.cn>
 
-../drivers/staging/rtl8192e/rtllib_wx.c: In function 'rtl819x_translate_scan':
-../drivers/staging/rtl8192e/rtllib_wx.c:220:57: warning: division by zero [-Wdiv-by-zero]
-  220 |      (jiffies - network->last_scanned) / (HZ / 100));
-      |                                                         ^
-In file included from ../include/linux/skbuff.h:45,
-                 from ../include/linux/if_ether.h:19,
-                 from ../include/linux/etherdevice.h:20,
-                 from ../drivers/staging/rtl8192e/rtllib_wx.c:18:
-../drivers/staging/rtl8192e/rtllib_wx.c: In function 'rtllib_wx_get_scan':
-../drivers/staging/rtl8192e/rtllib_wx.c:261:70: warning: division by zero [-Wdiv-by-zero]
-  261 |      (jiffies - network->last_scanned) /
-      |
+Copy libbpf_strlcpy() from libbpf_internal.h to bpf_util.h, and rename it
+to bpf_strlcpy(), then replace selftests strncpy()/libbpf_strlcpy() with
+bpf_strlcpy(), fix compile warning.
 
-In fact, is HZ is not a multiple of 100, the calculation will be wrong,
-but it will compile correctly.
+The libbpf_internal.h header cannot be used directly here, because
+references to cgroup_helpers.c in samples/bpf will generate compilation
+errors. We also can't add libbpf_strlcpy() directly to bpf_util.h,
+because the definition of libbpf_strlcpy() in libbpf_internal.h is
+duplicated. In order not to modify the libbpf code, add a new function
+bpf_strlcpy() to selftests bpf_util.h.
 
-The fix is to get rid of the (HZ / 100) portion. To decrease any round-off
-errors, the compiler is forced to perform the 100 * jiffies-difference
-before dividing by HZ. This patch is only compile tested.
+How to reproduce this compilation warning:
 
-Reported-by: Randy Dunlap <rdunlap@infradead.org>
-Acked-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
-Signed-off-by: Larry Finger <Larry.Finger@lwfinger.net>
+$ make -C samples/bpf
+cgroup_helpers.c: In function ‘__enable_controllers’:
+cgroup_helpers.c:80:17: warning: ‘strncpy’ specified bound 4097 equals destination size [-Wstringop-truncation]
+   80 |                 strncpy(enable, controllers, sizeof(enable));
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Signed-off-by: Rong Tao <rongtao@cestc.cn>
 ---
-v2 - some commit log lines are shortened
-   - add space after * operator
----
- drivers/staging/rtl8192e/rtllib_wx.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ tools/testing/selftests/bpf/bpf_util.h       | 19 ++++++++++++++
+ tools/testing/selftests/bpf/cgroup_helpers.c |  3 ++-
+ tools/testing/selftests/bpf/xsk.c            | 26 +++-----------------
+ 3 files changed, 25 insertions(+), 23 deletions(-)
 
-diff --git a/drivers/staging/rtl8192e/rtllib_wx.c b/drivers/staging/rtl8192e/rtllib_wx.c
-index da2c41c9b92f..217426ee2e92 100644
---- a/drivers/staging/rtl8192e/rtllib_wx.c
-+++ b/drivers/staging/rtl8192e/rtllib_wx.c
-@@ -217,7 +217,7 @@ static inline char *rtl819x_translate_scan(struct rtllib_device *ieee,
- 	p = custom;
- 	p += scnprintf(p, MAX_CUSTOM_LEN - (p - custom),
- 		      " Last beacon: %lums ago",
--		      (jiffies - network->last_scanned) / (HZ / 100));
-+		      (100 * (jiffies - network->last_scanned)) / HZ);
- 	iwe.u.data.length = p - custom;
- 	if (iwe.u.data.length)
- 		start = iwe_stream_add_point_rsl(info, start, stop,
-@@ -258,8 +258,8 @@ int rtllib_wx_get_scan(struct rtllib_device *ieee,
- 				   escape_essid(network->ssid,
- 						network->ssid_len),
- 				   network->bssid,
--				   (jiffies - network->last_scanned) /
--				   (HZ / 100));
-+				   (100 * (jiffies - network->last_scanned)) /
-+				   HZ);
+diff --git a/tools/testing/selftests/bpf/bpf_util.h b/tools/testing/selftests/bpf/bpf_util.h
+index a3352a64c067..10587a29b967 100644
+--- a/tools/testing/selftests/bpf/bpf_util.h
++++ b/tools/testing/selftests/bpf/bpf_util.h
+@@ -20,6 +20,25 @@ static inline unsigned int bpf_num_possible_cpus(void)
+ 	return possible_cpus;
+ }
+ 
++/* Copy up to sz - 1 bytes from zero-terminated src string and ensure that dst
++ * is zero-terminated string no matter what (unless sz == 0, in which case
++ * it's a no-op). It's conceptually close to FreeBSD's strlcpy(), but differs
++ * in what is returned. Given this is internal helper, it's trivial to extend
++ * this, when necessary. Use this instead of strncpy inside libbpf source code.
++ */
++static inline void bpf_strlcpy(char *dst, const char *src, size_t sz)
++{
++	size_t i;
++
++	if (sz == 0)
++		return;
++
++	sz--;
++	for (i = 0; i < sz && src[i]; i++)
++		dst[i] = src[i];
++	dst[i] = '\0';
++}
++
+ #define __bpf_percpu_val_align	__attribute__((__aligned__(8)))
+ 
+ #define BPF_DECLARE_PERCPU(type, name)				\
+diff --git a/tools/testing/selftests/bpf/cgroup_helpers.c b/tools/testing/selftests/bpf/cgroup_helpers.c
+index e914cc45b766..dd1aa5afcf5a 100644
+--- a/tools/testing/selftests/bpf/cgroup_helpers.c
++++ b/tools/testing/selftests/bpf/cgroup_helpers.c
+@@ -13,6 +13,7 @@
+ #include <ftw.h>
+ 
+ #include "cgroup_helpers.h"
++#include "bpf_util.h"
+ 
+ /*
+  * To avoid relying on the system setup, when setup_cgroup_env is called
+@@ -77,7 +78,7 @@ static int __enable_controllers(const char *cgroup_path, const char *controllers
+ 		enable[len] = 0;
+ 		close(fd);
+ 	} else {
+-		strncpy(enable, controllers, sizeof(enable));
++		bpf_strlcpy(enable, controllers, sizeof(enable));
  	}
  
- 	spin_unlock_irqrestore(&ieee->lock, flags);
+ 	snprintf(path, sizeof(path), "%s/cgroup.subtree_control", cgroup_path);
+diff --git a/tools/testing/selftests/bpf/xsk.c b/tools/testing/selftests/bpf/xsk.c
+index 0b3ff49c740d..39d349509ba4 100644
+--- a/tools/testing/selftests/bpf/xsk.c
++++ b/tools/testing/selftests/bpf/xsk.c
+@@ -33,6 +33,7 @@
+ #include <bpf/bpf.h>
+ #include <bpf/libbpf.h>
+ #include "xsk.h"
++#include "bpf_util.h"
+ 
+ #ifndef SOL_XDP
+  #define SOL_XDP 283
+@@ -521,25 +522,6 @@ static int xsk_create_bpf_link(struct xsk_socket *xsk)
+ 	return 0;
+ }
+ 
+-/* Copy up to sz - 1 bytes from zero-terminated src string and ensure that dst
+- * is zero-terminated string no matter what (unless sz == 0, in which case
+- * it's a no-op). It's conceptually close to FreeBSD's strlcpy(), but differs
+- * in what is returned. Given this is internal helper, it's trivial to extend
+- * this, when necessary. Use this instead of strncpy inside libbpf source code.
+- */
+-static inline void libbpf_strlcpy(char *dst, const char *src, size_t sz)
+-{
+-        size_t i;
+-
+-        if (sz == 0)
+-                return;
+-
+-        sz--;
+-        for (i = 0; i < sz && src[i]; i++)
+-                dst[i] = src[i];
+-        dst[i] = '\0';
+-}
+-
+ static int xsk_get_max_queues(struct xsk_socket *xsk)
+ {
+ 	struct ethtool_channels channels = { .cmd = ETHTOOL_GCHANNELS };
+@@ -552,7 +534,7 @@ static int xsk_get_max_queues(struct xsk_socket *xsk)
+ 		return -errno;
+ 
+ 	ifr.ifr_data = (void *)&channels;
+-	libbpf_strlcpy(ifr.ifr_name, ctx->ifname, IFNAMSIZ);
++	bpf_strlcpy(ifr.ifr_name, ctx->ifname, IFNAMSIZ);
+ 	err = ioctl(fd, SIOCETHTOOL, &ifr);
+ 	if (err && errno != EOPNOTSUPP) {
+ 		ret = -errno;
+@@ -771,7 +753,7 @@ static int xsk_create_xsk_struct(int ifindex, struct xsk_socket *xsk)
+ 	}
+ 
+ 	ctx->ifindex = ifindex;
+-	libbpf_strlcpy(ctx->ifname, ifname, IFNAMSIZ);
++	bpf_strlcpy(ctx->ifname, ifname, IFNAMSIZ);
+ 
+ 	xsk->ctx = ctx;
+ 	xsk->ctx->has_bpf_link = xsk_probe_bpf_link();
+@@ -958,7 +940,7 @@ static struct xsk_ctx *xsk_create_ctx(struct xsk_socket *xsk,
+ 	ctx->refcount = 1;
+ 	ctx->umem = umem;
+ 	ctx->queue_id = queue_id;
+-	libbpf_strlcpy(ctx->ifname, ifname, IFNAMSIZ);
++	bpf_strlcpy(ctx->ifname, ifname, IFNAMSIZ);
+ 
+ 	ctx->fill = fill;
+ 	ctx->comp = comp;
 -- 
-2.38.0
+2.31.1
+
 
