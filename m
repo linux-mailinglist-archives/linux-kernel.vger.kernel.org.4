@@ -2,208 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA7256192EE
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 09:46:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A50A56192F2
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 09:46:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230185AbiKDIqF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 04:46:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57104 "EHLO
+        id S231154AbiKDIqe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 04:46:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbiKDIqC (ORCPT
+        with ESMTP id S229481AbiKDIqb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 04:46:02 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D752CD2D1
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 01:46:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7E310B82C40
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 08:45:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2443BC433C1
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 08:45:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667551558;
-        bh=ByyutI2vBA3QhVIGyC66aA8zyhVYs5f2konmfwSQPnc=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=bh2jFjjEHZPtABoc/F6qzcbKAtleQlQvRlhOGeRNTbYwEmG2rOHmRD6uBT0RttSI6
-         Z9TCeCXZO6vS83C3Q9D2Olc1eEnAKxDRkZoMHkR39LMa6guFz7U/KWfFbcDVqfPyM6
-         KwPlws3b7XQZqQgnrBYqXX1nCsqbkaez/9+CT5Yob30/oKWezytIV74nGKmtjkupYy
-         B2fZTcZsH432eIxxo6Iv87WgGcudXhW/fEUbRxucxmbHokk0NAYfpovZtCRIZQyCLL
-         AMwbBOh+OgvCyoBaIuVd9kUtzjNHQbWUQkRKJnU2rt4umhrfInZ1yWyYXIKvsv5ND3
-         w5rSaSRtGFjKg==
-Received: by mail-oi1-f180.google.com with SMTP id t62so4489373oib.12
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 01:45:58 -0700 (PDT)
-X-Gm-Message-State: ACrzQf3hP5f35yhu2A6R7ecpFeGoXQoCf/Rsv3fhsFCMnWBQE9wfMJN8
-        mNUho5+dgyQRLIRnooVBile1QskcdSpNDaX4QR0=
-X-Google-Smtp-Source: AMsMyM5oVIVLfRHUS4DAGhvTfy6w5dJFbh2NmCaZ90J+g737bWB4KioXD6oOyWna6u1ncPNw8epNE52asaWlSMUdHHM=
-X-Received: by 2002:a05:6808:f0e:b0:359:b055:32ea with SMTP id
- m14-20020a0568080f0e00b00359b05532eamr26767203oiw.112.1667551557278; Fri, 04
- Nov 2022 01:45:57 -0700 (PDT)
+        Fri, 4 Nov 2022 04:46:31 -0400
+Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FE9ED2D1;
+        Fri,  4 Nov 2022 01:46:30 -0700 (PDT)
+Received: by mail-qt1-f181.google.com with SMTP id x15so2655311qtv.9;
+        Fri, 04 Nov 2022 01:46:30 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=FRsJmJJ3TCqkJyXDCVj80Nqy5R/Sc/EQh4ophnlNiFI=;
+        b=CdiUtilYSIuQoxj5lb1a0QyGGpD6r3ysaAzQ14bBiA15Si8Ude8Dl7DbTqREjV8npv
+         WqsIgA7iVNqLPwypqrrZUfEv22kYG75fnE/dhFWy/BqMZlkbZmor9GX7ZmGyYCfzQODA
+         frBVQDcUufaPMyAqRcwqy/GRcjnlISQsDJ5m3Owq/0YIOvc6uZO5h1YdY1wjRuzt7XVv
+         cgzd8YqPk60WwBdAjaQvO+/jaMl786fg27Tuvt9nm5tZFq0Khu7trZLWbVBfVCC2vfH1
+         na9o1ZC4IRSVhtGCOO+4FguL+cVbDLUGLKnPrSZyiEW1e9Gd+wf57sYQjpd05VLnAscD
+         scAA==
+X-Gm-Message-State: ACrzQf1SDmaQ8GEgOyxFzTJAvcFSV+A8SbLBL4BwzEdpY3fh+Ni1c7Fz
+        g6lBF1agWivLavvECJWGwaU08cU+s1+HjA==
+X-Google-Smtp-Source: AMsMyM5Bd8fan+kdTmTqb7rH0pUTNGU55PpiDwsQlLdZdKlH0cLuEBjV2HxmTD+54E/vaZLJEep51g==
+X-Received: by 2002:ac8:6998:0:b0:3a5:410a:1a33 with SMTP id o24-20020ac86998000000b003a5410a1a33mr13571709qtq.337.1667551589381;
+        Fri, 04 Nov 2022 01:46:29 -0700 (PDT)
+Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com. [209.85.128.179])
+        by smtp.gmail.com with ESMTPSA id m28-20020a05620a215c00b006ce2c3c48ebsm2460154qkm.77.2022.11.04.01.46.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 04 Nov 2022 01:46:28 -0700 (PDT)
+Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-333a4a5d495so37474917b3.10;
+        Fri, 04 Nov 2022 01:46:28 -0700 (PDT)
+X-Received: by 2002:a81:5a57:0:b0:353:6de6:3263 with SMTP id
+ o84-20020a815a57000000b003536de63263mr32756712ywb.358.1667551587958; Fri, 04
+ Nov 2022 01:46:27 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220921214439.1491510-1-stillson@rivosinc.com>
- <20220921214439.1491510-6-stillson@rivosinc.com> <1c74ac94-50db-ceb3-234d-f8f227de8f6e@linux.dev>
-In-Reply-To: <1c74ac94-50db-ceb3-234d-f8f227de8f6e@linux.dev>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Fri, 4 Nov 2022 16:45:44 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTS_2Kv94oCnr_hBgZD8ZK-_QuQ3ovQdjoXF1Pky2P5Ljg@mail.gmail.com>
-Message-ID: <CAJF2gTS_2Kv94oCnr_hBgZD8ZK-_QuQ3ovQdjoXF1Pky2P5Ljg@mail.gmail.com>
-Subject: Re: [PATCH v12 06/17] riscv: Reset vector register
-To:     Vineet Gupta <vineet.gupta@linux.dev>
-Cc:     Chris Stillson <stillson@rivosinc.com>,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Vincent Chen <vincent.chen@sifive.com>,
-        Han-Kuan Chen <hankuan.chen@sifive.com>,
-        Greentime Hu <greentime.hu@sifive.com>,
-        Palmer Dabbelt <palmer@rivosinc.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Kees Cook <keescook@chromium.org>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Heinrich Schuchardt <heinrich.schuchardt@canonical.com>,
-        Mayuresh Chitale <mchitale@ventanamicro.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Andy Chiu <andy.chiu@sifive.com>
+References: <20221103230648.53748-1-fabrizio.castro.jz@renesas.com> <20221103230648.53748-2-fabrizio.castro.jz@renesas.com>
+In-Reply-To: <20221103230648.53748-2-fabrizio.castro.jz@renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Fri, 4 Nov 2022 09:46:15 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdW0B2Botp18W7a2XzBZUjs7efxa4Mykg-=MFzhFjmuTDQ@mail.gmail.com>
+Message-ID: <CAMuHMdW0B2Botp18W7a2XzBZUjs7efxa4Mykg-=MFzhFjmuTDQ@mail.gmail.com>
+Subject: Re: [PATCH 1/3] arm64: dts: renesas: r9a09g011: Fix unit address
+ format error
+To:     Fabrizio Castro <fabrizio.castro.jz@renesas.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Wolfram Sang <wsa@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        Biju Das <biju.das@bp.renesas.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Jacopo Mondi <jacopo@jmondi.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 4, 2022 at 1:01 PM Vineet Gupta <vineet.gupta@linux.dev> wrote:
+On Fri, Nov 4, 2022 at 12:07 AM Fabrizio Castro
+<fabrizio.castro.jz@renesas.com> wrote:
+> Although the HW User Manual for RZ/V2M states in the "Address Map"
+> section that the interrupt controller is assigned addresses starting
+> from 0x82000000, the memory locations from 0x82000000 0x0x8200FFFF
+> are marked as reserved in the "Interrupt Controller (GIC)" section
+> and are currently not used by the device tree, leading to the below
+> warning:
 >
-> On 9/21/22 14:43, Chris Stillson wrote:
-> > From: Guo Ren <guoren@linux.alibaba.com>
-> >
-> > Reset vector registers at boot-time and disable vector instructions
-> > execution for kernel mode.
+> arch/arm64/boot/dts/renesas/r9a09g011.dtsi:51.38-63.5: Warning
+> (simple_bus_reg): /soc/interrupt-controller@82000000: simple-bus unit
+> address format error, expected "82010000"
 >
-> Perhaps bike-shedding, but "Reset" has a different connotation in
-> kernel, this is clear registers IMO. And "Reset Vector ..." sounds
-> totally different at first glance.
-Agree, "Clear vector registers" is okay.
+> Fix the unit address accordingly.
+>
+> Fixes: fb1929b98f2e ("arm64: dts: renesas: Add initial DTSI for RZ/V2M SoC")
+> Signed-off-by: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
 
->
->
-> > -      * Disable the FPU to detect illegal usage of floating point in kernel
-> > -      * space.
-> > +      * Disable the FPU/Vector to detect illegal usage of floating point
-> > +      * or vector in kernel space.
-> >        */
-> > -     li t0, SR_SUM | SR_FS
-> > +     li t0, SR_SUM | SR_FS | SR_VS
->
-> Is VS writable in implementations not implementing V hardware.
->
-> Priv spec seems to be confusing. It states
->
->     "The FS[1:0] and VS[1:0] WARL fields..."
->
-> Above implies it can be written always but will read legal values only.
-> But then this follows.
->
->         "If neither the v registers nor S-mode is implemented, then VS
->         is read-only zero. If S-mode is implemented but the v registers
->         are not, VS may optionally be read-only zero"
->
-> What does optionally mean for software ?
-The read-only zero bit is safe for writing 1, but the result is still
-zero. So let's keep it for easier coding.
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+i.e. will queue in renesas-devel for v6.2.
 
->
-> >
-> >       REG_L s0, TASK_TI_USER_SP(tp)
-> >       csrrc s1, CSR_STATUS, t0
-> > diff --git a/arch/riscv/kernel/head.S b/arch/riscv/kernel/head.S
-> > index b865046e4dbb..2c81ca42ec4e 100644
-> > --- a/arch/riscv/kernel/head.S
-> > +++ b/arch/riscv/kernel/head.S
-> > @@ -140,10 +140,10 @@ secondary_start_sbi:
-> >       .option pop
-> >
-> >       /*
-> > -      * Disable FPU to detect illegal usage of
-> > -      * floating point in kernel space
-> > +      * Disable FPU & VECTOR to detect illegal usage of
-> > +      * floating point or vector in kernel space
-> >        */
-> > -     li t0, SR_FS
-> > +     li t0, SR_FS | SR_VS
-> >       csrc CSR_STATUS, t0
-> >
-> >       /* Set trap vector to spin forever to help debug */
-> > @@ -234,10 +234,10 @@ pmp_done:
-> >   .option pop
-> >
-> >       /*
-> > -      * Disable FPU to detect illegal usage of
-> > -      * floating point in kernel space
-> > +      * Disable FPU & VECTOR to detect illegal usage of
-> > +      * floating point or vector in kernel space
-> >        */
-> > -     li t0, SR_FS
-> > +     li t0, SR_FS | SR_VS
-> >       csrc CSR_STATUS, t0
->
-> Third instance of duplicated SR_FS | SR_VS. Better to add a helper
-> SR_FS_VS or some such macro.
-Good point. But we could move it to another patch and define a new
-SR_AXS for all.
+Gr{oetje,eeting}s,
 
-#define SR_AXS         (SR_FS | SR_VS | SR_XS)
+                        Geert
 
->
-> >
-> >   #ifdef CONFIG_RISCV_BOOT_SPINWAIT
-> > @@ -431,6 +431,29 @@ ENTRY(reset_regs)
-> >       csrw    fcsr, 0
-> >       /* note that the caller must clear SR_FS */
-> >   #endif /* CONFIG_FPU */
-> > +
-> > +#ifdef CONFIG_VECTOR
-> > +     csrr    t0, CSR_MISA
-> > +     li      t1, COMPAT_HWCAP_ISA_V
-> > +     and     t0, t0, t1
-> > +     beqz    t0, .Lreset_regs_done
-> > +
-> > +     /*
-> > +      * Clear vector registers and reset vcsr
-> > +      * VLMAX has a defined value, VLEN is a constant,
-> > +      * and this form of vsetvli is defined to set vl to VLMAX.
-> > +      */
-> > +     li      t1, SR_VS
-> > +     csrs    CSR_STATUS, t1
-> > +     csrs    CSR_VCSR, x0
-> > +     vsetvli t1, x0, e8, m8, ta, ma
-> > +     vmv.v.i v0, 0
-> > +     vmv.v.i v8, 0
-> > +     vmv.v.i v16, 0
-> > +     vmv.v.i v24, 0
-> > +     /* note that the caller must clear SR_VS */
->
-> Is that actually happening ?
-Yes, It's the same as FPU, see head.S _start_kernel:
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-ENTRY(_start_kernel)
-..
-        /* Reset all registers except ra, a0, a1 */
-        call reset_regs
-...
-
->
->
-
-
--- 
-Best Regards
- Guo Ren
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
