@@ -2,160 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7955D6190AA
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 07:09:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE2F26190B1
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 07:10:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229770AbiKDGJz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 02:09:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43180 "EHLO
+        id S230382AbiKDGKe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 02:10:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229646AbiKDGJx (ORCPT
+        with ESMTP id S230008AbiKDGKW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 02:09:53 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BF3C178B8;
-        Thu,  3 Nov 2022 23:09:53 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id bj12so10645941ejb.13;
-        Thu, 03 Nov 2022 23:09:53 -0700 (PDT)
+        Fri, 4 Nov 2022 02:10:22 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 376C028E30;
+        Thu,  3 Nov 2022 23:10:21 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id u8-20020a17090a5e4800b002106dcdd4a0so7322170pji.1;
+        Thu, 03 Nov 2022 23:10:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+Tr/8hi5G7RL1UIjwqgzK0lAVGdQMoS2Pg25E/W9mMA=;
-        b=j47wp55XIfHt/4ShZQhg6PwD0qLIXnfGr8DblGzC564u4/ZP8LKISgmism26QTukkz
-         MiZcUXoboPKpeMG8nc8RPx/iXHluu08o1fX2xsHOYJbWI1TEjEcLu2BLDqzT+q6MUnvF
-         E6k9Ln/b/nV9qbOPQKSviQgz9Gw4dxZoaOQKryAahiSMwHq2jkyGO0pqdchJVtfgNMLj
-         Bn+JtuhfuQGtDYXguOID8sob9ZKuWaCOHQerkdGQ6x8qC4YAJRNFaX7GiQUZhMZdQgrT
-         7TKbH7AJq4JvHe1FAodjMRIGojve/FDHs7exu/EcmHirWgg25o3Y0yK/XhqFaB4Mkscn
-         CeVw==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=TLME7jH56C8D1+m0LNBApvFwrtLDMdDD21KTM6uwzsE=;
+        b=I4A3+fMFdFrw1ItUiXAMXyb/dpRXhGT7joIpaNMQ0W+htpFOy8qm0RnLufRDNI/oee
+         ui0A4rrd/yjdVcAr7RIQRAC8GqqUe6MjpRyPsyE5xs9v5xj+RlqS4CKsYpmj+ZubOiXz
+         Gx3wkPoK/VqHXweC6RPk2oIOTW2xe7RrZON67KUHnXdUOaQbl5Z5wtboxg1mljZNhuNr
+         tOxTvYcCQwEdwhMXmSqOlptpeIaCOuKQ5h6PtRtWQyeQuWyuVbo7TZb85bxWRsk7mzGJ
+         WPPhy3mzkTrHkv94sEzsV4VUHaxz8Ij20JKxnCkC/id7+pDZmsMTKYMqav5JH7+eyWOQ
+         McpQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+Tr/8hi5G7RL1UIjwqgzK0lAVGdQMoS2Pg25E/W9mMA=;
-        b=QYXmQ2LzlTnmuX4sJLd7iJNbdRuhxeTP0ulxkYDNDGEJ4GM1wb6TtHRe/SnF3ZRp7o
-         jE9sEtJHQ3PylFl3sXN92SfJ0+9bxs54NOfFbm1zsV0DKW2SeUJrtLEraJmpwzoJX/3f
-         vXejnNeoVmQ8v0NIHvszqcGmykyj9FvapQnzTyY8BNEtvhH608om/DacsUh5mK2WW1k+
-         G8yp4k84Ws1OyiUWdZE0irexuyuaWlA4swfArc4awUFg2+cl5Oy78MCxxYmEe+PSDbIK
-         m82ECBQ4iohh4HQSgcI7w+PuGJuSynunLp6+ThdP8DLYZgKw56mJ+yxW0sZhHBn2pnZp
-         3U7Q==
-X-Gm-Message-State: ACrzQf0vf2AkNO0BoTb/yQYuGuMN3LEvL0LRTrnYuOt2Q7RJ9iOlMRcC
-        csLGiFFmzNgmbcEW3ei0x3tCxZeRn+M78w==
-X-Google-Smtp-Source: AMsMyM7hve8hRJtZwRoCWB82qjULQJwqJkd4zxtaiGuBlB8BhuG7A+PxHy1rT30oWU4f04ZlKqQerQ==
-X-Received: by 2002:a17:907:5c2:b0:77e:def7:65d8 with SMTP id wg2-20020a17090705c200b0077edef765d8mr33622937ejb.487.1667542191538;
-        Thu, 03 Nov 2022 23:09:51 -0700 (PDT)
-Received: from [192.168.1.10] ([46.249.74.23])
-        by smtp.googlemail.com with ESMTPSA id m11-20020a170906258b00b0078dce9984afsm1331503ejb.220.2022.11.03.23.09.50
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 03 Nov 2022 23:09:51 -0700 (PDT)
-Subject: Re: [PATCH 1/3] power: cpcap-battery: Do not issue low signal too
- frequently
-To:     sre@kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tony@atomide.com, philipp@uvos.xyz
-References: <1667332425-12536-1-git-send-email-ivo.g.dimitrov.75@gmail.com>
- <1667332425-12536-2-git-send-email-ivo.g.dimitrov.75@gmail.com>
-From:   Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>
-Message-ID: <ce999c0b-342d-6a29-6a16-b69cf8a1db9d@gmail.com>
-Date:   Fri, 4 Nov 2022 08:09:46 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Firefox/60.0 Thunderbird/60.6.1
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TLME7jH56C8D1+m0LNBApvFwrtLDMdDD21KTM6uwzsE=;
+        b=d85n0d9umkbTZ+cHMkAKSw7mWVP2z+qrd634cOLQ+DuoxNL+7MoKJC9V9ddp4lJfDW
+         Z01YuS/+s/iZukx2FgrDU3jMC9ox74uxgl6fDROo9cM3IyFRrScd7FnysYgJeiVgczht
+         i1joncTdCdx5bEZmK6YpQI+xfGwXmFffIueqmAOrHaz2WQ9hC3NNTb2Qk7KUrqANyQ5E
+         GVK7nxc1HlMj+akcfJkuYLYXZ5XUhSkSxAYsTmlIUztLlq4xnhxNbyecrBVTlM/pAhxz
+         fc2IKz64rTRTRQk1CqEVFqK8ZAvhIGqyVl3L1QS2oEvrgi+gVFA83Vbrr4kSgXeZcuhz
+         d/Ww==
+X-Gm-Message-State: ACrzQf2gSFDWxhAQ4ePyVST8Qps71GJY6zoyhyoOnWymZqSBAB+mzsTE
+        1oVl9BqXDNrKefck8RzHejA=
+X-Google-Smtp-Source: AMsMyM6BNQnQnQmZJJmsIBLNwFI6ds2hXPvf65DlA882GVt+r1tc2tqiMseTvUiQJJMHn6UWrZ3epA==
+X-Received: by 2002:a17:90a:9c6:b0:213:b346:21dc with SMTP id 64-20020a17090a09c600b00213b34621dcmr32914249pjo.166.1667542220641;
+        Thu, 03 Nov 2022 23:10:20 -0700 (PDT)
+Received: from dtor-ws.mtv.corp.google.com ([2620:15c:9d:2:a6ae:11ff:fe11:fcc3])
+        by smtp.gmail.com with ESMTPSA id x5-20020aa79ac5000000b0056bfd4a2702sm1791411pfp.45.2022.11.03.23.10.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Nov 2022 23:10:19 -0700 (PDT)
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-acpi@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 0/6] Add support for software nodes to gpiolib
+Date:   Thu,  3 Nov 2022 23:10:10 -0700
+Message-Id: <20221031-gpiolib-swnode-v1-0-a0ab48d229c7@gmail.com>
+X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
 MIME-Version: 1.0
-In-Reply-To: <1667332425-12536-2-git-send-email-ivo.g.dimitrov.75@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-GB
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+X-Mailer: b4 0.11.0-dev-28747
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch has issues (calling enable_irq() from timer function), will 
-send v2 that uses delayed_work.
-
-On 1.11.22 г. 21:53 ч., Ivaylo Dimitrov wrote:
-> It seems that low battery irq may be generated tens of times per second,
-> leading to userspace being flooded with unnecessary events.
-> 
-> Fix that by preventing such events being generated more than once every 30
-> seconds.
-> 
-> Signed-off-by: Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>
-> ---
->   drivers/power/supply/cpcap-battery.c | 25 ++++++++++++++++++++++++-
->   1 file changed, 24 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/power/supply/cpcap-battery.c b/drivers/power/supply/cpcap-battery.c
-> index 4676560..2659df7 100644
-> --- a/drivers/power/supply/cpcap-battery.c
-> +++ b/drivers/power/supply/cpcap-battery.c
-> @@ -137,6 +137,7 @@ struct cpcap_battery_ddata {
->   	struct power_supply *psy;
->   	struct cpcap_battery_config config;
->   	struct cpcap_battery_state_data state[CPCAP_BATTERY_STATE_NR];
-> +	struct timer_list low_timer;
->   	u32 cc_lsb;		/* μAms per LSB */
->   	atomic_t active;
->   	int charge_full;
-> @@ -914,9 +915,14 @@ static irqreturn_t cpcap_battery_irq_thread(int irq, void *data)
->   		dev_info(ddata->dev, "Coulomb counter calibration done\n");
->   		break;
->   	case CPCAP_BATTERY_IRQ_ACTION_BATTERY_LOW:
-> -		if (latest->current_ua >= 0)
-> +		if (latest->current_ua >= 0 &&
-> +		    !timer_pending(&ddata->low_timer)) {
->   			dev_warn(ddata->dev, "Battery low at %imV!\n",
->   				latest->voltage / 1000);
-> +			mod_timer(&ddata->low_timer,
-> +				  jiffies + msecs_to_jiffies(30000));
-> +			disable_irq_nosync(d->irq);
-> +		}
->   		break;
->   	case CPCAP_BATTERY_IRQ_ACTION_POWEROFF:
->   		if (latest->current_ua >= 0 && latest->voltage <= 3200000) {
-> @@ -1087,6 +1093,19 @@ static int cpcap_battery_calibrate(struct cpcap_battery_ddata *ddata)
->   	return error;
->   }
->   
-> +static void cpcap_battery_lowbph_enable(struct timer_list *t)
-> +{
-> +	struct cpcap_battery_ddata *ddata = from_timer(ddata, t, low_timer);
-> +	struct cpcap_interrupt_desc *d;
-> +
-> +	list_for_each_entry(d, &ddata->irq_list, node) {
-> +		if (d->action == CPCAP_BATTERY_IRQ_ACTION_BATTERY_LOW)
-> +			break;
-> +	}
-> +
-> +	enable_irq(d->irq);
-> +}
-> +
->   #ifdef CONFIG_OF
->   static const struct of_device_id cpcap_battery_id_table[] = {
->   	{
-> @@ -1118,6 +1137,8 @@ static int cpcap_battery_probe(struct platform_device *pdev)
->   	if (!ddata)
->   		return -ENOMEM;
->   
-> +	timer_setup(&ddata->low_timer, cpcap_battery_lowbph_enable, 0);
-> +
->   	cpcap_battery_detect_battery_type(ddata);
->   
->   	INIT_LIST_HEAD(&ddata->irq_list);
-> @@ -1185,6 +1206,8 @@ static int cpcap_battery_remove(struct platform_device *pdev)
->   	if (error)
->   		dev_err(&pdev->dev, "could not disable: %i\n", error);
->   
-> +	del_timer_sync(&ddata->low_timer);
-> +
->   	return 0;
->   }
->   
-> 
+This series attempts to add support for software nodes to gpiolib, using=0D
+software node references. This allows us to convert more drivers to the=0D
+generic device properties and drop support for custom platform data.=0D
+=0D
+To describe a GPIO via software nodes we can create the following data=0D
+items:=0D
+=0D
+/* Node representing the GPIO controller/GPIO bank */=0D
+static const struct software_node gpio_bank_b_node =3D {=0D
+        .name =3D "B",=0D
+};=0D
+=0D
+/*=0D
+ * Properties that will be assigned to a software node assigned to=0D
+ * the devicei that used platform data.=0D
+ */=0D
+static const struct property_entry simone_key_enter_props[] =3D {=0D
+        PROPERTY_ENTRY_U32("linux,code", KEY_ENTER),=0D
+        PROPERTY_ENTRY_STRING("label", "enter"),=0D
+        PROPERTY_ENTRY_REF("gpios", &gpio_bank_b_node, 123, GPIO_ACTIVE_LOW=
+),=0D
+        { }=0D
+};=0D
+=0D
+The code in gpiolib handling software nodes uses the name in the=0D
+software node representing GPIO controller to locate the actual instance=0D
+of GPIO controller.=0D
+=0D
+Note that kbuild robot is likely to complain about this patchset because=0D
+it depends on patches removing [devm_]gpiod_get_from_of_node() and=0D
+devm_fwnode_get_[index_]gpiod_from_child() APIs that are still pending.=0D
+I pushed them to=0D
+=0D
+git://git.kernel.org/pub/scm/linux/kernel/git/dtor/input.git tmp-gpiolib=0D
+=0D
+for your reference.=0D
+=0D
+To: Linus Walleij <linus.walleij@linaro.org>=0D
+To: Bartosz Golaszewski <brgl@bgdev.pl>=0D
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>=0D
+Cc: linux-gpio@vger.kernel.org=0D
+Cc: linux-kernel@vger.kernel.org=0D
+Cc: linux-acpi@vger.kernel.org=0D
+=0D
+---=0D
+Dmitry Torokhov (6):=0D
+      gpiolib: of: change of_find_gpio() to accept device node=0D
+      gpiolib: acpi: change acpi_find_gpio() to accept firmware node=0D
+      gpiolib: acpi: teach acpi_find_gpio() to handle data-only nodes=0D
+      gpiolib: acpi: avoid leaking ACPI details into upper gpiolib layers=0D
+      gpiolib: consolidate GPIO lookups=0D
+      gpiolib: add support for software nodes=0D
+=0D
+ drivers/gpio/Makefile         |   1 +=0D
+ drivers/gpio/gpiolib-acpi.c   | 132 +++++++++++++----------=0D
+ drivers/gpio/gpiolib-acpi.h   |  54 +---------=0D
+ drivers/gpio/gpiolib-of.c     |  52 +--------=0D
+ drivers/gpio/gpiolib-of.h     |  16 +--=0D
+ drivers/gpio/gpiolib-swnode.c | 106 +++++++++++++++++++=0D
+ drivers/gpio/gpiolib-swnode.h |  13 +++=0D
+ drivers/gpio/gpiolib.c        | 239 ++++++++++++++++++++------------------=
+----=0D
+ 8 files changed, 316 insertions(+), 297 deletions(-)=0D
+---=0D
+base-commit: dc04f5ab1b1114aa19b9026f816fc01ca9c9941d=0D
+change-id: 20221031-gpiolib-swnode-948203f49b23=0D
+=0D
+-- =0D
+Dmitry=0D
+=0D
