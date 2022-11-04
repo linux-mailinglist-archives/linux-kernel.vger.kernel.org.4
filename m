@@ -2,190 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 759BD619095
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 06:57:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DDB3561909A
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 06:58:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231536AbiKDF5c convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 4 Nov 2022 01:57:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36654 "EHLO
+        id S231417AbiKDF6J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 01:58:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231908AbiKDF5T (ORCPT
+        with ESMTP id S231721AbiKDF5q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 01:57:19 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B007229340;
-        Thu,  3 Nov 2022 22:57:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6E326B82C0C;
-        Fri,  4 Nov 2022 05:57:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F5E4C433C1;
-        Fri,  4 Nov 2022 05:57:11 +0000 (UTC)
-Date:   Fri, 4 Nov 2022 01:57:09 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Anna-Maria Gleixner <anna-maria@linutronix.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Walls <awalls@md.metrocast.net>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Mike Isely <isely@pobox.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Johan Hovold <johan@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Corey Minyard <cminyard@mvista.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= 
-        <u.kleine-koenig@pengutronix.de>, linux-media@vger.kernel.org,
-        linux-staging@lists.linux.dev
-Subject: Re: [RFC][PATCH v3 18/33] timers: media: Use timer_shutdown_sync()
- before freeing timer
-Message-ID: <20221104015709.35d73bc6@rorschach.local.home>
-In-Reply-To: <20221104054915.190085802@goodmis.org>
-References: <20221104054053.431922658@goodmis.org>
-        <20221104054915.190085802@goodmis.org>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Fri, 4 Nov 2022 01:57:46 -0400
+Received: from mx.socionext.com (mx.socionext.com [202.248.49.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1D70C5FA2;
+        Thu,  3 Nov 2022 22:57:42 -0700 (PDT)
+Received: from unknown (HELO kinkan2-ex.css.socionext.com) ([172.31.9.52])
+  by mx.socionext.com with ESMTP; 04 Nov 2022 14:57:41 +0900
+Received: from mail.mfilter.local (m-filter-1 [10.213.24.61])
+        by kinkan2-ex.css.socionext.com (Postfix) with ESMTP id 4696E2059027;
+        Fri,  4 Nov 2022 14:57:41 +0900 (JST)
+Received: from 172.31.9.51 (172.31.9.51) by m-FILTER with ESMTP; Fri, 4 Nov 2022 14:57:41 +0900
+Received: from [10.212.159.130] (unknown [10.212.159.130])
+        by kinkan2.css.socionext.com (Postfix) with ESMTP id 75251B62A4;
+        Fri,  4 Nov 2022 14:57:40 +0900 (JST)
+Subject: Re: [PATCH 4/4] arm64: dts: uniphier: Add NX1 SoC and boards support
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     soc@kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20221027045157.23325-1-hayashi.kunihiko@socionext.com>
+ <20221027045157.23325-5-hayashi.kunihiko@socionext.com>
+ <a05535bc-ba18-0296-b387-d2c9c759d6f2@linaro.org>
+ <54206dca-0583-88c0-9924-a80dfaf0ba94@socionext.com>
+ <f1b5e138-e708-8aeb-9b59-96403f996fbd@linaro.org>
+From:   Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+Message-ID: <3e0a7894-677d-33fc-6b3c-a7561e18a93b@socionext.com>
+Date:   Fri, 4 Nov 2022 14:57:40 +0900
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <f1b5e138-e708-8aeb-9b59-96403f996fbd@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[ Once again, quilt fails the MIME coding ]
+On 2022/11/03 1:48, Krzysztof Kozlowski wrote:
+> On 01/11/2022 05:02, Kunihiko Hayashi wrote:
+>> Hi Krzysztof,
+>>
+> 
+> 
+>>>> +				compatible = "socionext,uniphier-nx1-clock";
+>>>> +				#clock-cells = <1>;
+>>>> +			};
+>>>> +
+>>>> +			sys_rst: reset {
+>>>
+>>> reset-controller
+>>>
+>>>> +				compatible = "socionext,uniphier-nx1-reset";
+>>>> +				#reset-cells = <1>;
+>>>> +			};
+>>>> +
+>>>> +			watchdog {
+>>>> +				compatible = "socionext,uniphier-wdt";
+>>>> +			};
+>>>> +
+>>>> +			pvtctl: thermal-sensor {
+>>>> +				compatible = "socionext,uniphier-nx1-thermal";
+>>>> +				interrupts = <GIC_SPI 3 IRQ_TYPE_LEVEL_HIGH>;
+>>>> +				#thermal-sensor-cells = <0>;
+>>>> +				socionext,tmod-calibration = <0x0f22 0x68ee>;
+>>>> +			};
+>>>> +		};
+>>>> +
+>>>> +		spi0: spi@14006000 {
+>>>> +			compatible = "socionext,uniphier-scssi";
+>>>> +			status = "disabled";
+>>>> +			reg = <0x14006000 0x100>;
+>>>
+>>> Reg is second property. Status goes last. The same in other nodes.
+>>
+>> Hmm, I've put "status" here according to the existing (uniphier's) DT
+>> policy
+>> and this should rewrite the policy. Is there documentation somewhere that
+>> recommends the order? Or, should I refer to previous comments?
+> 
+> Hm, your decision (as arch maintainer) is then preferred, not mine.
+> Although it is quite unusual to find status, not reg, as the second
+> property.
 
-From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+Okay, however, if there are no examples where the second is "status",
+I think it is better to follow the many descriptions for new additions.
 
-Before a timer is freed, timer_shutdown_sync() must be called.
+> compatible followed by reg is not documented anywhere, it's just the
+> most used style. And actually most sensible as it answers to questions
+> from highest importance to lowest:
+> 1. What is this device? compatible
+> 2. Where is it? Does it match unit address? reg
+> 3. all other properties
+> 4. Is it off or on? status as optional property
 
-Link: https://lore.kernel.org/all/20220407161745.7d6754b3@gandalf.local.home/
+I think it is reasonable to arrange the properties in order of importance.
+I'll put "reg" second in this addition in the next.
 
-Cc: Andy Walls <awalls@md.metrocast.net>
-Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: Mike Isely <isely@pobox.com>
-Cc: Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Johan Hovold <johan@kernel.org>
-Cc: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Cc: Benjamin Mugnier <benjamin.mugnier@foss.st.com>
-Cc: Vladimir Oltean <olteanv@gmail.com>
-Cc: Corey Minyard <cminyard@mvista.com>
-Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc: Miguel Ojeda <ojeda@kernel.org>
-Cc: "Uwe Kleine-König" <u.kleine-koenig@pengutronix.de>
-Cc: linux-media@vger.kernel.org
-Cc: linux-staging@lists.linux.dev
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+Thank you,
+
 ---
- drivers/media/pci/ivtv/ivtv-driver.c           |  2 +-
- drivers/media/usb/pvrusb2/pvrusb2-hdw.c        | 18 +++++++++---------
- drivers/media/usb/s2255/s2255drv.c             |  4 ++--
- .../staging/media/atomisp/i2c/atomisp-lm3554.c |  2 +-
- 4 files changed, 13 insertions(+), 13 deletions(-)
-
-diff --git a/drivers/media/pci/ivtv/ivtv-driver.c b/drivers/media/pci/ivtv/ivtv-driver.c
-index f5846c22c799..ba503d820e48 100644
---- a/drivers/media/pci/ivtv/ivtv-driver.c
-+++ b/drivers/media/pci/ivtv/ivtv-driver.c
-@@ -1425,7 +1425,7 @@ static void ivtv_remove(struct pci_dev *pdev)
- 
- 	/* Interrupts */
- 	ivtv_set_irq_mask(itv, 0xffffffff);
--	del_timer_sync(&itv->dma_timer);
-+	timer_shutdown_sync(&itv->dma_timer);
- 
- 	/* Kill irq worker */
- 	kthread_flush_worker(&itv->irq_worker);
-diff --git a/drivers/media/usb/pvrusb2/pvrusb2-hdw.c b/drivers/media/usb/pvrusb2/pvrusb2-hdw.c
-index 62ff1fa1c753..db000c9145d7 100644
---- a/drivers/media/usb/pvrusb2/pvrusb2-hdw.c
-+++ b/drivers/media/usb/pvrusb2/pvrusb2-hdw.c
-@@ -2605,10 +2605,10 @@ struct pvr2_hdw *pvr2_hdw_create(struct usb_interface *intf,
- 	return hdw;
-  fail:
- 	if (hdw) {
--		del_timer_sync(&hdw->quiescent_timer);
--		del_timer_sync(&hdw->decoder_stabilization_timer);
--		del_timer_sync(&hdw->encoder_run_timer);
--		del_timer_sync(&hdw->encoder_wait_timer);
-+		timer_shutdown_sync(&hdw->quiescent_timer);
-+		timer_shutdown_sync(&hdw->decoder_stabilization_timer);
-+		timer_shutdown_sync(&hdw->encoder_run_timer);
-+		timer_shutdown_sync(&hdw->encoder_wait_timer);
- 		flush_work(&hdw->workpoll);
- 		v4l2_device_unregister(&hdw->v4l2_dev);
- 		usb_free_urb(hdw->ctl_read_urb);
-@@ -2668,10 +2668,10 @@ void pvr2_hdw_destroy(struct pvr2_hdw *hdw)
- 	if (!hdw) return;
- 	pvr2_trace(PVR2_TRACE_INIT,"pvr2_hdw_destroy: hdw=%p",hdw);
- 	flush_work(&hdw->workpoll);
--	del_timer_sync(&hdw->quiescent_timer);
--	del_timer_sync(&hdw->decoder_stabilization_timer);
--	del_timer_sync(&hdw->encoder_run_timer);
--	del_timer_sync(&hdw->encoder_wait_timer);
-+	timer_shutdown_sync(&hdw->quiescent_timer);
-+	timer_shutdown_sync(&hdw->decoder_stabilization_timer);
-+	timer_shutdown_sync(&hdw->encoder_run_timer);
-+	timer_shutdown_sync(&hdw->encoder_wait_timer);
- 	if (hdw->fw_buffer) {
- 		kfree(hdw->fw_buffer);
- 		hdw->fw_buffer = NULL;
-@@ -3722,7 +3722,7 @@ status);
- 	hdw->cmd_debug_state = 5;
- 
- 	/* Stop timer */
--	del_timer_sync(&timer.timer);
-+	timer_shutdown_sync(&timer.timer);
- 
- 	hdw->cmd_debug_state = 6;
- 	status = 0;
-diff --git a/drivers/media/usb/s2255/s2255drv.c b/drivers/media/usb/s2255/s2255drv.c
-index acf18e2251a5..3c2627712fe9 100644
---- a/drivers/media/usb/s2255/s2255drv.c
-+++ b/drivers/media/usb/s2255/s2255drv.c
-@@ -1487,7 +1487,7 @@ static void s2255_destroy(struct s2255_dev *dev)
- 	/* board shutdown stops the read pipe if it is running */
- 	s2255_board_shutdown(dev);
- 	/* make sure firmware still not trying to load */
--	del_timer_sync(&dev->timer);  /* only started in .probe and .open */
-+	timer_shutdown_sync(&dev->timer);  /* only started in .probe and .open */
- 	if (dev->fw_data->fw_urb) {
- 		usb_kill_urb(dev->fw_data->fw_urb);
- 		usb_free_urb(dev->fw_data->fw_urb);
-@@ -2322,7 +2322,7 @@ static int s2255_probe(struct usb_interface *interface,
- errorFWDATA2:
- 	usb_free_urb(dev->fw_data->fw_urb);
- errorFWURB:
--	del_timer_sync(&dev->timer);
-+	timer_shutdown_sync(&dev->timer);
- errorEP:
- 	usb_put_dev(dev->udev);
- errorUDEV:
-diff --git a/drivers/staging/media/atomisp/i2c/atomisp-lm3554.c b/drivers/staging/media/atomisp/i2c/atomisp-lm3554.c
-index 75d16b525294..c4ce4cd445d7 100644
---- a/drivers/staging/media/atomisp/i2c/atomisp-lm3554.c
-+++ b/drivers/staging/media/atomisp/i2c/atomisp-lm3554.c
-@@ -921,7 +921,7 @@ static void lm3554_remove(struct i2c_client *client)
- 
- 	atomisp_gmin_remove_subdev(sd);
- 
--	del_timer_sync(&flash->flash_off_delay);
-+	timer_shutdown_sync(&flash->flash_off_delay);
- 
- 	lm3554_gpio_uninit(client);
- 
--- 
-2.35.1
+Best Regards
+Kunihiko Hayashi
