@@ -2,121 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDB3561909A
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 06:58:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C44D761909F
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 07:03:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231417AbiKDF6J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 01:58:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37692 "EHLO
+        id S230341AbiKDGDU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 02:03:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231721AbiKDF5q (ORCPT
+        with ESMTP id S229563AbiKDGDP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 01:57:46 -0400
-Received: from mx.socionext.com (mx.socionext.com [202.248.49.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1D70C5FA2;
-        Thu,  3 Nov 2022 22:57:42 -0700 (PDT)
-Received: from unknown (HELO kinkan2-ex.css.socionext.com) ([172.31.9.52])
-  by mx.socionext.com with ESMTP; 04 Nov 2022 14:57:41 +0900
-Received: from mail.mfilter.local (m-filter-1 [10.213.24.61])
-        by kinkan2-ex.css.socionext.com (Postfix) with ESMTP id 4696E2059027;
-        Fri,  4 Nov 2022 14:57:41 +0900 (JST)
-Received: from 172.31.9.51 (172.31.9.51) by m-FILTER with ESMTP; Fri, 4 Nov 2022 14:57:41 +0900
-Received: from [10.212.159.130] (unknown [10.212.159.130])
-        by kinkan2.css.socionext.com (Postfix) with ESMTP id 75251B62A4;
-        Fri,  4 Nov 2022 14:57:40 +0900 (JST)
-Subject: Re: [PATCH 4/4] arm64: dts: uniphier: Add NX1 SoC and boards support
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     soc@kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20221027045157.23325-1-hayashi.kunihiko@socionext.com>
- <20221027045157.23325-5-hayashi.kunihiko@socionext.com>
- <a05535bc-ba18-0296-b387-d2c9c759d6f2@linaro.org>
- <54206dca-0583-88c0-9924-a80dfaf0ba94@socionext.com>
- <f1b5e138-e708-8aeb-9b59-96403f996fbd@linaro.org>
-From:   Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-Message-ID: <3e0a7894-677d-33fc-6b3c-a7561e18a93b@socionext.com>
-Date:   Fri, 4 Nov 2022 14:57:40 +0900
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        Fri, 4 Nov 2022 02:03:15 -0400
+Received: from mail-ot1-f52.google.com (mail-ot1-f52.google.com [209.85.210.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 457F42181;
+        Thu,  3 Nov 2022 23:03:13 -0700 (PDT)
+Received: by mail-ot1-f52.google.com with SMTP id a13-20020a9d6e8d000000b00668d65fc44fso2165549otr.9;
+        Thu, 03 Nov 2022 23:03:13 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=loC6w0/i5CbAGUlQZBIMeNBQ+tlvwl3vVB+h9k8NGcM=;
+        b=dP7MW26p0wwpCA83sinsV6MQZLMiNF2uNUVwh0FjPkXSFAiUw2eWbT/uRgadpw9JzX
+         DNHc86MkLFov9ctJQP6QqHZdxY2J34uCEU77bbpO8gAYx+H0seXcZKVUXXI/SQPa8kDT
+         AHn51j3fel/guFI7Alvi4WY1e8nzbjcjt/j04/i1JDhfFBAlFZ+9f9NMM4EmkiysGxYG
+         /sFDninFvJ5OAe14c5TDl2intD91Cnqinv9SQpJ7d3Eh2a8nRKsKDQGvPOeLVk/pVyJC
+         5hEUr4CAjpi/wX+ToOZtg+s/d5Rc1IkmdbxDNFl2EnDoWoBIZWrDblHIc6b8FRi0xMa+
+         x0cw==
+X-Gm-Message-State: ACrzQf2Xj8gN9gmHgcZvNVPkvF1GsUVRwazPyEh+NhAyBlTJFeoHOhyK
+        9gjsxD3tcUv83sWFF2zd9+m9N/6c4ZDMKBG4o2zinFVM
+X-Google-Smtp-Source: AMsMyM4bn6uSw/2awV0vJqKDAmmzvk4us1xVi7uoHenl1cpbKds5aWEL607Utk0fRuHoJTaLZlYzkwhb7jZWljDpkZw=
+X-Received: by 2002:a05:6830:1219:b0:66c:2b26:b164 with SMTP id
+ r25-20020a056830121900b0066c2b26b164mr17127010otp.206.1667541792518; Thu, 03
+ Nov 2022 23:03:12 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <f1b5e138-e708-8aeb-9b59-96403f996fbd@linaro.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221101052340.1210239-1-namhyung@kernel.org> <20221101052340.1210239-2-namhyung@kernel.org>
+ <Y2Du5/Iolphxcbv2@krava>
+In-Reply-To: <Y2Du5/Iolphxcbv2@krava>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Thu, 3 Nov 2022 23:03:01 -0700
+Message-ID: <CAM9d7cheyGK9oK+SdoDxqwLuPLkAO5TrNrwJ4x1F4BrfMVzh+Q@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 1/3] perf/core: Prepare sample data before
+ calling BPF
+To:     Jiri Olsa <olsajiri@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Song Liu <songliubraving@fb.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Martin KaFai Lau <kafai@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
+        Stanislav Fomichev <sdf@google.com>,
+        LKML <linux-kernel@vger.kernel.org>, bpf@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/11/03 1:48, Krzysztof Kozlowski wrote:
-> On 01/11/2022 05:02, Kunihiko Hayashi wrote:
->> Hi Krzysztof,
->>
-> 
-> 
->>>> +				compatible = "socionext,uniphier-nx1-clock";
->>>> +				#clock-cells = <1>;
->>>> +			};
->>>> +
->>>> +			sys_rst: reset {
->>>
->>> reset-controller
->>>
->>>> +				compatible = "socionext,uniphier-nx1-reset";
->>>> +				#reset-cells = <1>;
->>>> +			};
->>>> +
->>>> +			watchdog {
->>>> +				compatible = "socionext,uniphier-wdt";
->>>> +			};
->>>> +
->>>> +			pvtctl: thermal-sensor {
->>>> +				compatible = "socionext,uniphier-nx1-thermal";
->>>> +				interrupts = <GIC_SPI 3 IRQ_TYPE_LEVEL_HIGH>;
->>>> +				#thermal-sensor-cells = <0>;
->>>> +				socionext,tmod-calibration = <0x0f22 0x68ee>;
->>>> +			};
->>>> +		};
->>>> +
->>>> +		spi0: spi@14006000 {
->>>> +			compatible = "socionext,uniphier-scssi";
->>>> +			status = "disabled";
->>>> +			reg = <0x14006000 0x100>;
->>>
->>> Reg is second property. Status goes last. The same in other nodes.
->>
->> Hmm, I've put "status" here according to the existing (uniphier's) DT
->> policy
->> and this should rewrite the policy. Is there documentation somewhere that
->> recommends the order? Or, should I refer to previous comments?
-> 
-> Hm, your decision (as arch maintainer) is then preferred, not mine.
-> Although it is quite unusual to find status, not reg, as the second
-> property.
+Hi Jiri,
 
-Okay, however, if there are no examples where the second is "status",
-I think it is better to follow the many descriptions for new additions.
+On Tue, Nov 1, 2022 at 3:03 AM Jiri Olsa <olsajiri@gmail.com> wrote:
+>
+> On Mon, Oct 31, 2022 at 10:23:38PM -0700, Namhyung Kim wrote:
+> > To allow bpf overflow handler to access the perf sample data, it needs to
+> > prepare missing but requested data before calling the handler.
+> >
+> > I'm taking a conservative approach to allow a list of sample formats only
+> > instead of allowing them all.  For now, IP and ADDR data are allowed and
+> > I think it's good enough to build and verify general BPF-based sample
+> > filters for perf events.
+> >
+> > Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+> > ---
+> >  kernel/events/core.c | 40 +++++++++++++++++++++++++++++++---------
+> >  1 file changed, 31 insertions(+), 9 deletions(-)
+> >
+> > diff --git a/kernel/events/core.c b/kernel/events/core.c
+> > index aefc1e08e015..519f30c33a24 100644
+> > --- a/kernel/events/core.c
+> > +++ b/kernel/events/core.c
+> > @@ -7329,8 +7329,10 @@ void perf_prepare_sample(struct perf_event_header *header,
+> >       filtered_sample_type = sample_type & ~data->sample_flags;
+> >       __perf_event_header__init_id(header, data, event, filtered_sample_type);
+> >
+> > -     if (sample_type & (PERF_SAMPLE_IP | PERF_SAMPLE_CODE_PAGE_SIZE))
+> > -             data->ip = perf_instruction_pointer(regs);
+> > +     if (sample_type & (PERF_SAMPLE_IP | PERF_SAMPLE_CODE_PAGE_SIZE)) {
+> > +             if (filtered_sample_type & PERF_SAMPLE_IP)
+> > +                     data->ip = perf_instruction_pointer(regs);
+> > +     }
+> >
+> >       if (sample_type & PERF_SAMPLE_CALLCHAIN) {
+> >               int size = 1;
+> > @@ -10006,6 +10008,32 @@ static void perf_event_free_filter(struct perf_event *event)
+> >  }
+> >
+> >  #ifdef CONFIG_BPF_SYSCALL
+> > +static void bpf_prepare_sample(struct bpf_prog *prog,
+> > +                            struct perf_event *event,
+> > +                            struct perf_sample_data *data,
+> > +                            struct pt_regs *regs)
+> > +{
+> > +     u64 filtered_sample_type;
+> > +
+> > +     filtered_sample_type = event->attr.sample_type & ~data->sample_flags;
+>
+> could we add the same comment in here as is in perf_prepare_sample
+>
+>         /*
+>          * Clear the sample flags that have already been done by the
+>          * PMU driver.
+>          */
+>
+> it took me while to recall while we set addr to 0 in here ;-)
 
-> compatible followed by reg is not documented anywhere, it's just the
-> most used style. And actually most sensible as it answers to questions
-> from highest importance to lowest:
-> 1. What is this device? compatible
-> 2. Where is it? Does it match unit address? reg
-> 3. all other properties
-> 4. Is it off or on? status as optional property
+Sorry about that! :)  I'll add the comment.
 
-I think it is reasonable to arrange the properties in order of importance.
-I'll put "reg" second in this addition in the next.
+Thanks,
+Namhyung
 
-Thank you,
 
----
-Best Regards
-Kunihiko Hayashi
+>
+> > +
+> > +     if (prog->call_get_stack &&
+> > +         (filtered_sample_type & PERF_SAMPLE_CALLCHAIN)) {
+> > +             data->callchain = perf_callchain(event, regs);
+> > +             data->sample_flags |= PERF_SAMPLE_CALLCHAIN;
+> > +     }
+> > +
+> > +     if (filtered_sample_type & PERF_SAMPLE_IP) {
+> > +             data->ip = perf_instruction_pointer(regs);
+> > +             data->sample_flags |= PERF_SAMPLE_IP;
+> > +     }
+> > +
+> > +     if (filtered_sample_type & PERF_SAMPLE_ADDR) {
+> > +             data->addr = 0;
+> > +             data->sample_flags |= PERF_SAMPLE_ADDR;
+> > +     }
+> > +}
+> > +
+> >  static void bpf_overflow_handler(struct perf_event *event,
+> >                                struct perf_sample_data *data,
+> >                                struct pt_regs *regs)
+> > @@ -10023,13 +10051,7 @@ static void bpf_overflow_handler(struct perf_event *event,
+> >       rcu_read_lock();
+> >       prog = READ_ONCE(event->prog);
+> >       if (prog) {
+> > -             if (prog->call_get_stack &&
+> > -                 (event->attr.sample_type & PERF_SAMPLE_CALLCHAIN) &&
+> > -                 !(data->sample_flags & PERF_SAMPLE_CALLCHAIN)) {
+> > -                     data->callchain = perf_callchain(event, regs);
+> > -                     data->sample_flags |= PERF_SAMPLE_CALLCHAIN;
+> > -             }
+> > -
+> > +             bpf_prepare_sample(prog, event, data, regs);
+> >               ret = bpf_prog_run(prog, &ctx);
+> >       }
+> >       rcu_read_unlock();
+> > --
+> > 2.38.1.273.g43a17bfeac-goog
+> >
