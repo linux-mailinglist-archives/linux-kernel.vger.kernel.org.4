@@ -2,55 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6CA061963D
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 13:30:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 719A9619589
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 12:42:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231902AbiKDM37 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 08:29:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51076 "EHLO
+        id S231625AbiKDLmi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 07:42:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231909AbiKDM3z (ORCPT
+        with ESMTP id S229489AbiKDLmg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 08:29:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78E3F29362;
-        Fri,  4 Nov 2022 05:29:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1ED286216F;
-        Fri,  4 Nov 2022 12:29:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E674C433C1;
-        Fri,  4 Nov 2022 12:29:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667564990;
-        bh=dRXXq1WtmtcofcC4LTzQfmWTAewk8R7MhRb3YRAQETg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JAhkp7ssChjDv9VUrE/ZQH8dUrKIDApMAcZT/aWq2t+eim5M8GnbEWnm46NqmYv76
-         r2oXS7iOympLpU2fvUAR0kE0DwPsuDjQhmT2aDvSoyiDHqHQBy+kt3mlpB457bZOE+
-         glSbMF6AXqU4h1B+yqOuR7dn+llKG3ag5kMyFLGIqKDW31u5gTyKisBFoUOGCofhQY
-         BEIOHeelIe/w0cPmDgZ+Y+SHt3cLx8aIpeJChPN/NOp7k3IspH1cLh6HBY2Zm/XJOT
-         NVDc9H3PWmoQuXY67a+73K0TdV92emufEINYsI9Q7Vuj7pxpHZyiArpNuLoNLZWslu
-         NYaXfoEn3B9EA==
-Date:   Fri, 4 Nov 2022 17:59:46 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Sireesh Kodali <sireeshkodali1@gmail.com>
-Cc:     andersson@kernel.org, agross@kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
-        Vladimir Lypak <vladimir.lypak@gmail.com>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        "open list:ARM/QUALCOMM SUPPORT" <linux-arm-msm@vger.kernel.org>
-Subject: Re: [PATCH v2 1/1] dmaengine: qcom: bam_dma: Add support for metadata
-Message-ID: <Y2UFuvg5sq9tLf83@matsya>
-References: <20221027052007.47403-1-sireeshkodali1@gmail.com>
- <20221027052007.47403-2-sireeshkodali1@gmail.com>
+        Fri, 4 Nov 2022 07:42:36 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53D9A12760
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 04:42:35 -0700 (PDT)
+Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4N3dtp0W38zpW70;
+        Fri,  4 Nov 2022 19:38:58 +0800 (CST)
+Received: from huawei.com (10.67.175.21) by kwepemi500012.china.huawei.com
+ (7.221.188.12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Fri, 4 Nov
+ 2022 19:42:32 +0800
+From:   Li Zetao <lizetao1@huawei.com>
+To:     <rpeterso@redhat.com>, <agruenba@redhat.com>,
+        <teigland@redhat.com>, <swhiteho@redhat.com>
+CC:     <lizetao1@huawei.com>, <yi.zhang@huawei.com>,
+        <zhangxiaoxu5@huawei.com>, <cluster-devel@redhat.com>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH] gfs2: Fix memory leak in init_journal()
+Date:   Fri, 4 Nov 2022 20:31:04 +0800
+Message-ID: <20221104123104.628576-1-lizetao1@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221027052007.47403-2-sireeshkodali1@gmail.com>
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.175.21]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemi500012.china.huawei.com (7.221.188.12)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,150 +47,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27-10-22, 10:50, Sireesh Kodali wrote:
-> From: Vladimir Lypak <vladimir.lypak@gmail.com>
-> 
-> Add client metadata support for receiving information about transfers.
-> Only type of metadata implemented is amount of transferred bytes. This
-> can be used to know how much data is actually received if information
-> transferred doesn't contain header with size or is aggregated.
-> 
-> Signed-off-by: Vladimir Lypak <vladimir.lypak@gmail.com>
-> Signed-off-by: Sireesh Kodali <sireeshkodali1@gmail.com>
-> ---
->  drivers/dma/qcom/bam_dma.c       | 57 ++++++++++++++++++++++++++++++++
->  include/linux/dma/qcom_bam_dma.h |  8 +++++
->  2 files changed, 65 insertions(+)
-> 
-> diff --git a/drivers/dma/qcom/bam_dma.c b/drivers/dma/qcom/bam_dma.c
-> index 3135a3e4a167..264a9a2e199f 100644
-> --- a/drivers/dma/qcom/bam_dma.c
-> +++ b/drivers/dma/qcom/bam_dma.c
-> @@ -30,6 +30,7 @@
->  #include <linux/module.h>
->  #include <linux/interrupt.h>
->  #include <linux/dma-mapping.h>
-> +#include <linux/dma/qcom_bam_dma.h>
->  #include <linux/scatterlist.h>
->  #include <linux/device.h>
->  #include <linux/platform_device.h>
-> @@ -70,6 +71,7 @@ struct bam_async_desc {
->  	u16 flags;
->  
->  	struct bam_desc_hw *curr_desc;
-> +	struct bam_dma_metadata *metadata;
->  
->  	/* list node for the desc in the bam_chan list of descriptors */
->  	struct list_head desc_node;
-> @@ -418,6 +420,52 @@ static inline void __iomem *bam_addr(struct bam_device *bdev, u32 pipe,
->  		r.ee_mult * bdev->ee;
->  }
->  
-> +/**
-> + * bam_update_metadata - update metadata buffer
-> + * @bchan: BAM channel to read metadata from
-> + * @async_desc: BAM async descriptior
-> + *
-> + * Updates metadata buffer (transfer size) based on values
-> + * read from FIFO descriptors at bchan->head
-> + */
-> +
-> +static inline void bam_update_metadata(struct bam_chan *bchan,
-> +				       struct bam_async_desc *async_desc)
-> +{
-> +	unsigned int i, e, len = 0;
-> +	struct bam_desc_hw *fifo;
-> +
-> +	if (!async_desc->metadata)
-> +		return;
-> +
-> +	fifo = PTR_ALIGN(bchan->fifo_virt, sizeof(struct bam_desc_hw));
-> +	for (i = bchan->head, e = i + async_desc->xfer_len; i < e; i++)
-> +		len += fifo[i % MAX_DESCRIPTORS].size;
-> +
-> +	async_desc->metadata->xfer_len_bytes += len;
-> +}
-> +
-> +/**
-> + * bam_attach_metadata - attach metadata buffer to the async descriptor
-> + * @desc: async descriptor
-> + * @data: buffer pointer
-> + * @len: length of passed buffer
-> + */
-> +static int bam_attach_metadata(struct dma_async_tx_descriptor *desc, void *data,
-> +			       size_t len)
-> +{
-> +	struct bam_async_desc *async_desc;
-> +
-> +	if (!data || len != sizeof(struct bam_dma_metadata))
-> +		return -EINVAL;
-> +
-> +	async_desc = container_of(desc, struct bam_async_desc, vd.tx);
-> +	async_desc->metadata = data;
-> +	async_desc->metadata->xfer_len_bytes = 0;
-> +
-> +	return 0;
-> +}
-> +
->  /**
->   * bam_reset() - reset and initialize BAM registers
->   * @bdev: bam device
-> @@ -456,6 +504,10 @@ static void bam_reset(struct bam_device *bdev)
->  	writel_relaxed(BAM_IRQ_MSK, bam_addr(bdev, 0, BAM_IRQ_SRCS_MSK_EE));
->  }
->  
-> +static struct dma_descriptor_metadata_ops metadata_ops = {
-> +	.attach = bam_attach_metadata,
-> +};
-> +
->  /**
->   * bam_reset_channel - Reset individual BAM DMA channel
->   * @bchan: bam channel
-> @@ -714,6 +766,8 @@ static struct dma_async_tx_descriptor *bam_prep_slave_sg(struct dma_chan *chan,
->  		} while (remainder > 0);
->  	}
->  
-> +	async_desc->vd.tx.metadata_ops = &metadata_ops;
-> +
->  	return vchan_tx_prep(&bchan->vc, &async_desc->vd, flags);
->  }
->  
-> @@ -867,6 +921,8 @@ static u32 process_channel_irqs(struct bam_device *bdev)
->  			if (avail < async_desc->xfer_len)
->  				break;
->  
-> +			bam_update_metadata(bchan, async_desc);
-> +
->  			/* manage FIFO */
->  			bchan->head += async_desc->xfer_len;
->  			bchan->head %= MAX_DESCRIPTORS;
-> @@ -1347,6 +1403,7 @@ static int bam_dma_probe(struct platform_device *pdev)
->  	bdev->common.residue_granularity = DMA_RESIDUE_GRANULARITY_SEGMENT;
->  	bdev->common.src_addr_widths = DMA_SLAVE_BUSWIDTH_4_BYTES;
->  	bdev->common.dst_addr_widths = DMA_SLAVE_BUSWIDTH_4_BYTES;
-> +	bdev->common.desc_metadata_modes = DESC_METADATA_CLIENT;
->  	bdev->common.device_alloc_chan_resources = bam_alloc_chan;
->  	bdev->common.device_free_chan_resources = bam_free_chan;
->  	bdev->common.device_prep_slave_sg = bam_prep_slave_sg;
-> diff --git a/include/linux/dma/qcom_bam_dma.h b/include/linux/dma/qcom_bam_dma.h
-> index 68fc0e643b1b..8168b0573f45 100644
-> --- a/include/linux/dma/qcom_bam_dma.h
-> +++ b/include/linux/dma/qcom_bam_dma.h
-> @@ -8,6 +8,14 @@
->  
->  #include <asm/byteorder.h>
->  
-> +/*
-> + * This data type is used as client metadata buffer in bam driver.
-> + */
-> +struct bam_dma_metadata {
-> +	/* Actual number of bytes transferred by hardware */
-> +	size_t xfer_len_bytes;
+There is a memory leak report by kmemleak:
 
-Pls implement dmaengine_result() and report that with proper residue
-set...
+  unreferenced object 0xffff8881786ff9a0 (size 192):
+    comm "mount", pid 8881, jiffies 4301165942 (age 892.453s)
+    hex dump (first 32 bytes):
+      e0 ef 6f 78 81 88 ff ff 70 95 2a 04 81 88 ff ff  ..ox....p.*.....
+      b0 f9 6f 78 81 88 ff ff b0 f9 6f 78 81 88 ff ff  ..ox......ox....
+    backtrace:
+      [<ffffffff8170ea67>] kmalloc_trace+0x27/0xa0
+      [<ffffffffa0a15465>] init_inodes+0x495/0x2010 [gfs2]
+      [<ffffffffa0a1bc27>] gfs2_fill_super+0x18c7/0x25b0 [gfs2]
+      [<ffffffff818e1626>] get_tree_bdev+0x3e6/0x6e0
+      [<ffffffffa0a13a34>] gfs2_get_tree+0x44/0x220 [gfs2]
+      [<ffffffff818de91d>] vfs_get_tree+0x7d/0x230
+      [<ffffffff81958073>] path_mount+0xd63/0x1760
+      [<ffffffff81958b3a>] do_mount+0xca/0xe0
+      [<ffffffff81958e1c>] __x64_sys_mount+0x12c/0x1a0
+      [<ffffffff82f2e485>] do_syscall_64+0x35/0x80
+      [<ffffffff8300006a>] entry_SYSCALL_64_after_hwframe+0x46/0xb0
 
-Thanks
+The root cause was traced to an error handling path in init_journal()
+when gfs2_jindex_hold() fails. The GFS2 superblock will hold a list
+of "gfs2_jdesc", and some of them are not freed in error handling path
+"fail" when gfs2_jindex_hold() fails.
 
+Fix it by freeing the memory of "gfs2_jdesc" allocated in the loop in
+gfs2_jindex_hold() when an error occurs.
+
+Fixes: b3b94faa5fe5 ("[GFS2] The core of GFS2")
+Signed-off-by: Li Zetao <lizetao1@huawei.com>
+---
+ fs/gfs2/ops_fstype.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/fs/gfs2/ops_fstype.c b/fs/gfs2/ops_fstype.c
+index c0cf1d2d0ef5..b55bee96619e 100644
+--- a/fs/gfs2/ops_fstype.c
++++ b/fs/gfs2/ops_fstype.c
+@@ -625,6 +625,9 @@ static int gfs2_jindex_hold(struct gfs2_sbd *sdp, struct gfs2_holder *ji_gh)
+ 		spin_unlock(&sdp->sd_jindex_spin);
+ 	}
+ 
++	if (error)
++		gfs2_jindex_free(sdp);
++
+ 	mutex_unlock(&sdp->sd_jindex_mutex);
+ 
+ 	return error;
 -- 
-~Vinod
+2.25.1
+
