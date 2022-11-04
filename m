@@ -2,203 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E0ED61A1E7
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 21:07:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51CEA61A1EA
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 21:09:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229875AbiKDUHP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 16:07:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53646 "EHLO
+        id S229804AbiKDUJz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 16:09:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229915AbiKDUHJ (ORCPT
+        with ESMTP id S229505AbiKDUJx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 16:07:09 -0400
-Received: from smtpcmd12132.aruba.it (smtpcmd12132.aruba.it [62.149.156.132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A32381BC
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 13:07:06 -0700 (PDT)
-Received: from [192.168.50.173] ([146.241.83.94])
-        by Aruba Outgoing Smtp  with ESMTPSA
-        id r2xxoksyrae4mr2xxos151; Fri, 04 Nov 2022 21:07:04 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
-        t=1667592424; bh=4rNWA6LxK3Nk/aSIAW3zF5mgoZH6h/znbwRrsrOEaHQ=;
-        h=Date:MIME-Version:Subject:To:From:Content-Type;
-        b=Hpi2sObTpY3uxA1QBl4NLTN7KUy8bgpaKQR32xj8Cxe17A06vTsKFgIXnNk/wE5XH
-         MF1vmLQXHOAM9c4HVMN/8tQywvD85yE6tZ1WzA2fzvWa3uAGuJmpWHJheEuMJqv/Zv
-         lBUtvSVgcsVja1bDi5N5FoJNH/UEs3/WMJbrlOvwyrERzO/t3RP0i/hpFnIPwo6mZN
-         6W86K3OiePsxB3hZaysjah9l2Ha8Jj6nTl0gh8IfIgECzyhWKCze3PiKtitgpd5Jdb
-         tz+TSCkZNF9XqluR21QMTK3E961omKHTkO37jJLrOiSwcAwdkOi8ZC85OvZyOPawn+
-         8B7ruD5QKJzNQ==
-Message-ID: <64e16669-8bcc-a05e-0eb1-9ae644431d95@benettiengineering.com>
-Date:   Fri, 4 Nov 2022 21:07:00 +0100
+        Fri, 4 Nov 2022 16:09:53 -0400
+Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0060F264B0
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 13:09:51 -0700 (PDT)
+Received: by mail-qk1-x730.google.com with SMTP id k2so3749929qkk.7
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 13:09:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=s2w2x5qgfrs2UH4lH19Zuziwi2d3oMiqWOuY2i6wV+k=;
+        b=BbHsErvmIp1WxlY55kMFQeuoO0DjymG1Js+lbuRznbSV1gD6ahTMrtM9A+Eysndx5Y
+         zk0RM8yBptrLXnGGPvqDk1yw2x36Dr3mvuzBtMdVdSq9wS98XYaiNDc92rCqryoEw17K
+         H404WLabDMsRb54A2XyMj9KNNdU2Tkzn0Pv9w5eWXtxdv2i19k4fetRuDdLdBB4YPzDi
+         Wodvrq6HdF66Oa3Hv2oPGimscsBU4Y8oUTIXe28TIVDzRcNo1qPkVu/QhW3+NfRRBMqf
+         i8JO+je4Hh/ch7fo9SKpJD+7StAJigkt5/2uV7LjA1jLiCrcwA3eO8CA8JaISlqIdgrt
+         e0hQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=s2w2x5qgfrs2UH4lH19Zuziwi2d3oMiqWOuY2i6wV+k=;
+        b=KgC07Q/vq5vY1XWZeLP0X/ki/Ht8SbL6c9PwF62WGHRsAlTt/eTDSzb7OxcgMk6LDG
+         g6YXId+tzpF+ke8ZEAYj0vtsIuznSEsdciggv2g+rEFek8Vh7jISwrcqHEmbWfySpHli
+         GxeD+Ov4BEeMPUBYSaQ+lhVBU5+Rpvk5yWIsBCoZ7yDuISr0oFJ8t1I9p0CGYjAarUM4
+         /7CEKdXsBdlT0Pxp3lLx9a5dt1A5FhKySq5pWS6Xz3iMh6m+C6bRCgOFaqeBHdUVM4+G
+         HAZK0eebaH9a+apAsDXArFRaKLz8uSQ+pcbiRxHfaHM1zQtwQoAr/qrWq21w5nxxLyhu
+         8qZA==
+X-Gm-Message-State: ACrzQf1zHlmVN4zloPivX3qOoQI8F7rgSAG27M4b5o49IP9qxIgF4wOk
+        594vZ6sKXA1sOYwPnlkkOrBCXQ==
+X-Google-Smtp-Source: AMsMyM6yqTk+Qn0lS01FjE4TynKZffWANmYs4XwHwnWPriRKzRd1O4hk4tVEaywrwhFRlbJEi/gw2g==
+X-Received: by 2002:a05:620a:400e:b0:6da:dd3c:7ff4 with SMTP id h14-20020a05620a400e00b006dadd3c7ff4mr25651530qko.682.1667592591116;
+        Fri, 04 Nov 2022 13:09:51 -0700 (PDT)
+Received: from ?IPV6:2601:586:5000:570:aad6:acd8:4ed9:299b? ([2601:586:5000:570:aad6:acd8:4ed9:299b])
+        by smtp.gmail.com with ESMTPSA id bq33-20020a05620a46a100b006eeb3165554sm110636qkb.19.2022.11.04.13.09.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 04 Nov 2022 13:09:50 -0700 (PDT)
+Message-ID: <03251423-b136-e4ff-2485-bbb16c0c7f5b@linaro.org>
+Date:   Fri, 4 Nov 2022 16:09:49 -0400
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.2
-Subject: Re: [PATCH v2 1/2] ARM: mm: fix no-MMU ZERO_PAGE() implementation
+Subject: Re: [PATCH v1 2/7] dt-bindings: usb: hpe,gxp-udc: Add binding for gxp
+ gadget
 Content-Language: en-US
-To:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Russell King <linux@armlinux.org.uk>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Russell King <rmk+kernel@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>, Will Deacon <will@kernel.org>
-References: <20221018222503.90118-1-giulio.benetti@benettiengineering.com>
-From:   Giulio Benetti <giulio.benetti@benettiengineering.com>
-In-Reply-To: <20221018222503.90118-1-giulio.benetti@benettiengineering.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     "Yu, Richard" <richard.yu@hpe.com>,
+        "Verdun, Jean-Marie" <verdun@hpe.com>,
+        "Hawkins, Nick" <nick.hawkins@hpe.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
+        "balbi@kernel.org" <balbi@kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "Chang, Clay" <clayc@hpe.com>
+References: <20221103160625.15574-1-richard.yu@hpe.com>
+ <20221103160625.15574-3-richard.yu@hpe.com>
+ <b85230d4-8fce-ba49-0d6b-8c4d20132cda@linaro.org>
+ <SJ0PR84MB2085A64D47E00077EFF8BFE18D3B9@SJ0PR84MB2085.NAMPRD84.PROD.OUTLOOK.COM>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <SJ0PR84MB2085A64D47E00077EFF8BFE18D3B9@SJ0PR84MB2085.NAMPRD84.PROD.OUTLOOK.COM>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4xfKhXI8JkQI++zVRgIJ21Nv3/QfDiS03sM1LqTkjDc5XF1BYJOfCrkATWnQKe7w3TAN3G8qlAp1CMB22g72AW4WbM11rwn3Q8m+UcRLOZS5wqJ26oqjpp
- A20qHynssmbBADayF6PLwEaJKWjt0aCm9ruy6EoT8zUQ94s59jzWXD90BBw4VLP190aMzc11EqjiU7SvkyRPuqJpOsdd+udaFsTZ1vPxvRkkJ7d+qe/fbOOp
- w2KvnuQVqGNDzEEESuthFTW1FqbHiRzEctu6jq/j0w7IJSuzuxlFNS+fhK0Fu74v63yc9G5CvO3tG+g09isqeCv+uuzabNtGVHctQmYC1DF3J6+hmLKvOA1n
- gYwBxaoJKEElAgyCCmNlbj9nFgxLZUbUotstAeikWK/p9vau5qvMw904Nu6HR4fiGQkHokUbIQ49oU/vjp2oi/2YcXkwaHEraNSDq7WXqiYmNmwdRdi9v6Ty
- 8QLQNxYE5dKQEHA+Up6vvpOKs15DaxMnN8YtM71lGpntjveuWPESKfkJnGg=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Arnd, Russell, All,
-
-is this patch ok or has it some changes to do?
-
-While instead [PATCH 2/2] has a NAK and can be dropped.
-
-Best regards
--- 
-Giulio Benetti
-Benetti Engineering sas
-
-On 19/10/22 00:25, Giulio Benetti wrote:
-> Actually in no-MMU SoCs(i.e. i.MXRT) ZERO_PAGE(vaddr) expands to
-> ```
-> virt_to_page(0)
-> ```
-> that in order expands to:
-> ```
-> pfn_to_page(virt_to_pfn(0))
-> ```
-> and then virt_to_pfn(0) to:
-> ```
-> #define virt_to_pfn(0) \
-> 	((((unsigned long)(0) - PAGE_OFFSET) >> PAGE_SHIFT) + \
-> 	 PHYS_PFN_OFFSET)
-> ```
-> where PAGE_OFFSET and PHYS_PFN_OFFSET are the DRAM offset(0x80000000) and
-> PAGE_SHIFT is 12. This way we obtain 16MB(0x01000000) summed to the base of
-> DRAM(0x80000000).
-> When ZERO_PAGE(0) is then used, for example in bio_add_page(), the page
-> gets an address that is out of DRAM bounds.
-> So instead of using fake virtual page 0 let's allocate a dedicated
-> zero_page during paging_init() and assign it to a global 'struct page *
-> empty_zero_page' the same way mmu.c does and it's the same approach used
-> in m68k with commit dc068f462179 as discussed here[0]. Then let's move
-> ZERO_PAGE() definition to the top of pgtable.h to be in common between
-> mmu.c and nommu.c.
+On 04/11/2022 16:03, Yu, Richard wrote:
+> Hi Mr. Kozlowski,
 > 
-> [0]: https://lore.kernel.org/linux-m68k/2a462b23-5b8e-bbf4-ec7d-778434a3b9d7@google.com/T/#m1266ceb63ad140743174d6b3070364d3c9a5179b
+> Thank you very much for your quick review and feedbacks.
 > 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> ---
-> V1->V2:
-> * improve commit log as suggested by Arnd Bergmann
-> ---
->   arch/arm/include/asm/pgtable-nommu.h |  6 ------
->   arch/arm/include/asm/pgtable.h       | 16 +++++++++-------
->   arch/arm/mm/nommu.c                  | 19 +++++++++++++++++++
->   3 files changed, 28 insertions(+), 13 deletions(-)
+> I will modify the patches based on your feedback accordingly.
 > 
-> diff --git a/arch/arm/include/asm/pgtable-nommu.h b/arch/arm/include/asm/pgtable-nommu.h
-> index d16aba48fa0a..090011394477 100644
-> --- a/arch/arm/include/asm/pgtable-nommu.h
-> +++ b/arch/arm/include/asm/pgtable-nommu.h
-> @@ -44,12 +44,6 @@
->   
->   typedef pte_t *pte_addr_t;
->   
-> -/*
-> - * ZERO_PAGE is a global shared page that is always zero: used
-> - * for zero-mapped memory areas etc..
-> - */
-> -#define ZERO_PAGE(vaddr)	(virt_to_page(0))
-> -
->   /*
->    * Mark the prot value as uncacheable and unbufferable.
->    */
-> diff --git a/arch/arm/include/asm/pgtable.h b/arch/arm/include/asm/pgtable.h
-> index 78a532068fec..ef48a55e9af8 100644
-> --- a/arch/arm/include/asm/pgtable.h
-> +++ b/arch/arm/include/asm/pgtable.h
-> @@ -10,6 +10,15 @@
->   #include <linux/const.h>
->   #include <asm/proc-fns.h>
->   
-> +#ifndef __ASSEMBLY__
-> +/*
-> + * ZERO_PAGE is a global shared page that is always zero: used
-> + * for zero-mapped memory areas etc..
-> + */
-> +extern struct page *empty_zero_page;
-> +#define ZERO_PAGE(vaddr)	(empty_zero_page)
-> +#endif
-> +
->   #ifndef CONFIG_MMU
->   
->   #include <asm-generic/pgtable-nopud.h>
-> @@ -139,13 +148,6 @@ extern pgprot_t phys_mem_access_prot(struct file *file, unsigned long pfn,
->    */
->   
->   #ifndef __ASSEMBLY__
-> -/*
-> - * ZERO_PAGE is a global shared page that is always zero: used
-> - * for zero-mapped memory areas etc..
-> - */
-> -extern struct page *empty_zero_page;
-> -#define ZERO_PAGE(vaddr)	(empty_zero_page)
-> -
->   
->   extern pgd_t swapper_pg_dir[PTRS_PER_PGD];
->   
-> diff --git a/arch/arm/mm/nommu.c b/arch/arm/mm/nommu.c
-> index c42debaded95..c1494a4dee25 100644
-> --- a/arch/arm/mm/nommu.c
-> +++ b/arch/arm/mm/nommu.c
-> @@ -26,6 +26,13 @@
->   
->   unsigned long vectors_base;
->   
-> +/*
-> + * empty_zero_page is a special page that is used for
-> + * zero-initialized data and COW.
-> + */
-> +struct page *empty_zero_page;
-> +EXPORT_SYMBOL(empty_zero_page);
-> +
->   #ifdef CONFIG_ARM_MPU
->   struct mpu_rgn_info mpu_rgn_info;
->   #endif
-> @@ -148,9 +155,21 @@ void __init adjust_lowmem_bounds(void)
->    */
->   void __init paging_init(const struct machine_desc *mdesc)
->   {
-> +	void *zero_page;
-> +
->   	early_trap_init((void *)vectors_base);
->   	mpu_setup();
-> +
-> +	/* allocate the zero page. */
-> +	zero_page = memblock_alloc(PAGE_SIZE, PAGE_SIZE);
-> +	if (!zero_page)
-> +		panic("%s: Failed to allocate %lu bytes align=0x%lx\n",
-> +		      __func__, PAGE_SIZE, PAGE_SIZE);
-> +
->   	bootmem_init();
-> +
-> +	empty_zero_page = virt_to_page(zero_page);
-> +	flush_dcache_page(empty_zero_page);
->   }
->   
->   /*
+> On this specific patch, you have questions on how we defined the device/gadget configurations: vdevnum and fepnum.
+> 
+> Please see my answers following the questions:
+> 
+>> +  vdevnum:
+>> +    description:
+>> +      virtual device number.
+> 
+> That's unusual property... Why numbering devices is part of DT (hardware description)?
+> 
+>>> Richard: In HPE GXP virtual EHCI controller chipset, it can support up to 8 virtual devices(gadgets). Each device/gadget will be represented by a bit in 8 bits register. For example, the interrupt register bit 0 indicates the interrupt from device 0, bit 1 for device 1 ... so on.  When an user defines a device/gadget, he/she can define the device number as between 0 and 7. Thus, the driver can up to the bit position. That is why we have numbering devices as port of DT.
+> 
+>> +
+>> +  fepnum:
+>> +    description:
+>> +      number of the flexible end-points this device is needed.
+> 
+> Similar question.
+> 
+>>> Richard: In HPE GXP virtual EHCI Controller chipset, there is a flexible EP pool. Each flexible EP has its own mapping register. The mapping register bit 0 to 3 is for device number (vdevnum) and bit 4 to 7 is for EP number inside the device. The device driver configures the mapping register to assign a flexible EP to a specific device.  Here, "fepnum" is the input letting the driver know how many EP is needed for this device/gadget.
+> 
+> Hope I have answered your questions on "vdevnum" and "fepnum". 
+
+Unfortunately I don't see your answers... Or actually I am not sure what
+is the answer and what is not. What is unusual, you did not quote my
+email but quoted something else. Please send it again, but following
+normal mailing list netiquette for replies.
+
+Here is one:
+
+https://en.opensuse.org/openSUSE:Mailing_list_netiquette
+
+Just don't use corporate style of emails on mailing list. We usually
+cannot handle them...
+
+Best regards,
+Krzysztof
 
