@@ -2,76 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C839761A56F
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 00:11:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED35261A575
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 00:12:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229716AbiKDXL2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 19:11:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44428 "EHLO
+        id S229629AbiKDXM5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 19:12:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229636AbiKDXLZ (ORCPT
+        with ESMTP id S229489AbiKDXMy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 19:11:25 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E86F545097;
-        Fri,  4 Nov 2022 16:11:23 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id x2so9722402edd.2;
-        Fri, 04 Nov 2022 16:11:23 -0700 (PDT)
+        Fri, 4 Nov 2022 19:12:54 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCBEA450B3
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 16:12:48 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id h4-20020a5b02c4000000b006bc192d672bso6178076ybp.22
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 16:12:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=07hdorLZjfDrmmF0RIbb3F6VZW1gi/vfnv07L0QVxCY=;
-        b=WGnqy424lfhHz+aAINFGSq6ODp0Gxck7vR2Ozdh6FTng/CdZ3be+yNRvZcLesqvChY
-         sJ/uivYjdfggdG/gPt3ivWw/YFAINSigm6FeXoLG6YmjT6hHadCiw+NXcijVYdamn6Qn
-         R5+qfhwsI5mTWdCLGvJQIKjXX0iluZUYNeEziVDeI+/eT0YWV8xb7RYQljPf5OX276rI
-         B+vRvHIolq9eTv7wmT3LP1Hr7FLqFLRiGWtY/74ZP1se7mZIXPMnEC7mVT0FYcVrY5Mw
-         Elh6j9HuiXqWVfGVAvobSAMV6E6CoHoNIuULwItXm97lqWgMgkRVcNB7S3YE6WV6OXvz
-         DEtA==
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=xG8SF42tN7XJN1Q1/ybEZcxUZopQ7i5Q8n92aTP8rTA=;
+        b=tdEbBLnkjqwBbh7mLxH/Hzv5saWzHJsiuGO1JdrLEH1aSoLYNPgSALLnmnrk1MPvh/
+         JIPJCaqnu93XVSnYgZGjyFvZmbkuSiyNxPuJ/niHgumMs02X6CW2dXrDvTWrRTAyJKoH
+         0bBCOnHT5uhKFMgZtbyGvCWTel+cD3XVCTnrPLp0vKZRIkw9JaQS/Ed/1EQdhhvGTjJ6
+         dg4n+1TuGl0VFscIP/fVd028BYD8TpXcxEFpRfW8E8H/G7NR4QQSSecIv5aZKgXc4T4f
+         VD6bDEyKb13O425K+X+aDNZ9hi0RbavOP2FDIWWjJcc78NYvj5OQTiromrial3O4O7y3
+         LFkw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=07hdorLZjfDrmmF0RIbb3F6VZW1gi/vfnv07L0QVxCY=;
-        b=bn7O+VzuLQ88rKt5KhbclRxYRAoIRlwxYhsKUXYPnfOtzqgCLXLdN5vrMLZ/AtXiLb
-         sagbnQKZ6WW9r6t8OMqpespcayteCCgbD2g+2y/O8MEt0rB9W8InaVxc1wMMgi5o4rL2
-         tC996GkHcLAmLfuDrYQKi4fFwpQ8BiT6knOxW5FM85TxDLvyMtXnR0mvMtJcEfIKDYKE
-         SygFcrtTmVKc/jxmZrOAmo97neDyG9vUoI5qS41Vnpc4EIIJnPM8TRysgA30y6pW6B6d
-         rcEkLTnAVjHi0k2SDA87GBw048huFwqF4a6EnvekbZgE7DAOEc8+YfBH3Vl/cDYn81Il
-         d+AQ==
-X-Gm-Message-State: ACrzQf1WX1o9KDCU6wJdbkaRmfF9lkE8BUWDOZSZRYSV5ATgn5g21vQZ
-        tkgNNcHpXS4Al0uvc0Or5/z+tDx2eu8hVpHiVvA=
-X-Google-Smtp-Source: AMsMyM5tCCKtcvEZQVkGHI7Qpz8ptEcCXCTV7R+VBHSElTu5gB69+R6ssVG1t04JvlRDGUBKK212FD7pLPLa1DW/tW0=
-X-Received: by 2002:aa7:c2ca:0:b0:461:89a6:2281 with SMTP id
- m10-20020aa7c2ca000000b0046189a62281mr39520308edp.260.1667603482360; Fri, 04
- Nov 2022 16:11:22 -0700 (PDT)
-MIME-Version: 1.0
-References: <20221104123913.50610-1-bagasdotme@gmail.com>
-In-Reply-To: <20221104123913.50610-1-bagasdotme@gmail.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Fri, 4 Nov 2022 16:11:10 -0700
-Message-ID: <CAEf4Bzau0QuBiNsXoMq_QRV+_MTyodQsvW7O2kbScgmVmbuXkQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] Documentation: bpf: escape underscore in BPF
- type name prefix
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     bpf@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        David Vernet <void@manifault.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=xG8SF42tN7XJN1Q1/ybEZcxUZopQ7i5Q8n92aTP8rTA=;
+        b=QMXjqsaKMwL5wDT7qRdpjASKnn4MNQ+2QF03aderkd383vc5t0PgaKHuvmH7Y1B4I4
+         ASpms0laiF1AU7JB+cO8FnU0Rb34vZrSegtcEVeV9DkyhYcF8wFKMidSqph7qt24Kufz
+         1O0c7ifq4UB3gMR0h7KEJx1D5jr5BuOGzlmFGym9rpOlc1PrNiB7VNPSihRvizC8RGAo
+         znVHInK2RjSYsPL0Hc/mg6GJiLKbGNUnj2tZQtiAVy61e1dDSYoWXVpNkV2DiOh3Xskw
+         7JbAJjeuDiqh4L+nofJLz3do7pzL8eJxVw1xVX/yPi2FDd7hsyqstoAkAW2CWKuyJrUz
+         Ri4w==
+X-Gm-Message-State: ACrzQf2jf8emCaUyiqg+f7rDRFhMRWm74sKdhtB1gisAy2ZQUH0dKQsg
+        22u5sgSf5Z6p52PUOsr87iYzgKJ8SGphiw==
+X-Google-Smtp-Source: AMsMyM5HF8y6DHVqifbG2yHGSsCpt3xo+QvJoGzCdtOLeSejk76K6mymM1jcnkGn3zQqkjKdm+yoPJav4qg4ng==
+X-Received: from xllamas.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5070])
+ (user=cmllamas job=sendgmr) by 2002:a5b:142:0:b0:6c4:8a9:e4d2 with SMTP id
+ c2-20020a5b0142000000b006c408a9e4d2mr372993ybp.164.1667603568127; Fri, 04 Nov
+ 2022 16:12:48 -0700 (PDT)
+Date:   Fri,  4 Nov 2022 23:12:35 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
+Message-ID: <20221104231235.348958-1-cmllamas@google.com>
+Subject: [PATCH] binder: validate alloc->mm in ->mmap() handler
+From:   Carlos Llamas <cmllamas@google.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "=?UTF-8?q?Arve=20Hj=C3=B8nnev=C3=A5g?=" <arve@android.com>,
+        Todd Kjos <tkjos@android.com>,
+        Martijn Coenen <maco@android.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Carlos Llamas <cmllamas@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>
+Cc:     linux-kernel@vger.kernel.org, kernel-team@android.com,
+        Jann Horn <jannh@google.com>, stable@vger.kernel.org,
+        Todd Kjos <tkjos@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,61 +75,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 4, 2022 at 5:39 AM Bagas Sanjaya <bagasdotme@gmail.com> wrote:
->
-> Sphinx reported unknown target warning:
->
-> Documentation/bpf/bpf_design_QA.rst:329: WARNING: Unknown target name: "bpf".
->
-> The warning is caused by BPF type name prefix ("bpf_") which is written
-> without escaping the trailing underscore.
->
-> Escape the underscore to fix the warning. While at it, wrap the
-> containing paragraph in less than 80 characters.
->
-> Fixes: 9805af8d8a5b17 ("bpf: Document UAPI details for special BPF types")
-> Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
-> ---
->  Documentation/bpf/bpf_design_QA.rst | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
->
+Since commit 1da52815d5f1 ("binder: fix alloc->vma_vm_mm null-ptr
+dereference") binder caches a pointer to the current->mm during open().
+This fixes a null-ptr dereference reported by syzkaller. Unfortunately,
+it also opens the door for a process to update its mm after the open(),
+(e.g. via execve) making the cached alloc->mm pointer invalid.
 
-Applied, thanks. But would the other similar case be problematic?
+Things get worse when the process continues to mmap() a vma. From this
+point forward, binder will attempt to find this vma using an obsolete
+alloc->mm reference. Such as in binder_update_page_range(), where the
+wrong vma is obtained via vma_lookup(), yet binder proceeds to happily
+insert new pages into it.
 
-$ rg 'bpf_\b'
-bpf_design_QA.rst
-329:NOTE: BPF subsystem specially reserves the 'bpf_' prefix for type names, in
-331:avoid defining types with 'bpf_' prefix to not be broken in future
-releases. In
-333:with 'bpf_' prefix.
+To avoid this issue fail the ->mmap() callback if we detect a mismatch
+between the vma->vm_mm and the original alloc->mm pointer. This prevents
+alloc->vm_addr from getting set, so that any subsequent vma_lookup()
+calls fail as expected.
 
-libbpf/libbpf_naming_convention.rst
-12:following prefixes: ``bpf_``, ``btf_``, ``libbpf_``, ``btf_dump_``,
-59:described above should have ``libbpf_`` prefix, e.g.
+Fixes: 1da52815d5f1 ("binder: fix alloc->vma_vm_mm null-ptr dereference")
+Reported-by: Jann Horn <jannh@google.com>
+Cc: <stable@vger.kernel.org> # 5.15+
+Signed-off-by: Carlos Llamas <cmllamas@google.com>
+---
+ drivers/android/binder_alloc.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
+diff --git a/drivers/android/binder_alloc.c b/drivers/android/binder_alloc.c
+index 1c39cfce32fa..4ad42b0f75cd 100644
+--- a/drivers/android/binder_alloc.c
++++ b/drivers/android/binder_alloc.c
+@@ -739,6 +739,12 @@ int binder_alloc_mmap_handler(struct binder_alloc *alloc,
+ 	const char *failure_string;
+ 	struct binder_buffer *buffer;
+ 
++	if (unlikely(vma->vm_mm != alloc->mm)) {
++		ret = -EINVAL;
++		failure_string = "invalid vma->vm_mm";
++		goto err_invalid_mm;
++	}
++
+ 	mutex_lock(&binder_alloc_mmap_lock);
+ 	if (alloc->buffer_size) {
+ 		ret = -EBUSY;
+@@ -785,6 +791,7 @@ int binder_alloc_mmap_handler(struct binder_alloc *alloc,
+ 	alloc->buffer_size = 0;
+ err_already_mapped:
+ 	mutex_unlock(&binder_alloc_mmap_lock);
++err_invalid_mm:
+ 	binder_alloc_debug(BINDER_DEBUG_USER_ERROR,
+ 			   "%s: %d %lx-%lx %s failed %d\n", __func__,
+ 			   alloc->pid, vma->vm_start, vma->vm_end,
+-- 
+2.38.1.431.g37b22c650d-goog
 
-> diff --git a/Documentation/bpf/bpf_design_QA.rst b/Documentation/bpf/bpf_design_QA.rst
-> index 4e4af398607b58..17e774d96c5e4b 100644
-> --- a/Documentation/bpf/bpf_design_QA.rst
-> +++ b/Documentation/bpf/bpf_design_QA.rst
-> @@ -326,11 +326,11 @@ size, type, and alignment, or any other user visible API or ABI detail across
->  kernel releases. The users must adapt their BPF programs to the new changes and
->  update them to make sure their programs continue to work correctly.
->
-> -NOTE: BPF subsystem specially reserves the 'bpf_' prefix for type names, in
-> +NOTE: BPF subsystem specially reserves the 'bpf\_' prefix for type names, in
->  order to introduce more special fields in the future. Hence, user programs must
-> -avoid defining types with 'bpf_' prefix to not be broken in future releases. In
-> -other words, no backwards compatibility is guaranteed if one using a type in BTF
-> -with 'bpf_' prefix.
-> +avoid defining types with 'bpf\_' prefix to not be broken in future releases.
-> +In other words, no backwards compatibility is guaranteed if one using a type
-> +in BTF with 'bpf\_' prefix.
->
->  Q: What is the compatibility story for special BPF types in local kptrs?
->  ------------------------------------------------------------------------
->
-> base-commit: f71b2f64177a199d5b1d2047e155d45fd98f564a
-> --
-> An old man doll... just what I always wanted! - Clara
->
