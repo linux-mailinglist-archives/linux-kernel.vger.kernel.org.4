@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAC69619C40
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 16:55:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 666C0619C49
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 16:56:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231983AbiKDPzg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 11:55:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59788 "EHLO
+        id S232201AbiKDP4I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 11:56:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231790AbiKDPzY (ORCPT
+        with ESMTP id S231966AbiKDPzd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 11:55:24 -0400
-Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 664D82FFD2;
-        Fri,  4 Nov 2022 08:55:23 -0700 (PDT)
-Received: by mail-oi1-f170.google.com with SMTP id v81so5592731oie.5;
-        Fri, 04 Nov 2022 08:55:23 -0700 (PDT)
+        Fri, 4 Nov 2022 11:55:33 -0400
+Received: from mail-ot1-f50.google.com (mail-ot1-f50.google.com [209.85.210.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EBDD303DE;
+        Fri,  4 Nov 2022 08:55:32 -0700 (PDT)
+Received: by mail-ot1-f50.google.com with SMTP id cb2-20020a056830618200b00661b6e5dcd8so2882250otb.8;
+        Fri, 04 Nov 2022 08:55:32 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=1LuRWZ+uGAhH28zFK+adTPuM2Aq0aZSCcYB6eJqAff0=;
-        b=n6JwNr1494B1IS3yVuRf9KG/Gicq7BlI2jCdg1HlM3CNAiLRNMUsbTqIXucZ+0tQ4P
-         Hn1gfJkrwoc4mw/xLX9kZdRv7wHqa94hP/mby+u2V27v7yWzrc8dH/9y3C8YsE1dXQXC
-         Q9y37wvVU32FSRiwAK4GnZVjnmq0VuY+FJhP/N8jB3Jrf9g/358303jo0Gxf5qOn7QMC
-         0XWfrCYDJbmiKzUjBFwDzC8gHdlsJ6ZIRIiqR9Wpr8C7OIDSmT9A0Vn83QEaq6zuRHmd
-         iQSO4xSg/L6CCLuKC8Td+JEPSAMvxcrqYh7RoeYCgAjNlekk6i69q9mSnHqOMmUU7+Eg
-         BAsQ==
-X-Gm-Message-State: ACrzQf3UZLjzu/PHBZnFVM/MaLD0kFUlMIRKJX2O1yZy5TwpNfYgM98y
-        T7y94+GVpRI4nWt7RNnJqg==
-X-Google-Smtp-Source: AMsMyM4d6TDw2T7GbRam3QWG/Wa4RT72PM5DQk1E8uYmT91uYVnx3slmlmbYjUyO46tJ6RiQPcimSQ==
-X-Received: by 2002:a05:6808:1492:b0:353:f28f:6fb with SMTP id e18-20020a056808149200b00353f28f06fbmr258038oiw.246.1667577322632;
-        Fri, 04 Nov 2022 08:55:22 -0700 (PDT)
+        bh=rdANC8NrUTH0lQipJQx568c5Das7/Cs95kVjxC07YnA=;
+        b=CUjfTPlV4R9Ip2xcxLX8KstCUgdyYGe0KvrOfE5iY/4ngx95li6kOh6XNeZVE/hyOO
+         ntmV9QXxc51HCSXHd00Rn6z3hRMIAf1fz++FPO3Q/YzTRuNHyCOmAFjZX7NL0tQIh16j
+         ZErXMnhm/bfLL7x89EmLJLe8Fq6r6fL5XXzBRvzxgSdBocudyVcUg+6USB0AC8s8ZmjM
+         8w8/68JHbs69+yE+Rctpy5XsH66/M7MW41LTXy3KTiGvkcPLqImq0k6HIU3lqfcFYeHk
+         KxGJRR1QY5juG9Z2jVP3HwjV2FF8fvGJwxKb4KBikWhfD0CPmKyl9LFtq4vWRcDwK2El
+         Hv9g==
+X-Gm-Message-State: ACrzQf1i43DlDElM8KUzw4KXtBOUcpOFL0Q0YC19IxMloaKQCp+aVKeE
+        sbvnSrrQ+uVDJcviGnrXSw==
+X-Google-Smtp-Source: AMsMyM59dgaW5KOcOiwYnuILFe/BJR9IA6bPecpfclxA2KHdZ3Eq+UoizXI26yxdMDvL0GyieiOjSA==
+X-Received: by 2002:a05:6830:1241:b0:66c:3bc2:f919 with SMTP id s1-20020a056830124100b0066c3bc2f919mr16838358otp.33.1667577331662;
+        Fri, 04 Nov 2022 08:55:31 -0700 (PDT)
 Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id z15-20020a056870e30f00b00136a0143de8sm1876818oad.40.2022.11.04.08.55.21
+        by smtp.gmail.com with ESMTPSA id l21-20020a05687040d500b0013d9bd4ad2esm1906311oal.12.2022.11.04.08.55.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Nov 2022 08:55:22 -0700 (PDT)
-Received: (nullmailer pid 1880420 invoked by uid 1000);
+        Fri, 04 Nov 2022 08:55:31 -0700 (PDT)
+Received: (nullmailer pid 1880422 invoked by uid 1000);
         Fri, 04 Nov 2022 15:55:18 -0000
 From:   Rob Herring <robh@kernel.org>
-Date:   Fri, 04 Nov 2022 10:55:06 -0500
-Subject: [PATCH v3 6/8] perf: arm_spe: Support new SPEv1.2/v8.7 'not taken' event
+Date:   Fri, 04 Nov 2022 10:55:07 -0500
+Subject: [PATCH v3 7/8] perf: Add perf_event_attr::config3
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20220825-arm-spe-v8-7-v3-6-87682f78caac@kernel.org>
+Message-Id: <20220825-arm-spe-v8-7-v3-7-87682f78caac@kernel.org>
 References: <20220825-arm-spe-v8-7-v3-0-87682f78caac@kernel.org>
 In-Reply-To: <20220825-arm-spe-v8-7-v3-0-87682f78caac@kernel.org>
 To:     Namhyung Kim <namhyung@kernel.org>, Will Deacon <will@kernel.org>,
@@ -69,17 +69,18 @@ Cc:     kvmarm@lists.linux.dev, linux-perf-users@vger.kernel.org,
 X-Mailer: b4 0.11.0-dev
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Arm SPEv1.2 (Armv8.7/v9.2) adds a new event, 'not taken', in bit 6 of
-the PMSEVFR_EL1 register. Update arm_spe_pmsevfr_res0() to support the
-additional event.
+Arm SPEv1.2 adds another 64-bits of event filtering control. As the
+existing perf_event_attr::configN fields are all used up for SPE PMU, an
+additional field is needed. Add a new 'config3' field.
 
 Tested-by: James Clark <james.clark@arm.com>
 Signed-off-by: Rob Herring <robh@kernel.org>
@@ -87,42 +88,32 @@ Signed-off-by: Rob Herring <robh@kernel.org>
 v3:
  - No change
 v2:
- - Update for v6.1 sysreg generated header changes
+ - Drop tools/ side update
 ---
- arch/arm64/include/asm/sysreg.h | 2 ++
- drivers/perf/arm_spe_pmu.c      | 4 +++-
- 2 files changed, 5 insertions(+), 1 deletion(-)
+ include/uapi/linux/perf_event.h | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/arch/arm64/include/asm/sysreg.h b/arch/arm64/include/asm/sysreg.h
-index d002dd00e53e..06231e896832 100644
---- a/arch/arm64/include/asm/sysreg.h
-+++ b/arch/arm64/include/asm/sysreg.h
-@@ -242,6 +242,8 @@
- 	 BIT_ULL(6) | BIT_ULL(4) | BIT_ULL(2) | BIT_ULL(0))
- #define PMSEVFR_EL1_RES0_V1P1	\
- 	(PMSEVFR_EL1_RES0_IMP & ~(BIT_ULL(18) | BIT_ULL(17) | BIT_ULL(11)))
-+#define PMSEVFR_EL1_RES0_V1P2	\
-+	(PMSEVFR_EL1_RES0_V1P1 & ~BIT_ULL(6))
+diff --git a/include/uapi/linux/perf_event.h b/include/uapi/linux/perf_event.h
+index 85be78e0e7f6..b2b1d7b54097 100644
+--- a/include/uapi/linux/perf_event.h
++++ b/include/uapi/linux/perf_event.h
+@@ -374,6 +374,7 @@ enum perf_event_read_format {
+ #define PERF_ATTR_SIZE_VER5	112	/* add: aux_watermark */
+ #define PERF_ATTR_SIZE_VER6	120	/* add: aux_sample_size */
+ #define PERF_ATTR_SIZE_VER7	128	/* add: sig_data */
++#define PERF_ATTR_SIZE_VER8	136	/* add: config3 */
  
- /* Buffer error reporting */
- #define PMBSR_EL1_FAULT_FSC_SHIFT	PMBSR_EL1_MSS_SHIFT
-diff --git a/drivers/perf/arm_spe_pmu.c b/drivers/perf/arm_spe_pmu.c
-index af6d3867c3e7..82f67e941bc4 100644
---- a/drivers/perf/arm_spe_pmu.c
-+++ b/drivers/perf/arm_spe_pmu.c
-@@ -677,9 +677,11 @@ static u64 arm_spe_pmsevfr_res0(u16 pmsver)
- 	case ID_AA64DFR0_EL1_PMSVer_IMP:
- 		return PMSEVFR_EL1_RES0_IMP;
- 	case ID_AA64DFR0_EL1_PMSVer_V1P1:
-+		return PMSEVFR_EL1_RES0_V1P1;
-+	case ID_AA64DFR0_EL1_PMSVer_V1P2:
- 	/* Return the highest version we support in default */
- 	default:
--		return PMSEVFR_EL1_RES0_V1P1;
-+		return PMSEVFR_EL1_RES0_V1P2;
- 	}
- }
+ /*
+  * Hardware event_id to monitor via a performance monitoring event:
+@@ -515,6 +516,8 @@ struct perf_event_attr {
+ 	 * truncated accordingly on 32 bit architectures.
+ 	 */
+ 	__u64	sig_data;
++
++	__u64	config3; /* extension of config2 */
+ };
  
+ /*
 
 -- 
 b4 0.11.0-dev
