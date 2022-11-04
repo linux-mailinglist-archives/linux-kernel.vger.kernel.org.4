@@ -2,69 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA0346194DE
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 11:54:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD74E6194E2
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 11:55:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231816AbiKDKyR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 06:54:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34596 "EHLO
+        id S231665AbiKDKz5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 06:55:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231821AbiKDKyJ (ORCPT
+        with ESMTP id S229611AbiKDKzv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 06:54:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41AC52BB21;
-        Fri,  4 Nov 2022 03:54:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D10F462152;
-        Fri,  4 Nov 2022 10:54:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30BA6C433C1;
-        Fri,  4 Nov 2022 10:54:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667559246;
-        bh=pvwG3Gm3N2eUyHgbPambsEuPVQ8R8/OOOxapou4YcUQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cbBnPnYUkVl8HlirmjDewnnffVKehLHqlm1obIGLgPClQn+N8qpt6kVVeRv7jmkO8
-         pE7BDnwwVWraetTc50i8EYFTEP+BRLKvWFpiyw2Gs+LrYi2/9fCOWz7XWJBfFy+t+N
-         VUPPPDL7PDYnompJUihMxfpqHpM5QT45oSZ5IzRkkx4uYzpbz7+Gv+BVjPcpGO6D0h
-         EHGkwdAYVKkDvz+n0VT5S1PBTfxDR9q6nxMI2WHO3D8zYILp8VLd98rqj+kPqOMjW/
-         q1XTDuI5pJ+IMVj8PdQoZ6+dd96tvrhGWkjqbmv2oVa552CjRmOl1p1ptyfl2jnXxh
-         uWarmbCkIf6hg==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1oquKZ-0001I6-77; Fri, 04 Nov 2022 11:53:47 +0100
-Date:   Fri, 4 Nov 2022 11:53:47 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, patches@lists.linux.dev,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        linux-arm-msm@vger.kernel.org,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Taniya Das <quic_tdas@quicinc.com>,
-        Satya Priya <quic_c_skakit@quicinc.com>,
-        Douglas Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>
-Subject: Re: [PATCH] clk: qcom: gdsc: Remove direct runtime PM calls
-Message-ID: <Y2TvO875fYZTTNy9@hovoldconsulting.com>
-References: <20221101233421.997149-1-swboyd@chromium.org>
- <Y2JL9/HFrb3E+CYY@hovoldconsulting.com>
- <CAE-0n51Wuc6gVmsTOu4Nf4yx+6Wp-Oi3XZy06syhCMVmePWPEw@mail.gmail.com>
- <Y2PAXX2oYL6iFTlB@hovoldconsulting.com>
- <CAE-0n5319JSX16Z3H5vKQSL9UDetOdfb38zo_vp0C=uX1jddWQ@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAE-0n5319JSX16Z3H5vKQSL9UDetOdfb38zo_vp0C=uX1jddWQ@mail.gmail.com>
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        Fri, 4 Nov 2022 06:55:51 -0400
+Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 636E12B1BD
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 03:55:50 -0700 (PDT)
+Received: by mail-qv1-xf35.google.com with SMTP id h10so2927779qvq.7
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 03:55:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google;
+        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
+         :from:content-transfer-encoding:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=m6rrlAfBsKD8gTPvCkh1Ab4cJUCPWtD+C8D8BepOwzI=;
+        b=pyHdnTd/0a6HLbDG+yMbapvIpgqafaYF1+DwCx63LJGKcQtxmnOf4qZBdUYZ2E8oOy
+         LzQBKefvl/U/lXkdmL4cfz0hV6qjS+LCI7e21VcPp1tINnmO4guiYOzki6xmiC1ZLeSl
+         k1I6B1tn4AD8S38pMR9veTSjIIKSpoYFN14H4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
+         :from:content-transfer-encoding:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=m6rrlAfBsKD8gTPvCkh1Ab4cJUCPWtD+C8D8BepOwzI=;
+        b=Eai+L1dQrSx1PwpEJCtczni6rEnPteeMunVds6nIQrUwwzNypu9mzw7S6RPOlUuREf
+         eGIFb9acixGcYMPIKmArgnqvRsADYZUFXRkD5L5APR8dBpm+cnJQDrUGke+0ZIWs8CJT
+         6sFBy6BmRPAAdP1w/S1wYaiBJF4SUvE7sXMrBxlKVice19ktiidNEeEi4qKpq1cQga/o
+         VPOcu6ZUM4Oe0tApGHW1o7skdyyMdBQ7Scd+IiS8j1m0VC/NYmN30W4GiFrkQWiVfbUD
+         NKADpmzY3rggsLkXJ0zBtZwZP2TksvSeSVHJJsXGxZVw+Ce59FjAJiro/2BTBf1E0rHW
+         NZ2Q==
+X-Gm-Message-State: ACrzQf2Bt4IrThRapP7U/w4qGnrm37jLfC6AUwI+KhAkwZ1WZ5eoYdlU
+        dXEAjZCSMRhIcpv9ZhS3f8kWzg==
+X-Google-Smtp-Source: AMsMyM5JmE5SEXSAY3N+qlWjqCIiBukkWULJvkpAaMnGuCcqWU7MDCSwZdmIwh6X2y/ftIGAtm1xxg==
+X-Received: by 2002:a0c:dd13:0:b0:4bb:664c:5aaa with SMTP id u19-20020a0cdd13000000b004bb664c5aaamr31708936qvk.121.1667559349437;
+        Fri, 04 Nov 2022 03:55:49 -0700 (PDT)
+Received: from smtpclient.apple (c-73-148-104-166.hsd1.va.comcast.net. [73.148.104.166])
+        by smtp.gmail.com with ESMTPSA id x4-20020a05620a258400b006ec771d8f89sm2708412qko.112.2022.11.04.03.55.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 04 Nov 2022 03:55:48 -0700 (PDT)
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+From:   Joel Fernandes <joel@joelfernandes.org>
+Mime-Version: 1.0 (1.0)
+Subject: Re: [PATCH v7 6/9] sched/fair: Add sched group latency support
+Date:   Fri, 4 Nov 2022 06:55:48 -0400
+Message-Id: <CD57BDD3-5919-48EC-992A-3879D8AA074F@joelfernandes.org>
+References: <CAKfTPtBJQOY7UUkm1=wvG18UWgLLiTW0dr3bTGUJY=siM_LLxQ@mail.gmail.com>
+Cc:     Qais Yousef <qyousef@layalina.io>, mingo@redhat.com,
+        peterz@infradead.org, juri.lelli@redhat.com,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        linux-kernel@vger.kernel.org, parth@linux.ibm.com,
+        qais.yousef@arm.com, chris.hyser@oracle.com,
+        patrick.bellasi@matbug.net, David.Laight@aculab.com,
+        pjt@google.com, pavel@ucw.cz, tj@kernel.org, qperret@google.com,
+        tim.c.chen@linux.intel.com, joshdon@google.com, timj@gnu.org,
+        kprateek.nayak@amd.com, yu.c.chen@intel.com,
+        youssefesmat@chromium.org
+In-Reply-To: <CAKfTPtBJQOY7UUkm1=wvG18UWgLLiTW0dr3bTGUJY=siM_LLxQ@mail.gmail.com>
+To:     Vincent Guittot <vincent.guittot@linaro.org>
+X-Mailer: iPhone Mail (19G82)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,95 +78,174 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 03, 2022 at 11:19:08AM -0700, Stephen Boyd wrote:
-> Quoting Johan Hovold (2022-11-03 06:21:33)
-> > On Wed, Nov 02, 2022 at 09:53:49AM -0700, Stephen Boyd wrote:
-> > > Quoting Johan Hovold (2022-11-02 03:52:39)
-> >
-> > > > > Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> > > > > Cc: Johan Hovold <johan+linaro@kernel.org>
-> > > > > Cc: Ulf Hansson <ulf.hansson@linaro.org>
-> > > > > Cc: Taniya Das <quic_tdas@quicinc.com>
-> > > > > Cc: Satya Priya <quic_c_skakit@quicinc.com>
-> > > > > Cc: Douglas Anderson <dianders@chromium.org>
-> > > > > Cc: Matthias Kaehlcke <mka@chromium.org>
-> > > > > Reported-by: Stephen Boyd <swboyd@chromium.org>
-> > > >
-> > > > We typically don't add Reported-by tags for bugs we find and fix
-> > > > ourselves.
-> > >
-> > > Heh, I didn't see anything like that in Documentation/ so it seems fine.
-> > > I debugged my problem and reported it.
-> >
-> > I'd say the documentation is pretty clear on this matter:
-> >
-> >   Reported-by: names a user who reported a problem which is fixed by this
-> >   patch; this tag is used to give credit to the (often underappreciated)
-> >   people who test our code and let us know when things do not work
-> >   correctly.
-> >
-> >   - Documentation/process/5.Posting.rst
-> >
-> >   The Reported-by tag gives credit to people who find bugs and report
-> >   them and it hopefully inspires them to help us again in the future.
-> >   Please note that if the bug was reported in private, then ask for
-> >   permission first before using the Reported-by tag.
-> >
-> >   - Documentation/process/submitting-patches.rst
-> 
-> I don't see anything above that says I can't add this tag if I reported
-> (by sending an email about the problem to the list), debugged, and
-> solved the problem by sending a patch.
 
-We don't try to prevent every strange interpretation of our docs by
-spelling everything out. Just look at why we added a tag in the first
-place and how it *is* being using.
- 
-> > Just like you don't add a Tested-by tag for every patch you submit, it
-> > is implied that you found the issue you fix unless you explicitly
-> > attribute that to a third party using Reported-by.
-> 
-> I don't see how this is the same. It certainly is not explicit, as you
-> say.
 
-We added the Reported-by tag so that users reporting bugs would get some
-credit and not just the person fixing the bug. Just as we did for
-Tested-by.
+> On Nov 4, 2022, at 6:37 AM, Vincent Guittot <vincent.guittot@linaro.org> w=
+rote:
+>=20
+> =EF=BB=BFOn Fri, 4 Nov 2022 at 11:15, Joel Fernandes <joel@joelfernandes.o=
+rg> wrote:
+>>=20
+>>> On Thu, Nov 3, 2022 at 5:03 PM Vincent Guittot
+>>> <vincent.guittot@linaro.org> wrote:
+>>>=20
+>>> On Thu, 3 Nov 2022 at 15:27, Qais Yousef <qyousef@layalina.io> wrote:
+>>>>=20
+>>>> On 11/03/22 09:46, Vincent Guittot wrote:
+>>>>> On Tue, 1 Nov 2022 at 20:28, Qais Yousef <qyousef@layalina.io> wrote:
+>>>>>>=20
+>>>>>> On 10/28/22 11:34, Vincent Guittot wrote:
+>>>>>>> Task can set its latency priority with sched_setattr(), which is the=
+n used
+>>>>>>> to set the latency offset of its sched_enity, but sched group entiti=
+es
+>>>>>>> still have the default latency offset value.
+>>>>>>>=20
+>>>>>>> Add a latency.nice field in cpu cgroup controller to set the latency=
 
-If some author added a Tested-by tag for themselves to their own patches
-I'm sure you'd call that out too as that's not the way the tag is meant
-to be used.
+>>>>>>> priority of the group similarly to sched_setattr(). The latency prio=
+rity
+>>>>>>> is then used to set the offset of the sched_entities of the group.
+>>>>>>>=20
+>>>>>>> Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
+>>>>>>> ---
+>>>>>>> Documentation/admin-guide/cgroup-v2.rst |  8 ++++
+>>>>>>> kernel/sched/core.c                     | 52 +++++++++++++++++++++++=
+++
+>>>>>>> kernel/sched/fair.c                     | 33 ++++++++++++++++
+>>>>>>> kernel/sched/sched.h                    |  4 ++
+>>>>>>> 4 files changed, 97 insertions(+)
+>>>>>>>=20
+>>>>>>> diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation=
+/admin-guide/cgroup-v2.rst
+>>>>>>> index be4a77baf784..d8ae7e411f9c 100644
+>>>>>>> --- a/Documentation/admin-guide/cgroup-v2.rst
+>>>>>>> +++ b/Documentation/admin-guide/cgroup-v2.rst
+>>>>>>> @@ -1095,6 +1095,14 @@ All time durations are in microseconds.
+>>>>>>>         values similar to the sched_setattr(2). This maximum utiliza=
+tion
+>>>>>>>         value is used to clamp the task specific maximum utilization=
+ clamp.
+>>>>>>>=20
+>>>>>>> +  cpu.latency.nice
+>>>>>>> +     A read-write single value file which exists on non-root
+>>>>>>> +     cgroups.  The default is "0".
+>>>>>>> +
+>>>>>>> +     The nice value is in the range [-20, 19].
+>>>>>>> +
+>>>>>>> +     This interface file allows reading and setting latency using t=
+he
+>>>>>>> +     same values used by sched_setattr(2).
+>>>>>>=20
+>>>>>> I'm still not sure about this [1].
+>>>>>=20
+>>>>> I'm still not sure about what you are trying to say here ...
+>>>>>=20
+>>>>> This is about setting a latency nice prio to a group level.
+>>>>>=20
+>>>>>>=20
+>>>>>> In some scenarios we'd like to get the effective latency_nice of the t=
+ask. How
+>>>>>> will the task inherit the cgroup value or be impacted by it?
+>>>>>>=20
+>>>>>> For example if there are tasks that belong to a latency sensitive cgr=
+oup; and
+>>>>>> I'd like to skip some searches in EAS to improve that latency sensiti=
+vity - how
+>>>>>> would I extract this info in EAS path given these tasks are using def=
+ault
+>>>>>> latency_nice value? And if should happen if their latency_nice is set=
+ to
+>>>>>> something else other than default?
+>>>>>>=20
+>>>>>> [1] https://lore.kernel.org/lkml/20221012160734.hrkb5jcjdq7r23pr@wubu=
+ntu/
+>>>>>=20
+>>>>> Hmm so you are speaking about something that is not part of the patch.=
 
-The reasoning is exactly the same for Reported-by.
+>>>>> Let focus on the patchset for now
+>>>>=20
+>>>> I am focusing on this patchset. Isn't this an essential part of the des=
+ign?
+>>>> Once the interface is out we can't change it. As it stands, I can't see=
+ how it
+>>>=20
+>>> So, are you speaking about the interface i.e. setting a value between [-=
+20:19]
+>>>=20
+>>>> can be used to replace prefer_idle in cgroup as used in Android. I can'=
+t see
+>>>> how this could happen if we don't define how the task will inherit the c=
+group
+>>>> value. If we can, mind elaborating how please?
+>>>=20
+>>> Or how to take into account the value set for a cgroup ?
+>>>=20
+>>> Regarding the behavior, the rule remains the same that a sched_entity
+>>> attached to a cgroup will not get more (latency in this case) than
+>>> what has been set for the group entity.
+>>=20
+>> I think the interface solves a different problem which is latency of
+>> task or cgroup wrt other group. Vincent, you are setting this for a
+>> =E2=80=9Ctop app=E2=80=9D group in android in your tests, and seeing impr=
+ovement
+>> correct? AFAICS, this improvement comes because of lower latency
+>=20
+> Yes Top app and display group
+>=20
+>> during *same CPU* competition between different groups by juggling
+>> around the wakeup-preemption window -- which maybe is good for
+>> Android.
+>>=20
+>> OTOH, the =E2=80=9Cprefer idle=E2=80=9D flag in android that Qais is refe=
+rring to,
+>> will need a completely different method as I cannot see how a nice
+>> value can communicate that (that can complement Vincent's changes
+>> here). And it will need to have a per-task interface as well. We have
+>=20
+> Why a negative latency_nice value condition can't be used ? or latency -20=
+  ?
 
-> I wouldn't have added the tag if I didn't send an email to the list with
-> the lockdep splat and follow that up with a bisection report for
-> suspend/resume being broken. Shouldn't we value those sorts of bug
-> report emails? I will add a link to the report in the commit text to
-> clarify.
+Ah and forgot to reply about negative.
 
-Ok, perhaps that would make this a bit more reasonable (Reported-by +
-Link to report), but I still do not think the tag is warranted.
+Maybe, but it=E2=80=99s still a horrible overload of the meaning of the valu=
+e. I am not terribly against choosing negative value if there is consensus a=
+mong everyone. Qais?
 
-> > This is the first time I see anyone trying to use Reported-by this way,
-> > and even if you think the documentation isn't clear enough on this, our
-> > praxis is.
-> >
-> 
-> Ok, so is it just a shock to see this for the first time? What is the
-> problem with the tag? Can you elaborate on your concerns? I would like
-> to understand.
+- Joel
 
-It's apparently the first time you try to give credit to yourself for
-finding a bug this way too, so let's turn that question around. Why do
-you suddenly insist on crediting yourself this way when no one else does
-so?
 
-In the end it's about maintaining a common interpretation of these tags
-and avoiding unnecessary noise. I'm sure no one wants to see a redundant
-Tested-by tag on every commit nor a redundant Reported-by tag on every
-bug fix for bugs that kernel developers find themselves. And if only
-some people start using the tags this way it would also skew our
-statistics (e.g. the LWN reports).
-
-Johan
+>=20
+>> something in ChromeOS as well, which is a proc knob and also
+>> out-of-tree patch for that [1]. Without [1] we fail Android CTS
+>> testing on a recent ARM64 ChromeOS device.
+>> [1] https://chromium-review.googlesource.com/c/chromiumos/third_party/ker=
+nel/+/3884575
+>> The changelog in [1] also has a detailed description of the ChromeOS usec=
+ase.
+>>=20
+>> Qais, any other reason you can see why Vincent's change will not be a
+>> good thing for Android? Since you 1 CGroup for the whole user-facing
+>> app (top app), you can just set that to a low "latency_nice" and get
+>> better wake-up latency for that.
+>>=20
+>> (Side rant about latency and CFS -- IMHO a better long term solution
+>> for lower latency is to use RT but don't throttle -- rather demote. Or
+>> break CFS into multiple tiers, and apply demotion. This is in a way
+>> what Vincent is doing, as the task becomes more CPU bound'ish, he's
+>> taking away the latency boost. Vincent/Qais, somebody was working on
+>> the RT demotion vs throttling a while back, any idea on the latest on
+>> that?).
+>>=20
+>> thanks,
+>>=20
+>> - Joel
+>>=20
+>>=20
+>>>=20
+>>>>=20
+>>>>=20
+>>>> Thanks
+>>>>=20
+>>>> --
+>>>> Qais Yousef
