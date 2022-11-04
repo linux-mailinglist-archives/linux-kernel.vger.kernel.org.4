@@ -2,446 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A5D8619835
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 14:35:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39CDE619849
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 14:42:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231349AbiKDNfc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 09:35:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34174 "EHLO
+        id S229884AbiKDNmN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 09:42:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231803AbiKDNfP (ORCPT
+        with ESMTP id S229882AbiKDNmI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 09:35:15 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 401A52E6B3;
-        Fri,  4 Nov 2022 06:35:14 -0700 (PDT)
-Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 6E5756602986;
-        Fri,  4 Nov 2022 13:35:12 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1667568913;
-        bh=Eb+xbMsO7KrHg8IVfxmIEWgXYchKqw4DxXi5WchT9w8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=C3nw1uupQ2nxivYub3mn8EjoiZfUHGLW77JMRJN4fN1aOs/dTrNMj4XM/CosLPT8r
-         qBvZ0mejBqmrlU8vwDJnX20ZN1uJnGTEQQ3sPASMuihLf9Y4XAz+37bf6fUJF4S4J2
-         4+DS7naub9VdqtkkkEnLOz5DIjyV6E28yElYyirnp5/1dkBc+RdmCFvSPo40t+pk4n
-         /GWWFSBv3fPwLbL3xRF8UukrFuyCUH/FyLMEnS5eR4NNYskp/RtWX7NCJ3fC0f+rbA
-         i9ZRAtJ8JVBQXOk23vlk/aNzu1GzPlUO09jIZq7xYP7xEauXmcZj1Ck1LBIxGaVztK
-         VpigjzeZpYbGA==
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-To:     agross@kernel.org
-Cc:     andersson@kernel.org, konrad.dybcio@somainline.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        angelogioacchino.delregno@collabora.com,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, marijn.suijten@somainline.org,
-        kernel@collabora.com,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>
-Subject: [PATCH 2/2] soc: qcom: Add Qualcomm Ramp Controller driver
-Date:   Fri,  4 Nov 2022 14:35:06 +0100
-Message-Id: <20221104133506.131316-3-angelogioacchino.delregno@collabora.com>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20221104133506.131316-1-angelogioacchino.delregno@collabora.com>
-References: <20221104133506.131316-1-angelogioacchino.delregno@collabora.com>
+        Fri, 4 Nov 2022 09:42:08 -0400
+Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8D362EF49
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 06:42:07 -0700 (PDT)
+Received: by mail-qv1-xf2f.google.com with SMTP id c8so3181658qvn.10
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 06:42:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=MMyaU86qb4lTKUtNgTOCQdes/+rIt6nWq/bdQaeuknw=;
+        b=y5AvJPLRIMXwWZKc9jQP4A0V2azYRNxYIGFEBK6zxdr0llR3PO3cPe/5eJ242K4uwN
+         Zij0h6pVcg8wDkxm/WOE2YmaUdosKO8QFIViEDlUSgL/ajC76Gis3Uucn6gh2HB2EsnE
+         N6TxBBJeG3bE1h0x6XvIa9lGfNzPPyEJVPHE84Tz/c10mQsqVWwhoV79GhsKCLruBeR9
+         P3tPgh0HNehK2u2SiUZss624PlZ+p6XN9Hq1EjOE5vzb0sTfFqiegqYbj4pANSlbAjEh
+         lhIlE2elDDn3CWXjewkAid0fDSPzj3Q7Gwjs4vt3UqR1MoXw/l8enGaDxV+i8XeBe9ym
+         zhYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=MMyaU86qb4lTKUtNgTOCQdes/+rIt6nWq/bdQaeuknw=;
+        b=lGOBGWTnGsXj0YgRUHaj/Hz8kfdoxNRNPNTGF9OH4xhkali6EH/SDjpLurL3+7AcU1
+         HQK96HuqUFGCAZo8JGiI/DrJD222sjZwIFHvmvGprEJKceplSlWPpcoMSoaIPe3A+Siy
+         iYFD3DS29nnbnAgtLI/n0BWB8057756lCcpHrmEsKQSxOl2j/+XV8QFfEgP26f+28kIo
+         njJnFf/eE9gXxQAoK2kthcMNRZKD9liFzFvmVfDB6KdIHNRXu37vCGMYgEl2QC8ukJwk
+         mHqrh3swML3Vikw56MMLmWPWr3igxjRk134c/tNvppT9llMD75c1bQjsVmGLCw1ck3Gp
+         0YQg==
+X-Gm-Message-State: ACrzQf1/E6zIkWqwMTaXkuBS2XFxrY4oXxFtaOhEtqwEQNhXIgHrZHSH
+        kOwfPe6uJ0O6cvSK2Sz1UMa9/w==
+X-Google-Smtp-Source: AMsMyM6KTCIg67folrXpvHf9QQEoGa69VsGoeBFBv55wj82oFzf8ryegyUV4HWZc24EW2s7OFcWAuA==
+X-Received: by 2002:a05:6214:d0e:b0:4bb:f5db:76ec with SMTP id 14-20020a0562140d0e00b004bbf5db76ecmr24823843qvh.9.1667569326779;
+        Fri, 04 Nov 2022 06:42:06 -0700 (PDT)
+Received: from ?IPV6:2601:586:5000:570:aad6:acd8:4ed9:299b? ([2601:586:5000:570:aad6:acd8:4ed9:299b])
+        by smtp.gmail.com with ESMTPSA id q3-20020a05620a2a4300b006eed47a1a1esm2909548qkp.134.2022.11.04.06.42.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 04 Nov 2022 06:42:05 -0700 (PDT)
+Message-ID: <d5fb79bc-c05c-8de1-e8a4-9e19cc5c8e1a@linaro.org>
+Date:   Fri, 4 Nov 2022 09:42:03 -0400
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [v2 02/10] dts-bingings: display: bridge: Add MHDP HDMI bindings
+ for i.MX8MQ
+Content-Language: en-US
+To:     Sandor Yu <Sandor.yu@nxp.com>, dri-devel@lists.freedesktop.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+        andrzej.hajda@intel.com, neil.armstrong@linaro.org,
+        robert.foss@linaro.org, Laurent.pinchart@ideasonboard.com,
+        jonas@kwiboo.se, jernej.skrabec@gmail.com, kishon@ti.com,
+        vkoul@kernel.org
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        linux-imx@nxp.com, tzimmermann@suse.de, lyude@redhat.com,
+        javierm@redhat.com, ville.syrjala@linux.intel.com,
+        sam@ravnborg.org, jani.nikula@intel.com, maxime@cerno.tech,
+        penguin-kernel@I-love.SAKURA.ne.jp, p.yadav@ti.com,
+        oliver.brown@nxp.com
+References: <cover.1667463263.git.Sandor.yu@nxp.com>
+ <0e1f631c22207c6af41ea512be85213b3953b44f.1667463263.git.Sandor.yu@nxp.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <0e1f631c22207c6af41ea512be85213b3953b44f.1667463263.git.Sandor.yu@nxp.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
+On 04/11/2022 02:44, Sandor Yu wrote:
+> Add bindings for i.MX8MQ MHDP HDMI.
 
-The Ramp Controller is used to program the sequence ID for pulse
-swallowing, enable sequence and linking sequence IDs for the CPU
-cores on some Qualcomm SoCs.
+Typo in subject - bindings.
 
-Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
----
- drivers/soc/qcom/Kconfig           |   9 +
- drivers/soc/qcom/Makefile          |   1 +
- drivers/soc/qcom/ramp_controller.c | 330 +++++++++++++++++++++++++++++
- 3 files changed, 340 insertions(+)
- create mode 100644 drivers/soc/qcom/ramp_controller.c
+Also in the subject - drop redundant second word "bindings".
 
-diff --git a/drivers/soc/qcom/Kconfig b/drivers/soc/qcom/Kconfig
-index 024e420f1bb7..1e681f98bad4 100644
---- a/drivers/soc/qcom/Kconfig
-+++ b/drivers/soc/qcom/Kconfig
-@@ -95,6 +95,15 @@ config QCOM_QMI_HELPERS
- 	tristate
- 	depends on NET
- 
-+config QCOM_RAMP_CTRL
-+	tristate "Qualcomm Ramp Controller driver"
-+	depends on ARCH_QCOM
-+	help
-+	  The Ramp Controller is used to program the sequence ID for pulse
-+	  swallowing, enable sequence and linking sequence IDs for the
-+	  CPU cores on some Qualcomm SoCs.
-+	  Say y here to enable support for the ramp controller.
-+
- config QCOM_RMTFS_MEM
- 	tristate "Qualcomm Remote Filesystem memory driver"
- 	depends on ARCH_QCOM
-diff --git a/drivers/soc/qcom/Makefile b/drivers/soc/qcom/Makefile
-index d66604aff2b0..6e02333c4080 100644
---- a/drivers/soc/qcom/Makefile
-+++ b/drivers/soc/qcom/Makefile
-@@ -10,6 +10,7 @@ obj-$(CONFIG_QCOM_OCMEM)	+= ocmem.o
- obj-$(CONFIG_QCOM_PDR_HELPERS)	+= pdr_interface.o
- obj-$(CONFIG_QCOM_QMI_HELPERS)	+= qmi_helpers.o
- qmi_helpers-y	+= qmi_encdec.o qmi_interface.o
-+obj-$(CONFIG_QCOM_RAMP_CTRL)	+= ramp_controller.o
- obj-$(CONFIG_QCOM_RMTFS_MEM)	+= rmtfs_mem.o
- obj-$(CONFIG_QCOM_RPMH)		+= qcom_rpmh.o
- qcom_rpmh-y			+= rpmh-rsc.o
-diff --git a/drivers/soc/qcom/ramp_controller.c b/drivers/soc/qcom/ramp_controller.c
-new file mode 100644
-index 000000000000..e28679b545d1
---- /dev/null
-+++ b/drivers/soc/qcom/ramp_controller.c
-@@ -0,0 +1,330 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Qualcomm Ramp Controller driver
-+ * Copyright (c) 2022, AngeloGioacchino Del Regno
-+ *                     <angelogioacchino.delregno@collabora.com>
-+ */
-+
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/of.h>
-+#include <linux/of_platform.h>
-+#include <linux/platform_device.h>
-+#include <linux/regmap.h>
-+#include <linux/types.h>
-+
-+#define RC_UPDATE_EN		BIT(0)
-+#define RC_ROOT_EN		BIT(1)
-+
-+#define RC_REG_CFG_UPDATE	0x60
-+ #define RC_CFG_UPDATE_EN	BIT(8)
-+ #define RC_CFG_ACK		GENMASK(31, 16)
-+
-+#define RC_DCVS_CFG_SID		2
-+#define RC_LINK_SID		3
-+#define RC_LMH_SID		6
-+#define RC_DFS_SID		14
-+
-+#define RC_UPDATE_TIMEOUT_US	500
-+
-+/**
-+ * struct qcom_ramp_controller_desc - SoC specific parameters
-+ * @cfg_dfs_sid:      Dynamic Frequency Scaling SID configuration
-+ * @cfg_link_sid:     Link SID configuration
-+ * @cfg_lmh_sid:      Limits Management hardware SID configuration
-+ * @cfg_ramp_pre_en:  Ramp Controller pre-enable sequence
-+ * @cfg_ramp_en:      Ramp Controller enable sequence
-+ * @cfg_ramp_post_en: Ramp Controller post-enable sequence
-+ * @cfg_ramp_dis:     Ramp Controller disable sequence
-+ * @cmd_reg:          Command register offset
-+ * @num_dfs_sids:     Number of DFS SIDs (max 8)
-+ * @num_link_sids:    Number of Link SIDs (max 3)
-+ * @num_lmh_sids:     Number of LMh SIDs (max 8)
-+ */
-+struct qcom_ramp_controller_desc {
-+	struct reg_sequence *cfg_dfs_sid;
-+	struct reg_sequence *cfg_link_sid;
-+	struct reg_sequence *cfg_lmh_sid;
-+	struct reg_sequence *cfg_ramp_pre_en;
-+	struct reg_sequence *cfg_ramp_en;
-+	struct reg_sequence *cfg_ramp_post_en;
-+	struct reg_sequence *cfg_ramp_dis;
-+	u8 cmd_reg;
-+	u8 num_dfs_sids;
-+	u8 num_link_sids;
-+	u8 num_lmh_sids;
-+};
-+
-+/**
-+ * struct qcom_ramp_controller - Main driver structure
-+ * @regmap: Regmap handle
-+ * @desc:   SoC specific parameters
-+ */
-+struct qcom_ramp_controller {
-+	struct regmap *regmap;
-+	const struct qcom_ramp_controller_desc *desc;
-+};
-+
-+/**
-+ * rc_wait_for_update() - Wait for Ramp Controller root update
-+ * @qrc: Main driver structure
-+ *
-+ * Return: Zero for success or negative number for failure
-+ */
-+static int rc_wait_for_update(struct qcom_ramp_controller *qrc)
-+{
-+	const struct qcom_ramp_controller_desc *d = qrc->desc;
-+	struct regmap *r = qrc->regmap;
-+	u32 val;
-+	int ret;
-+
-+	ret = regmap_set_bits(r, d->cmd_reg, RC_ROOT_EN);
-+	if (ret)
-+		return ret;
-+
-+	return regmap_read_poll_timeout(r, d->cmd_reg, val, !(val & RC_UPDATE_EN),
-+					1, RC_UPDATE_TIMEOUT_US);
-+}
-+
-+/**
-+ * rc_set_cfg_update() - Ramp Controller configuration update
-+ * @qrc: Main driver structure
-+ * @ce: Configuration entry to update
-+ *
-+ * Return: Zero for success or negative number for failure
-+ */
-+static int rc_set_cfg_update(struct qcom_ramp_controller *qrc, u8 ce)
-+{
-+	const struct qcom_ramp_controller_desc *d = qrc->desc;
-+	struct regmap *r = qrc->regmap;
-+	u32 ack, val;
-+	int ret;
-+
-+	/* The ack bit is between bits 16-31 of RC_REG_CFG_UPDATE */
-+	ack = FIELD_PREP(RC_CFG_ACK, BIT(ce));
-+
-+	/* Write the configuration type first... */
-+	ret = regmap_set_bits(r, d->cmd_reg + RC_REG_CFG_UPDATE, ce);
-+	if (ret)
-+		return ret;
-+
-+	/* ...and after that, enable the update bit to sync the changes */
-+	ret = regmap_set_bits(r, d->cmd_reg + RC_REG_CFG_UPDATE, RC_CFG_UPDATE_EN);
-+	if (ret)
-+		return ret;
-+
-+	/* Wait for the changes to go through */
-+	ret = regmap_read_poll_timeout(r, d->cmd_reg + RC_REG_CFG_UPDATE, val,
-+				       val & ack, 1, RC_UPDATE_TIMEOUT_US);
-+	if (ret)
-+		return ret;
-+
-+	/*
-+	 * Configuration update success! The CFG_UPDATE register will not be
-+	 * cleared automatically upon applying the configuration, so we have
-+	 * to do that manually in order to leave the ramp controller in a
-+	 * predictable and clean state.
-+	 */
-+	ret = regmap_write(r, d->cmd_reg + RC_REG_CFG_UPDATE, 0);
-+	if (ret)
-+		return ret;
-+
-+	/* Wait for the update bit cleared ack */
-+	return regmap_read_poll_timeout(r, d->cmd_reg + RC_REG_CFG_UPDATE,
-+					val, !(val & RC_CFG_ACK), 1,
-+					RC_UPDATE_TIMEOUT_US);
-+}
-+
-+/**
-+ * rc_write_cfg - Send configuration sequence
-+ * @qrc: Main driver structure
-+ * @seq: Register sequence to send before asking for update
-+ * @ce: Configuration SID
-+ * @nsids: Total number of SIDs
-+ *
-+ * Returns: Zero for success or negative number for error
-+ */
-+static int rc_write_cfg(struct qcom_ramp_controller *qrc, struct reg_sequence *seq,
-+			u16 ce, u8 nsids)
-+{
-+	int ret;
-+	u8 i;
-+
-+	/* Check if, and wait until the ramp controller is ready */
-+	ret = rc_wait_for_update(qrc);
-+	if (ret)
-+		return ret;
-+
-+	/* Write the sequence */
-+	ret = regmap_multi_reg_write(qrc->regmap, seq, nsids);
-+	if (ret)
-+		return ret;
-+
-+	/* Pull the trigger: do config update starting from the last sid */
-+	for (i = 0; i < nsids; i++) {
-+		ret = rc_set_cfg_update(qrc, (u8)ce - i);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+/**
-+ * rc_ramp_ctrl_enable() - Enable Ramp up/down Control
-+ * @qrc: Main driver structure
-+ *
-+ * Return: Zero for success or negative number for error
-+ */
-+static int rc_ramp_ctrl_enable(struct qcom_ramp_controller *qrc)
-+{
-+	const struct qcom_ramp_controller_desc *d = qrc->desc;
-+	int ret;
-+
-+	ret = rc_write_cfg(qrc, d->cfg_ramp_pre_en, RC_DCVS_CFG_SID, 1);
-+	if (ret)
-+		return ret;
-+
-+	ret = rc_write_cfg(qrc, d->cfg_ramp_en, RC_DCVS_CFG_SID, 1);
-+	if (ret)
-+		return ret;
-+
-+	return rc_write_cfg(qrc, d->cfg_ramp_post_en, RC_DCVS_CFG_SID, 1);
-+}
-+
-+/**
-+ * qcom_ramp_controller_start() - Initialize and start the ramp controller
-+ * @qrc: Main driver structure
-+ *
-+ * The Ramp Controller needs to be initialized by programming the relevant
-+ * registers with SoC-specific configuration: once programming is done,
-+ * the hardware will take care of the rest (no further handling required).
-+ *
-+ * Return: Zero for success or negative number for error
-+ */
-+static int qcom_ramp_controller_start(struct qcom_ramp_controller *qrc)
-+{
-+	const struct qcom_ramp_controller_desc *d = qrc->desc;
-+	int ret;
-+
-+	/* Program LMH, DFS, Link SIDs */
-+	ret = rc_write_cfg(qrc, d->cfg_lmh_sid, RC_LMH_SID, d->num_lmh_sids);
-+	if (ret)
-+		return ret;
-+
-+	ret = rc_write_cfg(qrc, d->cfg_dfs_sid, RC_DFS_SID, d->num_dfs_sids);
-+	if (ret)
-+		return ret;
-+
-+	ret = rc_write_cfg(qrc, d->cfg_link_sid, RC_LINK_SID, d->num_link_sids);
-+	if (ret)
-+		return ret;
-+
-+	/* Everything is ready! Enable the ramp up/down control */
-+	return rc_ramp_ctrl_enable(qrc);
-+}
-+
-+static const struct regmap_config qrc_regmap_config = {
-+	.reg_bits = 32,
-+	.reg_stride = 4,
-+	.val_bits = 32,
-+	.max_register =	0x68,
-+	.fast_io = true,
-+};
-+
-+static const struct qcom_ramp_controller_desc msm8976_rc_cfg = {
-+	.cfg_dfs_sid = (struct reg_sequence[]) {
-+		{ 0x10, 0xfefebff7 },
-+		{ 0x14, 0xfdff7fef },
-+		{ 0x18, 0xfbffdefb },
-+		{ 0x1c, 0xb69b5555 },
-+		{ 0x20, 0x24929249 },
-+		{ 0x24, 0x49241112 },
-+		{ 0x28, 0x11112111 },
-+		{ 0x2c, 0x8102 },
-+	},
-+	.cfg_link_sid = (struct reg_sequence[]) {
-+		{ 0x40, 0xfc987 },
-+	},
-+	.cfg_lmh_sid = (struct reg_sequence[]) {
-+		{ 0x30, 0x77706db },
-+		{ 0x34, 0x5550249 },
-+		{ 0x38, 0x111 },
-+	},
-+	.cfg_ramp_pre_en = (struct reg_sequence[]) {
-+		{ 0x50, 0x800 },
-+	},
-+	.cfg_ramp_en = (struct reg_sequence[]) {
-+		{ 0x50, 0xc00 },
-+	},
-+	.cfg_ramp_post_en = (struct reg_sequence[]) {
-+		{ 0x50, 0x400 },
-+	},
-+	.cfg_ramp_dis = (struct reg_sequence[]) {
-+		{ 0x50, 0x0 },
-+	},
-+	.cmd_reg = 0x0,
-+
-+	.num_dfs_sids = 8,
-+	.num_lmh_sids = 3,
-+	.num_link_sids = 1,
-+};
-+
-+static int qcom_ramp_controller_probe(struct platform_device *pdev)
-+{
-+	struct qcom_ramp_controller *qrc;
-+	void __iomem *base;
-+
-+	base = devm_platform_ioremap_resource(pdev, 0);
-+	if (IS_ERR(base))
-+		return PTR_ERR(base);
-+
-+	qrc = devm_kmalloc(&pdev->dev, sizeof(*qrc), GFP_KERNEL);
-+	if (!qrc)
-+		return -ENOMEM;
-+
-+	qrc->desc = device_get_match_data(&pdev->dev);
-+	if (!qrc)
-+		return -EINVAL;
-+
-+	qrc->regmap = devm_regmap_init_mmio(&pdev->dev, base, &qrc_regmap_config);
-+	if (IS_ERR(qrc->regmap))
-+		return PTR_ERR(qrc->regmap);
-+
-+	platform_set_drvdata(pdev, qrc);
-+
-+	return qcom_ramp_controller_start(qrc);
-+}
-+
-+static int qcom_ramp_controller_remove(struct platform_device *pdev)
-+{
-+	struct qcom_ramp_controller *qrc = platform_get_drvdata(pdev);
-+
-+	return rc_write_cfg(qrc, qrc->desc->cfg_ramp_dis, RC_DCVS_CFG_SID, 1);
-+}
-+
-+static const struct of_device_id qcom_ramp_controller_match_table[] = {
-+	{ .compatible = "qcom,msm8976-ramp-controller", .data = &msm8976_rc_cfg },
-+	{ /* sentinel */ }
-+};
-+MODULE_DEVICE_TABLE(of, qcom_ramp_controller_match_table);
-+
-+static struct platform_driver qcom_ramp_controller_driver = {
-+	.driver = {
-+		.name = "qcom-ramp-controller",
-+		.of_match_table = qcom_ramp_controller_match_table,
-+		.suppress_bind_attrs = true,
-+	},
-+	.probe  = qcom_ramp_controller_probe,
-+	.remove = qcom_ramp_controller_remove,
-+};
-+
-+static int __init qcom_ramp_controller_init(void)
-+{
-+	return platform_driver_register(&qcom_ramp_controller_driver);
-+}
-+arch_initcall(qcom_ramp_controller_init);
-+
-+MODULE_AUTHOR("AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>");
-+MODULE_DESCRIPTION("Qualcomm Ramp Controller driver");
-+MODULE_LICENSE("GPL");
--- 
-2.37.2
+> 
+> Signed-off-by: Sandor Yu <Sandor.yu@nxp.com>
+> ---
+>  .../display/bridge/cdns,mhdp-imx8mq-hdmi.yaml | 67 +++++++++++++++++++
+>  1 file changed, 67 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/display/bridge/cdns,mhdp-imx8mq-hdmi.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/display/bridge/cdns,mhdp-imx8mq-hdmi.yaml b/Documentation/devicetree/bindings/display/bridge/cdns,mhdp-imx8mq-hdmi.yaml
+> new file mode 100644
+> index 000000000000..b2a769d4cb82
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/display/bridge/cdns,mhdp-imx8mq-hdmi.yaml
+> @@ -0,0 +1,67 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: "http://devicetree.org/schemas/display/bridge/cdns,mhdp-imx8mq-hdmi.yaml#"
+> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+> +
+> +title: Cadence MHDP HDMI bridge
+> +
+> +maintainers:
+> +  - Sandor Yu <Sandor.yu@nxp.com>
+> +
+> +description:
+> +  The Cadence MHDP TX HDMI interface.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - cdns,mhdp-imx8mq-hdmi
+> +
+> +  reg:
+> +    items:
+> +      - description:
+> +          Memory mapped base address and length of mhdptx apb registers.
+
+Drop items and descripion and just "maxItems: 1"
+
+> +
+> +  phys:
+> +    description:
+> +      phandle to the HDMI PHY.
+
+Drop description, but instead "maxItems: 1"
+
+> +
+> +  phy-names:
+> +    items:
+> +      - const: hdmiphy
+
+Drop entire phy-names, not useful with one entry matching the name of
+theh block.
+
+> +
+> +  interrupts:
+> +    items:
+> +      - description: Hotplug detect interrupter for cable plugin event.
+> +      - description: Hotplug detect interrupter for cable plugout event.
+> +
+> +  interrupt-names:
+> +    items:
+> +      - const: plug_in
+> +      - const: plug_out
+> +
+> +  port:
+> +    $ref: /schemas/graph.yaml#/properties/port
+> +    description:
+> +      A port node pointing to the output port of a display controller..
+
+Just one '.' at the end.
+
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +    mhdp: mhdp@32c00000 {
+
+Node names should be generic, so hdmi-bridge, display-controller or just
+"hdmi"
+https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
+
+
+> +        compatible = "cdns,mhdp-imx8mq-hdmi";
+> +        reg = <0x32c00000 0x100000>;
+
+
+Best regards,
+Krzysztof
 
