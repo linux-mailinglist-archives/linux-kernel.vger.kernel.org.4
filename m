@@ -2,149 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAD0261A4D4
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 23:50:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA2A361A4E3
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 23:52:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230415AbiKDWty (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 18:49:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58162 "EHLO
+        id S231128AbiKDWvu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 18:51:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230387AbiKDWt2 (ORCPT
+        with ESMTP id S230453AbiKDWvg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 18:49:28 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5B1A862FC;
-        Fri,  4 Nov 2022 15:43:57 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id k2so16881409ejr.2;
-        Fri, 04 Nov 2022 15:43:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Rz+uJhq6MzU/GpngjVCSms293gxGW6YlyI6hslqJJXY=;
-        b=TTSC1PYsIl4wNygBOjEUlZux3jycvLQZX0WHn6DVKJn/Bn+ZesGrvgIXyj+0/ouW/k
-         h+wn0Cygd7/4L02ScnxFa3Jb67ww5ZmXvVAMflPFlv7nTf5Whhb66Ykyk7IWxFQSVQmO
-         GROHmfOl0tHjh3wYbOE0M8nW/ZaDmzNzm3sDGSvq/8y0aBb5LT8XGwUHsBJwX3fKoLKF
-         y/f+vkNDtMPsLJDISf0UkF9MSxgt3+Fffs7FX0xox4CNCxREk9/WX5bT1RMDmQifKkIe
-         ckFoAW0z2iUajI+YynPu9iCasmv6pxkObEVy1j/jGQBUeN1ECw3xa0SosZZBwDnp3poT
-         ia/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Rz+uJhq6MzU/GpngjVCSms293gxGW6YlyI6hslqJJXY=;
-        b=lnGH4UG//S7a6y73TYU7TViqjf+L51CLjFcKfqZnW9YaTo0SqQOpwy+QmEb/dEvhLm
-         x7Ul0flXIbnWy2Woxqr3CUsCo+BPhJWPNVYh+G2Kjz5qorfChDVBq1zujXdjoCTIt5UO
-         nxcTarTjiCKOlc38xskTgPpmFQxi9n8WkJyjkJTGuPiU4njPcqhZ813HRtI+gRa5pIji
-         KWCxkxuN04iBxcJF8btzekHbTomdYanhqh5ZLzdh45BswUEKad2N5e0O8m8BK8VmjP0z
-         OcbaLSCfl1sxFoJqNVf+DJ9YGqcKBV4kI2a3jFDtmdC0W1qq8u4Qj9Yp+KVdJKcNhF28
-         rO+Q==
-X-Gm-Message-State: ACrzQf0nqN21VDQXXBT04ztsH+hha1XxKI1o3IOF0arZvumvQCHWdGY3
-        GY82H3vBNyMdLNxCNH+W6zlo7Y8Y6DINMYzb3EU=
-X-Google-Smtp-Source: AMsMyM6m1JxGLOo6osuiEcTeO/CWp+a/VY4LBfYEMkKC6S8wslZ+0LSSDVoSUCw6MkSfeqGk5g8o1QthY79rE/UmA4k=
-X-Received: by 2002:a17:907:8a24:b0:795:bb7d:643b with SMTP id
- sc36-20020a1709078a2400b00795bb7d643bmr37412552ejc.115.1667601836086; Fri, 04
- Nov 2022 15:43:56 -0700 (PDT)
-MIME-Version: 1.0
-References: <20221103092118.248600-1-yangjihong1@huawei.com>
- <20221103092118.248600-3-yangjihong1@huawei.com> <Y2OknBtLgqTHSrvy@shell.armlinux.org.uk>
- <CAADnVQ+gX8Xc57K2hSG5ZNfU1RtKBFgEp2yOWq08X68bWjMqsg@mail.gmail.com>
-In-Reply-To: <CAADnVQ+gX8Xc57K2hSG5ZNfU1RtKBFgEp2yOWq08X68bWjMqsg@mail.gmail.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Fri, 4 Nov 2022 15:43:44 -0700
-Message-ID: <CAEf4BzaJMfCXf_uUgyuWBddyd3qrV7SgpVy-hicuOn87FigMSg@mail.gmail.com>
-Subject: Re: [PATCH bpf RESEND 2/4] bpf: Remove size check for sk in
- bpf_skb_is_valid_access for 32-bit architecture
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
-        Yang Jihong <yangjihong1@huawei.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Shubham Bansal <illusionist.neo@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Delyan Kratunov <delyank@fb.com>,
-        Artem Savkov <asavkov@redhat.com>, bpf <bpf@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 4 Nov 2022 18:51:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75F86554DB;
+        Fri,  4 Nov 2022 15:46:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D955F61A38;
+        Fri,  4 Nov 2022 22:46:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 4988EC433D7;
+        Fri,  4 Nov 2022 22:46:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667601996;
+        bh=iXRuDCF5abt+rGS1XqNIeqy7Lm7nRxbZ5FzIZ4tgQ7Q=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=mAXTlxb2lvr92p2QRjRzL65DwKcnq7qcOl+kFYTdV2KCc2KidNYepg63ZDZXxdlnS
+         V9mvOP0wl/CGLRbB43H0tT82owzgSQl9PHyRZOerPSreYXu5Ac443KPyA9OZftF8zt
+         Cr+9VjgxGzf82RfZsYiWukKTt5LhBJ792lUVLsAL0L8EzseRyPP+Xil0tid88M8Ses
+         7HkiRr749KNtFJl4OnDNKNL9cnDS4LK3exdl4pzXAZv1n391eMPCL+Rxmbq4ty/9dd
+         T8AEGOHwR3eMeOu7AYDLaP+rJaBqlGA+rWhV0Y/mqcoMebJS3mT6FTuNnQRa/cnvdi
+         3U4c3zSYEgkdg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 30797E270DF;
+        Fri,  4 Nov 2022 22:46:36 +0000 (UTC)
+Subject: Re: [GIT PULL] Landlock fix for v6.1 #2
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20221104174830.57435-1-mic@digikod.net>
+References: <20221104174830.57435-1-mic@digikod.net>
+X-PR-Tracked-List-Id: <linux-security-module.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20221104174830.57435-1-mic@digikod.net>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/mic/linux.git tags/landlock-6.1-rc4
+X-PR-Tracked-Commit-Id: 091873e47ef700e935aa80079b63929af599a0b2
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 5d8401be15a9e59af701db08fc0f973c3587f2ae
+Message-Id: <166760199619.25569.6080941804402391064.pr-tracker-bot@kernel.org>
+Date:   Fri, 04 Nov 2022 22:46:36 +0000
+To:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 3, 2022 at 11:15 AM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Thu, Nov 3, 2022 at 4:23 AM Russell King (Oracle)
-> <linux@armlinux.org.uk> wrote:
-> >
-> > On Thu, Nov 03, 2022 at 05:21:16PM +0800, Yang Jihong wrote:
-> > > The error code -EACCES is returned when bpf prog is tested in 32-bit environment,
-> > > This is because bpf_object__relocate modifies the instruction to change memory
-> > > size to 4 bytes, as shown in the following messages:
-> > >
-> > > libbpf: prog 'kfunc_call_test1': relo #2: matching candidate #0 <byte_off> [18342] struct __sk_buff.sk (0:30:0 @ offset 168)
-> > > libbpf: prog 'kfunc_call_test1': relo #2: patched insn #1 (LDX/ST/STX) off 168 -> 168
-> > > libbpf: prog 'kfunc_call_test1': relo #2: patched insn #1 (LDX/ST/STX) mem_sz 8 -> 4
-> > >
-> > > As a result, the bpf_skb_is_valid_access check fails. For 32-bit architecture,
-> > > unnecessary checks need to be deleted.
-> >
-> > Isn't the purpose of this check to ensure that the entire pointer is
-> > written, and BPF can't write half of it?
-> >
-> >
-> > >       case offsetof(struct __sk_buff, sk):
-> > > -             if (type == BPF_WRITE || size != sizeof(__u64))
-> > > -                     return false;
-> >
-> > Wouldn't "(size != sizeof(struct bpf_sock *) && size != sizeof(__u64))"
-> > be more appropriate here, so 32-bit can only write the 32-bit pointer
-> > or the full 64-bit value, and 64-bit can only write the 64-bit pointer?
-> > Or is there a reason not to? bpf folk?
->
-> You're correct. The patch is completely wrong.
-> The bug is elsewhere.
+The pull request you sent on Fri,  4 Nov 2022 18:48:30 +0100:
 
-So I looked at this a bit (and replied to the old version of this
-patch). What happens in the kernel is that we expect 64-bit load but
-rewrite it to 32-bit load on 32-bit architectures (because we just use
-sizeof(struct sk_buff, sk) which is 4 bytes on 32-bit arch.
+> git://git.kernel.org/pub/scm/linux/kernel/git/mic/linux.git tags/landlock-6.1-rc4
 
-The problem here is that libbpf adjusts such pointer accesses from
-8-byte read to 4-byte reads for preserve_access_index (because libbpf
-sees that pointer is really 4 byte long), which is what we actually
-want in the general case. Here the assumption was made before CO-RE
-that __sk_buff is a stable (and fake) UAPI and the correct BPF program
-will access sk as a 64-bit pointer because BPF-side pointers always
-appear as 64-bit.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/5d8401be15a9e59af701db08fc0f973c3587f2ae
 
-But from a correctness standpoint I think it should be fine to enable
-both 32- and 64-bit loads for such pointers in __sk_buff for 32-bit
-host arch. This will work well with CO-RE and will be correctly
-rewritten to 32-bit or 64-bit accesses, depending on host
-architecture.
+Thank you!
 
-We should still reject 32-bit load on 64-bit host arch, though.
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
