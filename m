@@ -2,137 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AB58618FC3
+	by mail.lfdr.de (Postfix) with ESMTP id 7F36C618FC4
 	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 06:00:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230494AbiKDFAr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 01:00:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36728 "EHLO
+        id S229567AbiKDFAw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 01:00:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230003AbiKDFA3 (ORCPT
+        with ESMTP id S230233AbiKDFAb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 01:00:29 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BFFF25EB6;
-        Thu,  3 Nov 2022 22:00:29 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id b185so3540401pfb.9;
-        Thu, 03 Nov 2022 22:00:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=RbsKwk2Ze0a5EYeW42rZ4T7BWU2ghCIbOlL+4KjCrSA=;
-        b=RFzz9X9p1w1SEIQ63P5JxPgyV2EcluHej5H3tsRel7O7ey7zGeegO7k9PwoTsMNjrs
-         T5cb96OwKV0zwXbw4r1rJVQQOrMo+O1MJWpmWLq06pU98nvGNL8ZuK5HjNubjpazbiLs
-         x9btqZAQljMdHgAyqjHeau03vEp1aUvhmeeNEJdZ/abpbI9+MaSApNk13lAIlIsekb2/
-         CngVaHk1ddZlmGFB2U9Y4W5uE13FeG4tARBHIWhmP+4mQrsWwV3h747w6duX8sC7znKF
-         UtqJ/2DzQdqCX5BXJH+HWDw6gKyRQS8sr4hCiz2C3nKPwkBHYKovINGi0rVL0hBEIMIw
-         +kDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RbsKwk2Ze0a5EYeW42rZ4T7BWU2ghCIbOlL+4KjCrSA=;
-        b=dBPUQk9+pT3Z5e/92sKCay4lsTakOfFWHSSfNMfa/E1HqPPWtXvyj/RVvxeR5iTRJH
-         o/SVFBzH6w7SSYSpuKfcE5gC0Nj+/v+vuJ2XWZqIArs0NSNwxPixgqGePf2gcdRrb4CV
-         yx/kUqr3G4FD11I6vmVueJV/PiuUopOLwq+A+q2ObXP7dXfGZ6+y1opZ4Ja8plAgkZ/D
-         5F7eX9I2D8Ii51iJDalQIjr5Tve9FFBZtbvrtBgbcH16h+H9uwqYz/r+w5Vr/r/qbH3A
-         pU+EEN7TOkmyLESHJkPmYwCIaVlzc0PJ1QMC3Uxb88ssAZK2mqFeEmNwYrH3yJST3MyD
-         NarQ==
-X-Gm-Message-State: ACrzQf3lzxcmWmDS8T9rabsvwr71wd/izMVkDUHnh1IOOBGTVhHhRRqj
-        Y+gxgr7QtgEfTxwkn7cS4zSZfdxzdHtjazz0
-X-Google-Smtp-Source: AMsMyM4j1xPj2Iui456ebdwBJaC4wCNuIKpEFlws2n1lOFGR5OsDZ89KfBpXvz0TsIH42WasFCiXQQ==
-X-Received: by 2002:a63:dc45:0:b0:43c:b43f:5228 with SMTP id f5-20020a63dc45000000b0043cb43f5228mr267639pgj.58.1667538028712;
-        Thu, 03 Nov 2022 22:00:28 -0700 (PDT)
-Received: from mail.google.com (125-237-50-34-fibre.sparkbb.co.nz. [125.237.50.34])
-        by smtp.gmail.com with ESMTPSA id d16-20020a63ed10000000b00459a36795cbsm1569438pgi.42.2022.11.03.22.00.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Nov 2022 22:00:28 -0700 (PDT)
-Date:   Fri, 4 Nov 2022 18:00:22 +1300
-From:   Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
-To:     Christine Caulfield <ccaulfie@redhat.com>,
-        David Teigland <teigland@redhat.com>, cluster-devel@redhat.com
-Cc:     linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v5] [next] dlm: replace one-element array with fixed size
- array
-Message-ID: <Y2ScZqWnJKe7J6NR@mail.google.com>
-References: <202210111305.743F591@keescook>
- <Y0XQsqdRzlrSpgOh@mail.google.com>
+        Fri, 4 Nov 2022 01:00:31 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 829B220F50;
+        Thu,  3 Nov 2022 22:00:30 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 379B8B82BF9;
+        Fri,  4 Nov 2022 05:00:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 6A842C43143;
+        Fri,  4 Nov 2022 05:00:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667538027;
+        bh=o0TS4iNSKwql1CsNnSuW4sitQYzuR5b7ICfwjT9hlj0=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=LMcPukrQaw8/EXTbPawdxSTuK/v8isU3ErmVfi70IQsJte9NSNyZpfLls3itdoTvt
+         p2dIVE4hvndPQsYhHly8evELSWbS4LBc73aeeCxs/tcRZcggPfTLh2kFlVVQkmuTib
+         mE/3MSUIqiJVONpLgz06Xk8pjPUaJlAG1DHXPV5Cr5JdR8HT5WXhbXWg1tKMqAqAPZ
+         kspQ6zj62a+RI+uMTNrAxK+Ns+kyCG46WDiJMhkvvdCsW2KAtlewNp5059mmxkJfbU
+         FGfC5yyzIU2DVYvLC4SNYa5NsOIe15wEd0eNrdryxpQaH5qmln7ACjkuyPOp8DKb3U
+         IiHEtq4Ht7IYw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 1E2DEE6BAC5;
+        Fri,  4 Nov 2022 05:00:27 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y0XQsqdRzlrSpgOh@mail.google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] net: ethernet: ti: Fix return type of netcp_ndo_start_xmit()
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166753802712.27738.5840275256929015736.git-patchwork-notify@kernel.org>
+Date:   Fri, 04 Nov 2022 05:00:27 +0000
+References: <20221102160933.1601260-1-nathan@kernel.org>
+In-Reply-To: <20221102160933.1601260-1-nathan@kernel.org>
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, netdev@vger.kernel.org, ndesaulniers@google.com,
+        trix@redhat.com, keescook@chromium.org, samitolvanen@google.com,
+        llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
+        patches@lists.linux.dev
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 12, 2022 at 09:23:14AM +1300, Paulo Miguel Almeida wrote:
-> One-element arrays are deprecated. So, replace one-element array with
-> fixed size array member in struct dlm_ls, and refactor the rest of the
-> code, accordingly.
-> 
-> Link: https://github.com/KSPP/linux/issues/79
-> Link: https://github.com/KSPP/linux/issues/228
-> Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=101836
-> Link: https://lore.kernel.org/lkml/Y0W5jkiXUkpNl4ap@mail.google.com/
-> 
-> Signed-off-by: Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
-> ---
-> Changelog:
-> 
-> v5: use preferred sizeof style. Req: Gustavo Silva
-> v4: resend patch using the right version number. Req: Gustavo Silva
-> v3: replace one-element array with a fixed size array. Req: Kees Cook
-> v2: patch resent as I had an issue with a <CRLF> char in my mail client
-> v1: https://lore.kernel.org/lkml/Y0ICbf8tCtXMn+W0@mail.google.com/
-> ---
-> 
->  fs/dlm/dlm_internal.h | 2 +-
->  fs/dlm/lockspace.c    | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/fs/dlm/dlm_internal.h b/fs/dlm/dlm_internal.h
-> index e34c3d2639a5..94fadb619ba0 100644
-> --- a/fs/dlm/dlm_internal.h
-> +++ b/fs/dlm/dlm_internal.h
-> @@ -670,7 +670,7 @@ struct dlm_ls {
->  	void			*ls_ops_arg;
->  
->  	int			ls_namelen;
-> -	char			ls_name[1];
-> +	char			ls_name[DLM_LOCKSPACE_LEN + 1];
->  };
->  
->  /*
-> diff --git a/fs/dlm/lockspace.c b/fs/dlm/lockspace.c
-> index bae050df7abf..9479c8110979 100644
-> --- a/fs/dlm/lockspace.c
-> +++ b/fs/dlm/lockspace.c
-> @@ -473,7 +473,7 @@ static int new_lockspace(const char *name, const char *cluster,
->  
->  	error = -ENOMEM;
->  
-> -	ls = kzalloc(sizeof(struct dlm_ls) + namelen, GFP_NOFS);
-> +	ls = kzalloc(sizeof(*ls), GFP_NOFS);
->  	if (!ls)
->  		goto out;
->  	memcpy(ls->ls_name, name, namelen);
-> -- 
-> 2.37.3
-> 
+Hello:
 
-Christine, David,
+This patch was applied to netdev/net-next.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
 
-Just following up on this patch. Is there anything that either of you
-want me change for this patch to be merged?
+On Wed,  2 Nov 2022 09:09:33 -0700 you wrote:
+> With clang's kernel control flow integrity (kCFI, CONFIG_CFI_CLANG),
+> indirect call targets are validated against the expected function
+> pointer prototype to make sure the call target is valid to help mitigate
+> ROP attacks. If they are not identical, there is a failure at run time,
+> which manifests as either a kernel panic or thread getting killed. A
+> proposed warning in clang aims to catch these at compile time, which
+> reveals:
+> 
+> [...]
 
-thanks!
+Here is the summary with links:
+  - net: ethernet: ti: Fix return type of netcp_ndo_start_xmit()
+    https://git.kernel.org/netdev/net-next/c/63fe6ff674a9
 
-- Paulo A.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
