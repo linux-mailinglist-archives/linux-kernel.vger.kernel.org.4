@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5280361905B
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 06:49:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EC4661903E
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 06:49:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231383AbiKDFtL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 01:49:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55652 "EHLO
+        id S231420AbiKDFs5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 01:48:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231205AbiKDFsu (ORCPT
+        with ESMTP id S231217AbiKDFsu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 4 Nov 2022 01:48:50 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E393728E0C;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3A3B28E0D;
         Thu,  3 Nov 2022 22:48:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 21462620B2;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 43EC2620BA;
         Fri,  4 Nov 2022 05:48:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7AF3DC43144;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0A69C433D7;
         Fri,  4 Nov 2022 05:48:46 +0000 (UTC)
 Received: from rostedt by gandalf.local.home with local (Exim 4.96)
         (envelope-from <rostedt@goodmis.org>)
-        id 1oqpZo-00710Z-37;
-        Fri, 04 Nov 2022 01:49:12 -0400
-Message-ID: <20221104054912.802343429@goodmis.org>
+        id 1oqpZp-007117-0U;
+        Fri, 04 Nov 2022 01:49:13 -0400
+Message-ID: <20221104054912.988821248@goodmis.org>
 User-Agent: quilt/0.66
-Date:   Fri, 04 Nov 2022 01:40:58 -0400
+Date:   Fri, 04 Nov 2022 01:40:59 -0400
 From:   Steven Rostedt <rostedt@goodmis.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
@@ -37,14 +37,9 @@ Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
         Guenter Roeck <linux@roeck-us.net>,
         Anna-Maria Gleixner <anna-maria@linutronix.de>,
         Andrew Morton <akpm@linux-foundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>, James Morse <james.morse@arm.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Shuai Xue <xueshuai@linux.alibaba.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>, linux-acpi@vger.kernel.org
-Subject: [RFC][PATCH v3 05/33] timers: ACPI: Use timer_shutdown_sync() before freeing timer
+        Chas Williams <3chas3@gmail.com>,
+        linux-atm-general@lists.sourceforge.net, netdev@vger.kernel.org
+Subject: [RFC][PATCH v3 06/33] timers: atm: Use timer_shutdown_sync() before freeing timer
 References: <20221104054053.431922658@goodmis.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -63,32 +58,65 @@ Before a timer is freed, timer_shutdown_sync() must be called.
 
 Link: https://lore.kernel.org/all/20220407161745.7d6754b3@gandalf.local.home/
 
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Len Brown <lenb@kernel.org>
-Cc: James Morse <james.morse@arm.com>
-Cc: Tony Luck <tony.luck@intel.com>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: Shuai Xue <xueshuai@linux.alibaba.com>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: Jarkko Sakkinen <jarkko@kernel.org>
-Cc: linux-acpi@vger.kernel.org
+Cc: Chas Williams <3chas3@gmail.com>
+Cc: linux-atm-general@lists.sourceforge.net
+Cc: netdev@vger.kernel.org
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 ---
- drivers/acpi/apei/ghes.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/atm/idt77105.c | 4 ++--
+ drivers/atm/idt77252.c | 4 ++--
+ drivers/atm/iphase.c   | 2 +-
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/acpi/apei/ghes.c b/drivers/acpi/apei/ghes.c
-index 9952f3a792ba..9a0e41c21cf9 100644
---- a/drivers/acpi/apei/ghes.c
-+++ b/drivers/acpi/apei/ghes.c
-@@ -1405,7 +1405,7 @@ static int ghes_remove(struct platform_device *ghes_dev)
- 	ghes->flags |= GHES_EXITING;
- 	switch (generic->notify.type) {
- 	case ACPI_HEST_NOTIFY_POLLED:
--		del_timer_sync(&ghes->timer);
-+		timer_shutdown_sync(&ghes->timer);
- 		break;
- 	case ACPI_HEST_NOTIFY_EXTERNAL:
- 		free_irq(ghes->irq, ghes);
+diff --git a/drivers/atm/idt77105.c b/drivers/atm/idt77105.c
+index bfca7b8a6f31..cc4a5449ca42 100644
+--- a/drivers/atm/idt77105.c
++++ b/drivers/atm/idt77105.c
+@@ -366,8 +366,8 @@ EXPORT_SYMBOL(idt77105_init);
+ static void __exit idt77105_exit(void)
+ {
+ 	/* turn off timers */
+-	del_timer_sync(&stats_timer);
+-	del_timer_sync(&restart_timer);
++	timer_shutdown_sync(&stats_timer);
++	timer_shutdown_sync(&restart_timer);
+ }
+ 
+ module_exit(idt77105_exit);
+diff --git a/drivers/atm/idt77252.c b/drivers/atm/idt77252.c
+index 681cb3786794..99cae174d558 100644
+--- a/drivers/atm/idt77252.c
++++ b/drivers/atm/idt77252.c
+@@ -2213,7 +2213,7 @@ idt77252_init_ubr(struct idt77252_dev *card, struct vc_map *vc,
+ 	}
+ 	spin_unlock_irqrestore(&vc->lock, flags);
+ 	if (est) {
+-		del_timer_sync(&est->timer);
++		timer_shutdown_sync(&est->timer);
+ 		kfree(est);
+ 	}
+ 
+@@ -3752,7 +3752,7 @@ static void __exit idt77252_exit(void)
+ 		card = idt77252_chain;
+ 		dev = card->atmdev;
+ 		idt77252_chain = card->next;
+-		del_timer_sync(&card->tst_timer);
++		timer_shutdown_sync(&card->tst_timer);
+ 
+ 		if (dev->phy->stop)
+ 			dev->phy->stop(dev);
+diff --git a/drivers/atm/iphase.c b/drivers/atm/iphase.c
+index 324148686953..9be45d9d66b3 100644
+--- a/drivers/atm/iphase.c
++++ b/drivers/atm/iphase.c
+@@ -3280,7 +3280,7 @@ static void __exit ia_module_exit(void)
+ {
+ 	pci_unregister_driver(&ia_driver);
+ 
+-	del_timer_sync(&ia_timer);
++	timer_shutdown_sync(&ia_timer);
+ }
+ 
+ module_init(ia_module_init);
 -- 
 2.35.1
