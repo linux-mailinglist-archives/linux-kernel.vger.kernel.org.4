@@ -2,297 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 532D7618E83
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 03:57:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CF8E618E85
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 03:57:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230157AbiKDC5A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 22:57:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46744 "EHLO
+        id S231140AbiKDC5T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 22:57:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230261AbiKDC4y (ORCPT
+        with ESMTP id S230261AbiKDC5S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 22:56:54 -0400
-Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9745B25287;
-        Thu,  3 Nov 2022 19:56:52 -0700 (PDT)
-Received: by mail-io1-xd2b.google.com with SMTP id b2so2876735iof.12;
-        Thu, 03 Nov 2022 19:56:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=FOBjK/oxBW5coVxRuNxHDGQNyTX798lKI6xKNExDeeM=;
-        b=GJGKLbiBy5uBS0p7xYddItZhaNHGrgHbgRxVSgCd/R715mAMrOTHBf9TWchioCkHeU
-         MzgiaY85lM4G7poN1veUtWQkjHy/uhL1g9k+8coJhkPpPTdqClM2a36wyubTe/mXmk/d
-         qMYT0Qh2Lu9BgmL+yTcrDjs8vMjYVimGyayyctiVA2mnjoUs3V3+KqRuoGilMS/tiimQ
-         v8yyW3VGqpm1Q29Q7m9lLxCCx4iKkhb6PxWZ24zkkvstqG/wEgFAILZOSlLfODFTzfAy
-         f7messIAnTuX4o7GPnkFkL6xZ5zmeSIex0QHl+0P6snfr/m5z7EmCS6CSISpwdyMTL/b
-         11iA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FOBjK/oxBW5coVxRuNxHDGQNyTX798lKI6xKNExDeeM=;
-        b=3+NrgqaNKDEgz93D5xy4MrgPr7kBMD8zqs3eWRj+boqmqDCubk/SaveZ9waasdTRL9
-         PrMXKCWcWwshG6Xrs3pDYbYjGG/6yFWT02hwiFMevM4K/6raM4Tz4iIiiMcjaDIAvqla
-         KpWW7mAhCFQYh9FcxTpzxEE+f0Rf9VU7a3yxlwAo+QPCGiMI03gPSrmakrW0EILWUqFt
-         3/7R3z6a7RGAN7b4qd4sWPTlWnSP6uXnh2p/UppfRWgnz1/H8EkmF7r7zmeUc24UhRhI
-         VFiN1TO74vaIUzOy/tiblgMvKU/BBMH/kNaQHJWCXwY+IYwOe7VSFgDTP6k9TYr+Hk4q
-         lmZA==
-X-Gm-Message-State: ACrzQf0WjaYXSHb9B7NGq85sJHO3L8vqWuV68+Aa4vVzCUS0SBYwe3nr
-        BDNQjW1C5rJQzy7z1FN8jVk=
-X-Google-Smtp-Source: AMsMyM5HW1vtLgkRjY3ZqFvgIeVhi/yAZ32JwwYMHlHgf6ZpYuvLCmygJ8skVFDc8DDz2rO2ns3naA==
-X-Received: by 2002:a02:c98d:0:b0:374:75a4:60c4 with SMTP id b13-20020a02c98d000000b0037475a460c4mr217930jap.189.1667530612003;
-        Thu, 03 Nov 2022 19:56:52 -0700 (PDT)
-Received: from localhost ([2607:fea8:a2e2:2d00:f1f0:c4d7:e39e:e2f])
-        by smtp.gmail.com with ESMTPSA id a1-20020a92d101000000b002fadf9505b4sm914202ilb.16.2022.11.03.19.56.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Nov 2022 19:56:51 -0700 (PDT)
-Date:   Thu, 3 Nov 2022 22:56:49 -0400
-From:   Richard Acayan <mailingradian@gmail.com>
-To:     Konrad Dybcio <konrad.dybcio@somainline.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Chanho Park <chanho61.park@samsung.com>,
-        Thierry Reding <treding@nvidia.com>,
-        Stephan Gerhold <stephan.gerhold@kernkonzept.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Robert Marko <robimarko@gmail.com>,
-        Das Srinagesh <quic_gurus@quicinc.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Richard Acayan <mailingradian@gmail.com>
-Subject: Re: [PATCH v2 4/4] arm64: dts: qcom: add sdm670 and pixel 3a device
- trees
-Message-ID: <Y2R/cWkdqlmCGlvC@mailingradian>
-References: <20221103230349.212861-1-mailingradian@gmail.com>
- <20221103230349.212861-5-mailingradian@gmail.com>
- <1a4423c2-42e6-756d-50d8-a844534eae0d@somainline.org>
+        Thu, 3 Nov 2022 22:57:18 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E12025287;
+        Thu,  3 Nov 2022 19:57:17 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2A42v9mi121141;
+        Thu, 3 Nov 2022 21:57:09 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1667530629;
+        bh=KXmUTvXsRh+/y7JM6K9LWoCa2OVGE7mxrKt5mQgY1Ko=;
+        h=From:To:CC:Subject:Date:In-Reply-To:References;
+        b=RsXAmx0nTPEEPoAJDoqki1vwi9lMEUZvIvjjpIqnieN1GUDzHj+41HP4D+LGEQ8Gc
+         mnkfpm0drtUvAPTZlxdAPa1ziiWgsWKevYEej0wxo09zaMZOK6zARJObjKGHtpNGjY
+         Vgz4RBZyWxLcFBqPSCI8qRikLPlO/2KCziLGaeVs=
+Received: from DLEE111.ent.ti.com (dlee111.ent.ti.com [157.170.170.22])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2A42v9os032416
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 3 Nov 2022 21:57:09 -0500
+Received: from DLEE109.ent.ti.com (157.170.170.41) by DLEE111.ent.ti.com
+ (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Thu, 3 Nov
+ 2022 21:57:09 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE109.ent.ti.com
+ (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
+ Frontend Transport; Thu, 3 Nov 2022 21:57:09 -0500
+Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2A42v9r5115637;
+        Thu, 3 Nov 2022 21:57:09 -0500
+From:   Nishanth Menon <nm@ti.com>
+To:     <kristo@kernel.org>, <vigneshr@ti.com>, <robh+dt@kernel.org>,
+        <bb@ti.com>, <afd@ti.com>, <linux-arm-kernel@lists.infradead.org>,
+        <le.jin@siemens.com>, <krzysztof.kozlowski+dt@linaro.org>,
+        <jan.kiszka@siemens.com>
+CC:     Nishanth Menon <nm@ti.com>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>
+Subject: Re: [PATCH 00/11] AM65x Disable Incomplete DT Nodes
+Date:   Thu, 3 Nov 2022 21:57:08 -0500
+Message-ID: <166753059764.28312.10505241921624248527.b4-ty@ti.com>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20221028142417.10642-1-afd@ti.com>
+References: <20221028142417.10642-1-afd@ti.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1a4423c2-42e6-756d-50d8-a844534eae0d@somainline.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 04, 2022 at 12:49:34AM +0100, Konrad Dybcio wrote:
-> On 04/11/2022 00:03, Richard Acayan wrote:
->> The Qualcomm Snapdragon 670 has been out for a while. Add a device tree
->> for it and the Google Pixel 3a as the first device.
->> 
->> The Pixel 3a has the same bootloader issue as the Pixel 3 and will not work
->> on Android 10 bootloaders or later until it gets fixed for the Pixel 3.
->> 
->> SoC Initial Features:
->>   - power management
->>   - clocks
->>   - pinctrl
->>   - eMMC
->>   - USB 2.0
->>   - GENI I2C
->>   - IOMMU
->>   - RPMh
->>   - interrupts
->> 
->> Device-Specific Initial Features:
->>   - side buttons (keys)
->>   - regulators
->>   - touchscreen
->> 
->> Signed-off-by: Richard Acayan <mailingradian@gmail.com>
->> ---
->>   arch/arm64/boot/dts/qcom/Makefile             |    1 +
->>   .../boot/dts/qcom/sdm670-google-sargo.dts     |  532 ++++++++
->>   arch/arm64/boot/dts/qcom/sdm670.dtsi          | 1169 +++++++++++++++++
->>   3 files changed, 1702 insertions(+)
->>   create mode 100644 arch/arm64/boot/dts/qcom/sdm670-google-sargo.dts
->>   create mode 100644 arch/arm64/boot/dts/qcom/sdm670.dtsi
->> 
->> diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
->> index b0558d3389e5..4eb5d8829efb 100644
->> --- a/arch/arm64/boot/dts/qcom/Makefile
->> +++ b/arch/arm64/boot/dts/qcom/Makefile
->> @@ -124,6 +124,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= sdm630-sony-xperia-nile-voyager.dtb
->>   dtb-$(CONFIG_ARCH_QCOM)	+= sdm632-fairphone-fp3.dtb
->>   dtb-$(CONFIG_ARCH_QCOM)	+= sdm636-sony-xperia-ganges-mermaid.dtb
->>   dtb-$(CONFIG_ARCH_QCOM)	+= sdm660-xiaomi-lavender.dtb
->> +dtb-$(CONFIG_ARCH_QCOM)	+= sdm670-google-sargo.dtb
->>   dtb-$(CONFIG_ARCH_QCOM)	+= sdm845-cheza-r1.dtb
->>   dtb-$(CONFIG_ARCH_QCOM)	+= sdm845-cheza-r2.dtb
->>   dtb-$(CONFIG_ARCH_QCOM)	+= sdm845-cheza-r3.dtb
->> diff --git a/arch/arm64/boot/dts/qcom/sdm670-google-sargo.dts b/arch/arm64/boot/dts/qcom/sdm670-google-sargo.dts
->> new file mode 100644
->> index 000000000000..3a01859dd42c
->> --- /dev/null
->> +++ b/arch/arm64/boot/dts/qcom/sdm670-google-sargo.dts
->> @@ -0,0 +1,532 @@
->> +// SPDX-License-Identifier: GPL-2.0
->> +/*
->> + * Device tree for Google Pixel 3a, adapted from google-blueline device tree,
->> + * xiaomi-lavender device tree, and oneplus-common device tree.
->> + *
->> + * Copyright (c) 2022, Richard Acayan. All rights reserved.
->> + */
->> +
->> +/dts-v1/;
->> +
->> +#include <dt-bindings/gpio/gpio.h>
->> +#include <dt-bindings/input/input.h>
->> +#include <dt-bindings/pinctrl/qcom,pmic-gpio.h>
->> +#include <dt-bindings/power/qcom-rpmpd.h>
->> +#include "sdm670.dtsi"
->> +#include "pm660.dtsi"
->> +#include "pm660l.dtsi"
->> +
->> +/delete-node/ &mpss_region;
->> +/delete-node/ &venus_mem;
->> +/delete-node/ &wlan_msa_mem;
->> +/delete-node/ &cdsp_mem;
->> +/delete-node/ &mba_region;
->> +/delete-node/ &adsp_mem;
->> +/delete-node/ &ipa_fw_mem;
->> +/delete-node/ &ipa_gsi_mem;
->> +/delete-node/ &gpu_mem;
->> +
->> +/ {
->> +	model = "Google Pixel 3a";
->> +	compatible = "google,sargo", "qcom,sdm670";
->> +	qcom,board-id = <0x00041e05 0>;
->> +	qcom,msm-id = <321 0x20001>;
->> +
->> +	aliases { };
->> +
->> +	chosen {
->> +		stdout-path = "serial0:115200n8";
->> +
->> +		#address-cells = <2>;
->> +		#size-cells = <2>;
->> +		ranges;
->> +
->> +		framebuffer@9c000000 {
->> +			compatible = "simple-framebuffer";
->> +			reg = <0x0 0x9c000000 0x0 (1080 * 2220 * 4)>;
->
-> Please use '0x0' and '0' consistently in reg properties.
+Hi Andrew Davis,
 
-Will also do this in aop_cmd_db_mem because grep works, but not in cpus
-because the sm6350 has <0x0 0x0> in cpus and <0x0 0x80000000 0x0 0x0> in
-memory. The sdm670 dtsi has <0 0x80000000 0 0>, maybe I should change
-that according to other dtsi's already in the kernel.
+On Fri, 28 Oct 2022 09:24:06 -0500, Andrew Davis wrote:
+> Same story as for AM64x[0], AM62x[1], and J7x[2].
+> 
+> Last round for AM65x, but there are some boards that I do not have
+> (Simatic IOT2050), so testing very welcome!
+> 
+> Thanks,
+> Andrew
+> 
+> [...]
 
->
->
->> +			width = <1080>;
->> +			height = <2220>;
->> +			stride = <(1080 * 4)>;
->> +			format = "a8r8g8b8";
->> +		};
->> +	};
->> +
->
-> [...]
->
->
->> 
->> +
->> +&i2c9 {
->> +	clock-frequency = <100000>;
->> +	status = "okay";
->> +
->> +	synaptics-rmi4-i2c@20 {
->> +		compatible = "syna,rmi4-i2c";
->> +		reg = <0x20>;
->> +		#address-cells = <0x1>;
->> +		#size-cells = <0x0>;
->
-> #-cells properties should have decimal values.
->
->
-> [...]
->
->
->> +};
->> diff --git a/arch/arm64/boot/dts/qcom/sdm670.dtsi b/arch/arm64/boot/dts/qcom/sdm670.dtsi
->> new file mode 100644
->> index 000000000000..cbebe29ca6f8
->> --- /dev/null
->> +++ b/arch/arm64/boot/dts/qcom/sdm670.dtsi
->> @@ -0,0 +1,1169 @@
->> +// SPDX-License-Identifier: GPL-2.0
->> +/*
->> + * SDM670 SoC device tree source, adapted from SDM845 SoC device tree
->> + *
->> + * Copyright (c) 2018, The Linux Foundation. All rights reserved.
->> + * Copyright (c) 2022, Richard Acayan. All rights reserved.
->> + */
->> +
->
-> [...]
->
->
->> +
->> +		gpi_dma0: dma-controller@800000 {
->> +			#dma-cells = <3>;
->> +			compatible = "qcom,sdm670-gpi-dma", "qcom,sdm845-gpi-dma";
->> +			reg = <0 0x00800000 0 0x60000>;
->> +			interrupts = <GIC_SPI 244 IRQ_TYPE_LEVEL_HIGH>,
->> +				     <GIC_SPI 245 IRQ_TYPE_LEVEL_HIGH>,
->> +				     <GIC_SPI 246 IRQ_TYPE_LEVEL_HIGH>,
->> +				     <GIC_SPI 247 IRQ_TYPE_LEVEL_HIGH>,
->> +				     <GIC_SPI 248 IRQ_TYPE_LEVEL_HIGH>,
->> +				     <GIC_SPI 249 IRQ_TYPE_LEVEL_HIGH>,
->> +				     <GIC_SPI 250 IRQ_TYPE_LEVEL_HIGH>,
->> +				     <GIC_SPI 251 IRQ_TYPE_LEVEL_HIGH>,
->> +				     <GIC_SPI 252 IRQ_TYPE_LEVEL_HIGH>,
->> +				     <GIC_SPI 253 IRQ_TYPE_LEVEL_HIGH>,
->> +				     <GIC_SPI 254 IRQ_TYPE_LEVEL_HIGH>,
->> +				     <GIC_SPI 255 IRQ_TYPE_LEVEL_HIGH>,
->> +				     <GIC_SPI 256 IRQ_TYPE_LEVEL_HIGH>;
->> +			dma-channels = <13>;
->> +			dma-channel-mask = <0xfa>;
->> +			iommus = <&apps_smmu 0x0016 0x0>;
->
-> &apps_smmu 0x16 0x0
->
->
-> [...]
->> +
->> +		intc: interrupt-controller@17a00000 {
->> +			compatible = "arm,gic-v3";
->> +			#address-cells = <2>;
->> +			#size-cells = <2>;
->> +			ranges;
->> +			#interrupt-cells = <3>;
->> +			interrupt-controller;
->> +			reg = <0 0x17a00000 0 0x10000>,     /* GICD */
->> +			      <0 0x17a60000 0 0x100000>;    /* GICR * 8 */
->
-> reg second, #cells and ranges last, please.
+I have applied the following to branch ti-k3-dts-next on [1].
+Thank you!
 
-I'll also move the label property down in apps_rsc and move the #cells
-down in touchscreen.
+[01/11] arm64: dts: ti: k3-am65: Enable UART nodes at the board level
+        commit: 65e8781ac90e74242ebb1a98bf415809e8387aaf
+[02/11] arm64: dts: ti: k3-am65: Enable I2C nodes at the board level
+        commit: c0a5ba87af56f073145dd026280454aec4a44db0
+[03/11] arm64: dts: ti: k3-am65: Enable SPI nodes at the board level
+        commit: 1c49cbb19b1f2c61168741f987e65b50dd2f97de
+[04/11] arm64: dts: ti: k3-am65: Enable EPWM nodes at the board level
+        commit: 5780cf09409551c67112127b90786e553c8f9a25
+[05/11] arm64: dts: ti: k3-am65: Enable ECAP nodes at the board level
+        commit: c1d1189eafb27fa5c0cb0b92a4e81c155709068b
+[06/11] arm64: dts: ti: k3-am65: MDIO pinmux should belong to the MDIO node
+        commit: 0edd6d7ed646a53b41d09f7aa1d8c01d23bd7b73
+[07/11] arm64: dts: ti: k3-am65: Enable MDIO nodes at the board level
+        commit: c75c5c0bba500b1e454dc2591acdd6596fe64ce2
+[08/11] arm64: dts: ti: k3-am65: Enable MCAN nodes at the board level
+        commit: b08bf4a5c0ed0a6b8472ca78ccf416d73d2609aa
+[09/11] arm64: dts: ti: k3-am65: Enable PCIe nodes at the board level
+        commit: 7ff8432c272e3556461b7c9daad8156ae446e812
+[10/11] arm64: dts: ti: k3-am65: Enable Mailbox nodes at the board level
+        commit: 3f9089ea008c195b6cf449735c5a3a5fcac1a382
+[11/11] arm64: dts: ti: k3-am65: Enable McASP nodes at the board level
+        commit: fdb02688f22b397c811328bf826b5b110d5cdc41
 
->
->
-> Other than that, lgtm
->
->
-> Konrad
->
->> +			interrupts = <GIC_PPI 9 IRQ_TYPE_LEVEL_HIGH>;
->> +		};
->> +	};
->> +};
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent up the chain during
+the next merge window (or sooner if it is a relevant bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+[1] git://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git
+-- 
+Regards,
+Nishanth Menon
+Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
+
