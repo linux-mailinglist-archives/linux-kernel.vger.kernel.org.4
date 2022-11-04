@@ -2,131 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6E77619AFE
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 16:08:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9B9A619B02
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 16:08:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232333AbiKDPIN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 11:08:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51958 "EHLO
+        id S232378AbiKDPIe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 11:08:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231920AbiKDPIK (ORCPT
+        with ESMTP id S232372AbiKDPI0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 11:08:10 -0400
-Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A28C8BC1A
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 08:08:09 -0700 (PDT)
-Received: by mail-qt1-x833.google.com with SMTP id fz10so3195432qtb.3
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 08:08:09 -0700 (PDT)
+        Fri, 4 Nov 2022 11:08:26 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1FF1BE0C;
+        Fri,  4 Nov 2022 08:08:23 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id z5-20020a17090a8b8500b00210a3a2364fso7976183pjn.0;
+        Fri, 04 Nov 2022 08:08:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=JwRFU1y3EfXp9NwfKHJKDTZzTorKYkXOQOScKexSK2s=;
-        b=N17D5A5+9jSMMCIRJo9nOYaW2EOVWnYsYjcQEdCs2HipPjL04GztoZIFUdoLImjxcx
-         YWT0qkQ61KZDBh6kF0Ffp3iSg/X3aQSV/R93MF56XvTuYLHFJQkuO6D1jva6zo3Gyxfb
-         s19rlLsB7tsMrvt3B+npYfsnQNWtHiDfTjV26taT59vOhpWgrNg+Obgne8Fq2bMpoLdK
-         xqclqtyEkY1hX3OQFaxsfxxAIrXbtGSYXPO7I2UTAuiovBwzOKYP3DvHizak3/qDYfE1
-         JBGSFqb77qeBNW02sezuWh0jHVNZmWJ9BuwC/5oymvChnUBbczRiAZ7y15bu6z1d8kHW
-         wZFg==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=JMPOdF+o0zNjI5oSIE1GsSu6N/ryN9SMeyxLPWXhVBs=;
+        b=RyhdIpGXQUD3R+si/9tPRnDaLMca3cbp3VLQ/v85H/ZaZ3gaR756lwv5SkgBd5x4G7
+         ekwGjJryWjPw2SdQ8n/mJPge5zWihLtr2DcyFD0mttD2WyDGJfEHKqLjIxPF5sZdkYvL
+         OvH9tU41qQ+8ZoC9t6FOPy4BJBJ55d3MQzq41uH4TPDvoidaLWevBZVEbiGGDCXHQxtb
+         VwebHuDywesjdUf+2x7nU6Zilu676jnTUQoS+Dh8PzC+BorW4EkltFg4jsGa72pqaXRP
+         VxjjFJwoSWC3956lN26S63DUxw3eJ504d7wd7tG6ASkiJGrAYlBDgBlq7QyDMVneeC3l
+         xUXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JwRFU1y3EfXp9NwfKHJKDTZzTorKYkXOQOScKexSK2s=;
-        b=oCqglMUtYs83RIDLlRdiDErh/VXfkeAZSdmVjF7Djqu742djBKdcnfC9AsobmaygMR
-         4nTi1AMkKOUga+bIpOYmwXXkkfyI/8TLQyr2GAg87g7+dvIbudcehF+Ddf/PAi1vwBPh
-         j0Mnp8C0pvnQXCdk6xi/6EVNMad111c2yFJ/mbz8A/2nds4wAL9Ww0SFh4Oew6HXYXuI
-         /WEU2XnTBpntCfNaK6C78GhnJn6we7iuA4woaYhcVg95aBW072OgRykQbzkLbs9Mr4mq
-         znAVf+GEyx+yH0UkmyOkrtO8aKOcPOTP2VVvL8Q7VNKC4DqRPryXJyUuAQj2dWXO8rIB
-         CXwg==
-X-Gm-Message-State: ACrzQf3MwqZn7LMhnvwpXKl0R+f3x1LTvaGh9QoWbhjUFv2kbNeTOylF
-        YsbrYlBys3+HzmAjUoo8VtZXJA==
-X-Google-Smtp-Source: AMsMyM4LCRABqWLW63iq3OI5t/wjFQZQXiaKmhKKkibnjMz59AyssRT8Oy815QpTVNo+MHXCgSxzpA==
-X-Received: by 2002:a05:622a:83:b0:3a4:ee89:1288 with SMTP id o3-20020a05622a008300b003a4ee891288mr298499qtw.512.1667574488795;
-        Fri, 04 Nov 2022 08:08:08 -0700 (PDT)
-Received: from ?IPV6:2601:586:5000:570:aad6:acd8:4ed9:299b? ([2601:586:5000:570:aad6:acd8:4ed9:299b])
-        by smtp.gmail.com with ESMTPSA id u5-20020a05620a0c4500b006fa22f0494bsm3043977qki.117.2022.11.04.08.08.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 04 Nov 2022 08:08:08 -0700 (PDT)
-Message-ID: <3bdb7b04-27a2-8d50-b96a-76ad914a0988@linaro.org>
-Date:   Fri, 4 Nov 2022 11:08:07 -0400
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=JMPOdF+o0zNjI5oSIE1GsSu6N/ryN9SMeyxLPWXhVBs=;
+        b=K/z11idtwcjV7Ta2+TrK7SkGCJR9g62jlV/V7V1NF4WboAZabFNuO1j77YvArzXbU/
+         kxyy56LqEHpjx39eewhHNgq8TgTPahn84sDbAkY0u59cy/KK5KaNcrL6T/+To5jbTkbi
+         ltdmQkPb0qGTqQ4dUyceoGg/r6WHbguwfoKRIUlDz3JjuTjtg9dyrgoiFgFKzB9yizQE
+         s7x3i0s1ssYCAlZyTwDQcBTaOdsjze16LwTeSCXQIKnVHg27dX6VyT7n7iu7u3debfyU
+         rXS1aCllonYrd3nKxyD7mmi844qDwsVT1z+pYRCqOX9JBdJPSMQO08L8hwohR6xv0BuK
+         lXqg==
+X-Gm-Message-State: ACrzQf23/aO7OWj5uvIojZAlSkhRqeTzaaLsc7+RNPACY+UV65ElXjOo
+        DFDq2J6iBgerC7lWo88hlS0=
+X-Google-Smtp-Source: AMsMyM5KzINUyMORzunyuK5891yHttCtmYcq8nB9pAJbJjysO0tEd1LCg8MnTXG3THRjnogaziLMVg==
+X-Received: by 2002:a17:90a:c705:b0:213:1455:1326 with SMTP id o5-20020a17090ac70500b0021314551326mr37110567pjt.244.1667574503114;
+        Fri, 04 Nov 2022 08:08:23 -0700 (PDT)
+Received: from localhost ([2a00:79e1:abd:4a00:2703:3c72:eb1a:cffd])
+        by smtp.gmail.com with ESMTPSA id f2-20020a170902ce8200b00176acd80f69sm2805024plg.102.2022.11.04.08.08.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Nov 2022 08:08:22 -0700 (PDT)
+From:   Rob Clark <robdclark@gmail.com>
+To:     dri-devel@lists.freedesktop.org
+Cc:     freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        Rob Clark <robdclark@chromium.org>,
+        Akhil P Oommen <quic_akhilpo@quicinc.com>,
+        Chia-I Wu <olvaffe@gmail.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        linux-kernel@vger.kernel.org (open list),
+        Sean Paul <sean@poorly.run>,
+        Vladimir Lypak <vladimir.lypak@gmail.com>
+Subject: [PATCH v3 0/2] drm/msm: Improved hang detection
+Date:   Fri,  4 Nov 2022 08:08:37 -0700
+Message-Id: <20221104150847.525173-1-robdclark@gmail.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH net-next v7 5/5] ARM: dts: qcom: ipq4019: Add description
- for the IPQESS Ethernet controller
-Content-Language: en-US
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc:     Maxime Chevallier <maxime.chevallier@bootlin.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "thomas.petazzoni@bootlin.com" <thomas.petazzoni@bootlin.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        Luka Perkov <luka.perkov@sartura.hr>,
-        Robert Marko <robert.marko@sartura.hr>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>
-References: <20221104142746.350468-1-maxime.chevallier@bootlin.com>
- <20221104142746.350468-6-maxime.chevallier@bootlin.com>
- <50814a5b-03d3-95b4-ab14-bfd19adae52b@linaro.org>
- <20221104143250.6qjkphkhrycp75rv@skbuf>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221104143250.6qjkphkhrycp75rv@skbuf>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/11/2022 10:32, Vladimir Oltean wrote:
-> On Fri, Nov 04, 2022 at 10:31:06AM -0400, Krzysztof Kozlowski wrote:
->>> diff --git a/arch/arm/boot/dts/qcom-ipq4019.dtsi b/arch/arm/boot/dts/qcom-ipq4019.dtsi
->>> index b23591110bd2..5fa1af147df9 100644
->>> --- a/arch/arm/boot/dts/qcom-ipq4019.dtsi
->>> +++ b/arch/arm/boot/dts/qcom-ipq4019.dtsi
->>> @@ -38,6 +38,7 @@ aliases {
->>>  		spi1 = &blsp1_spi2;
->>>  		i2c0 = &blsp1_i2c3;
->>>  		i2c1 = &blsp1_i2c4;
->>> +		ethernet0 = &gmac;
->>
->> Hm, I have doubts about this one. Why alias is needed and why it is a
->> property of a SoC? Not every board has Ethernet enabled, so this looks
->> like board property.
->>
->> I also wonder why do you need it at all?
-> 
-> In general, Ethernet aliases are needed so that the bootloader can fix
-> up the MAC address of each port's OF node with values it gets from the
-> U-Boot environment or an AT24 EEPROM or something like that.
+From: Rob Clark <robdclark@chromium.org>
 
-Assuming that's the case here, my other part of question remains - is
-this property of SoC or board? The buses (SPI, I2C) are properties of
-boards, even though were incorrectly put here. If the board has multiple
-ethernets, the final ordering is the property of the board, not SoC. I
-would assume that bootloader also configures the MAC address based on
-the board config, not per SoC...
+Try to detect when submit jobs are making forward progress and give them
+a bit more time.
 
-Best regards,
-Krzysztof
+Rob Clark (2):
+  drm/msm/adreno: Simplify read64/write64 helpers
+  drm/msm: Hangcheck progress detection
+
+ drivers/gpu/drm/msm/adreno/a4xx_gpu.c       |  3 +-
+ drivers/gpu/drm/msm/adreno/a5xx_gpu.c       | 27 ++++------
+ drivers/gpu/drm/msm/adreno/a5xx_preempt.c   |  4 +-
+ drivers/gpu/drm/msm/adreno/a6xx_gpu.c       | 58 +++++++++++++++------
+ drivers/gpu/drm/msm/adreno/a6xx_gpu_state.c |  3 +-
+ drivers/gpu/drm/msm/msm_drv.c               |  1 -
+ drivers/gpu/drm/msm/msm_drv.h               |  8 ++-
+ drivers/gpu/drm/msm/msm_gpu.c               | 31 ++++++++++-
+ drivers/gpu/drm/msm/msm_gpu.h               | 15 +++---
+ drivers/gpu/drm/msm/msm_ringbuffer.h        | 24 +++++++++
+ 10 files changed, 125 insertions(+), 49 deletions(-)
+
+-- 
+2.38.1
 
