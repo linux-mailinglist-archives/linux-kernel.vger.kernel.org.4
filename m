@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0630A6198A0
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 14:58:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 973B96198A1
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 14:58:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231858AbiKDN5q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 09:57:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47148 "EHLO
+        id S231822AbiKDN6G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 09:58:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231953AbiKDN52 (ORCPT
+        with ESMTP id S231923AbiKDN55 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 09:57:28 -0400
-Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A3222F3B8
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 06:57:28 -0700 (PDT)
-Received: by mail-qv1-xf2c.google.com with SMTP id c8so3210381qvn.10
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 06:57:28 -0700 (PDT)
+        Fri, 4 Nov 2022 09:57:57 -0400
+Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A70D12F66D
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 06:57:48 -0700 (PDT)
+Received: by mail-qv1-xf36.google.com with SMTP id w10so3230049qvr.3
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 06:57:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=IxLP2ZLC+RP/EOL4YGnV1q3bUiM48XPDLk7k0dObo0U=;
-        b=DNj1ahs3cwXtTKJXBfq3/beiqjXL6kHqoP1SRMGZjxbHB882O00Y8hK8d+TZF8EBSk
-         U4sLhyj33nvvANlEMvLCfq8F7x0YObfuu/5Su6pLEpKSkWJAOj+Fw7EkalZNBUjeMU3I
-         NL5Hsn03t2Xl23N2CLzl5aky+TdMpdp8bvHcKVCNMuO2CSHW6OGLs7Hv/DNAsQLbb5A0
-         gUlzDCiKBtcX/e6j/mm/pRVxG2S4fXx+TxOF3Vrd2RncZstAcTTM63d4KOjwgfHIL3Iu
-         rGYVKojtPIRWI7f3VGquF6YaBlRyhxJwI5vf1gCpAtx0VgA4MnNmGVnLjKJSgtmDtoHc
-         rQEA==
+        bh=Qhzgv1KpNF95EEHpLoq66m5LBpsayMOKdYESA76s0js=;
+        b=zxilIA0Fs4zbbUdB672h7ugyUJe1uPwi6JXWBQDCKcVg78XzJP0Xv6k+r5/o++MQkY
+         ztlYC+Oi2fivbMGK9LnwFD6z92tw7BdpAf60prgqBMd6/brzu/h/wumUcw6/VtSJ5T5I
+         ZPS6dMNOD5UcGzSixhsu8FHeo4QZ3c5LTWXmJbxYCEQL8i5ASvbqDBPdCvjHE37SRspi
+         dNic6HxtZE5e3cX9jihvyvlF0Gm2b8r9StPRhdtL+hdJzKv8rSDMvCERUpuWUXzYmu2A
+         1BsIr6OCGDFzb8UR7zYUoHO1ePCtUIKC8iPwqrb3efC6hgk09uIXi/Y5PI94Gv6H0uBn
+         86kQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=IxLP2ZLC+RP/EOL4YGnV1q3bUiM48XPDLk7k0dObo0U=;
-        b=kppp7draWjGvbrypFteHRSfxMqM04DoU+LUGBgGJK5lQwBOhbxBvxpLpczin26G1y3
-         SQr+Lf/XeEXIofZ+qC9GmodBx5ejFv8dSgoW15BRJjHc1woiSPNVfuDmXHPSX8l7RcGQ
-         jXfTMcRET1ayHg23P/+I/CeZUfJ1pum/f5qbxkCoJjA3UTTwL0s/DGAZCexH/NQqRVFu
-         BztymN1p6wQnfPlUTPMci8z4g2yEIqm8IDai09tnSfp2gjZ5GTA2xZPQfqIcEvvk5r3u
-         j9nNY4ZDZP9Rw3kw/T2AOcZy6gp1r6bOVVxfxHVZfUoNOMVB45WxQ+/++7nBPmgTrPae
-         z5Kw==
-X-Gm-Message-State: ACrzQf1p/gXBN2VUSPiLSf/6bBIr6fXgK6sJ8DqCXfUUd/JsgfHqaPpn
-        /tQNjOwusCWV0Jh/1X5q1VtJwVHysw2VfQ==
-X-Google-Smtp-Source: AMsMyM4B05822UBI4qLyY6s84o/V58iledNRHwC9mHUZccV4GV3swjVUcuNQzdqJWo/5IKhZ7jYMuQ==
-X-Received: by 2002:a05:6214:27c1:b0:4b4:9f69:dd5e with SMTP id ge1-20020a05621427c100b004b49f69dd5emr31727587qvb.56.1667570247409;
-        Fri, 04 Nov 2022 06:57:27 -0700 (PDT)
+        bh=Qhzgv1KpNF95EEHpLoq66m5LBpsayMOKdYESA76s0js=;
+        b=W6nzhUY5WoKocFnTUcRwgHleN1MZpwd2E64grNPGCpzQPP18r4NIwD8U59lbAix9J2
+         EpljZk4kFJPKqAy5Kp3IWFSkVvDOJD4n03PViSD9s/HbSQ1FXtkVQ8dD5hMcDjjBlBUk
+         8AuLjAQOypGKpd/w/K2F6FtfHic8KJh/P8T7XJbLxHb2Dac7Fpzej0dPwDO/yDIsYXSQ
+         r4rTLtY5LlLZkthF3HiWOIIEMUdjgD6i3T+8kO0wMYv/cUNcX0ddkQZxJCBIoFjeKQCC
+         4tNOr8/QBkDVl8BA+WSfkRyKGxsJ6pSFaKCBpFiMeZzaL/ymo/hmjcg7BZiLnwJSze3U
+         IUBg==
+X-Gm-Message-State: ACrzQf1VtjoNPHhhDCZcO0P5uaHJYsPLdgg8yKdObDpsU/HAnPDpj5Cn
+        2aPAQe5z/+K9I+hxkK5An4Rivw==
+X-Google-Smtp-Source: AMsMyM4mUU4Nr7fu+a8ccJKelKEROzGeWiovIx605bSMi89vFC11e0ut3vkDueZ7NUUyjwdLlCJ9gA==
+X-Received: by 2002:a05:6214:242b:b0:4bb:5e7e:715a with SMTP id gy11-20020a056214242b00b004bb5e7e715amr31976356qvb.8.1667570267351;
+        Fri, 04 Nov 2022 06:57:47 -0700 (PDT)
 Received: from ?IPV6:2601:586:5000:570:aad6:acd8:4ed9:299b? ([2601:586:5000:570:aad6:acd8:4ed9:299b])
-        by smtp.gmail.com with ESMTPSA id s6-20020a37a906000000b006fa1dc83a36sm2916394qke.64.2022.11.04.06.57.25
+        by smtp.gmail.com with ESMTPSA id w25-20020a05620a0e9900b006f9f714cb6asm2871899qkm.50.2022.11.04.06.57.46
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 04 Nov 2022 06:57:26 -0700 (PDT)
-Message-ID: <d336ca89-6c88-bf3c-8164-20e1937457a8@linaro.org>
-Date:   Fri, 4 Nov 2022 09:57:25 -0400
+        Fri, 04 Nov 2022 06:57:46 -0700 (PDT)
+Message-ID: <9c4b08e8-3ef7-133f-a71a-d80075f5073d@linaro.org>
+Date:   Fri, 4 Nov 2022 09:57:45 -0400
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.2
-Subject: Re: [PATCH v2 2/3] arm64: dts: qcom: msm8916-alcatel-idol347: add
- GPIO torch LED
+Subject: Re: [PATCH v2 3/3] arm64: dts: qcom: msm8916-alcatel-idol347: add LED
+ indicator
 Content-Language: en-US
 To:     Vincent Knecht <vincent.knecht@mailoo.org>,
         Andy Gross <agross@kernel.org>,
@@ -67,27 +67,27 @@ To:     Vincent Knecht <vincent.knecht@mailoo.org>,
         linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
 References: <20221104132400.1763218-1-vincent.knecht@mailoo.org>
- <20221104132400.1763218-3-vincent.knecht@mailoo.org>
+ <20221104132400.1763218-4-vincent.knecht@mailoo.org>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221104132400.1763218-3-vincent.knecht@mailoo.org>
+In-Reply-To: <20221104132400.1763218-4-vincent.knecht@mailoo.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/11/2022 09:23, Vincent Knecht wrote:
-> Add support for torch LED on GPIO 32.
+On 04/11/2022 09:24, Vincent Knecht wrote:
+> Add si-en,sn3190 LED controller to enable white LED indicator.
 > 
-> Signed-off-by: Vincent Knecht <vincent.knecht@mailoo.org>
-> ---
->  .../boot/dts/qcom/msm8916-alcatel-idol347.dts | 22 +++++++++++++++++++
->  1 file changed, 22 insertions(+)
+> This requires adding the additional "enable" gpio that the OEM
+> choose to use, despite it not being mentioned in si-en,sn3190
+> datasheet nor supported by the driver.
 > 
 
 
