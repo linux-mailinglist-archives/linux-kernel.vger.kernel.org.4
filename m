@@ -2,218 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACC36618D0D
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 00:59:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0AE6618D14
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 01:00:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230381AbiKCX7N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 19:59:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37582 "EHLO
+        id S230509AbiKDAAi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 20:00:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbiKCX7K (ORCPT
+        with ESMTP id S230419AbiKDAAf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 19:59:10 -0400
-Received: from mx0b-003ede02.pphosted.com (mx0b-003ede02.pphosted.com [205.220.181.153])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8855322293
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 16:59:09 -0700 (PDT)
-Received: from pps.filterd (m0286619.ppops.net [127.0.0.1])
-        by mx0b-003ede02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2A3Nx8Np010305
-        for <linux-kernel@vger.kernel.org>; Thu, 3 Nov 2022 16:59:08 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=getcruise.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding;
- s=ppemail; bh=ouJbkpR6+J4Encuu8K7QZ3Tg66Y2gZ1ROektz28aaQ8=;
- b=qNuSTQHrlG29WMBEKCzuEhwbZzxB6GY99xiOvuj5BHHRWga2x6p/B5hkz2cx60hHH75P
- 6JgW+zYu7qrkQRFfopmZG6DydatjSDuk30xktVeUBzNWjOtNYU4efSalYV5Wy11vAkPP
- pO6Fnu/wBPXcqrC760wvGd90QU2jNam0+qw/NGPPS9CGtG5jMgWarrBKRAbf4eW2mj+V
- pNeDmiejgUciOLFV8xF9XLoxdfDXcV1BSaUo8A8VCiZaaAADZYtnfAqiU/iLCdPH+3w9
- EfYdDJgAblXO8Ckiqaj6Fcz3zM04HqSyNL4W+h+eFkOUevHtCpbavh2CgQywvydhxNSu tg== 
-Received: from mail-pl1-f198.google.com (mail-pl1-f198.google.com [209.85.214.198])
-        by mx0b-003ede02.pphosted.com (PPS) with ESMTPS id 3kmq5nr097-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 16:59:08 -0700
-Received: by mail-pl1-f198.google.com with SMTP id x18-20020a170902ec9200b001869f20da7eso2295438plg.10
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 16:59:08 -0700 (PDT)
+        Thu, 3 Nov 2022 20:00:35 -0400
+Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2478022509
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 17:00:33 -0700 (PDT)
+Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-3321c2a8d4cso30359987b3.5
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 17:00:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=getcruise.com; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ouJbkpR6+J4Encuu8K7QZ3Tg66Y2gZ1ROektz28aaQ8=;
-        b=OAKCB1UKkJMmowNucXL/9mtiqjd2rHIVEgvHyojJcdPvsFIoahcervOah+E2d6sia3
-         J7XRoq3KFs7WCY5YF7n35fC5DipAjvx5leflRZQH5RegAef2zIVv2Zh+YewQhWUfoZhK
-         kGJV6i6uHGrLGi/dwKivK+r9+hLARwnd6HR5RlUNarGUpNSpKvSd/lpQyaAbFqbrhtRR
-         8JVPGW+JRo7kzYFgmUqrmO4OZhGIh+ccHoxeBfsmJiakVUl6d4kRc6SP1HOY4cg/Vuvh
-         DjKGlJxGYUYy8uS9H8gc9BaZoUGsPtpiIjPuulUlaph5lWzGiZipll0Up0op302Btj+O
-         05cQ==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=OIWN7urgPvg7gWQ/2jmCuNIcCwluarihUklEPGyHjcg=;
+        b=WfZQ7T5J19AGsPaNUJuOsP0Km5Ixqe3g2OjzWlZ48O9n++G6HOElr/NHRpLA9fDnwr
+         zjRaF+oN7J52K4Hkt1QfKpCQB5Wz5OV6RrsZAgAUs0tkU6h0aV7cYd6yEHz8xOWTUUaE
+         nTwx3sfZXExTHFKflgZ0kHbhOyWH5xYa/4o8baHcab29Hq9pAX7cOlT1SrWXDbt87QYk
+         qqJgjVZVqEHQO2qDmqBHDnF4n6wAmtRz5tmd/UsTP0SD10mD6uXXRAlwFdt5yYXaLs84
+         Q6NGteraqshFTYF08psP5WYnjWqJg/XADvug0NuClQLOveJFe7i203jnVfhv2iws1QsI
+         5poA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=ouJbkpR6+J4Encuu8K7QZ3Tg66Y2gZ1ROektz28aaQ8=;
-        b=PH9vcFBa3MAVNdmHFIYnEbKWck2ODNANUIX28ptW2xCgsKafeWNxwpzNGeR+9OF9YT
-         mqUrilogpNh859qUkog1aepjs1HzaylxG7lfp2IVMsTjVZcMBGgFac7xauKxiI65FfXD
-         jB2BaDYSpruPdY4qVEM4RuISwKP21u8oHbfu3d/fP3enQAP9F/ByVssdWBDIJCCifGN9
-         k2520xzjv0r318UsEfDzGp/feBMJqI0LamjMYqjiKkDGnsSJljelxBWAfQQHIaz9m7/d
-         bow+37Iwq1znL+OLHBjUAN734NnIIBCU2IjF693FOEoToHGAnXutfPiQ7GHnbZQUaO9s
-         wKrg==
-X-Gm-Message-State: ACrzQf1UlLUuWSTeWCNq586Gf5M1A73cgUhNCGmWuDWE9R4/G/Vr00Qf
-        CSk8BITo709wALHh0rwlD0e2QKbxlH1rc8n5CiqW4fcha5t+Ia3zi+7/k1HtqbuUHfykJV1WBFi
-        qdvTZeBVH3kk/Vpe6jgcZqeU=
-X-Received: by 2002:a17:90b:152:b0:213:dfd6:3e5e with SMTP id em18-20020a17090b015200b00213dfd63e5emr24109785pjb.229.1667519947143;
-        Thu, 03 Nov 2022 16:59:07 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM7SppjLEvoSfBSakmBLmRXOSm7cpqMiL0FcJeujJFX7yxnb9wtBbX+fAhrpea0RWwUGxQoOYQ==
-X-Received: by 2002:a17:90b:152:b0:213:dfd6:3e5e with SMTP id em18-20020a17090b015200b00213dfd63e5emr24109771pjb.229.1667519946882;
-        Thu, 03 Nov 2022 16:59:06 -0700 (PDT)
-Received: from 4VPLMR2-DT.corp.robot.car ([199.73.125.241])
-        by smtp.gmail.com with ESMTPSA id j6-20020a170902c08600b00183ba0fd54dsm1152555pld.262.2022.11.03.16.59.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Nov 2022 16:59:06 -0700 (PDT)
-From:   Andy Ren <andy.ren@getcruise.com>
-To:     netdev@vger.kernel.org
-Cc:     richardbgobert@gmail.com, davem@davemloft.net,
-        wsa+renesas@sang-engineering.com, edumazet@google.com,
-        petrm@nvidia.com, kuba@kernel.org, pabeni@redhat.com,
-        corbet@lwn.net, andrew@lunn.ch, dsahern@gmail.com,
-        sthemmin@microsoft.com, idosch@idosch.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        roman.gushchin@linux.dev, Andy Ren <andy.ren@getcruise.com>
-Subject: [PATCH net-next] net/core: Allow live renaming when an interface is up
-Date:   Thu,  3 Nov 2022 16:58:47 -0700
-Message-Id: <20221103235847.3919772-1-andy.ren@getcruise.com>
-X-Mailer: git-send-email 2.38.1
+        bh=OIWN7urgPvg7gWQ/2jmCuNIcCwluarihUklEPGyHjcg=;
+        b=1nKw4EZO3sY42coBA9PQnMhpvFZALdLTP0vfSG5nCTbse2UGT3u2MLC5BRjIZziE5l
+         3KTcV1G3/QUt/cR2ACBW1SKr4Bb1UcWOjHtJtCR8PrBpW31nGuGqSyipvecH0/7Cj1oV
+         H+LRc84zsysKuW/PEFBydSzEMcew3UeKM+wS6/y+xBFEpMgUVYXdQzibsXpa5HPujNfr
+         d7H0m/jXllKUbtIfhhsOy0EV7FjlkZL2JyAzaVrb59ELFOJzh9amuHra8Kbjws8cWyO6
+         3xAlf4k9m9abMqLZLCO+TOImDGp51zJs3eim7cEz8NcQt3L04e5YlygwsiIZcvew19Tx
+         Fswg==
+X-Gm-Message-State: ACrzQf2k73rojjQvifkNZGTUvrsLVKrgUOmlS2LxyyBxQzQK9lRKLooR
+        ghY3vtjdSkOUqXrcX1pevoN23wDNB4pKLwbMw3qDbw==
+X-Google-Smtp-Source: AMsMyM4aPgSxRkszwf78hhXzMH4nUQ/6+7Nmf1bkd3EgAr4pZAmAEnobR0Kbs5o4qTyfKdYLFWynOitqShpFiKJNAxo=
+X-Received: by 2002:a81:6084:0:b0:370:10fa:c4ff with SMTP id
+ u126-20020a816084000000b0037010fac4ffmr32397029ywb.255.1667520032026; Thu, 03
+ Nov 2022 17:00:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-ORIG-GUID: SpyiRmP4xGSvEG-JU__BN9Yp4eW-R705
-X-Proofpoint-GUID: SpyiRmP4xGSvEG-JU__BN9Yp4eW-R705
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-03_04,2022-11-03_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=786 bulkscore=0
- spamscore=0 phishscore=0 lowpriorityscore=0 priorityscore=1501
- adultscore=0 mlxscore=0 impostorscore=0 suspectscore=0 malwarescore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211030163
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20221027150525.753064657@goodmis.org> <20221027150928.780676863@goodmis.org>
+ <20221027155513.60b211e2@gandalf.local.home> <CAHk-=wjAjW2P5To82+CAM0Rx8RexQBHPTVZBWBPHyEPGm37oFA@mail.gmail.com>
+ <20221027163453.383bbf8e@gandalf.local.home> <CAHk-=whoS+krLU7JNe=hMp2VOcwdcCdTXhdV8qqKoViwzzJWfA@mail.gmail.com>
+ <20221027170720.31497319@gandalf.local.home> <20221027183511.66b058c4@gandalf.local.home>
+ <20221028183149.2882a29b@gandalf.local.home> <20221028154617.3c63ba68@kernel.org>
+ <27a6a587fee5e9172e41acd16ae1bc1f556fdbd7.camel@redhat.com> <20221103175123.744d0f37@rorschach.local.home>
+In-Reply-To: <20221103175123.744d0f37@rorschach.local.home>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Thu, 3 Nov 2022 17:00:20 -0700
+Message-ID: <CANn89iLv9cak6_vXJG5t=Kq+eiMPdMxF8w4AAuAuFB5sOsy2zg@mail.gmail.com>
+Subject: Re: [RFC][PATCH v2 19/31] timers: net: Use del_timer_shutdown()
+ before freeing timer
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Paolo Abeni <pabeni@redhat.com>, Jakub Kicinski <kuba@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Mirko Lindner <mlindner@marvell.com>,
+        Stephen Hemminger <stephen@networkplumber.org>,
+        Martin KaFai Lau <martin.lau@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Kuniyuki Iwashima <kuniyu@amazon.com>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        Menglong Dong <imagedong@tencent.com>,
+        linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org,
+        bridge@lists.linux-foundation.org, netfilter-devel@vger.kernel.org,
+        coreteam@netfilter.org, lvs-devel@vger.kernel.org,
+        linux-afs@lists.infradead.org, linux-nfs@vger.kernel.org,
+        tipc-discussion@lists.sourceforge.net
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch allows a network interface to be renamed when the interface
-is up.
+On Thu, Nov 3, 2022 at 2:51 PM Steven Rostedt <rostedt@goodmis.org> wrote:
+>
+> On Sun, 30 Oct 2022 18:22:03 +0100
+> Paolo Abeni <pabeni@redhat.com> wrote:
+>
+> > On the positive side, I think converting the sk_stop_timer in
+> > inet_csk_clear_xmit_timers() should be safe and should cover the issue
+> > reported by Guenter
+>
+> Would something like this be OK?
+>
+> [ Note, talking with Thomas Gleixner, we agreed that we are changing the
+>   name to: time_shutdown_sync() and timer_shutdown() (no wait version).
+>   I'll be posting new patches soon. ]
+>
+> -- Steve
+>
+> diff --git a/include/net/sock.h b/include/net/sock.h
+> index 22f8bab583dd..0ef58697d4e5 100644
+> --- a/include/net/sock.h
+> +++ b/include/net/sock.h
+> @@ -2439,6 +2439,8 @@ void sk_stop_timer(struct sock *sk, struct timer_list *timer);
+>
+>  void sk_stop_timer_sync(struct sock *sk, struct timer_list *timer);
+>
+> +void sk_shutdown_timer(struct sock *sk, struct timer_list *timer);
+> +
+>  int __sk_queue_drop_skb(struct sock *sk, struct sk_buff_head *sk_queue,
+>                         struct sk_buff *skb, unsigned int flags,
+>                         void (*destructor)(struct sock *sk,
+> diff --git a/net/core/sock.c b/net/core/sock.c
+> index a3ba0358c77c..82124862b594 100644
+> --- a/net/core/sock.c
+> +++ b/net/core/sock.c
+> @@ -3357,6 +3357,13 @@ void sk_stop_timer_sync(struct sock *sk, struct timer_list *timer)
+>  }
+>  EXPORT_SYMBOL(sk_stop_timer_sync);
+>
+> +void sk_shutdown_timer(struct sock *sk, struct timer_list* timer)
+> +{
+> +       if (timer_shutdown(timer))
+> +               __sock_put(sk);
+> +}
+> +EXPORT_SYMBOL(sk_shutdown_timer);
+> +
+>  void sock_init_data(struct socket *sock, struct sock *sk)
+>  {
+>         sk_init_common(sk);
+> diff --git a/net/ipv4/inet_connection_sock.c b/net/ipv4/inet_connection_sock.c
+> index 5e70228c5ae9..71f398f51958 100644
+> --- a/net/ipv4/inet_connection_sock.c
+> +++ b/net/ipv4/inet_connection_sock.c
+> @@ -722,15 +722,15 @@ void inet_csk_clear_xmit_timers(struct sock *sk)
+>
+>         icsk->icsk_pending = icsk->icsk_ack.pending = 0;
+>
+> -       sk_stop_timer(sk, &icsk->icsk_retransmit_timer);
+> -       sk_stop_timer(sk, &icsk->icsk_delack_timer);
+> -       sk_stop_timer(sk, &sk->sk_timer);
+> +       sk_shutdown_timer(sk, &icsk->icsk_retransmit_timer);
+> +       sk_shutdown_timer(sk, &icsk->icsk_delack_timer);
+> +       sk_shutdown_timer(sk, &sk->sk_timer);
+>  }
+>  EXPORT_SYMBOL(inet_csk_clear_xmit_timers);
 
-Live renaming was added as a failover in the past, and there has been no
-arising issues of user space breaking. Furthermore, it seems that this
-flag was added because in the past, IOCTL was used for renaming, which
-would not notify the user space. Nowadays, it appears that the user
-space receives notifications regardless of the state of the network
-device (e.g. rtnetlink_event()). The listeners for NETDEV_CHANGENAME
-also do not strictly ensure that the netdev is up or not.
+ inet_csk_clear_xmit_timers() can be called multiple times during TCP
+socket lifetime.
 
-Hence, this patch seeks to remove the live renaming flag and checks due
-to the aforementioned reasons.
+(See tcp_disconnect(), which can be followed by another connect() ... and loop)
 
-The changes are of following:
-- Remove IFF_LIVE_RENAME_OK flag declarations
-- Remove check in dev_change_name that checks whether device is up and
-if IFF_LIVE_RENAME_OK is set by the network device's priv_flags
-- Remove references of IFF_LIVE_RENAME_OK in the failover module
+Maybe add a second parameter, or add a new
+inet_csk_shutdown_xmit_timers() only called from tcp_v4_destroy_sock() ?
 
-Signed-off-by: Andy Ren <andy.ren@getcruise.com>
----
- include/linux/netdevice.h |  3 ---
- net/core/dev.c            | 16 ----------------
- net/core/failover.c       |  6 +++---
- 3 files changed, 3 insertions(+), 22 deletions(-)
+>
+>  void inet_csk_delete_keepalive_timer(struct sock *sk)
+>  {
+> -       sk_stop_timer(sk, &sk->sk_timer);
+> +       sk_shutdown_timer(sk, &sk->sk_timer);
 
-diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
-index 4b5052db978f..e2ff45aa17f5 100644
---- a/include/linux/netdevice.h
-+++ b/include/linux/netdevice.h
-@@ -1655,7 +1655,6 @@ struct net_device_ops {
-  * @IFF_FAILOVER: device is a failover master device
-  * @IFF_FAILOVER_SLAVE: device is lower dev of a failover master device
-  * @IFF_L3MDEV_RX_HANDLER: only invoke the rx handler of L3 master device
-- * @IFF_LIVE_RENAME_OK: rename is allowed while device is up and running
-  * @IFF_TX_SKB_NO_LINEAR: device/driver is capable of xmitting frames with
-  *	skb_headlen(skb) == 0 (data starts from frag0)
-  * @IFF_CHANGE_PROTO_DOWN: device supports setting carrier via IFLA_PROTO_DOWN
-@@ -1691,7 +1690,6 @@ enum netdev_priv_flags {
- 	IFF_FAILOVER			= 1<<27,
- 	IFF_FAILOVER_SLAVE		= 1<<28,
- 	IFF_L3MDEV_RX_HANDLER		= 1<<29,
--	IFF_LIVE_RENAME_OK		= 1<<30,
- 	IFF_TX_SKB_NO_LINEAR		= BIT_ULL(31),
- 	IFF_CHANGE_PROTO_DOWN		= BIT_ULL(32),
- };
-@@ -1726,7 +1724,6 @@ enum netdev_priv_flags {
- #define IFF_FAILOVER			IFF_FAILOVER
- #define IFF_FAILOVER_SLAVE		IFF_FAILOVER_SLAVE
- #define IFF_L3MDEV_RX_HANDLER		IFF_L3MDEV_RX_HANDLER
--#define IFF_LIVE_RENAME_OK		IFF_LIVE_RENAME_OK
- #define IFF_TX_SKB_NO_LINEAR		IFF_TX_SKB_NO_LINEAR
- 
- /* Specifies the type of the struct net_device::ml_priv pointer */
-diff --git a/net/core/dev.c b/net/core/dev.c
-index 2e4f1c97b59e..a2d650ae15d7 100644
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -1163,22 +1163,6 @@ int dev_change_name(struct net_device *dev, const char *newname)
- 
- 	net = dev_net(dev);
- 
--	/* Some auto-enslaved devices e.g. failover slaves are
--	 * special, as userspace might rename the device after
--	 * the interface had been brought up and running since
--	 * the point kernel initiated auto-enslavement. Allow
--	 * live name change even when these slave devices are
--	 * up and running.
--	 *
--	 * Typically, users of these auto-enslaving devices
--	 * don't actually care about slave name change, as
--	 * they are supposed to operate on master interface
--	 * directly.
--	 */
--	if (dev->flags & IFF_UP &&
--	    likely(!(dev->priv_flags & IFF_LIVE_RENAME_OK)))
--		return -EBUSY;
--
- 	down_write(&devnet_rename_sem);
- 
- 	if (strncmp(newname, dev->name, IFNAMSIZ) == 0) {
-diff --git a/net/core/failover.c b/net/core/failover.c
-index 864d2d83eff4..655411c4ca51 100644
---- a/net/core/failover.c
-+++ b/net/core/failover.c
-@@ -80,14 +80,14 @@ static int failover_slave_register(struct net_device *slave_dev)
- 		goto err_upper_link;
- 	}
- 
--	slave_dev->priv_flags |= (IFF_FAILOVER_SLAVE | IFF_LIVE_RENAME_OK);
-+	slave_dev->priv_flags |= IFF_FAILOVER_SLAVE;
- 
- 	if (fops && fops->slave_register &&
- 	    !fops->slave_register(slave_dev, failover_dev))
- 		return NOTIFY_OK;
- 
- 	netdev_upper_dev_unlink(slave_dev, failover_dev);
--	slave_dev->priv_flags &= ~(IFF_FAILOVER_SLAVE | IFF_LIVE_RENAME_OK);
-+	slave_dev->priv_flags &= ~IFF_FAILOVER_SLAVE;
- err_upper_link:
- 	netdev_rx_handler_unregister(slave_dev);
- done:
-@@ -121,7 +121,7 @@ int failover_slave_unregister(struct net_device *slave_dev)
- 
- 	netdev_rx_handler_unregister(slave_dev);
- 	netdev_upper_dev_unlink(slave_dev, failover_dev);
--	slave_dev->priv_flags &= ~(IFF_FAILOVER_SLAVE | IFF_LIVE_RENAME_OK);
-+	slave_dev->priv_flags &= ~IFF_FAILOVER_SLAVE;
- 
- 	if (fops && fops->slave_unregister &&
- 	    !fops->slave_unregister(slave_dev, failover_dev))
--- 
-2.38.1
+SO_KEEPALIVE can be called multiple times in a TCP socket lifetime,
+on/off/on/off/...
 
+I suggest leaving sk_stop_timer() here.
+
+Eventually  inet_csk_clear_xmit_timers( sk, destroy=true) (or
+inet_csk_shutdown_xmit_timers(())
+   will  be called before the socket is destroyed.
