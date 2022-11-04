@@ -2,254 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45D1761A32B
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 22:19:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0821B61A32F
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 22:20:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229889AbiKDVTp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 17:19:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35000 "EHLO
+        id S229704AbiKDVUI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 17:20:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230116AbiKDVTi (ORCPT
+        with ESMTP id S229932AbiKDVUC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 17:19:38 -0400
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 566C3635F
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 14:19:36 -0700 (PDT)
-Received: by mail-pg1-x529.google.com with SMTP id 78so5389744pgb.13
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 14:19:36 -0700 (PDT)
+        Fri, 4 Nov 2022 17:20:02 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1424D31ED2
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 14:19:49 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id l8so8086960ljh.13
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 14:19:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Q9ugyqOccmZowmlQRWmpT6Mn2YOA1KD6X2k+Tf7TPbA=;
-        b=RdPxBPZxRTrKi5VyUPbTa4PsV8EOmVSMHgdDTAto2Y3fDrK1yMJfnyHZGOAvZE51hC
-         MUTtzoVHHX3zY/UFvFQlLPFajO7Vk3UMWasOYjOunInXxRe9GMgvy1prXwrGnsWHLQTq
-         MkB4hXkPdaYmZNJhW5Z57kkp8cXynosPMw6g3gXtm3aJ5VZv/vU0u99UNnhtOR7mBQ/S
-         QL/4AUeWJ9N/SNvmKiWOBa8KZXdzPs5PSg0nheKWUsEYBsob3rOduKBZLw054Y3uq3k4
-         U296HEgVheMABieNv5oHp9dnkof3mwu5OIEwrSvKx9gbTi9SI4ERJkf3JYtYBgDx3FuJ
-         lMUA==
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:user-agent:from:references
+         :in-reply-to:mime-version:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7Bco6GFNVU1HGevRBeodLZeLGvp/i5iMrjxMWqPFArI=;
+        b=GL5H6SwIQ7SnPyD4oON4xBfjTDtVrCa9/Xki8VGFJD83uINEgUiij95xbgnMm86cqN
+         RDxCQFTbMYUGgzg6e1v/y4/nXYkFAQEJ1HKsM9mWwUwjdpv/PWNKkwHP/hYD6RVpTIQL
+         KNZiXlL5YoppusYjW8TIwl2fsbKq5X7G45NWs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        h=cc:to:subject:message-id:date:user-agent:from:references
+         :in-reply-to:mime-version:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Q9ugyqOccmZowmlQRWmpT6Mn2YOA1KD6X2k+Tf7TPbA=;
-        b=SbfTdo5Nzp4e7jWYsGwBdnZyqFlVWpeIDJIALVeS1KCSr0yNuL/YGjLC6vFSwobJjM
-         LsC7w9wD9Z8UtEQriIuvGCKGJvGDO3GzvqZVbcy4VDveCY2mgmb6lWjP7YSJzp5atI2J
-         ZSExaBVCBJNgB32/fFTxnaNEUnyJFdHaizr90PVgyXue4gpk2JHro5SDFF/QspFLR9U8
-         duxEi5vZ1g/xho+ChOyQgE5zcN2i5lGiVoGBawuUzRDWAn24glzRfHMsHM4tLigLaE9B
-         +WE+ZbgrMVPqY9sCM77NmF0VPF+/nx6KjK+U8AaPuozRLVXyOdCrGbg0Xqt4JNutUBoO
-         huXA==
-X-Gm-Message-State: ACrzQf31Dmf8jlemU7nhWCSSHWHGFJMd1tuRE0BTHP4QfQzE8wA4M4cj
-        27jeJmmVaEMzz5F6HpE6IUmG2Q==
-X-Google-Smtp-Source: AMsMyM5HLN09MZ7XXfHooCD3zs8msfwo0CBHOrCrZEPWc/5ODnQb86suM3i3C9TKpVcD/J1sy4dlFA==
-X-Received: by 2002:a63:215f:0:b0:46f:c464:a054 with SMTP id s31-20020a63215f000000b0046fc464a054mr23293449pgm.420.1667596775547;
-        Fri, 04 Nov 2022 14:19:35 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id d10-20020a621d0a000000b00562664d5027sm77216pfd.61.2022.11.04.14.19.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Nov 2022 14:19:35 -0700 (PDT)
-Date:   Fri, 4 Nov 2022 21:19:31 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Chao Peng <chao.p.peng@linux.intel.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>, tabba@google.com,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com
-Subject: Re: [PATCH v9 5/8] KVM: Register/unregister the guest private memory
- regions
-Message-ID: <Y2WB48kD0J4VGynX@google.com>
-References: <20221025151344.3784230-1-chao.p.peng@linux.intel.com>
- <20221025151344.3784230-6-chao.p.peng@linux.intel.com>
- <Y2RJFWplouV2iF5E@google.com>
- <20221104082843.GA4142342@chaop.bj.intel.com>
+        bh=7Bco6GFNVU1HGevRBeodLZeLGvp/i5iMrjxMWqPFArI=;
+        b=Pg3phrH6nSiPn/NYK0eQpsixHaISJTcQxncl+CpMxikQzuA7bK57JMsumwmVzY56iS
+         2UMfhlbF+rv9MOQLpHiBNZzVd9w7+pXTaYBNeH5BjwHaEtFq+uuJ9Mkyp6r2yomIBC2F
+         XIGao5TLsNio8FiGA4/EEUyWJ0ChDB3NykotBGtq8eyAAt81om6xUM6Dyf2sF6IZL/HC
+         iVK6ukTTSFPpmHMPNqhlwJaMygOwshKpsfBhoSnLM/aCUqhcy88aT0VJv3OdLRLVs2Rd
+         YumnNL9Zz5JKlEqIgakPF2bLOsdv80AvObmHu1GBuIwY5D2ohXcuG+JrceHOZj+fo37s
+         pSCQ==
+X-Gm-Message-State: ACrzQf1R7lJmflBvYUs5l487Eb3eTskSn+yblUiwqGYL0OvCoVpMKVGp
+        eJTaDo2mAoX+ebV2li3dV3Gw1eP4eBVMxA7xScJPEA==
+X-Google-Smtp-Source: AMsMyM6z0i1Sv3zsd0Jq/pbof/zICrtZpxky+Y+f3KH0VlUri2O47At8vk0jaz4ZKam20cq9Bb5MAyac1cc20XSL2Nk=
+X-Received: by 2002:a2e:8810:0:b0:277:4819:a6c3 with SMTP id
+ x16-20020a2e8810000000b002774819a6c3mr12733700ljh.4.1667596788296; Fri, 04
+ Nov 2022 14:19:48 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Fri, 4 Nov 2022 14:19:47 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221104082843.GA4142342@chaop.bj.intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221104064055.2.I49b25b9bda9430fc7ea21e5a708ca5a0aced2798@changeid>
+References: <20221104064055.1.I00a0e4564a25489e85328ec41636497775627564@changeid>
+ <20221104064055.2.I49b25b9bda9430fc7ea21e5a708ca5a0aced2798@changeid>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Fri, 4 Nov 2022 14:19:47 -0700
+Message-ID: <CAE-0n53FLz+4XROL7t5Vk1pEgvAX4tJYO4UK8rdCQUW0Pq78jg@mail.gmail.com>
+Subject: Re: [PATCH 2/3] clk: qcom: lpass-sc7180: Fix pm_runtime usage
+To:     Bjorn Andersson <andersson@kernel.org>,
+        Douglas Anderson <dianders@chromium.org>
+Cc:     Taniya Das <quic_tdas@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Judy Hsiao <judyhsiao@chromium.org>,
+        Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Paolo, any thoughts before I lead things further astray?
+Quoting Douglas Anderson (2022-11-04 06:56:29)
+> The sc7180 lpass clock controller's pm_runtime usage wasn't broken
+> quite as spectacularly as the sc7280's pm_runtime usage, but it was
+> still broken. Putting some printouts in at boot showed me this (with
+> serial console enabled, which makes the prints slow and thus changes
+> timing):
+>   [    3.109951] DOUG: my_pm_clk_resume, usage=1
+>   [    3.114767] DOUG: my_pm_clk_resume, usage=1
+>   [    3.664443] DOUG: my_pm_clk_suspend, usage=0
+>   [    3.897566] DOUG: my_pm_clk_suspend, usage=0
+>   [    3.910137] DOUG: my_pm_clk_resume, usage=1
+>   [    3.923217] DOUG: my_pm_clk_resume, usage=0
+>   [    4.440116] DOUG: my_pm_clk_suspend, usage=-1
+>   [    4.444982] DOUG: my_pm_clk_suspend, usage=0
+>   [   14.170501] DOUG: my_pm_clk_resume, usage=1
+>   [   14.176245] DOUG: my_pm_clk_resume, usage=0
+>
+> ...or this w/out serial console:
+>   [    0.556139] DOUG: my_pm_clk_resume, usage=1
+>   [    0.556279] DOUG: my_pm_clk_resume, usage=1
+>   [    1.058422] DOUG: my_pm_clk_suspend, usage=-1
+>   [    1.058464] DOUG: my_pm_clk_suspend, usage=0
+>   [    1.186250] DOUG: my_pm_clk_resume, usage=1
+>   [    1.186292] DOUG: my_pm_clk_resume, usage=0
+>   [    1.731536] DOUG: my_pm_clk_suspend, usage=-1
+>   [    1.731557] DOUG: my_pm_clk_suspend, usage=0
+>   [   10.288910] DOUG: my_pm_clk_resume, usage=1
+>   [   10.289496] DOUG: my_pm_clk_resume, usage=0
+>
+> It seems to be doing roughly the right sequence of calls, but just
+> like with sc7280 this is more by luck than anything. Having a usage of
+> -1 is just not OK.
+>
+> Let's fix this like we did with sc7280.
 
-On Fri, Nov 04, 2022, Chao Peng wrote:
-> On Thu, Nov 03, 2022 at 11:04:53PM +0000, Sean Christopherson wrote:
-> > On Tue, Oct 25, 2022, Chao Peng wrote:
-> > > @@ -4708,6 +4802,24 @@ static long kvm_vm_ioctl(struct file *filp,
-> > >  		r = kvm_vm_ioctl_set_memory_region(kvm, &mem);
-> > >  		break;
-> > >  	}
-> > > +#ifdef CONFIG_KVM_GENERIC_PRIVATE_MEM
-> > > +	case KVM_MEMORY_ENCRYPT_REG_REGION:
-> > > +	case KVM_MEMORY_ENCRYPT_UNREG_REGION: {
-> > 
-> > I'm having second thoughts about usurping KVM_MEMORY_ENCRYPT_(UN)REG_REGION.  Aside
-> > from the fact that restricted/protected memory may not be encrypted, there are
-> > other potential use cases for per-page memory attributes[*], e.g. to make memory
-> > read-only (or no-exec, or exec-only, etc...) without having to modify memslots.
-> > 
-> > Any paravirt use case where the attributes of a page are effectively dictated by
-> > the guest is going to run into the exact same performance problems with memslots,
-> > which isn't suprising in hindsight since shared vs. private is really just an
-> > attribute, albeit with extra special semantics.
-> > 
-> > And if we go with a brand new ioctl(), maybe someday in the very distant future
-> > we can deprecate and delete KVM_MEMORY_ENCRYPT_(UN)REG_REGION.
-> > 
-> > Switching to a new ioctl() should be a minor change, i.e. shouldn't throw too big
-> > of a wrench into things.
-> > 
-> > Something like:
-> > 
-> >   KVM_SET_MEMORY_ATTRIBUTES
-> > 
-> >   struct kvm_memory_attributes {
-> > 	__u64 address;
-> > 	__u64 size;
-> > 	__u64 flags;
+Any Fixes tag?
 
-Oh, this is half-baked.  I lost track of which flags were which.  What I intended
-was a separate, initially-unused flags, e.g.
+>
+> Signed-off-by: Douglas Anderson <dianders@chromium.org>
+> ---
 
- struct kvm_memory_attributes {
-	__u64 address;
-	__u64 size;
-	__u64 attributes;
-	__u64 flags;
-  }
-
-so that KVM can tweak behavior and/or extend the effective size of the struct.
-
-> I like the idea of adding a new ioctl(). But putting all attributes into
-> a flags in uAPI sounds not good to me, e.g. forcing userspace to set all
-> attributes in one call can cause pain for userspace, probably for KVM
-> implementation as well. For private<->shared memory conversion, we
-> actually only care the KVM_MEM_ATTR_SHARED or KVM_MEM_ATTR_PRIVATE bit,
-
-Not necessarily, e.g. I can see pKVM wanting to convert from RW+PRIVATE => RO+SHARED
-or even RW+PRIVATE => NONE+SHARED so that the guest can't write/access the memory
-while it's accessible from the host.
-
-And if this does extend beyond shared/private, dropping from RWX=>R, i.e. dropping
-WX permissions, would also be a common operation.
-
-Hmm, typing that out makes me think that if we do end up supporting other "attributes",
-i.e. protections, we should go straight to full RWX protections instead of doing
-things piecemeal, i.e. add individual protections instead of combinations like
-NO_EXEC and READ_ONLY.  The protections would have to be inverted for backwards
-compatibility, but that's easy enough to handle.  The semantics could be like
-protection keys, which also have inverted persmissions, where the final protections
-are the combination of memslot+attributes, i.e. a read-only memslot couldn't be made
-writable via attributes.
-
-E.g. userspace could do "NO_READ | NO_WRITE | NO_EXEC" to temporarily block access
-to memory without needing to delete the memslot.  KVM would need to disallow
-unsupported combinations, e.g. disallowed effective protections would be:
-
-  - W or WX [unless there's an arch that supports write-only memory]
-  - R or RW [until KVM plumbs through support for no-exec, or it's unsupported in hardware]
-  - X       [until KVM plumbs through support for exec-only, or it's unsupported in hardware]
-
-Anyways, that's all future work...
-
-> but we force userspace to set other irrelevant bits as well if use this
-> API.
-
-They aren't irrelevant though, as the memory attributes are all describing the
-allowed protections for a given page.  If there's a use case where userspace "can't"
-keep track of the attributes for whatever reason, then userspace could do a RMW
-to set/clear attributes.  Alternatively, the ioctl() could take an "operation" and
-support WRITE/OR/AND to allow setting/clearing individual flags, e.g. tweak the
-above to be: 
- 
- struct kvm_memory_attributes {
-	__u64 address;
-	__u64 size;
-	__u64 attributes;
-	__u32 operation;
-	__u32 flags;
-  }
-
-> I looked at kvm_device_attr, sounds we can do similar:
-
-The device attributes deal with isolated, arbitrary values, whereas memory attributes
-are flags, i.e. devices are 1:1 whereas memory is 1:MANY.  There is no "unset" for
-device attributes, because they aren't flags.  Device attributes vs. memory attributes
-really are two very different things that just happen to use a common name.
-
-If it helped clarify things without creating naming problems, we could even use
-PROTECTIONS instead of ATTRIBUTES.
-
->   KVM_SET_MEMORY_ATTR
-> 
->   struct kvm_memory_attr {
-> 	__u64 address;
-> 	__u64 size;
-> #define KVM_MEM_ATTR_SHARED	BIT(0)
-> #define KVM_MEM_ATTR_READONLY	BIT(1)
-> #define KVM_MEM_ATTR_NOEXEC	BIT(2)
-> 	__u32 attr;
-
-As above, letting userspace set only a single attribute would prevent setting
-(or clearing) multiple attributes in a single ioctl().
-
-> 	__u32 pad;
->   }
-> 
-> I'm not sure if we need KVM_GET_MEMORY_ATTR/KVM_HAS_MEMORY_ATTR as well,
-
-Definitely would need to communicate to userspace that various attributes are
-supported.  That doesn't necessarily require a common ioctl(), but I don't see
-any reason not to add a common helper, and adding a common helper would mean
-KVM_CAP_PRIVATE_MEM can go away.  But it should return a bitmask so that userspace
-can do a single query to get all supported attributes, e.g. KVM_SUPPORTED_MEMORY_ATTRIBUTES.  
-
-As for KVM_GET_MEMORY_ATTRIBUTES, we wouldn't necessarily have to provide such an
-API, e.g. we could hold off until someone came along with a RMW use case (as above).
-That said, debug would likely be a nightmare without KVM_GET_MEMORY_ATTRIBUTES,
-so it's probably best to add it straightway.
-
-> but sounds like we need a KVM_UNSET_MEMORY_ATTR.
-
-No need if the setter operates on all attributes.
-
-> Since we are exposing the attribute directly to userspace I also think
-> we'd better treat shared memory as the default, so even when the private
-> memory is not used, the bit can still be meaningful. So define BIT(0) as
-> KVM_MEM_ATTR_PRIVATE instead of KVM_MEM_ATTR_SHARED.
-
-Ah, right.
+Reviewed-by: Stephen Boyd <swboyd@chromium.org>
