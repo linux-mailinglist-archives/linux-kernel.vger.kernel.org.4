@@ -2,307 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D7B061A3E5
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 23:09:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC90961A3EA
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 23:09:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230011AbiKDWJG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 18:09:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36162 "EHLO
+        id S229663AbiKDWJx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 18:09:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229542AbiKDWJB (ORCPT
+        with ESMTP id S230071AbiKDWJr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 18:09:01 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CE7A24BFE
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 15:09:00 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id io19so6095619plb.8
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 15:09:00 -0700 (PDT)
+        Fri, 4 Nov 2022 18:09:47 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 802D82EF45
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 15:09:44 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id t25so16684755ejb.8
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 15:09:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=napPnSIw0O4XTTZP4wyQ6oPOXAEKNUr4s9A73CKQSGY=;
-        b=kD7U+cpuu24FxYIN5EAreZ+Lgq4/6Lmu0A/TMirFktAtEnJ6s/fxEjpZwCHASc/pe1
-         TDiNdvj+dOcC8LhggBtnkE46ljAq3pW23UkgihaSE8gBgkPhhCzFSB9VY2ZgAkHJhSEb
-         q4VCV/91gDwk1BtNNky6RFeYPBdHCUQQWAQadkKY438p0y4ZUxOJ8Zs4CnxDGpzuP7Ai
-         tFhD75PCzHmjqL6Kz7HTIuSZchB+VO8M/lRg2cDW+s5llYuLD0W2UZx57IiOMRRjqxDO
-         s+WhrkXWQzJM73VUKB+0azHenEKMKkoOzzmqLAsZ8WWi+1ieIxWFLGFNAGwTf0W/VuUU
-         fCpA==
+        d=isovalent-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=9KBg06ASwQ0kj5Ll8CLNORO/tXAtWH1/P4+spInuBjU=;
+        b=6wG3u3hZVFCLp3K2T2Sf/LAU1DSBeN+nC0BGK9arw6vilmy9jI48rpAMcDoCZpwFKG
+         QpolMLRk+09tudrxWMG2TE2c7/b5KNs97QRcf0ry42QDBSAbC9J6askQdS0xNj1LjsU0
+         ccJ1m2byPOfKcgqa5CBqRuYVt0QTgrd3Z4HRcZckMcck45/mLoNpTISwLEJ2dAWw0ypt
+         NWBRISB89SQ4S9QG61smvRzvIdZYXLsAssVf/IMRe1gBRxSr6Pf4fFi9W177ptwXDOTQ
+         NiOLgd/XsSZFsnEekAt3ShFwhLgA2Zo1k5VJj655qT5UiiSSeF4xInIo3CB6jdkq9tNn
+         pmPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=napPnSIw0O4XTTZP4wyQ6oPOXAEKNUr4s9A73CKQSGY=;
-        b=ugO3Un3vgeF0qeRbb6bfVI5yF9zPLG1u1DUCV+JVfl0Lv32M1lKoQqjU0K0N8bk7Ok
-         rtpC1SIzmVPShTltVEaUEjCuyv+TDrUuBJ1Bj5unmVJ/yxxOu7DbnT6rS91yhAgGqr8v
-         /cZvIeJu6Hps50trtfDEUVqp2wOqR6DGnsD8y1Jj48xJjKfULox0qarTEScRV+To039K
-         rblSr6tbpFNVUp7TCt2ZnxUg+rjPAO6mTp4+u6gXg3XSyK7daozk7AgKmWfLJWaKk3Wb
-         yX4jwTXd0b2/PLQYJ2Nu0mIoYrsAmjyKkGIypHE5Y93/+nMLYEvdmd/Jy2AnZfWjvOsZ
-         li8A==
-X-Gm-Message-State: ACrzQf06aOQrVK+I2o1NTkgjEqmwFSWALDg2oXUzxzhzJKjKHRB46Aly
-        dUQDsVlhIaxShC/1WgMISmLHdA==
-X-Google-Smtp-Source: AMsMyM6oA5ahyPe5S23IV6l2y4Cn84YgPaoYV2u7BrPePhrp2+b/+qkXCRldxNDh4Izp85AArod68g==
-X-Received: by 2002:a17:902:d4c4:b0:186:acb0:e93c with SMTP id o4-20020a170902d4c400b00186acb0e93cmr380593plg.141.1667599739868;
-        Fri, 04 Nov 2022 15:08:59 -0700 (PDT)
-Received: from [192.168.50.116] (c-24-4-73-83.hsd1.ca.comcast.net. [24.4.73.83])
-        by smtp.gmail.com with ESMTPSA id m21-20020a170902bb9500b00186e2123506sm200448pls.300.2022.11.04.15.08.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 04 Nov 2022 15:08:59 -0700 (PDT)
-Message-ID: <013150d0-c2cd-847a-6e6d-3292035b208d@rivosinc.com>
-Date:   Fri, 4 Nov 2022 15:08:56 -0700
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9KBg06ASwQ0kj5Ll8CLNORO/tXAtWH1/P4+spInuBjU=;
+        b=ZoVYGUs6niP7E2L+k/PLCJks5WleYwyluJoXr1OS6m20Hw+lvM0wIpL02zFQi9TPn5
+         W0EEiyarUkAFIOvSZINpOSvgdYcKti7nkxEpZ407zlC60dajopnqQ1iEOwmHJuiRIv33
+         nYOTNz/zHNvmbqebl1ClXVpXA4CbbRkzADWaQojYuNK25By6ay3VF1lpfwYBhIQ3g0HH
+         FP1mQyp1MPlNH4BWz5WqHfzG4kYML7LD99+Y2Js9hGGBqUfQxNSv+FrXYe5FocDpZzcB
+         Qc02R0qsDFyt+aihY66oMtDcz/F/CdbCkFeTbdZRzaF4LYISt9wdUzkE9AbwW9mxhJON
+         SRWA==
+X-Gm-Message-State: ACrzQf2SaR9qlvh8JjcCQP47sLAAyPg+YpDF5UQubeetScCcd6ZH2gXe
+        K9DrFZr2yyDg3DA7DTxphIlSnMF83qZKN+dXhGj8jQ==
+X-Google-Smtp-Source: AMsMyM6zLjfIm1LJZmdJmX3F1xuORskdHrN+sT3pubY7G2c3YSxmJcX5MMdRtWEU53NiZRQBAb55waQpcSVm/whAGAo=
+X-Received: by 2002:a17:907:6e9e:b0:78c:5533:4158 with SMTP id
+ sh30-20020a1709076e9e00b0078c55334158mr34265173ejc.417.1667599783015; Fri, 04
+ Nov 2022 15:09:43 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v12 08/17] riscv: Add task switch support for vector
-Content-Language: en-US
-To:     Chris Stillson <stillson@rivosinc.com>
-Cc:     Greentime Hu <greentime.hu@sifive.com>,
-        Andrew Waterman <andrew@sifive.com>,
-        Nick Knight <nick.knight@sifive.com>,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Vincent Chen <vincent.chen@sifive.com>,
-        Ruinland Tsai <ruinland.tsai@sifive.com>,
-        kernel test robot <lkp@intel.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Kees Cook <keescook@chromium.org>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Oleg Nesterov <oleg@redhat.com>, Guo Ren <guoren@kernel.org>,
-        Heinrich Schuchardt <heinrich.schuchardt@canonical.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        lkml <linux-kernel@vger.kernel.org>, linux-mm@kvack.org,
-        Andy Chiu <andy.chiu@sifive.com>
-References: <20220921214439.1491510-1-stillson@rivosinc.com>
- <20220921214439.1491510-8-stillson@rivosinc.com>
-From:   Vineet Gupta <vineetg@rivosinc.com>
-In-Reply-To: <20220921214439.1491510-8-stillson@rivosinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20221103205010.3266865-1-joe@isovalent.com> <101ab00c-5fa7-c3ee-63bd-f235e7c4d398@gmail.com>
+In-Reply-To: <101ab00c-5fa7-c3ee-63bd-f235e7c4d398@gmail.com>
+From:   Joe Stringer <joe@isovalent.com>
+Date:   Fri, 4 Nov 2022 15:09:32 -0700
+Message-ID: <CADa=RyxodgJ+Wa3tiWxTntZoy7eSm_UkuzDBx9tCN=s_QnsDOw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2] docs/bpf: Add LRU internals description and graph
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     bpf@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ast@kernel.org, corbet@lwn.net,
+        martin.lau@linux.dev
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/21/22 14:43, Chris Stillson wrote:
-> From: Greentime Hu <greentime.hu@sifive.com>
-> 
-> This patch adds task switch support for vector. It supports partial lazy
-> save and restore mechanism. It also supports all lengths of vlen.
-> 
-> [guoren@linux.alibaba.com: First available porting to support vector
-> context switching]
-> [nick.knight@sifive.com: Rewrite vector.S to support dynamic vlen, xlen and
-> code refine]
-> [vincent.chen@sifive.com: Fix the might_sleep issue in vstate_save,
-> vstate_restore]
-> [andrew@sifive.com: Optimize task switch codes of vector]
-> [ruinland.tsai@sifive.com: Fix the arch_release_task_struct free wrong
-> datap issue]
-> 
-> Suggested-by: Andrew Waterman <andrew@sifive.com>
-> Co-developed-by: Nick Knight <nick.knight@sifive.com>
-> Signed-off-by: Nick Knight <nick.knight@sifive.com>
-> Co-developed-by: Guo Ren <guoren@linux.alibaba.com>
-> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> Co-developed-by: Vincent Chen <vincent.chen@sifive.com>
-> Signed-off-by: Vincent Chen <vincent.chen@sifive.com>
-> Co-developed-by: Ruinland Tsai <ruinland.tsai@sifive.com>
-> Signed-off-by: Ruinland Tsai <ruinland.tsai@sifive.com>
-> Signed-off-by: Greentime Hu <greentime.hu@sifive.com>
-> Reported-by: kernel test robot <lkp@intel.com>
-> Reported-by: kernel test robot <lkp@intel.com>
-> ---
->   arch/riscv/include/asm/switch_to.h | 66 ++++++++++++++++++++++++++++++
->   arch/riscv/kernel/Makefile         |  1 +
->   arch/riscv/kernel/process.c        | 43 +++++++++++++++++++
->   3 files changed, 110 insertions(+)
-> 
-> diff --git a/arch/riscv/include/asm/switch_to.h b/arch/riscv/include/asm/switch_to.h
-> index df1aa589b7fd..527951c033d4 100644
-> --- a/arch/riscv/include/asm/switch_to.h
-> +++ b/arch/riscv/include/asm/switch_to.h
-> @@ -7,11 +7,13 @@
->   #define _ASM_RISCV_SWITCH_TO_H
->   
->   #include <linux/jump_label.h>
-> +#include <linux/slab.h>
->   #include <linux/sched/task_stack.h>
->   #include <asm/hwcap.h>
->   #include <asm/processor.h>
->   #include <asm/ptrace.h>
->   #include <asm/csr.h>
-> +#include <asm/asm-offsets.h>
->   
->   #ifdef CONFIG_FPU
->   extern void __fstate_save(struct task_struct *save_to);
-> @@ -68,6 +70,68 @@ static __always_inline bool has_fpu(void) { return false; }
->   #define __switch_to_fpu(__prev, __next) do { } while (0)
->   #endif
->   
-> +#ifdef CONFIG_VECTOR
-> +extern struct static_key_false cpu_hwcap_vector;
-> +static __always_inline bool has_vector(void)
-> +{
-> +	return static_branch_likely(&cpu_hwcap_vector);
-> +}
-> +extern unsigned long riscv_vsize;
-> +extern void __vstate_save(struct __riscv_v_state *save_to, void *datap);
-> +extern void __vstate_restore(struct __riscv_v_state *restore_from, void *datap);
-> +
-> +static inline void __vstate_clean(struct pt_regs *regs)
-> +{
-> +	regs->status = (regs->status & ~(SR_VS)) | SR_VS_CLEAN;
-> +}
-> +
-> +static inline void vstate_off(struct task_struct *task,
-> +			      struct pt_regs *regs)
-> +{
-> +	regs->status = (regs->status & ~SR_VS) | SR_VS_OFF;
-> +}
-> +
-> +static inline void vstate_save(struct task_struct *task,
-> +			       struct pt_regs *regs)
-> +{
-> +	if ((regs->status & SR_VS) == SR_VS_DIRTY) {
-> +		struct __riscv_v_state *vstate = &(task->thread.vstate);
-> +
-> +		__vstate_save(vstate, vstate->datap);
-> +		__vstate_clean(regs);
-> +	}
-> +}
-> +
-> +static inline void vstate_restore(struct task_struct *task,
-> +				  struct pt_regs *regs)
-> +{
-> +	if ((regs->status & SR_VS) != SR_VS_OFF) {
-> +		struct __riscv_v_state *vstate = &(task->thread.vstate);
-> +
-> +		__vstate_restore(vstate, vstate->datap);
-> +		__vstate_clean(regs);
-> +	}
-> +}
-> +
-> +static inline void __switch_to_vector(struct task_struct *prev,
-> +				   struct task_struct *next)
-> +{
-> +	struct pt_regs *regs;
-> +
-> +	regs = task_pt_regs(prev);
-> +	if (unlikely(regs->status & SR_SD))
-> +		vstate_save(prev, regs);
-> +	vstate_restore(next, task_pt_regs(next));
-> +}
-> +
-> +#else
-> +static __always_inline bool has_vector(void) { return false; }
-> +#define riscv_vsize (0)
-> +#define vstate_save(task, regs) do { } while (0)
-> +#define vstate_restore(task, regs) do { } while (0)
-> +#define __switch_to_vector(__prev, __next) do { } while (0)
-> +#endif
+Resending, this time without HTML.
 
-All of this needs to be moved into vector.h for better containment.
-I would also wire in struct __riscv_v_state vstate in struct 
-thread_struct in this patch.
+On Fri, Nov 4, 2022 at 2:31 AM Bagas Sanjaya <bagasdotme@gmail.com> wrote:
+>
+> On 11/4/22 03:50, Joe Stringer wrote:
+> > +An LRU hashmap type consists of two properties: Firstly, it is a hash map and
+> > +hence is indexable by key for constant time lookups. Secondly, when at map
+> > +capacity, map updates will trigger eviction of old entries based on the age of
+> > +the elements in a set of lists. Each of these properties may be either global
+> > +or per-CPU, depending on the map type and flags used to create the map:
+> > +
+> > +.. flat-table:: Comparison of map properties by map type (x-axis) and flags
+> > +   (y-axis)
+> > +
+> > +   * -
+> > +     - ``BPF_MAP_TYPE_LRU_HASH``
+> > +     - ``BPF_MAP_TYPE_LRU_PERCPU_HASH``
+> > +
+> > +   * - ``BPF_NO_COMMON_LRU``
+> > +     - Per-CPU LRU, global map
+> > +     - Per-CPU LRU, per-cpu map
+> > +
+> > +   * - ``!BPF_NO_COMMON_LRU``
+> > +     - Global LRU, global map
+> > +     - Global LRU, per-cpu map
+> > +
+>
+> Shouldn't the table be written in reST table syntax instead?
 
+This table follows the syntax outlined in
+https://docs.kernel.org/doc-guide/sphinx.html#list-tables . Is that
+document not up to date?
+I'm happy to do this, but several of the diagram boxes will reference
+terms like rotation, shrinking etc without explaining what they are. I
+think it's a net negative to readability if this text is not included
+with the diagram. If you think the commit formatting is a bit over the
+top, I could maybe just remove the decoration and embed the content
+directly in the doc? On my first attempt at sketching this up, it just
+felt a bit weird for me to submit that text directly if Martin was the
+author of the text. But I could figure something out for that if
+that's the preferred approach.
 
-> diff --git a/arch/riscv/kernel/Makefile b/arch/riscv/kernel/Makefile
-> index 33bb60a354cd..35752fb6d145 100644
-> --- a/arch/riscv/kernel/Makefile
-> +++ b/arch/riscv/kernel/Makefile
-> @@ -55,6 +55,7 @@ obj-$(CONFIG_MMU) += vdso.o vdso/
->   
->   obj-$(CONFIG_RISCV_M_MODE)	+= traps_misaligned.o
->   obj-$(CONFIG_FPU)		+= fpu.o
-> +obj-$(CONFIG_VECTOR)		+= vector.o
+> > +Notably, there are various steps that the update algorithm attempts in order to
+> > +enforce the LRU property which have increasing impacts on other CPUs involved
+> > +in the operations:
+> > +
+> > +- Attempt to use CPU-local state to batch operations
+> > +- Attempt to fetch free nodes from global lists
+> > +- Attempt to pull any node from a global list and remove it from the hashmap
+> > +- Attempt to pull any node from any CPU's list and remove it from the hashmap
+> > +
+>
+> Better say "... other CPUs involved in the following operation attempts:"
 
-This needs to go into last patch which adds Kconfig/Makefile enabling.
+Will fix, thanks.
 
-> +
-> +	if (has_vector()) {
+> > +Even if an LRU node may be acquired, maps of type ``BPF_MAP_TYPE_LRU_HASH``
+> > +may fail to insert the entry into the map if other CPUs are heavily contending
+> > +on the global hashmap lock.
+> > +
+> > +This algorithm is described visually in the following diagram:
+> > +
+> > +.. kernel-figure::  map_lru_hash_update.dot
+> > +   :alt:    Diagram outlining the LRU eviction steps taken during map update
+> > +
+> > +   LRU hash eviction during map update for ``BPF_MAP_TYPE_LRU_HASH`` and
+> > +   variants
+> > +
+> <snipped>...
+> > +
+> > +The dot file source for the above diagram is uses internal kernel function
+> > +names for the node names in order to make the corresponding logic easier to
+> > +find. See ``Documentation/bpf/map_lru_hash_update.dot`` for more details.
+>
+> Since it references the same figure, just say "See the figure above for more
+> details".
 
-Would it make sense to add IS_ENABLED(CONFIG_VECTOR) inside this helper 
-- would help compiler remove the codegen completely for !VECTOR but 
-still having some build test coverage. Anyhow this is minor point and 
-can be added later.
+The figure is rendered visually in the docs without the corresponding
+node names, so developers would need to look at either the dot source
+or maybe the SVG source though that's arguably a little less readable.
+The suggested phrasing to see the figure doesn't sound very useful to
+me since the simple reader's interpretation would be to look directly
+at the render rather than the source. This last sentence was intended
+as a helpful way for developers to find the path to the corresponding
+document, but if you think that is too much detail then I could also
+just drop this last sentence. Thoughts?
 
-> +		struct __riscv_v_state *vstate = &(current->thread.vstate);
-> +
-> +		/* Enable vector and allocate memory for vector registers. */
-> +		if (!vstate->datap) {
-> +			vstate->datap = kzalloc(riscv_vsize, GFP_KERNEL);
-> +			if (WARN_ON(!vstate->datap))
-> +				return;
-> +		}
-> +		regs->status |= SR_VS_INITIAL;
-> +
-> +		/*
-> +		 * Restore the initial value to the vector register
-> +		 * before starting the user program.
-> +		 */
-> +		vstate_restore(current, regs);
-> +	}
-> +
-
-...
-
-> +#ifdef CONFIG_VECTOR
-> +	/* Reset vector state */
-> +	vstate_off(current, task_pt_regs(current));
-> +	memset(&current->thread.vstate, 0, RISCV_V_STATE_DATAP);
-> +#endif
-
-This doesn't check has_vector() as we want to unconditionally clean 
-memory for security reasons ?
-
-
->   }
->   
->   int arch_dup_task_struct(struct task_struct *dst, struct task_struct *src)
->   {
->   	fstate_save(src, task_pt_regs(src));
->   	*dst = *src;
-> +	dst->thread.vstate.datap = NULL;
-
-has_vector() needed here ?
-
->   
-> +void arch_release_task_struct(struct task_struct *tsk)
-> +{
-> +	/* Free the vector context of datap. */
-> +	if (has_vector() && tsk->thread.vstate.datap)
-> +		kfree(tsk->thread.vstate.datap);
-> +}
-> +
->   int copy_thread(struct task_struct *p, const struct kernel_clone_args *args)
->   {
->   	unsigned long clone_flags = args->flags;
-> @@ -175,7 +208,17 @@ int copy_thread(struct task_struct *p, const struct kernel_clone_args *args)
->   		p->thread.ra = (unsigned long)ret_from_kernel_thread;
->   		p->thread.s[0] = (unsigned long)args->fn;
->   		p->thread.s[1] = (unsigned long)args->fn_arg;
-> +		p->thread.vstate.datap = NULL;
->   	} else {
-> +		/* Allocate the datap for the user process if datap is NULL */
-> +		if (has_vector() && !p->thread.vstate.datap) {
-> +			void *datap = kzalloc(riscv_vsize, GFP_KERNEL);
-> +			/* Failed to allocate memory. */
-> +			if (!datap)
-> +				return -ENOMEM;
-> +			p->thread.vstate.datap = datap;
-> +			memset(&p->thread.vstate, 0, RISCV_V_STATE_DATAP);
-> +		}
->   		*childregs = *(current_pt_regs());
->   		if (usp) /* User fork */
->   			childregs->sp = usp;
-
+Cheers,
+Joe
