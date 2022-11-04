@@ -2,129 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F1EC619382
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 10:30:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03FE4619383
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 10:30:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229572AbiKDJaE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 05:30:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46886 "EHLO
+        id S231504AbiKDJaJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 05:30:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230194AbiKDJ3u (ORCPT
+        with ESMTP id S230460AbiKDJ3v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 05:29:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 582C529CA4;
-        Fri,  4 Nov 2022 02:29:49 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E65ED62114;
-        Fri,  4 Nov 2022 09:29:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50DCFC433C1;
-        Fri,  4 Nov 2022 09:29:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667554188;
-        bh=GvpMC/s97cy1zODznYS5BOEVcIvr4qyq43qRasSeRqs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WYbQsiIwNF1cF6QBI0aTi+8vG8quWpm81ADIzZIhiYBWKG1Ece4kXL5OLIshNohBf
-         wO5oSxVeOYvYS76vsIkHoO+BudVt4N7putwzbWkN6ULnSuaRjQE2ZrIsxhJXfjhYAh
-         bYPc1mZLfok3O/YriEm91hnClG5gwU1DePng7rLNKElK3GuEvMpIf6jQt0L0DOnUGU
-         o5x1VMLz8t4XAKAAdGKzI6LDbIxlRolpcY+PDN8c8/VuiIuH/oR4VMo5ZaFtZ0Vfe4
-         bHKXYbnemDuNvMs0HG+K1F/0SvWEhCUblmL2iAl40CmpSB/rgkAXziTOaDUsX0Q7tT
-         YJe5ZQ5YvyLmA==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1oqt10-0004ha-Gb; Fri, 04 Nov 2022 10:29:30 +0100
-Date:   Fri, 4 Nov 2022 10:29:30 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Bjorn Andersson <andersson@kernel.org>
-Cc:     Shazad Hussain <quic_shazhuss@quicinc.com>,
-        Stephen Boyd <sboyd@kernel.org>, bmasney@redhat.com,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1] clk: qcom: gcc-sc8280xp: add cxo as parent for
- gcc_ufs_ref_clkref_clk
-Message-ID: <Y2Tber39cHuOSR/W@hovoldconsulting.com>
-References: <20221030142333.31019-1-quic_shazhuss@quicinc.com>
- <20221101182402.32CE5C433C1@smtp.kernel.org>
- <Y2IZaxukERXNcPGR@hovoldconsulting.com>
- <c96304da-f57e-4926-2f3f-665c2054fb00@quicinc.com>
- <Y2Imnf1+v5j5CH9r@hovoldconsulting.com>
- <bb590bfb-07a4-97c1-e5c0-d00d840e2e11@quicinc.com>
- <Y2I3tekSAO42r0xR@hovoldconsulting.com>
- <20221103024949.lw4g2tavk7uw5xt4@builder.lan>
- <Y2OEjNAPXg5BfOxH@hovoldconsulting.com>
- <20221103152355.5sfbkpsfvjzgeixi@builder.lan>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221103152355.5sfbkpsfvjzgeixi@builder.lan>
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 4 Nov 2022 05:29:51 -0400
+Received: from mailgw.kylinos.cn (unknown [124.126.103.232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2D6B29CB0
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 02:29:49 -0700 (PDT)
+X-UUID: 32913851603f47d2be2b81d5d1fe5aed-20221104
+X-CPASD-INFO: 0578b3f4e4614849936321507eaf5c19
+        @eYVxWI9llGSRVHh9g3t_c1lkZmNiXVV_eZ-
+        Bl2OTXVmVhH5xTV5uYFV9fWtVYV9dYVR6eGxQYmBgZFJ4i3-XblBhXoZgUZB3f3dxWJNhlg==
+X-CLOUD-ID: 0578b3f4e4614849936321507eaf5c19
+X-CPASD-SUMMARY: SIP:-1,APTIP:-2.0,KEY:0.0,FROMBLOCK:1,OB:1.0,URL:-5,TVAL:172.
+        0,ESV:0.0,ECOM:-5.0,ML:0.0,FD:0.0,CUTS:464.0,IP:-2.0,MAL:-5.0,PHF:-5.0,PHC:-5
+        .0,SPF:4.0,EDMS:-5,IPLABEL:4480.0,FROMTO:0,AD:0,FFOB:1.0,CFOB:1.0,SPC:0,SIG:-
+        5,AUF:1,DUF:7527,ACD:131,DCD:131,SL:0,EISP:0,AG:0,CFC:0.342,CFSR:0.25,UAT:0,R
+        AF:0,IMG:-5.0,DFA:0,DTA:0,IBL:-2.0,ADI:-5,SBL:0,REDM:0,REIP:0,ESB:0,ATTNUM:0,
+        EAF:0,CID:-5.0,VERSION:2.3.17
+X-CPASD-ID: 32913851603f47d2be2b81d5d1fe5aed-20221104
+X-CPASD-BLOCK: 1000
+X-CPASD-STAGE: 1
+X-UUID: 32913851603f47d2be2b81d5d1fe5aed-20221104
+X-User: tanglongjun@kylinos.cn
+Received: from localhost [(116.128.244.169)] by mailgw
+        (envelope-from <tanglongjun@kylinos.cn>)
+        (Generic MTA)
+        with ESMTP id 946662046; Fri, 04 Nov 2022 17:29:53 +0800
+From:   LongJun Tang <tanglongjun@kylinos.cn>
+To:     alexander.deucher@amd.com, Rodrigo.Siqueira@amd.com,
+        harry.wentland@amd.com, aurabindo.pillai@amd.com
+Cc:     lange_tang@163.com, linux-kernel@vger.kernel.org,
+        amd-gfx@lists.freedesktop.org,
+        LongJun Tang <tanglongjun@kylinos.cn>
+Subject: [PATCH v1] drm/amd/display: Have risk for memory exhaustion
+Date:   Fri,  4 Nov 2022 17:29:31 +0800
+Message-Id: <20221104092931.20226-1-tanglongjun@kylinos.cn>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        PDS_RDNS_DYNAMIC_FP,RDNS_DYNAMIC,SPF_HELO_NONE,T_SPF_PERMERROR,
+        UNPARSEABLE_RELAY autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 03, 2022 at 10:23:55AM -0500, Bjorn Andersson wrote:
-> On Thu, Nov 03, 2022 at 10:06:20AM +0100, Johan Hovold wrote:
-> > On Wed, Nov 02, 2022 at 09:49:49PM -0500, Bjorn Andersson wrote:
+In dcn*_clock_source_create when dcn*_clk_src_construct fails allocated
+clk_src needs release. A local attack could use this to cause memory
+exhaustion.
 
-> > > In line with the downstream dts, we have GCC_UFS{,_1}_CARD_CLKREF_CLK
-> > > providing a reference clock to the two phys. Then GCC_UFS_REF_CLKREF_CLK
-> > > feeds the UFS refclock pads (both of them), which connect to the memory
-> > > device(s).
-> > > 
-> > > In other words, GCC_UFS{,_1}_CARD_CLKREF_CLK should be "ref" in
-> > > respective phy.
-> > > 
-> > > GCC_UFS_REF_CLKREF_CLK is the clock to the devices, but as we don't
-> > > represent the memory device explicitly it seems suitable to use as
-> > > "ref_clk" in the ufshc nodes - which would then match the special
-> > > handling of the "link clock" in the UFS driver.
-> > 
-> > Thanks for clearing that up. Using GCC_UFS_REF_CLKREF_CLK as ref_clk for
-> > the controller sounds reasonable.
-> > 
-> > I guess the only missing piece is which "card" ref clock is used by
-> > which PHY.
-> > 
-> > The ADP dts uses:
-> > 
-> > 	phy			ref clock
-> > 
-> > 	phy@1d87000 (UFS_PHY)	GCC_UFS_CARD_CLKREF_CLK
-> > 	phy@1da7000 (UFS_CARD)	GCC_UFS_1_CARD_CLKREF_CLK
-> > 
-> 
-> This matches the documentation.
+Signed-off-by: LongJun Tang <tanglongjun@kylinos.cn>
+---
+ drivers/gpu/drm/amd/display/dc/dcn30/dcn30_resource.c   | 1 +
+ drivers/gpu/drm/amd/display/dc/dcn301/dcn301_resource.c | 1 +
+ drivers/gpu/drm/amd/display/dc/dcn302/dcn302_resource.c | 1 +
+ drivers/gpu/drm/amd/display/dc/dcn303/dcn303_resource.c | 1 +
+ drivers/gpu/drm/amd/display/dc/dcn31/dcn31_resource.c   | 1 +
+ drivers/gpu/drm/amd/display/dc/dcn315/dcn315_resource.c | 1 +
+ drivers/gpu/drm/amd/display/dc/dcn32/dcn32_resource.c   | 1 +
+ drivers/gpu/drm/amd/display/dc/dcn321/dcn321_resource.c | 1 +
+ 8 files changed, 8 insertions(+)
 
-Thanks for checking.
+diff --git a/drivers/gpu/drm/amd/display/dc/dcn30/dcn30_resource.c b/drivers/gpu/drm/amd/display/dc/dcn30/dcn30_resource.c
+index 020f512e9690..9b7e786bd4a2 100644
+--- a/drivers/gpu/drm/amd/display/dc/dcn30/dcn30_resource.c
++++ b/drivers/gpu/drm/amd/display/dc/dcn30/dcn30_resource.c
+@@ -1323,6 +1323,7 @@ static struct clock_source *dcn30_clock_source_create(
+ 		return &clk_src->base;
+ 	}
+ 
++	kfree(clk_src);
+ 	BREAK_TO_DEBUGGER();
+ 	return NULL;
+ }
+diff --git a/drivers/gpu/drm/amd/display/dc/dcn301/dcn301_resource.c b/drivers/gpu/drm/amd/display/dc/dcn301/dcn301_resource.c
+index f04595b750ab..7c1225046544 100644
+--- a/drivers/gpu/drm/amd/display/dc/dcn301/dcn301_resource.c
++++ b/drivers/gpu/drm/amd/display/dc/dcn301/dcn301_resource.c
+@@ -1288,6 +1288,7 @@ static struct clock_source *dcn301_clock_source_create(
+ 		return &clk_src->base;
+ 	}
+ 
++	kfree(clk_src);
+ 	BREAK_TO_DEBUGGER();
+ 	return NULL;
+ }
+diff --git a/drivers/gpu/drm/amd/display/dc/dcn302/dcn302_resource.c b/drivers/gpu/drm/amd/display/dc/dcn302/dcn302_resource.c
+index b925b6ddde5a..73ae1146dad5 100644
+--- a/drivers/gpu/drm/amd/display/dc/dcn302/dcn302_resource.c
++++ b/drivers/gpu/drm/amd/display/dc/dcn302/dcn302_resource.c
+@@ -458,6 +458,7 @@ static struct clock_source *dcn302_clock_source_create(struct dc_context *ctx, s
+ 		return &clk_src->base;
+ 	}
+ 
++	kfree(clk_src);
+ 	BREAK_TO_DEBUGGER();
+ 	return NULL;
+ }
+diff --git a/drivers/gpu/drm/amd/display/dc/dcn303/dcn303_resource.c b/drivers/gpu/drm/amd/display/dc/dcn303/dcn303_resource.c
+index 527d5c902878..0ea97eeec5a6 100644
+--- a/drivers/gpu/drm/amd/display/dc/dcn303/dcn303_resource.c
++++ b/drivers/gpu/drm/amd/display/dc/dcn303/dcn303_resource.c
+@@ -425,6 +425,7 @@ static struct clock_source *dcn303_clock_source_create(struct dc_context *ctx, s
+ 		return &clk_src->base;
+ 	}
+ 
++	kfree(clk_src);
+ 	BREAK_TO_DEBUGGER();
+ 	return NULL;
+ }
+diff --git a/drivers/gpu/drm/amd/display/dc/dcn31/dcn31_resource.c b/drivers/gpu/drm/amd/display/dc/dcn31/dcn31_resource.c
+index fddc21a5a04c..b02aa8874efb 100644
+--- a/drivers/gpu/drm/amd/display/dc/dcn31/dcn31_resource.c
++++ b/drivers/gpu/drm/amd/display/dc/dcn31/dcn31_resource.c
+@@ -1625,6 +1625,7 @@ static struct clock_source *dcn31_clock_source_create(
+ 		return &clk_src->base;
+ 	}
+ 
++	kfree(clk_src);
+ 	BREAK_TO_DEBUGGER();
+ 	return NULL;
+ }
+diff --git a/drivers/gpu/drm/amd/display/dc/dcn315/dcn315_resource.c b/drivers/gpu/drm/amd/display/dc/dcn315/dcn315_resource.c
+index 58746c437554..b2ff29e5f93c 100644
+--- a/drivers/gpu/drm/amd/display/dc/dcn315/dcn315_resource.c
++++ b/drivers/gpu/drm/amd/display/dc/dcn315/dcn315_resource.c
+@@ -1623,6 +1623,7 @@ static struct clock_source *dcn31_clock_source_create(
+ 		return &clk_src->base;
+ 	}
+ 
++	kfree(clk_src);
+ 	BREAK_TO_DEBUGGER();
+ 	return NULL;
+ }
+diff --git a/drivers/gpu/drm/amd/display/dc/dcn32/dcn32_resource.c b/drivers/gpu/drm/amd/display/dc/dcn32/dcn32_resource.c
+index a88dd7b3d1c1..71730b6666b0 100644
+--- a/drivers/gpu/drm/amd/display/dc/dcn32/dcn32_resource.c
++++ b/drivers/gpu/drm/amd/display/dc/dcn32/dcn32_resource.c
+@@ -829,6 +829,7 @@ static struct clock_source *dcn32_clock_source_create(
+ 		return &clk_src->base;
+ 	}
+ 
++	kfree(clk_src);
+ 	BREAK_TO_DEBUGGER();
+ 	return NULL;
+ }
+diff --git a/drivers/gpu/drm/amd/display/dc/dcn321/dcn321_resource.c b/drivers/gpu/drm/amd/display/dc/dcn321/dcn321_resource.c
+index 61087f2385a9..d3980fc243c9 100644
+--- a/drivers/gpu/drm/amd/display/dc/dcn321/dcn321_resource.c
++++ b/drivers/gpu/drm/amd/display/dc/dcn321/dcn321_resource.c
+@@ -828,6 +828,7 @@ static struct clock_source *dcn321_clock_source_create(
+ 		return &clk_src->base;
+ 	}
+ 
++	kfree(clk_src);
+ 	BREAK_TO_DEBUGGER();
+ 	return NULL;
+ }
+-- 
+2.17.1
 
-> > > All three clocks are sourced off the CXO pad, so I would like this patch
-> > > to cover at least all of these. And
-> > > 
-> > > Fixes: d65d005f9a6c ("clk: qcom: add sc8280xp GCC driver")
-> > > 
-> > > seems to be in order for such patch.
-> > > 
-> > > 
-> > > @Johan, would you mind writing a dts patch flipping the clocks around
-> > > and Shazad can update this patch?
-> > 
-> > I'll do so, but I'll wait with posting until you can confirm which
-> > clkref is which.
 
-I've know posted a patch fixing the devicetree here:
-
-	https://lore.kernel.org/lkml/20221104092045.17410-1-johan+linaro@kernel.org/
-
-Note that we need to get Shazad's clock driver fix in first as the UFS
-controller driver expects a valid frequency for the device ref clock.
-
-Johan
+No virus found
+		Checked by Hillstone Network AntiVirus
