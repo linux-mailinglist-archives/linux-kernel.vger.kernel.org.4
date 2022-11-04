@@ -2,194 +2,261 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B1D2618F7A
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 05:29:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B5EB618F7B
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 05:33:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230423AbiKDE3u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 00:29:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55436 "EHLO
+        id S230423AbiKDEds (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 00:33:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229646AbiKDE3s (ORCPT
+        with ESMTP id S229646AbiKDEdo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 00:29:48 -0400
-Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01on2115.outbound.protection.outlook.com [40.107.113.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA226248F8;
-        Thu,  3 Nov 2022 21:29:45 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=L32Fs0Jv4O1MM2XSk4jkdnAjP0tUGO1w/+P72G3zLH2XyyiBTJoxpstGzRfjVMYLQqFWAJZ8D7KfKoXO9KQwoZOcz0cwLOefOsraEhmPcw7vLuYQnbuSlZQJ11hoB+l8gDi3QmuC3DzXKp6oRFcASzze/PNCehc6lQO6OQ/qtbwnatO4/ZGs3W0GZppA1sYnIfm7EQjT7RakfuOoo3o6MRsOF2GEAg3kY3BJprnqZ1bB88iOkEFQk3VvaQolZikKxDVWkaRVc9y+x2tjZn6Q4IT5aQaoWHuD8LmW6yZMAaCfrUwAc2Gz0l/HS1XNNYhtLqEQBAvq3MwEAYLPFRbKfQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=f8hgJq3fsfAaTROBukC8XUs3L4X+xGBu0MIUU4daZL8=;
- b=KvOD0vTZ0HZ0jzVG+yaT4OI2W5XRRCc8ly7/0rczGg2TJ6CyVlWNuE3iFDCAWczwbOz1MS7RBg1eNWD1kZ8BL2PZghvKLAyyWy9dE9ctwc75hV6LH3wohuBLEp8CMLNzqukbLagnqwCMZSWfrResoZNigMyro68dXMCgiYokM8R6Zb7nRZ3Fe0FNs7j83Z+N7xUrnDOQ51x5Cg2EWxdo1cwbPNLGsypkn7xB3iKpXX6gsyOVEcEpPV4HpvwLUjxoBHp+SOE7EJ6AqZL9AcG9EVnwvUaJo8fzeJHK3Ne3z1a1ypVk7/AefIFlN4RZOzy+F+w6F7qwWWQpaOKlb8h0uw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
- dkim=pass header.d=renesas.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=renesas.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=f8hgJq3fsfAaTROBukC8XUs3L4X+xGBu0MIUU4daZL8=;
- b=Q4wJUJF0J1PcX5KXB1Z2LOCl4+J/AhHyGvAKpHMiZL8hzcf6IweYjjlvhDgE/3rvUShr21qUIPVB4+P1HKyc7v5jSz5XHqiza4rpGt+wEXsbCr7LglcylpdQZqNVsjIavuUZ2mDEGA1O/paiAGRIkPV7ltbcr4eFmp+3DLGuZMY=
-Received: from TYBPR01MB5341.jpnprd01.prod.outlook.com
- (2603:1096:404:8028::13) by TY3PR01MB9746.jpnprd01.prod.outlook.com
- (2603:1096:400:22f::6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.22; Fri, 4 Nov
- 2022 04:29:42 +0000
-Received: from TYBPR01MB5341.jpnprd01.prod.outlook.com
- ([fe80::e28a:8db5:ee6a:34a8]) by TYBPR01MB5341.jpnprd01.prod.outlook.com
- ([fe80::e28a:8db5:ee6a:34a8%9]) with mapi id 15.20.5791.022; Fri, 4 Nov 2022
- 04:29:42 +0000
-From:   Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-To:     Nathan Chancellor <nathan@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-CC:     Sergey Shtylyov <s.shtylyov@omp.ru>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, Kees Cook <keescook@chromium.org>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "patches@lists.linux.dev" <patches@lists.linux.dev>
-Subject: RE: [PATCH net-next] net: ethernet: renesas: Fix return type of
- rswitch_start_xmit()
-Thread-Topic: [PATCH net-next] net: ethernet: renesas: Fix return type of
- rswitch_start_xmit()
-Thread-Index: AQHY78/AL5gpWhL7fkeU297Crrw2Ea4uIPvQ
-Date:   Fri, 4 Nov 2022 04:29:42 +0000
-Message-ID: <TYBPR01MB53419352217D1C2FC8DFE1AED83B9@TYBPR01MB5341.jpnprd01.prod.outlook.com>
-References: <20221103220032.2142122-1-nathan@kernel.org>
-In-Reply-To: <20221103220032.2142122-1-nathan@kernel.org>
-Accept-Language: ja-JP, en-US
-Content-Language: ja-JP
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=renesas.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: TYBPR01MB5341:EE_|TY3PR01MB9746:EE_
-x-ms-office365-filtering-correlation-id: f92b574b-571f-4891-2240-08dabe1d3207
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: yzhH2wdN5cS/ftOi+yJCPMfg0+oFURELavHzA5aKCrnP5t6/mu7ttqmiu4Y1Z+7DZF+FsOylFU94Q+J/HOQUNyaYSfch16Aj814htOTyfLa9/pcCmRL6JAtCl1e7FJgE0eWmPajlVXipa2OikJrSdV9u9nKIkPC+V8rIZ+6fuOzktro/vBXAJ7yHV1oisJmHbOYxhv7wZadt0HQFUhUT+wd4eQjFDWbrzWkeOB2Q3vYf93snCkndO9iU4GBlfzJUcuCHIpCbHujBl4oA3jBQsA75Iku1Gsm2HJekorLvqbPq3eANQMfl+Kd9pzI0rE5mDTqtl3ikVO32B/7DA+kMK0jwSA8UUOSmf0frJi9+5tJRgaLaji26cf8dgsN9eeasL5AvvbIKyOrd1LHj3ojMqOQwJTRfVpZYvZGQYD8+Uz2pIDMq9TVO9yxBv2g2T3NvEMYOolFhPKnPZ/2Jb49rOKN4e1P8JJdfIK8uBw8yy5YfKKIlZ6FBGNuhOSLw7ltJCDusYRYnFnZKzWv6ZR0yIe8r62v6s8r8IVjk2GP9f/yFWbtIsaFlNVqOVz3KEy7axG8OKEs+3XosDai1c/xXDuj75YBA4QG4HixCXeVI0EtTtwEezAHClTvgq80wawJ1BHO5aNvGbgcTgPIiM7kDl+DL0hQCKv+e69PAZZNyEcCE8R6u5ZZwHjJJpxTfRxZqzYqzqJo9ehwLRKdIBTXM0vk8RUASuMrJTyoaARpKdAETocuFcrKHRF5NtIyfSJn/8cJoA3qGb0QyxxsPFD0oS/b57S2hsHoRdSZMFFTwZi0=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYBPR01MB5341.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(396003)(346002)(39860400002)(376002)(366004)(451199015)(38100700002)(7696005)(8936002)(41300700001)(52536014)(5660300002)(4326008)(33656002)(316002)(76116006)(64756008)(8676002)(66446008)(54906003)(66556008)(66946007)(2906002)(9686003)(66476007)(122000001)(6506007)(38070700005)(966005)(478600001)(7416002)(83380400001)(186003)(55016003)(71200400001)(86362001)(110136005);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?i+KaWJvgZ4Sr/Ith/Qb6A1V2oYugI+LaJA3zQ5gdyqoplNVicMPpqWDCKgQn?=
- =?us-ascii?Q?/l3oDzTXnSt/678Ti7Uh/vOPsYpBQGxtgH2mnalE0BduR1oM47C6+bik9sx7?=
- =?us-ascii?Q?eEPGGee8tigTS7mKqUN62EczAZR6VsVTmNQB6m8ddQKJzTGPVpONsFe/ENar?=
- =?us-ascii?Q?7xhLswxzKpIa8mT+ddqQVZYQr4yz0evV0ezNgE/xmyHSebfilclijSKdlGaj?=
- =?us-ascii?Q?mVCfpApCX2vVtklrIhcCX9H5GYEW9O81VMMAwLDJU/uiBvB01WewWm3yN8/M?=
- =?us-ascii?Q?GunEDWaRs5Q6G7o/Y8AosnoIQyVZzPCUGJeFQNNP2M/VXFnHtFwbXqSSwMWF?=
- =?us-ascii?Q?jcbHJoJIoISiPH6NcWa3TCDtnLFL/3TbQsO5pISH3sT8+hGeqdM4QYJxMQdZ?=
- =?us-ascii?Q?sZUwI4lnE56jDEMZHjhXUiPR05bkM9VvoUFYxTtk10FjXtH9oJQsZWi87I0+?=
- =?us-ascii?Q?sorLL/kvCaeTJ2X/RSwD+tJh6m5H1AmHHWUR3EjQiR0ylg2/EdMOQS6nS9wl?=
- =?us-ascii?Q?I+QeLiE4ppxnbprUU8z0ILKioA1V5SRiv4d/I8tbty59YvZ4UTEO13iMuUM+?=
- =?us-ascii?Q?gvj68V6WWneMoSCpXaPBiCc9GwYM3kVCwOlhM+kIhAn4g71flxrqQXfwV29C?=
- =?us-ascii?Q?F+y14H9bkeiaZoZOnPrXRHxkZNV2L2dKXTN5v5sehYznzNf7ZoWYS5sqWFbx?=
- =?us-ascii?Q?FhF3fh//WqZs2dMIosjc9X9J2rPD7l2997WnnzB0/YWID+YER/CYNXLrl0yt?=
- =?us-ascii?Q?/PQ1V0/vM1RxlsOdzxgo8AsSHAneSosRjZXfR1F04urW2P2WvSafqLzA+nBe?=
- =?us-ascii?Q?5qPRZm/rFOKEhO1VdA4zImukq4q3Ga6dFSZXAdJqY0rpcMI1e9BPkkz/QZJN?=
- =?us-ascii?Q?L0rnzlIFzZbVvl4gKHwClpHhESqhRw+6M5cCqSs9zB7Ezo436+Hd0erwky6k?=
- =?us-ascii?Q?bgLTyuZ9ZqTVa0MJjNpI+di+31sBLT5k0FL7dn0Ejy8KFrQxlZg/6Vpzk/X0?=
- =?us-ascii?Q?mu2fHYa4alX7tgxWu8Ly1HtOsgQhzWS4v4kQKt7IouGWQmttWHhH0DFifssK?=
- =?us-ascii?Q?unI5ItdxIt9tc0eF9NIvMW/gsS7Efyt4ErsaDH/GGQDt1MxfpCxjxTOXztSW?=
- =?us-ascii?Q?Krh1zMTLwX5QzDsDVZk3OjjTNmYS8EpQZu7li/oE5kiqUjC4ry4rUqT2TWix?=
- =?us-ascii?Q?g9o9N/APrlurn2jkG9/spM0OBEkSvMuc1JboLw37RPbTHk3tM3zwAOrFjhdx?=
- =?us-ascii?Q?AXzF0vGgWNKUrLdKAr1KTGP3kZAgYWC9RWsz/2uf9zg6p9AFonmKYBR9P2cF?=
- =?us-ascii?Q?NC83okdrSuJTHtuFX2SCnhT4W4FrwkY8OMOOuLbqs4gzPy7WHCPHDAHOKLiS?=
- =?us-ascii?Q?DmUqtiOfU2EY8Yb5Vi1FbWcuT95UkzwClY/sG8XsbbHJCkHTUTpkmRcFxEZn?=
- =?us-ascii?Q?ZVz8l1YN5Cy1YZrAIqkzHtztpwXXOCLhA9avvFTBNnzBw+KJrNdTVus+kR8F?=
- =?us-ascii?Q?CnqlDKR2rYKgNXuoDFgbtYQJAGzqD0nxuRXRqWwdszVM4c+eEEyMbO6l2p31?=
- =?us-ascii?Q?lErmVdz99CJ2zeX61I86UZbpyUh3nIFIkDJJsz5lYo+8McNj4O/t1Oh60VKL?=
- =?us-ascii?Q?MYMTLxHO0eFawNqVeB9/RWz5GhzrEN+QCOwbA/dvmdK89DP4ljOS6/IwtFyr?=
- =?us-ascii?Q?thSkXQ=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Fri, 4 Nov 2022 00:33:44 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3F1CDF72
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 21:33:43 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id b185so3500789pfb.9
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 21:33:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=wepWE4KrXFxsKEWcFpjgx18r9i0Jh/wR/FjXQiA0858=;
+        b=hYEu2TPYISRsKFMbiVQKHzSMt++TeF1aJ4wjBVUR/BzI5IqiVryuv37QHSjFceFqhP
+         UCswDcBHH5dIDVOSIiUI6q3UjV4KXld9UhnhRv0ww2GcLwpk72Eo2ft1qVykecA8glqv
+         lHV+D0/dhNnl7U2N8yNO6dCt+Wu9meRmYerNtBtBtdR+DmpCFK7oZK84zxbQx/Izuw87
+         6z+T6U2KpJtIRwio1+mOvnBycRVOKquHjvZkOpbQi2JJVqBhNCUsJTujneqkebqjIeGD
+         +KscwOEiskz7yz2gVb6UzrkoUhe+RMzsBMuqdgs0oziOqyfr1bJ+j9M+mRVldepmjvzP
+         18Yw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=wepWE4KrXFxsKEWcFpjgx18r9i0Jh/wR/FjXQiA0858=;
+        b=Vb5ywaL/RQ56hgH7hdNOH64p/46oNqa/RjCLwTShL4S9AvFaBOPhwNT1gYOvOJGXv3
+         oK48agiID2pVGkJlHSIcVYtZMc3I01IbMusWI4G7sfQePSKwXueSB2IeaHXdJHWABxqg
+         0RSq3orphahbRSy8lACGXD+o7R6IWAWzJhbfg5fxGAldqP7KgZ1UmPOA3qAL8A3uKptN
+         xJHgegYmdj15ai+L+N5kgX5KcW6ihwjpcqcABQ3eZO0MBSGU9BSuqkaCzvpNZYgB0ISy
+         0olrJcM5ggfWsmchMiVDzqygxc3NJjt8oKnB7lNZvFU6zNmwi5WFK63gLcPP/EXZXB8t
+         LZwA==
+X-Gm-Message-State: ACrzQf3s90bAV2pbPYcVtyv8pt2cBiMLUm7z6eOnby75fn9AV2tEJpxA
+        wlgNgo7Z0hm+6PppUDVSraHsXA==
+X-Google-Smtp-Source: AMsMyM5vRCcyhyFRrnmknUVlQ9x6+P0kY+j5utb1Rm9Wud+2LgOtZgzSOSakjK1mDK14SkuAEpYueg==
+X-Received: by 2002:a05:6a00:d5f:b0:56e:9868:52b6 with SMTP id n31-20020a056a000d5f00b0056e986852b6mr185075pfv.4.1667536423171;
+        Thu, 03 Nov 2022 21:33:43 -0700 (PDT)
+Received: from [192.168.50.116] (c-24-4-73-83.hsd1.ca.comcast.net. [24.4.73.83])
+        by smtp.gmail.com with ESMTPSA id f2-20020a170902ce8200b00176acd80f69sm1540295plg.102.2022.11.03.21.33.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 03 Nov 2022 21:33:42 -0700 (PDT)
+Message-ID: <3d8aa022-a73e-aa27-5219-12dcf9f20443@rivosinc.com>
+Date:   Thu, 3 Nov 2022 21:33:39 -0700
 MIME-Version: 1.0
-X-OriginatorOrg: renesas.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TYBPR01MB5341.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f92b574b-571f-4891-2240-08dabe1d3207
-X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Nov 2022 04:29:42.8378
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: X1IFrSBZdrrSdClkhFEeJNUTZbhBG/aunvUyIdxs9AiL9xdboTGJMy+7+GfSSRi2LuLhYyrtI0RWPOj4rL17NERpXSDa4dETVRmFMqOwdGVVvwCtBRSq7bL9cPqKKfVC
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY3PR01MB9746
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v12 05/17] riscv: Add has_vector/riscv_vsize to save
+ vector features.
+Content-Language: en-US
+To:     Chris Stillson <stillson@rivosinc.com>
+Cc:     Greentime Hu <greentime.hu@sifive.com>,
+        Guo Ren <guoren@linux.alibaba.com>,
+        Vincent Chen <vincent.chen@sifive.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Oleg Nesterov <oleg@redhat.com>, Guo Ren <guoren@kernel.org>,
+        Heinrich Schuchardt <heinrich.schuchardt@canonical.com>,
+        Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        Dao Lu <daolu@rivosinc.com>,
+        Sunil V L <sunilvl@ventanamicro.com>,
+        Andy Chiu <andy.chiu@sifive.com>, Guo Ren <guoren@kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>, linux-mm@kvack.org
+References: <20220921214439.1491510-1-stillson@rivosinc.com>
+ <20220921214439.1491510-5-stillson@rivosinc.com>
+From:   Vineet Gupta <vineetg@rivosinc.com>
+In-Reply-To: <20220921214439.1491510-5-stillson@rivosinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Nathan,
+On 9/21/22 14:43, Chris Stillson wrote:
+> From: Greentime Hu <greentime.hu@sifive.com>
+> 
+> This patch is used to detect vector support status of CPU and use
+> riscv_vsize to save the size of all the vector registers. It assumes
+> all harts has the same capabilities in SMP system.
 
-> From: Nathan Chancellor, Sent: Friday, November 4, 2022 7:01 AM
->=20
-> With clang's kernel control flow integrity (kCFI, CONFIG_CFI_CLANG),
-> indirect call targets are validated against the expected function
-> pointer prototype to make sure the call target is valid to help mitigate
-> ROP attacks. If they are not identical, there is a failure at run time,
-> which manifests as either a kernel panic or thread getting killed. A
-> proposed warning in clang aims to catch these at compile time, which
-> reveals:
->=20
->   drivers/net/ethernet/renesas/rswitch.c:1533:20: error: incompatible fun=
-ction pointer types initializing 'netdev_tx_t
-> (*)(struct sk_buff *, struct net_device *)' (aka 'enum netdev_tx (*)(stru=
-ct sk_buff *, struct net_device *)') with an
-> expression of type 'int (struct sk_buff *, struct net_device *)' [-Werror=
-,-Wincompatible-function-pointer-types-strict]
->           .ndo_start_xmit =3D rswitch_start_xmit,
->                           ^~~~~~~~~~~~~~~~~~
->   1 error generated.
->=20
-> ->ndo_start_xmit() in 'struct net_device_ops' expects a return type of
-> 'netdev_tx_t', not 'int'. Adjust the return type of rswitch_start_xmit()
-> to match the prototype's to resolve the warning and CFI failure.
->=20
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1750
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> ---
+Patch title is horrible. The meat of patch is vector state save/restore, 
+but no users of it yet. And then there are random unrelated snippets 
+thrown in same patch.
 
-Thank you for the patch!
+> +#ifdef CONFIG_FPU
+> +__ro_after_init DEFINE_STATIC_KEY_FALSE(cpu_hwcap_fpu);
+> +#endif
 
-Reviewed-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+This needs to be broken out to a FPU patch which actually uses 
+cpu_hwcap_fpu.
 
-Best regards,
-Yoshihiro Shimoda
 
->  drivers/net/ethernet/renesas/rswitch.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/drivers/net/ethernet/renesas/rswitch.c b/drivers/net/etherne=
-t/renesas/rswitch.c
-> index 20df2020d3e5..f0168fedfef9 100644
-> --- a/drivers/net/ethernet/renesas/rswitch.c
-> +++ b/drivers/net/ethernet/renesas/rswitch.c
-> @@ -1390,7 +1390,7 @@ static int rswitch_stop(struct net_device *ndev)
->  	return 0;
->  };
->=20
-> -static int rswitch_start_xmit(struct sk_buff *skb, struct net_device *nd=
-ev)
-> +static netdev_tx_t rswitch_start_xmit(struct sk_buff *skb, struct net_de=
-vice *ndev)
->  {
->  	struct rswitch_device *rdev =3D netdev_priv(ndev);
->  	struct rswitch_gwca_queue *gq =3D rdev->tx_queue;
->=20
-> base-commit: ef2dd61af7366e5a42e828fff04932e32eb0eacc
-> --
-> 2.38.1
+> +#ifdef CONFIG_VECTOR
+> +#include <asm/vector.h>
+> +__ro_after_init DEFINE_STATIC_KEY_FALSE(cpu_hwcap_vector);
+> +unsigned long riscv_vsize __read_mostly;
+> +#endif
 
+I'd move this patch v2/17 as part of detection etc.
+
+> +#ifdef CONFIG_VECTOR
+> +	if (elf_hwcap & COMPAT_HWCAP_ISA_V) {
+> +		static_branch_enable(&cpu_hwcap_vector);
+
+Ditto.
+
+> +		/* There are 32 vector registers with vlenb length. */
+> +		rvv_enable();
+> +		riscv_vsize = csr_read(CSR_VLENB) * 32;
+
+Ditto.
+
+> +		rvv_disable();
+
+But guess these needs to be added first as well, see below.
+
+
+> +#ifdef CONFIG_VECTOR
+> +#include <asm/vector.h>
+> +EXPORT_SYMBOL(rvv_enable);
+> +EXPORT_SYMBOL(rvv_disable);
+
+As suggested in prior review comment, we don't need to EXPORT these, for 
+now at least.
+
+> diff --git a/arch/riscv/kernel/vector.S b/arch/riscv/kernel/vector.S
+> new file mode 100644
+> index 000000000000..9f7dc70c4443
+> --- /dev/null
+> +++ b/arch/riscv/kernel/vector.S
+> @@ -0,0 +1,93 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * Copyright (C) 2012 Regents of the University of California
+> + * Copyright (C) 2017 SiFive
+> + * Copyright (C) 2019 Alibaba Group Holding Limited
+> + *
+> + *   This program is free software; you can redistribute it and/or
+> + *   modify it under the terms of the GNU General Public License
+> + *   as published by the Free Software Foundation, version 2.
+> + *
+> + *   This program is distributed in the hope that it will be useful,
+> + *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+> + *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+> + *   GNU General Public License for more details.
+> + */
+
+SPDX hdr ...
+
+> +
+> +#include <linux/linkage.h>
+> +
+> +#include <asm/asm.h>
+> +#include <asm/csr.h>
+> +#include <asm/asm-offsets.h>
+> +
+> +#define vstatep  a0
+> +#define datap    a1
+> +#define x_vstart t0
+> +#define x_vtype  t1
+> +#define x_vl     t2
+> +#define x_vcsr   t3
+> +#define incr     t4
+> +#define status   t5
+> +
+
+A few words here as to when is this save/restore done.
+Perhaps best to add this code in the patch which actually uses these.
+
+> +ENTRY(__vstate_save)
+> +	li      status, SR_VS
+> +	csrs    CSR_STATUS, status
+> +
+> +	csrr    x_vstart, CSR_VSTART
+> +	csrr    x_vtype, CSR_VTYPE
+> +	csrr    x_vl, CSR_VL
+> +	csrr    x_vcsr, CSR_VCSR
+> +	vsetvli incr, x0, e8, m8, ta, ma
+> +	vse8.v   v0, (datap)
+> +	add     datap, datap, incr
+> +	vse8.v   v8, (datap)
+> +	add     datap, datap, incr
+> +	vse8.v   v16, (datap)
+> +	add     datap, datap, incr
+> +	vse8.v   v24, (datap)
+> +
+> +	REG_S   x_vstart, RISCV_V_STATE_VSTART(vstatep)
+> +	REG_S   x_vtype, RISCV_V_STATE_VTYPE(vstatep)
+> +	REG_S   x_vl, RISCV_V_STATE_VL(vstatep)
+> +	REG_S   x_vcsr, RISCV_V_STATE_VCSR(vstatep)
+> +
+> +	csrc	CSR_STATUS, status
+> +	ret
+> +ENDPROC(__vstate_save)
+> +
+> +ENTRY(__vstate_restore)
+> +	li      status, SR_VS
+> +	csrs    CSR_STATUS, status
+
+This is rvv_enable code duplicated inline.
+
+> +
+> +	vsetvli incr, x0, e8, m8, ta, ma
+> +	vle8.v   v0, (datap)
+> +	add     datap, datap, incr
+> +	vle8.v   v8, (datap)
+> +	add     datap, datap, incr
+> +	vle8.v   v16, (datap)
+> +	add     datap, datap, incr
+> +	vle8.v   v24, (datap)
+> +
+> +	REG_L   x_vstart, RISCV_V_STATE_VSTART(vstatep)
+> +	REG_L   x_vtype, RISCV_V_STATE_VTYPE(vstatep)
+> +	REG_L   x_vl, RISCV_V_STATE_VL(vstatep)
+> +	REG_L   x_vcsr, RISCV_V_STATE_VCSR(vstatep)
+> +	vsetvl  x0, x_vl, x_vtype
+> +	csrw    CSR_VSTART, x_vstart
+> +	csrw    CSR_VCSR, x_vcsr
+> +
+> +	csrc	CSR_STATUS, status
+> +	ret
+> +ENDPROC(__vstate_restore)
+> +
+> +ENTRY(rvv_enable)
+> +	li      status, SR_VS
+> +	csrs    CSR_STATUS, status
+> +	ret
+> +ENDPROC(rvv_enable)
+> +
+> +ENTRY(rvv_disable)
+> +	li      status, SR_VS
+> +	csrc	CSR_STATUS, status
+> +	ret
+> +ENDPROC(rvv_disable)
+
+I'd suggest these be made asm macros, to avoid function call overhead 
+and duplication as in save/restore above.
