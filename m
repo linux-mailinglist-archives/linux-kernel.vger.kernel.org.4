@@ -2,34 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28D41619DAB
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 17:48:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0BEE619DA8
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 17:47:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232038AbiKDQsB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 12:48:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39052 "EHLO
+        id S231926AbiKDQrz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 12:47:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231588AbiKDQr3 (ORCPT
+        with ESMTP id S231238AbiKDQrf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 12:47:29 -0400
+        Fri, 4 Nov 2022 12:47:35 -0400
 Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::222])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3301731EFC;
-        Fri,  4 Nov 2022 09:47:27 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F7A040442;
+        Fri,  4 Nov 2022 09:47:28 -0700 (PDT)
 Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 8B9744000E;
-        Fri,  4 Nov 2022 16:47:24 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id CC8D840013;
+        Fri,  4 Nov 2022 16:47:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1667580445;
+        t=1667580446;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=1BVXfpUDpuO14vpkhrGj4WhajxKP64/OBHEAjC1gJJU=;
-        b=YDzbuVof2BvQCL5+tC0MmGS8rNod+85O+cSBK1eT7Ru8ktT/MCZQp4ix2sFrRCUezRZWdA
-        G2QIlNNJoydsR8NferXcXIdgYGuDeAWg9c7FVm+GVH/H5oBqoNKEUtthuyZNqw0MCz01q7
-        YQ5SLlsrUG3eI8GNSEdt4CuPaG9EaJCZ9cOrvYrEo2Er72D9s5JmPxP8Ok8u7B+7Zh2brS
-        SqatFHtjnOm5ZzP2VdlTXZ3pRAXO6zKeXsUhO7vJ4j6JwXVjLtV/+z6Pknn/+6kx46cAZF
-        Hewwv/KkOrWTbhDdtxcOytvFtUC1LazYonxqx79RZNotMDU3RB0bYl+6xoo3gg==
+        bh=abWxBYqdkWoQQQ3GX9Ts6R6Hk4Vd1Cu/4zxI2EIxg38=;
+        b=Mnu1nATjTqPwq1hRv6A1JF5exhMNr+6cwqEEau+Z4GMy5leCp8uBPVSTRgOhjEOq7YF3iy
+        L4/RtjaX7s6M2CjuDAG0W4U2x1+cAUwPObARXyXP9LDIHKF4hoxW9fquRa5CLyFmxLCfnD
+        r9mzSqyQSBBSWPgrUjRE7jDiaRTqHNhWVo7uJ3ZazBNXH2sY531Y5s8gvt0LmDLzYQSqgU
+        +GNWnTR2TV6cVROa/PdiExz9IAKOqfx2Kzmij7FByKaYI4tUHWqXfa26UYlVGRtnpWiC9x
+        A+KlQORXPG8I3mKUdAPVbWpeNpqsbNNXgqSCQ+5zR5fhVsEsyWMEzdu6QkRvVQ==
 From:   Miquel Raynal <miquel.raynal@bootlin.com>
 To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzk+dt@kernel.org>,
@@ -43,10 +43,11 @@ Cc:     Richard Weinberger <richard@nod.at>,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
         Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
         <linux-kernel@vger.kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>
-Subject: [PATCH v2 05/17] dt-bindings: mtd: nand: Standardize the child node name
-Date:   Fri,  4 Nov 2022 17:47:06 +0100
-Message-Id: <20221104164718.1290859-6-miquel.raynal@bootlin.com>
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Rob Herring <robh@kernel.org>
+Subject: [PATCH v2 06/17] dt-bindings: mtd: ingenic: Mark partitions in the controller node as deprecated
+Date:   Fri,  4 Nov 2022 17:47:07 +0100
+Message-Id: <20221104164718.1290859-7-miquel.raynal@bootlin.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221104164718.1290859-1-miquel.raynal@bootlin.com>
 References: <20221104164718.1290859-1-miquel.raynal@bootlin.com>
@@ -62,47 +63,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In almost all the schema mentioning a NAND chip child node, the name of
-the subnode contains a single index number.
-
-In practice there are currently no controller supporting more than 8 cs
-so even the [a-f] numbers are not needed. But let's be safe and limit
-the number of touched files by just allow a single number everywhere, so
-in practice up to 16 CS at most. This value can anyway be limited in
-each schema.
+Defining partitions as subnodes of the controller has been deprecated
+long time ago, but unlike having partitions within the controller node,
+having an enveloppe named "partitions" (which is not itself within a
+chip subnode) is not that common, so keep this deprecated definition in
+this file.
 
 Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+Acked-by: Rob Herring <robh@kernel.org>
 ---
- .../devicetree/bindings/mtd/allwinner,sun4i-a10-nand.yaml       | 2 +-
- Documentation/devicetree/bindings/mtd/intel,lgm-ebunand.yaml    | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ Documentation/devicetree/bindings/mtd/ingenic,nand.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/devicetree/bindings/mtd/allwinner,sun4i-a10-nand.yaml b/Documentation/devicetree/bindings/mtd/allwinner,sun4i-a10-nand.yaml
-index 65521924ee1c..465aa69f0f10 100644
---- a/Documentation/devicetree/bindings/mtd/allwinner,sun4i-a10-nand.yaml
-+++ b/Documentation/devicetree/bindings/mtd/allwinner,sun4i-a10-nand.yaml
-@@ -47,7 +47,7 @@ properties:
-     const: rxtx
+diff --git a/Documentation/devicetree/bindings/mtd/ingenic,nand.yaml b/Documentation/devicetree/bindings/mtd/ingenic,nand.yaml
+index 87b2944d0d1b..90dbc5eba1e7 100644
+--- a/Documentation/devicetree/bindings/mtd/ingenic,nand.yaml
++++ b/Documentation/devicetree/bindings/mtd/ingenic,nand.yaml
+@@ -32,6 +32,7 @@ properties:
  
- patternProperties:
--  "^nand@[a-f0-9]+$":
-+  "^nand@[a-f0-9]$":
+   partitions:
      type: object
-     properties:
-       reg:
-diff --git a/Documentation/devicetree/bindings/mtd/intel,lgm-ebunand.yaml b/Documentation/devicetree/bindings/mtd/intel,lgm-ebunand.yaml
-index 7c83a328845e..d455b75a0b0b 100644
---- a/Documentation/devicetree/bindings/mtd/intel,lgm-ebunand.yaml
-+++ b/Documentation/devicetree/bindings/mtd/intel,lgm-ebunand.yaml
-@@ -40,7 +40,7 @@ properties:
-       - const: rx
++    deprecated: true
+     description:
+       Node containing description of fixed partitions.
  
- patternProperties:
--  "^nand@[a-f0-9]+$":
-+  "^nand@[a-f0-9]$":
-     type: object
-     properties:
-       reg:
 -- 
 2.34.1
 
