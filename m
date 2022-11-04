@@ -2,115 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51EE7618E76
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 03:50:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B13D8618E78
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 03:53:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230388AbiKDCum (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 22:50:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44392 "EHLO
+        id S230463AbiKDCx2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 22:53:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229655AbiKDCuk (ORCPT
+        with ESMTP id S230259AbiKDCxZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 22:50:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDD1A65FE;
-        Thu,  3 Nov 2022 19:50:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6A1C462066;
-        Fri,  4 Nov 2022 02:50:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19B30C433D6;
-        Fri,  4 Nov 2022 02:50:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667530238;
-        bh=xUMe7WcxDjcNixtO8e13bMn6UtwNVzh9mKBW9tU/MGQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=DIZ8XoqQ63peEAmLWU+06RPEkk6UMsZYWqwmehfcyi21ly9/D3DTh4I8iKBQUA9+A
-         F62lb6dYmFMtA1bdhMYY4goCon/xg/fwfAyjUcSmR1kRXZonD+mXwbGgC7DXRDGQkg
-         hRcSVaj4RMSxZI2aRXulEtH0U6px8fJvqDVfmkoCHx7Ls970BAAiYQP5QloC0PMMHu
-         IoPZCsmUw/NX2MkBQuqljeOW2TiSeughtHG8Kksw4Ub5/s+rdb1JSxFicKhRfhHCv7
-         2PCt5Fwi17WPmM5ynQLjX/57ogldynNlpT8ZxoWTajF9XeJUbLC4CjR1chUARUnxN1
-         xMb/ioviiXHbQ==
-Date:   Thu, 3 Nov 2022 19:50:37 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Andy Ren <andy.ren@getcruise.com>
-Cc:     netdev@vger.kernel.org, richardbgobert@gmail.com,
-        davem@davemloft.net, wsa+renesas@sang-engineering.com,
-        edumazet@google.com, petrm@nvidia.com, pabeni@redhat.com,
-        corbet@lwn.net, andrew@lunn.ch, dsahern@gmail.com,
-        sthemmin@microsoft.com, idosch@idosch.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        roman.gushchin@linux.dev
-Subject: Re: [PATCH net-next] net/core: Allow live renaming when an
- interface is up
-Message-ID: <20221103195037.13ff8caf@kernel.org>
-In-Reply-To: <20221103235847.3919772-1-andy.ren@getcruise.com>
-References: <20221103235847.3919772-1-andy.ren@getcruise.com>
+        Thu, 3 Nov 2022 22:53:25 -0400
+Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 063FBDF1A
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 19:53:23 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R221e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0VTuj9Jz_1667530379;
+Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0VTuj9Jz_1667530379)
+          by smtp.aliyun-inc.com;
+          Fri, 04 Nov 2022 10:53:20 +0800
+From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+To:     bskeggs@redhat.com
+Cc:     kherbst@redhat.com, lyude@redhat.com, airlied@gmail.com,
+        daniel@ffwll.ch, dri-devel@lists.freedesktop.org,
+        nouveau@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH] $drm/nouveau: Fix kernel-doc
+Date:   Fri,  4 Nov 2022 10:52:58 +0800
+Message-Id: <20221104025258.69534-1-jiapeng.chong@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu,  3 Nov 2022 16:58:47 -0700 Andy Ren wrote:
-> @@ -1691,7 +1690,6 @@ enum netdev_priv_flags {
->  	IFF_FAILOVER			= 1<<27,
->  	IFF_FAILOVER_SLAVE		= 1<<28,
->  	IFF_L3MDEV_RX_HANDLER		= 1<<29,
-> -	IFF_LIVE_RENAME_OK		= 1<<30,
+No functional modification involved.
 
-As Stephen says the hole should be somehow noted.
-Comment saying what it was, or just a comment saying there 
-is a hole that can be reused.
+drivers/gpu/drm/nouveau/nouveau_ioc32.c:52: warning: expecting prototype for Called whenever a 32-bit process running under a 64(). Prototype was for nouveau_compat_ioctl() instead.
 
->  	IFF_TX_SKB_NO_LINEAR		= BIT_ULL(31),
->  	IFF_CHANGE_PROTO_DOWN		= BIT_ULL(32),
->  };
-> @@ -1726,7 +1724,6 @@ enum netdev_priv_flags {
->  #define IFF_FAILOVER			IFF_FAILOVER
->  #define IFF_FAILOVER_SLAVE		IFF_FAILOVER_SLAVE
->  #define IFF_L3MDEV_RX_HANDLER		IFF_L3MDEV_RX_HANDLER
-> -#define IFF_LIVE_RENAME_OK		IFF_LIVE_RENAME_OK
->  #define IFF_TX_SKB_NO_LINEAR		IFF_TX_SKB_NO_LINEAR
->  
->  /* Specifies the type of the struct net_device::ml_priv pointer */
-> diff --git a/net/core/dev.c b/net/core/dev.c
-> index 2e4f1c97b59e..a2d650ae15d7 100644
-> --- a/net/core/dev.c
-> +++ b/net/core/dev.c
-> @@ -1163,22 +1163,6 @@ int dev_change_name(struct net_device *dev, const char *newname)
->  
->  	net = dev_net(dev);
->  
-> -	/* Some auto-enslaved devices e.g. failover slaves are
-> -	 * special, as userspace might rename the device after
-> -	 * the interface had been brought up and running since
-> -	 * the point kernel initiated auto-enslavement. Allow
-> -	 * live name change even when these slave devices are
-> -	 * up and running.
-> -	 *
-> -	 * Typically, users of these auto-enslaving devices
-> -	 * don't actually care about slave name change, as
-> -	 * they are supposed to operate on master interface
-> -	 * directly.
-> -	 */
-> -	if (dev->flags & IFF_UP &&
-> -	    likely(!(dev->priv_flags & IFF_LIVE_RENAME_OK)))
-> -		return -EBUSY;
-> -
+Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=2730
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+---
+ drivers/gpu/drm/nouveau/nouveau_ioc32.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-Let's leave a hint for potential triage and add something extra to the
-netdev_info() print a few lines down in case the interface is renamed
-while UP. Perhaps:
+diff --git a/drivers/gpu/drm/nouveau/nouveau_ioc32.c b/drivers/gpu/drm/nouveau/nouveau_ioc32.c
+index adf01ca9e035..d13a64c0b529 100644
+--- a/drivers/gpu/drm/nouveau/nouveau_ioc32.c
++++ b/drivers/gpu/drm/nouveau/nouveau_ioc32.c
+@@ -39,13 +39,13 @@
+ #include "nouveau_ioctl.h"
+ 
+ /**
+- * Called whenever a 32-bit process running under a 64-bit kernel
++ * nouveau_compat_ioctl - Called whenever a 32-bit process running under a 64-bit kernel
+  * performs an ioctl on /dev/dri/card<n>.
+  *
+- * \param filp file pointer.
+- * \param cmd command.
+- * \param arg user argument.
+- * \return zero on success or negative number on failure.
++ * @filp: file pointer.
++ * @cmd: command.
++ * @arg: user argument.
++ * Return zero on success or negative number on failure.
+  */
+ long nouveau_compat_ioctl(struct file *filp, unsigned int cmd,
+ 			 unsigned long arg)
+-- 
+2.20.1.7.g153144c
 
-	netdev_info(dev, "renamed from %s%s\n", oldname,
-		    dev->flags & IFF_UP ? " (while UP)" : "");
-
-or some such.
