@@ -2,184 +2,327 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CD90619D95
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 17:46:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A5AC619DAD
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 17:48:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231243AbiKDQqY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 12:46:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38612 "EHLO
+        id S230194AbiKDQsM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 12:48:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229756AbiKDQqV (ORCPT
+        with ESMTP id S231761AbiKDQri (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 12:46:21 -0400
-Received: from vern.gendns.com (vern.gendns.com [98.142.107.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EE1231EF9;
-        Fri,  4 Nov 2022 09:46:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=lechnology.com; s=default; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=zI7RcZiPaTDKMltPgs4ZCXXOEkuyhKs5pu9RAgGaQCM=; b=WDBX+cAnoxNFA2qROraJWPqwl6
-        sawOBGcwqy0cJOAIrVpjLZZ+Gx2IKKPpzlq32XA8dIyrUdyxFM7DDARo5oPRviL3HJfndmG8Y/6DX
-        JszwjA1qIBE963R9b+AbWyWXzot3CnWQfj8Q3yBrd7GtzWZM+7HpOT38Y0pygwUoqjt9E5drTi3PA
-        iwRZOCwQqQ0SXdmD9XyBdaTbR1R3prwAqmXw5Hw/1of8Akd3I0gnrXsFcDHUGIRQzdA3pfYYEcbWP
-        RGvTglAlnqK66tcDfALPc+yDGWDJk2SuAVwnrNdyQUQOE9Eu+PrDksdtVsbsh6ynJyaP/aeQMp/TT
-        YGTHedGw==;
-Received: from ip98-183-112-30.ok.ok.cox.net ([98.183.112.30]:45370 helo=[192.168.0.134])
-        by vern.gendns.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.95)
-        (envelope-from <david@lechnology.com>)
-        id 1oqzpN-00ChtK-Ip;
-        Fri, 04 Nov 2022 12:46:11 -0400
-Message-ID: <4a91a4cf-acac-387f-19a5-e2ce144f3496@lechnology.com>
-Date:   Fri, 4 Nov 2022 11:46:02 -0500
+        Fri, 4 Nov 2022 12:47:38 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8CD131F82
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 09:46:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1667580400;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=6EdVZ9Ytp7ie9/xHerVjqdlN3g0FspZlsm56S90mrRM=;
+        b=IKUXQfMRqWjSPkNntDN88JmqeQKq1cbA68MxOkdnpmodu2p+Rym7hw7DgOGQg2/sniCwB7
+        sK80sqUILATZQBs8kNgV5Q9EEnW6kzuzci8f1AblHhoTLAYRFmLgy/ilCxY9b/8MsJHUGq
+        1qroqQkPws7/VaV2/l/8ABUhUtuug5I=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-408-kHMpo22BNGODkjOoOHqx_g-1; Fri, 04 Nov 2022 12:46:29 -0400
+X-MC-Unique: kHMpo22BNGODkjOoOHqx_g-1
+Received: by mail-wm1-f72.google.com with SMTP id f1-20020a1cc901000000b003cf703a4f08so1950317wmb.2
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 09:46:28 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=6EdVZ9Ytp7ie9/xHerVjqdlN3g0FspZlsm56S90mrRM=;
+        b=Yj8TxT/qWulbAoww8GDXN7eIF+rDxM7Y4KpU9N2VVkmb4w2rzPBnZj6IUf2JtZxw8t
+         Aix4uW1DZOuMfSw0B6tMyPEV09fxRgr2vUvMO8ob/jLlC9prAzgkJAvN13hFiZeED/49
+         AYcdE5O/I/Rxc91QUulXQxFFQ9GhQgdawAUthwM5zo1tNikRCBtpVUDRVI5yA93gN0gv
+         0cEayjogR3RA06q+a54rkG1Vqi83VXzYFMr5F4NTIyGZYRvI8908rGk+cTekGSEWU7+V
+         NvtpaZP8I6soCaWCfohRRNfVWoq3HqZ8f8PLkPsDh++d7Bflme8ZmQ0iArhAXP7Gvbhv
+         xQPg==
+X-Gm-Message-State: ACrzQf3Vmzrw08CxpWibebs4aZr8xwRtdwaj7RZAC/b+uYIlw8SC15v+
+        ZXTe5R6MVIHh8x2+iBVpzwyUPjvhpV2sgfoOSKBoSKhQp0YcsTaNAEgUmLJaFlnHQEqD4dwp2Zm
+        DAHPunvWs9wbWsFQHQJ6h8Acf
+X-Received: by 2002:a5d:6145:0:b0:236:a948:9e35 with SMTP id y5-20020a5d6145000000b00236a9489e35mr22553243wrt.185.1667580387854;
+        Fri, 04 Nov 2022 09:46:27 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM5S29feX0TY+GN+inRYLlRbhUeaGWGp0FCMYMbzVHUbNnPw/uP7vCsFYUy/s/j7DedEzCRhdQ==
+X-Received: by 2002:a5d:6145:0:b0:236:a948:9e35 with SMTP id y5-20020a5d6145000000b00236a9489e35mr22553229wrt.185.1667580387555;
+        Fri, 04 Nov 2022 09:46:27 -0700 (PDT)
+Received: from ovpn-192-136.brq.redhat.com (nat-2.ign.cz. [91.219.240.2])
+        by smtp.gmail.com with ESMTPSA id j13-20020a05600c190d00b003b47e8a5d22sm3789725wmq.23.2022.11.04.09.46.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Nov 2022 09:46:26 -0700 (PDT)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>
+Cc:     KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>
+Subject: RE: [PATCH] x86/hyperv: Restore VP assist page after cpu
+ offlining/onlining
+In-Reply-To: <BYAPR21MB1688482206965765C716DC9ED73B9@BYAPR21MB1688.namprd21.prod.outlook.com>
+References: <20221103190601.399343-1-vkuznets@redhat.com>
+ <BYAPR21MB1688482206965765C716DC9ED73B9@BYAPR21MB1688.namprd21.prod.outlook.com>
+Date:   Fri, 04 Nov 2022 17:46:25 +0100
+Message-ID: <878rkqr7ku.fsf@ovpn-192-136.brq.redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v2 22/65] clk: davinci: da8xx-cfgchip: Add a
- determine_rate hook
-Content-Language: en-US
-To:     Maxime Ripard <maxime@cerno.tech>, Stephen Boyd <sboyd@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Chen-Yu Tsai <wens@csie.org>, Daniel Vetter <daniel@ffwll.ch>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        =?UTF-8?Q?Andreas_F=c3=a4rber?= <afaerber@suse.de>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Abel Vesa <abelvesa@kernel.org>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Prashant Gaikwad <pgaikwad@nvidia.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Sekhar Nori <nsekhar@ti.com>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Takashi Iwai <tiwai@suse.com>,
-        David Airlie <airlied@gmail.com>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Mark Brown <broonie@kernel.org>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     linux-stm32@st-md-mailman.stormreply.com,
-        alsa-devel@alsa-project.org, linux-mediatek@lists.infradead.org,
-        linux-phy@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        linux-actions@lists.infradead.org, linux-clk@vger.kernel.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        patches@opensource.cirrus.com, linux-tegra@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-References: <20221018-clk-range-checks-fixes-v2-0-f6736dec138e@cerno.tech>
- <20221018-clk-range-checks-fixes-v2-22-f6736dec138e@cerno.tech>
-From:   David Lechner <david@lechnology.com>
-In-Reply-To: <20221018-clk-range-checks-fixes-v2-22-f6736dec138e@cerno.tech>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - vern.gendns.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - lechnology.com
-X-Get-Message-Sender-Via: vern.gendns.com: authenticated_id: davidmain+lechnology.com/only user confirmed/virtual account not confirmed
-X-Authenticated-Sender: vern.gendns.com: davidmain@lechnology.com
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; boundary="=-=-="
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/4/22 8:17 AM, Maxime Ripard wrote:
-> The Davinci DA8xxx cfgchip "clk48" clock implements a mux with a
-> set_parent hook, but doesn't provide a determine_rate implementation.
-> 
-> This is a bit odd, since set_parent() is there to, as its name implies,
-> change the parent of a clock. However, the most likely candidate to
-> trigger that parent change is a call to clk_set_rate(), with
-> determine_rate() figuring out which parent is the best suited for a
-> given rate.
-> 
-> The other trigger would be a call to clk_set_parent(), but it's far less
-> used, and it doesn't look like there's any obvious user for that clock.
-> 
-> So, the set_parent hook is effectively unused, possibly because of an
-> oversight. However, it could also be an explicit decision by the
-> original author to avoid any reparenting but through an explicit call to
-> clk_set_parent().
-> 
-> The latter case would be equivalent to setting the flag
-> CLK_SET_RATE_NO_REPARENT, together with setting our determine_rate hook
-> to __clk_mux_determine_rate(). Indeed, if no determine_rate
-> implementation is provided, clk_round_rate() (through
-> clk_core_round_rate_nolock()) will call itself on the parent if
-> CLK_SET_RATE_PARENT is set, and will not change the clock rate
-> otherwise. __clk_mux_determine_rate() has the exact same behavior when
-> CLK_SET_RATE_NO_REPARENT is set.
-> 
-> And if it was an oversight, then we are at least explicit about our
-> behavior now and it can be further refined down the line.
+--=-=-=
+Content-Type: text/plain
 
-The parent is defined in the device tree and is not expected to change
-at runtime, so if I am understanding the patch correctly, setting the
-CLK_SET_RATE_NO_REPARENT flag seems correct.
+"Michael Kelley (LINUX)" <mikelley@microsoft.com> writes:
 
-> 
-> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
-> ---
->   drivers/clk/davinci/da8xx-cfgchip.c | 2 ++
->   1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/clk/davinci/da8xx-cfgchip.c b/drivers/clk/davinci/da8xx-cfgchip.c
-> index c04276bc4051..4c1cc59bba53 100644
-> --- a/drivers/clk/davinci/da8xx-cfgchip.c
-> +++ b/drivers/clk/davinci/da8xx-cfgchip.c
-> @@ -565,6 +565,7 @@ static u8 da8xx_usb1_clk48_get_parent(struct clk_hw *hw)
->   }
->   
->   static const struct clk_ops da8xx_usb1_clk48_ops = {
-> +	.determine_rate	= __clk_mux_determine_rate,
->   	.set_parent	= da8xx_usb1_clk48_set_parent,
->   	.get_parent	= da8xx_usb1_clk48_get_parent,
->   };
-> @@ -589,6 +590,7 @@ da8xx_cfgchip_register_usb1_clk48(struct device *dev,
->   
->   	init.name = "usb1_clk48";
->   	init.ops = &da8xx_usb1_clk48_ops;
-> +	init.flags = CLK_SET_RATE_NO_REPARENT;
->   	init.parent_names = parent_names;
->   	init.num_parents = 2;
->   
-> 
+> From: Vitaly Kuznetsov <vkuznets@redhat.com> Sent: Thursday, November 3, 2022 12:06 PM
+>> 
+>> Commit e5d9b714fe40 ("x86/hyperv: fix root partition faults when writing
+>> to VP assist page MSR") moved 'wrmsrl(HV_X64_MSR_VP_ASSIST_PAGE)' under
+>> 'if (*hvp)' condition. This works for root partition as hv_cpu_die()
+>> does memunmap() and sets 'hv_vp_assist_page[cpu]' to NULL but breaks
+>> non-root partitions as hv_cpu_die() doesn't free 'hv_vp_assist_page[cpu]'
+>> for them. 
+>
+> Did you consider having hv_cpu_die() free the VP assist page and
+> set hv_vp_assist_page[cpu] to NULL in the non-root case?
+
+Oh yes, I did, and I even wrote a patch (attached) but it failed in
+testing :-( My testing was to run CPU onlining/offlining loop and and
+try using KVM on the same CPU at the same time. I was able to see issues
+when KVM was not able to reach to Enlightened VMCS because VP assist
+page was NULL.
+
+>  That would
+> make the root and non-root cases more consistent, and it would make
+> hv_cpu_init() and hv_cpu_die() more symmetrical.   The hv_cpu_die()
+> path frees up pretty much all the other per-CPU resources.  I don't
+> know why it keeps the VP assist page for re-use if the CPU comes back
+> online later.
+>
+> You added the original code for allocating the vp_assist_page in
+> commit a46d15cc1a, so maybe you remember if there are any
+> gotchas. :-)
+
+The root cause of the problem I observed seems to be the order of CPU
+hotplug. Hyper-V uses the last CPUHP_AP_ONLINE_DYN stage while KVM has
+his own dedicated CPUHP_AP_KVM_STARTING one so we end up freeing VP
+assist page before turning KVM off on the CPU. It may be sufficient to
+introduce a new stage for Hyper-V and put it before KVM's. It's in my
+backlog to explore this path but it may take me some time to get back to
+it :-( 
+
+>
+> Michael
+>
+>> This causes VP assist page to remain unset after CPU
+>> offline/online cycle:
+>> 
+>> $ rdmsr -p 24 0x40000073
+>>   10212f001
+>> $ echo 0 > /sys/devices/system/cpu/cpu24/online
+>> $ echo 1 > /sys/devices/system/cpu/cpu24/online
+>> $ rdmsr -p 24 0x40000073
+>>   0
+>> 
+>> Fix the issue by always writing to HV_X64_MSR_VP_ASSIST_PAGE in
+>> hv_cpu_init(). Note, checking 'if (!*hvp)', for root partition is
+>> pointless as hv_cpu_die() always sets 'hv_vp_assist_page[cpu]' to
+>> NULL (and it's also NULL initially).
+>> 
+>> Note: the fact that 'hv_vp_assist_page[cpu]' is reset to NULL may
+>> present a (potential) issue for KVM. While Hyper-V uses
+>> CPUHP_AP_ONLINE_DYN stage in CPU hotplug, KVM uses
+>> CPUHP_AP_KVM_STARTING
+>> which comes earlier in CPU teardown sequence. It is theoretically
+>> possible that Enlightened VMCS is still in use. It is unclear if the
+>> issue is real and if using KVM with Hyper-V root partition is even
+>> possible.
+>> 
+>> While on it, drop the unneeded smp_processor_id() call from hv_cpu_init().
+>> 
+>> Fixes: e5d9b714fe40 ("x86/hyperv: fix root partition faults when writing to VP assist
+>> page MSR")
+>> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+>> ---
+>>  arch/x86/hyperv/hv_init.c | 54 +++++++++++++++++++--------------------
+>>  1 file changed, 26 insertions(+), 28 deletions(-)
+>> 
+>> diff --git a/arch/x86/hyperv/hv_init.c b/arch/x86/hyperv/hv_init.c
+>> index f49bc3ec76e6..a269049a43ce 100644
+>> --- a/arch/x86/hyperv/hv_init.c
+>> +++ b/arch/x86/hyperv/hv_init.c
+>> @@ -77,7 +77,7 @@ static int hyperv_init_ghcb(void)
+>>  static int hv_cpu_init(unsigned int cpu)
+>>  {
+>>  	union hv_vp_assist_msr_contents msr = { 0 };
+>> -	struct hv_vp_assist_page **hvp = &hv_vp_assist_page[smp_processor_id()];
+>> +	struct hv_vp_assist_page **hvp = &hv_vp_assist_page[cpu];
+>>  	int ret;
+>> 
+>>  	ret = hv_common_cpu_init(cpu);
+>> @@ -87,34 +87,32 @@ static int hv_cpu_init(unsigned int cpu)
+>>  	if (!hv_vp_assist_page)
+>>  		return 0;
+>> 
+>> -	if (!*hvp) {
+>> -		if (hv_root_partition) {
+>> -			/*
+>> -			 * For root partition we get the hypervisor provided VP assist
+>> -			 * page, instead of allocating a new page.
+>> -			 */
+>> -			rdmsrl(HV_X64_MSR_VP_ASSIST_PAGE, msr.as_uint64);
+>> -			*hvp = memremap(msr.pfn <<
+>> -
+>> 	HV_X64_MSR_VP_ASSIST_PAGE_ADDRESS_SHIFT,
+>> -					PAGE_SIZE, MEMREMAP_WB);
+>> -		} else {
+>> -			/*
+>> -			 * The VP assist page is an "overlay" page (see Hyper-V TLFS's
+>> -			 * Section 5.2.1 "GPA Overlay Pages"). Here it must be zeroed
+>> -			 * out to make sure we always write the EOI MSR in
+>> -			 * hv_apic_eoi_write() *after* the EOI optimization is disabled
+>> -			 * in hv_cpu_die(), otherwise a CPU may not be stopped in the
+>> -			 * case of CPU offlining and the VM will hang.
+>> -			 */
+>> +	if (hv_root_partition) {
+>> +		/*
+>> +		 * For root partition we get the hypervisor provided VP assist
+>> +		 * page, instead of allocating a new page.
+>> +		 */
+>> +		rdmsrl(HV_X64_MSR_VP_ASSIST_PAGE, msr.as_uint64);
+>> +		*hvp = memremap(msr.pfn <<
+>> HV_X64_MSR_VP_ASSIST_PAGE_ADDRESS_SHIFT,
+>> +				PAGE_SIZE, MEMREMAP_WB);
+>> +	} else {
+>> +		/*
+>> +		 * The VP assist page is an "overlay" page (see Hyper-V TLFS's
+>> +		 * Section 5.2.1 "GPA Overlay Pages"). Here it must be zeroed
+>> +		 * out to make sure we always write the EOI MSR in
+>> +		 * hv_apic_eoi_write() *after* the EOI optimization is disabled
+>> +		 * in hv_cpu_die(), otherwise a CPU may not be stopped in the
+>> +		 * case of CPU offlining and the VM will hang.
+>> +		 */
+>> +		if (!*hvp)
+>>  			*hvp = __vmalloc(PAGE_SIZE, GFP_KERNEL | __GFP_ZERO);
+>> -			if (*hvp)
+>> -				msr.pfn = vmalloc_to_pfn(*hvp);
+>> -		}
+>> -		WARN_ON(!(*hvp));
+>> -		if (*hvp) {
+>> -			msr.enable = 1;
+>> -			wrmsrl(HV_X64_MSR_VP_ASSIST_PAGE, msr.as_uint64);
+>> -		}
+>> +		if (*hvp)
+>> +			msr.pfn = vmalloc_to_pfn(*hvp);
+>> +
+>> +	}
+>> +	if (!WARN_ON(!(*hvp))) {
+>> +		msr.enable = 1;
+>> +		wrmsrl(HV_X64_MSR_VP_ASSIST_PAGE, msr.as_uint64);
+>>  	}
+>> 
+>>  	return hyperv_init_ghcb();
+>> --
+>> 2.38.1
+>
+
+-- 
+Vitaly
+
+
+--=-=-=
+Content-Type: text/x-patch
+Content-Disposition: inline;
+ filename=0001-x86-hyperv-Free-VP-assist-page-from-hv_cpu_die.patch
+
+From 9b9e30e3fc182f6a43efca0f93b5851392074a3a Mon Sep 17 00:00:00 2001
+From: Vitaly Kuznetsov <vkuznets@redhat.com>
+Date: Thu, 3 Nov 2022 16:27:41 +0100
+Subject: [PATCH] x86/hyperv: Free VP assist page from hv_cpu_die()
+Content-Type: text/plain
+
+Normally, 'hv_vp_assist_page[cpu]' points to CPU's VP assist page mapping.
+In case of Hyper-V root partition, this is 'memremap()' of the PFN given
+by the hypervisor. In case of a non-root partition, it's vmalloc(). When
+the CPU goes offline, hv_cpu_die() disables VP assist page by writing
+HV_X64_MSR_VP_ASSIST_PAGE and in case of root partition, does memunmap().
+For non-root partitions, the vmalloc()ed page remains allocated and
+thus hv_cpu_init() has to check whether a new allocation is
+needed. This is unnecessary complicated. Let's always free the page
+from hv_cpu_die() and allocate it back from hv_cpu_init(). All VP
+assist page users have to be prepared to 'hv_vp_assist_page[cpu]'
+becoming NULL anyway as that's what happes already for the root
+partition.
+
+VP assist page has two users: KVM and APIC PV EOI. When a CPU goes
+offline, there cannot be a running guest and thus KVM's use case
+should be safe. As correctly noted in commit e320ab3cec7dd ("x86/hyper-v:
+Zero out the VP ASSIST PAGE on allocation"), it is possible to see
+interrupts after hv_cpu_die() and before the CPU is fully
+dead. hv_apic_eoi_write() is, however, also prepared to see NULL in
+'hv_vp_assist_page[smp_processor_id()]'. Moreover, checking the
+page which is already unmapped from the hypervisor is incorrect in the
+first place.
+
+While on it, adjust VP assist page disabling a bit: always write to
+HV_X64_MSR_VP_ASSIST_PAGE first and unmap/free the corresponding page
+after, this is to make sure the hypervisor doesn't write to the
+already freed memory in the interim.
+
+Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+---
+ arch/x86/hyperv/hv_init.c | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
+
+diff --git a/arch/x86/hyperv/hv_init.c b/arch/x86/hyperv/hv_init.c
+index a0165df3c4d8..74be6f145fc4 100644
+--- a/arch/x86/hyperv/hv_init.c
++++ b/arch/x86/hyperv/hv_init.c
+@@ -104,8 +104,7 @@ static int hv_cpu_init(unsigned int cpu)
+ 		 * in hv_cpu_die(), otherwise a CPU may not be stopped in the
+ 		 * case of CPU offlining and the VM will hang.
+ 		 */
+-		if (!*hvp)
+-			*hvp = __vmalloc(PAGE_SIZE, GFP_KERNEL | __GFP_ZERO);
++		*hvp = __vmalloc(PAGE_SIZE, GFP_KERNEL | __GFP_ZERO);
+ 		if (*hvp)
+ 			msr.pfn = vmalloc_to_pfn(*hvp);
+ 
+@@ -233,12 +232,17 @@ static int hv_cpu_die(unsigned int cpu)
+ 			 * page here and nullify it, so that in future we have
+ 			 * correct page address mapped in hv_cpu_init.
+ 			 */
+-			memunmap(hv_vp_assist_page[cpu]);
+-			hv_vp_assist_page[cpu] = NULL;
+ 			rdmsrl(HV_X64_MSR_VP_ASSIST_PAGE, msr.as_uint64);
+ 			msr.enable = 0;
+ 		}
+ 		wrmsrl(HV_X64_MSR_VP_ASSIST_PAGE, msr.as_uint64);
++
++		if (hv_root_partition)
++			memunmap(hv_vp_assist_page[cpu]);
++		else
++			vfree(hv_vp_assist_page[cpu]);
++
++		hv_vp_assist_page[cpu] = NULL;
+ 	}
+ 
+ 	if (hv_reenlightenment_cb == NULL)
+-- 
+2.38.1
+
+
+--=-=-=--
 
