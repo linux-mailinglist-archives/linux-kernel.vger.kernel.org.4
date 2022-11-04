@@ -2,80 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04CC3618E3E
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 03:26:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30EC8618D92
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 02:22:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231431AbiKDC0N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 22:26:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37510 "EHLO
+        id S230382AbiKDBWd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 21:22:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231470AbiKDC0F (ORCPT
+        with ESMTP id S229461AbiKDBW3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 22:26:05 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DDE624BF0
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 19:26:03 -0700 (PDT)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4N3PXf6V4dzpW8R;
-        Fri,  4 Nov 2022 10:22:26 +0800 (CST)
-Received: from dggpemm500016.china.huawei.com (7.185.36.25) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 4 Nov 2022 10:26:01 +0800
-Received: from [10.67.111.115] (10.67.111.115) by
- dggpemm500016.china.huawei.com (7.185.36.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 4 Nov 2022 10:26:01 +0800
-Message-ID: <963da72d-ce85-ea0b-2100-33d191f724ac@huawei.com>
-Date:   Fri, 4 Nov 2022 10:26:01 +0800
+        Thu, 3 Nov 2022 21:22:29 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DC5C95B7;
+        Thu,  3 Nov 2022 18:22:28 -0700 (PDT)
+Received: from kwepemi500015.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4N3NC20H5tzHvc3;
+        Fri,  4 Nov 2022 09:22:06 +0800 (CST)
+Received: from huawei.com (10.175.101.6) by kwepemi500015.china.huawei.com
+ (7.221.188.92) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Fri, 4 Nov
+ 2022 09:22:25 +0800
+From:   Lu Wei <luwei32@huawei.com>
+To:     <edumazet@google.com>, <davem@davemloft.net>,
+        <yoshfuji@linux-ipv6.org>, <dsahern@kernel.org>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <xemul@parallels.com>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [patch net v5] tcp: prohibit TCP_REPAIR_OPTIONS if data was already sent
+Date:   Fri, 4 Nov 2022 10:27:23 +0800
+Message-ID: <20221104022723.1066429-1-luwei32@huawei.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.0.3
-Subject: Re: [PATCH stable 0/1] x86: aperfmperf: bug report
-To:     <tglx@linutronix.de>, <bp@alien8.de>, <mingo@redhat.com>,
-        <x86@kernel.org>, <hpa@zytor.com>, <rafael.j.wysocki@intel.com>,
-        <linux-kernel@vger.kernel.org>
-References: <20221021021740.137196-1-zouyipeng@huawei.com>
-Content-Language: en-US
-From:   Yipeng Zou <zouyipeng@huawei.com>
-In-Reply-To: <20221021021740.137196-1-zouyipeng@huawei.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.111.115]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500016.china.huawei.com (7.185.36.25)
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.101.6]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemi500015.china.huawei.com (7.221.188.92)
 X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Ping~
+If setsockopt with option name of TCP_REPAIR_OPTIONS and opt_code
+of TCPOPT_SACK_PERM is called to enable sack after data is sent
+and dupacks are received , it will trigger a warning in function
+tcp_verify_left_out() as follows:
 
-在 2022/10/21 10:17, Yipeng Zou 写道:
-> Recently i was doing some work about calculating CPU frequency on x86 on
-> stable branch linux-5.10.y, and there is a problem which i descrip in
-> the commit message.
->
-> I've noticed that it has been abandoned on the mainline. On the mainline
-> it becomes to update [a,m]cnt in timer code with HZ frequency, and it is
-> actually calculated at the time of reading the cpu freqency. This solves
-> the problem above.
->
-> So, Are there other reasons why the stable branch doesn't have these
-> changes?, this patch is just to ask how we plan to fix it.
->
-> Yipeng Zou (1):
->    x86: aperfmperf: fix overflow problem in the concurrency scenario
->
->   arch/x86/kernel/cpu/aperfmperf.c | 4 ----
->   1 file changed, 4 deletions(-)
->
+============================================
+WARNING: CPU: 8 PID: 0 at net/ipv4/tcp_input.c:2132
+tcp_timeout_mark_lost+0x154/0x160
+tcp_enter_loss+0x2b/0x290
+tcp_retransmit_timer+0x50b/0x640
+tcp_write_timer_handler+0x1c8/0x340
+tcp_write_timer+0xe5/0x140
+call_timer_fn+0x3a/0x1b0
+__run_timers.part.0+0x1bf/0x2d0
+run_timer_softirq+0x43/0xb0
+__do_softirq+0xfd/0x373
+__irq_exit_rcu+0xf6/0x140
+
+The warning is caused in the following steps:
+1. a socket named socketA is created
+2. socketA enters repair mode without build a connection
+3. socketA calls connect() and its state is changed to TCP_ESTABLISHED
+   directly
+4. socketA leaves repair mode
+5. socketA calls sendmsg() to send data, packets_out and sack_outs(dup
+   ack receives) increase
+6. socketA enters repair mode again
+7. socketA calls setsockopt with TCPOPT_SACK_PERM to enable sack
+8. retransmit timer expires, it calls tcp_timeout_mark_lost(), lost_out
+   increases
+9. sack_outs + lost_out > packets_out triggers since lost_out and
+   sack_outs increase repeatly
+
+In function tcp_timeout_mark_lost(), tp->sacked_out will be cleared if
+Step7 not happen and the warning will not be triggered. As suggested by
+Denis and Eric, TCP_REPAIR_OPTIONS should be prohibited if data was
+already sent.
+
+socket-tcp tests in CRIU has been tested as follows:
+$ sudo ./test/zdtm.py run -t zdtm/static/socket-tcp*  --keep-going \
+       --ignore-taint
+
+socket-tcp* represent all socket-tcp tests in test/zdtm/static/.
+
+Fixes: b139ba4e90dc ("tcp: Repair connection-time negotiated parameters")
+Signed-off-by: Lu Wei <luwei32@huawei.com>
+---
+v5: modify the commit message
+ net/ipv4/tcp.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
+index ef14efa1fb70..54836a6b81d6 100644
+--- a/net/ipv4/tcp.c
++++ b/net/ipv4/tcp.c
+@@ -3647,7 +3647,7 @@ int do_tcp_setsockopt(struct sock *sk, int level, int optname,
+ 	case TCP_REPAIR_OPTIONS:
+ 		if (!tp->repair)
+ 			err = -EINVAL;
+-		else if (sk->sk_state == TCP_ESTABLISHED)
++		else if (sk->sk_state == TCP_ESTABLISHED && !tp->bytes_sent)
+ 			err = tcp_repair_options_est(sk, optval, optlen);
+ 		else
+ 			err = -EPERM;
 -- 
-Regards,
-Yipeng Zou
+2.31.1
 
