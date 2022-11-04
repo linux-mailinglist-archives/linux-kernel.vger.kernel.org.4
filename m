@@ -2,43 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52B2C61928C
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 09:15:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB2166192D9
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 09:36:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230199AbiKDIOz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 04:14:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46402 "EHLO
+        id S231246AbiKDIgm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 04:36:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229950AbiKDIOt (ORCPT
+        with ESMTP id S229493AbiKDIgk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 04:14:49 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E859A26109;
-        Fri,  4 Nov 2022 01:14:47 -0700 (PDT)
-Received: from dggpeml500021.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4N3YM82mPhzRp2Y;
-        Fri,  4 Nov 2022 16:14:44 +0800 (CST)
-Received: from huawei.com (10.175.127.227) by dggpeml500021.china.huawei.com
- (7.185.36.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Fri, 4 Nov
- 2022 16:14:45 +0800
-From:   Baokun Li <libaokun1@huawei.com>
-To:     <linux-ext4@vger.kernel.org>
-CC:     <tytso@mit.edu>, <adilger.kernel@dilger.ca>, <jack@suse.cz>,
-        <ritesh.list@gmail.com>, <linux-kernel@vger.kernel.org>,
-        <yi.zhang@huawei.com>, <yukuai3@huawei.com>, <libaokun1@huawei.com>
-Subject: [PATCH] ext4: fix bad checksum after online resize
-Date:   Fri, 4 Nov 2022 16:35:53 +0800
-Message-ID: <20221104083553.581928-1-libaokun1@huawei.com>
-X-Mailer: git-send-email 2.31.1
+        Fri, 4 Nov 2022 04:36:40 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98D39111C;
+        Fri,  4 Nov 2022 01:36:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4EA4EB82BE6;
+        Fri,  4 Nov 2022 08:36:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3994C433C1;
+        Fri,  4 Nov 2022 08:36:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667550997;
+        bh=47FBA33VGpTyXxdfNI47sIEI5c7uBK+g44tvgfL+w5Y=;
+        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+        b=MTygu3Ms9uz5CYlM0ARFuZA6GWVZY1A84c0NRPvMib94hwxcW25YSkvCPktiLIQIa
+         C/1b1GZlT+4xKn84AdlaGt18H+ldCNoPbcl9Qa0Wx3WBtHcjmJgEJ8AzE4RwvskYsi
+         dHe5HReiaCLHfGO6LmN0eNzIUmy2rHERBXDJF9TyJE4F2o+AIVhFNILSIFMQdYoGnM
+         K8LNZsTeHGmD6D0+AMl9dNXC3AFAbvicPrMcbdVX1n7pOgGmvjOl6Cm9xvPFLSWvzv
+         dx0Ce9aeyff8rc5wVoWP3BiwHneomEZad5Xx3hzNrx5ZzyYb4mKEETWM/bReF0wV9t
+         SeJKPgBPw1aqA==
+Date:   Fri, 4 Nov 2022 09:36:33 +0100 (CET)
+From:   Jiri Kosina <jikos@kernel.org>
+To:     =?ISO-8859-15?Q?Eray_Or=E7unus?= <erayorcunus@gmail.com>
+cc:     platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-input@vger.kernel.org, ike.pan@canonical.com,
+        benjamin.tissoires@redhat.com, dmitry.torokhov@gmail.com,
+        hdegoede@redhat.com, mgross@linux.intel.com, pobrn@protonmail.com
+Subject: Re: [PATCH v2 2/7] HID: add mapping for camera access keys
+In-Reply-To: <20221029120311.11152-3-erayorcunus@gmail.com>
+Message-ID: <nycvar.YFH.7.76.2211040936220.29912@cbobk.fhfr.pm>
+References: <20221029120311.11152-1-erayorcunus@gmail.com> <20221029120311.11152-3-erayorcunus@gmail.com>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.127.227]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpeml500021.china.huawei.com (7.185.36.21)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -46,47 +56,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When online resizing is performed twice consecutively, the error message
-"Superblock checksum does not match superblock" is displayed for the
-second time. Here's the reproducer:
+On Sat, 29 Oct 2022, Eray Orçunus wrote:
 
-	mkfs.ext4 -F /dev/sdb 100M
-	mount /dev/sdb /tmp/test
-	resize2fs /dev/sdb 5G
-	resize2fs /dev/sdb 6G
+> HUTRR72 added 3 new usage codes for keys that are supposed to enable,
+> disable and toggle camera access. These are useful, considering many
+> laptops today have key(s) for toggling access to camera.
+> 
+> This patch adds new key definitions for KEY_CAMERA_ACCESS_ENABLE,
+> KEY_CAMERA_ACCESS_DISABLE and KEY_CAMERA_ACCESS_TOGGLE. Additionally
+> hid-debug is adjusted to recognize this new usage codes as well.
+> 
+> Signed-off-by: Eray Orçunus <erayorcunus@gmail.com>
+> Acked-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 
-To solve this issue, we moved the update of the checksum after the
-es->s_overhead_clusters is updated.
+Acked-by: Jiri Kosina <jkosina@suse.cz>
 
-Fixes: 026d0d27c488 ("ext4: reduce computation of overhead during resize")
-Fixes: de394a86658f ("ext4: update s_overhead_clusters in the superblock during an on-line resize")
-Signed-off-by: Baokun Li <libaokun1@huawei.com>
----
- fs/ext4/resize.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/fs/ext4/resize.c b/fs/ext4/resize.c
-index 6dfe9ccae0c5..32fbfc173571 100644
---- a/fs/ext4/resize.c
-+++ b/fs/ext4/resize.c
-@@ -1471,8 +1471,6 @@ static void ext4_update_super(struct super_block *sb,
- 	 * active. */
- 	ext4_r_blocks_count_set(es, ext4_r_blocks_count(es) +
- 				reserved_blocks);
--	ext4_superblock_csum_set(sb);
--	unlock_buffer(sbi->s_sbh);
- 
- 	/* Update the free space counts */
- 	percpu_counter_add(&sbi->s_freeclusters_counter,
-@@ -1508,6 +1506,8 @@ static void ext4_update_super(struct super_block *sb,
- 		ext4_calculate_overhead(sb);
- 	es->s_overhead_clusters = cpu_to_le32(sbi->s_overhead);
- 
-+	ext4_superblock_csum_set(sb);
-+	unlock_buffer(sbi->s_sbh);
- 	if (test_opt(sb, DEBUG))
- 		printk(KERN_DEBUG "EXT4-fs: added group %u:"
- 		       "%llu blocks(%llu free %llu reserved)\n", flex_gd->count,
 -- 
-2.31.1
+Jiri Kosina
+SUSE Labs
 
