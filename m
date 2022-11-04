@@ -2,87 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84E7B61A55A
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 00:07:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1A7161A561
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 00:10:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229677AbiKDXH0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 19:07:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40958 "EHLO
+        id S229704AbiKDXKg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 19:10:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229627AbiKDXHW (ORCPT
+        with ESMTP id S229575AbiKDXKe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 19:07:22 -0400
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35ED51E3F7;
-        Fri,  4 Nov 2022 16:07:22 -0700 (PDT)
-Received: from sslproxy04.your-server.de ([78.46.152.42])
-        by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1or5mO-000Lae-8C; Sat, 05 Nov 2022 00:07:16 +0100
-Received: from [85.1.206.226] (helo=linux.home)
-        by sslproxy04.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1or5mO-0003mm-3w; Sat, 05 Nov 2022 00:07:16 +0100
-Subject: Re: [PATCH bpf-next] selftests/bpf: fix build-id for
- liburandom_read.so
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     KP Singh <kpsingh@kernel.org>, Artem Savkov <asavkov@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, ykaliuta@redhat.com,
-        linux-kernel@vger.kernel.org
-References: <20221104094016.102049-1-asavkov@redhat.com>
- <CACYkzJ4E37F9iyPU0Qux4ZazHMxz0oV=dANOaDNZ4O8cuWVYhg@mail.gmail.com>
- <5e6b5345-fc44-b577-e379-cedfe3263066@iogearbox.net>
- <CAEf4BzZO+4znx4VzQ9LwzFXv0=NfQL4DKBZCGB36ojYNbRoCzQ@mail.gmail.com>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <385ce274-712f-e1fb-8de6-f4441728c225@iogearbox.net>
-Date:   Sat, 5 Nov 2022 00:07:15 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        Fri, 4 Nov 2022 19:10:34 -0400
+Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85BA7A19F;
+        Fri,  4 Nov 2022 16:10:33 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ms.lwn.net (Postfix) with ESMTPSA id C35E82C8;
+        Fri,  4 Nov 2022 23:10:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net C35E82C8
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1667603432; bh=hrRJCfax9hvAb9UzryvBrpCL6w0tDPadfdbP2XtM8T4=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=hos/qeQCIvdU1pNKwBpWwCpSvg+L/oCV+7awU4OsvHsS2cxH6xNcpJjp2hoxSjzan
+         IxlNJcInNFz9RQI6Z5l+vvzO2Zqbest6sAYh6K45Fzq+1HrRTUmdfDVftWGMKwO7z2
+         3xgc7X7UTc1EHPd5dky1Wd5QQsA8SHLfP5LII7zFt/ofkNr5KdIj4WRSKTb2BcHiTC
+         vkZw0kRGw2aSmNAKlbwHgAhup2QHL0P5IjRuLFgLL8o9Dm+/0OhPNsdj/eGfUnUS8G
+         MPSiMUzQPzDopPwATzPO2Yix/ZcKDKvt1JHJdB6LDNXBur4TkBQ8OoHSvhgGWBMGJj
+         d3JBaRHGjjhhQ==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Joe Stringer <joe@isovalent.com>,
+        Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     bpf@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ast@kernel.org, martin.lau@linux.dev
+Subject: Re: [PATCH bpf-next v2] docs/bpf: Add LRU internals description and
+ graph
+In-Reply-To: <CADa=RyxodgJ+Wa3tiWxTntZoy7eSm_UkuzDBx9tCN=s_QnsDOw@mail.gmail.com>
+References: <20221103205010.3266865-1-joe@isovalent.com>
+ <101ab00c-5fa7-c3ee-63bd-f235e7c4d398@gmail.com>
+ <CADa=RyxodgJ+Wa3tiWxTntZoy7eSm_UkuzDBx9tCN=s_QnsDOw@mail.gmail.com>
+Date:   Fri, 04 Nov 2022 17:10:31 -0600
+Message-ID: <87fseyqpso.fsf@meer.lwn.net>
 MIME-Version: 1.0
-In-Reply-To: <CAEf4BzZO+4znx4VzQ9LwzFXv0=NfQL4DKBZCGB36ojYNbRoCzQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.7/26710/Fri Nov  4 08:53:05 2022)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/4/22 11:58 PM, Andrii Nakryiko wrote:
-> On Fri, Nov 4, 2022 at 10:38 AM Daniel Borkmann <daniel@iogearbox.net> wrote:
->>
->> Hi Artem,
->>
->> On 11/4/22 2:29 PM, KP Singh wrote:
->>> On Fri, Nov 4, 2022 at 10:41 AM Artem Savkov <asavkov@redhat.com> wrote:
->>>>
->>>> lld produces "fast" style build-ids by default, which is inconsistent
->>>> with ld's "sha1" style. Explicitly specify build-id style to be "sha1"
->>>> when linking liburandom_read.so the same way it is already done for
->>>> urandom_read.
->>>>
->>>> Signed-off-by: Artem Savkov <asavkov@redhat.com>
->>>
->>> Acked-by: KP Singh <kpsingh@kernel.org>
->>>
->>> This was done in
->>> https://lore.kernel.org/bpf/20200922232140.1994390-1-morbo@google.com
->>
->> When you say "fix", does it actually fix a failing test case or is it more
->> of a cleanup to align liburandom_read build with urandom_read? From glancing
->> at the code, we only check build id for urandom_read.
-> 
-> I reworded the subject to "selftests/bpf: Use consistent build-id type
-> for liburandom_read.so" and pushed. Thanks!
+Joe Stringer <joe@isovalent.com> writes:
 
-Ack, sgtm!
+> Resending, this time without HTML.
+>
+> On Fri, Nov 4, 2022 at 2:31 AM Bagas Sanjaya <bagasdotme@gmail.com> wrote:
+>>
+>> Shouldn't the table be written in reST table syntax instead?
+>
+> This table follows the syntax outlined in
+> https://docs.kernel.org/doc-guide/sphinx.html#list-tables . Is that
+> document not up to date?
+
+That document, right where you linked, says:
+
+	The list-table formats can be useful for tables that are not
+	easily laid out in the usual Sphinx ASCII-art formats. These
+	formats are nearly impossible for readers of the plain-text
+	documents to understand, though, and should be avoided in the
+	absence of a strong justification for their use.
+
+The list-table formats exist for a reason, and sometimes they can't
+really be avoided, but they do impose a heavy readability cost on the
+plain-text files.
+
+> I'm happy to do this, but several of the diagram boxes will reference
+> terms like rotation, shrinking etc without explaining what they are. I
+> think it's a net negative to readability if this text is not included
+> with the diagram. If you think the commit formatting is a bit over the
+> top, I could maybe just remove the decoration and embed the content
+> directly in the doc? On my first attempt at sketching this up, it just
+> felt a bit weird for me to submit that text directly if Martin was the
+> author of the text. But I could figure something out for that if
+> that's the preferred approach.
+
+I don't quite understand this comment; I don't think anybody is asking
+you to take information out?  Just to use one of the other table formats
+if you can.
+
+>> Since it references the same figure, just say "See the figure above for more
+>> details".
+>
+> The figure is rendered visually in the docs without the corresponding
+> node names, so developers would need to look at either the dot source
+> or maybe the SVG source though that's arguably a little less readable.
+> The suggested phrasing to see the figure doesn't sound very useful to
+> me since the simple reader's interpretation would be to look directly
+> at the render rather than the source. This last sentence was intended
+> as a helpful way for developers to find the path to the corresponding
+> document, but if you think that is too much detail then I could also
+> just drop this last sentence. Thoughts?
+
+That sentence is fine, I wouldn't mess with it.
+
+Thanks,
+
+jon
