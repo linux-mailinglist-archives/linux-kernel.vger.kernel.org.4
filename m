@@ -2,120 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C355F619F2B
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 18:47:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F56A619F33
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 18:48:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231536AbiKDRrO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 13:47:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53676 "EHLO
+        id S231527AbiKDRsf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 13:48:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231319AbiKDRrK (ORCPT
+        with ESMTP id S231398AbiKDRsb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 13:47:10 -0400
-Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E984311174
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 10:47:05 -0700 (PDT)
-Received: by mail-qt1-x82c.google.com with SMTP id e15so3483850qts.1
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 10:47:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wZUcE77o1yzWjb0fTasyoyk6GrW1k8wolBp/KJmZeFs=;
-        b=aTJncUTU61csNDX0UGztNm3uJUH4a3rJMzv7m0JmGps3lnjVb1938abOlb8jxHYYcf
-         rbBTBAgHQDpIfOCewXIS1dJDmufR78SfSlNORbhIYCpfex6MggHAYds9uYlP+9CQ3XZr
-         V7M1HG/V4MG3tAwAraszwL7kCKKRnc2+9AFvzp7+T15wM5EZODPbvJCKk6g5qbw/qXZT
-         bbu4xZEKGwPDhntH+PsTIHo5U6ThmfSHyCr3HapDp+4KjwFenwVPW6isLMGPwbm31QBA
-         tdmKUoCYPMWmESRS81x1BhMc6oMZEyuFFIr+BeTkWxgpvyVFJ5EOaMZWfXUVMXnBleF1
-         xrOA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wZUcE77o1yzWjb0fTasyoyk6GrW1k8wolBp/KJmZeFs=;
-        b=GP+7COlwbdaGdslHMRfJxCtQCVKIFShW46URxjZAdLCWmXUg2RVgSxUIR/dORgiuaK
-         LtN3AFFbe4ZTBR74CRPepNkFWEbU+JzVNEG9p22z/QP3a83U35O/fulhoDDujVtTaAWx
-         AlNiXYE/GYrpPF8I9PrG/HaKbbJlAp9o39W4Ooz2cXlYdH/DqEE5/eBFNEZ9EAIc3/H7
-         FSNligoLVKWqu5aarEWNXjdD6C59W2px1PacitXmpdkfAbi2aQPzWvTgmyXs5YIWAMen
-         /1m7xGqAePkFkNK7W7z2UtQ5oIX5fhM7IseKkUD766nOvuMXV8WMyYbeMy9uEmlJs5Xb
-         k2FA==
-X-Gm-Message-State: ACrzQf0NFlcIMOuufoJRk32otMf9u5+5UmBqk1rWjlU3q6wwY5hhg/jK
-        lNHuAEac21OqcejN+e/Xf6ZflQ==
-X-Google-Smtp-Source: AMsMyM45+S7Luyke1QTKNyUacM3gyzQXQHhhuHAb9M/YWli+5uvhotD+CNYWqDFz2zLNxQbC9Fn+aw==
-X-Received: by 2002:ac8:7f51:0:b0:3a5:5e3d:4b56 with SMTP id g17-20020ac87f51000000b003a55e3d4b56mr6175118qtk.519.1667584025047;
-        Fri, 04 Nov 2022 10:47:05 -0700 (PDT)
-Received: from krzk-bin.. ([2601:586:5000:570:aad6:acd8:4ed9:299b])
-        by smtp.gmail.com with ESMTPSA id c7-20020a05620a268700b006f84ee3a4f3sm3432908qkp.48.2022.11.04.10.47.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Nov 2022 10:47:04 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 3/3] dt-bindings: clock: qcom,audiocc-sm8250: add missing audio clock
-Date:   Fri,  4 Nov 2022 13:46:56 -0400
-Message-Id: <20221104174656.123979-3-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221104174656.123979-1-krzysztof.kozlowski@linaro.org>
-References: <20221104174656.123979-1-krzysztof.kozlowski@linaro.org>
+        Fri, 4 Nov 2022 13:48:31 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05C1A43AD2
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 10:47:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1667584048;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=qnPmYmConUMgaBA5iJmBF7ozEvY3875t4nGAe/KAgjQ=;
+        b=XGQybIPrL7qvkhV+JFhFl1i/73L8BXxvQ9w/H7mK48m5O0PMxlaNMFD07E9t/uqvGlML1J
+        Wd1eday13O9/hMeUGMIK0hYM93B2E4Z7/oPCEKbbR1pYMvLBmwaot7AmC8dxOEC8ssy+pC
+        EdVU9Xg5mxe45UfyqSr0Jm5q/zBaCTQ=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-102-3FIYXAr3MwugYiDXwX6Aig-1; Fri, 04 Nov 2022 13:47:24 -0400
+X-MC-Unique: 3FIYXAr3MwugYiDXwX6Aig-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7905F85A583;
+        Fri,  4 Nov 2022 17:47:23 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.37.22])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 9C97C4EA5A;
+        Fri,  4 Nov 2022 17:47:21 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        David Howells <dhowells@redhat.com>, willy@infradead.org,
+        dchinner@redhat.com, Steve French <smfrench@gmail.com>,
+        Shyam Prasad N <nspmangalore@gmail.com>,
+        Rohith Surabattula <rohiths.msft@gmail.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        Ira Weiny <ira.weiny@intel.com>, linux-cifs@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] iov_iter: Declare new iterator direction symbols
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <1010625.1667584040.1@warthog.procyon.org.uk>
+Content-Transfer-Encoding: quoted-printable
+Date:   Fri, 04 Nov 2022 17:47:20 +0000
+Message-ID: <1010626.1667584040@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The SM8250 DTS uses three clocks as input to LPASS AudioClock Controller
-(althopugh Linux driver seems not needing it), so document the missing
-audio voting clock.
+Hi Linus, Al,
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+If we're going to go with Al's changes to switch to using ITER_SOURCE and
+ITER_DEST instead of READ/WRITE, can we put just the new symbols into main=
+line
+now, even if we leave the rest for the next merge window?
+
+Thanks,
+David
 ---
- .../devicetree/bindings/clock/qcom,audiocc-sm8250.yaml       | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+From: Al Viro <viro@zeniv.linux.org.uk>
 
-diff --git a/Documentation/devicetree/bindings/clock/qcom,audiocc-sm8250.yaml b/Documentation/devicetree/bindings/clock/qcom,audiocc-sm8250.yaml
-index 915d76206ad0..48c7e10cc1b9 100644
---- a/Documentation/devicetree/bindings/clock/qcom,audiocc-sm8250.yaml
-+++ b/Documentation/devicetree/bindings/clock/qcom,audiocc-sm8250.yaml
-@@ -28,11 +28,13 @@ properties:
-   clocks:
-     items:
-       - description: LPASS Core voting clock
-+      - description: LPASS Audio codec voting clock
-       - description: Glitch Free Mux register clock
- 
-   clock-names:
-     items:
-       - const: core
-+      - const: audio
-       - const: bus
- 
- required:
-@@ -53,6 +55,7 @@ examples:
-       compatible = "qcom,sm8250-lpass-audiocc";
-       reg = <0x03300000 0x30000>;
-       clocks = <&q6afecc LPASS_HW_MACRO_VOTE LPASS_CLK_ATTRIBUTE_COUPLE_NO>,
-+               <&q6afecc LPASS_HW_DCODEC_VOTE LPASS_CLK_ATTRIBUTE_COUPLE_NO>,
-                <&q6afecc LPASS_CLK_ID_TX_CORE_MCLK LPASS_CLK_ATTRIBUTE_COUPLE_NO>;
--      clock-names = "core", "bus";
-+      clock-names = "core", "audio", "bus";
-     };
--- 
-2.34.1
+iov_iter: Declare new iterator direction symbols
+
+READ/WRITE proved to be actively confusing - the meanings are
+"data destination, as used with read(2)" and "data source, as
+used with write(2)", but people keep interpreting those as
+"we read data from it" and "we write data to it", i.e. exactly
+the wrong way.
+
+Call them ITER_DEST and ITER_SOURCE - at least that is harder
+to misinterpret...
+
+[dhowells] Declare the symbols for later use and change to an enum.  If
+READ/WRITE are switched to an enum also, I think the compiler should
+generate a warning if they're mixed.
+
+Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
+Signed-off-by: David Howells <dhowells@redhat.com>
+Link: https://lore.kernel.org/r/20221028023352.3532080-12-viro@zeniv.linux=
+.org.uk/ # v2
+---
+ include/linux/uio.h |    5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/include/linux/uio.h b/include/linux/uio.h
+index 2e3134b14ffd..7c1317b34c57 100644
+--- a/include/linux/uio.h
++++ b/include/linux/uio.h
+@@ -29,6 +29,11 @@ enum iter_type {
+ 	ITER_UBUF,
+ };
+ =
+
++enum iov_iter_direction {
++	ITER_DEST	=3D 0,	/* Iterator is a destination buffer (=3D=3D READ) */
++	ITER_SOURCE	=3D 1,	/* Iterator is a source buffer (=3D=3D WRITE) */
++};
++
+ struct iov_iter_state {
+ 	size_t iov_offset;
+ 	size_t count;
 
