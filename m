@@ -2,70 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 301EF619088
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 06:56:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F1BC619090
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 06:57:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231597AbiKDF4C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 01:56:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36478 "EHLO
+        id S231294AbiKDF5X convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 4 Nov 2022 01:57:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231561AbiKDFzW (ORCPT
+        with ESMTP id S231417AbiKDF4k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 01:55:22 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 163B22A424;
-        Thu,  3 Nov 2022 22:52:24 -0700 (PDT)
+        Fri, 4 Nov 2022 01:56:40 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC7A427B2E;
+        Thu,  3 Nov 2022 22:54:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B1CAAB82BFE;
-        Fri,  4 Nov 2022 05:51:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F079C433D6;
-        Fri,  4 Nov 2022 05:51:41 +0000 (UTC)
-Date:   Fri, 4 Nov 2022 01:51:39 -0400
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6C95AB82BFB;
+        Fri,  4 Nov 2022 05:54:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CCCBC433C1;
+        Fri,  4 Nov 2022 05:54:45 +0000 (UTC)
+Date:   Fri, 4 Nov 2022 01:54:44 -0400
 From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Eric Dumazet <edumazet@google.com>
-Cc:     Paolo Abeni <pabeni@redhat.com>, Jakub Kicinski <kuba@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+To:     linux-kernel@vger.kernel.org
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
         Stephen Boyd <sboyd@kernel.org>,
         Guenter Roeck <linux@roeck-us.net>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Mirko Lindner <mlindner@marvell.com>,
-        Stephen Hemminger <stephen@networkplumber.org>,
-        Martin KaFai Lau <martin.lau@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Kuniyuki Iwashima <kuniyu@amazon.com>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        Menglong Dong <imagedong@tencent.com>,
-        linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org,
-        bridge@lists.linux-foundation.org, netfilter-devel@vger.kernel.org,
-        coreteam@netfilter.org, lvs-devel@vger.kernel.org,
-        linux-afs@lists.infradead.org, linux-nfs@vger.kernel.org,
-        tipc-discussion@lists.sourceforge.net
-Subject: Re: [RFC][PATCH v2 19/31] timers: net: Use del_timer_shutdown()
- before freeing timer
-Message-ID: <20221104015139.58f17730@rorschach.local.home>
-In-Reply-To: <CANn89iLv9cak6_vXJG5t=Kq+eiMPdMxF8w4AAuAuFB5sOsy2zg@mail.gmail.com>
-References: <20221027150525.753064657@goodmis.org>
-        <20221027150928.780676863@goodmis.org>
-        <20221027155513.60b211e2@gandalf.local.home>
-        <CAHk-=wjAjW2P5To82+CAM0Rx8RexQBHPTVZBWBPHyEPGm37oFA@mail.gmail.com>
-        <20221027163453.383bbf8e@gandalf.local.home>
-        <CAHk-=whoS+krLU7JNe=hMp2VOcwdcCdTXhdV8qqKoViwzzJWfA@mail.gmail.com>
-        <20221027170720.31497319@gandalf.local.home>
-        <20221027183511.66b058c4@gandalf.local.home>
-        <20221028183149.2882a29b@gandalf.local.home>
-        <20221028154617.3c63ba68@kernel.org>
-        <27a6a587fee5e9172e41acd16ae1bc1f556fdbd7.camel@redhat.com>
-        <20221103175123.744d0f37@rorschach.local.home>
-        <CANn89iLv9cak6_vXJG5t=Kq+eiMPdMxF8w4AAuAuFB5sOsy2zg@mail.gmail.com>
+        Anna-Maria Gleixner <anna-maria@linutronix.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Christian =?UTF-8?B?S8O2bmln?= <christian.koenig@amd.com>,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org
+Subject: Re: [RFC][PATCH v3 12/33] timers: dma-buf: Use
+ timer_shutdown_sync() before freeing timer
+Message-ID: <20221104015444.57f73efb@rorschach.local.home>
+In-Reply-To: <20221104054914.085569465@goodmis.org>
+References: <20221104054053.431922658@goodmis.org>
+        <20221104054914.085569465@goodmis.org>
 X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
@@ -75,42 +54,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 3 Nov 2022 17:00:20 -0700
-Eric Dumazet <edumazet@google.com> wrote:
+[ Once again, quilt fails the MIME coding ]
 
->  inet_csk_clear_xmit_timers() can be called multiple times during TCP
-> socket lifetime.
-> 
-> (See tcp_disconnect(), which can be followed by another connect() ... and loop)
-> 
-> Maybe add a second parameter, or add a new
-> inet_csk_shutdown_xmit_timers() only called from tcp_v4_destroy_sock() ?
-> 
+From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
 
-I guess.
+Before a timer is freed, timer_shutdown_sync() must be called.
 
-> >
-> >  void inet_csk_delete_keepalive_timer(struct sock *sk)
-> >  {
-> > -       sk_stop_timer(sk, &sk->sk_timer);
-> > +       sk_shutdown_timer(sk, &sk->sk_timer);  
-> 
-> SO_KEEPALIVE can be called multiple times in a TCP socket lifetime,
-> on/off/on/off/...
-> 
-> I suggest leaving sk_stop_timer() here.
-> 
-> Eventually  inet_csk_clear_xmit_timers( sk, destroy=true) (or
-> inet_csk_shutdown_xmit_timers(())
->    will  be called before the socket is destroyed.
+Link: https://lore.kernel.org/all/20220407161745.7d6754b3@gandalf.local.home/
 
-OK. 
+Cc: Sumit Semwal <sumit.semwal@linaro.org>
+Cc: "Christian König" <christian.koenig@amd.com>
+Cc: linux-media@vger.kernel.org
+Cc: dri-devel@lists.freedesktop.org
+Cc: linaro-mm-sig@lists.linaro.org
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+---
+ drivers/dma-buf/st-dma-fence.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Guenter,
-
-I posted a new series, but did not include this change. If you want to
-test that other series, I would suggest to at least add the first part
-of this patch, otherwise it will trigger. But we want to see if there's
-other locations of issue that we should care about.
-
--- Steve
+diff --git a/drivers/dma-buf/st-dma-fence.c b/drivers/dma-buf/st-dma-fence.c
+index fb6e0a6ae2c9..5d3e7b503501 100644
+--- a/drivers/dma-buf/st-dma-fence.c
++++ b/drivers/dma-buf/st-dma-fence.c
+@@ -412,7 +412,7 @@ static int test_wait_timeout(void *arg)
+ 
+ 	err = 0;
+ err_free:
+-	del_timer_sync(&wt.timer);
++	timer_shutdown_sync(&wt.timer);
+ 	destroy_timer_on_stack(&wt.timer);
+ 	dma_fence_signal(wt.f);
+ 	dma_fence_put(wt.f);
+-- 
+2.35.1
