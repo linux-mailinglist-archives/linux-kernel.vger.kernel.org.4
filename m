@@ -2,239 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1BCD619E4E
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 18:17:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D7C7619E52
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 18:17:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231696AbiKDRRA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 13:17:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57616 "EHLO
+        id S231794AbiKDRRw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 13:17:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231621AbiKDRQq (ORCPT
+        with ESMTP id S231756AbiKDRRd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 13:16:46 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CC883E09D;
-        Fri,  4 Nov 2022 10:16:45 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id v17so5500464plo.1;
-        Fri, 04 Nov 2022 10:16:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=e0ErP+orkk4G4ShNSRoAumyTCOdV2yHLSVRR3eTBZqY=;
-        b=pnM3I45GlSkO+51EPfO/sMnc4irB4Km6/IANDutMalaLXhM0IbxCwbXK1vNBWmD4Cx
-         IaEbe+6qSuyiP+ff+zgSY7A2g6unUQt2J3/kHEciXxbQvFNkLY7qKNeBSfS42DU/Gzm8
-         4/hOoI/3YQwf2XbCC5lPNk65PRLQESclwUb5kQeFA2K0dIUhLRQeeAl4oExZrO5jwfSo
-         fJd73x2t2uAjgAT0X88cufrQbA+2qnKVn1SqECkojZfFmMtqn3tEc843RIY8b8WgK00r
-         BuY+JKPIaY09w6d4/iMfLl99dklAQ4QKx7a6htaodAdv8DjWmfSxoCErE4l28o1XN0sU
-         ZtEw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=e0ErP+orkk4G4ShNSRoAumyTCOdV2yHLSVRR3eTBZqY=;
-        b=pjbhcPRfoak/KUVrwcC6pJp9HzxEFQeZqxbKDGGtzrUryzsHRNFvIANjU3xsBxH4ez
-         X5s+4sDCJF/eCrnrTxYf+mE2Ncrbp+IP40EvhMnU803ePfeE+rcsloAiocsGUi4Pnxpd
-         8gJyCcL4s6rOr1eBopcDuJVVB45AK4Zs1sffvAWTISer0L80iQP5A86QOiwnCxxt6FFy
-         odbmL7Ft1V7R+LlAZBLYEir+IuqK08MFNxQV4RB/GvC4GL1SM9TrkPNLa1MKRsqOPliB
-         NNFrl0wcgdDfIXt93YaaOvxSq/incJStLPV9AfSQ+zmjwA15xYF/GzhJd806eBpuX26S
-         kKJQ==
-X-Gm-Message-State: ACrzQf04cyEkWTMVqy5BXZ7VAZ3CpKomwLfSvBuxiF/Z/zMnhjaVEuKG
-        IGlVUsapz73mM/BvMTVwodpDvZR8No4=
-X-Google-Smtp-Source: AMsMyM7hdEM7xNTxTC+b/SLA3tmCuWd+pXY/ru1M14fvtoxF7YucqgvNa7u/+yapLO6Ua1M7ev1b+w==
-X-Received: by 2002:a17:903:2308:b0:186:f608:c509 with SMTP id d8-20020a170903230800b00186f608c509mr36996999plh.154.1667582204511;
-        Fri, 04 Nov 2022 10:16:44 -0700 (PDT)
-Received: from localhost.localdomain (124x33x176x97.ap124.ftth.ucom.ne.jp. [124.33.176.97])
-        by smtp.gmail.com with ESMTPSA id u15-20020a17090a450f00b00212c27abcaesm1917655pjg.17.2022.11.04.10.16.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Nov 2022 10:16:44 -0700 (PDT)
-Sender: Vincent Mailhol <vincent.mailhol@gmail.com>
-From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-To:     linux-can@vger.kernel.org
-Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Subject: [PATCH v2 3/3] can: etas_es58x: report the firmware version through ethtool
-Date:   Sat,  5 Nov 2022 02:16:04 +0900
-Message-Id: <20221104171604.24052-4-mailhol.vincent@wanadoo.fr>
-X-Mailer: git-send-email 2.37.4
-In-Reply-To: <20221104171604.24052-1-mailhol.vincent@wanadoo.fr>
-References: <20221104073659.414147-1-mailhol.vincent@wanadoo.fr>
- <20221104171604.24052-1-mailhol.vincent@wanadoo.fr>
+        Fri, 4 Nov 2022 13:17:33 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA2A842F4E;
+        Fri,  4 Nov 2022 10:17:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667582251; x=1699118251;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=WgIQx6ItQN2BeraUn6yfs2aWC/9lQldfAk5Z+hzj/fo=;
+  b=fyUeHYKgo4a4p5EmcFycRi4SX96uiC+pe1a1b7PeYjBxBQmRZXUEO5fi
+   sI6C5WTRYbwXPNKC0dZqb10EjFENB+YsCjRHgtaLHY7FpQMkxvJScLSB3
+   1mEHGnvKk4bF96TFRi0tLaZIPwLdwoBj0lDXJoHoSGVI4zCxkwj8CCDSz
+   Cdge3WTIBf4BzMlhoxG/PehrqSIR2m/dIXSPB3gwZMyIMitf+aCzsrUj3
+   fRMEQ16hUYDOLDQVzKHL2d1O4jD9T9aCC70LOv4RIlsYNR2NVr63r5ypG
+   l30woRefiL9JnsCcY5rkNu6AP8Xebn7Mee5KnZ0A+Cct/q5fP+bFrH8cn
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10521"; a="311768225"
+X-IronPort-AV: E=Sophos;i="5.96,138,1665471600"; 
+   d="scan'208";a="311768225"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2022 10:17:31 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10521"; a="668427097"
+X-IronPort-AV: E=Sophos;i="5.96,138,1665471600"; 
+   d="scan'208";a="668427097"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga001.jf.intel.com with ESMTP; 04 Nov 2022 10:17:29 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1or0Js-007SvW-0G;
+        Fri, 04 Nov 2022 19:17:28 +0200
+Date:   Fri, 4 Nov 2022 19:17:27 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        linux-acpi@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 5/6] gpiolib: consolidate GPIO lookups
+Message-ID: <Y2VJJ8CYhGY69c/z@smile.fi.intel.com>
+References: <20221031-gpiolib-swnode-v1-0-a0ab48d229c7@gmail.com>
+ <20221031-gpiolib-swnode-v1-5-a0ab48d229c7@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221031-gpiolib-swnode-v1-5-a0ab48d229c7@gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ES58x devices report below information in their usb product info
-string:
+On Thu, Nov 03, 2022 at 11:10:15PM -0700, Dmitry Torokhov wrote:
+> Ensure that all paths to obtain/look up GPIOD from generic
+> consumer-visible APIs go through the new gpiod_find_and_request()
+> helper, so that we can easily extend it with support for new firmware
+> mechanisms.
 
-  * the firmware version
-  * the bootloader version
-  * the hardware revision
+...
 
-Report the firmware version through ethtool_drvinfo::fw_version.
-Because struct ethtool_drvinfo has no fields to report the boatloader
-version nor the hardware revision, continue to print these in the
-kernel log (c.f. es58x_get_product_info()).
+> +static struct gpio_desc *gpiod_find_by_fwnode(struct fwnode_handle *fwnode,
+> +					      struct device *consumer,
+> +					      const char *con_id,
+> +					      unsigned int idx,
+> +					      enum gpiod_flags *flags,
+> +					      unsigned long *lookupflags)
+>  {
 
-While doing so, bump up copyright year of each modified files.
+> +	struct gpio_desc *desc = ERR_PTR(-ENOENT);
 
-Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
----
- drivers/net/can/usb/etas_es58x/es581_4.c    |  5 ++-
- drivers/net/can/usb/etas_es58x/es58x_core.c | 42 ++++++++++++++++++++-
- drivers/net/can/usb/etas_es58x/es58x_core.h |  5 ++-
- drivers/net/can/usb/etas_es58x/es58x_fd.c   |  5 ++-
- 4 files changed, 51 insertions(+), 6 deletions(-)
+No need, just return directly.
 
-diff --git a/drivers/net/can/usb/etas_es58x/es581_4.c b/drivers/net/can/usb/etas_es58x/es581_4.c
-index 1bcdcece5ec7..29c03c8b3f07 100644
---- a/drivers/net/can/usb/etas_es58x/es581_4.c
-+++ b/drivers/net/can/usb/etas_es58x/es581_4.c
-@@ -6,7 +6,7 @@
-  *
-  * Copyright (c) 2019 Robert Bosch Engineering and Business Solutions. All rights reserved.
-  * Copyright (c) 2020 ETAS K.K.. All rights reserved.
-- * Copyright (c) 2020, 2021 Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-+ * Copyright (c) 2020-2022 Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-  */
- 
- #include <linux/kernel.h>
-@@ -492,7 +492,8 @@ const struct es58x_parameters es581_4_param = {
- 	.tx_bulk_max = ES581_4_TX_BULK_MAX,
- 	.urb_cmd_header_len = ES581_4_URB_CMD_HEADER_LEN,
- 	.rx_urb_max = ES58X_RX_URBS_MAX,
--	.tx_urb_max = ES58X_TX_URBS_MAX
-+	.tx_urb_max = ES58X_TX_URBS_MAX,
-+	.prod_info_delim = ',',
- };
- 
- const struct es58x_operators es581_4_ops = {
-diff --git a/drivers/net/can/usb/etas_es58x/es58x_core.c b/drivers/net/can/usb/etas_es58x/es58x_core.c
-index 1a17aadfc1dc..72a60f5f92c8 100644
---- a/drivers/net/can/usb/etas_es58x/es58x_core.c
-+++ b/drivers/net/can/usb/etas_es58x/es58x_core.c
-@@ -7,7 +7,7 @@
-  *
-  * Copyright (c) 2019 Robert Bosch Engineering and Business Solutions. All rights reserved.
-  * Copyright (c) 2020 ETAS K.K.. All rights reserved.
-- * Copyright (c) 2020, 2021 Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-+ * Copyright (c) 2020-2022 Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-  */
- 
- #include <linux/ethtool.h>
-@@ -1978,7 +1978,47 @@ static const struct net_device_ops es58x_netdev_ops = {
- 	.ndo_eth_ioctl = can_eth_ioctl_hwts,
- };
- 
-+/**
-+ * es58x_get_drvinfo() - Get the driver name and firmware version.
-+ * @netdev: CAN network device.
-+ * @drvinfo: Driver information.
-+ *
-+ * Populate @drvinfo with the driver name and the firmware version.
-+ */
-+static void es58x_get_drvinfo(struct net_device *netdev,
-+			      struct ethtool_drvinfo *drvinfo)
-+{
-+	struct es58x_device *es58x_dev = es58x_priv(netdev)->es58x_dev;
-+	char *prod_info, *start, *end;
-+
-+	strscpy(drvinfo->driver, KBUILD_MODNAME, sizeof(drvinfo->driver));
-+
-+	prod_info = usb_cache_string(es58x_dev->udev, ES58X_PROD_INFO_IDX);
-+	if (!prod_info)
-+		return;
-+
-+	/* The firmware prefix is either "FW_V" or "FW:" */
-+	start = strstr(prod_info, "FW");
-+	if (!start)
-+		goto free_prod_info;
-+	/* Go to first digit */
-+	while (!isdigit(*start)) {
-+		start++;
-+		if (!*start)
-+			goto free_prod_info;
-+	}
-+	end = strchr(start, es58x_dev->param->prod_info_delim);
-+	if (!end || end - start >= sizeof(drvinfo->fw_version))
-+		goto free_prod_info;
-+
-+	strncpy(drvinfo->fw_version, start, end - start);
-+
-+ free_prod_info:
-+	kfree(prod_info);
-+}
-+
- static const struct ethtool_ops es58x_ethtool_ops = {
-+	.get_drvinfo = es58x_get_drvinfo,
- 	.get_ts_info = can_ethtool_op_get_ts_info_hwts,
- };
- 
-diff --git a/drivers/net/can/usb/etas_es58x/es58x_core.h b/drivers/net/can/usb/etas_es58x/es58x_core.h
-index 9a5a616df783..9c2cdb57f34a 100644
---- a/drivers/net/can/usb/etas_es58x/es58x_core.h
-+++ b/drivers/net/can/usb/etas_es58x/es58x_core.h
-@@ -6,7 +6,7 @@
-  *
-  * Copyright (c) 2019 Robert Bosch Engineering and Business Solutions. All rights reserved.
-  * Copyright (c) 2020 ETAS K.K.. All rights reserved.
-- * Copyright (c) 2020, 2021 Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-+ * Copyright (c) 2020-2022 Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-  */
- 
- #ifndef __ES58X_COMMON_H__
-@@ -309,6 +309,8 @@ struct es58x_priv {
-  * @urb_cmd_header_len: Length of the URB command header.
-  * @rx_urb_max: Number of RX URB to be allocated during device probe.
-  * @tx_urb_max: Number of TX URB to be allocated during device probe.
-+ * @prod_info_delim: delimiter of the different fields in the USB
-+ *	product information string.
-  */
- struct es58x_parameters {
- 	const struct can_bittiming_const *bittiming_const;
-@@ -327,6 +329,7 @@ struct es58x_parameters {
- 	u8 urb_cmd_header_len;
- 	u8 rx_urb_max;
- 	u8 tx_urb_max;
-+	char prod_info_delim;
- };
- 
- /**
-diff --git a/drivers/net/can/usb/etas_es58x/es58x_fd.c b/drivers/net/can/usb/etas_es58x/es58x_fd.c
-index c97ffa71fd75..aa7a4866f870 100644
---- a/drivers/net/can/usb/etas_es58x/es58x_fd.c
-+++ b/drivers/net/can/usb/etas_es58x/es58x_fd.c
-@@ -8,7 +8,7 @@
-  *
-  * Copyright (c) 2019 Robert Bosch Engineering and Business Solutions. All rights reserved.
-  * Copyright (c) 2020 ETAS K.K.. All rights reserved.
-- * Copyright (c) 2020, 2021 Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-+ * Copyright (c) 2020-2022 Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-  */
- 
- #include <linux/kernel.h>
-@@ -550,7 +550,8 @@ const struct es58x_parameters es58x_fd_param = {
- 	.tx_bulk_max = ES58X_FD_TX_BULK_MAX,
- 	.urb_cmd_header_len = ES58X_FD_URB_CMD_HEADER_LEN,
- 	.rx_urb_max = ES58X_RX_URBS_MAX,
--	.tx_urb_max = ES58X_TX_URBS_MAX
-+	.tx_urb_max = ES58X_TX_URBS_MAX,
-+	.prod_info_delim = '-',
- };
- 
- const struct es58x_operators es58x_fd_ops = {
+> +	dev_dbg(consumer, "GPIO lookup for consumer %s in node '%s'\n",
+> +		con_id, fwnode_get_name(fwnode));
+
+%pfwP ?
+
+> +
+> +	/* Using device tree? */
+>  	if (is_of_node(fwnode)) {
+> +		dev_dbg(consumer, "using device tree for GPIO lookup\n");
+> +		desc = of_find_gpio(to_of_node(fwnode),
+> +				    con_id, idx, lookupflags);
+>  	} else if (is_acpi_node(fwnode)) {
+
+With direct return, no need for 'else' here.
+
+> +		dev_dbg(consumer, "using ACPI for GPIO lookup\n");
+> +		desc = acpi_find_gpio(fwnode, con_id, idx, flags, lookupflags);
+>  	}
+>  
+> +	return desc;
+> +}
+
+...
+
+> +static struct gpio_desc *gpiod_find_and_request(struct device *consumer,
+> +						struct fwnode_handle *fwnode,
+> +						const char *con_id,
+> +						unsigned int idx,
+> +						enum gpiod_flags flags,
+> +						const char *label,
+> +						bool platform_lookup_allowed)
+> +{
+
+> +	struct gpio_desc *desc = ERR_PTR(-ENOENT);
+
+We can get rid of the assignment, see below.
+
+
+> +	unsigned long lookupflags;
+> +	int ret;
+
+> +	if (fwnode)
+
+Do we need this check?
+
+Debug message above (when %pfw is used) would be even useful when
+fwnode == NULL.
+
+> +		desc = gpiod_find_by_fwnode(fwnode, consumer, con_id, idx,
+> +					    &flags, &lookupflags);
+
+> +
+
+The blank line can be removed after above comments being addressed.
+
+> +	if (gpiod_not_found(desc) && platform_lookup_allowed) {
+> +		/*
+> +		 * Either we are not using DT or ACPI, or their lookup did not
+> +		 * return a result. In that case, use platform lookup as a
+> +		 * fallback.
+> +		 */
+> +		dev_dbg(consumer, "using lookup tables for GPIO lookup\n");
+> +		desc = gpiod_find(consumer, con_id, idx, &lookupflags);
+> +	}
+> +
+> +	if (IS_ERR(desc)) {
+> +		dev_dbg(consumer, "No GPIO consumer %s found\n", con_id);
+> +		return desc;
+> +	}
+> +
+> +	/*
+> +	 * If a connection label was passed use that, else attempt to use
+> +	 * the device name as label
+> +	 */
+>  	ret = gpiod_request(desc, label);
+> +	if (ret) {
+> +		if (!(ret == -EBUSY && flags & GPIOD_FLAGS_BIT_NONEXCLUSIVE))
+> +			return ERR_PTR(ret);
+> +
+> +		/*
+> +		 * This happens when there are several consumers for
+> +		 * the same GPIO line: we just return here without
+> +		 * further initialization. It is a bit of a hack.
+> +		 * This is necessary to support fixed regulators.
+> +		 *
+> +		 * FIXME: Make this more sane and safe.
+> +		 */
+
+> +		dev_info(consumer,
+> +			 "nonexclusive access to GPIO for %s\n", con_id);
+
+Cam be one line.
+
+> +		return desc;
+> +	}
+>  
+> +	ret = gpiod_configure_flags(desc, con_id, lookupflags, flags);
+>  	if (ret < 0) {
+> +		dev_dbg(consumer, "setup of GPIO %s failed\n", con_id);
+>  		gpiod_put(desc);
+>  		return ERR_PTR(ret);
+>  	}
+
+...
+
+>  struct gpio_desc *fwnode_gpiod_get_index(struct fwnode_handle *fwnode,
+> +					 const char *con_id,
+> +					 int index,
+>  					 enum gpiod_flags flags,
+>  					 const char *label)
+>  {
+>  
+
+Unnecessary blank line?
+
+> +	return gpiod_find_and_request(NULL, fwnode, con_id, index, flags, label,
+> +				      false);
+
+Can be one line.
+
+>  }
+
+...
+
+
+> +	return gpiod_find_and_request(dev, fwnode, con_id, idx, flags, label,
+> +				      true);
+
+Ditto.
+
 -- 
-2.37.4
+With Best Regards,
+Andy Shevchenko
+
 
