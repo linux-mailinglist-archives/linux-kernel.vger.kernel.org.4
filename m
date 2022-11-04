@@ -2,99 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 719A9619589
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 12:42:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F909619640
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 13:33:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231625AbiKDLmi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 07:42:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57906 "EHLO
+        id S231597AbiKDMdb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 08:33:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbiKDLmg (ORCPT
+        with ESMTP id S230132AbiKDMd1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 07:42:36 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53D9A12760
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 04:42:35 -0700 (PDT)
-Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4N3dtp0W38zpW70;
-        Fri,  4 Nov 2022 19:38:58 +0800 (CST)
-Received: from huawei.com (10.67.175.21) by kwepemi500012.china.huawei.com
- (7.221.188.12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Fri, 4 Nov
- 2022 19:42:32 +0800
-From:   Li Zetao <lizetao1@huawei.com>
-To:     <rpeterso@redhat.com>, <agruenba@redhat.com>,
-        <teigland@redhat.com>, <swhiteho@redhat.com>
-CC:     <lizetao1@huawei.com>, <yi.zhang@huawei.com>,
-        <zhangxiaoxu5@huawei.com>, <cluster-devel@redhat.com>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH] gfs2: Fix memory leak in init_journal()
-Date:   Fri, 4 Nov 2022 20:31:04 +0800
-Message-ID: <20221104123104.628576-1-lizetao1@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 4 Nov 2022 08:33:27 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 768721583F;
+        Fri,  4 Nov 2022 05:33:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1667565207; x=1699101207;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=B2aH17D9PQ7GFN8pFlZ5kWL8Bi2LgoVEvlSNCoRVYJQ=;
+  b=e55PERic6ywE4LAH/N9NYhGNSGHmQTtlNb5+y5YrrjMksvmtsHq5zKHe
+   SypWYosl3FqeTv2WCA6rn/LFdA+gF/HzArwVjB1v0fZy4V2Ns9o/OHzMr
+   w9BcOASNAy+HsUAr/h/tUuJ3tXHzPRZ+fABvMRYJDuGYBp+Q80Cp1EdhU
+   7PzTbpcF7200Y4W4/d55PXm5Ky3Leeyr2suVX0SANh3LN8O5WV1Hq6kaV
+   cQWULuNk5Vi9b3mx2vGoIhyBzuJVsNNmzWeZVSsIP/s6vREraovoLRjkS
+   W405v7V2uRqKtmFvXE4i/R2iEfDhfpZNdwb3MVTHpoI3QoBRbqoUxBGOM
+   A==;
+X-IronPort-AV: E=Sophos;i="5.96,137,1665471600"; 
+   d="scan'208";a="181950097"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 04 Nov 2022 05:33:26 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Fri, 4 Nov 2022 05:33:24 -0700
+Received: from den-dk-m31857.microchip.com (10.10.115.15) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
+ 15.1.2507.12 via Frontend Transport; Fri, 4 Nov 2022 05:33:21 -0700
+From:   Steen Hegelund <steen.hegelund@microchip.com>
+To:     "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+CC:     Steen Hegelund <steen.hegelund@microchip.com>,
+        Louis Peens <louis.peens@corigine.com>,
+        Baowen Zheng <baowen.zheng@corigine.com>,
+        "Simon Horman" <simon.horman@corigine.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        Wojciech Drewek <wojciech.drewek@intel.com>,
+        Maksym Glubokiy <maksym.glubokiy@plvision.eu>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <UNGLinuxDriver@microchip.com>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>
+Subject: [PATCH net-next] net: flow_offload: add support for ARP frame matching
+Date:   Fri, 4 Nov 2022 13:33:14 +0100
+Message-ID: <20221104123314.1349814-1-steen.hegelund@microchip.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.175.21]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemi500012.china.huawei.com (7.221.188.12)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a memory leak report by kmemleak:
+This adds a new flow_rule_match_arp function that allows drivers
+to be able to dissect APR frames.
 
-  unreferenced object 0xffff8881786ff9a0 (size 192):
-    comm "mount", pid 8881, jiffies 4301165942 (age 892.453s)
-    hex dump (first 32 bytes):
-      e0 ef 6f 78 81 88 ff ff 70 95 2a 04 81 88 ff ff  ..ox....p.*.....
-      b0 f9 6f 78 81 88 ff ff b0 f9 6f 78 81 88 ff ff  ..ox......ox....
-    backtrace:
-      [<ffffffff8170ea67>] kmalloc_trace+0x27/0xa0
-      [<ffffffffa0a15465>] init_inodes+0x495/0x2010 [gfs2]
-      [<ffffffffa0a1bc27>] gfs2_fill_super+0x18c7/0x25b0 [gfs2]
-      [<ffffffff818e1626>] get_tree_bdev+0x3e6/0x6e0
-      [<ffffffffa0a13a34>] gfs2_get_tree+0x44/0x220 [gfs2]
-      [<ffffffff818de91d>] vfs_get_tree+0x7d/0x230
-      [<ffffffff81958073>] path_mount+0xd63/0x1760
-      [<ffffffff81958b3a>] do_mount+0xca/0xe0
-      [<ffffffff81958e1c>] __x64_sys_mount+0x12c/0x1a0
-      [<ffffffff82f2e485>] do_syscall_64+0x35/0x80
-      [<ffffffff8300006a>] entry_SYSCALL_64_after_hwframe+0x46/0xb0
-
-The root cause was traced to an error handling path in init_journal()
-when gfs2_jindex_hold() fails. The GFS2 superblock will hold a list
-of "gfs2_jdesc", and some of them are not freed in error handling path
-"fail" when gfs2_jindex_hold() fails.
-
-Fix it by freeing the memory of "gfs2_jdesc" allocated in the loop in
-gfs2_jindex_hold() when an error occurs.
-
-Fixes: b3b94faa5fe5 ("[GFS2] The core of GFS2")
-Signed-off-by: Li Zetao <lizetao1@huawei.com>
+Signed-off-by: Steen Hegelund <steen.hegelund@microchip.com>
 ---
- fs/gfs2/ops_fstype.c | 3 +++
- 1 file changed, 3 insertions(+)
+ include/net/flow_offload.h | 6 ++++++
+ net/core/flow_offload.c    | 7 +++++++
+ 2 files changed, 13 insertions(+)
 
-diff --git a/fs/gfs2/ops_fstype.c b/fs/gfs2/ops_fstype.c
-index c0cf1d2d0ef5..b55bee96619e 100644
---- a/fs/gfs2/ops_fstype.c
-+++ b/fs/gfs2/ops_fstype.c
-@@ -625,6 +625,9 @@ static int gfs2_jindex_hold(struct gfs2_sbd *sdp, struct gfs2_holder *ji_gh)
- 		spin_unlock(&sdp->sd_jindex_spin);
- 	}
+diff --git a/include/net/flow_offload.h b/include/net/flow_offload.h
+index 7a60bc6d72c9..0400a0ac8a29 100644
+--- a/include/net/flow_offload.h
++++ b/include/net/flow_offload.h
+@@ -32,6 +32,10 @@ struct flow_match_vlan {
+ 	struct flow_dissector_key_vlan *key, *mask;
+ };
  
-+	if (error)
-+		gfs2_jindex_free(sdp);
++struct flow_match_arp {
++	struct flow_dissector_key_arp *key, *mask;
++};
 +
- 	mutex_unlock(&sdp->sd_jindex_mutex);
+ struct flow_match_ipv4_addrs {
+ 	struct flow_dissector_key_ipv4_addrs *key, *mask;
+ };
+@@ -98,6 +102,8 @@ void flow_rule_match_vlan(const struct flow_rule *rule,
+ 			  struct flow_match_vlan *out);
+ void flow_rule_match_cvlan(const struct flow_rule *rule,
+ 			   struct flow_match_vlan *out);
++void flow_rule_match_arp(const struct flow_rule *rule,
++			 struct flow_match_arp *out);
+ void flow_rule_match_ipv4_addrs(const struct flow_rule *rule,
+ 				struct flow_match_ipv4_addrs *out);
+ void flow_rule_match_ipv6_addrs(const struct flow_rule *rule,
+diff --git a/net/core/flow_offload.c b/net/core/flow_offload.c
+index abe423fd5736..acfc1f88ea79 100644
+--- a/net/core/flow_offload.c
++++ b/net/core/flow_offload.c
+@@ -97,6 +97,13 @@ void flow_rule_match_cvlan(const struct flow_rule *rule,
+ }
+ EXPORT_SYMBOL(flow_rule_match_cvlan);
  
- 	return error;
++void flow_rule_match_arp(const struct flow_rule *rule,
++			 struct flow_match_arp *out)
++{
++	FLOW_DISSECTOR_MATCH(rule, FLOW_DISSECTOR_KEY_ARP, out);
++}
++EXPORT_SYMBOL(flow_rule_match_arp);
++
+ void flow_rule_match_ipv4_addrs(const struct flow_rule *rule,
+ 				struct flow_match_ipv4_addrs *out)
+ {
 -- 
-2.25.1
+2.38.1
 
