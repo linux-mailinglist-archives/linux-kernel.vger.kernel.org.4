@@ -2,223 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07AB161A25B
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 21:41:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85F3161A256
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 21:41:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229949AbiKDUlR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 16:41:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39752 "EHLO
+        id S229547AbiKDUk7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 16:40:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229640AbiKDUlB (ORCPT
+        with ESMTP id S229445AbiKDUk5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 16:41:01 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2083.outbound.protection.outlook.com [40.107.94.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D3D645ECA;
-        Fri,  4 Nov 2022 13:41:00 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=VFTkhTsBQwAVXu4jxy/GrjnJvuqsipEFx2tWVn76oa/hb21//gwwSFtdVB9gLhBDKbo3EHfn6RAMBZA9PupW8g3hJwBvIeL37KnLlhMukBgeeOud7/4IdVWTycHSIYl8ANuJeDMy44cBU3u84zrojnGDOlvUjr4PwrvM+71H4dprb9bCyle8FxAXUPq9bClRdVNNzG/TiEAGFP0zLYBPGZdo/fazLGd88LybaSNbQCQ5x+2kqN4X1hkU5Xq5UN6QIg1IDCy81/c1eO/DdwxOC6f00ZlQgg399bAIjibO0aO6E1pU6zNigXeuPruI+djVhbdg+s+nM2KTiiIri6PM3g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=bHlrOdQgG7aVh9xfrr999Erl0ZXVcYTq0Iltks3NldI=;
- b=HN2EQuXgtRoHp/cnUaSyFHS6WYh8fyL1V3G2+J1AOl0SFIMfKbtXqzuNOyt+0n/0ADYpw2KoRRv6w4zCVsJfTRbpvegqo82Y6AglnQGRw1ToD5Zpn/VhqhHJdeaYZrZ6ut1KdXLB1APGBTMjFD4ReNw31OkkKR9yDcolMKsg0sm8WY7kib2knbaT41zaGuo9RvTjkU1FIEJEHj3RVBQGdYrkesrDhpT545ITYunhVtsnU1e0Vx0MTxfAGEtfkDHccnzAWbTfgfDOS9TSJ42EW0rb6Mkl6BJxtJUH5kbX/eelXGZBKBiW7ZiL+sOchX4to+Akgna98SzhJe5RgrBCbQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=bHlrOdQgG7aVh9xfrr999Erl0ZXVcYTq0Iltks3NldI=;
- b=4m0ruVuGDLq4D30kIHQWWaKojBa69W39ybYMm6eYrKmMxQTRFBkeg1Qy49taoi/wOTRIXhF7Cp87JIlRpH1gZACXJ7D1pLLgHmTK/mHgJAm/0FEA7gftKTuxRgTHAuQ87AHuZxgBTGCww6YJKOHHq4LV+Vw2w1bn24EID1YyQkY=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN9PR12MB5115.namprd12.prod.outlook.com (2603:10b6:408:118::14)
- by BL1PR12MB5995.namprd12.prod.outlook.com (2603:10b6:208:39b::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.20; Fri, 4 Nov
- 2022 20:40:55 +0000
-Received: from BN9PR12MB5115.namprd12.prod.outlook.com
- ([fe80::5d8:f3f2:d940:5350]) by BN9PR12MB5115.namprd12.prod.outlook.com
- ([fe80::5d8:f3f2:d940:5350%3]) with mapi id 15.20.5791.022; Fri, 4 Nov 2022
- 20:40:55 +0000
-Message-ID: <8bca88b8-e7cb-8458-01e9-544de44302b8@amd.com>
-Date:   Fri, 4 Nov 2022 16:40:52 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: Coverity: kfd_parse_subtype_cache(): Memory - corruptions
-Content-Language: en-US
-To:     coverity-bot <keescook@chromium.org>,
-        Harish Kasiviswanathan <Harish.Kasiviswanathan@amd.com>,
-        "Ma, Jun" <Jun.Ma2@amd.com>
-Cc:     Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        David Airlie <airlied@gmail.com>,
-        amd-gfx@lists.freedesktop.org, Oded Gabbay <oded.gabbay@gmail.com>,
-        Jay Cornwall <Jay.Cornwall@amd.com>, Ben Goz <ben.goz@amd.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Kent Russell <kent.russell@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Amber Lin <Amber.Lin@amd.com>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        linux-next@vger.kernel.org, linux-hardening@vger.kernel.org
-References: <202211041239.2B98F280@keescook>
-From:   Felix Kuehling <felix.kuehling@amd.com>
-Organization: AMD Inc.
-In-Reply-To: <202211041239.2B98F280@keescook>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: CH0PR03CA0107.namprd03.prod.outlook.com
- (2603:10b6:610:cd::22) To BN9PR12MB5115.namprd12.prod.outlook.com
- (2603:10b6:408:118::14)
+        Fri, 4 Nov 2022 16:40:57 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4E7FB43AEC;
+        Fri,  4 Nov 2022 13:40:56 -0700 (PDT)
+Received: from skinsburskii-cloud-desktop.internal.cloudapp.net (unknown [20.120.152.163])
+        by linux.microsoft.com (Postfix) with ESMTPSA id EBABF205DA32;
+        Fri,  4 Nov 2022 13:40:55 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com EBABF205DA32
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1667594456;
+        bh=Q00AD5FtgxbleMEtoQwflwLsA5FxSLcJ86w/eZbdQKc=;
+        h=Subject:From:Cc:Date:In-Reply-To:References:From;
+        b=oRK56l9WNOXPJRJCUb9+KqFiJcF3wOaA/j+4Id3mzf79pv61WZSM+YyMZv1f/BDYw
+         5Ifb3IlQw9iosBQ9sP7CmNxTC1QiFtG/adeaWeAUrR2PZTpW8KvJoqNEQHQoaUvKWG
+         EQrLAgoVKpTt53V8/Xv0PMNSkM0d2wxsUbNyYaTc=
+Subject: [PATCH v4] drivers/clocksource/hyper-v: Add TSC page support for root
+ partition
+From:   Stanislav Kinsburskii <skinsburskii@linux.microsoft.com>
+Cc:     Stanislav Kinsburskiy <stanislav.kinsburskiy@gmail.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mikelley@microsoft.com
+Date:   Fri, 04 Nov 2022 20:40:55 +0000
+Message-ID: <166759443644.385891.15921594265843430260.stgit@skinsburskii-cloud-desktop.internal.cloudapp.net>
+In-Reply-To: <BYAPR21MB1688D81DEFA482E52653955FD73B9@BYAPR21MB1688.namprd21.prod.outlook.com>
+References: <BYAPR21MB1688D81DEFA482E52653955FD73B9@BYAPR21MB1688.namprd21.prod.outlook.com>
+User-Agent: StGit/0.19
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN9PR12MB5115:EE_|BL1PR12MB5995:EE_
-X-MS-Office365-Filtering-Correlation-Id: d07c513a-f7e9-4f4b-4f8f-08dabea4deec
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: WkEKMRGZLvyczkXEIxFQNshKOjzYmU7ng67QigAUYfSXpIj0UwZXuqDSs/AkXR8vwE11hu5KjgAhhBpux5x3OuDoMIwii9UR3L4wj0YtlOu7bZIuKTSo3Chr1LV2gCnxk+dxSsgFuDL88+M8q0SW5WPFQhWURpx2Q0rGGl2M9cRSOv05sCIWpurCOeAfi2fLosTo1ldriiHcgMNYafjdSqzEFrDqBipifu7B9IE/gpLeg3YPN+iTjwOteu7LIhgXibopI+hHuSzSvHkw+o0ze/6dFuhQlOla5h7o8KWQOGBCWJN+HW/JbzUzo1TwbcfaB5lwADBq1aDbm0J3/48uAf90PiMb7InCJ/DLcSVLeY6HCB5XMBVTu/ozBIF7Tk/uMXy2tFyQEDNFO/Cpcwj42cXiCBQwV8Q3wCORVuAXrbetL/Tc1v5cfV1IOuhJ19MO3AxoblTCBlr9aSfsyNQtwldEA1p4MbIzX3T5v2BWrh4N/V7SimGk1zM3XWYi+RgGM+5uAhjpy31rUUW+Dalgz/CfHG4E7/G3eMIgzanPf5C2/jtKR1p7xx/+b48H5P4sCodKlYweoUDsdEo78oxTiihHF5KpX9b7taF4Bgv0q9pw0KrasEngv32sfK4nLlk5/vyF1iCExUVMyeVPaGKEVcktMkdcAUhvSfQInOr0RXIpvE7L7Llkcruj7NBnWF8dyZd8V1NrVgf+nSGWtTgbHRd+0NbLQgJGcR13a4vcc0w4NPlEY1BHe8MSQpZEX6yPekL1pOkh1Erj5K6sevKWslhrw0P71BRYgqARFJmJlp+G/5G8sHIv4vvAa3Y5suu4Uini/M/c/7bfYFn4lyFgjA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR12MB5115.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(366004)(376002)(136003)(39860400002)(396003)(451199015)(38100700002)(83380400001)(31696002)(5660300002)(6636002)(86362001)(44832011)(2906002)(7416002)(8936002)(66476007)(41300700001)(4326008)(110136005)(53546011)(6506007)(6666004)(26005)(54906003)(316002)(186003)(478600001)(2616005)(6512007)(66946007)(66556008)(8676002)(36916002)(966005)(6486002)(31686004)(36756003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cnV6N2FOOU1tWWJuSmhvMnJzcEtnYUc0YWFOUUkxNWc0ZCt5eEk1L2JUdE5a?=
- =?utf-8?B?bUYxams4MXd1Zzk3VUtLeTZTTmZyWVBBYmhQSFpBMWgxdUE0cU4xTTAvZ3ZQ?=
- =?utf-8?B?MnUzYW9iNG9DTlVFWUhDdzdUdFkwaURLUGlzSmVsd0VDZzVhWDNVYThHZkR6?=
- =?utf-8?B?amRucDJJeFJtVXpxVlNCK05jdm05UnVaUFQ4SDR0M3A4TVplUkltR25uTTkw?=
- =?utf-8?B?Y2RURlEwdTBmQXRUVGViYWgyZVFvWi9QSXIyN1U5cHR6aUpST0ljYnJSb3lh?=
- =?utf-8?B?N3dvd0xUbGV5eFJlOUxuVGJGNFVmRVgxcFhHYWtjMXdEdm9tN2pwZnBHU0hj?=
- =?utf-8?B?ZHZlZVViVWhhK09mR21YQzkwSStsdjhyTmhIc04yY2JUdmZQRTVaS0Z5eXd5?=
- =?utf-8?B?Mll2MkVvdjg3dC9ONFVjMHZzc3IrTHZscFYvUkhnZkRSUlBiS0ZmdldjSmxF?=
- =?utf-8?B?ZDBQNjNIUlpWSG1nUDNXUGdVRWNQUHZFL0M1ck9nTWlEU0VrY2RRNm1idGFk?=
- =?utf-8?B?RG5VUHNwbzF3cXBMSGtYdkRZZCt3UFpQMGlnYWIwQzRaQ2IwcDJXaHpiTkRj?=
- =?utf-8?B?azZUbkFPMFRxZ3JBaVFvdGpNZCswOUhCcytZVVMwd28vc3A0NnMxQkJvTG1O?=
- =?utf-8?B?YlBxV3VXcnFjNTA2QTI0eEQrd3BGL1dqOUE3ZlFHYldrYU1CZFAwbUdxWG9M?=
- =?utf-8?B?Y0JLWXpUeE5ObCtxbVJqeUJ1Rm1wQkg5Z1NieWpnbzNUaWw2NUJKekZYb2lt?=
- =?utf-8?B?TWNLbXdMQ0t6KzVJTTBhdS9oU3lmcGpqMGN2Z1RlWkJrcWxXaGU0bk94cDV2?=
- =?utf-8?B?bjd6dkg5dUhrTVI4SkorOE5rS1pWdldVcjhWMHJydHB3R3JISXY4YW9QeGNV?=
- =?utf-8?B?Y2IrT1JydXl0a3hsbDQ5VHF5dlZLVWorOHZ3REkvNXNZTW1tNzdvUm1yMkZV?=
- =?utf-8?B?UWVqNWNRbkVoeWVGWUMvb3RWcENsT2RQNDd3SU52MTJSU1VvNi9seDd5S2J2?=
- =?utf-8?B?SCtvT1krdHYwWGJpRWsvTFJJeUR2NzJxTStNL2psMG9UZCtwNnBZZWFTdW1P?=
- =?utf-8?B?a3R1cW9INnRueDRvQ3FyWDJ1blR6bnpNZ1ZtVEZncmVFQjJ0dDYwS0lLS0F5?=
- =?utf-8?B?ZTF6K1hqQ1k2d0lLUzdyMm0yZDJnQ0puK2N5OVBueTk1RnRzdTVrbllDWC9r?=
- =?utf-8?B?QnNLOXJST1ptbFVwWlZPVnBraGsrb1FZTmxRRTdRb05Lbk1oTFJhQ1IwNzQz?=
- =?utf-8?B?S1JZL0NIMnltN3QvZkc5ZEdiU0x3Q1EvVWNZbGpUWHQveXlOcUpMRVJtNC9G?=
- =?utf-8?B?UTBYQ05JNU1hY0VWQ2hZQWJLWTV1Vmh2QXpIZm5EeWtZbDlBS214YUwwNUlw?=
- =?utf-8?B?VzVTUFUxdFdpUnhCVHJ1TU5mUUNrYlM5VkZ5U3FnZXBva2xRbGJSVzA4a1Ra?=
- =?utf-8?B?K09Ib01kcllKMVhlQkJsSHFHc1BGd2ZrWk14MWlacERqenlsemRmZmw1djA2?=
- =?utf-8?B?YUdONHkxNnhJWlZnUmNRc3p6WCtHT0JvR2tsbVNQK3dRZWtXdEpiSENLR3hI?=
- =?utf-8?B?UEhZdU9iZms3VFBPeGlXWVRpd3g4MTN1NHFrMUpHb20yNVYzMXArRWVIK1gx?=
- =?utf-8?B?cHhDS3Y2NVhBRTJyV29IOWpCUE1UUUE2VitLSldtZVJaaGFoWDhQV2NCWmtx?=
- =?utf-8?B?a0UxWmVQWGo3TGVxaVZ5MzlDVy84ZkJxUmpaaFhSVldXdjhUb3h4NTZWNGRS?=
- =?utf-8?B?bDNXVlZHeG9kYmo5bWdGMHVuL2RvYW1pOVRvNzdybXZOUE5UWFJKMmpPdUZy?=
- =?utf-8?B?L2ZDU1NWUGVBYk56V1dQUjRxVVZjd2M1UE9LdDQzZWlLMHJrS1RGS29VVE9z?=
- =?utf-8?B?dmJ6dlBkZlVtK3pBbkY1ZlZEZkU0cWp5YmtpWjhtWHVKSDhUL2NnM1hqU2Ry?=
- =?utf-8?B?WGxuZEtiSTZVVE81eDFWRC9kYTM2VnZDZk1IU3RaaDBHWnVDRnNRMXJ5bnI4?=
- =?utf-8?B?azlLNGw1QkZEaTUyUnBRNk9FSTdvYXRFK3JkNXpnL04rS3FkTjZsTHp6Rk9C?=
- =?utf-8?B?N1pPK0pxVk43R0h3QmUwbm56aDhTdEJ2VkdYRnBDdXl6eVlTRDU1eDZQOXRp?=
- =?utf-8?Q?h511NYdFaeMhGxmgiYE4FtTdh?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d07c513a-f7e9-4f4b-4f8f-08dabea4deec
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR12MB5115.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Nov 2022 20:40:55.2007
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: JBtH/OOIwZBppAhswGrWjs0vfVKfkdzaNbDzarqWqlG6JUwKne2MKSxiSEL8Sp3ao9fggRmw5BoY2rNuZsH/EQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5995
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-18.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,MISSING_HEADERS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-11-04 15:41, coverity-bot wrote:
-> Hello!
->
-> This is an experimental semi-automated report about issues detected by
-> Coverity from a scan of next-20221104 as part of the linux-next scan project:
-> https://scan.coverity.com/projects/linux-next-weekly-scan
->
-> You're getting this email because you were associated with the identified
-> lines of code (noted below) that were touched by commits:
->
->    Fri Dec 8 23:08:59 2017 -0500
->      3a87177eb141 ("drm/amdkfd: Add topology support for dGPUs")
->
-> Coverity reported the following:
->
-> *** CID 1527133:  Memory - corruptions  (OVERRUN)
-> drivers/gpu/drm/amd/amdkfd/kfd_crat.c:1113 in kfd_parse_subtype_cache()
-> 1107     			props->cache_size = cache->cache_size;
-> 1108     			props->cacheline_size = cache->cache_line_size;
-> 1109     			props->cachelines_per_tag = cache->lines_per_tag;
-> 1110     			props->cache_assoc = cache->associativity;
-> 1111     			props->cache_latency = cache->cache_latency;
-> 1112
-> vvv     CID 1527133:  Memory - corruptions  (OVERRUN)
-> vvv     Overrunning array "cache->sibling_map" of 32 bytes by passing it to a function which accesses it at byte offset 63 using argument "64UL". [Note: The source code implementation of the function has been overridden by a builtin model.]
-> 1113     			memcpy(props->sibling_map, cache->sibling_map,
-> 1114     					sizeof(props->sibling_map));
-> 1115
-> 1116     			/* set the sibling_map_size as 32 for CRAT from ACPI */
-> 1117     			props->sibling_map_size = CRAT_SIBLINGMAP_SIZE;
-> 1118
->
-> If this is a false positive, please let us know so we can mark it as
-> such, or teach the Coverity rules to be smarter. If not, please make
-> sure fixes get into linux-next. :) For patches fixing this, please
-> include these lines (but double-check the "Fixes" first):
->
-> Reported-by: coverity-bot <keescook+coverity-bot@chromium.org>
-> Addresses-Coverity-ID: 1527133 ("Memory - corruptions")
-> Fixes: 3a87177eb141 ("drm/amdkfd: Add topology support for dGPUs")
->
-> I'm not sure why this suddenly appeared after 5 years, but the read
-> over-run looks legit:
+From: Stanislav Kinsburskiy <stanislav.kinsburskiy@gmail.com>
+
+Microsoft Hypervisor root partition has to map the TSC page specified
+by the hypervisor, instead of providing the page to the hypervisor like
+it's done in the guest partitions.
+
+However, it's too early to map the page when the clock is initialized, so, the
+actual mapping is happening later.
+
+Signed-off-by: Stanislav Kinsburskiy <stanislav.kinsburskiy@gmail.com>
+CC: "K. Y. Srinivasan" <kys@microsoft.com>
+CC: Haiyang Zhang <haiyangz@microsoft.com>
+CC: Wei Liu <wei.liu@kernel.org>
+CC: Dexuan Cui <decui@microsoft.com>
+CC: Thomas Gleixner <tglx@linutronix.de>
+CC: Ingo Molnar <mingo@redhat.com>
+CC: Borislav Petkov <bp@alien8.de>
+CC: Dave Hansen <dave.hansen@linux.intel.com>
+CC: x86@kernel.org
+CC: "H. Peter Anvin" <hpa@zytor.com>
+CC: Daniel Lezcano <daniel.lezcano@linaro.org>
+CC: linux-hyperv@vger.kernel.org
+CC: linux-kernel@vger.kernel.org
+---
+ arch/x86/hyperv/hv_init.c          |    2 ++
+ drivers/clocksource/hyperv_timer.c |   44 +++++++++++++++++++++++++++++-------
+ include/clocksource/hyperv_timer.h |    1 +
+ 3 files changed, 38 insertions(+), 9 deletions(-)
+
+diff --git a/arch/x86/hyperv/hv_init.c b/arch/x86/hyperv/hv_init.c
+index f49bc3ec76e6..89954490af93 100644
+--- a/arch/x86/hyperv/hv_init.c
++++ b/arch/x86/hyperv/hv_init.c
+@@ -464,6 +464,8 @@ void __init hyperv_init(void)
+ 		BUG_ON(!src);
+ 		memcpy_to_page(pg, 0, src, HV_HYP_PAGE_SIZE);
+ 		memunmap(src);
++
++		hv_remap_tsc_clocksource();
+ 	} else {
+ 		hypercall_msr.guest_physical_address = vmalloc_to_pfn(hv_hypercall_pg);
+ 		wrmsrl(HV_X64_MSR_HYPERCALL, hypercall_msr.as_uint64);
+diff --git a/drivers/clocksource/hyperv_timer.c b/drivers/clocksource/hyperv_timer.c
+index 9445a1558fe9..c0cef92b12b8 100644
+--- a/drivers/clocksource/hyperv_timer.c
++++ b/drivers/clocksource/hyperv_timer.c
+@@ -509,9 +509,6 @@ static bool __init hv_init_tsc_clocksource(void)
+ 	if (!(ms_hyperv.features & HV_MSR_REFERENCE_TSC_AVAILABLE))
+ 		return false;
+ 
+-	if (hv_root_partition)
+-		return false;
+-
+ 	/*
+ 	 * If Hyper-V offers TSC_INVARIANT, then the virtualized TSC correctly
+ 	 * handles frequency and offset changes due to live migration,
+@@ -529,16 +526,28 @@ static bool __init hv_init_tsc_clocksource(void)
+ 	}
+ 
+ 	hv_read_reference_counter = read_hv_clock_tsc;
+-	tsc_pfn = HVPFN_DOWN(virt_to_phys(tsc_page));
+ 
+ 	/*
+-	 * The Hyper-V TLFS specifies to preserve the value of reserved
+-	 * bits in registers. So read the existing value, preserve the
+-	 * low order 12 bits, and add in the guest physical address
+-	 * (which already has at least the low 12 bits set to zero since
+-	 * it is page aligned). Also set the "enable" bit, which is bit 0.
++	 * TSC page mapping works differently in root compared to guest.
++	 * - In guest partition the guest PFN has to be passed to the
++	 *   hypervisor.
++	 * - In root partition it's other way around: it has to map the PFN
++	 *   provided by the hypervisor.
++	 *   But it can't be mapped right here as it's too early and MMU isn't
++	 *   ready yet. So, we only set the enable bit here and will remap the
++	 *   page later in hv_remap_tsc_clocksource().
++	 *
++	 * It worth mentioning, that TSC clocksource read function
++	 * (read_hv_clock_tsc) has a MSR-based fallback mechanism, used when
++	 * TSC page is zeroed (which is the case until the PFN is remapped) and
++	 * thus TSC clocksource will work even without the real TSC page
++	 * mapped.
+ 	 */
+ 	tsc_msr.as_uint64 = hv_get_register(HV_REGISTER_REFERENCE_TSC);
++	if (hv_root_partition)
++		tsc_pfn = tsc_msr.pfn;
++	else
++		tsc_pfn = HVPFN_DOWN(virt_to_phys(tsc_page));
+ 	tsc_msr.enable = 1;
+ 	tsc_msr.pfn = tsc_pfn;
+ 	hv_set_register(HV_REGISTER_REFERENCE_TSC, tsc_msr.as_uint64);
+@@ -573,3 +582,20 @@ void __init hv_init_clocksource(void)
+ 	hv_sched_clock_offset = hv_read_reference_counter();
+ 	hv_setup_sched_clock(read_hv_sched_clock_msr);
+ }
++
++void __init hv_remap_tsc_clocksource(void)
++{
++	if (!(ms_hyperv.features & HV_MSR_REFERENCE_TSC_AVAILABLE))
++		return;
++
++	if (!hv_root_partition) {
++		WARN(1, "%s: attempt to remap TSC page in guest partition\n",
++		     __func__);
++		return;
++	}
++
++	tsc_page = memremap(tsc_pfn << HV_HYP_PAGE_SHIFT, sizeof(tsc_pg),
++			    MEMREMAP_WB);
++	if (!tsc_page)
++		pr_err("Failed to remap Hyper-V TSC page.\n");
++}
+diff --git a/include/clocksource/hyperv_timer.h b/include/clocksource/hyperv_timer.h
+index 3078d23faaea..783701a2102d 100644
+--- a/include/clocksource/hyperv_timer.h
++++ b/include/clocksource/hyperv_timer.h
+@@ -31,6 +31,7 @@ extern void hv_stimer_global_cleanup(void);
+ extern void hv_stimer0_isr(void);
+ 
+ extern void hv_init_clocksource(void);
++extern void hv_remap_tsc_clocksource(void);
+ 
+ extern unsigned long hv_get_tsc_pfn(void);
+ extern struct ms_hyperv_tsc_page *hv_get_tsc_page(void);
 
 
-I think this was introduced by a more recent patch that was in fact 
-meant to fix an array overrun on HW that is outgrowing the CRAT sibling 
-map size:
-
-> commit 0938fbeb6f53fc44bc9b19784dee28496e68ba0c
-> Author: Ma Jun <Jun.Ma2@amd.com>
-> Date:   Wed Nov 2 15:53:26 2022 +0800
->
->     drm/amdkfd: Fix the warning of array-index-out-of-bounds
->
->     For some GPUs with more CUs, the original sibling_map[32]
->     in struct crat_subtype_cache is not enough
->     to save the cache information when create the VCRAT table,
->     so skip filling the struct crat_subtype_cache info instead
->     fill struct kfd_cache_properties directly to fix this problem.
->
->     Signed-off-by: Ma Jun <Jun.Ma2@amd.com>
->     Reviewed-by: Felix Kuehling <Felix.Kuehling@amd.com>
->     Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
-I added Ma Jun to the email.
-
-Regards,
-   Felix
-
-
->
-> struct crat_subtype_cache {
->          ...
->          uint8_t         sibling_map[CRAT_SIBLINGMAP_SIZE];
->
-> #define CRAT_SIBLINGMAP_SIZE    32
->
->
-> struct kfd_cache_properties {
->          ...
->          uint8_t                 sibling_map[CACHE_SIBLINGMAP_SIZE];
->
-> #define CACHE_SIBLINGMAP_SIZE 64
->
-> Thanks for your attention!
->
