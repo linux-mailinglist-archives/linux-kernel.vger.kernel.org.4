@@ -2,175 +2,447 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65C4F6195AF
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 12:56:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48B946195B4
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 12:59:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231638AbiKDL4F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 07:56:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34498 "EHLO
+        id S231504AbiKDL7S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 07:59:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230051AbiKDLzk (ORCPT
+        with ESMTP id S229553AbiKDL7O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 07:55:40 -0400
-Received: from IND01-MAX-obe.outbound.protection.outlook.com (mail-maxind01olkn2075.outbound.protection.outlook.com [40.92.102.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38AE323EB2;
-        Fri,  4 Nov 2022 04:55:39 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gJBURa4VJmHhM4b5jMMqc7dCdfarHFfqHlZnWVQAFnhS5wuYXf5H0gO+ZyZokSoSQlNHa4zgpe37RznogyRzFf7FAevRbQxpkAfGDVSOEChS/DV6t0yj3PkJHKarGbU6XV8rVOWTAR13EV0d/yxIPx21x78lM+LPMse8TyED/sMUQp4C4UjX+KXs8YTUpvySTitU+ndBAoi4xdjoWMTDXSC8zFGmrzMbF1kHzFsBkevhcg9088SLDyDuisByn4BsMVQ5V+NtHGTEppClXidEMI5dVr4B3QIbtdVh4MXmkpQzFp1hULZbFhuKZfx4Jfsr0pPVknEmsFtSv0SGrJDUFQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+AxIPdXcsYQrskZVcz927dpHO7YXP1jH9jfHvT5geFs=;
- b=c2f4+AUzH8YOxYGq+H/aVDPCppGjTBbx+jnphPABcjc1jpHnhW0ewZb37Lx+HRjuukS6BGepGhHTuwhi5LSgP/mJJXONwjImsOaM8QLfZh+81PgqxSJVLis4o4yxrPNV0g+gggKP19ziMuWwi14FNRjEOsYPirIiWqx7IsYARTLOfsAOZmS6fkGc3zUQ7rtVvq9BgDG0pToA6TVy6k0EcrtWZTr7wDh3v0ws40kArcV1Cvv5hjNxXxSfwnjPuapi+n3K0QHPA02tdpdZrC8dy3XT5DJ4M19TpMarwF6kfMO4oxpTHWF9WqND/YWWiBz5lAE8awx/8PX5RredfKd0Lg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=live.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+AxIPdXcsYQrskZVcz927dpHO7YXP1jH9jfHvT5geFs=;
- b=JRZf7xn3nLY/nfwfUizMls4TwsLkEw/aJTrO8etM5W79t6fIvwRCRQvaNVzzakQ/oLzikogMl20ofgI8mdvQUvnSSbmOhCEG73EZKVmH5lMFpUA9lrMoOtYUBiMWkgshSjc8gi7iJvYHCipGGx+OeczLzPst+RCH/vxk2R1iLSX1BwVZbW/Uqof+hHvYPTwWNl1Y7EDZuDoh7TsuXLFx58TSX6/8bpxtwgmn+W4otklkI7UC3WYiNap9sDb5AguDZeCI/lawo5ToiDV3RGloyO2DYrWGubxKhiGtBNpyU7kXq5nQsnpomXeP1qcaNQJ7VfUDL9eZcZqNmsvw8U8tsA==
-Received: from BM1PR01MB0931.INDPRD01.PROD.OUTLOOK.COM (2603:1096:b00:2::9) by
- MAZPR01MB7843.INDPRD01.PROD.OUTLOOK.COM (2603:1096:a01:24::14) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5791.22; Fri, 4 Nov 2022 11:55:35 +0000
-Received: from BM1PR01MB0931.INDPRD01.PROD.OUTLOOK.COM
- ([fe80::3dc1:f6bc:49e4:b294]) by BM1PR01MB0931.INDPRD01.PROD.OUTLOOK.COM
- ([fe80::3dc1:f6bc:49e4:b294%9]) with mapi id 15.20.5791.022; Fri, 4 Nov 2022
- 11:55:35 +0000
-From:   Aditya Garg <gargaditya08@live.com>
-To:     Jiri Kosina <jikos@kernel.org>,
-        "jkosina@suse.cz" <jkosina@suse.cz>,
-        "benjamin.tissoires@redhat.com" <benjamin.tissoires@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-input@vger.kernel.org" <linux-input@vger.kernel.org>
-Subject: [PATCH] HID: apple: Swap Control and Command keys on Apple keyboards
-Thread-Topic: [PATCH] HID: apple: Swap Control and Command keys on Apple
- keyboards
-Thread-Index: AQHY8ERZa3FoKSDxwkSesm/DJoXoaA==
-Date:   Fri, 4 Nov 2022 11:55:35 +0000
-Message-ID: <7AC64680-44F7-4605-95E9-B5FF97A78D2A@live.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-tmn:  [O0hB9y7RIPkVCcCO1Vy2KK5KnBzrGVR/]
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BM1PR01MB0931:EE_|MAZPR01MB7843:EE_
-x-ms-office365-filtering-correlation-id: 9dd6f6cf-cafd-4a2c-5cfd-08dabe5b7b98
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: JAl+VE5zpwasPoDcztDjSmqJgV83QJyzN3qQYE2DhxjXC9hHmFszBhaa0L4sT7CwdAzIz+QLlKRuwtkJlH6CebjCuonK3GFnlj5YUNv263ZBcVOoFFPfplBxUBAPzxLSER5mtxD0Maf3GT5NqIcO/vxwY6ACgsUebiADdatibOZ5jN77KWXKSOV1goWt0Wo0nN0onZXaQLl1pTg3/NcgypxdW3Pzu2Q1LcvdAy43Tm5MkHXIMTiC2egD/CGRWtY68z37BKZ0DRO4JprYXUuFkIX1xQJEih9OUqtkEjXdJd7nHeZgMqq9FLUanQH5M4w0MtfeZF1FXPHbCidzxV1B/aGrjsaLnT/TqH9bc9mlyo1eaWa6U57yPRqYxRQTGFO6f3R0XpYHojtNpGxvXNaIZrMezR1QH/n9zH24gTCFS8UI50Nf+DrELCgFq9SBb5Wf0dE5bvBAvPvcgcRC2GeqKtdy9WfRpEZI50DwUU/Xy6bIQLT7TOeA8ugNEXwiAuysw4/VHQ6TbgWXkr1nrAidXBlwGjRHuXMBFAkktXBbHQXMaz7Xs80wfLQ9OO6b+H/6UqYFa+tI00uPXh6R4eD3l0QIcalrd1qqIcBUvNwCUUJDSPEOFGle6m2MtzTEei6xEhOMKKkQbPSlQdGZcHGsig==
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?E3neTZTNx+ssHgvHBjd0COuXNPHnMEvgQqCLgkWeGvxD5g025hRsNgnF5J6O?=
- =?us-ascii?Q?Y/0BUdAtkXSvTNDh7Uj6We9rVewZzSpn35+gLEgWhN5Kn6aly46tPkWec5sR?=
- =?us-ascii?Q?1LgT6CcLHHaFdSJWwU5ORvVr3Hr3+ZSC8TZcby53V2ulWllUOADtnbwf2Ug2?=
- =?us-ascii?Q?kT8iPiiC9pWdbaUf48uZG96X8COlpyGQ+Ixdz29DJFnK8bE8/DDyve1ObKVD?=
- =?us-ascii?Q?tit+zShdVTb/x/6BH+RR9II0Zmr5Lh9T0j9Y2uDLsc32/Qm8VFEFfRl4IGxQ?=
- =?us-ascii?Q?K5MQpSS7XPI7gWKB4WM2B2nFch2W8WT4Q4S3IdGQJEfvUCatQbvrPCQ9BkWw?=
- =?us-ascii?Q?4gcYsaOXFvF13F8OtldtLM7CRfwRNcVDKm5iQTlO5nGOoQgPEWqRVKRr+2hW?=
- =?us-ascii?Q?7WPdL12c4aCio/KI+Xl6S+8E089u5S1AGKZdZfLgM8x0LgSYLT6MIMg0d6Tx?=
- =?us-ascii?Q?DNUsrPhnl+D66Pt8U0HNJWil8NK1Qvq+1sm3mHjSXg9V3HbJfRzf+zxsWzSO?=
- =?us-ascii?Q?AstPRyJjVtvETZfbnnl+Yk7v7bsbp/l9YYEKUwUcQjGV1Iy2Y9IqqrfP3Get?=
- =?us-ascii?Q?OfOBxfZqW/Z/0VhaRdUENtc0fY+lGw0Hn5tCQZzUtM40OqiJv/hEd3I0W+qE?=
- =?us-ascii?Q?ywCc8C7s+gcBAA647PxhzYOtAHrDIIt13qXi6nn8lotCwML8f0PXycLvWt0G?=
- =?us-ascii?Q?0XVFSdKYvCM9jyVcp+2lMiN8f7pdr3Lix5OBKeTsVPufjzEOoaGnq8fokv/Y?=
- =?us-ascii?Q?NCayNcErLnekwW71x4zcR8368ORCpX9miIvatXRkLe+Xjbj2/z4sJ1VbHgSl?=
- =?us-ascii?Q?rSuRxB22KmqOE4oXPJUm0lnQIgh+8XKRX/5yOiB6/tS9Qp13f9+Nx7LYS097?=
- =?us-ascii?Q?Qk5NA6vUw/gW+S9Vy2FVFeAzWyUz2V6zDElMh3Nv2rwyJDgWsCyAXajlpoLu?=
- =?us-ascii?Q?VL/glUqRTTmz2ciDkwq/rMRD4oov8dbJCTqX5tpl57WTJr8c0xYg3rlG7/b7?=
- =?us-ascii?Q?QaUBESWGIrjSBRg+CHGztuyOw3v52ipmOOlVGmrdTd8rcKRm6qbm3ejvWVua?=
- =?us-ascii?Q?sb44BIg8kY4YODNOwsqR7nmTVmtDcOZtezZJqU1aDm+BHlD1iuOmm8P1thSx?=
- =?us-ascii?Q?zE7IoUqKFUOgdBXrCBSd+/nb72UXte/+NZ9P/zstEYRSbUC9Sp5oFNlyGhFZ?=
- =?us-ascii?Q?Yg8yijTlUVMPpnMdQxUVBBWUoi4f9fbEu3HiA6NzgkLMsktgoXNyOQWNmn9I?=
- =?us-ascii?Q?xUTeIxkWvgRsjJMBwzx/KWv+0x4eLvMoM5Eb3QsOYA=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <A2C6CB428C4F204594415B0F4DD4E04F@INDPRD01.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: quoted-printable
+        Fri, 4 Nov 2022 07:59:14 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A36D29802;
+        Fri,  4 Nov 2022 04:59:13 -0700 (PDT)
+Received: from [192.168.1.15] (91-154-32-225.elisa-laajakaista.fi [91.154.32.225])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 4BB168B;
+        Fri,  4 Nov 2022 12:59:09 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1667563150;
+        bh=HnszknJqvNe0CRmLhV3ywEl3mb0b5R/82+6Y2R9VjOI=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=UA5hAEuKP6LpEtUFet3J9z3GBG805KpAZFtckd7GomolX84z6f6kJtzax/13JUvWF
+         z4z+/dA5Z4CxErdqU0mhQ3kWVAkCLWVDhfvoYKXcFeKDABvRnxmPOh2CYuty1lpIjm
+         U5Fb4GNKJJOmebeVD/I/0QAopfJ2wDbXsnNCJEto=
+Message-ID: <cc510516-c961-9efb-bcdf-2abea795433a@ideasonboard.com>
+Date:   Fri, 4 Nov 2022 13:59:06 +0200
 MIME-Version: 1.0
-X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-42ed3.templateTenant
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BM1PR01MB0931.INDPRD01.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9dd6f6cf-cafd-4a2c-5cfd-08dabe5b7b98
-X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Nov 2022 11:55:35.0919
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MAZPR01MB7843
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v4 2/8] i2c: add I2C Address Translator (ATR) support
+To:     Andy Shevchenko <andriy.shevchenko@intel.com>
+Cc:     devicetree@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        Kieran Bingham <kieran.bingham@ideasonboard.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Luca Ceresoli <luca@lucaceresoli.net>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Peter Rosin <peda@axentia.se>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        satish.nagireddy@getcruise.com
+References: <20221101132032.1542416-1-tomi.valkeinen@ideasonboard.com>
+ <20221101132032.1542416-3-tomi.valkeinen@ideasonboard.com>
+ <Y2EtnSNqBOfGRDMO@smile.fi.intel.com>
+Content-Language: en-US
+From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+In-Reply-To: <Y2EtnSNqBOfGRDMO@smile.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Aditya Garg <gargaditya08@live.com>
+Hi Andy,
 
-This patch allows users to swap the control and command keys. This can be
-useful for the Mac users who are used to using Command instead of Control
-in macOS for various commonly used shortcuts.
+On 01/11/2022 16:30, Andy Shevchenko wrote:
+> On Tue, Nov 01, 2022 at 03:20:26PM +0200, Tomi Valkeinen wrote:
+>> From: Luca Ceresoli <luca@lucaceresoli.net>
+>>
+>> An ATR is a device that looks similar to an i2c-mux: it has an I2C
+>> slave "upstream" port and N master "downstream" ports, and forwards
+>> transactions from upstream to the appropriate downstream port. But is
+>> is different in that the forwarded transaction has a different slave
+>> address. The address used on the upstream bus is called the "alias"
+>> and is (potentially) different from the physical slave address of the
+>> downstream chip.
+>>
+>> Add a helper file (just like i2c-mux.c for a mux or switch) to allow
+>> implementing ATR features in a device driver. The helper takes care or
+>> adapter creation/destruction and translates addresses at each transaction.
+> 
+> ...
+> 
+>>      i2c-topology
+>>      muxes/i2c-mux-gpio
+>>      i2c-sysfs
+>> +   muxes/i2c-atr
+> 
+> Doesn't make sense to group muxes/*, that they are following each other?
 
-Signed-off-by: Aditya Garg <gargaditya08@live.com>
----
- drivers/hid/hid-apple.c | 23 ++++++++++++++++++++++-
- 1 file changed, 22 insertions(+), 1 deletion(-)
+Ok.
 
-diff --git a/drivers/hid/hid-apple.c b/drivers/hid/hid-apple.c
-index c671ce946..86188e803 100644
---- a/drivers/hid/hid-apple.c
-+++ b/drivers/hid/hid-apple.c
-@@ -59,6 +59,12 @@ MODULE_PARM_DESC(swap_opt_cmd, "Swap the Option (\"Alt\"=
-) and Command (\"Flag\")
- 		"(For people who want to keep Windows PC keyboard muscle memory. "
- 		"[0] =3D as-is, Mac layout. 1 =3D swapped, Windows layout.)");
-=20
-+static unsigned int swap_ctrl_cmd;
-+module_param(swap_ctrl_cmd, uint, 0644);
-+MODULE_PARM_DESC(swap_ctrl_cmd, "Swap the Control (\"Ctrl\") and Command (=
-\"Flag\") keys. "
-+		"(For people who are used to Mac shortcuts involving Command instead of =
-Control. "
-+		"[0] =3D No change. 1 =3D Swapped.)");
-+
- static unsigned int swap_fn_leftctrl;
- module_param(swap_fn_leftctrl, uint, 0644);
- MODULE_PARM_DESC(swap_fn_leftctrl, "Swap the Fn and left Control keys. "
-@@ -308,7 +314,15 @@ static const struct apple_key_translation swapped_opti=
-on_cmd_keys[] =3D {
- 	{ KEY_LEFTALT,	KEY_LEFTMETA },
- 	{ KEY_LEFTMETA,	KEY_LEFTALT },
- 	{ KEY_RIGHTALT,	KEY_RIGHTMETA },
--	{ KEY_RIGHTMETA,KEY_RIGHTALT },
-+	{ KEY_RIGHTMETA, KEY_RIGHTALT },
-+	{ }
-+};
-+
-+static const struct apple_key_translation swapped_ctrl_cmd_keys[] =3D {
-+	{ KEY_LEFTCTRL,	KEY_LEFTMETA },
-+	{ KEY_LEFTMETA,	KEY_LEFTCTRL },
-+	{ KEY_RIGHTCTRL, KEY_RIGHTMETA },
-+	{ KEY_RIGHTMETA, KEY_RIGHTCTRL },
- 	{ }
- };
-=20
-@@ -407,6 +421,13 @@ static int hidinput_apple_event(struct hid_device *hid=
-, struct input_dev *input,
- 			code =3D trans->to;
- 	}
-=20
-+	if (swap_ctrl_cmd) {
-+		trans =3D apple_find_translation(swapped_ctrl_cmd_keys, code);
-+
-+		if (trans)
-+			code =3D trans->to;
-+	}
-+
- 	if (code =3D=3D KEY_FN)
- 		asc->fn_on =3D !!value;
-=20
---=20
-2.34.1
+> ...
+> 
+>> +I2C ADDRESS TRANSLATOR (ATR)
+>> +M:	Luca Ceresoli <luca@lucaceresoli.net>
+> 
+> Hmm... Are you going to maintain this? Or Review? Why not?
+
+We haven't discussed with Luca if he wants to maintain this (this is 
+mostly his code). But, indeed, I should add my name there.
+
+>> +L:	linux-i2c@vger.kernel.org
+>> +S:	Maintained
+>> +F:	drivers/i2c/i2c-atr.c
+>> +F:	include/linux/i2c-atr.h
+> 
+> ...
+> 
+>> +		void *new_buf = kmalloc_array(num, sizeof(chan->orig_addrs[0]),
+>> +					      GFP_KERNEL);
+>> +		if (new_buf == NULL)
+>> +			return -ENOMEM;
+> 
+> Isn't it better to write this as
+> 
+> 		void *new_buf;
+> 
+> 		new_buf = kmalloc_array(num, sizeof(chan->orig_addrs[0]), GFP_KERNEL);
+> 		if (!new_buf)
+> 			return -ENOMEM;
+
+Ok.
+
+> Remarks:
+> - note the style of the conditional
+> - why is it void?
+
+No idea. I'll change it.
+
+> 
+> Also, does it make sense to use krealloc_array() or is it complete replacement
+> of the data?
+
+The whole array will be rewritten, so we don't need to preserve the 
+current data.
+
+The buffer allocated here (i.e. orig_addrs) is only used for the 
+duration of the i2c_atr_master_xfer(). So, we could allocate a new 
+buffer for every xfer call, but to avoid that, we retain the old buffer. 
+Any old data in the buffer can be discarded.
+
+>> +		kfree(chan->orig_addrs);
+>> +		chan->orig_addrs = new_buf;
+>> +		chan->orig_addrs_size = num;
+> 
+> ...
+> 
+>> +static void i2c_atr_unmap_msgs(struct i2c_atr_chan *chan, struct i2c_msg msgs[],
+>> +			       int num)
+> 
+> [] in the function parameter is longer than * and actually doesn't make
+> difference in C. Ditto for the rest of similar cases.
+
+Ok. I missed a few, it seems.
+
+> ...
+> 
+>> +static int i2c_atr_smbus_xfer(struct i2c_adapter *adap, u16 addr,
+>> +			      unsigned short flags, char read_write, u8 command,
+>> +			      int size, union i2c_smbus_data *data)
+> 
+> Can flags be fixed size (yes I understand that in our case short would probably
+> never be different to u16, but for the sake of clearness)?
+
+The parameters and their types come from the ops in struct i2c_algorithm.
+
+> ...
+> 
+>> +static int i2c_atr_attach_client(struct i2c_adapter *adapter,
+>> +				 const struct i2c_board_info *info,
+>> +				 const struct i2c_client *client)
+>> +{
+>> +	struct i2c_atr_chan *chan = adapter->algo_data;
+>> +	struct i2c_atr *atr = chan->atr;
+>> +	struct i2c_atr_cli2alias_pair *c2a;
+> 
+>> +	u16 alias_id = 0;
+> 
+> Can we split assignment from the definition and locate it closer to the first
+> use?
+
+Actually, I don't think we need to initialize it at all. If 
+attach_client() fails, we don't care about alias_id. If attach_client() 
+succeeds, it _must_ return alias_id.
+
+>> +	int ret = 0;
+> 
+> Useless assignment.
+
+Yep.
+
+>> +
+>> +	c2a = kzalloc(sizeof(*c2a), GFP_KERNEL);
+>> +	if (!c2a)
+>> +		return -ENOMEM;
+>> +
+>> +	ret = atr->ops->attach_client(atr, chan->chan_id, info, client,
+>> +				      &alias_id);
+> 
+> On one line looks better.
+
+I agree, but it doesn't fit into 80 characters. I personally think 
+that's a too narrow a limit, but some maintainers absolutely require max 
+80 chars, so I try to limit the lines to 80 unless it looks really ugly.
+
+>> +	if (ret)
+>> +		goto err_free;
+>> +	if (alias_id == 0) {
+>> +		ret = -EINVAL;
+>> +		goto err_free;
+>> +	}
+>> +
+>> +	c2a->client = client;
+>> +	c2a->alias = alias_id;
+>> +	list_add(&c2a->node, &chan->alias_list);
+>> +
+>> +	return 0;
+>> +
+>> +err_free:
+>> +	kfree(c2a);
+>> +	return ret;
+>> +}
+> 
+> ...
+> 
+>> +int i2c_atr_add_adapter(struct i2c_atr *atr, u32 chan_id,
+>> +			struct fwnode_handle *bus_handle)
+>> +{
+>> +	struct i2c_adapter *parent = atr->parent;
+>> +	struct device *dev = atr->dev;
+>> +	struct i2c_atr_chan *chan;
+>> +	char *symlink_name;
+>> +	int ret;
+>> +
+>> +	if (chan_id >= atr->max_adapters) {
+>> +		dev_err(dev, "No room for more i2c-atr adapters\n");
+>> +		return -EINVAL;
+>> +	}
+>> +
+>> +	if (atr->adapter[chan_id]) {
+>> +		dev_err(dev, "Adapter %d already present\n", chan_id);
+>> +		return -EEXIST;
+>> +	}
+>> +
+>> +	chan = kzalloc(sizeof(*chan), GFP_KERNEL);
+>> +	if (!chan)
+>> +		return -ENOMEM;
+>> +
+>> +	chan->atr = atr;
+>> +	chan->chan_id = chan_id;
+>> +	INIT_LIST_HEAD(&chan->alias_list);
+>> +	mutex_init(&chan->orig_addrs_lock);
+>> +
+>> +	snprintf(chan->adap.name, sizeof(chan->adap.name), "i2c-%d-atr-%d",
+>> +		 i2c_adapter_id(parent), chan_id);
+>> +	chan->adap.owner = THIS_MODULE;
+>> +	chan->adap.algo = &atr->algo;
+>> +	chan->adap.algo_data = chan;
+>> +	chan->adap.dev.parent = dev;
+>> +	chan->adap.retries = parent->retries;
+>> +	chan->adap.timeout = parent->timeout;
+>> +	chan->adap.quirks = parent->quirks;
+>> +	chan->adap.lock_ops = &i2c_atr_lock_ops;
+>> +	chan->adap.attach_ops = &i2c_atr_attach_ops;
+>> +
+>> +	if (bus_handle) {
+>> +		device_set_node(&chan->adap.dev, fwnode_handle_get(bus_handle));
+>> +	} else {
+>> +		struct fwnode_handle *atr_node;
+>> +		struct fwnode_handle *child;
+>> +		u32 reg;
+>> +
+>> +		atr_node = device_get_named_child_node(dev, "i2c-atr");
+>> +
+>> +		fwnode_for_each_child_node(atr_node, child) {
+>> +			ret = fwnode_property_read_u32(child, "reg", &reg);
+>> +			if (ret)
+>> +				continue;
+>> +			if (chan_id == reg)
+>> +				break;
+>> +		}
+>> +
+>> +		device_set_node(&chan->adap.dev, child);
+>> +		fwnode_handle_put(atr_node);
+>> +	}
+> 
+> It seems you have OF independent code, but by some reason you included of.h
+> instead of property.h. Am I right?
+
+Just an leftover from the conversion from of to fwnode.
+
+>> +	ret = i2c_add_adapter(&chan->adap);
+>> +	if (ret) {
+>> +		dev_err(dev, "failed to add atr-adapter %u (error=%d)\n",
+>> +			chan_id, ret);
+>> +		goto err_add_adapter;
+>> +	}
+>> +
+>> +	symlink_name = kasprintf(GFP_KERNEL, "channel-%u", chan_id);
+> 
+> No NULL check?
+
+Right, missed that.
+
+>> +	WARN(sysfs_create_link(&chan->adap.dev.kobj, &dev->kobj, "atr_device"),
+>> +	     "can't create symlink to atr device\n");
+>> +	WARN(sysfs_create_link(&dev->kobj, &chan->adap.dev.kobj, symlink_name),
+>> +	     "can't create symlink for channel %u\n", chan_id);
+> 
+> Why WARNs? sysfs has already some in their implementation.
+
+True, and I can drop these if required. But afaics, sysfs_create_link 
+only warns if there's a duplicate entry, not for other errors.
+
+>> +
+>> +	kfree(symlink_name);
+>> +
+>> +	dev_dbg(dev, "Added ATR child bus %d\n", i2c_adapter_id(&chan->adap));
+>> +
+>> +	atr->adapter[chan_id] = &chan->adap;
+>> +	return 0;
+>> +
+>> +err_add_adapter:
+>> +	mutex_destroy(&chan->orig_addrs_lock);
+>> +	kfree(chan);
+>> +	return ret;
+>> +}
+> 
+> ...
+> 
+>> +	struct fwnode_handle *fwnode = adap->dev.fwnode;
+> 
+> Please don't dereference fwnode like this, we have dev_fwnode() for that.
+
+Ok.
+
+> ...
+> 
+>> +	if (atr->adapter[chan_id] == NULL) {
+> 
+> !
+
+Yep.
+
+>> +		dev_err(dev, "Adapter %d does not exist\n", chan_id);
+>> +		return;
+>> +	}
+> 
+> ...
+> 
+>> +	snprintf(symlink_name, sizeof(symlink_name),
+>> +		 "channel-%u", chan->chan_id);
+> 
+> Once line?
+
+80 char limit here too. But I see that this is (kind of) broken. In the 
+i2c_atr_add_adapter() I used dynamic alloc for the symlink_name, but 
+here we still have the fixed size buffer.
+
+> 
+> ...
+> 
+>> +	atr_size = struct_size(atr, adapter, max_adapters);
+> 
+>> +	if (atr_size == SIZE_MAX)
+>> +		return ERR_PTR(-EOVERFLOW);
+> 
+> Dunno if you really need this to be separated from devm_kzalloc(), either way
+> you will get an error, but in embedded case it will be -ENOMEM.
+
+Yep. Well... I kind of like it to be explicit. Calling alloc(SIZE_MAX) 
+doesn't feel nice.
+
+>> +	atr = devm_kzalloc(dev, atr_size, GFP_KERNEL);
+>> +	if (!atr)
+>> +		return ERR_PTR(-ENOMEM);
+> 
+> ...
+> 
+>> +EXPORT_SYMBOL_GPL(i2c_atr_delete);
+> 
+> I would put these to their own namespace from day 1.
+
+What would be the namespace? Isn't this something that should be 
+subsystem-wide decision? I have to admit I have never used symbol 
+namespaces, and don't know much about them.
+
+> 
+> ...
+> 
+>> +/**
+>> + * Helper to add I2C ATR features to a device driver.
+>> + */
+> 
+> ??? Copy'n'paste typo?
+
+No idea where that is from... I'll fix it.
+
+>> +struct i2c_atr {
+>> +	/* private: internal use only */
+>> +
+>> +	struct i2c_adapter *parent;
+>> +	struct device *dev;
+>> +	const struct i2c_atr_ops *ops;
+>> +
+>> +	void *priv;
+>> +
+>> +	struct i2c_algorithm algo;
+>> +	struct mutex lock;
+>> +	int max_adapters;
+>> +
+>> +	struct i2c_adapter *adapter[0];
+> 
+> No VLAs.
+
+Ok.
+
+I'm not arguing against any of the comments you've made, I think they 
+are all valid, but I want to point out that many of them are in a code 
+copied from i2c-mux.
+
+Whether there's any value in keeping i2c-mux and i2c-atr similar in 
+design/style... Maybe not.
+
+>> +};
+> 
+> ...
+> 
+>> +int i2c_atr_add_adapter(struct i2c_atr *atr, u32 chan_id,
+>> +			struct fwnode_handle *bus_np);
+> 
+> Missing
+> 
+> struct fwnode_handle;
+> 
+> at the top of the file?
+
+Ok.
+
+  Tomi
+
+
 
