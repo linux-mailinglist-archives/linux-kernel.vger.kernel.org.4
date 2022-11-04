@@ -2,78 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB99D619505
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 12:00:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 644D4619507
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 12:01:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231278AbiKDLAo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 07:00:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38742 "EHLO
+        id S231849AbiKDLBf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 07:01:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231695AbiKDLAb (ORCPT
+        with ESMTP id S231882AbiKDLBK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 07:00:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB70F2C126;
-        Fri,  4 Nov 2022 04:00:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Fri, 4 Nov 2022 07:01:10 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F6532CC88
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 04:00:45 -0700 (PDT)
+Received: from zn.tnic (p200300ea9733e72b329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e72b:329c:23ff:fea6:a903])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5BE4562159;
-        Fri,  4 Nov 2022 11:00:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD2CFC433D7;
-        Fri,  4 Nov 2022 11:00:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667559626;
-        bh=/MGecyQmJdqPsReJBSYYANujGfYMhCik3e8q0K1i5p4=;
-        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
-        b=rZDLQ8p/FknkmIXRK1vRJjz6MsTjqH71aZVu+TDZUbvp3uLCM/Ym82+78mxKOMcSB
-         9iRVJAZ/hnDYwVeczGhu9Vi13ZEp7i8Wyjofo7bbW5eDPuR3RQVWVz1OK20Hfy/mhA
-         9mEmiXRLmaXGucT5u3/VvVBUudO1d71Lk23tYVhHbUi3ADbGz5oaCWi1NqxGjAkBPt
-         2AjVy6aSzWK5FayQ++S9/Jc1s4L8QnDCG/sPmGJrv9e5VJeSTaqlAy9ruAjlEs+s7N
-         8dM46hkeN8kA4UWlaIEVgw01fEAbfqO775+4IKTf+P19XRLQe4daFaAonGtEl/dxId
-         B2/b9X9GauWBQ==
-Content-Type: text/plain; charset="utf-8"
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 8A2721EC02DD;
+        Fri,  4 Nov 2022 12:00:43 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1667559643;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=2DfDMvDEfCl6f+iu1DNkuxGDVrbKAhxaEEbnZy/Px9s=;
+        b=H4U2IZt86sqQ9/5FOmQOD73FkEYRiwkjtZNOJ+ShOVUls31EhxleJFTFGpr/O9Ext+277g
+        L1bO5wb3PqE6PG9WuB6Q6bviSbREa84GOLxCYNCP3OO+gaorT9crBy8fGLILlee22+yq4d
+        hE+8QRm/XISwICNq4iDHI+gldlyqA1E=
+Date:   Fri, 4 Nov 2022 12:00:43 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Ashok Raj <ashok.raj@intel.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        LKML Mailing List <linux-kernel@vger.kernel.org>,
+        X86-kernel <x86@kernel.org>, Tony Luck <tony.luck@intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Arjan van de Ven <arjan.van.de.ven@intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Jacon Jun Pan <jacob.jun.pan@intel.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Kai Huang <kai.huang@intel.com>,
+        Andrew Cooper <andrew.cooper3@citrix.com>
+Subject: Re: [v2 01/13] x86/microcode/intel: Prevent printing updated
+ microcode rev multiple times
+Message-ID: <Y2Tw2+LCmZe8XBJn@zn.tnic>
+References: <20221103175901.164783-1-ashok.raj@intel.com>
+ <20221103175901.164783-2-ashok.raj@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Subject: Re: wifi: rtlwifi: rtl8192ee: remove static variable stop_report_cnt
-From:   Kalle Valo <kvalo@kernel.org>
-In-Reply-To: <20221031155637.871164-1-colin.i.king@gmail.com>
-References: <20221031155637.871164-1-colin.i.king@gmail.com>
-To:     Colin Ian King <colin.i.king@gmail.com>
-Cc:     Ping-Ke Shih <pkshih@realtek.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-User-Agent: pwcli/0.1.1-git (https://github.com/kvalo/pwcli/) Python/3.7.3
-Message-ID: <166755962299.3283.14022973939524774032.kvalo@kernel.org>
-Date:   Fri,  4 Nov 2022 11:00:24 +0000 (UTC)
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20221103175901.164783-2-ashok.raj@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Colin Ian King <colin.i.king@gmail.com> wrote:
+On Thu, Nov 03, 2022 at 05:58:49PM +0000, Ashok Raj wrote:
+> @@ -696,8 +697,7 @@ static int collect_cpu_info(int cpu_num, struct cpu_signature *csig)
+>  
+>  	csig->rev = c->microcode;
+>  
+> -	/* No extra locking on prev, races are harmless. */
+> -	if (csig->sig != prev.sig || csig->pf != prev.pf || csig->rev != prev.rev) {
+> +	if (bsp && csig->rev != prev.rev) {
 
-> Variable stop_report_cnt is being set or incremented but is never
-> being used for anything meaningful. The variable and code relating
-> to it's use is redundant and can be removed.
-> 
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
-> Acked-by: Ping-Ke Shih <pkshih@realtek.com>
+This basically means that the loader is not going to support mixed
+steppings microcode.
 
-Patch applied to wireless-next.git, thanks.
+Yes, no?
 
-cdeee8540952 wifi: rtlwifi: rtl8192ee: remove static variable stop_report_cnt
+If yes, can I remove the patch cache too and use a single buffer for the
+current patch?
+
+That would simplify things even more.
 
 -- 
-https://patchwork.kernel.org/project/linux-wireless/patch/20221031155637.871164-1-colin.i.king@gmail.com/
+Regards/Gruss,
+    Boris.
 
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
-
+https://people.kernel.org/tglx/notes-about-netiquette
