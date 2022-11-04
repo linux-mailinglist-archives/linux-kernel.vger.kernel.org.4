@@ -2,90 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7950618EBE
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 04:17:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F16A8618EDA
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 04:19:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231331AbiKDDRm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 23:17:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51716 "EHLO
+        id S231464AbiKDDTt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 23:19:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230497AbiKDDQ7 (ORCPT
+        with ESMTP id S231518AbiKDDSv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 23:16:59 -0400
-Received: from ssh248.corpemail.net (ssh248.corpemail.net [210.51.61.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 254F522BE9;
-        Thu,  3 Nov 2022 20:16:58 -0700 (PDT)
-Received: from ([60.208.111.195])
-        by ssh248.corpemail.net ((D)) with ASMTP (SSL) id YEU00154;
-        Fri, 04 Nov 2022 11:16:54 +0800
-Received: from localhost.localdomain (10.200.104.82) by
- jtjnmail201602.home.langchao.com (10.100.2.2) with Microsoft SMTP Server id
- 15.1.2507.12; Fri, 4 Nov 2022 11:16:54 +0800
-From:   Deming Wang <wangdeming@inspur.com>
-To:     <viro@zeniv.linux.org.uk>
-CC:     <ebiederm@xmission.com>, <keescook@chromium.org>,
-        <linux-fsdevel@vger.kernel.org>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>, Deming Wang <wangdeming@inspur.com>
-Subject: [PATCH] binfmt_elf: replace IS_ERR() with IS_ERR_VALUE()
-Date:   Thu, 3 Nov 2022 23:16:44 -0400
-Message-ID: <20221104031644.1955-1-wangdeming@inspur.com>
+        Thu, 3 Nov 2022 23:18:51 -0400
+Received: from out203-205-251-53.mail.qq.com (out203-205-251-53.mail.qq.com [203.205.251.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B659325EAA;
+        Thu,  3 Nov 2022 20:17:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1667531838;
+        bh=xhvqscpJ8eJYk/Q1N9/AJKfFH00gTLPyIzjaSVR0k08=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=roa+3ScDD5VMRjXOG53h6XVLuVaoeVDE1Q1GLaMsAjzLxDQR5rSet9QmaRE8x1M6C
+         1Y81LScFpVMJ4IMzMpaV7nUx0zNkxYn3IOb2yjwfG2mbkQJjWYnTh6MxLF8GqqbwVa
+         AMBRvtK39mUBQxBfSM2nZ9x+UXSE8DdzP2QpaJ+I=
+Received: from localhost.localdomain ([39.156.73.13])
+        by newxmesmtplogicsvrsza12-0.qq.com (NewEsmtp) with SMTP
+        id 44E2E01A; Fri, 04 Nov 2022 11:17:14 +0800
+X-QQ-mid: xmsmtpt1667531834turi4l2i0
+Message-ID: <tencent_6AD8D17AC411037DA1AC2C8FCB0D15A3D707@qq.com>
+X-QQ-XMAILINFO: MMlYfvMiV1QnzSU/jATHOmgR8F5vhf1cuFc1zIQTTj922N06YwuoU/DuDKoXx1
+         SHs0eXcxKw+hBwtigH33hQbb07gG7y0b++YpCt49bXitNaT7nFbbO5a7x9fLPbpgeZxk49aa8jFl
+         SI/IS1Sx+xG1+AUsS3D/h6kjSBgsOzQRltVzqj9NGgmhpmpIe3pWmM1EaJThPWf7Uf4bTNug3xXq
+         7tVJxmNdsmolCyoCEyJr8k9CcgTRZ8NPWqvXS9vm88oX5gvZYSSFwsc4gl4C7sbQVb7BCZiOf7as
+         inWyJFUHpHQsgDoAnyMmz0VrXSgvOmGvfkeSt5SwmBEAvbL/4NegphtTaHk08RTCnSmuYRnriHzY
+         5cKDxZ7J6GDI+XIcz3XNUERdKcx7HiCuKir8bRL1LuKyRHcgusiYn/cWP4AY/OZPJx5VKRCd+PNN
+         HCMzqyosXzrXNQeQsLXDGJaq5xihlDXFFiGiULOR5+MdBmL+2mwQ0UYnTo5BIZHhycDH7UQa9Tp/
+         g156OjDzTM1lHPm4iEDmloSHg7XqWXjcNJU4UzjZ3xPbF6s06JVICEecCh7drdCt79s6kzAnZT7m
+         /gFeMZrTXsg+joirhplELGYXRov1Ct9A3wP5Eqm2pdLkmRJe3xYKDYj6ZB+Ch+cpSalsDEAL+NR+
+         YgpnP7BXUQY6dLT50aH+ek3cIgXWnFEtHI55lDEC5We5337OrF3Mma9Uc8tIM+tB/6+4xwfzzTkU
+         sP+9mP9RC0fms3wSBlWo/7NRa7+t3XrI+GoLivqxON4EUnJGCtyystj3GEd3okIC4ISoNUqp3Lih
+         wUAG8688cKStCBFfRa3o44OD0R1Jmy2qxOLiAvw1HfP6gOAmhJ+NyTLUKI7iWa12AUaWeDV8n8sy
+         eUeDedX5N+nyC/oBC39Kh2mKMYu7w/APnO3OlnJXglXJjJEu48/XmCuRuT02SSrKdCBwBAxnAsHM
+         NxbbEy6lFA3+m6gh2qsuDc0LrmrfFHlcUX3C3dQYx3PeMS4CHn8sIg8shCBwr1qJd0dLPmDP0=
+From:   Rong Tao <rtoax@foxmail.com>
+To:     andrii.nakryiko@gmail.com
+Cc:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
+        daniel@iogearbox.net, haoluo@google.com, john.fastabend@gmail.com,
+        jolsa@kernel.org, kpsingh@kernel.org, linux-kernel@vger.kernel.org,
+        martin.lau@linux.dev, rongtao@cestc.cn, rtoax@foxmail.com,
+        sdf@google.com, song@kernel.org, yhs@fb.com
+Subject: Re: Re: [PATCH bpf-next] samples/bpf: Fix sockex3: missing BPF prog type
+Date:   Fri,  4 Nov 2022 11:17:13 +0800
+X-OQ-MSGID: <20221104031713.668305-1-rtoax@foxmail.com>
 X-Mailer: git-send-email 2.31.1
+In-Reply-To: <CAEf4BzbvCABmSB3UqKyka=txTiCUdBpTtQg4X6XOa_qVVXW+hw@mail.gmail.com>
+References: <CAEf4BzbvCABmSB3UqKyka=txTiCUdBpTtQg4X6XOa_qVVXW+hw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.200.104.82]
-tUid:   20221104111654b93665246d00bf0b2870faeb81a5701b
-X-Abuse-Reports-To: service@corp-email.com
-Abuse-Reports-To: service@corp-email.com
-X-Complaints-To: service@corp-email.com
-X-Report-Abuse-To: service@corp-email.com
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RDNS_DYNAMIC,SORTED_RECIPS,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Avoid typecasts that are needed for IS_ERR() and use IS_ERR_VALUE()
-instead.
+We can not just remove the number of program like:
 
-Signed-off-by: Deming Wang <wangdeming@inspur.com>
----
- fs/binfmt_elf.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+-#define PROG(F) SEC("socket/"__stringify(F)) int bpf_func_##F
++#define PROG(F) SEC("socket_filter") int bpf_func_##F
 
-diff --git a/fs/binfmt_elf.c b/fs/binfmt_elf.c
-index 528e2ac8931f..d9af34f816a9 100644
---- a/fs/binfmt_elf.c
-+++ b/fs/binfmt_elf.c
-@@ -1160,7 +1160,7 @@ static int load_elf_binary(struct linux_binprm *bprm)
- 		error = elf_map(bprm->file, load_bias + vaddr, elf_ppnt,
- 				elf_prot, elf_flags, total_size);
- 		if (BAD_ADDR(error)) {
--			retval = IS_ERR((void *)error) ?
-+			retval = IS_ERR_VALUE(error) ?
- 				PTR_ERR((void*)error) : -EINVAL;
- 			goto out_free_dentry;
- 		}
-@@ -1245,7 +1245,7 @@ static int load_elf_binary(struct linux_binprm *bprm)
- 					    interpreter,
- 					    load_bias, interp_elf_phdata,
- 					    &arch_state);
--		if (!IS_ERR((void *)elf_entry)) {
-+		if (!IS_ERR_VALUE(elf_entry)) {
- 			/*
- 			 * load_elf_interp() returns relocation
- 			 * adjustment
-@@ -1254,7 +1254,7 @@ static int load_elf_binary(struct linux_binprm *bprm)
- 			elf_entry += interp_elf_ex->e_entry;
- 		}
- 		if (BAD_ADDR(elf_entry)) {
--			retval = IS_ERR((void *)elf_entry) ?
-+			retval = IS_ERR_VALUE(elf_entry) ?
- 					(int)elf_entry : -EINVAL;
- 			goto out_free_dentry;
- 		}
--- 
-2.27.0
+because "sockex3" use the _NUMBER_ as index(see map "jmp_table"), if we
+apply the following patch, it's still not recognize "socket_filter/xxx"
+as "socket_filter", still have "missing BPF prog type" error:
+
+diff --git a/samples/bpf/sockex3_kern.c b/samples/bpf/sockex3_kern.c
+index b363503357e5..ab5a7bde66d0 100644
+--- a/samples/bpf/sockex3_kern.c
++++ b/samples/bpf/sockex3_kern.c
+@@ -17,7 +17,7 @@
+ #define IP_MF          0x2000
+ #define IP_OFFSET      0x1FFF
+
+-#define PROG(F) SEC("socket/"__stringify(F)) int bpf_func_##F
++#define PROG(F) SEC("socket_filter/"__stringify(F)) int bpf_func_##F
+
+ struct {
+        __uint(type, BPF_MAP_TYPE_PROG_ARRAY);
+@@ -279,7 +279,7 @@ PROG(PARSE_MPLS)(struct __sk_buff *skb)
+        return 0;
+ }
+
+-SEC("socket/0")
++SEC("socket_filter/0")
+ int main_prog(struct __sk_buff *skb)
+ {
+        __u32 nhoff = ETH_HLEN;
+diff --git a/samples/bpf/sockex3_user.c b/samples/bpf/sockex3_user.c
+index cd6fa79df900..63fc9a8077b1 100644
+--- a/samples/bpf/sockex3_user.c
++++ b/samples/bpf/sockex3_user.c
+@@ -56,7 +56,7 @@ int main(int argc, char **argv)
+                fd = bpf_program__fd(prog);
+
+                section = bpf_program__section_name(prog);
+-               if (sscanf(section, "socket/%d", &key) != 1) {
++               if (sscanf(section, "socket_filter/%d", &key) != 1) {
+                        fprintf(stderr, "ERROR: finding prog failed\n");
+                        goto cleanup;
+                }
+
+For a reason, in sockex3_kern.c only have five PROGs, list all five:
+
+#define PROG(F) SEC("socket/"__stringify(F)) int bpf_func_##F
+PROG(PARSE_IP)(struct __sk_buff *skb)
+PROG(PARSE_IPV6)(struct __sk_buff *skb)
+PROG(PARSE_VLAN)(struct __sk_buff *skb)
+PROG(PARSE_MPLS)(struct __sk_buff *skb)
+SEC("socket/0") int main_prog(struct __sk_buff *skb)
+
+As you can see, all those PROGs are BPF_PROG_TYPE_SOCKET_FILTER, so we can
+use the follow patch specify bpf program type as SOCKET_FILTER:
+
+https://lore.kernel.org/lkml/tencent_7DD02046A8398BE3324F85E0F56ED41EB105@qq.com/
+
+diff --git a/samples/bpf/sockex3_user.c b/samples/bpf/sockex3_user.c
+index cd6fa79df900..dc79c17ad195 100644
+--- a/samples/bpf/sockex3_user.c
++++ b/samples/bpf/sockex3_user.c
+@@ -39,6 +39,9 @@ int main(int argc, char **argv)
+                return 0;
+        }
+
++       bpf_object__for_each_program(prog, obj)
++               bpf_program__set_type(prog, BPF_PROG_TYPE_SOCKET_FILTER);
++
+        /* load BPF program */
+        if (bpf_object__load(obj)) {
+                fprintf(stderr, "ERROR: loading BPF object file failed\n");
+
+This patch above totally solved the compile error.
 
