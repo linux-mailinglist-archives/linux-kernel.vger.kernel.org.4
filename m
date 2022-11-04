@@ -2,97 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9AD261A634
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 01:00:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84EB761A62B
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 00:59:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229667AbiKEAAk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 20:00:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38906 "EHLO
+        id S229628AbiKDX71 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 19:59:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229591AbiKEAAh (ORCPT
+        with ESMTP id S229516AbiKDX7Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 20:00:37 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE1FB4298B
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 16:59:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667606380;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ffbO6hwMXfi6ia/mJYNAheXY/Bx4C/bAtN/BCx8MV7k=;
-        b=fopL5Khi4ykYYA9s79CnaLpbmB3cR9RB1KuJ3+BFlcXt+nFMOAqN1X1DnMK7LJgOh31fPu
-        eDHSow8TutQJeKO/YrGYoC9CeInNnZoywAFbQwKNUWzn134bIr+g68ih7Euq63dTYA/t9m
-        EG+6Ja+fz5mxp8NIy4FiyHb6LFn1rd4=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-640-Ef2jqjQmOPuPMfiIymyr5Q-1; Fri, 04 Nov 2022 19:59:37 -0400
-X-MC-Unique: Ef2jqjQmOPuPMfiIymyr5Q-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 39928833AEC;
-        Fri,  4 Nov 2022 23:59:36 +0000 (UTC)
-Received: from emerald.lyude.net (unknown [10.22.11.87])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 88C2F112132C;
-        Fri,  4 Nov 2022 23:59:35 +0000 (UTC)
-From:   Lyude Paul <lyude@redhat.com>
-To:     amd-gfx@lists.freedesktop.org
-Cc:     stable@vger.kernel.org, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jani Nikula <jani.nikula@intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Wayne Lin <Wayne.Lin@amd.com>, Imre Deak <imre.deak@intel.com>,
-        Mikita Lipski <mikita.lipski@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        dri-devel@lists.freedesktop.org (open list:DRM DRIVERS),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH 2/2] drm/display/dp_mst: Fix drm_dp_mst_add_affected_dsc_crtcs() return code
-Date:   Fri,  4 Nov 2022 19:59:26 -0400
-Message-Id: <20221104235926.302883-3-lyude@redhat.com>
-In-Reply-To: <20221104235926.302883-1-lyude@redhat.com>
-References: <20221104235926.302883-1-lyude@redhat.com>
+        Fri, 4 Nov 2022 19:59:25 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8955E4298C;
+        Fri,  4 Nov 2022 16:59:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667606364; x=1699142364;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=hbMbA2gtORlmZXrbEO3nvATlX8xycbXUes0wIx18t3s=;
+  b=CW18EgI9otytfue6OMiFIbx32E9WIYOpY+Wv//GsD6M3Wr7LhYeVEOQ0
+   j/o3XAzfhncp+GsPryZXe+lQ2+Xyryzdih6Kmmn4KfhiFaKbGVnNL/7MT
+   j1B4Cs87qsnPiBbZV4l3Jq4PfOVJ98tYNYk9ux04ymUmFqNECKaVUl77c
+   c8wwcZfDDCPlLLptZrE3ys903bbA6GH2DL9maps89eXcS2gtlP52XXebk
+   jZ088BMoY9/PjklETP3eAHWjVGMSIz2W89a4TPm0+6Jk2dtvn8OejPhTa
+   u3e+vFv8GtSIFNPPkcxcY6yJWynEIdts0thCntc2ot+784WVQIVTr/5Ir
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10521"; a="311222392"
+X-IronPort-AV: E=Sophos;i="5.96,139,1665471600"; 
+   d="scan'208";a="311222392"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2022 16:59:24 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10521"; a="880470963"
+X-IronPort-AV: E=Sophos;i="5.96,139,1665471600"; 
+   d="scan'208";a="880470963"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga006.fm.intel.com with ESMTP; 04 Nov 2022 16:59:21 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id C79D6F7; Sat,  5 Nov 2022 01:59:44 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Vincent Knecht <vincent.knecht@mailoo.org>,
+        Pavel Machek <pavel@ucw.cz>, linux-leds@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH v1 1/1] leds: is31fl319x: Wrap mutex_destroy() for devm_add_action_or_rest()
+Date:   Sat,  5 Nov 2022 01:59:40 +0200
+Message-Id: <20221104235940.74044-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Looks like that we're accidentally dropping a pretty important return code
-here. For some reason, we just return -EINVAL if we fail to get the MST
-topology state. This is wrong: error codes are important and should never
-be squashed without being handled, which here seems to have the potential
-to cause a deadlock.
+Clang complains that devm_add_action() takes a parameter with a wrong type:
 
-Signed-off-by: Lyude Paul <lyude@redhat.com>
-Fixes: 8ec046716ca8 ("drm/dp_mst: Add helper to trigger modeset on affected DSC MST CRTCs")
-Cc: <stable@vger.kernel.org> # v5.6+
+warning: cast from 'void (*)(struct mutex *)' to 'void (*)(void *)' converts to incompatible function type [-Wcast-function-type-strict]
+    err = devm_add_action(dev, (void (*)(void *))mutex_destroy, &is31->lock);
+                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    1 warning generated.
+
+It appears that the commit e1af5c815586 ("leds: is31fl319x: Fix devm vs.
+non-devm ordering") missed two things:
+- while mention devm_add_action_or_reset() the actual change got
+  devm_add_action() call by unknown reason
+- strictly speaking the parameter is not compatible by type
+
+Fix both issues by switching to devm_add_action_or_reset() and adding a
+wrapper for mutex_destroy() call.
+
+Reported-by: kernel test robot <lkp@intel.com>
+Fixes: e1af5c815586 ("leds: is31fl319x: Fix devm vs. non-devm ordering")
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- drivers/gpu/drm/display/drm_dp_mst_topology.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/leds/leds-is31fl319x.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/display/drm_dp_mst_topology.c b/drivers/gpu/drm/display/drm_dp_mst_topology.c
-index ecd22c038c8c0..51a46689cda70 100644
---- a/drivers/gpu/drm/display/drm_dp_mst_topology.c
-+++ b/drivers/gpu/drm/display/drm_dp_mst_topology.c
-@@ -5186,7 +5186,7 @@ int drm_dp_mst_add_affected_dsc_crtcs(struct drm_atomic_state *state, struct drm
- 	mst_state = drm_atomic_get_mst_topology_state(state, mgr);
+diff --git a/drivers/leds/leds-is31fl319x.c b/drivers/leds/leds-is31fl319x.c
+index 52b59b62f437..6f94ad83e066 100644
+--- a/drivers/leds/leds-is31fl319x.c
++++ b/drivers/leds/leds-is31fl319x.c
+@@ -494,6 +494,11 @@ static inline int is31fl3196_db_to_gain(u32 dezibel)
+ 	return dezibel / IS31FL3196_AUDIO_GAIN_DB_STEP;
+ }
  
- 	if (IS_ERR(mst_state))
--		return -EINVAL;
-+		return PTR_ERR(mst_state);
++static void is31f1319x_mutex_destroy(void *lock)
++{
++	mutex_destroy(lock);
++}
++
+ static int is31fl319x_probe(struct i2c_client *client)
+ {
+ 	struct is31fl319x_chip *is31;
+@@ -510,7 +515,7 @@ static int is31fl319x_probe(struct i2c_client *client)
+ 		return -ENOMEM;
  
- 	list_for_each_entry(pos, &mst_state->payloads, next) {
+ 	mutex_init(&is31->lock);
+-	err = devm_add_action(dev, (void (*)(void *))mutex_destroy, &is31->lock);
++	err = devm_add_action_or_reset(dev, is31f1319x_mutex_destroy, &is31->lock);
+ 	if (err)
+ 		return err;
  
 -- 
-2.37.3
+2.35.1
 
