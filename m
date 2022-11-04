@@ -2,140 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFA2B61961A
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 13:21:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8DB561961F
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 13:21:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231847AbiKDMU6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 08:20:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47084 "EHLO
+        id S231861AbiKDMVX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 08:21:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231831AbiKDMUy (ORCPT
+        with ESMTP id S231833AbiKDMVR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 08:20:54 -0400
-Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 334892D760;
-        Fri,  4 Nov 2022 05:20:52 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.18.147.227])
-        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4N3fgZ3HXJzB0DDL;
-        Fri,  4 Nov 2022 20:14:18 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.204.63.22])
-        by APP1 (Coremail) with SMTP id LxC2BwA3I3CQA2Vjh6Q5AA--.49461S2;
-        Fri, 04 Nov 2022 13:20:38 +0100 (CET)
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     zohar@linux.ibm.com, dmitry.kasatkin@gmail.com,
-        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com
-Cc:     linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        stable@vger.kernel.org
-Subject: [PATCH] ima: Make a copy of sig and digest in asymmetric_verify()
-Date:   Fri,  4 Nov 2022 13:20:23 +0100
-Message-Id: <20221104122023.1750333-1-roberto.sassu@huaweicloud.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 4 Nov 2022 08:21:17 -0400
+Received: from mail-qk1-f176.google.com (mail-qk1-f176.google.com [209.85.222.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D12321FFBC;
+        Fri,  4 Nov 2022 05:21:15 -0700 (PDT)
+Received: by mail-qk1-f176.google.com with SMTP id f8so2907480qkg.3;
+        Fri, 04 Nov 2022 05:21:15 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=MpOBZFHbb5n86fo/L37mcIC77vG4ouciWdT84I9gcW4=;
+        b=usoqyl0Fswti9IMLxd6W6eq5sbA7Bl80cvqOLGkijkWFS2+jpNjQrMr/H3FtwNh8qE
+         z9sx1671tFAHFngC+NEl0jenHi7ZFzafYfGxfE1R8kA0ffdsoW+2f/EwZDyXZPIZMcC3
+         Da55NfF/epeEeyIxhzo9Ejy7y3lHVnUWY2/K0uxTZAyC1WW7UZHRs4mfESD9eTeVe5sQ
+         FM9nPKjAoMkzG4OZHIcF4lDGlezj1kOKbdblYZEq6vGPu753tAm9jl+Go9aF0MdatUGj
+         zK+GW+c3d/DPsCxe7ZQbAmoanc91QyNMmCMgGf27r6stBLDB4JgSILyjrywC3Pqty3GY
+         fueA==
+X-Gm-Message-State: ACrzQf1jC8doy0MAmKelhYhlfgTLW4v+JH5OunXjltD8/Ey96NEa28qb
+        3gqeyVu3K0m9ihdwqwUf53nD8/bcOmsJ9g==
+X-Google-Smtp-Source: AMsMyM6Tc3dneT99Wm55yxEyoppMN0GVPVmVf3jHJqAqDPQ1YkdwUStg7MvaVUWXmRGfVnIWp93EFw==
+X-Received: by 2002:ae9:e902:0:b0:6fa:8e2c:6c33 with SMTP id x2-20020ae9e902000000b006fa8e2c6c33mr1954998qkf.664.1667564474809;
+        Fri, 04 Nov 2022 05:21:14 -0700 (PDT)
+Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com. [209.85.219.178])
+        by smtp.gmail.com with ESMTPSA id e15-20020ac845cf000000b003995f6513b9sm2305584qto.95.2022.11.04.05.21.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 04 Nov 2022 05:21:14 -0700 (PDT)
+Received: by mail-yb1-f178.google.com with SMTP id j130so5568471ybj.9;
+        Fri, 04 Nov 2022 05:21:14 -0700 (PDT)
+X-Received: by 2002:a25:6b07:0:b0:6cd:3a43:bfe5 with SMTP id
+ g7-20020a256b07000000b006cd3a43bfe5mr22021198ybc.89.1667564474153; Fri, 04
+ Nov 2022 05:21:14 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: LxC2BwA3I3CQA2Vjh6Q5AA--.49461S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxWFy7KF4fKFWkuF4xKFWDXFb_yoW5Jw15pa
-        1kKas8KF4UKr4xCFW3Ca1xW3yrWFWrKr47WayfAwn3uFn8Xw4qywn2y3W7Xr98WryxtFW3
-        trnFqF17Cr1DC3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUv2b4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAa
-        w2AFwI0_GFv_Wryl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxV
-        Aqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q
-        6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6x
-        kF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVW3JVWrJr1lIxAIcVC2z280aVAF
-        wI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa
-        7IU8imRUUUUUU==
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAGBF1jj4URMQAAsX
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221103205546.24836-1-wsa+renesas@sang-engineering.com>
+ <20221103205546.24836-4-wsa+renesas@sang-engineering.com> <7cfe285d-eb82-1840-0149-b5b77f2beaae@linaro.org>
+ <Y2T0MT2mZ5kghUQ1@shikoro>
+In-Reply-To: <Y2T0MT2mZ5kghUQ1@shikoro>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Fri, 4 Nov 2022 13:21:02 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdXd1B=BbePp9X21ptUbr9tp9Qz4JPYBbvzCVtRjN+A97w@mail.gmail.com>
+Message-ID: <CAMuHMdXd1B=BbePp9X21ptUbr9tp9Qz4JPYBbvzCVtRjN+A97w@mail.gmail.com>
+Subject: Re: [PATCH 3/4] arm64: dts: renesas: white-hawk-cpu: sort RWDT entry correctly
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-renesas-soc@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Roberto Sassu <roberto.sassu@huawei.com>
+Hi Wolfram,
 
-Commit ac4e97abce9b8 ("scatterlist: sg_set_buf() argument must be in linear
-mapping") requires that both the signature and the digest resides in the
-linear mapping area.
+On Fri, Nov 4, 2022 at 12:15 PM Wolfram Sang
+<wsa+renesas@sang-engineering.com> wrote:
+> > But I doubt that there is a bug here. Style (like order of things) is
+> > not a bug.
+>
+> Okay, I'll be more strict next time. Geert, could you kindly drop the
+> Fixes tag or shall I resend?
 
-However, more recently commit ba14a194a434c ("fork: Add generic vmalloced
-stack support"), made it possible to move the stack in the vmalloc area,
-which could make the requirement of the first commit not satisfied anymore.
+Consider it done, no need to resend.
+BTW, I guess the stable machinery will pick it up anyway...
 
-If CONFIG_SG=y and CONFIG_VMAP_STACK=y, the following BUG() is triggered:
+Gr{oetje,eeting}s,
 
-[  467.077359] kernel BUG at include/linux/scatterlist.h:163!
-[  467.077939] invalid opcode: 0000 [#1] PREEMPT SMP NOPTI
+                        Geert
 
-[...]
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-[  467.095225] Call Trace:
-[  467.096088]  <TASK>
-[  467.096928]  ? rcu_read_lock_held_common+0xe/0x50
-[  467.097569]  ? rcu_read_lock_sched_held+0x13/0x70
-[  467.098123]  ? trace_hardirqs_on+0x2c/0xd0
-[  467.098647]  ? public_key_verify_signature+0x470/0x470
-[  467.099237]  asymmetric_verify+0x14c/0x300
-[  467.099869]  evm_verify_hmac+0x245/0x360
-[  467.100391]  evm_inode_setattr+0x43/0x190
-
-The failure happens only for the digest, as the pointer comes from the
-stack, and not for the signature, which instead was allocated by
-vfs_getxattr_alloc().
-
-Fix this by making a copy of both in asymmetric_verify(), so that the
-linear mapping requirement is always satisfied, regardless of the caller.
-
-Cc: stable@vger.kernel.org # 4.9.x
-Fixes: ba14a194a434 ("fork: Add generic vmalloced stack support")
-Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
----
- security/integrity/digsig_asymmetric.c | 19 +++++++++++++++++--
- 1 file changed, 17 insertions(+), 2 deletions(-)
-
-diff --git a/security/integrity/digsig_asymmetric.c b/security/integrity/digsig_asymmetric.c
-index 895f4b9ce8c6..635238d5c7fe 100644
---- a/security/integrity/digsig_asymmetric.c
-+++ b/security/integrity/digsig_asymmetric.c
-@@ -122,11 +122,26 @@ int asymmetric_verify(struct key *keyring, const char *sig,
- 		goto out;
- 	}
- 
--	pks.digest = (u8 *)data;
-+	pks.digest = kmemdup(data, datalen, GFP_KERNEL);
-+	if (!pks.digest) {
-+		ret = -ENOMEM;
-+		goto out;
-+	}
-+
- 	pks.digest_size = datalen;
--	pks.s = hdr->sig;
-+
-+	pks.s = kmemdup(hdr->sig, siglen, GFP_KERNEL);
-+	if (!pks.s) {
-+		kfree(pks.digest);
-+		ret = -ENOMEM;
-+		goto out;
-+	}
-+
- 	pks.s_size = siglen;
-+
- 	ret = verify_signature(key, &pks);
-+	kfree(pks.digest);
-+	kfree(pks.s);
- out:
- 	key_put(key);
- 	pr_debug("%s() = %d\n", __func__, ret);
--- 
-2.25.1
-
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
