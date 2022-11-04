@@ -2,218 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B001619E2B
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 18:09:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14AD7619E38
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 18:13:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231539AbiKDRJm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 13:09:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55130 "EHLO
+        id S231320AbiKDRNo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 13:13:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229954AbiKDRJk (ORCPT
+        with ESMTP id S229994AbiKDRNk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 13:09:40 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EAEE3326C0
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 10:09:38 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6EDFC1FB;
-        Fri,  4 Nov 2022 10:09:44 -0700 (PDT)
-Received: from [192.168.178.6] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 53AC33F703;
-        Fri,  4 Nov 2022 10:09:35 -0700 (PDT)
-Message-ID: <4ec6ab79-9f0f-e14b-dd06-d2840a1bf71a@arm.com>
-Date:   Fri, 4 Nov 2022 18:09:26 +0100
+        Fri, 4 Nov 2022 13:13:40 -0400
+Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7938A31F8F
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 10:13:37 -0700 (PDT)
+Received: by mail-qv1-xf30.google.com with SMTP id e15so3621977qvo.4
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 10:13:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=V9d/XoPw51yk/pI4pLP90kowufRsgkaEdGWppnSDAkE=;
+        b=nl4idPg6vMNt0oI4SBlEgipBnS7ZrmdQOCvz6ALUQsrc6BtD+bhod/KyLM/Kn/yaFT
+         Eph1kx+nWdV831rx21gd82njO+H3KEqvuuZpksRl50C6FOSwK13ypYmNzEBskoMGSzDN
+         JPoVFdVF3QbsUHrWqWYNE5TouaK9k/mA4mGmEj3ab+JKZExUVYOlRV5nixFt9/s+XCeu
+         /C97BPwdv8CAXzZBsvL+57TRksCg3zBJe4NsCAooCbem6tMyzBDespTm6OjfUuEiWESp
+         G7oJqsoYXPhOrT1PcFEIml0PBvyu/6ERlh8j1dmHM1BH6JHKwcWvAXz/eulmJzGTBOCs
+         74Lw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=V9d/XoPw51yk/pI4pLP90kowufRsgkaEdGWppnSDAkE=;
+        b=FvDWnGhESsvTsJdw6egLbvKRDUmZ4u0IZXNIr6UyK6E4LVwVwue55lhdI47M7bNwl+
+         O/noT9ETYFsjqRsA/5765wv9dEkJQeCv1TU8/P+rHAeAm6Zx0mbC2iPs7iJxmTyz3P9V
+         XX0ZldEl+8YD+cMfXv5kUk15DgOyM+dXAOBf1Lj1QiKocUpVsdgZjuE6ZyWFSqTYdgUp
+         xFPM4+avZOL3RKlhWMBu/3Q24R2574/igndMxn3taFf4hu/eduolQio25vaKuZZzpk2Y
+         JoIkYxZRAYobHGDTL4e3jkLpXNeAnIL9joiQHk95xxR4rerHdskEqnOfi/wQXRhmRaHs
+         Hb9w==
+X-Gm-Message-State: ACrzQf3G//IPf36+fHmw82rIWl0akYMz1FLmx+xvMcX9kwRUEEWnnebt
+        cL8b3FHbdiCLs9ysw14VUlapVg==
+X-Google-Smtp-Source: AMsMyM5My89DYXgpJIfD94Z5eFq3R7YTf92Y24BjUOWx99Z2hVSwPVsG1a0ndzH4FuZ8R0AdzYVsCg==
+X-Received: by 2002:ad4:5962:0:b0:4bb:6b78:c599 with SMTP id eq2-20020ad45962000000b004bb6b78c599mr32894711qvb.35.1667582016609;
+        Fri, 04 Nov 2022 10:13:36 -0700 (PDT)
+Received: from ?IPV6:2601:586:5000:570:aad6:acd8:4ed9:299b? ([2601:586:5000:570:aad6:acd8:4ed9:299b])
+        by smtp.gmail.com with ESMTPSA id 145-20020a370b97000000b006eeb3165565sm3176724qkl.80.2022.11.04.10.13.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 04 Nov 2022 10:13:35 -0700 (PDT)
+Message-ID: <61945062-4261-ba3d-0d39-8c1cc46ad33b@linaro.org>
+Date:   Fri, 4 Nov 2022 13:13:34 -0400
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [RFC PATCH 07/11] sched: Add proxy execution
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v2] dt-bindings: net: nxp,sja1105: document spi-cpol/cpha
 Content-Language: en-US
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     Connor O'Brien <connoro@google.com>, linux-kernel@vger.kernel.org,
-        kernel-team@android.com, John Stultz <jstultz@google.com>,
-        Qais Yousef <qais.yousef@arm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>
-References: <dab347c1-3724-8ac6-c051-9d2caea20101@arm.com>
- <34B2D8B9-A0C1-4280-944D-17224FB24339@joelfernandes.org>
- <4e396924-c3be-1932-91a3-5f458cc843fe@arm.com> <Y2ANPi7y5HhHvelr@google.com>
-From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
-In-Reply-To: <Y2ANPi7y5HhHvelr@google.com>
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221102185232.131168-1-krzysztof.kozlowski@linaro.org>
+ <20221103233319.m2wq5o2w3ccvw5cu@skbuf>
+ <698c3a72-f694-01ac-80ba-13bd40bb6534@linaro.org>
+ <20221104020326.4l63prl7vxgi3od7@skbuf>
+ <6056fe63-26f8-bbda-112a-5b7cf25570ad@linaro.org>
+ <20221104165230.oquh3dzisai2dt7e@skbuf>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221104165230.oquh3dzisai2dt7e@skbuf>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 31/10/2022 19:00, Joel Fernandes wrote:
-> On Mon, Oct 31, 2022 at 05:39:45PM +0100, Dietmar Eggemann wrote:
->> On 29/10/2022 05:31, Joel Fernandes wrote:
->>> Hello Dietmar,
+On 04/11/2022 12:52, Vladimir Oltean wrote:
+> On Fri, Nov 04, 2022 at 09:09:02AM -0400, Krzysztof Kozlowski wrote:
+>>> I think that spi-cpha/spi-cpol belongs to spi-peripheral-props.yaml just
+>>> as much as the others do.
 >>>
->>>> On Oct 24, 2022, at 6:13 AM, Dietmar Eggemann <dietmar.eggemann@arm.com> wrote:
->>>>
->>>> ﻿On 03/10/2022 23:44, Connor O'Brien wrote:
->>>>> From: Peter Zijlstra <peterz@infradead.org>
-
-[...]
-
->>>>> +    rq_unpin_lock(rq, rf);
->>>>> +    raw_spin_rq_unlock(rq);
->>>>
->>>> Don't we run into rq_pin_lock()'s:
->>>>
->>>> SCHED_WARN_ON(rq->balance_callback && rq->balance_callback !=
->>>> &balance_push_callback)
->>>>
->>>> by releasing rq lock between queue_balance_callback(, push_rt/dl_tasks)
->>>> and __balance_callbacks()?
->>>
->>> Apologies, I’m a bit lost here. The code you are responding to inline does not call rq_pin_lock, it calls rq_unpin_lock.  So what scenario does the warning trigger according to you?
+>>> The distinction "device specific, not controller specific" is arbitrary
+>>> to me. These are settings that the controller has to make in order to
+>>> talk to that specific peripheral. Same as many others in that file.
 >>
->> True, but the code which sneaks in between proxy()'s
->> raw_spin_rq_unlock(rq) and raw_spin_rq_lock(rq) does.
+>> Not every fruit is an orange, but every orange is a fruit. You do not
+>> put "color: orange" to schema for fruits. You put it to the schema for
+>> oranges.
 >>
+>> IOW, CPHA/CPOL are not valid for most devices, so they cannot be in
+>> spi-peripheral-props.yaml.
 > 
-> Got it now, thanks a lot for clarifying. Can this be fixed by do a
-> __balance_callbacks() at:
+> Ok, then this patch is not correct either. The "nxp,sja1105*" devices
+> need to have only "spi-cpha", and the "nxp,sja1110*" devices need to
+> have only "spi-cpol".
 
-I tried the: 
+Sure, I'll add allOf:if:then based on your input.
 
-   head = splice_balance_callbacks(rq)
-   task_rq_unlock(rq, p, &rf);
-   ...
-   balance_callbacks(rq, head);
+Best regards,
+Krzysztof
 
-separation known from __sched_setscheduler() in __schedule() (right
-after pick_next_task()) but it doesn't work. Lot of `BUG: scheduling
-while atomic:`
-
-[    0.384135] BUG: scheduling while atomic: swapper/0/1/0x00000002
-[    0.384198] INFO: lockdep is turned off.
-[    0.384241] Modules linked in:
-[    0.384289] CPU: 0 PID: 1 Comm: swapper/0 Tainted: G W 6.1.0-rc2-00023-g8a4c0a9d97ce-dirty #166
-[    0.384375] Hardware name: ARM Juno development board (r0) (DT)
-[    0.384426] Call trace:  
-[    0.384454]  dump_backtrace.part.0+0xe4/0xf0
-[    0.384501]  show_stack+0x18/0x40
-[    0.384540]  dump_stack_lvl+0x8c/0xb8
-[    0.384582]  dump_stack+0x18/0x34
-[    0.384622]  __schedule_bug+0x88/0xa0
-[    0.384666]  __schedule+0xae0/0xba4
-[    0.384711]  schedule+0x5c/0xfc
-[    0.384754]  schedule_timeout+0xcc/0x10c
-[    0.384798]  __wait_for_common+0xe4/0x1f4
-[    0.384847]  wait_for_completion+0x20/0x2c
-[    0.384897]  kthread_park+0x58/0xd0
-...
-
-> 
->> __schedule()
->>
->>   rq->proxy = next = pick_next_task()
->>
->>     __pick_next_task()
->>
->>       pick_next_task_rt()
->>
->>         set_next_task_rt()
->>
->>           rt_queue_push_tasks()
->>
->>             queue_balance_callback(..., push_rt_tasks); <-- queue rt cb
->>
->>   proxy()
->>
-> 
-> ... here, before doing the following unlock?
-> 
->>     raw_spin_rq_unlock(rq)
->>
->>                  ... <-- other thread does rq_lock_XXX(rq)
->>                                               raw_spin_rq_lock_XXX(rq)
->>                                                 rq_pin_lock(rq)
->>
->>     raw_spin_rq_lock(rq)
->>
->>   context_switch()
->>
->>      finish_task_switch()
->>
->>        finish_lock_switch()
->>
->>          __balance_callbacks(rq) <-- run rt cb here
->>
->>   __balance_callbacks(rq)() <-- or run rt cb here
-> 
-> 
-> Hmm also Connor, does locktorture do hotplug? Maybe it should to reproduce
-> the balance issues.
-
-I can reproduce this reliably with making the locktorture writer realtime.
-
---%<--
-
-diff --git a/kernel/locking/locktorture.c b/kernel/locking/locktorture.c
-index bc3557677eed..23aabb4f34e5 100644
---- a/kernel/locking/locktorture.c
-+++ b/kernel/locking/locktorture.c
-@@ -676,7 +676,8 @@ static int lock_torture_writer(void *arg)
-        DEFINE_TORTURE_RANDOM(rand);
- 
-        VERBOSE_TOROUT_STRING("lock_torture_writer task started");
--       set_user_nice(current, MAX_NICE);
-+       if (!rt_task(current))
-+               set_user_nice(current, MAX_NICE);
- 
-        do {
-                if ((torture_random(&rand) & 0xfffff) == 0)
-diff --git a/kernel/torture.c b/kernel/torture.c
-index 1d0dd88369e3..55d8ac417a4a 100644
---- a/kernel/torture.c
-+++ b/kernel/torture.c
-@@ -57,6 +57,9 @@ module_param(verbose_sleep_duration, int, 0444);
- static int random_shuffle;
- module_param(random_shuffle, int, 0444);
- 
-+static int lock_torture_writer_fifo;
-+module_param(lock_torture_writer_fifo, int, 0444);
-+
- static char *torture_type;
- static int verbose;
- 
-@@ -734,7 +737,7 @@ bool stutter_wait(const char *title)
-        cond_resched_tasks_rcu_qs();
-        spt = READ_ONCE(stutter_pause_test);
-        for (; spt; spt = READ_ONCE(stutter_pause_test)) {
--               if (!ret) {
-+               if (!ret && !rt_task(current)) {
-                        sched_set_normal(current, MAX_NICE);
-                        ret = true;
-                }
-@@ -944,6 +947,11 @@ int _torture_create_kthread(int (*fn)(void *arg), void *arg, char *s, char *m,
-                *tp = NULL;
-                return ret;
-        }
-+
-+       if (lock_torture_writer_fifo &&
-+           !strncmp(s, "lock_torture_writer", strlen(s)))
-+               sched_set_fifo(*tp);
-+
-        wake_up_process(*tp);  // Process is sleeping, so ordering provided.
-        torture_shuffle_task_register(*tp);
-        return ret;
