@@ -2,81 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29C3D618F25
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 04:37:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE890618F2A
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 04:38:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229591AbiKDDhp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 23:37:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37152 "EHLO
+        id S229952AbiKDDiu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 23:38:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229553AbiKDDhQ (ORCPT
+        with ESMTP id S229553AbiKDDil (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 23:37:16 -0400
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4EE360E6
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 20:37:03 -0700 (PDT)
-Received: by mail-pg1-x529.google.com with SMTP id 64so3364332pgc.5
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 20:37:03 -0700 (PDT)
+        Thu, 3 Nov 2022 23:38:41 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A599EC0D;
+        Thu,  3 Nov 2022 20:38:39 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id d20so2707744plr.10;
+        Thu, 03 Nov 2022 20:38:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fromorbit-com.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=kCztCif6DGnUVPea69d1j6HBte1tInJ//NGbT2adCtA=;
-        b=uj2thbHtG/d+GBBCufhO7rN+QkuEm7zsR1utnZpf1jQ6jQI6apkQTpUS2wcEmA9aNC
-         VnDMe2rmlwjjtPUJR6RVdf+UJIK/YCtwiDAFrNIV7Nt++fXhl9nREiFkHf0RyMEPfvfO
-         onGWmNN1ovJwkvkYC6fzzHZz7zyvVev9H3OguSEusghpv0YPPtdfeKpV8TCgCnMYqtfc
-         Ksic71C8032fBMagPD7RLDMZgSbzkcCWA6HBFsZEVIK8PskhHmcNukEVkFYsBkmvmeoC
-         g/qCQdT1fcwEOyEG1ZYfH8GugnyK0CKLKk6hzKwIFkwwhNd+ojc6bS3gdGaV6YzySSoe
-         prLQ==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=BIBSO8ZhfoOnCIqBf4JIjxIbJSOo930x/QG6CRhZqZw=;
+        b=p7qzc0fD4Y9LXR0L1FApcK7vnnes03yi+J8oM4Enu/2md0/3wJtUp55hjpuLK6CbWg
+         oH0GZQVJ10AUo9q5xBBvnb/SLv0+YhbFlopNIgBrF3wTBo2fw8LqNfNmO62NETWA54m3
+         0rRPhAkU1Sfi5NSehJs9j3UV6InyBY/422hBRgmMh/y0CQUQLBZ2MEHMjmsecrM588x3
+         Gc1sV3sC0+Nc/SQR78IULghPWV5e/dAJRKHTKO/JCjxTS6Ule9WtyvAxTM2chbERyuW4
+         Imd80Bbrzd1aboX5F2k8dER9mRyHzDjpFzHbpcpXk3PkscPdbTAhiVhedyl1DMWErONx
+         yfFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kCztCif6DGnUVPea69d1j6HBte1tInJ//NGbT2adCtA=;
-        b=3jrRX+metS+mcS6rTmOXE3oHwoPrZ6yBvqGA4tQdfV8PDPlsWEWp7HkFJAFBLEkhT3
-         HtUvPkLjHg9AvurO0SijaQ5xw3o1AwNJrHJ5P/tbaU3Qo4jBAJrD+Rx8tyWbJ2T7PMHa
-         EDBfsG8raPaqTcxRHIcCeSxcUhdNTp+7ypitjWVCCCcMNBOYTvxBSGxepP7/MCbpgHBI
-         pG9YEN8Lid938HO7yAiZWi+tbX/F8Mfb5ezXoHa0WhhhBPaSHrWSmPuKzKifgVpVzAZV
-         FOTrN2erb3mgblQt1ua823GIhdVcQ6hyaq5eZ4O1Qusit73FMgsWlzxvCx2gyyVGYfvu
-         7aCA==
-X-Gm-Message-State: ACrzQf2dsQ7qP2/lZSfycgVjSyldJHorGav3zNcoBIu503FPB5mn6Fib
-        ar7ZDL3Hf2Es/ouDSsmVCf6iWw==
-X-Google-Smtp-Source: AMsMyM7NwhgMGw/Ejg/10+QrYuOi1WfTIe60hww1ZNfzsfJwCZnIyT2jB8JwYZIzMahLdSnJ6wzgKQ==
-X-Received: by 2002:a05:6a00:2396:b0:56c:b770:eda6 with SMTP id f22-20020a056a00239600b0056cb770eda6mr33239633pfc.38.1667533023291;
-        Thu, 03 Nov 2022 20:37:03 -0700 (PDT)
-Received: from dread.disaster.area (pa49-181-106-210.pa.nsw.optusnet.com.au. [49.181.106.210])
-        by smtp.gmail.com with ESMTPSA id x13-20020a170902a38d00b001830ed575c3sm1430190pla.117.2022.11.03.20.37.02
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=BIBSO8ZhfoOnCIqBf4JIjxIbJSOo930x/QG6CRhZqZw=;
+        b=pxh+TEIIbkMDWAze97CNS5McFiFX1FsGYvBTLMUKJQQKL/2dH16VFtSgRFzfZ9XwAD
+         znOfYoMEHGaSzCb37N6y0g7OZyX19adGFNAGX0ubwHWE9mtzSXvM/D5btCmVF16AHFd0
+         9DFUbSQNZqtSD0Wa4mUFQbwSqckVeavraI9YqZfyoPILwCEpRAiea3F2DajEHKslYZtb
+         AR+Hnyox2Kyu8/tw/VSHhztOggA9sX2gmtcjd7QzGJSv7neR4wEOM2WV6nWY/di8M3hr
+         VWorzVty2fPp8L6l3j5ql/VTXqo3wr4ewX42yheNCGPac/YmH2l9ad8gRn43M9wsNqU6
+         2oiA==
+X-Gm-Message-State: ACrzQf3SpWsZNLA+iCNgLqMPQKkzTRUCUSiNo2IimgcaDqi6LtcluqjP
+        XSrmj97hWMg1EKmjc9T8ouSL39Wk+jI=
+X-Google-Smtp-Source: AMsMyM6QvfRsAwE/H7kQmKWFTjew7xtuhLq7ti65AZx5tJU+VmBSUdG/vxpZCn+cFki5lCJUPiK16A==
+X-Received: by 2002:a17:902:f647:b0:183:cb8d:40a0 with SMTP id m7-20020a170902f64700b00183cb8d40a0mr33220333plg.18.1667533119049;
+        Thu, 03 Nov 2022 20:38:39 -0700 (PDT)
+Received: from hcdev-d520mt2.. (60-250-192-107.hinet-ip.hinet.net. [60.250.192.107])
+        by smtp.gmail.com with ESMTPSA id f17-20020aa79d91000000b0056bb06ce1cfsm1545759pfq.97.2022.11.03.20.38.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Nov 2022 20:37:02 -0700 (PDT)
-Received: from dave by dread.disaster.area with local (Exim 4.92.3)
-        (envelope-from <david@fromorbit.com>)
-        id 1oqnVr-00A1XB-Bm; Fri, 04 Nov 2022 14:36:59 +1100
-Date:   Fri, 4 Nov 2022 14:36:59 +1100
-From:   Dave Chinner <david@fromorbit.com>
-To:     "Darrick J. Wong" <djwong@kernel.org>
-Cc:     Vishal Moola <vishal.moola@gmail.com>,
-        linux-fsdevel@vger.kernel.org, linux-afs@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-btrfs@vger.kernel.org,
-        ceph-devel@vger.kernel.org, linux-cifs@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
-        cluster-devel@redhat.com, linux-nilfs@vger.kernel.org,
-        linux-mm@kvack.org, Matthew Wilcox <willy@infradead.org>
-Subject: Re: [PATCH 04/23] page-writeback: Convert write_cache_pages() to use
- filemap_get_folios_tag()
-Message-ID: <20221104033659.GA2703033@dread.disaster.area>
-References: <20220901220138.182896-1-vishal.moola@gmail.com>
- <20220901220138.182896-5-vishal.moola@gmail.com>
- <20221018210152.GH2703033@dread.disaster.area>
- <Y2RAdUtJrOJmYU4L@fedora>
- <20221104003235.GZ2703033@dread.disaster.area>
- <Y2R8rRr0ZdrlT32m@magnolia>
+        Thu, 03 Nov 2022 20:38:38 -0700 (PDT)
+From:   Marvin Lin <milkfafa@gmail.com>
+To:     mchehab@kernel.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     openbmc@lists.ozlabs.org, avifishman70@gmail.com,
+        tmaimon77@gmail.com, tali.perry1@gmail.com, kwliu@nuvoton.com,
+        kflin@nuvoton.com, Marvin Lin <milkfafa@gmail.com>
+Subject: [PATCH v6 0/5] Support Nuvoton NPCM Video Capture/Encode Engine
+Date:   Fri,  4 Nov 2022 11:38:05 +0800
+Message-Id: <20221104033810.1324686-1-milkfafa@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y2R8rRr0ZdrlT32m@magnolia>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,64 +71,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 03, 2022 at 07:45:01PM -0700, Darrick J. Wong wrote:
-> On Fri, Nov 04, 2022 at 11:32:35AM +1100, Dave Chinner wrote:
-> > On Thu, Nov 03, 2022 at 03:28:05PM -0700, Vishal Moola wrote:
-> > > On Wed, Oct 19, 2022 at 08:01:52AM +1100, Dave Chinner wrote:
-> > > > On Thu, Sep 01, 2022 at 03:01:19PM -0700, Vishal Moola (Oracle) wrote:
-> > > > > -			BUG_ON(PageWriteback(page));
-> > > > > -			if (!clear_page_dirty_for_io(page))
-> > > > > +			BUG_ON(folio_test_writeback(folio));
-> > > > > +			if (!folio_clear_dirty_for_io(folio))
-> > > > >  				goto continue_unlock;
-> > > > >  
-> > > > >  			trace_wbc_writepage(wbc, inode_to_bdi(mapping->host));
-> > > > > -			error = (*writepage)(page, wbc, data);
-> > > > > +			error = writepage(&folio->page, wbc, data);
-> > > > 
-> > > > Yet, IIUC, this treats all folios as if they are single page folios.
-> > > > i.e. it passes the head page of a multi-page folio to a callback
-> > > > that will treat it as a single PAGE_SIZE page, because that's all
-> > > > the writepage callbacks are currently expected to be passed...
-> > > > 
-> > > > So won't this break writeback of dirty multipage folios?
-> > > 
-> > > Yes, it appears it would. But it wouldn't because its already 'broken'.
-> > 
-> > It is? Then why isn't XFS broken on existing kernels? Oh, we don't
-> > know because it hasn't been tested?
-> > 
-> > Seriously - if this really is broken, and this patchset further
-> > propagating the brokeness, then somebody needs to explain to me why
-> > this is not corrupting data in XFS.
-> 
-> It looks like iomap_do_writepage finds the folio size correctly
-> 
-> 	end_pos = folio_pos(folio) + folio_size(folio);
-> 
-> and iomap_writpage_map will map out the correct number of blocks
-> 
-> 	unsigned nblocks = i_blocks_per_folio(inode, folio);
-> 
-> 	for (i = 0; i < nblocks && pos < end_pos; i++, pos += len) {
-> 
-> right?
+This patch series add DTS node, dt-bindings document and drivers for Video
+Capture/Differentiation Engine (VCD) and Encoding Compression Engine (ECE)
+present on Nuvoton NPCM SoCs.
 
-Yup, that's how I read it, too.
+VCD can capture/differentiate video data from digital or analog sources,
+then the ECE will compress the data into HEXTILE format.
 
-But my recent experience with folios involved being repeatedly
-burnt by edge case corruptions due to multipage folios showing up
-when and where I least expected them.
+HEXTILE compressed format is defined in Remote Framebuffer Protocol (RFC
+6143) and is used by VNC features, so we also add a patch to support it.
 
-Hence doing a 1:1 conversion of page based code to folio based code
-and just assuming large folios will work without any testing seems
-akin to playing russian roulette with loose cannons that have been
-doused with napalm and then set on fire by an air-dropped barrel
-bomb...
+Changes in v6:
+  - Support NPCM845 and add compatible "nuvoton,npcm845-video".
+  - Correct pixel format to V4L2_PIX_FMT_HEXTILE which is newly added in
+    this patch series.
 
-Cheers,
+Changes in v5:
+  - Simplify function prefix "nuvoton_" to "npcm_".
+  - Increase VCD_BUSY_TIMEOUT_US and ECE_POLL_TIMEOUT_US to 300ms to
+    prevent polling timeout when ECC is enabled or system is busy.
 
-Dave.
+Changes in v4:
+  - Fix compile warning reported by kernel test robot.
+
+Changes in v3:
+  - Add video driver entry in MAINTAINERS.
+  - Change config name to CONFIG_VIDEO_NPCM_VCD_ECE.
+  - Reduce the waiting time after resetting the VCD/ECE module.
+  - Correct data types of some variables.
+
+Changes in v2:
+  - Add Hextile document and locate with vendor formats.
+
+Marvin Lin (5):
+  arm: dts: Add node for NPCM Video Capture/Encode Engine
+  dt-bindings: media: Add dt-bindings for NPCM Video Capture/Encode
+    Engine
+  dt-bindings: arm/npcm: Add dt-bindings for Graphics Core Information
+  media: Add HEXTILE compressed format
+  drivers: media: platform: Add NPCM Video Capture/Encode Engine driver
+
+ .../bindings/arm/npcm/nuvoton,gfxi.yaml       |   41 +
+ .../bindings/media/nuvoton,npcm-video.yaml    |   87 +
+ .../media/v4l/pixfmt-reserved.rst             |    7 +
+ MAINTAINERS                                   |    9 +
+ arch/arm/boot/dts/nuvoton-common-npcm7xx.dtsi |   19 +
+ drivers/media/platform/Kconfig                |    1 +
+ drivers/media/platform/Makefile               |    1 +
+ drivers/media/platform/nuvoton/Kconfig        |   12 +
+ drivers/media/platform/nuvoton/Makefile       |    2 +
+ drivers/media/platform/nuvoton/npcm-video.c   | 2093 +++++++++++++++++
+ drivers/media/v4l2-core/v4l2-ioctl.c          |    1 +
+ include/uapi/linux/videodev2.h                |    1 +
+ 12 files changed, 2274 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/arm/npcm/nuvoton,gfxi.yaml
+ create mode 100644 Documentation/devicetree/bindings/media/nuvoton,npcm-video.yaml
+ create mode 100644 drivers/media/platform/nuvoton/Kconfig
+ create mode 100644 drivers/media/platform/nuvoton/Makefile
+ create mode 100644 drivers/media/platform/nuvoton/npcm-video.c
+
 -- 
-Dave Chinner
-david@fromorbit.com
+2.34.1
+
