@@ -2,181 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDCC4619586
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 12:41:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C29DF619579
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 12:38:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231591AbiKDLlu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 07:41:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57488 "EHLO
+        id S230405AbiKDLi1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 07:38:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbiKDLlr (ORCPT
+        with ESMTP id S229708AbiKDLiX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 07:41:47 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F4BF12760;
-        Fri,  4 Nov 2022 04:41:47 -0700 (PDT)
+        Fri, 4 Nov 2022 07:38:23 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4FCA3B0
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 04:38:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667562107; x=1699098107;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=SlT5UwsKk+Qh3q4aaxeOm1yda/xai3OJXLkLJpRzhzY=;
-  b=f9Oh6hQTzH5YtXFXUqJOIiWHn8DFYNMLRDXQDEpg5NX5JYEeurBxw6Jh
-   jvWp3yPYcabdLbaShx3XfsWmaX15jQlFOYfZ2Pp3+mpDrvS5uaqbiCTId
-   7xRF1SpuDdUe33HZrybBaMRqnTZKs2S623T7i0WiPqMkEnluPcGlOLBJp
-   1f0HSzcFdO8KyAPmcatE35l/ZqJbLHzd1WKWauxaLx09Ob9c2wA0aA+dt
-   Bh57VkhiNnf2EcK8U7OriIc5zeGnBwYpvf1aCuV78rS3lZjdC6TYVAQga
-   O2/t7UAdomoxSl4BeAKDXS4tNWZglr2cCEtNL9VCYuxlIZCccNDpYPcuS
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10520"; a="396247153"
+  t=1667561902; x=1699097902;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=2dwZ0lBOQZ6+sQ6EOjFpDqnqPMYYcofhOiJqlrECN2A=;
+  b=e9BSeafAQUaJ3f/9uGJigkd2OltKJLAKmCtHKVmBoJhHJwQLJi1GJeWm
+   Xpss7our9Hkq9wsIyzqjMJpjqiytDzN2nC0C3ApHK5HaKLA5OhbJYbJbi
+   2505jzzXRIGsSSfcYoIV7iWkTP6rDEykMQUdl4xX/xD8duPyHNVifXQ7S
+   x8yR5QogMY+YEjCnCzisYiemPww17E6h3QOwcpaoZ751sYaUNvRXnbLN7
+   fIo9PY8g1FtDpRcjMQbmkkmx51IFNjNuUW+W27XdzJo4oaXm3guDLqpsh
+   WyYpt3e1XM/+RtzKoa+qwe2ta+EQihansTesOzRroA+TuYSWCi0p1fYLM
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10520"; a="308659433"
 X-IronPort-AV: E=Sophos;i="5.96,137,1665471600"; 
-   d="scan'208";a="396247153"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2022 04:41:46 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10520"; a="964319149"
+   d="scan'208";a="308659433"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2022 04:38:22 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10520"; a="666341173"
 X-IronPort-AV: E=Sophos;i="5.96,137,1665471600"; 
-   d="scan'208";a="964319149"
-Received: from ataghour-mobl.ger.corp.intel.com (HELO [10.251.217.193]) ([10.251.217.193])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2022 04:41:44 -0700
-Message-ID: <be549b74-426d-b7a4-1493-73709936638e@linux.intel.com>
-Date:   Fri, 4 Nov 2022 13:41:41 +0200
+   d="scan'208";a="666341173"
+Received: from liuzhao-optiplex-7080.sh.intel.com (HELO localhost) ([10.239.160.132])
+  by orsmga008.jf.intel.com with ESMTP; 04 Nov 2022 04:38:20 -0700
+Date:   Fri, 4 Nov 2022 19:44:05 +0800
+From:   Zhao Liu <zhao1.liu@linux.intel.com>
+To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+Cc:     intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org,
+        Zhenyu Wang <zhenyu.z.wang@intel.com>,
+        Zhao Liu <zhao1.liu@intel.com>,
+        Dave Hansen <dave.hansen@intel.com>
+Subject: Re: [PATCH 1/9] drm/i915: Use kmap_local_page() in
+ gem/i915_gem_object.c
+Message-ID: <Y2T7BePekbf06JEo@liuzhao-OptiPlex-7080>
+References: <20221017093726.2070674-1-zhao1.liu@linux.intel.com>
+ <2541717.Lt9SDvczpP@suse>
+ <Y2Pxi9FsdeULhHKI@iweiny-desk3>
+ <12087538.O9o76ZdvQC@suse>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH hid v11 00/14] Introduce eBPF support for HID devices
-Content-Language: en-US
-To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org
-References: <20221025093458.457089-1-benjamin.tissoires@redhat.com>
-From:   Tero Kristo <tero.kristo@linux.intel.com>
-In-Reply-To: <20221025093458.457089-1-benjamin.tissoires@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <12087538.O9o76ZdvQC@suse>
 X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Benjamin,
+On Thu, Nov 03, 2022 at 08:22:04PM +0100, Fabio M. De Francesco wrote:
+> Date: Thu, 03 Nov 2022 20:22:04 +0100
+> From: "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+> Subject: Re: [PATCH 1/9] drm/i915: Use kmap_local_page() in
+>  gem/i915_gem_object.c
+> 
+> On gioved? 3 novembre 2022 17:51:23 CET Ira Weiny wrote:
+> > On Sat, Oct 29, 2022 at 01:17:03PM +0200, Fabio M. De Francesco wrote:
+> > > On luned? 17 ottobre 2022 11:37:17 CEST Zhao Liu wrote:
+> > > > From: Zhao Liu <zhao1.liu@intel.com>
+> > > > 
+> > > > The use of kmap_atomic() is being deprecated in favor of
+> > > > kmap_local_page()[1].
+> > > > 
+> > > > The main difference between atomic and local mappings is that local
+> > > > mappings doesn't disable page faults or preemption.
+> > > 
+> > > You are right about about page faults which are never disabled by
+> > > kmap_local_page(). However kmap_atomic might not disable preemption. It
+> > > depends on CONFIG_PREEMPT_RT.
+> > > 
+> > > Please refer to how kmap_atomic_prot() works (this function is called by
+> > > kmap_atomic() when kernels have HIGHMEM enabled).
+> > > 
+> > > > There're 2 reasons why i915_gem_object_read_from_page_kmap() doesn't
+> > > > need to disable pagefaults and preemption for mapping:
+> > > > 
+> > > > 1. The flush operation is safe for CPU hotplug when preemption is not
+> > > > disabled.
+> > > 
+> > > I'm confused here. Why are you talking about CPU hotplug?
+> > 
+> > I agree with Fabio here.  I'm not making the connection between cpu hotplug 
+> and
+> > this code path.
+> > 
+> > Ira
+> 
+> @Zhao,
+> 
+> I'd like to add that I was about to put my reviewed-by tag. The other things I 
+> objected are minor nits. Please just clarify this connection.
 
-Tested this on top of 6.1-rc1 against my HID-USI work, appears to be 
-good. Also tried out the HID selftests, and they pass, so for the whole 
-series:
+Thanks Fabio for your comments! Sorry I missed the mails that day. This connection
+is my misunderstanding. Other thoughts please refer to my reply to your first email
+in this thread.
 
-Tested-by: Tero Kristo <tero.kristo@linux.intel.com>
+Thanks,
+Zhao
 
-On 25/10/2022 12:34, Benjamin Tissoires wrote:
-> Hi,
->
-> and here comes the v11 of the HID-BPF series.
->
-> Again, for a full explanation of HID-BPF, please refer to the last patch
-> in this series (14/14).
->
-> Now that the bpf-core changes are all merged in v6.1, it is
-> time to have that series entirely relying on HID, so it can get
-> merged into the HID tree.
->
-> Compared to v10, the most notable change is in the selftests and the
-> samples: they are now namespaced into hid, not bpf.
->
-> This means that HID-BPF has no more conflicts with the bpf tree.
->
-> One other interesting change is in patch 4/14. I managed to reduce
-> the scope of the embedded bpf programs, by tricking the refcount.
-> I am planning on submitting an RFC for embedding those changes in
-> bpf core (a map that doesn't increment refcount and a cleanup mechanism)
-> but this can come as a later improvement.
-> This new kind of maps and mechanisms might also be useful for other
-> subsystems.
->
-> Cheers,
-> Benjamin
->
-> Benjamin Tissoires (14):
->    HID: Kconfig: split HID support and hid-core compilation
->    HID: initial BPF implementation
->    selftests: add tests for the HID-bpf initial implementation
->    HID: bpf jmp table: simplify the logic of cleaning up programs
->    HID: bpf: allocate data memory for device_event BPF programs
->    selftests/hid: add test to change the report size
->    HID: bpf: introduce hid_hw_request()
->    selftests/hid: add tests for bpf_hid_hw_request
->    HID: bpf: allow to change the report descriptor
->    selftests/hid: add report descriptor fixup tests
->    selftests/hid: Add a test for BPF_F_INSERT_HEAD
->    samples/hid: add new hid BPF example
->    samples/hid: add Surface Dial example
->    Documentation: add HID-BPF docs
->
->   Documentation/hid/hid-bpf.rst                 | 513 +++++++++++
->   Documentation/hid/index.rst                   |   1 +
->   MAINTAINERS                                   |   3 +
->   drivers/Makefile                              |   2 +-
->   drivers/hid/Kconfig                           |  20 +-
->   drivers/hid/Makefile                          |   2 +
->   drivers/hid/bpf/Kconfig                       |  17 +
->   drivers/hid/bpf/Makefile                      |  11 +
->   drivers/hid/bpf/entrypoints/Makefile          |  93 ++
->   drivers/hid/bpf/entrypoints/README            |   4 +
->   drivers/hid/bpf/entrypoints/entrypoints.bpf.c |  34 +
->   .../hid/bpf/entrypoints/entrypoints.lskel.h   | 368 ++++++++
->   drivers/hid/bpf/hid_bpf_dispatch.c            | 526 +++++++++++
->   drivers/hid/bpf/hid_bpf_dispatch.h            |  28 +
->   drivers/hid/bpf/hid_bpf_jmp_table.c           | 572 ++++++++++++
->   drivers/hid/hid-core.c                        |  32 +-
->   include/linux/hid.h                           |   5 +
->   include/linux/hid_bpf.h                       | 148 +++
->   include/uapi/linux/hid_bpf.h                  |  25 +
->   samples/hid/.gitignore                        |   8 +
->   samples/hid/Makefile                          | 246 +++++
->   samples/hid/Makefile.target                   |  75 ++
->   samples/hid/hid_mouse.bpf.c                   | 134 +++
->   samples/hid/hid_mouse.c                       | 160 ++++
->   samples/hid/hid_surface_dial.bpf.c            | 161 ++++
->   samples/hid/hid_surface_dial.c                | 231 +++++
->   tools/include/uapi/linux/hid.h                |  62 ++
->   tools/include/uapi/linux/hid_bpf.h            |  25 +
->   tools/testing/selftests/Makefile              |   1 +
->   tools/testing/selftests/hid/.gitignore        |   4 +
->   tools/testing/selftests/hid/Makefile          | 242 +++++
->   tools/testing/selftests/hid/config            |  20 +
->   tools/testing/selftests/hid/hid_bpf.c         | 846 ++++++++++++++++++
->   tools/testing/selftests/hid/progs/hid.c       | 206 +++++
->   34 files changed, 4815 insertions(+), 10 deletions(-)
->   create mode 100644 Documentation/hid/hid-bpf.rst
->   create mode 100644 drivers/hid/bpf/Kconfig
->   create mode 100644 drivers/hid/bpf/Makefile
->   create mode 100644 drivers/hid/bpf/entrypoints/Makefile
->   create mode 100644 drivers/hid/bpf/entrypoints/README
->   create mode 100644 drivers/hid/bpf/entrypoints/entrypoints.bpf.c
->   create mode 100644 drivers/hid/bpf/entrypoints/entrypoints.lskel.h
->   create mode 100644 drivers/hid/bpf/hid_bpf_dispatch.c
->   create mode 100644 drivers/hid/bpf/hid_bpf_dispatch.h
->   create mode 100644 drivers/hid/bpf/hid_bpf_jmp_table.c
->   create mode 100644 include/linux/hid_bpf.h
->   create mode 100644 include/uapi/linux/hid_bpf.h
->   create mode 100644 samples/hid/.gitignore
->   create mode 100644 samples/hid/Makefile
->   create mode 100644 samples/hid/Makefile.target
->   create mode 100644 samples/hid/hid_mouse.bpf.c
->   create mode 100644 samples/hid/hid_mouse.c
->   create mode 100644 samples/hid/hid_surface_dial.bpf.c
->   create mode 100644 samples/hid/hid_surface_dial.c
->   create mode 100644 tools/include/uapi/linux/hid.h
->   create mode 100644 tools/include/uapi/linux/hid_bpf.h
->   create mode 100644 tools/testing/selftests/hid/.gitignore
->   create mode 100644 tools/testing/selftests/hid/Makefile
->   create mode 100644 tools/testing/selftests/hid/config
->   create mode 100644 tools/testing/selftests/hid/hid_bpf.c
->   create mode 100644 tools/testing/selftests/hid/progs/hid.c
->
