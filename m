@@ -2,109 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F687619424
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 11:05:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B4AD61945E
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 11:20:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231649AbiKDKFA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 06:05:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39136 "EHLO
+        id S231721AbiKDKUz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 06:20:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230491AbiKDKE5 (ORCPT
+        with ESMTP id S231687AbiKDKUk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 06:04:57 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2C8A126;
-        Fri,  4 Nov 2022 03:04:54 -0700 (PDT)
-X-UUID: 5da8b99b54c9420285541947fdeb3be4-20221104
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=SiJd/cbIFHc0t29rG3pUwRbp3B0gNob0JkC9ON4oH/Y=;
-        b=HZrqVcNlvAbPIAzrFT/a7SDK2j/pXOdxQKPtMtf0y73Ae8FsEW1eiMCbgUpicP6FP5z8nfmmmrubz59gZJKaiYA22EK7Y6ji631JpxP3zgXszRfjSnL0Y/3E+OrFgY4ZBE5aGhRjW+152CL+0VIDXMhCQCG+uMQ4sj1lc3szVcs=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.12,REQID:2b7ddbb3-d266-4b5f-bfff-06f200f23879,IP:0,U
-        RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-        :release,TS:-5
-X-CID-META: VersionHash:62cd327,CLOUDID:8300aff3-a19e-4b45-8bfe-6a73c93611e9,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: 5da8b99b54c9420285541947fdeb3be4-20221104
-Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw01.mediatek.com
-        (envelope-from <mengqi.zhang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 356064194; Fri, 04 Nov 2022 18:04:47 +0800
-Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
- mtkmbs13n1.mediatek.inc (172.21.101.193) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Fri, 4 Nov 2022 18:04:46 +0800
-Received: from localhost.localdomain (10.17.3.154) by mtkmbs13n1.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
- Transport; Fri, 4 Nov 2022 18:04:45 +0800
-From:   Mengqi Zhang <mengqi.zhang@mediatek.com>
-To:     <chaotian.jing@mediatek.com>, <ulf.hansson@linaro.org>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <matthias.bgg@gmail.com>, <wenbin.mei@mediatek.com>,
-        <angelogioacchino.delregno@collabora.com>
-CC:     <linux-mmc@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Mengqi Zhang <mengqi.zhang@mediatek.com>
-Subject: [PATCH v2 2/2] dt-bindings: mmc: mtk-sd: add Inline Crypto Engine clock
-Date:   Fri, 4 Nov 2022 18:04:11 +0800
-Message-ID: <20221104100410.27531-3-mengqi.zhang@mediatek.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 4 Nov 2022 06:20:40 -0400
+X-Greylist: delayed 932 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 04 Nov 2022 03:20:35 PDT
+Received: from 3.mo560.mail-out.ovh.net (3.mo560.mail-out.ovh.net [46.105.58.226])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2B3625E9B
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 03:20:35 -0700 (PDT)
+Received: from player726.ha.ovh.net (unknown [10.110.115.67])
+        by mo560.mail-out.ovh.net (Postfix) with ESMTP id 9243D255CB
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 10:05:01 +0000 (UTC)
+Received: from RCM-web3.webmail.mail.ovh.net (ip-194-187-74-233.konfederacka.maverick.com.pl [194.187.74.233])
+        (Authenticated sender: rafal@milecki.pl)
+        by player726.ha.ovh.net (Postfix) with ESMTPSA id 422C230557BA7;
+        Fri,  4 Nov 2022 10:04:57 +0000 (UTC)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+Date:   Fri, 04 Nov 2022 11:04:57 +0100
+From:   =?UTF-8?Q?Rafa=C5=82_Mi=C5=82ecki?= <rafal@milecki.pl>
+To:     Christian Lamparter <chunkeey@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, srinivas.kandagatla@linaro.org,
+        gregkh@linuxfoundation.org, a.fatoum@pengutronix.de
+Subject: Re: [PATCH v1] nvmem: address crc32 check on redundant-layout powerpc
+ machines
+In-Reply-To: <41e7ab94800b4a9aef73e212464bd94117429bec.1667555240.git.chunkeey@gmail.com>
+References: <41e7ab94800b4a9aef73e212464bd94117429bec.1667555240.git.chunkeey@gmail.com>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <e22067325dffb02739a7bd7c20419b43@milecki.pl>
+X-Sender: rafal@milecki.pl
+X-Originating-IP: 194.187.74.233
+X-Webmail-UserID: rafal@milecki.pl
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Ovh-Tracer-Id: 16414776219705846715
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: 0
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvgedrvddugddtlecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecunecujfgurhepggffhffvvefujghffgfkgihitgfgsehtjehjtddtredvnecuhfhrohhmpeftrghfrghlucfoihhlvggtkhhiuceorhgrfhgrlhesmhhilhgvtghkihdrphhlqeenucggtffrrghtthgvrhhnpefgueelueetteefueehhffhgfetvdegjeefleffuedvhfeuffdvheegueevuefhleenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecukfhppeduvdejrddtrddtrddupdduleegrddukeejrdejgedrvdeffeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduvdejrddtrddtrddupdhmrghilhhfrhhomhepoehrrghfrghlsehmihhlvggtkhhirdhplheqpdhnsggprhgtphhtthhopedupdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdfovfetjfhoshhtpehmohehiedtpdhmohguvgepshhmthhpohhuth
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add optional crypto clock of the Inline Crypto Engine of Mediatek SoCs.
+On 2022-11-04 10:47, Christian Lamparter wrote:
+> The Western Digital MyBook Live (PowerPC 464/APM82181)
+> has a set of redundant u-boot-env. Loading up the driver
+> causes it to error out with:
+> 
+> | u_boot_env: Invalid calculated CRC32: 0x4f8f2c86 (expected: 
+> 0x98b14514)
+> | u_boot_env: probe of partition@1e000 failed with error -22
+> 
+> Looking up the userspace libubootenv utilities source [0],
+> it looks like the "mark" or "flag" is not part of the
+> crc32 sum... which is unfortunate :(
+> 
+> |static int libuboot_load(struct uboot_ctx *ctx)
+> |{
+> |[...]
+> |       if (ctx->redundant) {
+> |		[...]
+> |               offsetdata = offsetof(struct uboot_env_redund, data);
+> |		[...]
+> |       }
+> |       usable_envsize = ctx->size - offsetdata;
+> |       buf[0] = malloc(bufsize);
+> |[...]
+> |	for (i = 0; i < copies; i++) {
+> |		data = (uint8_t *)(buf[i] + offsetdata);
+> |               uint32_t crc;
+> |
+> |		ret = devread(ctx, i, buf[i]);
+> |		[...]
+> |		crc = *(uint32_t *)(buf[i] + offsetcrc);
+> |               dev->crc = crc32(0, (uint8_t *)data, usable_envsize);
+> |
 
-Signed-off-by: Mengqi Zhang <mengqi.zhang@mediatek.com>
----
- .../devicetree/bindings/mmc/mtk-sd.yaml       | 22 +++++++++++++++++++
- 1 file changed, 22 insertions(+)
+Thanks for the fix, it may be I didn't actually test that code.
 
-diff --git a/Documentation/devicetree/bindings/mmc/mtk-sd.yaml b/Documentation/devicetree/bindings/mmc/mtk-sd.yaml
-index 6f8ecb4788eb..8ed94a12a03b 100644
---- a/Documentation/devicetree/bindings/mmc/mtk-sd.yaml
-+++ b/Documentation/devicetree/bindings/mmc/mtk-sd.yaml
-@@ -263,6 +263,28 @@ allOf:
-             - const: bus_clk
-             - const: sys_cg
- 
-+  - if:
-+      properties:
-+        compatible:
-+          enum:
-+            - mediatek,mt8186-mmc
-+            - mediatek,mt8188-mmc
-+            - mediatek,mt8195-mmc
-+    then:
-+      properties:
-+        clocks:
-+          items:
-+            - description: source clock
-+            - description: HCLK which used for host
-+            - description: independent source clock gate
-+            - description: crypto clock used for data encrypt/decrypt (optional)
-+        clock-names:
-+          items:
-+            - const: source
-+            - const: hclk
-+            - const: source_cg
-+            - const: crypto
-+
-   - if:
-       properties:
-         compatible:
--- 
-2.25.1
+That change has nothing to do with byte swapping so I' suggest TWO
+separated patches.
 
+
+> Now, this alone didn't fully fix the kernel's uboot-env nvmem
+> driver. The driver then ran into an endian error on the
+> big-endian powerpc device:
+> 
+> | u_boot_env: Invalid calculated CRC32: 0x1445b198 (expected: 
+> 0x98b14514)
+> 
+> however the __le32 type for the crc32 value is justified because the
+> the crc32() is just a macro for crc32_le(). So, to side-step that
+> problem, the crc32 check gets extended to also accept a byteswapped
+> crc32.
+
+Can you try this pending patch, please?
+[PATCH v2] nvmem: u-boot-env: align endianness of crc32 values
+https://lore.kernel.org/lkml/20221012155133.287-1-musashino.open@gmail.com/
