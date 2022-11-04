@@ -2,79 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2525D619C7D
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 17:04:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7BC0619C87
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 17:06:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232269AbiKDQEn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 12:04:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39040 "EHLO
+        id S232287AbiKDQGL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 12:06:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231565AbiKDQEl (ORCPT
+        with ESMTP id S229749AbiKDQGH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 12:04:41 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3E442710;
-        Fri,  4 Nov 2022 09:04:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=public-files.de;
-        s=s31663417; t=1667577856;
-        bh=HaDXsj5DAmUozxmuMTfo9ex+N6s+nv1T65q4Xi8hgFE=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=ZM2nwxB2r33PzRiQCbOUAeIkRnw2n9KjRUooAhRZVI9FX5xWWX4UWs1MZdn2iJS+F
-         DWw5BS4v8Jnvr9XtlBMz3T9NOVl2wGVwoY6N3nwXNjBEhsV+Dv6NN6zqc4N8WCs8Cm
-         Wa7veXULp3mR9NTq7H0N6DHXJibfQDALqqGUKtdkqQ5M4JAtSPGCQHwoMP4adChuoL
-         0lKpbFDuN3NR8wlpvQwKrfO6ot4c0ThUdXII1H6Vk4auLgDsdN88eA3fFYftYDciUg
-         hDG0gzOSaS80ZkoAsjTsiizwU2afLqcd+Ru8+pr6JHMuGs7YqTALqohyx6/tazW/Po
-         bnsNJoZx5VbNw==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [80.245.77.26] ([80.245.77.26]) by web-mail.gmx.net
- (3c-app-gmx-bs24.server.lan [172.19.170.76]) (via HTTP); Fri, 4 Nov 2022
- 17:04:16 +0100
+        Fri, 4 Nov 2022 12:06:07 -0400
+Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01olkn2054.outbound.protection.outlook.com [40.92.98.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FD8B1BEA3;
+        Fri,  4 Nov 2022 09:06:04 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Bbh6U9XHZsCBZcAEmKFfPicrmoZ3BFtWZ4B/HuoXPzQE4JN4zvISmU/2iG5BHi0I/SSB8IXyl8EhRAS5us2k6xTnHzQtrz4rNYLA0LY3ZsISkZ5djjGlRIs8G/AfQHB3gwjbv7O55bxe+YxGKCYF03eLo3w4/KEum58fMVO8qnemW2GOIZTHz6ZU4BVKUntbEYfQLDrF59GobCKg8wYGRuTkgG3W41CIopZYD1EWT20YBRVpBvRI0dY6FWT7njiOnckAAJ3CuNVbyd3BpVphuurbhOeOTlKg4Q1WXxCzMSkoPa8rB9g56lmfqfgjOleY32w01IzkVYLRholPQr0cgQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=EAausU8rFK0NzdqFnWtnDeOC1n9wuoalCC5vsr0tk60=;
+ b=XRmUT06Zb10OBTGPTbLBJSVUfqc3S97PgJXxy6Qo/OJyVF+pGA5it0DhcrRLtRjAML94skEvg/QI53WJXCTFWnqjtvWg3YjojjDfM895amxFBq6HKmODMIVBGf9JzK+OxDQS/+U5hdsOyn7rOiNeEswzlCFUOkyc0tTyk7dEK44lTGXtRmJW02vIPVoIAvNC6YVc9FcDBHaj7jZVRxYzdt6U37zGWxQnYnZo4BoKFXr9ZAezPwWRioRR2yzfac/PKPkzJ3ywSwrcoFNzMRjWvWAZAx2Lp7K366BFnuYSj5nOUs3zgFI+JqwX6SATiVA5bVejWR/bXQRCgQ6KsPgutw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=EAausU8rFK0NzdqFnWtnDeOC1n9wuoalCC5vsr0tk60=;
+ b=kpu6IZvykMTFZzZP6X/TCqTL6ABOODX3ncl87qO7x+CaZUqKCwxJGn/QLFk11+PHmJ2O0m7jQ9MzKOSaP3sNpIJOqnKe0xr0xCeNfOoMUBX3Rvr/VDuNGGyyX6w1aCeHt4xEB0i7w8b4VCYhKSQRr04UUiisfXzKRNiXgfb+V+oIllDIxfYUu1I3LcG9RjUNoyzipxJ2j9KnVMHayGwISKJ8wwdfN5xdUD3AgX1RuniQhckGPwuwmNlFmYASwSuT1PSAjgppWAAsSsewDxolsFo7zzx21guBusAoThX6rSSIcMleRBDe5J8P5iAFYW50ZB3xoXwqR5HwBGXD37VyQg==
+Received: from TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM (2603:1096:400:152::9)
+ by TYWP286MB3223.JPNP286.PROD.OUTLOOK.COM (2603:1096:400:2d6::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.24; Fri, 4 Nov
+ 2022 16:06:00 +0000
+Received: from TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM
+ ([fe80::c90e:cbf3:c23d:43a5]) by TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM
+ ([fe80::c90e:cbf3:c23d:43a5%9]) with mapi id 15.20.5791.024; Fri, 4 Nov 2022
+ 16:06:00 +0000
+From:   Dawei Li <set_pte_at@outlook.com>
+To:     sumit.semwal@linaro.org, christian.koenig@amd.com
+Cc:     benjamin.gaignard@collabora.com, labbott@redhat.com,
+        Brian.Starkey@arm.com, jstultz@google.com, afd@ti.com,
+        sspatil@android.com, linux-media@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
+        linux-kernel@vger.kernel.org, Dawei Li <set_pte_at@outlook.com>
+Subject: [PATCH v4] dma-buf: fix racing conflict of dma_heap_add()
+Date:   Sat,  5 Nov 2022 00:05:36 +0800
+Message-ID: <TYCP286MB2323873BBDF88020781FB986CA3B9@TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM>
+X-Mailer: git-send-email 2.25.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-TMN:  [+1ZKHlzTD/1HMwxkcwagGc0cFaIxQTFu]
+X-ClientProxiedBy: TY2PR02CA0041.apcprd02.prod.outlook.com
+ (2603:1096:404:a6::29) To TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM
+ (2603:1096:400:152::9)
+X-Microsoft-Original-Message-ID: <20221104160536.4123-1-set_pte_at@outlook.com>
 MIME-Version: 1.0
-Message-ID: <trinity-889b4468-8a50-4eae-80a1-6bd9ffbeaaf2-1667577856206@3c-app-gmx-bs24>
-From:   Frank Wunderlich <frank-w@public-files.de>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Frank Wunderlich <linux@fw-web.de>,
-        linux-mediatek@lists.infradead.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sean Wang <sean.wang@kernel.org>, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Aw: Re: [PATCH v2] dt-bindings: pinctrl: update uart/mmc bindings
- for MT7986 SoC
-Content-Type: text/plain; charset=UTF-8
-Date:   Fri, 4 Nov 2022 17:04:16 +0100
-Importance: normal
-Sensitivity: Normal
-In-Reply-To: <e7192d9b-df86-a860-d5cb-8b4b9184e5bc@linaro.org>
-References: <20221025070255.14407-1-linux@fw-web.de>
- <e7192d9b-df86-a860-d5cb-8b4b9184e5bc@linaro.org>
-X-UI-Message-Type: mail
-X-Priority: 3
-X-Provags-ID: V03:K1:2X1CafeoZLi1maobab4XpgEBgVUV/xQr84vHR6gjBAuOAY+JVVgANmAm4TcRb/l8nDxS2
- TnKDSNrjO66TVkQ5Xv4tr22SQACFwC8dyQ5Ll1ovrg6NFnaVVla9fQWFTGVG3ydGBt4eY/4/7vU8
- BOJEfNFxM3uM2fdID/4ZsxJovvlK1CDWDoVbs+QRvVF175YDPu+J5S564bNkOGoh11auRi/vnZss
- jHYbLCQ7bKanEf80Q/YE26Kq+rO1TwJuNmmvMxFtfFWsv5EV0YohuUNEs5XDlMS5neXaVDZAYIYw
- +g=
-UI-OutboundReport: notjunk:1;M01:P0:uc0fEXlhH1I=;v14gmGUwfv0+qhv+chsSKxKrs5P
- pwVmYK1Z+eFI4681MyQNBz/llzYKerv1128HaHFkR43erPzjWWPnk/BxJfoUhH3LmmWPkGsWG
- Sk8JuO1KSz5VdbakOSaL3Ql+Q7VPd4OGrLYhSBz8dfwaawb4C3pSOYpTnkgmMjCmqQgFXmrfq
- b9kGjG+G5j8n2iuiXVsv/L6nFTFnolCkwcPKeFysjsSbGZ7M0lGV+kaRIrPmezJVEnMSFiL9D
- pYy2VsMd7Dk17hgP81q7yhcsCA5vXFceeYISenxgZfBiXQSJV6mNKSFiGp0Ttql8Jyr1O/3ZV
- VyfLpd7PRJMmzap8TtKeBdgp6R9xVMsX/IaaKtXXfij97OGpAGCOJqs5hCE4Oz3DMP+F7QY0f
- WIN527EHyL47okLwszSdFNatf6uh9rc9oCMqHSMHq2l4P5g0//mfjV8G6O80rYd/RXfinSKGQ
- 7PPQRA0vJckPPSWEr9IRQpH2he3G8/22AzEqEBjDvZ6xAkTTz+iiUCN5zYA4mTT+lBmT1IJtf
- h09a8G8k4edta9sAq9qiMoGgS59X1Se7+ounLhHeWFFVZSVrgWNGdy4sBjD4vvgAb+/78C1gd
- oKf9no7c1eIuJa6bFL0s8Rwwya4yeVFr6M0ihtwsNdwU00a2L+3SLcHVvkwzhJ48p1WF5kNKE
- 4KXjT9FbecheJRm35FwNbIfhbmCrFR//HA7gt/o5x3FgnaeLupaIbf6BboNfWbDFrRcQ1aTLt
- 5zPRw4LOtLFUnk4KjIWnSF/+GgkaQn834lSdZe5OsIaQRJWuCnkC7VL73hMGHATNrap6UOuzr
- IDQZmto+wcE9Idj3Tx1bfR8NAo9OQlPqjlgFTRtTW3H7c=
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: TYCP286MB2323:EE_|TYWP286MB3223:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4522d9fd-dda1-4cb9-4da5-08dabe7e776c
+X-MS-Exchange-SLBlob-MailProps: hmxDvsT8QC9IPEq7hVSzi8CjtgIfWrB0P2xvIfdtuKc/0tqlgZnU4lfB0vqmy+0SL8Go1P/nWJhrujpcmWhOviI2CQy5eczzf2P6QlNViAm0524ANVYEC6dqDKm6kJ2AxhuAAXi8sBhW7jYXR2BMn4vuab7PL/w4E7XL9CdzT2f3WtvQprRWeukP6A9/0eP9IX2D59tO/tJSyc4ljYdxd0jMSAjOm3KL70dUpfxR0aGNb/z0xxtn7kQSFVZZnzUSRh4BM3JzRgJF5Z06rHY6CEriSsei6U6B/VR9eF5gestn+qOWSBYM3hbVoSTwzY3NkCssF6QS5Y/WGYGTCVMtOW3xjTQ9tRo8pfp+cAIHB1QxyYS4k/GzNThlc6o/EpqB3TUmL8iSrShs5CH3lfOY5pSQUZAQwxfQMWeUrICw/pnfC3aB+9wqhsub/Pp0S9736UOwHQpDeaF8FMJIP41VoCz0fGDvGbsU6G5wnOmElvHfyjfz8Z1t/49VmY7LBtH+qdiMKGvxRVuO0Vxjr37cqKvh5mSM3U7msGy4BslsAhARaKyuVHSfWOrWuFnmh9+o6TiPUA78SsgBjbX+Q5YEzJ/bBlHpHIgUAfNkDPtzzel9bYH219+U4GiAz91R48UDoMiw+T/OHXwUxvMcA1/Fet8F3NL+FmBOG5YyaQje3iTPcIYAJ3irhwkV9nO3kPnAMTySEiN5C3NRE6jBnhpKvbjbf3JaVOtaerMMR+6zjiI9I9nvaPvNbFqDY0+ecDISfOgLVHveGXA0x766KJafj4DoQXnazHrDDgeDLo+zuRjbzZDoqVAADg==
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: nu7IBIHOlDPhMuaYrdBnvYVRRF0dfixRQuPzejFZIGmybqC9VP66uAHfos7T6MC6Qhnuzou4CoXKofwA3V09fk2XI4kZ9B7Dll8Ou1aOzFIkdTO1P0G9ZLJtNSBTQsVP067Vy7bNHlgP8f2BdQUKMfBOdJiMf0VdkYO1NJbil1dCJGpTRUBpUPVw/btiGNkxNs+d0RZlcAhHEB8/5aP5a7QjO/XcHRnSLqLkC9Ab5IT43/3LVDUAdOL5rvvqfeLZ1XbWA3VxQOtTnQF6HJA71HpxVG9Ei6r/94wk4qeivp4AIMK0rO9jXnWFMwGA1lmbyHjxLRT/0cmDYi09Pg/pnXxxeKhYI6tuTWhi/sdu5uU/d6CM+tbqFO++b6oWGf3AUdRMzMGiT1peaEijDHEP7nD6ztuGD36Bb15cDxul4tL8l8K2YtmKVXHc0vrGPtCLi1qLJUxx7eBf8mOcVg5xhJTv2EdtXZdULozpOVvY7jgU8tGTRP+NzP3X+DEHZ2XzvFB8fw+xjg7fddHRzqResYYJyRTd5FSOR+DRfseHP3ZFL2VfRaeN7b/iR9sR09DMY52mZBmcmaXrReYBlL+13ZAxscjJr6Pz2/0IpZeiy5FrZ6wpTlPPOINzlGIg8c7r22VDocqZ7yraUHk7d+zherd5sRCasIbDoHI8C76XgeuUgFMQch66nzpb4lULetZP
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ImzAWx0EIQC9SbCxcmZTO3K7PeKDTSWsUrClVGni2cSBGE3GBYoy+M5R31Sn?=
+ =?us-ascii?Q?RRxzypqSm+UjCmNA0+M7fui9ySQFqyCgWBF853lhP9wZbwMivzSL5j2eXzpI?=
+ =?us-ascii?Q?b13NOcYMuTXL3TJy7lbPnoGvTmT13V7MbU0/LS/x+Cmf9nDzu8/pzFTfF77+?=
+ =?us-ascii?Q?hElAP70uef6Iw9hU4zFlAXT8IYrIINWXivXDeM6rulMqc172mlCnmts8dGi4?=
+ =?us-ascii?Q?JWIwsY0sqk8aD+cjMBQ40tsbshZoy3VoVqClHzNRcHXw7tyYD+7TBNHI0Rj6?=
+ =?us-ascii?Q?UXDMtP57nhWpYv+Knqs9WQshm/DkzVMHBzf58KzjTN1VOoXyMesd6As3oJH8?=
+ =?us-ascii?Q?pG+b5hIppMCM8Ns1FChhOQ/UsgWvj341uwJxoBT6KJ0rFjQ1VFshugHHrNZl?=
+ =?us-ascii?Q?eTYSgAXwpVa+nW702C0zCctNnvlcjwUyWEfukn8+EX8oj3Lf7lsiq0yr5sWy?=
+ =?us-ascii?Q?RruKdiUfqv46fseXtdEP0WeYecCqxmCxDxY0hfJFonipMRCqpG5Z/g+E+Ilm?=
+ =?us-ascii?Q?eFSg4kFPq8XzOZaTzdQGwGExxSZMSgE/yJDSvyFEbl0ioNGsdkBpuLhRCIUX?=
+ =?us-ascii?Q?25m994dZV3gSV60uVf0kLJKNLFC72KiFA/CaZ6BiKl2sa/z5GvJbQtqcPT57?=
+ =?us-ascii?Q?UmM7PJHuY4Mir1VfgTgf3PE9psEWCyhfjbY6UHTCI3hqXwnIV4BKBJ7HH+E1?=
+ =?us-ascii?Q?AGerJR6Pbd1LdNkSqJyspWzD1o8zqyrfdqEle/B0pWcyO+4L8ACW98eqT3je?=
+ =?us-ascii?Q?MBu20tGD6ar4Wx5tKucVPQ5Ke76oA8lUdPkuAz38fYlsU7OqBsiqfxvhQWqd?=
+ =?us-ascii?Q?m1J/uoVwPGo1cmM1xeWlKQ7vUGJZIXneVR/XQEtaPWTOwIQuBJIZsP8M9tfK?=
+ =?us-ascii?Q?w+aYi2oZdcrw57bWCyTwSTzgjFbqoFBwHNeYVDOpn2QhtyAtd/kkt2E9pEX/?=
+ =?us-ascii?Q?/7nTN/DDqAzvLVWKWQxOOK4tSqem+lJJPmU4y50YiTt3XKRIWX5mK7eKAJvw?=
+ =?us-ascii?Q?0Cmgf0kATUL2o/FgsM2Iow/vYt5BmBEz0JZcFTwR7IQh4FDG8fXeRjJnztDN?=
+ =?us-ascii?Q?qYE8FCKndlf+kMdfD6LdMIFWI+Ozw1XGFIPSwdVnoZtBNFy8d2aPhODAE45J?=
+ =?us-ascii?Q?TeGPIG1UoknJBj4zxafkqGAoOb6TJGYYCVywoM9tPiBOkyrZVO8NrQrxDQBd?=
+ =?us-ascii?Q?Hwo7wLQowCYbznHMqRreVabdA84rLdh57v08HGEEWpNw7wL9dWJQCFPxClJw?=
+ =?us-ascii?Q?/kDMulpcX9w/YVDvB1XOm9Gh1PIH8nlCFJBVtN1Ajw=3D=3D?=
+X-OriginatorOrg: outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4522d9fd-dda1-4cb9-4da5-08dabe7e776c
+X-MS-Exchange-CrossTenant-AuthSource: TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Nov 2022 16:06:00.7589
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYWP286MB3223
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,54 +107,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi
+Racing conflict could be:
+task A                 task B
+list_for_each_entry
+strcmp(h->name))
+                       list_for_each_entry
+                       strcmp(h->name)
+kzalloc                kzalloc
+......                 .....
+device_create          device_create
+list_add
+                       list_add
 
-> Gesendet: Dienstag, 25. Oktober 2022 um 20:35 Uhr
-> Von: "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>
-> Betreff: Re: [PATCH v2] dt-bindings: pinctrl: update uart/mmc bindings f=
-or MT7986 SoC
->
-> On 25/10/2022 03:02, Frank Wunderlich wrote:
-> > From: Frank Wunderlich <frank-w@public-files.de>
-> >
-> > Add new splitted uart pins and emmc_51
-> >
-> > Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
->
->
-> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+The root cause is that task B has no idea about the fact someone
+else(A) has inserted heap with same name when it calls list_add,
+so a potential collision occurs.
 
-after talking with MTK for the emmc pinctrl settings (custom pull-up) they=
- suggested me to change
-binding to fix other emmc-values and allow multiple (2) uart-items
+Fixes: c02a81fba74f ("dma-buf: Add dma-buf heaps framework")
+Signed-off-by: Dawei Li <set_pte_at@outlook.com>
+---
+v1: https://lore.kernel.org/all/TYCP286MB2323950197F60FC3473123B7CA349@TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM/
+v1->v2: Narrow down locking scope, check the existence of heap before
+insertion, as suggested by Andrew Davis.
+v2->v3: Remove double checking.
+v3->v4: Minor coding style and patch formatting adjustment.
+---
+ drivers/dma-buf/dma-heap.c | 28 +++++++++++++++-------------
+ 1 file changed, 15 insertions(+), 13 deletions(-)
 
-so on top of this patch
+diff --git a/drivers/dma-buf/dma-heap.c b/drivers/dma-buf/dma-heap.c
+index 8f5848aa144f..59d158873f4c 100644
+--- a/drivers/dma-buf/dma-heap.c
++++ b/drivers/dma-buf/dma-heap.c
+@@ -233,18 +233,6 @@ struct dma_heap *dma_heap_add(const struct dma_heap_export_info *exp_info)
+ 		return ERR_PTR(-EINVAL);
+ 	}
+ 
+-	/* check the name is unique */
+-	mutex_lock(&heap_list_lock);
+-	list_for_each_entry(h, &heap_list, list) {
+-		if (!strcmp(h->name, exp_info->name)) {
+-			mutex_unlock(&heap_list_lock);
+-			pr_err("dma_heap: Already registered heap named %s\n",
+-			       exp_info->name);
+-			return ERR_PTR(-EINVAL);
+-		}
+-	}
+-	mutex_unlock(&heap_list_lock);
+-
+ 	heap = kzalloc(sizeof(*heap), GFP_KERNEL);
+ 	if (!heap)
+ 		return ERR_PTR(-ENOMEM);
+@@ -283,13 +271,27 @@ struct dma_heap *dma_heap_add(const struct dma_heap_export_info *exp_info)
+ 		err_ret = ERR_CAST(dev_ret);
+ 		goto err2;
+ 	}
+-	/* Add heap to the list */
++
+ 	mutex_lock(&heap_list_lock);
++	/* check the name is unique */
++	list_for_each_entry(h, &heap_list, list) {
++		if (!strcmp(h->name, exp_info->name)) {
++			mutex_unlock(&heap_list_lock);
++			pr_err("dma_heap: Already registered heap named %s\n",
++			       exp_info->name);
++			err_ret = ERR_PTR(-EINVAL);
++			goto err3;
++		}
++	}
++
++	/* Add heap to the list */
+ 	list_add(&heap->list, &heap_list);
+ 	mutex_unlock(&heap_list_lock);
+ 
+ 	return heap;
+ 
++err3:
++	device_destroy(dma_heap_class, heap->heap_devt);
+ err2:
+ 	cdev_del(&heap->heap_cdev);
+ err1:
+-- 
+2.25.1
 
-             then:
-               properties:
-                 groups:
--                  enum: [emmc, emmc_rst, emmc_51]
-+                  enum: [emmc_45, emmc_51]
-           - if:
-               properties:
-                 function:
-@@ -231,10 +231,12 @@ patternProperties:
-             then:
-               properties:
-                 groups:
--                  enum: [uart1_0, uart1_rx_tx, uart1_cts_rts, uart1_1,
--                         uart1_2_rx_tx, uart1_2_cts_rts, uart1_3_rx_tx,
--                         uart1_3_cts_rts, uart2_0_rx_tx, uart2_0_cts_rts,
--                         uart2_1, uart0, uart1, uart2]
-+                  items:
-+                    enum: [uart1_0, uart1_rx_tx, uart1_cts_rts, uart1_1,
-+                           uart1_2_rx_tx, uart1_2_cts_rts, uart1_3_rx_tx,
-+                           uart1_3_cts_rts, uart2_0_rx_tx, uart2_0_cts_rt=
-s,
-+                           uart2_1, uart0, uart1, uart2]
-+                  maxItems: 2
-
-i would squash these changes and send as v3 or should i send an extra-patc=
-h?
-
-regards Frank
