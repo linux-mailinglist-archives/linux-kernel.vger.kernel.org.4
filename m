@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F42B619362
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 10:21:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6108F61935E
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 10:21:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231431AbiKDJV2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 05:21:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44016 "EHLO
+        id S231358AbiKDJVU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 05:21:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229572AbiKDJVV (ORCPT
+        with ESMTP id S229572AbiKDJVR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 05:21:21 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 347A0248DB;
-        Fri,  4 Nov 2022 02:21:19 -0700 (PDT)
+        Fri, 4 Nov 2022 05:21:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EEB0248DB;
+        Fri,  4 Nov 2022 02:21:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 1E8B5CE29F5;
-        Fri,  4 Nov 2022 09:21:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59070C433C1;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 07D6D6202C;
+        Fri,  4 Nov 2022 09:21:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D70DC433D7;
         Fri,  4 Nov 2022 09:21:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1667553674;
-        bh=ZNT0XwYAgRKuTKTfJu0Te8j5hILWxto2RffwHpENdF8=;
-        h=From:To:Cc:Subject:Date:From;
-        b=lR6xkhsNRtS7thTObdaB0xQK8Em+2A4+Ez2ybWVpI7xOyc2YCzsnhsbwOtcwLianv
-         kOaG4ZZQ7aU0kFMePoZyERKA2b7xfR8VFFsQcOvpMwGQb1hFWq9R3eaFb80Jqt3j1I
-         fnKjcG7MvczFgLJ1zgXZy69ZoOrScZD/5pptmh2VbQUAKQxnHeZdxqtBV8Dl7RpC1X
-         QGCSd4jYfrb7sM3TiQsiA8c0rX+DdNTFJTFq2z7Sb5TSruWVPXX+nl2LeLW7+Nm6rg
-         dzbAZBWGIhVCWTCUXut9+qyz02aQCZ40/4jGs6RShJykBd5dB3NU8Q9Xcnj1LZ2IMs
-         lotEsNdcdYMrQ==
+        bh=JiGW3IovHz7nDy/fwgLDO/2d+ZpNIFbV/Xo9gEkjrPc=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=YfPn9BjAdbYNYQMQD54Z00EzH3XFq9a6iYx9SEbkRxNXL6zouY5Dc6kq3rtCVRX2+
+         a5gAtPn0adnxG6DD7VXBrqY7TvoumMSV002oqka5m1cQ1lHy2BMscI8Q6FidArS6bU
+         voArok4ngCRjAirPqGO8x5W+56xXm9beZVUxTb14/J3vA4OaV3N7PC9ZdLOuYcZjxo
+         xD3ufEKRiklObg6j8x3MwvG10H2G3cB4efCfkW4Y3mJpUxFQjUzAYguTL5gTCKNoan
+         vheehfXafk9g5eqktjU0Ptgu19LiB0bxvyG7YKZ1PF0CUBKGz339p9+tLTng4fIzXb
+         pWeXV3ASlGLXQ==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan+linaro@kernel.org>)
-        id 1oqssh-0004XX-PF; Fri, 04 Nov 2022 10:20:56 +0100
+        id 1oqssi-0004XZ-Ii; Fri, 04 Nov 2022 10:20:56 +0100
 From:   Johan Hovold <johan+linaro@kernel.org>
 To:     Bjorn Andersson <andersson@kernel.org>
 Cc:     Andy Gross <agross@kernel.org>,
@@ -45,11 +45,13 @@ Cc:     Andy Gross <agross@kernel.org>,
         Shazad Hussain <quic_shazhuss@quicinc.com>,
         linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org,
-        Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH 0/2] arm64: dts: qcom: sc8280xp: fix UFS reference clocks and PHY nodes
-Date:   Fri,  4 Nov 2022 10:20:43 +0100
-Message-Id: <20221104092045.17410-1-johan+linaro@kernel.org>
+        Johan Hovold <johan+linaro@kernel.org>, stable@vger.kernel.org
+Subject: [PATCH 1/2] arm64: dts: qcom: sc8280xp: fix UFS reference clocks
+Date:   Fri,  4 Nov 2022 10:20:44 +0100
+Message-Id: <20221104092045.17410-2-johan+linaro@kernel.org>
 X-Mailer: git-send-email 2.37.3
+In-Reply-To: <20221104092045.17410-1-johan+linaro@kernel.org>
+References: <20221104092045.17410-1-johan+linaro@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -61,42 +63,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After some initial confusion, we've finally settled how the UFS ref
-clocks are used.
+There are three UFS reference clocks on SC8280XP which are used as
+follows:
 
-The first patch fixes the UFS controller and PHY nodes so that they
-reflect the hardware. This one should go in 6.1-rc where the two
-previous attempts to address this are heading.
+ - The GCC_UFS_REF_CLKREF_CLK clock is fed to any UFS device connected
+   to either controller.
 
-Note this patch depends on first updating the clock driver to reflect
-that the device ref clock is fed from CXO. This is needed as the UFS
-controller driver requires a valid frequency for the ref clock. A patch
-that addresses the this has been submitted, but a v2 is in the works.
-[1]
+ - The GCC_UFS_1_CARD_CLKREF_CLK and GCC_UFS_CARD_CLKREF_CLK clocks
+   provide reference clocks to the two PHYs.
 
-The second patch updates the UFS PHY nodes so that they reflect the
-fixed UFS PHY binding that is now in linux-next. This one is 6.2
-material but depends on first fixing the clocks.
+Note that this depends on first updating the clock driver to reflect
+that all three clocks are sourced from CXO. Specifically, the UFS
+controller driver expects the device reference clock to have a valid
+frequency:
 
-So to summarise the dependency order:
+	ufshcd-qcom 1d84000.ufs: invalid ref_clk setting = 0
 
- 1. clock driver should be fixed in 6.1-rc
- 2. patch 1/2 should go in 6.1-rc (after 1)
- 3. patch 2/2 should go in 6.2 (after 1 and 2)
+Fixes: 152d1faf1e2f ("arm64: dts: qcom: add SC8280XP platform")
+Fixes: 8d6b458ce6e9 ("arm64: dts: qcom: sc8280xp: fix ufs_card_phy ref clock")
+Fixes: f3aa975e230e ("arm64: dts: qcom: sc8280xp: correct ref clock for ufs_mem_phy")
+Link: https://lore.kernel.org/lkml/Y2OEjNAPXg5BfOxH@hovoldconsulting.com/
+Cc: stable@vger.kernel.org	# 5.20
+Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+---
+ arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-Johan
-
-
-[1] https://lore.kernel.org/r/20221030142333.31019-1-quic_shazhuss@quicinc.com
-
-
-Johan Hovold (2):
-  arm64: dts: qcom: sc8280xp: fix UFS reference clocks
-  arm64: dts: qcom: sc8280xp: update UFS PHY nodes
-
- arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 57 ++++++++++----------------
- 1 file changed, 21 insertions(+), 36 deletions(-)
-
+diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+index 21ac119e0382..e0d0fb6994b5 100644
+--- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+@@ -912,7 +912,7 @@ ufs_mem_hc: ufs@1d84000 {
+ 				 <&gcc GCC_AGGRE_UFS_PHY_AXI_CLK>,
+ 				 <&gcc GCC_UFS_PHY_AHB_CLK>,
+ 				 <&gcc GCC_UFS_PHY_UNIPRO_CORE_CLK>,
+-				 <&rpmhcc RPMH_CXO_CLK>,
++				 <&gcc GCC_UFS_REF_CLKREF_CLK>,
+ 				 <&gcc GCC_UFS_PHY_TX_SYMBOL_0_CLK>,
+ 				 <&gcc GCC_UFS_PHY_RX_SYMBOL_0_CLK>,
+ 				 <&gcc GCC_UFS_PHY_RX_SYMBOL_1_CLK>;
+@@ -943,7 +943,7 @@ ufs_mem_phy: phy@1d87000 {
+ 			ranges;
+ 			clock-names = "ref",
+ 				      "ref_aux";
+-			clocks = <&gcc GCC_UFS_REF_CLKREF_CLK>,
++			clocks = <&gcc GCC_UFS_CARD_CLKREF_CLK>,
+ 				 <&gcc GCC_UFS_PHY_PHY_AUX_CLK>;
+ 
+ 			resets = <&ufs_mem_hc 0>;
+@@ -980,7 +980,7 @@ ufs_card_hc: ufs@1da4000 {
+ 				 <&gcc GCC_AGGRE_UFS_CARD_AXI_CLK>,
+ 				 <&gcc GCC_UFS_CARD_AHB_CLK>,
+ 				 <&gcc GCC_UFS_CARD_UNIPRO_CORE_CLK>,
+-				 <&rpmhcc RPMH_CXO_CLK>,
++				 <&gcc GCC_UFS_REF_CLKREF_CLK>,
+ 				 <&gcc GCC_UFS_CARD_TX_SYMBOL_0_CLK>,
+ 				 <&gcc GCC_UFS_CARD_RX_SYMBOL_0_CLK>,
+ 				 <&gcc GCC_UFS_CARD_RX_SYMBOL_1_CLK>;
+@@ -1011,7 +1011,7 @@ ufs_card_phy: phy@1da7000 {
+ 			ranges;
+ 			clock-names = "ref",
+ 				      "ref_aux";
+-			clocks = <&gcc GCC_UFS_REF_CLKREF_CLK>,
++			clocks = <&gcc GCC_UFS_1_CARD_CLKREF_CLK>,
+ 				 <&gcc GCC_UFS_CARD_PHY_AUX_CLK>;
+ 
+ 			resets = <&ufs_card_hc 0>;
 -- 
 2.37.3
 
