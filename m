@@ -2,175 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45809619289
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 09:14:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FB3A61928B
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 09:14:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229611AbiKDIOa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 04:14:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46126 "EHLO
+        id S231246AbiKDIOw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 04:14:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229950AbiKDIO2 (ORCPT
+        with ESMTP id S230139AbiKDIOt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 04:14:28 -0400
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [IPv6:2001:4b98:dc4:8::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D95A326109;
-        Fri,  4 Nov 2022 01:14:25 -0700 (PDT)
-Received: from booty (unknown [77.244.183.192])
-        (Authenticated sender: luca.ceresoli@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 0B06E10000A;
-        Fri,  4 Nov 2022 08:14:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1667549664;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=+H2GO8v3XbY+N5PDhigFQzh8x3FCkd8eGdKQu4ziIlU=;
-        b=goh02MBw1xLMfvBjotjbiT1KklpqEqtRfEXdeDUE0vdwwwqc4WRzFT3kEkaMqPYUnOVnWq
-        UBYoXdiuVLCurH2PSTnaDu49UYyYCfWLRSBYvoEExn3ETJ0Jy7s0rDBCicK0Nl3av/EHVW
-        HfkD11MkStCAw+/OeisiTYf1UYg9Zn1cjkMQ+A2x3IQZyNsrSm5wvKAywFRKNGN5ZW28lD
-        O2YpRPZdWj/FrKZHb/gl5DhCGnmaDyDcM5xMhjP8j36u9YOfuOSUFB3Nx7HOxXgsvVsnsq
-        aMq92yeSLpi/OujBp1AuRA0U+/PKN+qdHrNf0/RIuPImgL2gNB72zZbmsde3OQ==
-Date:   Fri, 4 Nov 2022 09:14:20 +0100
-From:   Luca Ceresoli <luca.ceresoli@bootlin.com>
-To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
-Cc:     linux-tegra@vger.kernel.org,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Prashant Gaikwad <pgaikwad@nvidia.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        stable@vger.kernel.org, Ben Dooks <ben.dooks@codethink.co.uk>
-Subject: Re: [PATCH] clk: tegra: fix HOST1X clock divider on Tegra20 and
- Tegra30
-Message-ID: <20221104091420.4b6d90cb@booty>
-In-Reply-To: <0e002130-868e-ca51-a1dd-091c269dba5d@collabora.com>
-References: <20221028074826.2317640-1-luca.ceresoli@bootlin.com>
-        <603a0227-7d25-b9da-6dc3-fa9fe1b951e7@collabora.com>
-        <20221102093255.0b5ba7d6@booty>
-        <0e002130-868e-ca51-a1dd-091c269dba5d@collabora.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        Fri, 4 Nov 2022 04:14:49 -0400
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C84D2655A
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 01:14:49 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id 8592F5C00C3;
+        Fri,  4 Nov 2022 04:14:48 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute3.internal (MEProxy); Fri, 04 Nov 2022 04:14:48 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1667549688; x=1667636088; bh=CldNyn4VaM
+        Jwpbw91Bc/YLggaVVkQGItaw4hX9Ok9s4=; b=MP1cmgfdN5swbbyeFBlvVKoP7x
+        VujycihGEQzRhu/3QW40WwNsnoNDkqq9uC1UopuFSDhosuMiWVf5iB0TSw8okfG9
+        /GjCoG9F9GAtEYgOdVTI2zCIGT8+5ANWp6CLypepM6AsFJEVTaqGUTxHdP2zYuoV
+        T0K3R4Na2LzLG7e2iiozZtO3lNAdo30RtOeb/seoosJxDfYrGomkBQYLXN8PTdf1
+        Er2sfikgYOjmr+sgHJaD1Jdx+e2OmaziPy7wezoz4hHDuRpqE2JUrtUM6JFjoIym
+        YFvHGrH41VX+1zGrthKnpH6Hr4VtPkY+JfFlLk44I/SnaeXHJ2/JrsccLXQw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1667549688; x=1667636088; bh=CldNyn4VaMJwpbw91Bc/YLggaVVk
+        QGItaw4hX9Ok9s4=; b=E9XgBCu4hGlWH4f6Yn7wgjP+jxPw7wOsnxUJ6RyCxlcz
+        Ext+hty4kkHV/eqjeh52ERFQCj5sMARr8fqcNIjg3m1L9ZocwV+NmL29+w8yeGo1
+        B67Q6A1FDBsDtFn6KVBI0pc0s4vLmdP1i5JHApIqolgDplV1f8JJ5CS1w707LMu3
+        ar/8R1Wx6WajMdXuAn7dO/iUtdR+BEa7W8oh3F3Q/3QiRloR9BU1oZwAV2Mn1UTZ
+        bJ9LT/dPjtFpMApqPmlMhoxmxVfNdzsF9wW81l2QJth2l+ffZbh3lN3C5riFlW+9
+        k6PGgRHTVpcAvtWiz1hbd7qIV0tSGXL5UT35aXaDiA==
+X-ME-Sender: <xms:98lkY73Gyj-pBK8n07eCzbPvvh47d1-prqxneOr1sqTK392dGqS-8A>
+    <xme:98lkY6GIFrw0YYmoqJCqCV09K_oKWXsQnMYpPIeDzCFP2Z9PrO9-cZXzEgB23rWfH
+    wvVEM0EMDgVhYnNvwA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrvddtgdduudejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgepudenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:98lkY74qJd7Gh366iJlLOB2szXardAdGfDLoaDz56teNYq6pMGoIVA>
+    <xmx:98lkYw1TRWoyZLM2oQKMwDKMtb6X53zS0jRynckCW0af8frOOKNhvg>
+    <xmx:98lkY-HOYZo8Ef56TrBfUNWBCC8LrN2O7gwiz7EUNbNHd5gyL2R-jg>
+    <xmx:-MlkY6CC72B0Bktx_cor_eu8tJVnzoPZuTJlZX4qAw_xuHNTdz6uSA>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id D669DB603ED; Fri,  4 Nov 2022 04:14:47 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1087-g968661d8e1-fm-20221021.001-g968661d8
+Mime-Version: 1.0
+Message-Id: <26ce1ec2-effc-435f-8349-a12667973d92@app.fastmail.com>
+In-Reply-To: <202211041544.R0jV58vk-lkp@intel.com>
+References: <202211041544.R0jV58vk-lkp@intel.com>
+Date:   Fri, 04 Nov 2022 09:14:29 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "kernel test robot" <lkp@intel.com>,
+        "Sven Peter" <sven@svenpeter.dev>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        linux-kernel@vger.kernel.org, "Hector Martin" <marcan@marcan.st>
+Subject: Re: drivers/soc/apple/sart.c:190:38: warning: cast from 'void (*)(struct
+ device *)' to 'void (*)(void *)' converts to incompatible function type
+Content-Type: text/plain
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dmitry,
+On Fri, Nov 4, 2022, at 09:01, kernel test robot wrote:
+>
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
 
-On Fri, 4 Nov 2022 00:44:16 +0300
-Dmitry Osipenko <dmitry.osipenko@collabora.com> wrote:
+Thanks for the report!
 
-> On 11/2/22 11:32, Luca Ceresoli wrote:
-> > Hello Dmitry,
-> > 
-> > On Mon, 31 Oct 2022 03:34:07 +0300
-> > Dmitry Osipenko <dmitry.osipenko@collabora.com> wrote:
-> >   
-> >> On 10/28/22 10:48, luca.ceresoli@bootlin.com wrote:  
-> >>> From: Luca Ceresoli <luca.ceresoli@bootlin.com>
-> >>>
-> >>> On Tegra20 and Tegra30 the HOST1X clock is a fractional clock divider with
-> >>> 7 integer bits + 1 decimal bit. This has been verified on both
-> >>> documentation and real hardware for Tegra20 an on the documentation I was
-> >>> able to find for Tegra30.
-> >>>
-> >>> However in the kernel code this clock is declared as an integer divider. A
-> >>> consequence of this is that requesting 144 MHz for HOST1X which is fed by
-> >>> pll_p running at 216 MHz would result in 108 MHz (216 / 2) instead of 144
-> >>> MHz (216 / 1.5).
-> >>>
-> >>> Fix by replacing the INT() macro with the MUX() macro which, despite the
-> >>> name, defines a fractional divider. The only difference between the two
-> >>> macros is the former does not have the TEGRA_DIVIDER_INT flag.
-> >>>
-> >>> Also move the line together with the other MUX*() ones to keep the existing
-> >>> file organization.
-> >>>
-> >>> Fixes: 76ebc134d45d ("clk: tegra: move periph clocks to common file")
-> >>> Cc: stable@vger.kernel.org
-> >>> Cc: Peter De Schrijver <pdeschrijver@nvidia.com>
-> >>> Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
-> >>> ---
-> >>>  drivers/clk/tegra/clk-tegra-periph.c | 2 +-
-> >>>  1 file changed, 1 insertion(+), 1 deletion(-)
-> >>>
-> >>> diff --git a/drivers/clk/tegra/clk-tegra-periph.c b/drivers/clk/tegra/clk-tegra-periph.c
-> >>> index 4dcf7f7cb8a0..806d835ca0d2 100644
-> >>> --- a/drivers/clk/tegra/clk-tegra-periph.c
-> >>> +++ b/drivers/clk/tegra/clk-tegra-periph.c
-> >>> @@ -615,7 +615,6 @@ static struct tegra_periph_init_data periph_clks[] = {
-> >>>  	INT("vde", mux_pllp_pllc_pllm_clkm, CLK_SOURCE_VDE, 61, 0, tegra_clk_vde),
-> >>>  	INT("vi", mux_pllm_pllc_pllp_plla, CLK_SOURCE_VI, 20, 0, tegra_clk_vi),
-> >>>  	INT("epp", mux_pllm_pllc_pllp_plla, CLK_SOURCE_EPP, 19, 0, tegra_clk_epp),
-> >>> -	INT("host1x", mux_pllm_pllc_pllp_plla, CLK_SOURCE_HOST1X, 28, 0, tegra_clk_host1x),
-> >>>  	INT("mpe", mux_pllm_pllc_pllp_plla, CLK_SOURCE_MPE, 60, 0, tegra_clk_mpe),
-> >>>  	INT("2d", mux_pllm_pllc_pllp_plla, CLK_SOURCE_2D, 21, 0, tegra_clk_gr2d),
-> >>>  	INT("3d", mux_pllm_pllc_pllp_plla, CLK_SOURCE_3D, 24, 0, tegra_clk_gr3d),
-> >>> @@ -664,6 +663,7 @@ static struct tegra_periph_init_data periph_clks[] = {
-> >>>  	MUX("owr", mux_pllp_pllc_clkm, CLK_SOURCE_OWR, 71, TEGRA_PERIPH_ON_APB, tegra_clk_owr_8),
-> >>>  	MUX("nor", mux_pllp_pllc_pllm_clkm, CLK_SOURCE_NOR, 42, 0, tegra_clk_nor),
-> >>>  	MUX("mipi", mux_pllp_pllc_pllm_clkm, CLK_SOURCE_MIPI, 50, TEGRA_PERIPH_ON_APB, tegra_clk_mipi),
-> >>> +	MUX("host1x", mux_pllm_pllc_pllp_plla, CLK_SOURCE_HOST1X, 28, 0, tegra_clk_host1x),
-> >>>  	MUX("vi_sensor", mux_pllm_pllc_pllp_plla, CLK_SOURCE_VI_SENSOR, 20, TEGRA_PERIPH_NO_RESET, tegra_clk_vi_sensor),
-> >>>  	MUX("vi_sensor", mux_pllc_pllp_plla, CLK_SOURCE_VI_SENSOR, 20, TEGRA_PERIPH_NO_RESET, tegra_clk_vi_sensor_9),
-> >>>  	MUX("cilab", mux_pllp_pllc_clkm, CLK_SOURCE_CILAB, 144, 0, tegra_clk_cilab),    
-> >>
-> >> This was attempted in the past
-> >> https://lore.kernel.org/all/20180723085010.GK1636@tbergstrom-lnx.Nvidia.com/
-> >>
-> >> I assume here you're also porting the downstream patches to upstream.
-> >> This one is too questionable. The host1x clock shouldn't affect overall
-> >> performance to begin with. It doesn't make sense to use fractional clock
-> >> just for getting extra KHz.  
-> > 
-> > Thank you for the review and for the pointer!
-> > 
-> > Indeed I'm not sure this patch brings an actual improvement to my use
-> > case, however I reached it by trying to replicate the configuration on
-> > a known-working kernel 3.1, which uses a 1.5 divider. This seems to be
-> > the same reason that led to the 2018 patch that also got rejected.
-> > 
-> > I'll be OK with dropping this patch after I have a 100% working setup
-> > with an integer divider, which is very likely given your reply. But it
-> > took time before I found the root cause of this issue, and I would like
-> > to avoid other people waste time in the future, so what about adding a
-> > comment there?
-> > 
-> > What about:
-> > 
-> >   /*
-> >    * The host1x clock shouldn't affect overall performance. It doesn't
-> >    * make sense to use fractional clock just for getting extra KHz, so
-> >    * let's pretend it's an integer divider
-> >    */  
-> 
-> If host1x isn't the only clock like that, then comment shouldn't be
-> directed to host1x. Have you checked other clocks?
+>>> drivers/soc/apple/sart.c:190:38: warning: cast from 'void (*)(struct device *)' to 'void (*)(void *)' converts to incompatible function type [-Wcast-function-type-strict]
+>
+>            ret = devm_add_action_or_reset(dev, (void (*)(void *))put_device,
+>                                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-No, apologies, I don't know enough about this SoC to be able to put
-into a comment anything interesting other than what you wrote in your
-previous reply.
+Sven, can you send a patch to add the missing helper function that calls
+put_device?
 
-> I'm curious who made that change originally in your downstream, was it
-> coming from NVIDIA?
-
-It is coming from our customer, not sure where they got it initially,
-but this is the commit where it was added, with a DIV_U71 flag:
-
-https://osdn.net/projects/android-x86/scm/git/kernel/commits/d861196163e30c07add471562b45dce38517c9b2
-
--- 
-Luca Ceresoli, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+      Arnd
