@@ -2,72 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 153A3618E57
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 03:38:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03251618E25
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 03:18:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229745AbiKDCil (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 22:38:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41176 "EHLO
+        id S231331AbiKDCSG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 22:18:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbiKDCii (ORCPT
+        with ESMTP id S230377AbiKDCSB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 22:38:38 -0400
-Received: from unicom146.biz-email.net (unicom146.biz-email.net [210.51.26.146])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1071123388
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 19:38:36 -0700 (PDT)
-Received: from ([60.208.111.195])
-        by unicom146.biz-email.net ((D)) with ASMTP (SSL) id YDQ00033;
-        Fri, 04 Nov 2022 10:38:33 +0800
-Received: from localhost.localdomain (10.200.104.82) by
- jtjnmail201602.home.langchao.com (10.100.2.2) with Microsoft SMTP Server id
- 15.1.2507.12; Fri, 4 Nov 2022 10:38:33 +0800
-From:   Deming Wang <wangdeming@inspur.com>
-To:     <minchan@kernel.org>, <ngupta@vflare.org>,
-        <akpm@linux-foundation.org>
-CC:     <senozhatsky@chromium.org>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>, Deming Wang <wangdeming@inspur.com>
-Subject: [PATCH] zsmalloc: replace IS_ERR() with IS_ERR_VALUE()
-Date:   Thu, 3 Nov 2022 22:38:18 -0400
-Message-ID: <20221104023818.1728-1-wangdeming@inspur.com>
+        Thu, 3 Nov 2022 22:18:01 -0400
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AC17388A;
+        Thu,  3 Nov 2022 19:17:59 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4N3PNT4Y5rzKKd9;
+        Fri,  4 Nov 2022 10:15:21 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.127.227])
+        by APP2 (Coremail) with SMTP id Syh0CgB3D9RTdmRjDShNBQ--.16192S4;
+        Fri, 04 Nov 2022 10:17:57 +0800 (CST)
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+To:     hch@lst.de, tj@kernel.org, josef@toxicpanda.com, axboe@kernel.dk,
+        yukuai3@huawei.com
+Cc:     cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yukuai1@huaweicloud.com,
+        yi.zhang@huawei.com
+Subject: [PATCH v2 0/5] blk-iocost: random patches to improve configuration
+Date:   Fri,  4 Nov 2022 10:39:33 +0800
+Message-Id: <20221104023938.2346986-1-yukuai1@huaweicloud.com>
 X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.200.104.82]
-tUid:   20221104103833531fac831319cb0b27e05bee90e47ef1
-X-Abuse-Reports-To: service@corp-email.com
-Abuse-Reports-To: service@corp-email.com
-X-Complaints-To: service@corp-email.com
-X-Report-Abuse-To: service@corp-email.com
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: Syh0CgB3D9RTdmRjDShNBQ--.16192S4
+X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
+        VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUY27AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E
+        6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28Cjx
+        kF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8I
+        cVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87
+        Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE
+        6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72
+        CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7
+        M4IIrI8v6xkF7I0E8cxan2IY04v7MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r
+        1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CE
+        b7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0x
+        vE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI
+        42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxh
+        VjvjDU0xZFpf9x0JUdHUDUUUUU=
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Avoid typecasts that are needed for IS_ERR() and use IS_ERR_VALUE()
-instead.
+From: Yu Kuai <yukuai3@huawei.com>
 
-Signed-off-by: Deming Wang <wangdeming@inspur.com>
----
- mm/zsmalloc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Changes in v2:
+ - add review tag from Christoph for patch 1-3
+ - add a mutex to fix warnning as suggested by Christoph
+ - add patch 5
 
-diff --git a/mm/zsmalloc.c b/mm/zsmalloc.c
-index a40c548520d3..1322f3615067 100644
---- a/mm/zsmalloc.c
-+++ b/mm/zsmalloc.c
-@@ -379,7 +379,7 @@ static int zs_zpool_malloc(void *pool, size_t size, gfp_t gfp,
- {
- 	*handle = zs_malloc(pool, size, gfp);
- 
--	if (IS_ERR((void *)(*handle)))
-+	if (IS_ERR_VALUE(*handle))
- 		return PTR_ERR((void *)*handle);
- 	return 0;
- }
+Yu Kuai (5):
+  blk-iocost: cleanup ioc_qos_write() and ioc_cost_model_write()
+  blk-iocost: improve hanlder of match_u64()
+  blk-iocost: don't allow to configure bio based device
+  blk-iocost: fix sleeping in atomic context warnning
+  blk-iocost: read params inside lock in sysfs apis
+
+ block/blk-iocost.c | 116 +++++++++++++++++++++++++++++----------------
+ 1 file changed, 74 insertions(+), 42 deletions(-)
+
 -- 
-2.27.0
+2.31.1
 
