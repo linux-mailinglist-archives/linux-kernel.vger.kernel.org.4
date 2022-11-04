@@ -2,118 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C29DF619579
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 12:38:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EC0661958D
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 12:44:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230405AbiKDLi1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 07:38:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55984 "EHLO
+        id S231637AbiKDLod (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 07:44:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229708AbiKDLiX (ORCPT
+        with ESMTP id S231393AbiKDLob (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 07:38:23 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4FCA3B0
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 04:38:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667561902; x=1699097902;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=2dwZ0lBOQZ6+sQ6EOjFpDqnqPMYYcofhOiJqlrECN2A=;
-  b=e9BSeafAQUaJ3f/9uGJigkd2OltKJLAKmCtHKVmBoJhHJwQLJi1GJeWm
-   Xpss7our9Hkq9wsIyzqjMJpjqiytDzN2nC0C3ApHK5HaKLA5OhbJYbJbi
-   2505jzzXRIGsSSfcYoIV7iWkTP6rDEykMQUdl4xX/xD8duPyHNVifXQ7S
-   x8yR5QogMY+YEjCnCzisYiemPww17E6h3QOwcpaoZ751sYaUNvRXnbLN7
-   fIo9PY8g1FtDpRcjMQbmkkmx51IFNjNuUW+W27XdzJo4oaXm3guDLqpsh
-   WyYpt3e1XM/+RtzKoa+qwe2ta+EQihansTesOzRroA+TuYSWCi0p1fYLM
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10520"; a="308659433"
-X-IronPort-AV: E=Sophos;i="5.96,137,1665471600"; 
-   d="scan'208";a="308659433"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2022 04:38:22 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10520"; a="666341173"
-X-IronPort-AV: E=Sophos;i="5.96,137,1665471600"; 
-   d="scan'208";a="666341173"
-Received: from liuzhao-optiplex-7080.sh.intel.com (HELO localhost) ([10.239.160.132])
-  by orsmga008.jf.intel.com with ESMTP; 04 Nov 2022 04:38:20 -0700
-Date:   Fri, 4 Nov 2022 19:44:05 +0800
-From:   Zhao Liu <zhao1.liu@linux.intel.com>
-To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-Cc:     intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org,
-        Zhenyu Wang <zhenyu.z.wang@intel.com>,
-        Zhao Liu <zhao1.liu@intel.com>,
-        Dave Hansen <dave.hansen@intel.com>
-Subject: Re: [PATCH 1/9] drm/i915: Use kmap_local_page() in
- gem/i915_gem_object.c
-Message-ID: <Y2T7BePekbf06JEo@liuzhao-OptiPlex-7080>
-References: <20221017093726.2070674-1-zhao1.liu@linux.intel.com>
- <2541717.Lt9SDvczpP@suse>
- <Y2Pxi9FsdeULhHKI@iweiny-desk3>
- <12087538.O9o76ZdvQC@suse>
+        Fri, 4 Nov 2022 07:44:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D9212CC88;
+        Fri,  4 Nov 2022 04:44:30 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8A0996216C;
+        Fri,  4 Nov 2022 11:44:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA801C433D6;
+        Fri,  4 Nov 2022 11:44:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667562268;
+        bh=Fm4RmkkjBKi2J3sh9v6S2aRSdhr880Xg3fJGdAcANDY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fZqwDZQyk1Q1KEHu25MzHSyi663H6WkbJvSC0fUc1SkBj6V/V9RxG0hj7CoIZN334
+         wlDV0LzbOXYuVsKx5kgTnP68F8U+TThWMjOga1xUJ/QnuwTqA+7hHV+6KeJVfHViWZ
+         ah8KggQkb7OcmFOObkBckGjKgGLRgPOxm+J+U7FJOftUVYAUS9YeJwPpaXxWqlord9
+         u/6Jz28LL96zcldHJRqN/vJmvAEesiVW/ZHUQ7NjXrN2D+HpFCQPmrKnGgEolYI/Sk
+         NUYdgAqfalUcSREn4DxpyiwwZKRcdyczYUt2nw4Gt+W1f/lwucP9IOfn0sx7BMMciK
+         qfB8IxVRm1v+Q==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1oqv7K-0003KN-U9; Fri, 04 Nov 2022 12:44:11 +0100
+Date:   Fri, 4 Nov 2022 12:44:10 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, patches@lists.linux.dev,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        linux-arm-msm@vger.kernel.org,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Taniya Das <quic_tdas@quicinc.com>,
+        Satya Priya <quic_c_skakit@quicinc.com>,
+        Douglas Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>
+Subject: Re: [PATCH v3] clk: qcom: gdsc: Remove direct runtime PM calls
+Message-ID: <Y2T7Cp2HMChRbS/f@hovoldconsulting.com>
+References: <20221103183030.3594899-1-swboyd@chromium.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <12087538.O9o76ZdvQC@suse>
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221103183030.3594899-1-swboyd@chromium.org>
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 03, 2022 at 08:22:04PM +0100, Fabio M. De Francesco wrote:
-> Date: Thu, 03 Nov 2022 20:22:04 +0100
-> From: "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-> Subject: Re: [PATCH 1/9] drm/i915: Use kmap_local_page() in
->  gem/i915_gem_object.c
+On Thu, Nov 03, 2022 at 11:30:30AM -0700, Stephen Boyd wrote:
+> We shouldn't be calling runtime PM APIs from within the genpd
+> enable/disable path for a couple reasons.
 > 
-> On gioved? 3 novembre 2022 17:51:23 CET Ira Weiny wrote:
-> > On Sat, Oct 29, 2022 at 01:17:03PM +0200, Fabio M. De Francesco wrote:
-> > > On luned? 17 ottobre 2022 11:37:17 CEST Zhao Liu wrote:
-> > > > From: Zhao Liu <zhao1.liu@intel.com>
-> > > > 
-> > > > The use of kmap_atomic() is being deprecated in favor of
-> > > > kmap_local_page()[1].
-> > > > 
-> > > > The main difference between atomic and local mappings is that local
-> > > > mappings doesn't disable page faults or preemption.
-> > > 
-> > > You are right about about page faults which are never disabled by
-> > > kmap_local_page(). However kmap_atomic might not disable preemption. It
-> > > depends on CONFIG_PREEMPT_RT.
-> > > 
-> > > Please refer to how kmap_atomic_prot() works (this function is called by
-> > > kmap_atomic() when kernels have HIGHMEM enabled).
-> > > 
-> > > > There're 2 reasons why i915_gem_object_read_from_page_kmap() doesn't
-> > > > need to disable pagefaults and preemption for mapping:
-> > > > 
-> > > > 1. The flush operation is safe for CPU hotplug when preemption is not
-> > > > disabled.
-> > > 
-> > > I'm confused here. Why are you talking about CPU hotplug?
-> > 
-> > I agree with Fabio here.  I'm not making the connection between cpu hotplug 
-> and
-> > this code path.
-> > 
-> > Ira
+> First, this causes an AA lockdep splat[1] because genpd can call into
+> genpd code again while holding the genpd lock.
+
+> Second, this confuses runtime PM on CoachZ for the camera devices by
+> causing the camera clock controller's runtime PM usage_count to go
+> negative after resuming from suspend. This is because runtime PM is
+> being used on the clock controller while runtime PM is disabled for the
+> device.
 > 
-> @Zhao,
+> The reason for the negative count is because a GDSC is represented as a
+> genpd and each genpd that is attached to a device is resumed during the
+> noirq phase of system wide suspend/resume (see the noirq suspend ops
+> assignment in pm_genpd_init() for more details). The camera GDSCs are
+> attached to camera devices with the 'power-domains' property in DT.
+> Every device has runtime PM disabled in the late system suspend phase
+> via __device_suspend_late(). Runtime PM is not usable until runtime PM
+> is enabled in device_resume_early(). The noirq phases run after the
+> 'late' and before the 'early' phase of suspend/resume. When the genpds
+> are resumed in genpd_resume_noirq(), we call down into gdsc_enable()
+> that calls pm_runtime_resume_and_get() and that returns -EACCES to
+> indicate failure to resume because runtime PM is disabled for all
+> devices.
 > 
-> I'd like to add that I was about to put my reviewed-by tag. The other things I 
-> objected are minor nits. Please just clarify this connection.
+> Upon closer inspection, calling runtime PM APIs like this in the GDSC
+> driver doesn't make sense. It was intended to make sure the GDSC for the
+> clock controller providing other GDSCs was enabled, specifically the
+> MMCX GDSC for the display clk controller on SM8250 (sm8250-dispcc), so
+> that GDSC register accesses succeeded. That will already happen because
+> we make the 'dev->pm_domain' a parent domain of each GDSC we register in
+> gdsc_register() via pm_genpd_add_subdomain(). When any of these GDSCs
+> are accessed, we'll enable the parent domain (in this specific case
+> MMCX).
+> 
+> We also remove any getting of runtime PM during registration, because
+> when a genpd is registered it increments the count on the parent if the
+> genpd itself is already enabled.
+> 
+> Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> Cc: Johan Hovold <johan+linaro@kernel.org>
+> Cc: Ulf Hansson <ulf.hansson@linaro.org>
+> Cc: Taniya Das <quic_tdas@quicinc.com>
+> Cc: Satya Priya <quic_c_skakit@quicinc.com>
+> Reviewed-by: Douglas Anderson <dianders@chromium.org>
+> Tested-by: Douglas Anderson <dianders@chromium.org>
+> Cc: Matthias Kaehlcke <mka@chromium.org>
+> Reported-by: Stephen Boyd <swboyd@chromium.org>
+> Link: https://lore.kernel.org/r/CAE-0n52xbZeJ66RaKwggeRB57fUAwjvxGxfFMKOKJMKVyFTe+w@mail.gmail.com [1]
+> Fixes: 1b771839de05 ("clk: qcom: gdsc: enable optional power domain support")
+> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+> ---
+> 
+> Changes from v2 (https://lore.kernel.org/r/20221102170717.1262547-1-swboyd@chromium.org):
+>  * Drop dev assignment and remove struct member
+>  * Update commit text, add link to report
+> 
+> Changes from v1 (https://lore.kernel.org/r/20221101233421.997149-1-swboyd@chromium.org):
+>  * Fix ret thinko
+>  * Update kerneldoc on 'dev' member
 
-Thanks Fabio for your comments! Sorry I missed the mails that day. This connection
-is my misunderstanding. Other thoughts please refer to my reply to your first email
-in this thread.
+Reviewed-by: Johan Hovold <johan+linaro@kernel.org>
+Tested-by: Johan Hovold <johan+linaro@kernel.org>
 
-Thanks,
-Zhao
-
+Johan
