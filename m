@@ -2,67 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C267618EA1
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 04:16:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B2A2618EA7
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 04:17:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230301AbiKDDQx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 23:16:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51570 "EHLO
+        id S230459AbiKDDQ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 23:16:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbiKDDQs (ORCPT
+        with ESMTP id S229952AbiKDDQu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 23:16:48 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 939B322BE9;
-        Thu,  3 Nov 2022 20:16:47 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id p21so3736827plr.7;
-        Thu, 03 Nov 2022 20:16:47 -0700 (PDT)
+        Thu, 3 Nov 2022 23:16:50 -0400
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A01D822BE9;
+        Thu,  3 Nov 2022 20:16:49 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id v3so3330883pgh.4;
+        Thu, 03 Nov 2022 20:16:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ErMeJ3/N/lU6gG8CjwNQFs+A5aKgySMTRdfeG+Egqbs=;
-        b=FEEJPlJPYUREMw1w2MxcaST1IyKa4MxHkgJeNeJjaWJYeeR6EjTODo7oAewdL0XeTB
-         Uua2msSMqdLnBrfyRjTvNgXs0ypyw+ER2IsjAjzO2ToH4haL8BRiABXkWaQ9JscT2WiY
-         LyIPycSrKkzkqTCiESZooUV9bA5jZi1UwScPN5li75jEEiX9JjGmvnfDnUAAjyhyfYh5
-         065dIWklhOj8YdJKq+f+4D2gumQnCgz/7i0IaOTvS/C9f66vNmcLmnOPl2pupQFEbGnN
-         VgaDHIhuOrK+pHJVP0L4vgp18rIDr74fv2IrRbumn/ZLH5jk70OEf52YGFZmg2Zp9cVt
-         NCYA==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kVkDO2KOif2frQeCzecIa3Ot4mR/23B4wTbE/ilmNLI=;
+        b=ISodEXugjsGq/3voQK8yKgdkqR315OB/AgxmhqVqPbmkoX6tYVJxq4Qe1LyWQeOTCL
+         pOXwJlIJrbTSTw52Tmg+tM6gVo9rCHjHV4bniO/FsZX1yHZo68/hRy8G3GP51UZ54w3p
+         YbgidRg7v11OIVoiBVF2BNhAbCSbrPqrSvxocMRm8usjN8IeI27KLtJKKTtcFCtKgrL7
+         cv8eVSOH+881aWk7/zvyHPjeR6tPC3Rf9YaUFcFEs25De4bia3On/TvBgtGWmvVYAecN
+         U/hJqDZ6J7Ql0/YllMRZczid+nCLjwuJkxJhWyAQP9cEXxaop0I1zTMAiDAxy8EB0iWd
+         ekoQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ErMeJ3/N/lU6gG8CjwNQFs+A5aKgySMTRdfeG+Egqbs=;
-        b=HRPIchj5GvuZt7/h7oflfet3nBtDDMzqlTLtzmPGVyyMRV1FulczclTcNpQO7A78dL
-         zCeAt3y6zuO7acM1rJqBpOmG8MJED+HBL91wpX9BDsnRoyWX2jbtD/DNod9ZtGgvrT5r
-         +m3z+LLPxXTJVXU5P1Y9VNJxZXPcLLsLyd03J3l9Z/sLFlljF5m+1U7Oahy4UJunbiXX
-         RUd9Wl2yq8ogReNgCgyHHHIWy9WCXAewB7q56UkwlpOOkJEZbF+XNtpfRRDj7FPA8dII
-         3rvWOjHoVZUMKdGK7rAOGx8T8vnZtHJrZmLtbUjoyxpmDhduvNpNsJsEXBTBHWrbjZ5z
-         mLhA==
-X-Gm-Message-State: ACrzQf0S+CTTtQ7RRTQqNLIuoddqW+SCYKLxAHfvMnUzsnrHEU8muokG
-        ybXzmN6cT+Zh8tIcx2T2ytPpAzpOjgA=
-X-Google-Smtp-Source: AMsMyM7vh79PCyZMFQuT/KKZHGeAwlNjaPyLoj7VC+4pfmidI1y+REGGVZVpsmuRn0q/HdqDtozZWw==
-X-Received: by 2002:a17:902:d3cc:b0:186:9720:b19b with SMTP id w12-20020a170902d3cc00b001869720b19bmr33182884plb.3.1667531806883;
-        Thu, 03 Nov 2022 20:16:46 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=kVkDO2KOif2frQeCzecIa3Ot4mR/23B4wTbE/ilmNLI=;
+        b=5VobFBQTWf+LwZDEGU7EqWIFR4G+xhCjn7dGQ0zsIFz9qE3hGplC2Kze2vI0NHUD/Q
+         QnYNBAnDzPDn3RGHYA+DQDjN3qOjDGPISrkydbtHh2x3e+FnPM54OpPSGLUOGu6W1MFf
+         7uYy1CBP8h3GKZUi05zhA1yva/Vx+YK+dAstCoyTcZnk+Eszej06ve4WynxNzQWY8D5h
+         h8ve9os2qNBssilxVYIpJsdhISrbqFLHlQ1K7XcuUSvRFc4T4MguTCONLI5AsfhLwbHr
+         hYj6W+NQQ7n03Ve1nRZr9mhvR6aqlfiqi8+j2N1BhDE3jtF2br0fR3GpGjBgivH2cCAD
+         neHQ==
+X-Gm-Message-State: ACrzQf2ol3+d6fBPxYmglQrhkZK5Y1kAwTI/EP0LE9Fr+ZeKqTtjPZ8Q
+        o8EziVF0EHZ/w8fWKEZSUf3vooe0ZEA=
+X-Google-Smtp-Source: AMsMyM4gv9FFTkU3yc/kdYQAO0x9NhjY7M4+LxVPeUm9AG5lgYFwiLS9RSw36HZtBQOwFasZ85l0LQ==
+X-Received: by 2002:a63:2215:0:b0:43b:e00f:7c7b with SMTP id i21-20020a632215000000b0043be00f7c7bmr28818221pgi.511.1667531808949;
+        Thu, 03 Nov 2022 20:16:48 -0700 (PDT)
 Received: from dtor-ws.mtv.corp.google.com ([2620:15c:9d:2:a6ae:11ff:fe11:fcc3])
-        by smtp.gmail.com with ESMTPSA id s3-20020a63ff43000000b004702eca61fcsm1078655pgk.36.2022.11.03.20.16.45
+        by smtp.gmail.com with ESMTPSA id s3-20020a63ff43000000b004702eca61fcsm1078655pgk.36.2022.11.03.20.16.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Nov 2022 20:16:46 -0700 (PDT)
+        Thu, 03 Nov 2022 20:16:48 -0700 (PDT)
 From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
 To:     Helge Deller <deller@gmx.de>, Tony Lindgren <tony@atomide.com>,
         Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
         Sebastian Reichel <sre@kernel.org>
 Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
         linux-omap@vger.kernel.org, linux-fbdev@vger.kernel.org
-Subject: [PATCH RESEND 00/13] Convert omapfb drivers to gpiod API
-Date:   Thu,  3 Nov 2022 20:16:29 -0700
-Message-Id: <20221103-omapfb-gpiod-v1-0-cba1fae5a77c@gmail.com>
+Subject: [PATCH RESEND 01/13] omapfb: connector-hdmi: switch to using gpiod API
+Date:   Thu,  3 Nov 2022 20:16:30 -0700
+Message-Id: <20221103-omapfb-gpiod-v1-1-cba1fae5a77c@gmail.com>
 X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
+In-Reply-To: <20221103-omapfb-gpiod-v1-0-cba1fae5a77c@gmail.com>
+References: <20221103-omapfb-gpiod-v1-0-cba1fae5a77c@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 X-Mailer: b4 0.11.0-dev-28747
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -73,62 +76,109 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This series converts various OMAPFB drivers to use the newer gpiod API=0D
-that respects line polarity specified in DTS.=0D
-=0D
-Unfortunately existing DTS files specify incorrect (active high) polarity=0D
-for reset lines. As discussed in [1] we will not try to correct existing=0D
-DTSes, but instead follow the path established by DRM drivers for the same=
-=0D
-components, and continue using inverted polarity in the FB drivers.=0D
-=0D
-[1] https://lore.kernel.org/all/20221004213503.848262-1-dmitry.torokhov@gma=
-il.com/=0D
-=0D
-To: Helge Deller <deller@gmx.de>=0D
-To: Tony Lindgren <tony@atomide.com>=0D
-To: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>=0D
-To: Sebastian Reichel <sre@kernel.org>=0D
-Cc: linux-omap@vger.kernel.org=0D
-Cc: linux-fbdev@vger.kernel.org=0D
-Cc: dri-devel@lists.freedesktop.org=0D
-Cc: linux-kernel@vger.kernel.org=0D
-=0D
----=0D
-Dmitry Torokhov (13):=0D
-      omapfb: connector-hdmi: switch to using gpiod API=0D
-      omapfb: panel-sony-acx565akm: remove support for platform data=0D
-      omapfb: panel-sony-acx565akm: switch to using gpiod API=0D
-      omapfb: encoder-tfp410: switch to using gpiod API=0D
-      omapfb: panel-dsi-cm: switch to using gpiod API=0D
-      omapfb: panel-tpo-td043mtea1: switch to using gpiod API=0D
-      omapfb: panel-nec-nl8048hl11: switch to using gpiod API=0D
-      omapfb: panel-dpi: remove support for platform data=0D
-      omapfb: connector-analog-tv: remove support for platform data=0D
-      omapfb: encoder-opa362: fix included headers=0D
-      omapfb: panel-lgphilips-lb035q02: remove backlight GPIO handling=0D
-      omapfb: panel-tpo-td028ttec1: stop including gpio.h=0D
-      omapfb: panel-sharp-ls037v7dw01: fix included headers=0D
-=0D
- .../omap2/omapfb/displays/connector-analog-tv.c    |  60 ++---------=0D
- .../fbdev/omap2/omapfb/displays/connector-hdmi.c   |  49 +++------=0D
- .../fbdev/omap2/omapfb/displays/encoder-opa362.c   |   4 +-=0D
- .../fbdev/omap2/omapfb/displays/encoder-tfp410.c   |  67 ++++--------=0D
- .../video/fbdev/omap2/omapfb/displays/panel-dpi.c  |  83 ++-------------=0D
- .../fbdev/omap2/omapfb/displays/panel-dsi-cm.c     | 116 ++++++++---------=
-----=0D
- .../omapfb/displays/panel-lgphilips-lb035q02.c     |  21 +---=0D
- .../omap2/omapfb/displays/panel-nec-nl8048hl11.c   |  72 ++++---------=0D
- .../omapfb/displays/panel-sharp-ls037v7dw01.c      |   3 +-=0D
- .../omap2/omapfb/displays/panel-sony-acx565akm.c   | 105 ++++++-----------=
---=0D
- .../omap2/omapfb/displays/panel-tpo-td028ttec1.c   |   1 -=0D
- .../omap2/omapfb/displays/panel-tpo-td043mtea1.c   |  59 +++--------=0D
- include/video/omap-panel-data.h                    |  71 -------------=0D
- 13 files changed, 170 insertions(+), 541 deletions(-)=0D
----=0D
-base-commit: 61c3426aca2c71052ddcd06c32e29d92304990fd=0D
-change-id: 20221103-omapfb-gpiod-87ca2550bd90=0D
-=0D
--- =0D
-Dmitry=0D
+Switch the driver from legacy gpio API that is deprecated to the newer
+gpiod API that respects line polarities described in ACPI/DT.
+
+Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+---
+ .../fbdev/omap2/omapfb/displays/connector-hdmi.c   | 49 +++++++---------------
+ 1 file changed, 14 insertions(+), 35 deletions(-)
+
+diff --git a/drivers/video/fbdev/omap2/omapfb/displays/connector-hdmi.c b/drivers/video/fbdev/omap2/omapfb/displays/connector-hdmi.c
+index 670b9c6eb5a9..8f9ff9fb4ca4 100644
+--- a/drivers/video/fbdev/omap2/omapfb/displays/connector-hdmi.c
++++ b/drivers/video/fbdev/omap2/omapfb/displays/connector-hdmi.c
+@@ -6,11 +6,12 @@
+  * Author: Tomi Valkeinen <tomi.valkeinen@ti.com>
+  */
+ 
++#include <linux/err.h>
++#include <linux/gpio/consumer.h>
+ #include <linux/slab.h>
+ #include <linux/module.h>
+ #include <linux/platform_device.h>
+ #include <linux/of.h>
+-#include <linux/of_gpio.h>
+ 
+ #include <drm/drm_edid.h>
+ 
+@@ -41,7 +42,7 @@ struct panel_drv_data {
+ 
+ 	struct omap_video_timings timings;
+ 
+-	int hpd_gpio;
++	struct gpio_desc *hpd_gpio;
+ };
+ 
+ #define to_panel_data(x) container_of(x, struct panel_drv_data, dssdev)
+@@ -155,8 +156,8 @@ static bool hdmic_detect(struct omap_dss_device *dssdev)
+ 	struct panel_drv_data *ddata = to_panel_data(dssdev);
+ 	struct omap_dss_device *in = ddata->in;
+ 
+-	if (gpio_is_valid(ddata->hpd_gpio))
+-		return gpio_get_value_cansleep(ddata->hpd_gpio);
++	if (ddata->hpd_gpio)
++		return gpiod_get_value_cansleep(ddata->hpd_gpio);
+ 	else
+ 		return in->ops.hdmi->detect(in);
+ }
+@@ -197,31 +198,6 @@ static struct omap_dss_driver hdmic_driver = {
+ 	.set_hdmi_infoframe	= hdmic_set_infoframe,
+ };
+ 
+-static int hdmic_probe_of(struct platform_device *pdev)
+-{
+-	struct panel_drv_data *ddata = platform_get_drvdata(pdev);
+-	struct device_node *node = pdev->dev.of_node;
+-	struct omap_dss_device *in;
+-	int gpio;
+-
+-	/* HPD GPIO */
+-	gpio = of_get_named_gpio(node, "hpd-gpios", 0);
+-	if (gpio_is_valid(gpio))
+-		ddata->hpd_gpio = gpio;
+-	else
+-		ddata->hpd_gpio = -ENODEV;
+-
+-	in = omapdss_of_find_source_for_first_ep(node);
+-	if (IS_ERR(in)) {
+-		dev_err(&pdev->dev, "failed to find video source\n");
+-		return PTR_ERR(in);
+-	}
+-
+-	ddata->in = in;
+-
+-	return 0;
+-}
+-
+ static int hdmic_probe(struct platform_device *pdev)
+ {
+ 	struct panel_drv_data *ddata;
+@@ -238,15 +214,18 @@ static int hdmic_probe(struct platform_device *pdev)
+ 	platform_set_drvdata(pdev, ddata);
+ 	ddata->dev = &pdev->dev;
+ 
+-	r = hdmic_probe_of(pdev);
++	ddata->hpd_gpio = devm_gpiod_get_optional(&pdev->dev, "hpd", GPIOD_IN);
++	r = PTR_ERR_OR_ZERO(ddata->hpd_gpio);
+ 	if (r)
+ 		return r;
+ 
+-	if (gpio_is_valid(ddata->hpd_gpio)) {
+-		r = devm_gpio_request_one(&pdev->dev, ddata->hpd_gpio,
+-				GPIOF_DIR_IN, "hdmi_hpd");
+-		if (r)
+-			goto err_reg;
++	gpiod_set_consumer_name(ddata->hpd_gpio, "hdmi_hpd");
++
++	ddata->in = omapdss_of_find_source_for_first_ep(pdev->dev.of_node);
++	r = PTR_ERR_OR_ZERO(ddata->in);
++	if (r) {
++		dev_err(&pdev->dev, "failed to find video source\n");
++		return r;
+ 	}
+ 
+ 	ddata->timings = hdmic_default_timings;
+
+-- 
+b4 0.11.0-dev-28747
