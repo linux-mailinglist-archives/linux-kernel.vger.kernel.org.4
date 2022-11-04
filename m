@@ -2,122 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4207061A3BD
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 22:57:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 147BC61A3C5
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 22:59:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229936AbiKDV46 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 17:56:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55620 "EHLO
+        id S229877AbiKDV7p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 17:59:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229544AbiKDV4z (ORCPT
+        with ESMTP id S229469AbiKDV7l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 17:56:55 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF71359FCB;
-        Fri,  4 Nov 2022 14:56:54 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id y14so16619863ejd.9;
-        Fri, 04 Nov 2022 14:56:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=4lxURksHj3T3+DcMA1c6SDe+tyv9on8orkNxxpF1wpw=;
-        b=l0krgcQ1x+QyVprsYS3e+Ksm4+O/J8WaR2uV6+jmasJviwEA3s2GkMc63/xsHLjn7v
-         ixmrS6jsmrwUnuUdjE8GWaqkURtfAIBNCCDsOAH5yvj37AORMKhnXUlwGDLLishrkEap
-         hrZHKLTqYnAaRNKiwshxZEHjqjx5LSXqF3INh9C2ED0eTg/NncG5b8HIHoQNzr8f7MXo
-         lpHeaInkAo6UuVIdtSENIfi06o7QZxPQNsBAr4SfuN6j4EXeoA9ICcz0/c7FLMEIYK+3
-         khdW04Rm0KbzqigAluLFYkZG4vif9LQdMRDGfoQzFNW3uBAQJcLVelIpU8Z9vNHcFGmw
-         F7PQ==
+        Fri, 4 Nov 2022 17:59:41 -0400
+Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9998D31DD6;
+        Fri,  4 Nov 2022 14:59:39 -0700 (PDT)
+Received: by mail-oi1-f176.google.com with SMTP id r83so6566007oih.2;
+        Fri, 04 Nov 2022 14:59:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4lxURksHj3T3+DcMA1c6SDe+tyv9on8orkNxxpF1wpw=;
-        b=s19UwLSENXQF4FoGFDrZAFymyExVHsZAmUN4XTI773aInZYFTxQF/RDCKBTat9Cn+P
-         k11B2wrQmZIIeRLSPy4FLiEf0Emvv1BO1du9cEFAqc/ojJ5jl8No5bjx2I5NOTXFSlTJ
-         8AH/rGPZnB6oDpOe8YAxqTu6zKi+CQxlQy8/o7mnaq5n3vNd2I78orw8+/NkK1Ix949/
-         izf4xzQTjeR58LkDXOXPmIm1/Gk2l05QzQv5rBFbUeDc+5ylbp1dFCQzeoRIKkaYUtSY
-         QiX3sS5FcJLQZu4SDXXiVMOFeYzaMknyautP/1NiKIHNUqtI3PWShAU/moV6o0VYsNxL
-         lRng==
-X-Gm-Message-State: ACrzQf1ZwHhwXxnp6Q5066fm+1XrYgMNHqkm8GQEO3mayw3q+yTltVK0
-        W/pA5HuDtucEMu78IXEwcvCfFvnUfet1+1MB9OI=
-X-Google-Smtp-Source: AMsMyM7L6eNb0nhcMUMgqoe134AW/LDinI4BWgMVWvwPF3qBv3jLgKkauI5+9B9OECRCQCMH3pk11ofWlwIrl3aIwno=
-X-Received: by 2002:a17:906:11d6:b0:7ad:fd3e:2a01 with SMTP id
- o22-20020a17090611d600b007adfd3e2a01mr17227919eja.545.1667599013262; Fri, 04
- Nov 2022 14:56:53 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=g8HWz9kiwP2ArMvVVBjsIPOdlOe9gKH5fjfr8UxkpAI=;
+        b=5Smqpf3/BTrox1yUYdm2j+Yod/W/LVl34HSCYP2uCab97bo1rWXv7dXn0q8e1QChVY
+         LbY5iiAiOz27IouScKCDvYToTMGRXFhD07ApIFFimlZ5rpwOQ0HQO9jkfYaUTBlqmVSn
+         MxXDdqBmSGJADTIWMr7dW/lF6wrDlZaj9sTxpB/NZl8uk90urNsnMWTQLaluxb48od+e
+         HXQAT0vDm8V1Ap4gQjJnE20l/rns2vky9ISrWwx01NWbSUGK6HnDYLtktZR4W/wB935O
+         xhg/dwvt+Yo4Nxgk9QaJG7GC8K5a658lm2gbb+P/DSlmhIUJb7qCRmfptMiN9K1UN7ws
+         kmmA==
+X-Gm-Message-State: ACrzQf1yFN0Uyq74GQ4au9EXB1QNKTvzFvbe/hjS9OWPGm+ZtoB2BKB8
+        TgzsftdyfBqq6CT4y8Vm4A==
+X-Google-Smtp-Source: AMsMyM44JC4DHyZ3R5J0DsTWv8pZFFqZoZE6Jfx8IiWT3Y+Ce49KnN+aGjyJNEo2KWZSJ4NSxSPzrA==
+X-Received: by 2002:a05:6808:1642:b0:331:567c:54e1 with SMTP id az2-20020a056808164200b00331567c54e1mr19705073oib.232.1667599178815;
+        Fri, 04 Nov 2022 14:59:38 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id o22-20020a9d5c16000000b0066756fdd916sm192116otk.68.2022.11.04.14.59.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Nov 2022 14:59:38 -0700 (PDT)
+Received: (nullmailer pid 2900136 invoked by uid 1000);
+        Fri, 04 Nov 2022 21:59:40 -0000
+Date:   Fri, 4 Nov 2022 16:59:40 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Tinghan Shen <tinghan.shen@mediatek.com>
+Cc:     Jianjun Wang <jianjun.wang@mediatek.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        linux-pci@vger.kernel.org,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        Ryder Lee <ryder.lee@mediatek.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 1/3] dt-bindings: PCI: mediatek-gen3: Support mt8195
+Message-ID: <166759917936.2900079.7086690867814056235.robh@kernel.org>
+References: <20221103025656.8714-1-tinghan.shen@mediatek.com>
+ <20221103025656.8714-2-tinghan.shen@mediatek.com>
 MIME-Version: 1.0
-References: <20221103083254.237646-1-yangjihong1@huawei.com> <20221103083254.237646-3-yangjihong1@huawei.com>
-In-Reply-To: <20221103083254.237646-3-yangjihong1@huawei.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Fri, 4 Nov 2022 14:56:40 -0700
-Message-ID: <CAEf4BzY+qP1wwVddjg7_rypcUAW8iPRzSa=1O6aFG5dSLX+1Gg@mail.gmail.com>
-Subject: Re: [PATCH 2/4] bpf: Remove size check for sk in bpf_skb_is_valid_access
- for 32-bit architecture
-To:     Yang Jihong <yangjihong1@huawei.com>
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, illusionist.neo@gmail.com,
-        linux@armlinux.org.uk, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, mykolal@fb.com,
-        shuah@kernel.org, benjamin.tissoires@redhat.com, memxor@gmail.com,
-        delyank@fb.com, asavkov@redhat.com, colin.i.king@gmail.com,
-        bpf@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221103025656.8714-2-tinghan.shen@mediatek.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 3, 2022 at 1:36 AM Yang Jihong <yangjihong1@huawei.com> wrote:
->
-> The error code -EACCES is returned when bpf prog is tested in 32-bit environment,
-> This is because bpf_object__relocate modifies the instruction to change memory
-> size to 4 bytes, as shown in the following messages:
->
-> libbpf: prog 'kfunc_call_test1': relo #2: matching candidate #0 <byte_off> [18342] struct __sk_buff.sk (0:30:0 @ offset 168)
-> libbpf: prog 'kfunc_call_test1': relo #2: patched insn #1 (LDX/ST/STX) off 168 -> 168
-> libbpf: prog 'kfunc_call_test1': relo #2: patched insn #1 (LDX/ST/STX) mem_sz 8 -> 4
->
-> As a result, the bpf_skb_is_valid_access check fails. For 32-bit architecture,
-> unnecessary checks need to be deleted.
->
-> Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
+
+On Thu, 03 Nov 2022 10:56:54 +0800, Tinghan Shen wrote:
+> From: Jianjun Wang <jianjun.wang@mediatek.com>
+> 
+> In order to support mt8195 pcie node, update the yaml to support new
+> properties of iommu and power-domain, and update the reset-names
+> property to allow only one 'mac' name.
+> 
+> Signed-off-by: Jianjun Wang <jianjun.wang@mediatek.com>
+> Signed-off-by: TingHan Shen <tinghan.shen@mediatek.com>
 > ---
->  net/core/filter.c | 2 --
->  1 file changed, 2 deletions(-)
->
-> diff --git a/net/core/filter.c b/net/core/filter.c
-> index bb0136e7a8e4..eab7ce89740c 100644
-> --- a/net/core/filter.c
-> +++ b/net/core/filter.c
-> @@ -8269,8 +8269,6 @@ static bool bpf_skb_is_valid_access(int off, int size, enum bpf_access_type type
->                         return false;
->                 break;
->         case offsetof(struct __sk_buff, sk):
-> -               if (type == BPF_WRITE || size != sizeof(__u64))
-> -                       return false;
+>  .../devicetree/bindings/pci/mediatek-pcie-gen3.yaml | 13 +++++++++++--
+>  1 file changed, 11 insertions(+), 2 deletions(-)
+> 
 
-this probably should be specific to host architecture bitness? I'd
-imagine that size = 4 should be invalid on 64-bit arches (reading half
-of the pointer is bad)
-
-either way, please make sure to add tests specifically for this case
-in test_verifier
-
-
-
->                 info->reg_type = PTR_TO_SOCK_COMMON_OR_NULL;
->                 break;
->         case offsetof(struct __sk_buff, tstamp_type):
-> --
-> 2.30.GIT
->
+Reviewed-by: Rob Herring <robh@kernel.org>
