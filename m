@@ -2,65 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C51DA619D0E
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 17:23:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E3E1619D15
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 17:23:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230348AbiKDQXY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 12:23:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50568 "EHLO
+        id S230165AbiKDQXx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 12:23:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229812AbiKDQXT (ORCPT
+        with ESMTP id S230324AbiKDQXp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 12:23:19 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7788C2FC25;
-        Fri,  4 Nov 2022 09:23:17 -0700 (PDT)
-From:   John Ogness <john.ogness@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1667578996;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=tijLp86GZkQuYvpbkKNsoSVqaYbeBZGTP0NGWpFyyCE=;
-        b=rhX9V8yaFwgNnlHRVbXxSHwqauTFRTjTrQL6BQ1p6vBoQS+MPSPyCmgaN+rVzZbZBMCK8l
-        xo5SiNiRlO3EDC0yfxtSoi8U3Zjuu33rA+FMPViiORyfhqRC19TvEgrnEYVsKhv/m0CUrv
-        7uo+pCOQcFp6C62wH+xMood/ljqOalG8ogQFvFnOEVZ/zpGls4t+rqTIIxBquItUOK8ZBn
-        rgSqrlIJ74Nh5rH4KOzY24TklkQ8VxiLlwm+QOxJV/3l9cfBRUgmtn4fjiw8RxGTQc6j5P
-        Lo3zjkbgBHbIxinMoz3ykEASjqzkzppFTRmxVuyv60daF7CRQtMVQwq6XOLoIA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1667578996;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=tijLp86GZkQuYvpbkKNsoSVqaYbeBZGTP0NGWpFyyCE=;
-        b=03km6Xg2ZZbUKK1SCAp0bHxpHwoD19D3C1TT2XmKXk1NfLgyr78f44THYoqM/4udhMvv4f
-        SinlmF6qT5x7kCDw==
-To:     Doug Anderson <dianders@chromium.org>
-Cc:     Petr Mladek <pmladek@suse.com>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Jason Wessel <jason.wessel@windriver.com>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        kgdb-bugreport@lists.sourceforge.net, linux-serial@vger.kernel.org
-Subject: Re: [PATCH printk v2 12/38] tty: serial: kgdboc: use
- console_is_enabled()
-In-Reply-To: <87czagf8hf.fsf@jogness.linutronix.de>
-References: <20221019145600.1282823-1-john.ogness@linutronix.de>
- <20221019145600.1282823-13-john.ogness@linutronix.de>
- <CAD=FV=VFxKL=sOMdhyHrgy2JOtzKJdOe4euwZRRAK7P-rNVjuQ@mail.gmail.com>
- <CAD=FV=WF2S9wQ6uR+VKU4EfDTVd0JnKkuU3Wyfo6P8E_FouebQ@mail.gmail.com>
- <87czagf8hf.fsf@jogness.linutronix.de>
-Date:   Fri, 04 Nov 2022 17:29:15 +0106
-Message-ID: <87bkpm7kp8.fsf@jogness.linutronix.de>
+        Fri, 4 Nov 2022 12:23:45 -0400
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D17BA26CE
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 09:23:43 -0700 (PDT)
+Received: by mail-il1-f198.google.com with SMTP id m9-20020a056e021c2900b002fadb905ddcso4104093ilh.18
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 09:23:43 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ZTWPEbO/ykIic7pHU+hcEuKyktIGyGHMpQy7LQ2p3V4=;
+        b=bXQ9cV7bvDP4deb1njtSOgHt4JjSioaGAwXW3ben0pKmUPaZ8gVkglV/lyIqNyf9Ls
+         mtlNnQqxgmSDZPKnevj5IphIv33kOeQtg9gvcBKn0XfQbgAR3DgJyN9acZ0gL+DI4o7O
+         A8E+ctzKQU+ELm8L8ooDF474DP1JWPxmQvqkRGgToDKleOJ04N5E6a1cxyRYKIzhJvg8
+         z2KI7b3rV/F48lJm0VY4xg8ws57t7t669QpZg0prv0bMCil0gYpD+CX6Uig07wwJ3fCG
+         4lAn4SGKU86JOAIp1aa0XXdS3wC0Txqi26OAYDp5YsDKgfH4VfM1XeEGFupzHltn4AOg
+         ZHHg==
+X-Gm-Message-State: ACrzQf0n0E7PY2vuwGAMkxWr1A4o1af+7g8686LNbkyCzvDoCQyShL+J
+        nBxzy7m/hIIEtYpg1uOmCbaUBZiEOBCfK5cbHT7aFFifTkYa
+X-Google-Smtp-Source: AMsMyM7wt8+0ov4Wtc+UITQX3Dd1/57ISzUGXZZ2wHXoV+VJLxlqahBGInfpF6zeVmzvyYu+t4adwQU1Y32UE1NRGAX+ZwaqHAXg
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Received: by 2002:a05:6e02:164d:b0:2fc:636c:e233 with SMTP id
+ v13-20020a056e02164d00b002fc636ce233mr20857341ilu.251.1667579023197; Fri, 04
+ Nov 2022 09:23:43 -0700 (PDT)
+Date:   Fri, 04 Nov 2022 09:23:43 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000500ba305eca77f88@google.com>
+Subject: [syzbot] WARNING in ext4_xattr_block_set
+From:   syzbot <syzbot+98346927678ac3059c77@syzkaller.appspotmail.com>
+To:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        tytso@mit.edu
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_DIGITS,
+        FROM_LOCAL_HEX,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,22 +55,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-10-24, Doug Anderson <dianders@chromium.org> wrote:
-> It actually only holds console_list_lock() even at the end of the
-> series. Still, it seems weird that we're declaring the `data_race` on
-> CON_ENABLED but not CON_BOOT ?
+Hello,
 
-For my upcoming v3 I decided to drop this patch and will keep the
-existing direct reading of @flags. Instead of this patch, for v3 the
-comment will additionally mention why @flags is allowed to be directly
-read:
+syzbot found the following issue on:
 
-/*
- * Hold the console_lock to guarantee that no consoles are
- * unregistered until the kgdboc_earlycon setup is complete.
- * Trapping the exit() callback relies on exit() not being
- * called until the trap is setup. This also allows safe
- * traversal of the console list and race-free reading of @flags.
- */
+HEAD commit:    b229b6ca5abb Merge tag 'perf-tools-fixes-for-v6.1-2022-10-..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=120f2c0e880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=1d3548a4365ba17d
+dashboard link: https://syzkaller.appspot.com/bug?extid=98346927678ac3059c77
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=168cc339880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=119ac77a880000
 
-John Ogness
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/24728b72a896/disk-b229b6ca.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/10a3c40c60e1/vmlinux-b229b6ca.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/69f963b02b7e/bzImage-b229b6ca.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/4dd9a1b9ecac/mount_0.gz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+98346927678ac3059c77@syzkaller.appspotmail.com
+
+loop0: detected capacity change from 0 to 4096
+EXT4-fs: Journaled quota options ignored when QUOTA feature is enabled
+EXT4-fs (loop0): mounted filesystem without journal. Quota mode: writeback.
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 3611 at fs/ext4/xattr.c:2069 ext4_xattr_block_set+0x315f/0x3920
+Modules linked in:
+CPU: 0 PID: 3611 Comm: syz-executor383 Not tainted 6.1.0-rc2-syzkaller-00105-gb229b6ca5abb #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/11/2022
+RIP: 0010:ext4_xattr_block_set+0x315f/0x3920 fs/ext4/xattr.c:2069
+Code: f0 41 ff 48 8b 7c 24 58 4c 89 fe e8 fb 64 c2 ff 45 31 e4 e9 24 f5 ff ff e8 7e f0 41 ff 45 31 e4 e9 17 f5 ff ff e8 71 f0 41 ff <0f> 0b e9 4e f2 ff ff e8 65 f0 41 ff 0f 0b e9 22 df ff ff 44 89 f9
+RSP: 0018:ffffc90003e6f0a0 EFLAGS: 00010293
+RAX: ffffffff8245df6f RBX: ffffc90003e6f1e8 RCX: ffff888023aa8000
+RDX: 0000000000000000 RSI: 0000000000000001 RDI: 0000000000000001
+RBP: ffffc90003e6f2f0 R08: ffffffff820bd909 R09: ffffed1005342b23
+R10: ffffed1005342b23 R11: 1ffff11005342b22 R12: ffff888075fcd2f0
+R13: dffffc0000000000 R14: 0000000000000000 R15: 1ffff11004ba8405
+FS:  0000555556b01300(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000559471603278 CR3: 000000007bbfe000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ ext4_xattr_move_to_block fs/ext4/xattr.c:2604 [inline]
+ ext4_xattr_make_inode_space fs/ext4/xattr.c:2673 [inline]
+ ext4_expand_extra_isize_ea+0x137b/0x1cd0 fs/ext4/xattr.c:2765
+ __ext4_expand_extra_isize+0x2b8/0x3f0 fs/ext4/inode.c:5857
+ ext4_try_to_expand_extra_isize fs/ext4/inode.c:5900 [inline]
+ __ext4_mark_inode_dirty+0x51a/0x670 fs/ext4/inode.c:5978
+ ext4_rename fs/ext4/namei.c:3907 [inline]
+ ext4_rename2+0x2936/0x4760 fs/ext4/namei.c:4169
+ vfs_rename+0xd53/0x1130 fs/namei.c:4778
+ do_renameat2+0xb53/0x1370 fs/namei.c:4929
+ __do_sys_rename fs/namei.c:4975 [inline]
+ __se_sys_rename fs/namei.c:4973 [inline]
+ __x64_sys_rename+0x82/0x90 fs/namei.c:4973
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f400cc61b29
+Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffe83d770a8 EFLAGS: 00000246 ORIG_RAX: 0000000000000052
+RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f400cc61b29
+RDX: 00007f400cc20023 RSI: 00000000200000c0 RDI: 0000000020000080
+RBP: 00007f400cc212f0 R08: 00007ffe83d76fa0 R09: 0000000000000000
+R10: 00007ffe83d76f70 R11: 0000000000000246 R12: 00007f400cc21380
+R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+ </TASK>
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
