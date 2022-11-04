@@ -2,86 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48E90619B86
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 16:26:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88987619B8A
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 16:27:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232643AbiKDP0a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 11:26:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35880 "EHLO
+        id S229481AbiKDP1H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 11:27:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232597AbiKDP0J (ORCPT
+        with ESMTP id S232539AbiKDP0n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 11:26:09 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ED85F25;
-        Fri,  4 Nov 2022 08:25:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=du3wTT7gZIcCx7MAzovG5KucdTPH1Tr3pydnZK/Rz0I=; b=46kNXdi9RR7s+GQLUwE/lyN5uE
-        QNAC+e9tLj7U5tRxlATNLGezHv0SjgZPlhIU19uT5SK2VHL+JVpC1xJlQ2ZcvKpW1kTHaOjrzNp5j
-        kNrSxT0EnKQEkUSbPLjBu0gTxdkdHzsa5J/eWp6yzsE9OHp4S0U58k0K/cRvHQp2mbeI=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1oqyZD-001RGc-Rq; Fri, 04 Nov 2022 16:25:11 +0100
-Date:   Fri, 4 Nov 2022 16:25:11 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Sriranjani P <sriranjani.p@samsung.com>
-Cc:     peppe.cavallaro@st.com, alexandre.torgue@foss.st.com,
-        joabreu@synopsys.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, mcoquelin.stm32@gmail.com,
-        richardcochran@gmail.com, netdev@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Chandrasekar R <rcsekar@samsung.com>,
-        Suresh Siddha <ssiddha@tesla.com>
-Subject: Re: [PATCH 2/4] net: stmmac: dwc-qos: Add FSD EQoS support
-Message-ID: <Y2Uu16RSF9Py5AdC@lunn.ch>
-References: <20221104120517.77980-1-sriranjani.p@samsung.com>
- <CGME20221104115854epcas5p4ca280f9c4cc4d1fa564d80016e9f0061@epcas5p4.samsung.com>
- <20221104120517.77980-3-sriranjani.p@samsung.com>
+        Fri, 4 Nov 2022 11:26:43 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB02D2EF64;
+        Fri,  4 Nov 2022 08:26:30 -0700 (PDT)
+Received: from [192.168.1.15] (91-154-32-225.elisa-laajakaista.fi [91.154.32.225])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id B5895415;
+        Fri,  4 Nov 2022 16:26:26 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1667575587;
+        bh=3VzQ30cMBk6wTrjtkgYF9rzwEsB+Jh+az5UA0Ad2rNU=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=NowtYkLtoJJ0QilJeNJ0asKWJP0evDr+fZISuIIqn+BdKixyc3igGHGgGFBAF6PiC
+         NqLaBFzyD6OR7eoZ1Y7nSSptb1SUeeLuirN0yFh4nK4vFBHq9h4+esonh1YBDXWWza
+         yLaR8p527E9bwT1Y0fDrhMmZJenZ/3A7hgi3SEU4=
+Message-ID: <c0f0a5a3-c4bd-97e2-2047-da33bd896310@ideasonboard.com>
+Date:   Fri, 4 Nov 2022 17:26:24 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221104120517.77980-3-sriranjani.p@samsung.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v4 2/8] i2c: add I2C Address Translator (ATR) support
+Content-Language: en-US
+To:     Andy Shevchenko <andriy.shevchenko@intel.com>
+Cc:     devicetree@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        Kieran Bingham <kieran.bingham@ideasonboard.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Luca Ceresoli <luca@lucaceresoli.net>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Peter Rosin <peda@axentia.se>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        satish.nagireddy@getcruise.com
+References: <20221101132032.1542416-1-tomi.valkeinen@ideasonboard.com>
+ <20221101132032.1542416-3-tomi.valkeinen@ideasonboard.com>
+ <Y2EtnSNqBOfGRDMO@smile.fi.intel.com>
+ <cc510516-c961-9efb-bcdf-2abea795433a@ideasonboard.com>
+ <Y2UH0Wqp6R52tObC@smile.fi.intel.com>
+From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+In-Reply-To: <Y2UH0Wqp6R52tObC@smile.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> +static int dwc_eqos_setup_rxclock(struct platform_device *pdev)
-> +{
-> +	struct device_node *np = pdev->dev.of_node;
-> +
-> +	if (np && of_property_read_bool(np, "rx-clock-mux")) {
-> +		unsigned int reg, val;
-> +		struct regmap *syscon = syscon_regmap_lookup_by_phandle(np,
-> +			"rx-clock-mux");
-> +
-> +		if (IS_ERR(syscon)) {
-> +			dev_err(&pdev->dev, "couldn't get the rx-clock-mux syscon!\n");
-> +			return PTR_ERR(syscon);
-> +		}
-> +
-> +		if (of_property_read_u32_index(np, "rx-clock-mux", 1, &reg)) {
-> +			dev_err(&pdev->dev, "couldn't get the rx-clock-mux reg. offset!\n");
-> +			return -EINVAL;
-> +		}
-> +
-> +		if (of_property_read_u32_index(np, "rx-clock-mux", 2, &val)) {
-> +			dev_err(&pdev->dev, "couldn't get the rx-clock-mux reg. val!\n");
-> +			return -EINVAL;
-> +		}
-> +
-> +		regmap_write(syscon, reg, val);
+On 04/11/2022 14:38, Andy Shevchenko wrote:
+> On Fri, Nov 04, 2022 at 01:59:06PM +0200, Tomi Valkeinen wrote:
+>> On 01/11/2022 16:30, Andy Shevchenko wrote:
+>>> On Tue, Nov 01, 2022 at 03:20:26PM +0200, Tomi Valkeinen wrote:
+> 
+> ...
+> 
+>>>> +	ret = atr->ops->attach_client(atr, chan->chan_id, info, client,
+>>>> +				      &alias_id);
+>>>
+>>> On one line looks better.
+>>
+>> I agree, but it doesn't fit into 80 characters. I personally think that's a
+>> too narrow a limit, but some maintainers absolutely require max 80 chars, so
+>> I try to limit the lines to 80 unless it looks really ugly.
+> 
+> OK.
+> 
+> ...
+> 
+>>>> +	WARN(sysfs_create_link(&chan->adap.dev.kobj, &dev->kobj, "atr_device"),
+>>>> +	     "can't create symlink to atr device\n");
+>>>> +	WARN(sysfs_create_link(&dev->kobj, &chan->adap.dev.kobj, symlink_name),
+>>>> +	     "can't create symlink for channel %u\n", chan_id);
+>>>
+>>> Why WARNs? sysfs has already some in their implementation.
+>>
+>> True, and I can drop these if required. But afaics, sysfs_create_link only
+>> warns if there's a duplicate entry, not for other errors.
+> 
+> The problem with WARN that it can be easily converted to real Oops. Do you
+> consider other errors are so fatal that machine would need a reboot?
 
-This appears to be one of those binds which allows any magic value to
-be placed into any register. That is not how DT should be used.
+Yes, WARNs are bad, especially as the error here is not critical. I'll 
+change these to dev_warn(). (also, I didn't know WARN could be made to 
+oops).
 
-   Andrew
+> ...
+> 
+>>>> +	atr_size = struct_size(atr, adapter, max_adapters);
+>>>
+>>>> +	if (atr_size == SIZE_MAX)
+>>>> +		return ERR_PTR(-EOVERFLOW);
+>>>
+>>> Dunno if you really need this to be separated from devm_kzalloc(), either way
+>>> you will get an error, but in embedded case it will be -ENOMEM.
+>>
+>> Yep. Well... I kind of like it to be explicit. Calling alloc(SIZE_MAX)
+>> doesn't feel nice.
+> 
+> Yeah, but that is exactly the point of returning SIZE_MAX by the helpers from
+> overflow.h. And many of them are called inside a few k*alloc*() APIs.
+> 
+> So, I don't think it's ugly or not nice from that perspective.
+
+Ok, sounds fine to me. I'll drop the check.
+
+>>>> +	atr = devm_kzalloc(dev, atr_size, GFP_KERNEL);
+>>>> +	if (!atr)
+>>>> +		return ERR_PTR(-ENOMEM);
+> 
+> ...
+> 
+>>>> +EXPORT_SYMBOL_GPL(i2c_atr_delete);
+>>>
+>>> I would put these to their own namespace from day 1.
+>>
+>> What would be the namespace? Isn't this something that should be
+>> subsystem-wide decision? I have to admit I have never used symbol
+>> namespaces, and don't know much about them.
+> 
+> Yes, subsystem is I2C, but you introducing a kinda subsubsystem. Wouldn't be
+> better to provide all symbols in the I2C_ATR namespace from now on?
+> 
+> It really helps not polluting global namespace and also helps to identify
+> users in the source tree.
+
+Alright, I'll look into this.
+
+> ...
+> 
+>>>> +struct i2c_atr {
+>>>> +	/* private: internal use only */
+>>>> +
+>>>> +	struct i2c_adapter *parent;
+>>>> +	struct device *dev;
+>>>> +	const struct i2c_atr_ops *ops;
+>>>> +
+>>>> +	void *priv;
+>>>> +
+>>>> +	struct i2c_algorithm algo;
+>>>> +	struct mutex lock;
+>>>> +	int max_adapters;
+>>>> +
+>>>> +	struct i2c_adapter *adapter[0];
+>>>
+>>> No VLAs.
+>>
+>> Ok.
+>>
+>> I'm not arguing against any of the comments you've made, I think they are
+>> all valid, but I want to point out that many of them are in a code copied
+>> from i2c-mux.
+>>
+>> Whether there's any value in keeping i2c-mux and i2c-atr similar in
+>> design/style... Maybe not.
+> 
+> You can address my comment by simply dropping 0 in the respective member.
+
+Oh, I thought you meant no "extensible" structs. I'll drop the 0.
+
+  Tomi
+
