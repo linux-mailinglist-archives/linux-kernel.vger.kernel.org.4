@@ -2,187 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0BE5619BFF
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 16:46:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61391619C01
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 16:46:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231909AbiKDPqR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 11:46:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53218 "EHLO
+        id S231882AbiKDPqf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 11:46:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230205AbiKDPqN (ORCPT
+        with ESMTP id S232242AbiKDPqb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 11:46:13 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2059.outbound.protection.outlook.com [40.107.244.59])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 308BC2EF15;
-        Fri,  4 Nov 2022 08:46:13 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=IrL3p4IMQreDBDLIP0XmuMgVpp4yy4sNzunRKY5TN5EVgsHbmlPZFWhbmmdibQzCL60FLkXFpnQW5w4OzGMBlLGraL4ouWJLT2OlIQar+5o8qB4dh5+3ch9Y+2QqlFdHUCWiThNRS9gwnQbkohMyrhjszlbDwYI6ft3JExj5nIEtB+d6eRxwag9Ph0jHKINOujfWtz1oC+Q5lLgUuB3OxuoMMr768l6jPgvOc5xpFBHFAyFyb8E4q0/aw/wYRIOoKEYEaUPhdWUWVnRuXiL9VZl17qmYjMVm+renNouqUnUNRuu38AI+juD8Q22IyqRCxn3y3fVnY82uw7SBNwZvTw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=8l2x4TmN/7wzJNlvHvdt05vLRCcNu4rBcOxtpMAu2kc=;
- b=JH7H9s0DxQOt7+3e4r+tSiulbBnQIEI+eFih1A5ZCTSooY+QfEHeO0UeEHdmk3yfqrBqdeFrpOBxvBO/Xddqq/LwlHGo8CpC8EoS9qRkMD0Mb9aJ16pNRpWUjktx1rNMNOZ//eH6oGfe0pS265fyTIiae3YrW1bafBKqgjZXd8mIX+q5ODwIhdx3/Y5NyYCLBb7h6D8/XHMlcKprcBriII6O2LZk7XJU46+K1C08KX16j6s/aSsLZvsltGVkU0HfgKhc8IOOJQDRMT1mnsnjg3zcjwXzpymsab8ETDottoy/dRxDf8dI91HRyFwHAob33oXDqPOwDWPRPnjiV6B5kA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8l2x4TmN/7wzJNlvHvdt05vLRCcNu4rBcOxtpMAu2kc=;
- b=Ew2+bgd+kdkn0shTk2Su1a2LhQhU1+1OnZ3EOpGjcAWz0c2DuhymnsN6F3OlyomYOnsQSWu05oAJ8XqiSzoaoqfIzDz9XPQX9xvcHUNPdedcnsxAynfIMl4sITjZiI30sqVwj2J0IFCs64aQsWav89b2kC2zeAxWrpCDCYYt01p+of6UkL7bmFfpdeecBx8vhOunMRIF6rbYtzGRFF+C3nUUtJck9HDcJn5Xn1W86/PEoBi8rnOzYV5MlOnuESEMzjb0Lkqwldxl7z2YlxZFw0e9tI1nO96GT6PVAG9QJN1tg1mgQAcDIVIAK9eHPZWMbCqF0t1yGccqCO2U9lc/Dg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from CO6PR12MB5444.namprd12.prod.outlook.com (2603:10b6:5:35e::8) by
- CY5PR12MB6552.namprd12.prod.outlook.com (2603:10b6:930:40::16) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5791.22; Fri, 4 Nov 2022 15:46:11 +0000
-Received: from CO6PR12MB5444.namprd12.prod.outlook.com
- ([fe80::1912:a3a8:1a8d:a960]) by CO6PR12MB5444.namprd12.prod.outlook.com
- ([fe80::1912:a3a8:1a8d:a960%4]) with mapi id 15.20.5791.022; Fri, 4 Nov 2022
- 15:46:11 +0000
-Message-ID: <3a783b8d-4970-663f-816a-15aad5a66a48@nvidia.com>
-Date:   Fri, 4 Nov 2022 15:46:03 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v3 1/8] memory: tegra: Add API for retrieving carveout
- bounds
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Mikko Perttunen <cyndis@kapsi.fi>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        Ashish Mhetre <amhetre@nvidia.com>,
-        Sameer Pujar <spujar@nvidia.com>,
-        dri-devel@lists.freedesktop.org, linux-tegra@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220920081203.3237744-1-cyndis@kapsi.fi>
- <20220920081203.3237744-2-cyndis@kapsi.fi> <Y1aP7kDi8cJUTcGN@orome>
- <ee3073ba-d621-8b02-c986-3cf44cfbba96@nvidia.com>
- <b9b20abc-d37f-f74a-a416-2e210bf944c4@linaro.org>
-From:   Jon Hunter <jonathanh@nvidia.com>
-In-Reply-To: <b9b20abc-d37f-f74a-a416-2e210bf944c4@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: LO2P265CA0340.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:d::16) To CO6PR12MB5444.namprd12.prod.outlook.com
- (2603:10b6:5:35e::8)
+        Fri, 4 Nov 2022 11:46:31 -0400
+Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48AC03204E
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 08:46:29 -0700 (PDT)
+Received: by mail-qt1-x829.google.com with SMTP id s4so3256691qtx.6
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 08:46:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=EMdL8frPtC09UobH5ezNbC8q6/0SO/j0tS/fg1dr0Jc=;
+        b=Hqh0FSUo1VbF1hBNdCZ3rvLtSZxApntHLLOxU5MjvThqQN8+ue9vw5nDZVEn3dBspJ
+         h1IvMm/PaPFrv/QRvi+wGyIRhTO5K5BGGP2Pfp/eq4l/4vei0MlAz498SCrYBoFpWNzQ
+         G3Lp0IAPSzlkYCIdjoPyh6nbo42tlKvl6WuJ/naCcQlVkuy4ajpa4jl+SuiNHSDR+oRt
+         qxqTtYIonBrJ5PDWyoSWenpqkAPESQ6056NjFn2tLz0eqyUgjzZAEhhNeZm+KILcn1OX
+         9RdhR8PCRviKSWlF2kdrCwyGTvcHuf8tq554VY87O52BHwS383AByE9FFpZtf94fUGil
+         C2MQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=EMdL8frPtC09UobH5ezNbC8q6/0SO/j0tS/fg1dr0Jc=;
+        b=zO86TermLYrgoQgqvGc1czCFLmrUKOtuD0QaR0GCbccKydu62Mfc7J8gce75IKbOJv
+         5oXd46agduwiLgTc4ouPepjJeWFJJrKVcpeT4FVqVPnTX44glzYcBgFjmRf7SPs+OXaQ
+         Qx+Vr/h3+wcOoDw96Wd2yPs4DNsYncU+1zhNBtPxUgbek089S42ndBZv27534AjOcquh
+         9piPaaSbfOP4dJkj6uuG0ojU2NiPJ1o9wXcX71BK9kg6u0qdY1KnjogRhfjPJYyVfj2M
+         B1/BpXNyGo0i7EmyaO1DnfSyVWqmraDOX9soXGk2sohNNL2HA5ynJW7w/mpXdkejvT2i
+         OSzg==
+X-Gm-Message-State: ACrzQf2N1Gwkn12fDdNpSKRenjM+SoVLOxNpNM37G/veMamAOETDJiIs
+        wDvlEPPnlaNIcrR83fyPjKjp2A==
+X-Google-Smtp-Source: AMsMyM5TVwsaW5JJKdAl3ylOyp7OBqbSGw2sSssds63kvC6a4nJQvWwMLno0ew9cTNYhm72A84mZbQ==
+X-Received: by 2002:a05:622a:352:b0:3a5:4f9b:2141 with SMTP id r18-20020a05622a035200b003a54f9b2141mr8570633qtw.599.1667576788422;
+        Fri, 04 Nov 2022 08:46:28 -0700 (PDT)
+Received: from ?IPV6:2601:586:5000:570:aad6:acd8:4ed9:299b? ([2601:586:5000:570:aad6:acd8:4ed9:299b])
+        by smtp.gmail.com with ESMTPSA id d11-20020a05620a240b00b006b95b0a714esm3272220qkn.17.2022.11.04.08.46.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 04 Nov 2022 08:46:27 -0700 (PDT)
+Message-ID: <2f80c103-4b35-122d-b30f-4bdd8f643a31@linaro.org>
+Date:   Fri, 4 Nov 2022 11:46:26 -0400
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO6PR12MB5444:EE_|CY5PR12MB6552:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8bd8fdae-7ae6-4a5f-1e6f-08dabe7bb25d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: aFhlDgav19oTVKiIOvp4Dor4FgL63h0xY3J4pjbKGfZyj+l2cIpobBR0dV+O8rvkPghM7QC0GJ130NF1WF+h4Vta5IFnQ1FuJ0ZfBeMP2j5h+qwOGoZcSrCnHDgzu8/M78GVOVyCxR1xgfAZ7/5wutDkkgyNarSvf1YNjgWkjIz8GuKSCgz7uSTsa3W5O0GvjvINX5BABoMvnCFL2RQR76sqS8B664n8QZxbr+MxWFRDyyJHyOdGwB/n45wBnQGLC93vhSmMNxlg9NitCAceKfgrixEO4A8gUfLxIZ/TWfUSwBKCZ/fS/9cd4Mk1a2IP++XzJnCFhGbf4MSHpn+7cVlRDMS+izH4fkvO9e4UoTVHmR0ti78qFnNJdBW2K29k4mW+2/QCEifGYxJJMi4UZ+7jXLUZudsNG9Q8h9gw2XS+N8M7R8IN/R3P+SbHJK7dqdV2+8wql0FGI7D2fzEf7Xn0wa7gHzT6CFZoB3LiYPNVdmoBLO7xyJJtvdWj8SR7FVsqjcgWsB6R2t/gRDIG0K7JOju5PWGy9opxMk3KKOYxFh/QbQ2wZJbuweh49B8D8pz7zsUZp1WA6/m+2bMuvfTtyQgxja2j+W9m0AmVud4YfiREekjAUMgGJz0SPsOY95UnStFT2nNO/pm1DCzY+4naLDj1I1mKFZ1Sw+ghH0/TDfPrbSLMMfxKqZqOx+3yNNtdkLIKXHfv6JnqM9vIfb6a5Q+MMlONxY5BzeirYfxvjnhy3MKKdKmDuT7ozEPcdZsUieGOiGW/SUEWE8ynAqic0sx5ThGcoWCYkxZ6yvU=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5444.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(136003)(39860400002)(376002)(396003)(366004)(451199015)(8676002)(54906003)(8936002)(4326008)(41300700001)(86362001)(36756003)(110136005)(31696002)(7416002)(316002)(6506007)(5660300002)(6512007)(38100700002)(83380400001)(2616005)(53546011)(186003)(478600001)(6486002)(66946007)(6666004)(31686004)(66476007)(66556008)(2906002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Y0JNOEtuK3JHTlRNS08vUG1SSC9ZVW1BS2xHZTJWYmhLU0NPOTg2dmVwRkxY?=
- =?utf-8?B?VlMvRUFQdUErYW01Q1ZKUWRWMzNuS1lTb3FzeHc2YmsrakVmSXFKVzREeWdL?=
- =?utf-8?B?ZVdya21nRmRZdG1iNXhxM1V0YmRkSFlGUmlqY0lsNDR2NmZBWVhuODJjZVV4?=
- =?utf-8?B?MUQySHRkdklCSVdKMFlVR0JOVkc1Z29kVmo0ZjdPQzNXQVBLZ1UxTG9tbVl2?=
- =?utf-8?B?MHAxeERMdFBOOHJ4c29zb2djRXo1S2ZJRjRPRERxbWVTTEtmNXFWZFNCR001?=
- =?utf-8?B?aTBzSXVGdm01djgyMXBzUEVKenVXRDRhT0d6WC9qemlHeDM1c3BCUGlscGg1?=
- =?utf-8?B?a3YvWFZlaVdJdnlmaCtpTlY2aU5zMytSbEkycXVWc2JlOSt0Ynd6RXVvY1NP?=
- =?utf-8?B?dFVMZGpWaU1uenFtYzN6YTFNK2t1cms5T05KSFpiL0VSekpqelExa3RmTWxv?=
- =?utf-8?B?cGN1YXV5WFVRMStHNWRQRFZJZTh6TWJBL0RqSmRld3NFWEdIYnM3aDFFVkZH?=
- =?utf-8?B?VlpNVmNFSWljZWpwYzlIUlRyV3RtUHllQ0M3Uis5VkpCWFBVYUtBcmhyZEtW?=
- =?utf-8?B?c2tuVnhORTc3OHNOREtUeSs3eHNsc3E4aGFxTlluOEJPcm5majNQaGZuWFhq?=
- =?utf-8?B?YzlINkVZYjg3dHNKNlUzWFE4a056WjFiMElwUnhlZEdjazl4YXdSUVh3SlEy?=
- =?utf-8?B?azU2RDRRSzIwTmNqNE1NU0xZTzRPbnlxUnNIQ1JpZy8rT0JCTC84UkEvNXpH?=
- =?utf-8?B?czRxcVA1Qm5QNnNZYkJMZGtmdkp2dkhmTFhROWdwbnJ6azNGL3NIdTk4M3pm?=
- =?utf-8?B?ZGdOK0RaeStISzFwT0hWdEVQVDhSM2xKakYyTWtLZEdIWXdoL1hrak1TT2M3?=
- =?utf-8?B?MkRZSEYvZloydmpjd0hDZmhVbHFFNlZLa0Z2TzF5M3ZVV2NpQmhRSmdXVCtO?=
- =?utf-8?B?ZUp3ZUkrRWlROHBOa2g5UXp1d2hoR0JCZUFaREhvNk0wbVRCR3N5OGlGZlhV?=
- =?utf-8?B?NUpiWjZyeE1KZmNPTElaK21jVkxSNmxLelF4ZkZUSHRBYkFIZGxrNEJmcjAr?=
- =?utf-8?B?RUs1NC9MREhEWnQ3VVQ0ZUk4ZmF2a2dPbzRDOXk4ckt1UVdwaDdPRU5wMzRE?=
- =?utf-8?B?S2s0ZnB5SkZqcmg2bjRBUDJseFBrV2tRc3JnVVJtOGx2eVZZWnNtQ2V0dVc5?=
- =?utf-8?B?M2IxNDRqWU1jRmhTWXV4Qys1QTFsNEkvQnpyOGFnSmV6TFVYTEpXb3lqUVFO?=
- =?utf-8?B?VFRnZUxmNmFER0hOa3JHV05UblVBVFdjdDB3Q096ZTdZZnhzMWdqYi9Md3Iz?=
- =?utf-8?B?eVFzVU5BbUVRVTZZWHFGV1NPdURBTDJlU2RZblJYQ1hBNkxnSnZZcDh1N3Bv?=
- =?utf-8?B?ZFQzdUUyaWlOR2ZGVVFiQmRMbCtPdU1Dbm04Z01xWGh0b2hRSGkxenQwNXhP?=
- =?utf-8?B?VWhmdXU2b2hncDJiWG5JWnRRN3FLUmRaaWZGVEdiUlV4K2JWSXk3L1hhd1p5?=
- =?utf-8?B?M2YzNW50Z0NBTFFIbkQwekVLOHg5VUw3SElvMFN0R1RlSTZaSkozT3FwcDZK?=
- =?utf-8?B?RVNXaW8yclRtZ25XamZYUXRkZk5tQXdDRWhhbXRYV3I3UGkrV3pBZk55WUc1?=
- =?utf-8?B?UVJ5TkxieGhmdXUvQndyWTF1emNiWnpFa1NiZnFjWDRtNjB4SkRCUmloNHdV?=
- =?utf-8?B?anhVdnVsZnprRzdUWTVxcUJIb1hvNGNCOVVCVWhIVjhsZG0xWFI5dmNnUFpn?=
- =?utf-8?B?Ly9RR3EzT2o3dWF5UDBJNnJJbHU1MU1xbmlYemN0WWc4WEQzaTdSekRyS1Vr?=
- =?utf-8?B?bzAwTkVlV0d4ZDV3MGxTdlRUMVF3MUJ6dlNSUmhWdkhBa2ZvTUFFSmgydSt2?=
- =?utf-8?B?dmlPS25PbUVFeCt2eXZtSXNHY09vckxkaUZWdmEvUCt6cXpaRkFrMjZ6TGln?=
- =?utf-8?B?V1FUVTkrV3Q4VTFOT1BrT1BFWUhaa0pSZkt1MVhiMXkxSGptcmc0UUdTUXhU?=
- =?utf-8?B?Sjh6M2cwUFRLZStXM3hkWGRWTkxMMUZoSjJoaVpULzBGM3dZVVhyRWNvVGVo?=
- =?utf-8?B?K255OTB5OC9JWW4xMUtOcHMxS0dkUUlBVHhCZGhTVG84c0p2Q3ZmR1NhWTUr?=
- =?utf-8?B?N0MzRm5td2FHbHNubzFpTnNwOXZDKzk2UGxhYnpjVUhaNVJNcUV2TWREQW45?=
- =?utf-8?B?a0d1dXMxM2FBcGx5NlJVeURVendPV2I3dWEyb2NiUldMVms2cEVVSkdUcDha?=
- =?utf-8?B?VmhpV2pCQVdDYzlPZzRtQ05NdUdRPT0=?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8bd8fdae-7ae6-4a5f-1e6f-08dabe7bb25d
-X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5444.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Nov 2022 15:46:11.1860
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 2Uj3tZt6cYzGb+GMtosy5p9XFTVJ1V/0cFiINE6Wg8ZDDyq3U1XNagxq1Jt9naSkHxT/DGQDl/8Mxp22Y8f27w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR12MB6552
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [RFC][PATCH v3 23/33] timers: nfc: pn533: Use
+ timer_shutdown_sync() before freeing timer
+Content-Language: en-US
+To:     Steven Rostedt <rostedt@goodmis.org>, linux-kernel@vger.kernel.org
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Anna-Maria Gleixner <anna-maria@linutronix.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Chengfeng Ye <cyeaa@connect.ust.hk>, Lin Ma <linma@zju.edu.cn>,
+        Duoming Zhou <duoming@zju.edu.cn>, netdev@vger.kernel.org
+References: <20221104054053.431922658@goodmis.org>
+ <20221104054916.096085393@goodmis.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221104054916.096085393@goodmis.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 04/11/2022 15:35, Krzysztof Kozlowski wrote:
-> On 04/11/2022 11:33, Jon Hunter wrote:
->> Hi Thierry, Krzysztof,
->>
->> On 24/10/2022 14:15, Thierry Reding wrote:
->>> On Tue, Sep 20, 2022 at 11:11:56AM +0300, Mikko Perttunen wrote:
->>>> From: Mikko Perttunen <mperttunen@nvidia.com>
->>>>
->>>> On Tegra234 NVDEC firmware is loaded from a secure carveout, where it
->>>> has been loaded by a bootloader. When booting NVDEC, we need to tell it
->>>> the address of this firmware, which we can determine by checking the
->>>> starting address of the carveout. As such, add an MC API to query the
->>>> bounds of carveouts, and add related information on Tegra234.
->>>>
->>>> Signed-off-by: Mikko Perttunen <mperttunen@nvidia.com>
->>>> ---
->>>> v2:
->>>> - Add check for 64-bit phys_addr_t. In practice phys_addr_t
->>>>     is always 64 bits where this runs, but it avoids warnings in
->>>>     compile test.
->>>> ---
->>>>    drivers/memory/tegra/mc.c       | 25 +++++++++++++++++++++++++
->>>>    drivers/memory/tegra/tegra234.c |  5 +++++
->>>>    include/soc/tegra/mc.h          | 11 +++++++++++
->>>>    3 files changed, 41 insertions(+)
->>>
->>> Krzysztof,
->>>
->>> I've applied this to the same tree as the patch that uses it for now.
->>> Let me know if you want me to put this on a separate stable branch for
->>> you to pull in.
->>
->> Any update on this?
+On 04/11/2022 01:41, Steven Rostedt wrote:
+> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
 > 
-> What kind of update do you expect?
+> Before a timer is freed, timer_shutdown_sync() must be called.
+> 
+> Link: https://lore.kernel.org/all/20220407161745.7d6754b3@gandalf.local.home/
 
-Ha! I guess I should be more explicit :-)
+I think link has to be updated.
 
-Well, I would like to see this change in -next and so I was hoping that 
-you would respond to the above to indicate how you would like to pull 
-this in.
+Best regards,
+Krzysztof
 
-Cheers!
-Jon
-
--- 
-nvpublic
