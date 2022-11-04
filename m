@@ -2,120 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48624619236
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 08:52:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1739D619239
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 08:53:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231536AbiKDHv4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 03:51:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35056 "EHLO
+        id S230254AbiKDHxW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 03:53:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbiKDHvn (ORCPT
+        with ESMTP id S229481AbiKDHxT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 03:51:43 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 51770286F1;
-        Fri,  4 Nov 2022 00:51:42 -0700 (PDT)
-Received: by linux.microsoft.com (Postfix, from userid 1127)
-        id 0B58C20B929F; Fri,  4 Nov 2022 00:51:42 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 0B58C20B929F
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1667548302;
-        bh=0rJMGnEkNBde5KUwc9tOcVboZ+dqXPQBKYIPw1h/Nww=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hIpy28WiAEVrGN/W/7FDA2TH2xM+7mqDZYBxoc4uMUtFCpBgZHSjRn/qlgha3TnST
-         VhKhEqjGTzhtVIwT+ij4wQWnB2Ekjvlq4fJBWSfDYVVVVnYcInLIygfuhFFJNaYSmc
-         RG9W+03Z9L/9QzHlAVchX0rhHnAaqgGSSQ4KDnUw=
-Date:   Fri, 4 Nov 2022 00:51:42 -0700
-From:   Saurabh Singh Sengar <ssengar@linux.microsoft.com>
-To:     Anirudh Rayabharam <anrayabh@linux.microsoft.com>
-Cc:     ssengar@microsoft.com, kys@microsoft.com, haiyangz@microsoft.com,
-        wei.liu@kernel.org, decui@microsoft.com,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mikelley@microsoft.com, tglx@linutronix.de, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com
-Subject: Re: [PATCH] x86/Hyper-V: Expand definition of struct
- hv_vp_assist_page
-Message-ID: <20221104075142.GA6146@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-References: <1667537814-15939-1-git-send-email-ssengar@linux.microsoft.com>
- <Y2S8aT7ltuqcHGVN@anrayabh-desk>
+        Fri, 4 Nov 2022 03:53:19 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87F1D286F1
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 00:53:18 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id q71so3728246pgq.8
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 00:53:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Zup+uRlcf7AhU3cAwCzxwDKZNLa4muKa6BvILHvv3H8=;
+        b=IFZopsVsHu7I2P3qwC6/kTzZlyHHO5eGhZoRx365O/lkZJxLZjYZs0js6ZlWEFdlLB
+         bYKyfPeH4sZuVDuob832AJop/6rEUcinrSQulCe7kEO3fPrjs3L4re19Vi0gwJmtW5pG
+         Wz8wjX++FnnlNl80m2EGMTru3BfSwvlyT8GFY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Zup+uRlcf7AhU3cAwCzxwDKZNLa4muKa6BvILHvv3H8=;
+        b=ESTqS7BIOesDFiYbrtfR2riuGrLroiTUursB0HDdNyi5XLMnoFGl4BKUxCxiohEpaH
+         Ow/zSUsDrjTh5w8l5CY7IeVWeC3cwCLfuxj5lIk6xSDJ+BkPe9RbePcTk9BtEyq/aBG5
+         p8yZA8pJvnvGTzKXj+Zcq8/RGQ11bOERWbs5PvTX3WUxR4aT1YRoCm91/y1hFULPRCkZ
+         hy4TFXR4GMt3WTZbDohebCirF+RKNLGqA1AQhK8xCD/TlRRnAIpGOTScynPFnYhdeWfT
+         rbFJRFDjGbO81Dv1IIJmxpWftDl41qvOfqt/Gqms68C6MXWPHEf/gU96YJVUFWWXnszi
+         CQYQ==
+X-Gm-Message-State: ACrzQf2kJDVppWsTEKuZb+c96k/vjP4xtFxcXw9Sw49UJ2H7uthv3smI
+        pwDvDIdZSCnSCdC7rGuubG+6yzyWxZ24rA==
+X-Google-Smtp-Source: AMsMyM43KtChkf1aDRP4ODWe/7OB9VsNIWOVsZw/cipe1Yhe81tq2sk+ZvLsVyvbfq041q0AQDXBIw==
+X-Received: by 2002:a63:4b5e:0:b0:470:5e7:b0d2 with SMTP id k30-20020a634b5e000000b0047005e7b0d2mr11587921pgl.189.1667548398082;
+        Fri, 04 Nov 2022 00:53:18 -0700 (PDT)
+Received: from google.com ([240f:75:7537:3187:f2f6:8f5:87c8:3aeb])
+        by smtp.gmail.com with ESMTPSA id e18-20020a17090301d200b00177f25f8ab3sm1999081plh.89.2022.11.04.00.53.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Nov 2022 00:53:17 -0700 (PDT)
+Date:   Fri, 4 Nov 2022 16:53:13 +0900
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+To:     Minchan Kim <minchan@kernel.org>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Nitin Gupta <ngupta@vflare.org>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: Re: [PATCHv4 4/9] zram: Introduce recompress sysfs knob
+Message-ID: <Y2TE6XSTkyXVF+kB@google.com>
+References: <20221018045533.2396670-1-senozhatsky@chromium.org>
+ <20221018045533.2396670-5-senozhatsky@chromium.org>
+ <Y2Lbxp6to4QNYyGe@google.com>
+ <Y2M0t5etyJiUfeQi@google.com>
+ <Y2PzseskzPelrZum@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y2S8aT7ltuqcHGVN@anrayabh-desk>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y2PzseskzPelrZum@google.com>
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FSL_HELO_FAKE,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 04, 2022 at 12:46:57PM +0530, Anirudh Rayabharam wrote:
-> On Thu, Nov 03, 2022 at 09:56:54PM -0700, Saurabh Sengar wrote:
-> > The struct hv_vp_assist_page has 24 bytes which is defined as u64[3],
-> > expand that to expose vtl_entry_reason, vtl_ret_x64rax and vtl_ret_x64rcx
-> > field. vtl_entry_reason is updated by hypervisor for the entry reason as
-> > to why the VTL was entered on the virtual processor.
-> > Guest updates the vtl_ret_* fields to provide the register values to
-> > restore on VTL return. The specific register values that are restored
-> > which will be updated on vtl_ret_x64rax and vtl_ret_x64rcx.
-> > Also added the missing fields for synthetic_time_unhalted_timer_expired,
-> > virtualization_fault_information and intercept_message.
-> > 
-> > Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
-> > ---
-> >  arch/x86/include/asm/hyperv-tlfs.h | 11 ++++++++++-
-> >  1 file changed, 10 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/arch/x86/include/asm/hyperv-tlfs.h b/arch/x86/include/asm/hyperv-tlfs.h
-> > index f769b9db4630..b3d0f42853d2 100644
-> > --- a/arch/x86/include/asm/hyperv-tlfs.h
-> > +++ b/arch/x86/include/asm/hyperv-tlfs.h
-> > @@ -377,11 +377,20 @@ struct hv_nested_enlightenments_control {
-> >  struct hv_vp_assist_page {
-> >  	__u32 apic_assist;
-> >  	__u32 reserved1;
-> > -	__u64 vtl_control[3];
-> > +	__u8  vtl_entry_reason;
+On (22/11/03 10:00), Minchan Kim wrote:
+> zram->table[index].flags
 > 
-> This is defined as an enum in the TLFS [1]. We should do the same.
-> And since the TLFS defines it as an enum it is a 32 bit value and
-> not a u8.
+> If we squeeze the algorithm index, we could work like this
+> without ZRAM_RECOMP_SKIP.
 
-I think we can do that. Let me check this and update on v2.
+Something like this?
 
-> 
-> > +	__u8  vtl_reserved[7];
-> > +	__u64 vtl_ret_x64rax;
-> > +	__u64 vtl_ret_x64rcx;
-> 
-> The TLFS groups the above VTL related fields into a struct
-> HV_VP_VTL_CONTROL. Any reason to not do the same?
+Allocate two ->flags bits for priority and one bit for RECOMP_SKIP.
+Two priority bits let us to have 3 alternative algorithms (01 10 11)
+plus one default (00). So 4 in total.
 
-No particular reason, but this change is simple and sufficient.
-We can expand in future as the need arises.
-
-> 
-> [1] https://learn.microsoft.com/en-us/virtualization/hyper-v-on-windows/tlfs/datatypes/hv_vp_vtl_control
-> 
-> Thanks,
-> Anirudh.
-> 
-> >  	struct hv_nested_enlightenments_control nested_control;
-> >  	__u8 enlighten_vmentry;
-> >  	__u8 reserved2[7];
-> >  	__u64 current_nested_vmcs;
-> > +	__u8 synthetic_time_unhalted_timer_expired;
-> > +	__u8 reserved3[7];
-> > +	__u8 virtualization_fault_information[40];
-> > +	__u8 reserved4[8];
-> > +	__u8 intercept_message[256];
-> > +	__u8 vtl_ret_actions[256];
-> >  } __packed;
-> >  
-> >  struct hv_enlightened_vmcs {
-> > -- 
-> > 2.34.1
+---
+diff --git a/drivers/block/zram/zram_drv.c b/drivers/block/zram/zram_drv.c
+index 12f03745baf9..af0ff58087ca 100644
+--- a/drivers/block/zram/zram_drv.c
++++ b/drivers/block/zram/zram_drv.c
+@@ -127,6 +127,19 @@ static size_t zram_get_obj_size(struct zram *zram, u32 index)
+        return zram->table[index].flags & (BIT(ZRAM_FLAG_SHIFT) - 1);
+ }
+ 
++static inline void zram_set_priority(struct zram *zram, u32 index, u32 prio)
++{
++       prio &= ZRAM_COMP_PRIORITY_MASK;
++       zram->table[index].flags &= (prio << ZRAM_COMP_PRIORITY_1);
++}
++
++static inline u32 zram_get_priority(struct zram *zram, u32 index)
++{
++       u32 prio = zram->table[index].flags;
++
++       return prio & ZRAM_COMP_PRIORITY_MASK;
++}
++
+ static void zram_set_obj_size(struct zram *zram,
+                                        u32 index, size_t size)
+ {
+diff --git a/drivers/block/zram/zram_drv.h b/drivers/block/zram/zram_drv.h
+index bdfc9bf0bdd5..33e52c5a9a90 100644
+--- a/drivers/block/zram/zram_drv.h
++++ b/drivers/block/zram/zram_drv.h
+@@ -40,6 +40,8 @@
+  */
+ #define ZRAM_FLAG_SHIFT (PAGE_SHIFT + 1)
+ 
++#define ZRAM_COMP_PRIORITY_MASK  0x3
++
+ /* Flags for zram pages (table[page_no].flags) */
+ enum zram_pageflags {
+        /* zram slot is locked */
+@@ -49,8 +51,9 @@ enum zram_pageflags {
+        ZRAM_UNDER_WB,  /* page is under writeback */
+        ZRAM_HUGE,      /* Incompressible page */
+        ZRAM_IDLE,      /* not accessed page since last idle marking */
+-       ZRAM_RECOMP,    /* page was recompressed */
+        ZRAM_RECOMP_SKIP, /* secondary algorithm cannot compress this page */
++       ZRAM_COMP_PRIORITY_1,
++       ZRAM_COMP_PRIORITY_2,
+ 
+        __NR_ZRAM_PAGEFLAGS,
+ };
