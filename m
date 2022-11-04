@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D59A561907B
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 06:51:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7E6C619079
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 06:50:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231800AbiKDFvB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 01:51:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55688 "EHLO
+        id S231657AbiKDFuw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 01:50:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231280AbiKDFsx (ORCPT
+        with ESMTP id S231313AbiKDFsx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 4 Nov 2022 01:48:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF33D27B31;
-        Thu,  3 Nov 2022 22:48:50 -0700 (PDT)
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 567DA28731;
+        Thu,  3 Nov 2022 22:48:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F204D620D1;
-        Fri,  4 Nov 2022 05:48:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67B04C4347C;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 06717B82C03;
+        Fri,  4 Nov 2022 05:48:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD633C433D7;
         Fri,  4 Nov 2022 05:48:48 +0000 (UTC)
 Received: from rostedt by gandalf.local.home with local (Exim 4.96)
         (envelope-from <rostedt@goodmis.org>)
-        id 1oqpZq-00716l-3C;
-        Fri, 04 Nov 2022 01:49:14 -0400
-Message-ID: <20221104054914.824782154@goodmis.org>
+        id 1oqpZr-00717J-0Y;
+        Fri, 04 Nov 2022 01:49:15 -0400
+Message-ID: <20221104054915.007849347@goodmis.org>
 User-Agent: quilt/0.66
-Date:   Fri, 04 Nov 2022 01:41:09 -0400
+Date:   Fri, 04 Nov 2022 01:41:10 -0400
 From:   Steven Rostedt <rostedt@goodmis.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
@@ -37,8 +37,8 @@ Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
         Guenter Roeck <linux@roeck-us.net>,
         Anna-Maria Gleixner <anna-maria@linutronix.de>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Karsten Keil <isdn@linux-pingi.de>, netdev@vger.kernel.org
-Subject: [RFC][PATCH v3 16/33] timers: mISDN: Use timer_shutdown_sync() before freeing timer
+        Pavel Machek <pavel@ucw.cz>, linux-leds@vger.kernel.org
+Subject: [RFC][PATCH v3 17/33] timers: leds: Use timer_shutdown_sync() before freeing timer
 References: <20221104054053.431922658@goodmis.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,73 +53,71 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
 
-Before a timer is freed, timer_shutdown_sync() must be called, or at least
-timer_shutdown() (where sync is not possible in the context).
+Before a timer is freed, timer_shutdown_sync() must be called.
 
 Link: https://lore.kernel.org/all/20220407161745.7d6754b3@gandalf.local.home/
 
-Cc: Karsten Keil <isdn@linux-pingi.de>
-Cc: netdev@vger.kernel.org
+Cc: Pavel Machek <pavel@ucw.cz>
+Cc: linux-leds@vger.kernel.org
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 ---
- drivers/isdn/hardware/mISDN/hfcmulti.c | 6 ++----
- drivers/isdn/mISDN/l1oip_core.c        | 4 ++--
- drivers/isdn/mISDN/timerdev.c          | 4 ++--
- 3 files changed, 6 insertions(+), 8 deletions(-)
+ drivers/leds/trigger/ledtrig-activity.c  | 2 +-
+ drivers/leds/trigger/ledtrig-heartbeat.c | 2 +-
+ drivers/leds/trigger/ledtrig-pattern.c   | 2 +-
+ drivers/leds/trigger/ledtrig-transient.c | 2 +-
+ 4 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/isdn/hardware/mISDN/hfcmulti.c b/drivers/isdn/hardware/mISDN/hfcmulti.c
-index 4f7eaa17fb27..9c15c2c30e88 100644
---- a/drivers/isdn/hardware/mISDN/hfcmulti.c
-+++ b/drivers/isdn/hardware/mISDN/hfcmulti.c
-@@ -4543,10 +4543,8 @@ release_port(struct hfc_multi *hc, struct dchannel *dch)
+diff --git a/drivers/leds/trigger/ledtrig-activity.c b/drivers/leds/trigger/ledtrig-activity.c
+index 30bc9df03636..33cbf8413658 100644
+--- a/drivers/leds/trigger/ledtrig-activity.c
++++ b/drivers/leds/trigger/ledtrig-activity.c
+@@ -208,7 +208,7 @@ static void activity_deactivate(struct led_classdev *led_cdev)
+ {
+ 	struct activity_data *activity_data = led_get_trigger_data(led_cdev);
  
- 	spin_lock_irqsave(&hc->lock, flags);
+-	del_timer_sync(&activity_data->timer);
++	timer_shutdown_sync(&activity_data->timer);
+ 	kfree(activity_data);
+ 	clear_bit(LED_BLINK_SW, &led_cdev->work_flags);
+ }
+diff --git a/drivers/leds/trigger/ledtrig-heartbeat.c b/drivers/leds/trigger/ledtrig-heartbeat.c
+index 7fe0a05574d2..393b3ae832f4 100644
+--- a/drivers/leds/trigger/ledtrig-heartbeat.c
++++ b/drivers/leds/trigger/ledtrig-heartbeat.c
+@@ -151,7 +151,7 @@ static void heartbeat_trig_deactivate(struct led_classdev *led_cdev)
+ 	struct heartbeat_trig_data *heartbeat_data =
+ 		led_get_trigger_data(led_cdev);
  
--	if (dch->timer.function) {
--		del_timer(&dch->timer);
--		dch->timer.function = NULL;
--	}
-+	if (dch->timer.function)
-+		timer_shutdown(&dch->timer);
+-	del_timer_sync(&heartbeat_data->timer);
++	timer_shutdown_sync(&heartbeat_data->timer);
+ 	kfree(heartbeat_data);
+ 	clear_bit(LED_BLINK_SW, &led_cdev->work_flags);
+ }
+diff --git a/drivers/leds/trigger/ledtrig-pattern.c b/drivers/leds/trigger/ledtrig-pattern.c
+index 43a265dc4696..e996d61e3bd6 100644
+--- a/drivers/leds/trigger/ledtrig-pattern.c
++++ b/drivers/leds/trigger/ledtrig-pattern.c
+@@ -430,7 +430,7 @@ static void pattern_trig_deactivate(struct led_classdev *led_cdev)
+ 	if (led_cdev->pattern_clear)
+ 		led_cdev->pattern_clear(led_cdev);
  
- 	if (hc->ctype == HFC_TYPE_E1) { /* E1 */
- 		/* remove sync */
-diff --git a/drivers/isdn/mISDN/l1oip_core.c b/drivers/isdn/mISDN/l1oip_core.c
-index a77195e378b7..182e3f489c60 100644
---- a/drivers/isdn/mISDN/l1oip_core.c
-+++ b/drivers/isdn/mISDN/l1oip_core.c
-@@ -1236,8 +1236,8 @@ release_card(struct l1oip *hc)
+-	del_timer_sync(&data->timer);
++	timer_shutdown_sync(&data->timer);
  
- 	hc->shutdown = true;
+ 	led_set_brightness(led_cdev, LED_OFF);
+ 	kfree(data);
+diff --git a/drivers/leds/trigger/ledtrig-transient.c b/drivers/leds/trigger/ledtrig-transient.c
+index 80635183fac8..f111fa7635e5 100644
+--- a/drivers/leds/trigger/ledtrig-transient.c
++++ b/drivers/leds/trigger/ledtrig-transient.c
+@@ -180,7 +180,7 @@ static void transient_trig_deactivate(struct led_classdev *led_cdev)
+ {
+ 	struct transient_trig_data *transient_data = led_get_trigger_data(led_cdev);
  
--	del_timer_sync(&hc->keep_tl);
--	del_timer_sync(&hc->timeout_tl);
-+	timer_shutdown_sync(&hc->keep_tl);
-+	timer_shutdown_sync(&hc->timeout_tl);
- 
- 	cancel_work_sync(&hc->workq);
- 
-diff --git a/drivers/isdn/mISDN/timerdev.c b/drivers/isdn/mISDN/timerdev.c
-index abdf36ac3bee..83d6b484d3c6 100644
---- a/drivers/isdn/mISDN/timerdev.c
-+++ b/drivers/isdn/mISDN/timerdev.c
-@@ -74,7 +74,7 @@ mISDN_close(struct inode *ino, struct file *filep)
- 	while (!list_empty(list)) {
- 		timer = list_first_entry(list, struct mISDNtimer, list);
- 		spin_unlock_irq(&dev->lock);
--		del_timer_sync(&timer->tl);
-+		timer_shutdown_sync(&timer->tl);
- 		spin_lock_irq(&dev->lock);
- 		/* it might have been moved to ->expired */
- 		list_del(&timer->list);
-@@ -204,7 +204,7 @@ misdn_del_timer(struct mISDNtimerdev *dev, int id)
- 			list_del_init(&timer->list);
- 			timer->id = -1;
- 			spin_unlock_irq(&dev->lock);
--			del_timer_sync(&timer->tl);
-+			timer_shutdown_sync(&timer->tl);
- 			kfree(timer);
- 			return id;
- 		}
+-	del_timer_sync(&transient_data->timer);
++	timer_shutdown_sync(&transient_data->timer);
+ 	led_set_brightness_nosleep(led_cdev, transient_data->restore_state);
+ 	kfree(transient_data);
+ }
 -- 
 2.35.1
