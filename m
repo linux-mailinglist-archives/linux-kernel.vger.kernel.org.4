@@ -2,70 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0373619BA8
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 16:31:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F424619BAA
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 16:31:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232528AbiKDPbC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 11:31:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42324 "EHLO
+        id S232563AbiKDPbT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 11:31:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232172AbiKDPa7 (ORCPT
+        with ESMTP id S232560AbiKDPbP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 11:30:59 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 368432716E
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 08:30:57 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id kt23so14185052ejc.7
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 08:30:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fairphone.com; s=fair;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=l0/8QLq6i9UBaQrWixxpT1QN5F499hppxzKmDfSPo+o=;
-        b=QEPWfvV5o0/xQrLseMnsrB2cPgofxv3zH/nstHYd2ezRCYfPwC8IKVAHC/RDJpIAOm
-         QNi1POh6NYqgDxggTNQt77PFFTL3YbTyP6Q1+uTZQYDDSHa7wuWbJbqtJf/cX2bUUohM
-         245D5iJmIRgkb5mgPEhTPsiM1JBVQ4XU6qH/1Hu8qDhG392OsVwob5TS5yGG2C2MQD3i
-         QjZ/J4LHUFzaPDjoH3ujwaWhvYPpkcrmc4C5xpcZNXUu9CGVpCKgs4ttn7nYfhO4yLjh
-         vVPHK2vAULnKhoCyKzvVXLgTw3eZmKoyclloKeHJOs+yGWqXDJ5hbgPdr5bQNNMFe+m1
-         J89g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=l0/8QLq6i9UBaQrWixxpT1QN5F499hppxzKmDfSPo+o=;
-        b=55kKCWAMhOVuOUqvpvFNGEDrVaHXI5Gwi8k62QSr2yRWFwLa8frimRf3mLmfRs20Um
-         fQXeWCFX/PajxPfcsMMykegeBXNrjgfLyXJTGokLNy1KLPt8OTnPoSTpRanpv/mv+Rmw
-         I0Goz9s1Uy9Lkh7FqqIzyjwLhjQzc1ccpddszP42zOA1Bv4AF8pss9eNR27CS2pbB0Px
-         PEsLJKzDI/Nk5lhuxADxqBG3CfyerUyK+ec6itqZIC1JNsr0/l9rX1v2ou1HgK7Gby4K
-         6sYqg1zu0Nl5PG+pQeHe0r9vzL7uiTB6IY1bBDgCeg0bmb5cMGmn5hsshgFERxkesKbY
-         /9CA==
-X-Gm-Message-State: ACrzQf1VdvddWi0xPPJrodCm6oiLMY39bOFTv09qTbFAzZ6aFJK0St+v
-        qUedfFG/A2I72zDTewaqYRq2HA==
-X-Google-Smtp-Source: AMsMyM6Qm9G+ineNjR0kpLmP9LlNavjWQ8XENp+/k3yVxBWw3w6JPL3+riB7tItz0v4wzrMvO80ICA==
-X-Received: by 2002:a17:906:3852:b0:78d:b3d2:97a9 with SMTP id w18-20020a170906385200b0078db3d297a9mr34237279ejc.565.1667575855783;
-        Fri, 04 Nov 2022 08:30:55 -0700 (PDT)
-Received: from otso.arnhem.chello.nl (k10064.upc-k.chello.nl. [62.108.10.64])
-        by smtp.gmail.com with ESMTPSA id es11-20020a056402380b00b00458898fe90asm2059971edb.5.2022.11.04.08.30.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Nov 2022 08:30:55 -0700 (PDT)
-From:   Luca Weiss <luca.weiss@fairphone.com>
-To:     linux-arm-msm@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Luca Weiss <luca.weiss@fairphone.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Venkata Narendra Kumar Gutta <vnkgutta@codeaurora.org>,
-        Evan Green <evgreen@chromium.org>, linux-kernel@vger.kernel.org
-Subject: [PATCH] soc: qcom: llcc: make irq truly optional
-Date:   Fri,  4 Nov 2022 16:30:41 +0100
-Message-Id: <20221104153041.412020-1-luca.weiss@fairphone.com>
-X-Mailer: git-send-email 2.38.1
+        Fri, 4 Nov 2022 11:31:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DD8F2E6AA;
+        Fri,  4 Nov 2022 08:31:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BFDEA62269;
+        Fri,  4 Nov 2022 15:31:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8C8BC433D7;
+        Fri,  4 Nov 2022 15:31:10 +0000 (UTC)
+Message-ID: <74f2c9cc-4856-4985-5b37-13ee20411b32@xs4all.nl>
+Date:   Fri, 4 Nov 2022 16:31:09 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH v2 00/11] media: cedrus: Format handling improvements and
+ 10-bit HEVC support
+Content-Language: en-US
+To:     Jernej Skrabec <jernej.skrabec@gmail.com>, mripard@kernel.org,
+        paul.kocialkowski@bootlin.com
+Cc:     mchehab@kernel.org, gregkh@linuxfoundation.org, wens@csie.org,
+        samuel@sholland.org, linux-media@vger.kernel.org,
+        linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+References: <20221102180810.267252-1-jernej.skrabec@gmail.com>
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+In-Reply-To: <20221102180810.267252-1-jernej.skrabec@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,31 +51,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The function platform_get_irq prints an error message into the kernel
-log when the irq isn't found.
+Hi Jernej,
 
-Since the interrupt is actually optional and not provided by some SoCs,
-use platform_get_irq_optional which does not print an error message.
+On 02/11/2022 19:07, Jernej Skrabec wrote:
+> While my first intention was to just add 10-bit HEVC handling, I noticed
+> a few format handling issues and a bit of redundancy in some cases. Final
+> result is that driver now sticks to stateless decoder rules better.
+> 
+> Format handling improvements:
+> 1. Default format selection is now based on HW capabilities. Before, MPEG2
+>    was hardcoded but some Cedrus variants don't actually support it.
+> 2. Controls are registered only if related codec is supported by HW.
+> 3. Untiled output format is preferred, if supported, over tiled one. All
+>    display engine cores support untiled format, but only first generation
+>    supports tiled one.
+> 
+> I hope this makes Cedrus eligible for destaging.
+> 
+> Best regards,
+> Jernej
+> 
+> Changes from v1:
+> - collected acks, except for patch 5, which was changed
+> - use cedrus_is_capable() for cedrus_find_format() too (patch 4)
+> - tightly pack control pointers in ctx->ctrls[] (patch 5)
+> 
+> Jernej Skrabec (11):
+>   media: cedrus: remove superfluous call
+>   media: cedrus: Add format reset helpers
+>   media: cedrus: use helper to set default formats
+>   media: cedrus: Add helper for checking capabilities
+>   media: cedrus: Filter controls based on capability
+>   media: cedrus: set codec ops immediately
+>   media: cedrus: Remove cedrus_codec enum
+>   media: cedrus: prefer untiled capture format
+>   media: cedrus: initialize controls a bit later
 
-Fixes: c081f3060fab ("soc: qcom: Add support to register LLCC EDAC driver")
-Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
----
- drivers/soc/qcom/llcc-qcom.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I'm going to merge the first 9 patches, but leave out the last
+two. It's weird what happens there, and I think those two need a
+bit more work.
 
-diff --git a/drivers/soc/qcom/llcc-qcom.c b/drivers/soc/qcom/llcc-qcom.c
-index 8b7e8118f3ce..82c3cfdcc560 100644
---- a/drivers/soc/qcom/llcc-qcom.c
-+++ b/drivers/soc/qcom/llcc-qcom.c
-@@ -849,7 +849,7 @@ static int qcom_llcc_probe(struct platform_device *pdev)
- 	if (ret)
- 		goto err;
- 
--	drv_data->ecc_irq = platform_get_irq(pdev, 0);
-+	drv_data->ecc_irq = platform_get_irq_optional(pdev, 0);
- 	if (drv_data->ecc_irq >= 0) {
- 		llcc_edac = platform_device_register_data(&pdev->dev,
- 						"qcom_llcc_edac", -1, drv_data,
--- 
-2.38.1
+Regards,
+
+	Hans
+
+>   media: cedrus: Adjust buffer size based on control values
+>   media: cedrus: h265: Support decoding 10-bit frames
+> 
+>  drivers/staging/media/sunxi/cedrus/cedrus.c   | 102 +++++----
+>  drivers/staging/media/sunxi/cedrus/cedrus.h   |  22 +-
+>  .../staging/media/sunxi/cedrus/cedrus_dec.c   |   4 +-
+>  .../staging/media/sunxi/cedrus/cedrus_h264.c  |   2 +-
+>  .../staging/media/sunxi/cedrus/cedrus_h265.c  |  37 +++-
+>  .../staging/media/sunxi/cedrus/cedrus_hw.c    |  18 +-
+>  .../staging/media/sunxi/cedrus/cedrus_hw.h    |   2 +-
+>  .../staging/media/sunxi/cedrus/cedrus_mpeg2.c |   2 +-
+>  .../staging/media/sunxi/cedrus/cedrus_regs.h  |  16 ++
+>  .../staging/media/sunxi/cedrus/cedrus_video.c | 200 ++++++++++--------
+>  .../staging/media/sunxi/cedrus/cedrus_video.h |   2 +
+>  .../staging/media/sunxi/cedrus/cedrus_vp8.c   |   2 +-
+>  12 files changed, 244 insertions(+), 165 deletions(-)
+> 
+> --
+> 2.38.1
+> 
 
