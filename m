@@ -2,147 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7DE4618D2D
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 01:26:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EB42618D38
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 01:31:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230254AbiKDA0U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 20:26:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44146 "EHLO
+        id S231128AbiKDAbO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 20:31:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbiKDA0S (ORCPT
+        with ESMTP id S230496AbiKDAbL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 20:26:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0625DF34
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 17:26:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3A6686206A
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 00:26:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8AC03C433C1;
-        Fri,  4 Nov 2022 00:26:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667521576;
-        bh=Qeet/mfQtqAULjoGopJ7IxIdroJcaJ0GW6y0KQrk2AY=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=TBEg26IJMzoSY8V5enBN/5CFbpT8LOceojAkabxZGEzhKq99VbPOnIWk6iGlhn2ti
-         ykf0y05A+ddtVfWFT+Z9rI6dI1bS/8xk+JYTZUz+33nSzzcHL0LdmqJ6fFxDA6bFu+
-         pxknsiA9eb5bk/0rKrGyYMp8+D5P6NeKU9j0LFuaWFVFQNBlcJ2wtCh4gAPKXsWDcz
-         ollREZKwLKWtM9d2OCMhcqmdN4MHIUSg/gGMqBzMyK4/s3ME17FXRUcY26TiEpaMZ2
-         Wuy+WczzzOT9JcRsHRpByn5hoRXTGA6RgdQi+VH2r+8bVHPyEarHupt4nSv2ArwDRW
-         GfGDpHgZvRqVA==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 2E3B85C097E; Thu,  3 Nov 2022 17:26:16 -0700 (PDT)
-Date:   Thu, 3 Nov 2022 17:26:16 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Waiman Long <longman@redhat.com>
-Cc:     tglx@linutronix.de, linux-kernel@vger.kernel.org,
-        john.stultz@linaro.org, sboyd@kernel.org, corbet@lwn.net,
-        Mark.Rutland@arm.com, maz@kernel.org, kernel-team@meta.com,
-        neeraju@codeaurora.org, ak@linux.intel.com, feng.tang@intel.com,
-        zhengjun.xing@intel.com, John Stultz <jstultz@google.com>
-Subject: Re: [PATCH clocksource 2/2] clocksource: Exponential backoff for
- load-induced bogus watchdog reads
-Message-ID: <20221104002616.GH5600@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20221102184001.GA1306489@paulmck-ThinkPad-P17-Gen-1>
- <20221102184009.1306751-2-paulmck@kernel.org>
- <1fdbdf78-cdca-975f-7f57-e391263d0aec@redhat.com>
- <20221103204910.GF5600@paulmck-ThinkPad-P17-Gen-1>
- <61470eb8-fc3c-7f95-881e-03da1805b5ac@redhat.com>
+        Thu, 3 Nov 2022 20:31:11 -0400
+Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E55B2228A;
+        Thu,  3 Nov 2022 17:31:08 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R111e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VTuQtrw_1667521864;
+Received: from B-P7TQMD6M-0146.local(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VTuQtrw_1667521864)
+          by smtp.aliyun-inc.com;
+          Fri, 04 Nov 2022 08:31:06 +0800
+Date:   Fri, 4 Nov 2022 08:31:04 +0800
+From:   Gao Xiang <hsiangkao@linux.alibaba.com>
+To:     Dave Chinner <david@fromorbit.com>
+Cc:     linux-xfs@vger.kernel.org, "Darrick J. Wong" <djwong@kernel.org>,
+        Dave Chinner <dchinner@redhat.com>,
+        Brian Foster <bfoster@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Zirong Lang <zlang@redhat.com>
+Subject: Re: [PATCH v2] xfs: extend the freelist before available space check
+Message-ID: <Y2RdSCozXhKPeN8V@B-P7TQMD6M-0146.local>
+Mail-Followup-To: Dave Chinner <david@fromorbit.com>,
+        linux-xfs@vger.kernel.org, "Darrick J. Wong" <djwong@kernel.org>,
+        Dave Chinner <dchinner@redhat.com>,
+        Brian Foster <bfoster@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>, Zirong Lang <zlang@redhat.com>
+References: <20221103094639.39984-1-hsiangkao@linux.alibaba.com>
+ <20221103131025.40064-1-hsiangkao@linux.alibaba.com>
+ <20221103230542.GK3600936@dread.disaster.area>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <61470eb8-fc3c-7f95-881e-03da1805b5ac@redhat.com>
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221103230542.GK3600936@dread.disaster.area>
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 03, 2022 at 08:20:27PM -0400, Waiman Long wrote:
-> On 11/3/22 16:49, Paul E. McKenney wrote:
-> > commit da44b8af99222ff8761a98ca8c00837a7d607d28
-> > Author: Paul E. McKenney<paulmck@kernel.org>
-> > Date:   Fri Oct 28 10:38:58 2022 -0700
+Hi Dave,
+
+On Fri, Nov 04, 2022 at 10:05:42AM +1100, Dave Chinner wrote:
+> On Thu, Nov 03, 2022 at 09:10:25PM +0800, Gao Xiang wrote:
+> > There is a long standing issue which could cause fs shutdown due to
+> > inode extent to btree conversion failure right after an extent
+> > allocation in the same AG, which is absolutely unexpected due to the
+> > proper minleft reservation in the previous allocation.  Brian once
+> > addressed one of the root cause [1], however, such symptom can still
+> > occur after the commit is merged as reported [2], and our cloud
+> > environment is also suffering from this issue.
 > > 
-> >      clocksource: Exponential backoff for load-induced bogus watchdog reads
-> >      The clocksource watchdog will reject measurements that are excessively
-> >      delayed, that is, by more than 1.5 seconds beyond the intended 0.5-second
-> >      watchdog interval.  On an extremely busy system, this can result in a
-> >      console message being printed every two seconds.  This is excessively
-> >      noisy for a non-error condition.
-> >      Therefore, apply exponential backoff to these messages.  This exponential
-> >      backoff is capped at 1024 times the watchdog interval, which comes to
-> >      not quite one message per ten minutes.
-> >      Please note that the bogus watchdog reads that occur when the watchdog
-> >      interval is less than 0.125 seconds are still printed unconditionally
-> >      because these likely correspond to a serious error condition in the
-> >      timer code or hardware.
-> >      [ paulmck: Apply Feng Tang feedback. ]
-> >      [ paulmck: Apply Waiman Long feedback. ]
-> >      Reported-by: Waiman Long<longman@redhat.com>
-> >      Reported-by: Feng Tang<feng.tang@intel.com>
-> >      Signed-off-by: Paul E. McKenney<paulmck@kernel.org>
-> >      Cc: John Stultz<jstultz@google.com>
-> >      Cc: Thomas Gleixner<tglx@linutronix.de>
-> >      Cc: Stephen Boyd<sboyd@kernel.org>
-> >      Cc: Feng Tang<feng.tang@intel.com>
-> >      Cc: Waiman Long<longman@redhat.com>
+> > From the description of the commit [1], I found that Zirong has an
+> > in-house stress test reproducer for this issue, therefore I asked him
+> > to reproduce again and he confirmed that such issue can still be
+> > reproducable on RHEL 9.
 > > 
-> > diff --git a/include/linux/clocksource.h b/include/linux/clocksource.h
-> > index 1d42d4b173271..23b73f2293d6d 100644
-> > --- a/include/linux/clocksource.h
-> > +++ b/include/linux/clocksource.h
-> > @@ -125,6 +125,9 @@ struct clocksource {
-> >   	struct list_head	wd_list;
-> >   	u64			cs_last;
-> >   	u64			wd_last;
-> > +	u64			wd_last_bogus;
-> > +	int			wd_bogus_shift;
-> > +	unsigned long		wd_bogus_count;
-> >   #endif
-> >   	struct module		*owner;
-> >   };
-> > diff --git a/kernel/time/clocksource.c b/kernel/time/clocksource.c
-> > index 3f5317faf891f..1eefb56505350 100644
-> > --- a/kernel/time/clocksource.c
-> > +++ b/kernel/time/clocksource.c
-> > @@ -442,14 +442,33 @@ static void clocksource_watchdog(struct timer_list *unused)
-> >   		/* Check for bogus measurements. */
-> >   		wdi = jiffies_to_nsecs(WATCHDOG_INTERVAL);
-> > -		if (wd_nsec < (wdi >> 2)) {
-> > -			/* This usually indicates broken timer code or hardware. */
-> > -			pr_warn("timekeeping watchdog on CPU%d: Watchdog clocksource '%s' advanced only %lld ns during %d-jiffy time interval, skipping watchdog check.\n", smp_processor_id(), watchdog->name, wd_nsec, WATCHDOG_INTERVAL);
-> > +		if (wd_nsec > (wdi << 2) || cs_nsec > (wdi << 2)) {
-> > +			bool needwarn = false;
-> > +			u64 wd_lb;
-> > +
-> > +			cs->wd_bogus_count++;
-> > +			if (!cs->wd_bogus_shift) {
-> > +				needwarn = true;
-> > +			} else {
-> > +				delta = clocksource_delta(wdnow, cs->wd_last_bogus, watchdog->mask);
-> > +				wd_lb = clocksource_cyc2ns(delta, watchdog->mult, watchdog->shift);
-> > +				if ((1 << cs->wd_bogus_shift) * wdi <= wd_lb)
-> > +					needwarn = true;
-> > +			}
-> > +			if (needwarn) {
-> > +				/* This can happen on busy systems, which can delay the watchdog. */
-> > +				pr_warn("timekeeping watchdog on CPU%d: Watchdog clocksource '%s' advanced an excessive %lld ns during %d-jiffy time interval (%lu additional), probable CPU overutilization, skipping watchdog check.\n", smp_processor_id(), watchdog->name, wd_nsec, WATCHDOG_INTERVAL, cs->wd_bogus_count);
+> > Thanks to him, after dumping the transaction log items, I think
+> > the root cause is as below:
+> >  1. Allocate space with the following condition:
+> >     freeblks: 18304 pagf_flcount: 6
+> >     reservation: 18276 need (min_free): 6
+> >     args->minleft: 1
+> >     available = freeblks + agflcount - reservation - need - minleft
+> >               = 18304 + min(6, 6) - 18276 - 6 - 1 = 27
+> > 
+> >     The first allocation check itself is ok;
+> > 
+> >  2. At that time, the AG state is
+> >     AGF Buffer: (XAGF)
+> >         ver:1  seq#:3  len:2621424
+> >         root BNO:9  CNT:7
+> >         level BNO:2  CNT:2
+> >         1st:64  last:69  cnt:6  freeblks:18277  longest:6395
+>                                   ^^^^^^^^^^^^^^
 > 
-> Just one question, does "%lu additional" means the number of bogus count
-> that doesn't meet the needwarn requirement and hence skipped. If so, I think
-> you have to use "cs->wd_bogus_cnt - 1". Other than that, the change looks
-> good to me.
+> Hold on - pag->pagf_freeblks != agf->freeblks, and if we start with
+> the agf freeblocks:
+> 
+> 	available = 18277 + 6 - 18276 - 6 - 1 = 0
+> 
+> IOWs, the allocation should never selected this AG in the first
+> place.
+> 
+> So why is pag->pagf_freeblks not equal to agf->freeblks when this
+> allocation was first checked? It's clearly not because the AGFL is
+> unpopulated - both the perag and the agf indicate it has the minimum
+> 6 blocks already allocated....
 
-It means the number since the last report, or, for the first report,
-the number since boot.
+Thanks for the reply.
 
-Does that work for you?
+I may mispresent 2) here since there are several AGF agno 3 recording,
+the last completed trans printed by "xfs_logprint" is:
 
-							Thanx, Paul
+============================================================================
+TRANS: tid:0xaf57a744  #items:621  trans:0xaf57a744  q:0x56104c44be70
+CUD: cnt:1 total:1 a:0x56104c44e320 len:16
+CUD:  #regs: 1                   id: 0xff110004e02bc1e8
+EFI: cnt:1 total:1 a:0x56104c447b30 len:32
+        EFI:  #regs:1   num_extents:1  id:0xff110001bd8c56e0
+        (s: 0xe7cc8d, l: 3)
+EFD: cnt:1 total:1 a:0x56104c42d1b0 len:32
+        EFD:  #regs: 1  num_extents: 1  id: 0xff110001bd8c56e0
+BUF: cnt:2 total:2 a:0x56104c42f5c0 len:24 a:0x56104c4712e0 len:128
+        BUF:  #regs:2   start blkno:0x3bffe81   len:1   bmap size:1   flags:0x2800
+        AGF Buffer: (XAGF)
+                ver:1  seq#:3  len:2621424
+                root BNO:9  CNT:7
+                level BNO:2  CNT:2
+                1st:64  last:69  cnt:6  freeblks:18304  longest:6395
+
+So I think freeblks starts from 18304.
+
+18277 is just an intermediate state in my mind (Actually there is also such AGF
+record, but that is not the latest one because this is a stress test), sorry
+for this.
+
+In short, in order to do the first allocation, I think it allocates from
+ freeblks 18304 -> 18276
+ agflcount 6->5
+And the second one fails,
+     available = freeblks + agflcount - reservation - need - minleft
+               = 18277 + min(5, 6) - 18276 - 6 - 0 = 0   < 1
+I also think it can happen in the current codebase.
+
+Full xfs_logprint is too large to send by email to the mailing list, but
+I could send this separately to you if really needed.
+
+My debugging message catched when xfs_trans_cancel() attached in the
+following reply of this email.
+
+Thanks,
+Gao Xiang
+
+> 
+> Cheers,
+> 
+> Dave.
+> -- 
+> Dave Chinner
+> david@fromorbit.com
