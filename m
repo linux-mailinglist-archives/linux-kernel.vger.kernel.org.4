@@ -2,97 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D414F6192DF
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 09:37:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E226D6192D6
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 09:35:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230098AbiKDIhu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 04:37:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54954 "EHLO
+        id S231208AbiKDIfx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 04:35:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbiKDIhq (ORCPT
+        with ESMTP id S230456AbiKDIfu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 04:37:46 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F876F77
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 01:37:46 -0700 (PDT)
-Received: from kwepemi500008.china.huawei.com (unknown [172.30.72.53])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4N3YsZ3cBKz15MHy;
-        Fri,  4 Nov 2022 16:37:38 +0800 (CST)
-Received: from huawei.com (10.67.175.83) by kwepemi500008.china.huawei.com
- (7.221.188.139) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Fri, 4 Nov
- 2022 16:37:43 +0800
-From:   ruanjinjie <ruanjinjie@huawei.com>
-To:     <mst@redhat.com>, <jasowang@redhat.com>, <sgarzare@redhat.com>,
-        <eperezma@redhat.com>, <gautam.dawar@xilinx.com>,
-        <elic@nvidia.com>, <virtualization@lists.linux-foundation.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <ruanjinjie@huawei.com>
-Subject: [PATCH] vdpa_sim: fix possible memory leak in vdpasim_net_init() and vdpasim_blk_init()
-Date:   Fri, 4 Nov 2022 16:34:23 +0800
-Message-ID: <20221104083423.2090463-1-ruanjinjie@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 4 Nov 2022 04:35:50 -0400
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8447126574
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 01:35:49 -0700 (PDT)
+Received: by mail-yb1-xb34.google.com with SMTP id j130so5001431ybj.9
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 01:35:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=mUpvDHPp/KQbmUJ+TdnjII/BPksPsXvuEN05nH99p+w=;
+        b=MzqadLxIR9b6+LEJJ6HNsij9urCh0GbULmcpnN6dT5y91ETH4PNxDwJn56S2GxQLvz
+         ugMDI58sSH4xeUjXIHk3xGmoUp4Kb9Ir9KT9YYkbLVbAjpF7vUunAUDxOJSaK6lSNFQ1
+         4wRLynn7XKYZ5g3N1wOl0lZCc+rwXJA3axPgZbsV0ymxMJEjh2/ewOeyFOLEYAu3jX5R
+         1rB/oyzOEJ183FqFCmVDuRkDrBlfcROOq4HwqCUsoogizfDfrJFpRfb3GPpNH9oGEbyI
+         GbgICsAfSveF0MO/15ZLaapvsewpeGSKCUxDYSLY5ypcK1eaDegEA86YGIazXmWb5GS9
+         57oA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=mUpvDHPp/KQbmUJ+TdnjII/BPksPsXvuEN05nH99p+w=;
+        b=vc1uGXB1oDJkdjvg4EpwNWuVD7o4Lt5mG4PLcg5b8eFdwrRWmPNAcnPIfcI/KhnI2E
+         22wwpw8U0uJAK8b8iHYBrL5IWPvZw8Z+SsWONbygwOjs0JTktU4j7KHohBwkcI4AhGQD
+         AUoMcXWSzPcphBsfrCfDedFmwYTR9KBNHL5lAG+pNqEqlzj4MtFVeAQ/us3uFVK3LdeU
+         Psic63XfCp6B8Oh07hNBo+L3exFLqjFq574pf0qOBKbMsxKCnrJ3RtvRLiyeQd/LBqD/
+         TorbG+5RlMdGdlUV9E8VCGEjBH0R8BEG3hdMnNa1XfH+Ox+pB7vp5Uv5mvgQuiUNqMW6
+         E7xw==
+X-Gm-Message-State: ACrzQf1Xzn4vlu3htmFvZjEATYwI9niG4IaJZk5Ehm370yhnLOw2vx/5
+        6I+h8E6UYhLoE/vdgj8MWa7UjJjeRnklIHBcoUA=
+X-Google-Smtp-Source: AMsMyM6fG11B5iuPoqPwVLezhYfdgTc8yZq6qpMJjcuzWv4SacXQUbPlVZCOSNMseNsaIUVKR0dVYW6yukdbq16/f1E=
+X-Received: by 2002:a25:6854:0:b0:6ca:29fd:b6ea with SMTP id
+ d81-20020a256854000000b006ca29fdb6eamr34035095ybc.318.1667550948644; Fri, 04
+ Nov 2022 01:35:48 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.175.83]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemi500008.china.huawei.com (7.221.188.139)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221104070523.60296-1-liaochang1@huawei.com>
+In-Reply-To: <20221104070523.60296-1-liaochang1@huawei.com>
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Date:   Fri, 4 Nov 2022 09:35:37 +0100
+Message-ID: <CAKXUXMxi_aqnvCmYjakQzoYvYqqwrvMnFt-czLV1iUnO0TnScg@mail.gmail.com>
+Subject: Re: [PATCH -next v2] checkpatch: Add check for array allocator family
+ argument order
+To:     Liao Chang <liaochang1@huawei.com>
+Cc:     apw@canonical.com, joe@perches.com, dwaipayanray1@gmail.com,
+        linux-kernel@vger.kernel.org, bagasdotme@gmail.com,
+        pbonzini@redhat.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If device_register() returns error in vdpasim_net_init() or
-vdpasim_blk_init(), name of kobject which is allocated in dev_set_name()
-called in device_add() is leaked.
+On Fri, Nov 4, 2022 at 8:08 AM Liao Chang <liaochang1@huawei.com> wrote:
+>
+> These array allocator family are sometimes misused with the first and
+> second arguments switchted.
 
-As comment of device_add() says, it should call put_device() to drop
-the reference count that was set in device_initialize() when it fails,
-so the name can be freed in kobject_cleanup().
+Just a nit:
 
-Signed-off-by: ruanjinjie <ruanjinjie@huawei.com>
----
- drivers/vdpa/vdpa_sim/vdpa_sim_blk.c | 4 +++-
- drivers/vdpa/vdpa_sim/vdpa_sim_net.c | 4 +++-
- 2 files changed, 6 insertions(+), 2 deletions(-)
+s/switchted/switched/
 
-diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c b/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c
-index c6db1a1baf76..f745926237a8 100644
---- a/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c
-+++ b/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c
-@@ -427,8 +427,10 @@ static int __init vdpasim_blk_init(void)
- 	int ret;
- 
- 	ret = device_register(&vdpasim_blk_mgmtdev);
--	if (ret)
-+	if (ret) {
-+		put_device(&vdpasim_blk_mgmtdev);
- 		return ret;
-+	}
- 
- 	ret = vdpa_mgmtdev_register(&mgmt_dev);
- 	if (ret)
-diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim_net.c b/drivers/vdpa/vdpa_sim/vdpa_sim_net.c
-index c3cb225ea469..11f5a121df24 100644
---- a/drivers/vdpa/vdpa_sim/vdpa_sim_net.c
-+++ b/drivers/vdpa/vdpa_sim/vdpa_sim_net.c
-@@ -305,8 +305,10 @@ static int __init vdpasim_net_init(void)
- 	int ret;
- 
- 	ret = device_register(&vdpasim_net_mgmtdev);
--	if (ret)
-+	if (ret) {
-+		put_device(&vdpasim_net_mgmtdev);
- 		return ret;
-+	}
- 
- 	ret = vdpa_mgmtdev_register(&mgmt_dev);
- 	if (ret)
--- 
-2.25.1
+But probably you actually mean "swapped". I think there is a slight
+difference between the two words, "switched" and "swapped". And here
+the arguments are swapped. Note: I am also not a native speaker.
 
+For the implementation change:
+
+Acked-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+
+How many new findings are now identified with this extended check on
+linux-next? Could you run checkpatch on all files of linux-next and
+share the new findings? Then we can do a quick scan if some instances
+should be immediately fixed or some janitor should follow through with
+such a task.
+
+Lukas
+
+>
+> Same issue with calloc, kvcalloc, kvmalloc_array etc.
+>
+> Bleat if sizeof is the first argument.
+>
+> Link: https://lore.kernel.org/lkml/5374345c-7973-6a3c-d559-73bf4ac15079@redhat.com/
+> Signed-off-by: Liao Chang <liaochang1@huawei.com>
+> Acked-by: Joe Perches <joe@perches.com>
+> ---
+> v2:
+> 1. Acked-by Joe Perches.
+> 2. Use lore links in Link tag.
+>
+> ---
+>  scripts/checkpatch.pl | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
+> index 1e5e66ae5a52..a9a9dc277cff 100755
+> --- a/scripts/checkpatch.pl
+> +++ b/scripts/checkpatch.pl
+> @@ -7128,7 +7128,7 @@ sub process {
+>                 }
+>
+>  # check for alloc argument mismatch
+> -               if ($line =~ /\b((?:devm_)?(?:kcalloc|kmalloc_array))\s*\(\s*sizeof\b/) {
+> +               if ($line =~ /\b((?:devm_)?((?:k|kv)?(calloc|malloc_array)(?:_node)?))\s*\(\s*sizeof\b/) {
+>                         WARN("ALLOC_ARRAY_ARGS",
+>                              "$1 uses number as first arg, sizeof is generally wrong\n" . $herecurr);
+>                 }
+> --
+> 2.17.1
+>
