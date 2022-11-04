@@ -2,172 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9787F6192B9
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 09:29:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DA616192D0
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 09:33:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231201AbiKDI3o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 04:29:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49760 "EHLO
+        id S230376AbiKDId0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 04:33:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230460AbiKDI3i (ORCPT
+        with ESMTP id S230029AbiKDIdX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 04:29:38 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13F802610E;
-        Fri,  4 Nov 2022 01:29:34 -0700 (PDT)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2A46sh0l024757;
-        Fri, 4 Nov 2022 08:28:50 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=qcppdkim1;
- bh=F523UAf1/s3baROaXRYF1jL25q1n1tGzBM/u38xKkvk=;
- b=TBEhM615QX7w14CYbKOAnSSZbJ8Nwe5pNgzgsEXzywf4ZLCLdmtywAw+T4V088hTitTk
- 8A0glYME6NoXsemC4khtMfVMfPzipMbvsVw5VAfyfhNLcUvAwC3CErwSEhbopg0npbPz
- 8RMpBvhDGtWQht/t07CwgLcg8r+m/G+28hAgBd7WlSGnwEz7VKmF2f2OVwvEPrV1tSlU
- Nbf5kLBG9ntg8BNxP2aJQdDDuRaSlfIfi6qPIvAMLbbtlpT8g1Dz49IYURczn1BBTWel
- ARG80xOD41muE/hqXU9E8vcC2mVSTohQzoG6ESgSfJ+b/kcLEERjh5tMDdStBrlP9iOU bQ== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kmvdy8djp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 04 Nov 2022 08:28:50 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2A48SncK006786
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 4 Nov 2022 08:28:49 GMT
-Received: from youghand-linux.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.29; Fri, 4 Nov 2022 01:28:46 -0700
-From:   Youghandhar Chintala <quic_youghand@quicinc.com>
-To:     <ath11k@lists.infradead.org>
-CC:     <linux-wireless@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <quic_mpubbise@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
-        "Youghandhar Chintala" <quic_youghand@quicinc.com>,
-        kernel test robot <lkp@intel.com>
-Subject: [PATCH v2] wifi: ath10k: Add WLAN firmware image version info into smem
-Date:   Fri, 4 Nov 2022 13:58:28 +0530
-Message-ID: <20221104082828.14386-1-quic_youghand@quicinc.com>
-X-Mailer: git-send-email 2.38.0
+        Fri, 4 Nov 2022 04:33:23 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6368C17;
+        Fri,  4 Nov 2022 01:33:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667550800; x=1699086800;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   mime-version:in-reply-to;
+  bh=LBhw6eQcS71AQTHPgtJidpmNdTMwoZDoM5imFH5VGeA=;
+  b=VtuW8FrM4T9Pr7uZdJIrQ3z55NoK7YDpcRqyxOXaUIktGDj0O0kSKPc/
+   Tr79ep6jfD59cgU1/e/YA9/fi4q+686UL25P3g6n0jqXJmLyzu9BdZiYu
+   kbbxJi3qPRwkMwRHDV/pM6BmxYI9YkDU3EzQ74662jnALnicw1fJiLigs
+   AylKZiiM4oRcOV/5RQGzhabQzUNIhe5MLREEVvZLovIilcqvwXpxXq8Ak
+   6ffobuKuR1IyqbslUrxao3a6GCrpIuzIay8OeDhu4zuZ57LMEWjHFQWER
+   XtOKe0tVuutRHiSvAR6xI/fIIAUYzXvlvTmr8QLPrze7X6JfjUhg0bN74
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10520"; a="289632654"
+X-IronPort-AV: E=Sophos;i="5.96,136,1665471600"; 
+   d="scan'208";a="289632654"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2022 01:33:20 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10520"; a="637512630"
+X-IronPort-AV: E=Sophos;i="5.96,136,1665471600"; 
+   d="scan'208";a="637512630"
+Received: from chaop.bj.intel.com (HELO localhost) ([10.240.193.75])
+  by fmsmga007.fm.intel.com with ESMTP; 04 Nov 2022 01:33:10 -0700
+Date:   Fri, 4 Nov 2022 16:28:43 +0800
+From:   Chao Peng <chao.p.peng@linux.intel.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>, tabba@google.com,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com
+Subject: Re: [PATCH v9 5/8] KVM: Register/unregister the guest private memory
+ regions
+Message-ID: <20221104082843.GA4142342@chaop.bj.intel.com>
+Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
+References: <20221025151344.3784230-1-chao.p.peng@linux.intel.com>
+ <20221025151344.3784230-6-chao.p.peng@linux.intel.com>
+ <Y2RJFWplouV2iF5E@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: ViL93cA0mf8EPKql2a8wzNtxT70RzuSY
-X-Proofpoint-ORIG-GUID: ViL93cA0mf8EPKql2a8wzNtxT70RzuSY
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-04_02,2022-11-03_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 bulkscore=0
- priorityscore=1501 impostorscore=0 phishscore=0 spamscore=0 clxscore=1011
- mlxscore=0 malwarescore=0 lowpriorityscore=0 suspectscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211040055
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y2RJFWplouV2iF5E@google.com>
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In a SoC based solution, it would be useful to know the versions of the
-various binary firmware blobs the system is running on. On a QCOM based
-SoC, this info can be obtained from socinfo debugfs infrastructure. For
-this to work, respective subsystem drivers have to export the firmware
-version information to an SMEM based version information table.
+On Thu, Nov 03, 2022 at 11:04:53PM +0000, Sean Christopherson wrote:
+> On Tue, Oct 25, 2022, Chao Peng wrote:
+> > @@ -4708,6 +4802,24 @@ static long kvm_vm_ioctl(struct file *filp,
+> >  		r = kvm_vm_ioctl_set_memory_region(kvm, &mem);
+> >  		break;
+> >  	}
+> > +#ifdef CONFIG_KVM_GENERIC_PRIVATE_MEM
+> > +	case KVM_MEMORY_ENCRYPT_REG_REGION:
+> > +	case KVM_MEMORY_ENCRYPT_UNREG_REGION: {
+> 
+> I'm having second thoughts about usurping KVM_MEMORY_ENCRYPT_(UN)REG_REGION.  Aside
+> from the fact that restricted/protected memory may not be encrypted, there are
+> other potential use cases for per-page memory attributes[*], e.g. to make memory
+> read-only (or no-exec, or exec-only, etc...) without having to modify memslots.
+> 
+> Any paravirt use case where the attributes of a page are effectively dictated by
+> the guest is going to run into the exact same performance problems with memslots,
+> which isn't suprising in hindsight since shared vs. private is really just an
+> attribute, albeit with extra special semantics.
+> 
+> And if we go with a brand new ioctl(), maybe someday in the very distant future
+> we can deprecate and delete KVM_MEMORY_ENCRYPT_(UN)REG_REGION.
+> 
+> Switching to a new ioctl() should be a minor change, i.e. shouldn't throw too big
+> of a wrench into things.
+> 
+> Something like:
+> 
+>   KVM_SET_MEMORY_ATTRIBUTES
+> 
+>   struct kvm_memory_attributes {
+> 	__u64 address;
+> 	__u64 size;
+> 	__u64 flags;
+>   }
 
-Having firmware version information at one place will help quickly
-figure out the firmware versions of various subsystems on the device
-instead of going through builds/logs in an event of a system crash.
+I like the idea of adding a new ioctl(). But putting all attributes into
+a flags in uAPI sounds not good to me, e.g. forcing userspace to set all
+attributes in one call can cause pain for userspace, probably for KVM
+implementation as well. For private<->shared memory conversion, we
+actually only care the KVM_MEM_ATTR_SHARED or KVM_MEM_ATTR_PRIVATE bit,
+but we force userspace to set other irrelevant bits as well if use this
+API.
 
-Fill WLAN firmware version information in SMEM version table to be
-printed as part of socinfo debugfs infrastructure on a Qualcomm based
-SoC.
+I looked at kvm_device_attr, sounds we can do similar:
 
-This change is applicable only for WCN399X targets.
+  KVM_SET_MEMORY_ATTR
 
-Reported-by: kernel test robot <lkp@intel.com>
+  struct kvm_memory_attr {
+	__u64 address;
+	__u64 size;
+#define KVM_MEM_ATTR_SHARED	BIT(0)
+#define KVM_MEM_ATTR_READONLY	BIT(1)
+#define KVM_MEM_ATTR_NOEXEC	BIT(2)
+	__u32 attr;
+	__u32 pad;
+  }
 
-Tested-on: WCN3990 hw1.0 SNOC WLAN.HL.3.2.2.c10-00754-QCAHLSWMTPL-1
+I'm not sure if we need KVM_GET_MEMORY_ATTR/KVM_HAS_MEMORY_ATTR as well,
+but sounds like we need a KVM_UNSET_MEMORY_ATTR.
 
-Signed-off-by: Youghandhar Chintala <quic_youghand@quicinc.com>
+Since we are exposing the attribute directly to userspace I also think
+we'd better treat shared memory as the default, so even when the private
+memory is not used, the bit can still be meaningful. So define BIT(0) as
+KVM_MEM_ATTR_PRIVATE instead of KVM_MEM_ATTR_SHARED.
 
----
-Changes from v1:
- - Changed print format specifier to %zu from %i
- - Changed ath10k_qmi_add_wlan_ver_smem() API argument
-	  to const char *fw_build_id from char *fw_build_id
- - Changed version_string_size with MACRO
----
- drivers/net/wireless/ath/ath10k/qmi.c | 28 +++++++++++++++++++++++++++
- 1 file changed, 28 insertions(+)
+Thanks,
+Chao
 
-diff --git a/drivers/net/wireless/ath/ath10k/qmi.c b/drivers/net/wireless/ath/ath10k/qmi.c
-index 66cb7a1e628a..928d78f6d494 100644
---- a/drivers/net/wireless/ath/ath10k/qmi.c
-+++ b/drivers/net/wireless/ath/ath10k/qmi.c
-@@ -14,6 +14,7 @@
- #include <linux/net.h>
- #include <linux/platform_device.h>
- #include <linux/qcom_scm.h>
-+#include <linux/soc/qcom/smem.h>
- #include <linux/string.h>
- #include <net/sock.h>
- 
-@@ -22,6 +23,8 @@
- 
- #define ATH10K_QMI_CLIENT_ID		0x4b4e454c
- #define ATH10K_QMI_TIMEOUT		30
-+#define ATH10K_SMEM_IMAGE_VERSION_TABLE       469
-+#define ATH10K_SMEM_IMAGE_TABLE_CNSS_INDEX     13
- 
- static int ath10k_qmi_map_msa_permission(struct ath10k_qmi *qmi,
- 					 struct ath10k_msa_mem_info *mem_info)
-@@ -536,6 +539,29 @@ int ath10k_qmi_wlan_disable(struct ath10k *ar)
- 	return ath10k_qmi_mode_send_sync_msg(ar, QMI_WLFW_OFF_V01);
- }
- 
-+static void ath10k_qmi_add_wlan_ver_smem(struct ath10k *ar, const char *fw_build_id)
-+{
-+	u8 *smem_table_ptr;
-+	size_t smem_block_size;
-+	const u32 version_string_size = MAX_BUILD_ID_LEN;
-+	const u32 smem_img_idx_wlan = ATH10K_SMEM_IMAGE_TABLE_CNSS_INDEX * 128;
-+
-+	smem_table_ptr = qcom_smem_get(QCOM_SMEM_HOST_ANY,
-+				       ATH10K_SMEM_IMAGE_VERSION_TABLE,
-+				       &smem_block_size);
-+	if (IS_ERR(smem_table_ptr)) {
-+		ath10k_dbg(ar, ATH10K_DBG_QMI, "smem image version table not found");
-+		return;
-+	}
-+	if (smem_img_idx_wlan + version_string_size > smem_block_size) {
-+		ath10k_dbg(ar, ATH10K_DBG_QMI, "smem block size too small: %zu",
-+			   smem_block_size);
-+		return;
-+	}
-+	memcpy(smem_table_ptr + smem_img_idx_wlan, fw_build_id,
-+	       version_string_size);
-+}
-+
- static int ath10k_qmi_cap_send_sync_msg(struct ath10k_qmi *qmi)
- {
- 	struct wlfw_cap_resp_msg_v01 *resp;
-@@ -606,6 +632,8 @@ static int ath10k_qmi_cap_send_sync_msg(struct ath10k_qmi *qmi)
- 			    qmi->fw_version, qmi->fw_build_timestamp, qmi->fw_build_id);
- 	}
- 
-+	ath10k_qmi_add_wlan_ver_smem(ar, qmi->fw_build_id);
-+
- 	kfree(resp);
- 	return 0;
- 
--- 
-2.38.0
-
+> 
+> [*] https://lore.kernel.org/all/Y1a1i9vbJ%2FpVmV9r@google.com
+> 
+> > +		struct kvm_enc_region region;
+> > +		bool set = ioctl == KVM_MEMORY_ENCRYPT_REG_REGION;
+> > +
+> > +		if (!kvm_arch_has_private_mem(kvm))
+> > +			goto arch_vm_ioctl;
+> > +
+> > +		r = -EFAULT;
+> > +		if (copy_from_user(&region, argp, sizeof(region)))
+> > +			goto out;
+> > +
+> > +		r = kvm_vm_ioctl_set_mem_attr(kvm, region.addr,
+> > +					      region.size, set);
+> > +		break;
+> > +	}
+> > +#endif
