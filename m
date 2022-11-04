@@ -2,63 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2E86618EC6
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 04:17:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49639618ECB
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 04:18:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231374AbiKDDRx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 23:17:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51716 "EHLO
+        id S231401AbiKDDSK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 23:18:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231205AbiKDDR3 (ORCPT
+        with ESMTP id S230381AbiKDDRb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 23:17:29 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0B8425E9D;
-        Thu,  3 Nov 2022 20:17:01 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id r61-20020a17090a43c300b00212f4e9cccdso7021314pjg.5;
-        Thu, 03 Nov 2022 20:17:01 -0700 (PDT)
+        Thu, 3 Nov 2022 23:17:31 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B537C20186;
+        Thu,  3 Nov 2022 20:17:03 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id l6so3453032pjj.0;
+        Thu, 03 Nov 2022 20:17:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=zrQmz6cJVqY/H9BfK/o+0dkaKbv8JCR1T0NvHoya8JA=;
-        b=KMSJDgxFq1tY4jP2/++fZNe/D4/bncEPZSFY1/QeJqIqeDvK8p7XL22NdlHkO8+CEh
-         gOezBO3bjIahYJkfRsGJNGoWh51A1HAQxFJHnQsm5m9B5VWGJYTVz5bwzhlt3g59+IoT
-         CunmQTZ5fOSGNl6azO9SCS4x5qSW7puoWGiMUrvplVPe/9MbyYPrKmElyXtnUIlYAJyY
-         K1BaqxxIOPXKwL3cAtuUc8n9Vonz3qwMOa8WQAf2sr8XmSGXM2flPBypFj6/STW3D4pa
-         TP1pyFuhjmDnFZcW94rS7OMf1QJMlV4iqp5Mig15fFhTWOott2M3ZwXAk+ZZWxD5PmIY
-         Thzw==
+        bh=i3N39HNFiqYnjEtTIzF8MdLuTkDRvn84ONCWXTbY+Sc=;
+        b=ZfixGSIH/mZRzcotLRCWziaYgI6pQe4HhPfxoaOcrlUVe6q4KuY6B/cmG83Vn0rQJW
+         qPrvtysuEYTHQcjaD8j3ZuQZerWYCxN6Od3wHqNyAJbXyhjJ+3Xv56v24tqpKvIUWZ/y
+         RmGovEz+53FQm/hnL27uqjRQrf7s0t7e2NcSB08424ngTrv7jNpsMRIkTZfeRSfFhreq
+         2VpzeQbc5TV+h0gdqioeRjUcFKgZo+6IPYZo4CqA+F6rmpTk+t1Zyet2jtE6Z91/Pfcg
+         7SGPjYk6Rs4gymMy6xOj20l+FcQKAWf4dHiPx4FxXgcOEqMC3qPUYTrky/HgHoaeP70p
+         NZRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=zrQmz6cJVqY/H9BfK/o+0dkaKbv8JCR1T0NvHoya8JA=;
-        b=sl9JH2jZUR1hhrdtQOPOjFdDEdd88AybvgxU3A/FGYofMypnRT/JUvi7k6tz7tpYyR
-         gB+4GvahVSNJc18fmzgHRIy13KBE9DUVLgUWc0MKioK+QdhhWR1hNn6v5y7XlnjASS+d
-         N7t8BOfAVbCUgdv69oeebVkH7LZ90nhTEfqYKGe4pV9kzo6IeVgO8XACMLBuqmpvwuoN
-         pcmdmKIfVxYHHv4OZZTr1Qy4OAm8HcjQ4hmZq9BdAFfZ7ZcEj83ZFuovByx4qjs+Jaxr
-         L8jcOJQkbECjMaM70UirPeHuLc5KjQSqdgoLS/GwBxzwCe53S9vXWA3GCaa1Q6rlg8dN
-         ZMow==
-X-Gm-Message-State: ACrzQf2IGeS+DBtIvJ3bTNMY6I3fiK5xAXFj6k5sVfV6d2AX2voSyOss
-        EByB8eqeYb6wfT/ogsXB0hM=
-X-Google-Smtp-Source: AMsMyM7j+GKismZ1Aj2+yOnap1TmWUP2Ww4Xc3hFpTrs6VKlzeGB4aRksFTNQcUwDzL/dmDGvPX7YA==
-X-Received: by 2002:a17:902:7d87:b0:17f:9cd0:2e03 with SMTP id a7-20020a1709027d8700b0017f9cd02e03mr33241589plm.164.1667531821303;
-        Thu, 03 Nov 2022 20:17:01 -0700 (PDT)
+        bh=i3N39HNFiqYnjEtTIzF8MdLuTkDRvn84ONCWXTbY+Sc=;
+        b=wud01rNWcN8qkhFw9NQ39pvgK1TqO7ZoUtS6BmemtDLAzI92I4cBZzURpH9aQIY5J0
+         gIbGSW5L45xB/oS5eNP9fqPxSLimstedVtPBKQJsoXUxvnn5Oveu9FTkt4lbQ8cM1SUw
+         acc/aC6p0iGxwo4hvmCw6Zk2dUgwfrIRWvN+55rxTg0qkuE/8Qcfz5zXtUvxLFzL58AA
+         odpLaDa+aMWj5ISQ5ioTSaP3N4uSNPfTZINtbu4uWWbcYaz3voKrfPC2iFCvk2Weppb8
+         WEN7NTXbQcVLmhPXog8aP0zA3OFshFd+QZNBgcfpa5xHCNt7q6uezY1y1/56/bAANVgM
+         jDCw==
+X-Gm-Message-State: ACrzQf2xQhXaDd2m81UAGwLwVG+j0W6mW/5jP/cyW20jwIDaQ4Bj6fXS
+        qKjpZ3jaACfEOIrmVF50fSA=
+X-Google-Smtp-Source: AMsMyM7nrXImeyb+ka66vCt4Wt9iNDazA7HU2R3RzyPG8uayeoYSEucx8fEc3LM91bjy4udG/2+J7g==
+X-Received: by 2002:a17:902:7849:b0:186:68b9:e1ae with SMTP id e9-20020a170902784900b0018668b9e1aemr33322333pln.139.1667531823059;
+        Thu, 03 Nov 2022 20:17:03 -0700 (PDT)
 Received: from dtor-ws.mtv.corp.google.com ([2620:15c:9d:2:a6ae:11ff:fe11:fcc3])
-        by smtp.gmail.com with ESMTPSA id s3-20020a63ff43000000b004702eca61fcsm1078655pgk.36.2022.11.03.20.16.59
+        by smtp.gmail.com with ESMTPSA id s3-20020a63ff43000000b004702eca61fcsm1078655pgk.36.2022.11.03.20.17.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Nov 2022 20:17:00 -0700 (PDT)
+        Thu, 03 Nov 2022 20:17:02 -0700 (PDT)
 From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
 To:     Helge Deller <deller@gmx.de>, Tony Lindgren <tony@atomide.com>,
         Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
         Sebastian Reichel <sre@kernel.org>
 Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
         linux-omap@vger.kernel.org, linux-fbdev@vger.kernel.org
-Subject: [PATCH RESEND 08/13] omapfb: panel-dpi: remove support for platform data
-Date:   Thu,  3 Nov 2022 20:16:37 -0700
-Message-Id: <20221103-omapfb-gpiod-v1-8-cba1fae5a77c@gmail.com>
+Subject: [PATCH RESEND 09/13] omapfb: connector-analog-tv: remove support for platform data
+Date:   Thu,  3 Nov 2022 20:16:38 -0700
+Message-Id: <20221103-omapfb-gpiod-v1-9-cba1fae5a77c@gmail.com>
 X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
 In-Reply-To: <20221103-omapfb-gpiod-v1-0-cba1fae5a77c@gmail.com>
 References: <20221103-omapfb-gpiod-v1-0-cba1fae5a77c@gmail.com>
@@ -76,126 +76,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are no users of panel_dpi_platform_data in the mainline
+There are no users of connector_atv_platform_data in the mainline
 kernel so support for it can be removed from the panel driver.
 
 Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 ---
- .../video/fbdev/omap2/omapfb/displays/panel-dpi.c  | 83 ++--------------------
- include/video/omap-panel-data.h                    | 21 ------
- 2 files changed, 7 insertions(+), 97 deletions(-)
+ .../omap2/omapfb/displays/connector-analog-tv.c    | 60 +++-------------------
+ include/video/omap-panel-data.h                    | 34 ------------
+ 2 files changed, 8 insertions(+), 86 deletions(-)
 
-diff --git a/drivers/video/fbdev/omap2/omapfb/displays/panel-dpi.c b/drivers/video/fbdev/omap2/omapfb/displays/panel-dpi.c
-index ff3d1e8e1e7b..9790053c5877 100644
---- a/drivers/video/fbdev/omap2/omapfb/displays/panel-dpi.c
-+++ b/drivers/video/fbdev/omap2/omapfb/displays/panel-dpi.c
-@@ -6,15 +6,13 @@
-  * Author: Tomi Valkeinen <tomi.valkeinen@ti.com>
-  */
- 
--#include <linux/gpio.h>
-+#include <linux/gpio/consumer.h>
- #include <linux/module.h>
- #include <linux/platform_device.h>
- #include <linux/slab.h>
+diff --git a/drivers/video/fbdev/omap2/omapfb/displays/connector-analog-tv.c b/drivers/video/fbdev/omap2/omapfb/displays/connector-analog-tv.c
+index a9fd732f8103..0daaf9f89bab 100644
+--- a/drivers/video/fbdev/omap2/omapfb/displays/connector-analog-tv.c
++++ b/drivers/video/fbdev/omap2/omapfb/displays/connector-analog-tv.c
+@@ -12,7 +12,6 @@
  #include <linux/of.h>
--#include <linux/of_gpio.h>
  
  #include <video/omapfb_dss.h>
 -#include <video/omap-panel-data.h>
- #include <video/of_display_timing.h>
  
  struct panel_drv_data {
-@@ -25,9 +23,6 @@ struct panel_drv_data {
- 
- 	struct omap_video_timings videomode;
- 
--	/* used for non-DT boot, to be removed */
--	int backlight_gpio;
--
- 	struct gpio_desc *enable_gpio;
+ 	struct omap_dss_device dssdev;
+@@ -178,53 +177,15 @@ static struct omap_dss_driver tvc_driver = {
+ 	.set_wss		= tvc_set_wss,
  };
  
-@@ -77,9 +72,6 @@ static int panel_dpi_enable(struct omap_dss_device *dssdev)
- 
- 	gpiod_set_value_cansleep(ddata->enable_gpio, 1);
- 
--	if (gpio_is_valid(ddata->backlight_gpio))
--		gpio_set_value_cansleep(ddata->backlight_gpio, 1);
--
- 	dssdev->state = OMAP_DSS_DISPLAY_ACTIVE;
- 
- 	return 0;
-@@ -93,9 +85,6 @@ static void panel_dpi_disable(struct omap_dss_device *dssdev)
- 	if (!omapdss_device_is_enabled(dssdev))
- 		return;
- 
--	if (gpio_is_valid(ddata->backlight_gpio))
--		gpio_set_value_cansleep(ddata->backlight_gpio, 0);
--
- 	gpiod_set_value_cansleep(ddata->enable_gpio, 0);
- 
- 	in->ops.dpi->disable(in);
-@@ -146,49 +135,6 @@ static struct omap_dss_driver panel_dpi_ops = {
- 	.get_resolution	= omapdss_default_get_resolution,
- };
- 
--static int panel_dpi_probe_pdata(struct platform_device *pdev)
+-static int tvc_probe_pdata(struct platform_device *pdev)
 -{
--	const struct panel_dpi_platform_data *pdata;
 -	struct panel_drv_data *ddata = platform_get_drvdata(pdev);
--	struct omap_dss_device *dssdev, *in;
--	struct videomode vm;
--	int r;
+-	struct connector_atv_platform_data *pdata;
+-	struct omap_dss_device *in, *dssdev;
 -
 -	pdata = dev_get_platdata(&pdev->dev);
 -
 -	in = omap_dss_find_output(pdata->source);
 -	if (in == NULL) {
--		dev_err(&pdev->dev, "failed to find video source '%s'\n",
--				pdata->source);
+-		dev_err(&pdev->dev, "Failed to find video source\n");
 -		return -EPROBE_DEFER;
 -	}
 -
 -	ddata->in = in;
 -
--	ddata->data_lines = pdata->data_lines;
--
--	videomode_from_timing(pdata->display_timing, &vm);
--	videomode_to_omap_video_timings(&vm, &ddata->videomode);
+-	ddata->invert_polarity = pdata->invert_polarity;
 -
 -	dssdev = &ddata->dssdev;
 -	dssdev->name = pdata->name;
 -
--	r = devm_gpio_request_one(&pdev->dev, pdata->enable_gpio,
--					GPIOF_OUT_INIT_LOW, "panel enable");
--	if (r)
--		goto err_gpio;
--
--	ddata->enable_gpio = gpio_to_desc(pdata->enable_gpio);
--
--	ddata->backlight_gpio = pdata->backlight_gpio;
--
 -	return 0;
--
--err_gpio:
--	omap_dss_put_device(ddata->in);
--	return r;
 -}
 -
- static int panel_dpi_probe_of(struct platform_device *pdev)
- {
- 	struct panel_drv_data *ddata = platform_get_drvdata(pdev);
-@@ -205,8 +151,6 @@ static int panel_dpi_probe_of(struct platform_device *pdev)
- 
- 	ddata->enable_gpio = gpio;
- 
--	ddata->backlight_gpio = -ENOENT;
+-static int tvc_probe_of(struct platform_device *pdev)
+-{
+-	struct panel_drv_data *ddata = platform_get_drvdata(pdev);
+-	struct device_node *node = pdev->dev.of_node;
+-	struct omap_dss_device *in;
 -
- 	r = of_get_display_timing(node, "panel-timing", &timing);
- 	if (r) {
- 		dev_err(&pdev->dev, "failed to get video timing\n");
-@@ -233,30 +177,18 @@ static int panel_dpi_probe(struct platform_device *pdev)
+-	in = omapdss_of_find_source_for_first_ep(node);
+-	if (IS_ERR(in)) {
+-		dev_err(&pdev->dev, "failed to find video source\n");
+-		return PTR_ERR(in);
+-	}
+-
+-	ddata->in = in;
+-
+-	return 0;
+-}
+-
+ static int tvc_probe(struct platform_device *pdev)
+ {
+ 	struct panel_drv_data *ddata;
  	struct omap_dss_device *dssdev;
  	int r;
  
@@ -203,73 +152,70 @@ index ff3d1e8e1e7b..9790053c5877 100644
 +		return -ENODEV;
 +
  	ddata = devm_kzalloc(&pdev->dev, sizeof(*ddata), GFP_KERNEL);
- 	if (ddata == NULL)
+ 	if (!ddata)
  		return -ENOMEM;
- 
+@@ -232,16 +193,11 @@ static int tvc_probe(struct platform_device *pdev)
  	platform_set_drvdata(pdev, ddata);
+ 	ddata->dev = &pdev->dev;
  
 -	if (dev_get_platdata(&pdev->dev)) {
--		r = panel_dpi_probe_pdata(pdev);
+-		r = tvc_probe_pdata(pdev);
 -		if (r)
 -			return r;
 -	} else if (pdev->dev.of_node) {
--		r = panel_dpi_probe_of(pdev);
+-		r = tvc_probe_of(pdev);
 -		if (r)
 -			return r;
 -	} else {
 -		return -ENODEV;
--	}
--
--	if (gpio_is_valid(ddata->backlight_gpio)) {
--		r = devm_gpio_request_one(&pdev->dev, ddata->backlight_gpio,
--				GPIOF_OUT_INIT_LOW, "panel backlight");
--		if (r)
--			goto err_gpio;
--	}
-+	r = panel_dpi_probe_of(pdev);
-+	if (r)
++	ddata->in = omapdss_of_find_source_for_first_ep(pdev->dev.of_node);
++	r = PTR_ERR_OR_ZERO(ddata->in);
++	if (r) {
++		dev_err(&pdev->dev, "failed to find video source\n");
 +		return r;
+ 	}
  
- 	dssdev = &ddata->dssdev;
- 	dssdev->dev = &pdev->dev;
-@@ -275,7 +207,6 @@ static int panel_dpi_probe(struct platform_device *pdev)
- 	return 0;
- 
- err_reg:
--err_gpio:
- 	omap_dss_put_device(ddata->in);
- 	return r;
- }
+ 	ddata->timings = tvc_pal_timings;
 diff --git a/include/video/omap-panel-data.h b/include/video/omap-panel-data.h
-index b7733150b55c..18172d7b97d0 100644
+deleted file mode 100644
+index 18172d7b97d0..000000000000
 --- a/include/video/omap-panel-data.h
-+++ b/include/video/omap-panel-data.h
-@@ -31,25 +31,4 @@ struct connector_atv_platform_data {
- 	bool invert_polarity;
- };
- 
++++ /dev/null
+@@ -1,34 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0-only */
+-/*
+- * Header containing platform_data structs for omap panels
+- *
+- * Copyright (C) 2013 Texas Instruments
+- * Author: Tomi Valkeinen <tomi.valkeinen@ti.com>
+- *	   Archit Taneja <archit@ti.com>
+- *
+- * Copyright (C) 2011 Texas Instruments
+- * Author: Mayuresh Janorkar <mayur@ti.com>
+- *
+- * Copyright (C) 2010 Canonical Ltd.
+- * Author: Bryan Wu <bryan.wu@canonical.com>
+- */
+-
+-#ifndef __OMAP_PANEL_DATA_H
+-#define __OMAP_PANEL_DATA_H
+-
+-#include <video/display_timing.h>
+-
 -/**
-- * panel_dpi platform data
+- * connector_atv platform data
 - * @name: name for this display entity
 - * @source: name of the display entity used as a video source
-- * @data_lines: number of DPI datalines
-- * @display_timing: timings for this panel
-- * @backlight_gpio: gpio to enable/disable the backlight (or -1)
-- * @enable_gpio: gpio to enable/disable the panel (or -1)
+- * @invert_polarity: invert signal polarity
 - */
--struct panel_dpi_platform_data {
+-struct connector_atv_platform_data {
 -	const char *name;
 -	const char *source;
 -
--	int data_lines;
--
--	const struct display_timing *display_timing;
--
--	int backlight_gpio;
--	int enable_gpio;
+-	bool invert_polarity;
 -};
 -
- #endif /* __OMAP_PANEL_DATA_H */
+-#endif /* __OMAP_PANEL_DATA_H */
 
 -- 
 b4 0.11.0-dev-28747
