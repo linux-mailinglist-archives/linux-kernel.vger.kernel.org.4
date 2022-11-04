@@ -2,205 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE4BF61A612
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 00:44:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95C8A61A613
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 00:44:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229699AbiKDXon (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 19:44:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34776 "EHLO
+        id S229737AbiKDXo4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 19:44:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbiKDXok (ORCPT
+        with ESMTP id S229781AbiKDXox (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 19:44:40 -0400
-Received: from relay07.th.seeweb.it (relay07.th.seeweb.it [IPv6:2001:4b7a:2000:18::168])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20B642EF0C
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 16:44:39 -0700 (PDT)
-Received: from SoMainline.org (94-209-172-39.cable.dynamic.v4.ziggo.nl [94.209.172.39])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id C34073F73D;
-        Sat,  5 Nov 2022 00:44:36 +0100 (CET)
-Date:   Sat, 5 Nov 2022 00:44:35 +0100
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     Luca Weiss <luca@z3ntu.xyz>
-Cc:     linux-arm-msm@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        AngeloGioacchino Del Regno <kholk11@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 2/2] arm64: dts: qcom: Add configuration for PMI8950
- peripheral
-Message-ID: <20221104234435.xwjpwfxs73puvfca@SoMainline.org>
-Mail-Followup-To: Marijn Suijten <marijn.suijten@somainline.org>,
-        Luca Weiss <luca@z3ntu.xyz>, linux-arm-msm@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        AngeloGioacchino Del Regno <kholk11@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221101161801.1058969-1-luca@z3ntu.xyz>
- <20221101161801.1058969-2-luca@z3ntu.xyz>
+        Fri, 4 Nov 2022 19:44:53 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9087730560
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 16:44:51 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id q1so5628303pgl.11
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 16:44:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=MbYMQSTlWErMi0dlfZfN+APvyvfPo1NmalRHcGJBJUA=;
+        b=nN8SwqwOtFpxlzE+LhE/SLk4Y235L1jNgh/mYuDBAyGQUbHBjmj/5f3PMTChIEcWXy
+         fHyNc4fh3LyM3g0S+Bz93toRGeFIQ1FWbGf37ecVDJz70mjuUUKsMBKJxmIFRSMrRajA
+         2kASL1HnS3KE/ANbacU6GwpRtl6W+kMHrfVAA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MbYMQSTlWErMi0dlfZfN+APvyvfPo1NmalRHcGJBJUA=;
+        b=qLAAAS1Y5WCL2GhaUFwsJ+Y2ek1NeAPkqqiBeUpz/70hyNOXzo1HdiCt+e7aJ2/xu7
+         e8nthLkSPxboz/NdM9njcuoIh66oMQXmOExvGg4iRgbevJOu6VFKrIAAZQ9dJi+e2dI/
+         zLpGXYtj67Z/PB0Ci37z8r/pMIt+xhcqgfvJ2rxBhko1CQsTGKe4DFhYkw1MIkWcMVVn
+         4BiOK/SinQLYN5LT/6RNlQCnIU1+R6ct0DjUqA6UutFZ4VvLngHWRwo6xHbcM3mz8RCF
+         7ewfAnI/YKVDvbczE0bPEjs9WVuhdEFf/Yio6bWxUCFT3vh65FEVUYr3A9wARjhuTYNX
+         WJcQ==
+X-Gm-Message-State: ACrzQf2m+dyeWYpfjEx60IhMHVIGqTAepLXWEAT4hqMYRALJmn30JSov
+        qEuGxElnVI36o8CA+VmRPlP94w==
+X-Google-Smtp-Source: AMsMyM5gvQlFVPQtzvXPQ8bWwfYGPbcB3uOukJyB9L2y6dujo2uc13V+TqDBifAvayTpcdLq/CffHQ==
+X-Received: by 2002:a63:ea58:0:b0:45f:ffa9:60a0 with SMTP id l24-20020a63ea58000000b0045fffa960a0mr32834833pgk.433.1667605491154;
+        Fri, 04 Nov 2022 16:44:51 -0700 (PDT)
+Received: from google.com ([240f:75:7537:3187:f2f6:8f5:87c8:3aeb])
+        by smtp.gmail.com with ESMTPSA id p3-20020a622903000000b005636326fdbfsm163832pfp.78.2022.11.04.16.44.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Nov 2022 16:44:50 -0700 (PDT)
+Date:   Sat, 5 Nov 2022 08:44:46 +0900
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+To:     Minchan Kim <minchan@kernel.org>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Nitin Gupta <ngupta@vflare.org>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: Re: [PATCHv4 2/9] zram: Add recompression algorithm sysfs knob
+Message-ID: <Y2Wj7o9nibDr2X0C@google.com>
+References: <20221018045533.2396670-1-senozhatsky@chromium.org>
+ <20221018045533.2396670-3-senozhatsky@chromium.org>
+ <Y2LP0OWF/WTnkSne@google.com>
+ <Y2Mv4l+V9iCv9EMg@google.com>
+ <Y2Ptq1GZISCD7Mor@google.com>
+ <Y2SEkzKSWx2iQzLl@google.com>
+ <Y2U+/xQBwR3MPygL@google.com>
+ <Y2WfeLNwkwQZkEi8@google.com>
+ <Y2WjCsYrGfUENegL@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221101161801.1058969-2-luca@z3ntu.xyz>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <Y2WjCsYrGfUENegL@google.com>
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FSL_HELO_FAKE,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-11-01 17:18:00, Luca Weiss wrote:
-> From: AngeloGioacchino Del Regno <kholk11@gmail.com>
+On (22/11/04 16:40), Minchan Kim wrote:
+> > > > Configure 2 alternative algos, with priority 1 and 2
+> > > > 
+> > > > 	echo "name=lz4 priority=1" > recomp_algo
+> > > > 	echo "name=lz5 priority=2" > recomp_algo
+> > > > 
+> > > > Recompress pages using algo 1 and algo 2
+> > > > 
+> > > > 	echo "type=huge threshold=3000 algo_idx=1" > recompress
+> > > > 	echo "type=idle threshold=2000 algo_idx=2" > recompress
+> > > > 
+> > > > Maybe we can even pass algo name instead of idx.
+> > > 
+> > > Let's use name rather than index.
+> > 
+> > OK. Any preference on the keyword? "name="? "algo="? "algorithm="?
+> > "compressor="? "comp="?
+> > 
+> > I want use the same keyword for recomp_algo. I sort of like "algo=",
+> > but not sure.
 > 
-> The PMI8950 features integrated peripherals like ADC, GPIO controller,
-> MPPs and others.
-> 
-> [luca@z3ntu.xyz: remove pm8950, style changes for 2022 standards, add wled]
-> Signed-off-by: AngeloGioacchino Del Regno <kholk11@gmail.com>
-> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
-> ---
-> Changes since v2:
-> * Pick up patch, and adjust as mentioned above sign-offs
-> 
->  arch/arm64/boot/dts/qcom/pmi8950.dtsi | 97 +++++++++++++++++++++++++++
->  1 file changed, 97 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/qcom/pmi8950.dtsi
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/pmi8950.dtsi b/arch/arm64/boot/dts/qcom/pmi8950.dtsi
-> new file mode 100644
-> index 000000000000..32d27e2187e3
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/qcom/pmi8950.dtsi
-> @@ -0,0 +1,97 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +// Copyright (c) 2019, AngeloGioacchino Del Regno <kholk11@gmail.com>
-> +
-> +#include <dt-bindings/iio/qcom,spmi-vadc.h>
-> +#include <dt-bindings/interrupt-controller/irq.h>
-> +#include <dt-bindings/spmi/spmi.h>
-> +
-> +&spmi_bus {
-> +	pmic@2 {
-> +		compatible = "qcom,pmi8950", "qcom,spmi-pmic";
-> +		reg = <0x2 SPMI_USID>;
-> +		#address-cells = <1>;
-> +		#size-cells = <0>;
-> +
-> +		pmi8950_vadc: adc@3100 {
-> +			compatible = "qcom,spmi-vadc";
-> +			reg = <0x3100>;
-> +			interrupts = <0x2 0x31 0x0 IRQ_TYPE_EDGE_RISING>;
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +			#io-channel-cells = <1>;
-> +
-> +			adc-chan@0 {
-> +				reg = <VADC_USBIN>;
-> +				qcom,pre-scaling = <1 4>;
-> +				label = "usbin";
+> +1 with algo
 
-I've previously sent a patch with labels in the node name instead [1],
-what's the preferred way nowadays?
-
-[1]: https://lore.kernel.org/linux-arm-msm/20220926190148.283805-4-marijn.suijten@somainline.org/
-
-> +			};
-> +
-> +			adc-chan@1 {
-> +				reg = <VADC_DCIN>;
-> +				qcom,pre-scaling = <1 4>;
-> +				label = "dcin";
-> +			};
-> +
-> +			adc-chan@2 {
-> +				reg = <VADC_VCHG_SNS>;
-> +				qcom,pre-scaling = <1 1>;
-> +				label = "vchg_sns";
-
-Shall we use hyphens in labels (especially if using them as node names).
-
-> +			};
-> +
-> +			adc-chan@9 {
-> +				reg = <VADC_REF_625MV>;
-> +				qcom,pre-scaling = <1 1>;
-> +				label = "ref_625mv";
-> +			};
-> +
-> +			adc-chan@a {
-> +				reg = <VADC_REF_1250MV>;
-> +				qcom,pre-scaling = <1 1>;
-> +				label = "ref_1250v";
-
-mv* :)
-
-> +			};
-> +
-> +			adc-chan@d {
-> +				reg = <VADC_SPARE2>;
-> +				qcom,pre-scaling = <1 1>;
-> +				label = "chg_temp";
-> +			};
-> +		};
-> +
-> +		pmi8950_mpps: mpps@a000 {
-> +			compatible = "qcom,pmi8950-mpp", "qcom,spmi-mpp";
-> +			reg = <0xa000>;
-> +			gpio-controller;
-> +			gpio-ranges = <&pmi8950_mpps 0 0 4>;
-> +			#gpio-cells = <2>;
-> +			interrupt-controller;
-> +			#interrupt-cells = <2>;
-> +		};
-> +
-> +		pmi8950_gpio: gpio@c000 {
-
-It seems more common to name this label plural pmi8950_gpioS?
-
-> +			compatible = "qcom,pmi8950-gpio", "qcom,spmi-gpio";
-> +			reg = <0xc000>;
-> +			gpio-controller;
-> +			gpio-ranges = <&pmi8950_gpio 0 0 2>;
-> +			#gpio-cells = <2>;
-> +			interrupt-controller;
-> +			#interrupt-cells = <2>;
-> +		};
-> +	};
-> +
-> +	pmic@3 {
-> +		compatible = "qcom,pmi8950", "qcom,spmi-pmic";
-> +		reg = <0x3 SPMI_USID>;
-> +		#address-cells = <1>;
-> +		#size-cells = <0>;
-> +
-> +		pmi8950_wled: leds@d800 {
-> +			compatible = "qcom,pmi8950-wled";
-> +			reg = <0xd800>, <0xd900>;
-> +			interrupts = <0x3 0xd8 0x02 IRQ_TYPE_EDGE_RISING>;
-> +			interrupt-names = "short";
-> +			label = "backlight";
-
-Same question here about using the node name instead, and dropping the
-label altogether.
-
-- Marijn
-
-> +
-> +			status = "disabled";
-> +		};
-> +	};
-> +};
-> -- 
-> 2.38.1
-> 
+Minchan, I'm sorry I'm getting a bit confused (didn't sleep last night).
+I just saw your other email and you suggested there that we don't need
+any idx or name in recompress. Or did I misunderstand it?
