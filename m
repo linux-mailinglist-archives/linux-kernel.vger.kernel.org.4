@@ -2,328 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77A25619D47
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 17:29:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AEF8F619D4A
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 17:29:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231947AbiKDQ3L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 12:29:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55584 "EHLO
+        id S231927AbiKDQ3m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 12:29:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231651AbiKDQ2q (ORCPT
+        with ESMTP id S231908AbiKDQ3D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 12:28:46 -0400
-Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E65C748EB
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 09:28:07 -0700 (PDT)
-Received: by mail-qt1-x830.google.com with SMTP id s4so3334068qtx.6
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 09:28:07 -0700 (PDT)
+        Fri, 4 Nov 2022 12:29:03 -0400
+Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6D95121260
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 09:28:13 -0700 (PDT)
+Received: by mail-ot1-x330.google.com with SMTP id p8-20020a056830130800b0066bb73cf3bcso2928151otq.11
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 09:28:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=mime-version:references:in-reply-to:message-id:date:subject:cc:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=9FskemBwRWc4iv4d+vwl1RSo4mgNk7CgQPl/r7Hy/64=;
-        b=hvoY4VHyeE/PWW4/+9EUXPqxlY40jEnaplki/VXVYdbh9fZloSJ3S5bgnqKC/t2lEe
-         QxZiTk+rAwMpqAImoOdFFBSOfT57SjRUZN+mihkqN108n8/CT5mElr1iUDRbz/4Ryt+I
-         P3QXF1QUMpLroFr8twqJUuVwM0sQNYp3O6tcY=
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=v2Pmz+RE2prvZLfTVmDbhJKc4l2QBAu7VJ+q+ErwBNQ=;
+        b=coJivt9uBMGehyGbOtS3ZSyEbGRg4IxLXrUT6HLeqU5JAloD/I+eqk5ooZ/5ltCl1L
+         vhZVHNVr0HTrnNSCAZgOu/Sctoqpwn+N6M8mab2O2MrQwZovBoPNoYaOtk77WfqjJyU4
+         Ofylq0O6yxFkKHhKkWClTaG3+LMeyuIuTPcsNCJ2tkry28WufC9b3AIR4uHu1KYBCfw8
+         XQHrgligZQb4L7EGVJE+XioVvcvlaBXIBfoHhIvbEPBPRVRi4AlzJ//GE1JrnKJTc15J
+         UIxpHj9rICbnWasf/CAwVGFXjXzo82kaI4N3BQzCenKoVLsvJd01vviFaQMwwJD68qaj
+         uDLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:references:in-reply-to:message-id:date:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9FskemBwRWc4iv4d+vwl1RSo4mgNk7CgQPl/r7Hy/64=;
-        b=O5rFBRazPkHJscQsYw+/D6Pz8LrkyISPrRU2H96tZ+VNh/1HigJwByWAgTaMEsrkLC
-         1/5NfFvPqtXwiLsvJEJW+PZu1235vqUdlhOaMCW64s3CTvKdop5N2xPu8h6amloS8gDt
-         UQBg+AzCYGyElqmpQcFgUbkgZVowNjVde2vq4+Zn7me6W6hUkqCknmHNgQh4O8FSjR6b
-         GwrwC4VBf0n+bvkWEIimJTf7aq0vN63VDYBF3Ca9tC3+4cDwAkCmP8gchOckFn6MomDQ
-         n5iQ6r/u+hRL3o4EFwmfgiJ/RcTJsXwP/vkcmgSEgrvm7k9/BdeNHgxYBCQJbdYGsmYJ
-         Mp4w==
-X-Gm-Message-State: ACrzQf2MR0ShtJktJ2E82/BrQGBWfE8B64do8HjfxLtx+0fYUbvb6h1U
-        BiFnZI3TwKlWLHfa9G2bbY9dtQ==
-X-Google-Smtp-Source: AMsMyM7gIFoPzKAcgZEH28y1h+AjGbv3V0fC4QbvZ0nDSPw9qnJQ1sI5azinc1i9sc7qMW5V2nQa+A==
-X-Received: by 2002:a05:622a:453:b0:3a5:4093:8e96 with SMTP id o19-20020a05622a045300b003a540938e96mr15425451qtx.273.1667579286073;
-        Fri, 04 Nov 2022 09:28:06 -0700 (PDT)
-Received: from C02GC2QQMD6T.wifi.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id x17-20020a05620a449100b006fa31bf2f3dsm3290395qkp.47.2022.11.04.09.28.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Nov 2022 09:28:04 -0700 (PDT)
-From:   Ajit Khaparde <ajit.khaparde@broadcom.com>
-To:     ajit.khaparde@broadcom.com
-Cc:     andrew.gospodarek@broadcom.com, davem@davemloft.net,
-        edumazet@google.com, jgg@ziepe.ca, kuba@kernel.org,
-        leon@kernel.org, linux-kernel@vger.kernel.org,
-        linux-rdma@vger.kernel.org, michael.chan@broadcom.com,
-        netdev@vger.kernel.org, pabeni@redhat.com,
-        selvin.xavier@broadcom.com,
-        Hongguang Gao <hongguang.gao@broadcom.com>
-Subject: [PATCH v3 6/6] bnxt_en: Remove struct bnxt access from RoCE driver
-Date:   Fri,  4 Nov 2022 09:27:33 -0700
-Message-Id: <20221104162733.73345-7-ajit.khaparde@broadcom.com>
-X-Mailer: git-send-email 2.37.1 (Apple Git-137.1)
-In-Reply-To: <20221104162733.73345-1-ajit.khaparde@broadcom.com>
-References: <CACZ4nhtmE9Dh9z_O9-A934+q0_8yHEyj+V-DcEsuEWFbPH6BGg@mail.gmail.com>
- <20221104162733.73345-1-ajit.khaparde@broadcom.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=v2Pmz+RE2prvZLfTVmDbhJKc4l2QBAu7VJ+q+ErwBNQ=;
+        b=SqCEEsXJLOb+jJAQ+QAYKhD/FLDb7g8nes5K0ynQcrtgvzumg5FOeFRV/JMhCnaxy7
+         cjt8Iv/Tbk5xEXL2DDVBs4If/tfICAxBTGP+sQ8Qukttna+RquAz2dkIRKtt8nF3Qy0I
+         EroJ82TZlXzeK2Rn3cp/Ov9orNEWIE1pwUqpjLHFiq6sk1FNuCea2ag1XRfmGbSuZ0m7
+         jxdh1KJfVBXVO1Ys10WO/I1CPVLGudwlGTzb1zFQ+ddlfCi+hQSCdRabeQNh0c7tIurr
+         mtqVRdG2NsJEDErDaeFd1+FFVWEqP84iu3dfDctSkEqJLS6UOBPH1L5mpqNcvmUzjIYG
+         xbyw==
+X-Gm-Message-State: ACrzQf235rw90oymBkzxnyziQ5S/WW6whOfkAXwRGWMD59Kd6KEqKjj+
+        JNG3IvSW39rZLqTqgwvzQHj4BAGAmjOrMCML2qKfHQ==
+X-Google-Smtp-Source: AMsMyM5gYieYMr+uYhD9EKHowhKmrdmM1QMekJJ2kzIjeIJ/nD2P/U+aZdsXcT54V0X8/GlC+X2kwrBclF7Xlo0Sstg=
+X-Received: by 2002:a9d:62d8:0:b0:66c:4f88:78ff with SMTP id
+ z24-20020a9d62d8000000b0066c4f8878ffmr13691730otk.269.1667579293082; Fri, 04
+ Nov 2022 09:28:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="00000000000002126605eca78f44"
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <00000000000035fba305eca64106@google.com> <Y2UvigDr9ctxlEEE@google.com>
+In-Reply-To: <Y2UvigDr9ctxlEEE@google.com>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Fri, 4 Nov 2022 09:28:02 -0700
+Message-ID: <CACT4Y+Zb0T4bPk=gzYtexPqHTGSFAHaeY6DCYq268GV4+TM+gQ@mail.gmail.com>
+Subject: Re: [syzbot] BUG: unable to handle kernel paging request in get_desc
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     syzbot <syzbot+ffb4f000dc2872c93f62@syzkaller.appspotmail.com>,
+        bp@alien8.de, brgerst@gmail.com, dave.hansen@linux.intel.com,
+        hpa@zytor.com, kirill@shutemov.name, linux-kernel@vger.kernel.org,
+        mingo@redhat.com, peterz@infradead.org,
+        syzkaller-bugs@googlegroups.com, tglx@linutronix.de,
+        thomas.lendacky@amd.com, x86@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---00000000000002126605eca78f44
-Content-Transfer-Encoding: 8bit
+On Fri, 4 Nov 2022 at 08:28, 'Sean Christopherson' via syzkaller-bugs
+<syzkaller-bugs@googlegroups.com> wrote:
+>
+> On Fri, Nov 04, 2022, syzbot wrote:
+> > Hello,
+> >
+> > syzbot found the following issue on:
+> >
+> > HEAD commit:    81214a573d19 Add linux-next specific files for 20221103
+> > git tree:       linux-next
+> > console output: https://syzkaller.appspot.com/x/log.txt?x=132019de880000
+> > kernel config:  https://syzkaller.appspot.com/x/.config?x=cdc625e9234bac0
+> > dashboard link: https://syzkaller.appspot.com/bug?extid=ffb4f000dc2872c93f62
+> > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12dd52ca880000
+> >
+> > Downloadable assets:
+> > disk image: https://storage.googleapis.com/syzbot-assets/5d4dda497754/disk-81214a57.raw.xz
+> > vmlinux: https://storage.googleapis.com/syzbot-assets/9658efff160a/vmlinux-81214a57.xz
+> > kernel image: https://storage.googleapis.com/syzbot-assets/3711180f2565/bzImage-81214a57.xz
+> >
+> > IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> > Reported-by: syzbot+ffb4f000dc2872c93f62@syzkaller.appspotmail.com
+> >
+> > BUG: unable to handle page fault for address: fffffbc5a1c22e00
+> > #PF: supervisor read access in kernel mode
+> > #PF: error_code(0x0000) - not-present page
+> > PGD 23ffe4067 P4D 23ffe4067 PUD 13ff2d067 PMD 13ff2c067 PTE 0
+> > Oops: 0000 [#1] PREEMPT SMP KASAN
+> > CPU: 0 PID: 5368 Comm: syz-executor.2 Not tainted 6.1.0-rc3-next-20221103-syzkaller #0
+> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/11/2022
+> > RIP: 0010:get_desc+0x128/0x460 arch/x86/lib/insn-eval.c:660
+>
+> I'm pretty sure this is the same thing as
+>
+>   BUG: unable to handle kernel paging request in vmx_handle_exit_irqoff
+>
+> I'll verify and get a patch posted shortly.
 
-From: Hongguang Gao <hongguang.gao@broadcom.com>
+This repro does not create any VMs, it's just:
 
-Decouple RoCE driver from directly accessing L2's private bnxt
-structure. Move the fields needed by RoCE driver into bnxt_en_dev.
-They'll be passed to RoCE driver by bnxt_rdma_aux_device_add()
-function.
+iopl(0x3)
+rt_sigreturn()
 
-Signed-off-by: Hongguang Gao <hongguang.gao@broadcom.com>
-Signed-off-by: Ajit Khaparde <ajit.khaparde@broadcom.com>
-Reviewed-by: Andy Gospodarek <andrew.gospodarek@broadcom.com>
----
- drivers/infiniband/hw/bnxt_re/main.c          | 22 ++++++-------------
- drivers/net/ethernet/broadcom/bnxt/bnxt_ulp.c |  9 ++++++++
- drivers/net/ethernet/broadcom/bnxt/bnxt_ulp.h | 11 ++++++++++
- 3 files changed, 27 insertions(+), 15 deletions(-)
-
-diff --git a/drivers/infiniband/hw/bnxt_re/main.c b/drivers/infiniband/hw/bnxt_re/main.c
-index b2d9667c02af..2997b1949de9 100644
---- a/drivers/infiniband/hw/bnxt_re/main.c
-+++ b/drivers/infiniband/hw/bnxt_re/main.c
-@@ -112,16 +112,14 @@ static int bnxt_re_setup_chip_ctx(struct bnxt_re_dev *rdev, u8 wqe_mode)
- {
- 	struct bnxt_qplib_chip_ctx *chip_ctx;
- 	struct bnxt_en_dev *en_dev;
--	struct bnxt *bp;
- 
- 	en_dev = rdev->en_dev;
--	bp = netdev_priv(en_dev->net);
- 
- 	chip_ctx = kzalloc(sizeof(*chip_ctx), GFP_KERNEL);
- 	if (!chip_ctx)
- 		return -ENOMEM;
--	chip_ctx->chip_num = bp->chip_num;
--	chip_ctx->hw_stats_size = bp->hw_ring_stats_size;
-+	chip_ctx->chip_num = en_dev->chip_num;
-+	chip_ctx->hw_stats_size = en_dev->hw_ring_stats_size;
- 
- 	rdev->chip_ctx = chip_ctx;
- 	/* rest members to follow eventually */
-@@ -129,7 +127,7 @@ static int bnxt_re_setup_chip_ctx(struct bnxt_re_dev *rdev, u8 wqe_mode)
- 	rdev->qplib_res.cctx = rdev->chip_ctx;
- 	rdev->rcfw.res = &rdev->qplib_res;
- 	rdev->qplib_res.dattr = &rdev->dev_attr;
--	rdev->qplib_res.is_vf = BNXT_VF(bp);
-+	rdev->qplib_res.is_vf = BNXT_EN_VF(en_dev);
- 
- 	bnxt_re_set_drv_mode(rdev, wqe_mode);
- 	if (bnxt_qplib_determine_atomics(en_dev->pdev))
-@@ -142,10 +140,7 @@ static int bnxt_re_setup_chip_ctx(struct bnxt_re_dev *rdev, u8 wqe_mode)
- 
- static void bnxt_re_get_sriov_func_type(struct bnxt_re_dev *rdev)
- {
--	struct bnxt *bp;
--
--	bp = netdev_priv(rdev->en_dev->net);
--	if (BNXT_VF(bp))
-+	if (BNXT_EN_VF(rdev->en_dev))
- 		rdev->is_virtfn = 1;
- }
- 
-@@ -966,7 +961,6 @@ static int bnxt_re_query_hwrm_pri2cos(struct bnxt_re_dev *rdev, u8 dir,
- 				      u64 *cid_map)
- {
- 	struct hwrm_queue_pri2cos_qcfg_input req = {0};
--	struct bnxt *bp = netdev_priv(rdev->netdev);
- 	struct hwrm_queue_pri2cos_qcfg_output resp;
- 	struct bnxt_en_dev *en_dev = rdev->en_dev;
- 	struct bnxt_fw_msg fw_msg;
-@@ -983,7 +977,7 @@ static int bnxt_re_query_hwrm_pri2cos(struct bnxt_re_dev *rdev, u8 dir,
- 	flags |= (dir & 0x01);
- 	flags |= HWRM_QUEUE_PRI2COS_QCFG_INPUT_FLAGS_IVLAN;
- 	req.flags = cpu_to_le32(flags);
--	req.port_id = bp->pf.port_id;
-+	req.port_id = en_dev->pf_port_id;
- 
- 	bnxt_re_fill_fw_msg(&fw_msg, (void *)&req, sizeof(req), (void *)&resp,
- 			    sizeof(resp), DFLT_HWRM_CMD_TIMEOUT);
-@@ -1559,7 +1553,6 @@ static int bnxt_re_probe(struct auxiliary_device *adev,
- static int bnxt_re_suspend(struct auxiliary_device *adev, pm_message_t state)
- {
- 	struct bnxt_re_dev *rdev = auxiliary_get_drvdata(adev);
--	struct bnxt *bp;
- 
- 	if (!rdev)
- 		return 0;
-@@ -1571,15 +1564,14 @@ static int bnxt_re_suspend(struct auxiliary_device *adev, pm_message_t state)
- 	 * ie. by calling bnxt_re_dev_stop and release the MSIx vectors as
- 	 * L2 driver want to modify the MSIx table.
- 	 */
--	bp = netdev_priv(rdev->netdev);
- 
- 	ibdev_info(&rdev->ibdev, "Handle device suspend call");
--	/* Check the current device state from L2 structure and move the
-+	/* Check the current device state from bnxt_en_dev and move the
- 	 * device to detached state if FW_FATAL_COND is set.
- 	 * This prevents more commands to HW during clean-up,
- 	 * in case the device is already in error.
- 	 */
--	if (test_bit(BNXT_STATE_FW_FATAL_COND, &bp->state))
-+	if (test_bit(BNXT_STATE_FW_FATAL_COND, &rdev->en_dev->en_state))
- 		set_bit(ERR_DEVICE_DETACHED, &rdev->rcfw.cmdq.flags);
- 
- 	bnxt_re_dev_stop(rdev);
-diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt_ulp.c b/drivers/net/ethernet/broadcom/bnxt/bnxt_ulp.c
-index 2cfe61ed95fb..e39f27f59c72 100644
---- a/drivers/net/ethernet/broadcom/bnxt/bnxt_ulp.c
-+++ b/drivers/net/ethernet/broadcom/bnxt/bnxt_ulp.c
-@@ -288,6 +288,7 @@ void bnxt_ulp_stop(struct bnxt *bp)
- 			pm_message_t pm = {};
- 
- 			adrv = to_auxiliary_drv(adev->dev.driver);
-+			edev->en_state = bp->state;
- 			adrv->suspend(adev, pm);
- 		}
- 	}
-@@ -314,6 +315,7 @@ void bnxt_ulp_start(struct bnxt *bp, int err)
- 			struct auxiliary_driver *adrv;
- 
- 			adrv = to_auxiliary_drv(adev->dev.driver);
-+			edev->en_state = bp->state;
- 			adrv->resume(adev);
- 		}
- 	}
-@@ -498,6 +500,13 @@ static inline void bnxt_set_edev_info(struct bnxt_en_dev *edev, struct bnxt *bp)
- 		edev->flags |= BNXT_EN_FLAG_ROCEV1_CAP;
- 	if (bp->flags & BNXT_FLAG_ROCEV2_CAP)
- 		edev->flags |= BNXT_EN_FLAG_ROCEV2_CAP;
-+	if (bp->flags & BNXT_FLAG_VF)
-+		edev->flags |= BNXT_EN_FLAG_VF;
-+
-+	edev->chip_num = bp->chip_num;
-+	edev->hw_ring_stats_size = bp->hw_ring_stats_size;
-+	edev->pf_port_id = bp->pf.port_id;
-+	edev->en_state = bp->state;
- }
- 
- int bnxt_rdma_aux_device_add(struct bnxt *bp)
-diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt_ulp.h b/drivers/net/ethernet/broadcom/bnxt/bnxt_ulp.h
-index e96f93d38a30..4f892fe1f4d7 100644
---- a/drivers/net/ethernet/broadcom/bnxt/bnxt_ulp.h
-+++ b/drivers/net/ethernet/broadcom/bnxt/bnxt_ulp.h
-@@ -63,6 +63,9 @@ struct bnxt_en_dev {
- 						 BNXT_EN_FLAG_ROCEV2_CAP)
- 	#define BNXT_EN_FLAG_MSIX_REQUESTED	0x4
- 	#define BNXT_EN_FLAG_ULP_STOPPED	0x8
-+	#define BNXT_EN_FLAG_VF			0x10
-+#define BNXT_EN_VF(edev)	((edev)->flags & BNXT_EN_FLAG_VF)
-+
- 	struct bnxt_ulp			*ulp_tbl;
- 	int				l2_db_size;	/* Doorbell BAR size in
- 							 * bytes mapped by L2
-@@ -72,6 +75,14 @@ struct bnxt_en_dev {
- 							 * bytes mapped as non-
- 							 * cacheable.
- 							 */
-+	u16				chip_num;
-+	u16				hw_ring_stats_size;
-+	u16				pf_port_id;
-+	unsigned long			en_state;	/* Could be checked in
-+							 * RoCE driver suspend
-+							 * mode only. Will be
-+							 * updated in resume.
-+							 */
- };
- 
- static inline bool bnxt_ulp_registered(struct bnxt_en_dev *edev)
--- 
-2.37.1 (Apple Git-137.1)
-
-
---00000000000002126605eca78f44
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-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
-pZEyqKnwS1lKCzjX7mV5W955rFsFxChdAKfw0HilwtqdY24mhy62+GeaEkD0gYIj1tCmw9gnQToc
-K+0s7xEunfR9pBrzmOwS3OQbcP0nJ8SmQ8R+reroH6LYuFpaqK1rgQIDAQABo4IB2zCCAdcwDgYD
-VR0PAQH/BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3Vy
-ZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEG
-CCsGAQUFBzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWdu
-MmNhMjAyMDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93
-d3cuZ2xvYmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6
-hjhodHRwOi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNy
-bDAlBgNVHREEHjAcgRphaml0LmtoYXBhcmRlQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEF
-BQcDBDAfBgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUbrcTuh0mr2qP
-xYdtyDgFeRIiE/gwDQYJKoZIhvcNAQELBQADggEBALrc1TljKrDhXicOaZlzIQyqOEkKAZ324i8X
-OwzA0n2EcPGmMZvgARurvanSLD3mLeeuyq1feCcjfGM1CJFh4+EY7EkbFbpVPOIdstSBhbnAJnOl
-aC/q0wTndKoC/xXBhXOZB8YL/Zq4ZclQLMUO6xi/fFRyHviI5/IrosdrpniXFJ9ukJoOXtvdrEF+
-KlMYg/Deg9xo3wddCqQIsztHSkR4XaANdn+dbLRQpctZ13BY1lim4uz5bYn3M0IxyZWkQ1JuPHCK
-aRJv0SfR88PoI4RB7NCEHqFwARTj1KvFPQi8pK/YISFydZYbZrxQdyWDidqm4wSuJfpE6i0cWvCd
-u50xggJtMIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNh
-MTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwM2Vrj
-4nZK0WWosNswDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIDGVP/1WZA0NzacwL6Zs
-wVtbBjGeVSt92coxi91YbFI0MBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkF
-MQ8XDTIyMTEwNDE2MjgwNlowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUD
-BAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsG
-CWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQBAOOUgtRsYNf22rQmpwl5PjZe2wZhWAjlKP6Ja
-N2S8fYH968I8O3ypD0t50hUThKJfxlZ7pEGxYIz99IwQe0IFwlMY1pXVGA/uNBgluO7TtRaB1u0u
-DYSpe+uYomwK3GvfxFDV2y3cYrVjor0pF416u6RY88XQ49OV7Xgxvy4ICi0bvySddA3njOSj2evd
-fGDoSJOQwuQQMj8xJXa10CSiei3LgHRsOouKKn5xP8P4jVBnoOcHpS0KtnNVTHSdObhMz0xXlDtH
-a5R0WiYfplCRmf1rbYHlCIMpGj4LBNfQvuAR50vvcV9ylWMJ6IbfAsTvmtUtGvlMyqtkOwqnUoqB
---00000000000002126605eca78f44--
+Do you still think it's related to the vmx_handle_exit_irqoff issue?
