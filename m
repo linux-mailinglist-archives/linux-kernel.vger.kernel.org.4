@@ -2,113 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07B6D61996B
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 15:20:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FFB9619978
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 15:21:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232152AbiKDOUy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 10:20:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60674 "EHLO
+        id S232058AbiKDOVK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 10:21:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232098AbiKDOUf (ORCPT
+        with ESMTP id S232134AbiKDOUl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 10:20:35 -0400
-Received: from relay08.th.seeweb.it (relay08.th.seeweb.it [IPv6:2001:4b7a:2000:18::169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3FD22FFF5
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 07:20:02 -0700 (PDT)
-Received: from [192.168.31.208] (unknown [194.29.137.22])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 855E13F336;
-        Fri,  4 Nov 2022 15:20:00 +0100 (CET)
-Message-ID: <2afd6323-09e3-b8af-e98e-859983bde1ba@somainline.org>
-Date:   Fri, 4 Nov 2022 15:19:59 +0100
+        Fri, 4 Nov 2022 10:20:41 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 035472F3B8;
+        Fri,  4 Nov 2022 07:20:23 -0700 (PDT)
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2A4E0NQY015429;
+        Fri, 4 Nov 2022 14:20:16 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : content-transfer-encoding : mime-version; s=pp1;
+ bh=9SGw4OzVldCITXhtlQ5um7jPtHCDf0S7mHMQ3DIbAZo=;
+ b=Mtf25NG0LYLuOhmyJNQtWAGEvvB//A14sQwkXKzMw2gPkEiczn9O7kP4sjBvXEFLMV1A
+ iaWCWvoSWv7iNdsEHwVM4NA/gDnWvIQFIOu9f5B6Xluy9I1DC+FEdOSIo9YbJhmL3r+u
+ TnVeXJHshI3nXiWPEEzcM0AcnU/JzqS4hL2ofqxFo2Rc2rmhm8EORzVlwBVhLVv2GyDT
+ LvJRU8itgCH1bLV/SJXUnro0gMQm3JRdZwAbt/xCNZrDO3Zs7J+TZO7RjiXx1WR6tEnP
+ ZM0qF38Yb+VugVqMpfJ55LapR2yi4m0w9cH/cHtzQkzoDqfET6RBFC9fAn2H6MHj+/oG kw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kn2464yvq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 04 Nov 2022 14:20:16 +0000
+Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2A4C90df032034;
+        Fri, 4 Nov 2022 14:20:15 GMT
+Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kn2464ytu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 04 Nov 2022 14:20:15 +0000
+Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
+        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2A4E5Mr5027381;
+        Fri, 4 Nov 2022 14:20:12 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma05fra.de.ibm.com with ESMTP id 3kjepedmae-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 04 Nov 2022 14:20:12 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2A4EEYpV47645158
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 4 Nov 2022 14:14:34 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 393FCA4053;
+        Fri,  4 Nov 2022 14:20:09 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 207D9A4051;
+        Fri,  4 Nov 2022 14:20:09 +0000 (GMT)
+Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Fri,  4 Nov 2022 14:20:09 +0000 (GMT)
+Received: by tuxmaker.boeblingen.de.ibm.com (Postfix, from userid 4958)
+        id BE473E01BC; Fri,  4 Nov 2022 15:20:08 +0100 (CET)
+From:   Eric Farman <farman@linux.ibm.com>
+To:     Matthew Rosato <mjrosato@linux.ibm.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Kevin Tian <kevin.tian@intel.com>, Yi Liu <yi.l.liu@intel.com>
+Cc:     Zhenyu Wang <zhenyuw@linux.intel.com>,
+        Zhi Wang <zhi.a.wang@intel.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Halil Pasic <pasic@linux.ibm.com>,
+        Vineeth Vijayan <vneethv@linux.ibm.com>,
+        Peter Oberparleiter <oberpar@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Tony Krowiak <akrowiak@linux.ibm.com>,
+        Jason Herne <jjherne@linux.ibm.com>,
+        Harald Freudenberger <freude@linux.ibm.com>,
+        Diana Craciun <diana.craciun@oss.nxp.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        Kirti Wankhede <kwankhede@nvidia.com>,
+        Abhishek Sahu <abhsahu@nvidia.com>,
+        Yishai Hadas <yishaih@nvidia.com>,
+        intel-gvt-dev@lists.freedesktop.org,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org,
+        kvm@vger.kernel.org, Eric Farman <farman@linux.ibm.com>
+Subject: [PATCH v3 0/7] vfio-ccw parent rework
+Date:   Fri,  4 Nov 2022 15:20:00 +0100
+Message-Id: <20221104142007.1314999-1-farman@linux.ibm.com>
+X-Mailer: git-send-email 2.34.1
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: mtzOvMNnvG5ubfdM535qaNh-GmE-TSgU
+X-Proofpoint-GUID: VajN9RXUiMm1XBh1WxxH70KNT97wipk5
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.4.1
-Subject: Re: [PATCH v2 2/3] arm64: dts: qcom: msm8916-alcatel-idol347: add
- GPIO torch LED
-To:     Vincent Knecht <vincent.knecht@mailoo.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221104132400.1763218-1-vincent.knecht@mailoo.org>
- <20221104132400.1763218-3-vincent.knecht@mailoo.org>
-From:   Konrad Dybcio <konrad.dybcio@somainline.org>
-In-Reply-To: <20221104132400.1763218-3-vincent.knecht@mailoo.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-04_09,2022-11-03_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ bulkscore=0 spamscore=0 priorityscore=1501 malwarescore=0 mlxlogscore=999
+ clxscore=1015 adultscore=0 impostorscore=0 suspectscore=0 phishscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211040093
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Alex,
 
-On 04/11/2022 14:23, Vincent Knecht wrote:
-> Add support for torch LED on GPIO 32.
->
-> Signed-off-by: Vincent Knecht <vincent.knecht@mailoo.org>
-> ---
+Here's the (last?) update to the vfio-ccw lifecycle changes that I've sent
+recently, and were previously discussed at various points [1][2].
 
-Reviewed-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+Patches 1-5 rework the behavior of the vfio-ccw driver's private struct.
+In summary, the mdev pieces are split out of vfio_ccw_private and into a
+new vfio_ccw_parent struct that will continue to follow today's lifecycle.
+The remainder (bulk) of the private struct moves to follow the mdev
+probe/remove pair. There's opportunity for further separation of the
+things in the private struct, which would simplify some of the vfio-ccw
+code, but it got too hairy as I started that. Once vfio-ccw is no longer
+considered unique, those cleanups can happen at our leisure. 
 
+Patch 6 removes the trickery where vfio-ccw uses vfio_init_device instead of
+vfio_alloc_device, and thus removes vfio_init_device from the outside world.
 
-Konrad
+Patch 7 removes vfio_free_device from vfio-ccw and the other drivers (hello,
+CC list!), letting it be handled by vfio_device_release directly.
 
->   .../boot/dts/qcom/msm8916-alcatel-idol347.dts | 22 +++++++++++++++++++
->   1 file changed, 22 insertions(+)
->
-> diff --git a/arch/arm64/boot/dts/qcom/msm8916-alcatel-idol347.dts b/arch/arm64/boot/dts/qcom/msm8916-alcatel-idol347.dts
-> index 668f8ff53229..eadeb1a445fd 100644
-> --- a/arch/arm64/boot/dts/qcom/msm8916-alcatel-idol347.dts
-> +++ b/arch/arm64/boot/dts/qcom/msm8916-alcatel-idol347.dts
-> @@ -5,6 +5,7 @@
->   #include "msm8916-pm8916.dtsi"
->   #include <dt-bindings/gpio/gpio.h>
->   #include <dt-bindings/input/input.h>
-> +#include <dt-bindings/leds/common.h>
->   
->   / {
->   	model = "Alcatel OneTouch Idol 3 (4.7)";
-> @@ -34,6 +35,19 @@ button-volume-up {
->   		};
->   	};
->   
-> +	gpio-leds {
-> +		compatible = "gpio-leds";
-> +
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&gpio_leds_default>;
-> +
-> +		led-0 {
-> +			gpios = <&msmgpio 32 GPIO_ACTIVE_HIGH>;
-> +			linux,default-trigger = "torch";
-> +			function = LED_FUNCTION_TORCH;
-> +		};
-> +	};
-> +
->   	usb_id: usb-id {
->   		compatible = "linux,extcon-usb-gpio";
->   		id-gpio = <&msmgpio 69 GPIO_ACTIVE_HIGH>;
-> @@ -276,6 +290,14 @@ gpio_keys_default: gpio-keys-default-state {
->   		bias-pull-up;
->   	};
->   
-> +	gpio_leds_default: gpio-leds-default-state {
-> +		pins = "gpio32";
-> +		function = "gpio";
-> +
-> +		drive-strength = <2>;
-> +		bias-disable;
-> +	};
-> +
->   	gyro_int_default: gyro-int-default-state {
->   		pins = "gpio97", "gpio98";
->   		function = "gpio";
+I believe this covers everything in this space; let me know if not!
+
+Thanks,
+Eric
+
+[1] https://lore.kernel.org/kvm/0-v3-57c1502c62fd+2190-ccw_mdev_jgg@nvidia.com/
+[2] https://lore.kernel.org/kvm/20220602171948.2790690-1-farman@linux.ibm.com/
+
+v2->v3:
+ - [MR] Added r-b to remaining patches (Thank you!)
+ - Patch 1:
+   [gfx checkpatch] Whitespace
+   [EF] Remove put_device(&parent->dev)
+   [MR] Fix error exit when alloc of parent fails
+   [MR] Check for !private on sch_probe error path
+ - Patch 3:
+   [EF] Fix error exit when alloc of private fails
+ - Patch 6:
+   [AW] Added ack (Thank you!)
+ - Patch 7:
+   [CH, AK] Added r-b (Thank you!)
+   [AW] Added ack (Thank you!)
+v2: https://lore.kernel.org/kvm/20221102150152.2521475-1-farman@linux.ibm.com/
+v1: https://lore.kernel.org/kvm/20221019162135.798901-1-farman@linux.ibm.com/
+
+Eric Farman (7):
+  vfio/ccw: create a parent struct
+  vfio/ccw: remove private->sch
+  vfio/ccw: move private initialization to callback
+  vfio/ccw: move private to mdev lifecycle
+  vfio/ccw: remove release completion
+  vfio/ccw: replace vfio_init_device with _alloc_
+  vfio: Remove vfio_free_device
+
+ drivers/gpu/drm/i915/gvt/kvmgt.c      |   1 -
+ drivers/s390/cio/vfio_ccw_chp.c       |   5 +-
+ drivers/s390/cio/vfio_ccw_drv.c       | 173 +++++++++++---------------
+ drivers/s390/cio/vfio_ccw_fsm.c       |  27 ++--
+ drivers/s390/cio/vfio_ccw_ops.c       | 107 +++++++++++-----
+ drivers/s390/cio/vfio_ccw_private.h   |  37 ++++--
+ drivers/s390/crypto/vfio_ap_ops.c     |   6 -
+ drivers/vfio/fsl-mc/vfio_fsl_mc.c     |   1 -
+ drivers/vfio/pci/vfio_pci_core.c      |   1 -
+ drivers/vfio/platform/vfio_amba.c     |   1 -
+ drivers/vfio/platform/vfio_platform.c |   1 -
+ drivers/vfio/vfio_main.c              |  32 ++---
+ include/linux/vfio.h                  |   3 -
+ samples/vfio-mdev/mbochs.c            |   1 -
+ samples/vfio-mdev/mdpy.c              |   1 -
+ samples/vfio-mdev/mtty.c              |   1 -
+ 16 files changed, 196 insertions(+), 202 deletions(-)
+
+-- 
+2.34.1
+
