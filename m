@@ -2,174 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63689619E16
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 18:06:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51766619E1F
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 18:07:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230510AbiKDRGB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 13:06:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52778 "EHLO
+        id S231302AbiKDRHB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 13:07:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229749AbiKDRF6 (ORCPT
+        with ESMTP id S229600AbiKDRGs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 13:05:58 -0400
-Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8966B3E08D
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 10:05:57 -0700 (PDT)
-Received: by mail-qk1-x730.google.com with SMTP id x21so3475893qkj.0
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 10:05:57 -0700 (PDT)
+        Fri, 4 Nov 2022 13:06:48 -0400
+Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3459E30F62
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 10:06:44 -0700 (PDT)
+Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-3704852322fso49141807b3.8
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 10:06:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=QmgwhFKSfmRVfZGc4RFN5XxR8b40r2de6Oo0rq1T4LM=;
-        b=JbUTll5MUjsFEpb6RFMbBc3v4wZC7nXCGMHb5OK0Dj1brJXpSu1B6bkm7Y7U9ncuKG
-         iqnkdFnjDpJ/4iU0uVw5784Yk5pIFbYFFk7YLX74gaga3r1+BZWyM8k/tte7jaoZfLp+
-         SlEYGRI1opxkZ1YRf0Y4i8oWvqEnxRFm1RUa5eAOVfW4YOseCzkAaRrueQgSzuEEILvk
-         i9eEPWx2w/roHu+WfzQFQEo2ebRYbXiUsIeEZxCb/+ZMK51rTc/95nl1+OfG4qFyIvkk
-         nOUuPaSW/ZFDusLt/V5JBCTDb231pwqVnE35hOL+wY7KG8B6OE9IbAc/plX1LmlgWrEp
-         VTzA==
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Uh2Soqcix5NF4+gCA5HXepCepNj3tY45FfqIOXMoSa0=;
+        b=ogeWQukOaRtpW/g5+B8JjKag8ZQd2pKV7FnS1McLPACz4Fl7GCI1jzTDRlTVtMTN/v
+         CeFaqhO4h/paTdV9pAcLhWvVuX6IWxdlw1d98k65P4WYuZ5wN9pgH9H+BInFuJTBvyz3
+         ZWwTo5TEQcKq50mRoc7vH24ad+gxRVqenCH1UQn0cxen5Lwqc7lqthHJptv6Q7fynV16
+         CDrXyEmvybW6EzxA8sVwZ7wbUg+rtuGzSP9wcau/OjhcJbrvqwqd75kXhjlQ4Wx0AaLL
+         9bb0+thT8ugs3NvsuexF+OPLyh0vUC90BjeUsJkq22K/Uc4U1OVBe1MYRhlcjILM4UTl
+         FtnQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=QmgwhFKSfmRVfZGc4RFN5XxR8b40r2de6Oo0rq1T4LM=;
-        b=R5yuonUozwdPM1jy5p5j4yb2xphvN3xeKDlFX1S6irIehIGrgxz8fbFYKqvTNd+cbK
-         QrQTnRQ2UPPKWj47vtUI7D5yxjYfCn1CwJzUZsGquLT+FaM7/4z/mVaE9PhSxhNPvdqp
-         jK5G7oQJHDEkZvemOobMp/R7ZtOXu8XbQO6wArXsKD8Qi9BcWkB6NmGWAQkxgmaMU/fr
-         2oibAiuwzvLbGXghpko5XBxbyVPFXMNS5J5zTbwJ6Xfoj5vdcpl3a2Kq/kQODOctjTkp
-         BaNcN99JsPrrXPeG2i9LzI6sqsmLNVfvQl5ANJlnI7cEYS8JsgW9vVMHhfug5CTdMw1C
-         xhsw==
-X-Gm-Message-State: ACrzQf2BHeNTvPgfYYpPciF2pkjpMqQK9ncg1/00vWm2zWrX1v5JZV2a
-        YHrW9U37D+rbDSEGoqJDXUh6Pg==
-X-Google-Smtp-Source: AMsMyM6iuA5yKil9gA8TtmEMRoCASMZ22sLHJHjAsR2lUWcHqXr3ZMn45PnxakMpdKdj3KTXVDfCSQ==
-X-Received: by 2002:a37:2d84:0:b0:6fa:1747:5369 with SMTP id t126-20020a372d84000000b006fa17475369mr25414271qkh.693.1667581556663;
-        Fri, 04 Nov 2022 10:05:56 -0700 (PDT)
-Received: from krzk-bin.. ([2601:586:5000:570:aad6:acd8:4ed9:299b])
-        by smtp.gmail.com with ESMTPSA id c11-20020ac8054b000000b003a527d29a41sm2667370qth.75.2022.11.04.10.05.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Nov 2022 10:05:55 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH] dt-bindings: clock: qcom,sdm845-lpasscc: convert to dtschema
-Date:   Fri,  4 Nov 2022 13:05:52 -0400
-Message-Id: <20221104170552.72242-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Uh2Soqcix5NF4+gCA5HXepCepNj3tY45FfqIOXMoSa0=;
+        b=a+aYDB2SxhF8PZ/Ertzvu0TVctIHN5KVtHykiCukHzPxCX2aIfHQ6NRiohXTiRBrFt
+         6g3u+9/yCF0YV8FREaXnJ9+5HJGAQc8/VVEpLjgyb7dHuX4KN3NxhkFr7ANszhwMVkdQ
+         mpCugVRoXZqKxDY7lewgsu5JPOw9vvc4gZSYsX8GVDKqLb2sbLZIX1CH52qrguFE5tck
+         HKXU+tUAgDUOIc3UwjPFquQHPbZKYTDJprvg8lYJFO+oDX3XBVzPQQdZzQYmmwWmRTPN
+         Sp0zH9Ion6GFO7Hh2VyjwmcaBBQncAkS1jqc3dMXckqw1b1e2d4bL29CIFHPkEkm9Gs8
+         Ok/g==
+X-Gm-Message-State: ACrzQf364RsMaYz7HAbu0T54ayzlStDl9lUNGPSqiybS7VK7mLVOfHSR
+        wNfR09hU2A8OjrzTStLVeO/2HKv4UNxBhTIfNCG02Q==
+X-Google-Smtp-Source: AMsMyM5fulznOy0WkME0p6/ckcRkBb2ufpSlRYzkvA0Cr6xRpbyJ7kzo/KNTsjaMAUh3HbHLY/xWtfl+i7078Lfe3uE=
+X-Received: by 2002:a81:4811:0:b0:368:e6a7:6b38 with SMTP id
+ v17-20020a814811000000b00368e6a76b38mr35079787ywa.20.1667581603227; Fri, 04
+ Nov 2022 10:06:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221102081620.1465154-1-zhongbaisong@huawei.com>
+In-Reply-To: <20221102081620.1465154-1-zhongbaisong@huawei.com>
+From:   Alexander Potapenko <glider@google.com>
+Date:   Fri, 4 Nov 2022 18:06:05 +0100
+Message-ID: <CAG_fn=UDAjNd2xFrRxSVyLTZOAGapjSq2Zu5Xht12JNq-A7S=A@mail.gmail.com>
+Subject: Re: [PATCH -next,v2] bpf, test_run: fix alignment problem in bpf_prog_test_run_skb()
+To:     Baisong Zhong <zhongbaisong@huawei.com>, elver@google.com,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>
+Cc:     edumazet@google.com, keescook@chromium.org, kuba@kernel.org,
+        ast@kernel.org, daniel@iogearbox.net, davem@davemloft.net,
+        pabeni@redhat.com, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert Qualcomm SDM845 LPASS clock controller bindings to DT schema.
+On Wed, Nov 2, 2022 at 9:16 AM Baisong Zhong <zhongbaisong@huawei.com> wrot=
+e:
+>
+> we got a syzkaller problem because of aarch64 alignment fault
+> if KFENCE enabled.
+>
+> When the size from user bpf program is an odd number, like
+> 399, 407, etc, it will cause the struct skb_shared_info's
+> unaligned access. As seen below:
+>
+> BUG: KFENCE: use-after-free read in __skb_clone+0x23c/0x2a0 net/core/skbu=
+ff.c:1032
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- .../bindings/clock/qcom,lpasscc.txt           | 26 ----------
- .../bindings/clock/qcom,sdm845-lpasscc.yaml   | 47 +++++++++++++++++++
- 2 files changed, 47 insertions(+), 26 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/clock/qcom,lpasscc.txt
- create mode 100644 Documentation/devicetree/bindings/clock/qcom,sdm845-lpasscc.yaml
+It's interesting that KFENCE is reporting a UAF without a deallocation
+stack here.
 
-diff --git a/Documentation/devicetree/bindings/clock/qcom,lpasscc.txt b/Documentation/devicetree/bindings/clock/qcom,lpasscc.txt
-deleted file mode 100644
-index b9e9787045b9..000000000000
---- a/Documentation/devicetree/bindings/clock/qcom,lpasscc.txt
-+++ /dev/null
-@@ -1,26 +0,0 @@
--Qualcomm LPASS Clock Controller Binding
-------------------------------------------------
--
--Required properties :
--- compatible		: shall contain "qcom,sdm845-lpasscc"
--- #clock-cells		: from common clock binding, shall contain 1.
--- reg			: shall contain base register address and size,
--			  in the order
--			Index-0 maps to LPASS_CC register region
--			Index-1 maps to LPASS_QDSP6SS register region
--
--Optional properties :
--- reg-names	: register names of LPASS domain
--		 "cc", "qdsp6ss".
--
--Example:
--
--The below node has to be defined in the cases where the LPASS peripheral loader
--would bring the subsystem out of reset.
--
--	lpasscc: clock-controller@17014000 {
--		compatible = "qcom,sdm845-lpasscc";
--		reg = <0x17014000 0x1f004>, <0x17300000 0x200>;
--		reg-names = "cc", "qdsp6ss";
--		#clock-cells = <1>;
--	};
-diff --git a/Documentation/devicetree/bindings/clock/qcom,sdm845-lpasscc.yaml b/Documentation/devicetree/bindings/clock/qcom,sdm845-lpasscc.yaml
-new file mode 100644
-index 000000000000..10aa9b6e8d89
---- /dev/null
-+++ b/Documentation/devicetree/bindings/clock/qcom,sdm845-lpasscc.yaml
-@@ -0,0 +1,47 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/clock/qcom,sdm845-lpasscc.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Qualcomm SDM845 LPASS Clock Controller
-+
-+maintainers:
-+  - Bjorn Andersson <bjorn.andersson@linaro.org>
-+
-+description: |
-+  Qualcomm SDM845 LPASS (Low Power Audio SubSystem) Clock Controller.
-+
-+  See also:: include/dt-bindings/clock/qcom,lpass-sdm845.h
-+
-+properties:
-+  compatible:
-+    const: qcom,sdm845-lpasscc
-+
-+  '#clock-cells':
-+    const: 1
-+
-+  reg:
-+    maxItems: 2
-+
-+  reg-names:
-+    items:
-+      - const: cc
-+      - const: qdsp6ss
-+
-+required:
-+  - compatible
-+  - '#clock-cells'
-+  - reg
-+  - reg-names
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    clock-controller@17014000 {
-+        compatible = "qcom,sdm845-lpasscc";
-+        reg = <0x17014000 0x1f004>, <0x17300000 0x200>;
-+        reg-names = "cc", "qdsp6ss";
-+        #clock-cells = <1>;
-+    };
--- 
-2.34.1
+Looks like an unaligned access to 0xffff6254fffac077 causes the ARM
+CPU to throw a fault handled by __do_kernel_fault()
+This isn't technically a page fault, but anyway the access address
+gets passed to kfence_handle_page_fault(), which defaults to a
+use-after-free, because the address belongs to the object page, not
+the redzone page.
 
+Catalin, Mark, what is the right way to only handle traps caused by
+reading/writing to a page for which `set_memory_valid(addr, 1, 0)` was
+called?
+
+> Use-after-free read at 0xffff6254fffac077 (in kfence-#213):
+>  __lse_atomic_add arch/arm64/include/asm/atomic_lse.h:26 [inline]
+>  arch_atomic_add arch/arm64/include/asm/atomic.h:28 [inline]
+>  arch_atomic_inc include/linux/atomic-arch-fallback.h:270 [inline]
+>  atomic_inc include/asm-generic/atomic-instrumented.h:241 [inline]
+>  __skb_clone+0x23c/0x2a0 net/core/skbuff.c:1032
+>  skb_clone+0xf4/0x214 net/core/skbuff.c:1481
+>  ____bpf_clone_redirect net/core/filter.c:2433 [inline]
+>  bpf_clone_redirect+0x78/0x1c0 net/core/filter.c:2420
+>  bpf_prog_d3839dd9068ceb51+0x80/0x330
+>  bpf_dispatcher_nop_func include/linux/bpf.h:728 [inline]
+>  bpf_test_run+0x3c0/0x6c0 net/bpf/test_run.c:53
+>  bpf_prog_test_run_skb+0x638/0xa7c net/bpf/test_run.c:594
+>  bpf_prog_test_run kernel/bpf/syscall.c:3148 [inline]
+>  __do_sys_bpf kernel/bpf/syscall.c:4441 [inline]
+>  __se_sys_bpf+0xad0/0x1634 kernel/bpf/syscall.c:4381
+>
+> kfence-#213: 0xffff6254fffac000-0xffff6254fffac196, size=3D407, cache=3Dk=
+malloc-512
+>
+> allocated by task 15074 on cpu 0 at 1342.585390s:
+>  kmalloc include/linux/slab.h:568 [inline]
+>  kzalloc include/linux/slab.h:675 [inline]
+>  bpf_test_init.isra.0+0xac/0x290 net/bpf/test_run.c:191
+>  bpf_prog_test_run_skb+0x11c/0xa7c net/bpf/test_run.c:512
+>  bpf_prog_test_run kernel/bpf/syscall.c:3148 [inline]
+>  __do_sys_bpf kernel/bpf/syscall.c:4441 [inline]
+>  __se_sys_bpf+0xad0/0x1634 kernel/bpf/syscall.c:4381
+>  __arm64_sys_bpf+0x50/0x60 kernel/bpf/syscall.c:4381
+>
+> To fix the problem, we adjust @size so that (@size + @hearoom) is a
+> multiple of SMP_CACHE_BYTES. So we make sure the struct skb_shared_info
+> is aligned to a cache line.
+>
+> Fixes: 1cf1cae963c2 ("bpf: introduce BPF_PROG_TEST_RUN command")
+> Signed-off-by: Baisong Zhong <zhongbaisong@huawei.com>
+> ---
+> v2: use SKB_DATA_ALIGN instead kmalloc_size_roundup
+> ---
+>  net/bpf/test_run.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
+> index 4b855af267b1..bfdd7484b93f 100644
+> --- a/net/bpf/test_run.c
+> +++ b/net/bpf/test_run.c
+> @@ -259,6 +259,7 @@ static void *bpf_test_init(const union bpf_attr *katt=
+r, u32 size,
+>         if (user_size > size)
+>                 return ERR_PTR(-EMSGSIZE);
+>
+> +       size =3D SKB_DATA_ALIGN(size);
+>         data =3D kzalloc(size + headroom + tailroom, GFP_USER);
+>         if (!data)
+>                 return ERR_PTR(-ENOMEM);
+> --
+> 2.25.1
+>
+
+
+--
+Alexander Potapenko
+Software Engineer
+
+Google Germany GmbH
+Erika-Mann-Stra=C3=9Fe, 33
+80636 M=C3=BCnchen
+
+Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Liana Sebastian
+Registergericht und -nummer: Hamburg, HRB 86891
+Sitz der Gesellschaft: Hamburg
