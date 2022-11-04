@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ED2761907A
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 06:50:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D80C061906F
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 06:50:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231789AbiKDFuz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 01:50:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55688 "EHLO
+        id S231744AbiKDFuK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 01:50:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231338AbiKDFsy (ORCPT
+        with ESMTP id S231379AbiKDFsy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 4 Nov 2022 01:48:54 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7846D2873B
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 22:48:53 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7850228E0D;
+        Thu,  3 Nov 2022 22:48:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C15E0620DB
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 05:48:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C1DEC433D6;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E568C620E6;
+        Fri,  4 Nov 2022 05:48:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60E1BC433C1;
         Fri,  4 Nov 2022 05:48:51 +0000 (UTC)
 Received: from rostedt by gandalf.local.home with local (Exim 4.96)
         (envelope-from <rostedt@goodmis.org>)
-        id 1oqpZt-0071FH-2I;
+        id 1oqpZt-0071Fq-2u;
         Fri, 04 Nov 2022 01:49:17 -0400
-Message-ID: <20221104054917.543373979@goodmis.org>
+Message-ID: <20221104054917.730504253@goodmis.org>
 User-Agent: quilt/0.66
-Date:   Fri, 04 Nov 2022 01:41:24 -0400
+Date:   Fri, 04 Nov 2022 01:41:25 -0400
 From:   Steven Rostedt <rostedt@goodmis.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
@@ -37,17 +37,11 @@ Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
         Guenter Roeck <linux@roeck-us.net>,
         Anna-Maria Gleixner <anna-maria@linutronix.de>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>
-Subject: [RFC][PATCH v3 31/33] timers: sched/psi: Use timer_shutdown_sync() before freeing timer
+        Tony Luck <tony.luck@intel.com>,
+        Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-edac@vger.kernel.org
+Subject: [RFC][PATCH v3 32/33] timers: x86/mce: Use __init_timer() for resetting timers
 References: <20221104054053.431922658@goodmis.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -62,37 +56,62 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
 
-Before a timer is freed, timer_shutdown_sync() must be called.
+DEBUG_OBJECTS_TIMERS is now checking if a timer is ever enqueued, and if
+so, it must call timer_shutdown_sync() before freeing, otherwise
+debug objects will trigger. This requires that once a timer is initialized
+(and initialized for debug objects) it must not be re-initialized using
+timer_setup(), as that will call the debug objects initialization code
+again and trigger a bug if it was ever used.
+
+As the mce reinitializes its timers on CPU hotplug, it must use
+__init_timer() instead of timer_setup(), which will only initialize the
+debug objects once.
 
 Link: https://lore.kernel.org/all/20220407161745.7d6754b3@gandalf.local.home/
 
-Cc: Johannes Weiner <hannes@cmpxchg.org>
-Cc: Suren Baghdasaryan <surenb@google.com>
+Cc: Tony Luck <tony.luck@intel.com>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: Thomas Gleixner <tglx@linutronix.de>
 Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Juri Lelli <juri.lelli@redhat.com>
-Cc: Vincent Guittot <vincent.guittot@linaro.org>
-Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
-Cc: Ben Segall <bsegall@google.com>
-Cc: Mel Gorman <mgorman@suse.de>
-Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
-Cc: Valentin Schneider <vschneid@redhat.com>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: x86@kernel.org
+Cc: "H. Peter Anvin" <hpa@zytor.com>
+Cc: linux-edac@vger.kernel.org
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 ---
- kernel/sched/psi.c | 1 +
- 1 file changed, 1 insertion(+)
+ arch/x86/kernel/cpu/mce/core.c | 14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
 
-diff --git a/kernel/sched/psi.c b/kernel/sched/psi.c
-index ee2ecc081422..f5f2613c4292 100644
---- a/kernel/sched/psi.c
-+++ b/kernel/sched/psi.c
-@@ -1033,6 +1033,7 @@ void psi_cgroup_free(struct cgroup *cgroup)
+diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
+index 2c8ec5c71712..d2653c7d40b3 100644
+--- a/arch/x86/kernel/cpu/mce/core.c
++++ b/arch/x86/kernel/cpu/mce/core.c
+@@ -2051,14 +2051,24 @@ static void __mcheck_cpu_setup_timer(void)
+ {
+ 	struct timer_list *t = this_cpu_ptr(&mce_timer);
  
- 	cancel_delayed_work_sync(&cgroup->psi->avgs_work);
- 	free_percpu(cgroup->psi->pcpu);
-+	timer_shutdown_sync(&cgroup->psi->poll_timer);
- 	/* All triggers must be removed by now */
- 	WARN_ONCE(cgroup->psi->poll_states, "psi: trigger leak\n");
- 	kfree(cgroup->psi);
+-	timer_setup(t, mce_timer_fn, TIMER_PINNED);
++	/*
++	 * timer_setup() may only be used on a timer for the
++	 * first time it is initialized. This resets the
++	 * timer on CPU hotplug, so use __init_timer() instead.
++	 */
++	__init_timer(t, mce_timer_fn, TIMER_PINNED);
+ }
+ 
+ static void __mcheck_cpu_init_timer(void)
+ {
+ 	struct timer_list *t = this_cpu_ptr(&mce_timer);
+ 
+-	timer_setup(t, mce_timer_fn, TIMER_PINNED);
++	/*
++	 * timer_setup() may only be used on a timer for the
++	 * first time it is initialized. This resets the
++	 * timer on CPU hotplug, so use __init_timer() instead.
++	 */
++	__init_timer(t, mce_timer_fn, TIMER_PINNED);
+ 	mce_start_timer(t);
+ }
+ 
 -- 
 2.35.1
