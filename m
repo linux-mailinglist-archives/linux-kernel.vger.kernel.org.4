@@ -2,60 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AC5C619FD2
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 19:26:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D182619FD8
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 19:27:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231987AbiKDS0G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 14:26:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45664 "EHLO
+        id S232000AbiKDS1a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 14:27:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231838AbiKDS0D (ORCPT
+        with ESMTP id S231951AbiKDS11 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 14:26:03 -0400
-Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 950972CDC7
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 11:26:00 -0700 (PDT)
-Received: by mail-qt1-x82b.google.com with SMTP id l15so3535631qtv.4
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 11:26:00 -0700 (PDT)
+        Fri, 4 Nov 2022 14:27:27 -0400
+Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A36315831
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 11:27:26 -0700 (PDT)
+Received: by mail-qt1-x82c.google.com with SMTP id h24so3534349qta.7
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 11:27:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=nfL7V4DF1mS3vb8oqJLZ9Gcqha+6hsSCkIaoJBiXjNs=;
-        b=hZ45UrgvnMBkKwFxLXOJAK+Zy5Hr7AbMOYWwGcaKxaqQAnUKiYIgA4ALSxrpqbU26l
-         ntDqmGq7VJz4XT0ewcP/7fmiiOxSg5lh52S7U7uM1RsPJYrdWPKgQ1jx/tQLJ3qHjkjx
-         dx6WtS3nL5P6k3AGtYXIiODXLADcY753QzH7Y2IQB0Mx5aPGWUCFkXeRSG38Yw+WCQGd
-         4/rBputwHFKyYP0/o9mQWhDOQUqB8ntM3e7zIrBkIpmFGbECI/kvstRaaOc9gxT42OU3
-         6Z/DCZZgLroiFPdodxEwdJeCoE8HZrruEQjLhiG5fEiuRt2JG79OGLmnrGq55bN4ZKdy
-         c9jQ==
+        bh=8pPymEQjLByLqJ1LJVQ6h2zBy5/jBzUdgR2p9+XMI4k=;
+        b=Wh0vpAL6+49zc/HAr/bIXmX03WkQ3mA0rFRcZO1LrepQYZzY+nIx5/iAm6ypMQ0c2V
+         8kW56O9PjQTKjLd01tbzs914EO+tevPIyrOumnfGZkS9ix9Ifw6SedYRuRIlcNFxhPBr
+         WICXDY9YJDXL22t1FctnlPspiY+tfoogiL1qYfcNya7srwuLgugcxCGi0+pAiToWBNL9
+         ma1mTodsCQ3soMlCxcAhrX0VtLs8NDPI52WmDUfYSBjfJ5pmGET0YO790cvnNdOZHIEq
+         4mDr4DnvIgwMPcheKaiyYxKZ5xtY39gIg5ijdY4ELDXffQ8cJwvMpEwMfZig/IiZ9sE3
+         2Jdg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nfL7V4DF1mS3vb8oqJLZ9Gcqha+6hsSCkIaoJBiXjNs=;
-        b=NI+zGdyx7wDNAHStN6dETPWeW+V0xBlvV64dHT9AFFW8v8yRyeA6JIZtbKkgIocDmN
-         j7M1dH7nz5fRyK9HfvVXzC9sddGnuGG4MJNlixh5421yLfRr/ON/3iYb7uOMjke1tYCL
-         wDIgc6g4MIq3f5IzNLui1xz9K8H5r3w0VyVF7CEqK9AQaDGfHdFmXwCCwnXYNAl2mCwx
-         4H0KwJNXO1QEkBlo+OiacQe2r58CYKD5Nt0hsuAmxzgAVqPxy/9ZWl9pTe8Ok2qwKV3G
-         SVP+0siGwrTs+ck3DXi4UI/04cTxo0QrURbAq5kRMf19iWiXOFe9vOYMfzlOY4NQ3qPR
-         urJw==
-X-Gm-Message-State: ACrzQf2TJhYdy0oG+2rKN3i6GP4uCiJ1R+FJt5I3FvC7qoevJWIa0ZXP
-        zhPOAh//ej+Z8xZcLh5o6tECJA==
-X-Google-Smtp-Source: AMsMyM7ETgFuQuJS4Pf7TVNZ2lJ1PI/dtDHKr3X3V2+0ESFbqR4ytfCG99oiYQzezcRbWGyXJcB/PQ==
-X-Received: by 2002:ac8:7d07:0:b0:3a5:723d:9de4 with SMTP id g7-20020ac87d07000000b003a5723d9de4mr2021169qtb.558.1667586359765;
-        Fri, 04 Nov 2022 11:25:59 -0700 (PDT)
+        bh=8pPymEQjLByLqJ1LJVQ6h2zBy5/jBzUdgR2p9+XMI4k=;
+        b=VAQ43A90w1ORQR1gaW/vGw4EyO7pBY0WzY8zRlnV2Dw1eUKK/mmmpvb9zKQI0MtRMa
+         pJDExSGej5TA28hndqy+qQ7if58yU8n2A1hB4m8+lByhnCiZkUKlSUkiIV04jPkIsY9g
+         vW9ZoDPuuMgZzcuZzENdiySO8Lm+nprOjHGo5Mna1WokhrV6ChNX5pekbm/QlLf/xmSw
+         rwGaWed2cAy5yalwBfBXdrICTOjCMNZmX2FyjAVTMgBzVYCrhn7vwj1A/yjHlGGHw33E
+         tptdiacDIR/L9Le4jypgOOLigdmJwBSsYMfbjV2pM5trW9RH+WAskqcj/Atg1Rhyy0yd
+         XPEw==
+X-Gm-Message-State: ACrzQf1plVxyj96lckyS9gWmEU7RLsM2EXIpVQ5oGkUMNAWWqgVeTEMf
+        eW3lvH4HFoI1UqoH7pSOZ+zfpA==
+X-Google-Smtp-Source: AMsMyM75bhGOaJabuRzsV40E9zH2/tYcYQGUATEhMFO2Fg1ghbZcEsfB5vffoi3yX/3hmSOs2eAjNA==
+X-Received: by 2002:a05:622a:40ce:b0:3a5:6162:71ca with SMTP id ch14-20020a05622a40ce00b003a5616271camr5519254qtb.581.1667586445407;
+        Fri, 04 Nov 2022 11:27:25 -0700 (PDT)
 Received: from ?IPV6:2601:586:5000:570:aad6:acd8:4ed9:299b? ([2601:586:5000:570:aad6:acd8:4ed9:299b])
-        by smtp.gmail.com with ESMTPSA id y19-20020a05620a44d300b006fa2dde9db8sm3408762qkp.95.2022.11.04.11.25.58
+        by smtp.gmail.com with ESMTPSA id m7-20020ac807c7000000b003a4d5fed8c3sm2807816qth.85.2022.11.04.11.27.23
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 04 Nov 2022 11:25:59 -0700 (PDT)
-Message-ID: <c904b95c-f686-0a54-f697-ef0d35e37102@linaro.org>
-Date:   Fri, 4 Nov 2022 14:25:57 -0400
+        Fri, 04 Nov 2022 11:27:24 -0700 (PDT)
+Message-ID: <9e8a1990-c090-3a07-7769-307aca10e45c@linaro.org>
+Date:   Fri, 4 Nov 2022 14:27:23 -0400
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.2
-Subject: Re: [PATCH 2/9] dt-bindings: nvmem: Add compatible for MSM8976
+Subject: Re: [PATCH 3/9] dt-bindings: arm: qcom: Document msm8956 and msm8976
+ SoC and devices
 Content-Language: en-US
 To:     AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>, agross@kernel.org
@@ -70,9 +71,9 @@ Cc:     andersson@kernel.org, konrad.dybcio@somainline.org,
         linux-hardening@vger.kernel.org, marijn.suijten@somainline.org,
         kernel@collabora.com, luca@z3ntu.xyz, a39.skl@gmail.com
 References: <20221104172122.252761-1-angelogioacchino.delregno@collabora.com>
- <20221104172122.252761-3-angelogioacchino.delregno@collabora.com>
+ <20221104172122.252761-4-angelogioacchino.delregno@collabora.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221104172122.252761-3-angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20221104172122.252761-4-angelogioacchino.delregno@collabora.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -88,29 +89,14 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 On 04/11/2022 13:21, AngeloGioacchino Del Regno wrote:
 > From: Marijn Suijten <marijn.suijten@somainline.org>
 > 
-> Document generic QFPROM compatibility on MSM8976.
+> Note that msm8976 is omitted as a compatible, since there are currently
+> no boards/devices using it.
 > 
 > Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
 > Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> ---
->  Documentation/devicetree/bindings/nvmem/qcom,qfprom.yaml | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/nvmem/qcom,qfprom.yaml b/Documentation/devicetree/bindings/nvmem/qcom,qfprom.yaml
-> index 2eab2f46cb65..cac7be59c3cd 100644
-> --- a/Documentation/devicetree/bindings/nvmem/qcom,qfprom.yaml
-> +++ b/Documentation/devicetree/bindings/nvmem/qcom,qfprom.yaml
-> @@ -22,6 +22,7 @@ properties:
->            - qcom,msm8974-qfprom
->            - qcom,msm8916-qfprom
->            - qcom,msm8996-qfprom
-> +          - qcom,msm8976-qfprom
 
-Put it before msm8996, although order is already broken.
 
->            - qcom,msm8998-qfprom
->            - qcom,qcs404-qfprom
->            - qcom,sc7180-qfprom
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Best regards,
 Krzysztof
