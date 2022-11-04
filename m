@@ -2,69 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D42A36193D5
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 10:48:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DDDC16193DA
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 10:48:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231553AbiKDJsE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 05:48:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59400 "EHLO
+        id S231566AbiKDJst (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 05:48:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231543AbiKDJsC (ORCPT
+        with ESMTP id S231146AbiKDJsq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 05:48:02 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97DC3E0C
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 02:48:01 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id l11so6800803edb.4
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 02:48:01 -0700 (PDT)
+        Fri, 4 Nov 2022 05:48:46 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB47712A;
+        Fri,  4 Nov 2022 02:48:45 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id t10so5631367ljj.0;
+        Fri, 04 Nov 2022 02:48:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ESIFs3oJHDSvCLWap8pAAJrNAhFQntQkQpkAjXYar+4=;
-        b=ihVfFMm6Vu0eGpp3JnPrLZAFKbpzMCetRS+zRcv61cnXi9YuD9HLgoUY1GGQE8ZnlL
-         GLMxLjvDh44ErRKzQ1Szf+w15VIsvZCmJgokohMIb/z1jkr4Gs/FBwA2n8PAUALsgHVv
-         pgzL1cv35XwScmwombqFnKqmgP9dDOVS9NoSq5lemuvmqA1J4uIVKJ6HAosSS1wZ2qo0
-         PXgaXMhpZz4gh/fkyd5yTNSX4teE9SUCoO/GnJYGX4qiuErMTYj3Lobph9zKEuw3iVKR
-         HrUWKVob93reAA+ql5xzkfGYIR2BZhbdDmWyq2JmR2ACtZovchKKZc4ZCeez8CDN8Oru
-         B1hQ==
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=16368SpxFYfA1qhqcCioWm185iXGRNzUZqOGw6lrgz0=;
+        b=Xd1ynscTvD0jWIVc/LcHxRJuZm1oz4N2zhwYuqO5oc04eoAsff/91czEHVf63D9c6S
+         QhSWM2ULdJzhfOlexNlKXfArB9ox7bydCymJ/ss68zhzBgBFahcrGSX40OjGe6MNTK+8
+         GiRNhL2LCrx0fuqz24in5TvhXAo6gH179KYW1usZr4iNmpAiPY1GN/4cNELLcYAZPmaQ
+         E0Pum6PU6LMLZtp5XfiD2Nm4CuBDOPVNxkxtPUo84BJ1Vm2GqjHgHpcNgEVbaeIh/bfD
+         Uo4Tf1RJTLU5+hMdl+HzGX/FcGVQfUPJ2fb29Sd/BmRYE1HM4CTGj+hupqrZcjbiXp/Y
+         hzfg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ESIFs3oJHDSvCLWap8pAAJrNAhFQntQkQpkAjXYar+4=;
-        b=UuhIelFET/XFeiZi/lICpse1zTq6Ben2qKloYpvvIYg3p/F0Z3XZEUWOAp9j6aAB62
-         XLTudnxODTckNkgDCH0ghP+iYhlDPtTeQEpE166r+70wGH5vmXDdkU3WuMJelC2/svKw
-         ZkPKyZ4GwPm0sVrToaf+9o4izgu/Ef2d0ZYD7LOL/jcQZ0CFQ5LRUOI1PoBj/GT5V0PC
-         Sjdwq5vuNf8n9AvxAz3a6U7naJj3tbvnDCxotcuZsrFVMABeF5Tn5kDmD5grj5GMHVuj
-         ac/ednmT15+pMj4TD9qt4wKmcnbN5dn/6+bSYzpcbPE0ER+suj174Num7p+v5pTymQ5w
-         V8NQ==
-X-Gm-Message-State: ACrzQf2Kca116NB+egO46Qhrzh/gJs9bQ0uiYS4hLNp7r3kerK7Sz3DK
-        /Bi2WuNAmyJ1U3rIGXbo/ft/s79GiNE=
-X-Google-Smtp-Source: AMsMyM5ewo9+X3JXMYB4Uk+sdNSHtfne4qKDEIT8E43aoXxyhp4vD1j4FDJicN8lYCDQDnC9Xe9B5g==
-X-Received: by 2002:aa7:d385:0:b0:461:8cd3:b38b with SMTP id x5-20020aa7d385000000b004618cd3b38bmr34931896edq.172.1667555280005;
-        Fri, 04 Nov 2022 02:48:00 -0700 (PDT)
-Received: from debian64.daheim (p5b0d7d1e.dip0.t-ipconnect.de. [91.13.125.30])
-        by smtp.gmail.com with ESMTPSA id 23-20020a508757000000b004614fd33789sm1695689edv.18.2022.11.04.02.47.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Nov 2022 02:47:59 -0700 (PDT)
-Received: from chuck by debian64.daheim with local (Exim 4.96)
-        (envelope-from <chunkeey@gmail.com>)
-        id 1oqtIt-000QPM-0E;
-        Fri, 04 Nov 2022 10:47:59 +0100
-From:   Christian Lamparter <chunkeey@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     rafal@milecki.pl, srinivas.kandagatla@linaro.org,
-        gregkh@linuxfoundation.org, a.fatoum@pengutronix.de
-Subject: [PATCH v1] nvmem: address crc32 check on redundant-layout powerpc machines
-Date:   Fri,  4 Nov 2022 10:47:59 +0100
-Message-Id: <41e7ab94800b4a9aef73e212464bd94117429bec.1667555240.git.chunkeey@gmail.com>
-X-Mailer: git-send-email 2.38.1
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=16368SpxFYfA1qhqcCioWm185iXGRNzUZqOGw6lrgz0=;
+        b=5hBmd8o7JXy8L8vIDqRQftTnKale7LRsf3YL/3D0hFtaCu1aAVh9FW8HIIg+Oaw82R
+         pV2j8zz2pdCNqqlVlALUrQob5WqDF2fS3rL8QcwlN1mMRdHHYgXr2AMs/9N1n/sV3sk+
+         xD+pj825NjPv2KrFJLFkhEbPBbT+bwm9WMPFCUSO2MhiSv4Qe9MZ56b3nfTKkgO+0Xrs
+         9fmVoWeK9Z2ihECQJ/Y91qQtXihqjggTS+8pvBZzhSwAd50N1i2pcvBDriRFsfkkOTeK
+         8KVfSoLaK7ll7jyASPpbT4RqEqhcdcRCURpSD/fC/CYyvoifHFATKT9nC4cIwFMWpZMu
+         zJsw==
+X-Gm-Message-State: ACrzQf2AyD41r6IC4jYjSj6Sp5AqYRo8jteKf1quRNZFbBM6gSiAdUc0
+        ydAEp7BAkrw2Xs+Tk6zeLmYH+mpQI4w=
+X-Google-Smtp-Source: AMsMyM5lUfEeal7ji1xNwmiMKu1u535j/1rjCAffZnbxyiDTmKVBFhL/ByvYXf/1X7wZe7Nu2V8JCA==
+X-Received: by 2002:a2e:8255:0:b0:277:e01:6119 with SMTP id j21-20020a2e8255000000b002770e016119mr1989418ljh.33.1667555323617;
+        Fri, 04 Nov 2022 02:48:43 -0700 (PDT)
+Received: from [192.168.1.103] ([178.176.79.14])
+        by smtp.gmail.com with ESMTPSA id n20-20020a2e7214000000b00277078d4504sm368687ljc.13.2022.11.04.02.48.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 04 Nov 2022 02:48:42 -0700 (PDT)
+Subject: Re: [PATCH] irqchip: loongson-liointc: fix improper error handling in
+ liointc_init()
+To:     Liu Peibao <liupeibao@loongson.cn>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Jianmin Lv <lvjianmin@loongson.cn>
+Cc:     Yinbo Zhu <zhuyinbo@loongson.cn>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221104080347.21527-1-liupeibao@loongson.cn>
+From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Message-ID: <539b63ee-7655-50c1-a95f-9f8210e7229d@gmail.com>
+Date:   Fri, 4 Nov 2022 12:48:40 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221104080347.21527-1-liupeibao@loongson.cn>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -73,86 +81,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Western Digital MyBook Live (PowerPC 464/APM82181)
-has a set of redundant u-boot-env. Loading up the driver
-causes it to error out with:
+Hello!
 
-| u_boot_env: Invalid calculated CRC32: 0x4f8f2c86 (expected: 0x98b14514)
-| u_boot_env: probe of partition@1e000 failed with error -22
+On 11/4/22 11:03 AM, Liu Peibao wrote:
 
-Looking up the userspace libubootenv utilities source [0],
-it looks like the "mark" or "flag" is not part of the
-crc32 sum... which is unfortunate :(
+> For cores less than 4, eg, loongson2k1000 with 2 cores, the
+> of_property_match_string() may return with an error value,
+> which causes that liointc could not work. At least one isr
+> is what should be checked like previous commit <b2c4c3969fd7>
+> (irqchip/loongson-liointc: irqchip add 2.0 version) did.
 
-|static int libuboot_load(struct uboot_ctx *ctx)
-|{
-|[...]
-|       if (ctx->redundant) {
-|		[...]
-|               offsetdata = offsetof(struct uboot_env_redund, data);
-|		[...]
-|       }
-|       usable_envsize = ctx->size - offsetdata;
-|       buf[0] = malloc(bufsize);
-|[...]
-|	for (i = 0; i < copies; i++) {
-|		data = (uint8_t *)(buf[i] + offsetdata);
-|               uint32_t crc;
-|
-|		ret = devread(ctx, i, buf[i]);
-|		[...]
-|		crc = *(uint32_t *)(buf[i] + offsetcrc);
-|               dev->crc = crc32(0, (uint8_t *)data, usable_envsize);
-|
+   It should look like this:
 
-Now, this alone didn't fully fix the kernel's uboot-env nvmem
-driver. The driver then ran into an endian error on the
-big-endian powerpc device:
+commit b2c4c3969fd7 ("irqchip/loongson-liointc: irqchip add 2.0 version")
 
-| u_boot_env: Invalid calculated CRC32: 0x1445b198 (expected: 0x98b14514)
+> Fixes: 0858ed035a85 ("irqchip/loongson-liointc: Add ACPI init support")
+> Signed-off-by: Liu Peibao <liupeibao@loongson.cn>
+[...]
 
-however the __le32 type for the crc32 value is justified because the
-the crc32() is just a macro for crc32_le(). So, to side-step that
-problem, the crc32 check gets extended to also accept a byteswapped
-crc32.
-
-[0] https://github.com/sbabic/libubootenv/blob/master/src/uboot_env.c#L951
-Fixes: d5542923f200 ("nvmem: add driver handling U-Boot environment variables")
-Signed-off-by: Christian Lamparter <chunkeey@gmail.com>
----
-Might it be better to add a dt-property (I wouldn't piggy-pack on
-the existing big-endian;) to specify that the crc32 value stored
-in the flash/rom is swapped?
----
- drivers/nvmem/u-boot-env.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/nvmem/u-boot-env.c b/drivers/nvmem/u-boot-env.c
-index 8e72d1bbd649..f78e2f5d2ef1 100644
---- a/drivers/nvmem/u-boot-env.c
-+++ b/drivers/nvmem/u-boot-env.c
-@@ -135,7 +135,7 @@ static int u_boot_env_parse(struct u_boot_env *priv)
- 		break;
- 	case U_BOOT_FORMAT_REDUNDANT:
- 		crc32_offset = offsetof(struct u_boot_env_image_redundant, crc32);
--		crc32_data_offset = offsetof(struct u_boot_env_image_redundant, mark);
-+		crc32_data_offset = offsetof(struct u_boot_env_image_redundant, data);
- 		data_offset = offsetof(struct u_boot_env_image_redundant, data);
- 		break;
- 	}
-@@ -144,7 +144,11 @@ static int u_boot_env_parse(struct u_boot_env *priv)
- 	data_len = priv->mtd->size - data_offset;
- 
- 	calc = crc32(~0, buf + crc32_data_offset, crc32_data_len) ^ ~0L;
--	if (calc != crc32) {
-+	/*
-+	 * also accept byteswapped crc32 values for compatibility with
-+	 * existing legacy powerpc devices and userspace tools.
-+	 */
-+	if (calc != crc32 && calc != swab32(crc32)) {
- 		dev_err(dev, "Invalid calculated CRC32: 0x%08x (expected: 0x%08x)\n", calc, crc32);
- 		err = -EINVAL;
- 		goto err_kfree;
--- 
-2.38.1
-
+MBR, Sergey
