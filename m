@@ -2,102 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BD5A619870
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 14:48:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1385A619876
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 14:50:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231566AbiKDNs3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 09:48:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41878 "EHLO
+        id S231343AbiKDNuo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 09:50:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231454AbiKDNsY (ORCPT
+        with ESMTP id S229950AbiKDNuk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 09:48:24 -0400
-Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD72E187
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 06:48:22 -0700 (PDT)
-Received: by mail-qt1-x835.google.com with SMTP id c15so3020189qtw.8
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 06:48:22 -0700 (PDT)
+        Fri, 4 Nov 2022 09:50:40 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DFFC29B;
+        Fri,  4 Nov 2022 06:50:39 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id p13-20020a05600c468d00b003cf8859ed1bso3227665wmo.1;
+        Fri, 04 Nov 2022 06:50:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=7FuYaSuLHVjl+nMg8LeVo9P+/juH9VZJxeneSMIJjk4=;
-        b=joYPAYFh1lubtvMUJKKM50dbz1msMM8q6QwvCh2ZF8qS0opgo0aDoilvZiLd0a3/R1
-         q+XwGT6OX+KHe1xusmSCp6gTs4xYQA3iGGoEEIY0UkiN+ieE4GRYCTtv+FnBqfoRVi0c
-         YQPw25Ztp3XlRzsRxg8KU3lDJT/M/Kf8M7HFWqIDYieODHwA+Cw/DaLW/57Gbl6ExqAQ
-         mKiOS7Q2xeuXxSWN81DDbNwRdZDSRSlKmkLvgyHWy0cxMoof5QOdaWl6Kdafr2HWF0/F
-         UqVopqAQja7CW2NtZ/RxZ9Ca5JIN3df61F4SDrPqoCNbPF0Bz1UVnepxZI7GDU4hXSK5
-         Qjog==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Cm3BsyVvYpSeuNudkmxYNEssTxhnxpwGrC+e8qB022Q=;
+        b=NR7TLJzCPb2Z1wMhlgNcq0uSnplDtHg4xB4GGeup2S6Xc1Ve0fJXVFoCfSpEtqpMfR
+         GmKR3ZrUu8LLaKnYzfBRlq/ltFR/JitfNcXUIZB6hBiD1u0xwyJqTt/E0n6ic1wZYr1L
+         EYNwIhAKgLywM7z9kC8sUbiN5Ey8TAcXFZVwTjSqKjO/aaghluyXYUfhsiOS3JHx3XM7
+         GIj5YUnl2iFMVCVJGdXTRBL8+eXGUCuyC+0hzp5BX8oLKZU1+uH3B5FVTqXEHAh8rhwI
+         0cscXkYMEvbZymCjgY4tJYZ5ribl105etf8thyq27r5FlorxKCKYEngVSHyNuxV2qqkE
+         RvIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7FuYaSuLHVjl+nMg8LeVo9P+/juH9VZJxeneSMIJjk4=;
-        b=aYppn8ShDamicyU1EeDC/8d+F5g8FDTNd4z4UmtbxiQhhn5WVnybPWMMPlcH42IJ4e
-         wTFovrvSe7nWJC30hGn3sElQBYbH5CFgvRmzFbtOBjE0tnphmuHenal/KR9iCFxv3rgc
-         IS5vDRP0DyZ2ppmZPI8LaFlpHtgnVtHzmvsHym/KJb3RpJBV/zIvwyoJ8Z2/+Ry5vywI
-         K2HeHCWn4e93it5omNL+Pdr6HmV871RzCrk6YPlxs7SCVautGY9NyVa3M7/HBcQouzhu
-         hsD/vU881LLuh0313E4rj861g+MMzYDi5tDJkTqvDgDM5hIle2KY4bIi0fT3R2s6x8xO
-         oHWA==
-X-Gm-Message-State: ACrzQf0NYaiY058oXCNBWQ7x1BQwpQqwHs3bEHgJDCoNeTeFysoz1PB6
-        gsgqJEOrO0427CG3cKLZdN12fQ==
-X-Google-Smtp-Source: AMsMyM5GOMP8UcKyjRRp9D39ozG1zvgW3zu/OM7VYx623n8kqqwZBN0eCD4+ZfaJNF2wQG+kvUtNFQ==
-X-Received: by 2002:a05:622a:1304:b0:3a5:f04:5fe7 with SMTP id v4-20020a05622a130400b003a50f045fe7mr29245810qtk.158.1667569701917;
-        Fri, 04 Nov 2022 06:48:21 -0700 (PDT)
-Received: from ?IPV6:2601:586:5000:570:aad6:acd8:4ed9:299b? ([2601:586:5000:570:aad6:acd8:4ed9:299b])
-        by smtp.gmail.com with ESMTPSA id e13-20020ac8598d000000b003a57004313fsm466229qte.3.2022.11.04.06.48.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 04 Nov 2022 06:48:21 -0700 (PDT)
-Message-ID: <52abac38-b395-dddd-0c2d-886307b8e2d9@linaro.org>
-Date:   Fri, 4 Nov 2022 09:48:20 -0400
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Cm3BsyVvYpSeuNudkmxYNEssTxhnxpwGrC+e8qB022Q=;
+        b=mnXFSke4K4BU0EVAx8HDU+gm7dWqJnmxSOAc3WYMDkdDHms+KqbwlTET1hjTgbuzUS
+         +XUX7pBu+C8g6TjZGJJAsQSxb2Zr6wGBTrRe6OYsEI1cSD/3HYCeW8Waxu7LW2oXoT10
+         U5IjZVi5rMuE8HIFWSSkxFi/waEXtT5WyQapthLtbBcjddzXZS4X2dbghBx4d8hbXw1j
+         AdtydKfsqie4Z2gntxePJkYfbdZSyzEuRbb6GabM0fe0AqS8isl/YuRmSAhdxLw1gmJ3
+         e8oX1xb6VMlhm9Ae0L5tg1Qc11/fgluZcbMfSfx84GzDwaEeqdw/FuiyLZRbkNYDlGRP
+         2diw==
+X-Gm-Message-State: ACrzQf34mUWPy4UIbCb54jx+OYpYMSO4mi63JuGGR9epBP9UsaXGTlXb
+        0LU5FvQK4Alb/Ai9yBES36s=
+X-Google-Smtp-Source: AMsMyM6126QLQtqa/BlEQCAV4mdK+f0+HGOLxQHukxIVJzMus3Xva0A3wSvIXT1Qcg2lsLOnrkIxxg==
+X-Received: by 2002:a1c:2507:0:b0:3b3:3681:f774 with SMTP id l7-20020a1c2507000000b003b33681f774mr34535073wml.134.1667569838131;
+        Fri, 04 Nov 2022 06:50:38 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id l21-20020a05600c4f1500b003b4fdbb6319sm3340603wmq.21.2022.11.04.06.50.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Nov 2022 06:50:37 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Stanislaw Gruszka <stf_xl@wp.pl>, Kalle Valo <kvalo@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] iwlegacy: remove redundant variable len
+Date:   Fri,  4 Nov 2022 13:50:36 +0000
+Message-Id: <20221104135036.225628-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2 6/6] media: platform: Use IS_ENABLED() to check
- EXYNOS_IOMMU in s5p_mfc
-Content-Language: en-US
-To:     Sam Protsenko <semen.protsenko@linaro.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>
-Cc:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Janghyuck Kim <janghyuck.kim@samsung.com>,
-        Cho KyongHo <pullip.cho@samsung.com>,
-        Daniel Mentz <danielmentz@google.com>,
-        David Virag <virag.david003@gmail.com>, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org
-References: <20221103195154.21495-1-semen.protsenko@linaro.org>
- <20221103195154.21495-7-semen.protsenko@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221103195154.21495-7-semen.protsenko@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/11/2022 15:51, Sam Protsenko wrote:
-> Now that CONFIG_EXYNOS_IOMMU can be built as a module, it's not correct
-> anymore to check whether it's enabled or not just with #ifdef. Use
-> proper IS_ENABLED() macro to handle both built-in and module cases.
-> 
-> Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
-> ---
-> Changes in v2:
+Variable len is being assigned and modified but it is never
+used. The variable is redundant and can be removed.
 
+Cleans up clang scan build warning:
+warning: variable 'len' set but not used [-Wunused-but-set-variable]
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ drivers/net/wireless/intel/iwlegacy/3945-mac.c | 6 ------
+ 1 file changed, 6 deletions(-)
 
-Best regards,
-Krzysztof
+diff --git a/drivers/net/wireless/intel/iwlegacy/3945-mac.c b/drivers/net/wireless/intel/iwlegacy/3945-mac.c
+index 7352d5b2095f..429952871976 100644
+--- a/drivers/net/wireless/intel/iwlegacy/3945-mac.c
++++ b/drivers/net/wireless/intel/iwlegacy/3945-mac.c
+@@ -1202,8 +1202,6 @@ il3945_rx_handle(struct il_priv *il)
+ 		D_RX("r = %d, i = %d\n", r, i);
+ 
+ 	while (i != r) {
+-		int len;
+-
+ 		rxb = rxq->queue[i];
+ 
+ 		/* If an RXB doesn't have a Rx queue slot associated with it,
+@@ -1217,10 +1215,6 @@ il3945_rx_handle(struct il_priv *il)
+ 			       PAGE_SIZE << il->hw_params.rx_page_order,
+ 			       DMA_FROM_DEVICE);
+ 		pkt = rxb_addr(rxb);
+-
+-		len = le32_to_cpu(pkt->len_n_flags) & IL_RX_FRAME_SIZE_MSK;
+-		len += sizeof(u32);	/* account for status word */
+-
+ 		reclaim = il_need_reclaim(il, pkt);
+ 
+ 		/* Based on type of command response or notification,
+-- 
+2.38.1
 
