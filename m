@@ -2,82 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A927B61928E
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 09:16:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 615286192AE
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 09:23:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230348AbiKDIQZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 04:16:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47056 "EHLO
+        id S230428AbiKDIXI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 04:23:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229950AbiKDIQX (ORCPT
+        with ESMTP id S230199AbiKDIXG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 04:16:23 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E0162657A
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 01:16:23 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id l22-20020a17090a3f1600b00212fbbcfb78so7520663pjc.3
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 01:16:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=E10l8dXv+0yVdFm4e++fGKowhChM1uVgz1Vw83/Y2cg=;
-        b=ol95pFIRx0tYNNaY+NNILw/xN4ySwCeTdxC68wx492BaHbgyLSqUrsvf3NpH38iQUg
-         Zx7iD+35Px8hdlSrlQucqnbWLcMNaUx+50xOb2Ie20JDo1WtjkXEiv1zahOJGQ7T8/jg
-         cpyc1YqSqGsbSJOhcMEUHVans4zad6F/TH7eUoVqJRBIhPslv/m9gbDzndYR9wOZq6Ch
-         ENMJ3Bfmi9xvUEun7CA9/3uYf/elXBBIHIBt993RXprs91Vp67cqg5haroMY4G01L+0h
-         Erg22nRGNOCkODO8ARp6bNOM697JFyFy7djPWCtGJQmsE6kkeMaJZBHn0SCA0LUM70fI
-         /0dQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=E10l8dXv+0yVdFm4e++fGKowhChM1uVgz1Vw83/Y2cg=;
-        b=VxQFBJwrmWbs9Y86im6UzRohShcubQR5zQbZ3PnhdRi1YIEfKuOmbCm4WH+kK/cm8U
-         jOoaOsaUoSwKFI0rQFRWa0pF+l7oHVhxQsT0iTSwB0XyU0cgWiVhQARu6tke/5J7sP0A
-         03q6Da3oCdC35RnUCWH0Uyhs5ECrHCSWuf5qQ9ejwAr35JmEZhLoMCQLOPyL7hFbjbnv
-         w7TdmCO+oirMTZ7LrB/DVQMEPZ1zakW2ariKq1q5IpaMBpJIVq1ypHDF4Z6znPceDaR1
-         Hn6g8Lrp42hBSLgcVzmTd0XQzaskbgdKTL4Sj6CuXKkdWbYzu4faAfsHLnBgVJw6liPj
-         O7Ow==
-X-Gm-Message-State: ACrzQf17yPKOeuuDRHTntd+9HiwEuGv/ulDCefCwgbGLpdmetsjmJQap
-        MZSPC1MBfuyL1ivw6LnLSwY=
-X-Google-Smtp-Source: AMsMyM6VXD1w4yOU5o5rPc+Zy5uksryVOKxaPPSdQXbe5FLZuI1n8TxOgBi3w6BmwflaHME5uqdHHw==
-X-Received: by 2002:a17:903:2285:b0:187:3679:b3b0 with SMTP id b5-20020a170903228500b001873679b3b0mr19339855plh.121.1667549782836;
-        Fri, 04 Nov 2022 01:16:22 -0700 (PDT)
-Received: from debian.me (subs02-180-214-232-15.three.co.id. [180.214.232.15])
-        by smtp.gmail.com with ESMTPSA id z15-20020a62d10f000000b0056bee23a80bsm2052626pfg.137.2022.11.04.01.16.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Nov 2022 01:16:22 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id D62EC103D98; Fri,  4 Nov 2022 15:16:19 +0700 (WIB)
-Date:   Fri, 4 Nov 2022 15:16:19 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Syed Saba Kareem <Syed.SabaKareem@amd.com>
-Cc:     broonie@kernel.org, alsa-devel@alsa-project.org,
-        Vijendar.Mukunda@amd.com, Basavaraj.Hiregoudar@amd.com,
-        Sunil-kumar.Dommati@amd.com, mario.limonciello@amd.com,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Ajit Kumar Pandey <AjitKumar.Pandey@amd.com>,
-        Daniel Baluta <daniel.baluta@nxp.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Lucas Tanure <tanureal@opensource.cirrus.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] ASoC: amd: fix ACP version typo mistake
-Message-ID: <Y2TKUxKENsaAB3V8@debian.me>
-References: <20221104121001.207992-1-Syed.SabaKareem@amd.com>
+        Fri, 4 Nov 2022 04:23:06 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA62226AC1
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 01:23:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667550185; x=1699086185;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=7Y+gkhAAp0u7K1e9Tn7vtLtpxEKEw1yXGZ/7gmkDqig=;
+  b=gm2kdSbKsCbgwye+Cdd7BeBlpGnHkTYtErAruQxf0TbhzmPb9i6doChj
+   SzUd118Oqc5y6K9bkvrAMM5YGWy41dOqRlJ/7YW9zFvVXmK+v2O+1Hprt
+   PA9pxOXowqwyI3sAo2HkeTbK/+9AP3XKfHP84YaoMpL2RZ9KDjiwcWsOv
+   xGrGMOqmDnwEkd1gBdR0HboBesmjpNSSpmA2zQtcingNQwA/vKt+yc2Ff
+   btoGzvj8AGAsTpYFIlnVgEiT7PvDHgbIuIdYuJfksvJwSsO/uq+f4ofn2
+   X/KpOWpNi5e8VrkP8MEYXr3v2g8sx6xhoDCs1H2rFZrmq1i2H1vQn+FTn
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10520"; a="308625393"
+X-IronPort-AV: E=Sophos;i="5.96,136,1665471600"; 
+   d="scan'208";a="308625393"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2022 01:23:05 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10520"; a="880214608"
+X-IronPort-AV: E=Sophos;i="5.96,136,1665471600"; 
+   d="scan'208";a="880214608"
+Received: from rongch2-mobl.ccr.corp.intel.com (HELO [10.254.215.240]) ([10.254.215.240])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2022 01:23:03 -0700
+Subject: Re: FAILED: load BTF from vmlinux: No such file or directory
+To:     Mark Brown <broonie@kernel.org>, kernel test robot <lkp@intel.com>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <202211030542.t5oB7Bw6-lkp@intel.com>
+ <Y2Lig+5ak3zKuPa1@sirena.org.uk>
+From:   "Chen, Rong A" <rong.a.chen@intel.com>
+Message-ID: <80c8a969-b88c-fec3-ac32-0a61295decd6@intel.com>
+Date:   Fri, 4 Nov 2022 16:23:01 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.12.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="ZTMYTwyazIsoR/Ma"
-Content-Disposition: inline
-In-Reply-To: <20221104121001.207992-1-Syed.SabaKareem@amd.com>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <Y2Lig+5ak3zKuPa1@sirena.org.uk>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -85,38 +65,34 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---ZTMYTwyazIsoR/Ma
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Fri, Nov 04, 2022 at 05:39:07PM +0530, Syed Saba Kareem wrote:
-> From: syed saba kareem <syed.sabakareem@amd.com>
+On 11/3/2022 5:34 AM, Mark Brown wrote:
+> On Thu, Nov 03, 2022 at 05:27:38AM +0800, kernel test robot wrote:
+>> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+>> head:   8e5423e991e8cd0988d0c4a3f4ac4ca1af7d148a
+>> commit: 4e8ff35878685291978b93543d6b9e9290be770a ASoC: codecs: tlv320adc3xxx: Wrap adc3xxx_i2c_remove() in __exit_p()
+>> date:   2 weeks ago
+>> config: arc-buildonly-randconfig-r004-20221103
+>> compiler: arceb-elf-gcc (GCC) 12.1.0
+> 
+> ...
+> 
+>> All errors (new ones prefixed by >>):
+>>
+>>     Complex, interval and imaginary float types are not supported
+>>     Encountered error while encoding BTF.
+>>>> FAILED: load BTF from vmlinux: No such file or directory
+> 
+> This looks very much like a false positive, it is difficult to
+> understand how a change such as the one identified could trigger such an
+> issue.
+> 
 
-Is your name capitalization correct? I assume from From: mail header
-(Title Case).
+Hi Mark,
 
->=20
-> Pink Sardine is based on ACP6.3 architecture.
-> This patch fixes the typo mistake acp6.2 -> acp6.3
+Sorry for the noise, it's a false positive, the commit here fixed a 
+error and let the build process continuing which let the bot thought
+the new error is from this commit.
 
-Please write the description in imperative mood instead (e.g. "make foo
-do bar"). "This patch" phrase is redundant.
-
-Thanks.
-
---=20
-An old man doll... just what I always wanted! - Clara
-
---ZTMYTwyazIsoR/Ma
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY2TKUAAKCRD2uYlJVVFO
-o/fAAQD3rmfSByMHUHkKVpOJ6Ah3M+M3DKsLXB6nUzB3lzPbewEAilx/goxqiaWO
-hj9+2GDGqIQF5yWcjgxfnKYZ0LFlAg4=
-=IoKO
------END PGP SIGNATURE-----
-
---ZTMYTwyazIsoR/Ma--
+Best Regards,
+Rong Chen
