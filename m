@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7456E619AB2
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 15:58:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A57FB619AB9
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 15:58:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231956AbiKDO6X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 10:58:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41666 "EHLO
+        id S232351AbiKDO6w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 10:58:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231814AbiKDO55 (ORCPT
+        with ESMTP id S232263AbiKDO6C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 10:57:57 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AB4E303C4
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 07:57:56 -0700 (PDT)
+        Fri, 4 Nov 2022 10:58:02 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C7B52ED53
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 07:57:58 -0700 (PDT)
 From:   Anna-Maria Behnsen <anna-maria@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1667573874;
+        s=2020; t=1667573875;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=FruOUvpKeK+X7swaFNp01mmQJvyOWTcwLkHl8M9RVAo=;
-        b=WHasScklTX2l+M94cuiAXTiHWhyYQZKUYPXN+0WrU04i3B2wIeHRAL7p5P2Vd0qKsdWBmJ
-        NTXHiGgqYviBgWE/hJeIxrxiUxrEBTxr6ji/Cc9zINbCyDMl7QTV71eU7yob/aLskz2qJk
-        pSg+OMtjNkwgInWSfJsvF8kywdnPzkpjbhy7dqwNc5RR5d3Uldy3cSDaR9TIuBYT0xvhDN
-        HK1IuK6I6a1qeJcc8OrKZ9ESrEiUuavv2PjdjyX+g/KcBf4A3Pwv4GKupUFUe69rK0F3Zy
-        Lsr0HrkqYijt+h6onL8LKHZ1AmbwfzpMVdHxezK1nGyujGqAnyP5zKKEdgkkpw==
+        bh=SJQXT73M5EqpgN/OaScjUbemA9h45EuN/DjSPRp7+B8=;
+        b=opSSMs8+INQWcYQu5UHb3U05ouat0+yID7SNf3MMsxOGnyiItb/TVF8NFamERP/PRs9WS/
+        QWiFzEGdPN/gDJwLu1w2iZ2XRZ8GRyJn3I3oCyzc/Nl/PYbJMmTnoanSIQTN+fBTorjgoK
+        dbJVSy4yNQxYIFHfHhUIbtR+XyXGAKEyBdg+DvZLEXBIPBgMXpta3mEiCbv2hUXANnRDxm
+        +ZJ264kASAAprhV9amckn3jET3X8I/cL32JGSblkbgX6pHJ4hb5j3SHni7EPbfMn6tA5PZ
+        88Tk1AUB2GexmeMPAEmKJpEL57n6qdZFJHtdUx4rlzq7frqsvT/zcOLSnB2Xsg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1667573874;
+        s=2020e; t=1667573875;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=FruOUvpKeK+X7swaFNp01mmQJvyOWTcwLkHl8M9RVAo=;
-        b=2wS8GEB4PEbBXo6txsaCfHEF1g+vJEVKaQl6R3/fMHiP+lPDtKGvgPQJ+ghQetYhnuWU5z
-        QFpqJjEwwkTYl8Dw==
+        bh=SJQXT73M5EqpgN/OaScjUbemA9h45EuN/DjSPRp7+B8=;
+        b=Qw00fyiuSOq+8nMDyzrrq/BLOY+V56inCGAMwhxbouDigpsmgPMJJjh8IN+Ez30tZDJ+3x
+        c55XuXSl6NCE/HCg==
 To:     linux-kernel@vger.kernel.org
 Cc:     Peter Zijlstra <peterz@infradead.org>,
         John Stultz <jstultz@google.com>,
@@ -48,10 +48,15 @@ Cc:     Peter Zijlstra <peterz@infradead.org>,
         Frederic Weisbecker <fweisbec@gmail.com>,
         Rik van Riel <riel@surriel.com>,
         Anna-Maria Behnsen <anna-maria@linutronix.de>,
-        Frederic Weisbecker <frederic@kernel.org>
-Subject: [PATCH v4 04/16] timer: Rework idle logic
-Date:   Fri,  4 Nov 2022 15:57:25 +0100
-Message-Id: <20221104145737.71236-5-anna-maria@linutronix.de>
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, "Theodore Ts'o" <tytso@mit.edu>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Stephen Boyd <sboyd@kernel.org>, Tejun Heo <tj@kernel.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>
+Subject: [PATCH v4 05/16] add_timer_on(): Make sure callers have TIMER_PINNED flag
+Date:   Fri,  4 Nov 2022 15:57:26 +0100
+Message-Id: <20221104145737.71236-6-anna-maria@linutronix.de>
 In-Reply-To: <20221104145737.71236-1-anna-maria@linutronix.de>
 References: <20221104145737.71236-1-anna-maria@linutronix.de>
 MIME-Version: 1.0
@@ -65,66 +70,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Thomas Gleixner <tglx@linutronix.de>
+The implementation of the hierachical timer pull model will change the
+timer bases per CPU. Timers, that have to expire on a specific CPU, require
+the TIMER_PINNED flag. Otherwise they will be queued on the dedicated CPU
+but in global timer base and those timers could also expire on other
+CPUs. Timers with TIMER_DEFERRABLE flag end up in a separate base anyway
+and are executed on the local CPU only.
 
-To improve readability of the code, split base->idle calculation and
-expires calculation into separate parts.
+Therefore add the missing TIMER_PINNED flag for those callers who use
+add_timer_on() without the flag. No functional change.
 
-Thereby the following subtle change happens if the next event is just one
-jiffy ahead and the tick was already stopped: Originally base->is_idle
-remains true in this situation. Now base->is_idle turns to false. This may
-spare an IPI if a timer is enqueued remotely to an idle CPU that is going
-to tick on the next jiffy.
-
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 Signed-off-by: Anna-Maria Behnsen <anna-maria@linutronix.de>
-Reviewed-by: Frederic Weisbecker <frederic@kernel.org>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: x86@kernel.org
+Cc: "H. Peter Anvin" <hpa@zytor.com>
+Cc: "Theodore Ts'o" <tytso@mit.edu>
+Cc: "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc: John Stultz <jstultz@google.com>
+Cc: Stephen Boyd <sboyd@kernel.org>
+Cc: Tejun Heo <tj@kernel.org>
+Cc: Lai Jiangshan <jiangshanlai@gmail.com>
 ---
-v4: Change condition to force 0 delta and update commit message (Frederic)
+v4:
+  - Move patch before local and global base are introduced
+  - Add missing user (drivers/char/random.c) of add_timer_on() without
+    TIMER_PINNED flag (kernel test robot)
 ---
- kernel/time/timer.c | 29 ++++++++++++++---------------
- 1 file changed, 14 insertions(+), 15 deletions(-)
+ arch/x86/kernel/tsc_sync.c | 3 ++-
+ drivers/char/random.c      | 2 +-
+ kernel/time/clocksource.c  | 2 +-
+ kernel/workqueue.c         | 7 +++++--
+ 4 files changed, 9 insertions(+), 5 deletions(-)
 
-diff --git a/kernel/time/timer.c b/kernel/time/timer.c
-index 4547d2efcb86..0e9f609f5a38 100644
---- a/kernel/time/timer.c
-+++ b/kernel/time/timer.c
-@@ -1727,21 +1727,20 @@ u64 get_next_timer_interrupt(unsigned long basej, u64 basem)
- 			base->clk = nextevt;
- 	}
+diff --git a/arch/x86/kernel/tsc_sync.c b/arch/x86/kernel/tsc_sync.c
+index 9452dc9664b5..eab827288e0f 100644
+--- a/arch/x86/kernel/tsc_sync.c
++++ b/arch/x86/kernel/tsc_sync.c
+@@ -110,7 +110,8 @@ static int __init start_sync_check_timer(void)
+ 	if (!cpu_feature_enabled(X86_FEATURE_TSC_ADJUST) || tsc_clocksource_reliable)
+ 		return 0;
  
--	if (time_before_eq(nextevt, basej)) {
--		expires = basem;
--		base->is_idle = false;
--	} else {
--		if (base->timers_pending)
--			expires = basem + (u64)(nextevt - basej) * TICK_NSEC;
--		/*
--		 * If we expect to sleep more than a tick, mark the base idle.
--		 * Also the tick is stopped so any added timer must forward
--		 * the base clk itself to keep granularity small. This idle
--		 * logic is only maintained for the BASE_STD base, deferrable
--		 * timers may still see large granularity skew (by design).
--		 */
--		if ((expires - basem) > TICK_NSEC)
--			base->is_idle = true;
-+	/*
-+	 * Base is idle if the next event is more than a tick away. Also
-+	 * the tick is stopped so any added timer must forward the base clk
-+	 * itself to keep granularity small. This idle logic is only
-+	 * maintained for the BASE_STD base, deferrable timers may still
-+	 * see large granularity skew (by design).
-+	 */
-+	base->is_idle = time_after(nextevt, basej + 1);
-+
-+	if (base->timers_pending) {
-+		/* If we missed a tick already, force 0 delta */
-+		if (time_before(nextevt, basej))
-+			nextevt = basej;
-+		expires = basem + (u64)(nextevt - basej) * TICK_NSEC;
- 	}
- 	raw_spin_unlock(&base->lock);
+-	timer_setup(&tsc_sync_check_timer, tsc_sync_check_timer_fn, 0);
++	timer_setup(&tsc_sync_check_timer, tsc_sync_check_timer_fn,
++		    TIMER_PINNED);
+ 	tsc_sync_check_timer.expires = jiffies + SYNC_CHECK_INTERVAL;
+ 	add_timer(&tsc_sync_check_timer);
  
+diff --git a/drivers/char/random.c b/drivers/char/random.c
+index 69754155300e..2cae98dc86dc 100644
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -949,7 +949,7 @@ static DEFINE_PER_CPU(struct fast_pool, irq_randomness) = {
+ #define FASTMIX_PERM HSIPHASH_PERMUTATION
+ 	.pool = { HSIPHASH_CONST_0, HSIPHASH_CONST_1, HSIPHASH_CONST_2, HSIPHASH_CONST_3 },
+ #endif
+-	.mix = __TIMER_INITIALIZER(mix_interrupt_randomness, 0)
++	.mix = __TIMER_INITIALIZER(mix_interrupt_randomness, TIMER_PINNED)
+ };
+ 
+ /*
+diff --git a/kernel/time/clocksource.c b/kernel/time/clocksource.c
+index 8058bec87ace..f8c310e62758 100644
+--- a/kernel/time/clocksource.c
++++ b/kernel/time/clocksource.c
+@@ -523,7 +523,7 @@ static inline void clocksource_start_watchdog(void)
+ {
+ 	if (watchdog_running || !watchdog || list_empty(&watchdog_list))
+ 		return;
+-	timer_setup(&watchdog_timer, clocksource_watchdog, 0);
++	timer_setup(&watchdog_timer, clocksource_watchdog, TIMER_PINNED);
+ 	watchdog_timer.expires = jiffies + WATCHDOG_INTERVAL;
+ 	add_timer_on(&watchdog_timer, cpumask_first(cpu_online_mask));
+ 	watchdog_running = 1;
+diff --git a/kernel/workqueue.c b/kernel/workqueue.c
+index 7cd5f5e7e0a1..a0f7bf7be6f2 100644
+--- a/kernel/workqueue.c
++++ b/kernel/workqueue.c
+@@ -1670,10 +1670,13 @@ static void __queue_delayed_work(int cpu, struct workqueue_struct *wq,
+ 	dwork->cpu = cpu;
+ 	timer->expires = jiffies + delay;
+ 
+-	if (unlikely(cpu != WORK_CPU_UNBOUND))
++	if (unlikely(cpu != WORK_CPU_UNBOUND)) {
++		timer->flags |= TIMER_PINNED;
+ 		add_timer_on(timer, cpu);
+-	else
++	} else {
++		timer->flags &= ~TIMER_PINNED;
+ 		add_timer(timer);
++	}
+ }
+ 
+ /**
 -- 
 2.30.2
 
