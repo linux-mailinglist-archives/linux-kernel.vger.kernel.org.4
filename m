@@ -2,95 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08241619173
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 07:53:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D7E1619179
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 07:57:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231395AbiKDGxA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 02:53:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41942 "EHLO
+        id S231433AbiKDG5H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 02:57:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230342AbiKDGw6 (ORCPT
+        with ESMTP id S231374AbiKDG5F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 02:52:58 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0934D292;
-        Thu,  3 Nov 2022 23:52:58 -0700 (PDT)
-Received: by linux.microsoft.com (Postfix, from userid 1134)
-        id C66D820C3338; Thu,  3 Nov 2022 23:52:57 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com C66D820C3338
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1667544777;
-        bh=jb6l497PPbm1hNScY6pLdfDwqz1lLgbCVQL62N7ST2w=;
-        h=From:To:Cc:Subject:Date:From;
-        b=dd4z5rhEOCCgbd/WRAVLY7yoA2m04/GkgGrMz0g7VLTsdLI2jW4JbrfTfVX/VRIFn
-         sAkezacDQDGg+thfyg4jQcJI47Q9FqEVCDm+t8OKZF/d79jy/fB7sWeoNHtwUKkiHx
-         asLthUl0vRztG7P2lAQjCmi74Kds2wUDXi4raaj8=
-From:   Shradha Gupta <shradhagupta@linux.microsoft.com>
-To:     linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org
-Cc:     Shradha Gupta <shradhagupta@linux.microsoft.com>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Long Li <longli@microsoft.com>,
-        Michael Kelley <mikelley@microsoft.com>
-Subject: [PATCH] hv_balloon: Fix committed value in post_status() if dynamic memory is disabled
-Date:   Thu,  3 Nov 2022 23:52:50 -0700
-Message-Id: <1667544770-31377-1-git-send-email-shradhagupta@linux.microsoft.com>
-X-Mailer: git-send-email 1.8.3.1
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 4 Nov 2022 02:57:05 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC911644E
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 23:56:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1667544969;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=5Z8pgpEoQGeTMdYiqrUkF/Lckp8LaxoK9HC3TP6LmFk=;
+        b=CiCw683jaHHCLBOp5W/xYdsLOeCM3e9x+DTXcDxYMTeC7re3kDLQhiCFC8JXDGLhcEqJ3Y
+        ImuSGmteNOM4lA6pr8uPargqsNQxK1AB1JeepJV2xt7ClgLQyxlmAdB56KKe4t/n5IZIXd
+        PIsTQLEcVCOaZRL8XuSr6ILa2Gs4Ros=
+Received: from mail-oa1-f72.google.com (mail-oa1-f72.google.com
+ [209.85.160.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-584-tl7cLpKoOVqtVFLlNiUbrw-1; Fri, 04 Nov 2022 02:56:08 -0400
+X-MC-Unique: tl7cLpKoOVqtVFLlNiUbrw-1
+Received: by mail-oa1-f72.google.com with SMTP id 586e51a60fabf-13b88262940so2202479fac.15
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 23:56:08 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=5Z8pgpEoQGeTMdYiqrUkF/Lckp8LaxoK9HC3TP6LmFk=;
+        b=Y0NAOySxnPum3EXsl5nSD4zLBnbutu/Aw9Aksj7az1wRAKY1x9xe3Y6yN3AV2NvqkZ
+         MjL9Fh2IOykZRTfW8p4rPlRRBdz+IKLfi+rBR5mnELIVrQzYWXhxJ3gXShq9nFyqOi15
+         +yypFtk/tFXyJfGw5WPpDKziS1DBNHO7AtI/B26o4WaF2vicB4tlTThFzFSDoszWsoBG
+         5l0t3GAK3sudCJvXIR4UkDVJIbfQrWEd1RCyKak6GU/yA0sC6GdnlkcXliJ2jVP5vFAw
+         0afNnmafyKA1sZ2bgLfx3TtFmzBamBZM0dLHX2Efzi+57+H6sgWSjJmyx25MhPsOFOje
+         SJbQ==
+X-Gm-Message-State: ACrzQf1FrgcVlCC4YzWv+NqGvcGk2qP1Gc/SPrAAUfrUGuIIdZTxr/KP
+        ZM+zVlFW97JzZQ49ok5GE/y6W0ehTKshGSHyDX/FVLA9Emd0Rrmmxtll3pSd8uKOUTyjjlq7G1H
+        1ASatvQLtH/yU0+qm3UMSXDEaxhCkFXK8iz21+l0S
+X-Received: by 2002:a05:6870:9595:b0:132:7b3:29ac with SMTP id k21-20020a056870959500b0013207b329acmr187913oao.35.1667544967830;
+        Thu, 03 Nov 2022 23:56:07 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM6uOSbcIQS7KtsvJ6sUqAGVkWZj1MHAULLpUw3CyxbO8+piM4IZrUq0fI1jx3qzy5Tb12QsruflGwjcxpEXVPQ=
+X-Received: by 2002:a05:6870:9595:b0:132:7b3:29ac with SMTP id
+ k21-20020a056870959500b0013207b329acmr187905oao.35.1667544967645; Thu, 03 Nov
+ 2022 23:56:07 -0700 (PDT)
+MIME-Version: 1.0
+References: <Y0lcmZTP5sr467z6@T590> <CACycT3u8yYUS-WnNzgHQtQFYuK-XcyffpFc35HVZzrCS7hH5Sg@mail.gmail.com>
+ <Y05OzeC7wImts4p7@T590> <CACycT3sK1AzA4RH1ZfbstV3oax-oeBVtEz+sY+8scBU0=1x46g@mail.gmail.com>
+ <CAJSP0QVevA0gvyGABAFSoMhBN9ydZqUJh4qJYgNbGeyRXL8AjA@mail.gmail.com>
+ <CACycT3udzt0nyqweGbAsZB4LDQU=a7OSWKC8ZWieoBpsSfa2FQ@mail.gmail.com>
+ <1d051d63-ce34-1bb3-2256-4ced4be6d690@redhat.com> <CACycT3usE0QdJd50bSiLiPwTFxscg-Ur=iZyeGJJBPe7+KxOFQ@mail.gmail.com>
+ <CAJSP0QUGj4t8nYeJvGaO-cWJ+F3Zvxcq007RHOm-=41zaE-v0Q@mail.gmail.com>
+ <CACGkMEt+BWCUVQPnfUUd0QXkHz=90LMXxydCgBqWTDB3eGBw-w@mail.gmail.com> <Y2LBa/ePKiSN2phm@fedora>
+In-Reply-To: <Y2LBa/ePKiSN2phm@fedora>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Fri, 4 Nov 2022 14:55:55 +0800
+Message-ID: <CACGkMEvBZDxTv-DS7V6HW+GPZio5jiafmNGACa2cyWqCr_GvJg@mail.gmail.com>
+Subject: Re: ublk-qcow2: ublk-qcow2 is available
+To:     Stefan Hajnoczi <stefanha@redhat.com>
+Cc:     Stefan Hajnoczi <stefanha@gmail.com>,
+        Yongji Xie <xieyongji@bytedance.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Ming Lei <tom.leiming@gmail.com>,
+        Ziyang Zhang <ZiyangZhang@linux.alibaba.com>,
+        io-uring@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        "Denis V. Lunev" <den@openvz.org>,
+        Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If Dynamic memory is disabled for VM, the committed value reported by the
-post_status() call by hv_balloon driver includes compute_balloon_floor().
-This is not needed if balloon_up operations or hot_add operations were
-never requested on the VM(or if Dynamic memory was disabled for the VM)
+On Thu, Nov 3, 2022 at 3:13 AM Stefan Hajnoczi <stefanha@redhat.com> wrote:
+>
+> On Tue, Nov 01, 2022 at 10:36:29AM +0800, Jason Wang wrote:
+> > On Tue, Oct 25, 2022 at 8:02 PM Stefan Hajnoczi <stefanha@gmail.com> wr=
+ote:
+> > >
+> > > On Tue, 25 Oct 2022 at 04:17, Yongji Xie <xieyongji@bytedance.com> wr=
+ote:
+> > > >
+> > > > On Fri, Oct 21, 2022 at 2:30 PM Jason Wang <jasowang@redhat.com> wr=
+ote:
+> > > > >
+> > > > >
+> > > > > =E5=9C=A8 2022/10/21 13:33, Yongji Xie =E5=86=99=E9=81=93:
+> > > > > > On Tue, Oct 18, 2022 at 10:54 PM Stefan Hajnoczi <stefanha@gmai=
+l.com> wrote:
+> > > > > >> On Tue, 18 Oct 2022 at 09:17, Yongji Xie <xieyongji@bytedance.=
+com> wrote:
+> > > > > >>> On Tue, Oct 18, 2022 at 2:59 PM Ming Lei <tom.leiming@gmail.c=
+om> wrote:
+> > > > > >>>> On Mon, Oct 17, 2022 at 07:11:59PM +0800, Yongji Xie wrote:
+> > > > > >>>>> On Fri, Oct 14, 2022 at 8:57 PM Ming Lei <tom.leiming@gmail=
+.com> wrote:
+> > > > > >>>>>> On Thu, Oct 13, 2022 at 02:48:04PM +0800, Yongji Xie wrote=
+:
+> > > > > >>>>>>> On Wed, Oct 12, 2022 at 10:22 PM Stefan Hajnoczi <stefanh=
+a@gmail.com> wrote:
+> > > > > >>>>>>>> On Sat, 8 Oct 2022 at 04:43, Ziyang Zhang <ZiyangZhang@l=
+inux.alibaba.com> wrote:
+> > > > > >>>>>>>>> On 2022/10/5 12:18, Ming Lei wrote:
+> > > > > >>>>>>>>>> On Tue, Oct 04, 2022 at 09:53:32AM -0400, Stefan Hajno=
+czi wrote:
+> > > > > >>>>>>>>>>> On Tue, 4 Oct 2022 at 05:44, Ming Lei <tom.leiming@gm=
+ail.com> wrote:
+> > > > > >>>>>>>>>>>> On Mon, Oct 03, 2022 at 03:53:41PM -0400, Stefan Haj=
+noczi wrote:
+> > > > > >>>>>>>>>>>>> On Fri, Sep 30, 2022 at 05:24:11PM +0800, Ming Lei =
+wrote:
+> > > There are ways to minimize that cost:
+> > > 1. The driver only needs to fetch the device's sq index when it has
+> > > run out of sq ring space.
+> > > 2. The device can include sq index updates with completions. This is
+> > > what NVMe does with the CQE SQ Head Pointer field, but the
+> > > disadvantage is that the driver has no way of determining the sq inde=
+x
+> > > until a completion occurs.
+> >
+> > Probably, but as replied in another thread, based on the numbers
+> > measured from the networking test, I think the current virtio layout
+> > should be sufficient for block I/O but might not fit for cases like
+> > NFV.
+>
+> I remember that the Linux virtio_net driver doesn't rely on vq spinlocks
+> because CPU affinity and the NAPI architecture ensure that everything is
+> CPU-local. There is no need to protect the freelist explicitly because
+> the functions cannot race.
+>
+> Maybe virtio_blk can learn from virtio_net...
 
-Signed-off-by: Shradha Gupta <shradhagupta@linux.microsoft.com>
----
- drivers/hv/hv_balloon.c | 22 +++++++++++++++++-----
- 1 file changed, 17 insertions(+), 5 deletions(-)
+It only works for RX where add and get could be all done in NAPI. But
+this is not the case for TX (and virtio-blk).
 
-diff --git a/drivers/hv/hv_balloon.c b/drivers/hv/hv_balloon.c
-index fdf6decacf06..a6f5321d4a2e 100644
---- a/drivers/hv/hv_balloon.c
-+++ b/drivers/hv/hv_balloon.c
-@@ -1129,11 +1129,23 @@ static unsigned long compute_balloon_floor(void)
- 
- static unsigned long get_pages_committed(struct hv_dynmem_device *dm)
- {
--	return vm_memory_committed() +
--		dm->num_pages_ballooned +
--		(dm->num_pages_added > dm->num_pages_onlined ?
--		 dm->num_pages_added - dm->num_pages_onlined : 0) +
--		compute_balloon_floor();
-+	unsigned long pages_committed;
-+
-+	pages_committed = vm_memory_committed();
-+
-+	/*
-+	 * If no balloon_up or hot_add operation was performed do not add
-+	 * num_pages_ballooned, number of pages offline or
-+	 * compute_balloon_floor() to the pages_committed value
-+	 */
-+	if (dm->num_pages_ballooned || dm->num_pages_added) {
-+		pages_committed += dm->num_pages_ballooned +
-+			(dm->num_pages_added > dm->num_pages_onlined ?
-+			 dm->num_pages_added - dm->num_pages_onlined : 0) +
-+			 compute_balloon_floor();
-+	}
-+
-+	return pages_committed;
- }
- 
- /*
--- 
-2.37.2
+Actually, if the free_list is the one thing that needs to be
+serialized, there's no need to use lock at all. We can try to switch
+to use ptr_ring instead.
+
+Thanks
+
+>
+> Stefan
 
