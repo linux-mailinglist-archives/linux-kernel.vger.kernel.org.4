@@ -2,65 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17A86619EEC
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 18:38:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB017619EEA
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 18:37:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231584AbiKDRiB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 13:38:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46400 "EHLO
+        id S231465AbiKDRh5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 13:37:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231431AbiKDRh4 (ORCPT
+        with ESMTP id S229954AbiKDRhx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 13:37:56 -0400
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4941632065;
-        Fri,  4 Nov 2022 10:37:53 -0700 (PDT)
-Received: by mail-oi1-x230.google.com with SMTP id t62so5861550oib.12;
-        Fri, 04 Nov 2022 10:37:53 -0700 (PDT)
+        Fri, 4 Nov 2022 13:37:53 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67E0A31FBA
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 10:37:52 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id v17so5552987plo.1
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 10:37:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=CESi/QuyB0+7uMM9ST1dSB2NDWs95NPRxZRMfmdUQF8=;
-        b=qRN331Q3lFC/jiJrMMlhDieuNyyRJdSkDn90USd5Zh/1i49Mp/pjlpZAy+R1iGQowD
-         Ob3EIUrrYYuobp0mwpfkGBHaMqwkqWfuCoce2nhUE7ZtXDDR6VI1MLkXzAoBMhliVmbW
-         IZC47hdI39uFTmHxH+ahF2ALi9SiLzQRiXln4qyU4wtWE1e34IiqEGnRo5kyWYTAKzQ2
-         dXoX3yP2qzoTWQ/d86DHNjixR/9GucrW7/09u1snJVHFjbmMjG+cfx6KRcn+FMw2e+qF
-         AmsVne9WuzTPi64gVQ4PvbDHY/D427XPdsFC+x8UDH1y4uDA9JfuW1ZCUEJgKHOCyFmS
-         kj8A==
+        bh=9WJVNtgyt9yQIAQP4rGtMlIS+jIsXpnGPsRO7taD5C0=;
+        b=maWU6xxaIgdZI6etWPmNC9wyUJnic8/26HvAqDHTw2egJeR4aQ7meZcPEurtYlCHyR
+         wJ2i3kqsaduQJea56AO1pSMUp0DUmn53+6s89V7vq0KIvfwXKls0g+YGZ1ScH97iOOnX
+         XTsDdXfcw0ZtmkUXw/ZvHkE1E2lGO8jZueWHFjfyKBFKzxXONjBMELcVleHc9lizV4xr
+         WJ0QQj7Fp+zLA/vdzTb2yRkTI5p6TySvYbCdtKGiyLXrel+cd584xtVNBzHk7+jd/nOc
+         yaPSJsJex8qrYiG+AMQYbgDmP4uDfRETQKHQW0b0fTY9G9rs0HupZpYVazF5bZPdcPAF
+         8nHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=CESi/QuyB0+7uMM9ST1dSB2NDWs95NPRxZRMfmdUQF8=;
-        b=gJQTwed0X3LIjvY8JAV6untWKhNtZgkAgKQqoyD34EoZWZ39LTXa9jbtEk51m6iVCM
-         bdMGTrRxDVTfBWS1HUNIypw9+Puejqz9ypvKqvl62OsNgwKUl5asidXrb9myx4DaQjV+
-         uPljfWKI417lwtwvp9cMtyeRXu/gpdV4sfhjzDfF7krdfm0jW2QOroLlqME0lS5Y7BgF
-         iGI14PiHez89a59j9YJo1gnpDuKTf6yZuCEiu3vToqRpWdsdsld6vlugVVGudekiOoSF
-         GTlHhiZZBQQsJba8H0aaqe0NSSjhs/xxepQ22YRdXwcPxd6Ej7Dv0VlD8qyC5K9HUW87
-         fHDw==
-X-Gm-Message-State: ACrzQf1lOlAdxeL8YRcCemzwpHAXFM8RlBeBN52MQhsPciTxnBEGam8U
-        4d+/6pTcwABTqzgeJcm0kFR6zIARic6wrPXE36gs0oAdl8E=
-X-Google-Smtp-Source: AMsMyM6mBqd3NbWQM9nXMToatDmrFvI2ILGgGWse+BgGpeLKISzm+yE63S85OSA+mg1eA40JhsvZiPjcKpEgCQhGVWw=
-X-Received: by 2002:a05:6808:1826:b0:35a:573f:c8b5 with SMTP id
- bh38-20020a056808182600b0035a573fc8b5mr4008958oib.190.1667583472536; Fri, 04
- Nov 2022 10:37:52 -0700 (PDT)
+        bh=9WJVNtgyt9yQIAQP4rGtMlIS+jIsXpnGPsRO7taD5C0=;
+        b=rda2Zy5RWrfNsk1FhpyTyKHUyuAgwVMQL4CK9zGkhzI7tfEWeh/ZLajvznCb3slBVo
+         DqOqA3BtmC9o/28o4VchyIwgB7b0XKiLgGyDX7EwlH/IGg0gCtxEQH08Guz7xjYo1j/U
+         DRK3mofKp4E/9+TdVFZkfYqnZwU52dx0MhqD7k0oCptYPD7KhQU/nPmVhK6RQBiUHnxH
+         q8NjlU6if7i1vFiE+uLfd3TYBun//d98X06CEiF8OPzQlPl5LBFeXYwm1wAtfRO6btch
+         ZeR6Vy6T/Y9/ny9MGeLa0KKvL0y5JOKsUoVwtBNnuD+lklKEiwXzdZ5C+ppmNwIGvPgD
+         otUA==
+X-Gm-Message-State: ACrzQf0wYulpF44+q7k8oSe7hNyUqRREK5mYzR7oAcs3Z3eVuRNBd1NH
+        mInOZKg2M4FwW7VdUHY5whrdlPy5NFvaO2su1KG5i5n4
+X-Google-Smtp-Source: AMsMyM4aZ2Mu3gPp9wEirY7n+iM73dkatT2xVVDSugb86smFkyUY3Y0zdRRZ0DONUznEqQS/KkwXQbHtiKkHMV8zWcY=
+X-Received: by 2002:a17:90a:558c:b0:213:8cf1:2ac2 with SMTP id
+ c12-20020a17090a558c00b002138cf12ac2mr41822574pji.67.1667583471878; Fri, 04
+ Nov 2022 10:37:51 -0700 (PDT)
 MIME-Version: 1.0
-References: <CAO4mrfeFrYwFEYmULU0DWxG3kOq+M-=uqRJNp8b-RKy6wzvEsw@mail.gmail.com>
-In-Reply-To: <CAO4mrfeFrYwFEYmULU0DWxG3kOq+M-=uqRJNp8b-RKy6wzvEsw@mail.gmail.com>
-From:   Xin Long <lucien.xin@gmail.com>
-Date:   Fri, 4 Nov 2022 13:37:26 -0400
-Message-ID: <CADvbK_ffQx25qkwc94C_vsOjeqv_skcJ+H2Hkdtm6xVXgc4ggw@mail.gmail.com>
-Subject: Re: BUG: unable to handle kernel NULL pointer dereference in tipc_crypto_key_distr
-To:     Wei Chen <harperchen1110@gmail.com>
-Cc:     jmaloy@redhat.com, ying.xue@windriver.com, davem@davemloft.net,
-        kuba@kernel.org, tipc-discussion@lists.sourceforge.net,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221103213641.7296-1-shy828301@gmail.com> <Y2TOAdHk97pPYwJY@dhcp22.suse.cz>
+In-Reply-To: <Y2TOAdHk97pPYwJY@dhcp22.suse.cz>
+From:   Yang Shi <shy828301@gmail.com>
+Date:   Fri, 4 Nov 2022 10:37:39 -0700
+Message-ID: <CAHbLzkpPioG8kiTHtepEtTC8sr8JAc2JTJk0s7WQH+fCh6YFKA@mail.gmail.com>
+Subject: Re: [v2 PATCH 1/2] mm: khugepaged: allow page allocation fallback to
+ eligible nodes
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     zokeefe@google.com, akpm@linux-foundation.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,120 +68,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Oct 30, 2022 at 6:32 AM Wei Chen <harperchen1110@gmail.com> wrote:
+On Fri, Nov 4, 2022 at 1:32 AM Michal Hocko <mhocko@suse.com> wrote:
 >
-> Dear Linux Developer,
+> On Thu 03-11-22 14:36:40, Yang Shi wrote:
+> [...]
+> > So use nodemask to record the nodes which have the same hit record, the
+> > hugepage allocation could fallback to those nodes.  And remove
+> > __GFP_THISNODE since it does disallow fallback.  And if nodemask is
+> > empty (no node is set), it means there is one single node has the most
+> > hist record, the nodemask approach actually behaves like __GFP_THISNODE.
+> >
+> > Reported-by: syzbot+0044b22d177870ee974f@syzkaller.appspotmail.com
+> > Suggested-by: Zach O'Keefe <zokeefe@google.com>
+> > Suggested-by: Michal Hocko <mhocko@suse.com>
+> > Signed-off-by: Yang Shi <shy828301@gmail.com>
+> > ---
+> >  mm/khugepaged.c | 32 ++++++++++++++------------------
+> >  1 file changed, 14 insertions(+), 18 deletions(-)
+> >
+> > diff --git a/mm/khugepaged.c b/mm/khugepaged.c
+> > index ea0d186bc9d4..572ce7dbf4b0 100644
+> > --- a/mm/khugepaged.c
+> > +++ b/mm/khugepaged.c
+> > @@ -97,8 +97,8 @@ struct collapse_control {
+> >       /* Num pages scanned per node */
+> >       u32 node_load[MAX_NUMNODES];
+> >
+> > -     /* Last target selected in hpage_collapse_find_target_node() */
+> > -     int last_target_node;
+> > +     /* nodemask for allocation fallback */
+> > +     nodemask_t alloc_nmask;
 >
-> Recently when using our tool to fuzz kernel, the following crash was triggered:
->
-> HEAD commit: 64570fbc14f8 Linux 5.15-rc5
-> git tree: upstream
-> compiler: gcc 8.0.1
-> console output:
-> https://drive.google.com/file/d/1ZxNXcUkiJiTK6MzVIWCqDpq70QW2-t-b/view?usp=share_link
-> kernel config: https://drive.google.com/file/d/1uDOeEYgJDcLiSOrx9W8v2bqZ6uOA_55t/view?usp=share_link
->
-> Unfortunately, I don't have any reproducer for this crash yet.
->
-> IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> Reported-by: Wei Chen <harperchen1110@gmail.com>
->
-> RBP: 0000000000000045 R08: 0000000000000000 R09: 0000000000000000
-> R10: 0000000000000000 R11: 0000000000000246 R12: 000000000119bfac
-> R13: 0000000000000000 R14: 000000000119bfa0 R15: 00007fffcffa6fe0
-> BUG: kernel NULL pointer dereference, address: 0000000000000020
-> #PF: supervisor read access in kernel mode
-> #PF: error_code(0x0000) - not-present page
-> PGD 2763b067 P4D 2763b067 PUD 27636067 PMD 0
-> Oops: 0000 [#1] PREEMPT SMP
-> CPU: 0 PID: 12346 Comm: syz-executor.0 Not tainted 5.15.0-rc5 #1
-> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
-> rel-1.13.0-48-gd9c812dda519-prebuilt.qemu.org 04/01/2014
-> RIP: 0010:tipc_crypto_key_distr+0x121/0x6a0
-> Code: 00 48 8b 13 88 85 60 ff ff ff 41 0f b7 44 24 48 48 89 95 68 ff
-> ff ff 66 89 85 5c ff ff ff 49 8b 44 24 40 48 89 85 50 ff ff ff <8b> 40
-> 20 83 c0 24 0f b7 c0 83 c0 28 89 c7 89 85 64 ff ff ff e8 96
-> RSP: 0018:ffffc9000d48f8e0 EFLAGS: 00010212
-> RAX: 0000000000000000 RBX: ffff888010979a00 RCX: 0000000000040000
-> RDX: ffff8880163e0000 RSI: 0000000000000a20 RDI: 0000000000000002
-> RBP: ffffc9000d48f998 R08: ffffffff847c7f3d R09: 0000000000000000
-> R10: 0000000000000001 R11: 0000000000000001 R12: ffff88803189eb00
-> R13: 0000000000000001 R14: 0000000000000000 R15: 00000000ffffff82
-> FS:  00007f54fc3f7700(0000) GS:ffff88807dc00000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 0000000000000020 CR3: 0000000027638000 CR4: 00000000003526f0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> Call Trace:
->  tipc_nl_node_set_key+0x760/0x930
-Please check if this fix is in your kernel:
+> This will eat another 1k on the stack on most configurations
+> (NODE_SHIFT=10). Along with 4k of node_load this is quite a lot even
+> on shallow call chains like madvise resp. khugepaged.  I would just
+> add a follow up patch which changes both node_load and alloc_nmask to
+> dynamically allocated objects.
 
-commit 3e6db079751afd527bf3db32314ae938dc571916
-Author: Tadeusz Struk <tadeusz.struk@linaro.org>
-Date:   Mon Nov 15 08:01:43 2021 -0800
+The collapse_control is allocated by kmalloc dynamically for
+MADV_COLLAPSE path, and defined as a global variable for khugepaged
+(khugepaged_collapse_control). So it is not on stack.
 
-    tipc: check for null after calling kmemdup
-
-Thanks.
->  genl_family_rcv_msg_doit.isra.16+0x141/0x190
->  genl_rcv_msg+0x172/0x2c0
->  netlink_rcv_skb+0x87/0x1d0
->  genl_rcv+0x24/0x40
->  netlink_unicast+0x2b8/0x3d0
->  netlink_sendmsg+0x350/0x680
->  sock_sendmsg+0x52/0x70
->  ____sys_sendmsg+0x35f/0x390
->  ___sys_sendmsg+0x95/0xd0
->  __sys_sendmsg+0x87/0x100
->  do_syscall_64+0x34/0xb0
->  entry_SYSCALL_64_after_hwframe+0x44/0xae
-> RIP: 0033:0x4692c9
-> Code: f7 d8 64 89 02 b8 ff ff ff ff c3 66 0f 1f 44 00 00 48 89 f8 48
-> 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d
-> 01 f0 ff ff 73 01 c3 48 c7 c1 bc ff ff ff f7 d8 64 89 01 48
-> RSP: 002b:00007f54fc3f6c38 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
-> RAX: ffffffffffffffda RBX: 00007f54fc3f6c80 RCX: 00000000004692c9
-> RDX: 0000000000000000 RSI: 00000000200007c0 RDI: 0000000000000003
-> RBP: 0000000000000045 R08: 0000000000000000 R09: 0000000000000000
-> R10: 0000000000000000 R11: 0000000000000246 R12: 000000000119bfac
-> R13: 0000000000000000 R14: 000000000119bfa0 R15: 00007fffcffa6fe0
-> Modules linked in:
-> CR2: 0000000000000020
-> ---[ end trace c7813f5e0b2eeeab ]---
-> RIP: 0010:tipc_crypto_key_distr+0x121/0x6a0
-> Code: 00 48 8b 13 88 85 60 ff ff ff 41 0f b7 44 24 48 48 89 95 68 ff
-> ff ff 66 89 85 5c ff ff ff 49 8b 44 24 40 48 89 85 50 ff ff ff <8b> 40
-> 20 83 c0 24 0f b7 c0 83 c0 28 89 c7 89 85 64 ff ff ff e8 96
-> RSP: 0018:ffffc9000d48f8e0 EFLAGS: 00010212
-> RAX: 0000000000000000 RBX: ffff888010979a00 RCX: 0000000000040000
-> RDX: ffff8880163e0000 RSI: 0000000000000a20 RDI: 0000000000000002
-> RBP: ffffc9000d48f998 R08: ffffffff847c7f3d R09: 0000000000000000
-> R10: 0000000000000001 R11: 0000000000000001 R12: ffff88803189eb00
-> R13: 0000000000000001 R14: 0000000000000000 R15: 00000000ffffff82
-> FS:  00007f54fc3f7700(0000) GS:ffff88807dc00000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 0000000000000020 CR3: 0000000027638000 CR4: 00000000003526f0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> ----------------
-> Code disassembly (best guess):
->    0: 00 48 8b              add    %cl,-0x75(%rax)
->    3: 13 88 85 60 ff ff    adc    -0x9f7b(%rax),%ecx
->    9: ff 41 0f              incl   0xf(%rcx)
->    c: b7 44                mov    $0x44,%bh
->    e: 24 48                and    $0x48,%al
->   10: 48 89 95 68 ff ff ff mov    %rdx,-0x98(%rbp)
->   17: 66 89 85 5c ff ff ff mov    %ax,-0xa4(%rbp)
->   1e: 49 8b 44 24 40        mov    0x40(%r12),%rax
->   23: 48 89 85 50 ff ff ff mov    %rax,-0xb0(%rbp)
-> * 2a: 8b 40 20              mov    0x20(%rax),%eax <-- trapping instruction
->   2d: 83 c0 24              add    $0x24,%eax
->   30: 0f b7 c0              movzwl %ax,%eax
->   33: 83 c0 28              add    $0x28,%eax
->   36: 89 c7                mov    %eax,%edi
->   38: 89 85 64 ff ff ff    mov    %eax,-0x9c(%rbp)
->   3e: e8                    .byte 0xe8
->   3f: 96                    xchg   %eax,%esi
 >
-> Best,
-> We
+> Other than that LGTM. I thought we want to keep __GFP_THISNODE but after
+> a closer look it seems that this flag is not really compatible with
+> nodemask after all. node_zonelist() will simply return a trivial zone
+> list for a single (preferred node) so no fallback to other nodes is
+
+Yes, exactly.
+
+> possible. My bad to not realize it earlier.
+
+It is fine, never mind.
+
+> --
+> Michal Hocko
+> SUSE Labs
