@@ -2,69 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E9846190CB
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 07:17:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49CB16190CE
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 07:17:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229637AbiKDGRJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 02:17:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46998 "EHLO
+        id S230341AbiKDGRa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 02:17:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229608AbiKDGRG (ORCPT
+        with ESMTP id S230358AbiKDGRX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 02:17:06 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D25F28E03
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 23:17:04 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id fn7-20020a05600c688700b003b4fb113b86so2574956wmb.0
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 23:17:04 -0700 (PDT)
+        Fri, 4 Nov 2022 02:17:23 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC1AD28E30;
+        Thu,  3 Nov 2022 23:17:22 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id l11so6202583edb.4;
+        Thu, 03 Nov 2022 23:17:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=zhu8jnKVSyUET5dWBbeizhKy1SMpRgjknQ38ay3i9pY=;
-        b=covwzkdstwrYZ2G7OGrFQYxKlY30OW2v5rlDRhhupowlVD65ej46/o9SO1UinrJ3/m
-         0lzcsO8YTJZmr/8SS9w4G7XV3IkmHQcJPGZbAe/TLjJ5KTJK85/W6uuk7h6kTDoQj92W
-         ApAWWRRkpDXzKGV9t9o3idyzMUpNFaWAZu9DuTUUy6nrTakQB0q5wzB+k2CelDXa6IB5
-         2FO5BoKxhA2bpTh7AZA9bEYA3HeY+XOxsUwYP4XXKEpXY21QhzIYtSm/7JtZ8pYOY/Ta
-         +TNovCnwrRY7TDHWx4Ppwn5BGKQJ1qdrs6RhX5fjH3YY+C3XZRqQmGpNg1DWvjpAr/EE
-         Kv2Q==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=vnXXi3dtDeA8axtgZhnSxDrgwZYg0E3gMcTkynU2jnc=;
+        b=oweGMtYqZ7/L36euTghQ0xwNttLV0blhlZdGd9z30tXMFbZEG4H5+VveF/DO7F4dzg
+         dCVcer72QSzmCGOEKz0FB+EwrXXfhXlfJU6Secs2DOy8XP7AHE31KtbL+OUUE0OCJ6Hr
+         yrA91oVSsY7IRPk6F8QVClJAutQGbgIpB9s/hd0wYjdUTZGEp7ByXlZ2g8ZjS1hv6rQS
+         ndeVc8Mmmt2q2ha7muD2EUHJPgMQ4FYk9ZRyIdjwVXQSGGIbXEYlJedplscA5n36dygm
+         RZ86iK2RMdudYVhtuV5SFhEcL9qy3ueArwoFUt/9OJZx4f1oXyEiIQK40Jern8LvLyLd
+         +rlg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zhu8jnKVSyUET5dWBbeizhKy1SMpRgjknQ38ay3i9pY=;
-        b=AxUc2YIyK6eh+n7DA86YAJ4n7ZDHehKvEB+/QhSGE6LBtGEjByqBl2n8LSp9Xqowa3
-         QVFOuQzcs4eTCG3ZQvyDuD1QVFkwCnJ250Umm7t0lcZ76Gu4I+fVJty/vUm5tZOoR6zg
-         Si1auBfejqVZHBLW9HPrbcZYu/2OA+X4YLnQR5B3nAU6AffgPEme8ojP4mdDDmqCkXqU
-         HzrXt6R3jaJIdkj2e38RCv2aR2dp1Uf/hAM0oXoCt9oA6op3MAU6aNqP7abAE5YAYMMo
-         z12ieQv0jis8QAY0pfHqi8OZHHAxLMqwpRQVA78FfrIIUo3wfSs8zYlXD7I9dtIAwTQE
-         O1QA==
-X-Gm-Message-State: ACrzQf3bSDhI6GMoa6exY6JOvT+lzyiKE077K7quuWEF66uXVHDbnAor
-        ThNQS/QRZjI3FNZJuIDYWbaYV9dcCufYzQ==
-X-Google-Smtp-Source: AMsMyM7QV0dYQ4ol87Y3z5F86P2uJ/pz/WIvC3iw6qySzDfWN/XF8zwLlmhTATqf2Z5wsEx3NYMhJw==
-X-Received: by 2002:a05:600c:1e8c:b0:3cf:55e7:c54f with SMTP id be12-20020a05600c1e8c00b003cf55e7c54fmr27323841wmb.61.1667542622808;
-        Thu, 03 Nov 2022 23:17:02 -0700 (PDT)
-Received: from usaari01.cust.communityfibre.co.uk ([2a02:6b6a:b4d7:0:c7c:f931:dd4c:1ea6])
-        by smtp.gmail.com with ESMTPSA id m16-20020a5d6250000000b00236860e7e9esm2487658wrv.98.2022.11.03.23.17.02
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vnXXi3dtDeA8axtgZhnSxDrgwZYg0E3gMcTkynU2jnc=;
+        b=xNSuiMT3va9rqi4j7ej7hJTJEIzH+ynqfSWPW+/1hkT8iWZ1FIy+/Zlr8AZh8AHS5y
+         QiNoe1sOVCLPK3IhkawJCZvEzQD5jB+mq0+ZBZOBsNlQaNRa+3bV4kYw866Kbh+QPbEU
+         litg1xb5N0fwNGrFbH6vu4vALSab/aXFBkhq6bVy86+5srAtC3UJo0fbGirFMRLDchmL
+         nmVZ3d7lco3EB2Qu9TUYh2jWqmT2TY0Rf5dn8xDw/exwSHiQNEoNkNn2UWLwlYSPm/59
+         IwzRyYa1zj4NkUwACIu2D0tgSjDM5kgg93MUR3ttctqLPIYROfEvtRHtBnDjjwrhbB+5
+         5hOg==
+X-Gm-Message-State: ACrzQf3dYrjuC8Gw5SarGW9ER8i2yH0rhcWa8+T+FysQ4icjGA+PlNd0
+        7agMUPpIM4uo7Dg8S09ygp4=
+X-Google-Smtp-Source: AMsMyM5qJJYQVnfTuAbfE974R0XTKpxn5urBJZVGPKiOREWaPv/BYEeOguBJ8dHuTJY+GO5bYVeW8w==
+X-Received: by 2002:aa7:df94:0:b0:461:aff8:d3e1 with SMTP id b20-20020aa7df94000000b00461aff8d3e1mr34530709edy.10.1667542641116;
+        Thu, 03 Nov 2022 23:17:21 -0700 (PDT)
+Received: from hoboy.vegasvil.org (81-223-89-254.static.upcbusiness.at. [81.223.89.254])
+        by smtp.gmail.com with ESMTPSA id sg43-20020a170907a42b00b0077d37a5d401sm1406870ejc.33.2022.11.03.23.17.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Nov 2022 23:17:02 -0700 (PDT)
-From:   Usama Arif <usama.arif@bytedance.com>
-To:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        kvmarm@lists.cs.columbia.edu, kvm@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, linux@armlinux.org.uk,
-        yezengruan@huawei.com, catalin.marinas@arm.com, will@kernel.org,
-        maz@kernel.org, steven.price@arm.com, mark.rutland@arm.com
-Cc:     fam.zheng@bytedance.com, liangma@liangbit.com,
-        punit.agrawal@bytedance.com, Usama Arif <usama.arif@bytedance.com>
-Subject: [PATCH] arm64: paravirt: remove conduit check in has_pv_steal_clock
-Date:   Fri,  4 Nov 2022 06:16:59 +0000
-Message-Id: <20221104061659.4116508-1-usama.arif@bytedance.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 03 Nov 2022 23:17:20 -0700 (PDT)
+Date:   Thu, 3 Nov 2022 23:17:18 -0700
+From:   Richard Cochran <richardcochran@gmail.com>
+To:     Yang Li <yang.lee@linux.alibaba.com>
+Cc:     bagasdotme@gmail.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: Re: [PATCH -next v2] net: ethernet: Simplify bool conversion
+Message-ID: <Y2SubudMxMLV8R8D@hoboy.vegasvil.org>
+References: <20221104030313.81670-1-yang.lee@linux.alibaba.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221104030313.81670-1-yang.lee@linux.alibaba.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,31 +73,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-arm_smccc_1_1_invoke() which is called later on in the function
-will return failure if there's no conduit (or pre-SMCCC 1.1),
-hence the check is unnecessary.
+On Fri, Nov 04, 2022 at 11:03:13AM +0800, Yang Li wrote:
 
-Suggested-by: Steven Price <steven.price@arm.com>
-Signed-off-by: Usama Arif <usama.arif@bytedance.com>
----
- arch/arm64/kernel/paravirt.c | 4 ----
- 1 file changed, 4 deletions(-)
+> diff --git a/drivers/net/ethernet/renesas/rcar_gen4_ptp.c b/drivers/net/ethernet/renesas/rcar_gen4_ptp.c
+> index c007e33c47e1..37f7359678e5 100644
+> --- a/drivers/net/ethernet/renesas/rcar_gen4_ptp.c
+> +++ b/drivers/net/ethernet/renesas/rcar_gen4_ptp.c
+> @@ -29,7 +29,7 @@ static const struct rcar_gen4_ptp_reg_offset s4_offs = {
+>  static int rcar_gen4_ptp_adjfine(struct ptp_clock_info *ptp, long scaled_ppm)
+>  {
+>  	struct rcar_gen4_ptp_private *ptp_priv = ptp_to_priv(ptp);
+> -	bool neg_adj = scaled_ppm < 0 ? true : false;
+> +	bool neg_adj = scaled_ppm < 0;
+>  	s64 addend = ptp_priv->default_addend;
+>  	s64 diff;
 
-diff --git a/arch/arm64/kernel/paravirt.c b/arch/arm64/kernel/paravirt.c
-index 57c7c211f8c7..aa718d6a9274 100644
---- a/arch/arm64/kernel/paravirt.c
-+++ b/arch/arm64/kernel/paravirt.c
-@@ -141,10 +141,6 @@ static bool __init has_pv_steal_clock(void)
- {
- 	struct arm_smccc_res res;
- 
--	/* To detect the presence of PV time support we require SMCCC 1.1+ */
--	if (arm_smccc_1_1_get_conduit() == SMCCC_CONDUIT_NONE)
--		return false;
--
- 	arm_smccc_1_1_invoke(ARM_SMCCC_ARCH_FEATURES_FUNC_ID,
- 			     ARM_SMCCC_HV_PV_TIME_FEATURES, &res);
- 
--- 
-2.25.1
+Please preserve reverse Christmas tree order.
 
+Thanks,
+Richard
