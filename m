@@ -2,129 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4484061970F
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 14:07:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2C9A619711
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 14:07:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231559AbiKDNHL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 09:07:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43556 "EHLO
+        id S230045AbiKDNHm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 09:07:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231961AbiKDNGu (ORCPT
+        with ESMTP id S230021AbiKDNHj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 09:06:50 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6F4E2F01C;
-        Fri,  4 Nov 2022 06:06:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=LtHz5uPmwMnRA8pug11cAIugKhPmlVYnrt/fWjr2UQs=; b=D5/B7gyRf31MPbDuHBPq7nvyyP
-        OTMpHwhz789CRYrPf6cXtunXceOPmlcI5l0W/zyMT9U1hHrx7YB6IOQM4eLHQ1m4yK0WRcnBq1IdR
-        L29PkD26HOPr8vgV26Zu9iapv55p6bN/SK/2btYjPvlFEvLiAZzqN2KnRwz6nY5pP4Q7cu3/rHzL6
-        WBqNB/LXdcckZpuY6+wGUiQg0IobaaH6X00iku04xOleQnkrumlpOwma57rnIYkbG+ljIdTTpoCBN
-        XYDx3t6k1GphY4K9w/vYM20SjDlBfLLq7WnOuqjxBDctQIwxaA0s69ct73ND0eOLeS6jhcLlhGnSR
-        yS0GrHeQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oqwOh-008yeU-UO; Fri, 04 Nov 2022 13:06:12 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id B9E8E300282;
-        Fri,  4 Nov 2022 14:06:10 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 9A07F201E232E; Fri,  4 Nov 2022 14:06:10 +0100 (CET)
-Date:   Fri, 4 Nov 2022 14:06:10 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, anand.gore@broadcom.com,
-        william.zhang@broadcom.com, Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Anna-Maria Gleixner <anna-maria@linutronix.de>,
-        Sebastian Siewior <bigeasy@linutronix.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "open list:PERFORMANCE EVENTS SUBSYSTEM" 
-        <linux-perf-users@vger.kernel.org>
-Subject: Re: [PATCH] perf: Fix perf_event_{init,exit}_cpu stubs
-Message-ID: <Y2UOQpniaV12E0P9@hirez.programming.kicks-ass.net>
-References: <20221103224303.3910486-1-f.fainelli@gmail.com>
+        Fri, 4 Nov 2022 09:07:39 -0400
+Received: from m13134.mail.163.com (m13134.mail.163.com [220.181.13.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 89F142E6B9
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 06:07:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=Date:From:Subject:MIME-Version:Message-ID; bh=M9PbT
+        Gakjv/3zqqgp2j3iH+TiftOFmtoxz74GES9Wdo=; b=Yp/+ETeK6T2LXqYxNALmY
+        CjF/byF4HURdXx4RLah+6zhP35r5VkVwOboxj1jrufD3Huwl3mLjk2nmx5qKIukL
+        jH4Wm9IVgMZ82BCTNoxEw7M2dmVa305eNgdRcpXK/+l17Guqna9gmuaoq4IT3hmJ
+        RsPUcQbRcv+LsrJ3c2keeM=
+Received: from 00107082$163.com ( [222.64.157.165] ) by
+ ajax-webmail-wmsvr134 (Coremail) ; Fri, 4 Nov 2022 21:07:35 +0800 (CST)
+X-Originating-IP: [222.64.157.165]
+Date:   Fri, 4 Nov 2022 21:07:35 +0800 (CST)
+From:   "David Wang" <00107082@163.com>
+To:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: [PATCH] trace/trace_uprobe: Only invoke uprobe ebpf handler when
+ event matches.
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20220113(9671e152)
+ Copyright (c) 2002-2022 www.mailtech.cn 163com
+X-NTES-SC: AL_QuydBfmduEou4yWfZekZnEoUjug3W8K5v/kk3Y9VOp80iivC1Q4adlVPLEL4686kOQeHmjKpQSRf6PtgR4pKcqx5q1y7eiLUqlPJsufzuHT5
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=GBK
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221103224303.3910486-1-f.fainelli@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <41828b90.5798.18442c10017.Coremail.00107082@163.com>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: hsGowACH_t2XDmVjmj5cAA--.49235W
+X-CM-SenderInfo: qqqrilqqysqiywtou0bp/1tbiEAivql8YLKr7GgABs8
+X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 03, 2022 at 03:43:03PM -0700, Florian Fainelli wrote:
-> The original commit that introduced those stubs was already at fault,
-> but in the absence of a caller of perf_event_{init,exit}_cpu outside of
-> code that is compiled regardless of CONFIG_PERF_EVENTS, the build
-> failure cannot be observed. This was observed with the Android kernel to
-> produce a build failure similar to this:
-> 
->     In file included from ./include/uapi/linux/posix_types.h:5,
->                      from ./include/uapi/linux/types.h:14,
->                      from ./include/linux/types.h:6,
->                      from ./include/linux/limits.h:6,
->                      from ./include/linux/kernel.h:7,
->                      from ./include/linux/sched/mm.h:5,
->                      from kernel/cpu.c:6:
->     kernel/cpu.c: In function 'random_and_perf_prepare_fusion':
->     ./include/linux/stddef.h:8:14: error: called object is not a function or function pointer
->      #define NULL ((void *)0)
->                   ^
->     ./include/linux/perf_event.h:1607:29: note: in expansion of macro 'NULL'
->      #define perf_event_init_cpu NULL
->                                  ^~~~
->     kernel/cpu.c:1686:2: note: in expansion of macro 'perf_event_init_cpu'
->       perf_event_init_cpu(cpu);
->       ^~~~~~~~~~~~~~~~~~~
-
-What is the actual problem reported here? Did you see all the other NULL
-assignments in cpuhp_hp_states ?
-
-> 
-> Fixes: 00e16c3d68fc ("perf/core: Convert to hotplug state machine")
-> Reported-by: Anand Gore <anand.gore@broadcom.com>
-> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
-> ---
->  include/linux/perf_event.h | 11 +++++++++--
->  1 file changed, 9 insertions(+), 2 deletions(-)
-> 
-> diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
-> index 0031f7b4d9ab..592040e2398c 100644
-> --- a/include/linux/perf_event.h
-> +++ b/include/linux/perf_event.h
-> @@ -1678,8 +1678,15 @@ static struct device_attribute format_attr_##_name = __ATTR_RO(_name)
->  int perf_event_init_cpu(unsigned int cpu);
->  int perf_event_exit_cpu(unsigned int cpu);
->  #else
-> -#define perf_event_init_cpu	NULL
-> -#define perf_event_exit_cpu	NULL
-> +static inline int perf_event_init_cpu(unsigned int cpu)
-> +{
-> +	return 0;
-> +}
-> +
-> +static inline int perf_event_exit_cpu(unsigned int cpu)
-> +{
-> +	return 0;
-> +}
->  #endif
->  
->  extern void __weak arch_perf_update_userpage(struct perf_event *event,
-> -- 
-> 2.25.1
-> 
+T25seSBpbnZva2UgdXByb2JlIGVicGYgaGFuZGxlciB3aGVuIGV2ZW50IG1hdGNoZXMuCiAgICAK
+dXByb2JlIGVicGYgaGFuZGxlciB3b3VsZCBiZSBjYWxsZWQgZXZlbiB0aGUgZXZlbnQgZG9zZSBu
+b3QKbWF0Y2ggYW55IHJlZ2lzdGVyZWQgcGVyZiBldmVudCwgZm9sbG93aW5nIHN0ZXBzIHdvdWxk
+IGJlCnVzZWQgdG8gZ2VuZXJhdGUgYSB1bnJlZ2lzdGVyZWQgcGVyZiBldmVudC4KMS4gcmVnaXN0
+ZXIgYSB1cHJvYmUgZXZlbnQgb24gYSBzcGVjaWZpZWQgcGlkIDxwaWQtYT4KMi4gPHBpZC1hPiBp
+bnZva2VzIHN5c2NhbGwgYGNsb25lYCAodmlhIHB0aHJlYWRfY3JlYXRlKSwKICAgIG5ldyBwcm9j
+ZXNzIDxwaWQtYj4gZ2VuZXJhdGVkLiAoTWF5YmUgaXQgaXMgYSBidWcgaGVyZSwgdGhlCnVwcm9i
+ZSBicmVha3BvaW50IGlzIGluaGVyaXRlZCBmcm9tIDxwaWQtYT4KMy4gPHBpZC1iPiBpbnZva2Vz
+IHRoZSBmdW5jdGlvbiB3aGljaCBpcyB1cHJvYmVkIGluIHN0ZXAgMS4KNC4gcGVyZiBldmVudCBn
+ZW5lcmF0ZWQuLi4KICAgIApFYnBmIGhhbmRsZXIgd291bGQgYmUgaW52b2tlZCBldmVuIHRoZSBl
+dmVudCBoYXBwZW5lZCBvbiA8cGlkLWI+LApidXQgdGhlIGRlZmF1bHQgcGVyZiBldmVudCBoYW5k
+bGVyIG1ha2UgZnVydGhlciBjaGVjayBhbmQgaWdub3JlCnRoZSBldmVudCBiZWNhdXNlIG5vIHJl
+Z2lzdGVyZWQgcGVyZiBldmVudCBtYXRjaCBvbiA8cGlkLWI+LgoKVGhlIHBhdGNoIG1lYW5zIHRv
+IGZpeCB0aGUgaW5jb25zaXN0ZW50IGJlaGF2aW9yIGJldHdlZW4gZWJwZiBhbmQgdGhlIGRlZmF1
+bHQuCkJlZm9yZSBpbnZva2UgdXByb2JlIGVicGYgaGFuZGxlciwgbWFrZSBzdXJlIGN1cnJlbnQg
+ZXZlbnQgbWF0Y2guCiAgICAKU2lnbmVkLW9mZi1ieTogRGF2aWQgV2FuZyA8MDAxMDcwODJAMTYz
+LmNvbT4KLS0KZGlmZiAtLWdpdCBhL2tlcm5lbC90cmFjZS90cmFjZV91cHJvYmUuYyBiL2tlcm5l
+bC90cmFjZS90cmFjZV91cHJvYmUuYwppbmRleCBmYjU4ZTg2ZGQxMTcuLjZmMTMxNjNjMGMwZiAx
+MDA2NDQKLS0tIGEva2VybmVsL3RyYWNlL3RyYWNlX3Vwcm9iZS5jCisrKyBiL2tlcm5lbC90cmFj
+ZS90cmFjZV91cHJvYmUuYwpAQCAtMTM0NiwyNyArMTM0NiwyMCBAQCBzdGF0aWMgdm9pZCBfX3Vw
+cm9iZV9wZXJmX2Z1bmMoc3RydWN0IHRyYWNlX3Vwcm9iZSAqdHUsCiAJdm9pZCAqZGF0YTsKIAlp
+bnQgc2l6ZSwgZXNpemU7CiAJaW50IHJjdHg7CisJYm9vbCB0cmFjZV9ldmVudF9tYXRjaCA9IHRy
+dWU7CiAKLSNpZmRlZiBDT05GSUdfQlBGX0VWRU5UUwotCWlmIChicGZfcHJvZ19hcnJheV92YWxp
+ZChjYWxsKSkgewotCQl1MzIgcmV0OwogCi0JCXJldCA9IGJwZl9wcm9nX3J1bl9hcnJheV9zbGVl
+cGFibGUoY2FsbC0+cHJvZ19hcnJheSwgcmVncywgYnBmX3Byb2dfcnVuKTsKLQkJaWYgKCFyZXQp
+Ci0JCQlyZXR1cm47CisJcHJlZW1wdF9kaXNhYmxlKCk7CisJaGVhZCA9IHRoaXNfY3B1X3B0cihj
+YWxsLT5wZXJmX2V2ZW50cyk7CisJaWYgKGhsaXN0X2VtcHR5KGhlYWQpKSB7CisJCXRyYWNlX2V2
+ZW50X21hdGNoID0gZmFsc2U7CisJCWdvdG8gb3V0OwogCX0KLSNlbmRpZiAvKiBDT05GSUdfQlBG
+X0VWRU5UUyAqLwogCiAJZXNpemUgPSBTSVpFT0ZfVFJBQ0VfRU5UUlkoaXNfcmV0X3Byb2JlKHR1
+KSk7Ci0KIAlzaXplID0gZXNpemUgKyB0dS0+dHAuc2l6ZSArIGRzaXplOwogCXNpemUgPSBBTElH
+TihzaXplICsgc2l6ZW9mKHUzMiksIHNpemVvZih1NjQpKSAtIHNpemVvZih1MzIpOwogCWlmIChX
+QVJOX09OQ0Uoc2l6ZSA+IFBFUkZfTUFYX1RSQUNFX1NJWkUsICJwcm9maWxlIGJ1ZmZlciBub3Qg
+bGFyZ2UgZW5vdWdoIikpCi0JCXJldHVybjsKLQotCXByZWVtcHRfZGlzYWJsZSgpOwotCWhlYWQg
+PSB0aGlzX2NwdV9wdHIoY2FsbC0+cGVyZl9ldmVudHMpOwotCWlmIChobGlzdF9lbXB0eShoZWFk
+KSkKIAkJZ290byBvdXQ7CiAKIAllbnRyeSA9IHBlcmZfdHJhY2VfYnVmX2FsbG9jKHNpemUsIE5V
+TEwsICZyY3R4KTsKQEAgLTEzODksMTEgKzEzODIsMjEgQEAgc3RhdGljIHZvaWQgX191cHJvYmVf
+cGVyZl9mdW5jKHN0cnVjdCB0cmFjZV91cHJvYmUgKnR1LAogCiAJCW1lbXNldChkYXRhICsgbGVu
+LCAwLCBzaXplIC0gZXNpemUgLSBsZW4pOwogCX0KLQogCXBlcmZfdHJhY2VfYnVmX3N1Ym1pdChl
+bnRyeSwgc2l6ZSwgcmN0eCwgY2FsbC0+ZXZlbnQudHlwZSwgMSwgcmVncywKIAkJCSAgICAgIGhl
+YWQsIE5VTEwpOwogIG91dDoKIAlwcmVlbXB0X2VuYWJsZSgpOworCisjaWZkZWYgQ09ORklHX0JQ
+Rl9FVkVOVFMKKwlpZiAodHJhY2VfZXZlbnRfbWF0Y2ggJiYgYnBmX3Byb2dfYXJyYXlfdmFsaWQo
+Y2FsbCkpIHsKKwkJdTMyIHJldDsKKworCQlyZXQgPSBicGZfcHJvZ19ydW5fYXJyYXlfc2xlZXBh
+YmxlKGNhbGwtPnByb2dfYXJyYXksIHJlZ3MsIGJwZl9wcm9nX3J1bik7CisJCWlmICghcmV0KQor
+CQkJcmV0dXJuOworCX0KKyNlbmRpZiAvKiBDT05GSUdfQlBGX0VWRU5UUyAqLworCiB9CiAKIC8q
+IHVwcm9iZSBwcm9maWxlIGhhbmRsZXIgKi8KLS0K
