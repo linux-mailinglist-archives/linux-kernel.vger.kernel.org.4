@@ -2,98 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B1FE61A222
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 21:27:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B6BE61A225
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 21:28:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230005AbiKDU10 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 16:27:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34934 "EHLO
+        id S230010AbiKDU2m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 16:28:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229798AbiKDU1X (ORCPT
+        with ESMTP id S229501AbiKDU2j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 16:27:23 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A185F1F2D1
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 13:27:19 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id v28so5441585pfi.12
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 13:27:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=TzyhTv3BAtgpGpRr8HnNLx/d2zCvSqkboAFtik4Imo0=;
-        b=q/PTXKQj3ArVm2XzZe97QeFygVMm1eXh+9AVtXcJ75aOhS7rpOmmmorCukrcxmTsXJ
-         xtHpP7JyICLKwJpO4UdyBCOfADg9j8qWzQtBsGyOUBj4dtUE2hEcaa0M2lJNL2RYHNdm
-         t9CE40syL4mSgI+9axRmHRY3m49U53Bcc5xsUL4w5HmCnvq3rZFCi8RspoeZ0S4Nhg0P
-         dklWYN0e+iqclhNFPVLNqLlrIm4bRgIuUSiy6nVFx0aKBZbtXqUzzmm+oTu43A9TiINS
-         r9mhyi03/1kAIfHUOzdEnLew/bMGSFKH13ZsSBoEdZkxO+PvUKRhjXGV6DaJ6ZELthJK
-         tWVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TzyhTv3BAtgpGpRr8HnNLx/d2zCvSqkboAFtik4Imo0=;
-        b=HuehxHET4iPiQem9yLxviGGtSujAicct1hdYBUAZ9LogzIrpP0tj1bhEuQeqy4Eqe2
-         I7hjLElKLFOS7BS/qCzI8pzDbuuA7lsHP+7/yJMVmQtKJYytexprYJt6omv2607b2UxO
-         JVkJSz7wbdSFOMhu0PwesB6GPvCr8/K86iDHba1zlUqTdEmk1usYT33DzLUHLQsuXtGB
-         7BWC+qZUj4R7tnW3IisgUoIVjq2BbHsghwzkCQBdJZd3jBSyI4EtgFvn6ehHq5oVTKF+
-         6muqRhyjXMlYg0ERpsfJFs43Ydg2ctMtGScROu9p2/aNQzsp44CjX+QYyR7b14Ohszkq
-         eFNw==
-X-Gm-Message-State: ACrzQf1m/d5tNDK4BKG20APJ0oHYLKvJDMmBq5Ofnq9p0Y9x5wqg1tyW
-        C8VFMeRugYKkO9oSsI/xjNHo9Q==
-X-Google-Smtp-Source: AMsMyM6nILnCIcSIsk5JMrE+WRVnxFnaYDn7QGx3yWf1KAa3dZc7TNSn3aZcg19Xay3NbhiF32a9mw==
-X-Received: by 2002:a05:6a00:1781:b0:561:7f7f:dc38 with SMTP id s1-20020a056a00178100b005617f7fdc38mr38037687pfg.42.1667593638927;
-        Fri, 04 Nov 2022 13:27:18 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id u8-20020a1709026e0800b0018863e1bd3csm159522plk.134.2022.11.04.13.27.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Nov 2022 13:27:18 -0700 (PDT)
-Date:   Fri, 4 Nov 2022 20:27:14 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Isaku Yamahata <isaku.yamahata@gmail.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Anup Patel <anup@brainfault.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        Eric Farman <farman@linux.ibm.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Atish Patra <atishp@atishpatra.org>,
-        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Isaku Yamahata <isaku.yamahata@intel.com>,
-        Fabiano Rosas <farosas@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Chao Gao <chao.gao@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Yuan Yao <yuan.yao@intel.com>
-Subject: Re: [PATCH 00/44] KVM: Rework kvm_init() and hardware enabling
-Message-ID: <Y2V1oslbw24/2Opd@google.com>
-References: <20221102231911.3107438-1-seanjc@google.com>
- <20221104071749.GC1063309@ls.amr.corp.intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221104071749.GC1063309@ls.amr.corp.intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        Fri, 4 Nov 2022 16:28:39 -0400
+Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E38011A10
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 13:28:38 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.west.internal (Postfix) with ESMTP id 3E7BA320094B;
+        Fri,  4 Nov 2022 16:28:37 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute3.internal (MEProxy); Fri, 04 Nov 2022 16:28:37 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1667593716; x=1667680116; bh=LGoKu0vw3K
+        c8FrTfeG4Q9KAQSpeuhm0MFrj18uxk2Y0=; b=T3BN4RHFAmVSZZx2X5ZdDhkE3P
+        qsEfuFbsGQIHL5OcIMvW9bM6DUKtOzjkYN28UfpdqKjU6/QPU3kFfbAqvxQE6DRT
+        QijYI667m4QhH4eiuUFTr4Rspn4F264RVOd/4eDn2zGBFI1duMfat/lzXFc+mBFm
+        aGz6gq15S83V+EbkmMIUaxPJX/44wmn+m+xGb7c3L09tSayLaqIvBxmAEi35qWLD
+        pkC0f15bau7rcAImfMi1kNXV+shmKcMaRTCdRFHa4IhJ6vgKgwFi8FMd5knsoHP/
+        TiYRjKBhNx3DpMH3zCRYYg6cqc95WoH4SgbNNMcJ+sK02rV3Fc4uRXn5TUwA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1667593716; x=1667680116; bh=LGoKu0vw3Kc8FrTfeG4Q9KAQSpeu
+        hm0MFrj18uxk2Y0=; b=dA6MN3HOnNGr2laM0fDmdDcW0wwjN+r0FuAhVFVcAwvn
+        d11BQz8cuIirjgRcilwZdncvaVoA40UR+XjjHw/eKGCnnlgQzZ7K8DZRROmlKwMS
+        pP582ipiKX9+jGb1B3NTBSoBu7phgIXt2qsazWhcBIS5T3cbZMGp9zOb76Q+X9UI
+        RG2vo5MIup6fU6RViC+EcQ0wsyYuXdT5bMaXWGf5i5Sko3CCbUAAmKEi91vnWerF
+        zAAFcuExL73w/onTYbA6T65WwzdrbLGEijx5LEX6B7kehDEx1sVimSjcNN4JddsR
+        YiPx2ZupC4ebI+ertnyT24qPAJNLTVcd5nkE3VVVYA==
+X-ME-Sender: <xms:83VlY9uuBOYgNEziBa-dQlKxY5ZE7gmz2JLdoVgj1Lm_lunYwUT5aw>
+    <xme:83VlY2dR8YjIdkaplK6qe-giIW9Hmj1BgJpqF85wtTjStMtoZCPOdE-MvS1M4_BoV
+    XF47QCIEA5kpD14oFI>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrvddugddufeegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepleffheffveevkeegffefffdviefgffeghffhudevteevfefgtedujeefuefg
+    gfejnecuffhomhgrihhnpehlihhnuhigrdhorhhgrdhukhenucevlhhushhtvghrufhiii
+    gvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:83VlYwyLNnIwPzpcoUWMJHy-DThdmO1SHP5A4e37bAPU19POJ70dkw>
+    <xmx:83VlY0NoGX45jnYSj84icHWl1GjUU0WvKNM5YmjaZ2HgM3poW6q2MA>
+    <xmx:83VlY99ahfiZTxDjDgCg_y7X2g0kcD5fsXIlvpjaIKYWqZ1DPB93jQ>
+    <xmx:9HVlY9yAN3dGffzVeN-Cp2i_OOgeXx2tmtmQ2NvgxATd_4Iq-qlpPA>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id D4114B603ED; Fri,  4 Nov 2022 16:28:35 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1087-g968661d8e1-fm-20221021.001-g968661d8
+Mime-Version: 1.0
+Message-Id: <8a40c9da-041e-4d3d-90e4-22dbb93eb9ab@app.fastmail.com>
+In-Reply-To: <64e16669-8bcc-a05e-0eb1-9ae644431d95@benettiengineering.com>
+References: <20221018222503.90118-1-giulio.benetti@benettiengineering.com>
+ <64e16669-8bcc-a05e-0eb1-9ae644431d95@benettiengineering.com>
+Date:   Fri, 04 Nov 2022 21:28:18 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Giulio Benetti" <giulio.benetti@benettiengineering.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     "Russell King" <linux@armlinux.org.uk>,
+        "Anshuman Khandual" <anshuman.khandual@arm.com>,
+        "Andrew Morton" <akpm@linux-foundation.org>,
+        "Kefeng Wang" <wangkefeng.wang@huawei.com>,
+        "Russell King" <rmk+kernel@armlinux.org.uk>,
+        "Will Deacon" <will@kernel.org>
+Subject: Re: [PATCH v2 1/2] ARM: mm: fix no-MMU ZERO_PAGE() implementation
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -101,17 +89,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 04, 2022, Isaku Yamahata wrote:
-> Thanks for the patch series. I the rebased TDX KVM patch series and it worked.
-> Since cpu offline needs to be rejected in some cases(To keep at least one cpu
-> on a package), arch hook for cpu offline is needed.
+On Fri, Nov 4, 2022, at 21:07, Giulio Benetti wrote:
+> Hello Arnd, Russell, All,
+>
+> is this patch ok or has it some changes to do?
 
-I hate to bring this up because I doubt there's a real use case for SUSPEND with
-TDX, but the CPU offline path isn't just for true offlining of CPUs.  When the
-system enters SUSPEND, only the initiating CPU goes through kvm_suspend()+kvm_resume(),
-all responding CPUs go through CPU offline+online.  I.e. disallowing all CPUs from
-going "offline" will prevent suspending the system.
+Looks ok to me, please add it to Russell's patch
+tracker at:
+https://www.arm.linux.org.uk/developer/patches/
 
-I don't see anything in the TDX series or the specs that suggests suspend+resume
-is disallowed when TDX is enabled, so blocking that seems just as wrong as
-preventing software from soft-offlining CPUs.
+The patch description could be improved a little ("Link:"
+tag for the URL, avoiding the wikitext  markup, etc), but
+it's more important to actually get the bug fixed.
+
+     Arnd
