@@ -2,78 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB325619BD6
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 16:37:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5110619BDA
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 16:39:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232656AbiKDPhr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 11:37:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47974 "EHLO
+        id S232690AbiKDPjY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 11:39:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232428AbiKDPhp (ORCPT
+        with ESMTP id S232657AbiKDPjU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 11:37:45 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92FBCC7B
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 08:36:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667576209;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=5dzALKx1wiOuXG9PsArPMhYCXkScOFTOUlTcdPFBCp0=;
-        b=Qar9DEaUabJN7I7ksJ6FSw4wNmICmppYC395OEbxrpiWhUgAqZwLJjDTW3OXv2/cYORXUi
-        zZcnZUX/7Ni59e4M8fUG6/W+o10+NSw2aC5QhT0c4iV16dAJnl56MIYhHf/S3NMuDv66Q+
-        opMFl4g+yAT74EX2yon8oLEoyRTqeaI=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-428-OYzxYkpZO061-76v5Aki9A-1; Fri, 04 Nov 2022 11:36:48 -0400
-X-MC-Unique: OYzxYkpZO061-76v5Aki9A-1
-Received: by mail-qk1-f199.google.com with SMTP id q14-20020a05620a0d8e00b006ef0350dae1so4657329qkl.12
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 08:36:48 -0700 (PDT)
+        Fri, 4 Nov 2022 11:39:20 -0400
+Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC732627D;
+        Fri,  4 Nov 2022 08:39:18 -0700 (PDT)
+Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-13b103a3e5dso5938950fac.2;
+        Fri, 04 Nov 2022 08:39:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=iGFzmiGQlUlHm0R4DDnnBk35cJc4UPbmyhgnCQR1pYw=;
+        b=VYKLuhUdBoVVirbMpoctEQ55/+wcR0nvbLTAcsMh3SSl6lZsTPiFtT1qp8mHyZsSBH
+         2Sfw8kCzxZylZb6HwzCmumiuf9JPdEKr4gx+5YKG0DxsFAI5Q9dRZrxkX2FRygAvi0R6
+         tXhTSAEu6aFvZST6NaXnEZSKMkGsYyirkaeSgUKbKKaF6ORI36eCKZ2LZourXaiGf9AQ
+         Hs/DDyisj7330ly2FN6r2qi1FphUkEg5l8ibdiMT+9La5oD4T12KZT4Ns3y0OvE6suU3
+         Z6hrYG2/D8c6lxBMM5yLgcIwEo6zqecvg8liwjIFaGFEADcRG/vq7D1HVTrnwQtAMiuI
+         iVkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5dzALKx1wiOuXG9PsArPMhYCXkScOFTOUlTcdPFBCp0=;
-        b=hTNvhQ+D3+0qMO1CchQaTFAnbaMxo7YtDG7HeDboDh+4pqly9EBepKjGCJg6ubiVFe
-         iEWQ3P9ss8US4fFfGz7tx8jsM2ut0eikGPDggTsL3SM3rCZ/xffTiWxvvb+IqDQ6UoE9
-         y2AI2flKN7G495gOU8IbzxqWKZtT0aE6AgvW/tGL6LMIESVzN20IWTiqx4VSQevXApcB
-         Dn37BvslZdRsj+Ie/jimRL/0aMGukRczoap+JX5Va67sddapJTD5D2b22kkX0+WOnFri
-         jg3Kwd4Q5XSsRjBL3o+PFLlVZWFemhA656w3RKpsu1uZ+/VHhhPnm6pIc5reTpBXhglb
-         F6dw==
-X-Gm-Message-State: ACrzQf1b9HBug37A6MrxLn5G7p6MHwMFNp9x8TQ1y052/Ohioh3UFTIv
-        jbY/yTGBZ9A57FM2zeUzuXyoM6PLHT/YjXkSGTbcWiCJvj4IU+/dDBCfYCRCPChYvl4Ts9tT8pm
-        adp3j9l9LFICCm7Uf9BtxkCcl
-X-Received: by 2002:a05:620a:400e:b0:6da:dd3c:7ff4 with SMTP id h14-20020a05620a400e00b006dadd3c7ff4mr24761327qko.682.1667576207336;
-        Fri, 04 Nov 2022 08:36:47 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM4mJqhx+vXDalgQsDBxlXYilpKbT3+Sw/T1yUqPZ7t08h7Jt3WF5YUIRKDzFtakh3i831jYOA==
-X-Received: by 2002:a05:620a:400e:b0:6da:dd3c:7ff4 with SMTP id h14-20020a05620a400e00b006dadd3c7ff4mr24761307qko.682.1667576207065;
-        Fri, 04 Nov 2022 08:36:47 -0700 (PDT)
-Received: from localhost (ip98-179-76-75.ph.ph.cox.net. [98.179.76.75])
-        by smtp.gmail.com with ESMTPSA id e22-20020a05622a111600b003996aa171b9sm2611548qty.97.2022.11.04.08.36.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Nov 2022 08:36:45 -0700 (PDT)
-Date:   Fri, 4 Nov 2022 08:36:44 -0700
-From:   Jerry Snitselaar <jsnitsel@redhat.com>
-To:     Vinod Koul <vkoul@kernel.org>
-Cc:     Koba Ko <koba.ko@canonical.com>, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jie Hai <haijie1@huawei.com>,
-        Dave Jiang <dave.jiang@intel.com>
-Subject: Re: [PATCH V2] dmaengine: Fix client_count is countered one more
- incorrectly.
-Message-ID: <20221104153644.sz35cvgbhudr6ad7@cantor>
-References: <20220930173652.1251349-1-koba.ko@canonical.com>
- <20221102180726.fuwwk2npsse56ius@cantor>
- <Y2USwbAzuaCKTGdX@matsya>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=iGFzmiGQlUlHm0R4DDnnBk35cJc4UPbmyhgnCQR1pYw=;
+        b=1alcAv1eS82BU4s8Smt+nv5hIJ+5otEF1uZ7vr3X0oY5FRKCWlHM6OMQSCK2Y5BGS0
+         CLSyPU+VlL9fZngISZ0e1JzDLVgaAH6Y0j0ptsxws9AdZCgf+lhyyYOl8UfG6fVfaaSB
+         QgyfHqNfNFriY6zIZ/fw1MCSb7TGv8UcqhbBjvXv0kSsl8wjbY0k2eQIStZhuCIa5TcT
+         UrkPNZEADWvTm/je/9vdZCRUR7jMyTqZ026eU4C8C76l80NjPXeM+8M8u51/mkKuXDyz
+         eiNOZufvQ5wF0PsxaiCCsqvHhj3AVgY/IPmdEpu65CsLkRsREk7wsCu11P1lBwq+pdTv
+         85NQ==
+X-Gm-Message-State: ACrzQf0a5mvPrlWwIuDzGXxqho9tJ6YYFE9eGl95n6ljaIo3n351ar9N
+        kq2Bb/KdZGtgeyF5u4vPdOcGiT83/j7DKL2MQyI=
+X-Google-Smtp-Source: AMsMyM4hLfv3x6/HdWAQDrg0ibvLQse4DRYygfEMbgxa4GrAL0x4cjDYEkhBTBa/W8ctg4McM9OELC+itM6QzjEOKPs=
+X-Received: by 2002:a05:6870:9614:b0:11d:3906:18fc with SMTP id
+ d20-20020a056870961400b0011d390618fcmr31716276oaq.190.1667576358139; Fri, 04
+ Nov 2022 08:39:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y2USwbAzuaCKTGdX@matsya>
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+References: <000000000000d285ef05ec935d9e@google.com>
+In-Reply-To: <000000000000d285ef05ec935d9e@google.com>
+From:   Xin Long <lucien.xin@gmail.com>
+Date:   Fri, 4 Nov 2022 11:38:51 -0400
+Message-ID: <CADvbK_foAqKqpSp1YNNRE4HdXkUV+BXrtFAO_6u455DYrBUnGw@mail.gmail.com>
+Subject: Re: [syzbot] KMSAN: uninit-value in tipc_nl_compat_name_table_dump (3)
+To:     syzbot <syzbot+e5dbaaa238680ce206ea@syzkaller.appspotmail.com>
+Cc:     davem@davemloft.net, edumazet@google.com, glider@google.com,
+        jmaloy@redhat.com, kuba@kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, pabeni@redhat.com,
+        syzkaller-bugs@googlegroups.com,
+        tipc-discussion@lists.sourceforge.net, ying.xue@windriver.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,90 +70,105 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 04, 2022 at 06:55:21PM +0530, Vinod Koul wrote:
-> On 02-11-22, 11:07, Jerry Snitselaar wrote:
-> > Hi Vinod,
-> > 
-> > Thoughts on this patch?
-> > 
-> > Maybe changing the summary to "dmaengine: Fix double increment of client_count in dma_chan_get()"
-> > would be clearer?
-> 
-> Yes that would be better
-> 
-> > 
-> > On Sat, Oct 01, 2022 at 01:36:52AM +0800, Koba Ko wrote:
-> > > If the passed client_count is 0,
-> > > it would be incremented by balance_ref_count first
-> > > then increment one more.
-> > > This would cause client_count to 2.
-> > >
-> > > cat /sys/class/dma/dma0chan*/in_use
-> > > 2
-> > > 2
-> > > 2
-> > 
-> > Would this be better?
-> > 
-> >     The first time dma_chan_get() is called for a channel the channel
-> >     client_count is incorrectly incremented twice for public channels,
-> >     first in balance_ref_count(), and again prior to returning. This
-> >     results in an incorrect client count which will lead to the
-> >     channel resources not being freed when they should be. A simple
-> >     test of repeated module load and unload of async_tx on a Dell
-> >     Power Edge R7425 also shows this resulting in a kref underflow
-> >     warning.
-> 
-> Agree, also if you have the underflow warning handy, do add it to the
-> log
-> 
+On Thu, Nov 3, 2022 at 12:28 PM syzbot
+<syzbot+e5dbaaa238680ce206ea@syzkaller.appspotmail.com> wrote:
+>
+> Hello,
+>
+> syzbot found the following issue on:
+>
+> HEAD commit:    8f4ae27df775 Revert "Revert "crypto: kmsan: disable accele..
+> git tree:       https://github.com/google/kmsan.git master
+> console+strace: https://syzkaller.appspot.com/x/log.txt?x=142d16cf080000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=121c7ef28ec597bd
+> dashboard link: https://syzkaller.appspot.com/bug?extid=e5dbaaa238680ce206ea
+> compiler:       clang version 15.0.0 (https://github.com/llvm/llvm-project.git 610139d2d9ce6746b3c617fb3e2f7886272d26ff), GNU ld (GNU Binutils for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=176a716f080000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=140256a0880000
+>
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+e5dbaaa238680ce206ea@syzkaller.appspotmail.com
+>
+> =====================================================
+> BUG: KMSAN: uninit-value in tipc_nl_compat_name_table_dump+0x841/0xea0 net/tipc/netlink_compat.c:934
+looks we need this:
 
-I don't know if Canonical saw that in their testing, but that was how our
-QE initially found the issue.
+@@ -880,7 +880,7 @@ static int
+tipc_nl_compat_name_table_dump_header(struct tipc_nl_compat_msg *msg)
+        };
 
-[  124.329662] async_tx: api initialized (async)
-[  129.000627] async_tx: api initialized (async)
-[  130.047839] ------------[ cut here ]------------
-[  130.052472] refcount_t: underflow; use-after-free.
-[  130.057279] WARNING: CPU: 3 PID: 19364 at lib/refcount.c:28 refcount_warn_saturate+0xba/0x110
-[  130.065811] Modules linked in: async_tx(-) rfkill intel_rapl_msr intel_rapl_common amd64_edac edac_mce_amd ipmi_ssif kvm_amd dcdbas kvm mgag200 drm_shmem_helper acpi_ipmi irqbypass drm_kms_helper ipmi_si syscopyarea sysfillrect rapl pcspkr ipmi_devintf sysimgblt fb_sys_fops k10temp i2c_piix4 ipmi_msghandler acpi_power_meter acpi_cpufreq vfat fat drm fuse xfs libcrc32c sd_mod t10_pi sg ahci crct10dif_pclmul libahci crc32_pclmul crc32c_intel ghash_clmulni_intel igb megaraid_sas i40e libata i2c_algo_bit ccp sp5100_tco dca dm_mirror dm_region_hash dm_log dm_mod [last unloaded: async_tx]
-[  130.117361] CPU: 3 PID: 19364 Comm: modprobe Kdump: loaded Not tainted 5.14.0-185.el9.x86_64 #1
-[  130.126091] Hardware name: Dell Inc. PowerEdge R7425/02MJ3T, BIOS 1.18.0 01/17/2022
-[  130.133806] RIP: 0010:refcount_warn_saturate+0xba/0x110
-[  130.139041] Code: 01 01 e8 6d bd 55 00 0f 0b e9 72 9d 8a 00 80 3d 26 18 9c 01 00 75 85 48 c7 c7 f8 a3 03 9d c6 05 16 18 9c 01 01 e8 4a bd 55 00 <0f> 0b e9 4f 9d 8a 00 80 3d 01 18 9c 01 00 0f 85 5e ff ff ff 48 c7
-[  130.157807] RSP: 0018:ffffbf98898afe68 EFLAGS: 00010286
-[  130.163036] RAX: 0000000000000000 RBX: ffff9da06028e598 RCX: 0000000000000000
-[  130.170172] RDX: ffff9daf9de26480 RSI: ffff9daf9de198a0 RDI: ffff9daf9de198a0
-[  130.177316] RBP: ffff9da7cddf3970 R08: 0000000000000000 R09: 00000000ffff7fff
-[  130.184459] R10: ffffbf98898afd00 R11: ffffffff9d9e8c28 R12: ffff9da7cddf1970
-[  130.191596] R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
-[  130.198739] FS:  00007f646435c740(0000) GS:ffff9daf9de00000(0000) knlGS:0000000000000000
-[  130.206832] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[  130.212586] CR2: 00007f6463b214f0 CR3: 00000008ab98c000 CR4: 00000000003506e0
-[  130.219729] Call Trace:
-[  130.222192]  <TASK>
-[  130.224305]  dma_chan_put+0x10d/0x110
-[  130.227988]  dmaengine_put+0x7a/0xa0
-[  130.231575]  __do_sys_delete_module.constprop.0+0x178/0x280
-[  130.237157]  ? syscall_trace_enter.constprop.0+0x145/0x1d0
-[  130.242652]  do_syscall_64+0x5c/0x90
-[  130.246240]  ? exc_page_fault+0x62/0x150
-[  130.250178]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-[  130.255243] RIP: 0033:0x7f6463a3f5ab
-[  130.258830] Code: 73 01 c3 48 8b 0d 75 a8 1b 00 f7 d8 64 89 01 48 83 c8 ff c3 66 2e 0f 1f 84 00 00 00 00 00 90 f3 0f 1e fa b8 b0 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d 45 a8 1b 00 f7 d8 64 89 01 48
-[  130.277591] RSP: 002b:00007fff22f972c8 EFLAGS: 00000206 ORIG_RAX: 00000000000000b0
-[  130.285164] RAX: ffffffffffffffda RBX: 000055b6786edd40 RCX: 00007f6463a3f5ab
-[  130.292303] RDX: 0000000000000000 RSI: 0000000000000800 RDI: 000055b6786edda8
-[  130.299443] RBP: 000055b6786edd40 R08: 0000000000000000 R09: 0000000000000000
-[  130.306584] R10: 00007f6463b9eac0 R11: 0000000000000206 R12: 000055b6786edda8
-[  130.313731] R13: 0000000000000000 R14: 000055b6786edda8 R15: 00007fff22f995f8
-[  130.320875]  </TASK>
-[  130.323081] ---[ end trace eff7156d56b5cf25 ]---
+        ntq = (struct tipc_name_table_query *)TLV_DATA(msg->req);
+-       if (TLV_GET_DATA_LEN(msg->req) < sizeof(struct tipc_name_table_query))
++       if (TLV_GET_DATA_LEN(msg->req) < (int)sizeof(struct
+tipc_name_table_query))
+                return -EINVAL;
 
+        depth = ntohl(ntq->depth);
 
-Regards,
-Jerry
+as a follow-up of:
 
-> -- 
-> ~Vinod
+commit 974cb0e3e7c963ced06c4e32c5b2884173fa5e01
+Author: Ying Xue <ying.xue@windriver.com>
+Date:   Mon Jan 14 17:22:28 2019 +0800
 
+    tipc: fix uninit-value in tipc_nl_compat_name_table_dump
+
+>  tipc_nl_compat_name_table_dump+0x841/0xea0 net/tipc/netlink_compat.c:934
+>  __tipc_nl_compat_dumpit+0xab2/0x1320 net/tipc/netlink_compat.c:238
+>  tipc_nl_compat_dumpit+0x991/0xb50 net/tipc/netlink_compat.c:321
+>  tipc_nl_compat_recv+0xb6e/0x1640 net/tipc/netlink_compat.c:1324
+>  genl_family_rcv_msg_doit net/netlink/genetlink.c:731 [inline]
+>  genl_family_rcv_msg net/netlink/genetlink.c:775 [inline]
+>  genl_rcv_msg+0x103f/0x1260 net/netlink/genetlink.c:792
+>  netlink_rcv_skb+0x3a5/0x6c0 net/netlink/af_netlink.c:2501
+>  genl_rcv+0x3c/0x50 net/netlink/genetlink.c:803
+>  netlink_unicast_kernel net/netlink/af_netlink.c:1319 [inline]
+>  netlink_unicast+0xf3b/0x1270 net/netlink/af_netlink.c:1345
+>  netlink_sendmsg+0x1288/0x1440 net/netlink/af_netlink.c:1921
+>  sock_sendmsg_nosec net/socket.c:714 [inline]
+>  sock_sendmsg net/socket.c:734 [inline]
+>  ____sys_sendmsg+0xabc/0xe90 net/socket.c:2482
+>  ___sys_sendmsg+0x2a1/0x3f0 net/socket.c:2536
+>  __sys_sendmsg net/socket.c:2565 [inline]
+>  __do_sys_sendmsg net/socket.c:2574 [inline]
+>  __se_sys_sendmsg net/socket.c:2572 [inline]
+>  __x64_sys_sendmsg+0x367/0x540 net/socket.c:2572
+>  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>  do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+>  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+>
+> Uninit was created at:
+>  slab_post_alloc_hook mm/slab.h:732 [inline]
+>  slab_alloc_node mm/slub.c:3258 [inline]
+>  __kmalloc_node_track_caller+0x814/0x1250 mm/slub.c:4970
+>  kmalloc_reserve net/core/skbuff.c:362 [inline]
+>  __alloc_skb+0x346/0xcf0 net/core/skbuff.c:434
+>  alloc_skb include/linux/skbuff.h:1257 [inline]
+>  netlink_alloc_large_skb net/netlink/af_netlink.c:1191 [inline]
+>  netlink_sendmsg+0xb71/0x1440 net/netlink/af_netlink.c:1896
+>  sock_sendmsg_nosec net/socket.c:714 [inline]
+>  sock_sendmsg net/socket.c:734 [inline]
+>  ____sys_sendmsg+0xabc/0xe90 net/socket.c:2482
+>  ___sys_sendmsg+0x2a1/0x3f0 net/socket.c:2536
+>  __sys_sendmsg net/socket.c:2565 [inline]
+>  __do_sys_sendmsg net/socket.c:2574 [inline]
+>  __se_sys_sendmsg net/socket.c:2572 [inline]
+>  __x64_sys_sendmsg+0x367/0x540 net/socket.c:2572
+>  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>  do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+>  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+>
+> CPU: 1 PID: 3490 Comm: syz-executor155 Not tainted 6.0.0-rc5-syzkaller-48538-g8f4ae27df775 #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
+> =====================================================
+>
+>
+> ---
+> This report is generated by a bot. It may contain errors.
+> See https://goo.gl/tpsmEJ for more information about syzbot.
+> syzbot engineers can be reached at syzkaller@googlegroups.com.
+>
+> syzbot will keep track of this issue. See:
+> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+> syzbot can test patches for this issue, for details see:
+> https://goo.gl/tpsmEJ#testing-patches
