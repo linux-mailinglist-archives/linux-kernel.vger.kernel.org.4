@@ -2,119 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE3246194F2
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 11:58:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57F026194F6
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 11:59:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231444AbiKDK6M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 06:58:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37038 "EHLO
+        id S231493AbiKDK73 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 06:59:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231596AbiKDK5z (ORCPT
+        with ESMTP id S231354AbiKDK70 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 06:57:55 -0400
-Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2B5C2C12C
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 03:57:51 -0700 (PDT)
-Received: by mail-io1-xd31.google.com with SMTP id z3so3488833iof.3
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 03:57:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KBw6r/39I5ZdX4ted0MRMCqrVaORjgimjhJ6CowDODg=;
-        b=Q5xZXnEapVLguBKftTH5xS9ORf/btiGt8a8j4JTuzlKNIlICxEKZ72BcAeq2dRtjpg
-         FRD9ECAQ3ryxiE5HQy9bZq3jBmmnp6MUg4jTUUGCGdXHkt9v838CIuOtoYzQR8byduSb
-         /DlueIbH6r/BUU9n5rZpHOZ8jrxjzmjjdi1VRBkmmkyH8WENIuhTTcRm9ojpgqclWiBV
-         twBrm9lp46EOcV2Q7HoEfVPs773R2EiDW2r4LdLn+Z583EkDCEl4s/8UmQTq7oKTrjIP
-         XjaGJTn66UOt94RYNiG63BbfpEOBWBoRxVvZZEtrq65ejICKfE8xi23osDPGgzCE2gwB
-         xx4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KBw6r/39I5ZdX4ted0MRMCqrVaORjgimjhJ6CowDODg=;
-        b=yWLIwIateg7BgXVJw9QrNSex6rPx3SqCw4sxgIT/zbqi3Eq9Q6llMhjU3Gck5fWLb2
-         bpLT4ZLqAYiK5qWLuunnkI0EESilStMPFCII325+X9Jp+lKo+b/tBjd8QOpkge+1ddOs
-         7QXuM58fDEoIhC3v/BZ6oO04Ge6xZNyZH/7hf4UuiVPZBVopdYoF1OpiU47KZbZjSSGT
-         Vyme2e20o8pzNbtroTCY36pB0c3c3foSDMoxDnFHhMu6AFTa7SeG+meOLmwGUwkK6LLu
-         T1aEoeR7/tzC3vkXEpHxKRyV8BLljzIQ3pZ9Pd2yJR43wGD9vRNM9faARNUi65bUvRJK
-         G1ZQ==
-X-Gm-Message-State: ACrzQf00OjjrEZwqsp8JAovnwkJBTAC8H9idNLtdbPC5A6L1s8MWc/8B
-        8Tadw5yOzx4Ch6VGeTSKOesTl3Xrl8bPUJZDExiu5g==
-X-Google-Smtp-Source: AMsMyM6KdkkbJMxSJCn9XgLLHkwaUKBPOwsu5sngExm6GJ/ZMHrz7nrg8BkmrJwEWQ1+0TPgCouWYHNlv2ddi0i6d6w=
-X-Received: by 2002:a02:9a07:0:b0:375:4db5:2a4e with SMTP id
- b7-20020a029a07000000b003754db52a4emr18497636jal.71.1667559471338; Fri, 04
- Nov 2022 03:57:51 -0700 (PDT)
+        Fri, 4 Nov 2022 06:59:26 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 95777B72;
+        Fri,  4 Nov 2022 03:59:22 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.77])
+        by gateway (Coremail) with SMTP id _____8Cxq9iJ8GRj4H0EAA--.15023S3;
+        Fri, 04 Nov 2022 18:59:21 +0800 (CST)
+Received: from [10.20.42.77] (unknown [10.20.42.77])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Dxr+CI8GRjl2kNAA--.38047S3;
+        Fri, 04 Nov 2022 18:59:21 +0800 (CST)
+Subject: Re: [PATCH] irqchip: loongson-liointc: fix improper error handling in
+ liointc_init()
+To:     Sergei Shtylyov <sergei.shtylyov@gmail.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Jianmin Lv <lvjianmin@loongson.cn>
+Cc:     Yinbo Zhu <zhuyinbo@loongson.cn>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221104080347.21527-1-liupeibao@loongson.cn>
+ <539b63ee-7655-50c1-a95f-9f8210e7229d@gmail.com>
+From:   Liu Peibao <liupeibao@loongson.cn>
+Message-ID: <6c14515d-2369-83b5-e20c-0e2a5ba7524c@loongson.cn>
+Date:   Fri, 4 Nov 2022 18:59:20 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-References: <20221028093403.6673-1-vincent.guittot@linaro.org>
- <20221028093403.6673-7-vincent.guittot@linaro.org> <20221101192848.pjns3um7dnrwrk5p@airbuntu>
- <CAKfTPtA=vJQA_=6Un1CqwzMUaOxMeFGTKUZnj8qyqvqmSdYBAg@mail.gmail.com>
- <20221103142732.m5ibwkuymvhcdxkn@airbuntu> <CAKfTPtDu=c-psGnHkoWSPRWoh1Z0VBBfsN++g+krv4B1SJmFjg@mail.gmail.com>
- <CAEXW_YQd2y9=RHw3Sge7ghnhBz0AyR+B-U4zG10LXuSbg5bGSA@mail.gmail.com>
- <CAKfTPtBJQOY7UUkm1=wvG18UWgLLiTW0dr3bTGUJY=siM_LLxQ@mail.gmail.com> <CAEXW_YTcmbPg+UCacb4Vy0LeYuorT-yECoa39pqtw5wPUkzsvQ@mail.gmail.com>
-In-Reply-To: <CAEXW_YTcmbPg+UCacb4Vy0LeYuorT-yECoa39pqtw5wPUkzsvQ@mail.gmail.com>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Fri, 4 Nov 2022 11:57:39 +0100
-Message-ID: <CAKfTPtCfL7KZSyJmGRaW0KhGtkdZkk0JJDF0w_sgiSmZ-x-DSA@mail.gmail.com>
-Subject: Re: [PATCH v7 6/9] sched/fair: Add sched group latency support
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     Qais Yousef <qyousef@layalina.io>, mingo@redhat.com,
-        peterz@infradead.org, juri.lelli@redhat.com,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        linux-kernel@vger.kernel.org, parth@linux.ibm.com,
-        qais.yousef@arm.com, chris.hyser@oracle.com,
-        patrick.bellasi@matbug.net, David.Laight@aculab.com,
-        pjt@google.com, pavel@ucw.cz, tj@kernel.org, qperret@google.com,
-        tim.c.chen@linux.intel.com, joshdon@google.com, timj@gnu.org,
-        kprateek.nayak@amd.com, yu.c.chen@intel.com,
-        youssefesmat@chromium.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <539b63ee-7655-50c1-a95f-9f8210e7229d@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: AQAAf8Dxr+CI8GRjl2kNAA--.38047S3
+X-CM-SenderInfo: xolx1vpled0qxorr0wxvrqhubq/1tbiAQAACmNjr2Mb4AAAs8
+X-Coremail-Antispam: 1Uk129KBjvdXoW7XF1UXFW3AFWxWFy7Ww1xXwb_yoW3JFbEgF
+        92vr93Grn2qr1xJ34DJrWY9w47W347C3Z0krWUW3Z3Zw4Dta43ur17CwnakF18KFZ7Wwn3
+        ZFs5uFyxur1IkjkaLaAFLSUrUUUU1b8apTn2vfkv8UJUUUU8wcxFpf9Il3svdxBIdaVrn0
+        xqx4xG64xvF2IEw4CE5I8CrVC2j2Jv73VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUY
+        W7kC6x804xWl14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3w
+        AFIxvE14AKwVWUXVWUAwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK
+        6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7
+        xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr1j6rxdM2kK
+        e7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI
+        0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUtVWrXwAv7VC2z280
+        aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2
+        xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xF
+        xVAFwI0_Jrv_JF1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWw
+        C2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_
+        Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJV
+        WUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIY
+        CTnIWIevJa73UjIFyTuYvjxU4AhLUUUUU
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 4 Nov 2022 at 11:48, Joel Fernandes <joel@joelfernandes.org> wrote:
->
-> On Fri, Nov 4, 2022 at 10:37 AM Vincent Guittot
-> <vincent.guittot@linaro.org> wrote:
+On 11/4/22 5:48 PM, Sergei Shtylyov wrote:
+> Hello!
+> 
+> On 11/4/22 11:03 AM, Liu Peibao wrote:
+> 
+>> For cores less than 4, eg, loongson2k1000 with 2 cores, the
+>> of_property_match_string() may return with an error value,
+>> which causes that liointc could not work. At least one isr
+>> is what should be checked like previous commit <b2c4c3969fd7>
+>> (irqchip/loongson-liointc: irqchip add 2.0 version) did.
+> 
+>    It should look like this:
+> 
+> commit b2c4c3969fd7 ("irqchip/loongson-liointc: irqchip add 2.0 version")
+> 
+
+Thanks, I will update the patch.
+
+BR,
+Peibao
+
+>> Fixes: 0858ed035a85 ("irqchip/loongson-liointc: Add ACPI init support")
+>> Signed-off-by: Liu Peibao <liupeibao@loongson.cn>
 > [...]
-> > > during *same CPU* competition between different groups by juggling
-> > > around the wakeup-preemption window -- which maybe is good for
-> > > Android.
-> > >
-> > > OTOH, the =E2=80=9Cprefer idle=E2=80=9D flag in android that Qais is =
-referring to,
-> > > will need a completely different method as I cannot see how a nice
-> > > value can communicate that (that can complement Vincent's changes
-> > > here). And it will need to have a per-task interface as well. We have
-> >
-> > Why a negative latency_nice value condition can't be used ? or latency =
--20  ?
->
-> That's overloading the meaning of a value, the whole nice thing is
-> supposed to be "relative to something". So you are being nice to
-> something else. Here -20 means you are not being nice. But in fact you
-> are, because you are avoiding hurting something else by going to an
-> idle CPU. So it becomes really weird.
+> 
+> MBR, Sergey
+> 
 
-Looking for an idle CPU 1st is already the default behavior of CFS.
-Here we speak about an EAS specific behavior where we want to forgot
-the "full" EAS policy for some tasks and favor latency by spreading
-and looking for an idle cpu
-
->
-> Also, why would -19 or -18 not be a value instead to cause wakeup to
-> prefer an idle CPU? It confuses the user on how to choose value and we
-> should refrain from that IMHO.
-
-IIRC, the 1st idea was to say any negative value but then using the
-lowest one can be seen as an addon to the wakeup preemption
