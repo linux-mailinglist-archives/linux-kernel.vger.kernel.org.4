@@ -2,97 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93FDC61968D
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 13:50:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FD8161968E
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 13:51:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231955AbiKDMus (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 08:50:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34282 "EHLO
+        id S231963AbiKDMvH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 08:51:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230132AbiKDMup (ORCPT
+        with ESMTP id S231956AbiKDMvE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 08:50:45 -0400
-Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49865EE31;
-        Fri,  4 Nov 2022 05:50:44 -0700 (PDT)
-Received: by mail-qt1-x82f.google.com with SMTP id x15so2915617qtv.9;
-        Fri, 04 Nov 2022 05:50:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=HCg5U14h823fd/E6HfvfZMyPQS0BVVOBKdKh70+tEco=;
-        b=MURPBtT6SMZEFPvlZ8dHt6QTCIs5u7eDlYRQ3df41UwWgEh9kUXPkmMZbegcaIqQc+
-         VtdIXBcpivNIG+MwsAxsi1gWcu27Lg+p+1EfAm4iqF9bGgY6GUKPc7Coa1GZd+aSuQpZ
-         cXBptuU89TH8TrYCxBaIPooysc3ftyCMwDudNaGqymcrcll4CalAqI4IwaTmTPFv8WxF
-         BpT3inRmHsyD8O1+hpHeg48LJqJC7MyrjE1mbeK/ug/m6tUboARBrx5FWHxMDRb9LZCJ
-         TXcoY68JAzPx5dIxdG9DXMVWbZiZkZnnQqyXhzKK3bntebhaK8f3coZjgVRxRFBOyDke
-         bVbw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=HCg5U14h823fd/E6HfvfZMyPQS0BVVOBKdKh70+tEco=;
-        b=vL3ahOlA0IVmC/ne0uLgAB7P6YQQ3OcreSG9sZcGjgLU4iU+NllphU2RuMSt4gRR6V
-         NyoBV/fbEP+sCygcj5TqWJ/7JYx9uwqs0e5syqHOgnhbDRDDbfEHk6QUQQIMdweJXREs
-         /6I2Io44DtDzxrDWR2gfVlYQncir87yXRzaoxOON47TYMv7tIvZxYNBLI93joQ5tA41C
-         VxJFwsTRevlUdEkXKBuam7adgmvQn4ABHdmrDGjgu3Y9y022ClQtFkyfEAFhJWSiaiJD
-         xgd3lArW82ZCf+DQXQ9TSIIRnB+EQ3o//3onFuUJBGoobW3XZbaBM+hqJ6HNPLG6REhy
-         RjGg==
-X-Gm-Message-State: ACrzQf0YRLzjfDqB8sucRIr8pnY0aHN7jx3Kn8E9gvtjaOZcmDKeR27J
-        1I900gnk495+++3Y0g9IxFtjsxJxtkNcF+mXRvOhHDKk1BU=
-X-Google-Smtp-Source: AMsMyM7/vR6BHUB9wDEQrhkpI1dQLqYW8s55rI35FAXgGTlmy57auC3tsOsnHMCOAwGP85036yjCWc8xjBfR3E7Hqq8=
-X-Received: by 2002:ac8:7152:0:b0:3a5:2fa2:cd1a with SMTP id
- h18-20020ac87152000000b003a52fa2cd1amr18686625qtp.195.1667566243392; Fri, 04
- Nov 2022 05:50:43 -0700 (PDT)
+        Fri, 4 Nov 2022 08:51:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D80211823
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 05:51:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2F6B462177
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 12:51:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4EC7AC433C1;
+        Fri,  4 Nov 2022 12:51:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667566262;
+        bh=jiGK3o0Gv2eoeA5+7Wfk08wEapetiZPf58b7uXbb8OM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=pL7mTk8F89Yl8cKQ3USab8PnD5gWNSbJPe59wpc6mDAnghO5Mlzkm2buzRwpQnznn
+         LY+RQU9wjvHzOffXdRWfhSO2yBpHyh5/8Ju+FMCDgSWBayXPBKlm1Q30wyr3i3dutf
+         MlttYKL0FlhOSaiXlhxSCetIkOAuJALHaN3Z3lD6RHrx6jjXt8TJb2qVIaxChKniK4
+         Lwac4P4BwJ/gjQ2W8nsNoOfO8DvZDdLOa4wuVA8QEIJqqksq0jQp2S/LC71srWrC67
+         cdA3M/PJh+8OwuHV8KYIqznRffsrILVmKM971w5bQWXArXg23+2Z8ErgD/tU7DdBdA
+         7XkWq5405Kshg==
+Date:   Fri, 4 Nov 2022 12:50:57 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     Li Huafei <lihuafei1@huawei.com>
+Cc:     paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, lizhengyu3@huawei.com,
+        liaochang1@huawei.com, u.kleine-koenig@pengutronix.de,
+        rdunlap@infradead.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, kexec@lists.infradead.org
+Subject: Re: [PATCH 1/2] RISC-V: kexec: Fix memory leak of fdt buffer
+Message-ID: <Y2UKsW8RzuNmEo8r@spud>
+References: <20221104095658.141222-1-lihuafei1@huawei.com>
 MIME-Version: 1.0
-References: <20221001061507.3508603-1-kumaravel.thiagarajan@microchip.com>
- <20221001061507.3508603-4-kumaravel.thiagarajan@microchip.com>
- <CAHp75VdEJvG=BQvS2KVNY8BnjfHyOCO6ww0S4_gxVZNuhXaURg@mail.gmail.com> <PH0PR11MB50964BC2301907D51B3DCF119B3B9@PH0PR11MB5096.namprd11.prod.outlook.com>
-In-Reply-To: <PH0PR11MB50964BC2301907D51B3DCF119B3B9@PH0PR11MB5096.namprd11.prod.outlook.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Fri, 4 Nov 2022 14:50:07 +0200
-Message-ID: <CAHp75VfGZf_aM4+ta10kxaktwvkk9XiV=8ttAg7hcFV-rBtY1g@mail.gmail.com>
-Subject: Re: [PATCH v2 tty-next 3/3] 8250: microchip: pci1xxxx: Add power
- management functions to quad-uart driver.
-To:     Tharunkumar.Pasumarthi@microchip.com
-Cc:     Kumaravel.Thiagarajan@microchip.com, gregkh@linuxfoundation.org,
-        jirislaby@kernel.org, ilpo.jarvinen@linux.intel.com,
-        u.kleine-koenig@pengutronix.de, johan@kernel.org,
-        wander@redhat.com, etremblay@distech-controls.com,
-        macro@orcam.me.uk, geert+renesas@glider.be, jk@ozlabs.org,
-        phil.edworthy@renesas.com, lukas@wunner.de,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
-        UNGLinuxDriver@microchip.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221104095658.141222-1-lihuafei1@huawei.com>
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 4, 2022 at 12:23 PM <Tharunkumar.Pasumarthi@microchip.com> wrote:
-> > From: Andy Shevchenko <andy.shevchenko@gmail.com>
-> > Sent: Monday, October 3, 2022 2:57 PM
+On Fri, Nov 04, 2022 at 05:56:57PM +0800, Li Huafei wrote:
+> This is reported by kmemleak detector:
+> 
+> unreferenced object 0xff60000082864000 (size 9588):
+>   comm "kexec", pid 146, jiffies 4294900634 (age 64.788s)
+>   hex dump (first 32 bytes):
+>     d0 0d fe ed 00 00 12 ed 00 00 00 48 00 00 11 40  ...........H...@
+>     00 00 00 28 00 00 00 11 00 00 00 02 00 00 00 00  ...(............
+>   backtrace:
+>     [<00000000f95b17c4>] kmemleak_alloc+0x34/0x3e
+>     [<00000000b9ec8e3e>] kmalloc_order+0x9c/0xc4
+>     [<00000000a95cf02e>] kmalloc_order_trace+0x34/0xb6
+>     [<00000000f01e68b4>] __kmalloc+0x5c2/0x62a
+>     [<000000002bd497b2>] kvmalloc_node+0x66/0xd6
+>     [<00000000906542fa>] of_kexec_alloc_and_setup_fdt+0xa6/0x6ea
+>     [<00000000e1166bde>] elf_kexec_load+0x206/0x4ec
+>     [<0000000036548e09>] kexec_image_load_default+0x40/0x4c
+>     [<0000000079fbe1b4>] sys_kexec_file_load+0x1c4/0x322
+>     [<0000000040c62c03>] ret_from_syscall+0x0/0x2
+> 
+> In elf_kexec_load(), a buffer is allocated via kvmalloc() to store fdt.
+> While it's not freed back to system when kexec kernel is reloaded or
+> unloaded.  Then memory leak is caused.  Fix it by introducing riscv
+> specific function arch_kimage_file_post_load_cleanup(), and freeing the
+> buffer there.
+> 
+> Fixes: 6261586e0c91 ("RISC-V: Add kexec_file support")
+> Signed-off-by: Li Huafei <lihuafei1@huawei.com>
 
-> > If you have similarities with 8250_pci, probably you need to split it to
-> > 8250_pcilib.c and share. (See how 8250_dw /8250_lpss are done in that
-> > sense.)
->
-> All the functions used in 8250_pci1xxxx.c  that have similarity with 8250_pci use registers
-> that are specific to our IP.  The only function that can be moved to common library is the
-> setup_port. But, for that the first argument of setup_port must be changed to
-> 'struct pci_dev *dev' (priv->dev).  Do you suggest doing this?
+Both of these bits of cleanup seem to echo what's the case on arm64.
+Seems reasonable to me..
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 
-So, you can create a common serial8250_setup_port(struct pci_dev *dev,
-...) and call it from the static setup_port() inside 8250_pci.c. This
-way you won't introduce too many churn.
-
--- 
-With Best Regards,
-Andy Shevchenko
+> ---
+>  arch/riscv/include/asm/kexec.h |  5 +++++
+>  arch/riscv/kernel/elf_kexec.c  | 10 ++++++++++
+>  2 files changed, 15 insertions(+)
+> 
+> diff --git a/arch/riscv/include/asm/kexec.h b/arch/riscv/include/asm/kexec.h
+> index eee260e8ab30..2b56769cb530 100644
+> --- a/arch/riscv/include/asm/kexec.h
+> +++ b/arch/riscv/include/asm/kexec.h
+> @@ -39,6 +39,7 @@ crash_setup_regs(struct pt_regs *newregs,
+>  #define ARCH_HAS_KIMAGE_ARCH
+>  
+>  struct kimage_arch {
+> +	void *fdt; /* For CONFIG_KEXEC_FILE */
+>  	unsigned long fdt_addr;
+>  };
+>  
+> @@ -62,6 +63,10 @@ int arch_kexec_apply_relocations_add(struct purgatory_info *pi,
+>  				     const Elf_Shdr *relsec,
+>  				     const Elf_Shdr *symtab);
+>  #define arch_kexec_apply_relocations_add arch_kexec_apply_relocations_add
+> +
+> +struct kimage;
+> +int arch_kimage_file_post_load_cleanup(struct kimage *image);
+> +#define arch_kimage_file_post_load_cleanup arch_kimage_file_post_load_cleanup
+>  #endif
+>  
+>  #endif
+> diff --git a/arch/riscv/kernel/elf_kexec.c b/arch/riscv/kernel/elf_kexec.c
+> index 0cb94992c15b..ff30fcb43f47 100644
+> --- a/arch/riscv/kernel/elf_kexec.c
+> +++ b/arch/riscv/kernel/elf_kexec.c
+> @@ -21,6 +21,14 @@
+>  #include <linux/memblock.h>
+>  #include <asm/setup.h>
+>  
+> +int arch_kimage_file_post_load_cleanup(struct kimage *image)
+> +{
+> +	kvfree(image->arch.fdt);
+> +	image->arch.fdt = NULL;
+> +
+> +	return kexec_image_post_load_cleanup_default(image);
+> +}
+> +
+>  static int riscv_kexec_elf_load(struct kimage *image, struct elfhdr *ehdr,
+>  				struct kexec_elf_info *elf_info, unsigned long old_pbase,
+>  				unsigned long new_pbase)
+> @@ -298,6 +306,8 @@ static void *elf_kexec_load(struct kimage *image, char *kernel_buf,
+>  		pr_err("Error add DTB kbuf ret=%d\n", ret);
+>  		goto out_free_fdt;
+>  	}
+> +	/* Cache the fdt buffer address for memory cleanup */
+> +	image->arch.fdt = fdt;
+>  	pr_notice("Loaded device tree at 0x%lx\n", kbuf.mem);
+>  	goto out;
+>  
+> -- 
+> 2.17.1
+> 
