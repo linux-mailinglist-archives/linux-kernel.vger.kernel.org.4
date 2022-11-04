@@ -2,196 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1E36619D8A
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 17:43:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98CA5619DCD
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 17:52:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229898AbiKDQnF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 12:43:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36548 "EHLO
+        id S232017AbiKDQwX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 12:52:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231774AbiKDQmn (ORCPT
+        with ESMTP id S232012AbiKDQvs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 12:42:43 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CEAC2B628
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 09:42:42 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id gw22so4974360pjb.3
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 09:42:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sartura.hr; s=sartura;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=HwyjxWhZP/MgIgc5HM4/DGfwKdzwFd87DAz0NuXY8dw=;
-        b=xGqZScJ8boQw8m8d7rB+ASPYAOPe2WE8nrsOx2qcbG5iG7rIVKFDzyr7pVcEpUmjNV
-         p/nLqSgB1hU200+S88ug1jVS9tYZwBpZFtJJx1VxIUEVV/rslXj2arxQ9xc90mY+cokw
-         g99Z7Wdyy8PnCtB061AJG3IvPYYu3764iGjOqwYz5uxIJF4uXPKYGAtpSDFbuzSD3vgl
-         5tvVQ1pfME1LMkjFdRht2HUiHww9G5+5tqem7IKN4ifZSjM9BDqo78sEbuVljRGqR9u+
-         IOQUkROjy4U5+edGGbe2BG6un6yAoj9hUka1LcsL2qkgWh7v6c6G0X13T17cLMv6a+ab
-         2rug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=HwyjxWhZP/MgIgc5HM4/DGfwKdzwFd87DAz0NuXY8dw=;
-        b=jsRkSyXd+0OTFmvkqqDi4bvRik51zmlJXukCu7/zQNp9R6rku7X3O9hDCtgsKZR+n1
-         X+bcVvJjePNX88AW8ZhLjzHn52baxb5N2rR9lp3YZNKJuTmQOXXR+ZVpgudsnrbUMv6W
-         oNlRMyW1wnIaOS0kXgMPcFMH4ku/27ADb9zfF1CeLXJ0pQmrTu5JsPlM6vITzGJGQiEd
-         OnbGqV8diUnI3FrN5QEzQZBRHZV42SP7Uw8/1cUgr6pzFiQccOQHuQAlAq6fVZVdATjE
-         0CJFaWy48zRGRpyaQbsaHiYEEyZOat/YKgUhfXQKRH5/X56xorny6yVdAU5r8sQLlr5c
-         pR5Q==
-X-Gm-Message-State: ACrzQf1drK9rBDG5cerMIydk9UhdUubpyrIx9gkXC9jeTLPdEFC4WNEq
-        4RdUvMitgU4Bn4Z+fDgpMzVgM//7pIzTqkttDDjLfA==
-X-Google-Smtp-Source: AMsMyM5W4PMELNbAUb/lCFcSeStB7XeYIssPubhTCYDlCbdwq23rNZtSX9WBSCEmwJOAlx6ldI/sXbNs7re6ZZQuvhI=
-X-Received: by 2002:a17:902:edc3:b0:172:8ae3:9778 with SMTP id
- q3-20020a170902edc300b001728ae39778mr35968030plk.72.1667580161879; Fri, 04
- Nov 2022 09:42:41 -0700 (PDT)
+        Fri, 4 Nov 2022 12:51:48 -0400
+X-Greylist: delayed 392 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 04 Nov 2022 09:50:13 PDT
+Received: from mxex1.tik.uni-stuttgart.de (mxex1.tik.uni-stuttgart.de [IPv6:2001:7c0:2041:24::a:1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76445D76
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 09:50:13 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mxex1.tik.uni-stuttgart.de (Postfix) with ESMTP id B58C7601D8;
+        Fri,  4 Nov 2022 17:43:36 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=uni-stuttgart.de;
+         h=content-transfer-encoding:content-type:content-type
+        :in-reply-to:organization:from:from:references:content-language
+        :subject:subject:user-agent:mime-version:date:date:message-id;
+         s=dkim; i=@isd.uni-stuttgart.de; t=1667580214; x=1669319015;
+         bh=pj277RfjavgOMXxkxmgYdkXpZpHKvXQ7aiX3sWgAewI=; b=GFmSKFotmghm
+        p1/X/kmJnEXB0AqTkQ7zhONNg5HF2zQ8GJGrAjz9IVuTmLYq/aT5sLz9FuGfJYYk
+        nlFK9bL+ptTcnHh9oYaHZy5DpDjjcjwnyqX7PousUSq5nXGm5iMo+au180EMyky3
+        iSAgz7uKYxv1gGM/3ilfrPR1Cyr0Xtw5sGXy/Tc01HqSiM6K7xcfBtVieYQ3daZC
+        puxM6jDQt9AFSzPyxFcnzp4zHZ24YRo08USjtXjRrPgKLLJh7vxmnUy7GQsV0FRZ
+        SK39HEbEfq0hodhsUordLxZwTAXybOzTG0mEYU6Yn/yNJJdKZjH6ayaanLwZ4vKT
+        AUpKovWT/w==
+X-Virus-Scanned: USTUTT mailrelay AV services at mxex1.tik.uni-stuttgart.de
+Received: from mxex1.tik.uni-stuttgart.de ([127.0.0.1])
+        by localhost (mxex1.tik.uni-stuttgart.de [127.0.0.1]) (amavisd-new, port 10031)
+        with ESMTP id LIaqnECUk69N; Fri,  4 Nov 2022 17:43:34 +0100 (CET)
+Received: from authenticated client
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mxex1.tik.uni-stuttgart.de (Postfix) with ESMTPSA
+Message-ID: <e7ebabf9-a7b2-6155-cdd0-5dafb6bb2a7a@isd.uni-stuttgart.de>
+Date:   Fri, 4 Nov 2022 17:43:33 +0100
 MIME-Version: 1.0
-References: <20221104142746.350468-1-maxime.chevallier@bootlin.com> <20221104142746.350468-6-maxime.chevallier@bootlin.com>
-In-Reply-To: <20221104142746.350468-6-maxime.chevallier@bootlin.com>
-From:   Robert Marko <robert.marko@sartura.hr>
-Date:   Fri, 4 Nov 2022 17:42:30 +0100
-Message-ID: <CA+HBbNHTmpPJqzja11OqS9J-37vdDiDLubrimke73x+oQKuoJA@mail.gmail.com>
-Subject: Re: [PATCH net-next v7 5/5] ARM: dts: qcom: ipq4019: Add description
- for the IPQESS Ethernet controller
-To:     Maxime Chevallier <maxime.chevallier@bootlin.com>
-Cc:     davem@davemloft.net, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        thomas.petazzoni@bootlin.com, Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        linux-arm-kernel@lists.infradead.org,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Luka Perkov <luka.perkov@sartura.hr>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH v2] nvmem: u-boot-env: align endianness of crc32 values
+Content-Language: de-DE
+To:     INAGAKI Hiroshi <musashino.open@gmail.com>, rafal@milecki.pl,
+        srinivas.kandagatla@linaro.org
+Cc:     linux-kernel@vger.kernel.org
+References: <20221012155133.287-1-musashino.open@gmail.com>
+From:   Christian Lamparter <christian.lamparter@isd.uni-stuttgart.de>
+Organization: Universitaet Stuttgart - ISD
+In-Reply-To: <20221012155133.287-1-musashino.open@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE,
+        UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 4, 2022 at 3:28 PM Maxime Chevallier
-<maxime.chevallier@bootlin.com> wrote:
+On 10/12/22 17:51, INAGAKI Hiroshi wrote:
+> This patch fixes crc32 error on Big-Endianness system by conversion of
+> calculated crc32 value.
 >
-> The Qualcomm IPQ4019 includes an internal 5 ports switch, which is
-> connected to the CPU through the internal IPQESS Ethernet controller.
+> Little-Endianness system:
 >
-> Add support for this internal interface, which is internally connected to a
-> modified version of the QCA8K Ethernet switch.
+>    obtained crc32: Little
+> calculated crc32: Little
 >
-> This Ethernet controller only support a specific internal interface mode
-> for connection to the switch.
+> Big-Endianness system:
 >
-> Signed-off-by: Maxime Chevallier <maxime.chevallier@bootlin.com>
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
-> V6->V7:
->  - No Changes
-> V5->V6:
->  - Removed extra blank lines
->  - Put the status property last
-> V4->V5:
->  - Reword the commit log
-> V3->V4:
->  - No Changes
-> V2->V3:
->  - No Changes
-> V1->V2:
->  - Added clock and resets
+>    obtained crc32: Little
+> calculated crc32: Big
 >
->  arch/arm/boot/dts/qcom-ipq4019.dtsi | 44 +++++++++++++++++++++++++++++
->  1 file changed, 44 insertions(+)
+> log (APRESIA ApresiaLightGS120GT-SS, RTL8382M, Big-Endianness):
 >
-> diff --git a/arch/arm/boot/dts/qcom-ipq4019.dtsi b/arch/arm/boot/dts/qcom-ipq4019.dtsi
-> index b23591110bd2..5fa1af147df9 100644
-> --- a/arch/arm/boot/dts/qcom-ipq4019.dtsi
-> +++ b/arch/arm/boot/dts/qcom-ipq4019.dtsi
-> @@ -38,6 +38,7 @@ aliases {
->                 spi1 = &blsp1_spi2;
->                 i2c0 = &blsp1_i2c3;
->                 i2c1 = &blsp1_i2c4;
-> +               ethernet0 = &gmac;
->         };
+> [    8.570000] u_boot_env 18001200.spi:flash@0:partitions:partition@c0000: Invalid calculated CRC32: 0x88cd6f09 (expected: 0x096fcd88)
+> [    8.580000] u_boot_env: probe of 18001200.spi:flash@0:partitions:partition@c0000 failed with error -22
 >
->         cpus {
-> @@ -591,6 +592,49 @@ wifi1: wifi@a800000 {
->                         status = "disabled";
->                 };
+> Fixes: f955dc1445069 ("nvmem: add driver handling U-Boot environment variables")
 >
-> +               gmac: ethernet@c080000 {
-> +                       compatible = "qcom,ipq4019-ess-edma";
-> +                       reg = <0xc080000 0x8000>;
-> +                       resets = <&gcc ESS_RESET>;
-> +                       reset-names = "ess";
-> +                       clocks = <&gcc GCC_ESS_CLK>;
-> +                       clock-names = "ess";
-> +                       interrupts = <GIC_SPI  65 IRQ_TYPE_EDGE_RISING>,
-> +                                    <GIC_SPI  66 IRQ_TYPE_EDGE_RISING>,
-> +                                    <GIC_SPI  67 IRQ_TYPE_EDGE_RISING>,
-> +                                    <GIC_SPI  68 IRQ_TYPE_EDGE_RISING>,
-> +                                    <GIC_SPI  69 IRQ_TYPE_EDGE_RISING>,
-> +                                    <GIC_SPI  70 IRQ_TYPE_EDGE_RISING>,
-> +                                    <GIC_SPI  71 IRQ_TYPE_EDGE_RISING>,
-> +                                    <GIC_SPI  72 IRQ_TYPE_EDGE_RISING>,
-> +                                    <GIC_SPI  73 IRQ_TYPE_EDGE_RISING>,
-> +                                    <GIC_SPI  74 IRQ_TYPE_EDGE_RISING>,
-> +                                    <GIC_SPI  75 IRQ_TYPE_EDGE_RISING>,
-> +                                    <GIC_SPI  76 IRQ_TYPE_EDGE_RISING>,
-> +                                    <GIC_SPI  77 IRQ_TYPE_EDGE_RISING>,
-> +                                    <GIC_SPI  78 IRQ_TYPE_EDGE_RISING>,
-> +                                    <GIC_SPI  79 IRQ_TYPE_EDGE_RISING>,
-> +                                    <GIC_SPI  80 IRQ_TYPE_EDGE_RISING>,
-> +                                    <GIC_SPI 240 IRQ_TYPE_EDGE_RISING>,
-> +                                    <GIC_SPI 241 IRQ_TYPE_EDGE_RISING>,
-> +                                    <GIC_SPI 242 IRQ_TYPE_EDGE_RISING>,
-> +                                    <GIC_SPI 243 IRQ_TYPE_EDGE_RISING>,
-> +                                    <GIC_SPI 244 IRQ_TYPE_EDGE_RISING>,
-> +                                    <GIC_SPI 245 IRQ_TYPE_EDGE_RISING>,
-> +                                    <GIC_SPI 246 IRQ_TYPE_EDGE_RISING>,
-> +                                    <GIC_SPI 247 IRQ_TYPE_EDGE_RISING>,
-> +                                    <GIC_SPI 248 IRQ_TYPE_EDGE_RISING>,
-> +                                    <GIC_SPI 249 IRQ_TYPE_EDGE_RISING>,
-> +                                    <GIC_SPI 250 IRQ_TYPE_EDGE_RISING>,
-> +                                    <GIC_SPI 251 IRQ_TYPE_EDGE_RISING>,
-> +                                    <GIC_SPI 252 IRQ_TYPE_EDGE_RISING>,
-> +                                    <GIC_SPI 253 IRQ_TYPE_EDGE_RISING>,
-> +                                    <GIC_SPI 254 IRQ_TYPE_EDGE_RISING>,
-> +                                    <GIC_SPI 255 IRQ_TYPE_EDGE_RISING>;
-> +                       phy-mode = "internal";
-> +                       status = "disabled";
+> Signed-off-by: INAGAKI Hiroshi <musashino.open@gmail.com>
 
-The fixed-link should be defined here AFAIK, otherwise it will fail probing with
-just internal PHY mode.
-
-Regards,
-Robert
-> +               };
-> +
->                 mdio: mdio@90000 {
->                         #address-cells = <1>;
->                         #size-cells = <0>;
-> --
-> 2.37.3
->
-
-
--- 
-Robert Marko
-Staff Embedded Linux Engineer
-Sartura Ltd.
-Lendavska ulica 16a
-10000 Zagreb, Croatia
-Email: robert.marko@sartura.hr
-Web: www.sartura.hr
+Tested-by: Christian Lamparter <chunkeey@gmail.com> # PowerPC/MyBookLive
