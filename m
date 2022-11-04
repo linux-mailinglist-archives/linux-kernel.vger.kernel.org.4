@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B00E619E88
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 18:22:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41DDB619E86
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 18:22:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231779AbiKDRWZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 13:22:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34532 "EHLO
+        id S229539AbiKDRWW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 13:22:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231621AbiKDRWH (ORCPT
+        with ESMTP id S230008AbiKDRWG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 13:22:07 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E7E64199E;
+        Fri, 4 Nov 2022 13:22:06 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 492A74199D;
         Fri,  4 Nov 2022 10:22:03 -0700 (PDT)
 Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 476846602995;
-        Fri,  4 Nov 2022 17:21:59 +0000 (GMT)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id A5DA2660299E;
+        Fri,  4 Nov 2022 17:22:00 +0000 (GMT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1667582520;
-        bh=xk85JL4r9GN8347TeRxdMBc6hGdnmcfNXzfRU+FDXVg=;
+        s=mail; t=1667582521;
+        bh=ah3iLCOsM4WqktW76W9/Jw9aCMvs/EiM65WkIIXTGE0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ddq/w482hg/tM55H/d0BFH7R1PAvyrQ0w2EwwewOT5DRLLqg0sugFU2+LlzfgiuXQ
-         Kq+tM1GNN3xFARPOGrWS4U7v1sDuaS0Ty39D+6lx0iTplwb4tFTpj+/C3z4ZpbdxPt
-         1xftY2hdw8OOMfVLoI61SBSE25CjqpdbxBbVpyfCrRl2wS00lF+d8/kkyTGEZ9kVsx
-         Kzg7BH6qo4LlZ5STDwntBiSc8XceM/6sJBG5YW+mGavDt7RP2EzqYgAoHUI5mn5ZsF
-         8dCpbqGS8734ALrTi1HHoYihjNK7qijTiFDhRWe3rfvLcGobpbqQ15vIYPLOXbk2Xv
-         nZkDfego7zhIQ==
+        b=CD3By9lHSHlN885jyaYWtT2AOSe/3EXd6A249e4p5EBy2uxwP78s6g/rYBI7EWd1E
+         AanCDy9g4jyKBjfGeI5pbaT8Nu3Ab66uN9G4+c+cCr3UoFqWpK+yXgm9wujEQjwYRf
+         4aLxPcv3GkEkk8GJRL1y9vae9JRglgH1IoAQ9J+U4yBV2kQr9cpQPcbTSuW2MSxY4N
+         nuO0dAdAXOIbtZ1xKN2u2MEdxMi72aFvkBz0/bu2ZepEhRRqvIpRDisNUIuren4U1V
+         Y5o5XwCZlwmS9nFgn7yzdyg04I3lWjybxx46EUFglmVtVKfptzF+5/CCQtacBFyUNB
+         u6wBTlXn87HHQ==
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
 To:     agross@kernel.org
@@ -47,9 +47,9 @@ Cc:     andersson@kernel.org, konrad.dybcio@somainline.org,
         kernel@collabora.com, luca@z3ntu.xyz, a39.skl@gmail.com,
         AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-Subject: [PATCH 3/9] dt-bindings: arm: qcom: Document msm8956 and msm8976 SoC and devices
-Date:   Fri,  4 Nov 2022 18:21:16 +0100
-Message-Id: <20221104172122.252761-4-angelogioacchino.delregno@collabora.com>
+Subject: [PATCH 4/9] dt-bindings: soc: qcom: qcom,smd-rpm: Use qcom,smd-channels on MSM8976
+Date:   Fri,  4 Nov 2022 18:21:17 +0100
+Message-Id: <20221104172122.252761-5-angelogioacchino.delregno@collabora.com>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20221104172122.252761-1-angelogioacchino.delregno@collabora.com>
 References: <20221104172122.252761-1-angelogioacchino.delregno@collabora.com>
@@ -64,53 +64,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Marijn Suijten <marijn.suijten@somainline.org>
+Like MSM8916 and some others, MSM8976 uses qcom,smd-channels and not
+qcom,glink-channels.
 
-Note that msm8976 is omitted as a compatible, since there are currently
-no boards/devices using it.
-
-Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
 Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 ---
- Documentation/devicetree/bindings/arm/qcom.yaml | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ Documentation/devicetree/bindings/soc/qcom/qcom,smd-rpm.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/devicetree/bindings/arm/qcom.yaml b/Documentation/devicetree/bindings/arm/qcom.yaml
-index 207e28260206..bd1d5164938a 100644
---- a/Documentation/devicetree/bindings/arm/qcom.yaml
-+++ b/Documentation/devicetree/bindings/arm/qcom.yaml
-@@ -34,7 +34,9 @@ description: |
-         mdm9615
-         msm8226
-         msm8916
-+        msm8956
-         msm8974
-+        msm8976
-         msm8992
-         msm8994
-         msm8996
-@@ -149,6 +151,12 @@ properties:
-               - samsung,s3ve3g
-           - const: qcom,msm8226
- 
-+      - items:
-+          - enum:
-+              - sony,kugo-row
-+              - sony,suzu-row
-+          - const: qcom,msm8956
-+
-       - items:
-           - enum:
-               - qcom,msm8960-cdp
-@@ -834,6 +842,8 @@ allOf:
-               - qcom,apq8026
-               - qcom,apq8094
-               - qcom,apq8096
-+              - qcom,msm8956
-+              - qcom,msm8976
-               - qcom,msm8992
-               - qcom,msm8994
-               - qcom,msm8996
+diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,smd-rpm.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,smd-rpm.yaml
+index fef7f29d44ba..11c0f4dd797c 100644
+--- a/Documentation/devicetree/bindings/soc/qcom/qcom,smd-rpm.yaml
++++ b/Documentation/devicetree/bindings/soc/qcom/qcom,smd-rpm.yaml
+@@ -81,6 +81,7 @@ if:
+           - qcom,rpm-apq8084
+           - qcom,rpm-msm8916
+           - qcom,rpm-msm8974
++          - qcom,rpm-msm8976
+           - qcom,rpm-msm8953
+ then:
+   properties:
 -- 
 2.37.2
 
