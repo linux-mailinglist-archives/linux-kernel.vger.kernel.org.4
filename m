@@ -2,100 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DD2E61A625
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 00:56:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64BD161A629
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 00:59:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229696AbiKDX4l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 19:56:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37672 "EHLO
+        id S229615AbiKDX65 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 19:58:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbiKDX4k (ORCPT
+        with ESMTP id S229459AbiKDX6z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 19:56:40 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96D33419AE;
-        Fri,  4 Nov 2022 16:56:38 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2A4NuGqF128891;
-        Fri, 4 Nov 2022 18:56:16 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1667606176;
-        bh=UlbNzkDg0ggQlnGUGBncbnN9YSuiR3U5KDuKzBuB8/M=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=AqDByRhPUpYeQ0LvtMslbAljya41OofpiIy20WttGKXReojlbappURd8mLzO2PsE/
-         Gt/hRmoU4to1cDW8JrX5Y0nVFy72VZnJ05K+8MPL9J2VhKKJxFJqQoGrELgBQmslxv
-         0hl1pYEj8QylreNCKGxBx95PNphIwLD2sZjBdDNE=
-Received: from DLEE100.ent.ti.com (dlee100.ent.ti.com [157.170.170.30])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2A4NuGrH081722
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 4 Nov 2022 18:56:16 -0500
-Received: from DLEE100.ent.ti.com (157.170.170.30) by DLEE100.ent.ti.com
- (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Fri, 4 Nov
- 2022 18:56:16 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE100.ent.ti.com
- (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
- Frontend Transport; Fri, 4 Nov 2022 18:56:16 -0500
-Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2A4NuFMP010215;
-        Fri, 4 Nov 2022 18:56:15 -0500
-Date:   Fri, 4 Nov 2022 18:56:15 -0500
-From:   Nishanth Menon <nm@ti.com>
-To:     Rahul T R <r-ravikumar@ti.com>
-CC:     <vigneshr@ti.com>, <kristo@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <jkridner@gmail.com>
-Subject: Re: [PATCH v7 2/2] arm64: dts: ti: k3-j721e-sk: Add pinmux for RPi
- Header
-Message-ID: <20221104235615.gfwjxpcs2ldmp5dk@reflux>
-References: <20221103174743.16827-1-r-ravikumar@ti.com>
- <20221103174743.16827-3-r-ravikumar@ti.com>
- <20221103215440.7dmcvkmeni4xs2et@municipal>
- <20221104051554.nqoehxtv7rdtmkyi@uda0490373>
+        Fri, 4 Nov 2022 19:58:55 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A185419B1
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 16:58:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1667606282;
+        h=from:from:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZnzJmimE900iiRy7VTWPGN9EpNmm/Y1LD4I/QC6tB0Q=;
+        b=SAaScsy5VY4LkU/F29nQbQkVTdRnZ2Uug7YnY4hJq2aPUYT9avq/N/8zcbi5BuJxdoINE+
+        zTySlv0elts214yRAh2OsPXZSVHutrTsc3KpBUiIZrmsmztdlcQC8yNvCMXbeklvnvMOXw
+        ps3avhtBNlxNGI9jnwpY37JfuU7+8sg=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-196-T678CyveNP-D_kNb-7hxrA-1; Fri, 04 Nov 2022 19:57:57 -0400
+X-MC-Unique: T678CyveNP-D_kNb-7hxrA-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 20CF785A583;
+        Fri,  4 Nov 2022 23:57:46 +0000 (UTC)
+Received: from [10.64.54.78] (vpn2-54-78.bne.redhat.com [10.64.54.78])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 343EFC16932;
+        Fri,  4 Nov 2022 23:57:26 +0000 (UTC)
+Reply-To: Gavin Shan <gshan@redhat.com>
+Subject: Re: [PATCH v3 0/6] KVM: selftests: memslot_perf_test: aarch64
+ cleanup/fixes
+To:     "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
+Cc:     kvmarm@lists.cs.columbia.edu, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, maz@kernel.org, pbonzini@redhat.com,
+        ajones@ventanamicro.com, kvmarm@lists.linux.dev, shuah@kernel.org,
+        peterx@redhat.com, oliver.upton@linux.dev, seanjc@google.com,
+        ricarkol@google.com, zhenyzha@redhat.com, shan.gavin@gmail.com
+References: <20221020071209.559062-1-gshan@redhat.com>
+ <91d563b6-5f1c-5ecc-0a40-7d8838770b22@maciej.szmigiero.name>
+From:   Gavin Shan <gshan@redhat.com>
+Message-ID: <ee1167f3-5b43-55a9-c815-b759d243dc4e@redhat.com>
+Date:   Sat, 5 Nov 2022 07:57:24 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20221104051554.nqoehxtv7rdtmkyi@uda0490373>
-User-Agent: NeoMutt/20171215
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <91d563b6-5f1c-5ecc-0a40-7d8838770b22@maciej.szmigiero.name>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10:45-20221104, Rahul T R wrote:
-[...]
-> > OK I am confused now. What about the pwm nodes? don't they need to be
-> > muxed?
->=20
-> As per the discussions in the v4 of this series
-> the suggestion was to enable only gpio and i2c by
-> default
->=20
-> https://lore.kernel.org/all/20220620144322.x54zitvhjreiy3ey@uda0490373/
+On 10/25/22 7:18 AM, Maciej S. Szmigiero wrote:
+> On 20.10.2022 09:12, Gavin Shan wrote:
+>> kvm/selftests/memslots_perf_test doesn't work with 64KB-page-size-host
+>> and 4KB-page-size-guest on aarch64. In the implementation, the host and
+>> guest page size have been hardcoded to 4KB. It's ovbiously not working
+>> on aarch64 which supports 4KB, 16KB, 64KB individually on host and guest.
+>>
+>> This series tries to fix it. After the series is applied, the test runs
+>> successfully with 64KB-page-size-host and 4KB-page-size-guest.
+>>
+>>     # ./memslots_perf_tests -v -s 512
+>>
+>> Since we're here, the code is cleaned up a bit as PATCH[1-3] do. The
+>> other patches are fixes to handle the mismatched host/guest page
+>> sized.
+>>
+>> v1: https://lore.kernel.org/kvmarm/20221014071914.227134-1-gshan@redhat.com/T/#t
+>> v2: https://lore.kernel.org/kvmarm/20221018040454.405719-1-gshan@redhat.com/T/#t
+>>
+>> Changelog
+>> =========
+>> v3:
+>>    * Improved comments about MEM_TEST_MOVE_SIZE, which is set
+>>      to 64KB in PATCH[v3 4/6] and finally fixed to 192KB in
+>>      PATCH[v3 5/6].                                              (Maciej)
+>>    * Use size instead of pages to do the comparison in
+>>      test_memslot_move_prepare()                                 (Maciej)
+>>    * Use tools/include/linux/sizes.h instead of inventing
+>>      our own macros.                                             (Oliver)
+>> v2:
+>>    * Pick the smaller value between the ones specified by
+>>      user or probed from KVM_CAP_NR_MEMSLOTS in PATCH[v2 3/6]    (Maciej)
+>>    * Improved comments about MEM_TEST_MOVE_SIZE in
+>>      PATCH[v2 4/6]                                               (Maciej)
+>>    * Avoid mismatched guest page size after VM is started in
+>>      prepare_vm() in PATCH[v2 4/6]                               (Maciej)
+>>    * Fix condition to check MEM_TEST_{UNMAP, UNMAP_CHUNK}_SIZE
+>>      in check_memory_size() in PATCH[v2 4/6]                     (Maciej)
+>>    * Define base and huge page size in kvm_util_base.h in
+>>      PATCH[v2 5/6]                                               (Sean)
+>>    * Add checks on host/guest page size in check_memory_size()
+>>      and fail early if any of them exceeds 64KB in PATCH[v2 5/6] (Maciej)
+>>
+>>
+>> Gavin Shan (6):
+>>    KVM: selftests: memslot_perf_test: Use data->nslots in prepare_vm()
+>>    KVM: selftests: memslot_perf_test: Consolidate loop conditions in
+>>      prepare_vm()
+>>    KVM: selftests: memslot_perf_test: Probe memory slots for once
+>>    KVM: selftests: memslot_perf_test: Support variable guest page size
+>>    KVM: selftests: memslot_perf_test: Consolidate memory
+>>    KVM: selftests: memslot_perf_test: Report optimal memory slots
+>>
+> 
+> This patch set now looks good to me, so for the whole series:
+> Reviewed-by: Maciej S. Szmigiero <maciej.szmigiero@oracle.com>
+> 
 
+Thanks for your time on reviews, Maciej. The broken test case was reported
+in our downstream Linux, which means our downstream linux needs the improvements
+and fixes to make the test case working.
 
-Thanks for reminding me about this discussion - it is useful to add that
-information in the patch diffstat to avoid wondering about why.
+Thanks,
+Gavin
 
-
-Also please fix what ever wraparound scheme you use to 70/75
-characters for commit message please - I dont think you want me to
-have to manually fix the same for your patches
-
-Here is an example from my vimrc:
-map <F9> =1B{!}par 70=0D
-
---=20
-Regards,
-Nishanth Menon
-Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5=
- 849D 1736 249D
