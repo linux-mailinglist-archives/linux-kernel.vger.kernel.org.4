@@ -2,76 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE9B3619EF5
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 18:39:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC4B9619F00
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 18:42:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231680AbiKDRjm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 13:39:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48376 "EHLO
+        id S231610AbiKDRmP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 13:42:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231655AbiKDRjh (ORCPT
+        with ESMTP id S231171AbiKDRl7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 13:39:37 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB178B842
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 10:39:35 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id u8-20020a17090a5e4800b002106dcdd4a0so8872700pji.1
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 10:39:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=fEEv1AywiXkhljOATlKLojbeil+y0XxR22BrhAZuad0=;
-        b=VsMXhm+I0ktezbwg+zJnOVhdEr6eAKA9lB7gvqdUShiA4hAeB7An5n1y1M/9LiDT/5
-         4jpXreXCw7uHOmJAj+XpdxihrwjTadUiA8GrqO2digmzl4aMys95TuNBbSJG8bL8AsOb
-         XYTZvwaVwrJmLQv0Um7H+N36owCivdem7oaS2wIZOTb7k03zmyWN/l3eRum2Y9u+Y2RQ
-         1rDmr1n6d1xEKOmpj9SwEBr6JST8o1I8G8I3UPR8PByGoyFzwtO4bs29j/371kFQjPXZ
-         Aj9wyvtlXPah8U6sJInlPDk4+lnms3I8fjfm6M1s6G6KfNEv2K2Mg4PbwynPwyMmHJdY
-         Ss3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fEEv1AywiXkhljOATlKLojbeil+y0XxR22BrhAZuad0=;
-        b=nqCX+osrMt76S6fbu6c0BVvHqw6OMaavCCqqYM2S1vOQlDeqrd7V8brbwTmpJr/FQP
-         F0NUOkR1jRF08Obmf+ghKIXG1EqGkolvqQ+zZLxz0vDlYpUgYsSrxn2MpnqEc7oF8m0k
-         iB++7yhE8Ay+99EQYionC/BYoNm1nJlJ5lsHYySxO0csxCh8sRAfonV+XxhMgkTo9/0Y
-         CsgTprjzSlLH1q7W6f44mtxPHinL1YeGKC7Pyhe2fYRU68G57EjyQ1tFvv1lEZDApKlT
-         o8OLL+8b1qDfZ83U2A9wRtydiqJPn2z+GP3kKwA/AyYg/5uPvILfLolfFMRN7+cWqTBn
-         6kTg==
-X-Gm-Message-State: ACrzQf3yWgoKJwnETI+objHZE7vEheWYIzwKV9YMDnOWK1h+QLzpuywI
-        xZ2wdn4Z5trBQ3vy+Wnynm0vxtrw0gXFbw==
-X-Google-Smtp-Source: AMsMyM5MigB3yPnyRcVqTWxlMJPU4qt8aBjknfdfYnJwGyT/QfKBhfcHVQeUJb54kcWrooSDPoo2Hg==
-X-Received: by 2002:a17:90a:3947:b0:213:ebeb:2cf3 with SMTP id n7-20020a17090a394700b00213ebeb2cf3mr27088057pjf.9.1667583575140;
-        Fri, 04 Nov 2022 10:39:35 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id mm11-20020a17090b358b00b0020d24ea4400sm1899772pjb.38.2022.11.04.10.39.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Nov 2022 10:39:34 -0700 (PDT)
-Date:   Fri, 4 Nov 2022 17:39:31 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Dmitry Vyukov <dvyukov@google.com>
-Cc:     syzbot <syzbot+ffb4f000dc2872c93f62@syzkaller.appspotmail.com>,
-        bp@alien8.de, brgerst@gmail.com, dave.hansen@linux.intel.com,
-        hpa@zytor.com, kirill@shutemov.name, linux-kernel@vger.kernel.org,
-        mingo@redhat.com, peterz@infradead.org,
-        syzkaller-bugs@googlegroups.com, tglx@linutronix.de,
-        thomas.lendacky@amd.com, x86@kernel.org
-Subject: Re: [syzbot] BUG: unable to handle kernel paging request in get_desc
-Message-ID: <Y2VOU96gcoor288M@google.com>
-References: <00000000000035fba305eca64106@google.com>
- <Y2UvigDr9ctxlEEE@google.com>
- <CACT4Y+Zb0T4bPk=gzYtexPqHTGSFAHaeY6DCYq268GV4+TM+gQ@mail.gmail.com>
- <Y2U+8cM9z0axes2y@google.com>
+        Fri, 4 Nov 2022 13:41:59 -0400
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1391AB842;
+        Fri,  4 Nov 2022 10:41:56 -0700 (PDT)
+Received: (Authenticated sender: maxime.chevallier@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id BE086FF804;
+        Fri,  4 Nov 2022 17:41:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1667583715;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=hRN6TmZRqEG3ji2w4dBfaFdcgHUq8qs2x6FTGFXjvdU=;
+        b=LsPg9BvXp6A+afED5a5+DSQw2o+6gW5FbJIIR+Nh9jc68J5IYwq8agjnV330+84uRtIhGw
+        u/AjZ0S+EsH6BcOASDjvownFRu2iBydlJbYPtvg524UlqOqbXAGEDi2OnSgyNq6uvBW/Ls
+        9j9tQ7rHh/L4EFE+H4K8VBUW7NNHJsF1S8pnZwnCmDzz6nLRmNkWEN59UcekU0t5VNqdLL
+        JxX90haEq7UpiQOY6tPHhtlfOIkCbHU/L3RTrzAQNIY+6InDJyf43vZGIr935oi927yfNR
+        d7r5mZ2SXelxgsfJdMWKalb2GMti3LJSn17OfVECwbjHAqYYVMMBdNnGL9xdWA==
+From:   Maxime Chevallier <maxime.chevallier@bootlin.com>
+To:     davem@davemloft.net, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Maxime Chevallier <maxime.chevallier@bootlin.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        thomas.petazzoni@bootlin.com, Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        linux-arm-kernel@lists.infradead.org,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Luka Perkov <luka.perkov@sartura.hr>,
+        Robert Marko <robert.marko@sartura.hr>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>
+Subject: [PATCH net-next v8 0/5] net: ipqess: introduce Qualcomm IPQESS driver
+Date:   Fri,  4 Nov 2022 18:41:46 +0100
+Message-Id: <20221104174151.439008-1-maxime.chevallier@bootlin.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y2U+8cM9z0axes2y@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,58 +64,115 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 04, 2022, Sean Christopherson wrote:
-> On Fri, Nov 04, 2022, Dmitry Vyukov wrote:
-> > On Fri, 4 Nov 2022 at 08:28, 'Sean Christopherson' via syzkaller-bugs
-> > <syzkaller-bugs@googlegroups.com> wrote:
-> > >
-> > > On Fri, Nov 04, 2022, syzbot wrote:
-> > > > Hello,
-> > > >
-> > > > syzbot found the following issue on:
-> > > >
-> > > > HEAD commit:    81214a573d19 Add linux-next specific files for 20221103
-> > > > git tree:       linux-next
-> > > > console output: https://syzkaller.appspot.com/x/log.txt?x=132019de880000
-> > > > kernel config:  https://syzkaller.appspot.com/x/.config?x=cdc625e9234bac0
-> > > > dashboard link: https://syzkaller.appspot.com/bug?extid=ffb4f000dc2872c93f62
-> > > > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> > > > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12dd52ca880000
-> > > >
-> > > > Downloadable assets:
-> > > > disk image: https://storage.googleapis.com/syzbot-assets/5d4dda497754/disk-81214a57.raw.xz
-> > > > vmlinux: https://storage.googleapis.com/syzbot-assets/9658efff160a/vmlinux-81214a57.xz
-> > > > kernel image: https://storage.googleapis.com/syzbot-assets/3711180f2565/bzImage-81214a57.xz
-> > > >
-> > > > IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> > > > Reported-by: syzbot+ffb4f000dc2872c93f62@syzkaller.appspotmail.com
-> > > >
-> > > > BUG: unable to handle page fault for address: fffffbc5a1c22e00
-> > > > #PF: supervisor read access in kernel mode
-> > > > #PF: error_code(0x0000) - not-present page
-> > > > PGD 23ffe4067 P4D 23ffe4067 PUD 13ff2d067 PMD 13ff2c067 PTE 0
-> > > > Oops: 0000 [#1] PREEMPT SMP KASAN
-> > > > CPU: 0 PID: 5368 Comm: syz-executor.2 Not tainted 6.1.0-rc3-next-20221103-syzkaller #0
-> > > > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/11/2022
-> > > > RIP: 0010:get_desc+0x128/0x460 arch/x86/lib/insn-eval.c:660
-> > >
-> > > I'm pretty sure this is the same thing as
-> > >
-> > >   BUG: unable to handle kernel paging request in vmx_handle_exit_irqoff
-> > >
-> > > I'll verify and get a patch posted shortly.
-> > 
-> > This repro does not create any VMs, it's just:
-> > 
-> > iopl(0x3)
-> > rt_sigreturn()
-> > 
-> > Do you still think it's related to the vmx_handle_exit_irqoff issue?
-> 
-> Yes, the issue is that the shadow for the read-only IDT mapping in the CPU entry
-> area isn't populated (commit 9fd429c28073 ("x86/kasan: Map shadow for percpu pages
-> on demand") is to blame).  The bug manifests anytime software manually does an IDT
-> lookup.
+Hello everyone,
 
-Hrm, but the lookup is into the GDT, not the IDT, and I haven't been able to reproduce
-this one.  I'll leave it open for now.
+This is the 8th iteration on the IPQESS driver, that includes a new
+DSA tagger to let the MAC convey the tag to the switch through an
+out-of-band medium, here using DMA descriptors.
+
+Notables changes on v8 :
+ - Added fixed-link in the dtsi SoC file
+ - Removed the ethernet0 alias from the dtsi
+ - Added a missing blank line in tagger driver
+
+Notables changes on V7 :
+ - Fixed sparse warnings
+ - Fixed a typo in the bindings
+ - Added missing maintainers in CC
+
+Notables changes on V6 :
+ - Cleanup unused helpers and fields in the tagger
+ - Cleanup ordering in various files
+ - Added more documentation on the tagger
+ - Fixed the CHANGEUPPER caching
+ - Cleanups in the IPQESS driver
+
+Notables changes on V5 :
+ - Fix caching of CHANGEUPPER events
+ - Use a skb extension-based tagger
+ - Rename the binding file
+ - Some cleanups in the ipqess driver itself
+
+Notables changes on V4 :
+ - Cache the uses_dsa info from CHANGEUPPER events
+ - Use better string handling helpers for ethtool stats
+ - rename ethtool callbacks
+ - Fix a binding typo
+
+Notables changes on V3 :
+ - Took into account Russell's review on the ioctl handler and the mac
+   capabilities that were missing
+ - Took Andrew's reviews into account by reworking the napi rx loop,
+   some stray "inline" keywords, and useless warnings
+ - Took Vlad's reviews into account by reworking a few macros
+ - Took Christophe's review into account by removing extra GFP_ZERO
+ - Took Rob's review into account by simplifying the binding
+
+Notables changes on V2 :
+ - Put the DSA tag in the skb itself instead of using skb->shinfo
+ - Fixed the initialisation sequence based on Andrew's comments
+ - Reworked the error paths in the init sequence
+ - Add support for the clock and reset lines on that controller
+ - Fixed and updated the binding
+
+The driver itself is pretty straightforward, but has lived out-of-tree
+for a while. I've done my best to clean-up some outdated API calls, but
+some might remain.
+
+This controller is somewhat special, since it's part of the IPQ4019 SoC
+which also includes an QCA8K switch, and uses the IPQESS controller for
+the CPU port. The switch is so tightly intergrated with the MAC that it
+is connected to the MAC using an internal link (hence the fact that we
+only support PHY_INTERFACE_MODE_INTERNAL), and this has some
+consequences on the DSA side.
+
+The tagging for the switch isn't done inband as most switch do, but
+out-of-band, the DSA tag being included in the DMA descriptor.
+
+This series includes a new out-of-band tagger that uses skb extensions
+to convey the tag between the tagger and the MAC driver.
+
+Thanks to the Sartura folks who worked on a base version of this driver,
+and provided test hardware.
+
+Best regards,
+
+Maxime
+
+Maxime Chevallier (5):
+  net: dt-bindings: Introduce the Qualcomm IPQESS Ethernet controller
+  net: ipqess: introduce the Qualcomm IPQESS driver
+  net: dsa: add out-of-band tagging protocol
+  net: ipqess: Add out-of-band DSA tagging support
+  ARM: dts: qcom: ipq4019: Add description for the IPQESS Ethernet
+    controller
+
+ .../bindings/net/qcom,ipq4019-ess-edma.yaml   |   94 ++
+ Documentation/networking/dsa/dsa.rst          |   13 +-
+ MAINTAINERS                                   |    8 +
+ arch/arm/boot/dts/qcom-ipq4019.dtsi           |   48 +
+ drivers/net/ethernet/qualcomm/Kconfig         |   12 +
+ drivers/net/ethernet/qualcomm/Makefile        |    2 +
+ drivers/net/ethernet/qualcomm/ipqess/Makefile |    8 +
+ drivers/net/ethernet/qualcomm/ipqess/ipqess.c | 1308 +++++++++++++++++
+ drivers/net/ethernet/qualcomm/ipqess/ipqess.h |  522 +++++++
+ .../ethernet/qualcomm/ipqess/ipqess_ethtool.c |  164 +++
+ include/linux/dsa/oob.h                       |   16 +
+ include/linux/skbuff.h                        |    3 +
+ include/net/dsa.h                             |    2 +
+ net/core/skbuff.c                             |   10 +
+ net/dsa/Kconfig                               |    9 +
+ net/dsa/Makefile                              |    1 +
+ net/dsa/tag_oob.c                             |   49 +
+ 17 files changed, 2268 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/devicetree/bindings/net/qcom,ipq4019-ess-edma.yaml
+ create mode 100644 drivers/net/ethernet/qualcomm/ipqess/Makefile
+ create mode 100644 drivers/net/ethernet/qualcomm/ipqess/ipqess.c
+ create mode 100644 drivers/net/ethernet/qualcomm/ipqess/ipqess.h
+ create mode 100644 drivers/net/ethernet/qualcomm/ipqess/ipqess_ethtool.c
+ create mode 100644 include/linux/dsa/oob.h
+ create mode 100644 net/dsa/tag_oob.c
+
+-- 
+2.37.3
+
