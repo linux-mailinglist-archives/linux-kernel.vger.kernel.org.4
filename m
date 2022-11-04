@@ -2,152 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E482619E41
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 18:16:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 134A1619E44
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 18:16:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231514AbiKDRQI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 13:16:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57162 "EHLO
+        id S231592AbiKDRQp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 13:16:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231361AbiKDRQE (ORCPT
+        with ESMTP id S231522AbiKDRQf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 13:16:04 -0400
-Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EC4740471
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 10:16:01 -0700 (PDT)
-Received: by mail-qt1-x836.google.com with SMTP id hh9so3389337qtb.13
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 10:16:01 -0700 (PDT)
+        Fri, 4 Nov 2022 13:16:35 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4CE832BA7;
+        Fri,  4 Nov 2022 10:16:34 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id q1-20020a17090a750100b002139ec1e999so5102850pjk.1;
+        Fri, 04 Nov 2022 10:16:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=nOs3glUYlVlOGkD+d61vafn3z8WhEZloC5kNYhM2+Ik=;
-        b=nZUFy5qS+kcKRgiQerq9t6LWsQUJdfZxNClFWjXBy7+MNVNqdh5yPYzabdmEppfDTD
-         abMT22yv+qtHAYFUPLVTem0XhAMmHq96kPDp2rTluaG3S4mgJrbs1DagGbCmTBNy2M/g
-         rPqvqrPDyEnXn56ct9+FxhqTdIihgUPUWQbi+W4e/xcguUuLnZH3+drBpnnGC7Uq2H0z
-         gO0qwKIRiHA5uw2FLLFHvR6Xxz0meJrJSzEXlM1MyAIOIfGao0KmHKXnq1Kr8f1UQ/pd
-         HVT8+aQpBh5+anU8cH28jop/Zy8vaZRpZ42HO2jBKMzAMcDahCaKyDC7ZfWPUlqhAyae
-         8XGw==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=J5KS79M5S1sveLfe1zMPMHe02sw00ENM39EcOJ2UpjU=;
+        b=RhNCT2RKZYmehPwYURClj2BoXL6iPjh69O0IXfi3Jpy58k0lCjSUYmA6yVSSkJAAHH
+         9Wdq5WKMehoWOUNIy9r54MpYPuYRL9OJFu07BXz3bkRAvlm0FAH8iy42eF2ZbJG4q/Rk
+         pKEhKO4GSxSmXQ41CKBp9HEpXh1c9yc6rLXl3xPRHiwgsRjJXEQjO8tAxoHlEeEIDVks
+         wSVOWzpw58sxVFwSy3nuZj8FG3RnkuuRzAqVLFcCpSXlUJ3AWBujVE7kka4LY9xs/ZrR
+         a+FaiqtpoLUnQLcWaJUm6/OwHpds0MBv7FSOj2KW2LAfIla6W/0wVDimshs+KM6u12Xx
+         UnOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=nOs3glUYlVlOGkD+d61vafn3z8WhEZloC5kNYhM2+Ik=;
-        b=RMtTH8FwLx1X9wNJQPvSPL/kft4fFANTrO7yD2ylS0BqcVfw0Dg3Wq4toiK1ASHu1L
-         32iEczXpBMP5kwL+cpOPv5QkETMhpfNmPxwBRt5Uq74srkj6H2Fpa+b39UxAU1Q8w6Iy
-         A+ytYaRMv60KDio5iODDcJjUfNPi0IO/geMiMdZI8oBt13BI/4UpWFt6HUU++cBkGaw6
-         Rpfr3jxcnejwx5SQG6sQThxVx25vG966cvKBhDirMHi4VDwYr9XNYmc4W2FLHjhQ2cqo
-         BAFkFEsE/Evv6XRyj9qBC6mhdZt4S0lT3lwYsotxAWKSifGOvBQFPOOj+X0dMwHj4FXO
-         MsNQ==
-X-Gm-Message-State: ACrzQf3tmav+u9kT7GhkV5gTrZotXeXm3LggHOg6Kh4Z+RzbX/4lW8Sn
-        C+nzM9JVm4zI7AjQlKVkHQgqew==
-X-Google-Smtp-Source: AMsMyM7qnw0egP5wylRcXqYCLxbW8DXmsrk4aUPAOGiyXuh95E+RpEdQRtxMus7jOvms6Nx/Rfc0RA==
-X-Received: by 2002:ac8:5e50:0:b0:3a5:6a35:f440 with SMTP id i16-20020ac85e50000000b003a56a35f440mr2413122qtx.46.1667582160898;
-        Fri, 04 Nov 2022 10:16:00 -0700 (PDT)
-Received: from krzk-bin.. ([2601:586:5000:570:aad6:acd8:4ed9:299b])
-        by smtp.gmail.com with ESMTPSA id j8-20020a05620a288800b006fa4cac54a4sm3274901qkp.133.2022.11.04.10.15.59
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=J5KS79M5S1sveLfe1zMPMHe02sw00ENM39EcOJ2UpjU=;
+        b=o+KZmLzfAbqrx0n6sgRC89VTcKi+uihPCj3b8QTARTPe81Oz/1mu08DK+UPSWpb24W
+         jsar6Nj0lCkyw79FjJWauy9iZkTmC6OhQlLguvThYi1QF9tBTXEipnOlmkD7JuUlaBen
+         d4DPkHrD4HXb4EhSVZD34pyXZS60SGZ9GGjbgWuPIjuKXJloMs2AJfRPf38xZYnaxi0f
+         Zmg20s8dBDw3fAMYSknDlSnltTeeTOeopCBTkZVWNmkqp6ECXQJwokNz63rxqJn6OXuy
+         MQDJM3zPHi19vh/OZJHtPXvFlDwCvHUsCgi40bZuGi2mu1N+AeoYnR5w6h6H3iK0bWa6
+         iNAw==
+X-Gm-Message-State: ACrzQf3ud3oyhVtJb3SwLSZ2pqtndpH02LxloOqYfcNCFllJOLLMVYkq
+        EA1XPyg5FhHS5+iCEzrkeZyZuy2y5HE=
+X-Google-Smtp-Source: AMsMyM7/6/cUj5YvpTrzjB5O1p8qruE1FX9H85tTANK1LbnH7sIxYOJYlFZunQ13GQXGngQbhAz4fA==
+X-Received: by 2002:a17:902:ef89:b0:188:5e9a:c665 with SMTP id iz9-20020a170902ef8900b001885e9ac665mr6737942plb.62.1667582194113;
+        Fri, 04 Nov 2022 10:16:34 -0700 (PDT)
+Received: from localhost.localdomain (124x33x176x97.ap124.ftth.ucom.ne.jp. [124.33.176.97])
+        by smtp.gmail.com with ESMTPSA id u15-20020a17090a450f00b00212c27abcaesm1917655pjg.17.2022.11.04.10.16.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Nov 2022 10:16:00 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v3] dt-bindings: net: nxp,sja1105: document spi-cpol/cpha
-Date:   Fri,  4 Nov 2022 13:15:57 -0400
-Message-Id: <20221104171557.95871-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        Fri, 04 Nov 2022 10:16:33 -0700 (PDT)
+Sender: Vincent Mailhol <vincent.mailhol@gmail.com>
+From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+To:     linux-can@vger.kernel.org
+Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Subject: [PATCH v2 0/3] can: etas_es58x: report firmware version
+Date:   Sat,  5 Nov 2022 02:16:01 +0900
+Message-Id: <20221104171604.24052-1-mailhol.vincent@wanadoo.fr>
+X-Mailer: git-send-email 2.37.4
+In-Reply-To: <20221104073659.414147-1-mailhol.vincent@wanadoo.fr>
+References: <20221104073659.414147-1-mailhol.vincent@wanadoo.fr>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some boards use SJA1105 Ethernet Switch with SPI CPHA, while ones with
-SJA1110 use SPI CPOL, so document this to fix dtbs_check warnings:
+The goal of this series is to report the firmware version of ETAS
+ES58x devices through ethtool.
 
-  arch/arm64/boot/dts/freescale/fsl-lx2160a-bluebox3.dtb: ethernet-switch@0: Unevaluated properties are not allowed ('spi-cpol' was unexpected)
+The easiest way to do so is by using usb_cache_string so that we do
+not have to manage errors.
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+First patch exports usb_cache_string(). The second patch then does a
+small cleanup in the existing function and replace existing code with
+usb_cache_string(). The third and final patch reports the firmware
+version of the device to the userland through ethtool.
 
----
+* Changelog *
 
-Changes since v2:
-1. Add allOf:if:then, based on feedback from Vladimir.
+v1 -> v2:
 
-Changes since v1:
-1. Add also cpha
----
- .../bindings/net/dsa/nxp,sja1105.yaml         | 27 ++++++++++++++++---
- 1 file changed, 23 insertions(+), 4 deletions(-)
+  * was a single patch. It is now a series of three patches.
+  * add a first new patch to export  usb_cache_string().
+  * add a second new patch to apply usb_cache_string() to existing code.
+  * add missing check on product info string to prevent a buffer overflow.
+  * add comma on the last entry of struct es58x_parameters.
 
-diff --git a/Documentation/devicetree/bindings/net/dsa/nxp,sja1105.yaml b/Documentation/devicetree/bindings/net/dsa/nxp,sja1105.yaml
-index 1e26d876d146..ac66af3fdd82 100644
---- a/Documentation/devicetree/bindings/net/dsa/nxp,sja1105.yaml
-+++ b/Documentation/devicetree/bindings/net/dsa/nxp,sja1105.yaml
-@@ -12,10 +12,6 @@ description:
-   cs_sck_delay of 500ns. Ensuring that this SPI timing requirement is observed
-   depends on the SPI bus master driver.
- 
--allOf:
--  - $ref: "dsa.yaml#"
--  - $ref: /schemas/spi/spi-peripheral-props.yaml#
--
- maintainers:
-   - Vladimir Oltean <vladimir.oltean@nxp.com>
- 
-@@ -36,6 +32,9 @@ properties:
-   reg:
-     maxItems: 1
- 
-+  spi-cpha: true
-+  spi-cpol: true
-+
-   # Optional container node for the 2 internal MDIO buses of the SJA1110
-   # (one for the internal 100base-T1 PHYs and the other for the single
-   # 100base-TX PHY). The "reg" property does not have physical significance.
-@@ -109,6 +108,26 @@ $defs:
-        1860, 1880, 1900, 1920, 1940, 1960, 1980, 2000, 2020, 2040, 2060, 2080,
-        2100, 2120, 2140, 2160, 2180, 2200, 2220, 2240, 2260]
- 
-+allOf:
-+  - $ref: dsa.yaml#
-+  - $ref: /schemas/spi/spi-peripheral-props.yaml#
-+  - if:
-+      properties:
-+        compatible:
-+          enum:
-+            - nxp,sja1105e
-+            - nxp,sja1105t
-+            - nxp,sja1105p
-+            - nxp,sja1105q
-+            - nxp,sja1105r
-+            - nxp,sja1105s
-+    then:
-+      properties:
-+        spi-cpol: false
-+    else:
-+      properties:
-+        spi-cpha: false
-+
- unevaluatedProperties: false
- 
- examples:
+Vincent Mailhol (3):
+  USB: core: export usb_cache_string()
+  can: etas_es58x: use usb_cache_string() to retrieve the product info
+    string
+  can: etas_es58x: report the firmware version through ethtool
+
+ drivers/net/can/usb/etas_es58x/es581_4.c    |  5 +-
+ drivers/net/can/usb/etas_es58x/es58x_core.c | 75 ++++++++++++---------
+ drivers/net/can/usb/etas_es58x/es58x_core.h |  8 ++-
+ drivers/net/can/usb/etas_es58x/es58x_fd.c   |  5 +-
+ drivers/usb/core/message.c                  |  1 +
+ drivers/usb/core/usb.h                      |  1 -
+ include/linux/usb.h                         |  1 +
+ 7 files changed, 60 insertions(+), 36 deletions(-)
+
 -- 
-2.34.1
+2.37.4
 
