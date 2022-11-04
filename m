@@ -2,177 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC3E4619FDE
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 19:29:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F8C2619FE4
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 19:29:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232056AbiKDS3A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 14:29:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49020 "EHLO
+        id S232077AbiKDS3h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 14:29:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232034AbiKDS25 (ORCPT
+        with ESMTP id S232043AbiKDS3e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 14:28:57 -0400
-Received: from mail-ot1-f50.google.com (mail-ot1-f50.google.com [209.85.210.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF0DFAE63;
-        Fri,  4 Nov 2022 11:28:55 -0700 (PDT)
-Received: by mail-ot1-f50.google.com with SMTP id w26-20020a056830061a00b0066c320f5b49so3126112oti.5;
-        Fri, 04 Nov 2022 11:28:55 -0700 (PDT)
+        Fri, 4 Nov 2022 14:29:34 -0400
+Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67817AE64
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 11:29:31 -0700 (PDT)
+Received: by mail-qt1-x830.google.com with SMTP id cg5so3510814qtb.12
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 11:29:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Rw4BpqJZxha3Wydoc46zcEGyhFGGo7LUD5zP55YjGoc=;
+        b=dKzg1peGVvaOYb5V3V8Ci2QmNL55+dR23COoCJ7Zpfot4+5jLpVYwxo3aZMRPNFtkl
+         s++4gjsCvoyMl7XrO3eFL7b+vbwFxkiFqe7boar91f0rjUaT/OaPeDXw4w3X2QIgYNwy
+         3QeveHh9JlOq8hsCydzYxwfsOmWJLxK8QW6zCjgzTAJizGggTeCCdty7jqXNN1UAGZKr
+         /b7ym+jBmBKNu9z98LinObXcRoFGyzYLsfIuyfh1PubpsDEcPMpt2V9m+VLZPZsCa4iB
+         JSh9gSEa+YUUelVU5+Yxh60Prdbq5HCqI1dVQvfXcUdMaNZTze0n/Rj5b9Ged+GpvyCX
+         MRFQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Axeinl0AVOkMZkdy2C/CMY4wAszDNJkSPI4AMTzOaxM=;
-        b=Fdad+D53kpCWTGqMTAicGlrtX/UoagxMbJkZWA/0mkIOiFOKRAocBL6B3iCGVNXHyT
-         wHODA+uqaHXKSv5qSGYS1d1D3JjvMz+PLh8UN12QBsQf2XqIJKIyGtuD6lynMSamaRQj
-         yGz3rSTNq44jkthuqJPTHLgtcCdImuKyJVkPYNOJTZ57J9Ca9BBJDNlsmtuuxYWikKcb
-         5pUP1OncpLGZI4JuFnPzXDJUaffOdgynGgxwuzpmLV6OetZCdQY6xitQ/dd2/3nCHTyu
-         d1i/s+sNnK0DPfpKeeXlbU7kJpRHUKhRw8oR+gwZNwuS1mc+gV1escfKTxswTjiMk2hj
-         D3lg==
-X-Gm-Message-State: ACrzQf07g5alO+NaiTDKkGu2D9El0nc97eb0tOlz9ONtbEjkCz6r6oaD
-        C9RMfdfUtxYE3FnkgpP8wTK52t+nzQ==
-X-Google-Smtp-Source: AMsMyM5MfegN84c2dxVsm4eumZQlLU3ixmJQ8iQ0yvjncow3XVIGXYi5BQgNgYk95FH3nugWlpZ/eg==
-X-Received: by 2002:a9d:7dd1:0:b0:66c:54b2:7df3 with SMTP id k17-20020a9d7dd1000000b0066c54b27df3mr13767334otn.247.1667586534956;
-        Fri, 04 Nov 2022 11:28:54 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id 36-20020a9d0627000000b00660fe564e12sm1794otn.58.2022.11.04.11.28.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Nov 2022 11:28:54 -0700 (PDT)
-Received: (nullmailer pid 2226083 invoked by uid 1000);
-        Fri, 04 Nov 2022 18:28:55 -0000
-Date:   Fri, 4 Nov 2022 13:28:55 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Colin Foster <colin.foster@in-advantage.com>
-Cc:     linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        John Crispin <john@phrozen.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        =?iso-8859-1?Q?n=E7_=DCNAL?= <arinc.unal@arinc9.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Subject: Re: [PATCH v2 net-next 6/6] dt-bindings: net: mscc,vsc7514-switch:
- utilize generic ethernet-switch.yaml
-Message-ID: <20221104182855.GA2133300-robh@kernel.org>
-References: <20221104045204.746124-1-colin.foster@in-advantage.com>
- <20221104045204.746124-7-colin.foster@in-advantage.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Rw4BpqJZxha3Wydoc46zcEGyhFGGo7LUD5zP55YjGoc=;
+        b=mrJGbvftvsLB7TO+qUbmd4uo52BCIxEqWWMNYZPGtCfeY/i4V5zbCgxLGpia++74j1
+         J3rSyykIHQXXDLh5I+1WcjKA7uIujzaq0CMqdk5dTiRdPWh3NVCBcdWGJGW/OAwl/2pv
+         RbE8/htv930bxZX+Yn+bjPWeVBY7AkH5UYUTY2swwYL4HfRtjkKWwiQsYgEbz+UGgMaA
+         S+9HbhX+34bSQFr05iyo+noFCmCPmZLh7HK/nJkzv6rRFMj+wxVnifuMloEmI73chK5d
+         mUjOYZxkjdHjujreVZFbiXHXFghlaigJgtjVIWcxZkoNa77jRXpL9DC69aFcaZufAC2l
+         sPnA==
+X-Gm-Message-State: ACrzQf3B6tFZdxJCyv7vfWm6uo3eLFRXhxWPR584gOWafZWE3mzYKxrc
+        poCbiY7OAomBOCzyhPrK3FHiAQ==
+X-Google-Smtp-Source: AMsMyM4GJjWfktvfLHV6GWR02PPssI2BywrNwj37NdCyM/Q/Kk5BJKEqGr2Q1LpxU4TqrMItop4viw==
+X-Received: by 2002:a05:622a:5cd:b0:39c:fcaf:7b36 with SMTP id d13-20020a05622a05cd00b0039cfcaf7b36mr29603898qtb.117.1667586570572;
+        Fri, 04 Nov 2022 11:29:30 -0700 (PDT)
+Received: from ?IPV6:2601:586:5000:570:aad6:acd8:4ed9:299b? ([2601:586:5000:570:aad6:acd8:4ed9:299b])
+        by smtp.gmail.com with ESMTPSA id m17-20020ae9e711000000b006e42a8e9f9bsm3272968qka.121.2022.11.04.11.29.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 04 Nov 2022 11:29:29 -0700 (PDT)
+Message-ID: <ad221e40-cf88-e021-582d-7d992dce6c61@linaro.org>
+Date:   Fri, 4 Nov 2022 14:29:28 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221104045204.746124-7-colin.foster@in-advantage.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 3/9] dt-bindings: arm: qcom: Document msm8956 and msm8976
+ SoC and devices
+Content-Language: en-US
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, agross@kernel.org
+Cc:     andersson@kernel.org, konrad.dybcio@somainline.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        lee@kernel.org, ulf.hansson@linaro.org,
+        srinivas.kandagatla@linaro.org, jic23@kernel.org, lars@metafoo.de,
+        keescook@chromium.org, tony.luck@intel.com, gpiccoli@igalia.com,
+        bhupesh.sharma@linaro.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-hardening@vger.kernel.org, marijn.suijten@somainline.org,
+        kernel@collabora.com, luca@z3ntu.xyz, a39.skl@gmail.com
+References: <20221104172122.252761-1-angelogioacchino.delregno@collabora.com>
+ <20221104172122.252761-4-angelogioacchino.delregno@collabora.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221104172122.252761-4-angelogioacchino.delregno@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 03, 2022 at 09:52:04PM -0700, Colin Foster wrote:
-> Several bindings for ethernet switches are available for non-dsa switches
-> by way of ethernet-switch.yaml. Remove these duplicate entries and utilize
-> the common bindings for the VSC7514.
+On 04/11/2022 13:21, AngeloGioacchino Del Regno wrote:
+> From: Marijn Suijten <marijn.suijten@somainline.org>
 > 
-> Signed-off-by: Colin Foster <colin.foster@in-advantage.com>
-> Suggested-by: Vladimir Oltean <olteanv@gmail.com>
+> Note that msm8976 is omitted as a compatible, since there are currently
+> no boards/devices using it.
+> 
+> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 > ---
-> 
-> v1 -> v2:
->   * Fix "$ref: ethernet-switch.yaml" placement. Oops.
->   * Add "unevaluatedProperties: true" to ethernet-ports layer so it
->     can correctly read into ethernet-switch.yaml
->   * Add "unevaluatedProperties: true" to ethernet-port layer so it can
->     correctly read into ethernet-controller.yaml
-> 
-> ---
->  .../bindings/net/mscc,vsc7514-switch.yaml     | 40 ++-----------------
->  1 file changed, 4 insertions(+), 36 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/net/mscc,vsc7514-switch.yaml b/Documentation/devicetree/bindings/net/mscc,vsc7514-switch.yaml
-> index ee0a504bdb24..3f3f9fd548cf 100644
-> --- a/Documentation/devicetree/bindings/net/mscc,vsc7514-switch.yaml
-> +++ b/Documentation/devicetree/bindings/net/mscc,vsc7514-switch.yaml
-> @@ -18,10 +18,9 @@ description: |
->    packets using CPU. Additionally, PTP is supported as well as FDMA for faster
->    packet extraction/injection.
->  
-> -properties:
-> -  $nodename:
-> -    pattern: "^switch@[0-9a-f]+$"
-> +$ref: ethernet-switch.yaml#
->  
-> +properties:
->    compatible:
->      const: mscc,vsc7514-switch
->  
-> @@ -88,46 +87,15 @@ properties:
->        - const: fdma
->  
->    ethernet-ports:
-> -    type: object
-> -
-> -    properties:
-> -      '#address-cells':
-> -        const: 1
-> -      '#size-cells':
-> -        const: 0
->  
-> -    additionalProperties: false
-> +    unevaluatedProperties: true
+>  Documentation/devicetree/bindings/arm/qcom.yaml | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
 
-Both this and ethernet-switch.yaml allow unevaluated properties. 
-Therefore any extra properties will be allowed. Add some to your example 
-and see.
+Actually, you should also change include/dt-bindings/arm/qcom,ids.h
 
->  
->      patternProperties:
->        "^port@[0-9a-f]+$":
-> -        type: object
-> -        description: Ethernet ports handled by the switch
->  
->          $ref: ethernet-controller.yaml#
->  
-> -        unevaluatedProperties: false
-> -
-> -        properties:
-> -          reg:
-> -            description: Switch port number
-> -
-> -          phy-handle: true
-> -
-> -          phy-mode: true
-> -
-> -          fixed-link: true
-> -
-> -          mac-address: true
-> -
-> -        required:
-> -          - reg
-> -          - phy-mode
-> -
-> -        oneOf:
-> -          - required:
-> -              - phy-handle
-> -          - required:
-> -              - fixed-link
-> +        unevaluatedProperties: true
+and add a patch for drivers/soc/qcom/socinfo.c
 
-Same problem here. I'll comment more about this on 
-ethernet-switch-port.yaml.
+Best regards,
+Krzysztof
 
-Rob
