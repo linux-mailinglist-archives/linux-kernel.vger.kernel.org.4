@@ -2,95 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D46D61923D
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 08:53:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48624619236
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 08:52:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230394AbiKDHxi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 03:53:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35820 "EHLO
+        id S231536AbiKDHv4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 03:51:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbiKDHxf (ORCPT
+        with ESMTP id S229481AbiKDHvn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 03:53:35 -0400
-X-Greylist: delayed 184 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 04 Nov 2022 00:53:32 PDT
-Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [81.169.146.219])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B551E15;
-        Fri,  4 Nov 2022 00:53:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1667548219;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
-    bh=7n/shGnfP1l0uRtNIQNgUJX4uMoz9OqYhtqOImv6qnk=;
-    b=JhUQ6jLty4ryG0uaVYXYC6wuQ1KgBnaVJwLIe2DIyTrJftW4MURaUGlOJoBp/Zb8Or
-    TqAECd/s8jr4xIw51uLWlVxwRzTmLtpT7dhKqGE6odrXr+QtAJw3vazDObRGD1Eexogt
-    owmIF92Bc3PZa/uPC5Ou/Z3LKPf0mNL68MeT4Ju4oV3OfklxEIGgJxrFRUMAKkyQ8raz
-    L6lM+sMCKJa5LKdktwBHNqlK0lHKJ8FIlHExzHNWREkps69mUXNgGKXfBHVx/jvvEeKy
-    NiC9ObJQLG31QDEb9mex79P6bnmFyJGfb4KEnjLdOvsxBuXv5J4z1dKURw4xzPEWuaMu
-    V+hg==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjGrp7owjzFK3JbFk1mS/xvEBL7X5sbo3UIh9JiLceSWJaYxMWqfZ"
-X-RZG-CLASS-ID: mo00
-Received: from silver.lan
-    by smtp.strato.de (RZmta 48.2.1 AUTH)
-    with ESMTPSA id Dde783yA47oJPCK
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Fri, 4 Nov 2022 08:50:19 +0100 (CET)
-From:   Oliver Hartkopp <socketcan@hartkopp.net>
-To:     netdev@vger.kernel.org, linux-can@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Oliver Hartkopp <socketcan@hartkopp.net>,
-        Oleksij Rempel <o.rempel@pengutronix.de>,
-        syzbot+d168ec0caca4697e03b1@syzkaller.appspotmail.com
-Subject: [PATCH] can: j1939: fix missing CAN header initialization
-Date:   Fri,  4 Nov 2022 08:50:00 +0100
-Message-Id: <20221104075000.105414-1-socketcan@hartkopp.net>
-X-Mailer: git-send-email 2.30.2
+        Fri, 4 Nov 2022 03:51:43 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 51770286F1;
+        Fri,  4 Nov 2022 00:51:42 -0700 (PDT)
+Received: by linux.microsoft.com (Postfix, from userid 1127)
+        id 0B58C20B929F; Fri,  4 Nov 2022 00:51:42 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 0B58C20B929F
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1667548302;
+        bh=0rJMGnEkNBde5KUwc9tOcVboZ+dqXPQBKYIPw1h/Nww=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hIpy28WiAEVrGN/W/7FDA2TH2xM+7mqDZYBxoc4uMUtFCpBgZHSjRn/qlgha3TnST
+         VhKhEqjGTzhtVIwT+ij4wQWnB2Ekjvlq4fJBWSfDYVVVVnYcInLIygfuhFFJNaYSmc
+         RG9W+03Z9L/9QzHlAVchX0rhHnAaqgGSSQ4KDnUw=
+Date:   Fri, 4 Nov 2022 00:51:42 -0700
+From:   Saurabh Singh Sengar <ssengar@linux.microsoft.com>
+To:     Anirudh Rayabharam <anrayabh@linux.microsoft.com>
+Cc:     ssengar@microsoft.com, kys@microsoft.com, haiyangz@microsoft.com,
+        wei.liu@kernel.org, decui@microsoft.com,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mikelley@microsoft.com, tglx@linutronix.de, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com
+Subject: Re: [PATCH] x86/Hyper-V: Expand definition of struct
+ hv_vp_assist_page
+Message-ID: <20221104075142.GA6146@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+References: <1667537814-15939-1-git-send-email-ssengar@linux.microsoft.com>
+ <Y2S8aT7ltuqcHGVN@anrayabh-desk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y2S8aT7ltuqcHGVN@anrayabh-desk>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The read access to struct canxl_frame::len inside of a j1939 created skbuff
-revealed a missing initialization of reserved and later filled elements in
-struct can_frame.
+On Fri, Nov 04, 2022 at 12:46:57PM +0530, Anirudh Rayabharam wrote:
+> On Thu, Nov 03, 2022 at 09:56:54PM -0700, Saurabh Sengar wrote:
+> > The struct hv_vp_assist_page has 24 bytes which is defined as u64[3],
+> > expand that to expose vtl_entry_reason, vtl_ret_x64rax and vtl_ret_x64rcx
+> > field. vtl_entry_reason is updated by hypervisor for the entry reason as
+> > to why the VTL was entered on the virtual processor.
+> > Guest updates the vtl_ret_* fields to provide the register values to
+> > restore on VTL return. The specific register values that are restored
+> > which will be updated on vtl_ret_x64rax and vtl_ret_x64rcx.
+> > Also added the missing fields for synthetic_time_unhalted_timer_expired,
+> > virtualization_fault_information and intercept_message.
+> > 
+> > Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
+> > ---
+> >  arch/x86/include/asm/hyperv-tlfs.h | 11 ++++++++++-
+> >  1 file changed, 10 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/arch/x86/include/asm/hyperv-tlfs.h b/arch/x86/include/asm/hyperv-tlfs.h
+> > index f769b9db4630..b3d0f42853d2 100644
+> > --- a/arch/x86/include/asm/hyperv-tlfs.h
+> > +++ b/arch/x86/include/asm/hyperv-tlfs.h
+> > @@ -377,11 +377,20 @@ struct hv_nested_enlightenments_control {
+> >  struct hv_vp_assist_page {
+> >  	__u32 apic_assist;
+> >  	__u32 reserved1;
+> > -	__u64 vtl_control[3];
+> > +	__u8  vtl_entry_reason;
+> 
+> This is defined as an enum in the TLFS [1]. We should do the same.
+> And since the TLFS defines it as an enum it is a 32 bit value and
+> not a u8.
 
-This patch initializes the 8 byte CAN header with zero.
+I think we can do that. Let me check this and update on v2.
 
-Fixes: 9d71dd0c7009 ("can: add support of SAE J1939 protocol")
-Cc: Oleksij Rempel <o.rempel@pengutronix.de>
-Link: https://lore.kernel.org/linux-can/20221104052235.GA6474@pengutronix.de/T/#t
-Reported-by: syzbot+d168ec0caca4697e03b1@syzkaller.appspotmail.com
-Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
----
- net/can/j1939/main.c | 3 +++
- 1 file changed, 3 insertions(+)
+> 
+> > +	__u8  vtl_reserved[7];
+> > +	__u64 vtl_ret_x64rax;
+> > +	__u64 vtl_ret_x64rcx;
+> 
+> The TLFS groups the above VTL related fields into a struct
+> HV_VP_VTL_CONTROL. Any reason to not do the same?
 
-diff --git a/net/can/j1939/main.c b/net/can/j1939/main.c
-index 144c86b0e3ff..821d4ff303b3 100644
---- a/net/can/j1939/main.c
-+++ b/net/can/j1939/main.c
-@@ -334,10 +334,13 @@ int j1939_send_one(struct j1939_priv *priv, struct sk_buff *skb)
- 	dlc = skb->len;
- 
- 	/* re-claim the CAN_HDR from the SKB */
- 	cf = skb_push(skb, J1939_CAN_HDR);
- 
-+	/* initialize header structure */
-+	memset(cf, 0, J1939_CAN_HDR);
-+
- 	/* make it a full can frame again */
- 	skb_put(skb, J1939_CAN_FTR + (8 - dlc));
- 
- 	canid = CAN_EFF_FLAG |
- 		(skcb->priority << 26) |
--- 
-2.30.2
+No particular reason, but this change is simple and sufficient.
+We can expand in future as the need arises.
 
+> 
+> [1] https://learn.microsoft.com/en-us/virtualization/hyper-v-on-windows/tlfs/datatypes/hv_vp_vtl_control
+> 
+> Thanks,
+> Anirudh.
+> 
+> >  	struct hv_nested_enlightenments_control nested_control;
+> >  	__u8 enlighten_vmentry;
+> >  	__u8 reserved2[7];
+> >  	__u64 current_nested_vmcs;
+> > +	__u8 synthetic_time_unhalted_timer_expired;
+> > +	__u8 reserved3[7];
+> > +	__u8 virtualization_fault_information[40];
+> > +	__u8 reserved4[8];
+> > +	__u8 intercept_message[256];
+> > +	__u8 vtl_ret_actions[256];
+> >  } __packed;
+> >  
+> >  struct hv_enlightened_vmcs {
+> > -- 
+> > 2.34.1
