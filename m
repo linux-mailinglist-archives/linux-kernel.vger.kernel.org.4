@@ -2,161 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5254619D82
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 17:39:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69CF5619D76
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 17:39:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232060AbiKDQjb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 12:39:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33202 "EHLO
+        id S230157AbiKDQin (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 12:38:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231919AbiKDQjE (ORCPT
+        with ESMTP id S229770AbiKDQij (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 12:39:04 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A39032BB0A
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 09:38:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667579889;
+        Fri, 4 Nov 2022 12:38:39 -0400
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::226])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4750425EA4;
+        Fri,  4 Nov 2022 09:38:37 -0700 (PDT)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id D5003C0004;
+        Fri,  4 Nov 2022 16:38:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1667579915;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=98DS/ShV9PbTmYsJBJpYU7G9vDl9LaoIobMfit60y3k=;
-        b=cPa0EPP0oY28v/Q7mrNeprlVhOvXDbDzyBmn7gwdDBshTbbWcSzXgvhoRm5gRoX2L+Iwvh
-        fcfKeIKxks4aSUUIM+lciCg9htA3UJxpGw/13rPlyqUhB+9D1tQTbJTXxnrddyawdXRAVe
-        qAKkJyHVBRGqDMaMPExMWpwzF/npv9E=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-623-H_dYYikvOU6jbZlu1Jeswg-1; Fri, 04 Nov 2022 12:38:08 -0400
-X-MC-Unique: H_dYYikvOU6jbZlu1Jeswg-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 852D8800B23;
-        Fri,  4 Nov 2022 16:38:07 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.37.22])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id C4B8C40C835A;
-        Fri,  4 Nov 2022 16:38:06 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-Subject: [PATCH v2 2/2] netfs: Fix dodgy maths
-From:   David Howells <dhowells@redhat.com>
-To:     willy@infradead.org
-Cc:     Jeff Layton <jlayton@kernel.org>, linux-cachefs@redhat.com,
-        linux-fsdevel@vger.kernel.org, dhowells@redhat.com,
-        linux-kernel@vger.kernel.org
-Date:   Fri, 04 Nov 2022 16:38:06 +0000
-Message-ID: <166757988611.950645.7626959069846893164.stgit@warthog.procyon.org.uk>
-In-Reply-To: <166757987929.950645.12595273010425381286.stgit@warthog.procyon.org.uk>
-References: <166757987929.950645.12595273010425381286.stgit@warthog.procyon.org.uk>
-User-Agent: StGit/1.5
+         to:to:cc:cc:mime-version:mime-version:  content-type:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=e9XKbe2mUkU1EoIARk/XvvxHVyrHP8xE0gIy/lmQxXA=;
+        b=KB7Fp9zuC/EYFOWRALKkPfEfxYDcoTiHGV/qk2YYJITg9bTX71VBVidxLZeKrXlkBVeTE0
+        CVE8HOwuYSUB6SAhXirCD2gyIKNJM9jvZYtglktmK6kxGb+0PRcoSYa85dVbFGJEAhHhRV
+        8TD/fZoyLSJBw3C3rlEabcUKK/NzERPfYXgEL0G7TOW6GjkYiqwMSwiKvogKfh0yme024K
+        R197zicfdH44NXKG1qFWZIojGqwDm5WH3SwOpYr0Vf6nNMYmGa+zVj+SvxR2apGN8eEWvz
+        hSJoW1Cc0lDrWvNyHFCqHbsi1YSyTbNA0XMv7F3++tQ1NMrw9eF2ARvDB4KxPA==
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        devicetree@vger.kernel.org
+Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        <linux-kernel@vger.kernel.org>,
+        Robert Marko <robert.marko@sartura.hr>,
+        Luka Perkov <luka.perkov@sartura.hr>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Michael Walle <michael@walle.cc>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Christian Eggers <ceggers@arri.de>,
+        Cory Tusar <cory.tusar@pid1solutions.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+Subject: [PATCH v3 0/6] Bindings for NVMEM layouts
+Date:   Fri,  4 Nov 2022 17:38:27 +0100
+Message-Id: <20221104163833.1289857-1-miquel.raynal@bootlin.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix the dodgy maths in netfs_rreq_unlock_folios().  start_page could be
-inside the folio, in which case the calculation of pgpos will be come up
-with a negative number (though for the moment rreq->start is rounded down
-earlier and folios would have to get merged whilst locked)
+Hello,
 
-Alter how this works to just frame the tracking in terms of absolute file
-positions, rather than offsets from the start of the I/O request.  This
-simplifies the maths and makes it easier to follow.
+A month ago, Michael was sending a new iteration of his series bringing
+nvmem layout support. The idea is: we currently can produce nvmem cells
+statically defined on top of nvmem devices (which themselves may be MTD
+devices sometimes) but in some cases we may need more advanced parsing,
+which is possible thanks to the introduction of nvmem layout parsers.
 
-Fix the issue by using folio_pos() and folio_size() to calculate the end
-position of the page.
+I am not taking over the entire series but I recently tried to make use
+of these layouts for the ONIE tlv table layout and Rob (rightfully)
+pointed out that the description was messy, because of the mix between
+nvmem devices and nvmem parsers. This was known to Michael which
+initially argued that it was simpler to handle like that.
 
-Fixes: 3d3c95046742 ("netfs: Provide readahead and readpage netfs helpers")
-Reported-by: Matthew Wilcox <willy@infradead.org>
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: Jeff Layton <jlayton@kernel.org>
-cc: linux-cachefs@redhat.com
-cc: linux-fsdevel@vger.kernel.org
-Link: https://lore.kernel.org/r/Y2SJw7w1IsIik3nb@casper.infradead.org/
----
+So here is a new proposal for the bindings which is described in details
+within "dt-bindings: nvmem: Introduce the nvmem-layout container". The
+idea to avoid mixing different node contents is to use a container node
+when relevant (suggested by Rob) which I named nvmem-layout. This
+container will have a compatible that describes the parser (plus
+possible additional properties).
 
- fs/netfs/buffered_read.c |   17 +++++++++--------
- 1 file changed, 9 insertions(+), 8 deletions(-)
+Michael, I have a few fixup! patches which apply directly to your former
+series in order to support this additional container. I propose we first
+settle the bindings (including the two direct use cases as examples) and
+once merged, we can move forward and respin both the nvmem series + the
+layout drivers.
 
-diff --git a/fs/netfs/buffered_read.c b/fs/netfs/buffered_read.c
-index baf668fb4315..7679a68e8193 100644
---- a/fs/netfs/buffered_read.c
-+++ b/fs/netfs/buffered_read.c
-@@ -17,9 +17,9 @@ void netfs_rreq_unlock_folios(struct netfs_io_request *rreq)
- {
- 	struct netfs_io_subrequest *subreq;
- 	struct folio *folio;
--	unsigned int iopos, account = 0;
- 	pgoff_t start_page = rreq->start / PAGE_SIZE;
- 	pgoff_t last_page = ((rreq->start + rreq->len) / PAGE_SIZE) - 1;
-+	size_t account = 0;
- 	bool subreq_failed = false;
- 
- 	XA_STATE(xas, &rreq->mapping->i_pages, start_page);
-@@ -39,23 +39,23 @@ void netfs_rreq_unlock_folios(struct netfs_io_request *rreq)
- 	 */
- 	subreq = list_first_entry(&rreq->subrequests,
- 				  struct netfs_io_subrequest, rreq_link);
--	iopos = 0;
- 	subreq_failed = (subreq->error < 0);
- 
- 	trace_netfs_rreq(rreq, netfs_rreq_trace_unlock);
- 
- 	rcu_read_lock();
- 	xas_for_each(&xas, folio, last_page) {
--		unsigned int pgpos, pgend;
-+		loff_t pg_end;
- 		bool pg_failed = false;
- 
- 		if (xas_retry(&xas, folio))
- 			continue;
- 
--		pgpos = (folio_index(folio) - start_page) * PAGE_SIZE;
--		pgend = pgpos + folio_size(folio);
-+		pg_end = folio_pos(folio) + folio_size(folio) - 1;
- 
- 		for (;;) {
-+			loff_t sreq_end;
-+
- 			if (!subreq) {
- 				pg_failed = true;
- 				break;
-@@ -63,11 +63,11 @@ void netfs_rreq_unlock_folios(struct netfs_io_request *rreq)
- 			if (test_bit(NETFS_SREQ_COPY_TO_CACHE, &subreq->flags))
- 				folio_start_fscache(folio);
- 			pg_failed |= subreq_failed;
--			if (pgend < iopos + subreq->len)
-+			sreq_end = subreq->start + subreq->len - 1;
-+			if (pg_end < sreq_end)
- 				break;
- 
- 			account += subreq->transferred;
--			iopos += subreq->len;
- 			if (!list_is_last(&subreq->rreq_link, &rreq->subrequests)) {
- 				subreq = list_next_entry(subreq, rreq_link);
- 				subreq_failed = (subreq->error < 0);
-@@ -75,7 +75,8 @@ void netfs_rreq_unlock_folios(struct netfs_io_request *rreq)
- 				subreq = NULL;
- 				subreq_failed = false;
- 			}
--			if (pgend == iopos)
-+
-+			if (pg_end == sreq_end)
- 				break;
- 		}
- 
+# Original series (v2) from Michael
+Link: https://lore.kernel.org/linux-arm-kernel/20220921115813.208ff789@xps-13/T/#mb97d5376647ff3e686b9c55e3d5e0dc80879e84a
 
+Cheers, Miquèl
+
+Michael Walle (1):
+  dt-bindings: nvmem: add YAML schema for the sl28 vpd layout
+
+Miquel Raynal (5):
+  dt-bindings: nvmem: Fix example
+  dt-bindings: nvmem: Introduce the nvmem-layout container
+  dt-bindings: eeprom: Inherit from nvmem.yaml
+  dt-bindings: vendor-prefixes: Add ONIE
+  dt-bindings: nvmem: add YAML schema for the ONIE tlv layout
+
+ .../devicetree/bindings/eeprom/at24.yaml      |   5 +-
+ .../devicetree/bindings/eeprom/at25.yaml      |   1 +
+ .../bindings/eeprom/microchip,93lc46b.yaml    |   1 +
+ .../nvmem/layouts/kontron,sl28-vpd.yaml       |  60 +++++++++
+ .../bindings/nvmem/layouts/nvmem-layout.yaml  |  34 ++++++
+ .../nvmem/layouts/onie,tlv-layout.yaml        | 115 ++++++++++++++++++
+ .../devicetree/bindings/nvmem/nvmem.yaml      |   8 ++
+ .../devicetree/bindings/vendor-prefixes.yaml  |   2 +
+ 8 files changed, 225 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/devicetree/bindings/nvmem/layouts/kontron,sl28-vpd.yaml
+ create mode 100644 Documentation/devicetree/bindings/nvmem/layouts/nvmem-layout.yaml
+ create mode 100644 Documentation/devicetree/bindings/nvmem/layouts/onie,tlv-layout.yaml
+
+-- 
+2.34.1
 
