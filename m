@@ -2,93 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9119861A216
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 21:22:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CD7261A213
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 21:22:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229971AbiKDUWw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 16:22:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33086 "EHLO
+        id S229825AbiKDUWG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 16:22:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229947AbiKDUWu (ORCPT
+        with ESMTP id S229493AbiKDUVy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 16:22:50 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 114AF4C241
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 13:21:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667593317;
+        Fri, 4 Nov 2022 16:21:54 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB0524B9A6
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 13:21:52 -0700 (PDT)
+Received: from zn.tnic (p200300ea9733e72b329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e72b:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id B90511EC01D2;
+        Fri,  4 Nov 2022 21:21:50 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1667593310;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=IQUjE5P5kUgI2AUaH5ZmnOzKErlp1CyVjP3BJnMtrps=;
-        b=V+fpzqxBAXLlrc3Iag7AP1GnsRg+Yjvor+0IDaF4hG4WqzuHN0pbQPcftwHYvF/8a2Th0M
-        OVzWpCih7r+RrM5fEa327s3Hx6zLmO6uhP4E3Ek43gitNzJ4mTLFrlyc+G8TIeFeKe44UU
-        UXY+Y7ONc0jnEbIuyTk2wHNTzrS5gYQ=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-471-9szmCA8SObOfyjqqGkz10A-1; Fri, 04 Nov 2022 16:21:52 -0400
-X-MC-Unique: 9szmCA8SObOfyjqqGkz10A-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7006C101A52A;
-        Fri,  4 Nov 2022 20:21:51 +0000 (UTC)
-Received: from [10.22.34.155] (unknown [10.22.34.155])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id CAFB540C835A;
-        Fri,  4 Nov 2022 20:21:50 +0000 (UTC)
-Message-ID: <17047545-2993-f59b-2dbe-ccc997599ea1@redhat.com>
-Date:   Fri, 4 Nov 2022 16:21:50 -0400
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=PLBrkhUU/4M973QoFp5Vn+YXc1FnvZBpjagiJw9OaGE=;
+        b=KSAin9RaJOHxlb4o4cuSjtpUvR0LXLfV42Os7QTQ8uh8C6wORD7pF1PI8tBCR98cTkUI9m
+        ZgyQ6bXi4m+WLAYCKT2U9v0pDEvJaw0N1RaKqoeOPOqhu8qYcpAS+xaJFr8Nvqkl7cu08I
+        M78Yk22C8pgJSZ5VI1DCX4FhgyvBAcU=
+Date:   Fri, 4 Nov 2022 21:21:50 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Ashok Raj <ashok.raj@intel.com>
+Cc:     "Van De Ven, Arjan" <arjan.van.de.ven@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        LKML Mailing List <linux-kernel@vger.kernel.org>,
+        X86-kernel <x86@kernel.org>, "Luck, Tony" <tony.luck@intel.com>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "Pan, Jacob jun" <jacob.jun.pan@intel.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "Huang, Kai" <kai.huang@intel.com>,
+        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>
+Subject: Re: [v2 01/13] x86/microcode/intel: Prevent printing updated
+ microcode rev multiple times
+Message-ID: <Y2V0XkHcWHMQVTL7@zn.tnic>
+References: <20221103175901.164783-1-ashok.raj@intel.com>
+ <20221103175901.164783-2-ashok.raj@intel.com>
+ <Y2Tw2+LCmZe8XBJn@zn.tnic>
+ <DM8PR11MB5719A5BB1C56D442F0E25544923B9@DM8PR11MB5719.namprd11.prod.outlook.com>
+ <Y2U1J2NbGNjYUbjv@zn.tnic>
+ <Y2VZ1OSJkwJPnRa8@a4bf019067fa.jf.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH v9 3/3] blk-cgroup: Flush stats at blkgs destruction path
-Content-Language: en-US
-To:     Tejun Heo <tj@kernel.org>
-Cc:     Jens Axboe <axboe@kernel.dk>, cgroups@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Ming Lei <ming.lei@redhat.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>,
-        Hillf Danton <hdanton@sina.com>
-References: <20221104182050.342908-1-longman@redhat.com>
- <20221104182050.342908-4-longman@redhat.com>
- <Y2VvboMSxgF0pYpX@slm.duckdns.org>
- <84fd6656-d133-b9df-c39e-fbb3a1f4a873@redhat.com>
- <Y2VyWDvtwOsMBcKB@slm.duckdns.org>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <Y2VyWDvtwOsMBcKB@slm.duckdns.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Y2VZ1OSJkwJPnRa8@a4bf019067fa.jf.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Nov 04, 2022 at 11:28:36AM -0700, Ashok Raj wrote:
+> Wanted to add a check every AP that if its different fms+pf warn 
+> and bork late-load.
 
-On 11/4/22 16:13, Tejun Heo wrote:
-> On Fri, Nov 04, 2022 at 04:12:05PM -0400, Waiman Long wrote:
->> I should have named the function cgroup_rstat_css_cpu_flush() to indicate
->> that the cpu is a needed parameter. We can have a cgroup_rstat_css_flush()
->> in the future if the need arises.
->>
->> It is an optimization to call this function only if the corresponding cpu
->> has a pending lockless list. I could do cpu iteration here and call the
->> flushing function for all the CPUs. It is less optimized this way. Since it
->> is a slow path, I guess performance is not that critical. So I can go either
->> way. Please let me know your preference.
-> Yeah, cpu_flush is fine. Let's leave it that way.
->
-Will do.
+We don't need that check as we don't/won't support mixed steppings. It
+is as simple as that.
 
-Cheers,
-Longman
+-- 
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
