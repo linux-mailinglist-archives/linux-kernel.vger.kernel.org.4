@@ -2,117 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F424619BAA
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 16:31:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C1ED619BB0
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 16:32:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232563AbiKDPbT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 11:31:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42602 "EHLO
+        id S232574AbiKDPch (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 11:32:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232560AbiKDPbP (ORCPT
+        with ESMTP id S232136AbiKDPce (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 11:31:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DD8F2E6AA;
-        Fri,  4 Nov 2022 08:31:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BFDEA62269;
-        Fri,  4 Nov 2022 15:31:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8C8BC433D7;
-        Fri,  4 Nov 2022 15:31:10 +0000 (UTC)
-Message-ID: <74f2c9cc-4856-4985-5b37-13ee20411b32@xs4all.nl>
-Date:   Fri, 4 Nov 2022 16:31:09 +0100
+        Fri, 4 Nov 2022 11:32:34 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 534D52793F;
+        Fri,  4 Nov 2022 08:32:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=mT0boajW4GkaMWXjn2Ik44yi9m1XKFhaBoFguDvv3vg=; b=0aKDagYd+Mxgi/Pvo5mkjonGNN
+        80IH8gS04w8qq49ppCPCtcvQmc2osfp0F7g8wTOnEs1Psnx0T1GX9I8Ds0sw8bAnL6lSw9f1YMt/g
+        IhWxsymy8N0NipH+eiJrZn9aVbbtTeGrmkGuCrC8mvoIh1AQ2KtQrTL5AiLr5O9mjqYg=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1oqyfw-001RMg-PA; Fri, 04 Nov 2022 16:32:08 +0100
+Date:   Fri, 4 Nov 2022 16:32:08 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Sriranjani P <sriranjani.p@samsung.com>
+Cc:     peppe.cavallaro@st.com, alexandre.torgue@foss.st.com,
+        joabreu@synopsys.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, mcoquelin.stm32@gmail.com,
+        richardcochran@gmail.com, netdev@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Chandrasekar R <rcsekar@samsung.com>,
+        Suresh Siddha <ssiddha@tesla.com>
+Subject: Re: [PATCH 2/4] net: stmmac: dwc-qos: Add FSD EQoS support
+Message-ID: <Y2UweBsUDvrU9keT@lunn.ch>
+References: <20221104120517.77980-1-sriranjani.p@samsung.com>
+ <CGME20221104115854epcas5p4ca280f9c4cc4d1fa564d80016e9f0061@epcas5p4.samsung.com>
+ <20221104120517.77980-3-sriranjani.p@samsung.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH v2 00/11] media: cedrus: Format handling improvements and
- 10-bit HEVC support
-Content-Language: en-US
-To:     Jernej Skrabec <jernej.skrabec@gmail.com>, mripard@kernel.org,
-        paul.kocialkowski@bootlin.com
-Cc:     mchehab@kernel.org, gregkh@linuxfoundation.org, wens@csie.org,
-        samuel@sholland.org, linux-media@vger.kernel.org,
-        linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-References: <20221102180810.267252-1-jernej.skrabec@gmail.com>
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-In-Reply-To: <20221102180810.267252-1-jernej.skrabec@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221104120517.77980-3-sriranjani.p@samsung.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jernej,
+> For FSD SoC, a mux switch is needed between internal and external clocks.
+> By default after reset internal clock is used but for receiving packets
+> properly, external clock is needed. Mux switch to external clock happens
+> only when the external clock is present.
 
-On 02/11/2022 19:07, Jernej Skrabec wrote:
-> While my first intention was to just add 10-bit HEVC handling, I noticed
-> a few format handling issues and a bit of redundancy in some cases. Final
-> result is that driver now sticks to stateless decoder rules better.
-> 
-> Format handling improvements:
-> 1. Default format selection is now based on HW capabilities. Before, MPEG2
->    was hardcoded but some Cedrus variants don't actually support it.
-> 2. Controls are registered only if related codec is supported by HW.
-> 3. Untiled output format is preferred, if supported, over tiled one. All
->    display engine cores support untiled format, but only first generation
->    supports tiled one.
-> 
-> I hope this makes Cedrus eligible for destaging.
-> 
-> Best regards,
-> Jernej
-> 
-> Changes from v1:
-> - collected acks, except for patch 5, which was changed
-> - use cedrus_is_capable() for cedrus_find_format() too (patch 4)
-> - tightly pack control pointers in ctx->ctrls[] (patch 5)
-> 
-> Jernej Skrabec (11):
->   media: cedrus: remove superfluous call
->   media: cedrus: Add format reset helpers
->   media: cedrus: use helper to set default formats
->   media: cedrus: Add helper for checking capabilities
->   media: cedrus: Filter controls based on capability
->   media: cedrus: set codec ops immediately
->   media: cedrus: Remove cedrus_codec enum
->   media: cedrus: prefer untiled capture format
->   media: cedrus: initialize controls a bit later
 
-I'm going to merge the first 9 patches, but leave out the last
-two. It's weird what happens there, and I think those two need a
-bit more work.
+> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> @@ -3831,6 +3831,9 @@ static int __stmmac_open(struct net_device *dev,
+>  	netif_tx_start_all_queues(priv->dev);
+>  	stmmac_enable_all_dma_irq(priv);
+>  
+> +	if (priv->plat->rxmux_setup)
+> +		priv->plat->rxmux_setup(priv->plat->bsp_priv, true);
+> +
+>  	return 0;
+>  
+>  irq_error:
+> @@ -3884,6 +3887,9 @@ static int stmmac_release(struct net_device *dev)
+>  	struct stmmac_priv *priv = netdev_priv(dev);
+>  	u32 chan;
+>  
+> +	if (priv->plat->rxmux_setup)
+> +		priv->plat->rxmux_setup(priv->plat->bsp_priv, false);
+> +
 
-Regards,
+Is this the code which is deciding if the external clock is present? So when somebody called
+'ip link set eth42 up'?
 
-	Hans
+Where is the external clock coming from?
 
->   media: cedrus: Adjust buffer size based on control values
->   media: cedrus: h265: Support decoding 10-bit frames
-> 
->  drivers/staging/media/sunxi/cedrus/cedrus.c   | 102 +++++----
->  drivers/staging/media/sunxi/cedrus/cedrus.h   |  22 +-
->  .../staging/media/sunxi/cedrus/cedrus_dec.c   |   4 +-
->  .../staging/media/sunxi/cedrus/cedrus_h264.c  |   2 +-
->  .../staging/media/sunxi/cedrus/cedrus_h265.c  |  37 +++-
->  .../staging/media/sunxi/cedrus/cedrus_hw.c    |  18 +-
->  .../staging/media/sunxi/cedrus/cedrus_hw.h    |   2 +-
->  .../staging/media/sunxi/cedrus/cedrus_mpeg2.c |   2 +-
->  .../staging/media/sunxi/cedrus/cedrus_regs.h  |  16 ++
->  .../staging/media/sunxi/cedrus/cedrus_video.c | 200 ++++++++++--------
->  .../staging/media/sunxi/cedrus/cedrus_video.h |   2 +
->  .../staging/media/sunxi/cedrus/cedrus_vp8.c   |   2 +-
->  12 files changed, 244 insertions(+), 165 deletions(-)
-> 
-> --
-> 2.38.1
-> 
-
+      Andrew
