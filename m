@@ -2,105 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFFB2619191
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 08:04:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FE61619194
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 08:08:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231635AbiKDHEY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 03:04:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44970 "EHLO
+        id S229995AbiKDHIn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 03:08:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231171AbiKDHEK (ORCPT
+        with ESMTP id S229532AbiKDHIl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 03:04:10 -0400
-Received: from cpanel.siel.si (cpanel.siel.si [46.19.9.99])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E0D626AE5;
-        Fri,  4 Nov 2022 00:04:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=norik.com;
-        s=default; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:
-        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=mBlF5pZ1kv6ig6Ylvq6jnljrMvNC83XZi6GRm5B7Cvs=; b=jglzrcpQFJi18wyZ81//OzPEiL
-        HO0G5x77bH6j9Zx4Sd+m096og/rRjPOyreWvWg4sfUPhFef2rW40J/fZrALrsDOHdVJLgMph8kwy/
-        dAxyXgLeO5KFdIvxEMFfbX6aHfYmdR2EAfzAIeJFEFTGJCMZ0JMShnyVnZin3lLvvmBGEaQTVuRIr
-        dyq45s0nhkqbr/R2E0Ajg9b/ZuyjNtm/sDA/l0YXZxxIWBXyvkl9tvMGYcDjlekTUXSuqH30SW2ZJ
-        7732d5wOP48sNJciVBHqb5je1plIsLzYOQidquLnZyEEIc8BchELz1iyd/bdZLcxP1G5180d0Rin6
-        jpt1xoPA==;
-Received: from [89.212.21.243] (port=40616 helo=localhost.localdomain)
-        by cpanel.siel.si with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.95)
-        (envelope-from <andrej.picej@norik.com>)
-        id 1oqqk7-00EcG2-Kf;
-        Fri, 04 Nov 2022 08:04:02 +0100
-From:   Andrej Picej <andrej.picej@norik.com>
-To:     linux-watchdog@vger.kernel.org
-Cc:     wim@linux-watchdog.org, linux@roeck-us.net, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        linux-imx@nxp.com, Anson.Huang@nxp.com, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v4 3/3] ARM: dts: imx6ul/ull: suspend i.MX6UL watchdog in wait mode
-Date:   Fri,  4 Nov 2022 08:03:58 +0100
-Message-Id: <20221104070358.426657-4-andrej.picej@norik.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221104070358.426657-1-andrej.picej@norik.com>
-References: <20221104070358.426657-1-andrej.picej@norik.com>
+        Fri, 4 Nov 2022 03:08:41 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29943275EA
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 00:08:40 -0700 (PDT)
+Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4N3Wpk5JCJzpWBv;
+        Fri,  4 Nov 2022 15:05:02 +0800 (CST)
+Received: from huawei.com (10.67.174.53) by kwepemi500012.china.huawei.com
+ (7.221.188.12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Fri, 4 Nov
+ 2022 15:08:37 +0800
+From:   Liao Chang <liaochang1@huawei.com>
+To:     <apw@canonical.com>, <joe@perches.com>, <dwaipayanray1@gmail.com>,
+        <lukas.bulwahn@gmail.com>
+CC:     <linux-kernel@vger.kernel.org>, <liaochang1@huawei.com>,
+        <bagasdotme@gmail.com>, <pbonzini@redhat.com>
+Subject: [PATCH -next v2] checkpatch: Add check for array allocator family argument order
+Date:   Fri, 4 Nov 2022 15:05:23 +0800
+Message-ID: <20221104070523.60296-1-liaochang1@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - cpanel.siel.si
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - norik.com
-X-Get-Message-Sender-Via: cpanel.siel.si: authenticated_id: andrej.picej@norik.com
-X-Authenticated-Sender: cpanel.siel.si: andrej.picej@norik.com
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.67.174.53]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemi500012.china.huawei.com (7.221.188.12)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It was discovered that the watchdog triggers when the device is put into
-"Suspend-To-Idle"/"freeze" low-power mode. Setting WDW bit disables
-watchdog when the device is put into WAIT mode.
+These array allocator family are sometimes misused with the first and
+second arguments switchted.
 
-Signed-off-by: Andrej Picej <andrej.picej@norik.com>
-Reviewed-by: Fabio Estevam <festevam@gmail.com>
+Same issue with calloc, kvcalloc, kvmalloc_array etc.
+
+Bleat if sizeof is the first argument.
+
+Link: https://lore.kernel.org/lkml/5374345c-7973-6a3c-d559-73bf4ac15079@redhat.com/
+Signed-off-by: Liao Chang <liaochang1@huawei.com>
+Acked-by: Joe Perches <joe@perches.com>
 ---
-Changes in v4:
- - no changes
+v2:
+1. Acked-by Joe Perches.
+2. Use lore links in Link tag.
 
-Changes in v3:
- - no changes
-
-Changes in v2:
- - no changes
 ---
- arch/arm/boot/dts/imx6ul-phytec-phycore-som.dtsi | 4 ++++
- 1 file changed, 4 insertions(+)
+ scripts/checkpatch.pl | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm/boot/dts/imx6ul-phytec-phycore-som.dtsi b/arch/arm/boot/dts/imx6ul-phytec-phycore-som.dtsi
-index 3cddc68917a0..5168ed0ffec3 100644
---- a/arch/arm/boot/dts/imx6ul-phytec-phycore-som.dtsi
-+++ b/arch/arm/boot/dts/imx6ul-phytec-phycore-som.dtsi
-@@ -102,6 +102,10 @@ &usdhc2 {
- 	status = "disabled";
- };
+diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
+index 1e5e66ae5a52..a9a9dc277cff 100755
+--- a/scripts/checkpatch.pl
++++ b/scripts/checkpatch.pl
+@@ -7128,7 +7128,7 @@ sub process {
+ 		}
  
-+&wdog1 {
-+	fsl,suspend-in-wait;
-+};
-+
- &iomuxc {
- 	pinctrl_enet1: enet1grp {
- 		fsl,pins = <
+ # check for alloc argument mismatch
+-		if ($line =~ /\b((?:devm_)?(?:kcalloc|kmalloc_array))\s*\(\s*sizeof\b/) {
++		if ($line =~ /\b((?:devm_)?((?:k|kv)?(calloc|malloc_array)(?:_node)?))\s*\(\s*sizeof\b/) {
+ 			WARN("ALLOC_ARRAY_ARGS",
+ 			     "$1 uses number as first arg, sizeof is generally wrong\n" . $herecurr);
+ 		}
 -- 
-2.25.1
+2.17.1
 
