@@ -2,52 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E3E1619D15
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 17:23:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99F37619D1E
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 17:24:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230165AbiKDQXx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 12:23:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51124 "EHLO
+        id S230487AbiKDQYu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 12:24:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230324AbiKDQXp (ORCPT
+        with ESMTP id S230297AbiKDQYr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 12:23:45 -0400
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D17BA26CE
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 09:23:43 -0700 (PDT)
-Received: by mail-il1-f198.google.com with SMTP id m9-20020a056e021c2900b002fadb905ddcso4104093ilh.18
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 09:23:43 -0700 (PDT)
+        Fri, 4 Nov 2022 12:24:47 -0400
+Received: from mail-oa1-f52.google.com (mail-oa1-f52.google.com [209.85.160.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AEB1FDA;
+        Fri,  4 Nov 2022 09:24:47 -0700 (PDT)
+Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-13b6c1c89bdso6023762fac.13;
+        Fri, 04 Nov 2022 09:24:47 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ZTWPEbO/ykIic7pHU+hcEuKyktIGyGHMpQy7LQ2p3V4=;
-        b=bXQ9cV7bvDP4deb1njtSOgHt4JjSioaGAwXW3ben0pKmUPaZ8gVkglV/lyIqNyf9Ls
-         mtlNnQqxgmSDZPKnevj5IphIv33kOeQtg9gvcBKn0XfQbgAR3DgJyN9acZ0gL+DI4o7O
-         A8E+ctzKQU+ELm8L8ooDF474DP1JWPxmQvqkRGgToDKleOJ04N5E6a1cxyRYKIzhJvg8
-         z2KI7b3rV/F48lJm0VY4xg8ws57t7t669QpZg0prv0bMCil0gYpD+CX6Uig07wwJ3fCG
-         4lAn4SGKU86JOAIp1aa0XXdS3wC0Txqi26OAYDp5YsDKgfH4VfM1XeEGFupzHltn4AOg
-         ZHHg==
-X-Gm-Message-State: ACrzQf0n0E7PY2vuwGAMkxWr1A4o1af+7g8686LNbkyCzvDoCQyShL+J
-        nBxzy7m/hIIEtYpg1uOmCbaUBZiEOBCfK5cbHT7aFFifTkYa
-X-Google-Smtp-Source: AMsMyM7wt8+0ov4Wtc+UITQX3Dd1/57ISzUGXZZ2wHXoV+VJLxlqahBGInfpF6zeVmzvyYu+t4adwQU1Y32UE1NRGAX+ZwaqHAXg
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=236MtMSiYq8PfbAvUMwAbvkjZMfzu/0gyBql4UnRQZQ=;
+        b=Oq3H3AD2YLaTv3ZfGRNlOnU3Egp+qAU6PXayLEwKwDeTqGq+masS8fbvcDlg8AVMW6
+         bqrs4Xa/DW63ubTzt/gaw0Z2XAx+pskHWswL9iKflQSjZ+kFuoBbV2LdWv8X8OpBcft/
+         fznr1V+zKYIOJ6+PA2YiMpfL/tNLvR/WUegwp4Fpxn5Ul741WEgNLD3nmxePuFqvulNL
+         c0H3dgtffA4EEFD5qdQWuCdb+52z4+hBynbk1TiKX9C+sUMee+BdZgJBcXi3Q/UAXq8k
+         rTkkuhYjY7HQe0zfvIW3m0EPHPiObHg2KdQL7cXS/ysnUQXNnzcQwpENLdTueY0LRnmD
+         ug3g==
+X-Gm-Message-State: ACrzQf0qDoVJ1l56Fds59Are4iMAFBLoLCpRqC16Hcwm30Y1ocHy5IRd
+        MG8dRyIgEDc02RiUS6zoi5p72u9D4A==
+X-Google-Smtp-Source: AMsMyM63f5nI/3QWC4kluBY+6QxS5OfRPRvnf7sqUta3aTKn//+8mOCK+JCgL6rErbaXqdnVFReQ1Q==
+X-Received: by 2002:a05:6870:3413:b0:13d:3e44:4a9e with SMTP id g19-20020a056870341300b0013d3e444a9emr12757042oah.228.1667579086482;
+        Fri, 04 Nov 2022 09:24:46 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id m35-20020a05687005a300b0011f400edb17sm1934261oap.4.2022.11.04.09.24.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Nov 2022 09:24:46 -0700 (PDT)
+Received: (nullmailer pid 1982077 invoked by uid 1000);
+        Fri, 04 Nov 2022 16:24:47 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Manivannan Sadhasivam <mani@kernel.org>
+Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] dt-bindings: cpufreq: qcom: Add missing cache related properties
+Date:   Fri,  4 Nov 2022 11:24:29 -0500
+Message-Id: <20221104162429.1981729-1-robh@kernel.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:164d:b0:2fc:636c:e233 with SMTP id
- v13-20020a056e02164d00b002fc636ce233mr20857341ilu.251.1667579023197; Fri, 04
- Nov 2022 09:23:43 -0700 (PDT)
-Date:   Fri, 04 Nov 2022 09:23:43 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000500ba305eca77f88@google.com>
-Subject: [syzbot] WARNING in ext4_xattr_block_set
-From:   syzbot <syzbot+98346927678ac3059c77@syzkaller.appspotmail.com>
-To:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        tytso@mit.edu
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_DIGITS,
-        FROM_LOCAL_HEX,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,84 +64,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+The examples' cache nodes are incomplete as 'cache-unified' and
+'cache-level' are required cache properties.
 
-syzbot found the following issue on:
-
-HEAD commit:    b229b6ca5abb Merge tag 'perf-tools-fixes-for-v6.1-2022-10-..
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=120f2c0e880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=1d3548a4365ba17d
-dashboard link: https://syzkaller.appspot.com/bug?extid=98346927678ac3059c77
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=168cc339880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=119ac77a880000
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/24728b72a896/disk-b229b6ca.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/10a3c40c60e1/vmlinux-b229b6ca.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/69f963b02b7e/bzImage-b229b6ca.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/4dd9a1b9ecac/mount_0.gz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+98346927678ac3059c77@syzkaller.appspotmail.com
-
-loop0: detected capacity change from 0 to 4096
-EXT4-fs: Journaled quota options ignored when QUOTA feature is enabled
-EXT4-fs (loop0): mounted filesystem without journal. Quota mode: writeback.
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 3611 at fs/ext4/xattr.c:2069 ext4_xattr_block_set+0x315f/0x3920
-Modules linked in:
-CPU: 0 PID: 3611 Comm: syz-executor383 Not tainted 6.1.0-rc2-syzkaller-00105-gb229b6ca5abb #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/11/2022
-RIP: 0010:ext4_xattr_block_set+0x315f/0x3920 fs/ext4/xattr.c:2069
-Code: f0 41 ff 48 8b 7c 24 58 4c 89 fe e8 fb 64 c2 ff 45 31 e4 e9 24 f5 ff ff e8 7e f0 41 ff 45 31 e4 e9 17 f5 ff ff e8 71 f0 41 ff <0f> 0b e9 4e f2 ff ff e8 65 f0 41 ff 0f 0b e9 22 df ff ff 44 89 f9
-RSP: 0018:ffffc90003e6f0a0 EFLAGS: 00010293
-RAX: ffffffff8245df6f RBX: ffffc90003e6f1e8 RCX: ffff888023aa8000
-RDX: 0000000000000000 RSI: 0000000000000001 RDI: 0000000000000001
-RBP: ffffc90003e6f2f0 R08: ffffffff820bd909 R09: ffffed1005342b23
-R10: ffffed1005342b23 R11: 1ffff11005342b22 R12: ffff888075fcd2f0
-R13: dffffc0000000000 R14: 0000000000000000 R15: 1ffff11004ba8405
-FS:  0000555556b01300(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000559471603278 CR3: 000000007bbfe000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- ext4_xattr_move_to_block fs/ext4/xattr.c:2604 [inline]
- ext4_xattr_make_inode_space fs/ext4/xattr.c:2673 [inline]
- ext4_expand_extra_isize_ea+0x137b/0x1cd0 fs/ext4/xattr.c:2765
- __ext4_expand_extra_isize+0x2b8/0x3f0 fs/ext4/inode.c:5857
- ext4_try_to_expand_extra_isize fs/ext4/inode.c:5900 [inline]
- __ext4_mark_inode_dirty+0x51a/0x670 fs/ext4/inode.c:5978
- ext4_rename fs/ext4/namei.c:3907 [inline]
- ext4_rename2+0x2936/0x4760 fs/ext4/namei.c:4169
- vfs_rename+0xd53/0x1130 fs/namei.c:4778
- do_renameat2+0xb53/0x1370 fs/namei.c:4929
- __do_sys_rename fs/namei.c:4975 [inline]
- __se_sys_rename fs/namei.c:4973 [inline]
- __x64_sys_rename+0x82/0x90 fs/namei.c:4973
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f400cc61b29
-Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffe83d770a8 EFLAGS: 00000246 ORIG_RAX: 0000000000000052
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f400cc61b29
-RDX: 00007f400cc20023 RSI: 00000000200000c0 RDI: 0000000020000080
-RBP: 00007f400cc212f0 R08: 00007ffe83d76fa0 R09: 0000000000000000
-R10: 00007ffe83d76f70 R11: 0000000000000246 R12: 00007f400cc21380
-R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
- </TASK>
-
-
+Signed-off-by: Rob Herring <robh@kernel.org>
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+ .../bindings/cpufreq/cpufreq-qcom-hw.yaml      | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+diff --git a/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml b/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
+index 24fa3d87a40b..e58c55f78aaa 100644
+--- a/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
++++ b/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
+@@ -85,9 +85,13 @@ examples:
+         qcom,freq-domain = <&cpufreq_hw 0>;
+         L2_0: l2-cache {
+           compatible = "cache";
++          cache-unified;
++          cache-level = <2>;
+           next-level-cache = <&L3_0>;
+           L3_0: l3-cache {
+             compatible = "cache";
++            cache-unified;
++            cache-level = <3>;
+           };
+         };
+       };
+@@ -101,6 +105,8 @@ examples:
+         qcom,freq-domain = <&cpufreq_hw 0>;
+         L2_100: l2-cache {
+           compatible = "cache";
++          cache-unified;
++          cache-level = <2>;
+           next-level-cache = <&L3_0>;
+         };
+       };
+@@ -114,6 +120,8 @@ examples:
+         qcom,freq-domain = <&cpufreq_hw 0>;
+         L2_200: l2-cache {
+           compatible = "cache";
++          cache-unified;
++          cache-level = <2>;
+           next-level-cache = <&L3_0>;
+         };
+       };
+@@ -127,6 +135,8 @@ examples:
+         qcom,freq-domain = <&cpufreq_hw 0>;
+         L2_300: l2-cache {
+           compatible = "cache";
++          cache-unified;
++          cache-level = <2>;
+           next-level-cache = <&L3_0>;
+         };
+       };
+@@ -140,6 +150,8 @@ examples:
+         qcom,freq-domain = <&cpufreq_hw 1>;
+         L2_400: l2-cache {
+           compatible = "cache";
++          cache-unified;
++          cache-level = <2>;
+           next-level-cache = <&L3_0>;
+         };
+       };
+@@ -153,6 +165,8 @@ examples:
+         qcom,freq-domain = <&cpufreq_hw 1>;
+         L2_500: l2-cache {
+           compatible = "cache";
++          cache-unified;
++          cache-level = <2>;
+           next-level-cache = <&L3_0>;
+         };
+       };
+@@ -166,6 +180,8 @@ examples:
+         qcom,freq-domain = <&cpufreq_hw 1>;
+         L2_600: l2-cache {
+           compatible = "cache";
++          cache-unified;
++          cache-level = <2>;
+           next-level-cache = <&L3_0>;
+         };
+       };
+@@ -179,6 +195,8 @@ examples:
+         qcom,freq-domain = <&cpufreq_hw 1>;
+         L2_700: l2-cache {
+           compatible = "cache";
++          cache-unified;
++          cache-level = <2>;
+           next-level-cache = <&L3_0>;
+         };
+       };
+-- 
+2.35.1
+
