@@ -2,123 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BCC8619A25
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 15:36:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A304F619A21
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 15:35:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232040AbiKDOgO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 10:36:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52050 "EHLO
+        id S231596AbiKDOfz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 10:35:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232155AbiKDOep (ORCPT
+        with ESMTP id S231331AbiKDOeh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 10:34:45 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C1D83134A
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 07:32:35 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id sc25so13671775ejc.12
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 07:32:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=zPb3Ch5cQKo79npejowVrWhaxOj2flVSGSghaJJIM+U=;
-        b=dxtrk433iz23cbIBt75tV4gk15B1zGxQLL7jAwlCmvFRrRA8zIaKb1GO5l5owsD0oW
-         2km7HkCuXNWJFwFUBLl1swFXyGN5fQwIt/sK4B3tG18jBkFheLjAvGXAKH0BYcPpO+gr
-         Q0hCfupY+PK7atfKqUKcXj18iOcd0/8IYVX/g=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zPb3Ch5cQKo79npejowVrWhaxOj2flVSGSghaJJIM+U=;
-        b=vfb5U3Yc9DGrHz+v8TBtOEFwwAfgxz+z0Y4N/JPXp0F8nY2DMS0Sim3gaQli+w0hTQ
-         c62Meee6NW6X32Hbly37O2JscktAiGKU0O2t/jdWpGwv9oSSnbZW7DYw4rIioJbRWX4F
-         1dbh8B9JLl2CDsKHIpOEyRYqkmFrffzDcJoPvbtBIjkV3qLWTLR+S6baOYm3w3oCyXgL
-         UyQPWQ6Yi6pCxzVaXNO0xC9izl+1f8dFKQ4a+C63eHzLnydx35D6SRqbnv72NGnNPzlY
-         46PhKfmxjBPeRHLXUGGAFO+8VpxjsDI488E2pAiUVE4+9cwkFL79k6lwyVlgFa48MuS2
-         LeQA==
-X-Gm-Message-State: ACrzQf0Cb35eUlwXFUThbXVAKoszUxltWgI178oFmCC0iQmm1r2Qo6/G
-        yP+vbuL0Q7akARF7NYUDQRW2AaqmsD0eW4BH
-X-Google-Smtp-Source: AMsMyM48bKdj5ntL22XBdtOMNcXQLzM1l9X0sUkqZnnz+ZH4WUVdUPcACUgS+Kn47kF6zE/UMh3Rmw==
-X-Received: by 2002:a17:906:14d2:b0:7ad:be76:956f with SMTP id y18-20020a17090614d200b007adbe76956fmr30793043ejc.197.1667572353535;
-        Fri, 04 Nov 2022 07:32:33 -0700 (PDT)
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com. [209.85.221.43])
-        by smtp.gmail.com with ESMTPSA id ec35-20020a0564020d6300b00458dc7e8ecasm2003666edb.72.2022.11.04.07.32.28
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 04 Nov 2022 07:32:29 -0700 (PDT)
-Received: by mail-wr1-f43.google.com with SMTP id bk15so7266009wrb.13
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 07:32:28 -0700 (PDT)
-X-Received: by 2002:adf:d1ec:0:b0:236:880f:2adf with SMTP id
- g12-20020adfd1ec000000b00236880f2adfmr22994810wrd.617.1667572348631; Fri, 04
- Nov 2022 07:32:28 -0700 (PDT)
+        Fri, 4 Nov 2022 10:34:37 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D86E1303F9;
+        Fri,  4 Nov 2022 07:32:25 -0700 (PDT)
+Received: from notapiano (unknown [IPv6:2600:4041:5b1a:cd00:524d:e95d:1a9c:492a])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: nfraprado)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 27C756602966;
+        Fri,  4 Nov 2022 14:32:23 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1667572344;
+        bh=E4RBBVSKwbPJ3/jKWf+eXG57O7vMDBSJ35AS7H0Ljbs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jeuVh2DVCbj48QLsyqPk0UlTG4g5jUtsZVTT7fIxGVydicFOoGlOPyrS5gnFT0nPo
+         LpBCTbhTj1LpaWTW2Ux4O65DBImV53rBsVD/RBwMtGWqx/0pzzklwZ7to9Cvpxj0Uu
+         PtypyCcUSER01jNIkvI8TsEnwJ5N5YIQPZFQg8dc7WpWlx+lS0iqBS3t5GyVzTYLIF
+         oa+sm0Mt8Up0nDQuGSQ76snc1jnKVRJZx4lX7We4Jb4eoptVOZbSR2j3o61DvZKSRR
+         e6M6xmncOl+xB5XV3/Ffe2bpqO3Yr2glsnZoRJ9jepVw+jH1uxAZ/+J6t9F+C31U1W
+         mG5rMI9OoRMGQ==
+Date:   Fri, 4 Nov 2022 10:32:19 -0400
+From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
+        <nfraprado@collabora.com>
+To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        angelogioacchino.delregno@collabora.com,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        devicetree@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH v4 4/7] arm64: dts: mediatek: mt8516: Fix the watchdog
+ node name
+Message-ID: <20221104143219.aiwfezso7r72yg7q@notapiano>
+References: <20221104020701.24134-1-allen-kh.cheng@mediatek.com>
+ <20221104020701.24134-5-allen-kh.cheng@mediatek.com>
 MIME-Version: 1.0
-References: <20221104061941.2739938-1-sheng-liang.pan@quanta.corp-partner.google.com>
- <20221104141515.v10.3.I3ac715e729f6f9b5a3e3001b155df4f9d14e6186@changeid>
- <139c06eb-14b8-10b5-80b7-ba8ec8579846@somainline.org> <CAD=FV=VwP_s5y0MVNLs+WGD_=nJtJe7h=n+Xu4Ky5RvgdkAw9Q@mail.gmail.com>
- <b6e8da04-f5bf-8e27-e4b7-3854d4168a08@somainline.org>
-In-Reply-To: <b6e8da04-f5bf-8e27-e4b7-3854d4168a08@somainline.org>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Fri, 4 Nov 2022 07:32:15 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=Xsd6Do_RGN-F_Ef0uxBOqERNGUjme9nCE6Xu49kTOzcw@mail.gmail.com>
-Message-ID: <CAD=FV=Xsd6Do_RGN-F_Ef0uxBOqERNGUjme9nCE6Xu49kTOzcw@mail.gmail.com>
-Subject: Re: [PATCH v10 3/4] arm64: dts: qcom: sc7280: Add touchscreen and
- touchpad support for evoker
-To:     Konrad Dybcio <konrad.dybcio@somainline.org>
-Cc:     Sheng-Liang Pan <sheng-liang.pan@quanta.corp-partner.google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221104020701.24134-5-allen-kh.cheng@mediatek.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Fri, Nov 04, 2022 at 10:06:58AM +0800, Allen-KH Cheng wrote:
+> The proper name is 'watchdog', not 'toprgu'.
+> 
+> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+> ---
+>  arch/arm64/boot/dts/mediatek/mt8516.dtsi | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm64/boot/dts/mediatek/mt8516.dtsi b/arch/arm64/boot/dts/mediatek/mt8516.dtsi
+> index d1b67c82d761..fff59dc1b4d7 100644
+> --- a/arch/arm64/boot/dts/mediatek/mt8516.dtsi
+> +++ b/arch/arm64/boot/dts/mediatek/mt8516.dtsi
+> @@ -202,7 +202,7 @@
+>  			#clock-cells = <1>;
+>  		};
+>  
+> -		toprgu: toprgu@10007000 {
+> +		toprgu: watchdog@10007000 {
 
-On Fri, Nov 4, 2022 at 7:28 AM Konrad Dybcio
-<konrad.dybcio@somainline.org> wrote:
->
->
-> On 04/11/2022 15:25, Doug Anderson wrote:
-> > Hi,
-> >
-> > On Fri, Nov 4, 2022 at 2:35 AM Konrad Dybcio
-> > <konrad.dybcio@somainline.org> wrote:
-> >>
-> >> On 04/11/2022 07:19, Sheng-Liang Pan wrote:
-> >>> Change touchpad and touchscreen node for evoker
-> >>> Touchpad: SA461D-1011
-> >>> Touchscreen: GT7986U
-> >> What's the reasoning? Were they changed post r0? Is r0 support
-> >> effectively dropped?
-> >>
-> >> The changes look ok, but I feel like this needs more of a comment in the
-> >> commit msg.
-> > As I understand it r0's toucscreen/touchpad were not right to start
-> > with. We are moving towards getting things upstream sooner and that
-> > means that hardware hasn't always been fully tested out.
-> >
-> > I certainly wouldn't object to a better commit message here, but in
-> > this case there are no real world users (yet) and thus nobody is
-> > really affected by this churn. ...so IMO if the series needs to be
-> > spun for some other reason then the commit message could be updated,
-> > but I wouldn't object to it landing as-is either.
->
-> If there are no real (read: not-an-internal-devboard) devices using it,
-> then I
->
-> agree, it's fine to merge as-is.
+I think you missed my comment about renaming the label as well on the previous
+version.
 
-I can confirm that. There are no evoker devices in the wild.
-
--Doug
+>  			compatible = "mediatek,mt8516-wdt",
+>  				     "mediatek,mt6589-wdt";
+>  			reg = <0 0x10007000 0 0x1000>;
+> -- 
+> 2.18.0
+> 
