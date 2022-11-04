@@ -2,59 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3C3C619FFF
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 19:33:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 142AF61A000
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 19:33:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230041AbiKDSdC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 14:33:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51870 "EHLO
+        id S232169AbiKDSdJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 14:33:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232127AbiKDSc4 (ORCPT
+        with ESMTP id S232138AbiKDSdA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 14:32:56 -0400
+        Fri, 4 Nov 2022 14:33:00 -0400
 Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8F5340471
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 11:32:55 -0700 (PDT)
-Received: by mail-pl1-x64a.google.com with SMTP id u8-20020a17090341c800b0018731b83fe4so4058934ple.16
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 11:32:55 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC00440919
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 11:32:57 -0700 (PDT)
+Received: by mail-pl1-x64a.google.com with SMTP id q3-20020a17090311c300b0017898180dddso4120501plh.0
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 11:32:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:from:to:cc:subject:date:message-id:reply-to;
-        bh=NyjCQLTGMZRdycUacwFyAxLckz0Mzvzm9v3NS3Lsp2Q=;
-        b=AVNcRZuDOXKkWmneCdtvaxaauUn8pnyvuKeXgPpoA7oiOGmi9OxLgYnyUOwCRRGH0K
-         dBh2Xma4Y6oO9Qpgnxutb03h74QM6y3a9XAkRrYXJmzOUURYwqnNKG3gyrT0ihxFkXUT
-         Ddm/MgdwGQ80jg6kUaprBEP+0H85k9a5uTO4ESZJ3QMv9WrjcvA16a07YzdvAb+gWjpJ
-         FjkM0VzCNePqkvGtljKd1aofy2WISvZViliS38XVjz10op33UYWpYXDDiJYIjQONRK+A
-         DhnyIgjNZ3a1RvaF9Surpd+1x+EGiFaw5O0RmRLkVEPx7j+yN6asICDRXmzRI61muClU
-         Tu9A==
+        bh=YYBJ31ou5Rwg5LoGtjJ6FG68fLUfYn1uUGIk9MyRKGY=;
+        b=lSOSZi+kphdHFzsfDzuxPltgdYT52XM9vY5sOjBzYtVo0p2a1WGY/nTF11dzy8Qbx8
+         ez1v5pmtsDrjYrir1duKzoEcT0qcI0g4kWaXGKHs4w1r3UM3X3tUgQ8qOZioUqbgqyeb
+         7RrYIa7XhuH5JbZ1TLX3yoZ5EQafu4N/7G108aQOf3w0N6ZtRs6rsuQxxcbzzUyV4ANi
+         k6JFOVVConNg+UlCWbyXqapxwbpAty/FwQEd6zOf5bWeiAad6+ZqYsyIYEaa4vkYu6hX
+         Baa0w3EULQ5pVyq6f0u6UOAP+cI3sAwFz9DtPeHjV3OyccRoR8qPsYvul2C9eMIqzZvr
+         Sopw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=NyjCQLTGMZRdycUacwFyAxLckz0Mzvzm9v3NS3Lsp2Q=;
-        b=01wUey31vaE0ypxsB9xT7ot/53AAL8OyKsplBn62ijlTzak8HraPLfW1P6PM+Ao7dy
-         JSFd8v1x8enUIqEjpdxh4CPbojVDj6O4WeUMCU2bwrQOXA+n2dxvLssWfDAsE9UGIrcG
-         S7VI4NETHjO5nVc8TbGkQt+q9Vo24bEMqNdRCQ6WO6oVNJLWQRbx/AXwsjvNl3mC8SIv
-         f5bLOTtwafUy7TDfsFRrS6zeqr8BO46bq9guIOUWlmKh+lBXHUIxNarG6kYqBt8yAteW
-         q4z0f8dw8Edc8aaVuvxvWWVi4eW5lgQ/sZmFafZZSPpnkQrrTI5TldQTrVkuCvbPsSwI
-         AWVg==
-X-Gm-Message-State: ACrzQf2gi378uC5sxfczpLPmnkZAlMVDmN5RUohAvK2Hu88cO3krDPEc
-        1PGsSXvzisl2awefkwuiu9DBlJIGypY=
-X-Google-Smtp-Source: AMsMyM66P4Sl/iCruZJ88KS4Y3U+Wj7MQ/h68YnfMx6vYxCgarVhivUYc1AEY4Yy10853t0epdAixpflqZ8=
+        bh=YYBJ31ou5Rwg5LoGtjJ6FG68fLUfYn1uUGIk9MyRKGY=;
+        b=IIQLy2fOzY7/DV6yYfGA1YS1QXo99p3Y0I1dct5Uoeb1YbbJDFqu5CzDJz8nbVteV+
+         S7OgmAVq3YRD7UuxiKYCNuVKt+ZSU4Esy4cEcLBeNFjDl/WBlqdHXay7ImFz8guzMfId
+         LJCD4P+u1N72i7JSd4CHyI3Ux2vTZkyj8sYK09J1Apz3U5jPJezmV87aJeQkQa8rcnDc
+         1lyuOPA/mHCCkgNSII+jMrJlS7pCX/tg5C9aA+PxxI9PsqotjZLExN4ScHk6REFZOAsj
+         hd3m/J6WLbKpGmZn8oVLZ5Kb2BJwEkvxMNYqbGhLKRSCKCcOPp5y3F/soTPFGZ62ekdb
+         tr4g==
+X-Gm-Message-State: ACrzQf1k5EB2PGGJlQc+oXTiJoomp+ihyJhiRE1DKj10jMxwwJPkdIay
+        duoUNMLigzTdrO4YIDcy+9Y048p7x5U=
+X-Google-Smtp-Source: AMsMyM5AzYyUyY4WLPr0o7OeQqIFQaRG+NcbCZ2jehe2vxhaONBNiLQ0/sbFDkHT0pjDK29vN/bWCU5LarI=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a62:79d4:0:b0:561:f3bb:878 with SMTP id
- u203-20020a6279d4000000b00561f3bb0878mr366882pfc.83.1667586775330; Fri, 04
- Nov 2022 11:32:55 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:a05:6a00:2886:b0:565:c4e2:2634 with SMTP id
+ ch6-20020a056a00288600b00565c4e22634mr366477pfb.0.1667586777418; Fri, 04 Nov
+ 2022 11:32:57 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Fri,  4 Nov 2022 18:32:46 +0000
+Date:   Fri,  4 Nov 2022 18:32:47 +0000
 In-Reply-To: <20221104183247.834988-1-seanjc@google.com>
 Mime-Version: 1.0
 References: <20221104183247.834988-1-seanjc@google.com>
 X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
-Message-ID: <20221104183247.834988-3-seanjc@google.com>
-Subject: [PATCH 2/3] x86/kasan: Add helpers to align shadow addresses up and down
+Message-ID: <20221104183247.834988-4-seanjc@google.com>
+Subject: [PATCH 3/3] x86/kasan: Populate shadow for shared chunk of the CPU
+ entry area
 From:   Sean Christopherson <seanjc@google.com>
 To:     Andrey Ryabinin <ryabinin.a.a@gmail.com>,
         Dave Hansen <dave.hansen@linux.intel.com>,
@@ -82,92 +83,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add helpers to dedup code for aligning shadow address up/down to page
-boundaries when translating an address to its shadow.
+Popuplate the shadow for the shared portion of the CPU entry area, i.e.
+the read-only IDT mapping, during KASAN initialization.  A recent change
+modified KASAN to map the per-CPU areas on-demand, but forgot to keep a
+shadow for the common area that is shared amongst all CPUs.
 
-No functional change intended.
+Map the common area in KASAN init instead of letting idt_map_in_cea() do
+the dirty work so that it Just Works in the unlikely event more shared
+data is shoved into the CPU entry area.
 
+The bug manifests as a not-present #PF when software attempts to lookup
+an IDT entry, e.g. when KVM is handling IRQs on Intel CPUs (KVM performs
+direct CALL to the IRQ handler to avoid the overhead of INTn):
+
+ BUG: unable to handle page fault for address: fffffbc0000001d8
+ #PF: supervisor read access in kernel mode
+ #PF: error_code(0x0000) - not-present page
+ PGD 16c03a067 P4D 16c03a067 PUD 0
+ Oops: 0000 [#1] PREEMPT SMP KASAN
+ CPU: 5 PID: 901 Comm: repro Tainted: G        W          6.1.0-rc3+ #410
+ Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 0.0.0 02/06/2015
+ RIP: 0010:kasan_check_range+0xdf/0x190
+  vmx_handle_exit_irqoff+0x152/0x290 [kvm_intel]
+  vcpu_run+0x1d89/0x2bd0 [kvm]
+  kvm_arch_vcpu_ioctl_run+0x3ce/0xa70 [kvm]
+  kvm_vcpu_ioctl+0x349/0x900 [kvm]
+  __x64_sys_ioctl+0xb8/0xf0
+  do_syscall_64+0x2b/0x50
+  entry_SYSCALL_64_after_hwframe+0x46/0xb0
+
+Fixes: 9fd429c28073 ("x86/kasan: Map shadow for percpu pages on demand")
+Reported-by: syzbot+8cdd16fd5a6c0565e227@syzkaller.appspotmail.com
+Cc: Andrey Ryabinin <ryabinin.a.a@gmail.com>
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- arch/x86/mm/kasan_init_64.c | 40 ++++++++++++++++++++-----------------
- 1 file changed, 22 insertions(+), 18 deletions(-)
+ arch/x86/mm/kasan_init_64.c | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
 
 diff --git a/arch/x86/mm/kasan_init_64.c b/arch/x86/mm/kasan_init_64.c
-index ad7872ae10ed..afc5e129ca7b 100644
+index afc5e129ca7b..0302491d799d 100644
 --- a/arch/x86/mm/kasan_init_64.c
 +++ b/arch/x86/mm/kasan_init_64.c
-@@ -316,22 +316,33 @@ void __init kasan_early_init(void)
- 	kasan_map_early_shadow(init_top_pgt);
- }
- 
-+static unsigned long kasan_mem_to_shadow_align_down(unsigned long va)
-+{
-+	unsigned long shadow = (unsigned long)kasan_mem_to_shadow((void *)va);
-+
-+	return round_down(shadow, PAGE_SIZE);
-+}
-+
-+static unsigned long kasan_mem_to_shadow_align_up(unsigned long va)
-+{
-+	unsigned long shadow = (unsigned long)kasan_mem_to_shadow((void *)va);
-+
-+	return round_up(shadow, PAGE_SIZE);
-+}
-+
- void __init kasan_populate_shadow_for_vaddr(void *va, size_t size, int nid)
- {
- 	unsigned long shadow_start, shadow_end;
- 
--	shadow_start = (unsigned long)kasan_mem_to_shadow(va);
--	shadow_start = round_down(shadow_start, PAGE_SIZE);
--	shadow_end = (unsigned long)kasan_mem_to_shadow(va + size);
--	shadow_end = round_up(shadow_end, PAGE_SIZE);
--
-+	shadow_start = kasan_mem_to_shadow_align_down((unsigned long)va);
-+	shadow_end = kasan_mem_to_shadow_align_up((unsigned long)va + size);
- 	kasan_populate_shadow(shadow_start, shadow_end, nid);
- }
+@@ -341,7 +341,7 @@ void __init kasan_populate_shadow_for_vaddr(void *va, size_t size, int nid)
  
  void __init kasan_init(void)
  {
-+	unsigned long shadow_cea_begin, shadow_cea_end;
+-	unsigned long shadow_cea_begin, shadow_cea_end;
++	unsigned long shadow_cea_begin, shadow_cea_per_cpu_begin, shadow_cea_end;
  	int i;
--	void *shadow_cea_begin, *shadow_cea_end;
  
  	memcpy(early_top_pgt, init_top_pgt, sizeof(early_top_pgt));
- 
-@@ -372,16 +383,9 @@ void __init kasan_init(void)
- 		map_range(&pfn_mapped[i]);
+@@ -384,6 +384,7 @@ void __init kasan_init(void)
  	}
  
--	shadow_cea_begin = (void *)CPU_ENTRY_AREA_BASE;
--	shadow_cea_begin = kasan_mem_to_shadow(shadow_cea_begin);
--	shadow_cea_begin = (void *)round_down(
--			(unsigned long)shadow_cea_begin, PAGE_SIZE);
--
--	shadow_cea_end = (void *)(CPU_ENTRY_AREA_BASE +
--					CPU_ENTRY_AREA_MAP_SIZE);
--	shadow_cea_end = kasan_mem_to_shadow(shadow_cea_end);
--	shadow_cea_end = (void *)round_up(
--			(unsigned long)shadow_cea_end, PAGE_SIZE);
-+	shadow_cea_begin = kasan_mem_to_shadow_align_down(CPU_ENTRY_AREA_BASE);
-+	shadow_cea_end = kasan_mem_to_shadow_align_up(CPU_ENTRY_AREA_BASE +
-+						      CPU_ENTRY_AREA_MAP_SIZE);
+ 	shadow_cea_begin = kasan_mem_to_shadow_align_down(CPU_ENTRY_AREA_BASE);
++	shadow_cea_per_cpu_begin = kasan_mem_to_shadow_align_up(CPU_ENTRY_AREA_PER_CPU);
+ 	shadow_cea_end = kasan_mem_to_shadow_align_up(CPU_ENTRY_AREA_BASE +
+ 						      CPU_ENTRY_AREA_MAP_SIZE);
  
- 	kasan_populate_early_shadow(
- 		kasan_mem_to_shadow((void *)PAGE_OFFSET + MAXMEM),
-@@ -403,9 +407,9 @@ void __init kasan_init(void)
- 
- 	kasan_populate_early_shadow(
+@@ -409,6 +410,15 @@ void __init kasan_init(void)
  		kasan_mem_to_shadow((void *)VMALLOC_END + 1),
--		shadow_cea_begin);
-+		(void *)shadow_cea_begin);
+ 		(void *)shadow_cea_begin);
  
--	kasan_populate_early_shadow(shadow_cea_end,
-+	kasan_populate_early_shadow((void *)shadow_cea_end,
++	/*
++	 * Populate the shadow for the shared portion of the CPU entry area.
++	 * Shadows for the per-CPU areas are mapped on-demand, as each CPU's
++	 * area is randomly placed somewhere in the 512GiB range and mapping
++	 * the entire 512GiB range is prohibitively expensive.
++	 */
++	kasan_populate_shadow(shadow_cea_begin,
++			      shadow_cea_per_cpu_begin, 0);
++
+ 	kasan_populate_early_shadow((void *)shadow_cea_end,
  			kasan_mem_to_shadow((void *)__START_KERNEL_map));
  
- 	kasan_populate_shadow((unsigned long)kasan_mem_to_shadow(_stext),
 -- 
 2.38.1.431.g37b22c650d-goog
 
