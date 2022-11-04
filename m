@@ -2,274 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 321F06198E4
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 15:12:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17E786198EA
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 15:12:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231514AbiKDOMc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 10:12:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55808 "EHLO
+        id S231504AbiKDOMt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 10:12:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231894AbiKDOMR (ORCPT
+        with ESMTP id S231935AbiKDOMg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 10:12:17 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8C432E69E;
-        Fri,  4 Nov 2022 07:12:15 -0700 (PDT)
-Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4N3jCQ5LXszpVpv;
-        Fri,  4 Nov 2022 22:08:34 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 4 Nov 2022 22:12:10 +0800
-Received: from thunder-town.china.huawei.com (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 4 Nov 2022 22:12:09 +0800
-From:   Zhen Lei <thunder.leizhen@huawei.com>
-To:     "Paul E . McKenney" <paulmck@kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        "Josh Triplett" <josh@joshtriplett.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>, <rcu@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Zhen Lei <thunder.leizhen@huawei.com>,
-        Robert Elliott <elliott@hpe.com>
-Subject: [PATCH v5 4/4] rcu: Add RCU stall diagnosis information
-Date:   Fri, 4 Nov 2022 22:11:17 +0800
-Message-ID: <20221104141118.119-5-thunder.leizhen@huawei.com>
-X-Mailer: git-send-email 2.37.3.windows.1
-In-Reply-To: <20221104141118.119-1-thunder.leizhen@huawei.com>
-References: <20221104141118.119-1-thunder.leizhen@huawei.com>
+        Fri, 4 Nov 2022 10:12:36 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F24DE2F66A;
+        Fri,  4 Nov 2022 07:12:26 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id EEC406602983;
+        Fri,  4 Nov 2022 14:12:24 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1667571145;
+        bh=E/ZzSsVRUwbO05GoLP6P7MnbEOAXXssqTC73MARKT9w=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=IbAIC/azZYWBPQAO6MJ9kavEZMFgWgyOQmEH1Lwbzcq5qrrUxRd9tzVYfmEnnt7n6
+         Qf9Torw+lDxYLn0Lo6NA2W8Ned2gMsGLOT/X/ooAt+o33UzsFKv5ct9wMr49nZTW8j
+         N7RHAN9r9VJYnn+wfNO0OgA/rUi4VVlWf+TRurX4ix2YTg4k0LVIVTvTgwwxbvDe7d
+         jJtC6/Nw5Ue/Mx/yDmZ/vyjZyM0H/Yc72Cuzdd/Qu302M6hfP3yKJPv3+SSWo48HLs
+         07aTm6ayM9jzXkaZCwxYzc/7TDX8tMv7RboAOB9MFIhBypXR318GMA7mlpkwMELkh5
+         +1FkFf64m9wyg==
+Message-ID: <34f9a445-74bd-95e8-f1a6-5b142b95ee6f@collabora.com>
+Date:   Fri, 4 Nov 2022 15:12:22 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Subject: Re: [PATCH 1/2] dt-bindings: soc: qcom: Add bindings for Qualcomm
+ Ramp Controller
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        agross@kernel.org
+Cc:     andersson@kernel.org, konrad.dybcio@somainline.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, marijn.suijten@somainline.org,
+        kernel@collabora.com
+References: <20221104133506.131316-1-angelogioacchino.delregno@collabora.com>
+ <20221104133506.131316-2-angelogioacchino.delregno@collabora.com>
+ <4bd3afed-f0c7-8479-2e35-f56f542da674@linaro.org>
+Content-Language: en-US
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <4bd3afed-f0c7-8479-2e35-f56f542da674@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In some extreme cases, such as the I/O pressure test, the CPU usage may
-be 100%, causing RCU stall. In this case, the printed information about
-current is not useful. Displays the number and usage of hard interrupts,
-soft interrupts, and context switches that are generated within half of
-the CPU stall timeout, can help us make a general judgment. In other
-cases, we can preliminarily determine whether an infinite loop occurs
-when local_irq, local_bh or preempt is disabled.
+Il 04/11/22 15:00, Krzysztof Kozlowski ha scritto:
+> On 04/11/2022 09:35, AngeloGioacchino Del Regno wrote:
+>> Document bindings for the Qualcomm Ramp Controller, found on various
+>> legacy Qualcomm SoCs.
+>>
+>> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+>> ---
+>>   .../soc/qcom/qcom,ramp-controller.yaml        | 42 +++++++++++++++++++
+>>   1 file changed, 42 insertions(+)
+>>   create mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,ramp-controller.yaml
+> 
+> Filename based on compatible, so qcom,msm8976-ramp-controller.yaml
+> 
+>>
+>> diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,ramp-controller.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,ramp-controller.yaml
+>> new file mode 100644
+>> index 000000000000..95ce48cfca4e
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/soc/qcom/qcom,ramp-controller.yaml
+>> @@ -0,0 +1,42 @@
+>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: "http://devicetree.org/schemas/soc/qcom/qcom,ramp-controller.yaml#"
+>> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+> 
+> Drop quotes from both lines above.
+> 
+>> +
+>> +title: Qualcomm Ramp Controller
+>> +
+>> +maintainers:
+>> +  - AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+>> +
+>> +description:
+>> +  The Ramp Controller is used to program the sequence ID for pulse
+>> +  swallowing, enable sequences and linking Sequence IDs (SIDs) for
+> 
+> s/linking/link/ if I understand the sentence correctly (is used to:
+> program, enable and link)
+> 
+>> +  the CPU cores on some Qualcomm SoCs.
+>> +
+>> +properties:
+>> +  compatible:
+>> +    items:
+> 
+> Drop items.
+> 
+>> +      enum:
+> 
+> I also think you did not test it...
 
-For example:
-rcu: INFO: rcu_preempt self-detected stall on CPU
-rcu:     0-....: (1250 ticks this GP) <omitted>
-rcu:          hardirqs   softirqs   csw/system
-rcu:  number:      624         45            0
-rcu: cputime:       69          1         2425   ==> 2500(ms)
+I'm sorry, I acknowledged that I didn't test the yaml only after sending it...
+v2 is coming :-)
 
-The example above shows that the number of hard and soft interrupts is
-small, there is zero context switching, and the system takes up a lot of
-time. We can quickly conclude that the current task is infinitely looped
-with preempt_disable().
-
-The impact on system performance is negligible because snapshot is
-recorded only one time after 1/2 CPU stall timeout.
-
-This enhanced debugging information is suppressed by default and can be
-enabled by CONFIG_RCU_CPU_STALL_DEEP_DEBUG=y or
-rcupdate.rcu_cpu_stall_deep_debug=1.
-
-Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
----
- .../admin-guide/kernel-parameters.txt         |  5 +++
- kernel/rcu/Kconfig.debug                      | 10 ++++++
- kernel/rcu/rcu.h                              |  1 +
- kernel/rcu/tree.c                             | 16 ++++++++++
- kernel/rcu/tree.h                             | 17 ++++++++++
- kernel/rcu/tree_stall.h                       | 31 +++++++++++++++++++
- kernel/rcu/update.c                           |  2 ++
- 7 files changed, 82 insertions(+)
-
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index a465d5242774af8..f7c0cfd1cdcacd3 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -5082,6 +5082,11 @@
- 			rcupdate.rcu_cpu_stall_timeout to be used (after
- 			conversion from seconds to milliseconds).
- 
-+	rcupdate.rcu_cpu_stall_cputime= [KNL]
-+			Provide statistics on the cputime and count of
-+			interrupts and tasks during the second half of
-+			rcu stall timeout.
-+
- 	rcupdate.rcu_expedited= [KNL]
- 			Use expedited grace-period primitives, for
- 			example, synchronize_rcu_expedited() instead
-diff --git a/kernel/rcu/Kconfig.debug b/kernel/rcu/Kconfig.debug
-index 1b0c41d490f0588..cd7190d6b34e790 100644
---- a/kernel/rcu/Kconfig.debug
-+++ b/kernel/rcu/Kconfig.debug
-@@ -95,6 +95,16 @@ config RCU_EXP_CPU_STALL_TIMEOUT
- 	  says to use the RCU_CPU_STALL_TIMEOUT value converted from
- 	  seconds to milliseconds.
- 
-+config RCU_CPU_STALL_CPUTIME
-+	bool "Provide additional rcu stall debug information"
-+	depends on RCU_STALL_COMMON
-+	default n
-+	help
-+	  Statistics during the period from RCU_CPU_STALL_TIMEOUT/2 to
-+	  RCU_CPU_STALL_TIMEOUT, such as the number of (hard interrupts, soft
-+	  interrupts, task switches) and the cputime of (hard interrupts, soft
-+	  interrupts, kerenl tasks) are added to the rcu stall report.
-+
- config RCU_TRACE
- 	bool "Enable tracing for RCU"
- 	depends on DEBUG_KERNEL
-diff --git a/kernel/rcu/rcu.h b/kernel/rcu/rcu.h
-index 65704cbc9df7b3d..70c79adfdc7046c 100644
---- a/kernel/rcu/rcu.h
-+++ b/kernel/rcu/rcu.h
-@@ -224,6 +224,7 @@ extern int rcu_cpu_stall_ftrace_dump;
- extern int rcu_cpu_stall_suppress;
- extern int rcu_cpu_stall_timeout;
- extern int rcu_exp_cpu_stall_timeout;
-+extern int rcu_cpu_stall_cputime;
- int rcu_jiffies_till_stall_check(void);
- int rcu_exp_jiffies_till_stall_check(void);
- 
-diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-index c8ed24933b69c8c..93c286b98c8f03d 100644
---- a/kernel/rcu/tree.c
-+++ b/kernel/rcu/tree.c
-@@ -925,6 +925,22 @@ static int rcu_implicit_dynticks_qs(struct rcu_data *rdp)
- 			rdp->rcu_iw_gp_seq = rnp->gp_seq;
- 			irq_work_queue_on(&rdp->rcu_iw, rdp->cpu);
- 		}
-+
-+		if (rcu_cpu_stall_cputime && rdp->snap_record.gp_seq != rdp->gp_seq) {
-+			u64 *cpustat;
-+			struct rcu_snap_record *rsrp;
-+
-+			cpustat = kcpustat_cpu(rdp->cpu).cpustat;
-+
-+			rsrp = &rdp->snap_record;
-+			rsrp->cputime_irq     = cpustat[CPUTIME_IRQ];
-+			rsrp->cputime_softirq = cpustat[CPUTIME_SOFTIRQ];
-+			rsrp->cputime_system  = cpustat[CPUTIME_SYSTEM];
-+			rsrp->nr_hardirqs = kstat_cpu_irqs_sum(rdp->cpu);
-+			rsrp->nr_softirqs = kstat_cpu_softirqs_sum(rdp->cpu);
-+			rsrp->nr_csw = nr_context_switches_cpu(rdp->cpu);
-+			rsrp->gp_seq = rdp->gp_seq;
-+		}
- 	}
- 
- 	return 0;
-diff --git a/kernel/rcu/tree.h b/kernel/rcu/tree.h
-index fcb5d696eb1700d..fa159a951ded42e 100644
---- a/kernel/rcu/tree.h
-+++ b/kernel/rcu/tree.h
-@@ -158,6 +158,22 @@ union rcu_noqs {
- 	u16 s; /* Set of bits, aggregate OR here. */
- };
- 
-+/*
-+ * Record the snapshot of the core stats at 1/2 rcu stall timeout. The member
-+ * gp_seq is used to ensure that all members are updated only once during the
-+ * second half period. The snapshot is taken only if this gp_seq is not equal
-+ * to rdp->gp_seq.
-+ */
-+struct rcu_snap_record {
-+	unsigned long	gp_seq;		/* Track rdp->gp_seq counter */
-+	u64		cputime_irq;	/* Accumulated cputime of hard irqs */
-+	u64		cputime_softirq;/* Accumulated cputime of soft irqs */
-+	u64		cputime_system; /* Accumulated cputime of kernel tasks */
-+	unsigned long	nr_hardirqs;	/* Accumulated number of hard irqs */
-+	unsigned int	nr_softirqs;	/* Accumulated number of soft irqs */
-+	unsigned long long nr_csw;	/* Accumulated number of task switches */
-+};
-+
- /* Per-CPU data for read-copy update. */
- struct rcu_data {
- 	/* 1) quiescent-state and grace-period handling : */
-@@ -262,6 +278,7 @@ struct rcu_data {
- 	short rcu_onl_gp_flags;		/* ->gp_flags at last online. */
- 	unsigned long last_fqs_resched;	/* Time of last rcu_resched(). */
- 	unsigned long last_sched_clock;	/* Jiffies of last rcu_sched_clock_irq(). */
-+	struct rcu_snap_record snap_record; /* Snapshot of core stats at 1/2 rcu stall timeout */
- 
- 	long lazy_len;			/* Length of buffered lazy callbacks. */
- 	int cpu;
-diff --git a/kernel/rcu/tree_stall.h b/kernel/rcu/tree_stall.h
-index 5653560573e22d6..2e560a70d88fd87 100644
---- a/kernel/rcu/tree_stall.h
-+++ b/kernel/rcu/tree_stall.h
-@@ -428,6 +428,35 @@ static bool rcu_is_rcuc_kthread_starving(struct rcu_data *rdp, unsigned long *jp
- 	return j > 2 * HZ;
- }
- 
-+static void print_cpu_stat_info(int cpu)
-+{
-+	u64 *cpustat;
-+	unsigned long half_timeout;
-+	struct rcu_snap_record *rsrp;
-+	struct rcu_data *rdp = per_cpu_ptr(&rcu_data, cpu);
-+
-+	if (!rcu_cpu_stall_cputime)
-+		return;
-+
-+	rsrp = &rdp->snap_record;
-+	if (rsrp->gp_seq != rdp->gp_seq)
-+		return;
-+
-+	cpustat = kcpustat_cpu(cpu).cpustat;
-+	half_timeout = rcu_jiffies_till_stall_check() / 2;
-+
-+	pr_err("         hardirqs   softirqs   csw/system\n");
-+	pr_err(" number: %8ld %10d %12lld\n",
-+		kstat_cpu_irqs_sum(cpu) - rsrp->nr_hardirqs,
-+		kstat_cpu_softirqs_sum(cpu) - rsrp->nr_softirqs,
-+		nr_context_switches_cpu(cpu) - rsrp->nr_csw);
-+	pr_err("cputime: %8lld %10lld %12lld   ==> %lld(ms)\n",
-+		div_u64(cpustat[CPUTIME_IRQ] - rsrp->cputime_irq, NSEC_PER_MSEC),
-+		div_u64(cpustat[CPUTIME_SOFTIRQ] - rsrp->cputime_softirq, NSEC_PER_MSEC),
-+		div_u64(cpustat[CPUTIME_SYSTEM] - rsrp->cputime_system, NSEC_PER_MSEC),
-+		jiffies64_to_msecs(half_timeout));
-+}
-+
- /*
-  * Print out diagnostic information for the specified stalled CPU.
-  *
-@@ -484,6 +513,8 @@ static void print_cpu_stall_info(int cpu)
- 	       data_race(rcu_state.n_force_qs) - rcu_state.n_force_qs_gpstart,
- 	       rcuc_starved ? buf : "",
- 	       falsepositive ? " (false positive?)" : "");
-+
-+	print_cpu_stat_info(cpu);
- }
- 
- /* Complain about starvation of grace-period kthread.  */
-diff --git a/kernel/rcu/update.c b/kernel/rcu/update.c
-index 738842c4886b235..aec76ccbe1e343b 100644
---- a/kernel/rcu/update.c
-+++ b/kernel/rcu/update.c
-@@ -508,6 +508,8 @@ int rcu_cpu_stall_timeout __read_mostly = CONFIG_RCU_CPU_STALL_TIMEOUT;
- module_param(rcu_cpu_stall_timeout, int, 0644);
- int rcu_exp_cpu_stall_timeout __read_mostly = CONFIG_RCU_EXP_CPU_STALL_TIMEOUT;
- module_param(rcu_exp_cpu_stall_timeout, int, 0644);
-+int rcu_cpu_stall_cputime __read_mostly = IS_ENABLED(CONFIG_RCU_CPU_STALL_CPUTIME);
-+module_param(rcu_cpu_stall_cputime, int, 0644);
- #endif /* #ifdef CONFIG_RCU_STALL_COMMON */
- 
- // Suppress boot-time RCU CPU stall warnings and rcutorture writer stall
--- 
-2.25.1
+Thanks,
+Angelo
 
