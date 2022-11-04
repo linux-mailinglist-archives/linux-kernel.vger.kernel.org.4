@@ -2,90 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98CA5619DCD
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 17:52:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B586619D8B
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 17:44:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232017AbiKDQwX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 12:52:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39038 "EHLO
+        id S230267AbiKDQoJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 12:44:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232012AbiKDQvs (ORCPT
+        with ESMTP id S231693AbiKDQnt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 12:51:48 -0400
-X-Greylist: delayed 392 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 04 Nov 2022 09:50:13 PDT
-Received: from mxex1.tik.uni-stuttgart.de (mxex1.tik.uni-stuttgart.de [IPv6:2001:7c0:2041:24::a:1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76445D76
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 09:50:13 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mxex1.tik.uni-stuttgart.de (Postfix) with ESMTP id B58C7601D8;
-        Fri,  4 Nov 2022 17:43:36 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=uni-stuttgart.de;
-         h=content-transfer-encoding:content-type:content-type
-        :in-reply-to:organization:from:from:references:content-language
-        :subject:subject:user-agent:mime-version:date:date:message-id;
-         s=dkim; i=@isd.uni-stuttgart.de; t=1667580214; x=1669319015;
-         bh=pj277RfjavgOMXxkxmgYdkXpZpHKvXQ7aiX3sWgAewI=; b=GFmSKFotmghm
-        p1/X/kmJnEXB0AqTkQ7zhONNg5HF2zQ8GJGrAjz9IVuTmLYq/aT5sLz9FuGfJYYk
-        nlFK9bL+ptTcnHh9oYaHZy5DpDjjcjwnyqX7PousUSq5nXGm5iMo+au180EMyky3
-        iSAgz7uKYxv1gGM/3ilfrPR1Cyr0Xtw5sGXy/Tc01HqSiM6K7xcfBtVieYQ3daZC
-        puxM6jDQt9AFSzPyxFcnzp4zHZ24YRo08USjtXjRrPgKLLJh7vxmnUy7GQsV0FRZ
-        SK39HEbEfq0hodhsUordLxZwTAXybOzTG0mEYU6Yn/yNJJdKZjH6ayaanLwZ4vKT
-        AUpKovWT/w==
-X-Virus-Scanned: USTUTT mailrelay AV services at mxex1.tik.uni-stuttgart.de
-Received: from mxex1.tik.uni-stuttgart.de ([127.0.0.1])
-        by localhost (mxex1.tik.uni-stuttgart.de [127.0.0.1]) (amavisd-new, port 10031)
-        with ESMTP id LIaqnECUk69N; Fri,  4 Nov 2022 17:43:34 +0100 (CET)
-Received: from authenticated client
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Fri, 4 Nov 2022 12:43:49 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DA0B31EF9
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 09:43:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mxex1.tik.uni-stuttgart.de (Postfix) with ESMTPSA
-Message-ID: <e7ebabf9-a7b2-6155-cdd0-5dafb6bb2a7a@isd.uni-stuttgart.de>
-Date:   Fri, 4 Nov 2022 17:43:33 +0100
+        by ams.source.kernel.org (Postfix) with ESMTPS id DE9D4B82E72
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 16:43:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D007C433D6;
+        Fri,  4 Nov 2022 16:43:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667580225;
+        bh=vrLFKGbB+WonWostWlSiKuz27yHax/ThgTlKqQVTgQc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=kk5AVgkkcTwryvrh2TJfl7NM2BKytqTBHdEgOXT2xqFY+wl4POYrFfa4QAamr5vqb
+         reNy8dz5iWRdgDjEpLGBavDGqCNLPvHf98qJIqxZCvG1kdEDXhz6RkpMar1Fdc88Up
+         B+j5D1mZGSIg5QCWtZIN7/Fqh1+HtA4Q4/Ke18nBket/nuElg7fRMyDwiAx/ntwPDK
+         IAKEICkjRbmYwqcvyU5o72UCKZqTeBYPGHavvVhSyyGHhEoXRdIx4fEnXHNqWfwmnr
+         4Ud4W72vgP2U1aitNzu9F//GNbqosFqagOixG5lRdJbos2UgFqpdBOmTtE53p4fIMI
+         LRlMZH2v1QjJQ==
+Date:   Fri, 4 Nov 2022 17:43:42 +0100
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     Anna-Maria Behnsen <anna-maria@linutronix.de>
+Cc:     linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        John Stultz <jstultz@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Eric Dumazet <edumazet@google.com>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Arjan van de Ven <arjan@infradead.org>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Frederic Weisbecker <fweisbec@gmail.com>,
+        Rik van Riel <riel@surriel.com>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, Theodore Ts'o <tytso@mit.edu>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Stephen Boyd <sboyd@kernel.org>, Tejun Heo <tj@kernel.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>
+Subject: Re: [PATCH v4 05/16] add_timer_on(): Make sure callers have
+ TIMER_PINNED flag
+Message-ID: <20221104164342.GA1440400@lothringen>
+References: <20221104145737.71236-1-anna-maria@linutronix.de>
+ <20221104145737.71236-6-anna-maria@linutronix.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH v2] nvmem: u-boot-env: align endianness of crc32 values
-Content-Language: de-DE
-To:     INAGAKI Hiroshi <musashino.open@gmail.com>, rafal@milecki.pl,
-        srinivas.kandagatla@linaro.org
-Cc:     linux-kernel@vger.kernel.org
-References: <20221012155133.287-1-musashino.open@gmail.com>
-From:   Christian Lamparter <christian.lamparter@isd.uni-stuttgart.de>
-Organization: Universitaet Stuttgart - ISD
-In-Reply-To: <20221012155133.287-1-musashino.open@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE,
-        UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221104145737.71236-6-anna-maria@linutronix.de>
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/12/22 17:51, INAGAKI Hiroshi wrote:
-> This patch fixes crc32 error on Big-Endianness system by conversion of
-> calculated crc32 value.
->
-> Little-Endianness system:
->
->    obtained crc32: Little
-> calculated crc32: Little
->
-> Big-Endianness system:
->
->    obtained crc32: Little
-> calculated crc32: Big
->
-> log (APRESIA ApresiaLightGS120GT-SS, RTL8382M, Big-Endianness):
->
-> [    8.570000] u_boot_env 18001200.spi:flash@0:partitions:partition@c0000: Invalid calculated CRC32: 0x88cd6f09 (expected: 0x096fcd88)
-> [    8.580000] u_boot_env: probe of 18001200.spi:flash@0:partitions:partition@c0000 failed with error -22
->
-> Fixes: f955dc1445069 ("nvmem: add driver handling U-Boot environment variables")
->
-> Signed-off-by: INAGAKI Hiroshi <musashino.open@gmail.com>
+On Fri, Nov 04, 2022 at 03:57:26PM +0100, Anna-Maria Behnsen wrote:
+> The implementation of the hierachical timer pull model will change the
+> timer bases per CPU. Timers, that have to expire on a specific CPU, require
+> the TIMER_PINNED flag. Otherwise they will be queued on the dedicated CPU
+> but in global timer base and those timers could also expire on other
+> CPUs. Timers with TIMER_DEFERRABLE flag end up in a separate base anyway
+> and are executed on the local CPU only.
+> 
+> Therefore add the missing TIMER_PINNED flag for those callers who use
+> add_timer_on() without the flag. No functional change.
 
-Tested-by: Christian Lamparter <chunkeey@gmail.com> # PowerPC/MyBookLive
+You're fixing the current callers but what about the future ones?
+
+add_timer_on() should always guarantee that a timer runs on the
+right destination, which is not the case after your patchset if the
+timer hasn't been set to TIMER_PINNED.
+
+Therefore I think we should either have:
+
+* add_timer_on() enforce TIMER_PINNED (doesn't work because if the timer is
+  later called with mod_timer(), we should expect it to run anywhere)
+
+or
+
+* add_timer_on() warns if !TIMER_PINNED
+
+or
+
+* have an internal flag TIMER_LOCAL, that is turned on when
+  add_timer_on() is called or add_timer()/mod_timer() is called
+  on a TIMER_PINNED. Otherwise it is turned off.
+
+The last solution should work with existing API and you don't need to
+chase the current and future users of add_timer_on().
+
+Thanks.
