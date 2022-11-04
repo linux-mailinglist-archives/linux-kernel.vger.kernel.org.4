@@ -2,638 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3801161974E
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 14:16:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF34B619751
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 14:16:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231929AbiKDNQR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 09:16:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49286 "EHLO
+        id S232004AbiKDNQ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 09:16:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231530AbiKDNQP (ORCPT
+        with ESMTP id S231960AbiKDNQV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 09:16:15 -0400
-Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DEC212AF1
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 06:16:13 -0700 (PDT)
-Received: by mail-qt1-x830.google.com with SMTP id e15so2985872qts.1
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 06:16:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=swCK906swy0qXOHHAN4yLu1KSDM5U68ysH+cYzSB4XQ=;
-        b=jdnPlWki31khGRraYGKAj5o4g52voOS8ZkcIrr1FloZuDIdEfK9DnzmuVfmR+pLK+K
-         Exhp+Nw6eudjRX1LrvnLhCFeeW/JeAlwAti641ez3+R7pzf3fSepSLV+z/9vxX+EOy8P
-         lLV9H0tOhOI8htWpVSh4VkK1J82zEVBmqUaV70QNRVVoqv+yDIQI9B57IRBtiCah5YHY
-         BgEY9juC9Ku3wu3p263YJylK84OSrg73ZO07hSRi1PuaxVKLzQBUQxrAyjn+DNtc6emQ
-         yGuGeW0XNqrKvMneiHm3ciNhrkdgPlSmZtJPa8OsrBtYVeq6c8mLp8Ke9pPdSwcXN8na
-         naLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=swCK906swy0qXOHHAN4yLu1KSDM5U68ysH+cYzSB4XQ=;
-        b=UXkJcYkf3O7QakesKOHt57v3n89sRQieZnDGw82R2Jk3IQMzeKPARM/EKYQfATfen5
-         kzrgr28b5d7nRSEQZWkVCkEQhCKPhl3BlkVA5zUWqVm8rfOBSDWsOdlPG2GMgUBbVlWl
-         E0TLef7wL5SLo9wr97H3yg+6FEBhx09EqJyJAVOi+H6ontB250jxBwNUlqp+z4bFSADJ
-         BY4Z+6i8WV4UEyXH06TuaCywnM/tMnG0LDGjZu7r0QVNqw3UsIBBUuYuvNoOzGkYixiX
-         iriLdQwk8hT+ExdL3FAwuN5ARaapsYYA/JIVXYUJwjSdubyuVgXAU8+W5B701FumYHBV
-         VD8w==
-X-Gm-Message-State: ACrzQf2UBXaaUasAYIw7KKbhOjpVyrauanVvWo4nti3nhbOtInQJKk/n
-        pZEua9XI6lNv4D4g75b4H8F7TA==
-X-Google-Smtp-Source: AMsMyM7p+8ADBIl8fNgqxxqnEoZuU1TUxFCX0+Q4syI78RjCSrl+J63rGzdWOaOKWSVYKm0TgmhXUA==
-X-Received: by 2002:a05:622a:170d:b0:3a5:e6b:641d with SMTP id h13-20020a05622a170d00b003a50e6b641dmr29041622qtk.449.1667567772429;
-        Fri, 04 Nov 2022 06:16:12 -0700 (PDT)
-Received: from ?IPV6:2601:586:5000:570:aad6:acd8:4ed9:299b? ([2601:586:5000:570:aad6:acd8:4ed9:299b])
-        by smtp.gmail.com with ESMTPSA id bi11-20020a05620a318b00b006eeca296c00sm2809998qkb.104.2022.11.04.06.16.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 04 Nov 2022 06:16:12 -0700 (PDT)
-Message-ID: <39c3f8ff-0349-0b13-e83f-e933680d1264@linaro.org>
-Date:   Fri, 4 Nov 2022 09:16:11 -0400
+        Fri, 4 Nov 2022 09:16:21 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2082.outbound.protection.outlook.com [40.107.244.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF64F12AF1;
+        Fri,  4 Nov 2022 06:16:16 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=VoxvuHDZKJ4FPRHQOE8DcayzbKmY34h2w6x7+Dlz0jqh6ldlTzjmunZmf9MkHOCVDorXSs8U7E3VbhWJWJ20eAYN0TcAB7J4EIKtySPWbazRfvxvgABhd95Lb4MfVFx3KJjD7//qzLJPb8GGW4SiPmA3Dv/INs815GdP8MDwVr+7RogEV1AfTFTYdv6fVIi6iju2w3yuqvGsMDAFJEqSaAFKAI80VazbgzCXyYjao3f8orgYqng+aM/cQzDzLc0mb4SQsRNzmiZZE1RTpkJwuajLctiChRz9tQ6kxZnj5j0x2D3at/zqz60ujXXxXRmm7UeSpAHkMfrPGtmrsFlsiA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=mhqiwN9iG4xOX+MwWS8RByX1DI9RFcX4tKfvqxfeKsA=;
+ b=Qgx756Lx+Zcb3pRGUicSqlbB9baXZlhBjciT389ausTk44MT1IRm9UDLhspWeMqHmshUYNHrgLo1483JjKybBco3ZfE/iO6dx/CkjkSWceBAwkoJxMjDf9r5lNmcx5/gNBzYq0j+nOju8VpM2sQF+DlFLUdVahlwvk+/8ACXtGTqYcp44BoSWMR6GFScJd+/eznBKGb5KOHva5OUVXtIkUygUABCSHBoNu0/axMdTeOzNfzTJK37zSFexAwDOQgeL0cDHX0N4m2IxibxXEFp1D6uHgdbxNQvYrMGhyeV1L0VGdJLRjgFl0NcGRJuom9OmD8GusyKhw985urcb+SXFA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=mhqiwN9iG4xOX+MwWS8RByX1DI9RFcX4tKfvqxfeKsA=;
+ b=gc1cAAukmda97gcOJCjrseZ1sLbTawNpf15cO2yd0yjUZbG+2Sli+xNX6J6NN3kWntXvASQqgjzoM3laUQvLr2ZN1JTJdnJG6g5lLK8LD7McMIlSY2XCYdkK2tDhIPQKds925FcgWf48cSYp7+7buck/Qx+du6NSUB6sPSsOnx+yVbT54B7sRAwxr/IFN1pJH/NqvMNnXIMb7uWlGzE03iSx6wsyQrqjcB+PtzIktwrcmTc2nEj/EiDz6l9oeNvCxyA4bhz3Xgsw/C0GhcXEyjfFWFhkOBjL3jal1VLfMWpv12bQBkvop8+xLmOA9NJB36LOI5wMAnWMmigRzMXc0Q==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by DS7PR12MB5912.namprd12.prod.outlook.com (2603:10b6:8:7d::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5769.16; Fri, 4 Nov
+ 2022 13:16:15 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::7a81:a4e4:bb9c:d1de]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::7a81:a4e4:bb9c:d1de%6]) with mapi id 15.20.5769.015; Fri, 4 Nov 2022
+ 13:16:15 +0000
+Date:   Fri, 4 Nov 2022 10:16:13 -0300
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     liulongfang <liulongfang@huawei.com>
+Cc:     Alex Williamson <alex.williamson@redhat.com>,
+        shameerali.kolothum.thodi@huawei.com, john.garry@huawei.com,
+        cohuck@redhat.com, linux-kernel@vger.kernel.org,
+        linuxarm@openeuler.org, "kvm@vger.kernel.org" <kvm@vger.kernel.org>
+Subject: Re: [PATCH v2 1/2] hisi_acc_vfio_pci: Add debugfs to migration driver
+Message-ID: <Y2UQnQjKFrHZ6PT4@nvidia.com>
+References: <20221019081033.3169-1-liulongfang@huawei.com>
+ <20221019081033.3169-2-liulongfang@huawei.com>
+ <20221103142113.73ceddc9.alex.williamson@redhat.com>
+ <def63749-6005-8a67-8858-c5b0ff4f633d@huawei.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <def63749-6005-8a67-8858-c5b0ff4f633d@huawei.com>
+X-ClientProxiedBy: MN2PR12CA0004.namprd12.prod.outlook.com
+ (2603:10b6:208:a8::17) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 2/2] arm64: dts: rockchip: Add dts for rockchip rk3566 box
- demo board
-Content-Language: en-US
-To:     Andy Yan <andyshrk@163.com>, heiko@sntech.de,
-        linux-rockchip@lists.infradead.org
-Cc:     krzysztof.kozlowski+dt@linaro.org, pgwipeout@gmail.com,
-        robh+dt@kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Piotr Oniszczuk <piotr.oniszczuk@gmail.com>
-References: <20221104123804.484109-1-andyshrk@163.com>
- <20221104123838.484205-1-andyshrk@163.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221104123838.484205-1-andyshrk@163.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|DS7PR12MB5912:EE_
+X-MS-Office365-Filtering-Correlation-Id: 53fa377d-9ea1-4be4-ec38-08dabe66c066
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: mLEWYinTKib6WBNLhRSX/rF9q98V73y+8CsuKIQ8vtJeEymib7B8CrSlqZYR0yOiBidOaKXV5u9GctZ8jeBWn/CyANr18zgYBUhely05JwPR4SbdJkGVpxQY+GUqd0ejim5M55A2Cer4HnEiCdOhhVi8qdlrioXgK8VJkc49CMDk5t1xXGDAFOlCZe9ELByEVch7IDfChO//JEPCou10c6PqsB1j8bBVo0g+aLMls+VB4unQ9xNRsdP0xHOMGAfPjfjYdpynl8lmz0YQq6Hz6sIZcQMWN/vulG3q3nkJPpejTb1yf8q0GqZ1hOb08Q7ZlXVfZOp2wkdgOfQsxJcdySKjXB4Fb5yhI4Bd42bFkTJTTKUwAU1e7nfxRYmJNHPWLsqLm0ljipvrg8j/5nhwO+leoFND4+9QEKFTPLafIEIJ5Au+c1vYqQZQWMAavHzbpOsyFLQ2hcLVRd6qmabB9NY/Y0oGTA8HofggTNQlBZ0/+2O8jSEw7XqS+ywGzY1qEW+9OPjFAjHiYloe8xqkoEF1jxLvn8JQA8vj1LA0wU6KvshkARatX2ZnwVoMXw3jnXBVYLisBG/k+aTUE1JtMzAdwRnFluIIOO1L+9BjgkcfKZkpW3VfHM48X0TFoz8G87Vj5rRDYBFS782EIUKCVB/9Yyw9n2/kDXvmjX3t+H1R4ev0PXkDkojN40gSV3FLtvRc+ElhAbOGvSMgBfXYsQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(136003)(376002)(39860400002)(396003)(366004)(451199015)(26005)(6916009)(66946007)(8936002)(41300700001)(4326008)(66476007)(5660300002)(8676002)(6506007)(54906003)(6486002)(2616005)(316002)(6512007)(478600001)(36756003)(2906002)(38100700002)(53546011)(186003)(83380400001)(66556008)(86362001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?5c4MD5kCYqQQ9Q83AIZQ50psEFOveIysWBNF8VWw6AhtffRRxPqGWSY6T85o?=
+ =?us-ascii?Q?sztuRQiSD4//EAPjGS/lRXUS0NQpx0acQsDzzn2jUrno8jRKKU47NBk9p7TC?=
+ =?us-ascii?Q?wtbXnhQDPE1OJZ8gOX2qPq2WOc00VY/sYJXN3UaG+FFcy9tBtCMQ2PqKIltH?=
+ =?us-ascii?Q?Zom528/P1uoJSxPb6bQd7n37NXfdhDUyJMkvoi29Xwgwg+5UX5tAeMoo+BaS?=
+ =?us-ascii?Q?mzJygawmGaQia7nqXeiGx6l55ZuqpYOPeL96P91rrjOHgcYHwKUZcecvktmN?=
+ =?us-ascii?Q?+CEEEf23R2w5AdQU+tKYUQbbVHqPD1h863xhEN34i27/LuplS2UYDLVtEsl7?=
+ =?us-ascii?Q?/E4COa8WO/To1dP4ZS1T853HYDKBYgV4WYmOa9AwqHpxXQuRNAwpPusMmpJr?=
+ =?us-ascii?Q?7rhu/QSWLq/cp968TxeN6rk8hsAKZ3UWgHT8PG/2gTjIClj7z0fYti1Ek1ax?=
+ =?us-ascii?Q?p3xnybAKMFIjXGP6rxPOFYbih7Bc3JlNzccG9/7QcrdsJcNUto5FwCICYz9T?=
+ =?us-ascii?Q?SLtrGQF+Sj9+gllT7HEF59SWfXXquLJW+zGPcHURFGgeS4HjBUMKAoxwxtnb?=
+ =?us-ascii?Q?r9LoZp6XO7kax2UR9gEo1pulnsCJ1TVo7k50+yGCLzTQgSm+U7YoGLls+arc?=
+ =?us-ascii?Q?dOO1xcAs1rEp4ypX4Q6coQS6HarcuRFVnT2+TUjSCLFbSD2lKh1OwtEtJAtg?=
+ =?us-ascii?Q?lqQAF2NVjUU7mc9FgTlIAKVOipmh7RokL4/Inj0mEn5cMahODDU+VG9FBCfx?=
+ =?us-ascii?Q?MLqv1eXObLZvw3g0CcFWEkCBn63NI8KAWmcp6OEun8mJMPBpqGqEe2Nn524F?=
+ =?us-ascii?Q?gtD+TbA3R0eNTQCWLFiNGwEHNiUweVyLq1BM0IFamcan9muRq19qHcHS7l0s?=
+ =?us-ascii?Q?ofIdGJyWY1u2vtAUkziuiUck7LPaB5ylnnv8+W7V0OosxenGuW6zf7SfHw0+?=
+ =?us-ascii?Q?bTtgpYkqxwkBgqn5MswgxS57dwmgz83AOphBpNo4ufkY13/j0RaJO3MArmpb?=
+ =?us-ascii?Q?2hEGi3jlYoXsdhFz4K6NkHFUbIOKctqL6IKt85LWK2hkcLxsxZnapDKs2rL4?=
+ =?us-ascii?Q?rezqUkyLis0OoigTMQ8xVlDBPBpVSWtcuqykALcykEN9DcPFd0Ore7stkEaY?=
+ =?us-ascii?Q?a9UC30HgjzS8uDjLLjZuGbpk0amTEcNmzyVShyB5+Fx5Mz4p6RXkjTQEohc4?=
+ =?us-ascii?Q?ZPb1/ptsDjd0NWxQp7R2owcBo61EFgmiC1YCJk1Cb6/0pi4O7GcIyPEmvnit?=
+ =?us-ascii?Q?0a1CX3UIo551+HToUjbnXFes+LS+ZDZN6yExSH7NLkuQxuyAQX/4BxrqyKS3?=
+ =?us-ascii?Q?+BRGG7+QP/ddKDZYLDcZIGU87osk2Jdd0zdOGAauLiwswimBxCM9KeROsJtx?=
+ =?us-ascii?Q?ECbZmk2zPxLFauWbTgPoKr9LQJ1a4bJW8lIsaFT1H9bmdN4miQxIV09/3mxv?=
+ =?us-ascii?Q?h3pOav1uRjunP0aEiAhP1fsQQ76g3GiasxrxQlr1Q6kcg/lLdYrXEipvsLQC?=
+ =?us-ascii?Q?+LDUIU5bbnUioU9t94yMFFEvGkyL6nWTsEky5cgtcSFolNnGUtO09/Wdj1St?=
+ =?us-ascii?Q?LfslSsPZvJ26gtsqvHw=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 53fa377d-9ea1-4be4-ec38-08dabe66c066
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Nov 2022 13:16:15.1508
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: wK6oYOrnByYHyP1O7ssAFvsNEDlCC7U1RxAutGccpxIaWwz855V5/J95g2Xazj7R
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB5912
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/11/2022 08:38, Andy Yan wrote:
-> This is a rk3566 tv box  evaluation demo board.
+On Fri, Nov 04, 2022 at 11:22:51AM +0800, liulongfang wrote:
+> On 2022/11/4 4:21, Alex Williamson wrote:
+> > [Cc +kvm list]
+> > 
+> > On Wed, 19 Oct 2022 16:10:32 +0800
+> > Longfang Liu <liulongfang@huawei.com> wrote:
+> > 
+> >> There are multiple devices, software and operational steps involved
+> >> in the process of live migration. An error occurred on any node may
+> >> cause the live migration operation to fail.
+> >> This complex process makes it very difficult to locate and analyze
+> >> the cause when the function fails.
+> >>
+> >> In order to quickly locate the cause of the problem when the
+> >> live migration fails, I added a set of debugfs to the accelerator
+> >> live migration driver.
+> >>
+> >>  +-----------------------------------+
+> >>  |                                   |
+> >>  |                QEMU               |
+> >>  |                                   |
+> >>  +---+--^--------------------+--^----+
+> >>      |  |                    |  |
+> >>      |  |                    |  |
+> >>  +---v--+----+           +---v--+----+
+> >>  |           |           |           |
+> >>  |   src VF  |           |  dest VF  |
+> >>  |           |           |           |
+> >>  +---+--^----+           +---+--^----+
+> >>      |  |                    |  |
+> >>      |  |                    |  |
+> >>  +---v--+----+           +---v--+----+
+> >>  |  Debugfs  |           |  Debugfs  |
+> >>  +-----+-----+           +-----+-----+
+> >>  |state|debug|           |state|debug|
+> >>  +-----+-----+           +-----+-----+
+> >>
+> >> This set of debugfs will create two files for each VF device:
+> >> a state file and a debug file.
+> >>
+> >> The migration status of the current VF device can be obtained by
+> >> reading the status file.
+> >>
+> >> The live migration function of the current device can be tested by
+> >> operating the debug file, and the functional status of the equipment
+> >> and software at each stage can be tested step by step without
+> >> performing the complete live migration function. And after the live
+> >> migration is performed, the migration device data of the live migration
+> >> can be obtained through the debug file.
+> > 
+> > This is proposed as an hisi_vfio_acc specific debugfs interface, but
+> > common code could certainly implement much of this as well.  Should we
+> > have generic support for debugfs?
+> > 
 > 
-> Specification:
-> - Rockchip RK3566
-> - DDR4 4GB
-> - TF sd scard slot
-> - eMMC
-> - AP6398S for WiFi + BT
-> - Gigabit ethernet
-> - HDMI out
-> - USB HOST 2.0 x 2
-> - USB 3.0 x 1
-> - USB OTG 2.0  x 1
-> - 12V DC Power supply
-> 
-> Signed-off-by: Piotr Oniszczuk <piotr.oniszczuk@gmail.com>
-> Signed-off-by: Andy Yan <andyshrk@163.com>
-> ---
-> 
->  arch/arm64/boot/dts/rockchip/Makefile         |   1 +
->  .../boot/dts/rockchip/rk3566-box-demo.dts     | 509 ++++++++++++++++++
->  2 files changed, 510 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/rockchip/rk3566-box-demo.dts
-> 
-> diff --git a/arch/arm64/boot/dts/rockchip/Makefile b/arch/arm64/boot/dts/rockchip/Makefile
-> index 50942086490d..832613143030 100644
-> --- a/arch/arm64/boot/dts/rockchip/Makefile
-> +++ b/arch/arm64/boot/dts/rockchip/Makefile
-> @@ -72,6 +72,7 @@ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3566-quartz64-a.dtb
->  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3566-quartz64-b.dtb
->  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3566-roc-pc.dtb
->  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3566-soquartz-cm4.dtb
-> +dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3566-box-demo.dtb
->  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3568-bpi-r2-pro.dtb
->  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3568-evb1-v10.dtb
->  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3568-odroid-m1.dtb
-> diff --git a/arch/arm64/boot/dts/rockchip/rk3566-box-demo.dts b/arch/arm64/boot/dts/rockchip/rk3566-box-demo.dts
-> new file mode 100644
-> index 000000000000..6a6b6851a357
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/rockchip/rk3566-box-demo.dts
-> @@ -0,0 +1,509 @@
-> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-> +
-> +/*
-> + * Author: Piotr Oniszczuk piotr.oniszczuk@gmail.com
-> + * Based on Quartz64 DT by: Peter Geis pgwipeout@gmail.com
-> + */
-> +
-> +/dts-v1/;
-> +
-> +#include <dt-bindings/gpio/gpio.h>
-> +#include <dt-bindings/leds/common.h>
-> +#include <dt-bindings/pinctrl/rockchip.h>
-> +#include <dt-bindings/soc/rockchip,vop2.h>
-> +#include "rk3566.dtsi"
-> +
-> +/ {
-> +	model = "Rockchip RK3566 BOX DEMO V10 Board";
-> +	compatible = "rockchip,rk3566-box-demo-v10", "rockchip,rk3566";
-> +
-> +	aliases {
-> +		ethernet0 = &gmac1;
-> +		mmc0 = &sdmmc0;
-> +		mmc1 = &sdmmc1;
-> +		mmc2 = &sdhci;
-> +	};
-> +
-> +	chosen: chosen {
-> +		stdout-path = "serial2:1500000n8";
-> +	};
-> +
-> +	gmac1_clkin: external-gmac1-clock {
-> +		compatible = "fixed-clock";
-> +		clock-frequency = <125000000>;
-> +		clock-output-names = "gmac1_clkin";
-> +		#clock-cells = <0>;
-> +	};
-> +
-> +	hdmi-con {
-> +		compatible = "hdmi-connector";
-> +		type = "a";
-> +
-> +		port {
-> +			hdmi_con_in: endpoint {
-> +				remote-endpoint = <&hdmi_out_con>;
-> +			};
-> +		};
-> +	};
-> +
-> +	ir-receiver {
-> +		compatible = "gpio-ir-receiver";
-> +		gpios = <&gpio4 RK_PC3 GPIO_ACTIVE_LOW>;
-> +		pinctrl-0 = <&ir_int>;
-> +		linux,rc-map-name = "rc-beelink-gs1";
-> +		status = "okay";
-> +	};
-> +
-> +	leds {
-> +		compatible = "gpio-leds";
-> +
-> +		led_work: led-0 {
-> +			gpios = <&gpio0 RK_PC3 GPIO_ACTIVE_HIGH>;
-> +			function = LED_FUNCTION_HEARTBEAT;
-> +			color = <LED_COLOR_ID_BLUE>;
-> +			linux,default-trigger = "heartbeat";
-> +			pinctrl-names = "default";
-> +			pinctrl-0 = <&led_work_en>;
-> +		};
-> +	};
-> +
-> +	sdio_pwrseq: sdio-pwrseq {
-> +		status = "okay";
-> +		compatible = "mmc-pwrseq-simple";
-> +		clocks = <&pmucru CLK_RTC_32K>;
-> +		clock-names = "ext_clock";
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&wifi_enable_h &wifi_32k>;
-> +		reset-gpios = <&gpio2 RK_PB1 GPIO_ACTIVE_LOW>;
-> +	};
-> +
-> +	spdif_dit: spdif-dit {
-> +		compatible = "linux,spdif-dit";
-> +		#sound-dai-cells = <0>;
-> +	};
-> +
-> +	spdif_sound: spdif-sound {
-> +		compatible = "simple-audio-card";
-> +		simple-audio-card,name = "SPDIF";
-> +
-> +		simple-audio-card,cpu {
-> +			sound-dai = <&spdif>;
-> +		};
-> +
-> +		simple-audio-card,codec {
-> +			sound-dai = <&spdif_dit>;
-> +		};
-> +	};
-> +
-> +	dc_12v: dc_12v {
+> OK, I'd love to extend this part of the debugfs functionality into the
+> vfio framework and make it a common debugfs functionality for all
+> device drivers that use live migration.
 
-No underscores in node names. Generic node names, so at least with
-regulator suffix or prefix.
+Yeah, it is an interesting idea for sure
 
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "dc_12v";
-> +		regulator-always-on;
-> +		regulator-boot-on;
-> +		regulator-min-microvolt = <12000000>;
-> +		regulator-max-microvolt = <12000000>;
-> +	};
-> +
-> +	vcc5v0_sys: vcc5v0-sys {
-
-Same here and in other places.
-
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "vcc5v0_sys";
-> +		regulator-always-on;
-> +		regulator-boot-on;
-> +		regulator-min-microvolt = <5000000>;
-> +		regulator-max-microvolt = <5000000>;
-> +		vin-supply = <&dc_12v>;
-> +	};
-> +
-> +	vcc3v3_sys: vcc3v3-sys {
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "vcc3v3_sys";
-> +		regulator-always-on;
-> +		regulator-boot-on;
-> +		regulator-min-microvolt = <3300000>;
-> +		regulator-max-microvolt = <3300000>;
-> +		vin-supply = <&dc_12v>;
-> +	};
-> +
-> +	vcc_3v3: vcc_3v3 {
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "vcc_3v3";
-> +		regulator-always-on;
-> +		regulator-boot-on;
-> +		regulator-min-microvolt = <3300000>;
-> +		regulator-max-microvolt = <3300000>;
-> +		vin-supply = <&vcc3v3_sys>;
-> +	};
-> +
-> +	vcc5v0_usb_host: vcc5v0-usb-host {
-> +		compatible = "regulator-fixed";
-> +		enable-active-high;
-> +		gpio = <&gpio0 RK_PA6 GPIO_ACTIVE_HIGH>;
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&vcc5v0_usb_host_en>;
-> +		regulator-name = "vcc5v0_usb_host";
-> +		regulator-min-microvolt = <5000000>;
-> +		regulator-max-microvolt = <5000000>;
-> +		vin-supply = <&vcc5v0_sys>;
-> +	};
-> +
-> +	vcc5v0_usb2_otg: vcc5v0-usb2-otg {
-> +		compatible = "regulator-fixed";
-> +		enable-active-high;
-> +		gpio = <&gpio0 RK_PC6 GPIO_ACTIVE_HIGH>;
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&vcc5v0_usb2_otg_en>;
-> +		regulator-name = "vcc5v0_usb_otg";
-> +		regulator-min-microvolt = <5000000>;
-> +		regulator-max-microvolt = <5000000>;
-> +		vin-supply = <&vcc5v0_sys>;
-> +	};
-> +
-> +	vcca_1v8: vcca_1v8 {
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "vcca_1v8";
-> +		regulator-always-on;
-> +		regulator-boot-on;
-> +		regulator-min-microvolt = <1800000>;
-> +		regulator-max-microvolt = <1800000>;
-> +		vin-supply = <&vcc3v3_sys>;
-> +	};
-> +
-> +	vdda_0v9: vdda_0v9 {
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "vdda_0v9";
-> +		regulator-always-on;
-> +		regulator-boot-on;
-> +		regulator-min-microvolt = <900000>;
-> +		regulator-max-microvolt = <900000>;
-> +		vin-supply = <&vcc3v3_sys>;
-> +	};
-> +
-> +	vdd_fixed: vdd-fixed {
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "vdd_fixed";
-> +		regulator-min-microvolt = <950000>;
-> +		regulator-max-microvolt = <950000>;
-> +		regulator-always-on;
-> +		regulator-boot-on;
-> +		vin-supply = <&vcc5v0_sys>;
-> +	};
-> +
-> +	vdd_cpu: vdd-cpu {
-> +		compatible = "pwm-regulator";
-> +		pwms = <&pwm0 0 5000 1>;
-> +		regulator-name = "vdd_cpu";
-> +		regulator-min-microvolt = <800000>;
-> +		regulator-max-microvolt = <1200000>;
-> +		regulator-init-microvolt = <950000>;
-> +		regulator-always-on;
-> +		regulator-boot-on;
-> +		regulator-settling-time-up-us = <250>;
-> +		pwm-supply = <&vcc5v0_sys>;
-> +		status = "okay";
-
-Why only this is ok?
-
-> +	};
-> +
-> +	vdd_logic: vdd-logic {
-> +		compatible = "pwm-regulator";
-> +		pwms = <&pwm1 0 5000 1>;
-> +		regulator-name = "vdd_logic";
-> +		regulator-min-microvolt = <800000>;
-> +		regulator-max-microvolt = <1100000>;
-> +		regulator-init-microvolt = <950000>;
-> +		regulator-always-on;
-> +		regulator-boot-on;
-> +		regulator-settling-time-up-us = <250>;
-> +		pwm-supply = <&vcc5v0_sys>;
-> +		status = "okay";
-
-Drop.
-
-> +	};
-> +};
-> +
-> +&combphy1 {
-> +	status = "okay";
-> +};
-> +
-> +&combphy2 {
-> +	status = "okay";
-> +};
-> +
-> +&cpu0 {
-> +	cpu-supply = <&vdd_cpu>;
-> +};
-> +
-> +&cpu1 {
-> +	cpu-supply = <&vdd_cpu>;
-> +};
-> +
-> +&cpu2 {
-> +	cpu-supply = <&vdd_cpu>;
-> +};
-> +
-> +&cpu3 {
-> +	cpu-supply = <&vdd_cpu>;
-> +};
-> +
-> +&gmac1 {
-> +	assigned-clocks = <&cru SCLK_GMAC1_RX_TX>, <&cru SCLK_GMAC1>;
-> +	assigned-clock-parents =  <&cru SCLK_GMAC1_RGMII_SPEED>, <&gmac1_clkin>;
-> +	phy-mode = "rgmii";
-> +	clock_in_out = "input";
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&gmac1m1_miim
-> +		    &gmac1m1_tx_bus2
-> +		    &gmac1m1_rx_bus2
-> +		    &gmac1m1_rgmii_clk
-> +		    &gmac1m1_rgmii_bus
-> +		    &gmac1m1_clkinout>;
-> +	snps,reset-gpio = <&gpio4 RK_PC2 GPIO_ACTIVE_LOW>;
-> +	snps,reset-active-low;
-> +	/* Reset time is 20ms, 100ms for rtl8211f */
-> +	snps,reset-delays-us = <0 20000 100000>;
-> +
-> +	tx_delay = <0x4f>;
-> +	rx_delay = <0x2d>;
-> +	phy-handle = <&rgmii_phy1>;
-> +	status = "okay";
-> +};
-> +
-> +&mdio1 {
-> +	rgmii_phy1: ethernet-phy@1 {
-> +		compatible = "ethernet-phy-ieee802.3-c22";
-> +		reg = <0x1>;
-> +	};
-> +};
-> +
-> +&hdmi {
-> +	assigned-clocks = <&cru CLK_HDMI_CEC>;
-> +	assigned-clock-rates = <32768>;
-> +	avdd-0v9-supply = <&vdda_0v9>;
-> +	avdd-1v8-supply = <&vcca_1v8>;
-> +	status = "okay";
-> +};
-> +
-> +&hdmi_in {
-> +	hdmi_in_vp0: endpoint {
-> +		remote-endpoint = <&vp0_out_hdmi>;
-> +	};
-> +};
-> +
-> +&hdmi_out {
-> +	hdmi_out_con: endpoint {
-> +		remote-endpoint = <&hdmi_con_in>;
-> +	};
-> +};
-> +
-> +&hdmi_sound {
-> +	status = "okay";
-> +};
-> +
-> +&gpu {
-> +	status = "okay";
-> +};
-> +
-> +&i2s0_8ch {
-> +	status = "okay";
-> +};
-> +
-> +&i2s1_8ch {
-> +	rockchip,trcm-sync-tx-only;
-> +	status = "okay";
-> +};
-> +
-> +&pinctrl {
-> +	bt {
-> +		bt_enable_h: bt-enable-h {
-> +			rockchip,pins = <2 RK_PB7 RK_FUNC_GPIO &pcfg_pull_none>;
-> +		};
-> +
-> +		bt_host_wake_l: bt-host-wake-l {
-> +			rockchip,pins = <2 RK_PC0 RK_FUNC_GPIO &pcfg_pull_down>;
-> +		};
-> +
-> +		bt_wake_l: bt-wake-l {
-> +			rockchip,pins = <2 RK_PC1 RK_FUNC_GPIO &pcfg_pull_none>;
-> +		};
-> +	};
-> +
-> +	sdio-pwrseq {
-> +		wifi_enable_h: wifi-enable-h {
-> +			rockchip,pins = <2 RK_PB1 RK_FUNC_GPIO &pcfg_pull_none>;
-> +		};
-> +
-> +		wifi_32k: wifi-32k {
-> +			rockchip,pins = <0 RK_PB0 2 &pcfg_pull_none>;
-> +		};
-> +	};
-> +
-> +	usb {
-> +		vcc5v0_usb_host_en: vcc5v0_usb_host_en {
-
-No underscores in node names.
-
-> +			rockchip,pins = <0 RK_PA6 RK_FUNC_GPIO &pcfg_pull_none>;
-> +		};
-> +
-> +		vcc5v0_usb2_otg_en: vcc5v0_usb2_otg_en {
-> +			rockchip,pins = <0 RK_PC6 RK_FUNC_GPIO &pcfg_pull_none>;
-> +		};
-> +
-> +	};
-> +
-> +	ir {
-> +		ir_int: ir-int {
-> +			rockchip,pins = <4 RK_PC3 RK_FUNC_GPIO &pcfg_pull_none>;
-> +		};
-> +	};
-> +
-> +	led {
-> +		led_work_en: led_work_en {
-> +			rockchip,pins = <0 RK_PC3 RK_FUNC_GPIO &pcfg_pull_none>;
-> +		};
-> +
-
-No need for blank line.
-
-> +	};
-> +};
-> +
-> +&pwm0 {
-> +	status = "okay";
-> +};
-> +
-> +&pwm1 {
-> +	status = "okay";
-> +};
-> +
-> +&sdhci {
-> +	bus-width = <8>;
-> +	mmc-hs200-1_8v;
-> +	non-removable;
-> +	status = "okay";
-> +};
-> +
-> +&sdmmc0 {
-> +	bus-width = <4>;
-> +	cap-sd-highspeed;
-> +	cd-gpios = <&gpio0 RK_PA4 GPIO_ACTIVE_LOW>;
-> +	disable-wp;
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&sdmmc0_bus4 &sdmmc0_clk &sdmmc0_cmd &sdmmc0_det>;
-> +	vmmc-supply = <&vcc_3v3>;
-> +	status = "okay";
-> +};
-> +
-> +&sdmmc1 {
-> +	bus-width = <4>;
-> +	cap-sd-highspeed;
-> +	disable-wp;
-> +	mmc-pwrseq = <&sdio_pwrseq>;
-> +	non-removable;
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&sdmmc1_bus4 &sdmmc1_cmd &sdmmc1_clk>;
-> +	vmmc-supply = <&vcc_3v3>;
-> +	vqmmc-supply = <&vcca_1v8>;
-> +	status = "okay";
-> +};
-> +
-> +&spdif {
-> +	status = "okay";
-> +};
-> +
-> +&spi1 {
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&spi1m1_cs0 &spi1m1_pins>;
-> +};
-> +
-> +&tsadc {
-> +	/* tshut mode 0:CRU 1:GPIO */
-> +	rockchip,hw-tshut-mode = <1>;
-> +	/* tshut polarity 0:LOW 1:HIGH */
-> +	rockchip,hw-tshut-polarity = <0>;
-> +	status = "okay";
-> +};
-> +
-> +&uart1 {
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&uart1m0_xfer &uart1m0_ctsn>;
-> +	status = "okay";
-> +	uart-has-rtscts;
-> +
-> +	bluetooth {
-> +		compatible = "brcm,bcm43438-bt";
-> +		clocks = <&pmucru CLK_RTC_32K>;
-> +		clock-names = "ext_clock";
-> +		device-wake-gpios = <&gpio2 RK_PC1 GPIO_ACTIVE_HIGH>;
-> +		host-wake-gpios = <&gpio2 RK_PC0 GPIO_ACTIVE_HIGH>;
-> +		shutdown-gpios = <&gpio2 RK_PB7 GPIO_ACTIVE_HIGH>;
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&bt_host_wake_l &bt_wake_l &bt_enable_h>;
-> +		vbat-supply = <&vcc3v3_sys>;
-> +		vddio-supply = <&vcca_1v8>;
-> +	};
-> +};
-> +
-> +&uart2 {
-> +	status = "okay";
-> +};
-> +
-> +&vop {
-> +	assigned-clocks = <&cru DCLK_VOP0>, <&cru DCLK_VOP1>;
-> +	assigned-clock-parents = <&pmucru PLL_HPLL>, <&cru PLL_VPLL>;
-> +	status = "okay";
-> +};
-> +
-> +&vop_mmu {
-> +	status = "okay";
-> +};
-> +
-> +&vp0 {
-> +	vp0_out_hdmi: endpoint@ROCKCHIP_VOP2_EP_HDMI0 {
-> +		reg = <ROCKCHIP_VOP2_EP_HDMI0>;
-> +		remote-endpoint = <&hdmi_in_vp0>;
-> +	};
-> +};
-> +
-> +&vpu {
-> +	status = "okay";
-> +};
-> +
-> +&vdpu_mmu {
-> +	status = "okay";
-> +};
-> +
-> +&usb2phy0_host {
-> +	phy-supply = <&vcc5v0_usb_host>;
-> +	status = "okay";
-> +};
-> +
-> +&usb2phy0_otg {
-> +	vbus-supply = <&vcc5v0_usb2_otg>;
-> +	status = "okay";
-> +};
-> +
-> +&usb2phy1_host {
-> +	phy-supply = <&vcc5v0_usb_host>;
-> +	status = "okay";
-> +};
-> +
-> +&usb2phy1_otg {
-> +	phy-supply = <&vcc5v0_usb_host>;
-> +	status = "okay";
-> +};
-> +
-> +&usb2phy1 {
-> +	status = "okay";
-> +};
-> +
-> +
-
-Only one blank line
-
-Best regards,
-Krzysztof
-
+Jason
