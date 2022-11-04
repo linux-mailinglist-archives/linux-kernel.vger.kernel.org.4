@@ -2,77 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BF29619886
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 14:55:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE9CD619891
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 14:57:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231634AbiKDNzW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 09:55:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45948 "EHLO
+        id S231136AbiKDN5B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 09:57:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231570AbiKDNzT (ORCPT
+        with ESMTP id S229700AbiKDN4k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 09:55:19 -0400
-Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38E1D2EF6F
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 06:55:19 -0700 (PDT)
-Received: by mail-qt1-x835.google.com with SMTP id x15so3026839qtv.9
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 06:55:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Ehxmhy4tAHWSbEh2sXnHAvnOr4w5ROlpTnej7pSY4Yo=;
-        b=lU0zC3tbM0FXmD8k7A44xszngijWaUONXo402a0cS3lUudSFyM2taMvV5UStaDpiDx
-         baEbDMjidPA7BWF9jE62WRyzPDk8uhmV9X+I4u0U2Z/UME8LVoF+b0wfs/4Nen1B0TLY
-         afqKR0dMHxU4QFlsuRvHWK1J7wZGzIy7TBL3aEQBaKlxU3iMWi5vf/fb9Qs9VhinoA/u
-         gjZcFrdAGXGSAk4tmGkhVSMPHlzS0YgX+FhYksbKAla2ghmXqCqWY1/ajEyXRVN8t6fu
-         pvTW3VKVFo79/+atGwDMki1z154MVHWvc2NmT81W8yxNBeumj7VAhWYuMCstjDyeSI8a
-         eTIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ehxmhy4tAHWSbEh2sXnHAvnOr4w5ROlpTnej7pSY4Yo=;
-        b=67qFaFXB36ZgKr3djEdKLNhCiReZEa2yEaQBHhCmnVxW3+t9JZ+XUZ4QnLanOFfwMC
-         VFMExzZ/tOidO54UhPuH5rgpeumsrlcXCqxbCq9zZzqTyllmoce1WGq4GvvcoUSYBZ1i
-         DCxTQZG3zMpgZW97CZAzEKPlKTYsj72Jf01Aog33VFIpSau0TCH+wrJim4F3izTy141e
-         dpz3SGtYGTA8Jb8ZJzZ31pXqZ/EGm7KmOdwFo/5rhbrkUmYOygVVCU1mu8MZV1SmaGuB
-         saRcRENgv6w+UxV6ftNfw9Ss48RbSf/SBYtfoUW/rYH5ZMlX4fZnuX4KH25oMfcjr8wm
-         Su/Q==
-X-Gm-Message-State: ACrzQf0SSTkWzH6GvakHKDX/ojLVARBdg0wmF48FNRiR/Da6eo1FQmWr
-        rnLqEMfA/wJsw+6SLbi4OeBEr59FWG3Z9Q==
-X-Google-Smtp-Source: AMsMyM5+1hK78x/ofuVGTwjjBFP8elpNO/eeZxBLGWTPbx72HYwMV4bQWa+zaKvjGkrEYrxR6C4yzw==
-X-Received: by 2002:ac8:58cf:0:b0:3a5:6887:148f with SMTP id u15-20020ac858cf000000b003a56887148fmr2023265qta.606.1667570118348;
-        Fri, 04 Nov 2022 06:55:18 -0700 (PDT)
-Received: from ?IPV6:2601:586:5000:570:aad6:acd8:4ed9:299b? ([2601:586:5000:570:aad6:acd8:4ed9:299b])
-        by smtp.gmail.com with ESMTPSA id 20-20020ac85954000000b003a4f435e381sm2560456qtz.18.2022.11.04.06.55.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 04 Nov 2022 06:55:17 -0700 (PDT)
-Message-ID: <8f026f38-ef09-788e-7bd8-45683b074075@linaro.org>
-Date:   Fri, 4 Nov 2022 09:55:16 -0400
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH] dt-bindings: clock: exynosautov9: fix reference to
- CMU_FSYS1 mmc card clock
-Content-Language: en-US
-To:     Inbaraj <inbaraj.e@samsung.com>, s.nawrocki@samsung.com,
-        tomasz.figa@gmail.com, cw00.choi@samsung.com,
-        alim.akhtar@samsung.com, mturquette@baylibre.com, sboyd@kernel.org,
-        robh+dt@kernel.org, chanho61.park@samsung.com
-Cc:     linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        Fri, 4 Nov 2022 09:56:40 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E2522F001;
+        Fri,  4 Nov 2022 06:56:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9DA7EB82E28;
+        Fri,  4 Nov 2022 13:56:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24E0BC433D6;
+        Fri,  4 Nov 2022 13:56:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667570196;
+        bh=f+kfsg5vhO3DMtcWUBeGsDvS+k5oJCSMEawyOO9HqgI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Yy1N37+9MPg01JnN4z4Gd+ER/gLzZnHihM2HkralT5v4DhrIPs3Tfz/iDSlRINpB4
+         EXzEW3Irt7Rdu7JF+t9RDmde3T5cjVG5ywdo0ZFAGyBxqH26SX8AKbgK2BfksfTK9Z
+         rOHUUufNuVuj0PEXuG0fAuGg9cTe6ZQi1haVTBaTCaOrbs1i5oE1aEl8DQpRu2+LxY
+         /7J4OTf9D/owPMsMSE8q954RwatBjGNn3El1d3RiwRWH2xKY43hh6G991iryuJGSzi
+         NC+q/iU5C1KkCfRTAu8La5r4ztxehv5Rl4OS1SO/Z+YeE6BDJPEuQmvwkzL0wceGkW
+         ypqTTfQWglutg==
+Date:   Fri, 4 Nov 2022 13:56:26 +0000
+From:   Lee Jones <lee@kernel.org>
+To:     jerome Neanne <jneanne@baylibre.com>
+Cc:     lgirdwood@gmail.com, broonie@kernel.org, robh+dt@kernel.org,
+        nm@ti.com, kristo@kernel.org, dmitry.torokhov@gmail.com,
+        krzysztof.kozlowski+dt@linaro.org, catalin.marinas@arm.com,
+        will@kernel.org, tony@atomide.com, vigneshr@ti.com,
+        bjorn.andersson@linaro.org, shawnguo@kernel.org,
+        geert+renesas@glider.be, dmitry.baryshkov@linaro.org,
+        marcel.ziswiler@toradex.com, vkoul@kernel.org,
+        biju.das.jz@bp.renesas.com, arnd@arndb.de, jeff@labundy.com,
+        afd@ti.com, khilman@baylibre.com, narmstrong@baylibre.com,
+        msp@baylibre.com, j-keerthy@ti.com, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, pankaj.dubey@samsung.com
-References: <CGME20221104085410epcas5p24d88f59001b739075e9e190e2c47841e@epcas5p2.samsung.com>
- <20221104090019.88387-1-inbaraj.e@samsung.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221104090019.88387-1-inbaraj.e@samsung.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        linux-input@vger.kernel.org, linux-omap@vger.kernel.org
+Subject: Re: [PATCH v6 4/6] mfd: tps65219: Add driver for TI TPS65219 PMIC
+Message-ID: <Y2UaCq+EL0f2mJ3p@google.com>
+References: <20221011140549.16761-1-jneanne@baylibre.com>
+ <20221011140549.16761-5-jneanne@baylibre.com>
+ <Y1+q2Usm9ecicXqp@google.com>
+ <1383fd22-c720-811e-a2bb-be2151675089@baylibre.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1383fd22-c720-811e-a2bb-be2151675089@baylibre.com>
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,41 +67,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/11/2022 05:00, Inbaraj wrote:
-> Fix reference to CMU_FSYS1 mmc card clock to gout clock instead of dout.
-> 
-> This fixes make dtbs_check warning as shown below:
-> 
-> arch/arm64/boot/dts/exynos/exynosautov9-sadk.dtb: clock-controller@17040000:
-> clock-names:2: 'dout_clkcmu_fsys1_mmc_card' was expected
-> From schema: /home/inbaraj/mainline/linux/Documentation/devicetree/
-> bindings/clock/samsung,exynosautov9-clock.yaml
-
-I don't understand:
-1. Why bindings are wrong not DTSI?
-2. What is "gout"? "dout" had a meaning as clock divider output.
+On Fri, 04 Nov 2022, jerome Neanne wrote:
 
 > 
-> Fixes: 4b6ec8d88623 ("dt-bindings: clock: exynosautov9: add schema for cmu_fsys0/1")
-> Signed-off-by: Inbaraj <inbaraj.e@samsung.com>
-> ---
->  .../devicetree/bindings/clock/samsung,exynosautov9-clock.yaml   | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/clock/samsung,exynosautov9-clock.yaml b/Documentation/devicetree/bindings/clock/samsung,exynosautov9-clock.yaml
-> index 2ab4642679c0..55c4f94a14d1 100644
-> --- a/Documentation/devicetree/bindings/clock/samsung,exynosautov9-clock.yaml
-> +++ b/Documentation/devicetree/bindings/clock/samsung,exynosautov9-clock.yaml
-> @@ -148,7 +148,7 @@ allOf:
->            items:
->              - const: oscclk
->              - const: dout_clkcmu_fsys1_bus
-> -            - const: dout_clkcmu_fsys1_mmc_card
-> +            - const: gout_clkcmu_fsys1_mmc_card
->              - const: dout_clkcmu_fsys1_usbdrd
->  
->    - if:
+> On 31/10/2022 12:00, Lee Jones wrote:
+> > > diff --git a/include/linux/mfd/tps65219.h b/include/linux/mfd/tps65219.h
+> > > new file mode 100644
+> > > index 000000000000..2c1cf92e92ac
+> > > --- /dev/null
+> > > +++ b/include/linux/mfd/tps65219.h
+> 
+> > > +/**
+> > > + * struct tps65219 - tps65219 sub-driver chip access routines
+> > > + *
+> > > + * Device data may be used to access the TPS65219 chip
+> > > + *
+> > > + * @dev MFD device
+> > > + * @regmap Regmap for accessing the device registers
+> > > + * @irq_data Regmap irq data used for the irq chip
+> > > + * @nb notifier block for the restart handler
+> > > + */
+> > 
+> > This header needs work.
+> I'm not sure to get your point here. Just something like below to match
+> format or do you expect more:
+> 
+> /**
+>  * struct tps65219 - tps65219 sub-driver chip access routines
+>  *
+>  * Device data may be used to access the TPS65219 chip
+>  *
+>  * @dev: MFD device
+>  * @regmap: Regmap for accessing the device registers
+>  * @irq_data: Regmap irq data used for the irq chip
+>  * @nb: notifier block for the restart handler
+>  */
+> 
+> > 
+> > Can you try an compile with W=1 please.
+> This raise one warning on mfd:
 
-Best regards,
-Krzysztof
+Is that before or after the header was fixed-up?
 
+> drivers/mfd/tps65219.c:28:12: warning: ‘tps65219_soft_shutdown’ defined but
+> not used [-Wunused-function]
+>    28 | static int tps65219_soft_shutdown(struct tps65219 *tps)
+>       |            ^~~~~~~~~~~~~~~~~~~~~~
+> soft_shutdown has been validated and is used in TI baseline even if not
+> hooked in upstream version further to this review:
+> https://lore.kernel.org/lkml/20220825150224.826258-5-msp@baylibre.com/
+
+Will tps65219_soft_shutdown() be used?
+
+I think it should be removed until it's utilised in Mainline.
+
+> It was a TI requirement to implement it...
+> Let me know if you want me to remove this function or if we can keep it like
+> this.
+> 
+
+-- 
+Lee Jones [李琼斯]
