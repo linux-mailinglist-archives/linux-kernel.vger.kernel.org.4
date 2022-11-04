@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A252D61939E
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 10:34:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CCC1361939F
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 10:34:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231477AbiKDJeQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 05:34:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51596 "EHLO
+        id S231543AbiKDJeZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 05:34:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230021AbiKDJeM (ORCPT
+        with ESMTP id S229995AbiKDJeP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 05:34:12 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84A8FD46
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 02:34:11 -0700 (PDT)
+        Fri, 4 Nov 2022 05:34:15 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30E622BDC
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 02:34:14 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 349D1218A8;
-        Fri,  4 Nov 2022 09:34:10 +0000 (UTC)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id C2FE51F8B6;
+        Fri,  4 Nov 2022 09:34:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1667554450; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1667554452; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=F7Ie4B7a50PC9OXXhMZ93ubifOsPcPLwHTCVlnm01O8=;
-        b=JS67XKloZpe13Rvp7lovCKGGpXmT7MHrFB6vYDTn1w75sS8ekkSdqlzFHrD+mpVYYfdPnZ
-        dWrB7MrgPCj5vKCaw935VkBnZsYuLBe2W3sCpKiyt2ULbfV3Fiq0T/RKm9JdBq5OVJxfcV
-        G3yyx/Pqi3vZXYtzXvzo7Gq1Vgr2lhk=
+        bh=06k17Kzb8I50UujN65615D+OfTo3VSRSefXLgWtXH4s=;
+        b=REMbrl1azfOylp4pAnJt1FL6ZrrasKRv5lozVitWbG2UHqREoEBIF9GKRdfjQsD57D2svL
+        91z2mW8bta4V4blD0Kipp2nS2ajmH+IaDYaGy5Ww/NqmRa8DKIQ3USjuAZ7krdSYoH42MB
+        l5/FyUmXRDlT5BZlv2SCY2rZVipQhkg=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1667554450;
+        s=susede2_ed25519; t=1667554452;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=F7Ie4B7a50PC9OXXhMZ93ubifOsPcPLwHTCVlnm01O8=;
-        b=EScadhPK1XVUeNJyMquoIFdOv6eEkF+WA3kydq5Gc7zXzmxxTucSUuF1256Ilq9Bk0JDiW
-        vRcC9o3hiLXGfjBw==
+        bh=06k17Kzb8I50UujN65615D+OfTo3VSRSefXLgWtXH4s=;
+        b=vLH12hbo4td915aOcm9kAB3t3BajZdE4D3pmeF2CdDKx7OiOv3kzGVpUpIkwW1rjLXYFYt
+        19mmpa0C1bJlKpBw==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 482E41346F;
-        Fri,  4 Nov 2022 09:34:09 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 535FB1346F;
+        Fri,  4 Nov 2022 09:34:10 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id 6KooDZHcZGP3BQAAMHmgww
-        (envelope-from <osalvador@suse.de>); Fri, 04 Nov 2022 09:34:09 +0000
+        id 0LWDD5LcZGP3BQAAMHmgww
+        (envelope-from <osalvador@suse.de>); Fri, 04 Nov 2022 09:34:10 +0000
 From:   Oscar Salvador <osalvador@suse.de>
 To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
@@ -61,9 +61,9 @@ Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
         Andrey Konovalov <andreyknvl@gmail.com>,
         Alexander Potapenko <glider@google.com>,
         Oscar Salvador <osalvador@suse.de>
-Subject: [PATCH v3 1/3] lib/stackdepot: Add a refcount field in stack_record
-Date:   Fri,  4 Nov 2022 10:33:52 +0100
-Message-Id: <20221104093354.6218-2-osalvador@suse.de>
+Subject: [PATCH v3 2/3] mm, page_owner: Add page_owner_stacks file to print out only stacks and their counte
+Date:   Fri,  4 Nov 2022 10:33:53 +0100
+Message-Id: <20221104093354.6218-3-osalvador@suse.de>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20221104093354.6218-1-osalvador@suse.de>
 References: <20221104093354.6218-1-osalvador@suse.de>
@@ -78,297 +78,171 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We want to filter out page_owner output and print only those
-stacks that have been repeated beyond a certain threshold.
-This gives us the chance to get rid of a lot of noise.
-In order to do that, we need to keep track of how many repeated stacks
-(for allocation) do we have, so we add a new refcount_t field
-in the stack_record struct.
+We might be only interested in knowing about stacks <-> count
+relationship, so instead of having to fiddle with page_owner
+output and screen through pfns, let us add a new file called
+'page_owner_stacks' that does just that.
+By cating such file, we will get all the stacktraces followed by
+its counter, so we can have a more global view.
 
-Note that this might increase the size of the struct for some
-architectures.
-E.g: x86_64 is not affected due to alignment, but x86 32bits might.
-
-The alternative would be to have some kind of struct like this:
-
-struct track_stacks {
-	struct stack_record *stack;
-	struct track_stacks *next;
-	refcount_t stack_count;
-
-But ithat would imply to perform more allocations and glue everything
-together, which would make the code more complex, so I think that
-going with a new field in the struct stack_record is good enough.
-
-Note that on __set_page_owner_handle(), page_owner->handle is set,
-and on __reset_page_owner(), page_owner->free_handle is set.
-
-We are interested in page_owner->handle, so when __set_page_owner()
-gets called, we derive the stack_record struct from page_owner->handle,
-and we increment its refcount_t field; and when __reset_page_owner()
-gets called, we derive its stack_record from page_owner->handle()
-and we decrement its refcount_t field.
-
-Signed-off-by: Oscar Salvador <osalvador@suse.de>
+Signed-off-by: Oscar Salvador <osalvador@suse.de
 ---
- include/linux/stackdepot.h | 13 ++++++-
- lib/stackdepot.c           | 79 +++++++++++++++++++++++++++++++-------
- mm/kasan/common.c          |  3 +-
- mm/page_owner.c            | 14 +++++--
- 4 files changed, 89 insertions(+), 20 deletions(-)
+ include/linux/stackdepot.h |  5 +++
+ lib/stackdepot.c           | 73 ++++++++++++++++++++++++++++++++++++++
+ mm/page_owner.c            | 29 +++++++++++++++
+ 3 files changed, 107 insertions(+)
 
 diff --git a/include/linux/stackdepot.h b/include/linux/stackdepot.h
-index bc2797955de9..4e3a88f135ee 100644
+index 4e3a88f135ee..ca048a79bf7c 100644
 --- a/include/linux/stackdepot.h
 +++ b/include/linux/stackdepot.h
-@@ -15,9 +15,16 @@
- 
- typedef u32 depot_stack_handle_t;
- 
-+enum stack_depot_action {
-+	STACK_DEPOT_ACTION_NONE,
-+	STACK_DEPOT_ACTION_COUNT,
-+};
-+
- depot_stack_handle_t __stack_depot_save(unsigned long *entries,
- 					unsigned int nr_entries,
--					gfp_t gfp_flags, bool can_alloc);
-+					gfp_t gfp_flags, bool can_alloc,
-+					enum stack_depot_action action);
-+void stack_depot_dec_count(depot_stack_handle_t handle);
- 
- /*
-  * Every user of stack depot has to call stack_depot_init() during its own init
-@@ -55,6 +62,10 @@ static inline int stack_depot_early_init(void)	{ return 0; }
- 
- depot_stack_handle_t stack_depot_save(unsigned long *entries,
- 				      unsigned int nr_entries, gfp_t gfp_flags);
-+depot_stack_handle_t stack_depot_save_action(unsigned long *entries,
-+					     unsigned int nr_entries,
-+					     gfp_t gfp_flags,
-+					     enum stack_depot_action action);
+@@ -66,6 +66,11 @@ depot_stack_handle_t stack_depot_save_action(unsigned long *entries,
+ 					     unsigned int nr_entries,
+ 					     gfp_t gfp_flags,
+ 					     enum stack_depot_action action);
++#ifdef CONFIG_PAGE_OWNER
++void *stack_start(struct seq_file *m, loff_t *ppos);
++void *stack_next(struct seq_file *m, void *v, loff_t *ppos);
++int stack_print(struct seq_file *m, void *v);
++#endif
  
  unsigned int stack_depot_fetch(depot_stack_handle_t handle,
  			       unsigned long **entries);
 diff --git a/lib/stackdepot.c b/lib/stackdepot.c
-index e73fda23388d..a806ef58a385 100644
+index a806ef58a385..97e5dce40f4b 100644
 --- a/lib/stackdepot.c
 +++ b/lib/stackdepot.c
-@@ -64,6 +64,7 @@ struct stack_record {
- 	u32 hash;			/* Hash in the hastable */
- 	u32 size;			/* Number of frames in the stack */
- 	union handle_parts handle;
-+	refcount_t count;		/* Number of the same repeated stacks */
- 	unsigned long entries[];	/* Variable-sized array of entries. */
- };
+@@ -33,6 +33,8 @@
+ #include <linux/types.h>
+ #include <linux/memblock.h>
+ #include <linux/kasan-enabled.h>
++#include <linux/seq_file.h>
++#include <linux/debugfs.h>
  
-@@ -140,6 +141,7 @@ depot_alloc_stack(unsigned long *entries, int size, u32 hash, void **prealloc)
- 	stack->handle.slabindex = depot_index;
- 	stack->handle.offset = depot_offset >> STACK_ALLOC_ALIGN;
- 	stack->handle.valid = 1;
-+	refcount_set(&stack->count, 1);
- 	memcpy(stack->entries, entries, flex_array_size(stack, entries, size));
- 	depot_offset += required_size;
+ #define DEPOT_STACK_BITS (sizeof(depot_stack_handle_t) * 8)
  
-@@ -341,6 +343,29 @@ void stack_depot_print(depot_stack_handle_t stack)
+@@ -565,3 +567,74 @@ depot_stack_handle_t stack_depot_save_action(unsigned long *entries,
+ 	return __stack_depot_save(entries, nr_entries, alloc_flags, true, action);
  }
- EXPORT_SYMBOL_GPL(stack_depot_print);
- 
-+static struct stack_record *stack_depot_getstack(depot_stack_handle_t handle)
+ EXPORT_SYMBOL_GPL(stack_depot_save_action);
++
++#ifdef CONFIG_PAGE_OWNER
++void *stack_start(struct seq_file *m, loff_t *ppos)
 +{
-+	union handle_parts parts = { .handle = handle };
-+	void *slab;
-+	size_t offset = parts.offset << STACK_ALLOC_ALIGN;
-+	struct stack_record *stack;
++	unsigned long *table = m->private;
++	struct stack_record **stacks, *stack;
 +
-+	if(!handle)
++	/* First time */
++	if (*ppos == 0)
++		*table = 0;
++
++	if (*ppos == -1UL)
 +		return NULL;
 +
-+	if (parts.slabindex > depot_index) {
-+		WARN(1, "slab index %d out of bounds (%d) for stack id %08x\n",
-+		     parts.slabindex, depot_index, handle);
-+		return NULL;
-+	}
-+	slab = stack_slabs[parts.slabindex];
-+	if (!slab)
-+		return NULL;
++	stacks = &stack_table[*table];
++	stack = (struct stack_record *)stacks;
 +
-+	stack = slab + offset;
 +	return stack;
 +}
 +
- /**
-  * stack_depot_fetch - Fetch stack entries from a depot
-  *
-@@ -353,30 +378,42 @@ EXPORT_SYMBOL_GPL(stack_depot_print);
- unsigned int stack_depot_fetch(depot_stack_handle_t handle,
- 			       unsigned long **entries)
- {
--	union handle_parts parts = { .handle = handle };
--	void *slab;
--	size_t offset = parts.offset << STACK_ALLOC_ALIGN;
- 	struct stack_record *stack;
- 
- 	*entries = NULL;
- 	if (!handle)
- 		return 0;
- 
--	if (parts.slabindex > depot_index) {
--		WARN(1, "slab index %d out of bounds (%d) for stack id %08x\n",
--			parts.slabindex, depot_index, handle);
--		return 0;
--	}
--	slab = stack_slabs[parts.slabindex];
--	if (!slab)
-+	stack = stack_depot_getstack(handle);
-+	if (!stack)
- 		return 0;
--	stack = slab + offset;
- 
- 	*entries = stack->entries;
- 	return stack->size;
- }
- EXPORT_SYMBOL_GPL(stack_depot_fetch);
- 
-+static void stack_depot_inc_count(struct stack_record *stack)
++void *stack_next(struct seq_file *m, void *v, loff_t *ppos)
 +{
-+	refcount_inc(&stack->count);
-+}
++	unsigned long *table = m->private;
++	unsigned long nr_table = *table;
++	struct stack_record *next = NULL, *stack = v, **stacks;
++	unsigned long stack_table_entries = stack_hash_mask + 1;
 +
-+void stack_depot_dec_count(depot_stack_handle_t handle)
-+{
-+	struct stack_record *stack = NULL;
-+
-+	stack = stack_depot_getstack(handle);
-+	if (stack) {
-+		/*
-+		 * page_owner creates some stacks via create_dummy_stack().
-+		 * We are not interested in those, so make sure we only decrement
-+		 * "valid" stacks.
-+		 */
-+		if (refcount_read(&stack->count) > 1)
-+			refcount_dec(&stack->count);
++	if (!stack) {
++new_table:
++		/* New table */
++		nr_table++;
++		if (nr_table >= stack_table_entries)
++			goto out;
++		stacks = &stack_table[nr_table];
++		stack = (struct stack_record *)stacks;
++		next = stack;
++	} else {
++		next = stack->next;
 +	}
++
++	if (!next)
++		goto new_table;
++
++out:
++	*table = nr_table;
++	*ppos = (nr_table >= stack_table_entries) ? -1UL : *ppos + 1;
++	return next;
 +}
 +
- /**
-  * __stack_depot_save - Save a stack trace from an array
-  *
-@@ -402,7 +439,8 @@ EXPORT_SYMBOL_GPL(stack_depot_fetch);
-  */
- depot_stack_handle_t __stack_depot_save(unsigned long *entries,
- 					unsigned int nr_entries,
--					gfp_t alloc_flags, bool can_alloc)
-+					gfp_t alloc_flags, bool can_alloc,
-+					enum stack_depot_action action)
- {
- 	struct stack_record *found = NULL, **bucket;
- 	depot_stack_handle_t retval = 0;
-@@ -488,8 +526,11 @@ depot_stack_handle_t __stack_depot_save(unsigned long *entries,
- 		/* Nobody used this memory, ok to free it. */
- 		free_pages((unsigned long)prealloc, STACK_ALLOC_ORDER);
- 	}
--	if (found)
-+	if (found) {
- 		retval = found->handle.handle;
-+		if (action == STACK_DEPOT_ACTION_COUNT)
-+			stack_depot_inc_count(found);
-+	}
- fast_exit:
- 	return retval;
- }
-@@ -511,6 +552,16 @@ depot_stack_handle_t stack_depot_save(unsigned long *entries,
- 				      unsigned int nr_entries,
- 				      gfp_t alloc_flags)
- {
--	return __stack_depot_save(entries, nr_entries, alloc_flags, true);
-+	return __stack_depot_save(entries, nr_entries, alloc_flags, true,
-+				  STACK_DEPOT_ACTION_NONE);
- }
- EXPORT_SYMBOL_GPL(stack_depot_save);
-+
-+depot_stack_handle_t stack_depot_save_action(unsigned long *entries,
-+					     unsigned int nr_entries,
-+					     gfp_t alloc_flags,
-+					     enum stack_depot_action action)
++int stack_print(struct seq_file *m, void *v)
 +{
-+	return __stack_depot_save(entries, nr_entries, alloc_flags, true, action);
++	char *buf;
++	int ret = 0;
++	struct stack_record *stack =v;
++
++	if (!stack->size || stack->size < 0 ||
++	    stack->size > PAGE_SIZE || stack->handle.valid != 1 ||
++	    refcount_read(&stack->count) < 1)
++		return 0;
++
++	buf = kzalloc(PAGE_SIZE, GFP_KERNEL);
++	ret += stack_trace_snprint(buf, PAGE_SIZE, stack->entries, stack->size, 0);
++	scnprintf(buf + ret, PAGE_SIZE - ret, "stack count: %d\n\n",
++		  refcount_read(&stack->count));
++	seq_printf(m, buf);
++	seq_puts(m, "\n\n");
++	kfree(buf);
++
++        return 0;
 +}
-+EXPORT_SYMBOL_GPL(stack_depot_save_action);
-diff --git a/mm/kasan/common.c b/mm/kasan/common.c
-index 69f583855c8b..8077c6e70815 100644
---- a/mm/kasan/common.c
-+++ b/mm/kasan/common.c
-@@ -36,7 +36,8 @@ depot_stack_handle_t kasan_save_stack(gfp_t flags, bool can_alloc)
- 	unsigned int nr_entries;
- 
- 	nr_entries = stack_trace_save(entries, ARRAY_SIZE(entries), 0);
--	return __stack_depot_save(entries, nr_entries, flags, can_alloc);
-+	return __stack_depot_save(entries, nr_entries, flags, can_alloc,
-+				  STACK_DEPOT_ACTION_NONE);
- }
- 
- void kasan_set_track(struct kasan_track *track, gfp_t flags)
++#endif
 diff --git a/mm/page_owner.c b/mm/page_owner.c
-index e4c6f3f1695b..8730f377fa91 100644
+index 8730f377fa91..3808c0985060 100644
 --- a/mm/page_owner.c
 +++ b/mm/page_owner.c
-@@ -106,7 +106,8 @@ static inline struct page_owner *get_page_owner(struct page_ext *page_ext)
- 	return (void *)page_ext + page_owner_ops.offset;
- }
+@@ -668,6 +668,32 @@ static const struct file_operations proc_page_owner_operations = {
+ 	.read		= read_page_owner,
+ };
  
--static noinline depot_stack_handle_t save_stack(gfp_t flags)
-+static noinline depot_stack_handle_t save_stack(gfp_t flags,
-+						enum stack_depot_action action)
- {
- 	unsigned long entries[PAGE_OWNER_STACK_DEPTH];
- 	depot_stack_handle_t handle;
-@@ -125,7 +126,7 @@ static noinline depot_stack_handle_t save_stack(gfp_t flags)
- 	current->in_page_owner = 1;
- 
- 	nr_entries = stack_trace_save(entries, ARRAY_SIZE(entries), 2);
--	handle = stack_depot_save(entries, nr_entries, flags);
-+	handle = stack_depot_save_action(entries, nr_entries, flags, action);
- 	if (!handle)
- 		handle = failure_handle;
- 
-@@ -138,6 +139,7 @@ void __reset_page_owner(struct page *page, unsigned short order)
- 	int i;
- 	struct page_ext *page_ext;
- 	depot_stack_handle_t handle;
-+	depot_stack_handle_t alloc_handle;
- 	struct page_owner *page_owner;
- 	u64 free_ts_nsec = local_clock();
- 
-@@ -145,7 +147,10 @@ void __reset_page_owner(struct page *page, unsigned short order)
- 	if (unlikely(!page_ext))
- 		return;
- 
--	handle = save_stack(GFP_NOWAIT | __GFP_NOWARN);
-+	page_owner = get_page_owner(page_ext);
-+	alloc_handle = page_owner->handle;
++static void stack_stop(struct seq_file *m, void *v)
++{
++	return;
++}
 +
-+	handle = save_stack(GFP_NOWAIT | __GFP_NOWARN, STACK_DEPOT_ACTION_NONE);
- 	for (i = 0; i < (1 << order); i++) {
- 		__clear_bit(PAGE_EXT_OWNER_ALLOCATED, &page_ext->flags);
- 		page_owner = get_page_owner(page_ext);
-@@ -153,6 +158,7 @@ void __reset_page_owner(struct page *page, unsigned short order)
- 		page_owner->free_ts_nsec = free_ts_nsec;
- 		page_ext = page_ext_next(page_ext);
- 	}
-+	stack_depot_dec_count(alloc_handle);
++static const struct seq_operations page_owner_stack_op = {
++	.start  = stack_start,
++	.next   = stack_next,
++	.stop   = stack_stop,
++	.show   = stack_print
++};
++
++static int page_owner_stack_open(struct inode *inode, struct file *file)
++{
++	return seq_open_private(file, &page_owner_stack_op,
++				sizeof(unsigned long));
++}
++
++
++const struct file_operations page_owner_stack_operations = {
++	.open           = page_owner_stack_open,
++	.read           = seq_read,
++	.llseek         = seq_lseek,
++	.release        = seq_release,
++};
++
+ static int __init pageowner_init(void)
+ {
+ 	if (!static_branch_unlikely(&page_owner_inited)) {
+@@ -678,6 +704,9 @@ static int __init pageowner_init(void)
+ 	debugfs_create_file("page_owner", 0400, NULL, NULL,
+ 			    &proc_page_owner_operations);
+ 
++	debugfs_create_file("page_owner_stacks", S_IRUSR, NULL, NULL,
++			     &page_owner_stack_operations);
++
+ 	return 0;
  }
- 
- static inline void __set_page_owner_handle(struct page_ext *page_ext,
-@@ -189,7 +195,7 @@ noinline void __set_page_owner(struct page *page, unsigned short order,
- 	if (unlikely(!page_ext))
- 		return;
- 
--	handle = save_stack(gfp_mask);
-+	handle = save_stack(gfp_mask, STACK_DEPOT_ACTION_COUNT);
- 	__set_page_owner_handle(page_ext, handle, order, gfp_mask);
- }
- 
+ late_initcall(pageowner_init)
 -- 
 2.35.3
 
