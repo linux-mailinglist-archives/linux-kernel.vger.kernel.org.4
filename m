@@ -2,161 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E97E61A2B3
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 21:51:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7492561A2B4
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 21:51:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229562AbiKDUvb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 16:51:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47234 "EHLO
+        id S229952AbiKDUvd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 16:51:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229831AbiKDUv1 (ORCPT
+        with ESMTP id S229881AbiKDUv2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 16:51:27 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27A4149B46
+        Fri, 4 Nov 2022 16:51:28 -0400
+Received: from smtpcmd04131.aruba.it (smtpcmd04131.aruba.it [62.149.158.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BFF6D49B4B
         for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 13:51:26 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id b3so8948408lfv.2
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 13:51:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:user-agent:from:references
-         :in-reply-to:mime-version:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zMfksGVovJyKssatLq3qPApzW4xAJ9RmshsVA1B1FUM=;
-        b=AOyUYLhQB+OF+RwYwdDwwmQ38cHBcpL55GVlYYpbmo/IhTvhxI2JCo4BQLlSpPfIt2
-         A7kQpV15ys91B7Xw/oO6H4/94pyD7p5R/9pipaspVrj1YHbAAqWxDnhqCXtufv9IbnSe
-         ojKjV/3UgyYxiFjqcvbEBI8RtCfQXB/dzzgWQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:user-agent:from:references
-         :in-reply-to:mime-version:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zMfksGVovJyKssatLq3qPApzW4xAJ9RmshsVA1B1FUM=;
-        b=KL9XHK4hJ4J3Ht2wzJ4oL6xfQCEQt+u9jX9kaxgEd5hL2nTWMFKO5sFgKyya9NtTBH
-         Sz64ko6b0MmL6+4sd2PXbTtPUXrSJWxHyEwk4mYXW6IIsqDMJ0FGwkH92onFemZSBrRy
-         PjYKde6mO8n9VwCFsYWW/YRfEa9X5ao87tWPIxbrcVFeCZvpdffEzHxjeB8z5qrrE8iX
-         XSkFVNVAvmVJEGCOPGP/LFAT6gpLBEu2wBHJP96BjnGxBnmpp4VTMThx2L/N1rC2Urh6
-         Nl0YiOVc/2CQwd7OcqGtwx6acH9V5j0HQthxB6Z5dHRUJaSaZzLxs8aqOgxcKNJAR7QB
-         Dd5Q==
-X-Gm-Message-State: ACrzQf2bdHXO4B20FVIhKWTayhkVO9Mumm5X+yXfRJa0V+D1N7ZczLne
-        1lObCxyAlvIDrx8V2tht+txqS3gEH5VLFL+OuZ17qw==
-X-Google-Smtp-Source: AMsMyM7Nm8maiYEBKfD/QCN1CZqY5y3LSAqpeCk56cKCFU+2F+w80T1ekhdFysJ1NCnRuWqDWDLO5fNqaZBtILfclho=
-X-Received: by 2002:a05:6512:3dac:b0:4a4:8044:9c3 with SMTP id
- k44-20020a0565123dac00b004a4804409c3mr13585880lfv.145.1667595084419; Fri, 04
- Nov 2022 13:51:24 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Fri, 4 Nov 2022 13:51:23 -0700
+Received: from [192.168.50.220] ([146.241.83.94])
+        by Aruba Outgoing Smtp  with ESMTPSA
+        id r3euoxKyZMWOir3euoK1gE; Fri, 04 Nov 2022 21:51:25 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
+        t=1667595085; bh=Gn8zRrn+SxXIzEldL6GF6fbvpG2PrrQi5SiCoDCbpBE=;
+        h=Date:MIME-Version:Subject:To:From:Content-Type;
+        b=m54ddM1hllq+0+5SI+TZJ9rciQimZW2pwizc13IIGRor7FVE4zqp3U78vqyKVm453
+         bP6MbPSYUUrzQbjvP3jSRxMVB36PBWn3u8FyDraBCAhqmF/5pn2fpuhWE45xWzV+Y4
+         tIe18NaJmG6EwgCsyqm6tZKSbk0Xb+HTuBDctr72S/12D/wEv9AZrreSBT7XgmFAzX
+         4rsk6XTTgqk8pKrsOs0fXnNXFrTboeDaTMKxvCDFsPhczHTxhddg5rHNAV6cHY2Qu/
+         jY06qXzzrc3gcLzA6orcZ79mFJRSqMs4fQJA2Q6jxRhJEd6NdH91u4J4tSfI03o4Eo
+         eexs6mNR4eYKQ==
+Message-ID: <c951adae-73f3-070a-6aa7-20bd91dd371c@benettiengineering.com>
+Date:   Fri, 4 Nov 2022 21:51:24 +0100
 MIME-Version: 1.0
-In-Reply-To: <20221104064055.1.I00a0e4564a25489e85328ec41636497775627564@changeid>
-References: <20221104064055.1.I00a0e4564a25489e85328ec41636497775627564@changeid>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Fri, 4 Nov 2022 13:51:23 -0700
-Message-ID: <CAE-0n507hS0huoCVoarV65F5cGsxMuYCv-3C4s2e1m61cPMZcg@mail.gmail.com>
-Subject: Re: [PATCH 1/3] clk: qcom: lpass-sc7280: Fix pm_runtime usage
-To:     Bjorn Andersson <andersson@kernel.org>,
-        Douglas Anderson <dianders@chromium.org>
-Cc:     Taniya Das <quic_tdas@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Judy Hsiao <judyhsiao@chromium.org>,
-        Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Taniya Das <tdas@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v2 1/2] ARM: mm: fix no-MMU ZERO_PAGE() implementation
+To:     Arnd Bergmann <arnd@arndb.de>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Russell King <linux@armlinux.org.uk>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Russell King <rmk+kernel@armlinux.org.uk>,
+        Will Deacon <will@kernel.org>
+References: <20221018222503.90118-1-giulio.benetti@benettiengineering.com>
+ <64e16669-8bcc-a05e-0eb1-9ae644431d95@benettiengineering.com>
+ <8a40c9da-041e-4d3d-90e4-22dbb93eb9ab@app.fastmail.com>
+Content-Language: en-US
+From:   Giulio Benetti <giulio.benetti@benettiengineering.com>
+In-Reply-To: <8a40c9da-041e-4d3d-90e4-22dbb93eb9ab@app.fastmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4xfA5J7fX6ft4aHEaGERS0oHomm/EUtMtILglgfjbdCSyzGdhlA6dSc23/j7COoTRNMg4T2HcDLr+5xmRwsh74kAZKNVwzbvdCKNvjGury2wpLeSa+3QlM
+ G4gyWVCzbILrnh4RInjWP50hKo9JM5ROqOdn01uZDroOBpbQgu61chU6eUkZCbRLxfajnI6v6mbEDSWbYgMeg+GmeatVeL5fb8aQy83+J4UXIefCmvfMDPOW
+ quERXKkCY7xhwWp57/BmYt7zk9eJ2lJvtaJQgPLgJP5DSgisnJT3ibtTgzJQKEEVwcJn0h58ma7CpR5IiJkYbYZUEzKUiPYV/tMu7UsaMSOXs/7a21iY2PbD
+ 0Ha9J0EXjo/lrr+Mb1eHenBVzvAbtDDgWkEBokdfYdvq+EXgNc7AVEzAdaK6k+eRIkKQwm2/QpuTWeCTf9ltCCohkKC6kfwuirxWaGi3G7/0zOsVm2HN5ARA
+ 9Pn2dXujDUqROJKL8Dl/eNKrYlgV1pwHn5+7F7+d3qYxGb3cSeZATuoiIP8=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,NICE_REPLY_A,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Douglas Anderson (2022-11-04 06:56:28)
-> The pm_runtime usage in lpass-sc7280 was broken in quite a few
-> ways. Specifically:
->
-> 1. At the end of probe it called "put" twice. This is a no-no and will
->    end us up with a negative usage count. Even worse than calling
->    "put" twice, it never called "get" once. Thus after bootup it could
->    be seen that the runtime usage of the devices managed by this
->    driver was -2.
-> 2. In some error cases it manually called pm_runtime_disable() even
->    though it had previously used devm_add_action_or_reset() to set
->    this up to be called automatically. This meant that in these error
->    cases we'd double-call pm_runtime_disable().
-> 3. It forgot to call undo pm_runtime_use_autosuspend(), which can
->    sometimes have subtle problems (and the docs specifically mention
->    that you need to undo this function).
->
-> Overall the above seriously calls into question how this driver is
-> working. It seems like a combination of "it doesn't", "by luck", and
-> "because of the weirdness of runtime_pm". Specifically I put a
-> printout to the serial console every time the runtime suspend/resume
-> was called for the two devices created by this driver (I wrapped the
-> pm_clk calls). When I had serial console enabled, I found that the
-> calls got resumed at bootup (when the clk core probed and before our
-> double-put) and then never touched again. That's no good.
->   [    0.829997] DOUG: my_pm_clk_resume, usage=1
->   [    0.835487] DOUG: my_pm_clk_resume, usage=1
->
-> When I disabled serial console (speeding up boot), I got a different
-> pattern, which I guess (?) is better:
->   [    0.089767] DOUG: my_pm_clk_resume, usage=1
->   [    0.090507] DOUG: my_pm_clk_resume, usage=1
->   [    0.151885] DOUG: my_pm_clk_suspend, usage=-2
->   [    0.151914] DOUG: my_pm_clk_suspend, usage=-2
->   [    1.825747] DOUG: my_pm_clk_resume, usage=-1
->   [    1.825774] DOUG: my_pm_clk_resume, usage=-1
->   [    1.888269] DOUG: my_pm_clk_suspend, usage=-2
->   [    1.888282] DOUG: my_pm_clk_suspend, usage=-2
->
-> These different patterns have to do with the fact that the core PM
-> Runtime code really isn't designed to be robust to negative usage
-> counts and sometimes may happen to stumble upon a behavior that
-> happens to "work". For instance, you can see that
-> __pm_runtime_suspend() will treat any non-zero value (including
-> negative numbers) as if the device is in use.
->
-> In any case, let's fix the driver to be correct. We'll hold a
-> pm_runtime reference for the whole probe and then drop it (once!) at
-> the end. We'll get rid of manual pm_runtime_disable() calls in the
-> error handling. We'll also switch to devm_pm_runtime_enable(), which
-> magically handles undoing pm_runtime_use_autosuspend() as of commit
-> b4060db9251f ("PM: runtime: Have devm_pm_runtime_enable() handle
-> pm_runtime_dont_use_autosuspend()").
->
-> While we're at this, let's also use devm_pm_clk_create() instead of
-> rolling it ourselves.
->
-> Note that the above changes make it obvious that
-> lpassaudio_create_pm_clks() was doing more than just creating
-> clocks. It was also setting up pm_runtime parameters. Let's rename it.
->
-> All of these problems were found by code inspection. I started looking
-> at this driver because it was involved in a deadlock that I reported a
-> while ago [1]. Though I bisected the deadlock to commit 1b771839de05
-> ("clk: qcom: gdsc: enable optional power domain support"), it was
-> never really clear why that patch affected it other than a luck of
-> timing changes. I'll also note that by fixing the timing (as done in
-> this change) we also seem to aboid the deadlock, which is a nice
-> benefit.
->
-> Also note that some of the fixes here are much the same type of stuff
-> that Dmitry did in commit 72cfc73f4663 ("clk: qcom: use
-> devm_pm_runtime_enable and devm_pm_clk_create"), but I guess
-> lpassaudiocc-sc7280.c didn't exist then.
->
-> [1] https://lore.kernel.org/r/20220922154354.2486595-1-dianders@chromium.org
->
-> Fixes: a9dd26639d05 ("clk: qcom: lpass: Add support for LPASS clock controller for SC7280")
-> Signed-off-by: Douglas Anderson <dianders@chromium.org>
-> ---
+Hi Arnd,
 
-Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+On 04/11/22 21:28, Arnd Bergmann wrote:
+> On Fri, Nov 4, 2022, at 21:07, Giulio Benetti wrote:
+>> Hello Arnd, Russell, All,
+>>
+>> is this patch ok or has it some changes to do?
+> 
+> Looks ok to me, please add it to Russell's patch
+> tracker at:
+> https://www.arm.linux.org.uk/developer/patches/
+
+I've submitted it with your Reviewed-by:
+https://www.arm.linux.org.uk/developer/patches/viewpatch.php?id=9266/1
+
+> The patch description could be improved a little ("Link:"
+> tag for the URL, avoiding the wikitext  markup, etc), 
+
+Oh, I was not aware of "Link:" and avoiding wikitext markup. Next
+time I won't use it and I will use Link instead. I'll grep some other
+commit log to find out a correct way.
+
+> but
+> it's more important to actually get the bug fixed.
+
+Thank you for guiding me
+Best regards
+-- 
+Giulio Benetti
+CEO/CTO@Benetti Engineering sas
