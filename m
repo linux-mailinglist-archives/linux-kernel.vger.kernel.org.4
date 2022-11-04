@@ -2,125 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8994D61A2B0
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 21:51:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E97E61A2B3
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 21:51:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229576AbiKDUvP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 16:51:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47074 "EHLO
+        id S229562AbiKDUvb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 16:51:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbiKDUvN (ORCPT
+        with ESMTP id S229831AbiKDUv1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 16:51:13 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7E552F013
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 13:51:11 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id a67so9302957edf.12
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 13:51:11 -0700 (PDT)
+        Fri, 4 Nov 2022 16:51:27 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27A4149B46
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 13:51:26 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id b3so8948408lfv.2
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 13:51:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=osyiUzHDpQ2b7ih/B+DgltcTg6y80KjFxz7EsgKKi4k=;
-        b=YHDfqHF4z+DLMhHV4CIqYlVbRtpF9Vs/WjejXbkhUiKi/IQcczSWnxwRNQX4LgT0di
-         M4ZFAikpqI/fsBcexazarbcUqV1JjnQWjf0CEbAgFfIzAuZkJ2HducuGb+kOHaOx43eI
-         /q++/gU/xAYb8SGp8zgqkw1p7EYf9/+thgO3lH3Ih4++TUOau92f9Hx9XewRnpN7cuAK
-         oXqdI/c/1DfXOS0roxj3aj7Gz/J8Op1YvBCiVjDuvF+h4FFH6gizUPvgzWCzki/aQk2Z
-         X+L8MCHqqKy5P5zVPCQuMsuZ85Y7pKzHY+PzLfL0A7POzyYJH56cABoe+NBOwbDAs9eh
-         Jlzg==
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:user-agent:from:references
+         :in-reply-to:mime-version:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zMfksGVovJyKssatLq3qPApzW4xAJ9RmshsVA1B1FUM=;
+        b=AOyUYLhQB+OF+RwYwdDwwmQ38cHBcpL55GVlYYpbmo/IhTvhxI2JCo4BQLlSpPfIt2
+         A7kQpV15ys91B7Xw/oO6H4/94pyD7p5R/9pipaspVrj1YHbAAqWxDnhqCXtufv9IbnSe
+         ojKjV/3UgyYxiFjqcvbEBI8RtCfQXB/dzzgWQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        h=cc:to:subject:message-id:date:user-agent:from:references
+         :in-reply-to:mime-version:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=osyiUzHDpQ2b7ih/B+DgltcTg6y80KjFxz7EsgKKi4k=;
-        b=bljAX8Og+dYFH7U1cjDJE+O0UeBQxsyy+PDZJTs1i5tcCk/s/IIOnwhoKuQ6YTZBwj
-         QfcYZwi071bk/cNRHCy2fCDp211L60U6xL3bbt5g6mF74HtAKmpP+iOvwTD+vIGb01oy
-         TEBPed6B+PQxmOP4i6FMD8IuOVdjEpsHQVxfDSf+WoXgklf/W0WPHGL6AVU3mRL3USXT
-         pj01p60DC9w/iaO5kFsLJ3/bq+YZe5IPEDO4ZvGgkgIU/0R9t92VThXTi8l227QaK7kD
-         sm2tetDtSKPdbb0aoqGQCDDpM/fat05Xm/NSSYOFqb81lwCB5V2kNth64WqFf4eifbu7
-         Dp4Q==
-X-Gm-Message-State: ACrzQf3DDiIYaAzP8SmvUAw/ypx2wp6pK3iL/zxEPOsifOA+r4xQBRN0
-        PAb521eEl26eAJUyHwj64l8yPA==
-X-Google-Smtp-Source: AMsMyM7oXSJ3C4Rzx58L+qgDsaXMmR+B8N6HJBu02Ly92IqAOEQ3JFm5GqTGo9NNMe35JCj5VsIuow==
-X-Received: by 2002:a05:6402:1004:b0:464:778:c516 with SMTP id c4-20020a056402100400b004640778c516mr15586249edu.348.1667595070485;
-        Fri, 04 Nov 2022 13:51:10 -0700 (PDT)
-Received: from linaro.org ([94.52.112.99])
-        by smtp.gmail.com with ESMTPSA id v3-20020aa7d803000000b004585eba4baesm213243edq.80.2022.11.04.13.51.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Nov 2022 13:51:09 -0700 (PDT)
-Date:   Fri, 4 Nov 2022 22:51:08 +0200
-From:   Abel Vesa <abel.vesa@linaro.org>
-To:     Peng Fan <peng.fan@oss.nxp.com>
-Cc:     abelvesa@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-imx@nxp.com,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Peng Fan <peng.fan@nxp.com>
-Subject: Re: [PATCH 0/6] clk: imx93: fix and update
-Message-ID: <Y2V7PPGtzFgTxI89@linaro.org>
-References: <20221028095211.2598312-1-peng.fan@oss.nxp.com>
- <b7be4912-542e-8fdc-6948-ac4626a63418@oss.nxp.com>
+        bh=zMfksGVovJyKssatLq3qPApzW4xAJ9RmshsVA1B1FUM=;
+        b=KL9XHK4hJ4J3Ht2wzJ4oL6xfQCEQt+u9jX9kaxgEd5hL2nTWMFKO5sFgKyya9NtTBH
+         Sz64ko6b0MmL6+4sd2PXbTtPUXrSJWxHyEwk4mYXW6IIsqDMJ0FGwkH92onFemZSBrRy
+         PjYKde6mO8n9VwCFsYWW/YRfEa9X5ao87tWPIxbrcVFeCZvpdffEzHxjeB8z5qrrE8iX
+         XSkFVNVAvmVJEGCOPGP/LFAT6gpLBEu2wBHJP96BjnGxBnmpp4VTMThx2L/N1rC2Urh6
+         Nl0YiOVc/2CQwd7OcqGtwx6acH9V5j0HQthxB6Z5dHRUJaSaZzLxs8aqOgxcKNJAR7QB
+         Dd5Q==
+X-Gm-Message-State: ACrzQf2bdHXO4B20FVIhKWTayhkVO9Mumm5X+yXfRJa0V+D1N7ZczLne
+        1lObCxyAlvIDrx8V2tht+txqS3gEH5VLFL+OuZ17qw==
+X-Google-Smtp-Source: AMsMyM7Nm8maiYEBKfD/QCN1CZqY5y3LSAqpeCk56cKCFU+2F+w80T1ekhdFysJ1NCnRuWqDWDLO5fNqaZBtILfclho=
+X-Received: by 2002:a05:6512:3dac:b0:4a4:8044:9c3 with SMTP id
+ k44-20020a0565123dac00b004a4804409c3mr13585880lfv.145.1667595084419; Fri, 04
+ Nov 2022 13:51:24 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Fri, 4 Nov 2022 13:51:23 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b7be4912-542e-8fdc-6948-ac4626a63418@oss.nxp.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20221104064055.1.I00a0e4564a25489e85328ec41636497775627564@changeid>
+References: <20221104064055.1.I00a0e4564a25489e85328ec41636497775627564@changeid>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Fri, 4 Nov 2022 13:51:23 -0700
+Message-ID: <CAE-0n507hS0huoCVoarV65F5cGsxMuYCv-3C4s2e1m61cPMZcg@mail.gmail.com>
+Subject: Re: [PATCH 1/3] clk: qcom: lpass-sc7280: Fix pm_runtime usage
+To:     Bjorn Andersson <andersson@kernel.org>,
+        Douglas Anderson <dianders@chromium.org>
+Cc:     Taniya Das <quic_tdas@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Judy Hsiao <judyhsiao@chromium.org>,
+        Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Taniya Das <tdas@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22-11-02 10:13:45, Peng Fan wrote:
-> Hi Abel, Stephen
-> 
-> On 10/28/2022 5:52 PM, Peng Fan (OSS) wrote:
-> > From: Peng Fan <peng.fan@nxp.com>
-> > 
-> > V2:
-> >   Update commit log for patch 3
-> >   Add comment for critial clock for patch 5,6
-> 
-> V2 was not added to patch subject when I send out this patchset.
-> If you need to repost with V2, please let me know.
+Quoting Douglas Anderson (2022-11-04 06:56:28)
+> The pm_runtime usage in lpass-sc7280 was broken in quite a few
+> ways. Specifically:
+>
+> 1. At the end of probe it called "put" twice. This is a no-no and will
+>    end us up with a negative usage count. Even worse than calling
+>    "put" twice, it never called "get" once. Thus after bootup it could
+>    be seen that the runtime usage of the devices managed by this
+>    driver was -2.
+> 2. In some error cases it manually called pm_runtime_disable() even
+>    though it had previously used devm_add_action_or_reset() to set
+>    this up to be called automatically. This meant that in these error
+>    cases we'd double-call pm_runtime_disable().
+> 3. It forgot to call undo pm_runtime_use_autosuspend(), which can
+>    sometimes have subtle problems (and the docs specifically mention
+>    that you need to undo this function).
+>
+> Overall the above seriously calls into question how this driver is
+> working. It seems like a combination of "it doesn't", "by luck", and
+> "because of the weirdness of runtime_pm". Specifically I put a
+> printout to the serial console every time the runtime suspend/resume
+> was called for the two devices created by this driver (I wrapped the
+> pm_clk calls). When I had serial console enabled, I found that the
+> calls got resumed at bootup (when the clk core probed and before our
+> double-put) and then never touched again. That's no good.
+>   [    0.829997] DOUG: my_pm_clk_resume, usage=1
+>   [    0.835487] DOUG: my_pm_clk_resume, usage=1
+>
+> When I disabled serial console (speeding up boot), I got a different
+> pattern, which I guess (?) is better:
+>   [    0.089767] DOUG: my_pm_clk_resume, usage=1
+>   [    0.090507] DOUG: my_pm_clk_resume, usage=1
+>   [    0.151885] DOUG: my_pm_clk_suspend, usage=-2
+>   [    0.151914] DOUG: my_pm_clk_suspend, usage=-2
+>   [    1.825747] DOUG: my_pm_clk_resume, usage=-1
+>   [    1.825774] DOUG: my_pm_clk_resume, usage=-1
+>   [    1.888269] DOUG: my_pm_clk_suspend, usage=-2
+>   [    1.888282] DOUG: my_pm_clk_suspend, usage=-2
+>
+> These different patterns have to do with the fact that the core PM
+> Runtime code really isn't designed to be robust to negative usage
+> counts and sometimes may happen to stumble upon a behavior that
+> happens to "work". For instance, you can see that
+> __pm_runtime_suspend() will treat any non-zero value (including
+> negative numbers) as if the device is in use.
+>
+> In any case, let's fix the driver to be correct. We'll hold a
+> pm_runtime reference for the whole probe and then drop it (once!) at
+> the end. We'll get rid of manual pm_runtime_disable() calls in the
+> error handling. We'll also switch to devm_pm_runtime_enable(), which
+> magically handles undoing pm_runtime_use_autosuspend() as of commit
+> b4060db9251f ("PM: runtime: Have devm_pm_runtime_enable() handle
+> pm_runtime_dont_use_autosuspend()").
+>
+> While we're at this, let's also use devm_pm_clk_create() instead of
+> rolling it ourselves.
+>
+> Note that the above changes make it obvious that
+> lpassaudio_create_pm_clks() was doing more than just creating
+> clocks. It was also setting up pm_runtime parameters. Let's rename it.
+>
+> All of these problems were found by code inspection. I started looking
+> at this driver because it was involved in a deadlock that I reported a
+> while ago [1]. Though I bisected the deadlock to commit 1b771839de05
+> ("clk: qcom: gdsc: enable optional power domain support"), it was
+> never really clear why that patch affected it other than a luck of
+> timing changes. I'll also note that by fixing the timing (as done in
+> this change) we also seem to aboid the deadlock, which is a nice
+> benefit.
+>
+> Also note that some of the fixes here are much the same type of stuff
+> that Dmitry did in commit 72cfc73f4663 ("clk: qcom: use
+> devm_pm_runtime_enable and devm_pm_clk_create"), but I guess
+> lpassaudiocc-sc7280.c didn't exist then.
+>
+> [1] https://lore.kernel.org/r/20220922154354.2486595-1-dianders@chromium.org
+>
+> Fixes: a9dd26639d05 ("clk: qcom: lpass: Add support for LPASS clock controller for SC7280")
+> Signed-off-by: Douglas Anderson <dianders@chromium.org>
+> ---
 
-Sorry for the late reply.
-
-No need to resend.
-
-> 
-> Thanks,
-> Peng.
-> 
-> > 
-> > patch 1 is reported by Dan and marked as fix
-> > 
-> > During our development, per updated reference mannual and design
-> > information, correct enet and drop tpm 1/3, lpit 1/2.
-> > 
-> > The TPM/LPIT patch 3,4 are not marked as fixes, there is no user,
-> > so update binding and driver both.
-> > 
-> > Patch 5 enable HSIO root always on
-> > Patch 6 enable sysctr always on for cpuidle
-> > 
-> > Jacky Bai (2):
-> >    clk: imx: keep hsio bus clock always on
-> >    clk: imx93: keep sys ctr clock always on
-> > 
-> > Peng Fan (4):
-> >    clk: imx93: unmap anatop base in error handling path
-> >    clk: imx93: correct enet clock
-> >    dt-bindings: clock: imx93: drop TPM1/3 LPIT1/2 entry
-> >    clk: imx93: drop tpm1/3, lpit1/2 clk
-> > 
-> >   drivers/clk/imx/clk-imx93.c             | 38 ++++++++++++++-----------
-> >   include/dt-bindings/clock/imx93-clock.h |  4 ---
-> >   2 files changed, 21 insertions(+), 21 deletions(-)
-> > 
+Reviewed-by: Stephen Boyd <swboyd@chromium.org>
