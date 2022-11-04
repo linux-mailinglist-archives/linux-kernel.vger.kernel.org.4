@@ -2,197 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58DFD6191FD
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 08:30:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 065B4619225
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 08:45:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230474AbiKDHao (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 03:30:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57800 "EHLO
+        id S231343AbiKDHph (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 03:45:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231360AbiKDHa1 (ORCPT
+        with ESMTP id S231182AbiKDHpd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 03:30:27 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC8F829C94;
-        Fri,  4 Nov 2022 00:30:02 -0700 (PDT)
-Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4N3XHP6vGszpW5B;
-        Fri,  4 Nov 2022 15:26:25 +0800 (CST)
-Received: from kwepemm600015.china.huawei.com (7.193.23.52) by
- dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 4 Nov 2022 15:30:01 +0800
-Received: from huawei.com (10.175.101.6) by kwepemm600015.china.huawei.com
- (7.193.23.52) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Fri, 4 Nov
- 2022 15:30:00 +0800
-From:   ChenXiaoSong <chenxiaosong2@huawei.com>
-To:     <sfrench@samba.org>, <pc@cjr.nz>, <lsahlber@redhat.com>
-CC:     <linux-cifs@vger.kernel.org>, <samba-technical@lists.samba.org>,
-        <linux-kernel@vger.kernel.org>, <chenxiaosong2@huawei.com>,
-        <yi.zhang@huawei.com>, <zhangxiaoxu5@huawei.com>
-Subject: [PATCH v2] cifs: fix use-after-free on the link name
-Date:   Fri, 4 Nov 2022 15:44:41 +0800
-Message-ID: <20221104074441.634677-1-chenxiaosong2@huawei.com>
-X-Mailer: git-send-email 2.31.1
+        Fri, 4 Nov 2022 03:45:33 -0400
+Received: from out30-57.freemail.mail.aliyun.com (out30-57.freemail.mail.aliyun.com [115.124.30.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F38A42018B;
+        Fri,  4 Nov 2022 00:45:31 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R271e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0VTw1.EU_1667547928;
+Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0VTw1.EU_1667547928)
+          by smtp.aliyun-inc.com;
+          Fri, 04 Nov 2022 15:45:29 +0800
+From:   Yang Li <yang.lee@linux.alibaba.com>
+To:     clabbe@baylibre.com
+Cc:     herbert@gondor.apana.org.au, davem@davemloft.net, heiko@sntech.de,
+        linux-crypto@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Yang Li <yang.lee@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH -next v2] crypto: rockchip: Remove surplus dev_err() when using platform_get_irq()
+Date:   Fri,  4 Nov 2022 15:45:27 +0800
+Message-Id: <20221104074527.37353-1-yang.lee@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.101.6]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemm600015.china.huawei.com (7.193.23.52)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-xfstests generic/011 reported use-after-free bug as follows:
+There is no need to call the dev_err() function directly to print a
+custom message when handling an error from either the platform_get_irq()
+or platform_get_irq_byname() functions as both are going to display an
+appropriate error message in case of a failure.
 
-  BUG: KASAN: use-after-free in __d_alloc+0x269/0x859
-  Read of size 15 at addr ffff8880078933a0 by task dirstress/952
+./drivers/crypto/rockchip/rk3288_crypto.c:351:2-9: line 351 is
+redundant because platform_get_irq() already prints an error
 
-  CPU: 1 PID: 952 Comm: dirstress Not tainted 6.1.0-rc3+ #77
-  Call Trace:
-   __dump_stack+0x23/0x29
-   dump_stack_lvl+0x51/0x73
-   print_address_description+0x67/0x27f
-   print_report+0x3e/0x5c
-   kasan_report+0x7b/0xa8
-   kasan_check_range+0x1b2/0x1c1
-   memcpy+0x22/0x5d
-   __d_alloc+0x269/0x859
-   d_alloc+0x45/0x20c
-   d_alloc_parallel+0xb2/0x8b2
-   lookup_open+0x3b8/0x9f9
-   open_last_lookups+0x63d/0xc26
-   path_openat+0x11a/0x261
-   do_filp_open+0xcc/0x168
-   do_sys_openat2+0x13b/0x3f7
-   do_sys_open+0x10f/0x146
-   __se_sys_creat+0x27/0x2e
-   __x64_sys_creat+0x55/0x6a
-   do_syscall_64+0x40/0x96
-   entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-  Allocated by task 952:
-   kasan_save_stack+0x1f/0x42
-   kasan_set_track+0x21/0x2a
-   kasan_save_alloc_info+0x17/0x1d
-   __kasan_kmalloc+0x7e/0x87
-   __kmalloc_node_track_caller+0x59/0x155
-   kstrndup+0x60/0xe6
-   parse_mf_symlink+0x215/0x30b
-   check_mf_symlink+0x260/0x36a
-   cifs_get_inode_info+0x14e1/0x1690
-   cifs_revalidate_dentry_attr+0x70d/0x964
-   cifs_revalidate_dentry+0x36/0x62
-   cifs_d_revalidate+0x162/0x446
-   lookup_open+0x36f/0x9f9
-   open_last_lookups+0x63d/0xc26
-   path_openat+0x11a/0x261
-   do_filp_open+0xcc/0x168
-   do_sys_openat2+0x13b/0x3f7
-   do_sys_open+0x10f/0x146
-   __se_sys_creat+0x27/0x2e
-   __x64_sys_creat+0x55/0x6a
-   do_syscall_64+0x40/0x96
-   entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-  Freed by task 950:
-   kasan_save_stack+0x1f/0x42
-   kasan_set_track+0x21/0x2a
-   kasan_save_free_info+0x1c/0x34
-   ____kasan_slab_free+0x1c1/0x1d5
-   __kasan_slab_free+0xe/0x13
-   __kmem_cache_free+0x29a/0x387
-   kfree+0xd3/0x10e
-   cifs_fattr_to_inode+0xb6a/0xc8c
-   cifs_get_inode_info+0x3cb/0x1690
-   cifs_revalidate_dentry_attr+0x70d/0x964
-   cifs_revalidate_dentry+0x36/0x62
-   cifs_d_revalidate+0x162/0x446
-   lookup_open+0x36f/0x9f9
-   open_last_lookups+0x63d/0xc26
-   path_openat+0x11a/0x261
-   do_filp_open+0xcc/0x168
-   do_sys_openat2+0x13b/0x3f7
-   do_sys_open+0x10f/0x146
-   __se_sys_creat+0x27/0x2e
-   __x64_sys_creat+0x55/0x6a
-   do_syscall_64+0x40/0x96
-   entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-When opened a symlink, link name is from 'inode->i_link', but it may be
-reset to a new value when revalidate the dentry. If some processes get the
-link name on the race scenario, then UAF will happen on link name.
-
-Fix this by implementing 'get_link' interface to duplicate the link name.
-
-Fixes: 76894f3e2f71 ("cifs: improve symlink handling for smb2+")
-Signed-off-by: ChenXiaoSong <chenxiaosong2@huawei.com>
+Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=2677
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
 ---
- fs/cifs/cifsfs.c | 26 +++++++++++++++++++++++++-
- fs/cifs/inode.c  |  5 -----
- 2 files changed, 25 insertions(+), 6 deletions(-)
 
-diff --git a/fs/cifs/cifsfs.c b/fs/cifs/cifsfs.c
-index d0b9fec111aa..fe220686bba4 100644
---- a/fs/cifs/cifsfs.c
-+++ b/fs/cifs/cifsfs.c
-@@ -1143,8 +1143,32 @@ const struct inode_operations cifs_file_inode_ops = {
- 	.fiemap = cifs_fiemap,
- };
+change in v2:
+--According to Corentin's suggestion, make the subject started by "crypto: rockchip:".
+
+ drivers/crypto/rockchip/rk3288_crypto.c | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/drivers/crypto/rockchip/rk3288_crypto.c b/drivers/crypto/rockchip/rk3288_crypto.c
+index 6217e73ba4c4..9f6ba770a90a 100644
+--- a/drivers/crypto/rockchip/rk3288_crypto.c
++++ b/drivers/crypto/rockchip/rk3288_crypto.c
+@@ -348,7 +348,6 @@ static int rk_crypto_probe(struct platform_device *pdev)
  
-+const char *cifs_get_link(struct dentry *dentry, struct inode *inode,
-+			    struct delayed_call *done)
-+{
-+	char *target_path;
-+
-+	target_path = kmalloc(PATH_MAX, GFP_KERNEL);
-+	if (!target_path)
-+		return ERR_PTR(-ENOMEM);
-+
-+	spin_lock(&inode->i_lock);
-+	if (likely(CIFS_I(inode)->symlink_target)) {
-+		strscpy(target_path, CIFS_I(inode)->symlink_target, PATH_MAX);
-+	} else {
-+		kfree(target_path);
-+		target_path = ERR_PTR(-EOPNOTSUPP);
-+	}
-+	spin_unlock(&inode->i_lock);
-+
-+	if (!IS_ERR(target_path))
-+		set_delayed_call(done, kfree_link, target_path);
-+
-+	return target_path;
-+}
-+
- const struct inode_operations cifs_symlink_inode_ops = {
--	.get_link = simple_get_link,
-+	.get_link = cifs_get_link,
- 	.permission = cifs_permission,
- 	.listxattr = cifs_listxattr,
- };
-diff --git a/fs/cifs/inode.c b/fs/cifs/inode.c
-index 9bde08d44617..4e2ca3c6e5c0 100644
---- a/fs/cifs/inode.c
-+++ b/fs/cifs/inode.c
-@@ -215,11 +215,6 @@ cifs_fattr_to_inode(struct inode *inode, struct cifs_fattr *fattr)
- 		kfree(cifs_i->symlink_target);
- 		cifs_i->symlink_target = fattr->cf_symlink_target;
- 		fattr->cf_symlink_target = NULL;
--
--		if (unlikely(!cifs_i->symlink_target))
--			inode->i_link = ERR_PTR(-EOPNOTSUPP);
--		else
--			inode->i_link = cifs_i->symlink_target;
+ 	crypto_info->irq = platform_get_irq(pdev, 0);
+ 	if (crypto_info->irq < 0) {
+-		dev_err(&pdev->dev, "control Interrupt is not available.\n");
+ 		err = crypto_info->irq;
+ 		goto err_crypto;
  	}
- 	spin_unlock(&inode->i_lock);
- 
 -- 
-2.31.1
+2.20.1.7.g153144c
 
