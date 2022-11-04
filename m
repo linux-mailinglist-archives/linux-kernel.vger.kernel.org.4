@@ -2,143 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE24061A4E8
+	by mail.lfdr.de (Postfix) with ESMTP id 2C86061A4E6
 	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 23:53:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230458AbiKDWwt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 18:52:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59200 "EHLO
+        id S230074AbiKDWwy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 18:52:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231358AbiKDWwP (ORCPT
+        with ESMTP id S231347AbiKDWwO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 18:52:15 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45B334E423
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 15:50:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667602220; x=1699138220;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=vqfTxlpErbNaQT6peaUAVe+NDRK4xxYm7fk/SiaY4PY=;
-  b=jR8LGhewDNxq6hguidbGEnpc7OZrkCJmgwy0rqY1N+ggMEPAcXOlunmN
-   5VKOgM4JbPurls2Su5OjLBn7nY47qmNJlbZtjpg6kO1mfNG78uxjEGWAu
-   b+N4+xdT2lQzw1uDH6lhXX1/r4PR9wIY35cUyntV85YiKvpAX2+jpy2ew
-   /5AX1TfNJDvlYXsjtvYKwTXmeQcaCxT9xwowmYybk25pgB21mgvHnjwlG
-   39AJF/Q4P6cZgthBk5tY+fFCL0OaKwaWqWQACGKaYfFRKT3GBoTTm2hES
-   dPRDDovay80Izl+74AXSyZe8UeHxX2fBUE4sOnT/Pn3F4gH/WUyacgRe3
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10521"; a="293420790"
-X-IronPort-AV: E=Sophos;i="5.96,138,1665471600"; 
-   d="scan'208";a="293420790"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2022 15:50:16 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10521"; a="740798066"
-X-IronPort-AV: E=Sophos;i="5.96,138,1665471600"; 
-   d="scan'208";a="740798066"
-Received: from anantsin-mobl2.amr.corp.intel.com (HELO [10.209.97.57]) ([10.209.97.57])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2022 15:50:13 -0700
-Message-ID: <ac179589-bd60-a47c-2d3b-78992b6cbea2@intel.com>
-Date:   Fri, 4 Nov 2022 15:50:13 -0700
+        Fri, 4 Nov 2022 18:52:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0179543AD5;
+        Fri,  4 Nov 2022 15:50:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 919CB62361;
+        Fri,  4 Nov 2022 22:50:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id D6731C433B5;
+        Fri,  4 Nov 2022 22:50:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667602215;
+        bh=fA8aiQw4jlIUqRMgCixxIHpvXhT2q5L1pCsZsa7GlHA=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=SKt18paJ4ZdIFIcISrUZw0+aMBrHjZsG4PXE9Kot4R2UvbX0CEAV1E3QOMyucc9LX
+         XEjtCVhxPOlCsRS4LqaGvIMmCWGVACT7ApMFFdC/QEr9tvJ1ddlLm3yXLU1IjxZ/tn
+         S2Ud9MsKhDG32E4T1xJVzWKacCaJwo9HtVy4jJeC/sqVRvMvoPNFXkevcXkEF8E1Nr
+         0uij/MBvqgPt8X5akWiA33SRTkCPQqW7Q0x+dMTQPDL25UYwSELba1v9bY+xD4ZHto
+         p94g9puUa10Mhl29znpS6h6fz3w426B60znQVNY6LCL2/9AsKfuOBEk7lrzcbhA4aq
+         uyzGZWsEBB/dA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id BBA20E270FB;
+        Fri,  4 Nov 2022 22:50:15 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH 2/2] x86/tdx: Do not allow #VE due to EPT violation on the
- private memory
-Content-Language: en-US
-To:     Erdem Aktas <erdemaktas@google.com>,
-        "Nakajima, Jun" <jun.nakajima@intel.com>
-Cc:     Guorui Yu <GuoRui.Yu@linux.alibaba.com>,
-        kirill.shutemov@linux.intel.com, ak@linux.intel.com, bp@alien8.de,
-        dan.j.williams@intel.com, david@redhat.com,
-        elena.reshetova@intel.com, hpa@zytor.com,
-        linux-kernel@vger.kernel.org, luto@kernel.org, mingo@redhat.com,
-        peterz@infradead.org, sathyanarayanan.kuppuswamy@linux.intel.com,
-        seanjc@google.com, tglx@linutronix.de, thomas.lendacky@amd.com,
-        x86@kernel.org
-References: <20221028141220.29217-3-kirill.shutemov@linux.intel.com>
- <b5d04a6c-79b4-bbdc-b613-6958d9f75d53@linux.alibaba.com>
- <4bfcd256-b926-9b1c-601c-efcff0d16605@intel.com>
- <CAAYXXYy6xPPD0bLz9RrVO6FDWA9d8hiz4Po0hcEe0oupGq=L2g@mail.gmail.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <CAAYXXYy6xPPD0bLz9RrVO6FDWA9d8hiz4Po0hcEe0oupGq=L2g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next] selftests/bpf: cgroup_helpers.c: Fix strncpy()
+ fortify warning
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166760221576.27361.8207434405001811248.git-patchwork-notify@kernel.org>
+Date:   Fri, 04 Nov 2022 22:50:15 +0000
+References: <tencent_469D8AF32BD56816A29981BED06E96D22506@qq.com>
+In-Reply-To: <tencent_469D8AF32BD56816A29981BED06E96D22506@qq.com>
+To:     Rong Tao <rtoax@foxmail.com>
+Cc:     andrii.nakryiko@gmail.com, andrii@kernel.org, ast@kernel.org,
+        bpf@vger.kernel.org, daniel@iogearbox.net, david.laight@aculab.com,
+        haoluo@google.com, john.fastabend@gmail.com, jolsa@kernel.org,
+        kpsingh@kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, martin.lau@linux.dev,
+        mykolal@fb.com, rongtao@cestc.cn, sdf@google.com, shuah@kernel.org,
+        song@kernel.org, yhs@fb.com
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/4/22 15:36, Erdem Aktas wrote:
-> On Fri, Oct 28, 2022 at 7:12 AM Kirill A. Shutemov
-> <kirill.shutemov@linux.intel.com> wrote:
->> +        *
->> +        * Kernel has no legitimate use-cases for #VE on private memory. It is
->> +        * either a guest kernel bug (like access of unaccepted memory) or
->> +        * malicious/buggy VMM that removes guest page that is still in use.
->> +        *
+Hello:
+
+This patch was applied to bpf/bpf-next.git (master)
+by Andrii Nakryiko <andrii@kernel.org>:
+
+On Fri,  4 Nov 2022 09:27:54 +0800 you wrote:
+> From: Rong Tao <rongtao@cestc.cn>
 > 
-> I think this statement is too strong and I have few concerns on this approach.
-> I understand that there is an issue of handling #VEs on private pages
-> but it seems like we are just hiding the problem with this approach
-> instead of fixing it - I do not have any fix in my mind- .
-> First there is a feature of injecting #VE to handle unaccepted pages
-> at runtime and accept them on-demand, now the statement is saying this
-> was an unnecessary feature (why is it there at all then?) at all as
-> there is no legitimate use case.
-
-We're doing on-demand page acceptance.  We just don't need a #VE to
-drive it.  Why is it in the TDX module then?  Inertia?  Because it got
-too far along in the process before anyone asked me or some of the other
-x86 kernel folks to look at it hard.
-
-> I wonder if this will limit how we can implement the lazy TDACCEPT.
-> There are multiple ideas floating now.
-> https://github.com/intel/tdx/commit/9b3ef9655b695d3c67a557ec016487fded8b0e2b
-> has 3 implementation choices where "Accept a block of memory on the
-> first use." option is implemented.  Actually it says "Accept a block
-> of memory on the first use." but it is implemented as "Accept a block
-> of memory on the first allocation".  The comments in this code also
-> raises concerns on the performance.
+> Copy libbpf_strlcpy() from libbpf_internal.h to bpf_util.h, and rename it
+> to bpf_strlcpy(), then replace selftests strncpy()/libbpf_strlcpy() with
+> bpf_strlcpy(), fix compile warning.
 > 
-> As of now, we do not know which one of those ideas will provide an
-> acceptable performance for booting large size VMs. If the performance
-> overhead is high, we can always implement the lazy TDACCEPT as when
-> the first time a guest accesses an unaccepted memory, #VE can do the TDACCEPT.
+> The libbpf_internal.h header cannot be used directly here, because
+> references to cgroup_helpers.c in samples/bpf will generate compilation
+> errors. We also can't add libbpf_strlcpy() directly to bpf_util.h,
+> because the definition of libbpf_strlcpy() in libbpf_internal.h is
+> duplicated. In order not to modify the libbpf code, add a new function
+> bpf_strlcpy() to selftests bpf_util.h.
+> 
+> [...]
 
-Could you please elaborate a bit on what you think the distinction is
-between:
+Here is the summary with links:
+  - [bpf-next] selftests/bpf: cgroup_helpers.c: Fix strncpy() fortify warning
+    https://git.kernel.org/bpf/bpf-next/c/b3c09fdca113
 
-	* Accept on first use
-and
-	* Accept on allocation
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-Surely, for the vast majority of memory, it's allocated and then used
-pretty quickly.  As in, most allocations are __GFP_ZERO so they're
-allocated and "used" before they even leave the allocator.  So, in
-practice, they're *VERY* close to equivalent.
 
-Where do you see them diverging?  Why does it matter?
-
-> I am not trying to solve the lazy TDACCEPT problem here but all I am
-> trying to say is that, there might be legitimate use cases for #VE on
-> private memory and this patch limits any future improvement we might
-> need to do on lazy TDACCEPT implementation.
-
-The kernel can't take exceptions on arbitrary memory accesses.  I have
-*ZERO* idea how to handle page acceptance on an access to a per-cpu
-variable referenced in syscall entry, or the NMI stack when we've
-interrupted kernel code with a user GSBASE value.
-
-So, we either find *ALL* the kernel memory that needs to be pre-accepted
-at allocation time (like kernel stacks) or we just say that all
-allocated memory needs to be accepted before we let it be allocated.
-
-One of those is really easy.  The other means a boatload of code audits.
- I know.  I had to do that kind of exercise to get KPTI to work.  I
-don't want to do it again.  It was worth it for KPTI when the world was
-on fire.  TDX isn't that important IMNHO.  There's an easier way.
