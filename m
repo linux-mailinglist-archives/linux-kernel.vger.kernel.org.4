@@ -2,124 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5674361A214
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 21:22:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4008361A218
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 21:23:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229946AbiKDUWJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 16:22:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33092 "EHLO
+        id S229996AbiKDUXU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 16:23:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229956AbiKDUWA (ORCPT
+        with ESMTP id S229947AbiKDUXT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 16:22:00 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E58F24C242;
-        Fri,  4 Nov 2022 13:21:59 -0700 (PDT)
-Date:   Fri, 04 Nov 2022 20:21:55 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1667593317;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=J/89bIBY0RSkqVteTwXt3Qyj4gljpdxQaHrKe/YxAtM=;
-        b=GsOA/jHiSfPieVYVijcuWeIcw1tIIg9ZC1J+1lXFmgPuIwJI30aYc4FjcHgA0OqpLqnmMp
-        EEufuUBxJAkOkLMw/l9YTotVEpqRVfPBnHrEl702dlZ3Hyo0RKxfEnFKRK+91koNkrtw23
-        1O1ZHtXSEfjJB0jW5S1z4Pfyff57rOaaBEI6h2UrkE62+UtC2+4Hz3l1nMHwoILS+GYFwt
-        /PU/u0ELnq6+o+62z3mz+hkAnGbGh6uFfdep4B2xZI5lnzH/MHI43idUv3Wt8moJ0+w0On
-        NP3IBNkhsVACfR/x6utsFRmVWh5wKKHaUeO3i9fdtIfox2/1VQ9rwdrPXJmw0g==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1667593317;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=J/89bIBY0RSkqVteTwXt3Qyj4gljpdxQaHrKe/YxAtM=;
-        b=8vP1PVeXPNzJuLILWKcR4yJ1j+JGwpNYRj0oR7b/wWvy3bJR09bTyjgWaHv+j6gCvJO4Ih
-        El+Dttsw09KVKyBw==
-From:   "tip-bot2 for Tony Luck" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/urgent] x86/cpu: Add several Intel server CPU model numbers
-Cc:     Tony Luck <tony.luck@intel.com>, Borislav Petkov <bp@suse.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20221103203310.5058-1-tony.luck@intel.com>
-References: <20221103203310.5058-1-tony.luck@intel.com>
+        Fri, 4 Nov 2022 16:23:19 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 787F24C26E
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 13:22:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1667593344;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type;
+        bh=IEC3YoQur9oR8RdILpbxLY1AGs9Swo+08fxPh1HejRE=;
+        b=WJVLnuM37M1Or4R0Kl2WDNCbgddgGbpDRuIcm2meBIP5TmnS9gjuODrvzn1FqZAv7Nr6xV
+        /LyzTOZ3vYIcIQghrADauscIITq+YUQcMCW8Tp8LyNUVEG/81Y96VO15cQCUT4GUuwTR6a
+        JMxqBH6gqeKm+OURoGVcFRCMeoTy3b0=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-380-KSU7H_2cPM2V2X7H8ndBOw-1; Fri, 04 Nov 2022 16:22:22 -0400
+X-MC-Unique: KSU7H_2cPM2V2X7H8ndBOw-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2358738164D6;
+        Fri,  4 Nov 2022 20:22:22 +0000 (UTC)
+Received: from localhost (unknown [10.22.17.61])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id CD24240C6DC7;
+        Fri,  4 Nov 2022 20:22:21 +0000 (UTC)
+Date:   Fri, 4 Nov 2022 17:22:21 -0300
+From:   "Luis Claudio R. Goncalves" <lgoncalv@redhat.com>
+To:     LKML <linux-kernel@vger.kernel.org>,
+        linux-rt-users <linux-rt-users@vger.kernel.org>,
+        stable-rt <stable-rt@vger.kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Carsten Emde <C.Emde@osadl.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Daniel Wagner <daniel.wagner@suse.com>,
+        Tom Zanussi <tom.zanussi@linux.intel.com>,
+        Clark Williams <williams@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        Luis Goncalves <lgoncalv@redhat.com>
+Subject: [ANNOUNCE] 4.14.298-rt140
+Message-ID: <Y2V0feqRgHK0arYM@uudg.org>
 MIME-Version: 1.0
-Message-ID: <166759331563.4906.3844769797250286252.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/urgent branch of tip:
+Hello RT-list!
 
-Commit-ID:     7beade0dd41d42d797ccb7791b134a77fcebf35b
-Gitweb:        https://git.kernel.org/tip/7beade0dd41d42d797ccb7791b134a77fcebf35b
-Author:        Tony Luck <tony.luck@intel.com>
-AuthorDate:    Thu, 03 Nov 2022 13:33:10 -07:00
-Committer:     Borislav Petkov <bp@suse.de>
-CommitterDate: Fri, 04 Nov 2022 21:12:22 +01:00
+I'm pleased to announce the 4.14.298-rt140 stable release.
 
-x86/cpu: Add several Intel server CPU model numbers
+You can get this release via the git tree at:
 
-These servers are all on the public versions of the roadmap. The model
-numbers for Grand Ridge, Granite Rapids, and Sierra Forest were included
-in the September 2022 edition of the Instruction Set Extensions document.
+  git://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-stable-rt.git
 
-Signed-off-by: Tony Luck <tony.luck@intel.com>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Acked-by: Dave Hansen <dave.hansen@linux.intel.com>
-Link: https://lore.kernel.org/r/20221103203310.5058-1-tony.luck@intel.com
----
- arch/x86/include/asm/intel-family.h | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+  branch: v4.14-rt
+  Head SHA1: ab081f53d34e1093fc72590c21809298aa80ac94
 
-diff --git a/arch/x86/include/asm/intel-family.h b/arch/x86/include/asm/intel-family.h
-index 5d75fe2..347707d 100644
---- a/arch/x86/include/asm/intel-family.h
-+++ b/arch/x86/include/asm/intel-family.h
-@@ -107,6 +107,11 @@
- 
- #define INTEL_FAM6_SAPPHIRERAPIDS_X	0x8F	/* Golden Cove */
- 
-+#define INTEL_FAM6_EMERALDRAPIDS_X	0xCF
-+
-+#define INTEL_FAM6_GRANITERAPIDS_X	0xAD
-+#define INTEL_FAM6_GRANITERAPIDS_D	0xAE
-+
- #define INTEL_FAM6_ALDERLAKE		0x97	/* Golden Cove / Gracemont */
- #define INTEL_FAM6_ALDERLAKE_L		0x9A	/* Golden Cove / Gracemont */
- #define INTEL_FAM6_ALDERLAKE_N		0xBE
-@@ -118,7 +123,7 @@
- #define INTEL_FAM6_METEORLAKE		0xAC
- #define INTEL_FAM6_METEORLAKE_L		0xAA
- 
--/* "Small Core" Processors (Atom) */
-+/* "Small Core" Processors (Atom/E-Core) */
- 
- #define INTEL_FAM6_ATOM_BONNELL		0x1C /* Diamondville, Pineview */
- #define INTEL_FAM6_ATOM_BONNELL_MID	0x26 /* Silverthorne, Lincroft */
-@@ -145,6 +150,10 @@
- #define INTEL_FAM6_ATOM_TREMONT		0x96 /* Elkhart Lake */
- #define INTEL_FAM6_ATOM_TREMONT_L	0x9C /* Jasper Lake */
- 
-+#define INTEL_FAM6_SIERRAFOREST_X	0xAF
-+
-+#define INTEL_FAM6_GRANDRIDGE		0xB6
-+
- /* Xeon Phi */
- 
- #define INTEL_FAM6_XEON_PHI_KNL		0x57 /* Knights Landing */
+Or to build 4.14.298-rt140 directly, the following patches should be applied:
+
+  https://www.kernel.org/pub/linux/kernel/v4.x/linux-4.14.tar.xz
+
+  https://www.kernel.org/pub/linux/kernel/v4.x/patch-4.14.298.xz
+
+  https://www.kernel.org/pub/linux/kernel/projects/rt/4.14/older/patch-4.14.298-rt140.patch.xz
+
+Signing key fingerprint:
+
+  9354 0649 9972 8D31 D464  D140 F394 A423 F8E6 7C26
+
+All keys used for the above files and repositories can be found on the
+following git repository:
+
+   git://git.kernel.org/pub/scm/docs/kernel/pgpkeys.git
+
+Enjoy!
+Luis
+
