@@ -2,156 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A5846194A1
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 11:39:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D9396194BE
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 11:45:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230199AbiKDKjC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 06:39:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54754 "EHLO
+        id S231395AbiKDKpS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 06:45:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231801AbiKDKiq (ORCPT
+        with ESMTP id S229615AbiKDKpP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 06:38:46 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7AD52B63C
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 03:38:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667558316; x=1699094316;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=fqqtKLRYN5kDsLEk0+TvNtixmex/4vGMe3XB0EEHNbU=;
-  b=jAd+CvP7N6HTeZjrhSRZfUygebTveHbFYX29YqYeVIlk6sFOyika8fRV
-   /iN/R7SnyIksEWXAZ5IBItOTpq/p69xZ4StOGgFOdmcMIObTJkORUZZl4
-   h/FusBvU0LUzcyugLNFlWj7C0ajgxzYHLdscmAy9h6WsPzhiQg5OAcSQM
-   pth/0ZS/oftxAau5hDu3/R8HM3sv75R3aeAQc/qofLiIt1EMX4TUm4cYX
-   MdHLurGzFQzytikFXispW3y5zkKO5xZBN1oltpx6lynOdp1ziPqy3inby
-   njhXd2eMDWSJ7VsnrWeje71E7PeqXuzbzE9e1mYfMr5NDSoPAMZMgBZEe
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10520"; a="336638712"
-X-IronPort-AV: E=Sophos;i="5.96,137,1665471600"; 
-   d="scan'208";a="336638712"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2022 03:38:36 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10520"; a="586146016"
-X-IronPort-AV: E=Sophos;i="5.96,137,1665471600"; 
-   d="scan'208";a="586146016"
-Received: from liuzhao-optiplex-7080.sh.intel.com (HELO localhost) ([10.239.160.132])
-  by orsmga003.jf.intel.com with ESMTP; 04 Nov 2022 03:38:31 -0700
-Date:   Fri, 4 Nov 2022 18:44:16 +0800
-From:   Zhao Liu <zhao1.liu@linux.intel.com>
-To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Matthew Auld <matthew.auld@intel.com>,
-        Thomas =?iso-8859-1?Q?Hellstr=F6m?= 
-        <thomas.hellstrom@linux.intel.com>,
-        Nirmoy Das <nirmoy.das@intel.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Chris Wilson <chris@chris-wilson.co.uk>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, Ira Weiny <ira.weiny@intel.com>,
-        "Fabio M . De Francesco" <fmdefrancesco@gmail.com>,
-        Zhenyu Wang <zhenyu.z.wang@intel.com>,
-        Zhao Liu <zhao1.liu@intel.com>
-Subject: Re: [PATCH 0/9] drm/i915: Replace kmap_atomic() with
- kmap_local_page()
-Message-ID: <Y2TtAAqSyAgTVIL8@liuzhao-OptiPlex-7080>
-References: <20221017093726.2070674-1-zhao1.liu@linux.intel.com>
- <10176905.nUPlyArG6x@suse>
+        Fri, 4 Nov 2022 06:45:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 782A02654F;
+        Fri,  4 Nov 2022 03:45:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1FC6C6210B;
+        Fri,  4 Nov 2022 10:45:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FDE6C433D6;
+        Fri,  4 Nov 2022 10:45:11 +0000 (UTC)
+Message-ID: <52532fda-6863-6658-4ad5-a4dbc2607a1c@xs4all.nl>
+Date:   Fri, 4 Nov 2022 11:45:10 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <10176905.nUPlyArG6x@suse>
-X-Spam-Status: No, score=-8.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH v3 0/2] Digiteq Automotive MGB4 driver
+Content-Language: en-US
+To:     tumic@gpxsee.org, Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Michal Simek <michal.simek@xilinx.com>
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, Lizhi Hou <lizhi.hou@amd.com>,
+        =?UTF-8?Q?Martin_T=c5=afma?= <martin.tuma@digiteqautomotive.com>
+References: <20221018140338.7080-1-tumic@gpxsee.org>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+In-Reply-To: <20221018140338.7080-1-tumic@gpxsee.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Oct 29, 2022 at 09:12:27AM +0200, Fabio M. De Francesco wrote:
-> Date: Sat, 29 Oct 2022 09:12:27 +0200
-> From: "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-> Subject: Re: [PATCH 0/9] drm/i915: Replace kmap_atomic() with
->  kmap_local_page()
+On 18/10/2022 16:03, tumic@gpxsee.org wrote:
+> From: Martin Tůma <martin.tuma@digiteqautomotive.com>
+> 
+> Hi,
+> This series of patches adds a driver for the Digiteq Automotive MGB4 grabber
+> card. MGB4 is a modular frame grabber PCIe card for automotive video interfaces
+> (FPD-Link and GMSL for now). It is based on a Xilinx FPGA and uses their
+> XDMA IP core for DMA transfers. Additionally, Xilinx I2C and SPI IP cores
+> which already have drivers in linux are used in the design.
+> 
+> The driver is a quite standard v4l2 driver, with one exception - there are
+> a lot of sysfs options that may/must be set before opening the v4l2 device
+> to adapt the card on a specific signal (see mgb4.rst for details)
+> as the card must be able to work with various signal sources (or displays)
+> that can not be auto-detected.
+> 
+> I have run the driver through the v4l2-compliance test suite for both the
+> input and the output and the results look fine to me (I can provide the
+> output if required).
 
-Hi Fabio, thanks for your review!! (I'm sorry I missed the previous mails).
+Please do! Did you use the latest v4l2-compliance code from the v4l-utils
+git repo? Distros tend to have a too-old version.
+
+Regards,
+
+	Hans
 
 > 
-> On luned? 17 ottobre 2022 11:37:16 CEST Zhao Liu wrote:
-> > From: Zhao Liu <zhao1.liu@intel.com>
-> > 
-> > The use of kmap_atomic() is being deprecated in favor of
-> > kmap_local_page()[1].
+> The patch requires the new XDMA v8 driver from Xilinx/AMD from the dmaengine
+> mailing list to compile/work:
+> https://www.spinics.net/lists/dmaengine/msg31476.html
 > 
-> Some words to explain why kmap_atomic was deprecated won't hurt. Many 
-> maintainers and reviewers, and also casual readers might not yet be aware of 
-> the reasons behind that deprecation.
->  
-> > In the following patches, we can convert the calls of kmap_atomic() /
-> > kunmap_atomic() to kmap_local_page() / kunmap_local(), which can
-> > instead do the mapping / unmapping regardless of the context.
 > 
-> Readers are probably much more interested in what you did in the following 
-> patches and why you did it, instead of being informed about what "we can" do.
+> Changes in v3:
+> * Rebased the DMA transfers part to use the new XDMA driver from Xilinx/AMD
 > 
-> I would suggest something like "The following patches convert the calls to 
-> kmap_atomic() to kmap_local_page() [the rest looks OK]".
+> Changes in v2:
+> * Completely rewritten the original Xilinx's XDMA driver to meet kernel code
+>   standards.
+> * Added all required "to" and "cc" mail addresses.
 > 
-> This could also be the place to say something about why we prefer 
-> kmap_local_page() to kmap_atomic(). 
+> Martin Tůma (2):
+>   i2c: xiic: Added platform module alias for the xiic I2C driver
+>   Added Digiteq Automotive MGB4 driver
 > 
-> Are you sure that the reasons that motivates your conversions are merely 
-> summarized to kmap_local_page() being able to do mappings regardless of 
-> context? I think you are missing the real reasons why. 
-
-Thanks for your reminder, I'll emphasize the motivation here.
-
-> What about avoiding the often unwanted side effect of unnecessary page faults 
-> disables?
-
-Good suggestion! I'll add this into this cover message.
-
-What I think is that we have two reasons to do the replacement work:
-1. (main motication) Avoid unnessary pagefaulta and preemption disabling to gain
-performance benefits.
-2. We are trying to deprecate the old kmap/kmap_atomic interface. Some maintainer
-said it's also a good reason especially for the case that the performance is not
-critical [1].
-
-In addition, also from [1], I find in some case people chooses kmap_atomic() for
-the consideration that they want the atomic context. So, the explaination about
-why the atomic context is not needed is also a reasion? I understand that I need
-to make special explaination in each commit depending on the situation (In this
-case, it is not suitable to describe in the cover?).
-
-[1]: https://lore.kernel.org/lkml/YzRVaJA0EyfcVisW@liuwe-devbox-debian-v2/#t
-
+>  Documentation/admin-guide/media/mgb4.rst      | 342 ++++++++
+>  .../admin-guide/media/pci-cardlist.rst        |   1 +
+>  .../admin-guide/media/v4l-drivers.rst         |   1 +
+>  MAINTAINERS                                   |   7 +
+>  drivers/i2c/busses/i2c-xiic.c                 |   1 +
+>  drivers/media/pci/Kconfig                     |   1 +
+>  drivers/media/pci/Makefile                    |   1 +
+>  drivers/media/pci/mgb4/Kconfig                |  17 +
+>  drivers/media/pci/mgb4/Makefile               |   6 +
+>  drivers/media/pci/mgb4/mgb4_cmt.c             | 243 ++++++
+>  drivers/media/pci/mgb4/mgb4_cmt.h             |  16 +
+>  drivers/media/pci/mgb4/mgb4_core.c            | 628 +++++++++++++++
+>  drivers/media/pci/mgb4/mgb4_core.h            |  65 ++
+>  drivers/media/pci/mgb4/mgb4_dma.c             | 120 +++
+>  drivers/media/pci/mgb4/mgb4_dma.h             |  18 +
+>  drivers/media/pci/mgb4/mgb4_i2c.c             | 139 ++++
+>  drivers/media/pci/mgb4/mgb4_i2c.h             |  35 +
+>  drivers/media/pci/mgb4/mgb4_io.h              |  36 +
+>  drivers/media/pci/mgb4/mgb4_regs.c            |  30 +
+>  drivers/media/pci/mgb4/mgb4_regs.h            |  35 +
+>  drivers/media/pci/mgb4/mgb4_sysfs.h           |  18 +
+>  drivers/media/pci/mgb4/mgb4_sysfs_in.c        | 750 ++++++++++++++++++
+>  drivers/media/pci/mgb4/mgb4_sysfs_out.c       | 734 +++++++++++++++++
+>  drivers/media/pci/mgb4/mgb4_sysfs_pci.c       |  83 ++
+>  drivers/media/pci/mgb4/mgb4_trigger.c         | 203 +++++
+>  drivers/media/pci/mgb4/mgb4_trigger.h         |   8 +
+>  drivers/media/pci/mgb4/mgb4_vin.c             | 665 ++++++++++++++++
+>  drivers/media/pci/mgb4/mgb4_vin.h             |  64 ++
+>  drivers/media/pci/mgb4/mgb4_vout.c            | 507 ++++++++++++
+>  drivers/media/pci/mgb4/mgb4_vout.h            |  58 ++
+>  30 files changed, 4832 insertions(+)
+>  create mode 100644 Documentation/admin-guide/media/mgb4.rst
+>  create mode 100644 drivers/media/pci/mgb4/Kconfig
+>  create mode 100644 drivers/media/pci/mgb4/Makefile
+>  create mode 100644 drivers/media/pci/mgb4/mgb4_cmt.c
+>  create mode 100644 drivers/media/pci/mgb4/mgb4_cmt.h
+>  create mode 100644 drivers/media/pci/mgb4/mgb4_core.c
+>  create mode 100644 drivers/media/pci/mgb4/mgb4_core.h
+>  create mode 100644 drivers/media/pci/mgb4/mgb4_dma.c
+>  create mode 100644 drivers/media/pci/mgb4/mgb4_dma.h
+>  create mode 100644 drivers/media/pci/mgb4/mgb4_i2c.c
+>  create mode 100644 drivers/media/pci/mgb4/mgb4_i2c.h
+>  create mode 100644 drivers/media/pci/mgb4/mgb4_io.h
+>  create mode 100644 drivers/media/pci/mgb4/mgb4_regs.c
+>  create mode 100644 drivers/media/pci/mgb4/mgb4_regs.h
+>  create mode 100644 drivers/media/pci/mgb4/mgb4_sysfs.h
+>  create mode 100644 drivers/media/pci/mgb4/mgb4_sysfs_in.c
+>  create mode 100644 drivers/media/pci/mgb4/mgb4_sysfs_out.c
+>  create mode 100644 drivers/media/pci/mgb4/mgb4_sysfs_pci.c
+>  create mode 100644 drivers/media/pci/mgb4/mgb4_trigger.c
+>  create mode 100644 drivers/media/pci/mgb4/mgb4_trigger.h
+>  create mode 100644 drivers/media/pci/mgb4/mgb4_vin.c
+>  create mode 100644 drivers/media/pci/mgb4/mgb4_vin.h
+>  create mode 100644 drivers/media/pci/mgb4/mgb4_vout.c
+>  create mode 100644 drivers/media/pci/mgb4/mgb4_vout.h
 > 
-> > 
-> > With kmap_local_page(), the mapping is per thread, CPU local and not
-> > globally visible.
-> 
-> No news here. kmap_atomic() is "per thread, CPU local and not glocally 
-> visible". I cannot see any difference here between kmap_atomic() and 
-> kmap_local_page().
-
-What about the below description which refers to your doc?
-"kmap_atomic() in the kernel creates a non-preemptible section
-and disable pagefaults. This could be a source of unwanted latency.
-And kmap_local_page effectively overcomes this issue because it doesn't
-disable pagefault and preemption."
-
-Thanks,
-Zhao
 
