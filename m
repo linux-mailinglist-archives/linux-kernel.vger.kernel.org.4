@@ -2,101 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32BFE6191B8
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 08:18:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6014E6191C0
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 08:21:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231398AbiKDHS0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 03:18:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49958 "EHLO
+        id S231436AbiKDHU5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 03:20:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231374AbiKDHSW (ORCPT
+        with ESMTP id S229804AbiKDHUz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 03:18:22 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77153F33;
-        Fri,  4 Nov 2022 00:18:21 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id gw22so3785311pjb.3;
-        Fri, 04 Nov 2022 00:18:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=eA0yZupCmJu+lIFxWoscgsZofsCuVm6nQ+r3Bs4PfgM=;
-        b=pMTxZL/oe6jfdbdYCNUp+Xb6WGMwDJ0tqzYjFuCFVTbU1K6LCmp38IhtqgFEtGH1Fw
-         eLi3S+bCzf2+/rSdLI9BvXSs2AxVFQGLdZ/VpkCMRosDZICPg8K0E7aAi3VCg4WFPYDw
-         BfmWNQys/m/eitnUWQLYZ4i97xNTJmOpokS1/YmW7+tK6sMrbeSwt/lUvRFiVPBmwrU/
-         ivWuBjfa1WZ8S1UNebL0AtpJKNK0IoOPWmP7NKKqfcpMaASq0oFieIk/rtzcNf6p/IAa
-         QK7q17GoUs4Yjdkmho6a4WFZ4muIgt4Uy+uR4Vu4p0vmgfomnVLk+4/4y9tD9W4Njnx3
-         1t6w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eA0yZupCmJu+lIFxWoscgsZofsCuVm6nQ+r3Bs4PfgM=;
-        b=0fXgmSAgQp3CEAU9JiRx5zUifmpjqg5xcoqY+d31uqQBauQXzIHBGlCSxPzgQjtrAh
-         jb41sMOEK05HWxSSxRYyuYZQ9FxCdzk+RrRVnYP1N4WHzgdK1Y5C3BLjn1GPN1IqJKZQ
-         cp/UZ1mcjnPgUsfvLBimLK2qtegErm8JvVZj6mMtSCAA8guLxeGmNn/MEjB7yOFOcNqe
-         ooyOYjWZl6kQQQtvpkv1QAYMYBWyWIf9hQfZYrBvtTRagDaUvPISAV4Lm25m2LQqwmFh
-         LswyG1Da0PBarJZQVtDXOY2dMFdoHPi+o/IXBUu7jC+ein4L2nSmVGePd8EvTfopfRgC
-         actw==
-X-Gm-Message-State: ACrzQf3yumu0n+1uwUG1MV+UYSFLLjBHSmSjULtzYv4e+3/xprovEVnI
-        GhpRl6AYGZIn5hUuEBcREWw=
-X-Google-Smtp-Source: AMsMyM44DihVYXeoqfThPObIIFl16q8Fgq5Ol1s8X3KRnlnJD5T+n/qjAhXcJhbg7QI1HMtgLqbViQ==
-X-Received: by 2002:a17:902:d592:b0:17a:582:4eb with SMTP id k18-20020a170902d59200b0017a058204ebmr34136415plh.40.1667546300864;
-        Fri, 04 Nov 2022 00:18:20 -0700 (PDT)
-Received: from localhost ([192.55.54.55])
-        by smtp.gmail.com with ESMTPSA id y9-20020a17090322c900b00186f0f59c85sm1854838plg.235.2022.11.04.00.18.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Nov 2022 00:18:20 -0700 (PDT)
-Date:   Fri, 4 Nov 2022 00:18:19 -0700
-From:   Isaku Yamahata <isaku.yamahata@gmail.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Isaku Yamahata <isaku.yamahata@gmail.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Anup Patel <anup@brainfault.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        Eric Farman <farman@linux.ibm.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Atish Patra <atishp@atishpatra.org>,
-        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Isaku Yamahata <isaku.yamahata@intel.com>,
-        Fabiano Rosas <farosas@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Chao Gao <chao.gao@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Yuan Yao <yuan.yao@intel.com>
-Subject: Re: [PATCH 36/44] KVM: x86: Do compatibility checks when onlining CPU
-Message-ID: <20221104071819.GD1063309@ls.amr.corp.intel.com>
-References: <20221102231911.3107438-1-seanjc@google.com>
- <20221102231911.3107438-37-seanjc@google.com>
- <20221103210402.GB1063309@ls.amr.corp.intel.com>
- <Y2RB4qT02EkhMjPL@google.com>
+        Fri, 4 Nov 2022 03:20:55 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11371F33
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 00:20:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667546454; x=1699082454;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=jLozXZd9t3a7mI/Ru02vCIY5zjtAlB/7OfJd6d6CeRY=;
+  b=ZMsDjmzNj1TaNmfTchomE8qc5BSuVcIpSOhV2BldiioJ9RjV9fp7G9UU
+   T5yLhZipSu2aFP8UKxvwYlKcBX+g+7ZetFHlr9HlwlnSHOPaQc2prVjxV
+   Um+YfEWaj20NR22WoY8u56b4GMdlsDG0wM9UYvG1ksiVTeL5S79HsVvbw
+   1lpftvbyhwYqVTHXm7+MDAoxFnDvJKCDPQF5OQQS0n+kWgWC+zJHn419b
+   CIBmqh1Td+H+rfU8moBR0x5ijJ7D8d6a4L2mWS2hca6frK/fH4G2GDPJw
+   VM+0FMbI/FLICVo0066AlfIRa2oEO7i0TJyuYfSLmbMagU9Bi6piKjKC1
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10520"; a="307524210"
+X-IronPort-AV: E=Sophos;i="5.96,136,1665471600"; 
+   d="scan'208";a="307524210"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2022 00:20:53 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10520"; a="880199457"
+X-IronPort-AV: E=Sophos;i="5.96,136,1665471600"; 
+   d="scan'208";a="880199457"
+Received: from rongch2-mobl.ccr.corp.intel.com (HELO [10.254.215.240]) ([10.254.215.240])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2022 00:20:52 -0700
+Subject: Re: arch/powerpc/kexec/crash.c:311:22: error: variable 'i' might be
+ clobbered by 'longjmp' or 'vfork'
+To:     Alexander Potapenko <glider@google.com>,
+        kernel test robot <lkp@intel.com>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Kees Cook <keescook@chromium.org>,
+        =?UTF-8?Q?Maciej_=c5=bbenczykowski?= <maze@google.com>
+References: <202210310123.aklkcZzK-lkp@intel.com>
+ <CAG_fn=VqT+ORnMwR=YCsp6SxOMESqL9-O_t8G-5BdsNNBe13Mg@mail.gmail.com>
+From:   "Chen, Rong A" <rong.a.chen@intel.com>
+Message-ID: <ad55edce-7929-a2b7-4882-9ab9789d76e0@intel.com>
+Date:   Fri, 4 Nov 2022 15:20:50 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.12.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Y2RB4qT02EkhMjPL@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+In-Reply-To: <CAG_fn=VqT+ORnMwR=YCsp6SxOMESqL9-O_t8G-5BdsNNBe13Mg@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -104,37 +67,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 03, 2022 at 10:34:10PM +0000,
-Sean Christopherson <seanjc@google.com> wrote:
 
-> On Thu, Nov 03, 2022, Isaku Yamahata wrote:
-> > On Wed, Nov 02, 2022 at 11:19:03PM +0000,
-> > Sean Christopherson <seanjc@google.com> wrote:
-> > > diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-> > > index f223c845ed6e..c99222b71fcc 100644
-> > > --- a/arch/x86/include/asm/kvm_host.h
-> > > +++ b/arch/x86/include/asm/kvm_host.h
-> > > @@ -1666,7 +1666,7 @@ struct kvm_x86_nested_ops {
-> > >  };
-> > >  
-> > >  struct kvm_x86_init_ops {
-> > > -	int (*check_processor_compatibility)(void);
-> > > +	int (*check_processor_compatibility)(int cpu);
-> > 
-> > Is this cpu argument used only for error message to include cpu number
-> > with avoiding repeating raw_smp_processor_id() in pr_err()?
-> 
-> Yep.
-> 
-> > The actual check is done on the current executing cpu.
-> > 
-> > If cpu != raw_smp_processor_id(), cpu is wrong. Although the function is called
-> > in non-preemptive context, it's a bit confusing. So voting to remove it and
-> > to use.
-> 
-> What if I rename the param is this_cpu?  I 100% agree the argument is confusing
-> as-is, but forcing all the helpers to manually grab the cpu is quite annoying.
 
-Makes sense. Let's settle it with this_cpu.
--- 
-Isaku Yamahata <isaku.yamahata@gmail.com>
+On 10/31/2022 4:27 PM, Alexander Potapenko wrote:
+> Looks unrelated to this 2-year old commit?
+
+Hi Alexander,
+
+Sorry for the inconvenience, the commit here is not the root cause for
+this error, we'll add it to ignore list.
+
+Best Regards,
+Rong Chen
+
+
+> 
+> On Sun, Oct 30, 2022 at 6:12 PM kernel test robot <lkp@intel.com> wrote:
+>>
+>> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+>> head:   882ad2a2a8ffa1defecdf907052f04da2737dc46
+>> commit: f0fe00d4972a8cd4b98cc2c29758615e4d51cdfe security: allow using Clang's zero initialization for stack variables
+>> date:   2 years, 4 months ago
+>> config: powerpc-wii_defconfig
+>> compiler: powerpc-linux-gcc (GCC) 12.1.0
+>> reproduce (this is a W=1 build):
+>>          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>>          chmod +x ~/bin/make.cross
+>>          # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f0fe00d4972a8cd4b98cc2c29758615e4d51cdfe
+>>          git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+>>          git fetch --no-tags linus master
+>>          git checkout f0fe00d4972a8cd4b98cc2c29758615e4d51cdfe
+>>          # save the config file
+>>          mkdir build_dir && cp config build_dir/.config
+>>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash arch/powerpc/
+>>
+>> If you fix the issue, kindly add following tag where applicable
+>> | Reported-by: kernel test robot <lkp@intel.com>
+>>
+>> All errors (new ones prefixed by >>):
+>>
+>>     arch/powerpc/kexec/crash.c: In function 'default_machine_crash_shutdown':
+>>>> arch/powerpc/kexec/crash.c:311:22: error: variable 'i' might be clobbered by 'longjmp' or 'vfork' [-Werror=clobbered]
+>>       311 |         unsigned int i;
+>>           |                      ^
+>>     cc1: all warnings being treated as errors
+>>
+>>
+>> vim +311 arch/powerpc/kexec/crash.c
+>>
+>> 496b010e1e70a9 arch/powerpc/kernel/crash.c Michael Neuling  2008-01-18  308
+>> cc53291521701f arch/powerpc/kernel/crash.c Michael Ellerman 2005-12-04  309  void default_machine_crash_shutdown(struct pt_regs *regs)
+>> cc53291521701f arch/powerpc/kernel/crash.c Michael Ellerman 2005-12-04  310  {
+>> 496b010e1e70a9 arch/powerpc/kernel/crash.c Michael Neuling  2008-01-18 @311     unsigned int i;
+>>
+>> :::::: The code at line 311 was first introduced by commit
+>> :::::: 496b010e1e70a9b4286fa34f19523f24a194f119 [POWERPC] kdump shutdown hook support
+>>
+>> :::::: TO: Michael Neuling <mikey@neuling.org>
+>> :::::: CC: Paul Mackerras <paulus@samba.org>
+>>
+>> --
+>> 0-DAY CI Kernel Test Service
+>> https://01.org/lkp
+> 
+> 
+> 
