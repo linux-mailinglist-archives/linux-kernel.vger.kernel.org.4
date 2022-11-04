@@ -2,51 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B4AD61945E
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 11:20:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 364C961942B
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 11:07:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231721AbiKDKUz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 06:20:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46958 "EHLO
+        id S229898AbiKDKG7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 06:06:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231687AbiKDKUk (ORCPT
+        with ESMTP id S230456AbiKDKG5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 06:20:40 -0400
-X-Greylist: delayed 932 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 04 Nov 2022 03:20:35 PDT
-Received: from 3.mo560.mail-out.ovh.net (3.mo560.mail-out.ovh.net [46.105.58.226])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2B3625E9B
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 03:20:35 -0700 (PDT)
-Received: from player726.ha.ovh.net (unknown [10.110.115.67])
-        by mo560.mail-out.ovh.net (Postfix) with ESMTP id 9243D255CB
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 10:05:01 +0000 (UTC)
-Received: from RCM-web3.webmail.mail.ovh.net (ip-194-187-74-233.konfederacka.maverick.com.pl [194.187.74.233])
-        (Authenticated sender: rafal@milecki.pl)
-        by player726.ha.ovh.net (Postfix) with ESMTPSA id 422C230557BA7;
-        Fri,  4 Nov 2022 10:04:57 +0000 (UTC)
+        Fri, 4 Nov 2022 06:06:57 -0400
+Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E20B63C0
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 03:06:55 -0700 (PDT)
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+        by mx0a-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2A49TAQM012440;
+        Fri, 4 Nov 2022 05:06:40 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=PODMain02222019;
+ bh=0pR3TOrHMf9AHUYqBblJTRAag2PL/OTVWGjwi52/bj4=;
+ b=hUxE2vhD19xFJ1uLc3wc3uzsm51JVbUMxArrs1m68Vtv+67h+hktqAUP7nj5bBMMLzXp
+ pN9vbhg18Twred/ilxxns1KptnLg8l4UMIt58w2agRgusmBACxEp0v4FQ2t+4Ec5LtEY
+ mN7maTbd4nJnYiOqXHWTNB+3i797oV8VBIgp7CibObllaCT99025OO6eFsyDkxUOmsb6
+ PTOVT0MlPbyDVpUV5MAXQFUmiQgL2XKPgdrLZcLO2oqz1Qehnm1Q0lZ8n7iR38UGZz/N
+ f6pSjC0W3CSMaWlTYE9QnmdB62msus1RtAg7zisOKsR4YBqCKwsT1MxhJpMifOxiyrOw 2g== 
+Received: from ediex02.ad.cirrus.com ([84.19.233.68])
+        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3kmph3gmea-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 04 Nov 2022 05:06:39 -0500
+Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.15; Fri, 4 Nov
+ 2022 05:06:37 -0500
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.2.1118.15 via Frontend
+ Transport; Fri, 4 Nov 2022 05:06:37 -0500
+Received: from vitaly-Legion-7-16ACHg6.ad.cirrus.com (unknown [198.90.238.212])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 86B862AA;
+        Fri,  4 Nov 2022 10:06:37 +0000 (UTC)
+From:   Vitaly Rodionov <vitalyr@opensource.cirrus.com>
+To:     Sanjay R Mehta <sanju.mehta@amd.com>,
+        Mark Brown <broonie@kernel.org>, Takashi Iwai <tiwai@suse.com>
+CC:     <alsa-devel@alsa-project.org>, <patches@opensource.cirrus.com>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH] spi: amd: Fix SPI_SPD7 value
+Date:   Fri, 4 Nov 2022 10:06:37 +0000
+Message-ID: <20221104100637.13376-1-vitalyr@opensource.cirrus.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Date:   Fri, 04 Nov 2022 11:04:57 +0100
-From:   =?UTF-8?Q?Rafa=C5=82_Mi=C5=82ecki?= <rafal@milecki.pl>
-To:     Christian Lamparter <chunkeey@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, srinivas.kandagatla@linaro.org,
-        gregkh@linuxfoundation.org, a.fatoum@pengutronix.de
-Subject: Re: [PATCH v1] nvmem: address crc32 check on redundant-layout powerpc
- machines
-In-Reply-To: <41e7ab94800b4a9aef73e212464bd94117429bec.1667555240.git.chunkeey@gmail.com>
-References: <41e7ab94800b4a9aef73e212464bd94117429bec.1667555240.git.chunkeey@gmail.com>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <e22067325dffb02739a7bd7c20419b43@milecki.pl>
-X-Sender: rafal@milecki.pl
-X-Originating-IP: 194.187.74.233
-X-Webmail-UserID: rafal@milecki.pl
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Ovh-Tracer-Id: 16414776219705846715
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: 0
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvgedrvddugddtlecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecunecujfgurhepggffhffvvefujghffgfkgihitgfgsehtjehjtddtredvnecuhfhrohhmpeftrghfrghlucfoihhlvggtkhhiuceorhgrfhgrlhesmhhilhgvtghkihdrphhlqeenucggtffrrghtthgvrhhnpefgueelueetteefueehhffhgfetvdegjeefleffuedvhfeuffdvheegueevuefhleenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecukfhppeduvdejrddtrddtrddupdduleegrddukeejrdejgedrvdeffeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduvdejrddtrddtrddupdhmrghilhhfrhhomhepoehrrghfrghlsehmihhlvggtkhhirdhplheqpdhnsggprhgtphhtthhopedupdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdfovfetjfhoshhtpehmohehiedtpdhmohguvgepshhmthhpohhuth
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: BWIpw-d5CSFly8m_iAhM2k8SG_jgY4NS
+X-Proofpoint-GUID: BWIpw-d5CSFly8m_iAhM2k8SG_jgY4NS
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,58 +65,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-11-04 10:47, Christian Lamparter wrote:
-> The Western Digital MyBook Live (PowerPC 464/APM82181)
-> has a set of redundant u-boot-env. Loading up the driver
-> causes it to error out with:
-> 
-> | u_boot_env: Invalid calculated CRC32: 0x4f8f2c86 (expected: 
-> 0x98b14514)
-> | u_boot_env: probe of partition@1e000 failed with error -22
-> 
-> Looking up the userspace libubootenv utilities source [0],
-> it looks like the "mark" or "flag" is not part of the
-> crc32 sum... which is unfortunate :(
-> 
-> |static int libuboot_load(struct uboot_ctx *ctx)
-> |{
-> |[...]
-> |       if (ctx->redundant) {
-> |		[...]
-> |               offsetdata = offsetof(struct uboot_env_redund, data);
-> |		[...]
-> |       }
-> |       usable_envsize = ctx->size - offsetdata;
-> |       buf[0] = malloc(bufsize);
-> |[...]
-> |	for (i = 0; i < copies; i++) {
-> |		data = (uint8_t *)(buf[i] + offsetdata);
-> |               uint32_t crc;
-> |
-> |		ret = devread(ctx, i, buf[i]);
-> |		[...]
-> |		crc = *(uint32_t *)(buf[i] + offsetcrc);
-> |               dev->crc = crc32(0, (uint8_t *)data, usable_envsize);
-> |
+According to data sheet SPI_SPD7 should be set to 7.
 
-Thanks for the fix, it may be I didn't actually test that code.
+Signed-off-by: Vitaly Rodionov <vitalyr@opensource.cirrus.com>
+---
+ drivers/spi/spi-amd.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-That change has nothing to do with byte swapping so I' suggest TWO
-separated patches.
+diff --git a/drivers/spi/spi-amd.c b/drivers/spi/spi-amd.c
+index e23121456c70..bfc3ab5f39ea 100644
+--- a/drivers/spi/spi-amd.c
++++ b/drivers/spi/spi-amd.c
+@@ -65,7 +65,7 @@ enum amd_spi_speed {
+ 	F_16_66MHz,
+ 	F_100MHz,
+ 	F_800KHz,
+-	SPI_SPD7,
++	SPI_SPD7 = 0x7,
+ 	F_50MHz = 0x4,
+ 	F_4MHz = 0x32,
+ 	F_3_17MHz = 0x3F
+-- 
+2.34.1
 
-
-> Now, this alone didn't fully fix the kernel's uboot-env nvmem
-> driver. The driver then ran into an endian error on the
-> big-endian powerpc device:
-> 
-> | u_boot_env: Invalid calculated CRC32: 0x1445b198 (expected: 
-> 0x98b14514)
-> 
-> however the __le32 type for the crc32 value is justified because the
-> the crc32() is just a macro for crc32_le(). So, to side-step that
-> problem, the crc32 check gets extended to also accept a byteswapped
-> crc32.
-
-Can you try this pending patch, please?
-[PATCH v2] nvmem: u-boot-env: align endianness of crc32 values
-https://lore.kernel.org/lkml/20221012155133.287-1-musashino.open@gmail.com/
