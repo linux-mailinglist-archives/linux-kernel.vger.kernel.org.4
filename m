@@ -2,128 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E226D6192D6
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 09:35:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 52B2C61928C
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 09:15:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231208AbiKDIfx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 04:35:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53964 "EHLO
+        id S230199AbiKDIOz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 04:14:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230456AbiKDIfu (ORCPT
+        with ESMTP id S229950AbiKDIOt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 04:35:50 -0400
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8447126574
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 01:35:49 -0700 (PDT)
-Received: by mail-yb1-xb34.google.com with SMTP id j130so5001431ybj.9
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 01:35:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=mUpvDHPp/KQbmUJ+TdnjII/BPksPsXvuEN05nH99p+w=;
-        b=MzqadLxIR9b6+LEJJ6HNsij9urCh0GbULmcpnN6dT5y91ETH4PNxDwJn56S2GxQLvz
-         ugMDI58sSH4xeUjXIHk3xGmoUp4Kb9Ir9KT9YYkbLVbAjpF7vUunAUDxOJSaK6lSNFQ1
-         4wRLynn7XKYZ5g3N1wOl0lZCc+rwXJA3axPgZbsV0ymxMJEjh2/ewOeyFOLEYAu3jX5R
-         1rB/oyzOEJ183FqFCmVDuRkDrBlfcROOq4HwqCUsoogizfDfrJFpRfb3GPpNH9oGEbyI
-         GbgICsAfSveF0MO/15ZLaapvsewpeGSKCUxDYSLY5ypcK1eaDegEA86YGIazXmWb5GS9
-         57oA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mUpvDHPp/KQbmUJ+TdnjII/BPksPsXvuEN05nH99p+w=;
-        b=vc1uGXB1oDJkdjvg4EpwNWuVD7o4Lt5mG4PLcg5b8eFdwrRWmPNAcnPIfcI/KhnI2E
-         22wwpw8U0uJAK8b8iHYBrL5IWPvZw8Z+SsWONbygwOjs0JTktU4j7KHohBwkcI4AhGQD
-         AUoMcXWSzPcphBsfrCfDedFmwYTR9KBNHL5lAG+pNqEqlzj4MtFVeAQ/us3uFVK3LdeU
-         Psic63XfCp6B8Oh07hNBo+L3exFLqjFq574pf0qOBKbMsxKCnrJ3RtvRLiyeQd/LBqD/
-         TorbG+5RlMdGdlUV9E8VCGEjBH0R8BEG3hdMnNa1XfH+Ox+pB7vp5Uv5mvgQuiUNqMW6
-         E7xw==
-X-Gm-Message-State: ACrzQf1Xzn4vlu3htmFvZjEATYwI9niG4IaJZk5Ehm370yhnLOw2vx/5
-        6I+h8E6UYhLoE/vdgj8MWa7UjJjeRnklIHBcoUA=
-X-Google-Smtp-Source: AMsMyM6fG11B5iuPoqPwVLezhYfdgTc8yZq6qpMJjcuzWv4SacXQUbPlVZCOSNMseNsaIUVKR0dVYW6yukdbq16/f1E=
-X-Received: by 2002:a25:6854:0:b0:6ca:29fd:b6ea with SMTP id
- d81-20020a256854000000b006ca29fdb6eamr34035095ybc.318.1667550948644; Fri, 04
- Nov 2022 01:35:48 -0700 (PDT)
+        Fri, 4 Nov 2022 04:14:49 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E859A26109;
+        Fri,  4 Nov 2022 01:14:47 -0700 (PDT)
+Received: from dggpeml500021.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4N3YM82mPhzRp2Y;
+        Fri,  4 Nov 2022 16:14:44 +0800 (CST)
+Received: from huawei.com (10.175.127.227) by dggpeml500021.china.huawei.com
+ (7.185.36.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Fri, 4 Nov
+ 2022 16:14:45 +0800
+From:   Baokun Li <libaokun1@huawei.com>
+To:     <linux-ext4@vger.kernel.org>
+CC:     <tytso@mit.edu>, <adilger.kernel@dilger.ca>, <jack@suse.cz>,
+        <ritesh.list@gmail.com>, <linux-kernel@vger.kernel.org>,
+        <yi.zhang@huawei.com>, <yukuai3@huawei.com>, <libaokun1@huawei.com>
+Subject: [PATCH] ext4: fix bad checksum after online resize
+Date:   Fri, 4 Nov 2022 16:35:53 +0800
+Message-ID: <20221104083553.581928-1-libaokun1@huawei.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-References: <20221104070523.60296-1-liaochang1@huawei.com>
-In-Reply-To: <20221104070523.60296-1-liaochang1@huawei.com>
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Date:   Fri, 4 Nov 2022 09:35:37 +0100
-Message-ID: <CAKXUXMxi_aqnvCmYjakQzoYvYqqwrvMnFt-czLV1iUnO0TnScg@mail.gmail.com>
-Subject: Re: [PATCH -next v2] checkpatch: Add check for array allocator family
- argument order
-To:     Liao Chang <liaochang1@huawei.com>
-Cc:     apw@canonical.com, joe@perches.com, dwaipayanray1@gmail.com,
-        linux-kernel@vger.kernel.org, bagasdotme@gmail.com,
-        pbonzini@redhat.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.127.227]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpeml500021.china.huawei.com (7.185.36.21)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 4, 2022 at 8:08 AM Liao Chang <liaochang1@huawei.com> wrote:
->
-> These array allocator family are sometimes misused with the first and
-> second arguments switchted.
+When online resizing is performed twice consecutively, the error message
+"Superblock checksum does not match superblock" is displayed for the
+second time. Here's the reproducer:
 
-Just a nit:
+	mkfs.ext4 -F /dev/sdb 100M
+	mount /dev/sdb /tmp/test
+	resize2fs /dev/sdb 5G
+	resize2fs /dev/sdb 6G
 
-s/switchted/switched/
+To solve this issue, we moved the update of the checksum after the
+es->s_overhead_clusters is updated.
 
-But probably you actually mean "swapped". I think there is a slight
-difference between the two words, "switched" and "swapped". And here
-the arguments are swapped. Note: I am also not a native speaker.
+Fixes: 026d0d27c488 ("ext4: reduce computation of overhead during resize")
+Fixes: de394a86658f ("ext4: update s_overhead_clusters in the superblock during an on-line resize")
+Signed-off-by: Baokun Li <libaokun1@huawei.com>
+---
+ fs/ext4/resize.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-For the implementation change:
+diff --git a/fs/ext4/resize.c b/fs/ext4/resize.c
+index 6dfe9ccae0c5..32fbfc173571 100644
+--- a/fs/ext4/resize.c
++++ b/fs/ext4/resize.c
+@@ -1471,8 +1471,6 @@ static void ext4_update_super(struct super_block *sb,
+ 	 * active. */
+ 	ext4_r_blocks_count_set(es, ext4_r_blocks_count(es) +
+ 				reserved_blocks);
+-	ext4_superblock_csum_set(sb);
+-	unlock_buffer(sbi->s_sbh);
+ 
+ 	/* Update the free space counts */
+ 	percpu_counter_add(&sbi->s_freeclusters_counter,
+@@ -1508,6 +1506,8 @@ static void ext4_update_super(struct super_block *sb,
+ 		ext4_calculate_overhead(sb);
+ 	es->s_overhead_clusters = cpu_to_le32(sbi->s_overhead);
+ 
++	ext4_superblock_csum_set(sb);
++	unlock_buffer(sbi->s_sbh);
+ 	if (test_opt(sb, DEBUG))
+ 		printk(KERN_DEBUG "EXT4-fs: added group %u:"
+ 		       "%llu blocks(%llu free %llu reserved)\n", flex_gd->count,
+-- 
+2.31.1
 
-Acked-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
-
-How many new findings are now identified with this extended check on
-linux-next? Could you run checkpatch on all files of linux-next and
-share the new findings? Then we can do a quick scan if some instances
-should be immediately fixed or some janitor should follow through with
-such a task.
-
-Lukas
-
->
-> Same issue with calloc, kvcalloc, kvmalloc_array etc.
->
-> Bleat if sizeof is the first argument.
->
-> Link: https://lore.kernel.org/lkml/5374345c-7973-6a3c-d559-73bf4ac15079@redhat.com/
-> Signed-off-by: Liao Chang <liaochang1@huawei.com>
-> Acked-by: Joe Perches <joe@perches.com>
-> ---
-> v2:
-> 1. Acked-by Joe Perches.
-> 2. Use lore links in Link tag.
->
-> ---
->  scripts/checkpatch.pl | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
-> index 1e5e66ae5a52..a9a9dc277cff 100755
-> --- a/scripts/checkpatch.pl
-> +++ b/scripts/checkpatch.pl
-> @@ -7128,7 +7128,7 @@ sub process {
->                 }
->
->  # check for alloc argument mismatch
-> -               if ($line =~ /\b((?:devm_)?(?:kcalloc|kmalloc_array))\s*\(\s*sizeof\b/) {
-> +               if ($line =~ /\b((?:devm_)?((?:k|kv)?(calloc|malloc_array)(?:_node)?))\s*\(\s*sizeof\b/) {
->                         WARN("ALLOC_ARRAY_ARGS",
->                              "$1 uses number as first arg, sizeof is generally wrong\n" . $herecurr);
->                 }
-> --
-> 2.17.1
->
