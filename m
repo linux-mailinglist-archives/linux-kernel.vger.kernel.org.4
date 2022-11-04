@@ -2,113 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72F6561A1F7
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 21:13:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04A5C61A1F1
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 21:12:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229863AbiKDUNP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 16:13:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55586 "EHLO
+        id S229846AbiKDUMv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 16:12:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229877AbiKDUNI (ORCPT
+        with ESMTP id S229540AbiKDUMt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 16:13:08 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CA92264B0
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 13:12:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667592730;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=mVw++WwNRhJv9XuMMPj7SE5JUR1Vsk4jmONPY9jqoLM=;
-        b=ZVhmLWY04Om8UttXwveHGmaom2XqwiAwdphwSTBMIT34QpFcgs6ToY5HUSGzZHajbXTD2F
-        Nq5ZogZoc7qQpBuHWpyi14HfVE/9yuxS5lq95B2RjqlD6yU3se7OG7MAPalnRBEdJrwjXY
-        K4wONMRg6mVk0o2ds2Zoj5PIF7uzKrY=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-550-31-ZvFwqPWOwa4ydDYGVig-1; Fri, 04 Nov 2022 16:12:07 -0400
-X-MC-Unique: 31-ZvFwqPWOwa4ydDYGVig-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C83488039B4;
-        Fri,  4 Nov 2022 20:12:06 +0000 (UTC)
-Received: from [10.22.34.155] (unknown [10.22.34.155])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 1E2FEC2C8D9;
-        Fri,  4 Nov 2022 20:12:06 +0000 (UTC)
-Message-ID: <84fd6656-d133-b9df-c39e-fbb3a1f4a873@redhat.com>
-Date:   Fri, 4 Nov 2022 16:12:05 -0400
+        Fri, 4 Nov 2022 16:12:49 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB6E72C66E;
+        Fri,  4 Nov 2022 13:12:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
+        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+        Content-Description:In-Reply-To:References;
+        bh=kaPTClNPEmFEytPts+Xev/fPtAp5vUFNC52w26Gma5E=; b=sHtTCJfSRMFnnX6gmSmuGISc5Q
+        NlCQkuSFQAYT5n6OuRbayMx3ZdId54XLkYxluzgKseZyhzWyMDo9vrt/859Rq93RgXBBAqe7K4tF7
+        hbnLp5KXI7iXa7pwjmX4F4apIVjiq45mztC5BQV4hBay5qd1P/CuHb5cfwdO4Sgsx6cqAsDph2T/2
+        3zQsae+IsivTibRTrkiVS+sEVrTaMcYhtRoWR5hv3ebMiZx26aHp1DThLoNa8mLHzPa1Ez67XB613
+        pbrCcoEJl7Lv0LVSDzA0JW1S6cNc4VJGTnp/+5nwOXDWWyGJR2kR7wkVMUQEfoBJD86gtla1fDNHj
+        4bdaI4Qg==;
+Received: from [2601:1c2:d80:3110::a2e7] (helo=casper.infradead.org)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1or33Y-007dUQ-F9; Fri, 04 Nov 2022 20:12:48 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        kernel test robot <lkp@intel.com>,
+        Artur Rojek <contact@artur-rojek.eu>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        linux-input@vger.kernel.org, Paul Gazzillo <paul@pgazz.com>,
+        Necip Fazil Yildiran <fazilyildiran@gmail.com>
+Subject: [PATCH] Input: joystick - fix Kconfig warning for JOYSTICK_ADC
+Date:   Fri,  4 Nov 2022 13:12:38 -0700
+Message-Id: <20221104201238.31628-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.38.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH v9 3/3] blk-cgroup: Flush stats at blkgs destruction path
-Content-Language: en-US
-To:     Tejun Heo <tj@kernel.org>
-Cc:     Jens Axboe <axboe@kernel.dk>, cgroups@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Ming Lei <ming.lei@redhat.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>,
-        Hillf Danton <hdanton@sina.com>
-References: <20221104182050.342908-1-longman@redhat.com>
- <20221104182050.342908-4-longman@redhat.com>
- <Y2VvboMSxgF0pYpX@slm.duckdns.org>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <Y2VvboMSxgF0pYpX@slm.duckdns.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/4/22 16:00, Tejun Heo wrote:
-> On Fri, Nov 04, 2022 at 02:20:50PM -0400, Waiman Long wrote:
->> +/**
->> + * cgroup_rstat_css_flush - flush stats for the given css and cpu
->> + * @css: target css to be flush
->> + * @cpu: the cpu that holds the stats to be flush
->> + *
->> + * A lightweight rstat flush operation for a given css and cpu.
->> + * Only the cpu_lock is being held for mutual exclusion, the cgroup_rstat_lock
->> + * isn't used.
->> + */
->> +void cgroup_rstat_css_flush(struct cgroup_subsys_state *css, int cpu)
->> +{
->> +	raw_spinlock_t *cpu_lock = per_cpu_ptr(&cgroup_rstat_cpu_lock, cpu);
->> +
->> +	raw_spin_lock_irq(cpu_lock);
->> +	rcu_read_lock();
->> +	css->ss->css_rstat_flush(css, cpu);
->> +	rcu_read_unlock();
->> +	raw_spin_unlock_irq(cpu_lock);
->> +}
-> Would it make sense to itereate CPUs within the helper rather than asking
-> the caller to do it? Also, in terms of patch sequencing, this introduces a
-> bug and then fixes it. Prolly better to not introduce the bug in the first
-> place.
->
-> Thanks.
+Fix a Kconfig warning for JOYSTICK_ADC by also selecting
+IIO_BUFFER.
 
-I should have named the function cgroup_rstat_css_cpu_flush() to 
-indicate that the cpu is a needed parameter. We can have a 
-cgroup_rstat_css_flush() in the future if the need arises.
+WARNING: unmet direct dependencies detected for IIO_BUFFER_CB
+  Depends on [n]: IIO [=y] && IIO_BUFFER [=n]
+  Selected by [y]:
+  - JOYSTICK_ADC [=y] && INPUT [=y] && INPUT_JOYSTICK [=y] && IIO [=y]
 
-It is an optimization to call this function only if the corresponding 
-cpu has a pending lockless list. I could do cpu iteration here and call 
-the flushing function for all the CPUs. It is less optimized this way. 
-Since it is a slow path, I guess performance is not that critical. So I 
-can go either way. Please let me know your preference.
+Fixes: 2c2b364fddd5 ("Input: joystick - add ADC attached joystick driver.")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Reported-by: kernel test robot <lkp@intel.com>
+Cc: Artur Rojek <contact@artur-rojek.eu>
+Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc: linux-input@vger.kernel.org
+Cc: Paul Gazzillo <paul@pgazz.com>
+Cc: Necip Fazil Yildiran <fazilyildiran@gmail.com>
+---
+ drivers/input/joystick/Kconfig |    1 +
+ 1 file changed, 1 insertion(+)
 
-Thanks,
-Longman
-
+diff -- a/drivers/input/joystick/Kconfig b/drivers/input/joystick/Kconfig
+--- a/drivers/input/joystick/Kconfig
++++ b/drivers/input/joystick/Kconfig
+@@ -46,6 +46,7 @@ config JOYSTICK_A3D
+ config JOYSTICK_ADC
+ 	tristate "Simple joystick connected over ADC"
+ 	depends on IIO
++	select IIO_BUFFER
+ 	select IIO_BUFFER_CB
+ 	help
+ 	  Say Y here if you have a simple joystick connected over ADC.
