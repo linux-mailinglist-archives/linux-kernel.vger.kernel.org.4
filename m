@@ -2,90 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC7B461A3E0
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 23:06:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6E5A61A3E4
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 23:08:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229593AbiKDWGc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 18:06:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34522 "EHLO
+        id S229782AbiKDWIq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 18:08:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229542AbiKDWGa (ORCPT
+        with ESMTP id S229542AbiKDWIl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 18:06:30 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26401D10A;
-        Fri,  4 Nov 2022 15:06:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667599590; x=1699135590;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=fW0Bxr9OnS17BvgprAuZazMwrhTy9Qfa+MwnyV0jt60=;
-  b=n4hAvMbyxzAX+HZ9f5EgeAzpeNQ2G2C5NYqieQrd6sSgBKpDZBaCEqUj
-   GDEbWiJztuLp2Gj5qimeRplzG4qTv1WfxgiC8xPoKja34A9/L7PKnYVxp
-   sgi1TiCf+ktmF2L9BPtCDV3MP7CrbKz4mLwzW2lZeKWJZEDjObAkzxT2p
-   xFNLDg0nCgDCoHqRoirutydS3cqhjuDKc4Dw4o7Px4jAEPRZzA1XqZdDf
-   jPDZNw6EHvvr+tRwJWwv3yZosrjSN+JVkaZpFUXfg8ET+HlP/7yiXgi2v
-   RWIHk4SOM0rtA/tgiFwCIRnv7VHCvxLgIRoSlYTo7lpgpK01hjxIELvMV
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10521"; a="289811519"
-X-IronPort-AV: E=Sophos;i="5.96,138,1665471600"; 
-   d="scan'208";a="289811519"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2022 15:06:29 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10521"; a="635243963"
-X-IronPort-AV: E=Sophos;i="5.96,138,1665471600"; 
-   d="scan'208";a="635243963"
-Received: from anantsin-mobl2.amr.corp.intel.com (HELO [10.209.97.57]) ([10.209.97.57])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2022 15:06:28 -0700
-Message-ID: <b2274949-8fba-24ff-89bf-627f288ace06@intel.com>
-Date:   Fri, 4 Nov 2022 15:06:28 -0700
+        Fri, 4 Nov 2022 18:08:41 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9193FCFE
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 15:08:38 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id l11so9571856edb.4
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 15:08:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=OUWMpfCp8yMYMN27hOBTPmmaRDIODrfLy/QYyrxVC9U=;
+        b=N/5MobyCqMqaDHUf0VYAeGDlaShVI6gW3R/fr1tLkTjRzSd0mrwTwe6AgO1bc6rMAQ
+         vGqaYuhfvQ82vWTraoh76WIR9XOumQyzsOIhiQlm7A5wwEuKKd3o4BWpzigWjyVJAaHB
+         lXa1OaNbz5gonB88NC84ox0/3fAaw8jeOZ6TU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OUWMpfCp8yMYMN27hOBTPmmaRDIODrfLy/QYyrxVC9U=;
+        b=nw2fZIhpF5FPsiehg5jAkHLgGyWu8jWxOg+HnvzVZcTrGY7GPC0VQQ34xwQbT+Jw0l
+         N+R5mG4q/rKP3JervQFO6ytEODkgrgb7EkS8Rqt8vUdbzPxDpcBNpuydt5i7ryZ7sS8n
+         /HBbfzmi8F79Te5N2KPW5+RClVmWp6G8u+WtgF1/caWapEgh3b8yDT79nQZSAFKJ6NDo
+         EI/EuYeWBVXP58B/DIPI/NRhGZ1BN6w2MCwhhyJpkFhedYpBRonEAddU3TVwP7NdNhdg
+         z+ZxJAUOueFs6xupgub572mYG1mF5Lazi2xI6scCUaecSljKt9qbTK/9O2HIlPcXMmEk
+         f9qw==
+X-Gm-Message-State: ACrzQf334kOADTdHWmgUcpF74siGJ8kOXjuqQoz37LoowRVaBfdrJDfx
+        Eqnc3IsEtF4XmHOEXH5UbNwmmKnkpZ6P1Fhu
+X-Google-Smtp-Source: AMsMyM7VQ+4n2B4s6K4mE/OgXoYdHv0MSN6jnA/4b4RgMNPPdm9dQrZ4hGCA1YIoQHfehSQJheXjYw==
+X-Received: by 2002:a05:6402:3510:b0:461:f781:6dfe with SMTP id b16-20020a056402351000b00461f7816dfemr36633065edd.272.1667599717241;
+        Fri, 04 Nov 2022 15:08:37 -0700 (PDT)
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com. [209.85.128.49])
+        by smtp.gmail.com with ESMTPSA id j10-20020aa7c0ca000000b00459ad800bbcsm321696edp.33.2022.11.04.15.08.29
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 04 Nov 2022 15:08:32 -0700 (PDT)
+Received: by mail-wm1-f49.google.com with SMTP id ay14-20020a05600c1e0e00b003cf6ab34b61so6224414wmb.2
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 15:08:29 -0700 (PDT)
+X-Received: by 2002:a05:600c:2212:b0:3cf:6068:3c40 with SMTP id
+ z18-20020a05600c221200b003cf60683c40mr25419745wml.57.1667599706005; Fri, 04
+ Nov 2022 15:08:26 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH 0/3] x86/speculation: Support Automatic IBRS
-Content-Language: en-US
-To:     Kim Phillips <kim.phillips@amd.com>, x86@kernel.org
-Cc:     Borislav Petkov <bp@alien8.de>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Joao Martins <joao.m.martins@oracle.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        David Woodhouse <dwmw@amazon.co.uk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Juergen Gross <jgross@suse.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Babu Moger <Babu.Moger@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221104213651.141057-1-kim.phillips@amd.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <20221104213651.141057-1-kim.phillips@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20221104064055.1.I00a0e4564a25489e85328ec41636497775627564@changeid>
+ <20221104064055.2.I49b25b9bda9430fc7ea21e5a708ca5a0aced2798@changeid> <CAE-0n53FLz+4XROL7t5Vk1pEgvAX4tJYO4UK8rdCQUW0Pq78jg@mail.gmail.com>
+In-Reply-To: <CAE-0n53FLz+4XROL7t5Vk1pEgvAX4tJYO4UK8rdCQUW0Pq78jg@mail.gmail.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Fri, 4 Nov 2022 15:08:12 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=VSh90tdSDaxThoGaE_uYWPTMrGYBMM0UqcH=HUZaScNg@mail.gmail.com>
+Message-ID: <CAD=FV=VSh90tdSDaxThoGaE_uYWPTMrGYBMM0UqcH=HUZaScNg@mail.gmail.com>
+Subject: Re: [PATCH 2/3] clk: qcom: lpass-sc7180: Fix pm_runtime usage
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     Bjorn Andersson <andersson@kernel.org>,
+        Taniya Das <quic_tdas@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Judy Hsiao <judyhsiao@chromium.org>,
+        Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/4/22 14:36, Kim Phillips wrote:
-> The AMD Zen4 core supports a new feature called Automatic IBRS.
-> (Indirect Branch Restricted Speculation).
-> 
-> Enable Automatic IBRS by default if the CPU feature is present.
-> It typically provides greater performance over the incumbent
-> generic retpolines mitigation.
+Hi,
 
-Could you also share some information on how this differs from EIBRS and
-why it needs to exist in parallel to EBIRS?
+On Fri, Nov 4, 2022 at 2:19 PM Stephen Boyd <swboyd@chromium.org> wrote:
+>
+> Quoting Douglas Anderson (2022-11-04 06:56:29)
+> > The sc7180 lpass clock controller's pm_runtime usage wasn't broken
+> > quite as spectacularly as the sc7280's pm_runtime usage, but it was
+> > still broken. Putting some printouts in at boot showed me this (with
+> > serial console enabled, which makes the prints slow and thus changes
+> > timing):
+> >   [    3.109951] DOUG: my_pm_clk_resume, usage=1
+> >   [    3.114767] DOUG: my_pm_clk_resume, usage=1
+> >   [    3.664443] DOUG: my_pm_clk_suspend, usage=0
+> >   [    3.897566] DOUG: my_pm_clk_suspend, usage=0
+> >   [    3.910137] DOUG: my_pm_clk_resume, usage=1
+> >   [    3.923217] DOUG: my_pm_clk_resume, usage=0
+> >   [    4.440116] DOUG: my_pm_clk_suspend, usage=-1
+> >   [    4.444982] DOUG: my_pm_clk_suspend, usage=0
+> >   [   14.170501] DOUG: my_pm_clk_resume, usage=1
+> >   [   14.176245] DOUG: my_pm_clk_resume, usage=0
+> >
+> > ...or this w/out serial console:
+> >   [    0.556139] DOUG: my_pm_clk_resume, usage=1
+> >   [    0.556279] DOUG: my_pm_clk_resume, usage=1
+> >   [    1.058422] DOUG: my_pm_clk_suspend, usage=-1
+> >   [    1.058464] DOUG: my_pm_clk_suspend, usage=0
+> >   [    1.186250] DOUG: my_pm_clk_resume, usage=1
+> >   [    1.186292] DOUG: my_pm_clk_resume, usage=0
+> >   [    1.731536] DOUG: my_pm_clk_suspend, usage=-1
+> >   [    1.731557] DOUG: my_pm_clk_suspend, usage=0
+> >   [   10.288910] DOUG: my_pm_clk_resume, usage=1
+> >   [   10.289496] DOUG: my_pm_clk_resume, usage=0
+> >
+> > It seems to be doing roughly the right sequence of calls, but just
+> > like with sc7280 this is more by luck than anything. Having a usage of
+> > -1 is just not OK.
+> >
+> > Let's fix this like we did with sc7280.
+>
+> Any Fixes tag?
+
+Ah, right. I guess the most obvious one is actually:
+
+Fixes: ce8c195e652f ("clk: qcom: lpasscc: Introduce pm autosuspend for SC7180")
+
+That's what got us going negative. One could _sorta_ make the argument
+for a "Fixes" tag all the way to the start of the driver, though. The
+driver never did a pm_runtime_get() during probe and so there was (I
+guess) a chance that some of the bare register writes in probe could
+have been unclocked. I'm not aware of that ever being a problem, so I
+guess just the above "Fixes" is fine.
+
+
+> > Signed-off-by: Douglas Anderson <dianders@chromium.org>
+> > ---
+>
+> Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+
+Thanks! Yell if you want me to spin a v2 with the Fixes in place.
+
+-Doug
