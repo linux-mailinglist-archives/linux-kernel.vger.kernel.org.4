@@ -2,93 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 353ED61A5E7
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 00:37:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E138161A5EB
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 00:38:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229628AbiKDXhd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 19:37:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57954 "EHLO
+        id S229679AbiKDXh7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 19:37:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbiKDXhb (ORCPT
+        with ESMTP id S229629AbiKDXhz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 19:37:31 -0400
-Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFF2E26117;
-        Fri,  4 Nov 2022 16:37:27 -0700 (PDT)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.west.internal (Postfix) with ESMTP id 0E06832008FB;
-        Fri,  4 Nov 2022 19:37:24 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Fri, 04 Nov 2022 19:37:25 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fastmail.fm; h=
-        cc:cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm1; t=1667605044; x=
-        1667691444; bh=KPSj58myQkOWoEMJnn+Mf3F8dNGI3qP/0VDwKyDorz0=; b=h
-        hfOv2yw3rF4PWlowL6L1d88Kh1z02uXbUQ1RaWnFSmMgauOUFqO/HzAl40VJc+Iq
-        qA9DIVVcL3RPScaZS7cUNCr9ihPV7IvdUsPtH9vPBoXSIfB0vOOD7YjjrKTOG11o
-        rStzQeNwRuXNLHNlczO3tlBkGw8wlPO4lnvscup7SOl9ef188JeNK5ru+D5j9DtS
-        XvjXfUyEEEEaxSYOtz4AX1yBsd9/bGQoW3705kEicfRaWKg2HfwIyVbT9J+koonV
-        JT1Pai6SXaomRAFlmlIjcrTXpEpPCT8SfCwDH/XksrzPFNvoi/L8ES6nCs7qpox4
-        xAYZ9uB/YAJaAq+46ye3w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1667605044; x=
-        1667691444; bh=KPSj58myQkOWoEMJnn+Mf3F8dNGI3qP/0VDwKyDorz0=; b=S
-        XQN2VEuWylrzlq+TNLLhv5pcrXqlcvxLsE9vac+kngk5ISsp3X5ZKqPuO/JVNA5x
-        oavsCVbtyf4j0Onvsy6ror852I/v5LMGMNOE8+XWL0wIpsCjvijHZa61bMq5WKCL
-        BEpX9eLePIsaZQtJ7JyrggTqRfra0dDb0AEQZgrZuPMqMrPMGg7fFkYGnsdgMS0D
-        BltXpx46eS99apnjdUV4/X+yHEJrytz97X/CJUj8sLd/cq5vRMCm55Ab/AsqKOwR
-        BYn6zD6Fs568uQ8ZzJRrnkjXo4lKHlCwv8Qf09FqRgOEB4racW+0LLVqpsiVfdOS
-        DaDpSjBov4MJ/HNDUWVkg==
-X-ME-Sender: <xms:NKJlY7_-2A2kteFlgTn4e_7EEo6QwBtytHdzvl4gNQYv0dxPWeVZcA>
-    <xme:NKJlY3stTpxcKG32pLzh8AGi79o5Oex0tmPlvJVIVMK5igxWKbP0NdNxl8lc65c3f
-    3Wo2Guk2xBLOfNj>
-X-ME-Received: <xmr:NKJlY5A36liqmk8HqHmVO57GmwFmzJhewcKGLR2rG739l1n00mA8jLOvlKKHbBqwGNX7mcizu-FbutkwOKSa589ORoHrrONAXbEEqvmjsDSoRbkAlktX>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrvddvgdduudcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefkffggfgfuvfevfhfhjggtgfesthejredttdefjeenucfhrhhomhepuegvrhhn
-    ugcuufgthhhusggvrhhtuceosggvrhhnugdrshgthhhusggvrhhtsehfrghsthhmrghilh
-    drfhhmqeenucggtffrrghtthgvrhhnpeeuudekheelkeejhedvvdeifedtueelieeiuddt
-    lefhveeuledugfeljeeviedtgfenucffohhmrghinhepghhithhhuhgsrdgtohhmnecuve
-    hluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepsggvrhhnugdr
-    shgthhhusggvrhhtsehfrghsthhmrghilhdrfhhm
-X-ME-Proxy: <xmx:NKJlY3d0SKcw6tQPE2KxiYKVibwWOL-iSqZ0Ena_I4AfZUEhv01ASA>
-    <xmx:NKJlYwNFdB78ZaixwJM58CtWzkNMM0L78CWTCgN3nMF3pJWRh-zsJw>
-    <xmx:NKJlY5mwLCeSRntx4BsZ-u1B2TTZG1FZk8VQpj9CTqkcvTBNmZjYnA>
-    <xmx:NKJlY3cMWvqBee2k0yG4N3xDMLGJwApMsdpcouJOIDuB7oDIsEaO7A>
-Feedback-ID: id8a24192:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 4 Nov 2022 19:37:22 -0400 (EDT)
-Message-ID: <ead8a6cc-13eb-6dc0-2c17-a87e78d8a422@fastmail.fm>
-Date:   Sat, 5 Nov 2022 00:37:21 +0100
+        Fri, 4 Nov 2022 19:37:55 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA0DD26117;
+        Fri,  4 Nov 2022 16:37:54 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id f27so17112165eje.1;
+        Fri, 04 Nov 2022 16:37:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=POnyXKH4ESKITkg2I+AemO3Wn3BRnxBoAiqSICQ80nY=;
+        b=kUJEPvpQopr0fHeyPQEOvriHCtPtryaSgWOGc3rfBGqDCUWKmc+dD07ZiGA+Y+rPIL
+         BqouT1gEZdcbSGz/G5nXkjGMyke0I3m/9nGqPgD0T2NnJXzY5/ewWy2J5zfwmyozyThl
+         EGJAYgDm7EqKNVMeeb2O4IdVL9FAhWQfAlZjA8S3nxJE2183luM1zZxFh8SugQ/b9loO
+         rwnjvS/SohDAMJi2jtFu0gjAxZOOKTOpqqJ+19qIsX8lmosOaC8tgbDBFUWriXBP24X0
+         pqkcXSD067dW269bbJGobAVO3DIBjUriOjG95aoFHr29doV/QDEGmpc8nM5L2/pd+aH9
+         rFmw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=POnyXKH4ESKITkg2I+AemO3Wn3BRnxBoAiqSICQ80nY=;
+        b=gTV+BrK2R/OVkld4VcxLXk/TmC6zT5DBgETIepXp68sxL1AxF8mTXMgc2Zqg73YiFJ
+         dYUyPGJbVACqugL8qvbVDJmUAbynle5lqB+oe/USW5aDeJc4dHeWZWq1scMdx38k+zOA
+         nGeZh0idrrS5+cTm1aRXWtmZxQSjEkDtID+8N+ica6AI65b8E8nP1nsKiMJjthdhtuqa
+         ByhsrMJPHW5TswDDGkdBSckKqF9fB03BEWSQlLjDfJG+ThhwIdYAJEF91fyc1OKaIONy
+         A6xHi3LP11KpalYOrvvM0e7CyeIvE1vRx2RWDzosqLCJL6ITUU4ASt1svb6OnAqYNaNy
+         L3dw==
+X-Gm-Message-State: ACrzQf0IZL6SLXHl4qWByY6RmAbcgdJZxCgI2lsOr2cFfcCLwffvdkAU
+        8+2Z1E1TeqUYQ4g6tg13AyrHB9Y0IVS9YHSYh5g=
+X-Google-Smtp-Source: AMsMyM4rMbt31ppiBQsNiaj+yea98lMxOJ17MivfGnmwtj8HuvlzFjPbY8K4J3x0fY5zP0o8CaMXcr8irenKr/WuKvE=
+X-Received: by 2002:a17:906:1f48:b0:7ae:77d:bac with SMTP id
+ d8-20020a1709061f4800b007ae077d0bacmr15655351ejk.708.1667605073005; Fri, 04
+ Nov 2022 16:37:53 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [RFC PATCH 4/4] ublk_drv: support splice based read/write zero
- copy
-To:     Ming Lei <ming.lei@redhat.com>
-Cc:     Jens Axboe <axboe@kernel.dk>, io-uring@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org,
-        Miklos Szeredi <mszeredi@redhat.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        ZiyangZhang <ZiyangZhang@linux.alibaba.com>
-References: <20221103085004.1029763-1-ming.lei@redhat.com>
- <20221103085004.1029763-5-ming.lei@redhat.com>
- <712cd802-f3bb-9840-e334-385cd42325f2@fastmail.fm> <Y2Rgem8+oYafTLVO@T590>
-Content-Language: en-US
-From:   Bernd Schubert <bernd.schubert@fastmail.fm>
-In-Reply-To: <Y2Rgem8+oYafTLVO@T590>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS autolearn=ham
+References: <20221103092118.248600-1-yangjihong1@huawei.com>
+ <20221103092118.248600-3-yangjihong1@huawei.com> <Y2OknBtLgqTHSrvy@shell.armlinux.org.uk>
+ <CAADnVQ+gX8Xc57K2hSG5ZNfU1RtKBFgEp2yOWq08X68bWjMqsg@mail.gmail.com> <CAEf4BzaJMfCXf_uUgyuWBddyd3qrV7SgpVy-hicuOn87FigMSg@mail.gmail.com>
+In-Reply-To: <CAEf4BzaJMfCXf_uUgyuWBddyd3qrV7SgpVy-hicuOn87FigMSg@mail.gmail.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Fri, 4 Nov 2022 16:37:41 -0700
+Message-ID: <CAADnVQJAp4=ouSTn2UM=N-EHvO=v2RMVN1dH8erkyMU9ZF1QCA@mail.gmail.com>
+Subject: Re: [PATCH bpf RESEND 2/4] bpf: Remove size check for sk in
+ bpf_skb_is_valid_access for 32-bit architecture
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
+        Yang Jihong <yangjihong1@huawei.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Shubham Bansal <illusionist.neo@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Delyan Kratunov <delyank@fb.com>,
+        Artem Savkov <asavkov@redhat.com>, bpf <bpf@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -96,106 +94,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Nov 4, 2022 at 3:43 PM Andrii Nakryiko
+<andrii.nakryiko@gmail.com> wrote:
+>
+> On Thu, Nov 3, 2022 at 11:15 AM Alexei Starovoitov
+> <alexei.starovoitov@gmail.com> wrote:
+> >
+> > On Thu, Nov 3, 2022 at 4:23 AM Russell King (Oracle)
+> > <linux@armlinux.org.uk> wrote:
+> > >
+> > > On Thu, Nov 03, 2022 at 05:21:16PM +0800, Yang Jihong wrote:
+> > > > The error code -EACCES is returned when bpf prog is tested in 32-bit environment,
+> > > > This is because bpf_object__relocate modifies the instruction to change memory
+> > > > size to 4 bytes, as shown in the following messages:
+> > > >
+> > > > libbpf: prog 'kfunc_call_test1': relo #2: matching candidate #0 <byte_off> [18342] struct __sk_buff.sk (0:30:0 @ offset 168)
+> > > > libbpf: prog 'kfunc_call_test1': relo #2: patched insn #1 (LDX/ST/STX) off 168 -> 168
+> > > > libbpf: prog 'kfunc_call_test1': relo #2: patched insn #1 (LDX/ST/STX) mem_sz 8 -> 4
+> > > >
+> > > > As a result, the bpf_skb_is_valid_access check fails. For 32-bit architecture,
+> > > > unnecessary checks need to be deleted.
+> > >
+> > > Isn't the purpose of this check to ensure that the entire pointer is
+> > > written, and BPF can't write half of it?
+> > >
+> > >
+> > > >       case offsetof(struct __sk_buff, sk):
+> > > > -             if (type == BPF_WRITE || size != sizeof(__u64))
+> > > > -                     return false;
+> > >
+> > > Wouldn't "(size != sizeof(struct bpf_sock *) && size != sizeof(__u64))"
+> > > be more appropriate here, so 32-bit can only write the 32-bit pointer
+> > > or the full 64-bit value, and 64-bit can only write the 64-bit pointer?
+> > > Or is there a reason not to? bpf folk?
+> >
+> > You're correct. The patch is completely wrong.
+> > The bug is elsewhere.
+>
+> So I looked at this a bit (and replied to the old version of this
+> patch). What happens in the kernel is that we expect 64-bit load but
+> rewrite it to 32-bit load on 32-bit architectures (because we just use
+> sizeof(struct sk_buff, sk) which is 4 bytes on 32-bit arch.
+>
+> The problem here is that libbpf adjusts such pointer accesses from
+> 8-byte read to 4-byte reads for preserve_access_index (because libbpf
+> sees that pointer is really 4 byte long), which is what we actually
+> want in the general case. Here the assumption was made before CO-RE
+> that __sk_buff is a stable (and fake) UAPI and the correct BPF program
+> will access sk as a 64-bit pointer because BPF-side pointers always
+> appear as 64-bit.
+>
+> But from a correctness standpoint I think it should be fine to enable
+> both 32- and 64-bit loads for such pointers in __sk_buff for 32-bit
+> host arch. This will work well with CO-RE and will be correctly
+> rewritten to 32-bit or 64-bit accesses, depending on host
+> architecture.
+>
+> We should still reject 32-bit load on 64-bit host arch, though.
 
-
-On 11/4/22 01:44, Ming Lei wrote:
-> On Thu, Nov 03, 2022 at 11:28:29PM +0100, Bernd Schubert wrote:
->>
->>
->> On 11/3/22 09:50, Ming Lei wrote:
->>> Pass ublk block IO request pages to kernel backend IO handling code via
->>> pipe, and request page copy can be avoided. So far, the existed
->>> pipe/splice mechanism works for handling write request only.
->>>
->>> The initial idea of using splice for zero copy is from Miklos and Stefan.
->>>
->>> Read request's zero copy requires pipe's change to allow one read end to
->>> produce buffers for another read end to consume. The added SPLICE_F_READ_TO_READ
->>> flag is for supporting this feature.
->>>
->>> READ is handled by sending IORING_OP_SPLICE with SPLICE_F_DIRECT |
->>> SPLICE_F_READ_TO_READ. WRITE is handled by sending IORING_OP_SPLICE with
->>> SPLICE_F_DIRECT. Kernel internal pipe is used for simplifying userspace,
->>> meantime potential info leak could be avoided.
->>
->>
->> Sorry to ask, do you have an ublk branch that gives an example how to use
->> this?
-> 
-> Follows the ublk splice-zc branch:
-> 
-> https://github.com/ming1/ubdsrv/commits/splice-zc
-> 
-> which is mentioned in cover letter, but I guess it should be added to
-> here too, sorry for that, so far only ublk-loop supports it by:
-> 
->     ublk add -t loop -f $BACKING -z
-> 
-> without '-z', ublk-loop is created with zero copy disabled.
-
-Ah, thanks a lot! And sorry, I had missed this part in the cover letter.
-
-I will take a look on your new zero copy code on Monday.
-
-
-> 
->>
->> I still have several things to fix in my branches, but I got basic fuse
->> uring with copies working. Adding back splice would be next after posting
->> rfc patches. My initial assumption was that I needed to duplicate everything
->> splice does into the fuse .uring_cmd handler - obviously there is a better
->> way with your patches.
->>
->> This week I have a few days off, by end of next week or the week after I
->> might have patches in an rfc state (one thing I'm going to ask about is how
->> do I know what is the next CQE in the kernel handler - ublk does this with
->> tags through mq, but I don't understand yet where the tag is increased and
->> what the relation between tag and right CQE order is).
-> 
-> tag is one attribute of io request, which is originated from ublk
-> driver, and it is unique for each request among one queue. So ublksrv
-> won't change it at all, just use it, and ublk driver guarantees that
-> it is unique.
-> 
-> In ublkserv implementation, the tag info is set in cqe->user_data, so
-> we can retrieve the io request via tag part of cqe->user_data.
-
-Yeah, this is the easy part I understood. At least I hope so :)
-
-> 
-> Also I may not understand your question of 'the relation between tag and right
-> CQE order', io_uring provides IOSQE_IO_DRAIN/IOSQE_IO_LINK for ordering
-> SQE, and ublksrv only applies IOSQE_IO_LINK in ublk-qcow2, so care to
-> explain it in a bit details about the "the relation between tag and right
-> CQE order"?
-
-
-For fuse (kernel) a vfs request comes in and I need to choose a command 
-in the ring queue. Right now this is just an atomic counter % queue_size
-
-fuse_request_alloc_ring()
-	req_cnt = atomic_inc_return(&queue->req_cnt);
-	tag = req_cnt & (fc->ring.queue_depth - 1); /* cnt % queue_depth */
-
-	ring_req = &queue->ring_req[tag];
-
-
-
-I might be wrong, but I think that can be compared a bit to 
-ublk_queue_rq(). Looks like ublk_queue_rq gets called in blk-mq context 
-and blk-mq seems to provide rq->tag, which then determines the command 
-in the ring queue - completion of commands is done in tag-order provided 
-by blk-mq? The part I didn't figure out yet is where the tag value gets set.
-Also interesting is that there is no handler if the ring is already full 
-- like the ublk_io command is currently busy in ublksrv (user space). 
-Handled auto-magically with blk-mq?
-This is one of the parts not handled in my fuse code yet and my current 
-plan is to have a request queue on top of the (per core) ring queues. 
-Similar to the existing fuse request queue, just not one, but per ring 
-queue and processed by the ring queue. Unless there is a better way - 
-which is another reason to understand how ublk handles this.
-
-
-Thanks,
-Bernd
-
+Replied in the other thread as well :)
+The CO_RE screws up access here.
+Since it's a load of a pointer the verifier has to see it as a 8-byte load.
+When CO-RE converts it to 4 byte the verifier won't recognize it
+as a pointer load anymore.
+We cannot easily convert 64-bit BPF ISA into 32-bit.
+It's a massive amount of work.
