@@ -2,349 +2,446 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 169B761A1D2
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 21:02:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED52A61A1D8
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 21:03:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229770AbiKDUCj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 16:02:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48378 "EHLO
+        id S230012AbiKDUDQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 16:03:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229759AbiKDUBy (ORCPT
+        with ESMTP id S229939AbiKDUCz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 16:01:54 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2043.outbound.protection.outlook.com [40.107.94.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D1D34AF3F;
-        Fri,  4 Nov 2022 13:01:35 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GOscMAck0Sx2lzrEBhfUpbA1hTxmqP/64ZRPqMc/6dFOMEM4RhEIc6MLBbtZNO8rUkghhIycqWWmCFgi619hblSzSsQJyShoevrzVJPIfjekybelytWzbgXCcrpThs7YCfXOS4002Rd9SwcgL8tbOyNfFHO152jQyZlg3cTAoLA2BQ3cT4VOTnBWvKaDVIeKPjh537JPzODolh17hF7oBZse3Q+jenSODhQCRPrY49l4VPDtC+jW1CmbP2g09qKjiaY+iqddPsB8mo4eDWlIzTjM35yeHg7oHRisb7o21QZtHsYCHKYtkG+JbV9sfQ8LiVV3hEp2I/7g9v5HfbV5UA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+s4l4zkGjAI//GM6I9DveLbzsB6+BhZ4ms4R4KpxxNE=;
- b=VeR9OM+t9grn9NuXePRb/jat9m2hFJHGzWVDln05bJ/gLKIs3I+fDw7CKXt1rK6xaB0v1uFbw7HSV4U6TFm5LMay3NJ0PJDToID0SpoA/hozcMoufn1hv5Pe7D4cJS6Cy18NEYj8qiJlOCDFp9QqrZ1OOigk6z6xaDV+1S/NrsQG/i2bKtN4UcylRAqIn/RFuQVukpLAT8hxtJspnUw957DukWy8hsIId85v29/q0QE5/q0dPFN3kaaEb1HFuVlbXgndjNT66lW7bNRwgPxQFCTUb4nBdogQxp4Rd72hH0R403SBltFZkm7Dp7xO3mqd0P33DVdUTv4wI1a/SEG4zA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=quicinc.com smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+s4l4zkGjAI//GM6I9DveLbzsB6+BhZ4ms4R4KpxxNE=;
- b=wLnjMCtKLLY6nUdtj1QcMAqQj9s/LBWfdj5tWbBTIjR1Dwy6zxb/2wsmENN5P3mMrassz8hqjlhJNIZ8zR2ahwyhWBuvYwxyeE55+lmKPxfV1aEmEuT9Js8b0gcFCmAdire8bHEXaUFoArHasGVjtrhAgupV6i7WZGfpmDB2s1U=
-Received: from DM6PR11CA0059.namprd11.prod.outlook.com (2603:10b6:5:14c::36)
- by SJ0PR12MB6880.namprd12.prod.outlook.com (2603:10b6:a03:485::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.22; Fri, 4 Nov
- 2022 20:01:32 +0000
-Received: from DM6NAM11FT065.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:14c:cafe::db) by DM6PR11CA0059.outlook.office365.com
- (2603:10b6:5:14c::36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.22 via Frontend
- Transport; Fri, 4 Nov 2022 20:01:32 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DM6NAM11FT065.mail.protection.outlook.com (10.13.172.109) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5791.20 via Frontend Transport; Fri, 4 Nov 2022 20:01:32 +0000
-Received: from [127.0.1.1] (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Fri, 4 Nov
- 2022 15:01:30 -0500
-Subject: [PATCH v8 13/13] Documentation/x86: Update resctrl.rst for new
- features
-From:   Babu Moger <babu.moger@amd.com>
-To:     <corbet@lwn.net>, <reinette.chatre@intel.com>,
-        <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>
-CC:     <fenghua.yu@intel.com>, <dave.hansen@linux.intel.com>,
-        <x86@kernel.org>, <hpa@zytor.com>, <paulmck@kernel.org>,
-        <akpm@linux-foundation.org>, <quic_neeraju@quicinc.com>,
-        <rdunlap@infradead.org>, <damien.lemoal@opensource.wdc.com>,
-        <songmuchun@bytedance.com>, <peterz@infradead.org>,
-        <jpoimboe@kernel.org>, <pbonzini@redhat.com>, <babu.moger@amd.com>,
-        <chang.seok.bae@intel.com>, <pawan.kumar.gupta@linux.intel.com>,
-        <jmattson@google.com>, <daniel.sneddon@linux.intel.com>,
-        <sandipan.das@amd.com>, <tony.luck@intel.com>,
-        <james.morse@arm.com>, <linux-doc@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <bagasdotme@gmail.com>,
-        <eranian@google.com>
-Date:   Fri, 4 Nov 2022 15:01:29 -0500
-Message-ID: <166759208987.3281208.3199784740546752454.stgit@bmoger-ubuntu>
-In-Reply-To: <166759188265.3281208.11769277079826754455.stgit@bmoger-ubuntu>
-References: <166759188265.3281208.11769277079826754455.stgit@bmoger-ubuntu>
-User-Agent: StGit/1.1.dev103+g5369f4c
+        Fri, 4 Nov 2022 16:02:55 -0400
+Received: from mail-oi1-f171.google.com (mail-oi1-f171.google.com [209.85.167.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1F9651C01;
+        Fri,  4 Nov 2022 13:02:12 -0700 (PDT)
+Received: by mail-oi1-f171.google.com with SMTP id l127so6258350oia.8;
+        Fri, 04 Nov 2022 13:02:12 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=SJDm6ZwA/4FnL4+xX4lXkBOljkX+IoHERBT/+QgPzuE=;
+        b=mAKqWnFfnp3qRr8cSZGj6j+DKZL1loJFe0zz70ot3mxYr9psYewn+akmhW2kSe4v8K
+         tq4XUNRGWGNj9mFgXuqQLGxJcwoZigCAfttxIJ2jHkw7a7+OKBDbn6lqgnrkMzdvfXWd
+         Vi84W4zQHWFXvtdovELe6Jg0oaKtuGuexK2DXzYT57T/jsGu49iFUy4Pl8ACmFzElmS4
+         hZwXjXr86rlc8xXduDOgodGhoQMPNXRhiYin1QYf68SVISXdwKVeTAS+PuT9B7nD4j5v
+         e7YUEX58wbBju30Rx6mVkmtamjxyyYd0g5XEuoinc4aMUM0NZToxbsb1qXoUC4VbfnzJ
+         SL3w==
+X-Gm-Message-State: ACrzQf3mMJWfv+UN1oQChByJL5TH4KhPHzbMyl1q2dniqdnEK/oZ8N4h
+        ta2bn6REeoGHSnh/xf/VMQ==
+X-Google-Smtp-Source: AMsMyM6Ipf6S0fbARxOeLpKUo6SzRbVO9jETbh+4MRfT+gXkGSDVrL16sjzp3xIW9/gcVs7RMXvOIg==
+X-Received: by 2002:a05:6808:8e2:b0:35a:2f3e:4210 with SMTP id d2-20020a05680808e200b0035a2f3e4210mr11136724oic.7.1667592131831;
+        Fri, 04 Nov 2022 13:02:11 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id j36-20020a9d17a7000000b0066c55e23a16sm132454otj.2.2022.11.04.13.02.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Nov 2022 13:02:11 -0700 (PDT)
+Received: (nullmailer pid 2405323 invoked by uid 1000);
+        Fri, 04 Nov 2022 20:02:12 -0000
+Date:   Fri, 4 Nov 2022 15:02:12 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Colin Foster <colin.foster@in-advantage.com>
+Cc:     linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        John Crispin <john@phrozen.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        =?iso-8859-1?Q?n=E7_=DCNAL?= <arinc.unal@arinc9.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Subject: Re: [PATCH v2 net-next 0/6] dt-binding preparation for ocelot
+ switches
+Message-ID: <20221104200212.GA2315642-robh@kernel.org>
+References: <20221104045204.746124-1-colin.foster@in-advantage.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT065:EE_|SJ0PR12MB6880:EE_
-X-MS-Office365-Filtering-Correlation-Id: c256ef78-ce43-4667-f48a-08dabe9f5ea7
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 9NLPLuCUHvmPR8lPctqdDaVPWas8HS79j1dFqQ0cjh6xfz5qSsz3aDW9DngRxYX1vxi4WIf0jIY/vq6XChnjKhsdwfU3RZ+P1adUbFfHh+loL0HVreHUKy/s4eULmtUHL9voJCZjT7nsXhB9cl//FjrtY9UzCcCgY5mEVhYhvXUZOG8TSHBKAmyvRYf0FE+MSgoAdpZEvOBiR2Y7ALqM9VUbi94sWx6G/QJ5W7ZMv/5J8U3lSdMVJFE+dcHM70qqsJq7AMqDu5RkQznBIyLA/KPhaUozwqVTNXSBhLpp9VflPJ7fKjqe3hEm3i+Pke0fNp+7KEwb2DNyoPThrcigkSpXD3WCxtTwTUkiqbH6cwkR6B4Fs5rrpIDoySCvfw/XrQq8mJioM3Ycmy68YokmPf4O3bk54q6fVAgwhPvLkZW4KEKiKJGh1czx2eH5LihYx7xijH4ToGkpEIpY3rcxa4RUlbDsMIGDxsWy33ZjZdgbgy7+W6p3dhkbADXgeP86Hfl2KmGMF/TFi3XmKNWzZveM/ybv2CeWEz/OM04ai1VnvnY9EL914KR0uWHk+RbD4oGWlun6/Aui3eIWR2DKs2jE1x+hI92Vz3/hHyN4YVy5V5AcYUA5U9nOBkPpsSA++08BPoitxqBV8uCn1ksyTUzxfdUXK9jjxYuTzfpblKwW0a33AaL4fERVTJwjIuzoy1DloaEZb2W7dAGGsVhghpLu3rbAjnStZrLvi7Cd2VYhXwSBJuXrNCv2KdH9heguyshLmL0gB8XnkDJB97+lcCPD8dwo/v3mptKMB8Tb+ofT+MH1UO8PatvhWoE5C9C5
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(7916004)(39860400002)(346002)(136003)(376002)(396003)(451199015)(36840700001)(46966006)(40470700004)(2906002)(33716001)(110136005)(26005)(86362001)(82310400005)(356005)(81166007)(103116003)(40480700001)(7416002)(36860700001)(41300700001)(9686003)(8676002)(4326008)(70586007)(70206006)(186003)(44832011)(336012)(8936002)(16526019)(478600001)(5660300002)(54906003)(15650500001)(40460700003)(316002)(16576012)(82740400003)(83380400001)(47076005)(426003)(71626007)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Nov 2022 20:01:32.2708
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: c256ef78-ce43-4667-f48a-08dabe9f5ea7
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT065.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB6880
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221104045204.746124-1-colin.foster@in-advantage.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Update the documentation for the new features:=0A=
-1. Slow Memory Bandwidth allocation (SMBA).=0A=
-   With this feature, the QOS  enforcement policies can be applied=0A=
-   to the external slow memory connected to the host. QOS enforcement=0A=
-   is accomplished by assigning a Class Of Service (COS) to a processor=0A=
-   and specifying allocations or limits for that COS for each resource=0A=
-   to be allocated.=0A=
-=0A=
-2. Bandwidth Monitoring Event Configuration (BMEC).=0A=
-   The bandwidth monitoring events mbm_total_bytes and mbm_local_bytes=0A=
-   are set to count all the total and local reads/writes respectively.=0A=
-   With the introduction of slow memory, the two counters are not=0A=
-   enough to count all the different types of memory events. With the=0A=
-   feature BMEC, the users have the option to configure mbm_total_bytes=0A=
-   and mbm_local_bytes to count the specific type of events.=0A=
-=0A=
-Also add configuration instructions with examples.=0A=
-=0A=
-Signed-off-by: Babu Moger <babu.moger@amd.com>=0A=
-Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>=0A=
----=0A=
- Documentation/x86/resctrl.rst |  139 +++++++++++++++++++++++++++++++++++++=
-+++-=0A=
- 1 file changed, 137 insertions(+), 2 deletions(-)=0A=
-=0A=
-diff --git a/Documentation/x86/resctrl.rst b/Documentation/x86/resctrl.rst=
-=0A=
-index 71a531061e4e..12adba98afc5 100644=0A=
---- a/Documentation/x86/resctrl.rst=0A=
-+++ b/Documentation/x86/resctrl.rst=0A=
-@@ -17,14 +17,16 @@ AMD refers to this feature as AMD Platform Quality of S=
-ervice(AMD QoS).=0A=
- This feature is enabled by the CONFIG_X86_CPU_RESCTRL and the x86 /proc/cp=
-uinfo=0A=
- flag bits:=0A=
- =0A=
--=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D	=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=0A=
-+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D	=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=0A=
- RDT (Resource Director Technology) Allocation	"rdt_a"=0A=
- CAT (Cache Allocation Technology)		"cat_l3", "cat_l2"=0A=
- CDP (Code and Data Prioritization)		"cdp_l3", "cdp_l2"=0A=
- CQM (Cache QoS Monitoring)			"cqm_llc", "cqm_occup_llc"=0A=
- MBM (Memory Bandwidth Monitoring)		"cqm_mbm_total", "cqm_mbm_local"=0A=
- MBA (Memory Bandwidth Allocation)		"mba"=0A=
--=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D	=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=0A=
-+SMBA (Slow Memory Bandwidth Allocation)         "smba"=0A=
-+BMEC (Bandwidth Monitoring Event Configuration) "bmec"=0A=
-+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D	=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=0A=
- =0A=
- To use the feature mount the file system::=0A=
- =0A=
-@@ -161,6 +163,79 @@ with the following files:=0A=
- "mon_features":=0A=
- 		Lists the monitoring events if=0A=
- 		monitoring is enabled for the resource.=0A=
-+                Example::=0A=
-+=0A=
-+                   # cat /sys/fs/resctrl/info/L3_MON/mon_features=0A=
-+                   llc_occupancy=0A=
-+                   mbm_total_bytes=0A=
-+                   mbm_local_bytes=0A=
-+=0A=
-+                If the system supports Bandwidth Monitoring Event=0A=
-+                Configuration (BMEC), then the bandwidth events will=0A=
-+                be configurable. The output will be::=0A=
-+=0A=
-+                   # cat /sys/fs/resctrl/info/L3_MON/mon_features=0A=
-+                   llc_occupancy=0A=
-+                   mbm_total_bytes=0A=
-+                   mbm_total_bytes_config=0A=
-+                   mbm_local_bytes=0A=
-+                   mbm_local_bytes_config=0A=
-+=0A=
-+"mbm_total_bytes_config", "mbm_local_bytes_config":=0A=
-+        These files contain the current event configuration for the events=
-=0A=
-+        mbm_total_bytes and mbm_local_bytes, respectively, when the=0A=
-+        Bandwidth Monitoring Event Configuration (BMEC) feature is support=
-ed.=0A=
-+        The event configuration settings are domain specific and will affe=
-ct=0A=
-+        all the CPUs in the domain.=0A=
-+=0A=
-+        Following are the types of events supported:=0A=
-+=0A=
-+        =3D=3D=3D=3D    =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=0A=
-+        Bits    Description=0A=
-+        =3D=3D=3D=3D    =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=0A=
-+        6       Dirty Victims from the QOS domain to all types of memory=
-=0A=
-+        5       Reads to slow memory in the non-local NUMA domain=0A=
-+        4       Reads to slow memory in the local NUMA domain=0A=
-+        3       Non-temporal writes to non-local NUMA domain=0A=
-+        2       Non-temporal writes to local NUMA domain=0A=
-+        1       Reads to memory in the non-local NUMA domain=0A=
-+        0       Reads to memory in the local NUMA domain=0A=
-+        =3D=3D=3D=3D    =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=0A=
-+=0A=
-+        By default, the mbm_total_bytes configuration is set to 0x7f to co=
-unt=0A=
-+        all the event types and the mbm_local_bytes configuration is set t=
-o=0A=
-+        0x15 to count all the local memory events.=0A=
-+=0A=
-+        Examples:=0A=
-+=0A=
-+        * To view the current configuration::=0A=
-+          ::=0A=
-+=0A=
-+            # cat /sys/fs/resctrl/info/L3_MON/mbm_total_bytes_config=0A=
-+            0=3D0x7f;1=3D0x7f;2=3D0x7f;3=3D0x7f=0A=
-+=0A=
-+            # cat /sys/fs/resctrl/info/L3_MON/mbm_local_bytes_config=0A=
-+            0=3D0x15;1=3D0x15;3=3D0x15;4=3D0x15=0A=
-+=0A=
-+        * To change the mbm_total_bytes to count only reads on domain 0,=
-=0A=
-+          the bits 0, 1, 4 and 5 needs to be set, which is 110011b in bina=
-ry=0A=
-+          (in hexadecimal 0x33):=0A=
-+          ::=0A=
-+=0A=
-+            # echo  "0=3D0x33" > /sys/fs/resctrl/info/L3_MON/mbm_total_byt=
-es_config=0A=
-+=0A=
-+            # cat /sys/fs/resctrl/info/L3_MON/mbm_total_bytes_config=0A=
-+            0=3D0x33;1=3D0x7f;2=3D0x7f;3=3D0x7f=0A=
-+=0A=
-+        * To change the mbm_local_bytes to count all the slow memory reads=
- on=0A=
-+          domain 0 and 1, the bits 4 and 5 needs to be set, which is 11000=
-0b=0A=
-+          in binary (in hexadecimal 0x30):=0A=
-+          ::=0A=
-+=0A=
-+            # echo  "0=3D0x30;1=3D0x30" > /sys/fs/resctrl/info/L3_MON/mbm_=
-local_bytes_config=0A=
-+=0A=
-+            # cat /sys/fs/resctrl/info/L3_MON/mbm_local_bytes_config=0A=
-+            0=3D0x30;1=3D0x30;3=3D0x15;4=3D0x15=0A=
- =0A=
- "max_threshold_occupancy":=0A=
- 		Read/write file provides the largest value (in=0A=
-@@ -464,6 +539,26 @@ Memory bandwidth domain is L3 cache.=0A=
- =0A=
- 	MB:<cache_id0>=3Dbw_MBps0;<cache_id1>=3Dbw_MBps1;...=0A=
- =0A=
-+Slow Memory Bandwidth Allocation (SMBA)=0A=
-+---------------------------------------=0A=
-+AMD hardware support Slow Memory Bandwidth Allocation (SMBA) feature.=0A=
-+Currently, CXL.memory is the only supported "slow" memory device.=0A=
-+With the support of SMBA, the hardware enables bandwidth allocation=0A=
-+on the slow memory devices. If there are multiple such devices in the=0A=
-+system, the throttling logic groups all the slow sources together=0A=
-+and applies the limit on them as a whole.=0A=
-+=0A=
-+The presence of SMBA (with CXL.memory) is independent of slow memory=0A=
-+devices presence. If there is no such devices on the system, then=0A=
-+setting the configuring SMBA will have no impact on the performance=0A=
-+of the system.=0A=
-+=0A=
-+The bandwidth domain for slow memory is L3 cache. Its schemata file=0A=
-+is formatted as:=0A=
-+::=0A=
-+=0A=
-+	SMBA:<cache_id0>=3Dbandwidth0;<cache_id1>=3Dbandwidth1;...=0A=
-+=0A=
- Reading/writing the schemata file=0A=
- ---------------------------------=0A=
- Reading the schemata file will show the state of all resources=0A=
-@@ -479,6 +574,46 @@ which you wish to change.  E.g.=0A=
-   L3DATA:0=3Dfffff;1=3Dfffff;2=3D3c0;3=3Dfffff=0A=
-   L3CODE:0=3Dfffff;1=3Dfffff;2=3Dfffff;3=3Dfffff=0A=
- =0A=
-+Reading/writing the schemata file (on AMD systems)=0A=
-+--------------------------------------------------=0A=
-+Reading the schemata file will show the current bandwidth limit on all=0A=
-+domains. The allocated resources are in multiples of one eighth GB/s.=0A=
-+When writing to the file, you need to specify what cache id you wish to=0A=
-+configure the bandwidth limit.=0A=
-+=0A=
-+For example, to allocate 2GB/s limit on the first cache id:=0A=
-+=0A=
-+::=0A=
-+=0A=
-+  # cat schemata=0A=
-+    MB:0=3D2048;1=3D2048;2=3D2048;3=3D2048=0A=
-+    L3:0=3Dffff;1=3Dffff;2=3Dffff;3=3Dffff=0A=
-+=0A=
-+  # echo "MB:1=3D16" > schemata=0A=
-+  # cat schemata=0A=
-+    MB:0=3D2048;1=3D  16;2=3D2048;3=3D2048=0A=
-+    L3:0=3Dffff;1=3Dffff;2=3Dffff;3=3Dffff=0A=
-+=0A=
-+Reading/writing the schemata file (on AMD systems) with SMBA feature=0A=
-+--------------------------------------------------------------------=0A=
-+Reading and writing the schemata file is the same as without SMBA in=0A=
-+above section.=0A=
-+=0A=
-+For example, to allocate 8GB/s limit on the first cache id:=0A=
-+=0A=
-+::=0A=
-+=0A=
-+  # cat schemata=0A=
-+    SMBA:0=3D2048;1=3D2048;2=3D2048;3=3D2048=0A=
-+      MB:0=3D2048;1=3D2048;2=3D2048;3=3D2048=0A=
-+      L3:0=3Dffff;1=3Dffff;2=3Dffff;3=3Dffff=0A=
-+=0A=
-+  # echo "SMBA:1=3D64" > schemata=0A=
-+  # cat schemata=0A=
-+    SMBA:0=3D2048;1=3D  64;2=3D2048;3=3D2048=0A=
-+      MB:0=3D2048;1=3D2048;2=3D2048;3=3D2048=0A=
-+      L3:0=3Dffff;1=3Dffff;2=3Dffff;3=3Dffff=0A=
-+=0A=
- Cache Pseudo-Locking=0A=
- =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=0A=
- CAT enables a user to specify the amount of cache space that an=0A=
-=0A=
+On Thu, Nov 03, 2022 at 09:51:58PM -0700, Colin Foster wrote:
+> Ocelot switches have the abilitiy to be used internally via
+> memory-mapped IO or externally via SPI or PCIe. This brings up issues
+> for documentation, where the same chip might be accessed internally in a
+> switchdev manner, or externally in a DSA configuration. This patch set
+> is perparation to bring DSA functionality to the VSC7512, utilizing as
+> much as possible with an almost identical VSC7514 chip.
+> 
+> During the most recent RFC for internal ethernet switch functionality to
+> the VSC7512, there were 10 steps laid out to adequately prepare
+> documentation:
+> 
+> https://lore.kernel.org/all/20221010174856.nd3n4soxk7zbmcm7@skbuf/
+> 
+> The full context is quoted below. This patch set represents steps 1-7 of
+> the 10 steps, with the remaining steps to likely be part of what was the
+> original RFC.
+> 
+> The first two patches are specifically rewording and fixing of the MFD
+> bindings. I kept them in this patch set since they might cause conflicts
+> with future documentation changes that will be part of the net-next
+> tree. I can separate them if desired.
+> 
+> 
+> 
+> Context:
+> 
+> ```
+> To end the discussion on a constructive note, I think if I were Colin,
+> I would do the following, in the following order, according to what was
+> expressed as a constraint:
+> 
+> 1. Reword the "driver" word out of mscc,vsc7514-switch.yaml and express
+>    the description in terms of what the switch can do, not what the
+>    driver can do.
+> 
+> 2. Make qca8k.yaml have "$ref: dsa.yaml#". Remove "$ref: dsa-port.yaml#"
+>    from the same schema.
 
+No, you need dsa-port.yaml referenced because it has DSA port properties 
+plus custom qca8k properties.
+
+> 
+> 3. Remove "- $ref: dsa-port.yaml#" from mediatek,mt7530.yaml. It doesn't
+>    seem to be needed, since dsa.yaml also has this. We need this because
+>    we want to make sure no one except dsa.yaml references dsa-port.yaml.
+
+You don't seem to need it in mediatek,mt7530.yaml, but only dsa.yaml 
+referencing dsa-port.yaml is not what we need. dsa-port.yaml wouldn't 
+(and didn't at one time) exist if only dsa.yaml needed it.
+
+Something like the below patch is on top of your changes is what's 
+needed. For DSA, there are 2 cases, custom properties in 'port' nodes 
+and no custom properties. '(ethernet-)?ports' never has custom 
+properties AFAICT (brcm,sf2 had brcm,use-bcm-hdr in the wrong place).
+
+Bindings using only standard DSA properties need to reference 
+'dsa.yaml#'. Bindings with custom 'ethernet-port' node properties need 
+to use 'dsa.yaml#/$defs/base' and then under the ethernet-port node 
+reference dsa-port.yaml, define their custom properties, and set 
+'unevaluatedProperties: false'.
+
+Obviously this needs to be refactored into proper patches and/or 
+squashed into yours. Probably a patch to fix brcm,sf2 and one to add 
+dsa.yaml#/$defs/base, then split out switch stuff.
+
+8<-------------------------------------------------------------------
+diff --git a/Documentation/devicetree/bindings/net/dsa/arrow,xrs700x.yaml b/Documentation/devicetree/bindings/net/dsa/arrow,xrs700x.yaml
+index 259a0c6547f3..8d5abb05abdf 100644
+--- a/Documentation/devicetree/bindings/net/dsa/arrow,xrs700x.yaml
++++ b/Documentation/devicetree/bindings/net/dsa/arrow,xrs700x.yaml
+@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: Arrow SpeedChips XRS7000 Series Switch Device Tree Bindings
+ 
+ allOf:
+-  - $ref: dsa.yaml#
++  - $ref: dsa.yaml#/$defs/base
+ 
+ maintainers:
+   - George McCollister <george.mccollister@gmail.com>
+diff --git a/Documentation/devicetree/bindings/net/dsa/brcm,b53.yaml b/Documentation/devicetree/bindings/net/dsa/brcm,b53.yaml
+index 1219b830b1a4..f323fc01b224 100644
+--- a/Documentation/devicetree/bindings/net/dsa/brcm,b53.yaml
++++ b/Documentation/devicetree/bindings/net/dsa/brcm,b53.yaml
+@@ -66,7 +66,7 @@ required:
+   - reg
+ 
+ allOf:
+-  - $ref: dsa.yaml#
++  - $ref: dsa.yaml#/$defs/base
+   - if:
+       properties:
+         compatible:
+diff --git a/Documentation/devicetree/bindings/net/dsa/brcm,sf2.yaml b/Documentation/devicetree/bindings/net/dsa/brcm,sf2.yaml
+index d159ac78cec1..eed16e216fb6 100644
+--- a/Documentation/devicetree/bindings/net/dsa/brcm,sf2.yaml
++++ b/Documentation/devicetree/bindings/net/dsa/brcm,sf2.yaml
+@@ -85,11 +85,16 @@ properties:
+   ports:
+     type: object
+ 
+-    properties:
+-      brcm,use-bcm-hdr:
+-        description: if present, indicates that the switch port has Broadcom
+-          tags enabled (per-packet metadata)
+-        type: boolean
++    patternProperties:
++      '^port@[0-9a-f]$':
++        $ref: dsa-port.yaml#
++        unevaluatedProperties: false
++
++        properties:
++          brcm,use-bcm-hdr:
++            description: if present, indicates that the switch port has Broadcom
++              tags enabled (per-packet metadata)
++            type: boolean
+ 
+ required:
+   - reg
+diff --git a/Documentation/devicetree/bindings/net/dsa/dsa-port.yaml b/Documentation/devicetree/bindings/net/dsa/dsa-port.yaml
+index d97fb87cccb0..0672443ea7a6 100644
+--- a/Documentation/devicetree/bindings/net/dsa/dsa-port.yaml
++++ b/Documentation/devicetree/bindings/net/dsa/dsa-port.yaml
+@@ -14,6 +14,8 @@ maintainers:
+ description:
+   Ethernet switch port Description
+ 
++$ref: /schemas/net/ethernet-switch-port.yaml#
++
+ properties:
+   label:
+     description:
+diff --git a/Documentation/devicetree/bindings/net/dsa/dsa.yaml b/Documentation/devicetree/bindings/net/dsa/dsa.yaml
+index 2290a9d32b21..1b3593a36014 100644
+--- a/Documentation/devicetree/bindings/net/dsa/dsa.yaml
++++ b/Documentation/devicetree/bindings/net/dsa/dsa.yaml
+@@ -21,9 +21,6 @@ select: false
+ $ref: "/schemas/net/ethernet-switch.yaml#"
+ 
+ properties:
+-  $nodename:
+-    pattern: "^(ethernet-)?switch(@.*)?$"
+-
+   dsa,member:
+     minItems: 2
+     maxItems: 2
+@@ -36,4 +33,20 @@ properties:
+ 
+ additionalProperties: true
+ 
++$defs:
++  base:
++    description: A DSA without any extra port properties
++    $ref: '#/'
++
++    patternProperties:
++      "^(ethernet-)?ports$":
++        type: object
++
++        patternProperties:
++          "^(ethernet-)?port@[0-9]+$":
++            description: Ethernet switch ports
++            $ref: /schemas/net/dsa/dsa-port.yaml#
++            unevaluatedProperties: false
++
++
+ ...
+diff --git a/Documentation/devicetree/bindings/net/dsa/hirschmann,hellcreek.yaml b/Documentation/devicetree/bindings/net/dsa/hirschmann,hellcreek.yaml
+index 73b774eadd0b..e27b1619066f 100644
+--- a/Documentation/devicetree/bindings/net/dsa/hirschmann,hellcreek.yaml
++++ b/Documentation/devicetree/bindings/net/dsa/hirschmann,hellcreek.yaml
+@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: Hirschmann Hellcreek TSN Switch Device Tree Bindings
+ 
+ allOf:
+-  - $ref: dsa.yaml#
++  - $ref: dsa.yaml#/$defs/base
+ 
+ maintainers:
+   - Andrew Lunn <andrew@lunn.ch>
+diff --git a/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml b/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
+index 81f291105660..564783fcb685 100644
+--- a/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
++++ b/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
+@@ -156,21 +156,15 @@ patternProperties:
+ 
+     patternProperties:
+       "^(ethernet-)?port@[0-9]+$":
+-        type: object
+-        description: Ethernet switch ports
+-
+-        properties:
+-          reg:
+-            description:
+-              Port address described must be 5 or 6 for CPU port and from 0 to 5
+-              for user ports.
+-
+         allOf:
+           - if:
+               required: [ ethernet ]
+             then:
+               properties:
+                 reg:
++                  description:
++                    Port address described must be 5 or 6 for CPU port and from 0 to 5
++                    for user ports.
+                   enum:
+                     - 5
+                     - 6
+@@ -235,7 +229,7 @@ $defs:
+                       - sgmii
+ 
+ allOf:
+-  - $ref: dsa.yaml#
++  - $ref: dsa.yaml#/$defs/base
+   - if:
+       required:
+         - mediatek,mcm
+diff --git a/Documentation/devicetree/bindings/net/dsa/microchip,ksz.yaml b/Documentation/devicetree/bindings/net/dsa/microchip,ksz.yaml
+index 4da75b1f9533..bfa2b76659c9 100644
+--- a/Documentation/devicetree/bindings/net/dsa/microchip,ksz.yaml
++++ b/Documentation/devicetree/bindings/net/dsa/microchip,ksz.yaml
+@@ -11,7 +11,7 @@ maintainers:
+   - Woojung Huh <Woojung.Huh@microchip.com>
+ 
+ allOf:
+-  - $ref: dsa.yaml#
++  - $ref: dsa.yaml#/$defs/base
+   - $ref: /schemas/spi/spi-peripheral-props.yaml#
+ 
+ properties:
+diff --git a/Documentation/devicetree/bindings/net/dsa/microchip,lan937x.yaml b/Documentation/devicetree/bindings/net/dsa/microchip,lan937x.yaml
+index 630bf0f8294b..f4f9798addae 100644
+--- a/Documentation/devicetree/bindings/net/dsa/microchip,lan937x.yaml
++++ b/Documentation/devicetree/bindings/net/dsa/microchip,lan937x.yaml
+@@ -10,7 +10,7 @@ maintainers:
+   - UNGLinuxDriver@microchip.com
+ 
+ allOf:
+-  - $ref: dsa.yaml#
++  - $ref: dsa.yaml#/$defs/base
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/net/dsa/mscc,ocelot.yaml b/Documentation/devicetree/bindings/net/dsa/mscc,ocelot.yaml
+index 8d93ed9c172c..a7041ae4d811 100644
+--- a/Documentation/devicetree/bindings/net/dsa/mscc,ocelot.yaml
++++ b/Documentation/devicetree/bindings/net/dsa/mscc,ocelot.yaml
+@@ -78,7 +78,7 @@ required:
+   - reg
+ 
+ allOf:
+-  - $ref: dsa.yaml#
++  - $ref: dsa.yaml#/$defs/base
+   - if:
+       properties:
+         compatible:
+diff --git a/Documentation/devicetree/bindings/net/dsa/nxp,sja1105.yaml b/Documentation/devicetree/bindings/net/dsa/nxp,sja1105.yaml
+index 1e26d876d146..13a835af9468 100644
+--- a/Documentation/devicetree/bindings/net/dsa/nxp,sja1105.yaml
++++ b/Documentation/devicetree/bindings/net/dsa/nxp,sja1105.yaml
+@@ -13,7 +13,7 @@ description:
+   depends on the SPI bus master driver.
+ 
+ allOf:
+-  - $ref: "dsa.yaml#"
++  - $ref: dsa.yaml#/$defs/base
+   - $ref: /schemas/spi/spi-peripheral-props.yaml#
+ 
+ maintainers:
+diff --git a/Documentation/devicetree/bindings/net/dsa/qca8k.yaml b/Documentation/devicetree/bindings/net/dsa/qca8k.yaml
+index d831d5eee437..a33abdb9ead0 100644
+--- a/Documentation/devicetree/bindings/net/dsa/qca8k.yaml
++++ b/Documentation/devicetree/bindings/net/dsa/qca8k.yaml
+@@ -77,8 +77,7 @@ patternProperties:
+     type: object
+     patternProperties:
+       "^(ethernet-)?port@[0-6]$":
+-        type: object
+-        description: Ethernet switch ports
++        $ref: dsa-port.yaml#
+ 
+         properties:
+           qca,sgmii-rxclk-falling-edge:
+@@ -102,7 +101,7 @@ patternProperties:
+               SGMII on the QCA8337, it is advised to set this unless a communication
+               issue is observed.
+ 
+-        unevaluatedProperties: true
++        unevaluatedProperties: false
+ 
+ oneOf:
+   - required:
+diff --git a/Documentation/devicetree/bindings/net/dsa/realtek.yaml b/Documentation/devicetree/bindings/net/dsa/realtek.yaml
+index 1a7d45a8ad66..ad1793eba31a 100644
+--- a/Documentation/devicetree/bindings/net/dsa/realtek.yaml
++++ b/Documentation/devicetree/bindings/net/dsa/realtek.yaml
+@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: Realtek switches for unmanaged switches
+ 
+ allOf:
+-  - $ref: dsa.yaml#
++  - $ref: dsa.yaml#/$defs/base
+ 
+ maintainers:
+   - Linus Walleij <linus.walleij@linaro.org>
+diff --git a/Documentation/devicetree/bindings/net/dsa/renesas,rzn1-a5psw.yaml b/Documentation/devicetree/bindings/net/dsa/renesas,rzn1-a5psw.yaml
+index 7ca9c19a157c..eb9ea25efcb7 100644
+--- a/Documentation/devicetree/bindings/net/dsa/renesas,rzn1-a5psw.yaml
++++ b/Documentation/devicetree/bindings/net/dsa/renesas,rzn1-a5psw.yaml
+@@ -14,7 +14,7 @@ description: |
+   handles 4 ports + 1 CPU management port.
+ 
+ allOf:
+-  - $ref: dsa.yaml#
++  - $ref: dsa.yaml#/$defs/base
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/net/ethernet-switch.yaml b/Documentation/devicetree/bindings/net/ethernet-switch.yaml
+index f698857619da..0d417997c163 100644
+--- a/Documentation/devicetree/bindings/net/ethernet-switch.yaml
++++ b/Documentation/devicetree/bindings/net/ethernet-switch.yaml
+@@ -25,6 +25,8 @@ properties:
+ patternProperties:
+   "^(ethernet-)?ports$":
+     type: object
++    additionalProperties: false
++
+     properties:
+       '#address-cells':
+         const: 1
+@@ -36,10 +38,6 @@ patternProperties:
+         type: object
+         description: Ethernet switch ports
+ 
+-        allOf:
+-          - $ref: /schemas/net/dsa/dsa-port.yaml#
+-          - $ref: ethernet-switch-port.yaml#
+-
+ oneOf:
+   - required:
+       - ports
+@@ -48,4 +46,20 @@ oneOf:
+ 
+ additionalProperties: true
+ 
++$defs:
++  base:
++    description: An Ethernet switch without any extra port properties
++    $ref: '#/'
++
++    patternProperties:
++      "^(ethernet-)?ports$":
++        type: object
++
++        patternProperties:
++          "^(ethernet-)?port@[0-9]+$":
++            description: Ethernet switch ports
++            $ref: ethernet-switch-port.yaml#
++            unevaluatedProperties: false
++
++
+ ...
