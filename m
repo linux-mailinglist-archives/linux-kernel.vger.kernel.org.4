@@ -2,100 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7912461A040
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 19:48:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE8E161A03A
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 19:47:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229542AbiKDSsf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 14:48:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34712 "EHLO
+        id S229516AbiKDSri (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 14:47:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229540AbiKDSs1 (ORCPT
+        with ESMTP id S229499AbiKDSrf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 14:48:27 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5761C5986D
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 11:47:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667587651;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=lJfsTHY6tba7ZQacb0L0SXoAUwbrxp/Y0LpbDnploq0=;
-        b=idV9rW6CSHyNQjO1kwUXSDKZtyNXUOVNX8ew5tKCqy8MAkGjEj3llSj6N6MBdFIApzPcjy
-        0+CFruAMmBVeBaDIY6o79leYALqG51fXq8ZZpND/2zxC+tLcgRAXGUN8zhYLYo7/l6IQ+G
-        YSSR7P1N3Rm9g40LiSX/Bhb0J6qoYtY=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-575-zAFmLBlFNrCWx9rm7prL4w-1; Fri, 04 Nov 2022 14:47:27 -0400
-X-MC-Unique: zAFmLBlFNrCWx9rm7prL4w-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Fri, 4 Nov 2022 14:47:35 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C74659867;
+        Fri,  4 Nov 2022 11:47:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 73AEC185A78F;
-        Fri,  4 Nov 2022 18:47:26 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.37.22])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id CD547400EA89;
-        Fri,  4 Nov 2022 18:47:24 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <67142.1666978314@warthog.procyon.org.uk>
-References: <67142.1666978314@warthog.procyon.org.uk> <Y1btOP0tyPtcYajo@ZenIV> <Y01VjOE2RrLVA2T6@infradead.org> <1762414.1665761217@warthog.procyon.org.uk> <1415915.1666274636@warthog.procyon.org.uk> <Y1an1NFcowiSS9ms@infradead.org>
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     dhowells@redhat.com, Christoph Hellwig <hch@infradead.org>,
-        willy@infradead.org, dchinner@redhat.com,
-        Steve French <smfrench@gmail.com>,
-        Shyam Prasad N <nspmangalore@gmail.com>,
-        Rohith Surabattula <rohiths.msft@gmail.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        Ira Weiny <ira.weiny@intel.com>, torvalds@linux-foundation.org,
-        linux-cifs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, jlayton@redhat.com
-Subject: Re: How to convert I/O iterators to iterators, sglists and RDMA lists
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3C00CB82EF9;
+        Fri,  4 Nov 2022 18:47:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7088FC433C1;
+        Fri,  4 Nov 2022 18:47:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667587651;
+        bh=FCVLnWzagH7Ltd74TWHda9yHbM/ThxqIP+R6QjDXusQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=K8hlD+njx6G0TqbVm5Fth4CASD4xRSsQn3RzlPzp94KN29oCnPq1QW9c+GhArw0lr
+         IQV8gpSUILgpCglcGFRxTTIEVu1IfaPnMuRSqcLulzeSRZBwyFfxm5DPY3KkKH/1XE
+         iSDtWmLg+4zjj/QSfMgcNWeO3kXacE7WifGznlQF/rfapUXZUCNb5sTi8cpbbuhm8u
+         HDBnUcSH2d2i2GM6C12emCculNjc1Ze801WOqR9G0RSVwKLF9LR4+kmtJKjfLRjvNe
+         JlJHOrX1NojuKHc1moNVg0FzATcdR3XD0Y6vUNrtrNaoZcn0EO03RExhAOesjgH+tw
+         83q/IgxOqpz1w==
+Date:   Fri, 4 Nov 2022 11:47:30 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Tony Nguyen <anthony.l.nguyen@intel.com>
+Cc:     Jiri Slaby <jirislaby@kernel.org>,
+        "Loktionov, Aleksandr" <aleksandr.loktionov@intel.com>,
+        Jan Sokolowski <jan.sokolowski@intel.com>,
+        <jesse.brandeburg@intel.com>, <linux-kernel@vger.kernel.org>,
+        Martin Liska <mliska@suse.cz>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        <intel-wired-lan@lists.osuosl.org>, <netdev@vger.kernel.org>
+Subject: Re: [PATCH] i40e (gcc13): synchronize allocate/free functions
+ return type & values
+Message-ID: <20221104114730.42294e1c@kernel.org>
+In-Reply-To: <003bc385-dc14-12ba-d3d6-53de3712a5dc@intel.com>
+References: <20221031114456.10482-1-jirislaby@kernel.org>
+        <20221102204110.26a6f021@kernel.org>
+        <bf584d22-8aca-3867-5e3a-489d62a61929@kernel.org>
+        <003bc385-dc14-12ba-d3d6-53de3712a5dc@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <1014263.1667587643.1@warthog.procyon.org.uk>
-Content-Transfer-Encoding: quoted-printable
-Date:   Fri, 04 Nov 2022 18:47:23 +0000
-Message-ID: <1014264.1667587643@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-David Howells <dhowells@redhat.com> wrote:
+On Fri, 4 Nov 2022 11:33:07 -0700 Tony Nguyen wrote:
+> As Jiri mentioned, this is propagated up throughout the driver. We could 
+> change this function to return int but all the callers would then need 
+> to convert these errors to i40e_status to propagate. This doesn't really 
+> gain much other than having this function return int. To adjust the 
+> entire call chain is going to take more work. As this is resolving a 
+> valid warning and returning what is currently expected, what are your 
+> thoughts on taking this now to resolve the issue and our i40e team will 
+> take the work on to convert the functions to use the standard errnos?
 
-> > What protects pages involved in ITER_XARRAY iterator created by
-> > afs_read_dir()?  Note that we are not guaranteed inode_lock() on
-> > the directory in question...
-> =
+My thoughts on your OS abstraction layers should be pretty evident.
+If anything I'd like to be more vigilant about less flagrant cases.
 
-> Yeah - that needs fixing.  The size of the data can change, but I don't =
-update
-> the iterator.
-
-Actually, no.  The iterator is the output buffer for afs_fetch_data().  If=
- the
-buffer turned out to be too small we drop the validate_lock and go round a=
-nd
-try again.
-
-req->actual_len and req->file_size are updated by afs_fetch_data() from th=
-e
-RPC reply.  req->len tells the RPC delivery code how big the buffer is (wh=
-ich
-we don't have to fill if there's less data available than we have buffer
-space).
-
-David
-
+I don't think this is particularly difficult, let's patch it up
+best we can without letting the "status" usage grow.
