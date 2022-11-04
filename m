@@ -2,97 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1906C6193EC
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 10:56:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 18BA5619402
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 11:00:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231534AbiKDJ4M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 05:56:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34724 "EHLO
+        id S231649AbiKDKAX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 06:00:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229572AbiKDJ4I (ORCPT
+        with ESMTP id S231620AbiKDKAQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 05:56:08 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D7751EC4A
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 02:56:07 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 5195C1F8C1;
-        Fri,  4 Nov 2022 09:56:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1667555766; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=bmGFOdE8sYiFtyoIiRYb+2bGYVWu3+NkTdUNQoeZPMU=;
-        b=qg+RpcxZskLn7YVVHDUWRimO6eHunVMMmg8swpxUeWXVr6fXOc1IDurnsIc9FFhD0yRrCx
-        knjUb/FpRkhBdjG8BQ4gHTFd98dYdHmHtRuo8sZtIVXX6wfhSgZpmrItaiEH91M+tq/t16
-        hfWy2jM5F6nDqnAOJolP+HEct5+wTac=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 33E231346F;
-        Fri,  4 Nov 2022 09:56:06 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id lBBkCrbhZGNyEwAAMHmgww
-        (envelope-from <mhocko@suse.com>); Fri, 04 Nov 2022 09:56:06 +0000
-Date:   Fri, 4 Nov 2022 10:56:05 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Yang Shi <shy828301@gmail.com>
-Cc:     zokeefe@google.com, akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [v2 PATCH 2/2] mm: don't warn if the node is offlined
-Message-ID: <Y2ThtYKSxoP9S44i@dhcp22.suse.cz>
-References: <20221103213641.7296-1-shy828301@gmail.com>
- <20221103213641.7296-2-shy828301@gmail.com>
- <Y2Tc2JNeFWXmZbQ1@dhcp22.suse.cz>
+        Fri, 4 Nov 2022 06:00:16 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEEAA1EADF
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 03:00:14 -0700 (PDT)
+Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.57])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4N3bdS6RwQzJn3Y;
+        Fri,  4 Nov 2022 17:57:16 +0800 (CST)
+Received: from kwepemm600010.china.huawei.com (7.193.23.86) by
+ dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Fri, 4 Nov 2022 18:00:12 +0800
+Received: from ubuntu1804.huawei.com (10.67.174.174) by
+ kwepemm600010.china.huawei.com (7.193.23.86) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Fri, 4 Nov 2022 18:00:12 +0800
+From:   Li Huafei <lihuafei1@huawei.com>
+To:     <paul.walmsley@sifive.com>, <palmer@dabbelt.com>,
+        <aou@eecs.berkeley.edu>, <lizhengyu3@huawei.com>,
+        <liaochang1@huawei.com>, <u.kleine-koenig@pengutronix.de>,
+        <rdunlap@infradead.org>
+CC:     <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <kexec@lists.infradead.org>, <lihuafei1@huawei.com>
+Subject: [PATCH 1/2] RISC-V: kexec: Fix memory leak of fdt buffer
+Date:   Fri, 4 Nov 2022 17:56:57 +0800
+Message-ID: <20221104095658.141222-1-lihuafei1@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y2Tc2JNeFWXmZbQ1@dhcp22.suse.cz>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.67.174.174]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemm600010.china.huawei.com (7.193.23.86)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 04-11-22 10:35:21, Michal Hocko wrote:
-[...]
-> diff --git a/include/linux/gfp.h b/include/linux/gfp.h
-> index ef4aea3b356e..308daafc4871 100644
-> --- a/include/linux/gfp.h
-> +++ b/include/linux/gfp.h
-> @@ -227,7 +227,10 @@ static inline
->  struct folio *__folio_alloc_node(gfp_t gfp, unsigned int order, int nid)
->  {
->  	VM_BUG_ON(nid < 0 || nid >= MAX_NUMNODES);
-> -	VM_WARN_ON((gfp & __GFP_THISNODE) && !node_online(nid));
-> +	if((gfp & __GFP_THISNODE) && !node_online(nid)) {
+This is reported by kmemleak detector:
 
-or maybe even better
-	if ((gfp & (__GFP_THISNODE|__GFP_NOWARN) == __GFP_THISNODE|__GFP_NOWARN) && !node_online(nid))
+unreferenced object 0xff60000082864000 (size 9588):
+  comm "kexec", pid 146, jiffies 4294900634 (age 64.788s)
+  hex dump (first 32 bytes):
+    d0 0d fe ed 00 00 12 ed 00 00 00 48 00 00 11 40  ...........H...@
+    00 00 00 28 00 00 00 11 00 00 00 02 00 00 00 00  ...(............
+  backtrace:
+    [<00000000f95b17c4>] kmemleak_alloc+0x34/0x3e
+    [<00000000b9ec8e3e>] kmalloc_order+0x9c/0xc4
+    [<00000000a95cf02e>] kmalloc_order_trace+0x34/0xb6
+    [<00000000f01e68b4>] __kmalloc+0x5c2/0x62a
+    [<000000002bd497b2>] kvmalloc_node+0x66/0xd6
+    [<00000000906542fa>] of_kexec_alloc_and_setup_fdt+0xa6/0x6ea
+    [<00000000e1166bde>] elf_kexec_load+0x206/0x4ec
+    [<0000000036548e09>] kexec_image_load_default+0x40/0x4c
+    [<0000000079fbe1b4>] sys_kexec_file_load+0x1c4/0x322
+    [<0000000040c62c03>] ret_from_syscall+0x0/0x2
 
-because it doesn't really make much sense to dump this information if
-the allocation failure is going to provide sufficient (and even more
-comprehensive) context for the failure. It looks more hairy but this can
-be hidden in a nice little helper shared between the two callers.
+In elf_kexec_load(), a buffer is allocated via kvmalloc() to store fdt.
+While it's not freed back to system when kexec kernel is reloaded or
+unloaded.  Then memory leak is caused.  Fix it by introducing riscv
+specific function arch_kimage_file_post_load_cleanup(), and freeing the
+buffer there.
 
-> +		pr_warn("%pGg allocation from offline node %d\n", &gfp, nid);
-> +		dump_stack();
-> +	}
->  
->  	return __folio_alloc(gfp, order, nid, NULL);
->  }
-> -- 
-> Michal Hocko
-> SUSE Labs
+Fixes: 6261586e0c91 ("RISC-V: Add kexec_file support")
+Signed-off-by: Li Huafei <lihuafei1@huawei.com>
+---
+ arch/riscv/include/asm/kexec.h |  5 +++++
+ arch/riscv/kernel/elf_kexec.c  | 10 ++++++++++
+ 2 files changed, 15 insertions(+)
 
+diff --git a/arch/riscv/include/asm/kexec.h b/arch/riscv/include/asm/kexec.h
+index eee260e8ab30..2b56769cb530 100644
+--- a/arch/riscv/include/asm/kexec.h
++++ b/arch/riscv/include/asm/kexec.h
+@@ -39,6 +39,7 @@ crash_setup_regs(struct pt_regs *newregs,
+ #define ARCH_HAS_KIMAGE_ARCH
+ 
+ struct kimage_arch {
++	void *fdt; /* For CONFIG_KEXEC_FILE */
+ 	unsigned long fdt_addr;
+ };
+ 
+@@ -62,6 +63,10 @@ int arch_kexec_apply_relocations_add(struct purgatory_info *pi,
+ 				     const Elf_Shdr *relsec,
+ 				     const Elf_Shdr *symtab);
+ #define arch_kexec_apply_relocations_add arch_kexec_apply_relocations_add
++
++struct kimage;
++int arch_kimage_file_post_load_cleanup(struct kimage *image);
++#define arch_kimage_file_post_load_cleanup arch_kimage_file_post_load_cleanup
+ #endif
+ 
+ #endif
+diff --git a/arch/riscv/kernel/elf_kexec.c b/arch/riscv/kernel/elf_kexec.c
+index 0cb94992c15b..ff30fcb43f47 100644
+--- a/arch/riscv/kernel/elf_kexec.c
++++ b/arch/riscv/kernel/elf_kexec.c
+@@ -21,6 +21,14 @@
+ #include <linux/memblock.h>
+ #include <asm/setup.h>
+ 
++int arch_kimage_file_post_load_cleanup(struct kimage *image)
++{
++	kvfree(image->arch.fdt);
++	image->arch.fdt = NULL;
++
++	return kexec_image_post_load_cleanup_default(image);
++}
++
+ static int riscv_kexec_elf_load(struct kimage *image, struct elfhdr *ehdr,
+ 				struct kexec_elf_info *elf_info, unsigned long old_pbase,
+ 				unsigned long new_pbase)
+@@ -298,6 +306,8 @@ static void *elf_kexec_load(struct kimage *image, char *kernel_buf,
+ 		pr_err("Error add DTB kbuf ret=%d\n", ret);
+ 		goto out_free_fdt;
+ 	}
++	/* Cache the fdt buffer address for memory cleanup */
++	image->arch.fdt = fdt;
+ 	pr_notice("Loaded device tree at 0x%lx\n", kbuf.mem);
+ 	goto out;
+ 
 -- 
-Michal Hocko
-SUSE Labs
+2.17.1
+
