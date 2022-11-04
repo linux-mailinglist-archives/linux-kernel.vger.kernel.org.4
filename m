@@ -2,165 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1130619135
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 07:42:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8421161913B
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 07:46:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231339AbiKDGmp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 02:42:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34168 "EHLO
+        id S231359AbiKDGqj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 02:46:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229875AbiKDGmk (ORCPT
+        with ESMTP id S229875AbiKDGqg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 02:42:40 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2098.outbound.protection.outlook.com [40.107.237.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CF66DF70;
-        Thu,  3 Nov 2022 23:42:39 -0700 (PDT)
+        Fri, 4 Nov 2022 02:46:36 -0400
+Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2057.outbound.protection.outlook.com [40.107.21.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59AA615827;
+        Thu,  3 Nov 2022 23:46:34 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Br5SsGB0+A1TwBnq0lq79sMcti7PYWlpDIuCL/HOlC2R6ymi3RsBnrJ6PSZpdWDzZhqO8hkUsnwk4rrG5auGEJ5o9mEByj7WdFOtdHwGqw2p7z06STSjoPEWdtJXhgPfgNMQwD/xKF2/adMIrIsKcdZXi/QMvVHuQqezcy2BC0Pa3SFHKJLGjwaa9l7NQd3dSEdPrivQF44Zgk+hoIpZqS93tsOi82Ehz0JUOOjfMjyC1laJ19k8PL68slKSRrHr8UTAxg9kxH+tkEdQ45lijI5d4iZahI2zYw5AeK2sowekX4Scxie1oK4OFmOvoZCF3XgycP3GppJ3g2cG+PMAXw==
+ b=MnlrYuwcSG/GrIxJ/DT/dz1aBmWRMV3z+fy8k3BqgVDOpKn0OZnbPPnzTi1ziILLgcRm/Yp34hJ7EGhYf5Gz/94nu1kTUsdxMehZvFYZw50bdYc0h2pffaHulViyNBTNeVn5lLr5G0Xbf5F4D9jM3w2nSShyJBBMkPu71lg1txZNW7ycZYzFVIqY78/mfw+5ZJc8+iXBLpmNW7khTGOHYxXrtKZM/hWiU1hnmjgO5sBTYK4pgAdW9XsPszQrcIC/82ibWVAtkkf84ojhEW/k9qtqZeafhayIsmgeq4x1U/MtFV6ywnkBbMtBxWCRzwYH07JjCjNVDdSKCS4GEy3ViQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=t+OUE+mdVdCTet5tOTY66WL++4ZAEuURRw/ws7vPynM=;
- b=AZvjUY4BXCAHL9Tma/AvmMW/LAXjd7X8R2Rd0ZK6HoJOy/BHzjd7tTH8cWo7qYXKJkuR8tM/Kd07tAXHMgw/wIbaN8whN4kwyF53PigXGZEthJywNDqPb+vCbwp8xdHB9F/QyoWLW6xbr/LwsvQ9weepKzSakzm4kpDcmu+WphjlulZ1ADo6OPWatm5eaBy9mYeJyOlWt+iFoBh/y+k3zVXzINJfKUtsGTUP8E/SeY6SttouzWJ/4lizXRvyq5kERG+TThuEUHl2OrjK5ojv2g3H/1BaMpDX24QmcemzXRFR6GD/LRnFJq4Z1/MNsoM2ZAEkuCam2m3wZoBE6RO5FQ==
+ bh=ptaqgHG+OJO25Vb6vtGNb1qibKtVcIGIRFNXJo1lKMI=;
+ b=bTOrn4pRs140N8w7IpBTrc+mO2awqiLREi1CQikcq7cFWyDPbwNOFkkScjkJfbU6E/7fx+Wu09CvHZb8y7B2OwKcBK/hasRmaI3yeZcBWNgU+i+ikQfurVqvdGhXcccVPDFc1olWEoXMikj5ovR1r7t0LAz2BQk+FUfTPGqQVITe3mFSSFA+zhrOmx+ouRU0qjefCjS0JofXqASqDuANAylP8OUJBg625hrd/+h1BM9AcXP3wsnAjPUSSIZzdaJItIxxvEE+pKxBVUDR+rc9gfQEgHeMA+zRP6kMNQpP2qBXTai59cKx40ZWlt+MxI0WX4jDgNv5ifq57LKVBGJvYQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=bayhubtech.com; dmarc=pass action=none
- header.from=bayhubtech.com; dkim=pass header.d=bayhubtech.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=towerbridgetechnology.onmicrosoft.com;
- s=selector2-towerbridgetechnology-onmicrosoft-com;
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=t+OUE+mdVdCTet5tOTY66WL++4ZAEuURRw/ws7vPynM=;
- b=Z1L5SjSlQ8L+rKCUbuUlKhIMSku9gQ6dtdaFDJ9cC2xmce5C++tb2OluVCp0ycfsgh2yqaotqTK+TnbkVWbu/UCEItQpj1eRRJHvyU2FcDvqjR6LH8ODCRFjg+0ZU8d0qcDv0dwABjTifOJClDvM5wr8BAkIPr28dlzWfthn/XQ=
+ bh=ptaqgHG+OJO25Vb6vtGNb1qibKtVcIGIRFNXJo1lKMI=;
+ b=G6eqEMiWw07mAQehxd7EVei4y3mnwGgovtz83xBEhhzKBUeLmb+M15wXab7HpbOTWlAU8/XjbP4ajawIrlU8TQQPsvo+N1kBQAMN3n8sC/ndZi6UKCD0O00MhFyVOfvuODpikJzHLV4dBb6MlcRYxNQGEduGGjRhl+QxdQfenm8=
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=bayhubtech.com;
-Received: from MN2PR16MB2781.namprd16.prod.outlook.com (2603:10b6:208:e3::30)
- by SN6PR16MB2686.namprd16.prod.outlook.com (2603:10b6:805:d6::32) with
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from PAXPR04MB9448.eurprd04.prod.outlook.com (2603:10a6:102:2b1::21)
+ by AM9PR04MB8081.eurprd04.prod.outlook.com (2603:10a6:20b:3e2::5) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.20; Fri, 4 Nov
- 2022 06:42:35 +0000
-Received: from MN2PR16MB2781.namprd16.prod.outlook.com
- ([fe80::8aac:579e:4f4c:eb0c]) by MN2PR16MB2781.namprd16.prod.outlook.com
- ([fe80::8aac:579e:4f4c:eb0c%4]) with mapi id 15.20.5769.016; Fri, 4 Nov 2022
- 06:42:35 +0000
-From:   Charl Liu <charl.liu@bayhubtech.com>
-To:     adrian.hunter@intel.com, ulf.hansson@linaro.org,
-        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     shaper.liu@bayhubtech.com, chevron.li@bayhubtech.com,
-        thomas.hu@bayhubtech.com, xiaoguang.yu@bayhubtech.com,
-        shirley.her@bayhubtech.com
-Subject: [PATCH V2 1/1] mmc:sdhci:Fix the SD tuning issue that the SDHCI_TRANSFER_MODE is cleared incorrectly
-Date:   Thu,  3 Nov 2022 23:42:21 -0700
-Message-Id: <20221104064221.812-1-charl.liu@bayhubtech.com>
-X-Mailer: git-send-email 2.25.1
+ 2022 06:46:31 +0000
+Received: from PAXPR04MB9448.eurprd04.prod.outlook.com
+ ([fe80::88a0:57d8:2a57:3f4f]) by PAXPR04MB9448.eurprd04.prod.outlook.com
+ ([fe80::88a0:57d8:2a57:3f4f%9]) with mapi id 15.20.5791.022; Fri, 4 Nov 2022
+ 06:46:31 +0000
+From:   Sandor Yu <Sandor.yu@nxp.com>
+To:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-phy@lists.infradead.org, andrzej.hajda@intel.com,
+        neil.armstrong@linaro.org, robert.foss@linaro.org,
+        Laurent.pinchart@ideasonboard.com, jonas@kwiboo.se,
+        jernej.skrabec@gmail.com, kishon@ti.com, vkoul@kernel.org
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        linux-imx@nxp.com, tzimmermann@suse.de, lyude@redhat.com,
+        Sandor.yu@nxp.com, javierm@redhat.com,
+        ville.syrjala@linux.intel.com, sam@ravnborg.org,
+        jani.nikula@intel.com, maxime@cerno.tech,
+        penguin-kernel@I-love.SAKURA.ne.jp, p.yadav@ti.com,
+        oliver.brown@nxp.com
+Subject: [v2 0/10] Initial support for Cadence MHDP(HDMI/DP) for i.MX8MQ
+Date:   Fri,  4 Nov 2022 14:44:50 +0800
+Message-Id: <cover.1667463263.git.Sandor.yu@nxp.com>
+X-Mailer: git-send-email 2.34.1
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: TYCP286CA0029.JPNP286.PROD.OUTLOOK.COM
- (2603:1096:400:263::19) To MN2PR16MB2781.namprd16.prod.outlook.com
- (2603:10b6:208:e3::30)
+X-ClientProxiedBy: SG2PR06CA0194.apcprd06.prod.outlook.com (2603:1096:4:1::26)
+ To PAXPR04MB9448.eurprd04.prod.outlook.com (2603:10a6:102:2b1::21)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN2PR16MB2781:EE_|SN6PR16MB2686:EE_
-X-MS-Office365-Filtering-Correlation-Id: c2dc505e-0eb2-42f1-74eb-08dabe2fc1d4
+X-MS-TrafficTypeDiagnostic: PAXPR04MB9448:EE_|AM9PR04MB8081:EE_
+X-MS-Office365-Filtering-Correlation-Id: 07ab34d1-64be-44e4-7a2f-08dabe304e89
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ZqnEhYh2qJJfiAfEKPGVrn6BqgsoKSDfRc+sW89pw6qBRLZrMZ1X3R8M7/5OAr1GoW//Yom1g3V4+BVKUu/fR2/wnuC439QrNSJiLnxpFIPJL5A1rkyHZyyzGd8gn3PQO+s2cisnQIG1hyEUlrVDYfAzGBM7gNKqJTLpyCHKL9k1F9dAyh8LOFdH6V5mlnQQ2U+LO+OSDTnEg99UC+PQeXWOm7T/sz/5D1MGodvWu7wTLo3oYghdhz0HgIncQRawbkBbbzUKtsqHJqEzYOpIxBzxPA4jxPZ0one6cj/vQDVdegP5CQB2FRvu2m2gazggw9Z+D29FrrBYzUfmLumphcOPCATIqFKI/PPFh8o2Hr5/grWz+jP6DQ7WdMgcOxSQFAhvpn7dPcX4DANhI16EUWOa9QW5S2p7tBdPBsDUBRBoI4kT3zSI0Ot27kcn8CdJGtqLTfcdiAk9AdfXvVGbr4AIbNl+UBiFcwbzKRkndq0pcg1AHss2QQHGZcN9Zu9nWSEJfdwZz7BTcq11hwym9s/qD8FXZPzcGuOn00qP2FAmtA2h3RFCY5R+wC3QKvFl9mRe7IS8EhJPvq4RISKmgda0J2jgjSdwuTScB0rLxSdjIY9PcqrxXvgOKK0dZnEEGSfMHoNA34ix3DptZxtqeEmhCQcFds92bgNMF1tHDnAFuhJcaQd4lxUaVkm724NlLuE6OSS5E4GuWWhr6yoZBg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR16MB2781.namprd16.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(39830400003)(136003)(376002)(346002)(396003)(366004)(451199015)(83380400001)(44832011)(6506007)(6666004)(478600001)(2906002)(107886003)(6486002)(38100700002)(36756003)(6512007)(2616005)(52116002)(186003)(86362001)(4326008)(316002)(1076003)(66556008)(66946007)(8936002)(41300700001)(66476007)(8676002)(5660300002);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: N2mHU+JtIi1mpXxWs6A0A3YSdZjm9lZkSpa1gLaAf58i/O0KQ9JLS+jtqOnbfM8g9sSQEppe7zxl9/ObrrYpOs+avTk4o+s7K7za+0ebbKz04tuWNYz8UZy240wGU2ZmuclzObcvKGfM5UiTiyB15K4w00lhWIWXhYCOyBoO72d85XQ/tEiGTP3NUbgyK/bhRcyQnnNsjY50OvHTy/KguiZkb4C9X9e98YLOFbaJo32IrOhsMH8E71/B6VL6gbyK9mbdeOyF27A64eU0067toTVhUeJU7z44q7fYekyX+KtF0MdvRrdom6kEdggCX1XnqtKMlfFlkHlkyu6FMfBgaSMleWPAmhCiaQFac+M7UiFAZca3q6vfyJQxrLFaraYdwE/FnZAKvuOmh77TaZCCI+bsvJojBznW2KCrXSWNBW3YcqGyLfj2SE/IrCD4QF762MKCfo33KBCdyzWPcnxeMjSLjVfjqXqwZDzQbdDyZ45HwpQhDFGW4Ds7fd89R66OZMBJMTR8hoY9i5oPCB31Qi3Y94kqbBZivdWtPed7isnI1B+h0ZR+UvJm1I0x80ooaVCE+6eh6h+GPRfi7WovdBCWHjrbtVNj3brPTgleU4yt+hJynBDDXhfkQUggkeYAax34cnWKFLC6UCw5t8RejfqtCCEeJpDXTxFVDVCYP0fG/XNpo8o2B3AquEBpKlLzLMG1kxGbwSU9IfSBJpS55OBb7QEK0V67i+ADDDdHeubLg4zAR8JpVFmPRPOnubdn1yV0YtfkNJ4daKLmAbUyyHrf5hVsp9Zea0in4/9UHHwk5+K3gk1rubomEnThr+Uj
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB9448.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(376002)(39860400002)(366004)(136003)(396003)(451199015)(316002)(8676002)(38350700002)(7416002)(5660300002)(66556008)(66476007)(38100700002)(4326008)(66946007)(36756003)(8936002)(41300700001)(83380400001)(6666004)(921005)(186003)(966005)(2616005)(86362001)(6486002)(26005)(478600001)(6512007)(52116002)(6506007)(2906002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?238UJnGVantirW1FbiQSyOfVuFUunGLrrMAjoHQXE4OJ6gkoaEtOMosAPxIT?=
- =?us-ascii?Q?NRt7zMI7XxRhYdLoUr5/GjD5MGm7oGK51FPG6PyD61qpsck3AKNh3KyIBq5n?=
- =?us-ascii?Q?2nNUx3bcTcwYjKLOqkJm+W/2sI5oCtVJafYdQ4012VpbotJGrtfZUdSGbnsz?=
- =?us-ascii?Q?m+eEYSDu6UdQcfkgXpi85ayy3v2B8g15CM2vVmrysF1OFFo9+KbYVf4QIXNb?=
- =?us-ascii?Q?tOXI2qf+dP9qbgYB4SGnWb+xJ/cTyjuDjHqG0Zz50s0gXcO3AGUZYBNFlHGm?=
- =?us-ascii?Q?zYz5eg6dY9vSD+in9HY5k3l6v1P1Mahnwe7Hva3nppfHJJbDJCOmXSrGmzc9?=
- =?us-ascii?Q?JSMMBOkIbzu6kyB3j6VYQQy8Bqp4ZrXNyh0plxQB6Ov/d5oP56dj4s7QgA/I?=
- =?us-ascii?Q?LGbB6+2/j51fz1bNeUOopvkpQKQQcVekQXOP1PZngXzxme05tSlG38ThYnqG?=
- =?us-ascii?Q?zIgI2iNv6VjR3dwFuSZJpx8epUlbxBb154EEpCn9Gph3/+leOhn+UGJq8Mwa?=
- =?us-ascii?Q?Ay2nG/jnlC5RgZXzMNkrcjz09qZJivvWdZ2yvHlotSGuRxB9yfTR9lwFmFMn?=
- =?us-ascii?Q?bLJIeYiALcSgDdAcvbiB50sZSbG2e7JDdF/59v1r0UCek1GKsURsteS/Wv4M?=
- =?us-ascii?Q?twZdqjyN1yA6e5aQXJvQ0p6f0HkOyv7WZhwqm/jUZv8IlzKFH45tRn4gzXgP?=
- =?us-ascii?Q?SDFRdaVbtxv2Occ/W2cUmxH3717JXbNC5kMLD5PrTWjQFmdDDAYp5MTAEEdi?=
- =?us-ascii?Q?Re3eGhSWcgVbqfkV7aTAaG3+QenFApuCI/Pl+gyVQfCyFDQKKRAo+KSl6ZS0?=
- =?us-ascii?Q?xAuT9yALf0wmPf0M3G+tD4qSxVxHzjF/Oj5/1Ww7OYH3ZwKo1Qp9l5EBXrpA?=
- =?us-ascii?Q?3JlzoClGTyGn0xPiGh1a3B1wFFnQX1abvbSPO4l/ZHltgs3pcTG8JOE4ZAyC?=
- =?us-ascii?Q?BQelZYqx4Ul7xZu+zkAOX+zVzAjzdFRUY+X8g97wTY8rj7P7q8deya5pnxGA?=
- =?us-ascii?Q?T7pbIxOsJyn/WvdL7QKCg7H/lv1BfgPusl9rRqtC3tm6pbrI4Q1AtF5KLlhU?=
- =?us-ascii?Q?wgtIS+wQyl9KoQt4DQLQPzCwVU6XYzh4aGzREUw/YTZiNNjOmy2J7lX1Vh8u?=
- =?us-ascii?Q?u2VDqy3vsgHzZmei9aAxWLkLICkYjw6ZWAQjE5z2Rxhx9R1RdlQExK0ub4dQ?=
- =?us-ascii?Q?DUyAmFtf9fiyN1Ziq13u+lWePxh0paUjCkRnQORJH4Nb36mXHu8P3XFvAkkS?=
- =?us-ascii?Q?GhX6/R5OXpKa1tADQDYTwyUAQF1qsovvxgFRbjh+xCxRlD6drIw4aCL2yq4t?=
- =?us-ascii?Q?2/1U2xQZUSyg8pJ8Agqhit1OWsxFQrRBXShwp+0TdRjCDHt+jhDqWSn11J+z?=
- =?us-ascii?Q?7jVG2dGxQ7kaIzRPQxTkrmJqyXLvCjXEMjjEskfVMjHBBZcLEY9plPrTyO65?=
- =?us-ascii?Q?MMZdVPoXPdFL1mDpuNGKcdrsZep0TugSoCbloOkJyq2x/K6S383u9wGEjtVJ?=
- =?us-ascii?Q?xDHPmpCOrjMmaAlD/9QC5PG6NH+PN+h8dTWN4HBU/DClFEFVAVcffRbi/ViT?=
- =?us-ascii?Q?R11Ys6BUYUIhhBrpIQyMARCNHrFVbg6HCoHuxQ5sYeiMb59pE29P5OGdMz4h?=
- =?us-ascii?Q?BfzK5h7zYKDYXs3kl22nxK4nqNM0dJiqX56SjwyGrlY8TFMu+Gl4VmqATBpd?=
- =?us-ascii?Q?qwBG9w=3D=3D?=
-X-OriginatorOrg: bayhubtech.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c2dc505e-0eb2-42f1-74eb-08dabe2fc1d4
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR16MB2781.namprd16.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?XGhd9JY6vlui4IODOfDa2cGEckcZ3zW4BGO6QtNybWuAdz48vk6h9Ro6llPY?=
+ =?us-ascii?Q?lYwMa6GPOWC73punDFNBJ8Mcmo8NJvrVG1/c2Pax6qjpHCaM+9bMew+VJHbb?=
+ =?us-ascii?Q?qGC8SrIOgJSPsCeoCTw1dhx+G1JSY2rPo3vmJpegftFtj8lR2+R0IqCcvoKL?=
+ =?us-ascii?Q?+LtdDm/i/JVkqSA/n5FGTwd8E8bxSDtDpwHgydQE82KEoBo98TMb9JLucVX0?=
+ =?us-ascii?Q?GxGhFmneWkPpgJVhOK1ipJKW14fuwwY7XwAHfwzZ//ImFCrtyjlPrz+0ZGlw?=
+ =?us-ascii?Q?4I/p3BAmIxP10wcfaVGLupFYpYSlAEC18KkLfN/2UdJ03/tm+rd7f+IzKawt?=
+ =?us-ascii?Q?3ZIyaM5KAnd+di5kL54JN1kLRjeLxVHP0QdJwkbELPaN1w5mIXvzQMbAIOzg?=
+ =?us-ascii?Q?0QVvyL/rgBCMV96xz40LpIwAe3tGs7qNg1078uE1sLF2dDC+FiTqPAf7EFHu?=
+ =?us-ascii?Q?iwdgnKCcJRlBCtkkhQVnVX4eeXA8Pf3kN/BX6oxZvGNQLPQOF/bq0jtC4HuV?=
+ =?us-ascii?Q?4GB+7j79QPeABOSoSbEEjwPprKUIsOiRy/T3xa/bQ/umTCV+fDy2uYcQWZll?=
+ =?us-ascii?Q?gp0XKzXtQi+6vffKC6Vv/B1B89J+MBu62zFgLG1XOcMHA2OJy78Je1YQK2SR?=
+ =?us-ascii?Q?viVATI1TUSbJPBDpNFY23LtkiNquPQiJ0hc55KUdiXSdzsz2EZ/4INrDvP+f?=
+ =?us-ascii?Q?R2Nwghct1o43iAi+jB9uI6zgFzC4MTwR2L6sF6XhC1pZ8aLjqFTgLIHiNWks?=
+ =?us-ascii?Q?sH6JOFgGAAMUCSZTu08Ft+v4JItKrcENZ4keCX1aGTzY8NggCEomcdsuEPRq?=
+ =?us-ascii?Q?5yN102USnXmHOmU+myU9d80dJ2CZ8r2DVaRwH6gPWyoVTqhnkMBAfaFK7K1N?=
+ =?us-ascii?Q?caCPMzik4NMYSs0oSUjLJG0FXcT8bjiuB/eLeOHDDPGO0wITr1opyKwLgkCO?=
+ =?us-ascii?Q?1As4O1W6ouw+CVWxknIw5UykQ9Dv3Zd1G4YWf0Iut0OCpsHGEi6iH6SIb91B?=
+ =?us-ascii?Q?iHo2DDqJSsQ3nIoxu6inJH9Py9KQpcSeTwM4o81Z3jVjm3cVikebkrGK3SlS?=
+ =?us-ascii?Q?yqBmFXSDuiyl1ZB4Z/52XRf2YxBlScOlzbclVvxXI3iaWZU/POu8E56uOkEK?=
+ =?us-ascii?Q?ZkGfzBxBvjxOahEdMqjFID5pvJiqEvet3ljXcoZfwjaK99BeJnuyuuAAtXW7?=
+ =?us-ascii?Q?nPTZD9SOQQBwneE+lq8gvmZtdXzU+kknWLBl17K0VwyitMjps56w4j7D9fB3?=
+ =?us-ascii?Q?QN0WaFzTHFtVh6XmByqmYdU7snA/YoK3oSf0q5eLNQOJDDGU80FZbfswMIbg?=
+ =?us-ascii?Q?hsdk+WV0FZkgh6LHUVpNsYiKisnujO8gYwK+0+pZxWWlZdYW3j04hjx8XzFW?=
+ =?us-ascii?Q?uyTZeiIkb3RR3QqGbQXdC4o1NfBigmwWpiu/wfOuG57EdWS+p20VUMll0BA3?=
+ =?us-ascii?Q?YhSW/Wz6eXSZ5tyVtsujMCijAj82wQR8MDr5VqxPC7zGXOujduN+gnJUiSvo?=
+ =?us-ascii?Q?BGl6EZitepL5FIVwTRFzzPmCCcs07AVGq6zEZi9N5xPAed/fnriHH7JrxmXq?=
+ =?us-ascii?Q?KlMXYMVuKheoz/EisLt3NVPbJKEcyUt5bMpV9trB?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 07ab34d1-64be-44e4-7a2f-08dabe304e89
+X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB9448.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Nov 2022 06:42:35.2263
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Nov 2022 06:46:31.4030
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 0a7aae2b-8f2e-44df-ba2f-42de7f93c642
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: YpfRKbxCa0cq+nSdBUuaiIpRzEuBgre9Zz882qOQdYoDFFFJaHH6ywml3I9JEFcrKqVWVPkzft+mXEsz38xEEO7umafH8yiG0u/ZiUbsPPw=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR16MB2686
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-UserPrincipalName: ExuDrOS/9sL6gbn4gldHEpukbP+b3PkMMdrv9qbB0NQ2CGhB1JsyrMGkK+bq1pFCJDvjU+gR4hrqGolW4gs1pw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR04MB8081
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When cmd->opcode == MMC_SEND_TUNING_BLOCK, the SDHCI_TRANSFER_MODE
-should also be kept
+The patch set initial support for Cadence MHDP(HDMI/DP) DRM bridge
+drivers and Cadence HDP-TX PHY(HDMI/DP) drivers for iMX8MQ.
 
-Signed-off-by: Charl Liu <charl.liu@bayhubtech.com>
----
-change in V1:
-Keeping the SDHCI_TRANSFER_MODE when cmd->opcode == MMC_END_TUNING_BLOCK
+v2 is a completely different version compared to v1.
+Previous v1 can be available here [1].
 
-change in V2:
-add the mmc_op_tuning interface to judge if the opcode is tuning CMD
----
- drivers/mmc/host/sdhci.c | 2 +-
- include/linux/mmc/mmc.h  | 6 ++++++
- 2 files changed, 7 insertions(+), 1 deletion(-)
+v1->v2:
+- Reuse Cadence mailbox access functions from mhdp8546 instead of
+  rockchip DP.
+- Mailbox access functions be convert to marco functions
+  that will be referenced by HDP-TX PHY(HDMI/DP) driver too.
+- Plain bridge instead of component driver.
+- Standalone Cadence HDP-TX PHY(HDMI/DP) driver.
+- Audio driver are removed from the patch set, it will be add in another
+  patch set later.
 
-diff --git a/drivers/mmc/host/sdhci.c b/drivers/mmc/host/sdhci.c
-index 22152029e14c..9388628215ca 100644
---- a/drivers/mmc/host/sdhci.c
-+++ b/drivers/mmc/host/sdhci.c
-@@ -1430,7 +1430,7 @@ static void sdhci_set_transfer_mode(struct sdhci_host *host,
- 		if (host->quirks2 &
- 			SDHCI_QUIRK2_CLEAR_TRANSFERMODE_REG_BEFORE_CMD) {
- 			/* must not clear SDHCI_TRANSFER_MODE when tuning */
--			if (cmd->opcode != MMC_SEND_TUNING_BLOCK_HS200)
-+			if (!mmc_op_tuning(cmd->opcode))
- 				sdhci_writew(host, 0x0, SDHCI_TRANSFER_MODE);
- 		} else {
- 		/* clear Auto CMD settings for no data CMDs */
-diff --git a/include/linux/mmc/mmc.h b/include/linux/mmc/mmc.h
-index d9a65c6a8816..d809bdfcc59b 100644
---- a/include/linux/mmc/mmc.h
-+++ b/include/linux/mmc/mmc.h
-@@ -99,6 +99,12 @@ static inline bool mmc_op_multi(u32 opcode)
- 	       opcode == MMC_READ_MULTIPLE_BLOCK;
- }
- 
-+static inline bool mmc_op_tuning(u32 opcode)
-+{
-+	return opcode == MMC_SEND_TUNING_BLOCK ||
-+	       opcode == MMC_SEND_TUNING_BLOCK_HS200;
-+}
-+
- /*
-  * MMC_SWITCH argument format:
-  *
+The patch set compose of DRM bridge drivers and PHY drivers.
+Both of them need the followed two patches to pass build.
+  drm: bridge: cadence: convert mailbox functions to macro functions
+  phy: Add HDMI configuration options
+
+DRM bridges driver patches:
+  dts-bingings: display: bridge: Add MHDP HDMI bindings for i.MX8MQ
+  drm: bridge: cadence: Add MHDP DP driver for i.MX8MQ
+  dts-bindings: display: bridge: Add MHDP DP bindings for i.MX8MQ
+  drm: bridge: cadence: Add MHDP HDMI driver for i.MX8MQ
+
+PHY driver patches:
+  dts-bindings: phy: Add Cadence HDP-TX DP PHY bindings
+  phy: cadence: Add driver for HDP-TX DisplyPort PHY
+  dts-bindings: phy: Add Cadence HDP-TX HDMI PHY bindings
+  phy: cadence: Add driver for HDP-TX HDMI PHY
+
+[1] https://patchwork.kernel.org/project/linux-rockchip/cover/cover.1590982881.git.Sandor.yu@nxp.com/
+
+Sandor Yu (10):
+  drm: bridge: cadence: convert mailbox functions to macro functions
+  dts-bingings: display: bridge: Add MHDP HDMI bindings for i.MX8MQ
+  drm: bridge: cadence: Add MHDP DP driver for i.MX8MQ
+  phy: Add HDMI configuration options
+  dts-bindings: display: bridge: Add MHDP DP bindings for i.MX8MQ
+  drm: bridge: cadence: Add MHDP HDMI driver for i.MX8MQ
+  dts-bindings: phy: Add Cadence HDP-TX DP PHY bindings
+  phy: cadence: Add driver for HDP-TX DisplyPort PHY
+  dts-bindings: phy: Add Cadence HDP-TX HDMI PHY bindings
+  phy: cadence: Add driver for HDP-TX HDMI PHY
+
+ .../display/bridge/cdns,mhdp-imx8mq-dp.yaml   |   67 ++
+ .../display/bridge/cdns,mhdp-imx8mq-hdmi.yaml |   67 ++
+ .../bindings/phy/phy-cadence-hdptx-dp.yaml    |   70 ++
+ .../bindings/phy/phy-cadence-hdptx-hdmi.yaml  |   54 +
+ drivers/gpu/drm/bridge/cadence/Kconfig        |   25 +
+ drivers/gpu/drm/bridge/cadence/Makefile       |    3 +
+ drivers/gpu/drm/bridge/cadence/cdns-dp-core.c | 1070 +++++++++++++++++
+ .../gpu/drm/bridge/cadence/cdns-hdmi-core.c   | 1038 ++++++++++++++++
+ .../gpu/drm/bridge/cadence/cdns-mhdp-common.h |  402 +++++++
+ .../drm/bridge/cadence/cdns-mhdp8546-core.c   |  197 +--
+ .../drm/bridge/cadence/cdns-mhdp8546-core.h   |    1 -
+ drivers/phy/cadence/Kconfig                   |   16 +
+ drivers/phy/cadence/Makefile                  |    2 +
+ drivers/phy/cadence/phy-cadence-hdptx-dp.c    |  774 ++++++++++++
+ drivers/phy/cadence/phy-cadence-hdptx-hdmi.c  |  948 +++++++++++++++
+ include/drm/bridge/cdns-mhdp-mailbox.h        |  240 ++++
+ include/linux/phy/phy-hdmi.h                  |   33 +
+ include/linux/phy/phy.h                       |    7 +-
+ 18 files changed, 4817 insertions(+), 197 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/display/bridge/cdns,mhdp-imx8mq-dp.yaml
+ create mode 100644 Documentation/devicetree/bindings/display/bridge/cdns,mhdp-imx8mq-hdmi.yaml
+ create mode 100644 Documentation/devicetree/bindings/phy/phy-cadence-hdptx-dp.yaml
+ create mode 100644 Documentation/devicetree/bindings/phy/phy-cadence-hdptx-hdmi.yaml
+ create mode 100644 drivers/gpu/drm/bridge/cadence/cdns-dp-core.c
+ create mode 100644 drivers/gpu/drm/bridge/cadence/cdns-hdmi-core.c
+ create mode 100644 drivers/gpu/drm/bridge/cadence/cdns-mhdp-common.h
+ create mode 100644 drivers/phy/cadence/phy-cadence-hdptx-dp.c
+ create mode 100644 drivers/phy/cadence/phy-cadence-hdptx-hdmi.c
+ create mode 100644 include/drm/bridge/cdns-mhdp-mailbox.h
+ create mode 100644 include/linux/phy/phy-hdmi.h
+
 -- 
-2.32.0
+2.34.1
 
