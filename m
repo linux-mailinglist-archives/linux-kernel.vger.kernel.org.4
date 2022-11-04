@@ -2,83 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A24ED619CF5
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 17:19:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E1E2619CE3
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 17:19:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231898AbiKDQTo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 12:19:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47656 "EHLO
+        id S231601AbiKDQTE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 12:19:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229598AbiKDQTj (ORCPT
+        with ESMTP id S229539AbiKDQTB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 12:19:39 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAA67286CA;
-        Fri,  4 Nov 2022 09:19:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net; s=s31663417;
-        t=1667578751; bh=MBljRn36u0FL6eNZY6eErtpM03PtwqJkbltkRok4Li4=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=b7s0Z+KTIeqEHxHDUdWI9aKPAt+V65qGQebEI6Z3VCLgoEt+ntJjGUdU+DWWYBDiS
-         VMvuhSZimoXNVhLzUtTGaqVT0QeOGAjvQ+ipYZ9VO/wJxH3y0IrfzeDI9engdAKrMT
-         0NPblUT8o/V7j6VZQnXBNmzTfG58pWA1g14rKHOCwHksTepTycL4kVijVCps9nlPDY
-         +DCBeFKr5laZQ8Y60lIZ9OANqszQ3//Aa+vmFxqk0tIPr2g2NhU2wfcEgoHTfSVcz7
-         haoh9VWJ0xBLxWscW2oRn9V2Uobk5U/xq+wdf2k6Rmk+a1n5FhtqE+ooVS9LNbJcQy
-         ixD0He1C55ugA==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from probook ([95.223.44.31]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1M8ykW-1oup9l2QBK-0065Zs; Fri, 04
- Nov 2022 17:19:11 +0100
-From:   =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-To:     linux-clk@vger.kernel.org, openbmc@lists.ozlabs.org
-Cc:     linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Avi Fishman <avifishman70@gmail.com>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Subject: [PATCH v5 6/6] [NOT FOR MERGE] ARM: dts: wpcm450: Switch clocks to clock controller
-Date:   Fri,  4 Nov 2022 17:18:50 +0100
-Message-Id: <20221104161850.2889894-7-j.neuschaefer@gmx.net>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221104161850.2889894-1-j.neuschaefer@gmx.net>
-References: <20221104161850.2889894-1-j.neuschaefer@gmx.net>
+        Fri, 4 Nov 2022 12:19:01 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5C4220F6C
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 09:19:00 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 6FCDD219D0;
+        Fri,  4 Nov 2022 16:18:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1667578739; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=oxkh44BNK58jGCReJRCB+RdW49A2w+L2p0jqqFrbYiE=;
+        b=nFvrekBFLCrPaMrFa3xYrgidHPluNgHFcwDgpfx3OftXbRt+oCB2q6a2R3x1ESnukTE9o+
+        YcDL/No7VHbPY8FdZKPo0PWn3KIV76zOO9wH6mnIivvV8RgSSqZ1O5sYluQKyRqT3sy3KW
+        Ggsy7DOK3gXl1TMHSwX3gVZfGlwG0jc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1667578739;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=oxkh44BNK58jGCReJRCB+RdW49A2w+L2p0jqqFrbYiE=;
+        b=ausIb5Gz0Ya+BmacoDLQSfcZ2P3YBktOhTIUw1SGNMch1FNE8JxY5M+qJyY35n4f6yapBf
+        bSr9F8RVl3avfLCA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 32A9A1346F;
+        Fri,  4 Nov 2022 16:18:59 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id odlpC3M7ZWOPbgAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Fri, 04 Nov 2022 16:18:59 +0000
+Message-ID: <06e84020-3794-c798-10a6-97282814fd3a@suse.cz>
+Date:   Fri, 4 Nov 2022 17:18:58 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:MYaeCPeDHwfn24gZVmiUqk9z7xM6e/jUPy6MKhIikdpA3HBDwFz
- UPp6tSuHKU/z7b7PsJjllo3vmeFJZptVEU2QXAHNiY2I8AJkob0mzz/qwVYoQJYbkBAD+Dk
- xKVhac7D6yIJca8gtyFgqTjzTz2zPPm3I1es/04qTDxDscDKf0doEVfyMw93mvBqAG0LFoM
- 3Ng60zXjhmxenOm0K21iw==
-UI-OutboundReport: notjunk:1;M01:P0:H9UjfNO3BD0=;kgrWtE3l80XGZSPTutt39o5kwnt
- tMldVm6TmhS9PqJSDVDvROfSM4rYukkyJAsxSKKPi7dgzvIG3GUYsHuW/dOdqn2Cow3EpwyxM
- 5Iy3vl+0G2Jr2LvKUHz5sRCAZgpn6HZSyUhHYMPCdhzUbWu1mDggnQpD9r/AXNAzi/ZDc7/ge
- 5i1w0qZcYXrUu3eKlynm9xXpDWfRmS/MoK7Z7bUzqnwlJR8KsIEkNPR+CuLS6zahqHTpFTgs4
- n9Ly50nI9gdX5MTw0gO/bqtljAnVSk+U8/MQu1wKQ1bD0rJ8087Xx8MSB448YP7lUNQoP9ElD
- 3mLkuj+bdlA9ukKpXeJ0EUV9owNOg1kaOdzpmir3KWddJValLUIeWAWKBFVkExzWB7Pdt0wAu
- N/Xzdvh3kc3ueS2J+tfaa7mfQ+Bl9B2Quuw6YPM/ViekkY06/6wQmyRX9L7uoiFDuCkzd6XI6
- L+5WMZJfyrggVRcdiDwdTfDTF7DENd+c9EE9Iuwz5q0EozRzkPV0SMcrbrow5blKiLUNrFAd1
- 67fyj8RXn8Z1VuVk16Stlk62ScSoTfpbyIZuPQrrKiT+RizvhX9hSGr7z8+OYiKZa1zcrWUU4
- zNZFT4PLC5wClZBT872ZdEUOtEj5G8uqMO9tzwrhA66deLNIUASfNDqbeapanb57mm8e20SPx
- 3q6c9LfFN4DraqBEL1q0QZvp5GAfQGafrEPYLkCog9K5sTbvLe6VTXNckL9bjJ2D5Y4bOAGLw
- BLSOkOWQy81gdBvzYv2RQ0QeIR2pjNFe7G/XbLMyL0W3GLq+2MjvcopTD0UwJhHZfWXsTz4AG
- wEfY7ZPT3FGErm+ZfrptAl8C/Pp4psjCHlo9Yjr4BVygnMKZXjVNwCgY0uSNP7cuKFPFaNLox
- fJegGfD5OF89PN89qdPpOi5miGgk2tj1oIDBR6dQKXILGaDGknOW0kFYBw5sutRLtUgFZBlCD
- EQ5XFqTKKdSMCyOzz4uuXDZUopg=
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [RFC PATCH] mm: introduce object accounting via backtrace on slub
+Content-Language: en-US
+To:     "zhaoyang.huang" <zhaoyang.huang@unisoc.com>,
+        Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Zhaoyang Huang <huangzhaoyang@gmail.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, ke.wang@unisoc.com,
+        steve.kang@unisoc.com, Hyeonggon Yoo <42.hyeyoo@gmail.com>
+References: <1667550838-10639-1-git-send-email-zhaoyang.huang@unisoc.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <1667550838-10639-1-git-send-email-zhaoyang.huang@unisoc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,90 +79,247 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This change is incompatible with older kernels because it requires the
-clock controller driver, but I think that's acceptable because WPCM450
-support is generally still in an early phase.
+	On 11/4/22 09:33, zhaoyang.huang wrote:
+> From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+> 
+> Introduce a set of methods to account object via backtrace.
 
-Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
-=2D--
+Can you describe what exactly it does, so we don't need to guess from 
+the source code?
 
-This patch is currently only for demonstration purposes, as it will
-break the build if applied in parallel (going through different
-maintainer trees) with the other patches in this series.
-I will resend it once the other patches have been merged.
-
-v2-v5:
-- no changes
-=2D--
- arch/arm/boot/dts/nuvoton-wpcm450.dtsi | 20 +++++++++-----------
- 1 file changed, 9 insertions(+), 11 deletions(-)
-
-diff --git a/arch/arm/boot/dts/nuvoton-wpcm450.dtsi b/arch/arm/boot/dts/nu=
-voton-wpcm450.dtsi
-index 332cc222c7dc5..439f9047ad651 100644
-=2D-- a/arch/arm/boot/dts/nuvoton-wpcm450.dtsi
-+++ b/arch/arm/boot/dts/nuvoton-wpcm450.dtsi
-@@ -2,6 +2,7 @@
- // Copyright 2021 Jonathan Neusch=C3=A4fer
-
- #include <dt-bindings/interrupt-controller/irq.h>
-+#include <dt-bindings/clock/nuvoton,wpcm450-clk.h>
-
- / {
- 	compatible =3D "nuvoton,wpcm450";
-@@ -30,13 +31,6 @@ cpu@0 {
- 		};
- 	};
-
--	clk24m: clock-24mhz {
--		/* 24 MHz dummy clock */
--		compatible =3D "fixed-clock";
--		clock-frequency =3D <24000000>;
--		#clock-cells =3D <0>;
--	};
--
- 	refclk: clock-48mhz {
- 		/* 48 MHz reference oscillator */
- 		compatible =3D "fixed-clock";
-@@ -71,7 +65,7 @@ serial0: serial@b8000000 {
- 			reg =3D <0xb8000000 0x20>;
- 			reg-shift =3D <2>;
- 			interrupts =3D <7 IRQ_TYPE_LEVEL_HIGH>;
--			clocks =3D <&clk24m>;
-+			clocks =3D <&clk WPCM450_CLK_UART0>;
- 			pinctrl-names =3D "default";
- 			pinctrl-0 =3D <&bsp_pins>;
- 			status =3D "disabled";
-@@ -82,7 +76,7 @@ serial1: serial@b8000100 {
- 			reg =3D <0xb8000100 0x20>;
- 			reg-shift =3D <2>;
- 			interrupts =3D <8 IRQ_TYPE_LEVEL_HIGH>;
--			clocks =3D <&clk24m>;
-+			clocks =3D <&clk WPCM450_CLK_UART1>;
- 			status =3D "disabled";
- 		};
-
-@@ -90,14 +84,18 @@ timer0: timer@b8001000 {
- 			compatible =3D "nuvoton,wpcm450-timer";
- 			interrupts =3D <12 IRQ_TYPE_LEVEL_HIGH>;
- 			reg =3D <0xb8001000 0x1c>;
--			clocks =3D <&clk24m>;
-+			clocks =3D <&clk WPCM450_CLK_TIMER0>,
-+				 <&clk WPCM450_CLK_TIMER1>,
-+				 <&clk WPCM450_CLK_TIMER2>,
-+				 <&clk WPCM450_CLK_TIMER3>,
-+				 <&clk WPCM450_CLK_TIMER4>;
- 		};
-
- 		watchdog0: watchdog@b800101c {
- 			compatible =3D "nuvoton,wpcm450-wdt";
- 			interrupts =3D <1 IRQ_TYPE_LEVEL_HIGH>;
- 			reg =3D <0xb800101c 0x4>;
--			clocks =3D <&clk24m>;
-+			clocks =3D <&clk WPCM450_CLK_WDT>;
- 		};
-
- 		aic: interrupt-controller@b8002000 {
-=2D-
-2.35.1
+> Signed-off-by: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+> ---
+>   include/linux/slub_def.h |   7 +++
+>   mm/slub.c                | 155 ++++++++++++++++++++++++++++++++++++++++++++++-
+>   2 files changed, 161 insertions(+), 1 deletion(-)
+> 
+> diff --git a/include/linux/slub_def.h b/include/linux/slub_def.h
+> index f9c68a9..c90e5fb 100644
+> --- a/include/linux/slub_def.h
+> +++ b/include/linux/slub_def.h
+> @@ -139,9 +139,16 @@ struct kmem_cache {
+>   	unsigned int useroffset;	/* Usercopy region offset */
+>   	unsigned int usersize;		/* Usercopy region size */
+>   
+> +	struct rb_root user_hash_root;
+> +
+>   	struct kmem_cache_node *node[MAX_NUMNODES];
+>   };
+>   
+> +struct hash_object {
+> +	int count;
+> +	depot_stack_handle_t trace_hash;
+> +	struct rb_node rb_node;
+> +};
+>   #ifdef CONFIG_SYSFS
+>   #define SLAB_SUPPORTS_SYSFS
+>   void sysfs_slab_unlink(struct kmem_cache *);
+> diff --git a/mm/slub.c b/mm/slub.c
+> index 157527d..3ec02ff 100644
+> --- a/mm/slub.c
+> +++ b/mm/slub.c
+> @@ -337,6 +337,7 @@ static inline void stat(const struct kmem_cache *s, enum stat_item si)
+>    */
+>   static struct workqueue_struct *flushwq;
+>   
+> +static struct kmem_cache *user_hash_cache;
+>   /********************************************************************
+>    * 			Core slab cache functions
+>    *******************************************************************/
+> @@ -759,12 +760,152 @@ static void set_track_update(struct kmem_cache *s, void *object,
+>   	p->when = jiffies;
+>   }
+>   
+> +static void store_user_hash(struct kmem_cache *s, void *object,
+> +		depot_stack_handle_t trace_hash, enum track_item alloc)
+> +{
+> +	struct rb_node *rb_parent;
+> +	unsigned int trace_hash_parent;
+> +	struct rb_node **link = &s->user_hash_root.rb_node;
+> +	struct hash_object *hash_parent = NULL;
+> +	struct hash_object *hash_object = NULL;
+> +	unsigned long flags;
+> +	int count;
+> +	int nid = slab_nid(virt_to_slab(object));
+> +	struct kmem_cache_node *n = get_node(s, nid);
+> +
+> +	spin_lock_irqsave(&n->list_lock, flags);
+> +	while (*link) {
+> +		rb_parent = *link;
+> +		hash_parent = rb_entry(rb_parent, struct hash_object, rb_node);
+> +		trace_hash_parent = hash_parent->trace_hash;
+> +		if (trace_hash < trace_hash_parent)
+> +			link = &hash_parent->rb_node.rb_left;
+> +		else if (trace_hash_parent < trace_hash)
+> +			link = &hash_parent->rb_node.rb_right;
+> +		else {
+> +			hash_object = rb_entry(*link, struct hash_object, rb_node);
+> +			count = (alloc == TRACK_ALLOC) ? 1 : -1;
+> +			hash_object->count += count;
+> +			if (!RB_EMPTY_ROOT(&s->user_hash_root)
+> +				&& !hash_object->count) {
+> +				rb_erase(&hash_object->rb_node, &s->user_hash_root);
+> +				kmem_cache_free(user_hash_cache, hash_object);
+> +			}
+> +			spin_unlock_irqrestore(&n->list_lock, flags);
+> +			return;
+> +		}
+> +	}
+> +	spin_unlock_irqrestore(&n->list_lock, flags);
+> +	/*
+> +	 * hash_object is the 1st node represent this trace_hash
+> +	 * insert it to user_hash_root
+> +	 */
+> +	hash_object = kmem_cache_alloc(user_hash_cache, GFP_KERNEL);
+> +	if (!hash_object)
+> +		return;
+> +	hash_object->trace_hash = trace_hash;
+> +	/* add the node to rb tree*/
+> +	spin_lock_irqsave(&n->list_lock, flags);
+> +	rb_link_node(&hash_object->rb_node, rb_parent, link);
+> +	rb_insert_color(&hash_object->rb_node, &s->user_hash_root);
+> +	spin_unlock_irqrestore(&n->list_lock, flags);
+> +	return;
+> +}
+> +
+> +static ssize_t backtrace_acc_print(struct file *file, char __user *buf, size_t count, loff_t *ppos)
+> +{
+> +	struct hash_object *object;
+> +	struct rb_node *rb;
+> +	unsigned long *entries;
+> +	unsigned int nr_entries;
+> +	char *kbuf;
+> +	int i, ret = 0;
+> +	unsigned long flags;
+> +	struct kmem_cache_node *n;
+> +	enum track_item alloc;
+> +	int node;
+> +	struct slab *slab;
+> +	struct kmem_cache *s = file_inode(file)->i_private;
+> +
+> +	count = min_t(size_t, count, PAGE_SIZE);
+> +	kbuf = kmalloc(count, GFP_KERNEL);
+> +	if (!kbuf)
+> +		return -ENOMEM;
+> +
+> +	/* iterate from node-0 */
+> +	node = *ppos;
+> +	if (node >= nr_node_ids)
+> +		return 0;
+> +
+> +	if ((n = get_node(s, node))) {
+> +		/* skip empty node */
+> +		while (!atomic_long_read(&n->nr_slabs)) {
+> +			if (++node >= nr_node_ids)
+> +				return 0;
+> +			n = get_node(s, node);
+> +		}
+> +
+> +		rb = file->private_data ? (struct rb_node *)file->private_data : rb_first(&s->user_hash_root);
+> +		/* current node finish, reset rb to next node's root */
+> +		if(!rb) {
+> +			ret += snprintf(kbuf + ret, count - ret, "\n");
+> +			copy_to_user(buf, kbuf, ret);
+> +			file->private_data = 0;
+> +			*ppos = ++node;
+> +			return ret;
+> +		}
+> +
+> +		spin_lock_irqsave(&n->list_lock, flags);
+> +		object = rb_entry(rb, struct hash_object, rb_node);
+> +		if (object) {
+> +			while (!object->trace_hash || object->count <= 0) {
+> +				rb = rb_next(rb);
+> +				object = rb ? rb_entry(rb, struct hash_object, rb_node) : NULL;
+> +				if (!object) {
+> +					spin_unlock_irqrestore(&n->list_lock, flags);
+> +					ret += snprintf(kbuf + ret, count - ret, "\n");
+> +					copy_to_user(buf, kbuf, ret);
+> +					file->private_data = 0;
+> +					*ppos = ++node;
+> +					kfree(kbuf);
+> +					return ret;
+> +				}
+> +			}
+> +			nr_entries = stack_depot_fetch(object->trace_hash, &entries);
+> +			ret += snprintf(kbuf + ret, count - ret, "count %d\n", object->count);
+> +			if (ret >= count)
+> +				goto err;
+> +			for (i = 0; i < nr_entries; i++) {
+> +				void *ptr = (void *)entries[i];
+> +				ret += snprintf(kbuf + ret, count - ret, "    [<%p>] %pS\n", ptr, ptr);
+> +				if (ret >= count)
+> +					goto err;
+> +			}
+> +		}
+> +		file->private_data = (void *)rb_next(rb);
+> +		spin_unlock_irqrestore(&n->list_lock, flags);
+> +		*ppos = ++node;
+> +		if (copy_to_user(buf, kbuf, ret))
+> +			ret = -EFAULT;
+> +
+> +		kfree(kbuf);
+> +		return ret;
+> +err:
+> +		spin_unlock_irqrestore(&n->list_lock, flags);
+> +		kfree(kbuf);
+> +		return -ENOMEM;
+> +	}
+> +	return 0;
+> +}
+> +
+>   static __always_inline void set_track(struct kmem_cache *s, void *object,
+>   				      enum track_item alloc, unsigned long addr)
+>   {
+>   	depot_stack_handle_t handle = set_track_prepare();
+>   
+>   	set_track_update(s, object, alloc, addr, handle);
+> +	if (strcmp(s->name, "user_hash_cache") != 0)
+> +		store_user_hash(s, object, handle, alloc);
+>   }
+>   
+>   static void init_tracking(struct kmem_cache *s, void *object)
+> @@ -4918,8 +5059,10 @@ int __kmem_cache_create(struct kmem_cache *s, slab_flags_t flags)
+>   		return err;
+>   	}
+>   
+> -	if (s->flags & SLAB_STORE_USER)
+> +	if (s->flags & SLAB_STORE_USER) {
+> +		s->user_hash_root = RB_ROOT;
+>   		debugfs_slab_add(s);
+> +	}
+>   
+>   	return 0;
+>   }
+> @@ -6236,6 +6379,10 @@ static int slab_debug_trace_release(struct inode *inode, struct file *file)
+>   	.release = slab_debug_trace_release,
+>   };
+>   
+> +static const struct file_operations backtrace_accounting_operations = {
+> +	.read		= backtrace_acc_print,
+> +};
+> +
+>   static void debugfs_slab_add(struct kmem_cache *s)
+>   {
+>   	struct dentry *slab_cache_dir;
+> @@ -6250,6 +6397,9 @@ static void debugfs_slab_add(struct kmem_cache *s)
+>   
+>   	debugfs_create_file("free_traces", 0400,
+>   		slab_cache_dir, s, &slab_debugfs_fops);
+> +
+> +	debugfs_create_file("backtrace_accounting", 0400, NULL, NULL,
+> +			    &backtrace_accounting_operations);
+>   }
+>   
+>   void debugfs_slab_release(struct kmem_cache *s)
+> @@ -6261,6 +6411,9 @@ static int __init slab_debugfs_init(void)
+>   {
+>   	struct kmem_cache *s;
+>   
+> +	user_hash_cache = kmem_cache_create("user_hash_cache",
+> +			sizeof(struct hash_object),
+> +			0, 0, NULL);
+>   	slab_debugfs_root = debugfs_create_dir("slab", NULL);
+>   
+>   	list_for_each_entry(s, &slab_caches, list)
 
