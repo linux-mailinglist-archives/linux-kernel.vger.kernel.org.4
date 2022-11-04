@@ -2,155 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C1C9619468
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 11:25:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4561061946A
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 11:25:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231693AbiKDKZA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 06:25:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49062 "EHLO
+        id S231703AbiKDKZr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 06:25:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231309AbiKDKYz (ORCPT
+        with ESMTP id S231309AbiKDKZn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 06:24:55 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B3AB96162;
-        Fri,  4 Nov 2022 03:24:54 -0700 (PDT)
-Received: from anrayabh-desk (unknown [167.220.238.193])
-        by linux.microsoft.com (Postfix) with ESMTPSA id EFC91205DA4D;
-        Fri,  4 Nov 2022 03:24:48 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com EFC91205DA4D
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1667557494;
-        bh=8CZc6ie+M2e82JGKPjhLdxrXq0jJEkH38UjNhjZSp6g=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pN/agJ8c4ZP+qZ372rMTv3NFHY0P8aBaBlOUt4QrgPVaB76YE9mboq+JcfbztS4Kw
-         SHPB+xNqgvfk473M1yCg5JlAUvhf3TRTaILi0Hxt80qeY22EEmS8SWe+Afe9UFLNIA
-         9SnxOKyDUIofgZr0br524hTF0Rs0l1P+sYHAcudo=
-Date:   Fri, 4 Nov 2022 15:54:44 +0530
-From:   Anirudh Rayabharam <anrayabh@linux.microsoft.com>
-To:     Jinank Jain <jinankjain@linux.microsoft.com>
-Cc:     jinankjain@microsoft.com, kys@microsoft.com,
-        haiyangz@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        arnd@arndb.de, peterz@infradead.org, jpoimboe@kernel.org,
-        seanjc@google.com, kirill.shutemov@linux.intel.com,
-        ak@linux.intel.com, sathyanarayanan.kuppuswamy@linux.intel.com,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, mikelley@microsoft.com
-Subject: Re: [PATCH v3 1/5] x86/hyperv: Add support for detecting nested
- hypervisor
-Message-ID: <Y2TobFUO2dM1yVmq@anrayabh-desk>
-References: <cover.1667480257.git.jinankjain@linux.microsoft.com>
- <285b15b90ac6f29ef8ab6b6ececeeef7d7c6f380.1667480257.git.jinankjain@linux.microsoft.com>
+        Fri, 4 Nov 2022 06:25:43 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D84C426116;
+        Fri,  4 Nov 2022 03:25:40 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 71B261F8C1;
+        Fri,  4 Nov 2022 10:25:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1667557539; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=umYuvfSYpaOMnHXO5/tfa93Xw+i4utk39bFTOZA4b+Y=;
+        b=C1BmFJHcUygzu8U07Eaj/sxsK4vonaAfIucig1+vGHHold/zZg8FC6Z2ww+uWI9HPyHVUV
+        h+bcttMF4LfMcjIgvZ76XquF9FacVQpStk+LN06iSih2nZzoL2862fSJWyIW+u/f8K4yS2
+        6t0GXEY7eLJCfiodA5yy2YDcp7CmNfA=
+Received: from suse.cz (unknown [10.100.208.146])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 53DE32C141;
+        Fri,  4 Nov 2022 10:25:39 +0000 (UTC)
+Date:   Fri, 4 Nov 2022 11:25:38 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     Josh Poimboeuf <jpoimboe@kernel.org>,
+        Nicolai Stange <nstange@suse.de>
+Cc:     Marcos Paulo de Souza <mpdesouza@suse.com>,
+        linux-kernel@vger.kernel.org, live-patching@vger.kernel.org,
+        jpoimboe@redhat.com, joe.lawrence@redhat.com
+Subject: Re: [PATCH v2 4/4] livepatch/shadow: Add garbage collection of
+ shadow variables
+Message-ID: <Y2TooogxxLTIkBcj@alley>
+References: <20221026194122.11761-1-mpdesouza@suse.com>
+ <20221026194122.11761-5-mpdesouza@suse.com>
+ <20221104010327.wa256pos75dczt4x@treble>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <285b15b90ac6f29ef8ab6b6ececeeef7d7c6f380.1667480257.git.jinankjain@linux.microsoft.com>
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221104010327.wa256pos75dczt4x@treble>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 03, 2022 at 01:04:03PM +0000, Jinank Jain wrote:
-> When Linux runs as a root partition for Microsoft Hypervisor. It is
-> possible to detect if it is running as nested hypervisor using
-> hints exposed by mshv. While at it expose a new variable called
-> hv_nested which can be used later for making decisions specific to
-> nested use case.
+On Thu 2022-11-03 18:03:27, Josh Poimboeuf wrote:
+> On Wed, Oct 26, 2022 at 04:41:22PM -0300, Marcos Paulo de Souza wrote:
+> > The life of shadow variables is not completely trivial to maintain.
+> > They might be used by more livepatches and more livepatched objects.
+> > They should stay as long as there is any user.
+> > 
+> > In practice, it requires to implement reference counting in callbacks
+> > of all users. They should register all the user and remove the shadow
+> > variables only when there is no user left.
+> > 
+> > This patch hides the reference counting into the klp_shadow API.
+> > The counter is connected with the shadow variable @id. It requires
+> > an API to take and release the reference. The release function also
+> > calls the related dtor() when defined.
+> > 
+> > An easy solution would be to add some get_ref()/put_ref() API.
+> > But it would need to get called from pre()/post_un() callbacks.
+> > It might be easy to forget a callback and make it wrong.
+> > 
+> > A more safe approach is to associate the klp_shadow_type with
+> > klp_objects that use the shadow variables. The livepatch core
+> > code might then handle the reference counters on background.
+> > 
+> > The shadow variable type might then be added into a new @shadow_types
+> > member of struct klp_object. They will get then automatically registered
+> > and unregistered when the object is being livepatched. The registration
+> > increments the reference count. Unregistration decreases the reference
+> > count. All shadow variables of the given type are freed when the reference
+> > count reaches zero.
+> > 
+> > All klp_shadow_alloc/get/free functions also checks whether the requested
+> > type is registered. It will help to catch missing registration and might
+> > also help to catch eventual races.
 > 
-> Signed-off-by: Jinank Jain <jinankjain@linux.microsoft.com>
-> ---
->  arch/x86/include/asm/hyperv-tlfs.h | 3 +++
->  arch/x86/include/asm/mshyperv.h    | 2 ++
->  arch/x86/kernel/cpu/mshyperv.c     | 7 +++++++
->  drivers/hv/hv_common.c             | 7 +++++--
->  4 files changed, 17 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/x86/include/asm/hyperv-tlfs.h b/arch/x86/include/asm/hyperv-tlfs.h
-> index 3089ec352743..d9a611565859 100644
-> --- a/arch/x86/include/asm/hyperv-tlfs.h
-> +++ b/arch/x86/include/asm/hyperv-tlfs.h
-> @@ -114,6 +114,9 @@
->  /* Recommend using the newer ExProcessorMasks interface */
->  #define HV_X64_EX_PROCESSOR_MASKS_RECOMMENDED		BIT(11)
->  
-> +/* Indicates that the hypervisor is nested within a Hyper-V partition. */
-> +#define HV_X64_HYPERV_NESTED				BIT(12)
-> +
->  /* Recommend using enlightened VMCS */
->  #define HV_X64_ENLIGHTENED_VMCS_RECOMMENDED		BIT(14)
->  
-> diff --git a/arch/x86/include/asm/mshyperv.h b/arch/x86/include/asm/mshyperv.h
-> index 61f0c206bff0..3c39923e5969 100644
-> --- a/arch/x86/include/asm/mshyperv.h
-> +++ b/arch/x86/include/asm/mshyperv.h
-> @@ -26,6 +26,8 @@ void hyperv_vector_handler(struct pt_regs *regs);
->  #if IS_ENABLED(CONFIG_HYPERV)
->  extern int hyperv_init_cpuhp;
->  
-> +extern bool hv_nested;
-> +
->  extern void *hv_hypercall_pg;
->  
->  extern u64 hv_current_partition_id;
-> diff --git a/arch/x86/kernel/cpu/mshyperv.c b/arch/x86/kernel/cpu/mshyperv.c
-> index 831613959a92..9a4204139490 100644
-> --- a/arch/x86/kernel/cpu/mshyperv.c
-> +++ b/arch/x86/kernel/cpu/mshyperv.c
-> @@ -37,6 +37,8 @@
->  
->  /* Is Linux running as the root partition? */
->  bool hv_root_partition;
-> +/* Is Linux running on nested Microsoft Hypervisor */
-> +bool hv_nested;
->  struct ms_hyperv_info ms_hyperv;
->  
->  #if IS_ENABLED(CONFIG_HYPERV)
-> @@ -301,6 +303,11 @@ static void __init ms_hyperv_init_platform(void)
->  		pr_info("Hyper-V: running as root partition\n");
->  	}
->  
-> +	if (ms_hyperv.hints & HV_X64_HYPERV_NESTED) {
-> +		hv_nested = true;
-> +		pr_info("Hyper-V: running on a nested hypervisor\n");
-> +	}
-> +
->  	/*
->  	 * Extract host information.
->  	 */
-> diff --git a/drivers/hv/hv_common.c b/drivers/hv/hv_common.c
-> index ae68298c0dca..dcb336ce374f 100644
-> --- a/drivers/hv/hv_common.c
-> +++ b/drivers/hv/hv_common.c
-> @@ -25,8 +25,8 @@
->  #include <asm/mshyperv.h>
->  
->  /*
-> - * hv_root_partition and ms_hyperv are defined here with other Hyper-V
-> - * specific globals so they are shared across all architectures and are
-> + * hv_root_partition, ms_hyperv and hv_nested are defined here with other
-> + * Hyper-V specific globals so they are shared across all architectures and are
->   * built only when CONFIG_HYPERV is defined.  But on x86,
->   * ms_hyperv_init_platform() is built even when CONFIG_HYPERV is not
->   * defined, and it uses these two variables.  So mark them as __weak
-> @@ -36,6 +36,9 @@
->  bool __weak hv_root_partition;
->  EXPORT_SYMBOL_GPL(hv_root_partition);
->  
-> +bool __weak hv_nested;
-> +EXPORT_SYMBOL_GPL(hv_nested);
-> +
->  struct ms_hyperv_info __weak ms_hyperv;
->  EXPORT_SYMBOL_GPL(ms_hyperv);
->  
-> -- 
-> 2.25.1
+> Is there a reason the shadow variable lifetime is tied to klp_object
+> rather than klp_patch?
 
-Reviewed-by: <anrayabh@linux.microsoft.com>
+Good question!
 
+My thinking was that shadow variables might be tight to variables
+from a particular livepatched module. It would make sense to free them
+when the only user (livepatched module) is removed.
+
+The question is if it is really important. I did re-read the original
+issue and the real problem was when the livepatch was reloaded.
+The related variables were handled using livepatched code, then
+without the livepatched code, and then with the livepatched code
+again.
+
+The variable was modified with the original code that was not aware of
+the shadow variable. As a result the state of the shadow variable was
+not in sync when it was later used again.
+
+Nicolai, your have the practical experience. Should the reference
+counting be per-livepatched object or per-livepatch, please?
+
+> I get the feeling the latter would be easier to implement (no reference
+> counting; also maybe can be auto-detected with THIS_MODULE?) and harder
+> for the patch author to mess up (by accidentally omitting an object
+> which uses it).
+
+I am not sure how you mean it. I guess that you suggest to store
+the name of the livepatch module into the shadow variable.
+And use the variable only when the livepatch module is still loaded.
+
+This would not help.
+
+We use the reference counting because the shadow variables should
+survive an atomic replace of the lifepatch. In this case, the related
+variables are still handled using a livepatched code that is aware
+of the shadow variables.
+
+Also it does not solve the problem that the shadow variable might
+get out of sync with the related variable when the same
+livepatch gets reloaded.
+
+Best Regards,
+Petr
