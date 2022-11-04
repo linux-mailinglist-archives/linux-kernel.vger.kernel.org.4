@@ -2,61 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A935A6198AC
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 15:00:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DBB856198B4
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 15:04:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230254AbiKDOA4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 10:00:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50016 "EHLO
+        id S231146AbiKDOE1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 10:04:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229699AbiKDOAx (ORCPT
+        with ESMTP id S230333AbiKDOEX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 10:00:53 -0400
-Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B1191BB
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 07:00:51 -0700 (PDT)
-Received: by mail-qt1-x82b.google.com with SMTP id c15so3043108qtw.8
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 07:00:51 -0700 (PDT)
+        Fri, 4 Nov 2022 10:04:23 -0400
+Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99F06240B5
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 07:04:21 -0700 (PDT)
+Received: by mail-qv1-xf2a.google.com with SMTP id e15so3238395qvo.4
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 07:04:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=cmzAvR0lIiSXry6cPZqB4uuGgBneXPw0E3YJNqsCetg=;
-        b=drKyDrdi2zWNQ5CRFQCnCcvvnQd4V/mdpOt+ccqlO9hPIEQb+2rnkJY518Sd/baxw5
-         5g9KHW2u0KKYOK4qVZKp++5T5Ng/bKiNVQa5Sl3iw6Dlrn7ZWhL+Q0jM0JbdOHf8JzhM
-         +vnI/emIjefNMz4wEQ9M+bAeQKIPxA9kfLSbmKzXDkpgwuME32pl4aA6xRNAq4odslhs
-         LILddp/RpIBqiqOIBr+IRvqotY/JjAJ0I83ffFY34uilXyNNc7ZaEVWV8T6JIfWm9U7i
-         sLxEg4DL0/UbEeNBmBrdOKnXrRxSYmjDJxXOdONo9I5Z3PC+0y0uPSDPtE3560i5oO0M
-         g5bw==
+        bh=SGXI4uOFUmw6tZuPJPIsRTwiUyuymqNGhyu0fMFLngY=;
+        b=Y3Jh7krSivsqUXZ1y8aUKcbH0YggDsbbm62KuXJDGrLqEMYhAVhtbnLmVr4NRE4V7A
+         r4GHd7AzcBHpTxbI3xMOodbEGGBLsebbWXGDsgIxNX3xw0psYxuyvalVEURq+b9dtp42
+         Zec3/x5TyCr27R6LXpkQWobhyWF+K8Qch0XYMIrrEztR4F+p7R6n08Zf+/RrFIHG8x3i
+         BfjhEM2o+LSWjiNfmZGKk3WTS1D68nb+4SqS9xER9ekgkerDTSeuUJQyM2LsImLODkIk
+         wdEQrfGfAQrGRN8W+vXjgu7mPEazrTEhZPgSCLRKWQMiJraexXUZGW6aPgWjtnX3/fuu
+         mPEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=cmzAvR0lIiSXry6cPZqB4uuGgBneXPw0E3YJNqsCetg=;
-        b=Jk325n4zjylbD5C+FoTsMQKDFpTGWZnyafpU3fL6cMrDndZLXxtX9cX2C00sSKgANW
-         wrghwg4mWDEnpqvN63CGtQGijfZG580KhibDdwe8118esQibCO0sR7w60IZCc1zmMWlQ
-         NIIZCqKI3a17389U2TX54vlTfxjXbZLMqej6gFMzq2V777puPjoMpx533bRWpSZv31c3
-         83u1R1+XwHaPQkWTsCaRlphyqYpXkKpKfESlQdzANJxXPUNDe1TxhNJNk+FkzdDTx/4L
-         bwxN0a/bDDe+p0iuyGoW7aht3y912f2JO6qx38rOzhHRQYiHjxXJkcMj5UiSffqSf5tE
-         ufCA==
-X-Gm-Message-State: ACrzQf2h2KTAzoSTZn2X8PlfoAStvzqXcAtF5c4PRegTjDwMnZdTyRup
-        efPyE3/ARsmYkRDIC2t88/PTNQ==
-X-Google-Smtp-Source: AMsMyM4gBq2xeAIqhzmX0+gb9h1/RKuDi4aymI//Q7JJ4bZQoHjK6zELkIrKbU5WV6LAOjqN5fiJHA==
-X-Received: by 2002:ac8:5785:0:b0:3a5:71c:53ec with SMTP id v5-20020ac85785000000b003a5071c53ecmr28832382qta.439.1667570450170;
-        Fri, 04 Nov 2022 07:00:50 -0700 (PDT)
+        bh=SGXI4uOFUmw6tZuPJPIsRTwiUyuymqNGhyu0fMFLngY=;
+        b=lXwhyCjtVNqLbuEnjvlrFb2CeLsldr4qEjjW+rtraivQeKUtOEzEyUz0efpO/bz1Ir
+         DsuZC9Ae/8+mTUJKQS39RE3nr7y75usMAMirvfbhwZjifCMSO4YXWIfEmLHd1HX+D9wX
+         TBEq7mLnk1302khIdMkiJgopVjtdehbEnUoEfD9AZ4NFZ7HMQK4M30g0MD+fdemrcvbK
+         ze3YK920MZwcTWhgWJYj26nVb64s9uAh5jtVWpMXFKDjgLMB2dTH7PiIxOTSpa++7/XU
+         BAfYyWG5xEa8BFq6cnARbhCaZJvWcFrZh27kAE1Fgi/xz+k0uh/JJP8NAedINuUZN1mJ
+         e+FA==
+X-Gm-Message-State: ACrzQf3h6UDWvDkhMohFKoxpW/m8SU6VOtAN3At6ImnG+NO5lhI5Vw6d
+        wesB38FzyvHL2xdHVYHjRah5cw==
+X-Google-Smtp-Source: AMsMyM7t1UWhJ3+vFZhZ5FsL+3dGPFrNeosAMKKArGnMGgQF1/R8eynBl4jHvCyW6+G61q2kQXzccg==
+X-Received: by 2002:a05:6214:c63:b0:4bb:d14c:ada4 with SMTP id t3-20020a0562140c6300b004bbd14cada4mr30219758qvj.77.1667570660739;
+        Fri, 04 Nov 2022 07:04:20 -0700 (PDT)
 Received: from ?IPV6:2601:586:5000:570:aad6:acd8:4ed9:299b? ([2601:586:5000:570:aad6:acd8:4ed9:299b])
-        by smtp.gmail.com with ESMTPSA id f21-20020ac87f15000000b003a5430ee366sm2526283qtk.60.2022.11.04.07.00.48
+        by smtp.gmail.com with ESMTPSA id u12-20020a05620a430c00b006b640efe6dasm2984286qko.132.2022.11.04.07.04.19
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 04 Nov 2022 07:00:49 -0700 (PDT)
-Message-ID: <4bd3afed-f0c7-8479-2e35-f56f542da674@linaro.org>
-Date:   Fri, 4 Nov 2022 10:00:48 -0400
+        Fri, 04 Nov 2022 07:04:20 -0700 (PDT)
+Message-ID: <cf1a15c5-a16b-2d23-8f6c-b3892c141c34@linaro.org>
+Date:   Fri, 4 Nov 2022 10:04:18 -0400
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.2
-Subject: Re: [PATCH 1/2] dt-bindings: soc: qcom: Add bindings for Qualcomm
- Ramp Controller
+Subject: Re: [PATCH 2/2] soc: qcom: Add Qualcomm Ramp Controller driver
 Content-Language: en-US
 To:     AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>, agross@kernel.org
@@ -64,11 +63,13 @@ Cc:     andersson@kernel.org, konrad.dybcio@somainline.org,
         robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
         linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, marijn.suijten@somainline.org,
-        kernel@collabora.com
+        kernel@collabora.com,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>
 References: <20221104133506.131316-1-angelogioacchino.delregno@collabora.com>
- <20221104133506.131316-2-angelogioacchino.delregno@collabora.com>
+ <20221104133506.131316-3-angelogioacchino.delregno@collabora.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221104133506.131316-2-angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20221104133506.131316-3-angelogioacchino.delregno@collabora.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -82,62 +83,154 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 04/11/2022 09:35, AngeloGioacchino Del Regno wrote:
-> Document bindings for the Qualcomm Ramp Controller, found on various
-> legacy Qualcomm SoCs.
+> From: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
 > 
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> The Ramp Controller is used to program the sequence ID for pulse
+> swallowing, enable sequence and linking sequence IDs for the CPU
+> cores on some Qualcomm SoCs.
+> 
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
 > ---
->  .../soc/qcom/qcom,ramp-controller.yaml        | 42 +++++++++++++++++++
->  1 file changed, 42 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,ramp-controller.yaml
-
-Filename based on compatible, so qcom,msm8976-ramp-controller.yaml
-
+>  drivers/soc/qcom/Kconfig           |   9 +
+>  drivers/soc/qcom/Makefile          |   1 +
+>  drivers/soc/qcom/ramp_controller.c | 330 +++++++++++++++++++++++++++++
+>  3 files changed, 340 insertions(+)
+>  create mode 100644 drivers/soc/qcom/ramp_controller.c
 > 
-> diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,ramp-controller.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,ramp-controller.yaml
+> diff --git a/drivers/soc/qcom/Kconfig b/drivers/soc/qcom/Kconfig
+> index 024e420f1bb7..1e681f98bad4 100644
+> --- a/drivers/soc/qcom/Kconfig
+> +++ b/drivers/soc/qcom/Kconfig
+> @@ -95,6 +95,15 @@ config QCOM_QMI_HELPERS
+>  	tristate
+>  	depends on NET
+>  
+> +config QCOM_RAMP_CTRL
+> +	tristate "Qualcomm Ramp Controller driver"
+> +	depends on ARCH_QCOM
+
+I propose:
+depends on ARCH_QCOM && ARM || COMPILE_TEST
+
+I don't think it is used on ARM64 SoCs, so let's make life of distros
+easier.
+
+> +	help
+> +	  The Ramp Controller is used to program the sequence ID for pulse
+> +	  swallowing, enable sequence and linking sequence IDs for the
+> +	  CPU cores on some Qualcomm SoCs.
+> +	  Say y here to enable support for the ramp controller.
+> +
+>  config QCOM_RMTFS_MEM
+>  	tristate "Qualcomm Remote Filesystem memory driver"
+>  	depends on ARCH_QCOM
+> diff --git a/drivers/soc/qcom/Makefile b/drivers/soc/qcom/Makefile
+> index d66604aff2b0..6e02333c4080 100644
+> --- a/drivers/soc/qcom/Makefile
+> +++ b/drivers/soc/qcom/Makefile
+> @@ -10,6 +10,7 @@ obj-$(CONFIG_QCOM_OCMEM)	+= ocmem.o
+>  obj-$(CONFIG_QCOM_PDR_HELPERS)	+= pdr_interface.o
+>  obj-$(CONFIG_QCOM_QMI_HELPERS)	+= qmi_helpers.o
+>  qmi_helpers-y	+= qmi_encdec.o qmi_interface.o
+> +obj-$(CONFIG_QCOM_RAMP_CTRL)	+= ramp_controller.o
+>  obj-$(CONFIG_QCOM_RMTFS_MEM)	+= rmtfs_mem.o
+>  obj-$(CONFIG_QCOM_RPMH)		+= qcom_rpmh.o
+>  qcom_rpmh-y			+= rpmh-rsc.o
+> diff --git a/drivers/soc/qcom/ramp_controller.c b/drivers/soc/qcom/ramp_controller.c
 > new file mode 100644
-> index 000000000000..95ce48cfca4e
+> index 000000000000..e28679b545d1
 > --- /dev/null
-> +++ b/Documentation/devicetree/bindings/soc/qcom/qcom,ramp-controller.yaml
-> @@ -0,0 +1,42 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: "http://devicetree.org/schemas/soc/qcom/qcom,ramp-controller.yaml#"
-> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+> +++ b/drivers/soc/qcom/ramp_controller.c
+> @@ -0,0 +1,330 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Qualcomm Ramp Controller driver
+> + * Copyright (c) 2022, AngeloGioacchino Del Regno
+> + *                     <angelogioacchino.delregno@collabora.com>
+> + */
+> +
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +#include <linux/of.h>
+> +#include <linux/of_platform.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/regmap.h>
+> +#include <linux/types.h>
+> +
+> +#define RC_UPDATE_EN		BIT(0)
+> +#define RC_ROOT_EN		BIT(1)
+> +
+> +#define RC_REG_CFG_UPDATE	0x60
+> + #define RC_CFG_UPDATE_EN	BIT(8)
+> + #define RC_CFG_ACK		GENMASK(31, 16)
 
-Drop quotes from both lines above.
+Drop spaces before #define
 
 > +
-> +title: Qualcomm Ramp Controller
+> +#define RC_DCVS_CFG_SID		2
+> +#define RC_LINK_SID		3
+> +#define RC_LMH_SID		6
+> +#define RC_DFS_SID		14
 > +
-> +maintainers:
-> +  - AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> +#define RC_UPDATE_TIMEOUT_US	500
 > +
-> +description:
-> +  The Ramp Controller is used to program the sequence ID for pulse
-> +  swallowing, enable sequences and linking Sequence IDs (SIDs) for
+> +/**
+> + * struct qcom_ramp_controller_desc - SoC specific parameters
+> + * @cfg_dfs_sid:      Dynamic Frequency Scaling SID configuration
+> + * @cfg_link_sid:     Link SID configuration
+> + * @cfg_lmh_sid:      Limits Management hardware SID configuration
+> + * @cfg_ramp_pre_en:  Ramp Controller pre-enable sequence
+> + * @cfg_ramp_en:      Ramp Controller enable sequence
+> + * @cfg_ramp_post_en: Ramp Controller post-enable sequence
+> + * @cfg_ramp_dis:     Ramp Controller disable sequence
+> + * @cmd_reg:          Command register offset
+> + * @num_dfs_sids:     Number of DFS SIDs (max 8)
+> + * @num_link_sids:    Number of Link SIDs (max 3)
+> + * @num_lmh_sids:     Number of LMh SIDs (max 8)
+> + */
+> +struct qcom_ramp_controller_desc {
+> +	struct reg_sequence *cfg_dfs_sid;
 
-s/linking/link/ if I understand the sentence correctly (is used to:
-program, enable and link)
+I didn't check much, but can these be pointers to const?
 
-> +  the CPU cores on some Qualcomm SoCs.
+> +	struct reg_sequence *cfg_link_sid;
+> +	struct reg_sequence *cfg_lmh_sid;
+> +	struct reg_sequence *cfg_ramp_pre_en;
+> +	struct reg_sequence *cfg_ramp_en;
+> +	struct reg_sequence *cfg_ramp_post_en;
+> +	struct reg_sequence *cfg_ramp_dis;
+> +	u8 cmd_reg;
+> +	u8 num_dfs_sids;
+> +	u8 num_link_sids;
+> +	u8 num_lmh_sids;
+> +};
 > +
-> +properties:
-> +  compatible:
-> +    items:
 
-Drop items.
+(...)
 
-> +      enum:
-
-I also think you did not test it...
-
-> +        - qcom,msm8976-ramp-controller
 > +
-> +  reg:
-> +    maxItems: 1
+> +static struct platform_driver qcom_ramp_controller_driver = {
+> +	.driver = {
+> +		.name = "qcom-ramp-controller",
+> +		.of_match_table = qcom_ramp_controller_match_table,
+> +		.suppress_bind_attrs = true,
+> +	},
+> +	.probe  = qcom_ramp_controller_probe,
+> +	.remove = qcom_ramp_controller_remove,
+> +};
 > +
+> +static int __init qcom_ramp_controller_init(void)
+> +{
+> +	return platform_driver_register(&qcom_ramp_controller_driver);
+> +}
+> +arch_initcall(qcom_ramp_controller_init);
+
+Does it really have to be arch initcall? Cannot be module platform driver?
+
+> +
+> +MODULE_AUTHOR("AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>");
+> +MODULE_DESCRIPTION("Qualcomm Ramp Controller driver");
+> +MODULE_LICENSE("GPL");
 
 Best regards,
 Krzysztof
