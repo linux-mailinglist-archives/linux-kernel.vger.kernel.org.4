@@ -2,201 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BDEA618D4E
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 01:42:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 235BC618D52
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 01:46:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229637AbiKDAmT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 20:42:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48330 "EHLO
+        id S230233AbiKDAp6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 20:45:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229579AbiKDAmP (ORCPT
+        with ESMTP id S229511AbiKDApy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 20:42:15 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2743664DA;
-        Thu,  3 Nov 2022 17:42:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667522535; x=1699058535;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=DmfP1WtN2zWYZgm9zAlP7YL4qenoKXw4dE40xXnFxSA=;
-  b=W58lzRjanarA3rlpCvjcUsNoovST3p/oHQr+p6PVE/rJBERbAdVbX8QW
-   8WGS4P0YeAJP2t7P8VzRJiAsbTV1mtQNY+d54wIBumjKgh0al18RJZlbg
-   lgC0d22Q3/AdbCToT2gBxjyKXKNwDJvkKQ3HTQbwS06HtKMiaHbFL6xXe
-   X08bYLIdy1Onb3XOSNVLvqCVBvM5gCwB/brMxi9UplJH30CDtR2GcVD4s
-   93Jkq2O7YAn+iyogb7qsDwhOwR2CowjUZMdUCumSFdDlQwgBvm+7rryx9
-   mAVYt8p48uycsm+s8LJQ9hvMvBI98RHdqEZyMKV2eqZPO8/PoRc105+Mx
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10520"; a="308558183"
-X-IronPort-AV: E=Sophos;i="5.96,135,1665471600"; 
-   d="scan'208";a="308558183"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2022 17:42:14 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10520"; a="724156759"
-X-IronPort-AV: E=Sophos;i="5.96,135,1665471600"; 
-   d="scan'208";a="724156759"
-Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
-  by FMSMGA003.fm.intel.com with ESMTP; 03 Nov 2022 17:42:13 -0700
-Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
- ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 3 Nov 2022 17:42:13 -0700
-Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
- ORSMSX612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 3 Nov 2022 17:42:12 -0700
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Thu, 3 Nov 2022 17:42:12 -0700
-Received: from NAM02-BN1-obe.outbound.protection.outlook.com (104.47.51.47) by
- edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Thu, 3 Nov 2022 17:42:09 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SruFtt8NwJsf5Hf+As1LXFvP7A2QGeQIV0wzcFhr+jT+D+sPl3jEH2TD5yV32oudTcdVVR9sluY6ompmfW+lyKEzifEXiS/zKeTA2q5PbslxlyErVmzx59/1HA4mWEnyBgTt2Y90zzVbI2xTSaaLbwRynvovNkBhNA9hzfXwEkwxWpC8UgTXECgLPFWiMOLnJUgoy3HGa79n/29cLM6LD2lGLBJdlZb34+b0SVj9D01ZjawR+bzve5gMPXyy91E7SaLDanyHWU+uctqzlumY2p0/kj0S19h+ZmH86+ivoIEWEhlM5in9uJz8qLVaY1mikY3X4RszH5milmwCqEH6/A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ffU+QqEDNEuZD0BiE1d77bOmWPUT6GcZGA2lH5iasdE=;
- b=H3Je0DuOkmL/JuIh4M24Lg85MLmZDv+RuggOoeB+fulcYToP/HEZux3C9l9e+ywjuvhmVjRNNt52V5XfxPf3REZmuOLUyMzGEDjXrdXovu5FT1FVxhtiS+u0J7DYUlRxXSnOrwRamgTKOXo6ryXB8bzyEKpgGoIQIGEkLFTF7Dg/Oxy+tKPC1vVLOFvfgrXiS/unaY4HLR9EKiwUlop9ssD5GAxkspR/fJB7ZmO3eySgJ0yKnolmzq5eqX6EamIip0wGmhboQHidzbet68w/lSZ7LxEwDvC01ScCqyTniedDBQc7m3OkYYQcLvSiyqbGudzuWKBVyL22I+Jpd3xE5g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from MWHPR1101MB2221.namprd11.prod.outlook.com
- (2603:10b6:301:53::18) by SJ2PR11MB7547.namprd11.prod.outlook.com
- (2603:10b6:a03:4cd::22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5769.16; Fri, 4 Nov
- 2022 00:42:03 +0000
-Received: from MWHPR1101MB2221.namprd11.prod.outlook.com
- ([fe80::165:d3d0:6497:9097]) by MWHPR1101MB2221.namprd11.prod.outlook.com
- ([fe80::165:d3d0:6497:9097%2]) with mapi id 15.20.5791.022; Fri, 4 Nov 2022
- 00:42:02 +0000
-Date:   Fri, 4 Nov 2022 08:41:51 +0800
-From:   Chao Gao <chao.gao@intel.com>
-To:     Sean Christopherson <seanjc@google.com>
-CC:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Anup Patel <anup@brainfault.org>,
-        "Paul Walmsley" <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        "Claudio Imbrenda" <imbrenda@linux.ibm.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        Eric Farman <farman@linux.ibm.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Atish Patra <atishp@atishpatra.org>,
-        David Hildenbrand <david@redhat.com>, <kvm@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <kvmarm@lists.linux.dev>,
-        <kvmarm@lists.cs.columbia.edu>, <linux-mips@vger.kernel.org>,
-        <linuxppc-dev@lists.ozlabs.org>, <kvm-riscv@lists.infradead.org>,
-        <linux-riscv@lists.infradead.org>, <linux-s390@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Isaku Yamahata <isaku.yamahata@intel.com>,
-        Fabiano Rosas <farosas@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Yuan Yao <yuan.yao@intel.com>
-Subject: Re: [PATCH 02/44] KVM: Initialize IRQ FD after arch hardware setup
-Message-ID: <Y2Rfz+TIcdfcawxh@gao-cwp>
-References: <20221102231911.3107438-1-seanjc@google.com>
- <20221102231911.3107438-3-seanjc@google.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20221102231911.3107438-3-seanjc@google.com>
-X-ClientProxiedBy: SI2PR01CA0001.apcprd01.prod.exchangelabs.com
- (2603:1096:4:191::13) To MWHPR1101MB2221.namprd11.prod.outlook.com
- (2603:10b6:301:53::18)
+        Thu, 3 Nov 2022 20:45:54 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 499C81F601
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 17:45:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1667522699;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=hk17a/wyGHMD3AVv8URE6uxov/rnnGs5lYtB0Nz527o=;
+        b=WZZWU/O6CCSWJrVwWWXf6NmIOoXfOMfq5UoM3eo9+X1WL3g/V+Z/ERvd1rN9lUir/65sgQ
+        5NzNPuDocjm19WC+v/RsIQgolhzGgjXsTeW8zsqn/LGhPHaBPEkRFlLbHHx0x5wnQvFICi
+        7iIKAKcxLqiTe/jmtTPTVXeOlc31YGg=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-217-VXyfvujDOkW7XH9WHCu37A-1; Thu, 03 Nov 2022 20:44:58 -0400
+X-MC-Unique: VXyfvujDOkW7XH9WHCu37A-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B62DC1C08981;
+        Fri,  4 Nov 2022 00:44:57 +0000 (UTC)
+Received: from T590 (ovpn-8-18.pek2.redhat.com [10.72.8.18])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 14B6A2166B26;
+        Fri,  4 Nov 2022 00:44:49 +0000 (UTC)
+Date:   Fri, 4 Nov 2022 08:44:42 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     Bernd Schubert <bernd.schubert@fastmail.fm>
+Cc:     Jens Axboe <axboe@kernel.dk>, io-uring@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org,
+        Miklos Szeredi <mszeredi@redhat.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        ZiyangZhang <ZiyangZhang@linux.alibaba.com>
+Subject: Re: [RFC PATCH 4/4] ublk_drv: support splice based read/write zero
+ copy
+Message-ID: <Y2Rgem8+oYafTLVO@T590>
+References: <20221103085004.1029763-1-ming.lei@redhat.com>
+ <20221103085004.1029763-5-ming.lei@redhat.com>
+ <712cd802-f3bb-9840-e334-385cd42325f2@fastmail.fm>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MWHPR1101MB2221:EE_|SJ2PR11MB7547:EE_
-X-MS-Office365-Filtering-Correlation-Id: cbbf1d8c-acfe-491b-dfa6-08dabdfd63d5
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: QCFAgLyomoY5y31oBn1bUcVxCGVACsdPDcNDd8gymfF7Jrwnwe1epHiH49s6AHKt823zoxBon5VuLAIvpVH3uBNqzmHvSQUiLLknnWdgnTJ/GB68F29rJ3PgqIsbb/ljh4GCur6edO1ppKJO7WIRZUQcHGneb33QozstDa8jR3F5dlWR0sSXG+8Kyp6s7xUaj6zV7BQHsV5irgqbUC4hniAu6vpFTUUG3oP0rVeZ/eSzKk8d1tle8gsHwT8gTLRRRPnzvz4Us57u9eg9aBu2oAtoKOZO3AxK4BvIYc0d/3z/3gyVUVb2MPL7TQlO3b8/kLacs4WQZkvGpxF7rWB4chuxYG8dFCBI0dpvOtTE//zsH2MLyWoPI14U6GomaBNq8wnmAfMY3IFVdUD5Y31CWdXHGqkkTaVNYKhOpDuSaBl0IZtxvlqs4dfteUBq1k89y0tDQ755ImyYqrAIIf9U8Vl4DVJjrnxXnNjOXlzNzIvEW5bXLmLpTGI4TSr2ZVN4tGT498B68tmyOlzUdX15A/ihlE5xk3E80i5OW8dFpHLf9uXv6/2FRj7YmJ+KBmG94MRfeHDugOSBBboNdT47mm378KuOZhLVMCm/T0viZ9DqfDSmupIZI4jx4ryUwsJYyd7ADtJN6fjHlOyUOh+nT/rF6BtBaEcKmx7KkjjrZkhVfBpq4hadpxsbSG185wVxg1t+dNtWHXdOHLKEIKaz7Lppn204LY91EynsAQQXNvsYHYUToQbltEa2Fw3YV2QNnJqB7DydzbCYmoHTciIPNQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1101MB2221.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(376002)(136003)(396003)(39860400002)(366004)(346002)(451199015)(2906002)(9686003)(86362001)(8676002)(6512007)(6506007)(4326008)(41300700001)(33716001)(66556008)(38100700002)(26005)(6666004)(6916009)(54906003)(186003)(7406005)(82960400001)(6486002)(66476007)(5660300002)(107886003)(44832011)(316002)(8936002)(66946007)(7416002)(478600001)(4744005)(67856001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?24gOanRhUyDupyEqWmt/xOHRJAHmyR2yhDEn2mrw3pUf1trnr7jiGEI3bNKO?=
- =?us-ascii?Q?us4J4HU8YdEWU6ju58VQ5e9hmZGku9E3m7wdXU75T5s6UF4em4l/5YR7hxNS?=
- =?us-ascii?Q?b+0CdiQkkzsVTvXnj1EOF2dACFRKBxfdvgEVO19+QfEekvdAs/ZuZI+tUyn9?=
- =?us-ascii?Q?ZF8jtKyn/pMzno3S/ol1Af3fcg5BNIbJHsjO2bKYEdnYXq+1r4egPYN3Vm4K?=
- =?us-ascii?Q?wf8ACukLeIGW6n8UUmbXS453/Wr8lqEa8v5v4cD7UGucfMHWEcLq/g6Cp+31?=
- =?us-ascii?Q?JGWt6qF4/Fl7BKJ3HLceG1frh7xEB8FWxxNBBLZIoczuYQHYkr8M1802EpII?=
- =?us-ascii?Q?HXd9kRteA+idGCiNLB+/BQLUw/QAAmSItnyegsy3ecFXJXTJ6xCl/t/+rB8V?=
- =?us-ascii?Q?v37KR4axUP5mxCsZmJCgTbkPN5qX61WeSJGSRJAmlM/RnI+sQ+5gLtrXcFjY?=
- =?us-ascii?Q?f+9mKz0YTa2ja/DFRutT9j0aQSqplWs1jIn8eoLneS6o/3HdiBFCTLOGhKtv?=
- =?us-ascii?Q?2TiWCkrzJUaqwFx1Xe05aO+F3ypo+HPg5C2Vu6L/hvAUinL8r5YUpupEm5g/?=
- =?us-ascii?Q?T5UPw5pn82m/NhXBvAnoLElmobcrU6T0U7Joa4aG2q/abs3GdEXa6NToV6ga?=
- =?us-ascii?Q?qGvJLQAvAYKovXD1YJM5IMAG359GmQX/bFDv4hbRQCPboZdeflheE9u24woi?=
- =?us-ascii?Q?eKEqfWB9dyTB6JozM4/f94TPUGtSvpX2TtaJj+TtPm/Jugivtq3kmicYl8nC?=
- =?us-ascii?Q?Wxb3rTZlRJAiNbPkilnn9+a1/k9ZZ2hsoypuK7LKqKG0sPo27Dwhb7f5pGao?=
- =?us-ascii?Q?oTAP0ZH2OcvHTHy9D8pmdQCMBVUe9uCtaVyciiS+zeHvg4sKMFCDvqgkZDgl?=
- =?us-ascii?Q?PVvFWuiUjp7HYIoQUHP4xRWd448HhWaTuDVxkl47gk3mSHh13EYbTu+GgEbH?=
- =?us-ascii?Q?F2lzkqUd3/Q6VmQ93f/56ZFt9P6f24HbkA3JQ+2RoEqMU2Eo9suRMTqJS60u?=
- =?us-ascii?Q?SkgPtqtfxO4+ZdL0R5DmpJ1D+edMBFSMYXOc/Aq9GSBc9MVtVZlQ4fmh1Trf?=
- =?us-ascii?Q?mim65O/a+6noA9IIHN+hZBoiPM9+uNQKAaMEYLZkhyUZHMu2QrQQ/LzbeRsL?=
- =?us-ascii?Q?18icDg8H6Dn429Lb28YX3RxlfnVoLaB8JkAYe1irgPxPVchatVSSWgLj1yo8?=
- =?us-ascii?Q?fElvuBnEBDpJcM7AthSJsDxr/nj4cB7dHuhuRD+B3eUz2SRLWk9BeM4dlQIO?=
- =?us-ascii?Q?m2reXxSJ84fWsHS3f+DUzAp5FvDS0Fm+IcX5ihPxYAQbF8sIFATKx5zrcQSo?=
- =?us-ascii?Q?f2Yx59OYzrYuml+oicbd1IBFa1UAgbBqQKs0UJ2e99pHU+gMK6zOqwNb3hn5?=
- =?us-ascii?Q?tUFp/IycEzNrXMuzflundNw7eBRJs6SvfeW3pJIe+/8YCAAUOUb82XAWVv4I?=
- =?us-ascii?Q?R8UjTSNWXato73Wa0EFuLA0447dDWqtk0fqf0Y7nvb2fl2Xf/P1FKMAeqZR3?=
- =?us-ascii?Q?rnhWmAcbQhzr3DgmtjAM1px+cCepOtoG9RBRayt8zC0njg2mEUMABJz9S/MA?=
- =?us-ascii?Q?hlw7HIWc3GbLZCD5Ibp0CgtEbOIqZl1IHkjHr9sx?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: cbbf1d8c-acfe-491b-dfa6-08dabdfd63d5
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1101MB2221.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Nov 2022 00:42:02.7245
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: GY/iPDZJiqt1q3SKAQe1QmpkjcAT+jrq2UlvY9vDZ5f6yfa/PgRX/WhtvTFZiRMFkac5QkWF8HHCaFZ5Tqbm3w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR11MB7547
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <712cd802-f3bb-9840-e334-385cd42325f2@fastmail.fm>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 02, 2022 at 11:18:29PM +0000, Sean Christopherson wrote:
+On Thu, Nov 03, 2022 at 11:28:29PM +0100, Bernd Schubert wrote:
 > 
->+	r = kvm_irqfd_init();
->+	if (r)
->+		goto err_irqfd;
->+
-> 	r = kvm_async_pf_init();
-> 	if (r)
->-		goto out_free_4;
->+		goto err_async_pf;
 > 
-> 	kvm_chardev_ops.owner = module;
+> On 11/3/22 09:50, Ming Lei wrote:
+> > Pass ublk block IO request pages to kernel backend IO handling code via
+> > pipe, and request page copy can be avoided. So far, the existed
+> > pipe/splice mechanism works for handling write request only.
+> > 
+> > The initial idea of using splice for zero copy is from Miklos and Stefan.
+> > 
+> > Read request's zero copy requires pipe's change to allow one read end to
+> > produce buffers for another read end to consume. The added SPLICE_F_READ_TO_READ
+> > flag is for supporting this feature.
+> > 
+> > READ is handled by sending IORING_OP_SPLICE with SPLICE_F_DIRECT |
+> > SPLICE_F_READ_TO_READ. WRITE is handled by sending IORING_OP_SPLICE with
+> > SPLICE_F_DIRECT. Kernel internal pipe is used for simplifying userspace,
+> > meantime potential info leak could be avoided.
 > 
->@@ -5927,6 +5926,9 @@ int kvm_init(void *opaque, unsigned vcpu_size, unsigned vcpu_align,
-> 	kvm_vfio_ops_exit();
-> err_vfio:
-> 	kvm_async_pf_deinit();
->+err_async_pf:
->+	kvm_irqfd_exit();
+> 
+> Sorry to ask, do you have an ublk branch that gives an example how to use
+> this?
 
->+err_irqfd:
-> out_free_4:
+Follows the ublk splice-zc branch:
 
-Do you mind removing one of the two labels?
+https://github.com/ming1/ubdsrv/commits/splice-zc
+
+which is mentioned in cover letter, but I guess it should be added to
+here too, sorry for that, so far only ublk-loop supports it by:
+
+   ublk add -t loop -f $BACKING -z
+
+without '-z', ublk-loop is created with zero copy disabled.
+
+> 
+> I still have several things to fix in my branches, but I got basic fuse
+> uring with copies working. Adding back splice would be next after posting
+> rfc patches. My initial assumption was that I needed to duplicate everything
+> splice does into the fuse .uring_cmd handler - obviously there is a better
+> way with your patches.
+> 
+> This week I have a few days off, by end of next week or the week after I
+> might have patches in an rfc state (one thing I'm going to ask about is how
+> do I know what is the next CQE in the kernel handler - ublk does this with
+> tags through mq, but I don't understand yet where the tag is increased and
+> what the relation between tag and right CQE order is).
+
+tag is one attribute of io request, which is originated from ublk
+driver, and it is unique for each request among one queue. So ublksrv
+won't change it at all, just use it, and ublk driver guarantees that
+it is unique.
+
+In ublkserv implementation, the tag info is set in cqe->user_data, so
+we can retrieve the io request via tag part of cqe->user_data.
+
+Also I may not understand your question of 'the relation between tag and right
+CQE order', io_uring provides IOSQE_IO_DRAIN/IOSQE_IO_LINK for ordering
+SQE, and ublksrv only applies IOSQE_IO_LINK in ublk-qcow2, so care to
+explain it in a bit details about the "the relation between tag and right
+CQE order"?
+
+Thanks,
+Ming
+
