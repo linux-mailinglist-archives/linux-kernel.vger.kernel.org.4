@@ -2,107 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FAE961A1C9
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 21:02:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4831161A1CC
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 21:02:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229978AbiKDUB6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 16:01:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47738 "EHLO
+        id S229885AbiKDUCD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 16:02:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229933AbiKDUBV (ORCPT
+        with ESMTP id S229871AbiKDUBU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 16:01:21 -0400
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2050.outbound.protection.outlook.com [40.107.100.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EE2C45A37;
+        Fri, 4 Nov 2022 16:01:20 -0400
+Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com [IPv6:2607:f8b0:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 015AB45A25;
         Fri,  4 Nov 2022 13:01:15 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=T17cwrFzi0/pI0U4J3jC62qPpKJE/EaxOyEITknh1IJ7OGu9x44gUx28MS8eofnOTny3dEkROI43AzfQeR04qfOFOkFNH03toAlVUeMX1OiGHWuDCgKgDYfnoyRl2v5esJraBz9lGftw+tib2T9zXUZhg8T2j8admMMZM9KST4sZHEy18rAcSEd1u/PvW0xP3xEQ+y1PjbZh/7oe4GNOiX7XG7R7h2xqCu+hYgjEJd1kFz78dxcBBWRuHLO1hd+bftTFyY8qT91v3m5HqPzo9zNwK3e/3w1lM6hhU76sB/mY4CfWdfuMXPy9uuYpRvU4CfR3ouZ18ZglLK5j3UkYDw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=EhPsXuc7Ix2Dzi+ZlbtEA0mEhLgjscPZHWQv6Fb9h2g=;
- b=ngynHBVA4AzA/Zo7QlN9TfHPCitGyDF7xyG4Grt4eE53ix+bKb7KTDLgFN7Dqnci03Ryn1eSrhk4VR+CUXTnBkvMpj1CyUIU/46Q/FOuzwFXHLOoGfZo15ISdmCdcBWUVgR9599mctlnOMe+ia/tIj9BgmL8xYP+GlOGSQTLZE0Qyiws1uv+J5H75EhPuoP6eeERBB144dIs1DochFJDcnPsDKEktEJVE5PG77mU8VUYWENiwKkb9haHEpCWJRraZ3GFboc673C35NQ8l6eqUBjIPAUmYmjJ/6feiiyN4SZBRRVCMgc7L4bWcx8H0Ko3k3S0WtDFnhi8rOUJAdygbA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=quicinc.com smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=EhPsXuc7Ix2Dzi+ZlbtEA0mEhLgjscPZHWQv6Fb9h2g=;
- b=H2wC0/cBIahPQjilhd+6Qy+JhPqxmHEmqnL9z9ENOHK2LxHoZeR7PlwiYXIdcXuv+DCfId69ax+291lkONczQX0mWq3albrLb7Frrt/Li7hmubh1huw/pihsU4b4/yLuvONNc0x6IKvrl8E+pHP1YUWUtbeMx0IpHDbYkGHA5k0=
-Received: from DS7PR05CA0035.namprd05.prod.outlook.com (2603:10b6:8:2f::18) by
- DM6PR12MB5007.namprd12.prod.outlook.com (2603:10b6:5:20d::18) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5791.22; Fri, 4 Nov 2022 20:01:12 +0000
-Received: from DM6NAM11FT100.eop-nam11.prod.protection.outlook.com
- (2603:10b6:8:2f:cafe::60) by DS7PR05CA0035.outlook.office365.com
- (2603:10b6:8:2f::18) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.8 via Frontend
- Transport; Fri, 4 Nov 2022 20:01:12 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DM6NAM11FT100.mail.protection.outlook.com (10.13.172.247) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5791.20 via Frontend Transport; Fri, 4 Nov 2022 20:01:12 +0000
-Received: from [127.0.1.1] (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Fri, 4 Nov
- 2022 15:01:09 -0500
-Subject: [PATCH v8 10/13] x86/resctrl: Add sysfs interface to write
- mbm_total_bytes_config
-From:   Babu Moger <babu.moger@amd.com>
-To:     <corbet@lwn.net>, <reinette.chatre@intel.com>,
-        <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>
-CC:     <fenghua.yu@intel.com>, <dave.hansen@linux.intel.com>,
-        <x86@kernel.org>, <hpa@zytor.com>, <paulmck@kernel.org>,
-        <akpm@linux-foundation.org>, <quic_neeraju@quicinc.com>,
-        <rdunlap@infradead.org>, <damien.lemoal@opensource.wdc.com>,
-        <songmuchun@bytedance.com>, <peterz@infradead.org>,
-        <jpoimboe@kernel.org>, <pbonzini@redhat.com>, <babu.moger@amd.com>,
-        <chang.seok.bae@intel.com>, <pawan.kumar.gupta@linux.intel.com>,
-        <jmattson@google.com>, <daniel.sneddon@linux.intel.com>,
-        <sandipan.das@amd.com>, <tony.luck@intel.com>,
-        <james.morse@arm.com>, <linux-doc@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <bagasdotme@gmail.com>,
-        <eranian@google.com>
-Date:   Fri, 4 Nov 2022 15:01:09 -0500
-Message-ID: <166759206900.3281208.11975514088019160962.stgit@bmoger-ubuntu>
-In-Reply-To: <166759188265.3281208.11769277079826754455.stgit@bmoger-ubuntu>
-References: <166759188265.3281208.11769277079826754455.stgit@bmoger-ubuntu>
-User-Agent: StGit/1.1.dev103+g5369f4c
+Received: by mail-ot1-x333.google.com with SMTP id cb2-20020a056830618200b00661b6e5dcd8so3255869otb.8;
+        Fri, 04 Nov 2022 13:01:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PYDs6dB0C2b0gB8M0Zdr9P8IBo/8uaCtQ18Wgj0HndI=;
+        b=UGqiXDZQWSMqCn04bhW4+A7mSIb9Dcifi6WwzvJ94Jd+MxebOMA8FzUIK9zdjq/eak
+         e8ebMpoq+bwmjM7VE5W3EY2FzcHcNSWO/LU3R3cUGPfiwBK2l7ZbbLxLuVCs1N7hFeDX
+         af27WL4BnCDa8XvTnYG3lULRDShk9QgSXgKLro0v8CHdGupzLbjsmq9pz4qiqT+W3lbB
+         5ozhdCSR5h9OxoCtY9cjhJPDyykGH42rLlSS8hZBOoqIXEHxrV2RtUwTVKEgq7fd1++C
+         OLWDoZghMxx/2ZoPDVM4FHMQ4NyvYscqpNLWwBswGKvDWkn7D6Pp93L7Z5yLSDWgiJYj
+         o9Hw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=PYDs6dB0C2b0gB8M0Zdr9P8IBo/8uaCtQ18Wgj0HndI=;
+        b=aUWFz4YJLubRiyrfAWmb9RfRoHtpqWuQ3/3/hVyPOU6KscCSAPt7kMZWOLsmlXcMyG
+         NUV0JbnrvAfMaGeHRO3K5ymtXF6Q4moEFYhK7RLQFXi/Xbzazkr9mSKkSB/s5kbBmYci
+         t08dbo2C5B06MdzcyuirZ+SE/nSQsuK2XykJ1DsIzc4XF9rQ+2dHeEtDkvL3gvabWAX1
+         dI9icb2sQpmuJlo/hIvjj2/l9Lz01P5Na+rcMgWt2W08+RiKcgOB+qaZxUdZlvxs3mil
+         X8gTMkfuWioWEsMmiksKAJAfYSbRYtnzXivYQJeyZ0Nx6RLiEjb9+zPIIJEilwhD6eug
+         yq1w==
+X-Gm-Message-State: ACrzQf0xeMPTG4neMK6IyApyZQWp6bY2ezcDqELP0nMQOWVt8MbsDwet
+        SOgSZuk2COyM61OHHv19cd1+NTArrTw=
+X-Google-Smtp-Source: AMsMyM4N3OmTucquTH0TTlQ987WZdl/fFBQxUEsI+fB94S0Q1ty61pl6ZqfhBC5+ybR86iPoPhwgUQ==
+X-Received: by 2002:a9d:f63:0:b0:667:3aa9:cdca with SMTP id 90-20020a9d0f63000000b006673aa9cdcamr18415059ott.246.1667592074057;
+        Fri, 04 Nov 2022 13:01:14 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id a44-20020a056870d62c00b00130e66a7644sm2183440oaq.25.2022.11.04.13.01.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Nov 2022 13:01:13 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Fri, 4 Nov 2022 13:01:11 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     nick.hawkins@hpe.com
+Cc:     jdelvare@suse.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, verdun@hpe.com, corbet@lwn.net,
+        linux@armlinux.org.uk, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v1 1/6] hwmon: (gxp-fan-ctrl) Add GXP fan controller
+Message-ID: <20221104200111.GA2562021@roeck-us.net>
+References: <20221104193657.105130-1-nick.hawkins@hpe.com>
+ <20221104193657.105130-2-nick.hawkins@hpe.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT100:EE_|DM6PR12MB5007:EE_
-X-MS-Office365-Filtering-Correlation-Id: d1ee638a-3275-480d-26df-08dabe9f52ca
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: hG9n9cAnSqeTnoVfSyZ4ZqXfNvZ7C3UCGLGEyeZUaJtDIYSGb8c0jEc/KmDh392cfyVhuIqf86ufCG+kTfVimswHTczsj+GbZGUerEmv46633lb67/0Q6lF90quRw8u2jYvWa59y8g3rrSqQv3q9+sty302zTkSQCsP2LNmVxtV1THl7HGOvhJQ0pQxuWPlFo47Mcx1SzEfi432BuGuTLMH4QkRTg0+7+zqtwkggCckVHqZYEQZOL9bwTy/mX58mGHic5UIIjEg6EQRjSxuQjuHODeWfp//JNdq8DD6jpsAr/+ypiRCa4/QnxKD7Q1FPqSuxYM4oiYdE65D5nYevtmAkGt1cGRcYVTGOXVzmpEWbtY4aHWeivyk8zvI1dz+mnoUzAjrPfAbbvP85QakQbjPyQlw+4u5Cwd1aNqcELG+Z7UP6D5sm8lrH8UUFiEwd9FSJrM8fKNr+U7QVN9r+hhOzaQLsA3+DdY8bNHIK6KBK4E5iCd6Ga+KY5IqvNT2UoG20QwSnbLinufEGNvik1o13v5NO8FY+Iv68nDOwbrFd1fkYZXcNiGvYL9O4r2xgEqbhSt2OWPCnIWBjkqWKk1ppok9HKoEa+K325Wu3rJh7ZUpM8yDOwZzWLtbFOwp6yDFoYYAKOoJjDmNt0xKf7mwQlXNcUHmTwvoU48L2s6C9LCsI+tcC8GIQiUKJ/urM4YunhiOOHKFyHYKTu3P4+C4sqGJfCGXhN1CpHz4TmlWDUKSVv3DtL3PCvJARVmA93+kqgLve+fuEOvkh4g2ivV7xlBpDyDqO1uaeSBMx8j87gF9cWP5gDlrD5DHpO2vysXHrBYm5F5SUVmbC22XtoA==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(7916004)(4636009)(376002)(396003)(346002)(136003)(39860400002)(451199015)(36840700001)(40470700004)(46966006)(83380400001)(70586007)(8676002)(4326008)(70206006)(356005)(47076005)(86362001)(426003)(40480700001)(316002)(103116003)(33716001)(16576012)(40460700003)(54906003)(2906002)(81166007)(82310400005)(36860700001)(82740400003)(110136005)(8936002)(41300700001)(478600001)(9686003)(26005)(7416002)(5660300002)(16526019)(186003)(44832011)(336012)(71626007)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Nov 2022 20:01:12.3778
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: d1ee638a-3275-480d-26df-08dabe9f52ca
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT100.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB5007
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221104193657.105130-2-nick.hawkins@hpe.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -110,206 +78,517 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The current event configuration for mbm_total_bytes can be changed by=0A=
-the user by writing to the file=0A=
-/sys/fs/resctrl/info/L3_MON/mbm_total_bytes_config.=0A=
-=0A=
-The event configuration settings are domain specific and will affect all=0A=
-the CPUs in the domain.=0A=
-=0A=
-Following are the types of events supported:=0A=
-=0A=
-=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=0A=
-Bits   Description=0A=
-=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=0A=
-6      Dirty Victims from the QOS domain to all types of memory=0A=
-5      Reads to slow memory in the non-local NUMA domain=0A=
-4      Reads to slow memory in the local NUMA domain=0A=
-3      Non-temporal writes to non-local NUMA domain=0A=
-2      Non-temporal writes to local NUMA domain=0A=
-1      Reads to memory in the non-local NUMA domain=0A=
-0      Reads to memory in the local NUMA domain=0A=
-=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=0A=
-=0A=
-For example:=0A=
-To change the mbm_total_bytes to count only reads on domain 0, the bits=0A=
-0, 1, 4 and 5 needs to be set, which is 110011b (in hex 0x33). Run the=0A=
-command.=0A=
-	$echo  0=3D0x33 > /sys/fs/resctrl/info/L3_MON/mbm_total_bytes_config=0A=
-=0A=
-To change the mbm_total_bytes to count all the slow memory reads on=0A=
-domain 1, the bits 4 and 5 needs to be set which is 110000b (in hex 0x30).=
-=0A=
-Run the command.=0A=
-	$echo  1=3D0x30 > /sys/fs/resctrl/info/L3_MON/mbm_total_bytes_config=0A=
-=0A=
-Signed-off-by: Babu Moger <babu.moger@amd.com>=0A=
----=0A=
- arch/x86/kernel/cpu/resctrl/rdtgroup.c |  130 ++++++++++++++++++++++++++++=
-++++=0A=
- 1 file changed, 129 insertions(+), 1 deletion(-)=0A=
-=0A=
-diff --git a/arch/x86/kernel/cpu/resctrl/rdtgroup.c b/arch/x86/kernel/cpu/r=
-esctrl/rdtgroup.c=0A=
-index 18f9588a41cf..0cdccb69386e 100644=0A=
---- a/arch/x86/kernel/cpu/resctrl/rdtgroup.c=0A=
-+++ b/arch/x86/kernel/cpu/resctrl/rdtgroup.c=0A=
-@@ -1505,6 +1505,133 @@ static int mbm_local_bytes_config_show(struct kernf=
-s_open_file *of,=0A=
- 	return 0;=0A=
- }=0A=
- =0A=
-+static void mon_event_config_write(void *info)=0A=
-+{=0A=
-+	struct mon_config_info *mon_info =3D info;=0A=
-+	u32 index;=0A=
-+=0A=
-+	index =3D mon_event_config_index_get(mon_info->evtid);=0A=
-+	if (index >=3D MAX_CONFIG_EVENTS) {=0A=
-+		pr_warn_once("Invalid event id %d\n", mon_info->evtid);=0A=
-+		return;=0A=
-+	}=0A=
-+	wrmsr(MSR_IA32_EVT_CFG_BASE + index, mon_info->mon_config, 0);=0A=
-+}=0A=
-+=0A=
-+static int mbm_config_write(struct rdt_resource *r, struct rdt_domain *d,=
-=0A=
-+			    u32 evtid, u32 val)=0A=
-+{=0A=
-+	struct mon_config_info mon_info =3D {0};=0A=
-+	int ret =3D 0;=0A=
-+=0A=
-+	rdt_last_cmd_clear();=0A=
-+=0A=
-+	/* mon_config cannot be more than the supported set of events */=0A=
-+	if (val > MAX_EVT_CONFIG_BITS) {=0A=
-+		rdt_last_cmd_puts("Invalid event configuration\n");=0A=
-+		return -EINVAL;=0A=
-+	}=0A=
-+=0A=
-+	/*=0A=
-+	 * Read the current config value first. If both are same then=0A=
-+	 * we don't need to write it again.=0A=
-+	 */=0A=
-+	mon_info.evtid =3D evtid;=0A=
-+	mondata_config_read(d, &mon_info);=0A=
-+	if (mon_info.mon_config =3D=3D val)=0A=
-+		goto write_exit;=0A=
-+=0A=
-+	mon_info.mon_config =3D val;=0A=
-+=0A=
-+	/*=0A=
-+	 * Update MSR_IA32_EVT_CFG_BASE MSRs on all the CPUs in the=0A=
-+	 * domain. The MSRs offset from MSR MSR_IA32_EVT_CFG_BASE=0A=
-+	 * are scoped at the domain level. Writing any of these MSRs=0A=
-+	 * on one CPU is supposed to be observed by all CPUs in the=0A=
-+	 * domain. However, the hardware team recommends to update=0A=
-+	 * these MSRs on all the CPUs in the domain.=0A=
-+	 */=0A=
-+	on_each_cpu_mask(&d->cpu_mask, mon_event_config_write, &mon_info, 1);=0A=
-+=0A=
-+	/*=0A=
-+	 * When an Event Configuration is changed, the bandwidth counters=0A=
-+	 * for all RMIDs and Events will be cleared by the hardware. The=0A=
-+	 * hardware also sets MSR_IA32_QM_CTR.Unavailable (bit 62) for=0A=
-+	 * every RMID on the next read to any event for every RMID.=0A=
-+	 * Subsequent reads will have MSR_IA32_QM_CTR.Unavailable (bit 62)=0A=
-+	 * cleared while it is tracked by the hardware. Clear the=0A=
-+	 * mbm_local and mbm_total counts for all the RMIDs.=0A=
-+	 */=0A=
-+	memset(d->mbm_local, 0, sizeof(struct mbm_state) * r->num_rmid);=0A=
-+	memset(d->mbm_total, 0, sizeof(struct mbm_state) * r->num_rmid);=0A=
-+=0A=
-+write_exit:=0A=
-+	return ret;=0A=
-+}=0A=
-+=0A=
-+static int mon_config_parse(struct rdt_resource *r, char *tok, u32 evtid)=
-=0A=
-+{=0A=
-+	char *dom_str =3D NULL, *id_str;=0A=
-+	unsigned long dom_id, val;=0A=
-+	struct rdt_domain *d;=0A=
-+	int ret =3D 0;=0A=
-+=0A=
-+next:=0A=
-+	if (!tok || tok[0] =3D=3D '\0')=0A=
-+		return 0;=0A=
-+=0A=
-+	/* Start processing the strings for each domain */=0A=
-+	dom_str =3D strim(strsep(&tok, ";"));=0A=
-+	id_str =3D strsep(&dom_str, "=3D");=0A=
-+=0A=
-+	if (!dom_str || kstrtoul(id_str, 10, &dom_id)) {=0A=
-+		rdt_last_cmd_puts("Missing '=3D' or non-numeric domain id\n");=0A=
-+		return -EINVAL;=0A=
-+	}=0A=
-+=0A=
-+	if (!dom_str || kstrtoul(dom_str, 16, &val)) {=0A=
-+		rdt_last_cmd_puts("Missing '=3D' or non-numeric event configuration valu=
-e\n");=0A=
-+		return -EINVAL;=0A=
-+	}=0A=
-+=0A=
-+	list_for_each_entry(d, &r->domains, list) {=0A=
-+		if (d->id =3D=3D dom_id) {=0A=
-+			ret =3D mbm_config_write(r, d, evtid, val);=0A=
-+			if (ret)=0A=
-+				return -EINVAL;=0A=
-+			goto next;=0A=
-+		}=0A=
-+	}=0A=
-+=0A=
-+	return -EINVAL;=0A=
-+}=0A=
-+=0A=
-+static ssize_t mbm_total_bytes_config_write(struct kernfs_open_file *of,=
-=0A=
-+					    char *buf, size_t nbytes,=0A=
-+					    loff_t off)=0A=
-+{=0A=
-+	struct rdt_resource *r =3D of->kn->parent->priv;=0A=
-+	int ret;=0A=
-+=0A=
-+	/* Valid input requires a trailing newline */=0A=
-+	if (nbytes =3D=3D 0 || buf[nbytes - 1] !=3D '\n')=0A=
-+		return -EINVAL;=0A=
-+=0A=
-+	cpus_read_lock();=0A=
-+	mutex_lock(&rdtgroup_mutex);=0A=
-+=0A=
-+	rdt_last_cmd_clear();=0A=
-+=0A=
-+	buf[nbytes - 1] =3D '\0';=0A=
-+=0A=
-+	ret =3D mon_config_parse(r, buf, QOS_L3_MBM_TOTAL_EVENT_ID);=0A=
-+=0A=
-+	mutex_unlock(&rdtgroup_mutex);=0A=
-+	cpus_read_unlock();=0A=
-+=0A=
-+	return ret ?: nbytes;=0A=
-+}=0A=
-+=0A=
- /* rdtgroup information files for one cache resource. */=0A=
- static struct rftype res_common_files[] =3D {=0A=
- 	{=0A=
-@@ -1605,9 +1732,10 @@ static struct rftype res_common_files[] =3D {=0A=
- 	},=0A=
- 	{=0A=
- 		.name		=3D "mbm_total_bytes_config",=0A=
--		.mode		=3D 0444,=0A=
-+		.mode		=3D 0644,=0A=
- 		.kf_ops		=3D &rdtgroup_kf_single_ops,=0A=
- 		.seq_show	=3D mbm_total_bytes_config_show,=0A=
-+		.write		=3D mbm_total_bytes_config_write,=0A=
- 	},=0A=
- 	{=0A=
- 		.name		=3D "mbm_local_bytes_config",=0A=
-=0A=
+On Fri, Nov 04, 2022 at 02:36:52PM -0500, nick.hawkins@hpe.com wrote:
+> From: Nick Hawkins <nick.hawkins@hpe.com>
+> 
+> The GXP SoC can support up to 16 fans through the interface provided by
+> the CPLD. The fans speeds are controlled via a pwm value 0-255. The fans
+> are also capable of reporting if they have failed to the CPLD which in
+> turn reports the status to the GXP SoC. There are no tachometers so fan
+> speeds are reported as a percent of the pwm value.
 
+Drop the last sentence and the associated code. More on that below.
+
+> 
+> Signed-off-by: Nick Hawkins <nick.hawkins@hpe.com>
+> ---
+>  Documentation/hwmon/gxp-fan-ctrl.rst |  36 +++
+
+Needs to be added to Documentation/hwmon/index.rst.
+
+>  drivers/hwmon/Kconfig                |   8 +
+>  drivers/hwmon/Makefile               |   1 +
+>  drivers/hwmon/gxp-fan-ctrl.c         | 362 +++++++++++++++++++++++++++
+>  4 files changed, 407 insertions(+)
+>  create mode 100644 Documentation/hwmon/gxp-fan-ctrl.rst
+>  create mode 100644 drivers/hwmon/gxp-fan-ctrl.c
+> 
+> diff --git a/Documentation/hwmon/gxp-fan-ctrl.rst b/Documentation/hwmon/gxp-fan-ctrl.rst
+> new file mode 100644
+> index 000000000000..fc1709fb113b
+> --- /dev/null
+> +++ b/Documentation/hwmon/gxp-fan-ctrl.rst
+> @@ -0,0 +1,36 @@
+> +.. SPDX-License-Identifier: GPL-2.0
+> +
+> +Kernel driver gxp-fan-ctrl
+> +==========================
+> +
+> +Supported chips:
+> +
+> +  * HPE GXP SOC
+> +
+> +Author: Nick Hawkins <nick.hawkins@hpe.com>
+> +
+> +
+> +Description
+> +-----------
+> +
+> +gxp-fan-ctrl is a driver which provides fan control for the hpe gxp soc.
+> +The driver allows the gathering of fan status and the use of fan
+> +pwm control.
+> +
+> +
+> +Usage Notes
+> +-----------
+> +
+> +Traditionally fanY_input returns an RPM value, on HPE GXP systems it is
+> +the pwm value [0-255] due to the fan speeds being reported as
+> +percentages.
+
+It seems to me what is reported is the pwm value sent to the fan,
+and the code stringly suggests that this is the case. If the chip
+or controller doesn't report anything else, don't claim that this
+has any relation to the fan speed, and just report the pwm value.
+
+> +
+> +
+> +Sysfs attributes
+> +----------------
+> +
+> +======================= =================================================
+> +pwm[0-15]		Fan 0 to 15 respective pwm value
+> +fan[0-15]_input		Fan 0 to 15 respective input value: pwm value
+> +fan[0-15]_fault		Fan 0 to 15 respective fault status: 1 fail, 0 ok
+> +======================= =================================================
+> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+> index e70d9614bec2..3d32cd77424c 100644
+> --- a/drivers/hwmon/Kconfig
+> +++ b/drivers/hwmon/Kconfig
+> @@ -2303,6 +2303,14 @@ config SENSORS_INTEL_M10_BMC_HWMON
+>  	  sensors monitor various telemetry data of different components on the
+>  	  card, e.g. board temperature, FPGA core temperature/voltage/current.
+>  
+> +config SENSORS_GXP_FAN_CTRL
+> +	tristate "GXP Fan Control driver"
+> +	depends on ARCH_HPE_GXP || COMPILE_TEST
+> +	help
+> +	  If you say yes here you get support for GXP fan control functionality.
+> +	  The GXP controls fan function via the CPLD through the use of PWM
+> +	  registers. This driver reports status and pwm setting of the fans.
+> +
+>  if ACPI
+>  
+>  comment "ACPI drivers"
+> diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
+> index 007e829d1d0d..b474dcc708c4 100644
+> --- a/drivers/hwmon/Makefile
+> +++ b/drivers/hwmon/Makefile
+> @@ -83,6 +83,7 @@ obj-$(CONFIG_SENSORS_GL518SM)	+= gl518sm.o
+>  obj-$(CONFIG_SENSORS_GL520SM)	+= gl520sm.o
+>  obj-$(CONFIG_SENSORS_GSC)	+= gsc-hwmon.o
+>  obj-$(CONFIG_SENSORS_GPIO_FAN)	+= gpio-fan.o
+> +obj-$(CONFIG_SENSORS_GXP_FAN_CTRL) += gxp-fan-ctrl.o
+>  obj-$(CONFIG_SENSORS_HIH6130)	+= hih6130.o
+>  obj-$(CONFIG_SENSORS_ULTRA45)	+= ultra45_env.o
+>  obj-$(CONFIG_SENSORS_I5500)	+= i5500_temp.o
+> diff --git a/drivers/hwmon/gxp-fan-ctrl.c b/drivers/hwmon/gxp-fan-ctrl.c
+> new file mode 100644
+> index 000000000000..a01530951d58
+> --- /dev/null
+> +++ b/drivers/hwmon/gxp-fan-ctrl.c
+> @@ -0,0 +1,362 @@
+> +// SPDX-License-Identifier: GPL-2.0=or-later
+> +/* Copyright (C) 2022 Hewlett-Packard Enterprise Development Company, L.P. */
+> +
+> +#include <linux/err.h>
+> +#include <linux/hwmon.h>
+> +#include <linux/hwmon-sysfs.h>
+> +#include <linux/io.h>
+> +#include <linux/module.h>
+> +#include <linux/of_device.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/regmap.h>
+> +#include <linux/mfd/syscon.h>
+> +
+> +#define OFFSET_PWM0DUTY	0x10
+> +#define OFFSET_PWM1DUTY	0x11
+> +#define OFFSET_PWM2DUTY	0x12
+> +#define OFFSET_PWM3DUTY	0x13
+> +#define OFFSET_PWM4DUTY	0x14
+> +#define OFFSET_PWM5DUTY	0x15
+> +#define OFFSET_PWM6DUTY	0x16
+> +#define OFFSET_PWM7DUTY	0x17
+
+OFFSET_PWM[1-7]DUTY are not used anywhere. Please drop.
+
+> +
+> +struct fan_data {
+> +	u32 inst;
+> +	u32 fail;
+> +	u32 id;
+> +	u32 bit;
+> +};
+> +
+> +struct fan_ctrl_data {
+> +	struct fan_data fan[16];
+> +	u32 power_bit;
+> +};
+> +
+> +struct gxp_fan_ctrl_drvdata {
+> +	struct device	*dev;
+> +	struct device	*hwmon_dev;
+> +	struct regmap	*plreg_map; /* Programmable logic register regmap */
+> +	struct regmap	*fn2_map; /* Function 2 regmap */
+> +	void __iomem	*base;
+> +	const struct fan_ctrl_data *data;
+> +	struct mutex update_lock; /* To protect the setting of the fan PWM value */
+> +};
+> +
+> +static void address_translation(u32 desired_offset, u32 *offset, u32 *bit_shift)
+> +{
+> +	*offset = (desired_offset & 0xffc);
+> +	*bit_shift = (desired_offset - *offset) * 8;
+> +}
+> +
+> +static bool fan_installed(struct device *dev, int fan)
+> +{
+> +	struct gxp_fan_ctrl_drvdata *drvdata = dev_get_drvdata(dev);
+> +	u32 trans_offset;
+> +	u32 trans_shift;
+> +	u32 val;
+> +
+> +	address_translation(drvdata->data->fan[fan].inst,
+> +			    &trans_offset,
+> +			    &trans_shift);
+> +
+> +	regmap_read(drvdata->plreg_map, trans_offset, &val);
+> +	val = (val >> trans_shift) & drvdata->data->fan[fan].bit;
+> +	if (val == drvdata->data->fan[fan].bit)
+> +		return 1;
+> +	else
+> +		return 0;
+
+	return val == drvdata->data->fan[fan].bit;
+
+Those calculations look quite complex. Is there a public datasheet
+that would enable me to understand how registers are actually assigned ?
+
+> +}
+> +
+> +static bool fan_failed(struct device *dev, int fan)
+> +{
+> +	struct gxp_fan_ctrl_drvdata *drvdata = dev_get_drvdata(dev);
+> +	u32 trans_offset;
+> +	u32 trans_shift;
+> +	u32 val;
+> +
+> +	address_translation(drvdata->data->fan[fan].fail,
+> +			    &trans_offset,
+> +			    &trans_shift);
+> +
+> +	regmap_read(drvdata->plreg_map, trans_offset, &val);
+> +	val = (val >> trans_shift) & drvdata->data->fan[fan].fail;
+> +	if (val == drvdata->data->fan[fan].fail)
+> +		return 1;
+> +	else
+> +		return 0;
+
+	return val == drvdata->data->fan[fan].fail;
+> +}
+> +
+> +static ssize_t show_fault(struct device *dev, struct device_attribute *attr,
+> +			  char *buf)
+> +{
+> +	int nr = (to_sensor_dev_attr(attr))->index;
+> +	unsigned char val;
+> +
+> +	val = (fan_failed(dev, nr)) ? 1 : 0;
+
+This is really unnecessary. bool translates to 1/0. There is no need
+for another layer of translation.
+
+> +
+> +	return sprintf(buf, "%d\n", val);
+> +}
+> +
+> +static ssize_t show_in(struct device *dev, struct device_attribute *attr,
+> +		       char *buf)
+> +{
+> +	int nr = (to_sensor_dev_attr(attr))->index;
+> +	struct gxp_fan_ctrl_drvdata *drvdata = dev_get_drvdata(dev);
+> +	unsigned char val;
+> +	unsigned int reg;
+> +
+> +	/* Check Power Status */
+> +	regmap_read(drvdata->fn2_map, 0, &reg);
+> +	if (reg & BIT(drvdata->data->power_bit)) {
+> +		/* If Fan presents, then read it. */
+
+is present
+
+> +		val = (fan_installed(dev, nr)) ? readb(drvdata->base +
+> +						       OFFSET_PWM0DUTY +
+> +						       nr) : 0;
+
+Various unnecessary ( ) throughout the code.
+
+> +	} else {
+> +		/* Power Off */
+> +		val = 0;
+> +	}
+
+What determines power to a fan ? Should the power state be reported
+with fanX_enable ? Or possibly the installed state ?
+
+> +
+> +	return sprintf(buf, "%d\n", val);
+> +}
+> +
+> +static ssize_t show_pwm(struct device *dev, struct device_attribute *attr,
+> +			char *buf)
+> +{
+> +	int nr = (to_sensor_dev_attr(attr))->index;
+> +	struct gxp_fan_ctrl_drvdata *drvdata = dev_get_drvdata(dev);
+> +	unsigned char val;
+> +
+> +	val = readb(drvdata->base + OFFSET_PWM0DUTY + nr);
+> +
+> +	return sprintf(buf, "%d\n", val);
+> +}
+> +
+> +static ssize_t store_pwm(struct device *dev, struct device_attribute *attr,
+> +			 const char *buf, size_t count)
+> +{
+> +	int nr = (to_sensor_dev_attr(attr))->index;
+> +	struct gxp_fan_ctrl_drvdata *drvdata = dev_get_drvdata(dev);
+> +	unsigned long val;
+> +	int err;
+> +
+> +	err = kstrtoul(buf, 10, &val);
+> +	if (err)
+> +		return err;
+> +
+> +	if (val > 255)
+> +		return -1; /* out of range */
+
+Please always use standard error codes. This should be -EINVAL,
+not -EPERM (-1).
+
+> +
+> +	mutex_lock(&drvdata->update_lock);
+> +
+> +	writeb(val, drvdata->base + OFFSET_PWM0DUTY + nr);
+> +
+> +	mutex_unlock(&drvdata->update_lock);
+
+Mutex is pointless here.
+
+> +	return count;
+> +}
+> +
+> +static SENSOR_DEVICE_ATTR(pwm0, 0200 | 0444, show_pwm, store_pwm, 0);
+> +static SENSOR_DEVICE_ATTR(pwm1, 0200 | 0444, show_pwm, store_pwm, 1);
+> +static SENSOR_DEVICE_ATTR(pwm2, 0200 | 0444, show_pwm, store_pwm, 2);
+> +static SENSOR_DEVICE_ATTR(pwm3, 0200 | 0444, show_pwm, store_pwm, 3);
+> +static SENSOR_DEVICE_ATTR(pwm4, 0200 | 0444, show_pwm, store_pwm, 4);
+> +static SENSOR_DEVICE_ATTR(pwm5, 0200 | 0444, show_pwm, store_pwm, 5);
+> +static SENSOR_DEVICE_ATTR(pwm6, 0200 | 0444, show_pwm, store_pwm, 6);
+> +static SENSOR_DEVICE_ATTR(pwm7, 0200 | 0444, show_pwm, store_pwm, 7);
+> +static SENSOR_DEVICE_ATTR(pwm8, 0200 | 0444, show_pwm, store_pwm, 8);
+> +static SENSOR_DEVICE_ATTR(pwm9, 0200 | 0444, show_pwm, store_pwm, 9);
+> +static SENSOR_DEVICE_ATTR(pwm10, 0200 | 0444, show_pwm, store_pwm, 10);
+> +static SENSOR_DEVICE_ATTR(pwm11, 0200 | 0444, show_pwm, store_pwm, 11);
+> +static SENSOR_DEVICE_ATTR(pwm12, 0200 | 0444, show_pwm, store_pwm, 12);
+> +static SENSOR_DEVICE_ATTR(pwm13, 0200 | 0444, show_pwm, store_pwm, 13);
+> +static SENSOR_DEVICE_ATTR(pwm14, 0200 | 0444, show_pwm, store_pwm, 14);
+> +static SENSOR_DEVICE_ATTR(pwm15, 0200 | 0444, show_pwm, store_pwm, 15);
+> +
+> +static struct sensor_device_attribute sda_in_input[] = {
+> +	SENSOR_ATTR(fan0_input, 0444, show_in, NULL, 0),
+> +	SENSOR_ATTR(fan1_input, 0444, show_in, NULL, 1),
+> +	SENSOR_ATTR(fan2_input, 0444, show_in, NULL, 2),
+> +	SENSOR_ATTR(fan3_input, 0444, show_in, NULL, 3),
+> +	SENSOR_ATTR(fan4_input, 0444, show_in, NULL, 4),
+> +	SENSOR_ATTR(fan5_input, 0444, show_in, NULL, 5),
+> +	SENSOR_ATTR(fan6_input, 0444, show_in, NULL, 6),
+> +	SENSOR_ATTR(fan7_input, 0444, show_in, NULL, 7),
+> +	SENSOR_ATTR(fan8_input, 0444, show_in, NULL, 8),
+> +	SENSOR_ATTR(fan9_input, 0444, show_in, NULL, 9),
+> +	SENSOR_ATTR(fan10_input, 0444, show_in, NULL, 10),
+> +	SENSOR_ATTR(fan11_input, 0444, show_in, NULL, 11),
+> +	SENSOR_ATTR(fan12_input, 0444, show_in, NULL, 12),
+> +	SENSOR_ATTR(fan13_input, 0444, show_in, NULL, 13),
+> +	SENSOR_ATTR(fan14_input, 0444, show_in, NULL, 14),
+> +	SENSOR_ATTR(fan15_input, 0444, show_in, NULL, 15),
+> +};
+> +
+> +static SENSOR_DEVICE_ATTR(fan0_fault, 0444, show_fault, NULL, 0);
+> +static SENSOR_DEVICE_ATTR(fan1_fault, 0444, show_fault, NULL, 1);
+> +static SENSOR_DEVICE_ATTR(fan2_fault, 0444, show_fault, NULL, 2);
+> +static SENSOR_DEVICE_ATTR(fan3_fault, 0444, show_fault, NULL, 3);
+> +static SENSOR_DEVICE_ATTR(fan4_fault, 0444, show_fault, NULL, 4);
+> +static SENSOR_DEVICE_ATTR(fan5_fault, 0444, show_fault, NULL, 5);
+> +static SENSOR_DEVICE_ATTR(fan6_fault, 0444, show_fault, NULL, 6);
+> +static SENSOR_DEVICE_ATTR(fan7_fault, 0444, show_fault, NULL, 7);
+> +static SENSOR_DEVICE_ATTR(fan8_fault, 0444, show_fault, NULL, 8);
+> +static SENSOR_DEVICE_ATTR(fan9_fault, 0444, show_fault, NULL, 9);
+> +static SENSOR_DEVICE_ATTR(fan10_fault, 0444, show_fault, NULL, 10);
+> +static SENSOR_DEVICE_ATTR(fan11_fault, 0444, show_fault, NULL, 11);
+> +static SENSOR_DEVICE_ATTR(fan12_fault, 0444, show_fault, NULL, 12);
+> +static SENSOR_DEVICE_ATTR(fan13_fault, 0444, show_fault, NULL, 13);
+> +static SENSOR_DEVICE_ATTR(fan14_fault, 0444, show_fault, NULL, 14);
+> +static SENSOR_DEVICE_ATTR(fan15_fault, 0444, show_fault, NULL, 15);
+> +
+> +static struct attribute *gxp_fan_ctrl_attrs[] = {
+> +	&sensor_dev_attr_fan0_fault.dev_attr.attr,
+> +	&sensor_dev_attr_fan1_fault.dev_attr.attr,
+> +	&sensor_dev_attr_fan2_fault.dev_attr.attr,
+> +	&sensor_dev_attr_fan3_fault.dev_attr.attr,
+> +	&sensor_dev_attr_fan4_fault.dev_attr.attr,
+> +	&sensor_dev_attr_fan5_fault.dev_attr.attr,
+> +	&sensor_dev_attr_fan6_fault.dev_attr.attr,
+> +	&sensor_dev_attr_fan7_fault.dev_attr.attr,
+> +	&sensor_dev_attr_fan8_fault.dev_attr.attr,
+> +	&sensor_dev_attr_fan9_fault.dev_attr.attr,
+> +	&sensor_dev_attr_fan10_fault.dev_attr.attr,
+> +	&sensor_dev_attr_fan11_fault.dev_attr.attr,
+> +	&sensor_dev_attr_fan12_fault.dev_attr.attr,
+> +	&sensor_dev_attr_fan13_fault.dev_attr.attr,
+> +	&sensor_dev_attr_fan14_fault.dev_attr.attr,
+> +	&sensor_dev_attr_fan15_fault.dev_attr.attr,
+> +	&sda_in_input[0].dev_attr.attr,
+> +	&sda_in_input[1].dev_attr.attr,
+> +	&sda_in_input[2].dev_attr.attr,
+> +	&sda_in_input[3].dev_attr.attr,
+> +	&sda_in_input[4].dev_attr.attr,
+> +	&sda_in_input[5].dev_attr.attr,
+> +	&sda_in_input[6].dev_attr.attr,
+> +	&sda_in_input[7].dev_attr.attr,
+> +	&sda_in_input[8].dev_attr.attr,
+> +	&sda_in_input[9].dev_attr.attr,
+> +	&sda_in_input[10].dev_attr.attr,
+> +	&sda_in_input[11].dev_attr.attr,
+> +	&sda_in_input[12].dev_attr.attr,
+> +	&sda_in_input[13].dev_attr.attr,
+> +	&sda_in_input[14].dev_attr.attr,
+> +	&sda_in_input[15].dev_attr.attr,
+> +	&sensor_dev_attr_pwm0.dev_attr.attr,
+> +	&sensor_dev_attr_pwm1.dev_attr.attr,
+> +	&sensor_dev_attr_pwm2.dev_attr.attr,
+> +	&sensor_dev_attr_pwm3.dev_attr.attr,
+> +	&sensor_dev_attr_pwm4.dev_attr.attr,
+> +	&sensor_dev_attr_pwm5.dev_attr.attr,
+> +	&sensor_dev_attr_pwm6.dev_attr.attr,
+> +	&sensor_dev_attr_pwm7.dev_attr.attr,
+> +	&sensor_dev_attr_pwm8.dev_attr.attr,
+> +	&sensor_dev_attr_pwm9.dev_attr.attr,
+> +	&sensor_dev_attr_pwm10.dev_attr.attr,
+> +	&sensor_dev_attr_pwm11.dev_attr.attr,
+> +	&sensor_dev_attr_pwm12.dev_attr.attr,
+> +	&sensor_dev_attr_pwm13.dev_attr.attr,
+> +	&sensor_dev_attr_pwm14.dev_attr.attr,
+> +	&sensor_dev_attr_pwm15.dev_attr.attr,
+> +	NULL,
+> +};
+> +
+> +ATTRIBUTE_GROUPS(gxp_fan_ctrl);
+> +
+> +static struct regmap *gxp_fan_ctrl_init_regmap(struct platform_device *pdev, char *reg_name)
+> +{
+> +	struct regmap_config regmap_config = {
+> +		.reg_bits = 32,
+> +		.reg_stride = 4,
+> +		.val_bits = 32,
+> +	};
+> +	void __iomem *base;
+> +
+> +	base = devm_platform_ioremap_resource_byname(pdev, reg_name);
+> +	if (IS_ERR(base))
+> +		return ERR_CAST(base);
+> +
+> +	regmap_config.name = reg_name;
+> +
+> +	return devm_regmap_init_mmio(&pdev->dev, base, &regmap_config);
+> +}
+> +
+> +static int gxp_fan_ctrl_probe(struct platform_device *pdev)
+> +{
+> +	struct gxp_fan_ctrl_drvdata *drvdata;
+> +	struct resource *res;
+> +	struct device *dev = &pdev->dev;
+> +
+> +	drvdata = devm_kzalloc(&pdev->dev, sizeof(struct gxp_fan_ctrl_drvdata),
+> +			       GFP_KERNEL);
+> +	if (!drvdata)
+> +		return -ENOMEM;
+> +
+> +	drvdata->dev = &pdev->dev;
+> +
+> +	drvdata->data = of_device_get_match_data(&pdev->dev);
+> +
+> +	platform_set_drvdata(pdev, drvdata);
+> +
+> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> +	drvdata->base = devm_ioremap_resource(&pdev->dev, res);
+> +	if (IS_ERR(drvdata->base))
+> +		return dev_err_probe(dev, PTR_ERR(drvdata->base),
+> +				     "failed to map base\n");
+> +	drvdata->plreg_map = gxp_fan_ctrl_init_regmap(pdev, "plreg");
+> +	if (IS_ERR(drvdata->plreg_map))
+> +		return dev_err_probe(dev, PTR_ERR(drvdata->plreg_map),
+> +				     "failed to map plreg_handle\n");
+> +
+> +	drvdata->fn2_map = gxp_fan_ctrl_init_regmap(pdev, "fn2reg");
+> +	if (IS_ERR(drvdata->fn2_map))
+> +		return dev_err_probe(dev, PTR_ERR(drvdata->fn2_map),
+> +				     "failed to map fn2_handle\n");
+> +
+> +	mutex_init(&drvdata->update_lock);
+> +
+> +	drvdata->hwmon_dev = devm_hwmon_device_register_with_groups(&pdev->dev,
+> +								    "fan_ctrl",
+> +								    drvdata,
+> +								    gxp_fan_ctrl_groups);
+
+New drivers must register with devm_hwmon_device_register_with_info().
+
+> +
+> +	return PTR_ERR_OR_ZERO(drvdata->hwmon_dev);
+> +}
+> +
+> +static const struct fan_ctrl_data g10_data = {
+> +	.fan[0] = { .inst = 0x00, .fail = 0x02, .id = 0x04, .bit = 0x01 },
+> +	.fan[1] = { .inst = 0x00, .fail = 0x02, .id = 0x04, .bit = 0x02 },
+> +	.fan[2] = { .inst = 0x00, .fail = 0x02, .id = 0x04, .bit = 0x04 },
+> +	.fan[3] = { .inst = 0x00, .fail = 0x02, .id = 0x04, .bit = 0x08 },
+> +	.fan[4] = { .inst = 0x00, .fail = 0x02, .id = 0x04, .bit = 0x10 },
+> +	.fan[5] = { .inst = 0x00, .fail = 0x02, .id = 0x04, .bit = 0x20 },
+> +	.fan[6] = { .inst = 0x00, .fail = 0x02, .id = 0x04, .bit = 0x40 },
+> +	.fan[7] = { .inst = 0x00, .fail = 0x02, .id = 0x04, .bit = 0x80 },
+> +	.fan[8] = { .inst = 0x01, .fail = 0x03, .id = 0x05, .bit = 0x01 },
+> +	.fan[9] = { .inst = 0x01, .fail = 0x03, .id = 0x05, .bit = 0x02 },
+> +	.fan[10] = { .inst = 0x01, .fail = 0x03, .id = 0x05, .bit = 0x04 },
+> +	.fan[11] = { .inst = 0x01, .fail = 0x03, .id = 0x05, .bit = 0x08 },
+> +	.fan[12] = { .inst = 0x01, .fail = 0x03, .id = 0x05, .bit = 0x10 },
+> +	.fan[13] = { .inst = 0x01, .fail = 0x03, .id = 0x05, .bit = 0x20 },
+> +	.fan[14] = { .inst = 0x01, .fail = 0x03, .id = 0x05, .bit = 0x40 },
+> +	.fan[15] = { .inst = 0x01, .fail = 0x03, .id = 0x05, .bit = 0x80 },
+> +	.power_bit = 24,
+> +};
+> +
+> +static const struct of_device_id gxp_fan_ctrl_of_match[] = {
+> +	{ .compatible = "hpe,gxp-fan-ctrl", .data = &g10_data },
+
+I don't understand the point of attaching g10_data here.
+Why not just access it directly ? There is just one table.
+
+> +	{},
+> +};
+> +MODULE_DEVICE_TABLE(of, gxp_fan_ctrl_of_match);
+> +
+> +static struct platform_driver gxp_fan_ctrl_driver = {
+> +	.probe		= gxp_fan_ctrl_probe,
+> +	.driver = {
+> +		.name	= "gxp-fan-ctrl",
+> +		.of_match_table = gxp_fan_ctrl_of_match,
+> +	},
+> +};
+> +module_platform_driver(gxp_fan_ctrl_driver);
+> +
+> +MODULE_AUTHOR("Nick Hawkins <nick.hawkins@hpe.com>");
+> +MODULE_DESCRIPTION("HPE GXP Fan Ctrl driver");
+> +MODULE_LICENSE("GPL");
+> -- 
+> 2.17.1
+> 
