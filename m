@@ -2,106 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B586619D8B
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 17:44:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C11C619D92
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 17:45:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230267AbiKDQoJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 12:44:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37424 "EHLO
+        id S231244AbiKDQpy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 12:45:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231693AbiKDQnt (ORCPT
+        with ESMTP id S229496AbiKDQpr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 12:43:49 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DA0B31EF9
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 09:43:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DE9D4B82E72
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 16:43:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D007C433D6;
-        Fri,  4 Nov 2022 16:43:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667580225;
-        bh=vrLFKGbB+WonWostWlSiKuz27yHax/ThgTlKqQVTgQc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kk5AVgkkcTwryvrh2TJfl7NM2BKytqTBHdEgOXT2xqFY+wl4POYrFfa4QAamr5vqb
-         reNy8dz5iWRdgDjEpLGBavDGqCNLPvHf98qJIqxZCvG1kdEDXhz6RkpMar1Fdc88Up
-         B+j5D1mZGSIg5QCWtZIN7/Fqh1+HtA4Q4/Ke18nBket/nuElg7fRMyDwiAx/ntwPDK
-         IAKEICkjRbmYwqcvyU5o72UCKZqTeBYPGHavvVhSyyGHhEoXRdIx4fEnXHNqWfwmnr
-         4Ud4W72vgP2U1aitNzu9F//GNbqosFqagOixG5lRdJbos2UgFqpdBOmTtE53p4fIMI
-         LRlMZH2v1QjJQ==
-Date:   Fri, 4 Nov 2022 17:43:42 +0100
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     Anna-Maria Behnsen <anna-maria@linutronix.de>
-Cc:     linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        John Stultz <jstultz@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Eric Dumazet <edumazet@google.com>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Arjan van de Ven <arjan@infradead.org>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Frederic Weisbecker <fweisbec@gmail.com>,
-        Rik van Riel <riel@surriel.com>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, Theodore Ts'o <tytso@mit.edu>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Stephen Boyd <sboyd@kernel.org>, Tejun Heo <tj@kernel.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>
-Subject: Re: [PATCH v4 05/16] add_timer_on(): Make sure callers have
- TIMER_PINNED flag
-Message-ID: <20221104164342.GA1440400@lothringen>
-References: <20221104145737.71236-1-anna-maria@linutronix.de>
- <20221104145737.71236-6-anna-maria@linutronix.de>
+        Fri, 4 Nov 2022 12:45:47 -0400
+Received: from vern.gendns.com (vern.gendns.com [98.142.107.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3CF631F82;
+        Fri,  4 Nov 2022 09:45:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=lechnology.com; s=default; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=4AvnEeQeniDWkQBvG292xKcyqRcJZJN4ObwNBkkj5tk=; b=WdhahLUmGJpQ95hVL+3u1VjMxb
+        tUf7myaQndCk0qHzeKh1A+E2O/JcVf+aJ+IiQD/qFkAbTU535DJ2WAUD6UP1/EvQ/y4beijc5YALa
+        Q3fcMmim22RAxWP0Rh4RhjXR+GqdPYPNBO9KnnRYGmufKc5r2oNWcdiYm05562NzkHszBUsTfAWO7
+        JgFdZNqyyoguqSiEpMW173KJx1qkCjb5qv/86gVYx+OCVFDAJzuXuMvEgrqYPPENnQENv9FFS7mH/
+        qsMwcba1c5ad5x6Y1xKSIlEvINxjtsa56wEJ+F6ehiPRzOvf9PnvY6QcDHcSY53EeaOn9zO5Boa6z
+        wQg4vJPQ==;
+Received: from ip98-183-112-30.ok.ok.cox.net ([98.183.112.30]:58206 helo=[192.168.0.134])
+        by vern.gendns.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.95)
+        (envelope-from <david@lechnology.com>)
+        id 1oqzog-00Chgx-Is;
+        Fri, 04 Nov 2022 12:45:28 -0400
+Message-ID: <187e61cd-7d02-2453-acf1-30180559d42f@lechnology.com>
+Date:   Fri, 4 Nov 2022 11:45:17 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221104145737.71236-6-anna-maria@linutronix.de>
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v2 21/65] clk: davinci: da8xx-cfgchip: Add a
+ determine_rate hook
+Content-Language: en-US
+To:     Maxime Ripard <maxime@cerno.tech>, Stephen Boyd <sboyd@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Chen-Yu Tsai <wens@csie.org>, Daniel Vetter <daniel@ffwll.ch>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        =?UTF-8?Q?Andreas_F=c3=a4rber?= <afaerber@suse.de>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Abel Vesa <abelvesa@kernel.org>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Prashant Gaikwad <pgaikwad@nvidia.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Sekhar Nori <nsekhar@ti.com>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Takashi Iwai <tiwai@suse.com>,
+        David Airlie <airlied@gmail.com>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Mark Brown <broonie@kernel.org>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     linux-stm32@st-md-mailman.stormreply.com,
+        alsa-devel@alsa-project.org, linux-mediatek@lists.infradead.org,
+        linux-phy@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        linux-actions@lists.infradead.org, linux-clk@vger.kernel.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        patches@opensource.cirrus.com, linux-tegra@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+References: <20221018-clk-range-checks-fixes-v2-0-f6736dec138e@cerno.tech>
+ <20221018-clk-range-checks-fixes-v2-21-f6736dec138e@cerno.tech>
+From:   David Lechner <david@lechnology.com>
+In-Reply-To: <20221018-clk-range-checks-fixes-v2-21-f6736dec138e@cerno.tech>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - vern.gendns.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - lechnology.com
+X-Get-Message-Sender-Via: vern.gendns.com: authenticated_id: davidmain+lechnology.com/only user confirmed/virtual account not confirmed
+X-Authenticated-Sender: vern.gendns.com: davidmain@lechnology.com
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 04, 2022 at 03:57:26PM +0100, Anna-Maria Behnsen wrote:
-> The implementation of the hierachical timer pull model will change the
-> timer bases per CPU. Timers, that have to expire on a specific CPU, require
-> the TIMER_PINNED flag. Otherwise they will be queued on the dedicated CPU
-> but in global timer base and those timers could also expire on other
-> CPUs. Timers with TIMER_DEFERRABLE flag end up in a separate base anyway
-> and are executed on the local CPU only.
+On 11/4/22 8:17 AM, Maxime Ripard wrote:
+> The Davinci DA8xxx cfgchip mux clock implements a mux with a set_parent
+> hook, but doesn't provide a determine_rate implementation.
 > 
-> Therefore add the missing TIMER_PINNED flag for those callers who use
-> add_timer_on() without the flag. No functional change.
+> This is a bit odd, since set_parent() is there to, as its name implies,
+> change the parent of a clock. However, the most likely candidate to
+> trigger that parent change is a call to clk_set_rate(), with
+> determine_rate() figuring out which parent is the best suited for a
+> given rate.
+> 
+> The other trigger would be a call to clk_set_parent(), but it's far less
+> used, and it doesn't look like there's any obvious user for that clock.
+> 
+> So, the set_parent hook is effectively unused, possibly because of an
+> oversight. However, it could also be an explicit decision by the
+> original author to avoid any reparenting but through an explicit call to
+> clk_set_parent().
 
-You're fixing the current callers but what about the future ones?
 
-add_timer_on() should always guarantee that a timer runs on the
-right destination, which is not the case after your patchset if the
-timer hasn't been set to TIMER_PINNED.
+The parent is defined in the device tree and is not expected to change
+at runtime, so if I am understanding the patch correctly, setting the
+CLK_SET_RATE_NO_REPARENT flag seems correct.
 
-Therefore I think we should either have:
+> 
+> The latter case would be equivalent to setting the flag
+> CLK_SET_RATE_NO_REPARENT, together with setting our determine_rate hook
+> to __clk_mux_determine_rate(). Indeed, if no determine_rate
+> implementation is provided, clk_round_rate() (through
+> clk_core_round_rate_nolock()) will call itself on the parent if
+> CLK_SET_RATE_PARENT is set, and will not change the clock rate
+> otherwise. __clk_mux_determine_rate() has the exact same behavior when
+> CLK_SET_RATE_NO_REPARENT is set.
+> 
+> And if it was an oversight, then we are at least explicit about our
+> behavior now and it can be further refined down the line.
+> 
+> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+> ---
+>   drivers/clk/davinci/da8xx-cfgchip.c | 3 ++-
+>   1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/clk/davinci/da8xx-cfgchip.c b/drivers/clk/davinci/da8xx-cfgchip.c
+> index 4103d605e804..c04276bc4051 100644
+> --- a/drivers/clk/davinci/da8xx-cfgchip.c
+> +++ b/drivers/clk/davinci/da8xx-cfgchip.c
+> @@ -229,6 +229,7 @@ static u8 da8xx_cfgchip_mux_clk_get_parent(struct clk_hw *hw)
+>   }
+>   
+>   static const struct clk_ops da8xx_cfgchip_mux_clk_ops = {
+> +	.determine_rate	= __clk_mux_determine_rate,
+>   	.set_parent	= da8xx_cfgchip_mux_clk_set_parent,
+>   	.get_parent	= da8xx_cfgchip_mux_clk_get_parent,
+>   };
+> @@ -251,7 +252,7 @@ da8xx_cfgchip_mux_clk_register(struct device *dev,
+>   	init.ops = &da8xx_cfgchip_mux_clk_ops;
+>   	init.parent_names = parent_names;
+>   	init.num_parents = 2;
+> -	init.flags = 0;
+> +	init.flags = CLK_SET_RATE_NO_REPARENT;
+>   
+>   	mux->hw.init = &init;
+>   	mux->regmap = regmap;
+> 
 
-* add_timer_on() enforce TIMER_PINNED (doesn't work because if the timer is
-  later called with mod_timer(), we should expect it to run anywhere)
-
-or
-
-* add_timer_on() warns if !TIMER_PINNED
-
-or
-
-* have an internal flag TIMER_LOCAL, that is turned on when
-  add_timer_on() is called or add_timer()/mod_timer() is called
-  on a TIMER_PINNED. Otherwise it is turned off.
-
-The last solution should work with existing API and you don't need to
-chase the current and future users of add_timer_on().
-
-Thanks.
