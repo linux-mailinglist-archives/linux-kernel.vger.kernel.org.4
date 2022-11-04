@@ -2,71 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18A2B619FC2
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 19:24:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FF63619FC4
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 19:25:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232111AbiKDSYI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 14:24:08 -0400
+        id S230376AbiKDSZA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 14:25:00 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231945AbiKDSXi (ORCPT
+        with ESMTP id S232095AbiKDSYn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 14:23:38 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6941F2650;
-        Fri,  4 Nov 2022 11:23:22 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id m14-20020a17090a3f8e00b00212dab39bcdso9012735pjc.0;
-        Fri, 04 Nov 2022 11:23:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=K+T+zRU50EyoybWvV9puA2CX5+7utUDve2uCmkWDcVU=;
-        b=B2rp+yRal5VNyXSQzC2EFgINuD2kzVlVD2TOyfvjlWRzcAb4YSFfMY4ye+pMbKRllC
-         v2BUcdOoHBp/xD2OvPQ5xZy/OZuiBwALvcBl0w9iEJiDDDelF4obf/bXEy+9rcUkxXzr
-         F1O/VrabWitRCKzGUHE9RiwT3nI0KUrAFAThs3BwGfcL1QJpuyXvGenl5+9/qxfyzYNg
-         CsHEHLz4mh9zakPLY/u8tsb6Ml44itWPbePiC7gHgmstF/tA+dzZkK06a5Pp5v9CAD7w
-         oZh70tyhggS/PDYgoMPJq/NrUXl9DMkUC8TkQVa/FhUMVIKi7TnjdPlRlfg7e34ZCW73
-         jONA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=K+T+zRU50EyoybWvV9puA2CX5+7utUDve2uCmkWDcVU=;
-        b=Fkv91CnAjczGi8Gn2Q1g1Ha1QsQAScEXT90UPR739trDPgn/EDkHgDUE5TJa+0MAn0
-         mfeyiPPNqFFsaMtmu5WbDXr+nWOk/HarNckoql9sMkV9CBOVGD6DEdmuPQq/5Zwea4/z
-         h3kdsFCsiaTDp/BvMVs+nmhrrRxxr7oyqAq5Q07wqqrloHHDztPhyuMsMzEtBTC0bju2
-         P/HzekmGOgDYPfxTyy1k1dUqRORG9aZgsLfhfFHSYEb3BFBt9BN3KMzXssr17Co55VHP
-         5hK271QTvxkQyBMDjfQWTWIvHwVIubd0UAqMbSURGjkbcWdONdzeTKt/8l5jVVUmrePG
-         IIZQ==
-X-Gm-Message-State: ACrzQf2KHGETZAOsLPkmoAELkaIHfZHN8mdCEIWiLps3q8jWalemi8C5
-        iCVQxk53pQ+HK6s0PkKiDFY=
-X-Google-Smtp-Source: AMsMyM79Bzl/Axmwa1kFNk0sPDD6LGvI/Yhj+RoJh9H5Dh0Z4cCObAKCw+U7+fCVPO0/eZJ84pH/Lg==
-X-Received: by 2002:a17:902:bf01:b0:188:571f:3756 with SMTP id bi1-20020a170902bf0100b00188571f3756mr8870909plb.171.1667586201548;
-        Fri, 04 Nov 2022 11:23:21 -0700 (PDT)
-Received: from google.com ([2620:15c:9d:2:a6ae:11ff:fe11:fcc3])
-        by smtp.gmail.com with ESMTPSA id p3-20020a170902e74300b0017a0668befasm73545plf.124.2022.11.04.11.23.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Nov 2022 11:23:20 -0700 (PDT)
-Date:   Fri, 4 Nov 2022 11:23:17 -0700
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Kunbo Zhang <absoler@smail.nju.edu.cn>, tiwai@suse.de,
-        wsa+renesas@sang-engineering.com, linux-kernel@vger.kernel.org,
-        linux-input@vger.kernel.org, security@kernel.org
-Subject: Re: [PATCH] input: i8042 - fix a double-fetch vulnerability
- introduced by GCC
-Message-ID: <Y2VYlc8RxOsKxbmm@google.com>
-References: <20221104072347.74314-1-absoler@smail.nju.edu.cn>
- <Y2TtXAW1LhOwlE64@kroah.com>
+        Fri, 4 Nov 2022 14:24:43 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E64DD15831;
+        Fri,  4 Nov 2022 11:24:24 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2A4IO3LR060985;
+        Fri, 4 Nov 2022 13:24:03 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1667586243;
+        bh=8ETERx3slYS0YvwAHPAt1tHEj7ePcY+jVnmLR69eRuE=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=rlvAG86/GDDBZ5fxhUVaMVADwJxxY5DSIgPwh6iccIXPOknueMCmoc4clDXLqyMi0
+         m/4Z8ZA7epUbeawm2wNdddat7blaEi0X4M0tEHIdzVD3nG3LJb4fF/ROm52ozfGwP3
+         3dIcjcEH3LLPWj0iJOGz2y88X5SAKWE40wEcN8GM=
+Received: from DFLE108.ent.ti.com (dfle108.ent.ti.com [10.64.6.29])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2A4IO3Tt051765
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 4 Nov 2022 13:24:03 -0500
+Received: from DFLE108.ent.ti.com (10.64.6.29) by DFLE108.ent.ti.com
+ (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Fri, 4 Nov
+ 2022 13:24:02 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE108.ent.ti.com
+ (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
+ Frontend Transport; Fri, 4 Nov 2022 13:24:02 -0500
+Received: from [10.250.232.76] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2A4INw5L018692;
+        Fri, 4 Nov 2022 13:23:58 -0500
+Message-ID: <7c63a1b5-ee51-d395-d545-6d9046d63f69@ti.com>
+Date:   Fri, 4 Nov 2022 23:53:57 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y2TtXAW1LhOwlE64@kroah.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FSL_HELO_FAKE,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH 1/3] arm64: dts: ti: k3-am65-main: drop RNG clock
+Content-Language: en-US
+To:     Nishanth Menon <nm@ti.com>, Andrew Davis <afd@ti.com>
+CC:     <vigneshr@ti.com>, <kristo@kernel.org>, <robh+dt@kernel.org>,
+        <j-keerthy@ti.com>, <krzysztof.kozlowski+dt@linaro.org>,
+        <s-anna@ti.com>, <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20221031213237.52275-1-j-choudhary@ti.com>
+ <20221031213237.52275-2-j-choudhary@ti.com>
+ <20221102151706.krsi5lujydb4nswa@daybreak>
+ <4f954c08-6a2e-93b5-6806-7b27b247496e@ti.com>
+ <20221102194420.umwuyk374g2mgg45@unlucky>
+From:   Jayesh Choudhary <j-choudhary@ti.com>
+In-Reply-To: <20221102194420.umwuyk374g2mgg45@unlucky>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,24 +72,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
 
-On Fri, Nov 04, 2022 at 11:45:48AM +0100, Greg KH wrote:
-> On Fri, Nov 04, 2022 at 03:23:47PM +0800, Kunbo Zhang wrote:
-> > As in the source code, the global variable is tested (at line 408) before three assignments of irq_bit, disable_bit and port_name.
-> > However, as shown in the following disassembly of i8042_port_close(), 
-> > the variable (0x0(%rip)) is fetched and tested three times for each 
-> > assignment of irq_bit, disable_bit and port_name.
+
+On 03/11/22 01:14, Nishanth Menon wrote:
+> On 12:04-20221102, Andrew Davis wrote:
+>> On 11/2/22 10:17 AM, Nishanth Menon wrote:
+>>> On 03:02-20221101, Jayesh Choudhary wrote:
+>>>> Drop RNG clock property as it is not controlled by rng-driver.
+>>>
+>>> Does'nt tell me what is the alternative? why is the hardware description
+>>> not sufficient for control?
+>>>
+>>> https://software-dl.ti.com/tisci/esd/latest/5_soc_doc/am65x_sr2/clocks.html#clocks-for-sa2-ul0-device
+>>> Looks like a perfectly valid description - do we have a bug and firmware
+>>> does'nt allow control here?
+>>>
+>>
+>> We have three input clocks feeding the SA2UL module, x1, x2, pka. PKA goes
+>> to the PKA sub-module (isn't it nice when they make things simple). But x1 and
+>> x2 are miscellaneous and bus clocks respectively and route to several sub-modules.
+>>
+>> All we drop here is the clock handle in the RNG sub-module, as that sub-module is
+>> not the owner of that clock (the parent SA2UL is). The alternative we could implement
+>> is to move the clock node up to the parent SA2UL node.
+>>
+>>>>
+>>>> Fixes: b366b2409c97 ("arm64: dts: ti: k3-am6: Add crypto accelarator node")
+>>>> Signed-off-by: Jayesh Choudhary <j-choudhary@ti.com>
+>>>> ---
+>>>>    arch/arm64/boot/dts/ti/k3-am65-main.dtsi | 1 -
+>>>>    1 file changed, 1 deletion(-)
+>>>>
+>>>> diff --git a/arch/arm64/boot/dts/ti/k3-am65-main.dtsi b/arch/arm64/boot/dts/ti/k3-am65-main.dtsi
+>>>> index 4005a73cfea9..e166d7b7e3a1 100644
+>>>> --- a/arch/arm64/boot/dts/ti/k3-am65-main.dtsi
+>>>> +++ b/arch/arm64/boot/dts/ti/k3-am65-main.dtsi
+>>>> @@ -126,7 +126,6 @@ rng: rng@4e10000 {
+>>>>    			compatible = "inside-secure,safexcel-eip76";
+>>>>    			reg = <0x0 0x4e10000 0x0 0x7d>;
+>>>>    			interrupts = <GIC_SPI 24 IRQ_TYPE_LEVEL_HIGH>;
+>>>> -			clocks = <&k3_clks 136 1>;
+>>>
+>>> Does this mean that the crypto module's power-domains property should be
+>>> dropped as well?
+>>>
+>>
+>> Why? the power-domains property is in the correct spot (up in the parent node).
+>>
+>> Now it is true we cant actually shut the SA2UL down since it is owned
+>> by the security processor, but since it is marked TI_SCI_PD_SHARED this
+>> should be fine.
 > 
-> There should not be any problem with this as that value does not ever
-> change except in rare cases (shutdown or init).
+> The idea of the descriptions were to describe what is controllable by
+> firmware, if there is no control due to the specified reason, it is a
+> device tree bug, and should be documented when dropping it. If it serves
+> a purpose in the firmware by indicating usage for example - it has valid
+> reason to stick around as it is expected to be used by firmware for some
+> specific reason.
 
-We use this chunk only to establish identity of the port, we do not
-expect instances to change while driver operates, so I do not think
-there is any concern with re-fetching/re-checking the port while it is
-being closed.
+The x1-clk to sa2ul is always running and fixed. What we can do is gate
+off the clock specific to trng module (x1-clk) by using TRNG_EN MMR to
+disable TRNG.
+Hence, uncontrollable.
 
-Thanks.
+> 
+> The commit description does bring up the above mentioned questions and
+> must be explained appropriately.
+> 
 
--- 
-Dmitry
+Okay, I will update the description properly in v2 for dropping this
+clock and for each patch (and not just in the cover-letter).
