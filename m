@@ -2,88 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C173619A43
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 15:40:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3FED619A48
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 15:40:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231415AbiKDOkL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 10:40:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54498 "EHLO
+        id S232210AbiKDOkc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 10:40:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232180AbiKDOjo (ORCPT
+        with ESMTP id S232199AbiKDOkK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 10:39:44 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20EE13120E;
-        Fri,  4 Nov 2022 07:37:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7FEEAB82C13;
-        Fri,  4 Nov 2022 14:37:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97D77C433D7;
-        Fri,  4 Nov 2022 14:37:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667572654;
-        bh=mjEOutRuNE9+6UZp3LCAy5GbktpZ9JkgrgOZNHqtcIU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=J2do/PUx6HiYACXLaoZ5xOXQazDfGfDcddbpWhNHJuae9B+WUj/Xonur64ac57UoR
-         +4yBmAFCoSlqVmHaqmHe49Srs/PGK/pnRH/PcCm9HbFoo7IY1rjcRy52gOS3kkdtH0
-         7pJJEBGPMOfvZ2kiF4FAR8TsmVrJ8C0MZxgVGxXVYnYplDrWBBfVs9BMdHFpyldV0V
-         RCYSePM2UaF1X+0xbr5bldegwtjhThYEmWxoTGaLFu9CEFHXXQ9XVyXoP2usPBNjrd
-         JNNcOGihCKzMTO8gYNrhDNF5h1r+h6zicMkJdNf2BRG3sDsL+m9swu9YCxtmOhmK/r
-         I92QcKs5BhokQ==
-Date:   Fri, 4 Nov 2022 20:07:30 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Andrew Chernyakov <acherniakov@astralinux.ru>
-Cc:     dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
-        lvc-project@linuxtesting.org
-Subject: Re: [PATCH] dmaengine: fsl-edma: fix potential NULL pointer
- dereference in fsl_edma_tx_status()
-Message-ID: <Y2UjqrTVMKm1QGmD@matsya>
-References: <20221026101841.35305-1-acherniakov@astralinux.ru>
+        Fri, 4 Nov 2022 10:40:10 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C87132BB2
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 07:38:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667572699; x=1699108699;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=+BDW2rlh59H9OsdW2Tw7Cz4tXSOMyT1tD39twyGaGg0=;
+  b=KT20S8E63IuuPGyCAsGrT9NJHHiQFEEPmMbCR6U9zQlMvCYyViG0ZxTA
+   SENoSCh1NTUCyUJevQFcIJ+lCW8CWHgzlkN3653mcKa3alzUr5d+VGNam
+   WcAVyu5qUbWlNZhVB+SE1OKjF+B6lSLs1zcOvLpwObv4EIeV5NRrOLP8T
+   6hy9IJeksgt4IbGM4tb25jApbyzXnM6+5YAMWBDNB12N4lP8jY20SyQQr
+   4pu4/s6ndiRsLlaqvzCk0tmMY339m54prMvTGZVj+O9+9+4yBswEJoQbk
+   o8mnh3uc/B1vcCzQUgkni3pAMohwfNbl/xiqOLQMmQI5piSQgr025ImaW
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10521"; a="309969285"
+X-IronPort-AV: E=Sophos;i="5.96,137,1665471600"; 
+   d="scan'208";a="309969285"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2022 07:38:19 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10521"; a="668373765"
+X-IronPort-AV: E=Sophos;i="5.96,137,1665471600"; 
+   d="scan'208";a="668373765"
+Received: from anantsin-mobl2.amr.corp.intel.com (HELO [10.209.97.57]) ([10.209.97.57])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2022 07:38:18 -0700
+Message-ID: <1c9a1b86-efef-fa56-4451-ac3348b678bf@intel.com>
+Date:   Fri, 4 Nov 2022 07:38:17 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221026101841.35305-1-acherniakov@astralinux.ru>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [RFC v2 4/5] x86/crash: make the page that stores the LUKS volume
+ key inaccessible
+Content-Language: en-US
+To:     Coiby Xu <coxu@redhat.com>, kexec@lists.infradead.org
+Cc:     Milan Broz <gmazyland@gmail.com>,
+        Thomas Staudt <tstaudt@de.ibm.com>,
+        Kairui Song <ryncsn@gmail.com>, dm-devel@redhat.com,
+        Jan Pazdziora <jpazdziora@redhat.com>,
+        Pingfan Liu <kernelfans@gmail.com>,
+        Baoquan He <bhe@redhat.com>, Dave Young <dyoung@redhat.com>,
+        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>
+References: <20221104113000.487098-1-coxu@redhat.com>
+ <20221104113000.487098-5-coxu@redhat.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <20221104113000.487098-5-coxu@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26-10-22, 13:18, Andrew Chernyakov wrote:
-> fsl_edma_desc_residue() dereferences fsl_chan->edesc, but it is checked
-> for NULL only in one of two places where fsl_edma_desc_residue() is
-> called from fsl_edma_tx_status().
+On 11/4/22 04:29, Coiby Xu wrote:
+> +	if (kexec_crash_image->luks_volume_key_addr) {
+> +		start = kexec_crash_image->luks_volume_key_addr;
+> +		end = start + kexec_crash_image->luks_volume_key_sz - 1;
+> +		page = pfn_to_page(start >> PAGE_SHIFT);
+> +		nr_pages = (end >> PAGE_SHIFT) - (start >> PAGE_SHIFT) + 1;
+> +		set_memory_np((unsigned long)page_address(page), nr_pages);
+> +	}
 
-Patch subject should be the change it introduces, pls revise
+Why does this go pfn -> page -> vaddr?  What good does having the page
+do?  Can you just do phys_to_virt() on the start address?  Maybe:
 
-> 
-> Found by Linux Verification Center (linuxtesting.org) with SVACE.
-> 
-> Signed-off-by: Andrew Chernyakov <acherniakov@astralinux.ru>
-> ---
->  drivers/dma/fsl-edma-common.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/dma/fsl-edma-common.c b/drivers/dma/fsl-edma-common.c
-> index a06a1575a2a5..fb712d85d556 100644
-> --- a/drivers/dma/fsl-edma-common.c
-> +++ b/drivers/dma/fsl-edma-common.c
-> @@ -330,7 +330,7 @@ enum dma_status fsl_edma_tx_status(struct dma_chan *chan,
->  	if (fsl_chan->edesc && cookie == fsl_chan->edesc->vdesc.tx.cookie)
->  		txstate->residue =
->  			fsl_edma_desc_residue(fsl_chan, vdesc, true);
-> -	else if (vdesc)
-> +	else if (fsl_chan->edesc && vdesc)
->  		txstate->residue =
->  			fsl_edma_desc_residue(fsl_chan, vdesc, false);
->  	else
-> -- 
-> 2.35.1
+ 	start_paddr = kexec_crash_image->luks_volume_key_addr;
+ 	end_paddr   = start_paddr + kexec_crash_image->luks_volume_key_sz - 1;
+ 	nr_pages = (PAGE_ALIGN(end_paddr) - PAGE_ALIGN_DOWN(start_paddr))/
+PAGE_SIZE;
+ 	set_memory_np((unsigned long)phys_to_virt(start_paddr), nr_pages);
 
--- 
-~Vinod
+Also, if you resend this, please just cc the x86 folks on the series.
+The other patches and cover letter have desperately needed context
+around this.
