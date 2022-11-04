@@ -2,103 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC921619072
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 06:50:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62B8A619013
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 06:41:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231491AbiKDFuR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 01:50:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55570 "EHLO
+        id S231182AbiKDFlb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 01:41:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231343AbiKDFsy (ORCPT
+        with ESMTP id S229964AbiKDFl1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 01:48:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E50E27B2A;
-        Thu,  3 Nov 2022 22:48:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CD41F620D3;
-        Fri,  4 Nov 2022 05:48:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9491C4314D;
-        Fri,  4 Nov 2022 05:48:49 +0000 (UTC)
-Received: from rostedt by gandalf.local.home with local (Exim 4.96)
-        (envelope-from <rostedt@goodmis.org>)
-        id 1oqpZs-0071Ai-0q;
-        Fri, 04 Nov 2022 01:49:16 -0400
-Message-ID: <20221104054916.096085393@goodmis.org>
-User-Agent: quilt/0.66
-Date:   Fri, 04 Nov 2022 01:41:16 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Anna-Maria Gleixner <anna-maria@linutronix.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Chengfeng Ye <cyeaa@connect.ust.hk>, Lin Ma <linma@zju.edu.cn>,
-        Duoming Zhou <duoming@zju.edu.cn>, netdev@vger.kernel.org
-Subject: [RFC][PATCH v3 23/33] timers: nfc: pn533: Use timer_shutdown_sync() before freeing timer
-References: <20221104054053.431922658@goodmis.org>
+        Fri, 4 Nov 2022 01:41:27 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E3DA275CD;
+        Thu,  3 Nov 2022 22:41:26 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id m14-20020a17090a3f8e00b00212dab39bcdso7308118pjc.0;
+        Thu, 03 Nov 2022 22:41:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=/BZyFt5dCsT73A04TLBbOghf3YLF5kXYNj3qEppPq5Y=;
+        b=GOyEzehOcyRHUAlammU7EX9xRYhpA+YP4HPYMpKjovpagz8U6b8H/dV/9LC7A3Rv7z
+         AuxQJcKBDJn/mP7obi/aEMAwYNI1Xn5pH1LkBZ6x0hJbVlZvpH1fYaDb1Kh9r9CaT8zu
+         MSY+NsJdDzUYN+6VkC+KXowti8qjlc1G10BwbMY4GzVHlPf5JkPu3YLiYexmfJuf+d5F
+         Sp3JNnhfIKQ1HdhKAT+8ipgGbQf4Of7LlL4lon0tktVxAmYuOOwY8gbnTLjBOmZ5A6zg
+         booqWifuUzuyxxhwia00Sg8H0jof0+9oBzdsx8XaRXT7arCujN+pp9aO3zQjoawt7m6f
+         fT0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/BZyFt5dCsT73A04TLBbOghf3YLF5kXYNj3qEppPq5Y=;
+        b=Cqsfjpb/OXIOC9PWPvSuBs4uHwjLLVtPr8m/KHEpEAUrHGfDgin6l6ZFoRgXOB9Ff4
+         TMHq/uWhrmGNCLpneqzhGJu4YMuXzrcHWuvkam1hkOKs4iekWzEOOb8jKO32Rx1MpzM1
+         V3FQHB0K/K3McZ9NCLTvajtEnWOkJNOKd1et88uZZ62Dm57p+59sdtIhSD9sZDbH175+
+         nDPR1z86lYNgW932CfmD0HerT/UojKpmCgFWp4lwuKTgQ3DdCYvHwNV0B7+Q7k5Yo64c
+         E14EjiBYYgsR4Do+O7HEIfDlKVXs9Myk6SJHO4ehY3/mnurPpU+VgA6zzNQUItNhra1H
+         uoUw==
+X-Gm-Message-State: ACrzQf0A7MpVC9NyEjlc8k8EB1Rba+vx4JXI0TaW3vi7SvVWSOLsagE/
+        64krewzoCDrUU2dYN6FdE3E=
+X-Google-Smtp-Source: AMsMyM5ppXYAEctK4C52i9lpfUEFpfzLG/flwaMFtbqyr03aXVwRpcqL6NjtiSyJGTuT8RqckuL2aQ==
+X-Received: by 2002:a17:902:b94c:b0:178:336f:13d6 with SMTP id h12-20020a170902b94c00b00178336f13d6mr34498524pls.64.1667540485964;
+        Thu, 03 Nov 2022 22:41:25 -0700 (PDT)
+Received: from localhost.localdomain ([116.128.244.169])
+        by smtp.gmail.com with ESMTPSA id q15-20020aa7960f000000b0056bdc3f5b29sm1684043pfg.186.2022.11.03.22.41.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Nov 2022 22:41:25 -0700 (PDT)
+From:   TGSP <tgsp002@gmail.com>
+To:     rafael@kernel.org, len.brown@intel.com, pavel@ucw.cz,
+        huanglei@kylinos.cn
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        TGSP <tgsp002@gmail.com>
+Subject: [PATCH v2 0/2] Fixes to the hibernate_preallocate_memory()
+Date:   Fri,  4 Nov 2022 13:41:17 +0800
+Message-Id: <20221104054119.1946073-1-tgsp002@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+Changes in v2:
+- Optimize code to resolve compilation warnings;
+- Add comments, add debug data, easy to view and modify.
 
-Before a timer is freed, timer_shutdown_sync() must be called.
+v1:
+hibernate_preallocate_memory() function is still quite obscure, can
+anyone add a little more description?
 
-Link: https://lore.kernel.org/all/20220407161745.7d6754b3@gandalf.local.home/
+It seems that the max_size calculation formula is wrong in the comment
+part, correct it;
 
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Dan Carpenter <dan.carpenter@oracle.com>
-Cc: Chengfeng Ye <cyeaa@connect.ust.hk>
-Cc: Lin Ma <linma@zju.edu.cn>
-Cc: Duoming Zhou <duoming@zju.edu.cn>
-Cc: netdev@vger.kernel.org
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
----
- drivers/nfc/pn533/pn533.c | 2 +-
- drivers/nfc/pn533/uart.c  | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+It is also found that when mem preallocate is not enough, it goes
+directly down without checking.
 
-diff --git a/drivers/nfc/pn533/pn533.c b/drivers/nfc/pn533/pn533.c
-index d9f6367b9993..0a1d0b4e3bb8 100644
---- a/drivers/nfc/pn533/pn533.c
-+++ b/drivers/nfc/pn533/pn533.c
-@@ -2788,7 +2788,7 @@ void pn53x_common_clean(struct pn533 *priv)
- 	struct pn533_cmd *cmd, *n;
- 
- 	/* delete the timer before cleanup the worker */
--	del_timer_sync(&priv->listen_timer);
-+	timer_shutdown_sync(&priv->listen_timer);
- 
- 	flush_delayed_work(&priv->poll_work);
- 	destroy_workqueue(priv->wq);
-diff --git a/drivers/nfc/pn533/uart.c b/drivers/nfc/pn533/uart.c
-index 07596bf5f7d6..a556acdb947b 100644
---- a/drivers/nfc/pn533/uart.c
-+++ b/drivers/nfc/pn533/uart.c
-@@ -310,7 +310,7 @@ static void pn532_uart_remove(struct serdev_device *serdev)
- 	pn53x_unregister_nfc(pn532->priv);
- 	serdev_device_close(serdev);
- 	pn53x_common_clean(pn532->priv);
--	del_timer_sync(&pn532->cmd_timeout);
-+	timer_shutdown_sync(&pn532->cmd_timeout);
- 	kfree_skb(pn532->recv_skb);
- 	kfree(pn532);
- }
+xiongxin (2):
+  PM: hibernate: fix spelling mistake for annotation
+  PM: hibernate: add check of preallocate mem for image size pages
+
+ kernel/power/snapshot.c | 15 +++++++++++----
+ 1 file changed, 11 insertions(+), 4 deletions(-)
+
 -- 
-2.35.1
+2.25.1
+
