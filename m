@@ -2,66 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E69C618F16
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 04:32:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29C3D618F25
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 04:37:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230402AbiKDDcL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 23:32:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35650 "EHLO
+        id S229591AbiKDDhp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 23:37:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231334AbiKDDbh (ORCPT
+        with ESMTP id S229553AbiKDDhQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 23:31:37 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 071B72982E;
-        Thu,  3 Nov 2022 20:28:56 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id j12so3760439plj.5;
-        Thu, 03 Nov 2022 20:28:56 -0700 (PDT)
+        Thu, 3 Nov 2022 23:37:16 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4EE360E6
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 20:37:03 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id 64so3364332pgc.5
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 20:37:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=JMT1dZLwWjsj6ZRC5FLwoga4p9ykHLZjt9uAKMBniJ4=;
-        b=HzBPQ2voFqnO5CukHYYnrMjmSv2/hvUTLVACr1o2Y6AJOiBYvFodfXbvddb/Is3fXg
-         s1yjLSTUOvFT6fkYCrVdlPKepF90j63TqaCQfHjCVdngZGqszDqvZ03+m02hnzUsU7bx
-         degYpPwlVagJKCwgJ63pnkEEzOi7EnhmBSQfXuyVNcV4oRS7WFmRtxS1a9FoMGIyB0EL
-         hm3AWJ6MnMlNkzep7J2Z4eiSb4B823BxyU+SGQ7GDCxZ+CjN8UmONJohyxUM7i3pOU3r
-         v0uyyVTowLpI9d3oxCpcMPxJ82CSNQ8tu7JubSA/TZM0h+14LJeFA4ZmIBiIcJu5vWPQ
-         qBKw==
+        d=fromorbit-com.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=kCztCif6DGnUVPea69d1j6HBte1tInJ//NGbT2adCtA=;
+        b=uj2thbHtG/d+GBBCufhO7rN+QkuEm7zsR1utnZpf1jQ6jQI6apkQTpUS2wcEmA9aNC
+         VnDMe2rmlwjjtPUJR6RVdf+UJIK/YCtwiDAFrNIV7Nt++fXhl9nREiFkHf0RyMEPfvfO
+         onGWmNN1ovJwkvkYC6fzzHZz7zyvVev9H3OguSEusghpv0YPPtdfeKpV8TCgCnMYqtfc
+         Ksic71C8032fBMagPD7RLDMZgSbzkcCWA6HBFsZEVIK8PskhHmcNukEVkFYsBkmvmeoC
+         g/qCQdT1fcwEOyEG1ZYfH8GugnyK0CKLKk6hzKwIFkwwhNd+ojc6bS3gdGaV6YzySSoe
+         prLQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=JMT1dZLwWjsj6ZRC5FLwoga4p9ykHLZjt9uAKMBniJ4=;
-        b=156wYmkCwGLfpcV+Y7J6O6plro+7DPdTtLlkLupKE1GqP5idZTKxPuX8MbFb1dMoIW
-         Z1gUVPzNDn/vGv1PAS13f1XYZ/ZMQ7C7FFLXqvPkhNyuLtSGfrn4fBG5NAb0y0EmjfKH
-         mHR9qcYP2KWYYtNyxY/3d5dQUdblJ3SXvoaM3tLE5zz2sdK7vLudU5y2DFInDpDd23qN
-         W4te4g1YfxmBs+tXzxKE4xMvk9cBTCGRVjrPHcafha5OhhJSpSLdMYwG0C3b7tU2wgxi
-         U/AD90xz7EJAQev1uFSkqVRAwgKn9oYUVGiNkQTqfJaFS4L+kF3MLAJtiJnedkfyF8wO
-         sBqw==
-X-Gm-Message-State: ACrzQf1ByFu+9Mr6ecFKdNDbghtmsRRsOtDqwfbCvpFR5grv/EuvAC4p
-        okMnly/cSc7xoKpAt+9uYz4=
-X-Google-Smtp-Source: AMsMyM7cAPaIawmjjZVKGzqFvCvu8sr3Gap0Z63OtHMzsH4OcXDBb8WreTvlAnK+TCZdP5X8mu9grA==
-X-Received: by 2002:a17:902:d2cf:b0:187:1327:58af with SMTP id n15-20020a170902d2cf00b00187132758afmr28394255plc.88.1667532536439;
-        Thu, 03 Nov 2022 20:28:56 -0700 (PDT)
-Received: from localhost ([223.65.173.138])
-        by smtp.gmail.com with ESMTPSA id e11-20020a170902784b00b00176dd41320dsm1435426pln.119.2022.11.03.20.28.55
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kCztCif6DGnUVPea69d1j6HBte1tInJ//NGbT2adCtA=;
+        b=3jrRX+metS+mcS6rTmOXE3oHwoPrZ6yBvqGA4tQdfV8PDPlsWEWp7HkFJAFBLEkhT3
+         HtUvPkLjHg9AvurO0SijaQ5xw3o1AwNJrHJ5P/tbaU3Qo4jBAJrD+Rx8tyWbJ2T7PMHa
+         EDBfsG8raPaqTcxRHIcCeSxcUhdNTp+7ypitjWVCCCcMNBOYTvxBSGxepP7/MCbpgHBI
+         pG9YEN8Lid938HO7yAiZWi+tbX/F8Mfb5ezXoHa0WhhhBPaSHrWSmPuKzKifgVpVzAZV
+         FOTrN2erb3mgblQt1ua823GIhdVcQ6hyaq5eZ4O1Qusit73FMgsWlzxvCx2gyyVGYfvu
+         7aCA==
+X-Gm-Message-State: ACrzQf2dsQ7qP2/lZSfycgVjSyldJHorGav3zNcoBIu503FPB5mn6Fib
+        ar7ZDL3Hf2Es/ouDSsmVCf6iWw==
+X-Google-Smtp-Source: AMsMyM7NwhgMGw/Ejg/10+QrYuOi1WfTIe60hww1ZNfzsfJwCZnIyT2jB8JwYZIzMahLdSnJ6wzgKQ==
+X-Received: by 2002:a05:6a00:2396:b0:56c:b770:eda6 with SMTP id f22-20020a056a00239600b0056cb770eda6mr33239633pfc.38.1667533023291;
+        Thu, 03 Nov 2022 20:37:03 -0700 (PDT)
+Received: from dread.disaster.area (pa49-181-106-210.pa.nsw.optusnet.com.au. [49.181.106.210])
+        by smtp.gmail.com with ESMTPSA id x13-20020a170902a38d00b001830ed575c3sm1430190pla.117.2022.11.03.20.37.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Nov 2022 20:28:55 -0700 (PDT)
-From:   "zhijun.han" <hanzj.it@gmail.com>
-To:     arnd@arndb.de
-Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "zhijun.han" <hanzj.it@gmail.com>
-Subject: [PATCH] mm: swap the definition of CONFIG_SPARSEMEM_VMEMMAP and CONFIG_SPARSEMEM
-Date:   Fri,  4 Nov 2022 11:28:08 +0800
-Message-Id: <20221104032808.24565-1-hanzj.it@gmail.com>
-X-Mailer: git-send-email 2.37.0 (Apple Git-136)
+        Thu, 03 Nov 2022 20:37:02 -0700 (PDT)
+Received: from dave by dread.disaster.area with local (Exim 4.92.3)
+        (envelope-from <david@fromorbit.com>)
+        id 1oqnVr-00A1XB-Bm; Fri, 04 Nov 2022 14:36:59 +1100
+Date:   Fri, 4 Nov 2022 14:36:59 +1100
+From:   Dave Chinner <david@fromorbit.com>
+To:     "Darrick J. Wong" <djwong@kernel.org>
+Cc:     Vishal Moola <vishal.moola@gmail.com>,
+        linux-fsdevel@vger.kernel.org, linux-afs@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-btrfs@vger.kernel.org,
+        ceph-devel@vger.kernel.org, linux-cifs@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
+        cluster-devel@redhat.com, linux-nilfs@vger.kernel.org,
+        linux-mm@kvack.org, Matthew Wilcox <willy@infradead.org>
+Subject: Re: [PATCH 04/23] page-writeback: Convert write_cache_pages() to use
+ filemap_get_folios_tag()
+Message-ID: <20221104033659.GA2703033@dread.disaster.area>
+References: <20220901220138.182896-1-vishal.moola@gmail.com>
+ <20220901220138.182896-5-vishal.moola@gmail.com>
+ <20221018210152.GH2703033@dread.disaster.area>
+ <Y2RAdUtJrOJmYU4L@fedora>
+ <20221104003235.GZ2703033@dread.disaster.area>
+ <Y2R8rRr0ZdrlT32m@magnolia>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y2R8rRr0ZdrlT32m@magnolia>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,46 +84,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CONFIG_SPARSEMEM_VMEMMAP depends on CONFIG_SPARSEMEM
-When CONFIG_SPARSEMEM_VMEMMAP is enabled,
-CONFIG_SPARSEMEM will be enabled too.
-Causes __pfn_to_page and __page_to_pfn to be overwritten
+On Thu, Nov 03, 2022 at 07:45:01PM -0700, Darrick J. Wong wrote:
+> On Fri, Nov 04, 2022 at 11:32:35AM +1100, Dave Chinner wrote:
+> > On Thu, Nov 03, 2022 at 03:28:05PM -0700, Vishal Moola wrote:
+> > > On Wed, Oct 19, 2022 at 08:01:52AM +1100, Dave Chinner wrote:
+> > > > On Thu, Sep 01, 2022 at 03:01:19PM -0700, Vishal Moola (Oracle) wrote:
+> > > > > -			BUG_ON(PageWriteback(page));
+> > > > > -			if (!clear_page_dirty_for_io(page))
+> > > > > +			BUG_ON(folio_test_writeback(folio));
+> > > > > +			if (!folio_clear_dirty_for_io(folio))
+> > > > >  				goto continue_unlock;
+> > > > >  
+> > > > >  			trace_wbc_writepage(wbc, inode_to_bdi(mapping->host));
+> > > > > -			error = (*writepage)(page, wbc, data);
+> > > > > +			error = writepage(&folio->page, wbc, data);
+> > > > 
+> > > > Yet, IIUC, this treats all folios as if they are single page folios.
+> > > > i.e. it passes the head page of a multi-page folio to a callback
+> > > > that will treat it as a single PAGE_SIZE page, because that's all
+> > > > the writepage callbacks are currently expected to be passed...
+> > > > 
+> > > > So won't this break writeback of dirty multipage folios?
+> > > 
+> > > Yes, it appears it would. But it wouldn't because its already 'broken'.
+> > 
+> > It is? Then why isn't XFS broken on existing kernels? Oh, we don't
+> > know because it hasn't been tested?
+> > 
+> > Seriously - if this really is broken, and this patchset further
+> > propagating the brokeness, then somebody needs to explain to me why
+> > this is not corrupting data in XFS.
+> 
+> It looks like iomap_do_writepage finds the folio size correctly
+> 
+> 	end_pos = folio_pos(folio) + folio_size(folio);
+> 
+> and iomap_writpage_map will map out the correct number of blocks
+> 
+> 	unsigned nblocks = i_blocks_per_folio(inode, folio);
+> 
+> 	for (i = 0; i < nblocks && pos < end_pos; i++, pos += len) {
+> 
+> right?
 
-Signed-off-by: zhijun.han <hanzj.it@gmail.com>
----
- include/asm-generic/memory_model.h | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+Yup, that's how I read it, too.
 
-diff --git a/include/asm-generic/memory_model.h b/include/asm-generic/memory_model.h
-index a2c8ed60233a..e06851e0b39e 100644
---- a/include/asm-generic/memory_model.h
-+++ b/include/asm-generic/memory_model.h
-@@ -19,12 +19,6 @@
- #define __page_to_pfn(page)	((unsigned long)((page) - mem_map) + \
- 				 ARCH_PFN_OFFSET)
- 
--#elif defined(CONFIG_SPARSEMEM_VMEMMAP)
--
--/* memmap is virtually contiguous.  */
--#define __pfn_to_page(pfn)	(vmemmap + (pfn))
--#define __page_to_pfn(page)	(unsigned long)((page) - vmemmap)
--
- #elif defined(CONFIG_SPARSEMEM)
- /*
-  * Note: section's mem_map is encoded to reflect its start_pfn.
-@@ -41,6 +35,12 @@
- 	struct mem_section *__sec = __pfn_to_section(__pfn);	\
- 	__section_mem_map_addr(__sec) + __pfn;		\
- })
-+
-+#elif defined(CONFIG_SPARSEMEM_VMEMMAP)
-+
-+/* memmap is virtually contiguous.  */
-+#define __pfn_to_page(pfn)	(vmemmap + (pfn))
-+#define __page_to_pfn(page)	((unsigned long)((page) - vmemmap))
- #endif /* CONFIG_FLATMEM/SPARSEMEM */
- 
- /*
+But my recent experience with folios involved being repeatedly
+burnt by edge case corruptions due to multipage folios showing up
+when and where I least expected them.
+
+Hence doing a 1:1 conversion of page based code to folio based code
+and just assuming large folios will work without any testing seems
+akin to playing russian roulette with loose cannons that have been
+doused with napalm and then set on fire by an air-dropped barrel
+bomb...
+
+Cheers,
+
+Dave.
 -- 
-2.37.0 (Apple Git-136)
-
+Dave Chinner
+david@fromorbit.com
