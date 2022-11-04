@@ -2,65 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 001B5619F6D
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 19:03:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70569619F6F
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 19:07:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231944AbiKDSDn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 14:03:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34200 "EHLO
+        id S230297AbiKDSH2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 14:07:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231737AbiKDSDj (ORCPT
+        with ESMTP id S229548AbiKDSH0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 14:03:39 -0400
-Received: from mail-oo1-f44.google.com (mail-oo1-f44.google.com [209.85.161.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE47C2AE26;
-        Fri,  4 Nov 2022 11:03:38 -0700 (PDT)
-Received: by mail-oo1-f44.google.com with SMTP id e11-20020a4ab14b000000b0049be568062bso774009ooo.4;
-        Fri, 04 Nov 2022 11:03:38 -0700 (PDT)
+        Fri, 4 Nov 2022 14:07:26 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E9672AE26
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 11:07:25 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id y13so5170886pfp.7
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 11:07:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=qg78ANf/M2jEd3KO/CDqW7vrKt5orr3ONjK7IQbi6F0=;
+        b=UdfwPZjWfNlUJ2FfHGNt3Xf451L2UPrtmjSLgGoyBsuky91bOzKSZhsVAnU9Z9eJyO
+         AD5RjWqPfcsEY/ygC57ONT1aNwxa4cA8PnCrdyQQkjN79qNhQMd7jnOdM7LUSL7TJ9qT
+         6CW0UGAScq8feTw5SfaaXSmYTNgt7BIdcMF0uLj1kGFsmkVzdEsLrYGf3IT3JiCJh1mV
+         6EoPri61DuCkda1kUSvxNUF8XfrVFk4waVhZOiPeWMRARREMktu2oe++JJczU56AffG7
+         3g4Qb/JaLeHkbMdBmfTDrTArreBmsZjYAkJ6LHgmueX7diyKqR77ahmiNu8H4/sl8DY9
+         AYnA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=d/H6tH1T19zPir63G4IjFf14dpF+2I+FJK0jn9RaHLc=;
-        b=5FwfHo32kXpQpmAbmziIdo/DY5FvZOk6AGLGZKVmuPe63vsHSB8Zn/vlHJPXkM63Gd
-         f9QYPey9MtCo8L/s/mj4a7LzCki/1ZBHLSwM3O9n5t6OaRif2gquNz24g87VujYXti5+
-         nnIKAdBhxnSxScdsn0R91SzwwI7aI8i96fQ7ssRK3H9S9YzfXrd4uz5oBqHcJ5r0mSm8
-         PLSb+PKSBX9cfcDNfjTb/JDjI3YTRuYhl+0wi4tQ6pKDSKiOo/UN4nvENcZWT97e2fka
-         ArwHO0zZ39JD2yUlECoqcqaORj2S3h6cJ7YZ62UAFfos52mOXqQulOyoa1tLP7hjZV/B
-         f9HA==
-X-Gm-Message-State: ACrzQf2V5PZjhbmwlIByv04gs3zIIc9n7oVguBd7ngwiGyS4G3qQKRGR
-        qyO4L9IQFTrfFKTYdRk79g==
-X-Google-Smtp-Source: AMsMyM66fHRV+R/ARMYtiXVHLPRSZBNpfBH8YPLsVf1YT19J77mGQsHZqha8apV2mlQjAuCEsedmYQ==
-X-Received: by 2002:a4a:4e41:0:b0:480:8a3c:a797 with SMTP id r62-20020a4a4e41000000b004808a3ca797mr15670730ooa.71.1667585017929;
-        Fri, 04 Nov 2022 11:03:37 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id em6-20020a0568705b8600b00127d2005ea1sm2079274oab.18.2022.11.04.11.03.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Nov 2022 11:03:37 -0700 (PDT)
-Received: (nullmailer pid 2087245 invoked by uid 1000);
-        Fri, 04 Nov 2022 18:03:39 -0000
-Date:   Fri, 4 Nov 2022 13:03:39 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Sibi Sankar <quic_sibis@quicinc.com>
-Cc:     andersson@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        sudeep.holla@arm.com, cristian.marussi@arm.com, agross@kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, konrad.dybcio@somainline.org,
-        quic_avajid@quicinc.com
-Subject: Re: [RFC 1/2] dt-bindings: firmware: arm,scmi: Add support for
- memlat vendor protocol
-Message-ID: <20221104180339.GA2079655-robh@kernel.org>
-References: <1667451512-9655-1-git-send-email-quic_sibis@quicinc.com>
- <1667451512-9655-2-git-send-email-quic_sibis@quicinc.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qg78ANf/M2jEd3KO/CDqW7vrKt5orr3ONjK7IQbi6F0=;
+        b=tSnIxEmuciYJnh6Zdj1FLmF1amsarKyKiHjOL+WQ0YMb3zr4we1E+roay7rkN55HGL
+         y9zCzs9pErTr6/oqNwveXdgeyIZW8aGHf55a1k3/r2Px07YqlSH/RupWERjFYOde1MgE
+         sW2eMZ5HrY8qjIz7A2FmoW9VQ6t35tpm0C8sf6a6o1i3FDwtgL89Cwzkblv2EaIEgtFi
+         INlkLSZ6dbVCX2ei9uOC1QMieahmB1W6Ti6rwQW417Jz+ZtlKrQlkOkp4RXHgybXdFyn
+         8B1S1wBeVSOByu+z/LBCn4AVYuPNucpkSxMWdom7PcTb+7nZJXnyq1ZQJHV+kRgSqoH6
+         QcEg==
+X-Gm-Message-State: ACrzQf3/cYMql9mJlbbjT3rs9rG0yyk1uq7xgAYWvTZN/xXdIwfVAqv3
+        C6kwrkHHYuVOrypXOOwn0pQpdKekF/tnHMKjxS6uCQ==
+X-Google-Smtp-Source: AMsMyM5PwJ1ZBcYSgFHLKu87CEEV1wah9U9YGFQ3+my8JFfs8yDRx6QkMpj1gRLcPLxD0GIU26MUYd360ifmqqv7Hsc=
+X-Received: by 2002:a62:820a:0:b0:56d:2b5f:20dd with SMTP id
+ w10-20020a62820a000000b0056d2b5f20ddmr34264216pfd.66.1667585244330; Fri, 04
+ Nov 2022 11:07:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1667451512-9655-2-git-send-email-quic_sibis@quicinc.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+References: <20221103210748.1343090-1-ndesaulniers@google.com> <94597E96-D4FB-4312-8F8B-473AAC0503F7@zytor.com>
+In-Reply-To: <94597E96-D4FB-4312-8F8B-473AAC0503F7@zytor.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Fri, 4 Nov 2022 11:07:12 -0700
+Message-ID: <CAKwvOdmFTvpdFi08CMbxcnqHEcCTOtgkMWDx6Zyewxnb_pjo_g@mail.gmail.com>
+Subject: Re: [PATCH] x86/msr-index: make SPEC_CTRL_IBRS assembler-portable
+To:     "H. Peter Anvin" <hpa@zytor.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
+        Nathan Chancellor <nathan@kernel.org>,
+        Tom Rix <trix@redhat.com>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
+        Sandipan Das <sandipan.das@amd.com>,
+        Huang Rui <ray.huang@amd.com>, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, kernel-team@android.com,
+        Masahiro Yamada <masahiroy@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,212 +82,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 03, 2022 at 10:28:31AM +0530, Sibi Sankar wrote:
-> Add bindings support for the SCMI QTI memlat (memory latency) vendor
-> protocol. The memlat vendor protocol enables the frequency scaling of
-> various buses (L3/LLCC/DDR) based on the memory latency governor
-> running on the CPUSS Control Processor.
+On Fri, Nov 4, 2022 at 2:55 AM H. Peter Anvin <hpa@zytor.com> wrote:
+>
+> On November 3, 2022 2:07:48 PM PDT, Nick Desaulniers <ndesaulniers@google.com> wrote:
+> >GNU binutils' assembler (GAS) didn't support L suffixes on immediates
+> >until binutils 2.28 release. Building arch/x86/entry/entry_64.S with GAS
+> >v2.27 will produce the following assembler errors:
+> >
+> >  arch/x86/entry/entry_64.S: Assembler messages:
+> >  arch/x86/entry/entry_64.S:308: Error: found 'L', expected: ')'
+> >  arch/x86/entry/entry_64.S:308: Error: found 'L', expected: ')'
+> >  arch/x86/entry/entry_64.S:308: Error: junk `L<<(0)))' after expression
+> >  arch/x86/entry/entry_64.S:596: Error: found 'L', expected: ')'
+> >  arch/x86/entry/entry_64.S:596: Error: found 'L', expected: ')'
+> >  arch/x86/entry/entry_64.S:596: Error: junk `L<<(0)))' after expression
+> >
+> >These come from the use of the preprocessor defined SPEC_CTRL_IBRS in
+> >the IBRS_ENTER and IBRS_EXIT assembler macros. SPEC_CTRL_IBRS was using
+> >the BIT macros from include/linux/bits.h which are only portable between
+> >C and assembler for assemblers such as GAS v2.28 (or newer) or clang
+> >because they use the L suffixes for immediate operands, which older GAS
+> >releases cannot parse. The kernel still supports GAS v2.23 and newer
+> >(and older for branches of stable). Let's expand the value of
+> >SPEC_CTRL_IBRS in place so that assemblers don't have issues parsing the
+> >value.
+> >
+> >Fixes: 2dbb887e875b ("x86/entry: Add kernel IBRS implementation")
+> >Reported-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> >Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+> >---
+> >Some other ideas considered:
+> >* Use U64_C from include/asm-generic/int-ll64.h rather than BIT for the
+> >  value of SPEC_CTRL_IBRS.
+> >  * Do so for the entirety of arch/x86/include/asm/msr-index.h or just
+> >    SPEC_CTRL_IBRS? include/asm-generic/int-ll64.h doesn't define a UL
+> >    suffix; add one?
+> >* Make include/linux/bits.h assembler-portable (for older assemblers)
+> >  via the use of include/asm-generic/int-ll64.h.
+> >
+> > arch/x86/include/asm/msr-index.h | 2 +-
+> > 1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> >diff --git a/arch/x86/include/asm/msr-index.h b/arch/x86/include/asm/msr-index.h
+> >index 10ac52705892..0192d853136c 100644
+> >--- a/arch/x86/include/asm/msr-index.h
+> >+++ b/arch/x86/include/asm/msr-index.h
+> >@@ -46,7 +46,7 @@
+> > #define MSR_TEST_CTRL_SPLIT_LOCK_DETECT               BIT(MSR_TEST_CTRL_SPLIT_LOCK_DETECT_BIT)
+> >
+> > #define MSR_IA32_SPEC_CTRL            0x00000048 /* Speculation Control */
+> >-#define SPEC_CTRL_IBRS                        BIT(0)     /* Indirect Branch Restricted Speculation */
+> >+#define SPEC_CTRL_IBRS                        1          /* Indirect Branch Restricted Speculation */
+> > #define SPEC_CTRL_STIBP_SHIFT         1          /* Single Thread Indirect Branch Predictor (STIBP) bit */
+> > #define SPEC_CTRL_STIBP                       BIT(SPEC_CTRL_STIBP_SHIFT)      /* STIBP mask */
+> > #define SPEC_CTRL_SSBD_SHIFT          2          /* Speculative Store Bypass Disable bit */
+>
+> Let's fix the macro instead.
 
-I thought the interconnect binding was what provided details for bus 
-scaling.
-
-> 
-> Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
-> ---
->  .../devicetree/bindings/firmware/arm,scmi.yaml     | 164 +++++++++++++++++++++
->  1 file changed, 164 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/firmware/arm,scmi.yaml b/Documentation/devicetree/bindings/firmware/arm,scmi.yaml
-> index 1c0388da6721..efc8a5a8bffe 100644
-> --- a/Documentation/devicetree/bindings/firmware/arm,scmi.yaml
-> +++ b/Documentation/devicetree/bindings/firmware/arm,scmi.yaml
-> @@ -189,6 +189,47 @@ properties:
->        reg:
->          const: 0x18
->  
-> +  protocol@80:
-> +    type: object
-> +    properties:
-> +      reg:
-> +        const: 0x80
-> +
-> +      qcom,bus-type:
-> +        $ref: /schemas/types.yaml#/definitions/uint32-array
-> +        items:
-> +          minItems: 1
-> +        description:
-> +          Identifier of the bus type to be scaled by the memlat protocol.
-> +
-> +      cpu-map:
-
-cpu-map only goes under /cpus node.
-
-> +        type: object
-> +        description:
-> +          The list of all cpu cluster configurations to be tracked by the memlat protocol
-> +
-> +        patternProperties:
-> +          '^cluster[0-9]':
-> +            type: object
-> +            description:
-> +              Each cluster node describes the frequency domain associated with the
-> +              CPUFREQ HW engine and bandwidth requirements of the buses to be scaled.
-> +
-> +            properties:
-
-cpu-map nodes don't have properties.
-
-> +              operating-points-v2: true
-> +
-> +              qcom,freq-domain:
-
-Please don't add new users of this. Use the performance-domains binding 
-instead.
-
-> +                $ref: /schemas/types.yaml#/definitions/phandle-array
-> +                description:
-> +                  Reference to the frequency domain of the CPUFREQ HW engine
-> +                items:
-> +                  - items:
-> +                      - description: phandle to CPUFREQ HW engine
-> +                      - description: frequency domain associated with the cluster
-> +
-> +            required:
-> +              - qcom,freq-domain
-> +              - operating-points-v2
-> +
->  additionalProperties: false
->  
->  patternProperties:
-> @@ -429,4 +470,127 @@ examples:
->          };
->      };
->  
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +
-> +    firmware {
-> +        scmi {
-> +            compatible = "arm,scmi";
-> +
-> +            #address-cells = <1>;
-> +            #size-cells = <0>;
-> +
-> +            mboxes = <&cpucp_mbox>;
-> +            mbox-names = "tx";
-> +            shmem = <&cpu_scp_lpri>;
-> +
-> +            scmi_memlat: protocol@80 {
-> +                reg = <0x80>;
-> +                qcom,bus-type = <0x2>;
-> +
-> +                cpu-map {
-> +                    cluster0 {
-> +                        qcom,freq-domain = <&cpufreq_hw 0>;
-> +                        operating-points-v2 = <&cpu0_opp_table>;
-> +                    };
-> +
-> +                    cluster1 {
-> +                        qcom,freq-domain = <&cpufreq_hw 1>;
-> +                        operating-points-v2 = <&cpu4_opp_table>;
-> +                    };
-> +
-> +                    cluster2 {
-> +                        qcom,freq-domain = <&cpufreq_hw 2>;
-> +                        operating-points-v2 = <&cpu7_opp_table>;
-> +                    };
-> +                };
-> +            };
-> +        };
-> +
-> +        cpu0_opp_table: opp-table-cpu0 {
-> +            compatible = "operating-points-v2";
-> +
-> +            cpu0_opp_300mhz: opp-300000000 {
-> +                opp-hz = /bits/ 64 <300000000>;
-> +                opp-peak-kBps = <9600000>;
-> +            };
-> +
-> +            cpu0_opp_1325mhz: opp-1324800000 {
-> +                opp-hz = /bits/ 64 <1324800000>;
-> +                opp-peak-kBps = <33792000>;
-> +            };
-> +
-> +            cpu0_opp_2016mhz: opp-2016000000 {
-> +                opp-hz = /bits/ 64 <2016000000>;
-> +                opp-peak-kBps = <48537600>;
-> +            };
-> +        };
-> +
-> +        cpu4_opp_table: opp-table-cpu4 {
-> +            compatible = "operating-points-v2";
-> +
-> +            cpu4_opp_691mhz: opp-691200000 {
-> +                opp-hz = /bits/ 64 <691200000>;
-> +                opp-peak-kBps = <9600000>;
-> +            };
-> +
-> +            cpu4_opp_941mhz: opp-940800000 {
-> +                opp-hz = /bits/ 64 <940800000>;
-> +                opp-peak-kBps = <17817600>;
-> +            };
-> +
-> +            cpu4_opp_2611mhz: opp-2611200000 {
-> +                opp-hz = /bits/ 64 <2611200000>;
-> +                opp-peak-kBps = <48537600>;
-> +            };
-> +        };
-> +
-> +        cpu7_opp_table: opp-table-cpu7 {
-> +            compatible = "operating-points-v2";
-> +
-> +            cpu7_opp_806mhz: opp-806400000 {
-> +                opp-hz = /bits/ 64 <806400000>;
-> +                opp-peak-kBps = <9600000>;
-> +            };
-> +
-> +            cpu7_opp_2381mhz: opp-2380800000 {
-> +                opp-hz = /bits/ 64 <2380800000>;
-> +                opp-peak-kBps = <44851200>;
-> +            };
-> +
-> +            cpu7_opp_2515mhz: opp-2515200000 {
-> +                opp-hz = /bits/ 64 <2515200000>;
-> +                opp-peak-kBps = <48537600>;
-> +            };
-> +        };
-> +    };
-> +
-> +
-> +    soc {
-> +        #address-cells = <2>;
-> +        #size-cells = <2>;
-> +
-> +        cpucp_mbox: mailbox@17400000 {
-> +            compatible = "qcom,cpucp-mbox";
-> +            reg =   <0x0 0x17c00000 0x0 0x10>, <0x0 0x18590300 0x0 0x700>;
-> +            interrupts = <GIC_SPI 62 IRQ_TYPE_LEVEL_HIGH>;
-> +            #mbox-cells = <0>;
-> +        };
-> +
-> +        sram@18509400 {
-> +            compatible = "mmio-sram";
-> +            reg = <0x0 0x18509400 0x0 0x400>;
-> +            no-memory-wc;
-> +
-> +            #address-cells = <1>;
-> +            #size-cells = <1>;
-> +            ranges = <0x0 0x0 0x18509400 0x400>;
-> +
-> +            cpu_scp_lpri: scp-sram-section@0 {
-> +                compatible = "arm,scmi-shmem";
-> +                reg = <0x0 0x80>;
-> +            };
-> +        };
-> +    };
-> +
->  ...
-> -- 
-> 2.7.4
-> 
-> 
+Ah, I need to do more homework; this issue is specific to stable
+backports of the retbleed mitigations.
+commit 95b980d62d52 ("linux/bits.h: make BIT(), GENMASK(), and friends
+available in assembly")
+fixed this exact problem already.  Ok, I'll work with stable to get
+that backported as part of the series.  Sorry for the noise.
+-- 
+Thanks,
+~Nick Desaulniers
