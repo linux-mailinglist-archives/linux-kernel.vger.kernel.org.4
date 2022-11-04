@@ -2,119 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85A36619610
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 13:19:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 887AD619615
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 13:20:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231797AbiKDMTp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 08:19:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46056 "EHLO
+        id S231828AbiKDMUU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 08:20:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230402AbiKDMTn (ORCPT
+        with ESMTP id S231820AbiKDMUQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 08:19:43 -0400
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45613120A0;
-        Fri,  4 Nov 2022 05:19:40 -0700 (PDT)
-Received: by mail-pg1-x536.google.com with SMTP id q1so4202710pgl.11;
-        Fri, 04 Nov 2022 05:19:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=lpOhz7OxgcyX16jnYCGIcgxXstL27/jHBLX3BQlZkeM=;
-        b=cgzEgr24LoI9IjU+XM4EMk8dKD1ZuwOUoG2l29SwIwhDpdCk1rND+HSkQzPaFXXUun
-         5cwqt4utz8zuQy+631yxcp8JeTFWa3eEkR6rLzF+IQQONAm77Re4+TeMpD3W2MH1BG0k
-         xpw4hpqq2JLk9/rFoZ9a9PIltTd+TgIFu3ne1ijW4zZiDKY4Q2Lfnp1QKP/5fTQ/RXCF
-         sGZicS+qqji92R8nClF8Qce3AOCsMhu2lWkuuNsR5EHcX1aF3PHTZeyjQrPGzGFRsP4k
-         RN+MepWdTPb4gy5WMrWU7TZn6sYgVJl/ZAxP+ckrNg/JqvnI2g7HxwDXe6/hlJfR45wa
-         16lQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lpOhz7OxgcyX16jnYCGIcgxXstL27/jHBLX3BQlZkeM=;
-        b=YJgs5Hp3vkNswd+UPF0Q6kBgBL1lvfKiWSPvD0xhud3kAWds9Mv4AXCT0c1fDytjeH
-         N0OAPRelTTA6xXCp+yH1V2oub8X8Msb8EuEBu6zTh3Qd2eUtopmPhlx49ZHIFI0EXdFm
-         CpN/zlKymJh+CW1FPI0oD7I9gtivPLpDcadUz1J0SGVcQPqMG63VRQH3QEZ+HgwtSX/i
-         0iiOa166hQYyATABvcMxoGvPUh+w4sTrb5W4x3kBovDUB3fWJ+Ry8rH0NJMmxYF6ywtq
-         jJA1KMZGXQrWsSadrttmbUK/7FxUCSkE2uHyp9PMgK/Lk3D2Cc2+SEy0Hge7DzYIJErz
-         IplA==
-X-Gm-Message-State: ACrzQf2tsmQ1UvZIv/xJso/hzgJjnuLjKuN+TW3ObSkrzjXiU5REx4ye
-        5ucE/lY3d0ay/vFvOvMeqBmYAhg+ZcL0xQ==
-X-Google-Smtp-Source: AMsMyM7+wkqLB0hFLrfY0ZTPMLFgrcCEO0q4UBENhChoWBosKogPXniCnR6xUQqM7H+JaXD1DhGp0g==
-X-Received: by 2002:a05:6a00:140a:b0:56c:b679:f812 with SMTP id l10-20020a056a00140a00b0056cb679f812mr35864191pfu.46.1667564379656;
-        Fri, 04 Nov 2022 05:19:39 -0700 (PDT)
-Received: from [192.168.43.80] (subs02-180-214-232-17.three.co.id. [180.214.232.17])
-        by smtp.gmail.com with ESMTPSA id b6-20020a170903228600b001782a6fbcacsm2543892plh.101.2022.11.04.05.19.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 04 Nov 2022 05:19:39 -0700 (PDT)
-Message-ID: <995a64b0-a9bb-05ce-85d1-6b5ee25ec0ef@gmail.com>
-Date:   Fri, 4 Nov 2022 19:19:32 +0700
+        Fri, 4 Nov 2022 08:20:16 -0400
+Received: from out199-10.us.a.mail.aliyun.com (out199-10.us.a.mail.aliyun.com [47.90.199.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 168112CDCE;
+        Fri,  4 Nov 2022 05:20:14 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R671e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0VTxExbC_1667564409;
+Received: from 30.221.128.121(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0VTxExbC_1667564409)
+          by smtp.aliyun-inc.com;
+          Fri, 04 Nov 2022 20:20:11 +0800
+Message-ID: <6064150a-7517-c0e1-72bb-e1a8adcfae74@linux.alibaba.com>
+Date:   Fri, 4 Nov 2022 20:20:09 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH] kvm/arm: Fix pvtime documentation
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Usama Arif <usama.arif@bytedance.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        kvmarm@lists.cs.columbia.edu, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, linux@armlinux.org.uk,
-        yezengruan@huawei.com, catalin.marinas@arm.com, will@kernel.org,
-        steven.price@arm.com, mark.rutland@arm.com,
-        fam.zheng@bytedance.com, liangma@liangbit.com,
-        punit.agrawal@bytedance.com
-References: <20221103131210.3603385-1-usama.arif@bytedance.com>
- <24d81fe9-7cd1-71eb-8c35-0739f638b3df@gmail.com>
- <86fsf0qc1w.wl-maz@kernel.org>
- <4b2b78c6-9903-1247-9d16-fc6270aa34fc@gmail.com>
- <86cza3q8q5.wl-maz@kernel.org>
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.4.0
+Subject: Re: [PATCH 2/2] erofs: switch to prepare_ondemand_read() in fscache
+ mode
 Content-Language: en-US
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <86cza3q8q5.wl-maz@kernel.org>
+To:     Jeff Layton <jlayton@kernel.org>, dhowells@redhat.com,
+        xiang@kernel.org, chao@kernel.org, linux-cachefs@redhat.com,
+        linux-erofs@lists.ozlabs.org
+Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
+References: <20221104072637.72375-1-jefflexu@linux.alibaba.com>
+ <20221104072637.72375-3-jefflexu@linux.alibaba.com>
+ <2e2eceeb11972462bb9161a73c00a9c77f8af8d2.camel@kernel.org>
+From:   JeffleXu <jefflexu@linux.alibaba.com>
+In-Reply-To: <2e2eceeb11972462bb9161a73c00a9c77f8af8d2.camel@kernel.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/4/22 18:06, Marc Zyngier wrote:
-> On Fri, 04 Nov 2022 01:48:21 +0000,
-> Bagas Sanjaya <bagasdotme@gmail.com> wrote:
+
+
+On 11/4/22 7:46 PM, Jeff Layton wrote:
+> On Fri, 2022-11-04 at 15:26 +0800, Jingbo Xu wrote:
+>> Switch to prepare_ondemand_read() interface and a self-contained request
+>> completion to get rid of netfs_io_[request|subrequest].
 >>
->> On 11/3/22 22:42, Marc Zyngier wrote:
->>> No, this is the correct course of action. There isn't any point in
->>> having an *unrelated* change in a separate series. This is a
->>> standalone change, posted as a standalone patch.
->>>
->>>> Please reroll your series [2] with suggestion applied.
->>>
->>> Or not.
->>>
+>> The whole request will still be split into slices (subrequest) according
+>> to the cache state of the backing file.  As long as one of the
+>> subrequests fails, the whole request will be marked as failed. Besides
+>> it will not retry for short read.  Similarly the whole request will fail
+>> if that really happens. 
 >>
->> You mean the series before this patch have already been applied,
->> right?
 > 
-> This change is 100% independent from the series you quoted. Why should
-> there be a dependency between the two?
+> That's sort of nasty. The kernel can generally give you a short read for
+> all sorts of reasons, some of which may have nothing to do with the
+> underlying file or filesystem.
 > 
-> As for respinning the series at this stage for a documentation
-> formatting issue, this is pretty pointless, and only clutters people's
-> Inbox with redundant versions...
-> 
-> 	M.
+> Passing an error back to an application on a short read is probably not
+> what you want to do here. The usual thing to do is just to return what
+> you can, and let the application redrive the request if it wants.
 > 
 
-OK, thanks!
+Yeah, thanks for your comment. We can fix this either in current
+patchset or a separate series. As we just discussed on IRC, we will fix
+in the following series.
+
+
 
 -- 
-An old man doll... just what I always wanted! - Clara
-
+Thanks,
+Jingbo
