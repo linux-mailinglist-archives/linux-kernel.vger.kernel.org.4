@@ -2,92 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C5E86193D1
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 10:47:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E6B46193D6
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 10:48:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230290AbiKDJrT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 05:47:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58988 "EHLO
+        id S231583AbiKDJsI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 05:48:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231566AbiKDJrM (ORCPT
+        with ESMTP id S231540AbiKDJsC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 05:47:12 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1464D11C
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 02:47:09 -0700 (PDT)
-Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.53])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4N3bLM68R4zJnVQ;
-        Fri,  4 Nov 2022 17:44:11 +0800 (CST)
-Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
- dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 4 Nov 2022 17:47:07 +0800
-Received: from [10.67.108.67] (10.67.108.67) by dggpemm500013.china.huawei.com
- (7.185.36.172) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Fri, 4 Nov
- 2022 17:47:07 +0800
-Message-ID: <5ebfe6dc-326c-0c33-13dd-d2a6cb2fb11d@huawei.com>
-Date:   Fri, 4 Nov 2022 17:47:05 +0800
+        Fri, 4 Nov 2022 05:48:02 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2176B72;
+        Fri,  4 Nov 2022 02:48:01 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id y203so4067049pfb.4;
+        Fri, 04 Nov 2022 02:48:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:cc:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=JCM7DmPCrAhHj8o16i9KvJND8gQ8xeXyO3XsNoc1pPw=;
+        b=CgmPNUd+NId6xXJHCwc5dSIA8ALu4kUG/zxn0BAvqYPLQDM7sbgqN8OGvEmuEECLIa
+         pLgoVHrEI65nS2DTG++k31VbbJiaCRB1Alwe9PvYjPAUtxxIvb3fLvOVJoVr6fSf4rOk
+         UtOw0X3ZLkwgVaoBY6BREhDtkOx8AmfGt3ZnG7zmgPcfeJCqvzSgioOn/wq8cLgPit2S
+         MHd6eIFy9ebLWXTYUHEeWYVqMHpwlhwRr+kWa55WOQVYaQR6xqztpHuD05VCDV1H99rR
+         YbL63FshfBwmSZGDFwBVVumi+kKDUmWiYcgfYXBas80O8tM5q3ZlR1ABw3FwYQ14MnP9
+         eMAg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:cc:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=JCM7DmPCrAhHj8o16i9KvJND8gQ8xeXyO3XsNoc1pPw=;
+        b=bXpj5kfZLTQHVmtAFAF7ChbxOTLbfRuEIWfsucLLaHp+nnXxr6qVU5hAl+NipUWfs0
+         NFFu7jhHCwcFcjfINqOWR1S1cOjjWxChGOF23GromlzTzJ+TX1pJFw+CTwLPtdOgqrdY
+         OyT97rWiADSJA9RjFdGKyCxsNvb5Zg/x2ZBEO1K4z8plqirsVZzzEWSB1lx5QO019mqz
+         n5+CBuYw5mlqFWNqoL9QBUNGZVTw1qpqQYtmgOXh1JmO6ZiT3zOogh3TnWLnRKzoWUoU
+         uYqNA3Q/IB8ueTr0dpqjwkz/wuVBrAecQemZfrrm3c/IDS8vj7rWO2NPowjH72ZRXEcR
+         DMRw==
+X-Gm-Message-State: ACrzQf3H2WYAn+NPR6jskEKFkLDIdr84YB8YU5EjXIwasatGvemhOONC
+        blnvMKSsjrRfyUyebyGqLzc=
+X-Google-Smtp-Source: AMsMyM4J/bnvfLmAAYzNAp8KxZU31oa8PozHCTA7MrbLiwCOIyUOki9aQ6uaYWqTB9LkgJeVQJRXHw==
+X-Received: by 2002:a63:6507:0:b0:46f:ea82:5792 with SMTP id z7-20020a636507000000b0046fea825792mr15279336pgb.50.1667555281253;
+        Fri, 04 Nov 2022 02:48:01 -0700 (PDT)
+Received: from [172.20.12.203] ([116.128.244.169])
+        by smtp.gmail.com with ESMTPSA id y15-20020a17090322cf00b00176d347e9a7sm2172704plg.233.2022.11.04.02.47.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 04 Nov 2022 02:48:00 -0700 (PDT)
+Message-ID: <6436e363-198f-3d0b-cef3-4456de225432@gmail.com>
+Date:   Fri, 4 Nov 2022 17:47:07 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.0
-Subject: Re: [PATCH] ARM: module: Reclaim the unwind list of module on kmalloc
- failed
-To:     Liao Chang <liaochang1@huawei.com>, <linux@armlinux.org.uk>,
-        <linus.walleij@linaro.org>, <ardb@kernel.org>, <nico@fluxnic.net>,
-        <rmk+kernel@armlinux.org.uk>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20221103011713.138974-1-liaochang1@huawei.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Cc:     xiongxin@kylinos.cn, rafael@kernel.org, len.brown@intel.com,
+        pavel@ucw.cz, huanglei@kylinos.cn, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] PM: hibernate: fix spelling mistake for annotation
 Content-Language: en-US
-From:   Chen Zhongjin <chenzhongjin@huawei.com>
-In-Reply-To: <20221103011713.138974-1-liaochang1@huawei.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.108.67]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpemm500013.china.huawei.com (7.185.36.172)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+To:     Greg KH <gregkh@linuxfoundation.org>
+References: <20221104054119.1946073-1-tgsp002@gmail.com>
+ <20221104054119.1946073-2-tgsp002@gmail.com> <Y2TY120EAhfKgSvR@kroah.com>
+From:   TGSP <tgsp002@gmail.com>
+In-Reply-To: <Y2TY120EAhfKgSvR@kroah.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/11/3 9:17, Liao Chang wrote:
-> When unwind table allocation failed, it needs to reclaim the unwind list
-> of module to avoid potential NULL pointer exception and memory leakage.
->
-> Fixes: b6f21d14f1ac ("ARM: 9204/2: module: Add all unwind tables when load module")
-> Signed-off-by: Liao Chang <liaochang1@huawei.com>
-> Cc: Chen Zhongjin <chenzhongjin@huawei.com>
-> ---
->   arch/arm/kernel/module.c | 4 ++++
->   1 file changed, 4 insertions(+)
->
-> diff --git a/arch/arm/kernel/module.c b/arch/arm/kernel/module.c
-> index d59c36dc0494..cc637dcdcb10 100644
-> --- a/arch/arm/kernel/module.c
-> +++ b/arch/arm/kernel/module.c
-> @@ -485,6 +485,10 @@ int module_finalize(const Elf32_Ehdr *hdr, const Elf_Shdr *sechdrs,
->   						s->sh_size,
->   						txt_sec->sh_addr,
->   						txt_sec->sh_size);
-> +			if (!table) {
-> +				module_arch_cleanup(mod);
-> +				return -ENOMEM;
-> +			}
->   
->   			list_add(&table->mod_list, unwind_list);
->   
+在 2022/11/4 17:18, Greg KH 写道:
+> On Fri, Nov 04, 2022 at 01:41:18PM +0800, TGSP wrote:
+>> From: xiongxin <xiongxin@kylinos.cn>
+>>
+>> The actual calculation formula in the code below is:
+>>
+>> max_size = (count - (size + PAGES_FOR_IO)) / 2
+>> 	    - 2 * DIV_ROUND_UP(reserved_size, PAGE_SIZE);
+>>
+>> But function comments are written differently, the comment is wrong?
+>>
+>> By the way, what exactly do the "/ 2" and "2 *" mean?
+>>
+>> Cc: stable@vger.kernel.org
+>> Signed-off-by: xiongxin <xiongxin@kylinos.cn>
+> 
+> Please do not use an anonymous gmail account for your corporate work
+> like this.  Work with your company email admins to allow you to send
+> patches from that address so that they can be verified to actually come
+> from there.
+> 
+> thanks,
+> 
+> greg k-h
 
-Looks good to me.
+I also wanted to send it directly through the company mailbox, but those 
+leaders didn't take it seriously.
 
-Reviewed-by: Chen Zhongjin <chenzhongjin@huawei.com>
-
-
-Thanks.
-
+Next time I don't use the company email and submit patches as I can as a 
+freelancer.
