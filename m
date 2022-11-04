@@ -2,199 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69CB3619260
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 09:04:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39995619265
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 09:04:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231536AbiKDIET (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 04:04:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41790 "EHLO
+        id S231549AbiKDIEa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 04:04:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231515AbiKDIEQ (ORCPT
+        with ESMTP id S231426AbiKDIEY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 04:04:16 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F2E62656C;
-        Fri,  4 Nov 2022 01:04:10 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id r61-20020a17090a43c300b00212f4e9cccdso7486637pjg.5;
-        Fri, 04 Nov 2022 01:04:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=DUT9DZbpPzw4l4DAivVDi0EHJEPQG34kR+pR9G4kRjg=;
-        b=Md/JBNRCn6k9/QhyWKla++aSFaO2zdyAD5qp9CqqZqcQIXpZS6wIvXNCRJXdt4MxRM
-         rEz+DMr8ik6JoCzVGfsyAyC1/vhUGZRLed4HsbCr+dYAsvUNxz/KzaIkn44NxF6JnuBi
-         GYTpAyF/53lijkJENIBJK3pLmc6I2ctgtrivVQD/ezOop9cMbXHPGYky3QqTo8m0Gscm
-         +2qBXPSUBSRbXRSrowinkW4Y03u9Gvwc0jWaZQcFZ+sbKImKoK6YlNtkMafLpp3JsKhA
-         i9cOmH7PZxbJ+s5OC1UhFiNo1/EQRba1QUJSM/Q+slAV53xCZlxe/zz++L/WifiDOyDJ
-         m6sA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DUT9DZbpPzw4l4DAivVDi0EHJEPQG34kR+pR9G4kRjg=;
-        b=Yogt93KT3lBLDD7OuGYm0rh28oeXeRE5Sd4ZD2tRyupnLRcBq9+8YyEtkPWRQPOMjt
-         CG6bOs4bdlcRwIgvHUuU82XCZSPBmcgSjfY7pUHyWkrDS3d+k3+uOArMhGHAwZINqi2Q
-         t4bg4efdfOREFDMw0h9xl8MVKNHr37JNc1DFDF4unNXEgJVOECmy/6iv4hYyjo0cPD7y
-         QNlB4ry0CA4EtfqzMiuheLLZW5zUEm2Arw/WPeQRv7rOFLsfs35dBbcTq7CZSZef1vgz
-         XX0JBHaU31s3ovm8jgt+mgB/4uXh6avfj4RwN/BQGcwNKLiD1rY6yDHUUrHtSpZlM7Wj
-         5CUg==
-X-Gm-Message-State: ACrzQf0lSRajXdlJNt01ttvg8y2fp3k16BK2aWfYDku+8li759zN+6Hn
-        vIqTkEfNnD0tW/dcay4FS1WJ7LuzXunXxw==
-X-Google-Smtp-Source: AMsMyM4lg9/eYiZ/A3PDExjYt5DR2FhyaBeK7t6Hn+jS98gAmZwB0y00of0wW29wPQBgTP/n2J0kiA==
-X-Received: by 2002:a17:902:d484:b0:188:56f3:d374 with SMTP id c4-20020a170902d48400b0018856f3d374mr6547336plg.121.1667549049732;
-        Fri, 04 Nov 2022 01:04:09 -0700 (PDT)
-Received: from debian.me (subs02-180-214-232-15.three.co.id. [180.214.232.15])
-        by smtp.gmail.com with ESMTPSA id h10-20020a62830a000000b0056da2ad6503sm2073670pfe.39.2022.11.04.01.04.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Nov 2022 01:04:09 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id A4A11103D98; Fri,  4 Nov 2022 15:04:05 +0700 (WIB)
-Date:   Fri, 4 Nov 2022 15:04:05 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Kunbo Zhang <absoler@smail.nju.edu.cn>
-Cc:     dmitry.torokhov@gmail.com, tiwai@suse.de,
-        wsa+renesas@sang-engineering.com, linux-kernel@vger.kernel.org,
-        linux-input@vger.kernel.org, security@kernel.org
-Subject: Re: [PATCH] input: i8042 - fix a double-fetch vulnerability
- introduced by GCC
-Message-ID: <Y2THdZRV7Wg/1mSC@debian.me>
-References: <20221104072347.74314-1-absoler@smail.nju.edu.cn>
+        Fri, 4 Nov 2022 04:04:24 -0400
+Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CC7B2657A;
+        Fri,  4 Nov 2022 01:04:21 -0700 (PDT)
+Received: from letrec.thunk.org (guestnat-104-133-8-97.corp.google.com [104.133.8.97] (may be forged))
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 2A484ICK021299
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 4 Nov 2022 04:04:19 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
+        t=1667549060; bh=moS+CuyFo/iNk12/7L0jlf5OeXKrD4AexiQVcA1f9j8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=F5gcCLGTqiRzwEO8tX435sMMUO98xjBKvM80PtzwWZs3D/7CuiM3KJrcIhJroylM+
+         hETcagEc7uki9CRXr6ne5RPJ7g7j89zCPnu+GSH34zHhRnU0us/3AU846Oh5KUs4yU
+         e7BWTRcDyDUcl6Orss+5CiucFdctGXdCJ3LIGT9czozzvYW3+3zL/i/9gXWfRVdeAm
+         l6TUAzRkLkCFNJC5ofnSvt9OtAVXuFdFpG7ye75vFxa1QUeAcWAztVOavq38gEUdck
+         YXYOqgQ4APZz25TmDvqRK2PQGUEu4ZAZIKrcRlJ6FuUZDsL9md82/5eL53TMb2/kGd
+         muvJp/zA1/JrA==
+Received: by letrec.thunk.org (Postfix, from userid 15806)
+        id AFB0F8C0031; Fri,  4 Nov 2022 04:04:17 -0400 (EDT)
+Date:   Fri, 4 Nov 2022 04:04:17 -0400
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     Byungchul Park <byungchul.park@lge.com>
+Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        damien.lemoal@opensource.wdc.com, linux-ide@vger.kernel.org,
+        adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+        mingo@redhat.com, peterz@infradead.org, will@kernel.org,
+        tglx@linutronix.de, rostedt@goodmis.org, joel@joelfernandes.org,
+        sashal@kernel.org, daniel.vetter@ffwll.ch,
+        chris@chris-wilson.co.uk, duyuyang@gmail.com,
+        johannes.berg@intel.com, tj@kernel.org, willy@infradead.org,
+        david@fromorbit.com, amir73il@gmail.com,
+        gregkh@linuxfoundation.org, kernel-team@lge.com,
+        linux-mm@kvack.org, akpm@linux-foundation.org, mhocko@kernel.org,
+        minchan@kernel.org, hannes@cmpxchg.org, vdavydov.dev@gmail.com,
+        sj@kernel.org, jglisse@redhat.com, dennis@kernel.org, cl@linux.com,
+        penberg@kernel.org, rientjes@google.com, vbabka@suse.cz,
+        ngupta@vflare.org, linux-block@vger.kernel.org,
+        paolo.valente@linaro.org, josef@toxicpanda.com,
+        linux-fsdevel@vger.kernel.org, viro@zeniv.linux.org.uk,
+        jack@suse.cz, jlayton@kernel.org, dan.j.williams@intel.com,
+        hch@infradead.org, djwong@kernel.org,
+        dri-devel@lists.freedesktop.org, rodrigosiqueiramelo@gmail.com,
+        melissa.srw@gmail.com, hamohammed.sa@gmail.com,
+        42.hyeyoo@gmail.com, chris.p.wilson@intel.com,
+        gwan-gyeong.mun@intel.com
+Subject: Re: [QUESTION] {start,stop}_this_handle() and lockdep annotations
+Message-ID: <Y2THgc9xgnUJg0Io@mit.edu>
+References: <1667541392-16270-1-git-send-email-byungchul.park@lge.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="FjaVuQlRfQggdm//"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221104072347.74314-1-absoler@smail.nju.edu.cn>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <1667541392-16270-1-git-send-email-byungchul.park@lge.com>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Note: in the future, I'd recommend looking at the MAINTAINERS to
+figure out a smaller list of people to ask this question, instead of
+spamming everyone who has ever expressed interest in DEPT.
 
---FjaVuQlRfQggdm//
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Fri, Nov 04, 2022 at 03:23:47PM +0800, Kunbo Zhang wrote:
-> We found GCC (at least 9.4.0 and 12.1) introduces a double-fetch of `i804=
-2_ports[I8042_AUX_PORT_NO].serio` at drivers/input/serio/i8042.c:408.
->=20
-> One comparison of the global variable `i8042_ports[I8042_AUX_PORT_NO].ser=
-io` has been compiled to three ones,
-> and thus two extra fetches are introduced.
-> As in the source code, the global variable is tested (at line 408) before=
- three assignments of irq_bit, disable_bit and port_name.
-> However, as shown in the following disassembly of i8042_port_close(),=20
-> the variable (0x0(%rip)) is fetched and tested three times for each=20
-> assignment of irq_bit, disable_bit and port_name.
->=20
-> 0000000000000e50 <i8042_port_close>:
-> i8042_port_close():
-> ./drivers/input/serio/i8042.c:408
->      e50:	48 39 3d 00 00 00 00    cmp    %rdi,0x0(%rip)        # first lo=
-ad
-> ./drivers/input/serio/i8042.c:403
->      e57:	41 54                   push   %r12
-> ./drivers/input/serio/i8042.c:408
->      e59:	b8 ef ff ff ff          mov    $0xffffffef,%eax
->      e5e:	49 c7 c4 00 00 00 00    mov    $0x0,%r12
-> ./drivers/input/serio/i8042.c:403
->      e65:	55                      push   %rbp
-> ./drivers/input/serio/i8042.c:408
->      e66:	48 c7 c2 00 00 00 00    mov    $0x0,%rdx
-> ./drivers/input/serio/i8042.c:419
->      e6d:	be 60 10 00 00          mov    $0x1060,%esi
-> ./drivers/input/serio/i8042.c:403
->      e72:	53                      push   %rbx
-> ./drivers/input/serio/i8042.c:408
->      e73:	bb df ff ff ff          mov    $0xffffffdf,%ebx
->      e78:	0f 45 d8                cmovne %eax,%ebx
->      e7b:	0f 95 c0                setne  %al
->      e7e:	83 e8 03                sub    $0x3,%eax
->      e81:	48 39 3d 00 00 00 00    cmp    %rdi,0x0(%rip)        # second l=
-oad
->      e88:	40 0f 94 c5             sete   %bpl
->      e8c:	83 c5 01                add    $0x1,%ebp
->      e8f:	48 39 3d 00 00 00 00    cmp    %rdi,0x0(%rip)        # third lo=
-ad
-> ./drivers/input/serio/i8042.c:419
->      e96:	48 c7 c7 00 00 00 00    mov    $0x0,%rdi
-> ./drivers/input/serio/i8042.c:408
->      e9d:	4c 0f 45 e2             cmovne %rdx,%r12
->=20
-> We have not found any lock protection for the three fetches of `i8042_por=
-ts[I8042_AUX_PORT_NO].serio` yet.
-> If the value of this global variable is modified concurrently among the t=
-hree fetches, the corresponding assignment of=20
-> disable_bit or port_name will possibly be incorrect.
->=20
-> This patch fixs this by saving the checked value in advance and using a b=
-arrier() to prevent compiler optimizations.
-> This is inspired by a similar compiler-introduced double fetch situation =
-[1] in driver/xen (?).
->=20
-> [1] GitHub link of commit <8135cf8b092723dbfcc611fe6fdcb3a36c9951c5> ( Sa=
-ve xen_pci_op commands before processing it )
-> ---
->  drivers/input/serio/i8042.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
->=20
-> diff --git a/drivers/input/serio/i8042.c b/drivers/input/serio/i8042.c
-> index f9486495baef..554a2340ca84 100644
-> --- a/drivers/input/serio/i8042.c
-> +++ b/drivers/input/serio/i8042.c
-> @@ -405,7 +405,9 @@ static void i8042_port_close(struct serio *serio)
->  	int disable_bit;
->  	const char *port_name;
-> =20
-> -	if (serio =3D=3D i8042_ports[I8042_AUX_PORT_NO].serio) {
-> +	struct serio *tmp =3D i8042_ports[I8042_AUX_PORT_NO].serio;
-> +	barrier();
-> +	if (serio =3D=3D tmp) {
->  		irq_bit =3D I8042_CTR_AUXINT;
->  		disable_bit =3D I8042_CTR_AUXDIS;
->  		port_name =3D "AUX";
->=20
-> Signed-off-by: Kunbo Zhang <absoler@smail.nju.edu.cn>
->=20
+On Fri, Nov 04, 2022 at 02:56:32PM +0900, Byungchul Park wrote:
+> Peterz (commit 34a3d1e8370870 lockdep: annotate journal_start()) and
+> the commit message quoted what Andrew Morton said. It was like:
+> 
+> > Except lockdep doesn't know about journal_start(), which has ranking
+> > requirements similar to a semaphore.
+> 
+> Could anyone tell what the ranking requirements in the journal code
+> exactly means and what makes {start,stop}_this_handle() work for the
+> requirements?
 
-Regarding patch description, there are several guides:
+The comment from include/linux/jbd2.h may be helpful:
 
-  * Wrap the text (excluding code or terminal output) at 80 character
-    or less.
-  * Please write in imperative mood instead (no first-person pronouns [I, w=
-e],
-    "make foo do bar").
-  * When referring to past commits, the format should be
-    --pretty=3Dformat:'%h ("%s")'. The commit hash is at least 12
-    characters long (set core.abbrev to 12 on your .gitconfig)
-  * Last but not least, place your SoB at the end of description (before
-    three dash line).
+#ifdef CONFIG_DEBUG_LOCK_ALLOC
+	/**
+	 * @j_trans_commit_map:
+	 *
+	 * Lockdep entity to track transaction commit dependencies. Handles
+	 * hold this "lock" for read, when we wait for commit, we acquire the
+	 * "lock" for writing. This matches the properties of jbd2 journalling
+	 * where the running transaction has to wait for all handles to be
+	 * dropped to commit that transaction and also acquiring a handle may
+	 * require transaction commit to finish.
+	 */
+	struct lockdep_map	j_trans_commit_map;
+#endif
 
-Also, is this patch also applies to stable branches? If so, add Cc:
-stable@vger.kernel.org to the SoB area.
+And the reason why this isn't a problem is because start_this_handle()
+can be passed a special handle which is guaranteed to not block
+(because we've reserved journal credits for it).  Hence, there is no
+risk that in _this_ call path start_this_handle() will block for a
+commit:
 
-Thanks.
+> <4>[   43.124442 ] stacktrace:
+> <4>[   43.124443 ]       start_this_handle+0x557/0x620
+> <4>[   43.124445 ]       jbd2_journal_start_reserved+0x4d/0x1b0
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> <4>[   43.124448 ]       __ext4_journal_start_reserved+0x6d/0x190
+> <4>[   43.124450 ]       ext4_convert_unwritten_io_end_vec+0x22/0xd0
+> <4>[   43.124453 ]       ext4_end_io_rsv_work+0xe4/0x190
+> <4>[   43.124455 ]       process_one_work+0x301/0x660
+> <4>[   43.124458 ]       worker_thread+0x3a/0x3c0
+> <4>[   43.124459 ]       kthread+0xef/0x120
+> <4>[   43.124462 ]       ret_from_fork+0x22/0x30
 
---=20
-An old man doll... just what I always wanted! - Clara
 
---FjaVuQlRfQggdm//
-Content-Type: application/pgp-signature; name="signature.asc"
+The comment for this function from fs/jbd2/transaction.c:
 
------BEGIN PGP SIGNATURE-----
+/**
+ * jbd2_journal_start_reserved() - start reserved handle
+ * @handle: handle to start
+ * @type: for handle statistics
+ * @line_no: for handle statistics
+ *
+ * Start handle that has been previously reserved with jbd2_journal_reserve().
+ * This attaches @handle to the running transaction (or creates one if there's
+ * not transaction running). Unlike jbd2_journal_start() this function cannot
+ * block on journal commit, checkpointing, or similar stuff. It can block on
+ * memory allocation or frozen journal though.
+ *
+ * Return 0 on success, non-zero on error - handle is freed in that case.
+ */
 
-iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY2THbgAKCRD2uYlJVVFO
-o0cYAQDGnZxCETueLvCH1+rHlb5Hvmkk58Q94D/TcbWkIeAskgD8DH58m2pzzXa3
-2sm/HYMWThEKp4rm5fFgq1P5EDfmGAw=
-=YTdx
------END PGP SIGNATURE-----
+And this is why this will never be a problem in real life, or flagged
+by Lockdep, since Lockdep is a dynamic checker.  The deadlock which
+the static DEPT checker has imagined can never, ever, ever happen.
 
---FjaVuQlRfQggdm//--
+For more context, also from fs/jbd2/transaction.c:
+
+/**
+ * jbd2_journal_start() - Obtain a new handle.
+ * @journal: Journal to start transaction on.
+ * @nblocks: number of block buffer we might modify
+ *
+ * We make sure that the transaction can guarantee at least nblocks of
+ * modified buffers in the log.  We block until the log can guarantee
+ * that much space. Additionally, if rsv_blocks > 0, we also create another
+ * handle with rsv_blocks reserved blocks in the journal. This handle is
+ * stored in h_rsv_handle. It is not attached to any particular transaction
+ * and thus doesn't block transaction commit. If the caller uses this reserved
+ * handle, it has to set h_rsv_handle to NULL as otherwise jbd2_journal_stop()
+ * on the parent handle will dispose the reserved one. Reserved handle has to
+ * be converted to a normal handle using jbd2_journal_start_reserved() before
+ * it can be used.
+ *
+ * Return a pointer to a newly allocated handle, or an ERR_PTR() value
+ * on failure.
+ */
+
+To be clear, I don't blame DEPT for not being able to figure this out;
+it would require human-level intelligence to understand why in *this*
+call path, we never end up waiting.  But this is why I am very
+skeptical of static analyzers which are *sure* that anything they flag
+is definitely a bug.  We definitely will need a quick and easy way to
+tell DEPT, "go home, you're drunk".
+
+Hope this helps,
+
+					- Ted
+
+
+P.S.  Note: the actual function names are a bit misleading.  It looks
+like the functions got refactored, and the documentation wasn't
+updated to match.  Sigh... fortuantely the concepts are accurate; it's
+just that function names needs to be fixed up.  For example, creating
+a reserved handle is no longer done via jbd2_journal_start(), but
+rather jbd2__journal_start().  
+
