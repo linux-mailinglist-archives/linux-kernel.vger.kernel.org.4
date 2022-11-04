@@ -2,109 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DC616191C9
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 08:23:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C9916191D0
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 08:26:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231510AbiKDHXm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 03:23:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52352 "EHLO
+        id S230435AbiKDH0T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 03:26:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229950AbiKDHXk (ORCPT
+        with ESMTP id S229779AbiKDH0Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 03:23:40 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E40A96364
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 00:23:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667546618; x=1699082618;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=jNIWc97tS6wGon8k/Fw7hFZDoAAsSFUxCPMc9Hd2YGc=;
-  b=cnTjMS9u82vG5NUjcORoWNegxrRtEMchCkZlL3G7zMHvWD1vxoSuS1oh
-   zRk2UkEvYEGTLDbplrtzIJ0EO2XsZ56P8wwjJwHA3HY4cokVq1cOzjo6w
-   fHHHCFELwA4gPyI6eKyHik48omLwx9VhVxFYC4VTl5/OD5jzHwUaizZ2M
-   nnD/TpM10oF7DAzayVmA9deCSIn4IZ2f3xgxClHKLrZsDyMm0SGV3A9ic
-   5F7j9o0beXA0IgoT76MplZAVnXjzDqGD7UjYch04EwPWvlD6XOFDotRaS
-   ar9PgnroXYMF6En6D4dfxaj0k0IwV62lWAm11ERDGJCxMbgMmaNrgM6Pe
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10520"; a="309893426"
-X-IronPort-AV: E=Sophos;i="5.96,136,1665471600"; 
-   d="scan'208";a="309893426"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2022 00:23:38 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10520"; a="880200009"
-X-IronPort-AV: E=Sophos;i="5.96,136,1665471600"; 
-   d="scan'208";a="880200009"
-Received: from joe-255.igk.intel.com (HELO localhost) ([172.22.229.67])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2022 00:23:34 -0700
-Date:   Fri, 4 Nov 2022 08:23:32 +0100
-From:   Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Oded Gabbay <ogabbay@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>,
-        Jeffrey Hugo <quic_jhugo@quicinc.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        John Hubbard <jhubbard@nvidia.com>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Christoph Hellwig <hch@infradead.org>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Jiho Chu <jiho.chu@samsung.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        stanislaw.gruszka@intel.com,
-        Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Maciej Kwapulinski <maciej.kwapulinski@linux.intel.com>,
-        Jagan Teki <jagan@amarulasolutions.com>
-Subject: Re: [RFC PATCH v2 1/3] drivers/accel: define kconfig and register a
- new major
-Message-ID: <20221104072332.GA3149018@linux.intel.com>
-References: <20221102203405.1797491-1-ogabbay@kernel.org>
- <20221102203405.1797491-2-ogabbay@kernel.org>
- <Y2MMCIe5wND2XPqE@kroah.com>
- <CAFCwf13uLj=P6u6FAcY8M5qAXoaBdb+Ha-TYj0j2FAZnFAPFYg@mail.gmail.com>
- <CAFCwf12yRUG4593ozJMEwaaJBKyWqXTTCjef9O_fzWdQBxVrtw@mail.gmail.com>
- <d5630f32-208a-77d2-91ed-58ef526ed086@infradead.org>
+        Fri, 4 Nov 2022 03:26:16 -0400
+Received: from smtpbgeu2.qq.com (smtpbgeu2.qq.com [18.194.254.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2176518363;
+        Fri,  4 Nov 2022 00:26:08 -0700 (PDT)
+X-QQ-mid: bizesmtp75t1667546649tv9fay8q
+Received: from localhost.localdomain ( [58.213.8.169])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Fri, 04 Nov 2022 15:24:08 +0800 (CST)
+X-QQ-SSF: 0140000000000030B000000A0000000
+X-QQ-FEAT: FVl8EHhfVR5sZRNRY9/DeJL8TZ/JzmaTzPbfcQeUkmkwgHG3TgzG7YguMkqwy
+        yaQfw+EnjutXfftW/VCbeBl/TfaZCKBW2+Tai+grdWNRQ7bVMqRo8eL5hj9XDxKwdnWVJa4
+        3xp1I/AsLqrRDSXgrca14LAlBItPg97/+NoX/VhKn3jX2MiM0qBumuYrJx8lkRKC4kNRKY9
+        PfgdnibQfjejhJ+eZZQkH71Qc4KY5e0m0y9gvNbDdeLcu9lW97h4P1sz051DZacDRatllrx
+        bJWCDDK7cMDQ6rmSheAYzwzwahFpX4UL85BoK2x8Mni1J9E3ASq/Va5D7FUW42JeNQ/O/MS
+        zEFNu67stA7otbGcPr/cJY/mlSuvovGkzZlA2pvnM944vlf/Okkl2i7p57MPTaKMyRWQR9M
+X-QQ-GoodBg: 1
+From:   Kunbo Zhang <absoler@smail.nju.edu.cn>
+To:     dmitry.torokhov@gmail.com, tiwai@suse.de,
+        wsa+renesas@sang-engineering.com
+Cc:     linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        security@kernel.org, Kunbo Zhang <absoler@smail.nju.edu.cn>
+Subject: [PATCH] input: i8042 - fix a double-fetch vulnerability introduced by GCC
+Date:   Fri,  4 Nov 2022 15:23:47 +0800
+Message-Id: <20221104072347.74314-1-absoler@smail.nju.edu.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d5630f32-208a-77d2-91ed-58ef526ed086@infradead.org>
-X-Spam-Status: No, score=-8.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:smail.nju.edu.cn:qybglogicsvr:qybglogicsvr6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_PASS,T_SPF_HELO_TEMPERROR autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 03, 2022 at 04:01:08PM -0700, Randy Dunlap wrote:
-> >>> Module name if "M" is chosen?
-> >> Will add
-> > So, unfortunately, the path of doing accel as a kernel module won't
-> > work cleanly (Thanks stanislaw for pointing this out to me).
-> > The reason is the circular dependency between drm and accel. drm calls
-> > accel exported symbols during init and when devices are registering
-> > (all the minor handling), and accel calls drm exported symbols because
-> > I don't want to duplicate the entire drm core code.
-> 
-> But DRM is a tristate symbol, so during drm init (loadable module), couldn't
-> it call accel init code (loadable module)?
-> 
-> Or are you saying that they only work together if both of them are builtin?
+We found GCC (at least 9.4.0 and 12.1) introduces a double-fetch of `i8042_ports[I8042_AUX_PORT_NO].serio` at drivers/input/serio/i8042.c:408.
 
-Yes, with current state of the patches, we can not build code as modules.
-There are symbols in accel that are from drm and we use accel symbols
-in drm. This could be fixed by separating symbols accel requires in 
-separate module i.e. drm_file_helper.ko, however Oded proposed to make
-CONFIG_ACCEL compile option for DRM and all accel code will be
-build in drm.ko . I think that ok, since accel is not big. 
+One comparison of the global variable `i8042_ports[I8042_AUX_PORT_NO].serio` has been compiled to three ones,
+and thus two extra fetches are introduced.
+As in the source code, the global variable is tested (at line 408) before three assignments of irq_bit, disable_bit and port_name.
+However, as shown in the following disassembly of i8042_port_close(), 
+the variable (0x0(%rip)) is fetched and tested three times for each 
+assignment of irq_bit, disable_bit and port_name.
 
-Regards
-Stanislaw
+0000000000000e50 <i8042_port_close>:
+i8042_port_close():
+./drivers/input/serio/i8042.c:408
+     e50:	48 39 3d 00 00 00 00    cmp    %rdi,0x0(%rip)        # first load
+./drivers/input/serio/i8042.c:403
+     e57:	41 54                   push   %r12
+./drivers/input/serio/i8042.c:408
+     e59:	b8 ef ff ff ff          mov    $0xffffffef,%eax
+     e5e:	49 c7 c4 00 00 00 00    mov    $0x0,%r12
+./drivers/input/serio/i8042.c:403
+     e65:	55                      push   %rbp
+./drivers/input/serio/i8042.c:408
+     e66:	48 c7 c2 00 00 00 00    mov    $0x0,%rdx
+./drivers/input/serio/i8042.c:419
+     e6d:	be 60 10 00 00          mov    $0x1060,%esi
+./drivers/input/serio/i8042.c:403
+     e72:	53                      push   %rbx
+./drivers/input/serio/i8042.c:408
+     e73:	bb df ff ff ff          mov    $0xffffffdf,%ebx
+     e78:	0f 45 d8                cmovne %eax,%ebx
+     e7b:	0f 95 c0                setne  %al
+     e7e:	83 e8 03                sub    $0x3,%eax
+     e81:	48 39 3d 00 00 00 00    cmp    %rdi,0x0(%rip)        # second load
+     e88:	40 0f 94 c5             sete   %bpl
+     e8c:	83 c5 01                add    $0x1,%ebp
+     e8f:	48 39 3d 00 00 00 00    cmp    %rdi,0x0(%rip)        # third load
+./drivers/input/serio/i8042.c:419
+     e96:	48 c7 c7 00 00 00 00    mov    $0x0,%rdi
+./drivers/input/serio/i8042.c:408
+     e9d:	4c 0f 45 e2             cmovne %rdx,%r12
+
+We have not found any lock protection for the three fetches of `i8042_ports[I8042_AUX_PORT_NO].serio` yet.
+If the value of this global variable is modified concurrently among the three fetches, the corresponding assignment of 
+disable_bit or port_name will possibly be incorrect.
+
+This patch fixs this by saving the checked value in advance and using a barrier() to prevent compiler optimizations.
+This is inspired by a similar compiler-introduced double fetch situation [1] in driver/xen (?).
+
+[1] GitHub link of commit <8135cf8b092723dbfcc611fe6fdcb3a36c9951c5> ( Save xen_pci_op commands before processing it )
+---
+ drivers/input/serio/i8042.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/input/serio/i8042.c b/drivers/input/serio/i8042.c
+index f9486495baef..554a2340ca84 100644
+--- a/drivers/input/serio/i8042.c
++++ b/drivers/input/serio/i8042.c
+@@ -405,7 +405,9 @@ static void i8042_port_close(struct serio *serio)
+ 	int disable_bit;
+ 	const char *port_name;
+ 
+-	if (serio == i8042_ports[I8042_AUX_PORT_NO].serio) {
++	struct serio *tmp = i8042_ports[I8042_AUX_PORT_NO].serio;
++	barrier();
++	if (serio == tmp) {
+ 		irq_bit = I8042_CTR_AUXINT;
+ 		disable_bit = I8042_CTR_AUXDIS;
+ 		port_name = "AUX";
+
+Signed-off-by: Kunbo Zhang <absoler@smail.nju.edu.cn>
+
+-- 
+2.25.1
 
