@@ -2,119 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7429619A8D
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 15:50:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E921619A92
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 15:52:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231880AbiKDOua (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 10:50:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36518 "EHLO
+        id S231829AbiKDOw2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 10:52:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231737AbiKDOuS (ORCPT
+        with ESMTP id S229572AbiKDOw0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 10:50:18 -0400
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E9D565FA
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 07:50:17 -0700 (PDT)
-Received: by mail-il1-f200.google.com with SMTP id d19-20020a056e020c1300b00300b5a12c44so3943322ile.15
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 07:50:17 -0700 (PDT)
+        Fri, 4 Nov 2022 10:52:26 -0400
+Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5F20F0B
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 07:52:24 -0700 (PDT)
+Received: by mail-qt1-x82e.google.com with SMTP id a27so3138338qtw.10
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 07:52:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=QgjU+OEEvQPZ01qzgjb2MKqqHyMalDRUVvIv26QXzls=;
+        b=EEn0//VkZ+RccjlE/pD9lTHfQMk2wzl3pr5N8iZf+IhhfMGJ0ZrQE24okgkcanNyb4
+         i+FS7LZpo3vxhzn4guBMal5KihP9v276yMLOr/KaZmCa+swk6orhWJhPfIhOji3edgxk
+         OwYAbSCYeaF4IH8iqaBANSAgAQ5hdlVgdbPiTKMUmFSMo8ZnFCbplOk3PpfJO8e21SIq
+         bTXd6bTUTllJHlRaU0n3BHCDyTHblxDIw6oYd/Esv4RtvaK5dq+W93e/dLk7rF8yYFMg
+         62ZxAHiWZlBcs+EMikh1Cl0gDC9ul062+RvTpYLTj7cnKgXoAfcDZjxnUwwUP26xPlTk
+         UGfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:in-reply-to:date:mime-version
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lZSAhvKaDCo9M5dwzXckOjIUu8YR18Bj9O1fS06XjzU=;
-        b=4BUam253/HNFLDRF52OCJYM2hZ+wynFdATfBnSGgQof60pv0KzGJoMu/ykP+mO0Zyf
-         RdD0Syk2lpVK/cE6NPqcKS4C3W+0coK3hcomdqzayxmfhsHLea0DHjNxPk1XDH7DK/qj
-         R+td6u05phRj4X/KjqP4DMU3Uq1oVFb9dqhBTSaEEVVNCRbVjcyXrUo9Y/IXIk9a3QiW
-         HPJmB8ZMNqCcfiSTp/X3hNnjC2JuIy8OA3F/ocymqoFvUM9D0trroWS7tR8UFWM5JXhS
-         9mT5R8id7nvIBbW/d4R1cMJmPNi6iJhsbLWSZB9hhCR4QDvZQu5IV2kN/jMZXJ65ZjAK
-         gTEA==
-X-Gm-Message-State: ACrzQf0Az6RH7R5RC1DZkWcaWZqPdgEzF0Xg9cy3T6mV2FO1dsIkOJ8E
-        fYoBma6gwO4p8Tpajqd2NuI1/FSbvhc9BQW4TDdoDdKGM1kT
-X-Google-Smtp-Source: AMsMyM48vFZSD+wljzGUi1kCNaOQdol8nPZsTGyLSYXAWAi71A3bQGP5teK+u0H9qahj+dx6UpAntUJq7yEmPoz5NF3GQfGCqq6h
+        bh=QgjU+OEEvQPZ01qzgjb2MKqqHyMalDRUVvIv26QXzls=;
+        b=yh58nZB7uVSSvi0S70pV5S7EdcrlnEdzRlqw0tpAuXR3YojNVruqgnRds2xDDHyN3b
+         nSIDb0SOadqP8/heJrW6ALs04755r2cIw9VXtl9peF338p1q50NXEzcManO/txAbk4yi
+         ogPAwTA4QqJAytbEdiSnWjuXZojO4aBNjLoUCBDHp1UzBEFqvtdDxmmmRy03KlBEmqkj
+         Fqxj/iwdCVZgy8XsiFXYMY7wsCiabe/EzZD3bVLgddyjXR+byiS5TWhYGWKtLqZluywh
+         iyjl0m4/CPE/++3DlW2sNBYsz5lmfjdIQZJk23LlkGUkbn/gPIIlrYSK9ljFIT5GOYuW
+         4NWw==
+X-Gm-Message-State: ACrzQf0f046xBIRa1l2kJo2S4CWfvl2dWeu/PJKRCw64DF9Stno7CdvE
+        CCSXbwdp7uJGWie1ZhwbwHjNZw==
+X-Google-Smtp-Source: AMsMyM4YO7l4BmWs/QUGSvV1jS0dywSrAlj7aR/rV7nTudHC1ZtuLQY2KyT2tKW0cGiHGsyP4lLurQ==
+X-Received: by 2002:ac8:7fc7:0:b0:3a5:71f2:c89a with SMTP id b7-20020ac87fc7000000b003a571f2c89amr1179362qtk.636.1667573543826;
+        Fri, 04 Nov 2022 07:52:23 -0700 (PDT)
+Received: from ?IPV6:2601:586:5000:570:aad6:acd8:4ed9:299b? ([2601:586:5000:570:aad6:acd8:4ed9:299b])
+        by smtp.gmail.com with ESMTPSA id u5-20020a05620a0c4500b006fa22f0494bsm3020401qki.117.2022.11.04.07.52.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 04 Nov 2022 07:52:23 -0700 (PDT)
+Message-ID: <34f40c1c-f933-cee6-f022-14c37650dc3a@linaro.org>
+Date:   Fri, 4 Nov 2022 10:52:22 -0400
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:1186:b0:36f:ae2e:a396 with SMTP id
- f6-20020a056638118600b0036fae2ea396mr21567605jas.89.1667573417002; Fri, 04
- Nov 2022 07:50:17 -0700 (PDT)
-Date:   Fri, 04 Nov 2022 07:50:16 -0700
-In-Reply-To: <73f88a48-72e8-e6e7-faae-1d4b92e0e13b@kernel.org>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000028529905eca631f7@google.com>
-Subject: Re: [PATCH] ipv6: addrlabel: fix infoleak when sending struct
- ifaddrlblmsg to network
-From:   syzbot 
-        <syzbot+3553517af6020c4f2813f1003fe76ef3cbffe98d@syzkaller.appspotmail.com>
-To:     David Ahern <dsahern@kernel.org>
-Cc:     davem@davemloft.net, dsahern@kernel.org, glider@google.com,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        yoshfuji@linux-ipv6.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH] dt-bindings: examples: add a list of templates and
+ solutions
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20221028233701.572280-1-krzysztof.kozlowski@linaro.org>
+ <20221101130720.GA963805-robh@kernel.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221101130720.GA963805-robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> On 11/4/22 4:32 AM, Alexander Potapenko wrote:
->> When copying a `struct ifaddrlblmsg` to the network, __ifal_reserved
->> remained uninitialized, resulting in a 1-byte infoleak:
->> 
->>   BUG: KMSAN: kernel-network-infoleak in __netdev_start_xmit ./include/linux/netdevice.h:4841
->>    __netdev_start_xmit ./include/linux/netdevice.h:4841
->>    netdev_start_xmit ./include/linux/netdevice.h:4857
->>    xmit_one net/core/dev.c:3590
->>    dev_hard_start_xmit+0x1dc/0x800 net/core/dev.c:3606
->>    __dev_queue_xmit+0x17e8/0x4350 net/core/dev.c:4256
->>    dev_queue_xmit ./include/linux/netdevice.h:3009
->>    __netlink_deliver_tap_skb net/netlink/af_netlink.c:307
->>    __netlink_deliver_tap+0x728/0xad0 net/netlink/af_netlink.c:325
->>    netlink_deliver_tap net/netlink/af_netlink.c:338
->>    __netlink_sendskb net/netlink/af_netlink.c:1263
->>    netlink_sendskb+0x1d9/0x200 net/netlink/af_netlink.c:1272
->>    netlink_unicast+0x56d/0xf50 net/netlink/af_netlink.c:1360
->>    nlmsg_unicast ./include/net/netlink.h:1061
->>    rtnl_unicast+0x5a/0x80 net/core/rtnetlink.c:758
->>    ip6addrlbl_get+0xfad/0x10f0 net/ipv6/addrlabel.c:628
->>    rtnetlink_rcv_msg+0xb33/0x1570 net/core/rtnetlink.c:6082
->>   ...
->>   Uninit was created at:
->>    slab_post_alloc_hook+0x118/0xb00 mm/slab.h:742
->>    slab_alloc_node mm/slub.c:3398
->>    __kmem_cache_alloc_node+0x4f2/0x930 mm/slub.c:3437
->>    __do_kmalloc_node mm/slab_common.c:954
->>    __kmalloc_node_track_caller+0x117/0x3d0 mm/slab_common.c:975
->>    kmalloc_reserve net/core/skbuff.c:437
->>    __alloc_skb+0x27a/0xab0 net/core/skbuff.c:509
->>    alloc_skb ./include/linux/skbuff.h:1267
->>    nlmsg_new ./include/net/netlink.h:964
->>    ip6addrlbl_get+0x490/0x10f0 net/ipv6/addrlabel.c:608
->>    rtnetlink_rcv_msg+0xb33/0x1570 net/core/rtnetlink.c:6082
->>    netlink_rcv_skb+0x299/0x550 net/netlink/af_netlink.c:2540
->>    rtnetlink_rcv+0x26/0x30 net/core/rtnetlink.c:6109
->>    netlink_unicast_kernel net/netlink/af_netlink.c:1319
->>    netlink_unicast+0x9ab/0xf50 net/netlink/af_netlink.c:1345
->>    netlink_sendmsg+0xebc/0x10f0 net/netlink/af_netlink.c:1921
->>   ...
->> 
->> This patch ensures that the reserved field is always initialized.
->> 
->> Reported-by: syzbot+3553517af6020c4f2813f1003fe76ef3cbffe98d@syzkaller.appspotmail.com
->> Fixes: 2a8cc6c89039 ("[IPV6] ADDRCONF: Support RFC3484 configurable address selection policy table.")
->> Signed-off-by: Alexander Potapenko <glider@google.com>
->> ---
->>  net/ipv6/addrlabel.c | 1 +
->>  1 file changed, 1 insertion(+)
->> 
->
-> Reviewed-by: David Ahern <dsahern@kernel.org>
->
->
+On 01/11/2022 09:07, Rob Herring wrote:
+> On Fri, Oct 28, 2022 at 07:37:01PM -0400, Krzysztof Kozlowski wrote:
+>> It is useful to start from existing bindings when writing new ones,
+>> especially when one does not know that much DT schema.  However we have
+>> several bindings which are not the best examples, so people tend to copy
+>> their issues into new bindings.
+>>
+>> Beginners also might not know how to achieve some more complex solutions
+>> in DT schema, e.g. how one of two properties should be required by the
+>> bindings.  Some of such solutions are already in example-schema.yaml,
+>> but several other are missing.  Add reference with such re-usable
+>> design-patterns.
+> 
+> My main concern here is what's a good example today is not tomorrow... 
 
-I see the command but can't find the corresponding bug.
-The email is sent to  syzbot+HASH@syzkaller.appspotmail.com address
-but the HASH does not correspond to any known bug.
-Please double check the address.
+Yes, I agree. The problem I want to solve is some folks copy-paste some
+existing schema as starting point and then are surprised when receive
+basic style feedback.
+
+Of course the optimal solution would be to make all schemas in same
+(proper) style, but this is going take some time...
+
+How to solve this problem other way? I don't know.
+
+> 
+> 
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> ---
+>>  .../devicetree/bindings/examples.rst          | 63 +++++++++++++++++++
+>>  Documentation/devicetree/bindings/index.rst   |  1 +
+>>  2 files changed, 64 insertions(+)
+>>  create mode 100644 Documentation/devicetree/bindings/examples.rst
+>>
+>> diff --git a/Documentation/devicetree/bindings/examples.rst b/Documentation/devicetree/bindings/examples.rst
+>> new file mode 100644
+>> index 000000000000..710eea81d8b7
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/examples.rst
+>> @@ -0,0 +1,63 @@
+>> +.. SPDX-License-Identifier: GPL-2.0
+>> +
+>> +Examples of Devicetree Bindings to use a base
+>> +=============================================
+>> +
+>> +Following Devicetree Bindings in DT Schema are a known good starting point when
+>> +writing new bindings:
+>> +
+>> +1. Simple SPI device:
+>> +   Documentation/devicetree/bindings/iio/adc/maxim,max11205.yaml
+>> +
+>> +2. PMIC (MFD) with several sub-devices:
+>> +   Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml
+>> +
+>> +3. Battery charger (power supply):
+>> +   Documentation/devicetree/bindings/power/supply/bq256xx.yaml
+>> +   (but use vendor prefix in filename)
+>> +
+>> +4. Clock controller for several devices with different clock inputs:
+>> +   Documentation/devicetree/bindings/clock/qcom,mmcc.yaml
+>> +
+>> +5. GPIO controller:
+>> +   Documentation/devicetree/bindings/gpio/qcom,wcd934x-gpio.yaml
+>> +
+>> +
+>> +Re-usable design patterns when writing your own bindings
+>> +========================================================
+>> +
+>> +Following bindings show how to use common pattern of writing bindings:
+>> +
+>> +1. Property required and present only for one variant.  Property cannot appear
+>> +   on other variants:
+>> +   Documentation/devicetree/bindings/example-schema.yaml
+>> +   Line: 212
+>> +
+>> +2. Excluding properties, but none are required:
+>> +   Documentation/devicetree/bindings/mfd/samsung,s5m8767.yaml
+>> +   Line: 155
+>> +
+>> +3. Excluding required properties, but one is required:
+>> +   Documentation/devicetree/bindings/reserved-memory/reserved-memory.yaml
+>> +   Line: 91
+>> +
+>> +4. Array with numbers (items) from given range - min/max:
+>> +   Documentation/devicetree/bindings/arm/l2c2x0.yaml
+>> +   Line: 74
+>> +
+>> +5. Array with numbers (items) from given range - enum:
+>> +   Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml
+>> +   Line: 101
+>> +
+>> +6. Uint32 matrix, variable length of two-items:
+>> +   Documentation/devicetree/bindings/iio/adc/st,stm32-adc.yaml
+>> +   Line: 278
+>> +
+>> +7. Phandle to syscon with offset:
+>> +   Documentation/devicetree/bindings/soc/samsung/exynos-usi.yaml
+>> +   Line: 42
+>> +
+>> +8. Variable length of array (e.g. clocks and clock-names) but narrowed to
+>> +   specific variant:
+>> +   Documentation/devicetree/bindings/clock/qcom,mmcc.yaml
+>> +   Lines: 33 and 71
+> 
+> It seems like some of these that are just a single property we could add 
+> to example-schema.yaml.
+
+I am afraid the example-schema will grow too big for folks to look into.
+It's already quite complicated, with explanations of the dtschema
+behavior itself.
+
+How about then RST file with small code snippets?
+
+> Also, perhaps a reference to this from writing-schema.rst.
+
+I can do this as well.
+
+The problem with my approach above (and adding these to writing-schema)
+is that examples above can change, lines can be inadequate.
+
+Best regards,
+Krzysztof
 
