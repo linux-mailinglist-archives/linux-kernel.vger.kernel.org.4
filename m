@@ -2,34 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72ECD619127
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 07:37:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD3D261912B
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 07:37:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230473AbiKDGhL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 02:37:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60328 "EHLO
+        id S231201AbiKDGhm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 02:37:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230005AbiKDGhH (ORCPT
+        with ESMTP id S230005AbiKDGhj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 02:37:07 -0400
-Received: from out30-42.freemail.mail.aliyun.com (out30-42.freemail.mail.aliyun.com [115.124.30.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1B4A21E18
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 23:37:05 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R571e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=12;SR=0;TI=SMTPD_---0VTvoKDj_1667543814;
-Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0VTvoKDj_1667543814)
+        Fri, 4 Nov 2022 02:37:39 -0400
+Received: from out30-56.freemail.mail.aliyun.com (out30-56.freemail.mail.aliyun.com [115.124.30.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15CE821E18;
+        Thu,  3 Nov 2022 23:37:37 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0VTvrMNq_1667543853;
+Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0VTvrMNq_1667543853)
           by smtp.aliyun-inc.com;
-          Fri, 04 Nov 2022 14:37:03 +0800
-From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-To:     andrzej.hajda@intel.com
-Cc:     neil.armstrong@linaro.org, robert.foss@linaro.org,
-        Laurent.pinchart@ideasonboard.com, jonas@kwiboo.se,
-        jernej.skrabec@gmail.com, airlied@gmail.com, daniel@ffwll.ch,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+          Fri, 04 Nov 2022 14:37:34 +0800
+From:   Yang Li <yang.lee@linux.alibaba.com>
+To:     richardcochran@gmail.com, bagasdotme@gmail.com
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yang Li <yang.lee@linux.alibaba.com>,
         Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH] drm/bridge: sii9234: Remove the unused function sii9234_mode_valid()
-Date:   Fri,  4 Nov 2022 14:36:52 +0800
-Message-Id: <20221104063652.82789-1-jiapeng.chong@linux.alibaba.com>
+Subject: [PATCH -next v3] net: ethernet: Simplify bool conversion
+Date:   Fri,  4 Nov 2022 14:37:31 +0800
+Message-Id: <20221104063731.84008-1-yang.lee@linux.alibaba.com>
 X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -43,34 +42,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The function sii9234_mode_valid() is defined in the sii9234.c file, but
-not called elsewhere, so remove this unused function.
+The result of 'scaled_ppm < 0' is Boolean, and the question mark
+expression is redundant, remove it to clear the below warning:
 
-drivers/gpu/drm/bridge/sii9234.c:870:31: warning: unused function 'bridge_to_sii9234'.
+./drivers/net/ethernet/renesas/rcar_gen4_ptp.c:32:40-45: WARNING: conversion to bool not needed here
 
-Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=2735
+Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=2729
 Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
 ---
- drivers/gpu/drm/bridge/sii9234.c | 5 -----
- 1 file changed, 5 deletions(-)
 
-diff --git a/drivers/gpu/drm/bridge/sii9234.c b/drivers/gpu/drm/bridge/sii9234.c
-index 5b3061d4b5c3..62b6bc8ca7af 100644
---- a/drivers/gpu/drm/bridge/sii9234.c
-+++ b/drivers/gpu/drm/bridge/sii9234.c
-@@ -867,11 +867,6 @@ static int sii9234_init_resources(struct sii9234 *ctx,
- 	return 0;
- }
+change in v3:
+--According to Richard's suggestion, to preserve reverse Christmas tree order.
+
+ drivers/net/ethernet/renesas/rcar_gen4_ptp.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/net/ethernet/renesas/rcar_gen4_ptp.c b/drivers/net/ethernet/renesas/rcar_gen4_ptp.c
+index c007e33c47e1..0dc80f6bbf94 100644
+--- a/drivers/net/ethernet/renesas/rcar_gen4_ptp.c
++++ b/drivers/net/ethernet/renesas/rcar_gen4_ptp.c
+@@ -29,8 +29,8 @@ static const struct rcar_gen4_ptp_reg_offset s4_offs = {
+ static int rcar_gen4_ptp_adjfine(struct ptp_clock_info *ptp, long scaled_ppm)
+ {
+ 	struct rcar_gen4_ptp_private *ptp_priv = ptp_to_priv(ptp);
+-	bool neg_adj = scaled_ppm < 0 ? true : false;
+ 	s64 addend = ptp_priv->default_addend;
++	bool neg_adj = scaled_ppm < 0;
+ 	s64 diff;
  
--static inline struct sii9234 *bridge_to_sii9234(struct drm_bridge *bridge)
--{
--	return container_of(bridge, struct sii9234, bridge);
--}
--
- static enum drm_mode_status sii9234_mode_valid(struct drm_bridge *bridge,
- 					 const struct drm_display_info *info,
- 					 const struct drm_display_mode *mode)
+ 	if (neg_adj)
 -- 
 2.20.1.7.g153144c
 
