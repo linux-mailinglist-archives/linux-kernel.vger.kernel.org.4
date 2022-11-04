@@ -2,105 +2,234 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AAEF619F4C
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 18:54:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF2D1619F4E
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 18:54:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231903AbiKDRyW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 13:54:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58370 "EHLO
+        id S231623AbiKDRyy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 13:54:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231634AbiKDRyU (ORCPT
+        with ESMTP id S230147AbiKDRyu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 13:54:20 -0400
-Received: from mail-oi1-f169.google.com (mail-oi1-f169.google.com [209.85.167.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE2A02E9CE;
-        Fri,  4 Nov 2022 10:54:18 -0700 (PDT)
-Received: by mail-oi1-f169.google.com with SMTP id r76so5890970oie.13;
-        Fri, 04 Nov 2022 10:54:18 -0700 (PDT)
+        Fri, 4 Nov 2022 13:54:50 -0400
+Received: from mx0b-003ede02.pphosted.com (mx0b-003ede02.pphosted.com [205.220.181.153])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E3BE303CC
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 10:54:49 -0700 (PDT)
+Received: from pps.filterd (m0286621.ppops.net [127.0.0.1])
+        by mx0b-003ede02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2A4HpCYp003799
+        for <linux-kernel@vger.kernel.org>; Fri, 4 Nov 2022 10:54:48 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=getcruise.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding;
+ s=ppemail; bh=cDmOKcPj6U9lA8G0PnzuOvCtXbcRU92OPOA8AkWynSI=;
+ b=Gat4UQDpGwydop6PK7/brzsRD2WehWrJKEl0y41BiXpNoeBvO9dp1q/jJRLgsu6e0feE
+ dDXGyaDFtOHj+8Ch+qIdbPtrNguNqGcltdk1ecYw35h2t4mBXquPeEPIwTA5QVUZbnBY
+ Lz8TCjwHGEtFBZmgzmmFnbaDqEEUdlNRgjMu6PMpmkoQAoRW0twBIRhmipdEBsJVBQGL
+ 55S82fW+Q38IxMXhUjALuSjZQNVSZVXhMMjdrjZFeY0zCQlAqrtJsC2/4d9QmBiLBnj2
+ 4ndVDpid6zxAmPfM7esT9WwFW5fWwmdJj0v0nYzFraVZKlbuz8wv1P4GOy5n4ImoW5Gn 4A== 
+Received: from mail-pf1-f200.google.com (mail-pf1-f200.google.com [209.85.210.200])
+        by mx0b-003ede02.pphosted.com (PPS) with ESMTPS id 3kmpmmg6pb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 10:54:48 -0700
+Received: by mail-pf1-f200.google.com with SMTP id c207-20020a624ed8000000b0056e3714b62cso2810478pfb.23
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 10:54:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=getcruise.com; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=cDmOKcPj6U9lA8G0PnzuOvCtXbcRU92OPOA8AkWynSI=;
+        b=aMrx2+Kv3RQHcHzAANGS8zruVPElv/uWZS1795Tjhfbf5I5gJoVvANwq5pctH357Hp
+         OOuK3aXcauKygH3nxcodM8LPjxgidcpu6TJjC11N3N+SJpABWVYxNjl8VtBWrb0PFwPf
+         bK7SdoUQvMye1xI8fjcG2SbZd1qPSOj6wPz2cXtCdM/7ixZboGh+qoVT+C6Mwozr+w5I
+         5TBvjhbKVBQGMmtHi2F6FItzAIeqM1WLjM7RGlGDZ3jxwURO7AIStTLrhaIN872nyaA1
+         KWil/PapPTKvFjQjZlyyzoLkkX5r1j4BkMA+71THtTzQ50JsjERHEt2ZlM2p6tu7cLoP
+         X7kQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=8O78pONB73hi1zKNkgXxDhfNpzDliN4yTiKMnP0CVJo=;
-        b=I/qtxdP2K6GWbtfkf1B9S+NYJwuyLzh+PkLBJ/UykEhNfblKSuzR4O2SxBHjBBaM0s
-         VnpClXx+jqKzd3Wj10fEMUh0++h0xUaDnhyRFD/pBxtOXOh6IDij7f+debx9e+NTjZwl
-         SDevXN4ukT+bKinWSVy9jxme2Hbpl0rXa7SALh+OJhABpuDUlv0Jg4P1VQlgKHp35njT
-         FOgZf7BS9IgPO/g0zGzSQXhXpf6LYoL97teMJsYwQxEzeAEZjQR2XYWcEwrmwgrIM1ZD
-         QUSPQVDEjFSbCgcmM+TKHz2hW78Rpm+H1U0GEJCQYR/9JOSojxuW0XyU6FuHB414HsaC
-         wJVA==
-X-Gm-Message-State: ACrzQf0qorVm6oPBUSuQHXfteKeuTjeC/Df1/gGdKZciLIv/r8oMLCaf
-        9CY2xpGvIuLpY+sWTjve0A==
-X-Google-Smtp-Source: AMsMyM7xXk4euDIh9SYT0vN2hxCzE5fvK6Pc+ND36HcC2QllT1s+sTl/+OWip6cXM7LcLKAyo/Zahw==
-X-Received: by 2002:a05:6808:211b:b0:35a:4fb4:c3c6 with SMTP id r27-20020a056808211b00b0035a4fb4c3c6mr4979803oiw.141.1667584457901;
-        Fri, 04 Nov 2022 10:54:17 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id y3-20020a4ade03000000b004982f2d3c03sm1344414oot.25.2022.11.04.10.54.16
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=cDmOKcPj6U9lA8G0PnzuOvCtXbcRU92OPOA8AkWynSI=;
+        b=Cfo+mlZTJ/S4tgx4x7cm6+EkCy98cEarSsWF7DYa3V6hEctn9Qqh1sALjxIbgg1nwU
+         3b6IYorgw9SQQp493d64d8846/2zU1kKDBCGoBaQh3ug1rR6hiPaG1tO0LUWGzhf1M9A
+         KOHQCc1vjexWGcdAKBcWHhSMOYG3TptyZ3gf/+Ja2OpqN+vRQlsU9y1idHK2ss6MqcNI
+         tH6/ZC5WPn2cNP5g7HVJ1tvcQQYXufaauJcGCRy8+Vm2OKEYOwX9T9bpkHHNZwtg8WZG
+         rR/1dE0WgnscUWuclKXq9idkxZilwGacOXCJxNllEI3bIO6KBaprE8hTBXxtL8WGIJPD
+         MVmA==
+X-Gm-Message-State: ACrzQf3KSJ1rlQlmwmLMWNyfQMFFUbiIB3mGmUd6JaRQEKPAguM2A7qD
+        QpNGUSesENFFyJlbNeO9FAs/T6xurzvyYyvA7pmR9mAy6FpV9PcdCG+hDC6phBZOYW3RFNLgBOt
+        vsR+EtjMmyRSTnLI8Ltt62e4=
+X-Received: by 2002:a17:902:c2c4:b0:187:640:205c with SMTP id c4-20020a170902c2c400b001870640205cmr35182652pla.11.1667584487262;
+        Fri, 04 Nov 2022 10:54:47 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM7cea80X9+ppRTJHno74AreljRO/eYUblEOqETO59QjxbcVjz7DwzH0eTwrDORwq5sx8i2lYA==
+X-Received: by 2002:a17:902:c2c4:b0:187:640:205c with SMTP id c4-20020a170902c2c400b001870640205cmr35182630pla.11.1667584486950;
+        Fri, 04 Nov 2022 10:54:46 -0700 (PDT)
+Received: from 4VPLMR2-DT.corp.robot.car ([199.73.125.241])
+        by smtp.gmail.com with ESMTPSA id a9-20020aa78e89000000b005633a06ad67sm3011913pfr.64.2022.11.04.10.54.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Nov 2022 10:54:17 -0700 (PDT)
-Received: (nullmailer pid 2078503 invoked by uid 1000);
-        Fri, 04 Nov 2022 17:54:15 -0000
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+        Fri, 04 Nov 2022 10:54:46 -0700 (PDT)
+From:   Andy Ren <andy.ren@getcruise.com>
+To:     netdev@vger.kernel.org
+Cc:     richardbgobert@gmail.com, davem@davemloft.net,
+        wsa+renesas@sang-engineering.com, edumazet@google.com,
+        petrm@nvidia.com, kuba@kernel.org, pabeni@redhat.com,
+        corbet@lwn.net, andrew@lunn.ch, dsahern@gmail.com,
+        sthemmin@microsoft.com, idosch@idosch.org,
+        sridhar.samudrala@intel.com, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, roman.gushchin@linux.dev,
+        Andy Ren <andy.ren@getcruise.com>
+Subject: [PATCH net-next v2] net/core: Allow live renaming when an interface is up
+Date:   Fri,  4 Nov 2022 10:54:34 -0700
+Message-Id: <20221104175434.458177-1-andy.ren@getcruise.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     marijn.suijten@somainline.org, konrad.dybcio@somainline.org,
-        kernel@collabora.com, andersson@kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, agross@kernel.org
-In-Reply-To: <20221104142204.156333-2-angelogioacchino.delregno@collabora.com>
-References: <20221104142204.156333-1-angelogioacchino.delregno@collabora.com>
- <20221104142204.156333-2-angelogioacchino.delregno@collabora.com>
-Message-Id: <166758411781.2066027.6365889663189109123.robh@kernel.org>
-Subject: Re: [PATCH v2 1/2] dt-bindings: soc: qcom: Add bindings for Qualcomm
- Ramp Controller
-Date:   Fri, 04 Nov 2022 12:54:15 -0500
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-ORIG-GUID: hmwJBm1MZ5VST2zEHdzkPQ1IH8VdEwzH
+X-Proofpoint-GUID: hmwJBm1MZ5VST2zEHdzkPQ1IH8VdEwzH
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-04_11,2022-11-03_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ adultscore=0 lowpriorityscore=0 suspectscore=0 bulkscore=0 clxscore=1015
+ malwarescore=0 phishscore=0 mlxlogscore=840 impostorscore=0 spamscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211040113
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+We should allow a network interface to be renamed when the interface
+is up.
 
-On Fri, 04 Nov 2022 15:22:03 +0100, AngeloGioacchino Del Regno wrote:
-> Document bindings for the Qualcomm Ramp Controller, found on various
-> legacy Qualcomm SoCs.
-> 
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> ---
->  .../qcom/qcom,msm8976-ramp-controller.yaml    | 37 +++++++++++++++++++
->  1 file changed, 37 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,msm8976-ramp-controller.yaml
-> 
+Live renaming was added as a failover in the past, and there has been no
+arising issues of the user space breaking. Furthermore, it seems that this
+flag was added because in the past, IOCTL was used for renaming, which
+would not notify the user space. Nowadays, it appears that the user
+space receives notifications regardless of the state of the network
+device (e.g. rtnetlink_event()). The listeners for NETDEV_CHANGENAME
+also do not strictly ensure that the netdev is up or not.
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Hence, we should remove the live renaming flag and checks due
+to the aforementioned reasons.
 
-yamllint warnings/errors:
+The changes are as the following:
+- Remove IFF_LIVE_RENAME_OK flag declarations
+- Remove check in dev_change_name that checks whether device is up and
+if IFF_LIVE_RENAME_OK is set by the network device's priv_flags
+- Remove references of IFF_LIVE_RENAME_OK in the failover module
 
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/soc/qcom/qcom,msm8976-ramp-controller.example.dtb: power-controller@b014000: '#power-domain-cells' is a required property
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/power/power-domain.yaml
+Changes from v1->v2
+- Added placeholder comment in place of removed IFF_LIVE_RENAME_OK flag
+- Added extra logging hints to indicate whether a network interface was
+renamed while UP
 
-doc reference errors (make refcheckdocs):
+Signed-off-by: Andy Ren <andy.ren@getcruise.com>
+---
+ include/linux/netdevice.h |  4 +---
+ net/core/dev.c            | 19 ++-----------------
+ net/core/failover.c       |  6 +++---
+ 3 files changed, 6 insertions(+), 23 deletions(-)
 
-See https://patchwork.ozlabs.org/patch/
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
+diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
+index d45713a06568..4be87b89e481 100644
+--- a/include/linux/netdevice.h
++++ b/include/linux/netdevice.h
+@@ -1650,7 +1650,6 @@ struct net_device_ops {
+  * @IFF_FAILOVER: device is a failover master device
+  * @IFF_FAILOVER_SLAVE: device is lower dev of a failover master device
+  * @IFF_L3MDEV_RX_HANDLER: only invoke the rx handler of L3 master device
+- * @IFF_LIVE_RENAME_OK: rename is allowed while device is up and running
+  * @IFF_TX_SKB_NO_LINEAR: device/driver is capable of xmitting frames with
+  *	skb_headlen(skb) == 0 (data starts from frag0)
+  * @IFF_CHANGE_PROTO_DOWN: device supports setting carrier via IFLA_PROTO_DOWN
+@@ -1686,7 +1685,7 @@ enum netdev_priv_flags {
+ 	IFF_FAILOVER			= 1<<27,
+ 	IFF_FAILOVER_SLAVE		= 1<<28,
+ 	IFF_L3MDEV_RX_HANDLER		= 1<<29,
+-	IFF_LIVE_RENAME_OK		= 1<<30,
++	/* was IFF_LIVE_RENAME_OK */
+ 	IFF_TX_SKB_NO_LINEAR		= BIT_ULL(31),
+ 	IFF_CHANGE_PROTO_DOWN		= BIT_ULL(32),
+ };
+@@ -1721,7 +1720,6 @@ enum netdev_priv_flags {
+ #define IFF_FAILOVER			IFF_FAILOVER
+ #define IFF_FAILOVER_SLAVE		IFF_FAILOVER_SLAVE
+ #define IFF_L3MDEV_RX_HANDLER		IFF_L3MDEV_RX_HANDLER
+-#define IFF_LIVE_RENAME_OK		IFF_LIVE_RENAME_OK
+ #define IFF_TX_SKB_NO_LINEAR		IFF_TX_SKB_NO_LINEAR
+ 
+ /* Specifies the type of the struct net_device::ml_priv pointer */
+diff --git a/net/core/dev.c b/net/core/dev.c
+index 3bacee3bee78..707de6b841d0 100644
+--- a/net/core/dev.c
++++ b/net/core/dev.c
+@@ -1163,22 +1163,6 @@ int dev_change_name(struct net_device *dev, const char *newname)
+ 
+ 	net = dev_net(dev);
+ 
+-	/* Some auto-enslaved devices e.g. failover slaves are
+-	 * special, as userspace might rename the device after
+-	 * the interface had been brought up and running since
+-	 * the point kernel initiated auto-enslavement. Allow
+-	 * live name change even when these slave devices are
+-	 * up and running.
+-	 *
+-	 * Typically, users of these auto-enslaving devices
+-	 * don't actually care about slave name change, as
+-	 * they are supposed to operate on master interface
+-	 * directly.
+-	 */
+-	if (dev->flags & IFF_UP &&
+-	    likely(!(dev->priv_flags & IFF_LIVE_RENAME_OK)))
+-		return -EBUSY;
+-
+ 	down_write(&devnet_rename_sem);
+ 
+ 	if (strncmp(newname, dev->name, IFNAMSIZ) == 0) {
+@@ -1195,7 +1179,8 @@ int dev_change_name(struct net_device *dev, const char *newname)
+ 	}
+ 
+ 	if (oldname[0] && !strchr(oldname, '%'))
+-		netdev_info(dev, "renamed from %s\n", oldname);
++		netdev_info(dev, "renamed from %s%s\n", oldname,
++			    dev->flags & IFF_UP ? " (while UP)" : "");
+ 
+ 	old_assign_type = dev->name_assign_type;
+ 	dev->name_assign_type = NET_NAME_RENAMED;
+diff --git a/net/core/failover.c b/net/core/failover.c
+index 864d2d83eff4..655411c4ca51 100644
+--- a/net/core/failover.c
++++ b/net/core/failover.c
+@@ -80,14 +80,14 @@ static int failover_slave_register(struct net_device *slave_dev)
+ 		goto err_upper_link;
+ 	}
+ 
+-	slave_dev->priv_flags |= (IFF_FAILOVER_SLAVE | IFF_LIVE_RENAME_OK);
++	slave_dev->priv_flags |= IFF_FAILOVER_SLAVE;
+ 
+ 	if (fops && fops->slave_register &&
+ 	    !fops->slave_register(slave_dev, failover_dev))
+ 		return NOTIFY_OK;
+ 
+ 	netdev_upper_dev_unlink(slave_dev, failover_dev);
+-	slave_dev->priv_flags &= ~(IFF_FAILOVER_SLAVE | IFF_LIVE_RENAME_OK);
++	slave_dev->priv_flags &= ~IFF_FAILOVER_SLAVE;
+ err_upper_link:
+ 	netdev_rx_handler_unregister(slave_dev);
+ done:
+@@ -121,7 +121,7 @@ int failover_slave_unregister(struct net_device *slave_dev)
+ 
+ 	netdev_rx_handler_unregister(slave_dev);
+ 	netdev_upper_dev_unlink(slave_dev, failover_dev);
+-	slave_dev->priv_flags &= ~(IFF_FAILOVER_SLAVE | IFF_LIVE_RENAME_OK);
++	slave_dev->priv_flags &= ~IFF_FAILOVER_SLAVE;
+ 
+ 	if (fops && fops->slave_unregister &&
+ 	    !fops->slave_unregister(slave_dev, failover_dev))
+-- 
+2.38.1
 
