@@ -2,125 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 861F961965F
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 13:40:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE979619664
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 13:40:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231764AbiKDMkJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 08:40:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56400 "EHLO
+        id S231589AbiKDMkw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 08:40:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231848AbiKDMjr (ORCPT
+        with ESMTP id S229489AbiKDMks (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 08:39:47 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ADB5A1BC;
-        Fri,  4 Nov 2022 05:39:45 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id k15so4430405pfg.2;
-        Fri, 04 Nov 2022 05:39:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=/TTs+SQ3730sftInldiJIc3c0U0T3PiqOZZn4XJKbTc=;
-        b=pMDidnAt8xhkHG6jwMe8yC27eQxhm11xGQeS5bipl/LYmQFfMD+TYXs8rsleS076oe
-         7iQ5oQPvzqllPSIJuoe4ZYRLrh/49FetUiUqmkfvintVSYAjiy7pNahD93uTHmVxyULz
-         SKXj4p0LtikpNZiGqcpoNCVYxLYMibaO56eiyv+Z0y2TxnXg6Rk5NeQ5TfuTfThjgAtq
-         TjDaK83G/YQYhadkwjg/uxo5FvEWC4/iqPd940lUMIxX+VWGciiXTMKiuPQrFtgfxqxP
-         dEoFTx6APSO5cnuXrQO/rfsTHHns3a9rDb+x3EfBSyU9cYdkLvrgh4LDxf3Y8JemacKE
-         fbJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/TTs+SQ3730sftInldiJIc3c0U0T3PiqOZZn4XJKbTc=;
-        b=y6SGJNsqQdEYN2JZFdq3WZm6WUP8k0q/j33uTb8Srz8j3lohjRyo34XNRok+9/bf34
-         gWJh0RB1NJT91EZfL7vpcpNED8IhXL6hYi9R8g/lR4rft1xtVKEbZliohpcWEAkU79Pu
-         J2PmJ0AHQzrtD1FIgw8FUMgZjdyHp7RGBmZUpFvzbJWXvmFhAEdk/6jJB947jCCKKmRt
-         +Wfr5GHXUns0oI2Lh08uZEFhxJO1XOEqsbXpSMveVlL9sVpmAfxKyReufCMSjyw+Vk9t
-         mgKTWCf1konN/4vL9EvP2wadOi6Vvx5XN2r+K6PiY85OGlDKRNm8JicZhlcE7nbxGkOa
-         Uy1g==
-X-Gm-Message-State: ACrzQf3UJd8KBeBvePdOFhU8WQmWJFRBEeGpcQ4RbK3iNznpuWpu13CU
-        PP8HwHhG4CrjX0bLQrhQIrvKBsJLr+MRjmbJ
-X-Google-Smtp-Source: AMsMyM7pLqX6RGGlLZQ28jcGph6DjfzlBDsurtfYnyvWlXa0OKmKlyGysgSd3AzigrRmD0oxC6QfjA==
-X-Received: by 2002:a65:49c9:0:b0:462:9ce1:3f58 with SMTP id t9-20020a6549c9000000b004629ce13f58mr30209189pgs.200.1667565584901;
-        Fri, 04 Nov 2022 05:39:44 -0700 (PDT)
-Received: from debian.. (subs02-180-214-232-17.three.co.id. [180.214.232.17])
-        by smtp.gmail.com with ESMTPSA id w14-20020a627b0e000000b0056bd4ec964csm2603180pfc.194.2022.11.04.05.39.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Nov 2022 05:39:44 -0700 (PDT)
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     bpf@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        David Vernet <void@manifault.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Bagas Sanjaya <bagasdotme@gmail.com>
-Subject: [PATCH bpf-next] Documentation: bpf: escape underscore in BPF type name prefix
-Date:   Fri,  4 Nov 2022 19:39:14 +0700
-Message-Id: <20221104123913.50610-1-bagasdotme@gmail.com>
-X-Mailer: git-send-email 2.38.1
+        Fri, 4 Nov 2022 08:40:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50A4B2AD2;
+        Fri,  4 Nov 2022 05:40:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E1BAB6216F;
+        Fri,  4 Nov 2022 12:40:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8347C433C1;
+        Fri,  4 Nov 2022 12:40:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667565647;
+        bh=86lfsZhQiofECwdBXs+MGUADeqUzwNnoH81scqJlkF4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=cOgihHFG7DvlRNq1fWGC6tK8cVXEkJgDWZtX+VyGNFA51eg1sTn82YVl3OSeafcph
+         rzJvLIdXzod+5/+tx5ZI0dEkJMKMviP/GIQjKDsKI2BYkILiT01Iua1qEROQZQb2sO
+         2dCOxlezc4wDwi8wbuaRYT2gzi5v3Dfl+VG6BIgYXWSUft8nrDYClyfSKPjKR0Z5T2
+         Lzvh6a6m6Jtp00g6Bwwmu96/5N5I9mvfcKd60nvChtpuHFsoyC1wfLbJOLovXEOPLe
+         4TXLT4wOA7qdGY5MA8GCJ1FtEBDIWDIHMPwUlTOWMG+iQkYYk1Pv9ftShuIV/pJfEP
+         HfFe2mb4mrNdA==
+Date:   Fri, 4 Nov 2022 18:10:43 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Sireesh Kodali <sireeshkodali1@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, dmaengine@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht
+Subject: Re: [PATCH v2 0/3] dmaengine: Add support for immediate commands
+Message-ID: <Y2UIS7P0alvqT4jn@matsya>
+References: <20221027051429.46593-1-sireeshkodali1@gmail.com>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1956; i=bagasdotme@gmail.com; h=from:subject; bh=RWnD3wD39wBwhPhnOTT0S+Ljuw5X7oF+YsnsA+fSFlU=; b=owGbwMvMwCH2bWenZ2ig32LG02pJDMmp7K+XeAbM1mn5tLAjt+Wgmqn3Uzf910snXncP/+4utdLm oc20jlIWBjEOBlkxRZZJiXxNp3cZiVxoX+sIM4eVCWQIAxenAEzkTgEjw8vIv5uPXWubEHi81+DiPf f7+meXm8xdu85hxfWoTwvNvt1iZJjZynj/zzv3/WUp5cFV726nhd6/y1xwqeTA9Rs3l3gv38oLAA==
-X-Developer-Key: i=bagasdotme@gmail.com; a=openpgp; fpr=701B806FDCA5D3A58FFB8F7D7C276C64A5E44A1D
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221027051429.46593-1-sireeshkodali1@gmail.com>
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sphinx reported unknown target warning:
+On 27-10-22, 10:44, Sireesh Kodali wrote:
+> The IPA v2.x block, found on some older Qualcomm SoCs, uses BAM DMA to
+> send and receive packets from the AP. It also uses BAM to receive
+> commands from the AP (and possibly the modem). These commands are
+> encoded as "Immediate Commands". They vary from regular BAM DMA
+> commands. Adding support for immediate commands is trivial, but requires
+> also adding Immediate Commands to the dmaengine API, which is what this
+> patch series does.
 
-Documentation/bpf/bpf_design_QA.rst:329: WARNING: Unknown target name: "bpf".
+Can you explain a bit more. I understand you need "Immediate Commands"
+but am really reluctant to add another interface to support a specific
+use case
 
-The warning is caused by BPF type name prefix ("bpf_") which is written
-without escaping the trailing underscore.
+> 
+> Sireesh Kodali (3):
+>   doc: dmaengine: client-api: Add immediate commands in the DMA client
+>     API
+>   dmaengine: Add support for immediate commands in the client API
+>   dmaengine: bam_dma: Add support for immediate commands
+> 
+>  Documentation/driver-api/dmaengine/provider.rst | 10 ++++++++++
+>  drivers/dma/qcom/bam_dma.c                      |  3 +++
+>  include/linux/dmaengine.h                       |  4 ++++
+>  3 files changed, 17 insertions(+)
+> 
+> -- 
+> 2.38.1
 
-Escape the underscore to fix the warning. While at it, wrap the
-containing paragraph in less than 80 characters.
-
-Fixes: 9805af8d8a5b17 ("bpf: Document UAPI details for special BPF types")
-Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
----
- Documentation/bpf/bpf_design_QA.rst | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/Documentation/bpf/bpf_design_QA.rst b/Documentation/bpf/bpf_design_QA.rst
-index 4e4af398607b58..17e774d96c5e4b 100644
---- a/Documentation/bpf/bpf_design_QA.rst
-+++ b/Documentation/bpf/bpf_design_QA.rst
-@@ -326,11 +326,11 @@ size, type, and alignment, or any other user visible API or ABI detail across
- kernel releases. The users must adapt their BPF programs to the new changes and
- update them to make sure their programs continue to work correctly.
- 
--NOTE: BPF subsystem specially reserves the 'bpf_' prefix for type names, in
-+NOTE: BPF subsystem specially reserves the 'bpf\_' prefix for type names, in
- order to introduce more special fields in the future. Hence, user programs must
--avoid defining types with 'bpf_' prefix to not be broken in future releases. In
--other words, no backwards compatibility is guaranteed if one using a type in BTF
--with 'bpf_' prefix.
-+avoid defining types with 'bpf\_' prefix to not be broken in future releases.
-+In other words, no backwards compatibility is guaranteed if one using a type
-+in BTF with 'bpf\_' prefix.
- 
- Q: What is the compatibility story for special BPF types in local kptrs?
- ------------------------------------------------------------------------
-
-base-commit: f71b2f64177a199d5b1d2047e155d45fd98f564a
 -- 
-An old man doll... just what I always wanted! - Clara
-
+~Vinod
