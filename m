@@ -2,265 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B9DF61970E
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 14:06:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4484061970F
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 14:07:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231841AbiKDNGE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 09:06:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42348 "EHLO
+        id S231559AbiKDNHL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 09:07:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231652AbiKDNFv (ORCPT
+        with ESMTP id S231961AbiKDNGu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 09:05:51 -0400
-Received: from mx.gpxsee.org (mx.gpxsee.org [37.205.14.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 58FB72E9FF;
-        Fri,  4 Nov 2022 06:05:45 -0700 (PDT)
-Received: from [192.168.4.25] (unknown [62.77.71.229])
-        by mx.gpxsee.org (Postfix) with ESMTPSA id 200092AB1C;
-        Fri,  4 Nov 2022 14:05:43 +0100 (CET)
-Message-ID: <2af0e2a2-8f19-3c7b-4b5f-53ddf014bbf2@gpxsee.org>
-Date:   Fri, 4 Nov 2022 14:05:42 +0100
+        Fri, 4 Nov 2022 09:06:50 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6F4E2F01C;
+        Fri,  4 Nov 2022 06:06:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=LtHz5uPmwMnRA8pug11cAIugKhPmlVYnrt/fWjr2UQs=; b=D5/B7gyRf31MPbDuHBPq7nvyyP
+        OTMpHwhz789CRYrPf6cXtunXceOPmlcI5l0W/zyMT9U1hHrx7YB6IOQM4eLHQ1m4yK0WRcnBq1IdR
+        L29PkD26HOPr8vgV26Zu9iapv55p6bN/SK/2btYjPvlFEvLiAZzqN2KnRwz6nY5pP4Q7cu3/rHzL6
+        WBqNB/LXdcckZpuY6+wGUiQg0IobaaH6X00iku04xOleQnkrumlpOwma57rnIYkbG+ljIdTTpoCBN
+        XYDx3t6k1GphY4K9w/vYM20SjDlBfLLq7WnOuqjxBDctQIwxaA0s69ct73ND0eOLeS6jhcLlhGnSR
+        yS0GrHeQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oqwOh-008yeU-UO; Fri, 04 Nov 2022 13:06:12 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id B9E8E300282;
+        Fri,  4 Nov 2022 14:06:10 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 9A07F201E232E; Fri,  4 Nov 2022 14:06:10 +0100 (CET)
+Date:   Fri, 4 Nov 2022 14:06:10 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, anand.gore@broadcom.com,
+        william.zhang@broadcom.com, Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Anna-Maria Gleixner <anna-maria@linutronix.de>,
+        Sebastian Siewior <bigeasy@linutronix.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "open list:PERFORMANCE EVENTS SUBSYSTEM" 
+        <linux-perf-users@vger.kernel.org>
+Subject: Re: [PATCH] perf: Fix perf_event_{init,exit}_cpu stubs
+Message-ID: <Y2UOQpniaV12E0P9@hirez.programming.kicks-ass.net>
+References: <20221103224303.3910486-1-f.fainelli@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH v3 0/2] Digiteq Automotive MGB4 driver
-Content-Language: en-US
-To:     Hans Verkuil <hverkuil@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org, Lizhi Hou <lizhi.hou@amd.com>,
-        =?UTF-8?Q?Martin_T=c5=afma?= <martin.tuma@digiteqautomotive.com>
-References: <20221018140338.7080-1-tumic@gpxsee.org>
- <52532fda-6863-6658-4ad5-a4dbc2607a1c@xs4all.nl>
-From:   =?UTF-8?Q?Martin_T=c5=afma?= <tumic@gpxsee.org>
-In-Reply-To: <52532fda-6863-6658-4ad5-a4dbc2607a1c@xs4all.nl>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221103224303.3910486-1-f.fainelli@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04. 11. 22 11:45, Hans Verkuil wrote:
-> On 18/10/2022 16:03, tumic@gpxsee.org wrote:
->> From: Martin Tůma <martin.tuma@digiteqautomotive.com>
->>
->> Hi,
->> This series of patches adds a driver for the Digiteq Automotive MGB4 grabber
->> card. MGB4 is a modular frame grabber PCIe card for automotive video interfaces
->> (FPD-Link and GMSL for now). It is based on a Xilinx FPGA and uses their
->> XDMA IP core for DMA transfers. Additionally, Xilinx I2C and SPI IP cores
->> which already have drivers in linux are used in the design.
->>
->> The driver is a quite standard v4l2 driver, with one exception - there are
->> a lot of sysfs options that may/must be set before opening the v4l2 device
->> to adapt the card on a specific signal (see mgb4.rst for details)
->> as the card must be able to work with various signal sources (or displays)
->> that can not be auto-detected.
->>
->> I have run the driver through the v4l2-compliance test suite for both the
->> input and the output and the results look fine to me (I can provide the
->> output if required).
+On Thu, Nov 03, 2022 at 03:43:03PM -0700, Florian Fainelli wrote:
+> The original commit that introduced those stubs was already at fault,
+> but in the absence of a caller of perf_event_{init,exit}_cpu outside of
+> code that is compiled regardless of CONFIG_PERF_EVENTS, the build
+> failure cannot be observed. This was observed with the Android kernel to
+> produce a build failure similar to this:
 > 
-> Please do! Did you use the latest v4l2-compliance code from the v4l-utils
-> git repo? Distros tend to have a too-old version.
+>     In file included from ./include/uapi/linux/posix_types.h:5,
+>                      from ./include/uapi/linux/types.h:14,
+>                      from ./include/linux/types.h:6,
+>                      from ./include/linux/limits.h:6,
+>                      from ./include/linux/kernel.h:7,
+>                      from ./include/linux/sched/mm.h:5,
+>                      from kernel/cpu.c:6:
+>     kernel/cpu.c: In function 'random_and_perf_prepare_fusion':
+>     ./include/linux/stddef.h:8:14: error: called object is not a function or function pointer
+>      #define NULL ((void *)0)
+>                   ^
+>     ./include/linux/perf_event.h:1607:29: note: in expansion of macro 'NULL'
+>      #define perf_event_init_cpu NULL
+>                                  ^~~~
+>     kernel/cpu.c:1686:2: note: in expansion of macro 'perf_event_init_cpu'
+>       perf_event_init_cpu(cpu);
+>       ^~~~~~~~~~~~~~~~~~~
+
+What is the actual problem reported here? Did you see all the other NULL
+assignments in cpuhp_hp_states ?
+
 > 
-> Regards,
+> Fixes: 00e16c3d68fc ("perf/core: Convert to hotplug state machine")
+> Reported-by: Anand Gore <anand.gore@broadcom.com>
+> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+> ---
+>  include/linux/perf_event.h | 11 +++++++++--
+>  1 file changed, 9 insertions(+), 2 deletions(-)
 > 
-> 	Hans
+> diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
+> index 0031f7b4d9ab..592040e2398c 100644
+> --- a/include/linux/perf_event.h
+> +++ b/include/linux/perf_event.h
+> @@ -1678,8 +1678,15 @@ static struct device_attribute format_attr_##_name = __ATTR_RO(_name)
+>  int perf_event_init_cpu(unsigned int cpu);
+>  int perf_event_exit_cpu(unsigned int cpu);
+>  #else
+> -#define perf_event_init_cpu	NULL
+> -#define perf_event_exit_cpu	NULL
+> +static inline int perf_event_init_cpu(unsigned int cpu)
+> +{
+> +	return 0;
+> +}
+> +
+> +static inline int perf_event_exit_cpu(unsigned int cpu)
+> +{
+> +	return 0;
+> +}
+>  #endif
+>  
+>  extern void __weak arch_perf_update_userpage(struct perf_event *event,
+> -- 
+> 2.25.1
 > 
-
-Hi,
-Here they are:
-
---- INPUT ---
-
-v4l2-compliance 1.22.1, 64 bits, 64-bit time_t
-
-Compliance test for mgb4 device /dev/video4:
-
-Driver Info:
-	Driver name      : mgb4
-	Card type        : MGB4 PCIe Card
-	Bus info         : PCI:0000:06:00.0
-	Driver version   : 6.0.0
-	Capabilities     : 0x85200001
-		Video Capture
-		Read/Write
-		Streaming
-		Extended Pix Format
-		Device Capabilities
-	Device Caps      : 0x05200001
-		Video Capture
-		Read/Write
-		Streaming
-		Extended Pix Format
-
-Required ioctls:
-	test VIDIOC_QUERYCAP: OK
-	test invalid ioctls: OK
-
-Allow for multiple opens:
-	test second /dev/video4 open: OK
-	test VIDIOC_QUERYCAP: OK
-	test VIDIOC_G/S_PRIORITY: OK
-	test for unlimited opens: OK
-
-Debug ioctls:
-	test VIDIOC_DBG_G/S_REGISTER: OK (Not Supported)
-	test VIDIOC_LOG_STATUS: OK (Not Supported)
-
-Input ioctls:
-	test VIDIOC_G/S_TUNER/ENUM_FREQ_BANDS: OK (Not Supported)
-	test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
-	test VIDIOC_S_HW_FREQ_SEEK: OK (Not Supported)
-	test VIDIOC_ENUMAUDIO: OK (Not Supported)
-	test VIDIOC_G/S/ENUMINPUT: OK
-	test VIDIOC_G/S_AUDIO: OK (Not Supported)
-	Inputs: 1 Audio Inputs: 0 Tuners: 0
-
-Output ioctls:
-	test VIDIOC_G/S_MODULATOR: OK (Not Supported)
-	test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
-	test VIDIOC_ENUMAUDOUT: OK (Not Supported)
-	test VIDIOC_G/S/ENUMOUTPUT: OK (Not Supported)
-	test VIDIOC_G/S_AUDOUT: OK (Not Supported)
-	Outputs: 0 Audio Outputs: 0 Modulators: 0
-
-Input/Output configuration ioctls:
-	test VIDIOC_ENUM/G/S/QUERY_STD: OK (Not Supported)
-	test VIDIOC_ENUM/G/S/QUERY_DV_TIMINGS: OK (Not Supported)
-	test VIDIOC_DV_TIMINGS_CAP: OK (Not Supported)
-	test VIDIOC_G/S_EDID: OK (Not Supported)
-
-Control ioctls (Input 0):
-	test VIDIOC_QUERY_EXT_CTRL/QUERYMENU: OK (Not Supported)
-	test VIDIOC_QUERYCTRL: OK
-	test VIDIOC_G/S_CTRL: OK (Not Supported)
-	test VIDIOC_G/S/TRY_EXT_CTRLS: OK (Not Supported)
-	test VIDIOC_(UN)SUBSCRIBE_EVENT/DQEVENT: OK (Not Supported)
-	test VIDIOC_G/S_JPEGCOMP: OK (Not Supported)
-	Standard Controls: 0 Private Controls: 0
-
-Format ioctls (Input 0):
-	test VIDIOC_ENUM_FMT/FRAMESIZES/FRAMEINTERVALS: OK
-	test VIDIOC_G/S_PARM: OK
-	test VIDIOC_G_FBUF: OK (Not Supported)
-	test VIDIOC_G_FMT: OK
-	test VIDIOC_TRY_FMT: OK
-	test VIDIOC_S_FMT: OK
-	test VIDIOC_G_SLICED_VBI_CAP: OK (Not Supported)
-	test Cropping: OK (Not Supported)
-	test Composing: OK (Not Supported)
-	test Scaling: OK (Not Supported)
-
-Codec ioctls (Input 0):
-	test VIDIOC_(TRY_)ENCODER_CMD: OK (Not Supported)
-	test VIDIOC_G_ENC_INDEX: OK (Not Supported)
-	test VIDIOC_(TRY_)DECODER_CMD: OK (Not Supported)
-
-Buffer ioctls (Input 0):
-	test VIDIOC_REQBUFS/CREATE_BUFS/QUERYBUF: OK
-	test VIDIOC_EXPBUF: OK
-	test Requests: OK (Not Supported)
-
-Total for mgb4 device /dev/video4: 45, Succeeded: 45, Failed: 0, Warnings: 0
-
---- OUTPUT ---
-
-v4l2-compliance 1.22.1, 64 bits, 64-bit time_t
-
-Compliance test for mgb4 device /dev/video6:
-
-Driver Info:
-	Driver name      : mgb4
-	Card type        : MGB4 PCIe Card
-	Bus info         : PCI:0000:06:00.0
-	Driver version   : 6.0.0
-	Capabilities     : 0x85200002
-		Video Output
-		Read/Write
-		Streaming
-		Extended Pix Format
-		Device Capabilities
-	Device Caps      : 0x05200002
-		Video Output
-		Read/Write
-		Streaming
-		Extended Pix Format
-
-Required ioctls:
-	test VIDIOC_QUERYCAP: OK
-	test invalid ioctls: OK
-
-Allow for multiple opens:
-	test second /dev/video6 open: OK
-	test VIDIOC_QUERYCAP: OK
-	test VIDIOC_G/S_PRIORITY: OK
-	test for unlimited opens: OK
-
-Debug ioctls:
-	test VIDIOC_DBG_G/S_REGISTER: OK (Not Supported)
-	test VIDIOC_LOG_STATUS: OK (Not Supported)
-
-Input ioctls:
-	test VIDIOC_G/S_TUNER/ENUM_FREQ_BANDS: OK (Not Supported)
-	test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
-	test VIDIOC_S_HW_FREQ_SEEK: OK (Not Supported)
-	test VIDIOC_ENUMAUDIO: OK (Not Supported)
-	test VIDIOC_G/S/ENUMINPUT: OK (Not Supported)
-	test VIDIOC_G/S_AUDIO: OK (Not Supported)
-	Inputs: 0 Audio Inputs: 0 Tuners: 0
-
-Output ioctls:
-	test VIDIOC_G/S_MODULATOR: OK (Not Supported)
-	test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
-	test VIDIOC_ENUMAUDOUT: OK (Not Supported)
-	test VIDIOC_G/S/ENUMOUTPUT: OK
-	test VIDIOC_G/S_AUDOUT: OK (Not Supported)
-	Outputs: 1 Audio Outputs: 0 Modulators: 0
-
-Input/Output configuration ioctls:
-	test VIDIOC_ENUM/G/S/QUERY_STD: OK (Not Supported)
-	test VIDIOC_ENUM/G/S/QUERY_DV_TIMINGS: OK (Not Supported)
-	test VIDIOC_DV_TIMINGS_CAP: OK (Not Supported)
-	test VIDIOC_G/S_EDID: OK (Not Supported)
-
-Control ioctls (Output 0):
-	test VIDIOC_QUERY_EXT_CTRL/QUERYMENU: OK (Not Supported)
-	test VIDIOC_QUERYCTRL: OK
-	test VIDIOC_G/S_CTRL: OK (Not Supported)
-	test VIDIOC_G/S/TRY_EXT_CTRLS: OK (Not Supported)
-	test VIDIOC_(UN)SUBSCRIBE_EVENT/DQEVENT: OK (Not Supported)
-	test VIDIOC_G/S_JPEGCOMP: OK (Not Supported)
-	Standard Controls: 0 Private Controls: 0
-
-Format ioctls (Output 0):
-	test VIDIOC_ENUM_FMT/FRAMESIZES/FRAMEINTERVALS: OK
-	test VIDIOC_G/S_PARM: OK (Not Supported)
-	test VIDIOC_G_FBUF: OK (Not Supported)
-	test VIDIOC_G_FMT: OK
-	test VIDIOC_TRY_FMT: OK
-	test VIDIOC_S_FMT: OK
-	test VIDIOC_G_SLICED_VBI_CAP: OK (Not Supported)
-	test Cropping: OK (Not Supported)
-	test Composing: OK (Not Supported)
-	test Scaling: OK (Not Supported)
-
-Codec ioctls (Output 0):
-	test VIDIOC_(TRY_)ENCODER_CMD: OK (Not Supported)
-	test VIDIOC_G_ENC_INDEX: OK (Not Supported)
-	test VIDIOC_(TRY_)DECODER_CMD: OK (Not Supported)
-
-Buffer ioctls (Output 0):
-	test VIDIOC_REQBUFS/CREATE_BUFS/QUERYBUF: OK
-	test VIDIOC_EXPBUF: OK
-	test Requests: OK (Not Supported)
-
-Total for mgb4 device /dev/video6: 45, Succeeded: 45, Failed: 0, Warnings: 0
-
-M.
