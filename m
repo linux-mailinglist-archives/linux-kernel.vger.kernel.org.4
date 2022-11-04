@@ -2,127 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3FA8619D4E
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 17:31:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D222C619D53
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 17:31:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231719AbiKDQb2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 12:31:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56038 "EHLO
+        id S229770AbiKDQbp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 12:31:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231992AbiKDQbD (ORCPT
+        with ESMTP id S231728AbiKDQbb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 12:31:03 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 602464AF05
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 09:30:32 -0700 (PDT)
-Date:   Fri, 4 Nov 2022 17:30:29 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1667579431;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=3IWWRcr61poV2wfMEb6SdyyrYEqCB+EqRkP5X35iB6k=;
-        b=EUPx6j0ozuXuQT9/w0dh85/ZqRpVDqpYDpkgqyIr4Hjuhi7nUlToPvT36QCi00Byyku8WP
-        XY28FWwOm4ktjqh3CM4xrcqZfBTRGIJDx1nQkYTwNDHDUOxfKj7cPgCwEAAT9DiSw47tNZ
-        4lgrxJzK1bg0QnnuR7gQ9cGixio5HyY3GLr5lhbl9FeOCYdCBZAfXn183tjMEauGrgx3Uz
-        SCRlhvUgvWGVk7pGaVP/Lrui5M2cl0aIiXivcFtaYSAZhxix2kW8yVY5uf2q93FWeaDV7t
-        ahCmM15PTDVrevdXvufJK4Snxh+gori21UmwadpCrb6Vi4Q3iBlXNu7PgUS8iA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1667579431;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=3IWWRcr61poV2wfMEb6SdyyrYEqCB+EqRkP5X35iB6k=;
-        b=8CIaXqt4KIJKMD9QblwV+T8f00Pw15nvhOBI0vbJP/HStrkYCKyphAcD+eLGgsE7CFN7C7
-        WvGhVADWrmeqTbCg==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     Jan Kara <jack@suse.cz>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Fri, 4 Nov 2022 12:31:31 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BDFD29802
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 09:31:30 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id 78so4784513pgb.13
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 09:31:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=tykh0C7NQoqMsiv0FEJ8nDBTc1ar6j/4SljcpXaw+gg=;
+        b=ZvfqWRbmiygXbQlvUXzlFPIy6pWgi3NnbKZ9axUfvTwSG1jmeczFdzfmEBk6JPul9u
+         KtfoNDPD7+7L7ckLKxE85H3i30VZE1cLcwZqr+9Pmyt/Uvr0gsenysKMrttjRd1DNmYa
+         taHLNc4BlGL4LuS+a5zOzje7JmI5lr7pLr83tPoJKPDxZ+8mRqo1TUsZIcKB3+pLirGc
+         61VotfoTC994tXlc+pHq0IWsR3SGM7VfiO/hK89Ek0CoqTLSvnWOMLSW6BMMx8STYHyn
+         tAWojTUjFC5IOfCMzJ25ZkS53CsxfaYW+If16SDvap+gn/hFvgnPNsAIXJ/ZXr/CVgup
+         nXnw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tykh0C7NQoqMsiv0FEJ8nDBTc1ar6j/4SljcpXaw+gg=;
+        b=C0HK0BsuAx9LcBj5eEwA4L8GZTdHqgjRPY21KSioU+YUM1IhtyL/uiMZGBlh3LJN1p
+         ZM3cRNslQWIBzxNUSTOqEa/tFeC5yy1uqE2DFjQg8i/rtZeilwiDIivXh6j1LOf5udW4
+         fGf65KsNkDxEDksnFz49whRgLu9YmOxwRhsb+Ep4RLXpAyzWeshJ7azFvZwQ5K7i5Cs0
+         SzDx+DuGOvfiSOLhqtqJjUFjOuAElnSnLMWW0L+FOqjA3HwpjMVVsxM4+b1nahcmc5ON
+         KuepLyzMOge/GlaR5cwdxDAY+DUyyYm3qosOdoeImzFKbgXh/wkBPbd/5TDscCicyHpY
+         xQBw==
+X-Gm-Message-State: ACrzQf2U50fUICHwS/W2XiksJUV140ZhF/m1fgdhr3XX+AOHbapYRYfK
+        GvrIGuXVu86QPl21pjr9mgpuzg==
+X-Google-Smtp-Source: AMsMyM4q4CNgN2lQ4PyaYyADoR+QimlVBokrxw9X6LS0+cBweFifUR+XVuuTHXr8UlnLM2zvHk12kA==
+X-Received: by 2002:a05:6a00:248e:b0:56e:ad31:b976 with SMTP id c14-20020a056a00248e00b0056ead31b976mr1059125pfv.51.1667579490004;
+        Fri, 04 Nov 2022 09:31:30 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id y133-20020a62ce8b000000b00565cbad9616sm2954667pfg.6.2022.11.04.09.31.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Nov 2022 09:31:29 -0700 (PDT)
+Date:   Fri, 4 Nov 2022 16:31:25 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Yuan Yao <yuan.yao@linux.intel.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Anup Patel <anup@brainfault.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        Eric Farman <farman@linux.ibm.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Atish Patra <atishp@atishpatra.org>,
+        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Isaku Yamahata <isaku.yamahata@intel.com>,
+        Fabiano Rosas <farosas@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Chao Gao <chao.gao@intel.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mel Gorman <mgorman@suse.de>
-Subject: Re: Crash with PREEMPT_RT on aarch64 machine
-Message-ID: <Y2U+Je+LICO2HkNY@linutronix.de>
-References: <20221103115444.m2rjglbkubydidts@quack3>
+        Yuan Yao <yuan.yao@intel.com>
+Subject: Re: [PATCH 08/44] KVM: x86: Move hardware setup/unsetup to init/exit
+Message-ID: <Y2U+XT0Sm+a69CaH@google.com>
+References: <20221102231911.3107438-1-seanjc@google.com>
+ <20221102231911.3107438-9-seanjc@google.com>
+ <20221104062223.7kcrbt66mlmqxk7f@yy-desk-7060>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221103115444.m2rjglbkubydidts@quack3>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221104062223.7kcrbt66mlmqxk7f@yy-desk-7060>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-11-03 12:54:44 [+0100], Jan Kara wrote:
-> Hello,
-Hi,
+On Fri, Nov 04, 2022, Yuan Yao wrote:
+> On Wed, Nov 02, 2022 at 11:18:35PM +0000, Sean Christopherson wrote:
+> > To avoid having to unwind various setup, e.g registration of several
+> > notifiers, slot in the vendor hardware setup before the registration of
+> > said notifiers and callbacks.  Introducing a functional change while
+> > moving code is less than ideal, but the alternative is adding a pile of
+> > unwinding code, which is much more error prone, e.g. several attempts to
+> > move the setup code verbatim all introduced bugs.
 
-> I was tracking down the following crash with 6.0 kernel with
-> patch-6.0.5-rt14.patch applied:
+...
+
+> > @@ -9325,6 +9343,24 @@ int kvm_arch_init(void *opaque)
+> >  		kvm_caps.supported_xcr0 = host_xcr0 & KVM_SUPPORTED_XCR0;
+> >  	}
+> >
+> > +	rdmsrl_safe(MSR_EFER, &host_efer);
+> > +
+> > +	if (boot_cpu_has(X86_FEATURE_XSAVES))
+> > +		rdmsrl(MSR_IA32_XSS, host_xss);
+> > +
+> > +	kvm_init_pmu_capability();
+> > +
+> > +	r = ops->hardware_setup();
+> > +	if (r != 0)
+> > +		goto out_mmu_exit;
 > 
-> [ T6611] ------------[ cut here ]------------
-> [ T6611] kernel BUG at fs/inode.c:625!
+> The failure case of ops->hardware_setup() is unwound
+> by kvm_arch_exit() before this patch, do we need to
+> keep that old behavior ?
 
-seems like an off-by-one ;)
+As called out in the changelog, the call to ops->hardware_setup() was deliberately
+slotted in before the call to kvm_timer_init() so that kvm_arch_init() wouldn't
+need to unwind more stuff if harware_setup() fails.
 
-> The machine is aarch64 architecture, kernel config is attached. I have seen
-> the crashes also with 5.14-rt kernel so it is not a new thing. The crash is
-> triggered relatively reliably (on two different aarch64 machines) by our
-> performance testing framework when running dbench benchmark against an XFS
-> filesystem.
-
-different aarch64 machines as in different SoC? Or the same CPU twice.
-And no trouble on x86-64 I guess?
-
-> Now originally I thought this is some problem with XFS or writeback code
-> but after debugging this for some time I don't think that anymore.
-> clear_inode() complains about inode->i_wb_list being non-empty. In fact
-> looking at the list_head, I can see it is corrupted. In all the occurences
-> of the problem ->prev points back to the list_head itself but ->next points
-> to some list_head that used to be part of the sb->s_inodes_wb list (or
-> actually that list spliced in wait_sb_inodes() because I've seen a pointer to
-> the stack as ->next pointer as well).
-
-so you assume a delete and add operation in parallel?
-
-> This is not just some memory ordering issue with the check in
-> clear_inode(). If I add sb->s_inode_wblist_lock locking around the check in
-> clear_inode(), the problem still reproduces.
-
-What about dropping the list_empty() check in sb_mark_inode_writeback()
-and sb_clear_inode_writeback() so that the check operation always
-happens within the locked section? Either way, missing an add/delete
-should result in consistent pointers.
-
-> If I enable CONFIG_DEBUG_LIST or if I convert sb->s_inode_wblist_lock to
-> raw_spinlock_t, the problem disappears.
-> 
-> Finally, I'd note that the list is modified from three places which makes
-> audit relatively simple. sb_mark_inode_writeback(),
-> sb_clear_inode_writeback(), and wait_sb_inodes(). All these places hold
-> sb->s_inode_wblist_lock when modifying the list. So at this point I'm at
-> loss what could be causing this. As unlikely as it seems to me I've started
-> wondering whether it is not some subtle issue with RT spinlocks on aarch64
-> possibly in combination with interrupts (because sb_clear_inode_writeback()
-> may be called from an interrupt).
-
-This should be modified from a threaded interrupt so interrupts and
-preemption should be enabled at this point.
-If preemption and or interrupts are disabled at some point then
-CONFIG_DEBUG_ATOMIC_SLEEP should complain about it.
-
-spinlock_t and raw_spinlock_t differ slightly in terms of locking.
-rt_spin_lock() has the fast path via try_cmpxchg_acquire(). If you
-enable CONFIG_DEBUG_RT_MUTEXES then you would force the slow path which
-always acquires the rt_mutex_base::wait_lock (which is a raw_spinlock_t)
-while the actual lock is modified via cmpxchg. 
-
-> Any ideas?
-> 
-> 								Honza
-
-Sebastian
+> > +	/*
+> > +	 * Point of no return!  DO NOT add error paths below this point unless
+> > +	 * absolutely necessary, as most operations from this point forward
+> > +	 * require unwinding.
+> > +	 */
+> > +	kvm_ops_update(ops);
+> > +
+> >  	kvm_timer_init();
+> >
+> >  	if (pi_inject_timer == -1)
+> > @@ -9336,8 +9372,32 @@ int kvm_arch_init(void *opaque)
+> >  		set_hv_tscchange_cb(kvm_hyperv_tsc_notifier);
+> >  #endif
+> >
+> > +	kvm_register_perf_callbacks(ops->handle_intel_pt_intr);
+> > +
+> > +	if (!kvm_cpu_cap_has(X86_FEATURE_XSAVES))
+> > +		kvm_caps.supported_xss = 0;
+> > +
+> > +#define __kvm_cpu_cap_has(UNUSED_, f) kvm_cpu_cap_has(f)
+> > +	cr4_reserved_bits = __cr4_reserved_bits(__kvm_cpu_cap_has, UNUSED_);
+> > +#undef __kvm_cpu_cap_has
+> > +
+> > +	if (kvm_caps.has_tsc_control) {
+> > +		/*
+> > +		 * Make sure the user can only configure tsc_khz values that
+> > +		 * fit into a signed integer.
+> > +		 * A min value is not calculated because it will always
+> > +		 * be 1 on all machines.
+> > +		 */
+> > +		u64 max = min(0x7fffffffULL,
+> > +			      __scale_tsc(kvm_caps.max_tsc_scaling_ratio, tsc_khz));
+> > +		kvm_caps.max_guest_tsc_khz = max;
+> > +	}
+> > +	kvm_caps.default_tsc_scaling_ratio = 1ULL << kvm_caps.tsc_scaling_ratio_frac_bits;
+> > +	kvm_init_msr_list();
+> >  	return 0;
+> >
+> > +out_mmu_exit:
+> > +	kvm_mmu_vendor_module_exit();
+> >  out_free_percpu:
+> >  	free_percpu(user_return_msrs);
+> >  out_free_x86_emulator_cache:
