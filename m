@@ -2,143 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6756F619F16
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 18:44:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C0F6619F1B
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 18:45:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231985AbiKDRoq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 13:44:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51450 "EHLO
+        id S231304AbiKDRpo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 13:45:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231971AbiKDRoX (ORCPT
+        with ESMTP id S231716AbiKDRpa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 13:44:23 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D95F742F41
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 10:43:33 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id i3so5103242pfc.11
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 10:43:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Ym4tTa7HJpk2L/lI6OldtK0o0jadOpOF8+GMFA83qbA=;
-        b=RJ6QR4IglVEuR0hYC7lz/fpX6wgtAH99brFcbLXCLtVZxIkpLB7HbT8rXXyyHHZQ2q
-         QzEJU9GX9LXDgR2m2KLJXrj7lJPYICrlC5QpJmzRxiVl1W2BeE7lle/rUAqcXDOEh0ra
-         iU92VKcrwO4vjavCX8Y24xRaJe/tQXe2+qnz3+uG6JJakC+TP+qWox485vUll7I+62X5
-         tqK6ID6DQP0aYieT5qrKd1DXfL1ABBya6A6JJf4Wb4FM/tD2fGm7kr+5mydalyqwxfaz
-         JQ4LlEO92wjSrYaHKpENjtykxsR1cosO0LGjA4XKCobThCjtf5kEMbVNlZsg7nL5H8xS
-         ixyg==
+        Fri, 4 Nov 2022 13:45:30 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAE514AF28
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 10:43:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1667583838;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=aQmR1/jR3UTmYTEzmSRhCPtSx0fylOy6bnRZe0N+9wM=;
+        b=gTKDyMdlZl3TV0c4sXekeI6rLGpy9Tu/+IWUOK3ExtGtxsRP/f1m5ciWliT5scF2U2Qn/E
+        hiRAfJSh3ak/eLtnhMqyVMgmlUTn0LtosWb52hTkF7ps7jGVAck2z29JiQX78UWcTHh0th
+        yCXin4ClFkDBx88GbmC8IttIGnHH0+Y=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-167-3D_7pPKmN0ita4_O56cLXQ-1; Fri, 04 Nov 2022 13:43:57 -0400
+X-MC-Unique: 3D_7pPKmN0ita4_O56cLXQ-1
+Received: by mail-wm1-f72.google.com with SMTP id z15-20020a1c4c0f000000b003cf6f80007cso1995107wmf.3
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 10:43:56 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Ym4tTa7HJpk2L/lI6OldtK0o0jadOpOF8+GMFA83qbA=;
-        b=PIUrAbeqF72z07hgtmUZ70CLQwdUmMwR8jTeXGzp3+nWeKA8EfE2PP/qxgtDg5xIBd
-         hPjVvrD2dC8XPLmX+Pxeg2mcYl/XFzlVav5gRupQt5Eg1CAJrqxuTR3q+lHaTl627001
-         C5OolDNn6se7RN6GClxldQHLj0GOVLu5Ve4+T3yq7X4XlgbWoRKBP4RbQxG+YswXLQCs
-         VrsLopqJLPlX+Kg0zXbai9uRg2S6mDv8xOSGu3CRNIfChDyfwF1XdiLSwtv2ln4eUQUT
-         7vPAq0jpraAA5d+i6+JzPn0VDl1wcqzLxQLmgUrkl0DBVAnu9hmQTcM4abmG8BDDQl5y
-         s2BA==
-X-Gm-Message-State: ACrzQf2ioBZcvzlpFnHwbYmqCElpO1glcih4zz0vmpC09q5mwtYkNKVe
-        YsWH0Nc3WBhOtL6PufoJ9OI=
-X-Google-Smtp-Source: AMsMyM6vVs4RHT4CU/n6Se1T6SbF1VMwI6DW/K9IjlT8qUrCcsN3/fCU/NKL0FRHGYsk270C8JCEjg==
-X-Received: by 2002:a63:1d0f:0:b0:46e:e211:5433 with SMTP id d15-20020a631d0f000000b0046ee2115433mr31224631pgd.324.1667583813256;
-        Fri, 04 Nov 2022 10:43:33 -0700 (PDT)
-Received: from google.com ([2620:15c:211:201:755f:cdcb:1bd8:5ad8])
-        by smtp.gmail.com with ESMTPSA id x1-20020a633101000000b00464858cf6b0sm13848pgx.54.2022.11.04.10.43.32
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=aQmR1/jR3UTmYTEzmSRhCPtSx0fylOy6bnRZe0N+9wM=;
+        b=KnN4LUvTq3Pt2LBcHbokcjeYvAT1SI7nDuKRdiUwYtFke3O865+WFK7enrUSaxZAiO
+         cKdmfiGVVWPydTqL9JecMlzi1mo2KsKNhOKBMMtpNotcr0bpA1s7oAyNgVN77WzwbfCo
+         K6r0yTbo3D88rlLqvW6k4UnUBZZxlUFOWDeWa+MuwYQqiO7UjCu6tatlFb8PdspXju7j
+         w+rUEX7tH32eauCez4eCzSyKKbJk0/tn762sBPSo8LuNJdqDrqVXZKV6fvItCBuHsRfi
+         Jp8iYl7pfaEhwk4JvWwid5XfFT9Ov1hyzrm6zjdOH7xIdEut4bB5URPh+yG8mLQp6nZo
+         HpDA==
+X-Gm-Message-State: ACrzQf1L2sY7T5hw01Uz5SmA8o1i3Cyc5kVW/q9bCNR9rdLxuO9Vz4qN
+        ozidHQrLeR2O5XQ9enpNZVYq9TPbO/KP3VO1xEb4lhz9qB8Bp5yntrx93WNL+26GLbuuEPGmqoF
+        LgR9ClocgMqENEnJomWFdhjlj
+X-Received: by 2002:adf:cd05:0:b0:236:7a11:b061 with SMTP id w5-20020adfcd05000000b002367a11b061mr284946wrm.292.1667583835886;
+        Fri, 04 Nov 2022 10:43:55 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM4IpWBNLDaPnqdZ4Rj31ZB9VRNlAJ0E6Uf1KYyBWy0J6qrsoesGyWNrhiyCPZ9nsYpOVm0TWw==
+X-Received: by 2002:adf:cd05:0:b0:236:7a11:b061 with SMTP id w5-20020adfcd05000000b002367a11b061mr284935wrm.292.1667583835634;
+        Fri, 04 Nov 2022 10:43:55 -0700 (PDT)
+Received: from vschneid.remote.csb ([154.57.232.159])
+        by smtp.gmail.com with ESMTPSA id t6-20020adfe106000000b00231ed902a4esm3977777wrz.5.2022.11.04.10.43.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Nov 2022 10:43:32 -0700 (PDT)
-Sender: Minchan Kim <minchan.kim@gmail.com>
-Date:   Fri, 4 Nov 2022 10:43:30 -0700
-From:   Minchan Kim <minchan@kernel.org>
-To:     Sergey Senozhatsky <senozhatsky@chromium.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Nitin Gupta <ngupta@vflare.org>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: Re: [PATCHv4 2/9] zram: Add recompression algorithm sysfs knob
-Message-ID: <Y2VPQlnEiP75mY5O@google.com>
-References: <20221018045533.2396670-1-senozhatsky@chromium.org>
- <20221018045533.2396670-3-senozhatsky@chromium.org>
- <Y2LP0OWF/WTnkSne@google.com>
- <Y2Mv4l+V9iCv9EMg@google.com>
- <Y2Ptq1GZISCD7Mor@google.com>
- <Y2SEkzKSWx2iQzLl@google.com>
- <Y2Sat1/FCCT0Lia/@google.com>
+        Fri, 04 Nov 2022 10:43:54 -0700 (PDT)
+From:   Valentin Schneider <vschneid@redhat.com>
+To:     Yury Norov <yury.norov@gmail.com>, linux-kernel@vger.kernel.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Sander Vanheule <sander@svanheule.net>,
+        Alexey Klimov <klimov.linux@gmail.com>,
+        Eric Biggers <ebiggers@google.com>
+Cc:     Yury Norov <yury.norov@gmail.com>
+Subject: Re: [PATCH v2] cpumask: limit visibility of FORCE_NR_CPUS
+In-Reply-To: <20221019225939.1646349-1-yury.norov@gmail.com>
+References: <20221019225939.1646349-1-yury.norov@gmail.com>
+Date:   Fri, 04 Nov 2022 17:43:53 +0000
+Message-ID: <xhsmhtu3evcme.mognet@vschneid.remote.csb>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y2Sat1/FCCT0Lia/@google.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        FSL_HELO_FAKE,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 04, 2022 at 01:53:11PM +0900, Sergey Senozhatsky wrote:
-> On (22/11/04 12:18), Sergey Senozhatsky wrote:
-> > On (22/11/03 09:34), Minchan Kim wrote:
-> > > Yeah, I like the name and priority format.
-> > > 
-> > > Only question is how we could support algorithm selection change
-> > > under considering multiple secondary algorithms.
-> > 
-> > So what I was thinking about, and I'm still in the mental model that
-> > re-compression is a user-space event, just like writeback, extension
-> > of recompress sysfs knob with "algo_index" (or something similar) which
-> > will mirror algorithm priority.
-> > 
-> > Example:
-> > 
-> > Configure 2 alternative algos, with priority 1 and 2
-> > 
-> > 	echo "name=lz4 priority=1" > recomp_algo
-> > 	echo "name=lz5 priority=2" > recomp_algo
-> > 
-> > Recompress pages using algo 1 and algo 2
-> > 
-> > 	echo "type=huge threshold=3000 algo_idx=1" > recompress
-> > 	echo "type=idle threshold=2000 algo_idx=2" > recompress
-> > 
-> > Maybe we can even pass algo name instead of idx.
-> 
-> Or pass priority= so that interface that uses algorithms has the
-> same keyword that the interface that configures those algorithms.
+On 19/10/22 15:59, Yury Norov wrote:
+> In current form, FORCE_NR_CPUS is visible to all users building their
+> kernels, even not experts. It is also set in allmodconfig or allyesconfig,
+> which is not a correct behavior.
+>
+> The 'choice' and unused config UNFORCE_NR_CPUS are used to ensure that
+> auto-generated configs that try to enable as much options as possible,
+> like allmodconfig, don't enable FORCE_NR_CPUS.
+>
+> Suggested-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
+> Signed-off-by: Yury Norov <yury.norov@gmail.com>
+> ---
+> v2: extend commit message with an explanation for what we need 'choice'.
+>
+>  lib/Kconfig | 31 ++++++++++++++++++++++++-------
+>  1 file changed, 24 insertions(+), 7 deletions(-)
+>
+> diff --git a/lib/Kconfig b/lib/Kconfig
+> index 9bbf8a4b2108..1ada12f5dda6 100644
+> --- a/lib/Kconfig
+> +++ b/lib/Kconfig
+> @@ -528,14 +528,31 @@ config CPUMASK_OFFSTACK
+>         them on the stack.  This is a bit more expensive, but avoids
+>         stack overflow.
+>
+> +choice
+> +	prompt "Number of CPUs detection method"
+> +	default UNFORCE_NR_CPUS
+> +	depends on SMP && EXPERT
 
-Hmm, why do we need algo_idx here if we already set up every
-fields at algorithm setup time?
+What about moving the 'depends on EXPERT' onto FORCE_NR_CPUS? I find it
+makes it easier to figure out the requirements for that option, and is
+similar to how e.g. CONFIG_PREEMPT_RT is handled.
 
-My understaind(assuming default(i.e., primary) algo is lzo) is
+> +	help
+> +	  Select between boot-time and compile-time detection of number
+> +	  of CPUs. If it's possible to provide exact number of CPUs at
+> +	  compile-time, kernel code may be optimized better.
+> +	  For general-purpose kernel, choose "boot time" option.
+> +
+> +config UNFORCE_NR_CPUS
+> +	bool "Set number of CPUs at boot time"
+> +	help
+> +	  Choose it if you build general-purpose kernel and want to rely
+> +	  on kernel to detect actual number of CPUs.
+> +
+>  config FORCE_NR_CPUS
+> -       bool "NR_CPUS is set to an actual number of CPUs"
+> -       depends on SMP
+> -       help
+> -         Say Yes if you have NR_CPUS set to an actual number of possible
+> -         CPUs in your system, not to a default value. This forces the core
+> -         code to rely on compile-time value and optimize kernel routines
+> -         better.
+> +	bool "Set number of CPUs at compile time"
+> +	help
+> +	  Choose it if NR_CPUS corresponds to an actual number of
+> +	  possible CPUs in your system. This forces the core code
+> +	  to rely on compile-time value and optimize kernel routines
+> +	  better.
+> +
+> +endchoice
+>
+>  config CPU_RMAP
+>       bool
+> --
+> 2.34.1
 
-    echo "name=lz4 priority=1" > recomp_algo
-    echo "name=lz5 priority=2" > recomp_algo
-
-    echo "type=huge threshold=3000" > recompress
-
-It will try compress every objects which greater than 3000B with lz4 first
-and then lz5 if it's stillgreater or equal than 3000(or same size class).
-
-> 
-> I still don't see many use-cases for "delete algorithm", to be honest.
-> ZRAM is configured by scripts in 99.99999% of cases and it is
-
-For the development time in the local side, people usually type in
-until they will have solid script version. If we asks resetting
-to zram to modify it, it's not good and consistent with other
-sysfs knobs we could overwrite it to change it. How about supporting
-overwritting to chage it over priority?
-
-    echo "name=lz4 priority=1" > recomp_algo
-    echo "name=lz5 priority=2" > recomp_algo
-
-    # or I realized to change lz5 to lz7 so
-    echo "name=lz6 priority=2" > recomp_algo
-
-> quite static once it has been configured. So we probably can use
-> the "don't setup algorithms that you don't need" approach, to keep
-> things simpler.
