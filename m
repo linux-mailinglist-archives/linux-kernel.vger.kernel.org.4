@@ -2,281 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B513961960B
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 13:18:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C37E619612
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 13:20:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231757AbiKDMSm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 08:18:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45052 "EHLO
+        id S231812AbiKDMUE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 08:20:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231671AbiKDMSc (ORCPT
+        with ESMTP id S230402AbiKDMUC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 08:18:32 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C31171B1D2;
-        Fri,  4 Nov 2022 05:18:31 -0700 (PDT)
+        Fri, 4 Nov 2022 08:20:02 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 909D0120A0;
+        Fri,  4 Nov 2022 05:20:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667564311; x=1699100311;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=Nkb1aoerxeuYEOdE+BsMw78xrCR9ITNnBZN8jPViLk4=;
-  b=CD6Z6h/Ly83Bg9Ymn5uAUs8888CE4mB2YMwVBvRqAV3GE1j0phRiXgaT
-   BRPno56+4/+ayJ7Egc12Ck4ie0umPGb203Pwf4JVluDJyJ8wQyADdWQwa
-   C3ld4POLt7DRAuTpB1G2ePDT6818LWmOGYsDAHvYfw26ySJjoCWp0GY/h
-   PXiVC02lzGBCwd91Ke1KMEnY6OYcVJHVDQybJi/ckjtqzteAr2sh1h0G/
-   vmbQnASEFze305kpakADnNfgMx4hEzQxOIspAiqkMaWWVML5ML6PCIpva
-   z/GTLGrXdvW5jWhnJXi/C6qXE6dVnaynmfvQWrhtISp0xslr+VNyJLkUK
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1667564400; x=1699100400;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=b8IIA3P7AcrfkQStqWsci42IpheCko9C3MblZ4EP9F4=;
+  b=difmHZFwsa3K6yjqdkzC51muIYFiozjRCDA/5JyXCp6CGTs9iTVBhc7G
+   8f4M+MjzvLyF06SKHWLb3M+nAMzdXjVF3OcAj4xga3LytJmUo563Nl85n
+   lBWLW3k22XYaw3VCpbsDAEMBHjYh5Kig6/9QFOLu4WPRGHckvKSh4L6yE
+   yZD2667C+QE0DKMx1KtoEVce1M1Ah3SyqOZIbUSTzr84/Vubd2T2u/YZq
+   bqYCRyjAHYB8/IUJnzFgUCHlu9tJGdMqFpre4mwpwR1j4N+iAQQnZw+QH
+   MUd26TBM5zD441PWVZ+E+laOhQXMQIEoC7x+06dkRdN16aEzc5uvITpe1
    A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10520"; a="290341731"
 X-IronPort-AV: E=Sophos;i="5.96,137,1665471600"; 
-   d="scan'208";a="290341731"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2022 05:18:31 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10520"; a="760309132"
-X-IronPort-AV: E=Sophos;i="5.96,137,1665471600"; 
-   d="scan'208";a="760309132"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO ahunter-VirtualBox.home\044ger.corp.intel.com) ([10.252.46.118])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2022 05:18:29 -0700
-From:   Adrian Hunter <adrian.hunter@intel.com>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Jiri Olsa <jolsa@redhat.com>, Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org
-Subject: [PATCH 3/3] perf: intel-pt: Add hybrid CPU compatibility test
-Date:   Fri,  4 Nov 2022 14:18:05 +0200
-Message-Id: <20221104121805.5264-4-adrian.hunter@intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221104121805.5264-1-adrian.hunter@intel.com>
-References: <20221104121805.5264-1-adrian.hunter@intel.com>
+   d="scan'208";a="121821692"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 04 Nov 2022 05:19:59 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
+ chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Fri, 4 Nov 2022 05:19:44 -0700
+Received: from den-dk-m31857.microchip.com (10.10.115.15) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
+ 15.1.2507.12 via Frontend Transport; Fri, 4 Nov 2022 05:19:41 -0700
+From:   Steen Hegelund <steen.hegelund@microchip.com>
+To:     "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+CC:     Steen Hegelund <steen.hegelund@microchip.com>,
+        Louis Peens <louis.peens@corigine.com>,
+        Baowen Zheng <baowen.zheng@corigine.com>,
+        "Simon Horman" <simon.horman@corigine.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        Wojciech Drewek <wojciech.drewek@intel.com>,
+        Maksym Glubokiy <maksym.glubokiy@plvision.eu>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <UNGLinuxDriver@microchip.com>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>
+Subject: [PATCH net-next] net: flow_offload: add support for ARP frame matching
+Date:   Fri, 4 Nov 2022 13:19:15 +0100
+Message-ID: <20221104121915.1317246-1-steen.hegelund@microchip.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki, Business Identity Code: 0357606 - 4, Domiciled in Helsinki
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The kernel driver assumes hybrid CPUs will have Intel PT capabilities
-that are compatible with the boot CPU. Add a test to check that is the
-case.
+flow_rule_match_arp allows drivers to dissect APR frames
 
-Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
+Signed-off-by: Steen Hegelund <steen.hegelund@microchip.com>
 ---
- tools/perf/arch/x86/include/arch-tests.h  |   1 +
- tools/perf/arch/x86/tests/arch-tests.c    |   3 +-
- tools/perf/arch/x86/tests/intel-pt-test.c | 154 ++++++++++++++++++++++
- 3 files changed, 157 insertions(+), 1 deletion(-)
+ include/net/flow_offload.h | 6 ++++++
+ net/core/flow_offload.c    | 7 +++++++
+ 2 files changed, 13 insertions(+)
 
-diff --git a/tools/perf/arch/x86/include/arch-tests.h b/tools/perf/arch/x86/include/arch-tests.h
-index 6a1a1b3c0827..902e9ea9b99e 100644
---- a/tools/perf/arch/x86/include/arch-tests.h
-+++ b/tools/perf/arch/x86/include/arch-tests.h
-@@ -8,6 +8,7 @@ struct test_suite;
- int test__rdpmc(struct test_suite *test, int subtest);
- int test__insn_x86(struct test_suite *test, int subtest);
- int test__intel_pt_pkt_decoder(struct test_suite *test, int subtest);
-+int test__intel_pt_hybrid_compat(struct test_suite *test, int subtest);
- int test__bp_modify(struct test_suite *test, int subtest);
- int test__x86_sample_parsing(struct test_suite *test, int subtest);
- 
-diff --git a/tools/perf/arch/x86/tests/arch-tests.c b/tools/perf/arch/x86/tests/arch-tests.c
-index 8d5e4a0831d5..aae6ea0fe52b 100644
---- a/tools/perf/arch/x86/tests/arch-tests.c
-+++ b/tools/perf/arch/x86/tests/arch-tests.c
-@@ -8,11 +8,12 @@ DEFINE_SUITE("x86 instruction decoder - new instructions", insn_x86);
- 
- static struct test_case intel_pt_tests[] = {
- 	TEST_CASE("Intel PT packet decoder", intel_pt_pkt_decoder),
-+	TEST_CASE("Intel PT hybrid CPU compatibility", intel_pt_hybrid_compat),
- 	{ .name = NULL, }
+diff --git a/include/net/flow_offload.h b/include/net/flow_offload.h
+index 7a60bc6d72c9..0400a0ac8a29 100644
+--- a/include/net/flow_offload.h
++++ b/include/net/flow_offload.h
+@@ -32,6 +32,10 @@ struct flow_match_vlan {
+ 	struct flow_dissector_key_vlan *key, *mask;
  };
  
- struct test_suite suite__intel_pt = {
--	.desc = "Intel PT packet decoder",
-+	.desc = "Intel PT",
- 	.test_cases = intel_pt_tests,
++struct flow_match_arp {
++	struct flow_dissector_key_arp *key, *mask;
++};
++
+ struct flow_match_ipv4_addrs {
+ 	struct flow_dissector_key_ipv4_addrs *key, *mask;
  };
- 
-diff --git a/tools/perf/arch/x86/tests/intel-pt-test.c b/tools/perf/arch/x86/tests/intel-pt-test.c
-index 42237656f453..70b7f79396b1 100644
---- a/tools/perf/arch/x86/tests/intel-pt-test.c
-+++ b/tools/perf/arch/x86/tests/intel-pt-test.c
-@@ -1,12 +1,17 @@
- // SPDX-License-Identifier: GPL-2.0
- 
-+#include <linux/compiler.h>
-+#include <linux/bits.h>
- #include <string.h>
-+#include <cpuid.h>
-+#include <sched.h>
- 
- #include "intel-pt-decoder/intel-pt-pkt-decoder.h"
- 
- #include "debug.h"
- #include "tests/tests.h"
- #include "arch-tests.h"
-+#include "cpumap.h"
- 
- /**
-  * struct test_data - Test data.
-@@ -313,3 +318,152 @@ int test__intel_pt_pkt_decoder(struct test_suite *test __maybe_unused, int subte
- 
- 	return TEST_OK;
+@@ -98,6 +102,8 @@ void flow_rule_match_vlan(const struct flow_rule *rule,
+ 			  struct flow_match_vlan *out);
+ void flow_rule_match_cvlan(const struct flow_rule *rule,
+ 			   struct flow_match_vlan *out);
++void flow_rule_match_arp(const struct flow_rule *rule,
++			 struct flow_match_arp *out);
+ void flow_rule_match_ipv4_addrs(const struct flow_rule *rule,
+ 				struct flow_match_ipv4_addrs *out);
+ void flow_rule_match_ipv6_addrs(const struct flow_rule *rule,
+diff --git a/net/core/flow_offload.c b/net/core/flow_offload.c
+index abe423fd5736..acfc1f88ea79 100644
+--- a/net/core/flow_offload.c
++++ b/net/core/flow_offload.c
+@@ -97,6 +97,13 @@ void flow_rule_match_cvlan(const struct flow_rule *rule,
  }
-+
-+static int setaffinity(int cpu)
+ EXPORT_SYMBOL(flow_rule_match_cvlan);
+ 
++void flow_rule_match_arp(const struct flow_rule *rule,
++			 struct flow_match_arp *out)
 +{
-+	cpu_set_t cpu_set;
-+
-+	CPU_ZERO(&cpu_set);
-+	CPU_SET(cpu, &cpu_set);
-+	if (sched_setaffinity(0, sizeof(cpu_set), &cpu_set)) {
-+		pr_debug("sched_setaffinity() failed for CPU %d\n", cpu);
-+		return -1;
-+	}
-+	return 0;
++	FLOW_DISSECTOR_MATCH(rule, FLOW_DISSECTOR_KEY_ARP, out);
 +}
++EXPORT_SYMBOL(flow_rule_match_arp);
 +
-+#define INTEL_PT_ADDR_FILT_CNT_MASK	GENMASK(2, 0)
-+#define INTEL_PT_SUBLEAF_CNT		2
-+#define CPUID_REG_CNT			4
-+
-+struct cpuid_result {
-+	union {
-+		struct {
-+			unsigned int eax;
-+			unsigned int ebx;
-+			unsigned int ecx;
-+			unsigned int edx;
-+		};
-+		unsigned int reg[CPUID_REG_CNT];
-+	};
-+};
-+
-+struct pt_caps {
-+	struct cpuid_result subleaf[INTEL_PT_SUBLEAF_CNT];
-+};
-+
-+static int get_pt_caps(int cpu, struct pt_caps *caps)
-+{
-+	struct cpuid_result r;
-+	int i;
-+
-+	if (setaffinity(cpu))
-+		return -1;
-+
-+	memset(caps, 0, sizeof(*caps));
-+
-+	for (i = 0; i < INTEL_PT_SUBLEAF_CNT; i++) {
-+		__get_cpuid_count(20, i, &r.eax, &r.ebx, &r.ecx, &r.edx);
-+		pr_debug("CPU %d CPUID leaf 20 subleaf %d\n", cpu, i);
-+		pr_debug("eax = 0x%08x\n", r.eax);
-+		pr_debug("ebx = 0x%08x\n", r.ebx);
-+		pr_debug("ecx = 0x%08x\n", r.ecx);
-+		pr_debug("edx = 0x%08x\n", r.edx);
-+		caps->subleaf[i] = r;
-+	}
-+
-+	return 0;
-+}
-+
-+static bool is_hydrid(void)
-+{
-+	unsigned int eax, ebx, ecx, edx = 0;
-+	bool result;
-+
-+	__get_cpuid_count(7, 0, &eax, &ebx, &ecx, &edx);
-+	result = edx & BIT(15);
-+	pr_debug("Is %shybrid : CPUID leaf 7 subleaf 0 edx %#x (bit-15 indicates hybrid)\n",
-+		 result ? "" : "not ", edx);
-+	return result;
-+}
-+
-+static int compare_caps(int cpu, struct pt_caps *caps, struct pt_caps *caps0)
-+{
-+	struct pt_caps mask = { /* Mask of bits to check*/
-+		.subleaf = {
-+			[0] = {
-+				.ebx = GENMASK(8, 0),
-+				.ecx = GENMASK(3, 0),
-+			},
-+			[1] = {
-+				.eax = GENMASK(31, 16),
-+				.ebx = GENMASK(31, 0),
-+			}
-+		}
-+	};
-+	unsigned int m, reg, reg0;
-+	int ret = 0;
-+	int i, j;
-+
-+	for (i = 0; i < INTEL_PT_SUBLEAF_CNT; i++) {
-+		for (j = 0; j < CPUID_REG_CNT; j++) {
-+			m = mask.subleaf[i].reg[j];
-+			reg = m & caps->subleaf[i].reg[j];
-+			reg0 = m & caps0->subleaf[i].reg[j];
-+			if ((reg & reg0) != reg0) {
-+				pr_debug("CPU %d subleaf %d reg %d FAIL %#x vs %#x\n",
-+					 cpu, i, j, reg, reg0);
-+				ret = -1;
-+			}
-+		}
-+	}
-+
-+	m = INTEL_PT_ADDR_FILT_CNT_MASK;
-+	reg = m & caps->subleaf[1].eax;
-+	reg0 = m & caps0->subleaf[1].eax;
-+	if (reg < reg0) {
-+		pr_debug("CPU %d subleaf 1 reg 0 FAIL address filter count %#x vs %#x\n",
-+			 cpu, reg, reg0);
-+		ret = -1;
-+	}
-+
-+	if (!ret)
-+		pr_debug("CPU %d OK\n", cpu);
-+
-+	return ret;
-+}
-+
-+int test__intel_pt_hybrid_compat(struct test_suite *test, int subtest)
-+{
-+	int max_cpu = cpu__max_cpu().cpu;
-+	struct pt_caps last_caps;
-+	struct pt_caps caps0;
-+	int ret = TEST_OK;
-+	int cpu;
-+
-+	if (!is_hydrid()) {
-+		test->test_cases[subtest].skip_reason = "not hybrid";
-+		return TEST_SKIP;
-+	}
-+
-+	if (get_pt_caps(0, &caps0))
-+		return TEST_FAIL;
-+
-+	for (cpu = 1, last_caps = caps0; cpu < max_cpu; cpu++) {
-+		struct pt_caps caps;
-+
-+		if (get_pt_caps(cpu, &caps)) {
-+			pr_debug("CPU %d not found\n", cpu);
-+			continue;
-+		}
-+		if (!memcmp(&caps, &last_caps, sizeof(caps))) {
-+			pr_debug("CPU %d same caps as previous CPU\n", cpu);
-+			continue;
-+		}
-+		if (compare_caps(cpu, &caps, &caps0))
-+			ret = TEST_FAIL;
-+		last_caps = caps;
-+	}
-+
-+	return ret;
-+}
+ void flow_rule_match_ipv4_addrs(const struct flow_rule *rule,
+ 				struct flow_match_ipv4_addrs *out)
+ {
 -- 
-2.34.1
+2.38.1
 
