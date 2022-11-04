@@ -2,145 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE0C1619C18
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 16:50:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0337C619C21
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 16:51:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231493AbiKDPu2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 11:50:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56334 "EHLO
+        id S231354AbiKDPvg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 11:51:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229749AbiKDPuY (ORCPT
+        with ESMTP id S229995AbiKDPvc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 11:50:24 -0400
-Received: from mail-vk1-xa34.google.com (mail-vk1-xa34.google.com [IPv6:2607:f8b0:4864:20::a34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1C5026ACC
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 08:50:20 -0700 (PDT)
-Received: by mail-vk1-xa34.google.com with SMTP id s204so2655745vkb.3
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 08:50:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=++mWirKgGkrCI+vm0xRouCpwLdjdutJmLOYC+ZHZYHc=;
-        b=6qu4jPdvOOCYWJY2tYYGANBMsSd7/CxYS5H1o7QbPvAsTaD3mee0pz6cbfCWiGZ4Aq
-         H9LlODO3kFJlFVAJT7CWMU+Yqj+4/FmxVqbGf9Bg7iS7e2P92JECKKHtE261i6ZEtTCz
-         FIQOzDnp3SYTBW5oLsXtc6+zxZtUH7pborqIMlysstix1rAvqjU2uv6o+VflrvL4Rjj4
-         8mAa0BWA2okqYafMVrqVg84kcgiwkwcXcFlRYAFhq9TL0un+hAvb/jL9UqK7ynx2ocpb
-         TycWbahuCCIotdBs9kjuDTSC/+C7WLjP9lultacC5wEX+N88cMxMlPEGDydWN0KDNXJJ
-         e+yg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=++mWirKgGkrCI+vm0xRouCpwLdjdutJmLOYC+ZHZYHc=;
-        b=yhSXfX0omNp5EjVSOYShMV6ydM4zcuI51vIPWwHijSHer11BW9YZk9IehIAQtg+Dyd
-         p+0c8kbm3tL43UXtWmk1VB9t/Yx8rqfCtiORYboqe67I3RgNN1qLzF9mx6n5GFPlTbHd
-         KydJqxdHHZFcptYqwCIrgBZlAq8kI70Cauv0gd9kmLi92JtIx++0WlQsSGtd1jHY1SYx
-         3Y0ypzVQZZHFGn130zFZVwT6ZOJZU0fyz6XTObzrNfAVspOLxaynl4PU9RJ5m4nX6csl
-         1MrihY6dTgpXaXj1ReQt6FK+k1cOCp/n/vWCyczRzLAlj3gP0wbHsORBTBTPgaUKksrb
-         NDyQ==
-X-Gm-Message-State: ACrzQf3xyIO8xeVIAIF3os5YYvq2YkNuyVjLmJbLyAuw5chq0uca5X8R
-        evAaakTzq6Hua+VLAYSF0TxbbjT6zFr3fq1sqN0+gmLd0BE=
-X-Google-Smtp-Source: AMsMyM4h4K63MwrVrCDVB/AEOjRx4mKVdTi14OodmNPYWW8xwyK/6GeLFp4IWp8SkZBgNFadF7b0idAIkTNXuDaCmn8=
-X-Received: by 2002:a05:6122:92a:b0:3b8:ae77:6927 with SMTP id
- j42-20020a056122092a00b003b8ae776927mr1331401vka.33.1667577019933; Fri, 04
- Nov 2022 08:50:19 -0700 (PDT)
+        Fri, 4 Nov 2022 11:51:32 -0400
+Received: from new1-smtp.messagingengine.com (new1-smtp.messagingengine.com [66.111.4.221])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD3602D763;
+        Fri,  4 Nov 2022 08:51:30 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 2CF9E58022E;
+        Fri,  4 Nov 2022 11:51:29 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Fri, 04 Nov 2022 11:51:29 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1667577089; x=1667584289; bh=96a+nENK+p
+        wJv6heDljopZWYNAHZZlQcLYBgPBXjxIA=; b=c28hMZxPcLC5cKVn4RzGU23sOy
+        5KEaQ9azswPKVog9NQ9wCBgjJ5zlJEN0cHdbBCKvIlrdT+ZQfG2rcIz/rQlXO2jw
+        k1UxgqmX2FagKHw4X9whxQYdXqwWm+7Stg0ICjSEvVtcBkwwWTvNMnDOyIgDZEfK
+        HtR1ckYbIzWCnRQVeUfpYNLCZ1i4rwsh+GH+8saO+PVq3hn4d5QWQBRwmhPFIulZ
+        ZlC0ds9S6hNtgM4W07ajJa0wYBoiJMHdyUGc3JQeTkMBHEKKxMPhA7p0I2haT2t2
+        3KZ/N91fsmtAZg/vrWyo2Oe6uM7vziDS9Pnre6j6vnzrWB8ADGNFdEv/GhOg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1667577089; x=1667584289; bh=96a+nENK+pwJv6heDljopZWYNAHZ
+        ZlQcLYBgPBXjxIA=; b=lcjGNhjEpFG9UwlWNPlyqpI20z1c8nUuBQ9ZXwVXmg/b
+        ZeLdY5iT/PXtaTrCfBAbCRdLswoYCAlW/DJ8MOK3ly5WU0Ri4GsMvmbAiZM3YEV8
+        7b7rziMvPjbfCHBYUwVNNrurjBuR3uM3+3L5lP3jdROGg/FnKT7sHSV3uPRkhQpZ
+        apKhPjgWLrgSbzFty/fXLc5fDY2SimZDf9xM4fPoFnfU9jFtTLnjSfErO1Csdvwy
+        Kk5IyWi+3oStGEXC27JrUOyDJxsp3DASuQw9cI88KNVcO6v5HFvkr0/dBK9GL+h7
+        ToiYgcEnWuz66mqkbQ5B1R6Mal/DSPHP4ae31UzZPw==
+X-ME-Sender: <xms:_jRlY7Ez8WsNCE5vgDv7giaGvtlg_-S_TRslJicSiPCdt5bJkUoEjA>
+    <xme:_jRlY4UkRheR3U5QmJmsOPh6-XGK5CQfNUGZeNQ_AbqAFRLcEDmyB2cLzouBqARTU
+    krI-Ojq4CzRnSVgVcQ>
+X-ME-Received: <xmr:_jRlY9JiqeUBTyn6bWYvKmWYMotpgbK8YnEgDbLILKZx9L6KVBu2EE7Q3xNYrmiF1AYxcraFfmECS4yiAk2-MsqHugGRG3CxMH-3YrxjsuZX1w>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrvddugdejkecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvvefukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgigihhm
+    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
+    htvghrnhepteefffefgfektdefgfeludfgtdejfeejvddttdekteeiffejvdfgheehfffh
+    vedunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmh
+    grgihimhgvsegtvghrnhhordhtvggthh
+X-ME-Proxy: <xmx:_jRlY5ErY3ILridCfPdMiI1BdUsTnsKgcTt_koj5Y7kuky5Mvy56uw>
+    <xmx:_jRlYxWXTfF1vqAblQrq-NPyvBsz17O77BeYEHZbjU-jpqVh11zyFw>
+    <xmx:_jRlY0POCHLJSycVzP16fIOwooAHD-iZGUX4A32zENNBZ9QYZ-oINg>
+    <xmx:ATVlY1cZWdXf4vVe3bWpJOEOfEyXbf56TJKG-VDoEj6QaLJERlKGuA>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 4 Nov 2022 11:51:24 -0400 (EDT)
+Date:   Fri, 4 Nov 2022 16:51:23 +0100
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Stephen Boyd <sboyd@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Chen-Yu Tsai <wens@csie.org>, Daniel Vetter <daniel@ffwll.ch>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Andreas =?utf-8?Q?F=C3=A4rber?= <afaerber@suse.de>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Abel Vesa <abelvesa@kernel.org>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Prashant Gaikwad <pgaikwad@nvidia.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Sekhar Nori <nsekhar@ti.com>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Takashi Iwai <tiwai@suse.com>,
+        David Airlie <airlied@gmail.com>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        David Lechner <david@lechnology.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        alsa-devel@alsa-project.org, linux-mediatek@lists.infradead.org,
+        linux-phy@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        linux-actions@lists.infradead.org, linux-clk@vger.kernel.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        patches@opensource.cirrus.com, linux-tegra@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH v2 43/65] ASoC: tlv320aic32x4: Add a determine_rate hook
+Message-ID: <20221104155123.qomguvthehnogkdd@houat>
+References: <20221018-clk-range-checks-fixes-v2-0-f6736dec138e@cerno.tech>
+ <20221018-clk-range-checks-fixes-v2-43-f6736dec138e@cerno.tech>
+ <Y2UzdYyjgahJsbHg@sirena.org.uk>
 MIME-Version: 1.0
-References: <20221031-gpiolib-swnode-v1-0-a0ab48d229c7@gmail.com>
-In-Reply-To: <20221031-gpiolib-swnode-v1-0-a0ab48d229c7@gmail.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Fri, 4 Nov 2022 16:50:09 +0100
-Message-ID: <CAMRc=McPxk_SPybakAsfJB0RRjSSByEbPY+rk=M63b+i3pBnuA@mail.gmail.com>
-Subject: Re: [PATCH 0/6] Add support for software nodes to gpiolib
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-acpi@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="mczzont5aeejoi22"
+Content-Disposition: inline
+In-Reply-To: <Y2UzdYyjgahJsbHg@sirena.org.uk>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 4, 2022 at 7:10 AM Dmitry Torokhov
-<dmitry.torokhov@gmail.com> wrote:
->
-> This series attempts to add support for software nodes to gpiolib, using
-> software node references. This allows us to convert more drivers to the
-> generic device properties and drop support for custom platform data.
->
-> To describe a GPIO via software nodes we can create the following data
-> items:
->
-> /* Node representing the GPIO controller/GPIO bank */
-> static const struct software_node gpio_bank_b_node = {
->         .name = "B",
-> };
->
-> /*
->  * Properties that will be assigned to a software node assigned to
->  * the devicei that used platform data.
->  */
-> static const struct property_entry simone_key_enter_props[] = {
->         PROPERTY_ENTRY_U32("linux,code", KEY_ENTER),
->         PROPERTY_ENTRY_STRING("label", "enter"),
->         PROPERTY_ENTRY_REF("gpios", &gpio_bank_b_node, 123, GPIO_ACTIVE_LOW),
->         { }
-> };
->
-> The code in gpiolib handling software nodes uses the name in the
-> software node representing GPIO controller to locate the actual instance
-> of GPIO controller.
->
-> Note that kbuild robot is likely to complain about this patchset because
-> it depends on patches removing [devm_]gpiod_get_from_of_node() and
-> devm_fwnode_get_[index_]gpiod_from_child() APIs that are still pending.
-> I pushed them to
->
-> git://git.kernel.org/pub/scm/linux/kernel/git/dtor/input.git tmp-gpiolib
->
-> for your reference.
->
-> To: Linus Walleij <linus.walleij@linaro.org>
-> To: Bartosz Golaszewski <brgl@bgdev.pl>
-> To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Cc: linux-gpio@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Cc: linux-acpi@vger.kernel.org
->
-> ---
-> Dmitry Torokhov (6):
->       gpiolib: of: change of_find_gpio() to accept device node
->       gpiolib: acpi: change acpi_find_gpio() to accept firmware node
->       gpiolib: acpi: teach acpi_find_gpio() to handle data-only nodes
->       gpiolib: acpi: avoid leaking ACPI details into upper gpiolib layers
->       gpiolib: consolidate GPIO lookups
->       gpiolib: add support for software nodes
->
->  drivers/gpio/Makefile         |   1 +
->  drivers/gpio/gpiolib-acpi.c   | 132 +++++++++++++----------
->  drivers/gpio/gpiolib-acpi.h   |  54 +---------
->  drivers/gpio/gpiolib-of.c     |  52 +--------
->  drivers/gpio/gpiolib-of.h     |  16 +--
->  drivers/gpio/gpiolib-swnode.c | 106 +++++++++++++++++++
->  drivers/gpio/gpiolib-swnode.h |  13 +++
->  drivers/gpio/gpiolib.c        | 239 ++++++++++++++++++++----------------------
->  8 files changed, 316 insertions(+), 297 deletions(-)
-> ---
-> base-commit: dc04f5ab1b1114aa19b9026f816fc01ca9c9941d
-> change-id: 20221031-gpiolib-swnode-948203f49b23
->
-> --
-> Dmitry
->
 
-This is great work. I'll wait for Andy to Ack the ACPI patches and
-let's get it in.
+--mczzont5aeejoi22
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Bartosz
+Hi Mark,
+
+On Fri, Nov 04, 2022 at 03:44:53PM +0000, Mark Brown wrote:
+> On Fri, Nov 04, 2022 at 02:18:00PM +0100, Maxime Ripard wrote:
+>=20
+> > So, the set_parent hook is effectively unused, possibly because of an
+> > oversight. However, it could also be an explicit decision by the
+> > original author to avoid any reparenting but through an explicit call to
+> > clk_set_parent().
+>=20
+> > The latter case would be equivalent to setting the flag
+> > CLK_SET_RATE_NO_REPARENT, together with setting our determine_rate hook
+> > to __clk_mux_determine_rate(). Indeed, if no determine_rate
+> > implementation is provided, clk_round_rate() (through
+> > clk_core_round_rate_nolock()) will call itself on the parent if
+> > CLK_SET_RATE_PARENT is set, and will not change the clock rate
+> > otherwise. __clk_mux_determine_rate() has the exact same behavior when
+> > CLK_SET_RATE_NO_REPARENT is set.
+>=20
+> > And if it was an oversight, then we are at least explicit about our
+> > behavior now and it can be further refined down the line.
+>=20
+> Given that the current approach involves patching every single user to
+> set a default implementation it feels like it might be more
+> straightforward to just have the clock API use that implementation if
+> none is defined - as you say there's already a flag to indicate the
+> unusual case where there's a solid reason to prevent reparenting.  It
+> feels like the resulting API is more straightforward.
+
+That would be another solution indeed. The thing is, most places where
+determine_rate is missing seems to be oversight, and the flag is missing
+as well.
+
+Just filling determine_rate if it's missing with
+__clk_mux_determine_rate will possibly pick different parents, and I'm
+fairly certain that this have never been tested on most platforms, and
+will be completely broken. And I don't really want to play a game of
+whack-a-mole adding that flag everywhere it turns out it's broken.
+
+Maxime
+
+--mczzont5aeejoi22
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCY2U0+wAKCRDj7w1vZxhR
+xXdWAP9xOaAlwGZ6oTzlixCwOJjLcIji+k20bZRWJg3KwM8WjgD/XCMOLieTzsjF
+hAeOJdZFWunkoq+e4ZeBrrG36c3row8=
+=SvO6
+-----END PGP SIGNATURE-----
+
+--mczzont5aeejoi22--
