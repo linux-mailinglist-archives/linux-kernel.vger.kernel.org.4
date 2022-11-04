@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 607D4619CAE
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 17:11:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9ED82619CB0
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 17:11:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231789AbiKDQLm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 12:11:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42702 "EHLO
+        id S232050AbiKDQLp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 12:11:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232317AbiKDQLi (ORCPT
+        with ESMTP id S229749AbiKDQLi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 4 Nov 2022 12:11:38 -0400
-Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3490947313
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 09:11:35 -0700 (PDT)
-Received: by mail-qk1-x730.google.com with SMTP id i9so3323181qki.10
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 09:11:35 -0700 (PDT)
+Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AC444731E
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 09:11:36 -0700 (PDT)
+Received: by mail-qk1-x72e.google.com with SMTP id x21so3372527qkj.0
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 09:11:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=7zZ4hgOBkSS7lKqMVHhHdz8obglhyQ+aTwbL4NpTFkY=;
-        b=Yq6e3O/pGs0MyOMWNUA3vzTx3Od/4zemKt3ajIfy7bcKicU6rKTt+8SIfixfMHxYJG
-         w3lkubqOHSdShkN8ENt7WCjjVvv9tm492yyyg6N6h8Q0bhPz7urmD2n6uvcihudnfrtD
-         w5UqLLeSSwlvEdhrQ/6T0CGR628QwEKOuiTjBynJldhpCCIjNLmnUz62A21iSOSUoBz2
-         PTm/SNg41p669YN1ZpS75LmdeyTFSdWeYGC9CLP8h32bqyQkootg73Cnl8BMYv1fcapI
-         9/Q0u8hE1BASSR7bydW+osW15FGfsoMxrnc8IjlNiBNooe9wpIkU0P+PUIriongxdZqa
-         dUjQ==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Q2wrmGopd2SuEHcPg0XIzd7mEf4bj5oOXYDEQoz+QeQ=;
+        b=ENfr+rnAZZUl1MFe62UhyhC4eug1BbPGSx8LFrPPsHBkVH6h+IiDjDi558eIhJDbfy
+         5NVI4bhwfI0c+Bp+EvMU6u5glpHaDO21sGIvtqHPt3C4CDDrCXlOV99odayX3+LkF/hx
+         S9P9kKuPUj2m+Y4IiUOtKrwAhb7QcevvEkh7KBF4hmOJPshO1yBDzl5avS3kTXbhnnr9
+         uaQ7KDidNl9I2GWjrvg2f3uzCB8zBpjlTExxs10AyalD7cIV9CbTgRBg03udr+KMQjB1
+         eUiEUzCw2XhFF2c4St/YI+hrwbYwCcTLfvpbyl/ld497IjYa1+2PEh2LVmmoMMNS2lRy
+         Sbzg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=7zZ4hgOBkSS7lKqMVHhHdz8obglhyQ+aTwbL4NpTFkY=;
-        b=AEWAY3ScXebi90Ilwt15Rlt51Va4FCEk3TS5zGQV3Pfm+Vus4EvbkdaXWKh+j82M2P
-         Jk1/8AiJeQBiOCXC6kztumiB5NmCUFUPd7wAJyZwiFWQ0+8bKaENYhfjw2tTj8pgMkQD
-         bUQPCApD6loiVa+iKN1aD+Fw3KQ5F2tq6mRDNjGeDqUEId23wnErdO7lIwI8wpYt2GlM
-         GjZKsyToaIjHFBYsdLTfHGW4VQ/h5do1uJ5IXheAUnq6IZTA85Q7Jk78LstF8YpzpMIf
-         hqXl7Z5GvSG3VFzN39n4n4vcuxJDmvPqN1NXUjk93rdH0Ucl/C00OtXEFgvekXx5/n25
-         pz4Q==
-X-Gm-Message-State: ACrzQf2i7BN265av2Wlzfz2pjU+BeZpZSix19UdlFUXhvlmTw19cH08E
-        5+4BBfptZioZWrH5RtgveUjqqw==
-X-Google-Smtp-Source: AMsMyM6tpIfGesI5sSD92+o7Ph27abF80lG778Fl8YEEGnGgkigFyNhJSH2KgbhupSJ1G3bKjEPdZA==
-X-Received: by 2002:a37:69c5:0:b0:6fa:d6f:e848 with SMTP id e188-20020a3769c5000000b006fa0d6fe848mr26175271qkc.17.1667578294302;
-        Fri, 04 Nov 2022 09:11:34 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Q2wrmGopd2SuEHcPg0XIzd7mEf4bj5oOXYDEQoz+QeQ=;
+        b=PJtMvsggg+9HubCWZNXb9kw/BtFmVbKGzNqfBNH7yio5htcd3+6FVK8m99sIkQ167T
+         YfqM+t/t+qNLlcNvQv7V6kWdn1LiAuWzeBrzpf76YQmYYNqmdDChMVl6nIAIjRQlNc79
+         BgelGV2zVI/QvJJ/eXRbBHpBg4UfRefmLiytpZgM+zk0jVZ5b5DhK6ge2Ym53Zq6snjy
+         U7Ug1xxbUNJZxx1rXalcGB9gYlf5ZIxCga3BNWiookrpte4yLiY2ALPY2AOUZy5LN4wZ
+         aJMH+4eBVBTJeVkPXHf5Ko2l9pmHTAVZfayC8Oow4Evw82K5fx6j2gCfSVod1KHEBSM7
+         pqGQ==
+X-Gm-Message-State: ACrzQf1UHZMC/fcfZFALGjdCjlBdWzx3H+AvoKgiUyBCenTz9xe5dJW1
+        QoWUQxxFHyLrzEM18N/gQWeitQ==
+X-Google-Smtp-Source: AMsMyM5WD9eMuPHxfO29pIb1PAKf+911s8monr4hGIJU3TIXYi/5NSpkcUV3PbcNwPd4Uin3ZsZAjA==
+X-Received: by 2002:a37:8981:0:b0:6f1:1560:ac7d with SMTP id l123-20020a378981000000b006f11560ac7dmr27050562qkd.659.1667578295581;
+        Fri, 04 Nov 2022 09:11:35 -0700 (PDT)
 Received: from krzk-bin.. ([2601:586:5000:570:aad6:acd8:4ed9:299b])
-        by smtp.gmail.com with ESMTPSA id b6-20020a05620a0cc600b006e6a7c2a269sm3125370qkj.22.2022.11.04.09.11.32
+        by smtp.gmail.com with ESMTPSA id b6-20020a05620a0cc600b006e6a7c2a269sm3125370qkj.22.2022.11.04.09.11.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Nov 2022 09:11:33 -0700 (PDT)
+        Fri, 04 Nov 2022 09:11:35 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Bjorn Andersson <andersson@kernel.org>,
         Andy Gross <agross@kernel.org>,
@@ -59,398 +60,425 @@ To:     Bjorn Andersson <andersson@kernel.org>,
         linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 1/2] arm64: dts: qcom: qcs404: align TLMM pin configuration with DT schema
-Date:   Fri,  4 Nov 2022 12:11:30 -0400
-Message-Id: <20221104161131.57719-1-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 2/2] dt-bindings: pinctrl: qcom,qcs404: convert to dtschema
+Date:   Fri,  4 Nov 2022 12:11:31 -0400
+Message-Id: <20221104161131.57719-2-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20221104161131.57719-1-krzysztof.kozlowski@linaro.org>
+References: <20221104161131.57719-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DT schema expects TLMM pin configuration nodes to be named with
-'-state' suffix and their optional children with '-pins' suffix.
+Convert Qualcomm QCS404 pin controller bindings to DT schema.  Keep the
+parsing of pin configuration subnodes consistent with other Qualcomm
+schemas (children named with '-state' suffix, their children with
+'-pins').
+
+Changes during conversion: add sdc1_rclk pins (used in qcs404-evb.dtsi).
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- arch/arm64/boot/dts/qcom/qcs404-evb-4000.dts | 20 +++---
- arch/arm64/boot/dts/qcom/qcs404-evb.dtsi     | 52 +++++++--------
- arch/arm64/boot/dts/qcom/qcs404.dtsi         | 66 ++++++++++++--------
- 3 files changed, 71 insertions(+), 67 deletions(-)
+ .../bindings/pinctrl/qcom,qcs404-pinctrl.txt  | 199 ------------------
+ .../bindings/pinctrl/qcom,qcs404-pinctrl.yaml | 176 ++++++++++++++++
+ 2 files changed, 176 insertions(+), 199 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,qcs404-pinctrl.txt
+ create mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,qcs404-pinctrl.yaml
 
-diff --git a/arch/arm64/boot/dts/qcom/qcs404-evb-4000.dts b/arch/arm64/boot/dts/qcom/qcs404-evb-4000.dts
-index 08d5d51221cf..9c7d4e780357 100644
---- a/arch/arm64/boot/dts/qcom/qcs404-evb-4000.dts
-+++ b/arch/arm64/boot/dts/qcom/qcs404-evb-4000.dts
-@@ -37,54 +37,54 @@ phy1: phy@4 {
- };
- 
- &tlmm {
--	ethernet_defaults: ethernet-defaults {
--		int {
-+	ethernet_defaults: ethernet-defaults-state {
-+		int-pins {
- 			pins = "gpio61";
- 			function = "rgmii_int";
- 			bias-disable;
- 			drive-strength = <2>;
- 		};
--		mdc {
-+		mdc-pins {
- 			pins = "gpio76";
- 			function = "rgmii_mdc";
- 			bias-pull-up;
- 		};
--		mdio {
-+		mdio-pins {
- 			pins = "gpio75";
- 			function = "rgmii_mdio";
- 			bias-pull-up;
- 		};
--		tx {
-+		tx-pins {
- 			pins = "gpio67", "gpio66", "gpio65", "gpio64";
- 			function = "rgmii_tx";
- 			bias-pull-up;
- 			drive-strength = <16>;
- 		};
--		rx {
-+		rx-pins {
- 			pins = "gpio73", "gpio72", "gpio71", "gpio70";
- 			function = "rgmii_rx";
- 			bias-disable;
- 			drive-strength = <2>;
- 		};
--		tx-ctl {
-+		tx-ctl-pins {
- 			pins = "gpio68";
- 			function = "rgmii_ctl";
- 			bias-pull-up;
- 			drive-strength = <16>;
- 		};
--		rx-ctl {
-+		rx-ctl-pins {
- 			pins = "gpio74";
- 			function = "rgmii_ctl";
- 			bias-disable;
- 			drive-strength = <2>;
- 		};
--		tx-ck {
-+		tx-ck-pins {
- 			pins = "gpio63";
- 			function = "rgmii_ck";
- 			bias-pull-up;
- 			drive-strength = <16>;
- 		};
--		rx-ck {
-+		rx-ck-pins {
- 			pins = "gpio69";
- 			function = "rgmii_ck";
- 			bias-disable;
-diff --git a/arch/arm64/boot/dts/qcom/qcs404-evb.dtsi b/arch/arm64/boot/dts/qcom/qcs404-evb.dtsi
-index dbbe1653718b..4d53cd544e41 100644
---- a/arch/arm64/boot/dts/qcom/qcs404-evb.dtsi
-+++ b/arch/arm64/boot/dts/qcom/qcs404-evb.dtsi
-@@ -229,7 +229,7 @@ &sdcc1 {
- };
- 
- &tlmm {
--	perst_state: perst {
-+	perst_state: perst-state {
- 		pins = "gpio43";
- 		function = "gpio";
- 
-@@ -238,68 +238,63 @@ perst_state: perst {
- 		output-low;
- 	};
- 
--	sdc1_on: sdc1-on {
--		clk {
-+	sdc1_on: sdc1-on-state {
-+		clk-pins {
- 			pins = "sdc1_clk";
- 			bias-disable;
- 			drive-strength = <16>;
- 		};
- 
--		cmd {
-+		cmd-pins {
- 			pins = "sdc1_cmd";
- 			bias-pull-up;
- 			drive-strength = <10>;
- 		};
- 
--		data {
-+		data-pins {
- 			pins = "sdc1_data";
- 			bias-pull-up;
- 			drive-strength = <10>;
- 		};
- 
--		rclk {
-+		rclk-pins {
- 			pins = "sdc1_rclk";
- 			bias-pull-down;
- 		};
- 	};
- 
--	sdc1_off: sdc1-off {
--		clk {
-+	sdc1_off: sdc1-off-state {
-+		clk-pins {
- 			pins = "sdc1_clk";
- 			bias-disable;
- 			drive-strength = <2>;
- 		};
- 
--		cmd {
-+		cmd-pins {
- 			pins = "sdc1_cmd";
- 			bias-pull-up;
- 			drive-strength = <2>;
- 		};
- 
--		data {
-+		data-pins {
- 			pins = "sdc1_data";
- 			bias-pull-up;
- 			drive-strength = <2>;
- 		};
- 
--		rclk {
-+		rclk-pins {
- 			pins = "sdc1_rclk";
- 			bias-pull-down;
- 		};
- 	};
- 
--	usb3_id_pin: usb3-id-pin {
--		pinmux {
--			pins = "gpio116";
--			function = "gpio";
--		};
-+	usb3_id_pin: usb3-id-state {
-+		pins = "gpio116";
-+		function = "gpio";
- 
--		pinconf {
--			pins = "gpio116";
--			drive-strength = <2>;
--			bias-pull-up;
--			input-enable;
--		};
-+		drive-strength = <2>;
-+		bias-pull-up;
-+		input-enable;
- 	};
- };
- 
-@@ -366,31 +361,28 @@ &wifi {
- /* PINCTRL - additions to nodes defined in qcs404.dtsi */
- 
- &blsp1_uart2_default {
--	rx {
-+	rx-pins {
- 		drive-strength = <2>;
- 		bias-disable;
- 	};
- 
--	tx {
-+	tx-pins {
- 		drive-strength = <2>;
- 		bias-disable;
- 	};
- };
- 
- &blsp1_uart3_default {
--	cts {
--		pins = "gpio84";
-+	cts-pins {
- 		bias-disable;
- 	};
- 
--	rts-tx {
--		pins = "gpio85", "gpio82";
-+	rts-tx-pins {
- 		drive-strength = <2>;
- 		bias-disable;
- 	};
- 
--	rx {
--		pins = "gpio83";
-+	rx-pins {
- 		bias-pull-up;
- 	};
- };
-diff --git a/arch/arm64/boot/dts/qcom/qcs404.dtsi b/arch/arm64/boot/dts/qcom/qcs404.dtsi
-index 80f2d05595fa..577d76662468 100644
---- a/arch/arm64/boot/dts/qcom/qcs404.dtsi
-+++ b/arch/arm64/boot/dts/qcom/qcs404.dtsi
-@@ -593,118 +593,130 @@ tlmm: pinctrl@1000000 {
- 			interrupt-controller;
- 			#interrupt-cells = <2>;
- 
--			blsp1_i2c0_default: blsp1-i2c0-default {
-+			blsp1_i2c0_default: blsp1-i2c0-default-state {
- 				pins = "gpio32", "gpio33";
- 				function = "blsp_i2c0";
- 			};
- 
--			blsp1_i2c1_default: blsp1-i2c1-default {
-+			blsp1_i2c1_default: blsp1-i2c1-default-state {
- 				pins = "gpio24", "gpio25";
- 				function = "blsp_i2c1";
- 			};
- 
--			blsp1_i2c2_default: blsp1-i2c2-default {
--				sda {
-+			blsp1_i2c2_default: blsp1-i2c2-default-state {
-+				sda-pins {
- 					pins = "gpio19";
- 					function = "blsp_i2c_sda_a2";
- 				};
- 
--				scl {
-+				scl-pins {
- 					pins = "gpio20";
- 					function = "blsp_i2c_scl_a2";
- 				};
- 			};
- 
--			blsp1_i2c3_default: blsp1-i2c3-default {
-+			blsp1_i2c3_default: blsp1-i2c3-default-state {
- 				pins = "gpio84", "gpio85";
- 				function = "blsp_i2c3";
- 			};
- 
--			blsp1_i2c4_default: blsp1-i2c4-default {
-+			blsp1_i2c4_default: blsp1-i2c4-default-state {
- 				pins = "gpio117", "gpio118";
- 				function = "blsp_i2c4";
- 			};
- 
--			blsp1_uart0_default: blsp1-uart0-default {
-+			blsp1_uart0_default: blsp1-uart0-default-state {
- 				pins = "gpio30", "gpio31", "gpio32", "gpio33";
- 				function = "blsp_uart0";
- 			};
- 
--			blsp1_uart1_default: blsp1-uart1-default {
-+			blsp1_uart1_default: blsp1-uart1-default-state {
- 				pins = "gpio22", "gpio23";
- 				function = "blsp_uart1";
- 			};
- 
--			blsp1_uart2_default: blsp1-uart2-default {
--				rx {
-+			blsp1_uart2_default: blsp1-uart2-default-state {
-+				rx-pins {
- 					pins = "gpio18";
- 					function = "blsp_uart_rx_a2";
- 				};
- 
--				tx {
-+				tx-pins {
- 					pins = "gpio17";
- 					function = "blsp_uart_tx_a2";
- 				};
- 			};
- 
--			blsp1_uart3_default: blsp1-uart3-default {
--				pins = "gpio82", "gpio83", "gpio84", "gpio85";
--				function = "blsp_uart3";
-+			blsp1_uart3_default: blsp1-uart3-default-state {
-+				cts-pins {
-+					pins = "gpio84";
-+					function = "blsp_uart3";
-+				};
+diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,qcs404-pinctrl.txt b/Documentation/devicetree/bindings/pinctrl/qcom,qcs404-pinctrl.txt
+deleted file mode 100644
+index a50e74684195..000000000000
+--- a/Documentation/devicetree/bindings/pinctrl/qcom,qcs404-pinctrl.txt
++++ /dev/null
+@@ -1,199 +0,0 @@
+-Qualcomm QCS404 TLMM block
+-
+-This binding describes the Top Level Mode Multiplexer block found in the
+-QCS404 platform.
+-
+-- compatible:
+-	Usage: required
+-	Value type: <string>
+-	Definition: must be "qcom,qcs404-pinctrl"
+-
+-- reg:
+-	Usage: required
+-	Value type: <prop-encoded-array>
+-	Definition: the base address and size of the north, south and east TLMM
+-		    tiles.
+-
+-- reg-names:
+-	Usage: required
+-	Value type: <stringlist>
+-	Defintiion: names for the cells of reg, must contain "north", "south"
+-		    and "east".
+-
+-- interrupts:
+-	Usage: required
+-	Value type: <prop-encoded-array>
+-	Definition: should specify the TLMM summary IRQ.
+-
+-- interrupt-controller:
+-	Usage: required
+-	Value type: <none>
+-	Definition: identifies this node as an interrupt controller
+-
+-- #interrupt-cells:
+-	Usage: required
+-	Value type: <u32>
+-	Definition: must be 2. Specifying the pin number and flags, as defined
+-		    in <dt-bindings/interrupt-controller/irq.h>
+-
+-- gpio-controller:
+-	Usage: required
+-	Value type: <none>
+-	Definition: identifies this node as a gpio controller
+-
+-- #gpio-cells:
+-	Usage: required
+-	Value type: <u32>
+-	Definition: must be 2. Specifying the pin number and flags, as defined
+-		    in <dt-bindings/gpio/gpio.h>
+-
+-- gpio-ranges:
+-	Usage: required
+-	Definition:  see ../gpio/gpio.txt
+-
+-Please refer to ../gpio/gpio.txt and ../interrupt-controller/interrupts.txt for
+-a general description of GPIO and interrupt bindings.
+-
+-Please refer to pinctrl-bindings.txt in this directory for details of the
+-common pinctrl bindings used by client devices, including the meaning of the
+-phrase "pin configuration node".
+-
+-The pin configuration nodes act as a container for an arbitrary number of
+-subnodes. Each of these subnodes represents some desired configuration for a
+-pin, a group, or a list of pins or groups. This configuration can include the
+-mux function to select on those pin(s)/group(s), and various pin configuration
+-parameters, such as pull-up, drive strength, etc.
+-
+-
+-PIN CONFIGURATION NODES:
+-
+-The name of each subnode is not important; all subnodes should be enumerated
+-and processed purely based on their content.
+-
+-Each subnode only affects those parameters that are explicitly listed. In
+-other words, a subnode that lists a mux function but no pin configuration
+-parameters implies no information about any pin configuration parameters.
+-Similarly, a pin subnode that describes a pullup parameter implies no
+-information about e.g. the mux function.
+-
+-
+-The following generic properties as defined in pinctrl-bindings.txt are valid
+-to specify in a pin configuration subnode:
+-
+-- pins:
+-	Usage: required
+-	Value type: <string-array>
+-	Definition: List of gpio pins affected by the properties specified in
+-		    this subnode.
+-
+-		    Valid pins are:
+-		      gpio0-gpio119
+-		        Supports mux, bias and drive-strength
+-
+-		      sdc1_clk, sdc1_cmd, sdc1_data, sdc2_clk, sdc2_cmd,
+-		      sdc2_data
+-		        Supports bias and drive-strength
+-
+-		      ufs_reset
+-		        Supports bias and drive-strength
+-
+-- function:
+-	Usage: required
+-	Value type: <string>
+-	Definition: Specify the alternative function to be configured for the
+-		    specified pins. Functions are only valid for gpio pins.
+-		    Valid values are:
+-
+-		    gpio, hdmi_tx, hdmi_ddc, blsp_uart_tx_a2, blsp_spi2, m_voc,
+-		    qdss_cti_trig_in_a0, blsp_uart_rx_a2, qdss_tracectl_a,
+-		    blsp_uart2, aud_cdc, blsp_i2c_sda_a2, qdss_tracedata_a,
+-		    blsp_i2c_scl_a2, qdss_tracectl_b, qdss_cti_trig_in_b0,
+-		    blsp_uart1, blsp_spi_mosi_a1, blsp_spi_miso_a1,
+-		    qdss_tracedata_b, blsp_i2c1, blsp_spi_cs_n_a1, gcc_plltest,
+-		    blsp_spi_clk_a1, rgb_data0, blsp_uart5, blsp_spi5,
+-		    adsp_ext, rgb_data1, prng_rosc, rgb_data2, blsp_i2c5,
+-		    gcc_gp1_clk_b, rgb_data3, gcc_gp2_clk_b, blsp_spi0,
+-		    blsp_uart0, gcc_gp3_clk_b, blsp_i2c0, qdss_traceclk_b,
+-		    pcie_clk, nfc_irq, blsp_spi4, nfc_dwl, audio_ts, rgb_data4,
+-		    spi_lcd, blsp_uart_tx_b2, gcc_gp3_clk_a, rgb_data5,
+-		    blsp_uart_rx_b2, blsp_i2c_sda_b2, blsp_i2c_scl_b2,
+-		    pwm_led11, i2s_3_data0_a, ebi2_lcd, i2s_3_data1_a,
+-		    i2s_3_data2_a, atest_char, pwm_led3, i2s_3_data3_a,
+-		    pwm_led4, i2s_4, ebi2_a, dsd_clk_b, pwm_led5, pwm_led6,
+-		    pwm_led7, pwm_led8, pwm_led24, spkr_dac0, blsp_i2c4,
+-		    pwm_led9, pwm_led10, spdifrx_opt, pwm_led12, pwm_led13,
+-		    pwm_led14, wlan1_adc1, rgb_data_b0, pwm_led15,
+-		    blsp_spi_mosi_b1, wlan1_adc0, rgb_data_b1, pwm_led16,
+-		    blsp_spi_miso_b1, qdss_cti_trig_out_b0, wlan2_adc1,
+-		    rgb_data_b2, pwm_led17, blsp_spi_cs_n_b1, wlan2_adc0,
+-		    rgb_data_b3, pwm_led18, blsp_spi_clk_b1, rgb_data_b4,
+-		    pwm_led19, ext_mclk1_b, qdss_traceclk_a, rgb_data_b5,
+-		    pwm_led20, atest_char3, i2s_3_sck_b, ldo_update, bimc_dte0,
+-		    rgb_hsync, pwm_led21, i2s_3_ws_b, dbg_out, rgb_vsync,
+-		    i2s_3_data0_b, ldo_en, hdmi_dtest, rgb_de, i2s_3_data1_b,
+-		    hdmi_lbk9, rgb_clk, atest_char1, i2s_3_data2_b, ebi_cdc,
+-		    hdmi_lbk8, rgb_mdp, atest_char0, i2s_3_data3_b, hdmi_lbk7,
+-		    rgb_data_b6, rgb_data_b7, hdmi_lbk6, rgmii_int, cri_trng1,
+-		    rgmii_wol, cri_trng0, gcc_tlmm, rgmii_ck, rgmii_tx,
+-		    hdmi_lbk5, hdmi_pixel, hdmi_rcv, hdmi_lbk4, rgmii_ctl,
+-		    ext_lpass, rgmii_rx, cri_trng, hdmi_lbk3, hdmi_lbk2,
+-		    qdss_cti_trig_out_b1, rgmii_mdio, hdmi_lbk1, rgmii_mdc,
+-		    hdmi_lbk0, ir_in, wsa_en, rgb_data6, rgb_data7,
+-		    atest_char2, ebi_ch0, blsp_uart3, blsp_spi3, sd_write,
+-		    blsp_i2c3, gcc_gp1_clk_a, qdss_cti_trig_in_b1,
+-		    gcc_gp2_clk_a, ext_mclk0, mclk_in1, i2s_1, dsd_clk_a,
+-		    qdss_cti_trig_in_a1, rgmi_dll1, pwm_led22, pwm_led23,
+-		    qdss_cti_trig_out_a0, rgmi_dll2, pwm_led1,
+-		    qdss_cti_trig_out_a1, pwm_led2, i2s_2, pll_bist,
+-		    ext_mclk1_a, mclk_in2, bimc_dte1, i2s_3_sck_a, i2s_3_ws_a
+-
+-- bias-disable:
+-	Usage: optional
+-	Value type: <none>
+-	Definition: The specified pins should be configured as no pull.
+-
+-- bias-pull-down:
+-	Usage: optional
+-	Value type: <none>
+-	Definition: The specified pins should be configured as pull down.
+-
+-- bias-pull-up:
+-	Usage: optional
+-	Value type: <none>
+-	Definition: The specified pins should be configured as pull up.
+-
+-- output-high:
+-	Usage: optional
+-	Value type: <none>
+-	Definition: The specified pins are configured in output mode, driven
+-		    high.
+-		    Not valid for sdc pins.
+-
+-- output-low:
+-	Usage: optional
+-	Value type: <none>
+-	Definition: The specified pins are configured in output mode, driven
+-		    low.
+-		    Not valid for sdc pins.
+-
+-- drive-strength:
+-	Usage: optional
+-	Value type: <u32>
+-	Definition: Selects the drive strength for the specified pins, in mA.
+-		    Valid values are: 2, 4, 6, 8, 10, 12, 14 and 16
+-
+-Example:
+-
+-	tlmm: pinctrl@1000000 {
+-		compatible = "qcom,qcs404-pinctrl";
+-		reg = <0x01000000 0x200000>,
+-		      <0x01300000 0x200000>,
+-		      <0x07b00000 0x200000>;
+-		reg-names = "south", "north", "east";
+-		interrupts = <GIC_SPI 208 IRQ_TYPE_LEVEL_HIGH>;
+-		gpio-controller;
+-		#gpio-cells = <2>;
+-		gpio-ranges = <&tlmm 0 0 120>;
+-		interrupt-controller;
+-		#interrupt-cells = <2>;
+-	};
+diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,qcs404-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/qcom,qcs404-pinctrl.yaml
+new file mode 100644
+index 000000000000..3d314458bf84
+--- /dev/null
++++ b/Documentation/devicetree/bindings/pinctrl/qcom,qcs404-pinctrl.yaml
+@@ -0,0 +1,176 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/pinctrl/qcom,qcs404-pinctrl.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+				rts-tx-pins {
-+					pins = "gpio85", "gpio82";
-+					function = "blsp_uart3";
-+				};
++title: Qualcomm SCS404 TLMM pin controller
 +
-+				rx-pins {
-+					pins = "gpio83";
-+					function = "blsp_uart3";
-+				};
- 			};
- 
--			blsp2_i2c0_default: blsp2-i2c0-default {
-+			blsp2_i2c0_default: blsp2-i2c0-default-state {
- 				pins = "gpio28", "gpio29";
- 				function = "blsp_i2c5";
- 			};
- 
--			blsp1_spi0_default: blsp1-spi0-default {
-+			blsp1_spi0_default: blsp1-spi0-default-state {
- 				pins = "gpio30", "gpio31", "gpio32", "gpio33";
- 				function = "blsp_spi0";
- 			};
- 
--			blsp1_spi1_default: blsp1-spi1-default {
--				mosi {
-+			blsp1_spi1_default: blsp1-spi1-default-state {
-+				mosi-pins {
- 					pins = "gpio22";
- 					function = "blsp_spi_mosi_a1";
- 				};
- 
--				miso {
-+				miso-pins {
- 					pins = "gpio23";
- 					function = "blsp_spi_miso_a1";
- 				};
- 
--				cs_n {
-+				cs-n-pins {
- 					pins = "gpio24";
- 					function = "blsp_spi_cs_n_a1";
- 				};
- 
--				clk {
-+				clk-pins {
- 					pins = "gpio25";
- 					function = "blsp_spi_clk_a1";
- 				};
- 			};
- 
--			blsp1_spi2_default: blsp1-spi2-default {
-+			blsp1_spi2_default: blsp1-spi2-default-state {
- 				pins = "gpio17", "gpio18", "gpio19", "gpio20";
- 				function = "blsp_spi2";
- 			};
- 
--			blsp1_spi3_default: blsp1-spi3-default {
-+			blsp1_spi3_default: blsp1-spi3-default-state {
- 				pins = "gpio82", "gpio83", "gpio84", "gpio85";
- 				function = "blsp_spi3";
- 			};
- 
--			blsp1_spi4_default: blsp1-spi4-default {
-+			blsp1_spi4_default: blsp1-spi4-default-state {
- 				pins = "gpio37", "gpio38", "gpio117", "gpio118";
- 				function = "blsp_spi4";
- 			};
- 
--			blsp2_spi0_default: blsp2-spi0-default {
-+			blsp2_spi0_default: blsp2-spi0-default-state {
- 				pins = "gpio26", "gpio27", "gpio28", "gpio29";
- 				function = "blsp_spi5";
- 			};
- 
--			blsp2_uart0_default: blsp2-uart0-default {
-+			blsp2_uart0_default: blsp2-uart0-default-state {
- 				pins = "gpio26", "gpio27", "gpio28", "gpio29";
- 				function = "blsp_uart5";
- 			};
++maintainers:
++  - Bjorn Andersson <andersson@kernel.org>
++  - Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
++
++description:
++  Top Level Mode Multiplexer pin controller in Qualcomm QCS404 SoC.
++
++properties:
++  compatible:
++    const: qcom,qcs404-pinctrl
++
++  reg:
++    maxItems: 3
++
++  reg-names:
++    items:
++      - const: south
++      - const: north
++      - const: east
++
++  interrupts: true
++  interrupt-controller: true
++  "#interrupt-cells": true
++  gpio-controller: true
++  "#gpio-cells": true
++  gpio-ranges: true
++  wakeup-parent: true
++
++  gpio-reserved-ranges:
++    minItems: 1
++    maxItems: 60
++
++  gpio-line-names:
++    maxItems: 120
++
++patternProperties:
++  "-state$":
++    oneOf:
++      - $ref: "#/$defs/qcom-qcs404-tlmm-state"
++      - patternProperties:
++          "-pins$":
++            $ref: "#/$defs/qcom-qcs404-tlmm-state"
++        additionalProperties: false
++
++$defs:
++  qcom-qcs404-tlmm-state:
++    type: object
++    description:
++      Pinctrl node's client devices use subnodes for desired pin configuration.
++      Client device subnodes use below standard properties.
++    $ref: qcom,tlmm-common.yaml#/$defs/qcom-tlmm-state
++
++    properties:
++      pins:
++        description:
++          List of gpio pins affected by the properties specified in this
++          subnode.
++        items:
++          oneOf:
++            - pattern: "^gpio([0-9]|[1-9][0-9]|1[0-1][0-9])$"
++            - enum: [ sdc1_clk, sdc1_cmd, sdc1_data, sdc1_rclk, sdc2_clk,
++                      sdc2_cmd, sdc2_data, ufs_reset ]
++        minItems: 1
++        maxItems: 36
++
++      function:
++        description:
++          Specify the alternative function to be configured for the specified
++          pins.
++
++        enum: [ gpio, adsp_ext, atest_char, atest_char0, atest_char1,
++                atest_char2, atest_char3, aud_cdc, audio_ts, bimc_dte0,
++                bimc_dte1, blsp_i2c0, blsp_i2c1, blsp_i2c3, blsp_i2c4,
++                blsp_i2c5, blsp_i2c_scl_a2, blsp_i2c_scl_b2, blsp_i2c_sda_a2,
++                blsp_i2c_sda_b2, blsp_spi0, blsp_spi2, blsp_spi3, blsp_spi4,
++                blsp_spi5, blsp_spi_clk_a1, blsp_spi_clk_b1, blsp_spi_cs_n_a1,
++                blsp_spi_cs_n_b1, blsp_spi_miso_a1, blsp_spi_miso_b1,
++                blsp_spi_mosi_a1, blsp_spi_mosi_b1, blsp_uart0, blsp_uart1,
++                blsp_uart2, blsp_uart3, blsp_uart5, blsp_uart_rx_a2,
++                blsp_uart_rx_b2, blsp_uart_tx_a2, blsp_uart_tx_b2, cri_trng,
++                cri_trng0, cri_trng1, dbg_out, dsd_clk_a, dsd_clk_b, ebi2_a,
++                ebi2_lcd, ebi_cdc, ebi_ch0, ext_lpass, ext_mclk0, ext_mclk1_a,
++                ext_mclk1_b, gcc_gp1_clk_a, gcc_gp1_clk_b, gcc_gp2_clk_a,
++                gcc_gp2_clk_b, gcc_gp3_clk_a, gcc_gp3_clk_b, gcc_plltest,
++                gcc_tlmm, hdmi_ddc, hdmi_dtest, hdmi_lbk0, hdmi_lbk1,
++                hdmi_lbk2, hdmi_lbk3, hdmi_lbk4, hdmi_lbk5, hdmi_lbk6,
++                hdmi_lbk7, hdmi_lbk8, hdmi_lbk9, hdmi_pixel, hdmi_rcv, hdmi_tx,
++                i2s_1, i2s_2, i2s_3_data0_a, i2s_3_data0_b, i2s_3_data1_a,
++                i2s_3_data1_b, i2s_3_data2_a, i2s_3_data2_b, i2s_3_data3_a,
++                i2s_3_data3_b, i2s_3_sck_a, i2s_3_sck_b, i2s_3_ws_a,
++                i2s_3_ws_b, i2s_4, ir_in, ldo_en, ldo_update, mclk_in1,
++                mclk_in2, m_voc, nfc_dwl, nfc_irq, pcie_clk, pll_bist,
++                prng_rosc, pwm_led1, pwm_led10, pwm_led11, pwm_led12,
++                pwm_led13, pwm_led14, pwm_led15, pwm_led16, pwm_led17,
++                pwm_led18, pwm_led19, pwm_led2, pwm_led20, pwm_led21,
++                pwm_led22, pwm_led23, pwm_led24, pwm_led3, pwm_led4, pwm_led5,
++                pwm_led6, pwm_led7, pwm_led8, pwm_led9, qdss_cti_trig_in_a0,
++                qdss_cti_trig_in_a1, qdss_cti_trig_in_b0, qdss_cti_trig_in_b1,
++                qdss_cti_trig_out_a0, qdss_cti_trig_out_a1,
++                qdss_cti_trig_out_b0, qdss_cti_trig_out_b1, qdss_traceclk_a,
++                qdss_traceclk_b, qdss_tracectl_a, qdss_tracectl_b,
++                qdss_tracedata_a, qdss_tracedata_b, rgb_clk, rgb_data0,
++                rgb_data1, rgb_data2, rgb_data3, rgb_data4, rgb_data5,
++                rgb_data6, rgb_data7, rgb_data_b0, rgb_data_b1, rgb_data_b2,
++                rgb_data_b3, rgb_data_b4, rgb_data_b5, rgb_data_b6,
++                rgb_data_b7, rgb_de, rgb_hsync, rgb_mdp, rgb_vsync, rgmi_dll1,
++                rgmi_dll2, rgmii_ck, rgmii_ctl, rgmii_int, rgmii_mdc,
++                rgmii_mdio, rgmii_rx, rgmii_tx, rgmii_wol, sd_write,
++                spdifrx_opt, spi_lcd, spkr_dac0, wlan1_adc0, wlan1_adc1,
++                wlan2_adc0, wlan2_adc1, wsa_en ]
++
++      bias-pull-down: true
++      bias-pull-up: true
++      bias-disable: true
++      drive-strength: true
++      input-enable: true
++      output-high: true
++      output-low: true
++
++    required:
++      - pins
++
++    additionalProperties: false
++
++allOf:
++  - $ref: /schemas/pinctrl/qcom,tlmm-common.yaml#
++
++required:
++  - compatible
++  - reg
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++
++    tlmm: pinctrl@1000000 {
++        compatible = "qcom,qcs404-pinctrl";
++        reg = <0x01000000 0x200000>,
++              <0x01300000 0x200000>,
++              <0x07b00000 0x200000>;
++        reg-names = "south", "north", "east";
++        interrupts = <GIC_SPI 208 IRQ_TYPE_LEVEL_HIGH>;
++        gpio-ranges = <&tlmm 0 0 120>;
++        gpio-controller;
++        #gpio-cells = <2>;
++        interrupt-controller;
++        #interrupt-cells = <2>;
++
++
++        blsp1-i2c1-default-state {
++            pins = "gpio24", "gpio25";
++            function = "blsp_i2c1";
++        };
++
++        blsp1-i2c2-default-state {
++            sda-pins {
++                pins = "gpio19";
++                function = "blsp_i2c_sda_a2";
++            };
++
++            scl-pins {
++                pins = "gpio20";
++                function = "blsp_i2c_scl_a2";
++            };
++        };
++    };
 -- 
 2.34.1
 
