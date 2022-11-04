@@ -2,222 +2,263 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44B7361A048
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 19:50:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27D5B61A050
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 19:52:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229601AbiKDSue (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 14:50:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36784 "EHLO
+        id S229598AbiKDSwe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 14:52:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbiKDSu3 (ORCPT
+        with ESMTP id S229555AbiKDSwb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 14:50:29 -0400
-Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BA375F70;
-        Fri,  4 Nov 2022 11:50:28 -0700 (PDT)
-Received: by mail-oi1-f180.google.com with SMTP id g10so6069001oif.10;
-        Fri, 04 Nov 2022 11:50:28 -0700 (PDT)
+        Fri, 4 Nov 2022 14:52:31 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 665B459FE7;
+        Fri,  4 Nov 2022 11:52:30 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id d13-20020a17090a3b0d00b00213519dfe4aso5302985pjc.2;
+        Fri, 04 Nov 2022 11:52:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ucz5LsKRWTnco49tLmp1yAQRn6RZFKpYnyt+vhQDTKY=;
+        b=KBd8EDFK9r/2YuJezlbJ2rF1/+gDovqfgsgW5KxfAhfTwd4ywYz7SW4xIcl+V9sFkI
+         8oS36qt77hxizFjVgGHx2GtC5f5iuCsB+84devES+QNfZKKgxHPwIXeU8fpuIyIFpiVV
+         hTRrtBl2CUxOSeYPjVfP4xKMmPvyMhsoI9FpdVIPGxl3HmR7Yry6GkWpFUvjHh1+vSPU
+         AJedSN4r9nY+OlnWw3hTm3y+BQCj9nWKryue1J00RYr3GtkearnHqoJbsT+XMtPZ+IzE
+         rliVoY0UweTOMpt4htKJLWDqM0RYK22JKXqcq96YwUjpQp7nYoWMdudgIzBR5GXqEXce
+         T9VA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=JFZemGAiz+864ig6tHEwR4+zzxKN7GhJUHozYh5QjjI=;
-        b=GG/jE/pffRQmCB2QL+cRGeYDbEZl+QSXz2A9L2QDFJu4PZ9xgrYD3bxMrKiLGzpD+F
-         YZyBUpUrQUFB/Ls6E8l20JhgLbQaN3D5Bcyw9pFMFvGi8uE/eIcZbM0pmYfum8Z1P62p
-         lu8sgIRGS6q+Rm0He2A10M7ABFDM4ow7jQurenkvpoe7AnCcjAAvLVjbUysKo515yneZ
-         cCNqy4S983rHpUizGQFR4LA0Mj5nkONR+PdlJIwLomTVxFx7COl5bIwQtj2A1CriKkoe
-         bbm53k3rX7s1FcZugzTw27xdNrG4G9TApeKU66V/RO/4PNAmcotoQ0huYsISZwvez8NG
-         mPLw==
-X-Gm-Message-State: ACrzQf39tKJwsCG8/B6/Sne7Es9oBBe+lNVYl1y14Ddf0Wv2vTvdEiZT
-        mI6hfwt6a+0fSHjiVdop5w==
-X-Google-Smtp-Source: AMsMyM4NoyUsswYjaKUMH0fuD+Uj0sffbrFfd4AIvYQU1cWGLEOTRHBHp8TuRNKoTVHgwGqgdiwtkw==
-X-Received: by 2002:a54:4016:0:b0:35a:3878:f22a with SMTP id x22-20020a544016000000b0035a3878f22amr9656904oie.47.1667587827748;
-        Fri, 04 Nov 2022 11:50:27 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id 2-20020aca2102000000b0035173c2fddasm1726258oiz.51.2022.11.04.11.50.26
+        bh=Ucz5LsKRWTnco49tLmp1yAQRn6RZFKpYnyt+vhQDTKY=;
+        b=bVp17HbXvb9LyYmAd2UTgbDvIPJVEoRiyK/xsO91o7B4DNWi8Li55n77EiVumC7ahx
+         9Hrxcfp4vzGbweSujdmgv6+BQgRBhPZp4bTOOvUa5U7JO2bz/WkMP4nSr8eQmm7Q3CTl
+         SZSJ457scgljuenkWaBiLjCd/vh/NuP0BZFXvaoQhyeb7DGSAtJN6MGjMwBSDS7pHLkC
+         wK2P7cjdRkYFZu6D6tDj53+xzY/8Msa63ZBbrhDtMM3BZKfGdsoxsXN24jHqn9Er2ABn
+         AIPRMsEx4cZocnwOyRhWCSR3RItns177+6KqT7FShk9qHqzJ/VsurtkbqO9uYk11au4h
+         kyhg==
+X-Gm-Message-State: ACrzQf10518f/TxVmO8VhHYCfGbxkzs3vk83PHJHdQAM/yymjnpyPoxM
+        gZrQ3udS28+yu25OUV1zXpk=
+X-Google-Smtp-Source: AMsMyM5n3BmX4/4nkJDZfc84c6nVKx0cT+rWFP3ZcPGUx7r+tPuCqq+S0SjlpnCkKz6bM5uM15/VOg==
+X-Received: by 2002:a17:902:e84a:b0:186:b8ff:c698 with SMTP id t10-20020a170902e84a00b00186b8ffc698mr36687594plg.143.1667587949628;
+        Fri, 04 Nov 2022 11:52:29 -0700 (PDT)
+Received: from google.com ([2620:15c:9d:2:a6ae:11ff:fe11:fcc3])
+        by smtp.gmail.com with ESMTPSA id n6-20020a170902e54600b0017f5c7d3931sm73646plf.282.2022.11.04.11.52.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Nov 2022 11:50:27 -0700 (PDT)
-Received: (nullmailer pid 2243197 invoked by uid 1000);
-        Fri, 04 Nov 2022 18:50:28 -0000
-Date:   Fri, 4 Nov 2022 13:50:28 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Colin Foster <colin.foster@in-advantage.com>
-Cc:     linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        John Crispin <john@phrozen.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        =?iso-8859-1?Q?n=E7_=DCNAL?= <arinc.unal@arinc9.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Subject: Re: [PATCH v2 net-next 5/6] dt-bindings: net: add generic
- ethernet-switch-port binding
-Message-ID: <20221104185028.GB2133300-robh@kernel.org>
-References: <20221104045204.746124-1-colin.foster@in-advantage.com>
- <20221104045204.746124-6-colin.foster@in-advantage.com>
+        Fri, 04 Nov 2022 11:52:28 -0700 (PDT)
+Date:   Fri, 4 Nov 2022 11:52:26 -0700
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        linux-acpi@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 5/6] gpiolib: consolidate GPIO lookups
+Message-ID: <Y2Vfatm3VRGcktNN@google.com>
+References: <20221031-gpiolib-swnode-v1-0-a0ab48d229c7@gmail.com>
+ <20221031-gpiolib-swnode-v1-5-a0ab48d229c7@gmail.com>
+ <Y2VJJ8CYhGY69c/z@smile.fi.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221104045204.746124-6-colin.foster@in-advantage.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <Y2VJJ8CYhGY69c/z@smile.fi.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FSL_HELO_FAKE,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 03, 2022 at 09:52:03PM -0700, Colin Foster wrote:
-> The dsa-port.yaml binding had several references that can be common to all
-> ethernet ports, not just dsa-specific ones. Break out the generic bindings
-> to ethernet-switch-port.yaml they can be used by non-dsa drivers.
-> 
-> Signed-off-by: Colin Foster <colin.foster@in-advantage.com>
-> Suggested-by: Vladimir Oltean <olteanv@gmail.com>
-> ---
-> 
-> v1 -> v2
->   * Remove accidental addition of
->     "$ref: /schemas/net/ethernet-switch-port.yaml" which should be kept
->     out of dsa-port so that it doesn't get referenced multiple times
->     through both ethernet-switch and dsa-port.
-> 
-> ---
->  .../devicetree/bindings/net/dsa/dsa-port.yaml | 27 +-----------
->  .../bindings/net/ethernet-switch-port.yaml    | 44 +++++++++++++++++++
->  .../bindings/net/ethernet-switch.yaml         |  4 +-
->  MAINTAINERS                                   |  1 +
->  4 files changed, 49 insertions(+), 27 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/net/ethernet-switch-port.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/net/dsa/dsa-port.yaml b/Documentation/devicetree/bindings/net/dsa/dsa-port.yaml
-> index 10ad7e71097b..d97fb87cccb0 100644
-> --- a/Documentation/devicetree/bindings/net/dsa/dsa-port.yaml
-> +++ b/Documentation/devicetree/bindings/net/dsa/dsa-port.yaml
-> @@ -4,7 +4,7 @@
->  $id: http://devicetree.org/schemas/net/dsa/dsa-port.yaml#
->  $schema: http://devicetree.org/meta-schemas/core.yaml#
->  
-> -title: Ethernet Switch port Device Tree Bindings
-> +title: DSA Switch port Device Tree Bindings
->  
->  maintainers:
->    - Andrew Lunn <andrew@lunn.ch>
-> @@ -14,13 +14,7 @@ maintainers:
->  description:
->    Ethernet switch port Description
->  
-> -allOf:
-> -  - $ref: /schemas/net/ethernet-controller.yaml#
-> -
->  properties:
-> -  reg:
-> -    description: Port number
-> -
->    label:
->      description:
->        Describes the label associated with this port, which will become
-> @@ -57,25 +51,6 @@ properties:
->        - rtl8_4t
->        - seville
->  
-> -  phy-handle: true
-> -
-> -  phy-mode: true
-> -
-> -  fixed-link: true
-> -
-> -  mac-address: true
-> -
-> -  sfp: true
-> -
-> -  managed: true
-> -
-> -  rx-internal-delay-ps: true
-> -
-> -  tx-internal-delay-ps: true
-> -
-> -required:
-> -  - reg
-> -
->  # CPU and DSA ports must have phylink-compatible link descriptions
->  if:
->    oneOf:
-> diff --git a/Documentation/devicetree/bindings/net/ethernet-switch-port.yaml b/Documentation/devicetree/bindings/net/ethernet-switch-port.yaml
-> new file mode 100644
-> index 000000000000..cb1e5e12bf0a
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/net/ethernet-switch-port.yaml
-> @@ -0,0 +1,44 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/net/ethernet-switch-port.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Ethernet Switch port Device Tree Bindings
-> +
-> +maintainers:
-> +  - Andrew Lunn <andrew@lunn.ch>
-> +  - Florian Fainelli <f.fainelli@gmail.com>
-> +  - Vivien Didelot <vivien.didelot@gmail.com>
-> +
-> +description:
-> +  Ethernet switch port Description
-> +
-> +$ref: ethernet-controller.yaml#
-> +
-> +properties:
-> +  reg:
-> +    description: Port number
-> +
-> +  phy-handle: true
-> +
-> +  phy-mode: true
-> +
-> +  fixed-link: true
-> +
-> +  mac-address: true
-> +
-> +  sfp: true
-> +
-> +  managed: true
-> +
-> +  rx-internal-delay-ps: true
-> +
-> +  tx-internal-delay-ps: true
+Hi Andy,
 
-I know this is just copied, but these have no effect on validation. I 
-assume what they are meant to be is these are the subset of 
-ethernet-controller.yaml which are allowed, but that would only work 
-with 'additionalProperties: false'. That wouldn't work because we also 
-want to users to extend this with custom properties. What's needed here 
-is a list of properties not allowed:
+On Fri, Nov 04, 2022 at 07:17:27PM +0200, Andy Shevchenko wrote:
+> On Thu, Nov 03, 2022 at 11:10:15PM -0700, Dmitry Torokhov wrote:
+> > Ensure that all paths to obtain/look up GPIOD from generic
+> > consumer-visible APIs go through the new gpiod_find_and_request()
+> > helper, so that we can easily extend it with support for new firmware
+> > mechanisms.
+> 
+> ...
+> 
+> > +static struct gpio_desc *gpiod_find_by_fwnode(struct fwnode_handle *fwnode,
+> > +					      struct device *consumer,
+> > +					      const char *con_id,
+> > +					      unsigned int idx,
+> > +					      enum gpiod_flags *flags,
+> > +					      unsigned long *lookupflags)
+> >  {
+> 
+> > +	struct gpio_desc *desc = ERR_PTR(-ENOENT);
+> 
+> No need, just return directly.
+> 
+> > +	dev_dbg(consumer, "GPIO lookup for consumer %s in node '%s'\n",
+> > +		con_id, fwnode_get_name(fwnode));
+> 
+> %pfwP ?
 
-disallowed-prop: false
+OK. Although, I think I like %pfw (without 'P') better as it gives
+results like:
 
-Or we can just allow anything from ethernet-controller.yaml and drop 
-this list.
+	/soc/i2c@11007000/edp-bridge@8
 
-> +
-> +required:
-> +  - reg
-> +
-> +additionalProperties: true
-> +
-> +...
+or
+
+	\_SB.PCI0.I2C1.D010
+
+which should help identifying the exact node.
+
+> 
+> > +
+> > +	/* Using device tree? */
+> >  	if (is_of_node(fwnode)) {
+> > +		dev_dbg(consumer, "using device tree for GPIO lookup\n");
+> > +		desc = of_find_gpio(to_of_node(fwnode),
+> > +				    con_id, idx, lookupflags);
+> >  	} else if (is_acpi_node(fwnode)) {
+> 
+> With direct return, no need for 'else' here.
+
+When we have several branches of equal weight I prefer not to have
+early/inline returns, but I can add:
+
+	} else {
+		desc = ERR_PTR(-ENOENT);
+	}
+
+at the end, what do you think?
+
+> 
+> > +		dev_dbg(consumer, "using ACPI for GPIO lookup\n");
+> > +		desc = acpi_find_gpio(fwnode, con_id, idx, flags, lookupflags);
+> >  	}
+> >  
+> > +	return desc;
+> > +}
+> 
+> ...
+> 
+> > +static struct gpio_desc *gpiod_find_and_request(struct device *consumer,
+> > +						struct fwnode_handle *fwnode,
+> > +						const char *con_id,
+> > +						unsigned int idx,
+> > +						enum gpiod_flags flags,
+> > +						const char *label,
+> > +						bool platform_lookup_allowed)
+> > +{
+> 
+> > +	struct gpio_desc *desc = ERR_PTR(-ENOENT);
+> 
+> We can get rid of the assignment, see below.
+> 
+> 
+> > +	unsigned long lookupflags;
+> > +	int ret;
+> 
+> > +	if (fwnode)
+> 
+> Do we need this check?
+
+Yes, I would prefer to have it as it clearly informs the reader that we
+are only doing lookup by node if we actually have a node.
+
+gpiod_find_and_request() expects that it gets a valid node and in the
+followup change it will be dereferencing fwnode without checking for
+NULL-ness.
+
+> 
+> Debug message above (when %pfw is used) would be even useful when
+> fwnode == NULL.
+> 
+> > +		desc = gpiod_find_by_fwnode(fwnode, consumer, con_id, idx,
+> > +					    &flags, &lookupflags);
+> 
+> > +
+> 
+> The blank line can be removed after above comments being addressed.
+> 
+> > +	if (gpiod_not_found(desc) && platform_lookup_allowed) {
+> > +		/*
+> > +		 * Either we are not using DT or ACPI, or their lookup did not
+> > +		 * return a result. In that case, use platform lookup as a
+> > +		 * fallback.
+> > +		 */
+> > +		dev_dbg(consumer, "using lookup tables for GPIO lookup\n");
+> > +		desc = gpiod_find(consumer, con_id, idx, &lookupflags);
+> > +	}
+> > +
+> > +	if (IS_ERR(desc)) {
+> > +		dev_dbg(consumer, "No GPIO consumer %s found\n", con_id);
+> > +		return desc;
+> > +	}
+> > +
+> > +	/*
+> > +	 * If a connection label was passed use that, else attempt to use
+> > +	 * the device name as label
+> > +	 */
+> >  	ret = gpiod_request(desc, label);
+> > +	if (ret) {
+> > +		if (!(ret == -EBUSY && flags & GPIOD_FLAGS_BIT_NONEXCLUSIVE))
+> > +			return ERR_PTR(ret);
+> > +
+> > +		/*
+> > +		 * This happens when there are several consumers for
+> > +		 * the same GPIO line: we just return here without
+> > +		 * further initialization. It is a bit of a hack.
+> > +		 * This is necessary to support fixed regulators.
+> > +		 *
+> > +		 * FIXME: Make this more sane and safe.
+> > +		 */
+> 
+> > +		dev_info(consumer,
+> > +			 "nonexclusive access to GPIO for %s\n", con_id);
+> 
+> Cam be one line.
+
+I still have not embraced the new 100 columns limit. Linus, Bart, are
+you OK with moving to 100 or do you want to stay with 80 for a while?
+
+> 
+> > +		return desc;
+> > +	}
+> >  
+> > +	ret = gpiod_configure_flags(desc, con_id, lookupflags, flags);
+> >  	if (ret < 0) {
+> > +		dev_dbg(consumer, "setup of GPIO %s failed\n", con_id);
+> >  		gpiod_put(desc);
+> >  		return ERR_PTR(ret);
+> >  	}
+> 
+> ...
+> 
+> >  struct gpio_desc *fwnode_gpiod_get_index(struct fwnode_handle *fwnode,
+> > +					 const char *con_id,
+> > +					 int index,
+> >  					 enum gpiod_flags flags,
+> >  					 const char *label)
+> >  {
+> >  
+> 
+> Unnecessary blank line?
+
+Indeed, I'll fix it.
+
+> 
+> > +	return gpiod_find_and_request(NULL, fwnode, con_id, index, flags, label,
+> > +				      false);
+> 
+> Can be one line.
+
+Yep, depending on 80/100 column answer.
+
+Thanks for the review!
+
+
+-- 
+Dmitry
