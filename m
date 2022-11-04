@@ -2,99 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCAB3619A2A
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 15:36:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6ADED619A2D
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 15:37:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232224AbiKDOgT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 10:36:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53312 "EHLO
+        id S231446AbiKDOha convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 4 Nov 2022 10:37:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231697AbiKDOfr (ORCPT
+        with ESMTP id S231842AbiKDOgh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 10:35:47 -0400
-Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80F6B2E9DE
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 07:32:59 -0700 (PDT)
-Received: by mail-qv1-xf2b.google.com with SMTP id j6so3273433qvn.12
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 07:32:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=OeOrHPnEU5cox0eqwYtdlY9TT4wnzhynjogUJRsWZ7o=;
-        b=w/ARTFunLSDiyxRHSOzo6qwqLgD9x6KwLjikPcCosCa1wU2ELA2NXqsHWDw6OAZX0+
-         1ZKqC91ImfY/cR+gQfcLhCT4yk1E6H5yMfDLHXp0KBUN00cqK8Vm59sAB8zGcpGH4968
-         pglQtaGcq0d9DfTmU/YvyVTTbfEN0fWnSu3/q+utycA/AQI+Wc6pS7ocGeNQoU0jNcXJ
-         kwJ2KB2Z6oz2+Oat5Q2+iQJ8mOU9XnJihaRX5cXfR+quWHBN9W9H+eCPt242Bld2ODGw
-         YtkNJJWbjzormwNWmg/NtR250tXkhy+1cQgjWltaSPuHrt6fliBziGlezFBe8VOS17TC
-         5TCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OeOrHPnEU5cox0eqwYtdlY9TT4wnzhynjogUJRsWZ7o=;
-        b=hnvYdBfLgvdelQPdcXqF7XpI6f/agnH8US4RU9n0bM79DZkKSyk6ueAYDIVX6yDPIn
-         qr3SYlS4kH0kCru+T1hRNugmL+4DS2gZ3UjcsVmgGnAi+IwPnIGxYQR3KzyHgLheOAFh
-         z+JB5I39CA89EUQeYzd4NRqW7qFfNIAIj9V8BAC40FUFP8h3kDUO5hs+plORQBG6ISZC
-         8tPXf8twb93ZkvWzsGqUPPMU0UIZFizJfaZE6Vw+sf78vs+6UDwhVm/yUpb7UEQbO2MT
-         9iU0XOXRXvwoyUVhg4axDEsURMVKM70wKeObVHud3GR1Ntkmpn1pzwmBTMwTpP1g8BeD
-         8b9Q==
-X-Gm-Message-State: ACrzQf0R2Dqyx+JqJ7biDpFfjw4XGbBmfKE/taMSTSk/F3PnsCjfLnxf
-        pW02umNQ5bmM6YgvGjhnilTjcQ==
-X-Google-Smtp-Source: AMsMyM5Mv0wIYbec9tqLkuKXmCDe7J07JAYbB3fGL2UWnMWOFRvwdpyTKWWwHbksWKnADQkPdEmnQA==
-X-Received: by 2002:a0c:f391:0:b0:4bb:7482:526a with SMTP id i17-20020a0cf391000000b004bb7482526amr32859051qvk.20.1667572378718;
-        Fri, 04 Nov 2022 07:32:58 -0700 (PDT)
-Received: from ?IPV6:2601:586:5000:570:aad6:acd8:4ed9:299b? ([2601:586:5000:570:aad6:acd8:4ed9:299b])
-        by smtp.gmail.com with ESMTPSA id y7-20020ac87087000000b0039bfe8acff6sm2499020qto.58.2022.11.04.07.32.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 04 Nov 2022 07:32:58 -0700 (PDT)
-Message-ID: <6cdd193e-8a7a-c781-320a-8bf18f9c5c68@linaro.org>
-Date:   Fri, 4 Nov 2022 10:32:57 -0400
+        Fri, 4 Nov 2022 10:36:37 -0400
+Received: from relay.hostedemail.com (smtprelay0014.hostedemail.com [216.40.44.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 914FE31FA0
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 07:33:45 -0700 (PDT)
+Received: from omf09.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay03.hostedemail.com (Postfix) with ESMTP id B1E30A1409;
+        Fri,  4 Nov 2022 14:33:43 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf09.hostedemail.com (Postfix) with ESMTPA id 4B6D220028;
+        Fri,  4 Nov 2022 14:33:40 +0000 (UTC)
+Message-ID: <a8b903f83433c710fff6f80b5bd5353b9be663a9.camel@perches.com>
+Subject: Re: [PATCH -next v2] checkpatch: Add check for array allocator
+ family argument order
+From:   Joe Perches <joe@perches.com>
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Liao Chang <liaochang1@huawei.com>
+Cc:     apw@canonical.com, dwaipayanray1@gmail.com,
+        linux-kernel@vger.kernel.org, bagasdotme@gmail.com,
+        pbonzini@redhat.com
+Date:   Fri, 04 Nov 2022 07:33:39 -0700
+In-Reply-To: <CAKXUXMxi_aqnvCmYjakQzoYvYqqwrvMnFt-czLV1iUnO0TnScg@mail.gmail.com>
+References: <20221104070523.60296-1-liaochang1@huawei.com>
+         <CAKXUXMxi_aqnvCmYjakQzoYvYqqwrvMnFt-czLV1iUnO0TnScg@mail.gmail.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2 1/2] dt-bindings: soc: qcom: Add bindings for Qualcomm
- Ramp Controller
-Content-Language: en-US
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, agross@kernel.org
-Cc:     andersson@kernel.org, konrad.dybcio@somainline.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, marijn.suijten@somainline.org,
-        kernel@collabora.com
-References: <20221104142204.156333-1-angelogioacchino.delregno@collabora.com>
- <20221104142204.156333-2-angelogioacchino.delregno@collabora.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221104142204.156333-2-angelogioacchino.delregno@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Rspamd-Server: rspamout05
+X-Rspamd-Queue-Id: 4B6D220028
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_NONE,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
+        version=3.4.6
+X-Stat-Signature: 4sjyohrgqpg944iu7h8hd45b31x5o5r7
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX19wD3RqL7rcRrcmMu0rbTYsZy3DyVjpZy4=
+X-HE-Tag: 1667572420-735852
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/11/2022 10:22, AngeloGioacchino Del Regno wrote:
-> Document bindings for the Qualcomm Ramp Controller, found on various
-> legacy Qualcomm SoCs.
-
-Subject: drop second "bindings" word. One in prefix (dt-bindings) is enough.
-
+On Fri, 2022-11-04 at 09:35 +0100, Lukas Bulwahn wrote:
+> On Fri, Nov 4, 2022 at 8:08 AM Liao Chang <liaochang1@huawei.com> wrote:
+> > 
+> > These array allocator family are sometimes misused with the first and
+> > second arguments switchted.
 > 
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> ---
+> Just a nit:
+> 
+> s/switchted/switched/
+> 
+> But probably you actually mean "swapped". I think there is a slight
+> difference between the two words, "switched" and "swapped". And here
+> the arguments are swapped. Note: I am also not a native speaker.
+> 
+> For the implementation change:
+> 
+> Acked-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+> 
+> How many new findings are now identified with this extended check on
+> linux-next? Could you run checkpatch on all files of linux-next and
+> share the new findings? Then we can do a quick scan if some instances
+> should be immediately fixed or some janitor should follow through with
+> such a task.
 
-With above:
+There are ~25.
+It's fairly trivial Lukas and only cosmetic.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-
-Best regards,
-Krzysztof
+https://lore.kernel.org/lkml/d92ada3062bc1c3a7557bfa0499fc4a8cee3aa10.camel@perches.com/
 
