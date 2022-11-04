@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FE9861904B
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 06:49:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C6B761905E
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 06:49:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231490AbiKDFtA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 01:49:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55648 "EHLO
+        id S231627AbiKDFt2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 01:49:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230240AbiKDFsu (ORCPT
+        with ESMTP id S230511AbiKDFsw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 01:48:50 -0400
+        Fri, 4 Nov 2022 01:48:52 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3DE72792C;
-        Thu,  3 Nov 2022 22:48:47 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9706248D8;
+        Thu,  3 Nov 2022 22:48:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 516D1620A7;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BD597620C0;
         Fri,  4 Nov 2022 05:48:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4A4DC43149;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC804C4314D;
         Fri,  4 Nov 2022 05:48:46 +0000 (UTC)
 Received: from rostedt by gandalf.local.home with local (Exim 4.96)
         (envelope-from <rostedt@goodmis.org>)
-        id 1oqpZp-00711f-16;
+        id 1oqpZp-00712D-1g;
         Fri, 04 Nov 2022 01:49:13 -0400
-Message-ID: <20221104054913.171973223@goodmis.org>
+Message-ID: <20221104054913.358784408@goodmis.org>
 User-Agent: quilt/0.66
-Date:   Fri, 04 Nov 2022 01:41:00 -0400
+Date:   Fri, 04 Nov 2022 01:41:01 -0400
 From:   Steven Rostedt <rostedt@goodmis.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
@@ -37,11 +37,11 @@ Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
         Guenter Roeck <linux@roeck-us.net>,
         Anna-Maria Gleixner <anna-maria@linutronix.de>,
         Andrew Morton <akpm@linux-foundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-pm@vger.kernel.org
-Subject: [RFC][PATCH v3 07/33] timers: PM: Use timer_shutdown_sync()
+        Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        linux-bluetooth@vger.kernel.org
+Subject: [RFC][PATCH v3 08/33] timers: Bluetooth: Use timer_shutdown_sync() before freeing timer
 References: <20221104054053.431922658@goodmis.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,39 +56,61 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
 
-Instead of open coding making the timer look like it was not registered by
-setting the function pointer to NULL, call timer_shutdown_sync() that does
-the same thing.
+Before a timer is freed, timer_shutdown_sync() must be called.
 
 Link: https://lore.kernel.org/all/20220407161745.7d6754b3@gandalf.local.home/
 
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Len Brown <len.brown@intel.com>
-Cc: Pavel Machek <pavel@ucw.cz>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-pm@vger.kernel.org
+Cc: Marcel Holtmann <marcel@holtmann.org>
+Cc: Johan Hedberg <johan.hedberg@gmail.com>
+Cc: Luiz Augusto von Dentz <luiz.dentz@gmail.com>
+Cc: linux-bluetooth@vger.kernel.org
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 ---
- drivers/base/power/wakeup.c | 7 +------
- 1 file changed, 1 insertion(+), 6 deletions(-)
+ drivers/bluetooth/hci_bcsp.c | 2 +-
+ drivers/bluetooth/hci_h5.c   | 2 +-
+ drivers/bluetooth/hci_qca.c  | 4 ++--
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/base/power/wakeup.c b/drivers/base/power/wakeup.c
-index 7cc0c0cf8eaa..c6d68bdcac68 100644
---- a/drivers/base/power/wakeup.c
-+++ b/drivers/base/power/wakeup.c
-@@ -202,12 +202,7 @@ void wakeup_source_remove(struct wakeup_source *ws)
- 	raw_spin_unlock_irqrestore(&events_lock, flags);
- 	synchronize_srcu(&wakeup_srcu);
+diff --git a/drivers/bluetooth/hci_bcsp.c b/drivers/bluetooth/hci_bcsp.c
+index cf4a56095817..834b2efaa9bf 100644
+--- a/drivers/bluetooth/hci_bcsp.c
++++ b/drivers/bluetooth/hci_bcsp.c
+@@ -737,7 +737,7 @@ static int bcsp_close(struct hci_uart *hu)
+ {
+ 	struct bcsp_struct *bcsp = hu->priv;
  
--	del_timer_sync(&ws->timer);
--	/*
--	 * Clear timer.function to make wakeup_source_not_registered() treat
--	 * this wakeup source as not registered.
--	 */
--	ws->timer.function = NULL;
-+	timer_shutdown_sync(&ws->timer);
- }
- EXPORT_SYMBOL_GPL(wakeup_source_remove);
+-	del_timer_sync(&bcsp->tbcsp);
++	timer_shutdown_sync(&bcsp->tbcsp);
  
+ 	hu->priv = NULL;
+ 
+diff --git a/drivers/bluetooth/hci_h5.c b/drivers/bluetooth/hci_h5.c
+index c5a0409ef84f..51f93ff5ebe8 100644
+--- a/drivers/bluetooth/hci_h5.c
++++ b/drivers/bluetooth/hci_h5.c
+@@ -253,7 +253,7 @@ static int h5_close(struct hci_uart *hu)
+ {
+ 	struct h5 *h5 = hu->priv;
+ 
+-	del_timer_sync(&h5->timer);
++	timer_shutdown_sync(&h5->timer);
+ 
+ 	skb_queue_purge(&h5->unack);
+ 	skb_queue_purge(&h5->rel);
+diff --git a/drivers/bluetooth/hci_qca.c b/drivers/bluetooth/hci_qca.c
+index 8df11016fd51..eb81296b284c 100644
+--- a/drivers/bluetooth/hci_qca.c
++++ b/drivers/bluetooth/hci_qca.c
+@@ -697,8 +697,8 @@ static int qca_close(struct hci_uart *hu)
+ 	skb_queue_purge(&qca->txq);
+ 	skb_queue_purge(&qca->rx_memdump_q);
+ 	destroy_workqueue(qca->workqueue);
+-	del_timer_sync(&qca->tx_idle_timer);
+-	del_timer_sync(&qca->wake_retrans_timer);
++	timer_shutdown_sync(&qca->tx_idle_timer);
++	timer_shutdown_sync(&qca->wake_retrans_timer);
+ 	qca->hu = NULL;
+ 
+ 	kfree_skb(qca->rx_skb);
 -- 
 2.35.1
