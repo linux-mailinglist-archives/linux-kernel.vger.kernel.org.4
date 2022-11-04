@@ -2,66 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3612F61A22A
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 21:29:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A93E561A22B
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 21:29:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230020AbiKDU3e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 16:29:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36184 "EHLO
+        id S230030AbiKDU3v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 16:29:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbiKDU3b (ORCPT
+        with ESMTP id S230036AbiKDU3q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 16:29:31 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA86426100
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 13:29:29 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id v28so5446321pfi.12
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 13:29:29 -0700 (PDT)
+        Fri, 4 Nov 2022 16:29:46 -0400
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1A9D2FC1D
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 13:29:43 -0700 (PDT)
+Received: by mail-yb1-xb29.google.com with SMTP id 7so2549930ybp.13
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 13:29:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=xianwang.io; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=dNuOKOg5TSGR3sEFnpto1NusoWdDGSQBWKpGFE9UhI8=;
-        b=Wz6o3Ssb6qoQQb4wDttx51bVElUbeXinkynJ9AE/ddy1Aob9geCC7eWuA/BbexLl2C
-         VozOESQYheDe8Uqx97e8NHSVy07RRsHPoJ25VBi0cRLnFTbH9UcknIws3N0klm+FmXCM
-         olD8RIzsAkJS6SdEWbtbnvrD91GzJSwG5Z2LHI1+wtF2uyLoc7i03a254R/zMbj0+jsc
-         pYaKo2awRcVHZOzaikb7OH0p/3jqnyQbeux6oIV2JQUPzLQlt8R67R3bNTAOr744CVLS
-         ZZX+dypVpy4bKOEKwwKqJk6k9ank0qZKedIOM9QkET0C40aonV9ap4s9I5AdnY84DftN
-         mmHw==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=9lN8ClmqA674CDnsqxBY6p6j1UzI10/WvSrphQFuarg=;
+        b=V2arLZ4qwc9DOfaPJPZhbjmyn9Lvc4HJj3lXbxTWQGVbFGEUjO5CUDOrH/F/Ygoq8T
+         MLzyY3yhqAjRtejxx3oMuFJOyVtKPedTMhxJi0TIc7cPx5IRxmHFTbqfFkNjPSHpGkUE
+         Dm+uvPZccR8IS2XwpzvT8OjWe03H+ODyJ3qkkTH0ltyEt+KLl2Gr+nzkc65N1tSc1yn6
+         LBt7Wnlgm/+Urj5ENeUPuPaXosM+DpjJGnG6uXpM1H1gVZCf8PsD5hgDi62sNHI9fHf6
+         8eD1fYLowhVp2tQ11OPcVwkXSNqNS6YN0CmVFquxMQLQMZrsQ83vPwp9wsh8h9jbYM4h
+         JQmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=dNuOKOg5TSGR3sEFnpto1NusoWdDGSQBWKpGFE9UhI8=;
-        b=6Dep9xI5Q8z5j/PxHBBZmOzojf+wW/weWzmoTPzy+RIzjcVZpn2zKG3JWeQcANjFOd
-         FFJ4Rm1S7NiOIGf+mwAjdLP7y+XgH/nz4uhWwuHWDhwfYwdte1ERpK1cmg74LMp0orx/
-         VAkM0QvBijf/LZQxC2hgB2KV2FJhIC9txfY29uN425ZlYvYXD3RGZ/my9KUftA1dXcDj
-         uprBjIS/cLBzTP4XZzv6E42FKkMaGeoC6iWP5QHw7AGnsBr2s5o3fPRq+DuZOv+fVhxC
-         3CxGTfWPRPmsI7qsFs8vLN3Y/pQGADOyFG+HbWuhbSl1f08EwhxEBgyL0HKSqzEPrrs4
-         N3+w==
-X-Gm-Message-State: ACrzQf0tAQcSas60YuL3vHqaJ7U1SRxeu20Chjg22gmbESntffl73Uxv
-        jnJQvk1cPhfYJVxD1VnHOipE9Q==
-X-Google-Smtp-Source: AMsMyM6pF1IEuLJpCOWhcd/9mFu2k77dwgeQT5Ij3OZfPSun43ThrToOxj/+2bNwCeSyh1diar3UNA==
-X-Received: by 2002:a63:5123:0:b0:46f:f329:c013 with SMTP id f35-20020a635123000000b0046ff329c013mr16440935pgb.428.1667593769432;
-        Fri, 04 Nov 2022 13:29:29 -0700 (PDT)
-Received: from aurora.xw.lan (75-172-80-208.tukw.qwest.net. [75.172.80.208])
-        by smtp.gmail.com with ESMTPSA id u8-20020a1709026e0800b0017bb38e4588sm161464plk.135.2022.11.04.13.29.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Nov 2022 13:29:28 -0700 (PDT)
-From:   Xian Wang <dev@xianwang.io>
-To:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
-Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        Xian Wang <dev@xianwang.io>, stable@vger.kernel.org
-Subject: [PATCH] patch_ca0132: add quirk for EVGA Z390 DARK
-Date:   Fri,  4 Nov 2022 13:29:13 -0700
-Message-Id: <20221104202913.13904-1-dev@xianwang.io>
-X-Mailer: git-send-email 2.38.1
+        bh=9lN8ClmqA674CDnsqxBY6p6j1UzI10/WvSrphQFuarg=;
+        b=Z7Jbq9iqGUk4kG2nHX0jat3EmQRHzN0yoj3QbpY1Sxccr4Zlqh/WLs7+0rmGPM/czz
+         T/WqmhdhdgbHapTV+IcVpYxf0LxWP9+3HaVY0/kfeJuvTIeYnRLlsRhwMgc/VLTvr65y
+         YwSVZ6Ji2lA0FtUGU3UdTw0ZVkrikcVhN0EZs9ZlLCZrVj5I425VqnCedZGxDxqcTlMZ
+         PRsoelo88ngQ3zm8exx7ZkPIiDGAik8Qs10fnGtwuekKQUVr3iy/QwZzkj6CYKbiSBDr
+         FVKE3QLAvM7hvQTTv0rF8nJZMgC1VL6Bmm5DMxUdx1YSaTArUj5GxE/aEWKQAP4gJLGp
+         hA8A==
+X-Gm-Message-State: ANoB5pnxsohO09nmlFet4AGO4XgCv3vkbEYpfq2OYKfSjy7g24LKXkzO
+        jOPYPRiaQnpvvz6ySfmSHXjj44DW1U3jbJUY0Or5qpxA2r4=
+X-Google-Smtp-Source: AA0mqf7lkvprPwZ62m6L1tkLFO+gEiKhDLQr6Lxs7sCRqmIUFcUolKdepqdvlq5nA9s9Pv2V5CUSZOBbeDCPaBRKrfs=
+X-Received: by 2002:a25:cece:0:b0:6d3:911f:27fd with SMTP id
+ x197-20020a25cece000000b006d3911f27fdmr3559330ybe.340.1667593782651; Fri, 04
+ Nov 2022 13:29:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+References: <20221104054053.431922658@goodmis.org> <20221104054917.543373979@goodmis.org>
+ <Y2VyAZkTLj3kasA4@cmpxchg.org>
+In-Reply-To: <Y2VyAZkTLj3kasA4@cmpxchg.org>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Fri, 4 Nov 2022 13:29:31 -0700
+Message-ID: <CAJuCfpHDj3bR6+SGPbfGAxcE2WfWWm-h+sXp6s+Hp4BB2eTj9A@mail.gmail.com>
+Subject: Re: [RFC][PATCH v3 31/33] timers: sched/psi: Use timer_shutdown_sync()
+ before freeing timer
+To:     Johannes Weiner <hannes@cmpxchg.org>
+Cc:     Steven Rostedt <rostedt@goodmis.org>, linux-kernel@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Anna-Maria Gleixner <anna-maria@linutronix.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,35 +83,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Z390 DARK mainboard uses a CA0132 audio controller. The quirk is
-needed to enable surround sound and 3.5mm headphone jack handling in
-the front audio connector as well as in the rear of the board when in
-stereo mode.
+On Fri, Nov 4, 2022 at 1:11 PM Johannes Weiner <hannes@cmpxchg.org> wrote:
+>
+> On Fri, Nov 04, 2022 at 01:41:24AM -0400, Steven Rostedt wrote:
+> > From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+> >
+> > Before a timer is freed, timer_shutdown_sync() must be called.
+> >
+> > Link: https://lore.kernel.org/all/20220407161745.7d6754b3@gandalf.local.home/
+> >
+> > Cc: Johannes Weiner <hannes@cmpxchg.org>
+> > Cc: Suren Baghdasaryan <surenb@google.com>
+> > Cc: Ingo Molnar <mingo@redhat.com>
+> > Cc: Peter Zijlstra <peterz@infradead.org>
+> > Cc: Juri Lelli <juri.lelli@redhat.com>
+> > Cc: Vincent Guittot <vincent.guittot@linaro.org>
+> > Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
+> > Cc: Ben Segall <bsegall@google.com>
+> > Cc: Mel Gorman <mgorman@suse.de>
+> > Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
+> > Cc: Valentin Schneider <vschneid@redhat.com>
+> > Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+>
+> Acked-by: Johannes Weiner <hannes@cmpxchg.org>
 
-Page 97 of the linked manual contains instructions to setup the
-controller.
+Assuming the whole patchset makes it through the reviews, this part LGTM.
 
-Link: https://www.evga.com/support/manuals/files/131-CS-E399.pdf
-
-Cc: stable@vger.kernel.org
-
-Signed-off-by: Xian Wang <dev@xianwang.io>
----
- sound/pci/hda/patch_ca0132.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/sound/pci/hda/patch_ca0132.c b/sound/pci/hda/patch_ca0132.c
-index 9580fe00cbd9..0a292bf271f2 100644
---- a/sound/pci/hda/patch_ca0132.c
-+++ b/sound/pci/hda/patch_ca0132.c
-@@ -1306,6 +1306,7 @@ static const struct snd_pci_quirk ca0132_quirks[] = {
- 	SND_PCI_QUIRK(0x1458, 0xA026, "Gigabyte G1.Sniper Z97", QUIRK_R3DI),
- 	SND_PCI_QUIRK(0x1458, 0xA036, "Gigabyte GA-Z170X-Gaming 7", QUIRK_R3DI),
- 	SND_PCI_QUIRK(0x3842, 0x1038, "EVGA X99 Classified", QUIRK_R3DI),
-+	SND_PCI_QUIRK(0x3842, 0x1055, "EVGA Z390 DARK", QUIRK_R3DI),
- 	SND_PCI_QUIRK(0x1102, 0x0013, "Recon3D", QUIRK_R3D),
- 	SND_PCI_QUIRK(0x1102, 0x0018, "Recon3D", QUIRK_R3D),
- 	SND_PCI_QUIRK(0x1102, 0x0051, "Sound Blaster AE-5", QUIRK_AE5),
--- 
-2.38.1
-
+Reviewed-by: Suren Baghdasaryan <surenb@google.com>
