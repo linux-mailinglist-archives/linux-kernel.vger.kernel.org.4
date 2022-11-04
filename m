@@ -2,132 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 504A56199C8
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 15:28:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A15186199D9
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 15:29:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232240AbiKDO2O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 10:28:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42140 "EHLO
+        id S232049AbiKDO2y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 10:28:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232391AbiKDO10 (ORCPT
+        with ESMTP id S231620AbiKDO2R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 10:27:26 -0400
-Received: from relay08.th.seeweb.it (relay08.th.seeweb.it [5.144.164.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14DC12E9DE
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 07:25:09 -0700 (PDT)
-Received: from [192.168.31.208] (unknown [194.29.137.22])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id D52C23F796;
-        Fri,  4 Nov 2022 15:25:07 +0100 (CET)
-Message-ID: <8671f237-5b18-88c3-aef4-9acc46cfcbad@somainline.org>
-Date:   Fri, 4 Nov 2022 15:25:06 +0100
+        Fri, 4 Nov 2022 10:28:17 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D880305
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 07:26:13 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id sc25so13620954ejc.12
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 07:26:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ezu4+x+FxmyX9LnUOtXYBWAL6xwSTPUJFe4qn695+K8=;
+        b=CT1hZWbquyHWvrgB8QGBW5W6X6O9ZmDfiWMIdy36NP115npz/vftPW3Y/KXWY9GwVG
+         eHJqRqakklZm2mrqCohYKxxqfmGsVd18ife5cR5uc2d9icoK1bP8AnHKDTb0lM1rWW3X
+         7RcvCe2reUBgTMvL6PTalopiQulEArdShKqDM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ezu4+x+FxmyX9LnUOtXYBWAL6xwSTPUJFe4qn695+K8=;
+        b=wKfDVKbG/SPRMzmjwrxeRanhNt0ItRPgV1EfblJePMixfrNZGTWhkN7/HyJjI/FBgS
+         PjYSX0y8fVl8LhA2sU4/BN4mJzX5XpXpChaUOeUA+P1OBx0obN2SlTTaYLp1LCH6D0Se
+         1/0U3hX4U8CH021zv3B9qUiGO3F0Ugp9PwIkx2p2G8RbXct2oJr1qsCjK2exuMQu2FaE
+         zAZz8TdLYo6DffM8hk89zU89w07nFwwXfhQH6rclw9eb5cF1fc2Vpa+k06BIzcYeZSuk
+         7SxjLiIgfosOir8xTq74hJbHeSHthbCAuUrS2U+HtnXKZu2qkntEnxi2lgtrcu9x/uCD
+         PJqw==
+X-Gm-Message-State: ACrzQf0Ekf5ZXDEDNE5VlSuY3QZ4KnBMVhODciuw6tSIoCQxcY5a7Sng
+        CadxILVh6ySVDkbA8Pze2HiE6i+4KNJ/oWn4
+X-Google-Smtp-Source: AMsMyM4BXm6Wkpb8pM6TgGpPkBHADB23pCSPCUFYNr/qLV2FCvK58KmjBN1XeNeFRZQRY9x0XzmugQ==
+X-Received: by 2002:a17:907:6288:b0:78d:ab30:c374 with SMTP id nd8-20020a170907628800b0078dab30c374mr34815071ejc.266.1667571971719;
+        Fri, 04 Nov 2022 07:26:11 -0700 (PDT)
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com. [209.85.128.47])
+        by smtp.gmail.com with ESMTPSA id 9-20020a170906218900b007a9c3831409sm1853376eju.137.2022.11.04.07.26.08
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 04 Nov 2022 07:26:09 -0700 (PDT)
+Received: by mail-wm1-f47.google.com with SMTP id h125-20020a1c2183000000b003cf9c3f3b80so573264wmh.0
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 07:26:08 -0700 (PDT)
+X-Received: by 2002:a05:600c:4486:b0:3cf:6e1d:f4a5 with SMTP id
+ e6-20020a05600c448600b003cf6e1df4a5mr20925598wmo.85.1667571968557; Fri, 04
+ Nov 2022 07:26:08 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.4.1
-Subject: Re: [PATCH 2/2] soc: qcom: spm: Implement support for SAWv2.3,
- MSM8976 L2 PM
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, agross@kernel.org
-Cc:     andersson@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        marijn.suijten@somainline.org, kernel@collabora.com,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>
-References: <20221104133452.131227-1-angelogioacchino.delregno@collabora.com>
- <20221104133452.131227-3-angelogioacchino.delregno@collabora.com>
-From:   Konrad Dybcio <konrad.dybcio@somainline.org>
-In-Reply-To: <20221104133452.131227-3-angelogioacchino.delregno@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20221104061941.2739938-1-sheng-liang.pan@quanta.corp-partner.google.com>
+ <20221104141515.v10.3.I3ac715e729f6f9b5a3e3001b155df4f9d14e6186@changeid> <139c06eb-14b8-10b5-80b7-ba8ec8579846@somainline.org>
+In-Reply-To: <139c06eb-14b8-10b5-80b7-ba8ec8579846@somainline.org>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Fri, 4 Nov 2022 07:25:55 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=VwP_s5y0MVNLs+WGD_=nJtJe7h=n+Xu4Ky5RvgdkAw9Q@mail.gmail.com>
+Message-ID: <CAD=FV=VwP_s5y0MVNLs+WGD_=nJtJe7h=n+Xu4Ky5RvgdkAw9Q@mail.gmail.com>
+Subject: Re: [PATCH v10 3/4] arm64: dts: qcom: sc7280: Add touchscreen and
+ touchpad support for evoker
+To:     Konrad Dybcio <konrad.dybcio@somainline.org>
+Cc:     Sheng-Liang Pan <sheng-liang.pan@quanta.corp-partner.google.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
-On 04/11/2022 14:34, AngeloGioacchino Del Regno wrote:
-> From: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
+On Fri, Nov 4, 2022 at 2:35 AM Konrad Dybcio
+<konrad.dybcio@somainline.org> wrote:
 >
-> Implement the support for SAW v2.3, used in at least MSM8976, MSM8956
-> and APQ variants and while at it also add the configuration for the
-> MSM8976's little (a53) and big (a72) clusters cache power management.
 >
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
-> [Marijn: reorder struct definitions to follow high-to-low order]
-
-Weird to have a name without an email address in any of the tags, but I
-
-suppose it's not much of an issue?
-
-
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> ---
-
-For the code:
-
-Reviewed-by: Konrad Dybcio <konrad.dybcio@somainline.org>
-
-
-Konrad
-
->   drivers/soc/qcom/spm.c | 33 +++++++++++++++++++++++++++++++++
->   1 file changed, 33 insertions(+)
+> On 04/11/2022 07:19, Sheng-Liang Pan wrote:
+> > Change touchpad and touchscreen node for evoker
+> > Touchpad: SA461D-1011
+> > Touchscreen: GT7986U
 >
-> diff --git a/drivers/soc/qcom/spm.c b/drivers/soc/qcom/spm.c
-> index 484b42b7454e..bfcd321d7837 100644
-> --- a/drivers/soc/qcom/spm.c
-> +++ b/drivers/soc/qcom/spm.c
-> @@ -98,6 +98,35 @@ static const struct spm_reg_data spm_reg_8916_cpu = {
->   	.start_index[PM_SLEEP_MODE_SPC] = 5,
->   };
->   
-> +static const u16 spm_reg_offset_v2_3[SPM_REG_NR] = {
-> +	[SPM_REG_CFG]		= 0x08,
-> +	[SPM_REG_SPM_CTL]	= 0x30,
-> +	[SPM_REG_DLY]		= 0x34,
-> +	[SPM_REG_PMIC_DATA_0]	= 0x40,
-> +	[SPM_REG_PMIC_DATA_1]	= 0x44,
-> +};
-> +
-> +/* SPM register data for 8976 */
-> +static const struct spm_reg_data spm_reg_8976_gold_l2 = {
-> +	.reg_offset = spm_reg_offset_v2_3,
-> +	.spm_cfg = 0x14,
-> +	.spm_dly = 0x3c11840a,
-> +	.pmic_data[0] = 0x03030080,
-> +	.pmic_data[1] = 0x00030000,
-> +	.start_index[PM_SLEEP_MODE_STBY] = 0,
-> +	.start_index[PM_SLEEP_MODE_SPC] = 3,
-> +};
-> +
-> +static const struct spm_reg_data spm_reg_8976_silver_l2 = {
-> +	.reg_offset = spm_reg_offset_v2_3,
-> +	.spm_cfg = 0x14,
-> +	.spm_dly = 0x3c102800,
-> +	.pmic_data[0] = 0x03030080,
-> +	.pmic_data[1] = 0x00030000,
-> +	.start_index[PM_SLEEP_MODE_STBY] = 0,
-> +	.start_index[PM_SLEEP_MODE_SPC] = 2,
-> +};
-> +
->   static const u16 spm_reg_offset_v2_1[SPM_REG_NR] = {
->   	[SPM_REG_CFG]		= 0x08,
->   	[SPM_REG_SPM_CTL]	= 0x30,
-> @@ -213,6 +242,10 @@ static const struct of_device_id spm_match_table[] = {
->   	  .data = &spm_reg_8916_cpu },
->   	{ .compatible = "qcom,msm8974-saw2-v2.1-cpu",
->   	  .data = &spm_reg_8974_8084_cpu },
-> +	{ .compatible = "qcom,msm8976-gold-saw2-v2.3-l2",
-> +	  .data = &spm_reg_8976_gold_l2 },
-> +	{ .compatible = "qcom,msm8976-silver-saw2-v2.3-l2",
-> +	  .data = &spm_reg_8976_silver_l2 },
->   	{ .compatible = "qcom,msm8998-gold-saw2-v4.1-l2",
->   	  .data = &spm_reg_8998_gold_l2 },
->   	{ .compatible = "qcom,msm8998-silver-saw2-v4.1-l2",
+> What's the reasoning? Were they changed post r0? Is r0 support
+> effectively dropped?
+>
+> The changes look ok, but I feel like this needs more of a comment in the
+> commit msg.
+
+As I understand it r0's toucscreen/touchpad were not right to start
+with. We are moving towards getting things upstream sooner and that
+means that hardware hasn't always been fully tested out.
+
+I certainly wouldn't object to a better commit message here, but in
+this case there are no real world users (yet) and thus nobody is
+really affected by this churn. ...so IMO if the series needs to be
+spun for some other reason then the commit message could be updated,
+but I wouldn't object to it landing as-is either.
+
+-Doug
