@@ -2,153 +2,251 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EB42618D38
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 01:31:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 651D4618D40
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 01:32:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231128AbiKDAbO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 20:31:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45350 "EHLO
+        id S231134AbiKDAcp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 20:32:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230496AbiKDAbL (ORCPT
+        with ESMTP id S230254AbiKDAcm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 20:31:11 -0400
-Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E55B2228A;
-        Thu,  3 Nov 2022 17:31:08 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R111e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VTuQtrw_1667521864;
-Received: from B-P7TQMD6M-0146.local(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VTuQtrw_1667521864)
-          by smtp.aliyun-inc.com;
-          Fri, 04 Nov 2022 08:31:06 +0800
-Date:   Fri, 4 Nov 2022 08:31:04 +0800
-From:   Gao Xiang <hsiangkao@linux.alibaba.com>
-To:     Dave Chinner <david@fromorbit.com>
-Cc:     linux-xfs@vger.kernel.org, "Darrick J. Wong" <djwong@kernel.org>,
-        Dave Chinner <dchinner@redhat.com>,
-        Brian Foster <bfoster@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Zirong Lang <zlang@redhat.com>
-Subject: Re: [PATCH v2] xfs: extend the freelist before available space check
-Message-ID: <Y2RdSCozXhKPeN8V@B-P7TQMD6M-0146.local>
-Mail-Followup-To: Dave Chinner <david@fromorbit.com>,
-        linux-xfs@vger.kernel.org, "Darrick J. Wong" <djwong@kernel.org>,
-        Dave Chinner <dchinner@redhat.com>,
-        Brian Foster <bfoster@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>, Zirong Lang <zlang@redhat.com>
-References: <20221103094639.39984-1-hsiangkao@linux.alibaba.com>
- <20221103131025.40064-1-hsiangkao@linux.alibaba.com>
- <20221103230542.GK3600936@dread.disaster.area>
+        Thu, 3 Nov 2022 20:32:42 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 371262252D
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 17:32:40 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id y203so3150817pfb.4
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 17:32:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fromorbit-com.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=nqFWmWfUe3nfY/W1IhQtBrk1jdkAMC8SotBe5qoKInk=;
+        b=59fd9mimgkb3jqAEBB6FDge8YWbKgQ9cCVLSYc0vbz/ITZ/+MWGUAhT+BfkD/WyOKR
+         ZS72otyTGSBCMIn5KXHq3LY3eBVqj847EAys1SC/2LtlNG2ca/p3U0PFwYXe/Wnqkktr
+         I3J8EoDvRfIbPMbLnYr+wIQ9y3cFpGyrA7PQRcteKx3oRqTR+RVUuWrOgzafCb1uOAwz
+         nCRdmg7rcl4JIOC/F7kvcGFV4AMwfIgrEUm/9771CgvZ3C7eQT9zBQ3v6zbQ4HsMWHhf
+         YC3gUQD3VRGl+O7/Jyi2szZ3xH6y79IvLO1d72Ja/0b7kFUBkMCtbZ/1nn2lxndqgNOT
+         QynQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nqFWmWfUe3nfY/W1IhQtBrk1jdkAMC8SotBe5qoKInk=;
+        b=hTBFw0pN/Zz12a5Lco1HWOPFnpVCe4A6NfAKO2q3M3i1Oo4qTbI+5YRH03LMvVxYDd
+         JwZkrJJ5bCbfPRVhbke0mv9qc4tSRu+Uipa1wNErpx83V6KWL5uH23po9/VTcLydgjKL
+         Cbenc3QWyolzRxu79ziFEd3QBtt1Vgew5aaIibj4n89W+nqXy7Rcbl4uMg1KvY1qfJbZ
+         18YgEJjOkUwPFsyDimY8eAgMk4Rp4//hUY/rp/r+nS59KTRtLhBU9qPDP0Jb3WsUr8cm
+         3cg9tpCPdQ2ahMKP+QzNTQ+1qIUTautTrO8Odn0iHFpYW9ocZDwFE/UOdqRAnxRqV4T4
+         FF9A==
+X-Gm-Message-State: ACrzQf1YlcJwwxVT4WJrG/AF5C0jbP/AYMI4GtV1qkmaKw8tE2YNYvRj
+        8t7pQ+m7g4XdVmgy5pH2g2dPrQ==
+X-Google-Smtp-Source: AMsMyM6iJ2SNWGuGLen8Rv+LFYo5aa41OR1ELR00lyKv92EB0uGeLIs3Yf+UrlIB5ACN2HoiTY/hWA==
+X-Received: by 2002:aa7:962c:0:b0:56c:14c9:70dc with SMTP id r12-20020aa7962c000000b0056c14c970dcmr224950pfg.17.1667521959674;
+        Thu, 03 Nov 2022 17:32:39 -0700 (PDT)
+Received: from dread.disaster.area (pa49-181-106-210.pa.nsw.optusnet.com.au. [49.181.106.210])
+        by smtp.gmail.com with ESMTPSA id w189-20020a6282c6000000b0056c04dee930sm1341605pfd.120.2022.11.03.17.32.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Nov 2022 17:32:39 -0700 (PDT)
+Received: from dave by dread.disaster.area with local (Exim 4.92.3)
+        (envelope-from <david@fromorbit.com>)
+        id 1oqkdP-009ySF-U9; Fri, 04 Nov 2022 11:32:35 +1100
+Date:   Fri, 4 Nov 2022 11:32:35 +1100
+From:   Dave Chinner <david@fromorbit.com>
+To:     Vishal Moola <vishal.moola@gmail.com>
+Cc:     linux-fsdevel@vger.kernel.org, linux-afs@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-btrfs@vger.kernel.org,
+        ceph-devel@vger.kernel.org, linux-cifs@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
+        cluster-devel@redhat.com, linux-nilfs@vger.kernel.org,
+        linux-mm@kvack.org, Matthew Wilcox <willy@infradead.org>
+Subject: Re: [PATCH 04/23] page-writeback: Convert write_cache_pages() to use
+ filemap_get_folios_tag()
+Message-ID: <20221104003235.GZ2703033@dread.disaster.area>
+References: <20220901220138.182896-1-vishal.moola@gmail.com>
+ <20220901220138.182896-5-vishal.moola@gmail.com>
+ <20221018210152.GH2703033@dread.disaster.area>
+ <Y2RAdUtJrOJmYU4L@fedora>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221103230542.GK3600936@dread.disaster.area>
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <Y2RAdUtJrOJmYU4L@fedora>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dave,
-
-On Fri, Nov 04, 2022 at 10:05:42AM +1100, Dave Chinner wrote:
-> On Thu, Nov 03, 2022 at 09:10:25PM +0800, Gao Xiang wrote:
-> > There is a long standing issue which could cause fs shutdown due to
-> > inode extent to btree conversion failure right after an extent
-> > allocation in the same AG, which is absolutely unexpected due to the
-> > proper minleft reservation in the previous allocation.  Brian once
-> > addressed one of the root cause [1], however, such symptom can still
-> > occur after the commit is merged as reported [2], and our cloud
-> > environment is also suffering from this issue.
+On Thu, Nov 03, 2022 at 03:28:05PM -0700, Vishal Moola wrote:
+> On Wed, Oct 19, 2022 at 08:01:52AM +1100, Dave Chinner wrote:
+> > On Thu, Sep 01, 2022 at 03:01:19PM -0700, Vishal Moola (Oracle) wrote:
+> > > Converted function to use folios throughout. This is in preparation for
+> > > the removal of find_get_pages_range_tag().
+> > > 
+> > > Signed-off-by: Vishal Moola (Oracle) <vishal.moola@gmail.com>
+> > > ---
+> > >  mm/page-writeback.c | 44 +++++++++++++++++++++++---------------------
+> > >  1 file changed, 23 insertions(+), 21 deletions(-)
+> > > 
+> > > diff --git a/mm/page-writeback.c b/mm/page-writeback.c
+> > > index 032a7bf8d259..087165357a5a 100644
+> > > --- a/mm/page-writeback.c
+> > > +++ b/mm/page-writeback.c
+> > > @@ -2285,15 +2285,15 @@ int write_cache_pages(struct address_space *mapping,
+> > >  	int ret = 0;
+> > >  	int done = 0;
+> > >  	int error;
+> > > -	struct pagevec pvec;
+> > > -	int nr_pages;
+> > > +	struct folio_batch fbatch;
+> > > +	int nr_folios;
+> > >  	pgoff_t index;
+> > >  	pgoff_t end;		/* Inclusive */
+> > >  	pgoff_t done_index;
+> > >  	int range_whole = 0;
+> > >  	xa_mark_t tag;
+> > >  
+> > > -	pagevec_init(&pvec);
+> > > +	folio_batch_init(&fbatch);
+> > >  	if (wbc->range_cyclic) {
+> > >  		index = mapping->writeback_index; /* prev offset */
+> > >  		end = -1;
+> > > @@ -2313,17 +2313,18 @@ int write_cache_pages(struct address_space *mapping,
+> > >  	while (!done && (index <= end)) {
+> > >  		int i;
+> > >  
+> > > -		nr_pages = pagevec_lookup_range_tag(&pvec, mapping, &index, end,
+> > > -				tag);
+> > > -		if (nr_pages == 0)
+> > > +		nr_folios = filemap_get_folios_tag(mapping, &index, end,
+> > > +				tag, &fbatch);
 > > 
-> > From the description of the commit [1], I found that Zirong has an
-> > in-house stress test reproducer for this issue, therefore I asked him
-> > to reproduce again and he confirmed that such issue can still be
-> > reproducable on RHEL 9.
+> > This can find and return dirty multi-page folios if the filesystem
+> > enables them in the mapping at instantiation time, right?
+> 
+> Yup, it will.
+> 
+> > > +
+> > > +		if (nr_folios == 0)
+> > >  			break;
+> > >  
+> > > -		for (i = 0; i < nr_pages; i++) {
+> > > -			struct page *page = pvec.pages[i];
+> > > +		for (i = 0; i < nr_folios; i++) {
+> > > +			struct folio *folio = fbatch.folios[i];
+> > >  
+> > > -			done_index = page->index;
+> > > +			done_index = folio->index;
+> > >  
+> > > -			lock_page(page);
+> > > +			folio_lock(folio);
+> > >  
+> > >  			/*
+> > >  			 * Page truncated or invalidated. We can freely skip it
+> > > @@ -2333,30 +2334,30 @@ int write_cache_pages(struct address_space *mapping,
+> > >  			 * even if there is now a new, dirty page at the same
+> > >  			 * pagecache address.
+> > >  			 */
+> > > -			if (unlikely(page->mapping != mapping)) {
+> > > +			if (unlikely(folio->mapping != mapping)) {
+> > >  continue_unlock:
+> > > -				unlock_page(page);
+> > > +				folio_unlock(folio);
+> > >  				continue;
+> > >  			}
+> > >  
+> > > -			if (!PageDirty(page)) {
+> > > +			if (!folio_test_dirty(folio)) {
+> > >  				/* someone wrote it for us */
+> > >  				goto continue_unlock;
+> > >  			}
+> > >  
+> > > -			if (PageWriteback(page)) {
+> > > +			if (folio_test_writeback(folio)) {
+> > >  				if (wbc->sync_mode != WB_SYNC_NONE)
+> > > -					wait_on_page_writeback(page);
+> > > +					folio_wait_writeback(folio);
+> > >  				else
+> > >  					goto continue_unlock;
+> > >  			}
+> > >  
+> > > -			BUG_ON(PageWriteback(page));
+> > > -			if (!clear_page_dirty_for_io(page))
+> > > +			BUG_ON(folio_test_writeback(folio));
+> > > +			if (!folio_clear_dirty_for_io(folio))
+> > >  				goto continue_unlock;
+> > >  
+> > >  			trace_wbc_writepage(wbc, inode_to_bdi(mapping->host));
+> > > -			error = (*writepage)(page, wbc, data);
+> > > +			error = writepage(&folio->page, wbc, data);
 > > 
-> > Thanks to him, after dumping the transaction log items, I think
-> > the root cause is as below:
-> >  1. Allocate space with the following condition:
-> >     freeblks: 18304 pagf_flcount: 6
-> >     reservation: 18276 need (min_free): 6
-> >     args->minleft: 1
-> >     available = freeblks + agflcount - reservation - need - minleft
-> >               = 18304 + min(6, 6) - 18276 - 6 - 1 = 27
+> > Yet, IIUC, this treats all folios as if they are single page folios.
+> > i.e. it passes the head page of a multi-page folio to a callback
+> > that will treat it as a single PAGE_SIZE page, because that's all
+> > the writepage callbacks are currently expected to be passed...
 > > 
-> >     The first allocation check itself is ok;
-> > 
-> >  2. At that time, the AG state is
-> >     AGF Buffer: (XAGF)
-> >         ver:1  seq#:3  len:2621424
-> >         root BNO:9  CNT:7
-> >         level BNO:2  CNT:2
-> >         1st:64  last:69  cnt:6  freeblks:18277  longest:6395
->                                   ^^^^^^^^^^^^^^
+> > So won't this break writeback of dirty multipage folios?
 > 
-> Hold on - pag->pagf_freeblks != agf->freeblks, and if we start with
-> the agf freeblocks:
+> Yes, it appears it would. But it wouldn't because its already 'broken'.
+
+It is? Then why isn't XFS broken on existing kernels? Oh, we don't
+know because it hasn't been tested?
+
+Seriously - if this really is broken, and this patchset further
+propagating the brokeness, then somebody needs to explain to me why
+this is not corrupting data in XFS.
+
+I get it that page/folios are in transition, but passing a
+multi-page folio page to an interface that expects a PAGE_SIZE
+struct page is a pretty nasty landmine, regardless of how broken the
+higher level iteration code already might be.
+
+At minimum, it needs to be documented, though I'd much prefer that
+we explicitly duplicate write_cache_pages() as write_cache_folios()
+with a callback that takes a folio and change the code to be fully
+multi-page folio safe. Then filesystems that support folios (and
+large folios) natively can be passed folios without going through
+this crappy "folio->page, page->folio" dance because the writepage
+APIs are unaware of multi-page folio constructs.
+
+Then you can convert the individual filesystems using
+write_cache_pages() to call write_cache_folios() one at a time,
+updating the filesystem callback to do the conversion from folio to
+struct page and checking that it an order-0 page that it has been
+handed....
+
+> The current find_get_pages_range_tag() actually has the exact same
+> issue. The current code to fill up the pages array is:
 > 
-> 	available = 18277 + 6 - 18276 - 6 - 1 = 0
-> 
-> IOWs, the allocation should never selected this AG in the first
-> place.
-> 
-> So why is pag->pagf_freeblks not equal to agf->freeblks when this
-> allocation was first checked? It's clearly not because the AGFL is
-> unpopulated - both the perag and the agf indicate it has the minimum
-> 6 blocks already allocated....
+> 		pages[ret] = &folio->page;
+> 		if (++ret == nr_pages) {
+> 			*index = folio->index + folio_nr_pages(folio);
+> 			goto out;
 
-Thanks for the reply.
+"It's already broken so we can make it more broken" isn't an
+acceptible answer....
 
-I may mispresent 2) here since there are several AGF agno 3 recording,
-the last completed trans printed by "xfs_logprint" is:
+> Its not great to leave it 'broken' but its something that isn't - or at
+> least shouldn't be - creating any problems at present. And I believe Matthew
+> has plans to address them at some point before they actually become problems?
 
-============================================================================
-TRANS: tid:0xaf57a744  #items:621  trans:0xaf57a744  q:0x56104c44be70
-CUD: cnt:1 total:1 a:0x56104c44e320 len:16
-CUD:  #regs: 1                   id: 0xff110004e02bc1e8
-EFI: cnt:1 total:1 a:0x56104c447b30 len:32
-        EFI:  #regs:1   num_extents:1  id:0xff110001bd8c56e0
-        (s: 0xe7cc8d, l: 3)
-EFD: cnt:1 total:1 a:0x56104c42d1b0 len:32
-        EFD:  #regs: 1  num_extents: 1  id: 0xff110001bd8c56e0
-BUF: cnt:2 total:2 a:0x56104c42f5c0 len:24 a:0x56104c4712e0 len:128
-        BUF:  #regs:2   start blkno:0x3bffe81   len:1   bmap size:1   flags:0x2800
-        AGF Buffer: (XAGF)
-                ver:1  seq#:3  len:2621424
-                root BNO:9  CNT:7
-                level BNO:2  CNT:2
-                1st:64  last:69  cnt:6  freeblks:18304  longest:6395
+You are modifying the interfaces and doing folio conversions that
+expose and propagate the brokenness. The brokeness needs to be
+either avoided or fixed and not propagated further. Doing the above
+write_cache_folios() conversion avoids the propagating the
+brokenness, adds runtime detection of brokenness, and provides the
+right interface for writeback iteration of folios.
 
-So I think freeblks starts from 18304.
+Fixing the generic writeback iterator properly is not much extra
+work, and it sets the model for filesytsems that have copy-pasted
+write_cache_pages() and then hacked it around for their own purposes
+(e.g. ext4, btrfs) to follow.
 
-18277 is just an intermediate state in my mind (Actually there is also such AGF
-record, but that is not the latest one because this is a stress test), sorry
-for this.
-
-In short, in order to do the first allocation, I think it allocates from
- freeblks 18304 -> 18276
- agflcount 6->5
-And the second one fails,
-     available = freeblks + agflcount - reservation - need - minleft
-               = 18277 + min(5, 6) - 18276 - 6 - 0 = 0   < 1
-I also think it can happen in the current codebase.
-
-Full xfs_logprint is too large to send by email to the mailing list, but
-I could send this separately to you if really needed.
-
-My debugging message catched when xfs_trans_cancel() attached in the
-following reply of this email.
-
-Thanks,
-Gao Xiang
-
-> 
-> Cheers,
-> 
-> Dave.
-> -- 
-> Dave Chinner
-> david@fromorbit.com
+-Dave.
+-- 
+Dave Chinner
+david@fromorbit.com
