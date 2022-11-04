@@ -2,171 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8099E619553
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 12:24:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 310C361955D
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 12:31:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231625AbiKDLYR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 07:24:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48728 "EHLO
+        id S231354AbiKDLbN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 07:31:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231605AbiKDLYO (ORCPT
+        with ESMTP id S229637AbiKDLbL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 07:24:14 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A90762982F
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 04:24:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667561053; x=1699097053;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=G1aTmrVsZ8ad6jZu8lVyYIHH8cHgqIzYfaRarwXYjQk=;
-  b=SCneiT3xN0Bsoti0hyQxR5KXCF7ydlB+RMWqry8TFgsTjExD4yKTQLXp
-   +Qxex91FBP9OtvcoGniPf7piaGnm4mlZbNdNJHBDB84taw9VRmVWSh5Kr
-   yYDCygzf6GZUkIG8TTXNoyuU92sbkM/pWTrV/2tAk/RgqUn9Sx57h+sH9
-   KfvpAn+UNpXwvLd7Vocx/YIkWVJQNcIJR2w9QWf8+qBcdhhBaZjFm3IMH
-   1ojwnVfyQeftmQRDpydX8IU15dP/yw32p0iHW0LsQ0LgIzCqaSh05TTvr
-   ssTqejqtvgwRstkXf/AQqYpD7dDLYo0ExSOYHfMXvt4QQMThFVwAP3h+n
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10520"; a="309934148"
-X-IronPort-AV: E=Sophos;i="5.96,137,1665471600"; 
-   d="scan'208";a="309934148"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2022 04:24:13 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10520"; a="740590212"
-X-IronPort-AV: E=Sophos;i="5.96,137,1665471600"; 
-   d="scan'208";a="740590212"
-Received: from liuzhao-optiplex-7080.sh.intel.com (HELO localhost) ([10.239.160.132])
-  by fmsmga002.fm.intel.com with ESMTP; 04 Nov 2022 04:24:09 -0700
-Date:   Fri, 4 Nov 2022 19:29:54 +0800
-From:   Zhao Liu <zhao1.liu@linux.intel.com>
-To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        Ira Weiny <ira.weiny@intel.com>
-Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Matthew Auld <matthew.auld@intel.com>,
-        Thomas =?iso-8859-1?Q?Hellstr=F6m?= 
-        <thomas.hellstrom@linux.intel.com>,
-        Nirmoy Das <nirmoy.das@intel.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Chris Wilson <chris@chris-wilson.co.uk>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org,
-        Zhenyu Wang <zhenyu.z.wang@intel.com>,
-        Zhao Liu <zhao1.liu@intel.com>,
-        Dave Hansen <dave.hansen@intel.com>
-Subject: Re: [PATCH 1/9] drm/i915: Use kmap_local_page() in
- gem/i915_gem_object.c
-Message-ID: <Y2T3stShATdhBpla@liuzhao-OptiPlex-7080>
-References: <20221017093726.2070674-1-zhao1.liu@linux.intel.com>
- <20221017093726.2070674-2-zhao1.liu@linux.intel.com>
- <2541717.Lt9SDvczpP@suse>
+        Fri, 4 Nov 2022 07:31:11 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13CB6E7B
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 04:30:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1667561413;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=X2vF9wu9D9A9HBRSXFDC1P9Ez4nhQcXyZNLm0dcpRMo=;
+        b=fqRR84iF9Q3l0OtJjtpG7xVA9qWoBN0X6J//KPb6V7Kyo+TuU0sWg+rv7396QyfhcgU5OU
+        MnlaBHF3HFb5ZDowOQNAwOfAH22WuSW+lebC25MlK2SfQcVfsoyw66rULqlcV4UpNMIiXD
+        kxoxsKEyPrmW4tg14BAsTQ34t7D1QVQ=
+Received: from mail-pl1-f198.google.com (mail-pl1-f198.google.com
+ [209.85.214.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-522-Hu_fJAhWNXizIJW5xlBS0w-1; Fri, 04 Nov 2022 07:30:11 -0400
+X-MC-Unique: Hu_fJAhWNXizIJW5xlBS0w-1
+Received: by mail-pl1-f198.google.com with SMTP id s15-20020a170902ea0f00b00187050232fcso3401003plg.3
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 04:30:11 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=X2vF9wu9D9A9HBRSXFDC1P9Ez4nhQcXyZNLm0dcpRMo=;
+        b=x2C93vE0+Jks56dTIexE5zuSDtQFalOq48EaHmn6ayxFnJs9bWDtIAUseyy0K+hJCI
+         DWdAcyyY/G923Bg3XmyFUgGouC5jw4gayKNaUpRW06N3fqvLPkZVnpCEBqKGYAYgKIkE
+         XnUns8weLbRn2sPsCLO8N9eaqL2g3YtBAxMe8DmbvjWZ4VJZx16JOl/LKShoI903Qnoz
+         6ms6qXY36d53vKnKFOu2nlRg8hQ/fKkZtCGIX9TZC5guvEGqNJRHcJcUbc7rnuabpntm
+         hqVb4zVtkiOKzNycsqu1SxByq1XnM/4XXluJIG2PF9cjsmuYyQl8yE5NZKHmuc2JnH5A
+         ++mw==
+X-Gm-Message-State: ACrzQf1Lk+gXQrkgKUM8zMtqIl6/7UKCtTJiWdoKD0SPOoynOsaf0tMZ
+        Ezqx0DgM79m6mE4lwsifWEm3hVNyHiCmtxl0ovSpB8/iwfYZEN0JAHpbFA3h4caQVzoB0TiS2u8
+        I53tDW4tVkgL38UBQSQrzwcDW
+X-Received: by 2002:a05:6a00:84b:b0:56d:3cf5:1031 with SMTP id q11-20020a056a00084b00b0056d3cf51031mr30151533pfk.75.1667561410122;
+        Fri, 04 Nov 2022 04:30:10 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM6ZmqK77wd2hCvap39otYWhRGk7HSG6DR3nAEU2Jv3tyaB6tseG9Ymp8fTHcgu2gG1DjEWLsQ==
+X-Received: by 2002:a05:6a00:84b:b0:56d:3cf5:1031 with SMTP id q11-20020a056a00084b00b0056d3cf51031mr30151497pfk.75.1667561409825;
+        Fri, 04 Nov 2022 04:30:09 -0700 (PDT)
+Received: from localhost ([209.132.188.80])
+        by smtp.gmail.com with ESMTPSA id p189-20020a625bc6000000b0056abff42a8bsm2503420pfb.69.2022.11.04.04.30.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Nov 2022 04:30:08 -0700 (PDT)
+From:   Coiby Xu <coxu@redhat.com>
+To:     kexec@lists.infradead.org
+Cc:     Milan Broz <gmazyland@gmail.com>,
+        Thomas Staudt <tstaudt@de.ibm.com>,
+        Kairui Song <ryncsn@gmail.com>, dm-devel@redhat.com,
+        Jan Pazdziora <jpazdziora@redhat.com>,
+        Pingfan Liu <kernelfans@gmail.com>,
+        Baoquan He <bhe@redhat.com>, Dave Young <dyoung@redhat.com>,
+        linux-kernel@vger.kernel.org
+Subject: [RFC v2 0/5] Support kdump with LUKS encryption by reusing LUKS volume key
+Date:   Fri,  4 Nov 2022 19:29:55 +0800
+Message-Id: <20221104113000.487098-1-coxu@redhat.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2541717.Lt9SDvczpP@suse>
-X-Spam-Status: No, score=-8.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Oct 29, 2022 at 01:17:03PM +0200, Fabio M. De Francesco wrote:
-> Date: Sat, 29 Oct 2022 13:17:03 +0200
-> From: "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-> Subject: Re: [PATCH 1/9] drm/i915: Use kmap_local_page() in
->  gem/i915_gem_object.c
-> 
-> On luned? 17 ottobre 2022 11:37:17 CEST Zhao Liu wrote:
-> > From: Zhao Liu <zhao1.liu@intel.com>
-> > 
-> > The use of kmap_atomic() is being deprecated in favor of
-> > kmap_local_page()[1].
-> > 
-> > The main difference between atomic and local mappings is that local
-> > mappings doesn't disable page faults or preemption.
-> 
-> You are right about about page faults which are never disabled by 
-> kmap_local_page(). However kmap_atomic might not disable preemption. It 
-> depends on CONFIG_PREEMPT_RT.
-> 
-> Please refer to how kmap_atomic_prot() works (this function is called by 
-> kmap_atomic() when kernels have HIGHMEM enabled).
+RFC v2
+ - libcryptsetup interacts with the kernel via sysfs instead of "hacking"
+   dm-crypt 
+   - to save a kdump copy of the LUKS volume key in 1st kernel
+   - to add a logon key using the copy for libcryptsetup in kdump kernel [Milan]
+   - to avoid the incorrect usage of LUKS master key in dm-crypt [Milan]
+ - save the kdump copy of LUKS volume key randomly [Jan]
+ - mark the kdump copy inaccessible [Pingfan]
+ - Miscellaneous
+   - explain when operations related to the LUKS volume key happen [Jan]
+   - s/master key/volume key/g
+   - use crash_ instead of kexec_ as function prefix
+   - fix commit subject prefixes e.g. "x86, kdump" to x86/crash
 
-Yes, there is some ambiguity here. What about "The main difference between
-atomic and local mappings is that local mappings never disable page faults
-or preemption"?
+With kdump enabled, when the 1st kernel crashes, the system could boot
+into the kdump/crash kernel and dump the memory image i.e. /proc/vmcore
+to a specified target. Currently, when dumping vmcore to a LUKS
+encrypted device, there are two problems,
 
-> 
-> > 
-> > There're 2 reasons why i915_gem_object_read_from_page_kmap() doesn't
-> > need to disable pagefaults and preemption for mapping:
-> > 
-> > 1. The flush operation is safe for CPU hotplug when preemption is not
-> > disabled. 
-> 
-> I'm confused here. Why are you talking about CPU hotplug?
-> In any case, developers should never rely on implicit calls of 
-> preempt_disable() for the reasons said above. Therefore, flush operations 
-> should be allowed regardless that kmap_atomic() potential side effect.
+ - for some machines, a system administrator may not have a chance to
+   enter the password to decrypt the device in kdump initramfs after the
+   1st kernel crashes 
 
-Sorry, it's my fault, my misunderstanding about the connection between hotplug
-and flush here. When mapping exists, the cpu cannot be unplugged via CPU-hotplug.
-But whether plug or unplug, it has nothing to do with flush. I will delete this
-wrong description.
+ - LUKS2 by default use the memory-hard Argon2 key derivation function
+   which is quite memory-consuming compared to the limited memory reserved
+   for kdump. Take Fedora example, by default, only 256M is reserved for
+   systems having memory between 4G-64G. With LUKS enabled, ~1300M needs
+   to be reserved for kdump. Note if the memory reserved for kdump can't
+   be used by 1st kernel i.e. an user sees ~1300M memory missing in the
+   1st kernel. 
+ 
+Besides users (at least for Fedora) usually expect kdump to work out of
+the box i.e. no manual password input is needed. And it doesn't make
+sense to derivate the key again in kdump kernel which seems to be
+redundant work.
 
-My initial consideration is that this interface of flush may require an atomic
-context, so I want to explain more from the details of its implementation
-that cache consistency can be guaranteed without atomic context. Is this
-consideration redundant?
-Also, do I need to state that migration is still ok for this flush interface
-here (since __kmap_local_page_prot() doesn't always disable migration)?
+Based on Milan's feedback [1] on Kairui's ideas to support kdump with
+LUKS encryption, this patch set addresses the above issues by reusing
+the LUKS volume key in kdump kernel and here is the life cycle of this
+kdump copy of LUKS volume key,
 
-> > In drm/i915/gem/i915_gem_object.c, the function
-> > i915_gem_object_read_from_page_kmap() calls drm_clflush_virt_range()
-> 
-> If I recall correctly, drm_clflush_virt_range() can always be called with page 
-> faults and preemption enabled. If so, this is enough to say that the 
-> conversion is safe. 
-> 
-> Is this code explicitly related to flushing the cache lines before removing / 
-> adding CPUs? If I recall correctly, there are several other reasons behind the 
-> need to issue cache lines flushes. Am I wrong about this?
-> 
-> Can you please say more about what I'm missing here?
-> 
-> > to
-> > use CLFLUSHOPT or WBINVD to flush. Since CLFLUSHOPT is global on x86
-> > and WBINVD is called on each cpu in drm_clflush_virt_range(), the flush
-> > operation is global and any issue with cpu's being added or removed
-> > can be handled safely.
-> 
-> Again your main concern is about CPU hotplug.
-> 
-> Even if I'm missing something, do we really need all these details about the 
-> inner workings of drm_clflush_virt_range()? 
-> 
-> I'm not an expert, so may be that I'm wrong about all I wrote above.
-> 
-> Therefore, can you please elaborate a little more for readers with very little 
-> knowledge of these kinds of things (like me and perhaps others)?
->  
-> > 2. Any context switch caused by preemption or sleep (pagefault may
-> > cause sleep) doesn't affect the validity of local mapping.
-> 
-> I'd replace "preemption or sleep" with "preemption and page faults" since 
-> yourself then added that page faults lead to tasks being put to sleep.  
+ 1. After the 1st kernel loads the initramfs during boot, systemd
+    asks for a passphrase from the user and uses it to de-crypt the LUKS
+    volume key
 
-Thanks, good advice.
+ 2. After the 1st kernel saving the volume key as a logon key,
+    libcrytpsetup notifies the kernel to read this logon key and store a
+    temporary copy by writing the key description to
+    /sys/kernel/crash_luks_volume_key
 
-Zhao
+ 3. After switching to the real root fs, kdump.serivce is started and it 
+    loads the kdump kernel using the kexec_file_load syscall
+
+ 4. The kexec_file_load syscall saves the temporary copy of the volume
+    key to kdump reserved memory and wipe the copy.
+
+ 5. When the 1st kernel crashes and kdump kernel is booted,
+    libcryptsetup asks the kdump kernel to add a logon key using
+    the volume key stored in kdump reserved memory by writing the key
+    description to /sys/kernel/crash_luks_volume_key
+
+ 6. The system gets rebooted to the 1st kernel after dumping vmcore to
+    the LUKS encrypted device is finished
+
+Note the kdump copy of LUKS volume key never leaves the kernel space and
+is saved in the memory area exclusively reserved for kdump where even
+the 1st kernel has no direct access. 
+
+Milan's major concern [2] on previous version is "storing the encryption
+key to yet another place are creating another attack vector". To further
+secure this copy, two additional protections are added,
+ - save the copy randomly in kdump reserved memory as suggested by Jan
+ - clear the _PAGE_PRESENT flag of the page that stores the copy as
+   suggested by Pingfan
+
+If there is no further security concern with this approach or any other
+concern, I will drop the following assumptions,
+  - only x86 is supported
+  - there is only one LUKS device for the system
+
+to extend the support to other architectures including POWER, ARM and
+s390x and address the case of multiple LUKS devices. Any feedback will be 
+appreciated, thanks!
+
+For a proof of concept, I've patched cryptsetup [3] in a quick-and-dirty
+way to support a new option "--kdump-kernel-master-key"
+and hacked systemd [4]. It works for Fedora 35.
+
+[1] https://yhbt.net/lore/all/e5abd089-3398-fdb4-7991-0019be434b79@gmail.com/
+[2] https://lwn.net/ml/linux-kernel/c857dcf8-024e-ab8a-fd26-295ce2e0ae41@gmail.com/
+[3] https://gitlab.com/coxu/cryptsetup/-/commit/750a46d933fac82e0c994b5c41de40a0b8cac647
+[4] https://github.com/coiby/systemd/tree/reuse_kdump_master_key
+
+Coiby Xu (5):
+  kexec_file: allow to place kexec_buf randomly
+  crash_dump: save the LUKS volume key temporarily
+  x86/crash: pass the LUKS volume key to kdump kernel
+  x86/crash: make the page that stores the LUKS volume key inaccessible
+  crash_dump: retrieve LUKS volume key in kdump kernel
+
+ arch/x86/include/asm/crash.h       |   1 +
+ arch/x86/kernel/crash.c            |  47 ++++++-
+ arch/x86/kernel/kexec-bzimage64.c  |   7 +
+ arch/x86/kernel/machine_kexec_64.c |  16 +++
+ include/linux/crash_core.h         |   2 +
+ include/linux/crash_dump.h         |   2 +
+ include/linux/kexec.h              |   6 +
+ kernel/crash_dump.c                | 200 +++++++++++++++++++++++++++++
+ kernel/kexec_file.c                |  15 +++
+ kernel/ksysfs.c                    |  19 +++
+ 10 files changed, 314 insertions(+), 1 deletion(-)
+
+-- 
+2.37.3
 
