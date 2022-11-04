@@ -2,175 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72F7C6192E6
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 09:43:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AAC16192EC
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 09:45:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229481AbiKDInQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 04:43:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56130 "EHLO
+        id S229875AbiKDIpS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 04:45:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230001AbiKDInO (ORCPT
+        with ESMTP id S229600AbiKDIpP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 04:43:14 -0400
-Received: from smtp.smtpout.orange.fr (smtp-25.smtpout.orange.fr [80.12.242.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A92BB2791A
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 01:43:12 -0700 (PDT)
-Received: from [192.168.1.18] ([86.243.100.34])
-        by smtp.orange.fr with ESMTPA
-        id qsI7ozIjdkifIqsI7oGDyf; Fri, 04 Nov 2022 09:43:10 +0100
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Fri, 04 Nov 2022 09:43:10 +0100
-X-ME-IP: 86.243.100.34
-Message-ID: <d2f7deb7-ebe0-d880-1c4b-a210d65c6223@wanadoo.fr>
-Date:   Fri, 4 Nov 2022 09:43:06 +0100
+        Fri, 4 Nov 2022 04:45:15 -0400
+Received: from out28-173.mail.aliyun.com (out28-173.mail.aliyun.com [115.124.28.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA3BADA8;
+        Fri,  4 Nov 2022 01:45:13 -0700 (PDT)
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.3188103|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_system_inform|0.0085301-0.000443442-0.991026;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047212;MF=frank.sae@motor-comm.com;NM=1;PH=DS;RN=16;RT=16;SR=0;TI=SMTPD_---.Q.GlfjF_1667551464;
+Received: from sunhua.motor-comm.com(mailfrom:Frank.Sae@motor-comm.com fp:SMTPD_---.Q.GlfjF_1667551464)
+          by smtp.aliyun-inc.com;
+          Fri, 04 Nov 2022 16:44:49 +0800
+From:   Frank <Frank.Sae@motor-comm.com>
+To:     Peter Geis <pgwipeout@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     yinghong.zhang@motor-comm.com, fei.zhang@motor-comm.com,
+        hua.sun@motor-comm.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Frank <Frank.Sae@motor-comm.com>,
+        kernel test robot <lkp@intel.com>,
+        Julia Lawall <julia.lawall@lip6.fr>
+Subject: [PATCH net-next v2] net: phy: fix yt8521 duplicated argument to & or |
+Date:   Fri,  4 Nov 2022 16:44:41 +0800
+Message-Id: <20221104084441.1024-1-Frank.Sae@motor-comm.com>
+X-Mailer: git-send-email 2.31.0.windows.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v2 1/1] PCI: loongson: skip scanning unavailable child
- device
-To:     Liu Peibao <liupeibao@loongson.cn>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc:     Huacai Chen <chenhuacai@loongson.cn>,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        Yinbo Zhu <zhuyinbo@loongson.cn>, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221104072730.14631-1-liupeibao@loongson.cn>
-Content-Language: fr
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <20221104072730.14631-1-liupeibao@loongson.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 04/11/2022 à 08:27, Liu Peibao a écrit :
-> The PCI Controller of 2k1000 could not mask devices by
-> setting vender id or device id in configuration space header
-> as invalid values. When there are pins shareble between
-> the platform device and PCI device, if the platform device
-> is preferred, we should not scan this PCI device. In the
-> above scene, add `status = "disabled"` property in DT node
-> of this PCI device.
-> 
-> Signed-off-by: Liu Peibao <liupeibao@loongson.cn>
-> ---
-> V1 -> V2: use existing property "status" instead of adding new property.
-> 
->   drivers/pci/controller/pci-loongson.c | 57 +++++++++++++++++++++++++++
->   1 file changed, 57 insertions(+)
-> 
-> diff --git a/drivers/pci/controller/pci-loongson.c b/drivers/pci/controller/pci-loongson.c
-> index 05c50408f13b..cde8a8691867 100644
-> --- a/drivers/pci/controller/pci-loongson.c
-> +++ b/drivers/pci/controller/pci-loongson.c
-> @@ -40,11 +40,21 @@ struct loongson_pci_data {
->   	struct pci_ops *ops;
->   };
->   
-> +#ifdef CONFIG_OF
-> +struct mask_entry {
-> +	struct list_head entry;
-> +	unsigned int devfn;
-> +};
-> +#endif
-> +
->   struct loongson_pci {
->   	void __iomem *cfg0_base;
->   	void __iomem *cfg1_base;
->   	struct platform_device *pdev;
->   	const struct loongson_pci_data *data;
-> +#ifdef CONFIG_OF
-> +	struct list_head masklist;
-> +#endif
->   };
->   
->   /* Fixup wrong class code in PCIe bridges */
-> @@ -194,6 +204,20 @@ static void __iomem *pci_loongson_map_bus(struct pci_bus *bus,
->   			return NULL;
->   	}
->   
-> +#ifdef CONFIG_OF
-> +	/* Don't access devices in masklist */
-> +	if (pci_is_root_bus(bus)) {
-> +		struct list_head *list;
-> +		struct mask_entry *entry;
-> +
-> +		list_for_each(list, &priv->masklist) {
-> +			entry = list_entry(list, struct mask_entry, entry);
+cocci warnings: (new ones prefixed by >>)
+>> drivers/net/phy/motorcomm.c:1122:8-35: duplicated argument to & or |
+  drivers/net/phy/motorcomm.c:1126:8-35: duplicated argument to & or |
+  drivers/net/phy/motorcomm.c:1130:8-34: duplicated argument to & or |
+  drivers/net/phy/motorcomm.c:1134:8-34: duplicated argument to & or |
 
-Hi,
+ The second YT8521_RC1R_GE_TX_DELAY_xx should be YT8521_RC1R_FE_TX_DELAY_xx.
 
-list_for_each_entry() is slighly less verbose.
+Fixes: 70479a40954c ("net: phy: Add driver for Motorcomm yt8521 gigabit ethernet phy")
+Reported-by: kernel test robot <lkp@intel.com>
+Reported-by: Julia Lawall <julia.lawall@lip6.fr>
+Signed-off-by: Frank <Frank.Sae@motor-comm.com>
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+---
+Hi Jakub
 
-> +			if (devfn == entry->devfn)
-> +				return NULL;
-> +		}
-> +	}
-> +#endif
-> +
->   	/* CFG0 can only access standard space */
->   	if (where < PCI_CFG_SPACE_SIZE && priv->cfg0_base)
->   		return cfg0_map(priv, bus, devfn, where);
-> @@ -206,6 +230,36 @@ static void __iomem *pci_loongson_map_bus(struct pci_bus *bus,
->   }
->   
->   #ifdef CONFIG_OF
-> +static int setup_masklist(struct loongson_pci *priv)
-> +{
-> +	struct device *dev = &priv->pdev->dev;
-> +	struct device_node *dn, *parent = dev->of_node;
-> +	struct mask_entry *entry;
-> +	int devfn;
-> +
-> +	INIT_LIST_HEAD(&priv->masklist);
-> +
-> +	for_each_child_of_node(parent, dn) {
-> +		/*
-> +		 * if device is not available, add this to masklist
-> +		 * to avoid scanning it.
-> +		 */
-> +		if (!of_device_is_available(dn)) {
-> +			devfn = of_pci_get_devfn(dn);
-> +			if (devfn < 0)
-> +				continue;
-> +
-> +			entry = devm_kzalloc(dev, sizeof(entry), GFP_KERNEL);
+>  On Thu,  3 Nov 2022 10:50:47 +0800 Frank wrote:
+>  >  The second YT8521_RC1R_GE_TX_DELAY_xx should be YT8521_RC1R_FE_TX_DELAY_xx.
+>  > 
+>  >  Fixes: 70479a40954c ("[net-next,v8.2] net: phy: Add driver for Motorcomm yt8521 gigabit ethernet phy")
+>  
+>  There's a spurious space before the Fixes tag, please remove it.
+>  
+>  The patches does not apply to the net tree:
+>  
+>  https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git/
+>  
+>  please rebase and repost.
 
-sizeof(*entry)?
+ spurious space has been removed.
+ This pach should be work on following commit in net-next tree.
+  - [net-next,v8.2] net: phy: Add driver for Motorcomm yt8521 gigabit ethernet phy
+    https://git.kernel.org/netdev/net-next/c/70479a40954c
 
-> +			if (!entry)
-> +				return -ENOMEM;
-> +
-> +			entry->devfn = devfn;
-> +			list_add_tail(&entry->entry, &priv->masklist);
-> +		}
-> +	}
-> +
-> +	return 0;
-> +}
->   
->   static int loongson_map_irq(const struct pci_dev *dev, u8 slot, u8 pin)
->   {
-> @@ -305,6 +359,9 @@ static int loongson_pci_probe(struct platform_device *pdev)
->   		}
->   	}
->   
-> +	if (setup_masklist(priv))
-> +		return -ENOMEM;
-> +
->   	bridge->sysdata = priv;
->   	bridge->ops = priv->data->ops;
->   	bridge->map_irq = loongson_map_irq;
+v2 change:
+ -add "Reviewed-by: Andrew Lunn <andrew@lunn.ch>"
+ -fix tag name (full legal name)
+ -change PATCH net to PATCH net-next
+ -add warnings info
+ 
+ 
+ drivers/net/phy/motorcomm.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/net/phy/motorcomm.c b/drivers/net/phy/motorcomm.c
+index c7593f224177..bd1ab5d0631f 100644
+--- a/drivers/net/phy/motorcomm.c
++++ b/drivers/net/phy/motorcomm.c
+@@ -1119,19 +1119,19 @@ static int yt8521_config_init(struct phy_device *phydev)
+ 
+ 	switch (phydev->interface) {
+ 	case PHY_INTERFACE_MODE_RGMII:
+-		val = YT8521_RC1R_GE_TX_DELAY_DIS | YT8521_RC1R_GE_TX_DELAY_DIS;
++		val = YT8521_RC1R_GE_TX_DELAY_DIS | YT8521_RC1R_FE_TX_DELAY_DIS;
+ 		val |= YT8521_RC1R_RX_DELAY_DIS;
+ 		break;
+ 	case PHY_INTERFACE_MODE_RGMII_RXID:
+-		val = YT8521_RC1R_GE_TX_DELAY_DIS | YT8521_RC1R_GE_TX_DELAY_DIS;
++		val = YT8521_RC1R_GE_TX_DELAY_DIS | YT8521_RC1R_FE_TX_DELAY_DIS;
+ 		val |= YT8521_RC1R_RX_DELAY_EN;
+ 		break;
+ 	case PHY_INTERFACE_MODE_RGMII_TXID:
+-		val = YT8521_RC1R_GE_TX_DELAY_EN | YT8521_RC1R_GE_TX_DELAY_EN;
++		val = YT8521_RC1R_GE_TX_DELAY_EN | YT8521_RC1R_FE_TX_DELAY_EN;
+ 		val |= YT8521_RC1R_RX_DELAY_DIS;
+ 		break;
+ 	case PHY_INTERFACE_MODE_RGMII_ID:
+-		val = YT8521_RC1R_GE_TX_DELAY_EN | YT8521_RC1R_GE_TX_DELAY_EN;
++		val = YT8521_RC1R_GE_TX_DELAY_EN | YT8521_RC1R_FE_TX_DELAY_EN;
+ 		val |= YT8521_RC1R_RX_DELAY_EN;
+ 		break;
+ 	case PHY_INTERFACE_MODE_SGMII:
+-- 
+2.31.0.windows.1
 
