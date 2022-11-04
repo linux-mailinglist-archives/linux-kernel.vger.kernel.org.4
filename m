@@ -2,119 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14F86619DD0
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 17:52:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 060BE619DD1
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 17:52:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231831AbiKDQwn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 12:52:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41952 "EHLO
+        id S232222AbiKDQwp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 12:52:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232231AbiKDQv7 (ORCPT
+        with ESMTP id S231971AbiKDQwB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 12:51:59 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2126C42F72
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 09:50:58 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id y4so5425073plb.2
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 09:50:58 -0700 (PDT)
+        Fri, 4 Nov 2022 12:52:01 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B61C4385B
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 09:51:03 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id fn7-20020a05600c688700b003b4fb113b86so3556791wmb.0
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 09:51:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sartura.hr; s=sartura;
+        d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=aqKbKXfN/Kl/YBsSZhr+kY7w2JlUTQv8fAKnX9kUxlA=;
-        b=b/3iL1f/roPLiVYau8lWmUdsgyXVhz1ZRPy+8G4hoaTQqtW0h3EaZfmoc8Ow6q9V5E
-         UrSK87SpMViwfhalfKsSp+zq/9c+Ds8iNA+PM6C/VLk3LcOyeL0IlGdGuN7U3FfTU6c1
-         2He8bVTOAiS8kWDcL5qvtNukfsDHjW9rw2rIqE50lPs5obS3zaJ+fh169ccLwOH57fr0
-         9IISk/LnemBWAr+/2QEILkPbS17ZNpgr/gAnnKMBLIZJmqzTExI/1M4JLZdHlDIB/qs3
-         5bu65dVHMfjE79yli20iTrN2UkUhdwFP/xewnnHQO2HhxHhjaasXx0WCdM+yhlvR1yF7
-         0zrA==
+        bh=n5QQmhQYlJu0g2umyiifZ4v1v3v8ZYJYFgjE0g6FoAY=;
+        b=rUbLXeIFiV1fE+KkSF+NNFtUDmdRlf+e2dnUwLxx3HRGbCsN6iZ9G+KTZ+fWGHDib+
+         tpt3mDHxng4PdFQKfDMDyiJmePvhRPYubZorRkJ76enaucZM5gvrS2R3p53djwQ79O84
+         XaUvG1j5lAfHMzkAp57pTZ6T4TT1VavyCWBCrHyq+/ociUS3v2v24EDVfd+sEBjM8jQz
+         sEXfAE9zuLNuhCYgYKzNj6c+n5KsxBLtys1A6scVOombAuFDmqpQWAoB6W0VWEPABGHy
+         Yh9DEoZcMLDJwrSgVm6Ev+2T7LkHFGeHTsrSvVK8WXiI5h0cWPxcllpkRlestVEZzofg
+         AG9g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=aqKbKXfN/Kl/YBsSZhr+kY7w2JlUTQv8fAKnX9kUxlA=;
-        b=g51f0qgLnekeqYBppc84zLk7zKEER9rzrBg95o1VZ+TbbSBvriAPwXb/pqbDFigt1G
-         ICwz0dRzxQMroxxEk2DxdEf9yCTX8FhvSaTh2EtB14omy6bDspJj8aa+M86meLxao5PK
-         MRubSMRsEFjPEnfPf7W/XRlDwwHFZrInSgN8/pHp6e4iO/Pv1IND16y0xPvDBT6ncCRH
-         Tdet4DT9nTIyzQn2H2FLO4x07peBamW7v9/5h0Pf8ihoJMVf7frvyVgSlhi4tyCqj1Cd
-         +BPIEVCkPQyqrrZstUcncsEOKivpJk9zRNXGxK/o2U+/H1D04XJVaLMKOymJhQlEQU1W
-         sNJQ==
-X-Gm-Message-State: ACrzQf2pI/TTdPok8SnQHzfQNH6fpD8uV7OY7+0cGjxkt9Q/bl5cSwKF
-        iPVae2bUYeW9rfL+oX8lp4YWQonh+45fvQyfp6lqfQ==
-X-Google-Smtp-Source: AMsMyM5zpsMoVDTMaHJllLSmylVIhwIeZd51qqJEfE7RifMDbeUGSm3zFSFKMppSGCyECqWLItWme2sq81z8jYgzrS4=
-X-Received: by 2002:a17:90b:4c8c:b0:214:9a:1fd0 with SMTP id
- my12-20020a17090b4c8c00b00214009a1fd0mr22996063pjb.219.1667580657660; Fri, 04
- Nov 2022 09:50:57 -0700 (PDT)
+        bh=n5QQmhQYlJu0g2umyiifZ4v1v3v8ZYJYFgjE0g6FoAY=;
+        b=poP44pTIygTZZlTqF2jjWPQRfm0EeKseYaIW9gEbHIoI+OdEkqOuRu8TUsuPbh1IsT
+         YbHdBPwGDLpzJZgYjeVAk+4UaL6firFmNwrC/DTeNi67sUlkeAFN76wPGxC+Kznd6v8t
+         wUaPO7DTwtGkmHqzRkOltPPSTG5AJMjMgpbM+tjmjR6umZ7Ft3ZEpmaNqkGxI4lUzV7k
+         UNGviVFNXkPJjMd6DLfBdM4olbOaqkWlBnTGMSDdFfh5cCM/URzMWzoyMwZkTADMM+HP
+         1amXhAzbZDw3khMIwllNDd3TgO6BMBAha1yQ+6PjQ9rgRr2Kx/R+77H/ddn7ng85Srvd
+         91yQ==
+X-Gm-Message-State: ACrzQf3rAPLUAgi5bqIgSIZTLQrCQNUknPeKoKsxxXZjbvo+apS/oYcF
+        Cj9BuFi09PwgPVa1AJlJ9hpXOkvqJNlCpTv5IbV/I9WzRPc=
+X-Google-Smtp-Source: AMsMyM4MEEygxd1XMsEwfrtmGiBglppHD5QjOlUnlWY6ACQHuoCoSbvgD8iql9iMzp+BrErm6vjZ23Z2HoiGs7aXJwU=
+X-Received: by 2002:a1c:f214:0:b0:3be:4e7c:1717 with SMTP id
+ s20-20020a1cf214000000b003be4e7c1717mr24943418wmc.171.1667580661874; Fri, 04
+ Nov 2022 09:51:01 -0700 (PDT)
 MIME-Version: 1.0
-References: <20221104142746.350468-1-maxime.chevallier@bootlin.com>
- <20221104142746.350468-6-maxime.chevallier@bootlin.com> <CA+HBbNHTmpPJqzja11OqS9J-37vdDiDLubrimke73x+oQKuoJA@mail.gmail.com>
- <20221104164533.32qelsphhcmnm2gi@skbuf>
-In-Reply-To: <20221104164533.32qelsphhcmnm2gi@skbuf>
-From:   Robert Marko <robert.marko@sartura.hr>
-Date:   Fri, 4 Nov 2022 17:50:46 +0100
-Message-ID: <CA+HBbNGZ5WsJFuz69CLrr=-vLaev97__NRjDwDRSMN0gJvi=uw@mail.gmail.com>
-Subject: Re: [PATCH net-next v7 5/5] ARM: dts: qcom: ipq4019: Add description
- for the IPQESS Ethernet controller
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc:     Maxime Chevallier <maxime.chevallier@bootlin.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "thomas.petazzoni@bootlin.com" <thomas.petazzoni@bootlin.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        Luka Perkov <luka.perkov@sartura.hr>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+References: <20210913233435.24585-1-pcc@google.com> <CAMn1gO6zzSWJktCeH9Tg=eqpTR5innBOgqVOeDvBV0hcDi-uog@mail.gmail.com>
+In-Reply-To: <CAMn1gO6zzSWJktCeH9Tg=eqpTR5innBOgqVOeDvBV0hcDi-uog@mail.gmail.com>
+From:   Peter Collingbourne <pcc@google.com>
+Date:   Fri, 4 Nov 2022 09:50:50 -0700
+Message-ID: <CAMn1gO5GVVrbMp_s0FPBwQWo0vEw9JpGUoLtBg5dWCVkEtquYw@mail.gmail.com>
+Subject: Re: [PATCH] get_maintainer.pl: support running from non-top-level dir
+To:     Joe Perches <joe@perches.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 4, 2022 at 5:45 PM Vladimir Oltean <vladimir.oltean@nxp.com> wrote:
+On Wed, Feb 23, 2022 at 2:31 PM Peter Collingbourne <pcc@google.com> wrote:
 >
-> On Fri, Nov 04, 2022 at 05:42:30PM +0100, Robert Marko wrote:
-> > > +                       phy-mode = "internal";
-> > > +                       status = "disabled";
+> On Mon, Sep 13, 2021 at 4:34 PM Peter Collingbourne <pcc@google.com> wrote:
 > >
-> > The fixed-link should be defined here AFAIK, otherwise it will fail probing with
-> > just internal PHY mode.
+> > My workflow usually involves running scripts from a subdirectory of the
+> > kernel source tree. This fails with get_maintainer.pl because it assumes
+> > that it runs from the top level. Fix this assumption by setting $lk_path
+> > appropriately based on a check of $0 similar to what is in checkpatch.pl.
+> >
+> > This also requires fixing the VCS available checks to also check $lk_path.
 >
-> It wouldn't fail to probe because it has status = "disabled" by default,
-> and who enables that would also provide the fixed-link presumably.
-> But if the speed of the pseudo-MAC that goes to the switch is not board
-> specific, indeed the fixed-link belongs to the SoC dtsi.
+> Ping.
 
-Yes, its directly connected to the switch CPU port and its a part of the SoC,
-so it should be defined in the SoC DTSI as it cannot really be changed on
-boards.
+Ping^2.
 
-Regards,
-Robert
--- 
-Robert Marko
-Staff Embedded Linux Engineer
-Sartura Ltd.
-Lendavska ulica 16a
-10000 Zagreb, Croatia
-Email: robert.marko@sartura.hr
-Web: www.sartura.hr
+Peter
