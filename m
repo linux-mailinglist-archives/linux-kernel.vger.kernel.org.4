@@ -2,64 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0AB7618EE1
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 04:25:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC115618EE3
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 04:25:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231511AbiKDDZ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 23:25:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59192 "EHLO
+        id S231534AbiKDDZx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 23:25:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231234AbiKDDYq (ORCPT
+        with ESMTP id S229823AbiKDDZO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 23:24:46 -0400
-Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B37927FF4
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 20:21:15 -0700 (PDT)
-Received: by mail-qk1-x732.google.com with SMTP id v8so2389840qkg.12
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 20:21:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=qR+9PV1W56hl2vc+Dfe+aRwSNmJzZrOxDcC/ue9b5Y0=;
-        b=lmzgjtihIMIiLluOFHNc570O556umHqo+3geJZKZIE+DMYc+BUrFT3YFo6ulZXBzMz
-         BMef6f/yERPzUtq/ilj1uXCKkZ67JHtyNjB2EIGOABcTACziAPYWyMlWgTuBpgBWMbaG
-         3Qz4finm+aPmY5pVrIvvIYAbloeEZlKeLJuJfpjjzDT8dONSlt//ipIqJniDb2GDX8a4
-         F4xNOuhWd5kvQ7Qcwq/fE8sONK9p16f82k+T2mdMDb4Jqm6vdUuz16i5QYzl6oem6Mid
-         j1Aq3CGk+ijOH5DwKfFMHBa7iyk8wfD4nsMdPZqIso/x+8cPAUXvEmNvFZZZ6YUWZWR1
-         JSFg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qR+9PV1W56hl2vc+Dfe+aRwSNmJzZrOxDcC/ue9b5Y0=;
-        b=I/Bf4WVlxIx4IgwDQsoni2uhI8FlHKoOjoB5MOTiNBtB6Kl5B/5N0URCcBp2z/VEr5
-         c81vrz+6vWespj/UcifkF86DV1PY4upgNZjbfKXaWLu9lETCb9Q9ETC6xbavC4XMqLx1
-         JZUlqswAukBQjAaa6OCVYzdsNEq2VTfsHLxgYG2QLbslQtjYfdhaPf8j4/5ZO3YNRvpI
-         Osd58B4Krbrg1hLjWn6RrQzDKOYR1v3gkKWXalnER1wTnfSwoi8yxN7UrckcZBDnBzs5
-         wiXLDG9hPGxx5DV+clCigzAXhbReSPW9MLpf/yOHwBkRre0sS5Z+wEsC2siOPl0qXBA5
-         +Xgw==
-X-Gm-Message-State: ACrzQf2dituQzo80uJuo75vabS6Ht9X1ieIIqIrLUBBkwfpIUq7QDo7l
-        +R+0QhgQ26c/FsWjOYy+AMoCV4a4fl1xFisxtGN20QKCH8A=
-X-Google-Smtp-Source: AMsMyM4gqCXx4VnDU0H8GOp2a966UpJKWz5rHplEQhfEVKZubokBZWn66KUwuNQ2Lo8Zu0FWNCCdTkenEJMkCqzCO7s=
-X-Received: by 2002:a05:620a:1009:b0:6fa:1245:ce4 with SMTP id
- z9-20020a05620a100900b006fa12450ce4mr25138714qkj.483.1667532074052; Thu, 03
- Nov 2022 20:21:14 -0700 (PDT)
+        Thu, 3 Nov 2022 23:25:14 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73F72B2F;
+        Thu,  3 Nov 2022 20:22:54 -0700 (PDT)
+Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4N3Qt02QtTzHvZ7;
+        Fri,  4 Nov 2022 11:22:32 +0800 (CST)
+Received: from kwepemm600005.china.huawei.com (7.193.23.191) by
+ dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Fri, 4 Nov 2022 11:22:52 +0800
+Received: from [10.67.103.158] (10.67.103.158) by
+ kwepemm600005.china.huawei.com (7.193.23.191) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Fri, 4 Nov 2022 11:22:51 +0800
+Subject: Re: [PATCH v2 1/2] hisi_acc_vfio_pci: Add debugfs to migration driver
+To:     Alex Williamson <alex.williamson@redhat.com>
+CC:     <jgg@nvidia.com>, <shameerali.kolothum.thodi@huawei.com>,
+        <john.garry@huawei.com>, <cohuck@redhat.com>,
+        <linux-kernel@vger.kernel.org>, <linuxarm@openeuler.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>
+References: <20221019081033.3169-1-liulongfang@huawei.com>
+ <20221019081033.3169-2-liulongfang@huawei.com>
+ <20221103142113.73ceddc9.alex.williamson@redhat.com>
+From:   liulongfang <liulongfang@huawei.com>
+Message-ID: <def63749-6005-8a67-8858-c5b0ff4f633d@huawei.com>
+Date:   Fri, 4 Nov 2022 11:22:51 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-From:   Dave Airlie <airlied@gmail.com>
-Date:   Fri, 4 Nov 2022 13:21:02 +1000
-Message-ID: <CAPM=9ty0XRutgBy8fg13q-h-jm3uKQ+x1XyoT_6UcT5i+5uN9A@mail.gmail.com>
-Subject: [git pull] drm fixes for 6.1-rc4
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>
-Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+In-Reply-To: <20221103142113.73ceddc9.alex.williamson@redhat.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.103.158]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemm600005.china.huawei.com (7.193.23.191)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,241 +57,565 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On 2022/11/4 4:21, Alex Williamson wrote:
+> [Cc +kvm list]
+> 
+> On Wed, 19 Oct 2022 16:10:32 +0800
+> Longfang Liu <liulongfang@huawei.com> wrote:
+> 
+>> There are multiple devices, software and operational steps involved
+>> in the process of live migration. An error occurred on any node may
+>> cause the live migration operation to fail.
+>> This complex process makes it very difficult to locate and analyze
+>> the cause when the function fails.
+>>
+>> In order to quickly locate the cause of the problem when the
+>> live migration fails, I added a set of debugfs to the accelerator
+>> live migration driver.
+>>
+>>  +-----------------------------------+
+>>  |                                   |
+>>  |                QEMU               |
+>>  |                                   |
+>>  +---+--^--------------------+--^----+
+>>      |  |                    |  |
+>>      |  |                    |  |
+>>  +---v--+----+           +---v--+----+
+>>  |           |           |           |
+>>  |   src VF  |           |  dest VF  |
+>>  |           |           |           |
+>>  +---+--^----+           +---+--^----+
+>>      |  |                    |  |
+>>      |  |                    |  |
+>>  +---v--+----+           +---v--+----+
+>>  |  Debugfs  |           |  Debugfs  |
+>>  +-----+-----+           +-----+-----+
+>>  |state|debug|           |state|debug|
+>>  +-----+-----+           +-----+-----+
+>>
+>> This set of debugfs will create two files for each VF device:
+>> a state file and a debug file.
+>>
+>> The migration status of the current VF device can be obtained by
+>> reading the status file.
+>>
+>> The live migration function of the current device can be tested by
+>> operating the debug file, and the functional status of the equipment
+>> and software at each stage can be tested step by step without
+>> performing the complete live migration function. And after the live
+>> migration is performed, the migration device data of the live migration
+>> can be obtained through the debug file.
+> 
+> This is proposed as an hisi_vfio_acc specific debugfs interface, but
+> common code could certainly implement much of this as well.  Should we
+> have generic support for debugfs?
+> 
 
-This is the weekly fixes for rc4. Misc fixes across rockchip, imx,
-amdgpu and i915. The biggest change is for amdkfd where the trap
-handler needs an updated fw from a header which makes it a bit larger.
-I hadn't noticed this particular file before so I'm going to figure
-out what the magic is for, but the fix should be fine for now.
+OK, I'd love to extend this part of the debugfs functionality into the
+vfio framework and make it a common debugfs functionality for all
+device drivers that use live migration.
 
-Dave.
+> Some further comments and concerns below.  Thanks,
+>
+> Alex
+> 
+>  
+>> Signed-off-by: Longfang Liu <liulongfang@huawei.com>
+>> ---
+>>  .../vfio/pci/hisilicon/hisi_acc_vfio_pci.c    | 314 +++++++++++++++++-
+>>  .../vfio/pci/hisilicon/hisi_acc_vfio_pci.h    |  14 +
+>>  2 files changed, 326 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c b/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c
+>> index 39eeca18a0f7..eedf8fdf4403 100644
+>> --- a/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c
+>> +++ b/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c
+>> @@ -3,6 +3,7 @@
+>>   * Copyright (c) 2021, HiSilicon Ltd.
+>>   */
+>>  
+>> +#include <linux/anon_inodes.h>
+>>  #include <linux/device.h>
+>>  #include <linux/eventfd.h>
+>>  #include <linux/file.h>
+>> @@ -16,6 +17,9 @@
+>>  
+>>  #include "hisi_acc_vfio_pci.h"
+>>  
+>> +static struct dentry *hisi_acc_debugfs_root;
+>> +static atomic_t hisi_acc_root_ref;
+> 
+> This is unused, causing a compile failure:
+> 
+> drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c:21:17: error: ‘hisi_acc_root_ref’ defined but not used [-Werror=unused-variable]
+>    21 | static atomic_t hisi_acc_root_ref;
+>       |                 ^~~~~~~~~~~~~~~~~
+> cc1: all warnings being treated as errors
+> 
 
-drm-fixes-2022-11-04-1:
-drm fixes for 6.1-rc4
+OK! I will fix this in the next version.
 
-amdgpu:
-- DCN 3.1.4 fixes
-- DCN 3.2.x fixes
-- GC 11.x fixes
-- Virtual display fix
-- Fail suspend if resources can't be evicted
-- SR-IOV fix
-- Display PSR fix
+> 
+>> +
+>>  /* Return 0 on VM acc device ready, -ETIMEDOUT hardware timeout */
+>>  static int qm_wait_dev_not_ready(struct hisi_qm *qm)
+>>  {
+>> @@ -609,6 +613,18 @@ hisi_acc_check_int_state(struct hisi_acc_vf_core_device *hisi_acc_vdev)
+>>  	}
+>>  }
+>>  
+>> +static void hisi_acc_vf_migf_save(struct hisi_acc_vf_migration_file *src_migf,
+>> +	struct hisi_acc_vf_migration_file *dst_migf)
+>> +{
+>> +	if (!dst_migf)
+>> +		return;
+>> +
+>> +	dst_migf->disabled = false;
+>> +	dst_migf->total_length = src_migf->total_length;
+>> +	memcpy(&dst_migf->vf_data, &src_migf->vf_data,
+>> +		    sizeof(struct acc_vf_data));
+>> +}
+>> +
+>>  static void hisi_acc_vf_disable_fd(struct hisi_acc_vf_migration_file *migf)
+>>  {
+>>  	mutex_lock(&migf->lock);
+>> @@ -621,12 +637,16 @@ static void hisi_acc_vf_disable_fd(struct hisi_acc_vf_migration_file *migf)
+>>  static void hisi_acc_vf_disable_fds(struct hisi_acc_vf_core_device *hisi_acc_vdev)
+>>  {
+>>  	if (hisi_acc_vdev->resuming_migf) {
+>> +		hisi_acc_vf_migf_save(hisi_acc_vdev->resuming_migf,
+>> +						hisi_acc_vdev->debug_migf);
+>>  		hisi_acc_vf_disable_fd(hisi_acc_vdev->resuming_migf);
+>>  		fput(hisi_acc_vdev->resuming_migf->filp);
+>>  		hisi_acc_vdev->resuming_migf = NULL;
+>>  	}
+>>  
+>>  	if (hisi_acc_vdev->saving_migf) {
+>> +		hisi_acc_vf_migf_save(hisi_acc_vdev->saving_migf,
+>> +						hisi_acc_vdev->debug_migf);
+>>  		hisi_acc_vf_disable_fd(hisi_acc_vdev->saving_migf);
+>>  		fput(hisi_acc_vdev->saving_migf->filp);
+>>  		hisi_acc_vdev->saving_migf = NULL;
+>> @@ -1176,6 +1196,269 @@ static long hisi_acc_vfio_pci_ioctl(struct vfio_device *core_vdev, unsigned int
+>>  	return vfio_pci_core_ioctl(core_vdev, cmd, arg);
+>>  }
+>>  
+>> +static int hisi_acc_vf_debug_create(struct hisi_acc_vf_core_device *hisi_acc_vdev)
+>> +{
+>> +	struct hisi_acc_vf_migration_file *migf;
+>> +
+>> +	migf = kzalloc(sizeof(*migf), GFP_KERNEL);
+>> +	if (!migf)
+>> +		return -ENOMEM;
+>> +
+>> +	migf->disabled = false;
+>> +	hisi_acc_vdev->debug_migf = migf;
+>> +	mutex_init(&migf->lock);
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static void hisi_acc_vf_debug_release(struct hisi_acc_vf_migration_file *migf)
+>> +{
+>> +	migf->disabled = true;
+>> +	migf->total_length = 0;
+>> +	mutex_destroy(&migf->lock);
+>> +	kfree(migf);
+>> +}
+>> +
+>> +static int hisi_acc_vf_debug_test(struct hisi_acc_vf_core_device *hisi_acc_vdev)
+>> +{
+>> +	struct device *dev = &hisi_acc_vdev->vf_dev->dev;
+>> +	struct hisi_qm *vf_qm = &hisi_acc_vdev->vf_qm;
+>> +	u64 data;
+>> +	int ret;
+>> +
+>> +	data = readl(vf_qm->io_base + QM_MB_CMD_SEND_BASE);
+>> +	dev_info(dev, "debug mailbox val: 0x%llx\n", data);
+>> +
+>> +	ret = qm_wait_dev_not_ready(vf_qm);
+>> +	if (ret)
+>> +		dev_err(dev, "VF device not ready!\n");
+>> +
+>> +	return ret;
+>> +}
+>> +
+>> +static ssize_t hisi_acc_vf_debug_read(struct file *filp, char __user *buffer,
+>> +			   size_t count, loff_t *pos)
+>> +{
+>> +	char buf[VFIO_DEV_DBG_LEN];
+>> +	int len;
+>> +
+>> +	len = scnprintf(buf, VFIO_DEV_DBG_LEN, "%s\n",
+>> +			"echo 0: test vf state save\n"
+>> +			"echo 1: test vf state resume\n"
+>> +			"echo 2: test vf send mailbox\n"
+>> +			"echo 3: dump vf config data\n"
+>> +			"echo 4: dump vf migration state\n");
+> 
+> %d + enum names should be used here.  Does this match best practices
 
-amdkfd:
-- Fix possible NULL pointer deref
-- GC 11.x trap handler fix
+Yes, using "%d + enum names" will have better compatibility.
 
-i915:
-- Add locking around DKL PHY register accesses
-- Stop abusing swiotlb_max_segment
-- Filter out invalid outputs more sensibly
-- Setup DDC fully before output init
-- Simplify intel_panel_add_edid_alt_fixed_modes()
-- Grab mode_config.mutex during LVDS init to avoid WARNs
+> for debugfs?  Seems crude to assume 'echo' and 'cat' throughout, but
+> also reading from the file to learn commands in this way.
+> 
 
-rockchip:
-- fix probing issues
-- fix framebuffer without iommu
-- fix vop selection
-- fix NULL ptr access
+Yes, you can also learn these operation commands by reading from the file,
+here is to provide a convenient way to get the command description.
 
-imx:
-- Fix Kconfig.
-- fix mode_valid function
-The following changes since commit 30a0b95b1335e12efef89dd78518ed3e4a71a763=
-:
+>> +
+>> +	return simple_read_from_buffer(buffer, count, pos, buf, len);
+>> +}
+>> +
+>> +static void hisi_acc_vf_dev_data_dump(struct hisi_acc_vf_core_device *hisi_acc_vdev)
+>> +{
+>> +	size_t vf_data_sz = offsetofend(struct acc_vf_data, padding);
+>> +	struct device *dev = &hisi_acc_vdev->vf_dev->dev;
+>> +
+>> +	if (hisi_acc_vdev->debug_migf &&
+>> +	    hisi_acc_vdev->debug_migf->total_length) {
+>> +		print_hex_dump(KERN_INFO, "dev mig data:",
+>> +				DUMP_PREFIX_OFFSET, 16, 1,
+>> +				(u8 *)&hisi_acc_vdev->debug_migf->vf_data,
+>> +				vf_data_sz, false);
+>> +	} else {
+>> +		dev_info(dev, "device not migrated!\n");
+>> +	}
+>> +}
+> 
+> What are the security implications of an external party being able to
+> manipulate the device migration state and dump it to the console log?
+> It seems like a barrier to confidential computing support and we don't
+> even have this hidden behind a Kconfig option.
+> 
 
-  Linux 6.1-rc3 (2022-10-30 15:19:28 -0700)
+The data output here is only the current device-related status data,
+and security-related information such as data addresses will
+not be output.
 
-are available in the Git repository at:
+Of course, if we feel that the data of some devices involves
+security information, we can choose to remove it when dumping.
 
-  git://anongit.freedesktop.org/drm/drm tags/drm-fixes-2022-11-04-1
+> 
+>> +
+>> +static void hisi_acc_vf_dev_attr_show(struct hisi_acc_vf_core_device *hisi_acc_vdev)
+>> +{
+>> +	struct device *dev = &hisi_acc_vdev->vf_dev->dev;
+>> +
+>> +	if (hisi_acc_vdev->debug_migf &&
+>> +	    hisi_acc_vdev->debug_migf->total_length) {
+>> +		dev_info(dev, "acc device:\n"
+>> +			 "device  state: %d\n"
+>> +			 "device  ready: %u\n"
+>> +			 "data    valid: %d\n"
+>> +			 "data     size: %lu\n",
+>> +			 hisi_acc_vdev->mig_state,
+>> +			 hisi_acc_vdev->vf_qm_state,
+>> +			 hisi_acc_vdev->debug_migf->disabled,
+>> +			 hisi_acc_vdev->debug_migf->total_length);
+>> +	}  else {
+>> +		dev_info(dev, "device not migrated!\n");
+>> +	}
+>> +}
+>> +
+>> +static int hisi_acc_vf_debug_resume(struct hisi_acc_vf_core_device *hisi_acc_vdev)
+>> +{
+>> +	struct hisi_acc_vf_migration_file *migf = hisi_acc_vdev->debug_migf;
+>> +	struct device *dev = &hisi_acc_vdev->vf_dev->dev;
+>> +	int ret;
+>> +
+>> +	ret = vf_qm_state_save(hisi_acc_vdev, migf);
+>> +	if (ret) {
+>> +		dev_err(dev, "failed to save device data!\n");
+>> +		return -EINVAL;
+>> +	}
+>> +
+>> +	ret = vf_qm_check_match(hisi_acc_vdev, migf);
+>> +	if (ret) {
+>> +		dev_err(dev, "failed to match the VF!\n");
+>> +		return -EINVAL;
+>> +	}
+>> +
+>> +	ret = vf_qm_load_data(hisi_acc_vdev, migf);
+>> +	if (ret) {
+>> +		dev_err(dev, "failed to recover the VF!\n");
+>> +		return -EINVAL;
+>> +	}
+>> +
+>> +	vf_qm_fun_reset(&hisi_acc_vdev->vf_qm);
+>> +	dev_info(dev, "successful to resume device data!\n");
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static int hisi_acc_vf_debug_save(struct hisi_acc_vf_core_device *hisi_acc_vdev)
+>> +{
+>> +	struct hisi_acc_vf_migration_file *migf = hisi_acc_vdev->debug_migf;
+>> +	struct device *dev = &hisi_acc_vdev->vf_dev->dev;
+>> +	int ret;
+>> +
+>> +	ret = vf_qm_state_save(hisi_acc_vdev, migf);
+>> +	if (ret) {
+>> +		dev_err(dev, "failed to save device data!\n");
+>> +		return -EINVAL;
+>> +	}
+>> +	dev_info(dev, "successful to save device data!\n");
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static ssize_t hisi_acc_vf_debug_write(struct file *filp, const char __user *buffer,
+>> +			    size_t count, loff_t *pos)
+>> +{
+>> +	struct hisi_acc_vf_core_device *hisi_acc_vdev = filp->private_data;
+>> +	char tbuf[VFIO_DEV_DBG_LEN];
+>> +	unsigned long val;
+>> +	int len, ret;
+>> +
+>> +	if (*pos)
+>> +		return 0;
+>> +
+>> +	if (count >= VFIO_DEV_DBG_LEN)
+>> +		return -ENOSPC;
+>> +
+>> +	len = simple_write_to_buffer(tbuf, VFIO_DEV_DBG_LEN - 1,
+>> +					pos, buffer, count);
+>> +	if (len < 0 || len > VFIO_DEV_DBG_LEN - 1)
+>> +		return -EINVAL;
+>> +	tbuf[len] = '\0';
+>> +	if (kstrtoul(tbuf, 0, &val))
+>> +		return -EFAULT;
+>> +
+>> +	switch (val) {
+>> +	case STATE_SAVE:
+>> +		ret = hisi_acc_vf_debug_save(hisi_acc_vdev);
+>> +		if (ret)
+>> +			return ret;
+>> +		break;
+>> +	case STATE_RESUME:
+>> +		ret = hisi_acc_vf_debug_resume(hisi_acc_vdev);
+>> +		if (ret)
+>> +			return ret;
+>> +		break;
+>> +	case MB_TEST:
+>> +		ret = hisi_acc_vf_debug_test(hisi_acc_vdev);
+>> +		if (ret)
+>> +			return -EINVAL;
+>> +		break;
+>> +	case MIG_DATA_DUMP:
+>> +		hisi_acc_vf_dev_data_dump(hisi_acc_vdev);
+>> +		break;
+>> +	case MIG_DEV_SHOW:
+>> +		hisi_acc_vf_dev_attr_show(hisi_acc_vdev);
+>> +		break;
+>> +	default:
+>> +		return -EINVAL;
+>> +	}
+>> +
+>> +	return count;
+>> +}
+>> +
+>> +static const struct file_operations hisi_acc_vf_debug_fops = {
+>> +	.owner = THIS_MODULE,
+>> +	.open = simple_open,
+>> +	.read = hisi_acc_vf_debug_read,
+>> +	.write = hisi_acc_vf_debug_write,
+>> +};
+>> +
+>> +static ssize_t hisi_acc_vf_state_read(struct file *filp, char __user *buffer,
+>> +			   size_t count, loff_t *pos)
+>> +{
+>> +	struct hisi_acc_vf_core_device *hisi_acc_vdev = filp->private_data;
+>> +	char buf[VFIO_DEV_DBG_LEN];
+>> +	u32 state;
+>> +	int len;
+>> +
+>> +	state = hisi_acc_vdev->mig_state;
+>> +	switch (state) {
+>> +	case VFIO_DEVICE_STATE_RUNNING:
+>> +		len = scnprintf(buf, VFIO_DEV_DBG_LEN, "%s\n",
+>> +			"RUNNING\n");
+>> +		break;
+>> +	case VFIO_DEVICE_STATE_STOP_COPY:
+>> +		len = scnprintf(buf, VFIO_DEV_DBG_LEN, "%s\n",
+>> +			"STOP and COPYING\n");
+>> +		break;
+>> +	case VFIO_DEVICE_STATE_STOP:
+>> +		len = scnprintf(buf, VFIO_DEV_DBG_LEN, "%s\n",
+>> +			"STOP\n");
+>> +		break;
+>> +	case VFIO_DEVICE_STATE_RESUMING:
+>> +		len = scnprintf(buf, VFIO_DEV_DBG_LEN, "%s\n",
+>> +			"RESUMING\n");
+>> +		break;
+>> +	default:
+>> +		len = scnprintf(buf, VFIO_DEV_DBG_LEN, "%s\n",
+>> +			"Error\n");
+>> +	}
+> 
+> This looks prone to bit-rot, seems we should specifically test for
+> ERROR and default should probably print the state value. 
 
-for you to fetch changes up to 6295f1d8b4503ad8a18519b781dd2d1fe5e88c52:
+Well, here we only focus on the status of the currently device used,
+other states are handled as error states, and outputting its
+state values ​​in the error state can indeed obtain information.
 
-  Merge tag 'drm-intel-fixes-2022-11-03' of
-git://anongit.freedesktop.org/drm/drm-intel into drm-fixes (2022-11-04
-09:30:18 +1000)
+ Also seems
+> better if the printed value were to match the enum, ie. STOP_COPY
+> rather than "STOP and COPYING".
+> 
 
-----------------------------------------------------------------
-drm fixes for 6.1-rc4
+OK, this will be modified in the next version.
 
-amdgpu:
-- DCN 3.1.4 fixes
-- DCN 3.2.x fixes
-- GC 11.x fixes
-- Virtual display fix
-- Fail suspend if resources can't be evicted
-- SR-IOV fix
-- Display PSR fix
+>> +
+>> +	return simple_read_from_buffer(buffer, count, pos, buf, len);
+>> +}
+>> +
+>> +static const struct file_operations hisi_acc_vf_state_fops = {
+>> +	.owner = THIS_MODULE,
+>> +	.open = simple_open,
+>> +	.read = hisi_acc_vf_state_read,
+>> +};
+>> +
+>> +static void hisi_acc_vf_debugfs_init(struct hisi_acc_vf_core_device *hisi_acc_vdev)
+>> +{
+>> +	struct pci_dev *vf_pdev = hisi_acc_vdev->vf_dev;
+>> +	struct device *dev = &vf_pdev->dev;
+>> +	int ret;
+>> +
+>> +	hisi_acc_vdev->debug_root = debugfs_create_dir(dev_name(dev), hisi_acc_debugfs_root);
+>> +	debugfs_create_file("state", 0444, hisi_acc_vdev->debug_root,
+>> +			    hisi_acc_vdev, &hisi_acc_vf_state_fops);
+>> +
+>> +	ret = hisi_acc_vf_debug_create(hisi_acc_vdev);
+>> +	if (ret) {
+>> +		dev_err(dev, "failed to alloc migration debug node\n");
+>> +		return;
+>> +	}
+>> +	debugfs_create_file("debug", 0644, hisi_acc_vdev->debug_root,
+>> +			    hisi_acc_vdev, &hisi_acc_vf_debug_fops);
+>> +}
+>> +
+>> +static void hisi_acc_vf_debugfs_exit(struct hisi_acc_vf_core_device *hisi_acc_vdev)
+>> +{
+>> +	if (hisi_acc_vdev->debug_migf)
+>> +		hisi_acc_vf_debug_release(hisi_acc_vdev->debug_migf);
+>> +
+>> +	debugfs_remove_recursive(hisi_acc_vdev->debug_root);
+>> +}
+>> +
+>>  static int hisi_acc_vfio_pci_open_device(struct vfio_device *core_vdev)
+>>  {
+>>  	struct hisi_acc_vf_core_device *hisi_acc_vdev = container_of(core_vdev,
+>> @@ -1268,7 +1551,7 @@ static int hisi_acc_vfio_pci_probe(struct pci_dev *pdev, const struct pci_device
+>>  	struct hisi_acc_vf_core_device *hisi_acc_vdev;
+>>  	const struct vfio_device_ops *ops = &hisi_acc_vfio_pci_ops;
+>>  	struct hisi_qm *pf_qm;
+>> -	int vf_id;
+>> +	int vf_id = -1;
+>>  	int ret;
+>>  
+>>  	pf_qm = hisi_acc_get_pf_qm(pdev);
+>> @@ -1285,6 +1568,9 @@ static int hisi_acc_vfio_pci_probe(struct pci_dev *pdev, const struct pci_device
+>>  	if (IS_ERR(hisi_acc_vdev))
+>>  		return PTR_ERR(hisi_acc_vdev);
+>>  
+>> +	if (vf_id >= 0)
+> 
+> Perhaps test (ops == &hisi_acc_vfio_pci_migrn_ops) to make this more
+> obviously tied to migration support.
+> 
 
-amdkfd:
-- Fix possible NULL pointer deref
-- GC 11.x trap handler fix
+OK, this will be modified in the next version.
 
-i915:
-- Add locking around DKL PHY register accesses
-- Stop abusing swiotlb_max_segment
-- Filter out invalid outputs more sensibly
-- Setup DDC fully before output init
-- Simplify intel_panel_add_edid_alt_fixed_modes()
-- Grab mode_config.mutex during LVDS init to avoid WARNs
-
-rockchip:
-- fix probing issues
-- fix framebuffer without iommu
-- fix vop selection
-- fix NULL ptr access
-
-imx:
-- Fix Kconfig.
-- fix mode_valid function
-
-----------------------------------------------------------------
-Alvin Lee (1):
-      drm/amd/display: Enable timing sync on DCN32
-
-Aurelien Jarno (1):
-      drm/rockchip: dw_hdmi: filter regulator -EPROBE_DEFER error messages
-
-Brian Norris (2):
-      drm/rockchip: dsi: Clean up 'usage_mode' when failing to attach
-      drm/rockchip: dsi: Force synchronous probe
-
-Dave Airlie (3):
-      Merge tag 'drm-misc-fixes-2022-11-02-1' of
-git://anongit.freedesktop.org/drm/drm-misc into drm-fixes
-      Merge tag 'amd-drm-fixes-6.1-2022-11-02' of
-https://gitlab.freedesktop.org/agd5f/linux into drm-fixes
-      Merge tag 'drm-intel-fixes-2022-11-03' of
-git://anongit.freedesktop.org/drm/drm-intel into drm-fixes
-
-Dillon Varone (2):
-      drm/amd/display: Update latencies on DCN321
-      drm/amd/display: Set memclk levels to be at least 1 for dcn32
-
-Fangzhi Zuo (1):
-      drm/amd/display: Ignore Cable ID Feature
-
-Gavin Wan (1):
-      drm/amdgpu: Disable GPU reset on SRIOV before remove pci.
-
-George Shen (4):
-      drm/amd/display: Fix DCN32 DSC delay calculation
-      drm/amd/display: Use forced DSC bpp in DML
-      drm/amd/display: Round up DST_after_scaler to nearest int
-      drm/amd/display: Add DSC delay factor workaround
-
-Graham Sider (2):
-      drm/amdgpu: correct MES debugfs versions
-      drm/amdgpu: disable GFXOFF during compute for GFX11
-
-Hector Martin (1):
-      drm/format-helper: Only advertise supported formats for conversion
-
-Imre Deak (1):
-      drm/i915/tgl+: Add locking around DKL PHY register accesses
-
-Jay Cornwall (1):
-      drm/amdkfd: update GFX11 CWSR trap handler
-
-John Keeping (1):
-      drm/rockchip: fix fbdev on non-IOMMU devices
-
-Jun Lei (1):
-      drm/amd/display: Limit dcn32 to 1950Mhz display clock
-
-Leo Chen (1):
-      drm/amd/display: Update DSC capabilitie for DCN314
-
-Liu Ying (1):
-      drm/imx: Kconfig: Remove duplicated 'select DRM_KMS_HELPER' line
-
-Mario Limonciello (1):
-      drm/amd: Fail the suspend if resources can't be evicted
-
-Max Tseng (1):
-      drm/amd/display: cursor update command incomplete
-
-Michael Tretter (2):
-      drm/rockchip: vop2: fix null pointer in plane_atomic_disable
-      drm/rockchip: vop2: disable planes when disabling the crtc
-
-Nathan Huckleberry (1):
-      drm/imx: imx-tve: Fix return type of imx_tve_connector_mode_valid
-
-Nevenko Stupar (1):
-      drm/amd/display: Investigate tool reported FCLK P-state deviations
-
-Ondrej Jirman (1):
-      drm/rockchip: dsi: Fix VOP selection on SoCs that support it
-
-Robert Beckett (1):
-      drm/i915: stop abusing swiotlb_max_segment
-
-Ville Syrj=C3=A4l=C3=A4 (4):
-      drm/i915/sdvo: Filter out invalid outputs more sensibly
-      drm/i915/sdvo: Setup DDC fully before output init
-      drm/i915: Simplify intel_panel_add_edid_alt_fixed_modes()
-      drm/i915/sdvo: Grab mode_config.mutex during LVDS init to avoid WARNs
-
-Yang Li (1):
-      drm/amdkfd: Fix NULL pointer dereference in svm_migrate_to_ram()
-
-Yifan Zhang (1):
-      drm/amdgpu: set fb_modifiers_not_supported in vkms
-
- drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd.c         |   7 +
- drivers/gpu/drm/amd/amdgpu/amdgpu_device.c         |  15 +-
- drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c            |   3 +-
- drivers/gpu/drm/amd/amdgpu/amdgpu_kms.c            |  10 +-
- drivers/gpu/drm/amd/amdgpu/amdgpu_vkms.c           |   2 +
- drivers/gpu/drm/amd/amdkfd/cwsr_trap_handler.h     | 764 +++++++++++------=
-----
- .../gpu/drm/amd/amdkfd/cwsr_trap_handler_gfx10.asm |   6 +
- drivers/gpu/drm/amd/amdkfd/kfd_migrate.c           |   4 +-
- drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c  |   3 +
- .../amd/display/dc/clk_mgr/dcn32/dcn32_clk_mgr.c   |  11 +-
- drivers/gpu/drm/amd/display/dc/dc.h                |   1 +
- drivers/gpu/drm/amd/display/dc/dcn20/dcn20_hubp.c  |   4 +
- .../drm/amd/display/dc/dcn314/dcn314_resource.c    |   2 +-
- .../gpu/drm/amd/display/dc/dml/dcn20/dcn20_fpu.c   |   1 +
- .../gpu/drm/amd/display/dc/dml/dcn32/dcn32_fpu.c   |   4 +-
- .../amd/display/dc/dml/dcn32/display_mode_vba_32.c |  10 +-
- .../dc/dml/dcn32/display_mode_vba_util_32.c        |   7 +-
- .../dc/dml/dcn32/display_mode_vba_util_32.h        |   3 +-
- .../display/dc/dml/dcn32/display_rq_dlg_calc_32.c  |   4 +-
- .../gpu/drm/amd/display/dc/dml/dcn321/dcn321_fpu.c |  15 +-
- .../drm/amd/display/dc/dml/display_mode_structs.h  |   3 +
- .../gpu/drm/amd/display/dc/dml/display_mode_vba.c  |   2 +-
- drivers/gpu/drm/drm_format_helper.c                |  66 +-
- drivers/gpu/drm/i915/Makefile                      |   1 +
- drivers/gpu/drm/i915/display/intel_ddi.c           |  68 +-
- drivers/gpu/drm/i915/display/intel_display_core.h  |   8 +
- .../drm/i915/display/intel_display_power_well.c    |   7 +-
- drivers/gpu/drm/i915/display/intel_dkl_phy.c       | 109 +++
- drivers/gpu/drm/i915/display/intel_dkl_phy.h       |  24 +
- drivers/gpu/drm/i915/display/intel_dp.c            |   2 +-
- drivers/gpu/drm/i915/display/intel_dpll_mgr.c      |  59 +-
- drivers/gpu/drm/i915/display/intel_lvds.c          |   3 +-
- drivers/gpu/drm/i915/display/intel_panel.c         |   4 +-
- drivers/gpu/drm/i915/display/intel_panel.h         |   2 +-
- drivers/gpu/drm/i915/display/intel_sdvo.c          |  64 +-
- drivers/gpu/drm/i915/gem/i915_gem_internal.c       |  19 +-
- drivers/gpu/drm/i915/gem/i915_gem_shmem.c          |   2 +-
- drivers/gpu/drm/i915/gem/i915_gem_ttm.c            |   4 +-
- drivers/gpu/drm/i915/gem/i915_gem_userptr.c        |   2 +-
- drivers/gpu/drm/i915/i915_driver.c                 |   1 +
- drivers/gpu/drm/i915/i915_reg.h                    |   3 +
- drivers/gpu/drm/i915/i915_scatterlist.h            |  34 +-
- drivers/gpu/drm/imx/Kconfig                        |   1 -
- drivers/gpu/drm/imx/imx-tve.c                      |   5 +-
- drivers/gpu/drm/rockchip/dw-mipi-dsi-rockchip.c    |  26 +-
- drivers/gpu/drm/rockchip/dw_hdmi-rockchip.c        |   3 +-
- drivers/gpu/drm/rockchip/rockchip_drm_gem.c        |   5 +-
- drivers/gpu/drm/rockchip/rockchip_drm_vop2.c       |  10 +-
- 48 files changed, 824 insertions(+), 589 deletions(-)
- create mode 100644 drivers/gpu/drm/i915/display/intel_dkl_phy.c
- create mode 100644 drivers/gpu/drm/i915/display/intel_dkl_phy.h
+>> +		hisi_acc_vf_debugfs_init(hisi_acc_vdev);
+>> +
+>>  	dev_set_drvdata(&pdev->dev, &hisi_acc_vdev->core_device);
+>>  	ret = vfio_pci_core_register_device(&hisi_acc_vdev->core_device);
+>>  	if (ret)
+>> @@ -1300,6 +1586,7 @@ static void hisi_acc_vfio_pci_remove(struct pci_dev *pdev)
+>>  {
+>>  	struct hisi_acc_vf_core_device *hisi_acc_vdev = hisi_acc_drvdata(pdev);
+>>  
+>> +	hisi_acc_vf_debugfs_exit(hisi_acc_vdev);
+>>  	vfio_pci_core_unregister_device(&hisi_acc_vdev->core_device);
+>>  	vfio_put_device(&hisi_acc_vdev->core_device.vdev);
+>>  }
+>> @@ -1327,7 +1614,30 @@ static struct pci_driver hisi_acc_vfio_pci_driver = {
+>>  	.driver_managed_dma = true,
+>>  };
+>>  
+>> -module_pci_driver(hisi_acc_vfio_pci_driver);
+>> +static int __init hisi_acc_vfio_pci_init(void)
+>> +{
+>> +	int ret;
+>> +
+>> +	hisi_acc_debugfs_root = debugfs_create_dir("hisi_vfio_acc", NULL);
+>> +
+>> +	ret = pci_register_driver(&hisi_acc_vfio_pci_driver);
+>> +	if (ret < 0) {
+>> +		debugfs_remove_recursive(hisi_acc_debugfs_root);
+>> +		pr_err("failed to register pci driver.\n");
+>> +		return ret;
+>> +	}
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static void __exit hisi_acc_vfio_pci_exit(void)
+>> +{
+>> +	pci_unregister_driver(&hisi_acc_vfio_pci_driver);
+>> +	debugfs_remove_recursive(hisi_acc_debugfs_root);
+>> +}
+>> +
+>> +module_init(hisi_acc_vfio_pci_init);
+>> +module_exit(hisi_acc_vfio_pci_exit);
+>>  
+>>  MODULE_LICENSE("GPL v2");
+>>  MODULE_AUTHOR("Liu Longfang <liulongfang@huawei.com>");
+>> diff --git a/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.h b/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.h
+>> index 67343325b320..ae2a686c2e4d 100644
+>> --- a/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.h
+>> +++ b/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.h
+>> @@ -4,8 +4,11 @@
+>>  #ifndef HISI_ACC_VFIO_PCI_H
+>>  #define HISI_ACC_VFIO_PCI_H
+>>  
+>> +#include <linux/debugfs.h>
+>>  #include <linux/hisi_acc_qm.h>
+>>  
+>> +#define VFIO_DEV_DBG_LEN		256
+>> +
+>>  #define MB_POLL_PERIOD_US		10
+>>  #define MB_POLL_TIMEOUT_US		1000
+>>  #define QM_CACHE_WB_START		0x204
+>> @@ -49,6 +52,14 @@
+>>  #define QM_EQC_DW0		0X8000
+>>  #define QM_AEQC_DW0		0X8020
+>>  
+>> +enum mig_debug_cmd {
+>> +	STATE_SAVE,
+>> +	STATE_RESUME,
+>> +	MB_TEST,
+>> +	MIG_DATA_DUMP,
+>> +	MIG_DEV_SHOW,
+>> +};
+>> +
+>>  struct acc_vf_data {
+>>  #define QM_MATCH_SIZE offsetofend(struct acc_vf_data, qm_rsv_state)
+>>  	/* QM match information */
+>> @@ -111,5 +122,8 @@ struct hisi_acc_vf_core_device {
+>>  	spinlock_t reset_lock;
+>>  	struct hisi_acc_vf_migration_file *resuming_migf;
+>>  	struct hisi_acc_vf_migration_file *saving_migf;
+>> +	/* For debugfs */
+>> +	struct dentry *debug_root;
+>> +	struct hisi_acc_vf_migration_file *debug_migf;
+>>  };
+>>  #endif /* HISI_ACC_VFIO_PCI_H */
+> 
+> .
+> 
+Thanks,
+Longfang
