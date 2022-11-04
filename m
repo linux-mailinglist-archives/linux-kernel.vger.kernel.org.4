@@ -2,141 +2,438 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EACAE619CB1
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 17:11:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE9FE619CC7
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 17:14:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232382AbiKDQLt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 12:11:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42720 "EHLO
+        id S231626AbiKDQOq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 12:14:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232343AbiKDQLk (ORCPT
+        with ESMTP id S230145AbiKDQOn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 12:11:40 -0400
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95387286D3
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 09:11:39 -0700 (PDT)
-Received: by mail-io1-f72.google.com with SMTP id r197-20020a6b8fce000000b006c3fc33424dso3259251iod.5
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 09:11:39 -0700 (PDT)
+        Fri, 4 Nov 2022 12:14:43 -0400
+Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F80CCFB
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 09:14:42 -0700 (PDT)
+Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-3701a0681daso47949017b3.4
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 09:14:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+5v+p27CQOVhNMAHqQDcwxjRC8M+4widvhWkHJPKXMs=;
+        b=AXRWCewjuXhedfBrKWvvPqSzfOVriX6QCVwtDUll2wKd2I2uZnd/2SlvN1stVFRp/R
+         lVm+bftjR6+F62WJCVtTXblVHk0ZW056KDMSrBkbnhZoMvfEAoTbjdBCs+G1zYv3kLql
+         D3NA9rYHVE3IrVKb3JS5x2m/xNq0HqMrHZ+pg1vzSBjssACNuF4oHBSVjjQwSBfLgb6C
+         tNxq4WnbddlrDqnz9nptTZMMADb2XzYG4xLsoAW8nsRRycl1Iz7VTI5ffa/vSHdQ08lQ
+         qRn8/Af4Lc8FFMi4WKk0SA/uFREYNOb1kOkiduRSwtwjWWOHZrjn6kXrVAP7kVp8LAHv
+         zYZg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=6hVJXuTFQBtDnEunFerABAeJSDQzBLOgQs4tefvCO+Y=;
-        b=xI3r/VJ/Y0+pjufjtKtSakASCNuT7PDI+vL20CFmNdN3lREzF70JsCGz2ywnLLJtTD
-         NNk+WuHEueY6YtF+iTAEPfotKoatRjqlGLC4k7HBUsnaYMIxpy84pbgBwNEi8QGm+Pj4
-         RsEgoWxaqwT8xIPDY1YB1txpdTe8y58nx7lVdqkKXfQ4DzCOTV6je0C1UyhsEkAz7/G9
-         o19ghuKG+6bRU8EwkC5iVCkxRcFrkrw3MgRVRVFqKLHIYshOsvS6YL548tJ/wmM1KK4o
-         NSIzVHYSGO7y54t+XdvvUcSuOy7rFK4W3pVlYK2FYXq7UY/LSOmV1MctVXcgiisyZa/2
-         kzwg==
-X-Gm-Message-State: ACrzQf22MvkyhrZCIZileypOeOJNWV4oHrkgIVwdjaT4MltU5Y44A+HT
-        WYoDwHWVnhyfuCoQcI/+pMmlUD1FOSOZuTEiem3YZwYFM0G/
-X-Google-Smtp-Source: AMsMyM5rwpNIhl7AFVDDGlfSPxemvJzCe1+solre5RUwTI/7t9fqeMMmvwmi/Gp5Zhfuvt1Yutg9Cq8i0NxGslOaKGTkuoPMPBsX
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+5v+p27CQOVhNMAHqQDcwxjRC8M+4widvhWkHJPKXMs=;
+        b=J1NdCp+CQHAQsBA4z9fvrcQaqj9DEnqZzvRy0Ob/gktlSs1RX0ZHyNz++tZYrxmrwA
+         A3cee+O6+fwXTRM7jsnC2bxQ4t9+pgluCJ3sjuscLftI1OhsqoxPZsxSY5yrsSH2ejZq
+         V5PIgwM9WK0w9ALcRbv+T5ys7MbGmwkAM8nBybO30ckgyV9EfJ4ZNxCl99GJ+vz50bdF
+         Uc8zX17rftj9YfsvXgntkzDPPI9znNPnm2zeGC9kvF5PKSibtJ+YE8HO5KNWgSytYgWJ
+         6wn5jelQti4kQbCoG0SPc09P+fKcG7H3TQf1dY4bl9lifsDYyCR/Mn4Hr3NrCXCtCJgr
+         tBYw==
+X-Gm-Message-State: ACrzQf1oAJyXWRql0x4933Zjmg5r65lEQe1aQyvk2LR394JjrAMfGSBv
+        Tr/cJ9uHBv8RdUj+UobAfZKDnsPxFSPJp7oKHE5rYg==
+X-Google-Smtp-Source: AMsMyM6vBz93ef4FpclTlA4uL2F8f2wtAWuh3Ns0SLMDZeyJ2Vrq9XRuJOHPOF93Brj8mGR78TySZx/EuIk7GWaGLQ4=
+X-Received: by 2002:a0d:da03:0:b0:368:5712:5795 with SMTP id
+ c3-20020a0dda03000000b0036857125795mr35335357ywe.428.1667578481544; Fri, 04
+ Nov 2022 09:14:41 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:2103:b0:375:2ba6:b5d8 with SMTP id
- n3-20020a056638210300b003752ba6b5d8mr23187939jaj.27.1667578298920; Fri, 04
- Nov 2022 09:11:38 -0700 (PDT)
-Date:   Fri, 04 Nov 2022 09:11:38 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000002473fd05eca7540a@google.com>
-Subject: [syzbot] WARNING in kernfs_find_and_get_node_by_id
-From:   syzbot <syzbot+2fdf66e68f5f882c1074@syzkaller.appspotmail.com>
-To:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, tj@kernel.org,
-        zhouchengming@bytedance.com
+References: <20221104093354.6218-1-osalvador@suse.de> <20221104093354.6218-2-osalvador@suse.de>
+In-Reply-To: <20221104093354.6218-2-osalvador@suse.de>
+From:   Alexander Potapenko <glider@google.com>
+Date:   Fri, 4 Nov 2022 17:14:04 +0100
+Message-ID: <CAG_fn=UtAT2J9PPqEg64THGAWwWVV_Bk+ER9bj3VYK_6KfjcTA@mail.gmail.com>
+Subject: Re: [PATCH v3 1/3] lib/stackdepot: Add a refcount field in stack_record
+To:     Oscar Salvador <osalvador@suse.de>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Michal Hocko <mhocko@suse.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Eric Dumazet <edumazet@google.com>,
+        Waiman Long <longman@redhat.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Marco Elver <elver@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Fri, Nov 4, 2022 at 10:34 AM Oscar Salvador <osalvador@suse.de> wrote:
+>
+> We want to filter out page_owner output and print only those
+> stacks that have been repeated beyond a certain threshold.
+> This gives us the chance to get rid of a lot of noise.
+> In order to do that, we need to keep track of how many repeated stacks
+> (for allocation) do we have, so we add a new refcount_t field
+> in the stack_record struct.
+>
+> Note that this might increase the size of the struct for some
+> architectures.
+> E.g: x86_64 is not affected due to alignment, but x86 32bits might.
+>
+> The alternative would be to have some kind of struct like this:
+>
+> struct track_stacks {
+>         struct stack_record *stack;
+>         struct track_stacks *next;
+>         refcount_t stack_count;
+>
+> But ithat would imply to perform more allocations and glue everything
+> together, which would make the code more complex, so I think that
+> going with a new field in the struct stack_record is good enough.
+>
+> Note that on __set_page_owner_handle(), page_owner->handle is set,
+> and on __reset_page_owner(), page_owner->free_handle is set.
+>
+> We are interested in page_owner->handle, so when __set_page_owner()
+> gets called, we derive the stack_record struct from page_owner->handle,
+> and we increment its refcount_t field; and when __reset_page_owner()
+> gets called, we derive its stack_record from page_owner->handle()
+> and we decrement its refcount_t field.
+>
+> Signed-off-by: Oscar Salvador <osalvador@suse.de>
+> ---
+>  include/linux/stackdepot.h | 13 ++++++-
+>  lib/stackdepot.c           | 79 +++++++++++++++++++++++++++++++-------
+>  mm/kasan/common.c          |  3 +-
+>  mm/page_owner.c            | 14 +++++--
+>  4 files changed, 89 insertions(+), 20 deletions(-)
+>
+> diff --git a/include/linux/stackdepot.h b/include/linux/stackdepot.h
+> index bc2797955de9..4e3a88f135ee 100644
+> --- a/include/linux/stackdepot.h
+> +++ b/include/linux/stackdepot.h
+> @@ -15,9 +15,16 @@
+>
+>  typedef u32 depot_stack_handle_t;
+>
+> +enum stack_depot_action {
+> +       STACK_DEPOT_ACTION_NONE,
+> +       STACK_DEPOT_ACTION_COUNT,
+> +};
 
-syzbot found the following issue on:
+For the sake of simplicity, can it be just a boolean? What other kinds
+of actions do you anticipate?
+Another question is maybe we can afford incrementing the counter
+unconditionally? It costs almost nothing compared to stack
+unwinding/hashing, and this is a debug-only feature anyway (right?)
 
-HEAD commit:    f2f32f8af2b0 Merge tag 'for-6.1-rc3-tag' of git://git.kern..
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=101fe196880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=f7e100ed8aaa828e
-dashboard link: https://syzkaller.appspot.com/bug?extid=2fdf66e68f5f882c1074
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14aa1051880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10a863a6880000
+>  depot_stack_handle_t __stack_depot_save(unsigned long *entries,
+>                                         unsigned int nr_entries,
+> -                                       gfp_t gfp_flags, bool can_alloc);
+> +                                       gfp_t gfp_flags, bool can_alloc,
+> +                                       enum stack_depot_action action);
+> +void stack_depot_dec_count(depot_stack_handle_t handle);
+>
+>  /*
+>   * Every user of stack depot has to call stack_depot_init() during its o=
+wn init
+> @@ -55,6 +62,10 @@ static inline int stack_depot_early_init(void)       {=
+ return 0; }
+>
+>  depot_stack_handle_t stack_depot_save(unsigned long *ent=D0=B0, =D0=B2=
+=D1=81=D0=B5ries,
+>                                       unsigned int nr_entries, gfp_t gfp_=
+flags);
+> +depot_stack_handle_t stack_depot_save_action(unsigned long *entries,
+> +                                            unsigned int nr_entries,
+> +                                            gfp_t gfp_flags,
+> +                                            enum stack_depot_action acti=
+on);
+>
+>  unsigned int stack_depot_fetch(depot_stack_handle_t handle,
+>                                unsigned long **entries);
+> diff --git a/lib/stackdepot.c b/lib/stackdepot.c
+> index e73fda23388d..a806ef58a385 100644
+> --- a/lib/stackdepot.c
+> +++ b/lib/stackdepot.c
+> @@ -64,6 +64,7 @@ struct stack_record {
+>         u32 hash;                       /* Hash in the hastable */
+>         u32 size;                       /* Number of frames in the stack =
+*/
+>         union handle_parts handle;
+> +       refcount_t count;               /* Number of the same repeated st=
+acks */
+>         unsigned long entries[];        /* Variable-sized array of entrie=
+s. */
+>  };
+>
+> @@ -140,6 +141,7 @@ depot_alloc_stack(unsigned long *entries, int size, u=
+32 hash, void **prealloc)
+>         stack->handle.slabindex =3D depot_index;
+>         stack->handle.offset =3D depot_offset >> STACK_ALLOC_ALIGN;
+>         stack->handle.valid =3D 1;
+> +       refcount_set(&stack->count, 1);
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/ea126f52b953/disk-f2f32f8a.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/815b36048854/vmlinux-f2f32f8a.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/b7d04bb936fd/bzImage-f2f32f8a.xz
+If we decide to only maintain the refcount for the page owner,
+wouldn't it be simpler to decouple the counter increment from stack
+allocation?
+In that case other users won't need to be updated, and page owner will
+just get an extra call to stack_depot_inc_count().
 
-The issue was bisected to:
+>         memcpy(stack->entries, entries, flex_array_size(stack, entries, s=
+ize));
+>         depot_offset +=3D required_size;
+>
+> @@ -341,6 +343,29 @@ void stack_depot_print(depot_stack_handle_t stack)
+>  }
+>  EXPORT_SYMBOL_GPL(stack_depot_print);
+>
+> +static struct stack_record *stack_depot_getstack(depot_stack_handle_t ha=
+ndle)
+> +{
+> +       union handle_parts parts =3D { .handle =3D handle };
+> +       void *slab;
+> +       size_t offset =3D parts.offset << STACK_ALLOC_ALIGN;
+> +       struct stack_record *stack;
+> +
+> +       if(!handle)
+> +               return NULL;
+> +
+> +       if (parts.slabindex > depot_index) {
+> +               WARN(1, "slab index %d out of bounds (%d) for stack id %0=
+8x\n",
+> +                    parts.slabindex, depot_index, handle);
+> +               return NULL;
+> +       }
+> +       slab =3D stack_slabs[parts.slabindex];
+> +       if (!slab)
+> +               return NULL;
+> +
+> +       stack =3D slab + offset;
+> +       return stack;
+> +}
+> +
+>  /**
+>   * stack_depot_fetch - Fetch stack entries from a depot
+>   *
+> @@ -353,30 +378,42 @@ EXPORT_SYMBOL_GPL(stack_depot_print);
+>  unsigned int stack_depot_fetch(depot_stack_handle_t handle,
+>                                unsigned long **entries)
+>  {
+> -       union handle_parts parts =3D { .handle =3D handle };
+> -       void *slab;
+> -       size_t offset =3D parts.offset << STACK_ALLOC_ALIGN;
+>         struct stack_record *stack;
+>
+>         *entries =3D NULL;
+>         if (!handle)
+>                 return 0;
+>
+> -       if (parts.slabindex > depot_index) {
+> -               WARN(1, "slab index %d out of bounds (%d) for stack id %0=
+8x\n",
+> -                       parts.slabindex, depot_index, handle);
+> -               return 0;
+> -       }
+> -       slab =3D stack_slabs[parts.slabindex];
+> -       if (!slab)
+> +       stack =3D stack_depot_getstack(handle);
+> +       if (!stack)
+>                 return 0;
+> -       stack =3D slab + offset;
+>
+>         *entries =3D stack->entries;
+>         return stack->size;
+>  }
+>  EXPORT_SYMBOL_GPL(stack_depot_fetch);
+>
+> +static void stack_depot_inc_count(struct stack_record *stack)
+> +{
+> +       refcount_inc(&stack->count);
+> +}
+> +
+> +void stack_depot_dec_count(depot_stack_handle_t handle)
+> +{
+> +       struct stack_record *stack =3D NULL;
+> +
+> +       stack =3D stack_depot_getstack(handle);
+> +       if (stack) {
+> +               /*
+> +                * page_owner creates some stacks via create_dummy_stack(=
+).
+> +                * We are not interested in those, so make sure we only d=
+ecrement
+> +                * "valid" stacks.
+> +                */
+> +               if (refcount_read(&stack->count) > 1)
 
-commit c25491747b21536bd56dccb82a109754bbc8d52c
-Author: Tejun Heo <tj@kernel.org>
-Date:   Sun Aug 28 05:04:37 2022 +0000
+I don't see why we cannot decrement the refcounter when it is 1 -
+looks like a normal situation when the number of deallocations matches
+the number of allocations.
+But maybe we should warn about an overflow here instead?
 
-    kernfs: Add KERNFS_REMOVING flags
+> +                       refcount_dec(&stack->count);
+> +       }
+> +}
+> +
+>  /**
+>   * __stack_depot_save - Save a stack trace from an array
+>   *
+> @@ -402,7 +439,8 @@ EXPORT_SYMBOL_GPL(stack_depot_fetch);
+>   */
+>  depot_stack_handle_t __stack_depot_save(unsigned long *entries,
+>                                         unsigned int nr_entries,
+> -                                       gfp_t alloc_flags, bool can_alloc=
+)
+> +                                       gfp_t alloc_flags, bool can_alloc=
+,
+> +                                       enum stack_depot_action action)
+>  {
+>         struct stack_record *found =3D NULL, **bucket;
+>         depot_stack_handle_t retval =3D 0;
+> @@ -488,8 +526,11 @@ depot_stack_handle_t __stack_depot_save(unsigned lon=
+g *entries,
+>                 /* Nobody used this memory, ok to free it. */
+>                 free_pages((unsigned long)prealloc, STACK_ALLOC_ORDER);
+>         }
+> -       if (found)
+> +       if (found) {
+>                 retval =3D found->handle.handle;
+> +               if (action =3D=3D STACK_DEPOT_ACTION_COUNT)
+> +                       stack_depot_inc_count(found);
+> +       }
+>  fast_exit:
+>         return retval;
+>  }
+> @@ -511,6 +552,16 @@ depot_stack_handle_t stack_depot_save(unsigned long =
+*entries,
+>                                       unsigned int nr_entries,
+>                                       gfp_t alloc_flags)
+>  {
+> -       return __stack_depot_save(entries, nr_entries, alloc_flags, true)=
+;
+> +       return __stack_depot_save(entries, nr_entries, alloc_flags, true,
+> +                                 STACK_DEPOT_ACTION_NONE);
+>  }
+>  EXPORT_SYMBOL_GPL(stack_depot_save);
+> +
+> +depot_stack_handle_t stack_depot_save_action(unsigned long *entries,
+> +                                            unsigned int nr_entries,
+> +                                            gfp_t alloc_flags,
+> +                                            enum stack_depot_action acti=
+on)
+> +{
+> +       return __stack_depot_save(entries, nr_entries, alloc_flags, true,=
+ action);
+> +}
+> +EXPORT_SYMBOL_GPL(stack_depot_save_action);
+> diff --git a/mm/kasan/common.c b/mm/kasan/common.c
+> index 69f583855c8b..8077c6e70815 100644
+> --- a/mm/kasan/common.c
+> +++ b/mm/kasan/common.c
+> @@ -36,7 +36,8 @@ depot_stack_handle_t kasan_save_stack(gfp_t flags, bool=
+ can_alloc)
+>         unsigned int nr_entries;
+>
+>         nr_entries =3D stack_trace_save(entries, ARRAY_SIZE(entries), 0);
+> -       return __stack_depot_save(entries, nr_entries, flags, can_alloc);
+> +       return __stack_depot_save(entries, nr_entries, flags, can_alloc,
+> +                                 STACK_DEPOT_ACTION_NONE);
+>  }
+>
+>  void kasan_set_track(struct kasan_track *track, gfp_t flags)
+> diff --git a/mm/page_owner.c b/mm/page_owner.c
+> index e4c6f3f1695b..8730f377fa91 100644
+> --- a/mm/page_owner.c
+> +++ b/mm/page_owner.c
+> @@ -106,7 +106,8 @@ static inline struct page_owner *get_page_owner(struc=
+t page_ext *page_ext)
+>         return (void *)page_ext + page_owner_ops.offset;
+>  }
+>
+> -static noinline depot_stack_handle_t save_stack(gfp_t flags)
+> +static noinline depot_stack_handle_t save_stack(gfp_t flags,
+> +                                               enum stack_depot_action a=
+ction)
+>  {
+>         unsigned long entries[PAGE_OWNER_STACK_DEPTH];
+>         depot_stack_handle_t handle;
+> @@ -125,7 +126,7 @@ static noinline depot_stack_handle_t save_stack(gfp_t=
+ flags)
+>         current->in_page_owner =3D 1;
+>
+>         nr_entries =3D stack_trace_save(entries, ARRAY_SIZE(entries), 2);
+> -       handle =3D stack_depot_save(entries, nr_entries, flags);
+> +       handle =3D stack_depot_save_action(entries, nr_entries, flags, ac=
+tion);
+>         if (!handle)
+>                 handle =3D failure_handle;
+>
+> @@ -138,6 +139,7 @@ void __reset_page_owner(struct page *page, unsigned s=
+hort order)
+>         int i;
+>         struct page_ext *page_ext;
+>         depot_stack_handle_t handle;
+> +       depot_stack_handle_t alloc_handle;
+>         struct page_owner *page_owner;
+>         u64 free_ts_nsec =3D local_clock();
+>
+> @@ -145,7 +147,10 @@ void __reset_page_owner(struct page *page, unsigned =
+short order)
+>         if (unlikely(!page_ext))
+>                 return;
+>
+> -       handle =3D save_stack(GFP_NOWAIT | __GFP_NOWARN);
+> +       page_owner =3D get_page_owner(page_ext);
+> +       alloc_handle =3D page_owner->handle;
+> +
+> +       handle =3D save_stack(GFP_NOWAIT | __GFP_NOWARN, STACK_DEPOT_ACTI=
+ON_NONE);
+>         for (i =3D 0; i < (1 << order); i++) {
+>                 __clear_bit(PAGE_EXT_OWNER_ALLOCATED, &page_ext->flags);
+>                 page_owner =3D get_page_owner(page_ext);
+> @@ -153,6 +158,7 @@ void __reset_page_owner(struct page *page, unsigned s=
+hort order)
+>                 page_owner->free_ts_nsec =3D free_ts_nsec;
+>                 page_ext =3D page_ext_next(page_ext);
+>         }
+> +       stack_depot_dec_count(alloc_handle);
+>  }
+>
+>  static inline void __set_page_owner_handle(struct page_ext *page_ext,
+> @@ -189,7 +195,7 @@ noinline void __set_page_owner(struct page *page, uns=
+igned short order,
+>         if (unlikely(!page_ext))
+>                 return;
+>
+> -       handle =3D save_stack(gfp_mask);
+> +       handle =3D save_stack(gfp_mask, STACK_DEPOT_ACTION_COUNT);
+>         __set_page_owner_handle(page_ext, handle, order, gfp_mask);
+>  }
+>
+> --
+> 2.35.3
+>
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=106731ee880000
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=126731ee880000
-console output: https://syzkaller.appspot.com/x/log.txt?x=146731ee880000
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+2fdf66e68f5f882c1074@syzkaller.appspotmail.com
-Fixes: c25491747b21 ("kernfs: Add KERNFS_REMOVING flags")
+--=20
+Alexander Potapenko
+Software Engineer
 
-------------[ cut here ]------------
-WARNING: CPU: 1 PID: 3608 at fs/kernfs/dir.c:36 kernfs_find_and_get_node_by_id+0x1f0/0x270 fs/kernfs/dir.c:708
-Modules linked in:
-CPU: 1 PID: 3608 Comm: syz-executor714 Not tainted 6.1.0-rc3-syzkaller-00152-gf2f32f8af2b0 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/11/2022
-RIP: 0010:kernfs_active fs/kernfs/dir.c:36 [inline]
-RIP: 0010:kernfs_find_and_get_node_by_id+0x1f0/0x270 fs/kernfs/dir.c:708
-Code: e8 25 fc 29 08 4c 89 f0 5b 41 5c 41 5e 41 5f 5d c3 e8 94 c9 74 ff e9 35 ff ff ff e8 8a c9 74 ff e9 2b ff ff ff e8 80 c9 74 ff <0f> 0b e9 2c ff ff ff 48 c7 c1 d4 e8 0d 8e 80 e1 07 80 c1 03 38 c1
-RSP: 0018:ffffc90003cdfb58 EFLAGS: 00010293
-RAX: ffffffff821316a0 RBX: 0000000000000000 RCX: ffff88802937d7c0
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000000
-RBP: dffffc0000000000 R08: ffffffff821315ab R09: fffff5200079bf5c
-R10: fffff5200079bf5d R11: 1ffff9200079bf5c R12: dffffc0000000000
-R13: 0000000000000002 R14: ffff8881400f4570 R15: 0000000000000005
-FS:  00005555572ef300(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000020000000 CR3: 000000007806e000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- __kernfs_fh_to_dentry fs/kernfs/mount.c:102 [inline]
- kernfs_fh_to_dentry+0x129/0x1d0 fs/kernfs/mount.c:128
- exportfs_decode_fh_raw+0x115/0x600 fs/exportfs/expfs.c:435
- exportfs_decode_fh+0x38/0x70 fs/exportfs/expfs.c:575
- do_handle_to_path fs/fhandle.c:152 [inline]
- handle_to_path fs/fhandle.c:207 [inline]
- do_handle_open+0x485/0x950 fs/fhandle.c:223
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f3991d2bbe9
-Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fff8481e4e8 EFLAGS: 00000246 ORIG_RAX: 0000000000000130
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f3991d2bbe9
-RDX: 0000000000000000 RSI: 00000000200000c0 RDI: 0000000000000005
-RBP: 00007f3991cefd90 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 00007f3991cefe20
-R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
- </TASK>
+Google Germany GmbH
+Erika-Mann-Stra=C3=9Fe, 33
+80636 M=C3=BCnchen
 
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Liana Sebastian
+Registergericht und -nummer: Hamburg, HRB 86891
+Sitz der Gesellschaft: Hamburg
