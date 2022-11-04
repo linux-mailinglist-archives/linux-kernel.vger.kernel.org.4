@@ -2,173 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C44D761909F
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 07:03:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DFAB6190A7
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 07:04:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230341AbiKDGDU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 02:03:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40362 "EHLO
+        id S230405AbiKDGEh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 02:04:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229563AbiKDGDP (ORCPT
+        with ESMTP id S229600AbiKDGEa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 02:03:15 -0400
-Received: from mail-ot1-f52.google.com (mail-ot1-f52.google.com [209.85.210.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 457F42181;
-        Thu,  3 Nov 2022 23:03:13 -0700 (PDT)
-Received: by mail-ot1-f52.google.com with SMTP id a13-20020a9d6e8d000000b00668d65fc44fso2165549otr.9;
-        Thu, 03 Nov 2022 23:03:13 -0700 (PDT)
+        Fri, 4 Nov 2022 02:04:30 -0400
+Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36F9425C2
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 23:04:29 -0700 (PDT)
+Received: by mail-qt1-x832.google.com with SMTP id x15so2528958qtv.9
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 23:04:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=c8XA1N0uaxkLO/wKHErNWHaSuu64k5Pjb5u9dmcZrOc=;
+        b=j5b9GJzBtekkE7yFtXxrwfdSnFiLUyeBirWgEHrY1DwsCmMNln0raTzRxoGjxR0vEG
+         /uxcYigPDNuHCnpdjlCMIgM2n48VEgd9f1vOvLP7QtlQ6TZ60bKdG45TIRdnGWFrYvNx
+         Cp55Gth/vM30nQcwiFTGNz/rn848q3Eb4Q4zOcHHfzU4yUla/g4Ad3fhG08vEfC5/R3h
+         PPkXOTLacmBas/4TqbxS2EbsHUBC7HUkqW24VFIAAc/oUNQgb1e6AqTct7oO2A3z5CF9
+         SDfCYWufECI8AAEV1C876JYV0w0fzKUncqX3+GY4OEtVI/MgHr71Oynl7CVhbajN2Mle
+         apoA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=loC6w0/i5CbAGUlQZBIMeNBQ+tlvwl3vVB+h9k8NGcM=;
-        b=dP7MW26p0wwpCA83sinsV6MQZLMiNF2uNUVwh0FjPkXSFAiUw2eWbT/uRgadpw9JzX
-         DNHc86MkLFov9ctJQP6QqHZdxY2J34uCEU77bbpO8gAYx+H0seXcZKVUXXI/SQPa8kDT
-         AHn51j3fel/guFI7Alvi4WY1e8nzbjcjt/j04/i1JDhfFBAlFZ+9f9NMM4EmkiysGxYG
-         /sFDninFvJ5OAe14c5TDl2intD91Cnqinv9SQpJ7d3Eh2a8nRKsKDQGvPOeLVk/pVyJC
-         5hEUr4CAjpi/wX+ToOZtg+s/d5Rc1IkmdbxDNFl2EnDoWoBIZWrDblHIc6b8FRi0xMa+
-         x0cw==
-X-Gm-Message-State: ACrzQf2Xj8gN9gmHgcZvNVPkvF1GsUVRwazPyEh+NhAyBlTJFeoHOhyK
-        9gjsxD3tcUv83sWFF2zd9+m9N/6c4ZDMKBG4o2zinFVM
-X-Google-Smtp-Source: AMsMyM4bn6uSw/2awV0vJqKDAmmzvk4us1xVi7uoHenl1cpbKds5aWEL607Utk0fRuHoJTaLZlYzkwhb7jZWljDpkZw=
-X-Received: by 2002:a05:6830:1219:b0:66c:2b26:b164 with SMTP id
- r25-20020a056830121900b0066c2b26b164mr17127010otp.206.1667541792518; Thu, 03
- Nov 2022 23:03:12 -0700 (PDT)
+        bh=c8XA1N0uaxkLO/wKHErNWHaSuu64k5Pjb5u9dmcZrOc=;
+        b=5pzwACpUWM2/KOwFqnYh6Ul5m0dJFLtjN2kAzbeOTZKnM7TvKRZfM/cCy0EiMujME1
+         Hzq2rgB8/bDbHajUCwsXaaFTkyU1BG2y2B0LTi8TEmDw+qziUCJJXlTKw7BYdIP6DxS+
+         isJxX9BHgNnAkwhCDwUFXCo4jvhStSyVJRs8LXm5BVzIfE0dgvaScCLfusJbTQZl5cOP
+         c16qVCVVZonXnE4iL9hR4IdMFGIGejZA4iBSoG23aJTatG0VDGmPoKOyZvP6dhKomeI1
+         mfRpr6YlHzONU4cwx/W2OlktU5DObAqN/Y1uHvvg03GEs7158bQuuuWnVGn5XvqGYnmn
+         EvKw==
+X-Gm-Message-State: ACrzQf2cWOL7QMjn16JwHt3pvfAFCngg0snrNRvTlcuPZl/nlMG990ow
+        Bc1vbZgoifMS66NCcG/Iwk7IrtaKcq9tH0p8Qs8=
+X-Google-Smtp-Source: AMsMyM4d+3oHqwtyFW+7gNpseL+BTezKOejCwfVqbuHSnc4TnvWkrB9jZZGIql1DLTGZWP/QM8LeEdkETfs5XT/OIxU=
+X-Received: by 2002:a05:622a:1194:b0:3a5:40c8:99a1 with SMTP id
+ m20-20020a05622a119400b003a540c899a1mr13628866qtk.267.1667541868111; Thu, 03
+ Nov 2022 23:04:28 -0700 (PDT)
 MIME-Version: 1.0
-References: <20221101052340.1210239-1-namhyung@kernel.org> <20221101052340.1210239-2-namhyung@kernel.org>
- <Y2Du5/Iolphxcbv2@krava>
-In-Reply-To: <Y2Du5/Iolphxcbv2@krava>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Thu, 3 Nov 2022 23:03:01 -0700
-Message-ID: <CAM9d7cheyGK9oK+SdoDxqwLuPLkAO5TrNrwJ4x1F4BrfMVzh+Q@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 1/3] perf/core: Prepare sample data before
- calling BPF
-To:     Jiri Olsa <olsajiri@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Song Liu <songliubraving@fb.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Martin KaFai Lau <kafai@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-        Stanislav Fomichev <sdf@google.com>,
-        LKML <linux-kernel@vger.kernel.org>, bpf@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>
+Received: by 2002:a05:6200:5e0e:b0:49f:24a7:f1f7 with HTTP; Thu, 3 Nov 2022
+ 23:04:27 -0700 (PDT)
+Reply-To: stefanopessia755@hotmail.com
+From:   Stefano Pessina <nancyowuor33@gmail.com>
+Date:   Fri, 4 Nov 2022 09:04:27 +0300
+Message-ID: <CAN=GBp2sxHb16UOJrQWGG8HwWgM-xtD6Svz2cw0rojg4Fwu48Q@mail.gmail.com>
+Subject: Geldspende
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=5.0 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:832 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5009]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [nancyowuor33[at]gmail.com]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [stefanopessia755[at]hotmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [nancyowuor33[at]gmail.com]
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jiri,
-
-On Tue, Nov 1, 2022 at 3:03 AM Jiri Olsa <olsajiri@gmail.com> wrote:
->
-> On Mon, Oct 31, 2022 at 10:23:38PM -0700, Namhyung Kim wrote:
-> > To allow bpf overflow handler to access the perf sample data, it needs to
-> > prepare missing but requested data before calling the handler.
-> >
-> > I'm taking a conservative approach to allow a list of sample formats only
-> > instead of allowing them all.  For now, IP and ADDR data are allowed and
-> > I think it's good enough to build and verify general BPF-based sample
-> > filters for perf events.
-> >
-> > Signed-off-by: Namhyung Kim <namhyung@kernel.org>
-> > ---
-> >  kernel/events/core.c | 40 +++++++++++++++++++++++++++++++---------
-> >  1 file changed, 31 insertions(+), 9 deletions(-)
-> >
-> > diff --git a/kernel/events/core.c b/kernel/events/core.c
-> > index aefc1e08e015..519f30c33a24 100644
-> > --- a/kernel/events/core.c
-> > +++ b/kernel/events/core.c
-> > @@ -7329,8 +7329,10 @@ void perf_prepare_sample(struct perf_event_header *header,
-> >       filtered_sample_type = sample_type & ~data->sample_flags;
-> >       __perf_event_header__init_id(header, data, event, filtered_sample_type);
-> >
-> > -     if (sample_type & (PERF_SAMPLE_IP | PERF_SAMPLE_CODE_PAGE_SIZE))
-> > -             data->ip = perf_instruction_pointer(regs);
-> > +     if (sample_type & (PERF_SAMPLE_IP | PERF_SAMPLE_CODE_PAGE_SIZE)) {
-> > +             if (filtered_sample_type & PERF_SAMPLE_IP)
-> > +                     data->ip = perf_instruction_pointer(regs);
-> > +     }
-> >
-> >       if (sample_type & PERF_SAMPLE_CALLCHAIN) {
-> >               int size = 1;
-> > @@ -10006,6 +10008,32 @@ static void perf_event_free_filter(struct perf_event *event)
-> >  }
-> >
-> >  #ifdef CONFIG_BPF_SYSCALL
-> > +static void bpf_prepare_sample(struct bpf_prog *prog,
-> > +                            struct perf_event *event,
-> > +                            struct perf_sample_data *data,
-> > +                            struct pt_regs *regs)
-> > +{
-> > +     u64 filtered_sample_type;
-> > +
-> > +     filtered_sample_type = event->attr.sample_type & ~data->sample_flags;
->
-> could we add the same comment in here as is in perf_prepare_sample
->
->         /*
->          * Clear the sample flags that have already been done by the
->          * PMU driver.
->          */
->
-> it took me while to recall while we set addr to 0 in here ;-)
-
-Sorry about that! :)  I'll add the comment.
-
-Thanks,
-Namhyung
-
-
->
-> > +
-> > +     if (prog->call_get_stack &&
-> > +         (filtered_sample_type & PERF_SAMPLE_CALLCHAIN)) {
-> > +             data->callchain = perf_callchain(event, regs);
-> > +             data->sample_flags |= PERF_SAMPLE_CALLCHAIN;
-> > +     }
-> > +
-> > +     if (filtered_sample_type & PERF_SAMPLE_IP) {
-> > +             data->ip = perf_instruction_pointer(regs);
-> > +             data->sample_flags |= PERF_SAMPLE_IP;
-> > +     }
-> > +
-> > +     if (filtered_sample_type & PERF_SAMPLE_ADDR) {
-> > +             data->addr = 0;
-> > +             data->sample_flags |= PERF_SAMPLE_ADDR;
-> > +     }
-> > +}
-> > +
-> >  static void bpf_overflow_handler(struct perf_event *event,
-> >                                struct perf_sample_data *data,
-> >                                struct pt_regs *regs)
-> > @@ -10023,13 +10051,7 @@ static void bpf_overflow_handler(struct perf_event *event,
-> >       rcu_read_lock();
-> >       prog = READ_ONCE(event->prog);
-> >       if (prog) {
-> > -             if (prog->call_get_stack &&
-> > -                 (event->attr.sample_type & PERF_SAMPLE_CALLCHAIN) &&
-> > -                 !(data->sample_flags & PERF_SAMPLE_CALLCHAIN)) {
-> > -                     data->callchain = perf_callchain(event, regs);
-> > -                     data->sample_flags |= PERF_SAMPLE_CALLCHAIN;
-> > -             }
-> > -
-> > +             bpf_prepare_sample(prog, event, data, regs);
-> >               ret = bpf_prog_run(prog, &ctx);
-> >       }
-> >       rcu_read_unlock();
-> > --
-> > 2.38.1.273.g43a17bfeac-goog
-> >
+--=20
+Die Summe von 500.000,00 =E2=82=AC wurde Ihnen von STEFANO PESSINA gespende=
+t.
+Bitte kontaktieren Sie uns f=C3=BCr weitere Informationen =C3=BCber
+stefanopessia755@hotmail.com
