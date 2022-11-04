@@ -2,94 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91EF061A021
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 19:38:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1A4E61A024
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 19:39:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232108AbiKDSiy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 14:38:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56846 "EHLO
+        id S230045AbiKDSjD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 14:39:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230045AbiKDSiv (ORCPT
+        with ESMTP id S230089AbiKDSi7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 14:38:51 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9CAAC10043;
-        Fri,  4 Nov 2022 11:38:50 -0700 (PDT)
-Received: from linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net (linux.microsoft.com [13.77.154.182])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 83E46205DA32;
-        Fri,  4 Nov 2022 11:38:48 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 83E46205DA32
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1667587128;
-        bh=U9AOCmsv6YLLf4cMqDbSKLiOBujtTUIy6/UR/RPPRM8=;
-        h=From:To:Subject:Date:From;
-        b=eu8H7ythuTDN9Hn9PiACAdcWbJXCDTP7uD2h3n0sT+NAPtDr+NA2/YKiiHtTjRdTF
-         Ba8yAiQtRKQGDNXhNDJnkHG7qOXvEbT3qo9qdQxXpIBF8Gc/igI2BNGwFR6k2IC8XE
-         A8NAPrO2jmU2pmk3ZTfG4vDQUTIDopwXavjDnmr0=
-From:   Saurabh Sengar <ssengar@linux.microsoft.com>
-To:     ssengar@microsoft.com, kys@microsoft.com, haiyangz@microsoft.com,
-        wei.liu@kernel.org, decui@microsoft.com,
-        ssengar@linux.microsoft.com, linux-hyperv@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mikelley@microsoft.com,
-        tglx@linutronix.de, bp@alien8.de, dave.hansen@linux.intel.com,
-        x86@kernel.org, hpa@zytor.com, anrayabh@linux.microsoft.com
-Subject: [PATCH v2] x86/Hyper-V: Expand definition of struct hv_vp_assist_page
-Date:   Fri,  4 Nov 2022 11:38:43 -0700
-Message-Id: <1667587123-31645-1-git-send-email-ssengar@linux.microsoft.com>
-X-Mailer: git-send-email 1.8.3.1
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 4 Nov 2022 14:38:59 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C8D3101EF
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 11:38:58 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id b21so5669842plc.9
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 11:38:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=GxUQcGD1ekL/2d9GXVQdlQ0tteAYOQEOTDd6IVlVtPY=;
+        b=GjlhU7IoqaY718RNOR7DqWTG20zF6kOt5wgWynudn0ITp0+zDVD5QosZuVb9DcNI1E
+         uLg7ZOVZiESDg9QBf+b2QS/Pn8Hc0gkXnTqzle1PVe0v7nwVonxi/nK9dqBJhmAlASAJ
+         tuMCJ67J0Eu/2HZM0qT0wURiQPbKt5+sQ88DQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GxUQcGD1ekL/2d9GXVQdlQ0tteAYOQEOTDd6IVlVtPY=;
+        b=rnYKVZT3jzvU8ZPIaUdYphAX79sWY/1/CoI/GqCWdmf164dygW2K897GOumaJNyfSt
+         PRGprGxaCtDOUTS5xBGf5Wpcv8qrlCrAC5k5XxIVT08pCSfW3elVl5T+qQIeuPkstL9f
+         bawE9xsia/1WgKZgwOPMzk03Q4koX4tJeZ1cBvpeywv5HouVSLXOzNFJ01PKYkTSFUE/
+         z9207Xy47Vltf+wWKJyF395o+bN1YZPxGwPduM4R+kAZDUsSa4t4KtvL4s18seN2yDix
+         zdUmrFrzyhgU11vUsejDlKyvEsGOwWJNkkZmeSZVNuZ93jC/lJxDfjluTN69eevx3vOZ
+         DrYw==
+X-Gm-Message-State: ACrzQf3maeYKUQi5n6RWwWgWxhmbZUlmgSYDEGJWD9sF+04hEkqRrH3N
+        izAz1jwTVaUIVW4EmwP1oXFF4w==
+X-Google-Smtp-Source: AMsMyM4Ns1LVB+0LABBHOJzWrjQNzMAUk0lZthXzQw3TR/Rcm2joh9j3MHvMTSFHaR/HR+59oKPNuw==
+X-Received: by 2002:a17:902:8a90:b0:186:b145:f5ec with SMTP id p16-20020a1709028a9000b00186b145f5ecmr37462611plo.103.1667587137752;
+        Fri, 04 Nov 2022 11:38:57 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id d17-20020aa797b1000000b0056bcc744bdbsm2957812pfq.203.2022.11.04.11.38.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Nov 2022 11:38:57 -0700 (PDT)
+Date:   Fri, 4 Nov 2022 11:38:56 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Evan Green <evgreen@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, corbet@lwn.net,
+        linux-pm@vger.kernel.org, rjw@rjwysocki.net, gwendal@chromium.org,
+        apronin@chromium.org, Pavel Machek <pavel@ucw.cz>,
+        Matthew Garrett <mgarrett@aurora.tech>,
+        linux-integrity@vger.kernel.org, jejb@linux.ibm.com,
+        zohar@linux.ibm.com, dlunev@google.com,
+        Eric Biggers <ebiggers@kernel.org>,
+        Ben Boeckel <me@benboeckel.net>, jarkko@kernel.org,
+        Len Brown <len.brown@intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Subject: Re: [PATCH v4 07/11] PM: hibernate: Add kernel-based encryption
+Message-ID: <202211041135.EAC889BA08@keescook>
+References: <20221103180120.752659-1-evgreen@chromium.org>
+ <20221103105558.v4.7.Ifff11e11797a1bde0297577ecb2f7ebb3f9e2b04@changeid>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221103105558.v4.7.Ifff11e11797a1bde0297577ecb2f7ebb3f9e2b04@changeid>
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The struct hv_vp_assist_page has 24 bytes which is defined as u64[3],
-expand that to expose vtl_entry_reason, vtl_ret_x64rax and vtl_ret_x64rcx
-field. vtl_entry_reason is updated by hypervisor for the entry reason as
-to why the VTL was entered on the virtual processor.
-Guest updates the vtl_ret_* fields to provide the register values to
-restore on VTL return. The specific register values that are restored
-which will be updated on vtl_ret_x64rax and vtl_ret_x64rcx.
-Also added the missing fields for synthetic_time_unhalted_timer_expired,
-virtualization_fault_information and intercept_message.
+On Thu, Nov 03, 2022 at 11:01:15AM -0700, Evan Green wrote:
+> [...]
+> +config ENCRYPTED_HIBERNATION
+> +	bool "Encryption support for userspace snapshots"
+> +	depends on HIBERNATION_SNAPSHOT_DEV
+> +	depends on CRYPTO_AEAD2=y
+> +	default n
 
-Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
----
-[v2]: Corrected vtl_entry_reson size from u8 to u32
+"default n" is the, err, default, so this line can be left out.
 
- arch/x86/include/asm/hyperv-tlfs.h | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+If someone more familiar with the crypto pieces can review the rest,
+that would be good. :)
 
-diff --git a/arch/x86/include/asm/hyperv-tlfs.h b/arch/x86/include/asm/hyperv-tlfs.h
-index 3089ec3..6d9368e 100644
---- a/arch/x86/include/asm/hyperv-tlfs.h
-+++ b/arch/x86/include/asm/hyperv-tlfs.h
-@@ -374,11 +374,20 @@ struct hv_nested_enlightenments_control {
- struct hv_vp_assist_page {
- 	__u32 apic_assist;
- 	__u32 reserved1;
--	__u64 vtl_control[3];
-+	__u32 vtl_entry_reason;
-+	__u32 vtl_reserved;
-+	__u64 vtl_ret_x64rax;
-+	__u64 vtl_ret_x64rcx;
- 	struct hv_nested_enlightenments_control nested_control;
- 	__u8 enlighten_vmentry;
- 	__u8 reserved2[7];
- 	__u64 current_nested_vmcs;
-+	__u8 synthetic_time_unhalted_timer_expired;
-+	__u8 reserved3[7];
-+	__u8 virtualization_fault_information[40];
-+	__u8 reserved4[8];
-+	__u8 intercept_message[256];
-+	__u8 vtl_ret_actions[256];
- } __packed;
- 
- struct hv_enlightened_vmcs {
 -- 
-1.8.3.1
-
+Kees Cook
