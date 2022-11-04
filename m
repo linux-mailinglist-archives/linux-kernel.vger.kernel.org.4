@@ -2,60 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3313F619861
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 14:45:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9183E619864
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 14:46:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231491AbiKDNpt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 09:45:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39254 "EHLO
+        id S231496AbiKDNqR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 09:46:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231309AbiKDNpr (ORCPT
+        with ESMTP id S231596AbiKDNqO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 09:45:47 -0400
-Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 362052F392
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 06:45:46 -0700 (PDT)
-Received: by mail-qt1-x831.google.com with SMTP id e15so3037521qts.1
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 06:45:46 -0700 (PDT)
+        Fri, 4 Nov 2022 09:46:14 -0400
+Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 832FE2F03B
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 06:46:10 -0700 (PDT)
+Received: by mail-qt1-x834.google.com with SMTP id l15so3029358qtv.4
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 06:46:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=vavmHFdy2UqqtSaeoQXAprIbQNUxvGgL2a6sfjfX8bo=;
-        b=iAwllB/irUDcT6SbXQoW5KiHw7T62PcFpUyb6zPCWHLco9hXoKvpnr7HPeLKGHupX0
-         EFbxZluDtrNTuq0mMuGmqKbVVHtPW8mmg/BLLQaY8neKBSp+ivsalguEathuGmeiVmhv
-         MALOVfW1deKpH440RYNHLHhpzVaF8kpwV6+5bDFBFWGKSK6S258syC5PTfDGsfXulUIf
-         CaqoE2c2lP4fgCywLW3DKz2n8Vhff7/MejTJcm/PSeSwr8+0+s8dVHMTBKFiuKidhOze
-         I5SSKyj/zlAZNjs3lwrfRgKEJPfZ5CXMN2+UKq2D8OJRTx7wy/Y5nMezey8TZFmp3+e7
-         YiqA==
+        bh=nNOoeyNPbk4klwxXRT+oWl+4JUP2MxkRrYLhtJXAbr8=;
+        b=y5cyYq+ECxL6vl+kFY5grLw7dVgw/6YPqpqGm2pcr/O2va4IkgEIltfaC/1BQNhGCc
+         5ns0noh2pnxhErcjx3BxpvpCdxpNsfKRsKnR5zz4HUkAmuV5Rg19f710w9L09LFzKec9
+         r66nTrlfIBjRASVkCbiMJqPJ6u7fG0njn2PlFBnhxiMdG4Chuskz6flV1oYPCYXtVrGz
+         XP/JHucGnGIoZu93Xif8VxKCEWeCBZyIIiFTjUxsozZM4w9xQB2J+43w0eX/vwWNNASp
+         bL/7TcRZ00gPunemlpJP/K23L2MhR2cCV0uQ4oKeaDPBZmf2jV1LPZs20seYxmi+HcoW
+         6nIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vavmHFdy2UqqtSaeoQXAprIbQNUxvGgL2a6sfjfX8bo=;
-        b=sEAZZh7L0A4oF170dZpxKHHszTHR8O6PKwmT9XLGAEm4DhV7JSWEYHzqnrWV4QmTlp
-         evzHAhoyqYGkmCJez4HIrhfzO3tuTSKw5J3wrn+kVm+JpgZyE5RjdzSlYLCD5R8Xr5U/
-         sMV0boKTZeAQPE2xMmRRXcZJFYRX8n2i8QcoksoisbBTUe/+XvKpXqFCMJPnuZRk7VQH
-         tY9r9l4CIDtIUvL6guRxgLOJBYo23gLbaN1OHoogcrcpZmAgDlfaAPfoEi45NonYUOzK
-         zPoi59HkBluH1kGUazoc8wW6iWBs8FDlBX/Csy7htdcZOLHK81YL8BJnoPJkNExJgmQ/
-         ZyNQ==
-X-Gm-Message-State: ACrzQf0vc7ivOOXa/HFQyzl5wwjoYSwWKdVog5KUhhEdOg6eu3yHX6rE
-        XpjU7wz90sBXqjT5Wag0zoCS4A==
-X-Google-Smtp-Source: AMsMyM5zQlLo8OgUbaae5LuaNGlR9OiqXZ/GlpPgTSOHs/IrBoDuUR7UyTkOWYg4+o9aO140bphOxQ==
-X-Received: by 2002:a05:622a:1c15:b0:3a5:2602:7b99 with SMTP id bq21-20020a05622a1c1500b003a526027b99mr21380164qtb.127.1667569545298;
-        Fri, 04 Nov 2022 06:45:45 -0700 (PDT)
+        bh=nNOoeyNPbk4klwxXRT+oWl+4JUP2MxkRrYLhtJXAbr8=;
+        b=xzIOURVl7FQhzdoYk4d9i7gsL9+likxRf2Ke3iRmzCPASOaAxVPh3gMI1ahNG7Dnhu
+         +H5o6G00cclGCPpaO5D8+oAURur17MTZm3k8+sQ6rlPbxvyLLn8Gul1ZkLTVCPMhU9jZ
+         baeR+i0yS+kygd7oI9U5YCZ8yH+4FbY7WkjV7a0r2271Meb8X5zW8/pPUDm9LrMHPr45
+         FL+RLcFj3O54tyA2PDQVnzsn4+ieOAzYMl8qj6zZCncSUoPN5bSGjbQ77UJGJUARbM1I
+         eEoXR/aF7D7vR9mUUd5tG8So4F+DGevou7e6MGW73Ip8Uc7qGJHRfZ/CxSFbTIq6fn/E
+         vPKA==
+X-Gm-Message-State: ACrzQf0CjyKRumbY0zHO/iAWhkBTtBXXa0RHhUvVHxY/PNMZ9MQNO+mW
+        o17E7OlJgfm75FY4G04IbFZuFA==
+X-Google-Smtp-Source: AMsMyM5z68VJ4ZL4fh0QWV5cz9FsjGkFdAAv2iMVmsPyBZltry4swkjwL6vej368Hj6i1GkOsBsxUA==
+X-Received: by 2002:ac8:4a0a:0:b0:3a5:33cf:c1d2 with SMTP id x10-20020ac84a0a000000b003a533cfc1d2mr18416625qtq.548.1667569569695;
+        Fri, 04 Nov 2022 06:46:09 -0700 (PDT)
 Received: from ?IPV6:2601:586:5000:570:aad6:acd8:4ed9:299b? ([2601:586:5000:570:aad6:acd8:4ed9:299b])
-        by smtp.gmail.com with ESMTPSA id b1-20020ac87541000000b003a56d82fd8csm603940qtr.91.2022.11.04.06.45.43
+        by smtp.gmail.com with ESMTPSA id bi11-20020a05620a318b00b006eeca296c00sm2851191qkb.104.2022.11.04.06.46.07
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 04 Nov 2022 06:45:44 -0700 (PDT)
-Message-ID: <e2ea63b4-3be1-0a5a-9618-8495026ccead@linaro.org>
-Date:   Fri, 4 Nov 2022 09:45:42 -0400
+        Fri, 04 Nov 2022 06:46:08 -0700 (PDT)
+Message-ID: <9a6032c9-7784-3f64-fbaa-c18982d25a2d@linaro.org>
+Date:   Fri, 4 Nov 2022 09:46:07 -0400
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.2
-Subject: Re: [v2 07/10] dts-bindings: phy: Add Cadence HDP-TX DP PHY bindings
+Subject: Re: [v2 09/10] dts-bindings: phy: Add Cadence HDP-TX HDMI PHY
+ bindings
 Content-Language: en-US
 To:     Sandor Yu <Sandor.yu@nxp.com>, dri-devel@lists.freedesktop.org,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
@@ -72,9 +73,9 @@ Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
         penguin-kernel@I-love.SAKURA.ne.jp, p.yadav@ti.com,
         oliver.brown@nxp.com
 References: <cover.1667463263.git.Sandor.yu@nxp.com>
- <bea6eb888717e1c0a3efc58761b0e75e4104f737.1667463263.git.Sandor.yu@nxp.com>
+ <f1a558c1511f310475002ed7a18d4e0406318b63.1667463263.git.Sandor.yu@nxp.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <bea6eb888717e1c0a3efc58761b0e75e4104f737.1667463263.git.Sandor.yu@nxp.com>
+In-Reply-To: <f1a558c1511f310475002ed7a18d4e0406318b63.1667463263.git.Sandor.yu@nxp.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -88,112 +89,21 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 04/11/2022 02:44, Sandor Yu wrote:
-> Add bindings for Cadence HDP-TX DisplayPort PHY.
+> Add bindings for Cadence HDP-TX HDMI PHY.
 > 
 > Signed-off-by: Sandor Yu <Sandor.yu@nxp.com>
 > ---
->  .../bindings/phy/phy-cadence-hdptx-dp.yaml    | 70 +++++++++++++++++++
->  1 file changed, 70 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/phy/phy-cadence-hdptx-dp.yaml
+>  .../bindings/phy/phy-cadence-hdptx-hdmi.yaml  | 54 +++++++++++++++++++
+>  1 file changed, 54 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/phy/phy-cadence-hdptx-hdmi.yaml
 > 
-> diff --git a/Documentation/devicetree/bindings/phy/phy-cadence-hdptx-dp.yaml b/Documentation/devicetree/bindings/phy/phy-cadence-hdptx-dp.yaml
+> diff --git a/Documentation/devicetree/bindings/phy/phy-cadence-hdptx-hdmi.yaml b/Documentation/devicetree/bindings/phy/phy-cadence-hdptx-hdmi.yaml
 > new file mode 100644
-> index 000000000000..ab6f4e25c425
+> index 000000000000..edd7bf1c8920
 > --- /dev/null
-> +++ b/Documentation/devicetree/bindings/phy/phy-cadence-hdptx-dp.yaml
+> +++ b/Documentation/devicetree/bindings/phy/phy-cadence-hdptx-hdmi.yaml
 
-Use filename matching compatible, so cdns,hdptx-dp-phy.yaml
-
-> @@ -0,0 +1,70 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: "http://devicetree.org/schemas/phy/phy-cadence-hdptx-dp.yaml#"
-> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-
-Drop quotes from both lines.
-
-> +
-> +title: Cadence HDP(HDMI/DisplayPort) TX PHY for DisplayPort protocol binding
-
-Drop binding
-
-> +
-> +description:
-> +  This binding describes the Cadence HDP-TX PHY for DispalyPort protocol.
-
-Drop "This binding describes"
-
-> +
-> +maintainers:
-> +  - Sandor Yu <sandor.yu@nxp.com>
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - cdns,hdptx-dp-phy
-> +
-> +  reg:
-> +    description:
-> +      Offset of Cadence HDPTX APB configuration registers.
-
-Same comments as usual.
-
-> +
-> +  clocks:
-> +    items:
-> +      description:
-> +        PHY reference clock. Must contain an entry in clock-names.
-
-Drop "Must contain an entry in clock-names."
-
-> +
-> +  clock-names:
-> +    items:
-> +      - const: refclk
-> +
-> +  "#phy-cells":
-> +    const: 0
-> +
-> +  cdns,num-lanes:
-> +    description:
-> +      Number of lanes.
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    enum: [1, 2, 3, 4]
-> +    default: 4
-> +
-> +  cdns,max-bit-rate:
-> +    description:
-> +      Maximum DisplayPort link bit rate to use, in Mbps
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    enum: [2160, 2430, 2700, 3240, 4320, 5400]
-> +    default: 5400
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - clocks
-> +  - clock-names
-> +  - "#phy-cells"
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/phy/phy.h>
-> +    dp_phy: dp_phy@32c00000 {
-
-phy
-(and no underscores in node names)
-
-> +        compatible = "cdns,hdptx-dp-phy";
-> +        reg = <0x32c00000 0x100000>;
-> +        #phy-cells = <0>;
-> +        clocks = <&hdmi_phy_27m>;
-> +        clock-names = "refclk";
-> +        cdns,num-lanes = <4>;
-> +        cdns,max-bit-rate = <5400>;
-> +    };
+Same comments apply as for other bindings (also phy)
 
 Best regards,
 Krzysztof
