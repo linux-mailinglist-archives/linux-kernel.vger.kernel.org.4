@@ -2,85 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D7E1619179
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 07:57:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E899261917B
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 07:57:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231433AbiKDG5H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 02:57:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42764 "EHLO
+        id S231491AbiKDG5Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 02:57:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231374AbiKDG5F (ORCPT
+        with ESMTP id S231475AbiKDG5W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 02:57:05 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC911644E
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 23:56:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667544969;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=5Z8pgpEoQGeTMdYiqrUkF/Lckp8LaxoK9HC3TP6LmFk=;
-        b=CiCw683jaHHCLBOp5W/xYdsLOeCM3e9x+DTXcDxYMTeC7re3kDLQhiCFC8JXDGLhcEqJ3Y
-        ImuSGmteNOM4lA6pr8uPargqsNQxK1AB1JeepJV2xt7ClgLQyxlmAdB56KKe4t/n5IZIXd
-        PIsTQLEcVCOaZRL8XuSr6ILa2Gs4Ros=
-Received: from mail-oa1-f72.google.com (mail-oa1-f72.google.com
- [209.85.160.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-584-tl7cLpKoOVqtVFLlNiUbrw-1; Fri, 04 Nov 2022 02:56:08 -0400
-X-MC-Unique: tl7cLpKoOVqtVFLlNiUbrw-1
-Received: by mail-oa1-f72.google.com with SMTP id 586e51a60fabf-13b88262940so2202479fac.15
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 23:56:08 -0700 (PDT)
+        Fri, 4 Nov 2022 02:57:22 -0400
+Received: from mail-vk1-xa29.google.com (mail-vk1-xa29.google.com [IPv6:2607:f8b0:4864:20::a29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1692F656F;
+        Thu,  3 Nov 2022 23:57:22 -0700 (PDT)
+Received: by mail-vk1-xa29.google.com with SMTP id g16so1895872vkl.11;
+        Thu, 03 Nov 2022 23:57:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=QAu7avbRwIGd2fwGHCJmgmPKqmQjXHREloI21uMgOjM=;
+        b=Votyuy76zN6cU4EntSX9bdqU4qeiY/VJDpt62DtPMUzaY+nmsxh8NwAGjuhmFEPt/o
+         YBIeOcaTE2DGB8q4aSR5S9V6S7Dvo0IYm9gxkP0toA3APMQjHNb08KnpZgyoMRaXO31B
+         BJzLY+kuqqDHSzyBXAQAPQN11Jdky0bZnu01f9DKjANFAxLtHIvCab0ucxHWHcrNtrBJ
+         x0fP2Cg2nLNBLismWFQ/D2tfXw6tCgd2v4O9AXSk2MFjqU4OVFpgqBWimiVSPZq9w/Xg
+         N90RiyN8cjkeczYVJ/WlZsDpj9BkBTKDFpakLPKqyIOXk5JcGqIk579wevtu5VJIWHjt
+         wK6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5Z8pgpEoQGeTMdYiqrUkF/Lckp8LaxoK9HC3TP6LmFk=;
-        b=Y0NAOySxnPum3EXsl5nSD4zLBnbutu/Aw9Aksj7az1wRAKY1x9xe3Y6yN3AV2NvqkZ
-         MjL9Fh2IOykZRTfW8p4rPlRRBdz+IKLfi+rBR5mnELIVrQzYWXhxJ3gXShq9nFyqOi15
-         +yypFtk/tFXyJfGw5WPpDKziS1DBNHO7AtI/B26o4WaF2vicB4tlTThFzFSDoszWsoBG
-         5l0t3GAK3sudCJvXIR4UkDVJIbfQrWEd1RCyKak6GU/yA0sC6GdnlkcXliJ2jVP5vFAw
-         0afNnmafyKA1sZ2bgLfx3TtFmzBamBZM0dLHX2Efzi+57+H6sgWSjJmyx25MhPsOFOje
-         SJbQ==
-X-Gm-Message-State: ACrzQf1FrgcVlCC4YzWv+NqGvcGk2qP1Gc/SPrAAUfrUGuIIdZTxr/KP
-        ZM+zVlFW97JzZQ49ok5GE/y6W0ehTKshGSHyDX/FVLA9Emd0Rrmmxtll3pSd8uKOUTyjjlq7G1H
-        1ASatvQLtH/yU0+qm3UMSXDEaxhCkFXK8iz21+l0S
-X-Received: by 2002:a05:6870:9595:b0:132:7b3:29ac with SMTP id k21-20020a056870959500b0013207b329acmr187913oao.35.1667544967830;
-        Thu, 03 Nov 2022 23:56:07 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM6uOSbcIQS7KtsvJ6sUqAGVkWZj1MHAULLpUw3CyxbO8+piM4IZrUq0fI1jx3qzy5Tb12QsruflGwjcxpEXVPQ=
-X-Received: by 2002:a05:6870:9595:b0:132:7b3:29ac with SMTP id
- k21-20020a056870959500b0013207b329acmr187905oao.35.1667544967645; Thu, 03 Nov
- 2022 23:56:07 -0700 (PDT)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=QAu7avbRwIGd2fwGHCJmgmPKqmQjXHREloI21uMgOjM=;
+        b=f5gOUOA7USIZp0XOxHuXYeLChvySMgE9O4Z1FxQJYCBLe6vAWgYqCaTVXWV3cRf12D
+         JDM5izKPCPuydSCfSr8IWzkJm1THun4P/bki4GGi4a7DPCpu5CiS94DfQ/VbS8UyxtJ2
+         D47OjBid1olNKRrThuDxy2wp6ZlHKK08aW7M38WvqU/ju5wm0nZUjGHS/+IfHQHmbk3f
+         2IP3wVwUD1bn2DY+7zvCVcHSNYGPBUw9otQs7B8SqOY1kVGcDrr+fI1ORB8lKbq47dK8
+         c4jse6x3WToRtgdnzV2NgmlTCIcdVvMNR+WeWo2+CayzhK3GaseXimiZghl9/Y3XlvCR
+         tIwg==
+X-Gm-Message-State: ACrzQf2m55bf8OE6huKaIipI8MSpgUqFjcyDZpqbvL/DWRVPOrI980xP
+        tPvAfcPjhUU2eELbKSxqTSyJXlKdc5t1FF+1HLI=
+X-Google-Smtp-Source: AMsMyM7r4TvZPI/sr1xuU0sKbFppIpO4bFK9VcmyZLhh86+X3uSB2Ia2n26fQoKt3h9uu2Xl2tU3+4Z0x2zlaZPBN/g=
+X-Received: by 2002:a1f:254f:0:b0:3b7:7495:86d5 with SMTP id
+ l76-20020a1f254f000000b003b7749586d5mr19345652vkl.23.1667545041030; Thu, 03
+ Nov 2022 23:57:21 -0700 (PDT)
 MIME-Version: 1.0
-References: <Y0lcmZTP5sr467z6@T590> <CACycT3u8yYUS-WnNzgHQtQFYuK-XcyffpFc35HVZzrCS7hH5Sg@mail.gmail.com>
- <Y05OzeC7wImts4p7@T590> <CACycT3sK1AzA4RH1ZfbstV3oax-oeBVtEz+sY+8scBU0=1x46g@mail.gmail.com>
- <CAJSP0QVevA0gvyGABAFSoMhBN9ydZqUJh4qJYgNbGeyRXL8AjA@mail.gmail.com>
- <CACycT3udzt0nyqweGbAsZB4LDQU=a7OSWKC8ZWieoBpsSfa2FQ@mail.gmail.com>
- <1d051d63-ce34-1bb3-2256-4ced4be6d690@redhat.com> <CACycT3usE0QdJd50bSiLiPwTFxscg-Ur=iZyeGJJBPe7+KxOFQ@mail.gmail.com>
- <CAJSP0QUGj4t8nYeJvGaO-cWJ+F3Zvxcq007RHOm-=41zaE-v0Q@mail.gmail.com>
- <CACGkMEt+BWCUVQPnfUUd0QXkHz=90LMXxydCgBqWTDB3eGBw-w@mail.gmail.com> <Y2LBa/ePKiSN2phm@fedora>
-In-Reply-To: <Y2LBa/ePKiSN2phm@fedora>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Fri, 4 Nov 2022 14:55:55 +0800
-Message-ID: <CACGkMEvBZDxTv-DS7V6HW+GPZio5jiafmNGACa2cyWqCr_GvJg@mail.gmail.com>
-Subject: Re: ublk-qcow2: ublk-qcow2 is available
-To:     Stefan Hajnoczi <stefanha@redhat.com>
-Cc:     Stefan Hajnoczi <stefanha@gmail.com>,
-        Yongji Xie <xieyongji@bytedance.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Ming Lei <tom.leiming@gmail.com>,
-        Ziyang Zhang <ZiyangZhang@linux.alibaba.com>,
-        io-uring@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        "Denis V. Lunev" <den@openvz.org>,
-        Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>
+References: <20221104054053.431922658@goodmis.org> <20221104054917.009383303@goodmis.org>
+In-Reply-To: <20221104054917.009383303@goodmis.org>
+From:   Ryusuke Konishi <konishi.ryusuke@gmail.com>
+Date:   Fri, 4 Nov 2022 15:57:04 +0900
+Message-ID: <CAKFNMomoVn3Zj5xaH6hjXHO+KXj983yZEue5Jx4wH+_m5NiJjA@mail.gmail.com>
+Subject: Re: [RFC][PATCH v3 28/33] timers: fs/nilfs2: Use timer_shutdown_sync()
+ before freeing timer
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Anna-Maria Gleixner <anna-maria@linutronix.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-nilfs@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,74 +74,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 3, 2022 at 3:13 AM Stefan Hajnoczi <stefanha@redhat.com> wrote:
+On Fri, Nov 4, 2022 at 2:48 PM Steven Rostedt wrote:
 >
-> On Tue, Nov 01, 2022 at 10:36:29AM +0800, Jason Wang wrote:
-> > On Tue, Oct 25, 2022 at 8:02 PM Stefan Hajnoczi <stefanha@gmail.com> wr=
-ote:
-> > >
-> > > On Tue, 25 Oct 2022 at 04:17, Yongji Xie <xieyongji@bytedance.com> wr=
-ote:
-> > > >
-> > > > On Fri, Oct 21, 2022 at 2:30 PM Jason Wang <jasowang@redhat.com> wr=
-ote:
-> > > > >
-> > > > >
-> > > > > =E5=9C=A8 2022/10/21 13:33, Yongji Xie =E5=86=99=E9=81=93:
-> > > > > > On Tue, Oct 18, 2022 at 10:54 PM Stefan Hajnoczi <stefanha@gmai=
-l.com> wrote:
-> > > > > >> On Tue, 18 Oct 2022 at 09:17, Yongji Xie <xieyongji@bytedance.=
-com> wrote:
-> > > > > >>> On Tue, Oct 18, 2022 at 2:59 PM Ming Lei <tom.leiming@gmail.c=
-om> wrote:
-> > > > > >>>> On Mon, Oct 17, 2022 at 07:11:59PM +0800, Yongji Xie wrote:
-> > > > > >>>>> On Fri, Oct 14, 2022 at 8:57 PM Ming Lei <tom.leiming@gmail=
-.com> wrote:
-> > > > > >>>>>> On Thu, Oct 13, 2022 at 02:48:04PM +0800, Yongji Xie wrote=
-:
-> > > > > >>>>>>> On Wed, Oct 12, 2022 at 10:22 PM Stefan Hajnoczi <stefanh=
-a@gmail.com> wrote:
-> > > > > >>>>>>>> On Sat, 8 Oct 2022 at 04:43, Ziyang Zhang <ZiyangZhang@l=
-inux.alibaba.com> wrote:
-> > > > > >>>>>>>>> On 2022/10/5 12:18, Ming Lei wrote:
-> > > > > >>>>>>>>>> On Tue, Oct 04, 2022 at 09:53:32AM -0400, Stefan Hajno=
-czi wrote:
-> > > > > >>>>>>>>>>> On Tue, 4 Oct 2022 at 05:44, Ming Lei <tom.leiming@gm=
-ail.com> wrote:
-> > > > > >>>>>>>>>>>> On Mon, Oct 03, 2022 at 03:53:41PM -0400, Stefan Haj=
-noczi wrote:
-> > > > > >>>>>>>>>>>>> On Fri, Sep 30, 2022 at 05:24:11PM +0800, Ming Lei =
-wrote:
-> > > There are ways to minimize that cost:
-> > > 1. The driver only needs to fetch the device's sq index when it has
-> > > run out of sq ring space.
-> > > 2. The device can include sq index updates with completions. This is
-> > > what NVMe does with the CQE SQ Head Pointer field, but the
-> > > disadvantage is that the driver has no way of determining the sq inde=
-x
-> > > until a completion occurs.
-> >
-> > Probably, but as replied in another thread, based on the numbers
-> > measured from the networking test, I think the current virtio layout
-> > should be sufficient for block I/O but might not fit for cases like
-> > NFV.
+> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
 >
-> I remember that the Linux virtio_net driver doesn't rely on vq spinlocks
-> because CPU affinity and the NAPI architecture ensure that everything is
-> CPU-local. There is no need to protect the freelist explicitly because
-> the functions cannot race.
+> Before a timer is freed, timer_shutdown_sync() must be called.
 >
-> Maybe virtio_blk can learn from virtio_net...
-
-It only works for RX where add and get could be all done in NAPI. But
-this is not the case for TX (and virtio-blk).
-
-Actually, if the free_list is the one thing that needs to be
-serialized, there's no need to use lock at all. We can try to switch
-to use ptr_ring instead.
-
-Thanks
-
+> Link: https://lore.kernel.org/all/20220407161745.7d6754b3@gandalf.local.home/
 >
-> Stefan
+> Cc: Ryusuke Konishi <konishi.ryusuke@gmail.com>
+> Cc: linux-nilfs@vger.kernel.org
+> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+> ---
+>  fs/nilfs2/segment.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/fs/nilfs2/segment.c b/fs/nilfs2/segment.c
+> index b4cebad21b48..c50dc377da26 100644
+> --- a/fs/nilfs2/segment.c
+> +++ b/fs/nilfs2/segment.c
+> @@ -2752,7 +2752,7 @@ static void nilfs_segctor_destroy(struct nilfs_sc_info *sci)
+>
+>         down_write(&nilfs->ns_segctor_sem);
+>
+> -       del_timer_sync(&sci->sc_timer);
+> +       timer_shutdown_sync(&sci->sc_timer);
+>         kfree(sci);
+>  }
+>
+> --
+> 2.35.1
 
+Acked-by: Ryusuke Konishi <konishi.ryusuke@gmail.com>
+
+This is the second time, but my Ack is not tagged, so I'll reply again
+just in case.
+
+Thanks,
+Ryusuke Konishi
