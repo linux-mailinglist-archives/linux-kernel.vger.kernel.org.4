@@ -2,131 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49DA3619DC2
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 17:51:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BBAB619DCC
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 17:52:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230153AbiKDQvd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 12:51:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39514 "EHLO
+        id S232086AbiKDQwN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 12:52:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232038AbiKDQvM (ORCPT
+        with ESMTP id S232093AbiKDQvl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 12:51:12 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF9483E080
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 09:49:14 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id bs21so7878156wrb.4
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 09:49:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=aAs5rZHSGSQsXlUwWbd8TyKLYelB2yi0ItHv5X13qbU=;
-        b=M2bRgeY24u7TyRQlXnsLbPyjNfu+Ho/7yCycn1LnhjTiP/Kn7MtXJNNZIucexBpkgM
-         kugoRmyeiSyzRwVufXD5+3JxB8uD3E/pSb4JrkX7t234NhKqRAQx9jsNFWv5VeU//6WE
-         zUrHh9HELZrcK+LbDkaBZw/l/D/Sq4jDE+QhJu+1qG6tQ0fi2BRToFbyYKa9ETZT+2k0
-         4TjtuB/+e+hrdE0Kt92kdTQ2Z7gm7wwvlUpRREzryiSTgSACz/ayMZzEYR6ez3csscke
-         rG4ActMX68WWhhnGSZYuaUR+cwoukPwjU0nKGIUIZwbZXIAfESeByERFq1Ncu3UX8a9V
-         T9Ng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=aAs5rZHSGSQsXlUwWbd8TyKLYelB2yi0ItHv5X13qbU=;
-        b=Dop8TsFj0tk0UeDDc3DSZ6kD/6ggWQkFZRy/RAU2ZTrTfs1jbI+IJFXkqdw0ckPFf5
-         YZ0o1jrroatlPxtD5//sJpIX+ITydq4J/tYGj0LtS6DjF6Zrdn0W+0Lh43fV0TIIoOcg
-         Q/DRLd0MCis3CkXnULh/3X4wiDtLBYmc8FgKZ38SfeEYwghIhVxQtLWV9r+PxG0bRVsb
-         vJCiAD1nqS0ZDq1TwIIJwjJe7acZZN1/feVldJlqEE69prDTkXV8+Hkoi5S+gTfkZFte
-         JS1dMxtMtzHXscXLq5e5DRaEX6PNSf37gj7INXiFc0Y+u/3sSqNKnw6P1dolaZVwGovl
-         O+Mg==
-X-Gm-Message-State: ACrzQf2vXybOGqur9BtIk+bzTsFf/x8728Be524eaMcAguHE9CkWW3dH
-        g8yXm/aCRA4bl+9/56X25A4MpzAug0pXnc+NMqU5xQ==
-X-Google-Smtp-Source: AMsMyM7ncoUzg0qMJCCZdGfdxqGh69tHn8ZNDQ8QawadI4ZYCCzWRf+eIJsaO6bZQF0G4b5xqy0iA9qzYotAVvcOHjs=
-X-Received: by 2002:a05:6000:22f:b0:236:4f8e:a913 with SMTP id
- l15-20020a056000022f00b002364f8ea913mr22746689wrz.240.1667580552893; Fri, 04
- Nov 2022 09:49:12 -0700 (PDT)
+        Fri, 4 Nov 2022 12:51:41 -0400
+X-Greylist: delayed 248 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 04 Nov 2022 09:49:49 PDT
+Received: from vern.gendns.com (vern.gendns.com [98.142.107.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9374D42F46;
+        Fri,  4 Nov 2022 09:49:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=lechnology.com; s=default; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=/fSoTUtqLSMP2KfCqxLZIKji3GOepn9Xc93RPyjSVkg=; b=S05yN9/OkId9ymzRJ4dCjcPWLQ
+        7kS+7hwLHIGVXlHp7W14BxEpjdI4ntV02EjHSD7RVjfxzjyZZY+kvQZZx58NMhQA3G5XgkIRxucIi
+        1OotghPODhkcufNUd5I3CGkJL57YrmUvR1N06/jUXH2swC2CkuimIhdic8beAfGSReYdk0zY/yiuZ
+        yCoOy4drXYmkZQ1P6bLMxXp+heS5TEP3UnHMbT+naZWwnajVpJ4cAXNOiBZHJHsv1ZCK1dTFhnhcE
+        kQfJJLIU0/MUGSPFRmI/cJ4R007YPo4eHbdvB68luhk9bsDRd+9PwexE0o4g4q5uI6q1mQphZaEQ8
+        PyW6kaVA==;
+Received: from ip98-183-112-30.ok.ok.cox.net ([98.183.112.30]:33812 helo=[192.168.0.134])
+        by vern.gendns.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.95)
+        (envelope-from <david@lechnology.com>)
+        id 1oqzsl-00Ciq9-V8;
+        Fri, 04 Nov 2022 12:49:41 -0400
+Message-ID: <6296d944-e03d-6f2b-48b1-3dad78e3c89d@lechnology.com>
+Date:   Fri, 4 Nov 2022 11:49:34 -0500
 MIME-Version: 1.0
-References: <20221019202843.40810-1-helgaas@kernel.org> <Y2RlxvPAvzVXtw9t@google.com>
- <8a23b1d3ee853cee73385e8144338f399cbe3165.camel@perches.com>
- <CAMn1gO7tEF+VioB8n0=8vQ4gRPKqSSfPwmbX8ci82D=hBbcfyw@mail.gmail.com> <5f982ebd7223369362e6e27d111704883c4d7e44.camel@perches.com>
-In-Reply-To: <5f982ebd7223369362e6e27d111704883c4d7e44.camel@perches.com>
-From:   Peter Collingbourne <pcc@google.com>
-Date:   Fri, 4 Nov 2022 09:49:01 -0700
-Message-ID: <CAMn1gO5Q=kcDwEnNhothZiRfMi09X0jTTmTbm7qrvSFQ6a7ivg@mail.gmail.com>
-Subject: Re: [PATCH] checkpatch: add warning for non-lore mailing list URLs
-To:     Joe Perches <joe@perches.com>
-Cc:     Bjorn Helgaas <helgaas@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Whitcroft <apw@canonical.com>,
-        Dwaipayan Ray <dwaipayanray1@gmail.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Kees Cook <keescook@chromium.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v2 54/65] clk: da8xx: clk48: Switch to determine_rate
+Content-Language: en-US
+To:     Maxime Ripard <maxime@cerno.tech>, Stephen Boyd <sboyd@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Chen-Yu Tsai <wens@csie.org>, Daniel Vetter <daniel@ffwll.ch>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        =?UTF-8?Q?Andreas_F=c3=a4rber?= <afaerber@suse.de>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Abel Vesa <abelvesa@kernel.org>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Prashant Gaikwad <pgaikwad@nvidia.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Sekhar Nori <nsekhar@ti.com>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Takashi Iwai <tiwai@suse.com>,
+        David Airlie <airlied@gmail.com>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Mark Brown <broonie@kernel.org>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     linux-stm32@st-md-mailman.stormreply.com,
+        alsa-devel@alsa-project.org, linux-mediatek@lists.infradead.org,
+        linux-phy@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        linux-actions@lists.infradead.org, linux-clk@vger.kernel.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        patches@opensource.cirrus.com, linux-tegra@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+References: <20221018-clk-range-checks-fixes-v2-0-f6736dec138e@cerno.tech>
+ <20221018-clk-range-checks-fixes-v2-54-f6736dec138e@cerno.tech>
+From:   David Lechner <david@lechnology.com>
+In-Reply-To: <20221018-clk-range-checks-fixes-v2-54-f6736dec138e@cerno.tech>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - vern.gendns.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - lechnology.com
+X-Get-Message-Sender-Via: vern.gendns.com: authenticated_id: davidmain+lechnology.com/only user confirmed/virtual account not confirmed
+X-Authenticated-Sender: vern.gendns.com: davidmain@lechnology.com
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 3, 2022 at 6:41 PM Joe Perches <joe@perches.com> wrote:
->
-> On Thu, 2022-11-03 at 18:34 -0700, Peter Collingbourne wrote:
-> > On Thu, Nov 3, 2022 at 6:27 PM Joe Perches <joe@perches.com> wrote:
-> > >
-> > > On Thu, 2022-11-03 at 18:07 -0700, Peter Collingbourne wrote:
-> > > > On Wed, Oct 19, 2022 at 03:28:43PM -0500, Bjorn Helgaas wrote:
-> > > > > From: Bjorn Helgaas <bhelgaas@google.com>
-> > > > >
-> > > > > The lkml.org, marc.info, spinics.net, etc archives are not quite as useful
-> > > > > as lore.kernel.org because they use different styles, add advertising, and
-> > > > > may disappear in the future.  The lore archives are more consistent and
-> > > > > more likely to stick around, so prefer https://lore.kernel.org URLs when
-> > > > > they exist.
-> > > >
-> > > > If the commit message contains a line like:
-> > > >
-> > > > Cc: linux-arm-kernel@lists.infradead.org
-> > > >
-> > > > this patch causes checkpatch.pl to complain. Would it be possible to
-> > > > restrict this to URLs?
-> > >
-> > > Yes, I believe this would probably work well enough:
-> > > ---
-> > >  scripts/checkpatch.pl | 3 ++-
-> > >  1 file changed, 2 insertions(+), 1 deletion(-)
-> > >
-> > > diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
-> > > index 7be93c3df2bcb..fe25642d8bacc 100755
-> > > --- a/scripts/checkpatch.pl
-> > > +++ b/scripts/checkpatch.pl
-> > > @@ -3336,7 +3336,8 @@ sub process {
-> > >                 }
-> > >
-> > >  # Check for mailing list archives other than lore.kernel.org
-> > > -               if ($rawline =~ m{\b$obsolete_archives}) {
-> > > +               if ($rawline =~ m{\b$obsolete_archives} &&
-> > > +                   $rawline !~ /^\s*cc:/i) {
-> >
-> > Can we make this (to|cc): instead? Otherwise developers (like me) who
-> > use custom scripts to add To: headers to their patches before passing
-> > them to checkpatch.pl will also hit this warning if their patch is
-> > being sent To: one of these mailing lists.
->
-> I think adding "To:" would be odd and unnecessary as it's not
-> something that would actually be in a patch.
->
-> You could use another front-end script to strip those "To:" from
-> checkpatch inputs.
+On 11/4/22 8:18 AM, Maxime Ripard wrote:
+> The TI DA8xx USB0 clk48 clocks implements a mux with a set_parent
+> hook, but doesn't provide a determine_rate implementation.
+> 
+> This is a bit odd, since set_parent() is there to, as its name implies,
+> change the parent of a clock. However, the most likely candidate to
+> trigger that parent change is a call to clk_set_rate(), with
+> determine_rate() figuring out which parent is the best suited for a
+> given rate.
+> 
+> The other trigger would be a call to clk_set_parent(), but it's far less
+> used, and it doesn't look like there's any obvious user for that clock.
+> 
+> So, the set_parent hook is effectively unused, possibly because of an
+> oversight. However, it could also be an explicit decision by the
+> original author to avoid any reparenting but through an explicit call to
+> clk_set_parent().
+> 
+> The driver does implement round_rate() though, which means that we can
+> change the rate of the clock, but we will never get to change the
+> parent.
+> 
+> However, It's hard to tell whether it's been done on purpose or not.
+> 
+> Since we'll start mandating a determine_rate() implementation, let's
+> convert the round_rate() implementation to a determine_rate(), which
+> will also make the current behavior explicit. And if it was an
+> oversight, the clock behaviour can be adjusted later on.
 
-OK, I made that work, so I guess I don't mind much what we do here.
+I think this one should be the same as the clk:davinci changes and
+not allow re-parenting. Since this is a USB 48MHz PHY clock, a rate
+change will never be requested.
 
-Peter
+> 
+> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+> ---
+>   drivers/clk/davinci/da8xx-cfgchip.c | 10 ++++++----
+>   1 file changed, 6 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/clk/davinci/da8xx-cfgchip.c b/drivers/clk/davinci/da8xx-cfgchip.c
+> index 4c1cc59bba53..f60c97091818 100644
+> --- a/drivers/clk/davinci/da8xx-cfgchip.c
+> +++ b/drivers/clk/davinci/da8xx-cfgchip.c
+> @@ -462,10 +462,12 @@ static unsigned long da8xx_usb0_clk48_recalc_rate(struct clk_hw *hw,
+>   	return 48000000;
+>   }
+>   
+> -static long da8xx_usb0_clk48_round_rate(struct clk_hw *hw, unsigned long rate,
+> -					unsigned long *parent_rate)
+> +static int da8xx_usb0_clk48_determine_rate(struct clk_hw *hw,
+> +					   struct clk_rate_request *req)
+>   {
+> -	return 48000000;
+> +	req->rate = 48000000;
+> +
+> +	return 0;
+>   }
+>   
+>   static int da8xx_usb0_clk48_set_parent(struct clk_hw *hw, u8 index)
+> @@ -494,7 +496,7 @@ static const struct clk_ops da8xx_usb0_clk48_ops = {
+>   	.disable	= da8xx_usb0_clk48_disable,
+>   	.is_enabled	= da8xx_usb0_clk48_is_enabled,
+>   	.recalc_rate	= da8xx_usb0_clk48_recalc_rate,
+> -	.round_rate	= da8xx_usb0_clk48_round_rate,
+> +	.determine_rate	= da8xx_usb0_clk48_determine_rate,
+>   	.set_parent	= da8xx_usb0_clk48_set_parent,
+>   	.get_parent	= da8xx_usb0_clk48_get_parent,
+>   };
+> 
+
