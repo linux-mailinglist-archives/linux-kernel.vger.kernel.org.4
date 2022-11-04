@@ -2,179 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 235B06191EF
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 08:28:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D06256191F3
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 08:28:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231378AbiKDH2O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 03:28:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54202 "EHLO
+        id S230370AbiKDH23 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 03:28:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230035AbiKDH1l (ORCPT
+        with ESMTP id S230350AbiKDH2K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 03:27:41 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7A3AC2A70D;
-        Fri,  4 Nov 2022 00:27:37 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.77])
-        by gateway (Coremail) with SMTP id _____8BxfdrovmRjDW4EAA--.15553S3;
-        Fri, 04 Nov 2022 15:27:36 +0800 (CST)
-Received: from loongson-PC.loongson.cn (unknown [10.20.42.77])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxJlfivmRj5lANAA--.19331S2;
-        Fri, 04 Nov 2022 15:27:35 +0800 (CST)
-From:   Liu Peibao <liupeibao@loongson.cn>
-To:     Bjorn Helgaas <bhelgaas@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc:     Huacai Chen <chenhuacai@loongson.cn>,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        Yinbo Zhu <zhuyinbo@loongson.cn>,
-        Liu Peibao <liupeibao@loongson.cn>, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 1/1] PCI: loongson: skip scanning unavailable child device
-Date:   Fri,  4 Nov 2022 15:27:30 +0800
-Message-Id: <20221104072730.14631-1-liupeibao@loongson.cn>
-X-Mailer: git-send-email 2.20.1
+        Fri, 4 Nov 2022 03:28:10 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D28EF29828;
+        Fri,  4 Nov 2022 00:28:03 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id d24so4135775pls.4;
+        Fri, 04 Nov 2022 00:28:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:cc:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=FLeajmmt4OPqluX6qzNLUNCHH3zdvUvIgfbZ+S214BU=;
+        b=GOJB+kSCAztTl5M+caF4wc8YttwA+XpwYpWa/wWHHlGGI43rzkz8mGzjRyMIqFhH9m
+         j8i/8PY2xF+vutN1Xi4hB+EehJsIjFGDD/uUkTm3ElXwfXruft2PFepH7kBSNQXUdVNg
+         omti1zFQGd9C/aRAV4m6ND50lUkotoolyTxt05AM9x4bB/wi/J0fZ5OitA+ts9Ro5zuY
+         0asuHq5OQWULWhhUhN0DNsrokEkpgpF1Y7jt0YEQyvzFp2aegFdnFYvJAM5BUsGBJl2T
+         bXZ1wYlmnS855rZwISVyu7DvEzTnN5DOPHLGqcstT/RA+ezdEKErw0zlqrkif9HNvezV
+         FnUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:cc:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=FLeajmmt4OPqluX6qzNLUNCHH3zdvUvIgfbZ+S214BU=;
+        b=xHnQE8OVdN2MTuxZ5+CPi7OSnsAvhvpVEPHkkAn4t8kr3YQuoA1xYS8xvOWkrOvLIe
+         UKFF6kG4PrkkKpTXC8Qqi7ElFjoC6Pi1Fr/kfcVy90/xWQWsMnbh4ciKbk5PaGgpiz0N
+         Lr59NiNKjsh+XnkypIMP0elyxl2wO4MIQXnIlG/Slb15AMzD+WuDlguxEUx3FqyuIJBG
+         a9HPATtZUtUM0sH6YMXpb9dZSEAUR2yIhG+dBa62Wxbu9iO/irF+xRoyUChRtPH/zzea
+         3eMX/idmrkriigTT+84kA8kMkgtMdYmo0G0abDr21gJULx8j8JSH7vZfRPIUs/gOgB5P
+         /2HA==
+X-Gm-Message-State: ACrzQf1/gm3n60cFkFN09wLQxVUcBSgIHFxE4wOolKLCovd6h4Vy9q9a
+        9deVA5gVw8bO68hCQqtHLKc=
+X-Google-Smtp-Source: AMsMyM6TlmV0vIFYVjLSbkFVzEWKMmvlsNiO0yO7V75n+DXAg4e3kcERPBdT6RbSgtl4G4gFFJONSg==
+X-Received: by 2002:a17:903:404c:b0:188:602b:5a24 with SMTP id n12-20020a170903404c00b00188602b5a24mr3661082pla.105.1667546883166;
+        Fri, 04 Nov 2022 00:28:03 -0700 (PDT)
+Received: from [172.20.12.203] ([116.128.244.169])
+        by smtp.gmail.com with ESMTPSA id z11-20020a1709027e8b00b00186e2d57f79sm1799709pla.288.2022.11.04.00.28.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 04 Nov 2022 00:28:02 -0700 (PDT)
+Message-ID: <a6893696-bcac-c57d-7db9-61bcbb0ad414@gmail.com>
+Date:   Fri, 4 Nov 2022 15:27:58 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Cc:     xiongxin@kylinos.cn, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] PM: hibernate: add check of preallocate mem for
+ image size pages
+Content-Language: en-US
+To:     Jiri Slaby <jirislaby@kernel.org>, rafael@kernel.org,
+        len.brown@intel.com, pavel@ucw.cz, huanglei@kylinos.cn
+References: <20221104054119.1946073-1-tgsp002@gmail.com>
+ <20221104054119.1946073-3-tgsp002@gmail.com>
+ <90de2e70-1802-b26b-798e-74421389180e@kernel.org>
+From:   TGSP <tgsp002@gmail.com>
+In-Reply-To: <90de2e70-1802-b26b-798e-74421389180e@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8CxJlfivmRj5lANAA--.19331S2
-X-CM-SenderInfo: xolx1vpled0qxorr0wxvrqhubq/1tbiAQATCmNjr2MLBQAFsf
-X-Coremail-Antispam: 1Uk129KBjvJXoWxJw4fJrWrGw17Jry5Ww45Wrg_yoW5AryDpF
-        W3Aay3Kr4rtr1I9ws5t3yUCr1a9Fsa93s3JFs7Cwnagr9Fy3y0gFy8JF1jy3ySyrW8WF1a
-        qFWvgr48CF4UJFUanT9S1TB71UUUUjUqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        b3AYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
-        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
-        n4kS14v26r1Y6r17M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6x
-        ACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r126r1DMcIj6I8E
-        87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41l42xK82
-        IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_Jrv_JF1lx2Iq
-        xVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r
-        1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY
-        6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67
-        AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuY
-        vjxU466zUUUUU
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The PCI Controller of 2k1000 could not mask devices by
-setting vender id or device id in configuration space header
-as invalid values. When there are pins shareble between
-the platform device and PCI device, if the platform device
-is preferred, we should not scan this PCI device. In the
-above scene, add `status = "disabled"` property in DT node
-of this PCI device.
+在 2022/11/4 14:25, Jiri Slaby 写道:
+> On 04. 11. 22, 6:41, TGSP wrote:
+>> From: xiongxin <xiongxin@kylinos.cn>
+>>
+>> Added a check on the return value of preallocate_image_highmem(). If
+>> memory preallocate is insufficient, S4 cannot be done;
+>>
+>> I am playing 4K video on a machine with AMD or other graphics card and
+>> only 8GiB memory, and the kernel is not configured with CONFIG_HIGHMEM.
+>> When doing the S4 test, the analysis found that when the pages get from
+>> minimum_image_size() is large enough, The preallocate_image_memory() and
+>> preallocate_image_highmem() calls failed to obtain enough memory. Add
+>> the judgment that memory preallocate is insufficient;
+>>
+>> The detailed debugging data is as follows:
+>>
+>> image_size: 3225923584, totalram_pages: 1968948 in
+>> hibernate_reserved_size_init();
+>>
+>> in hibernate_preallocate_memory():
+>> code pages = minimum_image_size(saveable) = 717992, at this time(line):
+>> count: 2030858
+>> avail_normal: 2053753
+>> highmem: 0
+>> totalreserve_pages: 22895
+>> max_size: 1013336
+>> size: 787579
+>> saveable: 1819905
+>>
+>> When the code executes to:
+>> pages = preallocate_image_memory(alloc, avail_normal), at that
+>> time(line):
+>> pages_highmem: 0
+>> avail_normal: 1335761
+>> alloc: 1017522
+>> pages: 1017522
+>>
+>> So enter the else branch judged by (pages < alloc), When executed to
+>> size = preallocate_image_memory(alloc, avail_normal):
+>> alloc = max_size - size = 225757;
+>> size = preallocate_image_memory(alloc, avail_normal) = 168671, That is,
+>> preallocate_image_memory() does not apply for all alloc memory pages,
+>> because highmem is not enabled, and size_highmem will return 0 here, so
+>> there is a memory page that has not been preallocated, so I think a
+>> judgment needs to be added here.
+>>
+>> But what I can't understand is that although pages are not preallocated
+>> enough, "pages -= free_unnecessary_pages()" in the code below can also
+>> discard some pages that have been preallocated, so I am not sure whether
+>> it is appropriate to add a judgment here.
+>>
+>> Cc: stable@vger.kernel.org
+>> Signed-off-by: xiongxin <xiongxin@kylinos.cn>
+>> Signed-off-by: huanglei <huanglei@kylinos.cn>
+>> ---
+>>   kernel/power/snapshot.c | 11 +++++++++--
+>>   1 file changed, 9 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/kernel/power/snapshot.c b/kernel/power/snapshot.c
+>> index c20ca5fb9adc..546d544cf7de 100644
+>> --- a/kernel/power/snapshot.c
+>> +++ b/kernel/power/snapshot.c
+>> @@ -1854,6 +1854,8 @@ int hibernate_preallocate_memory(void)
+>>           alloc = (count - pages) - size;
+>>           pages += preallocate_image_highmem(alloc);
+>>       } else {
+>> +        unsigned long size_highmem = 0;
+> 
+> This needs not be initialized, right?
 
-Signed-off-by: Liu Peibao <liupeibao@loongson.cn>
----
-V1 -> V2: use existing property "status" instead of adding new property.
+If there is no need to make judgments here, then in the (pages < alloc) 
+branch, it is necessary to make judgments on (pages_highmem < alloc)? 
+should be the same;
 
- drivers/pci/controller/pci-loongson.c | 57 +++++++++++++++++++++++++++
- 1 file changed, 57 insertions(+)
-
-diff --git a/drivers/pci/controller/pci-loongson.c b/drivers/pci/controller/pci-loongson.c
-index 05c50408f13b..cde8a8691867 100644
---- a/drivers/pci/controller/pci-loongson.c
-+++ b/drivers/pci/controller/pci-loongson.c
-@@ -40,11 +40,21 @@ struct loongson_pci_data {
- 	struct pci_ops *ops;
- };
- 
-+#ifdef CONFIG_OF
-+struct mask_entry {
-+	struct list_head entry;
-+	unsigned int devfn;
-+};
-+#endif
-+
- struct loongson_pci {
- 	void __iomem *cfg0_base;
- 	void __iomem *cfg1_base;
- 	struct platform_device *pdev;
- 	const struct loongson_pci_data *data;
-+#ifdef CONFIG_OF
-+	struct list_head masklist;
-+#endif
- };
- 
- /* Fixup wrong class code in PCIe bridges */
-@@ -194,6 +204,20 @@ static void __iomem *pci_loongson_map_bus(struct pci_bus *bus,
- 			return NULL;
- 	}
- 
-+#ifdef CONFIG_OF
-+	/* Don't access devices in masklist */
-+	if (pci_is_root_bus(bus)) {
-+		struct list_head *list;
-+		struct mask_entry *entry;
-+
-+		list_for_each(list, &priv->masklist) {
-+			entry = list_entry(list, struct mask_entry, entry);
-+			if (devfn == entry->devfn)
-+				return NULL;
-+		}
-+	}
-+#endif
-+
- 	/* CFG0 can only access standard space */
- 	if (where < PCI_CFG_SPACE_SIZE && priv->cfg0_base)
- 		return cfg0_map(priv, bus, devfn, where);
-@@ -206,6 +230,36 @@ static void __iomem *pci_loongson_map_bus(struct pci_bus *bus,
- }
- 
- #ifdef CONFIG_OF
-+static int setup_masklist(struct loongson_pci *priv)
-+{
-+	struct device *dev = &priv->pdev->dev;
-+	struct device_node *dn, *parent = dev->of_node;
-+	struct mask_entry *entry;
-+	int devfn;
-+
-+	INIT_LIST_HEAD(&priv->masklist);
-+
-+	for_each_child_of_node(parent, dn) {
-+		/*
-+		 * if device is not available, add this to masklist
-+		 * to avoid scanning it.
-+		 */
-+		if (!of_device_is_available(dn)) {
-+			devfn = of_pci_get_devfn(dn);
-+			if (devfn < 0)
-+				continue;
-+
-+			entry = devm_kzalloc(dev, sizeof(entry), GFP_KERNEL);
-+			if (!entry)
-+				return -ENOMEM;
-+
-+			entry->devfn = devfn;
-+			list_add_tail(&entry->entry, &priv->masklist);
-+		}
-+	}
-+
-+	return 0;
-+}
- 
- static int loongson_map_irq(const struct pci_dev *dev, u8 slot, u8 pin)
- {
-@@ -305,6 +359,9 @@ static int loongson_pci_probe(struct platform_device *pdev)
- 		}
- 	}
- 
-+	if (setup_masklist(priv))
-+		return -ENOMEM;
-+
- 	bridge->sysdata = priv;
- 	bridge->ops = priv->data->ops;
- 	bridge->map_irq = loongson_map_irq;
--- 
-2.20.1
+> 
+>> @@ -1863,8 +1865,13 @@ int hibernate_preallocate_memory(void)
+>>           pages_highmem += size;
+>>           alloc -= size;
+>>           size = preallocate_image_memory(alloc, avail_normal);
+>> -        pages_highmem += preallocate_image_highmem(alloc - size);
+>> -        pages += pages_highmem + size;
+>> +        size_highmem = preallocate_image_highmem(alloc - size);
+>> +        if (size_highmem < (alloc - size)) {
+>> +            pr_err("Image allocation is %lu pages short, exit\n",
+>> +                alloc - size - pages_highmem);
+>> +            goto err_out;
+>> +        }
+>> +        pages += pages_highmem + size_highmem + size;
+>>       }
+>>       /*
+> 
 
