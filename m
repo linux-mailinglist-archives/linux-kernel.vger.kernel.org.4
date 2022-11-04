@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2966761902C
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 06:48:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA1C061905F
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 06:49:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231294AbiKDFsx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 01:48:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55650 "EHLO
+        id S231515AbiKDFtU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 01:49:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229900AbiKDFst (ORCPT
+        with ESMTP id S230358AbiKDFsu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 01:48:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C81F28E03;
-        Thu,  3 Nov 2022 22:48:46 -0700 (PDT)
+        Fri, 4 Nov 2022 01:48:50 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24F343898;
+        Thu,  3 Nov 2022 22:48:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 83B4C620B6;
+        by ams.source.kernel.org (Postfix) with ESMTPS id A9B6FB82BFB;
+        Fri,  4 Nov 2022 05:48:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60619C43141;
         Fri,  4 Nov 2022 05:48:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4B57C433D7;
-        Fri,  4 Nov 2022 05:48:45 +0000 (UTC)
 Received: from rostedt by gandalf.local.home with local (Exim 4.96)
         (envelope-from <rostedt@goodmis.org>)
-        id 1oqpZo-0070yv-1J;
+        id 1oqpZo-0070zT-1v;
         Fri, 04 Nov 2022 01:49:12 -0400
-Message-ID: <20221104054912.243707160@goodmis.org>
+Message-ID: <20221104054912.425376037@goodmis.org>
 User-Agent: quilt/0.66
-Date:   Fri, 04 Nov 2022 01:40:55 -0400
+Date:   Fri, 04 Nov 2022 01:40:56 -0400
 From:   Steven Rostedt <rostedt@goodmis.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
@@ -37,12 +37,9 @@ Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
         Guenter Roeck <linux@roeck-us.net>,
         Anna-Maria Gleixner <anna-maria@linutronix.de>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>, linux-s390@vger.kernel.org
-Subject: [RFC][PATCH v3 02/33] timers: s390/cmm: Use timer_shutdown_sync() before freeing timer
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, linux-sh@vger.kernel.org
+Subject: [RFC][PATCH v3 03/33] timers: sh: Use timer_shutdown_sync() before freeing timer
 References: <20221104054053.431922658@goodmis.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -61,38 +58,26 @@ Before a timer is freed, timer_shutdown_sync() must be called.
 
 Link: https://lore.kernel.org/all/20220407161745.7d6754b3@gandalf.local.home/
 
-Cc: Heiko Carstens <hca@linux.ibm.com>
-Cc: Vasily Gorbik <gor@linux.ibm.com>
-Cc: Alexander Gordeev <agordeev@linux.ibm.com>
-Cc: Christian Borntraeger <borntraeger@linux.ibm.com>
-Cc: Sven Schnelle <svens@linux.ibm.com>
-Cc: linux-s390@vger.kernel.org
+Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
+Cc: Rich Felker <dalias@libc.org>
+Cc: linux-sh@vger.kernel.org
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 ---
- arch/s390/mm/cmm.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ arch/sh/drivers/push-switch.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/s390/mm/cmm.c b/arch/s390/mm/cmm.c
-index 9141ed4c52e9..1a0a8aa43ac6 100644
---- a/arch/s390/mm/cmm.c
-+++ b/arch/s390/mm/cmm.c
-@@ -419,7 +419,7 @@ static int __init cmm_init(void)
- #endif
- 	unregister_sysctl_table(cmm_sysctl_header);
- out_sysctl:
--	del_timer_sync(&cmm_timer);
-+	timer_shutdown_sync(&cmm_timer);
- 	return rc;
- }
- module_init(cmm_init);
-@@ -432,7 +432,7 @@ static void __exit cmm_exit(void)
- #endif
- 	unregister_oom_notifier(&cmm_oom_nb);
- 	kthread_stop(cmm_thread_ptr);
--	del_timer_sync(&cmm_timer);
-+	timer_shutdown_sync(&cmm_timer);
- 	cmm_free_pages(cmm_pages, &cmm_pages, &cmm_page_list);
- 	cmm_free_pages(cmm_timed_pages, &cmm_timed_pages, &cmm_timed_page_list);
- }
+diff --git a/arch/sh/drivers/push-switch.c b/arch/sh/drivers/push-switch.c
+index 2813140fd92b..c95f48ff3f6f 100644
+--- a/arch/sh/drivers/push-switch.c
++++ b/arch/sh/drivers/push-switch.c
+@@ -102,7 +102,7 @@ static int switch_drv_remove(struct platform_device *pdev)
+ 
+ 	platform_set_drvdata(pdev, NULL);
+ 	flush_work(&psw->work);
+-	del_timer_sync(&psw->debounce);
++	timer_shutdown_sync(&psw->debounce);
+ 	free_irq(irq, pdev);
+ 
+ 	kfree(psw);
 -- 
 2.35.1
