@@ -2,100 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BAE361A20C
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 21:18:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9119861A216
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 21:22:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229926AbiKDUSi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 16:18:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59190 "EHLO
+        id S229971AbiKDUWw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 16:22:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229825AbiKDUSe (ORCPT
+        with ESMTP id S229947AbiKDUWu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 16:18:34 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEBF645ECA
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 13:17:41 -0700 (PDT)
+        Fri, 4 Nov 2022 16:22:50 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 114AF4C241
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 13:21:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667593060;
+        s=mimecast20190719; t=1667593317;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type;
-        bh=VsCOBPeWnAXU2L2IsC3R8lrfmlU0otvvdEntDMj8Nhw=;
-        b=i6WFWnKdZuwtrArtXSSVZgVazUUolXcxHWplWq0pJF0iLsdfP1XZukLlFGq8RTO/b02yUf
-        j0sD1FJ2BR3ByZ4e3cvWoOHluk+/otIcrlpQ5HgiSzZXARoL4vMWcp0vIJjswylSozMg85
-        mtl/bVz7/UvHSkon1qT2R32N8tsbreY=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=IQUjE5P5kUgI2AUaH5ZmnOzKErlp1CyVjP3BJnMtrps=;
+        b=V+fpzqxBAXLlrc3Iag7AP1GnsRg+Yjvor+0IDaF4hG4WqzuHN0pbQPcftwHYvF/8a2Th0M
+        OVzWpCih7r+RrM5fEa327s3Hx6zLmO6uhP4E3Ek43gitNzJ4mTLFrlyc+G8TIeFeKe44UU
+        UXY+Y7ONc0jnEbIuyTk2wHNTzrS5gYQ=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-312-Qf3APbRHPWG4eoyHOsAT7A-1; Fri, 04 Nov 2022 16:17:38 -0400
-X-MC-Unique: Qf3APbRHPWG4eoyHOsAT7A-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+ us-mta-471-9szmCA8SObOfyjqqGkz10A-1; Fri, 04 Nov 2022 16:21:52 -0400
+X-MC-Unique: 9szmCA8SObOfyjqqGkz10A-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B1A302804BC7;
-        Fri,  4 Nov 2022 20:17:37 +0000 (UTC)
-Received: from localhost (unknown [10.22.17.61])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id EFE2B403161;
-        Fri,  4 Nov 2022 20:17:36 +0000 (UTC)
-Date:   Fri, 4 Nov 2022 17:17:35 -0300
-From:   "Luis Claudio R. Goncalves" <lgoncalv@redhat.com>
-To:     LKML <linux-kernel@vger.kernel.org>,
-        linux-rt-users <linux-rt-users@vger.kernel.org>,
-        stable-rt <stable-rt@vger.kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Carsten Emde <C.Emde@osadl.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Daniel Wagner <daniel.wagner@suse.com>,
-        Tom Zanussi <tom.zanussi@linux.intel.com>,
-        Clark Williams <williams@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Pavel Machek <pavel@denx.de>,
-        Jeff Brady <jeffreyjbrady@gmail.com>,
-        Luis Goncalves <lgoncalv@redhat.com>
-Subject: [ANNOUNCE] 5.10.153-rt76
-Message-ID: <Y2VzX+D8rZ6xMdOu@uudg.org>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7006C101A52A;
+        Fri,  4 Nov 2022 20:21:51 +0000 (UTC)
+Received: from [10.22.34.155] (unknown [10.22.34.155])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id CAFB540C835A;
+        Fri,  4 Nov 2022 20:21:50 +0000 (UTC)
+Message-ID: <17047545-2993-f59b-2dbe-ccc997599ea1@redhat.com>
+Date:   Fri, 4 Nov 2022 16:21:50 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH v9 3/3] blk-cgroup: Flush stats at blkgs destruction path
+Content-Language: en-US
+To:     Tejun Heo <tj@kernel.org>
+Cc:     Jens Axboe <axboe@kernel.dk>, cgroups@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ming Lei <ming.lei@redhat.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>,
+        Hillf Danton <hdanton@sina.com>
+References: <20221104182050.342908-1-longman@redhat.com>
+ <20221104182050.342908-4-longman@redhat.com>
+ <Y2VvboMSxgF0pYpX@slm.duckdns.org>
+ <84fd6656-d133-b9df-c39e-fbb3a1f4a873@redhat.com>
+ <Y2VyWDvtwOsMBcKB@slm.duckdns.org>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <Y2VyWDvtwOsMBcKB@slm.duckdns.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
 X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello RT-list!
 
-I'm pleased to announce the 5.10.153-rt76 stable release.
+On 11/4/22 16:13, Tejun Heo wrote:
+> On Fri, Nov 04, 2022 at 04:12:05PM -0400, Waiman Long wrote:
+>> I should have named the function cgroup_rstat_css_cpu_flush() to indicate
+>> that the cpu is a needed parameter. We can have a cgroup_rstat_css_flush()
+>> in the future if the need arises.
+>>
+>> It is an optimization to call this function only if the corresponding cpu
+>> has a pending lockless list. I could do cpu iteration here and call the
+>> flushing function for all the CPUs. It is less optimized this way. Since it
+>> is a slow path, I guess performance is not that critical. So I can go either
+>> way. Please let me know your preference.
+> Yeah, cpu_flush is fine. Let's leave it that way.
+>
+Will do.
 
-You can get this release via the git tree at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-stable-rt.git
-
-  branch: v5.10-rt
-  Head SHA1: 0554e18dca1bb3e9900f02bdd6a597755858832f
-
-Or to build 5.10.153-rt76 directly, the following patches should be applied:
-
-  https://www.kernel.org/pub/linux/kernel/v5.x/linux-5.10.tar.xz
-
-  https://www.kernel.org/pub/linux/kernel/v5.x/patch-5.10.153.xz
-
-  https://www.kernel.org/pub/linux/kernel/projects/rt/5.10/older/patch-5.10.153-rt76.patch.xz
-
-Signing key fingerprint:
-
-  9354 0649 9972 8D31 D464  D140 F394 A423 F8E6 7C26
-
-All keys used for the above files and repositories can be found on the
-following git repository:
-
-   git://git.kernel.org/pub/scm/docs/kernel/pgpkeys.git
-
-Enjoy!
-Luis
+Cheers,
+Longman
 
