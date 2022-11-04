@@ -2,63 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38ACF61A10F
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 20:32:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0110361A112
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 20:33:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229689AbiKDTct (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 15:32:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59602 "EHLO
+        id S229645AbiKDTdJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 15:33:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229581AbiKDTcl (ORCPT
+        with ESMTP id S229445AbiKDTdD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 15:32:41 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CECC345082
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 12:32:40 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id y13so5346421pfp.7
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 12:32:40 -0700 (PDT)
+        Fri, 4 Nov 2022 15:33:03 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62CA843AF2
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 12:33:01 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id 136so1334376pga.1
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 12:33:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=content-disposition:mime-version:message-id:subject:cc:to:date:from
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=GJx5Vo13L9gX9apUbugbGq7p+vwBn4IOzk+4YVYJbZo=;
-        b=PWyXmK+bN4YM6UWblyRMVutXuc2f46M8K5kj7AsPvSQYau24NgfA3c14hTpOkY/lXh
-         TgZknkLqE8+M15xi09X/3zFxiyUz3OD4glTMJZRgR90wrf2JsTPhor8EbFM0YrK/rKoG
-         YgSETYSHttYklZcLjRGnOLHKMpA0xM6Z8PDlw=
+        bh=qGzpjn13dVlcuHa3QfKLMJS0aiybXjJ4fJgb8JKEdS0=;
+        b=iEpoNfjUSPmVInj+LqC03wXnbIzcRmhgeZwez+hMwOhChOZJiBRq1S5KF7dMUzdhRs
+         TyZtq+Iautgmig3VjOBjK5N+qtPcRucs5Pnz6722c6ahsdN0q3KtKaVo4h/ffyDrOnmQ
+         1+NqMwX5+Gai6f6NTzw8VnZqzwpHHkzEdI//U=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-disposition:mime-version:message-id:subject:cc:to:date:from
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GJx5Vo13L9gX9apUbugbGq7p+vwBn4IOzk+4YVYJbZo=;
-        b=R9Wi7Hs5oXaradb8e0m6RD21LKVq8o01hKZigcN8SxB52Bdo4NATCjMZAvf66AK03X
-         Kk6eUaq1QI1oEPwwATiDkQhWeIfT+bhzl3NVDhzRFkbL9ATuN0ZxDrylbTTU1EE+rXT+
-         4leB9cpMrJlm4stYLpxd4E3roLMZI4JPLv/4X2sCILkfx3FQ8gvzFH5lq7QKG5/RV7U5
-         IV0Zx8cWDIYWH3Whv8D5ATofEIE/dGY6vjGuSxmIS3dtFcz5o8QF+lKxJx2h5xkdsKe3
-         FVb89sZno/IKVmG0PlSqKfIfnQRqhZmTl1UhnR6oRoav5XJWYW0vMKzuzZHwzGo//zsF
-         bZ2A==
-X-Gm-Message-State: ACrzQf3JU1An1EU4DtHe57J1eru4PzioVhTW19tpf3yKkOinusnllsUr
-        3BzJrToOdFippg5hhT/kS0+6VA==
-X-Google-Smtp-Source: AMsMyM6b3yzI6tcnLNCUvQjftaq74cgnM4/tQtryFCIdjr3n8azek7qjQaYlxgkqWKXcmSealD9oKA==
-X-Received: by 2002:a05:6a00:a8c:b0:558:991a:6691 with SMTP id b12-20020a056a000a8c00b00558991a6691mr37351768pfl.53.1667590360362;
-        Fri, 04 Nov 2022 12:32:40 -0700 (PDT)
+        bh=qGzpjn13dVlcuHa3QfKLMJS0aiybXjJ4fJgb8JKEdS0=;
+        b=O/cnE0ElY+iwhmtioNt/p8lFK4cQnEFNvpCmYGl/X3OQyafra8weWDNrTN2CXwqi6W
+         A9wl7b5bHyjlj20CsENOibT0xlBg7/ldV6f+vuB9bX8VzQAJ/enYVF8TegcX4BgsNPbe
+         I1SNicNHxfg6TCEHg60N/5aRN93z2H0uTEr937es0hyjBFCYmyLBs07yWmwIjzTbKJh3
+         MjFfUG1BWuocwEMcSp1+bKMgrJEB+DonPrkdF1pp8gv/vZJmtg5WpwgP3iXnknNUDlqy
+         vjtHCsig2Ltsn/9dyTzSNBh1MJpK+u1f9qRojBI1e4jy655gv2+KBqFMSik7SnLrNL4J
+         nyzA==
+X-Gm-Message-State: ACrzQf0afxT6Pb9p967TCSe95nJfcU5W8l10NacDe1ugd6CKrU1pUPnq
+        ec3jwEyBebL/Yic8Xv2xaqN/eQ==
+X-Google-Smtp-Source: AMsMyM5FVrooXJN4dw9eC1GsB+jA3C1bDK2l4NoOTcLVgrzfxIY3HF8QnF9dZnGI1NjpBiY+EHAnTQ==
+X-Received: by 2002:a05:6a00:1309:b0:535:d421:1347 with SMTP id j9-20020a056a00130900b00535d4211347mr37370950pfu.5.1667590381090;
+        Fri, 04 Nov 2022 12:33:01 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id e4-20020a17090a684400b00212daa6f41dsm95856pjm.28.2022.11.04.12.32.39
+        by smtp.gmail.com with ESMTPSA id n4-20020a63e044000000b0044e8d66ae05sm105054pgj.22.2022.11.04.12.33.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Nov 2022 12:32:39 -0700 (PDT)
+        Fri, 04 Nov 2022 12:33:00 -0700 (PDT)
 From:   coverity-bot <keescook@chromium.org>
 X-Google-Original-From: coverity-bot <keescook+coverity-bot@chromium.org>
-Date:   Fri, 4 Nov 2022 12:32:38 -0700
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Miroslav Benes <mbenes@suse.cz>, linux-kernel@vger.kernel.org,
-        Mikulas Patocka <mpatocka@redhat.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Borislav Petkov <bp@suse.de>, Yujie Liu <yujie.liu@intel.com>,
+Date:   Fri, 4 Nov 2022 12:33:00 -0700
+To:     Benedikt Niedermayr <benedikt.niedermayr@siemens.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-kernel@vger.kernel.org, Tony Lindgren <tony@atomide.com>,
+        Roger Quadros <rogerq@kernel.org>, linux-omap@vger.kernel.org,
         "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
         linux-next@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Coverity: elf_create_prefix_symbol(): Resource leaks
-Message-ID: <202211041232.6071ACE@keescook>
+Subject: Coverity: gpmc_is_valid_waitpin(): Control flow issues
+Message-ID: <202211041233.4D45359E7@keescook>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -80,27 +77,27 @@ https://scan.coverity.com/projects/linux-next-weekly-scan
 You're getting this email because you were associated with the identified
 lines of code (noted below) that were touched by commits:
 
-  Tue Nov 1 13:44:09 2022 +0100
-    9f2899fe36a6 ("objtool: Add option to generate prefix symbols")
+  Wed Nov 2 10:02:39 2022 -0400
+    89aed3cd5cb9 ("memory: omap-gpmc: wait pin additions")
 
 Coverity reported the following:
 
-*** CID 1527141:  Resource leaks  (RESOURCE_LEAK)
-tools/objtool/elf.c:833 in elf_create_prefix_symbol()
-827     	struct symbol *sym = calloc(1, sizeof(*sym));
-828     	size_t namelen = strlen(orig->name) + sizeof("__pfx_");
-829     	char *name = malloc(namelen);
-830
-831     	if (!sym || !name) {
-832     		perror("malloc");
-vvv     CID 1527141:  Resource leaks  (RESOURCE_LEAK)
-vvv     Variable "sym" going out of scope leaks the storage it points to.
-833     		return NULL;
-834     	}
-835
-836     	snprintf(name, namelen, "__pfx_%s", orig->name);
-837
-838     	sym->name = name;
+*** CID 1527139:  Control flow issues  (NO_EFFECT)
+drivers/memory/omap-gpmc.c:1048 in gpmc_is_valid_waitpin()
+1042     	spin_unlock(&gpmc_mem_lock);
+1043     }
+1044     EXPORT_SYMBOL(gpmc_cs_free);
+1045
+1046     static bool gpmc_is_valid_waitpin(u32 waitpin)
+1047     {
+vvv     CID 1527139:  Control flow issues  (NO_EFFECT)
+vvv     This greater-than-or-equal-to-zero comparison of an unsigned value is always true. "waitpin >= 0U".
+1048     	return waitpin >= 0 && waitpin < gpmc_nr_waitpins;
+1049     }
+1050
+1051     static int gpmc_alloc_waitpin(struct gpmc_device *gpmc,
+1052     			      struct gpmc_settings *p)
+1053     {
 
 If this is a false positive, please let us know so we can mark it as
 such, or teach the Coverity rules to be smarter. If not, please make
@@ -108,8 +105,8 @@ sure fixes get into linux-next. :) For patches fixing this, please
 include these lines (but double-check the "Fixes" first):
 
 Reported-by: coverity-bot <keescook+coverity-bot@chromium.org>
-Addresses-Coverity-ID: 1527141 ("Resource leaks")
-Fixes: 9f2899fe36a6 ("objtool: Add option to generate prefix symbols")
+Addresses-Coverity-ID: 1527139 ("Control flow issues")
+Fixes: 89aed3cd5cb9 ("memory: omap-gpmc: wait pin additions")
 
 Thanks for your attention!
 
