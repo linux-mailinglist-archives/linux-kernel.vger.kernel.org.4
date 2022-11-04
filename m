@@ -2,193 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF57961954C
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 12:21:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 653EA619552
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 12:23:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231535AbiKDLVr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 07:21:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47482 "EHLO
+        id S231582AbiKDLXw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 07:23:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230005AbiKDLVn (ORCPT
+        with ESMTP id S229572AbiKDLXs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 07:21:43 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D5781EADF
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 04:21:42 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id k8so6651672wrh.1
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 04:21:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=layalina-io.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=CPJQLTqgqhkUtx+2R1QXT7VFUlZrxBQTxeHe3kJSttw=;
-        b=8Qimd9U5PhbMIg+/GlAePDse4ywOBiN7eINMxWz3i9/jKG0cRrQckxiLoIJe1mJ290
-         E9B6nMviD7+Omz6lWF5zvOAgra6q69XLLLSwnfr56oRJeKIwRDyRRtcdOr/aqhL1yUcP
-         /khEI4rlfXFxp3g3QOW7GMiO5JWtG8Lo7Ca9QmutXM1wk+Nlz9TtWoRdh+QhmHnGnVRk
-         bXBGVeDkTz63KO6OYSy5wHAFDSqCLhOhiAA5OAbH8Yh7lmxbKaw7VX76yIuiUS+twqmb
-         3rky3CKqGgOOYQlAfMYcPw+KdDT1DfVY86FGFfNqFrhjJ5g/i6pFtlGcXmhQUnEdKCKy
-         KLrA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CPJQLTqgqhkUtx+2R1QXT7VFUlZrxBQTxeHe3kJSttw=;
-        b=8EuBZkyjjKk8SpHX4Q8Es7ojWCNAl7LyTYI3DsUryWc1CplqK650ohAspp7fMGIrwD
-         fiGfWKqOdINhkNx0S15L4e3HXApQNX4hB0VCn0cfhycCGuTSZ+KZiKNDKiP+B3LctV3J
-         8/GkmZHens5OgpVUUz8FkiVgvJCQeaEAnyooE1a5DB4sC0OG1/6ww4pNWhtQGR/2ISRQ
-         1j9MVGXdfEy94c4DSr/z/iN03EJ5en9l6rNE0+zUncFLgZiJLJabRZF9fAszU3iaN1jC
-         dYlcq/5dWdv6Mmtcfx6iUCRw6fRPyktEiEp4WDDzWHiTm2ka+o8Upm2/UGCKS/sbQzpC
-         tuRg==
-X-Gm-Message-State: ACrzQf3y3Zt/weG6Rt33WteoUDQ+Yff1yayMZhb7V2q7hujMCSu5rgmI
-        MlcHOQ21J6HBppeti6lTp2iQuQ==
-X-Google-Smtp-Source: AMsMyM4tUCN9isR4czNaxRl0x6dvAYhQV88rJLiz84ONdqwnifZ9ftZfWrE+zPxDWcGHO2f6GwkJpA==
-X-Received: by 2002:a5d:52d0:0:b0:21e:4923:fa09 with SMTP id r16-20020a5d52d0000000b0021e4923fa09mr22761436wrv.244.1667560900482;
-        Fri, 04 Nov 2022 04:21:40 -0700 (PDT)
-Received: from airbuntu (host86-130-134-87.range86-130.btcentralplus.com. [86.130.134.87])
-        by smtp.gmail.com with ESMTPSA id n6-20020a5d6606000000b00238df11940fsm3182343wru.16.2022.11.04.04.21.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Nov 2022 04:21:40 -0700 (PDT)
-Date:   Fri, 4 Nov 2022 11:21:38 +0000
-From:   Qais Yousef <qyousef@layalina.io>
-To:     Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        linux-kernel@vger.kernel.org, parth@linux.ibm.com,
-        qais.yousef@arm.com, chris.hyser@oracle.com,
-        patrick.bellasi@matbug.net, David.Laight@aculab.com,
-        pjt@google.com, pavel@ucw.cz, tj@kernel.org, qperret@google.com,
-        tim.c.chen@linux.intel.com, joshdon@google.com, timj@gnu.org,
-        kprateek.nayak@amd.com, yu.c.chen@intel.com,
-        youssefesmat@chromium.org, joel@joelfernandes.org
-Subject: Re: [PATCH v7 6/9] sched/fair: Add sched group latency support
-Message-ID: <20221104112138.hlnwjmw2ls4gswuo@airbuntu>
-References: <20221028093403.6673-1-vincent.guittot@linaro.org>
- <20221028093403.6673-7-vincent.guittot@linaro.org>
- <20221101192848.pjns3um7dnrwrk5p@airbuntu>
- <CAKfTPtA=vJQA_=6Un1CqwzMUaOxMeFGTKUZnj8qyqvqmSdYBAg@mail.gmail.com>
- <20221103142732.m5ibwkuymvhcdxkn@airbuntu>
- <CAKfTPtDu=c-psGnHkoWSPRWoh1Z0VBBfsN++g+krv4B1SJmFjg@mail.gmail.com>
+        Fri, 4 Nov 2022 07:23:48 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EEB714081;
+        Fri,  4 Nov 2022 04:23:48 -0700 (PDT)
+Received: from zn.tnic (p200300ea9733e72b329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e72b:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 9ED461EC02DD;
+        Fri,  4 Nov 2022 12:23:46 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1667561026;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=marW4c8zTIflqJhdpTljXJjFAHNfLt0g8IVX4Ee73bo=;
+        b=hbs2OlzrMbdJRJx2QOMauLOtrRIcQ6kZ2G4Pmgu1R0171rDW4vYzTPLvAm9p4vpouiH4fF
+        j6W+WwFWyOd80ZkdXt+yVS0UXBK8jQMtRe4rM1rN7Y+LbiDInRqHU1Po1FQnZViFA4xP66
+        T2fLnZGJuS2Cjvk+QLT6AL7QLd90uSA=
+Date:   Fri, 4 Nov 2022 12:23:42 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Jiaxi Chen <jiaxi.chen@linux.intel.com>
+Cc:     kvm@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        seanjc@google.com, pbonzini@redhat.com, ndesaulniers@google.com,
+        alexandre.belloni@bootlin.com, peterz@infradead.org,
+        jpoimboe@kernel.org, chang.seok.bae@intel.com,
+        pawan.kumar.gupta@linux.intel.com, babu.moger@amd.com,
+        jmattson@google.com, sandipan.das@amd.com, tony.luck@intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, fenghua.yu@intel.com,
+        keescook@chromium.org, nathan@kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/8] x86: KVM: Move existing x86 CPUID leaf
+ [CPUID_7_1_EAX] to kvm-only leaf
+Message-ID: <Y2T2PqALCpG317F0@zn.tnic>
+References: <20221103025030.78371-1-jiaxi.chen@linux.intel.com>
+ <20221103025030.78371-2-jiaxi.chen@linux.intel.com>
+ <Y2N/peaVRIjTMyrw@zn.tnic>
+ <9197a0a4-4c15-1e6e-a44b-a8036c2104c4@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CAKfTPtDu=c-psGnHkoWSPRWoh1Z0VBBfsN++g+krv4B1SJmFjg@mail.gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <9197a0a4-4c15-1e6e-a44b-a8036c2104c4@linux.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/03/22 18:02, Vincent Guittot wrote:
-> On Thu, 3 Nov 2022 at 15:27, Qais Yousef <qyousef@layalina.io> wrote:
-> >
-> > On 11/03/22 09:46, Vincent Guittot wrote:
-> > > On Tue, 1 Nov 2022 at 20:28, Qais Yousef <qyousef@layalina.io> wrote:
-> > > >
-> > > > On 10/28/22 11:34, Vincent Guittot wrote:
-> > > > > Task can set its latency priority with sched_setattr(), which is then used
-> > > > > to set the latency offset of its sched_enity, but sched group entities
-> > > > > still have the default latency offset value.
-> > > > >
-> > > > > Add a latency.nice field in cpu cgroup controller to set the latency
-> > > > > priority of the group similarly to sched_setattr(). The latency priority
-> > > > > is then used to set the offset of the sched_entities of the group.
-> > > > >
-> > > > > Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
-> > > > > ---
-> > > > >  Documentation/admin-guide/cgroup-v2.rst |  8 ++++
-> > > > >  kernel/sched/core.c                     | 52 +++++++++++++++++++++++++
-> > > > >  kernel/sched/fair.c                     | 33 ++++++++++++++++
-> > > > >  kernel/sched/sched.h                    |  4 ++
-> > > > >  4 files changed, 97 insertions(+)
-> > > > >
-> > > > > diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
-> > > > > index be4a77baf784..d8ae7e411f9c 100644
-> > > > > --- a/Documentation/admin-guide/cgroup-v2.rst
-> > > > > +++ b/Documentation/admin-guide/cgroup-v2.rst
-> > > > > @@ -1095,6 +1095,14 @@ All time durations are in microseconds.
-> > > > >          values similar to the sched_setattr(2). This maximum utilization
-> > > > >          value is used to clamp the task specific maximum utilization clamp.
-> > > > >
-> > > > > +  cpu.latency.nice
-> > > > > +     A read-write single value file which exists on non-root
-> > > > > +     cgroups.  The default is "0".
-> > > > > +
-> > > > > +     The nice value is in the range [-20, 19].
-> > > > > +
-> > > > > +     This interface file allows reading and setting latency using the
-> > > > > +     same values used by sched_setattr(2).
-> > > >
-> > > > I'm still not sure about this [1].
-> > >
-> > > I'm still not sure about what you are trying to say here ...
-> > >
-> > > This is about setting a latency nice prio to a group level.
-> > >
-> > > >
-> > > > In some scenarios we'd like to get the effective latency_nice of the task. How
-> > > > will the task inherit the cgroup value or be impacted by it?
-> > > >
-> > > > For example if there are tasks that belong to a latency sensitive cgroup; and
-> > > > I'd like to skip some searches in EAS to improve that latency sensitivity - how
-> > > > would I extract this info in EAS path given these tasks are using default
-> > > > latency_nice value? And if should happen if their latency_nice is set to
-> > > > something else other than default?
-> > > >
-> > > > [1] https://lore.kernel.org/lkml/20221012160734.hrkb5jcjdq7r23pr@wubuntu/
-> > >
-> > > Hmm so you are speaking about something that is not part of the patch.
-> > > Let focus on the patchset for now
-> >
-> > I am focusing on this patchset. Isn't this an essential part of the design?
-> > Once the interface is out we can't change it. As it stands, I can't see how it
-> 
-> So, are you speaking about the interface i.e. setting a value between [-20:19]
+On Fri, Nov 04, 2022 at 10:01:55AM +0800, Jiaxi Chen wrote:
+> But before new bits come, word 12 is empty in this gap. Is that ok?
 
-About how the cgroup and per task interface interact.
+Yes.
 
-How to get the effective value of latency_nice for a task that belongs to
-a hierarchy?
+-- 
+Regards/Gruss,
+    Boris.
 
-If I have a task that has p->latency_nice = 20 but it belongs to a cgroup that
-has tg->cpu.latency.nice = -19
-
-And I want to use this interface in EAS; how should I interpret these values?
-How should I walk up the hierarchy and decide the _effective_ latency_nice
-value?
-
-> 
-> > can be used to replace prefer_idle in cgroup as used in Android. I can't see
-> > how this could happen if we don't define how the task will inherit the cgroup
-> > value. If we can, mind elaborating how please?
-> 
-> Or how to take into account the value set for a cgroup ?
-
-Yes that. How to calculate effective value in a hierarchy taking parents,
-children and task latency_nice values into account.
-
-> 
-> Regarding the behavior, the rule remains the same that a sched_entity
-> attached to a cgroup will not get more (latency in this case) than
-> what has been set for the group entity.
-
-So it behaves like a limit as described in cgroup-v2.rst? Is this enforced in
-the series?
-
-
-Thanks
-
---
-Qais Yousef
-
-> 
-> >
-> >
-> > Thanks
-> >
-> > --
-> > Qais Yousef
+https://people.kernel.org/tglx/notes-about-netiquette
