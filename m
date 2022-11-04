@@ -2,113 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A2F861A36B
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 22:37:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0163161A37A
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 22:39:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229962AbiKDVhR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 17:37:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43268 "EHLO
+        id S230008AbiKDVjU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 17:39:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229934AbiKDVhO (ORCPT
+        with ESMTP id S229739AbiKDVjR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 17:37:14 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD6E74C24D
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 14:37:11 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id d6so9043998lfs.10
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 14:37:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=DP55jvYVvLChyUqBN0WgemBdPF1mtSkgaw/KZ8miRCo=;
-        b=REGvrAvDwAoTXEum4yhI5ABHp/MEoIvT87pjrXW00hDKKdLV0h9Pv+rCOUn4YlPXKN
-         1KzA4Esla6BwpbwVegtlGe/VrNHH+ZZNVz0tiZO8snVlyLC+nwcO1YWHaoA6NNOMz6kg
-         mObF7YJx7lN/RrZSuXg0CYmU1TWdQv9JArDakq8j1MS8hs4JHhKNpk0MOmfb7doEdHRi
-         eOR1Fp/PS9d4CSYeZJx6c7bHRSYXB/aKZbNAXIjo8SmcbcWhSjMEKT6BTEmHqaYPoKgm
-         B1VB8skjTVU5QfI+FXYsFxQLx9Cd5xIk0lDHuA7bWCVvAyFXtqB1WUzDNHV08z4ciWaD
-         tA1w==
+        Fri, 4 Nov 2022 17:39:17 -0400
+Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com [209.85.167.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37E90BA6;
+        Fri,  4 Nov 2022 14:39:17 -0700 (PDT)
+Received: by mail-oi1-f181.google.com with SMTP id m204so6503422oib.6;
+        Fri, 04 Nov 2022 14:39:17 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=DP55jvYVvLChyUqBN0WgemBdPF1mtSkgaw/KZ8miRCo=;
-        b=pWH9I+Hq2w0vygxf00p7xKaI6Euycrf9gpQWZGWV3K/tBSTTiCvuZLCzESHwl5MjKx
-         A0wnvKVZ2mE+pce32RrdJQr/TOzfcUEHm24DKUVSUF2f+B7cO9IubdGEkcXPbcoVWbTe
-         cAa6t2ATAocrAhH5nPsxT45SfzrnE1vQP9L0ICYnlSbIsuTxdiPc4hD5q8BwkSvior/V
-         uY/xOo49i2S2TJDy/Hy1D+tgJxr4B4TRXZSdz0apdb77+iOFFLE7Oa9wz9eyROPRa16U
-         css+qqKQeTymVs8oum0+26hFPLCyrqWqleBIPKL0IUy3zsvheyBExZ5SvZdKq5NuXt0r
-         ah+A==
-X-Gm-Message-State: ACrzQf0uj0m+e3mHcUS39Iw0hnDNuksfJ4y6H2rrdKSnEvnwachRJvf0
-        RyvQ9vArj+D972N2KazQfT4mVv/QTwS+gf3qpE2+XQ==
-X-Google-Smtp-Source: AMsMyM4VhDP2dYwmTOaAqgDSmZyf8SoPv6TU9cZYNCkWxLMUCYIv3QGSXsa32XkxTEU4UuNU9h+70uc6dcTdNWjHPhM=
-X-Received: by 2002:ac2:41c2:0:b0:4b0:e27f:1ef5 with SMTP id
- d2-20020ac241c2000000b004b0e27f1ef5mr9056927lfi.682.1667597829812; Fri, 04
- Nov 2022 14:37:09 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=newmcT3dWVHHi0k2AzKHxIAzbgauqUYBBbVo3BlPTgk=;
+        b=f4+dyW7TELGKjc+Zhvih/azIl3SGW0aRYePcuUTXRargp3VWRzmoRwJDaUFPYTl8sO
+         PvKA+IdIwaDUt4V0If4OLte6wYhiPg02iujkzI0bV1VCo/wD7BEAk3nRB+0MxJd2YtsQ
+         +wBIuG15d0KtuiyyGBb/EAqeJ33hdhIErgaqy/F6h9n/Qu75fHcC7pC5LI/FCAaegILA
+         LpiBUYZ9Nz1d+1P8pHk5CGC2/gM6D2q//TBhzBHrzTuIunwSwXEyP9j0CoDj2IxEduaV
+         H9E3LvxY1rA2MEMdY9xFQktjRGdD4uyJtER6MO0ZhBHSaZ6nERr4KZ3qeWKGSuyGfXgp
+         pEEg==
+X-Gm-Message-State: ACrzQf1bkvJW7EcDsXh9tguWZiGLWcUvqZFnd8SJGKOj/KiNdUQzvzUd
+        iZLYJf++I3OX9tULGem3EQ==
+X-Google-Smtp-Source: AMsMyM6ECrXkT2/0pcWb+2yxaeQZEWevvl9EUUDRIk2D/iBgUdWBGzVwCL0SMNW/QXnmtgckjY5lqg==
+X-Received: by 2002:a05:6808:3dc:b0:35a:c37:3309 with SMTP id o28-20020a05680803dc00b0035a0c373309mr15750204oie.199.1667597956330;
+        Fri, 04 Nov 2022 14:39:16 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id w2-20020a056808090200b0035763a9a36csm75651oih.44.2022.11.04.14.39.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Nov 2022 14:39:15 -0700 (PDT)
+Received: (nullmailer pid 2876506 invoked by uid 1000);
+        Fri, 04 Nov 2022 21:39:17 -0000
+Date:   Fri, 4 Nov 2022 16:39:17 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Ajye Huang <ajye_huang@compal.corp-partner.google.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        =?iso-8859-1?Q?N=EDcolas_F_=2E_R_=2E_A_=2E?= Prado 
+        <nfraprado@collabora.com>, linux-kernel@vger.kernel.org,
+        Takashi Iwai <tiwai@suse.com>,
+        Jaroslav Kysela <perex@perex.cz>, alsa-devel@alsa-project.org,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "chunxu . li" <chunxu.li@mediatek.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        linux-mediatek@lists.infradead.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Jiaxin Yu <jiaxin.yu@mediatek.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Mark Brown <broonie@kernel.org>, devicetree@vger.kernel.org
+Subject: Re: [PATCH v6 1/2] ASoC: mediatek: dt-bindings: modify machine
+ bindings for two MICs case
+Message-ID: <166759787920.2873722.6503685794432759025.robh@kernel.org>
+References: <20221102125936.2176748-1-ajye_huang@compal.corp-partner.google.com>
+ <20221102125936.2176748-2-ajye_huang@compal.corp-partner.google.com>
 MIME-Version: 1.0
-References: <20221104201616.2268815-1-dionnaglaze@google.com> <20221104201616.2268815-3-dionnaglaze@google.com>
-In-Reply-To: <20221104201616.2268815-3-dionnaglaze@google.com>
-From:   Peter Gonda <pgonda@google.com>
-Date:   Fri, 4 Nov 2022 15:36:57 -0600
-Message-ID: <CAMkAt6r7UPON+sEDXPkT804rszTRBRmAk4pYv6tXjUPThF5fzQ@mail.gmail.com>
-Subject: Re: [PATCH v7 2/4] x86/sev: Change snp_guest_issue_request's fw_err
-To:     Dionna Glaze <dionnaglaze@google.com>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        Tom Lendacky <Thomas.Lendacky@amd.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Joerg Roedel <jroedel@suse.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Venu Busireddy <venu.busireddy@oracle.com>,
-        Michael Roth <michael.roth@amd.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Michael Sterritt <sterritt@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221102125936.2176748-2-ajye_huang@compal.corp-partner.google.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 4, 2022 at 2:16 PM Dionna Glaze <dionnaglaze@google.com> wrote:
->
-> The GHCB specification declares that the firmware error value for a
-> guest request will be stored in the lower 32 bits of EXIT_INFO_2.
-> The upper 32 bits are for the VMM's own error code. The fw_err argument
-> is thus a misnomer, and callers will need access to all 64 bits.
->
-> The type of unsigned long also causes problems, since sw_exit_info2 is
-> u64 (unsigned long long) vs the argument's previous unsigned long*.
-> The signature change requires the follow-up change to
-> drivers/virt/coco/sev-guest to use the new expected type in order to
-> compile.
->
-> The firmware might not even be called, so we bookend the call with the
-> no firmware call error and clearing the error.
->
-> Cc: Tom Lendacky <Thomas.Lendacky@amd.com>
-> Cc: Paolo Bonzini <pbonzini@redhat.com>
-> Cc: Joerg Roedel <jroedel@suse.de>
-> Cc: Peter Gonda <pgonda@google.com>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Dave Hansen <dave.hansen@linux.intel.com>
-> Cc: Ingo Molnar <mingo@redhat.com>
-> Cc: Borislav Petkov <bp@alien8.de>
-> Cc: "H. Peter Anvin" <hpa@zytor.com>
-> Cc: Venu Busireddy <venu.busireddy@oracle.com>
-> Cc: Michael Roth <michael.roth@amd.com>
-> Cc: "Kirill A. Shutemov" <kirill@shutemov.name>
-> Cc: Michael Sterritt <sterritt@google.com>
->
-> Fixes: d5af44dde546 ("x86/sev: Provide support for SNP guest request NAEs")
-> Signed-off-by: Dionna Glaze <dionnaglaze@google.com>
 
-Reviewed-by: Peter Gonda <pgonda@google.com>
+On Wed, 02 Nov 2022 20:59:35 +0800, Ajye Huang wrote:
+> Add a property "dmic-gpios" for switching between two MICs.
+> 
+> Signed-off-by: Ajye Huang <ajye_huang@compal.corp-partner.google.com>
+> ---
+>  .../sound/mt8186-mt6366-rt1019-rt5682s.yaml        | 14 +++++++++++++-
+>  1 file changed, 13 insertions(+), 1 deletion(-)
+> 
+
+
+Please add Acked-by/Reviewed-by tags when posting new versions. However,
+there's no need to repost patches *only* to add the tags. The upstream
+maintainer will do that for acks received on the version they apply.
+
+If a tag was not added on purpose, please state why and what changed.
+
