@@ -2,42 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9888A618F5C
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 05:03:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7C5C618F57
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 05:01:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230297AbiKDEDn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 00:03:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47082 "EHLO
+        id S230139AbiKDEBp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 00:01:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230074AbiKDEDj (ORCPT
+        with ESMTP id S229748AbiKDEB2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 00:03:39 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F2CB1EC53
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 21:03:37 -0700 (PDT)
-Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4N3RjD2w4bzpWCT;
-        Fri,  4 Nov 2022 12:00:00 +0800 (CST)
-Received: from huawei.com (10.67.174.53) by kwepemi500012.china.huawei.com
- (7.221.188.12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Fri, 4 Nov
- 2022 12:03:34 +0800
-From:   Liao Chang <liaochang1@huawei.com>
-To:     <apw@canonical.com>, <joe@perches.com>, <dwaipayanray1@gmail.com>,
-        <lukas.bulwahn@gmail.com>
-CC:     <linux-kernel@vger.kernel.org>, <liaochang1@huawei.com>,
-        <bagasdotme@gmail.com>, <pbonzini@redhat.com>
-Subject: [PATCH] checkpatch: Add check for array allocator family argument order
-Date:   Fri, 4 Nov 2022 12:00:20 +0800
-Message-ID: <20221104040020.16389-1-liaochang1@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        Fri, 4 Nov 2022 00:01:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEB2C1D679;
+        Thu,  3 Nov 2022 21:01:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7F41D61FC0;
+        Fri,  4 Nov 2022 04:01:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F144C433D6;
+        Fri,  4 Nov 2022 04:01:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667534486;
+        bh=WuJW+uuO8TeM/6fod4sapYBm3CSeI8w0DSzwMpGbSw8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=iOpoB13S0QYGy+F0D8nRQ8PPcpX+L/IxQhcBlPPkAkEAMRvH8+xkd7uIk48wJung7
+         ujXUBeOBp60iFhHK6iLnoV4YlTHaLCwV2WCi500Oop/tdal2WGqGCxQkBMRx3D9FzF
+         OVYjgLa6BvAOlQrscmxo4Cd4xGez4fUFG4DeGUGXEGlsA/gy7jRWQ7JvruPxsE5dJh
+         Ou60Wd8zj4DwtX/ksCZbUno7UAf87iz0oRClSZi8erujcHdOyScSQ3OO+3r0VW0ihT
+         n9ErIPSY05p0vISwzxHvW6JV5Y8qKbNr740yUuBV/RTmob1OI8w9Z8mfXolPFbemhS
+         jm21n5ZBGLxyg==
+Date:   Thu, 3 Nov 2022 21:01:25 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Frank <Frank.Sae@motor-comm.com>
+Cc:     Peter Geis <pgwipeout@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, yinghong.zhang@motor-comm.com,
+        fei.zhang@motor-comm.com, hua.sun@motor-comm.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel test robot <lkp@intel.com>,
+        Julia Lawall <julia.lawall@lip6.fr>
+Subject: Re: [PATCH net] net: phy: fix yt8521 duplicated argument to & or
+Message-ID: <20221103210125.255dea97@kernel.org>
+In-Reply-To: <20221103025047.1862-1-Frank.Sae@motor-comm.com>
+References: <20221103025047.1862-1-Frank.Sae@motor-comm.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.174.53]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemi500012.china.huawei.com (7.221.188.12)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -45,32 +61,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-These array allocator family are sometimes misused with the first and
-second arguments switchted.
+On Thu,  3 Nov 2022 10:50:47 +0800 Frank wrote:
+>  The second YT8521_RC1R_GE_TX_DELAY_xx should be YT8521_RC1R_FE_TX_DELAY_xx.
+> 
+>  Fixes: 70479a40954c ("[net-next,v8.2] net: phy: Add driver for Motorcomm yt8521 gigabit ethernet phy")
 
-Same issue with calloc, kvcalloc, kvmalloc_array etc.
+There's a spurious space before the Fixes tag, please remove it.
 
-Bleat if sizeof is the first argument.
+The patches does not apply to the net tree:
 
-Link: https://lkml.org/lkml/2022/11/3/668
-Signed-off-by: Liao Chang <liaochang1@huawei.com>
----
- scripts/checkpatch.pl | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git/
 
-diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
-index 1e5e66ae5a52..a9a9dc277cff 100755
---- a/scripts/checkpatch.pl
-+++ b/scripts/checkpatch.pl
-@@ -7128,7 +7128,7 @@ sub process {
- 		}
- 
- # check for alloc argument mismatch
--		if ($line =~ /\b((?:devm_)?(?:kcalloc|kmalloc_array))\s*\(\s*sizeof\b/) {
-+		if ($line =~ /\b((?:devm_)?((?:k|kv)?(calloc|malloc_array)(?:_node)?))\s*\(\s*sizeof\b/) {
- 			WARN("ALLOC_ARRAY_ARGS",
- 			     "$1 uses number as first arg, sizeof is generally wrong\n" . $herecurr);
- 		}
--- 
-2.17.1
+please rebase and repost.
 
+> Reported-by: kernel test robot <lkp@intel.com>
+> Reported-by: Julia Lawall <julia.lawall@lip6.fr>
+> Signed-off-by: Frank <Frank.Sae@motor-comm.com>
