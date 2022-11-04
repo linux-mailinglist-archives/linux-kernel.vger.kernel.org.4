@@ -2,192 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BBAB619DCC
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 17:52:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B314D619DCB
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 17:52:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232086AbiKDQwN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 12:52:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41918 "EHLO
+        id S231858AbiKDQwG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 12:52:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232093AbiKDQvl (ORCPT
+        with ESMTP id S231993AbiKDQvj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 12:51:41 -0400
-X-Greylist: delayed 248 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 04 Nov 2022 09:49:49 PDT
-Received: from vern.gendns.com (vern.gendns.com [98.142.107.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9374D42F46;
-        Fri,  4 Nov 2022 09:49:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=lechnology.com; s=default; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=/fSoTUtqLSMP2KfCqxLZIKji3GOepn9Xc93RPyjSVkg=; b=S05yN9/OkId9ymzRJ4dCjcPWLQ
-        7kS+7hwLHIGVXlHp7W14BxEpjdI4ntV02EjHSD7RVjfxzjyZZY+kvQZZx58NMhQA3G5XgkIRxucIi
-        1OotghPODhkcufNUd5I3CGkJL57YrmUvR1N06/jUXH2swC2CkuimIhdic8beAfGSReYdk0zY/yiuZ
-        yCoOy4drXYmkZQ1P6bLMxXp+heS5TEP3UnHMbT+naZWwnajVpJ4cAXNOiBZHJHsv1ZCK1dTFhnhcE
-        kQfJJLIU0/MUGSPFRmI/cJ4R007YPo4eHbdvB68luhk9bsDRd+9PwexE0o4g4q5uI6q1mQphZaEQ8
-        PyW6kaVA==;
-Received: from ip98-183-112-30.ok.ok.cox.net ([98.183.112.30]:33812 helo=[192.168.0.134])
-        by vern.gendns.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.95)
-        (envelope-from <david@lechnology.com>)
-        id 1oqzsl-00Ciq9-V8;
-        Fri, 04 Nov 2022 12:49:41 -0400
-Message-ID: <6296d944-e03d-6f2b-48b1-3dad78e3c89d@lechnology.com>
-Date:   Fri, 4 Nov 2022 11:49:34 -0500
+        Fri, 4 Nov 2022 12:51:39 -0400
+Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED88142F56
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 09:49:47 -0700 (PDT)
+Received: by mail-qk1-x734.google.com with SMTP id z1so3408911qkl.9
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 09:49:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=szOAhCODiz2psvbLaxB05H0+fft3Kwz0ZU1zhJdCDdQ=;
+        b=ttyl45T4rcwvy19XAH/tMzLVbnxQ07TsEg2etISoj+uvocLgeye+GCly2rxOdjFzPZ
+         NHfeIxWgFrcvmeGvFTznOkg8BYvCrL8m3eKROcxfmlJyKd61tyCL6uKFier8UR+21fpW
+         jIeU7QkwN3lFMm6zxcKwHZ3EQOO0/vFs/QJuLlf5L0950ssC+XJpfGmR8hCRTG//Psfs
+         xPg2swVaVcknk28KhPsE+6UAh5M7QFWJRkQaNkjvsFYeQ2EehLw7kcPEXbfWRz1igf5A
+         efsG/HBNI+Nzc2icw/RqwtmmF0JIneaiVbVUEGSWxrYXKl4oJCPDPsOprSKoL+UQ2jut
+         9Zrg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=szOAhCODiz2psvbLaxB05H0+fft3Kwz0ZU1zhJdCDdQ=;
+        b=3X6XquhgSqKMRISQIOppiLjJIgJDtrmXPgU/K5O/2Hva9MZQ4h+MrwY1yQeJXpr5je
+         fZKjxS7/4sFyqYqstxZqLgM1giEsN1IU9xGEEJnAyiSzCeFIWNjtTeMisVB+23FojWK5
+         5WYp9iXFpUmoMUWczzAmnsaZ5JRjgkxW3PZijWVfV8B6Q4tRtD2Xk4CG2AXbI9eJzEK/
+         6YnNMvFsYF/RbQi3IUBhkN/J/A1EKB9mLMjUM4kff4PLp3iTlYTjxey74bkHWoRwpyIu
+         XBqjrm9SCpFl6PgxNqbLZMZwkCXVRlzQWzcT2Qj7Bc3sxq1Kc/TD4xPtRYD/YMnOimou
+         830Q==
+X-Gm-Message-State: ACrzQf2WGxjM1UAP1C3vL29918IZQqS5hI4pdSSsJJpCSec/XXs3iu3x
+        rUMcnrjyQyI7Sx40TR3AQLIjaw==
+X-Google-Smtp-Source: AMsMyM5qHrayLZ4x1Xy8q+I1McvLmvl9QsUflOS8FBeq1znjLnFdKgBaqb3J/5HMhiVDBhLQezmtrQ==
+X-Received: by 2002:a05:620a:2909:b0:6ee:6c83:9769 with SMTP id m9-20020a05620a290900b006ee6c839769mr27246269qkp.732.1667580587144;
+        Fri, 04 Nov 2022 09:49:47 -0700 (PDT)
+Received: from ?IPV6:2601:586:5000:570:aad6:acd8:4ed9:299b? ([2601:586:5000:570:aad6:acd8:4ed9:299b])
+        by smtp.gmail.com with ESMTPSA id bp33-20020a05620a45a100b006ee7923c187sm3220489qkb.42.2022.11.04.09.49.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 04 Nov 2022 09:49:46 -0700 (PDT)
+Message-ID: <f1273127-0349-9978-b8de-94760684dc1d@linaro.org>
+Date:   Fri, 4 Nov 2022 12:49:45 -0400
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v2 54/65] clk: da8xx: clk48: Switch to determine_rate
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 1/2] arm64: dts: qcom: qcs404: align TLMM pin
+ configuration with DT schema
 Content-Language: en-US
-To:     Maxime Ripard <maxime@cerno.tech>, Stephen Boyd <sboyd@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Chen-Yu Tsai <wens@csie.org>, Daniel Vetter <daniel@ffwll.ch>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        =?UTF-8?Q?Andreas_F=c3=a4rber?= <afaerber@suse.de>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Abel Vesa <abelvesa@kernel.org>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Prashant Gaikwad <pgaikwad@nvidia.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Sekhar Nori <nsekhar@ti.com>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
+To:     Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
         Linus Walleij <linus.walleij@linaro.org>,
-        Takashi Iwai <tiwai@suse.com>,
-        David Airlie <airlied@gmail.com>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Mark Brown <broonie@kernel.org>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     linux-stm32@st-md-mailman.stormreply.com,
-        alsa-devel@alsa-project.org, linux-mediatek@lists.infradead.org,
-        linux-phy@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        linux-actions@lists.infradead.org, linux-clk@vger.kernel.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        patches@opensource.cirrus.com, linux-tegra@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-References: <20221018-clk-range-checks-fixes-v2-0-f6736dec138e@cerno.tech>
- <20221018-clk-range-checks-fixes-v2-54-f6736dec138e@cerno.tech>
-From:   David Lechner <david@lechnology.com>
-In-Reply-To: <20221018-clk-range-checks-fixes-v2-54-f6736dec138e@cerno.tech>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221104161131.57719-1-krzysztof.kozlowski@linaro.org>
+ <b9f217bf-f0cc-675e-bf76-399a63b10309@somainline.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <b9f217bf-f0cc-675e-bf76-399a63b10309@somainline.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - vern.gendns.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - lechnology.com
-X-Get-Message-Sender-Via: vern.gendns.com: authenticated_id: davidmain+lechnology.com/only user confirmed/virtual account not confirmed
-X-Authenticated-Sender: vern.gendns.com: davidmain@lechnology.com
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/4/22 8:18 AM, Maxime Ripard wrote:
-> The TI DA8xx USB0 clk48 clocks implements a mux with a set_parent
-> hook, but doesn't provide a determine_rate implementation.
+On 04/11/2022 12:34, Konrad Dybcio wrote:
 > 
-> This is a bit odd, since set_parent() is there to, as its name implies,
-> change the parent of a clock. However, the most likely candidate to
-> trigger that parent change is a call to clk_set_rate(), with
-> determine_rate() figuring out which parent is the best suited for a
-> given rate.
 > 
-> The other trigger would be a call to clk_set_parent(), but it's far less
-> used, and it doesn't look like there's any obvious user for that clock.
+> On 04/11/2022 17:11, Krzysztof Kozlowski wrote:
+>> DT schema expects TLMM pin configuration nodes to be named with
+>> '-state' suffix and their optional children with '-pins' suffix.
+>>
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> ---
+> Reviewed-by: Konrad Dybcio <konrad.dybcio@somainline.org>
 > 
-> So, the set_parent hook is effectively unused, possibly because of an
-> oversight. However, it could also be an explicit decision by the
-> original author to avoid any reparenting but through an explicit call to
-> clk_set_parent().
-> 
-> The driver does implement round_rate() though, which means that we can
-> change the rate of the clock, but we will never get to change the
-> parent.
-> 
-> However, It's hard to tell whether it's been done on purpose or not.
-> 
-> Since we'll start mandating a determine_rate() implementation, let's
-> convert the round_rate() implementation to a determine_rate(), which
-> will also make the current behavior explicit. And if it was an
-> oversight, the clock behaviour can be adjusted later on.
+> Konrad
 
-I think this one should be the same as the clk:davinci changes and
-not allow re-parenting. Since this is a USB 48MHz PHY clock, a rate
-change will never be requested.
+Thanks Konrad. Could you also take a look at:
+https://lore.kernel.org/linux-arm-msm/20221024002356.28261-2-krzysztof.kozlowski@linaro.org/
+?
 
-> 
-> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
-> ---
->   drivers/clk/davinci/da8xx-cfgchip.c | 10 ++++++----
->   1 file changed, 6 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/clk/davinci/da8xx-cfgchip.c b/drivers/clk/davinci/da8xx-cfgchip.c
-> index 4c1cc59bba53..f60c97091818 100644
-> --- a/drivers/clk/davinci/da8xx-cfgchip.c
-> +++ b/drivers/clk/davinci/da8xx-cfgchip.c
-> @@ -462,10 +462,12 @@ static unsigned long da8xx_usb0_clk48_recalc_rate(struct clk_hw *hw,
->   	return 48000000;
->   }
->   
-> -static long da8xx_usb0_clk48_round_rate(struct clk_hw *hw, unsigned long rate,
-> -					unsigned long *parent_rate)
-> +static int da8xx_usb0_clk48_determine_rate(struct clk_hw *hw,
-> +					   struct clk_rate_request *req)
->   {
-> -	return 48000000;
-> +	req->rate = 48000000;
-> +
-> +	return 0;
->   }
->   
->   static int da8xx_usb0_clk48_set_parent(struct clk_hw *hw, u8 index)
-> @@ -494,7 +496,7 @@ static const struct clk_ops da8xx_usb0_clk48_ops = {
->   	.disable	= da8xx_usb0_clk48_disable,
->   	.is_enabled	= da8xx_usb0_clk48_is_enabled,
->   	.recalc_rate	= da8xx_usb0_clk48_recalc_rate,
-> -	.round_rate	= da8xx_usb0_clk48_round_rate,
-> +	.determine_rate	= da8xx_usb0_clk48_determine_rate,
->   	.set_parent	= da8xx_usb0_clk48_set_parent,
->   	.get_parent	= da8xx_usb0_clk48_get_parent,
->   };
-> 
+Best regards,
+Krzysztof
 
