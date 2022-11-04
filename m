@@ -2,52 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 637D061A580
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 00:13:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C143661A57F
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 00:13:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229715AbiKDXNl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 19:13:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46096 "EHLO
+        id S229645AbiKDXNj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 19:13:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbiKDXNh (ORCPT
+        with ESMTP id S229445AbiKDXNh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 4 Nov 2022 19:13:37 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAF9D5F4E;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAFE05F56;
         Fri,  4 Nov 2022 16:13:32 -0700 (PDT)
-Date:   Fri, 04 Nov 2022 23:13:25 -0000
+Date:   Fri, 04 Nov 2022 23:13:29 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1667603610;
+        s=2020; t=1667603611;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=8oav//qRrb9yy+JSjLzHd0ymehB7QTQkYUzcq8adcJk=;
-        b=Hy4AyyFtZoDOsSYY4KpnZT7aZj/KEAfFLRna679vS3svViZ2Kq8opCUbNfzlWm9UNw1qFq
-        eyrVqDcWE+maoWm3roSQ92MJwvGivFA2dBmLYF0WTrs6Vdprgzn83ESAfivg3kuJsxN2we
-        0W9PNVZcJBMKQHVyServeG98pC8JCoBJ8NR4rOKR35036D6zgAioQ9fKumTHlqPbNwRBG/
-        Llw3JDx0YnBtmi5L15/XeS4SjjXZJ9jfvAcQQG6EgevSJlNS50uN/REWSQ4Od9seG7KvWN
-        FFxPtwjX0Bbo5CHbVHc9SGVITMUEvtmvKyGU1dEO8F2X3S7636TCb8Wv31YDlw==
+        bh=SqkAnomT/JrLiYy2TS/nUGgJrLXjfy6GyuJiR/AKF0s=;
+        b=dd+MNtJIpvG7DzaCGu4MnZPdBlFmkwbpnJ/nlVlXO8B3LsfBKhdDg2b/xabS8qIudmw2c2
+        EBKJ88NCrYbx2NTakWwx4qA89DIPotEgO9t91mjQ6wHR15HvRaYf5tLjz4aOhBlZA5tjh5
+        BhSWYozuklyyN2LiLZU/kKCo0lnPDY4dbYmyRVMHoGSf+WDTs71QqXYmOPThHr/fEi985o
+        HjScjYEI/KeTqMRKW1PJoXo8Y5rdSvDuwfcmtqaMMrXSb2dMpJ/saPept0yqi8nFyjN2I6
+        OfsUIPv5ts63SzmfQqQYaXDvjnBtiB7xyPmGD/xAQ7ijRDc8Vt+XGyJ05JDcMA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1667603610;
+        s=2020e; t=1667603611;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=8oav//qRrb9yy+JSjLzHd0ymehB7QTQkYUzcq8adcJk=;
-        b=sgJNEXzoYu90VEavbgzqmcFqvszmyQ/+sunY1T0ahe6HxErhNKVNObfz9BIFBIW0tyKAZk
-        Rd3uKVm9GwfegACg==
-From:   "tip-bot2 for Kai Huang" <tip-bot2@linutronix.de>
+        bh=SqkAnomT/JrLiYy2TS/nUGgJrLXjfy6GyuJiR/AKF0s=;
+        b=Fzzr9p/XSUCwJOckgc8/hXPHHc5B9oE/xBffBIGWKAz8cg8E6vkDJKEdd0vBtzaRjnIUep
+        OBNosd8GJG3rDcBQ==
+From:   "tip-bot2 for Dave Hansen" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/sgx] KVM/VMX: Allow exposing EDECCSSA user leaf function to
- KVM guest
-Cc:     Kai Huang <kai.huang@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>, x86@kernel.org,
+Subject: [tip: x86/sgx] x86/sgx: Allow enclaves to use Asynchrounous Exit Notification
+Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Haitao Huang <haitao.huang@intel.com>,
+        Kai Huang <kai.huang@intel.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
 MIME-Version: 1.0
-Message-ID: <166760360549.4906.809756297092548496.tip-bot2@tip-bot2>
+Message-ID: <166760360934.4906.2427175408052308969.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -63,139 +62,170 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/sgx branch of tip:
 
-Commit-ID:     16a7fe3728a8b832ef0d1add66875a666b1f24fc
-Gitweb:        https://git.kernel.org/tip/16a7fe3728a8b832ef0d1add66875a666b1f24fc
-Author:        Kai Huang <kai.huang@intel.com>
-AuthorDate:    Tue, 01 Nov 2022 15:24:22 +13:00
+Commit-ID:     370839c241f7b98c66063c2892795a37ee3d2771
+Gitweb:        https://git.kernel.org/tip/370839c241f7b98c66063c2892795a37ee3d2771
+Author:        Dave Hansen <dave.hansen@linux.intel.com>
+AuthorDate:    Wed, 20 Jul 2022 12:13:47 -07:00
 Committer:     Dave Hansen <dave.hansen@linux.intel.com>
-CommitterDate: Fri, 04 Nov 2022 15:33:56 -07:00
+CommitterDate: Fri, 04 Nov 2022 15:33:30 -07:00
 
-KVM/VMX: Allow exposing EDECCSSA user leaf function to KVM guest
+x86/sgx: Allow enclaves to use Asynchrounous Exit Notification
 
-The new Asynchronous Exit (AEX) notification mechanism (AEX-notify)
-allows one enclave to receive a notification in the ERESUME after the
-enclave exit due to an AEX.  EDECCSSA is a new SGX user leaf function
-(ENCLU[EDECCSSA]) to facilitate the AEX notification handling.  The new
-EDECCSSA is enumerated via CPUID(EAX=0x12,ECX=0x0):EAX[11].
+Short Version:
 
-Besides Allowing reporting the new AEX-notify attribute to KVM guests,
-also allow reporting the new EDECCSSA user leaf function to KVM guests
-so the guest can fully utilize the AEX-notify mechanism.
+Allow enclaves to use the new Asynchronous EXit (AEX)
+notification mechanism.  This mechanism lets enclaves run a
+handler after an AEX event.  These handlers can run mitigations
+for things like SGX-Step[1].
 
-Similar to existing X86_FEATURE_SGX1 and X86_FEATURE_SGX2, introduce a
-new scattered X86_FEATURE_SGX_EDECCSSA bit for the new EDECCSSA, and
-report it in KVM's supported CPUIDs.
+AEX Notify will be made available both on upcoming processors and
+on some older processors through microcode updates.
 
-Note, no additional KVM enabling is required to allow the guest to use
-EDECCSSA.  It's impossible to trap ENCLU (without completely preventing
-the guest from using SGX).  Advertise EDECCSSA as supported purely so
-that userspace doesn't need to special case EDECCSSA, i.e. doesn't need
-to manually check host CPUID.
+Long Version:
 
-The inability to trap ENCLU also means that KVM can't prevent the guest
-from using EDECCSSA, but that virtualization hole is benign as far as
-KVM is concerned.  EDECCSSA is simply a fancy way to modify internal
-enclave state.
+== SGX Attribute Background ==
 
-More background about how do AEX-notify and EDECCSSA work:
+The SGX architecture includes a list of SGX "attributes".  These
+attributes ensure consistency and transparency around specific
+enclave features.
 
-SGX maintains a Current State Save Area Frame (CSSA) for each enclave
-thread.  When AEX happens, the enclave thread context is saved to the
-CSSA and the CSSA is increased by 1.  For a normal ERESUME which doesn't
-deliver AEX notification, it restores the saved thread context from the
-previously saved SSA and decreases the CSSA.  If AEX-notify is enabled
-for one enclave, the ERESUME acts differently.  Instead of restoring the
-saved thread context and decreasing the CSSA, it acts like EENTER which
-doesn't decrease the CSSA but establishes a clean slate thread context
-using the CSSA for the enclave to handle the notification.  After some
-handling, the enclave must discard the "new-established" SSA and switch
-back to the previously saved SSA (upon AEX).  Otherwise, the enclave
-will run out of SSA space upon further AEXs and eventually fail to run.
+As a simple example, the "DEBUG" attribute allows an enclave to
+be debugged, but also destroys virtually all of SGX security.
+Using attributes, enclaves can know that they are being debugged.
+Attributes also affect enclave attestation so an enclave can, for
+instance, be denied access to secrets while it is being debugged.
 
-To solve this problem, the new EDECCSSA essentially decreases the CSSA.
-It can be used by the enclave notification handler to switch back to the
-previous saved SSA when needed, i.e. after it handles the notification.
+The kernel keeps a list of known attributes and will only
+initialize enclaves that use a known set of attributes.  This
+kernel policy eliminates the chance that a new SGX attribute
+could cause undesired effects.
 
-Signed-off-by: Kai Huang <kai.huang@intel.com>
+For example, imagine a new attribute was added called
+"PROVISIONKEY2" that provided similar functionality to
+"PROVISIIONKEY".  A kernel policy that allowed indiscriminate use
+of unknown attributes and thus PROVISIONKEY2 would undermine the
+existing kernel policy which limits use of PROVISIONKEY enclaves.
+
+== AEX Notify Background ==
+
+"Intel Architecture Instruction Set Extensions and Future
+Features - Version 45" is out[2].  There is a new chapter:
+
+	Asynchronous Enclave Exit Notify and the EDECCSSA User Leaf Function.
+
+Enclaves exit can be either synchronous and consensual (EEXIT for
+instance) or asynchronous (on an interrupt or fault).  The
+asynchronous ones can evidently be exploited to single step
+enclaves[1], on top of which other naughty things can be built.
+
+AEX Notify will be made available both on upcoming processors and
+on some older processors through microcode updates.
+
+== The Problem ==
+
+These attacks are currently entirely opaque to the enclave since
+the hardware does the save/restore under the covers. The
+Asynchronous Enclave Exit Notify (AEX Notify) mechanism provides
+enclaves an ability to detect and mitigate potential exposure to
+these kinds of attacks.
+
+== The Solution ==
+
+Define the new attribute value for AEX Notification.  Ensure the
+attribute is cleared from the list reserved attributes.  Instead
+of adding to the open-coded lists of individual attributes,
+add named lists of privileged (disallowed by default) and
+unprivileged (allowed by default) attributes.  Add the AEX notify
+attribute as an unprivileged attribute, which will keep the kernel
+from rejecting enclaves with it set.
+
+1. https://github.com/jovanbulck/sgx-step
+2. https://cdrdv2.intel.com/v1/dl/getContent/671368?explicitVersion=true
+
 Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
-Acked-by: Sean Christopherson <seanjc@google.com>
 Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
-Link: https://lore.kernel.org/all/20221101022422.858944-1-kai.huang%40intel.com
+Tested-by: Haitao Huang <haitao.huang@intel.com>
+Tested-by: Kai Huang <kai.huang@intel.com>
+Link: https://lore.kernel.org/all/20220720191347.1343986-1-dave.hansen%40linux.intel.com
 ---
- arch/x86/include/asm/cpufeatures.h | 1 +
- arch/x86/kernel/cpu/cpuid-deps.c   | 1 +
- arch/x86/kernel/cpu/scattered.c    | 1 +
- arch/x86/kvm/cpuid.c               | 2 +-
- arch/x86/kvm/reverse_cpuid.h       | 3 +++
- 5 files changed, 7 insertions(+), 1 deletion(-)
+ arch/x86/include/asm/sgx.h      | 33 +++++++++++++++++++++++++-------
+ arch/x86/kernel/cpu/sgx/ioctl.c |  2 +-
+ arch/x86/kvm/cpuid.c            |  4 +---
+ 3 files changed, 28 insertions(+), 11 deletions(-)
 
-diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
-index b71f4f2..d0d7edd 100644
---- a/arch/x86/include/asm/cpufeatures.h
-+++ b/arch/x86/include/asm/cpufeatures.h
-@@ -304,6 +304,7 @@
- #define X86_FEATURE_UNRET		(11*32+15) /* "" AMD BTB untrain return */
- #define X86_FEATURE_USE_IBPB_FW		(11*32+16) /* "" Use IBPB during runtime firmware calls */
- #define X86_FEATURE_RSB_VMEXIT_LITE	(11*32+17) /* "" Fill RSB on VM exit when EIBRS is enabled */
-+#define X86_FEATURE_SGX_EDECCSSA	(11*32+18) /* "" SGX EDECCSSA user leaf function */
+diff --git a/arch/x86/include/asm/sgx.h b/arch/x86/include/asm/sgx.h
+index eae20fa..6a00697 100644
+--- a/arch/x86/include/asm/sgx.h
++++ b/arch/x86/include/asm/sgx.h
+@@ -115,17 +115,36 @@ enum sgx_miscselect {
+  * %SGX_ATTR_EINITTOKENKEY:	Allow to use token signing key that is used to
+  *				sign cryptographic tokens that can be passed to
+  *				EINIT as an authorization to run an enclave.
++ * %SGX_ATTR_ASYNC_EXIT_NOTIFY:	Allow enclaves to be notified after an
++ *				asynchronous exit has occurred.
+  */
+ enum sgx_attribute {
+-	SGX_ATTR_INIT		= BIT(0),
+-	SGX_ATTR_DEBUG		= BIT(1),
+-	SGX_ATTR_MODE64BIT	= BIT(2),
+-	SGX_ATTR_PROVISIONKEY	= BIT(4),
+-	SGX_ATTR_EINITTOKENKEY	= BIT(5),
+-	SGX_ATTR_KSS		= BIT(7),
++	SGX_ATTR_INIT		   = BIT(0),
++	SGX_ATTR_DEBUG		   = BIT(1),
++	SGX_ATTR_MODE64BIT	   = BIT(2),
++				  /* BIT(3) is reserved */
++	SGX_ATTR_PROVISIONKEY	   = BIT(4),
++	SGX_ATTR_EINITTOKENKEY	   = BIT(5),
++				  /* BIT(6) is for CET */
++	SGX_ATTR_KSS		   = BIT(7),
++				  /* BIT(8) is reserved */
++				  /* BIT(9) is reserved */
++	SGX_ATTR_ASYNC_EXIT_NOTIFY = BIT(10),
+ };
  
- /* Intel-defined CPU features, CPUID level 0x00000007:1 (EAX), word 12 */
- #define X86_FEATURE_AVX_VNNI		(12*32+ 4) /* AVX VNNI instructions */
-diff --git a/arch/x86/kernel/cpu/cpuid-deps.c b/arch/x86/kernel/cpu/cpuid-deps.c
-index c881bca..d952211 100644
---- a/arch/x86/kernel/cpu/cpuid-deps.c
-+++ b/arch/x86/kernel/cpu/cpuid-deps.c
-@@ -75,6 +75,7 @@ static const struct cpuid_dep cpuid_deps[] = {
- 	{ X86_FEATURE_SGX_LC,			X86_FEATURE_SGX	      },
- 	{ X86_FEATURE_SGX1,			X86_FEATURE_SGX       },
- 	{ X86_FEATURE_SGX2,			X86_FEATURE_SGX1      },
-+	{ X86_FEATURE_SGX_EDECCSSA,		X86_FEATURE_SGX1      },
- 	{ X86_FEATURE_XFD,			X86_FEATURE_XSAVES    },
- 	{ X86_FEATURE_XFD,			X86_FEATURE_XGETBV1   },
- 	{ X86_FEATURE_AMX_TILE,			X86_FEATURE_XFD       },
-diff --git a/arch/x86/kernel/cpu/scattered.c b/arch/x86/kernel/cpu/scattered.c
-index fc01f81..f53944f 100644
---- a/arch/x86/kernel/cpu/scattered.c
-+++ b/arch/x86/kernel/cpu/scattered.c
-@@ -40,6 +40,7 @@ static const struct cpuid_bit cpuid_bits[] = {
- 	{ X86_FEATURE_PER_THREAD_MBA,	CPUID_ECX,  0, 0x00000010, 3 },
- 	{ X86_FEATURE_SGX1,		CPUID_EAX,  0, 0x00000012, 0 },
- 	{ X86_FEATURE_SGX2,		CPUID_EAX,  1, 0x00000012, 0 },
-+	{ X86_FEATURE_SGX_EDECCSSA,	CPUID_EAX, 11, 0x00000012, 0 },
- 	{ X86_FEATURE_HW_PSTATE,	CPUID_EDX,  7, 0x80000007, 0 },
- 	{ X86_FEATURE_CPB,		CPUID_EDX,  9, 0x80000007, 0 },
- 	{ X86_FEATURE_PROC_FEEDBACK,    CPUID_EDX, 11, 0x80000007, 0 },
+-#define SGX_ATTR_RESERVED_MASK	(BIT_ULL(3) | BIT_ULL(6) | GENMASK_ULL(63, 8))
++#define SGX_ATTR_RESERVED_MASK	(BIT_ULL(3) | \
++				 BIT_ULL(6) | \
++				 BIT_ULL(8) | \
++				 BIT_ULL(9) | \
++				 GENMASK_ULL(63, 11))
++
++#define SGX_ATTR_UNPRIV_MASK	(SGX_ATTR_DEBUG	    | \
++				 SGX_ATTR_MODE64BIT | \
++				 SGX_ATTR_KSS	    | \
++				 SGX_ATTR_ASYNC_EXIT_NOTIFY)
++
++#define SGX_ATTR_PRIV_MASK	(SGX_ATTR_PROVISIONKEY	| \
++				 SGX_ATTR_EINITTOKENKEY)
+ 
+ /**
+  * struct sgx_secs - SGX Enclave Control Structure (SECS)
+diff --git a/arch/x86/kernel/cpu/sgx/ioctl.c b/arch/x86/kernel/cpu/sgx/ioctl.c
+index ebe79d6..ef87482 100644
+--- a/arch/x86/kernel/cpu/sgx/ioctl.c
++++ b/arch/x86/kernel/cpu/sgx/ioctl.c
+@@ -111,7 +111,7 @@ static int sgx_encl_create(struct sgx_encl *encl, struct sgx_secs *secs)
+ 	encl->base = secs->base;
+ 	encl->size = secs->size;
+ 	encl->attributes = secs->attributes;
+-	encl->attributes_mask = SGX_ATTR_DEBUG | SGX_ATTR_MODE64BIT | SGX_ATTR_KSS;
++	encl->attributes_mask = SGX_ATTR_UNPRIV_MASK;
+ 
+ 	/* Set only after completion, as encl->lock has not been taken. */
+ 	set_bit(SGX_ENCL_CREATED, &encl->flags);
 diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
-index 7345bec..44151d2 100644
+index 7065462..7345bec 100644
 --- a/arch/x86/kvm/cpuid.c
 +++ b/arch/x86/kvm/cpuid.c
-@@ -665,7 +665,7 @@ void kvm_set_cpu_caps(void)
- 	);
- 
- 	kvm_cpu_cap_init_scattered(CPUID_12_EAX,
--		SF(SGX1) | SF(SGX2)
-+		SF(SGX1) | SF(SGX2) | SF(SGX_EDECCSSA)
- 	);
- 
- 	kvm_cpu_cap_mask(CPUID_8000_0001_ECX,
-diff --git a/arch/x86/kvm/reverse_cpuid.h b/arch/x86/kvm/reverse_cpuid.h
-index a19d473..4e5b844 100644
---- a/arch/x86/kvm/reverse_cpuid.h
-+++ b/arch/x86/kvm/reverse_cpuid.h
-@@ -23,6 +23,7 @@ enum kvm_only_cpuid_leafs {
- /* Intel-defined SGX sub-features, CPUID level 0x12 (EAX). */
- #define KVM_X86_FEATURE_SGX1		KVM_X86_FEATURE(CPUID_12_EAX, 0)
- #define KVM_X86_FEATURE_SGX2		KVM_X86_FEATURE(CPUID_12_EAX, 1)
-+#define KVM_X86_FEATURE_SGX_EDECCSSA	KVM_X86_FEATURE(CPUID_12_EAX, 11)
- 
- struct cpuid_reg {
- 	u32 function;
-@@ -78,6 +79,8 @@ static __always_inline u32 __feature_translate(int x86_feature)
- 		return KVM_X86_FEATURE_SGX1;
- 	else if (x86_feature == X86_FEATURE_SGX2)
- 		return KVM_X86_FEATURE_SGX2;
-+	else if (x86_feature == X86_FEATURE_SGX_EDECCSSA)
-+		return KVM_X86_FEATURE_SGX_EDECCSSA;
- 
- 	return x86_feature;
- }
+@@ -1047,9 +1047,7 @@ static inline int __do_cpuid_func(struct kvm_cpuid_array *array, u32 function)
+ 		 * userspace.  ATTRIBUTES.XFRM is not adjusted as userspace is
+ 		 * expected to derive it from supported XCR0.
+ 		 */
+-		entry->eax &= SGX_ATTR_DEBUG | SGX_ATTR_MODE64BIT |
+-			      SGX_ATTR_PROVISIONKEY | SGX_ATTR_EINITTOKENKEY |
+-			      SGX_ATTR_KSS;
++		entry->eax &= SGX_ATTR_PRIV_MASK | SGX_ATTR_UNPRIV_MASK;
+ 		entry->ebx &= 0;
+ 		break;
+ 	/* Intel PT */
