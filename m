@@ -2,50 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93851619401
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 11:00:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE14F6193F8
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 10:59:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231626AbiKDKAT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 06:00:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36450 "EHLO
+        id S231592AbiKDJ67 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 05:58:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231621AbiKDKAQ (ORCPT
+        with ESMTP id S229485AbiKDJ65 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 06:00:16 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AA6028725
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 03:00:15 -0700 (PDT)
-Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4N3bhS6M9MzHvZ2;
-        Fri,  4 Nov 2022 17:59:52 +0800 (CST)
-Received: from kwepemm600010.china.huawei.com (7.193.23.86) by
- dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 4 Nov 2022 18:00:13 +0800
-Received: from ubuntu1804.huawei.com (10.67.174.174) by
- kwepemm600010.china.huawei.com (7.193.23.86) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 4 Nov 2022 18:00:12 +0800
-From:   Li Huafei <lihuafei1@huawei.com>
-To:     <paul.walmsley@sifive.com>, <palmer@dabbelt.com>,
-        <aou@eecs.berkeley.edu>, <lizhengyu3@huawei.com>,
-        <liaochang1@huawei.com>, <u.kleine-koenig@pengutronix.de>,
-        <rdunlap@infradead.org>
-CC:     <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <kexec@lists.infradead.org>, <lihuafei1@huawei.com>
-Subject: [PATCH 2/2] RISC-V: kexec: Fix memory leak of elf header buffer
-Date:   Fri, 4 Nov 2022 17:56:58 +0800
-Message-ID: <20221104095658.141222-2-lihuafei1@huawei.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20221104095658.141222-1-lihuafei1@huawei.com>
-References: <20221104095658.141222-1-lihuafei1@huawei.com>
+        Fri, 4 Nov 2022 05:58:57 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 630381CFF4;
+        Fri,  4 Nov 2022 02:58:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net; s=s31663417;
+        t=1667555924; bh=mQO1KZtVW41h4QMxt8zmnc7+t4rWxxBsqaL/3wGPSOs=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=rnLoRfXNGrRvq1Z2tVCUMFlBCcx4s/0Kq5QGJ3cVHXtWdM2W9G4i7PJbY7GYY2dUW
+         unV+zD/UwJAz9V0CIVnQpuKbHpvMBX2ZF6GJtd0UEOD+j07D/kGVW8yTzXHgaLETLu
+         X6kRa5JPN0I37fcF5gabJLEDqQQWYcGS+38BXpCMUAobxpAL5EdTzRdUI4wmiwDmvm
+         BUe0Fc2IA/58p0q+a+8DjqPW6id898WrWxiB2LQHFGRK5C2XOlN73fifLtSMC3iMU4
+         JtV2xrMg2Kte2EEqwu3EZOV0uf/lwJP78Js0NlYqCqqNNJORYiwFjlw40FKDeN4xk/
+         /93bLPtSDa19w==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from probook ([95.223.44.31]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MaJ81-1oTzP71wIv-00WGY4; Fri, 04
+ Nov 2022 10:58:44 +0100
+From:   =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+To:     linux-usb@vger.kernel.org
+Cc:     =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Peter Chen <peter.chen@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: chipidea: ci_hdrc_imx: Fix a typo ("regualator")
+Date:   Fri,  4 Nov 2022 10:58:38 +0100
+Message-Id: <20221104095838.2132945-1-j.neuschaefer@gmx.net>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.174.174]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemm600010.china.huawei.com (7.193.23.86)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:V/ucTA5zBC1LuWA4bSeNtvNU5Y6rnvk4Vh3J/CDiJ5maFAgzbi9
+ RqS+RYWtthf6ZHDyeONto8Hojjs+kWTMZJYmdj/Z5xfBEH3UCq1GkG/WFiXOpKOgG1HGuDn
+ /Rxb3Vz1670tiYNBdRs4uA6QcUwUi5pdZKaAmy83VzIp37/Is2Rbo64WLc5XsA6dSnSDhr6
+ M5C5U/aTdB9eBOHNd82EQ==
+UI-OutboundReport: notjunk:1;M01:P0:IAAyuORdYPc=;n45qCqztgHAcf/HjvNCE4GXwxSa
+ WrlkqzW+LojMqVoB9AdCMYtcOiF7oZjVth4wzYcBcpyhen3SEvQ3tQNO2vx57yPxax1Amjbxg
+ mMHMwztXpkNoeiVnSt60ADsMPT+vKYUV6+GurHGTqD/HOtDoq25j9WxAUJ8244sWpEZdh4cnB
+ jxoHydlwxI7A4bLAmnSPYfUHwNMS2h9o0+g7JTqsQ884w5EcwLSM6amK8KYKyhz1w6KZ6L36Y
+ YV2YuRJy+d69KkSoOggSmWaNfBkwmCytLWx4J8w6moyQ1Pqa/mwSad9/vWzm/z85lezpyVq17
+ ajyqSiAXBR1fPYTjIHmRvoQia38wZ4Pml3EXZd7oPr78KwZj3X3wuLSvRZQ/Nb3cq7S+AF/HZ
+ h1YAoFrCR9NVf7CQ4+zCBQq1i3Tq/6xDOC1D8CJ5Eh78He5l24KULBdPspFYTc6ufFe9EqUuE
+ Q9rJcgZQ1Q0JxMOorobRjXBGr26EkYgISzE88UO+YHWAHE391x+YsWKT0YUq8TXnp/00VPOVu
+ ECQWvVDzpBblFf5ybxemDHxYUBIzlpI3VYG5i0ihF6GXuf3O2DCcFU9nBKzdMifwS3JNAeut1
+ kspgATADtVZDsvuIhWBATs5nHOCocrasITCWddaWBcpdpOvjWhvWiN/Cy3gExWbKLSBkbukPu
+ IlzkKt0H3R3sEiS9mK2VoZe1zJpR7NuTAljXKDCmAHM/P7y6UFMDEGBFgc1EcJdi2KeDsuXSJ
+ pvHcMhWyrxpBsMHdevwFUvMweVIdEJHz0QYMwXKHH1Ev2i40ESAYBqwthn+v9OAY7gkrrNbca
+ /8acwR+iWry3JQ2m3hkAXRhqzYGYNbOGSFWc4m0nS/V1jFpFoq5HqkWAZY6tq9fq/+TTyT1f5
+ WYPxQlcnwgUZdmEPf4kdPJZ+U8HO6QXMEhJY9LouCZeZIh/uDyud3i77RNakOM1GuAsiqyu01
+ b0oWB8D6s0eopSrGSgIDmXtpIto=
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,51 +74,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is reported by kmemleak detector:
+Change "regualator" to "regulator" in this comment.
 
-unreferenced object 0xff2000000403d000 (size 4096):
-  comm "kexec", pid 146, jiffies 4294900633 (age 64.792s)
-  hex dump (first 32 bytes):
-    7f 45 4c 46 02 01 01 00 00 00 00 00 00 00 00 00  .ELF............
-    04 00 f3 00 01 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<00000000566ca97c>] kmemleak_vmalloc+0x3c/0xbe
-    [<00000000979283d8>] __vmalloc_node_range+0x3ac/0x560
-    [<00000000b4b3712a>] __vmalloc_node+0x56/0x62
-    [<00000000854f75e2>] vzalloc+0x2c/0x34
-    [<00000000e9a00db9>] crash_prepare_elf64_headers+0x80/0x30c
-    [<0000000067e8bf48>] elf_kexec_load+0x3e8/0x4ec
-    [<0000000036548e09>] kexec_image_load_default+0x40/0x4c
-    [<0000000079fbe1b4>] sys_kexec_file_load+0x1c4/0x322
-    [<0000000040c62c03>] ret_from_syscall+0x0/0x2
+Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
+=2D--
+ drivers/usb/chipidea/ci_hdrc_imx.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-In elf_kexec_load(), a buffer is allocated via vzalloc() to store elf
-headers.  While it's not freed back to system when kdump kernel is
-reloaded or unloaded, or when image->elf_header is successfully set and
-then fails to load kdump kernel for some reason. Fix it by freeing the
-buffer in arch_kimage_file_post_load_cleanup().
-
-Fixes: 8acea455fafa ("RISC-V: Support for kexec_file on panic")
-Signed-off-by: Li Huafei <lihuafei1@huawei.com>
----
- arch/riscv/kernel/elf_kexec.c | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/arch/riscv/kernel/elf_kexec.c b/arch/riscv/kernel/elf_kexec.c
-index ff30fcb43f47..5372b708fae2 100644
---- a/arch/riscv/kernel/elf_kexec.c
-+++ b/arch/riscv/kernel/elf_kexec.c
-@@ -26,6 +26,10 @@ int arch_kimage_file_post_load_cleanup(struct kimage *image)
- 	kvfree(image->arch.fdt);
- 	image->arch.fdt = NULL;
- 
-+	vfree(image->elf_headers);
-+	image->elf_headers = NULL;
-+	image->elf_headers_sz = 0;
-+
- 	return kexec_image_post_load_cleanup_default(image);
- }
- 
--- 
-2.17.1
+diff --git a/drivers/usb/chipidea/ci_hdrc_imx.c b/drivers/usb/chipidea/ci_=
+hdrc_imx.c
+index 9ffcecd3058c1..1d6ee1d894f01 100644
+=2D-- a/drivers/usb/chipidea/ci_hdrc_imx.c
++++ b/drivers/usb/chipidea/ci_hdrc_imx.c
+@@ -355,7 +355,7 @@ static int ci_hdrc_imx_probe(struct platform_device *p=
+dev)
+ 		data->hsic_pad_regulator =3D
+ 				devm_regulator_get_optional(dev, "hsic");
+ 		if (PTR_ERR(data->hsic_pad_regulator) =3D=3D -ENODEV) {
+-			/* no pad regualator is needed */
++			/* no pad regulator is needed */
+ 			data->hsic_pad_regulator =3D NULL;
+ 		} else if (IS_ERR(data->hsic_pad_regulator))
+ 			return dev_err_probe(dev, PTR_ERR(data->hsic_pad_regulator),
+=2D-
+2.35.1
 
