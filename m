@@ -2,98 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7AFD61A203
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 21:15:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CB6061A204
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 21:16:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229589AbiKDUPo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 16:15:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57554 "EHLO
+        id S229872AbiKDUQb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 16:16:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229563AbiKDUPl (ORCPT
+        with ESMTP id S229469AbiKDUQ3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 16:15:41 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA92931EE9
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 13:15:40 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id m6-20020a17090a5a4600b00212f8dffec9so5491052pji.0
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 13:15:40 -0700 (PDT)
+        Fri, 4 Nov 2022 16:16:29 -0400
+Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1748745ED0
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 13:16:28 -0700 (PDT)
+Received: by mail-pg1-x549.google.com with SMTP id 125-20020a630283000000b0046e9babe7b3so3030999pgc.11
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 13:16:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=WwcH+iZxGlELoSFmbiG2F+LcSAfxo7d4BXkkQPL3oEI=;
-        b=Feo7aLccvIiUFCz0IQvThwilRRuNsyrpZUnftVsZfjj8XYXQSFrIYH3rBJ9pl9AVd1
-         0QBS4p0eS2Auk5grltqCZHhMy52m2eoOZ3Dyjvl6u7ksM+uKmfXQViJ2DXA8oC3D4Z34
-         IZgMWO3NptjbIzmMH+7K07NkCucKQA3oBW+yQ9OuKRe0+DMXUgLl0Rs58L/pchkt3qwG
-         SRvLV8FDseMonl0kTvvz0KTjPcnWljQWZJ8bRjD448LzwgH9ljB4ZZnYaguVVVZ5Rh/H
-         Z656e04FZq7s/SPiTN5UXm2Xfu4LYQY2nb1iUEZCzGlvNIqMCMtTR0K0fg2+3idK7iEY
-         /AAw==
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=SPGoNE++quTPKk7M9kXwumlWX1jUkQJNG2L9fOTVZ7Q=;
+        b=QOtWDCZHcwZq1VA2Yz+7ejGKdbICrOi681AFKe/8ED1zOMlNYPz9dHv2fBpC6yW5/9
+         CzK/2y/XkzSNPsCREkOLEW7IM6GRTM2+2FhUrwbDGt1LoI4CCKchcdtJjMLSzM1+cL7W
+         +ksYz8XYZFcE0vIIOIJdY5IZTewnbUIFS4xBKY2S9GqF2Ou22hEEqt+LRqnfV9bNibct
+         igc4s7FFlGtrKNpzjhZ/r5y+pc4LNZdq8aBRRU0vWZUQjYskHQC9h6UDnX5xwbCxyLnI
+         +CKIuQC+3+ecA/vrLXPbiPI5tW++QR8ijO0eLt1k1owXvasJtIZ8iNNrNgrHkijNz3Cs
+         z6FQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WwcH+iZxGlELoSFmbiG2F+LcSAfxo7d4BXkkQPL3oEI=;
-        b=FJw1f96UUnvnWGVCmGG+2nw4+Z6KRDeLJoGi9WXTVmm9eLU0KEp2LXoSbEzIBomZFW
-         ua0+//uioVT2mmMD1HH8wAX/uUfkgfVZk/rjBIci9xfsRE06WTtru6M55Vk/Xm8aQiUv
-         jd3snx3Pi8ihr+qYwg3wMhyajaDPCCe0Im8b7yrRG+vuZ5Moh/57qpJ08teyBuYqNzSj
-         ISeswOmtzCR1Rww03yBvJRvMmkSZ5dYaCdX2gy/KOo0jIz62dFxdhcgI+ekGhcYQTXHn
-         LspnYCoRlUCqYpQqEXrIAnPTep4ljv4lWhzWCsfDk0wXdC9bj9fqS61ne9bavPj13fux
-         Vi0w==
-X-Gm-Message-State: ACrzQf3s96IVQeVTUqwiHCGPLGlQggGzgxiO4wlTtSXSMH9IwIgSrJ6c
-        RyI8Xmf+LMMV0C++hXVxAMijeA==
-X-Google-Smtp-Source: AMsMyM7LA9CKVJucdf56FhPBIDbY23ArzmJdn5v66cKOhKDCPGvtmHqu7FhmyFiehmOw+k0waEgaCQ==
-X-Received: by 2002:a17:90a:2bc9:b0:212:8210:c92d with SMTP id n9-20020a17090a2bc900b002128210c92dmr38288471pje.38.1667592940349;
-        Fri, 04 Nov 2022 13:15:40 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id i7-20020a17090332c700b00183c67844aesm166908plr.22.2022.11.04.13.15.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Nov 2022 13:15:39 -0700 (PDT)
-Date:   Fri, 4 Nov 2022 20:15:36 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Chao Gao <chao.gao@intel.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Anup Patel <anup@brainfault.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        Eric Farman <farman@linux.ibm.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Atish Patra <atishp@atishpatra.org>,
-        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Isaku Yamahata <isaku.yamahata@intel.com>,
-        Fabiano Rosas <farosas@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=SPGoNE++quTPKk7M9kXwumlWX1jUkQJNG2L9fOTVZ7Q=;
+        b=K+++hLK6fXJRAZH1G37vMyZOy0SeAfW7crHJbUneBgaRaK9nKrslS23lAopFhL+03g
+         WmXI4iuSU3t7OSmgBvViS/NdoruG0IFWZGC7rETNribmxFs9e5nQyV2SwvLcYKzzbPTk
+         L3PiReDJ0knBcnfwXElqBBF1OqJEjTWd/8g44RaOBkqMZDlrQUw5W74Oz2jNjo/zN0K6
+         8FqFUDgBF6/J1tD7nJzpgCrQKbY+4LJ6rxsT51GHaY0WgIL19aTbxoTV8hVVzfy6L+UW
+         KGtSYy9kB0lmuqXDG2QtPgxIRDnne0iL3PdauHsUT5tdpm3uePkILMPEibWC50r8W5bB
+         GzcA==
+X-Gm-Message-State: ACrzQf3/J4TO2DUqJwSRujrvvaD81M4Fm/WaJd6lDgKVQnmApMyefdS2
+        5GmXbB72qQeJau6inBerZqPCYeJtxRMucGphGGDFWg9GoVKOQ+hFUVeYgCjqQCrn4okKzsJpaAd
+        eiQSWjJOcCAugeBf67/gJrviPs76MLutK/xM2FcbRmznvgpHrn8LbPtf+XistxQjJUQoP1oZJ5q
+        DVYPNiZG4=
+X-Google-Smtp-Source: AMsMyM7GQEiFtwYcIrg5bO5Gozt3bTJ9vqVcJs+LvAj1L2b2NRimkYw9l3gPkfFr90pelW+44p6rMdHd63yirF1ifg==
+X-Received: from dionnaglaze.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:2ee6])
+ (user=dionnaglaze job=sendgmr) by 2002:a05:6a00:b89:b0:56d:2a21:a6b3 with
+ SMTP id g9-20020a056a000b8900b0056d2a21a6b3mr33441906pfj.56.1667592987372;
+ Fri, 04 Nov 2022 13:16:27 -0700 (PDT)
+Date:   Fri,  4 Nov 2022 20:16:12 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
+Message-ID: <20221104201616.2268815-1-dionnaglaze@google.com>
+Subject: [PATCH v7 0/4] Add throttling detection to sev-guest
+From:   Dionna Glaze <dionnaglaze@google.com>
+To:     linux-kernel@vger.kernel.org, x86@kernel.org
+Cc:     Dionna Glaze <dionnaglaze@google.com>,
+        Tom Lendacky <Thomas.Lendacky@amd.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        Peter Gonda <pgonda@google.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Yuan Yao <yuan.yao@intel.com>
-Subject: Re: [PATCH 02/44] KVM: Initialize IRQ FD after arch hardware setup
-Message-ID: <Y2Vy6Eq89tQa+3bq@google.com>
-References: <20221102231911.3107438-1-seanjc@google.com>
- <20221102231911.3107438-3-seanjc@google.com>
- <Y2Rfz+TIcdfcawxh@gao-cwp>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y2Rfz+TIcdfcawxh@gao-cwp>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        Dave Hansen <dave.hansen@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -101,33 +73,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 04, 2022, Chao Gao wrote:
-> On Wed, Nov 02, 2022 at 11:18:29PM +0000, Sean Christopherson wrote:
-> > 
-> >+	r = kvm_irqfd_init();
-> >+	if (r)
-> >+		goto err_irqfd;
-> >+
-> > 	r = kvm_async_pf_init();
-> > 	if (r)
-> >-		goto out_free_4;
-> >+		goto err_async_pf;
-> > 
-> > 	kvm_chardev_ops.owner = module;
-> > 
-> >@@ -5927,6 +5926,9 @@ int kvm_init(void *opaque, unsigned vcpu_size, unsigned vcpu_align,
-> > 	kvm_vfio_ops_exit();
-> > err_vfio:
-> > 	kvm_async_pf_deinit();
-> >+err_async_pf:
-> >+	kvm_irqfd_exit();
-> 
-> >+err_irqfd:
-> > out_free_4:
-> 
-> Do you mind removing one of the two labels?
+The guest request synchronous API from SEV-SNP VMs to the host's security
+processor consumes a global resource. For this reason, AMD's docs
+recommend that the host implements a throttling mechanism. In order for
+the guest to know it's been throttled and should try its request again,
+we need some good-faith communication from the host that the request
+has been throttled.
 
-Ah, I meant to tack on a patch at the very end to clean up these labels once the
-dust had settled, e.g. to also resolve the "err" vs. "out" mess I created (on
-purpose, because trying to describe the "out" path was frustrating and generated
-too much churn).
+These patches work with the existing /dev/sev-guest ABI to detect a
+throttling code.
+
+Changes from v6:
+  * Rebased on the IV reuse fix patch
+  * renamed rate_hz to rate_s and fixed its MODULE_PARM_DESC to use the
+    correct variable name.
+  * Changed sleep_timeout_interrutible (not defined) to
+    schedule_timeout_interruptible.
+Changes from v5:
+  * Fixed commit prefix text
+  * Added all get_maintainers.pl folks to commits' Cc tags
+  * Changed SET_RET_NO_FW_CALL commit's metadata to show pgonda signs
+    off and is the author.
+Changes from v4:
+  * Clarified comment on SEV_RET_NO_FW_CALL
+  * Changed ratelimit loop to use sleep_timeout_interruptible
+Changes from v3:
+  * sev-guest ratelimits itself to one request twice a second.
+  * Fixed a type signature to use u64 instead of unsigned int
+  * Set *exitinfo2 unconditionally after the ghcb_hv_call.
+Changes from v2:
+  * Codified the non-firmware-call firmware error code as (u32)-1.
+  * Changed sev_issue_guest_request unsigned long *fw_err argument to
+    u64 *exitinfo2 to more accurately and type-safely describe the
+    value that it outputs.
+  * Changed sev_issue_guest_request to always set its exitinfo2
+    argument to either the non-firmware-call error code, the
+    EXIT_INFO_2 returned from the VMM if the request failed, or 0 on
+    success. This fixes a bug that returned uninitialized kernel stack
+    memory to the user when there is no error.
+  * Changed the throttle behavior to retry in the driver instead of
+    returning -EAGAIN, due to possible message sequence number reuse
+    on different message contents.
+
+Changes from v1:
+  * Changed throttle error code to 2
+
+Cc: Tom Lendacky <Thomas.Lendacky@amd.com>
+Cc: Paolo Bonzini <pbonzini@redhat.com>
+Cc: Joerg Roedel <jroedel@suse.de>
+Cc: Peter Gonda <pgonda@google.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
+
+Signed-off-by: Dionna Glaze <dionnaglaze@google.com>
+
+Dionna Glaze (3):
+  x86/sev: Change snp_guest_issue_request's fw_err
+  virt: sev-guest: Remove err in handle_guest_request
+  virt: sev-guest: interpret VMM errors from guest request
+
+Peter Gonda (1):
+  crypto: ccp - Name -1 return value as SEV_RET_NO_FW_CALL
+
+ arch/x86/include/asm/sev.h              |  4 +-
+ arch/x86/kernel/sev.c                   | 10 ++--
+ drivers/crypto/ccp/sev-dev.c            |  2 +-
+ drivers/virt/coco/sev-guest/sev-guest.c | 63 ++++++++++++++++++-------
+ include/uapi/linux/psp-sev.h            |  7 +++
+ include/uapi/linux/sev-guest.h          | 18 ++++++-
+ 6 files changed, 78 insertions(+), 26 deletions(-)
+
+-- 
+2.38.1.431.g37b22c650d-goog
+
