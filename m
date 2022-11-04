@@ -2,63 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BD81618ED7
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 04:19:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E83D2618ED8
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 04:19:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231246AbiKDDSz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 23:18:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52874 "EHLO
+        id S229655AbiKDDTB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 23:19:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231201AbiKDDRw (ORCPT
+        with ESMTP id S231255AbiKDDSD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 23:17:52 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3B9A2611E;
-        Thu,  3 Nov 2022 20:17:08 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id l2so3709049pld.13;
-        Thu, 03 Nov 2022 20:17:08 -0700 (PDT)
+        Thu, 3 Nov 2022 23:18:03 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2018B26133;
+        Thu,  3 Nov 2022 20:17:11 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id d59-20020a17090a6f4100b00213202d77e1so7052205pjk.2;
+        Thu, 03 Nov 2022 20:17:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=rqxToHgUhXx5zVzMpfDkvTdc32yI7QdTCdmYmbj1mWo=;
-        b=j1eELCK3rXz3s3bVoQnv3Vu0BMdZY+jObv7KwIQDVrR/E4D0UEyFceL4GQlw1xzjy7
-         vR2S08jcyzZtY/FzzMOPNKL/mC6V5S/GDhUPCemBf/0pIl5V7bpIUoChLzdo5Psuh0em
-         j6+SBf0d2qJgAfDSlw+wEoaYR/gQptqt6n+L9+o6IcfgkO40Qw3gvLemyJlbT5q5jCRX
-         22D+sHrmOok5bNY3Cd50+Phy4Tleu4e2HwFMk5mcpaOKOHgs7MXiLCyF26TbMxjZRPDF
-         evKOy7Ibuht885xVqnYRnUzL3tequdDqUUXVsJIbb6M7tlHz4dWFMT/KzEhrJNoDWsLr
-         EHsg==
+        bh=g6PAgha9awLqLasM2SZBLhBWQgufb9o8aM2Y2mLLZh0=;
+        b=Yc66T/C43UfEpUcqxFl5/KtvvWxdKjjseUpHDw3Zky+25MC+fBsWw2ozPEZuES4kvK
+         HKE67+vkfo9MYjWn+7/ot3l9RHt6HWq1g7/9WytwbtBrriBjNEViAnnsvPwvnyQgrP/N
+         KF9Ob5cfsOPDPIsbZdBcjxjKdFE1q5m1hx1Va8lO9Am8eqiLwFDmIXE6upHp94Bcl9TJ
+         gjrtAeuLLuAXpjO/5XengO2wiWYdw4kMLpOTWdEOoNIxUgAy+y8VRp9cioPjm/5A96oS
+         Sir2Y38f9lQg6EjePLvvUIGCq6iF/dPvghZWbisu+x0NDR0CZe2gB1mIjjYxowyYTbOe
+         DSNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=rqxToHgUhXx5zVzMpfDkvTdc32yI7QdTCdmYmbj1mWo=;
-        b=0r+8AD2GP2OA/7zqdtpo22VwTqNMy6+5kMRYnflnzEq7du3oD2S3mNzm62bMEiwlmj
-         d6KmkFsXSFVis5Vt19y7BjrMlx8DSGJRxrQ2kObQgfsMJPJ8Mu2hUwK49p+0E5eAIx18
-         J5j0EfCMaOe2lCC95IC2TYPiNHkXvB6TCtZT7rfzxjDVew8O5c85kMinEvLzJW9FVEHn
-         6mQ/o2vcRSRylRJPr1J3MUY80kgACGdxzglmZc1YFj6v9KSs2pYXWdghuKFTXxtT1Wvz
-         GMgmbdy4vr9278OSsfWwUTxLmAk7spjdBRxTvP8gr0URfB+VKlnRN+AAVQfqLKYxYccs
-         h65A==
-X-Gm-Message-State: ACrzQf1qSnQY4oNqGKe2fG3+S2YJ8celz8ZkBfV3evZikbb4/ihhMCmK
-        K3ckTImRKotbKzHsTLl3AiI=
-X-Google-Smtp-Source: AMsMyM4PVCPU2yHDYVCuNekAeB+5DTpKg+DXH2Jw0NlIlDE7xSaEuoTpI1qXSN4RrNFJ8SJoMNzKvw==
-X-Received: by 2002:a17:90a:8c7:b0:214:e1:cad0 with SMTP id 7-20020a17090a08c700b0021400e1cad0mr20381543pjn.3.1667531828266;
-        Thu, 03 Nov 2022 20:17:08 -0700 (PDT)
+        bh=g6PAgha9awLqLasM2SZBLhBWQgufb9o8aM2Y2mLLZh0=;
+        b=4HWBcsXBCOTfqmpFLLVTmSPM1DU5fTC0yUOljRHlSJ/CpLN0QZxZm4lGv7QWTzSG1A
+         VxRZexK2Mm/0O/q4WqfAaY5uV3GtsKrjuMUwygpcUiGKlJmBMdQpzJyim6le64pREz+i
+         V04DvPkfcqLhf7XhAtECm11uog1uKxDhGLTa4j4U7HGSwQ5KC9hyraWVKIueqUSsFVIu
+         Jk9HGjYUDwHPCi/+B+Rq1LGhIMN55d00mJyLTYgcv4EBT2njFcwiSmoZdIrV9tWMRDaf
+         OZcTEX9jBoQfgaWxEJrjPfPgPZ/NcKGcR1KkOBP4r4Nm3NbwvzehOyh5n5ced3qQLCs9
+         omBA==
+X-Gm-Message-State: ACrzQf2a4veNfdFWpf9gxKv9ekRHyXlqM81sXagEoJGGPWZtwqmNQO5R
+        wWftkIDqwEnJHuuViUzYM6w=
+X-Google-Smtp-Source: AMsMyM64tXvt/mZih/5xOGONanOKPX+R66cULAJlCmjnRjUYkHYQrQu4rLsZLjxE/l1ilhdz95A/NA==
+X-Received: by 2002:a17:90b:4d07:b0:1ef:521c:f051 with SMTP id mw7-20020a17090b4d0700b001ef521cf051mr52794390pjb.164.1667531830375;
+        Thu, 03 Nov 2022 20:17:10 -0700 (PDT)
 Received: from dtor-ws.mtv.corp.google.com ([2620:15c:9d:2:a6ae:11ff:fe11:fcc3])
-        by smtp.gmail.com with ESMTPSA id s3-20020a63ff43000000b004702eca61fcsm1078655pgk.36.2022.11.03.20.17.06
+        by smtp.gmail.com with ESMTPSA id s3-20020a63ff43000000b004702eca61fcsm1078655pgk.36.2022.11.03.20.17.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Nov 2022 20:17:07 -0700 (PDT)
+        Thu, 03 Nov 2022 20:17:09 -0700 (PDT)
 From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
 To:     Helge Deller <deller@gmx.de>, Tony Lindgren <tony@atomide.com>,
         Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
         Sebastian Reichel <sre@kernel.org>
 Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
         linux-omap@vger.kernel.org, linux-fbdev@vger.kernel.org
-Subject: [PATCH RESEND 12/13] omapfb: panel-tpo-td028ttec1: stop including gpio.h
-Date:   Thu,  3 Nov 2022 20:16:41 -0700
-Message-Id: <20221103-omapfb-gpiod-v1-12-cba1fae5a77c@gmail.com>
+Subject: [PATCH RESEND 13/13] omapfb: panel-sharp-ls037v7dw01: fix included headers
+Date:   Thu,  3 Nov 2022 20:16:42 -0700
+Message-Id: <20221103-omapfb-gpiod-v1-13-cba1fae5a77c@gmail.com>
 X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
 In-Reply-To: <20221103-omapfb-gpiod-v1-0-cba1fae5a77c@gmail.com>
 References: <20221103-omapfb-gpiod-v1-0-cba1fae5a77c@gmail.com>
@@ -76,25 +76,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The driver does not use gpios, so there is no need to include gpio.h.
+The driver is using gpiod API so it should include gpio/consumer.h and
+not gpio.gh or of_gpio.h.
 
 Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 ---
- drivers/video/fbdev/omap2/omapfb/displays/panel-tpo-td028ttec1.c | 1 -
- 1 file changed, 1 deletion(-)
+ drivers/video/fbdev/omap2/omapfb/displays/panel-sharp-ls037v7dw01.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/video/fbdev/omap2/omapfb/displays/panel-tpo-td028ttec1.c b/drivers/video/fbdev/omap2/omapfb/displays/panel-tpo-td028ttec1.c
-index 3c0f887d3092..c18d290693c1 100644
---- a/drivers/video/fbdev/omap2/omapfb/displays/panel-tpo-td028ttec1.c
-+++ b/drivers/video/fbdev/omap2/omapfb/displays/panel-tpo-td028ttec1.c
-@@ -16,7 +16,6 @@
- #include <linux/module.h>
- #include <linux/delay.h>
- #include <linux/spi/spi.h>
--#include <linux/gpio.h>
- #include <video/omapfb_dss.h>
+diff --git a/drivers/video/fbdev/omap2/omapfb/displays/panel-sharp-ls037v7dw01.c b/drivers/video/fbdev/omap2/omapfb/displays/panel-sharp-ls037v7dw01.c
+index f1072c319de8..cc30758300e2 100644
+--- a/drivers/video/fbdev/omap2/omapfb/displays/panel-sharp-ls037v7dw01.c
++++ b/drivers/video/fbdev/omap2/omapfb/displays/panel-sharp-ls037v7dw01.c
+@@ -7,10 +7,9 @@
+  */
  
- struct panel_drv_data {
+ #include <linux/delay.h>
+-#include <linux/gpio.h>
++#include <linux/gpio/consumer.h>
+ #include <linux/module.h>
+ #include <linux/of.h>
+-#include <linux/of_gpio.h>
+ #include <linux/platform_device.h>
+ #include <linux/slab.h>
+ #include <linux/regulator/consumer.h>
 
 -- 
 b4 0.11.0-dev-28747
