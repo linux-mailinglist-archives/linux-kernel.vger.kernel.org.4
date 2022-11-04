@@ -2,141 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6816F619205
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 08:32:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19A65619214
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 08:35:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231360AbiKDHcA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 03:32:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58470 "EHLO
+        id S230473AbiKDHfa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 03:35:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231146AbiKDHb4 (ORCPT
+        with ESMTP id S229756AbiKDHf2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 03:31:56 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D785F29CBB;
-        Fri,  4 Nov 2022 00:31:54 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id k15so3809146pfg.2;
-        Fri, 04 Nov 2022 00:31:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:cc:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=z/2ddx3QK9qVmB+YZPn4XwRTbYZOHRH73PR/5mzfEfs=;
-        b=VMp82LIS3vwEtXJO+/+qulhDA06eeVOiufgCORgqh+ukznplIhIOFxydjlGiDfIpqY
-         UXc7qz9WXOAUh0Zkxs49Ghh30Bvcf8K8IHjeVFs94dlpDBS09g4nt9weckjZgunEm2OI
-         n99KXR/LbdhfaiDbWFhmOuw4GyzDc+iw5QiZWsBTmkVMpWE5qkm74GfUv9hEszTSSO/F
-         mQe33R6q5DoI5gWUb435ifIWgEG5j/HfVHuETy6uPq8SYbX7D2FTNqpu3K6nXgJg4/SN
-         vZz9LE3DjAHomW5KRTf9Ng8KTAgn8q00HkDlW2fM9BNBO39I3ZaNp7nri8rfn/KHZ3Ab
-         h+pA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:cc:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=z/2ddx3QK9qVmB+YZPn4XwRTbYZOHRH73PR/5mzfEfs=;
-        b=50If4sZKgIByADnHsZ6x0Vf7naPadevkP59RlmIckbE9LoyXzXuNpKQjwgKvM4Ni1d
-         zZ8GsEabvr/bNexo6kHMU0cto4yT9hRRz12b7wfWnpO/PiM7qUJGEYhO9T3NjrRYw4Pg
-         Mn8QJc6ghjeMpGR5Oo7ZR4QoWgwvJNE7Ncxr70xwvB14JbWSadHQpQONpwXr3nlYg7Ga
-         52fVvbfLsmEK1ivw9OevUsHrvgno+xpki/PVud2b+yqWkfLVeBzQUENJugBM5nYYi8pn
-         dZkRvjEyanhMIWEFEVr+SUrZaiA8kqHDZ4gU2qmo9g97MgI5s679Na3bET47ClkMcR0j
-         mIlA==
-X-Gm-Message-State: ACrzQf3x/10TkSgKYa1AY6UFsPZMCsUa6lxxu0FO+hVIkxV9NNmLO9dO
-        4o1bfCYnle87hy6ymzOWvWjQ3XcyG+6pbQ==
-X-Google-Smtp-Source: AMsMyM4DOu8z9+w2S8sFcStYPjXJIlaR24z6iOen4ZQnFO1xlWcOOFlfIIWQREkSfp6bE+UOMspzpQ==
-X-Received: by 2002:a63:4955:0:b0:44e:d36e:4c2e with SMTP id y21-20020a634955000000b0044ed36e4c2emr29441324pgk.326.1667547114380;
-        Fri, 04 Nov 2022 00:31:54 -0700 (PDT)
-Received: from [172.20.12.203] ([116.128.244.169])
-        by smtp.gmail.com with ESMTPSA id b3-20020aa79503000000b0056d2797bf05sm1926784pfp.217.2022.11.04.00.31.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 04 Nov 2022 00:31:53 -0700 (PDT)
-Message-ID: <fe95b054-e720-ebbf-ba03-4ea6662974ad@gmail.com>
-Date:   Fri, 4 Nov 2022 15:31:49 +0800
+        Fri, 4 Nov 2022 03:35:28 -0400
+Received: from mailgw.kylinos.cn (unknown [124.126.103.232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EC4165D2
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 00:35:25 -0700 (PDT)
+X-UUID: 1f4c790098d84c258246e053a3af6d50-20221104
+X-CPASD-INFO: ae1fd406ff49445a8bea0bddb1cba13d@qrVrhpFmXmaShnaFg3eAm1iTlZFgjoS
+        zpGuDko9hX4SVhH5xTV5uYFV9fWtVYV9dYVR6eGxQYmBgZFJ4i3-XblBgXoZgUZB3sKdrhpRiYA==
+X-CLOUD-ID: ae1fd406ff49445a8bea0bddb1cba13d
+X-CPASD-SUMMARY: SIP:-1,APTIP:-2.0,KEY:0.0,FROMBLOCK:1,OB:0.0,URL:-5,TVAL:161.
+        0,ESV:0.0,ECOM:-5.0,ML:0.0,FD:0.0,CUTS:99.0,IP:-2.0,MAL:-5.0,PHF:-5.0,PHC:-5.
+        0,SPF:4.0,EDMS:-5,IPLABEL:4480.0,FROMTO:0,AD:0,FFOB:0.0,CFOB:0.0,SPC:0,SIG:-5
+        ,AUF:1,DUF:7502,ACD:131,DCD:131,SL:0,EISP:0,AG:0,CFC:0.278,CFSR:0.087,UAT:0,R
+        AF:0,IMG:-5.0,DFA:0,DTA:0,IBL:-2.0,ADI:-5,SBL:0,REDM:0,REIP:0,ESB:0,ATTNUM:0,
+        EAF:0,CID:-5.0,VERSION:2.3.17
+X-CPASD-ID: 1f4c790098d84c258246e053a3af6d50-20221104
+X-CPASD-BLOCK: 1000
+X-CPASD-STAGE: 1
+X-UUID: 1f4c790098d84c258246e053a3af6d50-20221104
+X-User: aichao@kylinos.cn
+Received: from localhost.localdomain [(112.64.161.44)] by mailgw
+        (envelope-from <aichao@kylinos.cn>)
+        (Generic MTA)
+        with ESMTP id 1062749013; Fri, 04 Nov 2022 15:35:29 +0800
+From:   aichao <aichao@kylinos.cn>
+To:     perex@perex.cz, tiwai@suse.com, alsa-devel@alsa-project.org
+Cc:     linux-kernel@vger.kernel.org, aichao <aichao@kylinos.cn>
+Subject: [PATCH] ALSA: usb-audio: fix Hamedal C20 usb camero disconnect issue
+Date:   Fri,  4 Nov 2022 15:35:18 +0800
+Message-Id: <20221104073518.120807-1-aichao@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Cc:     xiongxin@kylinos.cn, len.brown@intel.com, pavel@ucw.cz,
-        huanglei@kylinos.cn, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH -next 1/2] PM: hibernate: fix spelling mistake for
- annotation
-Content-Language: en-US
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-References: <20221101022840.1351163-1-tgsp002@gmail.com>
- <20221101022840.1351163-2-tgsp002@gmail.com>
- <CAJZ5v0iPFPbbconOoQ7x_4X5yJ31pP7aduLqG4dq6KgAsprKbA@mail.gmail.com>
-From:   TGSP <tgsp002@gmail.com>
-In-Reply-To: <CAJZ5v0iPFPbbconOoQ7x_4X5yJ31pP7aduLqG4dq6KgAsprKbA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        PDS_RDNS_DYNAMIC_FP,RDNS_DYNAMIC,SPF_HELO_NONE,T_SPF_PERMERROR,
+        UNPARSEABLE_RELAY autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-在 2022/11/4 00:25, Rafael J. Wysocki 写道:
-> On Tue, Nov 1, 2022 at 3:28 AM TGSP <tgsp002@gmail.com> wrote:
->>
->> From: xiongxin <xiongxin@kylinos.cn>
->>
->> The actual calculation formula in the code below is:
->>
->> max_size = (count - (size + PAGES_FOR_IO)) / 2
->>              - 2 * DIV_ROUND_UP(reserved_size, PAGE_SIZE);
->>
->> But function comments are written differently, the comment is wrong?
-> 
-> It is, and it is more serious than just a spelling mistake.
-> 
->> By the way, what exactly do the "/ 2" and "2 *" mean?
-> 
-> Every page in the image is a copy of an existing allocated page, so
-> room needs to be made for the two, except for the "IO pages" and
-> metadata pages that are not copied.  Hence, the division by 2.
-> 
-> Now, the "reserved_size" pages will be allocated right before creating
-> the image and there will be a copy of each of them in the image, so
-> there needs to be room for twice as many.
+For Hamedal C20, the current rate is different from the runtime rate,
+snd_usb_endpoint stop and close endpoint to resetting rate.
+if snd_usb_endpoint close the endpoint, sometimes usb will
+ disconnect the device.
 
-According to your interpretation, the formula should be：
-max_size = (count - 2 * DIV_ROUND_UP(reserved_size, PAGE_SIZE)
-                - (size + PAGES_FOR_IO)) / 2
+Signed-off-by: aichao <aichao@kylinos.cn>
+---
+ sound/usb/endpoint.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-Am I right?
-
-> 
-> I'll adjust the changelog and queue up the path for 6.2.
-> 
->> Cc: stable@vger.kernel.org
-> 
-> I'll add a Fixes tag instead.
-> 
->> Signed-off-by: xiongxin <xiongxin@kylinos.cn>
->> ---
->>   kernel/power/snapshot.c | 4 ++--
->>   1 file changed, 2 insertions(+), 2 deletions(-)
->>
->> diff --git a/kernel/power/snapshot.c b/kernel/power/snapshot.c
->> index 2a406753af90..c20ca5fb9adc 100644
->> --- a/kernel/power/snapshot.c
->> +++ b/kernel/power/snapshot.c
->> @@ -1723,8 +1723,8 @@ static unsigned long minimum_image_size(unsigned long saveable)
->>    * /sys/power/reserved_size, respectively).  To make this happen, we compute the
->>    * total number of available page frames and allocate at least
->>    *
->> - * ([page frames total] + PAGES_FOR_IO + [metadata pages]) / 2
->> - *  + 2 * DIV_ROUND_UP(reserved_size, PAGE_SIZE)
->> + * ([page frames total] - PAGES_FOR_IO - [metadata pages]) / 2
->> + *  - 2 * DIV_ROUND_UP(reserved_size, PAGE_SIZE)
->>    *
->>    * of them, which corresponds to the maximum size of a hibernation image.
->>    *
->> --
->> 2.25.1
->>
+diff --git a/sound/usb/endpoint.c b/sound/usb/endpoint.c
+index 533919a28856..c19e420b1780 100644
+--- a/sound/usb/endpoint.c
++++ b/sound/usb/endpoint.c
+@@ -825,7 +825,9 @@ void snd_usb_endpoint_close(struct snd_usb_audio *chip,
+ 	usb_audio_dbg(chip, "Closing EP 0x%x (count %d)\n",
+ 		      ep->ep_num, ep->opened);
+ 
+-	if (!--ep->iface_ref->opened)
++	if (!--ep->iface_ref->opened
++		&& (le16_to_cpu(chip->dev->descriptor.idVendor) != 0x0525)
++		&& (le16_to_cpu(chip->dev->descriptor.idProduct) != 0xa4ad))
+ 		endpoint_set_interface(chip, ep, false);
+ 
+ 	if (!--ep->opened) {
+-- 
+2.25.1
 
