@@ -2,75 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D413061A60E
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 00:43:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE4BF61A612
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 00:44:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229551AbiKDXnK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 19:43:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33154 "EHLO
+        id S229699AbiKDXon (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 19:44:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbiKDXnH (ORCPT
+        with ESMTP id S229549AbiKDXok (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 19:43:07 -0400
-Received: from stravinsky.debian.org (stravinsky.debian.org [IPv6:2001:41b8:202:deb::311:108])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 767043E0BF;
-        Fri,  4 Nov 2022 16:43:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-        s=smtpauto.stravinsky; h=X-Debian-User:Content-Transfer-Encoding:Content-Type
-        :In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
-        Reply-To:Content-ID:Content-Description;
-        bh=5DK/6BW6VHSBnMDPjjoCCOgcli3P8L2fcqJsVbJUKmA=; b=UomX6Hyz21CuclnkxkiWn7XglL
-        3R4Xus8C3kDxBNlTjX9XhdeyllqlT8Xwe9T5YDcTfBMJDYpOJy+N7tqEd9Q4ZWo2QYJ9TseV5ZXLT
-        vwXUwxvJBarja7iA0qRlVF4lvCa73dHjQK/S0s/g7SXfvuapbHhTpBAFxomRB7BULqGzZuGwJkW4A
-        lEnrm7V7n56ahIbjj1yEFb4cTVaVgXdII6bLEhTPH7EV3tFyOMAiYHLJXeVpzHj+ISzcKCA9kURob
-        Ssy+ugOO2H8Dbs6UpIOKbyEQ4GarI/+lEpS37+CviPEJ4uBtqRDMS+ehUKU9vy7ZYa5JI3hO/oMGe
-        OTs3Qb2A==;
-Received: from authenticated user
-        by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128)
-        (Exim 4.94.2)
-        (envelope-from <bage@debian.org>)
-        id 1or6Ky-003dJB-0W; Fri, 04 Nov 2022 23:42:59 +0000
-Message-ID: <a03089dd-6416-f933-6623-0e6c5f8460ec@debian.org>
-Date:   Sat, 5 Nov 2022 00:42:57 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH 1/1] arm64: allwinner: a64: enable Bluetooth on Pinebook
-Content-Language: de-DE-frami
-To:     Rob Herring <robh+dt@kernel.org>,
+        Fri, 4 Nov 2022 19:44:40 -0400
+Received: from relay07.th.seeweb.it (relay07.th.seeweb.it [IPv6:2001:4b7a:2000:18::168])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20B642EF0C
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 16:44:39 -0700 (PDT)
+Received: from SoMainline.org (94-209-172-39.cable.dynamic.v4.ziggo.nl [94.209.172.39])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id C34073F73D;
+        Sat,  5 Nov 2022 00:44:36 +0100 (CET)
+Date:   Sat, 5 Nov 2022 00:44:35 +0100
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     Luca Weiss <luca@z3ntu.xyz>
+Cc:     linux-arm-msm@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        AngeloGioacchino Del Regno <kholk11@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Cc:     Vasily Khoruzhick <anarsoul@gmail.com>
-References: <20221007234553.12328-1-bage@debian.org>
- <20221007234553.12328-2-bage@debian.org>
-From:   Bastian Germann <bage@debian.org>
-In-Reply-To: <20221007234553.12328-2-bage@debian.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Debian-User: bage
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,UNPARSEABLE_RELAY
-        autolearn=ham autolearn_force=no version=3.4.6
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 2/2] arm64: dts: qcom: Add configuration for PMI8950
+ peripheral
+Message-ID: <20221104234435.xwjpwfxs73puvfca@SoMainline.org>
+Mail-Followup-To: Marijn Suijten <marijn.suijten@somainline.org>,
+        Luca Weiss <luca@z3ntu.xyz>, linux-arm-msm@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        AngeloGioacchino Del Regno <kholk11@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221101161801.1058969-1-luca@z3ntu.xyz>
+ <20221101161801.1058969-2-luca@z3ntu.xyz>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221101161801.1058969-2-luca@z3ntu.xyz>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08.10.22 at 01:45 Bastian Germann wrote:
-> Pinebook has an RTL8723CS WiFi + BT chip. BT is connected to UART1
-> and uses PL5 as device wake GPIO and PL6 as host wake GPIO.
-> The I2C controlling signals are connected to R_I2C bus.
+On 2022-11-01 17:18:00, Luca Weiss wrote:
+> From: AngeloGioacchino Del Regno <kholk11@gmail.com>
 > 
-> Enable it in the device tree.
+> The PMI8950 features integrated peripherals like ADC, GPIO controller,
+> MPPs and others.
+> 
+> [luca@z3ntu.xyz: remove pm8950, style changes for 2022 standards, add wled]
+> Signed-off-by: AngeloGioacchino Del Regno <kholk11@gmail.com>
+> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+> ---
+> Changes since v2:
+> * Pick up patch, and adjust as mentioned above sign-offs
+> 
+>  arch/arm64/boot/dts/qcom/pmi8950.dtsi | 97 +++++++++++++++++++++++++++
+>  1 file changed, 97 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/qcom/pmi8950.dtsi
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/pmi8950.dtsi b/arch/arm64/boot/dts/qcom/pmi8950.dtsi
+> new file mode 100644
+> index 000000000000..32d27e2187e3
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/qcom/pmi8950.dtsi
+> @@ -0,0 +1,97 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +// Copyright (c) 2019, AngeloGioacchino Del Regno <kholk11@gmail.com>
+> +
+> +#include <dt-bindings/iio/qcom,spmi-vadc.h>
+> +#include <dt-bindings/interrupt-controller/irq.h>
+> +#include <dt-bindings/spmi/spmi.h>
+> +
+> +&spmi_bus {
+> +	pmic@2 {
+> +		compatible = "qcom,pmi8950", "qcom,spmi-pmic";
+> +		reg = <0x2 SPMI_USID>;
+> +		#address-cells = <1>;
+> +		#size-cells = <0>;
+> +
+> +		pmi8950_vadc: adc@3100 {
+> +			compatible = "qcom,spmi-vadc";
+> +			reg = <0x3100>;
+> +			interrupts = <0x2 0x31 0x0 IRQ_TYPE_EDGE_RISING>;
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +			#io-channel-cells = <1>;
+> +
+> +			adc-chan@0 {
+> +				reg = <VADC_USBIN>;
+> +				qcom,pre-scaling = <1 4>;
+> +				label = "usbin";
 
-Hey,
+I've previously sent a patch with labels in the node name instead [1],
+what's the preferred way nowadays?
 
-Any chance you have a look at this patch? It has been a month and it was the third time the patch hit the list.
-If there is something wrong with it I would appreciate a comment.
+[1]: https://lore.kernel.org/linux-arm-msm/20220926190148.283805-4-marijn.suijten@somainline.org/
 
-Thanks,
-Bastian
+> +			};
+> +
+> +			adc-chan@1 {
+> +				reg = <VADC_DCIN>;
+> +				qcom,pre-scaling = <1 4>;
+> +				label = "dcin";
+> +			};
+> +
+> +			adc-chan@2 {
+> +				reg = <VADC_VCHG_SNS>;
+> +				qcom,pre-scaling = <1 1>;
+> +				label = "vchg_sns";
 
+Shall we use hyphens in labels (especially if using them as node names).
+
+> +			};
+> +
+> +			adc-chan@9 {
+> +				reg = <VADC_REF_625MV>;
+> +				qcom,pre-scaling = <1 1>;
+> +				label = "ref_625mv";
+> +			};
+> +
+> +			adc-chan@a {
+> +				reg = <VADC_REF_1250MV>;
+> +				qcom,pre-scaling = <1 1>;
+> +				label = "ref_1250v";
+
+mv* :)
+
+> +			};
+> +
+> +			adc-chan@d {
+> +				reg = <VADC_SPARE2>;
+> +				qcom,pre-scaling = <1 1>;
+> +				label = "chg_temp";
+> +			};
+> +		};
+> +
+> +		pmi8950_mpps: mpps@a000 {
+> +			compatible = "qcom,pmi8950-mpp", "qcom,spmi-mpp";
+> +			reg = <0xa000>;
+> +			gpio-controller;
+> +			gpio-ranges = <&pmi8950_mpps 0 0 4>;
+> +			#gpio-cells = <2>;
+> +			interrupt-controller;
+> +			#interrupt-cells = <2>;
+> +		};
+> +
+> +		pmi8950_gpio: gpio@c000 {
+
+It seems more common to name this label plural pmi8950_gpioS?
+
+> +			compatible = "qcom,pmi8950-gpio", "qcom,spmi-gpio";
+> +			reg = <0xc000>;
+> +			gpio-controller;
+> +			gpio-ranges = <&pmi8950_gpio 0 0 2>;
+> +			#gpio-cells = <2>;
+> +			interrupt-controller;
+> +			#interrupt-cells = <2>;
+> +		};
+> +	};
+> +
+> +	pmic@3 {
+> +		compatible = "qcom,pmi8950", "qcom,spmi-pmic";
+> +		reg = <0x3 SPMI_USID>;
+> +		#address-cells = <1>;
+> +		#size-cells = <0>;
+> +
+> +		pmi8950_wled: leds@d800 {
+> +			compatible = "qcom,pmi8950-wled";
+> +			reg = <0xd800>, <0xd900>;
+> +			interrupts = <0x3 0xd8 0x02 IRQ_TYPE_EDGE_RISING>;
+> +			interrupt-names = "short";
+> +			label = "backlight";
+
+Same question here about using the node name instead, and dropping the
+label altogether.
+
+- Marijn
+
+> +
+> +			status = "disabled";
+> +		};
+> +	};
+> +};
+> -- 
+> 2.38.1
+> 
