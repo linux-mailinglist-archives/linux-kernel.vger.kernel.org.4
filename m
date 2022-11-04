@@ -2,141 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51DF861A405
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 23:23:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB29E61A413
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 23:30:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229619AbiKDWXw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 18:23:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41532 "EHLO
+        id S229771AbiKDWaB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 18:30:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbiKDWXt (ORCPT
+        with ESMTP id S229639AbiKDW3z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 18:23:49 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7EAA5FDE
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 15:23:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667600626; x=1699136626;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=jyyE3UFh52oFOY3mzA8Q7BVvcDMLwn6B9acrscYPruM=;
-  b=f6KqY1C54s92AxCJr7DBeG2OjBgp9L/8kqMVxzcAYzaJy+VHKQ27mpm+
-   DXqe1jJUvZItrlLA4WNbofNmaOPQbu3JpznFPt5k+eK2jCQr9ADoj+eHq
-   hZljwRW3m61SFMNeMAoQi4fqXuARyARCqtvVW+lebS3oDldMDdhq9dMFX
-   AhIMaGoi4Uij9lndDrVlsbmJRUzwVq+U+elsYK5XsNn79rWDPm5jdamcE
-   zLG3Gra9eYhNpEgQzEPxUIJ+DngVdskcXTGYb1oCLvPOdhGkm93PaoU9e
-   RFscW4TrL6wV1pbTFZUY/PjJVuinPH96FCECi3QAUA1Tlpi5aezQav3vM
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10521"; a="290476216"
-X-IronPort-AV: E=Sophos;i="5.96,138,1665471600"; 
-   d="scan'208";a="290476216"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2022 15:23:46 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10521"; a="613223490"
-X-IronPort-AV: E=Sophos;i="5.96,138,1665471600"; 
-   d="scan'208";a="613223490"
-Received: from stinkpipe.fi.intel.com (HELO stinkbox) ([10.237.72.191])
-  by orsmga006.jf.intel.com with SMTP; 04 Nov 2022 15:23:41 -0700
-Received: by stinkbox (sSMTP sendmail emulation); Sat, 05 Nov 2022 00:23:40 +0200
-Date:   Sat, 5 Nov 2022 00:23:40 +0200
-From:   Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>
-To:     Naoya Horiguchi <naoya.horiguchi@linux.dev>
-Cc:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Liu Shixin <liushixin2@huawei.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        Muchun Song <songmuchun@bytedance.com>,
-        linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
-        regressions@lists.linux.dev, naoya.horiguchi@nec.com
-Subject: Re: [mm-unstable PATCH v7 2/8] mm/hugetlb: make pud_huge() and
- follow_huge_pud() aware of non-present pud entry
-Message-ID: <Y2WQ7I4LXh8iUIRd@intel.com>
-References: <Y2LYXItKQyaJTv8j@intel.com>
- <20221104155930.GA527246@ik1-406-35019.vs.sakura.ne.jp>
+        Fri, 4 Nov 2022 18:29:55 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B728E64DF
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 15:29:53 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id 4so6183982pli.0
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 15:29:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=5Aq/mVWfLwMWGNt8fSCRAZ8qaQX+Rp9/roFUUSHdFcg=;
+        b=dKOKOca6Gt2YyKKroo64YoypifXCi0Cnu7uvNh/c1CQKTYDigZb1a5Lc6nfrrUEMI/
+         4AE2r5sOnFMf/n4N6rkqJkEinjHy10LPkOYq61AodJoYbUhGCTtIzVhqSoARiYYRtFo/
+         EclovTivzigbK81kGBQRDG0qF26K9JY+bLhX0J0qVedsSALXRnsV1mIYQbLUA7RdI4Bl
+         F8BWIJWldzMyvETppjo+2Y4ZQDwmlrfV9ZT/zySDdpk9yZyTmfAxbwSHbaM4LwBFWmC7
+         KyZY28moUsv5znWRMH9QPRY8B1+WPpJCb1AVkbrC9wmyWUSfTKUMmauuTdOpubCs51OC
+         6Y/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5Aq/mVWfLwMWGNt8fSCRAZ8qaQX+Rp9/roFUUSHdFcg=;
+        b=PS6K9Q5Ab/PuPt7S2hKih3ejLzaFAUC9pFSgur8suz7LgukZZb7DCgsgTRMf7BN9Lc
+         76oCyzOvyV0NRBsC7mAR1ywJ+hmRyjkQmFUvCi5q9qi45XBxTshggOvy8xylWg7VlSQT
+         DL/xN5zpmwPmTjj4wYlNczDL46ovNZACWCZ6zMwyHWdm4JCOz9JvCC5xEU9+Y8xeIWD9
+         Llfv3QBQSSp95k2Gnh8a9/Mfei7RJwCTIZYFhIB6prfh2PzeAT20pBoYLZw8rmEgsn0s
+         U11ljb/ZgSQf4rDqL3oAOdxHh8S2KON0jIYzG23ls2r8IWTZkdNLfG1piW7t8Tw31G7J
+         kYrA==
+X-Gm-Message-State: ACrzQf3ZQMAl0DiIAdD9bXBNlGXP5denHyK9qYsZy6D6T5nqbyGnJMRW
+        LRivH1yI7MllcJPAnVnbPGbe9w==
+X-Google-Smtp-Source: AMsMyM6o08bPyM7u13HIMLyxzK/w69wLSfIdjhMYyTpFlvV74UC9l3d3wEgtuR0o04KYkQ2hwL/GmQ==
+X-Received: by 2002:a17:903:2645:b0:185:480a:85d2 with SMTP id je5-20020a170903264500b00185480a85d2mr37750861plb.144.1667600993126;
+        Fri, 04 Nov 2022 15:29:53 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id s11-20020a170902ea0b00b0018700ba9090sm237049plg.185.2022.11.04.15.29.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Nov 2022 15:29:52 -0700 (PDT)
+Date:   Fri, 4 Nov 2022 22:29:48 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Chao Peng <chao.p.peng@linux.intel.com>
+Cc:     Fuad Tabba <tabba@google.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
+        qemu-devel@nongnu.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com
+Subject: Re: [PATCH v9 4/8] KVM: Use gfn instead of hva for mmu_notifier_retry
+Message-ID: <Y2WSXLtcJOpWPtuv@google.com>
+References: <20221025151344.3784230-1-chao.p.peng@linux.intel.com>
+ <20221025151344.3784230-5-chao.p.peng@linux.intel.com>
+ <CA+EHjTySnJTuLB+XoRya6kS_zw2iMahW9-Ze70oKTf+6k0GrGQ@mail.gmail.com>
+ <20221104022813.GA4129873@chaop.bj.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221104155930.GA527246@ik1-406-35019.vs.sakura.ne.jp>
-X-Patchwork-Hint: comment
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221104022813.GA4129873@chaop.bj.intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Nov 05, 2022 at 12:59:30AM +0900, Naoya Horiguchi wrote:
-> On Wed, Nov 02, 2022 at 10:51:40PM +0200, Ville Syrjälä wrote:
-> > On Thu, Jul 14, 2022 at 01:24:14PM +0900, Naoya Horiguchi wrote:
-> > > +/*
-> > > + * pud_huge() returns 1 if @pud is hugetlb related entry, that is normal
-> > > + * hugetlb entry or non-present (migration or hwpoisoned) hugetlb entry.
-> > > + * Otherwise, returns 0.
-> > > + */
-> > >  int pud_huge(pud_t pud)
-> > >  {
-> > > -	return !!(pud_val(pud) & _PAGE_PSE);
-> > > +	return !pud_none(pud) &&
-> > > +		(pud_val(pud) & (_PAGE_PRESENT|_PAGE_PSE)) != _PAGE_PRESENT;
-> > >  }
-> > 
+On Fri, Nov 04, 2022, Chao Peng wrote:
+> On Thu, Oct 27, 2022 at 11:29:14AM +0100, Fuad Tabba wrote:
 > > Hi,
 > > 
-> > This causes i915 to trip a BUG_ON() on x86-32 when I start X.
+> > On Tue, Oct 25, 2022 at 4:19 PM Chao Peng <chao.p.peng@linux.intel.com> wrote:
+> > >
+> > > Currently in mmu_notifier validate path, hva range is recorded and then
+> > > checked against in the mmu_notifier_retry_hva() of the page fault path.
+> > > However, for the to be introduced private memory, a page fault may not
+> > > have a hva associated, checking gfn(gpa) makes more sense.
+> > >
+> > > For existing non private memory case, gfn is expected to continue to
+> > > work. The only downside is when aliasing multiple gfns to a single hva,
+> > > the current algorithm of checking multiple ranges could result in a much
+> > > larger range being rejected. Such aliasing should be uncommon, so the
+> > > impact is expected small.
+> > >
+> > > It also fixes a bug in kvm_zap_gfn_range() which has already been using
+> > 
+> > nit: Now it's kvm_unmap_gfn_range().
 > 
-> Hello,
-> 
-> Thank you for finding and reporting the issue.
-> 
-> x86-32 does not enable CONFIG_ARCH_HAS_GIGANTIC_PAGE, so pud_huge() is
-> supposed to be false on x86-32.  Doing like below looks to me a fix
-> (reverting to the original behavior for x86-32):
-> diff --git a/arch/x86/mm/hugetlbpage.c b/arch/x86/mm/hugetlbpage.c
-> index 6b3033845c6d..bf73f25aaa32 100644
-> --- a/arch/x86/mm/hugetlbpage.c
-> +++ b/arch/x86/mm/hugetlbpage.c
-> @@ -37,8 +37,12 @@ int pmd_huge(pmd_t pmd)
->   */
->  int pud_huge(pud_t pud)
->  {
-> +#ifdef CONFIG_ARCH_HAS_GIGANTIC_PAGE
->         return !pud_none(pud) &&
->                 (pud_val(pud) & (_PAGE_PRESENT|_PAGE_PSE)) != _PAGE_PRESENT;
-> +#else
-> +       return !!(pud_val(pud) & _PAGE_PSE);    // or "return 0;" ?
-> +#endif
->  }
-> 
->  #ifdef CONFIG_HUGETLB_PAGE
-> 
-> 
-> Let me guess what the PUD entry was there when triggering the issue.
-> Assuming that the original code (before 3a194f3f8ad0) was correct, the PSE
-> bit in pud_val(pud) should be always cleared.  So, when pud_huge() returns
-> true since 3a194f3f8ad0, the PRESENT bit should be clear and some other
-> bits (rather than PRESENT and PSE) are set so that pud_none() is false.
-> I'm not sure what such a non-present PUD entry does mean.
+> Forgot to mention: the bug is still with kvm_zap_gfn_range(). It calls
+> kvm_mmu_invalidate_begin/end with a gfn range but before this series
+> kvm_mmu_invalidate_begin/end actually accept a hva range. Note it's
+> unrelated to whether we use kvm_zap_gfn_range() or kvm_unmap_gfn_range()
+> in the following patch (patch 05).
 
-pud_val()==0 when it blows up, and pud_none() is false because
-pgtable-nopmd.h says so with 2 level paging.
+Grr, in the future, if you find an existing bug, please send a patch.  At the
+very least, report the bug.  The APICv case that this was added for could very
+well be broken because of this, and the resulting failures would be an absolute
+nightmare to debug.
 
-And given that I just tested with PAE / 3 level paging, 
-and sure enough it no longer blows up.
+Compile tested only...
 
-So looks to me like maybe this new code just doesn't understand
-how the levels get folded.
+--
+From: Sean Christopherson <seanjc@google.com>
+Date: Fri, 4 Nov 2022 22:20:33 +0000
+Subject: [PATCH] KVM: x86/mmu: Block all page faults during
+ kvm_zap_gfn_range()
 
-I might also be missing something obvious, but why is it even
-necessary to treat PRESENT==0+PSE==0 as a huge entry?
+When zapping a GFN range, pass 0 => ALL_ONES for the to-be-invalidated
+range to effectively block all page faults while the zap is in-progress.
+The invalidation helpers take a host virtual address, whereas zapping a
+GFN obviously provides a guest physical address and with the wrong unit
+of measurement (frame vs. byte).
 
+Alternatively, KVM could walk all memslots to get the associated HVAs,
+but thanks to SMM, that would require multiple lookups.  And practically
+speaking, kvm_zap_gfn_range() usage is quite rare and not a hot path,
+e.g. MTRR and CR0.CD are almost guaranteed to be done only on vCPU0
+during boot, and APICv inhibits are similarly infrequent operations.
+
+Fixes: edb298c663fc ("KVM: x86/mmu: bump mmu notifier count in kvm_zap_gfn_range")
+Cc: stable@vger.kernel.org
+Cc: Maxim Levitsky <mlevitsk@redhat.com>
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+---
+ arch/x86/kvm/mmu/mmu.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+index 6f81539061d6..1ccb769f62af 100644
+--- a/arch/x86/kvm/mmu/mmu.c
++++ b/arch/x86/kvm/mmu/mmu.c
+@@ -6056,7 +6056,7 @@ void kvm_zap_gfn_range(struct kvm *kvm, gfn_t gfn_start, gfn_t gfn_end)
+ 
+ 	write_lock(&kvm->mmu_lock);
+ 
+-	kvm_mmu_invalidate_begin(kvm, gfn_start, gfn_end);
++	kvm_mmu_invalidate_begin(kvm, 0, -1ul);
+ 
+ 	flush = kvm_rmap_zap_gfn_range(kvm, gfn_start, gfn_end);
+ 
+@@ -6070,7 +6070,7 @@ void kvm_zap_gfn_range(struct kvm *kvm, gfn_t gfn_start, gfn_t gfn_end)
+ 		kvm_flush_remote_tlbs_with_address(kvm, gfn_start,
+ 						   gfn_end - gfn_start);
+ 
+-	kvm_mmu_invalidate_end(kvm, gfn_start, gfn_end);
++	kvm_mmu_invalidate_end(kvm, 0, -1ul);
+ 
+ 	write_unlock(&kvm->mmu_lock);
+ }
+
+base-commit: c12879206e47730ff5ab255bbf625b28ade4028f
 -- 
-Ville Syrjälä
-Intel
+
