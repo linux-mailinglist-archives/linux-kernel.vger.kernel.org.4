@@ -2,123 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C08CE6198D8
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 15:08:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 069236198F8
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 15:14:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231646AbiKDOIu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 10:08:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53762 "EHLO
+        id S229770AbiKDOOM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 10:14:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231958AbiKDOI3 (ORCPT
+        with ESMTP id S229572AbiKDOOK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 10:08:29 -0400
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2040.outbound.protection.outlook.com [40.107.92.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16DCB24F3A;
-        Fri,  4 Nov 2022 07:08:28 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZvtclDpTEQU2khiOZN6sFVlh6J7vBhV45r/5jV4ubydyWY5SHvYSIxOjNpKJ56qeOpSObsBYnELsADxYOOnjRJMI3AWpXG4leaTz2GkjKp4vyDprDOOKvt19j64XxH9zUnvjfy+7uzSLQTcrjjChacgLfNylnd2/esnY4g2dNVFeK/tDOygajeY2+CZXprywf9CBb8hK3ML0D62K9tam/R6smHQ0XcvgD66eyWyu/QU/d44FzsXViArZjtnDSL6uEDvHozKEtVF9xf014N5oQarg/AvDBFBxwLUJ04hI3H2UmFRLQloLAMQodmvl8e3imfXg9Yd+iDJOlO2tZ/J2ZA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3lxK89IEYYEObmimZ8sqVKTZJQ9XkwK2MWybmQUmgJI=;
- b=NS26WCI3at2TJrLC+Ux3oPBiEv4UmRnSy2QAxULQkwozIdCAbae0u1Y0YTD8K4PisDMA3sztZTE8KIEAUWxTYPVNGC1h1YhoWPp0JfWrYT970H22e8FO8OcPcUeqpU7zWXZHRvPs2Bf5UzP+OzKj0dImpfIZvfXtdnwmHwfb0nii1KeZR37qFMu8cwpwvxp0cpJoEld7qy1FjQ5K+RWfSLzWpXVyGu/UfoTMqpKjmPRaAVwAAM5fLTjuqz7G2rTeHsJKNr6EsYHkWwkdHogQvvb6SpHeFuno0cN0/POKXAtEm3xxVGJj6BjTHvjSAiqZHhTpQ0fOthFQsxOnwfgD5A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3lxK89IEYYEObmimZ8sqVKTZJQ9XkwK2MWybmQUmgJI=;
- b=juyFZzy/JtisnFO8CjkGyZF1HpRsTwx7dEt8vusrTW5IHtw+/EEUMq/nAptKNeDo2L23qrV4acCgRM59S9AoZBAukEYjMySetWSUMDbkC+8wxrYHnZ3bPbWRyoK8WLm8EQL48vss3EdYzhVtNZ2zi8C9h5L70NGWlnTaUDJzOm4=
-Received: from BN8PR12MB2852.namprd12.prod.outlook.com (2603:10b6:408:9a::14)
- by MN2PR12MB4359.namprd12.prod.outlook.com (2603:10b6:208:265::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.23; Fri, 4 Nov
- 2022 14:08:25 +0000
-Received: from BN8PR12MB2852.namprd12.prod.outlook.com
- ([fe80::1305:bd31:c5b:4217]) by BN8PR12MB2852.namprd12.prod.outlook.com
- ([fe80::1305:bd31:c5b:4217%7]) with mapi id 15.20.5791.022; Fri, 4 Nov 2022
- 14:08:25 +0000
-From:   "Somisetty, Pranavi" <pranavi.somisetty@amd.com>
-To:     Vladimir Oltean <olteanv@gmail.com>
-CC:     "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "git (AMD-Xilinx)" <git@amd.com>,
-        "Katakam, Harini" <harini.katakam@amd.com>,
-        "Pandey, Radhey Shyam" <radhey.shyam.pandey@amd.com>,
-        "Simek, Michal" <michal.simek@amd.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-Subject: RE: [RFC PATCH net-next 0/2] Add support for Frame preemption (IEEE
-Thread-Topic: [RFC PATCH net-next 0/2] Add support for Frame preemption (IEEE
-Thread-Index: AQHY73g85M6SkyRXJU+IsKC0ZZFrfa4tzqgAgAD+HVA=
-Date:   Fri, 4 Nov 2022 14:08:25 +0000
-Message-ID: <BN8PR12MB28528DB6C999C7608958B284F73B9@BN8PR12MB2852.namprd12.prod.outlook.com>
-References: <20221103113348.17378-1-pranavi.somisetty@amd.com>
- <20221103225124.h6nrj2qnypltgqbr@skbuf>
-In-Reply-To: <20221103225124.h6nrj2qnypltgqbr@skbuf>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BN8PR12MB2852:EE_|MN2PR12MB4359:EE_
-x-ms-office365-filtering-correlation-id: 8ca8260a-a71e-4b0a-133b-08dabe6e0a84
-x-ld-processed: 3dd8961f-e488-4e60-8e11-a82d994e183d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: MyeScw2cgUYH68kTJqV7qNrGtb3Zoy4F1UCLWiAa4HAgEik4m1I66i2J0pznxmIsoIk1G3cTN9ga6SviDxb2x5Igi1sFbu94rgXGARHT8w/cR2KRnKxwCLLpeZjglICYTQhwkcwMsR/Hd+hJHHy3GHozJxyTLlomttGwTVXAalzkcwDB0JYI5m1vn1UhWmQ7a4cJgJ/SQ7xm66/H6ba0IBqjuiuWZON7peM65TQdlryny317vSOunkxyp51cOcmesgIbu96MCxTTHSqO43NF758eGw4WySp9/49ubt1SJtWhxjNwZu30/wzyhW7XNKBqbz8roB5/boklMFoLRVHxQ+MSeb2v2ecZisHUnu4MU8L+K+U7cGQMi9sA6atHkcmYe2AwdA0TJf+ePlxpDW+Ur8iDlT/Eu3vaKuOKSC0hvH1ytsYrHIJ68lztA9Lgvuq2iJQETiZW6SGZCvx82f7hB1a4lszMp7F9FJSQTR1Ps9ut9eqRAdTKzHicBqXdOD86OvbNtLBI3oDy2xUgfLYPtkQlVzuB5KyZtSIxpGu834MvCjxfT4PpvVfQmCpwFK4Fjre52s95QK6NW792iGU0Wp/k6CXvYTwgy2TPRVbO2NCHGRTzSAeRi14/EoI41r1vnS5nUjDnWGAP0IKyuQd2b+FRklzqJy3H346r7YU4AGFXq6rhRTfFyWCER74+9tiXkxX+987b25nXuc2JPLFNlJpzFIIDu3zZtPIsasW95YpH7CYtZ/2Bc4azVZCEc0vvYqYdtBlSNri3TnrbyekeZ9T8Qjd64BFAVPhCS6HzvDQ=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB2852.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(366004)(396003)(39860400002)(376002)(136003)(451199015)(122000001)(316002)(86362001)(8936002)(33656002)(83380400001)(52536014)(186003)(2906002)(5660300002)(66946007)(66556008)(66476007)(53546011)(64756008)(76116006)(66446008)(7696005)(6506007)(41300700001)(9686003)(8676002)(55016003)(4326008)(38070700005)(71200400001)(478600001)(966005)(38100700002)(54906003)(6916009);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?uWlgpWbiI3gpDjnjuHWh64UYRnz83KLWWwRiq/S1d7l0pjIWwhxI2FtLg0EP?=
- =?us-ascii?Q?EQNqvhvIGi9QbkV/agt5jERo55UdifkioTIUsezl8jEhrVTauVOkxhb5yhcV?=
- =?us-ascii?Q?xSWoW7VTKTNW6NDKCFpqysC0sChvtDVEaf1TIlq7yGR/h0QWmQdAb+WmnS9k?=
- =?us-ascii?Q?xjKak18rbd5vvfuQdNN6F2h5/x7ChWLrh5LsCNxAaFNuyWB/CTwwbqCxALz/?=
- =?us-ascii?Q?sqbMNrklPV6qxo3u6mmG7Od7/GDL51mGRznApBJkc+3Vn1LnoLsNUXUG3NuA?=
- =?us-ascii?Q?rbA6NOL/yP/ShAEmbaQEDFLrS1jFZS4qFtk9b37LzVM77MQzIf8/uWMXqpNA?=
- =?us-ascii?Q?VdOnfBgW/kGBhoRejMc92SKvceWEilFaRJa2RbI1qa8DI+tyKGbBDsKWyOWQ?=
- =?us-ascii?Q?rVjW1bqWLa5cwphPW0R8UiQue88M706SCVFOFiw/ULUr2BeBKdoV402S8d/c?=
- =?us-ascii?Q?WyuzQ7ZrrAJM6NBbm7vxFe9uPPHaDwc92MaTzm+LiMuNnHYnXcKEeVOEQ0Gc?=
- =?us-ascii?Q?nIZ/wvaXVmeLVySQvCKNbd4YKgalJeFSf+43XkSb5g83dfpW8yKtF8FzsuO8?=
- =?us-ascii?Q?Yyz2GuBoGeIj8ki+a5kSjvdKjdS/ZqeiEtHr2GhpVmFcPkZsyCftVvdrQzbG?=
- =?us-ascii?Q?MiOhFz/G1JGSNBrBCdY77aV2fheSKRrSXmP3DJSNXGkmDcB8Ne+bVFG4iS7O?=
- =?us-ascii?Q?4OJj6KsXyys8fgydermlMXantWSbdLoV9jPAiMGiSjwMbBWFdsPWHK3BqLGb?=
- =?us-ascii?Q?WIxJ55xbDJ0iWW7g9n1UaTTmcx8YKylV25NRgrmi8B0ZZltzVaQt8PrXDWV9?=
- =?us-ascii?Q?WJCfkWuV/qISOej2jCZEjkM7hNlNbGhIUUbGA0K2Kh0KycIIY6QIwtPbP8bv?=
- =?us-ascii?Q?xJWtoWy6piiJbtO2ZSVZiEdRxQQ5ef+dhs7wZSuVK8r20MGNahEdS3k88sd+?=
- =?us-ascii?Q?GBWrIH1KfcjFAHXIUDmu2xLik2gzJNNeaxsNtWrtJhZXXzuSpgo7p2RTK2C9?=
- =?us-ascii?Q?NrREvyHYQ+l9JIM8ExvG7ip4SLVUOhYy9sFX5e2bUMeK2NojH1VBftKFpobL?=
- =?us-ascii?Q?sCiwm1VFHagEeRaYTtxTTNOKUiSja3II70FZIDeXq1zZDDLL8s2B4sI7UCLH?=
- =?us-ascii?Q?uILp7q0OJbzSqreMSfFvObHQ+Yck7pl9rsVscY2LYV6JxgkX5oAtfIzaqkrb?=
- =?us-ascii?Q?7Y7M8nejyXO4/TGZXKXuATuRs1rtf6H4A/9sJ/7muFbgHu6bqk4zGEvP5mVG?=
- =?us-ascii?Q?XAAAPX3XOkr8tW5PSVszJtUBJGjzPuGqlB0xr2costpCSlUoMjvJtdk+NJBL?=
- =?us-ascii?Q?bUJ79H+nZoybTS/mPwcejnAIBOrqBXM5SqVuREJtSK2jj0UY5qaVrdvbLOPw?=
- =?us-ascii?Q?Dtq+LbcJYwg6woadlmWggHedTBXmaY30xkZDaGnFTZxyDDqOWIBCPCxWlz3L?=
- =?us-ascii?Q?fmohCRZJw+DmYqyOnv0wkS0/5/4zNlvRtQ4C7WZC2LFU2gJp6e2vE2sI7l56?=
- =?us-ascii?Q?3Izw7c1aUInQQFhNL+Qre9DVVuc4NHB3M31+YueU+8L+p1hZSYd9z0o1HCEj?=
- =?us-ascii?Q?ivJNBXIZ+uE/jVnt4HJJiICMgY1LMV+O5WFDAa6TzWQ+oM4qP6GBZNqVsCEd?=
- =?us-ascii?Q?xSYWk9En7xAGTsMIBBCGuUs=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Fri, 4 Nov 2022 10:14:10 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46BCF9FFC
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 07:14:08 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id a14so7240949wru.5
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 07:14:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
+         :subject:from:to:cc:subject:date:message-id:reply-to;
+        bh=dkhsx/f1qVfNpQ2gRDXYIwTY68Bz97MiITex7YRzTDc=;
+        b=2wxt6g/M78F4d/hPa2+Kfql5eYMCMpkhtLTQgIowWZbk6VugLMYhUoHkZ/LSQhl7/t
+         9DR0AKN6J9FIhzbCFUBijhPrf7EmAr8tcWklcQ9BJ+FHxkUiNO2uZXGE4K+7q100IlT/
+         Bqj50J4yZyUz9ElyWH8tfh8+shAKb1xzCnj448DMiTL7CCODiIsu5obU0zTIhNxU13qb
+         S2/+/XgFgd07DE16E9iClL2HeuJaSbLa5Kq/a1GGYSC50gVdEM7gS2aJbddW+X5SmUo7
+         Hoj6a2H1LH588/jWdGPHVubluWKMq56gg7o9u3Ee8v/ub3u0brWcIHiHtKw67eTzWzWI
+         KBvw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
+         :subject:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=dkhsx/f1qVfNpQ2gRDXYIwTY68Bz97MiITex7YRzTDc=;
+        b=pbwqIM3gSoB4O4+4LsGV2UnPnfxLr9qJhFDKpKuLS6TDaDVuDzASl0Yipk8HMpJ3JJ
+         87OnGj3zne2nldc562V6PVoNgpG9NcAtu7jtI+PvRkOC/S/zjnwOMd323PYRrq7wM/kg
+         PnYu29d7p7szQzYJAtRN77m1u2GGVWBjBzIxSzi4hhwXGESI1v+syisKIEudrG0pekEh
+         fWi4B+GZlII9UWhNN3kIwUYg/LcMr8bpDYKNxceajOVKUSMKUHBy0Hx5oqjyNiG68+yl
+         UOfZeOSRF/Hm69pgda/7NtwqErRAq70BrMr5BRAj6GG5YVazE0QG47S5rhSZxdgDdLjt
+         qskw==
+X-Gm-Message-State: ACrzQf2pqZs3VKNhWOuxiHa5dYU5et68L8HyyFIdn16GqsQA4GhicOZ9
+        LuEy2uQyJTESrhD/Q82jOYVJow==
+X-Google-Smtp-Source: AMsMyM48zF9LQVcGi2NS+xsg9MQEat8n9V4ePGrQVLsNqsfhWhu/0S0WAkVM6laGPMKiYfM4ViunHg==
+X-Received: by 2002:a05:6000:381:b0:236:f075:d2a9 with SMTP id u1-20020a056000038100b00236f075d2a9mr9822118wrf.65.1667571246699;
+        Fri, 04 Nov 2022 07:14:06 -0700 (PDT)
+Received: from [127.0.0.1] (2a02-8440-6440-7fff-3074-96af-9642-0003.rev.sfr.net. [2a02:8440:6440:7fff:3074:96af:9642:3])
+        by smtp.gmail.com with ESMTPSA id bj9-20020a0560001e0900b002365cd93d05sm3594512wrb.102.2022.11.04.07.14.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Nov 2022 07:14:06 -0700 (PDT)
+Subject: [PATCH v3 00/12] Add MT8195 HDMI support
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB2852.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8ca8260a-a71e-4b0a-133b-08dabe6e0a84
-X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Nov 2022 14:08:25.7985
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: m5b+6wyF50r5N+Oe5rqELEzE3JOvFHiDbE1lfgIPgnGLMr5GGgsnTxlqhm779JVzXoWqT2f0px/ZzTTTQX1aTw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4359
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-b4-tracking: H4sIACodZWMC/13MTQrCMBAF4KuUWRtJYpDElfcoIvmrGWxTSGqglN7dwY3Q1fAe75sNaiwYK9y6DU
+ psWHHOFC6nDnyy+RUZBsoguZTcCMNSmPA5LW+ghbM1Mlds9ok2+TOOVCasy1zW38cm6PR/3ATjTGml
+ tLh6o7m+O7uO6Eo8+3mCB/EmD0QS0UqY4Ac1cBMOZN/3L59Xi/bFAAAA
+From:   Guillaume Ranquet <granquet@baylibre.com>
+Date:   Fri, 04 Nov 2022 15:09:46 +0100
+Message-Id: <20220919-v3-0-a803f2660127@baylibre.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Jitao shi <jitao.shi@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Vinod Koul <vkoul@kernel.org>, CK Hu <ck.hu@mediatek.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Kishon Vijay Abraham I <kishon@ti.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, stuart.lee@mediatek.com,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        Guillaume Ranquet <granquet@baylibre.com>,
+        mac.shen@mediatek.com, linux-phy@lists.infradead.org
+X-Mailer: b4 0.11.0-dev
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -126,53 +88,103 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Add support for HDMI Tx on MT8195.
 
+This includes a split of the current "legacy" hdmi driver into a common
+library of functions and a two dedicated compilation units with specific
+code for mt8167 and another for the "new" mt8195 SoC.
 
-> -----Original Message-----
-> From: Vladimir Oltean <olteanv@gmail.com>
-> Sent: Friday, November 4, 2022 4:21 AM
-> To: Somisetty, Pranavi <pranavi.somisetty@amd.com>
-> Cc: davem@davemloft.net; edumazet@google.com; kuba@kernel.org;
-> pabeni@redhat.com; git (AMD-Xilinx) <git@amd.com>; Katakam, Harini
-> <harini.katakam@amd.com>; Pandey, Radhey Shyam
-> <radhey.shyam.pandey@amd.com>; Simek, Michal
-> <michal.simek@amd.com>; linux-kernel@vger.kernel.org;
-> netdev@vger.kernel.org
-> Subject: Re: [RFC PATCH net-next 0/2] Add support for Frame preemption
-> (IEEE
->=20
-> Hi Pranavi,
->=20
-> On Thu, Nov 03, 2022 at 05:33:46AM -0600, Pranavi Somisetty wrote:
-> > Frame Preemption is one of the core standards of TSN. It enables low
-> > latency trasmission of time-critical frames by allowing them to
-> > interrupt the transmission of other non time-critical traffic. Frame
-> > preemption is only active when the link partner is also capable of it.
-> > This negotiation is done using LLDP as specified by the standard. Open
-> > source lldp utilities and other applications, can make use of the
-> > ioctls and the header being here, to query preemption capabilities and
-> > configure various parameters.
-> >
-> > Pranavi Somisetty (2):
-> >   include: uapi: Add new ioctl definitions to support Frame Preemption
-> >   include: uapi: Add Frame preemption parameters
-> >
-> >  include/uapi/linux/preemption_8023br.h | 30
-> ++++++++++++++++++++++++++
-> >  include/uapi/linux/sockios.h           |  6 ++++++
-> >  net/core/dev_ioctl.c                   |  6 +++++-
-> >  3 files changed, 41 insertions(+), 1 deletion(-)  create mode 100644
-> > include/uapi/linux/preemption_8023br.h
-> >
-> > --
-> > 2.36.1
-> >
->=20
-> Have you seen:
-> https://patchwork.kernel.org/project/netdevbpf/cover/20220816222920.195
-> 2936-1-vladimir.oltean@nxp.com/
+Support for the new mt8195 hdmi phy and the dpi/drm_drv adjustments to
+support hdmi.
 
-Thanks Vladimir, I hadn't, we will try to use your RFC.
+Based on next-20221104
 
-Regards
-Pranavi
+test branch with dts and various "in flight" patches available here:
+https://gitlab.com/granquet/linux/-/tree/granquet/linux-next_HDMI
+
+I haven't updated the vdosys/mmsys/ethdr and mutex patches in a while
+in that test branch, they might be outdated..
+
+To: Chunfeng Yun <chunfeng.yun@mediatek.com>
+To: Kishon Vijay Abraham I <kishon@ti.com>
+To: Vinod Koul <vkoul@kernel.org>
+To: Rob Herring <robh+dt@kernel.org>
+To: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+To: Matthias Brugger <matthias.bgg@gmail.com>
+To: Chun-Kuang Hu <chunkuang.hu@kernel.org>
+To: Philipp Zabel <p.zabel@pengutronix.de>
+To: David Airlie <airlied@gmail.com>
+To: Daniel Vetter <daniel@ffwll.ch>
+To: CK Hu <ck.hu@mediatek.com>
+To: Jitao shi <jitao.shi@mediatek.com>
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-mediatek@lists.infradead.org
+Cc: linux-phy@lists.infradead.org
+Cc: devicetree@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: dri-devel@lists.freedesktop.org
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Cc: mac.shen@mediatek.com
+CC: stuart.lee@mediatek.com
+Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+---
+Changes in v3:
+- phy: Grouped register and bit definition together to add clarity
+- dt-bindings: Addressed comments
+- Link to v2: https://lore.kernel.org/r/20220919-v2-0-8419dcf4f09d@baylibre.com
+
+Changes in v2:
+- Removed syscon requirement from the hdmi node
+- Use as much as possible bit FIELD_PREP/FIELD_GET macros across all the
+  patches
+- Make cec optional dynamically instead of hardcoded with a flag
+- Renamed hdmi variants to v1 (legacy) and v2 (mt8195) while waiting for
+  a better name
+- Rework hdmi v2 code to use a connector (same as v1)
+- Remove "magic" 0x43 addr special handling in hdmi ddc code
+- Link to v1: https://lore.kernel.org/r/20220919-v1-0-4844816c9808@baylibre.com
+
+---
+Guillaume Ranquet (12):
+      dt-bindings: phy: mediatek: hdmi-phy: Add mt8195 compatible
+      dt-bindings: display: mediatek: add MT8195 hdmi bindings
+      drm/mediatek: hdmi: use a regmap instead of iomem
+      drm/mediatek: extract common functions from the mtk hdmi driver
+      drm/mediatek: hdmi: make the cec dev optional
+      drm/mediatek: hdmi: add frame_colorimetry flag
+      drm/mediatek: hdmi: add v2 support
+      drm/mediatek: hdmi: v2: add audio support
+      phy: phy-mtk-hdmi: Add generic phy configure callback
+      phy: mediatek: add support for phy-mtk-hdmi-mt8195
+      dt-bindings: display: mediatek: dpi: Add compatible for MediaTek MT8195
+      drm/mediatek: dpi: Add mt8195 hdmi to DPI driver
+
+ .../bindings/display/mediatek/mediatek,dpi.yaml    |    1 +
+ .../bindings/display/mediatek/mediatek,hdmi.yaml   |   61 +-
+ .../display/mediatek/mediatek,mt8195-hdmi-ddc.yaml |   51 +
+ .../devicetree/bindings/phy/mediatek,hdmi-phy.yaml |    1 +
+ drivers/gpu/drm/mediatek/Makefile                  |    5 +-
+ drivers/gpu/drm/mediatek/mtk_dpi.c                 |  143 +-
+ drivers/gpu/drm/mediatek/mtk_dpi_regs.h            |    5 +
+ drivers/gpu/drm/mediatek/mtk_hdmi.c                |  655 +-------
+ drivers/gpu/drm/mediatek/mtk_hdmi.h                |   16 +
+ drivers/gpu/drm/mediatek/mtk_hdmi_common.c         |  477 ++++++
+ drivers/gpu/drm/mediatek/mtk_hdmi_common.h         |  224 +++
+ drivers/gpu/drm/mediatek/mtk_hdmi_ddc_v2.c         |  367 +++++
+ drivers/gpu/drm/mediatek/mtk_hdmi_regs_v2.h        |  309 ++++
+ drivers/gpu/drm/mediatek/mtk_hdmi_v2.c             | 1592 ++++++++++++++++++++
+ drivers/gpu/drm/mediatek/mtk_hdmi_v2.h             |   31 +
+ drivers/phy/mediatek/Makefile                      |    1 +
+ drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c         |  543 +++++++
+ drivers/phy/mediatek/phy-mtk-hdmi-mt8195.h         |  109 ++
+ drivers/phy/mediatek/phy-mtk-hdmi.c                |   15 +
+ drivers/phy/mediatek/phy-mtk-hdmi.h                |    2 +
+ 20 files changed, 3976 insertions(+), 632 deletions(-)
+---
+base-commit: 8d9826217c539e9dbc3472823dc536cff1d517a2
+change-id: 20220919-hdmi_mtk
+
+Best regards,
+-- 
+Guillaume Ranquet <granquet@baylibre.com>
