@@ -2,18 +2,18 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23D80619ABA
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 15:59:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B69F619ABB
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 15:59:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232348AbiKDO65 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 10:58:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41712 "EHLO
+        id S232359AbiKDO7C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 10:59:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232278AbiKDO6G (ORCPT
+        with ESMTP id S232282AbiKDO6G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 4 Nov 2022 10:58:06 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54E4E31DCE
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 555122EF7B
         for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 07:58:00 -0700 (PDT)
 From:   Anna-Maria Behnsen <anna-maria@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
@@ -22,21 +22,21 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=og4Fmjqc4BhAa6zqoKeZ4IC2HuQC1SBhqBX9c57/ezA=;
-        b=BG0dJQS/41uoSVCg4fsUBsZRj3FHe0a2pi920fPBprxNiIUtEzblTBMLbF1Y7v+G0+usMQ
-        XF6HUNpzMCq32JKBMQn/f+i8Bqt5svsuKxSMp0wYHnryE3voSKYtuwCLK3BkQvhktjUMpH
-        f4mtmQfjKU0PYYCSGXv/qYT9kbv3DzUCMgIIusxV/CxaXTV1lk2Sa9aMqOmRyVIUgsz+nk
-        yJ6RKQKzyxfZpU3/Wdsfhh7VKTN5c32YVRfYkQ5a6o87lvc6iioImPEwXGKNdqTJEks0kf
-        O0WoX4NUkeuiiJfES3D9HjP64NFDFwdLK2wkfyd0w01M9+YwiPGy1cDVweZ4ZA==
+        bh=7kvCElohZyUyNJGM2JneGjqwOan7vBCE2nbaLgbbE24=;
+        b=0tuI8buTxcQd683GsIeTB2XnvF+yOTjJCOWEzNfR1pfDAmxN20GCUlC36qmFby74aWOo0b
+        Jp1pe1Q7/zkmL1fCF/v8jjHO/UnzxZdHgcX30pQ1tKzk6X8wc2gLBVlzbzXJjm2b2EIBat
+        3X/5b3IX+EnjHS62nyFo7zcHS6aH4obDW2HKWCTptp8wZmLJ7xSwvEUJWpmr2mrBsM4TWl
+        UGgmRmBnZYt7IehlzhAi2yyc0IIs/QMzUu8oK2fbAVu2DNu+Eks43tEEvRG6Zjhkz8Tn8l
+        Ytxjkl84wObu9x6ASDBdLLk7xl4tToDtB8igF2/YNn2ShanmE65Dc86xxB7fUg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1667573879;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=og4Fmjqc4BhAa6zqoKeZ4IC2HuQC1SBhqBX9c57/ezA=;
-        b=sHaIgiqK10fb5yXmKO+wxs2Y4tbS5fk61OmJgtwBTpBRAMibYAZqVws1dyIiungZE9HQuj
-        jMvsK86yboVj15Bw==
+        bh=7kvCElohZyUyNJGM2JneGjqwOan7vBCE2nbaLgbbE24=;
+        b=XvrogLHg8qBegViDEiUEOPcLE9nQosfe7dI6/vK+t49B/gbCFUaDJ8+tS/0F7HBSAJperm
+        ZSI2edb40Ftv/oCg==
 To:     linux-kernel@vger.kernel.org
 Cc:     Peter Zijlstra <peterz@infradead.org>,
         John Stultz <jstultz@google.com>,
@@ -47,10 +47,11 @@ Cc:     Peter Zijlstra <peterz@infradead.org>,
         "Paul E . McKenney" <paulmck@kernel.org>,
         Frederic Weisbecker <fweisbec@gmail.com>,
         Rik van Riel <riel@surriel.com>,
+        "Richard Cochran (linutronix GmbH)" <richardcochran@gmail.com>,
         Anna-Maria Behnsen <anna-maria@linutronix.de>
-Subject: [PATCH v4 12/16] timer: Check if timers base is handled already
-Date:   Fri,  4 Nov 2022 15:57:33 +0100
-Message-Id: <20221104145737.71236-13-anna-maria@linutronix.de>
+Subject: [PATCH v4 13/16] tick/sched: Split out jiffies update helper function
+Date:   Fri,  4 Nov 2022 15:57:34 +0100
+Message-Id: <20221104145737.71236-14-anna-maria@linutronix.de>
 In-Reply-To: <20221104145737.71236-1-anna-maria@linutronix.de>
 References: <20221104145737.71236-1-anna-maria@linutronix.de>
 MIME-Version: 1.0
@@ -64,35 +65,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Due to the conversion of the NOHZ timer placement to a pull at expiry
-time model, the per CPU timer bases with non pinned timers are no
-longer handled only by the local CPU. In case a remote CPU already
-expires the non pinned timers base of the local cpu, nothing more
-needs to be done by the local CPU. A check at the begin of the expire
-timers routine is required, because timer base lock is dropped before
-executing the timer callback function.
+From: "Richard Cochran (linutronix GmbH)" <richardcochran@gmail.com>
 
-This is a preparatory work, but has no functional impact right now.
+The logic to get the time of the last jiffies update will be needed by
+the timer pull model as well.
 
+Move the code into a global funtion in anticipation of the new caller.
+
+No functional change.
+
+Signed-off-by: Richard Cochran (linutronix GmbH) <richardcochran@gmail.com>
 Signed-off-by: Anna-Maria Behnsen <anna-maria@linutronix.de>
 ---
- kernel/time/timer.c | 3 +++
- 1 file changed, 3 insertions(+)
+ kernel/time/tick-internal.h |  1 +
+ kernel/time/tick-sched.c    | 20 ++++++++++++++++----
+ 2 files changed, 17 insertions(+), 4 deletions(-)
 
-diff --git a/kernel/time/timer.c b/kernel/time/timer.c
-index 641e7284f0d7..f8b2065df79b 100644
---- a/kernel/time/timer.c
-+++ b/kernel/time/timer.c
-@@ -1912,6 +1912,9 @@ static inline void __run_timers(struct timer_base *base)
+diff --git a/kernel/time/tick-internal.h b/kernel/time/tick-internal.h
+index 7b65abc9d803..8f99e35e75b4 100644
+--- a/kernel/time/tick-internal.h
++++ b/kernel/time/tick-internal.h
+@@ -158,6 +158,7 @@ static inline void tick_nohz_init(void) { }
+ #ifdef CONFIG_NO_HZ_COMMON
+ extern unsigned long tick_nohz_active;
+ extern void timers_update_nohz(void);
++extern u64 get_jiffies_update(unsigned long *basej);
+ # ifdef CONFIG_SMP
+ extern struct static_key_false timers_migration_enabled;
+ # endif
+diff --git a/kernel/time/tick-sched.c b/kernel/time/tick-sched.c
+index 7f7bfe8b498d..868679ff3421 100644
+--- a/kernel/time/tick-sched.c
++++ b/kernel/time/tick-sched.c
+@@ -782,19 +782,31 @@ static inline bool local_timer_softirq_pending(void)
+ 	return local_softirq_pending() & BIT(TIMER_SOFTIRQ);
+ }
  
- 	lockdep_assert_held(&base->lock);
+-static ktime_t tick_nohz_next_event(struct tick_sched *ts, int cpu)
++/*
++ * Read jiffies and the time when jiffies were updated last
++ */
++u64 get_jiffies_update(unsigned long *basej)
+ {
+-	struct timer_events tevt = { .local = KTIME_MAX, .global = KTIME_MAX };
+-	u64 basemono, delta, expires;
+ 	unsigned long basejiff;
+ 	unsigned int seq;
++	u64 basemono;
  
-+	if (!!base->running_timer)
-+		return;
+-	/* Read jiffies and the time when jiffies were updated last */
+ 	do {
+ 		seq = read_seqcount_begin(&jiffies_seq);
+ 		basemono = last_jiffies_update;
+ 		basejiff = jiffies;
+ 	} while (read_seqcount_retry(&jiffies_seq, seq));
++	*basej = basejiff;
++	return basemono;
++}
 +
- 	while (time_after_eq(jiffies, base->clk) &&
- 	       time_after_eq(jiffies, base->next_expiry)) {
- 		levels = collect_expired_timers(base, heads);
++static ktime_t tick_nohz_next_event(struct tick_sched *ts, int cpu)
++{
++	struct timer_events tevt = { .local = KTIME_MAX, .global = KTIME_MAX };
++	u64 basemono, delta, expires;
++	unsigned long basejiff;
++
++	basemono = get_jiffies_update(&basejiff);
+ 	ts->last_jiffies = basejiff;
+ 	ts->timer_expires_base = basemono;
+ 
 -- 
 2.30.2
 
