@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52FD0619053
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 06:49:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 048A6619066
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 06:49:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231567AbiKDFtF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 01:49:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55582 "EHLO
+        id S231637AbiKDFte (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 01:49:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231206AbiKDFsu (ORCPT
+        with ESMTP id S231244AbiKDFsw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 01:48:50 -0400
+        Fri, 4 Nov 2022 01:48:52 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3F3527B31
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 22:48:47 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAE912792B
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 22:48:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 71EBD620BE
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AA8CF620B7
         for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 05:48:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 237FBC43151;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86E7CC433B5;
         Fri,  4 Nov 2022 05:48:47 +0000 (UTC)
 Received: from rostedt by gandalf.local.home with local (Exim 4.96)
         (envelope-from <rostedt@goodmis.org>)
-        id 1oqpZp-00712o-2F;
+        id 1oqpZp-00713M-2q;
         Fri, 04 Nov 2022 01:49:13 -0400
-Message-ID: <20221104054913.537193963@goodmis.org>
+Message-ID: <20221104054913.715976693@goodmis.org>
 User-Agent: quilt/0.66
-Date:   Fri, 04 Nov 2022 01:41:02 -0400
+Date:   Fri, 04 Nov 2022 01:41:03 -0400
 From:   Steven Rostedt <rostedt@goodmis.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
@@ -37,9 +37,9 @@ Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
         Guenter Roeck <linux@roeck-us.net>,
         Anna-Maria Gleixner <anna-maria@linutronix.de>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [RFC][PATCH v3 09/33] timers: hangcheck: Use timer_shutdown_sync() before freeing timer
+        openipmi-developer@lists.sourceforge.net,
+        Corey Minyard <cminyard@mvista.com>
+Subject: [RFC][PATCH v3 10/33] timers: ipmi: Use timer_shutdown_sync() before freeing timer
 References: <20221104054053.431922658@goodmis.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,31 +56,43 @@ From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
 
 Before a timer is freed, timer_shutdown_sync() must be called.
 
-Also fixed some whitespace issues in the line after.
-
 Link: https://lore.kernel.org/all/20220407161745.7d6754b3@gandalf.local.home/
 
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: openipmi-developer@lists.sourceforge.net
+Acked-by: Corey Minyard <cminyard@mvista.com>
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 ---
- drivers/char/hangcheck-timer.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/char/ipmi/ipmi_msghandler.c | 2 +-
+ drivers/char/ipmi/ipmi_ssif.c       | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/char/hangcheck-timer.c b/drivers/char/hangcheck-timer.c
-index 4181bcc1c796..783a86bfca69 100644
---- a/drivers/char/hangcheck-timer.c
-+++ b/drivers/char/hangcheck-timer.c
-@@ -167,8 +167,8 @@ static int __init hangcheck_init(void)
+diff --git a/drivers/char/ipmi/ipmi_msghandler.c b/drivers/char/ipmi/ipmi_msghandler.c
+index 49a1707693c9..5cfb85e22d65 100644
+--- a/drivers/char/ipmi/ipmi_msghandler.c
++++ b/drivers/char/ipmi/ipmi_msghandler.c
+@@ -5540,7 +5540,7 @@ static void __exit cleanup_ipmi(void)
+ 		 * here.
+ 		 */
+ 		atomic_set(&stop_operation, 1);
+-		del_timer_sync(&ipmi_timer);
++		timer_shutdown_sync(&ipmi_timer);
  
- static void __exit hangcheck_exit(void)
- {
--	del_timer_sync(&hangcheck_ticktock);
--        printk("Hangcheck: Stopped hangcheck timer.\n");
-+	timer_shutdown_sync(&hangcheck_ticktock);
-+	printk("Hangcheck: Stopped hangcheck timer.\n");
- }
+ 		initialized = false;
  
- module_init(hangcheck_init);
+diff --git a/drivers/char/ipmi/ipmi_ssif.c b/drivers/char/ipmi/ipmi_ssif.c
+index e1072809fe31..5194be6d0639 100644
+--- a/drivers/char/ipmi/ipmi_ssif.c
++++ b/drivers/char/ipmi/ipmi_ssif.c
+@@ -1273,8 +1273,8 @@ static void shutdown_ssif(void *send_info)
+ 		schedule_timeout(1);
+ 
+ 	ssif_info->stopping = true;
+-	del_timer_sync(&ssif_info->watch_timer);
+-	del_timer_sync(&ssif_info->retry_timer);
++	timer_shutdown_sync(&ssif_info->watch_timer);
++	timer_shutdown_sync(&ssif_info->retry_timer);
+ 	if (ssif_info->thread) {
+ 		complete(&ssif_info->wake_thread);
+ 		kthread_stop(ssif_info->thread);
 -- 
 2.35.1
