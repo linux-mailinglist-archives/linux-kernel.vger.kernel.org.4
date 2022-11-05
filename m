@@ -2,145 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FB7961DF26
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 23:39:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A052A61DF36
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 23:56:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229603AbiKEWjC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Nov 2022 18:39:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50284 "EHLO
+        id S229971AbiKEW4O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Nov 2022 18:56:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229542AbiKEWjA (ORCPT
+        with ESMTP id S229517AbiKEW4M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Nov 2022 18:39:00 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43AF29FE6
-        for <linux-kernel@vger.kernel.org>; Sat,  5 Nov 2022 15:38:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667687939; x=1699223939;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=y9CDc9xZ1YMldCutFBbHC131ijp5vj6wWVs5eeGhfWo=;
-  b=KxFi6Z3T/YiOY5xxWDQ3IdPHIdUyxFeJ8GcPl/wQIGmsUoBG+2lCTV/s
-   pfLZINkvbYv+VTyk11f+/3JGyKr9oVAgp4tZyGiqzOKp9nQ277Ytco0zJ
-   9En7auIzdQwKrJivNntNQihNJLSEXoUmIO3LF3cAyNejQwOTiM7J74pLH
-   hhtrxDt2sC2TMEqoP3fpEfNRuKzgp1XYkxaWgC6ioM+NjjQQHE8hw7xjR
-   vYpnBMt6VuelgdUQ+1hBMgYZ2oVyNIhBG9wMS36sNhoL9JbmqJmjN5ski
-   ahQAoMW+nVWquFdwJxkQYU84byrc9cstdLyhc9lNfMWay86MCv2yoTss4
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10522"; a="307835265"
-X-IronPort-AV: E=Sophos;i="5.96,141,1665471600"; 
-   d="scan'208";a="307835265"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Nov 2022 15:38:59 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10522"; a="586560355"
-X-IronPort-AV: E=Sophos;i="5.96,141,1665471600"; 
-   d="scan'208";a="586560355"
-Received: from lkp-server02.sh.intel.com (HELO b6d29c1a0365) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 05 Nov 2022 15:38:57 -0700
-Received: from kbuild by b6d29c1a0365 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1orRoW-000IOR-2u;
-        Sat, 05 Nov 2022 22:38:56 +0000
-Date:   Sun, 06 Nov 2022 06:38:53 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:x86/core] BUILD SUCCESS
- 4fd5f70ce14da230c6a29648c3d51a48ee0b4bfd
-Message-ID: <6366e5fd.pdJYrjWzF41Jo8jS%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Sat, 5 Nov 2022 18:56:12 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B121BCBF;
+        Sat,  5 Nov 2022 15:56:10 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id v17so12415275edc.8;
+        Sat, 05 Nov 2022 15:56:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=zP0zVoNY9bRmSC2JqzCNWw7/QwV/09WG5UmPPgvch3U=;
+        b=ITEnNwVtzwYUXM9GiBOje7UESNtMaKpXoKTRvxf9P/AI6w0n1UztX9zzK7K7sjBfMl
+         cx8tCJSd64ZPIjwBsDwnGdcicIERP2qeIIPbUPQBuocsbFUQuKYvBbMjBpyVu2f25xtJ
+         dFdHZ/gW4KeeLzrmGCERzCRRMSksSaRNElzMiVi5LBGmR+f2SQ/+3gYUdizT/oO1gpNw
+         s1ntGXJ+DVDMyw7PnmdFu9XqHcWtA9qlvdMvA1nIkzDVkXwN4R5q+vuRo8+TbBBpun6w
+         1z8Ga3WWhamod0INV2QTHj+EfMT3ONa0gejegma55sdo4/DD3R03P8JyXlu/UsFrOF0p
+         KpEg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zP0zVoNY9bRmSC2JqzCNWw7/QwV/09WG5UmPPgvch3U=;
+        b=DgWVEuEw3Z1tzGd/U8xmwC/X7LIltrvzP8sGX0WgJ5b9Qxhv4GIs3Ebw8/mHhI79xe
+         OHW3GhlZ6y8IR96aBr+6Gf8+zMZUOvQZyKmYz5m/BrVjfJiDnja/iTpBehhT+th+lT4U
+         SStCYuSPEDZj+b4u/J/I38OBPfbLw7MBaAqRfSlM6WH7Pw/j1PB/Sir4g4rDacYwcbnx
+         2zI85JCXNgm6j2V5F7y0CRUeZ3r1Cq+qeAPlCMBCrY6LCZ2aVdOGbQzZpVFuMOfpXk2p
+         +o3J+QxbVHcFo36UoutmoCUeLrWRPB1i74W33pXrC1/mjrQBpf6U6QXk6JeaYLXCturK
+         YYiA==
+X-Gm-Message-State: ACrzQf03UjlHJ4ABv7pk82a2SgxyWKRc9e9ELPcieMRfyf+TwbwgOfxU
+        lOq61svKg4nhIzfQpaxIzPlvM7dKfKjqCFBsoWw7fjFSAVE=
+X-Google-Smtp-Source: AMsMyM4szC53zUWs/viztgubknkdNxRoJepHUcXEVFQ7TSnVHReU8QFBSlIdlj2Od+GHx8/ceJxZvd4BbluaiSU+qnw=
+X-Received: by 2002:a05:6402:31f4:b0:461:604d:2607 with SMTP id
+ dy20-20020a05640231f400b00461604d2607mr43491798edb.330.1667688968775; Sat, 05
+ Nov 2022 15:56:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20221104083004.2212520-1-linux@rasmusvillemoes.dk> <CAFBinCBiTgV5uC2Dq3Lowj5WXFk7U0XuY07717oAMGc+jH15hg@mail.gmail.com>
+In-Reply-To: <CAFBinCBiTgV5uC2Dq3Lowj5WXFk7U0XuY07717oAMGc+jH15hg@mail.gmail.com>
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date:   Sat, 5 Nov 2022 23:55:57 +0100
+Message-ID: <CAFBinCBJVqM86VxPzSxafav9iOepS4sHuYWTD_1wY0ZYdjmzUw@mail.gmail.com>
+Subject: Re: [PATCH] net: stmmac: dwmac-meson8b: fix meson8b_devm_clk_prepare_enable()
+To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        "David S . Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/core
-branch HEAD: 4fd5f70ce14da230c6a29648c3d51a48ee0b4bfd  x86/Kconfig: Enable kernel IBT by default
+Rasmus replied to me off-list yesterday. His reply is important so I
+am sharing it here.
 
-elapsed time: 723m
+On Fri, Nov 4, 2022 at 10:02 PM Martin Blumenstingl
+<martin.blumenstingl@googlemail.com> wrote:
+[...]
+> If we want to propagate the error code returned by
+> devm_add_action_or_reset() then we also need to do the clean up within
+> meson8b_devm_clk_prepare_enable(), meaning we need to call
+> clk_disable_unprepare() in case devm_add_action_or_reset() failed.
+> Your change just propagates the error code without disabling and
+> unpreparing the clock.
+Rasmus replied to me:
+"devm_add_action_or_reset precisely calls the reset callback for you
+if the add action falls..."
 
-configs tested: 63
-configs skipped: 2
+I was not aware of this but it's actually true, which makes the patch
+perfectly valid. Thanks for the heads up Rasmus!
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+So this patch gets my:
+Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
 
-gcc tested configs:
-x86_64                         rhel-8.3-kunit
-x86_64                           rhel-8.3-kvm
-x86_64                           rhel-8.3-syz
-um                             i386_defconfig
-um                           x86_64_defconfig
-x86_64                               rhel-8.3
-arc                                 defconfig
-s390                             allmodconfig
-i386                          randconfig-a014
-i386                          randconfig-a001
-x86_64                              defconfig
-i386                          randconfig-a003
-x86_64                        randconfig-a004
-alpha                               defconfig
-x86_64                        randconfig-a002
-s390                                defconfig
-i386                          randconfig-a012
-x86_64                          rhel-8.3-func
-x86_64                        randconfig-a006
-i386                          randconfig-a016
-x86_64                    rhel-8.3-kselftests
-i386                          randconfig-a005
-arm                                 defconfig
-s390                             allyesconfig
-m68k                             allyesconfig
-i386                                defconfig
-m68k                             allmodconfig
-arc                              allyesconfig
-x86_64                        randconfig-a015
-alpha                            allyesconfig
-x86_64                        randconfig-a013
-s390                 randconfig-r044-20221104
-x86_64                        randconfig-a011
-riscv                randconfig-r042-20221104
-arm64                            allyesconfig
-ia64                             allmodconfig
-x86_64                           allyesconfig
-arm                              allyesconfig
-arc                  randconfig-r043-20221105
-powerpc                           allnoconfig
-i386                             allyesconfig
-powerpc                          allmodconfig
-arc                  randconfig-r043-20221104
-mips                             allyesconfig
-sh                               allmodconfig
+I suggest applying it to net-next (even though it carries a Fixes tag)
+so the various kernel auto testing labs can try it out on as many
+Amlogic SoCs as possible.
 
-clang tested configs:
-i386                          randconfig-a013
-i386                          randconfig-a011
-i386                          randconfig-a002
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-i386                          randconfig-a015
-x86_64                        randconfig-a005
-i386                          randconfig-a006
-i386                          randconfig-a004
-x86_64                        randconfig-a014
-hexagon              randconfig-r045-20221105
-x86_64                        randconfig-a012
-hexagon              randconfig-r041-20221105
-x86_64                        randconfig-a016
-hexagon              randconfig-r041-20221104
-hexagon              randconfig-r045-20221104
-s390                 randconfig-r044-20221105
-riscv                randconfig-r042-20221105
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Best regards,
+Martin
