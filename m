@@ -2,168 +2,243 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F24661DAC7
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 15:16:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40C8661DAE9
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 15:19:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229779AbiKEOQl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Nov 2022 10:16:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35918 "EHLO
+        id S229837AbiKEOTH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Nov 2022 10:19:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229614AbiKEOQi (ORCPT
+        with ESMTP id S229851AbiKEOSv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Nov 2022 10:16:38 -0400
-Received: from mail.cock.li (unknown [37.120.193.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1876026AC9;
-        Sat,  5 Nov 2022 07:16:34 -0700 (PDT)
+        Sat, 5 Nov 2022 10:18:51 -0400
+Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07D6FBBD;
+        Sat,  5 Nov 2022 07:18:36 -0700 (PDT)
+Received: from g550jk.. (unknown [46.183.103.8])
+        by mail.z3ntu.xyz (Postfix) with ESMTPSA id 48C9AD0409;
+        Sat,  5 Nov 2022 14:18:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=z3ntu.xyz; s=z3ntu;
+        t=1667657914; bh=1SgFc7do9FxwPKWcXsHvto6nssiqHLSglAvy8Itz6a8=;
+        h=From:To:Cc:Subject:Date;
+        b=pmYbjG/hx1B1rKL9yk3VFW6u/4xnu4cyvNIakg6Ss/ZxoTjS3VqjMX2FVT8LNga9z
+         RmGropT1C1ix57+gJ6DE7Om1An3PImYgTUXpbBQb5efuQlGs9UjkRkCDynFx940NY7
+         fE3viUvYIU3mkTUyCpyrKltn7lPOTS8iEqpzZAmc=
+From:   Luca Weiss <luca@z3ntu.xyz>
+To:     linux-input@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Luca Weiss <luca@z3ntu.xyz>, Andrew Davis <afd@ti.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3] dt-bindings: input: Convert ti,drv260x to DT schema
+Date:   Sat,  5 Nov 2022 15:17:06 +0100
+Message-Id: <20221105141707.92652-1-luca@z3ntu.xyz>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tfwno.gf; s=mail;
-        t=1667657790; bh=J7AqfEf7LvFDpqBYRlFhO8k4vfiTi6BH8M8TJ5Qv02s=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=KbjOkyroeyovBXygh35SwSIFVx4a8Xt4hpUdDp97q6+8nixOx0RL4hiUij+/vaePB
-         2t4XRTbjU72AtJckqln8KAw7Gq8M7xAGwh8wRnj4Zy8Hk67eCM8ewY41eb5w/gph0+
-         V1nz7lFLcltMnB2qPASazgNWMFpbSZKEoWWWXTxPWedNps1MM17/CrukWl+qquu3yG
-         oyaaW5bvy3r4UZfFujMTt/VeUM+DZRoQigihRWBAbRuXOCQKZt11WaLyOovNeKA8YN
-         QZxKHIUQBZJ8Klzj+4IXMfcHwEADJvCTxze47rpdqMyJX0xxEeIItilpzTyM70OY0a
-         Xz2px1nk9okRQ==
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Sat, 05 Nov 2022 14:16:30 +0000
-From:   ns@tfwno.gf
-To:     Dave Young <dyoung@redhat.com>
-Cc:     Baoquan He <bhe@redhat.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Ard Biesheuvel <ardb@kernel.org>, linux-efi@vger.kernel.org
-Subject: Re: Bug: kexec on Lenovo ThinkPad T480 disables EFI mode
-In-Reply-To: <CALu+AoTVtO=-tzbgjeVRQ3uO0yGUPWKPuAiLn0CpaAq_=xr-sw@mail.gmail.com>
-References: <3acf1cc7a974cb4fb9b77b39311c6714@tfwno.gf>
- <Y2XUNive2KMwTjUF@MiWiFi-R3L-srv>
- <CALu+AoTVtO=-tzbgjeVRQ3uO0yGUPWKPuAiLn0CpaAq_=xr-sw@mail.gmail.com>
-Message-ID: <2f43e1e583a92e1592c48a15a763e1f7@tfwno.gf>
-X-Sender: ns@tfwno.gf
-User-Agent: Roundcube Webmail/1.3.17
-X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_VALIDITY_RPBL,
-        SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
+        FROM_SUSPICIOUS_NTLD_FP,PDS_OTHER_BAD_TLD,RCVD_IN_SBL_CSS,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-11-05 05:49, Dave Young wrote:
-> Baoquan, thanks for cc me.
-> 
-> On Sat, 5 Nov 2022 at 11:10, Baoquan He <bhe@redhat.com> wrote:
->> 
->> Add Dave to CC
->> 
->> On 10/28/22 at 01:02pm, ns@tfwno.gf wrote:
->> > Greetings,
->> >
->> > I've been hitting a bug on my Lenovo ThinkPad T480 where kexecing will
->> > cause EFI mode (if that's the right term for it) to be unconditionally
->> > disabled, even when not using the --noefi option to kexec.
->> >
->> > What I mean by "EFI mode" being disabled, more than just EFI runtime
->> > services, is that basically nothing about the system's EFI is visible
->> > post-kexec. Normally you have a message like this in dmesg when the
->> > system is booted in EFI mode:
->> >
->> > [    0.000000] efi: EFI v2.70 by EDK II
->> > [    0.000000] efi: SMBIOS=0x7f98a000 ACPI=0x7fb7e000 ACPI 2.0=0x7fb7e014
->> > MEMATTR=0x7ec63018
->> > (obviously not the real firmware of the machine I'm talking about, but I
->> > can also send that if it would be of any help)
->> >
->> > No such message pops up in my dmesg as a result of this bug, & this
->> > causes some fallout like being unable to find the system's DMI
->> > information:
->> >
->> > <6>[    0.000000] DMI not present or invalid.
->> >
->> > The efivarfs module also fails to load with -ENODEV.
->> >
->> > I've tried also booting with efi=runtime explicitly but it doesn't
->> > change anything. The kernel still does not print the name of the EFI
->> > firmware, DMI is still missing, & efivarfs still fails to load.
->> >
->> > I've been using the kexec_load syscall for all these tests, if it's
->> > important.
->> >
->> > Also, to make it very clear, all this only ever happens post-kexec. When
->> > booting straight from UEFI (with the EFI stub), all the aforementioned
->> > stuff that fails works perfectly fine (i.e. name of firmware is printed,
->> > DMI is properly found, & efivarfs loads & mounts just fine).
->> >
->> > This is reproducible with a vanilla 6.1-rc2 kernel. I've been trying to
->> > bisect it, but it seems like it goes pretty far back. I've got vanilla
->> > mainline kernel builds dating back to 5.17 that have the exact same
->> > issue. It might be worth noting that during this testing, I made sure
->> > the version of the kernel being kexeced & the kernel kexecing were the
->> > same version. It may not have been a problem in older kernels, but that
->> > would be difficult to test for me (a pretty important driver for this
->> > machine was only merged during v5.17-rc4). So it may not have been a
->> > regression & just a hidden problem since time immemorial.
->> >
->> > I am willing to test any patches I may get to further debug or fix
->> > this issue, preferably based on the current state of torvalds/linux.git.
->> > I can build & test kernels quite a few times per day.
->> >
->> > I can also send any important materials (kernel config, dmesg, firmware
->> > information, so on & so forth) on request. I'll also just mention I'm
->> > using kexec-tools 2.0.24 upfront, if it matters.
-> 
-> Can you check the efi runtime in sysfs:
-> ls /sys/firmware/efi/runtime-map/
-> 
-> If nothing then maybe you did not enable CONFIG_EFI_RUNTIME_MAP=y, it
-> is needed for kexec UEFI boot on x86_64.
+Convert the drv260x haptics binding to DT schema format.
 
-Oh my, it really is that simple.
+The only notable change from .txt format is that vbat-supply is not
+actually required, so don't make it a required property.
 
-Indeed, enabling this in the pre-kexec kernel fixes it all up. I had
-blindly disabled it in my quest to downsize the pre-kexec kernel to
-reduce boot time (it only runs a bootloader). In hindsight, the firmware
-drivers section is not really a good section to tweak on a whim.
+Acked-by: Andrew Davis <afd@ti.com>
+Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+---
+Changes since v2:
+* add default values for vib-*-mv
+* add note about 'mode' property
+* add enable-gpios, deprecate enable-gpio
 
-I'm terribly sorry to have taken your time to "fix" this "bug". But I
-must ask, is there any reason why this is a visible config option, or at
-least not gated behind CONFIG_EXPERT? drivers/firmware/efi/runtime-map.c
-is pretty tiny, & considering it depends on CONFIG_KEXEC_CORE, one
-probably wants to have kexec work properly if they can even enable it.
-I admit the help text for it is arguably pretty good, but I feel like
-the config option is only really useful for embedded, the same
-enviroments where people would disable stuff like CONFIG_DMI -- a config
-option that I would argue is pretty justifiably gated behind
-CONFIG_EXPERT, because far too many systems break without it & it's
-pretty small code, so really not worth it unless you absolutely know
-what you're doing. Similarly, I don't really think there's much value
-in disabling the ability to kexec without the firmware except if you're
-heavily informed & must have the size reduction, especially since in
-EFI land that's where your DMI info comes from, if I were to argue for
-it on the basis of CONFIG_DMI being gated. In summary, it can cause
-quite a bit of unnecessary confusion despite only being useful to a very
-small minority of users.
+ .../devicetree/bindings/input/ti,drv260x.txt  |  50 --------
+ .../devicetree/bindings/input/ti,drv260x.yaml | 109 ++++++++++++++++++
+ 2 files changed, 109 insertions(+), 50 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/input/ti,drv260x.txt
+ create mode 100644 Documentation/devicetree/bindings/input/ti,drv260x.yaml
 
-Thank you!
+diff --git a/Documentation/devicetree/bindings/input/ti,drv260x.txt b/Documentation/devicetree/bindings/input/ti,drv260x.txt
+deleted file mode 100644
+index 4c5312eaaa85..000000000000
+--- a/Documentation/devicetree/bindings/input/ti,drv260x.txt
++++ /dev/null
+@@ -1,50 +0,0 @@
+-* Texas Instruments - drv260x Haptics driver family
+-
+-Required properties:
+-	- compatible - One of:
+-		"ti,drv2604" - DRV2604
+-		"ti,drv2605" - DRV2605
+-		"ti,drv2605l" - DRV2605L
+-	- reg -  I2C slave address
+-	- vbat-supply - Required supply regulator
+-	- mode - Power up mode of the chip (defined in include/dt-bindings/input/ti-drv260x.h)
+-		DRV260X_LRA_MODE - Linear Resonance Actuator mode (Piezoelectric)
+-		DRV260X_LRA_NO_CAL_MODE - This is a LRA Mode but there is no calibration
+-				sequence during init.  And the device is configured for real
+-				time playback mode (RTP mode).
+-		DRV260X_ERM_MODE - Eccentric Rotating Mass mode (Rotary vibrator)
+-	- library-sel - These are ROM based waveforms pre-programmed into the IC.
+-				This should be set to set the library to use at power up.
+-				(defined in include/dt-bindings/input/ti-drv260x.h)
+-		DRV260X_LIB_EMPTY - Do not use a pre-programmed library
+-		DRV260X_ERM_LIB_A - Pre-programmed Library
+-		DRV260X_ERM_LIB_B - Pre-programmed Library
+-		DRV260X_ERM_LIB_C - Pre-programmed Library
+-		DRV260X_ERM_LIB_D - Pre-programmed Library
+-		DRV260X_ERM_LIB_E - Pre-programmed Library
+-		DRV260X_ERM_LIB_F - Pre-programmed Library
+-		DRV260X_LIB_LRA - Pre-programmed LRA Library
+-
+-Optional properties:
+-	- enable-gpio - gpio pin to enable/disable the device.
+-	- vib-rated-mv - The rated voltage of the actuator in millivolts.
+-			  If this is not set then the value will be defaulted to
+-			  3.2 v.
+-	- vib-overdrive-mv - The overdrive voltage of the actuator in millivolts.
+-			  If this is not set then the value will be defaulted to
+-			  3.2 v.
+-Example:
+-
+-haptics: haptics@5a {
+-	compatible = "ti,drv2605l";
+-	reg = <0x5a>;
+-	vbat-supply = <&vbat>;
+-	enable-gpio = <&gpio1 28 GPIO_ACTIVE_HIGH>;
+-	mode = <DRV260X_LRA_MODE>;
+-	library-sel = <DRV260X_LIB_LRA>;
+-	vib-rated-mv = <3200>;
+-	vib-overdrive-mv = <3200>;
+-}
+-
+-For more product information please see the link below:
+-http://www.ti.com/product/drv2605
+diff --git a/Documentation/devicetree/bindings/input/ti,drv260x.yaml b/Documentation/devicetree/bindings/input/ti,drv260x.yaml
+new file mode 100644
+index 000000000000..63230977043e
+--- /dev/null
++++ b/Documentation/devicetree/bindings/input/ti,drv260x.yaml
+@@ -0,0 +1,109 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/input/ti,drv260x.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Texas Instruments - drv260x Haptics driver family
++
++maintainers:
++  - Andrew Davis <afd@ti.com>
++
++properties:
++  compatible:
++    enum:
++      - ti,drv2604
++      - ti,drv2605
++      - ti,drv2605l
++
++  reg:
++    maxItems: 1
++
++  vbat-supply:
++    description: Power supply to the haptic motor
++
++  # TODO: Deprecate 'mode' in favor of differently named property
++  mode:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description: |
++      Power up mode of the chip
++      (defined in include/dt-bindings/input/ti-drv260x.h)
++
++      DRV260X_LRA_MODE
++        Linear Resonance Actuator mode (Piezoelectric)
++
++      DRV260X_LRA_NO_CAL_MODE
++        This is a LRA Mode but there is no calibration sequence during init.
++        And the device is configured for real time playback mode (RTP mode).
++
++      DRV260X_ERM_MODE
++        Eccentric Rotating Mass mode (Rotary vibrator)
++    enum: [ 0, 1, 2 ]
++
++  library-sel:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description: |
++      These are ROM based waveforms pre-programmed into the IC.
++      This should be set to set the library to use at power up.
++      (defined in include/dt-bindings/input/ti-drv260x.h)
++
++      DRV260X_LIB_EMPTY - Do not use a pre-programmed library
++      DRV260X_ERM_LIB_A - Pre-programmed Library
++      DRV260X_ERM_LIB_B - Pre-programmed Library
++      DRV260X_ERM_LIB_C - Pre-programmed Library
++      DRV260X_ERM_LIB_D - Pre-programmed Library
++      DRV260X_ERM_LIB_E - Pre-programmed Library
++      DRV260X_ERM_LIB_F - Pre-programmed Library
++      DRV260X_LIB_LRA - Pre-programmed LRA Library
++    enum: [ 0, 1, 2, 3, 4, 5, 6, 7 ]
++
++  enable-gpio:
++    maxItems: 1
++    deprecated: true
++
++  enable-gpios:
++    maxItems: 1
++
++  vib-rated-mv:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description: |
++      The rated voltage of the actuator in millivolts.
++      If this is not set then the value will be defaulted to 3200 mV.
++    default: 3200
++
++  vib-overdrive-mv:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description: |
++      The overdrive voltage of the actuator in millivolts.
++      If this is not set then the value will be defaulted to 3200 mV.
++    default: 3200
++
++required:
++  - compatible
++  - reg
++  - enable-gpio
++  - mode
++  - library-sel
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/gpio/gpio.h>
++    #include <dt-bindings/input/ti-drv260x.h>
++
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        haptics@5a {
++            compatible = "ti,drv2605l";
++            reg = <0x5a>;
++            vbat-supply = <&vbat>;
++            enable-gpio = <&gpio1 28 GPIO_ACTIVE_HIGH>;
++            mode = <DRV260X_LRA_MODE>;
++            library-sel = <DRV260X_LIB_LRA>;
++            vib-rated-mv = <3200>;
++            vib-overdrive-mv = <3200>;
++        };
++    };
+-- 
+2.38.1
 
-> 
-> Otherwise you can add debug printf in kexec-tools efi error path to
-> see what is wrong.
-> kexec/arch/i386/x86-linux-setup.c : function setup_efi_data
-> 
-> And if it still not work please post your kernel config, I can have a
-> try although I do not have the t480 now.
-> 
-> 
->> >
->> > Regards,
->> >
->> > _______________________________________________
->> > kexec mailing list
->> > kexec@lists.infradead.org
->> > http://lists.infradead.org/mailman/listinfo/kexec
->> >
->> 
