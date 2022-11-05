@@ -2,126 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A716661DC91
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 18:38:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0424961DC94
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 18:39:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229817AbiKERim (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Nov 2022 13:38:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33780 "EHLO
+        id S229842AbiKERjU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Nov 2022 13:39:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbiKERil (ORCPT
+        with ESMTP id S229517AbiKERjS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Nov 2022 13:38:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C81701C914;
-        Sat,  5 Nov 2022 10:38:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 50A4360B31;
-        Sat,  5 Nov 2022 17:38:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D554C433C1;
-        Sat,  5 Nov 2022 17:38:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1667669918;
-        bh=Z7I+GuKl3dh2ub+VRNcy2mNWPcynPt2H6oRWtPE+IOg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=N5mAQpIQ6X7AELP/gFmcbw3avM3HrDF+DQilqmf4/x3YR6Fhact3vuUo04NPzDtv8
-         NMJX89R6MyAbq4k4fTjXWCH2nFrsWyPiaTniMb0FO/J8C4xk4jMb4rihvbA5RQW5wv
-         52ePz6Pl1zNc0BjRomdtFhIpXdu97VfwaYqnaQ80=
-Date:   Sat, 5 Nov 2022 18:38:35 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Cc:     linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v2 3/3] can: etas_es58x: report the firmware version
- through ethtool
-Message-ID: <Y2afm9xFIvJnwXh/@kroah.com>
-References: <20221104073659.414147-1-mailhol.vincent@wanadoo.fr>
- <20221104171604.24052-1-mailhol.vincent@wanadoo.fr>
- <20221104171604.24052-4-mailhol.vincent@wanadoo.fr>
- <Y2Ydf6UxVvTe8Zmz@kroah.com>
- <CAMZ6RqJkzag-PGuzHcDQkSXjqH6d8=uAe-UN8VXUoNWX2x+qbw@mail.gmail.com>
- <CAMZ6RqLMGfW0QcNdBKhfwayV=+FNHhvM_-ob0UvL=o6=zN0J7A@mail.gmail.com>
+        Sat, 5 Nov 2022 13:39:18 -0400
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AFF91C914
+        for <linux-kernel@vger.kernel.org>; Sat,  5 Nov 2022 10:39:17 -0700 (PDT)
+Received: by mail-pg1-x52a.google.com with SMTP id g129so6961235pgc.7
+        for <linux-kernel@vger.kernel.org>; Sat, 05 Nov 2022 10:39:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=WWrco+vXh1FbuoaRINj7wlDyd8eAZjNE4VHFGZp67xQ=;
+        b=tIMJvPzkHDIyKiPdGwqxg/svC3w0FkTPRJansTyXplDRdyay7bQCFAoI+4+Fba1aiy
+         8gWl1frw0GVmz5q147uAckoYIQlfraawpo9HctXDE7iij+90PUr7wwVjhM8Ti4ND/BNJ
+         Nk6/dViWcvSVqsLoWMwiKOsexmZ1cUpbr09x3zFlKIGUPLZUb8kxtQRySNTsX3LoZXMD
+         2h3SpRuuvPxM69XIab10T8Mb4GGy5IGkC5QhmrcWzLol9g19wSpfYg2/1pIgqh7hYgDq
+         UX5Q5blWMEiBeWdtZJKK87s002w7fiswuJzzy0UmGbMrv3KcvKcfC7ugLnMO53w8YVG4
+         jsZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=WWrco+vXh1FbuoaRINj7wlDyd8eAZjNE4VHFGZp67xQ=;
+        b=d5Y/DlUTyA8e4OZGP+2qEmA7k6bIR8RrsdUMzerfnGzpBGZxEAy1XTIk/KeWkJv/ie
+         kTMtbrtLNERFY0GfRS9Rg+snaen6tEE9OCDMoWJuT5hfK8JY7rzloFAedxjth/XTXQUL
+         8Vx6oOJMHnv33nqkTu+PDJUrrweNQQInF635OVWOcinIUcL3xYaWpkFiRmml5asoe6R1
+         EVwyTC5lyX2lw//abZxmrJPGfNoh6fg4bRVhA60apiqIC9lxLp4jH7M042AbHk+z0L6O
+         XqGmAwR0QxxzVPq0CnHWhN1eYw9dbex+Ba/hXH60/oHbQdh4N4gU8f6W/8/5tzblxGBC
+         YPyA==
+X-Gm-Message-State: ACrzQf2jJBthZJJB4GBx5FB3qs5dXQzYeuXeH0JWAxBTEroEgbKNex6p
+        LKJJoF+pXpuY4LQkFsIHDXaueO4rYdwsS8s7
+X-Google-Smtp-Source: AMsMyM6whexvajtuOncywX1ipcU7re5Fgjil52gkJ4VtzeHnP+Xj9pb3WrlwK4d2B7vJ6DVmp81RCg==
+X-Received: by 2002:a63:1748:0:b0:46f:18be:4880 with SMTP id 8-20020a631748000000b0046f18be4880mr35434657pgx.128.1667669956645;
+        Sat, 05 Nov 2022 10:39:16 -0700 (PDT)
+Received: from [192.168.1.136] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id l13-20020a170903120d00b00186a1b243basm1934278plh.226.2022.11.05.10.39.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 05 Nov 2022 10:39:15 -0700 (PDT)
+Message-ID: <fe28e9fa-b57b-8da6-383c-588f6e84f04f@kernel.dk>
+Date:   Sat, 5 Nov 2022 11:39:14 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMZ6RqLMGfW0QcNdBKhfwayV=+FNHhvM_-ob0UvL=o6=zN0J7A@mail.gmail.com>
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCHSET v3 0/5] Add support for epoll min_wait
+Content-Language: en-US
+From:   Jens Axboe <axboe@kernel.dk>
+To:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+References: <20221030220203.31210-1-axboe@kernel.dk>
+ <CA+FuTSfj5jn8Wui+az2BrcpDFYF5m5ehwLiswwHMPJ2MK+S_Jw@mail.gmail.com>
+ <02e5bf45-f877-719b-6bf8-c4ac577187a8@kernel.dk>
+ <CA+FuTSd-HvtPVwRto0EGExm-Pz7dGpxAt+1sTb51P_QBd-N9KQ@mail.gmail.com>
+ <88353f13-d1d8-ef69-bcdc-eb2aa17c7731@kernel.dk>
+ <CA+FuTSdEKsN_47RtW6pOWEnrKkewuDBdsv_qAhR1EyXUr3obrg@mail.gmail.com>
+ <46cb04ca-467c-2e33-f221-3e2a2eaabbda@kernel.dk>
+In-Reply-To: <46cb04ca-467c-2e33-f221-3e2a2eaabbda@kernel.dk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Nov 06, 2022 at 02:21:11AM +0900, Vincent MAILHOL wrote:
-> On Sat. 5 Nov. 2022 at 18:27, Vincent MAILHOL
-> <mailhol.vincent@wanadoo.fr> wrote:
-> > On Sat. 5 Nov. 2022 at 17:36, Greg Kroah-Hartman
-> > <gregkh@linuxfoundation.org> wrote:
-> > > On Sat, Nov 05, 2022 at 02:16:04AM +0900, Vincent Mailhol wrote:
-> > > > ES58x devices report below information in their usb product info
-> > > > string:
-> > > >
-> > > >   * the firmware version
-> > > >   * the bootloader version
-> > > >   * the hardware revision
-> > > >
-> > > > Report the firmware version through ethtool_drvinfo::fw_version.
-> > > > Because struct ethtool_drvinfo has no fields to report the boatloader
-> > > > version nor the hardware revision, continue to print these in the
-> > > > kernel log (c.f. es58x_get_product_info()).
-> > > >
-> > > > While doing so, bump up copyright year of each modified files.
-> > >
-> > > Why not just stick to the normal USB interface here and not try to tie
-> > > it into ethtool?  These values are all availble today in sysfs or in
-> > > libusb, right?
-> >
-> > The simple answer is ignorance. I am more familiar with ethtool than
-> > libusb and I just did not think to explore that second option.
-> > Thanks for the review, comments taken. I will study sysfs and libusb
-> > and will rework that.
+>> FWIW, when adding nsec resolution I initially opted for an init-based
+>> approach, passing a new flag to epoll_create1. Feedback then was that
+>> it was odd to have one syscall affect the behavior of another. The
+>> final version just added a new epoll_pwait2 with timespec.
 > 
-> I double checked following options:
->   * CONFIG_USB_ANNOUNCE_NEW_DEVICES
->   * lsusb -v from usbutils
->   * sysfs
+> I'm fine with just doing a pure syscall variant too, it was my original
+> plan. Only changed it to allow for easier experimentation and adoption,
+> and based on the fact that most use cases would likely use a fixed value
+> per context anyway.
 > 
-> None of those will return the firmware version. The only strings I am
-> getting are: the Product name, the Manufacturer and the SerialNumber.
+> I think it'd be a shame to drop the ctl, unless there's strong arguments
+> against it. I'm quite happy to add a syscall variant too, that's not a
+> big deal and would be a minor addition. Patch 6 should probably cut out
+> the ctl addition and leave that for a patch 7, and then a patch 8 for
+> adding a syscall.
+I split the ctl patch out from the core change, and then took a look at
+doing a syscall variant too. But there are a few complications there...
+It would seem to make the most sense to build this on top of the newest
+epoll wait syscall, epoll_pwait2(). But we're already at the max number
+of arguments there...
 
-Those are the default strings that a device can have, so it's good that
-the core tries to get them.
+Arguably pwait2 should've been converted to use some kind of versioned
+struct instead. I'm going to take a stab at pwait3 with that kind of
+interface.
 
-Anything other than those are "custom" strings and you can use libusb
-for that.  For some reason I thought sysfs also had custom strings, but
-as they are so rare I don't know if anyone has tried that.
+-- 
+Jens Axboe
 
-> I guess you were expecting some default behavior from the device, but
-> unfortunately, this is not the case.
-> On this device, the firmware version is stored at some arbitrary
-> descriptor index (if you ask me: 6). Unless you query that magic
-> number, the information will not pot up.
-> 
-> So as far as I can see, this does not duplicate existing mechanisms.
-> With this patch, the firmware version becomes available using:
->   $ ethtool -i canX
-
-It's late right now, and I can't remember the whole USB spec, but I
-think the device provides a list of the string ids that are valid for
-it.  If so, we can add that to sysfs for any USB device out there, no
-matter the string descriptor number.
-
-If not, maybe we can just iterate the 255 values and populate sysfs
-files if they are present?  I'll dig up the USB spec tomorrow...
-
-I say do this at the USB core level, that way it works for any USB
-device, and you don't have a device-specific sysfs file and custom
-userspace code just for this.
-
-Sound reasonable?
-
-greg k-h
