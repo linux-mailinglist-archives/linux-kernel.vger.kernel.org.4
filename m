@@ -2,70 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 647E561DDB2
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 20:29:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05EFC61DDC4
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 20:31:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229975AbiKET3W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Nov 2022 15:29:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34970 "EHLO
+        id S230040AbiKETbh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Nov 2022 15:31:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229849AbiKET3U (ORCPT
+        with ESMTP id S229791AbiKETbe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Nov 2022 15:29:20 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43515DE9A
-        for <linux-kernel@vger.kernel.org>; Sat,  5 Nov 2022 12:29:19 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id a5so12021040edb.11
-        for <linux-kernel@vger.kernel.org>; Sat, 05 Nov 2022 12:29:19 -0700 (PDT)
+        Sat, 5 Nov 2022 15:31:34 -0400
+Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F5A2DEF4;
+        Sat,  5 Nov 2022 12:31:33 -0700 (PDT)
+Received: by mail-oi1-x232.google.com with SMTP id r76so8402035oie.13;
+        Sat, 05 Nov 2022 12:31:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=L5WiDnJYUMPEroIJVQhoDLGCwGwQSDuzD60DQkwC21U=;
-        b=XDXvj1FgNwwxOavSqI5F6MfzY3W7wZ6QiIBe4PadMQSGJ51QnDJV02SJYfmuS06uZO
-         dxOBNd0gzXZsXLVJvFFnpS4MEJSE4O0GB63eokcPk+R+DPNvm7/XavHRBL+Q4VpnOMFE
-         FR6d5yiFdt9lcSoG8hL4gIy+q0N5Dew8zx7ALRr5hy1buOBBI5CSiL+FAB3k3uNhPRKN
-         3oB6WxhQj8EUN9NQCV97Lgn47sfbCJhkWbHyuCiSJSGg1PL8X8NBQnx452UobkWdnDvA
-         BlYMezSzkys4AxT6nLQS9AIiYYAzQ7te/JYys4eAdv6YN5gZBbLMljk1wlgZnFNIepRL
-         N2fQ==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=CTlAHc9k7qwIZyOhFoXagieaQq5pwRyAvyi0mAOE5RE=;
+        b=jURw19XL/xOvCrYwmv2aWUKdeAoWjP9YO+FTg9LO7kNLGP2qrxnNI/DeaM/hhYlqsP
+         YdQYptnzjKsYbbyAKOY5T5QWBhSSLuRj9tx/h3x3Iolz6OENad9xOgpnNTl3bQfF4abr
+         IGnRZ+gwoVhjhy8eDyzb76gdYWeTNG8HbYJzf+upnNf3q7GfCqhXHTbMnctQM+lT4ISN
+         LgN+zILvYp/x3cxyWSBN67VcIOLSthpIiMe3XVQLxJ5DNQbV3DpA0r2y4Xi6Om/6kI/T
+         +bTGJHJtUOpMMkvOkxDlr0Z5JMnZYu43sVpFgzYDCR/HFlqDOFJ8Z5bQFtUlln66Rbqg
+         ggdQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=L5WiDnJYUMPEroIJVQhoDLGCwGwQSDuzD60DQkwC21U=;
-        b=bTmRE2oHAXl+h48iT7BYpgcQ5U5VmXBuixf2XhyePwoWkKHObmJH2M/2qeIVMIGkQ7
-         +2gUca3yu5oexyHDU+9ag3wwb+Qx2GhncwtoqIKfw1y57tcO/+qvllQcQMFHVLn1lF72
-         MWoaYJCrjDJ6eZ2qFuChA441RzSMAkON8O6gWXfVelDZHzh3mRFVS0HUdfO5SD2V/ULY
-         uArzeS66e6QIYabLhcIvKC84tADDXUjRDEGDXqE/gmJuHlmW5IEr4JXOgIdG4dOwlp13
-         VDkE/sEbK4Y4zBLl4zkAKV8JfDBx/90wmLUZ0v1qt2BQBKZX7slzrB8LuEsFm4pVOe4N
-         XuDw==
-X-Gm-Message-State: ACrzQf2glQQ7mHM2Jdxt6kIiQhzJCZjZOGgiaHWdhC34dY45lpbRsBO4
-        NOV3dNxGtyRqDBG0bQo/7h0=
-X-Google-Smtp-Source: AMsMyM5OwVk8D3AHxkt9RmUJOdie6sDw+sHJ8tcCbe0A/BYCweeCFTHh9v2l13vFBF21Ccdryh6pKA==
-X-Received: by 2002:a50:950d:0:b0:463:298a:448c with SMTP id u13-20020a50950d000000b00463298a448cmr35877817eda.153.1667676557640;
-        Sat, 05 Nov 2022 12:29:17 -0700 (PDT)
-Received: from jernej-laptop.localnet (89-212-118-115.static.t-2.net. [89.212.118.115])
-        by smtp.gmail.com with ESMTPSA id du1-20020a17090772c100b007812ba2a360sm1253482ejc.149.2022.11.05.12.29.16
+        bh=CTlAHc9k7qwIZyOhFoXagieaQq5pwRyAvyi0mAOE5RE=;
+        b=3DN3uBBAdumw9VRPsShfHfGp73Pg4PdCRiFdzkXf4cQLPgUI3pIjIYusLO/xd0R2gR
+         QuYZ/Xws0VAO77AMSHRQ5wdaRFUSGKKMMbqEYFZ6TsA2vhLmtunk+nupZkRZXGmhBvrh
+         5p/+4oEbhaD8swG9EG8Z50T4n2zombjsdIabydzMxcs4gcqc6ipVQB3DWfH2zmRRUnew
+         lcHC11W4wjvOZGZ4rUviAzsPfF/yB4hao89JFEMiYiqIcRGxBMKhy/OoLYq9yy3ebsCP
+         7yNTmvKwlXPW/BFzvIAoM20+n+k2E6sFGEK/6qkWNLkIUBHXqqUNluOhiKCYbpG6Eogm
+         7atw==
+X-Gm-Message-State: ACrzQf11t7q3jaYlAkphgg7NJBD5WOyGhSOhya0Qwt9AX+c3YRUaOnBT
+        nU/fFlMyVx+7ndXLi+M6jec=
+X-Google-Smtp-Source: AMsMyM7VRYR4ja1354r4nOb4sGsFC9SF+e+FSsFCXSIKNyBk3irIl03bXoaveyKZeBBPlTvKUXlEMQ==
+X-Received: by 2002:a05:6808:1708:b0:351:728b:3a03 with SMTP id bc8-20020a056808170800b00351728b3a03mr22106906oib.275.1667676692450;
+        Sat, 05 Nov 2022 12:31:32 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id l14-20020a4ac60e000000b00499499a8e18sm834040ooq.5.2022.11.05.12.31.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 05 Nov 2022 12:29:17 -0700 (PDT)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     Chen-Yu Tsai <wens@csie.org>, Samuel Holland <samuel@sholland.org>
-Cc:     Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, Samuel Holland <samuel@sholland.org>
-Subject: Re: [PATCH 1/2] bus: sunxi-rsb: Remove shutdown callback
-Date:   Sat, 05 Nov 2022 20:29:15 +0100
-Message-ID: <2652299.mvXUDI8C0e@jernej-laptop>
-In-Reply-To: <20221105191954.14360-2-samuel@sholland.org>
-References: <20221105191954.14360-1-samuel@sholland.org> <20221105191954.14360-2-samuel@sholland.org>
+        Sat, 05 Nov 2022 12:31:31 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Sat, 5 Nov 2022 12:31:29 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Anna-Maria Gleixner <anna-maria@linutronix.de>,
+        Andrew Morton <akpm@linux-foundation.org>, rcu@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, linux-edac@vger.kernel.org,
+        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-acpi@vger.kernel.org,
+        linux-atm-general@lists.sourceforge.net, netdev@vger.kernel.org,
+        linux-pm@vger.kernel.org, drbd-dev@lists.linbit.com,
+        linux-bluetooth@vger.kernel.org,
+        openipmi-developer@lists.sourceforge.net,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org, intel-gfx@lists.freedesktop.org,
+        linux-input@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-leds@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
+        linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-ext4@vger.kernel.org, linux-nilfs@vger.kernel.org,
+        bridge@lists.linux-foundation.org, netfilter-devel@vger.kernel.org,
+        coreteam@netfilter.org, lvs-devel@vger.kernel.org,
+        linux-afs@lists.infradead.org, linux-nfs@vger.kernel.org,
+        tipc-discussion@lists.sourceforge.net, alsa-devel@alsa-project.org
+Subject: Re: [PATCH v4a 00/38] timers: Use timer_shutdown*() before freeing
+ timers
+Message-ID: <20221105193129.GA1487775@roeck-us.net>
+References: <20221105060024.598488967@goodmis.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221105060024.598488967@goodmis.org>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,52 +98,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dne sobota, 05. november 2022 ob 20:19:52 CET je Samuel Holland napisal(a):
-> Shutting down the RSB controller prevents communicating with a PMIC
-> inside pm_power_off(), so it breaks system poweroff on some boards.
+On Sat, Nov 05, 2022 at 02:00:24AM -0400, Steven Rostedt wrote:
 > 
-> Reported-by: Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>
-> Fixes: 843107498f91 ("bus: sunxi-rsb: Implement suspend/resume/shutdown
-> callbacks") Signed-off-by: Samuel Holland <samuel@sholland.org>
-
-Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
-
-Best regards,
-Jernej
-
-> ---
+> Back in April, I posted an RFC patch set to help mitigate a common issue
+> where a timer gets armed just before it is freed, and when the timer
+> goes off, it crashes in the timer code without any evidence of who the
+> culprit was. I got side tracked and never finished up on that patch set.
+> Since this type of crash is still our #1 crash we are seeing in the field,
+> it has become a priority again to finish it.
 > 
->  drivers/bus/sunxi-rsb.c | 9 ---------
->  1 file changed, 9 deletions(-)
+> The last version of that patch set is here:
 > 
-> diff --git a/drivers/bus/sunxi-rsb.c b/drivers/bus/sunxi-rsb.c
-> index 4cd2e127946e..17343cd75338 100644
-> --- a/drivers/bus/sunxi-rsb.c
-> +++ b/drivers/bus/sunxi-rsb.c
-> @@ -812,14 +812,6 @@ static int sunxi_rsb_remove(struct platform_device
-> *pdev) return 0;
->  }
+>   https://lore.kernel.org/all/20221104054053.431922658@goodmis.org/
 > 
-> -static void sunxi_rsb_shutdown(struct platform_device *pdev)
-> -{
-> -	struct sunxi_rsb *rsb = platform_get_drvdata(pdev);
-> -
-> -	pm_runtime_disable(&pdev->dev);
-> -	sunxi_rsb_hw_exit(rsb);
-> -}
-> -
->  static const struct dev_pm_ops sunxi_rsb_dev_pm_ops = {
->  	SET_RUNTIME_PM_OPS(sunxi_rsb_runtime_suspend,
->  			   sunxi_rsb_runtime_resume, NULL)
-> @@ -835,7 +827,6 @@ MODULE_DEVICE_TABLE(of, sunxi_rsb_of_match_table);
->  static struct platform_driver sunxi_rsb_driver = {
->  	.probe = sunxi_rsb_probe,
->  	.remove	= sunxi_rsb_remove,
-> -	.shutdown = sunxi_rsb_shutdown,
->  	.driver	= {
->  		.name = RSB_CTRL_NAME,
->  		.of_match_table = sunxi_rsb_of_match_table,
+> I'm calling this version 4a as it only has obvious changes were the timer that
+> is being shutdown is in the same function where it will be freed or released,
+> as this series should be "safe" for adding. I'll be calling the other patches
+> 4b for the next merge window.
+> 
 
+For the series, as far as my testbed goes:
 
+Build results:
+	total: 152 pass: 152 fail: 0
+Qemu test results:
+	total: 500 pass: 500 fail: 0
 
+No runtime crashes or warnings observed.
+
+Tested-by: Guenter Roeck <linux@roeck-us.net>
+
+Guenter
 
