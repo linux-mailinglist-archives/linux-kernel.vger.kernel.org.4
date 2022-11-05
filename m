@@ -2,85 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B77061D998
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 12:09:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1C6761D99B
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 12:11:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229716AbiKELJu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Nov 2022 07:09:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50360 "EHLO
+        id S229754AbiKELLE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Nov 2022 07:11:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229511AbiKELJr (ORCPT
+        with ESMTP id S229511AbiKELLC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Nov 2022 07:09:47 -0400
-Received: from smtp.smtpout.orange.fr (smtp-20.smtpout.orange.fr [80.12.242.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DF75101F5
-        for <linux-kernel@vger.kernel.org>; Sat,  5 Nov 2022 04:09:44 -0700 (PDT)
-Received: from pop-os.home ([86.243.100.34])
-        by smtp.orange.fr with ESMTPA
-        id rH3QocCGWnj75rH3QonBEO; Sat, 05 Nov 2022 12:09:42 +0100
-X-ME-Helo: pop-os.home
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sat, 05 Nov 2022 12:09:42 +0100
-X-ME-IP: 86.243.100.34
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org
-Subject: [PATCH] watchdog: Include <linux/kstrtox.h> when appropriate
-Date:   Sat,  5 Nov 2022 12:09:34 +0100
-Message-Id: <08fd5512e569558231247515c04c8596a1d11004.1667646547.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
+        Sat, 5 Nov 2022 07:11:02 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3378A101D0;
+        Sat,  5 Nov 2022 04:11:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=1s0+3GTF0fsjeGIh0i5LncjrVKVlIP2ZMoJrLBl0D/M=; b=INLogPRLDBQuuQbiPJxIxU+i7I
+        IbX7MxHRerkb6n4Ff/YtspDjH8U0hxIMMcxOTlxBqDYaOmUsrl5dfnFTFeteu2mT1M/Pq2ISkLOZ4
+        1B4S1r19xgXdBuQlGhbigeZDAJrWFCqgCJ9U6Q4acltKF+gZTrtdMF+2V3FQ4aJWLZ1rvloTTTdf8
+        OfWchvYQ3CIJv0KjRI4wT9s7UU0TyTP/VYCPwo0wGLjulic3eG7ivsxrt4ds1wZ7Wh2RhMf49OEgh
+        O9KndvKz7K43ZJKWQO+i1SSw676yVm/H+i2K4sD2yZvxIgpjlkC8hcqfxXdgWjwRK+pR8rbK6PZU+
+        nAmmaUmQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1orH3s-009Eek-U8; Sat, 05 Nov 2022 11:10:06 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id CBBA130012F;
+        Sat,  5 Nov 2022 12:10:02 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id B5F2820B40528; Sat,  5 Nov 2022 12:10:02 +0100 (CET)
+Date:   Sat, 5 Nov 2022 12:10:02 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Kim Phillips <kim.phillips@amd.com>, x86@kernel.org,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        Joao Martins <joao.m.martins@oracle.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Juergen Gross <jgross@suse.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Babu Moger <Babu.Moger@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/3] x86/speculation: Support Automatic IBRS
+Message-ID: <Y2ZEinL+wlIX+1Sn@hirez.programming.kicks-ass.net>
+References: <20221104213651.141057-1-kim.phillips@amd.com>
+ <20221104213651.141057-3-kim.phillips@amd.com>
+ <Y2WJjdY3wwQl9/q9@zn.tnic>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y2WJjdY3wwQl9/q9@zn.tnic>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The kstrto<something>() functions have been moved from kernel.h to
-kstrtox.h.
+On Fri, Nov 04, 2022 at 10:52:13PM +0100, Borislav Petkov wrote:
+> On Fri, Nov 04, 2022 at 04:36:50PM -0500, Kim Phillips wrote:
+> >  - Allow for spectre_v2=autoibrs in the kernel command line,
+> >    reverting to auto-selection if the feature isn't available.
+> 
+> Why?
+> 
+> What the whole logic here should do is enable autoibrs when detected
+> automatically, without the need for the user to even select it as it is
+> the superior mitigation.
 
-So, in order to eventually remove <linux/kernel.h> from <linux/watchdog.h>,
-include the latter directly in the appropriate files.
-
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
- drivers/watchdog/aspeed_wdt.c   | 1 +
- drivers/watchdog/watchdog_dev.c | 1 +
- 2 files changed, 2 insertions(+)
-
-diff --git a/drivers/watchdog/aspeed_wdt.c b/drivers/watchdog/aspeed_wdt.c
-index 0cff2adfbfc9..10863d2ef924 100644
---- a/drivers/watchdog/aspeed_wdt.c
-+++ b/drivers/watchdog/aspeed_wdt.c
-@@ -8,6 +8,7 @@
- #include <linux/delay.h>
- #include <linux/io.h>
- #include <linux/kernel.h>
-+#include <linux/kstrtox.h>
- #include <linux/module.h>
- #include <linux/of.h>
- #include <linux/platform_device.h>
-diff --git a/drivers/watchdog/watchdog_dev.c b/drivers/watchdog/watchdog_dev.c
-index 55574ed42504..f31608f3e324 100644
---- a/drivers/watchdog/watchdog_dev.c
-+++ b/drivers/watchdog/watchdog_dev.c
-@@ -35,6 +35,7 @@
- #include <linux/init.h>		/* For __init/__exit/... */
- #include <linux/hrtimer.h>	/* For hrtimers */
- #include <linux/kernel.h>	/* For printk/panic/... */
-+#include <linux/kstrtox.h>	/* For kstrto* */
- #include <linux/kthread.h>	/* For kthread_work */
- #include <linux/miscdevice.h>	/* For handling misc devices */
- #include <linux/module.h>	/* For module stuff/... */
--- 
-2.34.1
-
+Well; perhaps the whole autoibrs thing should be mapped to the existing
+eIBRS options. AFAICT this is the same thing under a new name, no need
+to invent yet more options. bugs.c is quite insane enough already.
