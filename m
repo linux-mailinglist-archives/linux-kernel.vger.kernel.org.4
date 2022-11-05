@@ -2,143 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 044B761D7F4
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 07:39:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B13261D7F5
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 07:46:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229523AbiKEGj2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Nov 2022 02:39:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48152 "EHLO
+        id S229528AbiKEGqE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Nov 2022 02:46:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbiKEGj0 (ORCPT
+        with ESMTP id S229486AbiKEGqC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Nov 2022 02:39:26 -0400
-Received: from m13144.mail.163.com (m13144.mail.163.com [220.181.13.144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9D21827CD3
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 23:39:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=Date:From:Subject:MIME-Version:Message-ID; bh=DA55Q
-        AG5qzOtw7UwsJyaDE+S0z9QN40RAI/J66HCxgE=; b=SlZx8VW+aTTdl/OxD1EaQ
-        UAmV5dDn39ZIj6VmT6k00VME4x8oeWKHpJeFc8rGqouVD7c6FEr+dBW0G/p8HfQH
-        VeP2kIkWhG65Xb6r2cxybF9Ien8xMMLhxgThKr+TK3dip+iDpR8nOyc1RTsSbrdR
-        jA/UmStrP9lkDLDhdCLywc=
-Received: from 00107082$163.com ( [222.64.157.165] ) by
- ajax-webmail-wmsvr144 (Coremail) ; Sat, 5 Nov 2022 14:38:58 +0800 (CST)
-X-Originating-IP: [222.64.157.165]
-Date:   Sat, 5 Nov 2022 14:38:58 +0800 (CST)
-From:   "David Wang" <00107082@163.com>
-To:     "kernel test robot" <lkp@intel.com>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        oe-kbuild-all@lists.linux.dev
-Subject: Re:Re: [PATCH] trace/trace_uprobe: Only invoke uprobe ebpf handler
- when event matches.
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20220113(9671e152)
- Copyright (c) 2002-2022 www.mailtech.cn 163com
-In-Reply-To: <202211050528.B1bEHrzL-lkp@intel.com>
-References: <41828b90.5798.18442c10017.Coremail.00107082@163.com>
- <202211050528.B1bEHrzL-lkp@intel.com>
-X-NTES-SC: AL_QuydBfqYv0so7iafYOkZnEoUjug3W8K5v/kk3Y9VOp80oyzP8QoKX1VpDFDf1suXLxiHmjKFUjZW5PV/U6xhQI1G7+X6zG5z3kDL9Ikahtna
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+        Sat, 5 Nov 2022 02:46:02 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A207D186D5
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 23:46:01 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id k7so6765448pll.6
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 23:46:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=srq0262QxbkEV6kNYP4erFtvI0rgH+oqu5/TPMxlwy4=;
+        b=W4KaJP6FV2vwHiDT+VvgaGaA1jeM6SQ8YJpGYx2Pbkhvyt+b8ut77tl012BXpoCSKZ
+         u+nxM1dLCKIVpLHfyXG1p88984BbMhKZGcd9C4F0RT8kncpFr41iKYeXmFz2HFf1Qd2/
+         RsyWHfwKmiA0qvv+5iNwqot7JBpHFX9AjApgU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=srq0262QxbkEV6kNYP4erFtvI0rgH+oqu5/TPMxlwy4=;
+        b=E05vZK6Yo4oskasLQZW4MEE7BjOOiH6Ceyn1C0uxsd8nQjMjXMO7p3ukNIq8t/6HVx
+         rpFWo0AS03/5Wkz610dEoVNBfwMhLtutVL7yhYGtU4507hQjKufSWchHNfDcu19ch1Fx
+         Sdf6L4yK/4LZPzvXBzHdhgF4cg4xF0RzX1MBh/kYlc2nbpqWkQjcw4T3Sox9hun99//9
+         DznTo3QYGyaAmifhNHAkhjc0aU43Q5iWWffN7Qycwir8zMprXCk9rHeJEXiJZzOfwP0e
+         SaeYZf1B/gc+Vnn5GpRxwkNeaTn/hitOwDfQ04b86ddza9ZnXzRqiV3UVz0jZCxm2hYj
+         YRTg==
+X-Gm-Message-State: ACrzQf0zPi6J8giSmhnU9exLkZSJDJkSnxqFOU8TZsrSPkB31yVXRwT3
+        cc53gDKG3vVS0QYlKmaawQW8OQ==
+X-Google-Smtp-Source: AMsMyM4oJjpqJJcKwUVLP7X5WeicCqIX6jcTy1xHjHbJtoU/3/GvJrm+L6ClZGrmleAPy813oxTJNQ==
+X-Received: by 2002:a17:903:1c6:b0:185:47ce:f4f0 with SMTP id e6-20020a17090301c600b0018547cef4f0mr40384496plh.132.1667630761129;
+        Fri, 04 Nov 2022 23:46:01 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id n2-20020a170902d2c200b0018099c9618esm857879plc.231.2022.11.04.23.46.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Nov 2022 23:46:00 -0700 (PDT)
+Date:   Fri, 4 Nov 2022 23:45:59 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Cc:     Vlastimil Babka <vbabka@suse.cz>, Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>, linux-mm@kvack.org,
+        David Gow <davidgow@google.com>,
+        Rasmus Villemoes <rasmus.villemoes@prevas.dk>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH 3/6] slab: Provide functional __alloc_size() hints to
+ kmalloc_trace*()
+Message-ID: <202211042345.B1D74469BC@keescook>
+References: <20221101222520.never.109-kees@kernel.org>
+ <20221101223321.1326815-3-keescook@chromium.org>
+ <Y2PNVUzHWCg765ml@hyeyoo>
+ <202211041121.2F1639D2@keescook>
+ <Y2W3zEcMd82B0O1I@hyeyoo>
 MIME-Version: 1.0
-Message-ID: <3f6aa3c1.1095.18446839279.Coremail.00107082@163.com>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: kMGowACXQ2QCBWZj1CtbAA--.33921W
-X-CM-SenderInfo: qqqrilqqysqiywtou0bp/xtbBEhiwqmI0U2afmwACs1
-X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y2W3zEcMd82B0O1I@hyeyoo>
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rml4IGNvbXBpbGUgd2FybmluZzogdW51c2VkIHZhcmlhYmxlIHRyYWNlX2V2ZW50X21hdGNoCsKg
-wqAgwqAKYHRyYWNlX2V2ZW50X21hdGNoYCBpcyB1c2VkIHRvIGluZGljYXRlIHdoZXRoZXIKY3Vy
-cmVudCBldmVudCBtYXRjaGVzIGFueSByZWdpc3RlcmVkIGV2ZW50LiBGb3IKbm93LCB0aGlzIHZh
-cmlhYmxlIGlzIG9ubHkgdXNlZCBmb3IgZWJwZiBoYW5kbGVyCmFuZCBDT05GSUdfQlBGX0VWRU5U
-UyBpcyBuZWVkZWQsIG90aGVyd2lzZSBhIGNvbXBpbGUKd2FybmluZyB3b3VsZCBiZSBnZW5lcmF0
-ZWQgYWJvdXQgdW51c2VkIHZhcmlhYmxlLgrCoMKgIMKgClJlcG9ydGVkLWJ5OiBrZXJuZWwgdGVz
-dCByb2JvdCA8bGtwQGludGVsLmNvbT4KU2lnbmVkLW9mZi1ieTogRGF2aWQgV2FuZyA8MDAxMDcw
-ODJAMTYzLmNvbT4KLS0KZGlmZiAtLWdpdCBhL2tlcm5lbC90cmFjZS90cmFjZV91cHJvYmUuYyBi
-L2tlcm5lbC90cmFjZS90cmFjZV91cHJvYmUuYwppbmRleCA2ZjEzMTYzYzBjMGYuLjA1NDhjNjUx
-Njk5ZSAxMDA2NDQKLS0tIGEva2VybmVsL3RyYWNlL3RyYWNlX3Vwcm9iZS5jCisrKyBiL2tlcm5l
-bC90cmFjZS90cmFjZV91cHJvYmUuYwpAQCAtMTM0NiwxMyArMTM0NiwxNyBAQCBzdGF0aWMgdm9p
-ZCBfX3Vwcm9iZV9wZXJmX2Z1bmMoc3RydWN0IHRyYWNlX3Vwcm9iZSAqdHUsCiAgICAgICAgdm9p
-ZCAqZGF0YTsKICAgICAgICBpbnQgc2l6ZSwgZXNpemU7CiAgICAgICAgaW50IHJjdHg7CisjaWZk
-ZWYgQ09ORklHX0JQRl9FVkVOVFMKICAgICAgICBib29sIHRyYWNlX2V2ZW50X21hdGNoID0gdHJ1
-ZTsKKyNlbmRpZiAvKiBDT05GSUdfQlBGX0VWRU5UUyAqLwogCiAKICAgICAgICBwcmVlbXB0X2Rp
-c2FibGUoKTsKICAgICAgICBoZWFkID0gdGhpc19jcHVfcHRyKGNhbGwtPnBlcmZfZXZlbnRzKTsK
-ICAgICAgICBpZiAoaGxpc3RfZW1wdHkoaGVhZCkpIHsKKyNpZmRlZiBDT05GSUdfQlBGX0VWRU5U
-UwogICAgICAgICAgICAgICAgdHJhY2VfZXZlbnRfbWF0Y2ggPSBmYWxzZTsKKyNlbmRpZiAvKiBD
-T05GSUdfQlBGX0VWRU5UUyAqLwogICAgICAgICAgICAgICAgZ290byBvdXQ7CiAgICAgICAgfQog
-Ci0tCgoKCgoKCgoKCgoKCgoKCgoKQXQgMjAyMi0xMS0wNSAwNTozMDozNywgImtlcm5lbCB0ZXN0
-IHJvYm90IiA8bGtwQGludGVsLmNvbT4gd3JvdGU6Cj5IaSBEYXZpZCwKPgo+VGhhbmsgeW91IGZv
-ciB0aGUgcGF0Y2ghIFBlcmhhcHMgc29tZXRoaW5nIHRvIGltcHJvdmU6Cj4KPlthdXRvIGJ1aWxk
-IHRlc3QgV0FSTklORyBvbiBsaW51cy9tYXN0ZXJdCj5bYWxzbyBidWlsZCB0ZXN0IFdBUk5JTkcg
-b24gdjYuMS1yYzMgbmV4dC0yMDIyMTEwNF0KPltJZiB5b3VyIHBhdGNoIGlzIGFwcGxpZWQgdG8g
-dGhlIHdyb25nIGdpdCB0cmVlLCBraW5kbHkgZHJvcCB1cyBhIG5vdGUuCj5BbmQgd2hlbiBzdWJt
-aXR0aW5nIHBhdGNoLCB3ZSBzdWdnZXN0IHRvIHVzZSAnLS1iYXNlJyBhcyBkb2N1bWVudGVkIGlu
-Cj5odHRwczovL2dpdC1zY20uY29tL2RvY3MvZ2l0LWZvcm1hdC1wYXRjaCNfYmFzZV90cmVlX2lu
-Zm9ybWF0aW9uXQo+Cj51cmw6ICAgIGh0dHBzOi8vZ2l0aHViLmNvbS9pbnRlbC1sYWItbGtwL2xp
-bnV4L2NvbW1pdHMvRGF2aWQtV2FuZy90cmFjZS10cmFjZV91cHJvYmUtT25seS1pbnZva2UtdXBy
-b2JlLWVicGYtaGFuZGxlci13aGVuLWV2ZW50LW1hdGNoZXMvMjAyMjExMDQtMjEwOTI1Cj5wYXRj
-aCBsaW5rOiAgICBodHRwczovL2xvcmUua2VybmVsLm9yZy9yLzQxODI4YjkwLjU3OTguMTg0NDJj
-MTAwMTcuQ29yZW1haWwuMDAxMDcwODIlNDAxNjMuY29tCj5wYXRjaCBzdWJqZWN0OiBbUEFUQ0hd
-IHRyYWNlL3RyYWNlX3Vwcm9iZTogT25seSBpbnZva2UgdXByb2JlIGVicGYgaGFuZGxlciB3aGVu
-IGV2ZW50IG1hdGNoZXMuCj5jb25maWc6IGkzODYtZGVmY29uZmlnCj5jb21waWxlcjogZ2NjLTEx
-IChEZWJpYW4gMTEuMy4wLTgpIDExLjMuMAo+cmVwcm9kdWNlICh0aGlzIGlzIGEgVz0xIGJ1aWxk
-KToKPiAgICAgICAgIyBodHRwczovL2dpdGh1Yi5jb20vaW50ZWwtbGFiLWxrcC9saW51eC9jb21t
-aXQvNmM3NzhjNDc1YzBhNmM4YTExYzFhNzQ3MDVhNTg1NjY4MWNmNmNmMAo+ICAgICAgICBnaXQg
-cmVtb3RlIGFkZCBsaW51eC1yZXZpZXcgaHR0cHM6Ly9naXRodWIuY29tL2ludGVsLWxhYi1sa3Av
-bGludXgKPiAgICAgICAgZ2l0IGZldGNoIC0tbm8tdGFncyBsaW51eC1yZXZpZXcgRGF2aWQtV2Fu
-Zy90cmFjZS10cmFjZV91cHJvYmUtT25seS1pbnZva2UtdXByb2JlLWVicGYtaGFuZGxlci13aGVu
-LWV2ZW50LW1hdGNoZXMvMjAyMjExMDQtMjEwOTI1Cj4gICAgICAgIGdpdCBjaGVja291dCA2Yzc3
-OGM0NzVjMGE2YzhhMTFjMWE3NDcwNWE1ODU2NjgxY2Y2Y2YwCj4gICAgICAgICMgc2F2ZSB0aGUg
-Y29uZmlnIGZpbGUKPiAgICAgICAgbWtkaXIgYnVpbGRfZGlyICYmIGNwIGNvbmZpZyBidWlsZF9k
-aXIvLmNvbmZpZwo+ICAgICAgICBtYWtlIFc9MSBPPWJ1aWxkX2RpciBBUkNIPWkzODYgU0hFTEw9
-L2Jpbi9iYXNoIGtlcm5lbC90cmFjZS8KPgo+SWYgeW91IGZpeCB0aGUgaXNzdWUsIGtpbmRseSBh
-ZGQgZm9sbG93aW5nIHRhZyB3aGVyZSBhcHBsaWNhYmxlCj58IFJlcG9ydGVkLWJ5OiBrZXJuZWwg
-dGVzdCByb2JvdCA8bGtwQGludGVsLmNvbT4KPgo+QWxsIHdhcm5pbmdzIChuZXcgb25lcyBwcmVm
-aXhlZCBieSA+Pik6Cj4KPiAgIGtlcm5lbC90cmFjZS90cmFjZV91cHJvYmUuYzogSW4gZnVuY3Rp
-b24gJ19fdXByb2JlX3BlcmZfZnVuYyc6Cj4+PiBrZXJuZWwvdHJhY2UvdHJhY2VfdXByb2JlLmM6
-MTM0OToxNDogd2FybmluZzogdmFyaWFibGUgJ3RyYWNlX2V2ZW50X21hdGNoJyBzZXQgYnV0IG5v
-dCB1c2VkIFstV3VudXNlZC1idXQtc2V0LXZhcmlhYmxlXQo+ICAgIDEzNDkgfCAgICAgICAgIGJv
-b2wgdHJhY2VfZXZlbnRfbWF0Y2ggPSB0cnVlOwo+ICAgICAgICAgfCAgICAgICAgICAgICAgXn5+
-fn5+fn5+fn5+fn5+fn4KPgo+Cj52aW0gKy90cmFjZV9ldmVudF9tYXRjaCArMTM0OSBrZXJuZWwv
-dHJhY2UvdHJhY2VfdXByb2JlLmMKPgo+ICAxMzM4CQo+ICAxMzM5CXN0YXRpYyB2b2lkIF9fdXBy
-b2JlX3BlcmZfZnVuYyhzdHJ1Y3QgdHJhY2VfdXByb2JlICp0dSwKPiAgMTM0MAkJCQkgICAgICAg
-dW5zaWduZWQgbG9uZyBmdW5jLCBzdHJ1Y3QgcHRfcmVncyAqcmVncywKPiAgMTM0MQkJCQkgICAg
-ICAgc3RydWN0IHVwcm9iZV9jcHVfYnVmZmVyICp1Y2IsIGludCBkc2l6ZSkKPiAgMTM0Mgl7Cj4g
-IDEzNDMJCXN0cnVjdCB0cmFjZV9ldmVudF9jYWxsICpjYWxsID0gdHJhY2VfcHJvYmVfZXZlbnRf
-Y2FsbCgmdHUtPnRwKTsKPiAgMTM0NAkJc3RydWN0IHVwcm9iZV90cmFjZV9lbnRyeV9oZWFkICpl
-bnRyeTsKPiAgMTM0NQkJc3RydWN0IGhsaXN0X2hlYWQgKmhlYWQ7Cj4gIDEzNDYJCXZvaWQgKmRh
-dGE7Cj4gIDEzNDcJCWludCBzaXplLCBlc2l6ZTsKPiAgMTM0OAkJaW50IHJjdHg7Cj4+IDEzNDkJ
-CWJvb2wgdHJhY2VfZXZlbnRfbWF0Y2ggPSB0cnVlOwo+ICAxMzUwCQo+ICAxMzUxCQo+ICAxMzUy
-CQlwcmVlbXB0X2Rpc2FibGUoKTsKPiAgMTM1MwkJaGVhZCA9IHRoaXNfY3B1X3B0cihjYWxsLT5w
-ZXJmX2V2ZW50cyk7Cj4gIDEzNTQJCWlmIChobGlzdF9lbXB0eShoZWFkKSkgewo+ICAxMzU1CQkJ
-dHJhY2VfZXZlbnRfbWF0Y2ggPSBmYWxzZTsKPiAgMTM1NgkJCWdvdG8gb3V0Owo+ICAxMzU3CQl9
-Cj4gIDEzNTgJCj4gIDEzNTkJCWVzaXplID0gU0laRU9GX1RSQUNFX0VOVFJZKGlzX3JldF9wcm9i
-ZSh0dSkpOwo+ICAxMzYwCQlzaXplID0gZXNpemUgKyB0dS0+dHAuc2l6ZSArIGRzaXplOwo+ICAx
-MzYxCQlzaXplID0gQUxJR04oc2l6ZSArIHNpemVvZih1MzIpLCBzaXplb2YodTY0KSkgLSBzaXpl
-b2YodTMyKTsKPiAgMTM2MgkJaWYgKFdBUk5fT05DRShzaXplID4gUEVSRl9NQVhfVFJBQ0VfU0la
-RSwgInByb2ZpbGUgYnVmZmVyIG5vdCBsYXJnZSBlbm91Z2giKSkKPiAgMTM2MwkJCWdvdG8gb3V0
-Owo+ICAxMzY0CQo+ICAxMzY1CQllbnRyeSA9IHBlcmZfdHJhY2VfYnVmX2FsbG9jKHNpemUsIE5V
-TEwsICZyY3R4KTsKPiAgMTM2NgkJaWYgKCFlbnRyeSkKPiAgMTM2NwkJCWdvdG8gb3V0Owo+ICAx
-MzY4CQo+ICAxMzY5CQlpZiAoaXNfcmV0X3Byb2JlKHR1KSkgewo+ICAxMzcwCQkJZW50cnktPnZh
-ZGRyWzBdID0gZnVuYzsKPiAgMTM3MQkJCWVudHJ5LT52YWRkclsxXSA9IGluc3RydWN0aW9uX3Bv
-aW50ZXIocmVncyk7Cj4gIDEzNzIJCQlkYXRhID0gREFUQU9GX1RSQUNFX0VOVFJZKGVudHJ5LCB0
-cnVlKTsKPiAgMTM3MwkJfSBlbHNlIHsKPiAgMTM3NAkJCWVudHJ5LT52YWRkclswXSA9IGluc3Ry
-dWN0aW9uX3BvaW50ZXIocmVncyk7Cj4gIDEzNzUJCQlkYXRhID0gREFUQU9GX1RSQUNFX0VOVFJZ
-KGVudHJ5LCBmYWxzZSk7Cj4gIDEzNzYJCX0KPiAgMTM3NwkKPiAgMTM3OAkJbWVtY3B5KGRhdGEs
-IHVjYi0+YnVmLCB0dS0+dHAuc2l6ZSArIGRzaXplKTsKPiAgMTM3OQkKPiAgMTM4MAkJaWYgKHNp
-emUgLSBlc2l6ZSA+IHR1LT50cC5zaXplICsgZHNpemUpIHsKPiAgMTM4MQkJCWludCBsZW4gPSB0
-dS0+dHAuc2l6ZSArIGRzaXplOwo+ICAxMzgyCQo+ICAxMzgzCQkJbWVtc2V0KGRhdGEgKyBsZW4s
-IDAsIHNpemUgLSBlc2l6ZSAtIGxlbik7Cj4gIDEzODQJCX0KPiAgMTM4NQkJcGVyZl90cmFjZV9i
-dWZfc3VibWl0KGVudHJ5LCBzaXplLCByY3R4LCBjYWxsLT5ldmVudC50eXBlLCAxLCByZWdzLAo+
-ICAxMzg2CQkJCSAgICAgIGhlYWQsIE5VTEwpOwo+ICAxMzg3CSBvdXQ6Cj4gIDEzODgJCXByZWVt
-cHRfZW5hYmxlKCk7Cj4gIDEzODkJCj4KPi0tIAo+MC1EQVkgQ0kgS2VybmVsIFRlc3QgU2Vydmlj
-ZQo+aHR0cHM6Ly8wMS5vcmcvbGtwCg==
+On Sat, Nov 05, 2022 at 10:09:32AM +0900, Hyeonggon Yoo wrote:
+> On Fri, Nov 04, 2022 at 11:22:42AM -0700, Kees Cook wrote:
+> > On Thu, Nov 03, 2022 at 11:16:53PM +0900, Hyeonggon Yoo wrote:
+> > > On Tue, Nov 01, 2022 at 03:33:11PM -0700, Kees Cook wrote:
+> > > > Since GCC cannot apply the __alloc_size attributes to inlines[1], all
+> > > > allocator inlines need to explicitly call into extern functions that
+> > > > contain a size argument. Provide these wrappers that end up just
+> > > > ignoring the size argument for the actual allocation.
+> > > > 
+> > > > This allows CONFIG_FORTIFY_SOURCE=y to see all various dynamic allocation
+> > > > sizes under GCC 12+ and all supported Clang versions.
+> > > > 
+> > > > [1] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=96503
+> > > > 
+> > > > Cc: Vlastimil Babka <vbabka@suse.cz>
+> > > > Cc: Christoph Lameter <cl@linux.com>
+> > > > Cc: Pekka Enberg <penberg@kernel.org>
+> > > > Cc: David Rientjes <rientjes@google.com>
+> > > > Cc: Joonsoo Kim <iamjoonsoo.kim@lge.com>
+> > > > Cc: Andrew Morton <akpm@linux-foundation.org>
+> > > > Cc: Roman Gushchin <roman.gushchin@linux.dev>
+> > > > Cc: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+> > > > Cc: linux-mm@kvack.org
+> > > > Signed-off-by: Kees Cook <keescook@chromium.org>
+> > > > ---
+> > > >  include/linux/slab.h |  8 ++++++--
+> > > >  mm/slab_common.c     | 14 ++++++++++++++
+> > > >  2 files changed, 20 insertions(+), 2 deletions(-)
+> > > > 
+> > > > diff --git a/include/linux/slab.h b/include/linux/slab.h
+> > > > index 970e9504949e..051d86ca31a8 100644
+> > > > --- a/include/linux/slab.h
+> > > > +++ b/include/linux/slab.h
+> > > > @@ -442,6 +442,8 @@ static_assert(PAGE_SHIFT <= 20);
+> > > >  
+> > > >  void *__kmalloc(size_t size, gfp_t flags) __assume_kmalloc_alignment __alloc_size(1);
+> > > >  void *kmem_cache_alloc(struct kmem_cache *s, gfp_t flags) __assume_slab_alignment __malloc;
+> > > > +void *kmem_cache_alloc_sized(struct kmem_cache *s, gfp_t flags, size_t size)
+> > > > +			     __assume_slab_alignment __alloc_size(3);
+> > > >  void *kmem_cache_alloc_lru(struct kmem_cache *s, struct list_lru *lru,
+> > > >  			   gfp_t gfpflags) __assume_slab_alignment __malloc;
+> > > >  void kmem_cache_free(struct kmem_cache *s, void *objp);
+> > > > @@ -469,6 +471,8 @@ void *__kmalloc_node(size_t size, gfp_t flags, int node) __assume_kmalloc_alignm
+> > > >  							 __alloc_size(1);
+> > > >  void *kmem_cache_alloc_node(struct kmem_cache *s, gfp_t flags, int node) __assume_slab_alignment
+> > > >  									 __malloc;
+> > > > +void *kmem_cache_alloc_node_sized(struct kmem_cache *s, gfp_t flags, int node, size_t size)
+> > > > +				  __assume_slab_alignment __alloc_size(4);
+> > > >  
+> > > >  #ifdef CONFIG_TRACING
+> > > >  void *kmalloc_trace(struct kmem_cache *s, gfp_t flags, size_t size)
+> > > > @@ -482,7 +486,7 @@ void *kmalloc_node_trace(struct kmem_cache *s, gfp_t gfpflags,
+> > > >  static __always_inline __alloc_size(3)
+> > > >  void *kmalloc_trace(struct kmem_cache *s, gfp_t flags, size_t size)
+> > > >  {
+> > > > -	void *ret = kmem_cache_alloc(s, flags);
+> > > > +	void *ret = kmem_cache_alloc_sized(s, flags, size);
+> > > >  
+> > > >  	ret = kasan_kmalloc(s, ret, size, flags);
+> > > >  	return ret;
+> > > > @@ -492,7 +496,7 @@ static __always_inline __alloc_size(4)
+> > > >  void *kmalloc_node_trace(struct kmem_cache *s, gfp_t gfpflags,
+> > > >  			 int node, size_t size)
+> > > >  {
+> > > > -	void *ret = kmem_cache_alloc_node(s, gfpflags, node);
+> > > > +	void *ret = kmem_cache_alloc_node_sized(s, gfpflags, node, size);
+> > > >  
+> > > >  	ret = kasan_kmalloc(s, ret, size, gfpflags);
+> > > >  	return ret;
+> > > > diff --git a/mm/slab_common.c b/mm/slab_common.c
+> > > > index 33b1886b06eb..5fa547539a6a 100644
+> > > > --- a/mm/slab_common.c
+> > > > +++ b/mm/slab_common.c
+> > > > @@ -1457,6 +1457,20 @@ size_t ksize(const void *objp)
+> > > >  }
+> > > >  EXPORT_SYMBOL(ksize);
+> > > >  
+> > > > +/* Wrapper so __alloc_size() can see the actual allocation size. */
+> > > > +void *kmem_cache_alloc_sized(struct kmem_cache *s, gfp_t flags, size_t size)
+> > > > +{
+> > > > +	return kmem_cache_alloc(s, flags);
+> > > > +}
+> > > > +EXPORT_SYMBOL(kmem_cache_alloc_sized);
+> > > > +
+> > > > +/* Wrapper so __alloc_size() can see the actual allocation size. */
+> > > > +void *kmem_cache_alloc_node_sized(struct kmem_cache *s, gfp_t flags, int node, size_t size)
+> > > > +{
+> > > > +	return kmem_cache_alloc_node(s, flags, node);
+> > > > +}
+> > > > +EXPORT_SYMBOL(kmem_cache_alloc_node_sized);
+> > > 
+> > > The reason that we have two implementations of kmalloc_trace*
+> > > depending on CONFIG_TRACING is to save additional function call when
+> > > CONFIG_TRACING is not set.
+> > > 
+> > > With this patch there is no reason to keep both.
+> > > So let's drop #ifdefs and use single implementation in mm/slab_common.c.
+> > 
+> > Okay, I'll respin...
+> > 
+> > -- 
+> > Kees Cook
+> 
+> Oh, it seems Vlastimil already did that.
+> Maybe simply drop this patch in next spin?
+> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/vbabka/slab.git/commit/?h=slab/for-6.1-rc4/fixes&id=eb4940d4adf590590a9d0c47e38d2799c2ff9670
+
+Oh! Well, yes, that makes that easy. :)
+
+-- 
+Kees Cook
