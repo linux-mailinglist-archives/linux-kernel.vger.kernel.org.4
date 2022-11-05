@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C373061DDAB
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 20:20:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA9F161DDAC
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 20:20:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229927AbiKETUC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Nov 2022 15:20:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60904 "EHLO
+        id S229938AbiKETUF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Nov 2022 15:20:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229900AbiKETT7 (ORCPT
+        with ESMTP id S229913AbiKETUB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Nov 2022 15:19:59 -0400
+        Sat, 5 Nov 2022 15:20:01 -0400
 Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2BCFB844
-        for <linux-kernel@vger.kernel.org>; Sat,  5 Nov 2022 12:19:58 -0700 (PDT)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.west.internal (Postfix) with ESMTP id 161B23200392;
-        Sat,  5 Nov 2022 15:19:58 -0400 (EDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F4030B861
+        for <linux-kernel@vger.kernel.org>; Sat,  5 Nov 2022 12:20:00 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id 0DBA432005C1;
+        Sat,  5 Nov 2022 15:19:59 -0400 (EDT)
 Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Sat, 05 Nov 2022 15:19:58 -0400
+  by compute5.internal (MEProxy); Sat, 05 Nov 2022 15:20:00 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
         cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
         :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1667675997; x=1667762397; bh=63
-        c2H+dRQD1BzJZi0cy8b0iFyafq5iwHTt7UuUibAIE=; b=H+JQcl35za7+ROjxck
-        sQmB6zB+1wboxkVRTI9TantFMWG1GBuOOIz5mL4qSF5LVfY8xnlKORAwAlQFulf3
-        d1lSIAMox3vNRn2aqLlmdCMDfQWAO5NFhNyXJWPc6DH/UIOfddSejzRcKvXCKQpr
-        u3ojWPFYFOQvHaWcbQ2/XUdawhecgirWsx6dN2+KRlRmwh2HKXZqmeo7c1LcYXjI
-        fPIvF7WdCveT7j0UvL5YNTQNT2AnfyYHaetBzM0vLzREA5RhVGKSfVFCxD1RVp7D
-        ZRnDESQM7HS2h4AQlo/IBxePUP1DeTgcKfq7fRMwgKlMjC3ex5X6CV22wfScEM3Y
-        j1IA==
+        :subject:subject:to:to; s=fm1; t=1667675999; x=1667762399; bh=Tp
+        wv+c2F2PU8VoJszCGDvaTbihLFPEmYX1Wb7G6Djbg=; b=Y6fGLWrmfRddnjem6R
+        Smpi3ED14bBqTQQpAKwrbY1YIc1X1eXN+Mixmjm+zD+/1W3A9uFbkme5LH/R4H0Y
+        szwKF364j/976o7TgvJ/7NE2hfh/EAOeA2+KCgulsVfIlduQH3m3wRi5LbqYwWHA
+        U3vjRDtuaQWloa3Su1QwbYvw4XUERmjey58qr3/MXzmPDGIYdFuplOUSHkqYjg+y
+        r7meIIgxsAvxrMPUMf75C75gIO7bi0LyCGKWMD7/zfY6gIpHbVTegZ0fIyuoHnre
+        JXDz/mn/jjAUi7KFXnzw3aGjh9RMufkKJu2iahQ8RB7qC3ARp5/sSpoijHNmfmM1
+        3A9A==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
         :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
         :message-id:mime-version:references:reply-to:sender:subject
         :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1667675997; x=1667762397; bh=63c2H+dRQD1Bz
-        JZi0cy8b0iFyafq5iwHTt7UuUibAIE=; b=co9pExtOgnJxK9hFOBL56VSD7zb2V
-        1Hcb72pT0OGFQF0at4s8S7ENA+phcrwviGDlY58UMepUNnGK3RngaOxVc+Duz6X2
-        /ycph15zLNDtj+AC4wxGRzkoKz+vQozdef1g5qJgj1kHSbNfudRU/6cEsiu7nZbn
-        dtUG33fWywr6XfrLs1C0yrhtzYpl2fW1SHxhXja7RgeVNgwES5dTefGFRGuMrW3z
-        7+QrxTkz43Xvu4K6Viba1XPdOtWhQG+PTt7ux5551ZNhKgJa9KWE4emkEEheRSwH
-        Q6sdlLYqAGTxkKc7E1AK1d4zw/fOh1tgs9fOFPPJ/A+PR2iXAIVFvlqnQ==
-X-ME-Sender: <xms:XbdmY5ZPjEYroYvrNFegeouF6lVjQFnY3z_-lam4q-GIzmp5waGkTQ>
-    <xme:XbdmYwbDfNPSeDN04Snq88CrGzeUSRPPtnp8YHcP-hgUR2D-Sm3gLcf-Mira2uEgi
-    Ld4v1Xb7Flf6hivow>
-X-ME-Received: <xmr:XbdmY7_FPhhXQ3PJirdxz6wgy_9oDbz638y2wMgDflCpiWjPpN2z8B5HJPVuRC-YxzH4WDVVc42to7YmiuxjfmttC5BKrZ0g4RhQxuWWI9fRm1UGRTgqyNhVx_Bc0Xtjez7E4Q>
+        :x-sasl-enc; s=fm3; t=1667675999; x=1667762399; bh=Tpwv+c2F2PU8V
+        oJszCGDvaTbihLFPEmYX1Wb7G6Djbg=; b=otS9uMteT5hsdxH2QCGs+j+EvEdm7
+        fxoCVGiYhX8SqtNwZvQB0tSx/19y+lwkI5DdxfCoV2nUwuRK3co4LyJXP7U0O8pe
+        R9Zo7DsVmQYAd4OVi6Qyyr8nMTW7+GqWS9R0RkN/tOth49apiZEqcN+JDEC76CUn
+        tBwtJfuioAxaUPcuWOy9KsqS+d+AM5kLmBPYOFewIka7412zeFxa6GdaYTblc9Rj
+        X+XoM5xyXrX+bnig4APlQ+zPhq0INJehvoXsE3rRAikTUYBU/n6HOwhcdP+ROw+N
+        cuUIXnTNqOJN288m8KNjNnGApqBGgL7fc7Nu+Ju9By8Zn6u7ZawLSDg2w==
+X-ME-Sender: <xms:X7dmY5VJ_sdg_rA5T6_pCQKXOIo_pzbQQcgNlj3Kpz615fLf6Ka60g>
+    <xme:X7dmY5lOs_CesuFXmBKSGBxq7nacg5w1pgSDDKUEi_wQnThicqGob-T01aMlFGOZN
+    QiU7nNhUCQJTV6TbQ>
+X-ME-Received: <xmr:X7dmY1ZFYq9StrbDlawAmuxpOv8SocaoHXLQEHMaBwEbsR43pt7Ercu8DJRIfVkJ16LhOoGGCo9GIo28pCllSBLdHK5WTUy8vPdvZKIML_FvUijyTmYrcRGV9wfu7fIw0yAb1A>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrvdeggddtjecutefuodetggdotefrodftvf
     curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
     uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
@@ -55,22 +55,22 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrvdeggddtjecutefuodetggdote
     frrghtthgvrhhnpedukeetueduhedtleetvefguddvvdejhfefudelgfduveeggeehgfdu
     feeitdevteenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
     hmpehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
-X-ME-Proxy: <xmx:XbdmY3o4W-uZuGUdIoFaD9xi0pQ2Kk0CwhDrCfRXnj6jW8-v2b4LBw>
-    <xmx:XbdmY0psUEP5G2XdSNvQN-RDLx_sf35OTv1VVViCE-qxFnIeLJYFgA>
-    <xmx:XbdmY9Qzp2uAA4FxYbqXqFrWQZ29afZ3wO8CYpcjPaaZQKKMWT71kA>
-    <xmx:XbdmY5BgoC7EeI0TF4pGUfsvCH2iO3xCiNBaONMNDlPMJ1UV_yV5Qg>
+X-ME-Proxy: <xmx:X7dmY8U1TrvpWJliqkhluRhisES214OLL2a5XNPSESlBo50hsyCVag>
+    <xmx:X7dmYzmne6j59I8m5mrch_WY1kIi6_ChY3YlxYzsj-kNUzkYYp3BuQ>
+    <xmx:X7dmY5cFVuyPhFjLZYsAXEhDmAFXDgoAgXeg_xk_D1dTkOAiLTB2ZQ>
+    <xmx:X7dmY-vLVzoOJjbesJWr6EbKVx_jYSyR8ksGK4EjsWISHewTLISt5w>
 Feedback-ID: i0ad843c9:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 5 Nov 2022 15:19:57 -0400 (EDT)
+ 5 Nov 2022 15:19:59 -0400 (EDT)
 From:   Samuel Holland <samuel@sholland.org>
 To:     Chen-Yu Tsai <wens@csie.org>,
         Jernej Skrabec <jernej.skrabec@gmail.com>
 Cc:     Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-sunxi@lists.linux.dev, Samuel Holland <samuel@sholland.org>
-Subject: [PATCH 1/2] bus: sunxi-rsb: Remove shutdown callback
-Date:   Sat,  5 Nov 2022 14:19:52 -0500
-Message-Id: <20221105191954.14360-2-samuel@sholland.org>
+Subject: [PATCH 2/2] bus: sunxi-rsb: Support atomic transfers
+Date:   Sat,  5 Nov 2022 14:19:53 -0500
+Message-Id: <20221105191954.14360-3-samuel@sholland.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20221105191954.14360-1-samuel@sholland.org>
 References: <20221105191954.14360-1-samuel@sholland.org>
@@ -85,44 +85,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Shutting down the RSB controller prevents communicating with a PMIC
-inside pm_power_off(), so it breaks system poweroff on some boards.
+When communicating with a PMIC during system poweroff (pm_power_off()),
+IRQs are disabled and we are in a RCU read-side critical section, so we
+cannot use wait_for_completion_io_timeout(). Instead, poll the status
+register for transfer completion.
 
-Reported-by: Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>
-Fixes: 843107498f91 ("bus: sunxi-rsb: Implement suspend/resume/shutdown callbacks")
 Signed-off-by: Samuel Holland <samuel@sholland.org>
 ---
 
- drivers/bus/sunxi-rsb.c | 9 ---------
- 1 file changed, 9 deletions(-)
+ drivers/bus/sunxi-rsb.c | 23 +++++++++++++++++------
+ 1 file changed, 17 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/bus/sunxi-rsb.c b/drivers/bus/sunxi-rsb.c
-index 4cd2e127946e..17343cd75338 100644
+index 17343cd75338..0f0e498d4379 100644
 --- a/drivers/bus/sunxi-rsb.c
 +++ b/drivers/bus/sunxi-rsb.c
-@@ -812,14 +812,6 @@ static int sunxi_rsb_remove(struct platform_device *pdev)
- 	return 0;
- }
+@@ -267,6 +267,9 @@ EXPORT_SYMBOL_GPL(sunxi_rsb_driver_register);
+ /* common code that starts a transfer */
+ static int _sunxi_rsb_run_xfer(struct sunxi_rsb *rsb)
+ {
++	bool timeout;
++	u32 status;
++
+ 	if (readl(rsb->regs + RSB_CTRL) & RSB_CTRL_START_TRANS) {
+ 		dev_dbg(rsb->dev, "RSB transfer still in progress\n");
+ 		return -EBUSY;
+@@ -279,8 +282,16 @@ static int _sunxi_rsb_run_xfer(struct sunxi_rsb *rsb)
+ 	writel(RSB_CTRL_START_TRANS | RSB_CTRL_GLOBAL_INT_ENB,
+ 	       rsb->regs + RSB_CTRL);
  
--static void sunxi_rsb_shutdown(struct platform_device *pdev)
--{
--	struct sunxi_rsb *rsb = platform_get_drvdata(pdev);
--
--	pm_runtime_disable(&pdev->dev);
--	sunxi_rsb_hw_exit(rsb);
--}
--
- static const struct dev_pm_ops sunxi_rsb_dev_pm_ops = {
- 	SET_RUNTIME_PM_OPS(sunxi_rsb_runtime_suspend,
- 			   sunxi_rsb_runtime_resume, NULL)
-@@ -835,7 +827,6 @@ MODULE_DEVICE_TABLE(of, sunxi_rsb_of_match_table);
- static struct platform_driver sunxi_rsb_driver = {
- 	.probe = sunxi_rsb_probe,
- 	.remove	= sunxi_rsb_remove,
--	.shutdown = sunxi_rsb_shutdown,
- 	.driver	= {
- 		.name = RSB_CTRL_NAME,
- 		.of_match_table = sunxi_rsb_of_match_table,
+-	if (!wait_for_completion_io_timeout(&rsb->complete,
+-					    msecs_to_jiffies(100))) {
++	if (irqs_disabled()) {
++		timeout = readl_poll_timeout_atomic(rsb->regs + RSB_INTS,
++						    status, status, 10, 100000);
++	} else {
++		timeout = !wait_for_completion_io_timeout(&rsb->complete,
++							  msecs_to_jiffies(100));
++		status = rsb->status;
++	}
++
++	if (timeout) {
+ 		dev_dbg(rsb->dev, "RSB timeout\n");
+ 
+ 		/* abort the transfer */
+@@ -292,18 +303,18 @@ static int _sunxi_rsb_run_xfer(struct sunxi_rsb *rsb)
+ 		return -ETIMEDOUT;
+ 	}
+ 
+-	if (rsb->status & RSB_INTS_LOAD_BSY) {
++	if (status & RSB_INTS_LOAD_BSY) {
+ 		dev_dbg(rsb->dev, "RSB busy\n");
+ 		return -EBUSY;
+ 	}
+ 
+-	if (rsb->status & RSB_INTS_TRANS_ERR) {
+-		if (rsb->status & RSB_INTS_TRANS_ERR_ACK) {
++	if (status & RSB_INTS_TRANS_ERR) {
++		if (status & RSB_INTS_TRANS_ERR_ACK) {
+ 			dev_dbg(rsb->dev, "RSB slave nack\n");
+ 			return -EINVAL;
+ 		}
+ 
+-		if (rsb->status & RSB_INTS_TRANS_ERR_DATA) {
++		if (status & RSB_INTS_TRANS_ERR_DATA) {
+ 			dev_dbg(rsb->dev, "RSB transfer data error\n");
+ 			return -EIO;
+ 		}
 -- 
 2.37.3
 
