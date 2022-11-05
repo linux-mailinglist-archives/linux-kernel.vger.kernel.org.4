@@ -2,97 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0526E61DD1E
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 19:10:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C62C61DD1F
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 19:13:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229777AbiKESKO convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 5 Nov 2022 14:10:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42958 "EHLO
+        id S229801AbiKESNN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Nov 2022 14:13:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbiKESKM (ORCPT
+        with ESMTP id S229533AbiKESNK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Nov 2022 14:10:12 -0400
-Received: from mail-qk1-f179.google.com (mail-qk1-f179.google.com [209.85.222.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51B22D11F;
-        Sat,  5 Nov 2022 11:10:11 -0700 (PDT)
-Received: by mail-qk1-f179.google.com with SMTP id v8so5101792qkg.12;
-        Sat, 05 Nov 2022 11:10:11 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=slKF0rJ0Rir2ceC3QpwgE09jNGnnMT8HqJLhQZweuOI=;
-        b=5rZMoWHn1/8Dd/kRnWrDkF968aOk1iYrhfTZjG7l7t0rkF6HxXyW1Z1rgA2CIepdfP
-         JNbwJmeAdjcNYbFBhn5b8U5qQxzxVV5lo6h3H8vrGW+5VhwZA+72kVWkLc4/f2NbDgCK
-         dcaTMISgd5U4hkZleI9HJfdtcYHZMa3l4LAfBQMcwmD+TaNpe/AusJC2A/pXT8gGAERU
-         HeebD+izdr8OIQY51u6n5SdZ0jbusNAWsjSt1o/6v3bxS357IRFNQyTcJp8uQcPsMEtq
-         b2L3keSl3FVXqBC5P1w8YPo2+oreDcFD0rqaBn5jBtTR6XPIMfHzkPY5M8qGLMa08NUw
-         CXPA==
-X-Gm-Message-State: ACrzQf1sTPCLfNl7EjxqzhGKnQojyoN3Ze071EWqlhLA4grBpNFcVlT1
-        ADnuQBtaLF7W3Jp/z0YQetwfVNn9H3LOaKg1nE7cU5UJ
-X-Google-Smtp-Source: AMsMyM6BpBjF6/vW3DJWYsm3B9od11m82oLF5euQ2Yv/K8jVFRoDkiJsT6XrOY8b3dsijMxeNhvQ5mPjrlJA6Kf1p9Q=
-X-Received: by 2002:a05:620a:1476:b0:6fa:4c67:83ec with SMTP id
- j22-20020a05620a147600b006fa4c6783ecmr18552724qkl.23.1667671776746; Sat, 05
- Nov 2022 11:09:36 -0700 (PDT)
-MIME-Version: 1.0
-References: <20221101022840.1351163-1-tgsp002@gmail.com> <20221101022840.1351163-2-tgsp002@gmail.com>
- <CAJZ5v0iPFPbbconOoQ7x_4X5yJ31pP7aduLqG4dq6KgAsprKbA@mail.gmail.com> <fe95b054-e720-ebbf-ba03-4ea6662974ad@gmail.com>
-In-Reply-To: <fe95b054-e720-ebbf-ba03-4ea6662974ad@gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Sat, 5 Nov 2022 19:09:22 +0100
-Message-ID: <CAJZ5v0hYc8sowEPaCKUG6yDkza6ax3d2iDeeSO8OQjot4OhLEQ@mail.gmail.com>
-Subject: Re: [PATCH -next 1/2] PM: hibernate: fix spelling mistake for annotation
-To:     TGSP <tgsp002@gmail.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>, xiongxin@kylinos.cn,
-        len.brown@intel.com, pavel@ucw.cz, huanglei@kylinos.cn,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        Sat, 5 Nov 2022 14:13:10 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFB13D11F
+        for <linux-kernel@vger.kernel.org>; Sat,  5 Nov 2022 11:13:08 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id 9B4A85C008B;
+        Sat,  5 Nov 2022 14:13:05 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute3.internal (MEProxy); Sat, 05 Nov 2022 14:13:05 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1667671985; x=1667758385; bh=f2+D6Fd2MB
+        rDAvM5rgGLYxZoJVv4Q2s4lizfG6wX8Rw=; b=aOj/eBmzmEgT3wUa5taBUlh6kT
+        //WWPaDdzth9TWS5xirfLo0eH64IBY5KLuSP+iQ/lp+fzRrHcfknpdjugDvJ4QSc
+        BUVEq7zkFvgHeXMKYbjOJXmCVm7eTVOOOJTxqWOWYG/EKpiFWO+0pOUaJ1excg0W
+        OVAWRnrGOs9djiOGGyPO+ZtL8Mgg6oTHDJdvXnhDZEQpq6e4J2tgkzA/KUSLNTH/
+        8jlJeFwZtqNvn7p1cUeZ72uPOmik0dBMwh2dt0hrbm40KVmC4dlMpWqZaSnMadkj
+        gDWVtmqpFOrwZcIbKEEzVtWwxuPRe+BZzEr20r4mKorIXFnUodu+G1bP8HwQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1667671985; x=1667758385; bh=f2+D6Fd2MBrDAvM5rgGLYxZoJVv4
+        Q2s4lizfG6wX8Rw=; b=q+ih9u08ckejnpHQ77tVzJORl/TgSlU1NRT5N7DuIFy9
+        vmBOBWEPWmdZIYYnCJ55McNnkI/5S1MJNhZ8pm1hrTZo4ClFhhyy37atZJs56PX+
+        WmydjB0vLhahDcU13G67elinca1WxstLUzQF9d2N7JRiP7l+vNTTGmp9fRKlgA2d
+        CBWv6tIqYXP+1+3xa0USyQ/+0nNqVfrTQB221ObyKEa+44PRfOoeyCbfrKhFSjwc
+        cL4bjW/jFypu0SA34+F7OQ4HJIfVbfFpSLL913xqGNSFhbcMgQt/67pdEoAIP203
+        xZm7YqRS+FSUD7xGwrCYIuWbCexrI3g/UF8asObuvg==
+X-ME-Sender: <xms:sadmY0C0WcosjXL8KeNr79SzEmoaBb_-KVoEj9Hh_N4us_Cgkm1MLw>
+    <xme:sadmY2hbGbPh67dbuYRiMCho4Y7UXTVIOcbOXmm47AD7FAsAnWGAD2mXZHQNwOpVI
+    pe5RTc4cyHihp2VnUo>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrvdefgddutdelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:sadmY3mzK3Vf5DvC-BPULmDzU7GHHvqhw9Q7KSZfyjNXg2YPrJQbng>
+    <xmx:sadmY6yMSc0EqzYnb4x8hQkVY8v-HHC7s7WmVrAjYM2p6ExXthJLkg>
+    <xmx:sadmY5Qxh4_MePxbUiuWx9RY92K0bA5EijUch-tJr8XJlBwuvFy09Q>
+    <xmx:sadmY-JQLQcH9EBa8qJIAECfMb78IoHRF_-y-UWUSyxGQj8KDGpqig>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 003F3B603ED; Sat,  5 Nov 2022 14:13:04 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1087-g968661d8e1-fm-20221021.001-g968661d8
+Mime-Version: 1.0
+Message-Id: <b01b7fbf-7296-43e5-b751-4ceb7b4f84bd@app.fastmail.com>
+In-Reply-To: <20221105060155.228348078@goodmis.org>
+References: <20221105060024.598488967@goodmis.org>
+ <20221105060155.228348078@goodmis.org>
+Date:   Sat, 05 Nov 2022 19:12:48 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Steven Rostedt" <rostedt@goodmis.org>,
+        linux-kernel@vger.kernel.org
+Cc:     "Linus Torvalds" <torvalds@linux-foundation.org>,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        "Stephen Boyd" <sboyd@kernel.org>,
+        "Guenter Roeck" <linux@roeck-us.net>,
+        "Anna-Maria Gleixner" <anna-maria@linutronix.de>,
+        "Andrew Morton" <akpm@linux-foundation.org>,
+        "Viresh Kumar" <vireshk@kernel.org>,
+        "Shiraz Hashim" <shiraz.linux.kernel@gmail.com>,
+        "Russell King" <linux@armlinux.org.uk>, soc@kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v4a 02/38] ARM: spear: Do not use timer namespace for
+ timer_shutdown() function
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 4, 2022 at 8:31 AM TGSP <tgsp002@gmail.com> wrote:
+On Sat, Nov 5, 2022, at 07:00, Steven Rostedt wrote:
+> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
 >
-> 在 2022/11/4 00:25, Rafael J. Wysocki 写道:
-> > On Tue, Nov 1, 2022 at 3:28 AM TGSP <tgsp002@gmail.com> wrote:
-> >>
-> >> From: xiongxin <xiongxin@kylinos.cn>
-> >>
-> >> The actual calculation formula in the code below is:
-> >>
-> >> max_size = (count - (size + PAGES_FOR_IO)) / 2
-> >>              - 2 * DIV_ROUND_UP(reserved_size, PAGE_SIZE);
-> >>
-> >> But function comments are written differently, the comment is wrong?
-> >
-> > It is, and it is more serious than just a spelling mistake.
-> >
-> >> By the way, what exactly do the "/ 2" and "2 *" mean?
-> >
-> > Every page in the image is a copy of an existing allocated page, so
-> > room needs to be made for the two, except for the "IO pages" and
-> > metadata pages that are not copied.  Hence, the division by 2.
-> >
-> > Now, the "reserved_size" pages will be allocated right before creating
-> > the image and there will be a copy of each of them in the image, so
-> > there needs to be room for twice as many.
+> A new "shutdown" timer state is being added to the generic timer code. One
+> of the functions to change the timer into the state is called
+> "timer_shutdown()". This means that there can not be other functions
+> called "timer_shutdown()" as the timer code owns the "timer_*" name space.
 >
-> According to your interpretation, the formula should be：
-> max_size = (count - 2 * DIV_ROUND_UP(reserved_size, PAGE_SIZE)
->                 - (size + PAGES_FOR_IO)) / 2
+> Rename timer_shutdown() to evt_timer_shutdown() to avoid this conflict.
 >
-> Am I right?
+> Cc: Viresh Kumar <vireshk@kernel.org>
+> Cc: Shiraz Hashim <shiraz.linux.kernel@gmail.com>
+> Cc: Russell King <linux@armlinux.org.uk>
+> Cc: soc@kernel.org
+> Cc: linux-arm-kernel@lists.infradead.org
+> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 
-No, you aren't.
+For arch/arm/mach-*
 
-The formula is fine.  I've attempted to explain it to you, but perhaps
-it's not been clear enough, sorry about that.
+Acked-by: Arnd Bergmann <arnd@arndb.de>
