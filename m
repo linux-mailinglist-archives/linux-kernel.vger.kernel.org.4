@@ -2,68 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A0AD61DF0D
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 23:30:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5147961DF13
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 23:34:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230006AbiKEWag (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Nov 2022 18:30:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47280 "EHLO
+        id S230060AbiKEWe6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Nov 2022 18:34:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229909AbiKEWae (ORCPT
+        with ESMTP id S229888AbiKEWe4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Nov 2022 18:30:34 -0400
-Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49F8F11A00
-        for <linux-kernel@vger.kernel.org>; Sat,  5 Nov 2022 15:30:31 -0700 (PDT)
-Received: by mail-il1-x12c.google.com with SMTP id o13so4238908ilq.6
-        for <linux-kernel@vger.kernel.org>; Sat, 05 Nov 2022 15:30:31 -0700 (PDT)
+        Sat, 5 Nov 2022 18:34:56 -0400
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ED9B11154;
+        Sat,  5 Nov 2022 15:34:54 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id h12so11098835ljg.9;
+        Sat, 05 Nov 2022 15:34:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=CbBRCqYlzL5aIOV/FIaD3IiZ/MIQgFytQcTe8Ul9rWk=;
-        b=PXiWAzVmOTq6MGJT16VHLmmAgF9HAeDaUY3bKDIRjX1G2Y65KvekkmTwB3jXjs7l8j
-         3pwPXGGFlmVDhSaP9TQBDvvS6p+fAWGePMqqaRzzzDXHP3KJe6vIEtBlUYLCnWIeVYWH
-         Ur3sBQPhqJ9Oxf9cpbNiQGJDIzJIItYtzHmtxg3clYTMzc4hOrUKhdgu8eInd8uXzmfA
-         k95eZ9IVCthx6Phbt4Yks+3rpYJa3InS68hKNKmTwEALPL0g5Nml8gTVHzucq3y6Jb8G
-         14nj2uu2GiE7DWFSSY89/Px2IvRk5FMIk9gai01Ied2ap6Bp2Jba4/6u5484C+uU7lis
-         IzFQ==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=6CtIVQWP+Kxh/6X4LVIIdMYVxRHCgpX/NmfsfTqOY7k=;
+        b=UIPJcAD9s4TdNFm9zVg2P/mZ0ZQlI3XcjxuMV21bO0DdBw8M8wwStfipvihaD7rtzP
+         wPxH4DYR2D+cPmO8gtC7VZWSws0s4qrsYx+bX7Ae0OGPG/FsKehC2JrCAxN18j6W7ruK
+         We3u1M3asut7zASyfQQCdHGSXNFekALPKrkk4xcxxJU55Tazs+Do521YzUXAUyejbTCZ
+         6AGybtRgYLe4i/iftNdP6mWQZweqeuDvOy9nYjHLsGg2vBBqhAyaXRlN+R1TxEDGcVGN
+         lYTukvEUbEfVVwrzJyk7Mr8kPoazydoMbe0/zf19ZWVlZH5YleOzwwZ8SusyMZCh2dNV
+         tMUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=CbBRCqYlzL5aIOV/FIaD3IiZ/MIQgFytQcTe8Ul9rWk=;
-        b=rCM5GUViv1j2aitdgmBK5p36HwrDT0HA8HAUyMba1m6kUOjs7caob5EdT8HBbwQaFz
-         u/m7IweBgG61vSL6vQ0L1o4T+eYXCDVnkOYIKhAq/mt4ZdUu/Jbyl65UVxuKAPMo3N98
-         oBX/aNFHd/wYtKG0o2beXad5ObH+NPhOvKwS7snIBRWmEWx/teDGqWrExp3MHJb7t41f
-         fj6sIL1rzBvKNqk4AGYUr19T4idqWfzYQvQzB7egsPkm0qewUhCoiOf40UXTnYIRhPUQ
-         hXhn0DG9/1fKQzppnVOna6YWpm5IYQiLTEhpie77WiO8UN2Lv42c5J+uYqUcoAcMkdG2
-         Hz3g==
-X-Gm-Message-State: ACrzQf3gNTF6rv2SHloXDLjWMDHADctqd2IXbSphkomf5rh/pa5Lb3r9
-        QFW1FH6zhR4iyWXu1CgG/w6HXGIXxo2peltmWzciVg==
-X-Google-Smtp-Source: AMsMyM40J9EK7H7dWx591VUYW8EeLwt7+r08P2BAfLCDJSKXILT7X4jfxhmxeUVbeOgoZHWLsVX+C2ikvjOfOmPCHIo=
-X-Received: by 2002:a05:6e02:d49:b0:300:d893:a3f8 with SMTP id
- h9-20020a056e020d4900b00300d893a3f8mr8609481ilj.53.1667687430424; Sat, 05 Nov
- 2022 15:30:30 -0700 (PDT)
-MIME-Version: 1.0
-References: <20221105110611.28920-1-yuehaibing@huawei.com>
-In-Reply-To: <20221105110611.28920-1-yuehaibing@huawei.com>
-From:   Yosry Ahmed <yosryahmed@google.com>
-Date:   Sat, 5 Nov 2022 15:29:54 -0700
-Message-ID: <CAJD7tkb06mjZ3bvoiR4U47+XknM4nTHY06RYZ8SULOxJ4mAOwQ@mail.gmail.com>
-Subject: Re: [PATCH] selftests: cgroup: Fix unsigned comparison with less than zero
-To:     YueHaibing <yuehaibing@huawei.com>
-Cc:     tj@kernel.org, lizefan.x@bytedance.com, hannes@cmpxchg.org,
-        shuah@kernel.org, roman.gushchin@linux.dev, shakeelb@google.com,
-        rientjes@google.com, akpm@linux-foundation.org,
-        cgroups@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        bh=6CtIVQWP+Kxh/6X4LVIIdMYVxRHCgpX/NmfsfTqOY7k=;
+        b=B59rtbnHfX/BhoRjMhBqWt3pK4q5/6nx0jEtAsap8hrCuRE6kbBpAcBP5nLpAUPU1H
+         1kHYQ3xzOlHuzMtv2OWWeJ1wbIYsIWrBd64xrS2l7Ku7F/qpgWUdEeDE2Zh6BV26PLdb
+         Xb4ctxf0NPvvvNt5xwPF98e1GjPtgejlS38a+FpHFYGWJVLx/14jfBaqs+SNCBbjQ6T1
+         Jzqief3SRJURQYk/IJsKAd+NZD3scfNGNuoamJo23nizIv5170Apo+ydeDHAFNRXvNfV
+         3iUefPQ8Go9EvOvwLzF+/XZ0ME+rEXMrgUZX0xxacBiVrHR6vRb9jtghScwrr/IgSi89
+         kAjw==
+X-Gm-Message-State: ACrzQf0XVMBE1MTooZXnJK9dGvIAp3/vcuNlHcpbIhdM488kCyAjVSNp
+        2VnVwJuMdxDlQpjALsoUg9cWqwJ4xyg=
+X-Google-Smtp-Source: AMsMyM6BXFpVv8PLWvJZIV2gTYX18Gxsz76ZzOnmTC4d4zkF5p/PE4dhpWDIvZ9P4Zm3JHlPuMbMag==
+X-Received: by 2002:a2e:94cf:0:b0:26c:5d14:6ec7 with SMTP id r15-20020a2e94cf000000b0026c5d146ec7mr16455809ljh.237.1667687692019;
+        Sat, 05 Nov 2022 15:34:52 -0700 (PDT)
+Received: from localhost.localdomain (cl-78-158-27-188.fastlink.lt. [78.158.27.188])
+        by smtp.gmail.com with ESMTPSA id a5-20020ac25e65000000b0049a5a59aa68sm447889lfr.10.2022.11.05.15.34.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 05 Nov 2022 15:34:50 -0700 (PDT)
+Received: from jek by localhost.localdomain with local (Exim 4.96)
+        (envelope-from <jekhor@gmail.com>)
+        id 1orRkX-001kZF-2v;
+        Sun, 06 Nov 2022 00:34:49 +0200
+From:   Yauhen Kharuzhy <jekhor@gmail.com>
+To:     linux-input@vger.kernel.org, linux-iio@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Cc:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Yauhen Kharuzhy <jekhor@gmail.com>
+Subject: [PATCH] HID: hid-sensor-custom: Allow more than one hinge angle sensor
+Date:   Sun,  6 Nov 2022 00:34:22 +0200
+Message-Id: <20221105223422.417316-1-jekhor@gmail.com>
+X-Mailer: git-send-email 2.38.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,48 +77,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Nov 5, 2022 at 4:06 AM YueHaibing <yuehaibing@huawei.com> wrote:
->
-> 'size' is unsigned, it never less than zero.
->
-> Fixes: 6c26df84e1f2 ("selftests: cgroup: return -errno from cg_read()/cg_write() on failure")
-> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+Some devices has two sets of accelerometers and the sensor hub exports
+two hinge angle 'sensors' based on accelerometer values. To allow more
+than one sensor of the same type, use PLATFORM_DEVID_AUTO instead of
+PLATFORM_DEVID_NONE when registering platform device for it.
 
-Thanks for fixing this!
-FWIW,
+Checked on the Lenovo Yoga Book YB1-X91L tablet.
 
-Reviewed-by: Yosry Ahmed <yosryahmed@google.com>
+Signed-off-by: Yauhen Kharuzhy <jekhor@gmail.com>
+---
+ drivers/hid/hid-sensor-custom.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/drivers/hid/hid-sensor-custom.c b/drivers/hid/hid-sensor-custom.c
+index 32c2306e240d6..a6fc89ee1287c 100644
+--- a/drivers/hid/hid-sensor-custom.c
++++ b/drivers/hid/hid-sensor-custom.c
+@@ -862,7 +862,7 @@ hid_sensor_register_platform_device(struct platform_device *pdev,
+ 		return ERR_PTR(-ENOMEM);
+ 
+ 	custom_pdev = platform_device_register_data(pdev->dev.parent, dev_name,
+-						    PLATFORM_DEVID_NONE, hsdev,
++						    PLATFORM_DEVID_AUTO, hsdev,
+ 						    sizeof(*hsdev));
+ 	kfree(dev_name);
+ 	return custom_pdev;
+-- 
+2.38.1
 
-
-
-> ---
->  tools/testing/selftests/cgroup/cgroup_util.c | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
->
-> diff --git a/tools/testing/selftests/cgroup/cgroup_util.c b/tools/testing/selftests/cgroup/cgroup_util.c
-> index 4c52cc6f2f9c..e8bbbdb77e0d 100644
-> --- a/tools/testing/selftests/cgroup/cgroup_util.c
-> +++ b/tools/testing/selftests/cgroup/cgroup_util.c
-> @@ -555,6 +555,7 @@ int proc_mount_contains(const char *option)
->  ssize_t proc_read_text(int pid, bool thread, const char *item, char *buf, size_t size)
->  {
->         char path[PATH_MAX];
-> +       ssize_t ret;
->
->         if (!pid)
->                 snprintf(path, sizeof(path), "/proc/%s/%s",
-> @@ -562,8 +563,8 @@ ssize_t proc_read_text(int pid, bool thread, const char *item, char *buf, size_t
->         else
->                 snprintf(path, sizeof(path), "/proc/%d/%s", pid, item);
->
-> -       size = read_text(path, buf, size);
-> -       return size < 0 ? -1 : size;
-> +       ret = read_text(path, buf, size);
-> +       return ret < 0 ? -1 : ret;
->  }
->
->  int proc_read_strstr(int pid, bool thread, const char *item, const char *needle)
-> --
-> 2.17.1
->
