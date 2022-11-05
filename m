@@ -2,141 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 707CB61DB91
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 16:09:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7332461DB94
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 16:14:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229918AbiKEPJi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Nov 2022 11:09:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57638 "EHLO
+        id S229895AbiKEPOr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Nov 2022 11:14:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229798AbiKEPJg (ORCPT
+        with ESMTP id S229767AbiKEPOp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Nov 2022 11:09:36 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94BCAEE30
-        for <linux-kernel@vger.kernel.org>; Sat,  5 Nov 2022 08:09:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667660975; x=1699196975;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=pb/3In8zvGVVLyunePkPe4yXkZquqxYoACGo8jdmt7I=;
-  b=GrxPji22A11dJljZFwHFrsBcPE55Xb4yCXwXqbvOgb08CFL6XA0jPVqt
-   uj7aHmbsq4LKc2fUAjHxfo38IjfI21T+/RjdraIa6TcQ7KBSLDpw+nJ6n
-   VFhryTsLgHqHvPdq7GdSHhEYAWoYl+G8xcRb4SvDoLGZp6jxvFclZB89w
-   R+xZUPuj17o/rxmNcx/f9Fk3ZCor6DyzWSFTbkV75awXh+sOiUZ8W1X+h
-   Gqc3FvRL/bPcoRixovFhIRqE98qGK+yN97+tB5/4YQrToIdoXTIYdPswp
-   Xsv4yl4I/LMVNBMQANtAEjLbaA8cz2pZXT19i+Lw9fdZAnfcdp2eNI9lU
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10522"; a="311309488"
-X-IronPort-AV: E=Sophos;i="5.96,140,1665471600"; 
-   d="scan'208";a="311309488"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Nov 2022 08:09:35 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10522"; a="613401261"
-X-IronPort-AV: E=Sophos;i="5.96,140,1665471600"; 
-   d="scan'208";a="613401261"
-Received: from lkp-server02.sh.intel.com (HELO b6d29c1a0365) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 05 Nov 2022 08:09:34 -0700
-Received: from kbuild by b6d29c1a0365 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1orKnd-000I65-1O;
-        Sat, 05 Nov 2022 15:09:33 +0000
-Date:   Sat, 05 Nov 2022 23:08:36 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [paulmck-rcu:dev.2022.11.03a] BUILD SUCCESS
- f843407d2393a3db87bdbd420cd55a7fe1cddbe1
-Message-ID: <63667c74.v7rA54Rxg8IUUNkX%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Sat, 5 Nov 2022 11:14:45 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 174821EEC0
+        for <linux-kernel@vger.kernel.org>; Sat,  5 Nov 2022 08:14:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=Ekr6Ag+B1UJpoeicPPmJBxRvs9MjSDhSR1SM46lu9oA=; b=YUqkdhzPuj35LQ0nNTHFA1lrVd
+        lxWzXxqhhIDwXpczLn5LEZceWYVlkhiZgdtoHk5rKZVZrN/d85dNKSe8YMVYdY9qUDiwXZr6bAj84
+        6jm3QKVzj5fkHWEtwWFBNVabQAJGPKjC40kSlyQnkfhHju3GqZIEH4vbNPzHIpfZXbukY4bGbgmMt
+        c9C4pthYgjx7fo8+YNitrMIdNGlkwO+yJKL2tYB2Mc39TD9uG0YaiTihVGb97wt31a8u1kj6pOYRe
+        IA8f1u1tk+2EGvQC0ZCiwR7561IXwZHSVBWgrsf4B9SFrhsA6jPaLVNOwTHab/t8MjD849pDgbh1m
+        za019YGQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1orKsM-008GWE-O3; Sat, 05 Nov 2022 15:14:26 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id E03C930007E;
+        Sat,  5 Nov 2022 16:14:19 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id BA99C209E95D6; Sat,  5 Nov 2022 16:14:19 +0100 (CET)
+Date:   Sat, 5 Nov 2022 16:14:19 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Uros Bizjak <ubizjak@gmail.com>, x86@kernel.org,
+        willy@infradead.org, akpm@linux-foundation.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        aarcange@redhat.com, kirill.shutemov@linux.intel.com,
+        jroedel@suse.de
+Subject: Re: [PATCH 11/13] x86_64: Remove pointless set_64bit() usage
+Message-ID: <Y2Z9yzmtYtmYi5rx@hirez.programming.kicks-ass.net>
+References: <20221022111403.531902164@infradead.org>
+ <20221022114425.168036718@infradead.org>
+ <Y2QR/BRHjjYUNszh@dev-arch.thelio-3990X>
+ <CAFULd4bkn3i0ds1ywhxAZBQH+1O-zbPWscUqjoEcv4xvnxOnSw@mail.gmail.com>
+ <Y2QYHZsZNs33NXZB@dev-arch.thelio-3990X>
+ <CAHk-=wjCBOwSWec+=h08q3Gbr4UjSfX46GrQjzHZLFokziS7nA@mail.gmail.com>
+ <Y2U3WdU61FvYlpUh@hirez.programming.kicks-ass.net>
+ <CAHk-=wggJFQJmWtvsFVt69hzRXW3zD5+9q-1Laz=NoZQ8Fy9Ag@mail.gmail.com>
+ <Y2ZlS3SHeAPOkVmN@zx2c4.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Disposition: inline
+In-Reply-To: <Y2ZlS3SHeAPOkVmN@zx2c4.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev.2022.11.03a
-branch HEAD: f843407d2393a3db87bdbd420cd55a7fe1cddbe1  fixup! clocksource: Exponential backoff for load-induced bogus watchdog reads
+On Sat, Nov 05, 2022 at 02:29:47PM +0100, Jason A. Donenfeld wrote:
+> On Fri, Nov 04, 2022 at 10:15:08AM -0700, Linus Torvalds wrote:
+> > On Fri, Nov 4, 2022 at 9:01 AM Peter Zijlstra <peterz@infradead.org> wrote:
+> > >
+> > > So cmpxchg_double() does a cmpxchg on a double long value and is
+> > > currently supported by: i386, x86_64, arm64 and s390.
+> > >
+> > > On all those, except i386, two longs are u128.
+> > >
+> > > So how about we introduce u128 and cmpxchg128 -- then it directly
+> > > mirrors the u64 and cmpxchg64 usage we already have. It then also
+> > > naturally imposses the alignment thing.
+> > 
+> > Ack, except that we might have some "u128" users that do *not*
+> > necessarily want any alignment thing.
+> > 
+> > But maybe we could at least start with an u128 type that is marked as
+> > being fully aligned, and if some other user comes in down the line
+> > that wants relaxed alignment we can call it "u128_unaligned" or
+> > something.
+> 
+> Hm, sounds maybe not so nice for another use case: arithmetic code that
+> makes use of u128 for efficient computations, but otherwise has
+> no particular alignment requirements. For example, `typedef __uint128_t
+> u128;` in:
 
-elapsed time: 721m
+Natural alignment is... natural. Making it unaligned is quite mad. That
+whole u64 is not naturally aligned on i386 thing Linus referred to is a
+sodding pain in the backside.
 
-configs tested: 58
-configs skipped: 2
+If the code has no alignment requirements, natural alignment is as good
+as any. And if it does have requirements, you can use u128_unaligned.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Also:
 
-gcc tested configs:
-x86_64                           rhel-8.3-syz
-x86_64                         rhel-8.3-kunit
-x86_64                           rhel-8.3-kvm
-x86_64                        randconfig-a002
-x86_64                        randconfig-a004
-x86_64                        randconfig-a006
-x86_64                        randconfig-a013
-x86_64                        randconfig-a011
-um                             i386_defconfig
-um                           x86_64_defconfig
-i386                          randconfig-a001
-i386                          randconfig-a003
-i386                          randconfig-a005
-arc                                 defconfig
-x86_64                        randconfig-a015
-alpha                               defconfig
-s390                                defconfig
-x86_64                               rhel-8.3
-mips                             allyesconfig
-alpha                            allyesconfig
-arc                  randconfig-r043-20221104
-x86_64                          rhel-8.3-func
-s390                             allmodconfig
-powerpc                           allnoconfig
-x86_64                    rhel-8.3-kselftests
-x86_64                              defconfig
-powerpc                          allmodconfig
-ia64                             allmodconfig
-sh                               allmodconfig
-i386                          randconfig-a014
-m68k                             allmodconfig
-riscv                randconfig-r042-20221104
-arc                              allyesconfig
-i386                          randconfig-a012
-s390                 randconfig-r044-20221104
-x86_64                           allyesconfig
-i386                          randconfig-a016
-s390                             allyesconfig
-m68k                             allyesconfig
-arm                                 defconfig
-i386                                defconfig
-arm                              allyesconfig
-arm64                            allyesconfig
-i386                             allyesconfig
+$ ./align
+16, 16
 
-clang tested configs:
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-x86_64                        randconfig-a005
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-x86_64                        randconfig-a012
-i386                          randconfig-a002
-i386                          randconfig-a006
-hexagon              randconfig-r041-20221104
-i386                          randconfig-a004
-i386                          randconfig-a013
-i386                          randconfig-a015
-hexagon              randconfig-r045-20221104
-i386                          randconfig-a011
+---
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+#include <stdio.h>
+
+int main(int argx, char **argv)
+{
+	__int128 a;
+
+	printf("%d, %d\n", sizeof(a), __alignof(a));
+	return 0;
+}
