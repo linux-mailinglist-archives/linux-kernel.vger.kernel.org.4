@@ -2,114 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9D3561DC59
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 18:21:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE9AD61DC61
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 18:24:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229739AbiKERVZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Nov 2022 13:21:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58742 "EHLO
+        id S229750AbiKERYj convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 5 Nov 2022 13:24:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbiKERVY (ORCPT
+        with ESMTP id S229453AbiKERYh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Nov 2022 13:21:24 -0400
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A5F91004E;
-        Sat,  5 Nov 2022 10:21:23 -0700 (PDT)
-Received: by mail-pj1-f46.google.com with SMTP id m14-20020a17090a3f8e00b00212dab39bcdso10966427pjc.0;
-        Sat, 05 Nov 2022 10:21:23 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vD8FilkUBj9ngEYDZ1KCGWjlrUlUwcbQQEe0iyoadYo=;
-        b=dDH/kf4Q5iI6ywTjdUFf2qv8iyrdHF97K5VOA3k+jiY4X9KAR3gDzIAQxNfOx/e/Oi
-         3mExDEmpxPvS60ji4aP0es42Wt6nf16qDWio582WD5YaYx80Q+/U3lYwNhMcx+CmADx1
-         IIvRJOuWb1At3y7Nz19Rnil8pRO2d14LTXlyjQGVOAij1kv/NncCJgZn0Mytfx+T+CBF
-         4XHTpNF+bL5Kl4VHZH9ZctlyxqJkTZ3tZaBia+VDtwzozg1cqKLL0B1DUPC0jbnWAjPQ
-         BEYK8qRX/adhY2vXDDXQdB1d5C6TzTSIZvzLeN5spMeN0gp49OwNv2grtDOQnDQaqc0r
-         qXLg==
-X-Gm-Message-State: ACrzQf1heVfOzh4sIVugL6e9TcK15JnkKtsgkh2PuNpe470SYS80jrz7
-        cNVQiaW3Hbqh1AaG5D+sWcmRlFPA+6m07sWpb5dm5D6r4mSdaA==
-X-Google-Smtp-Source: AMsMyM4LNeQqsBaWEqblbhExjVCprmk08vhjyAe5UUhyfmbAmaaOponjVbuyeA8/NVTW9skelDPEFSrIP0cj9rGzt4o=
-X-Received: by 2002:a17:90b:4ac3:b0:213:3918:f276 with SMTP id
- mh3-20020a17090b4ac300b002133918f276mr57992592pjb.19.1667668882537; Sat, 05
- Nov 2022 10:21:22 -0700 (PDT)
+        Sat, 5 Nov 2022 13:24:37 -0400
+Received: from relay.hostedemail.com (smtprelay0014.hostedemail.com [216.40.44.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E69E12607
+        for <linux-kernel@vger.kernel.org>; Sat,  5 Nov 2022 10:24:36 -0700 (PDT)
+Received: from omf01.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay06.hostedemail.com (Postfix) with ESMTP id D4435AB30C;
+        Sat,  5 Nov 2022 17:24:34 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf01.hostedemail.com (Postfix) with ESMTPA id A4EF56000F;
+        Sat,  5 Nov 2022 17:24:30 +0000 (UTC)
+Message-ID: <85bcafd00fbbf9c8199ce9d10cfa959791a1b96a.camel@perches.com>
+Subject: Re: [PATCH -next v2] checkpatch: Add check for array allocator
+ family argument order
+From:   Joe Perches <joe@perches.com>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Liao Chang <liaochang1@huawei.com>, apw@canonical.com,
+        dwaipayanray1@gmail.com, lukas.bulwahn@gmail.com,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, bagasdotme@gmail.com,
+        pbonzini@redhat.com
+Date:   Sat, 05 Nov 2022 10:24:27 -0700
+In-Reply-To: <dc5a7c79-af45-0e64-80fa-9f1ca8907033@wanadoo.fr>
+References: <20221104070523.60296-1-liaochang1@huawei.com>
+         <dc5a7c79-af45-0e64-80fa-9f1ca8907033@wanadoo.fr>
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
 MIME-Version: 1.0
-References: <20221104073659.414147-1-mailhol.vincent@wanadoo.fr>
- <20221104171604.24052-1-mailhol.vincent@wanadoo.fr> <20221104171604.24052-4-mailhol.vincent@wanadoo.fr>
- <Y2Ydf6UxVvTe8Zmz@kroah.com> <CAMZ6RqJkzag-PGuzHcDQkSXjqH6d8=uAe-UN8VXUoNWX2x+qbw@mail.gmail.com>
-In-Reply-To: <CAMZ6RqJkzag-PGuzHcDQkSXjqH6d8=uAe-UN8VXUoNWX2x+qbw@mail.gmail.com>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Sun, 6 Nov 2022 02:21:11 +0900
-Message-ID: <CAMZ6RqLMGfW0QcNdBKhfwayV=+FNHhvM_-ob0UvL=o6=zN0J7A@mail.gmail.com>
-Subject: Re: [PATCH v2 3/3] can: etas_es58x: report the firmware version
- through ethtool
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Rspamd-Queue-Id: A4EF56000F
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_NONE,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
+        version=3.4.6
+X-Stat-Signature: qpg798amgqsubot9hhmhmznmhzf8ej6p
+X-Rspamd-Server: rspamout02
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX1/getu2nSdF+wC3drRumdtbYGUc//3UCgg=
+X-HE-Tag: 1667669070-101770
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat. 5 Nov. 2022 at 18:27, Vincent MAILHOL
-<mailhol.vincent@wanadoo.fr> wrote:
-> On Sat. 5 Nov. 2022 at 17:36, Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> wrote:
-> > On Sat, Nov 05, 2022 at 02:16:04AM +0900, Vincent Mailhol wrote:
-> > > ES58x devices report below information in their usb product info
-> > > string:
-> > >
-> > >   * the firmware version
-> > >   * the bootloader version
-> > >   * the hardware revision
-> > >
-> > > Report the firmware version through ethtool_drvinfo::fw_version.
-> > > Because struct ethtool_drvinfo has no fields to report the boatloader
-> > > version nor the hardware revision, continue to print these in the
-> > > kernel log (c.f. es58x_get_product_info()).
-> > >
-> > > While doing so, bump up copyright year of each modified files.
-> >
-> > Why not just stick to the normal USB interface here and not try to tie
-> > it into ethtool?  These values are all availble today in sysfs or in
-> > libusb, right?
->
-> The simple answer is ignorance. I am more familiar with ethtool than
-> libusb and I just did not think to explore that second option.
-> Thanks for the review, comments taken. I will study sysfs and libusb
-> and will rework that.
+On Fri, 2022-11-04 at 18:08 +0100, Christophe JAILLET wrote:
+> Le 04/11/2022 à 08:05, Liao Chang a écrit :
+> > These array allocator family are sometimes misused with the first and
+> > second arguments switchted.
+> > 
+> > Same issue with calloc, kvcalloc, kvmalloc_array etc.
+> > 
+> > Bleat if sizeof is the first argument.
+> > 
+> > Link: https://lore.kernel.org/lkml/5374345c-7973-6a3c-d559-73bf4ac15079@redhat.com/
+> > Signed-off-by: Liao Chang <liaochang1@huawei.com>
+> > Acked-by: Joe Perches <joe@perches.com>
+> > ---
+> > v2:
+> > 1. Acked-by Joe Perches.
+> > 2. Use lore links in Link tag.
+> > 
+> > ---
+> >   scripts/checkpatch.pl | 2 +-
+> >   1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
+> > index 1e5e66ae5a52..a9a9dc277cff 100755
+> > --- a/scripts/checkpatch.pl
+> > +++ b/scripts/checkpatch.pl
+> > @@ -7128,7 +7128,7 @@ sub process {
+> >   		}
+> >   
+> >   # check for alloc argument mismatch
+> > -		if ($line =~ /\b((?:devm_)?(?:kcalloc|kmalloc_array))\s*\(\s*sizeof\b/) {
+> > +		if ($line =~ /\b((?:devm_)?((?:k|kv)?(calloc|malloc_array)(?:_node)?))\s*\(\s*sizeof\b/) {
+> >   			WARN("ALLOC_ARRAY_ARGS",
+> >   			     "$1 uses number as first arg, sizeof is generally wrong\n" . $herecurr);
+> >   		}
+> 
+> Hi,
+> 
+> Should the devm_ and not devm_ cases be separated?
+> 
+> In the devm_case, sizeof will never be just after the first '('.
 
-I double checked following options:
-  * CONFIG_USB_ANNOUNCE_NEW_DEVICES
-  * lsusb -v from usbutils
-  * sysfs
+Right.
 
-None of those will return the firmware version. The only strings I am
-getting are: the Product name, the Manufacturer and the SerialNumber.
+Likely this works better:
+---
+ scripts/checkpatch.pl | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-I guess you were expecting some default behavior from the device, but
-unfortunately, this is not the case.
-On this device, the firmware version is stored at some arbitrary
-descriptor index (if you ask me: 6). Unless you query that magic
-number, the information will not pot up.
+diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
+index 7be93c3df2bcb..7f37976a9f8b5 100755
+--- a/scripts/checkpatch.pl
++++ b/scripts/checkpatch.pl
+@@ -7145,12 +7145,18 @@ sub process {
+ 			     "Reusing the krealloc arg is almost always a bug\n" . $herecurr);
+ 		}
+ 
+-# check for alloc argument mismatch
+-		if ($line =~ /\b((?:devm_)?(?:kcalloc|kmalloc_array))\s*\(\s*sizeof\b/) {
++# check for alloc argument mismatch in alloc functions
++		if ($line =~ /\b(((?:k|kv)?(calloc|malloc_array)(?:_node)?))\s*\(\s*sizeof\b/) {
+ 			WARN("ALLOC_ARRAY_ARGS",
+ 			     "$1 uses number as first arg, sizeof is generally wrong\n" . $herecurr);
+ 		}
+ 
++# check for alloc argument mismatch in devm_ alloc functions
++		if ($line =~ /\b(devm_((?:k|kv)?(calloc|malloc_array)(?:_node)?))\s*\(\s*$FuncArg\s*,\s*sizeof\b/) {
++			WARN("ALLOC_ARRAY_ARGS",
++			     "$1 uses number as second arg, sizeof is generally wrong\n" . $herecurr);
++		}
++
+ # check for multiple semicolons
+ 		if ($line =~ /;\s*;\s*$/) {
+ 			if (WARN("ONE_SEMICOLON",
 
-So as far as I can see, this does not duplicate existing mechanisms.
-With this patch, the firmware version becomes available using:
-  $ ethtool -i canX
-
-> > What workflow wants this added to ethtool?
->
-> No workflow. My work is not bound to any company and this driver
-> maintenance and anything else I am doing on the mailing list at this
-> time is pure hobby.
->
-> Yours sincerely,
-> Vincent Mailhol
