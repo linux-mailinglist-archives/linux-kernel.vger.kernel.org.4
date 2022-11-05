@@ -2,49 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AA7361DBE4
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 17:07:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E58EB61DBE6
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 17:08:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229932AbiKEQHz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Nov 2022 12:07:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43358 "EHLO
+        id S230041AbiKEQIB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Nov 2022 12:08:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbiKEQHy (ORCPT
+        with ESMTP id S229776AbiKEQHy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 5 Nov 2022 12:07:54 -0400
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 459E310068
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 475A71006A
         for <linux-kernel@vger.kernel.org>; Sat,  5 Nov 2022 09:07:53 -0700 (PDT)
-Received: by mail-io1-f71.google.com with SMTP id bf14-20020a056602368e00b006ce86e80414so4719223iob.7
+Received: by mail-io1-f70.google.com with SMTP id i3-20020a5d8403000000b006c9271c3465so4793081ion.4
         for <linux-kernel@vger.kernel.org>; Sat, 05 Nov 2022 09:07:53 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=to:from:subject:message-id:date:mime-version:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=SrkMdh2rzSEfUpITUGJrHhsutoE7n5vCXPNepIr4K2k=;
-        b=t++IHxtiYhJnZEFuXAJ01GL1iEYqFnThQBPDRRwzRrTc6tK+e9GrcPOYIZNH5f5heT
-         GVxp+O/02TW94bleAQ7M8M5tiqTcDTfjmMLHjm7s0bYR8S1glCll+40Quf1o/Vy326rq
-         JJYjuduPu+s+ms433pKpwbyXmQtg7ThtZhhxRMkTyDH5JsvhipU3Sdmivqn5knPIJmFf
-         V5sgbvhVvPZMF5ScL8cETlWrW5v1GSdv9G5aQvpG8QhVqs3bZqSj/cW+TphmRtmc17j1
-         PY+PAnQgnFG3U4eGUFVYzuG/8WkBrhMxbC2v0jNTUZeMEiLfSsIiIfn7dKQWY7/5Fjym
-         Z2UQ==
-X-Gm-Message-State: ACrzQf2XccjURid4XXp3H/+AXRDesUxzTbS7LbsTXurYuacyHtPH50yJ
-        hw+NPy48eFQoKs4slIseaLOrDc/YuBKQXHHCkR6csHRxyjao
-X-Google-Smtp-Source: AMsMyM6ys/LYnOhuTYOgkQ7MFHH4ecac145EmKuKP9CrJkMvbn34KrtBesqKzcBYna0D2fV2xIFVycZ7w9BmJZ5cZKkPFQ2r0IDY
+        bh=Hgagf5yt2ztu2Dh9gjwBpSIVGJIV3SmeqpqowU6PJR0=;
+        b=aBUqfu/YoNwGr7ORMEjkGWzqRWOblLSN+SsHr/zB4bvw0Nm0Srk7CyJqcinXtTQC9O
+         ZDqutQAXeiPUHs+0S6Ig+6y4nUHNpV1GxxM/hgflu/ku3bJ61FBXXj3oofRuSfm9vh6o
+         LoIRLXUY3AGwsEv8B9wg+6rSNpZL4IgNoSni3AIrkl1MQ4433DTP68IW6Fveum9QZ2aU
+         gsdNCw7pqbxvhXFOAxLbrvAqSpA2QDucWWvx9P07f10c/1Jye7AAHU4eQAz+oFUknwuu
+         fxM89mmSxabqft++EqPVZkrTTOj6U498+1YsxFfj/M0Ns60fPKL3jD24C80gKPikZWNJ
+         FrnA==
+X-Gm-Message-State: ACrzQf0H8GDU2XUpglaTLuts2RT0dXqG6wu6dE5NlfUSZgouo4+sUFJc
+        pAx2xh3yhOcEt2TkdzqZRT5QWy5xOjYQYBX1Ombn9MqPkX+3
+X-Google-Smtp-Source: AMsMyM7+L/Ks+6LzUtDtTqj53oUeWY2zWjTgHCQ4Bm1/lzpOQd3wU44gns3zIg+NP3Tfc/YxqV9z6ZOXe+1uRXV+u8/hpGuna5jE
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:ce:b0:373:fccb:63e3 with SMTP id
- w14-20020a05663800ce00b00373fccb63e3mr24202249jao.66.1667664472626; Sat, 05
+X-Received: by 2002:a05:6638:4910:b0:375:4b54:fcfb with SMTP id
+ cx16-20020a056638491000b003754b54fcfbmr23910633jab.264.1667664472357; Sat, 05
  Nov 2022 09:07:52 -0700 (PDT)
 Date:   Sat, 05 Nov 2022 09:07:52 -0700
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000007edb6605ecbb6442@google.com>
-Subject: [syzbot] INFO: trying to register non-static key in f2fs_handle_error
-From:   syzbot <syzbot+40642be9b7e0bb28e0df@syzkaller.appspotmail.com>
-To:     chao@kernel.org, jaegeuk@kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        terrelln@fb.com
+Message-ID: <0000000000007ac73805ecbb64f7@google.com>
+Subject: [syzbot] BUG: unable to handle kernel NULL pointer dereference in udf_rename
+From:   syzbot <syzbot+17fcf98a689ff64f669b@syzkaller.appspotmail.com>
+To:     jack@suse.com, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -59,66 +57,81 @@ Hello,
 
 syzbot found the following issue on:
 
-HEAD commit:    10d916c86eca Merge tag 'soc-fixes-6.1-2' of git://git.kern..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=117b4251880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=ddb381fe9a8f6a8b
-dashboard link: https://syzkaller.appspot.com/bug?extid=40642be9b7e0bb28e0df
+HEAD commit:    bbed346d5a96 Merge branch 'for-next/core' into for-kernelci
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+console output: https://syzkaller.appspot.com/x/log.txt?x=17a63346880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=3a4a45d2d827c1e
+dashboard link: https://syzkaller.appspot.com/bug?extid=17fcf98a689ff64f669b
 compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-
-Unfortunately, I don't have any reproducer for this issue yet.
+userspace arch: arm64
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=100d5e2e880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17fb8b39880000
 
 Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/73d5475b518c/disk-10d916c8.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/2ce12d00f04a/vmlinux-10d916c8.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/4d23719c0557/bzImage-10d916c8.xz
+disk image: https://storage.googleapis.com/syzbot-assets/e8e91bc79312/disk-bbed346d.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/c1cb3fb3b77e/vmlinux-bbed346d.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/b990eb66b8ea/mount_0.gz
 
 IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+40642be9b7e0bb28e0df@syzkaller.appspotmail.com
+Reported-by: syzbot+17fcf98a689ff64f669b@syzkaller.appspotmail.com
 
-loop1: detected capacity change from 0 to 264192
-F2FS-fs (loop1): inaccessible inode: 2, run fsck to repair
-INFO: trying to register non-static key.
-The code is fine but needs lockdep annotation, or maybe
-you didn't initialize this object before use?
-turning off the locking correctness validator.
-CPU: 1 PID: 28028 Comm: syz-executor.1 Not tainted 6.1.0-rc3-syzkaller-00239-g10d916c86eca #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x1e3/0x2cb lib/dump_stack.c:106
- assign_lock_key+0x22a/0x240 kernel/locking/lockdep.c:981
- register_lock_class+0x287/0x9b0 kernel/locking/lockdep.c:1294
- __lock_acquire+0xe4/0x1f60 kernel/locking/lockdep.c:4934
- lock_acquire+0x1a7/0x400 kernel/locking/lockdep.c:5668
- __raw_spin_lock include/linux/spinlock_api_smp.h:133 [inline]
- _raw_spin_lock+0x2a/0x40 kernel/locking/spinlock.c:154
- spin_lock include/linux/spinlock.h:350 [inline]
- f2fs_save_errors fs/f2fs/super.c:3868 [inline]
- f2fs_handle_error+0x29/0x230 fs/f2fs/super.c:3896
- f2fs_iget+0x215/0x4bb0 fs/f2fs/inode.c:516
- f2fs_fill_super+0x47d3/0x7b50 fs/f2fs/super.c:4222
- mount_bdev+0x26c/0x3a0 fs/super.c:1401
- legacy_get_tree+0xea/0x180 fs/fs_context.c:610
- vfs_get_tree+0x88/0x270 fs/super.c:1531
- do_new_mount+0x289/0xad0 fs/namespace.c:3040
- do_mount fs/namespace.c:3383 [inline]
- __do_sys_mount fs/namespace.c:3591 [inline]
- __se_sys_mount+0x2e3/0x3d0 fs/namespace.c:3568
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x2b/0x70 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f5a7388cada
-Code: 48 c7 c2 b8 ff ff ff f7 d8 64 89 02 b8 ff ff ff ff eb d2 e8 b8 04 00 00 0f 1f 84 00 00 00 00 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f5a74682f88 EFLAGS: 00000202 ORIG_RAX: 00000000000000a5
-RAX: ffffffffffffffda RBX: 0000000020000200 RCX: 00007f5a7388cada
-RDX: 0000000020000000 RSI: 0000000020000100 RDI: 00007f5a74682fe0
-RBP: 00007f5a74683020 R08: 00007f5a74683020 R09: 0000000020000000
-R10: 0000000000000000 R11: 0000000000000202 R12: 0000000020000000
-R13: 0000000020000100 R14: 00007f5a74682fe0 R15: 00000000200005c0
- </TASK>
-F2FS-fs (loop1): Failed to read F2FS meta data inode
+loop0: detected capacity change from 0 to 2048
+UDF-fs: INFO Mounting volume 'LinuxUDF', timestamp 2022/09/12 12:00 (1000)
+Unable to handle kernel NULL pointer dereference at virtual address 0000000000000020
+Mem abort info:
+  ESR = 0x0000000096000046
+  EC = 0x25: DABT (current EL), IL = 32 bits
+  SET = 0, FnV = 0
+  EA = 0, S1PTW = 0
+  FSC = 0x06: level 2 translation fault
+Data abort info:
+  ISV = 0, ISS = 0x00000046
+  CM = 0, WnR = 1
+user pgtable: 4k pages, 48-bit VAs, pgdp=0000000109085000
+[0000000000000020] pgd=0800000106b68003, p4d=0800000106b68003, pud=0800000106b69003, pmd=0000000000000000
+Internal error: Oops: 0000000096000046 [#1] PREEMPT SMP
+Modules linked in:
+CPU: 0 PID: 3036 Comm: syz-executor863 Not tainted 6.0.0-rc7-syzkaller-18095-gbbed346d5a96 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/30/2022
+pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : __memset+0x84/0x188 arch/arm64/lib/memset.S:100
+lr : udf_write_fi+0x268/0x4e0
+sp : ffff800012a53a50
+x29: ffff800012a53a70 x28: 00000000000000d6 x27: 00000000000000d6
+x26: 00000000fffffff0 x25: 0000000000000000 x24: 0000000000000006
+x23: 00000000ffffffd4 x22: fffffffffffffff4 x21: ffff800012a53b40
+x20: ffff800012a53b00 x19: 0000000000000003 x18: 0000000000000021
+x17: 0000000000000000 x16: ffff80000db49158 x15: ffff0000c6401a80
+x14: 0000000000000010 x13: 0000000000000000 x12: ffff0000c6401a80
+x11: ff80800008d1bd1c x10: 0000000000000000 x9 : ffff800008d1bd1c
+x8 : 0000000000000020 x7 : 0000000000000000 x6 : 0000000000000000
+x5 : 0000000000000000 x4 : 0000000000000000 x3 : 0000000000000010
+x2 : ffffffffffffffd4 x1 : 0000000000000000 x0 : 0000000000000020
+Call trace:
+ __memset+0x84/0x188 arch/arm64/lib/memset.S:98
+ udf_delete_entry fs/udf/namei.c:577 [inline]
+ udf_rename+0x47c/0x6d0 fs/udf/namei.c:1173
+ vfs_rename+0x59c/0x7f8 fs/namei.c:4756
+ do_renameat2+0x490/0x758 fs/namei.c:4907
+ __do_sys_renameat2 fs/namei.c:4940 [inline]
+ __se_sys_renameat2 fs/namei.c:4937 [inline]
+ __arm64_sys_renameat2+0x6c/0x88 fs/namei.c:4937
+ __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+ invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
+ el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
+ do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
+ el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:636
+ el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:654
+ el0t_64_sync+0x18c/0x190 arch/arm64/kernel/entry.S:581
+Code: 54000060 5400006b a8811d07 a8811d07 (a8811d07) 
+---[ end trace 0000000000000000 ]---
+----------------
+Code disassembly (best guess):
+   0:	54000060 	b.eq	0xc  // b.none
+   4:	5400006b 	b.lt	0x10  // b.tstop
+   8:	a8811d07 	stp	x7, x7, [x8], #16
+   c:	a8811d07 	stp	x7, x7, [x8], #16
+* 10:	a8811d07 	stp	x7, x7, [x8], #16 <-- trapping instruction
 
 
 ---
@@ -128,3 +141,5 @@ syzbot engineers can be reached at syzkaller@googlegroups.com.
 
 syzbot will keep track of this issue. See:
 https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
