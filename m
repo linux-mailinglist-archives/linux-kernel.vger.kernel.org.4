@@ -2,219 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8357A61DD83
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 20:00:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B79B61DD87
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 20:02:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229816AbiKETAM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Nov 2022 15:00:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54708 "EHLO
+        id S230104AbiKETCT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Nov 2022 15:02:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230047AbiKES7w (ORCPT
+        with ESMTP id S230126AbiKETBy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Nov 2022 14:59:52 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54CBF5FF6;
-        Sat,  5 Nov 2022 11:59:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net; s=s31663417;
-        t=1667674768; bh=8Hp1zx/5xqPjJdBvcxGOdwOBXS460B5xQd0dp8zyAXc=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=R/FiV9Fg+SF9iBOFI1rcYT+poYx0llGUbBL2CU9PGJJ2IS4XLlGfI176v2lmd3Fl3
-         fXgqT1BXgP+HHQBUPrzdlcVYhQhLf4aRohbQ5ZVv36qlLCs5jQbYLEYt/u+PJpfhIM
-         544S4L3ZiOBLw11J7uwGE8Q5Mw9KtQvdR7u43qUDlnHccwfnMD31/Jk8i9AzclXFrg
-         XrpGjKaNAwXA40Fq7yfqmBQDfFrG5kUlCys84tGJXU/5OBySSF5DAmnk2OEvDAyqsV
-         jc5xQWFvH1uADn3QVB+VaLj6Ad69lExtdTYmikNBafsFVVbwxWTvmtegUvywymT5BY
-         /EXF28mSUX3iw==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from probook ([87.78.44.193]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MXp5Q-1oWWYm1aay-00YChF; Sat, 05
- Nov 2022 19:59:28 +0100
-From:   =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-To:     linux-spi@vger.kernel.org, openbmc@lists.ozlabs.org
-Cc:     Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        Mark Brown <broonie@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org
-Subject: [PATCH 8/8] spi: wpcm-fiu: Add direct map support
-Date:   Sat,  5 Nov 2022 19:59:11 +0100
-Message-Id: <20221105185911.1547847-9-j.neuschaefer@gmx.net>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221105185911.1547847-1-j.neuschaefer@gmx.net>
-References: <20221105185911.1547847-1-j.neuschaefer@gmx.net>
+        Sat, 5 Nov 2022 15:01:54 -0400
+Received: from mail-qv1-f45.google.com (mail-qv1-f45.google.com [209.85.219.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1112895BA;
+        Sat,  5 Nov 2022 12:01:06 -0700 (PDT)
+Received: by mail-qv1-f45.google.com with SMTP id w10so5583652qvr.3;
+        Sat, 05 Nov 2022 12:01:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MMRQpkt+46bPIVTYGYV/Az4BkAq6gnC1hbvHXSkejWg=;
+        b=zeC9upKZ2Ja1HVK0OEjEt04x3iJqZ4BafeyuPrNMcuL/k/PcFIZaOVnhNeUUEZcTEM
+         hNp4aNbVRlosMMRsVvSQ2zsIUA2inCKBpvVihKYQ6x6P6hYLAebBTMaK7N1aGNwknA7T
+         P6p7d22yKnUivAJ2rigzxM6Z0reHVOdchSOCcj+RZIfWROzkzRbuRQv30VsYmcmvMZjy
+         ur0qpdPQd9FPTZ/8SA1EspZVhTRuDCLGaFUL0S+HEZUBy4YK9EoNUpOx20zCqMrgOWye
+         UC/6UdB5oqJtZHpdCiDdZahgB0lxt1IwBhkTdt1Le2oHfsZbwJRwLOXR6uCDImLIjXKb
+         HAqw==
+X-Gm-Message-State: ACrzQf3hAa3Lj4W8uVQ9hvQ6WyuaitJxjYz8UIIAMNVZQZTQ+rhBHw7k
+        JrRLsBfA5XcBzf49uygk2/xWedUGVbE43UlB9nLENt0bntI=
+X-Google-Smtp-Source: AMsMyM7JuW9nTEWfj2RIShvPEv4weLZYP521+yycifgQoazHtN5fbx3w9v55I//lNsMeDfxVTozVG2unPM6FpjhFCB8=
+X-Received: by 2002:a0c:c684:0:b0:4bb:fc53:5ad9 with SMTP id
+ d4-20020a0cc684000000b004bbfc535ad9mr29253554qvj.3.1667674865176; Sat, 05 Nov
+ 2022 12:01:05 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:9V2ZEZNXbUL5fJgOg60HwNFPLB73gmrjIGRAPTVp/sNNac9zK1d
- 5UDoJcPw0nIsuE7FZ8KCLcHIfz58KPYWQvdhIo8CIU/EzQuxHAHm+XT2KOdPqzrHG1NszEP
- m1ME/7xu25bTayYm4BJIW2aSreCn6fKWoCcFtacYiyGy+EEVfWp+0eTv4LcQu/mEKyDffyp
- 2r6iyMuxikbYLE3S4jMYA==
-UI-OutboundReport: notjunk:1;M01:P0:u4ojvdMZIts=;SlqvjLzK+y0Xc6K4ER98wtDp10q
- uHKtssdXHpWlIjADhYxl7EznuhbAE0IeW47bH3v502JnVxiGOYKlF1k8nWGKHJIT9rSqPgoyv
- YQNR3TGd5isFq3YCnnaqIdnBUQb/mQbqZS0nsdFcMkMMfBxwVrbNoXskbqN5605fPchKeUwX7
- HxzzHcw//qyIdaCiTm4bB7osiSTF6rHA79YkHOX3L8r2htuL3RKDqxdyBMd2i7Xdrc4S/IZOH
- w8YWuc31nPkTQO4c2MLbrV00sfHXngzpBl7Bx/rZRQ4q5DJe4ZCogq56OL6TX7VtEiPJr5lmB
- qDLTaChbf8sMbaazK85199TXdUXuU1f7iobeBBWx/vsU14P9GTiLwmQ60Os2DybFD1kPa7jSy
- DyRGwOa4Jsc/coJzO5iqag6B6AQDp3PYb04GUDGHabGe34/MRXXAAM7Wse+x6kZf6BOss2chf
- ykHyVMxO4LJBYoAIBn2ooprsIHvjp+bkNc7MITPoOwk4DJ8lXOPPdNy44W5lblyAnzVYQv95h
- 4wzkhtvF1TToO6ij03q1T0UaKGvFCKSuadlZr8sSHizQzkm7k5Y5vqggMe27i4WHpJUYPldSb
- aMtySlOpQ2zjJBCKeUlIp/o7T8uzhfNA709QT4CLGAz0Xf8gp47RJWYPzEDYkQnWusvLTt4k7
- nHMyaq2sl8ki3tTV1k+3Cxczu/3GdvDp/Btogtfv2CpL2J04y22EIJV3MTuGOhggW+sJcPm68
- oVDTyBrhogKfmLzGBFsIdg82v9BP/mxACzcmGRAYWgYVuCKo8Eg+jfuy6pBZpqSGALUWZngKi
- kYHquwOhZBRzc9o6miGRwOGAuPlpyq7cAMZP99hqUYzdAKFUj5jsKscPtPGfCXTRAJ6r6dOU2
- YN22BSncJRv9qmxSqYSgfhG6HEm0CpNhwBOwZViAT09ZTftJlgVuuzYBJREQ5i9Ap/5yeQrGY
- BCP2Mv7zoYoR+qrlQQhx2c59Y2Q=
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20221019073443.248215-1-chenzhongjin@huawei.com> <CAJZ5v0hV2AFEgiuxxbDFUWLa0ZthSz3a=-9U4pjXm-GmmSgexw@mail.gmail.com>
+In-Reply-To: <CAJZ5v0hV2AFEgiuxxbDFUWLa0ZthSz3a=-9U4pjXm-GmmSgexw@mail.gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Sat, 5 Nov 2022 20:00:54 +0100
+Message-ID: <CAJZ5v0jPCGoss6X5bmv9Nw9ZxrDxirEEMh6UKSgOoArs2d9ffA@mail.gmail.com>
+Subject: Re: [PATCH] ACPICA: Fix use-after-free in acpi_ps_parse_aml()
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Chen Zhongjin <chenzhongjin@huawei.com>, robert.moore@intel.com,
+        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
+        rafael.j.wysocki@intel.com, lenb@kernel.org, lv.zheng@intel.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Besides software controlled SPI transfers (UMA, "user mode access"), FIU
-also supports a 16 MiB mapping window per attached flash chip.
+On Fri, Oct 28, 2022 at 5:46 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+>
+> On Wed, Oct 19, 2022 at 9:38 AM Chen Zhongjin <chenzhongjin@huawei.com> wrote:
+> >
+> > KASAN reports a use-after-free problem and causes kernel panic
+> > triggered by: modprobe acpiphp_ibm
+> >
+> > BUG: KASAN:
+> > use-after-free in acpi_ds_dump_method_stack (drivers/acpi/acpica/dsdebug.c:145)
+> > Read of size 8 at addr ffff888002f843f0 by task modprobe/519
+> >
+> > CPU: 2 PID: 519 Comm: modprobe Not tainted 6.0.0+
+> > Hardware name: QEMU Standard PC (i440FX + PIIX, 1996)
+> >     Call Trace:
+> >     <TASK>
+> >     acpi_ds_dump_method_stack (drivers/acpi/acpica/dsdebug.c:145)
+> >     acpi_ds_method_error (drivers/acpi/acpica/dsmethod.c:232)
+> >     acpi_ps_parse_aml (drivers/acpi/acpica/psparse.c:607)
+> >     ...
+> >     </TASK>
+> >
+> >     Allocated by task 519:
+> >     ...
+> >     __kasan_kmalloc (mm/kasan/common.c:526)
+> >     acpi_ds_create_walk_state (drivers/acpi/acpica/dswstate.c:519)
+> >     acpi_ds_call_control_method (drivers/acpi/acpica/dsmethod.c:498)
+> >     acpi_ps_parse_aml (drivers/acpi/acpica/psparse.c:607)
+> >     ...
+> >
+> >     Freed by task 519:
+> >     ...
+> >     __kmem_cache_free+0xb6/0x3c0
+> >     acpi_ds_delete_walk_state (drivers/acpi/acpica/dswstate.c:722)
+> >     acpi_ds_call_control_method (drivers/acpi/acpica/dsmethod.c:586)
+> >     acpi_ps_parse_aml (drivers/acpi/acpica/psparse.c:607)
+> >     ...
+> > ---[ end Kernel panic - not syncing: Fatal exception ]---
+> >
+> > In the error path in acpi_ps_parse_aml():
+> >
+> >     acpi_ds_call_control_method()
+> >         acpi_ds_create_walk_state()
+> >             acpi_ds_push_walk_state()
+> >             # thread->walk_state_list = walk_state
+> >
+> >         acpi_ds_init_aml_walk # *fail*
+> >         goto cleanup:
+> >         acpi_ds_delete_walk_state() # ACPI_FREE(walk_state)
+> >
+> >     acpi_ds_method_error()
+> >         acpi_ds_dump_method_stack()
+> >         # using freed thread->walk_state_list
+> >
+> > Briefly, the walk_state is pushed to thread, and freed without being poped.
+> > Then it is used in acpi_ds_dump_method_stack() and causes use-after-free.
+> >
+> > Add acpi_ds_pop_walk_state(thread) to the error path to fix the problem.
+> >
+> > Fixes: 0bac4295526c ("ACPICA: Dispatcher: Move stack traversal code to dispatcher")
+> >
+> > Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
+>
+> This should be submitted to the upstream project on GitHub, but it
+> looks bad enough, so I'll take care of this.
+>
+> Applied as 6.1-rc material, thanks!
+>
+> > ---
+> >  drivers/acpi/acpica/dsmethod.c | 1 +
+> >  1 file changed, 1 insertion(+)
+> >
+> > diff --git a/drivers/acpi/acpica/dsmethod.c b/drivers/acpi/acpica/dsmethod.c
+> > index ae2e768830bf..19da7fc73186 100644
+> > --- a/drivers/acpi/acpica/dsmethod.c
+> > +++ b/drivers/acpi/acpica/dsmethod.c
+> > @@ -581,6 +581,7 @@ acpi_ds_call_control_method(struct acpi_thread_state *thread,
+> >
+> >         acpi_ds_terminate_control_method(obj_desc, next_walk_state);
+> >         acpi_ds_delete_walk_state(next_walk_state);
+> > +       acpi_ds_pop_walk_state(thread);
 
-This patch implements direct mapped read access, to speed up flash reads.
+On second thought, though, should it be popped before deleting?
+Otherwise it looks like there will be still use-after-free, because
+acpi_ds_pop_walk_state() accesses the walk_state at the top of the
+queue.
+
+Moreover, it is not correct to pop the walk state if next_walk_state
+is NULL AFAICS.
+
+I'm dropping this one.
 
 
-Without direct mapping:
-
-	# time dd if=3D/dev/mtd0ro of=3Ddump bs=3D1M
-	16+0 records in
-	16+0 records out
-	real    1m 47.74s
-	user    0m 0.00s
-	sys     1m 47.75s
-
-
-With direct mapping:
-
-	# time dd if=3D/dev/mtd0ro of=3Ddump bs=3D1M
-	16+0 records in
-	16+0 records out
-	real    0m 30.81s
-	user    0m 0.00s
-	sys     0m 30.81s
-
-Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
-=2D--
- drivers/spi/spi-wpcm-fiu.c | 64 ++++++++++++++++++++++++++++++++++++++
- 1 file changed, 64 insertions(+)
-
-diff --git a/drivers/spi/spi-wpcm-fiu.c b/drivers/spi/spi-wpcm-fiu.c
-index d68693d4cd8bd..eda46c766ad9d 100644
-=2D-- a/drivers/spi/spi-wpcm-fiu.c
-+++ b/drivers/spi/spi-wpcm-fiu.c
-@@ -51,10 +51,16 @@
-  */
- #define UMA_WAIT_ITERATIONS 100
-
-+/* The memory-mapped view of flash is 16 MiB long */
-+#define MAX_MEMORY_SIZE_PER_CS	(16 << 20)
-+#define MAX_MEMORY_SIZE_TOTAL	(4 * MAX_MEMORY_SIZE_PER_CS)
-+
- struct wpcm_fiu_spi {
- 	struct device *dev;
- 	struct clk *clk;
- 	void __iomem *regs;
-+	void __iomem *memory;
-+	size_t memory_size;
- 	struct regmap *shm_regmap;
- };
-
-@@ -367,14 +373,64 @@ static int wpcm_fiu_adjust_op_size(struct spi_mem *m=
-em, struct spi_mem_op *op)
- 	return 0;
- }
-
-+static int wpcm_fiu_dirmap_create(struct spi_mem_dirmap_desc *desc)
-+{
-+	struct wpcm_fiu_spi *fiu =3D spi_controller_get_devdata(desc->mem->spi->=
-controller);
-+	int cs =3D desc->mem->spi->chip_select;
-+
-+	if (desc->info.op_tmpl.data.dir !=3D SPI_MEM_DATA_IN)
-+		return -ENOTSUPP;
-+
-+	/*
-+	 * Unfortunately, FIU only supports a 16 MiB direct mapping window (per
-+	 * attached flash chip), but the SPI MEM core doesn't support partial
-+	 * direct mappings. This means that we can't support direct mapping on
-+	 * flashes that are bigger than 16 MiB.
-+	 */
-+	if (desc->info.offset + desc->info.length > MAX_MEMORY_SIZE_PER_CS)
-+		return -ENOTSUPP;
-+
-+	/* Don't read past the memory window */
-+	if (cs * MAX_MEMORY_SIZE_PER_CS + desc->info.offset + desc->info.length =
-> fiu->memory_size)
-+		return -ENOTSUPP;
-+
-+	return 0;
-+}
-+
-+static int wpcm_fiu_direct_read(struct spi_mem_dirmap_desc *desc, u64 off=
-s, size_t len, void *buf)
-+{
-+	struct wpcm_fiu_spi *fiu =3D spi_controller_get_devdata(desc->mem->spi->=
-controller);
-+	int cs =3D desc->mem->spi->chip_select;
-+
-+	if (offs >=3D MAX_MEMORY_SIZE_PER_CS)
-+		return -ENOTSUPP;
-+
-+	offs +=3D cs * MAX_MEMORY_SIZE_PER_CS;
-+
-+	if (!fiu->memory || offs >=3D fiu->memory_size)
-+		return -ENOTSUPP;
-+
-+	len =3D min_t(size_t, len, fiu->memory_size - offs);
-+	memcpy_fromio(buf, fiu->memory + offs, len);
-+
-+	return len;
-+}
-+
- static const struct spi_controller_mem_ops wpcm_fiu_mem_ops =3D {
- 	.adjust_op_size =3D wpcm_fiu_adjust_op_size,
- 	.supports_op =3D wpcm_fiu_supports_op,
- 	.exec_op =3D wpcm_fiu_exec_op,
-+	.dirmap_create =3D wpcm_fiu_dirmap_create,
-+	.dirmap_read =3D wpcm_fiu_direct_read,
- };
-
- static void wpcm_fiu_hw_init(struct wpcm_fiu_spi *fiu)
- {
-+	/* Configure memory-mapped flash access */
-+	writeb(FIU_BURST_CFG_R16, fiu->regs + FIU_BURST_BFG);
-+	writeb(MAX_MEMORY_SIZE_TOTAL / (512 << 10), fiu->regs + FIU_CFG);
-+	writeb(MAX_MEMORY_SIZE_PER_CS / (512 << 10) | BIT(6), fiu->regs + FIU_SP=
-I_FL_CFG);
-+
- 	/* Deassert all manually asserted chip selects */
- 	writeb(0x0f, fiu->regs + FIU_UMA_ECTS);
- }
-@@ -404,6 +460,14 @@ static int wpcm_fiu_probe(struct platform_device *pde=
-v)
- 	if (IS_ERR(fiu->clk))
- 		return PTR_ERR(fiu->clk);
-
-+	res =3D platform_get_resource_byname(pdev, IORESOURCE_MEM, "memory");
-+	fiu->memory =3D devm_ioremap_resource(dev, res);
-+	fiu->memory_size =3D min_t(size_t, resource_size(res), MAX_MEMORY_SIZE_T=
-OTAL);
-+	if (IS_ERR(fiu->regs)) {
-+		dev_err(dev, "Failed to map flash memory window\n");
-+		return PTR_ERR(fiu->memory);
-+	}
-+
- 	fiu->shm_regmap =3D syscon_regmap_lookup_by_phandle_optional(dev->of_nod=
-e, "nuvoton,shm");
-
- 	wpcm_fiu_hw_init(fiu);
-=2D-
-2.35.1
-
+> >
+> >         return_ACPI_STATUS(status);
+> >  }
+> > --
+>
+> Bob, this looks correct to me, but I may be missing something in which
+> case please let me know.
