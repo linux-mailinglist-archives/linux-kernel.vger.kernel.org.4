@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86E4F61DD6F
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 19:59:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F6BC61DD61
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 19:59:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229994AbiKES7h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Nov 2022 14:59:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54230 "EHLO
+        id S229875AbiKES7b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Nov 2022 14:59:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229926AbiKES7a (ORCPT
+        with ESMTP id S229888AbiKES72 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Nov 2022 14:59:30 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A73A82AE1;
-        Sat,  5 Nov 2022 11:59:29 -0700 (PDT)
+        Sat, 5 Nov 2022 14:59:28 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C43AF2BE9;
+        Sat,  5 Nov 2022 11:59:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net; s=s31663417;
-        t=1667674759; bh=+CeGzPHAiwTHslgTPBjflPOdmW6LTaHhl7ZUhW3vNP8=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
-        b=qxOFkEZ6mRtOW6C0OtjPQyGgvkA05hjrWOCtJUZBCyskS27+Po3yB+UzY4c9ySMW/
-         qkIkVsUS5JQ94Wf9wUH3K6qMzTsyggEh/SK763o7GhpE7/4dk73d4KjtF42VBlRcbq
-         ozX8WEyPICLnYlaP5YxHVxVtwr8m0uvMaBblkOjOlOqhQ4Yu6gyuLVl0x4nx4rIxmB
-         452sTLm48cN80OwffYIcpoeIxoDftx510bmNlXV0loQ9zyBSs0DkJrr8JT29tvZXvs
-         lVJdUK8R6x940CoeNbTlEm/IVsc2S2wRIqGrivrGT/gav0wKHzb1v6Kp47HVVgG9Rc
-         jbjJVw/zc+a3w==
+        t=1667674760; bh=p9YDZV3SVh65N5p5g+sDDmYbRp27o4nub0l5+Ua3VKI=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=J3PoKDvhApuEyAoHR4cjNCvmbpvk2J/OZ40T+2RY1HFR429dXWIEeyNkwPA7EK9tp
+         mHU1yaiirfCRgKcCOZWd9VPPFo5Xcot1DA7vG7NJ3ISPpmksfeMUA4tBQmsie+MGkk
+         Lc/KX+d9f2EvBnqHiDKyacD4JjvHjf+om+tB8sHQCOLgjibvnDjo24iAQTgKmoJdx/
+         vm2lFk8Wx+d0+D8s7bEfZa9l9t8rFmWKzL35jOOTXLd89PMCb36IJdOUBjv+LVBISV
+         xQXAhYJJTI3xeLrCQKju0d+a+VtIxCimbzhcElA3qDTOtuKnap5NDn7bqFV1FJgK61
+         lWYQ86eYKEn7Q==
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from probook ([87.78.44.193]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1N4hzj-1oyiVE1D79-011mod; Sat, 05
- Nov 2022 19:59:19 +0100
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MdvmY-1pOnvi0Akw-00b1X1; Sat, 05
+ Nov 2022 19:59:20 +0100
 From:   =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
 To:     linux-spi@vger.kernel.org, openbmc@lists.ozlabs.org
 Cc:     Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
@@ -37,83 +37,96 @@ Cc:     Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
         Linus Walleij <linus.walleij@linaro.org>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-gpio@vger.kernel.org
-Subject: [PATCH 0/8] Nuvoton WPCM450 FIU SPI flash controller
-Date:   Sat,  5 Nov 2022 19:59:03 +0100
-Message-Id: <20221105185911.1547847-1-j.neuschaefer@gmx.net>
+Subject: [PATCH 1/8] pinctrl: nuvoton: wpcm450: Refactor MFSEL setting code
+Date:   Sat,  5 Nov 2022 19:59:04 +0100
+Message-Id: <20221105185911.1547847-2-j.neuschaefer@gmx.net>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20221105185911.1547847-1-j.neuschaefer@gmx.net>
+References: <20221105185911.1547847-1-j.neuschaefer@gmx.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:Y0mXxM0HICmGnOuG0U8nVhTFBA1wLRp9aUB6oInA+MZotw3HwbL
- MShwnW6ykzM4la9QVqS3pNg87Ylm7TX9x+vFTrexZ4qyxW5iiKcd4QsFgx/kozKO+QJBtAO
- O2Q2N7P4t6y+TxxbBbNeEsJpR9Q1gseSRdCD7urms/mKvIY8DH7a8npqzLV5eXbAsC8uqbQ
- Ej/NQvaje6iIicYun9tbw==
-UI-OutboundReport: notjunk:1;M01:P0:PW2MiMKEoQQ=;fObLh+9qyxrgamfZcR005K2qZ8L
- 7k//slWMHPh8Hrq2gPzixGromD+zVzHkp+Uh2Ta/jGEb1GovCJ4oRYykLzoNt1iIWNxT4K2AB
- XdnYnRCykuUV7tKyOWvx9FaxIa0j4XJRU4cgku4av2uBUU2OrdgQqINuk7JLgtnu2tn/AEy/R
- erCmQrwGNPCH3jFxt8oJ7UmzUeAQjoM+Gj0DikK1Ib2gA98DNurrPxjne7HB7WH/Cg1Y+3DuI
- JV1rp9rcgR2K6L0Xh/ePjL8TExk5xVGxNrEQLxbjBBmaFJQ9i1apVzBmNB3x4IIViiTZH+ahJ
- R+d38ePanKsDlpGDu/Gn96J2jiv2NnIW29OdcaDKWrFu5p4riSXmNagpbqp+TdwGtfG6iDbQH
- FeFJODT4YTClALNh+i2hm8l2VLknbpMStd5oqHs+vhrU01NI8L2qVA4tl5IwyjJsmpiGWT54K
- NtrN2Ka33X30nfLTDeGC+KUO4oMJGDDcefxFbjjTgeKxpf25/vr87HO81NzN/7VNl40lcJ6xK
- RK3g1lTBLMygylo+UFuRUyRljQ3c3WZL4a/6wpMAipW3CBOCoTiSioDYqCKbs6redtLRYHdaN
- ZtLwpr2Q+GvCyMo4MfsDr8t0wokve/l3FRxJn72fdMCYJhVXdf9K+URF96ruuQeUp/Dd/oBpC
- 4c5lvlsQeLJY91won9J3Lb7Gs4ZuMzZeiI7gU43I3xdcZr7c1asLaOVho+H91xK/uXqGtgv58
- 8zM5k7sFygPcGdsSC/0Lue+nDlaxbiIl8rdeug+7pQrJkFn63hCwQULKV5swpWEMF+pg8ccJp
- sFpSPQNdnZYsamiCIgOePho4EeJRCUiqOQE6V1O/BUKwa6aXGDN53pWWMvEWo+gH7WmhpPQ3l
- 9EdJlQQxIl/dMCXPL8Gx87ZZkayHNcHnBrfeK4qPPbZd/bBWibK4/AnAikp8aUH8NZFYSt8EI
- jg/s+rYmkweG1HffUj5Vj9l8eCE=
+X-Provags-ID: V03:K1:O8qPZWuqzhHITt3VaDtMUqy6A+mhRlAcyIBz33LYKVUSnA0k061
+ eiFGOgB4CIqGiB4MazQ7WXcCbS1g20BwUtujxoGnrLpKrecE+6hwRCpKQxXXuhRCCp3sOYY
+ nqIdtLBweaYTKm6UE9Jf9NoSM+QGGXPgF5vmgLLQ+ZuzzQLEAORevw6Xn4ObjtbY0lErAJ3
+ kPuVjeMlnaVb3lso+lFaw==
+UI-OutboundReport: notjunk:1;M01:P0:/kSkirQ6yIk=;ZbO3NPnwS5AqaGY/XtD5IpIPc0R
+ tsuV8YWbMT4oFeb12DQe+y8AEpJqAGYPMHZNzCxovoY+9lPOV4geaYtEaarPft+Rpn4h73Kt1
+ 4Ii3uESLo/r6W3EB9eQZNYFmFH3ASH/wW4a1g7i3/1aUrJLHnOXA9jCgzixyL1k2maPOTuApy
+ d5WH3XI+wV+a18ZDvcGVqEBZdobunWXOS3hbxC3cAhHFwDgMRaOTwDvnMfDu8tfC88T1uQOPW
+ u1uNFbUfMvNWWIam+MMaDk+0D9rNuGkNba/AloMkcsGrV+YP9xTkV6pf8do61VeqFiN/VQCTj
+ QXNO0naRHjUJ/e7zPbww4iPsAxdjckURvF0adISGLt5x4x9p3KUhO3VKv6FiidNMve1PCaCB7
+ RLRJtTRIjEDqVHPxXJ2ipN77mT/aYWfWgBO84sGVNzqr8OcA5KIfxS7rBJufgfbTY/EFJ5ARq
+ Y7gH/0XoAK4kDrvQUCVV53n6U3ImswM8bZs0fm9EjNI9I4cSE4ag9heIXa9pHxVdwTecCyh6t
+ 2XKDkLhtBqTLNas0jmYBC3ZHZSzPoypOsaEETecyUDLliHJS3zmUkIJhqbEkXl7Msb1GjliWy
+ mPqM+Iy/RAKkAZPruz/oLXa6OHvDRaTQwlqLm6QzQHTSkTGRRTsewwhjjokjQqSz5upr1xxRL
+ tpdXcUY8akmfmCNAn+7GVVeopF91ZupfWX7M7hz5fbAzKU5jK64+lbgwnm4fD3jaFeE4KHeic
+ O+t7FeRscFNtsZWnqnr3PwQiwgUFm+0bc1rMUs9y7PwdMcU8sy97p1T3spZ9s7r1Tskg2L8pF
+ vEabcZjtF8HBfeA8DAOw4ALOsKh+BzagWb/OBx5byi+WFMMO9WdsJXTVn+7cHocetKPsHRNDB
+ BjuqsQ5P66YBH8ntab0bZpGl0kyfTcAYo+Mkuq6MLt5dxw+LuwcFTOPda42/Pacr1WdZMr/Z0
+ fJI7DRAxgxV779NC7sMwEnCl+5A=
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patchset adds DT bindings and a driver for the Flash Interface Unit
-(FIU), the SPI flash controller in the Nuvoton WPCM450 BMC SoC. It
-supports four chip selects, and direct (memory-mapped) access to 16 MiB
-per chip. Larger flash chips can be accessed by software-defined SPI
-transfers.
+In preparation for the next patch, which makes the logic around
+setting/resetting bits in MFSEL a little more complicated, move that
+code to a new function
 
-The existing NPCM7xx FIU driver is sufficitently incompatible with the
-WPCM450 FIU that I decided to write a new driver.
+Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
+=2D--
+ drivers/pinctrl/nuvoton/pinctrl-wpcm450.c | 18 ++++++++++++------
+ 1 file changed, 12 insertions(+), 6 deletions(-)
 
-This patchset depends on the WPCM450 clock support patchset,
+diff --git a/drivers/pinctrl/nuvoton/pinctrl-wpcm450.c b/drivers/pinctrl/n=
+uvoton/pinctrl-wpcm450.c
+index 211ad32cc0d8f..49b2177af17b2 100644
+=2D-- a/drivers/pinctrl/nuvoton/pinctrl-wpcm450.c
++++ b/drivers/pinctrl/nuvoton/pinctrl-wpcm450.c
+@@ -800,6 +800,14 @@ static const struct pinctrl_pin_desc wpcm450_pins[] =
+=3D {
+ 	WPCM450_PIN(124), WPCM450_PIN(125), WPCM450_PIN(126), WPCM450_PIN(127),
+ };
 
-	[PATCH v5 0/6] Nuvoton WPCM450 clock and reset driver
-
-
-Jonathan
-
-
-Jonathan Neusch=C3=A4fer (8):
-  pinctrl: nuvoton: wpcm450: Refactor MFSEL setting code
-  pinctrl: nuvoton: wpcm450: Fix handling of inverted MFSEL bits
-  dt-bindings: spi: Add Nuvoton WPCM450 Flash Interface Unit (FIU)
-  dt-bindings: mfd: syscon: Add nuvoton,wpcm450-shm
-  ARM: dts: wpcm450: Add FIU SPI controller node
-  ARM: dts: wpcm450-supermicro-x9sci-ln4f: Add SPI flash
-  spi: wpcm-fiu: Add driver for Nuvoton WPCM450 Flash Interface Unit
-    (FIU)
-  spi: wpcm-fiu: Add direct map support
-
- .../devicetree/bindings/mfd/syscon.yaml       |   1 +
- .../bindings/spi/nuvoton,wpcm450-fiu.yaml     |  76 +++
- .../nuvoton-wpcm450-supermicro-x9sci-ln4f.dts |   9 +
- arch/arm/boot/dts/nuvoton-wpcm450.dtsi        |  16 +
- drivers/pinctrl/nuvoton/pinctrl-wpcm450.c     |  32 +-
- drivers/spi/Kconfig                           |  11 +
- drivers/spi/Makefile                          |   1 +
- drivers/spi/spi-wpcm-fiu.c                    | 507 ++++++++++++++++++
- 8 files changed, 644 insertions(+), 9 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/spi/nuvoton,wpcm450-=
-fiu.yaml
- create mode 100644 drivers/spi/spi-wpcm-fiu.c
-
++/* Helper function to update MFSEL field according to the selected functi=
+on */
++static void wpcm450_update_mfsel(struct regmap *gcr_regmap, int reg, int =
+bit, int fn, int fn_selected)
++{
++	bool value =3D (fn =3D=3D fn_selected);
++
++	regmap_update_bits(gcr_regmap, reg, BIT(bit), value ? BIT(bit) : 0);
++}
++
+ /* Enable mode in pin group */
+ static void wpcm450_setfunc(struct regmap *gcr_regmap, const unsigned int=
+ *pin,
+ 			    int npins, int func)
+@@ -811,13 +819,11 @@ static void wpcm450_setfunc(struct regmap *gcr_regma=
+p, const unsigned int *pin,
+ 		cfg =3D &pincfg[pin[i]];
+ 		if (func =3D=3D fn_gpio || cfg->fn0 =3D=3D func || cfg->fn1 =3D=3D func=
+) {
+ 			if (cfg->reg0)
+-				regmap_update_bits(gcr_regmap, cfg->reg0,
+-						   BIT(cfg->bit0),
+-						   (cfg->fn0 =3D=3D func) ?  BIT(cfg->bit0) : 0);
++				wpcm450_update_mfsel(gcr_regmap, cfg->reg0,
++						     cfg->bit0, cfg->fn0, func);
+ 			if (cfg->reg1)
+-				regmap_update_bits(gcr_regmap, cfg->reg1,
+-						   BIT(cfg->bit1),
+-						   (cfg->fn1 =3D=3D func) ?  BIT(cfg->bit1) : 0);
++				wpcm450_update_mfsel(gcr_regmap, cfg->reg1,
++						     cfg->bit1, cfg->fn1, func);
+ 		}
+ 	}
+ }
 =2D-
 2.35.1
 
