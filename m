@@ -2,106 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18B6361DB8B
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 16:07:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B694961DB8D
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 16:07:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229882AbiKEPHP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Nov 2022 11:07:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51072 "EHLO
+        id S229944AbiKEPHV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Nov 2022 11:07:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230092AbiKEPGr (ORCPT
+        with ESMTP id S229953AbiKEPHB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Nov 2022 11:06:47 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3365011178;
-        Sat,  5 Nov 2022 08:06:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=public-files.de;
-        s=s31663417; t=1667660774;
-        bh=n1U3A9SAcBnA+C+iil55xu82QnWztEgrMkdDHc+35tA=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=AjCMWVh0BIFUTqmoQfp7lRLnuGtkKG69KMZkOGi9fmas2hbXnIymztQPqPKniCPzu
-         tc2FVPvr/68tXcVuU1en+xXydkBQC3IfJxo/ytMqAOVXc25SResmhgcWpAmkUSkGkm
-         D4e8aFu/WhkrXmkYEemMASD+4GxcpL5FukzfNQNlIy4O5ae3LfPHmpR203ZQn1bJwn
-         jw5qCDUn1xD7EZRiNTJIfxnag8EYx6w2HaZe9YPj/VF88rzTXQzI9gcVNYM79rZ7/h
-         zUBL9Pik+cV0IhVhf2n/IlKNx9Sxh8kzZ3I/iqVXDIbNBhuofLmQvBB1xVL7vt1vdV
-         yt6PPDhP7RF0g==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [217.61.159.50] ([217.61.159.50]) by web-mail.gmx.net
- (3c-app-gmx-bap26.server.lan [172.19.172.96]) (via HTTP); Sat, 5 Nov 2022
- 16:06:14 +0100
+        Sat, 5 Nov 2022 11:07:01 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72ED71C5;
+        Sat,  5 Nov 2022 08:06:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 39714B800C1;
+        Sat,  5 Nov 2022 15:06:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D17CDC433D6;
+        Sat,  5 Nov 2022 15:06:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667660815;
+        bh=243tUlsrMWQnQ6yTrRx2ppdGwtQviho+Rgrz5cpgBmg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=nbx0r7jOhuykxmNuvrvypApgjsTpMxzr2WXgNy5Nc03IwP1TLo7st57uB0DAAkJbi
+         fIdVcz2HgeyByMGywwqU6HPj1A9aM9vm7Q33oCpxwyPQvt3vOnFhpMoWRAVv1P7MSN
+         9h4WGMFU8fatBfBefBchjvICsEOwAhNooDaVIDDBB8m+50r/wBQ/bljk/yyeeh3HsW
+         d45XZs39+kV+h6RBEnBYMWmzNbrU098Z78Yy0jPLUDZ9jdxozV0lN5/NGW53RpYsvH
+         xdM3nBvjgELz8TwXnV28WMlWMzfW1RicNWBvaBrEYt3aZdLXYoU9ba2FgnZ5QLhaPj
+         3TiHortKivllw==
+Date:   Sat, 5 Nov 2022 15:06:47 +0000
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     "Sa, Nuno" <Nuno.Sa@analog.com>
+Cc:     "Bolboaca, Ramona" <Ramona.Bolboaca@analog.com>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 0/8] Remove adis_initial_startup usage
+Message-ID: <20221105150647.2c9cbff7@jic23-huawei>
+In-Reply-To: <SJ0PR03MB677857576EF31B737F6D3DF599389@SJ0PR03MB6778.namprd03.prod.outlook.com>
+References: <20221103080847.162509-1-ramona.bolboaca@analog.com>
+        <SJ0PR03MB677857576EF31B737F6D3DF599389@SJ0PR03MB6778.namprd03.prod.outlook.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Message-ID: <trinity-c732b826-2a12-4ab1-aaac-294ac5524926-1667660774779@3c-app-gmx-bap26>
-From:   Frank Wunderlich <frank-w@public-files.de>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Frank Wunderlich <linux@fw-web.de>,
-        Sam Shih <sam.shih@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-mediatek@lists.infradead.org, linux-gpio@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Sean Wang <sean.wang@kernel.org>
-Subject: Aw: Re: [PATCH v1 1/4] dt-bindings: pinctrl: mt7986: add generic
- bias-pull* support
 Content-Type: text/plain; charset=UTF-8
-Date:   Sat, 5 Nov 2022 16:06:14 +0100
-Importance: normal
-Sensitivity: Normal
-In-Reply-To: <166765939131.4158830.8416727494529058690.robh@kernel.org>
-References: <20221105084905.9596-1-linux@fw-web.de>
- <20221105084905.9596-2-linux@fw-web.de>
- <166765939131.4158830.8416727494529058690.robh@kernel.org>
-X-UI-Message-Type: mail
-X-Priority: 3
-X-Provags-ID: V03:K1:9fTNNmdoC3U9t0q8xm2Ug5ZFFo0grHUmepRZAGw1MhDCqtX3M18QKeJzzXFiiiVS2S7Sk
- p67mKHnlzgsUM/uJUQBVYBQn5OhVPZTC2IqFecBXUgxb6RE+Jj6lyMYNbtJMhldk9gpL6yHpniMY
- VsuQ6C0lDgXc3lMsbhGv0IlXQ7OkxAVPSfhFNEVhtbFr3XZXr6h2BeIctzkG9bep5oCibVGgh0K+
- 7o+KUzsAIzonlCzBkDPpZ7+nfbJOyA11CTZ91uls6ez/UMc/GiTf8vNc7HgVg1J1bW5EpgBjgzSR
- Io=
-UI-OutboundReport: notjunk:1;M01:P0:ORwYdXrEkx8=;MkTnBmktZGm97zo4Cz1MuB1zExv
- QhXrJdLb/BuaVK+mKmyYmCSgq3xOJkrP9Qptx5qoVZFX6q2I1mkvtw/htlcv317gxC3JZWhTQ
- X5S1QXttGe0LNVlSfVDHTrn9PN+jLBUVwM4d3wnn5ECjmkJB76Of/za+ui5sm1PcLfchAlJNT
- NUp7uDkufGaqfKJXFZ055qYWjxCLv+rpmhWT78jHtWH0uaVnQcaN5Ek/mBkgEZ7pd77cgqe9Z
- tC0WIzbj8E7RNBo1wPJNCmZ1yml8ZWeVS5QsFPMoU34TPJOWHZk1RS8khjqJ2VCn0JWUbWhVi
- nkf+x8ZqDAxg9N2fFY7h/2x1+TBGvZX6kMsRKSb5n2P5D4fPuYnP2gZyGvEQZBcGIwbK4Y9Eg
- sOwolvOy2hD9h1hUoG9oC7h9lMZnoAn+YskxjZRRFHV8391r/MRbJWrobpF7rwXMRnGuUnL65
- ckalYf6Z833ZAhmx+hOKI8IOUzz+kTwG2B2WM+Taa4vZo5Fk6ITHb+o3vuOH0rAGPJSNQkw+R
- vB/yMeX6etXqlzkdApp8T1ysEIiaSHREwBP1yASDr/BC25hoeReWYWD9tNjdD+o/40/V4fq4T
- BPYGZm6liRW785dNUZxncP3AF0gQO+IPBHvH+FH0D2wQBBGKMhpLiEiTPAPolfNjW1EwjC1ln
- 6hHo3SYaTpn9rJ9Ud6VzmTAqImuJ15BtWxFZXaOdEaTTv9PuYyTOjIzgG97ifW8Yrm2NO2weS
- AQI24fiL0z8B2xgW6QP+eGZBlDowMk8GxQvL7hAebLUwK7pX5IF/B70BwIT/ApoaNDHOEqWAX
- Lur/xERm4fs4gmswIg2UjYoTzK7iLILjtL62W1YNbDazM=
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi
+On Thu, 3 Nov 2022 12:35:31 +0000
+"Sa, Nuno" <Nuno.Sa@analog.com> wrote:
 
-> Gesendet: Samstag, 05. November 2022 um 15:52 Uhr
-> Von: "Rob Herring" <robh@kernel.org>
+> > From: Ramona Bolboaca <ramona.bolboaca@analog.com>
+> > Sent: Thursday, November 3, 2022 9:09 AM
+> > To: jic23@kernel.org; linux-iio@vger.kernel.org; linux-
+> > kernel@vger.kernel.org
+> > Cc: Bolboaca, Ramona <Ramona.Bolboaca@analog.com>
+> > Subject: [PATCH v2 0/8] Remove adis_initial_startup usage
+> >=20
+> >=20
+> > Remove 'adis_initial_startup()' usage due to the fact that it leads to a
+> > deadlock.
+> > The same mutex is acquired twice, without releasing it, once inside
+> > 'adis_initial_startup()' and once inside 'adis_enable_irq()'.
+> > Instead of 'adis_initial_startup()', use '__adis_initial_startup()'.
+> >=20
+> > Ramona Bolboaca (8):
+> >   iio: accel: adis16201: Fix deadlock in probe
+> >   iio: accel: adis16209: Fix deadlock in probe
+> >   iio: gyro: adis16136: Fix deadlock in probe
+> >   iio: gyro: adis16260: Fix deadlock in probe
+> >   iio: imu: adis16400: Fix deadlock in probe
+> >   staging: iio: accel: adis16203: Fix deadlock in probe
+> >   staging: iio: accel: adis16240: Fix deadlock in probe
+> >   iio: imu: adis: Remove adis_initial_startup function
+> >=20
+> >  drivers/iio/accel/adis16201.c         |  2 +-
+> >  drivers/iio/accel/adis16209.c         |  2 +-
+> >  drivers/iio/gyro/adis16136.c          |  2 +-
+> >  drivers/iio/gyro/adis16260.c          |  2 +-
+> >  drivers/iio/imu/adis16400.c           |  2 +-
+> >  drivers/staging/iio/accel/adis16203.c |  2 +-
+> >  drivers/staging/iio/accel/adis16240.c |  2 +-
+> >  include/linux/iio/imu/adis.h          | 12 ------------
+> >  8 files changed, 7 insertions(+), 19 deletions(-)
+> >  =20
+>=20
+> You could have placed your v2 changelog in the cover letter.
+> Moreover it's the same for all patches... Anyways:=20
+>=20
+> Reviewed-by: Nuno S=C3=A1 <nuno.sa@analog.com>
 
-> yamllint warnings/errors:
->
-> dtschema/dtc warnings/errors:
-> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/=
-pinctrl/mediatek,mt7986-pinctrl.example.dtb: pinctrl@1001f000: mmc0-pins:m=
-ux:groups:0: 'emmc_51' is not one of ['emmc', 'emmc_rst']
-> 	From schema: /builds/robherring/dt-review-ci/linux/Documentation/device=
-tree/bindings/pinctrl/mediatek,mt7986-pinctrl.yaml
+This feels a little backwards.  Normally we'd expect the
+outer function to take the lock and the inner call to not
+do so.  Now it's fine to not take the lock here at all because
+the outer function call is in probe anyway, before we reach
+the point where there should be an concurrency.
 
-this is already solved by this Patch:
+I wonder if we should instead do this by having
+an unlocked __adis_enable_irq() that is always called
+by __adis_initial_startup().  That would be the fix that
+then needs backporting.
 
-https://patchwork.kernel.org/project/linux-mediatek/patch/20221105092500.1=
-2145-1-linux@fw-web.de/
+Switching the calls from adis_initial_startup() to
+__adis_initial_startup() would then just be a trivial
+optimization to not take locks before they should ever matter.
 
-i decided to send a v3 or if instead of including it into this series
+This all hinges on my assumption that the lock isn't useful.
+Am I right on that?
 
-regards Frank
+Jonathan
+
+
+>=20
+> - Nuno S=C3=A1
+
