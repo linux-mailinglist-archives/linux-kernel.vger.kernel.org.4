@@ -2,104 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C247C61DA99
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 14:30:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3F6B61DA9C
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 14:31:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229632AbiKENaA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Nov 2022 09:30:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53640 "EHLO
+        id S229708AbiKENbC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Nov 2022 09:31:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbiKEN36 (ORCPT
+        with ESMTP id S229516AbiKENbA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Nov 2022 09:29:58 -0400
+        Sat, 5 Nov 2022 09:31:00 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C537DFFF
-        for <linux-kernel@vger.kernel.org>; Sat,  5 Nov 2022 06:29:57 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6F56DFFF;
+        Sat,  5 Nov 2022 06:30:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CDBA8B82D6B
-        for <linux-kernel@vger.kernel.org>; Sat,  5 Nov 2022 13:29:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51B8FC433D6;
-        Sat,  5 Nov 2022 13:29:53 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="hjcmsaqx"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1667654991;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=R8ndFeWwtbidwmu8ZqWvQNw9vpteG/tvbT1CnALU5sI=;
-        b=hjcmsaqxZPJdNb/SShsGMITrrANeiPj7TEDeov/h5qjjSx35qyF/bbDL+rKwFHLBcZXap/
-        x5QfUFasXInh1eguji7rbPDV99dvXawiiWB9WQp3JE4dXklrhu+cF23SckzuMZZi6yuzPm
-        RAabW9uqEENLVS2JPtg0zCTbsamtm7E=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 091ecb54 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Sat, 5 Nov 2022 13:29:50 +0000 (UTC)
-Date:   Sat, 5 Nov 2022 14:29:47 +0100
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Uros Bizjak <ubizjak@gmail.com>, x86@kernel.org,
-        willy@infradead.org, akpm@linux-foundation.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        aarcange@redhat.com, kirill.shutemov@linux.intel.com,
-        jroedel@suse.de
-Subject: Re: [PATCH 11/13] x86_64: Remove pointless set_64bit() usage
-Message-ID: <Y2ZlS3SHeAPOkVmN@zx2c4.com>
-References: <20221022111403.531902164@infradead.org>
- <20221022114425.168036718@infradead.org>
- <Y2QR/BRHjjYUNszh@dev-arch.thelio-3990X>
- <CAFULd4bkn3i0ds1ywhxAZBQH+1O-zbPWscUqjoEcv4xvnxOnSw@mail.gmail.com>
- <Y2QYHZsZNs33NXZB@dev-arch.thelio-3990X>
- <CAHk-=wjCBOwSWec+=h08q3Gbr4UjSfX46GrQjzHZLFokziS7nA@mail.gmail.com>
- <Y2U3WdU61FvYlpUh@hirez.programming.kicks-ass.net>
- <CAHk-=wggJFQJmWtvsFVt69hzRXW3zD5+9q-1Laz=NoZQ8Fy9Ag@mail.gmail.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 92561B80025;
+        Sat,  5 Nov 2022 13:30:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B146AC433D7;
+        Sat,  5 Nov 2022 13:30:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667655057;
+        bh=Exmb2YbVuJv8xgD75Jwx6M3P7AfHe0lCKRLcDlEsnKw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=pPyd7d6NY3uFHHKCarHevBVmkEnP1IGtnPPCPiV186twVOs262fob0X4/QyuS0LEV
+         5v9DGoZDnSHBAE2P1j15ptsg7OrKX+3eu2Ri/xXnp4LZpt2mvsLGlrtkKUXtSsHyUL
+         xSg5L5xrFE0G3AyEdPGaIkrKdsG3kt250uDEGNqmVMwPv1snB4D5/SWGXIHdFxX076
+         UAkbh6eMnw4DY8ID9cPitTEoJXQLnlZum+UNSUCA7AsHTyE+2oJGLKTICTNZf5CB7c
+         2AXvTdXCuuvrIeJETIDtM+0KlK5TM7QKZN5ZjIehR8iYFDqwcbcaYOpG3BiJs5rASu
+         nyBMQZiEo6KFQ==
+Date:   Sat, 5 Nov 2022 19:00:52 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 09/16] phy: qcom-qmp-pcie: add register init helper
+Message-ID: <Y2ZljEGAdg9zehE7@matsya>
+References: <20221028133603.18470-1-johan+linaro@kernel.org>
+ <20221028133603.18470-10-johan+linaro@kernel.org>
+ <Y2ZSVooZDBDnsKD3@matsya>
+ <Y2ZiTWk+dJj/XNu/@hovoldconsulting.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAHk-=wggJFQJmWtvsFVt69hzRXW3zD5+9q-1Laz=NoZQ8Fy9Ag@mail.gmail.com>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Y2ZiTWk+dJj/XNu/@hovoldconsulting.com>
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 04, 2022 at 10:15:08AM -0700, Linus Torvalds wrote:
-> On Fri, Nov 4, 2022 at 9:01 AM Peter Zijlstra <peterz@infradead.org> wrote:
-> >
-> > So cmpxchg_double() does a cmpxchg on a double long value and is
-> > currently supported by: i386, x86_64, arm64 and s390.
-> >
-> > On all those, except i386, two longs are u128.
-> >
-> > So how about we introduce u128 and cmpxchg128 -- then it directly
-> > mirrors the u64 and cmpxchg64 usage we already have. It then also
-> > naturally imposses the alignment thing.
+On 05-11-22, 14:17, Johan Hovold wrote:
+> On Sat, Nov 05, 2022 at 05:38:54PM +0530, Vinod Koul wrote:
+> > On 28-10-22, 15:35, Johan Hovold wrote:
+
+> > > +	qmp_pcie_configure(serdes, tbls->serdes, tbls->serdes_num);
+> > 
+> > We are tbls
 > 
-> Ack, except that we might have some "u128" users that do *not*
-> necessarily want any alignment thing.
+> Yeah, it's a separate function.
 > 
-> But maybe we could at least start with an u128 type that is marked as
-> being fully aligned, and if some other user comes in down the line
-> that wants relaxed alignment we can call it "u128_unaligned" or
-> something.
+> Note that qmp_pcie_configure_lane() above use 'tbl' too.
+> 
+> > > +
+> > >  	qmp_pcie_configure_lane(tx, tbls->tx, tbls->tx_num, 1);
+> > >  	qmp_pcie_configure_lane(rx, tbls->rx, tbls->rx_num, 1);
+> > >  
+> > > @@ -1848,15 +1843,6 @@ static void qmp_pcie_lanes_init(struct qmp_pcie *qmp, const struct qmp_phy_cfg_t
+> > >  		qmp_pcie_configure_lane(tx2, tbls->tx, tbls->tx_num, 2);
+> > >  		qmp_pcie_configure_lane(rx2, tbls->rx, tbls->rx_num, 2);
+> > >  	}
+> > > -}
+> > > -
+> > > -static void qmp_pcie_pcs_init(struct qmp_pcie *qmp, const struct qmp_phy_cfg_tables *tbls)
+> > > -{
+> > > -	void __iomem *pcs = qmp->pcs;
+> > > -	void __iomem *pcs_misc = qmp->pcs_misc;
+> > > -
+> > > -	if (!tbls)
+> > > -		return;
+> > >  
+> > >  	qmp_pcie_configure(pcs, tbls->pcs, tbls->pcs_num);
+> > >  	qmp_pcie_configure(pcs_misc, tbls->pcs_misc, tbls->pcs_misc_num);
+> > > @@ -1932,8 +1918,8 @@ static int qmp_pcie_power_on(struct phy *phy)
+> > >  	else
+> > >  		mode_tables = cfg->tables_ep;
+> > >  
+> > > -	qmp_pcie_serdes_init(qmp, &cfg->tables);
+> > > -	qmp_pcie_serdes_init(qmp, mode_tables);
+> > > +	qmp_pcie_init_registers(qmp, &cfg->tables);
+> > > +	qmp_pcie_init_registers(qmp, mode_tables);
+> > 
+> > but here tables :(
+> > 
+> > Lets stick with either please, or if we have differentiation lets make
+> > it real obvious
+> 
+> It's not uncommon to use shorter local identifiers and a more descriptive
+> name in structures, but since the driver already used 'tbl' consistently
+> before the recent addition of the aggregate tables structure, I can
+> rename also those pointers so that we use 'tbl' and 'tbls' consistently
+> throughout the driver.
 
-Hm, sounds maybe not so nice for another use case: arithmetic code that
-makes use of u128 for efficient computations, but otherwise has
-no particular alignment requirements. For example, `typedef __uint128_t
-u128;` in:
+Thanks that would be great. Lets stick to one convention throughout the
+driver
 
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/lib/crypto/poly1305-donna64.c
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/lib/crypto/curve25519-hacl64.c
-
-I always thought it'd be nice to see that typedef alongside the others
-in the shared kernel headers, but figured the requirement for 64-bit and
-libgcc for some operations on some architectures made it a bit less
-general purpose, so I never proposed it.
-
-Jason
+-- 
+~Vinod
