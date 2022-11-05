@@ -2,94 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1716361DBAB
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 16:32:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3463461DBB0
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 16:33:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229993AbiKEPcD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Nov 2022 11:32:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35632 "EHLO
+        id S229996AbiKEPdm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Nov 2022 11:33:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229987AbiKEPcA (ORCPT
+        with ESMTP id S229479AbiKEPdk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Nov 2022 11:32:00 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B73DDBCBB
-        for <linux-kernel@vger.kernel.org>; Sat,  5 Nov 2022 08:31:59 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id b11so6947487pjp.2
-        for <linux-kernel@vger.kernel.org>; Sat, 05 Nov 2022 08:31:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=u6qHbmDTzsFmp0X86fW394d4Fwkk/f/BlwJbwOKkJEU=;
-        b=i6jdgsdIaozM/Ndg7HHs9a8asuJEhQrKcH7/ZbsijD/G5ocezII3lfuke4ykFge+kE
-         uAuU8mZfBZUOwrLK74eJzJwnTk09emA/v/qI8aoqFRDxjjWKqxnJ6Dx3lPv3U8aFhp9d
-         vijTSBBBDJfFB5TRvzYWVu92i3y+ejyi6E5lWjl2ahZE8tOUTx7JyAmE8k8WQGR+ZISu
-         GIIC0nw8JFdXCS3aUsCedwnrUv0I64g7UV6Ir9vVES/msUmyxTDR350i9RlRzjHzCz+z
-         2qpvg3sItCrOJluRsUSWNXr4Rnvdja0HFBB0K0lFBXsMaG/gvubbyZH7hrYsBUs7eGLR
-         u4HA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=u6qHbmDTzsFmp0X86fW394d4Fwkk/f/BlwJbwOKkJEU=;
-        b=i/Pg4keH5mbHgtYSPphHQTG2A0rjdzo1i4fE9FE5+YXuWwhbeM2SfO+KUAw4WhI2Nz
-         HP4JTWWAsQwZ0xS2HUkvUcM794Je5M0eKh/JDFfook2kdyBdCdU2rlsTwAAjtUqv3yJM
-         zfTn/v/69MRfSH7HCHFAPmmv7dkfTV4485ORSt/+bAQgGdySexKjo8clCAAN6bAsTime
-         J0cZG3qsJKfYiOV0Blqoyrmil2mm8pG2kmyJnEY8Zj2Tr3gvWAzw/tuir5RKW4GrZ39X
-         L1CFQ5QugME/dKCJH5kaN3CRujosk27XoSLvC3Q+lNf+gYiWSkh5oOOj2+dN/vUOrJrt
-         A87w==
-X-Gm-Message-State: ACrzQf1sLVVyp7QHGCXqgg4bzNjjyzHGuA6n//gaoh6hI5Ja2p4L+DO2
-        k/NCgHY4F2mp0mtOEzUmbSy2gA==
-X-Google-Smtp-Source: AMsMyM5fLVSDupJM7RFe24UvkrkX++qSvGpFZItF7SUA6ls9jpfTXzUUCD2kNUDQ5DklR8OlP1TJiQ==
-X-Received: by 2002:a17:902:d48d:b0:186:cf83:4be3 with SMTP id c13-20020a170902d48d00b00186cf834be3mr40775011plg.22.1667662319226;
-        Sat, 05 Nov 2022 08:31:59 -0700 (PDT)
-Received: from [127.0.0.1] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id z2-20020a17090a540200b0020af2bab83fsm1402635pjh.23.2022.11.05.08.31.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 05 Nov 2022 08:31:58 -0700 (PDT)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     korantwork@gmail.com, asml.silence@gmail.com
-Cc:     kernel test robot <lkp@intel.com>, linux-kernel@vger.kernel.org,
-        io-uring@vger.kernel.org, Xinghui Li <korantli@tencent.com>
-In-Reply-To: <20221102082503.32236-1-korantwork@gmail.com>
-References: <20221102082503.32236-1-korantwork@gmail.com>
-Subject: Re: [PATCH v2] io_uring: fix two assignments in if conditions
-Message-Id: <166766231805.14409.16784497219898130071.b4-ty@kernel.dk>
-Date:   Sat, 05 Nov 2022 09:31:58 -0600
+        Sat, 5 Nov 2022 11:33:40 -0400
+Received: from stravinsky.debian.org (stravinsky.debian.org [IPv6:2001:41b8:202:deb::311:108])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 598D4C75D;
+        Sat,  5 Nov 2022 08:33:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
+        s=smtpauto.stravinsky; h=X-Debian-User:Content-Transfer-Encoding:MIME-Version
+        :Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-Type:Content-ID:
+        Content-Description:In-Reply-To:References;
+        bh=6rfZ0+MVQCixP+2u55j4i4SsY6z48ejiPHC0AtI1mbw=; b=iemQmT3liHFJc0ZsdB/GUBwrxs
+        wMEFdfObOoMgpXpBvDGAOuriqzvc0RmX+nhcH3+fDzQJMtWzUsPkYP354iRCFyf31UVmyO+3oONiT
+        2dxA7Kx5LTUihtn7Avw+/Bmh45hyokn5KVnPxHqm4wOSGpz3UrhfBb9jAYN4ZrJk7q7HDJliPLmB9
+        qo4yO/HrsCiYuLDv51WkrPEfSBs/miVkcbUIvysNuKgFOLPiMrDCMVHmNxy0d7zTa2HeNGDFN4xyO
+        fsRMsTPfY9usXh79QnRllvpnZVs/KCBh3AYcYcbwt7R2rLVF7+Ee9lTZIaYkgDOwi0+k9jxwZ/Eqa
+        KhfR5ivQ==;
+Received: from authenticated user
+        by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+        (Exim 4.94.2)
+        (envelope-from <bage@debian.org>)
+        id 1orLAp-004CNe-Ak; Sat, 05 Nov 2022 15:33:30 +0000
+From:   Bastian Germann <bage@debian.org>
+To:     Samuel Holland <samuel@sholland.org>
+Cc:     Bastian Germann <bage@debian.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/1] arm64: dts: allwinner: a64: enable Bluetooth on Pinebook
+Date:   Sat,  5 Nov 2022 16:33:18 +0100
+Message-Id: <20221105153319.19345-1-bage@debian.org>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.11.0-dev-d9ed3
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Debian-User: bage
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2 Nov 2022 16:25:03 +0800, korantwork@gmail.com wrote:
-> From: Xinghui Li <korantli@tencent.com>
-> 
-> Fixs two error:
-> 
-> "ERROR: do not use assignment in if condition
-> 130: FILE: io_uring/net.c:130:
-> +       if (!(issue_flags & IO_URING_F_UNLOCKED) &&
-> 
-> [...]
+Pinebook uses RTL8723CS for WiFi and Bluetooth. Enable BT in the device tree.
+This was part of a patch series adding RTL8723CS Bluetooth support to btrtl.
 
-Applied, thanks!
+Changelog:
+  v2: Fix subject
+      Drop misleading I2C sentence
+      Add enable-gpios to bluetooth device tree node
 
-[1/1] io_uring: fix two assignments in if conditions
-      commit: c71afa164bfe91f0825c359940899e539abcb6b7
+Vasily Khoruzhick (1):
+  arm64: dts: allwinner: a64: enable Bluetooth on Pinebook
 
-Best regards,
+ .../boot/dts/allwinner/sun50i-a64-pinebook.dts     | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
+
 -- 
-Jens Axboe
-
+2.38.1
 
