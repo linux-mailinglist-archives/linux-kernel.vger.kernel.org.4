@@ -2,167 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD0A361D99E
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 12:15:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62D4F61D99F
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 12:16:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229635AbiKELPw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Nov 2022 07:15:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52032 "EHLO
+        id S229733AbiKELQN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Nov 2022 07:16:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbiKELPu (ORCPT
+        with ESMTP id S229453AbiKELQL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Nov 2022 07:15:50 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5036613D2C
-        for <linux-kernel@vger.kernel.org>; Sat,  5 Nov 2022 04:15:47 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id cl5so10132271wrb.9
-        for <linux-kernel@vger.kernel.org>; Sat, 05 Nov 2022 04:15:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=tP7byI0+Iy8thvBM9RxOZ1IAYRCUM1f3pZvYHntjIiU=;
-        b=DOEVQebwcJYZ/5W4LsmNd5BxPP3oBR0tUoHQD+yVm7KtNQLdI33Kxpiyv6k1NPct3d
-         TurVtwwBhEkn2mHX6TPae3EuT1hEMKdeiBcf88WBXTnIC577NYFCHOTGpLfIzv9UjqHz
-         lKPbX/Lc8OMHGYc0Yp5Rwehx3aljErPfr9t21Mkn/V7wHwfa57zgGFAe+iye9YXky3Rd
-         VHCv64i4uEGPsxNIn8Zzvp6VI/dDqGZZdUPeEWDFdDq3T3bIcPmavAhkFXfoqZgtw/a9
-         3T4CVHiCkUbrSqtnin2DcXzehauiCY95qQP4m63W2/D+F7YuhW3Ae8RVQvkUW8dz6EG+
-         EKcg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tP7byI0+Iy8thvBM9RxOZ1IAYRCUM1f3pZvYHntjIiU=;
-        b=C0qiu7WLnJoG8G/N3q8Mnip88CgL2LztcGfSOQbBzlMmsmQLe3ln5ZMQDBfSzjDzhy
-         Vg9L9WI6qGu7Tomy4k6j8T8EkdOVaCLj5cdqYWHLZSp+BEFjYGIUTEQUQtqRyZyBuuKe
-         jF5VmOS5iIoTrIENbl24egd4zHrQwGo8oclreFUD2r+hBMBfI7xwJ/v7a+wQ0pBe1Ui8
-         3NnoLNJsWtxZIS5jGLYAQWuaTIXNf1QYDCbAx35qR80qq0/PGG4+2234cdDUfzBq/saP
-         30T0Fihqyd6Qo5qXn38N6uPklZ7WEDdKqREEZTJYsj2/agzx4DRwkPcLpRD740v5Wu4S
-         MJcg==
-X-Gm-Message-State: ACrzQf3m4QrtzQuGL6c6/x1RV6Y5Mkv2nvD66R8gtbHY+WxDdGpX7UgE
-        Vnrmh9cAsy5Qh+wsdSHNP4U=
-X-Google-Smtp-Source: AMsMyM6WU7D2DZTLSdga05zuSpJl+2j2RYGDDpUBqWXo2H5qPh665HWr76c5oJV4AiBpWLaaf+cC9A==
-X-Received: by 2002:adf:f911:0:b0:21e:c0f6:fd26 with SMTP id b17-20020adff911000000b0021ec0f6fd26mr25119107wrr.361.1667646945769;
-        Sat, 05 Nov 2022 04:15:45 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id v18-20020adfe292000000b00228dbf15072sm1846126wri.62.2022.11.05.04.15.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 05 Nov 2022 04:15:45 -0700 (PDT)
-Date:   Sat, 5 Nov 2022 14:15:40 +0300
-From:   Dan Carpenter <error27@gmail.com>
-To:     oe-kbuild@lists.linux.dev,
-        Heming Zhao via Ocfs2-devel <ocfs2-devel@oss.oracle.com>
-Cc:     lkp@intel.com, oe-kbuild-all@lists.linux.dev,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Joseph Qi <joseph.qi@linux.alibaba.com>
-Subject: fs/ocfs2/super.c:1809 ocfs2_mount_volume() warn: missing error code
- 'status'
-Message-ID: <202211050722.8YGvtPaR-lkp@intel.com>
+        Sat, 5 Nov 2022 07:16:11 -0400
+Received: from msg-2.mailo.com (msg-2.mailo.com [213.182.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1D071401D
+        for <linux-kernel@vger.kernel.org>; Sat,  5 Nov 2022 04:16:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
+        t=1667646959; bh=qpdJDaTBBCeIGg/s5FF6Owl+Qmp6uRMXzQxAbIrbnuI=;
+        h=X-EA-Auth:Date:From:To:Subject:Message-ID:MIME-Version:
+         Content-Type;
+        b=QEqVKTAPIE8aJpYbG134PB+D10efGJZIBF3i4rmr9CyGOt5QNa7T3Z3Oqr9ay+x4S
+         2KdJvUt8JCf58UlxTFlFurGsWnIaNT2EbcrVNzRveBajL2cI3nq1J2xB1m0QOURsnL
+         q1RLEaBbTFP2OHAc/zG0OLNitkQEuGQLTr/kLHKg=
+Received: by b-4.in.mailobj.net [192.168.90.14] with ESMTP
+        via ip-206.mailobj.net [213.182.55.206]
+        Sat,  5 Nov 2022 12:15:59 +0100 (CET)
+X-EA-Auth: 0a3f/EhSvrbBZHBeZyD0G94mZtjjVEpUBuHyJrOYrVpONyWHt6JggA7qfN8IfBJcHiOq+0DctaiIqmf6ffj7q2hvF9duzjeM
+Date:   Sat, 5 Nov 2022 16:45:52 +0530
+From:   Deepak R Varma <drv@mailo.com>
+To:     outreachy@lists.linux.dev,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] staging: rtl8723bs: replace underutilized struct by array
+ variable
+Message-ID: <Y2ZF6O1KU3zZ6r3C@qemulion>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   10d916c86ecafeccaed89175ebf9b832dddde380
-commit: 0737e01de9c411e4db87dcedf4a9789d41b1c5c1 ocfs2: ocfs2_mount_volume does cleanup job before return error
-config: alpha-randconfig-m041-20221030
-compiler: alpha-linux-gcc (GCC) 12.1.0
+For structure iqk_matrix_regs_setting, only the "Value" member variable
+is utilized whereas the other struct members are only declared but not
+utilised. Replace the struct declaration and implementation by an
+equivalent variable similar to the only used struct member variable.
+While in there, update the macro mixed case names to uppercase style.
+The resultant code is simpler and is easy to maintain.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Reported-by: Dan Carpenter <error27@gmail.com>
+Suggested-by: Dan Carpenter <error27@gmail.com>
+Signed-off-by: Deepak R Varma <drv@mailo.com>
+---
 
-smatch warnings:
-fs/ocfs2/super.c:1809 ocfs2_mount_volume() warn: missing error code 'status'
+Changes in v2:
 
-vim +/status +1809 fs/ocfs2/super.c
+This patch now replaces the earlier patchset titled: "staging: rtl8723bs: struct
+iqk_matrix_regs_setting cleanup" made up of following two patches:
+   1. staging: rtl8723bs: Simplify underutilized 2D array to 1D array
+   2. staging: rtl8723bs: Remove unused member variable
 
-ccd979bdbce9fba Mark Fasheh                 2005-12-15  1802  
-ccd979bdbce9fba Mark Fasheh                 2005-12-15  1803  static int ocfs2_mount_volume(struct super_block *sb)
-ccd979bdbce9fba Mark Fasheh                 2005-12-15  1804  {
-ccd979bdbce9fba Mark Fasheh                 2005-12-15  1805  	int status = 0;
-ccd979bdbce9fba Mark Fasheh                 2005-12-15  1806  	struct ocfs2_super *osb = OCFS2_SB(sb);
-ccd979bdbce9fba Mark Fasheh                 2005-12-15  1807  
-ccd979bdbce9fba Mark Fasheh                 2005-12-15  1808  	if (ocfs2_is_hard_readonly(osb))
-0737e01de9c411e Heming Zhao via Ocfs2-devel 2022-04-29 @1809  		goto out;
+Based on the feedback received from gregkh@linuxfoundation.org and further code
+analysis, it is determined that the code can be further cleaned up and
+simplified. Hence the changes are now consolidated into a single patch replacing
+the earlier split patches.
 
-Unclear if this is an error path or a success path.  Honestly, I would
-have thought the checker is correct that it looks like a failure path.
+The changes are compile tested only.
 
-ccd979bdbce9fba Mark Fasheh                 2005-12-15  1810  
-5500ab4ed3b8f07 Gang He                     2019-03-05  1811  	mutex_init(&osb->obs_trim_fs_mutex);
-5500ab4ed3b8f07 Gang He                     2019-03-05  1812  
-ccd979bdbce9fba Mark Fasheh                 2005-12-15  1813  	status = ocfs2_dlm_init(osb);
-ccd979bdbce9fba Mark Fasheh                 2005-12-15  1814  	if (status < 0) {
-ccd979bdbce9fba Mark Fasheh                 2005-12-15  1815  		mlog_errno(status);
-a52370b3b182f79 Gang He                     2018-01-31  1816  		if (status == -EBADR && ocfs2_userspace_stack(osb))
-a52370b3b182f79 Gang He                     2018-01-31  1817  			mlog(ML_ERROR, "couldn't mount because cluster name on"
-a52370b3b182f79 Gang He                     2018-01-31  1818  			" disk does not match the running cluster name.\n");
-0737e01de9c411e Heming Zhao via Ocfs2-devel 2022-04-29  1819  		goto out;
-ccd979bdbce9fba Mark Fasheh                 2005-12-15  1820  	}
-ccd979bdbce9fba Mark Fasheh                 2005-12-15  1821  
-ccd979bdbce9fba Mark Fasheh                 2005-12-15  1822  	status = ocfs2_super_lock(osb, 1);
-ccd979bdbce9fba Mark Fasheh                 2005-12-15  1823  	if (status < 0) {
-ccd979bdbce9fba Mark Fasheh                 2005-12-15  1824  		mlog_errno(status);
-0737e01de9c411e Heming Zhao via Ocfs2-devel 2022-04-29  1825  		goto out_dlm;
-ccd979bdbce9fba Mark Fasheh                 2005-12-15  1826  	}
-ccd979bdbce9fba Mark Fasheh                 2005-12-15  1827  
-ccd979bdbce9fba Mark Fasheh                 2005-12-15  1828  	/* This will load up the node map and add ourselves to it. */
-ccd979bdbce9fba Mark Fasheh                 2005-12-15  1829  	status = ocfs2_find_slot(osb);
-ccd979bdbce9fba Mark Fasheh                 2005-12-15  1830  	if (status < 0) {
-ccd979bdbce9fba Mark Fasheh                 2005-12-15  1831  		mlog_errno(status);
-0737e01de9c411e Heming Zhao via Ocfs2-devel 2022-04-29  1832  		goto out_super_lock;
-ccd979bdbce9fba Mark Fasheh                 2005-12-15  1833  	}
-ccd979bdbce9fba Mark Fasheh                 2005-12-15  1834  
-ccd979bdbce9fba Mark Fasheh                 2005-12-15  1835  	/* load all node-local system inodes */
-ccd979bdbce9fba Mark Fasheh                 2005-12-15  1836  	status = ocfs2_init_local_system_inodes(osb);
-ccd979bdbce9fba Mark Fasheh                 2005-12-15  1837  	if (status < 0) {
-ccd979bdbce9fba Mark Fasheh                 2005-12-15  1838  		mlog_errno(status);
-0737e01de9c411e Heming Zhao via Ocfs2-devel 2022-04-29  1839  		goto out_super_lock;
-ccd979bdbce9fba Mark Fasheh                 2005-12-15  1840  	}
-ccd979bdbce9fba Mark Fasheh                 2005-12-15  1841  
-ccd979bdbce9fba Mark Fasheh                 2005-12-15  1842  	status = ocfs2_check_volume(osb);
-ccd979bdbce9fba Mark Fasheh                 2005-12-15  1843  	if (status < 0) {
-ccd979bdbce9fba Mark Fasheh                 2005-12-15  1844  		mlog_errno(status);
-0737e01de9c411e Heming Zhao via Ocfs2-devel 2022-04-29  1845  		goto out_system_inodes;
-ccd979bdbce9fba Mark Fasheh                 2005-12-15  1846  	}
-ccd979bdbce9fba Mark Fasheh                 2005-12-15  1847  
-ccd979bdbce9fba Mark Fasheh                 2005-12-15  1848  	status = ocfs2_truncate_log_init(osb);
-0737e01de9c411e Heming Zhao via Ocfs2-devel 2022-04-29  1849  	if (status < 0) {
-ccd979bdbce9fba Mark Fasheh                 2005-12-15  1850  		mlog_errno(status);
-0737e01de9c411e Heming Zhao via Ocfs2-devel 2022-04-29  1851  		goto out_system_inodes;
-0737e01de9c411e Heming Zhao via Ocfs2-devel 2022-04-29  1852  	}
-c271c5c22b0a7ca Sunil Mushran               2006-12-05  1853  
-ccd979bdbce9fba Mark Fasheh                 2005-12-15  1854  	ocfs2_super_unlock(osb, 1);
-0737e01de9c411e Heming Zhao via Ocfs2-devel 2022-04-29  1855  	return 0;
-ccd979bdbce9fba Mark Fasheh                 2005-12-15  1856  
-0737e01de9c411e Heming Zhao via Ocfs2-devel 2022-04-29  1857  out_system_inodes:
-0737e01de9c411e Heming Zhao via Ocfs2-devel 2022-04-29  1858  	if (osb->local_alloc_state == OCFS2_LA_ENABLED)
-0737e01de9c411e Heming Zhao via Ocfs2-devel 2022-04-29  1859  		ocfs2_shutdown_local_alloc(osb);
-0737e01de9c411e Heming Zhao via Ocfs2-devel 2022-04-29  1860  	ocfs2_release_system_inodes(osb);
-0737e01de9c411e Heming Zhao via Ocfs2-devel 2022-04-29  1861  	/* before journal shutdown, we should release slot_info */
-0737e01de9c411e Heming Zhao via Ocfs2-devel 2022-04-29  1862  	ocfs2_free_slot_info(osb);
-0737e01de9c411e Heming Zhao via Ocfs2-devel 2022-04-29  1863  	ocfs2_journal_shutdown(osb);
-0737e01de9c411e Heming Zhao via Ocfs2-devel 2022-04-29  1864  out_super_lock:
-0737e01de9c411e Heming Zhao via Ocfs2-devel 2022-04-29  1865  	ocfs2_super_unlock(osb, 1);
-0737e01de9c411e Heming Zhao via Ocfs2-devel 2022-04-29  1866  out_dlm:
-0737e01de9c411e Heming Zhao via Ocfs2-devel 2022-04-29  1867  	ocfs2_dlm_shutdown(osb, 0);
-0737e01de9c411e Heming Zhao via Ocfs2-devel 2022-04-29  1868  out:
-ccd979bdbce9fba Mark Fasheh                 2005-12-15  1869  	return status;
-ccd979bdbce9fba Mark Fasheh                 2005-12-15  1870  }
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+ .../staging/rtl8723bs/hal/HalPhyRf_8723B.c    | 21 +++++++++----------
+ drivers/staging/rtl8723bs/hal/odm.h           | 12 +++--------
+ 2 files changed, 13 insertions(+), 20 deletions(-)
+
+diff --git a/drivers/staging/rtl8723bs/hal/HalPhyRf_8723B.c b/drivers/staging/rtl8723bs/hal/HalPhyRf_8723B.c
+index a52748f7b56e..22e33b97800d 100644
+--- a/drivers/staging/rtl8723bs/hal/HalPhyRf_8723B.c
++++ b/drivers/staging/rtl8723bs/hal/HalPhyRf_8723B.c
+@@ -244,8 +244,8 @@ void ODM_TxPwrTrackSetPwr_8723B(
+ 			Final_CCK_Swing_Index = 0;
+
+ 		setIqkMatrix_8723B(pDM_Odm, Final_OFDM_Swing_Index, RFPath,
+-			pDM_Odm->RFCalibrateInfo.IQKMatrixRegSetting[ChannelMappedIndex].Value[0][0],
+-			pDM_Odm->RFCalibrateInfo.IQKMatrixRegSetting[ChannelMappedIndex].Value[0][1]);
++			pDM_Odm->RFCalibrateInfo.iqk_matrix_regs_setting_value[ChannelMappedIndex][0],
++			pDM_Odm->RFCalibrateInfo.iqk_matrix_regs_setting_value[ChannelMappedIndex][1]);
+
+ 		setCCKFilterCoefficient(pDM_Odm, Final_CCK_Swing_Index);
+
+@@ -257,8 +257,8 @@ void ODM_TxPwrTrackSetPwr_8723B(
+ 			pDM_Odm->Remnant_OFDMSwingIdx[RFPath] = Final_OFDM_Swing_Index - PwrTrackingLimit_OFDM;
+
+ 			setIqkMatrix_8723B(pDM_Odm, PwrTrackingLimit_OFDM, RFPath,
+-				pDM_Odm->RFCalibrateInfo.IQKMatrixRegSetting[ChannelMappedIndex].Value[0][0],
+-				pDM_Odm->RFCalibrateInfo.IQKMatrixRegSetting[ChannelMappedIndex].Value[0][1]);
++				pDM_Odm->RFCalibrateInfo.iqk_matrix_regs_setting_value[ChannelMappedIndex][0],
++				pDM_Odm->RFCalibrateInfo.iqk_matrix_regs_setting_value[ChannelMappedIndex][1]);
+
+ 			pDM_Odm->Modify_TxAGC_Flag_PathA = true;
+ 			PHY_SetTxPowerIndexByRateSection(Adapter, RFPath, pHalData->CurrentChannel, OFDM);
+@@ -267,16 +267,16 @@ void ODM_TxPwrTrackSetPwr_8723B(
+ 			pDM_Odm->Remnant_OFDMSwingIdx[RFPath] = Final_OFDM_Swing_Index;
+
+ 			setIqkMatrix_8723B(pDM_Odm, 0, RFPath,
+-				pDM_Odm->RFCalibrateInfo.IQKMatrixRegSetting[ChannelMappedIndex].Value[0][0],
+-				pDM_Odm->RFCalibrateInfo.IQKMatrixRegSetting[ChannelMappedIndex].Value[0][1]);
++				pDM_Odm->RFCalibrateInfo.iqk_matrix_regs_setting_value[ChannelMappedIndex][0],
++				pDM_Odm->RFCalibrateInfo.iqk_matrix_regs_setting_value[ChannelMappedIndex][1]);
+
+ 			pDM_Odm->Modify_TxAGC_Flag_PathA = true;
+ 			PHY_SetTxPowerIndexByRateSection(Adapter, RFPath, pHalData->CurrentChannel, OFDM);
+ 			PHY_SetTxPowerIndexByRateSection(Adapter, RFPath, pHalData->CurrentChannel, HT_MCS0_MCS7);
+ 		} else {
+ 			setIqkMatrix_8723B(pDM_Odm, Final_OFDM_Swing_Index, RFPath,
+-				pDM_Odm->RFCalibrateInfo.IQKMatrixRegSetting[ChannelMappedIndex].Value[0][0],
+-				pDM_Odm->RFCalibrateInfo.IQKMatrixRegSetting[ChannelMappedIndex].Value[0][1]);
++				pDM_Odm->RFCalibrateInfo.iqk_matrix_regs_setting_value[ChannelMappedIndex][0],
++				pDM_Odm->RFCalibrateInfo.iqk_matrix_regs_setting_value[ChannelMappedIndex][1]);
+
+ 			if (pDM_Odm->Modify_TxAGC_Flag_PathA) { /* If TxAGC has changed, reset TxAGC again */
+ 				pDM_Odm->Remnant_OFDMSwingIdx[RFPath] = 0;
+@@ -1759,9 +1759,8 @@ void PHY_IQCalibrate_8723B(
+ /* To Fix BSOD when final_candidate is 0xff */
+ /* by sherry 20120321 */
+ 	if (final_candidate < 4) {
+-		for (i = 0; i < IQK_Matrix_REG_NUM; i++)
+-			pDM_Odm->RFCalibrateInfo.IQKMatrixRegSetting[0].Value[0][i] = result[final_candidate][i];
+-		pDM_Odm->RFCalibrateInfo.IQKMatrixRegSetting[0].bIQKDone = true;
++		for (i = 0; i < IQK_MATRIX_REG_NUM; i++)
++			pDM_Odm->RFCalibrateInfo.iqk_matrix_regs_setting_value[0][i] = result[final_candidate][i];
+ 	}
+
+ 	_PHY_SaveADDARegisters8723B(padapter, IQK_BB_REG_92C, pDM_Odm->RFCalibrateInfo.IQK_BB_backup_recover, 9);
+diff --git a/drivers/staging/rtl8723bs/hal/odm.h b/drivers/staging/rtl8723bs/hal/odm.h
+index fe9782d2d4fd..f5c804a1b9d5 100644
+--- a/drivers/staging/rtl8723bs/hal/odm.h
++++ b/drivers/staging/rtl8723bs/hal/odm.h
+@@ -193,8 +193,8 @@ struct odm_rate_adaptive {
+ #define HP_THERMAL_NUM		8
+
+ #define AVG_THERMAL_NUM		8
+-#define IQK_Matrix_REG_NUM	8
+-#define IQK_Matrix_Settings_NUM	14 /* Channels_2_4G_NUM */
++#define IQK_MATRIX_REG_NUM	8
++#define IQK_MATRIX_SETTINGS_NUM	14 /* Channels_2_4G_NUM */
+
+ #define		DM_Type_ByFW			0
+ #define		DM_Type_ByDriver		1
+@@ -479,12 +479,6 @@ enum odm_type_alna_e { /* tag_ODM_TYPE_ALNA_Definition */
+ 	TYPE_ALNA3 = BIT(3)|BIT(2)|BIT(1)|BIT(0)
+ };
+
+-struct iqk_matrix_regs_setting { /* _IQK_MATRIX_REGS_SETTING */
+-	bool bIQKDone;
+-	s32 Value[3][IQK_Matrix_REG_NUM];
+-	bool bBWIqkResultSaved[3];
+-};
+-
+ /* Remove PATHDIV_PARA struct to odm_PathDiv.h */
+
+ struct odm_rf_cal_t { /* ODM_RF_Calibration_Structure */
+@@ -530,7 +524,7 @@ struct odm_rf_cal_t { /* ODM_RF_Calibration_Structure */
+
+ 	u8 ThermalValue_HP[HP_THERMAL_NUM];
+ 	u8 ThermalValue_HP_index;
+-	struct iqk_matrix_regs_setting IQKMatrixRegSetting[IQK_Matrix_Settings_NUM];
++	s32 iqk_matrix_regs_setting_value[IQK_MATRIX_SETTINGS_NUM][IQK_MATRIX_REG_NUM];
+ 	bool bNeedIQK;
+ 	bool bIQKInProgress;
+ 	u8 Delta_IQK;
+--
+2.34.1
+
+
 
