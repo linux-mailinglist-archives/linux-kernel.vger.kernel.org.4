@@ -2,136 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D3B561DEFF
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 22:49:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 277B861DF08
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 23:21:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230146AbiKEVtL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Nov 2022 17:49:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39786 "EHLO
+        id S229839AbiKEWVC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Nov 2022 18:21:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230078AbiKEVsu (ORCPT
+        with ESMTP id S229453AbiKEWVA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Nov 2022 17:48:50 -0400
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD77213DE7
-        for <linux-kernel@vger.kernel.org>; Sat,  5 Nov 2022 14:48:49 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id DF302320027A;
-        Sat,  5 Nov 2022 17:48:48 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Sat, 05 Nov 2022 17:48:49 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1667684928; x=1667771328; bh=H8
-        veXpvoO34Pl6tFHer7gYF/PO/WldpA4cjeFDX9dV0=; b=BOQ+xVr9BgNBJ53Np2
-        2GVbC01Gy1k7LsisJ6a4HuFQ3aNwUYuzdzm3kSYYjx33wwfxPd0z3fECkRdEfz4F
-        62Ckj0vTqo+3S0f1R73TNu9D4AXuFNon1dbIpj9aF4IKjZk2tDFoPyojbI0oQ5Ix
-        g4FwJgG5IO77IGz6Jr3cpRjq8dhQogtGz1IRhP3LwNipbhXviPOBoGB0/NIncCQX
-        U6qCvJNceg91LP93s5iTTQdXCfCxWf/1fTzpJYAwa0dbpMGBt99el8lLAPM6Yp7U
-        8YPb8yfCQd5ZeWTXhK6J515XXEX+UQMNrnHpZaMMKsQ//xhb7epA0EqIw7JVLRUT
-        T8bQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1667684928; x=1667771328; bh=H8veXpvoO34Pl
-        6tFHer7gYF/PO/WldpA4cjeFDX9dV0=; b=ttfz6Ev9+nb8DRzIFbSUQXXoxy9ds
-        MqMYAiRBBZ3/WgwsScVNN2kM2Sgat6JoK3cuvMFUt1Aoicg3XsJDkqDiCmPBy2CE
-        xVzfbYRrCAn7ViWfA2DrzmRnqphG4AkBaJqKRIpfjTH3FZs6uwmdxs1RKs0MPlYY
-        obe6NpNuqQ7Flq1zyG6ykN3p32xcz59OpwqWmcetbOYO38K/MBODaAO6H7SSz5a3
-        ZwZYYEKPHLxBZ5QkpWMj9Ehqi9tFw8tX6MgvREmHH1+IqcDUZtVj5K6BJLrIQb3l
-        U9cQtO+CZYTwm+FzVVabUcWH9lVZBKk/yzLK2u3Qvnti3H5yt22pP7a3g==
-X-ME-Sender: <xms:QNpmYxEKKrp7uWJIs2nOfxdiDiviudbQ4u6zgg7LYq4xP_b0YWvKjw>
-    <xme:QNpmY2Wrk1aJt-SvJ_2rusqeK_oyXJaMYhqcmwCDgeVawAToyYSxZR9cwEjAvSWEd
-    lJvGO_kjBaiZ5z2qw>
-X-ME-Received: <xmr:QNpmYzIQWRev5acjGr12qjqZeAf31D22Cg36yxZaIBghro-yf4DKcLWbmbvL21o9M_dJWV5gARqxibkyZDZrbMOb-3r3_AoMYAJ1iBo8aAkHJhlMNSimr-aqtCmjGEHKQTRnGw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrvdeggdefkecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefhvfevufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpefurghmuhgv
-    lhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenucggtf
-    frrghtthgvrhhnpedukeetueduhedtleetvefguddvvdejhfefudelgfduveeggeehgfdu
-    feeitdevteenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
-    hmpehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
-X-ME-Proxy: <xmx:QNpmY3E9dIRV572n1FNnXs48kLP5eFikRvqy4lAjKaD7JQUPNc3-Hw>
-    <xmx:QNpmY3VzIbOolxSI_pIQnOJt6czjIdbdI0YEzJvByflcOeHTrYOz2w>
-    <xmx:QNpmYyPju7kpwaWWvfD3zrAgMwOnoSiCp8__JwaKeCgi_60CgYyPpQ>
-    <xmx:QNpmY9cDe-5BFzgVrDKqPDVCDqF-Br0gtMszVFcZcdPw_XOw5hiB3w>
-Feedback-ID: i0ad843c9:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 5 Nov 2022 17:48:47 -0400 (EDT)
-From:   Samuel Holland <samuel@sholland.org>
-To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Samuel Holland <samuel@sholland.org>
-Subject: [PATCH 2/2] firmware/psci: Switch to the sys-off handler API
-Date:   Sat,  5 Nov 2022 16:48:40 -0500
-Message-Id: <20221105214841.7828-3-samuel@sholland.org>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221105214841.7828-1-samuel@sholland.org>
-References: <20221105214841.7828-1-samuel@sholland.org>
+        Sat, 5 Nov 2022 18:21:00 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F02D11470;
+        Sat,  5 Nov 2022 15:20:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D0E4DB80064;
+        Sat,  5 Nov 2022 22:20:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BEF3EC433D7;
+        Sat,  5 Nov 2022 22:20:54 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="NiluAsAW"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1667686852;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=GokT8QcZOOF1Sj+w1E78zsAC5vdLp3dZxLPEamRZIQc=;
+        b=NiluAsAWGU9q2YBTgfIqH7nw2j4QXLI9zVeGdjIIsiTzIQF6J69JxnxlXhrGVgPJYsTlNf
+        m2iE8C353WC3NFDPhvgr3yf7e8dr5Up3F5jyaGu5chUUnWd3HCjhX+7PdW1ogHNlCnFFUk
+        +6XrN1/n8nwHh1xBkhJAboxHjNS2tOg=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 969eda74 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Sat, 5 Nov 2022 22:20:52 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     dri-devel@lists.freedesktop.org, linux-api@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Daniel Vetter <daniel.vetter@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ilia Mirkin <imirkin@alum.mit.edu>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>,
+        Christian Brauner <brauner@kernel.org>,
+        =?UTF-8?q?Michel=20D=C3=A4nzer?= <michel@daenzer.net>,
+        Alex Deucher <alexdeucher@gmail.com>,
+        Adam Jackson <ajax@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
+        Rob Clark <robdclark@gmail.com>,
+        Sultan Alsawaf <sultan@kerneltoast.com>
+Subject: [PATCH] drm/atomic: do not branch based on the value of current->comm[0]
+Date:   Sat,  5 Nov 2022 23:20:12 +0100
+Message-Id: <20221105222012.4226-1-Jason@zx2c4.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Any other poweroff handlers registered at the default priority will
-run before the legacy pm_power_off() function. Register the PSCI
-poweroff handler with the correct priority to ensure it runs first.
+This reverts 26b1d3b527e7 ("drm/atomic: Take the atomic toys away from
+X"), a rootkit-like kludge that has no business being inside of a
+general purpose kernel. It's the type of debugging hack I'll use
+momentarily but never commit, or a sort of babbies-first-process-hider
+malware trick.
 
-Signed-off-by: Samuel Holland <samuel@sholland.org>
+The backstory is that some userspace code -- xorg-server -- has a
+modesetting DDX that isn't really coded right. With nobody wanting to
+maintain X11 anymore, rather than fixing the buggy code, the kernel was
+adjusted to avoid having to touch X11. A bummer, but fair enough: if the
+kernel doesn't want to support some userspace API any more, the right
+thing to do is to arrange for a graceful fallback where userspace thinks
+it's not available in a manageable way.
+
+However, the *way* it goes about doing that is just to check
+`current->comm[0] == 'X'`, and disable it for only that case. So that
+means it's *not* simply a matter of the kernel not wanting to support a
+particular userspace API anymore, but rather it's the kernel not wanting
+to support xorg-server, in theory, but actually, it turns out, that's
+all processes that begin with 'X'.
+
+Playing games with current->comm like this is obviously wrong, and it's
+pretty shocking that this ever got committed.
+
+Fortunately, since this was committed, somebody did actually disable
+the userspace side by default in X11:
+https://gitlab.freedesktop.org/xorg/xserver/-/merge_requests/180 and
+this was three years ago. So userspace is mostly fine now for ordinary
+default usage. And people who opt into this -- since it does actually
+work fine for many use cases on i915 -- ostensibly know what they're
+getting themselves into (my case).
+
+So let's just revert this `comm[0] == 'X'` business entirely, but still
+allow for `value == 2`, in case anybody actually started working on that
+part elsewhere.
+
+Fixes: 26b1d3b527e7 ("drm/atomic: Take the atomic toys away from X")
+Cc: Daniel Vetter <daniel.vetter@intel.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Ilia Mirkin <imirkin@alum.mit.edu>
+Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
+Cc: Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>
+Cc: Christian Brauner <brauner@kernel.org>
+Cc: Michel Dänzer <michel@daenzer.net>
+Cc: Alex Deucher <alexdeucher@gmail.com>
+Cc: Adam Jackson <ajax@redhat.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Sean Paul <sean@poorly.run>
+Cc: David Airlie <airlied@linux.ie>
+Cc: Rob Clark <robdclark@gmail.com>
+Cc: Sultan Alsawaf <sultan@kerneltoast.com>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 ---
+ drivers/gpu/drm/drm_ioctl.c | 5 -----
+ 1 file changed, 5 deletions(-)
 
- drivers/firmware/psci/psci.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/firmware/psci/psci.c b/drivers/firmware/psci/psci.c
-index e7bcfca4159f..6d528021925d 100644
---- a/drivers/firmware/psci/psci.c
-+++ b/drivers/firmware/psci/psci.c
-@@ -13,7 +13,6 @@
- #include <linux/errno.h>
- #include <linux/linkage.h>
- #include <linux/of.h>
--#include <linux/pm.h>
- #include <linux/printk.h>
- #include <linux/psci.h>
- #include <linux/reboot.h>
-@@ -322,9 +321,11 @@ static struct notifier_block psci_sys_reset_nb = {
- 	.priority = 129,
- };
- 
--static void psci_sys_poweroff(void)
-+static int psci_sys_poweroff(struct sys_off_data *data)
- {
- 	invoke_psci_fn(PSCI_0_2_FN_SYSTEM_OFF, 0, 0, 0);
-+
-+	return NOTIFY_DONE;
- }
- 
- static int psci_features(u32 psci_func_id)
-@@ -603,7 +604,9 @@ static void __init psci_0_2_set_functions(void)
- 
- 	register_restart_handler(&psci_sys_reset_nb);
- 
--	pm_power_off = psci_sys_poweroff;
-+	register_sys_off_handler(SYS_OFF_MODE_POWER_OFF,
-+				 SYS_OFF_PRIO_FIRMWARE,
-+				 psci_sys_poweroff, NULL);
- }
- 
- /*
+diff --git a/drivers/gpu/drm/drm_ioctl.c b/drivers/gpu/drm/drm_ioctl.c
+index ca2a6e6101dc..017f31e67179 100644
+--- a/drivers/gpu/drm/drm_ioctl.c
++++ b/drivers/gpu/drm/drm_ioctl.c
+@@ -336,11 +336,6 @@ drm_setclientcap(struct drm_device *dev, void *data, struct drm_file *file_priv)
+ 	case DRM_CLIENT_CAP_ATOMIC:
+ 		if (!drm_core_check_feature(dev, DRIVER_ATOMIC))
+ 			return -EOPNOTSUPP;
+-		/* The modesetting DDX has a totally broken idea of atomic. */
+-		if (current->comm[0] == 'X' && req->value == 1) {
+-			pr_info("broken atomic modeset userspace detected, disabling atomic\n");
+-			return -EOPNOTSUPP;
+-		}
+ 		if (req->value > 2)
+ 			return -EINVAL;
+ 		file_priv->atomic = req->value;
 -- 
-2.37.3
+2.38.1
 
