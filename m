@@ -2,72 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D693F61DD5D
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 19:49:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86E4F61DD6F
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 19:59:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229832AbiKEStA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Nov 2022 14:49:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51660 "EHLO
+        id S229994AbiKES7h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Nov 2022 14:59:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbiKESs6 (ORCPT
+        with ESMTP id S229926AbiKES7a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Nov 2022 14:48:58 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7117178B1;
-        Sat,  5 Nov 2022 11:48:55 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id u11so10708145ljk.6;
-        Sat, 05 Nov 2022 11:48:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:content-language
-         :references:cc:to:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7G5Dcl8evUDZTsQ00NdOfIxS0ycTvIlgB4Poi2VDHt8=;
-        b=n/NTVDKfQtfuVcMNy/aD9dp1pcIDCYNdAVvxsR6n8PoR8mcP71nZOkMy2hRwwjps8m
-         aTmi2IYleMKJh8BIEY/n0U8GasHdKlO5NgBJKecc02eDqApFgjKy2ZvZyheZoWvX3M2O
-         r7/eGPduOazcRrU7RFpt636k+FpEmHKn7AE7Tj2SSEoceMzn+DxlP9U6+qAgCyzH6kJi
-         ofWrS2kSZ7Ko7P3Gp7C428tce9LonkwyTkKpap6JwFP8jZkKFX91EwIamQblmoIR8GGn
-         QDFBGVpAH91w9R4lceTOQWJEEbSSlpZGHweM31LRyixRgF1I9oYAlHHcjMULk14fdLSz
-         FA0g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:content-language
-         :references:cc:to:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7G5Dcl8evUDZTsQ00NdOfIxS0ycTvIlgB4Poi2VDHt8=;
-        b=w0ZfNJQVBJu+qugmNIKfe5jcXri+B6owqLbwLBAg1d5DqGvtWK0PnRkNHON+IhoQFI
-         N8X+3GKAdWPEW2//Jg3B1mqaIwhwq1OlseeGYLUozfCi3JKjhhm+XbNXw3rehaHiItk1
-         n+HClj+Kloq0NI6f4XXarqlxkVfdkl3y5wab8z2gqa2Fhz8Se1v7ujE9NMxHUwfjfiZb
-         JJ2rJRX6xNX5zTqMzStw5nyfX/8uweQmxaqfJX8Rep0V5s0f6ck0Q475tCg0bNB3E+X8
-         uyJQiF0io4Q/5ZrQ0AsupjD/C2Ldz8+N7aIJaObcwHW+7Jij9HIXEJGcLcD/Vb8jrVJW
-         rrog==
-X-Gm-Message-State: ACrzQf0umKA27SxG0ybzc+qUBYOjngVutu/ZFyQkxOAUmkqP+L7sTyim
-        dTzmHi88K/cfEqgqPL01kmk=
-X-Google-Smtp-Source: AMsMyM7U4xI7nFSwWyhVQFBs4IPdbBRMBZQwwkF+QB6fMptlJkCi0GAvaZpZEMXL4Z/dYb59cnNbvA==
-X-Received: by 2002:a2e:9591:0:b0:277:99b:3826 with SMTP id w17-20020a2e9591000000b00277099b3826mr3335872ljh.412.1667674134079;
-        Sat, 05 Nov 2022 11:48:54 -0700 (PDT)
-Received: from [10.0.0.100] (host-185-69-38-8.kaisa-laajakaista.fi. [185.69.38.8])
-        by smtp.gmail.com with ESMTPSA id f4-20020a056512228400b00498f570aef2sm378864lfu.209.2022.11.05.11.48.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 05 Nov 2022 11:48:53 -0700 (PDT)
-Message-ID: <be967357-6ecb-5ecf-c860-5265e1527b2a@gmail.com>
-Date:   Sat, 5 Nov 2022 20:49:49 +0200
+        Sat, 5 Nov 2022 14:59:30 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A73A82AE1;
+        Sat,  5 Nov 2022 11:59:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net; s=s31663417;
+        t=1667674759; bh=+CeGzPHAiwTHslgTPBjflPOdmW6LTaHhl7ZUhW3vNP8=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=qxOFkEZ6mRtOW6C0OtjPQyGgvkA05hjrWOCtJUZBCyskS27+Po3yB+UzY4c9ySMW/
+         qkIkVsUS5JQ94Wf9wUH3K6qMzTsyggEh/SK763o7GhpE7/4dk73d4KjtF42VBlRcbq
+         ozX8WEyPICLnYlaP5YxHVxVtwr8m0uvMaBblkOjOlOqhQ4Yu6gyuLVl0x4nx4rIxmB
+         452sTLm48cN80OwffYIcpoeIxoDftx510bmNlXV0loQ9zyBSs0DkJrr8JT29tvZXvs
+         lVJdUK8R6x940CoeNbTlEm/IVsc2S2wRIqGrivrGT/gav0wKHzb1v6Kp47HVVgG9Rc
+         jbjJVw/zc+a3w==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from probook ([87.78.44.193]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1N4hzj-1oyiVE1D79-011mod; Sat, 05
+ Nov 2022 19:59:19 +0100
+From:   =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+To:     linux-spi@vger.kernel.org, openbmc@lists.ozlabs.org
+Cc:     Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Mark Brown <broonie@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org
+Subject: [PATCH 0/8] Nuvoton WPCM450 FIU SPI flash controller
+Date:   Sat,  5 Nov 2022 19:59:03 +0100
+Message-Id: <20221105185911.1547847-1-j.neuschaefer@gmx.net>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-To:     Georgi Vlaev <g-vlaev@ti.com>, Vinod Koul <vkoul@kernel.org>
-Cc:     Nishanth Menon <nm@ti.com>, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Vignesh Raghavendra <vigneshr@ti.com>
-References: <20221103203021.83929-1-g-vlaev@ti.com>
-Content-Language: en-US
-From:   =?UTF-8?Q?P=c3=a9ter_Ujfalusi?= <peter.ujfalusi@gmail.com>
-Subject: Re: [PATCH v2] dmaengine: k3-udma: Add system suspend/resume support
-In-Reply-To: <20221103203021.83929-1-g-vlaev@ti.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:Y0mXxM0HICmGnOuG0U8nVhTFBA1wLRp9aUB6oInA+MZotw3HwbL
+ MShwnW6ykzM4la9QVqS3pNg87Ylm7TX9x+vFTrexZ4qyxW5iiKcd4QsFgx/kozKO+QJBtAO
+ O2Q2N7P4t6y+TxxbBbNeEsJpR9Q1gseSRdCD7urms/mKvIY8DH7a8npqzLV5eXbAsC8uqbQ
+ Ej/NQvaje6iIicYun9tbw==
+UI-OutboundReport: notjunk:1;M01:P0:PW2MiMKEoQQ=;fObLh+9qyxrgamfZcR005K2qZ8L
+ 7k//slWMHPh8Hrq2gPzixGromD+zVzHkp+Uh2Ta/jGEb1GovCJ4oRYykLzoNt1iIWNxT4K2AB
+ XdnYnRCykuUV7tKyOWvx9FaxIa0j4XJRU4cgku4av2uBUU2OrdgQqINuk7JLgtnu2tn/AEy/R
+ erCmQrwGNPCH3jFxt8oJ7UmzUeAQjoM+Gj0DikK1Ib2gA98DNurrPxjne7HB7WH/Cg1Y+3DuI
+ JV1rp9rcgR2K6L0Xh/ePjL8TExk5xVGxNrEQLxbjBBmaFJQ9i1apVzBmNB3x4IIViiTZH+ahJ
+ R+d38ePanKsDlpGDu/Gn96J2jiv2NnIW29OdcaDKWrFu5p4riSXmNagpbqp+TdwGtfG6iDbQH
+ FeFJODT4YTClALNh+i2hm8l2VLknbpMStd5oqHs+vhrU01NI8L2qVA4tl5IwyjJsmpiGWT54K
+ NtrN2Ka33X30nfLTDeGC+KUO4oMJGDDcefxFbjjTgeKxpf25/vr87HO81NzN/7VNl40lcJ6xK
+ RK3g1lTBLMygylo+UFuRUyRljQ3c3WZL4a/6wpMAipW3CBOCoTiSioDYqCKbs6redtLRYHdaN
+ ZtLwpr2Q+GvCyMo4MfsDr8t0wokve/l3FRxJn72fdMCYJhVXdf9K+URF96ruuQeUp/Dd/oBpC
+ 4c5lvlsQeLJY91won9J3Lb7Gs4ZuMzZeiI7gU43I3xdcZr7c1asLaOVho+H91xK/uXqGtgv58
+ 8zM5k7sFygPcGdsSC/0Lue+nDlaxbiIl8rdeug+7pQrJkFn63hCwQULKV5swpWEMF+pg8ccJp
+ sFpSPQNdnZYsamiCIgOePho4EeJRCUiqOQE6V1O/BUKwa6aXGDN53pWWMvEWo+gH7WmhpPQ3l
+ 9EdJlQQxIl/dMCXPL8Gx87ZZkayHNcHnBrfeK4qPPbZd/bBWibK4/AnAikp8aUH8NZFYSt8EI
+ jg/s+rYmkweG1HffUj5Vj9l8eCE=
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,138 +73,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This patchset adds DT bindings and a driver for the Flash Interface Unit
+(FIU), the SPI flash controller in the Nuvoton WPCM450 BMC SoC. It
+supports four chip selects, and direct (memory-mapped) access to 16 MiB
+per chip. Larger flash chips can be accessed by software-defined SPI
+transfers.
+
+The existing NPCM7xx FIU driver is sufficitently incompatible with the
+WPCM450 FIU that I decided to write a new driver.
+
+This patchset depends on the WPCM450 clock support patchset,
+
+	[PATCH v5 0/6] Nuvoton WPCM450 clock and reset driver
 
 
-On 03/11/2022 22:30, Georgi Vlaev wrote:
-> From: Vignesh Raghavendra <vigneshr@ti.com>
-> 
-> The K3 platforms configure the DMA resources with the
-> help of the TI's System Firmware's Device Manager(DM)
-> over TISCI. The group of DMA related Resource Manager[1]
-> TISCI messages includes: INTA, RINGACC, UDMAP, and PSI-L.
-> This configuration however, does not persist in the DM
-> after leaving from Suspend-to-RAM state. We have to restore
-> the DMA channel configuration over TISCI for all configured
-> channels when returning from suspend.
-> 
-> The TISCI resource management calls for each DMA type (UDMA,
-> PKTDMA, BCDMA) happen in device_free_chan_resources() and
-> device_alloc_chan_resources(). In pm_suspend() we store
-> the current udma_chan_config for channels that still have
-> attached clients and call device_free_chan_resources().
-> In pm_resume() restore the udma_channel_config from backup
-> and call device_alloc_chan_resources() for those channels.
-> Drivers like CPSW can do their own DMA resource management,
-> so use the late system suspend/resume hooks.
+Jonathan
 
-It is wrong to push the DMA context store/restore task to a client 
-driver (cpsw or icss), it has to be done by the glue layer.
 
-With this patch the DMAengine side of the UDMA/BCDMA/PKTDMA will support 
-suspend/resume while the networking will remain broken, right?
+Jonathan Neusch=C3=A4fer (8):
+  pinctrl: nuvoton: wpcm450: Refactor MFSEL setting code
+  pinctrl: nuvoton: wpcm450: Fix handling of inverted MFSEL bits
+  dt-bindings: spi: Add Nuvoton WPCM450 Flash Interface Unit (FIU)
+  dt-bindings: mfd: syscon: Add nuvoton,wpcm450-shm
+  ARM: dts: wpcm450: Add FIU SPI controller node
+  ARM: dts: wpcm450-supermicro-x9sci-ln4f: Add SPI flash
+  spi: wpcm-fiu: Add driver for Nuvoton WPCM450 Flash Interface Unit
+    (FIU)
+  spi: wpcm-fiu: Add direct map support
 
-I can not test this atm since my setup relies solely on NFS rootfs via 
-cpsw, I might be able to check with a USB-ethernet dongle..
+ .../devicetree/bindings/mfd/syscon.yaml       |   1 +
+ .../bindings/spi/nuvoton,wpcm450-fiu.yaml     |  76 +++
+ .../nuvoton-wpcm450-supermicro-x9sci-ln4f.dts |   9 +
+ arch/arm/boot/dts/nuvoton-wpcm450.dtsi        |  16 +
+ drivers/pinctrl/nuvoton/pinctrl-wpcm450.c     |  32 +-
+ drivers/spi/Kconfig                           |  11 +
+ drivers/spi/Makefile                          |   1 +
+ drivers/spi/spi-wpcm-fiu.c                    | 507 ++++++++++++++++++
+ 8 files changed, 644 insertions(+), 9 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/spi/nuvoton,wpcm450-=
+fiu.yaml
+ create mode 100644 drivers/spi/spi-wpcm-fiu.c
 
-Please do a followup for the glue layer support.
+=2D-
+2.35.1
 
-Acked-by: Peter Ujfalusi <peter.ujfalusi@gmail.com>
-
-> [1] https://software-dl.ti.com/tisci/esd/latest/2_tisci_msgs/index.html#resource-management-rm
-> 
-> Signed-off-by: Vignesh Raghavendra <vigneshr@ti.com>
-> [g-vlaev@ti.com: Add patch description and config backup]
-> [g-vlaev@ti.com: Supend only channels with clients]
-> Signed-off-by: Georgi Vlaev <g-vlaev@ti.com>
-> ---
-> Changes:
-> 
-> v2:
-> * Update the commit message
-> * Use list_for_each_entry() to iterate over the channel list.
-> 
->   drivers/dma/ti/k3-udma.c | 54 ++++++++++++++++++++++++++++++++++++++++
->   1 file changed, 54 insertions(+)
-> 
-> diff --git a/drivers/dma/ti/k3-udma.c b/drivers/dma/ti/k3-udma.c
-> index ce8b80bb34d7..29844044132c 100644
-> --- a/drivers/dma/ti/k3-udma.c
-> +++ b/drivers/dma/ti/k3-udma.c
-> @@ -304,6 +304,8 @@ struct udma_chan {
->   
->   	/* Channel configuration parameters */
->   	struct udma_chan_config config;
-> +	/* Channel configuration parameters (backup) */
-> +	struct udma_chan_config backup_config;
->   
->   	/* dmapool for packet mode descriptors */
->   	bool use_dma_pool;
-> @@ -5491,11 +5493,63 @@ static int udma_probe(struct platform_device *pdev)
->   	return ret;
->   }
->   
-> +static int udma_pm_suspend(struct device *dev)
-> +{
-> +	struct udma_dev *ud = dev_get_drvdata(dev);
-> +	struct dma_device *dma_dev = &ud->ddev;
-> +	struct dma_chan *chan;
-> +	struct udma_chan *uc;
-> +
-> +	list_for_each_entry(chan, &dma_dev->channels, device_node) {
-> +		if (chan->client_count) {
-> +			uc = to_udma_chan(chan);
-> +			/* backup the channel configuration */
-> +			memcpy(&uc->backup_config, &uc->config,
-> +			       sizeof(struct udma_chan_config));
-> +			dev_dbg(dev, "Suspending channel %s\n",
-> +				dma_chan_name(chan));
-> +			ud->ddev.device_free_chan_resources(chan);
-> +		}
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int udma_pm_resume(struct device *dev)
-> +{
-> +	struct udma_dev *ud = dev_get_drvdata(dev);
-> +	struct dma_device *dma_dev = &ud->ddev;
-> +	struct dma_chan *chan;
-> +	struct udma_chan *uc;
-> +	int ret;
-> +
-> +	list_for_each_entry(chan, &dma_dev->channels, device_node) {
-> +		if (chan->client_count) {
-> +			uc = to_udma_chan(chan);
-> +			/* restore the channel configuration */
-> +			memcpy(&uc->config, &uc->backup_config,
-> +			       sizeof(struct udma_chan_config));
-> +			dev_dbg(dev, "Resuming channel %s\n",
-> +				dma_chan_name(chan));
-> +			ret = ud->ddev.device_alloc_chan_resources(chan);
-> +			if (ret)
-> +				return ret;
-> +		}
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct dev_pm_ops udma_pm_ops = {
-> +	SET_LATE_SYSTEM_SLEEP_PM_OPS(udma_pm_suspend, udma_pm_resume)
-> +};
-> +
->   static struct platform_driver udma_driver = {
->   	.driver = {
->   		.name	= "ti-udma",
->   		.of_match_table = udma_of_match,
->   		.suppress_bind_attrs = true,
-> +		.pm = &udma_pm_ops,
->   	},
->   	.probe		= udma_probe,
->   };
-> 
-> base-commit: 81214a573d19ae2fa5b528286ba23cd1cb17feec
-
--- 
-Péter
