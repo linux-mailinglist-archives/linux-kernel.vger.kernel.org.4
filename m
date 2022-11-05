@@ -2,158 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E68A361D928
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 10:38:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4785961D92B
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 10:39:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229546AbiKEJiR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Nov 2022 05:38:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56796 "EHLO
+        id S229649AbiKEJjp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Nov 2022 05:39:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbiKEJiP (ORCPT
+        with ESMTP id S229601AbiKEJjl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Nov 2022 05:38:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FEB72F3B8
-        for <linux-kernel@vger.kernel.org>; Sat,  5 Nov 2022 02:38:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D97FC60B0D
-        for <linux-kernel@vger.kernel.org>; Sat,  5 Nov 2022 09:38:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1183CC433C1;
-        Sat,  5 Nov 2022 09:38:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667641093;
-        bh=yCWj+XA04ZTlVCdL88pc7Uvsh6vI6Qz0YyTu54vfw1A=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=anXi2ll6orx4ryxYKCwtZDuh6aIOK53d1KLpUIgnU97wD4fCGBOigJgNx1rQDfvyL
-         K9KJKn7jfiTjyrIdlX8xuLgjiTFU7kUrW15p6wmWkB3nS18W7IK8WNQxjhpqm9t9Gc
-         khNG1HePqtTKdrJqHWO/YtaX1Q+3GAiyPjlKJd9Xar7IJR11CXLL41KcX7YD+xPHmE
-         nMw2+qc/n/3kqngoslnrRByN52XZKLVTWw6M/TToPuggeI9X9y0MtA1HS0RiFKoEQA
-         rOo7WNyIEys512WiGCPh19XA52R0dZAIaHMgaUtEDNt8nVmMYEy3juR4kHsb/7wEAu
-         Bu87s9M7jRXgQ==
-Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <maz@kernel.org>)
-        id 1orFcw-0041AX-H9;
-        Sat, 05 Nov 2022 09:38:10 +0000
+        Sat, 5 Nov 2022 05:39:41 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62F0D65C0
+        for <linux-kernel@vger.kernel.org>; Sat,  5 Nov 2022 02:39:39 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id bg9-20020a05600c3c8900b003bf249616b0so4471232wmb.3
+        for <linux-kernel@vger.kernel.org>; Sat, 05 Nov 2022 02:39:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=g7pK56t2R6Ps3nWxcCA0h4Y93S07BBRs7F+fa1Fp9yo=;
+        b=eZUXAjEgKFh1gKa76NKDihcp9jKqj+CroyCLGuKPjIH9/yonf3Ah69KSQJPXeY4oJF
+         3NWqsjWItl5VSyLGnqJ87QregktPBqtfzFOTDgn/jWDTdpSP8nmYydVVCG7UkAiT4GOc
+         oV+inyNe/Pz9tz5Ddsz3aHcxZEM+DPp8nuAFWco0MFdLT5pM9SWNiwHEOeWs598GZrBw
+         NFAUXwoegA7jsBvTUinXSGxjHtA1EZvr8x7HVZnzGUI09X1YjTAtLKbeBfLxvh98WD1T
+         /b1ukzw076V0J26RGr/kye4Uyr11f84PEpUlxh/WWNlgkVUolx9J3X0aHP4HyCO6Ks34
+         LdLQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=g7pK56t2R6Ps3nWxcCA0h4Y93S07BBRs7F+fa1Fp9yo=;
+        b=4tDbh30KerExDFAJVpTXfhcF85c/55EcMOPK1TG9z+c/F2yqZuuc1kCkhXbdc506cv
+         MU4/ttGUu/QJ7G0ota86I9SXaRUWK3FNfgmw01uvPBazsMpkUq4yZsA2bv1El2HDoYYw
+         rNoFw+Y3TspqKB5HN935fbskDuk/7drENnX8iu8gl0DY0YsNhUJPlRwSaUqBpb1xB1xt
+         aM9yfwGK5MXba1XFMnp+M9QIVbXrmGWbK4yPU0C5LbxZDvBkINQCRLxH8zJwlJdrzm9z
+         7gAf69hGu6lK/swORV2AgMZQhwQ/3EU82+xZUTCMKpAQ0OompmV6pvkuEVtC1bAK5Wbe
+         ZyyQ==
+X-Gm-Message-State: ACrzQf1wZtw4fw4e01V3+qEjFCBB74QI2ElBnL3mDhR3GSOCuqndU3l9
+        a0mNKGhOjc2I0QWUw15FxW4=
+X-Google-Smtp-Source: AMsMyM5PvPcwHf6V3i5PsjristDEGZsePtXLhYQmhw8olTLE3aZB+mn4rbBIJZcB50eBAaseYY23OQ==
+X-Received: by 2002:a1c:27c6:0:b0:3c2:e6df:c79b with SMTP id n189-20020a1c27c6000000b003c2e6dfc79bmr35729022wmn.14.1667641177909;
+        Sat, 05 Nov 2022 02:39:37 -0700 (PDT)
+Received: from localhost.localdomain ([213.177.192.129])
+        by smtp.googlemail.com with ESMTPSA id z11-20020a05600c0a0b00b003b4868eb71bsm6073622wmp.25.2022.11.05.02.39.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 05 Nov 2022 02:39:37 -0700 (PDT)
+From:   Juan Alfonso Reyes Ajenjo <juanalfonso.reyes@gmail.com>
+Cc:     juanalfonso.reyes@gmail.com,
+        Gustavo Plaza Roma <gplazar03@gmail.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        =?UTF-8?q?Martin=20Povi=C5=A1er?= <povik+lin@cutebit.org>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Fabio Estevam <festevam@denx.de>, Stephen Kitt <steve@sk2.org>,
+        alsa-devel@alsa-project.org (moderated list:SOUND - SOC LAYER / DYNAMIC
+        AUDIO POWER MANAGEM...), linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] Fix tas2562 volume table values
+Date:   Sat,  5 Nov 2022 10:39:16 +0100
+Message-Id: <20221105093918.12274-1-juanalfonso.reyes@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Date:   Sat, 05 Nov 2022 09:38:10 +0000
-From:   Marc Zyngier <maz@kernel.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Anna-Maria Gleixner <anna-maria@linutronix.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v4a 03/38] clocksource/drivers/arm_arch_timer: Do not use
- timer namespace for timer_shutdown() function
-In-Reply-To: <20221105060155.409832154@goodmis.org>
-References: <20221105060024.598488967@goodmis.org>
- <20221105060155.409832154@goodmis.org>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <a8cfb3a13d6a4a424edbbb8bf28b101c@kernel.org>
-X-Sender: maz@kernel.org
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 51.254.78.96
-X-SA-Exim-Rcpt-To: rostedt@goodmis.org, linux-kernel@vger.kernel.org, torvalds@linux-foundation.org, tglx@linutronix.de, sboyd@kernel.org, linux@roeck-us.net, anna-maria@linutronix.de, akpm@linux-foundation.org, mark.rutland@arm.com, daniel.lezcano@linaro.org, linux-arm-kernel@lists.infradead.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-11-05 06:00, Steven Rostedt wrote:
-> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
-> 
-> A new "shutdown" timer state is being added to the generic timer code. 
-> One
-> of the functions to change the timer into the state is called
-> "timer_shutdown()". This means that there can not be other functions
-> called "timer_shutdown()" as the timer code owns the "timer_*" name 
-> space.
-> 
-> Rename timer_shutdown() to clk_timer_shutdown() to avoid this conflict.
-> 
+This patch fixes -90dB value (0x84a3 instead of 0x695b)
+This patch adds missing -20dB value (0x06666666)
+float_vol_db_lookup must have 56 values as volume is from 0 to 55 (0-110dB)
 
-bikeshed: s/clk_timer/arch_timer/ would make the naming consistent
-with the rest of the code.
+Co-developed-by: Gustavo Plaza Roma <gplazar03@gmail.com>
+Signed-off-by: Gustavo Plaza Roma <gplazar03@gmail.com>
+Signed-off-by: Juan Alfonso Reyes Ajenjo <juanalfonso.reyes@gmail.com>
+---
+ sound/soc/codecs/tas2562.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-Thanks,
-
-          M.
-
-> Cc: Mark Rutland <mark.rutland@arm.com>
-> Cc: Marc Zyngier <maz@kernel.org>
-> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: linux-arm-kernel@lists.infradead.org
-> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-> ---
->  drivers/clocksource/arm_arch_timer.c | 12 ++++++------
->  1 file changed, 6 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/clocksource/arm_arch_timer.c
-> b/drivers/clocksource/arm_arch_timer.c
-> index a7ff77550e17..c36042d6a2f8 100644
-> --- a/drivers/clocksource/arm_arch_timer.c
-> +++ b/drivers/clocksource/arm_arch_timer.c
-> @@ -687,8 +687,8 @@ static irqreturn_t arch_timer_handler_virt_mem(int
-> irq, void *dev_id)
->  	return timer_handler(ARCH_TIMER_MEM_VIRT_ACCESS, evt);
->  }
-> 
-> -static __always_inline int timer_shutdown(const int access,
-> -					  struct clock_event_device *clk)
-> +static __always_inline int clk_timer_shutdown(const int access,
-> +					      struct clock_event_device *clk)
->  {
->  	unsigned long ctrl;
-> 
-> @@ -701,22 +701,22 @@ static __always_inline int timer_shutdown(const
-> int access,
-> 
->  static int arch_timer_shutdown_virt(struct clock_event_device *clk)
->  {
-> -	return timer_shutdown(ARCH_TIMER_VIRT_ACCESS, clk);
-> +	return clk_timer_shutdown(ARCH_TIMER_VIRT_ACCESS, clk);
->  }
-> 
->  static int arch_timer_shutdown_phys(struct clock_event_device *clk)
->  {
-> -	return timer_shutdown(ARCH_TIMER_PHYS_ACCESS, clk);
-> +	return clk_timer_shutdown(ARCH_TIMER_PHYS_ACCESS, clk);
->  }
-> 
->  static int arch_timer_shutdown_virt_mem(struct clock_event_device 
-> *clk)
->  {
-> -	return timer_shutdown(ARCH_TIMER_MEM_VIRT_ACCESS, clk);
-> +	return clk_timer_shutdown(ARCH_TIMER_MEM_VIRT_ACCESS, clk);
->  }
-> 
->  static int arch_timer_shutdown_phys_mem(struct clock_event_device 
-> *clk)
->  {
-> -	return timer_shutdown(ARCH_TIMER_MEM_PHYS_ACCESS, clk);
-> +	return clk_timer_shutdown(ARCH_TIMER_MEM_PHYS_ACCESS, clk);
->  }
-> 
->  static __always_inline void set_next_event(const int access, unsigned 
-> long evt,
-
+diff --git a/sound/soc/codecs/tas2562.c b/sound/soc/codecs/tas2562.c
+index b486d0b..acbdf77 100644
+--- a/sound/soc/codecs/tas2562.c
++++ b/sound/soc/codecs/tas2562.c
+@@ -33,15 +33,16 @@
+ static const unsigned int float_vol_db_lookup[] = {
+ 0x00000d43, 0x000010b2, 0x00001505, 0x00001a67, 0x00002151,
+ 0x000029f1, 0x000034cd, 0x00004279, 0x000053af, 0x0000695b,
+-0x0000695b, 0x0000a6fa, 0x0000d236, 0x000108a4, 0x00014d2a,
++0x000084a3, 0x0000a6fa, 0x0000d236, 0x000108a4, 0x00014d2a,
+ 0x0001a36e, 0x00021008, 0x000298c0, 0x000344df, 0x00041d8f,
+ 0x00052e5a, 0x000685c8, 0x00083621, 0x000a566d, 0x000d03a7,
+ 0x0010624d, 0x0014a050, 0x0019f786, 0x0020b0bc, 0x0029279d,
+ 0x0033cf8d, 0x004139d3, 0x00521d50, 0x00676044, 0x0082248a,
+ 0x00a3d70a, 0x00ce4328, 0x0103ab3d, 0x0146e75d, 0x019b8c27,
+ 0x02061b89, 0x028c423f, 0x03352529, 0x0409c2b0, 0x05156d68,
+-0x080e9f96, 0x0a24b062, 0x0cc509ab, 0x10137987, 0x143d1362,
+-0x197a967f, 0x2013739e, 0x28619ae9, 0x32d64617, 0x40000000
++0x06666666, 0x080e9f96, 0x0a24b062, 0x0cc509ab, 0x10137987,
++0x143d1362, 0x197a967f, 0x2013739e, 0x28619ae9, 0x32d64617,
++0x40000000
+ };
+ 
+ struct tas2562_data {
 -- 
-Jazz is not dead. It just smells funny...
+2.7.4
+
