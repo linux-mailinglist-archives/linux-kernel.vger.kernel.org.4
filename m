@@ -2,126 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4059A61D9E6
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 13:38:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 030A861DA68
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 13:41:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229662AbiKEMiR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Nov 2022 08:38:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39112 "EHLO
+        id S229752AbiKEMl3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Nov 2022 08:41:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229576AbiKEMiO (ORCPT
+        with ESMTP id S229740AbiKEMlZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Nov 2022 08:38:14 -0400
-Received: from msg-1.mailo.com (msg-1.mailo.com [213.182.54.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D70615726
-        for <linux-kernel@vger.kernel.org>; Sat,  5 Nov 2022 05:38:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailoo.org; s=mailo;
-        t=1667651877; bh=GtMx5VstEy61vrzIUASE+KC+AT3zTaHsHrHD2w3tP/k=;
-        h=X-EA-Auth:Message-ID:Subject:From:To:Cc:Date:In-Reply-To:
-         References:Content-Type:Content-Transfer-Encoding:MIME-Version;
-        b=HucCY67VaIu0on7RDF1CjxBYyZ5K4fOsh1jre9HaWPUEGCFupceKfrvOaTKUnvi9v
-         VfhwgyUFrP2mruGMF6aFK2TvlJgMm5RmhG88WnWKrMNaqpnJh2bc19cLChHFSWxS9W
-         WlnsAxtVEV6/CsCWlwQevZ/Ycj/r0vfSQkARp26M=
-Received: by b-2.in.mailobj.net [192.168.90.12] with ESMTP
-        via proxy.mailoo.org [213.182.55.207]
-        Sat,  5 Nov 2022 13:37:57 +0100 (CET)
-X-EA-Auth: UMfo2Qe/JnqzwN5ERAoWxYpcmCoJbQswsmnrVgTU93l0comRXwpP3OSZeJ6Ema/mzBFBynJuA581D2XsSp12iwPkcKsCi/xeqW5+fQUaf6A=
-Message-ID: <5f1a31ba4a53f8461bad7747ae09e73fcfe0af1c.camel@mailoo.org>
-Subject: Re: [PATCH v1 1/1] leds: is31fl319x: Wrap mutex_destroy() for
- devm_add_action_or_rest()
-From:   Vincent Knecht <vincent.knecht@mailoo.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Pavel Machek <pavel@ucw.cz>, linux-leds@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Cc:     Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, kernel test robot <lkp@intel.com>
-Date:   Sat, 05 Nov 2022 13:37:55 +0100
-In-Reply-To: <20221104235940.74044-1-andriy.shevchenko@linux.intel.com>
-References: <20221104235940.74044-1-andriy.shevchenko@linux.intel.com>
+        Sat, 5 Nov 2022 08:41:25 -0400
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4CC517A96
+        for <linux-kernel@vger.kernel.org>; Sat,  5 Nov 2022 05:41:23 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id v3so6576236pgh.4
+        for <linux-kernel@vger.kernel.org>; Sat, 05 Nov 2022 05:41:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=c8XA1N0uaxkLO/wKHErNWHaSuu64k5Pjb5u9dmcZrOc=;
+        b=Gk3yZkhSi6kYo66CMsVzsZ0alEOX+al83gx6YdeteiBBVjnxsZU2QYCBC9VEJIM00v
+         7svSVfAQgB1OM9CBG8BxLa08CIzx6fcyotbWwuEhNcwqsJrImasLjO0ZErwH5N90I1ug
+         IrNm1s5GhU4Xr8el/rUqm7iupqfXdmiOM+R9kNzO5fjRcjAbEXcvgt6TJ0ToasJKqnJY
+         Y4d9qY7dbLGefEmvDJGs/MNc7mxd9n8/qewVAPQmesAb0mrKhotmtmN/XYbqf7AdrtbF
+         kFgNysecpcLwtQw6LYiZljopkaNO4EQGd6aqfJAeKWQJEz56eaSKP9dw+VLpMjTOmd4h
+         5J+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=c8XA1N0uaxkLO/wKHErNWHaSuu64k5Pjb5u9dmcZrOc=;
+        b=XnTD+PxBrXJfwrHBprVfAX262ofBm78+cNlEq12Kx5jWs3tR77gFx2ZS2zWVuvXqW5
+         UaqNXc3HQ/m2VLmEYC+681AriUvhEE28LAkeMj+MPr1CfyQdwJh/ya0d9WRZQN6DP4D0
+         mWgFwuyAnm+cI36BtPAF8CG9rbMYHO9eGLB7oY3TopVA2aL55RRobUBal9AhMFuhtXfj
+         v6RAQWHNId9wkt1B5uoOF7Q8Tmzbu3ke8thvxMIAeL/i3kTlpJka7v21qT6ILIzBs14M
+         0mi02gtuLXjNJjxXKekZZoNvrLMGRNq0bbVQZNefeJCYxT9CW2m1GZ21nkc1RQ6dwd7R
+         YBjA==
+X-Gm-Message-State: ACrzQf0ZvWrFefD8uvJREMwGzOT9mNzLGbhPrw7ayNTCiYH0d9VZ+uN6
+        nc7fm76tSW2HPMfZ2/yFMmbQNqGrkxN6B3vZ0nA=
+X-Google-Smtp-Source: AMsMyM6kqzCzfrqLK3vl++KQvCb19Cm4GHRD1oroff3O19iaI2ZQYJSFxfKBngBvdZ4dnpcv1Jd81oVv9D3tC3u9PN8=
+X-Received: by 2002:a63:6a87:0:b0:46f:8fcc:de1a with SMTP id
+ f129-20020a636a87000000b0046f8fccde1amr30833900pgc.429.1667652083204; Sat, 05
+ Nov 2022 05:41:23 -0700 (PDT)
+MIME-Version: 1.0
+Received: by 2002:a05:6a20:548c:b0:a4:6bf8:6067 with HTTP; Sat, 5 Nov 2022
+ 05:41:22 -0700 (PDT)
+Reply-To: stefanopessia755@hotmail.com
+From:   Stefano Pessina <dkunitedfrontselfhelpgroup@gmail.com>
+Date:   Sat, 5 Nov 2022 15:41:22 +0300
+Message-ID: <CAJ0kvzVeqEoSzfpKLssYZf+=zhBcTAcb039NU_ZkRbhX-Nt-EA@mail.gmail.com>
+Subject: Geldspende
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
-MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=4.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le samedi 05 novembre 2022 =C3=A0 01:59 +0200, Andy Shevchenko a =C3=A9crit=
-=C2=A0:
-> Clang complains that devm_add_action() takes a parameter with a wrong typ=
-e:
->=20
-> warning: cast from 'void (*)(struct mutex *)' to 'void (*)(void *)' conve=
-rts to incompatible function type [-Wcast-
-> function-type-strict]
-> =C2=A0=C2=A0=C2=A0 err =3D devm_add_action(dev, (void (*)(void *))mutex_d=
-estroy, &is31->lock);
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> =C2=A0=C2=A0=C2=A0 1 warning generated.
->=20
-> It appears that the commit e1af5c815586 ("leds: is31fl319x: Fix devm vs.
-> non-devm ordering") missed two things:
-> - while mention devm_add_action_or_reset() the actual change got
-> =C2=A0 devm_add_action() call by unknown reason
-> - strictly speaking the parameter is not compatible by type
->=20
-> Fix both issues by switching to devm_add_action_or_reset() and adding a
-> wrapper for mutex_destroy() call.
->=20
-> Reported-by: kernel test robot <lkp@intel.com>
-> Fixes: e1af5c815586 ("leds: is31fl319x: Fix devm vs. non-devm ordering")
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
-> =C2=A0drivers/leds/leds-is31fl319x.c | 7 ++++++-
-> =C2=A01 file changed, 6 insertions(+), 1 deletion(-)
->=20
-> diff --git a/drivers/leds/leds-is31fl319x.c b/drivers/leds/leds-is31fl319=
-x.c
-> index 52b59b62f437..6f94ad83e066 100644
-> --- a/drivers/leds/leds-is31fl319x.c
-> +++ b/drivers/leds/leds-is31fl319x.c
-> @@ -494,6 +494,11 @@ static inline int is31fl3196_db_to_gain(u32 dezibel)
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return dezibel / IS31FL31=
-96_AUDIO_GAIN_DB_STEP;
-> =C2=A0}
-> =C2=A0
-> +static void is31f1319x_mutex_destroy(void *lock)
-> +{
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0mutex_destroy(lock);
-> +}
-> +
-> =C2=A0static int is31fl319x_probe(struct i2c_client *client)
-> =C2=A0{
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct is31fl319x_chip *i=
-s31;
-> @@ -510,7 +515,7 @@ static int is31fl319x_probe(struct i2c_client *client=
-)
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0return -ENOMEM;
-> =C2=A0
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0mutex_init(&is31->lock);
-> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0err =3D devm_add_action(dev, (=
-void (*)(void *))mutex_destroy, &is31->lock);
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0err =3D devm_add_action_or_res=
-et(dev, is31f1319x_mutex_destroy, &is31->lock);
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (err)
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0return err;
-> =C2=A0
-
-LED still works fine after applying this patch,
-also after rmmod'ing and modprobe'ing again.
-Please let me know if something else should be tested.
-Thank you !
-
-Tested-by: Vincent Knecht <vincent.knecht@mailoo.org>
-
-
+--=20
+Die Summe von 500.000,00 =E2=82=AC wurde Ihnen von STEFANO PESSINA gespende=
+t.
+Bitte kontaktieren Sie uns f=C3=BCr weitere Informationen =C3=BCber
+stefanopessia755@hotmail.com
