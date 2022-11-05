@@ -2,222 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8387B61A753
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 04:33:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3F8E61A75A
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 04:36:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229752AbiKEDdp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 23:33:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34906 "EHLO
+        id S229763AbiKEDgh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 23:36:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229553AbiKEDdn (ORCPT
+        with ESMTP id S229553AbiKEDgf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 23:33:43 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED8D827DD1;
-        Fri,  4 Nov 2022 20:33:40 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id v28so6069606pfi.12;
-        Fri, 04 Nov 2022 20:33:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=PqWuupQi575tTUpTn1o8/kCq7G4qDeLiygBhCrz4Zxo=;
-        b=aGdUJM/eIC4PP+6b+bBppMXXwPX3CNiuwwB6lgiPNuyvmrM88eneutVazgDvc2MLQ6
-         UJ4R0Wf47SGdcHq2b0/UA4d0wodUaZdfFZBAGej85/rMoU4MhjPEFB+3/wJZGPcFKlxm
-         xyjSsO9d8JDye6GUuUe2jduU1TVtZo9A+PyOJtV73YMr4d8EAJ9mD1yi1q94u8A1v6c/
-         sYJmUcWWFLssxQzvPQ8xoh1ULLvghWDEo7dLJO9mW53cox+STTdNM8t9ryEUtqowDMuP
-         dnBdvnq6ZwQlg+M0HrzyjyANMH+OWUoLl6Yf8pakpEOhFenzfv47ZZiQY5/6C8umg61P
-         fTew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PqWuupQi575tTUpTn1o8/kCq7G4qDeLiygBhCrz4Zxo=;
-        b=ankdGW0Sq/fCut1nEeKR8fp652qASZ1YjW0ILzcRt+33lc8CPF1kHLiVxHWNQYg9JZ
-         2M44wI3GheGLe3c2Nhy0pxpmFPTaykpDi7Y9lLNhu5r6uf5TDXKKnHfUYrM0GLSlCu9h
-         Qb/Yz2k3lTMimMJhI8sUeX3sIpLez5oos1HmCOqMeXkzCa1eY6x3oonn4pxlaQvXq8yT
-         JPwLj228Hc5L21elNjY8jUdnvRfZhtQjNXqrDv6+ziLzGKGKd7/J+T5jQD+Z2iYE6Dd2
-         z3prJXtXSX95VtWxIZy/giFa+IzLOtBgAOLXitaxWRqc9MB6HSSM5cmQLsUHrTZZy1XH
-         bBNA==
-X-Gm-Message-State: ACrzQf1ZTfZMVuJxjtopSbdaD2t175O7DyeEW+ogwY6rUR6Zu7Z5wnJc
-        bp9M1MXPNuw0nBGCzVPeoC8=
-X-Google-Smtp-Source: AMsMyM4x71iF83RahSkMtTuALh2Y0HRgGol+0+euNhayw25UqeojetlLdZqHO0MX/qp+ZVFHPLcIoQ==
-X-Received: by 2002:a63:5109:0:b0:470:22e0:d7a4 with SMTP id f9-20020a635109000000b0047022e0d7a4mr9087189pgb.71.1667619220342;
-        Fri, 04 Nov 2022 20:33:40 -0700 (PDT)
-Received: from debian.me (subs02-180-214-232-85.three.co.id. [180.214.232.85])
-        by smtp.gmail.com with ESMTPSA id w3-20020a628203000000b00562784609fbsm322628pfd.209.2022.11.04.20.33.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Nov 2022 20:33:39 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id 4619D1009A7; Sat,  5 Nov 2022 10:33:36 +0700 (WIB)
-Date:   Sat, 5 Nov 2022 10:33:35 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Dipen Patel <dipenp@nvidia.com>
-Cc:     thierry.reding@gmail.com, jonathanh@nvidia.com,
-        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linus.walleij@linaro.org,
-        devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
-        robh+dt@kernel.org
-Subject: Re: [PATCH 5/7] hte: Re-phrase tegra API document
-Message-ID: <Y2XZj4j/NQH2igvJ@debian.me>
-References: <20221103174523.29592-1-dipenp@nvidia.com>
- <20221103174523.29592-6-dipenp@nvidia.com>
+        Fri, 4 Nov 2022 23:36:35 -0400
+Received: from m12-16.163.com (m12-16.163.com [220.181.12.16])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C94103F07A
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 20:36:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=1TEi5
+        MrdrPrl+vCS4MMZ/HSJafuRbIvBzswPEFMXVrI=; b=W/9ZkllBwPN8OlaRQ6Swt
+        5JlYcwlftTruRsVas/1YRPRKFYkBnXMUJLq7lauPb7t7em3E48chW3Sztr0UQqrs
+        NDxopBapS4OGbaSjDsl/cVBO1F3kRdRrqjadrPXBf1tARzlmi36luikFLcteyjKW
+        jBX1vUZozhTTholgLf9Dqs=
+Received: from m5510.. (unknown [183.192.225.236])
+        by smtp12 (Coremail) with SMTP id EMCowACHzOU52mVjRn2lAA--.6785S2;
+        Sat, 05 Nov 2022 11:36:26 +0800 (CST)
+From:   jqlhn <jqlhn@163.com>
+To:     jassisinghbrar@gmail.com
+Cc:     linux-kernel@vger.kernel.org, jqlhn <jqlhn@163.com>
+Subject: [PATCH] drivers:mailbox Using kfifo to store buffered message data
+Date:   Sat,  5 Nov 2022 11:36:23 +0800
+Message-Id: <20221105033623.259053-1-jqlhn@163.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="uDKYV1gmcRUMwZrs"
-Content-Disposition: inline
-In-Reply-To: <20221103174523.29592-6-dipenp@nvidia.com>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: EMCowACHzOU52mVjRn2lAA--.6785S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxKr1DWr4rtFy5CF1UJrWfGrg_yoW7GF18pF
+        WaqFy3JFW8Ja15WF4DK3WrZr12q34kuF98C3sxK3WrZr98Cr93Z3WFy3W0qFWDtF47tFy2
+        93Z5Xrs7CF1DKr7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pEq2NhUUUUU=
+X-Originating-IP: [183.192.225.236]
+X-CM-SenderInfo: hmtox0i6rwjhhfrp/1tbiGQywolyPfO6VuwABsp
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+In current mailbox, a self implemented message array to be used
+as message fifo, I am replacing it with kernel kfifo,
+in order to make code cleaner.
 
---uDKYV1gmcRUMwZrs
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: jqlhn <jqlhn@163.com>
+---
+ drivers/mailbox/mailbox.c          | 33 ++++++++----------------------
+ drivers/mailbox/omap-mailbox.c     |  3 +--
+ drivers/mailbox/pcc.c              |  3 +--
+ include/linux/mailbox_controller.h | 10 ++++-----
+ 4 files changed, 14 insertions(+), 35 deletions(-)
 
-On Thu, Nov 03, 2022 at 10:45:21AM -0700, Dipen Patel wrote:
->  Description
->  -----------
-> -The Nvidia tegra194 HTE provider driver implements two GTE
-> -(Generic Timestamping Engine) instances: 1) GPIO GTE and 2) LIC
-> -(Legacy Interrupt Controller) IRQ GTE. Both GTE instances get the
-> -timestamp from the system counter TSC which has 31.25MHz clock rate, and=
- the
-> -driver converts clock tick rate to nanoseconds before storing it as time=
-stamp
-> -value.
-> +The Nvidia tegra HTE provider also known as GTE (Generic Timestamping En=
-gine)
-> +driver implements two GTE instances: 1) GPIO GTE and 2) LIC
-> +(Legacy Interrupt Controller) IRQ GTE. Both GTE instances get the timest=
-amp
-> +from the system counter TSC which has 31.25MHz clock rate, and the driver
-> +converts clock tick rate to nanoseconds before storing it as timestamp v=
-alue.
-> =20
->  GPIO GTE
->  --------
-> =20
->  This GTE instance timestamps GPIO in real time. For that to happen GPIO
-> -needs to be configured as input. The always on (AON) GPIO controller ins=
-tance
-> -supports timestamping GPIOs in real time and it has 39 GPIO lines. The G=
-PIO GTE
-> -and AON GPIO controller are tightly coupled as it requires very specific=
- bits
-> -to be set in GPIO config register before GPIO GTE can be used, for that =
-GPIOLIB
-> -adds two optional APIs as below. The GPIO GTE code supports both kernel
-> -and userspace consumers. The kernel space consumers can directly talk to=
- HTE
-> -subsystem while userspace consumers timestamp requests go through GPIOLI=
-B CDEV
-> -framework to HTE subsystem.
-> +needs to be configured as input. Only the always on (AON) GPIO controller
-> +instance supports timestamping GPIOs in real time as it is tightly coupl=
-ed with
-> +the GPIO GTE. To support this, GPIOLIB adds two optional APIs as mention=
-ed
-> +below. The GPIO GTE code supports both kernel and userspace consumers. T=
-he
-> +kernel space consumers can directly talk to HTE subsystem while userspace
-> +consumers timestamp requests go through GPIOLIB CDEV framework to HTE
-> +subsystem. The hte devicetree binding described at
-> +``Documentation/devicetree/bindings/timestamp`` provides an example of h=
-ow a
-> +consumer can request an GPIO line.
-> =20
->  See gpiod_enable_hw_timestamp_ns() and gpiod_disable_hw_timestamp_ns().
-> =20
+diff --git a/drivers/mailbox/mailbox.c b/drivers/mailbox/mailbox.c
+index 4229b9b5da98..d738bb472cd0 100644
+--- a/drivers/mailbox/mailbox.c
++++ b/drivers/mailbox/mailbox.c
+@@ -25,59 +25,43 @@ static DEFINE_MUTEX(con_mutex);
+ 
+ static int add_to_rbuf(struct mbox_chan *chan, void *mssg)
+ {
+-	int idx;
+ 	unsigned long flags;
+ 
+ 	spin_lock_irqsave(&chan->lock, flags);
+ 
+ 	/* See if there is any space left */
+-	if (chan->msg_count == MBOX_TX_QUEUE_LEN) {
++	if (kfifo_is_full(&chan->msg_fifo)) {
+ 		spin_unlock_irqrestore(&chan->lock, flags);
+ 		return -ENOBUFS;
+ 	}
+ 
+-	idx = chan->msg_free;
+-	chan->msg_data[idx] = mssg;
+-	chan->msg_count++;
+-
+-	if (idx == MBOX_TX_QUEUE_LEN - 1)
+-		chan->msg_free = 0;
+-	else
+-		chan->msg_free++;
++	kfifo_put(&chan->msg_fifo, mssg);
+ 
+ 	spin_unlock_irqrestore(&chan->lock, flags);
+ 
+-	return idx;
++	return 0;
+ }
+ 
+ static void msg_submit(struct mbox_chan *chan)
+ {
+-	unsigned count, idx;
+ 	unsigned long flags;
+ 	void *data;
+ 	int err = -EBUSY;
+ 
+ 	spin_lock_irqsave(&chan->lock, flags);
+ 
+-	if (!chan->msg_count || chan->active_req)
++	if (!kfifo_peek(&chan->msg_fifo, &data) || chan->active_req)
+ 		goto exit;
+ 
+-	count = chan->msg_count;
+-	idx = chan->msg_free;
+-	if (idx >= count)
+-		idx -= count;
+-	else
+-		idx += MBOX_TX_QUEUE_LEN - count;
+-
+-	data = chan->msg_data[idx];
+-
+ 	if (chan->cl->tx_prepare)
+ 		chan->cl->tx_prepare(chan->cl, data);
+ 	/* Try to submit a message to the MBOX controller */
+ 	err = chan->mbox->ops->send_data(chan, data);
+ 	if (!err) {
+ 		chan->active_req = data;
+-		chan->msg_count--;
++		/* Get msg out of fifo */
++		if (!kfifo_get(&chan->msg_fifo, &data))
++			err = -ENODATA;
+ 	}
+ exit:
+ 	spin_unlock_irqrestore(&chan->lock, flags);
+@@ -379,8 +363,7 @@ struct mbox_chan *mbox_request_channel(struct mbox_client *cl, int index)
+ 	}
+ 
+ 	spin_lock_irqsave(&chan->lock, flags);
+-	chan->msg_free = 0;
+-	chan->msg_count = 0;
++	INIT_KFIFO(chan->msg_fifo);
+ 	chan->active_req = NULL;
+ 	chan->cl = cl;
+ 	init_completion(&chan->tx_complete);
+diff --git a/drivers/mailbox/omap-mailbox.c b/drivers/mailbox/omap-mailbox.c
+index 098c82d87137..b392f79e77b3 100644
+--- a/drivers/mailbox/omap-mailbox.c
++++ b/drivers/mailbox/omap-mailbox.c
+@@ -443,8 +443,7 @@ struct mbox_chan *omap_mbox_request_channel(struct mbox_client *cl,
+ 
+ 	chan = mbox->chan;
+ 	spin_lock_irqsave(&chan->lock, flags);
+-	chan->msg_free = 0;
+-	chan->msg_count = 0;
++	INIT_KFIFO(chan->msg_fifo);
+ 	chan->active_req = NULL;
+ 	chan->cl = cl;
+ 	init_completion(&chan->tx_complete);
+diff --git a/drivers/mailbox/pcc.c b/drivers/mailbox/pcc.c
+index 3c2bc0ca454c..2359cba8381e 100644
+--- a/drivers/mailbox/pcc.c
++++ b/drivers/mailbox/pcc.c
+@@ -297,8 +297,7 @@ pcc_mbox_request_channel(struct mbox_client *cl, int subspace_id)
+ 	dev = chan->mbox->dev;
+ 
+ 	spin_lock_irqsave(&chan->lock, flags);
+-	chan->msg_free = 0;
+-	chan->msg_count = 0;
++	INIT_KFIFO(chan->msg_fifo);
+ 	chan->active_req = NULL;
+ 	chan->cl = cl;
+ 	init_completion(&chan->tx_complete);
+diff --git a/include/linux/mailbox_controller.h b/include/linux/mailbox_controller.h
+index 6fee33cb52f5..b3bec4f33b6d 100644
+--- a/include/linux/mailbox_controller.h
++++ b/include/linux/mailbox_controller.h
+@@ -8,6 +8,7 @@
+ #include <linux/hrtimer.h>
+ #include <linux/device.h>
+ #include <linux/completion.h>
++#include <linux/kfifo.h>
+ 
+ struct mbox_chan;
+ 
+@@ -100,7 +101,7 @@ struct mbox_controller {
+  * REVISIT: If too many platforms see the "Try increasing MBOX_TX_QUEUE_LEN"
+  * print, it needs to be taken from config option or somesuch.
+  */
+-#define MBOX_TX_QUEUE_LEN	20
++#define MBOX_TX_QUEUE_LEN	32
+ 
+ /**
+  * struct mbox_chan - s/w representation of a communication chan
+@@ -109,9 +110,7 @@ struct mbox_controller {
+  * @cl:			Pointer to the current owner of this channel
+  * @tx_complete:	Transmission completion
+  * @active_req:		Currently active request hook
+- * @msg_count:		No. of mssg currently queued
+- * @msg_free:		Index of next available mssg slot
+- * @msg_data:		Hook for data packet
++ * @msg_fifo:		Hook for data packet
+  * @lock:		Serialise access to the channel
+  * @con_priv:		Hook for controller driver to attach private data
+  */
+@@ -121,8 +120,7 @@ struct mbox_chan {
+ 	struct mbox_client *cl;
+ 	struct completion tx_complete;
+ 	void *active_req;
+-	unsigned msg_count, msg_free;
+-	void *msg_data[MBOX_TX_QUEUE_LEN];
++	DECLARE_KFIFO(msg_fifo, void*, MBOX_TX_QUEUE_LEN);
+ 	spinlock_t lock; /* Serialise access to the channel */
+ 	void *con_priv;
+ };
+-- 
+2.34.1
 
-I think the wording can be better:
-
----- >8 ----
-
-diff --git a/Documentation/driver-api/hte/tegra194-hte.rst b/Documentation/=
-driver-api/hte/tegra194-hte.rst
-index 85e654772782c1..13c45bfc03a75e 100644
---- a/Documentation/driver-api/hte/tegra194-hte.rst
-+++ b/Documentation/driver-api/hte/tegra194-hte.rst
-@@ -5,11 +5,11 @@ HTE Kernel provider driver
-=20
- Description
- -----------
--The Nvidia tegra HTE provider also known as GTE (Generic Timestamping Engi=
-ne)
--driver implements two GTE instances: 1) GPIO GTE and 2) LIC
--(Legacy Interrupt Controller) IRQ GTE. Both GTE instances get the timestamp
--from the system counter TSC which has 31.25MHz clock rate, and the driver
--converts clock tick rate to nanoseconds before storing it as timestamp val=
-ue.
-+The Nvidia tegra HTE provider, also known as GTE (Generic Timestamping Eng=
-ine)
-+driver implements two GTE instances: GPIO GTE and LIC (Legacy Interrupt
-+Controller) IRQ GTE. Both GTE instances get the timestamp from system coun=
-ter
-+TSC which has 31.25MHz clock rate, and the driver converts clock tick rate=
- to
-+nanoseconds before storing it as timestamp value.
-=20
- GPIO GTE
- --------
-@@ -19,17 +19,17 @@ needs to be configured as input. Only the always on (AO=
-N) GPIO controller
- instance supports timestamping GPIOs in real time as it is tightly coupled=
- with
- the GPIO GTE. To support this, GPIOLIB adds two optional APIs as mentioned
- below. The GPIO GTE code supports both kernel and userspace consumers. The
--kernel space consumers can directly talk to HTE subsystem while userspace
--consumers timestamp requests go through GPIOLIB CDEV framework to HTE
--subsystem. The hte devicetree binding described at
--``Documentation/devicetree/bindings/timestamp`` provides an example of how=
- a
--consumer can request an GPIO line.
-+kernel space consumers can directly talk to HTE subsystem while requests f=
-rom
-+userspace consumers go through GPIOLIB CDEV framework to HTE subsystem. Th=
-e hte
-+devicetree binding described at ``Documentation/devicetree/bindings/timest=
-amp``
-+provides an example of how a consumer can request an GPIO line.
-=20
--See gpiod_enable_hw_timestamp_ns() and gpiod_disable_hw_timestamp_ns().
-+To toggle hardware timestamp, use gpiod_enable_hw_timestamp_ns() and
-+gpiod_disable_hw_timestamp_ns().
-=20
- For userspace consumers, GPIO_V2_LINE_FLAG_EVENT_CLOCK_HTE flag must be
--specified during IOCTL calls. Refer to ``tools/gpio/gpio-event-mon.c``, wh=
-ich
--returns the timestamp in nanoseconds.
-+specified during IOCTL calls. Refer to ``tools/gpio/gpio-event-mon.c`` for
-+example.
-=20
- LIC (Legacy Interrupt Controller) IRQ GTE
- -----------------------------------------
-
-Thanks.
-
---=20
-An old man doll... just what I always wanted! - Clara
-
---uDKYV1gmcRUMwZrs
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY2XZigAKCRD2uYlJVVFO
-o8AOAP4hUzaq+a/2yFymft+ISsBiFcMR0EF08Jm0EKm6pu04bQD/fWuDpsSvy1dM
-kq2KhhNX5LxzZ+zeUL5x+YiHkrC35Qg=
-=CiD3
------END PGP SIGNATURE-----
-
---uDKYV1gmcRUMwZrs--
