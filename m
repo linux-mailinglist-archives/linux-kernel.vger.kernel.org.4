@@ -2,74 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F99461DDF7
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 21:21:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CEDBC61DDFA
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 21:21:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229913AbiKEUU4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Nov 2022 16:20:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44838 "EHLO
+        id S229946AbiKEUVO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Nov 2022 16:21:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbiKEUUy (ORCPT
+        with ESMTP id S229940AbiKEUVM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Nov 2022 16:20:54 -0400
+        Sat, 5 Nov 2022 16:21:12 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81CDB12771;
-        Sat,  5 Nov 2022 13:20:53 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F187113D7B;
+        Sat,  5 Nov 2022 13:21:10 -0700 (PDT)
 Received: from mercury (unknown [185.209.196.162])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
         (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 3E2FC6602366;
-        Sat,  5 Nov 2022 20:20:51 +0000 (GMT)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id B74696602366;
+        Sat,  5 Nov 2022 20:21:09 +0000 (GMT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1667679651;
-        bh=mN8RRJhsexrMmxXRD/OzjLCD+e45Cf3A7xewzxMAk7g=;
+        s=mail; t=1667679669;
+        bh=oFL+eFW9VNZnIxnzxItCZONBvkMIY4e/57puUZz/1/U=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nv146gyy87JZaKTwIPg8oDriZSgQJQenM6vsHMddgUvVjiSGRwV/aKmaGjx2qJcUi
-         C8etKDyd2rnoHpVcQXTVpN/gTJd9+Y4IIn8FAtd8zGj3TAHDHYsJoXk0BKrQqPUHoo
-         0/NSU+poYDHh7iQwskYKWSTf7fxhhaofeDllWnbZUUng+bff3LxWFpgie6jYnUDpTj
-         RlknxyhGBRcHPDWWx7kL7MPh9JSXllx1vAjcqBEFjZT93Z0H+nxAtUQPV0BDyohYdf
-         G1qznt7Vq8zvei0IlHP4qTCX60eTdZC0+lIBR5YqJ5XpMe5mkaoo3QrA1imtd4kjVy
-         FaMAkc5v/WlsA==
+        b=PNVy6yZJvOG3XLx5Fjo1uDwg4wiDU9t/6wSOsh7PvTR7WtpCc1yUIGBpSVexsegUB
+         kctUn8L3a5VGtkRR5AhCCjZlE4Tx/R2JvKqM1vUfG/9fYVvYhEN0/x6CYDElJPwH+O
+         AOBFYOEeNX3fBa3UQG88uS7qZL90BoOVmYQtG2o0yp3mpx1xLDUSSvC7t0i1DsZqEc
+         clUYRyRZYnb0QMXO+9c/Ow4VBH/Kbq/xM7QApl+vlCDwwAcdpcR/7yOGQvMIz6X6xY
+         Ysr198HLqi2iJyHQTOqz99zXAFHauW2RoOOmtCmSQcCMEvhvg1Om7P9W5ci7QQOqTj
+         mTYsuJbn3CCUg==
 Received: by mercury (Postfix, from userid 1000)
-        id 6AE111062C1F; Sat,  5 Nov 2022 21:20:49 +0100 (CET)
-Date:   Sat, 5 Nov 2022 21:20:49 +0100
+        id 912401062C1F; Sat,  5 Nov 2022 21:21:07 +0100 (CET)
+Date:   Sat, 5 Nov 2022 21:21:07 +0100
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
 To:     Rob Herring <robh@kernel.org>
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
         Zhang Qing <zhangqing@rock-chips.com>,
-        Markus Laine <markus.laine@fi.rohmeurope.com>,
-        Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>,
+        linux-rockchip@lists.infradead.org,
         Chris Zhong <zyw@rock-chips.com>,
-        "Andrew F. Davis" <afd@ti.com>,
-        Artur Rojek <contact@artur-rojek.eu>,
-        linux-kernel@vger.kernel.org,
-        Mikko Mutanen <mikko.mutanen@fi.rohmeurope.com>,
-        Hans de Goede <hdegoede@redhat.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
         Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        devicetree@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        Dmitry Osipenko <digetx@gmail.com>, Lee Jones <lee@kernel.org>,
+        devicetree@vger.kernel.org,
+        Mikko Mutanen <mikko.mutanen@fi.rohmeurope.com>,
+        Lee Jones <lee@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
         Rob Herring <robh+dt@kernel.org>,
+        Markus Laine <markus.laine@fi.rohmeurope.com>,
+        linux-pm@vger.kernel.org,
         Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Artur Rojek <contact@artur-rojek.eu>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>,
         Chunyan Zhang <zhang.lyra@gmail.com>,
         Purism Kernel Team <kernel@puri.sm>,
-        Orson Zhai <orsonzhai@gmail.com>, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v2 1/3] dt-bindings: power: supply: define
- monitored-battery in common place
-Message-ID: <20221105202049.2m2mbn3n4mhx7ppt@mercury.elektranox.org>
+        linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        "Andrew F. Davis" <afd@ti.com>
+Subject: Re: [PATCH v2 2/3] dt-bindings: power: supply: bq25890: allow
+ power-supply fields
+Message-ID: <20221105202107.6iuiahftidyvhlkq@mercury.elektranox.org>
 References: <20221102184501.109148-1-krzysztof.kozlowski@linaro.org>
- <166759887101.2893866.8476609318769745646.robh@kernel.org>
+ <20221102184501.109148-2-krzysztof.kozlowski@linaro.org>
+ <166759888639.2894265.16300000999459794709.robh@kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="b4bt64bo4i7jwi3n"
+        protocol="application/pgp-signature"; boundary="xrwr6djdhlvsae7h"
 Content-Disposition: inline
-In-Reply-To: <166759887101.2893866.8476609318769745646.robh@kernel.org>
+In-Reply-To: <166759888639.2894265.16300000999459794709.robh@kernel.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
@@ -80,57 +84,58 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---b4bt64bo4i7jwi3n
+--xrwr6djdhlvsae7h
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Fri, Nov 04, 2022 at 04:54:31PM -0500, Rob Herring wrote:
-> On Wed, 02 Nov 2022 14:44:59 -0400, Krzysztof Kozlowski wrote:
-> > Define the type of monitored-battery in power-supply.yaml common schema.
-> > Reference the schema where applicable to enforce the above in bindings
-> > which have monitored-battery property.
+On Fri, Nov 04, 2022 at 04:54:46PM -0500, Rob Herring wrote:
+>=20
+> On Wed, 02 Nov 2022 14:45:00 -0400, Krzysztof Kozlowski wrote:
+> > The BQ25890 schema references common power-supply.yaml, so allow all its
+> > properties to fix warnings like:
+> >=20
+> >   arch/arm64/boot/dts/freescale/imx8mq-librem5-r2.dtb: charger@6a: 'mon=
+itored-battery', 'power-supplies', ... do not match any of the regexes: 'pi=
+nctrl-[0-9]+'
 > >=20
 > > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > >=20
 > > ---
 > >=20
 > > Changes since v1:
-> > 1. Re-work the patch - define the type in power-supply.yaml.
+> > 1. New patch
 > > ---
-> >  Documentation/devicetree/bindings/mfd/ene-kb930.yaml        | 6 +++---
-> >  Documentation/devicetree/bindings/mfd/rockchip,rk817.yaml   | 2 ++
-> >  Documentation/devicetree/bindings/power/supply/bq27xxx.yaml | 2 --
-> >  .../devicetree/bindings/power/supply/ingenic,battery.yaml   | 4 ++--
-> >  .../devicetree/bindings/power/supply/power-supply.yaml      | 6 ++++++
-> >  .../devicetree/bindings/power/supply/rohm,bd99954.yaml      | 1 +
-> >  .../devicetree/bindings/power/supply/sc2731-charger.yaml    | 1 -
-> >  7 files changed, 14 insertions(+), 8 deletions(-)
+> >  Documentation/devicetree/bindings/power/supply/bq25890.yaml | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >=20
+>=20
+> Reviewed-by: Rob Herring <robh@kernel.org>
 
 Thanks, queued.
 
 -- Sebastian
 
---b4bt64bo4i7jwi3n
+--xrwr6djdhlvsae7h
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmNmxZoACgkQ2O7X88g7
-+prHnBAAoPZTWzrs6l6hUkEYVyqFlmO+8R2RwkF+0vpSS/vXtrs6KFN0L3im5zh3
-zj7BN0D9SJHSwYtl7bbJCAizZ9dzwLS8EFZq+6gKoh8wRQ+Y4WJCVeUhCwUMFzGI
-7rHzct8qpnjxkjwGCjb9Oip3dP2CE6YAad0QurUb/5xKQMZJhevi8xy19bURb9NS
-fqyuwHP4B41pVl/nosS8ssEyeiF6Wg0ypsXi+0nyiKHVHw/8ZOzSAM60crPVdFpi
-XGxv06qabil3Y9TmwxDHdSwKBzi37PK8QtMK2KvSQRb/lwVDw+ZsVuWQrOCoDYLI
-r/Rwy1YZmrQYYvcAMKaSZyQ0oTz9uv7SgIvfa+Yp/i/dCno9Z4NNgKh/ao84AHSk
-rPEQkaxHc6kNZ94H3dGBVaEW/kW+opU1IRk6ozA879KRPd8d4XWhakpigJ195jgd
-vzvOdmTTaW6sU1wiOeKSzTKUaCUFTTrVjO7F+ahqZtxTWv3rukR0vswbubPV2ors
-TaGUZtPJo1TM4yk12IOtXJcBKp1W/HFEGqOHvSI71fmF3zYguoht067emWduslH/
-1r4CvY2LI+oRMm6FR0yNx6GmPXhXRkmqh5tbV2zDaAlJ4/wYI2YaVumrYkjFEQWu
-zMMcrlBhLsDm/sPnMNirjWaBfUhm6e5i/IWzAsM9+vtBgtYkwQc=
-=d/iP
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmNmxbMACgkQ2O7X88g7
++pqyeg/+J35tV/0bGI5gBzwiaSLrPxYKQZ9I2Rk7/hVFT9rOC9BWJGDvCGR43oOH
+O9CbKjq7Ur5EdKKPArAoyPcuAT8km9MYflV/6SE/YlqnHHFBpjFFYOrD72oI1MKw
+jeIa4XdCzDhh1eA6y9hb77aCA71f3YpgmTWR4JZqSkLJHpKtve08F84DHXmLiCvW
+RYeDQmqRs9MghcBM3s+hahO4euBJucBr9GMyqSVK4oDksYRf+MNYsGFtyd2Zc9f3
+VSvvqjpwzP1xQaydBOEcHNDLWwVC1C2y+dPYsgSc7CF73WKiX5IkspNdYw8xu0mj
+BQzhSgAaNA9FRP0c3jjireMuNsW/1ZGez349zdpwAEYfNZTZnzALbHMcVRta/stT
+XkL60sAYwiYjhVejdJNwHTrIm717d6/k5s0cC0H3h+73RcancB3J1tptB49W2X4k
+IlL2dwRUcVkDayPa69FJAKFIK2SysQu4M7DQIg7etJZCs/ScO0uKVTdeDWJ1ANGF
+i37ld4P8Vksf1W3X5Z2918eDhaOpeTyc2HHs7f9Ua30SmZejuyEO7T0pGLGsuFmO
+qeu1/uCtH8WwBoEP+t+7AGqPUvC4+RydzStNdxRvLsc52SRoeZk58Uz/sVeNIUqe
+1RKhOqevx34NazEfgH4gVsw9hElaWFiKeplAbgDzVgjCwaQ21sk=
+=rEdX
 -----END PGP SIGNATURE-----
 
---b4bt64bo4i7jwi3n--
+--xrwr6djdhlvsae7h--
