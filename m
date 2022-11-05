@@ -2,92 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D957B61DBF1
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 17:16:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1EE661DBF7
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 17:21:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230072AbiKEQQr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Nov 2022 12:16:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45732 "EHLO
+        id S230024AbiKEQUk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Nov 2022 12:20:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbiKEQQp (ORCPT
+        with ESMTP id S229776AbiKEQUh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Nov 2022 12:16:45 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ADA713D4E;
-        Sat,  5 Nov 2022 09:16:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=hMlRvmOztseL8Ey9AQ1Tl95aMzXuJGidMzIyJVt4wQA=; b=kS9KqMtlGyn4E07pJekbylaDY7
-        IZSzpqI+ZtrvOtf46C0bfg/SW1A0KK2W7OhydzSADx5uwxf99rd+Yk+Md06SWn4aDil1o8tS1W/4x
-        2A5PHBczERCRSSYLt2e091A26eF5TJQ0oNLyUHVLOHX+xZBa1u24uH1KhfVMJiL0Jx2KOtfRpuJYk
-        Yvr++K+vjv5ep4XwSDDI5Ddk41Oy/s8mJ6avT89luwNwG/+Q6YM/Mt5rXlZnj5kHza8n3VcMb//5v
-        4/upmGhgfhaZvZokjY5olgoUQdTqK9Us5JbL8XlYFjqQtqFhG84gs80DCuu43HWJ95WUOPZGPTWYZ
-        Ya/dCSpg==;
-Received: from [2601:1c2:d80:3110::a2e7]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1orLqS-006set-5F; Sat, 05 Nov 2022 16:16:32 +0000
-Message-ID: <e03209cb-00c7-e282-c2a6-9a2bab0b147f@infradead.org>
-Date:   Sat, 5 Nov 2022 09:16:31 -0700
+        Sat, 5 Nov 2022 12:20:37 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60AC61A3AC;
+        Sat,  5 Nov 2022 09:20:36 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id v17so11650529edc.8;
+        Sat, 05 Nov 2022 09:20:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=srQ3lTh3ov/uW1CynRa0KjN77ReKbgwHiOujQ3nMVGI=;
+        b=P0kLwQwYClIZzoWMQF0niGOEZY4ILluvbFpoIzNEfGSiaBf5YEbKrtilG8yOZt23rS
+         A9Vn4TNmkIG8F/Z4HcJKJDpzol0995YgFK9jc/y9B+yZZWZv3sE6Q+tDvgndaqqA8tUa
+         GBpk7naq0m1IqFdv0pbGxcfdRsz4I9XaPo0zt2YVWaQFjQ16FTBxaHdpFw/y0izCcaEf
+         oSaYqWxONukSWy28TM0SRTQyooBPLQeQKL1DxvUuvEI00eHM33jFhETT2xm6tzTXGmwY
+         O1RaLVhp/FW7yx2zx0x9KAWRtwguiW83/3ZEaOUVaVPx4HoKCop39fY8BUTvITaxccsp
+         st1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=srQ3lTh3ov/uW1CynRa0KjN77ReKbgwHiOujQ3nMVGI=;
+        b=E9vVk8RXVOmGELl63j9QVDIKz0oEMf4Akj95O+VoAwrfat0qSa8hDdwlC/XWa1H8mv
+         ool3eplXKN8lDD9bxIFLdDL6Y3Ux3JWUWfPS5aN1Rk75EUV53t6juzXaPlqXki0Klqfy
+         shRJ/7eBbpr6Cq5DtnaKTcxiFfyt36CV1Rbvk0Cn8fPv+ND3yGEb6uBOHNLDUm3r9lHD
+         B5igVF6hha87e5NrCSz+GaQ7XKaU8MD8bsXlMCPOJNCLgmtOL/ds+okcXJHKzLBJNrCK
+         98b9GqDD/QPU8VP8MMptWeAeO0R6GMInLZuIwUwMQo1p7YfYTKOC9JqYMNPjQQ1l+ukJ
+         gbfQ==
+X-Gm-Message-State: ACrzQf0xAgfL6Z5DPXjoPh7rE7frbNZRe/Th3F0DR+9/G79f3xB12RIT
+        +/4/XJO2cxw8G2RXa0H6+lmLd95Eow2VqPXe4iLXy2pJ
+X-Google-Smtp-Source: AMsMyM7zSz2xzkf30t95QCMUe/+35Au5IQDfWUWwp1tGv7KynUmdAkPytr6E2YTxR4NYApaYSEmfEf0uMjZO7JpmzeE=
+X-Received: by 2002:a05:6402:5406:b0:452:1560:f9d4 with SMTP id
+ ev6-20020a056402540600b004521560f9d4mr41547613edb.333.1667665234700; Sat, 05
+ Nov 2022 09:20:34 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH v2] selftests/bpf: Fix unsigned expression compared with
- zero
-Content-Language: en-US
-To:     Kang Minchul <tegongkang@gmail.com>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>
-Cc:     Martin KaFai Lau <martin.lau@linux.dev>,
+References: <20221105025146.238209-1-horenchuang@bytedance.com>
+In-Reply-To: <20221105025146.238209-1-horenchuang@bytedance.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Sat, 5 Nov 2022 09:20:23 -0700
+Message-ID: <CAADnVQK5t0YWGgdWmjiWX6vA0SjANrnf5x=yzu7PtDKpoK6cJQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v1 0/4] Add BPF htab map's used size for monitoring
+To:     "Ho-Ren (Jack) Chuang" <horenchuang@bytedance.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>, Hao Luo <haoluo@google.com>,
+        Jiri Olsa <jolsa@kernel.org>, Jiri Olsa <olsajiri@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
         Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221105102552.80052-1-tegongkang@gmail.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20221105102552.80052-1-tegongkang@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Quentin Monnet <quentin@isovalent.com>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>,
+        Joanne Koong <joannelkoong@gmail.com>,
+        Kui-Feng Lee <kuifeng@fb.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Maxim Mikityanskiy <maximmi@nvidia.com>,
+        Hao Xiang <hao.xiang@bytedance.com>,
+        Punit Agrawal <punit.agrawal@bytedance.com>,
+        Yifei Ma <yifeima@bytedance.com>,
+        Xiaoning Ding <xiaoning.ding@bytedance.com>,
+        bpf <bpf@vger.kernel.org>, Ho-Ren Chuang <horenc@vt.edu>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        clang-built-linux <llvm@lists.linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi--
+On Fri, Nov 4, 2022 at 7:52 PM Ho-Ren (Jack) Chuang
+<horenchuang@bytedance.com> wrote:
+>
+> Hello everyone,
+>
+> We have prepared patches to address an issue from a previous discussion.
+> The previous discussion email thread is here: https://lore.kernel.org/all/CAADnVQLBt0snxv4bKwg1WKQ9wDFbaDCtZ03v1-LjOTYtsKPckQ@mail.gmail.com/
 
-On 11/5/22 03:25, Kang Minchul wrote:
-> Variable ret is compared with zero even though it was set as u32.
-
-It's OK to compare a u32 == to zero, but 'ret' is compared to < 0,
-which it cannot be. Better explanation here would be good.
-Thanks.
-
-> So u32 to int conversion is needed.
-> 
-> Signed-off-by: Kang Minchul <tegongkang@gmail.com>
-> ---
->  tools/testing/selftests/bpf/xskxceiver.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/bpf/xskxceiver.c b/tools/testing/selftests/bpf/xskxceiver.c
-> index 681a5db80dae..162d3a516f2c 100644
-> --- a/tools/testing/selftests/bpf/xskxceiver.c
-> +++ b/tools/testing/selftests/bpf/xskxceiver.c
-> @@ -1006,7 +1006,8 @@ static int __send_pkts(struct ifobject *ifobject, u32 *pkt_nb, struct pollfd *fd
->  {
->  	struct xsk_socket_info *xsk = ifobject->xsk;
->  	bool use_poll = ifobject->use_poll;
-> -	u32 i, idx = 0, ret, valid_pkts = 0;
-> +	u32 i, idx = 0, valid_pkts = 0;
-> +	int ret;
->  
->  	while (xsk_ring_prod__reserve(&xsk->tx, BATCH_SIZE, &idx) < BATCH_SIZE) {
->  		if (use_poll) {
-
--- 
-~Randy
+Rephrasing what was said earlier.
+We're not keeping the count of elements in a preallocated hash map
+and we are not going to add one.
+The bpf prog needs to do the accounting on its own if it needs
+this kind of statistics.
+Keeping the count for non-prealloc is already significant performance
+overhead. We don't trade performance for stats.
