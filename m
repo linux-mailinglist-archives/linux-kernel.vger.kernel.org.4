@@ -2,67 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 144E061DDDD
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 20:48:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3A1961DDE6
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 20:50:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229672AbiKETso (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Nov 2022 15:48:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38868 "EHLO
+        id S229900AbiKETuZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Nov 2022 15:50:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbiKETsj (ORCPT
+        with ESMTP id S229479AbiKETuW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Nov 2022 15:48:39 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6657710544
-        for <linux-kernel@vger.kernel.org>; Sat,  5 Nov 2022 12:48:38 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id y14so21062329ejd.9
-        for <linux-kernel@vger.kernel.org>; Sat, 05 Nov 2022 12:48:38 -0700 (PDT)
+        Sat, 5 Nov 2022 15:50:22 -0400
+Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3467C10571;
+        Sat,  5 Nov 2022 12:50:20 -0700 (PDT)
+Received: by mail-qv1-xf32.google.com with SMTP id n18so5615315qvt.11;
+        Sat, 05 Nov 2022 12:50:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hsVUZtHki8EBvGx5whDzNHPZ47FabaCsvu2d/dBbocY=;
-        b=ZG5inOk3smdgd27T+dN+G6mK3Vw2vI9Eve1vkyETDAKKYvB6W2mhCYuky1V1WhSBIU
-         yWtzAwcc9hobxVUf5JiqDrUZ3nOhkT1cxpfuAvh/ZajHYMLpx9vHaZfrfOQTufJD7ZwY
-         2xlb4II6NgADIuwuNA6x/kaGzzCXFIh+D6jmWeDHxoNC5rTftsqZn4CJBZZQzAAzNGG/
-         YRsnwP2GYjWUKQgo9NL8J3/e2kQLSep3YcxnSyIPlIbgsmPaR+ZwO4FQLYMzbPc2Xc4g
-         wJBMHuhO96nlKxjIDTb8DstV87zyncHVhI46mLH9qpAvTdrVHBRYI9/JEJX5/X3Un++m
-         9lKQ==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Wmi4cBXwD4RRiAsJ9cBaoYF9X/IkJO2wazc8jyFJHBc=;
+        b=JYsT2fJvA35DUV/jmQhlG2b7SFajiMKzyX4Tnk/eVH/r5Sptdv4tCFcZngrwmeCC8j
+         zAasNwI9vtR21jIPowm5HcKpsHM5+waa0MoFKts08nLqXisVu/XQhU2MqRSo4hz3uLL8
+         BU3SjNCcZHaJagh5GWj59TTLeFDxNr2wYj6iDoId8SvCpAeC4wAe4jeKVm5TG/crkjxK
+         4O9Xa3At7L9pd5z8yg5PfAMu06aZGOO9EpHwC9Bvsio4TIBNGoAuS67qHNaJ3Zw724BY
+         ebdchdJLqmpyroO4pfWlSQUmI5EjGO/O2DX7NuWlxLXF6T6JmhpDaW58LycivZfJ3GWX
+         ks/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hsVUZtHki8EBvGx5whDzNHPZ47FabaCsvu2d/dBbocY=;
-        b=XVJ0Ahw2qTHXL5TtAWSQmoaxZvVMJOVejYooTR3FWM0yQ6AE2kjL8OWCKhOGWBlPGr
-         KXBWOlCYfyjy7o0YkKzCTs/TVrCA9MfBkHgiSnzo/5wV8qh8GIsInR95d+zjHqcfZufY
-         ukTbcsGHfdXQ5kltYmjtJKpZWwWncNaEcYoq/LPEDvvxx+xAh3nM41sJKA8N0kK8BPqB
-         eT/7yrCghXPLA8ztZyf0hTYapOtX0uTiqAyZXou7Ajoc84x5sJ3hB6jA0Kx79b/b4mjs
-         1vJdkL/lVIibqMdn5bOh5+wBejdjV77/82JXcTC3cd1UBtR1x3YMZ8v063KQ0mhtUkM5
-         vTzQ==
-X-Gm-Message-State: ACrzQf2zOmm2u+n6sFn9lTL+dFXNubJ/Y8wuuItBqiyj+0BmmANMSa+1
-        wV4QrOHjU5f+YgY4jYIpBlWekqf6zXw=
-X-Google-Smtp-Source: AMsMyM5FzMR4PIjzYSnQ9p8ZEFjVMm931AWGHARdB55RkYgvKUAuSxrnAf053mOX43wfH3YRz1QFlQ==
-X-Received: by 2002:a17:906:7d8c:b0:7ae:159d:1146 with SMTP id v12-20020a1709067d8c00b007ae159d1146mr15255439ejo.528.1667677716871;
-        Sat, 05 Nov 2022 12:48:36 -0700 (PDT)
-Received: from jernej-laptop.localnet (89-212-118-115.static.t-2.net. [89.212.118.115])
-        by smtp.gmail.com with ESMTPSA id fe11-20020a056402390b00b00461b169c02csm1555318edb.91.2022.11.05.12.48.36
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Wmi4cBXwD4RRiAsJ9cBaoYF9X/IkJO2wazc8jyFJHBc=;
+        b=gCICPZ5UrBaWCQKSUclT4Hgn687i/MqQ6IU1xkg02gDkVdX6anKTnLU/9yyS+lKN6X
+         I4DB3LrC4l+ivi/OTIQlqesKVMERoe2p9gKV1fSZ4uEXCNUkQBmgAFX7kWtzrGu3zn2J
+         D2+XYJIpsDG2++0V5MI8W3Yeu9QaRyj1QrN1VTs5pjVBIzRW08Yq2N3qzJiGBjzrU27m
+         yPbo8ryrlywbexg/758drxVc2gZUTy6UHkvxxVxz+1DLFhNhoeaQhgoaKiOa9b+tGE2h
+         VUwgDH+3SJuaxKm+aHSJO7hsG3ZaQK5KJrj+G9N7pDrbgfmj0aeJpWNHqaLFPZec6ZXN
+         LU3w==
+X-Gm-Message-State: ACrzQf0B08mfi7X4mw5dHZrD42LArHzCJm4ztXMUb2HL3U4IM6EJzGzI
+        4ORbK2QU9apMw7rU0LnHBsA=
+X-Google-Smtp-Source: AMsMyM7isalRWuMXBDXLY0ObQZqbl0dHs9ZeH6F4EgOl0oQm4LwJtXNQ2tEdFg/2uMHVtf87FmIabA==
+X-Received: by 2002:ad4:4ea7:0:b0:4b9:365b:2a86 with SMTP id ed7-20020ad44ea7000000b004b9365b2a86mr37733354qvb.58.1667677819332;
+        Sat, 05 Nov 2022 12:50:19 -0700 (PDT)
+Received: from localhost ([2600:1700:65a0:ab60:3e4a:e8c3:587a:efae])
+        by smtp.gmail.com with ESMTPSA id m19-20020a05620a24d300b006ee8874f5fasm2646829qkn.53.2022.11.05.12.50.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 05 Nov 2022 12:48:36 -0700 (PDT)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     Chen-Yu Tsai <wens@csie.org>, Samuel Holland <samuel@sholland.org>
-Cc:     Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, Samuel Holland <samuel@sholland.org>
-Subject: Re: [PATCH 2/2] bus: sunxi-rsb: Support atomic transfers
-Date:   Sat, 05 Nov 2022 20:48:35 +0100
-Message-ID: <4752203.GXAFRqVoOG@jernej-laptop>
-In-Reply-To: <4779430.31r3eYUQgx@jernej-laptop>
-References: <20221105191954.14360-1-samuel@sholland.org> <20221105191954.14360-3-samuel@sholland.org> <4779430.31r3eYUQgx@jernej-laptop>
+        Sat, 05 Nov 2022 12:50:18 -0700 (PDT)
+Date:   Sat, 5 Nov 2022 12:50:17 -0700
+From:   Cong Wang <xiyou.wangcong@gmail.com>
+To:     Hawkins Jiawei <yin31149@gmail.com>
+Cc:     Jamal Hadi Salim <jhs@mojatatu.com>, Jiri Pirko <jiri@resnulli.us>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        syzbot+232ebdbd36706c965ebf@syzkaller.appspotmail.com,
+        syzkaller-bugs@googlegroups.com, 18801353760@163.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] net: sched: fix memory leak in tcindex_set_parms
+Message-ID: <Y2a+eXr20BcI3JDe@pop-os.localdomain>
+References: <20221031060835.11722-1-yin31149@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221031060835.11722-1-yin31149@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -73,129 +77,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dne sobota, 05. november 2022 ob 20:46:47 CET je Jernej =C5=A0krabec napisa=
-l(a):
-> Dne sobota, 05. november 2022 ob 20:19:53 CET je Samuel Holland napisal(a=
-):
-> > When communicating with a PMIC during system poweroff (pm_power_off()),
-> > IRQs are disabled and we are in a RCU read-side critical section, so we
-> > cannot use wait_for_completion_io_timeout(). Instead, poll the status
-> > register for transfer completion.
-> >=20
-> > Signed-off-by: Samuel Holland <samuel@sholland.org>
+On Mon, Oct 31, 2022 at 02:08:35PM +0800, Hawkins Jiawei wrote:
+> Syzkaller reports a memory leak as follows:
+> ====================================
+> BUG: memory leak
+> unreferenced object 0xffff88810c287f00 (size 256):
+>   comm "syz-executor105", pid 3600, jiffies 4294943292 (age 12.990s)
+>   hex dump (first 32 bytes):
+>     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+>     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+>   backtrace:
+>     [<ffffffff814cf9f0>] kmalloc_trace+0x20/0x90 mm/slab_common.c:1046
+>     [<ffffffff839c9e07>] kmalloc include/linux/slab.h:576 [inline]
+>     [<ffffffff839c9e07>] kmalloc_array include/linux/slab.h:627 [inline]
+>     [<ffffffff839c9e07>] kcalloc include/linux/slab.h:659 [inline]
+>     [<ffffffff839c9e07>] tcf_exts_init include/net/pkt_cls.h:250 [inline]
+>     [<ffffffff839c9e07>] tcindex_set_parms+0xa7/0xbe0 net/sched/cls_tcindex.c:342
+>     [<ffffffff839caa1f>] tcindex_change+0xdf/0x120 net/sched/cls_tcindex.c:553
+>     [<ffffffff8394db62>] tc_new_tfilter+0x4f2/0x1100 net/sched/cls_api.c:2147
+>     [<ffffffff8389e91c>] rtnetlink_rcv_msg+0x4dc/0x5d0 net/core/rtnetlink.c:6082
+>     [<ffffffff839eba67>] netlink_rcv_skb+0x87/0x1d0 net/netlink/af_netlink.c:2540
+>     [<ffffffff839eab87>] netlink_unicast_kernel net/netlink/af_netlink.c:1319 [inline]
+>     [<ffffffff839eab87>] netlink_unicast+0x397/0x4c0 net/netlink/af_netlink.c:1345
+>     [<ffffffff839eb046>] netlink_sendmsg+0x396/0x710 net/netlink/af_netlink.c:1921
+>     [<ffffffff8383e796>] sock_sendmsg_nosec net/socket.c:714 [inline]
+>     [<ffffffff8383e796>] sock_sendmsg+0x56/0x80 net/socket.c:734
+>     [<ffffffff8383eb08>] ____sys_sendmsg+0x178/0x410 net/socket.c:2482
+>     [<ffffffff83843678>] ___sys_sendmsg+0xa8/0x110 net/socket.c:2536
+>     [<ffffffff838439c5>] __sys_sendmmsg+0x105/0x330 net/socket.c:2622
+>     [<ffffffff83843c14>] __do_sys_sendmmsg net/socket.c:2651 [inline]
+>     [<ffffffff83843c14>] __se_sys_sendmmsg net/socket.c:2648 [inline]
+>     [<ffffffff83843c14>] __x64_sys_sendmmsg+0x24/0x30 net/socket.c:2648
+>     [<ffffffff84605fd5>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>     [<ffffffff84605fd5>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+>     [<ffffffff84800087>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> ====================================
+> 
+> Kernel will uses tcindex_change() to change an existing
+> traffic-control-indices filter properties. During the
+> process of changing, kernel will clears the old
+> traffic-control-indices filter result, and updates it
+> by RCU assigning new traffic-control-indices data.
+> 
+> Yet the problem is that, kernel will clears the old
+> traffic-control-indices filter result, without destroying
+> its tcf_exts structure, which triggers the above
+> memory leak.
+> 
+> This patch solves it by using tcf_exts_destroy() to
+> destroy the tcf_exts structure in old
+> traffic-control-indices filter result.
 
-Also a fixes tag would be in order here.
-
-Best regards,
-Jernej
-
-> > ---
-> >=20
-> >  drivers/bus/sunxi-rsb.c | 23 +++++++++++++++++------
-> >  1 file changed, 17 insertions(+), 6 deletions(-)
-> >=20
-> > diff --git a/drivers/bus/sunxi-rsb.c b/drivers/bus/sunxi-rsb.c
-> > index 17343cd75338..0f0e498d4379 100644
-> > --- a/drivers/bus/sunxi-rsb.c
-> > +++ b/drivers/bus/sunxi-rsb.c
-> > @@ -267,6 +267,9 @@ EXPORT_SYMBOL_GPL(sunxi_rsb_driver_register);
-> >=20
-> >  /* common code that starts a transfer */
-> >  static int _sunxi_rsb_run_xfer(struct sunxi_rsb *rsb)
-> >  {
-> >=20
-> > +	bool timeout;
-> > +	u32 status;
-> > +
-> >=20
-> >  	if (readl(rsb->regs + RSB_CTRL) & RSB_CTRL_START_TRANS) {
-> >  =09
-> >  		dev_dbg(rsb->dev, "RSB transfer still in progress\n");
-> >  		return -EBUSY;
-> >=20
-> > @@ -279,8 +282,16 @@ static int _sunxi_rsb_run_xfer(struct sunxi_rsb *r=
-sb)
-> >=20
-> >  	writel(RSB_CTRL_START_TRANS | RSB_CTRL_GLOBAL_INT_ENB,
-> >  =09
-> >  	       rsb->regs + RSB_CTRL);
-> >=20
-> > -	if (!wait_for_completion_io_timeout(&rsb->complete,
-> > -
->=20
-> msecs_to_jiffies(100))) {
->=20
-> > +	if (irqs_disabled()) {
-> > +		timeout =3D readl_poll_timeout_atomic(rsb->regs +
->=20
-> RSB_INTS,
->=20
-> > +						    status,
->=20
-> status, 10, 100000);
->=20
-> It would be good to check only for RSB_INTS_LOAD_BSY, RSB_INTS_TRANS_ERR =
-and
-> RSB_INTS_TRANS_OVER flags and clear them afterwards. That way we avoid
-> problems if this path is used outside power off case.
->=20
-> Best regards,
-> Jernej
->=20
-> > +	} else {
-> > +		timeout =3D !wait_for_completion_io_timeout(&rsb-
-> >
-> >complete,
-> >
-> > +
->=20
-> msecs_to_jiffies(100));
->=20
-> > +		status =3D rsb->status;
-> > +	}
-> > +
-> > +	if (timeout) {
-> >=20
-> >  		dev_dbg(rsb->dev, "RSB timeout\n");
-> >  	=09
-> >  		/* abort the transfer */
-> >=20
-> > @@ -292,18 +303,18 @@ static int _sunxi_rsb_run_xfer(struct sunxi_rsb
-> > *rsb)
-> >=20
-> >  		return -ETIMEDOUT;
-> >  =09
-> >  	}
-> >=20
-> > -	if (rsb->status & RSB_INTS_LOAD_BSY) {
-> > +	if (status & RSB_INTS_LOAD_BSY) {
-> >=20
-> >  		dev_dbg(rsb->dev, "RSB busy\n");
-> >  		return -EBUSY;
-> >  =09
-> >  	}
-> >=20
-> > -	if (rsb->status & RSB_INTS_TRANS_ERR) {
-> > -		if (rsb->status & RSB_INTS_TRANS_ERR_ACK) {
-> > +	if (status & RSB_INTS_TRANS_ERR) {
-> > +		if (status & RSB_INTS_TRANS_ERR_ACK) {
-> >=20
-> >  			dev_dbg(rsb->dev, "RSB slave nack\n");
-> >  			return -EINVAL;
-> >  	=09
-> >  		}
-> >=20
-> > -		if (rsb->status & RSB_INTS_TRANS_ERR_DATA) {
-> > +		if (status & RSB_INTS_TRANS_ERR_DATA) {
-> >=20
-> >  			dev_dbg(rsb->dev, "RSB transfer data
->=20
-> error\n");
->=20
-> >  			return -EIO;
-> >  	=09
-> >  		}
+So... your patch can be just the following one-liner, right?
 
 
-
-
+diff --git a/net/sched/cls_tcindex.c b/net/sched/cls_tcindex.c
+index 1c9eeb98d826..00a6c04a4b42 100644
+--- a/net/sched/cls_tcindex.c
++++ b/net/sched/cls_tcindex.c
+@@ -479,6 +479,7 @@ tcindex_set_parms(struct net *net, struct tcf_proto *tp, unsigned long base,
+ 	}
+ 
+ 	if (old_r && old_r != r) {
++		tcf_exts_destroy(&old_r->exts);
+ 		err = tcindex_filter_result_init(old_r, cp, net);
+ 		if (err < 0) {
+ 			kfree(f);
