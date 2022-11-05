@@ -2,126 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74A5961DD93
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 20:05:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A62761DD98
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 20:09:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229639AbiKETFz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Nov 2022 15:05:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57908 "EHLO
+        id S229713AbiKETJZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Nov 2022 15:09:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbiKETFx (ORCPT
+        with ESMTP id S229453AbiKETJW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Nov 2022 15:05:53 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F9F79FC2
-        for <linux-kernel@vger.kernel.org>; Sat,  5 Nov 2022 12:04:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667675096;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=fMzdSVUxKzfJHte4Vux2hVjWJ41SsNMVC7KP71E/b/A=;
-        b=Bsp4D4uY4xKa+28fS1YcocwuX1C0agJ8JSBM7TmWF1oC/kD/KsK7Pk+iXyvfARg7EJ9IsK
-        Oey28NYVV/ueCjmUtc270buPXBYjwOA0rKUEy3PYwCcvq/8M+r/JUo58HVAyFg72G3nPZ9
-        0F6TQXoWIZjVc4xUn6qjKJchhgKaqNU=
-Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com
- [209.85.214.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-388-wfXgdLLBNx2E3rJ4GMBbGQ-1; Sat, 05 Nov 2022 15:04:55 -0400
-X-MC-Unique: wfXgdLLBNx2E3rJ4GMBbGQ-1
-Received: by mail-pl1-f199.google.com with SMTP id n12-20020a170902e54c00b00188515e81a6so5945037plf.23
-        for <linux-kernel@vger.kernel.org>; Sat, 05 Nov 2022 12:04:55 -0700 (PDT)
+        Sat, 5 Nov 2022 15:09:22 -0400
+Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 088679FF8;
+        Sat,  5 Nov 2022 12:09:22 -0700 (PDT)
+Received: by mail-qt1-f178.google.com with SMTP id a27so5029568qtw.10;
+        Sat, 05 Nov 2022 12:09:21 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=fMzdSVUxKzfJHte4Vux2hVjWJ41SsNMVC7KP71E/b/A=;
-        b=x+rcMwDOMx9G6Wrcyq5dlnpkbcEO/gk10xMigW3N+rQINLa4vy9i93rb77jyFScJws
-         p9wQg0aeKJ/zJuT2jhHB0CStSLGhz3wTxOkIzWsPfi3YCoDzAxHtV2auCA03yxUBPNkp
-         mbO7gR0MHmTM6Y26vKNoZQmaqHYj4+xfbxYQ241MW4KRNpGfTORlNh/9UkIrOCiEWKlo
-         5iegVUmVAeXR+g6sMecxcJwUQMqdaLes9HEXT5cVmZHQptk5pS4RJtswuzhObAkJm4n+
-         6NopAHOhvH+zjAnxn8ocQY2gZI20Az4/OfRf8w2MUYYMxcyAak1f1pi/wcc8DrxS1yRr
-         IORw==
-X-Gm-Message-State: ACrzQf0Z+OkyONz5i31n2tscWHHsrvwrIock8VtIE+UKEXHrmJmaDdsL
-        GQ4zNiMUzlpR9l7EGrspMJhEQd9ZxLVTwcM3CMApQXzEnJ8/FdWBb/fC6o1kGTY2uAjF9UPEwik
-        JZPtHRMU84X70zkBsJZiFoxZp
-X-Received: by 2002:a05:6a00:a8c:b0:558:991a:6691 with SMTP id b12-20020a056a000a8c00b00558991a6691mr42009594pfl.53.1667675093780;
-        Sat, 05 Nov 2022 12:04:53 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM5D2hSXvk8kyWEGa1X5jowmFyC1fJpWFKAKj5E4KNYRak6FWEYFFNtXoe78WT4AeqLosIE1tA==
-X-Received: by 2002:a05:6a00:a8c:b0:558:991a:6691 with SMTP id b12-20020a056a000a8c00b00558991a6691mr42009574pfl.53.1667675093464;
-        Sat, 05 Nov 2022 12:04:53 -0700 (PDT)
-Received: from ryzen.. ([240d:1a:c0d:9f00:fc9c:8ee9:e32c:2d9])
-        by smtp.gmail.com with ESMTPSA id jd10-20020a170903260a00b00185507b5ef8sm2009003plb.50.2022.11.05.12.04.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 05 Nov 2022 12:04:53 -0700 (PDT)
-From:   Shigeru Yoshida <syoshida@redhat.com>
-To:     marcel@holtmann.org, johan.hedberg@gmail.com, luiz.dentz@gmail.com
-Cc:     linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com,
-        Shigeru Yoshida <syoshida@redhat.com>,
-        syzbot+19a9f729f05272857487@syzkaller.appspotmail.com
-Subject: [PATCH] Bluetooth: Fix use-after-free read in hci_cmd_timeout()
-Date:   Sun,  6 Nov 2022 04:04:46 +0900
-Message-Id: <20221105190446.1324053-1-syoshida@redhat.com>
-X-Mailer: git-send-email 2.38.1
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=NjtvR6bAq3+xmYuUSX6pXJhQLypuCESvmua1+ptWuE4=;
+        b=2+PcrLZEfozFCf8JMNw9K61B36w/GkJ+1hkqGxcThxL1jAVrlKdB7z3eeoxEDHqcEB
+         Z6jQCnF5Y9Qon3RUqOZoax1NcU9zaZrj1B/Ls/9au2TEZmjBDI3qa1qt6Wa9QYDri+md
+         k73KsZJdkFeJBtJ0+D4WFeo3CRknZPzztY8B+/wymGohtjv3LUZ9X6+XIgnV806k2RD3
+         E4boUNZPTndrNcPWqpYHz8sQdsTWX84kZQjTMiwuKH5rE1pGd2KvzVWz2gkWamaVRhTF
+         DusNrjhhtylHpC63pCscEhyNc4nQ38TQtOCWa5d57ZW75QhsP0sc+AfqxnpkDJldp1S2
+         zQLQ==
+X-Gm-Message-State: ACrzQf3J7qzZQoPDytx8XSXGgXQYpkkuzrS+ayqN2Q0uioQyPFglEBhC
+        Z/iW7ctU0xbd5BzKyzEko7dZ/bNwH8GX/co3mFQLAjnbu9U=
+X-Google-Smtp-Source: AMsMyM4KOXiAQMylP59BA+3abWz8wmOF/OhUbeY5XAQNe8/GttWAi6/jhGFZLBUYephPIcyzA47YP2DR0Em2gv9TG00=
+X-Received: by 2002:a05:622a:4c07:b0:3a5:27ec:6dd3 with SMTP id
+ ey7-20020a05622a4c0700b003a527ec6dd3mr26071593qtb.411.1667675361180; Sat, 05
+ Nov 2022 12:09:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Sat, 5 Nov 2022 20:09:10 +0100
+Message-ID: <CAJZ5v0iw2J0yVP_2hZWac24bDAjkGdLyCrLCqOsM4u62oGfvgA@mail.gmail.com>
+Subject: [GIT PULL] ACPI fix for v6.1-rc4
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot reported use-after-free in hci_cmd_timeout() [1].  The scenario
-for the issue is as follows:
+Hi Linus,
 
-Task                                    Workqueue
-----------------------------------------------------------------------
-hci_dev_open_sync
-  ...
-  hci_dev_init_sync  <- failed
-  ...
-  if (hdev->sent_cmd)
-    kfree_skb(hdev->sent_cmd)
-                                        hci_cmd_timeout
-                                          ...
-                                          if (hdev->sent_cmd)
-                                            sent = hdev->sent_cmd->data
-                                                   ^^ UAF occurred
-    hdev->sent_cmd = NULL
+Please pull from the tag
 
-When hci_dev_init_sync() failed, hci_dev_open_sync() frees
-hdev->send_cmd and set it to NULL.  However, hci_cmd_timeout() can run
-just after freeing hdev->sent_cmd because hdev->cmd_timer is not
-canceled.
+ git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
+ acpi-6.1-rc4
 
-This patch fixes the issue by canceling hdev->cmd_timer before freeing
-hdev->sent_cmd.
+with top-most commit 6faf4ce500d658bcf4d1fe6fe5de2d4d50366e25
 
-Link: https://syzkaller.appspot.com/bug?id=cb23ebfc8f304f510fb717cb783fe8b496c7ffb1 [1]
-Reported-by: syzbot+19a9f729f05272857487@syzkaller.appspotmail.com
-Signed-off-by: Shigeru Yoshida <syoshida@redhat.com>
----
- net/bluetooth/hci_sync.c | 1 +
- 1 file changed, 1 insertion(+)
+ Merge branch 'acpi-x86'
 
-diff --git a/net/bluetooth/hci_sync.c b/net/bluetooth/hci_sync.c
-index 76c3107c9f91..a011065220e4 100644
---- a/net/bluetooth/hci_sync.c
-+++ b/net/bluetooth/hci_sync.c
-@@ -4696,6 +4696,7 @@ int hci_dev_open_sync(struct hci_dev *hdev)
- 			hdev->flush(hdev);
- 
- 		if (hdev->sent_cmd) {
-+			cancel_delayed_work_sync(&hdev->cmd_timer);
- 			kfree_skb(hdev->sent_cmd);
- 			hdev->sent_cmd = NULL;
- 		}
--- 
-2.38.1
+on top of commit dd183e320524f076a765ec441193deb90bd53836
 
+ Merge branches 'acpi-resource', 'acpi-pcc' and 'devprop'
+
+to receive an ACPI fix for 6.1-rc4.
+
+This adds a StorageD3Enable quirk for Dell Inspiron 16 5625 (Mario
+Limonciello).
+
+Thanks!
+
+
+---------------
+
+Mario Limonciello (1):
+      ACPI: x86: Add another system to quirk list for forcing StorageD3Enable
+
+---------------
+
+ drivers/acpi/x86/utils.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
