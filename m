@@ -2,116 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7C3B61D767
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 06:23:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F27B61D768
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 06:23:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229471AbiKEFWT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Nov 2022 01:22:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54488 "EHLO
+        id S229552AbiKEFW2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Nov 2022 01:22:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbiKEFWR (ORCPT
+        with ESMTP id S229547AbiKEFWV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Nov 2022 01:22:17 -0400
-Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F2782E680
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 22:22:15 -0700 (PDT)
-Received: by mail-oi1-x22a.google.com with SMTP id l127so7198055oia.8
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 22:22:15 -0700 (PDT)
+        Sat, 5 Nov 2022 01:22:21 -0400
+Received: from mail-vs1-xe30.google.com (mail-vs1-xe30.google.com [IPv6:2607:f8b0:4864:20::e30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 073E92DABD;
+        Fri,  4 Nov 2022 22:22:21 -0700 (PDT)
+Received: by mail-vs1-xe30.google.com with SMTP id t5so6221368vsh.8;
+        Fri, 04 Nov 2022 22:22:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=EOF2Cx7IpRN9hnOm1d8qRQgLYEtSJu+jemaFIvyZFv0=;
-        b=ely303De/1B7MiFyoKEFJq6+SLg+YWzEHaAQgwOc1I+50zenn4zxDO/2dWbEBOfIeJ
-         QcpDm8/A4AC11ya2l1FQD5MixWsFF2Qcqyj0SsVvXMeKQFEPD8Xd9uou/WnRsM9WhAbI
-         a6d5K29siu4eNmMPC50IM1MXBkbovEP56bNFKNhvw4G4t6Kg1kR7gNdhj7tKszovtyQX
-         oGqx9goDlfWSWsbVQ8kOst9tWkPoG/UsufAgqQTSU/1Gbj4VQ/ezavbVYXAcjfyTdhwg
-         a+3BYfGlJd/+2IgY5udr2nNYfednesxtXDzqyPS1JAzw3z1pin4q8AlvYcpVgVjwWf02
-         KoDQ==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=A+Qwi7rg0U58xPzwrvVIHIbh9K9ZeQWsTgY/TnvreHo=;
+        b=Sq5w5AOO+/cUqQI+Zf5kQA/q+AmvqJoO1HjfWcMNeKhnbdkze0yEchcfHp48clyxn6
+         ITgTCwiSyJ1QgY4wqZeqTrMZ0fXAZLO0bMt2nyK6Z06/dbjBdJQ40j76bXpTpPfF8RPw
+         icL6bjNgQxTGQDUGI9ZNv6SHXNnm4EOswLUdVBxh0jAeIVCnUNgpm1QTAq48pG9IEEAl
+         z+bpQQfzgUi/c+nSAwRaBNaWocgTt/5ehVBqbA3twkEMfS7H+MsdyszU/nidwAjFuXqj
+         ZSvzsYjg7p22Wdi4MPNYebnn0KGQSrNS0sn3NAd1bYlbmIcMZFD1rdEwOqxnowOoczFE
+         SbCA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=EOF2Cx7IpRN9hnOm1d8qRQgLYEtSJu+jemaFIvyZFv0=;
-        b=A8YIEFOEEjjce42Q0WjHo8W30KzGM5I0eAr1H+7l4xj21UpOJ/YadZodi5V0dORLik
-         XcRX5TTV6W8pAIHvKOzP9JhOAPdKTnwJaNW4DxnD3VtAhfvy7RFInxVabwm7Rc+cZhGr
-         DnN2b9MlNTFQ+Z/DigSnQfMTRQYZhK9sDJ9RNRimKk8gMg/CIm8Eat7A/CBD79oG1ln1
-         HZkf3ktRQ/skvX0rZmyhJecEZpqP0dzSZ1huTWO8BbgtUmKSTclYFsAyTiTJ9/lFYQWB
-         EIPFn9PmDHVZdrJxeoUtr6ij9+H4ZrVfVBCnxEHfrwiv3DJ4E4e5vVZC7DvASliPJZaO
-         hUew==
-X-Gm-Message-State: ACrzQf3TVzfSD5tLt23EdXvpwudrkfxX4lC+bMWYItxbggNRqsk58/4p
-        BjtBog44dKT66F7vpGtKSOXexYheqcgVvbuVwhI8s5JqSieQ
-X-Google-Smtp-Source: AMsMyM4HQMM13euSxBSldw7b1HnIWnHCbPOiU15QeMZDkdhzFKutGseY3VrWmscilPSROZwBZZGGsLp17XCcP8tvHxk=
-X-Received: by 2002:a05:6808:1441:b0:35a:4a2d:673b with SMTP id
- x1-20020a056808144100b0035a4a2d673bmr7623626oiv.172.1667625734380; Fri, 04
- Nov 2022 22:22:14 -0700 (PDT)
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=A+Qwi7rg0U58xPzwrvVIHIbh9K9ZeQWsTgY/TnvreHo=;
+        b=F9n+VflwZF2wZUotH4J7FgF7Yx5lHaMENI5U4C3T1Jw1dnS7ExfcPimIa9PWl2eCtE
+         ObgwtYiEp2p7mzkAa0umP7AZDi9LNJ38htg7ikAW1oexhUFUHZXg9rGqDeFx182/3Mv3
+         7dAAcLiPi73/c1k54evTUVbdkvgbubRNM1Hb0jV4W+2t+/dn/gZghqLrsrZ27rnKando
+         HgFu9pO0uApdmqBOVRNbGYU4DT6ZU0eO43ByvNub1tI5mFsSgNvVnfDYh7hyVTXP3oQh
+         pL2ENsAWJNm+Li5loQspBNW4o7Bx47urQ2D3KDNZBqOxPZOlh5i6Md1yT4Yxmc2hvELL
+         Jmrg==
+X-Gm-Message-State: ACrzQf1tSoP3K1BQq2NdVOcM8tIDNtydTH6dC3yhszxIwJR6gBTSITb7
+        lPKQ2hXceFRyxgihoNOEfHhCmgUaBmSKvy+2hck=
+X-Google-Smtp-Source: AMsMyM6k1R3PQAK+eTqvhmY7GfQuqGyFz7rP0EaidF9pksUxVlIKsCpK4DdapRarjUZNcj5ut/W/sr+2D7NeBx9UzmY=
+X-Received: by 2002:a67:6dc5:0:b0:3aa:415:c0ca with SMTP id
+ i188-20020a676dc5000000b003aa0415c0camr21628683vsc.3.1667625739997; Fri, 04
+ Nov 2022 22:22:19 -0700 (PDT)
 MIME-Version: 1.0
-References: <CAHC9VhSSafrkW4VbTVoAUJmjFQdCwPTGDqTP8yBnLBqc7rW7iQ@mail.gmail.com>
- <CAHk-=wj_6Df1NAMs14S0OOqX1Z=460j-mfwn_qm-7EK1eK76qw@mail.gmail.com>
-In-Reply-To: <CAHk-=wj_6Df1NAMs14S0OOqX1Z=460j-mfwn_qm-7EK1eK76qw@mail.gmail.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Sat, 5 Nov 2022 01:22:02 -0400
-Message-ID: <CAHC9VhRe-oL7tHskQd9eBdpUh=PFujikL48kauZXU=xyZ1Ohag@mail.gmail.com>
-Subject: Re: [GIT PULL] LSM fixes for v6.1 (#1)
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221102053058.21021-1-lijiaming3@xiaomi.corp-partner.google.com>
+ <Y2IuhG8nBJj0F1fd@infradead.org> <c5948336-19fc-ddd3-bc34-aba2d1b02302@gmail.com>
+ <878ea44b-9616-e7d0-661c-82eae23b1b35@bjorling.me>
+In-Reply-To: <878ea44b-9616-e7d0-661c-82eae23b1b35@bjorling.me>
+From:   Juhyung Park <qkrwngud825@gmail.com>
+Date:   Sat, 5 Nov 2022 14:22:08 +0900
+Message-ID: <CAD14+f3i04piBzjuh9DFnbtbMmgqDLh3JMnTYM5ej=23rxjdtg@mail.gmail.com>
+Subject: Re: [RESEND PATCH 0/4] Implement File-Based optimization functionality
+To:     =?UTF-8?Q?Matias_Bj=C3=B8rling?= <m@bjorling.me>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        Jiaming Li <lijiaming3@xiaomi.corp-partner.google.com>,
+        alim.akhtar@samsung.com, avri.altman@wdc.com, bvanassche@acm.org,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        lijiaming3 <lijiaming3@xiaomi.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 31, 2022 at 3:22 PM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
-> On Mon, Oct 31, 2022 at 4:07 AM Paul Moore <paul@paul-moore.com> wrote:
-> >
-> > A single patch to the capabilities code to fix a potential memory leak
-> > in the xattr allocation error handling.  Please apply for v6.1-rcX.
+On Fri, Nov 4, 2022 at 9:37 PM Matias Bj=C3=B8rling <m@bjorling.me> wrote:
 >
-> Pulled.
+> On 03/11/2022 07.11, Juhyung Park wrote:
+> ...
+> >
+> > Is the idea really an utter madness? Majority of regular files that may
+> > be of interest from the perspective of UFS aren't reflinked or
+> > snapshotted (let alone the lack of support from ext4 or f2fs).
+> >
+> > Device-side fragmentation is a real issue [1] and it makes more than
+> > enough sense to defrag LBAs of interests to improve performance. This
+> > was long overdue, unless the block interface itself changes somehow.
+>
+> There are ongoing work with UFS to extend the block interface with
+> zones. This approach eliminates the mismatch between the device-side
+> mapping and host-side mapping and lets the host and device collaborate
+> on the data placement.
+>
+> >
+> > The question is how to implement it correctly without creating a mess
+> > with mismatched/outdated LBAs as you've mentioned, preferably through
+> > file-system's integration: If the LBAs in questions are indeed
+> > reflinked, how do we handle it?, If the LBAs are moved/invalidated from
+> > defrag or GC, how do we make sure that UFS is up-to-date?, etc.
+>
+> If using zoned UFS, the file-system can use zones for LBA tracking,
+> eliminating the mismatched/outdated LBA issue. f2fs already supports
+> this approach (works today with SMR HDDs and ZNS SSDs). It'll extend to
+> UFS when zone support is added/implemented.
+>
 
-Sorry for the delay in responding, you saw this in my other response,
-but limited network access, yadda yadda ...
-
-> However, I react to the strange test condition. Sure, it's
-> pre-existing, but does it really make sense?
-
-I wasn't responsible for this code when the conditional was written,
-and I've got enough mail in my backlog at the moment to not want to
-sift through the git log trying to make sense of it, but the current
-conditional does seem a bit "extra" when one considers
-vfs_getxattr_alloc().  The only gotcha that I can see is that
-vfs_getxattr_alloc() callers need to ensure that they always kfree()
-the xattr_value buffer on error as vfs_getxattr_alloc() may leave
-memory allocated on failure.  There was discussion of that when this
-leak fix patch was posted.
-
-I'll put together a cleanup patch to resolve the conditional oddity
-and send it up during the next merge window.
-
-> That whole "cast to int, and then cast back to size_t" also smells of
-> some serious confusion in the return value handling. It looks to me
-> like vfs_getxattr_alloc() fundamentally returns an 'int', not a
-> 'ssize_t', just by looking at the ->get function. But it just all
-> looks weird.
-
-Yes, it's a bit of a mess.  I suspect the problem originated in that
-vfs_getxattr_alloc() returns either a negative number on failure or
-the size of the allocation on success, and with allocation sizes
-typically using a {s}size_t type I'm guessing the original authors
-chose ssize_t, which seems reasonable until one looks at the
-xattr_handler's ->get() function and realizes that it returns an int.
-
-I think the right thing to do here is to update vfs_getxattr_alloc()
-to use an int return type and update all of the callers accordingly
-(currently they all live under security/).  I'll put together a patch
-to clean this up and send it via the next merge window assuming there
-are no objections to the patch.
-
--- 
-paul-moore.com
+More reasons to have this functionality integrated with the
+file-system instead of allowing users to specify random LBA ranges.
