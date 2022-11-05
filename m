@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E7A961D7CE
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 07:03:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 855AF61D7C4
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 07:03:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229814AbiKEGCQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Nov 2022 02:02:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60076 "EHLO
+        id S229601AbiKEGBw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Nov 2022 02:01:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229624AbiKEGBe (ORCPT
+        with ESMTP id S229615AbiKEGBe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 5 Nov 2022 02:01:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E819331207;
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE2FC30F7A;
         Fri,  4 Nov 2022 23:01:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 534AA60A67;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6CD3660A55;
         Sat,  5 Nov 2022 06:01:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2978BC4347C;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47C30C43143;
         Sat,  5 Nov 2022 06:01:30 +0000 (UTC)
 Received: from rostedt by gandalf.local.home with local (Exim 4.96)
         (envelope-from <rostedt@goodmis.org>)
-        id 1orCFi-007Ooz-0y;
+        id 1orCFi-007OpY-1Y;
         Sat, 05 Nov 2022 02:01:58 -0400
-Message-ID: <20221105060158.138331694@goodmis.org>
+Message-ID: <20221105060158.322031906@goodmis.org>
 User-Agent: quilt/0.66
-Date:   Sat, 05 Nov 2022 02:00:42 -0400
+Date:   Sat, 05 Nov 2022 02:00:43 -0400
 From:   Steven Rostedt <rostedt@goodmis.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
@@ -37,18 +37,12 @@ Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
         Guenter Roeck <linux@roeck-us.net>,
         Anna-Maria Gleixner <anna-maria@linutronix.de>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Johan Hovold <johan@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        Bhuvanesh Surachari <Bhuvanesh_Surachari@mentor.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
         Dan Carpenter <dan.carpenter@oracle.com>,
-        linux-usb@vger.kernel.org
-Subject: [PATCH v4a 18/38] timers: usb: Use timer_shutdown_sync() before freeing timer
+        Chengfeng Ye <cyeaa@connect.ust.hk>, Lin Ma <linma@zju.edu.cn>,
+        Duoming Zhou <duoming@zju.edu.cn>, netdev@vger.kernel.org
+Subject: [PATCH v4a 19/38] timers: nfc: pn533: Use timer_shutdown_sync() before freeing timer
 References: <20221105060024.598488967@goodmis.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -67,62 +61,44 @@ Before a timer is freed, timer_shutdown_sync() must be called.
 
 Link: https://lore.kernel.org/all/20221104054053.431922658@goodmis.org/
 
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Felipe Balbi <balbi@kernel.org>
-Cc: Johan Hovold <johan@kernel.org>
-Cc: Alan Stern <stern@rowland.harvard.edu>
-Cc: Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc: Kai-Heng Feng <kai.heng.feng@canonical.com>
-Cc: Matthias Kaehlcke <mka@chromium.org>
-Cc: Michael Grzeschik <m.grzeschik@pengutronix.de>
-Cc: Bhuvanesh Surachari <Bhuvanesh_Surachari@mentor.com>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc: "David S. Miller" <davem@davemloft.net>
 Cc: Dan Carpenter <dan.carpenter@oracle.com>
-Cc: linux-usb@vger.kernel.org
+Cc: Chengfeng Ye <cyeaa@connect.ust.hk>
+Cc: Lin Ma <linma@zju.edu.cn>
+Cc: Duoming Zhou <duoming@zju.edu.cn>
+Cc: netdev@vger.kernel.org
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 ---
- drivers/usb/gadget/udc/m66592-udc.c | 2 +-
- drivers/usb/serial/garmin_gps.c     | 2 +-
- drivers/usb/serial/mos7840.c        | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ drivers/nfc/pn533/pn533.c | 2 +-
+ drivers/nfc/pn533/uart.c  | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/usb/gadget/udc/m66592-udc.c b/drivers/usb/gadget/udc/m66592-udc.c
-index 931e6362a13d..c7e421b449f3 100644
---- a/drivers/usb/gadget/udc/m66592-udc.c
-+++ b/drivers/usb/gadget/udc/m66592-udc.c
-@@ -1519,7 +1519,7 @@ static int m66592_remove(struct platform_device *pdev)
+diff --git a/drivers/nfc/pn533/pn533.c b/drivers/nfc/pn533/pn533.c
+index d9f6367b9993..0a1d0b4e3bb8 100644
+--- a/drivers/nfc/pn533/pn533.c
++++ b/drivers/nfc/pn533/pn533.c
+@@ -2788,7 +2788,7 @@ void pn53x_common_clean(struct pn533 *priv)
+ 	struct pn533_cmd *cmd, *n;
  
- 	usb_del_gadget_udc(&m66592->gadget);
+ 	/* delete the timer before cleanup the worker */
+-	del_timer_sync(&priv->listen_timer);
++	timer_shutdown_sync(&priv->listen_timer);
  
--	del_timer_sync(&m66592->timer);
-+	timer_shutdown_sync(&m66592->timer);
- 	iounmap(m66592->reg);
- 	free_irq(platform_get_irq(pdev, 0), m66592);
- 	m66592_free_request(&m66592->ep[0].ep, m66592->ep0_req);
-diff --git a/drivers/usb/serial/garmin_gps.c b/drivers/usb/serial/garmin_gps.c
-index f1a8d8343623..670e942fdaaa 100644
---- a/drivers/usb/serial/garmin_gps.c
-+++ b/drivers/usb/serial/garmin_gps.c
-@@ -1405,7 +1405,7 @@ static void garmin_port_remove(struct usb_serial_port *port)
- 
- 	usb_kill_anchored_urbs(&garmin_data_p->write_urbs);
- 	usb_kill_urb(port->interrupt_in_urb);
--	del_timer_sync(&garmin_data_p->timer);
-+	timer_shutdown_sync(&garmin_data_p->timer);
- 	kfree(garmin_data_p);
+ 	flush_delayed_work(&priv->poll_work);
+ 	destroy_workqueue(priv->wq);
+diff --git a/drivers/nfc/pn533/uart.c b/drivers/nfc/pn533/uart.c
+index 07596bf5f7d6..a556acdb947b 100644
+--- a/drivers/nfc/pn533/uart.c
++++ b/drivers/nfc/pn533/uart.c
+@@ -310,7 +310,7 @@ static void pn532_uart_remove(struct serdev_device *serdev)
+ 	pn53x_unregister_nfc(pn532->priv);
+ 	serdev_device_close(serdev);
+ 	pn53x_common_clean(pn532->priv);
+-	del_timer_sync(&pn532->cmd_timeout);
++	timer_shutdown_sync(&pn532->cmd_timeout);
+ 	kfree_skb(pn532->recv_skb);
+ 	kfree(pn532);
  }
- 
-diff --git a/drivers/usb/serial/mos7840.c b/drivers/usb/serial/mos7840.c
-index 6b12bb4648b8..8a2d902a1c12 100644
---- a/drivers/usb/serial/mos7840.c
-+++ b/drivers/usb/serial/mos7840.c
-@@ -1726,7 +1726,7 @@ static void mos7840_port_remove(struct usb_serial_port *port)
- 		mos7840_set_led_sync(port, MODEM_CONTROL_REGISTER, 0x0300);
- 
- 		del_timer_sync(&mos7840_port->led_timer1);
--		del_timer_sync(&mos7840_port->led_timer2);
-+		timer_shutdown_sync(&mos7840_port->led_timer2);
- 
- 		usb_kill_urb(mos7840_port->led_urb);
- 		usb_free_urb(mos7840_port->led_urb);
 -- 
 2.35.1
