@@ -2,196 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B784661D97B
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 11:36:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2F5B61D984
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 11:57:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229666AbiKEKgk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Nov 2022 06:36:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43270 "EHLO
+        id S229676AbiKEKwt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Nov 2022 06:52:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229555AbiKEKgc (ORCPT
+        with ESMTP id S229472AbiKEKwr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Nov 2022 06:36:32 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0B902AE38;
-        Sat,  5 Nov 2022 03:36:30 -0700 (PDT)
-Date:   Sat, 05 Nov 2022 10:36:28 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1667644589;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=X7Gx3aKfS5VAgwB+wRizzNS4KlLZzo8Gg/aRiaUgpr8=;
-        b=k0XUNQYpT+YN6yFUPO1MGZ6yRvaemmWyCNrNYI7eUa1Vh0q/6nxDTQFDEDimmpq7YXsu0E
-        UgKOYK4jO7HspI4J1s1ix/dAMTTpv0mqx+xqbwU5DP7hBmYAThUbkiHJPJmtwib+Qx9PL5
-        JFA6JrYvsh9CglRu1XJBfl831Up6MSV71dEYkqPHFtnhcjLrRqdl8HY3+IJNsPs8pDaVb9
-        ST9qLJSPF//3qDQRHzwV5xCcEFWkO80hD/oq+sDIJpSAZeRZPSluZ8BOZbl3d4go8soAVD
-        jZTyT5BLwi5kRR1lgd6QYpHn/yGYRINXd4wmyEqs4Sbxu6mQumBG1p9FLJtpHg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1667644589;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=X7Gx3aKfS5VAgwB+wRizzNS4KlLZzo8Gg/aRiaUgpr8=;
-        b=3M19D6NDseZoQUZbW07xzyHq/QHzV1pdMYpVVEQ3Hgxxh1vjjPARA9wU8r5pJMvzbelgJD
-        ZTFdOa3vX1DbS3Aw==
-From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/core] objtool: Optimize elf_dirty_reloc_sym()
-Cc:     Borislav Petkov <bp@alien8.de>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <Y2LlRA7x+8UsE1xf@hirez.programming.kicks-ass.net>
-References: <Y2LlRA7x+8UsE1xf@hirez.programming.kicks-ass.net>
+        Sat, 5 Nov 2022 06:52:47 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6855324
+        for <linux-kernel@vger.kernel.org>; Sat,  5 Nov 2022 03:52:45 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id kt23so19109929ejc.7
+        for <linux-kernel@vger.kernel.org>; Sat, 05 Nov 2022 03:52:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tmYcctTiJYwwICkx5wu/bw8pUXXtcC2eFjna9pAcZHs=;
+        b=kMA28qDz2uGz76+Qxhi8rg+rfrk/Jrx0jjm4eBeI4LxKkLB/ncVOhxdgQPamDaUeRH
+         p0kH6XqKpiMXVcrEr/MFCQbTGbb0K0n6BcyQ0NuroLi8Q7U+KcNTHaKh1c+7IywHV938
+         mXTESu8+iUaGZwWjQ87Wi2osLmTdUVCL0N4ylKbdD5Hxj7FUpd4h3PeXy0045lxh02s3
+         cBq6k82BDaFYhq/7q1Xg4rxDfmRjm+SwZSOzpSV8Ty5ygdiRXJz7W+DF6HhjiUnKcyyS
+         Jc07WQS3pw3CMOjfdihL92OG2dvnSWZB/oD/b+Zgl3NyTHk2xvr/Di94SrXPvwZC3pJB
+         NYMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=tmYcctTiJYwwICkx5wu/bw8pUXXtcC2eFjna9pAcZHs=;
+        b=hBaPEE14EpPOPafG4clELjkHYQ265gGR/OC+8tkXwCkgAsddBrvjc1rtpvKGcHXML+
+         DypIokprKaNwDMYQGvCF7+MYtEXINxjEDf8nA0hMgPQrSmog2MA5bNIeh/ViUR4av8bp
+         jNQn3sPk1fqX9SS1GxkbWdLSjzPrD1GuTu6AnEXc/8jwszRxl+QeN7liJ2SpdXKVx1js
+         UO/mea8uvChI7XbAc+n1Rr3DPsHxp3zFlnsdQTYWaYKDpSjsp5Rejt0zrWzyWRtvqoGV
+         bYgRCwJ/+sK4G0nUv+ADBwDDCaXOhg7KDC0BBhcbYNBkhFuT6Ph3aY8bpIyPpUav5BeO
+         EA/w==
+X-Gm-Message-State: ACrzQf3NJ7NhRpyvxtK3QV2Lt50asdoZEmMnwg/0gDK20eoibjmruvxL
+        j/15pRWtyj7OnmSGj66kdH8UDuTMcOaQ+816FlsQgscDi3s=
+X-Google-Smtp-Source: AMsMyM7XIJ+eyAwMRRcSwfrnNnOoroHukEtAtoEQjMLnkwWOEZP/X8p0e7hAEv5whmFUewre9Rej4EPRetHS9mXL6H0=
+X-Received: by 2002:a17:907:2c71:b0:79e:8603:72c6 with SMTP id
+ ib17-20020a1709072c7100b0079e860372c6mr39228016ejc.172.1667645564153; Sat, 05
+ Nov 2022 03:52:44 -0700 (PDT)
 MIME-Version: 1.0
-Message-ID: <166764458820.4906.1462951010200408447.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <CAO4mrffA2tTwCKQ-objUH7BJ2GjSXaJdi=pq0vtqjicx8eH7wA@mail.gmail.com>
+ <c0112b1d-e3bb-9f54-eb0d-f5d77275a323@wanadoo.fr>
+In-Reply-To: <c0112b1d-e3bb-9f54-eb0d-f5d77275a323@wanadoo.fr>
+From:   Wei Chen <harperchen1110@gmail.com>
+Date:   Sat, 5 Nov 2022 18:52:08 +0800
+Message-ID: <CAO4mrfehbWr+wNxP22GntPmeFprap+PjuCwQgdqUahtPXHKJ6Q@mail.gmail.com>
+Subject: Re: BUG: unable to handle kernel NULL pointer dereference in debug_check_no_obj_freed
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/core branch of tip:
+Dear Linux developers,
 
-Commit-ID:     19526717f768bf2f89ca01bd2a595728ebe57540
-Gitweb:        https://git.kernel.org/tip/19526717f768bf2f89ca01bd2a595728ebe57540
-Author:        Peter Zijlstra <peterz@infradead.org>
-AuthorDate:    Wed, 02 Nov 2022 22:31:19 +01:00
-Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Sat, 05 Nov 2022 11:28:02 +01:00
+The bug persists in 5.15.76. Unfortunately, we do not have a reproducer eit=
+her.
 
-objtool: Optimize elf_dirty_reloc_sym()
+BUG: kernel NULL pointer dereference, address: 0000000000000038
+#PF: supervisor read access in kernel mode
+#PF: error_code(0x0000) - not-present page
+PGD 0 P4D 0
+Oops: 0000 [#1] PREEMPT SMP
+CPU: 1 PID: 10876 Comm: systemd-udevd Not tainted 5.15.76 #5
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
+rel-1.13.0-48-gd9c812dda519-prebuilt.qemu.org 04/01/2014
+RIP: 0010:__debug_check_no_obj_freed lib/debugobjects.c:983 [inline]
+RIP: 0010:debug_check_no_obj_freed+0xc7/0x210 lib/debugobjects.c:1023
+Code: 48 89 34 24 48 8b 3c 24 45 31 ff e8 63 d6 fc 01 48 8b 54 24 20
+48 89 44 24 18 48 c7 c0 a0 a9 82 88 48 8b 04 10 48 85 c0 74 4b <48> 8b
+48 18 41 83 c7 01 4c 8b 30 48 39 cb 77 2e 48 39 e9 73 29 83
+RSP: 0018:ffffc9000d3dfbb8 EFLAGS: 00010002
+RAX: 0000000000000020 RBX: ffff88811741d000 RCX: 0000000000000000
+RDX: 0000000000099b40 RSI: ffffffff852b51d8 RDI: ffffffff888c44e8
+RBP: ffff88811741e000 R08: 0000000000000000 R09: 0000000000000001
+R10: ffffc9000d3dfa60 R11: 0000000000000001 R12: dead000000000122
+R13: dead000000000100 R14: 0000000000000020 R15: 0000000000000003
+FS:  00007f29edb2a8c0(0000) GS:ffff88813dc00000(0000) knlGS:000000000000000=
+0
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000000000038 CR3: 000000010cc24000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ free_pages_prepare mm/page_alloc.c:1345 [inline]
+ free_pcp_prepare+0x177/0x490 mm/page_alloc.c:1391
+ free_unref_page_prepare mm/page_alloc.c:3317 [inline]
+ free_unref_page_list+0x8a/0x660 mm/page_alloc.c:3433
+ release_pages+0x1d2/0x1140 mm/swap.c:963
+ tlb_batch_pages_flush mm/mmu_gather.c:49 [inline]
+ tlb_flush_mmu_free mm/mmu_gather.c:242 [inline]
+ tlb_flush_mmu+0x60/0x1e0 mm/mmu_gather.c:249
+ tlb_finish_mmu+0x5f/0xb0 mm/mmu_gather.c:340
+ unmap_region+0x155/0x1a0 mm/mmap.c:2668
+ __do_munmap+0x292/0x6f0 mm/mmap.c:2899
+ __vm_munmap+0x96/0x180 mm/mmap.c:2922
+ __do_sys_munmap mm/mmap.c:2948 [inline]
+ __se_sys_munmap mm/mmap.c:2944 [inline]
+ __x64_sys_munmap+0x2a/0x30 mm/mmap.c:2944
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x34/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x61/0xcb
+RIP: 0033:0x7f29ec9a66e7
+Code: c7 c0 ff ff ff ff eb 8d 48 8b 15 ac 47 2b 00 f7 d8 64 89 02 e9
+5b ff ff ff 66 2e 0f 1f 84 00 00 00 00 00 b8 0b 00 00 00 0f 05 <48> 3d
+01 f0 ff ff 73 01 c3 48 8b 0d 81 47 2b 00 f7 d8 64 89 01 48
+RSP: 002b:00007ffd3fcf6c98 EFLAGS: 00000207 ORIG_RAX: 000000000000000b
+RAX: ffffffffffffffda RBX: 00000000000c3c94 RCX: 00007f29ec9a66e7
+RDX: 00007f29edae9000 RSI: 0000000000041000 RDI: 00007f29edae9000
+RBP: 0000000000000021 R08: 0000557c1a93c0d0 R09: 0000000000000000
+R10: 0000000000000210 R11: 0000000000000207 R12: 0000557c1a872ea0
+R13: 0000557c1a872ef0 R14: 00007f29ed709aa4 R15: 00007f29edae9028
+ </TASK>
+Modules linked in:
+CR2: 0000000000000038
+---[ end trace 850a1b705a5c4266 ]---
+RIP: 0010:__debug_check_no_obj_freed lib/debugobjects.c:983 [inline]
+RIP: 0010:debug_check_no_obj_freed+0xc7/0x210 lib/debugobjects.c:1023
+Code: 48 89 34 24 48 8b 3c 24 45 31 ff e8 63 d6 fc 01 48 8b 54 24 20
+48 89 44 24 18 48 c7 c0 a0 a9 82 88 48 8b 04 10 48 85 c0 74 4b <48> 8b
+48 18 41 83 c7 01 4c 8b 30 48 39 cb 77 2e 48 39 e9 73 29 83
+RSP: 0018:ffffc9000d3dfbb8 EFLAGS: 00010002
 
-When moving a symbol in the symtab its index changes and any reloc
-referring that symtol-table-index will need to be rewritten too.
+RAX: 0000000000000020 RBX: ffff88811741d000 RCX: 0000000000000000
+RDX: 0000000000099b40 RSI: ffffffff852b51d8 RDI: ffffffff888c44e8
+RBP: ffff88811741e000 R08: 0000000000000000 R09: 0000000000000001
+R10: ffffc9000d3dfa60 R11: 0000000000000001 R12: dead000000000122
+R13: dead000000000100 R14: 0000000000000020 R15: 0000000000000003
+FS:  00007f29edb2a8c0(0000) GS:ffff88813dc00000(0000) knlGS:000000000000000=
+0
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000000000038 CR3: 000000010cc24000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+----------------
+Code disassembly (best guess):
+   0: 48 89 34 24          mov    %rsi,(%rsp)
+   4: 48 8b 3c 24          mov    (%rsp),%rdi
+   8: 45 31 ff              xor    %r15d,%r15d
+   b: e8 63 d6 fc 01        callq  0x1fcd673
+  10: 48 8b 54 24 20        mov    0x20(%rsp),%rdx
+  15: 48 89 44 24 18        mov    %rax,0x18(%rsp)
+  1a: 48 c7 c0 a0 a9 82 88 mov    $0xffffffff8882a9a0,%rax
+  21: 48 8b 04 10          mov    (%rax,%rdx,1),%rax
+  25: 48 85 c0              test   %rax,%rax
+  28: 74 4b                je     0x75
+* 2a: 48 8b 48 18          mov    0x18(%rax),%rcx <-- trapping instruction
+  2e: 41 83 c7 01          add    $0x1,%r15d
+  32: 4c 8b 30              mov    (%rax),%r14
+  35: 48 39 cb              cmp    %rcx,%rbx
+  38: 77 2e                ja     0x68
+  3a: 48 39 e9              cmp    %rbp,%rcx
+  3d: 73 29                jae    0x68
+  3f: 83                    .byte 0x83
 
-In order to facilitate this, objtool simply marks the whole reloc
-section 'changed' which will cause the whole section to be
-re-generated.
+Best,
+Wei
 
-However, finding the relocs that use any given symbol is implemented
-rather crudely -- a fully iteration of all sections and their relocs.
-Given that some builds have over 20k sections (kallsyms etc..)
-iterating all that for *each* symbol moved takes a bit of time.
-
-Instead have each symbol keep a list of relocs that reference it.
-
-This *vastly* improves build times for certain configs.
-
-Reported-by: Borislav Petkov <bp@alien8.de>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lkml.kernel.org/r/Y2LlRA7x+8UsE1xf@hirez.programming.kicks-ass.net
----
- tools/objtool/elf.c                 | 27 ++++++++++-----------------
- tools/objtool/include/objtool/elf.h |  2 ++
- 2 files changed, 12 insertions(+), 17 deletions(-)
-
-diff --git a/tools/objtool/elf.c b/tools/objtool/elf.c
-index 3d636d1..8cd7f01 100644
---- a/tools/objtool/elf.c
-+++ b/tools/objtool/elf.c
-@@ -356,6 +356,7 @@ static void elf_add_symbol(struct elf *elf, struct symbol *sym)
- 	struct rb_node *pnode;
- 	struct symbol *iter;
- 
-+	INIT_LIST_HEAD(&sym->reloc_list);
- 	INIT_LIST_HEAD(&sym->pv_target);
- 	sym->alias = sym;
- 
-@@ -557,6 +558,7 @@ int elf_add_reloc(struct elf *elf, struct section *sec, unsigned long offset,
- 	reloc->sym = sym;
- 	reloc->addend = addend;
- 
-+	list_add_tail(&reloc->sym_reloc_entry, &sym->reloc_list);
- 	list_add_tail(&reloc->list, &sec->reloc->reloc_list);
- 	elf_hash_add(reloc, &reloc->hash, reloc_hash(reloc));
- 
-@@ -573,21 +575,10 @@ int elf_add_reloc(struct elf *elf, struct section *sec, unsigned long offset,
-  */
- static void elf_dirty_reloc_sym(struct elf *elf, struct symbol *sym)
- {
--	struct section *sec;
--
--	list_for_each_entry(sec, &elf->sections, list) {
--		struct reloc *reloc;
--
--		if (sec->changed)
--			continue;
-+	struct reloc *reloc;
- 
--		list_for_each_entry(reloc, &sec->reloc_list, list) {
--			if (reloc->sym == sym) {
--				sec->changed = true;
--				break;
--			}
--		}
--	}
-+	list_for_each_entry(reloc, &sym->reloc_list, sym_reloc_entry)
-+		reloc->sec->changed = true;
- }
- 
- /*
-@@ -902,11 +893,12 @@ static int read_rela_reloc(struct section *sec, int i, struct reloc *reloc, unsi
- 
- static int read_relocs(struct elf *elf)
- {
-+	unsigned long nr_reloc, max_reloc = 0, tot_reloc = 0;
- 	struct section *sec;
- 	struct reloc *reloc;
--	int i;
- 	unsigned int symndx;
--	unsigned long nr_reloc, max_reloc = 0, tot_reloc = 0;
-+	struct symbol *sym;
-+	int i;
- 
- 	if (!elf_alloc_hash(reloc, elf->text_size / 16))
- 		return -1;
-@@ -947,13 +939,14 @@ static int read_relocs(struct elf *elf)
- 
- 			reloc->sec = sec;
- 			reloc->idx = i;
--			reloc->sym = find_symbol_by_index(elf, symndx);
-+			reloc->sym = sym = find_symbol_by_index(elf, symndx);
- 			if (!reloc->sym) {
- 				WARN("can't find reloc entry symbol %d for %s",
- 				     symndx, sec->name);
- 				return -1;
- 			}
- 
-+			list_add_tail(&reloc->sym_reloc_entry, &sym->reloc_list);
- 			list_add_tail(&reloc->list, &sec->reloc_list);
- 			elf_hash_add(reloc, &reloc->hash, reloc_hash(reloc));
- 
-diff --git a/tools/objtool/include/objtool/elf.h b/tools/objtool/include/objtool/elf.h
-index b6974e3..bca719b 100644
---- a/tools/objtool/include/objtool/elf.h
-+++ b/tools/objtool/include/objtool/elf.h
-@@ -62,6 +62,7 @@ struct symbol {
- 	u8 fentry            : 1;
- 	u8 profiling_func    : 1;
- 	struct list_head pv_target;
-+	struct list_head reloc_list;
- };
- 
- struct reloc {
-@@ -73,6 +74,7 @@ struct reloc {
- 	};
- 	struct section *sec;
- 	struct symbol *sym;
-+	struct list_head sym_reloc_entry;
- 	unsigned long offset;
- 	unsigned int type;
- 	s64 addend;
+On Mon, 31 Oct 2022 at 00:43, Christophe JAILLET
+<christophe.jaillet@wanadoo.fr> wrote:
+>
+> Le 30/10/2022 =C3=A0 10:23, Wei Chen a =C3=A9crit :
+> > Dear Linux Developer,
+> >
+> > Recently when using our tool to fuzz kernel, the following crash was tr=
+iggered:
+> >
+> > HEAD commit: 64570fbc14f8 Linux 5.15-rc5
+>
+> Hi,
+>
+> any reason to run your fuzzer on 5.15-rc5?
+>
+> We are at 5.15.76 and many things have already been fixed in the 5.15
+> branch.
+>
+> 5.15 is also old.
+>
+> CJ
