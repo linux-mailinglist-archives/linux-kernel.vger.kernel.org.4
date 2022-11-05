@@ -2,90 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1969461DD11
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 19:06:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0526E61DD1E
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 19:10:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230035AbiKESF7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Nov 2022 14:05:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41006 "EHLO
+        id S229777AbiKESKO convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 5 Nov 2022 14:10:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbiKESFz (ORCPT
+        with ESMTP id S229453AbiKESKM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Nov 2022 14:05:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9579CBF62;
-        Sat,  5 Nov 2022 11:05:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3557B60684;
-        Sat,  5 Nov 2022 18:05:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08FEEC433D6;
-        Sat,  5 Nov 2022 18:05:51 +0000 (UTC)
-Date:   Sat, 5 Nov 2022 14:05:50 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Anna-Maria Gleixner <anna-maria@linutronix.de>,
-        Andrew Morton <akpm@linux-foundation.org>, rcu@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, linux-edac@vger.kernel.org,
-        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-acpi@vger.kernel.org,
-        linux-atm-general@lists.sourceforge.net, netdev@vger.kernel.org,
-        linux-pm@vger.kernel.org, drbd-dev@lists.linbit.com,
-        linux-bluetooth@vger.kernel.org,
-        openipmi-developer@lists.sourceforge.net,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org, intel-gfx@lists.freedesktop.org,
-        linux-input@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linux-leds@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
-        linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-ext4@vger.kernel.org, linux-nilfs@vger.kernel.org,
-        bridge@lists.linux-foundation.org, netfilter-devel@vger.kernel.org,
-        coreteam@netfilter.org, lvs-devel@vger.kernel.org,
-        linux-afs@lists.infradead.org, linux-nfs@vger.kernel.org,
-        tipc-discussion@lists.sourceforge.net, alsa-devel@alsa-project.org,
-        Julia Lawall <Julia.Lawall@inria.fr>
-Subject: Re: [PATCH v4a 00/38] timers: Use timer_shutdown*() before freeing
- timers
-Message-ID: <20221105140550.0ccb277c@rorschach.local.home>
-In-Reply-To: <20221105140356.6a3da628@rorschach.local.home>
-References: <20221105060024.598488967@goodmis.org>
-        <CAHk-=wi95dGkg7DiuOZ27gGW+mxJipn9ykB6LHB-HrbbLG6OMQ@mail.gmail.com>
-        <20221105123642.596371c7@rorschach.local.home>
-        <20221105140356.6a3da628@rorschach.local.home>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Sat, 5 Nov 2022 14:10:12 -0400
+Received: from mail-qk1-f179.google.com (mail-qk1-f179.google.com [209.85.222.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51B22D11F;
+        Sat,  5 Nov 2022 11:10:11 -0700 (PDT)
+Received: by mail-qk1-f179.google.com with SMTP id v8so5101792qkg.12;
+        Sat, 05 Nov 2022 11:10:11 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=slKF0rJ0Rir2ceC3QpwgE09jNGnnMT8HqJLhQZweuOI=;
+        b=5rZMoWHn1/8Dd/kRnWrDkF968aOk1iYrhfTZjG7l7t0rkF6HxXyW1Z1rgA2CIepdfP
+         JNbwJmeAdjcNYbFBhn5b8U5qQxzxVV5lo6h3H8vrGW+5VhwZA+72kVWkLc4/f2NbDgCK
+         dcaTMISgd5U4hkZleI9HJfdtcYHZMa3l4LAfBQMcwmD+TaNpe/AusJC2A/pXT8gGAERU
+         HeebD+izdr8OIQY51u6n5SdZ0jbusNAWsjSt1o/6v3bxS357IRFNQyTcJp8uQcPsMEtq
+         b2L3keSl3FVXqBC5P1w8YPo2+oreDcFD0rqaBn5jBtTR6XPIMfHzkPY5M8qGLMa08NUw
+         CXPA==
+X-Gm-Message-State: ACrzQf1sTPCLfNl7EjxqzhGKnQojyoN3Ze071EWqlhLA4grBpNFcVlT1
+        ADnuQBtaLF7W3Jp/z0YQetwfVNn9H3LOaKg1nE7cU5UJ
+X-Google-Smtp-Source: AMsMyM6BpBjF6/vW3DJWYsm3B9od11m82oLF5euQ2Yv/K8jVFRoDkiJsT6XrOY8b3dsijMxeNhvQ5mPjrlJA6Kf1p9Q=
+X-Received: by 2002:a05:620a:1476:b0:6fa:4c67:83ec with SMTP id
+ j22-20020a05620a147600b006fa4c6783ecmr18552724qkl.23.1667671776746; Sat, 05
+ Nov 2022 11:09:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221101022840.1351163-1-tgsp002@gmail.com> <20221101022840.1351163-2-tgsp002@gmail.com>
+ <CAJZ5v0iPFPbbconOoQ7x_4X5yJ31pP7aduLqG4dq6KgAsprKbA@mail.gmail.com> <fe95b054-e720-ebbf-ba03-4ea6662974ad@gmail.com>
+In-Reply-To: <fe95b054-e720-ebbf-ba03-4ea6662974ad@gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Sat, 5 Nov 2022 19:09:22 +0100
+Message-ID: <CAJZ5v0hYc8sowEPaCKUG6yDkza6ax3d2iDeeSO8OQjot4OhLEQ@mail.gmail.com>
+Subject: Re: [PATCH -next 1/2] PM: hibernate: fix spelling mistake for annotation
+To:     TGSP <tgsp002@gmail.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>, xiongxin@kylinos.cn,
+        len.brown@intel.com, pavel@ucw.cz, huanglei@kylinos.cn,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 5 Nov 2022 14:03:56 -0400
-Steven Rostedt <rostedt@goodmis.org> wrote:
+On Fri, Nov 4, 2022 at 8:31 AM TGSP <tgsp002@gmail.com> wrote:
+>
+> 在 2022/11/4 00:25, Rafael J. Wysocki 写道:
+> > On Tue, Nov 1, 2022 at 3:28 AM TGSP <tgsp002@gmail.com> wrote:
+> >>
+> >> From: xiongxin <xiongxin@kylinos.cn>
+> >>
+> >> The actual calculation formula in the code below is:
+> >>
+> >> max_size = (count - (size + PAGES_FOR_IO)) / 2
+> >>              - 2 * DIV_ROUND_UP(reserved_size, PAGE_SIZE);
+> >>
+> >> But function comments are written differently, the comment is wrong?
+> >
+> > It is, and it is more serious than just a spelling mistake.
+> >
+> >> By the way, what exactly do the "/ 2" and "2 *" mean?
+> >
+> > Every page in the image is a copy of an existing allocated page, so
+> > room needs to be made for the two, except for the "IO pages" and
+> > metadata pages that are not copied.  Hence, the division by 2.
+> >
+> > Now, the "reserved_size" pages will be allocated right before creating
+> > the image and there will be a copy of each of them in the image, so
+> > there needs to be room for twice as many.
+>
+> According to your interpretation, the formula should be：
+> max_size = (count - 2 * DIV_ROUND_UP(reserved_size, PAGE_SIZE)
+>                 - (size + PAGES_FOR_IO)) / 2
+>
+> Am I right?
 
-> --- a/drivers/isdn/hardware/mISDN/hfcmulti.c
-> +++ b/drivers/isdn/hardware/mISDN/hfcmulti.c
-> @@ -4544,7 +4544,7 @@ release_port(struct hfc_multi *hc, struct dchannel *dch)
->  	spin_lock_irqsave(&hc->lock, flags);
->  
->  	if (dch->timer.function) {
-> -		del_timer(&dch->timer);
-> +		timer_shutdown(&dch->timer);
->  		dch->timer.function = NULL;
->  	}
->  
+No, you aren't.
 
-I still hate the above.
-
--- Steve
+The formula is fine.  I've attempted to explain it to you, but perhaps
+it's not been clear enough, sorry about that.
