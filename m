@@ -2,95 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83EE961A731
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 04:06:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9165961A738
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 04:10:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229728AbiKEDGZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 23:06:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58516 "EHLO
+        id S229718AbiKEDKW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 23:10:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229563AbiKEDGS (ORCPT
+        with ESMTP id S229479AbiKEDKT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 23:06:18 -0400
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C365E23BCF
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 20:06:16 -0700 (PDT)
-Received: by mail-yb1-xb2e.google.com with SMTP id o70so7813390yba.7
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 20:06:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=nGToQRK0DXw7c1IROX4VhPmgoLvBloa1KH2z+OM+UGg=;
-        b=CPY+9w/NotyoR2K8mPiZ618PyK22YxCp0SaqY76wYG7svkV22RWzh39pDuI6fnl3FJ
-         lFRykuJZDpWiXOOBqTppN7aoJJbtQ0+rE/DWuw+XX0c/dSRay1rp1Ey05/E+WCvZ/Bjg
-         igMiRkow60smusWFCyrq66Y2D4f5KUT3uuNRQh+Aw2jKJq1PHnxOyspGtuCpec4Q5C/c
-         gx4CNCDSi+NFSNArebSYNtz3DJ7NtHf1Gs46UJtqtk9hgYD0LTl6PCAgyN5xli1snCgU
-         op2YDQQyZ7vxi33xnLvxzgSVd/Xb/ncJY0CKciD/67fDX5RceabOytbAHDRo1ymjHMuW
-         qmDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=nGToQRK0DXw7c1IROX4VhPmgoLvBloa1KH2z+OM+UGg=;
-        b=hMu/7IV6b8369/K5/yhmXtwTlZJqMFA0xAgwio+eaw6FMWDCJNC64R2v2IFzjS9bAL
-         +qdMfT1fxIhYAJEo9C9kCB3p7Y3Gc0OMi6FhiA6HryrRpiYZoagRdx/iu/PZnS+t+mjc
-         xej1rFLjt6W1Ek47O1bdUYL1S3RG5hfi7XQZerdXWo5tIpRfjyiCpSjbG0HSHCuq0kNU
-         f+Y7tYO5Fper5Ztjk15K17OKBTtdJ+5XPfY+3dUg9TyRUUlcbGogJq8OvnAIPJGNmKic
-         qyUnnUDUbH3jWX8pUADQVWQKNHK39O0ZBah9su7i0i7E2vFh5J+EDrrbp/GqcT52gcI1
-         hegQ==
-X-Gm-Message-State: ACrzQf2U5AhYBQKRjMg2y9e/kP7swcptdzf1mWF8lbTYkmYKQjXs01hY
-        ynxXBTjkhSqZFJT43RYTPJeBi7QTQzoYlgWYDXfh0A==
-X-Google-Smtp-Source: AMsMyM5mjEha55s4t7TntUfGRbOeZ7n0QwDmEGTRga0tyK+7SOuQhQiic2xIjVB8WFzL1IEvui/sDKGlN11imSJp0FY=
-X-Received: by 2002:a25:bc3:0:b0:6ca:6427:f00d with SMTP id
- 186-20020a250bc3000000b006ca6427f00dmr34962639ybl.62.1667617575953; Fri, 04
- Nov 2022 20:06:15 -0700 (PDT)
+        Fri, 4 Nov 2022 23:10:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A95826AD4;
+        Fri,  4 Nov 2022 20:10:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E28ED623AE;
+        Sat,  5 Nov 2022 03:10:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 37A23C433D6;
+        Sat,  5 Nov 2022 03:10:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667617817;
+        bh=nhpq3hxAK2wGS+j94s5Pcnje7u22mnXK8DftPTzq/aI=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=k23VnWodDWZgwsuaY6QbRqH44NDumZ6cSZwyPUSLi9ioCCl90v6JRfpqoJjUiAwcM
+         4p+kdnrXSq4UeynwF1JK9sw6/aRaG4HzJJI1cn4dXNEgndLwrGX4bw9DUSNslvIMSj
+         oAQ/A5XxiEB1cimQ+S/aPEoJxnj5U3LvhVhU2V0vdhl3REMnl+AkpIr5z0T5iaqPwl
+         Ma07EyCrp7vZJ1qmKmZnunUQd8fBkqGTXQ3fq3Jlj7Q8g33CfH55sstaBCmXTt67lP
+         ODcDj8g7xXWr32c6EoCLcaugbZBQ3NxAYXarGzrZTG4UKWw/4QE9cYRQlOznEEE/i8
+         suWUipx9v7J1Q==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 1C0D4E270FB;
+        Sat,  5 Nov 2022 03:10:17 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20221102125936.2176748-1-ajye_huang@compal.corp-partner.google.com>
- <20221102125936.2176748-2-ajye_huang@compal.corp-partner.google.com> <166759787920.2873722.6503685794432759025.robh@kernel.org>
-In-Reply-To: <166759787920.2873722.6503685794432759025.robh@kernel.org>
-From:   Ajye Huang <ajye_huang@compal.corp-partner.google.com>
-Date:   Sat, 5 Nov 2022 11:06:04 +0800
-Message-ID: <CALprXBbu1EFNMG2VwHd+k6kVkQXFLjKx1ojNPyKWJA-QPpyPaw@mail.gmail.com>
-Subject: Re: [PATCH v6 1/2] ASoC: mediatek: dt-bindings: modify machine
- bindings for two MICs case
-To:     Rob Herring <robh@kernel.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        =?UTF-8?B?TsOtY29sYXMgRiAuIFIgLiBBIC4gUHJhZG8=?= 
-        <nfraprado@collabora.com>, linux-kernel@vger.kernel.org,
-        Takashi Iwai <tiwai@suse.com>,
-        Jaroslav Kysela <perex@perex.cz>, alsa-devel@alsa-project.org,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        "chunxu . li" <chunxu.li@mediatek.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        linux-mediatek@lists.infradead.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Jiaxin Yu <jiaxin.yu@mediatek.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Mark Brown <broonie@kernel.org>, devicetree@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next v4] octeon_ep: support Octeon device CNF95N
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166761781710.20771.16670605812386475186.git-patchwork-notify@kernel.org>
+Date:   Sat, 05 Nov 2022 03:10:17 +0000
+References: <20221103060600.1858-1-vburru@marvell.com>
+In-Reply-To: <20221103060600.1858-1-vburru@marvell.com>
+To:     Veerasenareddy Burru <vburru@marvell.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        lironh@marvell.com, aayarekar@marvell.com, sedara@marvell.com,
+        sburla@marvell.com, linux-doc@vger.kernel.org, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        corbet@lwn.net
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rob,
+Hello:
 
-On Sat, Nov 5, 2022 at 5:39 AM Rob Herring <robh@kernel.org> wrote:
->
+This patch was applied to netdev/net-next.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
 
-> Please add Acked-by/Reviewed-by tags when posting new versions. However,
-> there's no need to repost patches *only* to add the tags. The upstream
-> maintainer will do that for acks received on the version they apply.
->
-> If a tag was not added on purpose, please state why and what changed.
->
+On Wed, 2 Nov 2022 23:05:57 -0700 you wrote:
+> Add support for Octeon device CNF95N.
+> CNF95N is a Octeon Fusion family product with same PCI NIC
+> characteristics as CN93 which is currently supported by the driver.
+> 
+> update supported device list in Documentation.
+> 
+> Signed-off-by: Veerasenareddy Burru <vburru@marvell.com>
+> 
+> [...]
 
-I Got it.  Thanks.
+Here is the summary with links:
+  - [net-next,v4] octeon_ep: support Octeon device CNF95N
+    https://git.kernel.org/netdev/net-next/c/63d9e1291484
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
