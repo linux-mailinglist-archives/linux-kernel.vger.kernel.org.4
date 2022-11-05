@@ -2,118 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7733361D8EB
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 09:52:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60F5A61D8EC
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 09:53:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229570AbiKEIwu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Nov 2022 04:52:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47744 "EHLO
+        id S229611AbiKEIx2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Nov 2022 04:53:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbiKEIws (ORCPT
+        with ESMTP id S229453AbiKEIx0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Nov 2022 04:52:48 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C63322528;
-        Sat,  5 Nov 2022 01:52:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 48428B81647;
-        Sat,  5 Nov 2022 08:52:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 714F0C433D6;
-        Sat,  5 Nov 2022 08:52:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667638364;
-        bh=ifUEBOIjQaHmKSCsfN+pCNH9FtC0PXujxXMPd3U2Z5s=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=ZFK7Q0k5/PyWzAUtzXCwB/8pi6eFMlDppfJllc6PQHVruX4YQdFl8n3jRHPrF7Gih
-         kOOMBl4WAyYako3HFAi9INuNy3ksMWbiSSw64aGskPAOyuwwt6jL/x7/G3SF6t3MRz
-         nnMrgUEUUJUQZIbadctLQLLTGoA4HxxqYV33q99aUbb3O8opxaq/2r49PTm6olBjtS
-         hKffbZA+xH4Tr0CyLTjLsq1XGupOKGaY3i+5PQ6RBDH+cpK9+n+OqaOaw4KXfNc2fS
-         v1vur1WotNh2Bu879jcvKiqjje+MI57mT7F8za11dBx8mAplqbD72qnj47x7mtBv1p
-         fpIz9RZcYWlwQ==
-Date:   Sat, 5 Nov 2022 17:52:41 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Yipeng Zou <zouyipeng@huawei.com>
-Cc:     <rostedt@goodmis.org>, <shuah@kernel.org>, <rdunlap@infradead.org>,
-        <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] selftests/ftrace: event_triggers: wait longer for
- test_event_enable
-Message-Id: <20221105175241.858bbd5b5337fc2b8a075ee9@kernel.org>
-In-Reply-To: <20221104020931.231090-1-zouyipeng@huawei.com>
-References: <20221104020931.231090-1-zouyipeng@huawei.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        Sat, 5 Nov 2022 04:53:26 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE37B1036
+        for <linux-kernel@vger.kernel.org>; Sat,  5 Nov 2022 01:53:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667638403; x=1699174403;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=cJWg3yAlwsAfeXaANa8CBAQalPeBRTf4JxiTggBSXno=;
+  b=KFyxIdHXlYTDPxn+tX4waYiQl+SgFdU/4PYeipZ+A21rNYvMnT1R4Stu
+   rFX/joKFlJyP5hXwfkLl6sj8HFCC7n7+6ZB9eWiuDzyTI9zukVKYpmmw3
+   UjLkrwAuxxQoFug1cstjXQD80skyMYjOhjLy83o67sBHt+nKRA5EyrfbP
+   T5y77Pm6q2UulqoX+ipLi0+JLoF9FxAYNU/NX/PI853CuzESlmcwYRogn
+   p5ic1Z0gqq5ISJh38DUzeuQ3qVK3uEhuKt396l1lkBDWfoZGQkPPxbEyr
+   vNEhyVEBP0Za3R+cV3EV/g9AIiZyXD8/ogCr8BTCeGrt22SItVB+Iqd9J
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10521"; a="293476055"
+X-IronPort-AV: E=Sophos;i="5.96,140,1665471600"; 
+   d="scan'208";a="293476055"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Nov 2022 01:53:23 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10521"; a="760581168"
+X-IronPort-AV: E=Sophos;i="5.96,140,1665471600"; 
+   d="scan'208";a="760581168"
+Received: from lkp-server02.sh.intel.com (HELO b6d29c1a0365) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 05 Nov 2022 01:53:21 -0700
+Received: from kbuild by b6d29c1a0365 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1orEvZ-000Hpb-0J;
+        Sat, 05 Nov 2022 08:53:21 +0000
+Date:   Sat, 05 Nov 2022 16:53:13 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:x86/urgent] BUILD SUCCESS
+ 7beade0dd41d42d797ccb7791b134a77fcebf35b
+Message-ID: <63662479.1eLXhVP7hqBao6+q%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Yipeng,
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/urgent
+branch HEAD: 7beade0dd41d42d797ccb7791b134a77fcebf35b  x86/cpu: Add several Intel server CPU model numbers
 
-On Fri, 4 Nov 2022 10:09:31 +0800
-Yipeng Zou <zouyipeng@huawei.com> wrote:
+elapsed time: 726m
 
-> In some platform, the schedule event may came slowly, delay 100ms can't
-> cover it.
-> 
-> I was notice that on my board which running in low cpu_freq,and this
-> selftests allways gose fail.
+configs tested: 56
+configs skipped: 83
 
-This looks good to me, since this can just extend the waiting time to 1 sec.
-(and most of the platforms have no effect)
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+gcc tested configs:
+x86_64                           rhel-8.3-syz
+x86_64                         rhel-8.3-kunit
+x86_64                           rhel-8.3-kvm
+x86_64                          rhel-8.3-func
+x86_64                    rhel-8.3-kselftests
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+x86_64                        randconfig-a006
+i386                          randconfig-a001
+i386                          randconfig-a003
+i386                          randconfig-a005
+x86_64                               rhel-8.3
+x86_64                        randconfig-a013
+x86_64                        randconfig-a011
+x86_64                              defconfig
+x86_64                        randconfig-a015
+i386                                defconfig
+x86_64                           allyesconfig
+i386                             allyesconfig
+i386                          randconfig-a014
+i386                          randconfig-a012
+i386                          randconfig-a016
+ia64                             allmodconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+arc                              allyesconfig
+alpha                            allyesconfig
+arm64                            allyesconfig
+arm                                 defconfig
+arm                              allyesconfig
+riscv                randconfig-r042-20221104
+arc                  randconfig-r043-20221104
+s390                 randconfig-r044-20221104
+arm                         s3c6400_defconfig
+arc                      axs103_smp_defconfig
+m68k                       bvme6000_defconfig
+i386                          randconfig-c001
+m68k                           sun3_defconfig
+csky                                defconfig
+nios2                         10m50_defconfig
 
-Thank you!
-
-> 
-> So maybe we can check more times here to wait longer.
-> 
-> Fixes: 43bb45da82f9 ("selftests: ftrace: Add a selftest to test event enable/disable func trigger")
-> Signed-off-by: Yipeng Zou <zouyipeng@huawei.com>
-> ---
->  .../ftrace/test.d/ftrace/func_event_triggers.tc   | 15 +++++++++++----
->  1 file changed, 11 insertions(+), 4 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/ftrace/test.d/ftrace/func_event_triggers.tc b/tools/testing/selftests/ftrace/test.d/ftrace/func_event_triggers.tc
-> index 8d26d5505808..3eea2abf68f9 100644
-> --- a/tools/testing/selftests/ftrace/test.d/ftrace/func_event_triggers.tc
-> +++ b/tools/testing/selftests/ftrace/test.d/ftrace/func_event_triggers.tc
-> @@ -38,11 +38,18 @@ cnt_trace() {
->  
->  test_event_enabled() {
->      val=$1
-> +    check_times=10		# wait for 10 * SLEEP_TIME at most
->  
-> -    e=`cat $EVENT_ENABLE`
-> -    if [ "$e" != $val ]; then
-> -	fail "Expected $val but found $e"
-> -    fi
-> +    while [ $check_times -ne 0 ]; do
-> +	e=`cat $EVENT_ENABLE`
-> +	if [ "$e" == $val ]; then
-> +	    return 0
-> +	fi
-> +	sleep $SLEEP_TIME
-> +	check_times=$((check_times - 1))
-> +    done
-> +
-> +    fail "Expected $val but found $e"
->  }
->  
->  run_enable_disable() {
-> -- 
-> 2.17.1
-> 
-
+clang tested configs:
+x86_64                        randconfig-a005
+x86_64                        randconfig-a001
+x86_64                        randconfig-a003
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+x86_64                        randconfig-a016
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+i386                          randconfig-a013
+i386                          randconfig-a011
+i386                          randconfig-a015
+powerpc                 xes_mpc85xx_defconfig
+hexagon              randconfig-r041-20221104
+hexagon              randconfig-r045-20221104
+x86_64                        randconfig-k001
 
 -- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+0-DAY CI Kernel Test Service
+https://01.org/lkp
