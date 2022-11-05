@@ -2,76 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0424961DC94
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 18:39:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03B4B61DC98
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 18:40:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229842AbiKERjU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Nov 2022 13:39:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34108 "EHLO
+        id S229871AbiKERkP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Nov 2022 13:40:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbiKERjS (ORCPT
+        with ESMTP id S229517AbiKERkM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Nov 2022 13:39:18 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AFF91C914
-        for <linux-kernel@vger.kernel.org>; Sat,  5 Nov 2022 10:39:17 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id g129so6961235pgc.7
-        for <linux-kernel@vger.kernel.org>; Sat, 05 Nov 2022 10:39:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=WWrco+vXh1FbuoaRINj7wlDyd8eAZjNE4VHFGZp67xQ=;
-        b=tIMJvPzkHDIyKiPdGwqxg/svC3w0FkTPRJansTyXplDRdyay7bQCFAoI+4+Fba1aiy
-         8gWl1frw0GVmz5q147uAckoYIQlfraawpo9HctXDE7iij+90PUr7wwVjhM8Ti4ND/BNJ
-         Nk6/dViWcvSVqsLoWMwiKOsexmZ1cUpbr09x3zFlKIGUPLZUb8kxtQRySNTsX3LoZXMD
-         2h3SpRuuvPxM69XIab10T8Mb4GGy5IGkC5QhmrcWzLol9g19wSpfYg2/1pIgqh7hYgDq
-         UX5Q5blWMEiBeWdtZJKK87s002w7fiswuJzzy0UmGbMrv3KcvKcfC7ugLnMO53w8YVG4
-         jsZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=WWrco+vXh1FbuoaRINj7wlDyd8eAZjNE4VHFGZp67xQ=;
-        b=d5Y/DlUTyA8e4OZGP+2qEmA7k6bIR8RrsdUMzerfnGzpBGZxEAy1XTIk/KeWkJv/ie
-         kTMtbrtLNERFY0GfRS9Rg+snaen6tEE9OCDMoWJuT5hfK8JY7rzloFAedxjth/XTXQUL
-         8Vx6oOJMHnv33nqkTu+PDJUrrweNQQInF635OVWOcinIUcL3xYaWpkFiRmml5asoe6R1
-         EVwyTC5lyX2lw//abZxmrJPGfNoh6fg4bRVhA60apiqIC9lxLp4jH7M042AbHk+z0L6O
-         XqGmAwR0QxxzVPq0CnHWhN1eYw9dbex+Ba/hXH60/oHbQdh4N4gU8f6W/8/5tzblxGBC
-         YPyA==
-X-Gm-Message-State: ACrzQf2jJBthZJJB4GBx5FB3qs5dXQzYeuXeH0JWAxBTEroEgbKNex6p
-        LKJJoF+pXpuY4LQkFsIHDXaueO4rYdwsS8s7
-X-Google-Smtp-Source: AMsMyM6whexvajtuOncywX1ipcU7re5Fgjil52gkJ4VtzeHnP+Xj9pb3WrlwK4d2B7vJ6DVmp81RCg==
-X-Received: by 2002:a63:1748:0:b0:46f:18be:4880 with SMTP id 8-20020a631748000000b0046f18be4880mr35434657pgx.128.1667669956645;
-        Sat, 05 Nov 2022 10:39:16 -0700 (PDT)
-Received: from [192.168.1.136] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id l13-20020a170903120d00b00186a1b243basm1934278plh.226.2022.11.05.10.39.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 05 Nov 2022 10:39:15 -0700 (PDT)
-Message-ID: <fe28e9fa-b57b-8da6-383c-588f6e84f04f@kernel.dk>
-Date:   Sat, 5 Nov 2022 11:39:14 -0600
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCHSET v3 0/5] Add support for epoll min_wait
-Content-Language: en-US
-From:   Jens Axboe <axboe@kernel.dk>
-To:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-References: <20221030220203.31210-1-axboe@kernel.dk>
- <CA+FuTSfj5jn8Wui+az2BrcpDFYF5m5ehwLiswwHMPJ2MK+S_Jw@mail.gmail.com>
- <02e5bf45-f877-719b-6bf8-c4ac577187a8@kernel.dk>
- <CA+FuTSd-HvtPVwRto0EGExm-Pz7dGpxAt+1sTb51P_QBd-N9KQ@mail.gmail.com>
- <88353f13-d1d8-ef69-bcdc-eb2aa17c7731@kernel.dk>
- <CA+FuTSdEKsN_47RtW6pOWEnrKkewuDBdsv_qAhR1EyXUr3obrg@mail.gmail.com>
- <46cb04ca-467c-2e33-f221-3e2a2eaabbda@kernel.dk>
-In-Reply-To: <46cb04ca-467c-2e33-f221-3e2a2eaabbda@kernel.dk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        Sat, 5 Nov 2022 13:40:12 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EFBB1C938;
+        Sat,  5 Nov 2022 10:40:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667670011; x=1699206011;
+  h=from:to:cc:subject:date:message-id;
+  bh=YNstcQSEkgMBc3Az2kOerrMpu3CRH4Immut06G88wYs=;
+  b=PtTCtXZ8oXDk6ikzs6KvqugGL3cGNR3SgsIQyJd9v3w4YmskIwmDYWLD
+   cOm+C0muQk6/mtx9ucYmS/IdXUEpRNOGqWgjjAa5FsqOytlm5r6fX8AHp
+   kVH+D8hqcjMZ3XXIGqpXTF9BxkeiRFk4XcvXU622m4d3lf99ooiA/7zwe
+   QmqRx+dINADDlhIf29EKrhBMWuVp9ghJSsR0oZb6wVaWsSe++H3xWzY+i
+   95OsBygpEqkf38YagIm4aE5RHPACvh+QdT03r0Rrex5cOcFGmvrVDfZJ0
+   KntvFb2rw3dug9rXekkQBa6Olw1pIW313DObA21blaNWR5rSyosmE8LMG
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10522"; a="297672765"
+X-IronPort-AV: E=Sophos;i="5.96,140,1665471600"; 
+   d="scan'208";a="297672765"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Nov 2022 10:40:10 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10522"; a="666729778"
+X-IronPort-AV: E=Sophos;i="5.96,140,1665471600"; 
+   d="scan'208";a="666729778"
+Received: from power-sh.sh.intel.com ([10.239.183.122])
+  by orsmga008.jf.intel.com with ESMTP; 05 Nov 2022 10:40:09 -0700
+From:   Zhang Rui <rui.zhang@intel.com>
+To:     rjw@rjwysocki.net, daniel.lezcano@linaro.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [RFC PATCH 1/3] cpuidle: ladder: Fix bogus comparison between s64 and u64
+Date:   Sun,  6 Nov 2022 01:42:23 +0800
+Message-Id: <20221105174225.28673-1-rui.zhang@intel.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,31 +55,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->> FWIW, when adding nsec resolution I initially opted for an init-based
->> approach, passing a new flag to epoll_create1. Feedback then was that
->> it was odd to have one syscall affect the behavior of another. The
->> final version just added a new epoll_pwait2 with timespec.
-> 
-> I'm fine with just doing a pure syscall variant too, it was my original
-> plan. Only changed it to allow for easier experimentation and adoption,
-> and based on the fact that most use cases would likely use a fixed value
-> per context anyway.
-> 
-> I think it'd be a shame to drop the ctl, unless there's strong arguments
-> against it. I'm quite happy to add a syscall variant too, that's not a
-> big deal and would be a minor addition. Patch 6 should probably cut out
-> the ctl addition and leave that for a patch 7, and then a patch 8 for
-> adding a syscall.
-I split the ctl patch out from the core change, and then took a look at
-doing a syscall variant too. But there are a few complications there...
-It would seem to make the most sense to build this on top of the newest
-epoll wait syscall, epoll_pwait2(). But we're already at the max number
-of arguments there...
+ladder_device_state.threshold.promotion_time_ns/demotion_time_ns
+are u64 type.
 
-Arguably pwait2 should've been converted to use some kind of versioned
-struct instead. I'm going to take a stab at pwait3 with that kind of
-interface.
+In ladder_select_state(), variable 'last_residency', as calculated by
 
+last_residency = dev->last_residency_ns - drv->states[last_idx].exit_latency_ns
+
+are s64 type, and it can be negative value.
+
+When this happens, comparing between 'last_residency' and
+'promotion_time_ns/demotion_time_ns' become bogus. As a result, the
+ladder governor promotes or stays with current state errornously.
+
+          <idle>-0       [001] d..1.   151.893396: ladder_select_state: last_idx 7, last_residency -373033
+          <idle>-0       [001] d..1.   151.893399: ladder_select_state:    dev->last_residency_ns 106967, drv->states[last_idx].exit_latency_ns 480000
+          <idle>-0       [001] d..1.   151.893402: ladder_select_state:    promote, last_state->threshold.promotion_time_ns 480000
+          <idle>-0       [001] d..1.   151.893404: ladder_select_state:    ---> new state 7
+          <idle>-0       [001] d..1.   151.893465: ladder_select_state: last_idx 7, last_residency -463800
+          <idle>-0       [001] d..1.   151.893467: ladder_select_state:    dev->last_residency_ns 16200, drv->states[last_idx].exit_latency_ns 480000
+          <idle>-0       [001] d..1.   151.893468: ladder_select_state:    promote, last_state->threshold.promotion_time_ns 480000
+          <idle>-0       [001] dn.1.   151.893470: ladder_select_state:    ---> new state 8
+
+Given that promotion_time_ns/demotion_time_ns are initialized with
+cpuidle_state.exit_latency_ns, which is s64 type, and they are used to
+compare with 'last_residency', which is also s64 type, there is no
+reason to use u64 for promotion_time_ns/demotion_time_ns.
+
+With this patch,
+          <idle>-0       [001] d..1.   523.578531: ladder_select_state: last_idx 8, last_residency -879453
+          <idle>-0       [001] d..1.   523.578531: ladder_select_state:    dev->last_residency_ns 10547, drv->states[last_idx].exit_latency_ns 890000
+          <idle>-0       [001] d..1.   523.578532: ladder_select_state:    demote , last_state->threshold.demotion_time_ns 890000
+          <idle>-0       [001] d..1.   523.578532: ladder_select_state:    ---> new state 7
+          <idle>-0       [001] d..1.   523.580220: ladder_select_state: last_idx 7, last_residency -169629
+          <idle>-0       [001] d..1.   523.580221: ladder_select_state:    dev->last_residency_ns 310371, drv->states[last_idx].exit_latency_ns 480000
+          <idle>-0       [001] d..1.   523.580221: ladder_select_state:    demote , last_state->threshold.demotion_time_ns 480000
+          <idle>-0       [001] d..1.   523.580222: ladder_select_state:    ---> new state 6
+
+Signed-off-by: Zhang Rui <rui.zhang@intel.com>
+---
+ drivers/cpuidle/governors/ladder.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/cpuidle/governors/ladder.c b/drivers/cpuidle/governors/ladder.c
+index 8e9058c4ea63..fb61118aef37 100644
+--- a/drivers/cpuidle/governors/ladder.c
++++ b/drivers/cpuidle/governors/ladder.c
+@@ -27,8 +27,8 @@ struct ladder_device_state {
+ 	struct {
+ 		u32 promotion_count;
+ 		u32 demotion_count;
+-		u64 promotion_time_ns;
+-		u64 demotion_time_ns;
++		s64 promotion_time_ns;
++		s64 demotion_time_ns;
+ 	} threshold;
+ 	struct {
+ 		int promotion_count;
 -- 
-Jens Axboe
+2.25.1
 
