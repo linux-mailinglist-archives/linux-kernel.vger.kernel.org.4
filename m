@@ -2,89 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1C6761D99B
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 12:11:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2849061D99D
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 12:12:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229754AbiKELLE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Nov 2022 07:11:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50778 "EHLO
+        id S229610AbiKELMW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Nov 2022 07:12:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229511AbiKELLC (ORCPT
+        with ESMTP id S229453AbiKELMU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Nov 2022 07:11:02 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3378A101D0;
-        Sat,  5 Nov 2022 04:11:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=1s0+3GTF0fsjeGIh0i5LncjrVKVlIP2ZMoJrLBl0D/M=; b=INLogPRLDBQuuQbiPJxIxU+i7I
-        IbX7MxHRerkb6n4Ff/YtspDjH8U0hxIMMcxOTlxBqDYaOmUsrl5dfnFTFeteu2mT1M/Pq2ISkLOZ4
-        1B4S1r19xgXdBuQlGhbigeZDAJrWFCqgCJ9U6Q4acltKF+gZTrtdMF+2V3FQ4aJWLZ1rvloTTTdf8
-        OfWchvYQ3CIJv0KjRI4wT9s7UU0TyTP/VYCPwo0wGLjulic3eG7ivsxrt4ds1wZ7Wh2RhMf49OEgh
-        O9KndvKz7K43ZJKWQO+i1SSw676yVm/H+i2K4sD2yZvxIgpjlkC8hcqfxXdgWjwRK+pR8rbK6PZU+
-        nAmmaUmQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1orH3s-009Eek-U8; Sat, 05 Nov 2022 11:10:06 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id CBBA130012F;
-        Sat,  5 Nov 2022 12:10:02 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id B5F2820B40528; Sat,  5 Nov 2022 12:10:02 +0100 (CET)
-Date:   Sat, 5 Nov 2022 12:10:02 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Kim Phillips <kim.phillips@amd.com>, x86@kernel.org,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Joao Martins <joao.m.martins@oracle.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        David Woodhouse <dwmw@amazon.co.uk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Juergen Gross <jgross@suse.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Babu Moger <Babu.Moger@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/3] x86/speculation: Support Automatic IBRS
-Message-ID: <Y2ZEinL+wlIX+1Sn@hirez.programming.kicks-ass.net>
-References: <20221104213651.141057-1-kim.phillips@amd.com>
- <20221104213651.141057-3-kim.phillips@amd.com>
- <Y2WJjdY3wwQl9/q9@zn.tnic>
+        Sat, 5 Nov 2022 07:12:20 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DF38101D0
+        for <linux-kernel@vger.kernel.org>; Sat,  5 Nov 2022 04:12:19 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id h9so10203691wrt.0
+        for <linux-kernel@vger.kernel.org>; Sat, 05 Nov 2022 04:12:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=8EnJIVNdbuecqVYinDVXfKkkTbjDs+68dueBt4aQTIg=;
+        b=WWeqqgbM2iA2X21Wf3NP6VyiIUxQurUo929lhwjXaIesY9ZAWBAcducLScj7cDnEX2
+         oC6weS3CYdKHx53JE5xehuLj1Dzvv2xDbcDwEEzFcn4wsjTZ5LaQ6d9tCV5c5uAbzmtS
+         bdW2kz7fyl9iiRnH7vb8dBNWidNz/W1RWMDg8qdJgWRukXqKfmiWv0UKxevoGu/qXadm
+         0JTufSaUabRNCqSb48kp7KNh28nYdxpbM2MEHWF07tTGosbDz2XcMeIACCQHDSHjRffG
+         6d8ceB4CPajcZse6K7FXJdzZNCFvSXTkvZEmtmeEIZZzYXGNm9/oyDKMJv/F0BNzss5Z
+         mdfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8EnJIVNdbuecqVYinDVXfKkkTbjDs+68dueBt4aQTIg=;
+        b=lNWzQGxE8GNwAVXzOLxjEm+65s5GP4xeU+0U7bJZHRCMg+6D209Uojljk/5aQEHm9x
+         dcSswB0mjCK6ekaNRZ/DeIz+2ioEcs45E4jP1torVnZO3Sy/wIsZNB1+DE7/qgbEBMls
+         xpiEn0o19kZtMOMsFQBHc4DstU1Es3NdDa6oKMwYcnIzJN0oGLbqpAY81/LEN5O5pkd6
+         1ZkAI4K5YMWj2bpUnB91cXqk5O4rSadNBdMHgg1DaVVxBzVHO3V+zYMQRRoVN/zBSsQT
+         INpDhxazR5Lj5AqzieHMjuJ6uFeg/KzF/JlUhpkkP4cfV61sPFEQ4CpSz0Qri2VouXpt
+         pHfQ==
+X-Gm-Message-State: ACrzQf2/hB1fPVuuftrosqr7IzKNHAyyCTuI7twUqehvUeAQphCKmAWY
+        AQEsJ/ZWRDIMDKt5ZYWe2MQAX0Eav4s=
+X-Google-Smtp-Source: AMsMyM7Jt/Q0qwraXiWlsCXnYhdxRBpumJ0L1tVcbQvaoMbVJMokoWqeeKKSe+S5MKkUNLRpGVvuXA==
+X-Received: by 2002:adf:f58f:0:b0:236:eea6:d4c with SMTP id f15-20020adff58f000000b00236eea60d4cmr13192456wro.39.1667646737665;
+        Sat, 05 Nov 2022 04:12:17 -0700 (PDT)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id bk28-20020a0560001d9c00b002365b759b65sm1854011wrb.86.2022.11.05.04.12.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 05 Nov 2022 04:12:17 -0700 (PDT)
+Date:   Sat, 5 Nov 2022 14:12:13 +0300
+From:   Dan Carpenter <error27@gmail.com>
+To:     oe-kbuild@lists.linux.dev, Kees Cook <keescook@chromium.org>
+Cc:     lkp@intel.com, oe-kbuild-all@lists.linux.dev,
+        linux-kernel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>
+Subject: fs/pstore/zone.c:1421 register_pstore_zone() warn: inconsistent
+ returns '&cxt->pstore_zone_info_lock'.
+Message-ID: <202211050153.EzdXBoMu-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y2WJjdY3wwQl9/q9@zn.tnic>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 04, 2022 at 10:52:13PM +0100, Borislav Petkov wrote:
-> On Fri, Nov 04, 2022 at 04:36:50PM -0500, Kim Phillips wrote:
-> >  - Allow for spectre_v2=autoibrs in the kernel command line,
-> >    reverting to auto-selection if the feature isn't available.
-> 
-> Why?
-> 
-> What the whole logic here should do is enable autoibrs when detected
-> automatically, without the need for the user to even select it as it is
-> the superior mitigation.
+Hi Kees,
 
-Well; perhaps the whole autoibrs thing should be mapped to the existing
-eIBRS options. AFAICT this is the same thing under a new name, no need
-to invent yet more options. bugs.c is quite insane enough already.
+First bad commit (maybe != root cause):
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   ee6050c8af96bba2f81e8b0793a1fc2f998fcd20
+commit: d1faacbf67b1944f0e0c618dc581d929263f6fe9 Revert "mark pstore-blk as broken"
+config: s390-randconfig-m031-20221104
+compiler: s390-linux-gcc (GCC) 12.1.0
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Reported-by: Dan Carpenter <error27@gmail.com>
+
+smatch warnings:
+fs/pstore/zone.c:1421 register_pstore_zone() warn: inconsistent returns '&cxt->pstore_zone_info_lock'.
+
+vim +1421 fs/pstore/zone.c
+
+d26c3321fe18dc WeiXiong Liao 2020-03-25  1341  	if (!info->read || !info->write) {
+d26c3321fe18dc WeiXiong Liao 2020-03-25  1342  		pr_err("no valid general read/write interface\n");
+d26c3321fe18dc WeiXiong Liao 2020-03-25  1343  		return -EINVAL;
+d26c3321fe18dc WeiXiong Liao 2020-03-25  1344  	}
+d26c3321fe18dc WeiXiong Liao 2020-03-25  1345  
+d26c3321fe18dc WeiXiong Liao 2020-03-25  1346  	mutex_lock(&cxt->pstore_zone_info_lock);
+d26c3321fe18dc WeiXiong Liao 2020-03-25  1347  	if (cxt->pstore_zone_info) {
+d26c3321fe18dc WeiXiong Liao 2020-03-25  1348  		pr_warn("'%s' already loaded: ignoring '%s'\n",
+d26c3321fe18dc WeiXiong Liao 2020-03-25  1349  				cxt->pstore_zone_info->name, info->name);
+d26c3321fe18dc WeiXiong Liao 2020-03-25  1350  		mutex_unlock(&cxt->pstore_zone_info_lock);
+d26c3321fe18dc WeiXiong Liao 2020-03-25  1351  		return -EBUSY;
+
+This is a false positive.  Smatch can't see that
+"&cxt->pstore_zone_info_lock" and "&pstore_zone_cxt.pstore_zone_info_lock"
+are the same.  (Presumably they are.  I haven't looked at the context
+outside this email).
+
+d26c3321fe18dc WeiXiong Liao 2020-03-25  1352  	}
+d26c3321fe18dc WeiXiong Liao 2020-03-25  1353  	cxt->pstore_zone_info = info;
+d26c3321fe18dc WeiXiong Liao 2020-03-25  1354  
+d26c3321fe18dc WeiXiong Liao 2020-03-25  1355  	pr_debug("register %s with properties:\n", info->name);
+d26c3321fe18dc WeiXiong Liao 2020-03-25  1356  	pr_debug("\ttotal size : %ld Bytes\n", info->total_size);
+d26c3321fe18dc WeiXiong Liao 2020-03-25  1357  	pr_debug("\tkmsg size : %ld Bytes\n", info->kmsg_size);
+0dc068265a1c59 WeiXiong Liao 2020-03-25  1358  	pr_debug("\tpmsg size : %ld Bytes\n", info->pmsg_size);
+cc9c4d1b559716 WeiXiong Liao 2020-03-25  1359  	pr_debug("\tconsole size : %ld Bytes\n", info->console_size);
+34327e9fd21341 WeiXiong Liao 2020-03-25  1360  	pr_debug("\tftrace size : %ld Bytes\n", info->ftrace_size);
+d26c3321fe18dc WeiXiong Liao 2020-03-25  1361  
+d26c3321fe18dc WeiXiong Liao 2020-03-25  1362  	err = psz_alloc_zones(cxt);
+d26c3321fe18dc WeiXiong Liao 2020-03-25  1363  	if (err) {
+d26c3321fe18dc WeiXiong Liao 2020-03-25  1364  		pr_err("alloc zones failed\n");
+d26c3321fe18dc WeiXiong Liao 2020-03-25  1365  		goto fail_out;
+d26c3321fe18dc WeiXiong Liao 2020-03-25  1366  	}
+d26c3321fe18dc WeiXiong Liao 2020-03-25  1367  
+d26c3321fe18dc WeiXiong Liao 2020-03-25  1368  	if (info->kmsg_size) {
+d26c3321fe18dc WeiXiong Liao 2020-03-25  1369  		cxt->pstore.bufsize = cxt->kpszs[0]->buffer_size -
+d26c3321fe18dc WeiXiong Liao 2020-03-25  1370  			sizeof(struct psz_kmsg_header);
+d26c3321fe18dc WeiXiong Liao 2020-03-25  1371  		cxt->pstore.buf = kzalloc(cxt->pstore.bufsize, GFP_KERNEL);
+d26c3321fe18dc WeiXiong Liao 2020-03-25  1372  		if (!cxt->pstore.buf) {
+d26c3321fe18dc WeiXiong Liao 2020-03-25  1373  			err = -ENOMEM;
+d26c3321fe18dc WeiXiong Liao 2020-03-25  1374  			goto fail_free;
+d26c3321fe18dc WeiXiong Liao 2020-03-25  1375  		}
+d26c3321fe18dc WeiXiong Liao 2020-03-25  1376  	}
+d26c3321fe18dc WeiXiong Liao 2020-03-25  1377  	cxt->pstore.data = cxt;
+d26c3321fe18dc WeiXiong Liao 2020-03-25  1378  
+d26c3321fe18dc WeiXiong Liao 2020-03-25  1379  	pr_info("registered %s as backend for", info->name);
+d26c3321fe18dc WeiXiong Liao 2020-03-25  1380  	cxt->pstore.max_reason = info->max_reason;
+d26c3321fe18dc WeiXiong Liao 2020-03-25  1381  	cxt->pstore.name = info->name;
+d26c3321fe18dc WeiXiong Liao 2020-03-25  1382  	if (info->kmsg_size) {
+d26c3321fe18dc WeiXiong Liao 2020-03-25  1383  		cxt->pstore.flags |= PSTORE_FLAGS_DMESG;
+d26c3321fe18dc WeiXiong Liao 2020-03-25  1384  		pr_cont(" kmsg(%s",
+d26c3321fe18dc WeiXiong Liao 2020-03-25  1385  			kmsg_dump_reason_str(cxt->pstore.max_reason));
+d26c3321fe18dc WeiXiong Liao 2020-03-25  1386  		if (cxt->pstore_zone_info->panic_write)
+d26c3321fe18dc WeiXiong Liao 2020-03-25  1387  			pr_cont(",panic_write");
+d26c3321fe18dc WeiXiong Liao 2020-03-25  1388  		pr_cont(")");
+d26c3321fe18dc WeiXiong Liao 2020-03-25  1389  	}
+0dc068265a1c59 WeiXiong Liao 2020-03-25  1390  	if (info->pmsg_size) {
+0dc068265a1c59 WeiXiong Liao 2020-03-25  1391  		cxt->pstore.flags |= PSTORE_FLAGS_PMSG;
+0dc068265a1c59 WeiXiong Liao 2020-03-25  1392  		pr_cont(" pmsg");
+0dc068265a1c59 WeiXiong Liao 2020-03-25  1393  	}
+cc9c4d1b559716 WeiXiong Liao 2020-03-25  1394  	if (info->console_size) {
+cc9c4d1b559716 WeiXiong Liao 2020-03-25  1395  		cxt->pstore.flags |= PSTORE_FLAGS_CONSOLE;
+cc9c4d1b559716 WeiXiong Liao 2020-03-25  1396  		pr_cont(" console");
+cc9c4d1b559716 WeiXiong Liao 2020-03-25  1397  	}
+34327e9fd21341 WeiXiong Liao 2020-03-25  1398  	if (info->ftrace_size) {
+34327e9fd21341 WeiXiong Liao 2020-03-25  1399  		cxt->pstore.flags |= PSTORE_FLAGS_FTRACE;
+34327e9fd21341 WeiXiong Liao 2020-03-25  1400  		pr_cont(" ftrace");
+34327e9fd21341 WeiXiong Liao 2020-03-25  1401  	}
+d26c3321fe18dc WeiXiong Liao 2020-03-25  1402  	pr_cont("\n");
+d26c3321fe18dc WeiXiong Liao 2020-03-25  1403  
+d26c3321fe18dc WeiXiong Liao 2020-03-25  1404  	err = pstore_register(&cxt->pstore);
+d26c3321fe18dc WeiXiong Liao 2020-03-25  1405  	if (err) {
+d26c3321fe18dc WeiXiong Liao 2020-03-25  1406  		pr_err("registering with pstore failed\n");
+d26c3321fe18dc WeiXiong Liao 2020-03-25  1407  		goto fail_free;
+d26c3321fe18dc WeiXiong Liao 2020-03-25  1408  	}
+d26c3321fe18dc WeiXiong Liao 2020-03-25  1409  	mutex_unlock(&pstore_zone_cxt.pstore_zone_info_lock);
+d26c3321fe18dc WeiXiong Liao 2020-03-25  1410  
+d26c3321fe18dc WeiXiong Liao 2020-03-25  1411  	return 0;
+d26c3321fe18dc WeiXiong Liao 2020-03-25  1412  
+d26c3321fe18dc WeiXiong Liao 2020-03-25  1413  fail_free:
+d26c3321fe18dc WeiXiong Liao 2020-03-25  1414  	kfree(cxt->pstore.buf);
+d26c3321fe18dc WeiXiong Liao 2020-03-25  1415  	cxt->pstore.buf = NULL;
+d26c3321fe18dc WeiXiong Liao 2020-03-25  1416  	cxt->pstore.bufsize = 0;
+d26c3321fe18dc WeiXiong Liao 2020-03-25  1417  	psz_free_all_zones(cxt);
+d26c3321fe18dc WeiXiong Liao 2020-03-25  1418  fail_out:
+d26c3321fe18dc WeiXiong Liao 2020-03-25  1419  	pstore_zone_cxt.pstore_zone_info = NULL;
+d26c3321fe18dc WeiXiong Liao 2020-03-25  1420  	mutex_unlock(&pstore_zone_cxt.pstore_zone_info_lock);
+d26c3321fe18dc WeiXiong Liao 2020-03-25 @1421  	return err;
+d26c3321fe18dc WeiXiong Liao 2020-03-25  1422  }
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
+
