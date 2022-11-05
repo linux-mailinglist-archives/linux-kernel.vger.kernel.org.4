@@ -2,58 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0B8161A79B
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 05:57:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3725C61A79C
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 05:57:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229616AbiKEE5Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Nov 2022 00:57:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47014 "EHLO
+        id S229639AbiKEE5U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Nov 2022 00:57:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229587AbiKEE5M (ORCPT
+        with ESMTP id S229595AbiKEE5O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Nov 2022 00:57:12 -0400
-Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEB8F31DD7
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 21:57:11 -0700 (PDT)
-Received: by mail-pf1-x44a.google.com with SMTP id k131-20020a628489000000b0056b3e1a9629so3264885pfd.8
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 21:57:11 -0700 (PDT)
+        Sat, 5 Nov 2022 00:57:14 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5F0231DD7
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 21:57:13 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-36fde8f2cdcso62957267b3.23
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 21:57:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=BXjcYNaRFsRiTOYj/VSeDrYfnk14qW8dp0T0QhmC01U=;
-        b=VEy7ANYLdY2iq6bTxxUDZH6+XSU2Nro3Rt2zHGVMA4QIhELj/IrEYMVaEzZGGn3ZuK
-         /aVN+XLpm2LmvYFvB2Gd10hGP/dFIqYq2yj+yM9Gndo6RtIm08NiZCTylamQCEAUGEos
-         KHPhMs/vHmbr50DuZRCNLnCw0oCUd7D4i0lsFgypH9fASd2wgsXDKOa3p1Ze7zQ7lI05
-         G5o9g23jHCJmOenZVwLG2uLqyO8mKbn1UZW6eXIb+/c0Y7bpFnNrqHaliPBbJL7u8fBY
-         LF44uC5ML5UeFa6fZChqUid+ocL/63nXT436SgeFZcuIMiYYwh4bRNYoRzNT3A/7jpGO
-         DLGA==
+        bh=BW+rPCZyrgfGjBQ3NJWBgC70ZM2E4N7Rxm+O8srguEk=;
+        b=pAlbE6bcgnNjnuoJ+rX9hnRtuqI6cTg40qoUAFHN13LuRDcL3E92YcRjLGNk/oYc1n
+         lMjbz30yCvufkdfqXQA3/fxMYImVQZbw8fw0LLfvujVII+d/gJtZGk5OZx3Y6xX2UlKX
+         clwas/NpZLJ4598nf/qr4z3AU+hMroJYTuPVhS9X4Wn2eWqc7fHYGbaHKeSCL2ATiJNu
+         8TZHj0l1n2OEFVQXolbTx96GQC5QgT9/DCwhp9kQQSokd2g6V9quOCvzJSUgR82+Y64R
+         w+kULRNopwY+6Gwt94hupB3kAPy6suRLjrZ8REtS5eZPl30kqte/ubZfadv4N4iqV7V5
+         Sdpw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BXjcYNaRFsRiTOYj/VSeDrYfnk14qW8dp0T0QhmC01U=;
-        b=kITcq5n4GdBmJPsb6b3TrPMC8SkKskyydw6s/5SC08wKBLRaZDQ5ONMlYtsicIgmdL
-         rXxBVNBoduiKUo1uoYdxXsH1cOdKNw/2u3Yt2zbDRvtijBHOgiZB7PA8MCXAX3KsHoTD
-         /eX/vBlfkSEnbulNVg+fANkAlkFRfRAEYjgWp2kRxp2MgXgX4zhsl1BsSjP+mXiJyvXB
-         rLhqi4+Iii9PdZDwAOFVR++Y3fbBRvyneNBHpfdADsfRnnAsv0CXcHBmYI9mM5NshFWx
-         ODmR19OVrRNdytjEByG4CGv3fC19tt5sg6GNolSlHROMqTp3JQMoC/Zg/qnt2A5yGE1X
-         a8Tg==
-X-Gm-Message-State: ACrzQf2NH9DhJI9VkzVl536V561vE91iKwehIMMN//+ZYZth4U6k75HE
-        Dh/LALMkIGVppvxPJM2NnKag5IZ7PTM8
-X-Google-Smtp-Source: AMsMyM74KD9sv5Y/7eP8tBJe72q8a1/ftv2vvR5j5K3J2QbUWaHpU3xhQYXxycxvJJyfgjd96owmfq9yHGCO
+        bh=BW+rPCZyrgfGjBQ3NJWBgC70ZM2E4N7Rxm+O8srguEk=;
+        b=VimZXBP1J0OP+En9F0vCkD2cfTnxTwDj5WCeL/fOWO/nI2+H6G8Va9/oRVmdSrOoaN
+         +32XbNWUSgeQ+BViLycF5rGJVyAlR1O+sptqT4qVVGvBkCdXMs/HVJ8ORJscM7+FpIW/
+         1Oi8am4bMQAeYoxnjo4Sy8SF50+d7ZGiFcziuhE/Mrmx3URZ6RY4A91kAivJ4NF8KR9s
+         JIG2CEPxw1CUZd4YiZEoRr7soIYDTqTwrJMLCIehdaZuyRo9aMV28xSVu+/cvWaT/kze
+         vQoQ9wghc8ROhva6Du4NVu09ZFsuK6XDKwbShgz3y7FzPlEfLEweE2sLkKPTkIAIKdBX
+         ENrg==
+X-Gm-Message-State: ACrzQf2J2QjoZtxQ1eRPeCaWf6FIm3hmcQgEicrffRDEu9q5pFowyJ4F
+        u0nzhaTcwPTLk1kDpOjT1ZfRhaQhHWpz
+X-Google-Smtp-Source: AMsMyM78gyHl/Ehhg39fKDPk6sd67w5nGZMpxmuBesaLcrfMLc4OytNZQthO+brQuFxPwEupOLckpKjKYoRe
 X-Received: from vipin.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:479f])
- (user=vipinsh job=sendgmr) by 2002:a17:902:e883:b0:186:99e3:c079 with SMTP id
- w3-20020a170902e88300b0018699e3c079mr433741plg.149.1667624231359; Fri, 04 Nov
- 2022 21:57:11 -0700 (PDT)
-Date:   Fri,  4 Nov 2022 21:56:59 -0700
+ (user=vipinsh job=sendgmr) by 2002:a5b:a0f:0:b0:691:6fea:deda with SMTP id
+ k15-20020a5b0a0f000000b006916feadedamr37985774ybq.377.1667624233167; Fri, 04
+ Nov 2022 21:57:13 -0700 (PDT)
+Date:   Fri,  4 Nov 2022 21:57:00 -0700
 In-Reply-To: <20221105045704.2315186-1-vipinsh@google.com>
 Mime-Version: 1.0
 References: <20221105045704.2315186-1-vipinsh@google.com>
 X-Mailer: git-send-email 2.38.1.273.g43a17bfeac-goog
-Message-ID: <20221105045704.2315186-2-vipinsh@google.com>
-Subject: [PATCH 1/6] KVM: x86: hyper-v: Use common code for hypercall
- userspace exit
+Message-ID: <20221105045704.2315186-3-vipinsh@google.com>
+Subject: [PATCH 2/6] KVM: x86: hyper-v: Add extended hypercall support in Hyper-v
 From:   Vipin Sharma <vipinsh@google.com>
 To:     seanjc@google.com, pbonzini@redhat.com, vkuznets@redhat.com
 Cc:     dmatlack@google.com, kvm@vger.kernel.org,
@@ -61,7 +60,7 @@ Cc:     dmatlack@google.com, kvm@vger.kernel.org,
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,67 +68,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove duplicate code to exit to userspace for hyper-v hypercalls and
-use a common place to exit.
+Add support for extended hypercall in Hyper-v. Hyper-v TLFS 6.0b
+describes hypercalls above call code 0x8000 as extended hypercalls.
+
+A Hyper-v hypervisor's guest VM finds availability of extended
+hypercalls via CPUID.0x40000003.EBX BIT(20). If the bit is set then the
+guest can call extended hypercalls.
+
+All extended hypercalls will exit to userspace by default. This allows
+for easy support of future hypercalls without being dependent on KVM
+releases.
+
+If there will be need to process the hypercall in KVM instead of
+userspace then KVM can create a capability which userspace can query to
+know which hypercalls can be handled by the KVM and enable handling
+of those hypercalls.
 
 Signed-off-by: Vipin Sharma <vipinsh@google.com>
-Suggested-by: Sean Christopherson <seanjc@google.com>
 ---
- arch/x86/kvm/hyperv.c | 27 +++++++++++----------------
- 1 file changed, 11 insertions(+), 16 deletions(-)
+ arch/x86/kvm/hyperv.c | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
 
 diff --git a/arch/x86/kvm/hyperv.c b/arch/x86/kvm/hyperv.c
-index 0adf4a437e85..db2f96a0ae23 100644
+index db2f96a0ae23..85c6100f4451 100644
 --- a/arch/x86/kvm/hyperv.c
 +++ b/arch/x86/kvm/hyperv.c
-@@ -2270,14 +2270,7 @@ int kvm_hv_hypercall(struct kvm_vcpu *vcpu)
- 			ret = HV_STATUS_INVALID_HYPERCALL_INPUT;
- 			break;
- 		}
--		vcpu->run->exit_reason = KVM_EXIT_HYPERV;
--		vcpu->run->hyperv.type = KVM_EXIT_HYPERV_HCALL;
--		vcpu->run->hyperv.u.hcall.input = hc.param;
--		vcpu->run->hyperv.u.hcall.params[0] = hc.ingpa;
--		vcpu->run->hyperv.u.hcall.params[1] = hc.outgpa;
--		vcpu->arch.complete_userspace_io =
--				kvm_hv_hypercall_complete_userspace;
--		return 0;
-+		goto hypercall_userspace_exit;
- 	case HVCALL_FLUSH_VIRTUAL_ADDRESS_LIST:
- 		if (unlikely(hc.var_cnt)) {
- 			ret = HV_STATUS_INVALID_HYPERCALL_INPUT;
-@@ -2336,14 +2329,7 @@ int kvm_hv_hypercall(struct kvm_vcpu *vcpu)
- 			ret = HV_STATUS_OPERATION_DENIED;
- 			break;
- 		}
--		vcpu->run->exit_reason = KVM_EXIT_HYPERV;
--		vcpu->run->hyperv.type = KVM_EXIT_HYPERV_HCALL;
--		vcpu->run->hyperv.u.hcall.input = hc.param;
--		vcpu->run->hyperv.u.hcall.params[0] = hc.ingpa;
--		vcpu->run->hyperv.u.hcall.params[1] = hc.outgpa;
--		vcpu->arch.complete_userspace_io =
--				kvm_hv_hypercall_complete_userspace;
--		return 0;
-+		goto hypercall_userspace_exit;
+@@ -40,6 +40,12 @@
+ 
+ #define KVM_HV_MAX_SPARSE_VCPU_SET_BITS DIV_ROUND_UP(KVM_MAX_VCPUS, 64)
+ 
++/*
++ * The TLFS carves out 64 possible extended hypercalls, numbered sequentially
++ * after the base capabilities extended hypercall.
++ */
++#define HV_EXT_CALL_MAX (HV_EXT_CALL_QUERY_CAPABILITIES + 64)
++
+ static void stimer_mark_pending(struct kvm_vcpu_hv_stimer *stimer,
+ 				bool vcpu_kick);
+ 
+@@ -2178,6 +2184,9 @@ static bool hv_check_hypercall_access(struct kvm_vcpu_hv *hv_vcpu, u16 code)
+ 	case HVCALL_SEND_IPI:
+ 		return hv_vcpu->cpuid_cache.enlightenments_eax &
+ 			HV_X64_CLUSTER_IPI_RECOMMENDED;
++	case HV_EXT_CALL_QUERY_CAPABILITIES ... HV_EXT_CALL_MAX:
++		return hv_vcpu->cpuid_cache.features_ebx &
++				HV_ENABLE_EXTENDED_HYPERCALLS;
+ 	default:
+ 		break;
  	}
+@@ -2331,6 +2340,12 @@ int kvm_hv_hypercall(struct kvm_vcpu *vcpu)
+ 		}
+ 		goto hypercall_userspace_exit;
+ 	}
++	case HV_EXT_CALL_QUERY_CAPABILITIES ... HV_EXT_CALL_MAX:
++		if (unlikely(hc.fast)) {
++			ret = HV_STATUS_INVALID_PARAMETER;
++			break;
++		}
++		goto hypercall_userspace_exit;
  	default:
  		ret = HV_STATUS_INVALID_HYPERCALL_CODE;
-@@ -2352,6 +2338,15 @@ int kvm_hv_hypercall(struct kvm_vcpu *vcpu)
+ 		break;
+@@ -2489,6 +2504,7 @@ int kvm_get_hv_cpuid(struct kvm_vcpu *vcpu, struct kvm_cpuid2 *cpuid,
  
- hypercall_complete:
- 	return kvm_hv_hypercall_complete(vcpu, ret);
-+
-+hypercall_userspace_exit:
-+	vcpu->run->exit_reason = KVM_EXIT_HYPERV;
-+	vcpu->run->hyperv.type = KVM_EXIT_HYPERV_HCALL;
-+	vcpu->run->hyperv.u.hcall.input = hc.param;
-+	vcpu->run->hyperv.u.hcall.params[0] = hc.ingpa;
-+	vcpu->run->hyperv.u.hcall.params[1] = hc.outgpa;
-+	vcpu->arch.complete_userspace_io = kvm_hv_hypercall_complete_userspace;
-+	return 0;
- }
+ 			ent->ebx |= HV_POST_MESSAGES;
+ 			ent->ebx |= HV_SIGNAL_EVENTS;
++			ent->ebx |= HV_ENABLE_EXTENDED_HYPERCALLS;
  
- void kvm_hv_init_vm(struct kvm *kvm)
+ 			ent->edx |= HV_X64_HYPERCALL_XMM_INPUT_AVAILABLE;
+ 			ent->edx |= HV_FEATURE_FREQUENCY_MSRS_AVAILABLE;
 -- 
 2.38.1.273.g43a17bfeac-goog
 
