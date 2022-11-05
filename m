@@ -2,95 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD45F61DD55
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 19:44:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75E8F61DD5B
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 19:46:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229893AbiKESoP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Nov 2022 14:44:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49364 "EHLO
+        id S229955AbiKESqS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Nov 2022 14:46:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229823AbiKESoN (ORCPT
+        with ESMTP id S229863AbiKESqJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Nov 2022 14:44:13 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D98D81572C
-        for <linux-kernel@vger.kernel.org>; Sat,  5 Nov 2022 11:44:09 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id x21so10670572ljg.10
-        for <linux-kernel@vger.kernel.org>; Sat, 05 Nov 2022 11:44:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ZqM95oaPnJH5MWhlRXsh/pWYkhJUcy6fi/S/KLDeWUY=;
-        b=i8fgFmifmE2Phhsq1JPfWQNpmrQX0+ooyicsgoxgtQAmqDeRap3MBc7AoGm0MJ7M3M
-         Har1YTulusg/2t3IN/iBpL3sK3EsnGVE/pGFJlCjTe1xrZb46hVwZKzfz65FOmc1Uz8R
-         rmwsRRKwlnbGBfN4dYB1qptl5Yfu1PNVZV9rOH4zQFXNYqjRBCMOwVBHgUW+Vrfxawt6
-         wGf/Q0BoF2U23YLWy0YQVKf3Q2oRqK1PrEldxJ1zHXSS6wPpoq7WK/wC/qjetG32yN47
-         Q1lq/MB7nBpivCwjpjVYSsbjan0knjOuKIqeZZPKM6PNmY0W2Voove26aW731rivYfKm
-         nmKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZqM95oaPnJH5MWhlRXsh/pWYkhJUcy6fi/S/KLDeWUY=;
-        b=G06K9bVzRv9talOWPsVj8zvHzJeQeVP4ZTi35+OcSa8ylHlZAI8YNfFU96Vr4R8YJh
-         I5VYwY8iZS93L7V/A6N8UBIbZ42+2s+tzlS4A5y+EZj6r9rhG6qK539EzJ1ZsPhstnYj
-         igetcf1FWFQFUjjS1XC8ZaR9HMBfMqPO6hvW09r+TS6QYWc2I7rmOkZxbD9HSsyqxidy
-         Cgav544e5pwm6+4OlIpiM+AFwYwRXd0jkzCiD3Es0BEZ79BaWTPCtHvHI1sy642RYc3b
-         Zt51uwhwMUiHnqRKX4bSnJkmA7ng+fr6/4w097yPUrgH7P1cgkIzdsIhDU3DJdzPjQj2
-         swzQ==
-X-Gm-Message-State: ACrzQf3JG8p9269AMIka6vfBQ38yJXaV4o4R9ejPBoLRnuVj2bqjXpcb
-        NSTMP1/hLGCxE4fjOUriYWwshw==
-X-Google-Smtp-Source: AMsMyM7OO4zYB/vcy8i1R2jRRjgDN+xMBxQNR3RbzhMCOaS4aSSPJtSTQhnXBAgmsT65yZmr79W0Ng==
-X-Received: by 2002:a2e:91c4:0:b0:277:e53:151a with SMTP id u4-20020a2e91c4000000b002770e53151amr15950844ljg.81.1667673848114;
-        Sat, 05 Nov 2022 11:44:08 -0700 (PDT)
-Received: from [192.168.0.20] (088156142199.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.199])
-        by smtp.gmail.com with ESMTPSA id a21-20020ac25e75000000b004991437990esm386360lfr.11.2022.11.05.11.44.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 05 Nov 2022 11:44:07 -0700 (PDT)
-Message-ID: <35b095a0-6bda-32c2-99e2-6815a852f9f0@linaro.org>
-Date:   Sat, 5 Nov 2022 19:44:05 +0100
+        Sat, 5 Nov 2022 14:46:09 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BD631759B;
+        Sat,  5 Nov 2022 11:46:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description;
+        bh=fCt1iVjHRZeCw6pu9EclVO4j9EFwGZ5O/BJCU/rap1A=; b=T0BgD/drapMt2Tphoq6uOkQyn/
+        rdXpRcw/JGyGZ3RcC68Ate57DupUttmnZwLyPDtbpDmoHA9Ovpqq+77ZuObgz2Pw5Fi7oYV8987Ru
+        25+iRQzVe3ZLTJtV/z4YXHwqCWXFUiao3ucjtVeLcNYwV43wOfW+Dc3ee+PUEePH5ttf4urQxaK0s
+        UQbNF6UTP2yOKClk4eZhfZkBNHv9D8agqb6wP0RYDN2sZRpbMu/pQQtRdK4hJvit4HFHcLczKdTrX
+        6nfo/d3ojbsDsKqPU3wDW7dio0pirWjGTgA/WpEiroGWuQ+cDkMZxWgs3X3/HQIZcRJDnO+1t9dbb
+        uxJt9MMQ==;
+Received: from [2601:1c2:d80:3110::2de6]
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1orOB0-008MDE-CP; Sat, 05 Nov 2022 18:45:54 +0000
+Message-ID: <bd7b8c9c-7169-6dfb-969b-6e879af8acb6@infradead.org>
+Date:   Sat, 5 Nov 2022 11:45:44 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 1/2] dt-bindings: arm: aspeed: document Delta AHE-50DC BMC
-To:     Zev Weiss <zev@bewilderbeest.net>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, soc@kernel.org
-Cc:     Andrew Jeffery <andrew@aj.id.au>, Arnd Bergmann <arnd@arndb.de>,
-        Joel Stanley <joel@jms.id.au>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Olof Johansson <olof@lixom.net>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org
-References: <20221105013321.2719-1-zev@bewilderbeest.net>
- <20221105013321.2719-2-zev@bewilderbeest.net>
+ Thunderbird/102.4.1
+Subject: Re: [PATCH v3] selftests/bpf: Fix u32 variable compared with less
+ than zero
+To:     Kang Minchul <tegongkang@gmail.com>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>
+Cc:     Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221105183656.86077-1-tegongkang@gmail.com>
 Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221105013321.2719-2-zev@bewilderbeest.net>
-Content-Type: text/plain; charset=UTF-8
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20221105183656.86077-1-tegongkang@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/11/2022 21:33, Zev Weiss wrote:
-> Document Delta AHE-50DC BMC board compatible.
+
+
+On 11/5/22 11:36, Kang Minchul wrote:
+> Variable ret is compared with less than zero even though it was set as u32.
+> So u32 to int conversion is needed.
 > 
-> Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
+> Signed-off-by: Kang Minchul <tegongkang@gmail.com>
+
+Acked-by: Randy Dunlap <rdunlap@infradead.org>
+
+Thanks.
+
 > ---
-
-
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Best regards,
-Krzysztof
-
+>   tools/testing/selftests/bpf/xskxceiver.c | 3 ++-
+>   1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/bpf/xskxceiver.c b/tools/testing/selftests/bpf/xskxceiver.c
+> index 681a5db80dae..162d3a516f2c 100644
+> --- a/tools/testing/selftests/bpf/xskxceiver.c
+> +++ b/tools/testing/selftests/bpf/xskxceiver.c
+> @@ -1006,7 +1006,8 @@ static int __send_pkts(struct ifobject *ifobject, u32 *pkt_nb, struct pollfd *fd
+>   {
+>   	struct xsk_socket_info *xsk = ifobject->xsk;
+>   	bool use_poll = ifobject->use_poll;
+> -	u32 i, idx = 0, ret, valid_pkts = 0;
+> +	u32 i, idx = 0, valid_pkts = 0;
+> +	int ret;
+>   
+>   	while (xsk_ring_prod__reserve(&xsk->tx, BATCH_SIZE, &idx) < BATCH_SIZE) {
+>   		if (use_poll) {
