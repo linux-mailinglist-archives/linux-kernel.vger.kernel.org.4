@@ -2,241 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DEDB61D972
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 11:34:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C01F361D979
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 11:36:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229496AbiKEKeX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Nov 2022 06:34:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42788 "EHLO
+        id S229590AbiKEKgf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Nov 2022 06:36:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbiKEKeV (ORCPT
+        with ESMTP id S229469AbiKEKg3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Nov 2022 06:34:21 -0400
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA1642AE38;
-        Sat,  5 Nov 2022 03:34:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1667644455; h=from:from:sender:reply-to:subject:subject:date:date:
+        Sat, 5 Nov 2022 06:36:29 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D9F22AE3A;
+        Sat,  5 Nov 2022 03:36:28 -0700 (PDT)
+Date:   Sat, 05 Nov 2022 10:36:24 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1667644586;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=TDaskHbQLkzLxZhbc0A77T82ys2sKHjzGtgSbl/eTqE=;
-        b=3fY3IZ0hJPiRN8vNazn9bcQMqR2JrjTIi9AXqwxwIe42aFOkSxs8/LodJeR17HX6gwP6nU
-        mZNm0vTVRbGLApx4Wl/flL8cOh+VgCBw+PxQes5goKWi15jShjtTx3YJEDgMNwV2KlXCJe
-        TCPPbMNaz+6Yvnpx7NfiTwQwJoNtT18=
-Date:   Sat, 05 Nov 2022 10:33:54 +0000
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH v2 56/65] clk: ingenic: cgu: Switch to determine_rate
-To:     Maxime Ripard <maxime@cerno.tech>
-Cc:     Stephen Boyd <sboyd@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Chen-Yu Tsai <wens@csie.org>, Daniel Vetter <daniel@ffwll.ch>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Andreas =?iso-8859-1?q?F=E4rber?= <afaerber@suse.de>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Abel Vesa <abelvesa@kernel.org>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Prashant Gaikwad <pgaikwad@nvidia.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Sekhar Nori <nsekhar@ti.com>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Takashi Iwai <tiwai@suse.com>,
-        David Airlie <airlied@gmail.com>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        David Lechner <david@lechnology.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Mark Brown <broonie@kernel.org>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        alsa-devel@alsa-project.org, linux-mediatek@lists.infradead.org,
-        linux-phy@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        linux-actions@lists.infradead.org, linux-clk@vger.kernel.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        patches@opensource.cirrus.com, linux-tegra@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Message-Id: <IOEVKR.TWFKJND2FJ473@crapouillou.net>
-In-Reply-To: <20221104145946.orsyrhiqvypisl5j@houat>
-References: <20221018-clk-range-checks-fixes-v2-0-f6736dec138e@cerno.tech>
-        <20221018-clk-range-checks-fixes-v2-56-f6736dec138e@cerno.tech>
-        <80VTKR.CE8RVN8M3ZYK3@crapouillou.net>
-        <20221104145946.orsyrhiqvypisl5j@houat>
+        bh=AHQrl6P86xz2am5gkMQph6NleuntroolUPtqBPFpcpw=;
+        b=Sbsj5FxRfxidqlXoqvppyqEBnGbvvmT1sCI13oTzo63LmozgdJbZl/2ax3K1dC03uhKx/k
+        UUcfbO+HwEYEOinVe3m0i2749o5wG2uWYg9z2Xz1w1wGwbvGsThgVYQahGNNwkHVL/EkOg
+        qP7bnh8dWiIy0BusYRZYhTbNYov26xZUzWDfnhb6QIVglvL4nrf8sWCilUqNq8ZssFwK8E
+        0zEy7KGC+9R2YXGf2a38Gk0GQL3Rk7HiifeKOhUy5/ln7TO1cfdPGOl3U85mtoEKl50dps
+        ar16Sia7SYHT0K2uuEIOS2sBCrZlStBZeS9QHCfOOQujVm9+0lQa8JXOc1z82g==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1667644586;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=AHQrl6P86xz2am5gkMQph6NleuntroolUPtqBPFpcpw=;
+        b=DUHWQPQoQL6cI2I7ZKDdWn01C2fvxAinvwqCg26Jqpu0ejkharNfmFTisrTyhmaQpNEw/S
+        K3KUiOtTgl29FhCw==
+From:   "tip-bot2 for Kees Cook" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/core] x86/Kconfig: Enable kernel IBT by default
+Cc:     Sami Tolvanen <samitolvanen@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20221101172503.gonna.094-kees@kernel.org>
+References: <20221101172503.gonna.094-kees@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <166764458451.4906.10224019690835731804.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Maxime,
+The following commit has been merged into the x86/core branch of tip:
 
-Le ven. 4 nov. 2022 =E0 15:59:46 +0100, Maxime Ripard=20
-<maxime@cerno.tech> a =E9crit :
-> Hi Paul,
->=20
-> On Fri, Nov 04, 2022 at 02:31:20PM +0000, Paul Cercueil wrote:
->>  Le ven. 4 nov. 2022 =E0 14:18:13 +0100, Maxime Ripard=20
->> <maxime@cerno.tech> a
->>  =E9crit :
->>  > The Ingenic CGU clocks implements a mux with a set_parent hook,=20
->> but
->>  > doesn't provide a determine_rate implementation.
->>  >
->>  > This is a bit odd, since set_parent() is there to, as its name=20
->> implies,
->>  > change the parent of a clock. However, the most likely candidate=20
->> to
->>  > trigger that parent change is a call to clk_set_rate(), with
->>  > determine_rate() figuring out which parent is the best suited for=20
->> a
->>  > given rate.
->>  >
->>  > The other trigger would be a call to clk_set_parent(), but it's=20
->> far less
->>  > used, and it doesn't look like there's any obvious user for that=20
->> clock.
->>  >
->>  > So, the set_parent hook is effectively unused, possibly because=20
->> of an
->>  > oversight. However, it could also be an explicit decision by the
->>  > original author to avoid any reparenting but through an explicit=20
->> call to
->>  > clk_set_parent().
->>  >
->>  > The driver does implement round_rate() though, which means that=20
->> we can
->>  > change the rate of the clock, but we will never get to change the
->>  > parent.
->>  >
->>  > However, It's hard to tell whether it's been done on purpose or=20
->> not.
->>  >
->>  > Since we'll start mandating a determine_rate() implementation,=20
->> let's
->>  > convert the round_rate() implementation to a determine_rate(),=20
->> which
->>  > will also make the current behavior explicit. And if it was an
->>  > oversight, the clock behaviour can be adjusted later on.
->>=20
->>  So it's partly on purpose, partly because I didn't know about
->>  .determine_rate.
->>=20
->>  There's nothing odd about having a lonely .set_parent callback; in=20
->> my case
->>  the clocks are parented from the device tree.
->>=20
->>  Having the clocks driver trigger a parent change when requesting a=20
->> rate
->>  change sounds very dangerous, IMHO. My MMC controller can be=20
->> parented to the
->>  external 48 MHz oscillator, and if the card requests 50 MHz, it=20
->> could switch
->>  to one of the PLLs. That works as long as the PLLs don't change=20
->> rate, but if
->>  one is configured as driving the CPU clock, it becomes messy.
->>  The thing is, the clocks driver has no way to know whether or not=20
->> it is
->>  "safe" to use a designated parent.
->>=20
->>  For that reason, in practice, I never actually want to have a clock
->>  re-parented - it's almost always a bad idea vs. sticking to the=20
->> parent clock
->>  configured in the DTS.
->=20
-> Yeah, and this is totally fine. But we need to be explicit about it.=20
-> The
-> determine_rate implementation I did in all the patches is an exact
-> equivalent to the round_rate one if there was one. We will never ask=20
-> to
-> change the parent.
->=20
-> Given what you just said, I would suggest to set the
-> CLK_SET_RATE_NO_REPARENT flag as well.
+Commit-ID:     4fd5f70ce14da230c6a29648c3d51a48ee0b4bfd
+Gitweb:        https://git.kernel.org/tip/4fd5f70ce14da230c6a29648c3d51a48ee0b4bfd
+Author:        Kees Cook <keescook@chromium.org>
+AuthorDate:    Tue, 01 Nov 2022 10:25:07 -07:00
+Committer:     Peter Zijlstra <peterz@infradead.org>
+CommitterDate: Sat, 05 Nov 2022 11:28:03 +01:00
 
-But that would introduce policy into the driver... The fact that I=20
-don't want the MMC parented to the PLLs, doesn't mean that it's an=20
-invalid configuration per se.
+x86/Kconfig: Enable kernel IBT by default
 
-Cheers,
--Paul
+The kernel IBT defense strongly mitigates the common "first step" of ROP
+attacks, by eliminating arbitrary stack pivots (that appear either at
+the end of a function or in immediate values), which cannot be reached
+if indirect calls must be to marked function entry addresses. IBT is
+also required to be enabled to gain the FineIBT feature when built with
+Kernel Control Flow Integrity.
 
->>=20
->>  > Signed-off-by: Maxime Ripard <maxime@cerno.tech>
->>  > ---
->>  >  drivers/clk/ingenic/cgu.c | 15 ++++++++-------
->>  >  1 file changed, 8 insertions(+), 7 deletions(-)
->>  >
->>  > diff --git a/drivers/clk/ingenic/cgu.c b/drivers/clk/ingenic/cgu.c
->>  > index 1f7ba30f5a1b..0c9c8344ad11 100644
->>  > --- a/drivers/clk/ingenic/cgu.c
->>  > +++ b/drivers/clk/ingenic/cgu.c
->>  > @@ -491,22 +491,23 @@ ingenic_clk_calc_div(struct clk_hw *hw,
->>  >  	return div;
->>  >  }
->>  >
->>  > -static long
->>  > -ingenic_clk_round_rate(struct clk_hw *hw, unsigned long req_rate,
->>  > -		       unsigned long *parent_rate)
->>  > +static int ingenic_clk_determine_rate(struct clk_hw *hw,
->>  > +				      struct clk_rate_request *req)
->>  >  {
->>  >  	struct ingenic_clk *ingenic_clk =3D to_ingenic_clk(hw);
->>  >  	const struct ingenic_cgu_clk_info *clk_info =3D
->>  > to_clk_info(ingenic_clk);
->>  >  	unsigned int div =3D 1;
->>  >
->>  >  	if (clk_info->type & CGU_CLK_DIV)
->>  > -		div =3D ingenic_clk_calc_div(hw, clk_info, *parent_rate,=20
->> req_rate);
->>  > +		div =3D ingenic_clk_calc_div(hw, clk_info, req->best_parent_rate,
->>  > +					   req->rate);
->>=20
->>  Sorry but I'm not sure that this works.
->>=20
->>  You replace the "parent_rate" with the "best_parent_rate", and that=20
->> means
->>  you only check the requested rate vs. the parent with the highest=20
->> frequency,
->>  and not vs. the actual parent that will be used.
->=20
-> best_parent_rate is initialized to the current parent rate, not the
-> parent with the highest frequency:
-> https://elixir.bootlin.com/linux/v6.1-rc3/source/drivers/clk/clk.c#L1471
->=20
-> Maxime
+Additionally, given that this feature is runtime enabled via CPU ID,
+it clearly should be built in by default; it will only be enabled if the
+CPU supports it. The build takes 2 seconds longer, which seems a small
+price to pay for gaining this coverage by default.
 
+Suggested-by: Sami Tolvanen <samitolvanen@google.com>
+Signed-off-by: Kees Cook <keescook@chromium.org>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Link: https://lkml.kernel.org/r/20221101172503.gonna.094-kees@kernel.org
+---
+ arch/x86/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index 479ee63..aaf1f0f 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -1856,7 +1856,7 @@ config CC_HAS_IBT
+ 
+ config X86_KERNEL_IBT
+ 	prompt "Indirect Branch Tracking"
+-	bool
++	def_bool y
+ 	depends on X86_64 && CC_HAS_IBT && HAVE_OBJTOOL
+ 	# https://github.com/llvm/llvm-project/commit/9d7001eba9c4cb311e03cd8cdc231f9e579f2d0f
+ 	depends on !LD_IS_LLD || LLD_VERSION >= 140000
