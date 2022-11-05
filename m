@@ -2,49 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 902AF61D97A
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 11:36:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B784661D97B
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 11:36:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229505AbiKEKgi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Nov 2022 06:36:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43264 "EHLO
+        id S229666AbiKEKgk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Nov 2022 06:36:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbiKEKga (ORCPT
+        with ESMTP id S229555AbiKEKgc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Nov 2022 06:36:30 -0400
+        Sat, 5 Nov 2022 06:36:32 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF94E2B18B;
-        Sat,  5 Nov 2022 03:36:29 -0700 (PDT)
-Date:   Sat, 05 Nov 2022 10:36:26 -0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0B902AE38;
+        Sat,  5 Nov 2022 03:36:30 -0700 (PDT)
+Date:   Sat, 05 Nov 2022 10:36:28 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1667644588;
+        s=2020; t=1667644589;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=1DAEXCKv31INkvBrmiYFmBxfqIyfg4r8BE7OR9TUi7U=;
-        b=W2NNpFo8d0RGhmikvSY/jUyJcSQ8ijkiC1sJcAUV3BY/D78eLq2UWUfdbGgX0NTeXCuW23
-        2GopUjcPXwi7294Z6gGokiQ5wmnspc9Y7HbqCgj8UEV0Zwo5Yo3zxYLQefY241ave94RrG
-        pYbrIpMHfI5AY3aB9i9LXuKJmeBbNYGZ74WpsEFdjtGc7UBKgYsVifR/+RAXba2ux8a8RX
-        DMIXNyvqq4uoR8qMYc8fo+bqga1SnhnmvfETouH1G6tqRYqms9EqDZwzMm45hHw6qyNOTj
-        fWto68z8+25889BVTAcN/H0UBAVUc5xVXrYj7ZXU/QIIHDGBUOBFxz4wmrmFPw==
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=X7Gx3aKfS5VAgwB+wRizzNS4KlLZzo8Gg/aRiaUgpr8=;
+        b=k0XUNQYpT+YN6yFUPO1MGZ6yRvaemmWyCNrNYI7eUa1Vh0q/6nxDTQFDEDimmpq7YXsu0E
+        UgKOYK4jO7HspI4J1s1ix/dAMTTpv0mqx+xqbwU5DP7hBmYAThUbkiHJPJmtwib+Qx9PL5
+        JFA6JrYvsh9CglRu1XJBfl831Up6MSV71dEYkqPHFtnhcjLrRqdl8HY3+IJNsPs8pDaVb9
+        ST9qLJSPF//3qDQRHzwV5xCcEFWkO80hD/oq+sDIJpSAZeRZPSluZ8BOZbl3d4go8soAVD
+        jZTyT5BLwi5kRR1lgd6QYpHn/yGYRINXd4wmyEqs4Sbxu6mQumBG1p9FLJtpHg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1667644588;
+        s=2020e; t=1667644589;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=1DAEXCKv31INkvBrmiYFmBxfqIyfg4r8BE7OR9TUi7U=;
-        b=pkRCGDKAu6cle/KR+FEgLAHIALxhzcXpq6cRd+cAx3Q8nUPm6WDmblv21Ig8hXaZhmhTMg
-        Vq3B/hbkYYQh/nCg==
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=X7Gx3aKfS5VAgwB+wRizzNS4KlLZzo8Gg/aRiaUgpr8=;
+        b=3M19D6NDseZoQUZbW07xzyHq/QHzV1pdMYpVVEQ3Hgxxh1vjjPARA9wU8r5pJMvzbelgJD
+        ZTFdOa3vX1DbS3Aw==
 From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/core] objtool: Fix weak hole vs prefix symbol
-Cc:     Borislav Petkov <bp@alien8.de>, kernel test robot <lkp@intel.com>,
+Subject: [tip: x86/core] objtool: Optimize elf_dirty_reloc_sym()
+Cc:     Borislav Petkov <bp@alien8.de>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
+In-Reply-To: <Y2LlRA7x+8UsE1xf@hirez.programming.kicks-ass.net>
+References: <Y2LlRA7x+8UsE1xf@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Message-ID: <166764458700.4906.4772901868553171180.tip-bot2@tip-bot2>
+Message-ID: <166764458820.4906.1462951010200408447.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -60,67 +66,132 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/core branch of tip:
 
-Commit-ID:     023f2340f053537cce170c31c430b0886c6f07ca
-Gitweb:        https://git.kernel.org/tip/023f2340f053537cce170c31c430b0886c6f07ca
+Commit-ID:     19526717f768bf2f89ca01bd2a595728ebe57540
+Gitweb:        https://git.kernel.org/tip/19526717f768bf2f89ca01bd2a595728ebe57540
 Author:        Peter Zijlstra <peterz@infradead.org>
-AuthorDate:    Thu, 03 Nov 2022 20:57:51 +01:00
+AuthorDate:    Wed, 02 Nov 2022 22:31:19 +01:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
 CommitterDate: Sat, 05 Nov 2022 11:28:02 +01:00
 
-objtool: Fix weak hole vs prefix symbol
+objtool: Optimize elf_dirty_reloc_sym()
 
-Boris (and the robot) reported that objtool grew a new complaint about
-unreachable instructions. Upon inspection it was immediately clear
-the __weak zombie instructions struck again.
+When moving a symbol in the symtab its index changes and any reloc
+referring that symtol-table-index will need to be rewritten too.
 
-For the unweary, the linker will simply remove the symbol for
-overriden __weak symbols but leave the instructions in place, creating
-unreachable instructions -- and objtool likes to report these.
+In order to facilitate this, objtool simply marks the whole reloc
+section 'changed' which will cause the whole section to be
+re-generated.
 
-Commit 4adb23686795 ("objtool: Ignore extra-symbol code") was supposed
-to have dealt with that, but the new commit 9f2899fe36a6 ("objtool:
-Add option to generate prefix symbols") subtly broke that logic by
-created unvisited symbols.
+However, finding the relocs that use any given symbol is implemented
+rather crudely -- a fully iteration of all sections and their relocs.
+Given that some builds have over 20k sections (kallsyms etc..)
+iterating all that for *each* symbol moved takes a bit of time.
 
-Fixes: 9f2899fe36a6 ("objtool: Add option to generate prefix symbols")
+Instead have each symbol keep a list of relocs that reference it.
+
+This *vastly* improves build times for certain configs.
+
 Reported-by: Borislav Petkov <bp@alien8.de>
-Reported-by: kernel test robot <lkp@intel.com>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Link: https://lkml.kernel.org/r/Y2LlRA7x+8UsE1xf@hirez.programming.kicks-ass.net
 ---
- tools/objtool/check.c | 22 +++++++++++++++++++++-
- 1 file changed, 21 insertions(+), 1 deletion(-)
+ tools/objtool/elf.c                 | 27 ++++++++++-----------------
+ tools/objtool/include/objtool/elf.h |  2 ++
+ 2 files changed, 12 insertions(+), 17 deletions(-)
 
-diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-index 55066c4..4f1a738 100644
---- a/tools/objtool/check.c
-+++ b/tools/objtool/check.c
-@@ -4053,8 +4053,28 @@ static int add_prefix_symbol(struct objtool_file *file, struct symbol *func,
+diff --git a/tools/objtool/elf.c b/tools/objtool/elf.c
+index 3d636d1..8cd7f01 100644
+--- a/tools/objtool/elf.c
++++ b/tools/objtool/elf.c
+@@ -356,6 +356,7 @@ static void elf_add_symbol(struct elf *elf, struct symbol *sym)
+ 	struct rb_node *pnode;
+ 	struct symbol *iter;
  
- 		offset = func->offset - prev->offset;
- 		if (offset >= opts.prefix) {
--			if (offset == opts.prefix)
-+			if (offset == opts.prefix) {
-+				/*
-+				 * Since the sec->symbol_list is ordered by
-+				 * offset (see elf_add_symbol()) the added
-+				 * symbol will not be seen by the iteration in
-+				 * validate_section().
-+				 *
-+				 * Hence the lack of list_for_each_entry_safe()
-+				 * there.
-+				 *
-+				 * The direct concequence is that prefix symbols
-+				 * don't get visited (because pointless), except
-+				 * for the logic in ignore_unreachable_insn()
-+				 * that needs the terminating insn to be visited
-+				 * otherwise it will report the hole.
-+				 *
-+				 * Hence mark the first instruction of the
-+				 * prefix symbol as visisted.
-+				 */
-+				prev->visited |= VISITED_BRANCH;
- 				elf_create_prefix_symbol(file->elf, func, opts.prefix);
-+			}
- 			break;
- 		}
- 		insn = prev;
++	INIT_LIST_HEAD(&sym->reloc_list);
+ 	INIT_LIST_HEAD(&sym->pv_target);
+ 	sym->alias = sym;
+ 
+@@ -557,6 +558,7 @@ int elf_add_reloc(struct elf *elf, struct section *sec, unsigned long offset,
+ 	reloc->sym = sym;
+ 	reloc->addend = addend;
+ 
++	list_add_tail(&reloc->sym_reloc_entry, &sym->reloc_list);
+ 	list_add_tail(&reloc->list, &sec->reloc->reloc_list);
+ 	elf_hash_add(reloc, &reloc->hash, reloc_hash(reloc));
+ 
+@@ -573,21 +575,10 @@ int elf_add_reloc(struct elf *elf, struct section *sec, unsigned long offset,
+  */
+ static void elf_dirty_reloc_sym(struct elf *elf, struct symbol *sym)
+ {
+-	struct section *sec;
+-
+-	list_for_each_entry(sec, &elf->sections, list) {
+-		struct reloc *reloc;
+-
+-		if (sec->changed)
+-			continue;
++	struct reloc *reloc;
+ 
+-		list_for_each_entry(reloc, &sec->reloc_list, list) {
+-			if (reloc->sym == sym) {
+-				sec->changed = true;
+-				break;
+-			}
+-		}
+-	}
++	list_for_each_entry(reloc, &sym->reloc_list, sym_reloc_entry)
++		reloc->sec->changed = true;
+ }
+ 
+ /*
+@@ -902,11 +893,12 @@ static int read_rela_reloc(struct section *sec, int i, struct reloc *reloc, unsi
+ 
+ static int read_relocs(struct elf *elf)
+ {
++	unsigned long nr_reloc, max_reloc = 0, tot_reloc = 0;
+ 	struct section *sec;
+ 	struct reloc *reloc;
+-	int i;
+ 	unsigned int symndx;
+-	unsigned long nr_reloc, max_reloc = 0, tot_reloc = 0;
++	struct symbol *sym;
++	int i;
+ 
+ 	if (!elf_alloc_hash(reloc, elf->text_size / 16))
+ 		return -1;
+@@ -947,13 +939,14 @@ static int read_relocs(struct elf *elf)
+ 
+ 			reloc->sec = sec;
+ 			reloc->idx = i;
+-			reloc->sym = find_symbol_by_index(elf, symndx);
++			reloc->sym = sym = find_symbol_by_index(elf, symndx);
+ 			if (!reloc->sym) {
+ 				WARN("can't find reloc entry symbol %d for %s",
+ 				     symndx, sec->name);
+ 				return -1;
+ 			}
+ 
++			list_add_tail(&reloc->sym_reloc_entry, &sym->reloc_list);
+ 			list_add_tail(&reloc->list, &sec->reloc_list);
+ 			elf_hash_add(reloc, &reloc->hash, reloc_hash(reloc));
+ 
+diff --git a/tools/objtool/include/objtool/elf.h b/tools/objtool/include/objtool/elf.h
+index b6974e3..bca719b 100644
+--- a/tools/objtool/include/objtool/elf.h
++++ b/tools/objtool/include/objtool/elf.h
+@@ -62,6 +62,7 @@ struct symbol {
+ 	u8 fentry            : 1;
+ 	u8 profiling_func    : 1;
+ 	struct list_head pv_target;
++	struct list_head reloc_list;
+ };
+ 
+ struct reloc {
+@@ -73,6 +74,7 @@ struct reloc {
+ 	};
+ 	struct section *sec;
+ 	struct symbol *sym;
++	struct list_head sym_reloc_entry;
+ 	unsigned long offset;
+ 	unsigned int type;
+ 	s64 addend;
