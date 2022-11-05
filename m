@@ -2,303 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32B4661D7F7
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 07:48:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2237561D7FA
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 07:53:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229545AbiKEGsN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Nov 2022 02:48:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49268 "EHLO
+        id S229552AbiKEGxx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Nov 2022 02:53:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229486AbiKEGsL (ORCPT
+        with ESMTP id S229523AbiKEGxu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Nov 2022 02:48:11 -0400
-Received: from out203-205-221-239.mail.qq.com (out203-205-221-239.mail.qq.com [203.205.221.239])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6503186D5;
-        Fri,  4 Nov 2022 23:48:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1667630886;
-        bh=+gll9StgemKd1xhohwq5I054sJFHK9r5jmDFbD01Ofk=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=RmlkMG2gfzEnzDUN/LVtIKIon4G/ZI7VsNms7DKRouUE3Ge10s/XSct/oeup7ixmY
-         SzOqpIkF7XphVNM3EAuhgXbDPaXeKYY+oDdb9PF5AREPlXrpkvKkOD1IRhr1QDiefj
-         jeJIAGoaTVpnVrclEO+GsfT19cc3x7M1YlvqagVM=
-Received: from localhost.localdomain ([111.199.189.86])
-        by newxmesmtplogicsvrszb1-0.qq.com (NewEsmtp) with SMTP
-        id C021EA90; Sat, 05 Nov 2022 14:48:02 +0800
-X-QQ-mid: xmsmtpt1667630882tixzor47r
-Message-ID: <tencent_EBA3C18864069E42175946973C2ACBAF5408@qq.com>
-X-QQ-XMAILINFO: NhUkPfKlCtQwXEHQjVhadMm1ARkhXNuiIX/WCZAPi0MgW0+Qw4ZCndktiRfURn
-         1idLR/F0pL0XtosEK8T9CHF/uOQtkGURGuQ2uRyluOSe2yr6a44ToLxxBPVaN3kqUxU2od9j/eHo
-         vuJlJJQ1JjZhmSh4FoSqcUMnoIzYc47jSUCVSjrBPVuJTLpEVbhkI0bUBrUNolWd8zJ+jPkdM1qY
-         ukWlZJlrHCGhs3oev1kYqjhACpCMJnYy5K20SCkN1xyipIIXryxAInJBFJeBOvcRTrIjsUSIsfJS
-         BipW3SzJYVMWW4Ie5eoDcjd9Ei/n2vxoNSuXMCE7RBTmTv/XKLqTMA5MBxk1/JGQtQg2U6FWsdzQ
-         FFGE9NotzeVX1mW7rGLGXayaHTmbSumJXHsRo7/vEhc1+aoP15hHyHiFUvn/+rc87eqq9zSZSsRA
-         qASTPmo30NaSVc2y3zk7x0LY+HJJuXBR1ixNiGeXmxpL31KWg0bXcRJoGblT8NHB5+4OscavNON+
-         8Rp7eaI9fh3DTCwtRdjcrP714Xq7ntqMTn9nvuNJ0PTX1aUfChjliU6rXgEISi7l4IJ9QbUbQkfj
-         t5du24mADDr0Pl6MEJx9RHi+IgZbbuwOnjuoOmcU9vEBfow0RfmzO0x2tXt4RD6/UuVznMF+LUCs
-         Ub9OSWPhLIEZ9j1Cd+mE8BGx81eyE8pW/Ztp7PKms8LySOfpboowE5apCW+wOn0TU0htKRyD8h1W
-         JKAuAdAIZnyZTv+ooAP+SXCE75kRkTX5d54LzdvVjbYNBU7uX+77CJGKWjuHlpBiZDPs6MwDm/vO
-         XvQ4hOCtrT18HllfdKOMzmZF2EL36RiVfE4xhrP4cqd5d92TDR7U3VkFfxNSX294zmV7gKI3mlA3
-         y46HmBj3JrQeAjW7hmj+VkLo7CyI5d1+VDrX1S/QgdjRdVapBXUb5gd5NMRDDJl6Y7TpvebJsAuq
-         fahViaEQKZ528M7xrhfVSZSBluVjwGPH4TIjm15IKbGteS9kImLie8fr9fHhHUwEMbSiBvXq4=
-From:   Rong Tao <rtoax@foxmail.com>
-To:     andrii.nakryiko@gmail.com
-Cc:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
-        daniel@iogearbox.net, haoluo@google.com, john.fastabend@gmail.com,
-        jolsa@kernel.org, kpsingh@kernel.org, linux-kernel@vger.kernel.org,
-        martin.lau@linux.dev, rongtao@cestc.cn, rtoax@foxmail.com,
-        sdf@google.com, song@kernel.org, yhs@fb.com
-Subject: [PATCH bpf-next] samples/bpf: Fix sockex3 error: missing BPF prog type
-Date:   Sat,  5 Nov 2022 14:48:00 +0800
-X-OQ-MSGID: <20221105064800.50494-1-rtoax@foxmail.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <CAEf4BzbZDmgnohyyXBwy+p_qfZ1r_kq6d3bfqig+zSOm65vFHg@mail.gmail.com>
-References: <CAEf4BzbZDmgnohyyXBwy+p_qfZ1r_kq6d3bfqig+zSOm65vFHg@mail.gmail.com>
+        Sat, 5 Nov 2022 02:53:50 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AA7A275C0
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 23:53:49 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id r18so6138392pgr.12
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 23:53:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=spqUCiWZo+MTX7gTrHIIYbpr2WVSxFKmPwib1nju6j0=;
+        b=vCsvXpteUbvdxcyhUwgBbkS7JDK6vIpRhapWfumJik5YymwhByNlMCGeqSpgXhYw/k
+         wDAhJUnTJ/l/8ChQJqwHBBFbVYrAFz+455zA+u0J0vFq3+Fv0oPXyO2Yo8yYsJZJPc4F
+         ybr/mELOAE7KFyRqYOJ9RUdN5nX2MCQQqK/eClhpf3tbtSaW9MUZKtIovYnK6dJkwwRD
+         wJNgSKT39a10xwVasH257lJNRPFoRPFhxQiLpHNT1CrXpT4xCGyjuVpmenkcuZPB2hUT
+         Zlfx6JET0RzcNOVxswtJ07cWDEZ47vLdJIcx1+NTdICsw3z23Olq4g1QGEE8ybOFUGGr
+         Uvdw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=spqUCiWZo+MTX7gTrHIIYbpr2WVSxFKmPwib1nju6j0=;
+        b=h2gCAAEpnGyacSK2Fc2aHgVey0uH7WjTYJkOJ3jCbAfDJbAKJHWtvAabyZXkz9PCXG
+         mS1RgoaWYIPqj6Dbn7HUjMTaqhBVjhhiKh714Mb/Eqf6/K/Xvy29vWH2SjY1qK8MNboW
+         WenElwhjUS9C3OXgppqe0wUfnj2QlnMih09PjHSf9nb/tTnFnbr10q3gBj+RcUaOqrA0
+         JlkRRBNIGFnskQUqrq7gXuLee9GpGu7f9jsmIukh4df76tXmmu0fDga/uO5qLLoVsnsx
+         TARkWScgHuntGhzp6wEThHPjB0kWo3bhqZkvNhIPVk+0kCFzJf3kgeXkX9stDaktFNYn
+         /gbw==
+X-Gm-Message-State: ACrzQf3xHMdTAkAYwLghBpULn12gLQQlnTBzamP/hysmnwK3SPuQ34KF
+        VVCye7AVtQ32WphLknipznNZ
+X-Google-Smtp-Source: AMsMyM5N2FhE/o8kj7rOhMh6xZCjBZiv0KSswsPslcJfG88j0WMERTeAbn/Rt39M6TXAOBiCJvxgqA==
+X-Received: by 2002:a05:6a00:24cb:b0:56c:7815:bc7d with SMTP id d11-20020a056a0024cb00b0056c7815bc7dmr39946304pfv.44.1667631227974;
+        Fri, 04 Nov 2022 23:53:47 -0700 (PDT)
+Received: from thinkpad ([117.217.186.6])
+        by smtp.gmail.com with ESMTPSA id v126-20020a626184000000b00565cf8c52c8sm666527pfb.174.2022.11.04.23.53.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Nov 2022 23:53:45 -0700 (PDT)
+Date:   Sat, 5 Nov 2022 12:23:37 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     kishon@kernel.org, lpieralisi@kernel.org, bhelgaas@google.com,
+        kvijayab@amd.com
+Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kw@linux.com, robh@kernel.org, vidyas@nvidia.com, vigneshr@ti.com
+Subject: Re: [PATCH v4 0/5] PCI: endpoint: Rework the EPC to EPF notification
+Message-ID: <20221105065337.GA109545@thinkpad>
+References: <20221025145101.116393-1-manivannan.sadhasivam@linaro.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RDNS_DYNAMIC,SORTED_RECIPS,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ***
+In-Reply-To: <20221025145101.116393-1-manivannan.sadhasivam@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rong Tao <rongtao@cestc.cn>
+Hi Kishon,
 
-since commit 450b167fb9be("libbpf: clean up SEC() handling"),
-sec_def_matches() does not recognize "socket/xxx" as "socket", therefore,
-the BPF program type is not recognized.
+On Tue, Oct 25, 2022 at 08:20:56PM +0530, Manivannan Sadhasivam wrote:
+> Hello,
+> 
+> During the review of the patch that fixes DBI access in PCI EP, Rob
+> suggested [1] using a fixed interface for passing the events from EPC to
+> EPF instead of the in-kernel notifiers.
+> 
+> This series introduces a simple callback based mechanism for passing the
+> events from EPC to EPF. This interface is chosen for satisfying the below
+> requirements:
+> 
+> 1. The notification has to reach the EPF drivers without any additional
+> latency.
+> 2. The context of the caller (EPC) needs to be preserved while passing the
+> notifications.
+> 
+> With the existing notifier mechanism, the 1st case can be satisfied since
+> notifiers aren't adding any huge overhead. But the 2nd case is clearly not
+> satisfied, because the current atomic notifiers forces the EPF
+> notification context to be atomic even though the caller (EPC) may not be
+> in atomic context. In the notification function, the EPF drivers are
+> required to call several EPC APIs that might sleep and this triggers a
+> sleeping in atomic bug during runtime.
+> 
+> The above issue could be fixed by using a blocking notifier instead of
+> atomic, but that proposal was not accepted either [2].
+> 
+> So instead of working around the issues within the notifiers, let's get rid
+> of it and use the callback mechanism.
+> 
+> NOTE: DRA7xx and TEGRA194 drivers are only compile tested. Testing this series
+> on the real platforms is greatly appreciated.
+> 
 
-Instead of sockex3_user.c parsing section names to get the BPF program fd.
-We use the program array map to assign a static index to each BPF program
-(get inspired by selftests/bpf progs/test_prog_array_init.c).
-Therefore, use SEC("socket") as section name instead of SEC("socket/xxx"),
-so that the BPF program is parsed to SOCKET_FILTER type. The "missing BPF
-prog type" problem is solved.
+Any feedback on this series?
 
-How to reproduce this error:
-$ cd samples/bpf
-$ sudo ./sockex3
-libbpf: prog 'bpf_func_PARSE_IP': missing BPF prog type, check ELF section name 'socket/3'
-libbpf: prog 'bpf_func_PARSE_IP': failed to load: -22
-libbpf: failed to load object './sockex3_kern.o'
-ERROR: loading BPF object file failed
+Thanks,
+Mani
 
-Signed-off-by: Rong Tao <rongtao@cestc.cn>
----
- samples/bpf/sockex3_kern.c | 95 ++++++++++++++++++++++----------------
- samples/bpf/sockex3_user.c | 23 ++++-----
- 2 files changed, 64 insertions(+), 54 deletions(-)
+> Thanks,
+> Mani
+> 
+> [1] https://lore.kernel.org/all/20220802072426.GA2494@thinkpad/T/#mfa3a5b3a9694798a562c36b228f595b6a571477d
+> [2] https://lore.kernel.org/all/20220228055240.24774-1-manivannan.sadhasivam@linaro.org
+> 
+> Changes in v4:
+> 
+> * Added check for the presence of event_ops before involing the callbacks (Kishon)
+> * Added return with IRQ_WAKE_THREAD when link_up event is found in the hard irq
+>   handler of tegra194 driver (Vidya)
+> * Collected review tags
+> 
+> Changes in v3:
+> 
+> * As Kishon spotted, fixed the DRA7xx driver and also the TEGRA194 driver to
+>   call the LINK_UP callback in threaded IRQ handler.
+> 
+> Changes in v2:
+> 
+> * Introduced a new "list_lock" for protecting the epc->pci_epf list and
+>   used it in the callback mechanism.
+> 
+> Manivannan Sadhasivam (5):
+>   PCI: dra7xx: Use threaded IRQ handler for "dra7xx-pcie-main" IRQ
+>   PCI: tegra194: Move dw_pcie_ep_linkup() to threaded IRQ handler
+>   PCI: endpoint: Use a separate lock for protecting epc->pci_epf list
+>   PCI: endpoint: Use callback mechanism for passing events from EPC to
+>     EPF
+>   PCI: endpoint: Use link_up() callback in place of LINK_UP notifier
+> 
+>  drivers/pci/controller/dwc/pci-dra7xx.c       |  2 +-
+>  drivers/pci/controller/dwc/pcie-tegra194.c    |  9 ++++-
+>  drivers/pci/endpoint/functions/pci-epf-test.c | 38 ++++++-------------
+>  drivers/pci/endpoint/pci-epc-core.c           | 32 ++++++++++++----
+>  include/linux/pci-epc.h                       | 10 +----
+>  include/linux/pci-epf.h                       | 19 ++++++----
+>  6 files changed, 59 insertions(+), 51 deletions(-)
+> 
+> -- 
+> 2.25.1
+> 
 
-diff --git a/samples/bpf/sockex3_kern.c b/samples/bpf/sockex3_kern.c
-index b363503357e5..26d916834865 100644
---- a/samples/bpf/sockex3_kern.c
-+++ b/samples/bpf/sockex3_kern.c
-@@ -17,47 +17,12 @@
- #define IP_MF		0x2000
- #define IP_OFFSET	0x1FFF
- 
--#define PROG(F) SEC("socket/"__stringify(F)) int bpf_func_##F
--
--struct {
--	__uint(type, BPF_MAP_TYPE_PROG_ARRAY);
--	__uint(key_size, sizeof(u32));
--	__uint(value_size, sizeof(u32));
--	__uint(max_entries, 8);
--} jmp_table SEC(".maps");
--
- #define PARSE_VLAN 1
- #define PARSE_MPLS 2
- #define PARSE_IP 3
- #define PARSE_IPV6 4
- 
--/* Protocol dispatch routine. It tail-calls next BPF program depending
-- * on eth proto. Note, we could have used ...
-- *
-- *   bpf_tail_call(skb, &jmp_table, proto);
-- *
-- * ... but it would need large prog_array and cannot be optimised given
-- * the map key is not static.
-- */
--static inline void parse_eth_proto(struct __sk_buff *skb, u32 proto)
--{
--	switch (proto) {
--	case ETH_P_8021Q:
--	case ETH_P_8021AD:
--		bpf_tail_call(skb, &jmp_table, PARSE_VLAN);
--		break;
--	case ETH_P_MPLS_UC:
--	case ETH_P_MPLS_MC:
--		bpf_tail_call(skb, &jmp_table, PARSE_MPLS);
--		break;
--	case ETH_P_IP:
--		bpf_tail_call(skb, &jmp_table, PARSE_IP);
--		break;
--	case ETH_P_IPV6:
--		bpf_tail_call(skb, &jmp_table, PARSE_IPV6);
--		break;
--	}
--}
-+#define PROG_SOCKET_FILTER	SEC("socket")
- 
- struct vlan_hdr {
- 	__be16 h_vlan_TCI;
-@@ -74,6 +39,8 @@ struct flow_key_record {
- 	__u32 ip_proto;
- };
- 
-+static inline void parse_eth_proto(struct __sk_buff *skb, u32 proto);
-+
- static inline int ip_is_fragment(struct __sk_buff *ctx, __u64 nhoff)
- {
- 	return load_half(ctx, nhoff + offsetof(struct iphdr, frag_off))
-@@ -189,7 +156,8 @@ static __always_inline void parse_ip_proto(struct __sk_buff *skb,
- 	}
- }
- 
--PROG(PARSE_IP)(struct __sk_buff *skb)
-+PROG_SOCKET_FILTER
-+int bpf_func_ip(struct __sk_buff *skb)
- {
- 	struct globals *g = this_cpu_globals();
- 	__u32 nhoff, verlen, ip_proto;
-@@ -217,7 +185,8 @@ PROG(PARSE_IP)(struct __sk_buff *skb)
- 	return 0;
- }
- 
--PROG(PARSE_IPV6)(struct __sk_buff *skb)
-+PROG_SOCKET_FILTER
-+int bpf_func_ipv6(struct __sk_buff *skb)
- {
- 	struct globals *g = this_cpu_globals();
- 	__u32 nhoff, ip_proto;
-@@ -240,7 +209,8 @@ PROG(PARSE_IPV6)(struct __sk_buff *skb)
- 	return 0;
- }
- 
--PROG(PARSE_VLAN)(struct __sk_buff *skb)
-+PROG_SOCKET_FILTER
-+int bpf_func_vlan(struct __sk_buff *skb)
- {
- 	__u32 nhoff, proto;
- 
-@@ -256,7 +226,8 @@ PROG(PARSE_VLAN)(struct __sk_buff *skb)
- 	return 0;
- }
- 
--PROG(PARSE_MPLS)(struct __sk_buff *skb)
-+PROG_SOCKET_FILTER
-+int bpf_func_mpls(struct __sk_buff *skb)
- {
- 	__u32 nhoff, label;
- 
-@@ -279,7 +250,49 @@ PROG(PARSE_MPLS)(struct __sk_buff *skb)
- 	return 0;
- }
- 
--SEC("socket/0")
-+struct {
-+	__uint(type, BPF_MAP_TYPE_PROG_ARRAY);
-+	__uint(key_size, sizeof(u32));
-+	__uint(max_entries, 8);
-+	__array(values, u32 (void *));
-+} prog_array_init SEC(".maps") = {
-+	.values = {
-+		[PARSE_VLAN] = (void *)&bpf_func_vlan,
-+		[PARSE_IP]   = (void *)&bpf_func_ip,
-+		[PARSE_IPV6] = (void *)&bpf_func_ipv6,
-+		[PARSE_MPLS] = (void *)&bpf_func_mpls,
-+	},
-+};
-+
-+/* Protocol dispatch routine. It tail-calls next BPF program depending
-+ * on eth proto. Note, we could have used ...
-+ *
-+ *   bpf_tail_call(skb, &prog_array_init, proto);
-+ *
-+ * ... but it would need large prog_array and cannot be optimised given
-+ * the map key is not static.
-+ */
-+static inline void parse_eth_proto(struct __sk_buff *skb, u32 proto)
-+{
-+	switch (proto) {
-+	case ETH_P_8021Q:
-+	case ETH_P_8021AD:
-+		bpf_tail_call(skb, &prog_array_init, PARSE_VLAN);
-+		break;
-+	case ETH_P_MPLS_UC:
-+	case ETH_P_MPLS_MC:
-+		bpf_tail_call(skb, &prog_array_init, PARSE_MPLS);
-+		break;
-+	case ETH_P_IP:
-+		bpf_tail_call(skb, &prog_array_init, PARSE_IP);
-+		break;
-+	case ETH_P_IPV6:
-+		bpf_tail_call(skb, &prog_array_init, PARSE_IPV6);
-+		break;
-+	}
-+}
-+
-+PROG_SOCKET_FILTER
- int main_prog(struct __sk_buff *skb)
- {
- 	__u32 nhoff = ETH_HLEN;
-diff --git a/samples/bpf/sockex3_user.c b/samples/bpf/sockex3_user.c
-index cd6fa79df900..56044acbd25d 100644
---- a/samples/bpf/sockex3_user.c
-+++ b/samples/bpf/sockex3_user.c
-@@ -24,10 +24,9 @@ struct pair {
- 
- int main(int argc, char **argv)
- {
--	int i, sock, key, fd, main_prog_fd, jmp_table_fd, hash_map_fd;
-+	int i, sock, fd, main_prog_fd, hash_map_fd;
- 	struct bpf_program *prog;
- 	struct bpf_object *obj;
--	const char *section;
- 	char filename[256];
- 	FILE *f;
- 
-@@ -45,26 +44,24 @@ int main(int argc, char **argv)
- 		goto cleanup;
- 	}
- 
--	jmp_table_fd = bpf_object__find_map_fd_by_name(obj, "jmp_table");
- 	hash_map_fd = bpf_object__find_map_fd_by_name(obj, "hash_map");
--	if (jmp_table_fd < 0 || hash_map_fd < 0) {
-+	if (hash_map_fd < 0) {
- 		fprintf(stderr, "ERROR: finding a map in obj file failed\n");
- 		goto cleanup;
- 	}
- 
-+	/* find BPF main program */
-+	main_prog_fd = 0;
- 	bpf_object__for_each_program(prog, obj) {
- 		fd = bpf_program__fd(prog);
- 
--		section = bpf_program__section_name(prog);
--		if (sscanf(section, "socket/%d", &key) != 1) {
--			fprintf(stderr, "ERROR: finding prog failed\n");
--			goto cleanup;
--		}
--
--		if (key == 0)
-+		if (!strcmp(bpf_program__name(prog), "main_prog"))
- 			main_prog_fd = fd;
--		else
--			bpf_map_update_elem(jmp_table_fd, &key, &fd, BPF_ANY);
-+	}
-+
-+	if (main_prog_fd == 0) {
-+		fprintf(stderr, "ERROR: can't find main_prog\n");
-+		goto cleanup;
- 	}
- 
- 	sock = open_raw_sock("lo");
 -- 
-2.31.1
-
+மணிவண்ணன் சதாசிவம்
