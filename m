@@ -2,82 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6097161D778
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 06:27:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5894361D788
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 06:51:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229615AbiKEF1W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Nov 2022 01:27:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56180 "EHLO
+        id S229523AbiKEFvf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Nov 2022 01:51:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229578AbiKEF1T (ORCPT
+        with ESMTP id S229457AbiKEFve (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Nov 2022 01:27:19 -0400
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 278A92EF4F
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 22:27:18 -0700 (PDT)
-Received: by mail-io1-f70.google.com with SMTP id r197-20020a6b8fce000000b006c3fc33424dso4190859iod.5
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 22:27:18 -0700 (PDT)
+        Sat, 5 Nov 2022 01:51:34 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 085BE30548
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 22:50:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1667627439;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=n/DPXqnNM3/vCTawtYzMf2SZGZlw8n3vrmnUPC8gUwE=;
+        b=FF77BdUfPnbl0I3TcEELFeX+Rq71HWRBTa+Ak3SkM1JsXMqNaKYksMPaOFX7uATuxbtja2
+        afUIPCNxjnMAYVgtbTn/yQeHyzrXBVK4dEJL82R7Q4PUdl0Do0/SO8sVCIgDVcD+WoPmi/
+        osFvlGP5CaUoCbfF5DWdGVDoO0bpYHc=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-563-PsAQG54JPWyZ9X-A6xacPA-1; Sat, 05 Nov 2022 01:50:37 -0400
+X-MC-Unique: PsAQG54JPWyZ9X-A6xacPA-1
+Received: by mail-ed1-f70.google.com with SMTP id r12-20020a05640251cc00b00463699c95aeso4734596edd.18
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 22:50:37 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5ASnNDxhoqSLaBjncwLtyuIp6tFD08p3uNjxVPZiJKI=;
-        b=y1HeU337liEjK14bpC2B5JNfmZNbPIbFCgpN9Gfk+P5q+tiIzyCNW3Q2KsKnBPk6vk
-         eVIsUuPuLwd6q99cDrbFRKuQ6daNUxiMtkiR3dMm8iXBKg0MPhO3gZVn9Dr5m/S9TDdc
-         /57eFMeaogIbjZiHCF17voQSXY7gV2RC7t3UqjKeTD0bQ4D/1t8uGnmCvrwCF1PaRKF9
-         zUdj4r/dziK7teGfDL5QPyEvtCn3jPCNvoUzPQGF1REP0tOEbCEK9JjUO5Jz7QJcmhTY
-         oU2Cfq3jIHvt+UmE0+iSdFQIL0Oo3wTS9zcavL3gWE5NkasFxD8Hn/O8cwhmj2GzM7rW
-         vZww==
-X-Gm-Message-State: ACrzQf2iWOGH/sc9rB4fcNIeC+yFa8RWgExUdYZw0pN2LPxVkgiloGyJ
-        rwzzKV/zn4l4tbp/XrT8o8qOaMgEEzffH5BuV261/hywp7cn
-X-Google-Smtp-Source: AMsMyM6VWI4Vk3WRzJfNJhb6um+SW7Ecd5WwtI1YxMBLKoya+XpAkwf4Adj2jolavy1c/SExku6Efe+lBuQpH9G+Y3dNw75iPtHB
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=n/DPXqnNM3/vCTawtYzMf2SZGZlw8n3vrmnUPC8gUwE=;
+        b=3MYxD+UrOySggvKZzclI7olGx8hOTZYZKWgHgrhwYbUaODomVNdMga3asJpFsWwsPr
+         TMER54cXmEqHjxokzOtOLFb3uT0t9ODCpfBuoVgxe/XZt4JlZt5FDoe+2D6otOh0OJ3R
+         6QQbUDEsxE7yOH2GglnEajsnftDcF6AFFpjTL6IFhlbvaSDPd9ujOhh9cQPl/DuJ6gqj
+         rnvzAxtZ4JfphGd/22/d6mjY1fr44bIUWYyI2gOK3k3S1JH/BTkSUHy+kMNgBrW7xS4v
+         +4XO7qjxxWb+qVpgDabVc7/ExGfI93E/UdtPgXm6eS5so7w92/I70pRiF0M9LfmS+oQU
+         IZQA==
+X-Gm-Message-State: ACrzQf31cnobbpUubWXo8tM7CqSpN9KMz8MLzizMY2XRCErUclDYg0w4
+        DdyHClwjbM6tJcfngVehWbLXatJzbLOfDDRnmcLk0j/IUDf/nSZlUI6jiZaX39hvXiPwVneArll
+        D1kvV7+oY4TBh0OA3GzkuJBc1lz/1Z40sUckSMNXD
+X-Received: by 2002:aa7:c859:0:b0:463:4b54:16a8 with SMTP id g25-20020aa7c859000000b004634b5416a8mr32111547edt.136.1667627436421;
+        Fri, 04 Nov 2022 22:50:36 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM5A9+6ol1jnUB036VhOH+sVLMKPc0rjDaF4P/UgBmXrj6EZZzZioW4TXgnIDDoT14UQIBs4LTH6v6uVO017x1c=
+X-Received: by 2002:aa7:c859:0:b0:463:4b54:16a8 with SMTP id
+ g25-20020aa7c859000000b004634b5416a8mr32111531edt.136.1667627436187; Fri, 04
+ Nov 2022 22:50:36 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a02:a00f:0:b0:375:7166:2dac with SMTP id
- a15-20020a02a00f000000b0037571662dacmr14017102jah.49.1667626037516; Fri, 04
- Nov 2022 22:27:17 -0700 (PDT)
-Date:   Fri, 04 Nov 2022 22:27:17 -0700
-In-Reply-To: <00000000000041f5bc05e678fa9f@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000959e6405ecb271a3@google.com>
-Subject: Re: [syzbot] WARNING in __cancel_work
-From:   syzbot <syzbot+10e37d0d88cbc2ea19e4@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, edumazet@google.com, hdanton@sina.com,
-        johan.hedberg@gmail.com, kuba@kernel.org,
-        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
-        luiz.dentz@gmail.com, luiz.von.dentz@intel.com,
-        marcel@holtmann.org, netdev@vger.kernel.org, pabeni@redhat.com,
-        penguin-kernel@I-love.SAKURA.ne.jp,
-        penguin-kernel@i-love.sakura.ne.jp, syzkaller-bugs@googlegroups.com
+References: <3acf1cc7a974cb4fb9b77b39311c6714@tfwno.gf> <Y2XUNive2KMwTjUF@MiWiFi-R3L-srv>
+In-Reply-To: <Y2XUNive2KMwTjUF@MiWiFi-R3L-srv>
+From:   Dave Young <dyoung@redhat.com>
+Date:   Sat, 5 Nov 2022 13:49:59 +0800
+Message-ID: <CALu+AoTVtO=-tzbgjeVRQ3uO0yGUPWKPuAiLn0CpaAq_=xr-sw@mail.gmail.com>
+Subject: Re: Bug: kexec on Lenovo ThinkPad T480 disables EFI mode
+To:     Baoquan He <bhe@redhat.com>
+Cc:     ns@tfwno.gf, Eric Biederman <ebiederm@xmission.com>,
+        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Ard Biesheuvel <ardb@kernel.org>, linux-efi@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot suspects this issue was fixed by commit:
+Baoquan, thanks for cc me.
 
-commit 2d2cb3066f2c90cd8ca540b36ba7a55e7f2406e0
-Author: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-Date:   Sat Sep 3 15:32:56 2022 +0000
+On Sat, 5 Nov 2022 at 11:10, Baoquan He <bhe@redhat.com> wrote:
+>
+> Add Dave to CC
+>
+> On 10/28/22 at 01:02pm, ns@tfwno.gf wrote:
+> > Greetings,
+> >
+> > I've been hitting a bug on my Lenovo ThinkPad T480 where kexecing will
+> > cause EFI mode (if that's the right term for it) to be unconditionally
+> > disabled, even when not using the --noefi option to kexec.
+> >
+> > What I mean by "EFI mode" being disabled, more than just EFI runtime
+> > services, is that basically nothing about the system's EFI is visible
+> > post-kexec. Normally you have a message like this in dmesg when the
+> > system is booted in EFI mode:
+> >
+> > [    0.000000] efi: EFI v2.70 by EDK II
+> > [    0.000000] efi: SMBIOS=0x7f98a000 ACPI=0x7fb7e000 ACPI 2.0=0x7fb7e014
+> > MEMATTR=0x7ec63018
+> > (obviously not the real firmware of the machine I'm talking about, but I
+> > can also send that if it would be of any help)
+> >
+> > No such message pops up in my dmesg as a result of this bug, & this
+> > causes some fallout like being unable to find the system's DMI
+> > information:
+> >
+> > <6>[    0.000000] DMI not present or invalid.
+> >
+> > The efivarfs module also fails to load with -ENODEV.
+> >
+> > I've tried also booting with efi=runtime explicitly but it doesn't
+> > change anything. The kernel still does not print the name of the EFI
+> > firmware, DMI is still missing, & efivarfs still fails to load.
+> >
+> > I've been using the kexec_load syscall for all these tests, if it's
+> > important.
+> >
+> > Also, to make it very clear, all this only ever happens post-kexec. When
+> > booting straight from UEFI (with the EFI stub), all the aforementioned
+> > stuff that fails works perfectly fine (i.e. name of firmware is printed,
+> > DMI is properly found, & efivarfs loads & mounts just fine).
+> >
+> > This is reproducible with a vanilla 6.1-rc2 kernel. I've been trying to
+> > bisect it, but it seems like it goes pretty far back. I've got vanilla
+> > mainline kernel builds dating back to 5.17 that have the exact same
+> > issue. It might be worth noting that during this testing, I made sure
+> > the version of the kernel being kexeced & the kernel kexecing were the
+> > same version. It may not have been a problem in older kernels, but that
+> > would be difficult to test for me (a pretty important driver for this
+> > machine was only merged during v5.17-rc4). So it may not have been a
+> > regression & just a hidden problem since time immemorial.
+> >
+> > I am willing to test any patches I may get to further debug or fix
+> > this issue, preferably based on the current state of torvalds/linux.git.
+> > I can build & test kernels quite a few times per day.
+> >
+> > I can also send any important materials (kernel config, dmesg, firmware
+> > information, so on & so forth) on request. I'll also just mention I'm
+> > using kexec-tools 2.0.24 upfront, if it matters.
 
-    Bluetooth: L2CAP: initialize delayed works at l2cap_chan_create()
+Can you check the efi runtime in sysfs:
+ls /sys/firmware/efi/runtime-map/
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1469d541880000
-start commit:   7ebfc85e2cd7 Merge tag 'net-6.0-rc1' of git://git.kernel.o..
-git tree:       upstream
-kernel config:  https://syzkaller.appspot.com/x/.config?x=20bc0b329895d963
-dashboard link: https://syzkaller.appspot.com/bug?extid=10e37d0d88cbc2ea19e4
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13537803080000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12e68315080000
+If nothing then maybe you did not enable CONFIG_EFI_RUNTIME_MAP=y, it
+is needed for kexec UEFI boot on x86_64.
 
-If the result looks correct, please mark the issue as fixed by replying with:
+Otherwise you can add debug printf in kexec-tools efi error path to
+see what is wrong.
+kexec/arch/i386/x86-linux-setup.c : function setup_efi_data
 
-#syz fix: Bluetooth: L2CAP: initialize delayed works at l2cap_chan_create()
+And if it still not work please post your kernel config, I can have a
+try although I do not have the t480 now.
 
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+
+> >
+> > Regards,
+> >
+> > _______________________________________________
+> > kexec mailing list
+> > kexec@lists.infradead.org
+> > http://lists.infradead.org/mailman/listinfo/kexec
+> >
+>
+
