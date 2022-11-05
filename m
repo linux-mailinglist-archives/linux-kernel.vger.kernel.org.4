@@ -2,93 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11D3D61D7E5
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 07:04:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F65961D7E9
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 07:25:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229874AbiKEGD0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Nov 2022 02:03:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60196 "EHLO
+        id S229555AbiKEGZO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Nov 2022 02:25:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229668AbiKEGBf (ORCPT
+        with ESMTP id S229486AbiKEGZM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Nov 2022 02:01:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7612230560;
-        Fri,  4 Nov 2022 23:01:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 58488609EB;
-        Sat,  5 Nov 2022 06:01:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5D5EC433C1;
-        Sat,  5 Nov 2022 06:01:33 +0000 (UTC)
-Received: from rostedt by gandalf.local.home with local (Exim 4.96)
-        (envelope-from <rostedt@goodmis.org>)
-        id 1orCFl-007P0H-3B;
-        Sat, 05 Nov 2022 02:02:01 -0400
-Message-ID: <20221105060201.829050575@goodmis.org>
-User-Agent: quilt/0.66
-Date:   Sat, 05 Nov 2022 02:01:02 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Anna-Maria Gleixner <anna-maria@linutronix.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-pm@vger.kernel.org
-Subject: [PATCH v4a 38/38] timers: PM: Use timer_shutdown_sync()
-References: <20221105060024.598488967@goodmis.org>
+        Sat, 5 Nov 2022 02:25:12 -0400
+Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B849813F1E;
+        Fri,  4 Nov 2022 23:25:10 -0700 (PDT)
+Received: by mail-oi1-x231.google.com with SMTP id b124so7292669oia.4;
+        Fri, 04 Nov 2022 23:25:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=6AE3y29509hLMsGDmKEJpwzl8TMTLwTBza5239RAscQ=;
+        b=AUx2N1nbtsFMiWYIlO/6Y0D3ZQlXcMrcbtiRnZWA9ZFE78KapFuKDiYmC62PRk+vr7
+         74Ka/Ob07tg7d6e7kdJyrFduSbMUh1XG4h/RqH0Lplb+d8QGphPCQkSfIgTWMcL1H7O4
+         G63wO2aKGXfJRdKTnxWrt6qLkTIpx5mtCoyGaZSQB+1qZTSj8dqlxMnr2iqdj4hG+aau
+         cj0096rvvIjYJvIGL+FaWFqHpvfWbAFBwe1qC8HEx3Fmskg9rCXFQn5uAaE25w+ZWP5X
+         IMRuRlAgL0RZ7gWsQm7fcPXjA0Z7gpqKuThqAix+2ZCkPIt24+u33BnIS5Q5u/x848on
+         Swlg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6AE3y29509hLMsGDmKEJpwzl8TMTLwTBza5239RAscQ=;
+        b=GVsSNEmD2CZXD7xcb8QVNVxRX9Biy5bIwka4J/Wkz7474omvgDL5YJ4NhUdELpDXpX
+         V3fpYEMGNV6HxNLsIrcfKEEkmGdtFdvVj+LEDKJ8U3SoJUPpfsWokQRKX55SVWo7x5f+
+         XpdqrCUXyCS/VnJZQmVD6MKQ9YWR9kPqHri6J6hlaYW6UHEmZ0bKzy7UIDE6QmRUSFG/
+         8brttk6LJBjvgx5jOlL1W3owNh76GhhFxzudiL5gMAYsd4EDGWx3aXhU1cC4XK1RBj1v
+         vtrfx7/3/0CKuCvIqUNQvXvxkizCa0M5gM5OMsXeZkf5QWa0gZT2tgEZWy+O780OFYj8
+         tE3w==
+X-Gm-Message-State: ACrzQf1w6uI+rKq+UKKKquf4VjFNpApPl6fe7f5qKErzHqQCM41biU4D
+        luTXQep7sz5c08/SKsfSRrKhbThVtSXHfd/olMo=
+X-Google-Smtp-Source: AMsMyM5DsRlY+IpeIBtRaARvugXX4xtvaU2mQyq0fH6YLi1+cQHHEFDfHmH8vrZWAcwMiBsXFFTxdtIjlL5F/V8jyf8=
+X-Received: by 2002:a05:6808:114a:b0:35a:4acd:f598 with SMTP id
+ u10-20020a056808114a00b0035a4acdf598mr7470562oiu.144.1667629510048; Fri, 04
+ Nov 2022 23:25:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221104205242.3440388-1-git@johnthomson.fastmail.com.au> <20221104205242.3440388-2-git@johnthomson.fastmail.com.au>
+In-Reply-To: <20221104205242.3440388-2-git@johnthomson.fastmail.com.au>
+From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Date:   Sat, 5 Nov 2022 07:24:58 +0100
+Message-ID: <CAMhs-H_uV=qURur1r4vK273rpaF990c9T6uP-7KWdPZz7+kNUg@mail.gmail.com>
+Subject: Re: [PATCH 1/2] phy: ralink: mt7621-pci: add sentinel to quirks table
+To:     John Thomson <git@johnthomson.fastmail.com.au>
+Cc:     Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+        linux-phy@lists.infradead.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+On Fri, Nov 4, 2022 at 9:54 PM John Thomson
+<git@johnthomson.fastmail.com.au> wrote:
+>
+> With mt7621 soc_dev_attr fixed to register the soc as a device,
+> kernel will experience an oops in soc_device_match_attr
+>
+> This quirk test was introduced in the staging driver in
+> commit 9445ccb3714c ("staging: mt7621-pci-phy: add quirks for 'E2'
+> revision using 'soc_device_attribute'"). The staging driver was removed,
+> and later re-added in commit d87da32372a0 ("phy: ralink: Add PHY driver
+> for MT7621 PCIe PHY") for kernel 5.11
+>
+> Link: https://lore.kernel.org/lkml/26ebbed1-0fe9-4af9-8466-65f841d0b382@app.fastmail.com
+> Fixes: d87da32372a0 ("phy: ralink: Add PHY driver for MT7621 PCIe PHY")
+> Signed-off-by: John Thomson <git@johnthomson.fastmail.com.au>
+> ---
+>  drivers/phy/ralink/phy-mt7621-pci.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 
-Instead of open coding making the timer look like it was not registered by
-setting the function pointer to NULL, call timer_shutdown_sync() that does
-the same thing.
+Acked-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
 
-Link: https://lore.kernel.org/all/20221104054053.431922658@goodmis.org/
-
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Len Brown <len.brown@intel.com>
-Cc: Pavel Machek <pavel@ucw.cz>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-pm@vger.kernel.org
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
----
- drivers/base/power/wakeup.c | 7 +------
- 1 file changed, 1 insertion(+), 6 deletions(-)
-
-diff --git a/drivers/base/power/wakeup.c b/drivers/base/power/wakeup.c
-index 7cc0c0cf8eaa..c6d68bdcac68 100644
---- a/drivers/base/power/wakeup.c
-+++ b/drivers/base/power/wakeup.c
-@@ -202,12 +202,7 @@ void wakeup_source_remove(struct wakeup_source *ws)
- 	raw_spin_unlock_irqrestore(&events_lock, flags);
- 	synchronize_srcu(&wakeup_srcu);
- 
--	del_timer_sync(&ws->timer);
--	/*
--	 * Clear timer.function to make wakeup_source_not_registered() treat
--	 * this wakeup source as not registered.
--	 */
--	ws->timer.function = NULL;
-+	timer_shutdown_sync(&ws->timer);
- }
- EXPORT_SYMBOL_GPL(wakeup_source_remove);
- 
--- 
-2.35.1
+Thanks,
+    Sergio Paracuellos
