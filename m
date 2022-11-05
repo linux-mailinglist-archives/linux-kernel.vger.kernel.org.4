@@ -2,159 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7633D61D8E9
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 09:49:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7733361D8EB
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 09:52:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229679AbiKEIta (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Nov 2022 04:49:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46056 "EHLO
+        id S229570AbiKEIwu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Nov 2022 04:52:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229582AbiKEItW (ORCPT
+        with ESMTP id S229453AbiKEIws (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Nov 2022 04:49:22 -0400
-Received: from mxout3.routing.net (mxout3.routing.net [IPv6:2a03:2900:1:a::8])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1897522516;
-        Sat,  5 Nov 2022 01:49:20 -0700 (PDT)
-Received: from mxbox2.masterlogin.de (unknown [192.168.10.89])
-        by mxout3.routing.net (Postfix) with ESMTP id 5F537604BB;
-        Sat,  5 Nov 2022 08:49:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailerdienst.de;
-        s=20200217; t=1667638158;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=G3AIjuOFV7NmJ2TCa+PR6W4BsmI1cN7bR/tG6Mgpyk4=;
-        b=juBc8LFU754K6LYQPXPDO3QJpbELE0e2QaSHzMAFWKEfSXkvQNiH1hl281T+cbR7/ej4Qa
-        RTiiu0xHY6GJ5BI/UWIiv7pn8ghYqEZhFgkRytRBeCRFB+XRsjluUXizR0K0ziRIB1dEce
-        aNXCNqkiFYkrTvTSGmvLtvbZRRJ/zbo=
-Received: from frank-G5.. (fttx-pool-217.61.159.50.bambit.de [217.61.159.50])
-        by mxbox2.masterlogin.de (Postfix) with ESMTPSA id A317E10068B;
-        Sat,  5 Nov 2022 08:49:17 +0000 (UTC)
-From:   Frank Wunderlich <linux@fw-web.de>
-To:     linux-mediatek@lists.infradead.org
-Cc:     Frank Wunderlich <frank-w@public-files.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sean Wang <sean.wang@kernel.org>,
-        Sam Shih <sam.shih@mediatek.com>, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v1 4/4] pinctrl: mediatek: add pull_type attribute for mediatek MT7986 SoC
-Date:   Sat,  5 Nov 2022 09:49:05 +0100
-Message-Id: <20221105084905.9596-5-linux@fw-web.de>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221105084905.9596-1-linux@fw-web.de>
-References: <20221105084905.9596-1-linux@fw-web.de>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Mail-ID: d9ecc7e5-fb35-45d3-9365-e8e061b9cc02
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UPPERCASE_50_75
-        autolearn=no autolearn_force=no version=3.4.6
+        Sat, 5 Nov 2022 04:52:48 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C63322528;
+        Sat,  5 Nov 2022 01:52:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 48428B81647;
+        Sat,  5 Nov 2022 08:52:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 714F0C433D6;
+        Sat,  5 Nov 2022 08:52:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667638364;
+        bh=ifUEBOIjQaHmKSCsfN+pCNH9FtC0PXujxXMPd3U2Z5s=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ZFK7Q0k5/PyWzAUtzXCwB/8pi6eFMlDppfJllc6PQHVruX4YQdFl8n3jRHPrF7Gih
+         kOOMBl4WAyYako3HFAi9INuNy3ksMWbiSSw64aGskPAOyuwwt6jL/x7/G3SF6t3MRz
+         nnMrgUEUUJUQZIbadctLQLLTGoA4HxxqYV33q99aUbb3O8opxaq/2r49PTm6olBjtS
+         hKffbZA+xH4Tr0CyLTjLsq1XGupOKGaY3i+5PQ6RBDH+cpK9+n+OqaOaw4KXfNc2fS
+         v1vur1WotNh2Bu879jcvKiqjje+MI57mT7F8za11dBx8mAplqbD72qnj47x7mtBv1p
+         fpIz9RZcYWlwQ==
+Date:   Sat, 5 Nov 2022 17:52:41 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     Yipeng Zou <zouyipeng@huawei.com>
+Cc:     <rostedt@goodmis.org>, <shuah@kernel.org>, <rdunlap@infradead.org>,
+        <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] selftests/ftrace: event_triggers: wait longer for
+ test_event_enable
+Message-Id: <20221105175241.858bbd5b5337fc2b8a075ee9@kernel.org>
+In-Reply-To: <20221104020931.231090-1-zouyipeng@huawei.com>
+References: <20221104020931.231090-1-zouyipeng@huawei.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sam Shih <sam.shih@mediatek.com>
+Hi Yipeng,
 
-Commit fb34a9ae383a ("pinctrl: mediatek: support rsel feature")
-add SoC specify 'pull_type' attribute for bias configuration.
+On Fri, 4 Nov 2022 10:09:31 +0800
+Yipeng Zou <zouyipeng@huawei.com> wrote:
 
-This patch add pull_type attribute to pinctrl-mt7986.c, and make
-bias_set_combo and bias_get_combo available to mediatek MT7986 SoC.
+> In some platform, the schedule event may came slowly, delay 100ms can't
+> cover it.
+> 
+> I was notice that on my board which running in low cpu_freq,and this
+> selftests allways gose fail.
 
-Signed-off-by: Sam Shih <sam.shih@mediatek.com>
-Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
----
- drivers/pinctrl/mediatek/pinctrl-mt7986.c | 56 +++++++++++++++++++++++
- 1 file changed, 56 insertions(+)
+This looks good to me, since this can just extend the waiting time to 1 sec.
+(and most of the platforms have no effect)
 
-diff --git a/drivers/pinctrl/mediatek/pinctrl-mt7986.c b/drivers/pinctrl/mediatek/pinctrl-mt7986.c
-index d13c59510468..872b1d9b5267 100644
---- a/drivers/pinctrl/mediatek/pinctrl-mt7986.c
-+++ b/drivers/pinctrl/mediatek/pinctrl-mt7986.c
-@@ -407,6 +407,60 @@ static const struct mtk_pin_field_calc mt7986_pin_r1_range[] = {
- 	PIN_FIELD_BASE(66, 68, IOCFG_LB_BASE, 0x60, 0x10, 2, 1),
- };
- 
-+static const unsigned int mt7986_pull_type[] = {
-+	MTK_PULL_PUPD_R1R0_TYPE,/*0*/ MTK_PULL_PUPD_R1R0_TYPE,/*1*/
-+	MTK_PULL_PUPD_R1R0_TYPE,/*2*/ MTK_PULL_PUPD_R1R0_TYPE,/*3*/
-+	MTK_PULL_PUPD_R1R0_TYPE,/*4*/ MTK_PULL_PUPD_R1R0_TYPE,/*4*/
-+	MTK_PULL_PUPD_R1R0_TYPE,/*6*/ MTK_PULL_PUPD_R1R0_TYPE,/*5*/
-+	MTK_PULL_PUPD_R1R0_TYPE,/*8*/ MTK_PULL_PUPD_R1R0_TYPE,/*9*/
-+	MTK_PULL_PUPD_R1R0_TYPE,/*10*/ MTK_PULL_PUPD_R1R0_TYPE,/*11*/
-+	MTK_PULL_PUPD_R1R0_TYPE,/*12*/ MTK_PULL_PUPD_R1R0_TYPE,/*13*/
-+	MTK_PULL_PUPD_R1R0_TYPE,/*14*/ MTK_PULL_PUPD_R1R0_TYPE,/*14*/
-+	MTK_PULL_PUPD_R1R0_TYPE,/*16*/ MTK_PULL_PUPD_R1R0_TYPE,/*15*/
-+	MTK_PULL_PUPD_R1R0_TYPE,/*18*/ MTK_PULL_PUPD_R1R0_TYPE,/*19*/
-+	MTK_PULL_PUPD_R1R0_TYPE,/*20*/ MTK_PULL_PUPD_R1R0_TYPE,/*21*/
-+	MTK_PULL_PUPD_R1R0_TYPE,/*22*/ MTK_PULL_PUPD_R1R0_TYPE,/*23*/
-+	MTK_PULL_PUPD_R1R0_TYPE,/*24*/ MTK_PULL_PUPD_R1R0_TYPE,/*24*/
-+	MTK_PULL_PUPD_R1R0_TYPE,/*26*/ MTK_PULL_PUPD_R1R0_TYPE,/*25*/
-+	MTK_PULL_PUPD_R1R0_TYPE,/*28*/ MTK_PULL_PUPD_R1R0_TYPE,/*29*/
-+	MTK_PULL_PUPD_R1R0_TYPE,/*30*/ MTK_PULL_PUPD_R1R0_TYPE,/*31*/
-+	MTK_PULL_PUPD_R1R0_TYPE,/*32*/ MTK_PULL_PUPD_R1R0_TYPE,/*33*/
-+	MTK_PULL_PUPD_R1R0_TYPE,/*34*/ MTK_PULL_PUPD_R1R0_TYPE,/*34*/
-+	MTK_PULL_PUPD_R1R0_TYPE,/*36*/ MTK_PULL_PUPD_R1R0_TYPE,/*35*/
-+	MTK_PULL_PUPD_R1R0_TYPE,/*38*/ MTK_PULL_PUPD_R1R0_TYPE,/*39*/
-+	MTK_PULL_PUPD_R1R0_TYPE,/*40*/ MTK_PULL_PUPD_R1R0_TYPE,/*41*/
-+	MTK_PULL_PUPD_R1R0_TYPE,/*42*/ MTK_PULL_PUPD_R1R0_TYPE,/*43*/
-+	MTK_PULL_PUPD_R1R0_TYPE,/*44*/ MTK_PULL_PUPD_R1R0_TYPE,/*44*/
-+	MTK_PULL_PUPD_R1R0_TYPE,/*46*/ MTK_PULL_PUPD_R1R0_TYPE,/*45*/
-+	MTK_PULL_PUPD_R1R0_TYPE,/*48*/ MTK_PULL_PUPD_R1R0_TYPE,/*49*/
-+	MTK_PULL_PUPD_R1R0_TYPE,/*50*/ MTK_PULL_PUPD_R1R0_TYPE,/*51*/
-+	MTK_PULL_PUPD_R1R0_TYPE,/*52*/ MTK_PULL_PUPD_R1R0_TYPE,/*53*/
-+	MTK_PULL_PUPD_R1R0_TYPE,/*54*/ MTK_PULL_PUPD_R1R0_TYPE,/*54*/
-+	MTK_PULL_PUPD_R1R0_TYPE,/*56*/ MTK_PULL_PUPD_R1R0_TYPE,/*55*/
-+	MTK_PULL_PUPD_R1R0_TYPE,/*58*/ MTK_PULL_PUPD_R1R0_TYPE,/*59*/
-+	MTK_PULL_PUPD_R1R0_TYPE,/*60*/ MTK_PULL_PUPD_R1R0_TYPE,/*61*/
-+	MTK_PULL_PUPD_R1R0_TYPE,/*62*/ MTK_PULL_PUPD_R1R0_TYPE,/*63*/
-+	MTK_PULL_PUPD_R1R0_TYPE,/*64*/ MTK_PULL_PUPD_R1R0_TYPE,/*64*/
-+	MTK_PULL_PUPD_R1R0_TYPE,/*66*/ MTK_PULL_PUPD_R1R0_TYPE,/*65*/
-+	MTK_PULL_PUPD_R1R0_TYPE,/*68*/ MTK_PULL_PU_PD_TYPE,/*69*/
-+	MTK_PULL_PU_PD_TYPE,/*70*/ MTK_PULL_PU_PD_TYPE,/*71*/
-+	MTK_PULL_PU_PD_TYPE,/*72*/ MTK_PULL_PU_PD_TYPE,/*73*/
-+	MTK_PULL_PU_PD_TYPE,/*74*/ MTK_PULL_PU_PD_TYPE,/*75*/
-+	MTK_PULL_PU_PD_TYPE,/*76*/ MTK_PULL_PU_PD_TYPE,/*77*/
-+	MTK_PULL_PU_PD_TYPE,/*78*/ MTK_PULL_PU_PD_TYPE,/*79*/
-+	MTK_PULL_PU_PD_TYPE,/*80*/ MTK_PULL_PU_PD_TYPE,/*81*/
-+	MTK_PULL_PU_PD_TYPE,/*82*/ MTK_PULL_PU_PD_TYPE,/*83*/
-+	MTK_PULL_PU_PD_TYPE,/*84*/ MTK_PULL_PU_PD_TYPE,/*85*/
-+	MTK_PULL_PU_PD_TYPE,/*86*/ MTK_PULL_PU_PD_TYPE,/*87*/
-+	MTK_PULL_PU_PD_TYPE,/*88*/ MTK_PULL_PU_PD_TYPE,/*89*/
-+	MTK_PULL_PU_PD_TYPE,/*90*/ MTK_PULL_PU_PD_TYPE,/*91*/
-+	MTK_PULL_PU_PD_TYPE,/*92*/ MTK_PULL_PU_PD_TYPE,/*93*/
-+	MTK_PULL_PU_PD_TYPE,/*94*/ MTK_PULL_PU_PD_TYPE,/*95*/
-+	MTK_PULL_PU_PD_TYPE,/*96*/ MTK_PULL_PU_PD_TYPE,/*97*/
-+	MTK_PULL_PU_PD_TYPE,/*98*/ MTK_PULL_PU_PD_TYPE,/*99*/
-+	MTK_PULL_PU_PD_TYPE,/*100*/
-+};
-+
- static const struct mtk_pin_reg_calc mt7986_reg_cals[] = {
- 	[PINCTRL_PIN_REG_MODE] = MTK_RANGE(mt7986_pin_mode_range),
- 	[PINCTRL_PIN_REG_DIR] = MTK_RANGE(mt7986_pin_dir_range),
-@@ -866,6 +920,7 @@ static struct mtk_pin_soc mt7986a_data = {
- 	.ies_present = false,
- 	.base_names = mt7986_pinctrl_register_base_names,
- 	.nbase_names = ARRAY_SIZE(mt7986_pinctrl_register_base_names),
-+	.pull_type = mt7986_pull_type,
- 	.bias_set_combo = mtk_pinconf_bias_set_combo,
- 	.bias_get_combo = mtk_pinconf_bias_get_combo,
- 	.drive_set = mtk_pinconf_drive_set_rev1,
-@@ -887,6 +942,7 @@ static struct mtk_pin_soc mt7986b_data = {
- 	.ies_present = false,
- 	.base_names = mt7986_pinctrl_register_base_names,
- 	.nbase_names = ARRAY_SIZE(mt7986_pinctrl_register_base_names),
-+	.pull_type = mt7986_pull_type,
- 	.bias_set_combo = mtk_pinconf_bias_set_combo,
- 	.bias_get_combo = mtk_pinconf_bias_get_combo,
- 	.drive_set = mtk_pinconf_drive_set_rev1,
+Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+
+Thank you!
+
+> 
+> So maybe we can check more times here to wait longer.
+> 
+> Fixes: 43bb45da82f9 ("selftests: ftrace: Add a selftest to test event enable/disable func trigger")
+> Signed-off-by: Yipeng Zou <zouyipeng@huawei.com>
+> ---
+>  .../ftrace/test.d/ftrace/func_event_triggers.tc   | 15 +++++++++++----
+>  1 file changed, 11 insertions(+), 4 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/ftrace/test.d/ftrace/func_event_triggers.tc b/tools/testing/selftests/ftrace/test.d/ftrace/func_event_triggers.tc
+> index 8d26d5505808..3eea2abf68f9 100644
+> --- a/tools/testing/selftests/ftrace/test.d/ftrace/func_event_triggers.tc
+> +++ b/tools/testing/selftests/ftrace/test.d/ftrace/func_event_triggers.tc
+> @@ -38,11 +38,18 @@ cnt_trace() {
+>  
+>  test_event_enabled() {
+>      val=$1
+> +    check_times=10		# wait for 10 * SLEEP_TIME at most
+>  
+> -    e=`cat $EVENT_ENABLE`
+> -    if [ "$e" != $val ]; then
+> -	fail "Expected $val but found $e"
+> -    fi
+> +    while [ $check_times -ne 0 ]; do
+> +	e=`cat $EVENT_ENABLE`
+> +	if [ "$e" == $val ]; then
+> +	    return 0
+> +	fi
+> +	sleep $SLEEP_TIME
+> +	check_times=$((check_times - 1))
+> +    done
+> +
+> +    fail "Expected $val but found $e"
+>  }
+>  
+>  run_enable_disable() {
+> -- 
+> 2.17.1
+> 
+
+
 -- 
-2.34.1
-
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
