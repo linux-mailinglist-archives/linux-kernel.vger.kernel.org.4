@@ -2,126 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E53D761DB3B
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 15:52:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F50561DB40
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 15:54:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229730AbiKEOwY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Nov 2022 10:52:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47470 "EHLO
+        id S229720AbiKEOys (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Nov 2022 10:54:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbiKEOwT (ORCPT
+        with ESMTP id S229517AbiKEOyq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Nov 2022 10:52:19 -0400
-Received: from mail-ot1-f52.google.com (mail-ot1-f52.google.com [209.85.210.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54DD8FAFC;
-        Sat,  5 Nov 2022 07:52:18 -0700 (PDT)
-Received: by mail-ot1-f52.google.com with SMTP id a7-20020a056830008700b0066c82848060so4045305oto.4;
-        Sat, 05 Nov 2022 07:52:18 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=DoovjTJROPf6fM2d6KbXfBg+AzBsvogq3b4O78GD5fc=;
-        b=k4Oq2EREibB3tNVPklG5Agk3fkwFW3u2cp/H9pGI9GLu5qo5fzTgWtfbYp49NYZzRI
-         mIVh8OMlTMuoUrgOjr+2dfsRPcb5ZlSxtM6DxYZjijWOfXvekiZ0nDt18gLUg+60ZOMd
-         oW8FoZQLpB3oFVlK9JXXNLSiDN8msKt/L6ULIBJxS8mn5nybvBGpL7rHh2Kzq3uzMmAP
-         mjHaFNcR7YzDOXYzEtXQlmJcYUUn3iyxSJv053Ba4RVRs/WXgGQFnTvMGrzqo7/qD20A
-         x17g2rs2cIcVuVDd76GJoLHhkExGbCT8kvoNG5EyzvJP3a13Xk/qMW/YQ+aKzZzk0P64
-         pjOg==
-X-Gm-Message-State: ACrzQf19yORFaTA2jpTmVwOe/rIQqiuoCigfKXWU+qe3ckFO4+BXivEp
-        p0h+by0P2Nrh4SX9AQYfIdHDs8ytoA==
-X-Google-Smtp-Source: AMsMyM7ctCunns3BMIghObU2ApaO5yOV/1suuvtsTcyoWTfq/xmUWqLoqyUTo48J6DKebXvozOisyw==
-X-Received: by 2002:a9d:4b85:0:b0:66c:9226:75b0 with SMTP id k5-20020a9d4b85000000b0066c922675b0mr3999606otf.365.1667659937513;
-        Sat, 05 Nov 2022 07:52:17 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id y77-20020a4a4550000000b0049e9a4b2dd4sm655355ooa.30.2022.11.05.07.52.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 05 Nov 2022 07:52:16 -0700 (PDT)
-Received: (nullmailer pid 27960 invoked by uid 1000);
-        Sat, 05 Nov 2022 14:52:16 -0000
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+        Sat, 5 Nov 2022 10:54:46 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4646FCC5;
+        Sat,  5 Nov 2022 07:54:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5CB19B80064;
+        Sat,  5 Nov 2022 14:54:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A5B1C433C1;
+        Sat,  5 Nov 2022 14:54:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667660083;
+        bh=/s8f7cVivOw8Fsc07Scg3akhDQlrwqbg4k+q724J/ZY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Z42LswfNnBwpGES6TiX16Em80TSNIQkuZxtxJ7P82hXM64xaEPr6NavqjDTO1r1qo
+         /Xv981rHTzJRnlcGIcyL7l8JrScMCYPYP5MmSit3gyBnJ6T6TKXUFeiLjriqIPOIRN
+         oApHaCYkgBICzjsYq48JG7aPu7CDXPA1ZAAQOHMbpiDtnMKoYFIxODvpiq7mZzQIiv
+         vETfASCqDULVzZ5fn6erJYbNdpUDIrRK/+CoyrSN/ya/Lm1/fyXDu5++SJeDKULUP4
+         b0I58b+uS+iVRmnuEJAdIFH9T47QSxc6F2Ehjv8vuhCOoHp/eptiqvxOiXr+TC75bl
+         XQQIpOiW1FO3g==
+Date:   Sat, 5 Nov 2022 14:54:31 +0000
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Angel Iglesias <ang.iglesiasg@gmail.com>
+Cc:     Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= 
+        <u.kleine-koenig@pengutronix.de>, linux-iio@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Nuno =?UTF-8?B?U8Oh?= <noname.nuno@gmail.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Paul Cercueil <paul@crapouillou.net>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 2/2] iio: pressure: bmp280: convert to i2c's
+ .probe_new()
+Message-ID: <20221105145431.4c2a7092@jic23-huawei>
+In-Reply-To: <ae43aa9c3a9f29d0ecef69756a539ebf00a84ab1.camel@gmail.com>
+References: <cover.1667151588.git.ang.iglesiasg@gmail.com>
+        <af8ed10a85d48531c50823163e6c55b2a72371ef.1667151588.git.ang.iglesiasg@gmail.com>
+        <20221101215236.ihoqkx2xckilom67@pengutronix.de>
+        <ae43aa9c3a9f29d0ecef69756a539ebf00a84ab1.camel@gmail.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Frank Wunderlich <linux@fw-web.de>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Sam Shih <sam.shih@mediatek.com>, devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-mediatek@lists.infradead.org,
-        Sean Wang <sean.wang@kernel.org>,
-        Frank Wunderlich <frank-w@public-files.de>
-In-Reply-To: <20221105092500.12145-1-linux@fw-web.de>
-References: <20221105092500.12145-1-linux@fw-web.de>
-Message-Id: <166765939212.4158869.5881767839110614067.robh@kernel.org>
-Subject: Re: [PATCH v3] dt-bindings: pinctrl: update uart/mmc bindings for MT7986 SoC
-Date:   Sat, 05 Nov 2022 09:52:16 -0500
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, 02 Nov 2022 01:16:44 +0100
+Angel Iglesias <ang.iglesiasg@gmail.com> wrote:
 
-On Sat, 05 Nov 2022 10:25:00 +0100, Frank Wunderlich wrote:
-> From: Frank Wunderlich <frank-w@public-files.de>
-> 
-> Some pinmux pins of the mt7986 pinctrl driver is composed of multiple
-> pinctrl groups, the original binding only allows one pinctrl group
-> per dts node, this patch sets "maxItems" for these groups and add new
-> examples to the binding documentation.
-> 
-> Fixes: 65916a1ca90a ("dt-bindings: pinctrl: update bindings for MT7986 SoC")
-> Signed-off-by: Sam Shih <sam.shih@mediatek.com>
-> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
-> ---
-> sorry, messed up email-list, so resend it
-> 
-> v3:
-> - squashed version from sam
-> - v2 was ack'd by Krzysztof, but sams patch included updated emmc-names
->   and different structure for uart to allow 2 pingroups
-> v2:
-> - wrap on col 80
-> ---
->  .../pinctrl/mediatek,mt7986-pinctrl.yaml      | 46 +++++++++++++++++--
->  1 file changed, 41 insertions(+), 5 deletions(-)
-> 
+> On Tue, 2022-11-01 at 22:52 +0100, Uwe Kleine-K=C3=B6nig wrote:
+> > Hello,
+> >=20
+> > On Sun, Oct 30, 2022 at 06:53:11PM +0100, Angel Iglesias wrote: =20
+> > > Use i2c_client_get_device_id() to get the i2c_device_id* parameter in=
+ the
+> > > .new_probe() callback.
+> > >=20
+> > > Signed-off-by: Angel Iglesias <ang.iglesiasg@gmail.com>
+> > > ---
+> > > =C2=A0drivers/iio/pressure/bmp280-i2c.c | 8 ++++----
+> > > =C2=A01 file changed, 4 insertions(+), 4 deletions(-)
+> > >=20
+> > > diff --git a/drivers/iio/pressure/bmp280-i2c.c
+> > > b/drivers/iio/pressure/bmp280-i2c.c
+> > > index 0c27211f3ea0..20073b09b3e3 100644
+> > > --- a/drivers/iio/pressure/bmp280-i2c.c
+> > > +++ b/drivers/iio/pressure/bmp280-i2c.c
+> > > @@ -5,11 +5,11 @@
+> > > =C2=A0
+> > > =C2=A0#include "bmp280.h"
+> > > =C2=A0
+> > > -static int bmp280_i2c_probe(struct i2c_client *client,
+> > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0 const struct i2c_device_id *id)
+> > > +static int bmp280_i2c_probe(struct i2c_client *client)
+> > > =C2=A0{
+> > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct regmap *regmap;
+> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0const struct i2c_device_id=
+ *id =3D i2c_client_get_device_id(client);
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0const struct regmap_c=
+onfig *regmap_config;
+> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct regmap *regmap;
+> > > =C2=A0
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0switch (id->driver_da=
+ta) {
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0case BMP180_CHIP_ID: =
+=20
+> >=20
+> > What is the motivation for moving regmap? I thought reverse christmas
+> > tree is only a thing in network code? I would have left the regmap
+> > declaration where it is. =20
+>=20
+> Long story short, I worked previously on a small refactor of this driver =
+to add
+> support for a new family of sensors. During the different iterations of t=
+he
+> patchset, one thing that was agreed was unifying the driver coding style =
+to
+> reverse xmas tree. For some extra context, here's the thread:
+> https://lore.kernel.org/all/20220814145249.701f1261@jic23-huawei/
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Not something I feel strongly enough about either way, but has benefit of
+consistency. However, it's an unrelated change in this patch, so drop it
+to avoid the noise in a patch where you have more significant changes.
 
-yamllint warnings/errors:
+Jonathan
 
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/pinctrl/mediatek,mt7986-pinctrl.example.dtb: pinctrl@1001f000: pcie-pins:mux:groups: ['pcie_clk', 'pcie_wake', 'pcie_pereset'] is too long
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/pinctrl/mediatek,mt7986-pinctrl.yaml
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/pinctrl/mediatek,mt7986-pinctrl.example.dtb: pinctrl@1001f000: pwm-pins:mux:groups: ['pwm0', 'pwm1_0'] is too long
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/pinctrl/mediatek,mt7986-pinctrl.yaml
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/pinctrl/mediatek,mt7986-pinctrl.example.dtb: pinctrl@1001f000: spi0-pins:mux:groups: ['spi0', 'spi0_wp_hold'] is too long
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/pinctrl/mediatek,mt7986-pinctrl.yaml
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/patch/
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
+>=20
+> > > @@ -65,7 +65,7 @@ static struct i2c_driver bmp280_i2c_driver =3D {
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0.of_match_table =3D bmp280_of_i2c_match,
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0.pm =3D pm_ptr(&bmp280_dev_pm_ops),
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0},
+> > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.probe=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=3D bmp280_i2c_probe,
+> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.probe_new=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=3D bmp280_i2c_probe,
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.id_table=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=3D bmp280_i2c_id,
+> > > =C2=A0};
+> > > =C2=A0module_i2c_driver(bmp280_i2c_driver); =20
+> >=20
+> > Best regards
+> > Uwe
+> >  =20
+> Kind regards
+> Angel
 
