@@ -2,115 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53BC361A6CF
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 03:09:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 13DF561A6D7
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 03:14:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229634AbiKECJw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 22:09:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40954 "EHLO
+        id S229567AbiKECO0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 22:14:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbiKECJt (ORCPT
+        with ESMTP id S229457AbiKECOY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 22:09:49 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 050702C11F
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 19:09:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667614189; x=1699150189;
-  h=message-id:date:mime-version:cc:to:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=+LNSy0qKszqJbrPe5Z7NBJATYat40gCGeYFNFMZ4Dp8=;
-  b=K+AHs1F7Eq9MUKVlHRw9lr6aGAFeSTwHgpZtpJtClNGALNgoxFAW6h3F
-   mfr/g0EZksHqAIBjqqASjAHIE4bM5FK4MBaf5FjpSSN+XWT9AsMqEqTh8
-   2NOf5rB++D5KBMNMRWmLc7rPRPz6cK8j45otfw3alUjqJRiOvnVOXhOeY
-   I1MgLdBU1U8ADUGlKk/LF/DIpHnieHmx34EhXBexPhT/rFzhwNGM/HUdr
-   fRBMYGzK87Jw6oKX64xnfZwSIuRLbAQXR9hiLXgQf9YglpKvd/Hl3btW5
-   uy3gn5OrXA/xbo1TyXbUESpS8R4jrJ5e1j4iDrdKCax83i1RD30tNhp/+
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10521"; a="336822499"
-X-IronPort-AV: E=Sophos;i="5.96,139,1665471600"; 
-   d="scan'208";a="336822499"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2022 19:09:48 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10521"; a="668552592"
-X-IronPort-AV: E=Sophos;i="5.96,139,1665471600"; 
-   d="scan'208";a="668552592"
-Received: from blu2-mobl3.ccr.corp.intel.com (HELO [10.254.213.180]) ([10.254.213.180])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2022 19:09:46 -0700
-Message-ID: <f6ee3ad3-0e75-2bc0-d03d-c2456ed6620a@linux.intel.com>
-Date:   Sat, 5 Nov 2022 10:09:44 +0800
+        Fri, 4 Nov 2022 22:14:24 -0400
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04AE341989
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 19:14:22 -0700 (PDT)
+Received: by mail-il1-f199.google.com with SMTP id j20-20020a056e02219400b00300a22a7fe0so5009703ila.3
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 19:14:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=MtM/gu2fObeNqMmez4g/cF2qcigw/qedoG+FcrO9org=;
+        b=Nbvy5kcP/HwUVv8SNUKn7Rv0BzPkGEPtYvQdXIlorhwskWpmNAOxuU0KNhGSFy3ttW
+         YvsHYd4QRozl31DLd9H3UJwFRMGZxmQjFv1KhZxnTTYanMJ2v6LUjDaxsucD63Nj1Q/V
+         ZuzLJCEv3BYh3NTuCx51YFcnISc4fqmwjZKETUOQae+UEfNAhFeRCEyrdGTFT3E9nVyx
+         vvdcBHuy1C1AffDhSC/ioBLwROY4O5mfPwHWQ3TniMcOCv7QWq/7A/Ovc9zA2GrX82kM
+         Ov4dpMebZ4UQIEQ/wei7W+/vDvZqGrTriJmrHFKGgRyqCnESXXEnbxZDbJGDftxHK34m
+         +Rmg==
+X-Gm-Message-State: ACrzQf21oksx6IY0jMrLktdxvK4YvrvLG7OdaFh5uGO6jBdskD4MDDY1
+        TRN1rR7FDinhahDVxbJ9M832VaYE5BVp2xOw2o0CCWpmIOyz
+X-Google-Smtp-Source: AMsMyM6H0VRqE2iG3u9Q55DjSC37hYwztUOtEYmhBgdB2Zr5NmiTeTvaT5aEtEGQpW2QeBKuSEfKn6aYMcKz8/ZKdEKBXhJCOyBK
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Cc:     baolu.lu@linux.intel.com, Joerg Roedel <joro@8bytes.org>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        "Liu, Yi L" <yi.l.liu@intel.com>,
-        "Pan, Jacob jun" <jacob.jun.pan@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Language: en-US
-To:     "Tian, Kevin" <kevin.tian@intel.com>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>
-References: <20221103055329.633052-1-baolu.lu@linux.intel.com>
- <20221103055329.633052-4-baolu.lu@linux.intel.com>
- <BN9PR11MB52763EB6CDF2E171210D04E48C3B9@BN9PR11MB5276.namprd11.prod.outlook.com>
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-Subject: Re: [PATCH 3/7] iommu/vt-d: Use device_block_translation() in
- dev_attach error path
-In-Reply-To: <BN9PR11MB52763EB6CDF2E171210D04E48C3B9@BN9PR11MB5276.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6e02:13c4:b0:300:ac44:b69c with SMTP id
+ v4-20020a056e0213c400b00300ac44b69cmr19262544ilj.300.1667614462301; Fri, 04
+ Nov 2022 19:14:22 -0700 (PDT)
+Date:   Fri, 04 Nov 2022 19:14:22 -0700
+In-Reply-To: <20221105012229.711-1-hdanton@sina.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000a5dde405ecafbf8d@google.com>
+Subject: Re: [syzbot] WARNING in kernfs_find_and_get_node_by_id
+From:   syzbot <syzbot+2fdf66e68f5f882c1074@syzkaller.appspotmail.com>
+To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/11/4 10:18, Tian, Kevin wrote:
->> From: Lu Baolu <baolu.lu@linux.intel.com>
->> Sent: Thursday, November 3, 2022 1:53 PM
->>
->> If domain attaching to device fails, the IOMMU driver should bring the
->> device to blocking DMA state. The upper layer is expected to recover it
->> by attaching a new domain. Use device_block_translation() in the error
->> path of dev_attach to make the behavior specific.
->>
->> The difference between device_block_translation() and the previous
->> dmar_remove_one_dev_info() is that the latter disables PCIe ATS and the
->> related PCIe features. This is unnecessary as these features are not per
->> domain capabilities, disabling them during domain switching is
->> unnecessary.
-> 
-> well, the opposite argument is that when the DMA is blocked what is
-> the point of enabling ATS/PRI on the device.
+Hello,
 
-It's not "DMA is blocked", but "DMA without PASID is blocked". :-)
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-As above term implies, it's conceptually incorrect to disable ATS/PRI
-only because DMA without PASID is about to blocked.
+Reported-and-tested-by: syzbot+2fdf66e68f5f882c1074@syzkaller.appspotmail.com
 
-> 
-> btw this change is partial. @attach_dev still calls iommu_enable_pci_caps()
-> which always tries to enable PCI capabilities w/o checking whether they
-> have been enabled or not. Then user will hit -EBUSY when related PCI
-> helpers are called.
+Tested on:
 
-Good catch!
+commit:         f2f32f8a Merge tag 'for-6.1-rc3-tag' of git://git.kern..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+console output: https://syzkaller.appspot.com/x/log.txt?x=14e2c339880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=f7e100ed8aaa828e
+dashboard link: https://syzkaller.appspot.com/bug?extid=2fdf66e68f5f882c1074
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=16b8c196880000
 
-How about moving iommu_enable/disable_pci_caps() into
-iommu_probe/release_device() path? I may look into details if there's no
-significant arch gaps.
-
-> 
-> another difference worthy of pointing out is that in scalable mode it is
-> the RID2PASID entry instead of context entry being cleared.
-
-Yes. Will update the commit message.
-
-Best regards,
-baolu
+Note: testing is done by a robot and is best-effort only.
