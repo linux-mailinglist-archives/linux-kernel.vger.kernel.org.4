@@ -2,199 +2,303 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B13261D7F5
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 07:46:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32B4661D7F7
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 07:48:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229528AbiKEGqE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Nov 2022 02:46:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49004 "EHLO
+        id S229545AbiKEGsN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Nov 2022 02:48:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229486AbiKEGqC (ORCPT
+        with ESMTP id S229486AbiKEGsL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Nov 2022 02:46:02 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A207D186D5
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 23:46:01 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id k7so6765448pll.6
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 23:46:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=srq0262QxbkEV6kNYP4erFtvI0rgH+oqu5/TPMxlwy4=;
-        b=W4KaJP6FV2vwHiDT+VvgaGaA1jeM6SQ8YJpGYx2Pbkhvyt+b8ut77tl012BXpoCSKZ
-         u+nxM1dLCKIVpLHfyXG1p88984BbMhKZGcd9C4F0RT8kncpFr41iKYeXmFz2HFf1Qd2/
-         RsyWHfwKmiA0qvv+5iNwqot7JBpHFX9AjApgU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=srq0262QxbkEV6kNYP4erFtvI0rgH+oqu5/TPMxlwy4=;
-        b=E05vZK6Yo4oskasLQZW4MEE7BjOOiH6Ceyn1C0uxsd8nQjMjXMO7p3ukNIq8t/6HVx
-         rpFWo0AS03/5Wkz610dEoVNBfwMhLtutVL7yhYGtU4507hQjKufSWchHNfDcu19ch1Fx
-         Sdf6L4yK/4LZPzvXBzHdhgF4cg4xF0RzX1MBh/kYlc2nbpqWkQjcw4T3Sox9hun99//9
-         DznTo3QYGyaAmifhNHAkhjc0aU43Q5iWWffN7Qycwir8zMprXCk9rHeJEXiJZzOfwP0e
-         SaeYZf1B/gc+Vnn5GpRxwkNeaTn/hitOwDfQ04b86ddza9ZnXzRqiV3UVz0jZCxm2hYj
-         YRTg==
-X-Gm-Message-State: ACrzQf0zPi6J8giSmhnU9exLkZSJDJkSnxqFOU8TZsrSPkB31yVXRwT3
-        cc53gDKG3vVS0QYlKmaawQW8OQ==
-X-Google-Smtp-Source: AMsMyM4oJjpqJJcKwUVLP7X5WeicCqIX6jcTy1xHjHbJtoU/3/GvJrm+L6ClZGrmleAPy813oxTJNQ==
-X-Received: by 2002:a17:903:1c6:b0:185:47ce:f4f0 with SMTP id e6-20020a17090301c600b0018547cef4f0mr40384496plh.132.1667630761129;
-        Fri, 04 Nov 2022 23:46:01 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id n2-20020a170902d2c200b0018099c9618esm857879plc.231.2022.11.04.23.46.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Nov 2022 23:46:00 -0700 (PDT)
-Date:   Fri, 4 Nov 2022 23:45:59 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>
-Cc:     Vlastimil Babka <vbabka@suse.cz>, Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>, linux-mm@kvack.org,
-        David Gow <davidgow@google.com>,
-        Rasmus Villemoes <rasmus.villemoes@prevas.dk>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH 3/6] slab: Provide functional __alloc_size() hints to
- kmalloc_trace*()
-Message-ID: <202211042345.B1D74469BC@keescook>
-References: <20221101222520.never.109-kees@kernel.org>
- <20221101223321.1326815-3-keescook@chromium.org>
- <Y2PNVUzHWCg765ml@hyeyoo>
- <202211041121.2F1639D2@keescook>
- <Y2W3zEcMd82B0O1I@hyeyoo>
+        Sat, 5 Nov 2022 02:48:11 -0400
+Received: from out203-205-221-239.mail.qq.com (out203-205-221-239.mail.qq.com [203.205.221.239])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6503186D5;
+        Fri,  4 Nov 2022 23:48:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1667630886;
+        bh=+gll9StgemKd1xhohwq5I054sJFHK9r5jmDFbD01Ofk=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=RmlkMG2gfzEnzDUN/LVtIKIon4G/ZI7VsNms7DKRouUE3Ge10s/XSct/oeup7ixmY
+         SzOqpIkF7XphVNM3EAuhgXbDPaXeKYY+oDdb9PF5AREPlXrpkvKkOD1IRhr1QDiefj
+         jeJIAGoaTVpnVrclEO+GsfT19cc3x7M1YlvqagVM=
+Received: from localhost.localdomain ([111.199.189.86])
+        by newxmesmtplogicsvrszb1-0.qq.com (NewEsmtp) with SMTP
+        id C021EA90; Sat, 05 Nov 2022 14:48:02 +0800
+X-QQ-mid: xmsmtpt1667630882tixzor47r
+Message-ID: <tencent_EBA3C18864069E42175946973C2ACBAF5408@qq.com>
+X-QQ-XMAILINFO: NhUkPfKlCtQwXEHQjVhadMm1ARkhXNuiIX/WCZAPi0MgW0+Qw4ZCndktiRfURn
+         1idLR/F0pL0XtosEK8T9CHF/uOQtkGURGuQ2uRyluOSe2yr6a44ToLxxBPVaN3kqUxU2od9j/eHo
+         vuJlJJQ1JjZhmSh4FoSqcUMnoIzYc47jSUCVSjrBPVuJTLpEVbhkI0bUBrUNolWd8zJ+jPkdM1qY
+         ukWlZJlrHCGhs3oev1kYqjhACpCMJnYy5K20SCkN1xyipIIXryxAInJBFJeBOvcRTrIjsUSIsfJS
+         BipW3SzJYVMWW4Ie5eoDcjd9Ei/n2vxoNSuXMCE7RBTmTv/XKLqTMA5MBxk1/JGQtQg2U6FWsdzQ
+         FFGE9NotzeVX1mW7rGLGXayaHTmbSumJXHsRo7/vEhc1+aoP15hHyHiFUvn/+rc87eqq9zSZSsRA
+         qASTPmo30NaSVc2y3zk7x0LY+HJJuXBR1ixNiGeXmxpL31KWg0bXcRJoGblT8NHB5+4OscavNON+
+         8Rp7eaI9fh3DTCwtRdjcrP714Xq7ntqMTn9nvuNJ0PTX1aUfChjliU6rXgEISi7l4IJ9QbUbQkfj
+         t5du24mADDr0Pl6MEJx9RHi+IgZbbuwOnjuoOmcU9vEBfow0RfmzO0x2tXt4RD6/UuVznMF+LUCs
+         Ub9OSWPhLIEZ9j1Cd+mE8BGx81eyE8pW/Ztp7PKms8LySOfpboowE5apCW+wOn0TU0htKRyD8h1W
+         JKAuAdAIZnyZTv+ooAP+SXCE75kRkTX5d54LzdvVjbYNBU7uX+77CJGKWjuHlpBiZDPs6MwDm/vO
+         XvQ4hOCtrT18HllfdKOMzmZF2EL36RiVfE4xhrP4cqd5d92TDR7U3VkFfxNSX294zmV7gKI3mlA3
+         y46HmBj3JrQeAjW7hmj+VkLo7CyI5d1+VDrX1S/QgdjRdVapBXUb5gd5NMRDDJl6Y7TpvebJsAuq
+         fahViaEQKZ528M7xrhfVSZSBluVjwGPH4TIjm15IKbGteS9kImLie8fr9fHhHUwEMbSiBvXq4=
+From:   Rong Tao <rtoax@foxmail.com>
+To:     andrii.nakryiko@gmail.com
+Cc:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
+        daniel@iogearbox.net, haoluo@google.com, john.fastabend@gmail.com,
+        jolsa@kernel.org, kpsingh@kernel.org, linux-kernel@vger.kernel.org,
+        martin.lau@linux.dev, rongtao@cestc.cn, rtoax@foxmail.com,
+        sdf@google.com, song@kernel.org, yhs@fb.com
+Subject: [PATCH bpf-next] samples/bpf: Fix sockex3 error: missing BPF prog type
+Date:   Sat,  5 Nov 2022 14:48:00 +0800
+X-OQ-MSGID: <20221105064800.50494-1-rtoax@foxmail.com>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <CAEf4BzbZDmgnohyyXBwy+p_qfZ1r_kq6d3bfqig+zSOm65vFHg@mail.gmail.com>
+References: <CAEf4BzbZDmgnohyyXBwy+p_qfZ1r_kq6d3bfqig+zSOm65vFHg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y2W3zEcMd82B0O1I@hyeyoo>
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RDNS_DYNAMIC,SORTED_RECIPS,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Nov 05, 2022 at 10:09:32AM +0900, Hyeonggon Yoo wrote:
-> On Fri, Nov 04, 2022 at 11:22:42AM -0700, Kees Cook wrote:
-> > On Thu, Nov 03, 2022 at 11:16:53PM +0900, Hyeonggon Yoo wrote:
-> > > On Tue, Nov 01, 2022 at 03:33:11PM -0700, Kees Cook wrote:
-> > > > Since GCC cannot apply the __alloc_size attributes to inlines[1], all
-> > > > allocator inlines need to explicitly call into extern functions that
-> > > > contain a size argument. Provide these wrappers that end up just
-> > > > ignoring the size argument for the actual allocation.
-> > > > 
-> > > > This allows CONFIG_FORTIFY_SOURCE=y to see all various dynamic allocation
-> > > > sizes under GCC 12+ and all supported Clang versions.
-> > > > 
-> > > > [1] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=96503
-> > > > 
-> > > > Cc: Vlastimil Babka <vbabka@suse.cz>
-> > > > Cc: Christoph Lameter <cl@linux.com>
-> > > > Cc: Pekka Enberg <penberg@kernel.org>
-> > > > Cc: David Rientjes <rientjes@google.com>
-> > > > Cc: Joonsoo Kim <iamjoonsoo.kim@lge.com>
-> > > > Cc: Andrew Morton <akpm@linux-foundation.org>
-> > > > Cc: Roman Gushchin <roman.gushchin@linux.dev>
-> > > > Cc: Hyeonggon Yoo <42.hyeyoo@gmail.com>
-> > > > Cc: linux-mm@kvack.org
-> > > > Signed-off-by: Kees Cook <keescook@chromium.org>
-> > > > ---
-> > > >  include/linux/slab.h |  8 ++++++--
-> > > >  mm/slab_common.c     | 14 ++++++++++++++
-> > > >  2 files changed, 20 insertions(+), 2 deletions(-)
-> > > > 
-> > > > diff --git a/include/linux/slab.h b/include/linux/slab.h
-> > > > index 970e9504949e..051d86ca31a8 100644
-> > > > --- a/include/linux/slab.h
-> > > > +++ b/include/linux/slab.h
-> > > > @@ -442,6 +442,8 @@ static_assert(PAGE_SHIFT <= 20);
-> > > >  
-> > > >  void *__kmalloc(size_t size, gfp_t flags) __assume_kmalloc_alignment __alloc_size(1);
-> > > >  void *kmem_cache_alloc(struct kmem_cache *s, gfp_t flags) __assume_slab_alignment __malloc;
-> > > > +void *kmem_cache_alloc_sized(struct kmem_cache *s, gfp_t flags, size_t size)
-> > > > +			     __assume_slab_alignment __alloc_size(3);
-> > > >  void *kmem_cache_alloc_lru(struct kmem_cache *s, struct list_lru *lru,
-> > > >  			   gfp_t gfpflags) __assume_slab_alignment __malloc;
-> > > >  void kmem_cache_free(struct kmem_cache *s, void *objp);
-> > > > @@ -469,6 +471,8 @@ void *__kmalloc_node(size_t size, gfp_t flags, int node) __assume_kmalloc_alignm
-> > > >  							 __alloc_size(1);
-> > > >  void *kmem_cache_alloc_node(struct kmem_cache *s, gfp_t flags, int node) __assume_slab_alignment
-> > > >  									 __malloc;
-> > > > +void *kmem_cache_alloc_node_sized(struct kmem_cache *s, gfp_t flags, int node, size_t size)
-> > > > +				  __assume_slab_alignment __alloc_size(4);
-> > > >  
-> > > >  #ifdef CONFIG_TRACING
-> > > >  void *kmalloc_trace(struct kmem_cache *s, gfp_t flags, size_t size)
-> > > > @@ -482,7 +486,7 @@ void *kmalloc_node_trace(struct kmem_cache *s, gfp_t gfpflags,
-> > > >  static __always_inline __alloc_size(3)
-> > > >  void *kmalloc_trace(struct kmem_cache *s, gfp_t flags, size_t size)
-> > > >  {
-> > > > -	void *ret = kmem_cache_alloc(s, flags);
-> > > > +	void *ret = kmem_cache_alloc_sized(s, flags, size);
-> > > >  
-> > > >  	ret = kasan_kmalloc(s, ret, size, flags);
-> > > >  	return ret;
-> > > > @@ -492,7 +496,7 @@ static __always_inline __alloc_size(4)
-> > > >  void *kmalloc_node_trace(struct kmem_cache *s, gfp_t gfpflags,
-> > > >  			 int node, size_t size)
-> > > >  {
-> > > > -	void *ret = kmem_cache_alloc_node(s, gfpflags, node);
-> > > > +	void *ret = kmem_cache_alloc_node_sized(s, gfpflags, node, size);
-> > > >  
-> > > >  	ret = kasan_kmalloc(s, ret, size, gfpflags);
-> > > >  	return ret;
-> > > > diff --git a/mm/slab_common.c b/mm/slab_common.c
-> > > > index 33b1886b06eb..5fa547539a6a 100644
-> > > > --- a/mm/slab_common.c
-> > > > +++ b/mm/slab_common.c
-> > > > @@ -1457,6 +1457,20 @@ size_t ksize(const void *objp)
-> > > >  }
-> > > >  EXPORT_SYMBOL(ksize);
-> > > >  
-> > > > +/* Wrapper so __alloc_size() can see the actual allocation size. */
-> > > > +void *kmem_cache_alloc_sized(struct kmem_cache *s, gfp_t flags, size_t size)
-> > > > +{
-> > > > +	return kmem_cache_alloc(s, flags);
-> > > > +}
-> > > > +EXPORT_SYMBOL(kmem_cache_alloc_sized);
-> > > > +
-> > > > +/* Wrapper so __alloc_size() can see the actual allocation size. */
-> > > > +void *kmem_cache_alloc_node_sized(struct kmem_cache *s, gfp_t flags, int node, size_t size)
-> > > > +{
-> > > > +	return kmem_cache_alloc_node(s, flags, node);
-> > > > +}
-> > > > +EXPORT_SYMBOL(kmem_cache_alloc_node_sized);
-> > > 
-> > > The reason that we have two implementations of kmalloc_trace*
-> > > depending on CONFIG_TRACING is to save additional function call when
-> > > CONFIG_TRACING is not set.
-> > > 
-> > > With this patch there is no reason to keep both.
-> > > So let's drop #ifdefs and use single implementation in mm/slab_common.c.
-> > 
-> > Okay, I'll respin...
-> > 
-> > -- 
-> > Kees Cook
-> 
-> Oh, it seems Vlastimil already did that.
-> Maybe simply drop this patch in next spin?
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/vbabka/slab.git/commit/?h=slab/for-6.1-rc4/fixes&id=eb4940d4adf590590a9d0c47e38d2799c2ff9670
+From: Rong Tao <rongtao@cestc.cn>
 
-Oh! Well, yes, that makes that easy. :)
+since commit 450b167fb9be("libbpf: clean up SEC() handling"),
+sec_def_matches() does not recognize "socket/xxx" as "socket", therefore,
+the BPF program type is not recognized.
 
+Instead of sockex3_user.c parsing section names to get the BPF program fd.
+We use the program array map to assign a static index to each BPF program
+(get inspired by selftests/bpf progs/test_prog_array_init.c).
+Therefore, use SEC("socket") as section name instead of SEC("socket/xxx"),
+so that the BPF program is parsed to SOCKET_FILTER type. The "missing BPF
+prog type" problem is solved.
+
+How to reproduce this error:
+$ cd samples/bpf
+$ sudo ./sockex3
+libbpf: prog 'bpf_func_PARSE_IP': missing BPF prog type, check ELF section name 'socket/3'
+libbpf: prog 'bpf_func_PARSE_IP': failed to load: -22
+libbpf: failed to load object './sockex3_kern.o'
+ERROR: loading BPF object file failed
+
+Signed-off-by: Rong Tao <rongtao@cestc.cn>
+---
+ samples/bpf/sockex3_kern.c | 95 ++++++++++++++++++++++----------------
+ samples/bpf/sockex3_user.c | 23 ++++-----
+ 2 files changed, 64 insertions(+), 54 deletions(-)
+
+diff --git a/samples/bpf/sockex3_kern.c b/samples/bpf/sockex3_kern.c
+index b363503357e5..26d916834865 100644
+--- a/samples/bpf/sockex3_kern.c
++++ b/samples/bpf/sockex3_kern.c
+@@ -17,47 +17,12 @@
+ #define IP_MF		0x2000
+ #define IP_OFFSET	0x1FFF
+ 
+-#define PROG(F) SEC("socket/"__stringify(F)) int bpf_func_##F
+-
+-struct {
+-	__uint(type, BPF_MAP_TYPE_PROG_ARRAY);
+-	__uint(key_size, sizeof(u32));
+-	__uint(value_size, sizeof(u32));
+-	__uint(max_entries, 8);
+-} jmp_table SEC(".maps");
+-
+ #define PARSE_VLAN 1
+ #define PARSE_MPLS 2
+ #define PARSE_IP 3
+ #define PARSE_IPV6 4
+ 
+-/* Protocol dispatch routine. It tail-calls next BPF program depending
+- * on eth proto. Note, we could have used ...
+- *
+- *   bpf_tail_call(skb, &jmp_table, proto);
+- *
+- * ... but it would need large prog_array and cannot be optimised given
+- * the map key is not static.
+- */
+-static inline void parse_eth_proto(struct __sk_buff *skb, u32 proto)
+-{
+-	switch (proto) {
+-	case ETH_P_8021Q:
+-	case ETH_P_8021AD:
+-		bpf_tail_call(skb, &jmp_table, PARSE_VLAN);
+-		break;
+-	case ETH_P_MPLS_UC:
+-	case ETH_P_MPLS_MC:
+-		bpf_tail_call(skb, &jmp_table, PARSE_MPLS);
+-		break;
+-	case ETH_P_IP:
+-		bpf_tail_call(skb, &jmp_table, PARSE_IP);
+-		break;
+-	case ETH_P_IPV6:
+-		bpf_tail_call(skb, &jmp_table, PARSE_IPV6);
+-		break;
+-	}
+-}
++#define PROG_SOCKET_FILTER	SEC("socket")
+ 
+ struct vlan_hdr {
+ 	__be16 h_vlan_TCI;
+@@ -74,6 +39,8 @@ struct flow_key_record {
+ 	__u32 ip_proto;
+ };
+ 
++static inline void parse_eth_proto(struct __sk_buff *skb, u32 proto);
++
+ static inline int ip_is_fragment(struct __sk_buff *ctx, __u64 nhoff)
+ {
+ 	return load_half(ctx, nhoff + offsetof(struct iphdr, frag_off))
+@@ -189,7 +156,8 @@ static __always_inline void parse_ip_proto(struct __sk_buff *skb,
+ 	}
+ }
+ 
+-PROG(PARSE_IP)(struct __sk_buff *skb)
++PROG_SOCKET_FILTER
++int bpf_func_ip(struct __sk_buff *skb)
+ {
+ 	struct globals *g = this_cpu_globals();
+ 	__u32 nhoff, verlen, ip_proto;
+@@ -217,7 +185,8 @@ PROG(PARSE_IP)(struct __sk_buff *skb)
+ 	return 0;
+ }
+ 
+-PROG(PARSE_IPV6)(struct __sk_buff *skb)
++PROG_SOCKET_FILTER
++int bpf_func_ipv6(struct __sk_buff *skb)
+ {
+ 	struct globals *g = this_cpu_globals();
+ 	__u32 nhoff, ip_proto;
+@@ -240,7 +209,8 @@ PROG(PARSE_IPV6)(struct __sk_buff *skb)
+ 	return 0;
+ }
+ 
+-PROG(PARSE_VLAN)(struct __sk_buff *skb)
++PROG_SOCKET_FILTER
++int bpf_func_vlan(struct __sk_buff *skb)
+ {
+ 	__u32 nhoff, proto;
+ 
+@@ -256,7 +226,8 @@ PROG(PARSE_VLAN)(struct __sk_buff *skb)
+ 	return 0;
+ }
+ 
+-PROG(PARSE_MPLS)(struct __sk_buff *skb)
++PROG_SOCKET_FILTER
++int bpf_func_mpls(struct __sk_buff *skb)
+ {
+ 	__u32 nhoff, label;
+ 
+@@ -279,7 +250,49 @@ PROG(PARSE_MPLS)(struct __sk_buff *skb)
+ 	return 0;
+ }
+ 
+-SEC("socket/0")
++struct {
++	__uint(type, BPF_MAP_TYPE_PROG_ARRAY);
++	__uint(key_size, sizeof(u32));
++	__uint(max_entries, 8);
++	__array(values, u32 (void *));
++} prog_array_init SEC(".maps") = {
++	.values = {
++		[PARSE_VLAN] = (void *)&bpf_func_vlan,
++		[PARSE_IP]   = (void *)&bpf_func_ip,
++		[PARSE_IPV6] = (void *)&bpf_func_ipv6,
++		[PARSE_MPLS] = (void *)&bpf_func_mpls,
++	},
++};
++
++/* Protocol dispatch routine. It tail-calls next BPF program depending
++ * on eth proto. Note, we could have used ...
++ *
++ *   bpf_tail_call(skb, &prog_array_init, proto);
++ *
++ * ... but it would need large prog_array and cannot be optimised given
++ * the map key is not static.
++ */
++static inline void parse_eth_proto(struct __sk_buff *skb, u32 proto)
++{
++	switch (proto) {
++	case ETH_P_8021Q:
++	case ETH_P_8021AD:
++		bpf_tail_call(skb, &prog_array_init, PARSE_VLAN);
++		break;
++	case ETH_P_MPLS_UC:
++	case ETH_P_MPLS_MC:
++		bpf_tail_call(skb, &prog_array_init, PARSE_MPLS);
++		break;
++	case ETH_P_IP:
++		bpf_tail_call(skb, &prog_array_init, PARSE_IP);
++		break;
++	case ETH_P_IPV6:
++		bpf_tail_call(skb, &prog_array_init, PARSE_IPV6);
++		break;
++	}
++}
++
++PROG_SOCKET_FILTER
+ int main_prog(struct __sk_buff *skb)
+ {
+ 	__u32 nhoff = ETH_HLEN;
+diff --git a/samples/bpf/sockex3_user.c b/samples/bpf/sockex3_user.c
+index cd6fa79df900..56044acbd25d 100644
+--- a/samples/bpf/sockex3_user.c
++++ b/samples/bpf/sockex3_user.c
+@@ -24,10 +24,9 @@ struct pair {
+ 
+ int main(int argc, char **argv)
+ {
+-	int i, sock, key, fd, main_prog_fd, jmp_table_fd, hash_map_fd;
++	int i, sock, fd, main_prog_fd, hash_map_fd;
+ 	struct bpf_program *prog;
+ 	struct bpf_object *obj;
+-	const char *section;
+ 	char filename[256];
+ 	FILE *f;
+ 
+@@ -45,26 +44,24 @@ int main(int argc, char **argv)
+ 		goto cleanup;
+ 	}
+ 
+-	jmp_table_fd = bpf_object__find_map_fd_by_name(obj, "jmp_table");
+ 	hash_map_fd = bpf_object__find_map_fd_by_name(obj, "hash_map");
+-	if (jmp_table_fd < 0 || hash_map_fd < 0) {
++	if (hash_map_fd < 0) {
+ 		fprintf(stderr, "ERROR: finding a map in obj file failed\n");
+ 		goto cleanup;
+ 	}
+ 
++	/* find BPF main program */
++	main_prog_fd = 0;
+ 	bpf_object__for_each_program(prog, obj) {
+ 		fd = bpf_program__fd(prog);
+ 
+-		section = bpf_program__section_name(prog);
+-		if (sscanf(section, "socket/%d", &key) != 1) {
+-			fprintf(stderr, "ERROR: finding prog failed\n");
+-			goto cleanup;
+-		}
+-
+-		if (key == 0)
++		if (!strcmp(bpf_program__name(prog), "main_prog"))
+ 			main_prog_fd = fd;
+-		else
+-			bpf_map_update_elem(jmp_table_fd, &key, &fd, BPF_ANY);
++	}
++
++	if (main_prog_fd == 0) {
++		fprintf(stderr, "ERROR: can't find main_prog\n");
++		goto cleanup;
+ 	}
+ 
+ 	sock = open_raw_sock("lo");
 -- 
-Kees Cook
+2.31.1
+
