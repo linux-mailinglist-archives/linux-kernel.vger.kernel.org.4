@@ -2,138 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60F5A61D8EC
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 09:53:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B2BC61D90F
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 10:22:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229611AbiKEIx2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Nov 2022 04:53:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48136 "EHLO
+        id S229674AbiKEJWi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Nov 2022 05:22:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbiKEIx0 (ORCPT
+        with ESMTP id S229487AbiKEJWg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Nov 2022 04:53:26 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE37B1036
-        for <linux-kernel@vger.kernel.org>; Sat,  5 Nov 2022 01:53:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667638403; x=1699174403;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=cJWg3yAlwsAfeXaANa8CBAQalPeBRTf4JxiTggBSXno=;
-  b=KFyxIdHXlYTDPxn+tX4waYiQl+SgFdU/4PYeipZ+A21rNYvMnT1R4Stu
-   rFX/joKFlJyP5hXwfkLl6sj8HFCC7n7+6ZB9eWiuDzyTI9zukVKYpmmw3
-   UjLkrwAuxxQoFug1cstjXQD80skyMYjOhjLy83o67sBHt+nKRA5EyrfbP
-   T5y77Pm6q2UulqoX+ipLi0+JLoF9FxAYNU/NX/PI853CuzESlmcwYRogn
-   p5ic1Z0gqq5ISJh38DUzeuQ3qVK3uEhuKt396l1lkBDWfoZGQkPPxbEyr
-   vNEhyVEBP0Za3R+cV3EV/g9AIiZyXD8/ogCr8BTCeGrt22SItVB+Iqd9J
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10521"; a="293476055"
-X-IronPort-AV: E=Sophos;i="5.96,140,1665471600"; 
-   d="scan'208";a="293476055"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Nov 2022 01:53:23 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10521"; a="760581168"
-X-IronPort-AV: E=Sophos;i="5.96,140,1665471600"; 
-   d="scan'208";a="760581168"
-Received: from lkp-server02.sh.intel.com (HELO b6d29c1a0365) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 05 Nov 2022 01:53:21 -0700
-Received: from kbuild by b6d29c1a0365 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1orEvZ-000Hpb-0J;
-        Sat, 05 Nov 2022 08:53:21 +0000
-Date:   Sat, 05 Nov 2022 16:53:13 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:x86/urgent] BUILD SUCCESS
- 7beade0dd41d42d797ccb7791b134a77fcebf35b
-Message-ID: <63662479.1eLXhVP7hqBao6+q%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Sat, 5 Nov 2022 05:22:36 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D8712CDC5;
+        Sat,  5 Nov 2022 02:22:36 -0700 (PDT)
+Received: from canpemm500007.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4N4BpY1GzczHtnp;
+        Sat,  5 Nov 2022 17:22:13 +0800 (CST)
+Received: from localhost (10.174.179.215) by canpemm500007.china.huawei.com
+ (7.192.104.62) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Sat, 5 Nov
+ 2022 17:22:34 +0800
+From:   YueHaibing <yuehaibing@huawei.com>
+To:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <richardcochran@gmail.com>,
+        <f.fainelli@gmail.com>
+CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        YueHaibing <yuehaibing@huawei.com>
+Subject: [PATCH] net: broadcom: Fix BCMGENET Kconfig
+Date:   Sat, 5 Nov 2022 17:02:45 +0800
+Message-ID: <20221105090245.8508-1-yuehaibing@huawei.com>
+X-Mailer: git-send-email 2.10.2.windows.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.174.179.215]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ canpemm500007.china.huawei.com (7.192.104.62)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/urgent
-branch HEAD: 7beade0dd41d42d797ccb7791b134a77fcebf35b  x86/cpu: Add several Intel server CPU model numbers
+While BCMGENET select BROADCOM_PHY as y, but PTP_1588_CLOCK_OPTIONAL is m,
+kconfig warning and build errors:
 
-elapsed time: 726m
+WARNING: unmet direct dependencies detected for BROADCOM_PHY
+  Depends on [m]: NETDEVICES [=y] && PHYLIB [=y] && PTP_1588_CLOCK_OPTIONAL [=m]
+  Selected by [y]:
+  - BCMGENET [=y] && NETDEVICES [=y] && ETHERNET [=y] && NET_VENDOR_BROADCOM [=y] && HAS_IOMEM [=y] && ARCH_BCM2835 [=y]
 
-configs tested: 56
-configs skipped: 83
+drivers/net/phy/broadcom.o: In function `bcm54xx_suspend':
+broadcom.c:(.text+0x6ac): undefined reference to `bcm_ptp_stop'
+drivers/net/phy/broadcom.o: In function `bcm54xx_phy_probe':
+broadcom.c:(.text+0x784): undefined reference to `bcm_ptp_probe'
+drivers/net/phy/broadcom.o: In function `bcm54xx_config_init':
+broadcom.c:(.text+0xd4c): undefined reference to `bcm_ptp_config_init'
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Fixes: 99addbe31f55 ("net: broadcom: Select BROADCOM_PHY for BCMGENET")
+Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+---
+ drivers/net/ethernet/broadcom/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-gcc tested configs:
-x86_64                           rhel-8.3-syz
-x86_64                         rhel-8.3-kunit
-x86_64                           rhel-8.3-kvm
-x86_64                          rhel-8.3-func
-x86_64                    rhel-8.3-kselftests
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-x86_64                        randconfig-a006
-i386                          randconfig-a001
-i386                          randconfig-a003
-i386                          randconfig-a005
-x86_64                               rhel-8.3
-x86_64                        randconfig-a013
-x86_64                        randconfig-a011
-x86_64                              defconfig
-x86_64                        randconfig-a015
-i386                                defconfig
-x86_64                           allyesconfig
-i386                             allyesconfig
-i386                          randconfig-a014
-i386                          randconfig-a012
-i386                          randconfig-a016
-ia64                             allmodconfig
-m68k                             allyesconfig
-m68k                             allmodconfig
-arc                              allyesconfig
-alpha                            allyesconfig
-arm64                            allyesconfig
-arm                                 defconfig
-arm                              allyesconfig
-riscv                randconfig-r042-20221104
-arc                  randconfig-r043-20221104
-s390                 randconfig-r044-20221104
-arm                         s3c6400_defconfig
-arc                      axs103_smp_defconfig
-m68k                       bvme6000_defconfig
-i386                          randconfig-c001
-m68k                           sun3_defconfig
-csky                                defconfig
-nios2                         10m50_defconfig
-
-clang tested configs:
-x86_64                        randconfig-a005
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-i386                          randconfig-a002
-i386                          randconfig-a006
-i386                          randconfig-a004
-x86_64                        randconfig-a016
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-i386                          randconfig-a013
-i386                          randconfig-a011
-i386                          randconfig-a015
-powerpc                 xes_mpc85xx_defconfig
-hexagon              randconfig-r041-20221104
-hexagon              randconfig-r045-20221104
-x86_64                        randconfig-k001
-
+diff --git a/drivers/net/ethernet/broadcom/Kconfig b/drivers/net/ethernet/broadcom/Kconfig
+index f4e1ca68d831..55dfdb34e37b 100644
+--- a/drivers/net/ethernet/broadcom/Kconfig
++++ b/drivers/net/ethernet/broadcom/Kconfig
+@@ -77,7 +77,7 @@ config BCMGENET
+ 	select BCM7XXX_PHY
+ 	select MDIO_BCM_UNIMAC
+ 	select DIMLIB
+-	select BROADCOM_PHY if ARCH_BCM2835
++	select BROADCOM_PHY if (ARCH_BCM2835 && PTP_1588_CLOCK_OPTIONAL)
+ 	help
+ 	  This driver supports the built-in Ethernet MACs found in the
+ 	  Broadcom BCM7xxx Set Top Box family chipset.
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.17.1
+
