@@ -2,48 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD7DF61A77E
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 05:23:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 029E561A786
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 05:39:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229542AbiKEEXd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Nov 2022 00:23:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43054 "EHLO
+        id S229546AbiKEEjN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Nov 2022 00:39:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbiKEEXa (ORCPT
+        with ESMTP id S229461AbiKEEjL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Nov 2022 00:23:30 -0400
-Received: from mailout-05.coopvgg.com.ar (mailout-05.coopvgg.com.ar [200.3.168.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 858C923BFE
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 21:23:26 -0700 (PDT)
-Received: from unknown (HELO webmail.telvgg.coop) ([192.168.3.137])
-  by iron-1-mgmnt.coopvgg.com.ar with ESMTP; 05 Nov 2022 01:23:23 -0300
-Received: from [105.112.214.188]
- by webmail.telvgg.coop
- with HTTP (HTTP/1.1 POST); Sat, 05 Nov 2022 01:23:23 -0300
+        Sat, 5 Nov 2022 00:39:11 -0400
+Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02ED7317EF
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 21:39:09 -0700 (PDT)
+Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-13b6c1c89bdso7545058fac.13
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 21:39:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=QVhCjTiXsm0XAmH+YRM1X339ickLF/GL0sKIvePwac0=;
+        b=FCSnsB+Ncbn05GHt62BXuzIBr4rsH97IiQeiye272VEDnNBybqlEYM6y/waq3nV71X
+         KaiiJRqUZTcnkEtCXHhVXzAmNgTVDOFb0BYeit0BPiJhk79dMcjE/vceD3btbG/nkPML
+         Sm3DZk4p55e3hOTDWHNnf21GfDhgAx0bVHpoV0VyYDI1lXMoPQT8hyTC9bHRPciw8JpY
+         eZ3sDpBvLCFakfNbS83WC96gEQjxzBIVJj5pWpvD6FPndHyIGhQPp6LOCChKqMqdnq/j
+         QMd8VSRtjkvDQKWcnjd0BXbzYUlGxA6LG1Sxr6sSwrBkaa0Rl3aJHijXxEDFqV3gIa+K
+         d1Kw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=QVhCjTiXsm0XAmH+YRM1X339ickLF/GL0sKIvePwac0=;
+        b=UZKdFquzvJyAiB7EcnJYPrHZ1h3VViRphhqySyUiJaii8HN+GxriF4YOWLdPHvaa1P
+         KOnNGuve3/OzODOILs4cjIXRk9EoASAtYDo+yZxNrFpm/ju4VZhD24bwpUrEJiMngU3W
+         vfZdgotz644YTevf+TBganEn04lwsdm0j5p/ZgWpjbYo7PQQwleoMVkvmpnRxtt5UwDd
+         bMNDIYAKkZe/1DqdfSNkvhrF6RmussitDissvi3dxvQ0czuY4eaJ1g4KrPt7SS4YWsND
+         uWWnLBGuyR1hYxquIStjuEuMvDJr3+Q9mb4qGjcDmWd2qI0uG1H1PM1dPQ7VqEhhfWMy
+         RGJA==
+X-Gm-Message-State: ACrzQf2JVY60oRgVS6qtXeqfsVarTX85eROPjirBud9ciVRmX6iUdEtp
+        rVenPyyVxLkm3gok22wHjvg7MuSkOKgz1XokXuq1
+X-Google-Smtp-Source: AMsMyM4w7eiFkYBhePubE/PyYhcqGdnaotz0NDTczdH13Aq1WqMXxNy3Sb/YZHqSax4NIV/jSYcVfTpPs875XiKcH8E=
+X-Received: by 2002:a05:6870:f299:b0:13b:ad21:934d with SMTP id
+ u25-20020a056870f29900b0013bad21934dmr23511755oap.172.1667623149267; Fri, 04
+ Nov 2022 21:39:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
-Date:   Fri, 04 Nov 2022 21:23:23 -0700
-From:   cpesther <cpesther@coopvgg.com.ar>
-To:     undisclosed-recipients:;
-Subject: Dear email Account user
-Message-ID: <ff1f27dda42a3b0d86e422e59dab0291@coopvgg.com.ar>
-X-Sender: cpesther@coopvgg.com.ar
-User-Agent: Roundcube Webmail/1.3.8
-X-Spam-Status: No, score=4.4 required=5.0 tests=BAYES_50,SPF_HELO_NONE,
-        SPF_PASS,URI_PHISH autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+References: <20221103151205.702826-1-omosnace@redhat.com>
+In-Reply-To: <20221103151205.702826-1-omosnace@redhat.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Sat, 5 Nov 2022 00:38:57 -0400
+Message-ID: <CAHC9VhS460B4Jpk8kqmhTBZv_dMuysNb9yH=6hB4-+Oc35UkAQ@mail.gmail.com>
+Subject: Re: [PATCH v2] fs: don't audit the capability check in simple_xattr_list()
+To:     Ondrej Mosnacek <omosnace@redhat.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        linux-fsdevel@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Martin Pitt <mpitt@redhat.com>,
+        Christian Brauner <brauner@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear email Account user,
+On Thu, Nov 3, 2022 at 11:13 AM Ondrej Mosnacek <omosnace@redhat.com> wrote:
+>
+> The check being unconditional may lead to unwanted denials reported by
+> LSMs when a process has the capability granted by DAC, but denied by an
+> LSM. In the case of SELinux such denials are a problem, since they can't
+> be effectively filtered out via the policy and when not silenced, they
+> produce noise that may hide a true problem or an attack.
+>
+> Checking for the capability only if any trusted xattr is actually
+> present wouldn't really address the issue, since calling listxattr(2) on
+> such node on its own doesn't indicate an explicit attempt to see the
+> trusted xattrs. Additionally, it could potentially leak the presence of
+> trusted xattrs to an unprivileged user if they can check for the denials
+> (e.g. through dmesg).
+>
+> Therefore, it's best (and simplest) to keep the check unconditional and
+> instead use ns_capable_noaudit() that will silence any associated LSM
+> denials.
+>
+> Fixes: 38f38657444d ("xattr: extract simple_xattr code from tmpfs")
+> Reported-by: Martin Pitt <mpitt@redhat.com>
+> Suggested-by: Christian Brauner (Microsoft) <brauner@kernel.org>
+> Signed-off-by: Ondrej Mosnacek <omosnace@redhat.com>
+> ---
+>
+> v1 -> v2: switch to simpler and better solution as suggested by Christian
+>
+> v1: https://lore.kernel.org/selinux/CAFqZXNuC7c0Ukx_okYZ7rsKycQY5P1zpMPmmq_T5Qyzbg-x7yQ@mail.gmail.com/T/
+>
+>  fs/xattr.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-You have exceeded your email limit quota of 450MB. You need to upgrade 
-your email limit quota to 3GB within the next 48 hours. To update your 
-email account kindly click here 
-https://infowebservicespor.wixsite.com/porta Thank you for using our 
-webmail. Copyright ©2021 Email Helpdesk Centre.
+VFS folks, this should really go through a vfs tree, but if nobody
+wants to pick it up *and* there are no objections to the change, I can
+take this via the LSM tree.
+
+Reviewed-by: Paul Moore <paul@paul-moore.com>
+
+-- 
+paul-moore.com
