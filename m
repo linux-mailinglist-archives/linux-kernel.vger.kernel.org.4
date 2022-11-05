@@ -2,65 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A535A61A652
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 01:13:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5556261A678
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 01:42:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229570AbiKEANM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 20:13:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43162 "EHLO
+        id S229615AbiKEAma (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 20:42:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229537AbiKEANJ (ORCPT
+        with ESMTP id S229551AbiKEAm1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 20:13:09 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F8902A941
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 17:12:59 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id ud5so17219011ejc.4
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 17:12:59 -0700 (PDT)
+        Fri, 4 Nov 2022 20:42:27 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35ABA4384E;
+        Fri,  4 Nov 2022 17:42:26 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id f5so17306276ejc.5;
+        Fri, 04 Nov 2022 17:42:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent-com.20210112.gappssmtp.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=vmDdnsiqYQ5dSYncDjsXtCDMJrfj6efGFHqiNmz/bqk=;
-        b=L4DRslqslApE6ut9YMJBqzDCAjS7p6SG4y65vH7qYsavlM3CaPNMiOeK5KvemSMafd
-         rbI+zGwuRSO2lM3Ow96+pz2Vr+h2stNgJ2+uWjnxpVrxuqYEBUPR/aDtfy9Zl6G2/W9k
-         vyDojD0CBeosUD5imqmqM57XmiVRVpTNoJoXmlE7miXfWQSMz7/G0k261HZQXpDKWq3l
-         kL8muVYHPoJuhK/Wr4D7uWaYc9SzxqnQbsKj/TCM8fC4GSveSbpbEfGb4Y3HmqDSnBGC
-         f3X5KkGODEH1504eS3Bdo7wSM8prGxJLHdhx8pofeuA20YJ+lOeT9LVIAOhZCIH3l9Ba
-         LWIA==
+        bh=+J/bknYGMod7US25lWylMSMqln/MJyxpOStait4Qizo=;
+        b=E9fqeaBiKavpXrO1r0TYwdqxae/GwxXp7DxM8m5UCOk7f7ADUDlmo8TmwypRkDE4BY
+         pF8m5Jst4JJMYsXEXuyRJKld+DyTzqnbMdaG8wBnMTY7nJwjkU8H9gD5K7ErMSJe2+Th
+         XLF7huf5BxV0Uyo1BUQn7JoFXD+tBN7wKNijyDGSEEo42ZxWMdjPw5+8rg/AOd+HD+Nh
+         RVrh/oQkjy5wH+g4aIwSGzj/OTFgWC2rI94055+uRsIBSq8+r7n5CY4rbUXrnvyutlSU
+         DIg9Wtk8jAS09fFKGppA2aIWV5uxbVUtkotMpqpjbsDOHNHJFZPAKwho97dm+HqatY/f
+         7haA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=vmDdnsiqYQ5dSYncDjsXtCDMJrfj6efGFHqiNmz/bqk=;
-        b=pHUm9kIKJa3R36CJtAIvYmpxSPX1rDzsl3Csx4YpcheiMxREPw6KzYEo5U0Rj74J51
-         QJ89K1MwN5+t3dTRpt4GRSQUqGXummeb9zCm06XvJj8HNB/F5im4o8cVzjtW2pz/4NUY
-         dEK+ErkkH2QKuDv/rOQVdTKBi8AjdQq9ed9pEyVTFPaO2MxgVd1AuJlAB34bsImUmzVP
-         3oMbqJawUrV9ZN9bvsXJGsp21YzXaWZ5Ko3EeKcPdvOlh4OqGnQVp89zghfXmHJHuX/i
-         pT7Pan56Dr+u3iLw90zAT8wEc8Bh/AMZWvQkbInMzFA8vuHeyMOy8l9oRwRhuLXkrYFJ
-         JJrQ==
-X-Gm-Message-State: ACrzQf1QPJizfuxT97qSaWCcsBR0XhfbWxnoSKy3UTOyQbn1DWIhNtMN
-        00O4prYDkl6NXocWr7dB+zy9I+/PTvXF6oKyI0YlVw==
-X-Google-Smtp-Source: AMsMyM7QDy0sVIicail7ccfx7jBBX30zxxyjoMCIqaGS22F9z1Ed8Q/ttEpjxfDsjRjlz3ljKRtR5VVnCYxnW/GZ25Y=
-X-Received: by 2002:a17:907:25c7:b0:77b:c193:9230 with SMTP id
- ae7-20020a17090725c700b0077bc1939230mr36243331ejc.316.1667607177998; Fri, 04
- Nov 2022 17:12:57 -0700 (PDT)
+        bh=+J/bknYGMod7US25lWylMSMqln/MJyxpOStait4Qizo=;
+        b=pPmVhyMphmbLJ72jOQGz3igq1KR9FE2Fk2PFKNMmseQrhP6EIsYOoo/1dT/IrUdZFz
+         HQlxPUzyk5mXG+Unms08oJgLYT04ExUk0KbFLRwHKwYwcHYqt5LmP6W3srJR3uesuiqv
+         KHQZ0xWUS5mSopxJW+kzaQazfZgy8SPnLY0qK6gAjrqYtwL8vHlb2Am5zHKOYnAnuHi5
+         ueqEWY1NQw9iiMXszzNdklGE5wRzfVXadlitCXR6kleFpN5xbXKdFj2UeeMXQh4mPraH
+         zQ1WTvwTO+9HzJ2b7SqnCxraTicDTRqaIycxUy7FAt+KR2lhucimb9aFK5JFXc2kDNaw
+         A0DA==
+X-Gm-Message-State: ACrzQf3zYqxtnJ4d2Ga0a2jeQhCadGr8xOYh56r1NTQ1FB3SI/xDvyh7
+        Cyh53CUc4OelXelfwH2MW19FlgnIl06qshMsfHg=
+X-Google-Smtp-Source: AMsMyM6dQ4e/p5g2AAhVG9v/4Ud0U7kmybarX2Y/Q3WM2ro0ABrQxrSZuiGmEyJcciKFX1xxp029rtRIUKGFy1TIPtA=
+X-Received: by 2002:a17:906:1f48:b0:7ae:77d:bac with SMTP id
+ d8-20020a1709061f4800b007ae077d0bacmr15854462ejk.708.1667608944599; Fri, 04
+ Nov 2022 17:42:24 -0700 (PDT)
 MIME-Version: 1.0
-References: <20221103205010.3266865-1-joe@isovalent.com> <101ab00c-5fa7-c3ee-63bd-f235e7c4d398@gmail.com>
- <CADa=RyxodgJ+Wa3tiWxTntZoy7eSm_UkuzDBx9tCN=s_QnsDOw@mail.gmail.com> <87fseyqpso.fsf@meer.lwn.net>
-In-Reply-To: <87fseyqpso.fsf@meer.lwn.net>
-From:   Joe Stringer <joe@isovalent.com>
-Date:   Fri, 4 Nov 2022 17:12:42 -0700
-Message-ID: <CADa=RyweVGfq_qj6V+WLRhitEq2uNhj=YHQBqgmRpkjrhdMA6w@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2] docs/bpf: Add LRU internals description and graph
-To:     Jonathan Corbet <corbet@lwn.net>
-Cc:     Bagas Sanjaya <bagasdotme@gmail.com>, bpf@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ast@kernel.org, martin.lau@linux.dev
+References: <20221028165423.386151-1-roberto.sassu@huaweicloud.com>
+ <20221028165423.386151-2-roberto.sassu@huaweicloud.com> <CACYkzJ5gFu5a-NoKFD6XFNYMDyP+iPon=kHMimJybmNexbhAPg@mail.gmail.com>
+ <38c3ff70963de4a7a396c0fad84349c7c39c0f07.camel@huaweicloud.com>
+In-Reply-To: <38c3ff70963de4a7a396c0fad84349c7c39c0f07.camel@huaweicloud.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Fri, 4 Nov 2022 17:42:13 -0700
+Message-ID: <CAADnVQ+K0NMFKV8pQR+ZMHMM9KArRsLSv-F82_qbK4+4xaPxrg@mail.gmail.com>
+Subject: Re: [RESEND][RFC][PATCH 2/3] bpf-lsm: Limit values that can be
+ returned by security modules
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
+Cc:     KP Singh <kpsingh@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>,
+        Florent Revest <revest@chromium.org>,
+        Brendan Jackman <jackmanb@chromium.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Paul Moore <paul@paul-moore.com>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Mimi Zohar <zohar@linux.ibm.com>, bpf <bpf@vger.kernel.org>,
+        LSM List <linux-security-module@vger.kernel.org>,
+        linux-integrity <linux-integrity@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        nicolas.bouchinet@clip-os.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,65 +89,108 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 4, 2022 at 4:10 PM Jonathan Corbet <corbet@lwn.net> wrote:
+On Fri, Nov 4, 2022 at 8:29 AM Roberto Sassu
+<roberto.sassu@huaweicloud.com> wrote:
 >
-> Joe Stringer <joe@isovalent.com> writes:
->
-> > Resending, this time without HTML.
+> On Thu, 2022-11-03 at 16:09 +0100, KP Singh wrote:
+> > On Fri, Oct 28, 2022 at 6:55 PM Roberto Sassu
+> > <roberto.sassu@huaweicloud.com> wrote:
+> > > From: Roberto Sassu <roberto.sassu@huawei.com>
+> > >
+> > > BPF LSM defines a bpf_lsm_*() function for each LSM hook, so that
+> > > security modules can define their own implementation for the desired hooks.
+> > >
+> > > Unfortunately, BPF LSM does not restrict which values security modules can
+> > > return (for non-void LSM hooks). Security modules might follow the
+> > > conventions stated in include/linux/lsm_hooks.h, or put arbitrary values.
+> > >
+> > > This could cause big troubles, as the kernel is not ready to handle
+> > > possibly malicious return values from LSMs. Until now, it was not the
 > >
-> > On Fri, Nov 4, 2022 at 2:31 AM Bagas Sanjaya <bagasdotme@gmail.com> wrote:
-> >>
-> >> Shouldn't the table be written in reST table syntax instead?
+> > I am not sure I would call this malicious. This would be incorrect, if
+> > someone is writing a BPF LSM program they already have the powers
+> > to willingly do a lot of malicious stuff.
 > >
-> > This table follows the syntax outlined in
-> > https://docs.kernel.org/doc-guide/sphinx.html#list-tables . Is that
-> > document not up to date?
+> > It's about unknowingly returning values that can break the system.
 >
-> That document, right where you linked, says:
+> Maybe it is possible to return specific values that lead to acquire
+> more information/do actions that the eBPF program is not supposed to
+> cause.
 >
->         The list-table formats can be useful for tables that are not
->         easily laid out in the usual Sphinx ASCII-art formats. These
->         formats are nearly impossible for readers of the plain-text
->         documents to understand, though, and should be avoided in the
->         absence of a strong justification for their use.
+> I don't have a concrete example, so I will use the word you suggested.
 >
-> The list-table formats exist for a reason, and sometimes they can't
-> really be avoided, but they do impose a heavy readability cost on the
-> plain-text files.
-
-Ah yikes, I just searched down for an example of how to sketch up a
-table and followed the first example I saw. I guess this is more the
-syntax you'd expect?
-
-https://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html#tables
-
-> > I'm happy to do this, but several of the diagram boxes will reference
-> > terms like rotation, shrinking etc without explaining what they are. I
-> > think it's a net negative to readability if this text is not included
-> > with the diagram. If you think the commit formatting is a bit over the
-> > top, I could maybe just remove the decoration and embed the content
-> > directly in the doc? On my first attempt at sketching this up, it just
-> > felt a bit weird for me to submit that text directly if Martin was the
-> > author of the text. But I could figure something out for that if
-> > that's the preferred approach.
+> > > case, as each LSM is carefully reviewed and it won't be accepted if it
+> > > does not meet the return value conventions.
+> > >
+> > > The biggest problem is when an LSM returns a positive value, instead of a
+> > > negative value, as it could be converted to a pointer. Since such pointer
+> > > escapes the IS_ERR() check, its use later in the code can cause
+> > > unpredictable consequences (e.g. invalid memory access).
+> > >
+> > > Another problem is returning zero when an LSM is supposed to have done some
+> > > operations. For example, the inode_init_security hook expects that their
+> > > implementations return zero only if they set the name and value of the new
+> > > xattr to be added to the new inode. Otherwise, other kernel subsystems
+> > > might encounter unexpected conditions leading to a crash (e.g.
+> > > evm_protected_xattr_common() getting NULL as argument).
+> > >
+> > > Finally, there are LSM hooks which are supposed to return just one as
+> > > positive value, or non-negative values. Also in these cases, although it
+> > > seems less critical, it is safer to return to callers of the LSM
+> > > infrastructure more precisely what they expect.
+> > >
+> > > As eBPF allows code outside the kernel to run, it is its responsibility
+> > > to ensure that only expected values are returned to LSM infrastructure
+> > > callers.
+> > >
+> > > Create four new BTF ID sets, respectively for hooks that can return
+> > > positive values, only one as positive value, that cannot return zero, and
+> > > that cannot return negative values. Create also corresponding functions to
+> > > check if the hook a security module is attached to belongs to one of the
+> > > defined sets.
+> > >
+> > > Finally, check in the eBPF verifier the value returned by security modules
+> > > for each attached LSM hook, and return -EINVAL (the security module cannot
+> > > run) if the hook implementation does not satisfy the hook return value
+> > > policy.
+> > >
+> > > Cc: stable@vger.kernel.org
+> > > Fixes: 9d3fdea789c8 ("bpf: lsm: Provide attachment points for BPF LSM programs")
+> > > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> > > ---
+> > >  include/linux/bpf_lsm.h | 24 ++++++++++++++++++
+> > >  kernel/bpf/bpf_lsm.c    | 56 +++++++++++++++++++++++++++++++++++++++++
+> > >  kernel/bpf/verifier.c   | 35 +++++++++++++++++++++++---
+> > >  3 files changed, 112 insertions(+), 3 deletions(-)
+> > >
+> > > diff --git a/include/linux/bpf_lsm.h b/include/linux/bpf_lsm.h
+> > > index 4bcf76a9bb06..cd38aca4cfc0 100644
+> > > --- a/include/linux/bpf_lsm.h
+> > > +++ b/include/linux/bpf_lsm.h
+> > > @@ -28,6 +28,10 @@ int bpf_lsm_verify_prog(struct bpf_verifier_log *vlog,
+> > >                         const struct bpf_prog *prog);
+> > >
+> > >  bool bpf_lsm_is_sleepable_hook(u32 btf_id);
+> > > +bool bpf_lsm_can_ret_pos_value(u32 btf_id);
+> > > +bool bpf_lsm_can_ret_only_one_as_pos_value(u32 btf_id);
+> > > +bool bpf_lsm_cannot_ret_zero(u32 btf_id);
+> > > +bool bpf_lsm_cannot_ret_neg_value(u32 btf_id);
+> > >
+> >
+> > This does not need to be exported to the rest of the kernel. Please
+> > have this logic in bpf_lsm.c and export a single verify function.
+> >
+> > Also, these really don't need to be such scattered logic, Could we
+> > somehow encode this into the LSM_HOOK definition?
 >
-> I don't quite understand this comment; I don't think anybody is asking
-> you to take information out?  Just to use one of the other table formats
-> if you can.
+> The problem is that a new LSM_HOOK definition would apply to every LSM
+> hook, while we need the ability to select subsets.
+>
+> I was thinking, but I didn't check yet, what about using BTF_ID_FLAGS,
+> introducing a flag for each interval (<0, 0, 1, >1) and setting the
+> appropriate flags for each LSM hook?
 
-Sorry, I switched to a new email address and inadvertently enabled
-HTML formatting, so my initial posting ended up rejected and my
-re-post snipped the important part. This response was intended as a
-response to the question around the formatting of the commit message
-content:
-
-> What about just writing the pointer ("See commit 3a08c2fd7634 ("bpf: LRU List")")
-instead?
-
-My thoughts were that the commit message describes the high level +
-algorithm pretty well and that text compliments the diagram quite
-well. But if there's some preferred processing I should perform on the
-text to format it well in the docs, I can do that.
-
-Cheers,
-Joe
+Before adding infra to all hooks, let's analyze all hooks first.
+I thought the number of exceptions is very small.
+99% of hooks will be fine with IS_ERR.
+If so, adding an extra flag to every hook will cause too much churn.
