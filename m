@@ -2,82 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D86A61A6E0
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 03:21:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 951DF61A6E7
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 03:32:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229528AbiKECVd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Nov 2022 22:21:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43172 "EHLO
+        id S229532AbiKECcN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Nov 2022 22:32:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbiKECVb (ORCPT
+        with ESMTP id S229445AbiKECcL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Nov 2022 22:21:31 -0400
+        Fri, 4 Nov 2022 22:32:11 -0400
 Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D242E2F011
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 19:21:29 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32B042E68A;
+        Fri,  4 Nov 2022 19:32:10 -0700 (PDT)
 Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.west.internal (Postfix) with ESMTP id 02D523200900;
-        Fri,  4 Nov 2022 22:21:25 -0400 (EDT)
+        by mailout.west.internal (Postfix) with ESMTP id 257833200437;
+        Fri,  4 Nov 2022 22:32:09 -0400 (EDT)
 Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Fri, 04 Nov 2022 22:21:26 -0400
+  by compute1.internal (MEProxy); Fri, 04 Nov 2022 22:32:09 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
         cc:cc:content-transfer-encoding:content-type:date:date:from:from
         :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm1; t=1667614885; x=
-        1667701285; bh=pkuzyg87KP4rXE017m3xZDHEqWMZVyvOipGLjav84k8=; b=g
-        +a1XIb5ASbBT4WOZpReXoq+MxgD2G9T9q4N+mXNxyP8v3qvLwTn06bhqd0YVIPb+
-        R3HodEBzFJZyNp4Lp5UMw0y1DvmT0K6df/15/nXIT1GU+f77SpXPLNLucjcfDcSu
-        WE8C7HzKQMhgXacU3zkJJM/49W+gYGsTz/CXqe6ntFTr5Smh8Fwfzirt05z1SyFH
-        mhSlImNGKOn+JZQBQMFeEi/Ywd9LvsxYZJWVZm0YjbniBdng2Y8cvWYa/slV2lt1
-        /bTfMgh2i9dOSo5R6TVqUOsINbzDJ5dRHjckkZSSbcS91CoeCEUVvwnT3iwFRtLC
-        JLTa5WdfsVFPghkrbRU0Q==
+        :reply-to:sender:subject:subject:to:to; s=fm1; t=1667615528; x=
+        1667701928; bh=ijJvdLYIYldUXAOtaIMJyb2s/LtRvLB9vF5LnGhLHK4=; b=H
+        EPxGf1aw8Uhh0fRHoPnJuo5euH1pTk3kOEOON0LtzMWiwJWTpU0tTgc27N0hXdiT
+        qDOt/wcUuHnPz2TN3HS90jOE2HyXd9Mj0dEOB2cS1BdaFy5ut+/ep/hbiJRY841u
+        6iJLPjQtgzhiZeeByqkFJlxNhYJugDwcIHYEoisoyJQ8ULOWby4d00xk7sOZaxAF
+        fttyJk9veMzzfQlSJKQ0gJRVIuJSK1dSeePyvXuHwbR45ne2vQtDHFoiDwdNGY+m
+        4IDjdNvfsSORdqCn8nbf+tedJXv/n1W02oTJjOu2HaIjTWHFkzyB73kj8aJgnQxR
+        UMq0DOWV40lbXJMG6N/ow==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding
         :content-type:date:date:feedback-id:feedback-id:from:from
         :in-reply-to:in-reply-to:message-id:mime-version:references
         :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1667614885; x=
-        1667701285; bh=pkuzyg87KP4rXE017m3xZDHEqWMZVyvOipGLjav84k8=; b=m
-        JZZVdhdYBY88gYVMFETYHw8pMSgyPNkwN3EQoRyJ7FmAVq4zBY+pBSp+gUH7Q86a
-        05MlusRleiruNgB+1+6iYcKDl9BurMNh0a/a6oyCB7Icts8JdnOk0ddwLIpv855v
-        o0YJadTYRBZp+/fPjoYVQIYhalaNszAMcQmZQ7QrwZZMheFIYhX0aXIwD66r8iKk
-        84pMKVco3TETkrf2aqVM1li36PW0xv0iaVAXGJs6RupRnQdxiHEF5QSM+fyEp3bU
-        pRnY971ScS9pfa+ADu6zleqFyWsIa6Uv5j00lTrcanAbyaMBfrBSyvsNYQnqx2gh
-        o17SmqHzDi4hHEP/d7sFA==
-X-ME-Sender: <xms:pchlY7KLT6pXUhf9QxikNI7eTc32poLrKzXxhDCVuYS1THMYPUzE5Q>
-    <xme:pchlY_KCbmeP-Ct6hNQhTpCVkdV16niwa83VI7kFzLy5IbwEbxb94NmUPKe3VCXad
-    lDVk3RZwOguKG2eQg>
-X-ME-Received: <xmr:pchlYzuFK96dhimQpsklpzPN8Xjg3RQIS9EcgNTvjGzbyG5DETrjGy0VwZiSYaqtERFgu99hpkHwv-0ha64jhK7OKl60PJ0MA58qr1frMq41TLw9SkqF2uDNmA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrvddvgdeghecutefuodetggdotefrodftvf
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1667615528; x=
+        1667701928; bh=ijJvdLYIYldUXAOtaIMJyb2s/LtRvLB9vF5LnGhLHK4=; b=R
+        CPHyofYQzG5wTHOMb+KWL4GoGBCku0X2ghycH49t5XMyTQAxkVvwbM9+N03RG3K/
+        ezTkaTSqUWEz9h+QjWDTDat2AwNBVVK7DPPQu1RCpReSPx5ThRthyZyxu8mplKQk
+        GYddjePun4rDtnSC0mOykO9JBjCNGXkR9H+IZnFB06gDHdA1Lhvqh8Fvb0prE5KV
+        FYnWl2OInxpfgGDkjMnwGH7e9tnK+gfSkjh0mpFUUSR3yLcRTQi4iMTcf9xAZ3NJ
+        2Jy2bYj6kMphMmaqxqTxdVeUuECYRtCufSGjDfw9FCOV2tIQZ0xJUjvfkFf8nY1w
+        QhTzfPaiIF2j995N5eLdA==
+X-ME-Sender: <xms:KMtlY8fbgDBClDHMlf7WLd10iTJGZVW2QvDaYlDlQgJUPBaX8QiyuQ>
+    <xme:KMtlY-N5vOF187Z-No8LpJ3lv05xgBTSK5b7MR_YpieGDNiDL0H63kxsSpvOVq8Fx
+    IXMbFw2_qQdHUFjrQ>
+X-ME-Received: <xmr:KMtlY9gvZqHyezeLczDO_5FnSI8z0YF8s7QKiptkRe-wJiPwtgu_gw7w5TDdUes3nnCSBNEGaZ2i41-Uoj0ZvC7Ul1c_-Q6OzH_QueQA7g3oIvCYtyImSwEU3A>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrvddvgdegjecutefuodetggdotefrodftvf
     curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
     uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefkffggfgfvvehfhffujggtgfesthekredttdefjeenucfhrhhomhepufgrmhhu
+    fjughrpefkffggfgfvvehfhffujggtgfesthejredttdefjeenucfhrhhomhepufgrmhhu
     vghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecugg
-    ftrfgrthhtvghrnhepgeeikeeufedvvdeuteeivdeiffdtgfdtfeejgfetfeefgeffgfdv
-    ffehjedvueeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
+    ftrfgrthhtvghrnhepjefgfffhudejfedtuedugeeutdetgfeiteffffehjeeugfeuvdeh
+    jeetfedtffdtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
     homhepshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
-X-ME-Proxy: <xmx:pchlY0YogvP04MM-Hq1cGfTkPRAYJLW-TiupnmaZQc8T0EZ1GD2QRQ>
-    <xmx:pchlYybOZa8CzETV-RjzmWZhcFVvtows4nzbc0Txrd_q5icDgk9bbg>
-    <xmx:pchlY4CGfaXCIoi7s31EN2wbQ8iIpQXvpGhauThEmzaNUng6zFrVug>
-    <xmx:pchlY5XffscEUqbAnKQDhCwsWJSkW7jwD1YJ4MpTA7KZx33ZOKM6Lw>
+X-ME-Proxy: <xmx:KMtlYx_bgTebu0wyPMQBbXGl8OxN1ejCsfGp1xVDeihsSSAtn7OJ2A>
+    <xmx:KMtlY4vq_2sR5t5Mg2gqZ_3j3WbYbayuox0LK1JLo93vH0wD8jRS6w>
+    <xmx:KMtlY4Fbuiv4xh2b_71c3Ae16PkVkvV11RtwGq-AdEvwQzU49pvydQ>
+    <xmx:KMtlY99CFBeML--Dj5kXYPz6vg_XjfSid4lvNj2oFMtIk9r02l07vA>
 Feedback-ID: i0ad843c9:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 4 Nov 2022 22:21:24 -0400 (EDT)
-Message-ID: <214ed3e0-5959-8fa7-8d66-196e33112cb0@sholland.org>
-Date:   Fri, 4 Nov 2022 21:21:23 -0500
+ 4 Nov 2022 22:32:07 -0400 (EDT)
+Message-ID: <90fcb1bc-6388-d4ba-a9cd-c5d35fb27e74@sholland.org>
+Date:   Fri, 4 Nov 2022 21:32:07 -0500
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux ppc64le; rv:102.0) Gecko/20100101
  Thunderbird/102.3.3
 Content-Language: en-US
-To:     Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>, wens@csie.org
-Cc:     mripard@kernel.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org, Merlijn Wajer <merlijn@wizzup.org>
-References: <9f8a0fc3-1d9a-b271-3c26-4f7373b8a3e9@gmail.com>
+To:     Bastian Germann <bage@debian.org>
+Cc:     Vasily Khoruzhick <anarsoul@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev,
+        Jernej Skrabec <jernej.skrabec@gmail.com>
+References: <20221007234553.12328-1-bage@debian.org>
+ <20221007234553.12328-2-bage@debian.org>
 From:   Samuel Holland <samuel@sholland.org>
-Subject: Re: [BISECTED] Allwinner A33 tablet does not fully power off
-In-Reply-To: <9f8a0fc3-1d9a-b271-3c26-4f7373b8a3e9@gmail.com>
+Subject: Re: [PATCH 1/1] arm64: allwinner: a64: enable Bluetooth on Pinebook
+In-Reply-To: <20221007234553.12328-2-bage@debian.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
@@ -88,60 +93,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ivo,
+Hi Bastian,
 
-On 10/29/22 10:23, Ivaylo Dimitrov wrote:
-> After commit 843107498f91e57d1d4b22cd8787112726fdaeb4 (bus: sunxi-rsb:
-> Implement suspend/resume/shutdown callbacks) Q8 A33 tablet I have here
-> cannot be powered-on after power-off, it needs press-and-hold of the
-> power button for 10 seconds (I guess some HW assisted power down
-> happens) before it can be powered-on again.
+Please make sure you include the sunxi platform maintainers (as reported
+by get_maintainers.pl) when sending your patch, so it gets in our inboxes.
+
+Subject prefix should be "arm64: dts: allwinner: a64:" (with "dts:").
+
+On 10/7/22 18:45, Bastian Germann wrote:
+> From: Vasily Khoruzhick <anarsoul@gmail.com>
 > 
-> The following patch makes it behave correctly:
+> Pinebook has an RTL8723CS WiFi + BT chip. BT is connected to UART1
+> and uses PL5 as device wake GPIO and PL6 as host wake GPIO.
+> The I2C controlling signals are connected to R_I2C bus.
+
+Please remove this sentence; it doesn't make sense. The RTL8723CS does
+not have any I2C connection.
+
+> Enable it in the device tree.
 > 
-> diff --git a/drivers/bus/sunxi-rsb.c b/drivers/bus/sunxi-rsb.c
-> index 60b082fe2ed0..30016d62044c 100644
-> --- a/drivers/bus/sunxi-rsb.c
-> +++ b/drivers/bus/sunxi-rsb.c
-> @@ -818,10 +818,7 @@ static int sunxi_rsb_remove(struct platform_device
-> *pdev)
+> Signed-off-by: Vasily Khoruzhick <anarsoul@gmail.com>
+> Signed-off-by: Bastian Germann <bage@debian.org>
+> ---
+>  .../boot/dts/allwinner/sun50i-a64-pinebook.dts      | 13 +++++++++++++
+>  1 file changed, 13 insertions(+)
 > 
->  static void sunxi_rsb_shutdown(struct platform_device *pdev)
->  {
-> -       struct sunxi_rsb *rsb = platform_get_drvdata(pdev);
-> -
->         pm_runtime_disable(&pdev->dev);
-> -       sunxi_rsb_hw_exit(rsb);
->  }
-> 
->  static const struct dev_pm_ops sunxi_rsb_dev_pm_ops = {
-> 
-> 
-> I guess the issue comes from the fact that by the time 'power off'
-> command to the power management IC has to be send, the bus it lives on
-> is already down, so the device is left in semi-powered down state. Ofc
-> this is a wild guess, however, preventing the bus being turned off on
-> shutdown fixes the issue.
+> diff --git a/arch/arm64/boot/dts/allwinner/sun50i-a64-pinebook.dts b/arch/arm64/boot/dts/allwinner/sun50i-a64-pinebook.dts
+> index 620cb3ef5f6c..19ba87c411ed 100644
+> --- a/arch/arm64/boot/dts/allwinner/sun50i-a64-pinebook.dts
+> +++ b/arch/arm64/boot/dts/allwinner/sun50i-a64-pinebook.dts
+> @@ -406,6 +406,19 @@ &uart0 {
+>  	status = "okay";
+>  };
+>  
+> +&uart1 {
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&uart1_pins>, <&uart1_rts_cts_pins>;
+> +	uart-has-rtscts;
+> +	status = "okay";
+> +
+> +	bluetooth {
+> +		compatible = "realtek,rtl8723cs-bt";
+> +		device-wake-gpios = <&r_pio 0 5 GPIO_ACTIVE_LOW>; /* PL5 */
 
-Your guess is correct. The controller gets shut down in
+You also need:
 
-  kernel_power_off()
-    kernel_shutdown_prepare()
-      device_shutdown()
+		enable-gpios = <&r_pio 0 4 GPIO_ACTIVE_HIGH>; /* PL4 */
 
-but the PMIC communication needs to happen later in
+(this is BT-RST-N in the schematic).
 
-  kernel_power_off()
-    machine_power_off()
-      pm_power_off()
-
-> Please LMK if the above is the correct approach so I will send a proper
-> patch or something else shall be fixed.
-
-Yes, this is exactly the right approach. The whole sunxi_rsb_shutdown()
-function should be removed. When you send a patch, please add a Fixes:
-tag referencing the commit that you bisected to.
+The rest looks good to me.
 
 Regards,
 Samuel
+
+> +		host-wake-gpios = <&r_pio 0 6 GPIO_ACTIVE_HIGH>; /* PL6 */
+> +	};
+> +};
+> +
+>  &usb_otg {
+>  	dr_mode = "host";
+>  };
 
