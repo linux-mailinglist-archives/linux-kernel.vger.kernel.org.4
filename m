@@ -2,130 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A481761DAC4
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 15:13:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F24661DAC7
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 15:16:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229761AbiKEONo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Nov 2022 10:13:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34958 "EHLO
+        id S229779AbiKEOQl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Nov 2022 10:16:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229614AbiKEONm (ORCPT
+        with ESMTP id S229614AbiKEOQi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Nov 2022 10:13:42 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D812726576;
-        Sat,  5 Nov 2022 07:13:39 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id b1-20020a17090a7ac100b00213fde52d49so6788562pjl.3;
-        Sat, 05 Nov 2022 07:13:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Mc5/Wq/QLHmzgpVMSRqnzX2BpVx6vMxkIU8iSMcAVMQ=;
-        b=b5u1gfszkwLvwol4kU5LuW0PdIiztNP0GUP5Fz+70LSaU+STOmBGO/4AIlOGcx3NYh
-         oQgtrT0fgIAt1LUcH66IZSbZQgqGQa6PISTz9+m581U8U+dYzakjT3dzQAEom9XpVuUo
-         TfcWJVgHKJ7l5f7MSiwfYfN4MWvU3CgZiPSmVsji8gRx7dnIwjBRF05B5UYpw683L/HJ
-         1v80hXYajZ9nbAyXFRkM4+5zi8I1Jv5rIRumXUkBm8lQ7NfKN9bHXcktEWjeRAt+kZP7
-         v+ZVI/Of2zbGCD2l/BKRgFpc8S4wjak5Bd83MoUKkOKqVmHa55E9StG0XjFK48kzg5qD
-         MRBg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Mc5/Wq/QLHmzgpVMSRqnzX2BpVx6vMxkIU8iSMcAVMQ=;
-        b=BWpb6cLjeAxJYuXR3JhFlLeit1zQd5tb2kW/D2YBf/43YjmCBDU9Tv29uNnSvf15w9
-         P72qRamAQHwE2ocMa4ncMuLMdyZXt9quNTUSXjH79R4AeeMP+r6nHcV3GxTY2/6I/QZc
-         InBXAeXSzjI1ZnVAjlivJIGRSVOFQ1j8sEN0wrpNv/2x2AhUTH/TjkTosBw7Em2GOoho
-         0lLnnJVNgYU/90fL9vY5MdzEMJVBq5g5LsFkRIpLa5zrZii7deAD6srDlcXzeRsAU3Dt
-         932uXbgt38nDQfBGSxBaiJu7eHA6+ruQhInCUkftb8n/6mYbmXQ8zRVY8W+P08K8Q8ZG
-         l3/Q==
-X-Gm-Message-State: ACrzQf1AiF5pcwI3WvTKIKG/HrWYl+QQVXU57FgGJKnTwmwE7zl4qm6o
-        omsJqcuoDFfuEOLq01whMgA=
-X-Google-Smtp-Source: AMsMyM5h8sJQF+cdGme7Ao2S3FTe5aQUEts242DlrG+c66cbxzCzm5nNVspr+cBlCV9bUu9MyINLUA==
-X-Received: by 2002:a17:903:50e:b0:182:631b:df6f with SMTP id jn14-20020a170903050e00b00182631bdf6fmr40747468plb.66.1667657617868;
-        Sat, 05 Nov 2022 07:13:37 -0700 (PDT)
-Received: from localhost ([223.104.41.238])
-        by smtp.gmail.com with ESMTPSA id v21-20020a631515000000b004405c6eb962sm1359798pgl.4.2022.11.05.07.13.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 05 Nov 2022 07:13:37 -0700 (PDT)
-From:   Hawkins Jiawei <yin31149@gmail.com>
-To:     kuba@kernel.org
-Cc:     18801353760@163.com, davem@davemloft.net, edumazet@google.com,
-        jhs@mojatatu.com, jiri@resnulli.us, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, pabeni@redhat.com,
-        syzbot+232ebdbd36706c965ebf@syzkaller.appspotmail.com,
-        syzkaller-bugs@googlegroups.com, xiyou.wangcong@gmail.com,
-        yin31149@gmail.com
-Subject: Re: [PATCH] net: sched: fix memory leak in tcindex_set_parms
-Date:   Sat,  5 Nov 2022 22:11:56 +0800
-Message-Id: <20221105141156.28093-1-yin31149@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221103192308.581a9124@kernel.org>
-References: <20221103192308.581a9124@kernel.org>
+        Sat, 5 Nov 2022 10:16:38 -0400
+Received: from mail.cock.li (unknown [37.120.193.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1876026AC9;
+        Sat,  5 Nov 2022 07:16:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tfwno.gf; s=mail;
+        t=1667657790; bh=J7AqfEf7LvFDpqBYRlFhO8k4vfiTi6BH8M8TJ5Qv02s=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=KbjOkyroeyovBXygh35SwSIFVx4a8Xt4hpUdDp97q6+8nixOx0RL4hiUij+/vaePB
+         2t4XRTbjU72AtJckqln8KAw7Gq8M7xAGwh8wRnj4Zy8Hk67eCM8ewY41eb5w/gph0+
+         V1nz7lFLcltMnB2qPASazgNWMFpbSZKEoWWWXTxPWedNps1MM17/CrukWl+qquu3yG
+         oyaaW5bvy3r4UZfFujMTt/VeUM+DZRoQigihRWBAbRuXOCQKZt11WaLyOovNeKA8YN
+         QZxKHIUQBZJ8Klzj+4IXMfcHwEADJvCTxze47rpdqMyJX0xxEeIItilpzTyM70OY0a
+         Xz2px1nk9okRQ==
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Sat, 05 Nov 2022 14:16:30 +0000
+From:   ns@tfwno.gf
+To:     Dave Young <dyoung@redhat.com>
+Cc:     Baoquan He <bhe@redhat.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Ard Biesheuvel <ardb@kernel.org>, linux-efi@vger.kernel.org
+Subject: Re: Bug: kexec on Lenovo ThinkPad T480 disables EFI mode
+In-Reply-To: <CALu+AoTVtO=-tzbgjeVRQ3uO0yGUPWKPuAiLn0CpaAq_=xr-sw@mail.gmail.com>
+References: <3acf1cc7a974cb4fb9b77b39311c6714@tfwno.gf>
+ <Y2XUNive2KMwTjUF@MiWiFi-R3L-srv>
+ <CALu+AoTVtO=-tzbgjeVRQ3uO0yGUPWKPuAiLn0CpaAq_=xr-sw@mail.gmail.com>
+Message-ID: <2f43e1e583a92e1592c48a15a763e1f7@tfwno.gf>
+X-Sender: ns@tfwno.gf
+User-Agent: Roundcube Webmail/1.3.17
+X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_VALIDITY_RPBL,
+        SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 4 Nov 2022 at 10:23, Jakub Kicinski <kuba@kernel.org> wrote:
->
-> On Fri,  4 Nov 2022 00:07:00 +0800 Hawkins Jiawei wrote:
-> > > Can't you localize all the changes to this if block?
-> > >
-> > > Maybe add a function called tcindex_filter_result_reinit()
-> > > which will act more appropriately? 
-> >
-> > I think we shouldn't put the tcf_exts_destroy(&old_e)
-> > into this if block, or other RCU readers may derefer the
-> > freed memory (Please correct me If I am wrong).
-> >
-> > So I put the tcf_exts_destroy(&old_e) near the tcindex
-> > destroy work, after the RCU updateing.
->
-> I'm not sure what this code is trying to do, to be honest.
-> Your concern that there may be a concurrent reader is valid,
-> but then again tcindex_filter_result_init() just wipes the
-> entire structure with a memset() so concurrent readers are
-> already likely broken?
->
-> Maybe tcindex_filter_result_init() dates back to times when
-> exts were a list (see commit 22dc13c837c) and calling
-> tcf_exts_init() wasn't that different than cleaning it up?
-> In other words this code is trying to destroy old_r, not
-> reinitialize it?
-Yes, I also think this code is just trying to destroy the old_r.
+On 2022-11-05 05:49, Dave Young wrote:
+> Baoquan, thanks for cc me.
+> 
+> On Sat, 5 Nov 2022 at 11:10, Baoquan He <bhe@redhat.com> wrote:
+>> 
+>> Add Dave to CC
+>> 
+>> On 10/28/22 at 01:02pm, ns@tfwno.gf wrote:
+>> > Greetings,
+>> >
+>> > I've been hitting a bug on my Lenovo ThinkPad T480 where kexecing will
+>> > cause EFI mode (if that's the right term for it) to be unconditionally
+>> > disabled, even when not using the --noefi option to kexec.
+>> >
+>> > What I mean by "EFI mode" being disabled, more than just EFI runtime
+>> > services, is that basically nothing about the system's EFI is visible
+>> > post-kexec. Normally you have a message like this in dmesg when the
+>> > system is booted in EFI mode:
+>> >
+>> > [    0.000000] efi: EFI v2.70 by EDK II
+>> > [    0.000000] efi: SMBIOS=0x7f98a000 ACPI=0x7fb7e000 ACPI 2.0=0x7fb7e014
+>> > MEMATTR=0x7ec63018
+>> > (obviously not the real firmware of the machine I'm talking about, but I
+>> > can also send that if it would be of any help)
+>> >
+>> > No such message pops up in my dmesg as a result of this bug, & this
+>> > causes some fallout like being unable to find the system's DMI
+>> > information:
+>> >
+>> > <6>[    0.000000] DMI not present or invalid.
+>> >
+>> > The efivarfs module also fails to load with -ENODEV.
+>> >
+>> > I've tried also booting with efi=runtime explicitly but it doesn't
+>> > change anything. The kernel still does not print the name of the EFI
+>> > firmware, DMI is still missing, & efivarfs still fails to load.
+>> >
+>> > I've been using the kexec_load syscall for all these tests, if it's
+>> > important.
+>> >
+>> > Also, to make it very clear, all this only ever happens post-kexec. When
+>> > booting straight from UEFI (with the EFI stub), all the aforementioned
+>> > stuff that fails works perfectly fine (i.e. name of firmware is printed,
+>> > DMI is properly found, & efivarfs loads & mounts just fine).
+>> >
+>> > This is reproducible with a vanilla 6.1-rc2 kernel. I've been trying to
+>> > bisect it, but it seems like it goes pretty far back. I've got vanilla
+>> > mainline kernel builds dating back to 5.17 that have the exact same
+>> > issue. It might be worth noting that during this testing, I made sure
+>> > the version of the kernel being kexeced & the kernel kexecing were the
+>> > same version. It may not have been a problem in older kernels, but that
+>> > would be difficult to test for me (a pretty important driver for this
+>> > machine was only merged during v5.17-rc4). So it may not have been a
+>> > regression & just a hidden problem since time immemorial.
+>> >
+>> > I am willing to test any patches I may get to further debug or fix
+>> > this issue, preferably based on the current state of torvalds/linux.git.
+>> > I can build & test kernels quite a few times per day.
+>> >
+>> > I can also send any important materials (kernel config, dmesg, firmware
+>> > information, so on & so forth) on request. I'll also just mention I'm
+>> > using kexec-tools 2.0.24 upfront, if it matters.
+> 
+> Can you check the efi runtime in sysfs:
+> ls /sys/firmware/efi/runtime-map/
+> 
+> If nothing then maybe you did not enable CONFIG_EFI_RUNTIME_MAP=y, it
+> is needed for kexec UEFI boot on x86_64.
 
-In my opinion, the context here is a bit like, this filter's some
-properties has been changed, so kernel should drop its old filter
-result and update a new one.
+Oh my, it really is that simple.
 
-Before kernel finishes RCU updating, concurrent readers should
-see an empty result(or a valid old result), cleaned by
-tcindex_filter_result_init().
+Indeed, enabling this in the pre-kexec kernel fixes it all up. I had
+blindly disabled it in my quest to downsize the pre-kexec kernel to
+reduce boot time (it only runs a bootloader). In hindsight, the firmware
+drivers section is not really a good section to tweak on a whim.
 
-This won't trigger the memory leak before commit b9a24bb76bf6
-("net_sched: properly handle failure case of tcf_exts_init()"),
-I think. Because the new filter result still uses the old_r->exts.
+I'm terribly sorry to have taken your time to "fix" this "bug". But I
+must ask, is there any reason why this is a visible config option, or at
+least not gated behind CONFIG_EXPERT? drivers/firmware/efi/runtime-map.c
+is pretty tiny, & considering it depends on CONFIG_KEXEC_CORE, one
+probably wants to have kexec work properly if they can even enable it.
+I admit the help text for it is arguably pretty good, but I feel like
+the config option is only really useful for embedded, the same
+enviroments where people would disable stuff like CONFIG_DMI -- a config
+option that I would argue is pretty justifiably gated behind
+CONFIG_EXPERT, because far too many systems break without it & it's
+pretty small code, so really not worth it unless you absolutely know
+what you're doing. Similarly, I don't really think there's much value
+in disabling the ability to kexec without the firmware except if you're
+heavily informed & must have the size reduction, especially since in
+EFI land that's where your DMI info comes from, if I were to argue for
+it on the basis of CONFIG_DMI being gated. In summary, it can cause
+quite a bit of unnecessary confusion despite only being useful to a very
+small minority of users.
 
-Yet after this commit, kernel allocates the new struct tcf_exts for
-new filter result in tcindex_alloc_perfect_hash(), which triggers
-the memory leak if kernel cleans the old_r without destroying its
-newly allocted struct tcf_exts.
+Thank you!
 
-As for the patch, I think we'd better free this struct tcf_exts
-after RCU updating, to make sure that concurrent readers can only
-see an empty result or a valid old result, before finishing updating
-(Please correct me if I am wrong).
->
-> > > 
-> > > >               err = tcindex_filter_result_init(old_r, cp, net);
+> 
+> Otherwise you can add debug printf in kexec-tools efi error path to
+> see what is wrong.
+> kexec/arch/i386/x86-linux-setup.c : function setup_efi_data
+> 
+> And if it still not work please post your kernel config, I can have a
+> try although I do not have the t480 now.
+> 
+> 
+>> >
+>> > Regards,
+>> >
+>> > _______________________________________________
+>> > kexec mailing list
+>> > kexec@lists.infradead.org
+>> > http://lists.infradead.org/mailman/listinfo/kexec
+>> >
+>> 
