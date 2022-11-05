@@ -2,198 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F27261DDE7
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 20:51:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8656F61DDF1
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 21:06:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229910AbiKETvX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Nov 2022 15:51:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39970 "EHLO
+        id S229744AbiKEUGr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Nov 2022 16:06:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbiKETvU (ORCPT
+        with ESMTP id S229453AbiKEUGo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Nov 2022 15:51:20 -0400
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF2A310571
-        for <linux-kernel@vger.kernel.org>; Sat,  5 Nov 2022 12:51:19 -0700 (PDT)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.nyi.internal (Postfix) with ESMTP id 2C42B5C00A6;
-        Sat,  5 Nov 2022 15:51:19 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Sat, 05 Nov 2022 15:51:19 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-         h=cc:cc:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1667677879; x=1667764279; bh=Oo
-        lEB8cwTU+D19Ary1jEoWj96aA/4SgZa+73Esw4OBQ=; b=BmH/hdycEoUmRs2MZv
-        RwtQPWQL2UuAo5RkVP3z6EqzOqzx7t41JzmdrQ6phRcjbW7Dn7xMM52Vp3+gi4/s
-        +CWKqDZ050zCPhlJadzZk2Vra6Tqbb9fHHkRs4MYoPfXHfnVm+qyoBxcbLj9AwhW
-        hDQTjWLjZhQzcjNn1lnilLFeJLtUJlaIiP8ti0yMdadBkDFFlCDFyakbniTUDszk
-        BBomiCv2hsy8SXyVgxcZ+POhDPrDFB8zzPq/j75RmKOq3mh/TYleCTgfwECD+rLP
-        XDZXZZ7i/kEH28CwNI6j/asctdA4s3T2ESmvkOvpdlL4OOC+g9AuQKDQDs4fhW55
-        5dbA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1667677879; x=1667764279; bh=OolEB8cwTU+D19Ary1jEoWj96aA/
-        4SgZa+73Esw4OBQ=; b=Fr/8cZXDQtxEoK27SVk1O4QhMm7DPH9YnMRiB2IpJMEM
-        DKHc62OPD++hYo74KtO6ngbv4ufXuj9/rdG9TRJ9Eebrwp+SsU6LFgy2R0eHUAf5
-        BpiZBUm/8/lWvc4T4Y/VgLMkN4k1tpklyhbmzFFNh0K8IctkoZu+TkVMYe+5Qmyu
-        UxQkGpaI+NkQCxicLD6ZS04hBQdeWQSagy4GF9IQF0JZCtkHKn32h0SWJ3QJ3pfz
-        Q9dUXWX8MsRKU6G4p0zQ9cdhRp0zoc7f1ufvvjIQgHsTZ46aPmBqDapEry4k8TzG
-        22nHjrve0VODY6U4rR+54JbX5LKGo3exddPrGQF5sg==
-X-ME-Sender: <xms:tr5mY_oSmNFFtR1SDhUHNYVDE_cnRUzR3iwn4HUFlVDphj2yNmJa5Q>
-    <xme:tr5mY5rMOnF4HitoFtiHn1BFTxnC6HR8DlKYtFxpyd9djOEFmYliCHr72ijK6h57M
-    PTgaSZs4S67Ey3yWFM>
-X-ME-Received: <xmr:tr5mY8PRMyu7b55KYL_FBtQJzlVn3IVnAcy1Rvdjcb4XP4vSG2mlz0GnPoAUFxWCHVHoFQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrvdeggddugecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpedfmfhirhhi
-    lhhlucetrdcuufhhuhhtvghmohhvfdcuoehkihhrihhllhesshhhuhhtvghmohhvrdhnrg
-    hmvgeqnecuggftrfgrthhtvghrnhepkedvvdejffehteegtddvgfeijeeivdegjeeiteej
-    heeiheevffeukeefheffvdevnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
-    hmrghilhhfrhhomhepkhhirhhilhhlsehshhhuthgvmhhovhdrnhgrmhgv
-X-ME-Proxy: <xmx:tr5mYy7uLLLNNK3EE0b3AziRtHnga8F2l4JVYlq9d_zkeh-zw-2aFw>
-    <xmx:tr5mY-6Byu3S0mFvXKRrlvW5eN0TGFZLqzu_saHl6Vobrs6isguN1w>
-    <xmx:tr5mY6jCQ9xLCcUv9zvq-HCbYOawygMVkfN1PY2HQ1ytgVFFPfsMhA>
-    <xmx:t75mY6oR4GP5KLiuASQnT3Eczlgr1BI6mDzTdLq2KKKKa3YTv4W5JQ>
-Feedback-ID: ie3994620:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 5 Nov 2022 15:51:17 -0400 (EDT)
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id E67B8104449; Sat,  5 Nov 2022 22:51:15 +0300 (+03)
-Date:   Sat, 5 Nov 2022 22:51:15 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     Hugh Dickins <hughd@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Vlastimil Babka <vbabka@suse.cz>, Peter Xu <peterx@redhat.com>,
-        Yang Shi <shy828301@gmail.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Sidhartha Kumar <sidhartha.kumar@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Naoya Horiguchi <naoya.horiguchi@linux.dev>,
-        Mina Almasry <almasrymina@google.com>,
-        James Houghton <jthoughton@google.com>,
-        Zach O'Keefe <zokeefe@google.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH 2/3] mm,thp,rmap: simplify compound page mapcount handling
-Message-ID: <20221105195115.2d5yvvepdjsqjmmv@box>
-References: <5f52de70-975-e94f-f141-543765736181@google.com>
- <47ad693-717-79c8-e1ba-46c3a6602e48@google.com>
+        Sat, 5 Nov 2022 16:06:44 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A8AC13DC5;
+        Sat,  5 Nov 2022 13:06:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 36235B8075B;
+        Sat,  5 Nov 2022 20:06:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A82E7C433D6;
+        Sat,  5 Nov 2022 20:06:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667678799;
+        bh=rT733yb6mRDJB52QxKMi0hwcmgmqhGu/jfN2AWSXS9k=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=B3lj/K3g5DYnLIRTc4K+/hbVErxc4p8Dy9UXpVYdzK7ksYOWaeYTXc2C2oXu5Nbgj
+         nkG+mpydmdqtPkVMK22OHjceHFGXSakCvwVH+ioQfb+otIkf8OEmzLHTy+uefm1HzB
+         PyZLmjEsSN+b8at3u3v4sY1qzfdB7yZn4WvWVFZHUQDNooduw16pBXmVDGdADyMdsu
+         pYIfzOLtVlR6bPed2gLkdouARUA0rtjGg2melv0ScFNQB4NSi8crGqOsqZ1O6VdmRJ
+         0l/WgVEn+/eWNzRweRJn4fGRvx6FbIXWr80gP7Jc/Uj9ghCnzXCx9BP5nMIRnqoaHu
+         rXvP85YZY3PrA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id C154E5C09A2; Sat,  5 Nov 2022 13:06:37 -0700 (PDT)
+Date:   Sat, 5 Nov 2022 13:06:37 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     "Elliott, Robert (Servers)" <elliott@hpe.com>
+Cc:     Zhen Lei <thunder.leizhen@huawei.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v4 4/4] rcu: Add RCU stall diagnosis information
+Message-ID: <20221105200637.GC28461@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20221104021224.102-1-thunder.leizhen@huawei.com>
+ <20221104021224.102-5-thunder.leizhen@huawei.com>
+ <MW5PR84MB18425CBD1259317004F7771AAB3A9@MW5PR84MB1842.NAMPRD84.PROD.OUTLOOK.COM>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <47ad693-717-79c8-e1ba-46c3a6602e48@google.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <MW5PR84MB18425CBD1259317004F7771AAB3A9@MW5PR84MB1842.NAMPRD84.PROD.OUTLOOK.COM>
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 02, 2022 at 06:51:38PM -0700, Hugh Dickins wrote:
-> Compound page (folio) mapcount calculations have been different for
-> anon and file (or shmem) THPs, and involved the obscure PageDoubleMap
-> flag.  And each huge mapping and unmapping of a file (or shmem) THP
-> involved atomically incrementing and decrementing the mapcount of every
-> subpage of that huge page, dirtying many struct page cachelines.
+On Sat, Nov 05, 2022 at 01:58:28AM +0000, Elliott, Robert (Servers) wrote:
 > 
-> Add subpages_mapcount field to the struct folio and first tail page,
-> so that the total of subpage mapcounts is available in one place near
-> the head: then page_mapcount() and total_mapcount() and page_mapped(),
-> and their folio equivalents, are so quick that anon and file and hugetlb
-> don't need to be optimized differently. Delete the unloved PageDoubleMap.
+> > --- a/kernel/rcu/Kconfig.debug
+> > +++ b/kernel/rcu/Kconfig.debug
+> > @@ -95,6 +95,16 @@ config RCU_EXP_CPU_STALL_TIMEOUT
+> >  	  says to use the RCU_CPU_STALL_TIMEOUT value converted from
+> >  	  seconds to milliseconds.
+> > 
+> > +config RCU_CPU_STALL_CPUTIME
 > 
-> page_add and page_remove rmap functions must now maintain the
-> subpages_mapcount as well as the subpage _mapcount, when dealing with
-> pte mappings of huge pages; and correct maintenance of NR_ANON_MAPPED
-> and NR_FILE_MAPPED statistics still needs reading through the subpages,
-> using nr_subpages_unmapped() - but only when first or last pmd mapping
-> finds subpages_mapcount raised (double-map case, not the common case).
+> Since the information might change and grow over time, consider
+> calling it "ADDITIONAL_INFO" rather than just "CPUTIME".
+
+Except that I already redirected Zhen Lei from a generic description
+to a more specific one.  The reason for this is that I already get
+complaints about the large volume of output from RCU CPU stall warnings,
+which suggests that unless the additional information is quite small,
+it should get its own Kconfig option and kernel boot parameter.
+
+So we well be keeping RCU_CPU_STALL_CPUTIME.
+
+And yes, I understand that high-end enterprise deployments might have
+absolutely no problem with the additional volume, but Linux handles a
+range of hardware and workloads that I would have thought impossible
+only 20 years ago.  And RCU needs to accommodate the full range.
+
+> > +	bool "Provide additional rcu stall debug information"
+> > +	depends on RCU_STALL_COMMON
+> > +	default n
+> > +	help
+> > +	  Statistics during the period from RCU_CPU_STALL_TIMEOUT/2 to
+> > +	  RCU_CPU_STALL_TIMEOUT, such as the number of (hard interrupts,
+> > soft
+> > +	  interrupts, task switches) and the cputime of (hard interrupts,
+> > soft
+> > +	  interrupts, kerenl tasks) are added to the rcu stall report.
 > 
-> But are those counts (used to decide when to split an anon THP, and
-> in vmscan's pagecache_reclaimable heuristic) correctly maintained?
-> Not quite: since page_remove_rmap() (and also split_huge_pmd()) is
-> often called without page lock, there can be races when a subpage pte
-> mapcount 0<->1 while compound pmd mapcount 0<->1 is scanning - races
-> which the previous implementation had prevented. The statistics might
-> become inaccurate, and even drift down until they underflow through 0.
-> That is not good enough, but is better dealt with in a followup patch.
+> s/kerenl/kernel/
 > 
-> Update a few comments on first and second tail page overlaid fields.
-> hugepage_add_new_anon_rmap() has to "increment" compound_mapcount, but
-> subpages_mapcount and compound_pincount are already correctly at 0,
-> so delete its reinitialization of compound_pincount.
+> Those parenthetical words are not grammatically correct, and
+> nobody will remember to update Kconfig if they change the code.
 > 
-> A simple 100 X munmap(mmap(2GB, MAP_SHARED|MAP_POPULATE, tmpfs), 2GB)
-> took 18 seconds on small pages, and used to take 1 second on huge pages,
-> but now takes 119 milliseconds on huge pages.  Mapping by pmds a second
-> time used to take 860ms and now takes 92ms; mapping by pmds after mapping
-> by ptes (when the scan is needed) used to take 870ms and now takes 495ms.
-> But there might be some benchmarks which would show a slowdown, because
-> tail struct pages now fall out of cache until final freeing checks them.
+> Try making it is a little less precise: 
+> "Collect statistics during the RCU stall timeout period
+> (e.g., counts and CPU time consumed by hard interrupts, soft
+> interrupts, task switches, and kernel tasks) and include
+> them in the RCU stall console error message."
+
+My usual practice when taking in patches from someone whose native
+language differs greatly from English is to do a round of wordsmithing.
+I run the wordsmithing past the author, which helps catch any errors
+I might make translating the rest of the way to Engligh and also
+(more frequently than not) helps the author's English skills.
+
+I have taken care of all but part of Zhen Lei's lat patch, and will
+pull that in later today.
+
+> ...
+> > +
+> > +	pr_err("         hardirqs   softirqs   csw/system\n");
+> > +	pr_err(" number: %8ld %10d %12lld\n",
 > 
-> Signed-off-by: Hugh Dickins <hughd@google.com>
+> Everything after a %d is a "number". These are more specifically counts.
 
-Thanks for doing this!
+The distinction between "number" and "count" probably isn't going to
+travel well, especially given that the next line could be argued to be
+either a number or a count of milliseconds.
 
-Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+To see this, please use Google Translate to convert "George is just along
+for the ride" to Chinese (simplified) and back and see what you get.  ;-)
 
-And sorry again for PageDoubleMap() :/
+OK, here is what I am going to do.  I am going to translate the last
+patch's commit log, but leave the patch itself as Zhen Lei sent it.
+Please feel free to send a follow-on patch that does the wordsmithing,
+but please check your work with some non-native English speakers.
+I am guessing that Zhen Lei would be happy to give you feedback from a
+both a technical viewpoint and a Chinese-speaker viewpoint.
 
-Minor nitpick and a question below.
+Please understand that this offer is not in any way sarcastic or
+insincere.  This sort of translation does take time and energy, and so
+I would have to be quite stupid not to accept good help.
 
-> @@ -829,12 +829,20 @@ static inline int folio_entire_mapcount(struct folio *folio)
->  
->  /*
->   * Mapcount of compound page as a whole, does not include mapped sub-pages.
-> - *
-> - * Must be called only for compound pages.
-> + * Must be called only on head of compound page.
->   */
-> -static inline int compound_mapcount(struct page *page)
-> +static inline int head_compound_mapcount(struct page *head)
->  {
-> -	return folio_entire_mapcount(page_folio(page));
-> +	return atomic_read(compound_mapcount_ptr(head)) + 1;
-> +}
-> +
-> +/*
-> + * Sum of mapcounts of sub-pages, does not include compound mapcount.
-> + * Must be called only on head of compound page.
-> + */
-> +static inline int head_subpages_mapcount(struct page *head)
-> +{
-> +	return atomic_read(subpages_mapcount_ptr(head));
->  }
->  
->  /*
+> > +		kstat_cpu_irqs_sum(cpu) - rsrp->nr_hardirqs,
+> > +		kstat_cpu_softirqs_sum(cpu) - rsrp->nr_softirqs,
+> > +		nr_context_switches_cpu(cpu) - rsrp->nr_csw);
+> 
+> Two columns are plural and one is not. 
+> 
+> Within a few lines, this is referred to as "context_switches", cws, 
+> and "task switches." One term would be better. vmstat uses "cs", 
+> pidstat uses "cswch", and /proc/<pid>/status uses "ctxt_switches,"
+> so there's not one ideal term for that column. Matching one
+> of those might be better than using another unique name.
+> 
+> Since no other variants are shown, the "/system" suffix is a bit
+> confusing. 
 
-Any particular reason these two do not take struct folio as an input?
-It would guarantee that it is non-tail page. It will not guarantee
-large-folio, but it is something.
+These are good points, including the lack of standard current
+nomenclature.  Again, would you be interested in providing a translation
+patch?
 
-> @@ -1265,8 +1288,6 @@ void page_add_new_anon_rmap(struct page *page,
->  		VM_BUG_ON_PAGE(!PageTransHuge(page), page);
->  		/* increment count (starts at -1) */
->  		atomic_set(compound_mapcount_ptr(page), 0);
-> -		atomic_set(compound_pincount_ptr(page), 0);
-> -
+> > +	pr_err("cputime: %8lld %10lld %12lld   ==> %lld(ms)\n",
+> > +		div_u64(cpustat[CPUTIME_IRQ] - rsrp->cputime_irq, NSEC_PER_MSEC),
+> > +		div_u64(cpustat[CPUTIME_SOFTIRQ] - rsrp->cputime_softirq, NSEC_PER_MSEC),
+> > +		div_u64(cpustat[CPUTIME_SYSTEM] - rsrp->cputime_system, NSEC_PER_MSEC),
+> > +		jiffies64_to_msecs(half_timeout));
+> 
+> There is no column header for that fourth number. "half_timeout"
+> might be good, dropping the "==>".
 
-It has to be initialized to 0 on allocation, right?
+Another approach is to print it as a fraction, in this case, 2425/2500.
+Of course, adding the "/2500" to the other two columns would be annoying.
+Yet another approach is to leave that last column, but prepend a "/",
+as in "/2500(ms)".
 
->  		__mod_lruvec_page_state(page, NR_ANON_THPS, nr);
->  	} else {
->  		/* increment count (starts at -1) */
+> The "(ms)" at the end is awkward. Try moving it to the left
+> as "cputime (ms): "
 
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+Good point, and that might also better disambiguate "number" than
+any other choice.
+
+> > +int rcu_cpu_stall_cputime __read_mostly =
+> > IS_ENABLED(CONFIG_RCU_CPU_STALL_CPUTIME);
+> 
+> As a config option and module parameter, adding some more
+> instrumentation overhead might be worthwhile for other
+> likely causes of rcu stalls.
+> 
+> For example, if enabled, have these functions (if available
+> on the architecture) maintain a per-CPU running count of
+> their invocations, which also cause the CPU to be unavailable
+> for rcu: 
+> - kernel_fpu_begin() calls - FPU/SIMD context preservation,
+>   which also calls preempt_disable()
+> - preempt_disable() calls - scheduler context switches disabled
+> - local_irq_save() calls - interrupts disabled
+> - cond_resched() calls - lack of these is a problem
+> 
+> For kernel_fpu_begin and preempt_disable, knowing if it is
+> currently blocked for those reasons is probably the most
+> helpful.
+
+These could be additional patches.
+
+But please tie any such patch to an actual use case.  After all, if no
+one actually uses that additional information, we have irritates untold
+numbers of electrons for no purpose.
+
+Also, some of those functions are on fastpaths, so adding unconditional
+instrumentation overhead might result in an objection or three.
+
+As always, choose wisely!  ;-)
+
+If I don't see anything from you by this coming Friday, I will fold my
+usual wordsmithing into the patch.
+
+							Thanx, Paul
