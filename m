@@ -2,66 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 029E561A786
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 05:39:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 411C461A78A
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 05:39:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229546AbiKEEjN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Nov 2022 00:39:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44614 "EHLO
+        id S229581AbiKEEjY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Nov 2022 00:39:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbiKEEjL (ORCPT
+        with ESMTP id S229461AbiKEEjX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Nov 2022 00:39:11 -0400
-Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02ED7317EF
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Nov 2022 21:39:09 -0700 (PDT)
-Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-13b6c1c89bdso7545058fac.13
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Nov 2022 21:39:09 -0700 (PDT)
+        Sat, 5 Nov 2022 00:39:23 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5172431DC2;
+        Fri,  4 Nov 2022 21:39:22 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id bp15so9869270lfb.13;
+        Fri, 04 Nov 2022 21:39:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=QVhCjTiXsm0XAmH+YRM1X339ickLF/GL0sKIvePwac0=;
-        b=FCSnsB+Ncbn05GHt62BXuzIBr4rsH97IiQeiye272VEDnNBybqlEYM6y/waq3nV71X
-         KaiiJRqUZTcnkEtCXHhVXzAmNgTVDOFb0BYeit0BPiJhk79dMcjE/vceD3btbG/nkPML
-         Sm3DZk4p55e3hOTDWHNnf21GfDhgAx0bVHpoV0VyYDI1lXMoPQT8hyTC9bHRPciw8JpY
-         eZ3sDpBvLCFakfNbS83WC96gEQjxzBIVJj5pWpvD6FPndHyIGhQPp6LOCChKqMqdnq/j
-         QMd8VSRtjkvDQKWcnjd0BXbzYUlGxA6LG1Sxr6sSwrBkaa0Rl3aJHijXxEDFqV3gIa+K
-         d1Kw==
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=pbMdUA8UzsgI7FBm0NGKkw14zTLbr3tXLACAHzr4fDs=;
+        b=CBUyq6rYjIfFSwz5VzRXGpr7DVFky/4CH0A1ipD4d8L+781f6w+0x2TsJmqGkamr6I
+         Hhnl26yg+95M13iR75yIefdX4cFjP7cM7ovutbIu4KrZRCmVksiqh7JoLI37N0plcNMS
+         s9NnMhjo2JWh1+xUY9vq9Afy0Dxf54t2hlyzG2wVyu1exu6xtm9AuZjL4+J35APgWn5Y
+         OwWXVvFlXy7J8ZlO7Bihw9NhuQo5QQ34atPRgXxJaqUOe8hGIzxu6K8muyCci9r05v02
+         Z4JLv06IBzqXbfXhVZc86fRd6QpvdlNiGQHLWu9sFaR4N4yNlRcNnQvCxQTtS8l6jBqk
+         ueTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=QVhCjTiXsm0XAmH+YRM1X339ickLF/GL0sKIvePwac0=;
-        b=UZKdFquzvJyAiB7EcnJYPrHZ1h3VViRphhqySyUiJaii8HN+GxriF4YOWLdPHvaa1P
-         KOnNGuve3/OzODOILs4cjIXRk9EoASAtYDo+yZxNrFpm/ju4VZhD24bwpUrEJiMngU3W
-         vfZdgotz644YTevf+TBganEn04lwsdm0j5p/ZgWpjbYo7PQQwleoMVkvmpnRxtt5UwDd
-         bMNDIYAKkZe/1DqdfSNkvhrF6RmussitDissvi3dxvQ0czuY4eaJ1g4KrPt7SS4YWsND
-         uWWnLBGuyR1hYxquIStjuEuMvDJr3+Q9mb4qGjcDmWd2qI0uG1H1PM1dPQ7VqEhhfWMy
-         RGJA==
-X-Gm-Message-State: ACrzQf2JVY60oRgVS6qtXeqfsVarTX85eROPjirBud9ciVRmX6iUdEtp
-        rVenPyyVxLkm3gok22wHjvg7MuSkOKgz1XokXuq1
-X-Google-Smtp-Source: AMsMyM4w7eiFkYBhePubE/PyYhcqGdnaotz0NDTczdH13Aq1WqMXxNy3Sb/YZHqSax4NIV/jSYcVfTpPs875XiKcH8E=
-X-Received: by 2002:a05:6870:f299:b0:13b:ad21:934d with SMTP id
- u25-20020a056870f29900b0013bad21934dmr23511755oap.172.1667623149267; Fri, 04
- Nov 2022 21:39:09 -0700 (PDT)
+        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=pbMdUA8UzsgI7FBm0NGKkw14zTLbr3tXLACAHzr4fDs=;
+        b=z9QMQY899s4r/3iMaoKQ8psOEqyXRGfwRpKvu0ZFhv2EehtzXgtNrDsEwVT2rR4Vvt
+         MzhZeK+rEAyfnQf1mVTebql0gDGs8HE7z88DgmIbW3UGjNiKmpnQQQwCI/a9xHQSe7z4
+         kFFKdVrlJDewX8ClRYnVkex8oUiQP8cnogF7Ay3XvWiX+mbaZovpg8FEtWwdAZvBYwRj
+         kA44U4zz0piKyANaxrwFTIKbAlXQvIDxpBQ9gazrfBBckRWeGRJOy8u2VRCECYugG3iV
+         7VuiOTKtH2JUdeuBzPlGAx36w8oxWfyxgHUn/daxqhZY8ZKuETviYB+/2d/lYR1wK34U
+         /VzA==
+X-Gm-Message-State: ANoB5plomwEq3cphw/XAaeKHVF4YMENy/UImiytiNrpaQNXwTCe69LkQ
+        uph9Aq8cX7Xy1opR4IIb1/YUlXlqoZUE3hzs0UFaMteE
+X-Google-Smtp-Source: AA0mqf7nLvop9D7qwQ0uqbWJPpEk5/avywHRXNBnPB/1d3nHsLxajC4xHLpyUku0yqPnJvMAPZXupJDsz6XCNwkQ0DY=
+X-Received: by 2002:a19:c215:0:b0:4b2:9de:44fe with SMTP id
+ l21-20020a19c215000000b004b209de44femr1584906lfc.636.1667623160012; Fri, 04
+ Nov 2022 21:39:20 -0700 (PDT)
 MIME-Version: 1.0
-References: <20221103151205.702826-1-omosnace@redhat.com>
-In-Reply-To: <20221103151205.702826-1-omosnace@redhat.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Sat, 5 Nov 2022 00:38:57 -0400
-Message-ID: <CAHC9VhS460B4Jpk8kqmhTBZv_dMuysNb9yH=6hB4-+Oc35UkAQ@mail.gmail.com>
-Subject: Re: [PATCH v2] fs: don't audit the capability check in simple_xattr_list()
-To:     Ondrej Mosnacek <omosnace@redhat.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        linux-fsdevel@vger.kernel.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Martin Pitt <mpitt@redhat.com>,
-        Christian Brauner <brauner@kernel.org>
+References: <20221104074441.634677-1-chenxiaosong2@huawei.com>
+ <871qqi1u3a.fsf@cjr.nz> <CAH2r5msDR41wQhtsAcE_pUvXXdvwWBBNdESvCkieBoy42vVhcA@mail.gmail.com>
+In-Reply-To: <CAH2r5msDR41wQhtsAcE_pUvXXdvwWBBNdESvCkieBoy42vVhcA@mail.gmail.com>
+From:   Steve French <smfrench@gmail.com>
+Date:   Fri, 4 Nov 2022 23:39:08 -0500
+Message-ID: <CAH2r5msCeS_3LJffON76hOO5fe7HA6Kc-5z7wDbXuoEDAijVbA@mail.gmail.com>
+Subject: Fwd: [PATCH v2] cifs: fix use-after-free on the link name
+To:     CIFS <linux-cifs@vger.kernel.org>,
+        samba-technical <samba-technical@lists.samba.org>,
+        LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,43 +67,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 3, 2022 at 11:13 AM Ondrej Mosnacek <omosnace@redhat.com> wrote:
->
-> The check being unconditional may lead to unwanted denials reported by
-> LSMs when a process has the capability granted by DAC, but denied by an
-> LSM. In the case of SELinux such denials are a problem, since they can't
-> be effectively filtered out via the policy and when not silenced, they
-> produce noise that may hide a true problem or an attack.
->
-> Checking for the capability only if any trusted xattr is actually
-> present wouldn't really address the issue, since calling listxattr(2) on
-> such node on its own doesn't indicate an explicit attempt to see the
-> trusted xattrs. Additionally, it could potentially leak the presence of
-> trusted xattrs to an unprivileged user if they can check for the denials
-> (e.g. through dmesg).
->
-> Therefore, it's best (and simplest) to keep the check unconditional and
-> instead use ns_capable_noaudit() that will silence any associated LSM
-> denials.
->
-> Fixes: 38f38657444d ("xattr: extract simple_xattr code from tmpfs")
-> Reported-by: Martin Pitt <mpitt@redhat.com>
-> Suggested-by: Christian Brauner (Microsoft) <brauner@kernel.org>
-> Signed-off-by: Ondrej Mosnacek <omosnace@redhat.com>
-> ---
->
-> v1 -> v2: switch to simpler and better solution as suggested by Christian
->
-> v1: https://lore.kernel.org/selinux/CAFqZXNuC7c0Ukx_okYZ7rsKycQY5P1zpMPmmq_T5Qyzbg-x7yQ@mail.gmail.com/T/
->
->  fs/xattr.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+tentatively merged into cifs-2.6.git for-next pending additional testing
 
-VFS folks, this should really go through a vfs tree, but if nobody
-wants to pick it up *and* there are no objections to the change, I can
-take this via the LSM tree.
+On Fri, Nov 4, 2022 at 12:57 PM Paulo Alcantara via samba-technical
+<samba-technical@lists.samba.org> wrote:
+>
+> ChenXiaoSong <chenxiaosong2@huawei.com> writes:
+>
+> > When opened a symlink, link name is from 'inode->i_link', but it may be
+> > reset to a new value when revalidate the dentry. If some processes get the
+> > link name on the race scenario, then UAF will happen on link name.
+> >
+> > Fix this by implementing 'get_link' interface to duplicate the link name.
+> >
+> > Fixes: 76894f3e2f71 ("cifs: improve symlink handling for smb2+")
+> > Signed-off-by: ChenXiaoSong <chenxiaosong2@huawei.com>
+> > ---
+> >  fs/cifs/cifsfs.c | 26 +++++++++++++++++++++++++-
+> >  fs/cifs/inode.c  |  5 -----
+> >  2 files changed, 25 insertions(+), 6 deletions(-)
+>
+> Reviewed-by: Paulo Alcantara (SUSE) <pc@cjr.nz>
+>
 
-Reviewed-by: Paul Moore <paul@paul-moore.com>
 
 -- 
-paul-moore.com
+Thanks,
+
+Steve
+
+
+-- 
+Thanks,
+
+Steve
