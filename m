@@ -2,66 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA44161D937
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 10:54:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5684761D93B
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Nov 2022 10:57:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229629AbiKEJyP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Nov 2022 05:54:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32922 "EHLO
+        id S229688AbiKEJ5W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Nov 2022 05:57:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbiKEJyM (ORCPT
+        with ESMTP id S229487AbiKEJ5U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Nov 2022 05:54:12 -0400
-Received: from smtp.domeneshop.no (smtp.domeneshop.no [IPv6:2a01:5b40:0:3005::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2242D18B21
-        for <linux-kernel@vger.kernel.org>; Sat,  5 Nov 2022 02:54:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tronnes.org
-        ; s=ds202112; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=QO/uh1tfrB1vZ/birVU9li3LJoDhOtqTeKkjmuQEcpU=; b=f8PZKPFaPnsa8knKT47i9fE0mj
-        aPMGaxO8zVXZyxJw7hhyjdY4uvNrXmbqRHSafTyZWk/g8BzjhCu914LSe3zgUxxIsg+6gYlyIIyO7
-        lDHZlOIyJGF9WsoQWnE4Cl/1UtZdjggV34hs38KfCrXqNmSrljZff2IkB7ocrp4Gy9K/dCuaeFeuj
-        DkWey3994d15MZEeU9o/P8W8QrYdwL7LQnJEIG6Z+t8EQgXAN2Ksnf9RirKKbjp92ni2CIiIrgqw4
-        WqLxmEJSQtVJTAm5xnBVPkhwwKPnnmMnofe+rOmye/FM633hokTlk13EMWHPa/1DhC6+Im2uTGbWs
-        QLgtsy7w==;
-Received: from [2a01:799:95a:cb00:749c:a195:60ac:1a6b] (port=61208)
-        by smtp.domeneshop.no with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <noralf@tronnes.org>)
-        id 1orFsN-0003Pc-4Z; Sat, 05 Nov 2022 10:54:07 +0100
-Message-ID: <4b97cc9b-4143-2a2f-f431-a7ea83a2e945@tronnes.org>
-Date:   Sat, 5 Nov 2022 10:54:02 +0100
+        Sat, 5 Nov 2022 05:57:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 489E518B21;
+        Sat,  5 Nov 2022 02:57:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C28CB60B16;
+        Sat,  5 Nov 2022 09:57:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 609AAC433D6;
+        Sat,  5 Nov 2022 09:57:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1667642237;
+        bh=CrtV301dX680V0TO45XPkqCAEPd5NncbV4z/AHZEjjo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=WQ/p1MLGqU8w1n0eRBDGckYVHyHConKkkopJDp6KKUoZExEtiwwRPi+7lAj/EnT/7
+         6crldLZom/JqM31NPid0WcmWS+e8HF+Hscd2yI1UKiA76g+C8iBGQ+ycxUN64Yhy/6
+         a4/4+91D4bPj8sdUkgUDRjjm3xlVIUdUsxlcDk4E=
+Date:   Sat, 5 Nov 2022 10:57:14 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
+        torvalds@linux-foundation.org, stable@vger.kernel.org, lwn@lwn.net,
+        jslaby@suse.cz
+Subject: Re: Linux 4.14.297
+Message-ID: <Y2YzeruPdM2y327C@kroah.com>
+References: <166732705422181@kroah.com>
+ <20221104181745.ahtjvjvk5qk7vu37@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH v4a 31/38] timers: drm: Use timer_shutdown_sync() for on
- stack timers
-To:     Steven Rostedt <rostedt@goodmis.org>, linux-kernel@vger.kernel.org
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Anna-Maria Gleixner <anna-maria@linutronix.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
-References: <20221105060024.598488967@goodmis.org>
- <20221105060200.540142479@goodmis.org>
-From:   =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
-In-Reply-To: <20221105060200.540142479@goodmis.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221104181745.ahtjvjvk5qk7vu37@google.com>
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,42 +52,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-Den 05.11.2022 07.00, skrev Steven Rostedt:
-> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+On Fri, Nov 04, 2022 at 11:17:45AM -0700, Nick Desaulniers wrote:
+> On Tue, Nov 01, 2022 at 07:24:13PM +0100, Greg Kroah-Hartman wrote:
+> > I'm announcing the release of the 4.14.297 kernel.
+> > 
+> > All users of the 4.14 kernel series must upgrade.
+> > 
+> > The updated 4.14.y git tree can be found at:
+> > 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-4.14.y
+> > and can be browsed at the normal kernel.org git web browser:
+> > 	https://git.kernel.org/?p=linux/kernel/git/stable/linux-stable.git;a=summary
 > 
-> Before a timer is released, timer_shutdown_sync() must be called.
+> Hi Greg and stable tree maintainers,
+> Please consider cherry-picking
+> commit 95b980d62d52 ("linux/bits.h: make BIT(), GENMASK(), and friends available in assembly")
+> back to 4.19.y and 4.14.y. It first landed in v5.3-rc1 and applies
+> cleanly to both branches. I did not find any fixups to 95b980d62d52,
+> FWIW.
 > 
-> Link: https://lore.kernel.org/all/20221104054053.431922658@goodmis.org/
+> Otherwise users upgrading to this point release of linux-4.14.y still on
+> versions of the GNU assembler older than v1.28 will observe assembler
+> errors when building this series. See the link below for the error
+> messages.
 > 
-> Cc: "Noralf Trønnes" <noralf@tronnes.org>
-> Cc: David Airlie <airlied@gmail.com>
-> Cc: Daniel Vetter <daniel@ffwll.ch>
-> Cc: Jani Nikula <jani.nikula@linux.intel.com>
-> Cc: Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
-> Cc: Rodrigo Vivi <rodrigo.vivi@intel.com>
-> Cc: Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-> Cc: dri-devel@lists.freedesktop.org
-> Cc: intel-gfx@lists.freedesktop.org
-> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-> ---
+> Please see
+> https://lore.kernel.org/llvm/20221103210748.1343090-1-ndesaulniers@google.com/
+> for more info.
 
-Acked-by: Noralf Trønnes <noralf@tronnes.org>
+Did you try building with that commit applied?  I get the following
+build error when running it through the Android build system:
 
->  drivers/gpu/drm/gud/gud_pipe.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/gpu/drm/gud/gud_pipe.c b/drivers/gpu/drm/gud/gud_pipe.c
-> index 7c6dc2bcd14a..08429bdd57cf 100644
-> --- a/drivers/gpu/drm/gud/gud_pipe.c
-> +++ b/drivers/gpu/drm/gud/gud_pipe.c
-> @@ -272,7 +272,7 @@ static int gud_usb_bulk(struct gud_device *gdrm, size_t len)
->  
->  	usb_sg_wait(&ctx.sgr);
->  
-> -	if (!del_timer_sync(&ctx.timer))
-> +	if (!timer_shutdown_sync(&ctx.timer))
->  		ret = -ETIMEDOUT;
->  	else if (ctx.sgr.status < 0)
->  		ret = ctx.sgr.status;
+In file included from /buildbot/src/android/q-common-android-4.14/common/arch/arm64/include/asm/bitops.h:49:
+/buildbot/src/android/q-common-android-4.14/common/include/asm-generic/bitops/non-atomic.h:60:23: error: implicit declaration of function 'UL' [-Werror,-Wimplicit-function-declaration]
+        unsigned long mask = BIT_MASK(nr);
+                             ^
+/buildbot/src/android/q-common-android-4.14/common/include/linux/bits.h:10:24: note: expanded from macro 'BIT_MASK'
+#define BIT_MASK(nr)            (UL(1) << ((nr) % BITS_PER_LONG))
+
+So are you sure this is the correct fix?
+
+thanks,
+
+greg k-h
