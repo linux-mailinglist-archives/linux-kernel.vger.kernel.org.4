@@ -2,90 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 767AC61E0DB
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 09:26:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C01F961E0DC
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 09:31:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229668AbiKFI0d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Nov 2022 03:26:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58542 "EHLO
+        id S229692AbiKFIb1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Nov 2022 03:31:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229589AbiKFI0a (ORCPT
+        with ESMTP id S229589AbiKFIbY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Nov 2022 03:26:30 -0500
-Received: from msg-2.mailo.com (msg-2.mailo.com [213.182.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 609CCB1C0
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Nov 2022 01:26:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
-        t=1667723169; bh=yX2+265rR785M95fcHNy467AL5AwbELaJnp6X7G2qZA=;
-        h=X-EA-Auth:Date:From:To:Subject:Message-ID:MIME-Version:
-         Content-Type;
-        b=np7fFDM1XDP0KCPeEjakvsHzqo7RO/2yRlvxCCCNQ/6NLWYt/yv+kgZMJQoY/xfpZ
-         aEmI+KvXRRYiuU+D/2wT3OWEiW/aTxiC2WhhczVn5eQSNkLa2sxvjthojgCDsCoA1Z
-         g2eYVoeZTXjS5hhn74r7fJ5PDPfrGjo+qfCXcD+w=
-Received: by b-6.in.mailobj.net [192.168.90.16] with ESMTP
-        via ip-206.mailobj.net [213.182.55.206]
-        Sun,  6 Nov 2022 09:26:09 +0100 (CET)
-X-EA-Auth: XktWBgDFtHub354BC+dxxKliuilwtqXGDLzjuFBXbch+6Vu+T4PKfcqK1yl3KXCjd08T7ttmQsZpXyjbsVWn622SMiCd1gX+
-Date:   Sun, 6 Nov 2022 13:56:01 +0530
-From:   Deepak R Varma <drv@mailo.com>
-To:     Larry Finger <Larry.Finger@lwfinger.net>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Pavel Skripkin <paskripkin@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH] staging: r8188eu: simplify complex pointer casting
-Message-ID: <Y2dvmdGxQfmK4O6F@qemulion>
+        Sun, 6 Nov 2022 03:31:24 -0500
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDBDDBC0A
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Nov 2022 01:31:22 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id z26so8089390pff.1
+        for <linux-kernel@vger.kernel.org>; Sun, 06 Nov 2022 01:31:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=QVmSnXt2cQp/FGtsTIfuWxTO1qzExefIA3nhCwOwGEM=;
+        b=TO0EsbJtWRFqDgIWJq/In23egRIvivDjs3i7F5P2C3YDuEA3NEftvGxLYjNcNk2Kmy
+         Re8NU/fyCfZ89E7yFVUuxbXm6/MNJWWHXzlXSTnUhLc43bMR6SGfGoQppKD3jGTysTbN
+         z/MZqJevuVzCLTvHfFJdNPwIP76jL5iOQ+8Cx4QEBN2SnzATSaEQwoGcFMUMa1xOblF5
+         mx3Xlj9rJfxmuV66loHKPTzVMXZAyPEVFEC8g+xaTFCfX3TS4PsH9NOMrPlxJgzWKHpV
+         0yRYkIGCW9+LObbJCuEkXW1ln+zVj4ki3UZZLv1llAqdzqPTRsxjazu2nWU1FzeSM0fi
+         QRMQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=QVmSnXt2cQp/FGtsTIfuWxTO1qzExefIA3nhCwOwGEM=;
+        b=TpLnOz3w0Wq9Nw8gMXTu1O4mHuw4ZArQneZHicmRxv/TI7jGxm/n/Dxr9lVFr7hLSc
+         SQpPd8/F9J5SX8tAeFMOmEeGEWOnaTBSJGNmV6TZiEz+wXKORPGfH2xoxBgcX+zJ1o7/
+         r9cvnupF//zAMlPjjDkrO/MIZHOWwg4JAIvid+tdhuEsKL5Byq9+ihkkyw4nPMNqOcq+
+         xnPW1NZImXoSWA0mzFxJfio+Nsml7DiHHdnObbg0HlrmihIW/mvs2Bnu1Np0hzLgUQx9
+         Rq1Y/pAx5A4JMtgzAOV2y6csvzLcgzD9V3qzxFWgZrON4I5QGMlUWbDVVN7qBniDvM6A
+         BxVg==
+X-Gm-Message-State: ACrzQf1tHIyOfzSCGFN+28zhWI/glpeInwNCPUEkryLXl7QxGelmmjVR
+        zKSrksW9TWXnRiefPxU+8lKaTWdfdXmJfb4G
+X-Google-Smtp-Source: AMsMyM7xW3vyHDXGjWfbVETA+rdoG4p6NKnLwUfKFXjm/xk+clR4UzgxIlx7+oHsNdKKQsoOsGNrsA==
+X-Received: by 2002:a63:215f:0:b0:46f:c464:a054 with SMTP id s31-20020a63215f000000b0046fc464a054mr29083875pgm.420.1667723482154;
+        Sun, 06 Nov 2022 01:31:22 -0700 (PDT)
+Received: from jacob-Ubuntu (126.224.215.218.sta.wbroadband.net.au. [218.215.224.126])
+        by smtp.gmail.com with ESMTPSA id x10-20020a1709027c0a00b00186b8752a78sm2790487pll.80.2022.11.06.01.31.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 06 Nov 2022 01:31:21 -0700 (PDT)
+From:   Jacob Bai <jacob.bai.au@gmail.com>
+To:     gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v4 0/3] staging: rtl8192e: trivial code cleanup patches 
+Date:   Sun,  6 Nov 2022 19:31:15 +1100
+Message-Id: <cover.1667723306.git.jacob.bai.au@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Pointers to structures udphdr and dhcpMessage are derived by casting
-adjacent pointers with size_t. Such typecast of pointer using size_t
-is not preferred. The code looks complex and delicate. Simplify such
-casting by utilizing generic "void *" casting.
-While at this change, remove the unnecessary __be32 casting for member
-variable "cookie".
+Rename few variables and source files to make it align with other
+rtlwifi drivers.
+The patches are required to be applied in sequence.
 
-Suggested-by: Joe Perches <joe@perches.com>
-Signed-off-by: Deepak R Varma <drv@mailo.com>
----
- drivers/staging/r8188eu/core/rtw_br_ext.c | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+Changes in v4:
+	1. missing vision number in the v3
 
-diff --git a/drivers/staging/r8188eu/core/rtw_br_ext.c b/drivers/staging/r8188eu/core/rtw_br_ext.c
-index a23f7df373ed..e9b0906d0d74 100644
---- a/drivers/staging/r8188eu/core/rtw_br_ext.c
-+++ b/drivers/staging/r8188eu/core/rtw_br_ext.c
-@@ -610,13 +610,15 @@ void dhcp_flag_bcast(struct adapter *priv, struct sk_buff *skb)
- 			struct iphdr *iph = (struct iphdr *)(skb->data + ETH_HLEN);
+Changes in v3:
+	1.Patch 3: use ARRAY_SIZE() to replace macros, feedback from
+joe@perches.com
 
- 			if (iph->protocol == IPPROTO_UDP) { /*  UDP */
--				struct udphdr *udph = (struct udphdr *)((size_t)iph + (iph->ihl << 2));
-+				struct udphdr *udph = (void *)iph + (iph->ihl << 2);
+Changes in v2:
+	1. Patch 2: modify r8192E_firmware.c to include table.h instead of
+r8192E_hwimg.h.
 
- 				if ((udph->source == htons(CLIENT_PORT)) &&
- 				    (udph->dest == htons(SERVER_PORT))) { /*  DHCP request */
--					struct dhcpMessage *dhcph =
--						(struct dhcpMessage *)((size_t)udph + sizeof(struct udphdr));
--					u32 cookie = be32_to_cpu((__be32)dhcph->cookie);
-+					u32 cookie;
-+					struct dhcpMessage *dhcph;
-+
-+					dhcph = (void *)udph + sizeof(struct udphdr);
-+					cookie = be32_to_cpu(dhcph->cookie);
+Jacob Bai (3):
+  staging: rtl8192e: rename tables in r8192e_hwimg.c
+  staging: rtl8192e: rename r8192E_hwimg.c/h to table.c/h
+  staging: rtl8192e: replace macro defines with ARRAY_SIZE
 
- 					if (cookie == DHCP_MAGIC) { /*  match magic word */
- 						if (!(dhcph->flags & htons(BROADCAST_FLAG))) {
---
+ drivers/staging/rtl8192e/rtl8192e/Makefile    |  2 +-
+ .../rtl8192e/rtl8192e/r8192E_firmware.c       |  2 +-
+ .../staging/rtl8192e/rtl8192e/r8192E_hwimg.h  | 33 ------------
+ .../staging/rtl8192e/rtl8192e/r8192E_phy.c    | 54 +++++++++----------
+ .../staging/rtl8192e/rtl8192e/r8192E_phy.h    | 20 -------
+ .../rtl8192e/{r8192E_hwimg.c => table.c}      | 34 +++++++-----
+ drivers/staging/rtl8192e/rtl8192e/table.h     | 33 ++++++++++++
+ 7 files changed, 84 insertions(+), 94 deletions(-)
+ delete mode 100644 drivers/staging/rtl8192e/rtl8192e/r8192E_hwimg.h
+ rename drivers/staging/rtl8192e/rtl8192e/{r8192E_hwimg.c => table.c} (91%)
+ create mode 100644 drivers/staging/rtl8192e/rtl8192e/table.h
+
+-- 
 2.34.1
-
-
 
