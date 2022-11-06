@@ -2,119 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3A2A61E223
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 13:45:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D33861E226
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 13:47:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229933AbiKFMpl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Nov 2022 07:45:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60884 "EHLO
+        id S229942AbiKFMrV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Nov 2022 07:47:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229763AbiKFMpj (ORCPT
+        with ESMTP id S229763AbiKFMrT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Nov 2022 07:45:39 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A436634B;
-        Sun,  6 Nov 2022 04:45:38 -0800 (PST)
-Received: from zn.tnic (p200300ea9733e7a5329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e7a5:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id B70C11EC050B;
-        Sun,  6 Nov 2022 13:45:36 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1667738736;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=O3Plcr3YOvWsF84KnFw9R0UX3XtJkwUwzUnXUCUaHoY=;
-        b=lO2T1ERQfqMhcp3K2rEZugUHLYpePRXjgR42fDDzpDUcpsfsQ/PRrawsdC7z7MAE/qjMZ9
-        VTaRC8HJt7BFvpMyiz08w851BVWx9bFpFPh2/dFxtOJW1Mb+SYUEiMaNkkEiN1wfnm9RvO
-        fii72rKb9IjCWouDXfCI1qqHsvUUPDg=
-Date:   Sun, 6 Nov 2022 13:45:16 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Dave Hansen <dave.hansen@linux.intel.com>
-Cc:     linux-kernel@vger.kernel.org, linux-tip-commits@vger.kernel.org,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        x86@kernel.org
-Subject: Re: [tip: x86/urgent] x86/tdx: Prepare for using "INFO" call for a
- second purpose
-Message-ID: <Y2esXPWwulendusf@zn.tnic>
-References: <166734513630.7716.12952231613533508782.tip-bot2@tip-bot2>
+        Sun, 6 Nov 2022 07:47:19 -0500
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50A5C634B;
+        Sun,  6 Nov 2022 04:47:18 -0800 (PST)
+Received: by mail-pl1-f174.google.com with SMTP id v17so8835660plo.1;
+        Sun, 06 Nov 2022 04:47:18 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rtaI7dptqi5ZpwJEZKaaL0yHcZ/jKYlvvRoizfRf0a4=;
+        b=hZ0xCe/GW5Y0ltXS00gNODyCPC6FA+KEIKiJsRflmcBFDNd7JhRQ0qE0/ExSOqlC4m
+         BdaMcxxj934ELo+qtnTIZr0KlJDVU1omBbuaXXwfyEVPkY9N7Ff4d3rS8TbKT9KTANM9
+         bYobQjfpC3N4AbgIGkTcFTQzYuLntY7U1lPRQu9r4aFCa7eoCgYXORH7VBRGUwz4Dy9A
+         BdcGIs4DUUwnXv9TEus/ncKRdeLC/rT+aCDKWK4S4tXCuG2KpTiVkOlTUBeRsZFtm/7j
+         oPBW8jxp/TUYxO5D/cEPwlpHGOalyZr7bSJwbASJscHAsfekwVAoPPeSVycrhsbPeVZ6
+         7PqQ==
+X-Gm-Message-State: ACrzQf0OM1+XLdDa5humlRh+Gpjf1pN3mtBQZFyaejYdKoF9uJi5jsSS
+        wGiLlY6mAbZsLiHs2SIqdYI9kem7SPvawztts5rxT7gi0Tk5/w==
+X-Google-Smtp-Source: AMsMyM7GddVXpGsuPBU+Xos4izTkPzEvtdjJZR2iS+fIEdVgkOfoGrk2J+rXCuIE9xRXrLiUOKQYl9flVkc3vJKP9cY=
+X-Received: by 2002:a17:90b:4ac3:b0:213:3918:f276 with SMTP id
+ mh3-20020a17090b4ac300b002133918f276mr61586630pjb.19.1667738837447; Sun, 06
+ Nov 2022 04:47:17 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <166734513630.7716.12952231613533508782.tip-bot2@tip-bot2>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221104073659.414147-1-mailhol.vincent@wanadoo.fr>
+ <20221104171604.24052-1-mailhol.vincent@wanadoo.fr> <20221104171604.24052-4-mailhol.vincent@wanadoo.fr>
+ <Y2Ydf6UxVvTe8Zmz@kroah.com> <CAMZ6RqJkzag-PGuzHcDQkSXjqH6d8=uAe-UN8VXUoNWX2x+qbw@mail.gmail.com>
+ <CAMZ6RqLMGfW0QcNdBKhfwayV=+FNHhvM_-ob0UvL=o6=zN0J7A@mail.gmail.com>
+ <Y2afm9xFIvJnwXh/@kroah.com> <Y2cDlrNjL5YSAPm2@rowland.harvard.edu> <Y2eYw9Kna712mzR8@kroah.com>
+In-Reply-To: <Y2eYw9Kna712mzR8@kroah.com>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Sun, 6 Nov 2022 21:47:05 +0900
+Message-ID: <CAMZ6RqJVFwhCjxghmDBt2kYeT_KhqE-4h=UGtKaSA1bwke1CaA@mail.gmail.com>
+Subject: Re: [PATCH v2 3/3] can: etas_es58x: report the firmware version
+ through ethtool
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Alan Stern <stern@rowland.harvard.edu>, linux-can@vger.kernel.org,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 01, 2022 at 11:25:36PM -0000, tip-bot2 for Dave Hansen wrote:
-> @@ -121,7 +121,7 @@ static u64 get_cc_mask(void)
->  	 * The highest bit of a guest physical address is the "sharing" bit.
->  	 * Set it for shared pages and clear it for private pages.
->  	 */
-> -	return BIT_ULL(gpa_width - 1);
-> +	*cc_mask = BIT_ULL(gpa_width - 1);
->  }
+On Sun. 6 Nov. 2022 at 20:25, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+> On Sat, Nov 05, 2022 at 08:45:10PM -0400, Alan Stern wrote:
+> > On Sat, Nov 05, 2022 at 06:38:35PM +0100, Greg Kroah-Hartman wrote:
+> > > On Sun, Nov 06, 2022 at 02:21:11AM +0900, Vincent MAILHOL wrote:
+> > > > On Sat. 5 Nov. 2022 at 18:27, Vincent MAILHOL
+> > > > <mailhol.vincent@wanadoo.fr> wrote:
+> > > > > On Sat. 5 Nov. 2022 at 17:36, Greg Kroah-Hartman
+> > > > > <gregkh@linuxfoundation.org> wrote:
+> > > It's late right now, and I can't remember the whole USB spec, but I
+> > > think the device provides a list of the string ids that are valid for
+> > > it.  If so, we can add that to sysfs for any USB device out there, no
+> > > matter the string descriptor number.
+> >
+> > No, there is no such list.
+>
+> Yeah, my fault, nevermind about that, sorry.
+>
+> > > If not, maybe we can just iterate the 255 values and populate sysfs
+> > > files if they are present?  I'll dig up the USB spec tomorrow...
+> >
+> > Yes, we could do that.  But the filename would have to be the string
+> > id, which is not meaningful.  We wouldn't be able to have labels like
+> > "product-info" unless somehow a driver could provide the label.
+>
+> We could have a directory of strings/ with the individual descriptors in
+> there as files with the name being the string id.
+>
+> But that might take a long time to populate, as it can take a few tries
+> to get the string from a device, and to do that 256 times might be
+> noticable at device insertion time.
+>
+> > Also, there's the matter of language.  Devices can have string
+> > descriptors in multiple languages; which one should we show in sysfs?
+> > All of them?  Right now we use just the default language for the strings
+> > that we put in sysfs.
+> >
+> > > I say do this at the USB core level, that way it works for any USB
+> > > device, and you don't have a device-specific sysfs file and custom
+> > > userspace code just for this.
+> >
+> > This is unavoidable to some extent.  Without device-specific information
+> > or userspace code, there is no way to know which string descriptor
+> > contains the data you want.
+>
+> Agreed.
+>
+> Ok, for this specific instance, adding the "we know this string id
+> should be here" as a device-specific sysfs file seems to be the easiest
+> way forward.
+>
+> Vincent, want to try that instead?
 
-I'm looking at the next patch too and I still don't see what the point
-is of making it a void?
+OK for me. Will do that and remove the kernel log spam and replace it
+by a sysfs entry.
 
-IOW, what's wrong with doing this?
+I have two questions:
 
----
-diff --git a/arch/x86/coco/tdx/tdx.c b/arch/x86/coco/tdx/tdx.c
-index b8998cf0508a..0421cb7f3b86 100644
---- a/arch/x86/coco/tdx/tdx.c
-+++ b/arch/x86/coco/tdx/tdx.c
-@@ -100,11 +100,11 @@ static inline void tdx_module_call(u64 fn, u64 rcx, u64 rdx, u64 r8, u64 r9,
- 		panic("TDCALL %lld failed (Buggy TDX module!)\n", fn);
- }
- 
--static void tdx_parse_tdinfo(u64 *cc_mask)
-+static u64 tdx_parse_tdinfo(void)
- {
- 	struct tdx_module_output out;
- 	unsigned int gpa_width;
--	u64 td_attr;
-+	u64 td_attr, ret;
- 
- 	/*
- 	 * TDINFO TDX module call is used to get the TD execution environment
-@@ -123,7 +123,7 @@ static void tdx_parse_tdinfo(u64 *cc_mask)
- 	 * can not meaningfully run without it.
- 	 */
- 	gpa_width = out.rcx & GENMASK(5, 0);
--	*cc_mask = BIT_ULL(gpa_width - 1);
-+	ret = BIT_ULL(gpa_width - 1);
- 
- 	/*
- 	 * The kernel can not handle #VE's when accessing normal kernel
-@@ -133,6 +133,8 @@ static void tdx_parse_tdinfo(u64 *cc_mask)
- 	td_attr = out.rdx;
- 	if (!(td_attr & ATTR_SEPT_VE_DISABLE))
- 		panic("TD misconfiguration: SEPT_VE_DISABLE attibute must be set.\n");
-+
-+	return ret;
- }
- 
- /*
-@@ -769,7 +771,7 @@ void __init tdx_early_init(void)
- 	setup_force_cpu_cap(X86_FEATURE_TDX_GUEST);
- 
- 	cc_set_vendor(CC_VENDOR_INTEL);
--	tdx_parse_tdinfo(&cc_mask);
-+	cc_mask = tdx_parse_tdinfo();
- 	cc_set_mask(cc_mask);
- 
- 	/*
+1/ Can I still export and use usb_cache_string()? In other terms, does
+the first patch of this series still apply? This looks like the most
+convenient function to retrieve that custom string to me.
 
--- 
-Regards/Gruss,
-    Boris.
+2/ Is it a no-go to also populate ethtool_drvinfo::fw_version? Some
+users might look for the value in sysfs, while some might use ethtool.
+If the info is not available in ethtool, people might simply assume it
+is not available at all. So, I would like to provide both.
 
-https://people.kernel.org/tglx/notes-about-netiquette
+
+Yours sincerely,
+Vincent Mailhol
