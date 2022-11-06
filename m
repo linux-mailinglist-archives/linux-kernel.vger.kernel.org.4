@@ -2,123 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FEAA61E4D4
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 18:22:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E317361E4D8
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 18:22:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230504AbiKFRWb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Nov 2022 12:22:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36534 "EHLO
+        id S230187AbiKFRW4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Nov 2022 12:22:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230409AbiKFRWN (ORCPT
+        with ESMTP id S231222AbiKFRWj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Nov 2022 12:22:13 -0500
-Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BB9EE95;
-        Sun,  6 Nov 2022 09:16:04 -0800 (PST)
-Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-13b23e29e36so10454531fac.8;
-        Sun, 06 Nov 2022 09:16:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=uEv5IfnJcbTamlVtUpqiTgyx6Ij9nPLIySLxf/hjkbo=;
-        b=noua/yFqm3voDQ4vK/Xnwv2lPUhv/bjeNBEioUMO1caiY+cqjqktx+Pq+DRvesZCgA
-         d//QuwBhkaum3ZBYqfka1bjS4ugjvhz9zNrSBccZhQnCtF5iSpOiT1aqW4lzlyJCKvrV
-         dQx6PgpGJKBWIl75kdxQhvPvNmohvGiU9mjOOPYyrhjV6FiChPpKXEJGdG1Z//cOb2uy
-         YmEf79V1DwuecsFIiSRsvbyzi1fqNHa8BDzUHl5y5Pv1lOKXCOWge8VhqhweK8+mq7T6
-         oc9rMh9QUnrWGArDAbXUF3fHSqvgREeIP7GukLeCHvRT4nVTCvhAgf+vo2IbBXnnMtFo
-         +RXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=uEv5IfnJcbTamlVtUpqiTgyx6Ij9nPLIySLxf/hjkbo=;
-        b=B4saOxUWObXoIeHMz4chsbVqbxLXAtrngkjK4bArT4Wryf7VgAZ1E503idW2DW8izb
-         1x5AKSJUFmOdp4iCk0rEJFAqtOmixgiGZBCZzZQfPgsIpgwi5PJ9eW7cF0kk3s1Zr4HX
-         8NvFkdF/D0opNCS8gK64qIoY+ShcNGUPveVOv3FxfjurMl+1Ck9lefykjds9zjW0LQ9O
-         +l10BSd1+3x4OEmpA4Yfn92o73f5Isb4gY5xpuMK6cEqtmpyrinDs1BBF34m7Y/HH3d9
-         lnuh9WcusIWZTZhFCiSx23hq/mCzwTB5a6DIXPEjz7zRIonhwnjNgZb4xdJqVqXL9kLe
-         l6Pw==
-X-Gm-Message-State: ACrzQf0/U6YK4tJNDrciZdq+am2cIpQKyHNHqUMmW/PThV7gwZ7ri3nf
-        ZQCMd+fo9WeJr1M2UU4e2YQ=
-X-Google-Smtp-Source: AMsMyM5bzIlrUuIFBGzNbqYQ02V6lN7ciCTOZDwHAvBLO5/YGgrsTnGI/pK4hMCO3nar5mewI1/zCg==
-X-Received: by 2002:a05:6870:4612:b0:13b:775d:511 with SMTP id z18-20020a056870461200b0013b775d0511mr37349401oao.81.1667754963323;
-        Sun, 06 Nov 2022 09:16:03 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id w52-20020a9d3637000000b00668953207b2sm2022492otb.80.2022.11.06.09.16.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 06 Nov 2022 09:16:02 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sun, 6 Nov 2022 09:16:01 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Corentin Labbe <clabbe.montjoie@gmail.com>,
-        Henrik Rydberg <rydberg@bitmath.org>,
-        George Joseph <george.joseph@fairview5.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
-        Juerg Haefliger <juergh@proton.me>,
-        Steve Glendinning <steve.glendinning@shawell.net>,
-        Riku Voipio <riku.voipio@iki.fi>,
-        Huang Rui <ray.huang@amd.com>,
-        Tim Harvey <tharvey@gateworks.com>,
-        Guillaume Ligneul <guillaume.ligneul@gmail.com>,
-        Ibrahim Tilki <Ibrahim.Tilki@analog.com>,
-        Jim Cromie <jim.cromie@gmail.com>,
-        Roger Lucas <vt8231@hiddenengine.co.uk>,
-        Marc Hulsman <m.hulsman@tudelft.nl>,
-        Rudolf Marek <r.marek@assembler.cz>,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org
-Subject: Re: [PATCH] hwmon: Include <linux/kstrtox.h> when appropriate
-Message-ID: <20221106171601.GB105056@roeck-us.net>
-References: <0e819645f8d607f7b4550c8aaf4a563b1404bf40.1667730675.git.christophe.jaillet@wanadoo.fr>
+        Sun, 6 Nov 2022 12:22:39 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B90C39A
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Nov 2022 09:18:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667755108; x=1699291108;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=l3iC7CmUcOXAxhDcYXOGQPCEkXZAISDUUMgzAGV88aQ=;
+  b=EAW4KQZSOsaV455gAEGg7Vvo4gcZvf9j9zTsdadfMJ+/PuMuq22d40XM
+   QRi8/z4EQHCVV1icJTuhAtMCeubJeEObY2txUB1JfCV7L14jyMdSTf78j
+   3mW0FYfUkuV9PCw8a0OHZNnYYwlszpOPQbmnFEKrPIES4MFJlo22SkHcj
+   7Zj5CeHMtAOM0y3bUQ2GeMUJD+EkuRokSGinqbGZwhgIO08TGhOzDD+gW
+   dzJr14iuxH8FW92BaxmHzO4S3U/WbBcfrPUi//PHTv6A6ohlm944JPZp9
+   m7PEfBIIakhDIyiXBHfgE7EL785R8UidPYOQX2Xqp6FRBL4Q/Nh+w6KrQ
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10523"; a="374519873"
+X-IronPort-AV: E=Sophos;i="5.96,142,1665471600"; 
+   d="scan'208";a="374519873"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2022 09:18:27 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10523"; a="635649398"
+X-IronPort-AV: E=Sophos;i="5.96,142,1665471600"; 
+   d="scan'208";a="635649398"
+Received: from lkp-server02.sh.intel.com (HELO b6d29c1a0365) ([10.239.97.151])
+  by orsmga002.jf.intel.com with ESMTP; 06 Nov 2022 09:18:26 -0800
+Received: from kbuild by b6d29c1a0365 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1orjHt-000Ivn-37;
+        Sun, 06 Nov 2022 17:18:25 +0000
+Date:   Mon, 07 Nov 2022 01:17:42 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [paulmck-rcu:rcu/next] BUILD SUCCESS
+ 5242bc5b7213c5ff120c018eabdfbcd6db3bacba
+Message-ID: <6367ec36.W1Ua88kd6NgBB9i1%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0e819645f8d607f7b4550c8aaf4a563b1404bf40.1667730675.git.christophe.jaillet@wanadoo.fr>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Nov 06, 2022 at 11:31:27AM +0100, Christophe JAILLET wrote:
-> The kstrto<something>() functions have been moved from kernel.h to
-> kstrtox.h.
-> 
-> So, include the latter directly in the appropriate files.
-> 
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> ---
-> The goal of this patch is to eventually remove <linux/kernel.h> from
-> <linux/watchdog.h>.
-> 
-> This patch is needed to avoid indirect inclusion, via <linux/watchdog.h>,
-> in fschmd.c, ftsteutates.c and w83793.c.
-> 
-> 
-> Maybe, just including <linux/kstrtox.h> in <linux/hwmon.h> would also do
-> the job. It is likely that this file is included in all hwmon's drivers.
-> Let me know if this less intrusive approach is preferred.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git rcu/next
+branch HEAD: 5242bc5b7213c5ff120c018eabdfbcd6db3bacba  rcu: Add RCU stall diagnosis information
 
-Include it from <linux/hwmon-sysfs.h>. This should cover almost all
-drivers needing it. The remaining drivers (if there are any) should
-include it directly. Almost all drivers registering the hwmon device
-with [devm_]hwmon_device_register_with_info() do not need the include,
-but (almost) all drivers registering with an older API will need it.
-Those drivers will also include <linux/hwmon-sysfs.h>.
+elapsed time: 1168m
 
-Thanks,
-Guenter
+configs tested: 65
+configs skipped: 3
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+x86_64                        randconfig-a004
+um                             i386_defconfig
+x86_64                        randconfig-a002
+um                           x86_64_defconfig
+arc                  randconfig-r043-20221106
+i386                          randconfig-a001
+i386                          randconfig-a003
+s390                 randconfig-r044-20221106
+i386                          randconfig-a005
+riscv                randconfig-r042-20221106
+x86_64                        randconfig-a013
+x86_64                        randconfig-a006
+x86_64                        randconfig-a011
+x86_64                           rhel-8.3-kvm
+x86_64                        randconfig-a015
+x86_64                           rhel-8.3-syz
+x86_64                              defconfig
+x86_64                         rhel-8.3-kunit
+ia64                             allmodconfig
+x86_64                               rhel-8.3
+x86_64                          rhel-8.3-func
+x86_64                           allyesconfig
+x86_64                    rhel-8.3-kselftests
+i386                          randconfig-a014
+i386                          randconfig-a012
+powerpc                          allmodconfig
+mips                             allyesconfig
+powerpc                           allnoconfig
+arc                                 defconfig
+s390                             allmodconfig
+alpha                               defconfig
+sh                               allmodconfig
+i386                          randconfig-a016
+s390                                defconfig
+i386                                defconfig
+s390                             allyesconfig
+m68k                             allmodconfig
+arc                              allyesconfig
+alpha                            allyesconfig
+m68k                             allyesconfig
+i386                             allyesconfig
+arm                                 defconfig
+arm                              allyesconfig
+arm64                            allyesconfig
+arc                        vdk_hs38_defconfig
+arc                          axs101_defconfig
+powerpc                        cell_defconfig
+sh                            migor_defconfig
+m68k                        mvme16x_defconfig
+sh                     sh7710voipgw_defconfig
+
+clang tested configs:
+x86_64                        randconfig-a005
+hexagon              randconfig-r041-20221106
+hexagon              randconfig-r045-20221106
+x86_64                        randconfig-a001
+x86_64                        randconfig-a014
+i386                          randconfig-a002
+i386                          randconfig-a004
+x86_64                        randconfig-a003
+x86_64                        randconfig-a016
+i386                          randconfig-a006
+x86_64                        randconfig-a012
+i386                          randconfig-a013
+i386                          randconfig-a011
+i386                          randconfig-a015
+x86_64                        randconfig-k001
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
