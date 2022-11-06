@@ -2,224 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 620C361E177
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 11:03:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B30261E17D
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 11:04:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229820AbiKFKDQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Nov 2022 05:03:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55594 "EHLO
+        id S229795AbiKFKEO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Nov 2022 05:04:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229564AbiKFKDO (ORCPT
+        with ESMTP id S229829AbiKFKDz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Nov 2022 05:03:14 -0500
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BD4CDF52;
-        Sun,  6 Nov 2022 02:03:13 -0800 (PST)
-Received: by mail-pg1-x532.google.com with SMTP id q1so8004296pgl.11;
-        Sun, 06 Nov 2022 02:03:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=3BU/GEX7oGTrvEjxodaV3U4uYUl5yeLKJDVZ9b6saoY=;
-        b=Kno/QC2ZKL9BcYH+lP3M0AqqYhOtAKS0FVBDBaPnqg5xd31e/3D430yc/RwAqyPKNA
-         aF52b3NCHQiXwq8Aywu3LZdUhwOGbvI79QDIGHJur5iqHXUIPU21rGBu8EenlfBaPFiA
-         hsp/rej9ZgNeZojPbvarbK/z/zrRmom6plT8MN/zpuDb48uxmcLhdN0cyZboa65kQ+m4
-         BHZhQsbYlcaK1f85xNjmn5lOiCge/BOBQb6Gltf23lxAUdDygWatDQMyyqiQzgtTenJe
-         +LuU9/rGLtNDqTAhCMOXyYF9fZxerhlxLxor4HPMdmNBMFQsyEAmUugVVqOBJgphMn/G
-         iVCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3BU/GEX7oGTrvEjxodaV3U4uYUl5yeLKJDVZ9b6saoY=;
-        b=s3/1eKRYziLKMjuy8ScUAtrUrXD7fkBLH50eHyk7SxPCFvWs13I4O+Hk7R82Orwr/O
-         N16Sa089X1OTnxBjbISCkctl5Ta8nKOBAJgXTmEEe6Wf9dXoUycHas36BZpDdYUj+wrK
-         WPSq18mawc/Z05sCsHPA1eS+TZHuiTl+Sm6FuczhHSt+g+Lg/9wp753I36+dLMEKjTDt
-         04v7R8hMJ9uf3BNsL5oA0uY+J3uS6PtbnwAjP/jiPBPZKmbfPbs6H2RVBBQg9eswfI3d
-         8RYO12IXSkH6/+pCz4N6xXgu6iLm/ctojwgZLsKy3nW45QtApm+fcS+3z+QOwyvp6PRJ
-         x58A==
-X-Gm-Message-State: ACrzQf03wGoS2KzDUT2+GkuRbBAIX6GGEe1dpyRbNDxI2uqMgpPbZYUf
-        PDo5a3MBV6+t0zKljVCEMk531S1p1SsdNw==
-X-Google-Smtp-Source: AMsMyM70O2q+4fIAYpvGU7bMSturp7FQUBo+pb4Y9kjdXowomrHLvtMAiVgvPjakgfAW1bk8mY0CmQ==
-X-Received: by 2002:a62:1e04:0:b0:56d:a2cf:e7fb with SMTP id e4-20020a621e04000000b0056da2cfe7fbmr31601371pfe.48.1667728992801;
-        Sun, 06 Nov 2022 02:03:12 -0800 (PST)
-Received: from debian.. (subs02-180-214-232-28.three.co.id. [180.214.232.28])
-        by smtp.gmail.com with ESMTPSA id z22-20020a630a56000000b0043c732e1536sm2333547pgk.45.2022.11.06.02.03.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 06 Nov 2022 02:03:12 -0800 (PST)
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     linux-doc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Alexandre Ghiti <alexandre.ghiti@canonical.com>,
-        Bagas Sanjaya <bagasdotme@gmail.com>
-Subject: [PATCH] Documentation: riscv: tableize memory layout
-Date:   Sun,  6 Nov 2022 17:02:40 +0700
-Message-Id: <20221106100239.53704-1-bagasdotme@gmail.com>
-X-Mailer: git-send-email 2.38.1
+        Sun, 6 Nov 2022 05:03:55 -0500
+Received: from cstnet.cn (smtp84.cstnet.cn [159.226.251.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 315F4E09E
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Nov 2022 02:03:50 -0800 (PST)
+Received: from cgk-Precision-3650-Tower.. (unknown [219.141.235.82])
+        by APP-05 (Coremail) with SMTP id zQCowACnrKByhmdj7bRnCA--.7053S4;
+        Sun, 06 Nov 2022 18:03:31 +0800 (CST)
+From:   Chen Guokai <chenguokai17@mails.ucas.ac.cn>
+To:     paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, rostedt@goodmis.org, mingo@redhat.com,
+        sfr@canb.auug.org.au
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        liaochang1@huawei.com, Liao Chang <liaoclark@163.com>
+Subject: [PATCH v4 0/8] Add OPTPROBES feature on RISCV
+Date:   Sun,  6 Nov 2022 18:03:08 +0800
+Message-Id: <20221106100316.2803176-1-chenguokai17@mails.ucas.ac.cn>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=13584; i=bagasdotme@gmail.com; h=from:subject; bh=HGrd3JUcYf98N1p7UhkB1UPQZR83cFVfgAcmvlNv+ek=; b=owGbwMvMwCH2bWenZ2ig32LG02pJDMnpbfZ/r8+oWNW0t3NqzJ01R0Ptl0aZ3DnBGro63ityUX+U fNuljlIWBjEOBlkxRZZJiXxNp3cZiVxoX+sIM4eVCWQIAxenAEzkw3RGhutC6pHrHd8ciX8dFNpr72 gfuDbmkuBDuyWlHKXO25Y1MDP8r9JvfsRZ9uJJjuRnrlcND38st7h5Wewlk8fLN5of7jJ94gYA
-X-Developer-Key: i=bagasdotme@gmail.com; a=openpgp; fpr=701B806FDCA5D3A58FFB8F7D7C276C64A5E44A1D
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+X-CM-TRANSID: zQCowACnrKByhmdj7bRnCA--.7053S4
+X-Coremail-Antispam: 1UD129KBjvJXoWxXw18Zry7Zw1DWFyDZr43KFg_yoWrGr4UpF
+        WkKw45JrWUAr4fCrW3Jr4kuFySkan5Gw43ur1UJ34rX3y3JryFy3ZagayUZF15GF4Y934j
+        qrn09ryvkFy5A3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvlb7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I2
+        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
+        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xII
+        jxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4
+        A2jsIEc7CjxVAFwI0_GcCE3s1lnxkEFVAIw20F6cxK64vIFxWle2I262IYc4CY6c8Ij28I
+        cVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx
+        0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwAC
+        I402YVCY1x02628vn2kIc2xKxwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJV
+        W8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF
+        1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6x
+        IIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvE
+        x4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvj
+        DU0xZFpf9x07b52NNUUUUU=
+X-Originating-IP: [219.141.235.82]
+X-CM-SenderInfo: xfkh0w5xrntxyrx6ztxlovh3xfdvhtffof0/1tbiCgUCE2NnSRxR0wAAsN
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The memory layout is written as table but it is inside literal code
-block, which renders as preformatted text. Write the layout in reST
-grid table instead.
+From: Liao Chang <liaoclark@163.com>
 
-Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
----
- Documentation/riscv/vm-layout.rst | 120 +++++++++++++++---------------
- 1 file changed, 58 insertions(+), 62 deletions(-)
+From: Liao Chang <liaochang1@huawei.com>
 
-diff --git a/Documentation/riscv/vm-layout.rst b/Documentation/riscv/vm-layout.rst
-index 5b36e45fef60bd..139320e35de81f 100644
---- a/Documentation/riscv/vm-layout.rst
-+++ b/Documentation/riscv/vm-layout.rst
-@@ -30,70 +30,66 @@ the RISC-V Linux Kernel resides.
- RISC-V Linux Kernel SV39
- ------------------------
- 
--::
--
--  ========================================================================================================================
--      Start addr    |   Offset   |     End addr     |  Size   | VM area description
--  ========================================================================================================================
--                    |            |                  |         |
--   0000000000000000 |    0       | 0000003fffffffff |  256 GB | user-space virtual memory, different per mm
--  __________________|____________|__________________|_________|___________________________________________________________
--                    |            |                  |         |
--   0000004000000000 | +256    GB | ffffffbfffffffff | ~16M TB | ... huge, almost 64 bits wide hole of non-canonical
--                    |            |                  |         |     virtual memory addresses up to the -256 GB
--                    |            |                  |         |     starting offset of kernel mappings.
--  __________________|____________|__________________|_________|___________________________________________________________
--                                                              |
--                                                              | Kernel-space virtual memory, shared between all processes:
--  ____________________________________________________________|___________________________________________________________
--                    |            |                  |         |
--   ffffffc6fee00000 | -228    GB | ffffffc6feffffff |    2 MB | fixmap
--   ffffffc6ff000000 | -228    GB | ffffffc6ffffffff |   16 MB | PCI io
--   ffffffc700000000 | -228    GB | ffffffc7ffffffff |    4 GB | vmemmap
--   ffffffc800000000 | -224    GB | ffffffd7ffffffff |   64 GB | vmalloc/ioremap space
--   ffffffd800000000 | -160    GB | fffffff6ffffffff |  124 GB | direct mapping of all physical memory
--   fffffff700000000 |  -36    GB | fffffffeffffffff |   32 GB | kasan
--  __________________|____________|__________________|_________|____________________________________________________________
--                                                              |
--                                                              |
--  ____________________________________________________________|____________________________________________________________
--                    |            |                  |         |
--   ffffffff00000000 |   -4    GB | ffffffff7fffffff |    2 GB | modules, BPF
--   ffffffff80000000 |   -2    GB | ffffffffffffffff |    2 GB | kernel
--  __________________|____________|__________________|_________|____________________________________________________________
-+   +------------------+---------+------------------+---------+----------------------------------------------------------+
-+   |    Start addr    | Offset  |     End addr     |  Size   | VM area description                                      |
-+   +==================+=========+==================+=========+==========================================================+
-+   | 0000000000000000 |    0    | 0000003fffffffff | 256 GB  | user-space virtual memory, different per mm              |
-+   +------------------+---------+------------------+---------+----------------------------------------------------------+
-+   | 0000004000000000 | +256 GB | ffffffbfffffffff | ~16M TB | ... huge, almost 64 bits wide hole of non-canonical      |
-+   |                  |         |                  |         | virtual memory addresses up to the -256 GB               |
-+   |                  |         |                  |         | starting offset of kernel mappings.                      |
-+   +------------------+---------+------------------+---------+----------------------------------------------------------+
-+   |                             Kernel-space virtual memory, shared between all processes:                             |
-+   +------------------+---------+------------------+---------+----------------------------------------------------------+
-+   | ffffffc6fee00000 | -228 GB | ffffffc6feffffff | 2 MB    | fixmap                                                   |
-+   +------------------+---------+------------------+---------+----------------------------------------------------------+
-+   | ffffffc6ff000000 | -228 GB | ffffffc6ffffffff | 16 MB   | PCI io                                                   |
-+   +------------------+---------+------------------+---------+----------------------------------------------------------+
-+   | ffffffc700000000 | -228 GB | ffffffc7ffffffff | 4 GB    | vmemmap                                                  |
-+   +------------------+---------+------------------+---------+----------------------------------------------------------+
-+   | ffffffc800000000 | -224 GB | ffffffd7ffffffff | 64 GB   | vmalloc/ioremap space                                    |
-+   +------------------+---------+------------------+---------+----------------------------------------------------------+
-+   | ffffffd800000000 | -160 GB | fffffff6ffffffff | 124 GB  | direct mapping of all physical memory                    |
-+   +------------------+---------+------------------+---------+----------------------------------------------------------+
-+   | fffffff700000000 | -36 GB  | fffffffeffffffff | 32 GB   | kasan                                                    |
-+   +------------------+---------+------------------+---------+----------------------------------------------------------+
-+   |                                  Identical layout to the 39-bit one from here on:                                  |
-+   +------------------+---------+------------------+---------+----------------------------------------------------------+
-+   | ffffffff00000000 | -4 GB   | ffffffff7fffffff | 2 GB    | modules, BPF                                             |
-+   +------------------+---------+------------------+---------+----------------------------------------------------------+
-+   | ffffffff80000000 | -2 GB   | ffffffffffffffff | 2 GB    | kernel                                                   |
-+   +------------------+---------+------------------+---------+----------------------------------------------------------+
- 
- 
- RISC-V Linux Kernel SV48
- ------------------------
- 
--::
--
-- ========================================================================================================================
--      Start addr    |   Offset   |     End addr     |  Size   | VM area description
-- ========================================================================================================================
--                    |            |                  |         |
--   0000000000000000 |    0       | 00007fffffffffff |  128 TB | user-space virtual memory, different per mm
--  __________________|____________|__________________|_________|___________________________________________________________
--                    |            |                  |         |
--   0000800000000000 | +128    TB | ffff7fffffffffff | ~16M TB | ... huge, almost 64 bits wide hole of non-canonical
--                    |            |                  |         | virtual memory addresses up to the -128 TB
--                    |            |                  |         | starting offset of kernel mappings.
--  __________________|____________|__________________|_________|___________________________________________________________
--                                                              |
--                                                              | Kernel-space virtual memory, shared between all processes:
--  ____________________________________________________________|___________________________________________________________
--                    |            |                  |         |
--   ffff8d7ffee00000 |  -114.5 TB | ffff8d7ffeffffff |    2 MB | fixmap
--   ffff8d7fff000000 |  -114.5 TB | ffff8d7fffffffff |   16 MB | PCI io
--   ffff8d8000000000 |  -114.5 TB | ffff8f7fffffffff |    2 TB | vmemmap
--   ffff8f8000000000 |  -112.5 TB | ffffaf7fffffffff |   32 TB | vmalloc/ioremap space
--   ffffaf8000000000 |  -80.5  TB | ffffef7fffffffff |   64 TB | direct mapping of all physical memory
--   ffffef8000000000 |  -16.5  TB | fffffffeffffffff | 16.5 TB | kasan
--  __________________|____________|__________________|_________|____________________________________________________________
--                                                              |
--                                                              | Identical layout to the 39-bit one from here on:
--  ____________________________________________________________|____________________________________________________________
--                    |            |                  |         |
--   ffffffff00000000 |   -4    GB | ffffffff7fffffff |    2 GB | modules, BPF
--   ffffffff80000000 |   -2    GB | ffffffffffffffff |    2 GB | kernel
--  __________________|____________|__________________|_________|____________________________________________________________
-+   +------------------+-----------+------------------+---------+-------------------------------------------------------+
-+   |    Start addr    |  Offset   |     End addr     |  Size   | VM area description                                   |
-+   +==================+===========+==================+=========+=======================================================+
-+   | 0000000000000000 |    0      | 00007fffffffffff | 128 TB  | user-space virtual memory, different per mm           |
-+   +------------------+-----------+------------------+---------+-------------------------------------------------------+
-+   | 0000800000000000 | +128 TB   | ffff7fffffffffff | ~16M TB | ... huge, almost 64 bits wide hole of non-canonical   |
-+   |                  |           |                  |         | virtual memory addresses up to the -128 TB            |
-+   |                  |           |                  |         | starting offset of kernel mappings.                   |
-+   +------------------+-----------+------------------+---------+-------------------------------------------------------+
-+   |                            Kernel-space virtual memory, shared between all processes:                             |
-+   +------------------+-----------+------------------+---------+-------------------------------------------------------+
-+   | ffff8d7ffee00000 | -114.5 TB | ffff8d7ffeffffff | 2 MB    | fixmap                                                |
-+   +------------------+-----------+------------------+---------+-------------------------------------------------------+
-+   | ffff8d7fff000000 | -114.5 TB | ffff8d7fffffffff | 16 MB   | PCI io                                                |
-+   +------------------+-----------+------------------+---------+-------------------------------------------------------+
-+   | ffff8d8000000000 | -114.5 TB | ffff8f7fffffffff | 2 TB    | vmemmap                                               |
-+   +------------------+-----------+------------------+---------+-------------------------------------------------------+
-+   | ffff8f8000000000 | -112.5 TB | ffffaf7fffffffff | 32 TB   | vmalloc/ioremap space                                 |
-+   +------------------+-----------+------------------+---------+-------------------------------------------------------+
-+   | ffffaf8000000000 | -80.5 TB  | ffffef7fffffffff | 64 TB   | direct mapping of all physical memory                 |
-+   +------------------+-----------+------------------+---------+-------------------------------------------------------+
-+   | ffffef8000000000 | -16.5 TB  | fffffffeffffffff | 16.5 TB | kasan                                                 |
-+   +------------------+-----------+------------------+---------+-------------------------------------------------------+
-+   |                                 Identical layout to the 39-bit one from here on:                                  |
-+   +------------------+-----------+------------------+---------+-------------------------------------------------------+
-+   | ffffffff00000000 | -4 GB     | ffffffff7fffffff | 2 GB    | modules, BPF                                          |
-+   +------------------+-----------+------------------+---------+-------------------------------------------------------+
-+   | ffffffff80000000 | -2 GB     | ffffffffffffffff | 2 GB    | kernel                                                |
-+   +------------------+-----------+------------------+---------+-------------------------------------------------------+
+Add jump optimization support for RISC-V.
 
-base-commit: 0cdb3579f1ee4c1e55acf8dfb0697b660067b1f8
+Replaces ebreak instructions used by normal kprobes with an
+auipc+jalr instruction pair, at the aim of suppressing the probe-hit
+overhead.
+
+All known optprobe-capable RISC architectures have been using a single
+jump or branch instructions while this patch chooses not. RISC-V has a
+quite limited jump range (4KB or 2MB) for both its branch and jump
+instructions, which prevent optimizations from supporting probes that
+spread all over the kernel.
+
+Auipc-jalr instruction pair is introduced with a much wider jump range
+(4GB), where auipc loads the upper 12 bits to a free register and jalr
+Deaconappends the lower 20 bits to form a 32 bit immediate. Note that
+returns from probe handler requires another free register. As kprobes
+can appear almost anywhere inside the kernel, the free register should
+be found in a generic way, not depending on calling convention or any
+other regulations.
+
+The algorithm for finding the free register is inspired by the register
+renaming in modern processors. From the perspective of register renaming,
+a register could be represented as two different registers if two neighbour
+instructions both write to it but no one ever reads. Extending this fact,
+a register is considered to be free if there is no read before its next
+write in the execution flow. We are free to change its value without
+interfering normal execution.
+
+Static analysis shows that 51% instructions of the kernel (default config)
+is capable of being replaced i.e. one free register can be found at both
+the start and end of replaced instruction pairs while the replaced
+instructions can be directly executed.
+
+Contribution:
+Chen Guokai invents the algorithm of searching free register, evaluate
+the ratio of optimizaion, the basic function support RVI kernel binary.
+Liao Chang adds the support for hybrid RVI and RVC kernel binary, fix
+some bugs with different kernel configure, refactor out entire feature
+into some individual patches.
+
+v4:
+Correct the sequence of Signed-off-by and Co-developed-by.
+
+v3:
+1. Support of hybrid RVI and RVC kernel binary.
+2. Refactor out entire feature into some individual patches.
+
+v2:
+1. Adjust comments
+2. Remove improper copyright
+3. Clean up format issues that is no common practice
+4. Extract common definition of instruction decoder
+5. Fix race issue in SMP platform.
+
+v1:
+Chen Guokai contribute the basic functionality code.
+
+Liao Chang (8):
+  riscv/kprobe: Prepare the skeleton to implement RISCV OPTPROBES
+    feature
+  riscv/kprobe: Allocate detour buffer from module area
+  riscv/kprobe: Prepare the skeleton to prepare optimized kprobe
+  riscv/kprobe: Add common RVI and RVC instruction decoder code
+  riscv/kprobe: Search free register(s) to clobber for 'AUIPC/JALR'
+  riscv/kprobe: Add code to check if kprobe can be optimized
+  riscv/kprobe: Prepare detour buffer for optimized kprobe
+  riscv/kprobe: Patch AUIPC/JALR pair to optimize kprobe
+
+ arch/riscv/Kconfig                        |   1 +
+ arch/riscv/include/asm/bug.h              |   5 +-
+ arch/riscv/include/asm/kprobes.h          |  48 ++
+ arch/riscv/include/asm/patch.h            |   1 +
+ arch/riscv/kernel/patch.c                 |  22 +-
+ arch/riscv/kernel/probes/Makefile         |   1 +
+ arch/riscv/kernel/probes/decode-insn.h    | 145 ++++++
+ arch/riscv/kernel/probes/kprobes.c        |  25 +
+ arch/riscv/kernel/probes/opt.c            | 602 ++++++++++++++++++++++
+ arch/riscv/kernel/probes/opt_trampoline.S | 137 +++++
+ arch/riscv/kernel/probes/simulate-insn.h  |  41 ++
+ 11 files changed, 1023 insertions(+), 5 deletions(-)
+ create mode 100644 arch/riscv/kernel/probes/opt.c
+ create mode 100644 arch/riscv/kernel/probes/opt_trampoline.S
+
 -- 
-An old man doll... just what I always wanted! - Clara
+2.25.1
 
