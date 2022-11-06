@@ -2,76 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18C1C61E371
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 17:34:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCDF161E377
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 17:35:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230100AbiKFQeE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Nov 2022 11:34:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58440 "EHLO
+        id S230010AbiKFQf5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Nov 2022 11:35:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229894AbiKFQeC (ORCPT
+        with ESMTP id S229823AbiKFQfz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Nov 2022 11:34:02 -0500
-Received: from smtp.domeneshop.no (smtp.domeneshop.no [IPv6:2a01:5b40:0:3005::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28591AE45
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Nov 2022 08:34:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tronnes.org
-        ; s=ds202112; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=QvIoHrgTbnCEFp2E+kqwZys718brKkUvKx2E8FVdXAU=; b=R0x9zXTEOsbViJfXz+FCNC4vM3
-        uFqtwGLxzOd05dS01ItMXMP1PPK45WYw0O3lAe0JvWH4jhQd5w7yknQd5EMIzdRq4pWLf0sLQXd3n
-        JfW+NRF49EsvmwA1jx8HJELNOcqT2nm9zpgUEpsEaro8rbYSf1gY+OqXYUpLms78UlIC6lFvBuMgh
-        9Vxf31BusF+P5+REG7+8UaSW79q1f9bhf8pGPyT3npoch3IMrFxnuBTyN0BDmNSjdIRhJCbuUOA6q
-        /qpAcBNRJyyNF7XLQFEQ/iE8RbIs5xs094+4T8TWzq+HX/IXWpVBiVlAZ2oiQOaMQNRubMHGbVgdN
-        ZHDbPCNA==;
-Received: from [2a01:799:95a:cb00:fd97:29ff:d72a:349e] (port=50711)
-        by smtp.domeneshop.no with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <noralf@tronnes.org>)
-        id 1oriap-0005uQ-6b; Sun, 06 Nov 2022 17:33:55 +0100
-Message-ID: <842076aa-8d7c-96d6-ba46-d0e66dacd2df@tronnes.org>
-Date:   Sun, 6 Nov 2022 17:33:48 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v6 16/23] drm/probe-helper: Provide a TV get_modes helper
-To:     maxime@cerno.tech, Karol Herbst <kherbst@redhat.com>,
-        Emma Anholt <emma@anholt.net>, Ben Skeggs <bskeggs@redhat.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Maxime Ripard <mripard@kernel.org>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Lyude Paul <lyude@redhat.com>
-Cc:     linux-sunxi@lists.linux.dev, intel-gfx@lists.freedesktop.org,
-        Phil Elwell <phil@raspberrypi.com>,
-        linux-arm-kernel@lists.infradead.org,
-        nouveau@lists.freedesktop.org, Hans de Goede <hdegoede@redhat.com>,
-        Dom Cobley <dom@raspberrypi.com>,
-        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
-        dri-devel@lists.freedesktop.org,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
-References: <20220728-rpi-analog-tv-properties-v6-0-e7792734108f@cerno.tech>
- <20220728-rpi-analog-tv-properties-v6-16-e7792734108f@cerno.tech>
-From:   =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
-In-Reply-To: <20220728-rpi-analog-tv-properties-v6-16-e7792734108f@cerno.tech>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        Sun, 6 Nov 2022 11:35:55 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E729AE46;
+        Sun,  6 Nov 2022 08:35:55 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 6BFDCCE09CB;
+        Sun,  6 Nov 2022 16:35:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6EBF5C433D6;
+        Sun,  6 Nov 2022 16:35:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667752551;
+        bh=yNfuDfXWA0vsDbKXvNaTminJH2Wz10lrgd6JPh43Wz0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=I+G48P9XkJFyZHA+9m6Wt55mjwTEeQSRdJ13v8ynfjJDMk2/WFt1uGnTcNoxR+Bm+
+         uMKazx0BUfghbhA+ZxWjgNyL/qmfKuQE/V71hUlhD/CIWUMoLpAJWteycn59+Eew2X
+         NVfAWezc+wXtHPj3eqXuX1o1EXP6JXj8HO/PleCdz5ITWsrHxDixtBfSWEN3T1LZU5
+         OJLa/wq+qWCCmgQdxPBGf2DmMrji48zvcsLc/du8IshwleTW1Ta8+RYyU6EcRN1Bak
+         CiIXVD3ll+KOt2sCn57mYlP1uy5QKAO8/vJzyp5TpS2d8B9ny1yMqtoEuFeiRjkFIG
+         KkDbRMYRCYQjw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oricf-004DkL-2N;
+        Sun, 06 Nov 2022 16:35:49 +0000
+Date:   Sun, 06 Nov 2022 16:35:21 +0000
+Message-ID: <87k048f3cm.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Usama Arif <usama.arif@bytedance.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        kvmarm@lists.cs.columbia.edu, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, linux@armlinux.org.uk,
+        yezengruan@huawei.com, catalin.marinas@arm.com, will@kernel.org,
+        steven.price@arm.com, mark.rutland@arm.com, bagasdotme@gmail.com,
+        fam.zheng@bytedance.com, liangma@liangbit.com,
+        punit.agrawal@bytedance.com
+Subject: Re: [v2 0/6] KVM: arm64: implement vcpu_is_preempted check
+In-Reply-To: <20221104062105.4119003-1-usama.arif@bytedance.com>
+References: <20221104062105.4119003-1-usama.arif@bytedance.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: usama.arif@bytedance.com, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu, kvm@vger.kernel.org, linux-doc@vger.kernel.org, virtualization@lists.linux-foundation.org, linux@armlinux.org.uk, yezengruan@huawei.com, catalin.marinas@arm.com, will@kernel.org, steven.price@arm.com, mark.rutland@arm.com, bagasdotme@gmail.com, fam.zheng@bytedance.com, liangma@liangbit.com, punit.agrawal@bytedance.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,192 +71,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-Den 26.10.2022 17.33, skrev maxime@cerno.tech:
-> Most of the TV connectors will need a similar get_modes implementation
-> that will, depending on the drivers' capabilities, register the 480i and
-> 576i modes.
+On Fri, 04 Nov 2022 06:20:59 +0000,
+Usama Arif <usama.arif@bytedance.com> wrote:
 > 
-> That implementation will also need to set the preferred flag and order
-> the modes based on the driver and users preferrence.
-> 
-> This is especially important to guarantee that a userspace stack such as
-> Xorg can start and pick up the preferred mode while maintaining a
-> working output.
-> 
-> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
-> 
-> ---
-> Changes in v6:
-> - New patch
-> ---
->  drivers/gpu/drm/drm_probe_helper.c | 97 ++++++++++++++++++++++++++++++++++++++
->  include/drm/drm_probe_helper.h     |  1 +
->  2 files changed, 98 insertions(+)
-> 
-> diff --git a/drivers/gpu/drm/drm_probe_helper.c b/drivers/gpu/drm/drm_probe_helper.c
-> index 69b0b2b9cc1c..4a60575f5c66 100644
-> --- a/drivers/gpu/drm/drm_probe_helper.c
-> +++ b/drivers/gpu/drm/drm_probe_helper.c
-> @@ -1147,3 +1147,100 @@ int drm_connector_helper_get_modes(struct drm_connector *connector)
->  	return count;
->  }
->  EXPORT_SYMBOL(drm_connector_helper_get_modes);
-> +
-> +static bool tv_mode_supported(struct drm_connector *connector,
-> +			      enum drm_connector_tv_mode mode)
-> +{
-> +	struct drm_device *dev = connector->dev;
-> +	struct drm_property *property = dev->mode_config.tv_mode_property;
-> +
+> This patchset adds support for vcpu_is_preempted in arm64, which
+> allows the guest to check if a vcpu was scheduled out, which is
+> useful to know incase it was holding a lock. vcpu_is_preempted can
+> be used to improve performance in locking (see owner_on_cpu usage in
+> mutex_spin_on_owner, mutex_can_spin_on_owner, rtmutex_spin_on_owner
+> and osq_lock) and scheduling (see available_idle_cpu which is used
+> in several places in kernel/sched/fair.c for e.g. in wake_affine to
+> determine which CPU can run soonest):
 
-Superfluous linebreak
+[...]
 
-> +	unsigned int i;
-> +
-> +	for (i = 0; i < property->num_values; i++)
-> +		if (property->values[i] == mode)
-> +			return true;
-> +
-> +	return false;
-> +}
-> +
-> +/**
-> + * drm_connector_helper_tv_get_modes - Fills the modes availables to a TV connector
+> pvcy shows a smaller overall improvement (50%) compared to
+> vcpu_is_preempted (277%).  Host side flamegraph analysis shows that
+> ~60% of the host time when using pvcy is spent in kvm_handle_wfx,
+> compared with ~1.5% when using vcpu_is_preempted, hence
+> vcpu_is_preempted shows a larger improvement.
 
-availables -> available
+And have you worked out *why* we spend so much time handling WFE?
 
-> + * @connector: The connector
-> + *
-> + * Fills the available modes for a TV connector based on the supported
-> + * TV modes, and the default mode expressed by the kernel command line.
-> + *
-> + * This can be used as the default TV connector helper .get_modes() hook
-> + * if the driver does not need any special processing.
-> + *
-> + * Returns:
-> + * The number of modes added to the connector.
-> + */
-> +int drm_connector_helper_tv_get_modes(struct drm_connector *connector)
-> +{
-> +	struct drm_device *dev = connector->dev;
-> +	struct drm_cmdline_mode *cmdline = &connector->cmdline_mode;
-> +	struct drm_display_mode *tv_modes[2] = {};
-> +	struct drm_display_mode *mode;
-> +	unsigned int first_mode_idx;
-> +	unsigned int count = 0;
-> +	uint64_t default_mode;
-> +	int ret;
-> +
-> +	if (!dev->mode_config.tv_mode_property)
-> +		return 0;
-> +
-> +	if (tv_mode_supported(connector, DRM_MODE_TV_MODE_NTSC) ||
-> +	    tv_mode_supported(connector, DRM_MODE_TV_MODE_NTSC_443) ||
-> +	    tv_mode_supported(connector, DRM_MODE_TV_MODE_NTSC_J) ||
-> +	    tv_mode_supported(connector, DRM_MODE_TV_MODE_PAL_M)) {
-> +		mode = drm_mode_analog_ntsc_480i(connector->dev);
+	M.
 
-Nit: You can use the dev variable here and below.
-
-> +		if (!mode)
-> +			return 0;
-> +
-> +		tv_modes[count++] = mode;
-> +	}
-> +
-> +	if (tv_mode_supported(connector, DRM_MODE_TV_MODE_PAL) ||
-> +	    tv_mode_supported(connector, DRM_MODE_TV_MODE_PAL_N) ||
-> +	    tv_mode_supported(connector, DRM_MODE_TV_MODE_SECAM)) {
-> +		mode = drm_mode_analog_pal_576i(connector->dev);
-> +		if (!mode)
-> +			return 0;
-
-You leak the ntsc mode when returning (possibly).
-
-> +
-> +		tv_modes[count++] = mode;
-> +	}
-> +
-
-Maybe check for count being zero here?
-
-> +	if (count == 1) {
-> +		mode->type |= DRM_MODE_TYPE_PREFERRED;
-> +		drm_mode_probed_add(connector, mode);
-> +		return count;
-> +	}
-> +
-> +	ret = drm_object_property_get_default_value(&connector->base,
-> +						    dev->mode_config.tv_mode_property,
-> +						    &default_mode);
-> +	if (ret)
-> +		return 0;
-
-You leak both modes when returning here. Maybe move this up before
-allocation to simplify error handling.
-
-> +
-> +	if (cmdline->tv_mode_specified)
-> +		default_mode = cmdline->tv_mode;
-
-I realised that we don't verify tv_mode coming from the command line,
-not here and not in the reset helper. Should we do that? A driver should
-be programmed defensively to handle an illegal/unsupported value, but it
-doesn't feel right to allow an illegal enum value coming through the
-core/helpers.
-
-> +
-> +	if ((default_mode == DRM_MODE_TV_MODE_NTSC) ||
-> +	    (default_mode == DRM_MODE_TV_MODE_NTSC_443) ||
-> +	    (default_mode == DRM_MODE_TV_MODE_NTSC_J) ||
-> +	    (default_mode == DRM_MODE_TV_MODE_PAL_M))
-> +		first_mode_idx = 0;
-> +	else
-> +		first_mode_idx = 1;
-> +
-> +	mode = tv_modes[first_mode_idx];
-> +	mode->type |= DRM_MODE_TYPE_PREFERRED;
-> +	drm_mode_probed_add(connector, mode);
-> +
-> +	mode = first_mode_idx ? tv_modes[0] : tv_modes[1];
-> +	drm_mode_probed_add(connector, mode);
-> +
-> +	return count;
-> +}
-> +EXPORT_SYMBOL(drm_connector_helper_tv_get_modes);
-
-I know this is not expensive, but you're looping over the property
-values 7 times. An alternative solution is to rebuild the supported bitmask:
-
-int drm_connector_helper_tv_get_modes(struct drm_connector *connector)
-{
-...
-	unsigned int ntsc_modes = BIT(DRM_MODE_TV_MODE_NTSC) |
-				  BIT(DRM_MODE_TV_MODE_NTSC_443) |
-				  BIT(DRM_MODE_TV_MODE_NTSC_J) |
-				  BIT(DRM_MODE_TV_MODE_PAL_M);
-	unsigned int pal_modes = BIT(DRM_MODE_TV_MODE_PAL) |
-				 BIT(DRM_MODE_TV_MODE_PAL_N) |
-				 BIT(DRM_MODE_TV_MODE_SECAM);
-	unsigned int supported_tv_modes = 0;
-
-...
-	for (i = 0; i < property->num_values; i++)
-		supported_tv_modes |= BIT(property->values[i]);
-
-	if (supported_tv_modes & ntsc_modes)
-...
-	if (supported_tv_modes & pal_modes)
-...
-
-	if (BIT(default_mode) & ntsc_modes)
-		first_mode_idx = 0;
-	else
-		first_mode_idx = 1;
-
-
-Up to you if you want to do this.
-
-Noralf.
+-- 
+Without deviation from the norm, progress is not possible.
