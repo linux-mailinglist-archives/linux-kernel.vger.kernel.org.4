@@ -2,96 +2,269 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DBBC61E370
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 17:32:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 18C1C61E371
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 17:34:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230024AbiKFQc3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Nov 2022 11:32:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57908 "EHLO
+        id S230100AbiKFQeE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Nov 2022 11:34:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229894AbiKFQc1 (ORCPT
+        with ESMTP id S229894AbiKFQeC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Nov 2022 11:32:27 -0500
-Received: from mout-p-101.mailbox.org (mout-p-101.mailbox.org [IPv6:2001:67c:2050:0:465::101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9B6EA1B0;
-        Sun,  6 Nov 2022 08:32:24 -0800 (PST)
-Received: from smtp2.mailbox.org (smtp2.mailbox.org [10.196.197.2])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mout-p-101.mailbox.org (Postfix) with ESMTPS id 4N50JK4fNRz9scS;
-        Sun,  6 Nov 2022 17:32:17 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sylv.io; s=MBO0001;
-        t=1667752337;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=OccA8rWskEjO8SKrGg5kJEkiqge1IiOm2jciYGaQByI=;
-        b=YvMtjwM1f2FABAvFqs0+IxAliPfdS7ub4rJi4nibuTBFtcMT3FTy73ArCyCvci+NMm9jEM
-        3VFyvCcBLfIMcxgENeFFCZShMv79iYRhKAJWNElNSHgDQAyK9VseBHdx3Xw6/v2I36Mn8o
-        oegPV8rVOygrJw7m0K7JRFvi2hAjG2uep2EYMkClYVJScqiDrB26WqXYBHFZpxy4t3htb+
-        OZW/GMCILISFi/pjzFutEWlW/wIGdw85dOki5Jp/pU2wQZqbMF7Tbeddy2k/7wSzC2OGBQ
-        8Bw2DVtR2b7S/FmgphvcYK+kjOdnAkd3zZKwioikjDz5+O9yqmd87zdOnYsjFQ==
-Message-ID: <84838ebd-f2da-9249-02fc-b959faa64c76@sylv.io>
-Date:   Sun, 6 Nov 2022 17:32:15 +0100
+        Sun, 6 Nov 2022 11:34:02 -0500
+Received: from smtp.domeneshop.no (smtp.domeneshop.no [IPv6:2a01:5b40:0:3005::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28591AE45
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Nov 2022 08:34:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tronnes.org
+        ; s=ds202112; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=QvIoHrgTbnCEFp2E+kqwZys718brKkUvKx2E8FVdXAU=; b=R0x9zXTEOsbViJfXz+FCNC4vM3
+        uFqtwGLxzOd05dS01ItMXMP1PPK45WYw0O3lAe0JvWH4jhQd5w7yknQd5EMIzdRq4pWLf0sLQXd3n
+        JfW+NRF49EsvmwA1jx8HJELNOcqT2nm9zpgUEpsEaro8rbYSf1gY+OqXYUpLms78UlIC6lFvBuMgh
+        9Vxf31BusF+P5+REG7+8UaSW79q1f9bhf8pGPyT3npoch3IMrFxnuBTyN0BDmNSjdIRhJCbuUOA6q
+        /qpAcBNRJyyNF7XLQFEQ/iE8RbIs5xs094+4T8TWzq+HX/IXWpVBiVlAZ2oiQOaMQNRubMHGbVgdN
+        ZHDbPCNA==;
+Received: from [2a01:799:95a:cb00:fd97:29ff:d72a:349e] (port=50711)
+        by smtp.domeneshop.no with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <noralf@tronnes.org>)
+        id 1oriap-0005uQ-6b; Sun, 06 Nov 2022 17:33:55 +0100
+Message-ID: <842076aa-8d7c-96d6-ba46-d0e66dacd2df@tronnes.org>
+Date:   Sun, 6 Nov 2022 17:33:48 +0100
 MIME-Version: 1.0
-Subject: Re: [PATCH] Revert "hwmon: (pmbus) Add regulator supply into macro"
-To:     Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Zev Weiss <zev@bewilderbeest.net>,
-        naresh.solanki@9elements.com
-References: <20221104234622.2444747-1-linux@roeck-us.net>
-Content-Language: en-US
-From:   Marcello Sylverster Bauer <sylv@sylv.io>
-In-Reply-To: <20221104234622.2444747-1-linux@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v6 16/23] drm/probe-helper: Provide a TV get_modes helper
+To:     maxime@cerno.tech, Karol Herbst <kherbst@redhat.com>,
+        Emma Anholt <emma@anholt.net>, Ben Skeggs <bskeggs@redhat.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Maxime Ripard <mripard@kernel.org>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Lyude Paul <lyude@redhat.com>
+Cc:     linux-sunxi@lists.linux.dev, intel-gfx@lists.freedesktop.org,
+        Phil Elwell <phil@raspberrypi.com>,
+        linux-arm-kernel@lists.infradead.org,
+        nouveau@lists.freedesktop.org, Hans de Goede <hdegoede@redhat.com>,
+        Dom Cobley <dom@raspberrypi.com>,
+        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
+        dri-devel@lists.freedesktop.org,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        linux-kernel@vger.kernel.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
+References: <20220728-rpi-analog-tv-properties-v6-0-e7792734108f@cerno.tech>
+ <20220728-rpi-analog-tv-properties-v6-16-e7792734108f@cerno.tech>
+From:   =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
+In-Reply-To: <20220728-rpi-analog-tv-properties-v6-16-e7792734108f@cerno.tech>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/5/22 00:46, Guenter Roeck wrote:
-> This reverts commit 54cc3dbfc10dc3db7cb1cf49aee4477a8398fbde.
->
-> Zev Weiss reports that the reverted patch may cause a regulator
-> undercount. Here is his report:
->
-> ... having regulator-dummy set as a supply on my PMBus regulators
-> (instead of having them as their own top-level regulators without
-> an upstream supply) leads to enable-count underflow errors when
-> disabling them:
->
->      # echo 0 > /sys/bus/platform/devices/efuse01/state
->      [  906.094477] regulator-dummy: Underflow of regulator enable count
->      [  906.100563] Failed to disable vout: -EINVAL
->      [  136.992676] reg-userspace-consumer efuse01: Failed to configure state: -22
->
-> Zev reports that reverting the patch fixes the problem. So let's do that
-> for now.
->
-> Fixes: 54cc3dbfc10d ("hwmon: (pmbus) Add regulator supply into macro")
-> Cc: Marcello Sylvester Bauer <sylv@sylv.io>
-> Reported-by: Zev Weiss <zev@bewilderbeest.net>
-> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-Acked-by: Marcello Sylvester Bauer <sylv@sylv.io>
+
+
+Den 26.10.2022 17.33, skrev maxime@cerno.tech:
+> Most of the TV connectors will need a similar get_modes implementation
+> that will, depending on the drivers' capabilities, register the 480i and
+> 576i modes.
+> 
+> That implementation will also need to set the preferred flag and order
+> the modes based on the driver and users preferrence.
+> 
+> This is especially important to guarantee that a userspace stack such as
+> Xorg can start and pick up the preferred mode while maintaining a
+> working output.
+> 
+> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+> 
 > ---
->   drivers/hwmon/pmbus/pmbus.h | 1 -
->   1 file changed, 1 deletion(-)
->
-> diff --git a/drivers/hwmon/pmbus/pmbus.h b/drivers/hwmon/pmbus/pmbus.h
-> index 7daaf0caf4d3..10fb17879f8e 100644
-> --- a/drivers/hwmon/pmbus/pmbus.h
-> +++ b/drivers/hwmon/pmbus/pmbus.h
-> @@ -467,7 +467,6 @@ extern const struct regulator_ops pmbus_regulator_ops;
->   #define PMBUS_REGULATOR_STEP(_name, _id, _voltages, _step)  \
->   	[_id] = {						\
->   		.name = (_name # _id),				\
-> -		.supply_name = "vin",				\
->   		.id = (_id),					\
->   		.of_match = of_match_ptr(_name # _id),		\
->   		.regulators_node = of_match_ptr("regulators"),	\
+> Changes in v6:
+> - New patch
+> ---
+>  drivers/gpu/drm/drm_probe_helper.c | 97 ++++++++++++++++++++++++++++++++++++++
+>  include/drm/drm_probe_helper.h     |  1 +
+>  2 files changed, 98 insertions(+)
+> 
+> diff --git a/drivers/gpu/drm/drm_probe_helper.c b/drivers/gpu/drm/drm_probe_helper.c
+> index 69b0b2b9cc1c..4a60575f5c66 100644
+> --- a/drivers/gpu/drm/drm_probe_helper.c
+> +++ b/drivers/gpu/drm/drm_probe_helper.c
+> @@ -1147,3 +1147,100 @@ int drm_connector_helper_get_modes(struct drm_connector *connector)
+>  	return count;
+>  }
+>  EXPORT_SYMBOL(drm_connector_helper_get_modes);
+> +
+> +static bool tv_mode_supported(struct drm_connector *connector,
+> +			      enum drm_connector_tv_mode mode)
+> +{
+> +	struct drm_device *dev = connector->dev;
+> +	struct drm_property *property = dev->mode_config.tv_mode_property;
+> +
+
+Superfluous linebreak
+
+> +	unsigned int i;
+> +
+> +	for (i = 0; i < property->num_values; i++)
+> +		if (property->values[i] == mode)
+> +			return true;
+> +
+> +	return false;
+> +}
+> +
+> +/**
+> + * drm_connector_helper_tv_get_modes - Fills the modes availables to a TV connector
+
+availables -> available
+
+> + * @connector: The connector
+> + *
+> + * Fills the available modes for a TV connector based on the supported
+> + * TV modes, and the default mode expressed by the kernel command line.
+> + *
+> + * This can be used as the default TV connector helper .get_modes() hook
+> + * if the driver does not need any special processing.
+> + *
+> + * Returns:
+> + * The number of modes added to the connector.
+> + */
+> +int drm_connector_helper_tv_get_modes(struct drm_connector *connector)
+> +{
+> +	struct drm_device *dev = connector->dev;
+> +	struct drm_cmdline_mode *cmdline = &connector->cmdline_mode;
+> +	struct drm_display_mode *tv_modes[2] = {};
+> +	struct drm_display_mode *mode;
+> +	unsigned int first_mode_idx;
+> +	unsigned int count = 0;
+> +	uint64_t default_mode;
+> +	int ret;
+> +
+> +	if (!dev->mode_config.tv_mode_property)
+> +		return 0;
+> +
+> +	if (tv_mode_supported(connector, DRM_MODE_TV_MODE_NTSC) ||
+> +	    tv_mode_supported(connector, DRM_MODE_TV_MODE_NTSC_443) ||
+> +	    tv_mode_supported(connector, DRM_MODE_TV_MODE_NTSC_J) ||
+> +	    tv_mode_supported(connector, DRM_MODE_TV_MODE_PAL_M)) {
+> +		mode = drm_mode_analog_ntsc_480i(connector->dev);
+
+Nit: You can use the dev variable here and below.
+
+> +		if (!mode)
+> +			return 0;
+> +
+> +		tv_modes[count++] = mode;
+> +	}
+> +
+> +	if (tv_mode_supported(connector, DRM_MODE_TV_MODE_PAL) ||
+> +	    tv_mode_supported(connector, DRM_MODE_TV_MODE_PAL_N) ||
+> +	    tv_mode_supported(connector, DRM_MODE_TV_MODE_SECAM)) {
+> +		mode = drm_mode_analog_pal_576i(connector->dev);
+> +		if (!mode)
+> +			return 0;
+
+You leak the ntsc mode when returning (possibly).
+
+> +
+> +		tv_modes[count++] = mode;
+> +	}
+> +
+
+Maybe check for count being zero here?
+
+> +	if (count == 1) {
+> +		mode->type |= DRM_MODE_TYPE_PREFERRED;
+> +		drm_mode_probed_add(connector, mode);
+> +		return count;
+> +	}
+> +
+> +	ret = drm_object_property_get_default_value(&connector->base,
+> +						    dev->mode_config.tv_mode_property,
+> +						    &default_mode);
+> +	if (ret)
+> +		return 0;
+
+You leak both modes when returning here. Maybe move this up before
+allocation to simplify error handling.
+
+> +
+> +	if (cmdline->tv_mode_specified)
+> +		default_mode = cmdline->tv_mode;
+
+I realised that we don't verify tv_mode coming from the command line,
+not here and not in the reset helper. Should we do that? A driver should
+be programmed defensively to handle an illegal/unsupported value, but it
+doesn't feel right to allow an illegal enum value coming through the
+core/helpers.
+
+> +
+> +	if ((default_mode == DRM_MODE_TV_MODE_NTSC) ||
+> +	    (default_mode == DRM_MODE_TV_MODE_NTSC_443) ||
+> +	    (default_mode == DRM_MODE_TV_MODE_NTSC_J) ||
+> +	    (default_mode == DRM_MODE_TV_MODE_PAL_M))
+> +		first_mode_idx = 0;
+> +	else
+> +		first_mode_idx = 1;
+> +
+> +	mode = tv_modes[first_mode_idx];
+> +	mode->type |= DRM_MODE_TYPE_PREFERRED;
+> +	drm_mode_probed_add(connector, mode);
+> +
+> +	mode = first_mode_idx ? tv_modes[0] : tv_modes[1];
+> +	drm_mode_probed_add(connector, mode);
+> +
+> +	return count;
+> +}
+> +EXPORT_SYMBOL(drm_connector_helper_tv_get_modes);
+
+I know this is not expensive, but you're looping over the property
+values 7 times. An alternative solution is to rebuild the supported bitmask:
+
+int drm_connector_helper_tv_get_modes(struct drm_connector *connector)
+{
+...
+	unsigned int ntsc_modes = BIT(DRM_MODE_TV_MODE_NTSC) |
+				  BIT(DRM_MODE_TV_MODE_NTSC_443) |
+				  BIT(DRM_MODE_TV_MODE_NTSC_J) |
+				  BIT(DRM_MODE_TV_MODE_PAL_M);
+	unsigned int pal_modes = BIT(DRM_MODE_TV_MODE_PAL) |
+				 BIT(DRM_MODE_TV_MODE_PAL_N) |
+				 BIT(DRM_MODE_TV_MODE_SECAM);
+	unsigned int supported_tv_modes = 0;
+
+...
+	for (i = 0; i < property->num_values; i++)
+		supported_tv_modes |= BIT(property->values[i]);
+
+	if (supported_tv_modes & ntsc_modes)
+...
+	if (supported_tv_modes & pal_modes)
+...
+
+	if (BIT(default_mode) & ntsc_modes)
+		first_mode_idx = 0;
+	else
+		first_mode_idx = 1;
+
+
+Up to you if you want to do this.
+
+Noralf.
