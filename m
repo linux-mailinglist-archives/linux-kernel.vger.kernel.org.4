@@ -2,74 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EE8861E1C3
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 11:56:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D25761E1CB
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 12:15:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229882AbiKFK40 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Nov 2022 05:56:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43340 "EHLO
+        id S229887AbiKFLKG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Nov 2022 06:10:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229581AbiKFK4Y (ORCPT
+        with ESMTP id S229795AbiKFLKD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Nov 2022 05:56:24 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F31EC3B
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Nov 2022 02:56:24 -0800 (PST)
+        Sun, 6 Nov 2022 06:10:03 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8CD6DF4C
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Nov 2022 03:10:02 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AFF3460BED
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Nov 2022 10:56:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF6CBC433D6
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Nov 2022 10:56:22 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 54AF3B80921
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Nov 2022 11:10:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF576C433C1;
+        Sun,  6 Nov 2022 11:09:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667732183;
-        bh=P5+oK5y1DwgK+cZ5FV6rwH5/YDmYJLDEYA0g/u08A8E=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=aPwkX6c6CUAG++Y/NFl1aCaJL4kAldL8ZfDAbrBpQSHavM4g2AHZ1twp8lcCazMh5
-         ZFUGOuL0JxDyfkIq/AqGxKaRtGC8ZwolOW8dS9l0pU2r7AFj/XVcdVHgsP8AI1NpmP
-         sJdSEEnCiAd0bmoh1KYmrYaSn54czDN+caHmaD+azD9NDru+1STH/6mZAh5g6aDnwv
-         5rDSMKCP7H6zHRU5rszvLWGbvjEcTVHVpBTh9R6Pr1zBCMAkjnLmS+EwXoAJ1rSSlz
-         q/gQDcxwok8ldw9azBb7QkBJzfez2gpfi9dvATFaCpZ827L0Ic67vQW8FmYtjS7zkt
-         I5y8fmeq57YcQ==
-Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-333a4a5d495so80429707b3.10
-        for <linux-kernel@vger.kernel.org>; Sun, 06 Nov 2022 02:56:22 -0800 (PST)
-X-Gm-Message-State: ACrzQf2HsIjtxUCAbNZZeut+TPhN7q/dzZALdALLI9f46mUzkkT4aw3Z
-        lC8ya/rbkgQS6zCQZhDHRFc3oBQ9fZaaZueDC1c=
-X-Google-Smtp-Source: AMsMyM6F5TjV3XEFGifBFFyTnxoEYOIx53CjGoI5BoOXmHjwgY51QZL2DiccNWXEsKvh28HauC6Coj1mObem968DBNQ=
-X-Received: by 2002:a0d:f445:0:b0:345:89a2:9a8d with SMTP id
- d66-20020a0df445000000b0034589a29a8dmr41906097ywf.107.1667732182083; Sun, 06
- Nov 2022 02:56:22 -0800 (PST)
-MIME-Version: 1.0
-References: <20221102203405.1797491-1-ogabbay@kernel.org> <20221102203405.1797491-4-ogabbay@kernel.org>
- <b6faacac-46f2-7643-7796-b34840fc94f5@quicinc.com>
-In-Reply-To: <b6faacac-46f2-7643-7796-b34840fc94f5@quicinc.com>
-From:   Oded Gabbay <ogabbay@kernel.org>
-Date:   Sun, 6 Nov 2022 12:55:55 +0200
-X-Gmail-Original-Message-ID: <CAFCwf11Fd6GZkmDi74TRVd2t3v7d0HTYSjLeEdM9UeK+fUofXw@mail.gmail.com>
-Message-ID: <CAFCwf11Fd6GZkmDi74TRVd2t3v7d0HTYSjLeEdM9UeK+fUofXw@mail.gmail.com>
-Subject: Re: [RFC PATCH v2 3/3] drm: initialize accel framework
-To:     Jeffrey Hugo <quic_jhugo@quicinc.com>
-Cc:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>,
-        Jiho Chu <jiho.chu@samsung.com>,
-        Daniel Stone <daniel@fooishbar.org>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>,
-        Maciej Kwapulinski <maciej.kwapulinski@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
+        s=k20201202; t=1667733000;
+        bh=cSly0yeM/0ib/gX6jfULXywLq1Ex9vr4Nq/bLBPvKoM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=SaDvysupVD6NSD4HlrT+ss2r9lDh6WMpLFGRx6U+B5TycnAh0UNWaunAXcrxObB5J
+         ud42DaKFheuKcka3jja8Jlqz+K14vJ+DRqlYYvgCAtkRpUKTLtXTSUNRJyBmNjmG7l
+         7Zs/c9/+fuOeWvAT8Ic4VTrv11nK2pJvx8o60+YPVmmb5fW9TMRd4udiyrRNyjIU79
+         IG50HWV3Vttn/cj5037C4sKJwtR3Pw+CEJViKyObW+cGpqh1EH7O7kCLXACN/RtlVa
+         cIel+xn1ZpIB5EoK18DDS4oZYXfpqLVPEC7pzb6O/1vCcW5SsJDUi1Oq5JvDn/tcQS
+         ouit9xMlX3MvQ==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1ordXJ-004Bej-F4;
+        Sun, 06 Nov 2022 11:09:57 +0000
+Date:   Sun, 06 Nov 2022 11:09:25 +0000
+Message-ID: <87sfiwfifu.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Anna-Maria Gleixner <anna-maria@linutronix.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v5a 2/5] clocksource/drivers/arm_arch_timer: Do not use timer namespace for timer_shutdown() function
+In-Reply-To: <20221106054648.549609750@goodmis.org>
+References: <20221106054535.709068702@goodmis.org>
+        <20221106054648.549609750@goodmis.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: rostedt@goodmis.org, linux-kernel@vger.kernel.org, torvalds@linux-foundation.org, tglx@linutronix.de, sboyd@kernel.org, linux@roeck-us.net, anna-maria@linutronix.de, akpm@linux-foundation.org, mark.rutland@arm.com, daniel.lezcano@linaro.org, linux-arm-kernel@lists.infradead.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -79,28 +74,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 2, 2022 at 11:30 PM Jeffrey Hugo <quic_jhugo@quicinc.com> wrote:
->
-> On 11/2/2022 2:34 PM, Oded Gabbay wrote:
-> > @@ -163,7 +174,11 @@ static int drm_minor_register(struct drm_device *dev, unsigned int type)
-> >
-> >       ret = drm_debugfs_init(minor, minor->index, drm_debugfs_root);
-> >       if (ret) {
-> > -             DRM_ERROR("DRM: Failed to initialize /sys/kernel/debug/dri.\n");
-> > +             if (minor->type == DRM_MINOR_ACCEL)
-> > +                     DRM_ERROR("DRM: Failed to initialize /sys/kernel/debug/accel.\n");
-> > +             else
-> > +                     DRM_ERROR("DRM: Failed to initialize /sys/kernel/debug/dri.\n");
-> > +
-> >               goto err_debugfs;
-> >       }
-> >
->
-> This doesn't look right.  Don't you need to call drm_debugfs_init() with
-> accel_debugfs_root for the case - minor->type == DRM_MINOR_ACCEL?
-> Unless I fail to understand something, this will put all the accel
-> devices under /sys/kernel/debug/dri
-ofc, you are correct.
-Will be fixed in v3.
-Thanks,
-Oded
+On Sun, 06 Nov 2022 05:45:37 +0000,
+Steven Rostedt <rostedt@goodmis.org> wrote:
+> 
+> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+> 
+> A new "shutdown" timer state is being added to the generic timer code. One
+> of the functions to change the timer into the state is called
+> "timer_shutdown()". This means that there can not be other functions
+> called "timer_shutdown()" as the timer code owns the "timer_*" name space.
+> 
+> Rename timer_shutdown() to arch_timer_shutdown() to avoid this conflict.
+> 
+> Link: https://lore.kernel.org/all/20221105060155.409832154@goodmis.org/
+> 
+> Cc: Mark Rutland <mark.rutland@arm.com>
+> Cc: Marc Zyngier <maz@kernel.org>
+> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: linux-arm-kernel@lists.infradead.org
+> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+
+Acked-by: Marc Zyngier <maz@kernel.org>
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
