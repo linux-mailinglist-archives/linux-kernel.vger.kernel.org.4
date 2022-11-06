@@ -2,172 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9785861E58D
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 20:34:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9517C61E591
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 20:36:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230119AbiKFTeg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Nov 2022 14:34:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40078 "EHLO
+        id S230115AbiKFTgk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Nov 2022 14:36:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230035AbiKFTe0 (ORCPT
+        with ESMTP id S229947AbiKFTgh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Nov 2022 14:34:26 -0500
-Received: from smtp.smtpout.orange.fr (smtp-16.smtpout.orange.fr [80.12.242.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 375B9E095
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Nov 2022 11:34:24 -0800 (PST)
-Received: from pop-os.home ([86.243.100.34])
-        by smtp.orange.fr with ESMTPA
-        id rlPRo1bQcsfCIrlPRomc2E; Sun, 06 Nov 2022 20:34:22 +0100
-X-ME-Helo: pop-os.home
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sun, 06 Nov 2022 20:34:22 +0100
-X-ME-IP: 86.243.100.34
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-hwmon@vger.kernel.org
-Subject: [PATCH v2] hwmon: Include <linux/kstrtox.h> when appropriate
-Date:   Sun,  6 Nov 2022 20:34:16 +0100
-Message-Id: <51688cf50bda44e2731381a31287c62319388783.1667763218.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
+        Sun, 6 Nov 2022 14:36:37 -0500
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0998BE084;
+        Sun,  6 Nov 2022 11:36:35 -0800 (PST)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id 5438B5FD04;
+        Sun,  6 Nov 2022 22:36:33 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1667763393;
+        bh=yQ6suEWJBzxoUrocwoSmUoXHvbi6PvhSnqawY+nZJZ8=;
+        h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version;
+        b=YV1yrrDKglvFQLa34c6eqjzoqkTQQDdNQdyDxpaC6X/S6vOK5GLypskjvi+zp++Dm
+         AhAfoS6eplCCgnaql70kq2zZIgZ4x20bZ15dsHACujm9LlO/N2UjuvrVMWWaIVbmy6
+         /q8GXlCZXIo9wDlCZKG/+dDz7dr2VwRtVrDXVsEl97SFZ3HreObFKRGRnZOBbn+P8v
+         K9cSd98Nbz19+MBQq04/Y386P6CS1NzpglnFgdgaJwbgJFSzYpStKvR15+PLcozJUf
+         E+6Mi/7mMASbAzeDOfaC75mlFgGA73t1xEFi0/+4kOB7mrjmx0Rl7/LceX84b6e8qq
+         wlREl7z+nWDVw==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Sun,  6 Nov 2022 22:36:33 +0300 (MSK)
+From:   Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+To:     Stefano Garzarella <sgarzare@redhat.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Krasnov Arseniy <oxffffaa@gmail.com>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        kernel <kernel@sberdevices.ru>
+Subject: [RFC PATCH v3 01/11] virtio/vsock: rework packet allocation logic
+Thread-Topic: [RFC PATCH v3 01/11] virtio/vsock: rework packet allocation
+ logic
+Thread-Index: AQHY8hcBEbxDmf4aG021vuOLUMusCQ==
+Date:   Sun, 6 Nov 2022 19:36:02 +0000
+Message-ID: <f896b8fd-50d2-2512-3966-3775245e9b96@sberdevices.ru>
+In-Reply-To: <f60d7e94-795d-06fd-0321-6972533700c5@sberdevices.ru>
+Accept-Language: en-US, ru-RU
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.16.1.12]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <D9B2370EC071AE4DB1F3A0C4C342CA7C@sberdevices.ru>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2022/11/06 12:52:00 #20573807
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The kstrto<something>() functions have been moved from kernel.h to
-kstrtox.h.
-
-So, include the latter directly in the appropriate files.
-
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
-The goal of this patch is to eventually remove <linux/kernel.h> from
-<linux/watchdog.h>.
-
-This patch is needed to avoid indirect inclusion, via <linux/watchdog.h>,
-in fschmd.c, ftsteutates.c and w83793.c.
-
-Changes in v2:
-   - Include <linux/kstrtox.h> in <linux/hwmon-sysfs.h> so that much less
-     drivers need to be updated   [Guenter Roeck]
-
-v1: https://lore.kernel.org/all/0e819645f8d607f7b4550c8aaf4a563b1404bf40.1667730675.git.christophe.jaillet@wanadoo.fr/
----
- drivers/hwmon/atxp1.c            | 1 +
- drivers/hwmon/gpio-fan.c         | 1 +
- drivers/hwmon/hwmon.c            | 1 +
- drivers/hwmon/lm90.c             | 1 +
- drivers/hwmon/mr75203.c          | 1 +
- drivers/hwmon/pcf8591.c          | 1 +
- drivers/hwmon/pmbus/q54sj108a2.c | 1 +
- include/linux/hwmon-sysfs.h      | 1 +
- 8 files changed, 8 insertions(+)
-
-diff --git a/drivers/hwmon/atxp1.c b/drivers/hwmon/atxp1.c
-index 4fd8de8022bc..118297ea1dcf 100644
---- a/drivers/hwmon/atxp1.c
-+++ b/drivers/hwmon/atxp1.c
-@@ -16,6 +16,7 @@
- #include <linux/hwmon.h>
- #include <linux/hwmon-vid.h>
- #include <linux/err.h>
-+#include <linux/kstrtox.h>
- #include <linux/mutex.h>
- #include <linux/sysfs.h>
- #include <linux/slab.h>
-diff --git a/drivers/hwmon/gpio-fan.c b/drivers/hwmon/gpio-fan.c
-index ba408942dbe7..e75db6f64e8c 100644
---- a/drivers/hwmon/gpio-fan.c
-+++ b/drivers/hwmon/gpio-fan.c
-@@ -14,6 +14,7 @@
- #include <linux/irq.h>
- #include <linux/platform_device.h>
- #include <linux/err.h>
-+#include <linux/kstrtox.h>
- #include <linux/mutex.h>
- #include <linux/hwmon.h>
- #include <linux/gpio/consumer.h>
-diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
-index 4218750d5a66..33edb5c02f7d 100644
---- a/drivers/hwmon/hwmon.c
-+++ b/drivers/hwmon/hwmon.c
-@@ -15,6 +15,7 @@
- #include <linux/gfp.h>
- #include <linux/hwmon.h>
- #include <linux/idr.h>
-+#include <linux/kstrtox.h>
- #include <linux/list.h>
- #include <linux/module.h>
- #include <linux/pci.h>
-diff --git a/drivers/hwmon/lm90.c b/drivers/hwmon/lm90.c
-index a3f95ba00dbf..6498d5acf705 100644
---- a/drivers/hwmon/lm90.c
-+++ b/drivers/hwmon/lm90.c
-@@ -103,6 +103,7 @@
- #include <linux/interrupt.h>
- #include <linux/jiffies.h>
- #include <linux/hwmon.h>
-+#include <linux/kstrtox.h>
- #include <linux/module.h>
- #include <linux/mutex.h>
- #include <linux/of_device.h>
-diff --git a/drivers/hwmon/mr75203.c b/drivers/hwmon/mr75203.c
-index 394a4c7e46ab..50a8b9c3f94d 100644
---- a/drivers/hwmon/mr75203.c
-+++ b/drivers/hwmon/mr75203.c
-@@ -11,6 +11,7 @@
- #include <linux/clk.h>
- #include <linux/debugfs.h>
- #include <linux/hwmon.h>
-+#include <linux/kstrtox.h>
- #include <linux/module.h>
- #include <linux/mod_devicetable.h>
- #include <linux/mutex.h>
-diff --git a/drivers/hwmon/pcf8591.c b/drivers/hwmon/pcf8591.c
-index af9614e918a4..1dbe209ae13f 100644
---- a/drivers/hwmon/pcf8591.c
-+++ b/drivers/hwmon/pcf8591.c
-@@ -14,6 +14,7 @@
- #include <linux/mutex.h>
- #include <linux/err.h>
- #include <linux/hwmon.h>
-+#include <linux/kstrtox.h>
- 
- /* Insmod parameters */
- 
-diff --git a/drivers/hwmon/pmbus/q54sj108a2.c b/drivers/hwmon/pmbus/q54sj108a2.c
-index fa298b4265a1..d3ba12951324 100644
---- a/drivers/hwmon/pmbus/q54sj108a2.c
-+++ b/drivers/hwmon/pmbus/q54sj108a2.c
-@@ -8,6 +8,7 @@
- 
- #include <linux/debugfs.h>
- #include <linux/i2c.h>
-+#include <linux/kstrtox.h>
- #include <linux/module.h>
- #include <linux/of_device.h>
- #include "pmbus.h"
-diff --git a/include/linux/hwmon-sysfs.h b/include/linux/hwmon-sysfs.h
-index cb26d02f52f3..d896713359cd 100644
---- a/include/linux/hwmon-sysfs.h
-+++ b/include/linux/hwmon-sysfs.h
-@@ -8,6 +8,7 @@
- #define _LINUX_HWMON_SYSFS_H
- 
- #include <linux/device.h>
-+#include <linux/kstrtox.h>
- 
- struct sensor_device_attribute{
- 	struct device_attribute dev_attr;
--- 
-2.34.1
-
+VG8gc3VwcG9ydCB6ZXJvY29weSByZWNlaXZlLCBwYWNrZXQncyBidWZmZXIgYWxsb2NhdGlvbiBp
+cyBjaGFuZ2VkOiBmb3INCmJ1ZmZlcnMgd2hpY2ggY291bGQgYmUgbWFwcGVkIHRvIHVzZXIncyB2
+bWEgd2UgY2FuJ3QgdXNlICdrbWFsbG9jKCknKGFzDQprZXJuZWwgcmVzdHJpY3RzIHRvIG1hcCBz
+bGFiIHBhZ2VzIHRvIHVzZXIncyB2bWEpIGFuZCByYXcgYnVkZHkNCmFsbG9jYXRvciBub3cgY2Fs
+bGVkLiBCdXQsIGZvciB0eCBwYWNrZXRzKHN1Y2ggcGFja2V0cyB3b24ndCBiZSBtYXBwZWQNCnRv
+IHVzZXIpLCBwcmV2aW91cyAna21hbGxvYygpJyB3YXkgaXMgdXNlZCwgYnV0IHdpdGggc3BlY2lh
+bCBmbGFnIGluDQpwYWNrZXQncyBzdHJ1Y3R1cmUgd2hpY2ggYWxsb3dzIHRvIGRpc3Rpbmd1aXNo
+IGJldHdlZW4gJ2ttYWxsb2MoKScgYW5kDQpyYXcgcGFnZXMgYnVmZmVycy4NCg0KU2lnbmVkLW9m
+Zi1ieTogQXJzZW5peSBLcmFzbm92IDxBVktyYXNub3ZAc2JlcmRldmljZXMucnU+DQotLS0NCiBk
+cml2ZXJzL3Zob3N0L3Zzb2NrLmMgICAgICAgICAgICAgICAgICAgfCAgMSArDQogaW5jbHVkZS9s
+aW51eC92aXJ0aW9fdnNvY2suaCAgICAgICAgICAgIHwgIDEgKw0KIG5ldC92bXdfdnNvY2svdmly
+dGlvX3RyYW5zcG9ydC5jICAgICAgICB8ICA4ICsrKysrKy0tDQogbmV0L3Ztd192c29jay92aXJ0
+aW9fdHJhbnNwb3J0X2NvbW1vbi5jIHwgMTAgKysrKysrKysrLQ0KIDQgZmlsZXMgY2hhbmdlZCwg
+MTcgaW5zZXJ0aW9ucygrKSwgMyBkZWxldGlvbnMoLSkNCg0KZGlmZiAtLWdpdCBhL2RyaXZlcnMv
+dmhvc3QvdnNvY2suYyBiL2RyaXZlcnMvdmhvc3QvdnNvY2suYw0KaW5kZXggNTcwMzc3NWFmMTI5
+Li42NTQ3NWQxMjhhMWQgMTAwNjQ0DQotLS0gYS9kcml2ZXJzL3Zob3N0L3Zzb2NrLmMNCisrKyBi
+L2RyaXZlcnMvdmhvc3QvdnNvY2suYw0KQEAgLTM5OSw2ICszOTksNyBAQCB2aG9zdF92c29ja19h
+bGxvY19wa3Qoc3RydWN0IHZob3N0X3ZpcnRxdWV1ZSAqdnEsDQogCQlyZXR1cm4gTlVMTDsNCiAJ
+fQ0KIA0KKwlwa3QtPnNsYWJfYnVmID0gdHJ1ZTsNCiAJcGt0LT5idWZfbGVuID0gcGt0LT5sZW47
+DQogDQogCW5ieXRlcyA9IGNvcHlfZnJvbV9pdGVyKHBrdC0+YnVmLCBwa3QtPmxlbiwgJmlvdl9p
+dGVyKTsNCmRpZmYgLS1naXQgYS9pbmNsdWRlL2xpbnV4L3ZpcnRpb192c29jay5oIGIvaW5jbHVk
+ZS9saW51eC92aXJ0aW9fdnNvY2suaA0KaW5kZXggMzVkN2VlZGI1ZThlLi5kMDJjYjdhYTkyMmYg
+MTAwNjQ0DQotLS0gYS9pbmNsdWRlL2xpbnV4L3ZpcnRpb192c29jay5oDQorKysgYi9pbmNsdWRl
+L2xpbnV4L3ZpcnRpb192c29jay5oDQpAQCAtNTAsNiArNTAsNyBAQCBzdHJ1Y3QgdmlydGlvX3Zz
+b2NrX3BrdCB7DQogCXUzMiBvZmY7DQogCWJvb2wgcmVwbHk7DQogCWJvb2wgdGFwX2RlbGl2ZXJl
+ZDsNCisJYm9vbCBzbGFiX2J1ZjsNCiB9Ow0KIA0KIHN0cnVjdCB2aXJ0aW9fdnNvY2tfcGt0X2lu
+Zm8gew0KZGlmZiAtLWdpdCBhL25ldC92bXdfdnNvY2svdmlydGlvX3RyYW5zcG9ydC5jIGIvbmV0
+L3Ztd192c29jay92aXJ0aW9fdHJhbnNwb3J0LmMNCmluZGV4IGFkNjRmNDAzNTM2YS4uMTk5MDlj
+MWU5YmEzIDEwMDY0NA0KLS0tIGEvbmV0L3Ztd192c29jay92aXJ0aW9fdHJhbnNwb3J0LmMNCisr
+KyBiL25ldC92bXdfdnNvY2svdmlydGlvX3RyYW5zcG9ydC5jDQpAQCAtMjU1LDE2ICsyNTUsMjAg
+QEAgc3RhdGljIHZvaWQgdmlydGlvX3Zzb2NrX3J4X2ZpbGwoc3RydWN0IHZpcnRpb192c29jayAq
+dnNvY2spDQogCXZxID0gdnNvY2stPnZxc1tWU09DS19WUV9SWF07DQogDQogCWRvIHsNCisJCXN0
+cnVjdCBwYWdlICpidWZfcGFnZTsNCisNCiAJCXBrdCA9IGt6YWxsb2Moc2l6ZW9mKCpwa3QpLCBH
+RlBfS0VSTkVMKTsNCiAJCWlmICghcGt0KQ0KIAkJCWJyZWFrOw0KIA0KLQkJcGt0LT5idWYgPSBr
+bWFsbG9jKGJ1Zl9sZW4sIEdGUF9LRVJORUwpOw0KLQkJaWYgKCFwa3QtPmJ1Zikgew0KKwkJYnVm
+X3BhZ2UgPSBhbGxvY19wYWdlKEdGUF9LRVJORUwpOw0KKw0KKwkJaWYgKCFidWZfcGFnZSkgew0K
+IAkJCXZpcnRpb190cmFuc3BvcnRfZnJlZV9wa3QocGt0KTsNCiAJCQlicmVhazsNCiAJCX0NCiAN
+CisJCXBrdC0+YnVmID0gcGFnZV90b192aXJ0KGJ1Zl9wYWdlKTsNCiAJCXBrdC0+YnVmX2xlbiA9
+IGJ1Zl9sZW47DQogCQlwa3QtPmxlbiA9IGJ1Zl9sZW47DQogDQpkaWZmIC0tZ2l0IGEvbmV0L3Zt
+d192c29jay92aXJ0aW9fdHJhbnNwb3J0X2NvbW1vbi5jIGIvbmV0L3Ztd192c29jay92aXJ0aW9f
+dHJhbnNwb3J0X2NvbW1vbi5jDQppbmRleCBhOTk4MGU5YjkzMDQuLjM3ZThkYmZlMmY1ZCAxMDA2
+NDQNCi0tLSBhL25ldC92bXdfdnNvY2svdmlydGlvX3RyYW5zcG9ydF9jb21tb24uYw0KKysrIGIv
+bmV0L3Ztd192c29jay92aXJ0aW9fdHJhbnNwb3J0X2NvbW1vbi5jDQpAQCAtNjksNiArNjksNyBA
+QCB2aXJ0aW9fdHJhbnNwb3J0X2FsbG9jX3BrdChzdHJ1Y3QgdmlydGlvX3Zzb2NrX3BrdF9pbmZv
+ICppbmZvLA0KIAkJaWYgKCFwa3QtPmJ1ZikNCiAJCQlnb3RvIG91dF9wa3Q7DQogDQorCQlwa3Qt
+PnNsYWJfYnVmID0gdHJ1ZTsNCiAJCXBrdC0+YnVmX2xlbiA9IGxlbjsNCiANCiAJCWVyciA9IG1l
+bWNweV9mcm9tX21zZyhwa3QtPmJ1ZiwgaW5mby0+bXNnLCBsZW4pOw0KQEAgLTEzMzksNyArMTM0
+MCwxNCBAQCBFWFBPUlRfU1lNQk9MX0dQTCh2aXJ0aW9fdHJhbnNwb3J0X3JlY3ZfcGt0KTsNCiAN
+CiB2b2lkIHZpcnRpb190cmFuc3BvcnRfZnJlZV9wa3Qoc3RydWN0IHZpcnRpb192c29ja19wa3Qg
+KnBrdCkNCiB7DQotCWt2ZnJlZShwa3QtPmJ1Zik7DQorCWlmIChwa3QtPmJ1Zl9sZW4pIHsNCisJ
+CWlmIChwa3QtPnNsYWJfYnVmKQ0KKwkJCWt2ZnJlZShwa3QtPmJ1Zik7DQorCQllbHNlDQorCQkJ
+ZnJlZV9wYWdlcygodW5zaWduZWQgbG9uZylwa3QtPmJ1ZiwNCisJCQkJICAgZ2V0X29yZGVyKHBr
+dC0+YnVmX2xlbikpOw0KKwl9DQorDQogCWtmcmVlKHBrdCk7DQogfQ0KIEVYUE9SVF9TWU1CT0xf
+R1BMKHZpcnRpb190cmFuc3BvcnRfZnJlZV9wa3QpOw0KLS0gDQoyLjM1LjANCg==
