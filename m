@@ -2,113 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2AB961E11F
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 09:58:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D3BB61E123
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 10:02:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229792AbiKFI6Z convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 6 Nov 2022 03:58:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40390 "EHLO
+        id S229721AbiKFJCe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Nov 2022 04:02:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229635AbiKFI6X (ORCPT
+        with ESMTP id S229564AbiKFJCa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Nov 2022 03:58:23 -0500
-Received: from relay.hostedemail.com (smtprelay0015.hostedemail.com [216.40.44.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7B6095
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Nov 2022 01:58:21 -0700 (PDT)
-Received: from omf04.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay08.hostedemail.com (Postfix) with ESMTP id 708D0140844;
-        Sun,  6 Nov 2022 08:58:20 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf04.hostedemail.com (Postfix) with ESMTPA id 5567E20027;
-        Sun,  6 Nov 2022 08:57:23 +0000 (UTC)
-Message-ID: <6ca906bd81be7c6700068a5c9ba7354e14280619.camel@perches.com>
-Subject: Re: [PATCH] staging: r8188eu: convert three functions to bool
-From:   Joe Perches <joe@perches.com>
-To:     Michael Straube <straube.linux@gmail.com>,
-        gregkh@linuxfoundation.org
-Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Date:   Sun, 06 Nov 2022 01:58:17 -0700
-In-Reply-To: <20221105093916.8255-1-straube.linux@gmail.com>
-References: <20221105093916.8255-1-straube.linux@gmail.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
+        Sun, 6 Nov 2022 04:02:30 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61F1F2663;
+        Sun,  6 Nov 2022 01:02:29 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9E218B80B30;
+        Sun,  6 Nov 2022 09:02:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A2F8C433D6;
+        Sun,  6 Nov 2022 09:02:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667725346;
+        bh=xjKCgVmFbXFxtKFBYyK+XNvbHjCTI456JH43nwr0lEc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=T9unJaNs6HLnI2qRq4XbuONifxSjf0RJRYhKfas+wxK0doTZWhX2Vxi39kuPEzrO1
+         +BV+lm/BOobR6s2lIx1pnCeyyfzWQXnIHRZ0qr9Wgc8MsPH6MehxcEhifAsz/gCVMR
+         wvbdlY7k7tV3PjNt7Ctd0UhP6JiWltIf9hTki/rSmR64249F9Up3gEhGCvzC/K1UUw
+         q9WzrK8uP8dz9slhiVl6SMQbmszxY25erslacG3LzbC9pUj69lwABU9ze9xERKJkcR
+         wekQkPj45xpacM2TntuWA291big5LixYfpfKE1aAa0O4qd/nFGMnoR+QB4LeTUmdNh
+         lMSMKTgYI6f8Q==
+Date:   Sun, 6 Nov 2022 17:02:21 +0800
+From:   Peter Chen <peter.chen@kernel.org>
+To:     Pawel Laszczak <pawell@cadence.com>
+Cc:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: Re: [PATCH v2] usb: cdnsp: fix issue with ZLP - added TD_SIZE = 1
+Message-ID: <20221106090221.GA152143@nchen-desktop>
+References: <1666620275-139704-1-git-send-email-pawell@cadence.com>
+ <20221027072421.GA75844@nchen-desktop>
+ <BYAPR07MB5381482129407B849BA9A616DD339@BYAPR07MB5381.namprd07.prod.outlook.com>
 MIME-Version: 1.0
-X-Rspamd-Server: rspamout05
-X-Rspamd-Queue-Id: 5567E20027
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
-        KHOP_HELO_FCRDNS,SPF_HELO_PASS,SPF_NONE,UNPARSEABLE_RELAY autolearn=no
-        autolearn_force=no version=3.4.6
-X-Stat-Signature: 4uxoeo1dq3egrbjd7hcj7d3iyewk3jjk
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX1/LEMc4sjU2B1G35nYKmk26Yld9KNJFg/I=
-X-HE-Tag: 1667725043-59702
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <BYAPR07MB5381482129407B849BA9A616DD339@BYAPR07MB5381.namprd07.prod.outlook.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 2022-11-05 at 10:39 +0100, Michael Straube wrote:
-> The functions
+On 22-10-27 08:46:17, Pawel Laszczak wrote:
 > 
-> is_client_associated_to_ap()
-> is_client_associated_to_ibss()
-> is_IBSS_empty()
+> >
+> >On 22-10-24 10:04:35, Pawel Laszczak wrote:
+> >> Patch modifies the TD_SIZE in TRB before ZLP TRB.
+> >> The TD_SIZE in TRB before ZLP TRB must be set to 1 to force processing
+> >> ZLP TRB by controller.
+> >>
+> >> cc: <stable@vger.kernel.org>
+> >> Fixes: 3d82904559f4 ("usb: cdnsp: cdns3 Add main part of Cadence
+> >> USBSSP DRD Driver")
+> >> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
+> >>
+> >> ---
+> >> Changelog:
+> >> v2:
+> >> - returned value for last TRB must be 0
+> >>
+> >>  drivers/usb/cdns3/cdnsp-ring.c | 7 ++++++-
+> >>  1 file changed, 6 insertions(+), 1 deletion(-)
+> >>
+> >> diff --git a/drivers/usb/cdns3/cdnsp-ring.c
+> >> b/drivers/usb/cdns3/cdnsp-ring.c index 04dfcaa08dc4..aa79bce89d8a
+> >> 100644
+> >> --- a/drivers/usb/cdns3/cdnsp-ring.c
+> >> +++ b/drivers/usb/cdns3/cdnsp-ring.c
+> >> @@ -1769,8 +1769,13 @@ static u32 cdnsp_td_remainder(struct
+> >> cdnsp_device *pdev,
+> >>
+> >>  	/* One TRB with a zero-length data packet. */
+> >>  	if (!more_trbs_coming || (transferred == 0 && trb_buff_len == 0) ||
+> >> -	    trb_buff_len == td_total_len)
+> >> +	    trb_buff_len == td_total_len) {
+> >> +		/* Before ZLP driver needs set TD_SIZE=1. */
+> >> +		if (more_trbs_coming)
+> >> +			return 1;
+> >> +
+> >>  		return 0;
+> >> +	}
+> >
+> >Does that fix the issue you want at bulk transfer, which has zero-length packet
+> >at the last packet? It seems not align with your previous fix.
+> >Would you mind explaining more?
 > 
-> return boolean values. Convert their return type to bool and replace
-> _FAIL, which is defined as 0, with false. Another step to get rid of
-> _SUCCESS / _FAIL.
+> Value returned by function cdnsp_td_remainder is used 
+> as TD_SIZE in TRB.
+> 
+> The last TRB in TD should have TD_SIZE=0, so trb for ZLP should have
+> set also TD_SIZE=0. If driver set TD_SIZE=0 on before the last one
+> TRB then the controller stops the transfer and ignore trb for ZLP packet.
+> 
+> To fix this, the driver in such case must set TD_SIZE = 1
+> before the last TRB. 
 
-yay.
+  	if (!more_trbs_coming || (transferred == 0 && trb_buff_len == 0) ||
+ -	    trb_buff_len == td_total_len)
+ +	    trb_buff_len == td_total_len) {
+ +		/* Before ZLP driver needs set TD_SIZE=1. */
+ +		if (more_trbs_coming)
+ +			return 1;
+ +
+  		return 0;
+ +	}
 
-> diff --git a/drivers/staging/r8188eu/core/rtw_wlan_util.c b/drivers/staging/r8188eu/core/rtw_wlan_util.c
-[]
-> +bool is_client_associated_to_ap(struct adapter *padapter)
->  {
->  	struct mlme_ext_priv	*pmlmeext;
->  	struct mlme_ext_info	*pmlmeinfo;
->  
->  	if (!padapter)
-> -		return _FAIL;
-> +		return false;
->  
->  	pmlmeext = &padapter->mlmeextpriv;
->  	pmlmeinfo = &pmlmeext->mlmext_info;
->  
->  	if ((pmlmeinfo->state & WIFI_FW_ASSOC_SUCCESS) && ((pmlmeinfo->state & 0x03) == WIFI_FW_STATION_STATE))
->  		return true;
-> -	else
-> -		return _FAIL;
-> +
-> +	return false;
+How your above fix could return TD_SIZE as 1 for last non-ZLP TRB?
+Which conditions are satisfied?
 
-instead of
+Peter
 
-	if (foo)
-		return true;
-	return false;
+> e.g.
+> 
+> TD -> TRB1  transfer_length = 64KB, TD_SIZE =0
+>           TRB2 transfer_length =0, TD_SIZE = 0  - controller will
+> 		    ignore this transfer and stop transfer on previous one
+> 
+> TD -> TRB1  transfer_length = 64KB, TD_SIZE =1
+>           TRB2 transfer_length =0, TD_SIZE = 0  - controller will
+> 		    execute this trb and send ZLP
+> 
+> As you noticed previously, previous fix for last TRB returned
+> TD_SIZE = 1 in some cases.
+> Previous fix was working correct but was not compliance with
+> controller specification.
+> 
+> >
+> >>
+> >>  	maxp = usb_endpoint_maxp(preq->pep->endpoint.desc);
+> >>  	total_packet_count = DIV_ROUND_UP(td_total_len, maxp);
+> >> --
+> >> 2.25.1
+> >>
+> >
+> >--
+> >
+> 
+> Thanks,
+> Pawel Laszczak
 
-These could be:
+-- 
 
-	return (pmlmeinfo->state & WIFI_FW_ASSOC_SUCCESS) &&
-	       ((pmlmeinfo->state & 0x03) == WIFI_FW_STATION_STATE);
-
-> +bool is_client_associated_to_ibss(struct adapter *padapter)
->  {
->  	struct mlme_ext_priv	*pmlmeext = &padapter->mlmeextpriv;
->  	struct mlme_ext_info	*pmlmeinfo = &pmlmeext->mlmext_info;
->  
->  	if ((pmlmeinfo->state & WIFI_FW_ASSOC_SUCCESS) && ((pmlmeinfo->state & 0x03) == WIFI_FW_ADHOC_STATE))
->  		return true;
-> -	else
-> -		return _FAIL;
-> +
-> +	return false;
-
-and
-
-	return (pmlmeinfo->state & WIFI_FW_ASSOC_SUCCESS) &&
-	       ((pmlmeinfo->state & 0x03) == WIFI_FW_ADHOC_STATE);
-
-
+Thanks,
+Peter Chen
