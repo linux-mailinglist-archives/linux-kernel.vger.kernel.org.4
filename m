@@ -2,107 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C788961E704
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 23:52:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1334361E71C
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 23:53:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230201AbiKFWwR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Nov 2022 17:52:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60534 "EHLO
+        id S230174AbiKFWxK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Nov 2022 17:53:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230080AbiKFWwO (ORCPT
+        with ESMTP id S230308AbiKFWxG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Nov 2022 17:52:14 -0500
-Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFFB310044
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Nov 2022 14:52:13 -0800 (PST)
-Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-13bd2aea61bso11053021fac.0
-        for <linux-kernel@vger.kernel.org>; Sun, 06 Nov 2022 14:52:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/0ydKSnTIyWx0S1Q3BoBxyZVcUZEIG3/6GqQGMFVTmw=;
-        b=o4U9+nFjsC8V78QKRojdVnejQj3nf/6FFOpizO4ntpJr9zYJui8jWbm/D905kJS75A
-         jmD0K5x9rK4rjG8zcj0KeBBuz/C10UxuSGFIs+lhwoaQap1FrbLvzZtcIdpjeBsXng+a
-         dVMnWPg+xqcrQiMiQzLIOh+ZB9cDPe7lT4hu4xyu69IraSEGV48S9pU3oB+zdKiON08f
-         ViOuLcNYW4F++h1sWrqtsy3lSRso+qF6zqieS567VMqV0IJ/SOG2NUsmov2hh9V37pFr
-         SMCYXVaRbJvRIiI3FVgAoAxHs5GlcuYSKQVb4cQ7LWb7TGp2RZnIWdKc+9I8hVdrWA8l
-         c15g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/0ydKSnTIyWx0S1Q3BoBxyZVcUZEIG3/6GqQGMFVTmw=;
-        b=xtqRXCzUVRDTs9cBGDKR96GCI4Li7zxE7mit1yNMsQFwOd6ktf/dQP8pNjq5DinE+R
-         sR++aAqCAtoFFK6qK8GycG4d9crfvxV2LFLVLnca/4TPIwJ7u2Ab9mm1ZoCARpZgPuNX
-         2wHzXbf3nE9asmzzxrIaqD9xyJkhioTAzKKIiwIf9b5tm8PlNEgkmg8fAbg5CFY45MUr
-         D2i92F1x9mDLab1gX25y0rN2Her0wnckwDQPQQn3G0B1a+/cO5/wyeGoPvf8bnOapU9a
-         6d6y0/ZrYVpVn4YsNb5JWxwdZyU+LgtGrB9WiPxPVGmUSWPgheBVWwJbE/NrpPbJZczT
-         uCKg==
-X-Gm-Message-State: ACrzQf1KR4LnqAMFNMn4DNOvwh7CAaVTwFN6JgAcGTA3dpmyQCF6MPeb
-        /Nsc0RbJBTVBNX8UuhJqN0g=
-X-Google-Smtp-Source: AMsMyM5mnh/T8kJBeyCEztSlAhbfFV1Jc4H4f0IT6lVYZCnzRYHZcyegQ5BffSeK4l2ATQlGOrTJMQ==
-X-Received: by 2002:a05:6870:3510:b0:13d:9666:b884 with SMTP id k16-20020a056870351000b0013d9666b884mr11871863oah.138.1667775133127;
-        Sun, 06 Nov 2022 14:52:13 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id s26-20020a9d759a000000b00667d9a866b0sm2259473otk.59.2022.11.06.14.52.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 06 Nov 2022 14:52:12 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sun, 6 Nov 2022 14:52:11 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
+        Sun, 6 Nov 2022 17:53:06 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A2F910065
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Nov 2022 14:53:00 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 258F360BA0
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Nov 2022 22:53:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B14DC433D6;
+        Sun,  6 Nov 2022 22:52:59 +0000 (UTC)
+Date:   Sun, 6 Nov 2022 17:52:57 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
 To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Steven Rostedt <rostedt@goodmis.org>, linux-kernel@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
+Cc:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
         Stephen Boyd <sboyd@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
         Anna-Maria Gleixner <anna-maria@linutronix.de>,
         Andrew Morton <akpm@linux-foundation.org>,
         Julia Lawall <Julia.Lawall@inria.fr>
 Subject: Re: [PATCH v5a 5/5] treewide: Convert del_timer*() to
  timer_shutdown*()
-Message-ID: <20221106225211.GB805009@roeck-us.net>
-References: <20221106054535.709068702@goodmis.org>
- <20221106054649.099333291@goodmis.org>
- <CAHk-=wiD3VWYqgO7JLqRCJvYHiO5RicGAERH1dWQ2pDqnXDy6g@mail.gmail.com>
- <20221106160956.2414d73f@rorschach.local.home>
- <CAHk-=wjYY9k7TzyJvWOPSPLL+jHkdogyWuOUyStfE5h1=0Qk0w@mail.gmail.com>
- <20221106165220.4d7e5dac@rorschach.local.home>
- <CAHk-=whO5PXEzWwf=4=fvdqim6cGTczVoN4KJ5H+dabHo-OTHw@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Message-ID: <20221106175257.3f1b9a55@rorschach.local.home>
 In-Reply-To: <CAHk-=whO5PXEzWwf=4=fvdqim6cGTczVoN4KJ5H+dabHo-OTHw@mail.gmail.com>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20221106054535.709068702@goodmis.org>
+        <20221106054649.099333291@goodmis.org>
+        <CAHk-=wiD3VWYqgO7JLqRCJvYHiO5RicGAERH1dWQ2pDqnXDy6g@mail.gmail.com>
+        <20221106160956.2414d73f@rorschach.local.home>
+        <CAHk-=wjYY9k7TzyJvWOPSPLL+jHkdogyWuOUyStfE5h1=0Qk0w@mail.gmail.com>
+        <20221106165220.4d7e5dac@rorschach.local.home>
+        <CAHk-=whO5PXEzWwf=4=fvdqim6cGTczVoN4KJ5H+dabHo-OTHw@mail.gmail.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Nov 06, 2022 at 02:40:14PM -0800, Linus Torvalds wrote:
-> On Sun, Nov 6, 2022 at 1:52 PM Steven Rostedt <rostedt@goodmis.org> wrote:
-> >
-> > I can update the change log to include:
-> 
-> Yup, full running instructions for coccinelle patches is probably a good idea.
-> 
-> I've done them semi-occasionally, but it's rare enough that I always
-> have to look it up anyway, and I suspect many others have never done
-> it, so having it in the commit message is probably a good idea.
-> 
-> >       when != ptr->timer.function = E;
-> 
+On Sun, 6 Nov 2022 14:40:14 -0800
+Linus Torvalds <torvalds@linux-foundation.org> wrote:
+
 > I do think that you should just remove that E expression and the
 > "function = E" part.
 > 
+> Really, _any_ use of the timer after the timer delete makes it questionable,
+> 
+> It doesn't change the patch in my testing, but I think it's silly to
+> have that very specific pattern, when the more general case of "hey,
+> if you use the timer after deleting it, it's not obvious that it
+> should be a shutdown any more" just is more sensible anyway.
 
-Agreed. Removing this line does not make a difference. It looks like the
-"when strict" takes care of the condition.
+OK, I updated the script to:
 
-Guenter
+@@
+expression ptr, slab;
+identifier timer, rfield;
+@@
+(
+-       del_timer(&ptr->timer);
++       timer_shutdown(&ptr->timer);
+|
+-       del_timer_sync(&ptr->timer);
++       timer_shutdown_sync(&ptr->timer);
+)
+  ... when strict
+      when != ptr->timer
+(
+        kfree_rcu(ptr, rfield);
+|
+        kmem_cache_free(slab, ptr);
+|
+        kfree(ptr);
+)
+
+And produced no difference from https://lore.kernel.org/all/20221106212702.547242324@goodmis.org/
+
+I can post a v7a with the updated change log and also Guenter's
+tested-by tag. But the patches will remain the same. Are you going to
+just take that then?
+
+-- Steve
