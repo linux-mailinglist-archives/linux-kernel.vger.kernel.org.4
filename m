@@ -2,51 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94A0E61E52E
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 18:58:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C74161E534
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 19:03:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229962AbiKFR6y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Nov 2022 12:58:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51096 "EHLO
+        id S230408AbiKFSDK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Nov 2022 13:03:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229947AbiKFR6w (ORCPT
+        with ESMTP id S229947AbiKFSDH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Nov 2022 12:58:52 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F2FEB4A5;
-        Sun,  6 Nov 2022 09:58:51 -0800 (PST)
+        Sun, 6 Nov 2022 13:03:07 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98821B4A1;
+        Sun,  6 Nov 2022 10:03:06 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D31D8B80C7E;
-        Sun,  6 Nov 2022 17:58:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBBABC433D6;
-        Sun,  6 Nov 2022 17:58:46 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2CF3860D32;
+        Sun,  6 Nov 2022 18:03:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF18EC433D6;
+        Sun,  6 Nov 2022 18:03:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667757528;
-        bh=S+WnY294EWtEjtcOaVsw5jz5omtvfUMG8HmmViscgG4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=cfuZ09AJPHdBGS649GWBT1+xGTU5gCl0SNqoUUQVUA1mrvR6b9coQ16y+61f+p0M1
-         x9/ag8wjbaB6h8bv1BFmm7mLHznBJUcpobitP3kocXHuxqldLosxOFiod/j3P8dfcC
-         68x3s2uvfsnRoM5unXgLh/LBXokRr7Srw4kxcyzFrHd0l99oUKF5Z4dKSVSax6iBhW
-         mqKzam0bwtYx8tY78Fu6+DGNebo9AvyWbe124gvPsLxW2UisXY0sfShaqXDKHBCzkZ
-         AgHEBZQSKTAmoD6HgHyCqbJJrv9fYhytbCmT5ftWrtEq04R7fHP80HyKa6ziqzZoPY
-         GdOkZ5MyFhzig==
-Date:   Sun, 6 Nov 2022 17:58:39 +0000
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Antoniu Miclaus <antoniu.miclaus@analog.com>
-Cc:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-iio@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 3/4] Documentation: ABI: testing: adf4377: add ABI docs
-Message-ID: <20221106175604.061b8662@jic23-huawei>
-In-Reply-To: <20221104092802.90725-4-antoniu.miclaus@analog.com>
-References: <20221104092802.90725-1-antoniu.miclaus@analog.com>
-        <20221104092802.90725-4-antoniu.miclaus@analog.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.34; x86_64-pc-linux-gnu)
+        s=k20201202; t=1667757785;
+        bh=uuxDn1OITqIDqXPA7ridGX3rAXW+cFLB1pbNkqErXvY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=cKOlW8pTjdb8KK9IW6NYiUtQVKx+CHTSjHFA53h2KnIDxSXC80moVIwZ62X90iVTv
+         YoODVvHeoVTjjtnnKQWuyzITRnfZqlsUuDpL/j9vxn2Zl3HVbbRPcPORFohLhFmQtg
+         9MoRuv3IzEnL6uyDcUY3qTNIkbUDvsia7CAkCLpnRa1DtL+dfUX3Z8PL5hbZBNV9Di
+         YwWkeZRX/RAfH1S3DL63aVkTCwvL8OcRogfsbk/nxectFS9PMG4fqnIcyX9FIt8Ug8
+         E/Rz0hnfUIQBF0mTJXPOz+bU3yoI+y//JEhQjFhVPtOxDhevWpM7SS9jyFjEpfKMcu
+         MGaB+BMURUc6Q==
+Date:   Sun, 6 Nov 2022 20:03:00 +0200
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Rohit Nair <rohit.sajan.kumar@oracle.com>
+Cc:     jgg@ziepe.ca, saeedm@nvidia.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, manjunath.b.patil@oracle.com,
+        rama.nichanamatlu@oracle.com,
+        Michael Guralnik <michaelgur@nvidia.com>
+Subject: Re: [External] : Re: [PATCH 1/1] IB/mlx5: Add a signature check to
+ received EQEs and CQEs
+Message-ID: <Y2f21JKWkQg8KtyK@unreal>
+References: <20221005174521.63619-1-rohit.sajan.kumar@oracle.com>
+ <Y0UYml07lb1I38MQ@unreal>
+ <5bab650a-3c0b-cfd2-d6a7-2e39c8474514@oracle.com>
+ <Y1p4OEIWNObQCDoG@unreal>
+ <fdb9f874-1998-5270-4360-61c74c34294d@oracle.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <fdb9f874-1998-5270-4360-61c74c34294d@oracle.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -56,79 +62,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 4 Nov 2022 11:28:01 +0200
-Antoniu Miclaus <antoniu.miclaus@analog.com> wrote:
-
-> Add documentation for the use of the output frequency and muxout select.
+On Fri, Oct 28, 2022 at 04:48:53PM -0700, Rohit Nair wrote:
+> On 10/27/22 5:23 AM, Leon Romanovsky wrote:
+> > On Tue, Oct 25, 2022 at 10:44:12AM -0700, Rohit Nair wrote:
+> > > Hey Leon,
+> > > 
+> > > Please find my replies to your comments here below:
+> > 
+> > <...>
+> > 
+> > > > 
+> > > > > This patch does not introduce any significant performance degradations
+> > > > > and has been tested using qperf.
+> > > > What does it mean? You made changes in kernel verbs flow, they are not
+> > > > executed through qperf.
+> > > We also conducted several extensive performance tests using our test-suite
+> > > which utilizes rds-stress and also saw no significant performance
+> > > degrdations in those results.
+> > 
+> > What does it mean "also"? Your change is applicable ONLY for kernel path.
+> > 
+> > Anyway, I'm not keen adding rare debug code to performance critical path.
+> > 
+> > Thanks
 > 
-> Signed-off-by: Antoniu Miclaus <antoniu.miclaus@analog.com>
-Hi Antoniu,
-
-A few questions inline.
-> ---
->  .../testing/sysfs-bus-iio-frequency-adf4377   | 32 +++++++++++++++++++
->  1 file changed, 32 insertions(+)
->  create mode 100644 Documentation/ABI/testing/sysfs-bus-iio-frequency-adf4377
+> rds-stress exercises the codepath we are modifying here. rds-stress didn't
+> show much of performance degrade when we ran internally. We also requested
+> our DB team for performance regression testing and this change passed their
+> test suite. This motivated us to submit this to upstream.
 > 
-> diff --git a/Documentation/ABI/testing/sysfs-bus-iio-frequency-adf4377 b/Documentation/ABI/testing/sysfs-bus-iio-frequency-adf4377
-> new file mode 100644
-> index 000000000000..0324de5c9328
-> --- /dev/null
-> +++ b/Documentation/ABI/testing/sysfs-bus-iio-frequency-adf4377
-> @@ -0,0 +1,32 @@
-> +What:		/sys/bus/iio/devices/iio:deviceX/frequency
-> +KernelVersion:
-> +Contact:	linux-iio@vger.kernel.org
-> +Description:
-> +		Stores the PLL frequency in Hz for output channels.
-> +		Reading returns the frequency in Hz.
+> If there is any other test that is better suited for this change, I am
+> willing to test it. Please let me know if you have something in mind. We can
+> revisit this patch after such a test may be.
+> 
+> I agree that, this was a rare debug scenario, but it took lot more than
+> needed to narrow down[engaged vendor on live sessions]. We are adding this
+> in the hope to finding the cause at the earliest or at least point us which
+> direction to look at. We also requested the vendor[mlx] to include some
+> diagnostics[HW counter], which can help us narrow it faster next time. This
+> is our attempt to add kernel side of diagnostics.
 
-I'm a little confused. Should we not tie this to the output channels?
-out_altvoltageX_frequency
+The thing is that "vendor" failed to explain internally if this debug
+code is useful. Like I said, extremely rare debug code shouldn't be part
+of main data path.
 
-> +
-> +What:		/sys/bus/iio/devices/iio:deviceX/muxout_select
+Thanks
 
-Why would userspace change this? 
-I'd sort of expect this to typically be chosen by what it is physically wired
-up to.
-
-You could treat muxout_low and muxout_high as a gpio (possibly high_z as well).
-If that were the case, then device tree binding should allow you detect that usecase.
-
-Lock detector is normally wired to a GPI so that software can check if the lock is
-successful (or it's wired to some other circuits we can't see).  The two
-clock dividers should be represented as a clock provider.
-
-Note this is partly driven by my desire to keep custom ABI to the minimum because
-it is rare that userspace has a clue what to do with it.  That is probably less
-of a consideration here though as I doubt this device is going to be much used
-with software stacks that don't know exactly what it is.
-
-Jonathan
-
-> +KernelVersion:
-> +Contact:	linux-iio@vger.kernel.org
-> +Description:
-> +		The mux output allows the user to access various internal points on
-> +		the chip. Valid values that can be written are:
-> +		* high_z -> high impedance output
-> +		* lock_detect -> digital lock detector output
-> +		* muxout_low -> low output
-> +		* f_div_rclk_2 -> fdiv_rclk/2
-> +		* f_div_nclk_2 -> fdiv_nclk/2
-> +		* muxout_high -> high output
-> +
-> +What:		/sys/bus/iio/devices/iio:deviceX/muxout_select_available
-> +KernelVersion:
-> +Contact:	linux-iio@vger.kernel.org
-> +Description:
-> +		Reading this returns the valid values that can be written to the
-> +		muxout_mode attribute:
-> +		* high_z
-> +		* lock_detect
-> +		* muxout_low
-> +		* f_div_rclk_2
-> +		* f_div_nclk_2
-> +		* muxout_high
-
+> 
+> Feel free to share your suggestions
+> 
+> Thanks
+> 
