@@ -2,21 +2,21 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28E7261E17C
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 11:04:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90F4261E179
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 11:04:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229902AbiKFKEL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Nov 2022 05:04:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56128 "EHLO
+        id S229868AbiKFKD6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Nov 2022 05:03:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229694AbiKFKDy (ORCPT
+        with ESMTP id S229564AbiKFKDx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Nov 2022 05:03:54 -0500
+        Sun, 6 Nov 2022 05:03:53 -0500
 Received: from cstnet.cn (smtp84.cstnet.cn [159.226.251.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3147ADFF3
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 27051DFD1
         for <linux-kernel@vger.kernel.org>; Sun,  6 Nov 2022 02:03:50 -0800 (PST)
 Received: from cgk-Precision-3650-Tower.. (unknown [219.141.235.82])
-        by APP-05 (Coremail) with SMTP id zQCowACnrKByhmdj7bRnCA--.7053S5;
+        by APP-05 (Coremail) with SMTP id zQCowACnrKByhmdj7bRnCA--.7053S6;
         Sun, 06 Nov 2022 18:03:34 +0800 (CST)
 From:   Chen Guokai <chenguokai17@mails.ucas.ac.cn>
 To:     paul.walmsley@sifive.com, palmer@dabbelt.com,
@@ -24,34 +24,34 @@ To:     paul.walmsley@sifive.com, palmer@dabbelt.com,
         sfr@canb.auug.org.au
 Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
         liaochang1@huawei.com, Chen Guokai <chenguokai17@mails.ucas.ac.cn>
-Subject: [PATCH v4 1/8] riscv/kprobe: Prepare the skeleton to implement RISCV OPTPROBES feature
-Date:   Sun,  6 Nov 2022 18:03:09 +0800
-Message-Id: <20221106100316.2803176-2-chenguokai17@mails.ucas.ac.cn>
+Subject: [PATCH v4 2/8] riscv/kprobe: Allocate detour buffer from module area
+Date:   Sun,  6 Nov 2022 18:03:10 +0800
+Message-Id: <20221106100316.2803176-3-chenguokai17@mails.ucas.ac.cn>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221106100316.2803176-1-chenguokai17@mails.ucas.ac.cn>
 References: <20221106100316.2803176-1-chenguokai17@mails.ucas.ac.cn>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: zQCowACnrKByhmdj7bRnCA--.7053S5
-X-Coremail-Antispam: 1UD129KBjvJXoW3XF1fuF1xtFWfZw1ktw17GFg_yoW7KFWUpF
-        s5Cwn5WrWkA3s3G3y3Jw1kuFWFqan5Wa17KryDZry5Xw45tr45Awn2grW5XryxGrs0gryf
-        uF1Fvry5Cry3X3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUPE14x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jr4l82xGYIkIc2
-        x26xkF7I0E14v26r1I6r4UM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
-        Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1l84
-        ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1lnxkE
-        FVAIw20F6cxK64vIFxWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I
-        8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCF
-        s4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFI
-        xGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_
-        Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17
-        CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0
-        I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I
-        8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73
-        UjIFyTuYvjfU5UUUUUUUU
+X-CM-TRANSID: zQCowACnrKByhmdj7bRnCA--.7053S6
+X-Coremail-Antispam: 1UD129KBjvJXoW7tr1DGF4kXrWfXr43Ww47XFb_yoW8uF4UpF
+        4DCr45JrZ8Z3W3G3y3twn5Z34Fva95ta17KrW2vF15ZwsxJr43Aw4vg3yrXrn8tr4a9Fy5
+        XrW29ryS9ayUA3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUmj14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jryl82xGYIkIc2
+        x26xkF7I0E14v26r4j6ryUM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
+        Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1UM2
+        8EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2vY
+        z4IE04k24VAvwVAKI4IrM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c
+        02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE
+        4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4
+        IIrI8v6xkF7I0E8cxan2IY04v7MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j
+        6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7
+        AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE
+        2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcV
+        C2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2Kfnx
+        nUUI43ZEXa7VUjbdbUUUUUU==
 X-Originating-IP: [219.141.235.82]
-X-CM-SenderInfo: xfkh0w5xrntxyrx6ztxlovh3xfdvhtffof0/1tbiBwQCE2NnTgRK2QAAsP
+X-CM-SenderInfo: xfkh0w5xrntxyrx6ztxlovh3xfdvhtffof0/1tbiBwMCE2NnTgRK2AAAsJ
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -64,175 +64,66 @@ From: Liao Chang <liaochang1@huawei.com>
 
 From: Liao Chang <liaochang1@huawei.com>
 
-Prepare skeleton to implement optimized kprobe on RISCV, it is consist
-of Makfile, Kconfig and some architecture specific files: kprobe.h and
-opt.c opt.c include some macro, type definition and functions required
-by kprobe framework, opt_trampoline.S provide a piece of assembly code
-template used to construct the detour buffer as the target of long jump
-instruction(s) for each optimzed kprobe.
+To address the limitation of PC-relative branch instruction on riscv
+architecture, detour buffer slot used for optprobes is allocated from
+the region, the distance of which from kernel should be less than 4GB.
 
-Since the jump range of PC-relative instruction JAL is +/-2M, that is
-too small to reach the detour buffer, hence the foudamental idea to
-address OPTPROBES on RISCV is replace 'EBREAK' with 'AUIPC/JALR'. which
-means it needs to clobber one more instruction beside the kprobe
-instruction, furthermore, RISCV supports hybird RVI and RVC in single
-kernel binary, so in theory a pair of 'AUIPC/JALR' is about to clobber
-10 bytes(3 RVC and 1 RVI, 2 bytes is padding for alignment) at worst
-case. The second hardsome problem is looking for one integer register as
-the destination of 'AUIPC/JALR' without any side-effect.
+For the time being, Modules region always live before the kernel.
+But Vmalloc region reside far from kernel, the distance is half of the
+kernel address space (See Documentation/riscv/vm-layout.rst), hence it
+needs to override the alloc_optinsn_page() to make sure allocate detour
+buffer from jump-safe region.
 
 Signed-off-by: Liao Chang <liaochang1@huawei.com>
 Co-developed-by: Chen Guokai <chenguokai17@mails.ucas.ac.cn>
 Signed-off-by: Chen Guokai <chenguokai17@mails.ucas.ac.cn>
 ---
- arch/riscv/Kconfig                        |  1 +
- arch/riscv/include/asm/kprobes.h          | 32 ++++++++++++++
- arch/riscv/kernel/probes/Makefile         |  1 +
- arch/riscv/kernel/probes/opt.c            | 51 +++++++++++++++++++++++
- arch/riscv/kernel/probes/opt_trampoline.S | 12 ++++++
- 5 files changed, 97 insertions(+)
- create mode 100644 arch/riscv/kernel/probes/opt.c
- create mode 100644 arch/riscv/kernel/probes/opt_trampoline.S
+ arch/riscv/kernel/probes/kprobes.c | 25 +++++++++++++++++++++++++
+ 1 file changed, 25 insertions(+)
 
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index 6b48a3ae9843..ca29306c93e2 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -99,6 +99,7 @@ config RISCV
- 	select HAVE_KPROBES if !XIP_KERNEL
- 	select HAVE_KPROBES_ON_FTRACE if !XIP_KERNEL
- 	select HAVE_KRETPROBES if !XIP_KERNEL
-+	select HAVE_OPTPROBES if !XIP_KERNEL
- 	select HAVE_MOVE_PMD
- 	select HAVE_MOVE_PUD
- 	select HAVE_PCI
-diff --git a/arch/riscv/include/asm/kprobes.h b/arch/riscv/include/asm/kprobes.h
-index 217ef89f22b9..22b73a2fd1fd 100644
---- a/arch/riscv/include/asm/kprobes.h
-+++ b/arch/riscv/include/asm/kprobes.h
-@@ -43,5 +43,37 @@ bool kprobe_single_step_handler(struct pt_regs *regs);
- void __kretprobe_trampoline(void);
- void __kprobes *trampoline_probe_handler(struct pt_regs *regs);
+diff --git a/arch/riscv/kernel/probes/kprobes.c b/arch/riscv/kernel/probes/kprobes.c
+index e6e950b7cf32..034eb7b13b3c 100644
+--- a/arch/riscv/kernel/probes/kprobes.c
++++ b/arch/riscv/kernel/probes/kprobes.c
+@@ -12,6 +12,7 @@
+ #include <asm/cacheflush.h>
+ #include <asm/bug.h>
+ #include <asm/patch.h>
++#include <asm/set_memory.h>
  
-+#ifdef CONFIG_OPTPROBES
-+
-+/* optinsn template addresses */
-+extern __visible kprobe_opcode_t optprobe_template_entry[];
-+extern __visible kprobe_opcode_t optprobe_template_end[];
-+
-+#define MAX_OPTINSN_SIZE				\
-+	((unsigned long)optprobe_template_end -		\
-+	 (unsigned long)optprobe_template_entry)
-+
-+/*
-+ * For RVI and RVC hybird encoding kernel, althought long jump just needs
-+ * 2 RVI instructions(AUIPC+JALR), optimized instructions is 10 bytes long
-+ * at most to ensure no RVI would be truncated actually, so it means four
-+ * combinations:
-+ * - 2 RVI
-+ * - 4 RVC
-+ * - 2 RVC + 1 RVI
-+ * - 3 RVC + 1 RVI (truncated, need padding)
-+ */
-+#define MAX_COPIED_INSN		4
-+#define MAX_OPTIMIZED_LENGTH	10
-+
-+struct arch_optimized_insn {
-+	kprobe_opcode_t copied_insn[MAX_COPIED_INSN];
-+	/* detour code buffer */
-+	kprobe_opcode_t *insn;
-+	unsigned long length;
-+	int rd;
-+};
-+
-+#endif /* CONFIG_OPTPROBES */
- #endif /* CONFIG_KPROBES */
- #endif /* _ASM_RISCV_KPROBES_H */
-diff --git a/arch/riscv/kernel/probes/Makefile b/arch/riscv/kernel/probes/Makefile
-index 7f0840dcc31b..6255b4600875 100644
---- a/arch/riscv/kernel/probes/Makefile
-+++ b/arch/riscv/kernel/probes/Makefile
-@@ -3,4 +3,5 @@ obj-$(CONFIG_KPROBES)		+= kprobes.o decode-insn.o simulate-insn.o
- obj-$(CONFIG_KPROBES)		+= kprobes_trampoline.o
- obj-$(CONFIG_KPROBES_ON_FTRACE)	+= ftrace.o
- obj-$(CONFIG_UPROBES)		+= uprobes.o decode-insn.o simulate-insn.o
-+obj-$(CONFIG_OPTPROBES)		+= opt.o opt_trampoline.o
- CFLAGS_REMOVE_simulate-insn.o = $(CC_FLAGS_FTRACE)
-diff --git a/arch/riscv/kernel/probes/opt.c b/arch/riscv/kernel/probes/opt.c
-new file mode 100644
-index 000000000000..56c8a227c857
---- /dev/null
-+++ b/arch/riscv/kernel/probes/opt.c
-@@ -0,0 +1,51 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ *  Kernel Probes Jump Optimization (Optprobes)
-+ *
-+ * Copyright (C) Guokai Chen, 2022
-+ * Author: Guokai Chen chenguokai17@mails.ucas.ac.cn
-+ */
-+
-+#define pr_fmt(fmt)	"optprobe: " fmt
-+
-+#include <linux/kprobes.h>
-+#include <asm/kprobes.h>
-+
-+int arch_prepared_optinsn(struct arch_optimized_insn *optinsn)
+ #include "decode-insn.h"
+ 
+@@ -84,6 +85,30 @@ int __kprobes arch_prepare_kprobe(struct kprobe *p)
+ }
+ 
+ #ifdef CONFIG_MMU
++#if defined(CONFIG_OPTPROBES) && defined(CONFIG_64BIT)
++void *alloc_optinsn_page(void)
 +{
-+	return 0;
++	void *page;
++
++	page = __vmalloc_node_range(PAGE_SIZE, 1, MODULES_VADDR,
++				    MODULES_END, GFP_KERNEL,
++				    PAGE_KERNEL, 0, NUMA_NO_NODE,
++				    __builtin_return_address(0));
++	if (!page)
++		return NULL;
++
++	set_vm_flush_reset_perms(page);
++	/*
++	 * First make the page read-only, and only then make it executable to
++	 * prevent it from being W+X in between.
++	 */
++	set_memory_ro((unsigned long)page, 1);
++	set_memory_x((unsigned long)page, 1);
++
++	return page;
 +}
++#endif
 +
-+int arch_check_optimized_kprobe(struct optimized_kprobe *op)
-+{
-+	return 0;
-+}
-+
-+int arch_prepare_optimized_kprobe(struct optimized_kprobe *op,
-+				  struct kprobe *orig)
-+{
-+	return 0;
-+}
-+
-+void arch_remove_optimized_kprobe(struct optimized_kprobe *op)
-+{
-+}
-+
-+void arch_optimize_kprobes(struct list_head *oplist)
-+{
-+}
-+
-+void arch_unoptimize_kprobes(struct list_head *oplist,
-+			     struct list_head *done_list)
-+{
-+}
-+
-+void arch_unoptimize_kprobe(struct optimized_kprobe *op)
-+{
-+}
-+
-+int arch_within_optimized_kprobe(struct optimized_kprobe *op,
-+				 kprobe_opcode_t *addr)
-+{
-+	return 0;
-+}
-diff --git a/arch/riscv/kernel/probes/opt_trampoline.S b/arch/riscv/kernel/probes/opt_trampoline.S
-new file mode 100644
-index 000000000000..16160c4367ff
---- /dev/null
-+++ b/arch/riscv/kernel/probes/opt_trampoline.S
-@@ -0,0 +1,12 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * Copyright (C) 2022 Guokai Chen
-+ */
-+
-+#include <linux/linkage.h>
-+
-+#incldue <asm/csr.h>
-+#include <asm/asm-offsets.h>
-+
-+SYM_ENTRY(optprobe_template_entry, SYM_L_GLOBAL, SYM_A_NONE)
-+SYM_ENTRY(optprobe_template_end, SYM_L_GLOBAL, SYM_A_NONE)
+ void *alloc_insn_page(void)
+ {
+ 	return  __vmalloc_node_range(PAGE_SIZE, 1, VMALLOC_START, VMALLOC_END,
 -- 
 2.25.1
 
