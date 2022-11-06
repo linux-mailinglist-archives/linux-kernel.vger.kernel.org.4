@@ -2,125 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69FE861E5DC
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 21:21:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7AB761E5DE
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 21:24:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230107AbiKFUVw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Nov 2022 15:21:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53486 "EHLO
+        id S230163AbiKFUYF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Nov 2022 15:24:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229947AbiKFUVu (ORCPT
+        with ESMTP id S229947AbiKFUYB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Nov 2022 15:21:50 -0500
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D3521117F
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Nov 2022 12:21:49 -0800 (PST)
-Received: by mail-io1-f71.google.com with SMTP id c14-20020a5ea80e000000b006d6e9b05e58so5056819ioa.23
-        for <linux-kernel@vger.kernel.org>; Sun, 06 Nov 2022 12:21:49 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=iFxtpsBCdq9AcVN6nHrpSjVURQQ/Q55yiCvyBMA//bs=;
-        b=Uotjov8W5bTzoBpjplbwf5tde4qZ9fbHk+OCSWEyE+myQzkRrLWrIPkhmjOB4WW4Yb
-         4s3ws71G8Taskmo0QXXxOcJQl17jMiA0PUAdJ+H5BGmuphyej/w3HYE/XkZhKAsUla4Q
-         l2QQnuFiuZWCbEYXDCtf03Timep3SPUToKZ2MLr6r4ODBGPflsm2+54h+gEbHBkVc07+
-         fHvr1FULmgcJ545/z1mbegNAPVCJUhb6FqmL44fzMxclG61OjH3ohXrMF8mIN/13YBdo
-         e6njAVDC3gFuM/0xkJp+4O7P6FErUyxPBx4qoeBd+djvSnU1jtvuN4PmPbsozlCK1GBQ
-         oryQ==
-X-Gm-Message-State: ACrzQf0v/i1dxV4Xfyn5CDlKTy3ikjpNYIngTUQV8H3C7AIg9GxzkBP9
-        HWGbTU0KCZRO8jRUqEy+F1a/aSjNy/n68dkUZaXy+hrd6zRJ
-X-Google-Smtp-Source: AMsMyM6EqIFLfRw3XsvZWos8WTIfz2nip/IxuKz8yIJJgbeT3yYSLrqxahtGADhLRG0BQFMiYtskWl4JRK2yFjpA0siEKTrQLKVO
+        Sun, 6 Nov 2022 15:24:01 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 985D111440;
+        Sun,  6 Nov 2022 12:23:59 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 1897D21EC4;
+        Sun,  6 Nov 2022 20:23:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1667766238; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=pIZQvJkOXMu5f5ncgLVznHSCKNS/Jviq7uNbN/RW5Bo=;
+        b=FuTiZBSeSwo20pDcxBzlBbULYTF4Fi0Ze9NoVLrAOErRj5OiR2I9jPC7HFZOWeqcRVJwMs
+        3MAzIy4+ETCetZlLfMIxzEzE7O3OHoeb/cK8uOO3nPsxKp5XkfwpEELC0DVkaHdR37UulO
+        CZemJmItaFTaR7fyHS4I/EBkMRmOVTc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1667766238;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=pIZQvJkOXMu5f5ncgLVznHSCKNS/Jviq7uNbN/RW5Bo=;
+        b=B8Y8sZPepMIqwwi83F/Y3Ly+9sVinxFhCmNBRE6RWjB17sMX1zGS7lfWyVJeyu8MqY8iPP
+        A/pqKVBucwxxS2AA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id CC0E81376E;
+        Sun,  6 Nov 2022 20:23:57 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 8T9XMN0XaGM7eQAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Sun, 06 Nov 2022 20:23:57 +0000
+Message-ID: <af445171-6d54-8380-fe11-79384d145b2c@suse.cz>
+Date:   Sun, 6 Nov 2022 21:23:57 +0100
 MIME-Version: 1.0
-X-Received: by 2002:a92:c5d4:0:b0:300:d9d7:fe2e with SMTP id
- s20-20020a92c5d4000000b00300d9d7fe2emr9682435ilt.212.1667766108744; Sun, 06
- Nov 2022 12:21:48 -0800 (PST)
-Date:   Sun, 06 Nov 2022 12:21:48 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000007af51d05ecd30ed9@google.com>
-Subject: [syzbot] UBSAN: array-index-out-of-bounds in xtLookup
-From:   syzbot <syzbot+e526b0844b096abaa8c7@syzkaller.appspotmail.com>
-To:     jfs-discussion@lists.sourceforge.net, linux-kernel@vger.kernel.org,
-        shaggy@kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH] mm/slab_common: Restore passing "caller" for tracing
+Content-Language: en-US
+To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Kees Cook <keescook@chromium.org>
+Cc:     Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>, linux-mm@kvack.org,
+        stable@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+References: <20221105063529.never.818-kees@kernel.org>
+ <Y2eQd365DU6Zi9wr@hyeyoo>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <Y2eQd365DU6Zi9wr@hyeyoo>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On 11/6/22 11:46, Hyeonggon Yoo wrote:
+> On Fri, Nov 04, 2022 at 11:35:34PM -0700, Kees Cook wrote:
+>> The "caller" argument was accidentally being ignored in a few places
+>> that were recently refactored. Restore these "caller" arguments, instead
+>> of _RET_IP_.
+>> 
+>> Cc: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+> 
+> Acked-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+> 
+>> Cc: Vlastimil Babka <vbabka@suse.cz>
+>> Cc: Christoph Lameter <cl@linux.com>
+>> Cc: Pekka Enberg <penberg@kernel.org>
+>> Cc: David Rientjes <rientjes@google.com>
+>> Cc: Joonsoo Kim <iamjoonsoo.kim@lge.com>
+>> Cc: Andrew Morton <akpm@linux-foundation.org>
+>> Cc: Roman Gushchin <roman.gushchin@linux.dev>
+>> Cc: linux-mm@kvack.org
+>> Fixes: 11e9734bcb6a ("mm/slab_common: unify NUMA and UMA version of tracepoints")
+>> Cc: stable@vger.kernel.org
+> 
+> 
+> BTW I think it can be just sent to next release candidate.
+> The referred commit was merged in this development cycle.
 
-syzbot found the following issue on:
+Yep, dropped the Cc stable for that reason. Pushed to
+slab/for-6.1-rc4/fixes and will send a PR to Linus in few days.
+Thanks!
 
-HEAD commit:    b229b6ca5abb Merge tag 'perf-tools-fixes-for-v6.1-2022-10-..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=144f6876880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=1d3548a4365ba17d
-dashboard link: https://syzkaller.appspot.com/bug?extid=e526b0844b096abaa8c7
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+>> Signed-off-by: Kees Cook <keescook@chromium.org>
+>> ---
+>>  mm/slab_common.c | 4 ++--
+>>  1 file changed, 2 insertions(+), 2 deletions(-)
+>> 
+>> diff --git a/mm/slab_common.c b/mm/slab_common.c
+>> index 33b1886b06eb..0e614f9e7ed7 100644
+>> --- a/mm/slab_common.c
+>> +++ b/mm/slab_common.c
+>> @@ -941,7 +941,7 @@ void *__do_kmalloc_node(size_t size, gfp_t flags, int node, unsigned long caller
+>>  
+>>  	if (unlikely(size > KMALLOC_MAX_CACHE_SIZE)) {
+>>  		ret = __kmalloc_large_node(size, flags, node);
+>> -		trace_kmalloc(_RET_IP_, ret, size,
+>> +		trace_kmalloc(caller, ret, size,
+>>  			      PAGE_SIZE << get_order(size), flags, node);
+>>  		return ret;
+>>  	}
+>> @@ -953,7 +953,7 @@ void *__do_kmalloc_node(size_t size, gfp_t flags, int node, unsigned long caller
+>>  
+>>  	ret = __kmem_cache_alloc_node(s, flags, node, size, caller);
+>>  	ret = kasan_kmalloc(s, ret, size, flags);
+>> -	trace_kmalloc(_RET_IP_, ret, size, s->size, flags, node);
+>> +	trace_kmalloc(caller, ret, size, s->size, flags, node);
+>>  	return ret;
+>>  }
+>>  
+>> -- 
+>> 2.34.1
+> 
+> 
+> Thanks for catching this!
+> 
 
-Unfortunately, I don't have any reproducer for this issue yet.
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/24728b72a896/disk-b229b6ca.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/10a3c40c60e1/vmlinux-b229b6ca.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/69f963b02b7e/bzImage-b229b6ca.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+e526b0844b096abaa8c7@syzkaller.appspotmail.com
-
-================================================================================
-UBSAN: array-index-out-of-bounds in fs/jfs/jfs_xtree.c:179:9
-index 19 is out of range for type 'xad_t [18]'
-CPU: 1 PID: 8948 Comm: syz-executor.1 Not tainted 6.1.0-rc2-syzkaller-00105-gb229b6ca5abb #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/11/2022
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x1b1/0x28e lib/dump_stack.c:106
- ubsan_epilogue lib/ubsan.c:151 [inline]
- __ubsan_handle_out_of_bounds+0xdb/0x130 lib/ubsan.c:283
- xtLookup+0x86c/0x880 fs/jfs/jfs_xtree.c:179
- jfs_get_block+0x24b/0xce0 fs/jfs/inode.c:218
- do_mpage_readpage+0x970/0x1c50 fs/mpage.c:208
- mpage_readahead+0x210/0x380 fs/mpage.c:361
- read_pages+0x169/0x9c0 mm/readahead.c:161
- page_cache_ra_unbounded+0x703/0x820 mm/readahead.c:270
- filemap_readahead mm/filemap.c:2557 [inline]
- filemap_get_pages+0x72f/0x10d0 mm/filemap.c:2597
- filemap_read+0x3cf/0xea0 mm/filemap.c:2675
- call_read_iter include/linux/fs.h:2185 [inline]
- generic_file_splice_read+0x1ff/0x5d0 fs/splice.c:309
- do_splice_to fs/splice.c:793 [inline]
- splice_direct_to_actor+0x41b/0xc00 fs/splice.c:865
- do_splice_direct+0x279/0x3d0 fs/splice.c:974
- do_sendfile+0x5fb/0xf80 fs/read_write.c:1255
- __do_sys_sendfile64 fs/read_write.c:1323 [inline]
- __se_sys_sendfile64+0x14f/0x1b0 fs/read_write.c:1309
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f59e548b5a9
-Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f59e6216168 EFLAGS: 00000246 ORIG_RAX: 0000000000000028
-RAX: ffffffffffffffda RBX: 00007f59e55abf80 RCX: 00007f59e548b5a9
-RDX: 0000000000000000 RSI: 0000000000000009 RDI: 0000000000000008
-RBP: 00007f59e54e67b0 R08: 0000000000000000 R09: 0000000000000000
-R10: 0001000000201005 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007fff7e17c23f R14: 00007f59e6216300 R15: 0000000000022000
- </TASK>
-================================================================================
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
