@@ -2,108 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4359661E125
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 10:05:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2B2161E129
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 10:08:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229783AbiKFJFN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Nov 2022 04:05:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43066 "EHLO
+        id S229636AbiKFJI0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Nov 2022 04:08:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229609AbiKFJFL (ORCPT
+        with ESMTP id S229609AbiKFJIX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Nov 2022 04:05:11 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1A6355B0;
-        Sun,  6 Nov 2022 01:05:10 -0800 (PST)
-Date:   Sun, 06 Nov 2022 09:05:06 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1667725508;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=89gCVDJVAOWy3TSZEo3iFfGJsyh+x/Z/Kw/KHr7+1G4=;
-        b=K0Z7rtmpD1pSUjLm7CbE8heLq7Vnpq4ww8AwA/7Z1euaOKZr9xO6mhNP2ILcOoCKELb1VM
-        sXWQbaftIxGmqv+3fkIm1o44Fn8WXWXe0cX8byoakqbWaaeA73NZpfAGmHBHifIRenPr9Y
-        yJ1NSQVwdBSvirl4niZg2ZZHCOkzVFU+KX5OLCcCd4h4333brHzJCQymKXxG82ufHWPy03
-        x8qBJ0P/SVCirrpa/iSQZb1LnTxHFDRlfhWsPSEybvRyYnejvlc9l94CHJIpaxRlxtW8v+
-        xZlDtOjTJjAZFhHt0waBgLCQcyDx0KCdmTan8sVE4Miq6701CXBsV4wriJDXnA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1667725508;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=89gCVDJVAOWy3TSZEo3iFfGJsyh+x/Z/Kw/KHr7+1G4=;
-        b=EBX8rKjEXGPoJqRNsDF8f07P7YU2voxjRGh7vU0vuZQ7sn+s5aPLkVnHY+yeIJuQDRo/+3
-        1TbiaLSWIEwYiUCQ==
-From:   "tip-bot2 for Ingo Molnar" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/core] x86/cpufeatures: Move X86_FEATURE_CALL_DEPTH from bit
- 18 to bit 19 of word 11, to leave space for WIP X86_FEATURE_SGX_EDECCSSA bit
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, Ingo Molnar <mingo@kernel.org>
+        Sun, 6 Nov 2022 04:08:23 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 257F7A9;
+        Sun,  6 Nov 2022 01:08:22 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 920DB60C07;
+        Sun,  6 Nov 2022 09:08:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B5EEC433C1;
+        Sun,  6 Nov 2022 09:08:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667725700;
+        bh=oSY2pB7T1Vm2y2VVy5D70U7pf0RgTlyiyzQ20GmbmMg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=k/pv7fMcaOv+eL7kiY75jtJZgr2H4SeF6Wk4jqIvV8QYy9yomZ9Ak2moOfhC9wcT+
+         Cpjc3CIIwZQ7Gv0G1lwRWVS/iBYDKvmF8u7H8UQ7hIAMGwJdSSqhqIBVlC8e+go2/2
+         aWV8wtBjgIrNkTmWMaNFQQ/MQxp/0nt5ABOx/T7xUXCoQzYa+FYJZxOH2YI3yiJLV9
+         w/lqvMZ5i3tWqEPFrUZYgrkgz/jMoQ2byJbh00w/zsXjFZzPCm6ombAcSqs4nP/l9j
+         Vp94ooQLvcQ+NBEeyapRt6JTbaw0RmY8GY10pgptlDJB8etr/xAJ0nK4vCHqTmQ4ug
+         hcdEQvCGBzvTw==
+Date:   Sun, 6 Nov 2022 17:08:15 +0800
+From:   Peter Chen <peter.chen@kernel.org>
+To:     Pawel Laszczak <pawell@cadence.com>
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH] usb: cdnsp: Fix issue with Clear Feature Halt Endpoint
+Message-ID: <20221106090815.GB152143@nchen-desktop>
+References: <20221026093710.449809-1-pawell@cadence.com>
 MIME-Version: 1.0
-Message-ID: <166772550650.4906.6007680313066821301.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221026093710.449809-1-pawell@cadence.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/core branch of tip:
+On 22-10-26 05:37:10, Pawel Laszczak wrote:
+> During handling Clear Halt Endpoint Feature request driver invokes
+> Reset Endpoint command. Because this command has some issue with
 
-Commit-ID:     b1599915f09157e98f59556e1b2eafe473603347
-Gitweb:        https://git.kernel.org/tip/b1599915f09157e98f59556e1b2eafe473603347
-Author:        Ingo Molnar <mingo@kernel.org>
-AuthorDate:    Sun, 06 Nov 2022 09:55:56 +01:00
-Committer:     Ingo Molnar <mingo@kernel.org>
-CommitterDate: Sun, 06 Nov 2022 09:58:36 +01:00
+What are issues? Would you please explain more?
 
-x86/cpufeatures: Move X86_FEATURE_CALL_DEPTH from bit 18 to bit 19 of word 11, to leave space for WIP X86_FEATURE_SGX_EDECCSSA bit
+> transition endpoint from Running to Idle state the driver must
+> stop the endpoint by using Stop Endpoint command.
+> 
+> cc: <stable@vger.kernel.org>
+> Fixes: 3d82904559f4 ("usb: cdnsp: cdns3 Add main part of Cadence USBSSP DRD Driver")
+> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
+> ---
+>  drivers/usb/cdns3/cdnsp-gadget.c | 12 ++++--------
+>  drivers/usb/cdns3/cdnsp-ring.c   |  3 ++-
+>  2 files changed, 6 insertions(+), 9 deletions(-)
+> 
+> diff --git a/drivers/usb/cdns3/cdnsp-gadget.c b/drivers/usb/cdns3/cdnsp-gadget.c
+> index e2e7d16f43f4..0576f9b0e4aa 100644
+> --- a/drivers/usb/cdns3/cdnsp-gadget.c
+> +++ b/drivers/usb/cdns3/cdnsp-gadget.c
+> @@ -600,11 +600,11 @@ int cdnsp_halt_endpoint(struct cdnsp_device *pdev,
+>  
+>  	trace_cdnsp_ep_halt(value ? "Set" : "Clear");
+>  
+> -	if (value) {
+> -		ret = cdnsp_cmd_stop_ep(pdev, pep);
+> -		if (ret)
+> -			return ret;
+> +	ret = cdnsp_cmd_stop_ep(pdev, pep);
+> +	if (ret)
+> +		return ret;
+>  
 
-Reallocate a soft-cpufeatures bit allocated for call-depth tracking
-code, which clashes with this recent KVM/SGX patch being worked on:
+In your change ,it call cdnsp_cmd_stop_ep unconditionally, no matter
+set or clear halt? Is it your expectation? If it is, why?
 
-        KVM/VMX: Allow exposing EDECCSSA user leaf function to KVM guest
+> +	if (value) {
+>  		if (GET_EP_CTX_STATE(pep->out_ctx) == EP_STATE_STOPPED) {
+>  			cdnsp_queue_halt_endpoint(pdev, pep->idx);
+>  			cdnsp_ring_cmd_db(pdev);
+> @@ -613,10 +613,6 @@ int cdnsp_halt_endpoint(struct cdnsp_device *pdev,
+>  
+>  		pep->ep_state |= EP_HALTED;
+>  	} else {
+> -		/*
+> -		 * In device mode driver can call reset endpoint command
+> -		 * from any endpoint state.
+> -		 */
+>  		cdnsp_queue_reset_ep(pdev, pep->idx);
+>  		cdnsp_ring_cmd_db(pdev);
+>  		ret = cdnsp_wait_for_cmd_compl(pdev);
+> diff --git a/drivers/usb/cdns3/cdnsp-ring.c b/drivers/usb/cdns3/cdnsp-ring.c
+> index 25e5e51cf5a2..aa79bce89d8a 100644
+> --- a/drivers/usb/cdns3/cdnsp-ring.c
+> +++ b/drivers/usb/cdns3/cdnsp-ring.c
+> @@ -2081,7 +2081,8 @@ int cdnsp_cmd_stop_ep(struct cdnsp_device *pdev, struct cdnsp_ep *pep)
+>  	u32 ep_state = GET_EP_CTX_STATE(pep->out_ctx);
+>  	int ret = 0;
+>  
+> -	if (ep_state == EP_STATE_STOPPED || ep_state == EP_STATE_DISABLED) {
+> +	if (ep_state == EP_STATE_STOPPED || ep_state == EP_STATE_DISABLED ||
+> +	    ep_state == EP_STATE_HALTED) {
+>  		trace_cdnsp_ep_stopped_or_disabled(pep->out_ctx);
+>  		goto ep_stopped;
+>  	}
+> -- 
+> 2.25.1
+> 
 
-Instead of reallocating cpufeatures bits in evil merges, make the
-allocation explicit.
+-- 
 
-Acked-by: Peter Zijlstra <peterz@infradead.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: x86@kernel.org
-Cc: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Ingo Molnar <mingo@kernel.org>
----
- arch/x86/include/asm/cpufeatures.h | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
-index aefd081..864c9b0 100644
---- a/arch/x86/include/asm/cpufeatures.h
-+++ b/arch/x86/include/asm/cpufeatures.h
-@@ -304,7 +304,8 @@
- #define X86_FEATURE_UNRET		(11*32+15) /* "" AMD BTB untrain return */
- #define X86_FEATURE_USE_IBPB_FW		(11*32+16) /* "" Use IBPB during runtime firmware calls */
- #define X86_FEATURE_RSB_VMEXIT_LITE	(11*32+17) /* "" Fill RSB on VM exit when EIBRS is enabled */
--#define X86_FEATURE_CALL_DEPTH		(11*32+18) /* "" Call depth tracking for RSB stuffing */
-+						   /* Hole left for X86_FEATURE_SGX_EDECCSSA */
-+#define X86_FEATURE_CALL_DEPTH		(11*32+19) /* "" Call depth tracking for RSB stuffing */
- 
- /* Intel-defined CPU features, CPUID level 0x00000007:1 (EAX), word 12 */
- #define X86_FEATURE_AVX_VNNI		(12*32+ 4) /* AVX VNNI instructions */
+Thanks,
+Peter Chen
