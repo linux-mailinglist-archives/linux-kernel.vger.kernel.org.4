@@ -2,101 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D239361E6A5
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 22:44:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED90E61E6A8
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 22:45:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230251AbiKFVna (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Nov 2022 16:43:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46404 "EHLO
+        id S230185AbiKFVpw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Nov 2022 16:45:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230003AbiKFVn1 (ORCPT
+        with ESMTP id S230050AbiKFVpu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Nov 2022 16:43:27 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 908A560D1;
-        Sun,  6 Nov 2022 13:43:24 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Sun, 6 Nov 2022 16:45:50 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36806BF70;
+        Sun,  6 Nov 2022 13:45:50 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4N57CD19Pbz4x2c;
-        Mon,  7 Nov 2022 08:43:20 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1667771003;
-        bh=NPLJIrYYOdhGjx9YSa7IN6VqLPLfnT7SouJu1IBs4+c=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=YQpXDsUI1YvVo6K8bToXfxeV6JC15eE5KpAFuEdSrclVChuWe7uzzmU3RKveilrC1
-         rg0Tnxg+TKjE5bhTSfYICZlVcWhB4NBjNzhSRJHu1nWyHgdxXsgpViKjWYQd/KkJh3
-         V/I/rKDZ+KLB9xe4Wt9U18rcXOVFW3IO9wxDY6A3n5yN2+DUFlA9qcfVXzeK6ry9b1
-         Zb6sc5yHm/FOq2WGQDdIbw8R6RU7mFPcoNB2ek67k2q+OepFQ7bZ6f/0/u13ccGj6n
-         /BbklQh++UpbmojomWmpRxExjnD9ZnxLcNuvMGedlMUPPuDXTsA/P03KpxOA1wrkXc
-         aw0JG0m18q/tQ==
-Date:   Mon, 7 Nov 2022 08:43:18 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>
-Cc:     Chen Zhongjin <chenzhongjin@huawei.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the sound-asoc-fixes
- tree
-Message-ID: <20221107084318.5a83394a@canb.auug.org.au>
-In-Reply-To: <20221031083917.6944b95b@canb.auug.org.au>
-References: <20221031083917.6944b95b@canb.auug.org.au>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CFE0D60DDA;
+        Sun,  6 Nov 2022 21:45:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F2E4C433C1;
+        Sun,  6 Nov 2022 21:45:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667771149;
+        bh=YLPSQwLHfaeoCgK19dKv5gYJV1PcqbtPt/rxzTGnmhg=;
+        h=Subject:From:To:Date:From;
+        b=O3K9tODvS85NLThT6eghrFteOPI+P4wUzZDqz7v05r1dGeQHqtIETkbARG35wg7jo
+         EAIUjUcK6XgFKwWlvaBJYjsKZgl2F6kIiewjfuUy2S8tJQCaqorhBRCM7n62u9Ia1T
+         xknrbenXKeSghFRWcLK6Z1+b+2BCkGFqzm4517iO6NQKtGWXJFqZieDG8KcXX+KI6l
+         XFETrr29EtlmeQj1w1kcIrd3w+0mq5Q6M970/EXozEilBpYNJj1q3rjWVJ4dra//ew
+         IoedRL9lCOoUP+f+IvOjUjKI0j1GZMOAUjEkDSXA3Az1Pt5/Pfdvgv2zbIi45h2UXc
+         iuOo2LFeXioVw==
+Message-ID: <6ffe3787fda7cb175dd32d728c1bd0cb9583e85b.camel@kernel.org>
+Subject: [ANNOUNCE] 5.4.221-rt79
+From:   Tom Zanussi <zanussi@kernel.org>
+To:     LKML <linux-kernel@vger.kernel.org>,
+        linux-rt-users <linux-rt-users@vger.kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Carsten Emde <C.Emde@osadl.org>,
+        John Kacur <jkacur@redhat.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Daniel Wagner <wagi@monom.org>,
+        Clark Williams <williams@redhat.com>,
+        "Luis Claudio R. Goncalves" <lgoncalv@redhat.com>,
+        Tom Zanussi <zanussi@kernel.org>
+Date:   Sun, 06 Nov 2022 15:45:47 -0600
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.1-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/MVjBo1Gv8enA0IwBrMpf=TE";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/MVjBo1Gv8enA0IwBrMpf=TE
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hello RT Folks!
 
-Hi Stephen,
+I'm pleased to announce the 5.4.221-rt79 stable release.
 
-On Mon, 31 Oct 2022 08:39:17 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->
-> Hi all,
->=20
-> After merging the sound-asoc-fixes tree, today's linux-next build (arm
-> multi_v7_defconfig) produced this warning:
->=20
-> WARNING: modpost: sound/soc/snd-soc-core.o: section mismatch in reference=
-: init_module (section: .init.text) -> snd_soc_util_exit (section: .exit.te=
-xt)
->=20
-> Introduced by commit
->=20
->   6ec27c53886c ("ASoC: core: Fix use-after-free in snd_soc_exit()")
+This release is just an update to the new stable 5.4.221
+version and no RT specific changes have been made.
 
-I am still getting this warning.
+You can get this release via the git tree at:
 
---=20
-Cheers,
-Stephen Rothwell
+  git://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-stable-rt.git
 
---Sig_/MVjBo1Gv8enA0IwBrMpf=TE
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+  branch: v5.4-rt
+  Head SHA1: 898397eb311e8bc7023173874d89c47e443e533f
 
------BEGIN PGP SIGNATURE-----
+Or to build 5.4.221-rt79 directly, the following patches should be applied:
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNoKnYACgkQAVBC80lX
-0Gw4agf/QK7wosY8qsJs6laM66PRSYssbYZFlEtR1MLLYCKEYmGh0cZpGKQYt7k3
-WNt1ysuVyglsvPUaRfA1GJm0SNhHf9uyE0RK1NrCfcDNTgiW3LApjY8ZWs+ERZCn
-elPnwykukF5nd5bZf7XJE9f+6ICA9mN/5FsC7tCzS6zx1lRVFdfnL4e6sZ7hJgAy
-VtCPpy7rzv6gHwzG3X+Hea7f2xowQkgw8TG3gKvD+8FyYR4fkXN6TrzD6OfX83P5
-heKy+0Sf/u0rT8awiqPb4TqltmhnJH1Mpwivfkzi7FhBNE7lll92u4mtygNjVtKf
-0mTCRPFjs2ggdCmKNNLUw5BCYGbg2w==
-=iY7s
------END PGP SIGNATURE-----
+  https://www.kernel.org/pub/linux/kernel/v5.x/linux-5.4.tar.xz
 
---Sig_/MVjBo1Gv8enA0IwBrMpf=TE--
+  https://www.kernel.org/pub/linux/kernel/v5.x/patch-5.4.221.xz
+
+  https://www.kernel.org/pub/linux/kernel/projects/rt/5.4/patch-5.4.221-rt7=
+9.patch.xz
+
+
+Enjoy!
+
+   Tom
+
