@@ -2,70 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 648FC61E511
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 18:49:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C43AE61E514
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 18:50:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230405AbiKFRtW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Nov 2022 12:49:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46772 "EHLO
+        id S230457AbiKFRuv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Nov 2022 12:50:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230188AbiKFRtT (ORCPT
+        with ESMTP id S230083AbiKFRuq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Nov 2022 12:49:19 -0500
-Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C144BD;
-        Sun,  6 Nov 2022 09:49:18 -0800 (PST)
-Received: by mail-qk1-x729.google.com with SMTP id x18so6056237qki.4;
-        Sun, 06 Nov 2022 09:49:18 -0800 (PST)
+        Sun, 6 Nov 2022 12:50:46 -0500
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DFFE18F;
+        Sun,  6 Nov 2022 09:50:43 -0800 (PST)
+Received: by mail-wm1-x32b.google.com with SMTP id o30so5673271wms.2;
+        Sun, 06 Nov 2022 09:50:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=yi6dfTij4IZpgiQaleZPgThvdhGcr1NeDjqN55rBrh4=;
-        b=Fsxhnt+S8VHlLTegM+VbWSvq09DEYo/1dn8XqlDATd62IILtb9BeOVrfQ4Um30pzYe
-         /kvthCsraw93ufy3qhyrQTCm7nt1DFxw3EqjGcDybumY17+Lqi8+xswHcS0IWQSE2s7w
-         wbtzi6Kojv0EA1kWxtx3WxVSQ+pBYdpn3so516ju1qTj+96716ZuC7JXMw6Kh9CfP7G8
-         xvlbg9OZzV2po/5am0vFNtJ3bX0yf+SqGAAf/K0MVW5gwKJuxQ+VZUvaSJImjTygIjpL
-         KqHgqPQOkTbRql2T+Oxdlfw+QoPijTxX2TlIcBcFavJ3cWj1F4b9ylK8PtzBVSbdAR+v
-         FopA==
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=Y8NI89KLXLUXJoqq3NauzSYIHtixTqflQ9ilDraLCKI=;
+        b=P5bhDOWN9gh8J3b9Dv60f0h5zjSZdKTbhPgy6YKdj66TmDV0Jj7metJu6VxOuEtZsO
+         Cp10SSKDNFng/K3UBPE5lppc2VzsTth3bT38dIu9eQM9Ypdb9NVNqQC6Bn/NouN+LzU0
+         3NEFsaqnjfHk1xK/vubhD+YlMUgWj8cR6JrBF8Hk4ZKTVQOEXkLTonOSkPQqOSSeT9Z6
+         tzthTbHbKLzMt7jRM7wFIIXsmQ7EdYTZ6IW1cCQuhr7jnAjy11RtDNNIMwRqzCspzJvu
+         eXESYGhJS14RHD0caNCP5dQAYdA1K6q/dwPgv4jIlNnZolp+dKlhwl0q+RON+PzwIXb+
+         xp4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yi6dfTij4IZpgiQaleZPgThvdhGcr1NeDjqN55rBrh4=;
-        b=VCTa1OdshmI3hwfCncFwhzwHXs5dVmHS73VG/JGReRzL8eFEh1AVoOo4xo/fRMR1f6
-         qpf7VDKlCndfHbKPQlf0hYYNjQdfOKCEKuP9Ap+D1e5ZRXOBIFOGEvmDAKIU8/Gc4Tjh
-         0jdsuDA/vPbFRUcEfijBpiNfbqIfc2N1nyn+vtiKqewbH3Z7LozOSgDDQ+Hw2ld7J6+p
-         sO4MJ8D7xSnGWiEwp3at3hAE/6kHHfnyUAqc5ZkRzDgb0hQX3Q5V5C3+bt3DDJ9B25QF
-         ePWy0z9HwAfsvZw0X6tv4Qo70dj/aQxftRvLkftqmmbGMb3tKD/SZ6RTawRU3PrNObna
-         8NJg==
-X-Gm-Message-State: ACrzQf17WCQBT9ttX8PYYG1td+dO8vQkZbwhBKtLVGqCYeXxTc0ZBBhn
-        I9IFF7uh5rtJSEVl3etK3hGWgfhVAc8=
-X-Google-Smtp-Source: AMsMyM6TmTSIMVvSx45NvR//r5wdwa+REIBJXFj0qjJ4IYioZz2X/7H9KrWMhxlA1NgdwT0wQccFZQ==
-X-Received: by 2002:a05:620a:1492:b0:6fa:2e33:c003 with SMTP id w18-20020a05620a149200b006fa2e33c003mr27609215qkj.587.1667756957684;
-        Sun, 06 Nov 2022 09:49:17 -0800 (PST)
-Received: from localhost ([2600:1700:65a0:ab60:320c:c2b1:6732:81ff])
-        by smtp.gmail.com with ESMTPSA id fg26-20020a05622a581a00b00399b73d06f0sm4307254qtb.38.2022.11.06.09.49.16
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Y8NI89KLXLUXJoqq3NauzSYIHtixTqflQ9ilDraLCKI=;
+        b=jQSTQ52Encdzra8rg8MFRtSIDTazywX+Uhb4zfjlML48OcgMCu8WErk9BndU4z4dVC
+         oFUkF2ZKCPq9vvpW2Cw7ewq/JAvurw1ky/dV7QkN/8og6L5bHWq9bEZ4XfR4mjb5oBHq
+         n5bg2NuE8MJijyXldvLBCaGeMwjsVDm6NQsV3CqvRSxwyOV3fA5GTbI8zapAm+CnBw2G
+         P75zIBKANcjUVaQT9zhnvDB/CIkGD+BfG2hvl2v/0nfLIXy5cu+332PXFU4gdh2HQQF/
+         aWO4DQXVHcmEp3B3ZZTYqtAM04sHdmINqCiY68FWPWw/0MZ1UGCeyQnqLLPRYjNxDn21
+         f4FQ==
+X-Gm-Message-State: ACrzQf3wLa+9ueiOcnSdO6Z1heHNjxQA9H9/P6xpNqaC+iFEuPa5zCVU
+        zLh1N4eahrFN4TIvmxSaGsw=
+X-Google-Smtp-Source: AMsMyM4MvXoTIr0PSU3qzPu4EnfNvUVv5WsNvbliwvNY17gMm4/1ztCu62Se4b8KcxSG7gjKUnqBMQ==
+X-Received: by 2002:a05:600c:1c0d:b0:3cf:5fd2:1fd1 with SMTP id j13-20020a05600c1c0d00b003cf5fd21fd1mr33027652wms.8.1667757041329;
+        Sun, 06 Nov 2022 09:50:41 -0800 (PST)
+Received: from DreamMachine2.lan (188.red-83-35-57.dynamicip.rima-tde.net. [83.35.57.188])
+        by smtp.gmail.com with ESMTPSA id v14-20020adfedce000000b00236883f2f5csm5153643wro.94.2022.11.06.09.50.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 06 Nov 2022 09:49:17 -0800 (PST)
-Date:   Sun, 6 Nov 2022 09:49:16 -0800
-From:   Cong Wang <xiyou.wangcong@gmail.com>
-To:     Hawkins Jiawei <yin31149@gmail.com>
-Cc:     18801353760@163.com, davem@davemloft.net, edumazet@google.com,
-        jhs@mojatatu.com, jiri@resnulli.us, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        pabeni@redhat.com,
-        syzbot+232ebdbd36706c965ebf@syzkaller.appspotmail.com,
-        syzkaller-bugs@googlegroups.com
-Subject: Re: [PATCH] net: sched: fix memory leak in tcindex_set_parms
-Message-ID: <Y2fznI8JgkTBCVAA@pop-os.localdomain>
-References: <Y2a+eXr20BcI3JDe@pop-os.localdomain>
- <20221106145530.3717-1-yin31149@gmail.com>
+        Sun, 06 Nov 2022 09:50:41 -0800 (PST)
+Message-ID: <6b8bd5b63a69390a7facba39339c75255f57f2c4.camel@gmail.com>
+Subject: Re: [PATCH v2 1/2] i2c: core: Introduce i2c_client_get_device_id
+ helper function
+From:   Angel Iglesias <ang.iglesiasg@gmail.com>
+To:     Jonathan Cameron <jic23@kernel.org>
+Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Nuno =?ISO-8859-1?Q?S=E1?= <noname.nuno@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org
+Date:   Sun, 06 Nov 2022 18:50:40 +0100
+In-Reply-To: <20221106172249.30241713@jic23-huawei>
+References: <cover.1667750698.git.ang.iglesiasg@gmail.com>
+         <bb8d7f33c6b9e960d542c3951101587b4ddfaef6.1667750698.git.ang.iglesiasg@gmail.com>
+         <20221106172249.30241713@jic23-huawei>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.1 (by Flathub.org) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221106145530.3717-1-yin31149@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -76,34 +78,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Nov 06, 2022 at 10:55:31PM +0800, Hawkins Jiawei wrote:
-> Hi Cong,
-> 
-> >
-> >
-> > diff --git a/net/sched/cls_tcindex.c b/net/sched/cls_tcindex.c
-> > index 1c9eeb98d826..00a6c04a4b42 100644
-> > --- a/net/sched/cls_tcindex.c
-> > +++ b/net/sched/cls_tcindex.c
-> > @@ -479,6 +479,7 @@ tcindex_set_parms(struct net *net, struct tcf_proto *tp, unsigned long base,
-> >         }
-> >
-> >         if (old_r && old_r != r) {
-> > +               tcf_exts_destroy(&old_r->exts);
-> >                 err = tcindex_filter_result_init(old_r, cp, net);
-> >                 if (err < 0) {
-> >                         kfree(f);
-> 
-> As for the position of the tcf_exts_destroy(), should we
-> call it after the RCU updating, after
-> `rcu_assign_pointer(tp->root, cp)` ?
-> 
-> Or the concurrent RCU readers may derefer this freed memory
-> (Please correct me If I am wrong).
+On Sun, 2022-11-06 at 17:22 +0000, Jonathan Cameron wrote:
+> On Sun,=C2=A0 6 Nov 2022 17:42:24 +0100
+> Angel Iglesias <ang.iglesiasg@gmail.com> wrote:
+>=20
+> > Introduces new helper function to aid in .probe_new() refactors. In ord=
+er
+> > to use existing i2c_get_device_id() on the probe callback, the device
+> > match table needs to be accessible in that function, which would requir=
+e
+> > bigger refactors in some drivers using the deprecated .probe callback.
+> >=20
+> > This issue was discussed in more detail in the IIO mailing list.
+> >=20
+> > Link:
+> > https://lore.kernel.org/all/20221023132302.911644-11-u.kleine-koenig@pe=
+ngutronix.de/
+> > Suggested-by: Nuno S=C3=A1 <noname.nuno@gmail.com>
+> > Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> > Suggested-by: Jonathan Cameron <jic23@kernel.org>
+> > Signed-off-by: Angel Iglesias <ang.iglesiasg@gmail.com>
+> > Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+>=20
+> Trivial comment inline - otherwise lgtm
+> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+>=20
+> Thanks,
+>=20
+> >=20
+> > diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
+> > index b4edf10e8fd0..920676e62c22 100644
+> > --- a/drivers/i2c/i2c-core-base.c
+> > +++ b/drivers/i2c/i2c-core-base.c
+> > @@ -2236,6 +2236,21 @@ int i2c_get_device_id(const struct i2c_client
+> > *client,
+> > =C2=A0}
+> > =C2=A0EXPORT_SYMBOL_GPL(i2c_get_device_id);
+> > =C2=A0
+> > +/**
+> > + * i2c_client_get_device_id - get the driver match table entry of a de=
+vice
+> > + * @client: the device to query. The device must be bound to a driver =
+or
+> > + *=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 the function oopses=
+.
+>=20
+> Maybe don't state what happens otherwise if something changes to make it
+> instead do something else unfortunate, this comment will need updating.
+> "The device must be bound to a driver."
 
-I don't think so, because we already have tcf_exts_change() in multiple
-places within tcindex_set_parms(). Even if this is really a problem,
-moving it after rcu_assign_pointer() does not help, you need to wait for
-a grace period.
+Sure, sorry for the trouble. I'll wait a bit for more comments and then sen=
+d v3
+fixed.
 
-Thanks.
+Thanks for your time,
+Angel
+
+>=20
+> > + *
+> > + * Returns a pointer to the matching entry if found, NULL otherwise.
+> > + */
+> > +const struct i2c_device_id *i2c_client_get_device_id(const struct
+> > i2c_client *client)
+> > +{
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0const struct i2c_driver *drv=
+ =3D to_i2c_driver(client->dev.driver);
+> > +
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return i2c_match_id(drv->id_=
+table, client);
+> > +}
+> > +EXPORT_SYMBOL_GPL(i2c_client_get_device_id);
+> > +
+> > =C2=A0/* ----------------------------------------------------
+> > =C2=A0 * the i2c address scanning function
+> > =C2=A0 * Will not work for 10-bit addresses!
+> > diff --git a/include/linux/i2c.h b/include/linux/i2c.h
+> > index f7c49bbdb8a1..d84e0e99f084 100644
+> > --- a/include/linux/i2c.h
+> > +++ b/include/linux/i2c.h
+> > @@ -189,6 +189,7 @@ s32 i2c_smbus_read_i2c_block_data_or_emulated(const
+> > struct i2c_client *client,
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 u8 *values);
+> > =C2=A0int i2c_get_device_id(const struct i2c_client *client,
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct i2c_device=
+_identity *id);
+> > +const struct i2c_device_id *i2c_client_get_device_id(const struct
+> > i2c_client *client);
+> > =C2=A0#endif /* I2C */
+> > =C2=A0
+> > =C2=A0/**
+>=20
+
