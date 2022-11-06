@@ -2,156 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C90461E25F
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 14:34:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB7C461E260
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 14:35:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229974AbiKFNeF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Nov 2022 08:34:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44272 "EHLO
+        id S229977AbiKFNe6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Nov 2022 08:34:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229804AbiKFNeD (ORCPT
+        with ESMTP id S229804AbiKFNez (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Nov 2022 08:34:03 -0500
-Received: from wnew2-smtp.messagingengine.com (wnew2-smtp.messagingengine.com [64.147.123.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86D29DFFF;
-        Sun,  6 Nov 2022 05:34:02 -0800 (PST)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailnew.west.internal (Postfix) with ESMTP id 6DE8A2B06280;
-        Sun,  6 Nov 2022 08:33:57 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Sun, 06 Nov 2022 08:33:59 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-         h=cc:cc:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1667741636; x=1667748836; bh=qW
-        0kL8NboCk/b+RHJv96xFs8vnUwrO9Z41lcOwMOB8E=; b=ZAaJqrKdI5LhW2lFri
-        kvU1FsfUECIQD9N8sO7JXPk8AqgarmIjBf+YEbsbOBO8ubzBbwNrBPkd5jYkzzJY
-        ScC2Em7YUEr+g6D9JnWHxanDgRisCrQoUvP9pdIfmkY+N21MIxJZOsLa0BME7eZB
-        j09FtiK+ieMxgJOBIWdL+qMtTzGGivauJ0ZrqIsDrAGok6TOFnlYQvQj5GGIQ3kA
-        wsOeSnWjNdGs/h0GmFbJC9BV8Zp4K/DLenbli05o3q/zHrVAHuCMipaqioURUMJ2
-        ktmLmrFICYnTCcGTZYZ4Ime9E3Q4xCp/6vdwevnOkPb4nZAGtEmr1Q5ptRxcqELk
-        UQFA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1667741636; x=1667748836; bh=qW0kL8NboCk/b+RHJv96xFs8vnUw
-        rO9Z41lcOwMOB8E=; b=TgL/lROlUJEFEFXtcXVtI1Y26EuNQSY3CAROZ9yWyNYn
-        V7zu+k7LtQDQYTYWU3XvCzOo66JkWwLPBcImgww1xw8fL7zW3srwY2b8A7hoMR9V
-        hAhSbL/S7Fr8DptVpO3zfcjn+4uCVGZm+e6/og0B0oYjdKBCWKXpzCzskNz9JIJ/
-        y41qabStDHrCW3yW/fF1gCM6yGRcC73hJrIlEiRKZQsJCn5hCdj3FGwBpWXmm9M7
-        zsQRihm/mZc5K/vWAFhGbBWFp7M1w+VEY5aHQPysbBN9gSm/UAAKHUW/1US5TdpC
-        tN3YKlfyGVlJ6kTlUfijHrOeg3DdqPUjFzu7nUR1vw==
-X-ME-Sender: <xms:w7dnYwZbT57sBQC872l8BjpzGaPfV8dVLnO1XByQCSs5APaV4xlq9Q>
-    <xme:w7dnY7ZBDxmTYZ43UWprMS1aLjT-NaGQf9BKYbV8hsANc0ch5KjDMYSSBmms91Teu
-    NY--p1tvLlxd4KnR8M>
-X-ME-Received: <xmr:w7dnY6_WsL9IiN274wPkJTZNtrdXKmSKMXNJgOn1P1KurPTm215tWJCEj8zXS9F3spEO1Q>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrvdeigdegjecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvvefukfhfgggtuggjsehttddttddttddvnecuhfhrohhmpedfmfhirhhi
-    lhhlucetrdcuufhhuhhtvghmohhvfdcuoehkihhrihhllhesshhhuhhtvghmohhvrdhnrg
-    hmvgeqnecuggftrfgrthhtvghrnhephfeigefhtdefhedtfedthefghedutddvueehtedt
-    tdehjeeukeejgeeuiedvkedtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
-    hmrghilhhfrhhomhepkhhirhhilhhlsehshhhuthgvmhhovhdrnhgrmhgv
-X-ME-Proxy: <xmx:w7dnY6oOZG9W9pqXoZMr-Ff_7yz_takt9x2wrVt_VedyFWfLrriyRg>
-    <xmx:w7dnY7q-wn-_ci1Wao2rR-uiYdAWw9Ij-xaB3N_WRsXv6N0sdQ6A_Q>
-    <xmx:w7dnY4TtpP3ophLuoBVpRi2mc5-7VBVZJuWAr1NX_T-xB_SaGFaCHg>
-    <xmx:xLdnY3BiyQNYUYPNSeq_8_DlQWviDkIBdIO9OnYhbIpVzHY77O89ReWaIYE>
-Feedback-ID: ie3994620:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 6 Nov 2022 08:33:55 -0500 (EST)
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id 5A2BB104149; Sun,  6 Nov 2022 16:33:51 +0300 (+03)
-Date:   Sun, 6 Nov 2022 16:33:51 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     Pasha Tatashin <pasha.tatashin@soleen.com>
-Cc:     corbet@lwn.net, akpm@linux-foundation.org, hughd@google.com,
-        hannes@cmpxchg.org, david@redhat.com, vincent.whitchurch@axis.com,
-        seanjc@google.com, rppt@kernel.org, shy828301@gmail.com,
-        paul.gortmaker@windriver.com, peterx@redhat.com, vbabka@suse.cz,
-        Liam.Howlett@Oracle.com, ccross@google.com, willy@infradead.org,
-        arnd@arndb.de, cgel.zte@gmail.com, yuzhao@google.com,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH] mm: anonymous shared memory naming
-Message-ID: <20221106133351.ukb5quoizkkzyrge@box.shutemov.name>
-References: <20221105025342.3130038-1-pasha.tatashin@soleen.com>
+        Sun, 6 Nov 2022 08:34:55 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7E57DFBD
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Nov 2022 05:34:54 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id l11so13829515edb.4
+        for <linux-kernel@vger.kernel.org>; Sun, 06 Nov 2022 05:34:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=vczVhc3OPBbJJv7puS37X+vgFWWnV3V2UNdSHwQBMYc=;
+        b=i1b1IJU/LpVhIaTvS94dUc2JKge3gJ6cj0xyMOOnQLqDgOEnYFCjY8jrr6cHsQwPot
+         gg75MroaDsVi+JOeSjYDsJUR8/aVLPF/xmq+wCulcgZri2P1+PM2+ieYK09NQt12N1Pb
+         gKfaYTqbwd7uY1lg88saCybSe/MukoIFM++tgDuV3057/dPcS5Crbmp3u1rxNyCG3Yvw
+         bFrSraUWHeLs6go9xfRuRoLEmMdJGzyPXa6Nt9XVlNsFGb+FSEuhprfgD/uNvtMBHokQ
+         MRN8pTDBEvgBLWaXT6i3mkG+DN4EQQwHWeAnBJAcwok9xtIsm+TlVBIstiGpy321oOLx
+         AcBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vczVhc3OPBbJJv7puS37X+vgFWWnV3V2UNdSHwQBMYc=;
+        b=vT65OFtEM9K19qg7s3PN3m/KS6uOuBPi/+MJ7R+AWTW5ag409a6etdOsAXZr1m5YmH
+         P9mmVAm3Q3uGvOyrr4lL/jtKHbIEj2l2rqiInnk8q2dezhGSoAC9zC2dW8k4x571gJkF
+         K0+NvTSvQOXeehqJ9fmJ98GvA8Jskb/v/XewA32QlvgCZcktY+3sO50ndkUsuAJqJMgA
+         RaMoCU6QLjgnKSVJ4y3stXGqGkFQWPFTzuTlOd4Dx3zEmzoskUPcLmstlvyU4Ien4zVg
+         35BOEU0DVlODFgRPM+NdR0q+prSnFbmXQhsfLrQaSGWEHqHga2udWJS3g1m25cmJ6tzW
+         O58Q==
+X-Gm-Message-State: ACrzQf1iKqZMop8AJ82AFBIFU2MBOgZiJMntJPII9xRjEqIT1uKSEAKn
+        haOzGWNOUfgbK8aiErq88tk=
+X-Google-Smtp-Source: AMsMyM58sIvXMQ7yJf2mzm4IBOjz5GUtQrFbrW0f3mcVLNuEfr7CyNdtZn7qfMBPLBJqthPifEvL5g==
+X-Received: by 2002:a05:6402:1ca9:b0:461:30d8:6742 with SMTP id cz9-20020a0564021ca900b0046130d86742mr601164edb.172.1667741693392;
+        Sun, 06 Nov 2022 05:34:53 -0800 (PST)
+Received: from localhost.localdomain (ip5f5abba7.dynamic.kabel-deutschland.de. [95.90.187.167])
+        by smtp.gmail.com with ESMTPSA id lj18-20020a170906f9d200b007adade0e9easm2103614ejb.85.2022.11.06.05.34.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 06 Nov 2022 05:34:52 -0800 (PST)
+From:   Michael Straube <straube.linux@gmail.com>
+To:     gregkh@linuxfoundation.org
+Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Michael Straube <straube.linux@gmail.com>
+Subject: [PATCH] staging: r8188eu: clean up error handling in rtw_start_drv_threads()
+Date:   Sun,  6 Nov 2022 14:34:43 +0100
+Message-Id: <20221106133443.8872-1-straube.linux@gmail.com>
+X-Mailer: git-send-email 2.38.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221105025342.3130038-1-pasha.tatashin@soleen.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Nov 05, 2022 at 02:53:42AM +0000, Pasha Tatashin wrote:
-> Since:
-> commit 9a10064f5625 ("mm: add a field to store names for private anonymous
-> memory")
-> 
-> We can set names for private anonymous memory but not for shared
-> anonymous memory. However, naming shared anonymous memory just as
-> useful for tracking purposes.
-> 
-> Extend the functionality to be able to set names for shared anon.
-> 
-> / [anon_shmem:<name>]      an anonymous shared memory mapping that has
->                            been named by userspace
-> 
-> Sample output:
->         share = mmap(NULL, SIZE, PROT_READ | PROT_WRITE,
->                      MAP_SHARED | MAP_ANONYMOUS, -1, 0);
->         rv = prctl(PR_SET_VMA, PR_SET_VMA_ANON_NAME,
->                    share, SIZE, "shared anon");
-> 
-> /proc/<pid>/maps (and smaps):
-> 7fc8e2b4c000-7fc8f2b4c000 rw-s 00000000 00:01 1024
-> /dev/zero (deleted) [anon_shmem:shared anon]
-> 
-> pmap $(pgrep a.out)
-> 254:   pub/a.out
-> 000056093fab2000      4K r---- a.out
-> 000056093fab3000      4K r-x-- a.out
-> 000056093fab4000      4K r---- a.out
-> 000056093fab5000      4K r---- a.out
-> 000056093fab6000      4K rw--- a.out
-> 000056093fdeb000    132K rw---   [ anon ]
-> 00007fc8e2b4c000 262144K rw-s- zero (deleted) [anon_shmem:shared anon]
-> 
-> Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
-> ---
->  Documentation/filesystems/proc.rst |  4 +++-
->  fs/proc/task_mmu.c                 |  7 ++++---
->  include/linux/mm.h                 |  2 ++
->  include/linux/mm_types.h           | 27 +++++++++++++--------------
->  mm/madvise.c                       |  7 ++-----
->  mm/shmem.c                         | 13 +++++++++++--
->  6 files changed, 35 insertions(+), 25 deletions(-)
-> 
-> diff --git a/Documentation/filesystems/proc.rst b/Documentation/filesystems/proc.rst
-> index 898c99eae8e4..8f1e68460da5 100644
-> --- a/Documentation/filesystems/proc.rst
-> +++ b/Documentation/filesystems/proc.rst
-> @@ -431,8 +431,10 @@ is not associated with a file:
->   [stack]                    the stack of the main process
->   [vdso]                     the "virtual dynamic shared object",
->                              the kernel system call handler
-> - [anon:<name>]              an anonymous mapping that has been
-> + [anon:<name>]              a private anonymous mapping that has been
->                              named by userspace
-> + path [anon_shmem:<name>]   an anonymous shared memory mapping that has
-> +                            been named by userspace
+Convert the error handling in the function rtw_start_drv_threads() to
+the common logic used in the kernel. Another step to get rid of _FAIL
+and _SUCCESS which uses inverted logic.
 
-I expect it to break existing parsers. If the field starts with '/' it is
-reasonable to assume the rest of the string to be a path, but it is not
-the case now.
+Signed-off-by: Michael Straube <straube.linux@gmail.com>
+---
+ drivers/staging/r8188eu/include/osdep_intf.h |  2 +-
+ drivers/staging/r8188eu/os_dep/os_intfs.c    | 17 +++++++----------
+ 2 files changed, 8 insertions(+), 11 deletions(-)
 
+diff --git a/drivers/staging/r8188eu/include/osdep_intf.h b/drivers/staging/r8188eu/include/osdep_intf.h
+index 0f7d74a3ff6d..6d66cb57225e 100644
+--- a/drivers/staging/r8188eu/include/osdep_intf.h
++++ b/drivers/staging/r8188eu/include/osdep_intf.h
+@@ -46,7 +46,7 @@ u8 rtw_init_drv_sw(struct adapter *padapter);
+ void rtw_free_drv_sw(struct adapter *padapter);
+ void rtw_reset_drv_sw(struct adapter *padapter);
+ 
+-u32 rtw_start_drv_threads(struct adapter *padapter);
++int rtw_start_drv_threads(struct adapter *padapter);
+ void rtw_stop_drv_threads (struct adapter *padapter);
+ void rtw_cancel_all_timer(struct adapter *padapter);
+ 
+diff --git a/drivers/staging/r8188eu/os_dep/os_intfs.c b/drivers/staging/r8188eu/os_dep/os_intfs.c
+index 970f380bac96..66556e07ed93 100644
+--- a/drivers/staging/r8188eu/os_dep/os_intfs.c
++++ b/drivers/staging/r8188eu/os_dep/os_intfs.c
+@@ -363,18 +363,16 @@ struct net_device *rtw_init_netdev(struct adapter *old_padapter)
+ 	return pnetdev;
+ }
+ 
+-u32 rtw_start_drv_threads(struct adapter *padapter)
++int rtw_start_drv_threads(struct adapter *padapter)
+ {
+-	u32 _status = _SUCCESS;
+-
+ 	padapter->cmdThread = kthread_run(rtw_cmd_thread, padapter, "RTW_CMD_THREAD");
+ 	if (IS_ERR(padapter->cmdThread))
+-		_status = _FAIL;
+-	else
+-		/* wait for rtw_cmd_thread() to start running */
+-		wait_for_completion(&padapter->cmdpriv.start_cmd_thread);
++		return PTR_ERR(padapter->cmdThread);
+ 
+-	return _status;
++	/* wait for rtw_cmd_thread() to start running */
++	wait_for_completion(&padapter->cmdpriv.start_cmd_thread);
++
++	return 0;
+ }
+ 
+ void rtw_stop_drv_threads(struct adapter *padapter)
+@@ -627,8 +625,7 @@ static int _netdev_open(struct net_device *pnetdev)
+ 
+ 		netdev_dbg(pnetdev, "MAC Address = %pM\n", pnetdev->dev_addr);
+ 
+-		status = rtw_start_drv_threads(padapter);
+-		if (status == _FAIL) {
++		if (rtw_start_drv_threads(padapter)) {
+ 			pr_info("Initialize driver software resource Failed!\n");
+ 			goto netdev_open_error;
+ 		}
 -- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+2.38.0
+
