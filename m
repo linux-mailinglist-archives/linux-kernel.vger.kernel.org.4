@@ -2,182 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3562E61E1BA
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 11:48:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A33361E1BE
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 11:52:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229887AbiKFKrz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Nov 2022 05:47:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41366 "EHLO
+        id S229917AbiKFKwX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Nov 2022 05:52:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229581AbiKFKru (ORCPT
+        with ESMTP id S229581AbiKFKwV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Nov 2022 05:47:50 -0500
-Received: from FRA01-PR2-obe.outbound.protection.outlook.com (mail-eopbgr120049.outbound.protection.outlook.com [40.107.12.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EE1765D5
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Nov 2022 02:47:48 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=i3AkjSRuf7SkVMOz6bsdiMFdvuyFPLFNIlUtxFFAMBp9z2ZlGd1dQtr9//e0eenfqZ9gWhqz0Li1pciBPZKwt+KwqBvLna3aX7FBrVKJ41dqRwNgvBbTMPTX1eeZfqIXwiJnjTHerMsCAMV8D3Jw/Ox5X4Nfpoqm6LfAgiHyuSNGBAy4I4uAIsVWbC8pQxV8FTkfSAjqRQQ9MtDRf+SVaX2jFCWPSuq6uu3kdP+6l92XcsCwIfKHFgNcTzF+trfxMU1fc5UalpkV/okz2IkqsErk4mFfyU9GvEPEUxZt97W+cZ+C7SvTZbQ8NCEma07+cEDbpY4HxvK75T6ah1LNYA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+0xNZWFFyCmtrFlvMke8J2WCEDeZsluPq6NOndTsas4=;
- b=bo/Ahrwr9xud9MbQX/WsA4pFPGGWnsOgbQLLPbbECXCpOa+nOqyokKQ0IZOb7TdOzkRQJCeD+K8hWOFEnPWkaAWl7kBdLLFG67DHDeIjadeF2CqQqJ3A8tCz18SsykCIVIb52stiaSGgj3NQ0nPCNWf5psaFPQRxCgPBt4NlROBsFcGq8OjaLptuohiXyQMZIGr+Uf+mB16mB7jgCwOUAkMZrtES8T+kpdF0sQXNOrki0RA/apLdklGYOnYvoyvf8tuFPM8Sh0X1A9F8FKpnZsbALUKr72tTD0KJWZjHLSXzEDeDQ2DlDSFY3oaCBLo03j6stAaARq0cmu5aAsXOkg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
- dkim=pass header.d=csgroup.eu; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=csgroup.eu;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+0xNZWFFyCmtrFlvMke8J2WCEDeZsluPq6NOndTsas4=;
- b=KpPXnjozM4bfJjkRls4AogTmM/JBpSSAR6Z4Q3lWHlH7SSWeAJMJ7vV8P+6LCq4XTTlOXcNkZvFL1hJJPWWxmm9nWwcCzxiQRyXcgAwvX4TKFHSQd6LDr0w6ua9j57l6t9UQi+E8DF88DFvF33vTVMdagxZNqzH/ffXLu6ROfhyzyZEBEKQNXt4XiDB8P+4w55brZrglH//Fz8N6XbWWR8zs5793pVPltb/CVRhtGcce3c9J2citLDWZSb7iXZl04dJz85CCBzyIZjzkCuvDG1fHwWD+boKZvTryLYAF2nlpxhq5sBpws+jYrXNpf6W74zzPRu+ldaOKjrkUq/12NQ==
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
- by PR1P264MB2230.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:193::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.25; Sun, 6 Nov
- 2022 10:47:45 +0000
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::a85b:a9b6:cb36:fa6]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::a85b:a9b6:cb36:fa6%8]) with mapi id 15.20.5791.025; Sun, 6 Nov 2022
- 10:47:45 +0000
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        "qiang.zhao@nxp.com" <qiang.zhao@nxp.com>,
-        "leoyang.li@nxp.com" <leoyang.li@nxp.com>
-CC:     "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH v3] soc: fsl: qe: Add check for ioremap
-Thread-Topic: [PATCH v3] soc: fsl: qe: Add check for ioremap
-Thread-Index: AQHY3T4L/2Iswwpqok+PEJki3pXcbq4x39cA
-Date:   Sun, 6 Nov 2022 10:47:44 +0000
-Message-ID: <51573e02-cd54-d55f-b4ff-a4ad75aa6955@csgroup.eu>
-References: <20221011065225.16602-1-jiasheng@iscas.ac.cn>
-In-Reply-To: <20221011065225.16602-1-jiasheng@iscas.ac.cn>
-Accept-Language: fr-FR, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=csgroup.eu;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MRZP264MB2988:EE_|PR1P264MB2230:EE_
-x-ms-office365-filtering-correlation-id: baf68c6f-4c1c-42e8-1e12-08dabfe45670
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: sjYlzsOB+rHr8PVlmVpRMLHmFgg/nEvHIE3pmHVY4WDu1iaVq6f8h9azTiqjLumqPLX0/koOHWtwZZRqIUz6LJmI9z2RaRyItLvhwGPLdcCHeKGSif8waql44DlSt9nNPdnkXBt5610D+bXs9EtrKXv2ogj+aE3Frlvj4FSUU/QvE5Rvys01KaBcBKHEk5VfZpNQi1iecKGHwCd3QcoAoPc7Uxc38wyNPaJJiSLW4beqBrKyZAeDshwTtOErvLWaQRujnKdh53JQRbUysfvyzvevKKSpC5XKDZs/tVPKEl4nndnoQscuOCG/mLd5ZgQ2Dibwlo1FuEakRyOzavdX6+mPg8cNi7THOutv0LweiS4zzSisbgqEU9AmwNVYgJiJ1pZ9eFtnGgN3qYOJxPjxjqKDyIsKj6pTE0kiqYbmgDO4+fuBWkrOCG5CxVGt/LqYSdE9SmHKsqHdu894JSXyBKVQRf9nukDh+7e8NrCcCY3YM+SV2w6VPc6BghvPYayo2vzxeNlF8k9RSadZrzlcRVpD3kFBqDw6Zin3HLFe+R3qej6a1WwrHPTZe+FYjVhTPtlzV88LMhnw/TTNwZ3ZmFPXrjpSavv5WyndsLW1tElVCSF39XYxvv2QoAr6Pfc4U4Y507b8+4zYht1s9cZzE45zVwHYJeD4AXy238w8RaDvqQ52ST4Tz2p9yLE1rDbQFye1pSIz/7Xf6Vb0/LjIkQy6AfxaA5FMoEGsMog+uIBDztVXKAneC0tHyTxdC5xR+oFobrUZHnC8lWMiSPFwsXPrk2MuqpZYjqBcRGQh031pY/MUWNH/rNJHVzhctVhoDij6Nt7Yccx6ZyTI6MT5sA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(136003)(346002)(376002)(366004)(39840400004)(451199015)(76116006)(91956017)(41300700001)(4326008)(8676002)(66446008)(66556008)(66946007)(64756008)(66476007)(54906003)(110136005)(38070700005)(83380400001)(8936002)(44832011)(478600001)(6486002)(71200400001)(2906002)(316002)(5660300002)(36756003)(26005)(6512007)(2616005)(186003)(66574015)(31686004)(38100700002)(122000001)(86362001)(31696002)(6506007)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?eGlkZnFQL0o5WlVzdXdIMFlDczBpRjlyMFowUENtdS9oOFphdGc0Z1JHcmlH?=
- =?utf-8?B?QWdtdVJSbWF1TDhlemFZaks4MFlvZTl4Z3FJMmRXbzhLbmlXZkg5Z0dqTTBI?=
- =?utf-8?B?WWVXbnBLN1ZsTXp6RWJnc3dISnhHVjY2OFNoYjBPbVlCMnZYZEVCUzFieXdV?=
- =?utf-8?B?SmdUS0lDdFB4dTAzOFpmSXZIemsxVUhzYlFpMlg1TXZpYnpTZFdLcS9uSDZR?=
- =?utf-8?B?YzJ5ZVZuMDAyQWpETm9mT3FGeUloQ05XRUdMNThUOXhPT2hwSFZQMnZFSGFo?=
- =?utf-8?B?SURhV1hBeGRrbTBFbXJBVGt3Nmp0QStEdjdRSS9rRittUlU1MitQcWN5T01S?=
- =?utf-8?B?cjdUOWRLSCtyS1owOUhSVXYzUGtMbGJTOXRuTmthZ25aSUZqeldrT3lvM1pm?=
- =?utf-8?B?Vk1rYkdqV2d0VVpDY2VxUzVGN3dNQ3VlZk8rQktzQUtpclk5M2RxQjBpVnh2?=
- =?utf-8?B?ekhVZTVuWmgrZVhvOHJzSHpjWXNsZHFKZGpkV0pTNEs0djh3UC9Ed3haSnd5?=
- =?utf-8?B?QTBRaUREYjFHU1JsQ1hXaHpxTDBGSWUrNUF2TFFzSzlYU0N6SmNBWGRkc0pu?=
- =?utf-8?B?NjR3NkhjQVEvaU5seUZPbC9HeFlzK3c0VjZHdnBleDAxdGRJTktLbmpyd3dU?=
- =?utf-8?B?em9qdVl0Ny9uYVNWL1R0SGR1Z21XbzNPRnRJbWx1NW5QYjFoQ28yVVpoR0Zm?=
- =?utf-8?B?NC9SZWd6Q0UyNklSSkRZbFBBcm81bzE4ODVJSTZDcWJEWDBDZVY1NndPU1cy?=
- =?utf-8?B?OVVBbGdrWjFVWElQWjBDd0JxRFdsRkEvTk53a0VrbW9EM3pub1VaUjVucFdG?=
- =?utf-8?B?SmVIbzVmNSt0UmVkMHlTcEdLbjhWS0pmdDdRVFBoMGFCWkx2OEZBUG5LVnN1?=
- =?utf-8?B?Wmw2N3BKMGJidDNUdGs2bXlTY1E3UUtlRWM4bTg3WkZSUkFWdWlHTFNsMHNB?=
- =?utf-8?B?dVVzZWY2NnBWWUtwdjYrWGcxR1ZZVC9hbUxPaXZrYy9iS1ZsMjhzbWVJZHcw?=
- =?utf-8?B?OXFldEpzWFZzc3NFcGd1bnhRWkp2SDFHK3dlNEp4aGp5cUFTejNGNFVQYVZ2?=
- =?utf-8?B?ZTFFbWZ6UnJFQXNxNzlXK3p3eWlIek5CWG1xYXQxN0RJMld5L0RKUEkxbGZu?=
- =?utf-8?B?YlNIQUFZKzdWUUdoWUJqdXk1UG5NaUNEeEEyWGxvbkZqRnVVMWppd05OWVRj?=
- =?utf-8?B?MU05d2VnSGRyZlAzM1VobmNNN3Q5b2NUeE45Sk5TR2l1VlEvdFFia3Z4QXZr?=
- =?utf-8?B?TmpqRWFCRDNnbEYxeEJMLy9mQTQ3bXFIelU3YnlkTHZCNmJPK2VrNzNyZldk?=
- =?utf-8?B?TXBTOEQwQjd1RG53REJHenRDcHQwNmxvTWZnV2RiL3dYRStUVVVmNDZzNThW?=
- =?utf-8?B?WktJT2dZMExVd2ZRYTFNZ251THhWbkEweHNYYU54aDlrZGQwOEF2YXQvYW9C?=
- =?utf-8?B?RGp4TjlpRk9HSUxuOWlBVUlBOVZNRnZ2d0ZTdEJhQmhBRmNZaEVZTkpzdTQz?=
- =?utf-8?B?TDBNK1NRMWlVQS9xTnlhRmRvaUlabDFnZlYzaFhHRVZRa2tma3k4WEVHdU1V?=
- =?utf-8?B?UG1LMForbHZFMkNqSVE4UHY5WXJGcTZVMlZQWE1Ud1grOEZTalhDY1had0JG?=
- =?utf-8?B?eFZlajkxRk5kNFk1V2dmYzZuSE1nWDB0VDhEU1VzK013dC9Jd0pNT1FtK1Nn?=
- =?utf-8?B?KzZFajVQTmtVZ1NOV0pJaTdXSXlRSDY2RXExTGZQdzFrZUZwSEs0anN1Vk5R?=
- =?utf-8?B?alBMcEpqeFA5L0N1bUd0UG1ZZnF0ZTd4M09iZFFtYzJsY0R2anF0c21ka1Bk?=
- =?utf-8?B?KzMyN2FtZTNkN05MeVdJVTJuS1hNUmR2UDdGMmQ0YmdwQ0VEd1p3YjFPL2l4?=
- =?utf-8?B?UzcvYWpTVjU4WkVSYnJKTFErNm9ra3Y2TFNET0Q5RGJvNDI5UnJ6aXN1VFUz?=
- =?utf-8?B?S2MvUTh3WUx6N2xUQ3hxK2NvVkhpQW9pOForblpkRTdSdmVYdnZUMnlyTmdJ?=
- =?utf-8?B?V3lKQVVIS1pFTzhQVjRtZk95MDVpSXdaMGFkQzF4OGtyZUVJN2RDTk42bzFF?=
- =?utf-8?B?YzFRYTdUVFRLMTNjYktLR2J6OVpablJYWGlCaUE1SDNmbDlpMmhRS0NEMWN6?=
- =?utf-8?B?d3B2SG93a1JIUU45bll3d0VnQjJlYytkQ3l6QnowNnp6T1JzTVU4cmRnc1NH?=
- =?utf-8?Q?AAg74AaIJDrCqkwrIvkyqUM=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <FEABAF0762BCAA4FAF6A44AE522A9133@FRAP264.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
+        Sun, 6 Nov 2022 05:52:21 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65FB49FE7
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Nov 2022 02:52:20 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F284260C07
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Nov 2022 10:52:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63696C43470
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Nov 2022 10:52:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667731939;
+        bh=zZXlka8XT0jQaPkciMFldTLZtAMw7JFqIJd9Pf545QE=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Y2V4328ZVop5zSPYMbnVBTVFNfHfFl+chIXZhpO3/zXuc77NPWVLdHRiTycGuYLy3
+         OQbUBXlQWlcy4fOP0D5fVyCaK1MmlrXGd3P62LZtmNp8qrmfzslkYWTadXKvypzQHj
+         nuFIGYLJxI3Zmgn+fkji9quyQVjcuXEjHVglP9ZZrIcbNXZqQkY22tMRB3HZzpmk+N
+         ntw6n7OWV/T1t8nbGFYfzJJ3knROgXviZLu8JCdIFdPcA5MKh+0t6OQ4hf2D7Kb7lK
+         ThJPmyQF4mRQFCzb2I2zJMaTGOGFh3RH04hlAYqJAWJJQPry4/lRvLo/ygZ19/8VyQ
+         Cq6axWmp+BdzQ==
+Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-36cbcda2157so80326297b3.11
+        for <linux-kernel@vger.kernel.org>; Sun, 06 Nov 2022 02:52:19 -0800 (PST)
+X-Gm-Message-State: ACrzQf01T/8TSknhXNXVA8KCHRJva1Ab6KEdgYtmEFjUptavBO615g7m
+        0zeyY6Y2TZTIZCQaBpEI0YvfN3Z7tDjnNJrg7vw=
+X-Google-Smtp-Source: AMsMyM7whTmcg306z1pjEJrFbNEeVSy7uMLjOJgY0HfUfOsFdMfzjOY9hDUp6Y+85iouOs3uQS7VnQILBs8heSGodHE=
+X-Received: by 2002:a81:9214:0:b0:36c:7b94:aa57 with SMTP id
+ j20-20020a819214000000b0036c7b94aa57mr41538976ywg.221.1667731938334; Sun, 06
+ Nov 2022 02:52:18 -0800 (PST)
 MIME-Version: 1.0
-X-OriginatorOrg: csgroup.eu
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: baf68c6f-4c1c-42e8-1e12-08dabfe45670
-X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Nov 2022 10:47:44.9671
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: y9jxObYXpDb3G7fk3oYfvfBUr6aj0dW1oNQXm+pa4W+scYjO6bWJ5gNzoFDPPkdTwVBnntAie0831WwJmIEFC+EcC6isIJSesx2vh1FAdX0=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR1P264MB2230
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20221102203405.1797491-1-ogabbay@kernel.org> <20221102203405.1797491-3-ogabbay@kernel.org>
+ <7654d9c0-c181-ae6b-96ee-349f20f24b18@quicinc.com>
+In-Reply-To: <7654d9c0-c181-ae6b-96ee-349f20f24b18@quicinc.com>
+From:   Oded Gabbay <ogabbay@kernel.org>
+Date:   Sun, 6 Nov 2022 12:51:51 +0200
+X-Gmail-Original-Message-ID: <CAFCwf10SLEd3dKXYEhyX0E95b66Qfok2Rou=6tOE_j2LCpOc6A@mail.gmail.com>
+Message-ID: <CAFCwf10SLEd3dKXYEhyX0E95b66Qfok2Rou=6tOE_j2LCpOc6A@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 2/3] accel: add dedicated minor for accelerator devices
+To:     Jeffrey Hugo <quic_jhugo@quicinc.com>
+Cc:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>,
+        Jiho Chu <jiho.chu@samsung.com>,
+        Daniel Stone <daniel@fooishbar.org>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>,
+        Maciej Kwapulinski <maciej.kwapulinski@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCkxlIDExLzEwLzIwMjIgw6AgMDg6NTIsIEppYXNoZW5nIEppYW5nIGEgw6ljcml0wqA6DQo+
-IEFzIGlvcmVtYXAgY2FuIHJldHVybiBOVUxMIHBvaW50ZXIsIGl0IHNob3VsZA0KPiBiZSBiZXR0
-ZXIgdG8gY2hlY2sgdGhlIHJldHVybiB2YWx1ZSByZXR1cm4gZXJyb3INCj4gaWYgZmFpbHMuDQo+
-IE1vcmVvdmVyLCB0aGUgcmV0dXJuIHZhbHVlIG9mIHFlX3Jlc2V0IHNob3VsZCBiZQ0KPiBjaGVj
-a2VkIGJ5IGNhc2NhZGUuDQo+IA0KPiBGaXhlczogNjhmMDQ3ZTNkNjJlICgiZnNsL3FlOiBhZGQg
-cnhfc3luYyBhbmQgdHhfc3luYyBmb3IgVERNIG1vZGUiKQ0KPiBTdWdnZXN0ZWQtYnk6IENocmlz
-dG9waGUgTGVyb3kgPGNocmlzdG9waGUubGVyb3lAY3Nncm91cC5ldT4NCj4gU2lnbmVkLW9mZi1i
-eTogSmlhc2hlbmcgSmlhbmcgPGppYXNoZW5nQGlzY2FzLmFjLmNuPg0KDQpSZXZpZXdlZC1ieTog
-Q2hyaXN0b3BoZSBMZXJveSA8Y2hyaXN0b3BoZS5sZXJveUBjc2dyb3VwLmV1Pg0KDQo+IC0tLQ0K
-PiBDaGFuZ2Vsb2c6DQo+IA0KPiB2MiAtPiB2MzoNCj4gDQo+IDEuIEFkZCByZXR1cm4gc3RhdGVt
-ZW50IG9mIHFlX3Jlc2V0IHdoZW4gQ09ORklHX1FVSUNDX0VOR0lORSBpcyBub3Qgc2VsZWN0ZWQu
-DQo+IA0KPiB2MSAtPiB2MjoNCj4gDQo+IDEuIENoYW5nZSB0aGUgcG9zaXRpb24gb2YgdGhlIGNo
-ZWNrIGZvciBpb3JlbWFwLg0KPiAyLiBTaW1wbGlmeSB0aGUgY2hlY2sgZm9yIHFlX3Jlc2V0Lg0K
-PiAzLiBSZW1vdmUgdGhlICdleHRlcm4nIGtleXdvcmQuDQo+IC0tLQ0KPiAgIGRyaXZlcnMvc29j
-L2ZzbC9xZS9xZS5jIHwgMTIgKysrKysrKystLS0tDQo+ICAgaW5jbHVkZS9zb2MvZnNsL3FlL3Fl
-LmggfCAgNyArKysrKy0tDQo+ICAgMiBmaWxlcyBjaGFuZ2VkLCAxMyBpbnNlcnRpb25zKCspLCA2
-IGRlbGV0aW9ucygtKQ0KPiANCj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvc29jL2ZzbC9xZS9xZS5j
-IGIvZHJpdmVycy9zb2MvZnNsL3FlL3FlLmMNCj4gaW5kZXggYjNjMjI2ZWI1MjkyLi4zM2Y3NmNj
-NTg3MmUgMTAwNjQ0DQo+IC0tLSBhL2RyaXZlcnMvc29jL2ZzbC9xZS9xZS5jDQo+ICsrKyBiL2Ry
-aXZlcnMvc29jL2ZzbC9xZS9xZS5jDQo+IEBAIC04MywxMSArODMsMTQgQEAgc3RhdGljIHBoeXNf
-YWRkcl90IGdldF9xZV9iYXNlKHZvaWQpDQo+ICAgCXJldHVybiBxZWJhc2U7DQo+ICAgfQ0KPiAg
-IA0KPiAtdm9pZCBxZV9yZXNldCh2b2lkKQ0KPiAraW50IHFlX3Jlc2V0KHZvaWQpDQo+ICAgew0K
-PiAgIAlpZiAocWVfaW1tciA9PSBOVUxMKQ0KPiAgIAkJcWVfaW1tciA9IGlvcmVtYXAoZ2V0X3Fl
-X2Jhc2UoKSwgUUVfSU1NQVBfU0laRSk7DQo+ICAgDQo+ICsJaWYgKHFlX2ltbXIgPT0gTlVMTCkN
-Cj4gKwkJcmV0dXJuIC1FTk9NRU07DQo+ICsNCj4gICAJcWVfc251bXNfaW5pdCgpOw0KPiAgIA0K
-PiAgIAlxZV9pc3N1ZV9jbWQoUUVfUkVTRVQsIFFFX0NSX1NVQkJMT0NLX0lOVkFMSUQsDQo+IEBA
-IC05OCw2ICsxMDEsOCBAQCB2b2lkIHFlX3Jlc2V0KHZvaWQpDQo+ICAgDQo+ICAgCWlmIChxZV9z
-ZG1hX2luaXQoKSkNCj4gICAJCXBhbmljKCJzZG1hIGluaXQgZmFpbGVkISIpOw0KPiArDQo+ICsJ
-cmV0dXJuIDA7DQo+ICAgfQ0KPiAgIA0KPiAgIGludCBxZV9pc3N1ZV9jbWQodTMyIGNtZCwgdTMy
-IGRldmljZSwgdTggbWNuX3Byb3RvY29sLCB1MzIgY21kX2lucHV0KQ0KPiBAQCAtNjQ0LDkgKzY0
-OSw4IEBAIHN0YXRpYyBpbnQgX19pbml0IHFlX2luaXQodm9pZCkNCj4gICAJbnAgPSBvZl9maW5k
-X2NvbXBhdGlibGVfbm9kZShOVUxMLCBOVUxMLCAiZnNsLHFlIik7DQo+ICAgCWlmICghbnApDQo+
-ICAgCQlyZXR1cm4gLUVOT0RFVjsNCj4gLQlxZV9yZXNldCgpOw0KPiAgIAlvZl9ub2RlX3B1dChu
-cCk7DQo+IC0JcmV0dXJuIDA7DQo+ICsJcmV0dXJuIHFlX3Jlc2V0KCk7DQo+ICAgfQ0KPiAgIHN1
-YnN5c19pbml0Y2FsbChxZV9pbml0KTsNCj4gICANCj4gQEAgLTY1NCw3ICs2NTgsNyBAQCBzdWJz
-eXNfaW5pdGNhbGwocWVfaW5pdCk7DQo+ICAgc3RhdGljIGludCBxZV9yZXN1bWUoc3RydWN0IHBs
-YXRmb3JtX2RldmljZSAqb2ZkZXYpDQo+ICAgew0KPiAgIAlpZiAoIXFlX2FsaXZlX2R1cmluZ19z
-bGVlcCgpKQ0KPiAtCQlxZV9yZXNldCgpOw0KPiArCQlyZXR1cm4gcWVfcmVzZXQoKTsNCj4gICAJ
-cmV0dXJuIDA7DQo+ICAgfQ0KPiAgIA0KPiBkaWZmIC0tZ2l0IGEvaW5jbHVkZS9zb2MvZnNsL3Fl
-L3FlLmggYi9pbmNsdWRlL3NvYy9mc2wvcWUvcWUuaA0KPiBpbmRleCBiMDJlOWZlNjkxNDYuLjA3
-MTRiMGJhN2Y0OSAxMDA2NDQNCj4gLS0tIGEvaW5jbHVkZS9zb2MvZnNsL3FlL3FlLmgNCj4gKysr
-IGIvaW5jbHVkZS9zb2MvZnNsL3FlL3FlLmgNCj4gQEAgLTg0LDkgKzg0LDEyIEBAIGV4dGVybiBz
-cGlubG9ja190IGNteGdjcl9sb2NrOw0KPiAgIA0KPiAgIC8qIEV4cG9ydCBRRSBjb21tb24gb3Bl
-cmF0aW9ucyAqLw0KPiAgICNpZmRlZiBDT05GSUdfUVVJQ0NfRU5HSU5FDQo+IC1leHRlcm4gdm9p
-ZCBxZV9yZXNldCh2b2lkKTsNCj4gK2ludCBxZV9yZXNldCh2b2lkKTsNCj4gICAjZWxzZQ0KPiAt
-c3RhdGljIGlubGluZSB2b2lkIHFlX3Jlc2V0KHZvaWQpIHt9DQo+ICtzdGF0aWMgaW5saW5lIGlu
-dCBxZV9yZXNldCh2b2lkKQ0KPiArew0KPiArCXJldHVybiAwOw0KPiArfQ0KPiAgICNlbmRpZg0K
-PiAgIA0KPiAgIGludCBjcG1fbXVyYW1faW5pdCh2b2lkKTs=
+On Wed, Nov 2, 2022 at 11:17 PM Jeffrey Hugo <quic_jhugo@quicinc.com> wrote:
+>
+> On 11/2/2022 2:34 PM, Oded Gabbay wrote:
+> > @@ -24,16 +33,6 @@ static char *accel_devnode(struct device *dev, umode_t *mode)
+> >
+> >   static CLASS_ATTR_STRING(accel_version, 0444, "accel 1.0.0 20221018");
+> >
+> > -/**
+> > - * accel_sysfs_init - initialize sysfs helpers
+> > - *
+> > - * This is used to create the ACCEL class, which is the implicit parent of any
+> > - * other top-level ACCEL sysfs objects.
+> > - *
+> > - * You must call accel_sysfs_destroy() to release the allocated resources.
+> > - *
+> > - * Return: 0 on success, negative error code on failure.
+> > - */
+>
+> Why are we removing this?
+It should have been removed at the first patch, and will be fixed in v3.
+I'm removing it as it is a static function. We don't document every
+static function.
+>
+> >   static int accel_sysfs_init(void)
+> >   {
+> >       int err;
+> > @@ -54,11 +53,6 @@ static int accel_sysfs_init(void)
+> >       return 0;
+> >   }
+> >
+> > -/**
+> > - * accel_sysfs_destroy - destroys ACCEL class
+> > - *
+> > - * Destroy the ACCEL device class.
+> > - */
+>
+> Again, why remove this?  Adding it in one patch than immediately
+> removing it in the next patch seems wasteful.
+Correct, will be removed from the first patch in the next version.
+>
+> >   static void accel_sysfs_destroy(void)
+> >   {
+> >       if (IS_ERR_OR_NULL(accel_class))
+> > @@ -68,11 +62,185 @@ static void accel_sysfs_destroy(void)
+> >       accel_class = NULL;
+> >   }
+> >
+> > +static void accel_minor_release(struct drm_minor *minor)
+> > +{
+> > +     drm_dev_put(minor->dev);
+> > +}
+> > +
+> > +/**
+> > + * accel_open - open method for ACCEL file
+> > + * @inode: device inode
+> > + * @filp: file pointer.
+> > + *
+> > + * This function must be used by drivers as their &file_operations.open method.
+>
+> Feels like it would be helpful to have an accel version of
+> DEFINE_DRM_GEM_FOPS() which helps accel drivers to get this right
+Yeah, I also thought about it. I'll add it.
+thanks,
+oded
+>
+> > + * It looks up the correct ACCEL device and instantiates all the per-file
+> > + * resources for it. It also calls the &drm_driver.open driver callback.
+> > + *
+> > + * Return: 0 on success or negative errno value on failure.
+> > + */
+> > +int accel_open(struct inode *inode, struct file *filp)
+> > +{
+> > +     struct drm_device *dev;
+> > +     struct drm_minor *minor;
+> > +     int retcode;
+> > +
+> > +     minor = accel_minor_acquire(iminor(inode));
+> > +     if (IS_ERR(minor))
+> > +             return PTR_ERR(minor);
+> > +
+> > +     dev = minor->dev;
+> > +
+> > +     atomic_fetch_inc(&dev->open_count);
+> > +
+> > +     /* share address_space across all char-devs of a single device */
+> > +     filp->f_mapping = dev->anon_inode->i_mapping;
+> > +
+> > +     retcode = drm_open_helper(filp, minor);
+> > +     if (retcode)
+> > +             goto err_undo;
+> > +
+> > +     return 0;
+> > +
+> > +err_undo:
+> > +     atomic_dec(&dev->open_count);
+> > +     accel_minor_release(minor);
+> > +     return retcode;
+> > +}
+> > +EXPORT_SYMBOL_GPL(accel_open);
