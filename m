@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAE2361E1C1
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 11:54:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EE8861E1C3
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 11:56:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229837AbiKFKyk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Nov 2022 05:54:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42994 "EHLO
+        id S229882AbiKFK40 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Nov 2022 05:56:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229581AbiKFKyh (ORCPT
+        with ESMTP id S229581AbiKFK4Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Nov 2022 05:54:37 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D684D11F
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Nov 2022 02:54:36 -0800 (PST)
+        Sun, 6 Nov 2022 05:56:24 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F31EC3B
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Nov 2022 02:56:24 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3BD47B80B34
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Nov 2022 10:54:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC4E1C43146
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Nov 2022 10:54:33 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AFF3460BED
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Nov 2022 10:56:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF6CBC433D6
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Nov 2022 10:56:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667732073;
-        bh=DGWITShguY2YvDwT2F/Zt1p4K6E4TZdBWjm0qvd7Y5c=;
+        s=k20201202; t=1667732183;
+        bh=P5+oK5y1DwgK+cZ5FV6rwH5/YDmYJLDEYA0g/u08A8E=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=jtg3YNva6eR97+CKcl2lU4MZakiRXGxBnD8cqRXo2jA3ubAsAokvwHJHoxI5Q6ckr
-         xxgWcqTnT2MSmSpKhhnM7EKt7eWZqlmB13PGa+bqTL9e4zpY7LhNdqJnH4/Dvztq3R
-         TeO+JbCAD6DB2mFqDuIOtIyngVklXLzX060KDMUSD3e+C44DBRwUpT4fWcl1duQTQY
-         p/G64KpiN/F4dB/+x4j6CO36Ktj7p1x+trI7fHQlmuJ8owjfoOOpQmPemOPIe6Q4Zy
-         MvqyIq95aIK9M+RIPI3yxaQEu1bRUJ+OS4usLPCA4imQctMwY9xe4Y+fzYU9HAZv6u
-         aRRddZEuTgt5A==
-Received: by mail-yb1-f178.google.com with SMTP id 63so10569128ybq.4
-        for <linux-kernel@vger.kernel.org>; Sun, 06 Nov 2022 02:54:33 -0800 (PST)
-X-Gm-Message-State: ACrzQf0j4RdNI+j2xrqzCYUoolvGZjqyhj2x09ur/fSgEqG0jRVok3F9
-        BUNBtqERIoxayP6FTLhJDs1vVheCtXVst0dlK4g=
-X-Google-Smtp-Source: AMsMyM4FcFut+LU4VdTnrVzBfv6cltrpShWVNbuucVGQUt4hr2pnnb6JqFc2yeeMG3KRDMdP48BI892EZF4vx48UqWM=
-X-Received: by 2002:a25:1e89:0:b0:6bf:9e55:5cb4 with SMTP id
- e131-20020a251e89000000b006bf9e555cb4mr44196756ybe.642.1667732072872; Sun, 06
- Nov 2022 02:54:32 -0800 (PST)
+        b=aPwkX6c6CUAG++Y/NFl1aCaJL4kAldL8ZfDAbrBpQSHavM4g2AHZ1twp8lcCazMh5
+         ZFUGOuL0JxDyfkIq/AqGxKaRtGC8ZwolOW8dS9l0pU2r7AFj/XVcdVHgsP8AI1NpmP
+         sJdSEEnCiAd0bmoh1KYmrYaSn54czDN+caHmaD+azD9NDru+1STH/6mZAh5g6aDnwv
+         5rDSMKCP7H6zHRU5rszvLWGbvjEcTVHVpBTh9R6Pr1zBCMAkjnLmS+EwXoAJ1rSSlz
+         q/gQDcxwok8ldw9azBb7QkBJzfez2gpfi9dvATFaCpZ827L0Ic67vQW8FmYtjS7zkt
+         I5y8fmeq57YcQ==
+Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-333a4a5d495so80429707b3.10
+        for <linux-kernel@vger.kernel.org>; Sun, 06 Nov 2022 02:56:22 -0800 (PST)
+X-Gm-Message-State: ACrzQf2HsIjtxUCAbNZZeut+TPhN7q/dzZALdALLI9f46mUzkkT4aw3Z
+        lC8ya/rbkgQS6zCQZhDHRFc3oBQ9fZaaZueDC1c=
+X-Google-Smtp-Source: AMsMyM6F5TjV3XEFGifBFFyTnxoEYOIx53CjGoI5BoOXmHjwgY51QZL2DiccNWXEsKvh28HauC6Coj1mObem968DBNQ=
+X-Received: by 2002:a0d:f445:0:b0:345:89a2:9a8d with SMTP id
+ d66-20020a0df445000000b0034589a29a8dmr41906097ywf.107.1667732182083; Sun, 06
+ Nov 2022 02:56:22 -0800 (PST)
 MIME-Version: 1.0
-References: <20221102203405.1797491-1-ogabbay@kernel.org> <CGME20221102203430epcas1p380845d7a6ebc38ab1f41acf8c48a4480@epcas1p3.samsung.com>
- <20221102203405.1797491-3-ogabbay@kernel.org> <20221103142554.6310a60f0f6dad1a59fa7644@samsung.com>
-In-Reply-To: <20221103142554.6310a60f0f6dad1a59fa7644@samsung.com>
+References: <20221102203405.1797491-1-ogabbay@kernel.org> <20221102203405.1797491-4-ogabbay@kernel.org>
+ <b6faacac-46f2-7643-7796-b34840fc94f5@quicinc.com>
+In-Reply-To: <b6faacac-46f2-7643-7796-b34840fc94f5@quicinc.com>
 From:   Oded Gabbay <ogabbay@kernel.org>
-Date:   Sun, 6 Nov 2022 12:54:06 +0200
-X-Gmail-Original-Message-ID: <CAFCwf124PAis_PJjswUdGbpRJ=SGsPpAOQbjuRzvfM7VZyS8Dg@mail.gmail.com>
-Message-ID: <CAFCwf124PAis_PJjswUdGbpRJ=SGsPpAOQbjuRzvfM7VZyS8Dg@mail.gmail.com>
-Subject: Re: [RFC PATCH v2 2/3] accel: add dedicated minor for accelerator devices
-To:     Jiho Chu <jiho.chu@samsung.com>
+Date:   Sun, 6 Nov 2022 12:55:55 +0200
+X-Gmail-Original-Message-ID: <CAFCwf11Fd6GZkmDi74TRVd2t3v7d0HTYSjLeEdM9UeK+fUofXw@mail.gmail.com>
+Message-ID: <CAFCwf11Fd6GZkmDi74TRVd2t3v7d0HTYSjLeEdM9UeK+fUofXw@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 3/3] drm: initialize accel framework
+To:     Jeffrey Hugo <quic_jhugo@quicinc.com>
 Cc:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
         Arnd Bergmann <arnd@arndb.de>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -61,9 +61,9 @@ Cc:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
         Maxime Ripard <mripard@kernel.org>,
         Thomas Zimmermann <tzimmermann@suse.de>,
         Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>,
+        Jiho Chu <jiho.chu@samsung.com>,
         Daniel Stone <daniel@fooishbar.org>,
         Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Jeffrey Hugo <quic_jhugo@quicinc.com>,
         Christoph Hellwig <hch@infradead.org>,
         Kevin Hilman <khilman@baylibre.com>,
         Jagan Teki <jagan@amarulasolutions.com>,
@@ -79,74 +79,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 3, 2022 at 7:26 AM Jiho Chu <jiho.chu@samsung.com> wrote:
+On Wed, Nov 2, 2022 at 11:30 PM Jeffrey Hugo <quic_jhugo@quicinc.com> wrote:
 >
-> On Wed,  2 Nov 2022 22:34:04 +0200
-> Oded Gabbay <ogabbay@kernel.org> wrote:
+> On 11/2/2022 2:34 PM, Oded Gabbay wrote:
+> > @@ -163,7 +174,11 @@ static int drm_minor_register(struct drm_device *dev, unsigned int type)
+> >
+> >       ret = drm_debugfs_init(minor, minor->index, drm_debugfs_root);
+> >       if (ret) {
+> > -             DRM_ERROR("DRM: Failed to initialize /sys/kernel/debug/dri.\n");
+> > +             if (minor->type == DRM_MINOR_ACCEL)
+> > +                     DRM_ERROR("DRM: Failed to initialize /sys/kernel/debug/accel.\n");
+> > +             else
+> > +                     DRM_ERROR("DRM: Failed to initialize /sys/kernel/debug/dri.\n");
+> > +
+> >               goto err_debugfs;
+> >       }
+> >
 >
-> > +/**
-> > + * accel_open - open method for ACCEL file
-> > + * @inode: device inode
-> > + * @filp: file pointer.
-> > + *
-> > + * This function must be used by drivers as their &file_operations.open method.
-> > + * It looks up the correct ACCEL device and instantiates all the per-file
-> > + * resources for it. It also calls the &drm_driver.open driver callback.
-> > + *
-> > + * Return: 0 on success or negative errno value on failure.
-> > + */
-> > +int accel_open(struct inode *inode, struct file *filp)
-> > +{
-> > +     struct drm_device *dev;
-> > +     struct drm_minor *minor;
-> > +     int retcode;
-> > +
-> > +     minor = accel_minor_acquire(iminor(inode));
-> > +     if (IS_ERR(minor))
-> > +             return PTR_ERR(minor);
-> > +
-> > +     dev = minor->dev;
-> > +
-> > +     atomic_fetch_inc(&dev->open_count);
-> > +
->
-> Hi,
-> It needs to consider drm_global_mutex to access open_count.
-> please check doxy of open_count.
-Now that I'm changing the code back to be part of drm.ko, I can return
-all the code that is in drm_copy which I removed for this to compile.
-
->
->
-> > +     /* share address_space across all char-devs of a single device */
-> > +     filp->f_mapping = dev->anon_inode->i_mapping;
-> > +
-> > +     retcode = drm_open_helper(filp, minor);
-> > +     if (retcode)
-> > +             goto err_undo;
-> > +
-> > +     return 0;
-> > +
-> > +err_undo:
-> > +     atomic_dec(&dev->open_count);
-> > +     accel_minor_release(minor);
-> > +     return retcode;
-> > +}
-> > +EXPORT_SYMBOL_GPL(accel_open);
-> > +
-> >  static int accel_stub_open(struct inode *inode, struct file *filp)
-> >  {
-> > -     DRM_DEBUG("Operation not supported");
-> > +     const struct file_operations *new_fops;
-> > +     struct drm_minor *minor;
-> > +     int err;
-> > +
-> > +     DRM_DEBUG("\n");
->
-> It seems useless.
-Correct, I removed it in v3.
+> This doesn't look right.  Don't you need to call drm_debugfs_init() with
+> accel_debugfs_root for the case - minor->type == DRM_MINOR_ACCEL?
+> Unless I fail to understand something, this will put all the accel
+> devices under /sys/kernel/debug/dri
+ofc, you are correct.
+Will be fixed in v3.
 Thanks,
 Oded
->
-> Thanks.
-> Jiho Chu
