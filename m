@@ -2,171 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6353F61E391
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 17:59:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C841D61E398
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 18:02:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230126AbiKFQ7d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Nov 2022 11:59:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36092 "EHLO
+        id S230100AbiKFRCb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Nov 2022 12:02:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230099AbiKFQ7b (ORCPT
+        with ESMTP id S229952AbiKFRCa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Nov 2022 11:59:31 -0500
-Received: from smtp.domeneshop.no (smtp.domeneshop.no [IPv6:2a01:5b40:0:3005::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3DBDDEC1
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Nov 2022 08:59:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tronnes.org
-        ; s=ds202112; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=1fHQEWgWob7nqgYb7pRzlsH6vNCFNYXfK+/x9/nB01M=; b=Yje8YQHhRml05gW1dej/dWiQQZ
-        AqKj2i0OjO2RM1Qumjo7FoNfWRUdBC4/h2uQHli8coC+LKe7l3tUuPyfG7KqA8BEsiA+NVUYZGdcd
-        RinbElpcQ3zEo0Ef+uc++uePxxY9puXszvLwKUx+P73tntoXkxilGwxDL1B3Co5nkaf1qLNefEJdU
-        TbFTqkc2KcniVpob8iHII19/YNuRBUOwfVsA0XatDekK5sUsjYZNxCxDW65aky/cX6L9UkiWis18f
-        9uK/o/dLYZ0E8dKpnNEyK/urj4eNuLfnJnz0gFxc4QGDZbkz/3loUbjywm6lgaJZ1VZ7l87tNIpzo
-        XoageSaA==;
-Received: from [2a01:799:95a:cb00:fd97:29ff:d72a:349e] (port=51993)
-        by smtp.domeneshop.no with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <noralf@tronnes.org>)
-        id 1orizW-0005gi-Tq; Sun, 06 Nov 2022 17:59:26 +0100
-Message-ID: <eb485588-2e7a-8455-7ec4-6a9649d2bef8@tronnes.org>
-Date:   Sun, 6 Nov 2022 17:59:23 +0100
+        Sun, 6 Nov 2022 12:02:30 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B1F5DEBF;
+        Sun,  6 Nov 2022 09:02:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667754149; x=1699290149;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=tVXlcBE2aFKbiiRITzLn6WZi+rbe15vkZSuzbS4Aw1k=;
+  b=auI+t/yGq0NPI+LR+u+mO2/nJRc9LQ0oZb2EcAvc4gLxDOFYAnFkKMkr
+   AKP0PZGqgwzgpjufE9wwO3U+4hqMv2EQpd6SqBm+oKx0WiobxXxvQyVw8
+   u3H3OcFFvJ+jbppyd/vJttpsX0t4C7Vfs3GF5eRz028n+5TY+5Sr7x9BN
+   Wi3IL8dBpyntn1tm5dRR4qF5Uy++l2Dg40FDBOH0COIzaaj1tJM9zYEtN
+   Sb9MkQgXgRxz4OTxJbE8jTwFNze96qbp0bKoLTPkln7nnU1AyG0fHcYFv
+   fl5FGDrZY9/+jCNBMck+oOBd6oVN9GuLXcPtwvTLDLFms/9PMkR83Nxed
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10523"; a="289995254"
+X-IronPort-AV: E=Sophos;i="5.96,142,1665471600"; 
+   d="scan'208";a="289995254"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2022 09:02:29 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10523"; a="638123578"
+X-IronPort-AV: E=Sophos;i="5.96,142,1665471600"; 
+   d="scan'208";a="638123578"
+Received: from edegrijs-mobl.amr.corp.intel.com (HELO [10.209.44.139]) ([10.209.44.139])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2022 09:02:28 -0800
+Message-ID: <d4614b70-b37b-44b8-6a9c-54d59a6f9fec@intel.com>
+Date:   Sun, 6 Nov 2022 09:02:27 -0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v6 16/23] drm/probe-helper: Provide a TV get_modes helper
-To:     Mateusz Kwiatkowski <kfyatek@gmail.com>, maxime@cerno.tech,
-        Karol Herbst <kherbst@redhat.com>,
-        Emma Anholt <emma@anholt.net>, Ben Skeggs <bskeggs@redhat.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Maxime Ripard <mripard@kernel.org>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Lyude Paul <lyude@redhat.com>
-Cc:     linux-sunxi@lists.linux.dev, intel-gfx@lists.freedesktop.org,
-        Phil Elwell <phil@raspberrypi.com>,
-        linux-arm-kernel@lists.infradead.org,
-        nouveau@lists.freedesktop.org, Hans de Goede <hdegoede@redhat.com>,
-        Dom Cobley <dom@raspberrypi.com>,
-        dri-devel@lists.freedesktop.org,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
-References: <20220728-rpi-analog-tv-properties-v6-0-e7792734108f@cerno.tech>
- <20220728-rpi-analog-tv-properties-v6-16-e7792734108f@cerno.tech>
- <8d0eee22-50f5-5b0a-c1e6-c5f61dd5bbcd@gmail.com>
-From:   =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
-In-Reply-To: <8d0eee22-50f5-5b0a-c1e6-c5f61dd5bbcd@gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [tip: x86/urgent] x86/tdx: Prepare for using "INFO" call for a
+ second purpose
+Content-Language: en-US
+To:     Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>
+Cc:     linux-kernel@vger.kernel.org, linux-tip-commits@vger.kernel.org,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        x86@kernel.org
+References: <166734513630.7716.12952231613533508782.tip-bot2@tip-bot2>
+ <Y2esXPWwulendusf@zn.tnic>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <Y2esXPWwulendusf@zn.tnic>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-Den 27.10.2022 00.02, skrev Mateusz Kwiatkowski:
-> Hi Maxime,
+On 11/6/22 04:45, Borislav Petkov wrote:
+> On Tue, Nov 01, 2022 at 11:25:36PM -0000, tip-bot2 for Dave Hansen wrote:
+>> @@ -121,7 +121,7 @@ static u64 get_cc_mask(void)
+>>  	 * The highest bit of a guest physical address is the "sharing" bit.
+>>  	 * Set it for shared pages and clear it for private pages.
+>>  	 */
+>> -	return BIT_ULL(gpa_width - 1);
+>> +	*cc_mask = BIT_ULL(gpa_width - 1);
+>>  }
+> I'm looking at the next patch too and I still don't see what the point
+> is of making it a void?
 > 
-> First of all, nice idea with the helper function that can be reused by different
-> drivers. This is neat!
-> 
-> But looking at this function, it feels a bit overcomplicated. You're creating
-> the two modes, then checking which one is the default, then set the preferred
-> one and possibly reorder them. Maybe it can be simplified somehow?
-> 
-> Although when I tried to refactor it myself, I ended up with something that's
-> not better at all. Maybe it needs to be complicated, after all :(
-> 
+> IOW, what's wrong with doing this?
 
-I also thought that the function was complicated/difficult to read, in
-particular the index stuff at the end, but I also failed in finding a
-"better" solution, just a different one ;)
+It's fine for now, except that the naming on this:
 
-Noralf.
+-	tdx_parse_tdinfo(&cc_mask);
++	cc_mask = tdx_parse_tdinfo();
 
-My version:
+is a bit funky since tdx_parse_tdinfo() is doing a couple of things and
+will need to return a second item shortly.
 
-int drm_connector_helper_tv_get_modes(struct drm_connector *connector)
-{
-	struct drm_device *dev = connector->dev;
-	struct drm_property *tv_mode_property = dev->mode_config.tv_mode_property;
-	struct drm_cmdline_mode *cmdline = &connector->cmdline_mode;
-	unsigned int ntsc_modes = BIT(DRM_MODE_TV_MODE_NTSC) |
-				  BIT(DRM_MODE_TV_MODE_NTSC_443) |
-				  BIT(DRM_MODE_TV_MODE_NTSC_J) |
-				  BIT(DRM_MODE_TV_MODE_PAL_M);
-	unsigned int pal_modes = BIT(DRM_MODE_TV_MODE_PAL) |
-				 BIT(DRM_MODE_TV_MODE_PAL_N) |
-				 BIT(DRM_MODE_TV_MODE_SECAM);
-	unsigned int tv_modes[2] = { UINT_MAX, UINT_MAX };
-	unsigned int i, supported_tv_modes = 0;
-
-	if (!tv_mode_property)
-		return 0;
-
-	for (i = 0; i < tv_mode_property->num_values; i++)
-		supported_tv_modes |= BIT(tv_mode_property->values[i]);
-
-	if ((supported_tv_modes & ntsc_modes) && (supported_tv_modes &
-pal_modes)) {
-		uint64_t default_mode;
-
-		if (drm_object_property_get_default_value(&connector->base,
-							  tv_mode_property,
-							  &default_mode))
-			return 0;
-
-		if (cmdline->tv_mode_specified)
-			default_mode = cmdline->tv_mode;
-
-		if (BIT(default_mode) & ntsc_modes) {
-			tv_modes[0] = DRM_MODE_TV_MODE_NTSC;
-			tv_modes[1] = DRM_MODE_TV_MODE_PAL;
-		} else {
-			tv_modes[0] = DRM_MODE_TV_MODE_PAL;
-			tv_modes[1] = DRM_MODE_TV_MODE_NTSC;
-		}
-	} else if (supported_tv_modes & ntsc_modes) {
-		tv_modes[0] = DRM_MODE_TV_MODE_NTSC;
-	} else if (supported_tv_modes & pal_modes) {
-		tv_modes[0] = DRM_MODE_TV_MODE_PAL;
-	} else {
-		return 0;
-	}
-	
-	for (i = 0; i < ARRAY_SIZE(tv_modes); i++) {
-		struct drm_display_mode *mode;
-
-		if (tv_modes[i] == DRM_MODE_TV_MODE_NTSC)
-			mode = drm_mode_analog_ntsc_480i(dev);
-		else if (tv_modes[i] == DRM_MODE_TV_MODE_PAL)
-			mode = drm_mode_analog_pal_576i(dev);
-		else
-			break;
-		if (!mode)
-			return i;
-		if (!i)
-			mode->type |= DRM_MODE_TYPE_PREFERRED;
-		drm_mode_probed_add(connector, mode);
-	}
-
-	return i;
-}
+But, zero objections if you want to make it that way for now.
