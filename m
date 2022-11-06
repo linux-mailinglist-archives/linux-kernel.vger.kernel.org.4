@@ -2,73 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF9B861E6BF
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 22:56:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76F6A61E6D1
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 23:11:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230298AbiKFV4o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Nov 2022 16:56:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49702 "EHLO
+        id S230112AbiKFWLo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Nov 2022 17:11:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230057AbiKFV4i (ORCPT
+        with ESMTP id S229669AbiKFWLl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Nov 2022 16:56:38 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D5292632;
-        Sun,  6 Nov 2022 13:56:37 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Sun, 6 Nov 2022 17:11:41 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFA9DDF8D;
+        Sun,  6 Nov 2022 14:11:39 -0800 (PST)
+Received: from [192.168.2.238] (109-252-117-140.nat.spd-mgts.ru [109.252.117.140])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8D17060DBF;
-        Sun,  6 Nov 2022 21:56:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id F2729C433D6;
-        Sun,  6 Nov 2022 21:56:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667771797;
-        bh=tmoMBh0NtTLCrcuQlh83dR/WTBY9GjenE9BEF/+LliA=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=dTp9JA88eko0SuKZ0oLnqMoBhFrZEoMHyclGmvB+AJsoMv1s7Y8h1SHmWLUgX4znr
-         NeyeYmSARCgB6z6YOCX5WYklKpuGutGTw1mBs3N9AeaAlzMXiIaav/yJv2eCRioozn
-         3RwzPwHAjtBenRolk/A1v1n0TkuIAR8CM59qCotOySuwnUS/D8q44GnT5fxNpEgGzI
-         aNxmd5+fnRu8MaSIeQBMNzWJHgJRD851Fg+Li5ksz1w1/ut/M9kggSWrdsabO8pPnT
-         X166BPy1MbcS5QeTaptUQkSbjxO1K08d77/DkXNFnuNw2ElWfGUD78XDEqBqwMm5Q6
-         J/DoGVr62rF4A==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E057AC41621;
-        Sun,  6 Nov 2022 21:56:36 +0000 (UTC)
-Subject: Re: [GIT PULL] hwmon fixes for v6.1-rc4
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20221106140706.808902-1-linux@roeck-us.net>
-References: <20221106140706.808902-1-linux@roeck-us.net>
-X-PR-Tracked-List-Id: <linux-hwmon.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20221106140706.808902-1-linux@roeck-us.net>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v6.1-rc4
-X-PR-Tracked-Commit-Id: 1e699e177e339e462cdc8571e3d0fcf29665608e
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: aa52994915dca444dbb8e6b91eb82b749ba7a1ec
-Message-Id: <166777179691.27970.11086155896782800145.pr-tracker-bot@kernel.org>
-Date:   Sun, 06 Nov 2022 21:56:36 +0000
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        (Authenticated sender: dmitry.osipenko)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 32BBF6602261;
+        Sun,  6 Nov 2022 22:11:36 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1667772697;
+        bh=uj2dLo8EulDe9eQh23LWWOKmwfSsFi4WmR5legeb4QU=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=QgSUe6x0xNv1vzxK6hnDqpCJMMOd9suyAd7SQfgQRIE6aADyx2/C9cA65f+deB6i8
+         U4qVRT3V3Q8sH6EdZroifIOmd3T3JtYEv6O7PSsHQbQ9CEkRZy6i9QFySS0z941TqG
+         IcOnn4InF4j2M7L3MyR3KfR1KW6EoLijIckDseInKIOSjVN5wEP97XPDrdGriTXJQU
+         7M783fLfVUCPjyoSM4w6JuI3PAEHBfuZP/cF6T2UzcRRMCAtefi8trCm1v3XX699l+
+         fd4YMRMqBiNm3OZUEGCE9hxm9MC7C9K07OSK7zYzmbOyoYPOqsjqotk6YhQzqWnJtP
+         PQOSjTcQTlIKA==
+Message-ID: <b58e2678-8d2a-a323-07e4-12cc01c8c3c2@collabora.com>
+Date:   Mon, 7 Nov 2022 01:11:32 +0300
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [RFC PATCH v6 02/11] media: v4l2: Extend pixel formats to unify
+ single/multi-planar handling (and more)
+To:     Hsia-Jun Li <Randy.Li@synaptics.com>,
+        Helen Koike <helen.koike@collabora.com>
+Cc:     mchehab@kernel.org, hans.verkuil@cisco.com,
+        laurent.pinchart@ideasonboard.com, sakari.ailus@iki.fi,
+        boris.brezillon@collabora.com, hiroh@chromium.org,
+        nicolas@ndufresne.ca, Brian.Starkey@arm.com, kernel@collabora.com,
+        narmstrong@baylibre.com, linux-kernel@vger.kernel.org,
+        frkoenig@chromium.org, stanimir.varbanov@linaro.org,
+        tfiga@chromium.org, Hans Verkuil <hverkuil@xs4all.nl>,
+        linux-media@vger.kernel.org
+References: <20210114180738.1758707-1-helen.koike@collabora.com>
+ <20210114180738.1758707-3-helen.koike@collabora.com>
+ <d0d1f74f-7e77-1b18-0529-dbbec8889584@xs4all.nl>
+ <577c56bf-146c-f34a-2028-075170076de7@collabora.com>
+ <708221e8-a805-c394-6958-6c7ec24bfe66@synaptics.com>
+Content-Language: en-US
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+In-Reply-To: <708221e8-a805-c394-6958-6c7ec24bfe66@synaptics.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Sun,  6 Nov 2022 06:07:06 -0800:
+On 11/5/22 18:19, Hsia-Jun Li wrote:
+> Hello Helen
+> 
+> I didn't see any updates from V6 and V7-WIP in your repo. That is what I
+> need to for our complex tile formats in our platform.
+> 
+> Any future plane here?
+> 
+> Besides I have some ideas on these patches.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v6.1-rc4
-
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/aa52994915dca444dbb8e6b91eb82b749ba7a1ec
-
-Thank you!
+I was looking into updating this patchset few months ago and the biggest
+blocker was the absence of immediate upstream user for this new UAPI.
+What your platform is? Is the driver stack completely opensource?
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Best regards,
+Dmitry
+
