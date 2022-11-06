@@ -2,63 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 469D161E04C
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 06:07:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1EA761E05F
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 06:35:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229525AbiKFFHy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Nov 2022 01:07:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54326 "EHLO
+        id S229567AbiKFFfd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Nov 2022 01:35:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbiKFFHw (ORCPT
+        with ESMTP id S229562AbiKFFf2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Nov 2022 01:07:52 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 827ADDEAE;
-        Sat,  5 Nov 2022 22:07:51 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id d3so11718208ljl.1;
-        Sat, 05 Nov 2022 22:07:51 -0700 (PDT)
+        Sun, 6 Nov 2022 01:35:28 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A9E262E1
+        for <linux-kernel@vger.kernel.org>; Sat,  5 Nov 2022 22:35:26 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id k5so7829405pjo.5
+        for <linux-kernel@vger.kernel.org>; Sat, 05 Nov 2022 22:35:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=FD7cFXaNxreHZW/S/IEPAaDO1vDMzt9q8nyoz0dU69U=;
-        b=jPm9opIhg0S1ilPGsAvRrk0KML6qSvoVW5z+yJlnipA+AXOdidF0V24962I3lDsIlR
-         X7Cwb7O9/750qXZvuQ+mtdYP7Z7il/5HyGV/yujNbW/rmt+i7LFZl8EOquGkpXMiQCVp
-         ENCHnyThe4UEs6gsg51m+nW8PSW6VyDkUBYLMsUxuRgQb1TieZXyH3snTe8jso2nxIJc
-         7FVZ/qWxdkjxntQLjV2Rl678tS5Z5bwIz4Shuadc+7HgZJ7jI1Pf/Vcbp5Ehu2rS/L2b
-         EvYIeNVN/WCa85I4Vu8TGA2FR6DZbq5yfQSVQB/puczGE3RGVifdstOKjCw/DM3t5OmP
-         cfUA==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YoUZh4lJUYrbwudjwdWbM7Cwr0IVA3bWnluUyVYLrBY=;
+        b=CZfQz2CmGeqn+3G+XO9nhVZykM8puBDwRCTbEbwO1T3oJG9CUz3EAgZnivZdIagWOu
+         wfL0OnvXE+CldbKw9tP6lAObZ6x5GBMoUxKKYskLIYkyuKVkxe/NUKM54hb/txgcA4K8
+         dqHfQ/x6fxAexo9dSHBQP0vHEfv0Rw7+enOfnvKCMLvAN5lUfU4/A9f/fIoOLdw105rv
+         D6OTLMSEZZHAWWKP+TSmZL8rAAAFjCPqShme8N/F9dxYvAc2oeRzf3sxp4++UPVNNmS+
+         BvrKo3HEakiSFe5a9hmES5hknaUufT8Zp4AEutFYL5xUZeGJrM8Az3cTJqnmOXxz616m
+         Bh8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=FD7cFXaNxreHZW/S/IEPAaDO1vDMzt9q8nyoz0dU69U=;
-        b=gcHiOcbxOH62tg6O4xH+lTZiodNkQzmz2iyp1uY/ZNHph4a/qaeqs6W8jlSb5EcKIi
-         nx0FXPpAr2iuncKmYpIfxHW3eOgSU/fYgDWDd+h27KxCmFO4VOAcewE6tSLpl2aNHATH
-         3GByO9SV5cl3DQYgImERE1zijYV2j1BqczHf1MI3GXB/onGjVJeWtVEdbmmtU3OPurLQ
-         6AVhXIMHChBNRh8r9Y6qIeErpBNK7IV+ByAat0zeLtoHnfyGTfitbMAU0z9ObxvhU0nC
-         m7pd7N8lgCg5QnOPi9+Si3ZzSxWdOr9i/9/nfPvkPZ0lrZ/KkJJ6U54iS8FqKJbxvNZD
-         GAGQ==
-X-Gm-Message-State: ACrzQf3ZIpdKnmOE6odb+Cf0eUPq5gS1sCQV9i9gT8PD9/t8SAevQWo9
-        RUQs9C3+ODIgRuKWHuyIVgYsXnZiE+u4rw3+mXI=
-X-Google-Smtp-Source: AMsMyM7eCUET6KyY6J1jtgBrwEFIaPGB9yMh1ig/q3XvD3C0xvwLjBB3DFtd0u7BAjDT/w1phqlXlehlU78knCm5pG4=
-X-Received: by 2002:a2e:ab0d:0:b0:26e:8a39:4cae with SMTP id
- ce13-20020a2eab0d000000b0026e8a394caemr16268501ljb.138.1667711269196; Sat, 05
- Nov 2022 22:07:49 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=YoUZh4lJUYrbwudjwdWbM7Cwr0IVA3bWnluUyVYLrBY=;
+        b=QBL0ltkcqDZIHMi+MrigHwfARUJ2GoSlZEER9EBq3ivSd79cq+qAdDJgKnpCT6N2ui
+         C7Uq+vXZrqfUNq4mJhbQtIuXnxbDCPzVR6Di5xh/ldBcBEQRFSSEbfRCqEeVBQyPyUXc
+         /mywmQlNgrIRxaDaHgN53WxhvrKsMr8afQ1vfpRckXOavX5/JlNdnpdrCbTjhSV0QkjT
+         p6nfmD8KilzZ3VO5RuN3YGYY6Mw89vy+e4uwx76pz8/8m1DvknZrQ5SrzlCaKmB0tybE
+         0XHZ6ZOyDNJwpCJ/X/aVBCv8O5ELEer2rHhCiQqyjOSY2FoCnSWNryMt4gFXfHfQYGcS
+         7gtg==
+X-Gm-Message-State: ANoB5plQZ521o0Y81w9SmuUouqdEFOJrsmEJCeTshw+DGKsfMLX/81wu
+        imn7HER0iPBDnRPBtNl8aXsSNw==
+X-Google-Smtp-Source: AA0mqf5fZv394AoZUuVqcgf6tPCN3Oucnp+lvMz/w4gT18G/Oiiz4YTO2j9h2FpmwFGrz9gD0KhCYQ==
+X-Received: by 2002:a17:902:7044:b0:188:6d97:7aaa with SMTP id h4-20020a170902704400b001886d977aaamr8408005plt.11.1667712925904;
+        Sat, 05 Nov 2022 22:35:25 -0700 (PDT)
+Received: from devtp.bytedance.net ([139.177.225.243])
+        by smtp.gmail.com with ESMTPSA id q27-20020aa7961b000000b0056bee236e9csm2127121pfg.142.2022.11.05.22.35.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 05 Nov 2022 22:35:25 -0700 (PDT)
+From:   wuqiang <wuqiang.matt@bytedance.com>
+To:     mhiramat@kernel.org, davem@davemloft.net,
+        anil.s.keshavamurthy@intel.com, naveen.n.rao@linux.ibm.com,
+        rostedt@goodmis.org, peterz@infradead.org,
+        akpm@linux-foundation.org, sander@svanheule.net,
+        ebiggers@google.com, dan.j.williams@intel.com, jpoimboe@kernel.org
+Cc:     linux-kernel@vger.kernel.org, lkp@intel.com, mattwu@163.com
+Subject: [PATCH v5 0/4] lib,kprobes: kretprobe scalability improvement
+Date:   Sun,  6 Nov 2022 13:34:37 +0800
+Message-Id: <20221106053441.103199-1-wuqiang.matt@bytedance.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20221102023012.6362-1-wuqiang.matt@bytedance.com>
+References: <20221102023012.6362-1-wuqiang.matt@bytedance.com>
 MIME-Version: 1.0
-From:   Steve French <smfrench@gmail.com>
-Date:   Sun, 6 Nov 2022 00:07:38 -0500
-Message-ID: <CAH2r5msckOPtJzUmpzRZAQCQG96nRWDFd=b3An_oiZpU=kwLBQ@mail.gmail.com>
-Subject: [GIT PULL] smb3 client fixes
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     CIFS <linux-cifs@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Shyam Prasad N <nspmangalore@gmail.com>,
-        ChenXiaoSong <chenxiaosong2@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,47 +74,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Please pull the following changes since commit
-30a0b95b1335e12efef89dd78518ed3e4a71a763:
+This patch series introduces a scalable and lockless ring-array based
+object pool and replaces the original freelist (a LIFO queue based on
+singly linked list) to improve the scalability of kretprobed routines.
 
-  Linux 6.1-rc3 (2022-10-30 15:19:28 -0700)
+Changes from v4:
+  1) compiling failure with [-Werror=designated-init]
+  2) compiling failure for sparc: prefetch() not defined
+  3) comments & codes of objpool routines refined
 
-are available in the Git repository at:
+v4 and more:
+  https://lore.kernel.org/all/20221102023012.6362-1-wuqiang.matt@bytedance.com
 
-  git://git.samba.org/sfrench/cifs-2.6.git tags/6.1-rc4-smb3-fixes
-
-for you to fetch changes up to 542228db2f28fdf775b301f2843e1fe486e7c797:
-
-  cifs: fix use-after-free on the link name (2022-11-04 23:36:54 -0500)
-
-----------------------------------------------------------------
-3 cifs/smb3 fixes,
-- one for symlink handling race (fixes a bug spotted with KASAN)
-- two fix multichannel issues with iterating channels instead of using
-the primary channel. The
-more important one fixes a bug when leases are disabled (ie using
-oplocks instead) that was
-spotted with xfstest generic/013 timing out
-
-----------------------------------------------------------------
-ChenXiaoSong (1):
-      cifs: fix use-after-free on the link name
-
-Shyam Prasad N (2):
-      cifs: always iterate smb sessions using primary channel
-      cifs: avoid unnecessary iteration of tcp sessions
-
- fs/cifs/cifsfs.c        | 26 +++++++++++++++++++++++++-
- fs/cifs/inode.c         |  5 -----
- fs/cifs/misc.c          |  6 +++++-
- fs/cifs/smb2misc.c      | 81
-+++++++++++++++++++++++++++++++++++++++++++++------------------------------------
- fs/cifs/smb2ops.c       | 30 ++++++++++++++++++------------
- fs/cifs/smb2transport.c | 19 ++++++++++++-------
- 6 files changed, 105 insertions(+), 62 deletions(-)
-
-
--- 
-Thanks,
-
-Steve
+---
+ include/linux/freelist.h |  129 ------------
+ include/linux/kprobes.h  |    9 +-
+ include/linux/objpool.h  |  153 ++++++++++++++
+ include/linux/rethook.h  |   15 +-
+ kernel/kprobes.c         |   95 ++++-----
+ kernel/trace/fprobe.c    |   17 +-
+ kernel/trace/rethook.c   |   80 +++----
+ lib/Kconfig.debug        |   11 +
+ lib/Makefile             |    4 +-
+ lib/objpool.c            |  487 +++++++++++++++++++++++++++++++++++++++++++
+ lib/test_objpool.c       | 1052 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 11 files changed, 1802 insertions(+), 250 deletions(-)
+ create mode 100644 include/linux/objpool.h
+ create mode 100644 lib/objpool.c
+ create mode 100644 lib/test_objpool.c
+ delete mode 100644 include/linux/freelist.h
