@@ -2,74 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E812C61E2B9
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 15:50:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69CAC61E2B8
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 15:50:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230039AbiKFOuI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Nov 2022 09:50:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60090 "EHLO
+        id S230037AbiKFOuG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Nov 2022 09:50:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230021AbiKFOuF (ORCPT
+        with ESMTP id S229991AbiKFOuE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Nov 2022 09:50:05 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1551DA6;
-        Sun,  6 Nov 2022 06:50:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net; s=s31663417;
-        t=1667746186; bh=ECV+FbP67f13YOWH9y/B96gfaAMWtHMN4kiwg6xe/ew=;
-        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=Wm8ErbfmDYMYL47J70Vold6InuuMsMDRJlB3C376PAISlSpxry1odeOX5tKlrj7OG
-         OFOmpADRZ9A8s7ItjUx0VBJYrQLXHJMQCAJ7v2Zc1CDeFI4+PHr3tqGJeejd387q1q
-         NbCwn8e3x5LEoaj8LX86g1MhmRpqxPZ0X+AqP/sTygeEXtT0vRBwVBcrys0dEdD4XA
-         65zG/sqagDSWAN8zS8Z1Et9CBAHHdgc9Qa34NrWYaZfKuuA+G7SI2Xu/9mgQK3wtV+
-         TrPkGJnfzC3CFWXRR9Bk64qkR9Y0HMGwauL/3RNIGLpWNYBxnxsac2TuB9P+6WMugY
-         /Ryi2pTPa6T5A==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from probook ([87.78.44.193]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MQvD5-1ocWR32bFn-00O363; Sun, 06
- Nov 2022 15:49:46 +0100
-Date:   Sun, 6 Nov 2022 15:49:43 +0100
-From:   Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-To:     kernel test robot <lkp@intel.com>
-Cc:     Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        linux-spi@vger.kernel.org, openbmc@lists.ozlabs.org,
-        oe-kbuild-all@lists.linux.dev, Lee Jones <lee@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org
-Subject: Re: [PATCH 8/8] spi: wpcm-fiu: Add direct map support
-Message-ID: <Y2fJhzeXQgG5DS1U@probook>
-References: <20221105185911.1547847-9-j.neuschaefer@gmx.net>
- <202211060513.HAfQX0DY-lkp@intel.com>
+        Sun, 6 Nov 2022 09:50:04 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00DC9E99;
+        Sun,  6 Nov 2022 06:50:02 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A02D7B80B87;
+        Sun,  6 Nov 2022 14:50:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C498C433C1;
+        Sun,  6 Nov 2022 14:49:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667746200;
+        bh=2/Oq4fxqMnhCc+bd62Y6vkjiu/snPGpLW2GdYhAJ9HU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=fpWE9GoPqgrBzQAb4xjS4heDU/dsZ/tb4Y/CLLkxeGtErwgiuNOxgN9V+oXU3pXCC
+         T8k6EaBqF/0CDMbv9o41CJARmcb0/crudR0amV23awx5EgcMJIIfzos1UerGsssueC
+         vXvcl7qYQiBMs25bSzytt7B42BGIxJ+Pkzf2zjnG1NywY37oKYh065nq0httUG3kzR
+         pJMfyLr6S7KGe2N0m6goNmdAbPlhodCnNX6HaGKVwjaSvqTRtJvQGasOyUVnHWzDJ/
+         9LM5bejQ31Mnvc85KiO3j7bLget74NesW47z4YjApltZhYxnCe86fd55/uuQr5lpQ8
+         jRtMSaCTWCyyw==
+Date:   Sun, 6 Nov 2022 14:49:49 +0000
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Billy Tsai <billy_tsai@aspeedtech.com>
+Cc:     <lars@metafoo.de>, <robh+dt@kernel.org>, <joel@jms.id.au>,
+        <andrew@aj.id.au>, <colin.king@canonical.com>,
+        <linux-iio@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-aspeed@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>,
+        <BMC-SW@aspeedtech.com>
+Subject: Re: [PATCH 1/2] iio: adc: aspeed: Remove the trim valid dts
+ property.
+Message-ID: <20221106144949.61731d8e@jic23-huawei>
+In-Reply-To: <20221031113208.19194-1-billy_tsai@aspeedtech.com>
+References: <20221031113208.19194-1-billy_tsai@aspeedtech.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="pjGtmQLcgVoAQZIl"
-Content-Disposition: inline
-In-Reply-To: <202211060513.HAfQX0DY-lkp@intel.com>
-X-Provags-ID: V03:K1:sJ2SqQ6RGeuHWMwFP7t5iXt67gyTZyOmJJqF6LgTdZCth2Pkfvp
- mO5tZHRmO3dVr6RNgK0TL0weozaLrCOk4TTP+5r3AcqUUNKyxvQhPyDvmLLOQf2NQ+7uNGV
- H40KE0ujNuJL6Kt646+lmbXu4h/p6HUdqD+Ig5/i6sjKvEpaUsklXoGEBLnzyTLfazIw3Yi
- wNOrIa36Rw1huGNQSwjtg==
-UI-OutboundReport: notjunk:1;M01:P0:WSxHhovQB+0=;pq1/NUCX5J84EDsRYejbVfZlgFf
- Vt9dBCEY6KELW0DhkrVBwh7UtAY1VQBY5SUbwpbzAVgax+jTcT+uRyBfbxp8a4rz6yd10ozw7
- zpZAnY6as+CBd8z38VteSc9C0LMjxYqyl2jXJSeM55S+rJdCzL0DzPajdc/Sde3yi0TqOtP/+
- hVoahS8WYzqkT7XqGXRT4ydjwXKMqHAle6HWQjgA6mzyc2fFTgCxobvWSciDit51Fn0ZNYeuf
- AfB7/SLBOX0dmNPGy2VHGsZfYPczjAY1di1ZI9gWvSf5hzTjr050OighHTR6D3S70xK3NtzLU
- wjkK2IXiyZW75kzpmytNUE06whU/dl/2vVXWvgUK7ycaHpL+M7lqnF8/SHZMXmM5A31JcVJj5
- QV4NstcxBs1yZ2+ztgQmrfMc/gf3zg66+TVwCpRjyZPPpgI84YtV+eCHnxcKfkm0AooKDCLvQ
- Ed5/R3lbDYBBXSqLqhlxwzlT2m9ujfC3pE93zwbRRkNa4rQJSgy4shu6+YLpDWYOSqbfrSXc5
- eYZ8AcKwLhTtaAd3J3GYYRuzgTtAuIVeKwX3MUJuSzF/n6PEPvVNxaAS3sx2327ZN4hR3erde
- hpONkpWsIhPfDr/mNBi8WoHBGk2F5TOCsxcYq4jihPz7iBkc5lSD1YuCOsLNWTKbt6rfiksUV
- QTISCgItLAySJpIQ9i8U3SnXNkji1w3TuCNYC3j77JrcE6WV4mwfSMHI27nDqVECySAFOKwej
- VvgPGVBSS9DgsHNvDM9aSwDrY1tmgv6Ev45GZ50j2sDiftdHxVKmi8uGSeh9Bf1ys+Ojbc9Vt
- QACe7AzyiIlQYckywrDGUDa+Zl7FCrWV19EmpH1uY9GL0Ya4s8d1p9sfePfENt2R5bklT8I3a
- nuZ+aVs+UHNDgsmImIab0/bvQr7BdkeeTSWnVrBl3nSCcCgvDUNwX5Ahjp5wB37nlMgIqfm/m
- beuTJg==
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,38 +59,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, 31 Oct 2022 19:32:07 +0800
+Billy Tsai <billy_tsai@aspeedtech.com> wrote:
 
---pjGtmQLcgVoAQZIl
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+> The dts property "aspeed,trim-data-valid" is used to determin whether to
+> read the OTP register. If the image with the aspeed,trim-data-vali
+> install to the chip without valid trimming data the adc controller will
+> become confused. This patch use the default otp value 0 as a criterion
+> for determining whether trimming data is valid instead of the dts
+> property. The chip with actually trimming value is 0 should be filter out.
 
-On Sun, Nov 06, 2022 at 05:35:24AM +0800, kernel test robot wrote:
-> >> drivers/spi/spi-wpcm-fiu.c:424:24: error: initialization of 'ssize_t (*)(struct spi_mem_dirmap_desc *, u64,  size_t,  void *)' {aka 'long int (*)(struct spi_mem_dirmap_desc *, long long unsigned int,  long unsigned int,  void *)'} from incompatible pointer type 'int (*)(struct spi_mem_dirmap_desc *, u64,  size_t,  void *)' {aka 'int (*)(struct spi_mem_dirmap_desc *, long long unsigned int,  long unsigned int,  void *)'} [-Werror=incompatible-pointer-types]
->      424 |         .dirmap_read = wpcm_fiu_direct_read,
->          |                        ^~~~~~~~~~~~~~~~~~~~
->    drivers/spi/spi-wpcm-fiu.c:424:24: note: (near initialization for 'wpcm_fiu_mem_ops.dirmap_read')
->    cc1: some warnings being treated as errors
+Hi Billy,
 
-Indeed. I'll fix it.
+I'm not sure I correctly follow the patch description.  Would the following
+be an accurate description?
 
---pjGtmQLcgVoAQZIl
-Content-Type: application/pgp-signature; name="signature.asc"
+The dts property "aspeed,trim-data-valid" is currently used to determine
+whether to read trimming data from the OTP register. If this is set on
+a device without valid trimming data in the OTP the ADC will not function
+correctly. This patch drops he use of this property and instead uses the
+default (unprogrammed) OTP value of 0 to detect when a fallback value of
+0x8 should be used rather then the value read from the OTP.
 
------BEGIN PGP SIGNATURE-----
+Also, is this a bug fix we need to backport?  If so please provide a fixes
+tag.
 
-iQIzBAABCgAdFiEEvHAHGBBjQPVy+qvDCDBEmo7zX9sFAmNnyYcACgkQCDBEmo7z
-X9v61w/+Io1ta7R0TS2m7Vkejmdcl6DZSvXI2z5VpV9J4y3LaDAzvKnb2FGVIcX3
-czQ76JDo26wMKTHFxb+PoV/BDss+5c9oPMHmb1AnGMDX/348gPnbDtrASxMnCWkr
-pkLpenYQG+EotLl0LRQH5HPCROwKx7sLqDdmcO55GyYLRVv8JIZ4zzdEangBHjph
-td4oRWimW/FD3ADtYMu4iGNJGVG4rwwpo6BGGUmJFYLv2OWauk65ByH0x1Iv42cm
-23JFPtu8IUctqI91HULI1sJGrHIzGMOX54iJmcRyNJc7U5w6YFaNRxDJ5HbToywe
-GOE3t53pw99xuNMC/VzMyUL4dCjqpoxT0GYQFxp4bIRgSKXGeNMG8QZGlZYKNAsH
-9m2QW6IwGaUWP8cCzeoaTxv1yOEYNsEO2KR6wQsLNl9Y/oNUfKxlArGvFjN0phx8
-SKIm91KyCU9UI/bcdHWYx05fIba/BgMIldPbwasp/2DKF4j7nCe5O89uB1Uh6OZy
-a3VXTcu+FKqQMk5iekUgEGAud6vgEkcfNfyGNxSQbt/LYXNKZXnimWQgaOp7mesR
-lm14A3Ic0cJX4GHmH12y8YZmGp31y4i+KVoqDrcFF9TPMtkTnKcSfe8vVewDFh3B
-4Jefen+bjYZpy02U92Z0h9kh8iqEkj+crx+wtHJKHIopJzV0gBk=
-=+33i
------END PGP SIGNATURE-----
+Thanks,
 
---pjGtmQLcgVoAQZIl--
+Jonathan
+
+> 
+> Signed-off-by: Billy Tsai <billy_tsai@aspeedtech.com>
+> ---
+>  drivers/iio/adc/aspeed_adc.c | 11 +++++------
+>  1 file changed, 5 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/iio/adc/aspeed_adc.c b/drivers/iio/adc/aspeed_adc.c
+> index ffae64f39221..0f065f0bb8e7 100644
+> --- a/drivers/iio/adc/aspeed_adc.c
+> +++ b/drivers/iio/adc/aspeed_adc.c
+> @@ -201,6 +201,8 @@ static int aspeed_adc_set_trim_data(struct iio_dev *indio_dev)
+>  				((scu_otp) &
+>  				 (data->model_data->trim_locate->field)) >>
+>  				__ffs(data->model_data->trim_locate->field);
+> +			if (!trimming_val)
+> +				trimming_val = 0x8;
+>  		}
+>  		dev_dbg(data->dev,
+>  			"trimming val = %d, offset = %08x, fields = %08x\n",
+> @@ -562,12 +564,9 @@ static int aspeed_adc_probe(struct platform_device *pdev)
+>  	if (ret)
+>  		return ret;
+>  
+> -	if (of_find_property(data->dev->of_node, "aspeed,trim-data-valid",
+> -			     NULL)) {
+> -		ret = aspeed_adc_set_trim_data(indio_dev);
+> -		if (ret)
+> -			return ret;
+> -	}
+> +	ret = aspeed_adc_set_trim_data(indio_dev);
+> +	if (ret)
+> +		return ret;
+>  
+>  	if (of_find_property(data->dev->of_node, "aspeed,battery-sensing",
+>  			     NULL)) {
+
