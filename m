@@ -2,160 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D3BB61E123
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 10:02:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4359661E125
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 10:05:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229721AbiKFJCe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Nov 2022 04:02:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42148 "EHLO
+        id S229783AbiKFJFN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Nov 2022 04:05:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229564AbiKFJCa (ORCPT
+        with ESMTP id S229609AbiKFJFL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Nov 2022 04:02:30 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61F1F2663;
-        Sun,  6 Nov 2022 01:02:29 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9E218B80B30;
-        Sun,  6 Nov 2022 09:02:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A2F8C433D6;
-        Sun,  6 Nov 2022 09:02:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667725346;
-        bh=xjKCgVmFbXFxtKFBYyK+XNvbHjCTI456JH43nwr0lEc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=T9unJaNs6HLnI2qRq4XbuONifxSjf0RJRYhKfas+wxK0doTZWhX2Vxi39kuPEzrO1
-         +BV+lm/BOobR6s2lIx1pnCeyyfzWQXnIHRZ0qr9Wgc8MsPH6MehxcEhifAsz/gCVMR
-         wvbdlY7k7tV3PjNt7Ctd0UhP6JiWltIf9hTki/rSmR64249F9Up3gEhGCvzC/K1UUw
-         q9WzrK8uP8dz9slhiVl6SMQbmszxY25erslacG3LzbC9pUj69lwABU9ze9xERKJkcR
-         wekQkPj45xpacM2TntuWA291big5LixYfpfKE1aAa0O4qd/nFGMnoR+QB4LeTUmdNh
-         lMSMKTgYI6f8Q==
-Date:   Sun, 6 Nov 2022 17:02:21 +0800
-From:   Peter Chen <peter.chen@kernel.org>
-To:     Pawel Laszczak <pawell@cadence.com>
-Cc:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: Re: [PATCH v2] usb: cdnsp: fix issue with ZLP - added TD_SIZE = 1
-Message-ID: <20221106090221.GA152143@nchen-desktop>
-References: <1666620275-139704-1-git-send-email-pawell@cadence.com>
- <20221027072421.GA75844@nchen-desktop>
- <BYAPR07MB5381482129407B849BA9A616DD339@BYAPR07MB5381.namprd07.prod.outlook.com>
+        Sun, 6 Nov 2022 04:05:11 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1A6355B0;
+        Sun,  6 Nov 2022 01:05:10 -0800 (PST)
+Date:   Sun, 06 Nov 2022 09:05:06 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1667725508;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
+        bh=89gCVDJVAOWy3TSZEo3iFfGJsyh+x/Z/Kw/KHr7+1G4=;
+        b=K0Z7rtmpD1pSUjLm7CbE8heLq7Vnpq4ww8AwA/7Z1euaOKZr9xO6mhNP2ILcOoCKELb1VM
+        sXWQbaftIxGmqv+3fkIm1o44Fn8WXWXe0cX8byoakqbWaaeA73NZpfAGmHBHifIRenPr9Y
+        yJ1NSQVwdBSvirl4niZg2ZZHCOkzVFU+KX5OLCcCd4h4333brHzJCQymKXxG82ufHWPy03
+        x8qBJ0P/SVCirrpa/iSQZb1LnTxHFDRlfhWsPSEybvRyYnejvlc9l94CHJIpaxRlxtW8v+
+        xZlDtOjTJjAZFhHt0waBgLCQcyDx0KCdmTan8sVE4Miq6701CXBsV4wriJDXnA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1667725508;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
+        bh=89gCVDJVAOWy3TSZEo3iFfGJsyh+x/Z/Kw/KHr7+1G4=;
+        b=EBX8rKjEXGPoJqRNsDF8f07P7YU2voxjRGh7vU0vuZQ7sn+s5aPLkVnHY+yeIJuQDRo/+3
+        1TbiaLSWIEwYiUCQ==
+From:   "tip-bot2 for Ingo Molnar" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/core] x86/cpufeatures: Move X86_FEATURE_CALL_DEPTH from bit
+ 18 to bit 19 of word 11, to leave space for WIP X86_FEATURE_SGX_EDECCSSA bit
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, Ingo Molnar <mingo@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <BYAPR07MB5381482129407B849BA9A616DD339@BYAPR07MB5381.namprd07.prod.outlook.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <166772550650.4906.6007680313066821301.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22-10-27 08:46:17, Pawel Laszczak wrote:
-> 
-> >
-> >On 22-10-24 10:04:35, Pawel Laszczak wrote:
-> >> Patch modifies the TD_SIZE in TRB before ZLP TRB.
-> >> The TD_SIZE in TRB before ZLP TRB must be set to 1 to force processing
-> >> ZLP TRB by controller.
-> >>
-> >> cc: <stable@vger.kernel.org>
-> >> Fixes: 3d82904559f4 ("usb: cdnsp: cdns3 Add main part of Cadence
-> >> USBSSP DRD Driver")
-> >> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
-> >>
-> >> ---
-> >> Changelog:
-> >> v2:
-> >> - returned value for last TRB must be 0
-> >>
-> >>  drivers/usb/cdns3/cdnsp-ring.c | 7 ++++++-
-> >>  1 file changed, 6 insertions(+), 1 deletion(-)
-> >>
-> >> diff --git a/drivers/usb/cdns3/cdnsp-ring.c
-> >> b/drivers/usb/cdns3/cdnsp-ring.c index 04dfcaa08dc4..aa79bce89d8a
-> >> 100644
-> >> --- a/drivers/usb/cdns3/cdnsp-ring.c
-> >> +++ b/drivers/usb/cdns3/cdnsp-ring.c
-> >> @@ -1769,8 +1769,13 @@ static u32 cdnsp_td_remainder(struct
-> >> cdnsp_device *pdev,
-> >>
-> >>  	/* One TRB with a zero-length data packet. */
-> >>  	if (!more_trbs_coming || (transferred == 0 && trb_buff_len == 0) ||
-> >> -	    trb_buff_len == td_total_len)
-> >> +	    trb_buff_len == td_total_len) {
-> >> +		/* Before ZLP driver needs set TD_SIZE=1. */
-> >> +		if (more_trbs_coming)
-> >> +			return 1;
-> >> +
-> >>  		return 0;
-> >> +	}
-> >
-> >Does that fix the issue you want at bulk transfer, which has zero-length packet
-> >at the last packet? It seems not align with your previous fix.
-> >Would you mind explaining more?
-> 
-> Value returned by function cdnsp_td_remainder is used 
-> as TD_SIZE in TRB.
-> 
-> The last TRB in TD should have TD_SIZE=0, so trb for ZLP should have
-> set also TD_SIZE=0. If driver set TD_SIZE=0 on before the last one
-> TRB then the controller stops the transfer and ignore trb for ZLP packet.
-> 
-> To fix this, the driver in such case must set TD_SIZE = 1
-> before the last TRB. 
+The following commit has been merged into the x86/core branch of tip:
 
-  	if (!more_trbs_coming || (transferred == 0 && trb_buff_len == 0) ||
- -	    trb_buff_len == td_total_len)
- +	    trb_buff_len == td_total_len) {
- +		/* Before ZLP driver needs set TD_SIZE=1. */
- +		if (more_trbs_coming)
- +			return 1;
- +
-  		return 0;
- +	}
+Commit-ID:     b1599915f09157e98f59556e1b2eafe473603347
+Gitweb:        https://git.kernel.org/tip/b1599915f09157e98f59556e1b2eafe473603347
+Author:        Ingo Molnar <mingo@kernel.org>
+AuthorDate:    Sun, 06 Nov 2022 09:55:56 +01:00
+Committer:     Ingo Molnar <mingo@kernel.org>
+CommitterDate: Sun, 06 Nov 2022 09:58:36 +01:00
 
-How your above fix could return TD_SIZE as 1 for last non-ZLP TRB?
-Which conditions are satisfied?
+x86/cpufeatures: Move X86_FEATURE_CALL_DEPTH from bit 18 to bit 19 of word 11, to leave space for WIP X86_FEATURE_SGX_EDECCSSA bit
 
-Peter
+Reallocate a soft-cpufeatures bit allocated for call-depth tracking
+code, which clashes with this recent KVM/SGX patch being worked on:
 
-> e.g.
-> 
-> TD -> TRB1  transfer_length = 64KB, TD_SIZE =0
->           TRB2 transfer_length =0, TD_SIZE = 0  - controller will
-> 		    ignore this transfer and stop transfer on previous one
-> 
-> TD -> TRB1  transfer_length = 64KB, TD_SIZE =1
->           TRB2 transfer_length =0, TD_SIZE = 0  - controller will
-> 		    execute this trb and send ZLP
-> 
-> As you noticed previously, previous fix for last TRB returned
-> TD_SIZE = 1 in some cases.
-> Previous fix was working correct but was not compliance with
-> controller specification.
-> 
-> >
-> >>
-> >>  	maxp = usb_endpoint_maxp(preq->pep->endpoint.desc);
-> >>  	total_packet_count = DIV_ROUND_UP(td_total_len, maxp);
-> >> --
-> >> 2.25.1
-> >>
-> >
-> >--
-> >
-> 
-> Thanks,
-> Pawel Laszczak
+        KVM/VMX: Allow exposing EDECCSSA user leaf function to KVM guest
 
--- 
+Instead of reallocating cpufeatures bits in evil merges, make the
+allocation explicit.
 
-Thanks,
-Peter Chen
+Acked-by: Peter Zijlstra <peterz@infradead.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: x86@kernel.org
+Cc: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Ingo Molnar <mingo@kernel.org>
+---
+ arch/x86/include/asm/cpufeatures.h | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
+index aefd081..864c9b0 100644
+--- a/arch/x86/include/asm/cpufeatures.h
++++ b/arch/x86/include/asm/cpufeatures.h
+@@ -304,7 +304,8 @@
+ #define X86_FEATURE_UNRET		(11*32+15) /* "" AMD BTB untrain return */
+ #define X86_FEATURE_USE_IBPB_FW		(11*32+16) /* "" Use IBPB during runtime firmware calls */
+ #define X86_FEATURE_RSB_VMEXIT_LITE	(11*32+17) /* "" Fill RSB on VM exit when EIBRS is enabled */
+-#define X86_FEATURE_CALL_DEPTH		(11*32+18) /* "" Call depth tracking for RSB stuffing */
++						   /* Hole left for X86_FEATURE_SGX_EDECCSSA */
++#define X86_FEATURE_CALL_DEPTH		(11*32+19) /* "" Call depth tracking for RSB stuffing */
+ 
+ /* Intel-defined CPU features, CPUID level 0x00000007:1 (EAX), word 12 */
+ #define X86_FEATURE_AVX_VNNI		(12*32+ 4) /* AVX VNNI instructions */
