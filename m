@@ -2,76 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5438F61E2FF
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 16:28:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E2E661E30A
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 16:33:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230122AbiKFP2b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Nov 2022 10:28:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41964 "EHLO
+        id S230114AbiKFPdj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Nov 2022 10:33:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230115AbiKFP2Y (ORCPT
+        with ESMTP id S230038AbiKFPdg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Nov 2022 10:28:24 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD3E6E9F;
-        Sun,  6 Nov 2022 07:28:23 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5BC9560BFF;
-        Sun,  6 Nov 2022 15:28:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 831EBC433C1;
-        Sun,  6 Nov 2022 15:28:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667748502;
-        bh=E9NRTTEykCALmdyzeT0Ev2PHNAi8E5E9zOmBGoR0aek=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=YBO7cJ2t00yDUPmHVOQNZrOGiaFTdT1twkaVa4dQzVTfRNTeDecrLyeHWj9S4m1FD
-         gctw89/r0kxy3Ra2+XQscUdbBtIqYfL2IjlVgtHza9QhhOhXLoFVrrinY+v0VfvBXz
-         CRTvoPEEqBZ98xz7ubzxeTQ6XujFp0dwe9WcJeWRYvEPpzxeBwXHVw/1q7iXLRHahT
-         JdcEP6q1PBpgJdD85UeBgZ2zcLX1h2LFuCUXx6JhVlX6yLpqVyqKBTqHd0FFDLSbtk
-         +T73+CY8/9XfT0dB6COU+sbri+1MMoN+Iw8oBd3Ww1+WKl3QQfl0AmbpXx6IYW7q1I
-         zqLpLkR01WkPw==
-Date:   Sun, 6 Nov 2022 15:28:12 +0000
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
-Cc:     lars@metafoo.de, linux-kernel@vger.kernel.org,
-        linux-iio@vger.kernel.org, jdelvare@suse.com, linux@roeck-us.net,
-        linux-hwmon@vger.kernel.org, rajat.khandelwal@intel.com
-Subject: Re: [PATCH v7] iio: temperature: Add driver support for Maxim
- MAX30208
-Message-ID: <20221106152812.5ed5ef2f@jic23-huawei>
-In-Reply-To: <20221101174409.316447-1-rajat.khandelwal@linux.intel.com>
-References: <20221101174409.316447-1-rajat.khandelwal@linux.intel.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.34; x86_64-pc-linux-gnu)
-MIME-Version: 1.0
+        Sun, 6 Nov 2022 10:33:36 -0500
+Received: from jari.cn (unknown [218.92.28.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0619DBC1F
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Nov 2022 07:33:35 -0800 (PST)
+Received: by ajax-webmail-localhost.localdomain (Coremail) ; Sun, 6 Nov 2022
+ 23:28:44 +0800 (GMT+08:00)
+X-Originating-IP: [182.148.13.29]
+Date:   Sun, 6 Nov 2022 23:28:44 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From:   wangkailong@jari.cn
+To:     benh@kernel.crashing.org, mpe@ellerman.id.au,
+        gregkh@linuxfoundation.org, sohu0106@126.com,
+        christophe.leroy@csgroup.eu
+Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] macintosh/adb: Fix warning comparing pointer to 0
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT6.0.1 build 20210329(c53f3fee)
+ Copyright (c) 2002-2022 www.mailtech.cn
+ mispb-4e503810-ca60-4ec8-a188-7102c18937cf-zhkzyfz.cn
+Content-Transfer-Encoding: base64
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+MIME-Version: 1.0
+Message-ID: <2ef267c.c4.1844d8ef2d8.Coremail.wangkailong@jari.cn>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: AQAAfwCXq+Gs0mdjLYwBAA--.53W
+X-CM-SenderInfo: 5zdqwypdlo00nj6mt2flof0/1tbiAQACB2FEYx0CzgAIsb
+X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
+        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
+        daVFxhVjvjDU=
+X-Spam-Status: No, score=2.2 required=5.0 tests=BAYES_00,RCVD_IN_PBL,RDNS_NONE,
+        T_SPF_HELO_PERMERROR,T_SPF_PERMERROR,XPRIO autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue,  1 Nov 2022 23:14:09 +0530
-Rajat Khandelwal <rajat.khandelwal@linux.intel.com> wrote:
-
-> Maxim MAX30208 is a digital temperature sensor with 0.1=C2=B0C accuracy.
->=20
-> Add support for max30208 driver in iio subsystem.
-> Datasheet: https://datasheets.maximintegrated.com/en/ds/MAX30208.pdf
->=20
-> Signed-off-by: Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
-
-Hi Rajat,
-
-Given ongoing discussion on v6 (sorry I didn't get back to you earlier
-in the week), will result in some changes in here, I'll wait for v8 before
-taking another close look.
-
-Jonathan
-
-
+Rml4IHRoZSBmb2xsb3dpbmcgY29jY2ljaGVjayB3YXJuaW5nOgoKZHJpdmVycy9tYWNpbnRvc2gv
+YWRiLmM6Njc2OjE0LTE1OiBXQVJOSU5HIGNvbXBhcmluZyBwb2ludGVyIHRvIDAuCgpTaWduZWQt
+b2ZmLWJ5OiBLYWlMb25nIFdhbmcgPHdhbmdrYWlsb25nQGphcmkuY24+Ci0tLQogZHJpdmVycy9t
+YWNpbnRvc2gvYWRiLmMgfCAyICstCiAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKyksIDEg
+ZGVsZXRpb24oLSkKCmRpZmYgLS1naXQgYS9kcml2ZXJzL21hY2ludG9zaC9hZGIuYyBiL2RyaXZl
+cnMvbWFjaW50b3NoL2FkYi5jCmluZGV4IDFiYmI5Y2EwOGQ0MC4uMDc2MjUzNTk5YmQ0IDEwMDY0
+NAotLS0gYS9kcml2ZXJzL21hY2ludG9zaC9hZGIuYworKysgYi9kcml2ZXJzL21hY2ludG9zaC9h
+ZGIuYwpAQCAtNjczLDcgKzY3Myw3IEBAIHN0YXRpYyBpbnQgYWRiX29wZW4oc3RydWN0IGlub2Rl
+ICppbm9kZSwgc3RydWN0IGZpbGUgKmZpbGUpCiAJCWdvdG8gb3V0OwogCX0KIAlzdGF0ZSA9IGtt
+YWxsb2Moc2l6ZW9mKHN0cnVjdCBhZGJkZXZfc3RhdGUpLCBHRlBfS0VSTkVMKTsKLQlpZiAoc3Rh
+dGUgPT0gMCkgeworCWlmIChzdGF0ZSkgewogCQlyZXQgPSAtRU5PTUVNOwogCQlnb3RvIG91dDsK
+IAl9Ci0tIAoyLjI1LjEK
