@@ -2,35 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F32B61E0BF
+	by mail.lfdr.de (Postfix) with ESMTP id DC2E661E0C0
 	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 09:02:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229785AbiKFIB4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Nov 2022 03:01:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51548 "EHLO
+        id S229817AbiKFICA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Nov 2022 03:02:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229700AbiKFIBg (ORCPT
+        with ESMTP id S229701AbiKFIBh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Nov 2022 03:01:36 -0500
-Received: from mxout1.routing.net (mxout1.routing.net [IPv6:2a03:2900:1:a::a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C4296343;
+        Sun, 6 Nov 2022 03:01:37 -0500
+Received: from mxout4.routing.net (mxout4.routing.net [IPv6:2a03:2900:1:a::9])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C4F56353;
         Sun,  6 Nov 2022 01:01:33 -0700 (PDT)
 Received: from mxbox3.masterlogin.de (unknown [192.168.10.78])
-        by mxout1.routing.net (Postfix) with ESMTP id 87EBF40665;
-        Sun,  6 Nov 2022 08:01:31 +0000 (UTC)
+        by mxout4.routing.net (Postfix) with ESMTP id 3158D10077E;
+        Sun,  6 Nov 2022 08:01:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailerdienst.de;
-        s=20200217; t=1667721691;
+        s=20200217; t=1667721692;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=c4sTT60tFhvVvkdJlkoRnV4vJdcHfpYoypJr9bb49Ng=;
-        b=hWBaVRu5DPLqgR0cLXduTMtEwl6P0F4ywmWuARRqnkx3kzDAGwaN6rcfKqOduQsgWWXluH
-        b+LFCerrbOfJ58LpR90Ei/Y2mMpA29/rE8dtTOE4Mi8dGa9IyiZ7rjzdf3ikuLolbBU2gB
-        M7//SWaKHOeBXgrG4j+2iDziUyAJlg8=
+        bh=El1GKLp+WHT5eBOYelh41HPdJnJnhv3QxP1VgLX4sjE=;
+        b=QqwGZJNVCarkqfKXJrYzkxHf4BpJO/wWU6Yi8JVnKKu1QuBlOAeoeFFWjaE6yIb0awivtq
+        Ab2ZeINUwtdrMtWM3SYGP1wntJxXd54H76SmKIaaiQJvGbR+c+L5wizdk4l8A7tW1p8/yG
+        v35raMlc5Qb8rdkhin8LMFKXXdgGEs8=
 Received: from frank-G5.. (fttx-pool-80.245.79.199.bambit.de [80.245.79.199])
-        by mxbox3.masterlogin.de (Postfix) with ESMTPSA id D871C3608D6;
-        Sun,  6 Nov 2022 08:01:30 +0000 (UTC)
+        by mxbox3.masterlogin.de (Postfix) with ESMTPSA id 8820E360707;
+        Sun,  6 Nov 2022 08:01:31 +0000 (UTC)
 From:   Frank Wunderlich <linux@fw-web.de>
 To:     linux-mediatek@lists.infradead.org
 Cc:     Frank Wunderlich <frank-w@public-files.de>,
@@ -42,18 +42,18 @@ Cc:     Frank Wunderlich <frank-w@public-files.de>,
         Sam Shih <sam.shih@mediatek.com>, linux-gpio@vger.kernel.org,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 5/6] pinctrl: mediatek: extend pinctrl-moore to support new bias functions
-Date:   Sun,  6 Nov 2022 09:01:12 +0100
-Message-Id: <20221106080114.7426-6-linux@fw-web.de>
+Subject: [PATCH v2 6/6] pinctrl: mediatek: add pull_type attribute for mediatek MT7986 SoC
+Date:   Sun,  6 Nov 2022 09:01:13 +0100
+Message-Id: <20221106080114.7426-7-linux@fw-web.de>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221106080114.7426-1-linux@fw-web.de>
 References: <20221106080114.7426-1-linux@fw-web.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Mail-ID: 834ebe36-977f-4cff-aa59-d34b09342e20
+X-Mail-ID: 1833dc4d-5032-4cbc-ab32-c25b5990d83b
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UPPERCASE_50_75
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -63,127 +63,101 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 From: Sam Shih <sam.shih@mediatek.com>
 
 Commit fb34a9ae383a ("pinctrl: mediatek: support rsel feature")
-introduced SoC specify 'pull_type' attribute to mtk_pinconf_bias_set_combo
-and mtk_pinconf_bias_get_combo, and make the functions able to support
-almost all Mediatek SoCs that use pinctrl-mtk-common-v2.c.
+add SoC specify 'pull_type' attribute for bias configuration.
 
-This patch enables pinctrl_moore to support these functions.
+This patch add pull_type attribute to pinctrl-mt7986.c, and make
+bias_set_combo and bias_get_combo available to mediatek MT7986 SoC.
 
 Signed-off-by: Sam Shih <sam.shih@mediatek.com>
 Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
 ---
- drivers/pinctrl/mediatek/pinctrl-moore.c | 49 ++++++++++++++++++++----
- 1 file changed, 42 insertions(+), 7 deletions(-)
+v2:
+- fix odd numbers in comments
+---
+ drivers/pinctrl/mediatek/pinctrl-mt7986.c | 56 +++++++++++++++++++++++
+ 1 file changed, 56 insertions(+)
 
-diff --git a/drivers/pinctrl/mediatek/pinctrl-moore.c b/drivers/pinctrl/mediatek/pinctrl-moore.c
-index 526faaebaf77..cdc002d29932 100644
---- a/drivers/pinctrl/mediatek/pinctrl-moore.c
-+++ b/drivers/pinctrl/mediatek/pinctrl-moore.c
-@@ -8,6 +8,7 @@
-  *
-  */
+diff --git a/drivers/pinctrl/mediatek/pinctrl-mt7986.c b/drivers/pinctrl/mediatek/pinctrl-mt7986.c
+index d13c59510468..db3497d6787a 100644
+--- a/drivers/pinctrl/mediatek/pinctrl-mt7986.c
++++ b/drivers/pinctrl/mediatek/pinctrl-mt7986.c
+@@ -407,6 +407,60 @@ static const struct mtk_pin_field_calc mt7986_pin_r1_range[] = {
+ 	PIN_FIELD_BASE(66, 68, IOCFG_LB_BASE, 0x60, 0x10, 2, 1),
+ };
  
-+#include <dt-bindings/pinctrl/mt65xx.h>
- #include <linux/gpio/driver.h>
- #include "pinctrl-moore.h"
- 
-@@ -105,7 +106,7 @@ static int mtk_pinconf_get(struct pinctrl_dev *pctldev,
- {
- 	struct mtk_pinctrl *hw = pinctrl_dev_get_drvdata(pctldev);
- 	u32 param = pinconf_to_config_param(*config);
--	int val, val2, err, reg, ret = 1;
-+	int val, val2, err, pullup, reg, ret = 1;
- 	const struct mtk_pin_desc *desc;
- 
- 	desc = (const struct mtk_pin_desc *)&hw->soc->pins[pin];
-@@ -114,7 +115,13 @@ static int mtk_pinconf_get(struct pinctrl_dev *pctldev,
- 
- 	switch (param) {
- 	case PIN_CONFIG_BIAS_DISABLE:
--		if (hw->soc->bias_disable_get) {
-+		if (hw->soc->bias_get_combo) {
-+			err = hw->soc->bias_get_combo(hw, desc, &pullup, &ret);
-+			if (err)
-+				return err;
-+			if (ret != MTK_PUPD_SET_R1R0_00 && ret != MTK_DISABLE)
-+				return -EINVAL;
-+		} else if (hw->soc->bias_disable_get) {
- 			err = hw->soc->bias_disable_get(hw, desc, &ret);
- 			if (err)
- 				return err;
-@@ -123,7 +130,15 @@ static int mtk_pinconf_get(struct pinctrl_dev *pctldev,
- 		}
- 		break;
- 	case PIN_CONFIG_BIAS_PULL_UP:
--		if (hw->soc->bias_get) {
-+		if (hw->soc->bias_get_combo) {
-+			err = hw->soc->bias_get_combo(hw, desc, &pullup, &ret);
-+			if (err)
-+				return err;
-+			if (ret == MTK_PUPD_SET_R1R0_00 || ret == MTK_DISABLE)
-+				return -EINVAL;
-+			if (!pullup)
-+				return -EINVAL;
-+		} else if (hw->soc->bias_get) {
- 			err = hw->soc->bias_get(hw, desc, 1, &ret);
- 			if (err)
- 				return err;
-@@ -132,7 +147,15 @@ static int mtk_pinconf_get(struct pinctrl_dev *pctldev,
- 		}
- 		break;
- 	case PIN_CONFIG_BIAS_PULL_DOWN:
--		if (hw->soc->bias_get) {
-+		if (hw->soc->bias_get_combo) {
-+			err = hw->soc->bias_get_combo(hw, desc, &pullup, &ret);
-+			if (err)
-+				return err;
-+			if (ret == MTK_PUPD_SET_R1R0_00 || ret == MTK_DISABLE)
-+				return -EINVAL;
-+			if (pullup)
-+				return -EINVAL;
-+		} else if (hw->soc->bias_get) {
- 			err = hw->soc->bias_get(hw, desc, 0, &ret);
- 			if (err)
- 				return err;
-@@ -235,7 +258,11 @@ static int mtk_pinconf_set(struct pinctrl_dev *pctldev, unsigned int pin,
- 
- 		switch (param) {
- 		case PIN_CONFIG_BIAS_DISABLE:
--			if (hw->soc->bias_disable_set) {
-+			if (hw->soc->bias_set_combo) {
-+				err = hw->soc->bias_set_combo(hw, desc, 0, MTK_DISABLE);
-+				if (err)
-+					return err;
-+			} else if (hw->soc->bias_disable_set) {
- 				err = hw->soc->bias_disable_set(hw, desc);
- 				if (err)
- 					return err;
-@@ -244,7 +271,11 @@ static int mtk_pinconf_set(struct pinctrl_dev *pctldev, unsigned int pin,
- 			}
- 			break;
- 		case PIN_CONFIG_BIAS_PULL_UP:
--			if (hw->soc->bias_set) {
-+			if (hw->soc->bias_set_combo) {
-+				err = hw->soc->bias_set_combo(hw, desc, 1, arg);
-+				if (err)
-+					return err;
-+			} else if (hw->soc->bias_set) {
- 				err = hw->soc->bias_set(hw, desc, 1);
- 				if (err)
- 					return err;
-@@ -253,7 +284,11 @@ static int mtk_pinconf_set(struct pinctrl_dev *pctldev, unsigned int pin,
- 			}
- 			break;
- 		case PIN_CONFIG_BIAS_PULL_DOWN:
--			if (hw->soc->bias_set) {
-+			if (hw->soc->bias_set_combo) {
-+				err = hw->soc->bias_set_combo(hw, desc, 0, arg);
-+				if (err)
-+					return err;
-+			} else if (hw->soc->bias_set) {
- 				err = hw->soc->bias_set(hw, desc, 0);
- 				if (err)
- 					return err;
++static const unsigned int mt7986_pull_type[] = {
++	MTK_PULL_PUPD_R1R0_TYPE,/*0*/ MTK_PULL_PUPD_R1R0_TYPE,/*1*/
++	MTK_PULL_PUPD_R1R0_TYPE,/*2*/ MTK_PULL_PUPD_R1R0_TYPE,/*3*/
++	MTK_PULL_PUPD_R1R0_TYPE,/*4*/ MTK_PULL_PUPD_R1R0_TYPE,/*5*/
++	MTK_PULL_PUPD_R1R0_TYPE,/*6*/ MTK_PULL_PUPD_R1R0_TYPE,/*7*/
++	MTK_PULL_PUPD_R1R0_TYPE,/*8*/ MTK_PULL_PUPD_R1R0_TYPE,/*9*/
++	MTK_PULL_PUPD_R1R0_TYPE,/*10*/ MTK_PULL_PUPD_R1R0_TYPE,/*11*/
++	MTK_PULL_PUPD_R1R0_TYPE,/*12*/ MTK_PULL_PUPD_R1R0_TYPE,/*13*/
++	MTK_PULL_PUPD_R1R0_TYPE,/*14*/ MTK_PULL_PUPD_R1R0_TYPE,/*15*/
++	MTK_PULL_PUPD_R1R0_TYPE,/*16*/ MTK_PULL_PUPD_R1R0_TYPE,/*17*/
++	MTK_PULL_PUPD_R1R0_TYPE,/*18*/ MTK_PULL_PUPD_R1R0_TYPE,/*19*/
++	MTK_PULL_PUPD_R1R0_TYPE,/*20*/ MTK_PULL_PUPD_R1R0_TYPE,/*21*/
++	MTK_PULL_PUPD_R1R0_TYPE,/*22*/ MTK_PULL_PUPD_R1R0_TYPE,/*23*/
++	MTK_PULL_PUPD_R1R0_TYPE,/*24*/ MTK_PULL_PUPD_R1R0_TYPE,/*25*/
++	MTK_PULL_PUPD_R1R0_TYPE,/*26*/ MTK_PULL_PUPD_R1R0_TYPE,/*27*/
++	MTK_PULL_PUPD_R1R0_TYPE,/*28*/ MTK_PULL_PUPD_R1R0_TYPE,/*29*/
++	MTK_PULL_PUPD_R1R0_TYPE,/*30*/ MTK_PULL_PUPD_R1R0_TYPE,/*31*/
++	MTK_PULL_PUPD_R1R0_TYPE,/*32*/ MTK_PULL_PUPD_R1R0_TYPE,/*33*/
++	MTK_PULL_PUPD_R1R0_TYPE,/*34*/ MTK_PULL_PUPD_R1R0_TYPE,/*35*/
++	MTK_PULL_PUPD_R1R0_TYPE,/*36*/ MTK_PULL_PUPD_R1R0_TYPE,/*37*/
++	MTK_PULL_PUPD_R1R0_TYPE,/*38*/ MTK_PULL_PUPD_R1R0_TYPE,/*39*/
++	MTK_PULL_PUPD_R1R0_TYPE,/*40*/ MTK_PULL_PUPD_R1R0_TYPE,/*41*/
++	MTK_PULL_PUPD_R1R0_TYPE,/*42*/ MTK_PULL_PUPD_R1R0_TYPE,/*43*/
++	MTK_PULL_PUPD_R1R0_TYPE,/*44*/ MTK_PULL_PUPD_R1R0_TYPE,/*45*/
++	MTK_PULL_PUPD_R1R0_TYPE,/*46*/ MTK_PULL_PUPD_R1R0_TYPE,/*47*/
++	MTK_PULL_PUPD_R1R0_TYPE,/*48*/ MTK_PULL_PUPD_R1R0_TYPE,/*49*/
++	MTK_PULL_PUPD_R1R0_TYPE,/*50*/ MTK_PULL_PUPD_R1R0_TYPE,/*51*/
++	MTK_PULL_PUPD_R1R0_TYPE,/*52*/ MTK_PULL_PUPD_R1R0_TYPE,/*53*/
++	MTK_PULL_PUPD_R1R0_TYPE,/*54*/ MTK_PULL_PUPD_R1R0_TYPE,/*55*/
++	MTK_PULL_PUPD_R1R0_TYPE,/*56*/ MTK_PULL_PUPD_R1R0_TYPE,/*57*/
++	MTK_PULL_PUPD_R1R0_TYPE,/*58*/ MTK_PULL_PUPD_R1R0_TYPE,/*59*/
++	MTK_PULL_PUPD_R1R0_TYPE,/*60*/ MTK_PULL_PUPD_R1R0_TYPE,/*61*/
++	MTK_PULL_PUPD_R1R0_TYPE,/*62*/ MTK_PULL_PUPD_R1R0_TYPE,/*63*/
++	MTK_PULL_PUPD_R1R0_TYPE,/*64*/ MTK_PULL_PUPD_R1R0_TYPE,/*65*/
++	MTK_PULL_PUPD_R1R0_TYPE,/*66*/ MTK_PULL_PUPD_R1R0_TYPE,/*67*/
++	MTK_PULL_PUPD_R1R0_TYPE,/*68*/ MTK_PULL_PU_PD_TYPE,/*69*/
++	MTK_PULL_PU_PD_TYPE,/*70*/ MTK_PULL_PU_PD_TYPE,/*71*/
++	MTK_PULL_PU_PD_TYPE,/*72*/ MTK_PULL_PU_PD_TYPE,/*73*/
++	MTK_PULL_PU_PD_TYPE,/*74*/ MTK_PULL_PU_PD_TYPE,/*75*/
++	MTK_PULL_PU_PD_TYPE,/*76*/ MTK_PULL_PU_PD_TYPE,/*77*/
++	MTK_PULL_PU_PD_TYPE,/*78*/ MTK_PULL_PU_PD_TYPE,/*79*/
++	MTK_PULL_PU_PD_TYPE,/*80*/ MTK_PULL_PU_PD_TYPE,/*81*/
++	MTK_PULL_PU_PD_TYPE,/*82*/ MTK_PULL_PU_PD_TYPE,/*83*/
++	MTK_PULL_PU_PD_TYPE,/*84*/ MTK_PULL_PU_PD_TYPE,/*85*/
++	MTK_PULL_PU_PD_TYPE,/*86*/ MTK_PULL_PU_PD_TYPE,/*87*/
++	MTK_PULL_PU_PD_TYPE,/*88*/ MTK_PULL_PU_PD_TYPE,/*89*/
++	MTK_PULL_PU_PD_TYPE,/*90*/ MTK_PULL_PU_PD_TYPE,/*91*/
++	MTK_PULL_PU_PD_TYPE,/*92*/ MTK_PULL_PU_PD_TYPE,/*93*/
++	MTK_PULL_PU_PD_TYPE,/*94*/ MTK_PULL_PU_PD_TYPE,/*95*/
++	MTK_PULL_PU_PD_TYPE,/*96*/ MTK_PULL_PU_PD_TYPE,/*97*/
++	MTK_PULL_PU_PD_TYPE,/*98*/ MTK_PULL_PU_PD_TYPE,/*99*/
++	MTK_PULL_PU_PD_TYPE,/*100*/
++};
++
+ static const struct mtk_pin_reg_calc mt7986_reg_cals[] = {
+ 	[PINCTRL_PIN_REG_MODE] = MTK_RANGE(mt7986_pin_mode_range),
+ 	[PINCTRL_PIN_REG_DIR] = MTK_RANGE(mt7986_pin_dir_range),
+@@ -866,6 +920,7 @@ static struct mtk_pin_soc mt7986a_data = {
+ 	.ies_present = false,
+ 	.base_names = mt7986_pinctrl_register_base_names,
+ 	.nbase_names = ARRAY_SIZE(mt7986_pinctrl_register_base_names),
++	.pull_type = mt7986_pull_type,
+ 	.bias_set_combo = mtk_pinconf_bias_set_combo,
+ 	.bias_get_combo = mtk_pinconf_bias_get_combo,
+ 	.drive_set = mtk_pinconf_drive_set_rev1,
+@@ -887,6 +942,7 @@ static struct mtk_pin_soc mt7986b_data = {
+ 	.ies_present = false,
+ 	.base_names = mt7986_pinctrl_register_base_names,
+ 	.nbase_names = ARRAY_SIZE(mt7986_pinctrl_register_base_names),
++	.pull_type = mt7986_pull_type,
+ 	.bias_set_combo = mtk_pinconf_bias_set_combo,
+ 	.bias_get_combo = mtk_pinconf_bias_get_combo,
+ 	.drive_set = mtk_pinconf_drive_set_rev1,
 -- 
 2.34.1
 
