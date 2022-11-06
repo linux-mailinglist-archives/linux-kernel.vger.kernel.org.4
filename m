@@ -2,94 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1FD361E047
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 05:36:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 469D161E04C
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 06:07:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229533AbiKFEf6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Nov 2022 00:35:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51226 "EHLO
+        id S229525AbiKFFHy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Nov 2022 01:07:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbiKFEf4 (ORCPT
+        with ESMTP id S229463AbiKFFHw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Nov 2022 00:35:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1171641D;
-        Sat,  5 Nov 2022 21:35:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 74F9E60BED;
-        Sun,  6 Nov 2022 04:35:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3E2AC433C1;
-        Sun,  6 Nov 2022 04:35:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667709354;
-        bh=kOngOvfZxwx9QxOuj1TrIm7cT3qvXl/KFNkdQIS7quI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tRQEknKdx47ZVpK/iFTkqLOh0c9+4+dtd0GcrZwVYX4WP2QSyunnkONg9JH/JoJzO
-         1cCVwZ2E4wE1bQxmX1JBVkAGGS2ZQUHl3xMuvtUypH0os03N2RdTwus2838GLWTww5
-         e+mhYggFpiGAYVKxUQ3slDooeAzB24qGTMq95NELb8NBZhgzZBaH2+6H4Hz+m6F20k
-         psrpV4nSwpq8KOqQWpkArcsNhUNP1ikCb4Rfs8ALmj5WjrhySQ1pUnMiS9yIFCO84m
-         jwKfayvED/lXhiMHy0jr9AR0TcNuoqBI6w6v62VnaEUs1t+/ir+F0NJ2irYbaOzUel
-         qjjKvGqZSCL0A==
-Date:   Sat, 5 Nov 2022 23:35:52 -0500
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        konrad.dybcio@somainline.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, johan+linaro@kernel.org,
-        quic_jprakash@quicinc.com, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        steev@kali.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH v4 11/12] arm64: dts: qcom: sc8280xp-x13s: Add
- PM8280_{1/2} ADC_TM5 channels
-Message-ID: <20221106043552.f5vrtpzd3en2lauc@builder.lan>
-References: <20221103095810.64606-1-manivannan.sadhasivam@linaro.org>
- <20221103095810.64606-12-manivannan.sadhasivam@linaro.org>
- <Y2Om1N8X/Qkr9rYI@hovoldconsulting.com>
+        Sun, 6 Nov 2022 01:07:52 -0400
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 827ADDEAE;
+        Sat,  5 Nov 2022 22:07:51 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id d3so11718208ljl.1;
+        Sat, 05 Nov 2022 22:07:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=FD7cFXaNxreHZW/S/IEPAaDO1vDMzt9q8nyoz0dU69U=;
+        b=jPm9opIhg0S1ilPGsAvRrk0KML6qSvoVW5z+yJlnipA+AXOdidF0V24962I3lDsIlR
+         X7Cwb7O9/750qXZvuQ+mtdYP7Z7il/5HyGV/yujNbW/rmt+i7LFZl8EOquGkpXMiQCVp
+         ENCHnyThe4UEs6gsg51m+nW8PSW6VyDkUBYLMsUxuRgQb1TieZXyH3snTe8jso2nxIJc
+         7FVZ/qWxdkjxntQLjV2Rl678tS5Z5bwIz4Shuadc+7HgZJ7jI1Pf/Vcbp5Ehu2rS/L2b
+         EvYIeNVN/WCa85I4Vu8TGA2FR6DZbq5yfQSVQB/puczGE3RGVifdstOKjCw/DM3t5OmP
+         cfUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=FD7cFXaNxreHZW/S/IEPAaDO1vDMzt9q8nyoz0dU69U=;
+        b=gcHiOcbxOH62tg6O4xH+lTZiodNkQzmz2iyp1uY/ZNHph4a/qaeqs6W8jlSb5EcKIi
+         nx0FXPpAr2iuncKmYpIfxHW3eOgSU/fYgDWDd+h27KxCmFO4VOAcewE6tSLpl2aNHATH
+         3GByO9SV5cl3DQYgImERE1zijYV2j1BqczHf1MI3GXB/onGjVJeWtVEdbmmtU3OPurLQ
+         6AVhXIMHChBNRh8r9Y6qIeErpBNK7IV+ByAat0zeLtoHnfyGTfitbMAU0z9ObxvhU0nC
+         m7pd7N8lgCg5QnOPi9+Si3ZzSxWdOr9i/9/nfPvkPZ0lrZ/KkJJ6U54iS8FqKJbxvNZD
+         GAGQ==
+X-Gm-Message-State: ACrzQf3ZIpdKnmOE6odb+Cf0eUPq5gS1sCQV9i9gT8PD9/t8SAevQWo9
+        RUQs9C3+ODIgRuKWHuyIVgYsXnZiE+u4rw3+mXI=
+X-Google-Smtp-Source: AMsMyM7eCUET6KyY6J1jtgBrwEFIaPGB9yMh1ig/q3XvD3C0xvwLjBB3DFtd0u7BAjDT/w1phqlXlehlU78knCm5pG4=
+X-Received: by 2002:a2e:ab0d:0:b0:26e:8a39:4cae with SMTP id
+ ce13-20020a2eab0d000000b0026e8a394caemr16268501ljb.138.1667711269196; Sat, 05
+ Nov 2022 22:07:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y2Om1N8X/Qkr9rYI@hovoldconsulting.com>
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+From:   Steve French <smfrench@gmail.com>
+Date:   Sun, 6 Nov 2022 00:07:38 -0500
+Message-ID: <CAH2r5msckOPtJzUmpzRZAQCQG96nRWDFd=b3An_oiZpU=kwLBQ@mail.gmail.com>
+Subject: [GIT PULL] smb3 client fixes
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     CIFS <linux-cifs@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Shyam Prasad N <nspmangalore@gmail.com>,
+        ChenXiaoSong <chenxiaosong2@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 03, 2022 at 12:32:36PM +0100, Johan Hovold wrote:
-> On Thu, Nov 03, 2022 at 03:28:09PM +0530, Manivannan Sadhasivam wrote:
-> > Add ADC_TM5 channels of PM8280_{1/2} for monitoring the temperature from
-> > external thermistors connected to AMUX pins. The temperature measurements
-> > are collected from the PMK8280's VADC channels that expose the
-> > measurements from secondary PMICs PM8280_{1/2}.
-> > 
-> > Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> > Reviewed-by: Konrad Dybcio <konrad.dybcio@somainline.org>
-> > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> > ---
-> >  .../qcom/sc8280xp-lenovo-thinkpad-x13s.dts    | 68 +++++++++++++++++++
-> >  1 file changed, 68 insertions(+)
-> > 
-> > diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
-> > index 7677fe5cf28e..bdaacf1abf9f 100644
-> > --- a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
-> > +++ b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
-> > @@ -254,6 +254,74 @@ pmic-die-temp@403 {
-> >  	};
-> >  };
-> >  
-> > +&pmk8280_adc_tm {
-> 
-> Please try to keep the nodes sorted alphabetically (e.g. this one should
-> go before &pmk8280_pon_pwrkey).
-> 
+Please pull the following changes since commit
+30a0b95b1335e12efef89dd78518ed3e4a71a763:
 
-Thanks for spotting that, I fixed up the order.
+  Linux 6.1-rc3 (2022-10-30 15:19:28 -0700)
 
-Regards,
-Bjorn
+are available in the Git repository at:
+
+  git://git.samba.org/sfrench/cifs-2.6.git tags/6.1-rc4-smb3-fixes
+
+for you to fetch changes up to 542228db2f28fdf775b301f2843e1fe486e7c797:
+
+  cifs: fix use-after-free on the link name (2022-11-04 23:36:54 -0500)
+
+----------------------------------------------------------------
+3 cifs/smb3 fixes,
+- one for symlink handling race (fixes a bug spotted with KASAN)
+- two fix multichannel issues with iterating channels instead of using
+the primary channel. The
+more important one fixes a bug when leases are disabled (ie using
+oplocks instead) that was
+spotted with xfstest generic/013 timing out
+
+----------------------------------------------------------------
+ChenXiaoSong (1):
+      cifs: fix use-after-free on the link name
+
+Shyam Prasad N (2):
+      cifs: always iterate smb sessions using primary channel
+      cifs: avoid unnecessary iteration of tcp sessions
+
+ fs/cifs/cifsfs.c        | 26 +++++++++++++++++++++++++-
+ fs/cifs/inode.c         |  5 -----
+ fs/cifs/misc.c          |  6 +++++-
+ fs/cifs/smb2misc.c      | 81
++++++++++++++++++++++++++++++++++++++++++++++------------------------------------
+ fs/cifs/smb2ops.c       | 30 ++++++++++++++++++------------
+ fs/cifs/smb2transport.c | 19 ++++++++++++-------
+ 6 files changed, 105 insertions(+), 62 deletions(-)
+
+
+-- 
+Thanks,
+
+Steve
