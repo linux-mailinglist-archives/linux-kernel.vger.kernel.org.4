@@ -2,114 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C74161E534
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 19:03:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9AAF61E537
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 19:04:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230408AbiKFSDK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Nov 2022 13:03:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51652 "EHLO
+        id S230037AbiKFSEj convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 6 Nov 2022 13:04:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229947AbiKFSDH (ORCPT
+        with ESMTP id S229919AbiKFSEg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Nov 2022 13:03:07 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98821B4A1;
-        Sun,  6 Nov 2022 10:03:06 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2CF3860D32;
-        Sun,  6 Nov 2022 18:03:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF18EC433D6;
-        Sun,  6 Nov 2022 18:03:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667757785;
-        bh=uuxDn1OITqIDqXPA7ridGX3rAXW+cFLB1pbNkqErXvY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cKOlW8pTjdb8KK9IW6NYiUtQVKx+CHTSjHFA53h2KnIDxSXC80moVIwZ62X90iVTv
-         YoODVvHeoVTjjtnnKQWuyzITRnfZqlsUuDpL/j9vxn2Zl3HVbbRPcPORFohLhFmQtg
-         9MoRuv3IzEnL6uyDcUY3qTNIkbUDvsia7CAkCLpnRa1DtL+dfUX3Z8PL5hbZBNV9Di
-         YwWkeZRX/RAfH1S3DL63aVkTCwvL8OcRogfsbk/nxectFS9PMG4fqnIcyX9FIt8Ug8
-         E/Rz0hnfUIQBF0mTJXPOz+bU3yoI+y//JEhQjFhVPtOxDhevWpM7SS9jyFjEpfKMcu
-         MGaB+BMURUc6Q==
-Date:   Sun, 6 Nov 2022 20:03:00 +0200
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Rohit Nair <rohit.sajan.kumar@oracle.com>
-Cc:     jgg@ziepe.ca, saeedm@nvidia.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, manjunath.b.patil@oracle.com,
-        rama.nichanamatlu@oracle.com,
-        Michael Guralnik <michaelgur@nvidia.com>
-Subject: Re: [External] : Re: [PATCH 1/1] IB/mlx5: Add a signature check to
- received EQEs and CQEs
-Message-ID: <Y2f21JKWkQg8KtyK@unreal>
-References: <20221005174521.63619-1-rohit.sajan.kumar@oracle.com>
- <Y0UYml07lb1I38MQ@unreal>
- <5bab650a-3c0b-cfd2-d6a7-2e39c8474514@oracle.com>
- <Y1p4OEIWNObQCDoG@unreal>
- <fdb9f874-1998-5270-4360-61c74c34294d@oracle.com>
+        Sun, 6 Nov 2022 13:04:36 -0500
+Received: from relay.hostedemail.com (smtprelay0017.hostedemail.com [216.40.44.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 390D026F8;
+        Sun,  6 Nov 2022 10:04:36 -0800 (PST)
+Received: from omf18.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay03.hostedemail.com (Postfix) with ESMTP id 224DBA01AD;
+        Sun,  6 Nov 2022 18:04:33 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf18.hostedemail.com (Postfix) with ESMTPA id 76E7230;
+        Sun,  6 Nov 2022 18:04:06 +0000 (UTC)
+Message-ID: <c038e06504733e8dc6830f082c8522c60895fd8e.camel@perches.com>
+Subject: Re: [RFC v2 3/3] mm, printk: introduce new format %pGt for page_type
+From:   Joe Perches <joe@perches.com>
+To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>, linux-mm@kvack.org
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Minchan Kim <minchan@kernel.org>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Hugh Dickins <hughd@google.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        David Hildenbrand <david@redhat.com>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Sun, 06 Nov 2022 10:04:25 -0800
+In-Reply-To: <20221106140355.294845-4-42.hyeyoo@gmail.com>
+References: <20221106140355.294845-1-42.hyeyoo@gmail.com>
+         <20221106140355.294845-4-42.hyeyoo@gmail.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <fdb9f874-1998-5270-4360-61c74c34294d@oracle.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_NONE,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
+        version=3.4.6
+X-Stat-Signature: btrbetsb33g9g991fgia9znt4oaqtubf
+X-Rspamd-Server: rspamout01
+X-Rspamd-Queue-Id: 76E7230
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX1/TDiNWGzwXgd/sBaXkZIB0ArMrI/YeeY0=
+X-HE-Tag: 1667757846-282636
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 28, 2022 at 04:48:53PM -0700, Rohit Nair wrote:
-> On 10/27/22 5:23 AM, Leon Romanovsky wrote:
-> > On Tue, Oct 25, 2022 at 10:44:12AM -0700, Rohit Nair wrote:
-> > > Hey Leon,
-> > > 
-> > > Please find my replies to your comments here below:
-> > 
-> > <...>
-> > 
-> > > > 
-> > > > > This patch does not introduce any significant performance degradations
-> > > > > and has been tested using qperf.
-> > > > What does it mean? You made changes in kernel verbs flow, they are not
-> > > > executed through qperf.
-> > > We also conducted several extensive performance tests using our test-suite
-> > > which utilizes rds-stress and also saw no significant performance
-> > > degrdations in those results.
-> > 
-> > What does it mean "also"? Your change is applicable ONLY for kernel path.
-> > 
-> > Anyway, I'm not keen adding rare debug code to performance critical path.
-> > 
-> > Thanks
-> 
-> rds-stress exercises the codepath we are modifying here. rds-stress didn't
-> show much of performance degrade when we ran internally. We also requested
-> our DB team for performance regression testing and this change passed their
-> test suite. This motivated us to submit this to upstream.
-> 
-> If there is any other test that is better suited for this change, I am
-> willing to test it. Please let me know if you have something in mind. We can
-> revisit this patch after such a test may be.
-> 
-> I agree that, this was a rare debug scenario, but it took lot more than
-> needed to narrow down[engaged vendor on live sessions]. We are adding this
-> in the hope to finding the cause at the earliest or at least point us which
-> direction to look at. We also requested the vendor[mlx] to include some
-> diagnostics[HW counter], which can help us narrow it faster next time. This
-> is our attempt to add kernel side of diagnostics.
+On Sun, 2022-11-06 at 23:03 +0900, Hyeonggon Yoo wrote:
+> dump_page() uses %pGp format to print 'flags' field of struct page.
+> As some page flags (e.g. PG_buddy, see page-flags.h for more details)
+> are set in page_type field, introduce %pGt format which provides
+> human readable output of page_type. And use it in dump_page().
+[]
+> diff --git a/lib/vsprintf.c b/lib/vsprintf.c
+[]
+> @@ -2056,6 +2056,28 @@ char *format_page_flags(char *buf, char *end, unsigned long flags)
+>  	return buf;
+>  }
+>  
+> +static
 
-The thing is that "vendor" failed to explain internally if this debug
-code is useful. Like I said, extremely rare debug code shouldn't be part
-of main data path.
+noinline_for_stack ?
 
-Thanks
+> +char *format_page_type(char *buf, char *end, unsigned int page_type)
+> +{
+> +	if (!(page_type & PAGE_TYPE_BASE))
+> +		return string(buf, end, "no type for user-mapped page", default_str_spec);
 
-> 
-> Feel free to share your suggestions
-> 
-> Thanks
-> 
+Might be better with something like '%pGt: no type..."
+
