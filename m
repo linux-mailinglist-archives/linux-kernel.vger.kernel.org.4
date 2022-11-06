@@ -2,99 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1334361E71C
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 23:53:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67EEB61E720
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 23:54:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230174AbiKFWxK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Nov 2022 17:53:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32898 "EHLO
+        id S230269AbiKFWyO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Nov 2022 17:54:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230308AbiKFWxG (ORCPT
+        with ESMTP id S229993AbiKFWyM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Nov 2022 17:53:06 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A2F910065
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Nov 2022 14:53:00 -0800 (PST)
+        Sun, 6 Nov 2022 17:54:12 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 938056153;
+        Sun,  6 Nov 2022 14:54:11 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 258F360BA0
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Nov 2022 22:53:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B14DC433D6;
-        Sun,  6 Nov 2022 22:52:59 +0000 (UTC)
-Date:   Sun, 6 Nov 2022 17:52:57 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Anna-Maria Gleixner <anna-maria@linutronix.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Julia Lawall <Julia.Lawall@inria.fr>
-Subject: Re: [PATCH v5a 5/5] treewide: Convert del_timer*() to
- timer_shutdown*()
-Message-ID: <20221106175257.3f1b9a55@rorschach.local.home>
-In-Reply-To: <CAHk-=whO5PXEzWwf=4=fvdqim6cGTczVoN4KJ5H+dabHo-OTHw@mail.gmail.com>
-References: <20221106054535.709068702@goodmis.org>
-        <20221106054649.099333291@goodmis.org>
-        <CAHk-=wiD3VWYqgO7JLqRCJvYHiO5RicGAERH1dWQ2pDqnXDy6g@mail.gmail.com>
-        <20221106160956.2414d73f@rorschach.local.home>
-        <CAHk-=wjYY9k7TzyJvWOPSPLL+jHkdogyWuOUyStfE5h1=0Qk0w@mail.gmail.com>
-        <20221106165220.4d7e5dac@rorschach.local.home>
-        <CAHk-=whO5PXEzWwf=4=fvdqim6cGTczVoN4KJ5H+dabHo-OTHw@mail.gmail.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3DD7EB80C85;
+        Sun,  6 Nov 2022 22:54:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8997CC433D6;
+        Sun,  6 Nov 2022 22:54:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667775248;
+        bh=CCOXKsk1YG6cytIhCugUYJ5LpHswjB66YukQZnjJrb4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=dHI5IDuxp1uLkeFTUcpRH3bRKYCLaI4GmrmUFk/iFG3nvE5gcAwQBdoS7zh+QeLu1
+         7f5/j4eVo3ADiBkrPFu/GxybEOmWlwVtRjHWfwrTC/46ZDNAN6kUIpmNY3kZksY90I
+         OdbFe6BYMYjJZALw9ciO/Hcb6dxTBoyEIn3mcecQIwDIH6TpGF6FYqMhLX+OckU8ym
+         aF3Ikni8lpbyq1Qcy/7iN3Mlil65LlBdW0XSvo3nc+SnRQo7v+czAs1Esld+tX+W5A
+         TgFsXXSFhLpPhzCfLZnEwLMjU1Sp615Ol+5fZZSPZV1vBPaTavbDBf4MfVNUxdNb0X
+         hebEDEeu3Bj9w==
+Date:   Sun, 6 Nov 2022 23:54:06 +0100
+From:   Pratyush Yadav <pratyush@kernel.org>
+To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+Cc:     Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Michael Walle <michael@walle.cc>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-mtd@lists.infradead.org, linux-spi@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        Bayi Cheng <bayi.cheng@mediatek.com>
+Subject: Re: [PATCH] mtd: spi-nor: Fix the number of bytes for the dummy
+ cycles
+Message-ID: <20221106225406.o36syeso4prdi7yn@yadavpratyush.com>
+References: <20221031124633.13189-1-allen-kh.cheng@mediatek.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221031124633.13189-1-allen-kh.cheng@mediatek.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 6 Nov 2022 14:40:14 -0800
-Linus Torvalds <torvalds@linux-foundation.org> wrote:
-
-> I do think that you should just remove that E expression and the
-> "function = E" part.
+On 31/10/22 08:46PM, Allen-KH Cheng wrote:
+> The number of bytes used by spi_nor_spimem_check_readop() may be
+> incorrect for the dummy cycles. Since nor->read_dummy is not initialized
+> before spi_nor_spimem_adjust_hwcaps().
 > 
-> Really, _any_ use of the timer after the timer delete makes it questionable,
+> We use both mode and wait state clock cycles instead of nor->read_dummy.
 > 
-> It doesn't change the patch in my testing, but I think it's silly to
-> have that very specific pattern, when the more general case of "hey,
-> if you use the timer after deleting it, it's not obvious that it
-> should be a shutdown any more" just is more sensible anyway.
+> Fixes: 0e30f47232ab ("mtd: spi-nor: add support for DTR protocol")
+> Co-developed-by: Bayi Cheng <bayi.cheng@mediatek.com>
+> Signed-off-by: Bayi Cheng <bayi.cheng@mediatek.com>
+> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+> ---
+>  drivers/mtd/spi-nor/core.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
+> index 6c921eb3fadb..8b9c318a0ad4 100644
+> --- a/drivers/mtd/spi-nor/core.c
+> +++ b/drivers/mtd/spi-nor/core.c
+> @@ -1914,7 +1914,8 @@ static int spi_nor_spimem_check_readop(struct spi_nor *nor,
+>  	spi_nor_spimem_setup_op(nor, &op, read->proto);
+>  
+>  	/* convert the dummy cycles to the number of bytes */
+> -	op.dummy.nbytes = (nor->read_dummy * op.dummy.buswidth) / 8;
+> +	op.dummy.nbytes = (read->num_mode_clocks + read->num_wait_states) *
+> +			  op.dummy.buswidth / 8;
 
-OK, I updated the script to:
+Good catch!
 
-@@
-expression ptr, slab;
-identifier timer, rfield;
-@@
-(
--       del_timer(&ptr->timer);
-+       timer_shutdown(&ptr->timer);
-|
--       del_timer_sync(&ptr->timer);
-+       timer_shutdown_sync(&ptr->timer);
-)
-  ... when strict
-      when != ptr->timer
-(
-        kfree_rcu(ptr, rfield);
-|
-        kmem_cache_free(slab, ptr);
-|
-        kfree(ptr);
-)
+Reviewed-by: Pratyush Yadav <pratyush@kernel.org>
 
-And produced no difference from https://lore.kernel.org/all/20221106212702.547242324@goodmis.org/
+>  	if (spi_nor_protocol_is_dtr(nor->read_proto))
+>  		op.dummy.nbytes *= 2;
+>  
+> -- 
+> 2.18.0
+> 
 
-I can post a v7a with the updated change log and also Guenter's
-tested-by tag. But the patches will remain the same. Are you going to
-just take that then?
-
--- Steve
+-- 
+Regards,
+Pratyush Yadav
