@@ -2,48 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27FC661E4F3
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 18:39:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B90D061E4F7
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 18:40:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230363AbiKFRjv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Nov 2022 12:39:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42754 "EHLO
+        id S230384AbiKFRkw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Nov 2022 12:40:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229919AbiKFRjs (ORCPT
+        with ESMTP id S229919AbiKFRku (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Nov 2022 12:39:48 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F4D163D5;
-        Sun,  6 Nov 2022 09:39:47 -0800 (PST)
+        Sun, 6 Nov 2022 12:40:50 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67F0763D5;
+        Sun,  6 Nov 2022 09:40:49 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1D754B80C7E;
-        Sun,  6 Nov 2022 17:39:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB744C433C1;
-        Sun,  6 Nov 2022 17:39:42 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 235ABB80C81;
+        Sun,  6 Nov 2022 17:40:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02AA5C433D7;
+        Sun,  6 Nov 2022 17:40:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667756384;
-        bh=+Z+VFK9uwo8rXQGuAGrs3LDCWmJz79959MQPWjHFGEA=;
+        s=k20201202; t=1667756446;
+        bh=q/yAJG+gPPwQsHpI0BDyRwMkyjUzzL21ov3sPjMsNJI=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=S4kFCxfqKAiM1pOUXQwa3dPqGFz2Pdsqu/lY3B3WRZRxF2GLgWUGuoXGbLdxqFlBU
-         cEawzkYgteh7q9R3BaIx+dFabeehiqGutouUnDe112z0kzlxNnAzJDIWQ54WIzqHjc
-         Fg9oORtz9RRw612hu+KZWZEm6SU0KVSM90ELBw7uJg16o2Oea4KrB1PgnFp3hT7Weq
-         8IvlyYngiqi4pmekXRVb+PgfBcgWWlTBCxrk9V+kwPJiEcEcNVyk/9564bEzNn6IAY
-         X7VBz0di6tikurD8AbEhCfpt1r8V1j743PqDAGVfEwlIKtLM4nDuULBhODQO6BI2Ym
-         qqG9R8IlQngLQ==
-Date:   Sun, 6 Nov 2022 17:39:37 +0000
+        b=WCfgzYSscEuCtTd8yXBem5vLLMAzsO9bMMWxKsajo7rHSSPzwng/6JlTDVG9gvGwu
+         qCLbbLXCsHaPBpfUAjKRjUjgbE1iRrCQAa9LdO7dQB0OZ66DQUBEfGqxQAvbIXHLwR
+         NW1IGwJxBpfd1FTK3rio3EH/gcqmEz1xqrpNTSko4TGBxxkuujwduRdxT4L50krI9L
+         nFQfrzneMIEhTuDpivWYoLxjtGFEydlK51LzJMDYvzKlmVOOhejg/qiesjlaBC0HJx
+         MhTKHy0NP+ba5wdFb5EsQWUAWC1PoGSnFDT5bnlBZJzdpzdM2vft0915C4plyuQWyU
+         4dhyJIDyGdrrg==
+Date:   Sun, 6 Nov 2022 17:40:38 +0000
 From:   Jonathan Cameron <jic23@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Antoniu Miclaus <antoniu.miclaus@analog.com>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-iio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/4] dt-bindings: iio: frequency: add adf4377 doc
-Message-ID: <20221106173937.37c00e0a@jic23-huawei>
-In-Reply-To: <f551f177-8163-283d-cf1e-23b09ff35489@linaro.org>
+To:     Antoniu Miclaus <antoniu.miclaus@analog.com>
+Cc:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-iio@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 0/3] Add support for ADF4377
+Message-ID: <20221106174038.20866863@jic23-huawei>
+In-Reply-To: <20221104092802.90725-1-antoniu.miclaus@analog.com>
 References: <20221104092802.90725-1-antoniu.miclaus@analog.com>
-        <20221104092802.90725-2-antoniu.miclaus@analog.com>
-        <f551f177-8163-283d-cf1e-23b09ff35489@linaro.org>
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -57,41 +55,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > +
-> > +required:
-> > +  - compatible
-> > +  - reg
-> > +  - clocks
-> > +  - clock-names
-> > +  
-> 
-> allOf with reference to spi-peripheral-props.yaml
-> 
-> > +additionalProperties: false
-switch to unevaluatedProperties: false
-as well when you do the spi-peripheral-props.yaml addition.
+On Fri, 4 Nov 2022 11:27:58 +0200
+Antoniu Miclaus <antoniu.miclaus@analog.com> wrote:
 
-Easy to forget.
-
-Jonathan
-
-> > +
-> > +examples:
-> > +  - |
-> > +    spi {
-> > +        #address-cells = <1>;
-> > +        #size-cells = <0>;
-> > +        frequency@0 {
-> > +            compatible = "adi,adf4377";
-> > +            reg = <0>;
-> > +            spi-max-frequency = <10000000>;
-> > +            clocks = <&adf4377_ref_in>;
-> > +            clock-names = "ref_in";
-> > +        };
-> > +    };
-> > +...  
+> The ADF4377 is a high performance, ultralow jitter, dual output integer-N
+> phased locked loop (PLL) with integrated voltage controlled oscillator
+> (VCO) ideally suited for data converter and mixed signal front end (MxFE)
+> clock applications.
 > 
-> Best regards,
-> Krzysztof
+> Antoniu Miclaus (3):
+>   dt-bindings: iio: frequency: add adf4377 doc
+>   iio: frequency: adf4377: add support for ADF4377
+>   Documentation: ABI: testing: adf4377: add ABI docs
+
+4 patches in series. I guess you cut and paste from a different version
+and overwrote that bit...
+
+J
+
+> 
+>  .../testing/sysfs-bus-iio-frequency-adf4377   |   32 +
+>  .../bindings/iio/frequency/adi,adf4377.yaml   |   78 ++
+>  drivers/iio/frequency/Kconfig                 |   10 +
+>  drivers/iio/frequency/Makefile                |    1 +
+>  drivers/iio/frequency/adf4377.c               | 1155 +++++++++++++++++
+>  5 files changed, 1276 insertions(+)
+>  create mode 100644 Documentation/ABI/testing/sysfs-bus-iio-frequency-adf4377
+>  create mode 100644 Documentation/devicetree/bindings/iio/frequency/adi,adf4377.yaml
+>  create mode 100644 drivers/iio/frequency/adf4377.c
 > 
 
