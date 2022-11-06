@@ -2,224 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3624261E063
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 06:36:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2955261E05E
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 06:35:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229624AbiKFFgW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Nov 2022 01:36:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58056 "EHLO
+        id S229555AbiKFFfU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Nov 2022 01:35:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229630AbiKFFgP (ORCPT
+        with ESMTP id S229464AbiKFFfP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Nov 2022 01:36:15 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8736965AE
-        for <linux-kernel@vger.kernel.org>; Sat,  5 Nov 2022 22:36:09 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id q9so7912362pfg.5
-        for <linux-kernel@vger.kernel.org>; Sat, 05 Nov 2022 22:36:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OkVJDMV1dLbnY0a97cBJ8dALMRcKW3eBADQn81KDV+U=;
-        b=TGQEp1NiL7c1ui00qNnf0UpvEYUfVDnvSWok5/lR1f3GpJuHW4OC/Cy4XizOe/t0ip
-         N/QNbJBzpAANWnVGttDiJJUNbk9lxRVS9gcZs4Hfi4EhqeIFMWpGKxxg7qaYuZqoLHA+
-         xyvRmoHhKlBvLHXekit6pWiQKYKblnFkUj/joOnpAHPtSVPrSIJk5MECEyGoYT8/jBvr
-         EEvIWFhgkknw7ZeQvMP073JHKzeP5RSBTrZmbPR1ZYKGA+nrfo5G1LyIuCD2GdTqUClm
-         r6FL1ff/QylU5/ODdPaydMSIpahmawJYHWTSVWfsmJKz1XfGSEq7JE32vssD2KT6xm7G
-         YyCg==
+        Sun, 6 Nov 2022 01:35:15 -0400
+Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9F6F62E1;
+        Sat,  5 Nov 2022 22:35:10 -0700 (PDT)
+Received: by mail-pf1-f172.google.com with SMTP id g62so7892680pfb.10;
+        Sat, 05 Nov 2022 22:35:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=OkVJDMV1dLbnY0a97cBJ8dALMRcKW3eBADQn81KDV+U=;
-        b=cWs4xei4dO+bZcopBLfH+1FRr6+x6KSy2RfwyiX0rAOrffupXEf6aJmbmF41kep3Iq
-         EPrS8faV7IVXafmBZ3CGq5BMWMzJJ6d+mCzEH0fHCwDhfcMWetACMIaujtCaWcqVvdO3
-         N6gA9WO2juTPtqOhMq9CzV++oLSB0faUJYiojHqY07yLUl0qCrJxuh5FOSbXOX38idWN
-         D1Yv2IcVMuJ+BnCIUy0gD18sqyIFMPvJUp/7m8TEx1KwRR3SxJKRXpVspDFGDv9ArOtS
-         XfhgBKpcReMlmhRg38D8w8l0l9Hf4cqcAAHpDpdrtFIbzJMzfqJ3Xcfhs3LHkX5Vz+LZ
-         q+1Q==
-X-Gm-Message-State: ACrzQf1HlQvm4DTHH2Md4HxM6ifhuDgDmSxMbHrJOxjcClXSRgYk5hVP
-        +Bik0yJqXJVIvrBeEIevD5bqdg==
-X-Google-Smtp-Source: AMsMyM4aQBjF5n9cfBTDcIkXg3xqJ/wcoAF2kqdMjXXgWaF+YSnqqc6ABveTu0wXNngWuA4McFoR7g==
-X-Received: by 2002:a05:6a00:1251:b0:56d:cabd:7207 with SMTP id u17-20020a056a00125100b0056dcabd7207mr26920231pfi.45.1667712968824;
-        Sat, 05 Nov 2022 22:36:08 -0700 (PDT)
-Received: from devtp.bytedance.net ([139.177.225.243])
-        by smtp.gmail.com with ESMTPSA id q27-20020aa7961b000000b0056bee236e9csm2127121pfg.142.2022.11.05.22.36.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 05 Nov 2022 22:36:08 -0700 (PDT)
-From:   wuqiang <wuqiang.matt@bytedance.com>
-To:     mhiramat@kernel.org, davem@davemloft.net,
-        anil.s.keshavamurthy@intel.com, naveen.n.rao@linux.ibm.com,
-        rostedt@goodmis.org, peterz@infradead.org,
-        akpm@linux-foundation.org, sander@svanheule.net,
-        ebiggers@google.com, dan.j.williams@intel.com, jpoimboe@kernel.org
-Cc:     linux-kernel@vger.kernel.org, lkp@intel.com, mattwu@163.com,
-        wuqiang <wuqiang.matt@bytedance.com>
-Subject: [PATCH v5 4/4] kprobes: freelist.h removed
-Date:   Sun,  6 Nov 2022 13:34:41 +0800
-Message-Id: <20221106053441.103199-5-wuqiang.matt@bytedance.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221106053441.103199-1-wuqiang.matt@bytedance.com>
-References: <20221102023012.6362-1-wuqiang.matt@bytedance.com>
- <20221106053441.103199-1-wuqiang.matt@bytedance.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KdcHygyluxlSKZYhnOmBthfqKtj/GWkjEK+v9KvjztY=;
+        b=fW6UwGe8o/Ye2VvIC4G/mRQYZUqUzC3TICxqAIhCgigDzUlNKtzQZ3DWpWaSIS7Dx0
+         Lj0mYdsFtfLSb/VXvUGMe4G1U3O09R1Ialntx4TNGj/8wU+QOBn6ivqyvZOZDScyOwG/
+         +1vyZUR+7Zq/qBzjZ/d4bWsCRCPY2MgR+/H16B30r3F1N9jqhH0FP4LeeYisW9MQe6Cw
+         k8oS33/VpzLXjqnQzuYp1JXwCciUAyDfC1npGZheSNYzNBI2yjI8yLse6raoOV7DJnPe
+         qq1dpVRxoLoQD+6fWi+XU6L41P0fWEfijhddktjTZEr8l8jBLzBK3KjzLRsBKIam7FOw
+         00TA==
+X-Gm-Message-State: ACrzQf1XqOlAZRrRq/8j5rrQFF5XpJZbN31Jccf9VS2pWG1iom/dp3/y
+        jmfxdJ8Lqus9pt9JPPqzdZ6rd8CUQIRBWrgYlFyPD4Ic28UlSQ==
+X-Google-Smtp-Source: AMsMyM7Q8GwZh9SKm3Tco3931Q8FVqiPXIX2xv52FjuT3th+35TD7IfyBqv8xJC1D1lvq8zZgm1YJMpabzvuqegeaYI=
+X-Received: by 2002:a65:6894:0:b0:470:76d:6f4a with SMTP id
+ e20-20020a656894000000b00470076d6f4amr19455046pgt.457.1667712910263; Sat, 05
+ Nov 2022 22:35:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20221104073659.414147-1-mailhol.vincent@wanadoo.fr>
+ <20221104171604.24052-1-mailhol.vincent@wanadoo.fr> <20221104171604.24052-4-mailhol.vincent@wanadoo.fr>
+ <Y2Ydf6UxVvTe8Zmz@kroah.com> <CAMZ6RqJkzag-PGuzHcDQkSXjqH6d8=uAe-UN8VXUoNWX2x+qbw@mail.gmail.com>
+ <CAMZ6RqLMGfW0QcNdBKhfwayV=+FNHhvM_-ob0UvL=o6=zN0J7A@mail.gmail.com>
+ <Y2afm9xFIvJnwXh/@kroah.com> <Y2cDlrNjL5YSAPm2@rowland.harvard.edu>
+In-Reply-To: <Y2cDlrNjL5YSAPm2@rowland.harvard.edu>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Sun, 6 Nov 2022 14:34:58 +0900
+Message-ID: <CAMZ6Rq+hc+YObxCAFL8Go3gvc8budzdaxLZY2b4GexcG1xHzdQ@mail.gmail.com>
+Subject: Re: [PATCH v2 3/3] can: etas_es58x: report the firmware version
+ through ethtool
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch will remove freelist.h from kernel source tree, since the
-only use cases (kretprobe and rethook) are converted to objpool.
+On Sun. 6 Nov. 2022 at 09:48, Alan Stern <stern@rowland.harvard.edu> wrote:
+> On Sat, Nov 05, 2022 at 06:38:35PM +0100, Greg Kroah-Hartman wrote:
+> > On Sun, Nov 06, 2022 at 02:21:11AM +0900, Vincent MAILHOL wrote:
+> > > On Sat. 5 Nov. 2022 at 18:27, Vincent MAILHOL
+> > > <mailhol.vincent@wanadoo.fr> wrote:
+> > > > On Sat. 5 Nov. 2022 at 17:36, Greg Kroah-Hartman
+> > > > <gregkh@linuxfoundation.org> wrote:
+> > It's late right now, and I can't remember the whole USB spec, but I
+> > think the device provides a list of the string ids that are valid for
+> > it.  If so, we can add that to sysfs for any USB device out there, no
+> > matter the string descriptor number.
+>
+> No, there is no such list.
+>
+> > If not, maybe we can just iterate the 255 values and populate sysfs
+> > files if they are present?  I'll dig up the USB spec tomorrow...
+>
+> Yes, we could do that.  But the filename would have to be the string
+> id, which is not meaningful.  We wouldn't be able to have labels like
+> "product-info" unless somehow a driver could provide the label.
 
-Signed-off-by: wuqiang <wuqiang.matt@bytedance.com>
----
- include/linux/freelist.h | 129 ---------------------------------------
- 1 file changed, 129 deletions(-)
- delete mode 100644 include/linux/freelist.h
+My shot on this would be like this:
 
-diff --git a/include/linux/freelist.h b/include/linux/freelist.h
-deleted file mode 100644
-index fc1842b96469..000000000000
---- a/include/linux/freelist.h
-+++ /dev/null
-@@ -1,129 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause */
--#ifndef FREELIST_H
--#define FREELIST_H
--
--#include <linux/atomic.h>
--
--/*
-- * Copyright: cameron@moodycamel.com
-- *
-- * A simple CAS-based lock-free free list. Not the fastest thing in the world
-- * under heavy contention, but simple and correct (assuming nodes are never
-- * freed until after the free list is destroyed), and fairly speedy under low
-- * contention.
-- *
-- * Adapted from: https://moodycamel.com/blog/2014/solving-the-aba-problem-for-lock-free-free-lists
-- */
--
--struct freelist_node {
--	atomic_t		refs;
--	struct freelist_node	*next;
--};
--
--struct freelist_head {
--	struct freelist_node	*head;
--};
--
--#define REFS_ON_FREELIST 0x80000000
--#define REFS_MASK	 0x7FFFFFFF
--
--static inline void __freelist_add(struct freelist_node *node, struct freelist_head *list)
--{
--	/*
--	 * Since the refcount is zero, and nobody can increase it once it's
--	 * zero (except us, and we run only one copy of this method per node at
--	 * a time, i.e. the single thread case), then we know we can safely
--	 * change the next pointer of the node; however, once the refcount is
--	 * back above zero, then other threads could increase it (happens under
--	 * heavy contention, when the refcount goes to zero in between a load
--	 * and a refcount increment of a node in try_get, then back up to
--	 * something non-zero, then the refcount increment is done by the other
--	 * thread) -- so if the CAS to add the node to the actual list fails,
--	 * decrese the refcount and leave the add operation to the next thread
--	 * who puts the refcount back to zero (which could be us, hence the
--	 * loop).
--	 */
--	struct freelist_node *head = READ_ONCE(list->head);
--
--	for (;;) {
--		WRITE_ONCE(node->next, head);
--		atomic_set_release(&node->refs, 1);
--
--		if (!try_cmpxchg_release(&list->head, &head, node)) {
--			/*
--			 * Hmm, the add failed, but we can only try again when
--			 * the refcount goes back to zero.
--			 */
--			if (atomic_fetch_add_release(REFS_ON_FREELIST - 1, &node->refs) == 1)
--				continue;
--		}
--		return;
--	}
--}
--
--static inline void freelist_add(struct freelist_node *node, struct freelist_head *list)
--{
--	/*
--	 * We know that the should-be-on-freelist bit is 0 at this point, so
--	 * it's safe to set it using a fetch_add.
--	 */
--	if (!atomic_fetch_add_release(REFS_ON_FREELIST, &node->refs)) {
--		/*
--		 * Oh look! We were the last ones referencing this node, and we
--		 * know we want to add it to the free list, so let's do it!
--		 */
--		__freelist_add(node, list);
--	}
--}
--
--static inline struct freelist_node *freelist_try_get(struct freelist_head *list)
--{
--	struct freelist_node *prev, *next, *head = smp_load_acquire(&list->head);
--	unsigned int refs;
--
--	while (head) {
--		prev = head;
--		refs = atomic_read(&head->refs);
--		if ((refs & REFS_MASK) == 0 ||
--		    !atomic_try_cmpxchg_acquire(&head->refs, &refs, refs+1)) {
--			head = smp_load_acquire(&list->head);
--			continue;
--		}
--
--		/*
--		 * Good, reference count has been incremented (it wasn't at
--		 * zero), which means we can read the next and not worry about
--		 * it changing between now and the time we do the CAS.
--		 */
--		next = READ_ONCE(head->next);
--		if (try_cmpxchg_acquire(&list->head, &head, next)) {
--			/*
--			 * Yay, got the node. This means it was on the list,
--			 * which means should-be-on-freelist must be false no
--			 * matter the refcount (because nobody else knows it's
--			 * been taken off yet, it can't have been put back on).
--			 */
--			WARN_ON_ONCE(atomic_read(&head->refs) & REFS_ON_FREELIST);
--
--			/*
--			 * Decrease refcount twice, once for our ref, and once
--			 * for the list's ref.
--			 */
--			atomic_fetch_add(-2, &head->refs);
--
--			return head;
--		}
--
--		/*
--		 * OK, the head must have changed on us, but we still need to decrement
--		 * the refcount we increased.
--		 */
--		refs = atomic_fetch_add(-1, &prev->refs);
--		if (refs == REFS_ON_FREELIST + 1)
--			__freelist_add(prev, list);
--	}
--
--	return NULL;
--}
--
--#endif /* FREELIST_H */
--- 
-2.34.1
+diff --git a/include/linux/mod_devicetable.h b/include/linux/mod_devicetable.h
+index 549590e9c644..d0a4fc3ffe07 100644
+--- a/include/linux/mod_devicetable.h
++++ b/include/linux/mod_devicetable.h
+@@ -77,6 +77,19 @@ struct ieee1394_device_id {
+  * Use the flag values to control which fields are compared.
+  */
 
++/**
++ * struct custom_string - information of custom string and their indexes
++ * @idx: Index of the custom string descriptor.
++ * @label: Mnemotechnic, will be used as a filename for the sysfs entry.
++ *
++ * USB devices might expose some information in some customs strings. Drivers
++ * can use this structure to inform the USB core of where to find these.
++ */
++struct custom_string {
++       __u8 idx;
++       const char *label;
++};
++
+ /**
+  * struct usb_device_id - identifies USB devices for probing and hotplugging
+  * @match_flags: Bit mask controlling which of the other fields are used to
+@@ -110,6 +123,9 @@ struct ieee1394_device_id {
+  * @driver_info: Holds information used by the driver.  Usually it holds
+  *         a pointer to a descriptor understood by the driver, or perhaps
+  *         device flags.
++ * @customs_strings_table: devices using customs strings can use this table to
++ *         inform the USB core of how to retrieve them. If used, must
+contained an
++ *         empty terminating entry.
+  *
+  * In most cases, drivers will create a table of device IDs by using
+  * USB_DEVICE(), or similar macros designed for that purpose.
+@@ -150,6 +166,7 @@ struct usb_device_id {
+            /* not matched against */
+            kernel_ulong_t  driver_info
+                        __attribute__((aligned(sizeof(kernel_ulong_t))));
++           const struct custom_string *custom_strings_table;
+ };
+
+ /* Some useful macros to use to create struct usb_device_id */
+
+
+Then the driver would declare its custom stings like this:
+
+  static const struct custom_string es58x_custom_strings_table[] = {
+          { .idx = 6, .label = "product_info" },
+          { /* Terminating entry */ }
+  };
+
+
+Finally, the USB core can iterate through it and populate the sysfs
+entries using the provided label.
+
+
+> Also, there's the matter of language.  Devices can have string
+> descriptors in multiple languages; which one should we show in sysfs?
+> All of them?  Right now we use just the default language for the strings
+> that we put in sysfs.
+
+I do not have the knowledge to comment on the multiple languages
+issue. FYI, the device which I maintain does not have multiple
+languages.
+
+> > I say do this at the USB core level, that way it works for any USB
+> > device, and you don't have a device-specific sysfs file and custom
+> > userspace code just for this.
+>
+> This is unavoidable to some extent.  Without device-specific information
+> or userspace code, there is no way to know which string descriptor
+> contains the data you want.
+
+ACK. I also do not want any userspace code for that. Users should not
+need to know a magic number to retrieve the thing.
+
+> Alan Stern
+>
+> > Sound reasonable?
+> >
+> > greg k-h
