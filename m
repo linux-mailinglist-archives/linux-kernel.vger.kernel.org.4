@@ -2,52 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0F3C61E56A
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 19:57:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FAFD61E574
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 20:08:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230099AbiKFS4w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Nov 2022 13:56:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33878 "EHLO
+        id S230094AbiKFTIc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Nov 2022 14:08:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229909AbiKFS4u (ORCPT
+        with ESMTP id S229641AbiKFTI1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Nov 2022 13:56:50 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88CE3E0CC;
-        Sun,  6 Nov 2022 10:56:49 -0800 (PST)
+        Sun, 6 Nov 2022 14:08:27 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DE9E265B;
+        Sun,  6 Nov 2022 11:08:26 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 06F43CE0E13;
-        Sun,  6 Nov 2022 18:56:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DA91C433D6;
-        Sun,  6 Nov 2022 18:56:45 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BCDD5B80CA2;
+        Sun,  6 Nov 2022 19:08:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB715C433C1;
+        Sun,  6 Nov 2022 19:08:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667761006;
-        bh=XcaDx53ZZHUc0l8ILKX5RE1+LHLJaPD85TpWG4xZmSE=;
+        s=k20201202; t=1667761703;
+        bh=n1QZlVQPqIfnOW1Dc1y6OdrVUcoHPlboJLH6at3KM+E=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=j6IzSq3k0h5KjSirg/QJ8lx6E8Apm+NQX1Doljh7fIZYFotY2ymGtw+EJyRSqw5af
-         8sMP+xaZUHm3uCnPffidyUOPMYOTLhb6sQ0tvyBko/ZUNIXYT8F4FMxTHjQEB/3GD5
-         VPs4rvvDitbDYaj0DDpptcRXk/03xHbrgWCePFILnKGto864G4qKMssz1iOTb912za
-         fn2ouqiN74KaDOpPNmDEFXXXXkZoCUdMPTF2ICrrlXjcH7B9/McQDXC0tafpfft0qR
-         sCfkTP/GaAgM9Ya1+bvJ9AAqtsGNtB1BZL159zPrfyeRm7M/MW+KqbaPIcV0cQLdYa
-         laPBcOUceGQlA==
-Date:   Sun, 6 Nov 2022 20:56:41 +0200
+        b=gc6VGuGzO+7LA7whS2QFCxpM1aGrxqRTd8QwbDdA6QybbgkHE4HU6x8R7gkE3+nav
+         QbNpgkKYEcGHE/tni4Pd3szujHnpIvrJxYaK4Rcx3Jn4E2MlcPx5bD+4ZbdHzHguWr
+         94nOMrofGcUE+Yu5kqM+PGCxJm9kqt+7Ky8oDdq87mWzl1457xxdXXtBPud9mBzfrt
+         Oh1UAHB/j12rTh0eSE5K0D8e5RhSNPLlchq71rvnz/CqCY+REOkRG+d1DA5FPC2m73
+         4+AGnhHpszXARAsBH5KyfEszpq2nAbvrJqMXxHXksHtS1Px8FLsNfYGWoyZHl5Xu1a
+         NWok6hC+c9Xtg==
+Date:   Sun, 6 Nov 2022 21:08:18 +0200
 From:   Leon Romanovsky <leon@kernel.org>
-To:     zhang.songyi@zte.com.cn
-Cc:     saeedm@nvidia.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, kliteyn@nvidia.com,
-        shunh@nvidia.com, rongweil@nvidia.com, valex@nvidia.com,
-        netdev@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linux-kernel@vger.kernel.org, jiang.xuexin@zte.com.cn,
-        xue.zhihong@zte.com.cn
-Subject: Re: [PATCH linux-next] net/mlx5: remove redundant ret variable
-Message-ID: <Y2gDaRc3t7WiWoTT@unreal>
-References: <202211022150403300510@zte.com.cn>
+To:     Chen Zhongjin <chenzhongjin@huawei.com>
+Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        steffen.klassert@secunet.com, herbert@gondor.apana.org.au,
+        davem@davemloft.net, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        mkubecek@suse.cz
+Subject: Re: [PATCH net] xfrm: Fix ignored return value in xfrm6_init()
+Message-ID: <Y2gGIuwY368X8Won@unreal>
+References: <20221103090713.188740-1-chenzhongjin@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202211022150403300510@zte.com.cn>
+In-Reply-To: <20221103090713.188740-1-chenzhongjin@huawei.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -57,49 +56,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 02, 2022 at 09:50:40PM +0800, zhang.songyi@zte.com.cn wrote:
-> From 74562e313cf9a1b96c7030f27964f826a0c2572d Mon Sep 17 00:00:00 2001
-> From: zhang songyi <zhang.songyi@zte.com.cn>
-> Date: Wed, 2 Nov 2022 20:48:08 +0800
-> Subject: [PATCH linux-next] net/mlx5: remove redundant ret variable
+On Thu, Nov 03, 2022 at 05:07:13PM +0800, Chen Zhongjin wrote:
+> When IPv6 module initializing in xfrm6_init(), register_pernet_subsys()
+> is possible to fail but its return value is ignored.
+> 
+> If IPv6 initialization fails later and xfrm6_fini() is called,
+> removing uninitialized list in xfrm6_net_ops will cause null-ptr-deref:
+> 
+> KASAN: null-ptr-deref in range [0x0000000000000008-0x000000000000000f]
+> CPU: 1 PID: 330 Comm: insmod
+> RIP: 0010:unregister_pernet_operations+0xc9/0x450
+> Call Trace:
+>  <TASK>
+>  unregister_pernet_subsys+0x31/0x3e
+>  xfrm6_fini+0x16/0x30 [ipv6]
+>  ip6_route_init+0xcd/0x128 [ipv6]
+>  inet6_init+0x29c/0x602 [ipv6]
+>  ...
+> 
+> Fix it by catching the error return value of register_pernet_subsys().
+> 
+> Fixes: 8d068875caca ("xfrm: make gc_thresh configurable in all namespaces")
+> Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
+> ---
+>  net/ipv6/xfrm6_policy.c | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
 
-Subject line should be "[PATCH net-next] ..." for all net patches.
-And please use git send-email utility to send the patches.
+I see same error in net/ipv4/xfrm4_policy.c which introduced by same
+commit mentioned in Fixes line.
 
 Thanks
 
 > 
-> Return value from mlx5dr_send_postsend_action() directly instead of taking
-> this in another redundant variable.
+> diff --git a/net/ipv6/xfrm6_policy.c b/net/ipv6/xfrm6_policy.c
+> index 4a4b0e49ec92..ea435eba3053 100644
+> --- a/net/ipv6/xfrm6_policy.c
+> +++ b/net/ipv6/xfrm6_policy.c
+> @@ -287,9 +287,13 @@ int __init xfrm6_init(void)
+>  	if (ret)
+>  		goto out_state;
+>  
+> -	register_pernet_subsys(&xfrm6_net_ops);
+> +	ret = register_pernet_subsys(&xfrm6_net_ops);
+> +	if (ret)
+> +		goto out_protocol;
+>  out:
+>  	return ret;
+> +out_protocol:
+> +	xfrm6_protocol_fini();
+>  out_state:
+>  	xfrm6_state_fini();
+>  out_policy:
+> -- 
+> 2.17.1
 > 
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Signed-off-by: zhang songyi <zhang.songyi@zte.com.cn>
-> ---
->  drivers/net/ethernet/mellanox/mlx5/core/steering/dr_send.c | 5 +----
->  1 file changed, 1 insertion(+), 4 deletions(-)
-> 
-> diff --git a/drivers/net/ethernet/mellanox/mlx5/core/steering/dr_send.c b/drivers/net/ethernet/mellanox/mlx5/core/steering/dr_send.c
-> index a4476cb4c3b3..fd2d31cdbcf9 100644
-> --- a/drivers/net/ethernet/mellanox/mlx5/core/steering/dr_send.c
-> +++ b/drivers/net/ethernet/mellanox/mlx5/core/steering/dr_send.c
-> @@ -724,7 +724,6 @@ int mlx5dr_send_postsend_action(struct mlx5dr_domain *dmn,
->                 struct mlx5dr_action *action)
->  {
->     struct postsend_info send_info = {};
-> -   int ret;
-> 
->     send_info.write.addr = (uintptr_t)action->rewrite->data;
->     send_info.write.length = action->rewrite->num_of_actions *
-> @@ -734,9 +733,7 @@ int mlx5dr_send_postsend_action(struct mlx5dr_domain *dmn,
->         mlx5dr_icm_pool_get_chunk_mr_addr(action->rewrite->chunk);
->     send_info.rkey = mlx5dr_icm_pool_get_chunk_rkey(action->rewrite->chunk);
-> 
-> -   ret = dr_postsend_icm_data(dmn, &send_info);
-> -
-> -   return ret;
-> +   return dr_postsend_icm_data(dmn, &send_info);
->  }
-> 
->  static int dr_modify_qp_rst2init(struct mlx5_core_dev *mdev,
-> --
-> 2.15.2
