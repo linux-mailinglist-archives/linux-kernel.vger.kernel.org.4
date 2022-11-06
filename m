@@ -2,79 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D056561E147
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 10:24:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3719461E150
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 10:34:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229774AbiKFJYB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Nov 2022 04:24:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47338 "EHLO
+        id S229820AbiKFJe3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Nov 2022 04:34:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229619AbiKFJX7 (ORCPT
+        with ESMTP id S229804AbiKFJe0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Nov 2022 04:23:59 -0500
-Received: from thorn.bewilderbeest.net (thorn.bewilderbeest.net [IPv6:2605:2700:0:5::4713:9cab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF6DBC754;
-        Sun,  6 Nov 2022 01:23:57 -0800 (PST)
-Received: from hatter.bewilderbeest.net (97-113-250-99.tukw.qwest.net [97.113.250.99])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Sun, 6 Nov 2022 04:34:26 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C25363CB
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Nov 2022 01:33:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1667727207;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Zh55VMQOWIkhaJAfQsJ8QsFJiksbwnIoMMdZI6R95ts=;
+        b=Gs9LP/PIoiavm+VJBSWqGm5Qx+BUWUBSKGENjHBPrHcxRi+wAyZI1cN8ZakMChTz7lpdmd
+        J3TMLip8ovCBsxVJiYve342sSJSCe1HYTTtrRgbNfR822aLH8t/F7qRfCo5S7yHjNRnKpm
+        e4s2N8RQMPYnEESHA6to2waJMVxKuJE=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-96-_TRw53ORONGgtKkEmETIFA-1; Sun, 06 Nov 2022 04:33:25 -0500
+X-MC-Unique: _TRw53ORONGgtKkEmETIFA-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: zev)
-        by thorn.bewilderbeest.net (Postfix) with ESMTPSA id 0E3C3216;
-        Sun,  6 Nov 2022 01:23:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bewilderbeest.net;
-        s=thorn; t=1667726637;
-        bh=Q6rA6QGxk4YR7vZUSMP3iZf8lpV6fi2XiRCc0+f8lyk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Q8sLcxslhia5fk7j7nWLtocYLbLxI7C+mepSmRLlSSBtFMII+h/gi7mrXc9E/2lYt
-         jkYkcyd3TNsi4kVGpRmgOz8HpsOrDlBmpaYrqrgYYKwrTgx4jf04u0w8a5GTJJrKDh
-         80JbCw2oCYBUp45IlW2aZxfLkQohm3M4V1WUJmds=
-Date:   Sun, 6 Nov 2022 01:23:55 -0800
-From:   Zev Weiss <zev@bewilderbeest.net>
-To:     linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, soc@kernel.org
-Cc:     Andrew Jeffery <andrew@aj.id.au>, Arnd Bergmann <arnd@arndb.de>,
-        Joel Stanley <joel@jms.id.au>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Olof Johansson <olof@lixom.net>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org
-Subject: Re: [PATCH 2/2] ARM: dts: aspeed: Add Delta AHE-50DC BMC
-Message-ID: <Y2d9K1KGM8BcR6Rn@hatter.bewilderbeest.net>
-References: <20221105013321.2719-1-zev@bewilderbeest.net>
- <20221105013321.2719-3-zev@bewilderbeest.net>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0760238041D5;
+        Sun,  6 Nov 2022 09:33:24 +0000 (UTC)
+Received: from oldenburg.str.redhat.com (unknown [10.2.16.37])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id E146C40C2064;
+        Sun,  6 Nov 2022 09:33:11 +0000 (UTC)
+From:   Florian Weimer <fweimer@redhat.com>
+To:     "H.J. Lu" <hjl.tools@gmail.com>
+Cc:     Rick Edgecombe <rick.p.edgecombe@intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        John Allen <john.allen@amd.com>, kcc@google.com,
+        eranian@google.com, rppt@kernel.org, jamorris@linux.microsoft.com,
+        dethoma@microsoft.com, akpm@linux-foundation.org,
+        Yu-cheng Yu <yu-cheng.yu@intel.com>
+Subject: Re: [RFC 37/37] fs/binfmt_elf: Block old shstk elf bit
+References: <20221104223604.29615-1-rick.p.edgecombe@intel.com>
+        <20221104223604.29615-38-rick.p.edgecombe@intel.com>
+        <CAMe9rOpfSccXVWmgK6E0Y0DXC=VX3PpdxXookN1Ty8soeAxrKw@mail.gmail.com>
+Date:   Sun, 06 Nov 2022 10:33:10 +0100
+In-Reply-To: <CAMe9rOpfSccXVWmgK6E0Y0DXC=VX3PpdxXookN1Ty8soeAxrKw@mail.gmail.com>
+        (H. J. Lu's message of "Fri, 4 Nov 2022 15:56:16 -0700")
+Message-ID: <87iljs4ecp.fsf@oldenburg.str.redhat.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20221105013321.2719-3-zev@bewilderbeest.net>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 04, 2022 at 06:33:21PM PDT, Zev Weiss wrote:
->This is a 1U Open19 power shelf with six PSUs and 50 12VDC outputs via
->LM25066 efuses.  It's managed by a pair of AST1250 BMCs in a redundant
->active/active configuration using a PCA9541 on each I2C bus to
->arbitrate access between the two.
->
->Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
->---
-> arch/arm/boot/dts/Makefile                    |    1 +
-> .../arm/boot/dts/aspeed-bmc-delta-ahe50dc.dts | 1094 +++++++++++++++++
-> 2 files changed, 1095 insertions(+)
-> create mode 100644 arch/arm/boot/dts/aspeed-bmc-delta-ahe50dc.dts
->
+* H. J. Lu:
 
-Hmm -- actually, after posting this I realized that the repetitive efuse 
-nodes could be expressed in a much more concise and much less tedious, 
-error-prone manner using a preprocessor macro or two; I'll send a v2 
-with that approach instead.
+> This change doesn't make a binary CET compatible.  It just requires
+> that the toolchain must be updated and all binaries have to be
+> recompiled with the new toolchain to enable CET.  It doesn't solve any
+> issue which can't be solved by not updating glibc.
 
+Right, and it doesn't even address the library case (the kernel would
+have to hook into mmap for that).  The kernel shouldn't do this.
 
-Zev
+Thanks,
+Florian
 
