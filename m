@@ -2,78 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4105A61E603
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 21:56:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99B6D61E60C
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 22:02:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230011AbiKFU4K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Nov 2022 15:56:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59550 "EHLO
+        id S230051AbiKFVCk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Nov 2022 16:02:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229566AbiKFU4H (ORCPT
+        with ESMTP id S229566AbiKFVCi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Nov 2022 15:56:07 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34FA5DFD2
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Nov 2022 12:56:03 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Sun, 6 Nov 2022 16:02:38 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 940CCFADD
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Nov 2022 13:02:36 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 3035E22522;
-        Sun,  6 Nov 2022 20:56:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1667768161; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZtjHZhTXVaGjQcJVa95fXnoOmRq7kv/Z46oADISZGSU=;
-        b=HAkMG7zHvJxEfRZQcfZaiyCQUnZF0sQ/QvviRRjN25NoY7CJSDKuBxNzNmihz6WLaoCvM0
-        jyc4wJWWQ8Xszwc7gXwNppmN351gq8BMZ79vMUtOqr2r/XE4LehQQ6QmOuDc2qcapN8vdn
-        QRQ7R6G1YDKkTCkW7Vvd0EByzFdjWBY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1667768161;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZtjHZhTXVaGjQcJVa95fXnoOmRq7kv/Z46oADISZGSU=;
-        b=EpUpFW9X9hU+kQuKMsWg56gKGJ4tA5iKd++PJ3c7LApVcYUZzDZj1b117Ks1wAfrbEVgyd
-        Cgz/3xzQD5ets6AQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E42B9132E7;
-        Sun,  6 Nov 2022 20:56:00 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 43rbNmAfaGMOBwAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Sun, 06 Nov 2022 20:56:00 +0000
-Message-ID: <b3776af5-65c7-62b4-7624-184420d0da63@suse.cz>
-Date:   Sun, 6 Nov 2022 21:56:00 +0100
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4198AB80D17
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Nov 2022 21:02:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FE5DC433D7;
+        Sun,  6 Nov 2022 21:02:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667768553;
+        bh=EXvwdhWEYV7UJ2h0xFwZgcbB4zy2TYFGbCvTW03tHYU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=GprBHDGEFAa8bq7NcFH9F6bzocK/wwk4LpOUsP86Ft/pnzakOV/s7rhPdDIb4LvoB
+         b6bMd37UQcYM80/6j6/hEp82DmnwLbT5qI0ba8NmhZGbm91FwwElyzR8BTsFQZwknL
+         DJVjSPfYJSSlRtjvvz5INLEKCXy/W6Twpl3tCl1p/kmKLXLZFeV+VgU4+nepV7EbPW
+         b3orOmpSRCucQ+nwO6glQMSnMKY5UA35GQb9DdH6P72CxJGNhedkAqo+SrnL0VSxL1
+         4HUoyZs6G2FkbB59ucvGgI4gtwsMuZmxyz1tvjtVLSWAvSWV6QnYnT8AvjajVhIz2W
+         +jnxmIcA88duA==
+From:   Oded Gabbay <ogabbay@kernel.org>
+To:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Alex Deucher <alexander.deucher@amd.com>
+Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>,
+        Jiho Chu <jiho.chu@samsung.com>,
+        Daniel Stone <daniel@fooishbar.org>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Jeffrey Hugo <quic_jhugo@quicinc.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>,
+        Maciej Kwapulinski <maciej.kwapulinski@linux.intel.com>,
+        Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>,
+        Randy Dunlap <rdunlap@infradead.org>
+Subject: [RFC PATCH v3 0/3] new subsystem for compute accelerator devices
+Date:   Sun,  6 Nov 2022 23:02:22 +0200
+Message-Id: <20221106210225.2065371-1-ogabbay@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH 8/8] mm/slub, percpu: correct the calculation of early
- percpu allocation size
-Content-Language: en-US
-To:     Baoquan He <bhe@redhat.com>, linux-kernel@vger.kernel.org
-Cc:     Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>,
-        Christoph Lameter <cl@linux.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>
-References: <20221024081435.204970-1-bhe@redhat.com>
- <20221024081435.204970-9-bhe@redhat.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <20221024081435.204970-9-bhe@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,48 +70,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/24/22 10:14, Baoquan He wrote:
-> SLUB allocator relies on percpu allocator to initialize its ->cpu_slab
-> during early boot. For that, the dynamic chunk of percpu which serves
-> the early allocation need be large enough to satisfy the kmalloc
-> creation.
-> 
-> However, the current BUILD_BUG_ON() in alloc_kmem_cache_cpus() doesn't
-> consider the kmalloc array with NR_KMALLOC_TYPES length. Fix that
-> with correct calculation.
-> 
-> Signed-off-by: Baoquan He <bhe@redhat.com>
-> Cc: Christoph Lameter <cl@linux.com>
-> Cc: Pekka Enberg <penberg@kernel.org>
-> Cc: David Rientjes <rientjes@google.com>
-> Cc: Joonsoo Kim <iamjoonsoo.kim@lge.com>
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: Vlastimil Babka <vbabka@suse.cz>
-> Cc: Roman Gushchin <roman.gushchin@linux.dev>
-> Cc: Hyeonggon Yoo <42.hyeyoo@gmail.com>
-> ---
->  mm/slub.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+This is the third version of the RFC following the comments given on the
+second version, but more importantly, following testing done by the VPU
+driver people and myself. We found out that there is a circular dependency
+between DRM and accel. DRM calls accel exported symbols during init and when
+accel devices are registering (all the minor handling), then accel calls DRM
+exported symbols. Therefore, if the two components are compiled as modules,
+there is a circular dependency.
 
-As only slub is touched and there's no prerequsities in the previous
-patches, I took this to the slab tree, branch
-slab/for-6.2/cleanups
+To overcome this, I have decided to compile the accel core code as part of
+the DRM kernel module (drm.ko). IMO, this is inline with the spirit of the
+design choice to have accel reuse the DRM core code and avoid code
+duplication.
 
-Thanks!
+Another important change is that I have reverted back to use IDR for minor
+handling instead of xarray. This is because I have found that xarray doesn't
+handle well the scenario where you allocate a NULL entry and then exchange it
+with a real pointer. It appears xarray still considers that entry a "zero"
+entry. This is unfortunate because DRM works that way (first allocates a NULL
+entry and then replaces the entry with a real pointer).
 
-> 
-> diff --git a/mm/slub.c b/mm/slub.c
-> index 157527d7101b..8ac3bb9a122a 100644
-> --- a/mm/slub.c
-> +++ b/mm/slub.c
-> @@ -4017,7 +4017,8 @@ init_kmem_cache_node(struct kmem_cache_node *n)
->  static inline int alloc_kmem_cache_cpus(struct kmem_cache *s)
->  {
->  	BUILD_BUG_ON(PERCPU_DYNAMIC_EARLY_SIZE <
-> -			KMALLOC_SHIFT_HIGH * sizeof(struct kmem_cache_cpu));
-> +			NR_KMALLOC_TYPES * KMALLOC_SHIFT_HIGH *
-> +			sizeof(struct kmem_cache_cpu));
->  
->  	/*
->  	 * Must align to double word boundary for the double cmpxchg
+I decided to revert to IDR because I don't want to hold up these patches,
+as many people are blocked until the support for accel is merged. The xarray
+issue should be fixed as a separate patch by either fixing the xarray code or
+changing how DRM + ACCEL do minor id handling.
+
+The patches are in the following repo:
+https://git.kernel.org/pub/scm/linux/kernel/git/ogabbay/accel.git/log/?h=accel_v3
+
+As in v2, The HEAD of that branch is a commit adding a dummy driver that
+registers an accel device using the new framework. This can be served
+as a simple reference. I have checked inserting and removing the dummy driver,
+and opening and closing /dev/accel/accel0 and nothing got broken :)
+
+v1 cover letter:
+https://lkml.org/lkml/2022/10/22/544
+
+v2 cover letter:
+https://lore.kernel.org/lkml/20221102203405.1797491-1-ogabbay@kernel.org/T/
+
+Thanks,
+Oded.
+
+Oded Gabbay (3):
+  drivers/accel: define kconfig and register a new major
+  accel: add dedicated minor for accelerator devices
+  drm: initialize accel framework
+
+ Documentation/admin-guide/devices.txt |   5 +
+ MAINTAINERS                           |   8 +
+ drivers/Kconfig                       |   2 +
+ drivers/accel/Kconfig                 |  24 ++
+ drivers/accel/drm_accel.c             | 322 ++++++++++++++++++++++++++
+ drivers/gpu/drm/Makefile              |   1 +
+ drivers/gpu/drm/drm_drv.c             | 102 +++++---
+ drivers/gpu/drm/drm_file.c            |   2 +-
+ drivers/gpu/drm/drm_sysfs.c           |  24 +-
+ include/drm/drm_accel.h               |  97 ++++++++
+ include/drm/drm_device.h              |   3 +
+ include/drm/drm_drv.h                 |   8 +
+ include/drm/drm_file.h                |  21 +-
+ 13 files changed, 582 insertions(+), 37 deletions(-)
+ create mode 100644 drivers/accel/Kconfig
+ create mode 100644 drivers/accel/drm_accel.c
+ create mode 100644 include/drm/drm_accel.h
+
+--
+2.25.1
 
