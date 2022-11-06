@@ -2,52 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EB4661E1D2
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 12:22:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19F0161E1D4
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 12:27:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229750AbiKFLWk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Nov 2022 06:22:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47420 "EHLO
+        id S229754AbiKFL1Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Nov 2022 06:27:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229692AbiKFLWj (ORCPT
+        with ESMTP id S229668AbiKFL1U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Nov 2022 06:22:39 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BF0E1137;
-        Sun,  6 Nov 2022 03:22:38 -0800 (PST)
+        Sun, 6 Nov 2022 06:27:20 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 213C25F60;
+        Sun,  6 Nov 2022 03:27:19 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B14E860C41;
-        Sun,  6 Nov 2022 11:22:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 459D8C433D6;
-        Sun,  6 Nov 2022 11:22:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667733757;
-        bh=OwdTq6vSYCGMHzoUM+Ktw7CRJaOcLC4+kIT/bLyvSOI=;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9D49960C41;
+        Sun,  6 Nov 2022 11:27:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5351BC433D6;
+        Sun,  6 Nov 2022 11:27:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1667734038;
+        bh=TkHgIkBcH71TK5yfForSJw+5lXMejJ9dhQTtpK8GAnM=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=oydxPb/Hw5UAOU7joCSB3r72ZuzIWLb2EcYR6UWqAkIy/Ow2xlnvWY6jkJuytjMfT
-         lkwtNOEaKb92/NcQVC3NVU5gNol8DMYKo13xSZr9SVgnAcUyI4O7F26hWr0illqpV2
-         X/4woT6dhwfUhaVglPmzOBUCvXoNOmWwLPV4NNBnLMdA/i4vm0xYClQQxaqlk5KGXS
-         AhFRUq9sQKEMlc49ZR0Ff40AoW7XNThwOXtZ8nk9U2hH0vHlfN4nXpRss7xMia5u+o
-         ovdU7HETFyscLiM77/o6wXkEXAYptDvnLpYWvXJwjkgisN0VPlpZpiwddy031ath3r
-         AYUnKvc9o7isg==
-Date:   Sun, 6 Nov 2022 11:22:32 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     linux-doc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Alexandre Ghiti <alexandre.ghiti@canonical.com>
-Subject: Re: [PATCH] Documentation: riscv: tableize memory layout
-Message-ID: <Y2eY+LulWaKm7MHl@spud>
-References: <20221106100239.53704-1-bagasdotme@gmail.com>
+        b=aitp4QYdYt454gND3ks/FDrd8SJrNQ2NpV74b0nWoYBOvrVDPNcnoB/L48uI4qNs0
+         qXnAjqMRI+O2tFOWgkm/cEqpoVMNFpTOqwN0IDbm0gus99/68FEDTfjOvtDzRQKcig
+         lrS3o9ujeuKENM73EEfc6OLm1oC5G0J55/Nvp1CE=
+Date:   Sun, 6 Nov 2022 12:27:12 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Aaron Lu <aaron.lu@intel.com>
+Cc:     Dave Hansen <dave.hansen@intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        "Yin, Fengwei" <fengwei.yin@intel.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        "Huang, Ying" <ying.huang@intel.com>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH v2] selftest/x86/meltdown: Add a selftest for meltdown
+Message-ID: <Y2eaEG5IX+tk4wuA@kroah.com>
+References: <Y1kwa0ZLI9xbEaHx@ziqianlu-desk1>
+ <Y2eKO48Tv+UD0IpV@ziqianlu-desk1>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221106100239.53704-1-bagasdotme@gmail.com>
+In-Reply-To: <Y2eKO48Tv+UD0IpV@ziqianlu-desk1>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -57,105 +55,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Nov 06, 2022 at 05:02:40PM +0700, Bagas Sanjaya wrote:
-> Documentation: riscv: tableize memory layout
-
-Minor nit about the $subject - but this is the docs, so I guess there's
-nowhere better to mention grammar: "tableize" is not a word. I think
-what you want here is "tabulate".
-
-> The memory layout is written as table but it is inside literal code
-                                 ^ as a table           ^ inside a
-
-Anyway, those are minor nits I saw in passing, one actual comment and a
-simple question below.
-Thanks,
-Conor.
-
-> block, which renders as preformatted text. Write the layout in reST
-> grid table instead.
+On Sun, Nov 06, 2022 at 06:19:39PM +0800, Aaron Lu wrote:
+> To capture potential programming errors like mistakenly setting Global
+> bit on kernel page table entries, a selftest for meltdown is added.
 > 
-> Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
+> This selftest is based on https://github.com/IAIK/meltdown. What this
+> test does is to firstly set a predefined string at a random user address
+> and then with pagemap, get the physical address of this string. Finally,
+> try to fetch the data using kernel's directmap address for this physical
+> address to see if user space can use kernel's page table.
+
+As this is based on someone else's code, what happened to the proper
+credit for them as the author and copyright owner?
+
+> Per my tests, this test works well on CPUs that have TSX support. For
+> this reason, this selftest only works on CPUs that supports TSX.
+> 
+> This test requires the knowledge of direct map base. IAIK used the
+> following two methods to get direct map base:
+> 1 through a kernel module to show phys_to_virt(0);
+> 2 by exploiting the same HW vulnerability to guess the base.
+> Method 1 makes running this selftest complex while method 2 is not
+> reliable and I do not want to use a possibly wrong value to run this
+> test. Suggestions are welcome.
+> 
+> Tested on both x86_64 and i386_pae VMs on a host with i7-7700K cpu,
+> success rate is about 50% when nopti kernel cmdline is used.
+> 
+> Signed-off-by: Aaron Lu <aaron.lu@intel.com>
 > ---
->  Documentation/riscv/vm-layout.rst | 120 +++++++++++++++---------------
->  1 file changed, 58 insertions(+), 62 deletions(-)
+> v2:
+> - Added [SKIP], [INFO] prefix to some prints;
+> - Do not run 32bits test on 64bits host since it doesn't make sense to
+>   do that;
+> - Minor comment update.
 > 
-> diff --git a/Documentation/riscv/vm-layout.rst b/Documentation/riscv/vm-layout.rst
-> index 5b36e45fef60bd..139320e35de81f 100644
-> --- a/Documentation/riscv/vm-layout.rst
-> +++ b/Documentation/riscv/vm-layout.rst
-> @@ -30,70 +30,66 @@ the RISC-V Linux Kernel resides.
->  RISC-V Linux Kernel SV39
->  ------------------------
->  
-> -::
-> -
-> -  ========================================================================================================================
-> -      Start addr    |   Offset   |     End addr     |  Size   | VM area description
-> -  ========================================================================================================================
-> -                    |            |                  |         |
-> -   0000000000000000 |    0       | 0000003fffffffff |  256 GB | user-space virtual memory, different per mm
-> -  __________________|____________|__________________|_________|___________________________________________________________
-> -                    |            |                  |         |
-> -   0000004000000000 | +256    GB | ffffffbfffffffff | ~16M TB | ... huge, almost 64 bits wide hole of non-canonical
-> -                    |            |                  |         |     virtual memory addresses up to the -256 GB
-> -                    |            |                  |         |     starting offset of kernel mappings.
-> -  __________________|____________|__________________|_________|___________________________________________________________
-> -                                                              |
-> -                                                              | Kernel-space virtual memory, shared between all processes:
-> -  ____________________________________________________________|___________________________________________________________
-> -                    |            |                  |         |
-> -   ffffffc6fee00000 | -228    GB | ffffffc6feffffff |    2 MB | fixmap
-> -   ffffffc6ff000000 | -228    GB | ffffffc6ffffffff |   16 MB | PCI io
-> -   ffffffc700000000 | -228    GB | ffffffc7ffffffff |    4 GB | vmemmap
-> -   ffffffc800000000 | -224    GB | ffffffd7ffffffff |   64 GB | vmalloc/ioremap space
-> -   ffffffd800000000 | -160    GB | fffffff6ffffffff |  124 GB | direct mapping of all physical memory
-> -   fffffff700000000 |  -36    GB | fffffffeffffffff |   32 GB | kasan
-> -  __________________|____________|__________________|_________|____________________________________________________________
-> -                                                              |
-> -                                                              |
-> -  ____________________________________________________________|____________________________________________________________
-> -                    |            |                  |         |
-> -   ffffffff00000000 |   -4    GB | ffffffff7fffffff |    2 GB | modules, BPF
-> -   ffffffff80000000 |   -2    GB | ffffffffffffffff |    2 GB | kernel
-> -  __________________|____________|__________________|_________|____________________________________________________________
-> +   +------------------+---------+------------------+---------+----------------------------------------------------------+
-> +   |    Start addr    | Offset  |     End addr     |  Size   | VM area description                                      |
-> +   +==================+=========+==================+=========+==========================================================+
-> +   | 0000000000000000 |    0    | 0000003fffffffff | 256 GB  | user-space virtual memory, different per mm              |
-> +   +------------------+---------+------------------+---------+----------------------------------------------------------+
-> +   | 0000004000000000 | +256 GB | ffffffbfffffffff | ~16M TB | ... huge, almost 64 bits wide hole of non-canonical      |
-> +   |                  |         |                  |         | virtual memory addresses up to the -256 GB               |
-> +   |                  |         |                  |         | starting offset of kernel mappings.                      |
-> +   +------------------+---------+------------------+---------+----------------------------------------------------------+
-> +   |                             Kernel-space virtual memory, shared between all processes:                             |
-> +   +------------------+---------+------------------+---------+----------------------------------------------------------+
-> +   | ffffffc6fee00000 | -228 GB | ffffffc6feffffff | 2 MB    | fixmap                                                   |
-> +   +------------------+---------+------------------+---------+----------------------------------------------------------+
-> +   | ffffffc6ff000000 | -228 GB | ffffffc6ffffffff | 16 MB   | PCI io                                                   |
-> +   +------------------+---------+------------------+---------+----------------------------------------------------------+
-                                                        ^
-Will these numbers remain right-aligned in the formatted doc? They were
-aligned before in the text form & no longer appear to be.
+>  tools/testing/selftests/x86/Makefile   |   2 +-
+>  tools/testing/selftests/x86/meltdown.c | 418 +++++++++++++++++++++++++
+>  2 files changed, 419 insertions(+), 1 deletion(-)
+>  create mode 100644 tools/testing/selftests/x86/meltdown.c
+> 
+> diff --git a/tools/testing/selftests/x86/Makefile b/tools/testing/selftests/x86/Makefile
+> index 0388c4d60af0..36f99c360a56 100644
+> --- a/tools/testing/selftests/x86/Makefile
+> +++ b/tools/testing/selftests/x86/Makefile
+> @@ -13,7 +13,7 @@ CAN_BUILD_WITH_NOPIE := $(shell ./check_cc.sh "$(CC)" trivial_program.c -no-pie)
+>  TARGETS_C_BOTHBITS := single_step_syscall sysret_ss_attrs syscall_nt test_mremap_vdso \
+>  			check_initial_reg_state sigreturn iopl ioperm \
+>  			test_vsyscall mov_ss_trap \
+> -			syscall_arg_fault fsgsbase_restore sigaltstack
+> +			syscall_arg_fault fsgsbase_restore sigaltstack meltdown
+>  TARGETS_C_32BIT_ONLY := entry_from_vm86 test_syscall_vdso unwind_vdso \
+>  			test_FCMOV test_FCOMI test_FISTTP \
+>  			vdso_restorer
+> diff --git a/tools/testing/selftests/x86/meltdown.c b/tools/testing/selftests/x86/meltdown.c
+> new file mode 100644
+> index 000000000000..8c0c1db49096
+> --- /dev/null
+> +++ b/tools/testing/selftests/x86/meltdown.c
+> @@ -0,0 +1,418 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
 
-> +   | ffffffc700000000 | -228 GB | ffffffc7ffffffff | 4 GB    | vmemmap                                                  |
-> +   +------------------+---------+------------------+---------+----------------------------------------------------------+
-> +   | ffffffc800000000 | -224 GB | ffffffd7ffffffff | 64 GB   | vmalloc/ioremap space                                    |
-> +   +------------------+---------+------------------+---------+----------------------------------------------------------+
-> +   | ffffffd800000000 | -160 GB | fffffff6ffffffff | 124 GB  | direct mapping of all physical memory                    |
-> +   +------------------+---------+------------------+---------+----------------------------------------------------------+
-> +   | fffffff700000000 | -36 GB  | fffffffeffffffff | 32 GB   | kasan                                                    |
-> +   +------------------+---------+------------------+---------+----------------------------------------------------------+
-> +   |                                  Identical layout to the 39-bit one from here on:                                  |
+That's nice but that does NOT reflect the license of the code below, as
+you state in the comments.
 
-This one /is/ sv39. I'd leave this as a blank to match the styling in
-the original document.
+You might want to get an Intel lawyer to look this over and give you
+advice on how to properly tag this license.
 
-> +   +------------------+---------+------------------+---------+----------------------------------------------------------+
-> +   | ffffffff00000000 | -4 GB   | ffffffff7fffffff | 2 GB    | modules, BPF                                             |
-> +   +------------------+---------+------------------+---------+----------------------------------------------------------+
-> +   | ffffffff80000000 | -2 GB   | ffffffffffffffff | 2 GB    | kernel                                                   |
-> +   +------------------+---------+------------------+---------+----------------------------------------------------------+
->  
->  
+> +/*
+> + * This selftest is based on code from https://github.com/IAIK/meltdown
+> + * and can be used to check if user space can read data through kernel
+> + * page table entries.
+> + *
+> + * Note for i386 test: due to kernel prefer to use high memory for user
+> + * programs, it is necessary to restrict the available memory under that
+> + * of low memory size(around ~896MiB) so that the memory hosting "string"
+> + * in main() is directly mapped.
+> + *
+> + * Note for both x86_64 and i386 test: the hardware race window can not be
+> + * exploited 100% each time so a single run of the test on a vulnerable system
+> + * may not FAIL. My tests on a i7-7700K cpu have a success rate about 50%.
+> + *
+> + * The original copyright and license information are shown below:
+> + *
+> + * Copyright (c) 2018 meltdown
 
+I don't see that copyright in the original github repo, are you sure
+about that?  I see individual developers contributing there instead.
+Please keep authorship information when you know it.
+
+thanks,
+
+greg k-h
