@@ -2,94 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 278C461E1A3
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 11:32:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 053BE61E1A6
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 11:37:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229906AbiKFKcP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Nov 2022 05:32:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36838 "EHLO
+        id S229820AbiKFKh1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Nov 2022 05:37:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229895AbiKFKcK (ORCPT
+        with ESMTP id S229544AbiKFKhZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Nov 2022 05:32:10 -0500
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7941657D
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Nov 2022 02:32:09 -0800 (PST)
-Received: by mail-lf1-x12f.google.com with SMTP id bp15so13074973lfb.13
-        for <linux-kernel@vger.kernel.org>; Sun, 06 Nov 2022 02:32:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=lKYJOkirmCecq9ezHzpl0WQVkwqT4CQCl37ykbl0Zzc=;
-        b=hsyMaz80e4MLIWes0KileGeBWI8raCMyY0pY0CIvH9kSmZV4hodx5vJaCCgICypc3Y
-         uDaDBJwyMmo6EJfePQTYDJXwazXVPlQNrMeM7QC96cXuZbpWLi+guNoNYQOkcIrV2ax4
-         Jn23oGy2g3Dxf+TY/6IG2lCe/ieBBUhL9gI97eDPBO+jx3Fd4JyDI/GMdZaf9fgXdO4U
-         JUvij1CaheKxShzQFBCq9wTWQQqfvf3rDx9HcJX1y5yHCUW1anM6E3MX71R79/c+tt6F
-         Pt3ZGRWaJNaSGYXYeAb2Em/Sq/J2ole9jXmhlIIt8SVBTezWCAbAARNAOm0GQOEE9EjF
-         2izA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lKYJOkirmCecq9ezHzpl0WQVkwqT4CQCl37ykbl0Zzc=;
-        b=N31cDAE9fLigeBbPAZH4xgvDTWR4TbjNYYpCoJfipm0eeTwSXltKfIapXGkfe2Z7r0
-         95woWDfyxEGJoWyHb5IV2ZOhcNGr2/Qrs01OuDgfNVeGgcYKWVW0+KF0nRnWogJo2Noz
-         g5TWArrLJib6NEhTEOeXfT3xM006EswbrbQZ3xItMBDSAVJgs6TNUMLrrGcchy5acwtP
-         QEWE/Z96a0/HmD0LWCHzywvLl4c/PEjOW5Fkggo+wgnGwqzLqFuc/t8sGUX6Y12PJoQW
-         Cn6oyv31o93vWDM5Scu9fz/g7hkUUqCoUghCBub6ASrG9Mfo4GHqdBKEovOq9THC31Og
-         W5KQ==
-X-Gm-Message-State: ACrzQf0txpANbbrQhOrA0VFpXlTEoTKnYuaNzSbqy8wsDmincuAsclPg
-        q2rCjMMuVxbB43didCqBUOQe5A==
-X-Google-Smtp-Source: AMsMyM62YKz6Gaslh7qeGOV096YtXnoCOEfNwT2yIiYZoZ7xUHy+2qkLcd96zaeHQgQbQynT0YRbPQ==
-X-Received: by 2002:a05:6512:3d0b:b0:4a2:6d15:91ff with SMTP id d11-20020a0565123d0b00b004a26d1591ffmr16224777lfv.575.1667730728289;
-        Sun, 06 Nov 2022 02:32:08 -0800 (PST)
-Received: from [192.168.0.20] (088156142199.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.199])
-        by smtp.gmail.com with ESMTPSA id x9-20020a056512078900b00498f23c249dsm644046lfr.74.2022.11.06.02.32.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 06 Nov 2022 02:32:07 -0800 (PST)
-Message-ID: <ac684379-d3a1-be60-1b46-71561e668c23@linaro.org>
-Date:   Sun, 6 Nov 2022 11:32:06 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH] dt-bindings: thermal: cooling-devices: Add missing cache
- related properties
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221104162450.1982114-1-robh@kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221104162450.1982114-1-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Sun, 6 Nov 2022 05:37:25 -0500
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 048536411;
+        Sun,  6 Nov 2022 02:37:23 -0800 (PST)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id 76E4F5C0094;
+        Sun,  6 Nov 2022 05:37:21 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute3.internal (MEProxy); Sun, 06 Nov 2022 05:37:21 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1667731041; x=1667817441; bh=iZKiEdnklv
+        /cMgHcGgFsT32PDcRiV02bsGomPmRflXQ=; b=lhD4XUnlgMF2qasljxzE262L5m
+        OCC9icbfveMNNfzaSDF9FvqFI1bb4bbE3GyXsW8agJr4qy7FkehvSC1ETElCIibO
+        FPIKhvA5oQI5yHwhKbzdmRQrqUrSMPOVw8YjVjvG9l/+khtkSJStjoaC2uxHRSVR
+        LPfOyEg3ncp5MBn/762fUNjYh+XnOd/glZVzD9K7Uw1ctAvcYpdw+OWQAoNBFq4I
+        v4lySq7Z8f2HbsF9cY6dxeudewajS7LKFHMBOAzkLn86FQVDBMBrQUVDgbETcLwQ
+        Ybg14LvLyFMQqQmZpXECks1+8WLAeVkz26u7GKMd/8l6W8enIwrndXCvZEiQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1667731041; x=1667817441; bh=iZKiEdnklv/cMgHcGgFsT32PDcRi
+        V02bsGomPmRflXQ=; b=TXGYKE9krWTVoKoQxB42ORrFNVkjwBgury1I/zyF6l8/
+        wnUEhdZtrHdRYm4ng4huV+4ekV2o3DhOm7/Sk5pQr8pQqLcs4c5WZEq96dPPfo8Y
+        DORzukAYuPWdv4cw3sQQk8cT0a6+/cGpB9ZSRGODUFgCC//Qo8aMMm3Hr7mjt6jm
+        5HgQ0zvbjGCvDhuVCzCVmmb7Go4MEztIC6cp7vbSOFRBtfSnvAqGpSAXFNCeydGm
+        tIsQN08eCaydeBuDXSvZrv6sa2E9TCWCuR5DbdyfFDX/W8uHBeLXZykTwptlIagV
+        o9FNndXvTn+fb5dSwjrA4b6uXYQHvIUa7uTtckf5dw==
+X-ME-Sender: <xms:YI5nY9EGVtZTQ8zpXcYaH4PTh1rRLfVpEh5QfmGx5FoXbEcq2r6G5A>
+    <xme:YI5nYyXJYlvDSrFR0H2HSQ1cGwn97PC0GFlzR7S2-d3tFJFHawmo_bzGiLyNpoon9
+    b9EN8Xlk21eGSmIUFM>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrvdeigdduvdcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
+    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
+    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
+    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
+    hnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:YI5nY_I6QyVLSOq9VG3vXJTxw7J4ZtG5pSaltM76YaBoVT-1djyPng>
+    <xmx:YI5nYzHxkLyzbSwLuR71Vk4hQxWD4402C9odtwrAF1mZuRXp58Ui8A>
+    <xmx:YI5nYzV82JW0EkCPX5FtLlBIKQmsAcHmbejL_OqxWKGVP3kHlw1uag>
+    <xmx:YY5nY1LCBjpapUAaPXUMfFEz3dvN5UBnYJ4OWORMKHjhbkMe3aarZw>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 23153B603ED; Sun,  6 Nov 2022 05:37:20 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1087-g968661d8e1-fm-20221021.001-g968661d8
+Mime-Version: 1.0
+Message-Id: <ab965f39-94b7-4962-a53e-46b88fd6ecae@app.fastmail.com>
+In-Reply-To: <Y2eLuf4SCrZ5X+ui@shell.armlinux.org.uk>
+References: <20221106062536.26369-1-rdunlap@infradead.org>
+ <62f5b747-4c65-46a6-b04d-1d0fcbadf5c9@app.fastmail.com>
+ <Y2eLuf4SCrZ5X+ui@shell.armlinux.org.uk>
+Date:   Sun, 06 Nov 2022 11:37:04 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Russell King" <linux@armlinux.org.uk>
+Cc:     "Randy Dunlap" <rdunlap@infradead.org>,
+        linux-kernel@vger.kernel.org, "kernel test robot" <lkp@intel.com>,
+        "Aaro Koskinen" <aaro.koskinen@iki.fi>,
+        "Janusz Krzysztofik" <jmkrzyszt@gmail.com>,
+        "Tony Lindgren" <tony@atomide.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Linux-OMAP <linux-omap@vger.kernel.org>
+Subject: Re: [PATCH] ARM: omap1: set ARCH_OMAP1_ANY for ARCH_OMAP1
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/11/2022 17:24, Rob Herring wrote:
-> The examples' cache nodes are incomplete as 'cache-unified' and
-> 'cache-level' are required cache properties.
-> 
-> Signed-off-by: Rob Herring <robh@kernel.org>
+On Sun, Nov 6, 2022, at 11:26, Russell King (Oracle) wrote:
+> On Sun, Nov 06, 2022 at 08:43:50AM +0100, Arnd Bergmann wrote:
+>> --- a/arch/arm/mach-omap1/Kconfig
+>> +++ b/arch/arm/mach-omap1/Kconfig
+>> @@ -49,7 +49,7 @@ config ARCH_OMAP1_ANY
+>>         select ARCH_OMAP
+>>         def_bool ARCH_OMAP730 || ARCH_OMAP850 || ARCH_OMAP15XX || ARCH_OMAP16XX
+>>  
+>> -config ARCH_OMAP
+>> +config ARCH_OMAP1_ANY
+>
+> This patch can't be right - look at the first line of context above, you
+> have symbols that select ARCH_OMAP and you've just removed the
+> definition of ARCH_OMAP.
 
+Right, I misread this, I thought this was an 'if ARCH_OMAP' block
+instead of the Kconfig symbol. Part of the problem is now is
+possibly that there are two symbols with that name now, I'll have
+to try to reproduce the problem first and then see what caused it
+originally.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Best regards,
-Krzysztof
-
+      Arnd
