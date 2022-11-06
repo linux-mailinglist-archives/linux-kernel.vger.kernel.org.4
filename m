@@ -2,200 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F27F961E691
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 22:29:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3CB461E69B
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 22:40:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230136AbiKFV3o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Nov 2022 16:29:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44134 "EHLO
+        id S230099AbiKFVkJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Nov 2022 16:40:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229887AbiKFV3j (ORCPT
+        with ESMTP id S229452AbiKFVkG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Nov 2022 16:29:39 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C07BBB1FE
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Nov 2022 13:29:38 -0800 (PST)
-Received: from zn.tnic (p200300ea9733e71f329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e71f:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 3DADA1EC06A9;
-        Sun,  6 Nov 2022 22:29:37 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1667770177;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:
-         content-transfer-encoding:content-transfer-encoding:in-reply-to:
-         references; bh=MvaBIEo5j4icp2jk7W9uNf4VMOnSMT/FNWVXKZ9V6ls=;
-        b=bMlBL4/+TPXEll0WcznX0ASRy6IJUgIuJlyGI5rdxGkIrUPkYuMJSek/sX1UB4GOVnU8xJ
-        sb6nKW/f5Kxd2uxH0/MMKuo3oCtO8qej9vogXFrpZXLyy9nsotvfQwvfARUdiF9/2l4vEQ
-        Lt4ParIby8diNjYIOQdVKXjTC/u/OG4=
-From:   Borislav Petkov <bp@alien8.de>
-To:     Fenghua Yu <fenghua.yu@intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Babu Moger <Babu.Moger@amd.com>
-Cc:     X86 ML <x86@kernel.org>, LKML <linux-kernel@vger.kernel.org>
-Subject: [PATCH] x86/resctrl: Move MSR defines into msr-index.h
-Date:   Sun,  6 Nov 2022 22:29:23 +0100
-Message-Id: <20221106212923.20699-1-bp@alien8.de>
-X-Mailer: git-send-email 2.35.1
+        Sun, 6 Nov 2022 16:40:06 -0500
+Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11999BC2E
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Nov 2022 13:40:03 -0800 (PST)
+Received: by mail-qt1-x829.google.com with SMTP id h21so6046405qtu.2
+        for <linux-kernel@vger.kernel.org>; Sun, 06 Nov 2022 13:40:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Wo7D366kVu3SrxVktqc4LKs9aaH2aa4rKZe1IVS8u5g=;
+        b=XrOkgpqMp7xklkIuOQGXPfnegAeupS9fT7UqiULwzWkt1SZH1EWCX0L9blgprAbOZP
+         VqYp/LdCrgDCTxGuXTWnOS7D76lxAOdGLEt8uMZGamb6BJHN3trSdQA5niB53Te6649w
+         F+Tl8iQ6hT/YK5fST/drg5X1DY39YkJ1syHPo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Wo7D366kVu3SrxVktqc4LKs9aaH2aa4rKZe1IVS8u5g=;
+        b=UeYNfGIPEi4HrivbFAGjMFDJ8gxv99uem2yv1NDtcjIZaPzMmx39x9eSJnZ11oWJm3
+         knVa+zESVzsJqhSLpCo1gxQwj7Ph3s6ds5tmTjBTCLMHC8snb3lhiY/rIeSyJc52ReOv
+         0PnzruYvSTkTFmJKozh7FL5PybWKdPgSjdcC1hZcic/GGbHN0nbP3d2F8w0OXSEWgv+c
+         +//HrlY0blHcc2uptgep3i3NdgWC62KdXhMgL7qQ4xQq8ZeH+KKmCoqsa1+jDxz9EpKV
+         ZRY3GczM7ulLOiEZeeXRu96cEcLA5kp3agQlTFFEP2W6fJVLIK+KzG5WHq765W2I8e5F
+         FfEw==
+X-Gm-Message-State: ACrzQf0MUqJ6kH5ldWJZFVnlfatQxqIHtQHCpM9llsOacSh4AyXCNOcl
+        4t81saJoQzbHp89JvMdJqiy2a+hpyonveA==
+X-Google-Smtp-Source: AMsMyM5m2EAXAMqXi4YW/ygYGScLSYbt2tqkmGzSZRz3buLaVKIhoJbxZ004/RQNjKb7SJLhT6O9cQ==
+X-Received: by 2002:ac8:5b03:0:b0:3a5:a44:8dfd with SMTP id m3-20020ac85b03000000b003a50a448dfdmr37479368qtw.497.1667770801868;
+        Sun, 06 Nov 2022 13:40:01 -0800 (PST)
+Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com. [209.85.219.178])
+        by smtp.gmail.com with ESMTPSA id de4-20020a05620a370400b006bb29d932e1sm53064qkb.105.2022.11.06.13.40.01
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 06 Nov 2022 13:40:01 -0800 (PST)
+Received: by mail-yb1-f178.google.com with SMTP id r3so11609432yba.5
+        for <linux-kernel@vger.kernel.org>; Sun, 06 Nov 2022 13:40:01 -0800 (PST)
+X-Received: by 2002:a05:6902:1352:b0:6bb:3f4b:9666 with SMTP id
+ g18-20020a056902135200b006bb3f4b9666mr42703657ybu.101.1667770800966; Sun, 06
+ Nov 2022 13:40:00 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221106054535.709068702@goodmis.org> <20221106054649.099333291@goodmis.org>
+ <CAHk-=wiD3VWYqgO7JLqRCJvYHiO5RicGAERH1dWQ2pDqnXDy6g@mail.gmail.com> <20221106160956.2414d73f@rorschach.local.home>
+In-Reply-To: <20221106160956.2414d73f@rorschach.local.home>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sun, 6 Nov 2022 13:39:45 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wjYY9k7TzyJvWOPSPLL+jHkdogyWuOUyStfE5h1=0Qk0w@mail.gmail.com>
+Message-ID: <CAHk-=wjYY9k7TzyJvWOPSPLL+jHkdogyWuOUyStfE5h1=0Qk0w@mail.gmail.com>
+Subject: Re: [PATCH v5a 5/5] treewide: Convert del_timer*() to timer_shutdown*()
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Anna-Maria Gleixner <anna-maria@linutronix.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Julia Lawall <Julia.Lawall@inria.fr>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Borislav Petkov <bp@suse.de>
+On Sun, Nov 6, 2022 at 1:10 PM Steven Rostedt <rostedt@goodmis.org> wrote:
+>
+>   ... when strict
+>       when != ptr->timer.function = E;
 
-msr-index.h should contain all MSRs for easier grepping for MSR numbers
-when dealing with unchecked MSR access warnings, for example.
+.. and I tried this with just 'ptr->timer', and it doesn't seem to
+make any difference, so apparently that NULL pointer initialization
+was the only case.
 
-Move the resctrl ones. Prefix IA32_PQR_ASSOC with "MSR_" while at it.
+And then - like you and Guenter - I went through the patch manually to
+look for anything that looked odd, and didn't find anything.
 
-No functional changes.
+So yes, I'm happy with this. It looks like a very reasonable "let's
+handle the scripted trivial cases automatically", and then anything
+more complicated can be left for 6.2.
 
-Signed-off-by: Borislav Petkov <bp@suse.de>
----
- arch/x86/include/asm/msr-index.h          | 22 ++++++++++++++++------
- arch/x86/include/asm/resctrl.h            |  8 +++-----
- arch/x86/kernel/cpu/resctrl/core.c        |  2 +-
- arch/x86/kernel/cpu/resctrl/internal.h    | 10 +---------
- arch/x86/kernel/cpu/resctrl/pseudo_lock.c |  4 ++--
- 5 files changed, 23 insertions(+), 23 deletions(-)
+And with that cocci script (and how to run it), people can see what
+the script was, and even run it themselves to verify, and that just
+makes me feel all warm and fuzzy about it.
 
-diff --git a/arch/x86/include/asm/msr-index.h b/arch/x86/include/asm/msr-index.h
-index a3eb4d3e70b8..c29cf6d1935b 100644
---- a/arch/x86/include/asm/msr-index.h
-+++ b/arch/x86/include/asm/msr-index.h
-@@ -4,12 +4,7 @@
- 
- #include <linux/bits.h>
- 
--/*
-- * CPU model specific register (MSR) numbers.
-- *
-- * Do not add new entries to this file unless the definitions are shared
-- * between multiple compilation units.
-- */
-+/* CPU model specific register (MSR) numbers. */
- 
- /* x86-64 specific MSRs */
- #define MSR_EFER		0xc0000080 /* extended feature register */
-@@ -1051,6 +1046,21 @@
- #define VMX_BASIC_MEM_TYPE_WB	6LLU
- #define VMX_BASIC_INOUT		0x0040000000000000LLU
- 
-+/* Resctrl MSRs: */
-+/* - Intel: */
-+#define MSR_IA32_L3_QOS_CFG		0xc81
-+#define MSR_IA32_L2_QOS_CFG		0xc82
-+#define MSR_IA32_QM_EVTSEL		0xc8d
-+#define MSR_IA32_QM_CTR			0xc8e
-+#define MSR_IA32_PQR_ASSOC		0xc8f
-+#define MSR_IA32_L3_CBM_BASE		0xc90
-+#define MSR_IA32_L2_CBM_BASE		0xd10
-+#define MSR_IA32_MBA_THRTL_BASE		0xd50
-+
-+
-+/* - AMD: */
-+#define MSR_IA32_MBA_BW_BASE		0xc0000200
-+
- /* MSR_IA32_VMX_MISC bits */
- #define MSR_IA32_VMX_MISC_INTEL_PT                 (1ULL << 14)
- #define MSR_IA32_VMX_MISC_VMWRITE_SHADOW_RO_FIELDS (1ULL << 29)
-diff --git a/arch/x86/include/asm/resctrl.h b/arch/x86/include/asm/resctrl.h
-index d24b04ebf950..52788f79786f 100644
---- a/arch/x86/include/asm/resctrl.h
-+++ b/arch/x86/include/asm/resctrl.h
-@@ -7,8 +7,6 @@
- #include <linux/sched.h>
- #include <linux/jump_label.h>
- 
--#define IA32_PQR_ASSOC	0x0c8f
--
- /**
-  * struct resctrl_pqr_state - State cache for the PQR MSR
-  * @cur_rmid:		The cached Resource Monitoring ID
-@@ -16,8 +14,8 @@
-  * @default_rmid:	The user assigned Resource Monitoring ID
-  * @default_closid:	The user assigned cached Class Of Service ID
-  *
-- * The upper 32 bits of IA32_PQR_ASSOC contain closid and the
-- * lower 10 bits rmid. The update to IA32_PQR_ASSOC always
-+ * The upper 32 bits of MSR_IA32_PQR_ASSOC contain closid and the
-+ * lower 10 bits rmid. The update to MSR_IA32_PQR_ASSOC always
-  * contains both parts, so we need to cache them. This also
-  * stores the user configured per cpu CLOSID and RMID.
-  *
-@@ -77,7 +75,7 @@ static void __resctrl_sched_in(void)
- 	if (closid != state->cur_closid || rmid != state->cur_rmid) {
- 		state->cur_closid = closid;
- 		state->cur_rmid = rmid;
--		wrmsr(IA32_PQR_ASSOC, rmid, closid);
-+		wrmsr(MSR_IA32_PQR_ASSOC, rmid, closid);
- 	}
- }
- 
-diff --git a/arch/x86/kernel/cpu/resctrl/core.c b/arch/x86/kernel/cpu/resctrl/core.c
-index 03cfbf0fe000..c98e52ff5f20 100644
---- a/arch/x86/kernel/cpu/resctrl/core.c
-+++ b/arch/x86/kernel/cpu/resctrl/core.c
-@@ -575,7 +575,7 @@ static void clear_closid_rmid(int cpu)
- 	state->default_rmid = 0;
- 	state->cur_closid = 0;
- 	state->cur_rmid = 0;
--	wrmsr(IA32_PQR_ASSOC, 0, 0);
-+	wrmsr(MSR_IA32_PQR_ASSOC, 0, 0);
- }
- 
- static int resctrl_online_cpu(unsigned int cpu)
-diff --git a/arch/x86/kernel/cpu/resctrl/internal.h b/arch/x86/kernel/cpu/resctrl/internal.h
-index 5f7128686cfd..4f43da46243d 100644
---- a/arch/x86/kernel/cpu/resctrl/internal.h
-+++ b/arch/x86/kernel/cpu/resctrl/internal.h
-@@ -8,15 +8,7 @@
- #include <linux/fs_context.h>
- #include <linux/jump_label.h>
- 
--#define MSR_IA32_L3_QOS_CFG		0xc81
--#define MSR_IA32_L2_QOS_CFG		0xc82
--#define MSR_IA32_L3_CBM_BASE		0xc90
--#define MSR_IA32_L2_CBM_BASE		0xd10
--#define MSR_IA32_MBA_THRTL_BASE		0xd50
--#define MSR_IA32_MBA_BW_BASE		0xc0000200
--
--#define MSR_IA32_QM_CTR			0x0c8e
--#define MSR_IA32_QM_EVTSEL		0x0c8d
-+
- 
- #define L3_QOS_CDP_ENABLE		0x01ULL
- 
-diff --git a/arch/x86/kernel/cpu/resctrl/pseudo_lock.c b/arch/x86/kernel/cpu/resctrl/pseudo_lock.c
-index d961ae3ed96e..ba8d0763b36b 100644
---- a/arch/x86/kernel/cpu/resctrl/pseudo_lock.c
-+++ b/arch/x86/kernel/cpu/resctrl/pseudo_lock.c
-@@ -477,7 +477,7 @@ static int pseudo_lock_fn(void *_rdtgrp)
- 	 * pseudo-locked followed by reading of kernel memory to load it
- 	 * into the cache.
- 	 */
--	__wrmsr(IA32_PQR_ASSOC, rmid_p, rdtgrp->closid);
-+	__wrmsr(MSR_IA32_PQR_ASSOC, rmid_p, rdtgrp->closid);
- 	/*
- 	 * Cache was flushed earlier. Now access kernel memory to read it
- 	 * into cache region associated with just activated plr->closid.
-@@ -513,7 +513,7 @@ static int pseudo_lock_fn(void *_rdtgrp)
- 	 * Critical section end: restore closid with capacity bitmask that
- 	 * does not overlap with pseudo-locked region.
- 	 */
--	__wrmsr(IA32_PQR_ASSOC, rmid_p, closid_p);
-+	__wrmsr(MSR_IA32_PQR_ASSOC, rmid_p, closid_p);
- 
- 	/* Re-enable the hardware prefetcher(s) */
- 	wrmsrl(MSR_MISC_FEATURE_CONTROL, saved_msr);
--- 
-2.35.1
-
+                 Linus
