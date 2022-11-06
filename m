@@ -2,162 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC2E661E0C0
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 09:02:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F38861E0C3
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 09:02:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229817AbiKFICA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Nov 2022 03:02:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51552 "EHLO
+        id S229839AbiKFICd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Nov 2022 03:02:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229701AbiKFIBh (ORCPT
+        with ESMTP id S230003AbiKFICU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Nov 2022 03:01:37 -0500
-Received: from mxout4.routing.net (mxout4.routing.net [IPv6:2a03:2900:1:a::9])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C4F56353;
-        Sun,  6 Nov 2022 01:01:33 -0700 (PDT)
-Received: from mxbox3.masterlogin.de (unknown [192.168.10.78])
-        by mxout4.routing.net (Postfix) with ESMTP id 3158D10077E;
-        Sun,  6 Nov 2022 08:01:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailerdienst.de;
-        s=20200217; t=1667721692;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=El1GKLp+WHT5eBOYelh41HPdJnJnhv3QxP1VgLX4sjE=;
-        b=QqwGZJNVCarkqfKXJrYzkxHf4BpJO/wWU6Yi8JVnKKu1QuBlOAeoeFFWjaE6yIb0awivtq
-        Ab2ZeINUwtdrMtWM3SYGP1wntJxXd54H76SmKIaaiQJvGbR+c+L5wizdk4l8A7tW1p8/yG
-        v35raMlc5Qb8rdkhin8LMFKXXdgGEs8=
-Received: from frank-G5.. (fttx-pool-80.245.79.199.bambit.de [80.245.79.199])
-        by mxbox3.masterlogin.de (Postfix) with ESMTPSA id 8820E360707;
-        Sun,  6 Nov 2022 08:01:31 +0000 (UTC)
-From:   Frank Wunderlich <linux@fw-web.de>
-To:     linux-mediatek@lists.infradead.org
-Cc:     Frank Wunderlich <frank-w@public-files.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
+        Sun, 6 Nov 2022 03:02:20 -0500
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F10316356;
+        Sun,  6 Nov 2022 01:02:05 -0700 (PDT)
+Received: by mail-pg1-x52a.google.com with SMTP id b62so7939981pgc.0;
+        Sun, 06 Nov 2022 01:02:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=5HVAEd9MRqq4+UEkyosACOKfYclXv6j5Rr/scR7ngsI=;
+        b=J8FhOotX+JH9qRe0ClIg8UlfWcSSHM4bB5OpcJN9ldMUQEXOY38+SBkjn22YmmIQEk
+         d+0bSAYG3+XaQQ8QstzC/9f2oR6gHIOwiLgylKn0Jl+R9RO0qWxWikwozGPb0Gtdwftb
+         z6Am7/a1uWQbXL6RwZf2zbTBK/xJnEmW1LYDqkv8cRcPoJWy4Kygy3sV4PLOMeJ1Nsc6
+         ihiOid9PJ+0/85gUV7jo67RjM5ulI/votfGsyiz87eFWMmu0yoSOsxiElOZ0isD3RO3u
+         BfZPyIyPgzDltKjNDwz169RWXoghVwU+Z7mDQqppX/RkaKblO8ZYNFmEWGWS9RF7/Oe3
+         UYHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5HVAEd9MRqq4+UEkyosACOKfYclXv6j5Rr/scR7ngsI=;
+        b=BJWBX1CM024e4Sr4AYKO3QjPxHPbrvzzTWjqOW0YCqVEe0NRu+E37NFoUExiXatYxr
+         tFDcvnT9YW6Jbkw2cgwA4XooO/NKwLg5vBZJ7T6Aj7lpOyjw4VkAF5DW8gJWWtpoFELk
+         tBhZTmJNwrOFkXu675E+/1L1iJcck4psPCJaRaaUJsGAx/apj+pZbSm6NV4n15dAuRQw
+         tM1oBxlXa+6+8WDuIVAiZH/IHcRDP73AwwhLt3EPU05aAKwaEafrZ5G8XwM1eA1PyRSC
+         OxTVDTb2U7KzvKmec7MGjMpUh8vlYJvlvpqKohqH7eWUMYl8Cfod2dGOBTB6wtFE5oJh
+         4ltw==
+X-Gm-Message-State: ANoB5pnOeRxhYI9ESG2oTyKgmLPQi7PrKYu7onG0N8LZxQ4ZjoiDjj/b
+        mrDpZoiwQkNkwjEoM8RpKbE=
+X-Google-Smtp-Source: AA0mqf5npKAYgb+1Fna6B5J8t9t0/6WOt/svLNq0egbTm/M0bEBCNFe7ugsuf+37FLFfBxMKYaODGw==
+X-Received: by 2002:a63:f651:0:b0:470:4f30:f724 with SMTP id u17-20020a63f651000000b004704f30f724mr5016774pgj.445.1667721719706;
+        Sun, 06 Nov 2022 01:01:59 -0700 (PDT)
+Received: from localhost ([2600:1700:38c1:1d7f:f66d:4ff:fe3c:3ceb])
+        by smtp.gmail.com with ESMTPSA id i17-20020aa796f1000000b0056da073b2b7sm2237769pfq.210.2022.11.06.01.01.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 06 Nov 2022 01:01:59 -0700 (PDT)
+Date:   Sun, 6 Nov 2022 01:01:55 -0700
+From:   Brian Norris <computersforpeace@gmail.com>
+To:     Christian Marangi <ansuelsmth@gmail.com>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sean Wang <sean.wang@kernel.org>,
-        Sam Shih <sam.shih@mediatek.com>, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 6/6] pinctrl: mediatek: add pull_type attribute for mediatek MT7986 SoC
-Date:   Sun,  6 Nov 2022 09:01:13 +0100
-Message-Id: <20221106080114.7426-7-linux@fw-web.de>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221106080114.7426-1-linux@fw-web.de>
-References: <20221106080114.7426-1-linux@fw-web.de>
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Hendrik Koerner <koerhen@web.de>
+Subject: Re: [PATCH] ARM: dts: qcom: ipq8064: disable mmc-ddr-1_8v for sdcc1
+Message-ID: <Y2dp8+2tfi2+nXNL@localhost>
+References: <20221024233817.27410-1-ansuelsmth@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Mail-ID: 1833dc4d-5032-4cbc-ab32-c25b5990d83b
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UPPERCASE_50_75
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221024233817.27410-1-ansuelsmth@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sam Shih <sam.shih@mediatek.com>
+On Tue, Oct 25, 2022 at 01:38:17AM +0200, Christian Marangi wrote:
+> It was reported non working mmc with this option enabled.
+> Both mmc for ipq8064 are supplied by a fixed 3.3v regulator so mmc can't
+> be run at 1.8v.
+> Disable it to restore correct functionality of this SoC feature.
+> 
+> Tested-by: Hendrik Koerner <koerhen@web.de>
+> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
 
-Commit fb34a9ae383a ("pinctrl: mediatek: support rsel feature")
-add SoC specify 'pull_type' attribute for bias configuration.
+Perhaps there's some board where this property makes sense, but it seems
+like something that should be added when needed in the leaf DTS, and not
+supplied in the base DTSI. So:
 
-This patch add pull_type attribute to pinctrl-mt7986.c, and make
-bias_set_combo and bias_get_combo available to mediatek MT7986 SoC.
+Reviewed-by: Brian Norris <computersforpeace@gmail.com>
 
-Signed-off-by: Sam Shih <sam.shih@mediatek.com>
-Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
----
-v2:
-- fix odd numbers in comments
----
- drivers/pinctrl/mediatek/pinctrl-mt7986.c | 56 +++++++++++++++++++++++
- 1 file changed, 56 insertions(+)
+This also fixes problems I've seen on my systems, so:
 
-diff --git a/drivers/pinctrl/mediatek/pinctrl-mt7986.c b/drivers/pinctrl/mediatek/pinctrl-mt7986.c
-index d13c59510468..db3497d6787a 100644
---- a/drivers/pinctrl/mediatek/pinctrl-mt7986.c
-+++ b/drivers/pinctrl/mediatek/pinctrl-mt7986.c
-@@ -407,6 +407,60 @@ static const struct mtk_pin_field_calc mt7986_pin_r1_range[] = {
- 	PIN_FIELD_BASE(66, 68, IOCFG_LB_BASE, 0x60, 0x10, 2, 1),
- };
- 
-+static const unsigned int mt7986_pull_type[] = {
-+	MTK_PULL_PUPD_R1R0_TYPE,/*0*/ MTK_PULL_PUPD_R1R0_TYPE,/*1*/
-+	MTK_PULL_PUPD_R1R0_TYPE,/*2*/ MTK_PULL_PUPD_R1R0_TYPE,/*3*/
-+	MTK_PULL_PUPD_R1R0_TYPE,/*4*/ MTK_PULL_PUPD_R1R0_TYPE,/*5*/
-+	MTK_PULL_PUPD_R1R0_TYPE,/*6*/ MTK_PULL_PUPD_R1R0_TYPE,/*7*/
-+	MTK_PULL_PUPD_R1R0_TYPE,/*8*/ MTK_PULL_PUPD_R1R0_TYPE,/*9*/
-+	MTK_PULL_PUPD_R1R0_TYPE,/*10*/ MTK_PULL_PUPD_R1R0_TYPE,/*11*/
-+	MTK_PULL_PUPD_R1R0_TYPE,/*12*/ MTK_PULL_PUPD_R1R0_TYPE,/*13*/
-+	MTK_PULL_PUPD_R1R0_TYPE,/*14*/ MTK_PULL_PUPD_R1R0_TYPE,/*15*/
-+	MTK_PULL_PUPD_R1R0_TYPE,/*16*/ MTK_PULL_PUPD_R1R0_TYPE,/*17*/
-+	MTK_PULL_PUPD_R1R0_TYPE,/*18*/ MTK_PULL_PUPD_R1R0_TYPE,/*19*/
-+	MTK_PULL_PUPD_R1R0_TYPE,/*20*/ MTK_PULL_PUPD_R1R0_TYPE,/*21*/
-+	MTK_PULL_PUPD_R1R0_TYPE,/*22*/ MTK_PULL_PUPD_R1R0_TYPE,/*23*/
-+	MTK_PULL_PUPD_R1R0_TYPE,/*24*/ MTK_PULL_PUPD_R1R0_TYPE,/*25*/
-+	MTK_PULL_PUPD_R1R0_TYPE,/*26*/ MTK_PULL_PUPD_R1R0_TYPE,/*27*/
-+	MTK_PULL_PUPD_R1R0_TYPE,/*28*/ MTK_PULL_PUPD_R1R0_TYPE,/*29*/
-+	MTK_PULL_PUPD_R1R0_TYPE,/*30*/ MTK_PULL_PUPD_R1R0_TYPE,/*31*/
-+	MTK_PULL_PUPD_R1R0_TYPE,/*32*/ MTK_PULL_PUPD_R1R0_TYPE,/*33*/
-+	MTK_PULL_PUPD_R1R0_TYPE,/*34*/ MTK_PULL_PUPD_R1R0_TYPE,/*35*/
-+	MTK_PULL_PUPD_R1R0_TYPE,/*36*/ MTK_PULL_PUPD_R1R0_TYPE,/*37*/
-+	MTK_PULL_PUPD_R1R0_TYPE,/*38*/ MTK_PULL_PUPD_R1R0_TYPE,/*39*/
-+	MTK_PULL_PUPD_R1R0_TYPE,/*40*/ MTK_PULL_PUPD_R1R0_TYPE,/*41*/
-+	MTK_PULL_PUPD_R1R0_TYPE,/*42*/ MTK_PULL_PUPD_R1R0_TYPE,/*43*/
-+	MTK_PULL_PUPD_R1R0_TYPE,/*44*/ MTK_PULL_PUPD_R1R0_TYPE,/*45*/
-+	MTK_PULL_PUPD_R1R0_TYPE,/*46*/ MTK_PULL_PUPD_R1R0_TYPE,/*47*/
-+	MTK_PULL_PUPD_R1R0_TYPE,/*48*/ MTK_PULL_PUPD_R1R0_TYPE,/*49*/
-+	MTK_PULL_PUPD_R1R0_TYPE,/*50*/ MTK_PULL_PUPD_R1R0_TYPE,/*51*/
-+	MTK_PULL_PUPD_R1R0_TYPE,/*52*/ MTK_PULL_PUPD_R1R0_TYPE,/*53*/
-+	MTK_PULL_PUPD_R1R0_TYPE,/*54*/ MTK_PULL_PUPD_R1R0_TYPE,/*55*/
-+	MTK_PULL_PUPD_R1R0_TYPE,/*56*/ MTK_PULL_PUPD_R1R0_TYPE,/*57*/
-+	MTK_PULL_PUPD_R1R0_TYPE,/*58*/ MTK_PULL_PUPD_R1R0_TYPE,/*59*/
-+	MTK_PULL_PUPD_R1R0_TYPE,/*60*/ MTK_PULL_PUPD_R1R0_TYPE,/*61*/
-+	MTK_PULL_PUPD_R1R0_TYPE,/*62*/ MTK_PULL_PUPD_R1R0_TYPE,/*63*/
-+	MTK_PULL_PUPD_R1R0_TYPE,/*64*/ MTK_PULL_PUPD_R1R0_TYPE,/*65*/
-+	MTK_PULL_PUPD_R1R0_TYPE,/*66*/ MTK_PULL_PUPD_R1R0_TYPE,/*67*/
-+	MTK_PULL_PUPD_R1R0_TYPE,/*68*/ MTK_PULL_PU_PD_TYPE,/*69*/
-+	MTK_PULL_PU_PD_TYPE,/*70*/ MTK_PULL_PU_PD_TYPE,/*71*/
-+	MTK_PULL_PU_PD_TYPE,/*72*/ MTK_PULL_PU_PD_TYPE,/*73*/
-+	MTK_PULL_PU_PD_TYPE,/*74*/ MTK_PULL_PU_PD_TYPE,/*75*/
-+	MTK_PULL_PU_PD_TYPE,/*76*/ MTK_PULL_PU_PD_TYPE,/*77*/
-+	MTK_PULL_PU_PD_TYPE,/*78*/ MTK_PULL_PU_PD_TYPE,/*79*/
-+	MTK_PULL_PU_PD_TYPE,/*80*/ MTK_PULL_PU_PD_TYPE,/*81*/
-+	MTK_PULL_PU_PD_TYPE,/*82*/ MTK_PULL_PU_PD_TYPE,/*83*/
-+	MTK_PULL_PU_PD_TYPE,/*84*/ MTK_PULL_PU_PD_TYPE,/*85*/
-+	MTK_PULL_PU_PD_TYPE,/*86*/ MTK_PULL_PU_PD_TYPE,/*87*/
-+	MTK_PULL_PU_PD_TYPE,/*88*/ MTK_PULL_PU_PD_TYPE,/*89*/
-+	MTK_PULL_PU_PD_TYPE,/*90*/ MTK_PULL_PU_PD_TYPE,/*91*/
-+	MTK_PULL_PU_PD_TYPE,/*92*/ MTK_PULL_PU_PD_TYPE,/*93*/
-+	MTK_PULL_PU_PD_TYPE,/*94*/ MTK_PULL_PU_PD_TYPE,/*95*/
-+	MTK_PULL_PU_PD_TYPE,/*96*/ MTK_PULL_PU_PD_TYPE,/*97*/
-+	MTK_PULL_PU_PD_TYPE,/*98*/ MTK_PULL_PU_PD_TYPE,/*99*/
-+	MTK_PULL_PU_PD_TYPE,/*100*/
-+};
-+
- static const struct mtk_pin_reg_calc mt7986_reg_cals[] = {
- 	[PINCTRL_PIN_REG_MODE] = MTK_RANGE(mt7986_pin_mode_range),
- 	[PINCTRL_PIN_REG_DIR] = MTK_RANGE(mt7986_pin_dir_range),
-@@ -866,6 +920,7 @@ static struct mtk_pin_soc mt7986a_data = {
- 	.ies_present = false,
- 	.base_names = mt7986_pinctrl_register_base_names,
- 	.nbase_names = ARRAY_SIZE(mt7986_pinctrl_register_base_names),
-+	.pull_type = mt7986_pull_type,
- 	.bias_set_combo = mtk_pinconf_bias_set_combo,
- 	.bias_get_combo = mtk_pinconf_bias_get_combo,
- 	.drive_set = mtk_pinconf_drive_set_rev1,
-@@ -887,6 +942,7 @@ static struct mtk_pin_soc mt7986b_data = {
- 	.ies_present = false,
- 	.base_names = mt7986_pinctrl_register_base_names,
- 	.nbase_names = ARRAY_SIZE(mt7986_pinctrl_register_base_names),
-+	.pull_type = mt7986_pull_type,
- 	.bias_set_combo = mtk_pinconf_bias_set_combo,
- 	.bias_get_combo = mtk_pinconf_bias_get_combo,
- 	.drive_set = mtk_pinconf_drive_set_rev1,
--- 
-2.34.1
+Tested-by: Brian Norris <computersforpeace@gmail.com>
 
+Thanks!
