@@ -2,142 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7ED2661E27A
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 14:58:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25F2E61E27E
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 15:03:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229992AbiKFN6G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Nov 2022 08:58:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49656 "EHLO
+        id S230005AbiKFOD0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Nov 2022 09:03:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229883AbiKFN6E (ORCPT
+        with ESMTP id S229820AbiKFODY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Nov 2022 08:58:04 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5837D630D;
-        Sun,  6 Nov 2022 05:58:03 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id a67so13838465edf.12;
-        Sun, 06 Nov 2022 05:58:03 -0800 (PST)
+        Sun, 6 Nov 2022 09:03:24 -0500
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 946CBE37;
+        Sun,  6 Nov 2022 06:03:23 -0800 (PST)
+Received: by mail-pf1-x42c.google.com with SMTP id q9so8421852pfg.5;
+        Sun, 06 Nov 2022 06:03:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=oTWv8Arpvhk+VLNvjiohfLLFMW1gdUFZvUNXxvts/P4=;
-        b=fLZWYaPs3BvKAMSnliZpz8SCMlAxLVAt0qRaQFn7Veqy637jbTTimpKW+oeC9HnBMk
-         4yk+vSLB3gRkM8Ap64ZiuHPfpAGwlMbRJRIQX9ve6HxlUJ9naOkJlemR39Zqco1Jy3DL
-         5M3SzSpVWtan25TtB6tdBzb58kQh++5b8aDqnzLE7rsEGaqmnybF2SPzucmaOvD/PfzE
-         qi4NarNKH64ebh6eDvaIvqcS7Wv4UmOsaZEOWiQhznE5HEqrSUnWIXWFRQZl+aM1pNDo
-         ImPWOO0vfyPuO9/EfYAPmLZaZZL1q2Q3maMEW4sCwchj3RH2HZP4F0NkdsROZnSLQDre
-         l7+w==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=a+S/udKCmHjZqnoeIR1sQ8q/CXlcQvvka8Tjnn+pm0M=;
+        b=JcxKKNbpHoRXw49UJtem2dR8dPnhVIlnCiAVBmD6/cZw0+v/FYlEUQ4qyJhMnJ3FL+
+         ydY3WuwQ4VRtrp69Op2wdJLx3Rq7tctTZr44mJMK8k93EAcOpJWH002qiQink9IlPT31
+         SP8YicXbBqwpWemhykwHTMadDtIEwf9oJBJtjbsX/Vw3oV1QwcW0SuzNU2zdJx3PyFBL
+         a+pFFz1vm70mlOEvAgjJXkmeoP+qOcW90K7RiCjOzRn8OhEAwgNhFVBzX7BYH/8LL0Q0
+         tFR2/rH8TrXOO4p3s5fwtU7El2M0hXrl51i+XMwRgB5ZF3vZHWofifLFwavOZSTiYd9Z
+         276w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=oTWv8Arpvhk+VLNvjiohfLLFMW1gdUFZvUNXxvts/P4=;
-        b=wl7v1t4Bu1DSL2yytQKFPPQ47vFxtqgfFq/L9ahRyhLe8QBXkOiTYzMXsPsVHKNJDg
-         07nih1wP9ci8ePlR19DVyVQa5Lt0F/ZmkdEYFEOf1sGbAcUINah9NmzYXuJ2nR1BmOZ4
-         g5r3x0SM2Jwb+V7f8lg5wHYB7cuHE68GzXj0vJJCcMQ7OxVXpEQ6hRRr6AbdN38KHPV6
-         OkB+49XJoFoAfRVUZ264d8XHBaW5QeNB4+U9F7wZZ5eEvBkihIjPe/y6vsO5Kut5JiiS
-         DelFaqlM0TAHizyDz6duT1qjlCoSjNDwOHYbevpKlJAh1Qbi+thdnODUzXSetsoaAPId
-         A64g==
-X-Gm-Message-State: ACrzQf1ZwIb7YRksZoFwRmo4K6JIzVyCY8/P6ml3ATUHhbAnZIccnZnJ
-        tjuFU3uv3hod56e9VS/bExQ=
-X-Google-Smtp-Source: AMsMyM40H2rY3rMrCtAOedxUz5U7Vh/Tl/zMTEFk2kQG3BLvYaGYUyg4eNktKI/PH/bQRLkWkJ+Mkg==
-X-Received: by 2002:aa7:d44b:0:b0:464:2fa2:3359 with SMTP id q11-20020aa7d44b000000b004642fa23359mr18272772edr.409.1667743081807;
-        Sun, 06 Nov 2022 05:58:01 -0800 (PST)
-Received: from [192.168.0.131] ([194.183.54.57])
-        by smtp.gmail.com with ESMTPSA id k8-20020a1709062a4800b007ad9c826d75sm2169089eje.61.2022.11.06.05.58.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 06 Nov 2022 05:58:00 -0800 (PST)
-Message-ID: <1ca5fc04-f16b-f98a-0373-c61c258aa8bd@gmail.com>
-Date:   Sun, 6 Nov 2022 14:57:59 +0100
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=a+S/udKCmHjZqnoeIR1sQ8q/CXlcQvvka8Tjnn+pm0M=;
+        b=yhC6uP8CXH2aKfhZdbpBWd9Ym22HZ64s2lkD2H0LdEFcrUWnLs9QxmCfVvvCyHfg8g
+         swNgp5xwIh5Lk5QxsFqr1fe+ENijaXnqr/WdFdkUzDTbNFUhmCdHSWMtAp9G7MLgp4+i
+         eUWjMBjLFLp0KtHE9GBvIRY4nHpM54p1l3pGpX64LPnYbOOiaDgTVZHk4CQTmRiG46Fh
+         2/waRcezLoFAF8sCh9yhSl0hVQ269ApfoW39YJj9wmTU+d+UX5k3Su2dIUCJ8hWbAkVZ
+         KY7ehmqObkjRRCBnym98feHIhB3+16Sn37u93CRM5Kt5hhcrSpHKhhlcUzMAn4XhkAfb
+         1jWw==
+X-Gm-Message-State: ACrzQf1nWinXhzQKc9e8IAITmgb3/2Fhnospzekc/30f02aig3M/YW0A
+        ghW53kLv4zZ4n8DTULojHSUijb0e9+L2pg==
+X-Google-Smtp-Source: AMsMyM60npb3Ps/2+F93AMIYzlhqTklHe6wP9Bs6546mlBOpgNxzGrhrmN38P+azrsPkbs4piFCodw==
+X-Received: by 2002:a05:6a00:a8c:b0:558:991a:6691 with SMTP id b12-20020a056a000a8c00b00558991a6691mr45644570pfl.53.1667743402929;
+        Sun, 06 Nov 2022 06:03:22 -0800 (PST)
+Received: from debian.. (subs02-180-214-232-23.three.co.id. [180.214.232.23])
+        by smtp.gmail.com with ESMTPSA id p67-20020a625b46000000b005625d6d2999sm2635068pfb.187.2022.11.06.06.03.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 06 Nov 2022 06:03:22 -0800 (PST)
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Cosmin Tanislav <cosmin.tanislav@analog.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Bagas Sanjaya <bagasdotme@gmail.com>
+Subject: [PATCH] Documentation: ad4130: format list of in_voltage-voltage_filter_mode_available modes
+Date:   Sun,  6 Nov 2022 21:02:33 +0700
+Message-Id: <20221106140233.74112-1-bagasdotme@gmail.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v5 6/6] leds: Add a multicolor LED driver to group
- monochromatic LEDs
-Content-Language: en-US
-To:     Jean-Jacques Hiblot <jjhiblot@traphandler.com>,
-        lee.jones@linaro.org, pavel@ucw.cz, robh+dt@kernel.org,
-        sven.schwermer@disruptive-technologies.com,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     johan+linaro@kernel.org, marijn.suijten@somainline.org,
-        bjorn.andersson@linaro.org, andy.shevchenko@gmail.com,
-        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221028170308.2676734-1-jjhiblot@traphandler.com>
- <20221028170308.2676734-7-jjhiblot@traphandler.com>
-From:   Jacek Anaszewski <jacek.anaszewski@gmail.com>
-In-Reply-To: <20221028170308.2676734-7-jjhiblot@traphandler.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3309; i=bagasdotme@gmail.com; h=from:subject; bh=ttGJr6cF+tz4BDV10+eWjaRdXdHuebhd6zQIvSyvI9s=; b=owGbwMvMwCH2bWenZ2ig32LG02pJDMnp+0qU2M3OcATMbb43beenxL0J9sUPOjrdr1yb3Ghx032x Yq1wRykLgxgHg6yYIsukRL6m07uMRC60r3WEmcPKBDKEgYtTACYSzs/IcPR0M5vFev8jnvaucwUuC0 6y5Xznwr6m+ItOu33Am3th+xkZLsVseaS8YQNT9mLfLa1+sYohC6/OWrqzSy1ig5tn/oFtXAA=
+X-Developer-Key: i=bagasdotme@gmail.com; a=openpgp; fpr=701B806FDCA5D3A58FFB8F7D7C276C64A5E44A1D
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jean,
+Sphinx reports two warnings on sysfs documentation for AD4130 driver:
 
-On 10/28/22 19:03, Jean-Jacques Hiblot wrote:
-> By allowing to group multiple monochrome LED into multicolor LEDs,
-> all involved LEDs can be controlled in-sync. This enables using effects
-> using triggers, etc.
-> 
-> Signed-off-by: Jean-Jacques Hiblot <jjhiblot@traphandler.com>
-> ---
->   drivers/leds/rgb/Kconfig                 |  10 ++
->   drivers/leds/rgb/Makefile                |   1 +
->   drivers/leds/rgb/leds-group-multicolor.c | 154 +++++++++++++++++++++++
->   3 files changed, 165 insertions(+)
->   create mode 100644 drivers/leds/rgb/leds-group-multicolor.c
-> 
-> diff --git a/drivers/leds/rgb/Kconfig b/drivers/leds/rgb/Kconfig
-> index 204cf470beae..1a87f53faa8a 100644
-> --- a/drivers/leds/rgb/Kconfig
-> +++ b/drivers/leds/rgb/Kconfig
-> @@ -2,6 +2,16 @@
->   
-[...]
-> +
-> +	for (i = 0; i < count; i++) {
-> +		struct led_classdev *led_cdev = priv->monochromatics[i];
-> +
-> +		/* Make the sysfs of the monochromatic LED read-only */
-> +		led_cdev->flags |= LED_SYSFS_DISABLE;
+Documentation/ABI/testing/sysfs-bus-iio-adc-ad4130:2: WARNING: Unexpected indentation.
+Documentation/ABI/testing/sysfs-bus-iio-adc-ad4130:2: WARNING: Block quote ends without a blank line; unexpected unindent.
 
-Clearing these on remove is needed as well.
+These are due to misformatting of sinc* modes list. Format it with bullet
+list. Since each entry spans multiple lines, separate each with a blank
+line.
 
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct of_device_id of_led_mcg_match[] = {
-> +	{ .compatible = "leds-group-multicolor" },
-> +	{}
-> +};
-> +MODULE_DEVICE_TABLE(of, of_led_mcg_match);
-> +
-> +static struct platform_driver led_mcg_driver = {
-> +	.probe		= led_mcg_probe,
-> +	.driver		= {
-> +		.name	= "leds_group_multicolor",
-> +		.of_match_table = of_led_mcg_match,
-> +	}
-> +};
-> +module_platform_driver(led_mcg_driver);
-> +
-> +MODULE_AUTHOR("Jean-Jacques Hiblot <jjhiblot@traphandler.com>");
-> +MODULE_DESCRIPTION("multi-color LED group driver");
-> +MODULE_LICENSE("GPL");
-> +MODULE_ALIAS("platform:leds-group-multicolor");
+Fixes: 5bdef39c5c6e1a ("iio: adc: ad4130: add AD4130 driver")
+Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
+---
+ .../ABI/testing/sysfs-bus-iio-adc-ad4130      | 48 +++++++++++--------
+ 1 file changed, 29 insertions(+), 19 deletions(-)
 
+diff --git a/Documentation/ABI/testing/sysfs-bus-iio-adc-ad4130 b/Documentation/ABI/testing/sysfs-bus-iio-adc-ad4130
+index d9555751d21ce2..f24ed6687e900e 100644
+--- a/Documentation/ABI/testing/sysfs-bus-iio-adc-ad4130
++++ b/Documentation/ABI/testing/sysfs-bus-iio-adc-ad4130
+@@ -3,25 +3,35 @@ KernelVersion:  6.2
+ Contact:	linux-iio@vger.kernel.org
+ Description:
+ 		Reading returns a list with the possible filter modes.
+-		"sinc4"       - Sinc 4. Excellent noise performance. Long 1st
+-				conversion time. No natural 50/60Hz rejection.
+-		"sinc4+sinc1" - Sinc4 + averaging by 8. Low 1st conversion time.
+-		"sinc3"	      - Sinc3. Moderate 1st conversion time. Good noise
+-				performance.
+-		"sinc3+rej60" - Sinc3 + 60Hz rejection. At a sampling frequency
+-				of 50Hz, achieves simultaneous 50Hz and 60Hz
+-				rejection.
+-		"sinc3+sinc1" - Sinc3 + averaging by 8. Low 1st conversion time.
+-				Best used with a sampling frequency of at least
+-				216.19Hz.
+-		"sinc3+pf1"   - Sinc3 + Post Filter 1.
+-				53dB rejection @ 50Hz, 58dB rejection @ 60Hz.
+-		"sinc3+pf2"   - Sinc3 + Post Filter 2.
+-				70dB rejection @ 50Hz, 70dB rejection @ 60Hz.
+-		"sinc3+pf3"   - Sinc3 + Post Filter 3.
+-				99dB rejection @ 50Hz, 103dB rejection @ 60Hz.
+-		"sinc3+pf4"   - Sinc3 + Post Filter 4.
+-				103dB rejection @ 50Hz, 109dB rejection @ 60Hz.
++
++		  * "sinc4"       - Sinc 4. Excellent noise performance. Long
++                    1st conversion time. No natural 50/60Hz rejection.
++
++		  * "sinc4+sinc1" - Sinc4 + averaging by 8. Low 1st conversion
++		    time.
++
++		  * "sinc3"	      - Sinc3. Moderate 1st conversion time.
++		    Good noise performance.
++
++		  * "sinc3+rej60" - Sinc3 + 60Hz rejection. At a sampling
++		    frequency of 50Hz, achieves simultaneous 50Hz and 60Hz
++		    rejection.
++
++		  * "sinc3+sinc1" - Sinc3 + averaging by 8. Low 1st conversion
++		    time. Best used with a sampling frequency of at least
++		    216.19Hz.
++
++		  * "sinc3+pf1"   - Sinc3 + Post Filter 1. 53dB rejection @
++		    50Hz, 58dB rejection @ 60Hz.
++
++		  * "sinc3+pf2"   - Sinc3 + Post Filter 2. 70dB rejection @
++		    50Hz, 70dB rejection @ 60Hz.
++
++		  * "sinc3+pf3"   - Sinc3 + Post Filter 3. 99dB rejection @
++		    50Hz, 103dB rejection @ 60Hz.
++
++		  * "sinc3+pf4"   - Sinc3 + Post Filter 4. 103dB rejection @
++		    50Hz, 109dB rejection @ 60Hz.
+ 
+ What:		/sys/bus/iio/devices/iio:deviceX/in_voltageY-voltageZ_filter_mode
+ KernelVersion:  6.2
+
+base-commit: b8bee0f98634cc1ce8cc8bf0e1db025734ee0c2b
 -- 
-Best regards,
-Jacek Anaszewski
+An old man doll... just what I always wanted! - Clara
+
