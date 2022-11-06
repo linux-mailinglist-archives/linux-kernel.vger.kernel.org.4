@@ -2,75 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A50D61E2C1
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 15:51:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D8F761E2C2
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 15:52:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230021AbiKFOvw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Nov 2022 09:51:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60634 "EHLO
+        id S230047AbiKFOwN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Nov 2022 09:52:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229909AbiKFOvt (ORCPT
+        with ESMTP id S229909AbiKFOwL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Nov 2022 09:51:49 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 234D9DA6;
-        Sun,  6 Nov 2022 06:51:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net; s=s31663417;
-        t=1667746292; bh=EDw7/ApaRoHYrFz5JFfVxSbpvRHo10Rc+evSfgmLvrk=;
-        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=MdkhUnBQDQaG7MrQw/QBa/+PdAyjUrTGB6RVIWH8I9wm6JYevgaxFNe4QjeWaHKkP
-         RGmEGLlB+JI2us4eBl87Wtc3xqerLCvzIXV8zJ+28VapUl96ts5oNn2pL4C/vGPRBB
-         4WYP3NJxpOIJgRos5YQlnPApIdC6xXr1+jrqe/GURG2kn1bV/htLs1B6oeWdW9VuFv
-         OvSy3QMuaM6t8tUsdem+ASDJoVb3l914C+kbMDoKChE/0PZpvRof7rOsWzwbnQESeX
-         8g6zIP0Hp1OpVDxgCa4bDeES3B22rGG+5asot335zXSU+K2bxGZ/NnPHB5f63qLqOh
-         DVEcpFBBZpXAQ==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from probook ([87.78.44.193]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1McpJg-1pQCjW07Yg-00ZztL; Sun, 06
- Nov 2022 15:51:32 +0100
-Date:   Sun, 6 Nov 2022 15:51:30 +0100
-From:   Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-To:     kernel test robot <lkp@intel.com>
-Cc:     Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        linux-spi@vger.kernel.org, openbmc@lists.ozlabs.org,
-        oe-kbuild-all@lists.linux.dev, Lee Jones <lee@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org
-Subject: Re: [PATCH 7/8] spi: wpcm-fiu: Add driver for Nuvoton WPCM450 Flash
- Interface Unit (FIU)
-Message-ID: <Y2fJ8jyZDC12v8pQ@probook>
-References: <20221105185911.1547847-8-j.neuschaefer@gmx.net>
- <202211060522.PA6tWBXx-lkp@intel.com>
+        Sun, 6 Nov 2022 09:52:11 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6DEAF5E
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Nov 2022 06:52:09 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 69751B80BFE
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Nov 2022 14:52:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21B67C43144
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Nov 2022 14:52:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667746327;
+        bh=Ycv1TxqlDJ3PK7eO119N5f0GkPr0orUNrH7dQ8IQPdE=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=fu3I/AcPITAehA5xO7w7LrjaeI07r9dQU0hYsX9eSlAL95iAt0S5BcMkDiT55oG2b
+         XoMuJMB59oIzPzp+Txhv/p1zbzUYKjQpemIB4ph6ouTRByEIJmHmBK5H+Fhf1lPMkF
+         tHuKnv9DXQE+4X8Qz5YxkT3Q4o/J8tQVSV+NoUA4bFTTyIe18cSYR0D+G5v1JuHcSU
+         OKMWlLawq1RjaBoqyUWWF3CIkHG5oknE+YFIYgbDB7ZsG5++PKyd5Pgh8rZviUFoXr
+         00WEzdSfgW1plbx33ymsV/yT+9N1zMLds6r+3Lp1OzjebteK/VMTMj5So0qnQ53UrF
+         ygU19VQkPSu/g==
+Received: by mail-yb1-f179.google.com with SMTP id j2so10934860ybb.6
+        for <linux-kernel@vger.kernel.org>; Sun, 06 Nov 2022 06:52:07 -0800 (PST)
+X-Gm-Message-State: ACrzQf268Nc7fNJXsoukgs3Wm6CWzCSYcQoJAUyN2tlsyDCy/ftHsuBA
+        caP5qWb9yo28carT9lnjhlFB2yRtJ4l1NLIG0pA=
+X-Google-Smtp-Source: AMsMyM6TvlDttRINKFf1Xcnd0MX5uUAP1N9lvaQHPrt6uoT9ZyWzHOEh5zd8XsvoUYuAsAJ+Ic5VwHx+OwCliyzxs9U=
+X-Received: by 2002:a05:6902:152:b0:6ca:8fa:105b with SMTP id
+ p18-20020a056902015200b006ca08fa105bmr44476132ybh.550.1667746326046; Sun, 06
+ Nov 2022 06:52:06 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="9VS3WmYdJL+KGKqF"
-Content-Disposition: inline
-In-Reply-To: <202211060522.PA6tWBXx-lkp@intel.com>
-X-Provags-ID: V03:K1:oJ5ru1cyrw7RDcUHnSy09tCJMmYiyA/udXX7LddEiK7VDDR+rZZ
- +GV9CD7tqRbbej7qEZ9PLqx+a8aNSxrrl9HDJdGWxHAHFzjlluEr1uPkBGpXmnGDSdJccRz
- Ml5fWx2pc5PKhd/cGEKM8kf55FotaPq8iNFlkt/0SWQF+TN/7XcH9vGBRLbXtqjydw0JOH+
- 7+8lopmfzUb1y8Anumhzg==
-UI-OutboundReport: notjunk:1;M01:P0:DXR6bHdGeK0=;tnNCRqf0Konp127/y0kqNWgv1+N
- UnpAnfYAphWaHbTLTz01KKi2ydds6L6QP0fIYyxg90eq0AsZApvsniEXYRMUQ6CBdYznNnGdL
- XcyID2poxX8vYn6YKboDCnagsk1GGks3DWCSjyZYNTnwnv/aCUnMvvnPnuseOoNIVyYxoPLLE
- XqNmGAkWe6IuKdsKpxRJXd0530CNVSdyXOjXSHwiaJ4EmUfwZTiPx90KFTVL7aE5VTI9fKW91
- DWoNhqh4TDmG31i/og9+EdQ1EHaz5TRs9CaYIWFnPmuffCpyPxwhal0NuOcb0idB7GBd1z+dl
- wJCBK5varNJS+XXPEqDTWT77PPCgRwWApNyWa0aTPPbkQrgHC3Cxb/fvaWn8jIKLJ4XP41lNc
- HBnskvTa3YHfkuFQoQMAn+fVlsDQIEMxqyGIIX4e14lV7V9aJ03BrjmzhrYXWNPaqccVyzhjU
- Wctq8EbBvbJ8wycLMFKXra7x00Ly/LaaC9bRTrFZv+HXhBUOfSEBu+xzNUgl2nTvo5T/GQxQ6
- Kbm34Xle3MUYkG4V+NX35ca+p2lDFeqr5+EmlzLN0w7uukeVOblCsCW73ufuwFVjMzrfky/fh
- UPlGtM7au9AHR2rkU6mLYcOqxY8Y2iI47VngFBQheaAHTrWZe5QQE3/a6l/dp7IbhNd3ObmRz
- RB4cJIfwcAycdsjpIlT4xHlEOKdTPwQmlvJUPENe6YgkevEUX1AEP/XJSIcrH9FWHquUn7SGF
- bbUOJhBna93HVQe+1PzYpCJs87a9gexKucyvR8TzSE9SMiSCbtMcN+OMFGTkDKIW9SY5PXiWv
- xSYw/CMq6K3031aUX9LDzahtBOyGTGf+vwTppnJmjjWyWzlCwCVMv5bSAtG1y4XQzmvqpfU4x
- Qd44EHPUeJLDtVHC/C5Im+vly6n4R9MFtlDKxIZAYB6OxhLbnNev/nsVaqiBmQ/MF8hfJifnc
- TLNnjg==
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+References: <20220911211443.581481-1-michal.winiarski@intel.com>
+ <20220911211443.581481-2-michal.winiarski@intel.com> <CAFCwf11=hKGm93oF1A5PLhdvdo2ujYJWyt4qAqK-KQQqe6ngDA@mail.gmail.com>
+In-Reply-To: <CAFCwf11=hKGm93oF1A5PLhdvdo2ujYJWyt4qAqK-KQQqe6ngDA@mail.gmail.com>
+From:   Oded Gabbay <ogabbay@kernel.org>
+Date:   Sun, 6 Nov 2022 16:51:39 +0200
+X-Gmail-Original-Message-ID: <CAFCwf12+piEABvv=nxFJCzUU4XdZw5Pu=r=i3aKQGZrBeraFqw@mail.gmail.com>
+Message-ID: <CAFCwf12+piEABvv=nxFJCzUU4XdZw5Pu=r=i3aKQGZrBeraFqw@mail.gmail.com>
+Subject: Re: [PATCH v5 1/3] drm: Use XArray instead of IDR for minors
+To:     =?UTF-8?Q?Micha=C5=82_Winiarski?= <michal.winiarski@intel.com>
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        intel-gfx@lists.freedesktop.org, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Simon Ser <contact@emersion.fr>,
+        Matthew Wilcox <willy@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,36 +69,231 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Nov 2, 2022 at 4:23 PM Oded Gabbay <ogabbay@kernel.org> wrote:
+>
+> On Mon, Sep 12, 2022 at 12:17 AM Micha=C5=82 Winiarski
+> <michal.winiarski@intel.com> wrote:
+> >
+> > IDR is deprecated, and since XArray manages its own state with internal
+> > locking, it simplifies the locking on DRM side.
+> > Additionally, don't use the IRQ-safe variant, since operating on drm
+> > minor is not done in IRQ context.
+> >
+> > Signed-off-by: Micha=C5=82 Winiarski <michal.winiarski@intel.com>
+> > Suggested-by: Matthew Wilcox <willy@infradead.org>
+> > ---
+> >  drivers/gpu/drm/drm_drv.c | 51 ++++++++++++++-------------------------
+> >  1 file changed, 18 insertions(+), 33 deletions(-)
+> >
+> > diff --git a/drivers/gpu/drm/drm_drv.c b/drivers/gpu/drm/drm_drv.c
+> > index 8214a0b1ab7f..61d24cdcd0f8 100644
+> > --- a/drivers/gpu/drm/drm_drv.c
+> > +++ b/drivers/gpu/drm/drm_drv.c
+> > @@ -34,6 +34,7 @@
+> >  #include <linux/pseudo_fs.h>
+> >  #include <linux/slab.h>
+> >  #include <linux/srcu.h>
+> > +#include <linux/xarray.h>
+> >
+> >  #include <drm/drm_cache.h>
+> >  #include <drm/drm_client.h>
+> > @@ -53,8 +54,7 @@ MODULE_AUTHOR("Gareth Hughes, Leif Delgass, Jos=C3=A9=
+ Fonseca, Jon Smirl");
+> >  MODULE_DESCRIPTION("DRM shared core routines");
+> >  MODULE_LICENSE("GPL and additional rights");
+> >
+> > -static DEFINE_SPINLOCK(drm_minor_lock);
+> > -static struct idr drm_minors_idr;
+> > +static DEFINE_XARRAY_ALLOC(drm_minors_xa);
+> >
+> >  /*
+> >   * If the drm core fails to init for whatever reason,
+> > @@ -98,21 +98,19 @@ static struct drm_minor **drm_minor_get_slot(struct=
+ drm_device *dev,
+> >  static void drm_minor_alloc_release(struct drm_device *dev, void *data=
+)
+> >  {
+> >         struct drm_minor *minor =3D data;
+> > -       unsigned long flags;
+> >
+> >         WARN_ON(dev !=3D minor->dev);
+> >
+> >         put_device(minor->kdev);
+> >
+> > -       spin_lock_irqsave(&drm_minor_lock, flags);
+> > -       idr_remove(&drm_minors_idr, minor->index);
+> > -       spin_unlock_irqrestore(&drm_minor_lock, flags);
+> > +       xa_erase(&drm_minors_xa, minor->index);
+> >  }
+> >
+> > +#define DRM_MINOR_LIMIT(t) ({ typeof(t) _t =3D (t); XA_LIMIT(64 * _t, =
+64 * _t + 63); })
+> > +
+> >  static int drm_minor_alloc(struct drm_device *dev, unsigned int type)
+> >  {
+> >         struct drm_minor *minor;
+> > -       unsigned long flags;
+> >         int r;
+> >
+> >         minor =3D drmm_kzalloc(dev, sizeof(*minor), GFP_KERNEL);
+> > @@ -122,21 +120,10 @@ static int drm_minor_alloc(struct drm_device *dev=
+, unsigned int type)
+> >         minor->type =3D type;
+> >         minor->dev =3D dev;
+> >
+> > -       idr_preload(GFP_KERNEL);
+> > -       spin_lock_irqsave(&drm_minor_lock, flags);
+> > -       r =3D idr_alloc(&drm_minors_idr,
+> > -                     NULL,
+> > -                     64 * type,
+> > -                     64 * (type + 1),
+> > -                     GFP_NOWAIT);
+> > -       spin_unlock_irqrestore(&drm_minor_lock, flags);
+> > -       idr_preload_end();
+> > -
+> > +       r =3D xa_alloc(&drm_minors_xa, &minor->index, NULL, DRM_MINOR_L=
+IMIT(type), GFP_KERNEL);
+This was GFP_NOWAIT in the original code.
 
---9VS3WmYdJL+KGKqF
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+> >         if (r < 0)
+> >                 return r;
+> >
+> > -       minor->index =3D r;
+> > -
+> >         r =3D drmm_add_action_or_reset(dev, drm_minor_alloc_release, mi=
+nor);
+> >         if (r)
+> >                 return r;
+> > @@ -152,7 +139,7 @@ static int drm_minor_alloc(struct drm_device *dev, =
+unsigned int type)
+> >  static int drm_minor_register(struct drm_device *dev, unsigned int typ=
+e)
+> >  {
+> >         struct drm_minor *minor;
+> > -       unsigned long flags;
+> > +       void *entry;
+> >         int ret;
+> >
+> >         DRM_DEBUG("\n");
+> > @@ -172,9 +159,12 @@ static int drm_minor_register(struct drm_device *d=
+ev, unsigned int type)
+> >                 goto err_debugfs;
+> >
+> >         /* replace NULL with @minor so lookups will succeed from now on=
+ */
+> > -       spin_lock_irqsave(&drm_minor_lock, flags);
+> > -       idr_replace(&drm_minors_idr, minor, minor->index);
+> > -       spin_unlock_irqrestore(&drm_minor_lock, flags);
+> > +       entry =3D xa_cmpxchg(&drm_minors_xa, minor->index, NULL, &minor=
+, GFP_KERNEL);
+> I believe we should pass in "minor", without the &, as &minor will
+> give you the address of the local pointer.
+>
+> Oded
+>
+> > +       if (xa_is_err(entry)) {
+> > +               ret =3D xa_err(entry);
+> > +               goto err_debugfs;
+> > +       }
+> > +       WARN_ON(entry);
+> >
+> >         DRM_DEBUG("new minor registered %d\n", minor->index);
+> >         return 0;
+> > @@ -187,16 +177,13 @@ static int drm_minor_register(struct drm_device *=
+dev, unsigned int type)
+> >  static void drm_minor_unregister(struct drm_device *dev, unsigned int =
+type)
+> >  {
+> >         struct drm_minor *minor;
+> > -       unsigned long flags;
+> >
+> >         minor =3D *drm_minor_get_slot(dev, type);
+> >         if (!minor || !device_is_registered(minor->kdev))
+> >                 return;
+> >
+> >         /* replace @minor with NULL so lookups will fail from now on */
+> > -       spin_lock_irqsave(&drm_minor_lock, flags);
+> > -       idr_replace(&drm_minors_idr, NULL, minor->index);
+> > -       spin_unlock_irqrestore(&drm_minor_lock, flags);
+> > +       xa_store(&drm_minors_xa, minor->index, NULL, GFP_KERNEL);
+> >
+> >         device_del(minor->kdev);
+> >         dev_set_drvdata(minor->kdev, NULL); /* safety belt */
+> > @@ -215,13 +202,12 @@ static void drm_minor_unregister(struct drm_devic=
+e *dev, unsigned int type)
+> >  struct drm_minor *drm_minor_acquire(unsigned int minor_id)
+> >  {
+> >         struct drm_minor *minor;
+> > -       unsigned long flags;
+> >
+> > -       spin_lock_irqsave(&drm_minor_lock, flags);
+> > -       minor =3D idr_find(&drm_minors_idr, minor_id);
+> > +       xa_lock(&drm_minors_xa);
+> > +       minor =3D xa_load(&drm_minors_xa, minor_id);
+Did you check this part ? Because this always gives me NULL...
 
-On Sun, Nov 06, 2022 at 05:35:26AM +0800, kernel test robot wrote:
-> >> drivers/spi/spi-wpcm-fiu.c:296:11: error: positional initialization of field in 'struct' declared with 'designated_init' attribute [-Werror=designated-init]
->      296 |         { wpcm_fiu_normal_match, wpcm_fiu_normal_exec },
->          |           ^~~~~~~~~~~~~~~~~~~~~
+I tried executing the following code in a dummy driver I wrote:
 
-Alright, this is not a bad idea, I'll change it.
+static DEFINE_XARRAY_ALLOC(xa_dummy);
+void check_xa(void *pdev)
+{
+  void *entry;
+  int ret, index;
 
---9VS3WmYdJL+KGKqF
-Content-Type: application/pgp-signature; name="signature.asc"
+  ret =3D xa_alloc(&xa_dummy, &index, NULL, XA_LIMIT(0, 63), GFP_NOWAIT);
+  if (ret < 0)
+      return ret;
 
------BEGIN PGP SIGNATURE-----
+  entry =3D xa_cmpxchg(&xa_dummy, index, NULL, pdev, GFP_KERNEL);
+  if (xa_is_err(entry))
+       return;
 
-iQIzBAABCgAdFiEEvHAHGBBjQPVy+qvDCDBEmo7zX9sFAmNnyfEACgkQCDBEmo7z
-X9vymg//W339DCLRB060/F+UAzAMGsYUWYjtFlIH2gAOSbNzKncYoBkyaM5vZWkm
-phYrLRCBOCMU1KRi80baQxKjrdRIa+jXGqFV7c9pw/YgrgiZ/Qhxbw87JO3FN/i1
-o176DXK+3TUMa6sJWM1cdTvIfZe3pgeB56948Zd3B8wCd+HaReC04kQ7qxupnzwd
-bMJeZwJYUVYWZlGdy2Mai59gWGihBviPr5fY1eBXzz8R32FcB+GswNW7xkKdn/W8
-JyMlTqEOnw8dJBkpmedWvRdXbN5uCmNnvSABIQvvbDuSFDenueZnGmKSbMNS9MoJ
-wkgaWIGz1Npy3DyXBbAKVGbyKaXbYnAkzWGYAEZRFPns/A+rqroxaRw2CnkNCAtm
-n8+cA1ZE3F5WAnhd6B1AL1m2Be8rghswOvIDNblCK72IM0D9XGgayw9IiwD8SKYV
-s2fL2LeJXfm1K9ukwJVm2GlmhUkrXb5VjBqSszghtcIIoljyQx96xuT+aCK6qsiT
-0gaEW+PCMoJ/RdtO4f61tcYU7+H2++MVn3oN5TU6zWIUFN62kJcm5Tj8rhON89LA
-mxZVawZe57wHlamFRByWW2qnGglcg0nMoRAIEV1HZaaQTBnLB+0EFsjdZjxJC9IP
-mH+iahGDdgXQrEajed/JswQKHyXieK0hVaoxHmhmeJysBckPv3c=
-=pOjm
------END PGP SIGNATURE-----
+  xa_lock(&xa_dummy);
+  xa_dev =3D xa_load(&xa_dummy, index);
+  xa_unlock(&xa_dummy);
+}
 
---9VS3WmYdJL+KGKqF--
+And to my surprise xa_dev is always NULL, when it should be pdev.
+I believe that because we first allocate the entry with NULL, it is
+considered a "zero" entry in the XA.
+And when we replace it, this attribute doesn't change so when we do
+xa_load, the xa code thinks the entry is a "zero" entry and returns
+NULL.
+If that's correct, you need to either fix xarray code or change the
+flow of allocating this in drm.
+
+If I send a real pointer (just a dummy object I allocated) instead of
+NULL in xa_alloc, and then do xa_cmpxchg with pdev, xa_load returns
+pdev successfully.
+That points to the NULL being problematic in allocating an entry.
+
+Oded
+
+
+> >         if (minor)
+> >                 drm_dev_get(minor->dev);
+> > -       spin_unlock_irqrestore(&drm_minor_lock, flags);
+> > +       xa_unlock(&drm_minors_xa);
+> >
+> >         if (!minor) {
+> >                 return ERR_PTR(-ENODEV);
+> > @@ -1037,7 +1023,7 @@ static void drm_core_exit(void)
+> >         unregister_chrdev(DRM_MAJOR, "drm");
+> >         debugfs_remove(drm_debugfs_root);
+> >         drm_sysfs_destroy();
+> > -       idr_destroy(&drm_minors_idr);
+> > +       WARN_ON(!xa_empty(&drm_minors_xa));
+> >         drm_connector_ida_destroy();
+> >  }
+> >
+> > @@ -1046,7 +1032,6 @@ static int __init drm_core_init(void)
+> >         int ret;
+> >
+> >         drm_connector_ida_init();
+> > -       idr_init(&drm_minors_idr);
+> >         drm_memcpy_init_early();
+> >
+> >         ret =3D drm_sysfs_init();
+> > --
+> > 2.37.3
+> >
