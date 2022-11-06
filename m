@@ -2,55 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE6BD61E563
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 19:50:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0F3C61E56A
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 19:57:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230290AbiKFSuH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Nov 2022 13:50:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60128 "EHLO
+        id S230099AbiKFS4w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Nov 2022 13:56:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230201AbiKFStr (ORCPT
+        with ESMTP id S229909AbiKFS4u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Nov 2022 13:49:47 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12FC8FCDD
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Nov 2022 10:49:47 -0800 (PST)
+        Sun, 6 Nov 2022 13:56:50 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88CE3E0CC;
+        Sun,  6 Nov 2022 10:56:49 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B3D0CB80CCA
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Nov 2022 18:49:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 6DF6DC433D7;
-        Sun,  6 Nov 2022 18:49:44 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 06F43CE0E13;
+        Sun,  6 Nov 2022 18:56:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DA91C433D6;
+        Sun,  6 Nov 2022 18:56:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667760584;
-        bh=MfPHo+0mPM8JcO0sg8ivk7lLZLBFpDVM1b+O/kblazs=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=ohp/yTocx7u1uzQa0yyMrpBNC1FK7RCjeYuQmjnbILPxo9+1LRnC1r3EvqbcidyGs
-         3S7tjxBg+tEt/ei8bpFgA3OHEFemc+Imu5GoP2R7Cj7Ey8MMM6vNSITSLVnl7xDw1h
-         NUZEfTy/iNQP+e/vvMACL7DOkiZUSZpAWJSI5YazkS6VVyab7sjrF3vqBrrT5p7sc8
-         T4u4txOqg4VhuSm+Hzz/q4W7yIz1PhLft+81HpeyRhKRsrIhcRxTZUDUY9qIWCvE/x
-         3RnFJ0h+2dza19lTZJrjr/ie3mn/qRvfPeWdJJTp2Sovn3b0lf2JT4qYkCX8aZrwrV
-         tCqQXhqJAe4bQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 4C5F3E270DD;
-        Sun,  6 Nov 2022 18:49:44 +0000 (UTC)
-Subject: Re: [GIT PULL] xen: branch for v6.1-rc4
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20221106055958.14139-1-jgross@suse.com>
-References: <20221106055958.14139-1-jgross@suse.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20221106055958.14139-1-jgross@suse.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/xen/tip.git for-linus-6.1-rc4-tag
-X-PR-Tracked-Commit-Id: 4bff677b30156435afa2cc4c3601b542b4ddd439
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 6e8c78d32b5c60737bcd71346130f0bf91d6e066
-Message-Id: <166776058430.6751.15098264634464095841.pr-tracker-bot@kernel.org>
-Date:   Sun, 06 Nov 2022 18:49:44 +0000
-To:     Juergen Gross <jgross@suse.com>
-Cc:     torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
-        xen-devel@lists.xenproject.org, sstabellini@kernel.org
+        s=k20201202; t=1667761006;
+        bh=XcaDx53ZZHUc0l8ILKX5RE1+LHLJaPD85TpWG4xZmSE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=j6IzSq3k0h5KjSirg/QJ8lx6E8Apm+NQX1Doljh7fIZYFotY2ymGtw+EJyRSqw5af
+         8sMP+xaZUHm3uCnPffidyUOPMYOTLhb6sQ0tvyBko/ZUNIXYT8F4FMxTHjQEB/3GD5
+         VPs4rvvDitbDYaj0DDpptcRXk/03xHbrgWCePFILnKGto864G4qKMssz1iOTb912za
+         fn2ouqiN74KaDOpPNmDEFXXXXkZoCUdMPTF2ICrrlXjcH7B9/McQDXC0tafpfft0qR
+         sCfkTP/GaAgM9Ya1+bvJ9AAqtsGNtB1BZL159zPrfyeRm7M/MW+KqbaPIcV0cQLdYa
+         laPBcOUceGQlA==
+Date:   Sun, 6 Nov 2022 20:56:41 +0200
+From:   Leon Romanovsky <leon@kernel.org>
+To:     zhang.songyi@zte.com.cn
+Cc:     saeedm@nvidia.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, kliteyn@nvidia.com,
+        shunh@nvidia.com, rongweil@nvidia.com, valex@nvidia.com,
+        netdev@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linux-kernel@vger.kernel.org, jiang.xuexin@zte.com.cn,
+        xue.zhihong@zte.com.cn
+Subject: Re: [PATCH linux-next] net/mlx5: remove redundant ret variable
+Message-ID: <Y2gDaRc3t7WiWoTT@unreal>
+References: <202211022150403300510@zte.com.cn>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202211022150403300510@zte.com.cn>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -60,15 +57,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Sun,  6 Nov 2022 06:59:58 +0100:
+On Wed, Nov 02, 2022 at 09:50:40PM +0800, zhang.songyi@zte.com.cn wrote:
+> From 74562e313cf9a1b96c7030f27964f826a0c2572d Mon Sep 17 00:00:00 2001
+> From: zhang songyi <zhang.songyi@zte.com.cn>
+> Date: Wed, 2 Nov 2022 20:48:08 +0800
+> Subject: [PATCH linux-next] net/mlx5: remove redundant ret variable
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/xen/tip.git for-linus-6.1-rc4-tag
+Subject line should be "[PATCH net-next] ..." for all net patches.
+And please use git send-email utility to send the patches.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/6e8c78d32b5c60737bcd71346130f0bf91d6e066
+Thanks
 
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+> 
+> Return value from mlx5dr_send_postsend_action() directly instead of taking
+> this in another redundant variable.
+> 
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
+> Signed-off-by: zhang songyi <zhang.songyi@zte.com.cn>
+> ---
+>  drivers/net/ethernet/mellanox/mlx5/core/steering/dr_send.c | 5 +----
+>  1 file changed, 1 insertion(+), 4 deletions(-)
+> 
+> diff --git a/drivers/net/ethernet/mellanox/mlx5/core/steering/dr_send.c b/drivers/net/ethernet/mellanox/mlx5/core/steering/dr_send.c
+> index a4476cb4c3b3..fd2d31cdbcf9 100644
+> --- a/drivers/net/ethernet/mellanox/mlx5/core/steering/dr_send.c
+> +++ b/drivers/net/ethernet/mellanox/mlx5/core/steering/dr_send.c
+> @@ -724,7 +724,6 @@ int mlx5dr_send_postsend_action(struct mlx5dr_domain *dmn,
+>                 struct mlx5dr_action *action)
+>  {
+>     struct postsend_info send_info = {};
+> -   int ret;
+> 
+>     send_info.write.addr = (uintptr_t)action->rewrite->data;
+>     send_info.write.length = action->rewrite->num_of_actions *
+> @@ -734,9 +733,7 @@ int mlx5dr_send_postsend_action(struct mlx5dr_domain *dmn,
+>         mlx5dr_icm_pool_get_chunk_mr_addr(action->rewrite->chunk);
+>     send_info.rkey = mlx5dr_icm_pool_get_chunk_rkey(action->rewrite->chunk);
+> 
+> -   ret = dr_postsend_icm_data(dmn, &send_info);
+> -
+> -   return ret;
+> +   return dr_postsend_icm_data(dmn, &send_info);
+>  }
+> 
+>  static int dr_modify_qp_rst2init(struct mlx5_core_dev *mdev,
+> --
+> 2.15.2
