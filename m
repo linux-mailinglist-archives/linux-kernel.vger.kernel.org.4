@@ -2,133 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F9F461E324
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 16:50:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7787561E33D
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 16:51:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230123AbiKFPuA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Nov 2022 10:50:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46372 "EHLO
+        id S230103AbiKFPvO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Nov 2022 10:51:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229902AbiKFPt5 (ORCPT
+        with ESMTP id S230017AbiKFPvN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Nov 2022 10:49:57 -0500
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B0B4DEBE;
-        Sun,  6 Nov 2022 07:49:57 -0800 (PST)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id 7A9765C00A3;
-        Sun,  6 Nov 2022 10:49:56 -0500 (EST)
-Received: from imap47 ([10.202.2.97])
-  by compute2.internal (MEProxy); Sun, 06 Nov 2022 10:49:56 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
-         h=cc:cc:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1667749796; x=1667836196; bh=2R
-        ExpLgU9g1N+kqrPRFMdAkMdWjT7WLqNDmpPvDQ17Q=; b=DmjqHN7yrCbLOSSh7d
-        SAzD+TBzSfihWszXmjEMLhCYtRM23iy3t8v23UduvgKsczS9UaRHpEvTq8v+3tOL
-        f7HXnwv2mP/fli3F0wjI1Qd20xANu765VA67yWgsWl7LytYgL+TRmb3rsGRaF1hn
-        yU8u/0CD0RD2XZG0YraxctVLF0Vuk1PwiUUbl4BvBvtW2JAokjG2dtk7KPEJ9Shq
-        5Eh4yiFrIAMZmwGGdZTBzQfXj3kgadhISraqH4emcnmsVdhVywi+9P4xu3AFHaBT
-        nZWf9VpS06ydtiIg5dOmPHKcGZ411UlzLAwHqg5r2UmGyDAiI8JLDheQIlDq2LfS
-        1/0A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1667749796; x=1667836196; bh=2RExpLgU9g1N+kqrPRFMdAkMdWjT
-        7WLqNDmpPvDQ17Q=; b=ZCBNc/BUa/qNzefy+yhJM+dcOSlUenf99lBMJGGmtaPS
-        XdlSmmhqTdrvUZY6cQE5EAZcBPwWRxaARENTLhdeTlbItl7EfUDSkrxM9x+IuzWH
-        Snp/Brj1PGVvXB9azni1q2npz6prh+naw4c+XPhei5mHxmg9WNbnd87lALgCdOTP
-        Suv1a+yX94bZwXClzCBGROkFhjjr4y+ai59peTzKOtzkS4KTReG7TbJvEerCN9tE
-        3x3xr2xRo5jSuMUAzNswfBZoErv/xRpRy/IKFPwiv4izeXTxUwJnZWsRloaLXBYd
-        Sf/8TvFmRA7LAEUDtdFNpv16UJ+69ow6PELtHXBSMg==
-X-ME-Sender: <xms:pNdnYyI3q7euMRFPQdA9gcg20ASDsAviCGJHa0W7H-4FT5kd-sNPPg>
-    <xme:pNdnY6IhvZ4DJ6kK0m_c4EI-jHNM_oN5_THAzyfv89T--5baPor7XfDl3VVQcuHJS
-    CW72OD5nqGjPbyHUhs>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrvdeigdejhecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdfuvhgv
-    nhcurfgvthgvrhdfuceoshhvvghnsehsvhgvnhhpvghtvghrrdguvghvqeenucggtffrrg
-    htthgvrhhnpeduiedvgeekffdvffdtkefhhedtjeduleffleegleefkefgueeijeejueek
-    gfdtffenucffohhmrghinhepshhpihhnihgtshdrnhgvthenucevlhhushhtvghrufhiii
-    gvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehsvhgvnhesshhvvghnphgvthgvrhdr
-    uggvvh
-X-ME-Proxy: <xmx:pNdnYys2d_fjlycfGIvKnoe_0GI9blBLCIBps-jvOSB6FKbG5rTQOg>
-    <xmx:pNdnY3Ye9Pazw9PaGEgJz9l-Pmk4rvAo3kIAZ1YmkSuqQbVomK6gPw>
-    <xmx:pNdnY5bAWh74a2sGmia9HKmcC-aArMCeJv87PVWPxNWkU3Kg_Ar5zQ>
-    <xmx:pNdnY3P_26aZxbhFZe6LB41pZja6RekhVgEankWq7aLjy_86wsL8VA>
-Feedback-ID: i51094778:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 38700A6007C; Sun,  6 Nov 2022 10:49:56 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1087-g968661d8e1-fm-20221021.001-g968661d8
-Mime-Version: 1.0
-Message-Id: <47fd4a93-8544-41eb-9ddd-1501b9006cf0@app.fastmail.com>
-In-Reply-To: <20221102141513.49289-1-fnkl.kernel@gmail.com>
-References: <20221102141513.49289-1-fnkl.kernel@gmail.com>
-Date:   Sun, 06 Nov 2022 16:49:35 +0100
-From:   "Sven Peter" <sven@svenpeter.dev>
-To:     "Sasha Finkelstein" <fnkl.kernel@gmail.com>,
-        "Thierry Reding" <thierry.reding@gmail.com>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>
-Cc:     "Hector Martin" <marcan@marcan.st>,
-        "Alyssa Rosenzweig" <alyssa@rosenzweig.io>, asahi@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-pwm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/4] PWM and keyboard backlight driver for ARM Macs
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 6 Nov 2022 10:51:13 -0500
+Received: from sonata.ens-lyon.org (sonata.ens-lyon.org [140.77.166.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D016DED9
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Nov 2022 07:51:12 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by sonata.ens-lyon.org (Postfix) with ESMTP id 352822010B;
+        Sun,  6 Nov 2022 16:51:10 +0100 (CET)
+Received: from sonata.ens-lyon.org ([127.0.0.1])
+        by localhost (sonata.ens-lyon.org [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id zKeRytKHzjnZ; Sun,  6 Nov 2022 16:51:10 +0100 (CET)
+Received: from begin (lfbn-bor-1-376-208.w109-215.abo.wanadoo.fr [109.215.91.208])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by sonata.ens-lyon.org (Postfix) with ESMTPSA id 85C4520107;
+        Sun,  6 Nov 2022 16:51:09 +0100 (CET)
+Received: from samy by begin with local (Exim 4.96)
+        (envelope-from <samuel.thibault@ens-lyon.org>)
+        id 1orhvR-00DuLc-0S;
+        Sun, 06 Nov 2022 16:51:09 +0100
+Date:   Sun, 6 Nov 2022 16:51:09 +0100
+From:   Samuel Thibault <samuel.thibault@ens-lyon.org>
+To:     wangkailong@jari.cn
+Cc:     w.d.hubbs@gmail.com, chris@the-brannons.com, kirk@reisers.ca,
+        gregkh@linuxfoundation.org, speakup@linux-speakup.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] speakup: Fix warning comparing pointer to 0
+Message-ID: <20221106155109.wh5ivhk2zc7cumn5@begin>
+Mail-Followup-To: Samuel Thibault <samuel.thibault@ens-lyon.org>,
+        wangkailong@jari.cn, w.d.hubbs@gmail.com, chris@the-brannons.com,
+        kirk@reisers.ca, gregkh@linuxfoundation.org,
+        speakup@linux-speakup.org, linux-kernel@vger.kernel.org
+References: <1de9cab8.c1.1844d7bdf4b.Coremail.wangkailong@jari.cn>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1de9cab8.c1.1844d7bdf4b.Coremail.wangkailong@jari.cn>
+Organization: I am not organized
+User-Agent: NeoMutt/20170609 (1.8.3)
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+wangkailong@jari.cn, le dim. 06 nov. 2022 23:07:54 +0800, a ecrit:
+> Fix the following coccicheck warning:
+> 
+> drivers/accessibility/speakup/utils.h:39:15-16: WARNING comparing
+> pointer to 0
 
-On Wed, Nov 2, 2022, at 15:15, Sasha Finkelstein wrote:
-> Hi,
->
-> This is the v2 of the patch series to add PWM and keyboard backlight
-> drivers for ARM macs. The changes from v1 address the review
-> comments on that patch set.
->
-> v1: https://www.spinics.net/lists/linux-pwm/msg19500.html
->
-> Best Regards.
->
-> Sasha Finkelstein (4):
->   dt-bindings: pwm: Add Apple PWM controller
->   pwm: Add Apple PWM controller
->   arm64: dts: apple: t8103: Add PWM controller
->   MAINTAINERS: Add entries for Apple PWM driver
->
->  .../bindings/pwm/apple,s5l-fpwm.yaml          |  51 +++++++
->  MAINTAINERS                                   |   2 +
->  arch/arm64/boot/dts/apple/t8103-j293.dts      |  20 +++
->  arch/arm64/boot/dts/apple/t8103-j313.dts      |  20 +++
->  arch/arm64/boot/dts/apple/t8103.dtsi          |   9 ++
->  drivers/pwm/Kconfig                           |  12 ++
->  drivers/pwm/Makefile                          |   1 +
->  drivers/pwm/pwm-apple.c                       | 127 ++++++++++++++++++
->  8 files changed, 242 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/pwm/apple,s5l-fpwm.yaml
->  create mode 100644 drivers/pwm/pwm-apple.c
->
+You're replacing it with the contrary of what it should be...
+
+> ---
+>  drivers/accessibility/speakup/utils.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/accessibility/speakup/utils.h b/drivers/accessibility/speakup/utils.h
+> index 4bf2ee8ac246..5803b521df2b 100644
+> --- a/drivers/accessibility/speakup/utils.h
+> +++ b/drivers/accessibility/speakup/utils.h
+> @@ -36,7 +36,7 @@ static inline void open_input(const char *dir_name, const char *name)
+>  	else
+>  		snprintf(filename, sizeof(filename), "%s", name);
+>  	infile = fopen(filename, "r");
+> -	if (infile == 0) {
+> +	if (infile) {
+>  		fprintf(stderr, "can't open %s\n", filename);
+>  		exit(1);
+>  	}
 > -- 
-> 2.37.3
-
-this looks good to me, entire series:
-
-Acked-by: Sven Peter <sven@svenpeter.dev>
-
-
-Best,
-
-
-Sven
+> 2.25.1
