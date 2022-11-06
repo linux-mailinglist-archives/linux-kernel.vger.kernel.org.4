@@ -2,125 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF4A861E4CD
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 18:21:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8590561E4D1
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 18:22:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230437AbiKFRVr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Nov 2022 12:21:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36628 "EHLO
+        id S231397AbiKFRWY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Nov 2022 12:22:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231223AbiKFRVX (ORCPT
+        with ESMTP id S231479AbiKFRWF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Nov 2022 12:21:23 -0500
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8919B248CD
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Nov 2022 09:13:48 -0800 (PST)
-Received: by mail-io1-f70.google.com with SMTP id i6-20020a5d88c6000000b006d088a0e518so5816164iol.19
-        for <linux-kernel@vger.kernel.org>; Sun, 06 Nov 2022 09:13:48 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=tntjbVIwEnUx/49ns5I6z84/2ydQTBLdsYbGbJMJCpQ=;
-        b=x1Gav4ZLGvi/gf4Oc2/yfRuFSy8CX1RyNDnsz4dIGda8ByViArIhUBMQIQ15Lf56oQ
-         HwN4/P9Amihz/cQrTxftKGvi657Jnvp9ZuE73ukci1BAeWnUbmPSB4A/F9aZ65NKTtUm
-         43yNMY/20jzetIAaB7VDilJvGPB3BpsQDdehoUGeWKH9Y3edN+lcvcmPIcuZAGvnhEvW
-         6ibxwqqvycczGM2/iSepetYFv+pSsK1s+VCc/uA9sRdquubuiLg4PqRmg5wueBhRUeQV
-         aPloGOM9kDOv38hEwOwip+e5bG3GKCIn6w9dRheXmMQpEYw0OATrcqTINMHgNiEFSJ9w
-         v+rw==
-X-Gm-Message-State: ACrzQf0SfqGUq7ZvardF5nl5a/78ettGjDJ9+vZModjd1WZJhHJjg0da
-        puwK66myrMmIQtxW2r9TPhadsYuBtbE+U9WM8lkoV0HGimLa
-X-Google-Smtp-Source: AMsMyM5VKrPycUSdOb59R+bOeJjI8zf+bDoOUzp/DAJ9/FySDSlbXCpISl4QixGDm7RkRqs48uXrytApZLsrPKoMlZ/SOwyrHkOm
+        Sun, 6 Nov 2022 12:22:05 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35D12339;
+        Sun,  6 Nov 2022 09:15:12 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C8063B80C6A;
+        Sun,  6 Nov 2022 17:15:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4601C433C1;
+        Sun,  6 Nov 2022 17:15:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667754909;
+        bh=aRmkKiaGl0TJQ5HduQMLRpqvOFwi5+C07v6IJ/fcaAM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=IbK2OrUMj5IGt2U1b8PXi/DCK/IBXk6oB/TgASEF3SBi7obCNpSfNJYWHr0e2jBPs
+         rNLkdCddAr4fSOhEsSg2sFyKe0U8d7iP6yBI5lzu3xe9vzsJ4T7wQZPu2TQopAckSK
+         B8krlsdB5unIP1lz2yJmwyWxHVtvLzh8QjpEFw4hXxoxXexQJamgSsGxK7JbNFJbem
+         hJpzsXtWvc4FtB0JjV4t8SU3gA7Re9T9i1+xq4FDWaoM/G3o+vdvI26n6SDU9JlAgG
+         +TTsTAU53zY9oJibVRV+9TmzzHI4WOqImiURsd74vGfAjk3hKupPMaI3bTPZlOV+jU
+         HUKk6bfWmmKaw==
+Date:   Sun, 6 Nov 2022 17:14:58 +0000
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Cosmin Tanislav <demonsingur@gmail.com>
+Cc:     Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Nuno =?UTF-8?B?U8Oh?= <nuno.sa@analog.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 00/13] Support more parts in LTC2983
+Message-ID: <20221106171458.0715a602@jic23-huawei>
+In-Reply-To: <20221103130041.2153295-1-demonsingur@gmail.com>
+References: <20221103130041.2153295-1-demonsingur@gmail.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:4094:b0:375:8dbb:ef89 with SMTP id
- m20-20020a056638409400b003758dbbef89mr11067967jam.93.1667754827881; Sun, 06
- Nov 2022 09:13:47 -0800 (PST)
-Date:   Sun, 06 Nov 2022 09:13:47 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000016a4a905ecd06e88@google.com>
-Subject: [syzbot] WARNING in btrfs_create_new_inode
-From:   syzbot <syzbot+56e0adfbcf0bafbf4f53@syzkaller.appspotmail.com>
-To:     clm@fb.com, dsterba@suse.com, josef@toxicpanda.com,
-        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Thu,  3 Nov 2022 15:00:28 +0200
+Cosmin Tanislav <demonsingur@gmail.com> wrote:
 
-syzbot found the following issue on:
+> Add support for the following parts:
+>  * LTC2984
+>  * LTC2986
+>  * LTM2985
+> 
+> The LTC2984 is a variant of the LTC2983 with EEPROM.
+> The LTC2986 is a variant of the LTC2983 with only 10 channels,
+> EEPROM and support for active analog temperature sensors.
+> The LTM2985 is software-compatible with the LTC2986.
+> 
+> Also, make bulk write buffer DMA-safe.
+> Besides that, refine the binding.
+Replying at least partly so I can see I already looked at this...
 
-HEAD commit:    b208b9fbbcba Merge tag 'arm64-fixes' of git://git.kernel.o..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=152c0676880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=f7e100ed8aaa828e
-dashboard link: https://syzkaller.appspot.com/bug?extid=56e0adfbcf0bafbf4f53
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+Looks good to me.  Will pick up once DT bindings maintainers are
+happy.
 
-Unfortunately, I don't have any reproducer for this issue yet.
+Thanks,
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/92fde6d92d82/disk-b208b9fb.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/ae3dbdb3faf8/vmlinux-b208b9fb.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/bbf4da09683c/bzImage-b208b9fb.xz
+Jonathan
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+56e0adfbcf0bafbf4f53@syzkaller.appspotmail.com
+> 
+> V1 -> V2:
+>  * add Fixes tag
+>  * add patch that fixes the regmap_bulk_write() call with stack allocated
+>    buffer
+>  * add patch that refines the binding in preperation for adding new
+>    parts support to it
+>  * do not use stack allocated buffer for writing the EEPROM key
+> 
+> V2 -> V3:
+>  * drop minItems if equal to maxItems
+>  * drop adi,single-ended conditions because of recent dtschema
+>    restrictions (even though they're valid in jsonschema and the last
+>    dtschema tag)
+>  * drop "allocate iio channels once" patch since it's been picked as a fix
+> 
+> V3 -> V4:
+>   * add pipe for 'adi,mux-delay-config-us' description
+>   * add pipe for 'adi,rtd-curve' description
+>   * keep newlines after descriptions
+>   * move 'adi,current-rotate' to conditional
+>   * put 'adi,custom-steinhart' in the original place
+>   * keep 'minItems' for 'adi,custom-steinhart'
+>   * override 'enum' to forbid auto-range in 'adi,excitation-current-nanoamp'
+>     when using custom thermistors
+>   * split refine patch into multiple patches
+>     - use generic node name in example
+>     - describe broken mux delay property
+>     - refine descriptions
+>     - change default excitation for custom thermistors
+>     - require 4 wire rtd for current rotate
+>     - require custom sensor tables
+>     - describe matrix items
+>     - remove qutations from phandle ref
+>     - use hex for sensor address
+>     - add default values
+> 
+> Cosmin Tanislav (13):
+>   iio: temperature: ltc2983: make bulk write buffer DMA-safe
+>   dt-bindings: iio: temperature: ltc2983: add default values
+>   dt-bindings: iio: temperature: ltc2983: use hex for sensor address
+>   dt-bindings: iio: temperature: ltc2983: remove qutations from phandle
+>     ref
+>   dt-bindings: iio: temperature: ltc2983: describe matrix items
+>   dt-bindings: iio: temperature: ltc2983: require custom sensor tables
+>   dt-bindings: iio: temperature: ltc2983: require 4 wire rtd for current
+>     rotate
+>   dt-bindings: iio: temperature: ltc2983: change default excitation for
+>     custom thermistors
+>   dt-bindings: iio: temperature: ltc2983: refine descriptions
+>   dt-bindings: iio: temperature: ltc2983: describe broken mux delay
+>     property
+>   dt-bindings: iio: temperature: ltc2983: use generic node name in
+>     example
+>   dt-bindings: iio: temperature: ltc2983: support more parts
+>   iio: temperature: ltc2983: support more parts
+> 
+>  .../bindings/iio/temperature/adi,ltc2983.yaml | 335 +++++++++++-------
+>  drivers/iio/temperature/ltc2983.c             | 193 +++++++++-
+>  2 files changed, 389 insertions(+), 139 deletions(-)
+> 
 
-BTRFS info (device loop5): using free space tree
-BTRFS info (device loop5): enabling ssd optimizations
-------------[ cut here ]------------
-WARNING: CPU: 1 PID: 27384 at fs/btrfs/inode.c:6412 btrfs_create_new_inode+0x1aa3/0x2270 fs/btrfs/inode.c:6412
-Modules linked in:
-CPU: 1 PID: 27384 Comm: syz-executor.5 Not tainted 6.1.0-rc3-syzkaller-00288-gb208b9fbbcba #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-RIP: 0010:btrfs_create_new_inode+0x1aa3/0x2270 fs/btrfs/inode.c:6412
-Code: d5 85 a7 06 4c 8b 6c 24 20 49 bf 00 00 00 00 00 fc ff df eb 17 e8 1d 3b fd fd 48 c7 c7 80 00 db 8a 89 de 31 c0 e8 2d d9 c4 fd <0f> 0b b0 01 44 0f b6 c0 48 8b 7c 24 18 48 c7 c6 60 07 db 8a ba 0c
-RSP: 0018:ffffc90003abfa20 EFLAGS: 00010246
-RAX: 3679467aa46b8200 RBX: 00000000fffffff4 RCX: 0000000000040000
-RDX: ffffc9000d634000 RSI: 0000000000006e63 RDI: 0000000000006e64
-RBP: ffffc90003abfc70 R08: ffffffff816b9e3d R09: ffffed1017364f13
-R10: ffffed1017364f13 R11: 1ffff11017364f12 R12: ffff88803d12e590
-R13: 1ffff92000757f60 R14: 1ffff11007a25cb2 R15: dffffc0000000000
-FS:  00007f64f0355700(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00000000201e6000 CR3: 000000003a0d2000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- btrfs_create_common+0x2eb/0x420 fs/btrfs/inode.c:6639
- vfs_mkdir+0x3b3/0x590 fs/namei.c:4035
- do_mkdirat+0x279/0x550 fs/namei.c:4060
- __do_sys_mkdirat fs/namei.c:4075 [inline]
- __se_sys_mkdirat fs/namei.c:4073 [inline]
- __x64_sys_mkdirat+0x85/0x90 fs/namei.c:4073
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f64ef68b5a9
-Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f64f0355168 EFLAGS: 00000246 ORIG_RAX: 0000000000000102
-RAX: ffffffffffffffda RBX: 00007f64ef7abf80 RCX: 00007f64ef68b5a9
-RDX: 0000000000000000 RSI: 0000000020000340 RDI: 0000000000000004
-RBP: 00007f64f03551d0 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000002
-R13: 00007ffd23a451ef R14: 00007f64f0355300 R15: 0000000000022000
- </TASK>
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
