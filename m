@@ -2,82 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD85B61E6C0
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 22:57:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0856061E6B6
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 22:52:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230211AbiKFV5o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Nov 2022 16:57:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50132 "EHLO
+        id S230204AbiKFVw2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Nov 2022 16:52:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230003AbiKFV5n (ORCPT
+        with ESMTP id S230148AbiKFVwY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Nov 2022 16:57:43 -0500
-X-Greylist: delayed 574 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 06 Nov 2022 13:57:41 PST
-Received: from soltyk.jannau.net (soltyk.jannau.net [144.76.91.90])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FA2A111C
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Nov 2022 13:57:41 -0800 (PST)
-Received: from robin.home.jannau.net (p54acc2ba.dip0.t-ipconnect.de [84.172.194.186])
-        by soltyk.jannau.net (Postfix) with ESMTPSA id 1CEBC26F2E4;
-        Sun,  6 Nov 2022 22:48:05 +0100 (CET)
-From:   Janne Grunau <j@jannau.net>
-To:     linux-usb@vger.kernel.org
-Cc:     Sven Peter <sven@svenpeter.de>, stable@kernel.org,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrey Smirnov <andrew.smirnov@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 1/1] usb: dwc3: Do not get extcon device when usb-role-switch is used
-Date:   Sun,  6 Nov 2022 22:48:04 +0100
-Message-Id: <20221106214804.2814-1-j@jannau.net>
-X-Mailer: git-send-email 2.37.3
+        Sun, 6 Nov 2022 16:52:24 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D843111F
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Nov 2022 13:52:23 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AF33860DBF
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Nov 2022 21:52:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE9E8C433C1;
+        Sun,  6 Nov 2022 21:52:21 +0000 (UTC)
+Date:   Sun, 6 Nov 2022 16:52:20 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Anna-Maria Gleixner <anna-maria@linutronix.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Julia Lawall <Julia.Lawall@inria.fr>
+Subject: Re: [PATCH v5a 5/5] treewide: Convert del_timer*() to
+ timer_shutdown*()
+Message-ID: <20221106165220.4d7e5dac@rorschach.local.home>
+In-Reply-To: <CAHk-=wjYY9k7TzyJvWOPSPLL+jHkdogyWuOUyStfE5h1=0Qk0w@mail.gmail.com>
+References: <20221106054535.709068702@goodmis.org>
+        <20221106054649.099333291@goodmis.org>
+        <CAHk-=wiD3VWYqgO7JLqRCJvYHiO5RicGAERH1dWQ2pDqnXDy6g@mail.gmail.com>
+        <20221106160956.2414d73f@rorschach.local.home>
+        <CAHk-=wjYY9k7TzyJvWOPSPLL+jHkdogyWuOUyStfE5h1=0Qk0w@mail.gmail.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The change breaks device tree based platforms with PHY device and use
-usb-role-switch instead of an extcon switch. extcon_find_edev_by_node()
-will return EPROBE_DEFER if it can not find a device so probing without
-an extcon device will be deferred indefinitely. Fix this by
-explicitly checking for usb-role-switch.
-At least the out-of-tree USB3 support on Apple silicon based platforms
-using dwc3 with tipd USB Type-C and PD controller is affected by this
-issue.
+On Sun, 6 Nov 2022 13:39:45 -0800
+Linus Torvalds <torvalds@linux-foundation.org> wrote:
 
-Fixes: d182c2e1bc92 ("usb: dwc3: Don't switch OTG -> peripheral if extcon is present")
-Cc: stable@kernel.org
-Signed-off-by: Janne Grunau <j@jannau.net>
----
- drivers/usb/dwc3/core.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+> So yes, I'm happy with this. It looks like a very reasonable "let's
+> handle the scripted trivial cases automatically", and then anything
+> more complicated can be left for 6.2.
 
-diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-index c0e7c76dc5c8..1f348bc867c2 100644
---- a/drivers/usb/dwc3/core.c
-+++ b/drivers/usb/dwc3/core.c
-@@ -1710,6 +1710,16 @@ static struct extcon_dev *dwc3_get_extcon(struct dwc3 *dwc)
- 	if (device_property_read_string(dev, "linux,extcon-name", &name) == 0)
- 		return extcon_get_extcon_dev(name);
- 
-+	/*
-+	 * Check explicitly if "usb-role-switch" is used since
-+	 * extcon_find_edev_by_node() can not be used to check the absence of
-+	 * an extcon device. In the absence of an device it will always return
-+	 * EPROBE_DEFER.
-+	 */
-+	if (IS_ENABLED(CONFIG_USB_ROLE_SWITCH) &&
-+	    device_property_read_bool(dev, "usb-role-switch"))
-+		return NULL;
-+
- 	/*
- 	 * Try to get an extcon device from the USB PHY controller's "port"
- 	 * node. Check if it has the "port" node first, to avoid printing the
--- 
-2.37.3
+Great to hear.
 
+> 
+> And with that cocci script (and how to run it), people can see what
+> the script was, and even run it themselves to verify, and that just
+> makes me feel all warm and fuzzy about it.
+
+I can update the change log to include:
+
+$ cat timer.cocci
+@@
+expression E, ptr, slab;
+identifier timer, rfield;
+@@
+(
+-       del_timer(&ptr->timer);
++       timer_shutdown(&ptr->timer);
+|
+-       del_timer_sync(&ptr->timer);
++       timer_shutdown_sync(&ptr->timer);
+)
+  ... when strict
+      when != ptr->timer.function = E;
+(
+        kfree_rcu(ptr, rfield);
+|
+        kmem_cache_free(slab, ptr);
+|
+        kfree(ptr);
+)
+$ spatch --dir timer.cocci . > /tmp/t.patch
+$ patch -p1 < /tmp/t.patch
+
+if you want.
+
+The question now comes, how should you take it?
+
+- You pull in this series directly.
+
+- Thomas takes it and sends you a pull request (although he's been very
+  quiet on this topic, even though he told me he was OK with it on IRC).
+
+- I add it to my tree, and send you a pull request?
+
+I'll let you choose.
+
+-- Steve
