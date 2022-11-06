@@ -2,68 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEA3A61E7BB
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 00:55:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6C0F61E7C1
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 00:57:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230113AbiKFXzO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Nov 2022 18:55:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47682 "EHLO
+        id S230149AbiKFX52 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Nov 2022 18:57:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229628AbiKFXzK (ORCPT
+        with ESMTP id S229628AbiKFX50 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Nov 2022 18:55:10 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2723ED2C8
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Nov 2022 15:55:09 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Sun, 6 Nov 2022 18:57:26 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB511B850;
+        Sun,  6 Nov 2022 15:57:24 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 91F6260E04
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Nov 2022 23:55:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F6F3C433C1;
-        Sun,  6 Nov 2022 23:55:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1667778908;
-        bh=bjJ8NTyavDSRWAsWa9+hTtgMREs2cKp4Ko75e1GmCas=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=mEWhuXlOGMXOKcrvEk0IOgGkl+h8jyuhPESeshfMv7OBErObyl5trr50jJ+Iifuxj
-         jxbdluIpHQar+hQ4aUsWar+SocBo/LKMHtrozHFP4kvd+7PrDyCF2vSWrbFL5VK4j6
-         vUqWMLLDixIGhVY12Jj+Us5w32jd6/I+Og5oN4FU=
-Date:   Sun, 6 Nov 2022 15:55:06 -0800
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Hugh Dickins <hughd@google.com>
-Cc:     Mel Gorman <mgorman@techsingularity.net>,
-        Yu Zhao <yuzhao@google.com>, Vlastimil Babka <vbabka@suse.cz>,
-        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>
-Subject: Re: [PATCH v2] mm/page_alloc: Leave IRQs enabled for per-cpu page
- allocations
-Message-Id: <20221106155506.64c5d42a73c507d666da2172@linux-foundation.org>
-In-Reply-To: <97b7ae87-797c-4ebb-d2d3-9415975188@google.com>
-References: <20221104142259.5hohev5hzvwanbi2@techsingularity.net>
-        <97b7ae87-797c-4ebb-d2d3-9415975188@google.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4N5B9s28bfz4x2c;
+        Mon,  7 Nov 2022 10:57:20 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1667779042;
+        bh=WKbbjhmoX+PLZSWp9Hz42z8ZXQ+/shw87aV6Bdak6r0=;
+        h=Date:From:To:Cc:Subject:From;
+        b=L97Xiyi4DK6DrWR11l6SCXngWW9fNb4IBTGBg64UnRvbVTDToj2mS/AGSW1Jq3MWe
+         gXw8L3Ea+dtbldHxRlDPT/sKIbAz7Qt6yq37442CCDl5G/WaEmon+rtZdVNnDWgGl0
+         MvpzUXDDVm5xp6pZPYEjCdzJpkzNa7DMWeHNuiIYCygD/QIPRWoIF9yPA3Yqkga4fd
+         I2GMg4ik/PBgd3Zli9c4dbwCJCaTl0alr2UC2WfH+TDu45m0RK6aWU3Ukx/L8d+ot+
+         UJ57Z1Z8stp+1AEtxLfwKoNttp0onNh3BtaKQ2EamUmHE24EGGGbXLJHSukoJBl38P
+         Gj1DhD8OCxzTg==
+Date:   Mon, 7 Nov 2022 10:57:19 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>
+Cc:     bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the tip tree with the bpf tree
+Message-ID: <20221107105719.56060308@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/gJYGAaOCvgcCYzE_mMaE4Ro";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 6 Nov 2022 08:42:32 -0800 (PST) Hugh Dickins <hughd@google.com> wrote:
+--Sig_/gJYGAaOCvgcCYzE_mMaE4Ro
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-> I'd advocate for dropping this patch of yours too; but if it's giving
-> nobody else any trouble, I can easily continue to patch it out.
+Hi all,
 
-Thanks, I'll drop it for now.  Please keep plugging away at mm-unstable
-until we can get it less so, then let's start moving forwards again.
+Today's linux-next merge of the tip tree got a conflict in:
 
+  include/linux/bpf.h
+
+between commit:
+
+  18acb7fac22f ("bpf: Revert ("Fix dispatcher patchable function entry to 5=
+ bytes nop")")
+
+from the bpf tree and commits:
+
+  bea75b33895f ("x86/Kconfig: Introduce function padding")
+  931ab63664f0 ("x86/ibt: Implement FineIBT")
+
+from the tip tree.
+
+I fixed it up (the former removed the lines modified by the latter) and
+can carry the fix as necessary. This is now fixed as far as linux-next
+is concerned, but any non trivial conflicts should be mentioned to your
+upstream maintainer when your tree is submitted for merging.  You may
+also want to consider cooperating with the maintainer of the conflicting
+tree to minimise any particularly complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/gJYGAaOCvgcCYzE_mMaE4Ro
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNoSd8ACgkQAVBC80lX
+0GyAMAf/V33zgHqmbl8MAluSFFtMw8oVynfJE7uit0GOeoMPT3bMLydOMRiTvLbS
+JkER/+HO6ioj6Om/7y54QsmcWcplH85EsD3h+v1uKVPDzrfkWSv2OIDkYZxIjjuT
+oLwKAX0bj62AgQbRig1z8K0hLt67O0gxeNATVeJZFt6WHfUZKbfkhd4xiEGiP+8I
+TlDbQLXP6mgFr31BFD69MMQuZXtJtiEsOBf/kC/1zCjUi7VLOzRbtUA+0tF5gP4K
+jVpb2Nc1HM8DYZux/BiDdKbF5JbNqv18JwpDV0kmrbLt6kOMnaCWQjKlJYabfdL2
+idgg+/wJAGfe2nQJweDuJS7PKPBCJA==
+=ur6H
+-----END PGP SIGNATURE-----
+
+--Sig_/gJYGAaOCvgcCYzE_mMaE4Ro--
