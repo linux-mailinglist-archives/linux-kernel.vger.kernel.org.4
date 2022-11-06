@@ -2,70 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D595261E0E1
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 09:36:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7082F61E0E2
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 09:36:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229623AbiKFIf7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Nov 2022 03:35:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60638 "EHLO
+        id S229701AbiKFIgO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Nov 2022 03:36:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229525AbiKFIf4 (ORCPT
+        with ESMTP id S229525AbiKFIgL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Nov 2022 03:35:56 -0500
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2993BD139
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Nov 2022 01:35:55 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id f7so13258333edc.6
-        for <linux-kernel@vger.kernel.org>; Sun, 06 Nov 2022 01:35:55 -0700 (PDT)
+        Sun, 6 Nov 2022 03:36:11 -0500
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECF12D2C4
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Nov 2022 01:36:10 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id bj12so22935651ejb.13
+        for <linux-kernel@vger.kernel.org>; Sun, 06 Nov 2022 01:36:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=Q8VESBKh1KMoZOvtg0ZXq27EnrJxCWZC/qS4aZqyj6E=;
-        b=ckK656tMCZn6XdNyIdpwTuvuc78qcLTit148z0817frs3Lu9U8ibpVJOHuwzuhKteo
-         KISbgXg6rdFNPl7WKZMr76PxqxzBTQSCcOYHeXz0g7Gmbo7cocxbefWpjjLPxUdIA9+z
-         U6pal+7Wo9FJjtgwgXDQRf5ju2KXZ+7KILzbFoWL2j+W8ftA0sFd8QVT7lZJxPh1/pXP
-         ubC67zvY85c1uf0+5fOhJG7IteFg2gRmIHY/ru2pwUYuv1NfyON+cRg7xiXHiB4YSy6H
-         9L7vkIf1QxylvC+9MTHKE+bZ180Y7lFbfWceDY/QEQJX5B135Z7oUEl43cb7iAW7Vz9Q
-         lCqw==
+        bh=+7CekdsHq3o9kP3EBlvL2Isxys3n4Y2CKKaBFtZHFmY=;
+        b=jtSJGBK1bieEG6sijFoat41fEfFt2bMDnVRsldhV8stdSoZNPoLuWbh7z3CK4+Y7IR
+         9wkdJ2DUxJfe2NykXYBrOltrog2pdZWKGrm9wZ4nxQ0BAKNWVfif/rUtM1vuauQTZgd8
+         tlYcF8K0dfwxamnY24gFvN77nO9Lkr89r9YvId47XIVXItBWVFrA14Q076CeVsvP+tRM
+         g+WJR2rWuf7cK5w1SXeAfwL/BCR0ge33A3S29nezEwHlyhSiShREGwgE0KvIfjXHN383
+         slF34HDr++WiyETl3eATA76SdLZqszMbDPpzfTiP7SfKwQ9QFWHRXbH4ZUQLpt1StUcn
+         7ZrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Q8VESBKh1KMoZOvtg0ZXq27EnrJxCWZC/qS4aZqyj6E=;
-        b=w1OIJ1YOfb4bAoviDlkXrBxte1cGwsn+/f9RavnA6UpW0kNJU0kUMfkHTMa/xBOzS5
-         tnI6EDZKIu798SBZgceRo5GdafMAbr3vjrEHU8G1njylGEp11b4ecdMatYrQ95W3eCZ8
-         KeEf94f/+D4AY0FexusLdawX+iuq0Q99Qr6d4BYyzHk/qvCZD+tVwlh8nXNAYKw6lNNH
-         LST/TTYD6/vdq8Oed7NM2WRkpMEaJ1l1Qa7yq6VVwaLKrktLh8p3CZwmFc6S3iqHEYrs
-         Wqkhn5gTfa+ctCeUi8MKgcfpmKQQnnx99eeBN9akOjH15tlLntT6A2oVZxwKW69DpLbw
-         iMuA==
-X-Gm-Message-State: ACrzQf2gTtCbDYLz1jKSiQYIK1d4mVgm+wmy4hSXx4+od5RF0qwWXpqn
-        d/s0IxtpkAyYNO70IjGsP6J+fTecWgQ=
-X-Google-Smtp-Source: AMsMyM5xQd8XIQIdDn9rJugZguTohqD5xQiQajGEtAeexVP9/CA70pQvYS69d7Z5EXfJhKr4v9a2RA==
-X-Received: by 2002:aa7:cf0b:0:b0:461:2271:8559 with SMTP id a11-20020aa7cf0b000000b0046122718559mr44462387edy.92.1667723753732;
-        Sun, 06 Nov 2022 01:35:53 -0700 (PDT)
+        bh=+7CekdsHq3o9kP3EBlvL2Isxys3n4Y2CKKaBFtZHFmY=;
+        b=bb5a/dPWFdSNYWSMs3b3HtD+QJnJcRgwnHntf0WzZhWRffC6oIk2YODN4GIAEhwL9P
+         TC7Po8ITph0/2dbfOWwT2l7R7m1URMF4cSewuj4pbD3HrEu06YyoK9wS0blrsYsyW0g0
+         HqumCXbNVphHaPLUJlrgEtDLS/8CGQIR6NcEGJ4lP1k6L9CnOIcXROqSuEDbAtM+3bzm
+         lA424qUDG1LFDEzQe8TbpKH5XpiLDxt/M+iYLdCh4quBaej686hn/fKAOfgY0vNcl6Pv
+         wmA9KKtZ4f1PERpPf14GWoJAiuciUKQm+YPuXw904w6/+nDSG71G1UTuoLIjaV47Qrxc
+         pU1A==
+X-Gm-Message-State: ACrzQf3SYg4gjHAjm0z5kjmLOOHmwpJwESMl/rm366cJJPj1y++Vr4zD
+        +bh+MCjYfFO4ktnw+o3nxHA=
+X-Google-Smtp-Source: AMsMyM6O6gGj9j+axrISZpxtKlQI88MGa12/mobBrIOrm3TgGf5zFgJsDuMWH59fCp5ujW0QwWLbpA==
+X-Received: by 2002:a17:907:1def:b0:7ad:9673:8668 with SMTP id og47-20020a1709071def00b007ad96738668mr41376461ejc.698.1667723769523;
+        Sun, 06 Nov 2022 01:36:09 -0700 (PDT)
 Received: from [192.168.1.100] (p54a07888.dip0.t-ipconnect.de. [84.160.120.136])
-        by smtp.gmail.com with ESMTPSA id i28-20020a1709067a5c00b00781dbdb292asm1858629ejo.155.2022.11.06.01.35.52
+        by smtp.gmail.com with ESMTPSA id g26-20020a056402321a00b00463bc1ddc76sm2314024eda.28.2022.11.06.01.36.08
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 06 Nov 2022 01:35:53 -0700 (PDT)
-Message-ID: <f3b1a309-f7bc-a225-90ac-90838a89acfa@gmail.com>
-Date:   Sun, 6 Nov 2022 09:35:51 +0100
+        Sun, 06 Nov 2022 01:36:09 -0700 (PDT)
+Message-ID: <9d8ed71b-abee-bc3e-df66-fc9d8d498d1d@gmail.com>
+Date:   Sun, 6 Nov 2022 09:36:08 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: [PATCH] staging: r8188eu: simplify complex pointer casting
+Subject: Re: [PATCH] staging: r8188eu: convert three functions to bool
 Content-Language: en-US
-To:     Deepak R Varma <drv@mailo.com>,
-        Larry Finger <Larry.Finger@lwfinger.net>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Pavel Skripkin <paskripkin@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+To:     Michael Straube <straube.linux@gmail.com>,
+        gregkh@linuxfoundation.org
+Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-References: <Y2dvmdGxQfmK4O6F@qemulion>
+References: <20221105093916.8255-1-straube.linux@gmail.com>
 From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
-In-Reply-To: <Y2dvmdGxQfmK4O6F@qemulion>
+In-Reply-To: <20221105093916.8255-1-straube.linux@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -78,48 +76,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/6/22 09:26, Deepak R Varma wrote:
-> Pointers to structures udphdr and dhcpMessage are derived by casting
-> adjacent pointers with size_t. Such typecast of pointer using size_t
-> is not preferred. The code looks complex and delicate. Simplify such
-> casting by utilizing generic "void *" casting.
-> While at this change, remove the unnecessary __be32 casting for member
-> variable "cookie".
+On 11/5/22 10:39, Michael Straube wrote:
+> The functions
 > 
-> Suggested-by: Joe Perches <joe@perches.com>
-> Signed-off-by: Deepak R Varma <drv@mailo.com>
+> is_client_associated_to_ap()
+> is_client_associated_to_ibss()
+> is_IBSS_empty()
+> 
+> return boolean values. Convert their return type to bool and replace
+> _FAIL, which is defined as 0, with false. Another step to get rid of
+> _SUCCESS / _FAIL.
+> 
+> Signed-off-by: Michael Straube <straube.linux@gmail.com>
 > ---
->   drivers/staging/r8188eu/core/rtw_br_ext.c | 10 ++++++----
->   1 file changed, 6 insertions(+), 4 deletions(-)
+>   drivers/staging/r8188eu/core/rtw_wlan_util.c   | 18 +++++++++---------
+>   drivers/staging/r8188eu/include/rtw_mlme_ext.h |  6 +++---
+>   2 files changed, 12 insertions(+), 12 deletions(-)
 > 
-> diff --git a/drivers/staging/r8188eu/core/rtw_br_ext.c b/drivers/staging/r8188eu/core/rtw_br_ext.c
-> index a23f7df373ed..e9b0906d0d74 100644
-> --- a/drivers/staging/r8188eu/core/rtw_br_ext.c
-> +++ b/drivers/staging/r8188eu/core/rtw_br_ext.c
-> @@ -610,13 +610,15 @@ void dhcp_flag_bcast(struct adapter *priv, struct sk_buff *skb)
->   			struct iphdr *iph = (struct iphdr *)(skb->data + ETH_HLEN);
-> 
->   			if (iph->protocol == IPPROTO_UDP) { /*  UDP */
-> -				struct udphdr *udph = (struct udphdr *)((size_t)iph + (iph->ihl << 2));
-> +				struct udphdr *udph = (void *)iph + (iph->ihl << 2);
-> 
->   				if ((udph->source == htons(CLIENT_PORT)) &&
->   				    (udph->dest == htons(SERVER_PORT))) { /*  DHCP request */
-> -					struct dhcpMessage *dhcph =
-> -						(struct dhcpMessage *)((size_t)udph + sizeof(struct udphdr));
-> -					u32 cookie = be32_to_cpu((__be32)dhcph->cookie);
-> +					u32 cookie;
-> +					struct dhcpMessage *dhcph;
+> diff --git a/drivers/staging/r8188eu/core/rtw_wlan_util.c b/drivers/staging/r8188eu/core/rtw_wlan_util.c
+> index e50631848cab..c95438a12b59 100644
+> --- a/drivers/staging/r8188eu/core/rtw_wlan_util.c
+> +++ b/drivers/staging/r8188eu/core/rtw_wlan_util.c
+> @@ -331,35 +331,35 @@ u16 get_beacon_interval(struct wlan_bssid_ex *bss)
+>   	return le16_to_cpu(val);
+>   }
+>   
+> -int is_client_associated_to_ap(struct adapter *padapter)
+> +bool is_client_associated_to_ap(struct adapter *padapter)
+>   {
+>   	struct mlme_ext_priv	*pmlmeext;
+>   	struct mlme_ext_info	*pmlmeinfo;
+>   
+>   	if (!padapter)
+> -		return _FAIL;
+> +		return false;
+>   
+>   	pmlmeext = &padapter->mlmeextpriv;
+>   	pmlmeinfo = &pmlmeext->mlmext_info;
+>   
+>   	if ((pmlmeinfo->state & WIFI_FW_ASSOC_SUCCESS) && ((pmlmeinfo->state & 0x03) == WIFI_FW_STATION_STATE))
+>   		return true;
+> -	else
+> -		return _FAIL;
 > +
-> +					dhcph = (void *)udph + sizeof(struct udphdr);
-> +					cookie = be32_to_cpu(dhcph->cookie);
-> 
->   					if (cookie == DHCP_MAGIC) { /*  match magic word */
->   						if (!(dhcph->flags & htons(BROADCAST_FLAG))) {
-> --
-> 2.34.1
-> 
-> 
-> 
-> 
+> +	return false;
+>   }
+>   
+> -int is_client_associated_to_ibss(struct adapter *padapter)
+> +bool is_client_associated_to_ibss(struct adapter *padapter)
+>   {
+>   	struct mlme_ext_priv	*pmlmeext = &padapter->mlmeextpriv;
+>   	struct mlme_ext_info	*pmlmeinfo = &pmlmeext->mlmext_info;
+>   
+>   	if ((pmlmeinfo->state & WIFI_FW_ASSOC_SUCCESS) && ((pmlmeinfo->state & 0x03) == WIFI_FW_ADHOC_STATE))
+>   		return true;
+> -	else
+> -		return _FAIL;
+> +
+> +	return false;
+>   }
+>   
+> -int is_IBSS_empty(struct adapter *padapter)
+> +bool is_IBSS_empty(struct adapter *padapter)
+>   {
+>   	unsigned int i;
+>   	struct mlme_ext_priv	*pmlmeext = &padapter->mlmeextpriv;
+> @@ -367,7 +367,7 @@ int is_IBSS_empty(struct adapter *padapter)
+>   
+>   	for (i = IBSS_START_MAC_ID; i < NUM_STA; i++) {
+>   		if (pmlmeinfo->FW_sta_info[i].status == 1)
+> -			return _FAIL;
+> +			return false;
+>   	}
+>   	return true;
+>   }
+> diff --git a/drivers/staging/r8188eu/include/rtw_mlme_ext.h b/drivers/staging/r8188eu/include/rtw_mlme_ext.h
+> index e234a3b9af6f..7652e72a03f4 100644
+> --- a/drivers/staging/r8188eu/include/rtw_mlme_ext.h
+> +++ b/drivers/staging/r8188eu/include/rtw_mlme_ext.h
+> @@ -432,9 +432,9 @@ void update_network(struct wlan_bssid_ex *dst, struct wlan_bssid_ex *src,
+>   u8 *get_my_bssid(struct wlan_bssid_ex *pnetwork);
+>   u16 get_beacon_interval(struct wlan_bssid_ex *bss);
+>   
+> -int is_client_associated_to_ap(struct adapter *padapter);
+> -int is_client_associated_to_ibss(struct adapter *padapter);
+> -int is_IBSS_empty(struct adapter *padapter);
+> +bool is_client_associated_to_ap(struct adapter *padapter);
+> +bool is_client_associated_to_ibss(struct adapter *padapter);
+> +bool is_IBSS_empty(struct adapter *padapter);
+>   
+>   unsigned char check_assoc_AP(u8 *pframe, uint len);
+>   
 Tested-by: Philipp Hortmann <philipp.g.hortmann@gmail.com> # Edimax N150
