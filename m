@@ -2,80 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B8D561E078
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 07:00:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EF9E61E080
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 07:17:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229582AbiKFGAE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Nov 2022 01:00:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35172 "EHLO
+        id S229613AbiKFGRL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Nov 2022 01:17:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbiKFGAB (ORCPT
+        with ESMTP id S229463AbiKFGRI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Nov 2022 01:00:01 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFF621D2
-        for <linux-kernel@vger.kernel.org>; Sat,  5 Nov 2022 23:00:00 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 5DA1A1F950;
-        Sun,  6 Nov 2022 05:59:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1667714399; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=8hVb6BAyWvekO938dQSC+RJ8T7govWTrExn1p5zb8JU=;
-        b=nbO5SOj8oSk1Wc6NC1zqUlHYUboewu/rFh7gRlQxz5QNG6n0JrCA1nTPpK98nAWanzV0ak
-        UljRMSzvy6qoaeujTPcpcfsWzvT3ybfV3taCt7SmU52+d02nsrEfbM5XA6tZuw1bXiwGI+
-        uBjL8FaLKaMNp4sGw4Sn99D8r037Ct4=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 268D8132E7;
-        Sun,  6 Nov 2022 05:59:59 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id jppJB19NZ2ODJwAAMHmgww
-        (envelope-from <jgross@suse.com>); Sun, 06 Nov 2022 05:59:59 +0000
-From:   Juergen Gross <jgross@suse.com>
-To:     torvalds@linux-foundation.org
-Cc:     linux-kernel@vger.kernel.org, xen-devel@lists.xenproject.org,
-        sstabellini@kernel.org
-Subject: [GIT PULL] xen: branch for v6.1-rc4
-Date:   Sun,  6 Nov 2022 06:59:58 +0100
-Message-Id: <20221106055958.14139-1-jgross@suse.com>
-X-Mailer: git-send-email 2.35.3
+        Sun, 6 Nov 2022 01:17:08 -0500
+Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37E24DE98;
+        Sat,  5 Nov 2022 23:17:06 -0700 (PDT)
+Received: from cwcc.thunk.org (pool-173-48-120-46.bstnma.fios.verizon.net [173.48.120.46])
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 2A66GwOd032684
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 6 Nov 2022 01:17:00 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
+        t=1667715420; bh=sP0ybmGgYruTos8gDoWNUX5C6ji8NsMQXypakkdfDL8=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=pVVhRdYXG6pkhIxgAn5Vcta8ftCl2Jj1hmdwl332L+T+1i02F8gEMYyvt+vTNFwxf
+         Q+9dG9d6Ry9iMon9Mr3mOj8orFskg71w019ozK28mIQGcBvQ0PGndYMkFwCcARVxdZ
+         yEF5O8JEsk37MJLlu4WmPdS43jMLFifjQdtzDc8n9bgj9Akfbt/JAQLmeQxeh8mUGj
+         N1TGPhUN4DGhUpAKbOPo647FkbkF/tK/elPhXP2SMTTZl3G/JngeX1Q/RiyQzz2Ncv
+         AAjPrckdVTBQLGpVq1XA8JRqSpyxYVPellKK0UGN28urhr52l7wUUjXm7uTL1k1ZXU
+         FQcKYT3fPW4Gw==
+Received: by cwcc.thunk.org (Postfix, from userid 15806)
+        id 127DD15C45B9; Sun,  6 Nov 2022 01:16:58 -0500 (EST)
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     =?UTF-8?q?Lu=C3=ADs=20Henriques?= <lhenriques@suse.de>,
+        Andreas Dilger <adilger.kernel@dilger.ca>
+Cc:     "Theodore Ts'o" <tytso@mit.edu>, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, linux-ext4@vger.kernel.org
+Subject: Re: [PATCH v2] ext4: fix BUG_ON() when directory entry has invalid rec_len
+Date:   Sun,  6 Nov 2022 01:16:51 -0500
+Message-Id: <166771539910.127460.13255978172835793776.b4-ty@mit.edu>
+X-Mailer: git-send-email 2.31.0
+In-Reply-To: <20221012131330.32456-1-lhenriques@suse.de>
+References: <20221010142035.2051-1-lhenriques@suse.de> <20221012131330.32456-1-lhenriques@suse.de>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linus,
+On Wed, 12 Oct 2022 14:13:30 +0100, Luís Henriques wrote:
+> The rec_len field in the directory entry has to be a multiple of 4.  A
+> corrupted filesystem image can be used to hit a BUG() in
+> ext4_rec_len_to_disk(), called from make_indexed_dir().
+> 
+>  ------------[ cut here ]------------
+>  kernel BUG at fs/ext4/ext4.h:2413!
+>  ...
+>  RIP: 0010:make_indexed_dir+0x53f/0x5f0
+>  ...
+>  Call Trace:
+>   <TASK>
+>   ? add_dirent_to_buf+0x1b2/0x200
+>   ext4_add_entry+0x36e/0x480
+>   ext4_add_nondir+0x2b/0xc0
+>   ext4_create+0x163/0x200
+>   path_openat+0x635/0xe90
+>   do_filp_open+0xb4/0x160
+>   ? __create_object.isra.0+0x1de/0x3b0
+>   ? _raw_spin_unlock+0x12/0x30
+>   do_sys_openat2+0x91/0x150
+>   __x64_sys_open+0x6c/0xa0
+>   do_syscall_64+0x3c/0x80
+>   entry_SYSCALL_64_after_hwframe+0x46/0xb0
+> 
+> [...]
 
-Please git pull the following tag:
+Applied, thanks!
 
- git://git.kernel.org/pub/scm/linux/kernel/git/xen/tip.git for-linus-6.1-rc4-tag
+[1/1] ext4: fix BUG_ON() when directory entry has invalid rec_len
+      commit: 17a0bc9bd697f75cfdf9b378d5eb2d7409c91340
 
-xen: branch for v6.1-rc4
-
-It contains only one fix for silencing a smatch warning, and a small
-cleanup patch.
-
-Thanks.
-
-Juergen
-
- arch/x86/xen/pmu.c   |  2 +-
- arch/x86/xen/setup.c | 23 ++++++-----------------
- 2 files changed, 7 insertions(+), 18 deletions(-)
-
-Juergen Gross (2):
-      x86/xen: silence smatch warning in pmu_msr_chk_emulated()
-      x86/xen: simplify sysenter and syscall setup
+Best regards,
+-- 
+Theodore Ts'o <tytso@mit.edu>
