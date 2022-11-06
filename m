@@ -2,47 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EF9E61E080
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 07:17:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BDDFC61E083
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 07:17:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229613AbiKFGRL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Nov 2022 01:17:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36744 "EHLO
+        id S229663AbiKFGR0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Nov 2022 01:17:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbiKFGRI (ORCPT
+        with ESMTP id S229629AbiKFGRX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Nov 2022 01:17:08 -0500
+        Sun, 6 Nov 2022 01:17:23 -0500
 Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37E24DE98;
-        Sat,  5 Nov 2022 23:17:06 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20971DEA8;
+        Sat,  5 Nov 2022 23:17:23 -0700 (PDT)
 Received: from cwcc.thunk.org (pool-173-48-120-46.bstnma.fios.verizon.net [173.48.120.46])
         (authenticated bits=0)
         (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 2A66GwOd032684
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 2A66H01T032709
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
         Sun, 6 Nov 2022 01:17:00 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
-        t=1667715420; bh=sP0ybmGgYruTos8gDoWNUX5C6ji8NsMQXypakkdfDL8=;
+        t=1667715421; bh=QdQ7jgAPs3Fub2MtTS9nyM+pXxBGvy+wYzkhhV6yWZ8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=pVVhRdYXG6pkhIxgAn5Vcta8ftCl2Jj1hmdwl332L+T+1i02F8gEMYyvt+vTNFwxf
-         Q+9dG9d6Ry9iMon9Mr3mOj8orFskg71w019ozK28mIQGcBvQ0PGndYMkFwCcARVxdZ
-         yEF5O8JEsk37MJLlu4WmPdS43jMLFifjQdtzDc8n9bgj9Akfbt/JAQLmeQxeh8mUGj
-         N1TGPhUN4DGhUpAKbOPo647FkbkF/tK/elPhXP2SMTTZl3G/JngeX1Q/RiyQzz2Ncv
-         AAjPrckdVTBQLGpVq1XA8JRqSpyxYVPellKK0UGN28urhr52l7wUUjXm7uTL1k1ZXU
-         FQcKYT3fPW4Gw==
+        b=YUJIvcSR+gTG+lQVHvHh1YHv0pz49WlAC8FhjdjkHpVu3yMGYcxyQifqAuqFOIvke
+         ik9C73qTCxTcEr/+WXqQkpiGNF+qHVaZIihjM7FJfnNsosH/dx009mzu5EXLK699Ks
+         w1U3nyI3FX/50LaBaotDQ+E1maflJCI08reCi4SDFKTYov0T9lyG2toKxb5jzprt3M
+         fMW6+h5eo5dweWt0gOe/Vt/yvkaFED4uDaL4x3nuJUKUwkLOs0IeWlVKRidrHHa3D/
+         6tLoN5AoFOc500NbU8/QLfL1eNVi2Ih6NnF0X4gIsMj0gV9LXDCCpFnHsKR5lLkbS5
+         CeKNgrhaUzVBQ==
 Received: by cwcc.thunk.org (Postfix, from userid 15806)
-        id 127DD15C45B9; Sun,  6 Nov 2022 01:16:58 -0500 (EST)
+        id E25E715C45BB; Sun,  6 Nov 2022 01:16:59 -0500 (EST)
 From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     =?UTF-8?q?Lu=C3=ADs=20Henriques?= <lhenriques@suse.de>,
-        Andreas Dilger <adilger.kernel@dilger.ca>
-Cc:     "Theodore Ts'o" <tytso@mit.edu>, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, linux-ext4@vger.kernel.org
-Subject: Re: [PATCH v2] ext4: fix BUG_ON() when directory entry has invalid rec_len
-Date:   Sun,  6 Nov 2022 01:16:51 -0500
-Message-Id: <166771539910.127460.13255978172835793776.b4-ty@mit.edu>
+To:     Ye Bin <yebin10@huawei.com>, linux-ext4@vger.kernel.org,
+        adilger.kernel@dilger.ca
+Cc:     "Theodore Ts'o" <tytso@mit.edu>, jack@suse.cz,
+        syzbot+c740bb18df70ad00952e@syzkaller.appspotmail.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH -next v2] ext4: fix warning in 'ext4_da_release_space'
+Date:   Sun,  6 Nov 2022 01:16:53 -0500
+Message-Id: <166771539910.127460.7496410803932369792.b4-ty@mit.edu>
 X-Mailer: git-send-email 2.31.0
-In-Reply-To: <20221012131330.32456-1-lhenriques@suse.de>
-References: <20221010142035.2051-1-lhenriques@suse.de> <20221012131330.32456-1-lhenriques@suse.de>
+In-Reply-To: <20221018022701.683489-1-yebin10@huawei.com>
+References: <20221018022701.683489-1-yebin10@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -55,37 +56,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 12 Oct 2022 14:13:30 +0100, Luís Henriques wrote:
-> The rec_len field in the directory entry has to be a multiple of 4.  A
-> corrupted filesystem image can be used to hit a BUG() in
-> ext4_rec_len_to_disk(), called from make_indexed_dir().
-> 
->  ------------[ cut here ]------------
->  kernel BUG at fs/ext4/ext4.h:2413!
->  ...
->  RIP: 0010:make_indexed_dir+0x53f/0x5f0
->  ...
->  Call Trace:
->   <TASK>
->   ? add_dirent_to_buf+0x1b2/0x200
->   ext4_add_entry+0x36e/0x480
->   ext4_add_nondir+0x2b/0xc0
->   ext4_create+0x163/0x200
->   path_openat+0x635/0xe90
->   do_filp_open+0xb4/0x160
->   ? __create_object.isra.0+0x1de/0x3b0
->   ? _raw_spin_unlock+0x12/0x30
->   do_sys_openat2+0x91/0x150
->   __x64_sys_open+0x6c/0xa0
->   do_syscall_64+0x3c/0x80
->   entry_SYSCALL_64_after_hwframe+0x46/0xb0
+On Tue, 18 Oct 2022 10:27:01 +0800, Ye Bin wrote:
+> Syzkaller report issue as follows:
+> EXT4-fs (loop0): Free/Dirty block details
+> EXT4-fs (loop0): free_blocks=0
+> EXT4-fs (loop0): dirty_blocks=0
+> EXT4-fs (loop0): Block reservation details
+> EXT4-fs (loop0): i_reserved_data_blocks=0
+> EXT4-fs warning (device loop0): ext4_da_release_space:1527: ext4_da_release_space: ino 18, to_free 1 with only 0 reserved data blocks
+> ------------[ cut here ]------------
+> WARNING: CPU: 0 PID: 92 at fs/ext4/inode.c:1528 ext4_da_release_space+0x25e/0x370 fs/ext4/inode.c:1524
+> Modules linked in:
+> CPU: 0 PID: 92 Comm: kworker/u4:4 Not tainted 6.0.0-syzkaller-09423-g493ffd6605b2 #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/22/2022
+> Workqueue: writeback wb_workfn (flush-7:0)
+> RIP: 0010:ext4_da_release_space+0x25e/0x370 fs/ext4/inode.c:1528
+> RSP: 0018:ffffc900015f6c90 EFLAGS: 00010296
+> RAX: 42215896cd52ea00 RBX: 0000000000000000 RCX: 42215896cd52ea00
+> RDX: 0000000000000000 RSI: 0000000080000001 RDI: 0000000000000000
+> RBP: 1ffff1100e907d96 R08: ffffffff816aa79d R09: fffff520002bece5
+> R10: fffff520002bece5 R11: 1ffff920002bece4 R12: ffff888021fd2000
+> R13: ffff88807483ecb0 R14: 0000000000000001 R15: ffff88807483e740
+> FS:  0000000000000000(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 00005555569ba628 CR3: 000000000c88e000 CR4: 00000000003506f0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> Call Trace:
+>  <TASK>
+>  ext4_es_remove_extent+0x1ab/0x260 fs/ext4/extents_status.c:1461
+>  mpage_release_unused_pages+0x24d/0xef0 fs/ext4/inode.c:1589
+>  ext4_writepages+0x12eb/0x3be0 fs/ext4/inode.c:2852
+>  do_writepages+0x3c3/0x680 mm/page-writeback.c:2469
+>  __writeback_single_inode+0xd1/0x670 fs/fs-writeback.c:1587
+>  writeback_sb_inodes+0xb3b/0x18f0 fs/fs-writeback.c:1870
+>  wb_writeback+0x41f/0x7b0 fs/fs-writeback.c:2044
+>  wb_do_writeback fs/fs-writeback.c:2187 [inline]
+>  wb_workfn+0x3cb/0xef0 fs/fs-writeback.c:2227
+>  process_one_work+0x877/0xdb0 kernel/workqueue.c:2289
+>  worker_thread+0xb14/0x1330 kernel/workqueue.c:2436
+>  kthread+0x266/0x300 kernel/kthread.c:376
+>  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+>  </TASK>
 > 
 > [...]
 
 Applied, thanks!
 
-[1/1] ext4: fix BUG_ON() when directory entry has invalid rec_len
-      commit: 17a0bc9bd697f75cfdf9b378d5eb2d7409c91340
+[1/1] ext4: fix warning in 'ext4_da_release_space'
+      commit: 1b8f787ef547230a3249bcf897221ef0cc78481b
 
 Best regards,
 -- 
