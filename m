@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AE4561E4EB
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 18:35:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D0A161E4EF
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 18:36:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230317AbiKFRfI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Nov 2022 12:35:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41674 "EHLO
+        id S230290AbiKFRg4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Nov 2022 12:36:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229919AbiKFRfF (ORCPT
+        with ESMTP id S229919AbiKFRgy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Nov 2022 12:35:05 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA80F5FC4;
-        Sun,  6 Nov 2022 09:35:03 -0800 (PST)
+        Sun, 6 Nov 2022 12:36:54 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBDD25FC4;
+        Sun,  6 Nov 2022 09:36:53 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9261BB80C67;
-        Sun,  6 Nov 2022 17:35:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC15CC433C1;
-        Sun,  6 Nov 2022 17:34:59 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7B9EF60CEF;
+        Sun,  6 Nov 2022 17:36:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A223C433C1;
+        Sun,  6 Nov 2022 17:36:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667756101;
-        bh=K/R2PfBnRtCsPdAZPZWkG3dkqQSGM5S1L3bcvRE0TA0=;
+        s=k20201202; t=1667756212;
+        bh=KFkAfIG8I6dG0L+fuoOEwux4EkDFFug6VihBxtyS6bQ=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=AhOfN9x9Wk+g+kttu/Dm7IT/2nEpu5zYxweZ4l3TRPX1MqUem3+dz3I1Pzr4oZKS/
-         1TY97crkR9Jwu2Tok0Qsz83J4sDdojqBZNTV7D9rVdIaCGbUL9WZtcr/jSUQUAf2VE
-         ZLvriL+sB177lukgpffjDnvG7fKKc9wJmw+23da1iBKPv+EYh2dOqT1Ocii2+L562j
-         zFaXk6ZqIpgZlHQPIKwlqGKHWHvmwSLWZVzkSBvvM/v/diOOpkHm/pVNYqdDa3O5Kd
-         KWhqKa3zzJuEdqOjYUevPuOQU+2TgBrTXpYqueqzEiHvxMi0JOkRAVuWuD2pAu47Rk
-         RyIjJoU+nJtDw==
-Date:   Sun, 6 Nov 2022 17:34:51 +0000
+        b=oNe9f+dwYwBu5Ihh/ExrBplWFCqMJSg6AEC2sA9NieXzrO+p3mRVkHFygWwqjoxhe
+         bDTx3H+z4nmn7nj4HOmjpnYwfGBLQ6BToGQwSrv7a1c2WZnB9v6/v3QlTpBRd7WpF6
+         vPGPYCrDAlnRvC+AjXnh4DKsbTFD+6EVaxdlzZxw1zuOnDEXwg8bbsWVns4zatnEzL
+         WpC7dl1CWGRrWRv6WlO8UjaEGPnC/NoLrmmIHR0RINGvsux69G+2UpYENvcMDP+M7v
+         mfMsrdFPQnGDMikanoa4nEhCdr4oXOaK3VTMFzIm4BB2RGtYveDyxCo/VpFCy/nq3C
+         2bgFd41j1QZvg==
+Date:   Sun, 6 Nov 2022 17:36:43 +0000
 From:   Jonathan Cameron <jic23@kernel.org>
-To:     Matt Ranostay <matt.ranostay@konsulko.com>
-Cc:     Alejandro =?UTF-8?B?Q29uY2VwY2nDs24gUm9kcsOtZ3Vleg==?= 
-        <asconcepcion@acoro.eu>, "lars@metafoo.de" <lars@metafoo.de>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>
-Subject: Re: [PATCH] iio: light: apds9960: fix wrong register for gesture
- gain
-Message-ID: <20221106173451.2e6e7ff0@jic23-huawei>
-In-Reply-To: <CAJCx=gk0j-PT56yea_dEAT3=uBAfMebgvHf8D4yT9f7_4YAQhQ@mail.gmail.com>
-References: <EaT-NKC-H4DNX5z4Lg9B6IWPD5TrTrYBr5DYB784wfDKQkTmzPXkoYqyUOrOgJH-xvTsEkFLcVkeAPZRUODEFI5dGziaWXwjpfBNLeNGfNc=@acoro.eu>
-        <CAJCx=gk0j-PT56yea_dEAT3=uBAfMebgvHf8D4yT9f7_4YAQhQ@mail.gmail.com>
+To:     Yauhen Kharuzhy <jekhor@gmail.com>
+Cc:     linux-input@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Jiri Kosina <jikos@kernel.org>
+Subject: Re: [PATCH] HID: hid-sensor-custom: Allow more than one hinge angle
+ sensor
+Message-ID: <20221106173643.5b4f2a0b@jic23-huawei>
+In-Reply-To: <20221105223422.417316-1-jekhor@gmail.com>
+References: <20221105223422.417316-1-jekhor@gmail.com>
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -58,79 +58,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 6 Nov 2022 13:42:24 +0800
-Matt Ranostay <matt.ranostay@konsulko.com> wrote:
+On Sun,  6 Nov 2022 00:34:22 +0200
+Yauhen Kharuzhy <jekhor@gmail.com> wrote:
 
-> On Sun, Nov 6, 2022 at 9:56 AM Alejandro Concepci=C3=B3n Rodr=C3=ADguez
-> <asconcepcion@acoro.eu> wrote:
-> >
-> > Gesture Gain Control is in REG_GCONF_2 (0xa3), not in REG_CONFIG_2 (0x9=
-0).
-> >
-> > Fixes: aff268cd532e ("iio: light: add APDS9960 ALS + promixity driver")
-> >
-There shouldn't be any blank lines in the tags block.  I fixed this whilst =
-applying. =20
->=20
-> Good find. Odd that nobody ran into that issue before :/
->=20
-> NOTE: Sorry for the double emails to some.. seems gmail dropped my
-> Plain Text default setting and set it to HTML *sigh*
->=20
-> Acked-by: Matt Ranostay <matt.ranostay@konsulko.com>
->=20
+> Some devices has two sets of accelerometers and the sensor hub exports
+> two hinge angle 'sensors' based on accelerometer values. To allow more
+> than one sensor of the same type, use PLATFORM_DEVID_AUTO instead of
+> PLATFORM_DEVID_NONE when registering platform device for it.
+> 
+> Checked on the Lenovo Yoga Book YB1-X91L tablet.
+> 
+> Signed-off-by: Yauhen Kharuzhy <jekhor@gmail.com>
 
-Applied to the fixes-togreg branch of iio.git and marked for stable.
-
-Thanks,
+Purely for curiosity sake, but where are the two sets of sensors?
+Doesn't look like it has two hinges at first glance!
 
 Jonathan
 
-> > Signed-off-by: Alejandro Concepcion-Rodriguez <asconcepcion@acoro.eu>
-> > ---
-> >  drivers/iio/light/apds9960.c | 12 ++++++------
-> >  1 file changed, 6 insertions(+), 6 deletions(-)
-> >
-> > diff --git a/drivers/iio/light/apds9960.c b/drivers/iio/light/apds9960.c
-> > index b62c139baf41..38d4c7644bef 100644
-> > --- a/drivers/iio/light/apds9960.c
-> > +++ b/drivers/iio/light/apds9960.c
-> > @@ -54,9 +54,6 @@
-> >  #define APDS9960_REG_CONTROL_PGAIN_MASK_SHIFT  2
-> >
-> >  #define APDS9960_REG_CONFIG_2  0x90
-> > -#define APDS9960_REG_CONFIG_2_GGAIN_MASK       0x60
-> > -#define APDS9960_REG_CONFIG_2_GGAIN_MASK_SHIFT 5
-> > -
-> >  #define APDS9960_REG_ID                0x92
-> >
-> >  #define APDS9960_REG_STATUS    0x93
-> > @@ -77,6 +74,9 @@
-> >  #define APDS9960_REG_GCONF_1_GFIFO_THRES_MASK_SHIFT    6
-> >
-> >  #define APDS9960_REG_GCONF_2   0xa3
-> > +#define APDS9960_REG_GCONF_2_GGAIN_MASK                        0x60
-> > +#define APDS9960_REG_GCONF_2_GGAIN_MASK_SHIFT          5
-> > +
-> >  #define APDS9960_REG_GOFFSET_U 0xa4
-> >  #define APDS9960_REG_GOFFSET_D 0xa5
-> >  #define APDS9960_REG_GPULSE    0xa6
-> > @@ -396,9 +396,9 @@ static int apds9960_set_pxs_gain(struct apds9960_da=
-ta *data, int val)
-> >                         }
-> >
-> >                         ret =3D regmap_update_bits(data->regmap,
-> > -                               APDS9960_REG_CONFIG_2,
-> > -                               APDS9960_REG_CONFIG_2_GGAIN_MASK,
-> > -                               idx << APDS9960_REG_CONFIG_2_GGAIN_MASK=
-_SHIFT);
-> > +                               APDS9960_REG_GCONF_2,
-> > +                               APDS9960_REG_GCONF_2_GGAIN_MASK,
-> > +                               idx << APDS9960_REG_GCONF_2_GGAIN_MASK_=
-SHIFT);
-> >                         if (!ret)
-> >                                 data->pxs_gain =3D idx;
-> >                         mutex_unlock(&data->lock);
-> > --
-> > 2.34.1 =20
+> ---
+>  drivers/hid/hid-sensor-custom.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/hid/hid-sensor-custom.c b/drivers/hid/hid-sensor-custom.c
+> index 32c2306e240d6..a6fc89ee1287c 100644
+> --- a/drivers/hid/hid-sensor-custom.c
+> +++ b/drivers/hid/hid-sensor-custom.c
+> @@ -862,7 +862,7 @@ hid_sensor_register_platform_device(struct platform_device *pdev,
+>  		return ERR_PTR(-ENOMEM);
+>  
+>  	custom_pdev = platform_device_register_data(pdev->dev.parent, dev_name,
+> -						    PLATFORM_DEVID_NONE, hsdev,
+> +						    PLATFORM_DEVID_AUTO, hsdev,
+>  						    sizeof(*hsdev));
+>  	kfree(dev_name);
+>  	return custom_pdev;
 
