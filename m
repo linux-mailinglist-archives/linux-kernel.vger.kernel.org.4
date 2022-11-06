@@ -2,49 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC61F61E555
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 19:36:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD6B761E559
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 19:40:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230121AbiKFSg5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Nov 2022 13:36:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58050 "EHLO
+        id S230127AbiKFSkr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Nov 2022 13:40:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229947AbiKFSgz (ORCPT
+        with ESMTP id S229452AbiKFSkp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Nov 2022 13:36:55 -0500
+        Sun, 6 Nov 2022 13:40:45 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B1C7FAE1;
-        Sun,  6 Nov 2022 10:36:54 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 050E7FCCB;
+        Sun,  6 Nov 2022 10:40:44 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 170B5B80C93;
-        Sun,  6 Nov 2022 18:36:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A69BC433C1;
-        Sun,  6 Nov 2022 18:36:50 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B5BFBB80CA2;
+        Sun,  6 Nov 2022 18:40:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F3B2C433C1;
+        Sun,  6 Nov 2022 18:40:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667759811;
-        bh=iaXMsaT6N/esst59h7+2aRkkMyeFognZ0/KjhwSM5As=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=cJO/LwFhmFn6QMKC2/2Suw9rnTPk5EHd0XzEsJt9acwNzf1tcd41AR9upsw6Mtjbx
-         hHiiCf3du/YoLoehrm7lSqlwQ2SYLneNO7DLbp1Pdi28+xhaFlxMXn9kqvfjHI3CzT
-         xhxiT1vFWVugbV7Z/p/LaLr0Jnvh/oYh5qw44+wMJ0Q6B1zXvo8Y6HKXJ9AU2L1Kjf
-         xG7gt+sPaiY82cALeJTMuI7mBuiihoFx5PN135D4HCnUQ2aXGUWOHgoZLp71QDZsud
-         tIj/qTikbprsXAlupzRUQR0wLTVrLcTLKaD/F051bkK4dWlFgBBDCYzU7lujNWvGIF
-         1OAHE14F2jr9Q==
+        s=k20201202; t=1667760041;
+        bh=AVnsoYGb2+AD+XRwI/0qYBFYN0B977pukexcxCro4fM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=obXaSTt/yx69kdCi6VfoD+7BNQfjeRBCgEHNImgGqs3BLbmzZEzei7tX+sESkfaQU
+         XmbyBUggVLVRN0HciufzMpVy8MXcGPnu8Wkm5VR3mZZmHsPmvRqE0XUAAs8h/WfKEx
+         c68YBGqf5nsinyS+L6PZI3ILK+32mfvcq48GhpB1a+XzBBSX/UbJKQfMPSu5I/aRRA
+         4Kg9x1dXMgKaO4WTNR/mQT3PDILHgdRkWlwdxx3jpUE/sIEyHzqZeHaKlfmHHn8gcN
+         g9b0Q4eqyWZa8XF1hoXfm5BfhYn5JC9vXue2V3dZrCG7mTJREeoghW0Rq/y/MMQ/j3
+         KKscj4Uiphagg==
+Date:   Sun, 6 Nov 2022 20:40:36 +0200
 From:   Leon Romanovsky <leon@kernel.org>
-To:     jgg@ziepe.ca, Arumugam Kolappan <aru.kolappan@oracle.com>,
-        linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org
-Cc:     rama.nichanamatlu@oracle.com, manjunath.b.patil@oracle.com
-In-Reply-To: <1667287664-19377-1-git-send-email-aru.kolappan@oracle.com>
-References: <1667287664-19377-1-git-send-email-aru.kolappan@oracle.com>
-Subject: Re: [PATCH rdma-next v2] RDMA/mlx5: update debug log level for remote access error syndromes
-Message-Id: <166775980729.499685.4215751686786264846.b4-ty@kernel.org>
-Date:   Sun, 06 Nov 2022 20:36:47 +0200
+To:     Veerasenareddy Burru <vburru@marvell.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        lironh@marvell.com, aayarekar@marvell.com, sedara@marvell.com,
+        sburla@marvell.com, "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Subject: Re: [PATCH] octeon_ep: support Octeon device CNF95N
+Message-ID: <Y2f/pE5Fr5wJUtSJ@unreal>
+References: <20221101153539.22630-1-vburru@marvell.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.11.0-dev-87e0e
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221101153539.22630-1-vburru@marvell.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -54,22 +57,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 1 Nov 2022 00:27:44 -0700, Arumugam Kolappan wrote:
-> The mlx5 driver dumps the entire CQE buffer by default for few syndromes.
-> Some syndromes are expected due to the application behavior [ex:
-> MLX5_CQE_SYNDROME_REMOTE_ACCESS_ERR, MLX5_CQE_SYNDROME_REMOTE_OP_ERR and
-> MLX5_CQE_SYNDROME_LOCAL_PROT_ERR]. Hence, for these syndromes, the patch
-> converts the log level from KERN_WARNING to KERN_DEBUG. This enables the
-> application to get the CQE buffer dump by changing to KERN_DEBUG level
-> as and when needed.
+On Tue, Nov 01, 2022 at 08:35:39AM -0700, Veerasenareddy Burru wrote:
+> Add support for Octeon device CNF95N.
+> CNF95N is a Octeon Fusion family product with same PCI NIC
+> characteristics as CN93 which is currently supported by the driver.
 > 
-> [...]
+> Signed-off-by: Veerasenareddy Burru <vburru@marvell.com>
+> ---
+>  .../ethernet/marvell/octeon_ep/octep_main.c   | 19 ++++++++++++++++---
+>  .../ethernet/marvell/octeon_ep/octep_main.h   |  2 ++
+>  2 files changed, 18 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/net/ethernet/marvell/octeon_ep/octep_main.c b/drivers/net/ethernet/marvell/octeon_ep/octep_main.c
+> index 9089adcb75f9..e956c1059fc8 100644
+> --- a/drivers/net/ethernet/marvell/octeon_ep/octep_main.c
+> +++ b/drivers/net/ethernet/marvell/octeon_ep/octep_main.c
+> @@ -23,6 +23,7 @@ struct workqueue_struct *octep_wq;
+>  /* Supported Devices */
+>  static const struct pci_device_id octep_pci_id_tbl[] = {
+>  	{PCI_DEVICE(PCI_VENDOR_ID_CAVIUM, OCTEP_PCI_DEVICE_ID_CN93_PF)},
+> +	{PCI_DEVICE(PCI_VENDOR_ID_CAVIUM, OCTEP_PCI_DEVICE_ID_CNF95N_PF)},
+>  	{0, },
+>  };
+>  MODULE_DEVICE_TABLE(pci, octep_pci_id_tbl);
+> @@ -907,6 +908,18 @@ static void octep_ctrl_mbox_task(struct work_struct *work)
+>  	}
+>  }
+>  
+> +static const char *octep_devid_to_str(struct octep_device *oct)
+> +{
+> +	switch (oct->chip_id) {
+> +	case OCTEP_PCI_DEVICE_ID_CN93_PF:
+> +		return "CN93XX";
+> +	case OCTEP_PCI_DEVICE_ID_CNF95N_PF:
+> +		return "CNF95N";
+> +	default:
+> +		return "Unsupported";
+> +	}
+> +}
+> +
+>  /**
+>   * octep_device_setup() - Setup Octeon Device.
+>   *
+> @@ -939,9 +952,9 @@ int octep_device_setup(struct octep_device *oct)
+>  
+>  	switch (oct->chip_id) {
+>  	case OCTEP_PCI_DEVICE_ID_CN93_PF:
+> -		dev_info(&pdev->dev,
+> -			 "Setting up OCTEON CN93XX PF PASS%d.%d\n",
+> -			 OCTEP_MAJOR_REV(oct), OCTEP_MINOR_REV(oct));
+> +	case OCTEP_PCI_DEVICE_ID_CNF95N_PF:
+> +		dev_info(&pdev->dev, "Setting up OCTEON %s PF PASS%d.%d\n",
+> +			 octep_devid_to_str(oct), OCTEP_MAJOR_REV(oct), OCTEP_MINOR_REV(oct));
+>  		octep_device_setup_cn93_pf(oct);
+>  		break;
+>  	default:
+> diff --git a/drivers/net/ethernet/marvell/octeon_ep/octep_main.h b/drivers/net/ethernet/marvell/octeon_ep/octep_main.h
+> index 025626a61383..123ffc13754d 100644
+> --- a/drivers/net/ethernet/marvell/octeon_ep/octep_main.h
+> +++ b/drivers/net/ethernet/marvell/octeon_ep/octep_main.h
+> @@ -21,6 +21,8 @@
+>  #define  OCTEP_PCI_DEVICE_ID_CN93_PF 0xB200
+>  #define  OCTEP_PCI_DEVICE_ID_CN93_VF 0xB203
+>  
+> +#define  OCTEP_PCI_DEVICE_ID_CNF95N_PF 0xB400    //95N PF
 
-Applied, thanks!
+AFAIK, correct comment style is /* */ and not //.
 
-[1/1] RDMA/mlx5: update debug log level for remote access error syndromes
-      https://git.kernel.org/rdma/rdma/c/abef378c434e6f
+BTW, patch should include target "[PATCH net-next]...".
 
-Best regards,
--- 
-Leon Romanovsky <leon@kernel.org>
+> +
+>  #define  OCTEP_MAX_QUEUES   63
+>  #define  OCTEP_MAX_IQ       OCTEP_MAX_QUEUES
+>  #define  OCTEP_MAX_OQ       OCTEP_MAX_QUEUES
+> -- 
+> 2.36.0
+> 
