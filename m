@@ -2,184 +2,512 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC7A261E6F0
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 23:41:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A091561E6E5
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 23:35:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230118AbiKFWlf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Nov 2022 17:41:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57142 "EHLO
+        id S230083AbiKFWfL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Nov 2022 17:35:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230050AbiKFWle (ORCPT
+        with ESMTP id S230037AbiKFWfH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Nov 2022 17:41:34 -0500
-Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DB82FD07
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Nov 2022 14:41:33 -0800 (PST)
-Received: by mail-qk1-x72e.google.com with SMTP id v8so6280634qkg.12
-        for <linux-kernel@vger.kernel.org>; Sun, 06 Nov 2022 14:41:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZMovLP0zi5Hy9M5Np2yrgkMh7vSv6N1lqtVs8OK/j6M=;
-        b=SFFtpaaFdKF014jghg/vqNT3X4Waz9R9v3wN9nf0iRah92p1UUnQbcxIoHsPXF1RLq
-         cK+uyn4DmRxuQl+k0wyeRO+yTDJgIff6MXt4wr6tsRo71fWvG3YluXBbLG+G8JrDK2Mc
-         Z6GjqaAaevseb04xMi+8briB+EYfhb4ZaGah4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ZMovLP0zi5Hy9M5Np2yrgkMh7vSv6N1lqtVs8OK/j6M=;
-        b=RIH3kydrEQzSipwEgqrMMCGHMLqP1Zhrz8qFpVDQQvmeZMQpvdpnvh0yBJ8Hhjb//L
-         no+G33WFxUqXnEKRWbygTWJAREKqJ/gAYaQ6ki4Y+9+nmkossy/rkSpDzPmquqCRs/SO
-         3WKkHqpYJVYfx/65WZH11LlHnbmQsLNUuXTaLkfW/nC/mFkeRQj6r3F6JU4th4OHCLN3
-         Ay9BG4J10w8N0/69qnsG9EmZ9JH9T4RQW435JXGUE7agHB8YNDMbccSHWDPtALmx9NEX
-         hQ3qcQ74nxc0YLtpiv4pywXjujlZe6RsngMlmf0mPrpx6DiNFor8/x7IxB3r1oKEhKxD
-         p2Uw==
-X-Gm-Message-State: ACrzQf1fsAWJANALLqWbd3F21w4UX/DujUN8+T6LR2RxAwmUxVE5iSVw
-        YIrYy/iDj+ZKGMWaPRH4yoNsqA2wqCS72w==
-X-Google-Smtp-Source: AMsMyM7l8pT0HanSWKxJ+gT73keBa/eHx7qdypKExfFeHSSWdELmqqNEQsKHONiaPXh0Ckynjr7+hg==
-X-Received: by 2002:a05:620a:1430:b0:6fa:b78:7e07 with SMTP id k16-20020a05620a143000b006fa0b787e07mr33169340qkj.120.1667774492125;
-        Sun, 06 Nov 2022 14:41:32 -0800 (PST)
-Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com. [209.85.128.179])
-        by smtp.gmail.com with ESMTPSA id i5-20020ac871c5000000b003a494b61e67sm4762074qtp.46.2022.11.06.14.41.31
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 06 Nov 2022 14:41:31 -0800 (PST)
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-3704852322fso89331047b3.8
-        for <linux-kernel@vger.kernel.org>; Sun, 06 Nov 2022 14:41:31 -0800 (PST)
-X-Received: by 2002:a05:6902:1352:b0:6bb:3f4b:9666 with SMTP id
- g18-20020a056902135200b006bb3f4b9666mr42872513ybu.101.1667774108259; Sun, 06
- Nov 2022 14:35:08 -0800 (PST)
+        Sun, 6 Nov 2022 17:35:07 -0500
+Received: from mail.rnplus.nl (mail.rnplus.nl [178.251.25.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58873AE6E
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Nov 2022 14:35:05 -0800 (PST)
+Received: from localhost (unknown [127.0.0.1])
+        by mail.rnplus.nl (Postfix) with ESMTP id 431E3378510
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Nov 2022 22:40:01 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at rnplus.nl
+Received: from mail.rnplus.nl ([127.0.0.1])
+        by localhost (mail.rnplus.nl [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id fowr9dGzPI3g for <linux-kernel@vger.kernel.org>;
+        Sun,  6 Nov 2022 23:40:01 +0100 (CET)
+Received: from mail.rnplus.nl (mail.rnplus.nl [178.251.25.70])
+        by mail.rnplus.nl (Postfix) with ESMTPSA id 61799377D7B;
+        Sun,  6 Nov 2022 23:39:55 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=rnplus.nl; s=dkim;
+        t=1667774396; bh=PGh4TeK6Tq1WKGcotdl2MGS+Gx9fUkonV1urhUlF+lo=;
+        h=Date:From:To:Cc:Subject;
+        b=Wma/hVliRzlfkzXviTrjigSePjeRBE2MthcmttOgqrBZdt+0iWQ1pfYavXgshYuHV
+         m38tZuuV6FzV2IkqiHzEsmg0BHZ0MlHhuEjgKEV/zw+DghDDpEL7uMevRh0mmNMWKj
+         DmrcfHdjB6LI6WLj48MfPNUKt0r+MJ+mhX965qKk=
 MIME-Version: 1.0
-References: <CAHk-=wjzngbbwHw4nAsqo_RpyOtUDk5G+Wus=O0w0A6goHvBWA@mail.gmail.com>
- <CAHk-=wijU_YHSZq5N7vYK+qHPX0aPkaePaGOyWk4aqMvvSXxJA@mail.gmail.com>
- <140B437E-B994-45B7-8DAC-E9B66885BEEF@gmail.com> <CAHk-=wjX_P78xoNcGDTjhkgffs-Bhzcwp-mdsE1maeF57Sh0MA@mail.gmail.com>
- <CAHk-=wio=UKK9fX4z+0CnyuZG7L+U9OB7t7Dcrg4FuFHpdSsfw@mail.gmail.com>
- <CAHk-=wgz0QQd6KaRYQ8viwkZBt4xDGuZTFiTB8ifg7E3F2FxHg@mail.gmail.com>
- <CAHk-=wiwt4LC-VmqvYrphraF0=yQV=CQimDCb0XhtXwk8oKCCA@mail.gmail.com>
- <Y1+XCALog8bW7Hgl@hirez.programming.kicks-ass.net> <CAHk-=wjnvPA7mi-E3jVEfCWXCNJNZEUjm6XODbbzGOh9c8mhgw@mail.gmail.com>
- <CAHk-=wjjXQP7PTEXO4R76WPy1zfQad_DLKw1GKU_4yWW1N4n7w@mail.gmail.com>
- <Y2SyJuohLFLqIhlZ@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
- <CAHk-=wjzp65=-QE1dg8KfqG-tVHiT+yAfHXGx9sro=8yOceELg@mail.gmail.com> <8a1e97c9-bd5-7473-6da8-2aa75198fbe8@google.com>
-In-Reply-To: <8a1e97c9-bd5-7473-6da8-2aa75198fbe8@google.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sun, 6 Nov 2022 14:34:51 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wgvx5sDaOfCTMkVpZ9+-iFCeh5AOML5aJG1EiR0+e1aBQ@mail.gmail.com>
-Message-ID: <CAHk-=wgvx5sDaOfCTMkVpZ9+-iFCeh5AOML5aJG1EiR0+e1aBQ@mail.gmail.com>
-Subject: Re: mm: delay rmap removal until after TLB flush
-To:     Hugh Dickins <hughd@google.com>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>,
-        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
-        Nick Piggin <npiggin@gmail.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Jann Horn <jannh@google.com>,
-        John Hubbard <jhubbard@nvidia.com>, X86 ML <x86@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        kernel list <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Joerg Roedel <jroedel@suse.de>,
-        Uros Bizjak <ubizjak@gmail.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        linux-arch <linux-arch@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Date:   Sun, 06 Nov 2022 23:39:55 +0100
+From:   Renze Nicolai <renze@rnplus.nl>
+To:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-aspeed@lists.ozlabs.org
+Cc:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>
+Subject: [PATCH] ARM: dts: aspeed: Add ASRock X570D4U BMC
+User-Agent: RN+ Webmail
+Message-ID: <7baebe77f0f8963e06d5ddeec6c737f5@rnplus.nl>
+X-Sender: renze@rnplus.nl
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[ Editing down to just the bare-bones problem cases ]
+This is a relatively low-cost AST2500-based Amd Ryzen 5000 Series
+micro-ATX board that we hope can provide a decent platform for OpenBMC
+development.
 
-On Sun, Nov 6, 2022 at 1:06 PM Hugh Dickins <hughd@google.com> wrote:
->
-> anon_vma (bad)
-> --------------
->
-> See folio_lock_anon_vma_read(): folio_mapped() plays a key role in
-> establishing the continued validity of an anon_vma.  See comments
-> above folio_get_anon_vma(), some by me but most by PeterZ IIRC.
->
-> I believe what has happened is that your patchset has, very intentionally,
-> kept the page as "folio_mapped" until after free_pgtables() does its
-> unlink_anon_vmas(); but that is telling folio_lock_anon_vma_read()
-> that the anon_vma is safe to use when actually it has been freed.
-> (It looked like a page table when I peeped at it.)
->
-> I'm not certain, but I think that you made page_zap_pte_rmap() handle
-> anon as well as file, just for the righteous additional simplification;
-> but I'm afraid that (without opening a huge anon_vma refcounting can of
-> worms) that unification has to be reverted, and anon left to go the
-> same old way it did before.
+This initial device-tree provides the necessary configuration for
+basic BMC functionality such as serial console, KVM support
+and POST code snooping.
 
-Indeed. I made them separate initially, just because the only case
-that mattered for the dirty bit was the file-mapped case.
+Signed-off-by: Renze Nicolai <renze@rnplus.nl>
+---
+  arch/arm/boot/dts/Makefile                    |   1 +
+  .../boot/dts/aspeed-bmc-asrock-x570d4u.dts    | 360 ++++++++++++++++++
+  2 files changed, 361 insertions(+)
+  create mode 100644 arch/arm/boot/dts/aspeed-bmc-asrock-x570d4u.dts
 
-But then the two functions ended up being basically the identical
-function, so I unified them again.
-
-But the anonvma lifetime issue looks very real, and so doing the
-"delay rmap only for file mappings" seems sane.
-
-In fact, I wonder if we should delay it only for *dirty* file
-mappings, since it doesn't matter for the clean case.
-
-Hmm.
-
-I already threw away my branch (since Andrew picked the patches up),
-so a question for Andrew: do you want me to re-do the branch entirely,
-or do you want me to just send you an incremental patch?
-
-To make for minimal changes, I'd drop the 're-unification' patch, and
-then small updates to the zap_pte_range() code to keep the anon (and
-possibly non-dirty) case synchronous.
-
-And btw, this one is interesting: for anonymous (and non-dirty
-file-mapped) patches, we actually can end up delaying the final page
-free (and the rmap zapping) all the way to "tlb_finish_mmu()".
-
-Normally we still have the vma's all available, but yes,
-free_pgtables() can and does happen before the final TLB flush.
-
-The file-mapped dirty case doesn't have that issue - not just because
-it doesn't have an anonvma at all, but because it also does that
-"force_flush" thing that just measn that the page freeign never gets
-delayed that far in the first place.
-
-> mm-unstable (bad)
-> -----------------
-> Aside from that PageAnon issue, mm-unstable is in an understandably bad
-> state because you could not have foreseen my subpages_mapcount addition
-> to page_remove_rmap().  page_zap_pte_rmap() now needs to handle the
-> PageCompound (but not the "compound") case too.  I rushed you and akpm
-> an emergency patch for that on Friday night, but you, let's say, had
-> reservations about it.  So I haven't posted it, and while the PageAnon
-> issue remains, I think your patchset has to be removed from mm-unstable
-> and linux-next anyway.
-
-So I think I'm fine with your patch, I just want to move the memcg
-accounting to outside of it.
-
-I can re-do my series on top of mm-unstable, I guess. That's probably
-the easiest way to handle this all.
-
-Andrew - can you remove those patches again, and I'll create a new
-series for you?
-
-                 Linus
+diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+index 6aa7dc4db2fc..adbbf27dfcee 100644
+--- a/arch/arm/boot/dts/Makefile
++++ b/arch/arm/boot/dts/Makefile
+@@ -1587,6 +1587,7 @@ dtb-$(CONFIG_ARCH_ASPEED) += \
+  	aspeed-bmc-arm-stardragon4800-rep2.dtb \
+  	aspeed-bmc-asrock-e3c246d4i.dtb \
+  	aspeed-bmc-asrock-romed8hm3.dtb \
++	aspeed-bmc-asrock-x570d4u.dtb \
+  	aspeed-bmc-bytedance-g220a.dtb \
+  	aspeed-bmc-facebook-bletchley.dtb \
+  	aspeed-bmc-facebook-cloudripper.dtb \
+diff --git a/arch/arm/boot/dts/aspeed-bmc-asrock-x570d4u.dts 
+b/arch/arm/boot/dts/aspeed-bmc-asrock-x570d4u.dts
+new file mode 100644
+index 000000000000..818c8879e0a0
+--- /dev/null
++++ b/arch/arm/boot/dts/aspeed-bmc-asrock-x570d4u.dts
+@@ -0,0 +1,360 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++// Copyright (c) 2022 Renze Nicolai <renze@rnplus.nl>
++
++/dts-v1/;
++#include "aspeed-g5.dtsi"
++#include <dt-bindings/gpio/aspeed-gpio.h>
++
++/ {
++	model = "Asrock Rack X570D4U BMC";
++	compatible = "asrock,x570d4u-bmc";
++
++	chosen {
++			stdout-path = &uart5;
++			bootargs = "console=ttyS4,115200 earlycon";
++	};
++
++	memory@80000000 {
++			reg = <0x80000000 0x20000000>;
++	};
++
++	reserved-memory {
++			#address-cells = <1>;
++			#size-cells = <1>;
++			ranges;
++
++			flash_memory: region@98000000 {
++					no-map;
++					reg = <0x98000000 0x04000000>; /* 64M */
++			};
++
++			vga_memory: framebuffer@9f000000 {
++				no-map;
++				reg = <0x9f000000 0x01000000>; /* 16M */
++			};
++
++			pci_memory: region@9A000000 {
++				no-map;
++				reg = <0x9A000000 0x00010000>; /* 64K */
++			};
++
++			video_engine_memory: jpegbuffer {
++				size = <0x02800000>;	/* 40M */
++				alignment = <0x01000000>;
++				compatible = "shared-dma-pool";
++				reusable;
++			};
++
++			gfx_memory: framebuffer {
++				size = <0x01000000>;
++				alignment = <0x01000000>;
++				compatible = "shared-dma-pool";
++				reusable;
++			};
++	};
++
++	leds {
++		compatible = "gpio-leds";
++
++		heartbeat {
++			/* BMC_HB_LED_N */
++			gpios = <&gpio ASPEED_GPIO(H, 6) GPIO_ACTIVE_LOW>;
++			linux,default-trigger = "timer";
++		};
++
++		system-fault {
++			/* SYSTEM_FAULT_LED_N */
++			gpios = <&gpio ASPEED_GPIO(Z, 2) GPIO_ACTIVE_LOW>;
++			panic-indicator;
++		};
++	};
++
++	iio-hwmon {
++		compatible = "iio-hwmon";
++		io-channels = <&adc 0>, <&adc 1>, <&adc 2>, <&adc 3>, <&adc 4>,
++			<&adc 5>, <&adc 6>, <&adc 7>, <&adc 8>, <&adc 9>,
++			<&adc 10>, <&adc 11>, <&adc 12>;
++	};
++};
++
++&gpio {
++	status = "okay";
++	gpio-line-names =
++	/*A0-A3*/       "LOCATORLED_STATUS_N",    "",                     
+"NMI_BTN_N",          "BMC_NMI",
++	/*A4-A7*/       "",                       "",                     "",  
+                  "",
++	/*B0-B3*/       "FM_BIOS_POST_CMPLT_N",   "",                     "",  
+                  "",
++	/*B4-B7*/       "",                       "IRQ_BMC_PCH_SMI_LPC_N","",  
+                  "",
++	/*C0-C3*/       "",                       "",                     "",  
+                  "",
++	/*C4-C7*/       "",                       "",                     
+"LOCATORBTN",         "",
++	/*D0-D3*/       "BMC_PSIN",               "BMC_PSOUT",            
+"BMC_RESETCON",       "RESETCON",
++	/*D4-D7*/       "",                       "",                     "",  
+                  "",
++	/*E0-E3*/       "",                       "",                     "",  
+                  "",
++	/*E4-E7*/       "",                       "",                     "",  
+                  "",
++	/*F0-F3*/       "",                       "",                     "",  
+                  "",
++	/*F4-F7*/       "",                       "",                     "",  
+                  "",
++	/*G0-G3*/       "HWM_BAT_EN",             "CHASSIS_ID0",          
+"CHASSIS_ID1",        "CHASSIS_ID2",
++	/*G4-G7*/       "BMC_ALERT1_N_R",         "BMC_ALERT2_N_R",       
+"BMC_ALERT3_N",       "SML0ALERT",
++	/*H0-H3*/       "",                       "O_PWROK",              "",  
+                  "",
++	/*H4-H7*/       "MFG_MODE_N",             "BMC_RTCRST",           
+"BMC_HB_LED_N",       "BMC_CASEOPEN",
++	/*I0-I3*/       "",                       "",                     "",  
+                  "",
++	/*I4-I7*/       "",                       "",                     "",  
+                  "",
++	/*J0-J3*/       "BMC_READY",              "",                     "",  
+                  "",
++	/*J4-J7*/       "VGAHS",                  "VGAVS",                
+"DDCCLK",             "DDCDAT",
++	/*K0-K3*/       "I2C_SCL4",               "I2C_SDA4",             
+"I2C_SCL5",           "I2C_SDA5",
++	/*K4-K7*/       "",                       "",                     
+"I2C_SCL7",           "I2C_SDA7",
++	/*L0-L3*/       "BMC_CTS1",               "BMC_DCD1",             
+"BMC_DSR1",           "BMC_RI1",
++	/*L4-L7*/       "BMC_DTR1",               "BMC_RTS1",             
+"BMC_TXD1",           "BMC_RXD1",
++	/*M0-M3*/       "BMC_LAN0_DIS_N",         "BMC_LAN1_DIS_N",       "",  
+                  "",
++	/*M4-M7*/       "",                       "",                     "",  
+                  "",
++	/*N0-N3*/       "PWM_FAN1",               "PWM_FAN2",             
+"PWM_FAN3",           "PWM_FAN4",
++	/*N4-N7*/       "PWM_FAN6",               "PWM_FAN5",             "",  
+                  "",
++	/*O0-O3*/       "TACHO_FAN1",             "TACHO_FAN2",           
+"TACHO_FAN3",         "TACHO_FAN4",
++	/*O4-O7*/       "TACHO_FAN5",             "TACHO_FAN6",           "",  
+                  "",
++	/*P0-P3*/       "",                       "",                     "",  
+                  "PS_PWROK",
++	/*P4-P7*/       "",                       "",                     "",  
+                  "",
++	/*Q0-Q3*/       "I2C_SCL2",               "I2C_SDA2",             
+"I2C_SCL3",           "I2C_SDA3",
++	/*Q4-Q7*/       "BMC_SBM_PRESENT_1_N",    "BMC_SBM_PRESENT_2_N",  
+"BMC_SBM_PRESENT_3_N","BMC_PCIE_WAKE_N",
++	/*R0-R3*/       "",                       "",                     "",  
+                  "",
++	/*R4-R7*/       "",                       "",                     "",  
+                  "",
++	/*S0-S3*/       "PCHHOT_BMC_N",           "",                     
+"RSMRST",             "",
++	/*S4-S7*/       "",                       "",                     "",  
+                  "",
++	/*T0-T3*/       "RGMII1TXCK",             "RGMII1TXCL",           
+"RGMII1TXD0",         "RGMII1TXD1",
++	/*T4-T7*/       "RGMII1TXD2",            "RGMII1TXD3",           
+"RMII2RCLKO",         "RMII2TXEN",
++	/*U0-U3*/       "RMII2TXD0",              "RMII2TXD1",            "",  
+                  "",
++	/*U4-U7*/       "RGMII1RXCK",             "RGMII1RXCTL",          
+"RGMII1RXD0",         "RGMII1RXD1",
++	/*V0-V3*/       "RGMII1RXD2",             "RGMII1RXD3",           
+"RMII2RCLKI",         "",
++	/*V4-V7*/       "RMII2RXD0",              "RMII2RXD1",            
+"RMII2CRSDV",         "RMII2RXER",
++	/*W0-W3*/       "",                       "",                     "",  
+                  "",
++	/*W4-W7*/       "",                       "",                     "",  
+                  "",
++	/*X0-X3*/       "",                       "",                     "",  
+                  "",
++	/*X4-X7*/       "",                       "",                     "",  
+                  "",
++	/*Y0-Y3*/       "SLP_S3",                 "SLP_S5",               "",  
+                  "",
++	/*Y4-Y7*/       "I2C_SCL0",               "I2C_SDA0",             
+"I2C_SCL1",           "I2C_SDA1",
++	/*Z0-Z3*/       "",                       "",                     
+"SYSTEM_FAULT_LED_N", "BMC_THROTTLE_N",
++	/*Z4-Z7*/       "",                       "",                     "",  
+                  "",
++	/*AA0-AA3*/     "CPU1_THERMTRIP_LATCH_N", "",                     
+"CPU1_PROCHOT_N",     "",
++	/*AA4-AC7*/     "",                       "",                     "",  
+                  "",
++	/*AB0-AB3*/     "",                       "",                     "",  
+                  "",
++	/*AB4-AC7*/     "",                       "",                     "",  
+                  "",
++	/*AC0-AC3*/     "LAD0",                   "LAD1",                 
+"LAD2",               "LAD3",
++	/*AC4-AC7*/     "CK_33M_BMC",             "LFRAME",               
+"SERIRQ",             "S_PLTRST";
++
++
++	/* Assert BMC_READY so BIOS doesn't sit around waiting for it */
++	bmc-ready {
++		gpio-hog;
++		gpios = <ASPEED_GPIO(J, 0) GPIO_ACTIVE_LOW>;
++		output-high;
++	};
++};
++
++&fmc {
++	status = "okay";
++	flash@0 {
++			status = "okay";
++			label = "bmc";
++			m25p,fast-read;
++			spi-max-frequency = <10000000>;
++#include "openbmc-flash-layout-64.dtsi"
++	};
++};
++
++&uart5 {
++	status = "okay";
++};
++
++&vuart {
++	status = "okay";
++};
++
++&mac0 {
++	status = "okay";
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_rgmii1_default &pinctrl_mdio1_default>;
++};
++
++&mac1 {
++	status = "okay";
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_rmii2_default &pinctrl_mdio2_default>;
++	use-ncsi;
++};
++
++&i2c0 {
++	status = "okay";
++};
++
++&i2c1 {
++	status = "okay";
++
++	w83773g@4c {
++		compatible = "nuvoton,w83773g";
++		reg = <0x4c>;
++	};
++};
++
++&i2c2 {
++	status = "okay";
++};
++
++&i2c3 {
++	status = "okay";
++};
++
++&i2c4 {
++	status = "okay";
++
++	i2c-switch@70 {
++		compatible = "nxp,pca9545";
++		#address-cells = <1>;
++		#size-cells = <0>;
++		reg = <0x70>;
++
++		interrupt-parent = <&i2c_ic>;
++		interrupts = <4>;
++		interrupt-controller;
++		#interrupt-cells = <2>;
++
++		i2c@0 {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			reg = <0>;
++		};
++
++		i2c@1 {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			reg = <1>;
++		};
++
++		i2c@2 {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			reg = <2>;
++		};
++
++		i2c@3 {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			reg = <3>;
++		};
++	};
++};
++
++&i2c5 {
++	status = "okay";
++};
++
++&i2c7 {
++	status = "okay";
++
++	eeprom@57 {
++		compatible = "st,24c128", "atmel,24c128";
++		reg = <0x57>;
++		pagesize = <16>;
++	};
++};
++
++&gfx {
++	status = "okay";
++};
++
++&pinctrl {
++	aspeed,external-nodes = <&gfx &lhc>;
++};
++
++&vhub {
++	status = "okay";
++};
++
++&ehci1 {
++	status = "okay";
++};
++&uhci {
++	status = "okay";
++};
++
++&kcs3 {
++	aspeed,lpc-io-reg = <0xca2>;
++	status = "okay";
++};
++
++&lpc_ctrl {
++	status = "okay";
++};
++
++&lpc_snoop {
++	status = "okay";
++	snoop-ports = <0x80>;
++};
++
++&p2a {
++	status = "okay";
++	memory-region = <&pci_memory>;
++};
++
++&video {
++	status = "okay";
++	memory-region = <&video_engine_memory>;
++};
++
++&gfx {
++	status = "okay";
++	memory-region = <&gfx_memory>;
++};
++
++&pwm_tacho {
++	status = "okay";
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_pwm0_default
++				&pinctrl_pwm1_default
++				&pinctrl_pwm2_default
++				&pinctrl_pwm3_default
++				&pinctrl_pwm4_default
++				&pinctrl_pwm5_default>;
++	fan@0 {
++		reg = <0x00>;
++		aspeed,fan-tach-ch = /bits/ 8 <0x00 0x01>;
++	};
++	fan@1 {
++		reg = <0x01>;
++		aspeed,fan-tach-ch = /bits/ 8 <0x02 0x03>;
++	};
++	fan@2 {
++		reg = <0x02>;
++		aspeed,fan-tach-ch = /bits/ 8 <0x04 0x05>;
++	};
++	fan@3 {
++		reg = <0x03>;
++		aspeed,fan-tach-ch = /bits/ 8 <0x06 0x07>;
++	};
++	fan@4 {
++		reg = <0x04>;
++		aspeed,fan-tach-ch = /bits/ 8 <0x08 0x09>;
++	};
++	fan@5 {
++		reg = <0x05>;
++		aspeed,fan-tach-ch = /bits/ 8 <0x0a 0x0b>;
++	};
++};
++
++&adc {
++	status = "okay";
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_adc0_default
++				&pinctrl_adc1_default
++				&pinctrl_adc2_default
++				&pinctrl_adc3_default
++				&pinctrl_adc4_default
++				&pinctrl_adc5_default
++				&pinctrl_adc6_default
++				&pinctrl_adc7_default
++				&pinctrl_adc8_default
++				&pinctrl_adc9_default
++				&pinctrl_adc10_default
++				&pinctrl_adc11_default
++				&pinctrl_adc12_default
++				&pinctrl_adc13_default
++				&pinctrl_adc14_default
++				&pinctrl_adc15_default>;
++};
+-- 
+2.38.1
