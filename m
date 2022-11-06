@@ -2,113 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 053BE61E1A6
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 11:37:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0D1661E1AB
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 11:38:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229820AbiKFKh1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Nov 2022 05:37:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38678 "EHLO
+        id S229896AbiKFKif (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Nov 2022 05:38:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229544AbiKFKhZ (ORCPT
+        with ESMTP id S229544AbiKFKib (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Nov 2022 05:37:25 -0500
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 048536411;
-        Sun,  6 Nov 2022 02:37:23 -0800 (PST)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.nyi.internal (Postfix) with ESMTP id 76E4F5C0094;
-        Sun,  6 Nov 2022 05:37:21 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute3.internal (MEProxy); Sun, 06 Nov 2022 05:37:21 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1667731041; x=1667817441; bh=iZKiEdnklv
-        /cMgHcGgFsT32PDcRiV02bsGomPmRflXQ=; b=lhD4XUnlgMF2qasljxzE262L5m
-        OCC9icbfveMNNfzaSDF9FvqFI1bb4bbE3GyXsW8agJr4qy7FkehvSC1ETElCIibO
-        FPIKhvA5oQI5yHwhKbzdmRQrqUrSMPOVw8YjVjvG9l/+khtkSJStjoaC2uxHRSVR
-        LPfOyEg3ncp5MBn/762fUNjYh+XnOd/glZVzD9K7Uw1ctAvcYpdw+OWQAoNBFq4I
-        v4lySq7Z8f2HbsF9cY6dxeudewajS7LKFHMBOAzkLn86FQVDBMBrQUVDgbETcLwQ
-        Ybg14LvLyFMQqQmZpXECks1+8WLAeVkz26u7GKMd/8l6W8enIwrndXCvZEiQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1667731041; x=1667817441; bh=iZKiEdnklv/cMgHcGgFsT32PDcRi
-        V02bsGomPmRflXQ=; b=TXGYKE9krWTVoKoQxB42ORrFNVkjwBgury1I/zyF6l8/
-        wnUEhdZtrHdRYm4ng4huV+4ekV2o3DhOm7/Sk5pQr8pQqLcs4c5WZEq96dPPfo8Y
-        DORzukAYuPWdv4cw3sQQk8cT0a6+/cGpB9ZSRGODUFgCC//Qo8aMMm3Hr7mjt6jm
-        5HgQ0zvbjGCvDhuVCzCVmmb7Go4MEztIC6cp7vbSOFRBtfSnvAqGpSAXFNCeydGm
-        tIsQN08eCaydeBuDXSvZrv6sa2E9TCWCuR5DbdyfFDX/W8uHBeLXZykTwptlIagV
-        o9FNndXvTn+fb5dSwjrA4b6uXYQHvIUa7uTtckf5dw==
-X-ME-Sender: <xms:YI5nY9EGVtZTQ8zpXcYaH4PTh1rRLfVpEh5QfmGx5FoXbEcq2r6G5A>
-    <xme:YI5nYyXJYlvDSrFR0H2HSQ1cGwn97PC0GFlzR7S2-d3tFJFHawmo_bzGiLyNpoon9
-    b9EN8Xlk21eGSmIUFM>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrvdeigdduvdcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
-    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
-    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
-    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
-    hnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:YI5nY_I6QyVLSOq9VG3vXJTxw7J4ZtG5pSaltM76YaBoVT-1djyPng>
-    <xmx:YI5nYzHxkLyzbSwLuR71Vk4hQxWD4402C9odtwrAF1mZuRXp58Ui8A>
-    <xmx:YI5nYzV82JW0EkCPX5FtLlBIKQmsAcHmbejL_OqxWKGVP3kHlw1uag>
-    <xmx:YY5nY1LCBjpapUAaPXUMfFEz3dvN5UBnYJ4OWORMKHjhbkMe3aarZw>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 23153B603ED; Sun,  6 Nov 2022 05:37:20 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1087-g968661d8e1-fm-20221021.001-g968661d8
-Mime-Version: 1.0
-Message-Id: <ab965f39-94b7-4962-a53e-46b88fd6ecae@app.fastmail.com>
-In-Reply-To: <Y2eLuf4SCrZ5X+ui@shell.armlinux.org.uk>
-References: <20221106062536.26369-1-rdunlap@infradead.org>
- <62f5b747-4c65-46a6-b04d-1d0fcbadf5c9@app.fastmail.com>
- <Y2eLuf4SCrZ5X+ui@shell.armlinux.org.uk>
-Date:   Sun, 06 Nov 2022 11:37:04 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Russell King" <linux@armlinux.org.uk>
-Cc:     "Randy Dunlap" <rdunlap@infradead.org>,
-        linux-kernel@vger.kernel.org, "kernel test robot" <lkp@intel.com>,
-        "Aaro Koskinen" <aaro.koskinen@iki.fi>,
-        "Janusz Krzysztofik" <jmkrzyszt@gmail.com>,
-        "Tony Lindgren" <tony@atomide.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Linux-OMAP <linux-omap@vger.kernel.org>
-Subject: Re: [PATCH] ARM: omap1: set ARCH_OMAP1_ANY for ARCH_OMAP1
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 6 Nov 2022 05:38:31 -0500
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4B6BB1FC
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Nov 2022 02:38:30 -0800 (PST)
+Received: by mail-lf1-x133.google.com with SMTP id bp15so13086252lfb.13
+        for <linux-kernel@vger.kernel.org>; Sun, 06 Nov 2022 02:38:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=3CTC+S72ReqNXTQYMAegPNOzjNTLFGMiaRDIQZ2VQPI=;
+        b=XkLVNCyGWSdG3QlVJE9vwgeevQ/pa4PlpBm+YzoLf2DPbPYdX790c0IJN2kZ0/kRQ9
+         lVabZrJSmf2eOopcl7poCfoIaepawG0YOwVhTix2+FcLQ8aUNsxHkppNgBgyVOqRrgca
+         AqcmVmC5VRoANTQfEjY67q+PlvYWiHaH8fKF6vxC3OHaoh18ARLVtvm2YyN/pO/r3FGk
+         YyuYG5uNxnrOOx+gQbynXTnxkWgbN5x49M1ePTYJhxOXi5qBgICbuhEMQrYKOVHI9BDD
+         4Zo7+97ql4OktBwoWnho756NYhB4fg+9NnZvQCg0YNykqw4Mq+9MzQSdXCYHtz8Yo6yN
+         eGhg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=3CTC+S72ReqNXTQYMAegPNOzjNTLFGMiaRDIQZ2VQPI=;
+        b=I+7ezDeO6LlWrkCnlzKhJUHAJY66Kh1Xw8jZF56NeLPp60kaGF5NvRJVPiLT/WtPut
+         OSUCRG21jv4az7KiM8n681DDy+Zf4Fjed3r8VBtn8jgG6qnOj8ybgB6L8x7VOKhnD7qk
+         XmxVVbzUYNOPgPCDs4IljtSJ5gjK9bqNjs84gc911NHVx96Xf3w5KMX4I8m6PGI6z+La
+         6gGulLPDDhqqoNB63nZtIRQDTo0Fn4CZg4lL7D+xjP4lLTAP32Vp4EeVLyGN9ShLuvUb
+         aQK6ZZDp2k9wW9u9MgMtNm9pb70B7BrN/AwJObIUCDaBpmnzPHf7lYXbwtv9Ih22u8iX
+         KZrw==
+X-Gm-Message-State: ANoB5pmFcGQD7dbqhaLoeuzGWDBBmrhwaa62YVM1Z2FmNXD3YKcoqqVP
+        IXeq4QMTvFBghhncFjawpzJ04w==
+X-Google-Smtp-Source: AA0mqf4slr0rnkvM60jAJJdLzKEh6OMKSW7h1AoeIaP8tswj+6hmnpERidN0jf9+iRWcW5DoeZmdaQ==
+X-Received: by 2002:a19:ad49:0:b0:4b3:b755:789b with SMTP id s9-20020a19ad49000000b004b3b755789bmr313874lfd.415.1667731109131;
+        Sun, 06 Nov 2022 02:38:29 -0800 (PST)
+Received: from [192.168.0.20] (088156142199.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.199])
+        by smtp.gmail.com with ESMTPSA id c10-20020a056512324a00b004afc1607130sm644717lfr.8.2022.11.06.02.38.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 06 Nov 2022 02:38:28 -0800 (PST)
+Message-ID: <1b90f86c-9c0f-225b-38b5-6f37a4eded69@linaro.org>
+Date:   Sun, 6 Nov 2022 11:38:27 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v1 3/6] dt-bindings: hwmon: Add hpe,gxp-fan-ctrl
+Content-Language: en-US
+To:     nick.hawkins@hpe.com, jdelvare@suse.com, linux@roeck-us.net,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        verdun@hpe.com, corbet@lwn.net, linux@armlinux.org.uk,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20221104193657.105130-1-nick.hawkins@hpe.com>
+ <20221104193657.105130-4-nick.hawkins@hpe.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221104193657.105130-4-nick.hawkins@hpe.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Nov 6, 2022, at 11:26, Russell King (Oracle) wrote:
-> On Sun, Nov 06, 2022 at 08:43:50AM +0100, Arnd Bergmann wrote:
->> --- a/arch/arm/mach-omap1/Kconfig
->> +++ b/arch/arm/mach-omap1/Kconfig
->> @@ -49,7 +49,7 @@ config ARCH_OMAP1_ANY
->>         select ARCH_OMAP
->>         def_bool ARCH_OMAP730 || ARCH_OMAP850 || ARCH_OMAP15XX || ARCH_OMAP16XX
->>  
->> -config ARCH_OMAP
->> +config ARCH_OMAP1_ANY
->
-> This patch can't be right - look at the first line of context above, you
-> have symbols that select ARCH_OMAP and you've just removed the
-> definition of ARCH_OMAP.
+On 04/11/2022 20:36, nick.hawkins@hpe.com wrote:
+> From: Nick Hawkins <nick.hawkins@hpe.com>
+> 
+> This provides the base registers address, programmable logic registers
+> address, and the function 2 registers to allow control access of the HPE
+> fans on the GXP SoC.
 
-Right, I misread this, I thought this was an 'if ARCH_OMAP' block
-instead of the Kconfig symbol. Part of the problem is now is
-possibly that there are two symbols with that name now, I'll have
-to try to reproduce the problem first and then see what caused it
-originally.
+What is "This"? If "This patch", then drop it.
+https://elixir.bootlin.com/linux/v5.17.1/source/Documentation/process/submitting-patches.rst#L95
 
-      Arnd
+If "This hardware" then please instead describe the hardware, not it
+components. What are its features? If it controls the fan, then why
+there are no PWM-related cells? How do you set the speed?
+
+> 
+> Signed-off-by: Nick Hawkins <nick.hawkins@hpe.com>
+> ---
+>  .../bindings/hwmon/hpe,gxp-fan-ctrl.yaml      | 41 +++++++++++++++++++
+>  1 file changed, 41 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/hpe,gxp-fan-ctrl.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/hwmon/hpe,gxp-fan-ctrl.yaml b/Documentation/devicetree/bindings/hwmon/hpe,gxp-fan-ctrl.yaml
+> new file mode 100644
+> index 000000000000..40a5d9cd0a30
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/hwmon/hpe,gxp-fan-ctrl.yaml
+> @@ -0,0 +1,41 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/hwmon/hpe,gxp-fan-ctrl.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: GXP Fan Controller
+> +
+> +maintainers:
+> +  - Nick Hawkins <nick.hawkins@hpe.com>
+> +
+> +properties:
+> +  compatible:
+> +    const: hpe,gxp-fan-ctrl
+> +
+> +  reg:
+> +    items:
+> +      - description: Fan controller base register
+> +      - description: Programmable logic registers base
+> +      - description: Function 2 registers base
+
+Drop "register" and "base" from all descriptions
+
+> +
+> +  reg-names:
+> +    items:
+> +      - const: base
+> +      - const: plreg
+
+Drop reg suffix
+
+> +      - const: fn2reg
+
+Drop reg suffix
+
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - reg-names
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    fanctrl@1000c00 {
+
+fan-controller
+
+> +      compatible = "hpe,gxp-fan-ctrl";
+> +      reg = <0x1000c00 0x200>, <0xd1000000 0xff>, <0x80200000 0x100000>;
+> +      reg-names = "base", "plreg", "fn2reg";
+> +    };
+
+Best regards,
+Krzysztof
+
