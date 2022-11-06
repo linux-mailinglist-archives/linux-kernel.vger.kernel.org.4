@@ -2,92 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E1F661E085
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 07:18:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C51AD61E089
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 07:25:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229668AbiKFGSW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Nov 2022 01:18:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37300 "EHLO
+        id S229601AbiKFGZv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Nov 2022 01:25:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbiKFGSR (ORCPT
+        with ESMTP id S229556AbiKFGZt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Nov 2022 01:18:17 -0500
-Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56BD0DE98;
-        Sat,  5 Nov 2022 23:18:16 -0700 (PDT)
-Received: from cwcc.thunk.org (pool-173-48-120-46.bstnma.fios.verizon.net [173.48.120.46])
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 2A66IBAa000632
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 6 Nov 2022 01:18:12 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
-        t=1667715492; bh=sq9x0ixmES8dQm2ed+yrpLJsiG3/CLeyCVNL98AuebQ=;
-        h=Date:From:To:Cc:Subject;
-        b=KeDTB2YJHjfFeEZiKxAPZdbHvf9uj5Yg+OxXguoK2/vq/wKvJz4Wzf2F4LuQZ9j/B
-         xtKwSxqimNG53Y5ySbiBgkV2iRYWuo7GhnpijlAtkTUhJBjO0JJEo+9z9n1Zezmr7I
-         eAUFns798OaK6ISeQYvVbqp/T4Rx05UbAwPxW2o069RlyFy8b1/2KA9XkPzpHcHn4K
-         i/CuhaLQqPRRaVfJLcYoXZ4S+XGrttzQPTo0+yqPClHf5Q54kOR8LcM8pv95U0xNtU
-         wIBs0fj2rRpivgkJQVWnS2w2c3pmQdLtpLHOB5CTjrcXUiC+aAUd1QLCMxZc/AaSuq
-         C4ag0xDMbevnQ==
-Received: by cwcc.thunk.org (Postfix, from userid 15806)
-        id 68D3715C45B9; Sun,  6 Nov 2022 01:18:11 -0500 (EST)
-Date:   Sun, 6 Nov 2022 01:18:11 -0500
-From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, linux-ext4@vger.kernel.org
-Subject: [GIT PULL] ext4 bug fixes for 6.1
-Message-ID: <Y2dRoyP5tKIZj/b4@mit.edu>
+        Sun, 6 Nov 2022 01:25:49 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 221C3DF59;
+        Sat,  5 Nov 2022 23:25:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
+        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+        Content-Description:In-Reply-To:References;
+        bh=5SDRXSxMWlUUbPkDm/PxbafoOSGwgChTiTX8o4kcnFs=; b=OtHvTeo+vzTRfVCnhEJDuEKv1/
+        wV69kB36ag1cN6N67bOEKgN9X9koB+S2VWXL3eBOnzdvqpSeDPSxrWI7T7fWvlOhjUgOLJZS8+LN/
+        dMCVzDce7fZeTobLxQcy8JVI2IMJ3YeFFCs64bmKIGTIJaDnkIHJEYSh/jhsla/ygVlsWOp6iON7v
+        UEH/laLwCPmvF+ZSAz9NqVD3pYUkOSRny2IWBlV43UEbvigmZvsONWUmxkl61W6jmx0QmzOoHcIW8
+        WMjCEK2oXyXPePRd/clLr1cv6gAikUeQghlPyjZ0dABCsCUUwmnS/ZvIbqkry5jvh2X7pwYZYAsHN
+        nmokIXcQ==;
+Received: from [2601:1c2:d80:3110::a2e7] (helo=casper.infradead.org)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1orZ6J-008eYA-0p; Sun, 06 Nov 2022 06:25:47 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        kernel test robot <lkp@intel.com>,
+        Aaro Koskinen <aaro.koskinen@iki.fi>,
+        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org
+Subject: [PATCH] ARM: omap1: set ARCH_OMAP1_ANY for ARCH_OMAP1
+Date:   Sat,  5 Nov 2022 23:25:36 -0700
+Message-Id: <20221106062536.26369-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.38.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit 4c86114194e644b6da9107d75910635c9e87179e:
+Fix a build error by setting ARCH_OMAP1_ANY Kconfig symbol.
+Fixes this build error:
 
-  Merge tag 'iomap-6.1-merge-1' of git://git.kernel.org/pub/scm/fs/xfs/xfs-linux (2022-10-06 17:57:50 -0700)
+arm-linux-gnueabi-ld: drivers/video/backlight/omap1_bl.o: in function `omapbl_probe':
+omap1_bl.c:(.text+0x1b4): undefined reference to `omap_cfg_reg'
 
-are available in the Git repository at:
+Fixes: 7036440eab3e ("ARM: omap1: enable multiplatform")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Reported-by: kernel test robot <lkp@intel.com>
+Cc: Aaro Koskinen <aaro.koskinen@iki.fi>
+Cc: Janusz Krzysztofik <jmkrzyszt@gmail.com>
+Cc: Tony Lindgren <tony@atomide.com>
+Cc: Russell King <linux@armlinux.org.uk>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-omap@vger.kernel.org
+---
+ arch/arm/mach-omap1/Kconfig |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/tytso/ext4.git tags/ext4_for_linus_stable
-
-for you to fetch changes up to 0d043351e5baf3857f915367deba2a518b6a0809:
-
-  ext4: fix fortify warning in fs/ext4/fast_commit.c:1551 (2022-11-06 01:07:59 -0400)
-
-----------------------------------------------------------------
-Fix a number of bug fixes, including some regressions, the most
-serious of which was one which would cause online resizes to fail with
-file systems with metadata checksums enabled.  Also fix a warning
-caused by the newly added fortify string checker, plus some bugs that
-were found using fuzzed file systems.
-
-----------------------------------------------------------------
-Jason Yan (1):
-      ext4: fix wrong return err in ext4_load_and_init_journal()
-
-Luís Henriques (1):
-      ext4: fix BUG_ON() when directory entry has invalid rec_len
-
-Theodore Ts'o (2):
-      ext4: update the backup superblock's at the end of the online resize
-      ext4: fix fortify warning in fs/ext4/fast_commit.c:1551
-
-Ye Bin (1):
-      ext4: fix warning in 'ext4_da_release_space'
-
- fs/ext4/fast_commit.c |  5 +++--
- fs/ext4/ioctl.c       |  3 +--
- fs/ext4/migrate.c     |  3 ++-
- fs/ext4/namei.c       | 10 +++++++++-
- fs/ext4/resize.c      |  5 +++++
- fs/ext4/super.c       |  2 +-
- 6 files changed, 21 insertions(+), 7 deletions(-)
+diff -- a/arch/arm/mach-omap1/Kconfig b/arch/arm/mach-omap1/Kconfig
+--- a/arch/arm/mach-omap1/Kconfig
++++ b/arch/arm/mach-omap1/Kconfig
+@@ -47,7 +47,8 @@ config ARCH_OMAP16XX
+ 
+ config ARCH_OMAP1_ANY
+ 	select ARCH_OMAP
+-	def_bool ARCH_OMAP730 || ARCH_OMAP850 || ARCH_OMAP15XX || ARCH_OMAP16XX
++	def_bool ARCH_OMAP730 || ARCH_OMAP850 || ARCH_OMAP15XX || \
++		ARCH_OMAP16XX || ARCH_OMAP1
+ 
+ config ARCH_OMAP
+ 	bool
