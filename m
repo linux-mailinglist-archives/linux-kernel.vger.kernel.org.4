@@ -2,110 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6EED61DFCF
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 01:30:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCA9561DFD3
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 01:32:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229540AbiKFAap (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Nov 2022 20:30:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42468 "EHLO
+        id S229552AbiKFAcV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Nov 2022 20:32:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229499AbiKFAal (ORCPT
+        with ESMTP id S229499AbiKFAcT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Nov 2022 20:30:41 -0400
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B8B1265B;
-        Sat,  5 Nov 2022 17:30:40 -0700 (PDT)
-Received: by mail-qt1-x82e.google.com with SMTP id a27so5254866qtw.10;
-        Sat, 05 Nov 2022 17:30:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:reply-to
-         :message-id:subject:cc:to:from:date:sender:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=U7icr2ccwj4KXKIEFeiasLTFoXUPeV5GqVTWsb2ag74=;
-        b=J4HGCixsqOHqnl7wwgpKN/wpG1l5e7HZx5SRew4/3U6oI9/krShrjd2+JVmp1jcFZ9
-         zBBq1nlWov8Egp3o1UslodAR2HGZb/c4+YGJ9SUMo/TskUrwxB+s3MRm874qdBbM8xG9
-         abgQmaK8tAeU3vfvGyfU/XT3aLj1IKPgoGUwt4nmoa4IwVYKaLUKWhNVH3A8Ge5QKOr4
-         dnKhpX4XG92gCVoprWkH6ZMXs/dm6HfVEj7Mv7cGIoQaZHu/nl24reeIA3kJGPoGgsyE
-         +2U93K5MohtYCYR/GGdabIyiXZXxb6BKtoN6Fm6iOiM4VV+R9uh23vqdt+cOaNb/zv9j
-         uALA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:reply-to
-         :message-id:subject:cc:to:from:date:sender:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=U7icr2ccwj4KXKIEFeiasLTFoXUPeV5GqVTWsb2ag74=;
-        b=Tro22emqKcUBfrkqZuanxWttpf4CgTB7L4f6nI9mp/l3+9CLZQcxE92j0Qm39h1QAJ
-         zc3RZR2hQJCdMYWTOeaLkymmTzY2/XXKByJJwvJv+V7Nq9zFoEk1MldmwqE2PGTxZcNe
-         GJL/VuF0ZNYUH2DKQ3MoR8Uv5XhTpB4r/gxkk2VJLmLJZwEdS0vs7Eno8LapdE/1S2T4
-         +HD9RzbKsvnLTZ4yLzD16DUh+jUNB0Ucq1nROiEBbhcsAuCwdPwGWaxxGyTYnxaTlaj2
-         bq1u+/F6JZlyzfe/2YMLGVDwtxTzd0s36FyzvbEQNewyjvKTjnEUkZ3bW42b8GcQP8m/
-         kDeQ==
-X-Gm-Message-State: ACrzQf0Rd9vPaTB0U05IDfKZ5R7efb27sq4mOXVPUdnaHm8K376uey/R
-        4ruMhiSYS6wBipuT0VstPQ==
-X-Google-Smtp-Source: AMsMyM5DO/1XqMmBZ2bNaxOTQmx8u0/IZ2EubMZ0oerO/KAUsl3l/boidddsW0tbhwz3X62yEzFqww==
-X-Received: by 2002:a05:622a:40d:b0:397:bd61:ef1d with SMTP id n13-20020a05622a040d00b00397bd61ef1dmr35514956qtx.404.1667694639370;
-        Sat, 05 Nov 2022 17:30:39 -0700 (PDT)
-Received: from serve.minyard.net (serve.minyard.net. [2001:470:b8f6:1b::1])
-        by smtp.gmail.com with ESMTPSA id o14-20020a05620a0d4e00b006eef13ef4c8sm2960643qkl.94.2022.11.05.17.30.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 05 Nov 2022 17:30:38 -0700 (PDT)
-Sender: Corey Minyard <tcminyard@gmail.com>
-Received: from minyard.net (unknown [IPv6:2001:470:b8f6:1b:56b3:6d0f:b2b0:c9a9])
-        by serve.minyard.net (Postfix) with ESMTPSA id F14E8180044;
-        Sun,  6 Nov 2022 00:30:36 +0000 (UTC)
-Date:   Sat, 5 Nov 2022 19:30:35 -0500
-From:   Corey Minyard <minyard@acm.org>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        openipmi-developer@lists.sourceforge.net
-Subject: Re: [PATCH] ipmi/watchdog: Include <linux/kstrtox.h> when appropriate
-Message-ID: <Y2cAKyqilb7v9tFi@minyard.net>
-Reply-To: minyard@acm.org
-References: <37daa028845d90ee77f1e547121a051a983fec2e.1667647002.git.christophe.jaillet@wanadoo.fr>
+        Sat, 5 Nov 2022 20:32:19 -0400
+Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1ACEB85C;
+        Sat,  5 Nov 2022 17:32:17 -0700 (PDT)
+Received: from letrec.thunk.org (guestnat-104-133-8-97.corp.google.com [104.133.8.97] (may be forged))
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 2A60W9Vu026511
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 5 Nov 2022 20:32:11 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
+        t=1667694732; bh=azX4G6X16XY4YlZZR91Wa/ucrvUu3oVweywncwRmWZI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=BYuDOdgYrMa2SvrDKJ8/BOIcHD3FN1jNmiNwcwiUGnFjRnnvyDGQGVR+rZtDzbQ0e
+         staf7jJCrgCDn1mwxek80hAS6/aJRj/z3n534JE9OkornLh6ZT/zrFjwAs67u9X9w5
+         VdLQgkJIz8lctifYLFeJEZhjQUSAU0UqKVgbjF7DkS/m/A7CzoOkV1TZW6WBMInT6S
+         dnfCxsKDvIVXyNXM638fWcvYtPxt/WS2h4elNWXnF+ruQ6JL4Kzdo+WY6srDoPDr6A
+         ANZIyJi3ic4ShX7kt3/nIYKPtOopQjUtyHs/FTVCL+WpNmI3t5wSnbFoO2n8jvLnib
+         UwIAaigFW1X2w==
+Received: by letrec.thunk.org (Postfix, from userid 15806)
+        id F2D3E8C00A0; Sat,  5 Nov 2022 20:32:08 -0400 (EDT)
+Date:   Sat, 5 Nov 2022 20:32:08 -0400
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     =?iso-8859-1?Q?Lu=EDs?= Henriques <lhenriques@suse.de>
+Cc:     Andreas Dilger <adilger.kernel@dilger.ca>,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: Re: [PATCH v2] ext4: fix a NULL pointer when validating an inode
+ bitmap
+Message-ID: <Y2cAiLNIIJhm4goP@mit.edu>
+References: <20221010142035.2051-1-lhenriques@suse.de>
+ <20221011155623.14840-1-lhenriques@suse.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <37daa028845d90ee77f1e547121a051a983fec2e.1667647002.git.christophe.jaillet@wanadoo.fr>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221011155623.14840-1-lhenriques@suse.de>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Nov 05, 2022 at 12:16:54PM +0100, Christophe JAILLET wrote:
-> The kstrto<something>() functions have been moved from kernel.h to
-> kstrtox.h.
-> 
-> So, in order to eventually remove <linux/kernel.h> from <linux/watchdog.h>,
-> include the latter directly in the appropriate files.
+First of all, you replied to this patch a completely different patch,
+"ext4: fix BUG_ON() when directory entry has invalid rec_len".  This
+very much confuses b4, so please don't do that.  If you send a patch
+series, where the message-id are related, e.g.:
 
-This is in my queue.  Thanks.
+    20221011155623.14840-1-lhenriques@suse.de
+    20221011155623.14840-2-lhenriques@suse.de
 
--corey
+etc., b4 will figure out what is going on.  But when the message id's
+are unrelated, e.g:
 
-> 
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> ---
->  drivers/char/ipmi/ipmi_watchdog.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/char/ipmi/ipmi_watchdog.c b/drivers/char/ipmi/ipmi_watchdog.c
-> index 5b4e677929ca..47365150e431 100644
-> --- a/drivers/char/ipmi/ipmi_watchdog.c
-> +++ b/drivers/char/ipmi/ipmi_watchdog.c
-> @@ -23,6 +23,7 @@
->  #include <linux/init.h>
->  #include <linux/completion.h>
->  #include <linux/kdebug.h>
-> +#include <linux/kstrtox.h>
->  #include <linux/rwsem.h>
->  #include <linux/errno.h>
->  #include <linux/uaccess.h>
-> -- 
-> 2.34.1
-> 
+    20221011155623.14840-1-lhenriques@suse.de
+vs    
+    20221012131330.32456-1-lhenriques@suse.de
+
+... b4 will assume that 20221012131330.32456-1-lhenriques@suse.de is a
+newer version of 20221011155623.14840-1-lhenriques@suse.de and there
+is apparently no way to tell it to not try to use the "newer" version
+of the patch.
+
+On Tue, Oct 11, 2022 at 04:56:24PM +0100, Luís Henriques wrote:
+> It's possible to hit a NULL pointer exception while accessing the
+> sb->s_group_info in ext4_validate_inode_bitmap(), when calling
+> ext4_get_group_info().
+
+  ...
+
+> This issue can be fixed by returning NULL in ext4_get_group_info() when
+> ->s_group_info is NULL.  This also requires checking the return code from
+> ext4_get_group_info() when appropriate.
+
+I don't believe this is a correct diagnosis of what is going on.  Did
+you actually confirm the line numbers associated with the call stack?
+What makes you believe that?  Look at how s_group_info is initialized
+in ext4_mb_alloc_groupinfo() in fs/ext4/mballoc.c.  It's pretty
+careful to make sure this is not the case.
+
+>  EXT4-fs (loop0): warning: mounting unchecked fs, running e2fsck is recommended
+>  EXT4-fs error (device loop0): ext4_clear_blocks:866: inode #32: comm mount: attempt to clear invalid blocks 16777450 len 1
+>  EXT4-fs error (device loop0): ext4_free_branches:1012: inode #32: comm mount: invalid indirect mapped block 1258291200 (level 1)
+>  EXT4-fs error (device loop0): ext4_free_branches:1012: inode #32: comm mount: invalid indirect mapped block 7379847 (level 2)
+>  BUG: kernel NULL pointer dereference, address: 0000000000000000
+>  ...
+>  RIP: 0010:ext4_read_inode_bitmap+0x21b/0x5a0
+>  ...
+>  Call Trace:
+>   <TASK>
+>   ext4_free_inode+0x172/0x5c0
+>   ext4_evict_inode+0x4a5/0x730
+>   evict+0xc1/0x1c0
+>   ext4_setup_system_zone+0x2ea/0x380
+>   ext4_fill_super+0x249f/0x3910
+>   ? ext4_reconfigure+0x880/0x880
+>   ? snprintf+0x49/0x60
+>   ? ext4_reconfigure+0x880/0x880
+>   get_tree_bdev+0x169/0x260
+>   vfs_get_tree+0x16/0x70
+>   path_mount+0x77d/0xa30
+>   __x64_sys_mount+0x101/0x140
+>   do_syscall_64+0x3c/0x80
+>   entry_SYSCALL_64_after_hwframe+0x46/0xb0
+
+So we're evicting an inode while in the middle of calling
+ext4_setup_system_zone() in fs/ext4/block_validity.c.  That can only
+happen if we are calling iput() on an an inode, and the only place
+that we do that in block_validity.c is in the function
+ext4_protect_reserved_inode() --- which we call on the journal inode.
+
+Given the error messages, I suspect this was a fuzzed file system
+where the journal inode was not in the standard reserved ino, but
+rather in a the normal inode number, in s_journal_inum (which is a
+leftover relic from the very early ext3 days), and that inode number
+was then explicitly/maliciously placed on the orphan list, and then
+hilarity ensued from there.
+
+We need to add some better error checking to protect against this case
+in ext4_orphan_get().
+
+Do you have the file system image which triggered this failure?  Was
+it the same syzkaller report, or perhaps was it some other syzkaller
+report?
+
+
+> diff --git a/fs/ext4/indirect.c b/fs/ext4/indirect.c
+> index 860fc5119009..e5ac5c2363df 100644
+> --- a/fs/ext4/indirect.c
+> +++ b/fs/ext4/indirect.c
+> @@ -148,6 +148,7 @@ static Indirect *ext4_get_branch(struct inode *inode, int depth,
+>  	struct super_block *sb = inode->i_sb;
+>  	Indirect *p = chain;
+>  	struct buffer_head *bh;
+> +	unsigned int key;
+>  	int ret = -EIO;
+>  
+>  	*err = 0;
+> @@ -156,9 +157,18 @@ static Indirect *ext4_get_branch(struct inode *inode, int depth,
+>  	if (!p->key)
+>  		goto no_block;
+>  	while (--depth) {
+> -		bh = sb_getblk(sb, le32_to_cpu(p->key));
+> +		key = le32_to_cpu(p->key);
+> +		bh = sb_getblk(sb, key);
+>  		if (unlikely(!bh)) {
+> -			ret = -ENOMEM;
+> +			/*
+> +			 * sb_getblk() masks different errors by always
+> +			 * returning NULL.  Let's distinguish at least the case
+> +			 * where the block is out of range.
+> +			 */
+> +			if (key > ext4_blocks_count(EXT4_SB(sb)->s_es))
+> +				ret = -EFSCORRUPTED;
+> +			else
+> +				ret = -ENOMEM;
+>  			goto failure;
+>  		}
+>
+
+And this is fixing a completely different problem and should go in a
+different patch.  It's also not the best way of fixing it.  What we
+should do is check whether key is out of bounds *before* calling
+sb_getblkf(), and then call ext4_error() to mark the file system is
+corrupted, and then return -EFSCORRUPTED.
+
+Cheers,
+
+						- Ted
