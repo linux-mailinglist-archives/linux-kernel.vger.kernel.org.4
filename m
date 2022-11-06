@@ -2,88 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42ABC61E01B
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 04:13:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9F3761E01A
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 04:13:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229567AbiKFDMy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Nov 2022 23:12:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38692 "EHLO
+        id S229603AbiKFDNt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Nov 2022 23:13:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229492AbiKFDMu (ORCPT
+        with ESMTP id S229492AbiKFDNr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Nov 2022 23:12:50 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90CB4CF4
-        for <linux-kernel@vger.kernel.org>; Sat,  5 Nov 2022 20:12:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id AA580CE092D
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Nov 2022 03:12:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71FFCC433C1;
-        Sun,  6 Nov 2022 03:12:43 +0000 (UTC)
-Date:   Sat, 5 Nov 2022 23:12:41 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Julia Lawall <julia.lawall@inria.fr>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Anna-Maria Gleixner <anna-maria@linutronix.de>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [PATCH v4a 00/38] timers: Use timer_shutdown*() before freeing
- timers
-Message-ID: <20221105231241.7513fc33@rorschach.local.home>
-In-Reply-To: <b52c207c-e7bf-af2e-61d9-116c9e76af86@inria.fr>
-References: <20221105060024.598488967@goodmis.org>
-        <CAHk-=wi95dGkg7DiuOZ27gGW+mxJipn9ykB6LHB-HrbbLG6OMQ@mail.gmail.com>
-        <20221105123642.596371c7@rorschach.local.home>
-        <20221105140356.6a3da628@rorschach.local.home>
-        <CAHk-=wjnASLkTdPd+wxto2RBQH+S9MUm4FrNPWvU87opFG5SKQ@mail.gmail.com>
-        <20221105144303.3552bf85@rorschach.local.home>
-        <775ada-29f1-3b56-7deb-c1b8d958e2c@inria.fr>
-        <20221105203634.7e0b2e8e@rorschach.local.home>
-        <b52c207c-e7bf-af2e-61d9-116c9e76af86@inria.fr>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Sat, 5 Nov 2022 23:13:47 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A091D60FF
+        for <linux-kernel@vger.kernel.org>; Sat,  5 Nov 2022 20:13:45 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id b21so8257551plc.9
+        for <linux-kernel@vger.kernel.org>; Sat, 05 Nov 2022 20:13:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=GlryiTuhWGpYZ55w8aKcxwdOIFsmDboEh+8If5PMp54=;
+        b=M+7//DBspHtFga2JTwlMmTCv7yBpINTaAknyJ3Z9YY0YnNCPRI2PYANVL0smCYFGfF
+         4qCNQrXvsyBKQ5hqRLcJGzfiwffO3xmohgEvKhV0lwaHvcoYQx3/JzW2tlsnja+zLTxy
+         uTe5hjQTBGcARsSknr+LAPt8UIfmY6Cg3v6nEEq0btSiW8rzBEb0GF/7CvpIoiIeSlqP
+         CqUqf7sd7sSDJdxtznekAQoG8jIaE7qT5+SueLOGQMcV0Z9GUpK1nKiK2n2qyb3IikfG
+         K2wZuIkURZ5SdkGtFfKcrFugArIJGKfusVMDv6RrYbFZ12Y4/+X3lgsA0l9GNmn0XXNA
+         Fu9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=GlryiTuhWGpYZ55w8aKcxwdOIFsmDboEh+8If5PMp54=;
+        b=ajRHpm1BJnQ5qStcwyahzQikM48VB5YsnxpnqwtQHNpT4sl/bPs3pT0CGJ3DLYIvyT
+         61EQ7S1QSMXEh2LuiNzPGl9GMKD2HE0IhwXrUXT12lzxOIxzx977Ddp/yBsLLBoaVg5T
+         gGumsIlEiKez/y7zkjaDdxuaWCdWFDcbF9NpLaMZndb15WRWmmaFINr6EKbMWta6YoPh
+         AhBm7/OJevGrbKzTe+KJZJATNwmhl7fG/G1jS1UVtnPojwxtgdY9rX+gicIWBV/r/C7O
+         gwCjrM4WyO5HEgn2DAP6ghFFTbXU+YWKXZEgWVHK0bQR8biIdczPWU4Hf8SLbpD1pKYp
+         B9FQ==
+X-Gm-Message-State: ACrzQf1LNpZu+iobN92dGYjy541nW7hWiRWTkfCuzrQEnU8wmefbryro
+        Slsww4THQMJu8WQJsMCWhMwpPB6Rsh6Rfzjx
+X-Google-Smtp-Source: AMsMyM5XeDR3a8cToBiG0H/ubNRQvJErSnLzD/K/PNz7FLpBKxPhxGCgPn5Y6/IsuTNoOVdn07SXtA==
+X-Received: by 2002:a17:90a:cb03:b0:214:219:b2b9 with SMTP id z3-20020a17090acb0300b002140219b2b9mr30506867pjt.191.1667704424857;
+        Sat, 05 Nov 2022 20:13:44 -0700 (PDT)
+Received: from jacob-Ubuntu (126.224.215.218.sta.wbroadband.net.au. [218.215.224.126])
+        by smtp.gmail.com with ESMTPSA id h3-20020a63df43000000b0046fd180640asm1876817pgj.24.2022.11.05.20.13.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 05 Nov 2022 20:13:44 -0700 (PDT)
+From:   Jacob Bai <jacob.bai.au@gmail.com>
+To:     joe@perches.com, gregkh@linuxfoundation.org,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/3] staging: rtl8192e: trivial code cleanup patches 
+Date:   Sun,  6 Nov 2022 14:13:37 +1100
+Message-Id: <cover.1667704057.git.jacob.bai.au@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 6 Nov 2022 11:05:14 +0800 (+08)
-Julia Lawall <julia.lawall@inria.fr> wrote:
+Rename few variables and source files to make it align with other
+rtlwifi drivers.
+The patches are required to be applied in sequence.
 
-> > Thinking that's what you meant (examples would be easier to understand,
-> > than descriptions). And it didn't cover the return case. Does it only
-> > cover gotos?
-> >
-> >   See drivers/net/wireless/intel/iwlwifi/mvm/sta.c for the false positive case:
-> >
-> > 	del_timer_sync(&baid_data->session_timer);
-> > [..]  
-> 
-> But there is a kfree_rcu(baid_data, rcu_head); right below.  So it looks
-> fine?
+Changes in v3:
+	1.Patch 3: use ARRAY_SIZE() to replace macros, feedback from
+joe@perches.com
 
-D'oh! I think you are correct. I didn't trust the script and it appears
-that it was correct all along. The free was hidden in between the code
-and I only noticed the kfree() in the error path. I thought that was a
-bug in the script. :-/
+Changes in v2:
+	1. Patch 2: modify r8192E_firmware.c to include table.h instead of
+r8192E_hwimg.h.
 
-I guess there were no false positives then. To be sure, I'll write a
-script to find all that have a return or goto in between and see what
-it comes up with.
+Jacob Bai (3):
+  staging: rtl8192e: rename tables in r8192e_hwimg.c
+  staging: rtl8192e: rename r8192E_hwimg.c/h to table.c/h
+  staging: rtl8192e: replace macro defines with ARRAY_SIZE
 
-I guess my original patch doesn't need any changes from the script.
-I'll look more.
+ drivers/staging/rtl8192e/rtl8192e/Makefile    |  2 +-
+ .../rtl8192e/rtl8192e/r8192E_firmware.c       |  2 +-
+ .../staging/rtl8192e/rtl8192e/r8192E_hwimg.h  | 33 ------------
+ .../staging/rtl8192e/rtl8192e/r8192E_phy.c    | 54 +++++++++----------
+ .../staging/rtl8192e/rtl8192e/r8192E_phy.h    | 20 -------
+ .../rtl8192e/{r8192E_hwimg.c => table.c}      | 34 +++++++-----
+ drivers/staging/rtl8192e/rtl8192e/table.h     | 33 ++++++++++++
+ 7 files changed, 84 insertions(+), 94 deletions(-)
+ delete mode 100644 drivers/staging/rtl8192e/rtl8192e/r8192E_hwimg.h
+ rename drivers/staging/rtl8192e/rtl8192e/{r8192E_hwimg.c => table.c} (91%)
+ create mode 100644 drivers/staging/rtl8192e/rtl8192e/table.h
 
-Thanks Julia!
+-- 
+2.34.1
 
--- Steve
