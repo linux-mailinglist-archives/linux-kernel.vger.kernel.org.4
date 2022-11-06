@@ -2,174 +2,249 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C43AE61E514
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 18:50:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2538061E51A
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 18:51:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230457AbiKFRuv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Nov 2022 12:50:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47554 "EHLO
+        id S229984AbiKFRvw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Nov 2022 12:51:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230083AbiKFRuq (ORCPT
+        with ESMTP id S229947AbiKFRvu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Nov 2022 12:50:46 -0500
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DFFE18F;
-        Sun,  6 Nov 2022 09:50:43 -0800 (PST)
-Received: by mail-wm1-x32b.google.com with SMTP id o30so5673271wms.2;
-        Sun, 06 Nov 2022 09:50:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=Y8NI89KLXLUXJoqq3NauzSYIHtixTqflQ9ilDraLCKI=;
-        b=P5bhDOWN9gh8J3b9Dv60f0h5zjSZdKTbhPgy6YKdj66TmDV0Jj7metJu6VxOuEtZsO
-         Cp10SSKDNFng/K3UBPE5lppc2VzsTth3bT38dIu9eQM9Ypdb9NVNqQC6Bn/NouN+LzU0
-         3NEFsaqnjfHk1xK/vubhD+YlMUgWj8cR6JrBF8Hk4ZKTVQOEXkLTonOSkPQqOSSeT9Z6
-         tzthTbHbKLzMt7jRM7wFIIXsmQ7EdYTZ6IW1cCQuhr7jnAjy11RtDNNIMwRqzCspzJvu
-         eXESYGhJS14RHD0caNCP5dQAYdA1K6q/dwPgv4jIlNnZolp+dKlhwl0q+RON+PzwIXb+
-         xp4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Y8NI89KLXLUXJoqq3NauzSYIHtixTqflQ9ilDraLCKI=;
-        b=jQSTQ52Encdzra8rg8MFRtSIDTazywX+Uhb4zfjlML48OcgMCu8WErk9BndU4z4dVC
-         oFUkF2ZKCPq9vvpW2Cw7ewq/JAvurw1ky/dV7QkN/8og6L5bHWq9bEZ4XfR4mjb5oBHq
-         n5bg2NuE8MJijyXldvLBCaGeMwjsVDm6NQsV3CqvRSxwyOV3fA5GTbI8zapAm+CnBw2G
-         P75zIBKANcjUVaQT9zhnvDB/CIkGD+BfG2hvl2v/0nfLIXy5cu+332PXFU4gdh2HQQF/
-         aWO4DQXVHcmEp3B3ZZTYqtAM04sHdmINqCiY68FWPWw/0MZ1UGCeyQnqLLPRYjNxDn21
-         f4FQ==
-X-Gm-Message-State: ACrzQf3wLa+9ueiOcnSdO6Z1heHNjxQA9H9/P6xpNqaC+iFEuPa5zCVU
-        zLh1N4eahrFN4TIvmxSaGsw=
-X-Google-Smtp-Source: AMsMyM4MvXoTIr0PSU3qzPu4EnfNvUVv5WsNvbliwvNY17gMm4/1ztCu62Se4b8KcxSG7gjKUnqBMQ==
-X-Received: by 2002:a05:600c:1c0d:b0:3cf:5fd2:1fd1 with SMTP id j13-20020a05600c1c0d00b003cf5fd21fd1mr33027652wms.8.1667757041329;
-        Sun, 06 Nov 2022 09:50:41 -0800 (PST)
-Received: from DreamMachine2.lan (188.red-83-35-57.dynamicip.rima-tde.net. [83.35.57.188])
-        by smtp.gmail.com with ESMTPSA id v14-20020adfedce000000b00236883f2f5csm5153643wro.94.2022.11.06.09.50.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 06 Nov 2022 09:50:41 -0800 (PST)
-Message-ID: <6b8bd5b63a69390a7facba39339c75255f57f2c4.camel@gmail.com>
-Subject: Re: [PATCH v2 1/2] i2c: core: Introduce i2c_client_get_device_id
- helper function
-From:   Angel Iglesias <ang.iglesiasg@gmail.com>
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Nuno =?ISO-8859-1?Q?S=E1?= <noname.nuno@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org
-Date:   Sun, 06 Nov 2022 18:50:40 +0100
-In-Reply-To: <20221106172249.30241713@jic23-huawei>
-References: <cover.1667750698.git.ang.iglesiasg@gmail.com>
-         <bb8d7f33c6b9e960d542c3951101587b4ddfaef6.1667750698.git.ang.iglesiasg@gmail.com>
-         <20221106172249.30241713@jic23-huawei>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.1 (by Flathub.org) 
+        Sun, 6 Nov 2022 12:51:50 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 370F0244;
+        Sun,  6 Nov 2022 09:51:49 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CF97E60C55;
+        Sun,  6 Nov 2022 17:51:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B18C0C433C1;
+        Sun,  6 Nov 2022 17:51:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667757108;
+        bh=ngeGRJrDFN8bc4IHbWSf91d8o8lEG+vzXG7Fqs3t3+I=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=QsrMwSsgNC55WS0Tws2Tsu0REVWXZdLPB0YyF2UGjvPQDJzlXojp1xlExKdQFwiJN
+         yf6alM2EUtFO+u51c3GIhXuzzfpV8i9kjI/BDRmXwWlwpRAJvvObm1GTeEMA+Hv7O3
+         4Lok/Zyr2d3zFUoqLVLUpT5G+izh8Jm6YzsJ3oxYFqO8sPLU+59/fI7WK6aKQ8TSEu
+         OZiHIrUKuvLIhaF12mU/572i8vroZJYmMpsbUzeRcvnEOzWVvIasXJbiqpBNsSdUQ4
+         HFPIiK3AP732HDqzyrWH5H1nCUZg4cle/xekfuBDnrm0sWT6ZQ1VHzyjiHKS37q2X0
+         hpxP4nDKsuM/g==
+Date:   Sun, 6 Nov 2022 17:51:39 +0000
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Nuno =?UTF-8?B?U8Oh?= <noname.nuno@gmail.com>
+Cc:     Antoniu Miclaus <antoniu.miclaus@analog.com>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-iio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/4] iio: frequency: adf4377: add support for ADF4377
+Message-ID: <20221106175139.093edcd9@jic23-huawei>
+In-Reply-To: <3417a0fd87e6f13207690e49b797f2d2689f802a.camel@gmail.com>
+References: <20221104092802.90725-1-antoniu.miclaus@analog.com>
+        <20221104092802.90725-3-antoniu.miclaus@analog.com>
+        <3417a0fd87e6f13207690e49b797f2d2689f802a.camel@gmail.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 2022-11-06 at 17:22 +0000, Jonathan Cameron wrote:
-> On Sun,=C2=A0 6 Nov 2022 17:42:24 +0100
-> Angel Iglesias <ang.iglesiasg@gmail.com> wrote:
->=20
-> > Introduces new helper function to aid in .probe_new() refactors. In ord=
-er
-> > to use existing i2c_get_device_id() on the probe callback, the device
-> > match table needs to be accessible in that function, which would requir=
-e
-> > bigger refactors in some drivers using the deprecated .probe callback.
-> >=20
-> > This issue was discussed in more detail in the IIO mailing list.
-> >=20
-> > Link:
-> > https://lore.kernel.org/all/20221023132302.911644-11-u.kleine-koenig@pe=
-ngutronix.de/
-> > Suggested-by: Nuno S=C3=A1 <noname.nuno@gmail.com>
-> > Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> > Suggested-by: Jonathan Cameron <jic23@kernel.org>
-> > Signed-off-by: Angel Iglesias <ang.iglesiasg@gmail.com>
-> > Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
->=20
-> Trivial comment inline - otherwise lgtm
-> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
->=20
-> Thanks,
->=20
-> >=20
-> > diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
-> > index b4edf10e8fd0..920676e62c22 100644
-> > --- a/drivers/i2c/i2c-core-base.c
-> > +++ b/drivers/i2c/i2c-core-base.c
-> > @@ -2236,6 +2236,21 @@ int i2c_get_device_id(const struct i2c_client
-> > *client,
-> > =C2=A0}
-> > =C2=A0EXPORT_SYMBOL_GPL(i2c_get_device_id);
-> > =C2=A0
-> > +/**
-> > + * i2c_client_get_device_id - get the driver match table entry of a de=
-vice
-> > + * @client: the device to query. The device must be bound to a driver =
-or
-> > + *=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 the function oopses=
-.
->=20
-> Maybe don't state what happens otherwise if something changes to make it
-> instead do something else unfortunate, this comment will need updating.
-> "The device must be bound to a driver."
+On Fri, 04 Nov 2022 12:38:07 +0100
+Nuno S=C3=A1 <noname.nuno@gmail.com> wrote:
 
-Sure, sorry for the trouble. I'll wait a bit for more comments and then sen=
-d v3
-fixed.
+> On Fri, 2022-11-04 at 11:28 +0200, Antoniu Miclaus wrote:
+> > The ADF4377 is a high performance, ultralow jitter, dual output
+> > integer-N
+> > phased locked loop (PLL) with integrated voltage controlled
+> > oscillator
+> > (VCO) ideally suited for data converter and mixed signal front end
+> > (MxFE)
+> > clock applications.
+> >=20
+> > Datasheet:
+> > https://www.analog.com/media/en/technical-documentation/data-sheets/adf=
+4377.pdf
+> > Signed-off-by: Antoniu Miclaus <antoniu.miclaus@analog.com>
 
-Thanks for your time,
-Angel
+Nuno, please crop to the bit you comment on.  Doom scrolling isn't fun ;)
 
->=20
-> > + *
-> > + * Returns a pointer to the matching entry if found, NULL otherwise.
-> > + */
-> > +const struct i2c_device_id *i2c_client_get_device_id(const struct
-> > i2c_client *client)
-> > +{
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0const struct i2c_driver *drv=
- =3D to_i2c_driver(client->dev.driver);
-> > +
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return i2c_match_id(drv->id_=
-table, client);
-> > +}
-> > +EXPORT_SYMBOL_GPL(i2c_client_get_device_id);
-> > +
-> > =C2=A0/* ----------------------------------------------------
-> > =C2=A0 * the i2c address scanning function
-> > =C2=A0 * Will not work for 10-bit addresses!
-> > diff --git a/include/linux/i2c.h b/include/linux/i2c.h
-> > index f7c49bbdb8a1..d84e0e99f084 100644
-> > --- a/include/linux/i2c.h
-> > +++ b/include/linux/i2c.h
-> > @@ -189,6 +189,7 @@ s32 i2c_smbus_read_i2c_block_data_or_emulated(const
-> > struct i2c_client *client,
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+A few follow up comments inline.
+
+Jonathan
+
+> > ---
+> > =C2=A0drivers/iio/frequency/Kconfig=C2=A0=C2=A0 |=C2=A0=C2=A0 10 +
+> > =C2=A0drivers/iio/frequency/Makefile=C2=A0 |=C2=A0=C2=A0=C2=A0 1 +
+> > =C2=A0drivers/iio/frequency/adf4377.c | 1154
+
+...
+> > +static ssize_t adf4377_read(struct iio_dev *indio_dev, uintptr_t
+> > private,
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
 =A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 u8 *values);
-> > =C2=A0int i2c_get_device_id(const struct i2c_client *client,
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct i2c_device=
-_identity *id);
-> > +const struct i2c_device_id *i2c_client_get_device_id(const struct
-> > i2c_client *client);
-> > =C2=A0#endif /* I2C */
-> > =C2=A0
-> > =C2=A0/**
+=C2=A0=C2=A0 const struct iio_chan_spec *chan, char
+> > *buf)
+> > +{
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct adf4377_state *st =3D=
+ iio_priv(indio_dev);
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u64 val =3D 0;
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0int ret;
+> > +
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0switch ((u32)private) {
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0case ADF4377_FREQ:
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0ret =3D adf4377_get_freq(st, &val);
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0break;
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0default:
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0ret =3D -EINVAL;
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0val =3D 0;
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0break;
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0}
+> > +
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return ret ?: sysfs_emit(buf=
+, "%llu\n", val); =20
 >=20
+> I would also return in place. I've come to prefer it but that's me :)
+
+Definitely if alternative is a ternary!
+
+
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return ret ? : FIELD_GET(ADF=
+4377_MUXOUT_MSK, mode);
+> > +}
+> > +
+> > +static const struct iio_enum adf4377_muxout_enum =3D {
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.items =3D adf4377_muxout_mo=
+des,
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.num_items =3D ARRAY_SIZE(ad=
+f4377_muxout_modes),
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.get =3D adf4377_get_muxout_=
+mode,
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.set =3D adf4377_set_muxout_=
+mode,
+> > +};
+> > +
+> > +#define _ADF4377_EXT_INFO(_name, _shared, _ident) { \
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0.name =3D _name, \
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0.read =3D adf4377_read, \
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0.write =3D adf4377_write, \
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0.private =3D _ident, \
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0.shared =3D _shared, \
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0}
+> > +
+> > +static const struct iio_chan_spec_ext_info adf4377_ext_info[] =3D {
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/*
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * Usually we use IIO_CHAN_I=
+NFO_FREQUENCY, but there are
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * values > 2^32 in order to=
+ support the entire frequency
+> > range
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * in Hz.
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 */
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0_ADF4377_EXT_INFO("frequency=
+", IIO_SHARED_BY_ALL,
+> > ADF4377_FREQ), =20
+>=20
+> Can't we have u64 already in IIO_CHAN_INFO_FREQUENCY? I know the write
+> side is a bit awkward but I think we can make it better.
+
+hmm. I think we only have s64. If 63 bits is enough then we are good to go =
+:)
+
+(in the annals of bad design decisions, thinking years ago that no one would
+ go beyond 32 bits... oops).
+
+> =20
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0IIO_ENUM("muxout_select", II=
+O_SHARED_BY_ALL,
+> > &adf4377_muxout_enum),
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0IIO_ENUM_AVAILABLE("muxout_s=
+elect", IIO_SHARED_BY_ALL,
+> > &adf4377_muxout_enum),
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0{ },
+> > +};
+> > +
+
+...
+
+> > +
+> > +static int adf4377_probe(struct spi_device *spi)
+> > +{
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct iio_dev *indio_dev;
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct regmap *regmap;
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct adf4377_state *st;
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0int ret;
+> > +
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0indio_dev =3D devm_iio_devic=
+e_alloc(&spi->dev, sizeof(*st));
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (!indio_dev)
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0return -ENOMEM;
+> > +
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0regmap =3D devm_regmap_init_=
+spi(spi, &adf4377_regmap_config);
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (IS_ERR(regmap))
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0return PTR_ERR(regmap);
+> > +
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0st =3D iio_priv(indio_dev);
+> > +
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0indio_dev->info =3D &adf4377=
+_info;
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0indio_dev->name =3D "adf4377=
+";
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0indio_dev->channels =3D adf4=
+377_channels;
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0indio_dev->num_channels =3D =
+ARRAY_SIZE(adf4377_channels);
+> > +
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0st->regmap =3D regmap;
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0st->spi =3D spi;
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0st->type =3D spi_get_device_=
+id(spi)->driver_data; =20
+>=20
+> Hmm this is something that came up internally the other day. Are we
+> guaranteed that this will always work? For OF I think it is but I'm not
+> sure about ACPI? At first glance, it seems that it might be ok but I
+> did not went too deep in the ACPI code.
+
+Better indeed to not assume it and indeed ACPI can't do this magic, because
+there isn't a match between the actual ACPI ID and the spi_device_ids.
+Not sure what it does with PRP0001 case (where it uses the of_device_id tab=
+le).
+
+
+	st->type =3D device_get_match_id()->driver_data;
+	if (!st->type) {
+		const struct spi_device_id *id =3D spi_get_device_id(spi);
+
+		if (!id)
+			return -EINVAL;
+
+		st->type =3D spi_get_device_id(spi)->driver_data;
+	}
+would be my preferred pattern. Andy had a suggestion to roll this
+up in a standard function, but not gone anywhere yet.
+
+>=20
+
+Jonathan
+
 
