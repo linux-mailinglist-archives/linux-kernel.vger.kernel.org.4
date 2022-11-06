@@ -2,86 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7787561E33D
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 16:51:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35BDC61E344
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Nov 2022 16:53:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230103AbiKFPvO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Nov 2022 10:51:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47776 "EHLO
+        id S230109AbiKFPxl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Nov 2022 10:53:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230017AbiKFPvN (ORCPT
+        with ESMTP id S230019AbiKFPxe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Nov 2022 10:51:13 -0500
-Received: from sonata.ens-lyon.org (sonata.ens-lyon.org [140.77.166.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D016DED9
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Nov 2022 07:51:12 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by sonata.ens-lyon.org (Postfix) with ESMTP id 352822010B;
-        Sun,  6 Nov 2022 16:51:10 +0100 (CET)
-Received: from sonata.ens-lyon.org ([127.0.0.1])
-        by localhost (sonata.ens-lyon.org [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id zKeRytKHzjnZ; Sun,  6 Nov 2022 16:51:10 +0100 (CET)
-Received: from begin (lfbn-bor-1-376-208.w109-215.abo.wanadoo.fr [109.215.91.208])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by sonata.ens-lyon.org (Postfix) with ESMTPSA id 85C4520107;
-        Sun,  6 Nov 2022 16:51:09 +0100 (CET)
-Received: from samy by begin with local (Exim 4.96)
-        (envelope-from <samuel.thibault@ens-lyon.org>)
-        id 1orhvR-00DuLc-0S;
-        Sun, 06 Nov 2022 16:51:09 +0100
-Date:   Sun, 6 Nov 2022 16:51:09 +0100
-From:   Samuel Thibault <samuel.thibault@ens-lyon.org>
-To:     wangkailong@jari.cn
-Cc:     w.d.hubbs@gmail.com, chris@the-brannons.com, kirk@reisers.ca,
-        gregkh@linuxfoundation.org, speakup@linux-speakup.org,
+        Sun, 6 Nov 2022 10:53:34 -0500
+Received: from msg-4.mailo.com (msg-4.mailo.com [213.182.54.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73C2CFACD
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Nov 2022 07:53:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
+        t=1667749984; bh=dmKfIeO1VeBT4R+Kq0XhzSljt+SmVaKK6PEqQdi6PAA=;
+        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:References:
+         MIME-Version:Content-Type:In-Reply-To;
+        b=LmoUC3G34R1DwCWQ+F1NNFrRF2PorUAQehSztPMaLCENSzQYuwI+Pmd+oWDbGEujg
+         IUU+5pQt7e1bReIBuJtgduu9nWmyF8lIjK5hsPvhEeyHtWwyidJeb1Rl40KIwa5x0v
+         oMTkcxjFdpfmLwSFMp0pJWbpAEmhw7dLI+Lgp9vA=
+Received: by b-1.in.mailobj.net [192.168.90.11] with ESMTP
+        via ip-206.mailobj.net [213.182.55.206]
+        Sun,  6 Nov 2022 16:53:04 +0100 (CET)
+X-EA-Auth: 9t6s0BerjpqO1VYQo8v6OMTRabzSBetVRZqnZqWKLooLO7w9iv/byaeqo9eiQoRh15bx9tbDz930YaQtsUqfGmA0p3kX7sdT
+Date:   Sun, 6 Nov 2022 21:22:55 +0530
+From:   Deepak R Varma <drv@mailo.com>
+To:     Michael Straube <straube.linux@gmail.com>
+Cc:     gregkh@linuxfoundation.org, Larry.Finger@lwfinger.net,
+        phil@philpotter.co.uk, linux-staging@lists.linux.dev,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] speakup: Fix warning comparing pointer to 0
-Message-ID: <20221106155109.wh5ivhk2zc7cumn5@begin>
-Mail-Followup-To: Samuel Thibault <samuel.thibault@ens-lyon.org>,
-        wangkailong@jari.cn, w.d.hubbs@gmail.com, chris@the-brannons.com,
-        kirk@reisers.ca, gregkh@linuxfoundation.org,
-        speakup@linux-speakup.org, linux-kernel@vger.kernel.org
-References: <1de9cab8.c1.1844d7bdf4b.Coremail.wangkailong@jari.cn>
+Subject: Re: [PATCH] staging: r8188eu: clean up error handling in
+ rtw_start_drv_threads()
+Message-ID: <Y2fYVzU6JDxocTdC@qemulion>
+References: <20221106133443.8872-1-straube.linux@gmail.com>
+ <Y2fGGsV5ZwxmkTNB@qemulion>
+ <5fa89086-c81d-0a3d-8d0d-0bb293052c5c@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1de9cab8.c1.1844d7bdf4b.Coremail.wangkailong@jari.cn>
-Organization: I am not organized
-User-Agent: NeoMutt/20170609 (1.8.3)
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <5fa89086-c81d-0a3d-8d0d-0bb293052c5c@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-wangkailong@jari.cn, le dim. 06 nov. 2022 23:07:54 +0800, a ecrit:
-> Fix the following coccicheck warning:
-> 
-> drivers/accessibility/speakup/utils.h:39:15-16: WARNING comparing
-> pointer to 0
+On Sun, Nov 06, 2022 at 04:34:57PM +0100, Michael Straube wrote:
+> On 11/6/22 15:35, Deepak R Varma wrote:
+> > On Sun, Nov 06, 2022 at 02:34:43PM +0100, Michael Straube wrote:
+> > > Convert the error handling in the function rtw_start_drv_threads() to
+> > > the common logic used in the kernel. Another step to get rid of _FAIL
+> > > and _SUCCESS which uses inverted logic.
+> >
+> > Hello Michael,
+> > Can you please tell how did you find this opportunity for improvement? Are you
+> > using some tool or is it a manual code review/analysis?
+> >
+>
+> Hi Deepak,
+>
+> I just used git grep to search for _FAIL or _SUCCESS and then looked at
+> the code manually.
+>
+> Regards,
+> Michael
+>
 
-You're replacing it with the contrary of what it should be...
+Okay. That is very helpful. Thank you Michael.
 
-> ---
->  drivers/accessibility/speakup/utils.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/accessibility/speakup/utils.h b/drivers/accessibility/speakup/utils.h
-> index 4bf2ee8ac246..5803b521df2b 100644
-> --- a/drivers/accessibility/speakup/utils.h
-> +++ b/drivers/accessibility/speakup/utils.h
-> @@ -36,7 +36,7 @@ static inline void open_input(const char *dir_name, const char *name)
->  	else
->  		snprintf(filename, sizeof(filename), "%s", name);
->  	infile = fopen(filename, "r");
-> -	if (infile == 0) {
-> +	if (infile) {
->  		fprintf(stderr, "can't open %s\n", filename);
->  		exit(1);
->  	}
-> -- 
-> 2.25.1
+./drv
+
+
