@@ -2,71 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 023EB61FE55
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 20:11:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DFDB61FE5D
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 20:12:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232387AbiKGTLL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 14:11:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46830 "EHLO
+        id S232192AbiKGTMN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 14:12:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232611AbiKGTKt (ORCPT
+        with ESMTP id S232910AbiKGTLg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 14:10:49 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4DF629C82;
-        Mon,  7 Nov 2022 11:10:48 -0800 (PST)
-Received: from zn.tnic (p200300ea9733e71f329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e71f:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 5052F1EC0567;
-        Mon,  7 Nov 2022 20:10:47 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1667848247;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=zgafXme/YlkPVTuatr/YKPrpFzsJCUOJ17VfQBIvcIA=;
-        b=YJ2hJxTGDz78MWs+NfxNQAyMXBGKrEZmSid4LJPUTmJhcqkjulwoXe2CRpAhwfWGGNZKQ6
-        6JPQWgbT+W8ye6miqzwlNMJ9vi0JFMbpNL4rbENdJMpKUORXbbOn5W6v74Kv+p7xWGIUiR
-        Qu2rcfVifxdsrSfF/1L0UBDJJRgfyW0=
-Date:   Mon, 7 Nov 2022 20:10:42 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Maxim Levitsky <mlevitsk@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Chang S. Bae" <chang.seok.bae@intel.com>,
-        Jane Malalane <jane.malalane@citrix.com>,
-        Kees Cook <keescook@chromium.org>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        linux-perf-users@vger.kernel.org,
-        "open list:CRYPTO API" <linux-crypto@vger.kernel.org>
-Subject: Re: [PATCH v2 2/5] x86/cpuid: refactor
- setup_clear_cpu_cap()/clear_cpu_cap()
-Message-ID: <Y2lYMqLVP+00Rpu5@zn.tnic>
-References: <20220718141123.136106-1-mlevitsk@redhat.com>
- <20220718141123.136106-3-mlevitsk@redhat.com>
- <Y1LGkTXCksqAYLHD@zn.tnic>
+        Mon, 7 Nov 2022 14:11:36 -0500
+Received: from msg-4.mailo.com (msg-4.mailo.com [213.182.54.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4A702A248;
+        Mon,  7 Nov 2022 11:11:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
+        t=1667848286; bh=zWPAdToNUDwcfw6NFyLWvfacA3nb38cKYkYp0UwSEe0=;
+        h=X-EA-Auth:Date:From:To:Subject:Message-ID:MIME-Version:
+         Content-Type;
+        b=e+EjilvWCDu3GYPl50nMRQcJ3YfC61qnAQ4TnVjjx9VnoXN24iJaw3EzlJducIw1D
+         i6AEctOqf2gK+tJ9k+Xw0xko7kxtxBsfXFE4Mqpsf/K4wgZfi8KArDvWNiumosR/RJ
+         5aviiZDV4Xa83JS+xV+AkT7XZEKbnnM39F4sAiAc=
+Received: by b-5.in.mailobj.net [192.168.90.15] with ESMTP
+        via ip-206.mailobj.net [213.182.55.206]
+        Mon,  7 Nov 2022 20:11:26 +0100 (CET)
+X-EA-Auth: lhzqnxlKSukeYTArdeiVEjBhxUlWR9klVoDlFhWy14zVU6h0rU481r3lcJJeuxpO45fLMz+oj+pcg6mqQVqZdCkKc6VHGZrj
+Date:   Tue, 8 Nov 2022 00:41:21 +0530
+From:   Deepak R Varma <drv@mailo.com>
+To:     Neil Armstrong <neil.armstrong@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        linux-media@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] staging: media: meson: vdec: use min() for comparison and
+ assignment
+Message-ID: <Y2lYWWKkDa73gcqm@qemulion>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y1LGkTXCksqAYLHD@zn.tnic>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
@@ -76,59 +52,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 21, 2022 at 06:19:29PM +0200, Borislav Petkov wrote:
-> On Mon, Jul 18, 2022 at 05:11:20PM +0300, Maxim Levitsky wrote:
-> > Currently setup_clear_cpu_cap passes NULL 'struct cpuinfo_x86*'
-> > to clear_cpu_cap to indicate that capability should be cleared from boot_cpu_data.
-> > 
-> > Later that is used in clear_feature to do recursive call to
-> > clear_cpu_cap together with clearing the feature bit from 'cpu_caps_cleared'
-> > 
-> > Remove that code and just call the do_clear_cpu_cap on boot_cpu_data directly
-> > from the setup_clear_cpu_cap.
-> > 
-> > The only functional change this introduces is that now calling clear_cpu_cap
-> > explicitly on boot_cpu_data also sets the bits in cpu_caps_cleared,
-> > which is the only thing that makes sense anyway.
-> > 
-> > All callers of both functions were checked for this and fixed.
-> 
-> Change looks ok. What I can't grok is this sentence: what was checked
-> and fixed where?
+Use of standard min() helper macro is preferred over using ternary
+operator for logical evaluation and value assignment. This issue is
+identified by coccicheck using the minmax.cocci file.
 
-Ok, I think I know what you mean. That:
+Signed-off-by: Deepak R Varma <drv@mailo.com>
+---
+ drivers/staging/media/meson/vdec/codec_vp9.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-git grep -E "clear_cpu_cap.*boot"
-arch/x86/events/intel/lbr.c:1599:       clear_cpu_cap(&boot_cpu_data, X86_FEATURE_ARCH_LBR);
-arch/x86/kernel/alternative.c:746:              clear_cpu_cap(&boot_cpu_data, X86_FEATURE_UP);
+diff --git a/drivers/staging/media/meson/vdec/codec_vp9.c b/drivers/staging/media/meson/vdec/codec_vp9.c
+index 897f5d7a6aad..da7265c8de37 100644
+--- a/drivers/staging/media/meson/vdec/codec_vp9.c
++++ b/drivers/staging/media/meson/vdec/codec_vp9.c
+@@ -1459,7 +1459,7 @@ static void vp9_tree_merge_probs(unsigned int *prev_prob,
+ 	if (den == 0) {
+ 		new_prob = pre_prob;
+ 	} else {
+-		m_count = den < MODE_MV_COUNT_SAT ? den : MODE_MV_COUNT_SAT;
++		m_count = min(den, MODE_MV_COUNT_SAT);
+ 		get_prob =
+ 			clip_prob(div_r32(((int64_t)tree_left * 256 +
+ 					   (den >> 1)),
+@@ -1513,7 +1513,7 @@ static void adapt_coef_probs_cxt(unsigned int *prev_prob,
+ 			/* get binary prob */
+ 			num = branch_ct[node][0];
+ 			den = branch_ct[node][0] + branch_ct[node][1];
+-			m_count = den < count_sat ? den : count_sat;
++			m_count = min(den, count_sat);
 
-Right, so here's the difference:
+ 			get_prob = (den == 0) ?
+ 					128u :
+@@ -1664,8 +1664,7 @@ static void adapt_coef_probs(int prev_kf, int cur_kf, int pre_fc,
+ 			if (den == 0) {
+ 				new_prob = pre_prob;
+ 			} else {
+-				m_count = den < MODE_MV_COUNT_SAT ?
+-						den : MODE_MV_COUNT_SAT;
++				m_count = min(den, MODE_MV_COUNT_SAT);
+ 				get_prob =
+ 				clip_prob(div_r32(((int64_t)
+ 					count[coef_count_node_start] * 256 +
+--
+2.34.1
 
-When you call setup_clear_cpu_cap(), it basically means, to disable the
-cap on *every* CPU. This is done with cpu_caps_cleared which gets ANDed
-in in apply_forced_caps().
 
-clear_cpu_cap() clears the bit *only* in the first parameter supplied.
 
-Now, that first parameter can be boot_cpu_data too but then, strictly
-speaking, clear_cpu_cap() would really do what you want it to do - to
-clear it only in its first param.
-
-If you really want to enforce that bit cleared everywhere, you need to
-use the setup_* variant.
-
-So this patch is actually incorrect but I admit, the CPU caps handling
-are kinda subtle and probably need cleaning.
-
-Lemme document it so that it is at least clear. Who knows, we might end
-up improving it in the process.
-
-:-)
-
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
