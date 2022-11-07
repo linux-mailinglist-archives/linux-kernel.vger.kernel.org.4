@@ -2,216 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 720FA61F786
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 16:23:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F71361F78A
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 16:25:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232349AbiKGPXc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 10:23:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60566 "EHLO
+        id S232260AbiKGPZx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 10:25:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231438AbiKGPX3 (ORCPT
+        with ESMTP id S231577AbiKGPZv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 10:23:29 -0500
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A9CECD9;
-        Mon,  7 Nov 2022 07:23:24 -0800 (PST)
-Received: (Authenticated sender: herve.codina@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 4F5BF240007;
-        Mon,  7 Nov 2022 15:23:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1667834603;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=SJd93Y5HIkbd3Alvti1JPtGvDBLfYghJCCdXFuuDQuY=;
-        b=oa6r8eHOhRqhyq8m0OyGQMeXXLO+mcrcHTch6Sxrcj+ToRz4YE1Pjfq5pgFZyZ+KoSMwf9
-        oZrCPxvhvmALjaTn2UyYyKJIqTOz8HEuqVpkCYHBbMjEAQ0+Q5CWMcFZ7d4np9xSjS1z8M
-        5ZETcxVWIiJ59CLrOBZzIuIqVfHcmEUNSrMTUfTp60LirRgQzSKMVoAQNrXSnrgPZ6i4lA
-        b4vFUl1iCad/M8DwIiK8RcISyYi7J1BebN4suQzD4xBTVORiwfLer29EeEHbDv/3zhpb28
-        ykYPaKzQgdmBxAhRPtOFbMb5BlmCoSe3coP40G18XD/FOZ8eMYQP3+QNC8hR5g==
-Date:   Mon, 7 Nov 2022 16:23:19 +0100
-From:   Herve Codina <herve.codina@bootlin.com>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Gareth Williams <gareth.williams.jx@renesas.com>,
-        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>
-Subject: Re: [PATCH 5/7] usb: gadget: udc: add Renesas RZ/N1 USBF controller
- support
-Message-ID: <20221107162319.7945f241@bootlin.com>
-In-Reply-To: <CAMuHMdVod1VqKSBFa5syeSPU=RzgqQ=3tg70V1OSZFOext7kgw@mail.gmail.com>
-References: <20221107135825.583877-1-herve.codina@bootlin.com>
-        <20221107135825.583877-6-herve.codina@bootlin.com>
-        <CAMuHMdVod1VqKSBFa5syeSPU=RzgqQ=3tg70V1OSZFOext7kgw@mail.gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+        Mon, 7 Nov 2022 10:25:51 -0500
+Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88A29A1B3;
+        Mon,  7 Nov 2022 07:25:50 -0800 (PST)
+Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: marex@denx.de)
+        by phobos.denx.de (Postfix) with ESMTPSA id 175B184DF9;
+        Mon,  7 Nov 2022 16:25:48 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+        s=phobos-20191101; t=1667834748;
+        bh=FPh/2Lps2gSNBBEpj2mp+HQ0XsRPC3xrI5k7dVky1aI=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=zhmfWzh6xmSA5xEeypcJ5w2NobW88mVxV86f9TGdXjDuHO9XZsBYcUQeOpzi1Z8vF
+         dHAL5Q9o8Oat6qC2kDil6AyCzjvQI6MxGtFl+JM2A3+0DC2USi4v3riVwIFbXTam4j
+         cD+hGsZ2DdEAZhQayqM/mGKOtQTfhrYCs2OPTrM77tU8VaexCDvflnwj2XCS79Cam0
+         c0TD5lwDd4dMCSe/vJHKMoqeetJkspXqzZmXaaxTe+aWzyxm5Be5rqbAThA0hbYu78
+         aDkFnz6EpCaJ14HSijQet04loLdGw04SyJ156ahh4EP8FZy/8Xqc0BUMNa+eKO7lni
+         CtaS04dY0n7pg==
+Message-ID: <f0e80866-9f7c-4a95-3dbc-c2950162c703@denx.de>
+Date:   Mon, 7 Nov 2022 16:25:47 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH] extcon: usbc-tusb320: Call the Type-C IRQ handler only if
+ a port is registered
+Content-Language: en-US
+To:     Yassine Oudjana <yassine.oudjana@gmail.com>
+Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        =?UTF-8?Q?Alvin_=c5=a0ipraga?= <alsi@bang-olufsen.dk>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yassine Oudjana <y.oudjana@protonmail.com>
+References: <20221107144810.588755-1-y.oudjana@protonmail.com>
+ <49a553b3-bd79-7845-41c4-2b8a3a3d4932@denx.de>
+ <AGGZKR.PDKF4SHFJVZC3@gmail.com>
+From:   Marek Vasut <marex@denx.de>
+In-Reply-To: <AGGZKR.PDKF4SHFJVZC3@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Geert,
+On 11/7/22 16:02, Yassine Oudjana wrote:
+> 
+> On Mon, Nov 7 2022 at 15:51:55 +01:00:00, Marek Vasut <marex@denx.de> 
+> wrote:
+>> On 11/7/22 15:48, Yassine Oudjana wrote:
+>>> From: Yassine Oudjana <y.oudjana@protonmail.com>
+>>>
+>>> Commit bf7571c00dca ("extcon: usbc-tusb320: Add USB TYPE-C support")
+>>> added an optional Type-C interface to the driver but missed to check
+>>> if it is in use when calling the IRQ handler. This causes an oops on
+>>> devices currently using the old extcon interface. Check if a Type-C
+>>> port is registered before calling the Type-C IRQ handler.
+>>>
+>>> Fixes: bf7571c00dca ("extcon: usbc-tusb320: Add USB TYPE-C support")
+>>> Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
+>>> ---
+>>>   drivers/extcon/extcon-usbc-tusb320.c | 9 ++++++++-
+>>>   1 file changed, 8 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/drivers/extcon/extcon-usbc-tusb320.c 
+>>> b/drivers/extcon/extcon-usbc-tusb320.c
+>>> index 41041ff0fadb..037bc11b2a48 100644
+>>> --- a/drivers/extcon/extcon-usbc-tusb320.c
+>>> +++ b/drivers/extcon/extcon-usbc-tusb320.c
+>>> @@ -327,7 +327,14 @@ static irqreturn_t tusb320_irq_handler(int irq, 
+>>> void *dev_id)
+>>>           return IRQ_NONE;
+>>>         tusb320_extcon_irq_handler(priv, reg);
+>>> -    tusb320_typec_irq_handler(priv, reg);
+>>> +
+>>> +    /*
+>>> +     * Type-C support is optional for backward compatibility.
+>>
+>> It's the other way around, extcon is the legacy, type-c is the new, 
+>> right ?
+> 
+> Type-C is the new one, yes. This comment is somewhat similar to the one 
+> in tusb320_typec_probe():
+> 
+> /* The Type-C connector is optional, for backward compatibility. */
 
-On Mon, 7 Nov 2022 15:37:40 +0100
-Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+Ahhh, The Type-C connector support is indeed optional to avoid breaking 
+any of the older systems which only use/provide extcon.
 
-> Hi Herv=C3=A9,
->=20
-> On Mon, Nov 7, 2022 at 3:00 PM Herve Codina <herve.codina@bootlin.com> wr=
-ote:
-> > Add support for the Renesas USBF controller.
-> > This controller is an USB2.0 UDC controller available in the
-> > Renesas r9a06g032 SoC (RZ/N1 family).
-> >
-> > Signed-off-by: Herve Codina <herve.codina@bootlin.com> =20
->=20
-> > --- /dev/null
-> > +++ b/drivers/usb/gadget/udc/renesas_usbf.c =20
->=20
-> > +struct usbf_udc {
-> > +       struct usb_gadget               gadget;
-> > +       struct usb_gadget_driver        *driver;
-> > +       struct device                   *dev;
-> > +       struct clk_bulk_data            *clocks;
-> > +       int                             nclocks;
-> > +       void __iomem                    *regs;
-> > +       spinlock_t                      lock;
-> > +       bool                            is_remote_wakeup;
-> > +       bool                            is_usb_suspended;
-> > +       struct usbf_ep                  ep[USBF_NUM_ENDPOINTS];
-> > +       /* for EP0 control messages */
-> > +       enum usbf_ep0state              ep0state;
-> > +       struct usbf_req                 setup_reply;
-> > +       u8                              ep0_buf[USBF_EP0_MAX_PCKT_SIZE];
-> > +}; =20
->=20
-> > +static int usbf_probe(struct platform_device *pdev)
-> > +{
-> > +       struct device *dev =3D &pdev->dev;
-> > +       struct usbf_udc *udc;
-> > +       struct usbf_ep *ep;
-> > +       bool h2mode;
-> > +       int irq;
-> > +       int ret;
-> > +       int i;
-> > +
-> > +       ret =3D r9a06g032_sysctrl_get_usb_h2mode(&h2mode);
-> > +       if (ret)
-> > +               return ret;
-> > +       if (h2mode) {
-> > +               dev_warn(dev, "Disabled in H2 (host) mode\n");
-> > +               return -ENODEV;
-> > +       }
-> > +
-> > +       udc =3D devm_kzalloc(dev, sizeof(*udc), GFP_KERNEL);
-> > +       if (!udc)
-> > +               return -ENOMEM;
-> > +       platform_set_drvdata(pdev, udc);
-> > +
-> > +       udc->dev =3D dev;
-> > +       spin_lock_init(&udc->lock);
-> > +
-> > +       udc->regs =3D devm_platform_ioremap_resource(pdev, 0);
-> > +       if (IS_ERR(udc->regs))
-> > +               return PTR_ERR(udc->regs);
-> > +
-> > +       devm_pm_runtime_enable(&pdev->dev);
-> > +       ret =3D pm_runtime_resume_and_get(&pdev->dev);
-> > +       if (ret < 0)
-> > +               return ret;
-> > +
-> > +       ret =3D devm_clk_bulk_get_all(dev, &udc->clocks);
-> > +       if (ret < 1) {
-> > +               dev_err(dev, "failed to get clocks %d\n", ret);
-> > +               return ret;
-> > +       }
-> > +       udc->nclocks =3D ret;
-> > +
-> > +       ret =3D clk_bulk_prepare_enable(udc->nclocks, udc->clocks);
-> > +       if (ret) {
-> > +               dev_err(dev, "can not enable the clock\n");
-> > +               return ret;
-> > +       } =20
->=20
-> As this driver only enables/disables the clocks, perhaps you could
-> just delegate this to Runtime PM (through the clock domain pointed
-> by the power-domains property in DT), and drop the .clocks and
-> .nclocks fields?
+> Perhaps a better way to say this in both comments would be "to maintain" 
+> instead of "for".
 
-Yes, indeed.
-I tested it and it works.
-I will remove the the clocks handling from this driver in v2 series.
+I think best just drop the "for backward compatibility" altogether, like so:
 
->=20
-> > +clk_disable:
-> > +       clk_bulk_disable_unprepare(udc->nclocks, udc->clocks);
-> > +       return ret;
-> > +}
-> > +
-> > +static int usbf_remove(struct platform_device *pdev)
-> > +{
-> > +       struct usbf_udc *udc =3D platform_get_drvdata(pdev);
-> > +
-> > +       usb_del_gadget_udc(&udc->gadget);
-> > +
-> > +       clk_bulk_disable_unprepare(udc->nclocks, udc->clocks);
-> > +
-> > +       pm_runtime_put(&pdev->dev);
-> > +
-> > +       return 0;
-> > +} =20
->=20
-> > +MODULE_AUTHOR("Herve Codina <herve.codina@bootlin.com>"); =20
->=20
-> Herv=C3=A9? ;-)
-
-Just to be consistent with other places where my email appears,
-I keep "Herve" :)
-
->=20
-> > +MODULE_DESCRIPTION("Renesas R-Car Gen3 & RZ/N1 USB Function driver");
-> > +MODULE_LICENSE("GPL"); =20
->=20
-> > --
-> > 2.37.3
-> > =20
->=20
->=20
-> --
-> Gr{oetje,eeting}s,
->=20
->                         Geert
->=20
-> --
-> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m6=
-8k.org
->=20
-> In personal conversations with technical people, I call myself a hacker. =
-But
-> when I'm talking to journalists I just say "programmer" or something like=
- that.
->                                 -- Linus Torvalds
-
-Thanks for this review,
-Herv=C3=A9
-
---=20
-Herv=C3=A9 Codina, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+/*
+  * Type-C support is optional. Only call the Type-C handler if a
+  * port had been registered previously.
+  */
