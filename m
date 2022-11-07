@@ -2,255 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAB5361FE21
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 20:02:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC12D61FE65
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 20:14:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232060AbiKGTCE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 14:02:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41642 "EHLO
+        id S232280AbiKGTOU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 14:14:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232339AbiKGTBx (ORCPT
+        with ESMTP id S232468AbiKGTOJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 14:01:53 -0500
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9C2E25C46
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 11:01:52 -0800 (PST)
-Received: by mail-pf1-x433.google.com with SMTP id i3so11481255pfc.11
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 11:01:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=q2n/Cgmsu8tKWQM5CKwHOZ+k/jvnspDL6f1qkBBQf1s=;
-        b=YxAEdD0b+Q/TmeIUqoPf+dpK9tGqegysAV5+NNfc2Lzhpz/dBdZbv836WzVorwqhsw
-         GjxsIrrqxnMLWqYizTaxjPOl2+9MScvinuCtP05crs7ltOJ4969hw9DLgc87S0mLABlV
-         O3HWbJj9vPR4/JzMU68SyWIX/FopN9otiGAA35uEZWqu6RCpzpqzF1mEega+WDqcHEzz
-         Ru+Uyw22x8kXd8a1DLrganMfuO7aJXDq4BlNhxxCsE/RHzBkxlamQ0zAZrk3tIqbu7de
-         nPzFLZpRjrferCFsB7JvsR52Bf0sqBm40Zaf+ZsQTnnUtZ8W53g0FUaqoT0R85l1AKJs
-         9x9A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=q2n/Cgmsu8tKWQM5CKwHOZ+k/jvnspDL6f1qkBBQf1s=;
-        b=zjWhspRfLSi2uLnZptUMIKt+Oz40xLnN9Ckt73z4wygiB9KFr3GAU/NtZxTy2nI1yf
-         RwNuZqv1bTFIGkgS/5YCbdrNF9Oto+QqxKPHHHacJwqGTbpoOkxN3QE+L4UvwpCN0OVJ
-         L+iYazNM/YOhvIEk1gszb+T1nF5XkULjWIELf12VrVy2Rn974YBlyiG6Iz5tQc35xgr4
-         XNvsXzUqPODoQCts2Xhco22ZKaxiwJ4PE/JN61TcI5PH0EZoAs6lNxTjsdfeHxm+90D8
-         zL6O+EJqpXwlEaoOSd+v2qlVW7R3dJGZ+Z9ySXo6VQ0lQh8nV9B4VOeRSVBwxpK5cCVW
-         VDig==
-X-Gm-Message-State: ACrzQf3BEgDSgvQhtQAaR3tEJCJ2IzlliB7JQZVN8bh7bp6lrWXNA/7C
-        Ks9HBhQ6BP/+7Z8cjjhal2+3vw==
-X-Google-Smtp-Source: AMsMyM4xNtJ2CH54SFvz8Guktw6dN7N0mSOjTjYsn4OpfDdfMeQFupcqleUmK0w7g75UCvX+taqvfg==
-X-Received: by 2002:a05:6a00:1c92:b0:56d:643e:e116 with SMTP id y18-20020a056a001c9200b0056d643ee116mr43112334pfw.15.1667847712011;
-        Mon, 07 Nov 2022 11:01:52 -0800 (PST)
-Received: from google.com (223.103.125.34.bc.googleusercontent.com. [34.125.103.223])
-        by smtp.gmail.com with ESMTPSA id s10-20020aa78bca000000b0056bc5ad4862sm4800647pfd.28.2022.11.07.11.01.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Nov 2022 11:01:51 -0800 (PST)
-Date:   Mon, 7 Nov 2022 11:01:47 -0800
-From:   David Matlack <dmatlack@google.com>
-To:     Vipin Sharma <vipinsh@google.com>
-Cc:     seanjc@google.com, pbonzini@redhat.com, vkuznets@redhat.com,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 6/6] KVM: selftests: Test Hyper-V extended hypercall exit
- to userspace
-Message-ID: <Y2lWG7wV+UvzX5jm@google.com>
-References: <20221105045704.2315186-1-vipinsh@google.com>
- <20221105045704.2315186-7-vipinsh@google.com>
+        Mon, 7 Nov 2022 14:14:09 -0500
+X-Greylist: delayed 1800 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 07 Nov 2022 11:14:08 PST
+Received: from finn.localdomain (finn.gateworks.com [108.161.129.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 833FC1E71E
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 11:14:08 -0800 (PST)
+Received: from 068-189-091-139.biz.spectrum.com ([68.189.91.139] helo=tharvey.pdc.gateworks.com)
+        by finn.localdomain with esmtp (Exim 4.93)
+        (envelope-from <tharvey@gateworks.com>)
+        id 1os6h2-000VhV-EN; Mon, 07 Nov 2022 18:17:56 +0000
+From:   Tim Harvey <tharvey@gateworks.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Cc:     Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        Tim Harvey <tharvey@gateworks.com>
+Subject: [PATCH] arm64: dts: imx8m{m,n}-venice-gw7902: add gpio pins for new board revision
+Date:   Mon,  7 Nov 2022 10:17:54 -0800
+Message-Id: <20221107181754.218158-1-tharvey@gateworks.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221105045704.2315186-7-vipinsh@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 04, 2022 at 09:57:04PM -0700, Vipin Sharma wrote:
-> Hyper-V extended hypercalls by default exit to userspace. Verify
-> userspace gets the call, update the result and then guest verifies
-> result it received.
-> 
-> Signed-off-by: Vipin Sharma <vipinsh@google.com>
-> ---
->  tools/testing/selftests/kvm/.gitignore        |  1 +
->  tools/testing/selftests/kvm/Makefile          |  1 +
->  .../kvm/x86_64/hyperv_extended_hcalls.c       | 90 +++++++++++++++++++
->  3 files changed, 92 insertions(+)
->  create mode 100644 tools/testing/selftests/kvm/x86_64/hyperv_extended_hcalls.c
-> 
-> diff --git a/tools/testing/selftests/kvm/.gitignore b/tools/testing/selftests/kvm/.gitignore
-> index 2f0d705db9db..ffe06dd1cc6e 100644
-> --- a/tools/testing/selftests/kvm/.gitignore
-> +++ b/tools/testing/selftests/kvm/.gitignore
-> @@ -24,6 +24,7 @@
->  /x86_64/kvm_pv_test
->  /x86_64/hyperv_clock
->  /x86_64/hyperv_cpuid
-> +/x86_64/hyperv_extended_hcalls
+Add gpio pins present on new board revision:
+ * LTE modem support (imx8mm-gw7902 only)
+  - lte_pwr#
+  - lte_rst
+  - lte_int
+ * M2 power enable
+  - m2_pwr_en
+ * off-board 4.0V supply
+  - vdd_4p0_en
 
-nit: Any reason not to name this hyperv_extended_hypercalls? It's not
-too long and as a non-Hyper-V developer it's easier to read.
+Signed-off-by: Tim Harvey <tharvey@gateworks.com>
+---
+ .../boot/dts/freescale/imx8mm-venice-gw7902.dts      | 12 ++++++++----
+ .../boot/dts/freescale/imx8mn-venice-gw7902.dts      |  8 ++++----
+ 2 files changed, 12 insertions(+), 8 deletions(-)
 
->  /x86_64/hyperv_features
->  /x86_64/hyperv_svm_test
->  /x86_64/max_vcpuid_cap_test
-> diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
-> index 0172eb6cb6ee..366345099363 100644
-> --- a/tools/testing/selftests/kvm/Makefile
-> +++ b/tools/testing/selftests/kvm/Makefile
-> @@ -85,6 +85,7 @@ TEST_GEN_PROGS_x86_64 += x86_64/emulator_error_test
->  TEST_GEN_PROGS_x86_64 += x86_64/fix_hypercall_test
->  TEST_GEN_PROGS_x86_64 += x86_64/hyperv_clock
->  TEST_GEN_PROGS_x86_64 += x86_64/hyperv_cpuid
-> +TEST_GEN_PROGS_x86_64 += x86_64/hyperv_extended_hcalls
->  TEST_GEN_PROGS_x86_64 += x86_64/hyperv_features
->  TEST_GEN_PROGS_x86_64 += x86_64/hyperv_svm_test
->  TEST_GEN_PROGS_x86_64 += x86_64/kvm_clock_test
-> diff --git a/tools/testing/selftests/kvm/x86_64/hyperv_extended_hcalls.c b/tools/testing/selftests/kvm/x86_64/hyperv_extended_hcalls.c
-> new file mode 100644
-> index 000000000000..d378877235d4
-> --- /dev/null
-> +++ b/tools/testing/selftests/kvm/x86_64/hyperv_extended_hcalls.c
-> @@ -0,0 +1,90 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Test Hyper-V extended hypercalls
+diff --git a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw7902.dts b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw7902.dts
+index 0359dca031c8..11481e09c75b 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw7902.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw7902.dts
+@@ -261,7 +261,7 @@ ethphy0: ethernet-phy@0 {
+ 
+ &gpio1 {
+ 	gpio-line-names = "", "", "", "", "", "", "", "",
+-		"", "", "", "", "", "m2_reset", "", "m2_wdis#",
++		"m2_pwr_en", "", "", "", "", "m2_reset", "", "m2_wdis#",
+ 		"", "", "", "", "", "", "", "",
+ 		"", "", "", "", "", "", "", "";
+ };
+@@ -283,7 +283,8 @@ &gpio3 {
+ &gpio4 {
+ 	gpio-line-names = "", "", "", "", "", "", "", "",
+ 		"", "", "", "amp_gpio3", "amp_gpio2", "", "amp_gpio1", "",
+-		"", "", "", "", "amp_gpio4", "app_gpio1", "", "uart1_rs485",
++		"lte_pwr#", "lte_rst", "lte_int", "",
++		"amp_gpio4", "app_gpio1", "vdd_4p0_en", "uart1_rs485",
+ 		"", "uart1_term", "uart1_half", "app_gpio2",
+ 		"mipi_gpio1", "", "", "";
+ };
+@@ -750,14 +751,19 @@ &iomuxc {
+ 	pinctrl_hog: hoggrp {
+ 		fsl,pins = <
+ 			MX8MM_IOMUXC_NAND_CE0_B_GPIO3_IO1	0x40000159 /* M2_GDIS# */
++			MX8MM_IOMUXC_GPIO1_IO08_GPIO1_IO8	0x40000041 /* M2_PWR_EN */
+ 			MX8MM_IOMUXC_GPIO1_IO13_GPIO1_IO13	0x40000041 /* M2_RESET */
+ 			MX8MM_IOMUXC_NAND_DATA01_GPIO3_IO7	0x40000119 /* M2_OFF# */
+ 			MX8MM_IOMUXC_GPIO1_IO15_GPIO1_IO15	0x40000159 /* M2_WDIS# */
++			MX8MM_IOMUXC_SAI1_TXD6_GPIO4_IO18       0x40000041 /* LTE_INT */
++			MX8MM_IOMUXC_SAI1_TXD5_GPIO4_IO17       0x40000041 /* LTE_RST# */
++			MX8MM_IOMUXC_SAI1_TXD4_GPIO4_IO16       0x40000041 /* LTE_PWR */
+ 			MX8MM_IOMUXC_SAI1_TXD2_GPIO4_IO14	0x40000041 /* AMP GPIO1 */
+ 			MX8MM_IOMUXC_SAI1_TXD0_GPIO4_IO12	0x40000041 /* AMP GPIO2 */
+ 			MX8MM_IOMUXC_SAI1_TXC_GPIO4_IO11	0x40000041 /* AMP GPIO3 */
+ 			MX8MM_IOMUXC_SAI1_MCLK_GPIO4_IO20	0x40000041 /* AMP_GPIO4 */
+ 			MX8MM_IOMUXC_SAI2_RXFS_GPIO4_IO21	0x40000041 /* APP GPIO1 */
++			MX8MM_IOMUXC_SAI2_RXC_GPIO4_IO22	0x40000041 /* VDD_4P0_EN */
+ 			MX8MM_IOMUXC_SAI2_MCLK_GPIO4_IO27	0x40000041 /* APP GPIO2 */
+ 			MX8MM_IOMUXC_SD1_DATA6_GPIO2_IO8	0x40000041 /* UART2_EN# */
+ 			MX8MM_IOMUXC_SAI3_RXFS_GPIO4_IO28	0x40000041 /* MIPI_GPIO1 */
+@@ -791,8 +797,6 @@ MX8MM_IOMUXC_ENET_RX_CTL_ENET1_RGMII_RX_CTL	0x91
+ 			MX8MM_IOMUXC_ENET_TX_CTL_ENET1_RGMII_TX_CTL	0x1f
+ 			MX8MM_IOMUXC_GPIO1_IO10_GPIO1_IO10		0x19 /* RST# */
+ 			MX8MM_IOMUXC_GPIO1_IO11_GPIO1_IO11		0x19 /* IRQ# */
+-			MX8MM_IOMUXC_GPIO1_IO08_ENET1_1588_EVENT0_IN	0x141
+-			MX8MM_IOMUXC_GPIO1_IO09_ENET1_1588_EVENT0_OUT	0x141
+ 		>;
+ 	};
+ 
+diff --git a/arch/arm64/boot/dts/freescale/imx8mn-venice-gw7902.dts b/arch/arm64/boot/dts/freescale/imx8mn-venice-gw7902.dts
+index 187e0410b87d..97582db71ca8 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mn-venice-gw7902.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mn-venice-gw7902.dts
+@@ -256,7 +256,7 @@ ethphy0: ethernet-phy@0 {
+ 
+ &gpio1 {
+ 	gpio-line-names = "", "", "", "", "", "", "", "",
+-		"", "", "", "", "", "m2_reset", "", "m2_wdis#",
++		"m2_pwr_en", "", "", "", "", "m2_reset", "", "m2_wdis#",
+ 		"", "", "", "", "", "", "", "",
+ 		"", "", "", "", "", "", "", "";
+ };
+@@ -278,7 +278,7 @@ &gpio3 {
+ &gpio4 {
+ 	gpio-line-names = "", "", "", "", "", "", "", "",
+ 		"", "", "", "", "", "", "", "",
+-		"", "", "", "", "", "app_gpio1", "", "uart1_rs485",
++		"", "", "", "", "", "app_gpio1", "vdd_4p0_en", "uart1_rs485",
+ 		"", "uart1_term", "uart1_half", "app_gpio2",
+ 		"mipi_gpio1", "", "", "";
+ };
+@@ -701,10 +701,12 @@ &iomuxc {
+ 	pinctrl_hog: hoggrp {
+ 		fsl,pins = <
+ 			MX8MN_IOMUXC_NAND_CE0_B_GPIO3_IO1	0x40000159 /* M2_GDIS# */
++			MX8MN_IOMUXC_GPIO1_IO08_GPIO1_IO8	0x40000041 /* M2_PWR_EN */
+ 			MX8MN_IOMUXC_GPIO1_IO13_GPIO1_IO13	0x40000041 /* M2_RESET */
+ 			MX8MN_IOMUXC_NAND_DATA01_GPIO3_IO7	0x40000119 /* M2_OFF# */
+ 			MX8MN_IOMUXC_GPIO1_IO15_GPIO1_IO15	0x40000159 /* M2_WDIS# */
+ 			MX8MN_IOMUXC_SAI2_RXFS_GPIO4_IO21	0x40000041 /* APP GPIO1 */
++			MX8MN_IOMUXC_SAI2_RXC_GPIO4_IO22	0x40000041 /* VDD_4P0_EN */
+ 			MX8MN_IOMUXC_SAI2_MCLK_GPIO4_IO27	0x40000041 /* APP GPIO2 */
+ 			MX8MN_IOMUXC_SD1_DATA6_GPIO2_IO8	0x40000041 /* UART2_EN# */
+ 			MX8MN_IOMUXC_SAI3_RXFS_GPIO4_IO28	0x40000041 /* MIPI_GPIO1 */
+@@ -738,8 +740,6 @@ MX8MN_IOMUXC_ENET_RX_CTL_ENET1_RGMII_RX_CTL	0x91
+ 			MX8MN_IOMUXC_ENET_TX_CTL_ENET1_RGMII_TX_CTL	0x1f
+ 			MX8MN_IOMUXC_GPIO1_IO10_GPIO1_IO10		0x19 /* RST# */
+ 			MX8MN_IOMUXC_GPIO1_IO11_GPIO1_IO11		0x19 /* IRQ# */
+-			MX8MN_IOMUXC_GPIO1_IO08_ENET1_1588_EVENT0_IN	0x141
+-			MX8MN_IOMUXC_GPIO1_IO09_ENET1_1588_EVENT0_OUT	0x141
+ 		>;
+ 	};
+ 
+-- 
+2.25.1
 
-It would probably be worth adding a note in this comment that the
-negative tests for extended hypercalls live in hyperv_features.c, that
-way someone doesn't accidentally go down the rabbit hole of adding
-negative tests here in the future.
-
-> + *
-> + * Copyright 2020 Google LLC
-
-2022 :)
-
-> + * Author: Vipin Sharma <vipinsh@google.com>
-> + */
-> +
-> +#include "kvm_util.h"
-> +#include "processor.h"
-> +#include "hyperv.h"
-> +
-> +/* Any value is fine */
-> +#define EXT_CAPABILITIES 0xbull
-> +
-> +static void guest_code(vm_vaddr_t pgs_gpa, vm_vaddr_t output_pg_gva)
-> +{
-> +	uint64_t res, vector;
-> +	uint64_t *output_gva;
-> +
-> +	wrmsr(HV_X64_MSR_GUEST_OS_ID, hv_linux_guest_id());
-> +	wrmsr(HV_X64_MSR_HYPERCALL, pgs_gpa);
-> +
-> +	output_gva = (uint64_t *)output_pg_gva;
-> +
-> +	vector = hypercall(HV_EXT_CALL_QUERY_CAPABILITIES, pgs_gpa,
-> +			   pgs_gpa + 4096, &res);
-> +
-> +	GUEST_ASSERT_1(!vector, vector);
-> +	GUEST_ASSERT_2(res == HV_STATUS_SUCCESS, res, HV_STATUS_SUCCESS);
-
-GUEST_ASSERT_EQ(res, HV_STATUS_SUCCESS);
-
-> +
-> +	/* TLFS states output will be a uint64_t value */
-> +	GUEST_ASSERT_2(*output_gva == EXT_CAPABILITIES, *output_gva,
-> +		       EXT_CAPABILITIES);
-
-GUEST_ASSERT_EQ(*output_gva, EXT_CAPABILITIES);
-
-> +
-> +	GUEST_DONE();
-> +}
-> +
-> +static void guest_extended_hcall_test(void)
-> +{
-> +	struct kvm_vcpu *vcpu;
-> +	struct kvm_run *run;
-> +	struct kvm_vm *vm;
-> +	struct ucall uc;
-> +	vm_vaddr_t hcall_page;
-> +	uint64_t *outval;
-> +
-> +	vm = vm_create_with_one_vcpu(&vcpu, guest_code);
-> +	run = vcpu->run;
-> +	vcpu_enable_cap(vcpu, KVM_CAP_HYPERV_ENFORCE_CPUID, 1);
-> +	vcpu_set_hv_cpuid(vcpu);
-
-Check if KVM offers HV_ENABLE_EXTENDED_HYPERCALLS in CPUID, and skip the
-test if not.
-
-> +
-> +	/* Hypercall input/output */
-> +	hcall_page = vm_vaddr_alloc_pages(vm, 2);
-> +	memset(addr_gva2hva(vm, hcall_page), 0x0, 2 * getpagesize());
-
-s/getpagesize()/vm->page_size/
-
-> +	vcpu_args_set(vcpu, 2, addr_gva2gpa(vm, hcall_page), hcall_page + 4096);
-
-s/4096/vm->page_size/
-
-And to avoid hard-coding 4096 in guest_code(), you could pass in the GPA
-of the ouput page as another argument.
-
-> +
-> +	vcpu_run(vcpu);
-> +
-> +	TEST_ASSERT((run->exit_reason == KVM_EXIT_HYPERV),
-> +		    "unexpected exit reason: %u (%s)", run->exit_reason,
-> +		    exit_reason_str(run->exit_reason));
-> +
-> +	outval = addr_gpa2hva(vm, run->hyperv.u.hcall.params[1]);
-> +	*outval = EXT_CAPABILITIES;
-> +	run->hyperv.u.hcall.result = HV_STATUS_SUCCESS;
-> +
-> +	vcpu_run(vcpu);
-> +
-> +	TEST_ASSERT((run->exit_reason == KVM_EXIT_IO),
-> +		    "unexpected exit reason: %u (%s)", run->exit_reason,
-> +		    exit_reason_str(run->exit_reason));
-
-Optional: Asserting a specific exit reason is a pretty common pattern in
-the x86 selftests. It'd be nice to create a common macro for it. e.g.
-
-	ASSERT_EXIT_REASON(vcpu, KVM_EXIT_IO);
-
-> +
-> +	switch (get_ucall(vcpu, &uc)) {
-> +	case UCALL_ABORT:
-> +		REPORT_GUEST_ASSERT_2(uc, "arg1 = %ld, arg2 = %ld");
-> +		break;
-> +	case UCALL_DONE:
-> +		break;
-> +	default:
-> +		TEST_FAIL("Unhandled ucall: %ld", uc.cmd);
-> +	}
-> +
-> +	kvm_vm_free(vm);
-> +}
-> +
-> +int main(void)
-> +{
-> +	guest_extended_hcall_test();
-
-Why not just put all this in main()?
-
-> +}
-
-return 0?
-
-> -- 
-> 2.38.1.273.g43a17bfeac-goog
-> 
