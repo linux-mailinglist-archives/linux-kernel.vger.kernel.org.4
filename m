@@ -2,131 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B8AA61F1F6
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 12:38:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14DB861F1F9
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 12:38:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231879AbiKGLiA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 06:38:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49380 "EHLO
+        id S231901AbiKGLiQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 06:38:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231837AbiKGLh6 (ORCPT
+        with ESMTP id S231837AbiKGLiO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 06:37:58 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AFB6D40;
-        Mon,  7 Nov 2022 03:37:58 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E3A9DB81047;
-        Mon,  7 Nov 2022 11:37:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F6C3C433C1;
-        Mon,  7 Nov 2022 11:37:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667821075;
-        bh=wmRJ9Bh1sQC5dP/YZFcpYvwOfERvr5wUBEB4e5Epx4E=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=O+DVhJKV0sdvQ9OEqMeJ39GM3xddAsWmwVCTv+OcVovps629wehNde+cOI0Yw3Ucn
-         d+eEG+YFVPK1eD5C75kDEy9j0asfxBFJH1WIGxRGw4aVSe0fTeqwwDN2bhnEbpfXdL
-         1SwXXP2JA+DGFkUF6iHoswBEKo9mLtEuMPVYn0soK4qAMdYN/tL3mF3FNqGYGRebtO
-         AQ5xh6+QWg7/SBlOEcRa8yQzjHAUmsg+uOjPjl5YtOxkYN/vB77G7CetEAfro4gEfA
-         xDBU7kkHQ6xokjAwDstiCoq1xizZhyceELdGhJ5cNBXO1cJJhmnZ6doQ0acUvaAlsD
-         DwRSHUSdT6W2g==
-Date:   Mon, 7 Nov 2022 13:37:49 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Evan Green <evgreen@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, corbet@lwn.net,
-        linux-pm@vger.kernel.org, rjw@rjwysocki.net, gwendal@chromium.org,
-        apronin@chromium.org, Pavel Machek <pavel@ucw.cz>,
-        Kees Cook <keescook@chromium.org>,
-        Matthew Garrett <mgarrett@aurora.tech>,
-        linux-integrity@vger.kernel.org, jejb@linux.ibm.com,
-        zohar@linux.ibm.com, dlunev@google.com,
-        Eric Biggers <ebiggers@kernel.org>,
-        Ben Boeckel <me@benboeckel.net>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Peter Huewe <peterhuewe@gmx.de>
-Subject: Re: [PATCH v4 02/11] tpm: Export and rename
- tpm2_find_and_validate_cc()
-Message-ID: <Y2juDUwRLnYRYCPs@kernel.org>
-References: <20221103180120.752659-1-evgreen@chromium.org>
- <20221103105558.v4.2.I7bbedcf5efd3f1c72c32d6002faed086c5ed31c7@changeid>
+        Mon, 7 Nov 2022 06:38:14 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F1F7D40;
+        Mon,  7 Nov 2022 03:38:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667821093; x=1699357093;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=umGzmRMwLMWQ/a5ON85PG0oqEFogrPqAnJJnkozevmM=;
+  b=m+m7HEQUZli3mAxcVynO2gP33sdbLjh4AfI9MObuf9FFGo28NsjStQVh
+   S8RQM7nSVL3lnShAUmzgHtUGeZESuXSZ0qT2EaCcXyVWkh3v58JkQrrdZ
+   M2VqphdlwVSkw7h2b0cVCIB4z4YKi5nEa/dkf39db1xV23G+OFp4WY0u2
+   LSedE+EFYr8HyW+AUTzChh8/S2BMrWIpsgreNA10tJhkJBW7QDPmnVofT
+   iDk+mMI1AjkXa9aYVDKFhD5428TK5LIjvn3ljFTH1i9k/xCGZXk2t3arj
+   9pvu8btoMxJJ9W2FH4GTYAfqYhjk8e9YeTFUEDAM0oXIjR71JXxnhipVj
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10523"; a="311523885"
+X-IronPort-AV: E=Sophos;i="5.96,143,1665471600"; 
+   d="scan'208";a="311523885"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Nov 2022 03:38:13 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10523"; a="669108364"
+X-IronPort-AV: E=Sophos;i="5.96,143,1665471600"; 
+   d="scan'208";a="669108364"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga001.jf.intel.com with ESMTP; 07 Nov 2022 03:38:10 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1os0S8-008bvj-29;
+        Mon, 07 Nov 2022 13:38:08 +0200
+Date:   Mon, 7 Nov 2022 13:38:08 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, Wentong Wu <wentong.wu@intel.com>,
+        Srikanth Thokala <srikanth.thokala@intel.com>,
+        Aman Kumar <aman.kumar@intel.com>
+Subject: Re: [PATCH 3/4] serial: 8250_lpss: Use 16B DMA burst with Elkhart
+ Lake
+Message-ID: <Y2juIETKUZtw9wu6@smile.fi.intel.com>
+References: <20221107110708.58223-1-ilpo.jarvinen@linux.intel.com>
+ <20221107110708.58223-4-ilpo.jarvinen@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20221103105558.v4.2.I7bbedcf5efd3f1c72c32d6002faed086c5ed31c7@changeid>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221107110708.58223-4-ilpo.jarvinen@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 03, 2022 at 11:01:10AM -0700, Evan Green wrote:
-> Export tpm_find_and_validate_cc() since it will be needed by an upcoming
-> change allowing access to certain PCRs to be restricted to the kernel.
-> In order to export it consistently, and because it's a tpm2-only
-> function, rename it to tpm2_find_and_validate_cc().
+On Mon, Nov 07, 2022 at 01:07:07PM +0200, Ilpo Järvinen wrote:
+> Configure DMA to use 16B burst size with Elkhart Lake. This makes the
+> bus use more efficient and works around an issue which occurs with the
+> previously used 1B.
 > 
-> Signed-off-by: Evan Green <evgreen@chromium.org>
+> Fixes: 0a9410b981e9 ("serial: 8250_lpss: Enable DMA on Intel Elkhart Lake")
+> Cc: <stable@vger.kernel.org> # serial: 8250_lpss: Configure DMA also w/o DMA filter
+> Reported-by: Wentong Wu <wentong.wu@intel.com>
+> Co-developed-by: Srikanth Thokala <srikanth.thokala@intel.com>
+> Signed-off-by: Srikanth Thokala <srikanth.thokala@intel.com>
+> Co-developed-by: Aman Kumar <aman.kumar@intel.com>
+> Signed-off-by: Aman Kumar <aman.kumar@intel.com>
+> Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 > 
 > ---
-> 
-> (no changes since v3)
-> 
-> Changes in v3:
->  - Split find_and_validate_cc() export to its own patch (Jarkko)
->  - Rename tpm_find_and_validate_cc() to tpm2_find_and_validate_cc().
-> 
->  drivers/char/tpm/tpm.h        | 3 +++
->  drivers/char/tpm/tpm2-space.c | 8 ++++----
->  2 files changed, 7 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/char/tpm/tpm.h b/drivers/char/tpm/tpm.h
-> index 24ee4e1cc452a0..f1e0f490176f01 100644
-> --- a/drivers/char/tpm/tpm.h
-> +++ b/drivers/char/tpm/tpm.h
-> @@ -231,6 +231,9 @@ int tpm2_find_cc(struct tpm_chip *chip, u32 cc);
->  int tpm2_init_space(struct tpm_space *space, unsigned int buf_size);
->  void tpm2_del_space(struct tpm_chip *chip, struct tpm_space *space);
->  void tpm2_flush_space(struct tpm_chip *chip);
-> +int tpm2_find_and_validate_cc(struct tpm_chip *chip,
-> +			      struct tpm_space *space,
-> +			      const void *cmd, size_t len);
->  int tpm2_prepare_space(struct tpm_chip *chip, struct tpm_space *space, u8 *cmd,
->  		       size_t cmdsiz);
->  int tpm2_commit_space(struct tpm_chip *chip, struct tpm_space *space, void *buf,
-> diff --git a/drivers/char/tpm/tpm2-space.c b/drivers/char/tpm/tpm2-space.c
-> index ffb35f0154c16c..ca34cc006e7f8d 100644
-> --- a/drivers/char/tpm/tpm2-space.c
-> +++ b/drivers/char/tpm/tpm2-space.c
-> @@ -262,9 +262,9 @@ static int tpm2_map_command(struct tpm_chip *chip, u32 cc, u8 *cmd)
->  	return 0;
->  }
->  
-> -static int tpm_find_and_validate_cc(struct tpm_chip *chip,
-> -				    struct tpm_space *space,
-> -				    const void *cmd, size_t len)
-> +int tpm2_find_and_validate_cc(struct tpm_chip *chip,
-> +			      struct tpm_space *space,
-> +			      const void *cmd, size_t len)
->  {
->  	const struct tpm_header *header = (const void *)cmd;
->  	int i;
-> @@ -306,7 +306,7 @@ int tpm2_prepare_space(struct tpm_chip *chip, struct tpm_space *space, u8 *cmd,
->  	if (!space)
->  		return 0;
->  
-> -	cc = tpm_find_and_validate_cc(chip, space, cmd, cmdsiz);
-> +	cc = tpm2_find_and_validate_cc(chip, space, cmd, cmdsiz);
->  	if (cc < 0)
->  		return cc;
->  
-> -- 
-> 2.38.1.431.g37b22c650d-goog
-> 
+> I know the list of Co-dev-bys & Sob seems a bit odd for a oneliner.
+> The reason is that I cleaned up this from a more complex patch using
+> the earlier change that I authored myself so only this oneliner
+> remained in this patch.
 
-Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
+If you changed more than 70% of the code, I would suggest to drop the rest of
+(Co)authors and if you want to pay a credit, just mention them in the commit
+message in a free form.
 
-BR, Jarkko
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
