@@ -2,56 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED22261F59E
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 15:19:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45D4161F59F
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 15:19:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232433AbiKGOTN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 09:19:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56776 "EHLO
+        id S232366AbiKGOTR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 09:19:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232250AbiKGOR1 (ORCPT
+        with ESMTP id S232254AbiKGOR2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 09:17:27 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2101A1D31F;
-        Mon,  7 Nov 2022 06:16:57 -0800 (PST)
+        Mon, 7 Nov 2022 09:17:28 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6125F1D331
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 06:16:57 -0800 (PST)
 From:   John Ogness <john.ogness@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1667830615;
+        s=2020; t=1667830616;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=gS+TlnBfnvuNwOKZQIZcdjPH9bhpfrs5K1fOz4tyq8E=;
-        b=djqqVbIJuMlxRG/KUYbjTE3WlJPb8/4BRjZqiVgvYMTr7/Sg0autRsyaU2JWaZq3VN3Mfw
-        OwXHjvPPuCWuVO7A4iO0R7oz5UwNRLhdk02uk4jpCy9Gt7MNNPJoFi4PLw9QL+wwMeqZgG
-        x8w4JTnSU8McnTmTMP+zEv1TCPiXlXiHUYwTYDDfpGnYPpWIDb6LZ00TZMmkMkukcDDlD8
-        pGbuhmV/Z89XLkI7qVEP/xlfkQntbD1FliCvEtwapvNn1D8KcDpxh7Pcm+BFSRCbglYTQK
-        WSb0+BfzqLoXNbMVTMuI8qVDma66XMtIjHtCHVcUsZm6wYyw6AxM9KLuzMDR0g==
+        bh=OuuuTA4YWeOsJFG5PLdantkjarf2V1vxrJ2SuyPt64s=;
+        b=Ad8er1f7f8T+qnj0Gixt4/Eb+4c4OBJuex8lcfrI6Qt9I87cz3Yhpp3wFd3F8c5QAakGi7
+        n0yYpOb0XzwK6fAjOBesCSJAdkcc9KpXBouFayqOhvycH3D3yadGi/NrkdtoGLbncezA5X
+        YjxkitS3+oQNxU51jX06dua+f/JTR0XVGlDIr8XnD/7XQCOkEkGQV7za9feSO1p2qDYB97
+        UumWZEnga12d8kYgQTwG2oUlZ8itzYhywnpRTKu8Ks8TF1Bk4XdZtBxWxmXB+X1cV+LfUg
+        IEtga3BtJP43iP9Aa+RQ9n71Ed9jlHvrLDju9BL47ap7+sIADoEpSefIdM/kVg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1667830615;
+        s=2020e; t=1667830616;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=gS+TlnBfnvuNwOKZQIZcdjPH9bhpfrs5K1fOz4tyq8E=;
-        b=M60ZeenQNKgOoEahohQx+InKZNToZ2PTl+S+h/Y9/Dwe3ZAZMQrMX+0/9pXQL0rFd4ySGx
-        /D2ZyiONrI29IoCg==
+        bh=OuuuTA4YWeOsJFG5PLdantkjarf2V1vxrJ2SuyPt64s=;
+        b=zK+1fRr2slLJAgCrOQ92XALV5x6DkTtyLpaf7GZ9DoHDzskWr2XYcAOYzCFmWcOd1UDl2W
+        031PveM/i8gqIXAg==
 To:     Petr Mladek <pmladek@suse.com>
 Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
         Steven Rostedt <rostedt@goodmis.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org, Helge Deller <deller@gmx.de>,
+        linux-kernel@vger.kernel.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Juergen Gross <jgross@suse.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Tom Rix <trix@redhat.com>, linux-fbdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Subject: [PATCH printk v3 33/40] printk, xen: fbfront: create/use safe function for forcing preferred
-Date:   Mon,  7 Nov 2022 15:22:31 +0106
-Message-Id: <20221107141638.3790965-34-john.ogness@linutronix.de>
+        Jiri Slaby <jirislaby@kernel.org>
+Subject: [PATCH printk v3 34/40] tty: tty_io: use console_list_lock for list synchronization
+Date:   Mon,  7 Nov 2022 15:22:32 +0106
+Message-Id: <20221107141638.3790965-35-john.ogness@linutronix.de>
 In-Reply-To: <20221107141638.3790965-1-john.ogness@linutronix.de>
 References: <20221107141638.3790965-1-john.ogness@linutronix.de>
 MIME-Version: 1.0
@@ -66,125 +61,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With commit 9e124fe16ff2("xen: Enable console tty by default in domU
-if it's not a dummy") a hack was implemented to make sure that the
-tty console remains the console behind the /dev/console device. The
-main problem with the hack is that, after getting the console pointer
-to the tty console, it is assumed the pointer is still valid after
-releasing the console_sem. This assumption is incorrect and unsafe.
+show_cons_active() uses the console_lock to gather information
+on registered consoles. It requires that no consoles are unregistered
+until it is finished. The console_list_lock should be used because
+list synchronization responsibility will be removed from the
+console_lock in a later change.
 
-Make the hack safe by introducing a new function
-console_force_preferred_locked() and perform the full operation
-under the console_list_lock.
+Note, the console_lock is still needed to serialize the device()
+callback with other console operations.
 
 Signed-off-by: John Ogness <john.ogness@linutronix.de>
+Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Reviewed-by: Petr Mladek <pmladek@suse.com>
 ---
- drivers/video/fbdev/xen-fbfront.c | 12 +++------
- include/linux/console.h           |  1 +
- kernel/printk/printk.c            | 44 ++++++++++++++++++++++++++++---
- 3 files changed, 46 insertions(+), 11 deletions(-)
+ drivers/tty/tty_io.c | 18 ++++++++++++------
+ 1 file changed, 12 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/video/fbdev/xen-fbfront.c b/drivers/video/fbdev/xen-fbfront.c
-index 4d2694d904aa..8752d389e382 100644
---- a/drivers/video/fbdev/xen-fbfront.c
-+++ b/drivers/video/fbdev/xen-fbfront.c
-@@ -504,18 +504,14 @@ static void xenfb_make_preferred_console(void)
- 	if (console_set_on_cmdline)
- 		return;
+diff --git a/drivers/tty/tty_io.c b/drivers/tty/tty_io.c
+index ee4da2fec328..cafdff575716 100644
+--- a/drivers/tty/tty_io.c
++++ b/drivers/tty/tty_io.c
+@@ -3527,16 +3527,13 @@ static ssize_t show_cons_active(struct device *dev,
+ 	ssize_t count = 0;
  
+ 	/*
+-	 * Hold the console_lock to guarantee that no consoles are
++	 * Hold the console_list_lock to guarantee that no consoles are
+ 	 * unregistered until all console processing is complete.
+ 	 * This also allows safe traversal of the console list and
+ 	 * race-free reading of @flags.
+-	 *
+-	 * Take console_lock to serialize device() callback with
+-	 * other console operations. For example, fg_console is
+-	 * modified under console_lock when switching vt.
+ 	 */
 -	console_lock();
 +	console_list_lock();
++
  	for_each_console(c) {
- 		if (!strcmp(c->name, "tty") && c->index == 0)
+ 		if (!c->device)
+ 			continue;
+@@ -3548,6 +3545,13 @@ static ssize_t show_cons_active(struct device *dev,
+ 		if (i >= ARRAY_SIZE(cs))
  			break;
  	}
--	console_unlock();
--	if (c) {
--		unregister_console(c);
--		c->flags |= CON_CONSDEV;
--		c->flags &= ~CON_PRINTBUFFER; /* don't print again */
--		register_console(c);
--	}
-+	if (c)
-+		console_force_preferred_locked(c);
-+	console_list_unlock();
- }
- 
- static int xenfb_resume(struct xenbus_device *dev)
-diff --git a/include/linux/console.h b/include/linux/console.h
-index cdae70e27377..b6b5d796d15c 100644
---- a/include/linux/console.h
-+++ b/include/linux/console.h
-@@ -273,6 +273,7 @@ enum con_flush_mode {
- };
- 
- extern int add_preferred_console(char *name, int idx, char *options);
-+extern void console_force_preferred_locked(struct console *con);
- extern void register_console(struct console *);
- extern int unregister_console(struct console *);
- extern void console_lock(void);
-diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
-index be40a9688403..d74e6e609f7d 100644
---- a/kernel/printk/printk.c
-+++ b/kernel/printk/printk.c
-@@ -247,9 +247,10 @@ int devkmsg_sysctl_set_loglvl(struct ctl_table *table, int write,
- void console_list_lock(void)
- {
- 	/*
--	 * In unregister_console(), synchronize_srcu() is called with the
--	 * console_list_lock held. Therefore it is not allowed that the
--	 * console_list_lock is taken with the srcu_lock held.
-+	 * In unregister_console() and console_force_preferred_locked(),
-+	 * synchronize_srcu() is called with the console_list_lock held.
-+	 * Therefore it is not allowed that the console_list_lock is taken
-+	 * with the srcu_lock held.
- 	 *
- 	 * Whether or not this context is in the read-side critical section
- 	 * can only be detected if the appropriate debug options are enabled.
-@@ -3457,6 +3458,43 @@ int unregister_console(struct console *console)
- }
- EXPORT_SYMBOL(unregister_console);
- 
-+/**
-+ * console_force_preferred_locked - force a registered console preferred
-+ * @con: The registered console to force preferred.
-+ *
-+ * Must be called under console_list_lock().
-+ */
-+void console_force_preferred_locked(struct console *con)
-+{
-+	struct console *cur_pref_con;
-+
-+	if (!console_is_registered_locked(con))
-+		return;
-+
-+	cur_pref_con = console_first();
-+
-+	/* Already preferred? */
-+	if (cur_pref_con == con)
-+		return;
-+
-+	hlist_del_init_rcu(&con->node);
 +
 +	/*
-+	 * Ensure that all SRCU list walks have completed so that the console
-+	 * can be added to the beginning of the console list and its forward
-+	 * list pointer can be re-initialized.
++	 * Take console_lock to serialize device() callback with
++	 * other console operations. For example, fg_console is
++	 * modified under console_lock when switching vt.
 +	 */
-+	synchronize_srcu(&console_srcu);
++	console_lock();
+ 	while (i--) {
+ 		int index = cs[i]->index;
+ 		struct tty_driver *drv = cs[i]->device(cs[i], &index);
+@@ -3563,6 +3567,8 @@ static ssize_t show_cons_active(struct device *dev,
+ 	}
+ 	console_unlock();
+ 
++	console_list_unlock();
 +
-+	con->flags |= CON_CONSDEV;
-+	WARN_ON(!con->device);
-+
-+	/* Only the new head can have CON_CONSDEV set. */
-+	WRITE_ONCE(cur_pref_con->flags, cur_pref_con->flags & ~CON_CONSDEV);
-+	hlist_add_behind_rcu(&con->node, console_list.first);
-+}
-+EXPORT_SYMBOL(console_force_preferred_locked);
-+
- /*
-  * Initialize the console device. This is called *early*, so
-  * we can't necessarily depend on lots of kernel help here.
+ 	return count;
+ }
+ static DEVICE_ATTR(active, S_IRUGO, show_cons_active, NULL);
 -- 
 2.30.2
 
