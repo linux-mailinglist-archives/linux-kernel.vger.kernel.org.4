@@ -2,244 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46F0661E7CF
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 01:04:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8495A61E7D1
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 01:06:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229909AbiKGAEs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Nov 2022 19:04:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50772 "EHLO
+        id S230235AbiKGAGu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Nov 2022 19:06:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230192AbiKGAEp (ORCPT
+        with ESMTP id S230184AbiKGAGs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Nov 2022 19:04:45 -0500
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60CCEBE3A
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Nov 2022 16:04:44 -0800 (PST)
-Received: by mail-il1-f198.google.com with SMTP id j20-20020a056e02219400b00300a22a7fe0so7645377ila.3
-        for <linux-kernel@vger.kernel.org>; Sun, 06 Nov 2022 16:04:44 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=HcE7kLihBa6CEUaoqLpOeyRK6SUL8ybmiCmMzV2rmlQ=;
-        b=OdiKQmcurGtpGqgU87a8jtHc3rj1JI2szdMRZkUzr4ob/Cky+dOqBOC5Q8saKVLK7h
-         BC6qiyylTGUjhFS2Ye8Lc4zbpz8Jds0N6shX2d3W5wNoNz5iVbu3aCEnVH7LvvMLNdJA
-         x0hCmcyoPBjuh9ySC3pJwelsa41ytvnKn3XmmjIvaNlEONI2MlrK6AhxTb+GPJzXg6IH
-         jlLlQPaRzl9Imi8IIoNnLJ/W0vySlwTM6rebQjiNjYy+8H6ITc9+x4G4jYqMe0LC+SJj
-         gCrslgem/zLFC2QQkkZN1OdOcfyxGPiKq1uGBQpLZ+7Iaj3cWbDCozZDuZ2USJZVwfs/
-         LuCA==
-X-Gm-Message-State: ANoB5pkuFEX7EvIZFS3yRv1qIRasmkKFFxApGt7/3FVq2usgTrcAF67c
-        aua3Goozwv5PeHZRuQyz39uflVqg+uFYw2Y5b5NMSKbIii2T
-X-Google-Smtp-Source: AA0mqf69tKoz3EWC77737bO3FK/DAf75zEWVyuPI5frhi3QDguvEE2ls4K9l4wsga6Ka+zamTSFgsSE42LLcauJ2Ei/RHPK6y6bz
+        Sun, 6 Nov 2022 19:06:48 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9D49BE39;
+        Sun,  6 Nov 2022 16:06:47 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4N5BNg6v9Cz4xDK;
+        Mon,  7 Nov 2022 11:06:43 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1667779606;
+        bh=PEtFVE11aUocVEWH3BRg2hxUlPqEtbP6pNHSK4p3WHg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ScVpQ5QGU5/oOCeqNiAlmxRs+0O1+WBCdfkk+kUsu8Lr2oaP/D8T/dfznelRDbljp
+         vrG2UjZTUnK4653vqrl51kSihLWFUz6UPq2r+NA9HaaVojWFSjmefAYboVZ3ja4lvr
+         fxMp2eMO58LSv30Q6cYZ/dbjD6Oj0KFN9RZwIpFYQDXRPH06M54OffSoqaYCKi2ulA
+         5bbgTdjKKKJXJP5LPldGAplZ0yKHPvwAhDGiQcgTImZX2ZX+mQLo9EYXZlNaqUp6P/
+         y1idlrBie29pi/mf8TudAtivkNcoRE5NntrhkHvYXMbjeg96QRdaZiPGbPyyT151AR
+         yrKI+3BlLm5Ag==
+Date:   Mon, 7 Nov 2022 11:06:42 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>,
+        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
+        Nick Piggin <npiggin@gmail.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Jann Horn <jannh@google.com>,
+        John Hubbard <jhubbard@nvidia.com>, X86 ML <x86@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        kernel list <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        Uros Bizjak <ubizjak@gmail.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        linux-arch <linux-arch@vger.kernel.org>
+Subject: Re: mm: delay rmap removal until after TLB flush
+Message-ID: <20221107110642.0f7cf886@canb.auug.org.au>
+In-Reply-To: <20221106151416.bc2f942f237de31b6c577e70@linux-foundation.org>
+References: <CAHk-=wjzngbbwHw4nAsqo_RpyOtUDk5G+Wus=O0w0A6goHvBWA@mail.gmail.com>
+        <CAHk-=wijU_YHSZq5N7vYK+qHPX0aPkaePaGOyWk4aqMvvSXxJA@mail.gmail.com>
+        <140B437E-B994-45B7-8DAC-E9B66885BEEF@gmail.com>
+        <CAHk-=wjX_P78xoNcGDTjhkgffs-Bhzcwp-mdsE1maeF57Sh0MA@mail.gmail.com>
+        <CAHk-=wio=UKK9fX4z+0CnyuZG7L+U9OB7t7Dcrg4FuFHpdSsfw@mail.gmail.com>
+        <CAHk-=wgz0QQd6KaRYQ8viwkZBt4xDGuZTFiTB8ifg7E3F2FxHg@mail.gmail.com>
+        <CAHk-=wiwt4LC-VmqvYrphraF0=yQV=CQimDCb0XhtXwk8oKCCA@mail.gmail.com>
+        <Y1+XCALog8bW7Hgl@hirez.programming.kicks-ass.net>
+        <CAHk-=wjnvPA7mi-E3jVEfCWXCNJNZEUjm6XODbbzGOh9c8mhgw@mail.gmail.com>
+        <CAHk-=wjjXQP7PTEXO4R76WPy1zfQad_DLKw1GKU_4yWW1N4n7w@mail.gmail.com>
+        <Y2SyJuohLFLqIhlZ@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
+        <CAHk-=wjzp65=-QE1dg8KfqG-tVHiT+yAfHXGx9sro=8yOceELg@mail.gmail.com>
+        <8a1e97c9-bd5-7473-6da8-2aa75198fbe8@google.com>
+        <CAHk-=wgvx5sDaOfCTMkVpZ9+-iFCeh5AOML5aJG1EiR0+e1aBQ@mail.gmail.com>
+        <20221106151416.bc2f942f237de31b6c577e70@linux-foundation.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1aab:b0:302:770:3997 with SMTP id
- l11-20020a056e021aab00b0030207703997mr4386567ilv.34.1667779483760; Sun, 06
- Nov 2022 16:04:43 -0800 (PST)
-Date:   Sun, 06 Nov 2022 16:04:43 -0800
-In-Reply-To: <0000000000009abbbf05ecd5f687@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000b1832205ecd62ba5@google.com>
-Subject: Re: [syzbot] possible deadlock in btrfs_search_slot_get_root
-From:   syzbot <syzbot+4ef9e52e464c6ff47d9d@syzkaller.appspotmail.com>
-To:     clm@fb.com, dsterba@suse.com, josef@toxicpanda.com,
-        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/bAuVKIBtYnHc4hWVhD/GQqd";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+--Sig_/bAuVKIBtYnHc4hWVhD/GQqd
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-HEAD commit:    bbed346d5a96 Merge branch 'for-next/core' into for-kernelci
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-console output: https://syzkaller.appspot.com/x/log.txt?x=15a085a9880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=3a4a45d2d827c1e
-dashboard link: https://syzkaller.appspot.com/bug?extid=4ef9e52e464c6ff47d9d
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=154649a9880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=115dc1a9880000
+Hi all,
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/e8e91bc79312/disk-bbed346d.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/c1cb3fb3b77e/vmlinux-bbed346d.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/e4f681f3b5be/mount_0.gz
+On Sun, 6 Nov 2022 15:14:16 -0800 Andrew Morton <akpm@linux-foundation.org>=
+ wrote:
+>
+> Yes, I've removed both serieses and shall push the tree out within half
+> an hour from now.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+4ef9e52e464c6ff47d9d@syzkaller.appspotmail.com
+And I have picked up the new version for today's linux-next.  Thanks all.
 
-BTRFS info (device loop0): using xxhash64 (xxhash64-generic) checksum algorithm
-BTRFS info (device loop0): using free space tree
-BTRFS info (device loop0): enabling ssd optimizations
-======================================================
-WARNING: possible circular locking dependency detected
-6.0.0-rc7-syzkaller-18095-gbbed346d5a96 #0 Not tainted
-------------------------------------------------------
-syz-executor307/3029 is trying to acquire lock:
-ffff0000c02525d8 (&mm->mmap_lock){++++}-{3:3}, at: __might_fault+0x54/0xb4 mm/memory.c:5576
+--=20
+Cheers,
+Stephen Rothwell
 
-but task is already holding lock:
-ffff0000c958a608 (btrfs-root-00){++++}-{3:3}, at: __btrfs_tree_read_lock fs/btrfs/locking.c:134 [inline]
-ffff0000c958a608 (btrfs-root-00){++++}-{3:3}, at: btrfs_tree_read_lock fs/btrfs/locking.c:140 [inline]
-ffff0000c958a608 (btrfs-root-00){++++}-{3:3}, at: btrfs_read_lock_root_node+0x13c/0x1c0 fs/btrfs/locking.c:279
+--Sig_/bAuVKIBtYnHc4hWVhD/GQqd
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-which lock already depends on the new lock.
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNoTBIACgkQAVBC80lX
+0GzqCwgAkzgOwwKSyOvOOPT+9Jvf8ki09kLVKQ795ok8w5kz3sGzCoOMyKSUPUGo
++isMdjE7ctVDXyDyNt38WrkoepLeuiO9G9r0xVLvD7mIMAewNHf8x6oPxUB38fA+
+O4wI5ewtQGmWugOj4uGcvqXds9r8k93ByX+9gIxcwbdCQXVkVRwSkyfxabH40fTW
+847Kdv6C/giBasAxPyIRBphdDa1m9QUR1xcVI+lROSZ0ouuXzU5lgyor/uk/Gwa2
+QQC1zL58LzibCUU1HFmY2SkRSLfRWEB+h++iCv5NvfSNW7ZKJF4dcrPPICH598KN
+biLKRWXv9sH8oy6X2RX/369eWh9A9A==
+=adI7
+-----END PGP SIGNATURE-----
 
-the existing dependency chain (in reverse order) is:
-
--> #3 (btrfs-root-00){++++}-{3:3}:
-       down_read_nested+0x64/0x84 kernel/locking/rwsem.c:1624
-       __btrfs_tree_read_lock fs/btrfs/locking.c:134 [inline]
-       btrfs_tree_read_lock fs/btrfs/locking.c:140 [inline]
-       btrfs_read_lock_root_node+0x13c/0x1c0 fs/btrfs/locking.c:279
-       btrfs_search_slot_get_root+0x74/0x338 fs/btrfs/ctree.c:1637
-       btrfs_search_slot+0x1b0/0xfd8 fs/btrfs/ctree.c:1944
-       btrfs_update_root+0x6c/0x5a0 fs/btrfs/root-tree.c:132
-       commit_fs_roots+0x1f0/0x33c fs/btrfs/transaction.c:1459
-       btrfs_commit_transaction+0x89c/0x12d8 fs/btrfs/transaction.c:2343
-       flush_space+0x66c/0x738 fs/btrfs/space-info.c:786
-       btrfs_async_reclaim_metadata_space+0x43c/0x4e0 fs/btrfs/space-info.c:1059
-       process_one_work+0x2d8/0x504 kernel/workqueue.c:2289
-       worker_thread+0x340/0x610 kernel/workqueue.c:2436
-       kthread+0x12c/0x158 kernel/kthread.c:376
-       ret_from_fork+0x10/0x20 arch/arm64/kernel/entry.S:860
-
--> #2 (&fs_info->reloc_mutex){+.+.}-{3:3}:
-       __mutex_lock_common+0xd4/0xca8 kernel/locking/mutex.c:603
-       __mutex_lock kernel/locking/mutex.c:747 [inline]
-       mutex_lock_nested+0x38/0x44 kernel/locking/mutex.c:799
-       btrfs_record_root_in_trans fs/btrfs/transaction.c:516 [inline]
-       start_transaction+0x248/0x944 fs/btrfs/transaction.c:752
-       btrfs_start_transaction+0x34/0x44 fs/btrfs/transaction.c:781
-       btrfs_create_common+0xf0/0x1b4 fs/btrfs/inode.c:6651
-       btrfs_create+0x8c/0xb0 fs/btrfs/inode.c:6697
-       lookup_open fs/namei.c:3413 [inline]
-       open_last_lookups fs/namei.c:3481 [inline]
-       path_openat+0x804/0x11c4 fs/namei.c:3688
-       do_filp_open+0xdc/0x1b8 fs/namei.c:3718
-       do_sys_openat2+0xb8/0x22c fs/open.c:1313
-       do_sys_open fs/open.c:1329 [inline]
-       __do_sys_openat fs/open.c:1345 [inline]
-       __se_sys_openat fs/open.c:1340 [inline]
-       __arm64_sys_openat+0xb0/0xe0 fs/open.c:1340
-       __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
-       invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
-       el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
-       do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
-       el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:636
-       el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:654
-       el0t_64_sync+0x18c/0x190 arch/arm64/kernel/entry.S:581
-
--> #1 (sb_internal#2){.+.+}-{0:0}:
-       percpu_down_read include/linux/percpu-rwsem.h:51 [inline]
-       __sb_start_write include/linux/fs.h:1826 [inline]
-       sb_start_intwrite include/linux/fs.h:1948 [inline]
-       start_transaction+0x360/0x944 fs/btrfs/transaction.c:683
-       btrfs_join_transaction+0x30/0x40 fs/btrfs/transaction.c:795
-       btrfs_dirty_inode+0x50/0x140 fs/btrfs/inode.c:6103
-       btrfs_update_time+0x1c0/0x1e8 fs/btrfs/inode.c:6145
-       inode_update_time fs/inode.c:1872 [inline]
-       touch_atime+0x1f0/0x4a8 fs/inode.c:1945
-       file_accessed include/linux/fs.h:2516 [inline]
-       btrfs_file_mmap+0x50/0x88 fs/btrfs/file.c:2407
-       call_mmap include/linux/fs.h:2192 [inline]
-       mmap_region+0x7fc/0xc14 mm/mmap.c:1752
-       do_mmap+0x644/0x97c mm/mmap.c:1540
-       vm_mmap_pgoff+0xe8/0x1d0 mm/util.c:552
-       ksys_mmap_pgoff+0x1cc/0x278 mm/mmap.c:1586
-       __do_sys_mmap arch/arm64/kernel/sys.c:28 [inline]
-       __se_sys_mmap arch/arm64/kernel/sys.c:21 [inline]
-       __arm64_sys_mmap+0x58/0x6c arch/arm64/kernel/sys.c:21
-       __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
-       invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
-       el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
-       do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
-       el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:636
-       el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:654
-       el0t_64_sync+0x18c/0x190 arch/arm64/kernel/entry.S:581
-
--> #0 (&mm->mmap_lock){++++}-{3:3}:
-       check_prev_add kernel/locking/lockdep.c:3095 [inline]
-       check_prevs_add kernel/locking/lockdep.c:3214 [inline]
-       validate_chain kernel/locking/lockdep.c:3829 [inline]
-       __lock_acquire+0x1530/0x30a4 kernel/locking/lockdep.c:5053
-       lock_acquire+0x100/0x1f8 kernel/locking/lockdep.c:5666
-       __might_fault+0x7c/0xb4 mm/memory.c:5577
-       _copy_to_user include/linux/uaccess.h:134 [inline]
-       copy_to_user include/linux/uaccess.h:160 [inline]
-       btrfs_ioctl_get_subvol_rootref+0x3a8/0x4bc fs/btrfs/ioctl.c:3203
-       btrfs_ioctl+0xa08/0xa64 fs/btrfs/ioctl.c:5556
-       vfs_ioctl fs/ioctl.c:51 [inline]
-       __do_sys_ioctl fs/ioctl.c:870 [inline]
-       __se_sys_ioctl fs/ioctl.c:856 [inline]
-       __arm64_sys_ioctl+0xd0/0x140 fs/ioctl.c:856
-       __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
-       invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
-       el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
-       do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
-       el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:636
-       el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:654
-       el0t_64_sync+0x18c/0x190 arch/arm64/kernel/entry.S:581
-
-other info that might help us debug this:
-
-Chain exists of:
-  &mm->mmap_lock --> &fs_info->reloc_mutex --> btrfs-root-00
-
- Possible unsafe locking scenario:
-
-       CPU0                    CPU1
-       ----                    ----
-  lock(btrfs-root-00);
-                               lock(&fs_info->reloc_mutex);
-                               lock(btrfs-root-00);
-  lock(&mm->mmap_lock);
-
- *** DEADLOCK ***
-
-1 lock held by syz-executor307/3029:
- #0: ffff0000c958a608 (btrfs-root-00){++++}-{3:3}, at: __btrfs_tree_read_lock fs/btrfs/locking.c:134 [inline]
- #0: ffff0000c958a608 (btrfs-root-00){++++}-{3:3}, at: btrfs_tree_read_lock fs/btrfs/locking.c:140 [inline]
- #0: ffff0000c958a608 (btrfs-root-00){++++}-{3:3}, at: btrfs_read_lock_root_node+0x13c/0x1c0 fs/btrfs/locking.c:279
-
-stack backtrace:
-CPU: 0 PID: 3029 Comm: syz-executor307 Not tainted 6.0.0-rc7-syzkaller-18095-gbbed346d5a96 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/30/2022
-Call trace:
- dump_backtrace+0x1c4/0x1f0 arch/arm64/kernel/stacktrace.c:156
- show_stack+0x2c/0x54 arch/arm64/kernel/stacktrace.c:163
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x104/0x16c lib/dump_stack.c:106
- dump_stack+0x1c/0x58 lib/dump_stack.c:113
- print_circular_bug+0x2c4/0x2c8 kernel/locking/lockdep.c:2053
- check_noncircular+0x14c/0x154 kernel/locking/lockdep.c:2175
- check_prev_add kernel/locking/lockdep.c:3095 [inline]
- check_prevs_add kernel/locking/lockdep.c:3214 [inline]
- validate_chain kernel/locking/lockdep.c:3829 [inline]
- __lock_acquire+0x1530/0x30a4 kernel/locking/lockdep.c:5053
- lock_acquire+0x100/0x1f8 kernel/locking/lockdep.c:5666
- __might_fault+0x7c/0xb4 mm/memory.c:5577
- _copy_to_user include/linux/uaccess.h:134 [inline]
- copy_to_user include/linux/uaccess.h:160 [inline]
- btrfs_ioctl_get_subvol_rootref+0x3a8/0x4bc fs/btrfs/ioctl.c:3203
- btrfs_ioctl+0xa08/0xa64 fs/btrfs/ioctl.c:5556
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:870 [inline]
- __se_sys_ioctl fs/ioctl.c:856 [inline]
- __arm64_sys_ioctl+0xd0/0x140 fs/ioctl.c:856
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
- el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
- el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:636
- el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:654
- el0t_64_sync+0x18c/0x190 arch/arm64/kernel/entry.S:581
-
+--Sig_/bAuVKIBtYnHc4hWVhD/GQqd--
