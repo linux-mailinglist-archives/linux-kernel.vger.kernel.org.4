@@ -2,61 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEA4561EDEE
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 09:57:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CB2461EDFE
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 10:00:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231411AbiKGI5Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 03:57:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57316 "EHLO
+        id S231379AbiKGJAR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 04:00:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231559AbiKGI5N (ORCPT
+        with ESMTP id S229586AbiKGJAN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 03:57:13 -0500
+        Mon, 7 Nov 2022 04:00:13 -0500
 Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CB09165A7;
-        Mon,  7 Nov 2022 00:57:10 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85FBC12AFA;
+        Mon,  7 Nov 2022 01:00:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1667811431; x=1699347431;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=Zjw2eLMsG2LSSDYSvbVcihp0soRMh4/V39CpIRdjo58=;
-  b=QebBCzQxNjzvOdZ4h5vGbioOOe30pHjwFGi4BkxM+IkrIpisUp83BGdn
-   VRBaaaZeYqIcLPuQeinPN3ZscTrzg7icxPApHlUhj+Qk9C+WcOTMUh6dh
-   1GPsuVttDmTFVbeREawB6B/PCmtJPIi2bWBXpuwKVH8WQmXBgEZ/I79CB
-   Yd3/fEX0rWzs2HKiTK/e8Vwpf0OEcFwymBzcMeg8LngCNJFeyUSYuHuup
-   RKiD56MTNSLWqT7t3JIR5pc9oayW1eaz+NhEADwt08v0TSRHGVKgLjGeb
-   XDC1A8YEUFTx1IHhXLCM98cF18X9/4oiuNVqmhLjHCX+8vpviU+dqsgwe
-   Q==;
+  t=1667811612; x=1699347612;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=eJRJg4dr6L1XMewhqOoQg2VFwfTUhQIjjDurN4sIL9Q=;
+  b=KvCsANrYHi1qRWps0HUhXL8sYJdphZ26A8G/FEaaLL68MMMCpT2fHaV7
+   lL6ggW+U2Axk9qmtrBc8pr5C5M8n1o/SokR7UzWoshzln8LwUL3DIToxz
+   4iDVNAeqKiS4wDHf6h2n0svCAP/sSBFHIszoarHwKpXkCI+pMOg3t5dsu
+   Td/OyMfeLFjK5AAyf5HSHOeK2P94FZ1U/zd1eeRLLhRnAy6L282pE+ix2
+   lQCY0N1r6rq0+dlvMXyz2DILkmsC8zrQXhvZkTPi4pgwuF9idX+OwyHEe
+   bODXHZbR8iNwARA2ux2mkLB4SCGKHSAASnI2FD3lzzKsXPkenuit7QoHz
+   A==;
 X-IronPort-AV: E=Sophos;i="5.96,143,1665471600"; 
-   d="scan'208";a="198684723"
+   d="scan'208";a="198685223"
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 07 Nov 2022 01:57:06 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 07 Nov 2022 02:00:12 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
  chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Mon, 7 Nov 2022 01:57:05 -0700
-Received: from localhost.localdomain (10.10.115.15) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2507.12 via Frontend Transport; Mon, 7 Nov 2022 01:57:01 -0700
-From:   Raju Lakkaraju <Raju.Lakkaraju@microchip.com>
-To:     <netdev@vger.kernel.org>
-CC:     <davem@davemloft.net>, <kuba@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <bryan.whitehead@microchip.com>,
-        <pabeni@redhat.com>, <edumazet@google.com>, <olteanv@gmail.com>,
-        <linux@armlinux.org.uk>, <UNGLinuxDriver@microchip.com>,
-        <andrew@lunn.ch>, <Ian.Saturley@microchip.com>
-Subject: [PATCH net-next V7 2/2] net: lan743x: Add support to SGMII register dump for PCI11010/PCI11414 chips
-Date:   Mon, 7 Nov 2022 14:26:50 +0530
-Message-ID: <20221107085650.991470-3-Raju.Lakkaraju@microchip.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221107085650.991470-1-Raju.Lakkaraju@microchip.com>
-References: <20221107085650.991470-1-Raju.Lakkaraju@microchip.com>
+ 15.1.2507.12; Mon, 7 Nov 2022 02:00:10 -0700
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12 via Frontend Transport; Mon, 7 Nov 2022 02:00:10 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=LFJEOZofiJcwSwwHr8P2Q3Ivvqjsa1Sf3r0X72vYrZJkhPZaYjS7pGRP6F7ltl1148pJ7cyZfCNm715SeJZR8piNxcsQHDnuwDlnDm/aLbemX5Aa3u26x4qHI0gxRMfJwz5+aXEJeBd3Gs7th8bAC3W+9s7yTDG0Bp9YlSt6kYA4IpZ7w4jbiOA5eC519ooMYQ7PONO6Xqf8aPF3bIQk70frh7CmsQdOGm8qGdl0j1momNxcaK2QN3J99aqAmJMldGcKdjl78PZLOMEi3jirk1f/W4ffZdQ+Zs6oJIKcFzXqKpI5G+duFc79iHwWSYZX7eneR4KcQq5QenE5+HfUlQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=eJRJg4dr6L1XMewhqOoQg2VFwfTUhQIjjDurN4sIL9Q=;
+ b=ZRQoTnFMbIYfZPuJw9wo97RVf3PAVOWaGYPC+jQldIB39IKzEGL/UaDvwPIYM7xQsyarK9sa3UV5Xr0TZVVB53VofeJI4sbq/8TLaeAy7/iRPqBImLyo8BC6Cm06Foc0jM8QZVMWrlZkuGASHslblXQSkxVKArNaZXtd8cAfs7RfYB0R72bZOKJZ0ctPoarwwIDiNINo2LyupkbtUdxvjL3FgVD2HK8ZyYaB+ctme5Gxhdn2OO/fHafXdqYFFf7tVXtRCUlIHBw+gVljtpYNC6qi4N0Xc/Az06DFvkd9MbTqgiqzWab8RoLDvP1QZKsOem2tmM6B2YxNxQ5RVcUp0A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=eJRJg4dr6L1XMewhqOoQg2VFwfTUhQIjjDurN4sIL9Q=;
+ b=k/hE+F9Kjprz8AI6Nz2162xEH20teS7mQMCtT0J2yUYY0W7qqs5UZEF03VahInK4z7T2qYFwVCvvOKngFfVeQ6KeJPqxVqM7UzeEbShGAL91VnUm+fejlR2tCJVcobO74dMYWcsBebeik+LEIddLE5oWr21uVllbj05+zBt4OEA=
+Received: from DM4PR11MB6479.namprd11.prod.outlook.com (2603:10b6:8:8c::19) by
+ MN0PR11MB5962.namprd11.prod.outlook.com (2603:10b6:208:371::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.26; Mon, 7 Nov
+ 2022 09:00:06 +0000
+Received: from DM4PR11MB6479.namprd11.prod.outlook.com
+ ([fe80::626d:ef37:c13f:1c4b]) by DM4PR11MB6479.namprd11.prod.outlook.com
+ ([fe80::626d:ef37:c13f:1c4b%4]) with mapi id 15.20.5791.026; Mon, 7 Nov 2022
+ 09:00:06 +0000
+From:   <Tudor.Ambarus@microchip.com>
+To:     <vkoul@kernel.org>
+CC:     <peda@axentia.se>, <du@axentia.se>, <maciej.sosnowski@intel.com>,
+        <Nicolas.Ferre@microchip.com>, <mripard@kernel.org>,
+        <torfl6749@gmail.com>, <linux-kernel@vger.kernel.org>,
+        <dmaengine@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH v2 00/32] dmaengine: at_hdmac: Fix concurrency bugs and
+ then convert to virt-dma
+Thread-Topic: [PATCH v2 00/32] dmaengine: at_hdmac: Fix concurrency bugs and
+ then convert to virt-dma
+Thread-Index: AQHY8GAxL57d78lf2Ea0R6kPIjrAlw==
+Date:   Mon, 7 Nov 2022 09:00:06 +0000
+Message-ID: <da042959-9c87-94cc-990c-27f7d9b8ab29@microchip.com>
+References: <20221025090306.297886-1-tudor.ambarus@microchip.com>
+ <Y2USF24O90/dLKz7@matsya>
+ <d1035d5f-02f8-a98f-fbfe-bccbdfd3920b@microchip.com>
+ <93048355-18a0-df4e-54ad-9c5955933109@microchip.com>
+ <Y2VS6xPnTXNvNtf8@matsya> <Y2iKn5CH7IYUxwy8@matsya>
+In-Reply-To: <Y2iKn5CH7IYUxwy8@matsya>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DM4PR11MB6479:EE_|MN0PR11MB5962:EE_
+x-ms-office365-filtering-correlation-id: 00831814-ecd9-4d1c-0f2a-08dac09e7717
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 8+hn6xURH7oMQxllYK/fcgRbCCKNh1mMKNfuWk9HhhLUCifHhPsD/5nUMioVv0TNadpSphu9teZTH67aGkF9vKndBYRwkTw/x+A9SA8xXzL1HC5O6fIHMXh/etjtsbvRvxdkqHQCcflsfa2fIhN0nEv72FHA49CmUjtM5OoQ2KHV6iDKbCKa2I45FuEHr3PkvGzgINFBQWYPOV+PLnHkkFbwTC/gN5x+lXEV9k/Tlbtk9Xk8OV6vqaaanwYCHDnNxoAtvmYAmTn4l/TO4b0JCGkIsAW+1JrX2Gy7UQCNfne15uWsX4tVIA7uVkDF1cPJpPaXC1N7lAo1exxxb15ut9VO6CaifTmRqFMZ+duGU7j7PitpTb+R52V6kHaIXrF6WA5r7t7tG2gfrbGnAbwiIRmWUhHU59EfST8mJwWjToLjCVciec47usWsR2sTOecIKb30dHG73jUM8nj8wO8LBvOAczw7bmc4BNNG1TgYl4JsCmNIRaFlx6CN300qtiB6EOdqbSdbnAa6Zk1MgrVSS9H3Ale15wCvIJ7PgkBLacNzktWWbZ2K5ZMy7sGN1qifgfV70HVbIMkgJkZDIJ2eHvNkFbX1B4anmMKkXfAvnUdnymdMH3MgtK3uXfZQtQqzXKCNRfovMxBwesVuDfH910HYkapmJ5Rc6C1NLlR93qAwCCa8dv5fjFJ63/qHgRHsrcKqxmyuiKjOMZBFmbGND0QkpcYkjbkabYs9HalA0mkQ2O22Ag0Qxs/MMXS5YJORNynl0eb98M4eZz3P0B872kZ0RpR5oLurxmKE38u1qY9EJzcvrwFeapQPHdo9pWUKdnFyEsSwYgAbp/W0OJ7FU3HYddgnxzg5g1b8LCrJOkubdU+xznxuV5pqRyPjsyoZ8n0RP+yKWjabfahcjPHLow==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB6479.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(376002)(39860400002)(366004)(396003)(136003)(346002)(451199015)(84970400001)(186003)(66946007)(76116006)(66446008)(64756008)(8676002)(66556008)(316002)(66476007)(6916009)(91956017)(4326008)(54906003)(31686004)(478600001)(2906002)(966005)(6486002)(71200400001)(38100700002)(5660300002)(36756003)(8936002)(41300700001)(26005)(53546011)(86362001)(31696002)(6512007)(2616005)(6506007)(38070700005)(83380400001)(122000001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?R0lPdDd0WTN3akJ5aWsyeGZqY3R4Qzhld09xZHFjeUtpMFdVRlM2cDVkRkR0?=
+ =?utf-8?B?Z0R6b0VQSUhpNHNZWUpXdkwyN3JtUlUzb05uTXk3cUJzRUJsakU2cEM2bHds?=
+ =?utf-8?B?K2dPMWdtTFFGVTFwWTAvUjdiNStLQk50VnF0OGs5RGdXS1NLWGlKdkZWZ1NX?=
+ =?utf-8?B?dEZGbERFQnY2RUI0Yi9RNHUxZ3c0WVdoMVgwTmx2RjVXL3hlSUV6bTl1bGRG?=
+ =?utf-8?B?WHhleVk1ZzdwWUNMa0EydFZXbUYvNTlXUVpSZlovdmxDQXRCK1pISEJDRHN5?=
+ =?utf-8?B?RERTMDBPaG1XSjF1Q2xCbVdVUHA5dEthK1FNVFBTY3RDRENRMnJmcngzc2Jo?=
+ =?utf-8?B?TzFoUFpLaTh5T3lja2paWUlVdmdMTTh5SXFLeVpiUXNPRkVFYXdzWnltY09s?=
+ =?utf-8?B?dUE2bW1hUkc5WTFzMDNKTmFKT0VyRzNERFEwUklKdlk2Q0FSMy9Wdi9URjAv?=
+ =?utf-8?B?MkUzYnRwZW9QOXRiUk1ya2NVVzhMQnM3aWkxZmx6TmFUeDhGcjlmdE5TRFpa?=
+ =?utf-8?B?Smo1M0pKMWtHeGdxVXFiZTRMWnZSUG1jcmhra0kwcCtwNGpNQnEzUzJUSnFY?=
+ =?utf-8?B?SHR5aVUyb05YTzlCd0VQRHJmN0IyaDRacHhiZlBlbWJ2dW9JRVV5MGF5dzBl?=
+ =?utf-8?B?eStrbksxZ1dDbnM1Rjk1NHAxM2g1TWpQd0ZpNWtMNmlRaWVCQ0RDTzdRZ0Ja?=
+ =?utf-8?B?OTF3eGFIcnBhMEFPSU5Rby83OG8vWERxZTRWUzJTNU5iTGtQOWNqMm1FMy80?=
+ =?utf-8?B?ZTdJWFNlb0lOdTJRL0UzM0dBbEYwaUgrU001QjNyS1RpNG5ndWlmb0k0V1dI?=
+ =?utf-8?B?ZDVubkV6UU15Wlh2QXZsd0pMRlp3ZTVoUE12UXQ5b3NBVnFOWUxyU2xBemdC?=
+ =?utf-8?B?M0lYOHlzaDJ0dXVBR1JxSWRNVkpiMUg4MFkycnJtN1hBV0JLMXpuNlp3K2hS?=
+ =?utf-8?B?OUJHMjdKM2xuWUZmSFo4V3dzbjFReDJKUExhUnVXL2FXdWtLMm5DSkJtOHhQ?=
+ =?utf-8?B?MzV0K1dGY3NsMXp5bUFaUWpRUkZVSytldWxnUGszWEpPMVROQ0JNamk2YzBi?=
+ =?utf-8?B?YWlZUHN2NGJLVytENEZYZlcrbkMzS2VjOVd6ZUtkVjNoQ29lVXpvUGhqSVBZ?=
+ =?utf-8?B?SXhEdk15dmtnOGZrcUpRbHZDbVZWZGR5RTBSYW5kdTZFbUloaWNQQ2V5cDlO?=
+ =?utf-8?B?T3RmL3kveDlocTlKUWRvejhCbkk0YjVvMUN3K01IV01XNUZGWENycWs5UWVC?=
+ =?utf-8?B?N2ZObGVWQkxjZGhhdEhoZFlmTmN3WkhuZ1ZhYThHbU1SNWJQenNzdVdwWnF6?=
+ =?utf-8?B?Ynk1S09kY0pMbUdZVFhhTm00eVBFK0Qxam1yVVF1NzhJbkNTQ3VxMzNjeEVR?=
+ =?utf-8?B?OUlYQUd4STlWdURWVzZsaVY2MW53Zy9Nblp4VnJwcTRmVERyZjdodmpSOEhO?=
+ =?utf-8?B?NWZlZWI1K3h6dGVCTXBGZ3lKcmdSQ21EOUhOSmh5NDdVendzVmhzNnlYOElU?=
+ =?utf-8?B?T2JmeWxIbkRnNGNNOHZ0NVRwdHBaMGg0YVR5TUFXMGhXSkFoVjQ1U3NvRDRr?=
+ =?utf-8?B?SEJHM1FoOW9xcVpYa29WcWEwbExxbnE3L3BSUFFiaE5vU2FjMUt5Z1E4QUtY?=
+ =?utf-8?B?cUJ2c3ZSa25RWG5hS3BXT1Z4a04wQXlIOW1jYVZ2Y2VUSTNjVnFOWVNrR3Ro?=
+ =?utf-8?B?Z1dXb1VpWWxTQldoaDdFSm9yMHlFVktBZDliaFdva2EvWHVFYmQ3NVdKd2VS?=
+ =?utf-8?B?ZWRIUG1GdlNDRWIxSFdsR1Zxai92WFROUEs3d1g5aDFRam4xWW5nTGNMam55?=
+ =?utf-8?B?RWFzMWprd2pzNVIyVVd6aEZqYmYzRUh3R2VsWDdNQ0dCV2JQYkR5VnFaam1F?=
+ =?utf-8?B?WlB1RXVaSnQ5bFlaTVJINEdJUUlldE1qRUpqN0tyTEc1TFlXZTRic1VlUyt6?=
+ =?utf-8?B?TU4zZG9URHpIbnViUG1JU2IwK3F1YVQrbEwyd1N4Zld2MEJYTVROYlpIZUVo?=
+ =?utf-8?B?cThLU05PSHRSaGsvU1M3Rkx1cm0va2tDRjVBbnhmMFNnRjZuTnQvdUdaNUpk?=
+ =?utf-8?B?NTF1cUtUZjdoQzRjdDNxNXoxb1E3TFFsNVRHWjZYVExCWjNERHB6YXZKd2VW?=
+ =?utf-8?Q?kzzF1X+5Af/zWPK9voej7NX4f?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <BD6ECF53837FBA4F9FA1FFB9AAAFB380@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB6479.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 00831814-ecd9-4d1c-0f2a-08dac09e7717
+X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Nov 2022 09:00:06.1243
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: kPEUApOQaAS8TOPb6mwBtZMVgVcsnfZ4SfHnQeIuzqg2d6FAWU371RwqksGsnbNAfyyfrFWv2vKJ9hhfCpCG7Jluv72ib+jUo6/yw6xLDsU=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR11MB5962
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -65,284 +162,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support to SGMII register dump
-
-Signed-off-by: Raju Lakkaraju <Raju.Lakkaraju@microchip.com>
----
-Change List:
-============
-V5 -> V6:
- - Split change in two patches (i.e. unused argument in lan743x_common_regs
-   change and SGMII register dump)
- - Fix the "ARRAY_SIZE" issue
-
-V4 -> V5:
- - Remove the debug read function macro
- - Add auto variable structure to handle register definitions
-
-V3 -> V4:
- - No changes. Patch on tags 6.1-rc1
-
-V2 -> V3:
- - Remove the private flag option.
-   As per review comment, use -w/-W to configure dump flag.
-   But, change to -w/-W option, EEPROM/OTP data might be corrupt
-   in case of wrong flag input.
-   Need to fix this properly in future development.
-
-V1 -> V2:
- - Add set_dump and get_dump_flag functions
-
-V0 -> V1:
- - Removed unwanted code
-
- .../net/ethernet/microchip/lan743x_ethtool.c  | 107 +++++++++++++++++-
- .../net/ethernet/microchip/lan743x_ethtool.h  |  71 +++++++++++-
- drivers/net/ethernet/microchip/lan743x_main.c |   2 +-
- drivers/net/ethernet/microchip/lan743x_main.h |   1 +
- 4 files changed, 177 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/net/ethernet/microchip/lan743x_ethtool.c b/drivers/net/ethernet/microchip/lan743x_ethtool.c
-index aa1d79a9a1f2..2db5949b4c7e 100644
---- a/drivers/net/ethernet/microchip/lan743x_ethtool.c
-+++ b/drivers/net/ethernet/microchip/lan743x_ethtool.c
-@@ -1195,7 +1195,7 @@ static void lan743x_common_regs(struct net_device *dev, void *p)
- 	struct lan743x_adapter *adapter = netdev_priv(dev);
- 	u32 *rb = p;
- 
--	memset(p, 0, (MAX_LAN743X_ETH_REGS * sizeof(u32)));
-+	memset(p, 0, (MAX_LAN743X_ETH_COMMON_REGS * sizeof(u32)));
- 
- 	rb[ETH_PRIV_FLAGS] = adapter->flags;
- 	rb[ETH_ID_REV]     = lan743x_csr_read(adapter, ID_REV);
-@@ -1218,17 +1218,120 @@ static void lan743x_common_regs(struct net_device *dev, void *p)
- 	rb[ETH_WK_SRC]     = lan743x_csr_read(adapter, MAC_WK_SRC);
- }
- 
-+static void lan743x_sgmii_regs(struct net_device *dev, void *p)
-+{
-+	struct lan743x_adapter *adp = netdev_priv(dev);
-+	u32 *rb = p;
-+	u16 idx;
-+	int val;
-+	struct {
-+		u8 id;
-+		u8 dev;
-+		u16 addr;
-+	} regs[] = {
-+		{ ETH_SR_VSMMD_DEV_ID1,                MDIO_MMD_VEND1, 0x0002},
-+		{ ETH_SR_VSMMD_DEV_ID2,                MDIO_MMD_VEND1, 0x0003},
-+		{ ETH_SR_VSMMD_PCS_ID1,                MDIO_MMD_VEND1, 0x0004},
-+		{ ETH_SR_VSMMD_PCS_ID2,                MDIO_MMD_VEND1, 0x0005},
-+		{ ETH_SR_VSMMD_STS,                    MDIO_MMD_VEND1, 0x0008},
-+		{ ETH_SR_VSMMD_CTRL,                   MDIO_MMD_VEND1, 0x0009},
-+		{ ETH_SR_MII_CTRL,                     MDIO_MMD_VEND2, 0x0000},
-+		{ ETH_SR_MII_STS,                      MDIO_MMD_VEND2, 0x0001},
-+		{ ETH_SR_MII_DEV_ID1,                  MDIO_MMD_VEND2, 0x0002},
-+		{ ETH_SR_MII_DEV_ID2,                  MDIO_MMD_VEND2, 0x0003},
-+		{ ETH_SR_MII_AN_ADV,                   MDIO_MMD_VEND2, 0x0004},
-+		{ ETH_SR_MII_LP_BABL,                  MDIO_MMD_VEND2, 0x0005},
-+		{ ETH_SR_MII_EXPN,                     MDIO_MMD_VEND2, 0x0006},
-+		{ ETH_SR_MII_EXT_STS,                  MDIO_MMD_VEND2, 0x000F},
-+		{ ETH_SR_MII_TIME_SYNC_ABL,            MDIO_MMD_VEND2, 0x0708},
-+		{ ETH_SR_MII_TIME_SYNC_TX_MAX_DLY_LWR, MDIO_MMD_VEND2, 0x0709},
-+		{ ETH_SR_MII_TIME_SYNC_TX_MAX_DLY_UPR, MDIO_MMD_VEND2, 0x070A},
-+		{ ETH_SR_MII_TIME_SYNC_TX_MIN_DLY_LWR, MDIO_MMD_VEND2, 0x070B},
-+		{ ETH_SR_MII_TIME_SYNC_TX_MIN_DLY_UPR, MDIO_MMD_VEND2, 0x070C},
-+		{ ETH_SR_MII_TIME_SYNC_RX_MAX_DLY_LWR, MDIO_MMD_VEND2, 0x070D},
-+		{ ETH_SR_MII_TIME_SYNC_RX_MAX_DLY_UPR, MDIO_MMD_VEND2, 0x070E},
-+		{ ETH_SR_MII_TIME_SYNC_RX_MIN_DLY_LWR, MDIO_MMD_VEND2, 0x070F},
-+		{ ETH_SR_MII_TIME_SYNC_RX_MIN_DLY_UPR, MDIO_MMD_VEND2, 0x0710},
-+		{ ETH_VR_MII_DIG_CTRL1,                MDIO_MMD_VEND2, 0x8000},
-+		{ ETH_VR_MII_AN_CTRL,                  MDIO_MMD_VEND2, 0x8001},
-+		{ ETH_VR_MII_AN_INTR_STS,              MDIO_MMD_VEND2, 0x8002},
-+		{ ETH_VR_MII_TC,                       MDIO_MMD_VEND2, 0x8003},
-+		{ ETH_VR_MII_DBG_CTRL,                 MDIO_MMD_VEND2, 0x8005},
-+		{ ETH_VR_MII_EEE_MCTRL0,               MDIO_MMD_VEND2, 0x8006},
-+		{ ETH_VR_MII_EEE_TXTIMER,              MDIO_MMD_VEND2, 0x8008},
-+		{ ETH_VR_MII_EEE_RXTIMER,              MDIO_MMD_VEND2, 0x8009},
-+		{ ETH_VR_MII_LINK_TIMER_CTRL,          MDIO_MMD_VEND2, 0x800A},
-+		{ ETH_VR_MII_EEE_MCTRL1,               MDIO_MMD_VEND2, 0x800B},
-+		{ ETH_VR_MII_DIG_STS,                  MDIO_MMD_VEND2, 0x8010},
-+		{ ETH_VR_MII_ICG_ERRCNT1,              MDIO_MMD_VEND2, 0x8011},
-+		{ ETH_VR_MII_GPIO,                     MDIO_MMD_VEND2, 0x8015},
-+		{ ETH_VR_MII_EEE_LPI_STATUS,           MDIO_MMD_VEND2, 0x8016},
-+		{ ETH_VR_MII_EEE_WKERR,                MDIO_MMD_VEND2, 0x8017},
-+		{ ETH_VR_MII_MISC_STS,                 MDIO_MMD_VEND2, 0x8018},
-+		{ ETH_VR_MII_RX_LSTS,                  MDIO_MMD_VEND2, 0x8020},
-+		{ ETH_VR_MII_GEN2_GEN4_TX_BSTCTRL0,    MDIO_MMD_VEND2, 0x8038},
-+		{ ETH_VR_MII_GEN2_GEN4_TX_LVLCTRL0,    MDIO_MMD_VEND2, 0x803A},
-+		{ ETH_VR_MII_GEN2_GEN4_TXGENCTRL0,     MDIO_MMD_VEND2, 0x803C},
-+		{ ETH_VR_MII_GEN2_GEN4_TXGENCTRL1,     MDIO_MMD_VEND2, 0x803D},
-+		{ ETH_VR_MII_GEN4_TXGENCTRL2,          MDIO_MMD_VEND2, 0x803E},
-+		{ ETH_VR_MII_GEN2_GEN4_TX_STS,         MDIO_MMD_VEND2, 0x8048},
-+		{ ETH_VR_MII_GEN2_GEN4_RXGENCTRL0,     MDIO_MMD_VEND2, 0x8058},
-+		{ ETH_VR_MII_GEN2_GEN4_RXGENCTRL1,     MDIO_MMD_VEND2, 0x8059},
-+		{ ETH_VR_MII_GEN4_RXEQ_CTRL,           MDIO_MMD_VEND2, 0x805B},
-+		{ ETH_VR_MII_GEN4_RXLOS_CTRL0,         MDIO_MMD_VEND2, 0x805D},
-+		{ ETH_VR_MII_GEN2_GEN4_MPLL_CTRL0,     MDIO_MMD_VEND2, 0x8078},
-+		{ ETH_VR_MII_GEN2_GEN4_MPLL_CTRL1,     MDIO_MMD_VEND2, 0x8079},
-+		{ ETH_VR_MII_GEN2_GEN4_MPLL_STS,       MDIO_MMD_VEND2, 0x8088},
-+		{ ETH_VR_MII_GEN2_GEN4_LVL_CTRL,       MDIO_MMD_VEND2, 0x8090},
-+		{ ETH_VR_MII_GEN4_MISC_CTRL2,          MDIO_MMD_VEND2, 0x8093},
-+		{ ETH_VR_MII_GEN2_GEN4_MISC_CTRL0,     MDIO_MMD_VEND2, 0x8099},
-+		{ ETH_VR_MII_GEN2_GEN4_MISC_CTRL1,     MDIO_MMD_VEND2, 0x809A},
-+		{ ETH_VR_MII_SNPS_CR_CTRL,             MDIO_MMD_VEND2, 0x80A0},
-+		{ ETH_VR_MII_SNPS_CR_ADDR,             MDIO_MMD_VEND2, 0x80A1},
-+		{ ETH_VR_MII_SNPS_CR_DATA,             MDIO_MMD_VEND2, 0x80A2},
-+		{ ETH_VR_MII_DIG_CTRL2,                MDIO_MMD_VEND2, 0x80E1},
-+		{ ETH_VR_MII_DIG_ERRCNT,               MDIO_MMD_VEND2, 0x80E2},
-+	};
-+
-+	for (idx = 0; idx < ARRAY_SIZE(regs); idx++) {
-+		val = lan743x_sgmii_read(adp, regs[idx].dev, regs[idx].addr);
-+		if (val < 0)
-+			rb[regs[idx].id] = 0xFFFF;
-+		else
-+			rb[regs[idx].id] = val;
-+	}
-+}
-+
- static int lan743x_get_regs_len(struct net_device *dev)
- {
--	return MAX_LAN743X_ETH_REGS * sizeof(u32);
-+	struct lan743x_adapter *adapter = netdev_priv(dev);
-+	u32 num_regs = MAX_LAN743X_ETH_COMMON_REGS;
-+
-+	if (adapter->is_sgmii_en)
-+		num_regs += MAX_LAN743X_ETH_SGMII_REGS;
-+
-+	return num_regs * sizeof(u32);
- }
- 
- static void lan743x_get_regs(struct net_device *dev,
- 			     struct ethtool_regs *regs, void *p)
- {
-+	struct lan743x_adapter *adapter = netdev_priv(dev);
-+	int regs_len;
-+
-+	regs_len = lan743x_get_regs_len(dev);
-+	memset(p, 0, regs_len);
-+
- 	regs->version = LAN743X_ETH_REG_VERSION;
-+	regs->len = regs_len;
- 
- 	lan743x_common_regs(dev, p);
-+	p = (u32 *)p + MAX_LAN743X_ETH_COMMON_REGS;
-+
-+	if (adapter->is_sgmii_en) {
-+		lan743x_sgmii_regs(dev, p);
-+		p = (u32 *)p + MAX_LAN743X_ETH_SGMII_REGS;
-+	}
- }
- 
- static void lan743x_get_pauseparam(struct net_device *dev,
-diff --git a/drivers/net/ethernet/microchip/lan743x_ethtool.h b/drivers/net/ethernet/microchip/lan743x_ethtool.h
-index 7f5996a52488..267d5035b8ad 100644
---- a/drivers/net/ethernet/microchip/lan743x_ethtool.h
-+++ b/drivers/net/ethernet/microchip/lan743x_ethtool.h
-@@ -29,7 +29,76 @@ enum {
- 	ETH_WK_SRC,
- 
- 	/* Add new registers above */
--	MAX_LAN743X_ETH_REGS
-+	MAX_LAN743X_ETH_COMMON_REGS
-+};
-+
-+enum {
-+	/* SGMII Register */
-+	ETH_SR_VSMMD_DEV_ID1,
-+	ETH_SR_VSMMD_DEV_ID2,
-+	ETH_SR_VSMMD_PCS_ID1,
-+	ETH_SR_VSMMD_PCS_ID2,
-+	ETH_SR_VSMMD_STS,
-+	ETH_SR_VSMMD_CTRL,
-+	ETH_SR_MII_CTRL,
-+	ETH_SR_MII_STS,
-+	ETH_SR_MII_DEV_ID1,
-+	ETH_SR_MII_DEV_ID2,
-+	ETH_SR_MII_AN_ADV,
-+	ETH_SR_MII_LP_BABL,
-+	ETH_SR_MII_EXPN,
-+	ETH_SR_MII_EXT_STS,
-+	ETH_SR_MII_TIME_SYNC_ABL,
-+	ETH_SR_MII_TIME_SYNC_TX_MAX_DLY_LWR,
-+	ETH_SR_MII_TIME_SYNC_TX_MAX_DLY_UPR,
-+	ETH_SR_MII_TIME_SYNC_TX_MIN_DLY_LWR,
-+	ETH_SR_MII_TIME_SYNC_TX_MIN_DLY_UPR,
-+	ETH_SR_MII_TIME_SYNC_RX_MAX_DLY_LWR,
-+	ETH_SR_MII_TIME_SYNC_RX_MAX_DLY_UPR,
-+	ETH_SR_MII_TIME_SYNC_RX_MIN_DLY_LWR,
-+	ETH_SR_MII_TIME_SYNC_RX_MIN_DLY_UPR,
-+	ETH_VR_MII_DIG_CTRL1,
-+	ETH_VR_MII_AN_CTRL,
-+	ETH_VR_MII_AN_INTR_STS,
-+	ETH_VR_MII_TC,
-+	ETH_VR_MII_DBG_CTRL,
-+	ETH_VR_MII_EEE_MCTRL0,
-+	ETH_VR_MII_EEE_TXTIMER,
-+	ETH_VR_MII_EEE_RXTIMER,
-+	ETH_VR_MII_LINK_TIMER_CTRL,
-+	ETH_VR_MII_EEE_MCTRL1,
-+	ETH_VR_MII_DIG_STS,
-+	ETH_VR_MII_ICG_ERRCNT1,
-+	ETH_VR_MII_GPIO,
-+	ETH_VR_MII_EEE_LPI_STATUS,
-+	ETH_VR_MII_EEE_WKERR,
-+	ETH_VR_MII_MISC_STS,
-+	ETH_VR_MII_RX_LSTS,
-+	ETH_VR_MII_GEN2_GEN4_TX_BSTCTRL0,
-+	ETH_VR_MII_GEN2_GEN4_TX_LVLCTRL0,
-+	ETH_VR_MII_GEN2_GEN4_TXGENCTRL0,
-+	ETH_VR_MII_GEN2_GEN4_TXGENCTRL1,
-+	ETH_VR_MII_GEN4_TXGENCTRL2,
-+	ETH_VR_MII_GEN2_GEN4_TX_STS,
-+	ETH_VR_MII_GEN2_GEN4_RXGENCTRL0,
-+	ETH_VR_MII_GEN2_GEN4_RXGENCTRL1,
-+	ETH_VR_MII_GEN4_RXEQ_CTRL,
-+	ETH_VR_MII_GEN4_RXLOS_CTRL0,
-+	ETH_VR_MII_GEN2_GEN4_MPLL_CTRL0,
-+	ETH_VR_MII_GEN2_GEN4_MPLL_CTRL1,
-+	ETH_VR_MII_GEN2_GEN4_MPLL_STS,
-+	ETH_VR_MII_GEN2_GEN4_LVL_CTRL,
-+	ETH_VR_MII_GEN4_MISC_CTRL2,
-+	ETH_VR_MII_GEN2_GEN4_MISC_CTRL0,
-+	ETH_VR_MII_GEN2_GEN4_MISC_CTRL1,
-+	ETH_VR_MII_SNPS_CR_CTRL,
-+	ETH_VR_MII_SNPS_CR_ADDR,
-+	ETH_VR_MII_SNPS_CR_DATA,
-+	ETH_VR_MII_DIG_CTRL2,
-+	ETH_VR_MII_DIG_ERRCNT,
-+
-+	/* Add new registers above */
-+	MAX_LAN743X_ETH_SGMII_REGS
- };
- 
- extern const struct ethtool_ops lan743x_ethtool_ops;
-diff --git a/drivers/net/ethernet/microchip/lan743x_main.c b/drivers/net/ethernet/microchip/lan743x_main.c
-index c0f8ba601c01..534840f9a7ca 100644
---- a/drivers/net/ethernet/microchip/lan743x_main.c
-+++ b/drivers/net/ethernet/microchip/lan743x_main.c
-@@ -939,7 +939,7 @@ static int lan743x_sgmii_wait_till_not_busy(struct lan743x_adapter *adapter)
- 	return ret;
- }
- 
--static int lan743x_sgmii_read(struct lan743x_adapter *adapter, u8 mmd, u16 addr)
-+int lan743x_sgmii_read(struct lan743x_adapter *adapter, u8 mmd, u16 addr)
- {
- 	u32 mmd_access;
- 	int ret;
-diff --git a/drivers/net/ethernet/microchip/lan743x_main.h b/drivers/net/ethernet/microchip/lan743x_main.h
-index bc5eea4c7b40..8438c3dbcf36 100644
---- a/drivers/net/ethernet/microchip/lan743x_main.h
-+++ b/drivers/net/ethernet/microchip/lan743x_main.h
-@@ -1161,5 +1161,6 @@ int lan743x_hs_syslock_acquire(struct lan743x_adapter *adapter, u16 timeout);
- void lan743x_hs_syslock_release(struct lan743x_adapter *adapter);
- void lan743x_mac_flow_ctrl_set_enables(struct lan743x_adapter *adapter,
- 				       bool tx_enable, bool rx_enable);
-+int lan743x_sgmii_read(struct lan743x_adapter *adapter, u8 mmd, u16 addr);
- 
- #endif /* _LAN743X_H */
--- 
-2.25.1
-
+T24gMTEvNy8yMiAwNjozMywgVmlub2QgS291bCB3cm90ZToNCj4gRVhURVJOQUwgRU1BSUw6IERv
+IG5vdCBjbGljayBsaW5rcyBvciBvcGVuIGF0dGFjaG1lbnRzIHVubGVzcyB5b3Uga25vdyB0aGUg
+Y29udGVudCBpcyBzYWZlDQo+IA0KPiBPbiAwNC0xMS0yMiwgMjM6MjksIFZpbm9kIEtvdWwgd3Jv
+dGU6DQo+PiBPbiAwNC0xMS0yMiwgMTU6MjEsIFR1ZG9yLkFtYmFydXNAbWljcm9jaGlwLmNvbSB3
+cm90ZToNCj4+Pg0KPj4+Pj4NCj4+Pj4+IFRoaXMgZG9lcyBub3QgYXBwbHkgb24gZG1hZW5naW5l
+LWZpeGVzLCBjYW4geW91IHBsZWFzZSByZWJhc2UgYW5kIHJlc2VuZA0KPj4+Pj4NCj4+Pj4NCj4+
+Pj4gU3VyZSwgSSBjYW4sIGJ1dCBvbiBteSBzaWRlIGl0IGFwcGxpZXMganVzdCBmaW5lLCBib3Ro
+IG9uIHRoZSBmaXhlcyBhbmQgbmV4dA0KPj4+PiBicmFuY2hlcy4gSSB1c2VkIGdpdDovL2dpdC5r
+ZXJuZWwub3JnL3B1Yi9zY20vbGludXgva2VybmVsL2dpdC92a291bC9kbWFlbmdpbmUuZ2l0DQo+
+Pj4+IFNoYWxsIEkgdXNlIG90aGVyIHRyZWU/DQo+Pg0KPj4gdGhpcyBpcyByaWdodCB0cmVlLCBJ
+IHdhcyBvbiBmaXhlcyBicmFuY2ggKGZvciBpbml0aWFsIGZpeGVzKSBhbmQgaQ0KPj4gdGhpbmsg
+N3RoIG9yIDh0aCBvbmUgZmFpbGVkIHRvIGFwcGx5IGZvciBtZS4uLg0KPj4NCj4+Pg0KPj4+ICQg
+Z2l0IGxvZyAtLW9uZWxpbmUNCj4+PiA3OTAyOWRjMzQxYzcgKEhFQUQsIHZrb3VsLWRtYS9maXhl
+cykgZG1hZW5naW5lOiBzdG0zMi1kbWE6IGZpeCBwb3RlbnRpYWwgcmFjZSBiZXR3ZWVuIHBhdXNl
+IGFuZCByZXN1bWUNCj4+Pg0KPj4+IFtjdXRdDQo+Pj4NCj4+PiAkIGI0IGFtIDIwMjIxMDI1MDkw
+MzA2LjI5Nzg4Ni0xLXR1ZG9yLmFtYmFydXNAbWljcm9jaGlwLmNvbQ0KPj4+IExvb2tpbmcgdXAg
+aHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvci8yMDIyMTAyNTA5MDMwNi4yOTc4ODYtMS10dWRvci5h
+bWJhcnVzJTQwbWljcm9jaGlwLmNvbQ0KPj4+IEdyYWJiaW5nIHRocmVhZCBmcm9tIGxvcmUua2Vy
+bmVsLm9yZy9hbGwvMjAyMjEwMjUwOTAzMDYuMjk3ODg2LTEtdHVkb3IuYW1iYXJ1cyU0MG1pY3Jv
+Y2hpcC5jb20vdC5tYm94Lmd6DQo+Pj4gQW5hbHl6aW5nIDM3IG1lc3NhZ2VzIGluIHRoZSB0aHJl
+YWQNCj4+PiBDaGVja2luZyBhdHRlc3RhdGlvbiBvbiBhbGwgbWVzc2FnZXMsIG1heSB0YWtlIGEg
+bW9tZW50Li4uDQo+IA0KPiBPa2F5IGdyYWJiaW5nIHRoZSBiNCB2ZXJzaW9uIGRpZCB0aGUgdHJp
+Y2ssIG5vIHN1cmUgd2h5IG15IGxvY2FsIG9uZQ0KPiBmYWlsZWQuIEkgaGF2ZSBhcHBsaWVkIHRo
+ZXNlIG5vdy4gVGhhbmtzDQoNCkNvb2wsIHRoYW5rIHlvdSENCg0K
