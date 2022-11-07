@@ -2,80 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5411961FF85
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 21:28:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9699C61FF89
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 21:29:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232943AbiKGU2v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 15:28:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58160 "EHLO
+        id S233006AbiKGU3I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 15:29:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232895AbiKGU2q (ORCPT
+        with ESMTP id S232942AbiKGU3D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 15:28:46 -0500
-Received: from viti.kaiser.cx (viti.kaiser.cx [IPv6:2a01:238:43fe:e600:cd0c:bd4a:7a3:8e9f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F4C3201A2
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 12:28:46 -0800 (PST)
-Received: from ipservice-092-217-067-198.092.217.pools.vodafone-ip.de ([92.217.67.198] helo=martin-debian-2.paytec.ch)
-        by viti.kaiser.cx with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.89)
-        (envelope-from <martin@kaiser.cx>)
-        id 1os8jZ-0004bP-6j; Mon, 07 Nov 2022 21:28:41 +0100
-From:   Martin Kaiser <martin@kaiser.cx>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Michael Straube <straube.linux@gmail.com>,
-        Pavel Skripkin <paskripkin@gmail.com>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Martin Kaiser <martin@kaiser.cx>
-Subject: [PATCH v2 3/3] staging: r8188eu: drop removal/stop check in dump_mgntframe_and_wait_ack
-Date:   Mon,  7 Nov 2022 21:28:24 +0100
-Message-Id: <20221107202824.61431-4-martin@kaiser.cx>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20221107202824.61431-1-martin@kaiser.cx>
-References: <20221107202824.61431-1-martin@kaiser.cx>
+        Mon, 7 Nov 2022 15:29:03 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF01426AE5;
+        Mon,  7 Nov 2022 12:28:56 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4DB38612F3;
+        Mon,  7 Nov 2022 20:28:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75190C433D6;
+        Mon,  7 Nov 2022 20:28:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667852935;
+        bh=yvpUUnOPYhg2U+DkWMtEWcYfKBAQIgETZ3DrNN9r0mY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=to0/8UgUzeTStHPDDlxQoR6tBFjNif8uBLMwr5Bu+rBtdWEp/o/XeDU6X9Icks+Zk
+         XkqUVcIOzjuOd6N7lYmThOqVGCR1Xxkr8ZX175A/8aHDeoGGEDdU6mEwLE0jtQt21M
+         Dllv9WtoHjwMFalUN5XluPhdyQalFXaO+u3brBeHG3vMebOVeMRPGC10p/vLVTdAJW
+         4teCPHxU9rYWT0e08mQFwpgH+zQ05PIHOa7c8Smdlpa+7sy23yEANoI7Rn0Rbw9yP4
+         7VLNOZxtowMkDXJx/AYX65a0HUlQMghUMEx2FjFmM6ed4nFihXwQVg83CU32gEB1EC
+         dk8xlEQqhigng==
+Date:   Mon, 7 Nov 2022 14:28:53 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     kishon@kernel.org, lpieralisi@kernel.org, bhelgaas@google.com,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kw@linux.com, robh@kernel.org, vidyas@nvidia.com, vigneshr@ti.com
+Subject: Re: [PATCH v4 0/5] PCI: endpoint: Rework the EPC to EPF notification
+Message-ID: <20221107202853.GA416802@bhelgaas>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221025145101.116393-1-manivannan.sadhasivam@linaro.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We can remove the checks for bDriverStopped and bSurpriseRemoved in
-dump_mgntframe_and_wait_ack.
+On Tue, Oct 25, 2022 at 08:20:56PM +0530, Manivannan Sadhasivam wrote:
+> Hello,
+> 
+> During the review of the patch that fixes DBI access in PCI EP, Rob
+> suggested [1] using a fixed interface for passing the events from EPC to
+> EPF instead of the in-kernel notifiers.
 
-The code path from this function looks like
+> Manivannan Sadhasivam (5):
+>   PCI: dra7xx: Use threaded IRQ handler for "dra7xx-pcie-main" IRQ
+>   PCI: tegra194: Move dw_pcie_ep_linkup() to threaded IRQ handler
+>   PCI: endpoint: Use a separate lock for protecting epc->pci_epf list
+>   PCI: endpoint: Use callback mechanism for passing events from EPC to
+>     EPF
+>   PCI: endpoint: Use link_up() callback in place of LINK_UP notifier
+> 
+>  drivers/pci/controller/dwc/pci-dra7xx.c       |  2 +-
+>  drivers/pci/controller/dwc/pcie-tegra194.c    |  9 ++++-
+>  drivers/pci/endpoint/functions/pci-epf-test.c | 38 ++++++-------------
+>  drivers/pci/endpoint/pci-epc-core.c           | 32 ++++++++++++----
+>  include/linux/pci-epc.h                       | 10 +----
+>  include/linux/pci-epf.h                       | 19 ++++++----
+>  6 files changed, 59 insertions(+), 51 deletions(-)
 
-dump_mgntframe_and_wait_ack
-   rtl8188eu_mgnt_xmit
-      rtw_dump_xframe
-         loop over all fragments
-
-rtw_write_port is called for each fragment. bSurpriseRemoved and
-bDriverStopped are checked in rtw_write_port.
-
-Signed-off-by: Martin Kaiser <martin@kaiser.cx>
----
- drivers/staging/r8188eu/core/rtw_mlme_ext.c | 3 ---
- 1 file changed, 3 deletions(-)
-
-diff --git a/drivers/staging/r8188eu/core/rtw_mlme_ext.c b/drivers/staging/r8188eu/core/rtw_mlme_ext.c
-index bfd6afd7266e..be33489d3dfd 100644
---- a/drivers/staging/r8188eu/core/rtw_mlme_ext.c
-+++ b/drivers/staging/r8188eu/core/rtw_mlme_ext.c
-@@ -3988,9 +3988,6 @@ s32 dump_mgntframe_and_wait_ack(struct adapter *padapter, struct xmit_frame *pmg
- 	u32 timeout_ms = 500;/*   500ms */
- 	struct xmit_priv	*pxmitpriv = &padapter->xmitpriv;
- 
--	if (padapter->bSurpriseRemoved || padapter->bDriverStopped)
--		return -1;
--
- 	mutex_lock(&pxmitpriv->ack_tx_mutex);
- 	pxmitpriv->ack_tx = true;
- 
--- 
-2.30.2
-
+Doesn't apply cleanly on v6.1-rc1.  Does it depend on something else?
