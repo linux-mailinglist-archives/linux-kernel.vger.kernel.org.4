@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59C2261F83F
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 17:05:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E61F61F840
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 17:05:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232555AbiKGQFA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 11:05:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56500 "EHLO
+        id S232582AbiKGQFE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 11:05:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232467AbiKGQEy (ORCPT
+        with ESMTP id S232540AbiKGQE6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 11:04:54 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 813EB20191
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 08:04:53 -0800 (PST)
+        Mon, 7 Nov 2022 11:04:58 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8278E1CB1E
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 08:04:57 -0800 (PST)
 Received: from notapiano.myfiosgateway.com (zone.collabora.co.uk [167.235.23.81])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: nfraprado)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id C024C66028EA;
-        Mon,  7 Nov 2022 16:04:49 +0000 (GMT)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id BF4CD66028B1;
+        Mon,  7 Nov 2022 16:04:52 +0000 (GMT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1667837092;
-        bh=xD95zUNAQgJy90NkPhVmGd7rPUx4jnJPotUs0/QHgXs=;
+        s=mail; t=1667837095;
+        bh=kyJUl4AIfO/bUHE12xVqYeJlBk+GtcwnhEWyl6Ffr50=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Rx8u/wqsxB2UekVdI46dYFJ3WyqS+vqn/6gljNuxlENp5KBaK0wPPqyp49CCDeFIR
-         5H120fxAWVOksFogb6bE+BBSGh0sI5FbZJc5MgFo241bJV/T37E5js25UW9d3T+fze
-         6h6U4ocXMaZ9Nm5Zs9af+T+oR62W4C2JCZLPA7p2AzV5dQUqO2xC8SuYKAwYW0hvAp
-         eQtKUTalBOXgvAAasuI0uwpqBd4Ud6GFptoK2h0ms/JI0vRsc7P7f/7bVAPoD0v66T
-         MO4lCwj7TB9G7rs1esYd0uYovddJ1g2ueO5i+gyj6VJaVxvz2QKXiChxs6R2kOGQZC
-         jFwk+hcQOB6tA==
+        b=IOE585/bBs1Urpz+7wizZVDFh28yo+XQgY1LV95IGy7snk4vB2ayP4Kr9Qgip953p
+         1x7+QGeKcKehO/RwmLvWCDGRyfXAhP4RWK0oNu19trya1DW8OXRZTfRn+10yEhd+d0
+         ePdN1Zh74GiBYHnBcHACyueDl5acGdC7SgE4yMfc0k3kJgWmqfdfqbdpyXout9aWxu
+         ZGJMjfGkvvoIZ7FNxcvQ9Q36MseW9Mo4pHfTrKeuQaL69darwdw/27znC0zRJBMvIc
+         Pny7MhxqMz4oV3uBz7U+9VqdKgcrVxCbtTYEtwh+zXeH+JUHRogTzXCXkwcnIPOtF2
+         mR5GPYij1YTgA==
 From:   =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
         <nfraprado@collabora.com>
 To:     Mark Brown <broonie@kernel.org>
@@ -45,9 +45,9 @@ Cc:     AngeloGioacchino Del Regno
         Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-mediatek@lists.infradead.org
-Subject: [PATCH 2/9] ASoC: mediatek: mt2701-wm8960: Register to module device table
-Date:   Mon,  7 Nov 2022 11:04:30 -0500
-Message-Id: <20221107160437.740353-3-nfraprado@collabora.com>
+Subject: [PATCH 3/9] ASoC: mediatek: mt6797-mt6351: Register to module device table
+Date:   Mon,  7 Nov 2022 11:04:31 -0500
+Message-Id: <20221107160437.740353-4-nfraprado@collabora.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221107160437.740353-1-nfraprado@collabora.com>
 References: <20221107160437.740353-1-nfraprado@collabora.com>
@@ -70,21 +70,21 @@ system.
 Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
 ---
 
- sound/soc/mediatek/mt2701/mt2701-wm8960.c | 1 +
+ sound/soc/mediatek/mt6797/mt6797-mt6351.c | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/sound/soc/mediatek/mt2701/mt2701-wm8960.c b/sound/soc/mediatek/mt2701/mt2701-wm8960.c
-index 0cdf2ae36243..a184032c15b6 100644
---- a/sound/soc/mediatek/mt2701/mt2701-wm8960.c
-+++ b/sound/soc/mediatek/mt2701/mt2701-wm8960.c
-@@ -161,6 +161,7 @@ static const struct of_device_id mt2701_wm8960_machine_dt_match[] = {
- 	{.compatible = "mediatek,mt2701-wm8960-machine",},
+diff --git a/sound/soc/mediatek/mt6797/mt6797-mt6351.c b/sound/soc/mediatek/mt6797/mt6797-mt6351.c
+index d2f6213a6bfc..784c201b8fd4 100644
+--- a/sound/soc/mediatek/mt6797/mt6797-mt6351.c
++++ b/sound/soc/mediatek/mt6797/mt6797-mt6351.c
+@@ -242,6 +242,7 @@ static const struct of_device_id mt6797_mt6351_dt_match[] = {
+ 	{.compatible = "mediatek,mt6797-mt6351-sound",},
  	{}
  };
-+MODULE_DEVICE_TABLE(of, mt2701_wm8960_machine_dt_match);
++MODULE_DEVICE_TABLE(of, mt6797_mt6351_dt_match);
  #endif
  
- static struct platform_driver mt2701_wm8960_machine = {
+ static struct platform_driver mt6797_mt6351_driver = {
 -- 
 2.38.1
 
