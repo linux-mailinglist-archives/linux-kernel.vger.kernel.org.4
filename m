@@ -2,180 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C35FD61FEA2
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 20:28:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C134B61FEA8
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 20:29:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231887AbiKGT2V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 14:28:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57640 "EHLO
+        id S232084AbiKGT3Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 14:29:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231995AbiKGT2O (ORCPT
+        with ESMTP id S231586AbiKGT3W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 14:28:14 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A65D02AC7C
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 11:28:13 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 45FB561299
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 19:28:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE368C43149
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 19:28:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667849292;
-        bh=TZKyIaX0u5nJ3UCma7bzPt1mKZ6/XSl9drIlz/9920I=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=sXWkVldcgB3q6cs/Wz7FXe2KoWwpioNLFzaTOmsrZerJ8v3hxPfwk21YXuqprbS6R
-         mTpkEok0mR2rU+E52CySxPevkNICPzrenDdbDEslasbEJKFROGLzKSwWrpDk6jsZRd
-         ftPmiARRNape3VGPO/niNQo9CFG0dZfuMKKEIDquAuLeoLCVrCObNikUmUH1rk99Mn
-         4S9JV84eYtgOzCn6CzGLAXIXhO89T+HoI2jkBFn+z72pKQnbL/F7czyOTb4sxAJxhU
-         T8Yz3HRG8SbJmjVyHj+3Jf4GaWbDCsw8kW+BOPVjU+doCLHJP+xx+0e6TC/a3vQvCI
-         GW/rpNOAOLhnQ==
-Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-370547b8ca0so114524977b3.0
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 11:28:12 -0800 (PST)
-X-Gm-Message-State: ACrzQf132M0hgFsxVH8FjaGNiUUEMoXW9eAutxf44AohCFQsuGv5kmSu
-        gPiwmk35q1goag3Yk1OdFhfkTfq+lSp8ppehXt4=
-X-Google-Smtp-Source: AMsMyM5sSsqkCEAZ6ZNJYdROpT7FWWWPULEgBRn6snyuHnepkxvU3yGCTRWry1wc7DqPA+3ZyNclkz3eUjO5EJdtpkg=
-X-Received: by 2002:a81:5f46:0:b0:370:2d8c:8193 with SMTP id
- t67-20020a815f46000000b003702d8c8193mr777050ywb.221.1667849291594; Mon, 07
- Nov 2022 11:28:11 -0800 (PST)
+        Mon, 7 Nov 2022 14:29:22 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D199C6273;
+        Mon,  7 Nov 2022 11:29:21 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id u8-20020a17090a5e4800b002106dcdd4a0so15655098pji.1;
+        Mon, 07 Nov 2022 11:29:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ROsSP2zJLMpqkNAkCkejAhjTOebhsc8Ura1yv3/lEHk=;
+        b=P4B9TBMmaUKzX1GYrwQo7DZAJge385WbTniJ5hPd5TGarQl25gy+JuH6EEPIl+QSeq
+         WeNlcpvUE3IXQ/vtcSDqGx1I0q+LJFdSkRSPbcddpVl2GfcRBhklXYI1y/dvb/3rk/M/
+         VVH5+EhekIMiJ5zchjea+5WYH4fnUF47afGpgYQcxVG5G0hPoAcfHhalyU2DDWgLdsrg
+         UGKOHpl/sh7ga5svx/RjbyOObf1XFSq8Iek91LRoluT9rFSVIhzMhbHAXxN4RIXXcbZh
+         00k2/pCmbXw/4D30kjQNoLxLwgk6Dz9e1UIHKxZOoEYLp8oL3WwKaOLJfFdYTQFV13e2
+         f1mA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ROsSP2zJLMpqkNAkCkejAhjTOebhsc8Ura1yv3/lEHk=;
+        b=SELwtL2FrkQtoFKYokAsK/xVS3wk0TkEzfw3ylRueMWk1gd9hpYD99MzP+9k6kSZy2
+         jsZjaPeAxO+1unBvAdWQz75jmxBov6EmEiODWoTCP9gqR+wW/O6jHZ1641EV3sxQM1J/
+         VP88VG13yKlNRKPFiqbvXxTX1pGAhtl7Wvjqo+Rq06kQ55bGAjmzcy6g+YCATvvxGBHD
+         lRABCGs7/sLfy1F0pDUZWHKgk+LCIx7bovmCTDQ1M8ATGX4aW1H3oWZlJ9oHegMAGwpV
+         8ngR+l0hYfDfQm0NUZhu7kr8HhEtXsWXdRRC5Fq4ZmfrDO0XE9F6wGa0J5R6RVDsUwwc
+         o9dw==
+X-Gm-Message-State: ACrzQf1RENm778VVEv3GIckLFhK7xCy4csTwjeu4LjtUYyPeNKZqUXVz
+        robLwrTqkeRuZEVZ1aelz/M=
+X-Google-Smtp-Source: AMsMyM495vmD7fimlGChX5ECDkEgbUrq4CJpt+iqe6EQh4zATNbCGMe0QLoX6Js34e5qejLL1T3sOA==
+X-Received: by 2002:a17:90a:13c4:b0:213:9c67:1b09 with SMTP id s4-20020a17090a13c400b002139c671b09mr833259pjf.221.1667849361156;
+        Mon, 07 Nov 2022 11:29:21 -0800 (PST)
+Received: from google.com ([2620:15c:9d:2:626:eb80:9eb9:1fd7])
+        by smtp.gmail.com with ESMTPSA id g12-20020a17090a714c00b0020a7d076bfesm4653752pjs.2.2022.11.07.11.29.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Nov 2022 11:29:20 -0800 (PST)
+Date:   Mon, 7 Nov 2022 11:29:17 -0800
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Job Noorman <job@noorman.info>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Henrik Rydberg <rydberg@bitmath.org>,
+        Rob Herring <robh@kernel.org>, linux-input@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Luca Weiss <luca@z3ntu.xyz>
+Subject: Re: [PATCH RESEND v6 1/3] dt-bindings: touchscreen: add Himax
+ hx83112b bindings
+Message-ID: <Y2lcjWJYkeHljbJQ@google.com>
+References: <20221107105604.26541-1-job@noorman.info>
+ <20221107105604.26541-2-job@noorman.info>
 MIME-Version: 1.0
-References: <20221102203405.1797491-2-ogabbay@kernel.org> <Y2MMCIe5wND2XPqE@kroah.com>
- <CAFCwf13uLj=P6u6FAcY8M5qAXoaBdb+Ha-TYj0j2FAZnFAPFYg@mail.gmail.com>
- <CAFCwf12yRUG4593ozJMEwaaJBKyWqXTTCjef9O_fzWdQBxVrtw@mail.gmail.com>
- <Y2kAcCu4z2LUMN7u@nvidia.com> <CAFCwf10K-dTu455QfOK8i6thismY-FUN2Rws830EGiqOcGWFgA@mail.gmail.com>
- <Y2kDzPswkKyZyRpS@nvidia.com> <CAFCwf10A=-bj2nR8WasNxyQQ07D24Je04tzKxqv2X_XnA0BUSQ@mail.gmail.com>
- <Y2kRvyR8VrZrO/1H@nvidia.com> <CAFCwf12E4K7bpLcDvTtG1mKxoy1JnchXGCKDvcKAayCFvGWXXQ@mail.gmail.com>
- <Y2kyvswuCsO0x1/2@nvidia.com>
-In-Reply-To: <Y2kyvswuCsO0x1/2@nvidia.com>
-From:   Oded Gabbay <ogabbay@kernel.org>
-Date:   Mon, 7 Nov 2022 21:27:45 +0200
-X-Gmail-Original-Message-ID: <CAFCwf11x1pwsgu=UWGOhjCYcLzRWOiAaiPonRB9Nh3TCo4KiUw@mail.gmail.com>
-Message-ID: <CAFCwf11x1pwsgu=UWGOhjCYcLzRWOiAaiPonRB9Nh3TCo4KiUw@mail.gmail.com>
-Subject: Re: [RFC PATCH v2 1/3] drivers/accel: define kconfig and register a
- new major
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Arnd Bergmann <arnd@arndb.de>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        John Hubbard <jhubbard@nvidia.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>,
-        Jiho Chu <jiho.chu@samsung.com>,
-        Daniel Stone <daniel@fooishbar.org>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Jeffrey Hugo <quic_jhugo@quicinc.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>,
-        Maciej Kwapulinski <maciej.kwapulinski@linux.intel.com>,
-        stanislaw.gruszka@intel.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221107105604.26541-2-job@noorman.info>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 7, 2022 at 6:31 PM Jason Gunthorpe <jgg@nvidia.com> wrote:
->
-> On Mon, Nov 07, 2022 at 05:53:55PM +0200, Oded Gabbay wrote:
-> > On Mon, Nov 7, 2022 at 4:10 PM Jason Gunthorpe <jgg@nvidia.com> wrote:
-> > >
-> > > On Mon, Nov 07, 2022 at 04:02:01PM +0200, Oded Gabbay wrote:
-> > > > On Mon, Nov 7, 2022 at 3:10 PM Jason Gunthorpe <jgg@nvidia.com> wrote:
-> > > > >
-> > > > > On Mon, Nov 07, 2022 at 03:01:08PM +0200, Oded Gabbay wrote:
-> > > > > > I don't agree with your statement that it should be "a layer over top of DRM".
-> > > > > > Anything on top of DRM is a device driver.
-> > > > > > Accel is not a device driver, it is a new type of drm minor / drm driver.
-> > > > >
-> > > > > Yeah, I still think this is not the right way, you are getting almost
-> > > > > nothing from DRM and making everything more complicated in the
-> > > > > process.
-> > > > >
-> > > > > > The only alternative imo to that is to abandon the idea of reusing
-> > > > > > drm, and just make an independant accel core code.
-> > > > >
-> > > > > Not quite really, layer it properly and librarize parts of DRM into
-> > > > > things accel can re-use so they are not intimately tied to the DRM
-> > > > > struct device notion.
-> > > > >
-> > > > > IMHO this is much better, because accel has very little need of DRM to
-> > > > > manage a struct device/cdev in the first place.
-> > > > >
-> > > > > Jason
-> > > > I'm not following. How can an accel device be a new type of drm_minor,
-> > > > if it doesn't have access to all its functions and members ?
-> > >
-> > > "drm_minor" is not necessary anymore. Strictly managing minor numbers
-> > > lost its value years ago when /dev/ was reorganized. Just use
-> > > dynamic minors fully.
-> > drm minor is not just about handling minor numbers. It contains the
-> > entire code to manage devices that register with drm framework (e.g.
-> > supply callbacks to file operations), manage their lifecycle,
-> > resources (e.g. automatic free of resources on release), sysfs,
-> > debugfs, etc.
->
-> This is why you are having such troubles, this is already good library
-> code. You don't need DRM to wrapper debugfs APIs, for instance. We
-> have devm, though maybe it is not a good idea, etc
->
-> Greg already pointed out the sysfs was not being done correctly
-> anyhow.
->
-> I don't think DRM is improving on these core kernel services. Just use
-> the normal stuff directly.
-I get what you are saying but if I do all that, then how is this
-subsystem related to DRM and re-using its code ? (at least at this
-stage)
-btw, using the basic stuff directly was my original intention, if you
-remember the original accel mail thread from July/August.
-And then we all decided in LPC that we shouldn't do that and instead
-accel should use the DRM code and just expose a new major+minor for
-the new drivers.
+On Mon, Nov 07, 2022 at 11:56:02AM +0100, Job Noorman wrote:
+> This patch adds device tree bindings for Himax 83112b touchscreen
+> devices.
+> 
+> Signed-off-by: Job Noorman <job@noorman.info>
+> Reviewed-by: Rob Herring <robh@kernel.org>
 
-So, something doesn't add up...
-imo, we need to choose between doing accel either as a small new
-feature in drm, or as an independent subsystem.
-I just don't see how I do the former without calling drm code directly
-and using all its wrappers.
+Applied, thank you.
 
->
-> > > > How will accel device leverage, for example, the GEM code without
-> > > > being a drm_minor ?
-> > >
-> > > Split GEM into a library so it doesn't require that.
-> > I don't see the advantage of doing that over defining accel as a new
-> > type of drm minor.
->
-> Making things into smaller libraries is recognized as a far better
-> kernel approach than trying to make a gigantic wide midlayer that stuffs
-> itself into everything. LWN called this the "midlayer mistake" and
-> wrote about the pitfalls a long time ago:
->
-> https://lwn.net/Articles/336262/
->
-> It is exactly what you are experiencing trying to stretch a
-> midlayer even further out.
->
-> Jason
-I'm all for breaking it down to smaller libraries, I completely agree with you.
-But as you wrote above, why do I even need to use the drm wrappers for
-the basic stuff ? I'll just call the kernel api directly.
-And if that's the case then I don't need to rip that code out of the
-heart of drm and make it a separate module.
-
-For GEM (as an example of something less basic) it might be a
-different story, but we are not there yet.
-
-Oded
+-- 
+Dmitry
