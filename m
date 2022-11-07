@@ -2,110 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E912761F7E0
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 16:41:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60DD261F7DC
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 16:41:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232241AbiKGPlf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 10:41:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43236 "EHLO
+        id S232926AbiKGPlM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 10:41:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231676AbiKGPlc (ORCPT
+        with ESMTP id S232267AbiKGPlL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 10:41:32 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23BD61F9FE
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 07:40:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667835628;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+        Mon, 7 Nov 2022 10:41:11 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0136F01E
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 07:41:09 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 660DA1F86C;
+        Mon,  7 Nov 2022 15:41:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1667835668; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=0RG2qjH57v6es353SUCFI/Tv9kwI5E+OcxJV2Spp6Rc=;
-        b=bv1m3mHfe7KYKlT2PLyX4Wn5WadEVll/s3G6Y/0R15VcgUN4K8l7tYATdXoefYKCvR93JX
-        9Ooi89gVdqXnsVFnCgTDbhnoOLOrNvDEXMo2QJp1vl83MtBU0lb3CieAuL9dPLuJqDxnxA
-        KXNr9a1eezNIl7efUSq7RD1v4WJAfpk=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-589-hksUy6xyNYCAWEcmfoED7w-1; Mon, 07 Nov 2022 10:40:26 -0500
-X-MC-Unique: hksUy6xyNYCAWEcmfoED7w-1
-Received: by mail-wm1-f71.google.com with SMTP id m34-20020a05600c3b2200b003cf549cb32bso8625056wms.1
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 07:40:26 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0RG2qjH57v6es353SUCFI/Tv9kwI5E+OcxJV2Spp6Rc=;
-        b=opdBLnRITPnLjQvblEBwlzjn4puXirvdorGMuKib/C+c9eadVvJ7/aDunvhZwbPnHf
-         YUQySGcMtVdVaofG/cOM+2ZUtY7XxYxDFBzB7p5bhGno1c5s3qiqBLucX8vPKSaqLeRm
-         EV+Uei7AU5SezXe0cw3JDXckHWMPX2D4fJEZMamB0qdzeyYhwr0BQxhGneocsEwOpu+X
-         3/KFcRpjVta0Wte1dcvHNEh+6fi2iPZ9kTNOoFjmSDv6OyxEB3iQJMx7ZZxbD2qTaYr0
-         9uX4nues0OPMik9pQOsIrr5fCxOahfFVHsP4LXRO4zTTuiOPsRVrkoQFLGqu/wG8y/q+
-         GPqQ==
-X-Gm-Message-State: ACrzQf2iwUleG+n46giHS5Ynah5tOGruo+kda35MubP2oM8tFdTtYZTE
-        VJOr3TdymBs9R3kM9Xh1c2NGxC0pJiJ/AB9orsy6+RYx7i9Mv60Nud1CUkV+ABl5QIQ2PHWS34Y
-        ekNUkW0GcQMU9R/f/xQ+mjOoi
-X-Received: by 2002:a05:6000:1a41:b0:22e:3667:d306 with SMTP id t1-20020a0560001a4100b0022e3667d306mr31781641wry.21.1667835625845;
-        Mon, 07 Nov 2022 07:40:25 -0800 (PST)
-X-Google-Smtp-Source: AMsMyM43CzSLo45txkBr/LR1HD0u4aQzeSZDSSshQoLseGKtmzaSgzMFWVPFWTNHLrm4+Jz2aV2pkw==
-X-Received: by 2002:a05:6000:1a41:b0:22e:3667:d306 with SMTP id t1-20020a0560001a4100b0022e3667d306mr31781627wry.21.1667835625649;
-        Mon, 07 Nov 2022 07:40:25 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
-        by smtp.googlemail.com with ESMTPSA id t20-20020a05600c199400b003cf9bf5208esm10359646wmq.19.2022.11.07.07.40.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Nov 2022 07:40:24 -0800 (PST)
-Message-ID: <4427cc5b-82fd-5656-da68-186b87dbe666@redhat.com>
-Date:   Mon, 7 Nov 2022 16:40:23 +0100
+        bh=WqBY47TvUH1dvtSu8SBNelarM/9OKGyt4h0zT41CUVM=;
+        b=qNqUVG75BJt1bm99q72Pq3B/A7r/E+YucWOeV+VHxz3GREf20Zo/rk1vnqyrFSgOtIXXUu
+        gIJYbInNNAxW/SXFFVKZqyVui8e1MKtK9sj35dlzXC8adNzv1tMDiJDPtfkEGEKpVoeWiC
+        ZRlpEN+Hgu+y6g6vMiDtlcjwUIUyfcI=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1667835668;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=WqBY47TvUH1dvtSu8SBNelarM/9OKGyt4h0zT41CUVM=;
+        b=Zo2UNhuBcQjBz+7pFX65zMWGBt269DOBhicmohatji+6xycj0/yF+69GOVOQAFRlmBZaBq
+        QgCot0Lb91FCcwDw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3676913494;
+        Mon,  7 Nov 2022 15:41:08 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id AI6PDBQnaWMWMQAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Mon, 07 Nov 2022 15:41:08 +0000
+Message-ID: <66279414-6cc5-d4a4-176e-a75ba7d36037@suse.cz>
+Date:   Mon, 7 Nov 2022 16:41:07 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH 4/8] KVM: SVM: move guest vmsave/vmload to assembly
+ Thunderbird/102.4.1
+Subject: Re: [PATCH V5] mm: fix use-after free of page_ext after race with
+ memory-offline
 Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        nathan@kernel.org, thomas.lendacky@amd.com,
-        andrew.cooper3@citrix.com, jmattson@google.com, seanjc@google.com,
-        stable@vger.kernel.org
-References: <20221107145436.276079-1-pbonzini@redhat.com>
- <20221107145436.276079-5-pbonzini@redhat.com>
- <Y2ki4Iz8AZzTODKS@hirez.programming.kicks-ass.net>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <Y2ki4Iz8AZzTODKS@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Charan Teja Kalla <quic_charante@quicinc.com>,
+        akpm@linux-foundation.org, mhocko@suse.com, david@redhat.com,
+        pasha.tatashin@soleen.com, shakeelb@google.com, sieberf@amazon.com,
+        sjpark@amazon.de, william.kucharski@oracle.com,
+        willy@infradead.org, quic_pkondeti@quicinc.com, minchan@google.com
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org
+References: <1661496993-11473-1-git-send-email-quic_charante@quicinc.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <1661496993-11473-1-git-send-email-quic_charante@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/7/22 16:23, Peter Zijlstra wrote:
->>   
->> +3:	vmrun %_ASM_AX
->> +4:
->> +	cli
->>   
->> +	/* Pop @svm to RAX while it's the only available register. */
->>   	pop %_ASM_AX
->>   
->>   	/* Save all guest registers.  */
-> So Andrew noted that once the vmload has executed any exception taken
-> (say at 3) will crash and burn because %gs is scribbled.
+On 8/26/22 08:56, Charan Teja Kalla wrote:
+> The below is one path where race between page_ext and  offline of the
+> respective memory blocks will cause use-after-free on the access of
+> page_ext structure.
 > 
-> Might be good to make a record of this in the code so it can be cleaned
-> up some day.
+> process1		              process2
+> ---------                             ---------
+> a)doing /proc/page_owner           doing memory offline
+> 			           through offline_pages.
 > 
+> b)PageBuddy check is failed
+> thus proceed to get the
+> page_owner information
+> through page_ext access.
+> page_ext = lookup_page_ext(page);
+> 
+> 				    migrate_pages();
+> 				    .................
+> 				Since all pages are successfully
+> 				migrated as part of the offline
+> 				operation,send MEM_OFFLINE notification
+> 				where for page_ext it calls:
+> 				offline_page_ext()-->
+> 				__free_page_ext()-->
+> 				   free_page_ext()-->
+> 				     vfree(ms->page_ext)
+> 			           mem_section->page_ext = NULL
+> 
+> c) Check for the PAGE_EXT flags
+> in the page_ext->flags access
+> results into the use-after-free(leading
+> to the translation faults).
+> 
+> As mentioned above, there is really no synchronization between page_ext
+> access and its freeing in the memory_offline.
+> 
+> The memory offline steps(roughly) on a memory block is as below:
+> 1) Isolate all the pages
+> 2) while(1)
+>   try free the pages to buddy.(->free_list[MIGRATE_ISOLATE])
+> 3) delete the pages from this buddy list.
+> 4) Then free page_ext.(Note: The struct page is still alive as it is
+> freed only during hot remove of the memory which frees the memmap, which
+> steps the user might not perform).
+> 
+> This design leads to the state where struct page is alive but the struct
+> page_ext is freed, where the later is ideally part of the former which
+> just representing the page_flags (check [3] for why this design is
+> chosen).
+> 
+> The above mentioned race is just one example __but the problem persists
+> in the other paths too involving page_ext->flags access(eg:
+> page_is_idle())__.
+> 
+> Fix all the paths where offline races with page_ext access by
+> maintaining synchronization with rcu lock and is achieved in 3 steps:
+> 1) Invalidate all the page_ext's of the sections of a memory block by
+> storing a flag in the LSB of mem_section->page_ext.
+> 
+> 2) Wait till all the existing readers to finish working with the
+> ->page_ext's with synchronize_rcu(). Any parallel process that starts
+> after this call will not get page_ext, through lookup_page_ext(), for
+> the block parallel offline operation is being performed.
+> 
+> 3) Now safely free all sections ->page_ext's of the block on which
+> offline operation is being performed.
+> 
+> Note: If synchronize_rcu() takes time then optimizations can be done in
+> this path through call_rcu()[2].
+> 
+> Thanks to David Hildenbrand for his views/suggestions on the initial
+> discussion[1] and Pavan kondeti for various inputs on this patch.
+> 
+> [1] https://lore.kernel.org/linux-mm/59edde13-4167-8550-86f0-11fc67882107@quicinc.com/
+> [2] https://lore.kernel.org/all/a26ce299-aed1-b8ad-711e-a49e82bdd180@quicinc.com/T/#u
+> [3] https://lore.kernel.org/all/6fa6b7aa-731e-891c-3efb-a03d6a700efa@redhat.com/
+> 
+> Suggested-by: David Hildenbrand <david@redhat.com>
+> Suggested-by: Michal Hocko <mhocko@suse.com>
+> Signed-off-by: Charan Teja Kalla <quic_charante@quicinc.com>
 
-Yeah, it won't happen because clgi/stgi blocks setting kvm_rebooting so 
-I thought of killing the three exception fixups after the first.  In the 
-end I kept them for simplicity and to keep the normal/SEV-ES versions as 
-similar as possible.
+Hi, looks like this added a new warning to a previously clean "make W=1 mm/"
+build:
+mm/page_ext.c:178: warning: Function parameter or member 'page_ext' not
+described in 'page_ext_put'
 
-Paolo
-
+Can you fixup please?
