@@ -2,116 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 656E561F704
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 16:02:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9483B61F70E
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 16:03:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232772AbiKGPCp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 10:02:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45038 "EHLO
+        id S232741AbiKGPDB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 10:03:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232956AbiKGPCT (ORCPT
+        with ESMTP id S232681AbiKGPCb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 10:02:19 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17C0A1E72E
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 07:01:31 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C27C7B8108F
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 15:01:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7765BC433C1;
-        Mon,  7 Nov 2022 15:01:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667833288;
-        bh=Gwl817qdWCkyUsypT+mBMX99k8wTF8oxqsN3mD/crgM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tHijNVUt0qfZl48XvsISPf+Ifk1Yumatus3hQzyZpbyAI3YNHCGgtSd9bruG9GXka
-         GSyntLryCBQCgtcsDPLRKHMlDr01rDuaJdMF0LXhdHt+fZUsOwMv21OzS1xJgGPbbc
-         IwdlO/7kpJ5IiaNnUzKeEwH4Q639bdtQNsqtRhcOlEaxqvmrA9qPdL5qvaDvhvshuv
-         ZFVh4WElKAUq+2yeNWdfPWLhm9JW9H8Aneb+iU5QEune6lrnYbj2cj8kZcLKDKQAfY
-         J42Ynul1ZxrntPLOwrkjooUynerPeu2TQ8wrTvKw6J1l/xdmNU4E6XFlRie/Zvh6n+
-         XIOGJ80Fb96ww==
-Date:   Mon, 7 Nov 2022 15:01:22 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Venkata Prasad Potturu <venkataprasad.potturu@amd.com>
-Cc:     Venkata Prasad Potturu 
-        <venkataprasad.potturu@amd.corp-partner.google.com>,
-        alsa-devel@alsa-project.org, vsujithkumar.reddy@amd.com,
-        Vijendar.Mukunda@amd.com, Basavaraj.Hiregoudar@amd.com,
-        Sunil-kumar.Dommati@amd.com, ssabakar@amd.com,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Ajit Kumar Pandey <AjitKumar.Pandey@amd.com>,
-        Akihiko Odaki <akihiko.odaki@gmail.com>,
-        ye xingchen <ye.xingchen@zte.com.cn>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] CHROMIUM: ASoC: amd: acp: Add tdm support for codecs in
- machine driver
-Message-ID: <Y2kdwms39CQUMQp/@sirena.org.uk>
-References: <20221028103443.30375-1-venkataprasad.potturu@amd.corp-partner.google.com>
- <Y1u1vj0K3m33wCTd@sirena.org.uk>
- <b384e012-31c5-8412-8b05-cd026c5d6a0f@amd.com>
- <Y2EttkwUvMReQcqg@sirena.org.uk>
- <ca006546-9b0c-34df-2a33-a4f10b68f815@amd.com>
- <Y2JVWmJsprt0xnKH@sirena.org.uk>
- <7b97682d-5cf1-8be1-9c62-41c9fbd89018@amd.com>
+        Mon, 7 Nov 2022 10:02:31 -0500
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D736BF6B
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 07:02:29 -0800 (PST)
+Received: by mail-lj1-x22a.google.com with SMTP id z24so16690517ljn.4
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 07:02:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=fODzgR6f5QIFQoQpSBqUjOLDxlY3mnOv7TGRHuzFTmQ=;
+        b=Sa3GlGhKz9uFh2xqVF8cJoU3Rjyu+lW99l4UTK5vaJQyJGY6nBEgvS0sw04i2CTloO
+         bsEm3VpZONpb7/0esp7CVMuVMI0WhPcfnK4wfKSJBdQZWTliIllDagRJbTVMLjWVfMB/
+         y7nOTLmb+q8rBgXSIyLUO8Dy8CFYQ9ra93pHcCjU3iJFxmCcidG9C7lwTRq5WNBrT5zy
+         2BI50NMYSP2Jlv+QCsIIVgCnREo91KPRqexIfjimqLibHRiZ8yv3+lw6O6DeppQkqrzx
+         j5Jcqd+rbgT+8Izh6bAq+KIbx/7p7XBzgWKhQy8DCK64B7Hr5oesOQiXBYHUndvSskGE
+         fBcg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=fODzgR6f5QIFQoQpSBqUjOLDxlY3mnOv7TGRHuzFTmQ=;
+        b=f6fdZGPNH/TkeI9BClpMQk0jIh1J/qufbPNtBCscKIVus+QhWGT4CqG3OGbIHbexmI
+         znaDGgEMYUVNjrTV1rYK9yy88AkIhyRtGVDCpKAxCOpLREys2P3mo6ri+RI/cxUFW/mX
+         rzgoltvKJpVVsqvOw4B2pwVVa5RuqcWzm51J/2hjLy1ia2cdocOLRKzqXcqSw44P/Gae
+         QhyHNtOHiOEs6YSHGJNaP70L2TuRiJB0efRPeA3fQelrlHKNYd+Tnhmv17+LhR6R/2Ji
+         vKPsMug9AAbrt7bWfPU+Cao8h0+HaK7HtcybixUTCgLdPAttFXB0GTV3nuhJ6c3MiHtw
+         JH6A==
+X-Gm-Message-State: ACrzQf06D63t0BfwSn2M59sQEkwPunf7kTm9KV5R/lqexpUCBaVjvkTQ
+        q7/v4/70mhFagXskcZ93IX3CIg==
+X-Google-Smtp-Source: AMsMyM6B0W0l3KqZ9xRH+gtlHucDMeOI7PEKTYEscM5ZWSFSyC5tIOLxpnuRvNgZsHoxQ2HzMi+yNQ==
+X-Received: by 2002:a2e:bc11:0:b0:277:6018:6f07 with SMTP id b17-20020a2ebc11000000b0027760186f07mr12809516ljf.16.1667833347512;
+        Mon, 07 Nov 2022 07:02:27 -0800 (PST)
+Received: from [192.168.0.20] (088156142199.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.199])
+        by smtp.gmail.com with ESMTPSA id x23-20020ac24897000000b0048aee825e2esm1272499lfc.282.2022.11.07.07.02.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 07 Nov 2022 07:02:26 -0800 (PST)
+Message-ID: <88c55827-067c-e6b1-a841-be70c05b7fc4@linaro.org>
+Date:   Mon, 7 Nov 2022 16:02:24 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="u3jPCXTCofiGGOee"
-Content-Disposition: inline
-In-Reply-To: <7b97682d-5cf1-8be1-9c62-41c9fbd89018@amd.com>
-X-Cookie: Minimum charge for booths.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v4 1/3] arm64: dts: qcom: Update soundwire slave node
+ names
+Content-Language: en-US
+To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
+        vkoul@kernel.org, agross@kernel.org, andersson@kernel.org,
+        robh+dt@kernel.org, broonie@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_rohkumar@quicinc.com, srinivas.kandagatla@linaro.org,
+        dianders@chromium.org, swboyd@chromium.org, judyhsiao@chromium.org,
+        alsa-devel@alsa-project.org, quic_rjendra@quicinc.com,
+        konrad.dybcio@somainline.org, mka@chromium.org
+Cc:     Ratna Deepthi Kudaravalli <quic_rkudarav@quicinc.com>
+References: <1667830844-31566-1-git-send-email-quic_srivasam@quicinc.com>
+ <1667830844-31566-2-git-send-email-quic_srivasam@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <1667830844-31566-2-git-send-email-quic_srivasam@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 07/11/2022 15:20, Srinivasa Rao Mandadapu wrote:
+> Update soundwire slave nodes of WSA speaker to match with
+> dt-bindings pattern properties regular expression.
+> 
+> This modifiction is required to avoid dtbs-check errors
+> occurred with qcom,soundwire.yaml.
+> 
+> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+> Co-developed-by: Ratna Deepthi Kudaravalli <quic_rkudarav@quicinc.com>
+> Signed-off-by: Ratna Deepthi Kudaravalli <quic_rkudarav@quicinc.com>
+> ---
+>  arch/arm64/boot/dts/qcom/qrb5165-rb5.dts             | 4 ++--
+>  arch/arm64/boot/dts/qcom/sdm845-db845c.dts           | 4 ++--
+>  arch/arm64/boot/dts/qcom/sdm850-lenovo-yoga-c630.dts | 4 ++--
+>  arch/arm64/boot/dts/qcom/sdm850-samsung-w737.dts     | 4 ++--
+>  arch/arm64/boot/dts/qcom/sm8250-mtp.dts              | 4 ++--
+>  5 files changed, 10 insertions(+), 10 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/qrb5165-rb5.dts b/arch/arm64/boot/dts/qcom/qrb5165-rb5.dts
+> index 2c08500..983e8a9 100644
+> --- a/arch/arm64/boot/dts/qcom/qrb5165-rb5.dts
+> +++ b/arch/arm64/boot/dts/qcom/qrb5165-rb5.dts
+> @@ -1007,7 +1007,7 @@
+>  };
+>  
+>  &swr0 {
+> -	left_spkr: wsa8810-left {
+> +	left_spkr: wsa8810@0,3 {
 
---u3jPCXTCofiGGOee
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+While changing it, make the node names generic, so:
 
-On Mon, Nov 07, 2022 at 04:04:40PM +0530, Venkata Prasad Potturu wrote:
-> On 11/2/22 17:02, Mark Brown wrote:
+speaker@0,3
 
-> > Why would the user choose one value or the other, and why would this
-> > choice be something that only changes at module load time?  If this is
-> > user controllable I'd really expect it to be runtime controllable.
-> > You're not explaining why this is a module parameter.
+https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
 
-> Different vendors/OEM's use the same hardware as one need I2S mode and ot=
-her
-> need TDM mode, using common driver=A0 to support=A0 I2S and TDM mode with=
- this
-> parameter.
+>  		compatible = "sdw10217211000";
+>  		reg = <0 3>;
+>  		powerdown-gpios = <&tlmm 130 GPIO_ACTIVE_HIGH>;
+> @@ -1016,7 +1016,7 @@
+>  		#sound-dai-cells = <0>;
+>  	};
+>  
+> -	right_spkr: wsa8810-right {
+> +	right_spkr: wsa8810@0,4 {
 
-If a given board needs a specific configuration we should be configuring
-based on identifying the board, not hoping that the user somehow knows
-that this configuration is required and can work out how to do it.  If
-this is purely a software setting depending on the software stack
-running on the device then it should be selected at runtime by that
-software as part of the use case management.
+speaker@0,4
 
---u3jPCXTCofiGGOee
-Content-Type: application/pgp-signature; name="signature.asc"
+and so on...
 
------BEGIN PGP SIGNATURE-----
+Best regards,
+Krzysztof
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmNpHcEACgkQJNaLcl1U
-h9Actwf/XNs2J7Ffddfy8nVY0H6pR5ug6RjoG3sOjBiBm3NonuNjnBmAD1rYCjOW
-t6KnGt1Q656Eyz6ycPZz09PDIWT80wv/zYbzGU2fyk3hpyZzG8AhJrU0AybvRSmI
-g/mEgzC3X0aOnXRm4eF4oTdBxab6weg+LbwSASDByPOP710bNQtM/0MjKd6Jpz3C
-iY7XJj4BrVynqak3IbjwY1hgX94yY/ZeRUbDE8/iC4+z/F0ORoQCM85xJ3UZgC8a
-ikYvz4jJcumSQMeSwuOoQF4xLo7dvF0NSnm5V/DiXO0T3eEwJm193lLxTExEjhhG
-YW/u9RRJjDiRsLpN2zCJ0TMJk6rvMQ==
-=WKwD
------END PGP SIGNATURE-----
-
---u3jPCXTCofiGGOee--
