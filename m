@@ -2,116 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6C3461E802
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 01:55:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64F3161E817
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 01:58:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230134AbiKGAzT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Nov 2022 19:55:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58338 "EHLO
+        id S230191AbiKGA64 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Nov 2022 19:58:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229876AbiKGAzR (ORCPT
+        with ESMTP id S229782AbiKGA6x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Nov 2022 19:55:17 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E152A18A;
-        Sun,  6 Nov 2022 16:55:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=qkPCrvakuWsxBIiqN2P+Ebj3vUfpA6YfwWkFjX3LRwo=; b=a6GWTSWrzhgOW2yIA4hHY4oYDX
-        VbNJ8JYcwGp9AbMN/kNObt924s2BWyTPrJprbKchakYzTmHwSAZhXUPje6us5SDmwwcaVzZWrZrIB
-        tZ+gW2YDp+lV8459++eUPkveV1SqMPLTjVDcJLiWmc0sfWz9rspnB8JSU3ub1I+FA/a8XyIfX7GU3
-        1YI7xZF7gbwI/sXkoQ9dZCPAHrncAhtme1lBej+xtJYK3EtVhDzVhwnXf4QDDSE9zhy8tOgIVUKxn
-        AB33imLt49gtqwGnJTebscuVuq0leILQVttUbs9Oj+wF4WP5WALz4vz1BLCia2Pm+7qxODllqzoMj
-        XZBbzy1g==;
-Received: from [2601:1c2:d80:3110::a2e7]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1orqPu-00Aj33-Bi; Mon, 07 Nov 2022 00:55:10 +0000
-Message-ID: <55cdacf5-2b0c-3813-d739-b806db65b052@infradead.org>
-Date:   Sun, 6 Nov 2022 16:55:08 -0800
+        Sun, 6 Nov 2022 19:58:53 -0500
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9B00B7CA;
+        Sun,  6 Nov 2022 16:58:52 -0800 (PST)
+Received: by mail-wr1-x42d.google.com with SMTP id cl5so14067633wrb.9;
+        Sun, 06 Nov 2022 16:58:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=3SUjrVNjYpQ4FGX+sVZmnlqoqrxVRTW7jwTovMJReUo=;
+        b=lqbltCqrY+FRt+9AmsTb7o1R9vs/00guDt0qQbM8gWwdbdwavbxrUbxVvmjL1zkbNx
+         xKUHAEMJcs+nrDC033nDYlsxCE5bkJ8xmWeFWsouQpiuRy+ZPIdEgj7Y3b70IlYOaAbb
+         K4E7tnd68EJLj+RQGOKR+bsw/YRiFjzRFrpVxHq627eoIq9fHdTZcGvr+kk+eN0q6FvA
+         NPDvvR9wkM4dS5WaRidyiEoDqCrMd/ZQK7o8ODVnQsK2bAjT05ytuNyKTYBO+Gh4d57C
+         5nMDQK8Z/7D543qOrKlWfGBwy9cj5hhShQiyujPBHvfT+LjrtF4ds3W2gqkSbMsfdwst
+         cD2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3SUjrVNjYpQ4FGX+sVZmnlqoqrxVRTW7jwTovMJReUo=;
+        b=nYQC5S933ewvnR/MNSSqkYFYsqm0ajlCAHfEM314UDA3AfrYMJlmuwua8IXqAsbga5
+         tJp6Mz5LNHBn+jnhiPcRiZjSWGZtBxUalEttDuRG2/9nAwMlEV+rYD7c4nJ4CDkuqE6V
+         Q73YYcBeE1xKRGPJEyFAbXzfenspq0S8t2ryE51SyjMMw5JGvBHCFNStypc4hxTmvv7p
+         ncen19e4JdUoxP10JsQ1Y809C01t4q1Tfi+lLonHLdcs8MxDEhG+rG1Hu3FwtrGTuPoQ
+         LjnAFBrwHOEIekj1pBNu4Pr9TINBlAFm4AtP9Tc6DxJbDmeYeQ45ozk2Lcp4Gr+okETD
+         w2kQ==
+X-Gm-Message-State: ACrzQf2kAdmxPt8bWOryiz9tk/hl1ES8xAVfFIZGzIGrMMu2fAkj9X6s
+        2f0zvqk4UEprpWpPiKCoWODAoFFVLh6J5RsNI/0=
+X-Google-Smtp-Source: AMsMyM5oGZnKz4jdnVIz9fRd6FjjmcWKsJdz9cqrYMtzAtJH2bfQLsbI3jNtHgiCJHWVsISzHqMRM8QZuwvgVzNDOgE=
+X-Received: by 2002:a5d:604c:0:b0:236:6deb:6d31 with SMTP id
+ j12-20020a5d604c000000b002366deb6d31mr29321862wrt.282.1667782731107; Sun, 06
+ Nov 2022 16:58:51 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH] ARM: omap1: set ARCH_OMAP1_ANY for ARCH_OMAP1
-Content-Language: en-US
-To:     Arnd Bergmann <arnd@arndb.de>, Russell King <linux@armlinux.org.uk>
-Cc:     linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Aaro Koskinen <aaro.koskinen@iki.fi>,
-        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
-        Tony Lindgren <tony@atomide.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Linux-OMAP <linux-omap@vger.kernel.org>
-References: <20221106062536.26369-1-rdunlap@infradead.org>
- <62f5b747-4c65-46a6-b04d-1d0fcbadf5c9@app.fastmail.com>
- <Y2eLuf4SCrZ5X+ui@shell.armlinux.org.uk>
- <ab965f39-94b7-4962-a53e-46b88fd6ecae@app.fastmail.com>
- <b764ed1f-263a-47f4-962c-286fcf38fc32@app.fastmail.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <b764ed1f-263a-47f4-962c-286fcf38fc32@app.fastmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20221106161513.4140-1-wens@kernel.org>
+In-Reply-To: <20221106161513.4140-1-wens@kernel.org>
+From:   Peter Geis <pgwipeout@gmail.com>
+Date:   Sun, 6 Nov 2022 19:58:37 -0500
+Message-ID: <CAMdYzYqP+0B5Q_7bfNREx7MvxZxawMGD+jRTfSSb8X6N8LCL=w@mail.gmail.com>
+Subject: Re: [PATCH] arm64: dts: rockchip: Fix Pine64 Quartz4-B PMIC interrupt
+To:     Chen-Yu Tsai <wens@kernel.org>
+Cc:     Heiko Stuebner <heiko@sntech.de>, Chen-Yu Tsai <wens@csie.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sun, Nov 6, 2022 at 11:15 AM Chen-Yu Tsai <wens@kernel.org> wrote:
+>
+> From: Chen-Yu Tsai <wens@csie.org>
+>
+> Ths PMIC's interrupt line is tied to GPIO0_A3. This is described
+> correctly for the pinmux setting, but incorrectly for the interrupt.
+>
+> Correct the interrupt setting so that interrupts from the PMIC get
+> delivered.
+>
+> Fixes: dcc8c66bef79 ("arm64: dts: rockchip: add Pine64 Quartz64-B device tree")
+> Signed-off-by: Chen-Yu Tsai <wens@csie.org>
 
+Good catch, thanks!
+Reviewed-by: Peter Geis <pgwipeout@gmail.com>
 
-On 11/6/22 03:32, Arnd Bergmann wrote:
-> On Sun, Nov 6, 2022, at 11:37, Arnd Bergmann wrote:
->> On Sun, Nov 6, 2022, at 11:26, Russell King (Oracle) wrote:
->>> On Sun, Nov 06, 2022 at 08:43:50AM +0100, Arnd Bergmann wrote:
->>>> --- a/arch/arm/mach-omap1/Kconfig
->>>> +++ b/arch/arm/mach-omap1/Kconfig
->>>> @@ -49,7 +49,7 @@ config ARCH_OMAP1_ANY
->>>>         select ARCH_OMAP
->>>>         def_bool ARCH_OMAP730 || ARCH_OMAP850 || ARCH_OMAP15XX || ARCH_OMAP16XX
->>>>  
->>>> -config ARCH_OMAP
->>>> +config ARCH_OMAP1_ANY
->>>
->>> This patch can't be right - look at the first line of context above, you
->>> have symbols that select ARCH_OMAP and you've just removed the
->>> definition of ARCH_OMAP.
->>
->> Right, I misread this, I thought this was an 'if ARCH_OMAP' block
->> instead of the Kconfig symbol. Part of the problem is now is
->> possibly that there are two symbols with that name now, I'll have
->> to try to reproduce the problem first and then see what caused it
->> originally.
-> 
-> It seems the root cause was actually 804f7f19c2e2 ("fbdev: omap:
-> avoid using mach/*.h files"), where I started allowing building with
-> CONFIG_COMPILE_TEST, but this fails when ARCH_OMAP1_ANY is disabled,
-> as Randy correctly found.
-> 
-> We could tighten this gain by adding something like
-> 
->      depends on ARCH_OMAP1_ANY || !OMAP_MUX
-> 
-> to still allow compile-testing but specifically avoiding the
-> broken case. I think we have the same problem in the pcmcia and
-> spi-uwire drivers, so maybe something like this would be
-> a better approach:
-> 
-> --- a/include/linux/soc/ti/omap1-mux.h
-> +++ b/include/linux/soc/ti/omap1-mux.h
-> @@ -302,7 +302,7 @@ enum omap1xxx_index {
->  
->  };
->  
-> -#ifdef CONFIG_OMAP_MUX
-> +#if defined(CONFIG_OMAP_MUX) && defined(CONFIG_ARCH_OMAP1_ANY)
->  extern int omap_cfg_reg(unsigned long reg_cfg);
->  #else
->  static inline int omap_cfg_reg(unsigned long reg_cfg) { return 0; }
-
-That seems to work. Push it into -next and see what happens. :)
-
--- 
-~Randy
+> ---
+>  arch/arm64/boot/dts/rockchip/rk3566-quartz64-b.dts | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/arch/arm64/boot/dts/rockchip/rk3566-quartz64-b.dts b/arch/arm64/boot/dts/rockchip/rk3566-quartz64-b.dts
+> index 77b179cd20e7..b276eb0810c7 100644
+> --- a/arch/arm64/boot/dts/rockchip/rk3566-quartz64-b.dts
+> +++ b/arch/arm64/boot/dts/rockchip/rk3566-quartz64-b.dts
+> @@ -246,7 +246,7 @@ rk809: pmic@20 {
+>                 compatible = "rockchip,rk809";
+>                 reg = <0x20>;
+>                 interrupt-parent = <&gpio0>;
+> -               interrupts = <RK_PA7 IRQ_TYPE_LEVEL_LOW>;
+> +               interrupts = <RK_PA3 IRQ_TYPE_LEVEL_LOW>;
+>                 assigned-clocks = <&cru I2S1_MCLKOUT_TX>;
+>                 assigned-clock-parents = <&cru CLK_I2S1_8CH_TX>;
+>                 clock-names = "mclk";
+> --
+> 2.34.1
+>
+>
+> _______________________________________________
+> Linux-rockchip mailing list
+> Linux-rockchip@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-rockchip
