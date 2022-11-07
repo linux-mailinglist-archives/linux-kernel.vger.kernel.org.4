@@ -2,91 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 538C161FFDD
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 21:52:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E87C161FFDF
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 21:54:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233088AbiKGUw5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 15:52:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42798 "EHLO
+        id S233039AbiKGUyN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 15:54:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232191AbiKGUw4 (ORCPT
+        with ESMTP id S232191AbiKGUyL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 15:52:56 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8FF727176;
-        Mon,  7 Nov 2022 12:52:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667854375; x=1699390375;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=KHZYJ5N4WN4GFIdBJV+9/tjtDA1oPGVdqK3Z+qwe07A=;
-  b=Oc4iLPbTPMczUwq7su4EZeOzYvn7LuUMbqbYNqEXUcgvB4MtvkFwdXwW
-   qEnvnxPAnDC1MJdQfKAYy3pd0oehrgS8oGaLNA+OqsGmX1cD2alChzFWV
-   215PZQEPr/YEPL591QgUcgP0OU4uoi1aIn0otS0l6x8yT41L8sdeEMbnX
-   pd25pTFaMcjDJGTEsayNwIa9Zgz0HM7b+KzPxYvT1ycWQKJFutEgMqGi4
-   BMsphX036TjjhFhf2w/9ZvlXqHXQrOSAoaIz2zhCFKv2f/7D/klK+o9yb
-   Xwc8u1NP08ha4yaPADeMX9fCzXxJJ376BiZYmZpjz6DEMnvtqrmhM51fk
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10524"; a="310524040"
-X-IronPort-AV: E=Sophos;i="5.96,145,1665471600"; 
-   d="scan'208";a="310524040"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Nov 2022 12:52:55 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10524"; a="699636618"
-X-IronPort-AV: E=Sophos;i="5.96,145,1665471600"; 
-   d="scan'208";a="699636618"
-Received: from peggykes-mobl.amr.corp.intel.com (HELO [10.251.7.244]) ([10.251.7.244])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Nov 2022 12:52:54 -0800
-Message-ID: <6d29eadd-69ef-343d-fcc8-b0432d604e92@intel.com>
-Date:   Mon, 7 Nov 2022 12:52:52 -0800
+        Mon, 7 Nov 2022 15:54:11 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FCE15F40
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 12:54:10 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D645AB816A0
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 20:54:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D43DC433D6;
+        Mon,  7 Nov 2022 20:54:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667854447;
+        bh=imEkwKJJvU1UO54Y2mHW8PLJBKSEvCTZ91B6qYkCO30=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=nkwqEiqZLWe8aigDmczpGxIZOuHgvLzZR9UH6uWXTD2ckRChIwDIMCxR+WYp4Kwfg
+         AfylPCiFayEML+Q7yURI2dybv9juXm2wrURt2UDm01VJLUqN/p6u2LyaLmNTUcvP3t
+         iUbEMILgk4W7YTdE+Jcr+DPNQJEHenkDvPGN1lQ9IF/MvagjJ/T/Fx63MC+QtTn0u0
+         w//yk32F2V7AgWREerpq06HLoN5qeYBOF9Q+kdJHe05ZI8E2jaF5JnvD8niV0LU3ny
+         RFHxtkDLHhigEOzKjtu63KlG6BwxdJ9TOoH5dAAxwSBFe6DpwyYYxGlwLK+bA1tavL
+         elWONZyccVgNw==
+Date:   Mon, 7 Nov 2022 14:54:05 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Peter Collingbourne <pcc@google.com>
+Cc:     Joe Perches <joe@perches.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Whitcroft <apw@canonical.com>,
+        Dwaipayan Ray <dwaipayanray1@gmail.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Kees Cook <keescook@chromium.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        linux-kernel@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>
+Subject: Re: [PATCH] checkpatch: add warning for non-lore mailing list URLs
+Message-ID: <20221107205405.GA419220@bhelgaas>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [RESEND PATCH v6] x86/fpu: Trying to fix writing PKRU through
- ptrace
-Content-Language: en-US
-To:     Slade Watkins <srw@sladewatkins.net>, Kyle Huey <me@kylehuey.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Sean Christopherson <seanjc@google.com>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Robert O'Callahan <robert@ocallahan.org>,
-        David Manouchehri <david.manouchehri@riseup.net>
-References: <20221107063807.81774-1-khuey@kylehuey.com>
- <CA+pv=HNPDvr_SV0f6RSBz2A3qBQQLBXaaxTPPT4FABQhwQwuHw@mail.gmail.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <CA+pv=HNPDvr_SV0f6RSBz2A3qBQQLBXaaxTPPT4FABQhwQwuHw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMn1gO7tEF+VioB8n0=8vQ4gRPKqSSfPwmbX8ci82D=hBbcfyw@mail.gmail.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/7/22 12:49, Slade Watkins wrote:
-> On Mon, Nov 7, 2022 at 1:38 AM Kyle Huey <me@kylehuey.com> wrote:
->> I've been trying since July to get this regression that was introduced in
->> 5.14 fixed. This is my third time submitting this version of the patch in the
->> last two months. Both prior submissions have not received any comments from
->> (nor have they been applied by) the x86 maintainers. I don't really know
->> what else to do at this point beyond "complain to the management" as it
->> were.
->>
->> I appreciate anything you can do to unjam things here.
-> Maintainers: is there any reason why this hasn't been applied, or
-> received comments? I'm confused and a bit worried.
+On Thu, Nov 03, 2022 at 06:34:31PM -0700, Peter Collingbourne wrote:
+> On Thu, Nov 3, 2022 at 6:27 PM Joe Perches <joe@perches.com> wrote:
+> > On Thu, 2022-11-03 at 18:07 -0700, Peter Collingbourne wrote:
+> > > On Wed, Oct 19, 2022 at 03:28:43PM -0500, Bjorn Helgaas wrote:
+> > > > From: Bjorn Helgaas <bhelgaas@google.com>
+> > > >
+> > > > The lkml.org, marc.info, spinics.net, etc archives are not quite as useful
+> > > > as lore.kernel.org because they use different styles, add advertising, and
+> > > > may disappear in the future.  The lore archives are more consistent and
+> > > > more likely to stick around, so prefer https://lore.kernel.org URLs when
+> > > > they exist.
+> > >
+> > > If the commit message contains a line like:
+> > >
+> > > Cc: linux-arm-kernel@lists.infradead.org
+> > >
+> > > this patch causes checkpatch.pl to complain. Would it be possible to
+> > > restrict this to URLs?
+> >
+> > Yes, I believe this would probably work well enough:
+> > ---
+> >  scripts/checkpatch.pl | 3 ++-
+> >  1 file changed, 2 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
+> > index 7be93c3df2bcb..fe25642d8bacc 100755
+> > --- a/scripts/checkpatch.pl
+> > +++ b/scripts/checkpatch.pl
+> > @@ -3336,7 +3336,8 @@ sub process {
+> >                 }
+> >
+> >  # Check for mailing list archives other than lore.kernel.org
+> > -               if ($rawline =~ m{\b$obsolete_archives}) {
+> > +               if ($rawline =~ m{\b$obsolete_archives} &&
+> > +                   $rawline !~ /^\s*cc:/i) {
+> 
+> Can we make this (to|cc): instead? Otherwise developers (like me) who
+> use custom scripts to add To: headers to their patches before passing
+> them to checkpatch.pl will also hit this warning if their patch is
+> being sent To: one of these mailing lists.
 
-Thomas had some strong opinions in the area, so I've been neglecting it.
- I'll put it in my queue to take a look now, though.
+Why not make it look for "http" instead of the absence of "cc"?
