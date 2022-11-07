@@ -2,133 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BCB761F629
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 15:35:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 037C761F628
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 15:35:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231820AbiKGOfb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 09:35:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48820 "EHLO
+        id S231963AbiKGOez (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 09:34:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231594AbiKGOf2 (ORCPT
+        with ESMTP id S232417AbiKGOef (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 09:35:28 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7207D2E9
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 06:34:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667831653;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+        Mon, 7 Nov 2022 09:34:35 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B075B214;
+        Mon,  7 Nov 2022 06:34:33 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 6B1EE225AD;
+        Mon,  7 Nov 2022 14:34:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1667831672; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=ijNz8eAPO9Q05t4hDsgKToL8SbJ7TyveKWVglTvBbII=;
-        b=ct4F3gErRKg4aNSMracrIwsdX/0oJ6chrAHNhI+9WZoZqwMp2txMTDB4WFsFonIlf3xtEr
-        YuIsdbx63pNt2D+gYekd3uQtMuogbYcU3H3cLqDS4ULhxRQTKBmzHLCmE4FMbAmpzgNx0l
-        n2bJitdTSVDZGDhGidJteQxGC+GK1nY=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-107-leZ0axh0NnSOFulX-c3Y1A-1; Mon, 07 Nov 2022 09:34:11 -0500
-X-MC-Unique: leZ0axh0NnSOFulX-c3Y1A-1
-Received: by mail-ed1-f72.google.com with SMTP id q13-20020a056402518d00b00462b0599644so8604408edd.20
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 06:34:11 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ijNz8eAPO9Q05t4hDsgKToL8SbJ7TyveKWVglTvBbII=;
-        b=2iR2ypr1psQfNUoUVzxR3pVN9/TyMY3DOUoI2ZHe+2FjGLBqXyJff2Ra9ZMFtnj26+
-         gZz3lkUxinBJxdesLGRrp26npfTjKwm+p+sxzW+fL8hTb2HVu4hoNGRWq3uuT7Uy2uxH
-         9hJFeE7S+oCjKyjVgJjUnntJQ0MLPcdxrD7s1XfxZv/3iAHel2nGqX10eh+G1h/Sp6HE
-         WEG2eQ7Y+EHJ7ixnp26InC+5jZy980150RHTSjtMjv1MlDgmwpjAyfq27+K8Aa8TGpNS
-         jRl9azEMmOKyiPaBiYxI48IFBUpjRZALbcjyEYOGc+i5U47otZfRjAJZHUKDcXVjzeyc
-         vO5g==
-X-Gm-Message-State: ACrzQf32jhGDO2U/BJgyUiDEyQt7lHxWdz+gqqPzzGLokaT9jesISiWE
-        aCEEHOeYtF7hVcEeZr097KH53IS7bnMWMvwlrHsipzNWneDg0m523ehbyFbmdEsaSg5SdpaSXcL
-        WVEb7caH1X5zZu5GCHbj+AFYE
-X-Received: by 2002:a17:907:7d8f:b0:78e:2cba:560f with SMTP id oz15-20020a1709077d8f00b0078e2cba560fmr48447152ejc.173.1667831650521;
-        Mon, 07 Nov 2022 06:34:10 -0800 (PST)
-X-Google-Smtp-Source: AMsMyM7RQoQplQyxXr+bxL3t5Ktl0d0ZhMW1oU/JYobjrch2dFusmFBgLa6XAR4eAiNPp2UxN3GyRg==
-X-Received: by 2002:a17:907:7d8f:b0:78e:2cba:560f with SMTP id oz15-20020a1709077d8f00b0078e2cba560fmr48447139ejc.173.1667831650347;
-        Mon, 07 Nov 2022 06:34:10 -0800 (PST)
-Received: from [10.40.98.142] ([78.108.130.194])
-        by smtp.gmail.com with ESMTPSA id eh9-20020a0564020f8900b004587f9d3ce8sm4280958edb.56.2022.11.07.06.34.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Nov 2022 06:34:09 -0800 (PST)
-Message-ID: <d35060f2-d2ea-104e-9915-99f83014cc84@redhat.com>
-Date:   Mon, 7 Nov 2022 15:34:08 +0100
+        bh=L4Sg1qZkwEiVSC2iC9dKlGrQBQD0s8J33K2XOu5KL/0=;
+        b=N6Bkqf/c7//mK5rtoPzoC8e+qy9BdJHOSb8jcGnaB5CG5HwReYZjRblTPTmnRQxvFnaQIv
+        qDV8M41T0T6bHuMPHrfUA3nSKLPjyhKR6cEjb7mKNpSdSWrMhOfCWqP5GN9x0MhE1QmL85
+        peuBYiQOCGwswOb6zO2vwvbnISvnkxA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1667831672;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=L4Sg1qZkwEiVSC2iC9dKlGrQBQD0s8J33K2XOu5KL/0=;
+        b=J4uiNATruM+2EzKbD+Jy+1ehg3atdTKIKxl8M5nA1CM6NlOwGjnpqIzTa8zLjwW/q50d5w
+        P0F5WEaqk5+VfiCA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 462D413AC7;
+        Mon,  7 Nov 2022 14:34:32 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id kC/TEHgXaWNCBAAAMHmgww
+        (envelope-from <hare@suse.de>); Mon, 07 Nov 2022 14:34:32 +0000
+Message-ID: <84544a8b-5884-840c-0b69-fe6c4ae18e72@suse.de>
+Date:   Mon, 7 Nov 2022 15:34:31 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH v3] platform/x86: ISST: Fix typo in comments
+ Thunderbird/102.4.0
 Content-Language: en-US
-To:     chen zhang <chenzhang@kylinos.cn>, rdunlap@infradead.org,
-        bagasdotme@gmail.com
-Cc:     linux-kernel@vger.kernel.org, chenzhang_0901@163.com,
-        k2ci <kernel-bot@kylinos.cn>
-References: <20221103013313.13278-1-chenzhang@kylinos.cn>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20221103013313.13278-1-chenzhang@kylinos.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        John Garry <john.g.garry@oracle.com>,
+        John Garry <john.garry@huawei.com>, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, bvanassche@acm.org, hch@lst.de,
+        ming.lei@redhat.com, niklas.cassel@wdc.com
+Cc:     axboe@kernel.dk, jinpu.wang@cloud.ionos.com,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-ide@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linuxarm@huawei.com, john.garry2@mail.dcu.ie
+References: <1666693976-181094-1-git-send-email-john.garry@huawei.com>
+ <1666693976-181094-3-git-send-email-john.garry@huawei.com>
+ <08fdb698-0df3-7bc8-e6af-7d13cc96acfa@opensource.wdc.com>
+ <83d9dc82-ea37-4a3c-7e67-1c097f777767@huawei.com>
+ <9a2f30cc-d0e9-b454-d7cd-1b0bd3cf0bb9@opensource.wdc.com>
+ <0e60fab5-8a76-9b7e-08cf-fb791e01ae08@huawei.com>
+ <71b56949-e4d7-fd94-c44a-867080b7a4fa@opensource.wdc.com>
+ <b03b37a2-35dc-5218-7279-ae68678a47ff@huawei.com>
+ <0e4994f7-f131-39b0-c876-f447b71566cd@opensource.wdc.com>
+ <05cf6d61-987b-025d-b694-a58981226b97@oracle.com>
+ <ff0c2ab7-8e82-40d9-1adf-78ee12846e1f@opensource.wdc.com>
+ <39f9afc5-9aab-6f7c-b67a-e74e694543d4@suse.de>
+ <0de1c3fd-4be7-1690-0780-720505c3692b@opensource.wdc.com>
+ <75aea0e8-4fa4-593c-0024-3c39ac3882f3@suse.de>
+ <cfb89169-77e5-b208-62e7-4cf1c660ac7a@opensource.wdc.com>
+From:   Hannes Reinecke <hare@suse.de>
+Subject: Re: [PATCH RFC v3 2/7] ata: libata-scsi: Add
+ ata_internal_queuecommand()
+In-Reply-To: <cfb89169-77e5-b208-62e7-4cf1c660ac7a@opensource.wdc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 11/3/22 02:33, chen zhang wrote:
-> Fix spelling typo in comments.
+On 11/7/22 14:29, Damien Le Moal wrote:
+> On 11/7/22 19:12, Hannes Reinecke wrote:
+>> On 11/2/22 12:25, Damien Le Moal wrote:
+>>> On 11/2/22 20:12, Hannes Reinecke wrote:
+>>>> On 11/2/22 11:07, Damien Le Moal wrote:
+>>>>> On 11/2/22 18:52, John Garry wrote:
+>>>>>> Hi Damien,
+>>>>>>
+>>>> [ .. ] >> So we only need to find a way of 're-using' that tag, then we won't have
+>>>> to set aside a reserved tag and everything would be dandy...
+>>>
+>>> I tried that. It is very ugly... Problem is that integration with EH in
+>>> case a real NCQ error happens when all that read-log-complete dance is
+>>> happening is hard. And don't get me started with the need to save/restore
+>>> the scsi command context of the command we are reusing the tag from.
+>>>
+>>> And given that the code is changing to use regular submission path for
+>>> internal commands, right now, we need a reserved tag. Or a way to "borrow"
+>>> the tag from a request that we need to check. Which means we need some
+>>> additional api to not always try to allocate a tag.
+>>>
+>>>>
+>>>> Maybe we can stop processing when we receive an error (should be doing
+>>>> that anyway as otherwise the log might be overwritten), then we should
+>>>> be having a pretty good chance of getting that tag.
+>>>
+>>> Hmmm.... that would be no better than using EH which does stop processing
+>>> until the internal house keeping is done.
+>>>
+>>>> Or, precisely, getting _any_ tag as at least one tag is free at that point.
+>>>> Hmm?
+>>>
+>>> See above. Not free, but usable as far as the device is concerned since we
+>>> have at least on command we need to check completed at the device level
+>>> (but not yet completed from scsi/block layer point of view).
+>>>
+>> So, having had an entire weekend pondering this issue why don't we
+>> allocate an _additional_ set of requests?
+>> After all, we had been very generous with allocating queues and requests
+>> (what with us doing a full provisioning of the requests for all queues
+>> already for the non-shared tag case).
+>>
+>> Idea would be to keep the single tag bitmap, but add eg a new rq state
+>> MQ_RQ_ERROR. Once that flag is set we'll fetch the error request instead
+>> of the normal one:
+>>
+>> @@ -761,6 +763,8 @@ static inline struct request
+>> *blk_mq_tag_to_rq(struct blk_mq_tags *tags,
+>>    {
+>>           if (tag < tags->nr_tags) {
+>>                   prefetch(tags->rqs[tag]);
+>> +               if (unlikely(blk_mq_request_error(tags->rqs[tag])))
+>> +                       return tags->error_rqs[tag];
+>>                   return tags->rqs[tag];
+>>           }
+>>
+>> and, of course, we would need to provision the error request first.
+>>
+>> Rationale here is that this will be primarily for devices with a low
+>> number of tags, so doubling the number of request isn't much of an
+>> overhead (as we'll be doing it essentially anyway in the error case as
+>> we'll have to save the original request _somewhere_), and that it would
+>> remove quite some cruft from the subsystem; look at SCSI EH trying to
+>> store the original request contents and then after EH restoring them again.
 > 
-> Reported-by: k2ci <kernel-bot@kylinos.cn>
-> Signed-off-by: chen zhang <chenzhang@kylinos.cn>
-
-Thank you for your patch, I've applied this patch to my review-hans 
-branch:
-https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
-
-Note it will show up in my review-hans branch once I've pushed my
-local branch there, which might take a while.
-
-Once I've run some tests on this branch the patches there will be
-added to the platform-drivers-x86/for-next branch and eventually
-will be included in the pdx86 pull-request to Linus for the next
-merge-window.
-
-Regards,
-
-Hans
-
-
-> ---
-> v3: Change "interace" to "interfaces", Change "share" to "shared"
-> Thanks for your advice.
-> v2: update the comments
-> There is a bug with my company's mailbox with kylinos.cn, and sometimes 
-> I can't receive reply emails. I cc my personal 163 mailbox, so that I can
-> receive feedback from reviewer on time.
-> ---
->  drivers/platform/x86/intel/speed_select_if/isst_if_common.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> Interesting idea. I like it. It is essentially a set of reserved requests
+> without reserved tags: the tag to use for these requests would be provided
+> "manually" by the user. Right ?
 > 
-> diff --git a/drivers/platform/x86/intel/speed_select_if/isst_if_common.c b/drivers/platform/x86/intel/speed_select_if/isst_if_common.c
-> index fd102678c75f..a7e02b24a87a 100644
-> --- a/drivers/platform/x86/intel/speed_select_if/isst_if_common.c
-> +++ b/drivers/platform/x86/intel/speed_select_if/isst_if_common.c
-> @@ -623,7 +623,7 @@ static long isst_if_def_ioctl(struct file *file, unsigned int cmd,
->  
->  /* Lock to prevent module registration when already opened by user space */
->  static DEFINE_MUTEX(punit_misc_dev_open_lock);
-> -/* Lock to allow one share misc device for all ISST interace */
-> +/* Lock to allow one shared misc device for all ISST interfaces */
->  static DEFINE_MUTEX(punit_misc_dev_reg_lock);
->  static int misc_usage_count;
->  static int misc_device_ret;
+Yes. Upon failure one would be calling something like 
+'blk_mq_get_error_rq(rq)', which would set the error flag in the 
+original request, fetch the matching request from ->static_rqs, and 
+return that one.
+
+Just figured, we could simply enlarge 'static_rqs' to have double the 
+size; then we can easily get the appropriate request from 'static_rqs' 
+by just adding the queue size.
+Making things even easier ...
+
+> That should allow simplifying any processing that needs to reuse a tag,
+> and currently its request. That is, CDL, but also usb-scsi, scsi EH and
+> the few scsi LLDs using scsi_eh_prep_cmnd()+scsi_eh_restore_cmnd().
+> Ideally, these 2 functions could go away too.
+> 
+Which was precisely the idea. We have quite some drivers/infrastructure 
+which already require a similar functionality, and basically all of them 
+cover devices with a really low tag space (32/31 in the libata NCQ case, 
+16 in the SCSI TCQ case, or even _1_ in the SCSI parallel case :-)
+So a request duplication wouldn't matter _that_ much here.
+
+Drivers with a higher queue depth typically can do 'real' TMFs, where 
+you need to allocate a new tag anyway, and so the whole operation 
+doesn't apply here.
+
+Cheers,
+
+Hannes
+-- 
+Dr. Hannes Reinecke		           Kernel Storage Architect
+hare@suse.de			                  +49 911 74053 688
+SUSE Software Solutions Germany GmbH, Maxfeldstr. 5, 90409 Nürnberg
+HRB 36809 (AG Nürnberg), GF: Felix Imendörffer
 
