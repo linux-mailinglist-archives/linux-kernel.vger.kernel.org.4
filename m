@@ -2,208 +2,325 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E623761FE0F
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 19:59:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B25861FE16
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 19:59:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231970AbiKGS7Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 13:59:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39514 "EHLO
+        id S232306AbiKGS7o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 13:59:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231652AbiKGS7U (ORCPT
+        with ESMTP id S232213AbiKGS7i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 13:59:20 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59D72F65
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 10:58:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667847509;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=zAtcEOPSlot0plj2rcnsTapnoNeT01CxSTEjWLgd9/A=;
-        b=DJ1LFH49HEvJrm+UWXyFPd2yzO66yrSWULyYzKsiaalNVgNpchkPTnU6TYXgW5aG9BYJh6
-        0EWmXltIxm8W+I8tzsSk/ISSZgaTj0yxwujbiq10PJ9aQqoePkaA9yr+6rj1tcCkO6oJ1g
-        xcc65MnYy2MPhla+vTtdkJeAOBwlHGA=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-351-oRFo4PqOO_SgjVKSxv2zIg-1; Mon, 07 Nov 2022 13:58:26 -0500
-X-MC-Unique: oRFo4PqOO_SgjVKSxv2zIg-1
-Received: by mail-wr1-f71.google.com with SMTP id h18-20020adfa4d2000000b00236584fc8c7so3084556wrb.7
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 10:58:25 -0800 (PST)
+        Mon, 7 Nov 2022 13:59:38 -0500
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DACAE248CA
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 10:59:35 -0800 (PST)
+Received: by mail-lj1-x236.google.com with SMTP id d20so17717146ljc.12
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 10:59:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=mzBdSHu6u/NiAzmAan71AbHEXCztDx1eWL0MFLAjVBw=;
+        b=eXWffAkvcIDnpIT9k3tN/pH23NmpS9g1ezQUyC4o6pP3m9rAiOWXxdMoQN3mrCwSzh
+         mxEcG8m5Sl8UHiMsm05BINaRZfGAnr5l9fJ+21eVmQ6uT0a6e1Pn1iTIwNyFqk0heP9y
+         YihmAswiiTjDleWGouA4s4PkEFWrhDaY1yq57UoOTVvB4nTtRDq0ZiKP1N+mwKaD1Vz/
+         RD6j3ffiy1bs7aFywSYySzNcknoDU0s/XKhDKPGC0Glr6Y7iRFVMiQcPIQ3748X2QS8/
+         ZiRwEwuGQfy66+1Xqu0vE39GeabAlcxGaHkFrjFPNAKOk5jAukmJ+N2lkH40uowMiu16
+         p5EQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zAtcEOPSlot0plj2rcnsTapnoNeT01CxSTEjWLgd9/A=;
-        b=WQgRTtI7/v3MyGH68/fw/kWm9VuHO0syXzFS2ZCk4rsHB9E1UJh23nEUrhkhfyuzIn
-         9cZp06J/y9k4P0MdJnEu95PBZ34EOtvJfrFaGIOaBzk2KGM1W+9XbCBXdICm+BM1YoE7
-         cOFyuUJNWvpey5xzG4rpHZlbv1ZEf/yWHJ5kHVY2XksuYp72FKNLwXN2vDg982lVj1RH
-         DdmGgp71HnFSLfk808Yq/2tG5MY9KqSCraFhOCg9ORLU+XSice8TZEVxma5B16vkojpX
-         cqW/UItxDwlvFJ5OSMQIsxnUPRFPASLfY41EVPCgdkjW9oBlXy8goKSQFlQvHScYH17Z
-         +uIQ==
-X-Gm-Message-State: ACrzQf2s8b+TPQIw/yP8ooHiJsGVZLkgjvzbL8x+oXp0iu4XG/GH/iLB
-        4GulDDoSpC1eTU1y2NUMvXEQFtLKbkikLpzvzFAU1cTml0+LPWBV2pKOAtobWUsy+YFe0PpLvdJ
-        KOM/xauDs2gNjPEE6g/IWEYia
-X-Received: by 2002:a05:600c:5388:b0:3c5:4c1:a1f6 with SMTP id hg8-20020a05600c538800b003c504c1a1f6mr34552896wmb.11.1667847504982;
-        Mon, 07 Nov 2022 10:58:24 -0800 (PST)
-X-Google-Smtp-Source: AMsMyM7N36r1wNwR+0Wql6ZMTaLxXdMQmSdQqpgHVXqn7a8pp4qgv1x8kBYd0zW2p3ob8L0JqfocJA==
-X-Received: by 2002:a05:600c:5388:b0:3c5:4c1:a1f6 with SMTP id hg8-20020a05600c538800b003c504c1a1f6mr34552881wmb.11.1667847504718;
-        Mon, 07 Nov 2022 10:58:24 -0800 (PST)
-Received: from vschneid.remote.csb ([154.57.232.159])
-        by smtp.gmail.com with ESMTPSA id bq21-20020a5d5a15000000b00231ed902a4esm8387926wrb.5.2022.11.07.10.58.23
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=mzBdSHu6u/NiAzmAan71AbHEXCztDx1eWL0MFLAjVBw=;
+        b=xzySkr+LChZ3QLms3wxyXnuEBje/XXI2lmmzj3RLdyPv3Ut63qphclSDdkEKMsteOs
+         ue0zCeNrwplEZhZYM1QjJo/5FdRr7X9yqZlaN7g6rfejkn7aRPJqfgzU67qMauTUCdm3
+         //zmVpWnCGQw5khYyPCeKcyjL1IrLUbiBWWgHSEz/tudsHfAJJ61qG4GVbFhzm4kFHiY
+         wfXa3gD4IlNg6gjTW+TKm5hOmp9ltV/MkOmhGKRRDCkpAp76ZVyfnr4Zwfe+2400fINv
+         +wyp03/UDBIHuL6kDGop5uY8FXazslXZWdl/cXEUQ+3dtJnUdZr5oqygTH7gXXDz9iJ5
+         T/lQ==
+X-Gm-Message-State: ACrzQf37jiKnXgs2WOfwCHMXFiVi8ObhCks5u8+80RTARXSvRLqOqPHZ
+        5NcTQqKmtdsWbhKgyfkN32aJ0A==
+X-Google-Smtp-Source: AMsMyM5hqxGfwz8P6yjzN7RdozQ/Ufrx1pPbdjNFT9maL8BpEkZziOYwFfCO3upfHVZBBSMO4WgpOQ==
+X-Received: by 2002:a2e:6e03:0:b0:277:d99:9971 with SMTP id j3-20020a2e6e03000000b002770d999971mr18911047ljc.34.1667847574140;
+        Mon, 07 Nov 2022 10:59:34 -0800 (PST)
+Received: from krzk-bin.NAT.warszawa.vectranet.pl (088156142199.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.199])
+        by smtp.gmail.com with ESMTPSA id y5-20020a05651c106500b002770a9ed61bsm1327875ljm.66.2022.11.07.10.59.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Nov 2022 10:58:24 -0800 (PST)
-From:   Valentin Schneider <vschneid@redhat.com>
-To:     Qais Yousef <qyousef@layalina.io>
-Cc:     Qais Yousef <qais.yousef@arm.com>, Ingo Molnar <mingo@kernel.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        linux-kernel@vger.kernel.org, Xuewen Yan <xuewen.yan94@gmail.com>,
-        Lukasz Luba <lukasz.luba@arm.com>, Wei Wang <wvw@google.com>,
-        Jonathan JMChen <Jonathan.JMChen@mediatek.com>,
-        Hank <han.lin@mediatek.com>
-Subject: Re: [PATCH v2 9/9] sched/fair: Consider capacity inversion in
- util_fits_cpu()
-In-Reply-To: <20221105204141.3tno6fzuh536ye4e@airbuntu>
-References: <20220804143609.515789-1-qais.yousef@arm.com>
- <20220804143609.515789-10-qais.yousef@arm.com>
- <xhsmhwn8avd07.mognet@vschneid.remote.csb>
- <20221105204141.3tno6fzuh536ye4e@airbuntu>
-Date:   Mon, 07 Nov 2022 18:58:23 +0000
-Message-ID: <xhsmho7timw1c.mognet@vschneid.remote.csb>
+        Mon, 07 Nov 2022 10:59:33 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 1/2] dt-bindings: pinctrl: qcom,msm8660: convert to dtschema
+Date:   Mon,  7 Nov 2022 19:59:30 +0100
+Message-Id: <20221107185931.22075-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/11/22 20:41, Qais Yousef wrote:
-> On 11/04/22 17:35, Valentin Schneider wrote:
->> On 04/08/22 15:36, Qais Yousef wrote:
->> > We do consider thermal pressure in util_fits_cpu() for uclamp_min only.
->> > With the exception of the biggest cores which by definition are the max
->> > performance point of the system and all tasks by definition should fit.
->> >
->> > Even under thermal pressure, the capacity of the biggest CPU is the
->> > highest in the system and should still fit every task. Except when it
->> > reaches capacity inversion point, then this is no longer true.
->> >
->> > We can handle this by using the inverted capacity as capacity_orig in
->> > util_fits_cpu(). Which not only addresses the problem above, but also
->> > ensure uclamp_max now considers the inverted capacity. Force fitting
->> > a task when a CPU is in this adverse state will contribute to making the
->> > thermal throttling last longer.
->> >
->> > Signed-off-by: Qais Yousef <qais.yousef@arm.com>
->> > ---
->> >  kernel/sched/fair.c | 14 +++++++++-----
->> >  1 file changed, 9 insertions(+), 5 deletions(-)
->> >
->> > diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
->> > index cb32dc9a057f..77ae343e32a3 100644
->> > --- a/kernel/sched/fair.c
->> > +++ b/kernel/sched/fair.c
->> > @@ -4293,12 +4293,16 @@ static inline int util_fits_cpu(unsigned long util,
->> >        * For uclamp_max, we can tolerate a drop in performance level as the
->> >        * goal is to cap the task. So it's okay if it's getting less.
->> >        *
->> > -	 * In case of capacity inversion, which is not handled yet, we should
->> > -	 * honour the inverted capacity for both uclamp_min and uclamp_max all
->> > -	 * the time.
->> > +	 * In case of capacity inversion we should honour the inverted capacity
->> > +	 * for both uclamp_min and uclamp_max all the time.
->> >        */
->> > -	capacity_orig = capacity_orig_of(cpu);
->> > -	capacity_orig_thermal = capacity_orig - arch_scale_thermal_pressure(cpu);
->> > +	capacity_orig = cpu_in_capacity_inversion(cpu);
->> > +	if (capacity_orig) {
->> > +		capacity_orig_thermal = capacity_orig;
->> > +	} else {
->> > +		capacity_orig = capacity_orig_of(cpu);
->> > +		capacity_orig_thermal = capacity_orig - arch_scale_thermal_pressure(cpu);
->> > +	}
->> >
->>
->> IIUC the rq->cpu_capacity_inverted computation in update_cpu_capacity() can be
->> summarised as:
->>
->> - If there is a PD with equal cap_orig, but higher effective (orig - thermal)
->>   capacity
->>   OR
->>   there is a PD with pd_cap_orig > cpu_effective_cap:
->>   rq->cpu_capacity_inverted = capacity_orig - thermal_load_avg(rq)
->>
->> - Else:
->>   rq->cpu_capacity_inverted = 0
->>
->> Then, the code above uses either rq->cpu_capacity_inverted if it is
->> non-zero, otherwise:
->>
->>   capacity_orig - arch_scale_thermal_pressure(cpu);
->>
->> Why use average thermal pressure in one case, and use instantaneous
->> thermal pressure in the other?
->
-> There was a big debate on [1] about using avg vs instantaneous.
->
+Convert Qualcomm MSM8660 pin controller bindings to DT schema.  Keep the
+parsing of pin configuration subnodes consistent with other Qualcomm
+schemas (children named with '-state' suffix, their children with
+'-pins').
 
-Interesting thread, thanks for the link!
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ .../bindings/pinctrl/qcom,msm8660-pinctrl.txt |  96 --------------
+ .../pinctrl/qcom,msm8660-pinctrl.yaml         | 125 ++++++++++++++++++
+ 2 files changed, 125 insertions(+), 96 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,msm8660-pinctrl.txt
+ create mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,msm8660-pinctrl.yaml
 
-> I used avg for detecting inversion to be consistent with using average in in
-> scale_rt_capacity(). I didn't want the inversion state to be flipping too
-> quickly too.
->
-> I used the instantaneous in the other check based on that discussion. It seemed
-> using the average is hurtful when for example the medium drops an OPP and by
-> not reacting quickly at wake up we lose the chance to place it on a big; which
-> if my memory didn't fail me is what Xuewen was seeing.
->
-
-OK So IIUC by using the inst. pressure you start excluding CPUs sooner, and
-with the avg pressure you keep those CPUs out (if the pressure remained
-long enough).
-
-> [1] https://lore.kernel.org/lkml/24631a27-42d9-229f-d9b0-040ac993b749@arm.com/
->
-
->>
->> Can't we get rid of rq->cpu_capacity_inverted and replace this whole thing
->> with an unconditional
->>
->>   capacity_orig_thermal = capacity_orig_of(cpu) - thermal_load_avg(cpu_rq(cpu));
->>
->> ?
->
-> I can't see how we end up with equivalent behavior then. Or address the
-> concerns raised by Xuewen and Lukasz on the RT thread in regards to avg vs
-> instantaneous.
->
-> Specifically, if we don't use the new rq->cpu_capacity_inverted we can't handle
-> the case where the task is requesting to run at maximum performance but a small
-> drop in thermal pressure means it won't fit anywhere. That PD is the best fit
-> until it hits an inversion.
->
-> Originally I wanted to defer handling thermal pressure into a different series.
-> But Vincent thought it's better to handle it now. We want more data points from
-> more systems tbh. But I think what we have now is still a good improvement over
-> what we had before.
->
-> Lukasz had a patch [2] which could allow making thermal_load_avg() more
-> acceptable for systems that care about faster response times.
->
-> [2] https://lore.kernel.org/lkml/20220429091245.12423-1-lukasz.luba@arm.com/
->
->
-> Thanks
->
-> --
-> Qais Yousef
+diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,msm8660-pinctrl.txt b/Documentation/devicetree/bindings/pinctrl/qcom,msm8660-pinctrl.txt
+deleted file mode 100644
+index f095209848c8..000000000000
+--- a/Documentation/devicetree/bindings/pinctrl/qcom,msm8660-pinctrl.txt
++++ /dev/null
+@@ -1,96 +0,0 @@
+-Qualcomm MSM8660 TLMM block
+-
+-Required properties:
+-- compatible: "qcom,msm8660-pinctrl"
+-- reg: Should be the base address and length of the TLMM block.
+-- interrupts: Should be the parent IRQ of the TLMM block.
+-- interrupt-controller: Marks the device node as an interrupt controller.
+-- #interrupt-cells: Should be two.
+-- gpio-controller: Marks the device node as a GPIO controller.
+-- #gpio-cells : Should be two.
+-                The first cell is the gpio pin number and the
+-                second cell is used for optional parameters.
+-- gpio-ranges: see ../gpio/gpio.txt
+-
+-Optional properties:
+-
+-- gpio-reserved-ranges: see ../gpio/gpio.txt
+-
+-Please refer to ../gpio/gpio.txt and ../interrupt-controller/interrupts.txt for
+-a general description of GPIO and interrupt bindings.
+-
+-Please refer to pinctrl-bindings.txt in this directory for details of the
+-common pinctrl bindings used by client devices, including the meaning of the
+-phrase "pin configuration node".
+-
+-Qualcomm's pin configuration nodes act as a container for an arbitrary number of
+-subnodes. Each of these subnodes represents some desired configuration for a
+-pin, a group, or a list of pins or groups. This configuration can include the
+-mux function to select on those pin(s)/group(s), and various pin configuration
+-parameters, such as pull-up, drive strength, etc.
+-
+-The name of each subnode is not important; all subnodes should be enumerated
+-and processed purely based on their content.
+-
+-Each subnode only affects those parameters that are explicitly listed. In
+-other words, a subnode that lists a mux function but no pin configuration
+-parameters implies no information about any pin configuration parameters.
+-Similarly, a pin subnode that describes a pullup parameter implies no
+-information about e.g. the mux function.
+-
+-
+-The following generic properties as defined in pinctrl-bindings.txt are valid
+-to specify in a pin configuration subnode:
+-
+- pins, function, bias-disable, bias-pull-down, bias-pull-up, drive-strength,
+- output-low, output-high.
+-
+-Non-empty subnodes must specify the 'pins' property.
+-
+-Valid values for pins are:
+-  gpio0-gpio172, sdc3_clk, sdc3_cmd, sdc3_data sdc4_clk, sdc4_cmd, sdc4_data
+-
+-Valid values for function are:
+-  gpio, cam_mclk, dsub, ext_gps, gp_clk_0a, gp_clk_0b, gp_clk_1a, gp_clk_1b,
+-  gp_clk_2a, gp_clk_2b, gp_mn, gsbi1, gsbi1_spi_cs1_n, gsbi1_spi_cs2a_n,
+-  gsbi1_spi_cs2b_n, gsbi1_spi_cs3_n, gsbi2, gsbi2_spi_cs1_n, gsbi2_spi_cs2_n,
+-  gsbi2_spi_cs3_n, gsbi3, gsbi3_spi_cs1_n, gsbi3_spi_cs2_n, gsbi3_spi_cs3_n,
+-  gsbi4, gsbi5, gsbi6, gsbi7, gsbi8, gsbi9, gsbi10, gsbi11, gsbi12, hdmi, i2s,
+-  lcdc, mdp_vsync, mi2s, pcm, ps_hold, sdc1, sdc2, sdc5, tsif1, tsif2, usb_fs1,
+-  usb_fs1_oe_n, usb_fs2, usb_fs2_oe_n, vfe, vsens_alarm, ebi2, ebi2cs
+-
+-Example:
+-
+-	msmgpio: pinctrl@800000 {
+-		compatible = "qcom,msm8660-pinctrl";
+-		reg = <0x800000 0x4000>;
+-
+-		gpio-controller;
+-		#gpio-cells = <2>;
+-		gpio-ranges = <&msmgpio 0 0 173>;
+-		interrupt-controller;
+-		#interrupt-cells = <2>;
+-		interrupts = <0 16 0x4>;
+-
+-		pinctrl-names = "default";
+-		pinctrl-0 = <&gsbi12_uart>;
+-
+-		gsbi12_uart: gsbi12-uart {
+-			mux {
+-				pins = "gpio117", "gpio118";
+-				function = "gsbi12";
+-			};
+-
+-			tx {
+-				pins = "gpio118";
+-				drive-strength = <8>;
+-				bias-disable;
+-			};
+-
+-			rx {
+-				pins = "gpio117";
+-				drive-strength = <2>;
+-				bias-pull-up;
+-			};
+-		};
+-	};
+diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,msm8660-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/qcom,msm8660-pinctrl.yaml
+new file mode 100644
+index 000000000000..ad0cad4694c0
+--- /dev/null
++++ b/Documentation/devicetree/bindings/pinctrl/qcom,msm8660-pinctrl.yaml
+@@ -0,0 +1,125 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/pinctrl/qcom,msm8660-pinctrl.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Qualcomm MSM8660 TLMM pin controller
++
++maintainers:
++  - Bjorn Andersson <andersson@kernel.org>
++  - Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
++
++description:
++  Top Level Mode Multiplexer pin controller in Qualcomm MSM8660 SoC.
++
++properties:
++  compatible:
++    const: qcom,msm8660-pinctrl
++
++  reg:
++    maxItems: 1
++
++  interrupts: true
++  interrupt-controller: true
++  "#interrupt-cells": true
++  gpio-controller: true
++  "#gpio-cells": true
++  gpio-ranges: true
++  wakeup-parent: true
++
++  gpio-reserved-ranges:
++    minItems: 1
++    maxItems: 86
++
++  gpio-line-names:
++    maxItems: 173
++
++patternProperties:
++  "-state$":
++    oneOf:
++      - $ref: "#/$defs/qcom-msm8660-tlmm-state"
++      - patternProperties:
++          "-pins$":
++            $ref: "#/$defs/qcom-msm8660-tlmm-state"
++        additionalProperties: false
++
++$defs:
++  qcom-msm8660-tlmm-state:
++    type: object
++    description:
++      Pinctrl node's client devices use subnodes for desired pin configuration.
++      Client device subnodes use below standard properties.
++    $ref: qcom,tlmm-common.yaml#/$defs/qcom-tlmm-state
++
++    properties:
++      pins:
++        description:
++          List of gpio pins affected by the properties specified in this
++          subnode.
++        items:
++          oneOf:
++            - pattern: "^gpio([0-9]|[1-9][0-9]|1[0-6][0-9]|17[0-2])$"
++            - enum: [ sdc3_clk, sdc3_cmd, sdc3_data, sdc4_clk, sdc4_cmd, sdc4_data ]
++        minItems: 1
++        maxItems: 36
++
++      function:
++        description:
++          Specify the alternative function to be configured for the specified
++          pins.
++
++        enum: [ gpio, cam_mclk, dsub, ext_gps, gp_clk_0a, gp_clk_0b, gp_clk_1a,
++                gp_clk_1b, gp_clk_2a, gp_clk_2b, gp_mn, gsbi1, gsbi1_spi_cs1_n,
++                gsbi1_spi_cs2a_n, gsbi1_spi_cs2b_n, gsbi1_spi_cs3_n, gsbi2,
++                gsbi2_spi_cs1_n, gsbi2_spi_cs2_n, gsbi2_spi_cs3_n, gsbi3,
++                gsbi3_spi_cs1_n, gsbi3_spi_cs2_n, gsbi3_spi_cs3_n, gsbi4,
++                gsbi5, gsbi6, gsbi7, gsbi8, gsbi9, gsbi10, gsbi11, gsbi12,
++                hdmi, i2s, lcdc, mdp_vsync, mi2s, pcm, ps_hold, sdc1, sdc2,
++                sdc5, tsif1, tsif2, usb_fs1, usb_fs1_oe_n, usb_fs2,
++                usb_fs2_oe_n, vfe, vsens_alarm, ebi2, ebi2cs ]
++
++
++      bias-pull-down: true
++      bias-pull-up: true
++      bias-disable: true
++      drive-strength: true
++      input-enable: true
++      output-high: true
++      output-low: true
++
++    required:
++      - pins
++
++    additionalProperties: false
++
++allOf:
++  - $ref: /schemas/pinctrl/qcom,tlmm-common.yaml#
++
++required:
++  - compatible
++  - reg
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    tlmm: pinctrl@800000 {
++        compatible = "qcom,msm8660-pinctrl";
++        reg = <0x800000 0x4000>;
++
++        gpio-controller;
++        gpio-ranges = <&tlmm 0 0 173>;
++        #gpio-cells = <2>;
++        interrupts = <0 16 0x4>;
++        interrupt-controller;
++        #interrupt-cells = <2>;
++
++        gsbi3-i2c-state {
++            pins = "gpio43", "gpio44";
++            function = "gsbi3";
++            drive-strength = <8>;
++            bias-disable;
++        };
++    };
+-- 
+2.34.1
 
