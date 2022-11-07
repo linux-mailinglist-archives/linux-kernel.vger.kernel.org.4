@@ -2,81 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7426861EF8C
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 10:49:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EBEF61EF8F
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 10:49:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231895AbiKGJs7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 04:48:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42794 "EHLO
+        id S231898AbiKGJtX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 04:49:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231530AbiKGJs4 (ORCPT
+        with ESMTP id S230389AbiKGJtU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 04:48:56 -0500
-Received: from faui40.informatik.uni-erlangen.de (faui40.informatik.uni-erlangen.de [131.188.34.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1385714D34;
-        Mon,  7 Nov 2022 01:48:54 -0800 (PST)
-Received: from cs.fau.de (ipbcc2d1f0.dynamic.kabel-deutschland.de [188.194.209.240])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: rabenstein)
-        by faui40.informatik.uni-erlangen.de (Postfix) with ESMTPSA id 920DB548498;
-        Mon,  7 Nov 2022 10:48:49 +0100 (CET)
-Date:   Mon, 7 Nov 2022 10:48:49 +0100
-From:   Jonas Rabenstein <rabenstein@cs.fau.de>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, Jiri Olsa <jolsa@kernel.org>,
-        Song Liu <song@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] bpf: mark get_entry_ip as __maybe_unused
-Message-ID: <20221107094849.gowmplkn3ozskrk2@kashyyyk>
-References: <20221103150303.974028-1-rabenstein@cs.fau.de>
- <20221103153247.zal3czlsxvanfnc3@kashyyyk>
- <Y2jISpQUOTxXxpxN@kroah.com>
- <Y2jQEwGJZ0fANWAb@kroah.com>
+        Mon, 7 Nov 2022 04:49:20 -0500
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94E8126D5;
+        Mon,  7 Nov 2022 01:49:19 -0800 (PST)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id C93F81BF20B;
+        Mon,  7 Nov 2022 09:49:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1667814558;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=suAWhiMbN3vVsVIvCvbfabSCT4Xo/QXzr+vevpFsMds=;
+        b=T1w1LK54EqHBS2sNA+9bpJ2n2BiREChSZ5BAQwPQSkvIafyXCZYaOZAtEHOdWjJHv4Ih/M
+        /zwJj0vPJz3lw1I8rqTUsdDso3xyEdIWcIeGLDaTWm0oDQLaCSMv7q4fTDHc1p/R2izvkg
+        gXnugYgu01OHMUN0pOKXzRjakrCT8m9wsjNXW/wLQdnSNhO1M2HlbVxFS52uErVDKNz+vj
+        cbNMts1tmrQPi6pjvJm/1yWMUPDizpq8ujkNwWPgAJpCkH/6wvFp8k3+/LmPWPuw+yvAw+
+        fyHg6LKS/f6wPcLFDouy6gHB4ZyH0HysqJMOEwt31T4kwXXlg5sHeTF//TLpkw==
+Date:   Mon, 7 Nov 2022 10:49:16 +0100
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     zys.zljxml@gmail.com
+Cc:     a.zummo@towertech.it, alexandre.belloni@bootlin.com,
+        michel.pollet@bp.renesas.com, linux-rtc@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yushan Zhou <katrinzhou@tencent.com>
+Subject: Re: [PATCH] rtc: rzn1: Check return value in rzn1_rtc_probe
+Message-ID: <20221107104916.64dc26d4@xps-13>
+In-Reply-To: <20221107092544.3721053-1-zys.zljxml@gmail.com>
+References: <20221107092544.3721053-1-zys.zljxml@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y2jQEwGJZ0fANWAb@kroah.com>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 07, 2022 at 10:29:55AM +0100, Greg KH wrote:
-> On Mon, Nov 07, 2022 at 09:56:42AM +0100, Greg KH wrote:
-> > On Thu, Nov 03, 2022 at 04:32:47PM +0100, Jonas Rabenstein wrote:
-> > > Hi again,
-> > > after sending this out, I noticed this is only a problem in the stable
-> > > versions (starting from v6.0.3), as c09eb2e578eb1668bbc has been applied (as
-> > > 03f148c159a250dd454) but not 0e253f7e558a3e250902 ("bpf: Return value in kprobe
-> > > get_func_ip only for entry address") which makes always use of get_entry_ip.
-> > > I therefore think, 0e253f7e558a3e250902 needs to be added to the stable v6.0
-> > > series as well as otherwise it can't be compiled with -Werror if
-> > > CONFIG_X6_KERNEL_IBT is set but CONFIG_FPROBE isn't.
-> > 
-> > Ok, now queued up, thanks.
-> 
-> Oops, this breaks the build, now dropping.
-Sorry, 0e253f7e558a3e250902 ("bpf: Return value in kprobe get_func_ip only for
-entry address") uses the macro KPROBE_FLAG_ON_FUNC_ENTRY that was introduced
-in bf7a87f1075f67c286f7 ("kprobes: Add new KPROBE_FLAG_ON_FUNC_ENTRY kprobe
-flag"). Applying those on top of v6.0.7 fixes the original compilation problem
-(CONFIG_X6_KERNEL_IBT but !CONFIG_FPROBE) and should not break anything
-- jonas
-> 
-> greg k-h
+Hello,
+
+zys.zljxml@gmail.com wrote on Mon,  7 Nov 2022 17:25:44 +0800:
+
+> From: Yushan Zhou <katrinzhou@tencent.com>
+>=20
+> The rzn1_rtc_probe() function utilizes devm_pm_runtime_enable()
+> but wasn't checking the return value. Fix it by adding missing
+> check.
+>=20
+> Fixes: deeb4b5393e1 ("rtc: rzn1: Add new RTC driver")
+>=20
+> Signed-off-by: Yushan Zhou <katrinzhou@tencent.com>
+> ---
+>  drivers/rtc/rtc-rzn1.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/rtc/rtc-rzn1.c b/drivers/rtc/rtc-rzn1.c
+> index ac788799c8e3..0d36bc50197c 100644
+> --- a/drivers/rtc/rtc-rzn1.c
+> +++ b/drivers/rtc/rtc-rzn1.c
+> @@ -355,7 +355,9 @@ static int rzn1_rtc_probe(struct platform_device *pde=
+v)
+>  	set_bit(RTC_FEATURE_ALARM_RES_MINUTE, rtc->rtcdev->features);
+>  	clear_bit(RTC_FEATURE_UPDATE_INTERRUPT, rtc->rtcdev->features);
+> =20
+> -	devm_pm_runtime_enable(&pdev->dev);
+> +	ret =3D devm_pm_runtime_enable(&pdev->dev);
+> +	if (ret < 0)
+> +		return ret;
+>  	ret =3D pm_runtime_resume_and_get(&pdev->dev);
+>  	if (ret < 0)
+>  		return ret;
+
+Reviewed-by: Miquel Raynal <miquel.raynal@bootlin.com>
+
+Thanks,
+Miqu=C3=A8l
