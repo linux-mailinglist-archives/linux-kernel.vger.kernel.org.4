@@ -2,290 +2,486 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 911AB61EA8F
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 06:39:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F7FA61EA99
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 06:43:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229503AbiKGFjZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 00:39:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56462 "EHLO
+        id S230501AbiKGFnV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 00:43:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230050AbiKGFjX (ORCPT
+        with ESMTP id S229509AbiKGFnN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 00:39:23 -0500
-Received: from mx0a-0014ca01.pphosted.com (mx0a-0014ca01.pphosted.com [208.84.65.235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74B127662;
-        Sun,  6 Nov 2022 21:39:21 -0800 (PST)
-Received: from pps.filterd (m0042385.ppops.net [127.0.0.1])
-        by mx0a-0014ca01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2A6MS95O010541;
-        Sun, 6 Nov 2022 21:39:11 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com; h=from : to : cc :
- subject : date : message-id : references : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=proofpoint;
- bh=2aJ6IEEoy6f3j2bgv74ipH8FNUcxYankOFdjdPxeNAE=;
- b=S3rnUlW4zhqsU1IgQ7V4OrqSHSW6YddIJUCM2yMc1P6jth06aMFsCGXpAhCBmthvg2h+
- Q15K0z/lRij/+br6p0h9WezlnVWx2FLeZiDM1cDj4WtatGb/G7KXgv4ze5roWPk6o/QT
- vBkD3VewzQKDWbRLRg6Fon8FShQOSVMO0CA1ptesvPyAWS01e5RKpFPBcpo4hEJ7wspo
- lmfGx73il8R0/iMzLBI1z07D6+hADq+l/2bAg4mS6WJ26hF5lY2BxcGDGTtDu5z5Orkf
- xce57UIjrRSpz9j2PGZMiHY7IYaxUOPiwyYyEc7UKEuXkmnXBwxzR7Es8uhl74nRLDyk /Q== 
-Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2107.outbound.protection.outlook.com [104.47.58.107])
-        by mx0a-0014ca01.pphosted.com (PPS) with ESMTPS id 3kpepta198-1
+        Mon, 7 Nov 2022 00:43:13 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 159F32DFC;
+        Sun,  6 Nov 2022 21:43:12 -0800 (PST)
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2A75b56h020033;
+        Mon, 7 Nov 2022 05:42:54 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=nwt6wD2/dJAWmW5gjL11ffiveIB70LyyJlu7YrjKMVU=;
+ b=pda/BM53zRF1hqYQFiomr7kD9IfeE87QaKmzUd143463zEmfl3leAxp4wJAemUgfX7km
+ FjbfA5uPOsubm+rczrNQ5V1aCrEkmK7ZF3m9gMt0kOiJR1ts027bQXcH/0JTwY++ftyh
+ dC75qoP+n0L4DY8L8tHji9SlJ2ppAq6KOXI2lpMGKQOb0/y7HNtGa5wwguDO/FjgL72o
+ I9y9oG5HTQ/Odl4buGtvFG/jyABmTY8aM4JCRqA6ik74gDkC8qIzMHhW4UE2zBumHM/2
+ QQlrYvm72mEzvJ9slt9B0XILvWRN/ICBvc5JvLR9kxp7IojJFZmpvATz1cbLHe0bPrAM vA== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kphq2rn5v-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 06 Nov 2022 21:39:11 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OU+yrLYfMlkWwY1Tc6fwvWpyHDbYM3ZQkTw/Wt956Z4ckiTz7sFWqe+H4ADj9NKYgmATLNmOYREILDhJOBYyxnop32AoF6Yq2o/wu+2gizsaHEPeR3GXbNTpKRZtriIiZbvT5ICp25/VFwNwT4QtazzqxiEsjEnS9/G//8N+58emhrzf1IQU8pZ9OCVcuwbFScV25HDovx0GASnsWQEcDYg8saw81EKyyZrbeOnsJkc9YuYhz7Pko4DFGMEBTFtiS/CqjgsQqhkpgNK1Vuk6bdboKJ4d9tabYefss8qbhpn59IRSqF2VlVH/y8ve5yP1f2eqwRDHW0KsrLK+XIeX/A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2aJ6IEEoy6f3j2bgv74ipH8FNUcxYankOFdjdPxeNAE=;
- b=iahjTvq+FX6jCxaMnjXISsOdqrFf0tROZG4mcANe1Q3kZ0Eqma8RnQtInnhS7keSGsE/Fp6Fa/93ZRlf9s0YYAX/42d+N4D6a3XhxV5P3KIgpyvJeZS6tJsN31SG/9qjhb5jBCExjydnC90SwTSk//Bm8gv2irviHDcmjJ/UgLoVht/5QEWt8ysPubIZceUZbMpNEhyKNR8Rgl4iEw3SNAuAneQT1LydXlTM49uT4hheusHFktuSck+UwkTtE4BxIvoiuTV/B89vBmBeHLQ4Jk6NzFlOGy8ZHa3N4mgTeX1Ptmw+/k7NMyMAL5ftTHDWbqO1GraVkQ6Q3o76+QPmmw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=cadence.com; dmarc=pass action=none header.from=cadence.com;
- dkim=pass header.d=cadence.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2aJ6IEEoy6f3j2bgv74ipH8FNUcxYankOFdjdPxeNAE=;
- b=CISpXgHCnHIxEdr6YZOffnNi6MySNxz7AzYU/L5NrRfNQuPhl04mVAJX/2YktML0Hr41g39mXpQqiQcOxYCeIPc4DMpeX8k+ClI9yLtx/qGIxnYpN86q/1y5UsJrnb6W5CcVoQ/KUwPeg0Z6Jmmq1skwwvW8oRzsFq+mG5+biY0=
-Received: from BYAPR07MB5381.namprd07.prod.outlook.com (2603:10b6:a03:6d::24)
- by DM6PR07MB5594.namprd07.prod.outlook.com (2603:10b6:5:36::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5769.21; Mon, 7 Nov
- 2022 05:39:08 +0000
-Received: from BYAPR07MB5381.namprd07.prod.outlook.com
- ([fe80::ea7c:b79f:752e:1afc]) by BYAPR07MB5381.namprd07.prod.outlook.com
- ([fe80::ea7c:b79f:752e:1afc%4]) with mapi id 15.20.5791.025; Mon, 7 Nov 2022
- 05:39:08 +0000
-From:   Pawel Laszczak <pawell@cadence.com>
-To:     Peter Chen <peter.chen@kernel.org>
-CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: RE: [PATCH v2] usb: cdnsp: fix issue with ZLP - added TD_SIZE = 1
-Thread-Topic: [PATCH v2] usb: cdnsp: fix issue with ZLP - added TD_SIZE = 1
-Thread-Index: AQHY57Ge68RMVQuhaUeO0fOrXMci/K4h2uCAgAAVsiCAD7z/gIABUoKQ
-Date:   Mon, 7 Nov 2022 05:39:08 +0000
-Message-ID: <BYAPR07MB5381CD42617915D95122D56FDD3C9@BYAPR07MB5381.namprd07.prod.outlook.com>
-References: <1666620275-139704-1-git-send-email-pawell@cadence.com>
- <20221027072421.GA75844@nchen-desktop>
- <BYAPR07MB5381482129407B849BA9A616DD339@BYAPR07MB5381.namprd07.prod.outlook.com>
- <20221106090221.GA152143@nchen-desktop>
-In-Reply-To: <20221106090221.GA152143@nchen-desktop>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-dg-ref: PG1ldGE+PGF0IG5tPSJib2R5LnR4dCIgcD0iYzpcdXNlcnNccGF3ZWxsXGFwcGRhdGFccm9hbWluZ1wwOWQ4NDliNi0zMmQzLTRhNDAtODVlZS02Yjg0YmEyOWUzNWJcbXNnc1xtc2ctN2Q2ZGE4Y2ItNWU1ZS0xMWVkLWE4NDgtMDBiZTQzMTQxNTFkXGFtZS10ZXN0XDdkNmRhOGNkLTVlNWUtMTFlZC1hODQ4LTAwYmU0MzE0MTUxZGJvZHkudHh0IiBzej0iNDA0MyIgdD0iMTMzMTIyNzMxNDUyNzYxOTgzIiBoPSIyR1VHc2NIZVRSMm41YjVXTjFOSm1iUGFXdDQ9IiBpZD0iIiBibD0iMCIgYm89IjEiLz48L21ldGE+
-x-dg-rorf: true
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BYAPR07MB5381:EE_|DM6PR07MB5594:EE_
-x-ms-office365-filtering-correlation-id: be407443-e5ca-4c95-1cb7-08dac0826417
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: V9PFIPib5sR+RfrkNz2kBxMStvHvqYKhbazFIO7uEwkIoUgP6yRrUmuLmaiLw1tGHrNabm56qmKnjxQXtqO1+wHuIBEzE5xqld1EQ+2iQIg+UPBuM71P0EI5Wr6X/h5pEn+7CM5xCG8Je7WZlNl5qm+e0nClLGg5+fvibtQtbAher0HKw8WX0uwcNs79fWtozdbCQLJwH/ebNH/M7mLH4PVd3JVHgMDRRFVCrtTTDhDkVH0APlPj1WAzW+AjtBz8G8SeQWKVm2cDsHx3jhVmgnpuMFziaODUfqB7J49Oc7EX7f1niUNXj5zl3I3TXXHCLD6hyx4RkguN48UILY3jsBJBRxXrPPkC1ZoC08fN/bX1oNcxpOhQMOSX7eWeQg3YOAltFg00Tpjjw2kRP52A0FdSXekN8s22u5WSM5UxIMnZcBDQAuLrB6mKs2RzY08VLkTb8+TCuSHbauDBK56jYEQAHVTsGzs7MdTfWvzh5j335SYsYeydfo7J4VQg3z0YJ4D5nyp5WEsFty4a6j0eB2Aw+lWleLQIk/CxoWZB+DdgwzpNsWOhVhScqFr7BqNW+gH8ogb5m88tygCJLEeQ5DblH5SKatYyFMIWsyuw2koVngsKAZmVv+KITLK8cZxLbGDQIOkj//mH0uTp6VLHCF3/4eCKSlUjNKrRLiCQo7vWPN3BK9mencXmFQEqYzikLUBLkYYQnpQStsRkZEP5w6lmfq16YxsYtsYHSf/yweAsr0OcHk3EyTmlY6XTuvxdBCOPlmVGXhTVp3MZ/rcwGQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR07MB5381.namprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(376002)(366004)(346002)(396003)(39860400002)(36092001)(451199015)(41300700001)(5660300002)(66476007)(6916009)(4326008)(54906003)(8936002)(55016003)(38070700005)(64756008)(66446008)(66556008)(2906002)(33656002)(52536014)(316002)(66946007)(83380400001)(76116006)(8676002)(7696005)(86362001)(6506007)(38100700002)(26005)(9686003)(122000001)(186003)(478600001)(71200400001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?fsLF/uS2DEvpzir5/4OAt94aEW4MaJczYsYnrkFPHtoy4gsxK+k/bU4NRCKj?=
- =?us-ascii?Q?C6lm54EZzfHn6Lkot/zSfC/yfDrHot1F/CGiw9IANV3in+JYTTD9UjhrE8FP?=
- =?us-ascii?Q?zSQvgIeCaGcMr5Ce8nw00GD5KcxGZyHPpT9uGVJOrxdTePhCOUwqrV4IRMZ3?=
- =?us-ascii?Q?y7uP4Se9psRuahSVyOZY6le81bjrMNMd48ed6Eqozj5+oCOaOcopLAZ2S3dG?=
- =?us-ascii?Q?Qq59G0gKMBkKPxqdxZqswRgaz5vXPUxN4UVteskw677jjdoT407Ipx8+/Tni?=
- =?us-ascii?Q?Tw2NECJkm9pbYl19g9iv86RoqSMIamnHMcLE5dkxCWBFK+zISzTJYAhXzY61?=
- =?us-ascii?Q?Di/YHneYrPbIsBszpbE4aYx860O+VchW2KdbuE7od9yWZNMv6heh7SyUeLNL?=
- =?us-ascii?Q?TKt7n8UNO7oLWoTD4WTCOjwiWrh/smWwzYl/xrmMZw4ft6yCUqK2+1sqpBwC?=
- =?us-ascii?Q?bKGt6b5BXTns8AyFuYG4EJgU+neNZl+YIGrMvzWvMNRzPXhiJ9oguPcis86d?=
- =?us-ascii?Q?b29iFG+HUWWIdyyG0BArtSd1g1N8KI47mXvBRihEmvtn2mnBzBeY0El0HN5z?=
- =?us-ascii?Q?oRla/oDBu2m37e5chomfABAQC91pIArtygTuhXxRbbGpSmGpWpb+KkTb+pCO?=
- =?us-ascii?Q?8ScGEKWQdQq4DwFTlNEXIIF0OHRfLe2+8kcfQj7JdQsGEpv9hf3xwJC6SWlH?=
- =?us-ascii?Q?qhlX64f7zCBU6ap+eDlbQvI7ameOxg6Po9KQ8K3aGAqilFbzyFQPkzJvL3T2?=
- =?us-ascii?Q?UHKDACSPRFnMps8NSSsGyHnNTdlMts8+U7XLJ0ou4sn1SuhwJneYpE3gq9lz?=
- =?us-ascii?Q?LSnCZ5RFFpTUnaxCecPo/yPug39/p3biL//vTtS3WCiIKcAwuI6lNss9Ha8t?=
- =?us-ascii?Q?z+YlAGGR8EmL3qbIkH/v1j52WJyb9cX8jCcZrE74kjd6hahAYnv4dMmgWBrL?=
- =?us-ascii?Q?s9Lr2knXMlEBWaA7WO3SBkYQAyJb2dkknDl9V6qecuu+NL/essI+Wt+SynoY?=
- =?us-ascii?Q?b8AFTrSdpNttVCLT/+OjzO7H4cTyAX4aFnVQqm2URSns7KHT7a82Dzu3WYmr?=
- =?us-ascii?Q?bPrLx8qGXFgBGhRcfAjKQTWBDzU6gSA9zYvh1U15v7Hio3/tGgXxTD9YUcfu?=
- =?us-ascii?Q?Q58Vsd7Z/7SoQz38XvhoGE8tAPDbKDFyq/EOIiRwoNr+JKXmzzrdhy1/d/Pa?=
- =?us-ascii?Q?TOROuO6MHqn6GdZc/m3P70GCvmxbEH6qS7V1db5WFC6h/nAFx65mm7IM0RE+?=
- =?us-ascii?Q?eGdXMjZAKcO29yecvjlOJ+98VoRfveFg0kKG2eAjMXoTIFoAVOsREv5+dlTd?=
- =?us-ascii?Q?TjV5oquXeTVGaVsLyVwi49FkzM3Pyzcla8b8lXZNpjf4EE2gyLNEz/sjl+Kd?=
- =?us-ascii?Q?1Id+R8EOv30wnCZSSyxF7gg2JutfC9E/hPP93BJLkfxXwCpX94C9BJ8v8YSx?=
- =?us-ascii?Q?V7p6og6F4F/YOlIMit3fv9pZ1beAbFnlvFyRWGfrL1WK4Y93tErJDAntJ02O?=
- =?us-ascii?Q?Exi2hfRZvEH7bQ+9XepfozCVxgy/P/llapdjSu3ZNIBruYjhMpOcJhaUg/5p?=
- =?us-ascii?Q?e0fbivjAE2MapKZ4xy/WXp5eOGmB1Jn5k2u2qQUwQKOiVsUAA2qfO55Q1LBA?=
- =?us-ascii?Q?aw=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Mon, 07 Nov 2022 05:42:54 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2A75grwY027306
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 7 Nov 2022 05:42:53 GMT
+Received: from [10.110.53.224] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Sun, 6 Nov 2022
+ 21:42:47 -0800
+Message-ID: <a019d6e7-6796-c34f-f9b5-d7d4a4260b14@quicinc.com>
+Date:   Mon, 7 Nov 2022 11:12:28 +0530
 MIME-Version: 1.0
-X-OriginatorOrg: cadence.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR07MB5381.namprd07.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: be407443-e5ca-4c95-1cb7-08dac0826417
-X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Nov 2022 05:39:08.3239
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: d36035c5-6ce6-4662-a3dc-e762e61ae4c9
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: gZDZioLrXPL3UXTxoHvnZ2GI3Arkvfba9bU7P0a392uu5PPiNWIEuhhOaHV7PmrVSpKtcY3IhQnmN9JfccraOrKCloPAfXOwNKJbPv3bJmg=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR07MB5594
-X-Proofpoint-GUID: tbw37VKf4uvLTa_-KEXCY-Lm-Ig5mXvR
-X-Proofpoint-ORIG-GUID: tbw37VKf4uvLTa_-KEXCY-Lm-Ig5mXvR
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH V17 2/7] soc: qcom: dcc: Add driver support for Data
+ Capture and Compare unit(DCC)
+Content-Language: en-US
+To:     Alex Elder <elder@ieee.org>, Andy Gross <agross@kernel.org>,
+        "Bjorn Andersson" <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>,
+        "Sai Prakash Ranjan" <quic_saipraka@quicinc.com>,
+        Sibi Sankar <quic_sibis@quicinc.com>,
+        Rajendra Nayak <quic_rjendra@quicinc.com>, <vkoul@kernel.org>
+References: <cover.1665549527.git.quic_schowdhu@quicinc.com>
+ <5fee939d0a238344c7db11cf322adcb6baa35724.1665549527.git.quic_schowdhu@quicinc.com>
+ <6693993c-bd81-c974-a903-52a62bfec606@ieee.org>
+ <7f61eba9-30d2-1540-1c2f-6af7a50a4b53@quicinc.com>
+ <461b7484-b244-c66f-7a86-fadc5c7cabca@ieee.org>
+From:   Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+In-Reply-To: <461b7484-b244-c66f-7a86-fadc5c7cabca@ieee.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: ygfgo6M5wmrlbvhOYcY-XSwHV1PSmH1o
+X-Proofpoint-ORIG-GUID: ygfgo6M5wmrlbvhOYcY-XSwHV1PSmH1o
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
  definitions=2022-11-06_16,2022-11-03_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_check_notspam policy=outbound_check score=0 clxscore=1011
- bulkscore=0 suspectscore=0 adultscore=0 priorityscore=1501 phishscore=0
- mlxscore=0 impostorscore=0 malwarescore=0 lowpriorityscore=0 spamscore=0
- mlxlogscore=533 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211070047
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
+ lowpriorityscore=0 phishscore=0 priorityscore=1501 impostorscore=0
+ adultscore=0 malwarescore=0 bulkscore=0 mlxscore=0 clxscore=1015
+ mlxlogscore=999 suspectscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2210170000 definitions=main-2211070047
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->
->
->On 22-10-27 08:46:17, Pawel Laszczak wrote:
+
+
+On 11/1/2022 12:21 AM, Alex Elder wrote:
+> On 10/21/22 2:14 AM, Souradeep Chowdhury wrote:
 >>
->> >
->> >On 22-10-24 10:04:35, Pawel Laszczak wrote:
->> >> Patch modifies the TD_SIZE in TRB before ZLP TRB.
->> >> The TD_SIZE in TRB before ZLP TRB must be set to 1 to force
->> >> processing ZLP TRB by controller.
->> >>
->> >> cc: <stable@vger.kernel.org>
->> >> Fixes: 3d82904559f4 ("usb: cdnsp: cdns3 Add main part of Cadence
->> >> USBSSP DRD Driver")
->> >> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
->> >>
->> >> ---
->> >> Changelog:
->> >> v2:
->> >> - returned value for last TRB must be 0
->> >>
->> >>  drivers/usb/cdns3/cdnsp-ring.c | 7 ++++++-
->> >>  1 file changed, 6 insertions(+), 1 deletion(-)
->> >>
->> >> diff --git a/drivers/usb/cdns3/cdnsp-ring.c
->> >> b/drivers/usb/cdns3/cdnsp-ring.c index 04dfcaa08dc4..aa79bce89d8a
->> >> 100644
->> >> --- a/drivers/usb/cdns3/cdnsp-ring.c
->> >> +++ b/drivers/usb/cdns3/cdnsp-ring.c
->> >> @@ -1769,8 +1769,13 @@ static u32 cdnsp_td_remainder(struct
->> >> cdnsp_device *pdev,
->> >>
->> >>  	/* One TRB with a zero-length data packet. */
->> >>  	if (!more_trbs_coming || (transferred =3D=3D 0 && trb_buff_len =3D=
-=3D 0) ||
->> >> -	    trb_buff_len =3D=3D td_total_len)
->> >> +	    trb_buff_len =3D=3D td_total_len) {
->> >> +		/* Before ZLP driver needs set TD_SIZE=3D1. */
->> >> +		if (more_trbs_coming)
->> >> +			return 1;
->> >> +
->> >>  		return 0;
->> >> +	}
->> >
->> >Does that fix the issue you want at bulk transfer, which has
->> >zero-length packet at the last packet? It seems not align with your pre=
-vious
->fix.
->> >Would you mind explaining more?
 >>
->> Value returned by function cdnsp_td_remainder is used as TD_SIZE in
->> TRB.
+>> On 10/21/2022 5:37 AM, Alex Elder wrote:
+>>> On 10/14/22 1:00 AM, Souradeep Chowdhury wrote:
+>>>> The DCC is a DMA Engine designed to capture and store data
+>>>> during system crash or software triggers. The DCC operates
+>>>> based on user inputs via the debugfs interface. The user gives
+>>>> addresses as inputs and these addresses are stored in the
+>>>> dcc sram. In case of a system crash or a manual software
+>>>> trigger by the user through the debugfs interface,
+>>>> the dcc captures and stores the values at these addresses.
+>>>> This patch contains the driver which has all the methods
+>>>> pertaining to the debugfs interface, auxiliary functions to
+>>>> support all the four fundamental operations of dcc namely
+>>>> read, write, read/modify/write and loop. The probe method
+>>>> here instantiates all the resources necessary for dcc to
+>>>> operate mainly the dedicated dcc sram where it stores the
+>>>> values. The DCC driver can be used for debugging purposes
+>>>> without going for a reboot since it can perform software
+>>>> triggers as well based on user inputs.
+>>>>
+>>>> Also added the documentation for debugfs entries and explained
+>>>> the functionalities of each debugfs file that has been created
+>>>> for dcc.
+>>>>
+>>>> The following is the justification of using debugfs interface
+>>>> over the other alternatives like sysfs/ioctls
+>>>>
+>>>> i) As can be seen from the debugfs attribute descriptions,
+>>>> some of the debugfs attribute files here contains multiple
+>>>> arguments which needs to be accepted from the user. This goes
+>>>> against the design style of sysfs.
+>>>>
+>>>> ii) The user input patterns have been made simple and convenient
+>>>> in this case with the use of debugfs interface as user doesn't
+>>>> need to shuffle between different files to execute one instruction
+>>>> as was the case on using other alternatives.
+>>>>
+>>>> Signed-off-by: Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+>>>
+>>> I haven't followed any review feedback you have received
+>>> since verion 8 (which I reviewed), so if I say something
+>>> that conflicts with other feedback I apologize.  I know
+>>> Bjorn had some comments too, so you're already going to
+>>> send another version.
+>>>
+>>> Unfortunately I have some more input, including some things
+>>> that are basically bugs (because buffers could be overrun).
+>>> I will plan to review again once you've had a chance to
+>>> address my comments.
+>>>
+>>>                      -Alex
 >>
->> The last TRB in TD should have TD_SIZE=3D0, so trb for ZLP should have
->> set also TD_SIZE=3D0. If driver set TD_SIZE=3D0 on before the last one T=
-RB
->> then the controller stops the transfer and ignore trb for ZLP packet.
+>> Thanks for the review. Will be sending out the next version 
+>> implementing Bjorn's and your comments.
+> 
+> Sorry for my delayed response.  Your message didn't show up
+> in my "normal" mail box so I'm catching up now.
+> 
+> . . .
+> 
+>>>> diff --git a/drivers/soc/qcom/Makefile b/drivers/soc/qcom/Makefile
+>>>> index d66604a..b1fe812 100644
+>>>> --- a/drivers/soc/qcom/Makefile
+>>>> +++ b/drivers/soc/qcom/Makefile
+>>>> @@ -4,6 +4,7 @@ obj-$(CONFIG_QCOM_AOSS_QMP) +=    qcom_aoss.o
+>>>>   obj-$(CONFIG_QCOM_GENI_SE) +=    qcom-geni-se.o
+>>>>   obj-$(CONFIG_QCOM_COMMAND_DB) += cmd-db.o
+>>>>   obj-$(CONFIG_QCOM_CPR)        += cpr.o
+>>>> +obj-$(CONFIG_QCOM_DCC) += dcc.o
+>>>>   obj-$(CONFIG_QCOM_GSBI)    +=    qcom_gsbi.o
+>>>>   obj-$(CONFIG_QCOM_MDT_LOADER)    += mdt_loader.o
+>>>>   obj-$(CONFIG_QCOM_OCMEM)    += ocmem.o
+>>>> diff --git a/drivers/soc/qcom/dcc.c b/drivers/soc/qcom/dcc.c
+>>>> new file mode 100644
+>>>> index 0000000..efad225
+>>>> --- /dev/null
+>>>> +++ b/drivers/soc/qcom/dcc.c
+> 
+> . . .
+> 
+>>> Then you use DCC_ADDR_RANGE_MASK to truncate an address
+>>> provided down to a multiple of 16 bytes.  Why is that?
+>>> Is there a hardware limitation that makes 16 byte alignment
+>>> necessary?  (A little more below, where they're used.)
 >>
->> To fix this, the driver in such case must set TD_SIZE =3D 1 before the
->> last TRB.
->
->  	if (!more_trbs_coming || (transferred =3D=3D 0 && trb_buff_len =3D=3D 0=
-) ||
-> -	    trb_buff_len =3D=3D td_total_len)
-> +	    trb_buff_len =3D=3D td_total_len) {
-> +		/* Before ZLP driver needs set TD_SIZE=3D1. */
-> +		if (more_trbs_coming)
-> +			return 1;
-> +
->  		return 0;
-> +	}
->
->How your above fix could return TD_SIZE as 1 for last non-ZLP TRB?
->Which conditions are satisfied?
+>> Yes,this is necessary as per dcc_sram hardware configuraton.
+> 
+> OK.  I assumed that, but it's worth mentioning that
+> somewhere (perhaps you already did, and I just missed it).
 
-For last non-ZLP TRB TD_SIZE should be 0 or 1.
+Ack
 
-We have three casess:=20
-1. =20
-	TRB1 - length > 1
-	TRb2 - ZLP
-
-In this case TRB1 should have set TD_SIZE =3D 1. In this case the condition
-	if (more_trbs_coming)
-		return 1;
-
-returns TD_SIZE=3D1. In this case more_trb_comming for TRB1 is 1 and for TR=
-B2 is 0
-
-
-2.=20
-	TRB1 - length >1 and we don't except ZLP
-
-In this case TD_SIZE should be set to 0 for TRB1 and function returns 0, mo=
-re_trbs_comming for TRB1 will be set to 0.
-
-3 More TRBs without ZLP:
-	e.g.
-	TRB1  -  length > 0,  more_trbs_comming =3D 1 - TD_SIZE  > 0
-	TRB2 -  length > 0, more_trbs_comming =3D 1  - TD_SIZE > 0
-	TRB3 - length >=3D 0, more_trbs_comming =3D 0 -  TD_SIZE  =3D 0
-
-Pawel
-
->
->Peter
->
->> e.g.
+> 
+> . . .
+> 
+>>> I have some questions about the way memory regions
+>>> are defined here.
+>>>
+>>> - You round down the address using DCC_ADDR_RANGE_MASK.
+>>>    Is that because the address has an alignment requirement?
+>>> - DCC_ADDR_RANGE_MASK is 0xfffffff0, meaning it's 16-byte
+>>>    aligned.  Is that the required alignment?  (It is more
+>>>    strict than the 32-bit word size.)
+>>> - Is there any requirement on the size (in bytes)?  I.e.,
+>>>    does it need to be 16-byte aligned?  (You multiply the
+>>>    count by 4, which I presume is sizeof(u32), the word size.)
+>>> - If the base address is affected by rounding down like
+>>>    this, you aren't updating the length, which it seems
+>>>    could omit a word at the end of the desired range.
+>>> - You are checking to be sure the word count doesn't exceed
+>>>    the RAM size.  But you're using DCC_ADDR_OFF_RANGE=8,
+>>>    even though you said that a "word" is 32 bits.
 >>
->> TD -> TRB1  transfer_length =3D 64KB, TD_SIZE =3D0
->>           TRB2 transfer_length =3D0, TD_SIZE =3D 0  - controller will
->> 		    ignore this transfer and stop transfer on previous one
->>
->> TD -> TRB1  transfer_length =3D 64KB, TD_SIZE =3D1
->>           TRB2 transfer_length =3D0, TD_SIZE =3D 0  - controller will
->> 		    execute this trb and send ZLP
->>
->> As you noticed previously, previous fix for last TRB returned TD_SIZE
->> =3D 1 in some cases.
->> Previous fix was working correct but was not compliance with
->> controller specification.
->>
->> >
->> >>
->> >>  	maxp =3D usb_endpoint_maxp(preq->pep->endpoint.desc);
->> >>  	total_packet_count =3D DIV_ROUND_UP(td_total_len, maxp);
->> >> --
->> >> 2.25.1
->> >>
->> >
->> >--
->> >
->>
->> Thanks,
->> Pawel Laszczak
->
->--
->
->Thanks,
->Peter Chen
+>> The check for the DCC_ADDR_OFF_RANGE=8 is to give an arbitrary
+>> restriction in word length for the dcc configuration but ideally it
+>> should be 4 as dcc sram word length is 4, will be changing this 
+>> accordingly.
+> 
+> I think that will be clearer.  Using the word length avoids
+> any need to explain why 8 was being used.
 
-Regards,
-Pawel Laszczak=20
+Ack
+
+> 
+>> Also the base address alignment requirement is consistent as per the
+>> DCC hardware specification. The address range has to be 16 byte
+>> aligned.
+> 
+> So you're saying the size in bytes also has this requirement?
+> If so, then it's good you'll enforce it.
+
+Ack
+
+> 
+>>>
+>>>> +    if (!len || len > drvdata->ram_size / DCC_ADDR_OFF_RANGE) {
+>>>> +        dev_err(drvdata->dev, "DCC: Invalid length\n");
+>>>> +        ret = -EINVAL;
+>>>> +        goto out_unlock;
+>>>> +    }
+>>>> +
+>>>> +    base = addr & DCC_ADDR_RANGE_MASK;
+>>> Maybe:
+>>>      base = round_down(addr, DCC_WORD_SIZE);
+>>>
+>>> Then you don't even need DCC_ADDR_RANGE_MASK.
+>>>
+>>> And then:
+>>>      len += base - addr;
+>>> And if necessary:
+>>>      len = round_up(addr, DCC_WORD_SIZE);
+>>> And finally:
+>>>      if (len > drvdata->ram_size / DCC_WORD_SIZE)
+>>>          return -EINVAL;
+>>
+>> Ack
+> 
+> . . .
+> 
+>>>> +    if (ret)
+>>>> +        return -EFAULT;
+>>>> +    if (count > sizeof(buf) || count == 0)
+>>>> +        return -EINVAL;
+>>>> +
+>>>> +    curr_list = dcc_filp_curr_list(filp);
+>>>> +    if (curr_list < 0)
+>>>> +        return curr_list;
+>>>> +
+>>>> +    if (buf[count - 1] == '\n')
+>>>> +        buf[count - 1] = '\0';
+>>>> +    else
+>>>> +        return -EINVAL;
+>>> Why is it important for the input buffer to end in newline?
+>>
+>> We are using the newline to convert the input buffer into a string
+>>
+>> for strsep operations.
+> 
+> But strsep() returns the entire string if it finds the '\0'
+> before finding any of the delimiters.  So the effect should
+> be the same.  It's possible I'm misunderstanding but I think
+> there's no need for this check at all.
+
+Ack
+
+> 
+>>>> +    /* EOF check */
+>>>> +    if (*ppos >= drvdata->ram_size)
+>>>> +        return 0;
+>>>> +
+>>>> +    if ((*ppos + len) > drvdata->ram_size)
+>>>> +        len = (drvdata->ram_size - *ppos);
+>>>> +
+>>>> +    buf = kzalloc(len, GFP_KERNEL);
+>>>
+>>> Now that you are using memremap() rather than ioremap()
+>>> for the ram_base memory, I don't think you have any need
+>>> to allocate a buffer here anymore.
+>>
+>> Ack. As per Bjorn's comments this should be ioremaped.
+> 
+> OK, sorry, I didn't notice that.
+> 
+>> Can you please clarify whether this should be mapped to
+>>
+>> mem or ioremap?
+> 
+> The reason I suggested memremap() was that the region you
+> are mapping is being treated as a block of RAM.  Bjorn
+> might know something about this that I don't know...
+> 
+> Here's an early LWN article which (at the end) explains
+> why/when one might want to use memremap().
+>    https://lwn.net/Articles/653585/
+> Where I have used it, I pass MEMREMAP_WC as the flag.
+
+Thanks for sharing this. Will also wait for Bjorn's
+take on this.
+
+> 
+>>>
+>>>> +    if (!buf)
+>>>> +        return -ENOMEM;
+>>>> +
+>>>> +    memcpy(buf, drvdata->ram_base + *ppos, len);
+>>>
+>>> That is, you can simply copy_to_user() into the (user)
+>>> data pointer, from drvdata->ram_base + *ppos.  Maybe
+>>> something like:
+>>>
+>>>      void *src;
+>>>      /* ... */
+>>>
+>>>      src = drvdata->ram_base + *ppos;
+>>>      if (copy_to_user(data, src, len))
+>>>          return -EFAULT;
+>>>
+>>
+>> Ack
+>>
+>>>> +    if (copy_to_user(data, buf, len)) {
+>>>> +        kfree(buf);
+>>>> +        return -EFAULT;
+>>>> +    }
+>>>> +
+>>>> +    *ppos += len;
+>>>> +
+>>>> +    kfree(buf);
+>>>> +
+>>>> +    return len;
+>>>> +}
+>>>> +
+>>>> +static const struct file_operations dcc_sram_fops = {
+>>>> +    .owner        = THIS_MODULE,
+>>>> +    .read        = dcc_sram_read,
+>>>> +    .llseek        = no_llseek,
+>>>> +};
+>>>> +
+>>>> +static int dcc_sram_dev_init(struct dcc_drvdata *drvdata)
+>>>> +{
+>>>> +    drvdata->sram_dev.minor = MISC_DYNAMIC_MINOR;
+>>>> +    drvdata->sram_dev.name = DCC_SRAM_NODE;
+>>>> +    drvdata->sram_dev.fops = &dcc_sram_fops;
+>>>> +
+>>>> +    return misc_register(&drvdata->sram_dev);
+>>>> +}
+>>>> +
+>>>> +static void dcc_sram_dev_exit(struct dcc_drvdata *drvdata)
+>>>> +{
+>>>> +    misc_deregister(&drvdata->sram_dev);
+>>>> +}
+>>>> +
+>>>> +static int dcc_probe(struct platform_device *pdev)
+>>>> +{
+>>>> +    u32 val;
+>>>> +    int ret = 0, i;
+>>>> +    struct device *dev = &pdev->dev;
+>>>> +    struct dcc_drvdata *dcc;
+>>>
+>>> Why do you use "dcc" here and "drvdata" elsewhere?
+>>
+>> This was renamed in probe as per prior review comment.
+> 
+> I don't know who suggested that (maybe me?), but I guess I
+> prefer using the same (base) name for variables of a given
+> type.  So if you call it "dcc" here, then maybe call it
+> "dcc" everywhere.
+> 
+> I haven't looked closely at your patch just now, but it's
+> possible the "struct dcc_drvdata" type could simply be
+> "struct dcc".  That is, a "dcc" structure represents a
+> single "dcc" instance, and you happen to store a copy of
+> that "dcc" pointer as the device's drvdata.
+> 
+> Something for you to consider, but this isn't as important
+> a suggestion as a few other comments I've made.
+
+Ack
+
+> 
+>>>> +    struct resource *res;
+>>>> +
+>>>> +    dcc = devm_kzalloc(dev, sizeof(*dcc), GFP_KERNEL);
+>>>> +    if (!dcc)
+>>>> +        return -ENOMEM;
+>>>> +
+>>>> +    dcc->dev = &pdev->dev;
+>>>> +    platform_set_drvdata(pdev, dcc);
+>>>> +
+>>>> +    dcc->base = devm_platform_ioremap_resource(pdev, 0);
+>>>> +    if (IS_ERR(dcc->base))
+>>>> +        return PTR_ERR(dcc->base);
+>>>> +
+>>>> +    res = platform_get_resource(pdev, IORESOURCE_MEM, 1);
+>>>> +    if (!res)
+>>>> +        return -ENODEV;
+>>>> +
+>>>> +    dcc->ram_base = memremap(res->start, resource_size(res), 
+>>>> MEMREMAP_WB);
+>>>> +    if (!dcc->ram_base)
+>>>> +        return -ENODEV;
+> 
+> . . .
+> 
+>>>> +    /* Either set the fixed loop offset or calculate it
+>>>> +     * from ram_size. Max consecutive addresses the
+>>>> +     * dcc can loop is equivalent to the ram size
+>>>> +     */
+>>>> +    if (val & DCC_LOOP_OFFSET_MASK)
+>>>> +        dcc->loopoff = DCC_FIX_LOOP_OFFSET;
+>>>> +    else
+>>>> +        dcc->loopoff = get_bitmask_order((dcc->ram_size +
+>>>> +                dcc->ram_offset) / 4 - 1);
+>>>
+>>> Here's what I said about the
+  above last time:
+>>>
+>>>    This get_bitmask_order() call to determine the offset of a
+>>>    register seems overly clever.  I think it warrants a little
+>>>    explanation why it's determined by the size of SRAM.
+>>>
+>>> I think part of what confuses me is why you use the sum
+>>> of ram_size and ram_offset.  I suppose 4 is DCC_WORD_SIZE
+>>> but I just don't know.  The comment I was suggesting was
+>>> something about what loopoff actually represents, and why
+>>> it's calculated this way.
+>>
+>> As mentioned in the comment above, the loopoff stands for the max
+>>
+>> consecutive addresses that can be given to the loop instruction. We
+>>
+>> are restricting it as per the total words that can be accomodated in
+>>
+>> the dcc_sram.
+> 
+> So you're taking the ram_size + ram_offset, which is the
+> the address just beyond the end of RAM.  (Right?)
+> 
+> Then you divide it by 4 (because 4 is the size of a "word"?).
+> To the result would be the end of RAM expressed as "words".
+> 
+> Then you subtract 1, which means "last word within RAM".
+> 
+> I think there are two things I find confusing:
+> - Why do you use ram_size + ram_offset?  The comment you
+>    added even says "Max consecutive addresses the dcc can
+>    loop is equivalent to the ram size", and that sounds
+>    like the loop_offset calculation should be working
+>    *only* with ram_size.
+> - You call get_bitmask_order() on this value, and I just
+>    don't see how that is related to a loop offset.
+> 
+> (Again, I'm not looking closely at the code right now, so
+> maybe I'm just forgetting something about the way this memory
+> is laid out.)
+
+Yes, this is in conjunction with what is excepted for loop instructions.
+We are setting the most significant bit based on the number of words 
+that can be accomodated inside a dcc_sram(the last word), then using 
+that to compare with the actual loop_cnt that is entered for the loop 
+instructions. Will add further details to my comment for clarity.
+
+
+
+> 
+> Thanks.
+> 
+>                      -Alex
+> 
