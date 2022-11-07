@@ -2,127 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9441D620123
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 22:27:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E613620128
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 22:28:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233034AbiKGV1o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 16:27:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50774 "EHLO
+        id S233270AbiKGV2q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 16:28:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231659AbiKGV1m (ORCPT
+        with ESMTP id S231659AbiKGV2o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 16:27:42 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E4BEDE5;
-        Mon,  7 Nov 2022 13:27:41 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 196E86130A;
-        Mon,  7 Nov 2022 21:27:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50E2AC433B5;
-        Mon,  7 Nov 2022 21:27:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667856460;
-        bh=Y9ievI8xmiGIfwMRNVx6qBK1od74wXXSEXRcznQ0g04=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=FUFq9w6GPWRw7xk5f83wNH93Xc9Pafg4pOjKwkSnGhOdxprdH8hQ75gbJY20MvXR0
-         0LuLwCOTizKdEBEc2myVmCsi5wIWdlkTM/lHg8FUU/gtnHk+hFbQHZ0qJc05MzK69m
-         JGKhRcir88L8PLDB6jHfgbmI9CryzD7gPAqWkz8pZ/NKQ4bOtuppksiq3fTTfHpiCS
-         eEBp/ojgnFGvf1YkkDCftUFwc7eiMIIvL7Ri0Y1zAa86BwdtwoBXiHziUCHucdFzyn
-         EcrGao4s6brtUMWRDbGUp0ysu5Fv+25UpbshhsNGzgTSvSu7nmSeDQpCbNt/UjHNRE
-         UvWows2gqkquw==
-Date:   Mon, 7 Nov 2022 15:27:38 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>, Stefan Roese <sr@denx.de>,
-        Jim Wilson <wilson@tuliptree.org>,
-        David Abdurachmanov <david.abdurachmanov@gmail.com>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 1/5] PCI: Consistently report presence of PCIe link
- registers
-Message-ID: <20221107212738.GA421803@bhelgaas>
+        Mon, 7 Nov 2022 16:28:44 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5746118E03;
+        Mon,  7 Nov 2022 13:28:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667856523; x=1699392523;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=eMhhFWN0tq3l9heiz2390g+NAjEPIpwyv/9Bc22v3Xg=;
+  b=EZrjx+/FT6Askg25K7DfXJ+Uua8eu0oyfjEx8Bq12Rq7yt+O3K4ZXdcn
+   CFxYUdJfln2q0ybuCzbdLWRye2Oa/C7DKHZTjRN4BQJOmZ2E/p4xZ/kKf
+   MTarx+TTBoQvszxzrhNj9ZdflwpI00iloINgdBanqK7tZov0FFgqbmgmt
+   RYiw7N44rVNiO6iNmwJ2OGX8psA0BriskYA9YmOZxeSTN3cS4IvIo25Zh
+   w8X1s1ijindBtlXvBZVvGHJSsNheZALNwc/23hbclArJzS27guQr2Wj+f
+   1hlUUYWOvI1PeKpmJ6s8/KDCSmr65owMNHDnesaYp0xipnxwgCT6UC3n9
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10524"; a="310530454"
+X-IronPort-AV: E=Sophos;i="5.96,145,1665471600"; 
+   d="scan'208";a="310530454"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Nov 2022 13:28:43 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10524"; a="614022429"
+X-IronPort-AV: E=Sophos;i="5.96,145,1665471600"; 
+   d="scan'208";a="614022429"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga006.jf.intel.com with ESMTP; 07 Nov 2022 13:28:40 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1os9fa-008qG5-1s;
+        Mon, 07 Nov 2022 23:28:38 +0200
+Date:   Mon, 7 Nov 2022 23:28:38 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-rtc@vger.kernel.org, Linux ACPI <linux-acpi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Alessandro Zummo <a.zummo@towertech.it>
+Subject: Re: [PATCH v1 5/5] rtc: rtc-cmos: Disable ACPI RTC event on removal
+Message-ID: <Y2l4hmXQTiQZssDK@smile.fi.intel.com>
+References: <2276401.ElGaqSPkdT@kreacher>
+ <2219830.iZASKD2KPV@kreacher>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <alpine.DEB.2.21.2209100057070.2275@angie.orcam.me.uk>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <2219830.iZASKD2KPV@kreacher>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Sep 17, 2022 at 01:03:09PM +0100, Maciej W. Rozycki wrote:
-> Consistently with commit c8b303d0206b ("PCI: Remove PCIe Capability 
-> version checks") only consider the PCI Express capability's Link Control 
-> 2, etc. registers present if the Link Control register is.
-> 
-> Before said commit with PCI Express capability versions higher than one 
-> all link registers used to be considered present, however starting from 
-> said commit Link Control, etc. original registers are only considered 
-> present in devices with links, but Link Control 2, etc. registers 
-> continue being considered always present even though likewise they are 
-> only present in devices with links.
-> 
-> Fix the inconsistency then.
-> 
-> Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
+On Mon, Nov 07, 2022 at 09:03:06PM +0100, Rafael J. Wysocki wrote:
 
-While we figure out the rest of this, I squashed the first two patches
-and applied them to pci/enumeration for v6.2:
+...
 
-  commit 503fa23614dc ("PCI: Access Link 2 registers only for devices with Links")
-  Author: Maciej W. Rozycki <macro@orcam.me.uk>
-  Date:   Sat Sep 17 13:03:09 2022 +0100
-
-    PCI: Access Link 2 registers only for devices with Links
-
-    PCIe r2.0, sec 7.8 added Link Capabilities/Status/Control 2 registers to
-    the PCIe Capability with Capability Version 2.
-
-    Previously we assumed these registers were implemented for all PCIe
-    Capabilities of version 2 or greater, but in fact they are only
-    implemented for devices with Links.
-
-    Update pcie_capability_reg_implemented() to check whether the device has
-    a Link.
-
-> ---
-> New change in v5.
-> ---
->  drivers/pci/access.c |    8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
-> 
-> linux-pcie-cap-has-lnkctl2.diff
-> Index: linux-macro/drivers/pci/access.c
-> ===================================================================
-> --- linux-macro.orig/drivers/pci/access.c
-> +++ linux-macro/drivers/pci/access.c
-> @@ -350,6 +350,11 @@ bool pcie_cap_has_lnkctl(const struct pc
->  	       type == PCI_EXP_TYPE_PCIE_BRIDGE;
->  }
->  
-> +static inline bool pcie_cap_has_lnkctl2(const struct pci_dev *dev)
+> +static inline void acpi_rtc_event_cleanup(void)
 > +{
-> +	return pcie_cap_has_lnkctl(dev) && pcie_cap_version(dev) > 1;
+> +	if (!acpi_disabled)
+
+Btw, other functions look like using
+
+	if (acpi_disabled)
+		return;
+
+pattern. Maybe here the same for the sake of consistency?
+
+> +		acpi_remove_fixed_event_handler(ACPI_EVENT_RTC, rtc_handler);
 > +}
-> +
->  static inline bool pcie_cap_has_sltctl(const struct pci_dev *dev)
->  {
->  	return pcie_downstream_port(dev) &&
-> @@ -390,10 +395,11 @@ static bool pcie_capability_reg_implemen
->  		return pcie_cap_has_rtctl(dev);
->  	case PCI_EXP_DEVCAP2:
->  	case PCI_EXP_DEVCTL2:
-> +		return pcie_cap_version(dev) > 1;
->  	case PCI_EXP_LNKCAP2:
->  	case PCI_EXP_LNKCTL2:
->  	case PCI_EXP_LNKSTA2:
-> -		return pcie_cap_version(dev) > 1;
-> +		return pcie_cap_has_lnkctl2(dev);
->  	default:
->  		return false;
->  	}
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
