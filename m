@@ -2,74 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95BD661E9F9
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 04:59:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4646A61E9FC
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 04:59:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230326AbiKGD7Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Nov 2022 22:59:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34322 "EHLO
+        id S230349AbiKGD7p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Nov 2022 22:59:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230302AbiKGD7U (ORCPT
+        with ESMTP id S230260AbiKGD7m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Nov 2022 22:59:20 -0500
-Received: from msg-4.mailo.com (msg-4.mailo.com [213.182.54.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB5AF10066
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Nov 2022 19:59:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
-        t=1667793550; bh=PWveDsnayKgrwHoxVXJd7rB504HWxfroON00hivoOew=;
-        h=X-EA-Auth:Date:From:To:Subject:Message-ID:MIME-Version:
-         Content-Type;
-        b=YdXnXEFbW9DR84+iQYgGw8mU2/2+6Bb8Wwll1qOCq4uZ4C18UFwzkjyzz8M9CGjKY
-         4G85+g/j+Pw/ehmO6twUGpIWGUtMEH2ymEhY8JaYmb8LRXmq+tRppsXo2A7Pzh5KdO
-         vVYc3UXABM2TfdPXmo+/u4T/KqvpMkk6mhx9SXSQ=
-Received: by b-3.in.mailobj.net [192.168.90.13] with ESMTP
-        via ip-206.mailobj.net [213.182.55.206]
-        Mon,  7 Nov 2022 04:59:10 +0100 (CET)
-X-EA-Auth: kW7V4VN242VMCTbuSQIdbYqXwNnnKreCRhtWZoxe9kVNSMa8hCD5XlxbnutT/5ApyQQFpSH0lrGK4birqbcL2Px+W7eI+2Au
-Date:   Mon, 7 Nov 2022 09:29:04 +0530
-From:   Deepak R Varma <drv@mailo.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH] staging: most: video: use min_t() for comparison and
- assignment
-Message-ID: <Y2iCiOf9ctg4jdV0@qemulion>
+        Sun, 6 Nov 2022 22:59:42 -0500
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC039C62
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Nov 2022 19:59:41 -0800 (PST)
+Received: by mail-pj1-x1029.google.com with SMTP id e7-20020a17090a77c700b00216928a3917so8491889pjs.4
+        for <linux-kernel@vger.kernel.org>; Sun, 06 Nov 2022 19:59:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=tK5YyOubJwfiTVmlG1/f7tjG17kEPCWvBahIEcz+8l4=;
+        b=ZyitcS/3gs3aZQiGqG/Q7GbVOlc1TqzvFtgbdhE/AqyUaP1LLQq7PHRtclmapVQ8vj
+         8GKLXAi+Yh/h0uNE8dbF0XQ5AzmseEysJikeo/ZeIDRKV+Il03kMhToc8viko9/AmYul
+         zcQ5Eeefg16RBLveRSsNajatDmqhu8tm32z4Y=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tK5YyOubJwfiTVmlG1/f7tjG17kEPCWvBahIEcz+8l4=;
+        b=iZ+fe2Z/F7UXvdZE9PgpVlQDZtXu/GYcglnyppdddvVxuflrceGUHRv6Y4gIYwyK2i
+         B33s85HezpJzu/ZOof1A8WPgLhD686LoB8ClUCJITbPdS552MwSNEVNvOq2RVjGs3ssf
+         1hq3AqStvxX3QNXv7JsJh+P575A797fJWKH8ZtBeF9UsdwkrwvTrpnrpkFWv+jrIR4Uo
+         uLOLT7jJhEGYGuDoFAG9jtVjrSiMYP+b2eunpW7OPTXD4G5eBJ5ZJHiEW8z+UH19BF1e
+         E/15IoGXt7RX/FzD3RaKQP7xpbuCtRXOjGG79dBxB5WeKOMeEJUqD5N26p9piPMS+fD+
+         lGZw==
+X-Gm-Message-State: ACrzQf0DeWMGYAYhPDV53c7SmWjI6K28dJ9EniXGuJp6OYgk6rJtpC5h
+        y0WbTig7x+FzX+iyWyP3ZOpURA==
+X-Google-Smtp-Source: AMsMyM7lkEs6qetTh6BXX437KL+xR0SL7scTZP0rtLfxeDY1BHX12asImU0zz6Ln0CkKhKAchIwV2Q==
+X-Received: by 2002:a17:903:1207:b0:185:4042:23d2 with SMTP id l7-20020a170903120700b00185404223d2mr47766328plh.143.1667793581465;
+        Sun, 06 Nov 2022 19:59:41 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id w13-20020a1709027b8d00b00186c5e8b1d0sm3807639pll.149.2022.11.06.19.59.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 06 Nov 2022 19:59:41 -0800 (PST)
+Date:   Sun, 6 Nov 2022 19:59:40 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Pedro Falcato <pedro.falcato@gmail.com>,
+        David Gow <davidgow@google.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org, sam@gentoo.org,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Eric Biederman <ebiederm@xmission.com>,
+        linux-fsdevel@vger.kernel.org, Rich Felker <dalias@libc.org>,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
+Subject: Re: [PATCH] fs/binfmt_elf: Fix memsz > filesz handling
+Message-ID: <202211061948.46D3F78@keescook>
+References: <20221106021657.1145519-1-pedro.falcato@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221106021657.1145519-1-pedro.falcato@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Simplify code by using min_t helper macros in place of lengthy if/else
-block oriented logical evaluation and value assignment. Use the _t
-variant of min macro since the variable types are not same.
-This issue is identified by coccicheck using the minmax.cocci file.
+On Sun, Nov 06, 2022 at 02:16:57AM +0000, Pedro Falcato wrote:
+> The old code for ELF interpreter loading could only handle
+> 1 memsz > filesz segment. This is incorrect, as evidenced
+> by the elf program loading code, which could handle multiple
+> such segments.
+> 
+> This patch fixes memsz > filesz handling for elf interpreters
+> and refactors interpreter/program BSS clearing into a common
+> codepath.
+> 
+> This bug was uncovered on builds of ppc64le musl libc with
+> llvm lld 15.0.0, since ppc64 does not allocate file space
+> for its .plt.
+> 
+> Cc: Rich Felker <dalias@libc.org>
+> Signed-off-by: Pedro Falcato <pedro.falcato@gmail.com>
 
-Signed-off-by: Deepak R Varma <drv@mailo.com>
----
- drivers/staging/most/video/video.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thanks for the patch! I need to triple-check this logic, as there have
+been some overlapping (or out-of-order) LOAD bugs in the past too, and I
+want to make sure we don't accidentally zero things that already got
+loaded, etc.
 
-diff --git a/drivers/staging/most/video/video.c b/drivers/staging/most/video/video.c
-index ffa97ef21ea5..d5cc7eea3b52 100644
---- a/drivers/staging/most/video/video.c
-+++ b/drivers/staging/most/video/video.c
-@@ -173,7 +173,7 @@ static ssize_t comp_vdev_read(struct file *filp, char __user *buf,
- 	while (count > 0 && data_ready(mdev)) {
- 		struct mbo *const mbo = get_top_mbo(mdev);
- 		int const rem = mbo->processed_length - fh->offs;
--		int const cnt = rem < count ? rem : count;
-+		int const cnt = min_t(int, rem, count);
+David, has there been any work on adding a way to instantiate
+userspace VMAs in a KUnit test? I tried to write this myself, but I
+couldn't figure out how to make the userspace memory mappings appear.
+Here's my fumbling attempt:
+https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git/log/?h=devel/kunit/usercopy
 
- 		if (copy_to_user(buf, mbo->virt_address + fh->offs, cnt)) {
- 			v4l2_err(&mdev->v4l2_dev, "read: copy_to_user failed\n");
---
-2.34.1
+I really wish KUnit had userspace mapping support -- I have a bunch of
+unit tests that need to get built up around checking for regressions
+here, etc.
 
+Anyway, I'll test this patch and get it applied and likely backported
+to earlier kernels in the next few days.
 
+-Kees
 
+-- 
+Kees Cook
