@@ -2,69 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D805161F42E
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 14:20:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7260F61F433
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 14:22:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231737AbiKGNUf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 08:20:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55528 "EHLO
+        id S232018AbiKGNWa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 08:22:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231643AbiKGNUd (ORCPT
+        with ESMTP id S231872AbiKGNW1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 08:20:33 -0500
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60BE11B784
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 05:20:32 -0800 (PST)
-Received: by mail-wr1-x42f.google.com with SMTP id g12so16135179wrs.10
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 05:20:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=rQkhty8T6POVcU0azwPlKsIEvLSkT2jpd0kdC7pkzz0=;
-        b=ew4Bjy04DI9e5uryHgtndcjXp7MrPHICFFUqFV3AugH3b1UShyzEM/SAirrVHiAl83
-         PVmFgozsEbeu6JDph10T15ypDT+tLWM653yGhNcnL3qWab7Wp0ueNotW7YUWIYs9HQ3h
-         I6OVDxc3D176IlpO8mTZ34in308iaW6xkLWh+hEVyY5MwlM2E2jbNfH0+3ogAqfaSS58
-         3S19a/4DM9vKUaT8B9CUc/0++7ZFOWmgk0ZmnWHnCRX//F6eKCwElFNwgI/K2L6MejIQ
-         tgfEMzbF3cAuOa2GYXwISRtsHS/uM/D0Dbc6pjZpDS64kz7bzYsK8/0c01s+x6ZdRo5q
-         x/mw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rQkhty8T6POVcU0azwPlKsIEvLSkT2jpd0kdC7pkzz0=;
-        b=3kgIXfuLxXt2LBuj4xF2RFx9/Y3hXWouz6KkS6FWnqQXrBZU7y09ozrPXhPPeBcLBI
-         wpMxqO8ETrPaTttPt1GooalnHBODzyEtAyzQTpk0zBZsrChuCdIOXagKnRq1JqFDj1h7
-         8gg+Gwiwg/0H0Dd4jYKcD0o6lzFkCRhZIBDLTz3TbZqYcrJJK5q9icJ6SKSo3GlrpBpW
-         IO5BbIzkgD2wEvwht1sQFKveCnvHvzOL7M4I6g7DNJCrTkWaa39D/ztnnFV3L1+19CKk
-         exTnuRIPc+RC00euEcytgEMDT/kOGpsfg0EBuQ4mi5zpgZ/2sv023Nb7X05o3BXo7RzB
-         SgjA==
-X-Gm-Message-State: ACrzQf0qT9iWVnPaXWSlwynWUQxL51PzWAfcg8JBx5eJVxG5OUeDKXp6
-        1syjnEcO+1DtSbALtI9Z8BA=
-X-Google-Smtp-Source: AMsMyM67ieLID2xmpb5tqDsb0FoMSwND0Ma2RaIdA+o1o/Ikv6l0mI6mTXhxzxUplvxTUH8HZwcyMg==
-X-Received: by 2002:adf:f2c5:0:b0:236:aad0:b361 with SMTP id d5-20020adff2c5000000b00236aad0b361mr30264804wrp.228.1667827230815;
-        Mon, 07 Nov 2022 05:20:30 -0800 (PST)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id bw9-20020a0560001f8900b00236c1f2cecesm8935240wrb.81.2022.11.07.05.20.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Nov 2022 05:20:30 -0800 (PST)
-Date:   Mon, 7 Nov 2022 16:20:27 +0300
-From:   Dan Carpenter <error27@gmail.com>
-To:     Deepak R Varma <drv@mailo.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] staging: most: video: use min_t() for comparison and
- assignment
-Message-ID: <Y2kGG3zuvvDLZKWq@kadam>
-References: <Y2iHl5CuqyR2vEc8@qemulion>
+        Mon, 7 Nov 2022 08:22:27 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C85971B78B;
+        Mon,  7 Nov 2022 05:22:25 -0800 (PST)
+Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4N5WyY3J2TzpWDG;
+        Mon,  7 Nov 2022 21:18:45 +0800 (CST)
+Received: from kwepemm600005.china.huawei.com (7.193.23.191) by
+ dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 7 Nov 2022 21:22:23 +0800
+Received: from [10.67.103.158] (10.67.103.158) by
+ kwepemm600005.china.huawei.com (7.193.23.191) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 7 Nov 2022 21:22:23 +0800
+Subject: Re: [PATCH] crypto/hisilicon: Add null judgment to the callback
+ interface
+To:     Herbert Xu <herbert@gondor.apana.org.au>
+CC:     <wangzhou1@hisilicon.com>, <linux-crypto@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20220930024320.29922-1-liulongfang@huawei.com>
+ <YzZZTsIHLSkuufeb@gondor.apana.org.au>
+ <717adf23-3080-5041-14ed-6ab5dcaddbf9@huawei.com>
+ <Y1tTLAEi7ukUCCmB@gondor.apana.org.au>
+ <a1229856-fbe4-9ae7-5789-332ed0af87eb@huawei.com>
+ <Y2TWpyynYMyStKRX@gondor.apana.org.au>
+From:   liulongfang <liulongfang@huawei.com>
+Message-ID: <d914a099-06ef-acfe-f394-f4790a821598@huawei.com>
+Date:   Mon, 7 Nov 2022 21:22:22 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y2iHl5CuqyR2vEc8@qemulion>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+In-Reply-To: <Y2TWpyynYMyStKRX@gondor.apana.org.au>
+Content-Type: text/plain; charset="gbk"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.103.158]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemm600005.china.huawei.com (7.193.23.191)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,44 +59,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 07, 2022 at 09:50:39AM +0530, Deepak R Varma wrote:
-> Simplify code by using min_t helper macro for logical evaluation
-> and value assignment. Use the _t variant of min macro since the
-> variable types are not same.
-> This issue is identified by coccicheck using the minmax.cocci file.
+On 2022/11/4 17:08, Herbert Xu wrote:
+> On Sat, Oct 29, 2022 at 09:25:18AM +0800, liulongfang wrote:
+>>
+>> The context of the problem may not have been clearly stated in the previous
+>> description.
+>>
+>> This is a problem found in one of our real user scenarios:
+>> In this scenario of using an accelerator to perform encryption  services,
+>> it was originally intended to use the CPU to perform encryption services
+>> in synchronous mode (without loading the hardware device driver, and without
+>> registering the asynchronous callback function), but due to a deployment
+>> error, the Hisi hardware device driver was loaded into the system,
+>> this wrong operation causes the encryption service to call the device
+>> driver of the hisi hardware, but the hardware device driver executes the
+>> asynchronous mode, so the callback interface is called after the service
+>> is completed.
+>> This leads to this system calltrace problem.
+>>
+>> The purpose of this patch is to ensure that the device does not appear
+>> calltrace in this abnormal situation.
 > 
-> Signed-off-by: Deepak R Varma <drv@mailo.com>
-> ---
+> I'm still having trouble understanding this.  Please give an
+> exact call-trace that triggers the callback with a NULL callback
+> pointer.
 > 
-> Changes in v2:
->    1. Revise patch description. No functional change.
+
+What do you need is the log of this call trace?
+
+Kernel log:
+ Workqueue: 0000:76:00.0 qm_work_process [hisi_qm]
+ pstate: 60400009 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+ pc : 0x0
+ lr : sec_skcipher_callback+0x108/0x140 [hisi_sec2]
+ sp : ffff80002cda3cb0
+ x29: ffff80002cda3cb0 x28: ffff0020a9a56080 x27: ffff2040076a4800
+ x26: 0000000000000000 x25: dead000000000100 x24: dead000000000122
+ x23: ffff0020881eb4d0 x22: ffff0020960c6f00 x21: ffff0020881eb4b0
+ x20: ffff0020881eb478 x19: ffff2040076a4880 x18: 000000000000001c
+ x17: 00000000a3f246e1 x16: ffffb38bc5e73d40 x15: 000000006c63877d
+ x14: 0000000000000000 x13: 0000000000000000 x12: ffff2040063b1dd0
+ x11: ffff2040063b1da8 x10: ffff2040063b1da8 x9 : ffffb38b8da71f78
+ x8 : ffff2040063b1dd0 x7 : 0000000000000000 x6 : ffff2040063b1fd0
+ x5 : 0000000000000228 x4 : 0000000000000000 x3 : ffff00209ba33000
+ x2 : 0000000000000000 x1 : 0000000000000000 x0 : ffff2040076a4820
+ Call trace:
+  0x0
+  sec_req_cb+0xc8/0x254 [hisi_sec2]
+  qm_work_process+0x1d8/0x330 [hisi_qm]
+  process_one_work+0x1e0/0x450
+  worker_thread+0x158/0x450
+  kthread+0x118/0x120
+  ret_from_fork+0x10/0x20
+  Code: bad PC value
+  ---[ end trace 0000000000000000 ]---
+
+> Thanks,
 > 
->  drivers/staging/most/video/video.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/staging/most/video/video.c b/drivers/staging/most/video/video.c
-> index ffa97ef21ea5..d5cc7eea3b52 100644
-> --- a/drivers/staging/most/video/video.c
-> +++ b/drivers/staging/most/video/video.c
-> @@ -173,7 +173,7 @@ static ssize_t comp_vdev_read(struct file *filp, char __user *buf,
->  	while (count > 0 && data_ready(mdev)) {
->  		struct mbo *const mbo = get_top_mbo(mdev);
->  		int const rem = mbo->processed_length - fh->offs;
-> -		int const cnt = rem < count ? rem : count;
-> +		int const cnt = min_t(int, rem, count);
-
-TL;DR use size_t instead of int.
-
-Using "int" here is wrong.  size_t is unsigned long meaning that it has
-64 bits to use to represent positive values.  (Let's ignore 32 bit
-arches).  You have chopped it down to say that it now has 31 bits for
-positives and if BIT(31) is set then treat it as negative.  Everything
-which is larger than INT_MAX will be broken.
-
-Fortunately, in this code the value of count will never go higher than
-"INT_MAX - PAGE_SIZE" because Linus understands that it's easy to
-introduce bugs like this.
-
-regards,
-dan carpenter
-
+Thanks,
+Longfang.
