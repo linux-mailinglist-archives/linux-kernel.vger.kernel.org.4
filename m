@@ -2,28 +2,28 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE12B61F0CE
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 11:35:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B524561F0CF
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 11:35:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231299AbiKGKfE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 05:35:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42208 "EHLO
+        id S232022AbiKGKfG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 05:35:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231578AbiKGKeb (ORCPT
+        with ESMTP id S231939AbiKGKed (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 05:34:31 -0500
+        Mon, 7 Nov 2022 05:34:33 -0500
 Received: from mx.socionext.com (mx.socionext.com [202.248.49.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C2698BC28;
-        Mon,  7 Nov 2022 02:34:19 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4DDA3186C2;
+        Mon,  7 Nov 2022 02:34:20 -0800 (PST)
 Received: from unknown (HELO kinkan2-ex.css.socionext.com) ([172.31.9.52])
   by mx.socionext.com with ESMTP; 07 Nov 2022 19:34:17 +0900
 Received: from mail.mfilter.local (m-filter-2 [10.213.24.62])
-        by kinkan2-ex.css.socionext.com (Postfix) with ESMTP id 439572059027;
+        by kinkan2-ex.css.socionext.com (Postfix) with ESMTP id C1C002059027;
         Mon,  7 Nov 2022 19:34:17 +0900 (JST)
 Received: from 172.31.9.51 (172.31.9.51) by m-FILTER with ESMTP; Mon, 7 Nov 2022 19:34:17 +0900
 Received: from plum.e01.socionext.com (unknown [10.212.243.119])
-        by kinkan2.css.socionext.com (Postfix) with ESMTP id BACA5B62A4;
-        Mon,  7 Nov 2022 19:34:16 +0900 (JST)
+        by kinkan2.css.socionext.com (Postfix) with ESMTP id 5F9B4B62A4;
+        Mon,  7 Nov 2022 19:34:17 +0900 (JST)
 From:   Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
 To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -31,11 +31,10 @@ To:     Rob Herring <robh+dt@kernel.org>,
         Masami Hiramatsu <mhiramat@kernel.org>
 Cc:     soc@kernel.org, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v2 4/5] dt-bindings: arm: uniphier: Add NX1 boards
-Date:   Mon,  7 Nov 2022 19:34:09 +0900
-Message-Id: <20221107103410.3443-5-hayashi.kunihiko@socionext.com>
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+Subject: [PATCH v2 5/5] arm64: dts: uniphier: Add NX1 SoC and boards support
+Date:   Mon,  7 Nov 2022 19:34:10 +0900
+Message-Id: <20221107103410.3443-6-hayashi.kunihiko@socionext.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221107103410.3443-1-hayashi.kunihiko@socionext.com>
 References: <20221107103410.3443-1-hayashi.kunihiko@socionext.com>
@@ -49,32 +48,1038 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add compatible string for NX1 SoM board, evaluation board, and reference
-board support.
+Initial version of devicetree sources for NX1 SoC and boards.
+
+NX1 SoC belongs to the UniPhier armv8 architecture platform, and is
+designed for IoT and AI/ML application fields.
+
+This SoC has four Cortex-A53 cores and basically peripherals compatible
+with the previous UniPhier SoCs: PCIe Gen2, USB3.1/2.0, eMMC/SD,
+1G Ethernet, UART, GPIO, FI2C, SPI, DMAC, and Video Out.
+
+The SOM is a small module that has only the peripherals necessary for
+booting: UART, FI2C for EEPROM, eMMC and SD. The reference board has
+other peripherals and external LED IC, and is in conjunction with SOM.
+PCIe works as an endpoint as default.
+
+The EVB is a standalone board that has all supported peripherals.
+PCIe works as a host controller as default. This SoC has only 190MB of
+PCIe space, so the possible endpoint devices are limited, but it is
+assumed that the reference board will be connected.
+
+This devicetree has two restrictions:
+
+- SD cards that works at 1.8V are not supported, because the power
+  supply switching function is in the system controller and needs to be
+  controlled by the driver.
+
+- This SoC has two USB ports, each with an HS-PHY and an SS-PHY, however,
+  DWC3 can only specify one HS-PHY and one SS-PHY, so the PHYs on the
+  second port are not currently specified.
 
 Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- .../devicetree/bindings/arm/socionext/uniphier.yaml        | 7 +++++++
- 1 file changed, 7 insertions(+)
+ arch/arm64/boot/dts/socionext/Makefile        |   3 +
+ .../boot/dts/socionext/uniphier-nx1-evb.dts   |  87 +++
+ .../boot/dts/socionext/uniphier-nx1-ref.dts   | 109 +++
+ .../boot/dts/socionext/uniphier-nx1-som.dts   |  54 ++
+ .../boot/dts/socionext/uniphier-nx1.dtsi      | 702 ++++++++++++++++++
+ 5 files changed, 955 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/socionext/uniphier-nx1-evb.dts
+ create mode 100644 arch/arm64/boot/dts/socionext/uniphier-nx1-ref.dts
+ create mode 100644 arch/arm64/boot/dts/socionext/uniphier-nx1-som.dts
+ create mode 100644 arch/arm64/boot/dts/socionext/uniphier-nx1.dtsi
 
-diff --git a/Documentation/devicetree/bindings/arm/socionext/uniphier.yaml b/Documentation/devicetree/bindings/arm/socionext/uniphier.yaml
-index c2cea1c90f3c..eb4401067683 100644
---- a/Documentation/devicetree/bindings/arm/socionext/uniphier.yaml
-+++ b/Documentation/devicetree/bindings/arm/socionext/uniphier.yaml
-@@ -66,5 +66,12 @@ properties:
-           - enum:
-               - socionext,uniphier-pxs3-ref
-           - const: socionext,uniphier-pxs3
-+      - description: NX1 SoC boards
-+        items:
-+          - enum:
-+              - socionext,uniphier-nx1-evb
-+              - socionext,uniphier-nx1-ref
-+              - socionext,uniphier-nx1-som
-+          - const: socionext,uniphier-nx1
- 
- additionalProperties: true
+diff --git a/arch/arm64/boot/dts/socionext/Makefile b/arch/arm64/boot/dts/socionext/Makefile
+index 33989a9643ac..0f198888484a 100644
+--- a/arch/arm64/boot/dts/socionext/Makefile
++++ b/arch/arm64/boot/dts/socionext/Makefile
+@@ -5,6 +5,9 @@ dtb-$(CONFIG_ARCH_UNIPHIER) += \
+ 	uniphier-ld20-akebi96.dtb \
+ 	uniphier-ld20-global.dtb \
+ 	uniphier-ld20-ref.dtb \
++	uniphier-nx1-evb.dtb \
++	uniphier-nx1-ref.dtb \
++	uniphier-nx1-som.dtb \
+ 	uniphier-pxs3-ref.dtb \
+ 	uniphier-pxs3-ref-gadget0.dtb \
+ 	uniphier-pxs3-ref-gadget1.dtb
+diff --git a/arch/arm64/boot/dts/socionext/uniphier-nx1-evb.dts b/arch/arm64/boot/dts/socionext/uniphier-nx1-evb.dts
+new file mode 100644
+index 000000000000..381ec274d78f
+--- /dev/null
++++ b/arch/arm64/boot/dts/socionext/uniphier-nx1-evb.dts
+@@ -0,0 +1,87 @@
++// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
++//
++// Device Tree Source for UniPhier NX1 Evaluation Board
++//
++// Copyright (C) 2021 Socionext Inc.
++//   Author: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
++
++/dts-v1/;
++#include "uniphier-nx1.dtsi"
++
++/ {
++	model = "UniPhier NX1 Evaluation Board";
++	compatible = "socionext,uniphier-nx1-evb", "socionext,uniphier-nx1";
++
++	chosen {
++		stdout-path = "serial0:115200n8";
++	};
++
++	aliases {
++		serial0 = &serial0;
++		serial1 = &serial1;
++		serial2 = &serial2;
++		serial3 = &serial3;
++		spi0 = &spi0;
++		ethernet = &eth;
++	};
++
++	memory@20000000 {
++		device_type = "memory";
++		reg = <0 0x20000000 1 0x00000000>;
++	};
++};
++
++&refclk {
++	clock-frequency = <25000000>;
++};
++
++&serial0 {
++	status = "okay";
++};
++
++&serial1 {
++	status = "okay";
++};
++
++&serial2 {
++	status = "okay";
++};
++
++&serial3 {
++	status = "okay";
++};
++
++&spi0 {
++	status = "okay";
++};
++
++&eth {
++	status = "okay";
++	phy-handle = <&ethphy>;
++};
++
++&mdio {
++	ethphy: ethphy@0 {
++		reg = <0>;
++	};
++};
++
++&usb {
++	status = "okay";
++};
++
++&pcie {
++	status = "okay";
++};
++
++&sd {
++	status = "okay";
++};
++
++&pinctrl_sd {
++	sd {
++		pins = "SDCLK", "SDCMD", "SDDAT0",
++		       "SDDAT1", "SDDAT2", "SDDAT3";
++		bias-pull-up;
++	};
++};
+diff --git a/arch/arm64/boot/dts/socionext/uniphier-nx1-ref.dts b/arch/arm64/boot/dts/socionext/uniphier-nx1-ref.dts
+new file mode 100644
+index 000000000000..7c373eba7a81
+--- /dev/null
++++ b/arch/arm64/boot/dts/socionext/uniphier-nx1-ref.dts
+@@ -0,0 +1,109 @@
++// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
++//
++// Device Tree Source for UniPhier NX1 Reference Board
++//
++// Copyright (C) 2021 Socionext Inc.
++//   Author: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
++
++/dts-v1/;
++#include "uniphier-nx1-som.dts"
++
++/ {
++	model = "UniPhier NX1 Reference Board";
++	compatible = "socionext,uniphier-nx1-ref", "socionext,uniphier-nx1";
++
++	chosen {
++		stdout-path = "serial0:115200n8";
++	};
++
++	aliases {
++		serial0 = &serial0;
++		serial1 = &serial1;
++		serial2 = &serial2;
++		i2c0 = &i2c0;
++		i2c1 = &i2c1;
++		i2c2 = &i2c2;
++		i2c3 = &i2c3;
++		spi0 = &spi0;
++		spi1 = &spi1;
++		ethernet = &eth;
++	};
++
++	leds {
++		compatible = "gpio-leds";
++		led0 {
++			label = "user0";
++			gpios = <&pca9536 0 GPIO_ACTIVE_LOW>;
++		};
++
++		led1 {
++			label = "user1";
++			gpios = <&pca9536 1 GPIO_ACTIVE_LOW>;
++		};
++
++		led2 {
++			label = "user2";
++			gpios = <&pca9536 2 GPIO_ACTIVE_LOW>;
++		};
++
++		led3 {
++			label = "user3";
++			gpios = <&pca9536 3 GPIO_ACTIVE_LOW>;
++		};
++	};
++
++};
++
++&serial1 {
++	status = "okay";
++};
++
++&serial2 {
++	status = "okay";
++};
++
++&spi0 {
++	status = "okay";
++};
++
++&spi1 {
++	status = "okay";
++};
++
++&i2c0 {
++	status = "okay";
++
++	pca9536: gpio@41 {
++		compatible = "ti,pca9536";
++		reg = <0x41>;
++		gpio-controller;
++		#gpio-cells = <2>;
++	};
++};
++
++&i2c2 {
++	status = "okay";
++};
++
++&i2c3 {
++	status = "okay";
++};
++
++&eth {
++	status = "okay";
++	phy-handle = <&ethphy>;
++};
++
++&mdio {
++	ethphy: ethernet-phy@0 {
++		reg = <0>;
++	};
++};
++
++&usb {
++	status = "okay";
++};
++
++&pcie_ep {
++	status = "okay";
++};
+diff --git a/arch/arm64/boot/dts/socionext/uniphier-nx1-som.dts b/arch/arm64/boot/dts/socionext/uniphier-nx1-som.dts
+new file mode 100644
+index 000000000000..e55e482eca6a
+--- /dev/null
++++ b/arch/arm64/boot/dts/socionext/uniphier-nx1-som.dts
+@@ -0,0 +1,54 @@
++// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
++//
++// Device Tree Source for UniPhier NX1 SOM Board
++//
++// Copyright (C) 2021 Socionext Inc.
++//   Author: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
++
++/dts-v1/;
++#include "uniphier-nx1.dtsi"
++
++/ {
++	model = "UniPhier NX1 SOM Board";
++	compatible = "socionext,uniphier-nx1-som", "socionext,uniphier-nx1";
++
++	chosen {
++		stdout-path = "serial0:115200n8";
++	};
++
++	aliases {
++		serial0 = &serial0;
++		i2c1 = &i2c1;
++	};
++
++	memory@20000000 {
++		device_type = "memory";
++		reg = <0 0x20000000 1 0x00000000>;
++	};
++};
++
++&refclk {
++	clock-frequency = <25000000>;
++};
++
++&serial0 {
++	status = "okay";
++};
++
++&i2c1 {
++	status = "okay";
++
++	eeprom@50 {
++		compatible = "st,24c64", "atmel,24c64";
++		reg = <0x50>;
++		pagesize = <32>;
++	};
++};
++
++&emmc {
++	status = "okay";
++};
++
++&sd {
++	status = "okay";
++};
+diff --git a/arch/arm64/boot/dts/socionext/uniphier-nx1.dtsi b/arch/arm64/boot/dts/socionext/uniphier-nx1.dtsi
+new file mode 100644
+index 000000000000..fe9652b145cc
+--- /dev/null
++++ b/arch/arm64/boot/dts/socionext/uniphier-nx1.dtsi
+@@ -0,0 +1,702 @@
++// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
++//
++// Device Tree Source for UniPhier NX1 SoC
++//
++// Copyright (C) 2021 Socionext Inc.
++//   Author: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
++
++#include <dt-bindings/gpio/gpio.h>
++#include <dt-bindings/gpio/uniphier-gpio.h>
++#include <dt-bindings/interrupt-controller/arm-gic.h>
++#include <dt-bindings/thermal/thermal.h>
++
++/ {
++	compatible = "socionext,uniphier-nx1";
++	#address-cells = <2>;
++	#size-cells = <2>;
++	interrupt-parent = <&gic>;
++
++	cpus {
++		#address-cells = <2>;
++		#size-cells = <0>;
++
++		cpu-map {
++			cluster0 {
++				core0 {
++					cpu = <&cpu0>;
++				};
++				core1 {
++					cpu = <&cpu1>;
++				};
++				core2 {
++					cpu = <&cpu2>;
++				};
++				core3 {
++					cpu = <&cpu3>;
++				};
++			};
++		};
++
++		cpu0: cpu@0 {
++			device_type = "cpu";
++			compatible = "arm,cortex-a53";
++			reg = <0 0x000>;
++			clocks = <&sys_clk 33>;
++			enable-method = "psci";
++			next-level-cache = <&l2>;
++			operating-points-v2 = <&cluster0_opp>;
++			#cooling-cells = <2>;
++		};
++
++		cpu1: cpu@1 {
++			device_type = "cpu";
++			compatible = "arm,cortex-a53";
++			reg = <0 0x001>;
++			clocks = <&sys_clk 33>;
++			enable-method = "psci";
++			next-level-cache = <&l2>;
++			operating-points-v2 = <&cluster0_opp>;
++			#cooling-cells = <2>;
++		};
++
++		cpu2: cpu@2 {
++			device_type = "cpu";
++			compatible = "arm,cortex-a53";
++			reg = <0 0x002>;
++			clocks = <&sys_clk 33>;
++			enable-method = "psci";
++			next-level-cache = <&l2>;
++			operating-points-v2 = <&cluster0_opp>;
++			#cooling-cells = <2>;
++		};
++
++		cpu3: cpu@3 {
++			device_type = "cpu";
++			compatible = "arm,cortex-a53";
++			reg = <0 0x003>;
++			clocks = <&sys_clk 33>;
++			enable-method = "psci";
++			next-level-cache = <&l2>;
++			operating-points-v2 = <&cluster0_opp>;
++			#cooling-cells = <2>;
++		};
++
++		l2: l2-cache {
++			compatible = "cache";
++		};
++	};
++
++	cluster0_opp: opp-table {
++		compatible = "operating-points-v2";
++		opp-shared;
++
++		opp-78125000 {
++			opp-hz = /bits/ 64 <78125000>;
++			clock-latency-ns = <300>;
++		};
++		opp-156250000 {
++			opp-hz = /bits/ 64 <156250000>;
++			clock-latency-ns = <300>;
++		};
++		opp-312500000 {
++			opp-hz = /bits/ 64 <312500000>;
++			clock-latency-ns = <300>;
++		};
++		opp-625000000 {
++			opp-hz = /bits/ 64 <625000000>;
++			clock-latency-ns = <300>;
++		};
++		opp-1250000000 {
++			opp-hz = /bits/ 64 <1250000000>;
++			clock-latency-ns = <300>;
++		};
++	};
++
++	psci {
++		compatible = "arm,psci-1.0";
++		method = "smc";
++	};
++
++	clocks {
++		refclk: clock-ref {
++			compatible = "fixed-clock";
++			#clock-cells = <0>;
++			clock-output-names = "ref";
++		};
++	};
++
++	emmc_pwrseq: emmc-pwrseq {
++		compatible = "mmc-pwrseq-emmc";
++		reset-gpios = <&gpio UNIPHIER_GPIO_PORT(3, 0) GPIO_ACTIVE_LOW>;
++	};
++
++	timer {
++		compatible = "arm,armv8-timer";
++		interrupts = <GIC_PPI 13 IRQ_TYPE_LEVEL_HIGH>,
++			     <GIC_PPI 14 IRQ_TYPE_LEVEL_HIGH>,
++			     <GIC_PPI 11 IRQ_TYPE_LEVEL_HIGH>,
++			     <GIC_PPI 10 IRQ_TYPE_LEVEL_HIGH>;
++	};
++
++	thermal-zones {
++		cpu-thermal {
++			polling-delay-passive = <250>;	/* 250ms */
++			polling-delay = <1000>;		/* 1000ms */
++			thermal-sensors = <&pvtctl>;
++
++			trips {
++				cpu_crit: cpu-crit {
++					temperature = <120000>;	/* 120C */
++					hysteresis = <2000>;
++					type = "critical";
++				};
++				cpu_alert: cpu-alert {
++					temperature = <110000>;	/* 110C */
++					hysteresis = <2000>;
++					type = "passive";
++				};
++			};
++
++			cooling-maps {
++				map0 {
++					trip = <&cpu_alert>;
++					cooling-device = <&cpu0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
++							 <&cpu1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
++							 <&cpu2 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
++							 <&cpu3 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
++				};
++			};
++		};
++	};
++
++	reserved-memory {
++		#address-cells = <2>;
++		#size-cells = <2>;
++		ranges;
++
++		secure-memory@21000000 {
++			reg = <0x0 0x21000000 0x0 0x01000000>;
++			no-map;
++		};
++	};
++
++	soc@0 {
++		compatible = "simple-bus";
++		#address-cells = <1>;
++		#size-cells = <1>;
++		ranges = <0 0 0 0xffffffff>;
++
++		sysctrl: syscon@11840000 {
++			compatible = "socionext,uniphier-nx1-sysctrl",
++				     "simple-mfd", "syscon";
++			reg = <0x11840000 0x10000>;
++
++			sys_clk: clock-controller {
++				compatible = "socionext,uniphier-nx1-clock";
++				#clock-cells = <1>;
++			};
++
++			sys_rst: reset-controller {
++				compatible = "socionext,uniphier-nx1-reset";
++				#reset-cells = <1>;
++			};
++
++			watchdog {
++				compatible = "socionext,uniphier-wdt";
++			};
++
++			pvtctl: thermal-sensor {
++				compatible = "socionext,uniphier-nx1-thermal";
++				interrupts = <GIC_SPI 3 IRQ_TYPE_LEVEL_HIGH>;
++				#thermal-sensor-cells = <0>;
++				socionext,tmod-calibration = <0x0f22 0x68ee>;
++			};
++		};
++
++		spi0: spi@14006000 {
++			compatible = "socionext,uniphier-scssi";
++			reg = <0x14006000 0x100>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++			interrupts = <GIC_SPI 36 IRQ_TYPE_LEVEL_HIGH>;
++			pinctrl-names = "default";
++			pinctrl-0 = <&pinctrl_spi0>;
++			clocks = <&peri_clk 11>;
++			resets = <&peri_rst 11>;
++			status = "disabled";
++		};
++
++		spi1: spi@14006100 {
++			compatible = "socionext,uniphier-scssi";
++			reg = <0x14006100 0x100>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++			interrupts = <GIC_SPI 37 IRQ_TYPE_LEVEL_HIGH>;
++			pinctrl-names = "default";
++			pinctrl-0 = <&pinctrl_spi1>;
++			clocks = <&peri_clk 12>;
++			resets = <&peri_rst 12>;
++			status = "disabled";
++		};
++
++		serial0: serial@14006800 {
++			compatible = "socionext,uniphier-uart";
++			reg = <0x14006800 0x40>;
++			interrupts = <GIC_SPI 32 IRQ_TYPE_LEVEL_HIGH>;
++			pinctrl-names = "default";
++			pinctrl-0 = <&pinctrl_uart0>;
++			clocks = <&peri_clk 0>;
++			resets = <&peri_rst 0>;
++			status = "disabled";
++		};
++
++		serial1: serial@14006900 {
++			compatible = "socionext,uniphier-uart";
++			reg = <0x14006900 0x40>;
++			interrupts = <GIC_SPI 33 IRQ_TYPE_LEVEL_HIGH>;
++			pinctrl-names = "default";
++			pinctrl-0 = <&pinctrl_uart1>;
++			clocks = <&peri_clk 1>;
++			resets = <&peri_rst 1>;
++			status = "disabled";
++		};
++
++		serial2: serial@14006a00 {
++			compatible = "socionext,uniphier-uart";
++			reg = <0x14006a00 0x40>;
++			interrupts = <GIC_SPI 34 IRQ_TYPE_LEVEL_HIGH>;
++			pinctrl-names = "default";
++			pinctrl-0 = <&pinctrl_uart2>;
++			clocks = <&peri_clk 2>;
++			resets = <&peri_rst 2>;
++			status = "disabled";
++		};
++
++		serial3: serial@14006b00 {
++			compatible = "socionext,uniphier-uart";
++			reg = <0x14006b00 0x40>;
++			interrupts = <GIC_SPI 35 IRQ_TYPE_LEVEL_HIGH>;
++			pinctrl-names = "default";
++			pinctrl-0 = <&pinctrl_uart3>;
++			clocks = <&peri_clk 3>;
++			resets = <&peri_rst 3>;
++			status = "disabled";
++		};
++
++		gpio: gpio@14007000 {
++			compatible = "socionext,uniphier-gpio";
++			reg = <0x14007000 0x200>;
++			interrupt-parent = <&aidet>;
++			interrupt-controller;
++			#interrupt-cells = <2>;
++			gpio-controller;
++			#gpio-cells = <2>;
++			gpio-ranges = <&pinctrl 0 0 0>,
++				      <&pinctrl 49 0 0>,
++				      <&pinctrl 53 0 0>,
++				      <&pinctrl 96 0 0>,
++				      <&pinctrl 120 0 0>;
++			gpio-ranges-group-names = "gpio_range0",
++						  "gpio_range1",
++						  "gpio_range2",
++						  "gpio_range3",
++						  "gpio_range4";
++			ngpios = <126>;
++			socionext,interrupt-ranges = <0 48 6>;
++		};
++
++		eth: ethernet@15000000 {
++			compatible = "socionext,uniphier-nx1-ave4";
++			reg = <0x15000000 0x8500>;
++			interrupts = <GIC_SPI 66 IRQ_TYPE_LEVEL_HIGH>;
++			pinctrl-names = "default";
++			pinctrl-0 = <&pinctrl_ether_rgmii>;
++			clock-names = "ether";
++			clocks = <&sys_clk 6>;
++			reset-names = "ether";
++			resets = <&sys_rst 6>;
++			phy-mode = "rgmii-id";
++			local-mac-address = [00 00 00 00 00 00];
++			socionext,syscon-phy-mode = <&soc_glue 0>;
++			status = "disabled";
++
++			mdio: mdio {
++				#address-cells = <1>;
++				#size-cells = <0>;
++			};
++		};
++
++		usb: usb@15a00000 {
++			compatible = "snps,dwc3";
++			reg = <0x15a00000 0xcd00>;
++			interrupt-names = "host";
++			interrupts = <GIC_SPI 68 IRQ_TYPE_LEVEL_HIGH>;
++			pinctrl-names = "default";
++			pinctrl-0 = <&pinctrl_usb0>, <&pinctrl_usb1>;
++			clock-names = "ref", "bus_early", "suspend";
++			clocks = <&sys_clk 12>, <&sys_clk 12>, <&sys_clk 12>;
++			resets = <&usb_rst 15>;
++			phy-names = "usb2-phy", "usb3-phy";
++			phys = <&usb_hsphy0>, <&usb_ssphy0>;
++			dr_mode = "host";
++			status = "disabled";
++		};
++
++		usb-controller@15b00000 {
++			compatible = "simple-mfd";
++			#address-cells = <1>;
++			#size-cells = <1>;
++			ranges = <0 0x15b00000 0x400>;
++
++			usb_rst: reset-controller@0 {
++				compatible = "socionext,uniphier-nx1-usb3-reset";
++				reg = <0x0 0x4>;
++				#reset-cells = <1>;
++				clock-names = "link";
++				clocks = <&sys_clk 12>;
++				reset-names = "link";
++				resets = <&sys_rst 12>;
++			};
++
++			usb_vbus0: regulator@100 {
++				compatible = "socionext,uniphier-nx1-usb3-regulator";
++				reg = <0x100 0x10>;
++				clock-names = "link";
++				clocks = <&sys_clk 12>;
++				reset-names = "link";
++				resets = <&sys_rst 12>;
++			};
++
++			usb_vbus1: regulator@110 {
++				compatible = "socionext,uniphier-nx1-usb3-regulator";
++				reg = <0x110 0x10>;
++				clock-names = "link";
++				clocks = <&sys_clk 12>;
++				reset-names = "link";
++				resets = <&sys_rst 12>;
++			};
++
++			usb_hsphy0: phy@200 {
++				compatible = "socionext,uniphier-nx1-usb3-hsphy";
++				reg = <0x200 0x10>;
++				#phy-cells = <0>;
++				clock-names = "link", "phy", "phy-ext";
++				clocks = <&sys_clk 12>, <&sys_clk 16>,
++					 <&sys_clk 13>;
++				reset-names = "link", "phy";
++				resets = <&sys_rst 12>, <&sys_rst 16>;
++				vbus-supply = <&usb_vbus0>;
++			};
++
++			usb_hsphy1: phy@210 {
++				compatible = "socionext,uniphier-nx1-usb3-hsphy";
++				reg = <0x210 0x10>;
++				#phy-cells = <0>;
++				clock-names = "link", "phy", "phy-ext";
++				clocks = <&sys_clk 12>, <&sys_clk 16>,
++					 <&sys_clk 13>;
++				reset-names = "link", "phy";
++				resets = <&sys_rst 12>, <&sys_rst 16>;
++				vbus-supply = <&usb_vbus1>;
++			};
++
++			usb_ssphy0: phy@300 {
++				compatible = "socionext,uniphier-nx1-usb3-ssphy";
++				reg = <0x300 0x10>;
++				#phy-cells = <0>;
++				clock-names = "link", "phy", "phy-ext";
++				clocks = <&sys_clk 12>, <&sys_clk 17>,
++					 <&sys_clk 13>;
++				reset-names = "link", "phy";
++				resets = <&sys_rst 12>, <&sys_rst 17>;
++				vbus-supply = <&usb_vbus0>;
++			};
++
++			usb_ssphy1: phy@310 {
++				compatible = "socionext,uniphier-nx1-usb3-ssphy";
++				reg = <0x310 0x10>;
++				#phy-cells = <0>;
++				clock-names = "link", "phy", "phy-ext";
++				clocks = <&sys_clk 12>, <&sys_clk 18>,
++					 <&sys_clk 13>;
++				reset-names = "link", "phy";
++				resets = <&sys_rst 12>, <&sys_rst 18>;
++				vbus-supply = <&usb_vbus1>;
++			};
++		};
++
++		pcie: pcie@16000000 {
++			compatible = "socionext,uniphier-pcie";
++			reg-names = "dbi", "link", "config", "atu";
++			reg = <0x16000000 0x1000>, <0x179a0000 0x10000>,
++			      <0x0fff0000 0x10000>, <0x16300000 0x1000>;
++			#address-cells = <3>;
++			#size-cells = <2>;
++			clocks = <&sys_clk 24>;
++			resets = <&sys_rst 24>;
++			num-lanes = <2>;
++			num-viewport = <1>;
++			bus-range = <0x0 0xff>;
++			device_type = "pci";
++			ranges =
++			/* downstream I/O */
++				<0x81000000 0 0x00000000 0x0ffe0000 0 0x00010000>,
++			/* non-prefetchable memory */
++				<0x82000000 0 0x20000000 0x04200000 0 0x0bde0000>;
++			#interrupt-cells = <1>;
++			interrupt-names = "dma", "msi";
++			interrupts = <GIC_SPI 84 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 85 IRQ_TYPE_LEVEL_HIGH>;
++			interrupt-map-mask = <0 0 0 7>;
++			interrupt-map = <0 0 0 1 &pcie_intc 0>,	/* INTA */
++					<0 0 0 2 &pcie_intc 1>,	/* INTB */
++					<0 0 0 3 &pcie_intc 2>,	/* INTC */
++					<0 0 0 4 &pcie_intc 3>;	/* INTD */
++			phy-names = "pcie-phy";
++			phys = <&pcie_phy>;
++			status = "disabled";
++
++			pcie_intc: legacy-interrupt-controller {
++				interrupt-controller;
++				#interrupt-cells = <1>;
++				interrupt-parent = <&gic>;
++				interrupts = <GIC_SPI 86 IRQ_TYPE_LEVEL_HIGH>;
++			};
++		};
++
++		pcie_ep: pcie-ep@16000000 {
++			compatible = "socionext,uniphier-nx1-pcie-ep";
++			reg-names = "dbi", "dbi2", "link", "addr_space", "atu";
++			reg = <0x16000000 0x1000>, <0x16100000 0x1000>,
++			      <0x179a0000 0x10000>, <0x04200000 0xbe00000>,
++			      <0x16300000 0x1000>;
++			clock-names = "link";
++			clocks = <&sys_clk 24>;
++			reset-names = "link";
++			resets = <&sys_rst 24>;
++			num-ib-windows = <16>;
++			num-ob-windows = <16>;
++			num-lanes = <2>;
++			phy-names = "pcie-phy";
++			phys = <&pcie_phy>;
++			status = "disabled";
++		};
++
++		pcie_phy: phy@179b8000 {
++			compatible = "socionext,uniphier-nx1-pcie-phy";
++			reg = <0x179b8000 0x4000>;
++			#phy-cells = <0>;
++			clock-names = "link";
++			clocks = <&sys_clk 24>;
++			reset-names = "link";
++			resets = <&sys_rst 24>;
++			socionext,syscon = <&sysctrl>;
++		};
++
++		i2c0: i2c@18780000 {
++			compatible = "socionext,uniphier-fi2c";
++			reg = <0x18780000 0x80>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++			interrupts = <GIC_SPI 41 IRQ_TYPE_LEVEL_HIGH>;
++			pinctrl-names = "default";
++			pinctrl-0 = <&pinctrl_i2c0>;
++			clocks = <&peri_clk 4>;
++			resets = <&peri_rst 4>;
++			clock-frequency = <400000>;
++			status = "disabled";
++		};
++
++		i2c1: i2c@18781000 {
++			compatible = "socionext,uniphier-fi2c";
++			reg = <0x18781000 0x80>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++			interrupts = <GIC_SPI 42 IRQ_TYPE_LEVEL_HIGH>;
++			pinctrl-names = "default";
++			pinctrl-0 = <&pinctrl_i2c1>;
++			clocks = <&peri_clk 5>;
++			resets = <&peri_rst 5>;
++			clock-frequency = <400000>;
++			status = "disabled";
++		};
++
++		i2c2: i2c@18782000 {
++			compatible = "socionext,uniphier-fi2c";
++			reg = <0x18782000 0x80>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++			interrupts = <GIC_SPI 43 IRQ_TYPE_LEVEL_HIGH>;
++			pinctrl-names = "default";
++			pinctrl-0 = <&pinctrl_i2c2>;
++			clocks = <&peri_clk 6>;
++			resets = <&peri_rst 6>;
++			clock-frequency = <400000>;
++			status = "disabled";
++		};
++
++		i2c3: i2c@18783000 {
++			compatible = "socionext,uniphier-fi2c";
++			reg = <0x18783000 0x80>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++			interrupts = <GIC_SPI 44 IRQ_TYPE_LEVEL_HIGH>;
++			pinctrl-names = "default";
++			pinctrl-0 = <&pinctrl_i2c3>;
++			clocks = <&peri_clk 7>;
++			resets = <&peri_rst 7>;
++			clock-frequency = <400000>;
++			status = "disabled";
++		};
++
++		i2c4: i2c@18784000 {
++			compatible = "socionext,uniphier-fi2c";
++			reg = <0x18784000 0x80>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++			interrupts = <GIC_SPI 45 IRQ_TYPE_LEVEL_HIGH>;
++			pinctrl-names = "default";
++			pinctrl-0 = <&pinctrl_i2c4>;
++			clocks = <&peri_clk 8>;
++			resets = <&peri_rst 8>;
++			clock-frequency = <100000>;
++			status = "disabled";
++		};
++
++		i2c5: i2c@18785000 {
++			compatible = "socionext,uniphier-fi2c";
++			reg = <0x18785000 0x80>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++			interrupts = <GIC_SPI 46 IRQ_TYPE_LEVEL_HIGH>;
++			pinctrl-names = "default";
++			pinctrl-0 = <&pinctrl_i2c5>;
++			clocks = <&peri_clk 9>;
++			resets = <&peri_rst 9>;
++			clock-frequency = <100000>;
++			status = "disabled";
++		};
++
++		i2c6: i2c@18786000 {
++			compatible = "socionext,uniphier-fi2c";
++			reg = <0x18786000 0x80>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++			interrupts = <GIC_SPI 47 IRQ_TYPE_LEVEL_HIGH>;
++			pinctrl-names = "default";
++			pinctrl-0 = <&pinctrl_i2c6>;
++			clocks = <&peri_clk 10>;
++			resets = <&peri_rst 10>;
++			clock-frequency = <100000>;
++			status = "disabled";
++		};
++
++		syscon@19810000 {
++			compatible = "socionext,uniphier-nx1-sdctrl",
++				     "simple-mfd", "syscon";
++			reg = <0x19810000 0x400>;
++
++			sd_clk: clock-controller {
++				compatible = "socionext,uniphier-nx1-sd-clock";
++				#clock-cells = <1>;
++			};
++
++			sd_rst: reset-controller {
++				compatible = "socionext,uniphier-nx1-sd-reset";
++				#reset-cells = <1>;
++			};
++		};
++
++		syscon@19820000 {
++			compatible = "socionext,uniphier-nx1-perictrl",
++				     "simple-mfd", "syscon";
++			reg = <0x19820000 0x200>;
++
++			peri_clk: clock-controller {
++				compatible = "socionext,uniphier-nx1-peri-clock";
++				#clock-cells = <1>;
++			};
++
++			peri_rst: reset-controller {
++				compatible = "socionext,uniphier-nx1-peri-reset";
++				#reset-cells = <1>;
++			};
++		};
++
++		emmc: mmc@1a000000 {
++			compatible = "socionext,uniphier-sd4hc", "cdns,sd4hc";
++			reg = <0x1a000000 0x400>;
++			interrupts = <GIC_SPI 78 IRQ_TYPE_LEVEL_HIGH>;
++			pinctrl-names = "default";
++			pinctrl-0 = <&pinctrl_emmc>;
++			clocks = <&sys_clk 4>;
++			resets = <&sys_rst 4>;
++			bus-width = <8>;
++			mmc-ddr-1_8v;
++			mmc-hs200-1_8v;
++			mmc-pwrseq = <&emmc_pwrseq>;
++			cdns,phy-input-delay-legacy = <9>;
++			cdns,phy-input-delay-mmc-highspeed = <2>;
++			cdns,phy-input-delay-mmc-ddr = <3>;
++			cdns,phy-dll-delay-sdclk = <21>;
++			cdns,phy-dll-delay-sdclk-hsmmc = <21>;
++		};
++
++		sd: mmc@1a400000 {
++			compatible = "socionext,uniphier-sd-v3.1.1";
++			reg = <0x1a400000 0x800>;
++			interrupts = <GIC_SPI 76 IRQ_TYPE_LEVEL_HIGH>;
++			pinctrl-names = "default";
++			pinctrl-0 = <&pinctrl_sd>;
++			clocks = <&sd_clk 0>;
++			reset-names = "host";
++			resets = <&sd_rst 0>;
++			bus-width = <4>;
++			cap-sd-highspeed;
++			status = "disabled";
++		};
++
++		soc_glue: syscon@1f800000 {
++			compatible = "socionext,uniphier-nx1-soc-glue",
++				     "simple-mfd", "syscon";
++			reg = <0x1f800000 0x2000>;
++
++			pinctrl: pinctrl {
++				compatible = "socionext,uniphier-nx1-pinctrl";
++			};
++		};
++
++		soc-glue@1f900000 {
++			compatible = "simple-mfd";
++			#address-cells = <1>;
++			#size-cells = <1>;
++			ranges = <0 0x1f900000 0x2000>;
++		};
++
++		xdmac: dma-controller@1fa10000 {
++			compatible = "socionext,uniphier-xdmac";
++			reg = <0x1fa10000 0x5300>;
++			interrupts = <GIC_SPI 39 IRQ_TYPE_LEVEL_HIGH>;
++			dma-channels = <16>;
++			#dma-cells = <2>;
++		};
++
++		aidet: interrupt-controller@1fb20000 {
++			compatible = "socionext,uniphier-nx1-aidet";
++			reg = <0x1fb20000 0x200>;
++			interrupt-controller;
++			#interrupt-cells = <2>;
++		};
++
++		gic: interrupt-controller@1fd00000 {
++			compatible = "arm,gic-v3";
++			reg = <0x1fd00000 0x10000>,	/* GICD */
++			      <0x1fd80000 0x80000>;	/* GICR */
++			interrupt-controller;
++			#interrupt-cells = <3>;
++			interrupts = <GIC_PPI 9 IRQ_TYPE_LEVEL_HIGH>;
++		};
++	};
++};
++
++#include "uniphier-pinctrl.dtsi"
 -- 
 2.25.1
 
