@@ -2,107 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2CD361FB77
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 18:33:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D00261FB55
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 18:28:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232853AbiKGRdQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 12:33:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45550 "EHLO
+        id S232085AbiKGR17 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 12:27:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232815AbiKGRdN (ORCPT
+        with ESMTP id S232000AbiKGR1s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 12:33:13 -0500
-Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EE3A1F9FC
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 09:33:12 -0800 (PST)
-Received: by mail-oi1-x234.google.com with SMTP id c129so12936248oia.0
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 09:33:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=OtwMIMageNgEFgITDbP/X4AlmExFVOD7QsjK39jRkOs=;
-        b=ZrBbGd0NE5W3bFjfpMfVEGchJiOqL5vKGUnJZWHQEDCz71oryF6CDiPscJkkJaNeeg
-         /pKDfIl6hW5yw8tjgrcZSOwrloCrFqYb1/s9Bc1/cV94xFkaKkZwH1bCSgyaTCtOH5Nq
-         2ijwSehO6aXkrD87GuWevIaaXGPhzXmGc/u0k=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=OtwMIMageNgEFgITDbP/X4AlmExFVOD7QsjK39jRkOs=;
-        b=hFRvHh4CsrK9dzjO1E67Eks+0NeigmxoPvd/ezg4UqX21eSHIwpudnreSjeFwfaHpz
-         Hd+MWpp0kYz/YWH/W9zB7W8B9OkAeF+9m2aycv26C0q9WhRdWeotvGl3EeapowhL32Er
-         EFa8tIpUmKQ7bq1ckMq2a6R7NqW0aIB9gnUNuwISbDSrjire0OYmGfSvC2OUDjcc5JoA
-         wvYAkbSDns/Ft42o7liPYQCsWVz7O/l4f/7zu4oKhnDh2stP8FRIdcakQpeBkiB+kX9e
-         JI+S+JeeOSB++wJW7l/Fo5UyZiw6b2iSdp6EEaGuv9hEcd3bbLQ0UtSmKMXDLNEXDO3r
-         zy+g==
-X-Gm-Message-State: ACrzQf0127i1G+feATMVQaR9QEpfQgNAimf04Q9niaKZjYOtYEikUqYE
-        rB+bO2d3dQHNu16R9FCUyzgUuJ1DcZbR4g==
-X-Google-Smtp-Source: AMsMyM58URHlet91YVc1ZTCOgcPmck7PwChUtJRD93+Pe7zPa+yANJZKicGRDYFVxXEcOAezWKb1oQ==
-X-Received: by 2002:a05:6808:490:b0:359:fcf5:3c0f with SMTP id z16-20020a056808049000b00359fcf53c0fmr24740171oid.65.1667842391642;
-        Mon, 07 Nov 2022 09:33:11 -0800 (PST)
-Received: from mail-oo1-f41.google.com (mail-oo1-f41.google.com. [209.85.161.41])
-        by smtp.gmail.com with ESMTPSA id x51-20020a9d37b6000000b00666a5b5d20fsm3115030otb.32.2022.11.07.09.33.09
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Nov 2022 09:33:10 -0800 (PST)
-Received: by mail-oo1-f41.google.com with SMTP id x196-20020a4a41cd000000b0049f064d2591so156543ooa.11
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 09:33:09 -0800 (PST)
-X-Received: by 2002:a05:6902:1352:b0:6bb:3f4b:9666 with SMTP id
- g18-20020a056902135200b006bb3f4b9666mr46634218ybu.101.1667842059236; Mon, 07
- Nov 2022 09:27:39 -0800 (PST)
+        Mon, 7 Nov 2022 12:27:48 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DCF0723E9C;
+        Mon,  7 Nov 2022 09:27:47 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CA40F1FB;
+        Mon,  7 Nov 2022 09:27:53 -0800 (PST)
+Received: from monolith.localdoman (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 88B7A3F534;
+        Mon,  7 Nov 2022 09:27:46 -0800 (PST)
+Date:   Mon, 7 Nov 2022 17:27:35 +0000
+From:   Alexandru Elisei <alexandru.elisei@arm.com>
+To:     ardb@kernel.org, catalin.marinas@arm.com, will@kernel.org,
+        linux-efi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: [Possible BUG] arm64: efi: efi_runtime_fixup_exception() and
+ efi_call_virt_check_flags() both taint the kernel
+Message-ID: <Y2lAB508TrrjpDPi@monolith.localdoman>
 MIME-Version: 1.0
-References: <20221107161740.144456-1-david@redhat.com>
-In-Reply-To: <20221107161740.144456-1-david@redhat.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 7 Nov 2022 09:27:23 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wj51-dtxf8BQBYP+9Kc3ejq4Y0=-6hCbf_XAnkT3fsgDQ@mail.gmail.com>
-Message-ID: <CAHk-=wj51-dtxf8BQBYP+9Kc3ejq4Y0=-6hCbf_XAnkT3fsgDQ@mail.gmail.com>
-Subject: Re: [PATCH RFC 00/19] mm/gup: remove FOLL_FORCE usage from drivers
- (reliable R/O long-term pinning)
-To:     David Hildenbrand <david@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        etnaviv@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Peter Xu <peterx@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Hugh Dickins <hughd@google.com>, Nadav Amit <namit@vmware.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        David Airlie <airlied@gmail.com>,
-        Oded Gabbay <ogabbay@kernel.org>, Arnd Bergmann <arnd@arndb.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 7, 2022 at 8:18 AM David Hildenbrand <david@redhat.com> wrote:
->
-> So instead, make R/O long-term pinning work as expected, by breaking COW
-> in a COW mapping early, such that we can remove any FOLL_FORCE usage from
-> drivers.
+I'm going to preface this by saying that I'm extremely unfamiliar with the
+EFI code.
 
-Nothing makes me unhappy from a quick scan through these patches.
+Commit d3549a938b73 ("efi/arm64: libstub: avoid SetVirtualAddressMap() when
+possible") skipped the call to SetVirtualAddressMap() for certain
+configurations, and that started causing kernel panics on an Ampere Altra
+machine due to an EFI synchronous exception.
 
-And I'd really love to just have this long saga ended, and FOLL_FORCE
-finally relegated to purely ptrace accesses.
+Commit 23715a26c8d8 ("arm64: efi: Recover from synchronous exceptions
+occurring in firmware") made the EFI exception non-fatal.
 
-So an enthusiastic Ack from me.
+With a kernel built from v6.1-rc4 (which has both patches), I'm now getting
+two splats on the same Altra machine (log below). Looks to me like the
+second splat is caused by efi_call_virt_check_flags() using the
+PSTATE.{I,F} values from when taking the exception. Shouldn't
+efi_runtime_fixup_exception() fix up the exception so the error isn't
+propagated along the call chain?
 
-                   Linus
+I'm asking this because efi_runtime_fixup_exception() has this add_taint()
+call:
+
+	pr_err(FW_BUG "Unable to handle %s in EFI runtime service\n", msg);
+	add_taint(TAINT_FIRMWARE_WORKAROUND, LOCKDEP_STILL_OK);
+
+and then efi_call_virt_check_flags() has this call:
+
+        mismatch = flags ^ cur_flags;
+        if (!WARN_ON_ONCE(mismatch & ARCH_EFI_IRQ_FLAGS_MASK))
+                return;
+
+        add_taint(TAINT_FIRMWARE_WORKAROUND, LOCKDEP_NOW_UNRELIABLE);
+
+It looks to me like LOCKDEP_STILL_OK from the first call is at odds with
+LOCKDEP_NOW_UNRELIABLE from the second add_taint() call.
+
+Here is the relevant part of the log (I can send the .config, kernel
+command line and full log, or any other information that might be needed):
+
+[   55.479519] [Firmware Bug]: Unable to handle paging request in EFI runtime service
+[   55.487122] CPU: 62 PID: 9 Comm: kworker/u320:0 Tainted: G          I        6.1.0-rc4 #60
+[   55.487128] Hardware name: WIWYNN Mt.Jade Server System B81.03001.0005/Mt.Jade Motherboard, BIOS 1.08.20220218 (SCP: 1.08.20220218) 2022/02/18
+[   55.487131] Workqueue: efi_rts_wq efi_call_rts
+[   55.487158] Call trace:
+[   55.487161]  dump_backtrace.part.0+0xdc/0xf0
+[   55.487177]  show_stack+0x18/0x40
+[   55.487180]  dump_stack_lvl+0x68/0x84
+[   55.487190]  dump_stack+0x18/0x34
+[   55.487192]  efi_runtime_fixup_exception+0x74/0x88
+[   55.487199]  __do_kernel_fault+0x108/0x1b0
+[   55.487204]  do_page_fault+0xd0/0x400
+[   55.487207]  do_translation_fault+0xac/0xc0
+[   55.487209]  do_mem_abort+0x44/0x94
+[   55.487212]  el1_abort+0x40/0x6c
+[   55.487214]  el1h_64_sync_handler+0xd8/0xe4
+[   55.487218]  el1h_64_sync+0x64/0x68
+[   55.487221]  0xb7eb7ae4
+[   55.487224]  0xb7eb8668
+[   55.487225]  0xb7eb6e08
+[   55.487227]  0xb7eb68ec
+[   55.487228]  0xb7eb3824
+[   55.487230]  0xb7eb05a8
+[   55.487231]  0xb7eb12a0
+[   55.487232]  0xb7e43504
+[   55.487234]  0xb7e43650
+[   55.487235]  0xb7e482d0
+[   55.487237]  0xb7e4907c
+[   55.487238]  0xb7e49ff4
+[   55.487239]  0xb7e40888
+[   55.487241]  0xb7cb3328
+[   55.487242]  0xb7cb0674
+[   55.487243]  __efi_rt_asm_wrapper+0x54/0x70
+[   55.487246]  efi_call_rts+0x28c/0x3d0
+[   55.487249]  process_one_work+0x1d0/0x320
+[   55.487258]  worker_thread+0x14c/0x444
+[   55.487261]  kthread+0x10c/0x110
+[   55.487264]  ret_from_fork+0x10/0x20
+[   55.487268] [Firmware Bug]: Synchronous exception occurred in EFI runtime service set_time()
+[   55.495735] ------------[ cut here ]------------
+[   55.495739] WARNING: CPU: 62 PID: 9 at drivers/firmware/efi/runtime-wrappers.c:111 efi_call_virt_check_flags+0x40/0xac
+[   55.495746] Modules linked in:
+[   55.495749] CPU: 62 PID: 9 Comm: kworker/u320:0 Tainted: G          I        6.1.0-rc4 #60
+[   55.495751] Hardware name: WIWYNN Mt.Jade Server System B81.03001.0005/Mt.Jade Motherboard, BIOS 1.08.20220218 (SCP: 1.08.20220218) 2022/02/18
+[   55.495753] Workqueue: efi_rts_wq efi_call_rts
+[   55.495757] pstate: 004000c9 (nzcv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+[   55.495761] pc : efi_call_virt_check_flags+0x40/0xac
+[   55.495764] lr : efi_call_rts+0x29c/0x3d0
+[   55.495767] sp : ffff80000861bd40
+[   55.495768] x29: ffff80000861bd40 x28: 0000000000000000 x27: 0000000000000000
+[   55.495772] x26: ffffb251470e9e68 x25: ffff3fff89714805 x24: 0000000000000000
+[   55.495775] x23: 0000000000000000 x22: 0000000000000000 x21: 00000000000000c0
+[   55.495778] x20: ffffb25146688de0 x19: 0000000000000000 x18: ffffffffffffffff
+[   55.495780] x17: 657320656d69746e x16: 757220494645206e x15: 6920646572727563
+[   55.495784] x14: 636f206e6f697470 x13: ffff403e40540000 x12: 0000000000001c14
+[   55.495787] x11: 000000000000095c x10: ffff403e40800000 x9 : ffff403e40540000
+[   55.495790] x8 : 00000000ffff7fff x7 : ffff403e40800000 x6 : 0000000000000000
+[   55.495792] x5 : ffff083e7fe9aaa0 x4 : 0000000000000000 x3 : 0000000000000000
+[   55.495796] x2 : 0000000000000000 x1 : ffffb25146688de0 x0 : 00000000000000c0
+[   55.495799] Call trace:
+[   55.495800]  efi_call_virt_check_flags+0x40/0xac
+[   55.495802]  efi_call_rts+0x29c/0x3d0
+[   55.495805]  process_one_work+0x1d0/0x320
+[   55.495808]  worker_thread+0x14c/0x444
+[   55.495811]  kthread+0x10c/0x110
+[   55.495814]  ret_from_fork+0x10/0x20
+[   55.495815] ---[ end trace 0000000000000000 ]---
+[   55.495818] Disabling lock debugging due to kernel taint
+[   55.495822] efi: [Firmware Bug]: IRQ flags corrupted (0x00000000=>0x000000c0) by EFI set_time
+[   55.504434] efi: EFI Runtime Services are disabled!
+[   55.504465] rtc-efi rtc-efi.0: can't read time
+[   56.479370] efi: EFI Runtime Services are disabled!
+[   56.479394] rtc-efi rtc-efi.0: can't read time
+[   57.479574] rtc-efi rtc-efi.0: can't read time
+[   57.484030] rtc-efi rtc-efi.0: can't read time
+[   57.488474] rtc-efi rtc-efi.0: can't read time
+[   58.479692] rtc-efi rtc-efi.0: can't read time
+[   58.484139] rtc-efi rtc-efi.0: can't read time
+
+(rtc-efi error message repeats ad nauseum)
+
+Note: this error message from the EFI rtc driver fires over and over and
+clutters dmesg, will send a different report for this as I don't think it's
+necessarily related to the two functions.
+
+Thanks,
+Alex
