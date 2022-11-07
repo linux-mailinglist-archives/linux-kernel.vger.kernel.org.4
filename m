@@ -2,248 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C173761FD94
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 19:30:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 534D361FD97
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 19:30:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233035AbiKGSaE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 13:30:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45748 "EHLO
+        id S232196AbiKGSav (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 13:30:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233027AbiKGS37 (ORCPT
+        with ESMTP id S232483AbiKGSat (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 13:29:59 -0500
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE5A7193E2
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 10:29:52 -0800 (PST)
-Received: by mail-il1-f200.google.com with SMTP id h20-20020a056e021d9400b00300581edaa5so9253848ila.12
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 10:29:52 -0800 (PST)
+        Mon, 7 Nov 2022 13:30:49 -0500
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC78F1A046
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 10:30:48 -0800 (PST)
+Received: by mail-pl1-x636.google.com with SMTP id k7so11839839pll.6
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 10:30:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=eOgVsIAsrne2RGr05kp3qZLB8zxsQRZ1bdjAelDdoHY=;
+        b=K744o80UvSD2QHtY98/IvJEitqOtWQg+H0OuAvIlpmM7D9VK0aQrl8OMyItoinxi5e
+         MHABQNT0asHUfLdnr0QiZy7vWPgMGjC+NNY0p3EO+nOFZdEntIOpOj55JDIViLMeBXJ5
+         5T0cqUD7Ox+4dB/5Wv2UrVwpcQuNSJIc5g+T/4TNmNCX2mYlHV8vFINTcW3nDC3U0MK6
+         bGgqSBtl2L/YtIwCXW1Z16aIYBZxpA4DcYUcLjjaPXScg3USaZ03/iX/iuCu98040NUZ
+         5K22snT6lnEcREoInNeAQB4Y6ifjwdDhLjJlPTZX8T2Fcd503LEaT/nXVFiOtGbQrHJh
+         MyIg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ILXgDeED0B9TieOZ1yhu4rMHPM18i/4CeVyvudKaPP8=;
-        b=ekSYZ7ZjGb/nDqxN6M6waSTcOSHXIB0dJxaKVm8Fm3RtcwuWmYpXHjLPn1hEgmBWna
-         ai+dOYFC6zEdm232VIf9ZzQkzpi15T8QOHQMiFWAAyXihAukYeTUoUjKRIru4bOkXmdi
-         t3Yr2JaPgXz6pN0ni7nHv2xL2s4OWZzFaR7GUXPZOsxa9chp/aTA97ahBvoaypWpDcq5
-         YT9mJK67k/mVwNP1Zkm9KbOyf4iuehJAUd5Pke9mZuiLKTjneunEPN1W7mxNb7s4CkH9
-         /Q+l8cwzx6b/j/qcQVHdmkRdb75qCWqD3Sip9qr8mV751BHDkAQziOFzKykGkUWHkw1c
-         7wZA==
-X-Gm-Message-State: ACrzQf0PNVPkH5X3mRv76CvylKv1YAaHmCaiyQBUCE9R+9eZldshItwj
-        EyAy65SMTO8vgbvOVe4Vpgk1/pKi70b4I7hsuXE6lScoiwzV
-X-Google-Smtp-Source: AMsMyM7oXP1WtFevwDBtmgOdu03qyjgu1zf89PWRBtzdXhD+z8wKRhMDmfNKPvkejJS5rNtI1TL6dZrntC/La9OdYtX7SgDhptMt
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=eOgVsIAsrne2RGr05kp3qZLB8zxsQRZ1bdjAelDdoHY=;
+        b=wk+UaJWCHHVYGLJX2iPZg5pomQz/krv+X479vxKXYUi7Rnt9krDtyUFAWKEL/K0Vpc
+         t8YePsYMKc2yGuTAKwwbtJOc8XrdjZ+vnfd19Z1Ps/q+jNGj0Xr7BeQiF9BVqU6x4Sej
+         oqbDFPzS1MtkmiMfZ/BMG0jNomxHDycWJLc2KJdwSjcFTyYZkaL7d6XUZLVumrCSUKbf
+         o5CFJBkaT9c0suc5ZNMzxZ3WRQSc61plEj9iuPW+2kTRVx8oXn/H6EHWbsOK+p5MK9rJ
+         5ylwzeAw2cULDtxtk9bPij4bwbk0kB1Rr2ATQdp77pXRcq7kRN5ik1Hgc65P+gvQ5sBT
+         uO3A==
+X-Gm-Message-State: ACrzQf3+O0y24bvgV87ISfyoF5RD0RWlqv9rsVKBcvKFzu/hO2MUeQBu
+        +fbQ3DKRChtXfrvEqZCoMooNlg==
+X-Google-Smtp-Source: AMsMyM5TCWfGrWZyWLKvedu2XldfcYy10WsNCUL7xcXO5xYqi31L5tAz/Zo5Y5slL7GJXF8IfQ0oSw==
+X-Received: by 2002:a17:902:834c:b0:187:49e0:fd4d with SMTP id z12-20020a170902834c00b0018749e0fd4dmr29535678pln.81.1667845848256;
+        Mon, 07 Nov 2022 10:30:48 -0800 (PST)
+Received: from google.com (223.103.125.34.bc.googleusercontent.com. [34.125.103.223])
+        by smtp.gmail.com with ESMTPSA id o8-20020aa79788000000b0056c003f9169sm4822056pfp.196.2022.11.07.10.30.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Nov 2022 10:30:47 -0800 (PST)
+Date:   Mon, 7 Nov 2022 10:30:44 -0800
+From:   David Matlack <dmatlack@google.com>
+To:     Vipin Sharma <vipinsh@google.com>
+Cc:     seanjc@google.com, pbonzini@redhat.com, vkuznets@redhat.com,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 5/6] KVM: selftests: Move hypercall() to hyper.h
+Message-ID: <Y2lO1HQtaMBCGpcZ@google.com>
+References: <20221105045704.2315186-1-vipinsh@google.com>
+ <20221105045704.2315186-6-vipinsh@google.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:264c:b0:375:2a59:683c with SMTP id
- n12-20020a056638264c00b003752a59683cmr29825763jat.232.1667845792271; Mon, 07
- Nov 2022 10:29:52 -0800 (PST)
-Date:   Mon, 07 Nov 2022 10:29:52 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000fd151d05ece59b42@google.com>
-Subject: [syzbot] possible deadlock in btrfs_search_slot
-From:   syzbot <syzbot+c06034aecf9f5eab1ac1@syzkaller.appspotmail.com>
-To:     clm@fb.com, dsterba@suse.com, josef@toxicpanda.com,
-        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221105045704.2315186-6-vipinsh@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Fri, Nov 04, 2022 at 09:57:03PM -0700, Vipin Sharma wrote:
+> hypercall() can be used by other hyperv tests, move it to hyperv.h.
+> 
+> Signed-off-by: Vipin Sharma <vipinsh@google.com>
+> ---
+>  .../selftests/kvm/include/x86_64/hyperv.h       | 17 +++++++++++++++++
+>  .../selftests/kvm/x86_64/hyperv_features.c      | 17 -----------------
+>  2 files changed, 17 insertions(+), 17 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/kvm/include/x86_64/hyperv.h b/tools/testing/selftests/kvm/include/x86_64/hyperv.h
+> index 9d8c325af1d9..87d8d9e444f7 100644
+> --- a/tools/testing/selftests/kvm/include/x86_64/hyperv.h
+> +++ b/tools/testing/selftests/kvm/include/x86_64/hyperv.h
+> @@ -199,4 +199,21 @@ static inline uint64_t hv_linux_guest_id(void)
+>  	       ((uint64_t)LINUX_VERSION_CODE << 16);
+>  }
+>  
+> +static inline uint8_t hypercall(u64 control, vm_vaddr_t input_address,
+> +				vm_vaddr_t output_address, uint64_t *hv_status)
+> +{
+> +	uint8_t vector;
+> +
+> +	/* Note both the hypercall and the "asm safe" clobber r9-r11. */
+> +	asm volatile("mov %[output_address], %%r8\n\t"
+> +		     KVM_ASM_SAFE("vmcall")
+> +		     : "=a" (*hv_status),
+> +		       "+c" (control), "+d" (input_address),
+> +		       KVM_ASM_SAFE_OUTPUTS(vector)
+> +		     : [output_address] "r"(output_address),
+> +		       "a" (-EFAULT)
+> +		     : "cc", "memory", "r8", KVM_ASM_SAFE_CLOBBERS);
+> +	return vector;
+> +}
 
-syzbot found the following issue on:
+Since this function is Hyper-V specific it probably makes sense to
+rename it to hyperv_hypercall() as part of moving it to library, e.g. to
+differentiate it from kvm_hypercall().
 
-HEAD commit:    f0c4d9fc9cc9 Linux 6.1-rc4
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=10d158fe880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=771b06c41e08f95b
-dashboard link: https://syzkaller.appspot.com/bug?extid=c06034aecf9f5eab1ac1
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-
-Unfortunately, I don't have any reproducer for this issue yet.
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/8c210d1cda58/disk-f0c4d9fc.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/ab3065e17b8b/vmlinux-f0c4d9fc.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/739b786269f4/bzImage-f0c4d9fc.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+c06034aecf9f5eab1ac1@syzkaller.appspotmail.com
-
-======================================================
-WARNING: possible circular locking dependency detected
-6.1.0-rc4-syzkaller #0 Not tainted
-------------------------------------------------------
-syz-executor.1/21431 is trying to acquire lock:
-ffff888028341e58 (&mm->mmap_lock#2){++++}-{3:3}, at: __might_fault+0x8f/0x110 mm/memory.c:5645
-
-but task is already holding lock:
-ffff888020a77838 (btrfs-root-00){++++}-{3:3}, at: __btrfs_tree_read_lock fs/btrfs/locking.c:134 [inline]
-ffff888020a77838 (btrfs-root-00){++++}-{3:3}, at: btrfs_tree_read_lock fs/btrfs/locking.c:140 [inline]
-ffff888020a77838 (btrfs-root-00){++++}-{3:3}, at: btrfs_read_lock_root_node+0x2b4/0x400 fs/btrfs/locking.c:279
-
-which lock already depends on the new lock.
-
-
-the existing dependency chain (in reverse order) is:
-
--> #3 (btrfs-root-00){++++}-{3:3}:
-       lock_acquire+0x182/0x3c0 kernel/locking/lockdep.c:5668
-       down_read_nested+0x3c/0x50 kernel/locking/rwsem.c:1634
-       __btrfs_tree_read_lock fs/btrfs/locking.c:134 [inline]
-       btrfs_tree_read_lock fs/btrfs/locking.c:140 [inline]
-       btrfs_read_lock_root_node+0x2b4/0x400 fs/btrfs/locking.c:279
-       btrfs_search_slot_get_root fs/btrfs/ctree.c:1649 [inline]
-       btrfs_search_slot+0x495/0x2fe0 fs/btrfs/ctree.c:1969
-       btrfs_insert_empty_items fs/btrfs/ctree.c:4103 [inline]
-       btrfs_insert_empty_item fs/btrfs/ctree.h:3127 [inline]
-       btrfs_insert_item+0x199/0x3b0 fs/btrfs/ctree.c:4132
-       btrfs_create_tree+0x7c9/0xc30 fs/btrfs/disk-io.c:1229
-       btrfs_create_free_space_tree+0x116/0x1160 fs/btrfs/free-space-tree.c:1169
-       btrfs_start_pre_rw_mount+0x4df/0x660 fs/btrfs/disk-io.c:3254
-       open_ctree+0x27e6/0x2d6d fs/btrfs/disk-io.c:3790
-       btrfs_fill_super+0x1c6/0x2d0 fs/btrfs/super.c:1461
-       btrfs_mount_root+0x885/0x9a0 fs/btrfs/super.c:1829
-       legacy_get_tree+0xea/0x180 fs/fs_context.c:610
-       vfs_get_tree+0x88/0x270 fs/super.c:1531
-       fc_mount fs/namespace.c:1043 [inline]
-       vfs_kern_mount+0xc9/0x160 fs/namespace.c:1073
-       btrfs_mount+0x3d3/0xbb0 fs/btrfs/super.c:1889
-       legacy_get_tree+0xea/0x180 fs/fs_context.c:610
-       vfs_get_tree+0x88/0x270 fs/super.c:1531
-       do_new_mount+0x289/0xad0 fs/namespace.c:3040
-       do_mount fs/namespace.c:3383 [inline]
-       __do_sys_mount fs/namespace.c:3591 [inline]
-       __se_sys_mount+0x2d3/0x3c0 fs/namespace.c:3568
-       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-       do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
-       entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
--> #2 (btrfs_trans_num_extwriters){++++}-{0:0}:
-       lock_acquire+0x182/0x3c0 kernel/locking/lockdep.c:5668
-       join_transaction+0x19f/0xe60 fs/btrfs/transaction.c:299
-       start_transaction+0x6fb/0x1180 fs/btrfs/transaction.c:658
-       btrfs_commit_super+0x9a/0xd0 fs/btrfs/disk-io.c:4494
-       close_ctree+0x3a7/0xbde fs/btrfs/disk-io.c:4651
-       generic_shutdown_super+0x130/0x310 fs/super.c:492
-       kill_anon_super+0x36/0x60 fs/super.c:1086
-       btrfs_kill_super+0x3d/0x50 fs/btrfs/super.c:2441
-       deactivate_locked_super+0xa7/0xf0 fs/super.c:332
-       cleanup_mnt+0x494/0x520 fs/namespace.c:1186
-       task_work_run+0x243/0x300 kernel/task_work.c:179
-       resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
-       exit_to_user_mode_loop+0x124/0x150 kernel/entry/common.c:171
-       exit_to_user_mode_prepare+0xb2/0x140 kernel/entry/common.c:203
-       __syscall_exit_to_user_mode_work kernel/entry/common.c:285 [inline]
-       syscall_exit_to_user_mode+0x26/0x60 kernel/entry/common.c:296
-       do_syscall_64+0x49/0xb0 arch/x86/entry/common.c:86
-       entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
--> #1 (btrfs_trans_num_writers){++++}-{0:0}:
-       reacquire_held_locks+0x386/0x650 kernel/locking/lockdep.c:5193
-       __lock_release kernel/locking/lockdep.c:5382 [inline]
-       lock_release+0x2e2/0x820 kernel/locking/lockdep.c:5688
-       percpu_up_read include/linux/percpu-rwsem.h:99 [inline]
-       __sb_end_write include/linux/fs.h:1821 [inline]
-       sb_end_intwrite+0x1e/0x1a0 include/linux/fs.h:1877
-       __btrfs_end_transaction+0x388/0x790 fs/btrfs/transaction.c:995
-       btrfs_dirty_inode+0x177/0x1c0 fs/btrfs/inode.c:6099
-       inode_update_time fs/inode.c:1871 [inline]
-       touch_atime+0x315/0x630 fs/inode.c:1944
-       file_accessed include/linux/fs.h:2521 [inline]
-       btrfs_file_mmap+0xbb/0x120 fs/btrfs/file.c:2333
-       call_mmap include/linux/fs.h:2196 [inline]
-       mmap_region+0x10c1/0x1da0 mm/mmap.c:2625
-       do_mmap+0x8d9/0xf60 mm/mmap.c:1412
-       vm_mmap_pgoff+0x19e/0x2b0 mm/util.c:520
-       ksys_mmap_pgoff+0x48c/0x6d0 mm/mmap.c:1458
-       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-       do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
-       entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
--> #0 (&mm->mmap_lock#2){++++}-{3:3}:
-       check_prev_add kernel/locking/lockdep.c:3097 [inline]
-       check_prevs_add kernel/locking/lockdep.c:3216 [inline]
-       validate_chain+0x1898/0x6ae0 kernel/locking/lockdep.c:3831
-       __lock_acquire+0x1292/0x1f60 kernel/locking/lockdep.c:5055
-       lock_acquire+0x182/0x3c0 kernel/locking/lockdep.c:5668
-       __might_fault+0xb2/0x110 mm/memory.c:5646
-       _copy_to_user+0x26/0x130 lib/usercopy.c:29
-       copy_to_user include/linux/uaccess.h:169 [inline]
-       btrfs_ioctl_get_subvol_rootref+0x8cf/0xa90 fs/btrfs/ioctl.c:3203
-       btrfs_ioctl+0xb7c/0xc10 fs/btrfs/ioctl.c:5556
-       vfs_ioctl fs/ioctl.c:51 [inline]
-       __do_sys_ioctl fs/ioctl.c:870 [inline]
-       __se_sys_ioctl+0xfb/0x170 fs/ioctl.c:856
-       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-       do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
-       entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-other info that might help us debug this:
-
-Chain exists of:
-  &mm->mmap_lock#2 --> btrfs_trans_num_extwriters --> btrfs-root-00
-
- Possible unsafe locking scenario:
-
-       CPU0                    CPU1
-       ----                    ----
-  lock(btrfs-root-00);
-                               lock(btrfs_trans_num_extwriters);
-                               lock(btrfs-root-00);
-  lock(&mm->mmap_lock#2);
-
- *** DEADLOCK ***
-
-1 lock held by syz-executor.1/21431:
- #0: ffff888020a77838 (btrfs-root-00){++++}-{3:3}, at: __btrfs_tree_read_lock fs/btrfs/locking.c:134 [inline]
- #0: ffff888020a77838 (btrfs-root-00){++++}-{3:3}, at: btrfs_tree_read_lock fs/btrfs/locking.c:140 [inline]
- #0: ffff888020a77838 (btrfs-root-00){++++}-{3:3}, at: btrfs_read_lock_root_node+0x2b4/0x400 fs/btrfs/locking.c:279
-
-stack backtrace:
-CPU: 1 PID: 21431 Comm: syz-executor.1 Not tainted 6.1.0-rc4-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x1b1/0x28e lib/dump_stack.c:106
- check_noncircular+0x2cc/0x390 kernel/locking/lockdep.c:2177
- check_prev_add kernel/locking/lockdep.c:3097 [inline]
- check_prevs_add kernel/locking/lockdep.c:3216 [inline]
- validate_chain+0x1898/0x6ae0 kernel/locking/lockdep.c:3831
- __lock_acquire+0x1292/0x1f60 kernel/locking/lockdep.c:5055
- lock_acquire+0x182/0x3c0 kernel/locking/lockdep.c:5668
- __might_fault+0xb2/0x110 mm/memory.c:5646
- _copy_to_user+0x26/0x130 lib/usercopy.c:29
- copy_to_user include/linux/uaccess.h:169 [inline]
- btrfs_ioctl_get_subvol_rootref+0x8cf/0xa90 fs/btrfs/ioctl.c:3203
- btrfs_ioctl+0xb7c/0xc10 fs/btrfs/ioctl.c:5556
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:870 [inline]
- __se_sys_ioctl+0xfb/0x170 fs/ioctl.c:856
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f1a4f28b5a9
-Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f1a4ffb1168 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 00007f1a4f3ac050 RCX: 00007f1a4f28b5a9
-RDX: 0000000020058480 RSI: 00000000d000943d RDI: 0000000000000005
-RBP: 00007f1a4f2e67b0 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffc4fbced1f R14: 00007f1a4ffb1300 R15: 0000000000022000
- </TASK>
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+> +
+>  #endif /* !SELFTEST_KVM_HYPERV_H */
+> diff --git a/tools/testing/selftests/kvm/x86_64/hyperv_features.c b/tools/testing/selftests/kvm/x86_64/hyperv_features.c
+> index b5a42cf1ad9d..31b22ee07dfb 100644
+> --- a/tools/testing/selftests/kvm/x86_64/hyperv_features.c
+> +++ b/tools/testing/selftests/kvm/x86_64/hyperv_features.c
+> @@ -13,23 +13,6 @@
+>  #include "processor.h"
+>  #include "hyperv.h"
+>  
+> -static inline uint8_t hypercall(u64 control, vm_vaddr_t input_address,
+> -				vm_vaddr_t output_address, uint64_t *hv_status)
+> -{
+> -	uint8_t vector;
+> -
+> -	/* Note both the hypercall and the "asm safe" clobber r9-r11. */
+> -	asm volatile("mov %[output_address], %%r8\n\t"
+> -		     KVM_ASM_SAFE("vmcall")
+> -		     : "=a" (*hv_status),
+> -		       "+c" (control), "+d" (input_address),
+> -		       KVM_ASM_SAFE_OUTPUTS(vector)
+> -		     : [output_address] "r"(output_address),
+> -		       "a" (-EFAULT)
+> -		     : "cc", "memory", "r8", KVM_ASM_SAFE_CLOBBERS);
+> -	return vector;
+> -}
+> -
+>  struct msr_data {
+>  	uint32_t idx;
+>  	bool available;
+> -- 
+> 2.38.1.273.g43a17bfeac-goog
+> 
