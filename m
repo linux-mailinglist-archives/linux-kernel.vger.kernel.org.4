@@ -2,215 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B954E61F1AD
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 12:19:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F05661F1AF
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 12:20:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231599AbiKGLTE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 06:19:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39930 "EHLO
+        id S231633AbiKGLUR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 06:20:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229659AbiKGLTC (ORCPT
+        with ESMTP id S229659AbiKGLUP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 06:19:02 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83830CE3C;
-        Mon,  7 Nov 2022 03:19:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667819941; x=1699355941;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=cvxDWNtZzVvqQ3+pEhs6dDAy1QCbFhG4zWxy+4oWNiI=;
-  b=VO97Et4glXrjgp9o+bUUfEFcFseC3yRQxuxCex045QWMNqPTc7Q+Yfn9
-   p6Uis3aGMRXMFSxqB/IsZHCuZWQ10rtQHHCB9DU2MKB1inE1DMK3sSbl1
-   +4bw9vPo/yRNsaqhdoz8+jKRxwROTN63LYy8+zaMSLi4GZjVu+cVU98F4
-   zY8SjUr2LN/DwT4UNzRg6MNfDgyVQk6jMl/22+CQQh4zhI6L9m1ucL2R7
-   VpZ+U/F8RvohmrzfFFwx5yqH75o1HyEFpsEdv/rZ80VJuWMOS4RmxlkPs
-   jInmaxKpC/3yOd1XafPxYjyCcSrQACUROdtR6tSfC/36lkGkmlcisLj85
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10523"; a="297878464"
-X-IronPort-AV: E=Sophos;i="5.96,143,1665471600"; 
-   d="scan'208";a="297878464"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Nov 2022 03:19:01 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10523"; a="725106215"
-X-IronPort-AV: E=Sophos;i="5.96,143,1665471600"; 
-   d="scan'208";a="725106215"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by FMSMGA003.fm.intel.com with ESMTP; 07 Nov 2022 03:18:55 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1os09U-008bap-0v;
-        Mon, 07 Nov 2022 13:18:52 +0200
-Date:   Mon, 7 Nov 2022 13:18:52 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>
-Cc:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
-        Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Minchan Kim <minchan@kernel.org>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Hugh Dickins <hughd@google.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        David Hildenbrand <david@redhat.com>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        Mon, 7 Nov 2022 06:20:15 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8AB3B15722;
+        Mon,  7 Nov 2022 03:20:13 -0800 (PST)
+Received: from loongson.cn (unknown [10.20.42.77])
+        by gateway (Coremail) with SMTP id _____8BxWtjs6WhjUQUFAA--.14786S3;
+        Mon, 07 Nov 2022 19:20:12 +0800 (CST)
+Received: from [10.20.42.77] (unknown [10.20.42.77])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxiFfr6WhjcGwOAA--.22100S3;
+        Mon, 07 Nov 2022 19:20:11 +0800 (CST)
+Subject: Re: [PATCH 2/2] dt-bindings: interrupt-controller: add yaml for
+ LoongArch CPU interrupt controller
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>
+Cc:     Jianmin Lv <lvjianmin@loongson.cn>,
+        Yinbo Zhu <zhuyinbo@loongson.cn>, linux-mips@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [RFC v2 3/3] mm, printk: introduce new format %pGt for page_type
-Message-ID: <Y2jpnBLFOgP8+RZ7@smile.fi.intel.com>
-References: <20221106140355.294845-1-42.hyeyoo@gmail.com>
- <20221106140355.294845-4-42.hyeyoo@gmail.com>
+References: <20221107023404.26730-1-liupeibao@loongson.cn>
+ <20221107023404.26730-2-liupeibao@loongson.cn>
+ <b45b8cf8-de9d-7132-1a35-48deeb4b79d5@linaro.org>
+ <196e80d8-f4fb-7393-81a5-bca757c805f5@loongson.cn>
+ <e92beaac-aa88-0336-cb30-7de438de67c9@linaro.org>
+From:   Liu Peibao <liupeibao@loongson.cn>
+Message-ID: <e5910bf9-b662-a733-57f2-5faccb038cb1@loongson.cn>
+Date:   Mon, 7 Nov 2022 19:20:10 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221106140355.294845-4-42.hyeyoo@gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <e92beaac-aa88-0336-cb30-7de438de67c9@linaro.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: AQAAf8AxiFfr6WhjcGwOAA--.22100S3
+X-CM-SenderInfo: xolx1vpled0qxorr0wxvrqhubq/1tbiAQADCmNno+QOXQADsb
+X-Coremail-Antispam: 1Uk129KBjvJXoWxCr4fZryDuF4Utw13KrW5Awb_yoW5ZFykpF
+        yUCFZxGF4Utr43Cws2g3WFkrnIvrn3Jr109wsxtw17CrnIg343XF42yF95uayrGryxXr4j
+        vr10v3WIgFnxJFJanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bI8YFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwA2z4
+        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26F4UJVW0owAS
+        0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0V
+        AKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Gr0_Cr1l
+        Ox8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21l42
+        xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWU
+        GwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI4
+        8JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4U
+        MIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I
+        8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUcVc_UUUUU
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Nov 06, 2022 at 11:03:55PM +0900, Hyeonggon Yoo wrote:
-> dump_page() uses %pGp format to print 'flags' field of struct page.
-> As some page flags (e.g. PG_buddy, see page-flags.h for more details)
-> are set in page_type field, introduce %pGt format which provides
-> human readable output of page_type. And use it in dump_page().
+On 11/7/22 5:55 PM, Krzysztof Kozlowski wrote:
+> On 07/11/2022 10:21, Liu Peibao wrote:
+>> On 11/7/22 4:28 PM, Krzysztof Kozlowski wrote:
+>>> On 07/11/2022 03:34, Liu Peibao wrote:
+>>>
+>>> Add commit msg explaining what you are doing here (e.g. the hardware).
+>>>
+>>
+>> I just add this yaml for what I did in patch 1/2 and the header seems enough
+>> to describe what I want to, so I did not add the commit log.
 > 
-> Note that the sense of bits are different in page_type. if page_type is
-> 0xffffffff, no flags are set. if PG_slab (0x00100000) flag is set,
-> page_type is 0xffefffff. Clearing a bit means we set the bit. Bits in
-> page_type are inverted when printing type names.
+> This should instead describe briefly the hardware here.
 > 
-> Below is examples of dump_page(). One is just after alloc_pages() and
-> the other is after __SetPageSlab().
+
+How about I add the following comments:
+
+"Current LoongArch compatible CPUs support 14 CPU IRQs. We can describe how
+the 14 IRQs are wired to the platforms internal interrupt controller cascade
+by devicetree."
+
+
+>>
+>>>> Signed-off-by: Liu Peibao <liupeibao@loongson.cn>
+>>>> ---
+>>>>  .../loongarch,cpu-interrupt-controller.yaml   | 42 +++++++++++++++++++
+>>>>  1 file changed, 42 insertions(+)
+>>>>  create mode 100644 Documentation/devicetree/bindings/interrupt-controller/loongarch,cpu-interrupt-controller.yaml
+>>>>
+>>>> diff --git a/Documentation/devicetree/bindings/interrupt-controller/loongarch,cpu-interrupt-controller.yaml b/Documentation/devicetree/bindings/interrupt-controller/loongarch,cpu-interrupt-controller.yaml
+>>>> new file mode 100644
+>>>> index 000000000000..30b742661a3f
+>>>> --- /dev/null
+>>>> +++ b/Documentation/devicetree/bindings/interrupt-controller/loongarch,cpu-interrupt-controller.yaml
+>>>> @@ -0,0 +1,42 @@
+>>>> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+>>>> +%YAML 1.2
+>>>> +---
+>>>> +$id: http://devicetree.org/schemas/interrupt-controller/loongarch,cpu-interrupt-controller.yaml#
+>>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>>> +
+>>>> +title: LoongArch CPU Interrupt Controller
+>>>> +
+>>>> +description: >
+>>>> +   On LoongArch the loongarch_cpu_irq_of_init() helper can be used to initialize
+>>>> +   the 14 CPU IRQs from a devicetree file and create a irq_domain for this IRQ
+>>>> +   controller.
+>>>> +
+>>>> +   With the irq_domain in place we can describe how the 14 IRQs are wired to the
+>>>> +   platforms internal interrupt controller cascade.
+>>>
+>>> This should be the description of hardware, not Linux drivers.
+>>>
+>>
+>> OK, I will remove this in the next version of this patch.
+>>
+>>>> +
+>>>> +maintainers:
+>>>> +  - Liu Peibao <liupeibao@loongson.cn>
+>>>> +
+>>>> +properties:
+>>>> +  compatible:
+>>>> +    const: loongarch,cpu-interrupt-controller
+>>>
+>>> You have exactly one and only one type of CPU interrupt controller for
+>>> all your Loongarch designs? All current and all future? All?
+>>>
+>>
+>> It is sure of that "all current and recent designs". It is really hard to limit the
+>> design in the distant future.
+>>
+>> And if there is updating, maybe I will add additional things like this:
+>> "loongarch,cpu-interrupt-controller-2.0".
 > 
-> [    1.814728] page:ffffea000415e200 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x105788
-> [    1.815961] flags: 0x17ffffc0000000(node=0|zone=2|lastcpupid=0x1fffff)
-
-> [    1.816443] page_type: 0xffffffff()
-
-Why do we have empty parentheses? I would expect either something there, or no
-parentheses at all.
-
-> [    1.816704] raw: 0017ffffc0000000 0000000000000000 dead000000000122 0000000000000000
-> [    1.817291] raw: 0000000000000000 0000000000000000 00000001ffffffff 0000000000000000
-> [    1.817870] page dumped because: Before __SetPageSlab()
+> Unless you have a clear versioning of your hardware, adding 2.0 won't be
+> correct. Don't you have this for specific SoC?
 > 
-> [    1.818258] page:ffffea000415e200 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x105788
-> [    1.818857] flags: 0x17ffffc0000000(node=0|zone=2|lastcpupid=0x1fffff)
-> [    1.819250] page_type: 0xffefffff(slab)
-> [    1.819483] raw: 0017ffffc0000000 0000000000000000 dead000000000122 0000000000000000
-> [    1.819947] raw: 0000000000000000 0000000000000000 00000001ffefffff 0000000000000000
-> [    1.820410] page dumped because: After __SetPageSlab()
 
-> Cc: Petr Mladek <pmladek@suse.com>
-> Cc: Steven Rostedt <rostedt@goodmis.org>
-> Cc: Sergey Senozhatsky <senozhatsky@chromium.org>
-> Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Cc: Rasmus Villemoes <linux@rasmusvillemoes.dk>
-> Cc: Jonathan Corbet <corbet@lwn.net>
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: linux-doc@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Cc: linux-mm@kvack.org
+The "loongarch,cpu-interrupt-controller" now is compatible for all the LoongArch
+compatible CPUs, not specific for one chip. And we may keep this CPU interrupt
+controller for a long time.
 
-Can you utilize --cc parameter next time and avoid polluting commit message
-with this? We have archives where anybody can check this (and usually maintainers
-add a Link tag for that purpose).
-
-...
-
-> +	%pGt	0xffefffff(slab)
-
-No space before ( ?
-
-...
-
-> +static
-> +char *format_page_type(char *buf, char *end, unsigned int page_type)
-> +{
-> +	if (!(page_type & PAGE_TYPE_BASE))
-> +		return string(buf, end, "no type for user-mapped page", default_str_spec);
-
-It's too long, can we make it shorten?
-
-> +	buf = number(buf, end, page_type, default_flag_spec);
-> +
-> +	if (buf < end)
-> +		*buf = '(';
-> +	buf++;
-
-> +	if (page_type_has_type(page_type))
-
-This should be check for the entire function.
-
-> +		buf = format_flags(buf, end, ~page_type, pagetype_names);
-> +
-> +	if (buf < end)
-> +		*buf = ')';
-> +	buf++;
-> +
-> +	return buf;
-> +}
-
-...
-
-> @@ -36,6 +36,11 @@ const struct trace_print_flags pageflag_names[] = {
->  	{0, NULL}
->  };
->  
-> +const struct trace_print_flags pagetype_names[] = {
-> +	__def_pagetype_names,
-
-
-> +	{0, NULL}
-
-Hmm... I see it's already done like this above, but {}  would suffice, why not
-to convert the rest first to the {} and use it here?
-
-> +};
-
-...
-
->  	pr_warn("%sflags: %pGp%s\n", type, &head->flags,
->  		page_cma ? " CMA" : "");
-> +	pr_warn("page_type: %pGt\n", &head->page_type);
-> +
->  	print_hex_dump(KERN_WARNING, "raw: ", DUMP_PREFIX_NONE, 32,
->  			sizeof(unsigned long), page,
->  			sizeof(struct page), false);
-> diff --git a/mm/internal.h b/mm/internal.h
-> index cb4c663a714e..956eaa9f12c0 100644
-> --- a/mm/internal.h
-> +++ b/mm/internal.h
-> @@ -773,6 +773,7 @@ static inline void flush_tlb_batched_pending(struct mm_struct *mm)
->  #endif /* CONFIG_ARCH_WANT_BATCHED_UNMAP_TLB_FLUSH */
->  
->  extern const struct trace_print_flags pageflag_names[];
-> +extern const struct trace_print_flags pagetype_names[];
->  extern const struct trace_print_flags vmaflag_names[];
->  extern const struct trace_print_flags gfpflag_names[];
-
-I would split this to a separate change, but it's up to PRINTK maintainers.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
+BR,
+Peibao
 
