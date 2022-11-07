@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8750E61FA0A
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 17:36:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 222C261FA13
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 17:38:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232305AbiKGQgr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 11:36:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34520 "EHLO
+        id S232272AbiKGQiT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 11:38:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232142AbiKGQgn (ORCPT
+        with ESMTP id S231302AbiKGQiR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 11:36:43 -0500
+        Mon, 7 Nov 2022 11:38:17 -0500
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D95B0CD0;
-        Mon,  7 Nov 2022 08:36:42 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 244B9CDA;
+        Mon,  7 Nov 2022 08:38:16 -0800 (PST)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C8F72ED1;
-        Mon,  7 Nov 2022 08:36:48 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F14141FB;
+        Mon,  7 Nov 2022 08:38:21 -0800 (PST)
 Received: from pierre123.arm.com (pierre123.nice.arm.com [10.34.100.128])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 943B23F534;
-        Mon,  7 Nov 2022 08:36:27 -0800 (PST)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id C69D73F534;
+        Mon,  7 Nov 2022 08:38:00 -0800 (PST)
 From:   Pierre Gondois <pierre.gondois@arm.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Pierre Gondois <pierre.gondois@arm.com>,
@@ -85,24 +85,24 @@ Cc:     Pierre Gondois <pierre.gondois@arm.com>,
         Vignesh Raghavendra <vigneshr@ti.com>,
         Tero Kristo <kristo@kernel.org>,
         Viorel Suman <viorel.suman@nxp.com>,
-        Abel Vesa <abelvesa@kernel.org>, Peng Fan <peng.fan@nxp.com>,
+        Abel Vesa <abelvesa@kernel.org>,
         Zhou Peng <eagle.zhou@nxp.com>,
         Shenwei Wang <shenwei.wang@nxp.com>,
-        Ming Qian <ming.qian@nxp.com>, Adam Ford <aford173@gmail.com>,
+        Peng Fan <peng.fan@nxp.com>, Ming Qian <ming.qian@nxp.com>,
         Tim Harvey <tharvey@gateworks.com>,
+        Adam Ford <aford173@gmail.com>,
         Lucas Stach <l.stach@pengutronix.de>, Li Jun <jun.li@nxp.com>,
         Richard Zhu <hongxing.zhu@nxp.com>,
         Markus Niebel <Markus.Niebel@ew.tq-group.com>,
+        Joakim Zhang <qiangqing.zhang@nxp.com>,
         Marek Vasut <marex@denx.de>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Joakim Zhang <qiangqing.zhang@nxp.com>,
         Alexander Stein <alexander.stein@ew.tq-group.com>,
         Paul Elder <paul.elder@ideasonboard.com>,
         Martin Kepplinger <martink@posteo.de>,
         David Heidelberg <david@ixit.cz>,
         Oliver Graute <oliver.graute@kococonnector.com>,
-        Liu Ying <victor.liu@nxp.com>, Shijie Qin <shijie.qin@nxp.com>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
+        Liu Ying <victor.liu@nxp.com>, Wei Fang <wei.fang@nxp.com>,
         Clark Wang <xiaoning.wang@nxp.com>,
         Jacky Bai <ping.bai@nxp.com>,
         Chris Packham <chris.packham@alliedtelesis.co.nz>,
@@ -120,7 +120,8 @@ Cc:     Pierre Gondois <pierre.gondois@arm.com>,
         Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
         Aswani Reddy <aswani.reddy@samsung.com>,
         Shashank Prashar <s.prashar@samsung.com>,
-        devicetree@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
+        Arjun K V <arjun.kv@samsung.com>, devicetree@vger.kernel.org,
+        linux-rpi-kernel@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org,
         linux-amlogic@lists.infradead.org,
         linux-samsung-soc@vger.kernel.org,
@@ -129,9 +130,9 @@ Cc:     Pierre Gondois <pierre.gondois@arm.com>,
         linux-realtek-soc@lists.infradead.org,
         linux-renesas-soc@vger.kernel.org,
         linux-rockchip@lists.infradead.org
-Subject: [PATCH v2 22/23] arm64: dts: Update cache properties for tesla
-Date:   Mon,  7 Nov 2022 16:57:15 +0100
-Message-Id: <20221107155825.1644604-23-pierre.gondois@arm.com>
+Subject: [PATCH v2 23/23] arm64: dts: Update cache properties for ti
+Date:   Mon,  7 Nov 2022 16:57:16 +0100
+Message-Id: <20221107155825.1644604-24-pierre.gondois@arm.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221107155825.1644604-1-pierre.gondois@arm.com>
 References: <20221107155825.1644604-1-pierre.gondois@arm.com>
@@ -155,22 +156,107 @@ Update the Device Trees accordingly.
 
 Signed-off-by: Pierre Gondois <pierre.gondois@arm.com>
 ---
- arch/arm64/boot/dts/tesla/fsd.dtsi | 2 ++
- 1 file changed, 2 insertions(+)
+ arch/arm64/boot/dts/ti/k3-am625.dtsi  | 1 +
+ arch/arm64/boot/dts/ti/k3-am62a7.dtsi | 1 +
+ arch/arm64/boot/dts/ti/k3-am642.dtsi  | 1 +
+ arch/arm64/boot/dts/ti/k3-am654.dtsi  | 2 ++
+ arch/arm64/boot/dts/ti/k3-j7200.dtsi  | 1 +
+ arch/arm64/boot/dts/ti/k3-j721e.dtsi  | 1 +
+ arch/arm64/boot/dts/ti/k3-j721s2.dtsi | 1 +
+ 7 files changed, 8 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/tesla/fsd.dtsi b/arch/arm64/boot/dts/tesla/fsd.dtsi
-index f35bc5a288c2..d58d47618c95 100644
---- a/arch/arm64/boot/dts/tesla/fsd.dtsi
-+++ b/arch/arm64/boot/dts/tesla/fsd.dtsi
-@@ -281,6 +281,8 @@ cpucl2_3: cpu@203 {
+diff --git a/arch/arm64/boot/dts/ti/k3-am625.dtsi b/arch/arm64/boot/dts/ti/k3-am625.dtsi
+index 887f31c23fef..7d7e5a1673a2 100644
+--- a/arch/arm64/boot/dts/ti/k3-am625.dtsi
++++ b/arch/arm64/boot/dts/ti/k3-am625.dtsi
+@@ -95,6 +95,7 @@ cpu3: cpu@3 {
  
- 		cpucl_l2: l2-cache0 {
- 			compatible = "cache";
-+			cache-level = <2>;
-+			cache-unified;
- 			cache-size = <0x400000>;
- 			cache-line-size = <64>;
- 			cache-sets = <4096>;
+ 	L2_0: l2-cache0 {
+ 		compatible = "cache";
++		cache-unified;
+ 		cache-level = <2>;
+ 		cache-size = <0x40000>;
+ 		cache-line-size = <64>;
+diff --git a/arch/arm64/boot/dts/ti/k3-am62a7.dtsi b/arch/arm64/boot/dts/ti/k3-am62a7.dtsi
+index 331d89fda29d..9734549851c0 100644
+--- a/arch/arm64/boot/dts/ti/k3-am62a7.dtsi
++++ b/arch/arm64/boot/dts/ti/k3-am62a7.dtsi
+@@ -95,6 +95,7 @@ cpu3: cpu@3 {
+ 
+ 	L2_0: l2-cache0 {
+ 		compatible = "cache";
++		cache-unified;
+ 		cache-level = <2>;
+ 		cache-size = <0x40000>;
+ 		cache-line-size = <64>;
+diff --git a/arch/arm64/boot/dts/ti/k3-am642.dtsi b/arch/arm64/boot/dts/ti/k3-am642.dtsi
+index 8a76f4821b11..7a6eedea3aae 100644
+--- a/arch/arm64/boot/dts/ti/k3-am642.dtsi
++++ b/arch/arm64/boot/dts/ti/k3-am642.dtsi
+@@ -58,6 +58,7 @@ cpu1: cpu@1 {
+ 	L2_0: l2-cache0 {
+ 		compatible = "cache";
+ 		cache-level = <2>;
++		cache-unified;
+ 		cache-size = <0x40000>;
+ 		cache-line-size = <64>;
+ 		cache-sets = <256>;
+diff --git a/arch/arm64/boot/dts/ti/k3-am654.dtsi b/arch/arm64/boot/dts/ti/k3-am654.dtsi
+index a89257900047..4cc329b271ac 100644
+--- a/arch/arm64/boot/dts/ti/k3-am654.dtsi
++++ b/arch/arm64/boot/dts/ti/k3-am654.dtsi
+@@ -93,6 +93,7 @@ cpu3: cpu@101 {
+ 	L2_0: l2-cache0 {
+ 		compatible = "cache";
+ 		cache-level = <2>;
++		cache-unified;
+ 		cache-size = <0x80000>;
+ 		cache-line-size = <64>;
+ 		cache-sets = <512>;
+@@ -102,6 +103,7 @@ L2_0: l2-cache0 {
+ 	L2_1: l2-cache1 {
+ 		compatible = "cache";
+ 		cache-level = <2>;
++		cache-unified;
+ 		cache-size = <0x80000>;
+ 		cache-line-size = <64>;
+ 		cache-sets = <512>;
+diff --git a/arch/arm64/boot/dts/ti/k3-j7200.dtsi b/arch/arm64/boot/dts/ti/k3-j7200.dtsi
+index b6da0454cc5b..d74f86b0f622 100644
+--- a/arch/arm64/boot/dts/ti/k3-j7200.dtsi
++++ b/arch/arm64/boot/dts/ti/k3-j7200.dtsi
+@@ -84,6 +84,7 @@ cpu1: cpu@1 {
+ 	L2_0: l2-cache0 {
+ 		compatible = "cache";
+ 		cache-level = <2>;
++		cache-unified;
+ 		cache-size = <0x100000>;
+ 		cache-line-size = <64>;
+ 		cache-sets = <1024>;
+diff --git a/arch/arm64/boot/dts/ti/k3-j721e.dtsi b/arch/arm64/boot/dts/ti/k3-j721e.dtsi
+index 0e23886c9fd1..6975cae644d9 100644
+--- a/arch/arm64/boot/dts/ti/k3-j721e.dtsi
++++ b/arch/arm64/boot/dts/ti/k3-j721e.dtsi
+@@ -86,6 +86,7 @@ cpu1: cpu@1 {
+ 	L2_0: l2-cache0 {
+ 		compatible = "cache";
+ 		cache-level = <2>;
++		cache-unified;
+ 		cache-size = <0x100000>;
+ 		cache-line-size = <64>;
+ 		cache-sets = <1024>;
+diff --git a/arch/arm64/boot/dts/ti/k3-j721s2.dtsi b/arch/arm64/boot/dts/ti/k3-j721s2.dtsi
+index 7b930a85a29d..78295ee0fee5 100644
+--- a/arch/arm64/boot/dts/ti/k3-j721s2.dtsi
++++ b/arch/arm64/boot/dts/ti/k3-j721s2.dtsi
+@@ -69,6 +69,7 @@ cpu1: cpu@1 {
+ 
+ 	L2_0: l2-cache0 {
+ 		compatible = "cache";
++		cache-unified;
+ 		cache-level = <2>;
+ 		cache-size = <0x100000>;
+ 		cache-line-size = <64>;
 -- 
 2.25.1
 
