@@ -2,105 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E325761F462
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 14:31:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C4E961F465
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 14:31:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231361AbiKGNbK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 08:31:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33540 "EHLO
+        id S231618AbiKGNbq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 08:31:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231324AbiKGNbF (ORCPT
+        with ESMTP id S231365AbiKGNbn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 08:31:05 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DBFA1B9FA
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 05:31:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667827865; x=1699363865;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=v1gI9Pe6bvHrL0dWTyJyctWSrUg2IYLGOLoOANLiJ3Y=;
-  b=FUE/MnYuJUdy5AfXF9/nr+Q9403SmU1wcQrDXeze85TLtywAhcV8zxje
-   ko5A3ucGKlZrnUPSK6PnAmj2sMeZXCvmbl8jzX4ZVCRxh63OCCZy22irs
-   pqMCG8FMNo+WtE1jZ/sPkgrQsysC3KBaaPZNEq82MWTOGSgpbHmNKsVwg
-   MRHpfQFjcMoTgZ8t98t0UY/htBKoZfoHUVwyLwLfDKmg0UypNx+wiFXdg
-   zNHgpVNlKWH8ZKBk7R/LbC+DdYkkLM1RodJIVgvYBNOwNGK9nMzlmNUi2
-   AuPCnBCbYacYmQwIIO/P1sN5IDkrcvVM0NUPt3dfvdPbS6cvlqGgbnWE4
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10523"; a="297900053"
-X-IronPort-AV: E=Sophos;i="5.96,145,1665471600"; 
-   d="scan'208";a="297900053"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Nov 2022 05:31:04 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10523"; a="586968694"
-X-IronPort-AV: E=Sophos;i="5.96,145,1665471600"; 
-   d="scan'208";a="586968694"
-Received: from dkthrons-mobl2.amr.corp.intel.com (HELO [10.209.29.113]) ([10.209.29.113])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Nov 2022 05:31:04 -0800
-Message-ID: <3cdb5bf8-7f26-0416-46d2-a5640dd27f22@intel.com>
-Date:   Mon, 7 Nov 2022 05:31:03 -0800
+        Mon, 7 Nov 2022 08:31:43 -0500
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3AA01CB09
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 05:31:41 -0800 (PST)
+Received: from kwepemi500016.china.huawei.com (unknown [172.30.72.56])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4N5XB04tKZzJnXT;
+        Mon,  7 Nov 2022 21:28:40 +0800 (CST)
+Received: from [10.174.176.230] (10.174.176.230) by
+ kwepemi500016.china.huawei.com (7.221.188.220) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 7 Nov 2022 21:31:39 +0800
+Message-ID: <ea5827fc-ca41-3ee7-87df-f1e3acdba561@huawei.com>
+Date:   Mon, 7 Nov 2022 21:31:38 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH 2/2] x86/tdx: Do not allow #VE due to EPT violation on the
- private memory
-Content-Language: en-US
-To:     Guorui Yu <GuoRui.Yu@linux.alibaba.com>,
-        kirill.shutemov@linux.intel.com
-Cc:     ak@linux.intel.com, bp@alien8.de, dan.j.williams@intel.com,
-        david@redhat.com, elena.reshetova@intel.com, hpa@zytor.com,
-        linux-kernel@vger.kernel.org, luto@kernel.org, mingo@redhat.com,
-        peterz@infradead.org, sathyanarayanan.kuppuswamy@linux.intel.com,
-        seanjc@google.com, tglx@linutronix.de, thomas.lendacky@amd.com,
-        x86@kernel.org
-References: <20221028141220.29217-3-kirill.shutemov@linux.intel.com>
- <b5d04a6c-79b4-bbdc-b613-6958d9f75d53@linux.alibaba.com>
- <4bfcd256-b926-9b1c-601c-efcff0d16605@intel.com>
- <c2b60735-84a8-649e-536c-877c790eb101@linux.alibaba.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <c2b60735-84a8-649e-536c-877c790eb101@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.0
+Subject: Re: [PATCH 1/2] tracing: kprobe: Fix potential null-ptr-deref on
+ trace_event_file in kprobe_event_gen_test_exit()
+To:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+CC:     <rostedt@goodmis.org>, <zanussi@kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20221107071617.21644-1-shangxiaojing@huawei.com>
+ <20221107071617.21644-2-shangxiaojing@huawei.com>
+ <20221107222540.1701bb267fd523fbafbbdee8@kernel.org>
+From:   shangxiaojing <shangxiaojing@huawei.com>
+In-Reply-To: <20221107222540.1701bb267fd523fbafbbdee8@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.176.230]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemi500016.china.huawei.com (7.221.188.220)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/6/22 21:10, Guorui Yu wrote:
->> Without ATTR_SEPT_VE_DISABLE, a #VE can occur on basically any
->> instruction.  We call those kinds of exceptions "paranoid entry" points.
->>   They need special handling like the NMI or #MC handlers.
->>
->> I'd be happy to look at a patch that does the MMIO path check *and*
->> turns the #VE handler into a robust entry point.
->>
->> Bonus points if you can do ~5 lines of C like the approach in this
->> thread.
-> 
-> Yes, there is a fix to satify your requirement and get the bouns points 😄
-> 
-> Please refer to
-> https://github.com/intel/tdx/commit/f045b0d52a5f7d8bf66cd4410307d05a90523f10
-> 
-> case EXIT_REASON_EPT_VIOLATION:
-> + if (!(ve->gpa & tdx_shared_mask())) {
-> + panic("#VE due to access to unaccepted memory. "
-> + "GPA: %#llx\n", ve->gpa);
-> + }
-> +
-> /* original from Kirill and Kuppuswamy */
-> 
-> It's already there, but it just didn't get into the main branch.
 
-Could you explain how that prevents the #VE from occurring in the
-"syscall gap" or in a place where the kernel is running with the user
-GSBASE value?
 
-It doesn't as far as I can tell.  You need the SEPT_VE_DISABLE check for
-that.
+On 2022/11/7 21:25, Masami Hiramatsu (Google) wrote:
+> On Mon, 7 Nov 2022 15:16:16 +0800
+> Shang XiaoJing <shangxiaojing@huawei.com> wrote:
+> 
+>> When trace_get_event_file() failed, gen_kretprobe_test will be assigned
+>> as the error code. If module kprobe_event_gen_test is removed now, the
+>> null pointer dereference will happen in kprobe_event_gen_test_exit().
+>> Check if gen_kprobe_test or gen_kretprobe_test is error code or NULL
+>> before dereference them.
+>>
+>> BUG: kernel NULL pointer dereference, address: 0000000000000012
+>> PGD 0 P4D 0
+>> Oops: 0000 [#1] SMP PTI
+>> CPU: 3 PID: 2210 Comm: modprobe Not tainted
+>> 6.1.0-rc1-00171-g2159299a3b74-dirty #217
+>> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
+>> rel-1.15.0-0-g2dd4b9b3f840-prebuilt.qemu.org 04/01/2014
+>> RIP: 0010:kprobe_event_gen_test_exit+0x1c/0xb5 [kprobe_event_gen_test]
+>> Code: Unable to access opcode bytes at 0xffffffff9ffffff2.
+>> RSP: 0018:ffffc900015bfeb8 EFLAGS: 00010246
+>> RAX: ffffffffffffffea RBX: ffffffffa0002080 RCX: 0000000000000000
+>> RDX: ffffffffa0001054 RSI: ffffffffa0001064 RDI: ffffffffdfc6349c
+>> RBP: ffffffffa0000000 R08: 0000000000000004 R09: 00000000001e95c0
+>> R10: 0000000000000000 R11: 0000000000000001 R12: 0000000000000800
+>> R13: ffffffffa0002420 R14: 0000000000000000 R15: 0000000000000000
+>> FS:  00007f56b75be540(0000) GS:ffff88813bc00000(0000)
+>> knlGS:0000000000000000
+>> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>> CR2: ffffffff9ffffff2 CR3: 000000010874a006 CR4: 0000000000330ee0
+>> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+>> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+>> Call Trace:
+>>   <TASK>
+>>   __x64_sys_delete_module+0x206/0x380
+>>   ? lockdep_hardirqs_on_prepare+0xd8/0x190
+>>   ? syscall_enter_from_user_mode+0x1c/0x50
+>>   do_syscall_64+0x3f/0x90
+>>   entry_SYSCALL_64_after_hwframe+0x63/0xcd
+>>
+>> Fixes: 64836248dda2 ("tracing: Add kprobe event command generation test module")
+> 
+> Ah, indeed. If anything wrong in the test code and if the
+> gen_kprobe_test/gen_kretprobe_test is not initialized, this
+> can happen.
+> 
+> Cc: stable@vger.kernel.org
+> Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> 
+> Thank you!
+> 
+Thanks for the review, will add the Tag in v2.
+
+Thanks,
+-- 
+Shang XiaoJing
