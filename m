@@ -2,111 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D94F761F67B
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 15:45:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B849061F683
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 15:47:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232077AbiKGOpb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 09:45:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59348 "EHLO
+        id S231845AbiKGOrY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 09:47:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231607AbiKGOp3 (ORCPT
+        with ESMTP id S231510AbiKGOrW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 09:45:29 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8327763CA;
-        Mon,  7 Nov 2022 06:45:28 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 408861F88B;
-        Mon,  7 Nov 2022 14:45:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1667832327; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=cZm/wQf2gsUgDGXoHLBPB1Qsxg3OrtK7BF0uBkFje6Y=;
-        b=nSLX0a1Js2iMFMZa7zClEOTa7FimIBdoknU1tFZAm7LeZXtmQh4Uoa/2WtkXblRWu7+Bc2
-        r/KIGDICJ8I0dm7tCkgsodZbLcIJveHlh3xRq0p1isEV0W0pGMe/Pk+pyO7DXLI1P78CGi
-        BzxE3N2fjvPH7AHpHGylnVTf2CV0tTs=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1667832327;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=cZm/wQf2gsUgDGXoHLBPB1Qsxg3OrtK7BF0uBkFje6Y=;
-        b=npiHpnCbz+k6+yawP0mvSkWJPqR+7u3mdfWTsoYeDCgeEVoqu737Cqw9ttphecr2+c1YlK
-        NTM6796GIFMXf4CQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 09A0513AC7;
-        Mon,  7 Nov 2022 14:45:26 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id ZxtUOAYaaWPvCgAAMHmgww
-        (envelope-from <krisman@suse.de>); Mon, 07 Nov 2022 14:45:26 +0000
-From:   Gabriel Krisman Bertazi <krisman@suse.de>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        krisman@collabora.com, jirislaby@kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH v2] unicode: don't write -1 after NUL terminator
-References: <79db9616-a2ee-9a1a-9a35-b82f65b6d15e@kernel.org>
-        <20221103113021.3271-1-Jason@zx2c4.com>
-Date:   Mon, 07 Nov 2022 09:45:25 -0500
-In-Reply-To: <20221103113021.3271-1-Jason@zx2c4.com> (Jason A. Donenfeld's
-        message of "Thu, 3 Nov 2022 12:30:21 +0100")
-Message-ID: <87sfiux1q2.fsf@suse.de>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
+        Mon, 7 Nov 2022 09:47:22 -0500
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AB8F63CA
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 06:47:21 -0800 (PST)
+Received: by mail-pg1-x52c.google.com with SMTP id o13so1335080pgu.7
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 06:47:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=/5c2uCvOxQ4QVOaWp4B05KhfDnp/A118lkPf9ZxjkfM=;
+        b=BHWLwmctCDlaNT0qusEyo1UDPqVwY6BCsYN+ZkRNPDDaXx1xN/AjMeHydLIo6fGpzB
+         RsnnM/cJknD6w0oYALVuMjiG7RICrDHv10jyhvtkBFHigvCl2Nh8LT5Ga9SYVWviWZhV
+         bGIgRFl+AXoVNtdtAaMxC//pDkPCfJmv33laLHMPM1e/VU2wgB8fJMBCvv9whNuHOTl5
+         dPrzOJRGSZFFDCzmVGYpY8FZY38iPJmD9Q3crEtM7J5y+Y/6d7cBMrEqZdWpjiKyixIs
+         lRFa0oo1em2T0L2a7R9fB9+3x/a4z9FITnnlizMMueHJqhQqcyxXqDHANctriCoczZKl
+         NPwg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/5c2uCvOxQ4QVOaWp4B05KhfDnp/A118lkPf9ZxjkfM=;
+        b=4uLxFGATJulBir2CkGLwHZ5TXE6zZ+VWF2mrqX4g5boeIpmXVJUUUbPoQxYonUnhDM
+         TzllytDwARdMQsQSbR+GxyCQfh6iUwHay+He0cUQtDqSlemNbTRmlaoHLsPmGWOJi4fN
+         2wEy3QnfdiU3h2qHtcoIxxaAkQD3Erz3Olsc9HzCsjDxmGSc2SsfYGFikOt/NcqE/Kba
+         luXCpzBXhnxz2tZ3bDlyz/aKj2aAom3QrrSGVyh/JRO1VLnfmOGsxIVT/BImY0PMJDL6
+         M5VOmKPPGPrgVgJHOP1p5J6IdZeRTJCxR8WYNXQesYPt8eDbqgWgqh85KYCIkbgitJX6
+         T1OQ==
+X-Gm-Message-State: ACrzQf1fk3YgCGy1TVmQkhKMUXtW8zHw+KZUNX0Fn03w9JflvoX95qrs
+        rM3ovibk3NxEK2Uax/2oOj0SjA==
+X-Google-Smtp-Source: AMsMyM52wRN4DEh0Zo2NexLCUfgd5bt8kOt5xmE2XXSSuELD9uW+be6OH9HyRY+1qMnACI7O4EbEXg==
+X-Received: by 2002:a05:6a00:224c:b0:56c:40ff:7709 with SMTP id i12-20020a056a00224c00b0056c40ff7709mr50641719pfu.59.1667832440879;
+        Mon, 07 Nov 2022 06:47:20 -0800 (PST)
+Received: from leoy-huanghe.lan (211-75-219-204.hinet-ip.hinet.net. [211.75.219.204])
+        by smtp.gmail.com with ESMTPSA id a17-20020aa794b1000000b0056eaa577eb0sm4572420pfl.215.2022.11.07.06.47.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Nov 2022 06:47:20 -0800 (PST)
+Date:   Mon, 7 Nov 2022 22:47:10 +0800
+From:   Leo Yan <leo.yan@linaro.org>
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        John Garry <john.garry@huawei.com>,
+        James Clark <james.clark@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org
+Subject: Re: [PATCH v1 3/3] perf arm64: Support virtual CPU ID for kvm-stat
+Message-ID: <Y2kabsQdddiX4G+O@leoy-huanghe.lan>
+References: <20221105072311.8214-1-leo.yan@linaro.org>
+ <20221105072311.8214-4-leo.yan@linaro.org>
+ <868rkpr0mv.wl-maz@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <868rkpr0mv.wl-maz@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-"Jason A. Donenfeld" <Jason@zx2c4.com> writes:
+On Sat, Nov 05, 2022 at 01:28:40PM +0000, Marc Zyngier wrote:
 
-> If the intention is to overwrite the first NUL with a -1, s[strlen(s)]
-> is the first NUL, not s[strlen(s)+1].
+[...]
 
-Hi Jason,
+> > Before:
+> > 
+> >   # perf kvm stat report --vcpu 27
+> > 
+> >   Analyze events for all VMs, VCPU 27:
+> > 
+> >                VM-EXIT    Samples  Samples%     Time%    Min Time    Max Time         Avg time
+> > 
+> >   Total Samples:0, Total events handled time:0.00us.
+> >
+> > After:
+> > 
+> >   # perf kvm stat report --vcpu 27
+> > 
+> >   Analyze events for all VMs, VCPU 27:
+> > 
+> >                VM-EXIT    Samples  Samples%     Time%    Min Time    Max Time         Avg time
+> > 
+> >                  SYS64        808    98.54%    91.24%      0.00us    303.76us      3.46us ( +-  13.54% )
+> >                    WFx         10     1.22%     7.79%      0.00us     69.48us     23.91us ( +-  25.91% )
+> >                    IRQ          2     0.24%     0.97%      0.00us     22.64us     14.82us ( +-  52.77% )
+> > 
+> >   Total Samples:820, Total events handled time:3068.28us.
+> 
+> Please educate me: how useful is it to filter on a vcpu number across
+> all VMs? What sense does it even make?
 
-This code is part of the verification of the trie that done at the end
-of utf8data generation. It is making sure the tree is not corrupted, by
-ensuring that utf8byte doesn't see something past the correct end of the
-string (the first NULL byte).  Note it is not a bad memory access
-either, since we guarantee to have allocated enough space.
+Now "perf kvm" tool is not sophisticated since it doesn't capture VMID
+and virtual CPU ID together.
 
-So I think the code is correct as is. if you apply your patch and
-regenerate utf8data.h_shipped, utf8byte will reach that -1 and fail the
-verification.
+I think a case is we can spin a program on a specific virtual CPU with
+taskset in VM, in this way we can check if any bottleneck is caused by
+VM entry/exit, but I have to say that it's inaccurate if we only filter
+on VCPU ID, we should consider tracing VMID and VCPU ID together in
+later's enhancement.
 
-> Cc: Gabriel Krisman Bertazi <krisman@collabora.com>
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-> ---
->  fs/unicode/mkutf8data.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/fs/unicode/mkutf8data.c b/fs/unicode/mkutf8data.c
-> index bc1a7c8b5c8d..61800e0d3226 100644
-> --- a/fs/unicode/mkutf8data.c
-> +++ b/fs/unicode/mkutf8data.c
-> @@ -3194,7 +3194,7 @@ static int normalize_line(struct tree *tree)
->  	/* Second test: length-limited string. */
->  	s = buf2;
->  	/* Replace NUL with a value that will cause an error if seen. */
-> -	s[strlen(s) + 1] = -1;
-> +	s[strlen(s)] = -1;
->  	t = buf3;
->  	if (utf8cursor(&u8c, tree, s))
->  		return -1;
+> Conversely, what would be the purpose of filtering on a 5th thread of
+> any process irrespective of what the process does? To me, this is the
+> same level of non-sense.
 
--- 
-Gabriel Krisman Bertazi
+I agree.
+
+> AFAICT, this is just piling more arbitrary data extraction for no
+> particular reason other than "just because we can", and there is
+> absolutely no guarantee that this is fit for anyone else's purpose.
+> 
+> I'd rather you have a generic tracepoint taking the vcpu as a context
+> and a BPF program that spits out the information people actually need,
+> keeping things out of the kernel. Or even a tracehook (like the
+> scheduler does), and let people load a module to dump whatever
+> information they please.
+
+Actually I considered three options:
+
+Option 1: Simply add new version's trace events for recording more info.
+This is not flexible and we even have risk to add more version's trace
+event if later we might find that more data should traced.
+
+This approach is straightforward and the implementation would be
+simple.  This is main reason why finally I choosed to add new trace
+events.
+
+Option 2: use Kprobe to dynamically insert tracepoints; but this means
+the user must have the corresponding vmlinux file, otherwise, perf
+tool might inject tracepoint at an incorrect address.  This is the
+main reason I didn't use Kprobe to add dynamic tracepoints.
+
+Option 3: As you suggested, I can bind KVM tracepoints with a eBPF
+program and the eBPF program records perf events.
+
+When I reviewed Arm64's kvm_entry / kvm_exit trace events, they don't
+have vcpu context in the arguments, this means I need to add new trace
+events for accessing "vcpu" context.
+
+Option 1 and 3 both need to add trace events; option 1 is more
+straightforward solution and this is why it was choosed in current patch
+set.
+
+I recognized that I made a mistake, actually we can modify the trace
+event's definition for kvm_entry / kvm_exit, note we only modify the
+trace event's arguments, this will change the trace function's
+definition but it will not break ABI (the format is exactly same for
+the user space).  Below changes demonstrate what's my proposing:
+
+diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
+index 94d33e296e10..16f6b61abfec 100644
+--- a/arch/arm64/kvm/arm.c
++++ b/arch/arm64/kvm/arm.c
+@@ -917,7 +917,7 @@ int kvm_arch_vcpu_ioctl_run(struct kvm_vcpu *vcpu)
+                /**************************************************************
+                 * Enter the guest
+                 */
+-               trace_kvm_entry(*vcpu_pc(vcpu));
++               trace_kvm_entry(vcpu);
+                guest_timing_enter_irqoff();
+ 
+                ret = kvm_arm_vcpu_enter_exit(vcpu);
+diff --git a/arch/arm64/kvm/trace_arm.h b/arch/arm64/kvm/trace_arm.h
+index 33e4e7dd2719..9df4fd30093c 100644
+--- a/arch/arm64/kvm/trace_arm.h
++++ b/arch/arm64/kvm/trace_arm.h
+@@ -12,15 +12,15 @@
+  * Tracepoints for entry/exit to guest
+  */
+ TRACE_EVENT(kvm_entry,
+-       TP_PROTO(unsigned long vcpu_pc),
+-       TP_ARGS(vcpu_pc),
++       TP_PROTO(struct kvm_vcpu *vcpu),
++       TP_ARGS(vcpu),
+ 
+        TP_STRUCT__entry(
+                __field(        unsigned long,  vcpu_pc         )
+        ),
+ 
+        TP_fast_assign(
+-               __entry->vcpu_pc                = vcpu_pc;
++               __entry->vcpu_pc                = *vcpu_pc(vcpu);
+        ),
+ 
+        TP_printk("PC: 0x%016lx", __entry->vcpu_pc)
+
+Please let me know your opinion, if you don't object, I can move
+forward with this approach.
+
+> But randomly adding new tracepoints to output a semi-useless field
+> without any consideration for future-proofing? No, thank you.
+
+Okay.  Thanks for review!
+
+Leo
