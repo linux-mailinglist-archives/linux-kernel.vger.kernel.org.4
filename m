@@ -2,119 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9418061FAA9
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 17:56:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E44BA61FAB6
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 18:00:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232831AbiKGQ4P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 11:56:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49568 "EHLO
+        id S232636AbiKGRAr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 12:00:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232804AbiKGQ4L (ORCPT
+        with ESMTP id S232417AbiKGRAo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 11:56:11 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6798220C9
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 08:56:10 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 16594CE1718
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 16:56:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25903C433D6;
-        Mon,  7 Nov 2022 16:56:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667840167;
-        bh=pnyl9ZpInkkIrifXkuZxEpTl9OIUwhuPakxK4echwoU=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=uDayzqo4JFxbQbxSN4/X/creKMzVS+AWMg/Jj9ta5qzISdtF8uG4v1Ms+sAi9C3fG
-         5DwENLzEQyD9aAnjkbcxwJfWuhtp8RICFHy/jCO76xPu3HAPx2cvGV589EQ8A7Ikdc
-         1MffGd/cMLS1G5a+nZ0OR264xr+S3K5QCQnJxV97wGtSoSMJZpD6SYbYl5ldby2T0e
-         zxENeHrkrnLtMDghJ2HDMkT2fpG2UW6YtA7rzTh9WNGarnWr7bpZuwNRR3o2rAS4R1
-         gJ5JrwIFy6IMbFGZTR744jEBmwmSeqomCbYqop5EOS4BKXIKavFgR1w5doHSCCibsX
-         0+KTS5QZuVZMQ==
-From:   =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-To:     Chen Guokai <chenguokai17@mails.ucas.ac.cn>,
-        paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, rostedt@goodmis.org, mingo@redhat.com,
-        sfr@canb.auug.org.au
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        liaochang1@huawei.com, Chen Guokai <chenguokai17@mails.ucas.ac.cn>
-Subject: Re: [PATCH v4 6/8] riscv/kprobe: Add code to check if kprobe can be
- optimized
-In-Reply-To: <20221106100316.2803176-7-chenguokai17@mails.ucas.ac.cn>
-References: <20221106100316.2803176-1-chenguokai17@mails.ucas.ac.cn>
- <20221106100316.2803176-7-chenguokai17@mails.ucas.ac.cn>
-Date:   Mon, 07 Nov 2022 17:56:04 +0100
-Message-ID: <87v8nq1z6j.fsf@all.your.base.are.belong.to.us>
+        Mon, 7 Nov 2022 12:00:44 -0500
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03AC122B05
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 09:00:42 -0800 (PST)
+Received: by mail-ed1-x530.google.com with SMTP id i21so18568039edj.10
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 09:00:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=aK/Mb1lQmrWp0WIZzAQZyGa5kst0gFmBMRnnMnq6heo=;
+        b=YEKGVkj/9lV6H+WKl0DAv5UsTSd+466O/ymx34swbdZo5yizFGQodVqLifmQr1B9Ts
+         P//nlccbfUoJEv5iOO2ROpD1floSrnCSDZBZ8NO14TGSi7FGdj52KeZbbE8QJ6dB0UzZ
+         Yzal/BE/Z4JuuZAvAx4mN8D0lQbULbSyaxyGI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=aK/Mb1lQmrWp0WIZzAQZyGa5kst0gFmBMRnnMnq6heo=;
+        b=7Dtc1cRXHyB2cwX5pgrr6oXFwBrIifB78G18ox/hNzMRgx4frSBANa6/1ncnGh1rVK
+         X7GYQrypYbvpjsdGddWbLn6uymP1LcHHVbWEGZhf8kJsyNMlmbSsPUc9InmldzM+9EY3
+         J1izrSCzptfUiTXB+jbJJBvEH7TNvBHDNQZWIYuotViMQZwtXt1r3YY1xvXX2N1OtGZK
+         arwjQZCioZLkUrntKGjY/sD3PrbjLRmmeWtEPlDLwdyCzHl5CQ4ybQYYgYX+yjXJsaHc
+         Bb7I8mrjwkFgJwuP+dx3vgT0GIkGUq21FvALPsdEpO+JnqMnwI2zmgi63V0pbDjGi5Td
+         MupQ==
+X-Gm-Message-State: ACrzQf1vZdNC2HkFER6pbBCH04N3FoINY/nowzjjpYzT0DfQPZacwFVe
+        jn+RH8vtDC4QYiTfcqAOz8ZO826rgidZhac5
+X-Google-Smtp-Source: AMsMyM4MDkXcguL/aqLsVTGvmnIz0JgIhPbo+9wZACV68ozgWIXOM57HvIXdCOrJ0r4W89DO+nyy6Q==
+X-Received: by 2002:a05:6402:1f84:b0:455:27b8:27aa with SMTP id c4-20020a0564021f8400b0045527b827aamr50637541edc.243.1667840440103;
+        Mon, 07 Nov 2022 09:00:40 -0800 (PST)
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com. [209.85.128.45])
+        by smtp.gmail.com with ESMTPSA id en6-20020a056402528600b0044e937ddcabsm4495367edb.77.2022.11.07.09.00.32
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 07 Nov 2022 09:00:37 -0800 (PST)
+Received: by mail-wm1-f45.google.com with SMTP id v7so7297041wmn.0
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 09:00:32 -0800 (PST)
+X-Received: by 2002:a05:600c:2212:b0:3cf:6068:3c40 with SMTP id
+ z18-20020a05600c221200b003cf60683c40mr34107154wml.57.1667840431739; Mon, 07
+ Nov 2022 09:00:31 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <1666159535-6447-1-git-send-email-quic_c_skakit@quicinc.com>
+ <CAE-0n52N6oxSLoU_=Cq1xK9bVX7H+AvPsR3dLepMNjKywdffvQ@mail.gmail.com> <21cd992c-334e-3a28-f3ac-68a49a4ef00b@quicinc.com>
+In-Reply-To: <21cd992c-334e-3a28-f3ac-68a49a4ef00b@quicinc.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Mon, 7 Nov 2022 09:00:18 -0800
+X-Gmail-Original-Message-ID: <CAD=FV=WRCJ6d6jTHH2ZHvuh+c4yTeXhS_D5LZcvfMn1c4NP2aA@mail.gmail.com>
+Message-ID: <CAD=FV=WRCJ6d6jTHH2ZHvuh+c4yTeXhS_D5LZcvfMn1c4NP2aA@mail.gmail.com>
+Subject: Re: [PATCH] clk: qcom: Update the force mem core bit for GPU clocks
+To:     "Satya Priya Kakitapalli (Temp)" <quic_c_skakit@quicinc.com>
+Cc:     Stephen Boyd <swboyd@chromium.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_tdas@quicinc.com, linux-clk@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Chen Guokai <chenguokai17@mails.ucas.ac.cn> writes:
+Hi,
 
-[...]
+On Sun, Nov 6, 2022 at 9:38 PM Satya Priya Kakitapalli (Temp)
+<quic_c_skakit@quicinc.com> wrote:
+>
+>
+> On 10/28/2022 5:54 AM, Stephen Boyd wrote:
+> > Quoting Satya Priya (2022-10-18 23:05:35)
+> >> From: Taniya Das <quic_tdas@quicinc.com>
+> >>
+> >> There are few GPU clocks which are powering up the memories
+> >> and thus enable the FORCE_MEM_PERIPH always for these clocks
+> >> to force the periph_on signal to remain active during halt
+> >> state of the clock.
+> > I take it that missing this causes GPU to lose state when it suspends
+> > and that confuses the driver?
+>
+>
+> It is more related to GPU SMMU states and the stability issues that are
+> encountered.
 
-> diff --git a/arch/riscv/kernel/probes/opt.c b/arch/riscv/kernel/probes/op=
-t.c
-> index 6d23c843832e..876bec539554 100644
-> --- a/arch/riscv/kernel/probes/opt.c
-> +++ b/arch/riscv/kernel/probes/opt.c
+I see a very similar code sequence for sc7180. Is any similar fix
+needed for sc7180, or is this something unique for sc7280?
 
-[...]
-
->  /*
-> - * If two free registers can be found at the beginning of both
-> - * the start and the end of replaced code, it can be optimized
-> - * Also, in-function jumps need to be checked to make sure that
-> - * there is no jump to the second instruction to be replaced
-> + * The kprobe can be optimized when no in-function jump reaches to the
-> + * instructions replaced by optimized jump instructions(AUIPC/JALR).
->   */
->  static bool can_optimize(unsigned long paddr, struct optimized_kprobe *o=
-p)
->  {
-> -	return false;
-> +	int ret;
-> +	unsigned long addr, size =3D 0, offset =3D 0;
-> +	struct kprobe *kp =3D get_kprobe((kprobe_opcode_t *)paddr);
-> +
-> +	/*
-> +	 * Skip optimization if kprobe has been disarmed or instrumented
-> +	 * instruction support XOI.
-> +	 */
-> +	if (!kp || (riscv_probe_decode_insn(&kp->opcode, NULL) !=3D INSN_GOOD))
-> +		return false;
-> +
-> +	/*
-> +	 * Find a instruction window large enough to contain a pair
-> +	 * of AUIPC/JALR, and ensure each instruction in this window
-> +	 * supports XOI.
-> +	 */
-> +	ret =3D search_copied_insn(paddr, op);
-> +	if (ret)
-> +		return false;
-> +
-> +	if (!kallsyms_lookup_size_offset(paddr, &size, &offset))
-> +		return false;
-> +
-> +	/* Check there is enough space for relative jump(AUIPC/JALR) */
-> +	if (size - offset <=3D op->optinsn.length)
-> +		return false;
-> +
-> +	/*
-> +	 * Decode instructions until function end, check any instruction
-> +	 * don't jump into the window used to emit optprobe(AUIPC/JALR).
-> +	 */
-
-Don't the fixup tables need to be checked, similar to the x86 code?
-
-
-Bj=C3=B6rn
+-Doug
