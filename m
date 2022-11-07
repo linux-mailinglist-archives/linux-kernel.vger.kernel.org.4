@@ -2,211 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9869861F39B
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 13:45:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95EAE61F38E
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 13:44:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232418AbiKGMpw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 07:45:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36120 "EHLO
+        id S232045AbiKGMoo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 07:44:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232375AbiKGMpj (ORCPT
+        with ESMTP id S231355AbiKGMom (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 07:45:39 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 665A61B7AE
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 04:44:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667825079;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=2hqgA/TRgZw1DzPVWmvs/bi2bDcerUKILSHp4k/Qv2I=;
-        b=f7EMFN9Xsur14JhZg3H3ilyEK03fuywrxHRba7S2t5aB7+4LSOxNNb4JzQ7201A0qhVsIh
-        4r6iulr/IYRInwZLCldYpxr33sy7seTYLnYT7hcR8lz0lH7WQVRkPmKsr0Ci+aJqz/fWrM
-        i3+3rm5FrGyxVtygqgo05pu5yDbdh8E=
-Received: from mail-pl1-f198.google.com (mail-pl1-f198.google.com
- [209.85.214.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-191-Jn9u6rUePGqWzPiV2khzOw-1; Mon, 07 Nov 2022 07:44:33 -0500
-X-MC-Unique: Jn9u6rUePGqWzPiV2khzOw-1
-Received: by mail-pl1-f198.google.com with SMTP id s15-20020a170902ea0f00b00187050232fcso8992379plg.3
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 04:44:33 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-language:content-transfer-encoding:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2hqgA/TRgZw1DzPVWmvs/bi2bDcerUKILSHp4k/Qv2I=;
-        b=hgjHBAlecp6+Azu6pRqva3zNuwjv5GSJ1KsQPlqcB2BbIG6YTIJlEhySW6oK5qyGNQ
-         LHQtfm2IQ4p7sNcMOPyB4BK871VBsmDePqA5Bi3i7NzzbcJgIn0qdmAuIQYBN5sEaBjk
-         X/XYFAbRj9jRHqKSAgtq4z1lfWkob399BRCGhf5Jn46f9Ts2unDgBv0kK6UE3wF2TOom
-         Vm0bFNzckULJJAoXa27GrYu7YVhLVV0pLeSS8SxQaxUQbHmnd4GPRygPhFXqgryRS0rt
-         asseTYRk7FrrhZrJIo/LAiR/j6Tqti6aVUsFTMk9WFDb52Cz0Gioa+PBhKPadD9C2kto
-         hCIQ==
-X-Gm-Message-State: ACrzQf1+bcB3tLXb7ptz6GmZO737/pqnr6qAbQRasLCz90wIvBNxQXPi
-        duq8KRUujNHADfX8Y07BbRwLMdAb68/KoMBBfVaaFdegLoe0EQtINo2InmsAB+wsYJYo0lFLyzP
-        5XM+RIt682rl4SxLxz96os/oo
-X-Received: by 2002:a05:6a00:21cc:b0:56c:ba99:795d with SMTP id t12-20020a056a0021cc00b0056cba99795dmr50314884pfj.84.1667825072149;
-        Mon, 07 Nov 2022 04:44:32 -0800 (PST)
-X-Google-Smtp-Source: AMsMyM6Z8VizXTILvpkDYYRHc1gOLDg0bA5X+HhAJoGWKY3jU2FfCdpEd9AI46CqQAZaCoZ5DX+GxA==
-X-Received: by 2002:a05:6a00:21cc:b0:56c:ba99:795d with SMTP id t12-20020a056a0021cc00b0056cba99795dmr50314862pfj.84.1667825071873;
-        Mon, 07 Nov 2022 04:44:31 -0800 (PST)
-Received: from [10.72.12.88] ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id pv7-20020a17090b3c8700b00213c7cf21c0sm4240009pjb.5.2022.11.07.04.44.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Nov 2022 04:44:31 -0800 (PST)
-Subject: Re: [RFC PATCH] fs/lock: increase the filp's reference for
- Posix-style locks
-To:     Jeff Layton <jlayton@kernel.org>, viro@zeniv.linux.org.uk,
-        chuck.lever@oracle.com
-Cc:     axboe@kernel.dk, asml.silence@gmail.com,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        io-uring@vger.kernel.org, ceph-devel@vger.kernel.org,
-        mchangir@redhat.com, idryomov@gmail.com, lhenriques@suse.de,
-        gfarnum@redhat.com
-References: <20221107095232.36828-1-xiubli@redhat.com>
- <2f1fe2fe57f39ab420c7855584ae7b6bb85a7692.camel@kernel.org>
- <c5a2cf05-8e30-1fac-3c48-d4b508ea9009@redhat.com>
- <88511dabbfb0cfad748100f59f2ce4025db29dc0.camel@kernel.org>
-From:   Xiubo Li <xiubli@redhat.com>
-Message-ID: <b1333f15-fb3d-5698-1852-47a55546bdb8@redhat.com>
-Date:   Mon, 7 Nov 2022 20:44:24 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Mon, 7 Nov 2022 07:44:42 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D5CA1B9F6;
+        Mon,  7 Nov 2022 04:44:40 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 309586101F;
+        Mon,  7 Nov 2022 12:44:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 209BFC433B5;
+        Mon,  7 Nov 2022 12:44:37 +0000 (UTC)
+Message-ID: <588804b7-d275-ddbe-0ad0-f8d59ecff18a@xs4all.nl>
+Date:   Mon, 7 Nov 2022 13:44:36 +0100
 MIME-Version: 1.0
-In-Reply-To: <88511dabbfb0cfad748100f59f2ce4025db29dc0.camel@kernel.org>
-Content-Type: text/plain; charset=iso-8859-15; format=flowed
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
 Content-Language: en-US
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+To:     =?UTF-8?Q?Martin_T=c5=afma?= <tumic@gpxsee.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Michal Simek <michal.simek@xilinx.com>
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, Lizhi Hou <lizhi.hou@amd.com>,
+        =?UTF-8?Q?Martin_T=c5=afma?= <martin.tuma@digiteqautomotive.com>
+References: <20221018140338.7080-1-tumic@gpxsee.org>
+ <20221018140338.7080-3-tumic@gpxsee.org>
+ <4ec93bdd-8b3d-2e3c-a7d7-7f3cd12520e7@xs4all.nl>
+ <8023f2f5-638d-e83f-ea27-d135202725f3@gpxsee.org>
+ <66518e88-5193-cf21-f2b9-869ee6a1024f@xs4all.nl>
+ <47e66164-9a41-997d-70eb-59f2650235d6@gpxsee.org>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+Subject: Re: [PATCH v3 2/2] Added Digiteq Automotive MGB4 driver
+In-Reply-To: <47e66164-9a41-997d-70eb-59f2650235d6@gpxsee.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 07/11/2022 20:29, Jeff Layton wrote:
-> On Mon, 2022-11-07 at 20:03 +0800, Xiubo Li wrote:
->> On 07/11/2022 18:33, Jeff Layton wrote:
->>> On Mon, 2022-11-07 at 17:52 +0800, xiubli@redhat.com wrote:
-[...]
->>>> diff --git a/io_uring/openclose.c b/io_uring/openclose.c
->>>> index 67178e4bb282..5a12cdf7f8d0 100644
->>>> --- a/io_uring/openclose.c
->>>> +++ b/io_uring/openclose.c
->>>> @@ -212,6 +212,7 @@ int io_close_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
->>>>    int io_close(struct io_kiocb *req, unsigned int issue_flags)
->>>>    {
->>>>    	struct files_struct *files = current->files;
->>>> +	fl_owner_t owner = file_lock_make_thread_owner(files);
->>>>    	struct io_close *close = io_kiocb_to_cmd(req, struct io_close);
->>>>    	struct fdtable *fdt;
->>>>    	struct file *file;
->>>> @@ -247,7 +248,7 @@ int io_close(struct io_kiocb *req, unsigned int issue_flags)
->>>>    		goto err;
->>>>    
->>>>    	/* No ->flush() or already async, safely close from here */
->>>> -	ret = filp_close(file, current->files);
->>>> +	ret = filp_close(file, owner);
->>>>    err:
->>>>    	if (ret < 0)
->>>>    		req_set_fail(req);
->>> I think this is the wrong approach to fixing this. It also looks like
->>> you could hit a similar problem with OFD locks and this patch wouldn't
->>> address that issue.
->> For the OFD locks they will set the 'file' struct as the owner just as
->> the flock does, it should be okay and I don't think it has this issue if
->> my understanding is correct here.
+On 07/11/2022 12:38, Martin TÅ¯ma wrote:
+> On 07. 11. 22 10:11, Hans Verkuil wrote:
+> 
+>>>>
+>>>> Erm, what is CMT and where do the values in the tables below come from?
+>>>>
+>>>
+>>> The CMT table is used to set up some FPGA PLL related registers. For different video signal frequencies (FPGA input signal frequencies), the FPGA PLL stuff needs to be adjusted to work properly. The
+>>> values are precomputed based on some formulas given by Xilinx in their FPGA documentation and those formulas are in turn full of some magic values/tables. So the answer to your question is that no one
+>>> (not even our HW engineer writing the VHDL code...) really knows where these values exactly come from, but they have to be set for the FPGA to work properly with the given video signal.
 >>
-> They set the the owner to "file", but they don't hold a reference to it.
-> With OFD locks, the file is what holds references to the lock, not the
-> reverse.
-
-Yeah, right. But for both OFD and flock they shouldn't hit this issue, 
-because it when removing all the locks having the same owner, which is 
-the 'file', passed by filp_close(filp), the 'file' reference counter 
-must be larger than 0. Because the filp_close() is still using it.
-
-This is why using the thread id as the owner is a special case for 
-Posix-style lock.
-
->
->>> The real bug seems to be that ceph_fl_release_lock dereferences fl_file,
->>> at a point when it shouldn't rely on that being valid. Most filesystems
->>> stash some info in fl->fl_u if they need to do bookkeeping after
->>> releasing a lock. Perhaps ceph should be doing something similar?
->> This is the 'filp' memory in filp_close(filp, ...):
+>> OK, that will be good to document. And what does the abbreviation 'CMT' stand for?
 >>
->> crash> file.f_path.dentry,f_inode 0xffff952d7ab46200
->>     f_path.dentry = 0xffff9521b121cb40
->>     f_inode = 0xffff951f3ea33550,
+> 
+> Clock Management Tile, it is commonly used in Xilinx's FPGA documentation
+> 
+>>>>
+>>>> I'm pretty certain that you didn't run 'checkpatch.pl --strict' over this patch.
+>>>> Please do so for v4!
+>>>>
+>>>
+>>> I have run 'checkpatch.pl' without '--strict' over this patch and ignored all the "too long lines" warnings on the tables as I think they are more clear this way, and all the "change name suggestion"
+>>> warnings as they are IMHO wrong in this case. Other warnings did not come up. I will try it with '--strict' when I post v4 patch.
 >>
->> We can see the 'f_inode' is pointing to the correct inode memory.
+>> Yes please, the media subsystem uses the --strict option.
 >>
+> 
+> Ok.
+> 
+>>>>
+>>>> This doesn't look right. Just opening a video device shouldn't cause
+>>>> any state changes, and that's what it looks is happening here.
+>>>>
+>>>> I.e., if I just want to query the device (v4l2-ctl --all), then that
+>>>> shouldn't not change anything.
+>>>>
+>>>
+>>> The MGB4 card is quiet special in this case. Unlike in "normal" cameras, the video signal may change over time as the user can connect different video sources to the card. This is why I set up some
+>>> video signal related stuff in the open() call. When you open the device, you "configure" it for the current video signal and the signal is then expected not to change until the device is closed (such
+>>> change will not break the driver, but will break the image). Additionally, the open() call must fail, when there is no signal connected to the card.
+>>>
+>>> If you have some suggestions how to handle this "dynamic" behaviour in a different way (properly?) then I'm open to them. But the fact, that even the video resolution can change at any arbitrary time
+>>> will IMHO always lead to some "workarounds" like this one in the open() call.
 >>
+>> This is not special. We support HDMI receivers today as well which have exactly the same behavior.
 >>
->> While later in 'ceph_fl_release_lock()':
+>> Typically the way this works is that such drivers support the Digital Video Timings ioctls
+>> (VIDIOC_ENUM_DV_TIMINGS, VIDIOC_DV_TIMINGS_CAP, VIDIOC_G/S/QUERY_DV_TIMINGS). The driver
+>> stores the current timings as set by userspace (and initialized to something at probe() time
+>> by the driver), but typically userspace will query the actual detected timings, then set them.
 >>
->> 41 static void ceph_fl_release_lock(struct file_lock *fl)
->> 42 {
->> 43     struct ceph_file_info *fi = fl->fl_file->private_data;
->> 44     struct inode *inode = file_inode(fl->fl_file);
->> 45     struct ceph_inode_info *ci = ceph_inode(inode);
->> 46     atomic_dec(&fi->num_locks);
->> 47     if (atomic_dec_and_test(&ci->i_filelock_ref)) {
->> 48         /* clear error when all locks are released */
->> 49         spin_lock(&ci->i_ceph_lock);
->> 50         ci->i_ceph_flags &= ~CEPH_I_ERROR_FILELOCK;
->> 51         spin_unlock(&ci->i_ceph_lock);
->> 52     }
->> 53 }
+>> Next it will allocate buffers, which will fix the timings. E.g. an attempt to set new timings
+>> will fail with -EBUSY. If the hardware detects a format change, then it will raise the
+>> V4L2_EVENT_SOURCE_CHANGE event and call vb2_queue_error() to stop streaming.
 >>
-> You only need the inode for most of this. The exception is
-> fi->num_locks, so you may need to test for that in a different way.
->
->> It crashed in Line#47 and the 'fl->fl_file' memory is:
+>> Userspace detects that, stops streaming, frees buffers, and calls QUERY_DV_TIMINGS again to
+>> get the new timings.
 >>
->> crash> file.f_path.dentry,f_inode 0xffff952d4ebd8a00
->>     f_path.dentry = 0x0
->>     f_inode = 0x0,
+>> Key here is that the timings are locked when you allocate buffers (vb2_is_busy() will return
+>> true at that time). Buffers are allocated based on the framesize, which is based on the timings,
+>> so if timings change, then buffers typically need to be reallocated.
 >>
->> Please NOTE: the 'filp' and 'fl->fl_file' are two different 'file struct'.
+>> Search for these ioctls to see how other drivers do this.
 >>
-> Yep, I understand the bug. I just don't like the proposed fix. :)
+> 
+> Ok, I will look at those ioctls and try to implement this part using those.
+> 
+>>>>> +
+>>>>> +static int vidioc_queryctrl(struct file *file, void *priv,
+>>>>> +Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â  struct v4l2_queryctrl *qc)
+>>>>> +{
+>>>>> +Â Â Â  return -EINVAL;
+>>>>> +}
+>>>>
+>>>> Huh? Why is this needed?
+>>>>
+>>>
+>>> I think this was required to "silence" some v4l2-compliance tool warnings/errors. I will recheck this.
+>>
+>> If there are warnings/errors with the latest v4l2-compliance, then let me know.
+>> It would be a bug in the compliance tool.
+>>
+> 
+> I'm not sure what version of the v4l2-compliance tool I have used that time, but as I have Arch linux on the devel machine, I suppose it was quiet new. When I get warnings/errors after removing this
+> callback with the 1.22.1 version, I will let you know.
+> 
+>>>>
+>>>> Same as for input: opening a video device appears to have a side-effect.
+>>>>
+>>>
+>>> The same reason as in the input case. You can have different displays with completely different video signals (even resolutions) connected to the output at any arbitrary time.
+>>
+>> It's similar to the input side: use the DV timings ioctls. Except there won't be a
+>> QUERY_DV_TIMINGS, since it is an output.
+>>
+>> But how do you know what the display supports? Is it using an EDID? In that case you
+>> need to support VIDIOC_G_EDID as well, and probably some of the DV controls:
+>>
+>> https://linuxtv.org/downloads/v4l-dvb-apis-new/userspace-api/v4l/ext-ctrls-dv.html
+>>
+> 
+> There is no EDID or another type of autoconfiguration. In the cars, there is simply always the right display connected to the radio (infotainment system) and the values are hardcoded on both sides.
+> 
+> In the mgb4 card (that must support arbitrary size displays) we solve this by the sysfs configuration - see the "Common FPDL3/GMSL output parameters" in the documentation. You set the display
+> properties in sysfs (usualy using some udev rules at boot time) and the v4l2 part of the driver then uses this values.
 
-Yeah, I also think this approach is ugly :-)
+So for output at least the values do not 'just' change, it is something that is configured
+via sysfs. So the driver knows when this happens, and G_DV_TIMINGS would just return that
+configuration. You can choose (if it would make sense) to support S_DV_TIMINGS to set the
+configuration instead of sysfs, but I don't know if that would be sufficient or if it
+even makes sense.
 
->> Can we fix this by using 'fl->fl_u' here ?
->>
-> Probably. You could take and hold an inode reference in there, and maybe
-> add a function that looks at whether there are any locks held against a
-> particular file, rather than trying to count locks in ceph_file_info.
+Changing timings when someone is streaming is also something you need to think about:
+you can either refuse changing timings (return EBUSY), or accepts it, but then the
+driver has to call vb2_queue_error() and raise the V4L2_EVENT_SOURCE_CHANGE event to
+signal that the format changed and userspace has to take action.
 
-Okay, this sounds good.
+Regards,
 
-Let me try this tomorrow.
-
->> I was also thinking I could just call the 'get_file(file)' in
->> ceph_lock() and then in ceph_fl_release_lock() release the reference
->> counter. How about this ?
->>
-> That may work too, though again, I'd be worried about cyclical
-> dependencies, particularly with OFD locks. If the lock holds a reference
-> to the file, then can the file's refcount ever go to zero if the lock is
-> never explicitly released? I think not.
->
-> You may also need to consider flock locks too, since they have similar
-> ownership semantics to OFD locks.
-
-I will send a V2 later.
-
-Thanks Jeff!
-
-- Xiubo
-
-
+	Hans
