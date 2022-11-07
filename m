@@ -2,54 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FD7361EE2A
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 10:05:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AF4061EE2C
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 10:05:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231139AbiKGJFT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 04:05:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34596 "EHLO
+        id S231361AbiKGJFu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 04:05:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230434AbiKGJFQ (ORCPT
+        with ESMTP id S230434AbiKGJFq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 04:05:16 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1451120AD
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 01:05:15 -0800 (PST)
+        Mon, 7 Nov 2022 04:05:46 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F2109FD9;
+        Mon,  7 Nov 2022 01:05:45 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 343C660F1C
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 09:05:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88B5FC43148;
-        Mon,  7 Nov 2022 09:05:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667811914;
-        bh=dQUl7/g2deHQHg56f4HOG512Ok3mw3uMyxBnPD5nMGQ=;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3404AB80E84;
+        Mon,  7 Nov 2022 09:05:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4EBF6C433D6;
+        Mon,  7 Nov 2022 09:05:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1667811942;
+        bh=jOVKgvmAFLLzJwu6tB2mvWc8Es7QRbg7ypmEseVvlFE=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jspR5KW7AKgSMQTAtag8X2CW6uXYboNG2QGtwY0fLz9dPQ1XMNhJMSQOgM/S8DFRm
-         cre6eWAzcPOIJRFzy5S4mv7mEzUyaC5H5nPeOpJafn522zgwNYwbTaCblwmERvVFvY
-         6I8D4xuelfUGBH8Gz5OcSaCMlNhMhF2fiLh5+qSQHsR9pw59R3+ejsjr5pvfEODYZw
-         UtorxcVB+qAHX1lATGruS98uqU8Z1tCFlKirAAZaGSlqHTQJ4JYR3ZG4jSB7gRGmCp
-         TQw4lhOvTmgv131tgBYT1UKeEVcDjcWBTr826IqhaN4mhwdZvE3giGqeiCEX8Dd8ub
-         c9aTEjuMYkqvg==
-Date:   Mon, 7 Nov 2022 09:05:09 +0000
-From:   Lee Jones <lee@kernel.org>
-To:     Liu Ying <victor.liu@nxp.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, linux-imx@nxp.com
-Subject: Re: [PATCH RESEND] mfd: Add Freescale i.MX8qxp Control and Status
- Registers (CSR) module driver
-Message-ID: <Y2jKRQ8VyauSfXmH@google.com>
-References: <20221017075702.4182846-1-victor.liu@nxp.com>
- <Y1/sUfeVy1a6EKZQ@google.com>
- <afa29fcc11436dd957314a4066c9141937f0470c.camel@nxp.com>
- <b7bcc99c006c91871f0518c1a132035d2a148f24.camel@nxp.com>
+        b=i7TKhikM8ZMz6J4u5ACj3S0hJmsQBbePwedLBnPraQ263s/JvDcux5/BPjt1Hnp99
+         cyfoFgw9p8TqcS3HIIhziAPmNwN9qLr9C42jYzdcfRqIj18XQ9M8crxmzACM3KXLwk
+         paHr/6p5oxoxLzPu35NVyFr+yAUKi96QeqBkpyz4=
+Date:   Mon, 7 Nov 2022 10:05:39 +0100
+From:   "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+To:     Jiantao Zhang <water.zhangjiantao@huawei.com>
+Cc:     "Xuetao (kirin)" <xuetao09@huawei.com>,
+        "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>,
+        "jakobkoschel@gmail.com" <jakobkoschel@gmail.com>,
+        "geert+renesas@glider.be" <geert+renesas@glider.be>,
+        "colin.i.king@gmail.com" <colin.i.king@gmail.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Caiyadong <caiyadong@huawei.com>,
+        xuhaiyang <xuhaiyang5@hisilicon.com>,
+        Suzhuangluan <suzhuangluan@hisilicon.com>
+Subject: Re: [PATCH] USB: gadget: Fix CFI failure during usb config switch.
+Message-ID: <Y2jKY9Nw1a0/951a@kroah.com>
+References: <b4d5fcb42622441189ad0e6ca5b170c0@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <b7bcc99c006c91871f0518c1a132035d2a148f24.camel@nxp.com>
+In-Reply-To: <b4d5fcb42622441189ad0e6ca5b170c0@huawei.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -59,130 +58,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 02 Nov 2022, Liu Ying wrote:
+On Mon, Nov 07, 2022 at 08:56:06AM +0000, Jiantao Zhang wrote:
+> This reverts commit 0a55187a1ec8c
 
-> Hi Lee,
+Please show the full hash for this line.
+
 > 
-> On Tue, 2022-11-01 at 13:53 +0800, Liu Ying wrote:
-> > Hi Lee,
-> > 
-> > On Mon, 2022-10-31 at 15:40 +0000, Lee Jones wrote:
-> > > On Mon, 17 Oct 2022, Liu Ying wrote:
-> > > 
-> > > > Freescale i.MX8qxp Control and Status Registers (CSR) module is a
-> > > > system
-> > > > controller. It represents a set of miscellaneous registers of a
-> > > > specific
-> > > > subsystem. It may provide control and/or status report interfaces
-> > > > to a
-> > > > mix of standalone hardware devices within that subsystem.
-> > > > 
-> > > > The CSR module in i.MX8qm/qxp SoCs is a child node of a simple
-> > > > power-managed
-> > > > bus(i.MX8qxp pixel link MSI bus). To propagate power management
-> > > > operations
-> > > > of the CSR module's child devices to that simple power-managed
-> > > > bus, add a
-> > > > dedicated driver for the CSR module. Also, the driver would
-> > > > populate the CSR
-> > > > module's child devices.
-> > > > 
-> > > > Signed-off-by: Liu Ying <victor.liu@nxp.com>
-> > > > ---
-> > > > The Freescale i.MX8qxp CSR DT bindings is at
-> > > > Documentation/devicetree/bindings/mfd/fsl,imx8qxp-csr.yaml.
-> > > > 
-> > > > Resend the patch based on v6.1-rc1.
-> > > > 
-> > > >  drivers/mfd/Kconfig           | 10 +++++++
-> > > >  drivers/mfd/Makefile          |  1 +
-> > > >  drivers/mfd/fsl-imx8qxp-csr.c | 53
-> > > > +++++++++++++++++++++++++++++++++++
-> > > >  3 files changed, 64 insertions(+)
-> > > >  create mode 100644 drivers/mfd/fsl-imx8qxp-csr.c
-> > 
-> > [...]
-> > 
-> > > > diff --git a/drivers/mfd/fsl-imx8qxp-csr.c b/drivers/mfd/fsl-
-> > > > imx8qxp-csr.c
-> > > > new file mode 100644
-> > > > index 000000000000..3915d3d6ca65
-> > > > --- /dev/null
-> > > > +++ b/drivers/mfd/fsl-imx8qxp-csr.c
-> > > > @@ -0,0 +1,53 @@
-> > > > +// SPDX-License-Identifier: GPL-2.0+
-> > > > +
-> > > > +/*
-> > > > + * Copyright 2022 NXP
-> > > > + */
-> > > > +
-> > > > +#include <linux/module.h>
-> > > > +#include <linux/of_platform.h>
-> > > > +#include <linux/platform_device.h>
-> > > > +#include <linux/pm_runtime.h>
-> > > > +
-> > > > +static int imx8qxp_csr_probe(struct platform_device *pdev)
-> > > > +{
-> > > > +	int ret;
-> > > > +
-> > > > +	pm_runtime_enable(&pdev->dev);
-> > > > +
-> > > > +	ret = devm_of_platform_populate(&pdev->dev);
-> > > 
-> > > The use of this API does not constitute a MFD.
-> > > 
-> > > Please use "simple-mfd" instead.
-> > 
-> > simple-mfd devices have "ONLY_BUS" set in simple-pm-bus.c, so the
-> > simple-pm-bus driver would not populate child devices of simple-mfd
-> > devices.
+> In the process of switching USB config from rndis to other config, if function gadget->ops->pullup() return an error,it will inevitably cause a CFI failure(Linux version 5.10.43).
 
-Right, simple-pm-bus will not populate child devices, because:
+Please wrap the line properly.
 
-  /*                                                                     
-   * These are transparent bus devices (not simple-pm-bus matches) that  
-   * have their child nodes populated automatically.  So, don't need to  
-   * do anything more. We only match with the device if this driver is   
-   * the most specific match because we don't want to incorrectly bind to
-   * a device that has a more specific driver.                           
-   */                                                                    
+And CFI is not in 5.10, so why is this an issue?
 
-So "simple-mfd" must be populated elsewhere i.e. drivers/of/platform.c.
+> 
+> analysis as follows:
+> ======================================================
+> (1) write /config/usb_gadget/g1/UDC "none"   (init.usb.configfs.rc:2)
+> 
+> gether_disconnect+0x2c/0x1f8     (dev->port_usb = NULL)
+> rndis_disable+0x4c/0x74
+> composite_disconnect+0x74/0xb0
+> configfs_composite_disconnect+0x60/0x7c
+> usb_gadget_disconnect+0x70/0x124
+> usb_gadget_unregister_driver+0xc8/0x1d8
+> gadget_dev_desc_UDC_store+0xec/0x1e4
+> 
+> in function usb_gadget_disconnect(),gadget->udc->driver->disconnect()
+> will not be called when gadget->ops->pullup() return an error, therefore, pointer dev->port will not be set to NULL.
+> 
+> (2) rm /config/usb_gadget/g1/configs/b.1/f1    (init.usb.configfs.rc:8)
+>     (f1 -> ../../../../usb_gadget/g1/functions/rndis.gs4)
+> 
+> rndis_deregister+0x28/0x54
+> rndis_free+0x44/0x7c
+> usb_put_function+0x14/0x1c
+> config_usb_cfg_unlink+0xc4/0xe0
+> configfs_unlink+0x124/0x1c8
+> vfs_unlink+0x114/0x1dc
+> 
+> (3) rmdir /config/usb_gadget/g1/functions/rndis.gs4
+>     (init.usb.configfs.rc:11)
+> 
+> CFI failure (target: [<ffffff814bc20c00>] 0000000068f50078):
+> CPU: 2 PID: 1 Comm: init VIP: 00 Tainted: G   W  O   5.10.43 #1
+> Call trace:
+>  __cfi_slowpath+0x300/0x3bc
+>  rndis_signal_disconnect+0x1e0/0x204
+>  rndis_close+0x24/0x2c
+>  eth_stop+0xd0/0x234           (if dev->port_usb != NULL, call rndis_close)
+>  __dev_close_many+0x204/0x2d4
+>  dev_close_many+0x48/0x2c8
+>  rollback_registered_many+0x184/0xdac
+>  unregister_netdevice_queue+0xf8/0x24c
+>  rndis_free_inst+0x78/0xc8
+>  rndis_attr_release+0x3c/0x84
+>  config_item_release+0x6c/0x180
+>  configfs_rmdir+0x7e0/0xca0
+> 
+> Since the rndis memory has been freed in step2, function rndis_close cannot be called here. In function eth_stop(), if pointer dev->port_usb is NULL, function rndis_close() will not be called. So, if
+> gadget->ops->pullup() return an error in step1, a CFI failure will be
+> caused here.
+> ======================================================
+> Through above analysis, i think gadget->udc->driver->disconnect() need to be called even if gadget->udc->driver->disconnect() return an error.
 
-> > Also, the simple-pm-bus driver would not enable runtime
-> > power management for simple-mfd devices due to "ONLY_BUS", which
-> > means it would not propagate power management operations from child
-> > devices of simple-mfd devices to parent devices of simple-mfd
-> > devices.  That's why a dedicated fsl-imx8qxp-csr driver is needed. 
 
-This is more of an issue.
+I really do not understand, sorry.  What does CFI have to do with
+anything here?  What functions are mis-matched that CFI trips over it?
 
-Why can't this device use "simple-pm-bus" to have support for both
-auto-registration AND Runtime PM?
+And by reverting this change, don't you now have the original problem
+that this commit was trying to solve?
 
-> One more point which might be overlooked - as mentioned in commit
-> message, the CSR module is a child node of a simple power-managed
-> bus(i.MX8qxp pixel link MSI bus), which means the child devices of the
-> CSR module(as a simple-mfd device) won't be populated by
-> of_platform_default_populate() from of_platform_default_populate_init()
-> because "simple-pm-bus" is not listed in of_default_bus_match_table[]
-> and hence recursion of of_platform_bus_create() will stop at the
-> simple-pm-bus. This is also a reason why a dedicated fsl-imx8qxp-csr
-> driver is needed to populated those child devices of the CSR module.
+> 
+> Signed-off-by: Jiantao Zhang <water.zhangjiantao@huawei.com>
+> Signed-off-by: TaoXue <xuetao09@huawei.com>
 
-Not sure I know the semantics well enough (anymore) to get a
-meaningful picture of what you're trying to explain, and I do not have
-any suitable H/W here to mock-up a real-world test-bed / concept
-demonstrator to debug this for you.
+No Fixes: tag?
 
-The long and the short of it is; we have a bunch of automatic
-child-device-registering helpers in the kernel.  One of the mechanisms
-is bound to work for you if you structure your code appropriately.
+No cc: stable?
 
-Introducing an empty, meaningless driver, simply to call a single
-function it not acceptable.  Please make the infrastructure already
-offered specifically to solve this category of issue work for your
-use-case.
+thanks,
 
--- 
-Lee Jones [李琼斯]
+greg k-h
