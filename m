@@ -2,51 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 590EA61FD06
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 19:13:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20CFE61FD09
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 19:14:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231408AbiKGSNm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 13:13:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52888 "EHLO
+        id S233002AbiKGSOE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 13:14:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232840AbiKGSNK (ORCPT
+        with ESMTP id S232963AbiKGSNn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 13:13:10 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BB5329C85
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 10:11:47 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1os6b3-00065f-Ia; Mon, 07 Nov 2022 19:11:45 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1os6b1-002uN5-8c; Mon, 07 Nov 2022 19:11:44 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1os6b1-00F1sJ-8Q; Mon, 07 Nov 2022 19:11:43 +0100
-Date:   Mon, 7 Nov 2022 19:11:35 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Julia Lawall <julia.lawall@inria.fr>
-Cc:     kernel@pengutronix.de, Nicolas Palix <nicolas.palix@imag.fr>,
-        linux-kernel@vger.kernel.org, cocci@inria.fr
-Subject: [PATCH v2] coccinelle: api: Don't use
- devm_platform_get_and_ioremap_resource with res==NULL
-Message-ID: <20221107181135.tm2wmwiulepsyrmk@pengutronix.de>
-References: <20221107114702.15706-1-u.kleine-koenig@pengutronix.de>
- <28e17fb9-cec1-4a89-1492-cd3ece7a9487@inria.fr>
+        Mon, 7 Nov 2022 13:13:43 -0500
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A93724BC1
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 10:12:31 -0800 (PST)
+Received: by mail-ej1-x635.google.com with SMTP id t25so32349873ejb.8
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 10:12:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=7vy3t5kbrzPjpdQusaDe/qP73aspKCTGfj7z6ORzdgY=;
+        b=cDv8auhtTvoqm4hxu39M9iJQmX6h3VmdR/dy12zJqgoxSKbPh/6ALAqQOyAY3DgWcN
+         vjul/joY1QIREYkeyGuOtZAHrIOnJTMuQgejXET/AF6vOB+ONqpiLclQTdGMh5KA+f92
+         1bRl4AO76MRNV5EXV6PhcVC/0xCgPIr0FuuQQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7vy3t5kbrzPjpdQusaDe/qP73aspKCTGfj7z6ORzdgY=;
+        b=K2sSbFqZ2Gektg56z5ZiSIWSOygN3ElOBBtUCSybGOWZ0SfL6AMMEhty9k5at3cB02
+         b0avU+lp//UPzb9Y6zhNCzybaJ49lnch8J+rTA0uF9Bac2RAjdMnAaKYm6uLEzv4ZdsZ
+         I34njXDU/F4zujcQaSaAr5sVNB6jovcTFcWT7HDCptgmuKuEY2+wQ+qz4q9SGoVeJmzY
+         nekoPcW6zrDG/SIHhfUloBS30SmER0ZSLVirSMxt9u4Ry6FM1/7qhbv2ZcpZulTAwjBE
+         vVgydUUCwUebQUPzqgrxvgeZIzMhvNCY2BxrlJ9zVgQWrNCXegGxusDw3I0MmFyCUZCy
+         Ay8w==
+X-Gm-Message-State: ACrzQf3gQeFAEAY9YQSI7/zHbG4DmWbe2jut68R3mq3WvCyvZZPXyFLb
+        6PO5cnM8KddJMfbkJG6fwNMtt0SaQBMpkWty
+X-Google-Smtp-Source: AMsMyM5lW9xv/67Y6u2MtpzGreE1K4kobTGFA5rs8ew+A1L/6oZM+K5CONPJI6wywjbVK4qyjpR6NQ==
+X-Received: by 2002:a17:907:2719:b0:782:b261:e9eb with SMTP id w25-20020a170907271900b00782b261e9ebmr50450648ejk.104.1667844749195;
+        Mon, 07 Nov 2022 10:12:29 -0800 (PST)
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com. [209.85.221.50])
+        by smtp.gmail.com with ESMTPSA id k18-20020a05640212d200b0044ef2ac2650sm4484749edx.90.2022.11.07.10.12.28
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 07 Nov 2022 10:12:28 -0800 (PST)
+Received: by mail-wr1-f50.google.com with SMTP id j15so17472595wrq.3
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 10:12:28 -0800 (PST)
+X-Received: by 2002:adf:d1ec:0:b0:236:880f:2adf with SMTP id
+ g12-20020adfd1ec000000b00236880f2adfmr32978773wrd.617.1667844748035; Mon, 07
+ Nov 2022 10:12:28 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="br76c7q2m6ekdpo6"
-Content-Disposition: inline
-In-Reply-To: <28e17fb9-cec1-4a89-1492-cd3ece7a9487@inria.fr>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+References: <20221107094345.2838931-1-sheng-liang.pan@quanta.corp-partner.google.com>
+ <20221107173954.v11.5.I4c6d97e6f3cf8cdc691d2d4519883c3018dd4372@changeid>
+In-Reply-To: <20221107173954.v11.5.I4c6d97e6f3cf8cdc691d2d4519883c3018dd4372@changeid>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Mon, 7 Nov 2022 10:12:16 -0800
+X-Gmail-Original-Message-ID: <CAD=FV=UQc1L3z2Z7sfV1RnQS3c6RStXmighAC1OBPgYEAsPF6g@mail.gmail.com>
+Message-ID: <CAD=FV=UQc1L3z2Z7sfV1RnQS3c6RStXmighAC1OBPgYEAsPF6g@mail.gmail.com>
+Subject: Re: [PATCH v11 5/5] arm64: dts: qcom: sc7280: sort out the "Status"
+ to last property with sc7280-herobrine-audio-rt5682.dtsi
+To:     Sheng-Liang Pan <sheng-liang.pan@quanta.corp-partner.google.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,168 +80,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi
 
---br76c7q2m6ekdpo6
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Mon, Nov 7, 2022 at 1:46 AM Sheng-Liang Pan
+<sheng-liang.pan@quanta.corp-partner.google.com> wrote:
+>
+> To keep diffs clean, sort out "Status" to last property.
+>
+> Signed-off-by: Sheng-Liang Pan <sheng-liang.pan@quanta.corp-partner.google.com>
+> ---
+>
+> Changes in v11:
+> - sort out the "Status" property with sc7280-herobrine-audio-rt5682.dtsi
+>
+>  .../dts/qcom/sc7280-herobrine-audio-rt5682.dtsi    | 14 +++++++-------
+>  1 file changed, 7 insertions(+), 7 deletions(-)
 
-devm_platform_get_and_ioremap_resource(pdev, index, NULL) is equivalent to
-the shorter devm_platform_ioremap_resource(pdev, index).
+Thanks!
 
-Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
----
-On Mon, Nov 07, 2022 at 08:45:38PM +0800, Julia Lawall wrote:
-> On Mon, 7 Nov 2022, Uwe Kleine-K=F6nig wrote:
->=20
-> > devm_platform_get_and_ioremap_resource(pdev, index, NULL) is equivalent=
- to
-> > the shorter devm_platform_ioremap_resource(pdev, index).
-> >
-> > Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
-> > ---
-> > Hello,
-> >
-> > a potential improvement is to check for invocations of
-> > devm_platform_get_and_ioremap_resource() where the res parameter isn't
-> > used afterwards, but my coccinelle foo isn't strong enough for that.
->=20
-> ... when !=3D res
->=20
-> I'm not sure where you wanted to put it though.
+I probably would have also removed the 'status = "okay";' from the
+top-level sound node in this patch, but that can always be done later.
+Certainly your patch is a step forward. :-)
 
-I tinkered a bit further and even succeeded to remove the declaration if
-it's otherwise unused.
-
-I failed to test the report mode, my spatch tells me some error about
-python2?!
-
-Best regards
-Uwe
-
- .../api/devm_platform_ioremap_resource.cocci  | 85 +++++++++++++++++++
- 1 file changed, 85 insertions(+)
- create mode 100644 scripts/coccinelle/api/devm_platform_ioremap_resource.c=
-occi
-
-diff --git a/scripts/coccinelle/api/devm_platform_ioremap_resource.cocci b/=
-scripts/coccinelle/api/devm_platform_ioremap_resource.cocci
-new file mode 100644
-index 000000000000..485dfa6ea0aa
---- /dev/null
-+++ b/scripts/coccinelle/api/devm_platform_ioremap_resource.cocci
-@@ -0,0 +1,85 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/// Don't use devm_platform_get_and_ioremap_resource with NULL as third pa=
-rameter
-+// Confidence: High
-+
-+virtual patch
-+virtual context
-+virtual org
-+virtual report
-+
-+@r1@
-+position p;
-+@@
-+ devm_platform_ioremap_resource(...) {
-+	...
-+	devm_platform_get_and_ioremap_resource@p(...)
-+	...
-+ }
-+
-+@depends on patch@
-+expression pdev,index;
-+position p !=3D r1.p;
-+@@
-+
-+-  devm_platform_get_and_ioremap_resource@p(pdev, index, NULL)
-++  devm_platform_ioremap_resource(pdev, index)
-+
-+@depends on patch@
-+expression pdev,index;
-+identifier res;
-+type T;
-+@@
-+-  T res;
-+   ... when !=3D res
-+-  devm_platform_get_and_ioremap_resource(pdev, index, &res)
-++  devm_platform_ioremap_resource(pdev, index)
-+   ... when !=3D res
-+
-+@depends on patch@
-+expression pdev,index;
-+identifier res;
-+@@
-+
-+-  devm_platform_get_and_ioremap_resource(pdev, index, &res)
-++  devm_platform_ioremap_resource(pdev, index)
-+   ... when !=3D res
-+
-+@r2 depends on !patch exists@
-+expression pdev,index;
-+position p;
-+@@
-+
-+*  devm_platform_get_and_ioremap_resource@p(pdev, index, NULL)
-+
-+@script:python depends on org@
-+p << r2.p;
-+@@
-+
-+cocci.print_main("WARNING opportunity for devm_platform_ioremap_resource",=
- p)
-+
-+@script:python depends on report@
-+p << r2.p;
-+@@
-+
-+coccilib.report.print_report(p[0], "WARNING opportunity for devm_platform_=
-ioremap_resource")
-+
-+@r3 depends on !patch exists@
-+expression pdev,index;
-+identifier res;
-+position p;
-+@@
-+
-+*  devm_platform_get_and_ioremap_resource@p(pdev, index, &res)
-+   ... when !=3D res
-+
-+@script:python depends on org@
-+p << r3.p;
-+@@
-+
-+cocci.print_main("WARNING opportunity for devm_platform_ioremap_resource",=
- p)
-+
-+@script:python depends on report@
-+p << r3.p;
-+@@
-+
-+coccilib.report.print_report(p[0], "WARNING opportunity for devm_platform_=
-ioremap_resource")
---=20
-2.38.1
-
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---br76c7q2m6ekdpo6
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmNpSksACgkQwfwUeK3K
-7AkVLgf/Rft3yyIkDXUecuNVqIMeOI150FeS5ugDchiUalYpbmdntH6DabihECa8
-RvYGAuCfnvvmHeQzfPf0g4b2ysQaZcWqzLWnBoq33vuUMsea9jsz9cGuCwx1Csv5
-9FgmNg7Iqg9fIpuiAoJaAWYmcU8ftjgqq4euXQQnp2i/Wucnwtyl8EoeSJ1DGAMI
-mDSjEkYO/oAfIlWQJGXqbwf70JWrZqnyLTch86IuZPSQj0MOMj1tKHxcL9zxWUAY
-/m/49N4jcK9yGL+F3gSAx5chSewiqkv8Ob1I5P2sbJNgZ3iKJoEM+yD5S6futd/g
-AUHkYT/VvaLwJ1FEmda6p7m6qBYWfg==
-=53Fs
------END PGP SIGNATURE-----
-
---br76c7q2m6ekdpo6--
+Reviewed-by: Douglas Anderson <dianders@chromium.org>
