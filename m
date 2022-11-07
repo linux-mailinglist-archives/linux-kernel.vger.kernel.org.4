@@ -2,86 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B034961FAA6
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 17:55:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB8A461FAAE
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 17:57:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232763AbiKGQzt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 11:55:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49198 "EHLO
+        id S232948AbiKGQ5G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 11:57:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232742AbiKGQzr (ORCPT
+        with ESMTP id S232901AbiKGQ45 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 11:55:47 -0500
-Received: from mail-oi1-f172.google.com (mail-oi1-f172.google.com [209.85.167.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 792011F2E4;
-        Mon,  7 Nov 2022 08:55:46 -0800 (PST)
-Received: by mail-oi1-f172.google.com with SMTP id t62so12738039oib.12;
-        Mon, 07 Nov 2022 08:55:46 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XPM1SjQy3RL278fadljq6LXWFkiGCqCWW45rr2YCC9k=;
-        b=DgKMAfp8GhV1+ehpI4L3JuSZkl47DNDM8BdUd321ATnxOhzTqZwUoDNCptjzlK7kkb
-         mVn4Ja8QQdrxxGOzBj+/oqJbHsHPiIE2NVCU9TR3OcMC9Tj8d35VDnovIAZSL8x6bE9C
-         qOQSAI+R0D7HMZiqDsTTf1wca52tu2ZzBoZ6gzdRm4cY/3TtA2wOh7LOy4AyDiFr0mXI
-         KbqeXlib19ufrunpLQk3P7VvcT4IZuOSYT2tzowJx/zPwYq8zl1tOEgtwiAVxnVbcNbe
-         Mir0bPKCqJI2QFNC/F4WW7jWryW9tnEHI8SLJ3TubSrIxWJDLOFY9PBMVtWlRM4oHpF0
-         /PjA==
-X-Gm-Message-State: ACrzQf1ozVEugo0VYzRn+zjjafDE5akmtOs8yn57g9/cTeOkVH66UH2o
-        OGSG+OnBRaGTcIONZiLBog==
-X-Google-Smtp-Source: AMsMyM4KGfE4d7WEoO1UV7x/0XyV0YFT5iUy6Ik/q+LODSTg6VDGMqLqNxPdr/1UYIHozMuxxxbHHQ==
-X-Received: by 2002:a05:6808:1446:b0:35a:e73:5c39 with SMTP id x6-20020a056808144600b0035a0e735c39mr23179455oiv.113.1667840145674;
-        Mon, 07 Nov 2022 08:55:45 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id v194-20020acaaccb000000b00359a9663053sm2591795oie.4.2022.11.07.08.55.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Nov 2022 08:55:45 -0800 (PST)
-Received: (nullmailer pid 1233957 invoked by uid 1000);
-        Mon, 07 Nov 2022 16:55:47 -0000
-Date:   Mon, 7 Nov 2022 10:55:47 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Cosmin Tanislav <demonsingur@gmail.com>
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org,
-        Cosmin Tanislav <cosmin.tanislav@analog.com>,
-        Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH v4 07/13] dt-bindings: iio: temperature: ltc2983: require
- 4 wire rtd for current rotate
-Message-ID: <166784014532.1233860.9945084029419885067.robh@kernel.org>
-References: <20221103130041.2153295-1-demonsingur@gmail.com>
- <20221103130041.2153295-8-demonsingur@gmail.com>
+        Mon, 7 Nov 2022 11:56:57 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 060E52229A
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 08:56:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1667840166;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=T50w0nkUuy7T2kUqSnZIRriHtEbo2iSXTPmDVdxQoV8=;
+        b=DQrz2Ul/SSr1QRgx1t8Xpy/8qjlbtJDH0+P/OKwidmzSvVopZLlT++TspUdb5imjxagTPV
+        RpIxByRAVtOoH0jokR2GxcMnGEZKHiCyjQRsL8A5BZl3Pq/i93tBDZDC8HYj0lSlJecgnz
+        lipyB4w7CckoOnZzpeD9GLy+5/dZs84=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-642-vUiqRtnoNq-2EW1fMouqkA-1; Mon, 07 Nov 2022 11:56:02 -0500
+X-MC-Unique: vUiqRtnoNq-2EW1fMouqkA-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 61A36101E14D;
+        Mon,  7 Nov 2022 16:56:01 +0000 (UTC)
+Received: from oldenburg.str.redhat.com (unknown [10.2.16.86])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id A58641121314;
+        Mon,  7 Nov 2022 16:55:55 +0000 (UTC)
+From:   Florian Weimer <fweimer@redhat.com>
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+Cc:     "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "bsingharora@gmail.com" <bsingharora@gmail.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "Syromiatnikov, Eugene" <esyr@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "Eranian, Stephane" <eranian@google.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
+        "jannh@google.com" <jannh@google.com>,
+        "dethoma@microsoft.com" <dethoma@microsoft.com>,
+        "kcc@google.com" <kcc@google.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "bp@alien8.de" <bp@alien8.de>, "oleg@redhat.com" <oleg@redhat.com>,
+        "Yang, Weijiang" <weijiang.yang@intel.com>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "pavel@ucw.cz" <pavel@ucw.cz>, "arnd@arndb.de" <arnd@arndb.de>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
+        "john.allen@amd.com" <john.allen@amd.com>,
+        "rppt@kernel.org" <rppt@kernel.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "gorcunov@gmail.com" <gorcunov@gmail.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
+Subject: Re: [RFC 37/37] fs/binfmt_elf: Block old shstk elf bit
+References: <20221104223604.29615-1-rick.p.edgecombe@intel.com>
+        <20221104223604.29615-38-rick.p.edgecombe@intel.com>
+        <CAMe9rOpfSccXVWmgK6E0Y0DXC=VX3PpdxXookN1Ty8soeAxrKw@mail.gmail.com>
+        <87iljs4ecp.fsf@oldenburg.str.redhat.com>
+        <ca106fe1b5005f54525e7a644684108f6a823e14.camel@intel.com>
+Date:   Mon, 07 Nov 2022 17:55:54 +0100
+In-Reply-To: <ca106fe1b5005f54525e7a644684108f6a823e14.camel@intel.com> (Rick
+        P. Edgecombe's message of "Mon, 7 Nov 2022 16:49:58 +0000")
+Message-ID: <87h6zaiu05.fsf@oldenburg.str.redhat.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221103130041.2153295-8-demonsingur@gmail.com>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+* Rick P. Edgecombe:
 
-On Thu, 03 Nov 2022 15:00:35 +0200, Cosmin Tanislav wrote:
-> From: Cosmin Tanislav <cosmin.tanislav@analog.com>
-> 
-> The driver will error out when current rotation is enabled but the RTD
-> is not 4-wire. Require it in the binding too.
-> 
-> Signed-off-by: Cosmin Tanislav <cosmin.tanislav@analog.com>
-> ---
->  .../bindings/iio/temperature/adi,ltc2983.yaml | 25 +++++++++++--------
->  1 file changed, 15 insertions(+), 10 deletions(-)
-> 
+> On Sun, 2022-11-06 at 10:33 +0100, Florian Weimer wrote:
+>> * H. J. Lu:
+>>=20
+>> > This change doesn't make a binary CET compatible.  It just requires
+>> > that the toolchain must be updated and all binaries have to be
+>> > recompiled with the new toolchain to enable CET.  It doesn't solve
+>> > any
+>> > issue which can't be solved by not updating glibc.
+>>=20
+>> Right, and it doesn't even address the library case (the kernel would
+>> have to hook into mmap for that).  The kernel shouldn't do this.
+>
+> Shadow stack shouldn't enable as a result of loading a library, if
+> that's what you mean.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+It's the opposite=E2=80=94loading incompatible libraries needs to disable s=
+hadow
+stack (or ideally, not enable it in the first place).  Technically, I
+think most incompatible code resides in libraries, so this kernel change
+achieves nothing besides punishing early implementations of the
+published-as-finalized x86-64 ABI.
+
+Thanks,
+Florian
+
