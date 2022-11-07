@@ -2,106 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C429361F7F3
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 16:48:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28A9F61F7FA
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 16:52:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232624AbiKGPsx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 10:48:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47494 "EHLO
+        id S232821AbiKGPwy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 10:52:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232875AbiKGPsr (ORCPT
+        with ESMTP id S232444AbiKGPww (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 10:48:47 -0500
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDB68DD3
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 07:48:45 -0800 (PST)
-Received: by mail-ed1-x52a.google.com with SMTP id a13so18298426edj.0
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 07:48:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=BDYirpYZ5kfOHvkxSrtBuDWKGYWjPD6FnuUfORGWBTc=;
-        b=N61PlqxwjqQnwv3OvI+EWHIUjyufpc88GAYSXe2k3Qb2N3zrydxbk9C60OjQBXKRzr
-         9cUZtxpKU+mWXjf8A8mzB0H8eYEt/HoELb9CriiBFUEFXcl4sII0rw9wMMUsdg3HorFm
-         qpbIyF0CJEkDKgyvbuJtLJV5s3DczZhbKPyEfZ+jH7ggc4K4hGucMma3Xiizhw5dv9N2
-         iZ1iMd+hBBpVe7NX44xYJQ/E/JvOhdKFPLv2beaa3dIR3yHohsR5hn2/VmwAf/T9TjyS
-         QI1cQ1p7Gko+33B/OnIfJj5GbxDRYufkrBUzD3nhgNdNbwS1sIMYFnVlIPQBlV/iHfjS
-         vk7g==
+        Mon, 7 Nov 2022 10:52:52 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39B28CFC
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 07:51:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1667836310;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=jKqEegX7OgcJy3yUQyqatoiqD10vcofZSbYNQadN7Ek=;
+        b=J+Nd2gtzjVr+rkEnrOwmtDjTGqD2XQMKat8DZizrQ0Lg/y4oZxLE9Io1A52wylWp0c94A+
+        7gVlOZ9p0Y1MWVy3xPhEejBvfgLZFcWZPMlS6F5MNhA5fnjd4AhU3rHtCfucwN1pSJ/sxs
+        kYZrdXcgjp9NJpcpBqEIMCfufGRwxxI=
+Received: from mail-ot1-f72.google.com (mail-ot1-f72.google.com
+ [209.85.210.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-483-Bl28DQ5aOS2JqEddg6LpSg-1; Mon, 07 Nov 2022 10:51:49 -0500
+X-MC-Unique: Bl28DQ5aOS2JqEddg6LpSg-1
+Received: by mail-ot1-f72.google.com with SMTP id r17-20020a056830135100b0066c3ca9c6d8so5764598otq.15
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 07:51:49 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=BDYirpYZ5kfOHvkxSrtBuDWKGYWjPD6FnuUfORGWBTc=;
-        b=KRfSTFUNkCVASk7/MxaBiUDu5eBQjbNl0ktBqnNuV28BgEG7N2ZVJeXFd11BxB7O3u
-         CvgceoeDtYw5JIGGtRjzhE6MmvmO93nVJWSuYvzK9Z66677tJ4ij4Ij5Fuzlv8lGKAeH
-         zln4ABhVEdN53+j61a+aTNXhO1y5a60jvWh/h0JRUn85IIaw25yVLr7FOT08KmjyYX1h
-         jKc3BfWB/umU8cktJc1CTlLKodMENivEs3Gec/Oa+mQGBExB0mArkfe6uA/qCncsR5p7
-         T+a589fTm3VotguPOETQ3PZTQ5UYNuBv264NiMjROFSo+/lPInOJWbbd9c/7IO7xLPdP
-         bHDQ==
-X-Gm-Message-State: ACrzQf2z7oFZzUp68c8RVJE7BDgPr4/CO3/khow2o2HONmL9T5J8ptxF
-        jXU16jfRh0j+B/Rtd3JI6WW5fAEXaGiDEudcQIfZ7w==
-X-Google-Smtp-Source: AMsMyM7zOBjN+DY54GaOFcaOAZYJ2+CY36CiwWfiLKrZNLYwlFnSiyAZculK/38l8emxDE0svopFaHLOams2uMneWEU=
-X-Received: by 2002:aa7:d7c1:0:b0:463:1dcc:5fbc with SMTP id
- e1-20020aa7d7c1000000b004631dcc5fbcmr47586072eds.250.1667836124340; Mon, 07
- Nov 2022 07:48:44 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jKqEegX7OgcJy3yUQyqatoiqD10vcofZSbYNQadN7Ek=;
+        b=k603Z/o6CEkD1RlHVl0GERVRGExY1yZD3de5F/yyCa8tJTxoUGFHdsHxVoxZWyKHxW
+         BX0rP4TNPZke9+Y/pi76QjRZTWiNq0VYaUo+PXnoHqNV4bxH9/rJDR9tDza0cA1pff/M
+         JKRoLMVCINWeB8LHyiCR1ieFUY+qnYivb0CESWXlL+nvlBRMaEcJt6jH2zQMrlR5tzVV
+         mpP95HEmtYWjPEUJV6N8Niy3HoE4HNXuaj490JTQXlM1EciqjQcPQkEqG70r6UKKd7Sp
+         dYv+l7aJ8frCi3RH7xpKLnQx134ShvrR7PcZqe0EGO/qwjmamWdKmwp8UShfclLzWpYN
+         NrBA==
+X-Gm-Message-State: ACrzQf0e1dXSJAnbZbuNlbyWmUiKVnPOgEjgjwYqUs0mch0mhTmfpoDB
+        rhrXci7D4HKZutD5DkjCDl/3wQ5hHaJ0FYYjvgTy25eqnQ/e2Qi7u/BwNNNAgSzxDeLOHdXkpZN
+        TH8z+BrW1oTwFyHqJU4CgmBWy
+X-Received: by 2002:a05:6808:1796:b0:359:e5f6:6662 with SMTP id bg22-20020a056808179600b00359e5f66662mr26691816oib.256.1667836308557;
+        Mon, 07 Nov 2022 07:51:48 -0800 (PST)
+X-Google-Smtp-Source: AMsMyM4ZjtbShF1jQWywiTvyIgE7lltPnxOVzJZFu9R+Imftqkh3XahaunnziORphW9W136kJURU/A==
+X-Received: by 2002:a05:6808:1796:b0:359:e5f6:6662 with SMTP id bg22-20020a056808179600b00359e5f66662mr26691802oib.256.1667836308297;
+        Mon, 07 Nov 2022 07:51:48 -0800 (PST)
+Received: from halaney-x13s ([2600:1700:1ff0:d0e0::21])
+        by smtp.gmail.com with ESMTPSA id a22-20020a9d4716000000b0066c41be56e7sm3013797otf.55.2022.11.07.07.51.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Nov 2022 07:51:47 -0800 (PST)
+Date:   Mon, 7 Nov 2022 09:51:45 -0600
+From:   Andrew Halaney <ahalaney@redhat.com>
+To:     Johan Hovold <johan+linaro@kernel.org>
+Cc:     Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] arm64: dts: qcom: sc8280xp: fix USB MP QMP PHY nodes
+Message-ID: <20221107155145.tvxxi7oed7a6nms7@halaney-x13s>
+References: <20221107081705.18446-1-johan+linaro@kernel.org>
 MIME-Version: 1.0
-References: <20221104063652.82789-1-jiapeng.chong@linux.alibaba.com>
-In-Reply-To: <20221104063652.82789-1-jiapeng.chong@linux.alibaba.com>
-From:   Robert Foss <robert.foss@linaro.org>
-Date:   Mon, 7 Nov 2022 16:48:33 +0100
-Message-ID: <CAG3jFyus_GX=9N0bYQbjuDENdjPurBmy1S_+0eFRsHsnAbCYAg@mail.gmail.com>
-Subject: Re: [PATCH] drm/bridge: sii9234: Remove the unused function sii9234_mode_valid()
-To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-Cc:     andrzej.hajda@intel.com, neil.armstrong@linaro.org,
-        Laurent.pinchart@ideasonboard.com, jonas@kwiboo.se,
-        jernej.skrabec@gmail.com, airlied@gmail.com, daniel@ffwll.ch,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Abaci Robot <abaci@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221107081705.18446-1-johan+linaro@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 4 Nov 2022 at 07:37, Jiapeng Chong
-<jiapeng.chong@linux.alibaba.com> wrote:
->
-> The function sii9234_mode_valid() is defined in the sii9234.c file, but
-> not called elsewhere, so remove this unused function.
->
-> drivers/gpu/drm/bridge/sii9234.c:870:31: warning: unused function 'bridge_to_sii9234'.
->
-> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=2735
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-> ---
->  drivers/gpu/drm/bridge/sii9234.c | 5 -----
->  1 file changed, 5 deletions(-)
->
-> diff --git a/drivers/gpu/drm/bridge/sii9234.c b/drivers/gpu/drm/bridge/sii9234.c
-> index 5b3061d4b5c3..62b6bc8ca7af 100644
-> --- a/drivers/gpu/drm/bridge/sii9234.c
-> +++ b/drivers/gpu/drm/bridge/sii9234.c
-> @@ -867,11 +867,6 @@ static int sii9234_init_resources(struct sii9234 *ctx,
->         return 0;
->  }
->
-> -static inline struct sii9234 *bridge_to_sii9234(struct drm_bridge *bridge)
-> -{
-> -       return container_of(bridge, struct sii9234, bridge);
-> -}
-> -
->  static enum drm_mode_status sii9234_mode_valid(struct drm_bridge *bridge,
->                                          const struct drm_display_info *info,
->                                          const struct drm_display_mode *mode)
-> --
-> 2.20.1.7.g153144c
->
+On Mon, Nov 07, 2022 at 09:17:05AM +0100, Johan Hovold wrote:
+> Update the USB MP QMP PHY nodes to match the new binding which
+> specifically includes the missing register regions (e.g. PCS_USB).
+> 
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 
-Reviewed-by: Robert Foss <robert.foss@linaro.org>
+Reviewed-by: Andrew Halaney <ahalaney@redhat.com>
+
+Address region matches downstream, and with this change in place
+make CHECK_DTBS=y qcom/sa8295p-adp.dtb no longer complains about
+the node failing to follow the dt-bindings.
+
+Thanks,
+Andrew
+
+> ---
+> 
+> The corresponding binding and driver fixes are now in linux-next so that
+> the devicetree can be updated. [1]
+> 
+> Note that there's yet no support for the multiport controller in
+> mainline.
+> 
+> Johan
+> 
+> [1] https://lore.kernel.org/lkml/20221028160435.26948-1-johan+linaro@kernel.org/
+> 
+> 
+>  arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 62 ++++++++++----------------
+>  1 file changed, 24 insertions(+), 38 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> index 1b309fa93484..506172206b8a 100644
+> --- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> @@ -1090,70 +1090,56 @@ usb_2_hsphy3: phy@88ea000 {
+>  			status = "disabled";
+>  		};
+>  
+> -		usb_2_qmpphy0: phy-wrapper@88ef000 {
+> +		usb_2_qmpphy0: phy@88ef000 {
+>  			compatible = "qcom,sc8280xp-qmp-usb3-uni-phy";
+> -			reg = <0 0x088ef000 0 0x1c8>;
+> -			#address-cells = <2>;
+> -			#size-cells = <2>;
+> -			ranges;
+> +			reg = <0 0x088ef000 0 0x2000>;
+>  
+>  			clocks = <&gcc GCC_USB3_MP_PHY_AUX_CLK>,
+>  				 <&rpmhcc RPMH_CXO_CLK>,
+>  				 <&gcc GCC_USB3_MP0_CLKREF_CLK>,
+> -				 <&gcc GCC_USB3_MP_PHY_COM_AUX_CLK>;
+> -			clock-names = "aux", "ref_clk_src", "ref", "com_aux";
+> +				 <&gcc GCC_USB3_MP_PHY_COM_AUX_CLK>,
+> +				 <&gcc GCC_USB3_MP_PHY_PIPE_0_CLK>;
+> +			clock-names = "aux", "ref_clk_src", "ref", "com_aux",
+> +				      "pipe";
+>  
+>  			resets = <&gcc GCC_USB3_UNIPHY_MP0_BCR>,
+>  				 <&gcc GCC_USB3UNIPHY_PHY_MP0_BCR>;
+> -			reset-names = "phy", "common";
+> +			reset-names = "phy", "phy_phy";
+>  
+>  			power-domains = <&gcc USB30_MP_GDSC>;
+>  
+> -			status = "disabled";
+> +			#clock-cells = <0>;
+> +			clock-output-names = "usb2_phy0_pipe_clk";
+>  
+> -			usb_2_ssphy0: phy@88efe00 {
+> -				reg = <0 0x088efe00 0 0x160>,
+> -				      <0 0x088f0000 0 0x1ec>,
+> -				      <0 0x088ef200 0 0x1f0>;
+> -				#phy-cells = <0>;
+> -				#clock-cells = <0>;
+> -				clocks = <&gcc GCC_USB3_MP_PHY_PIPE_0_CLK>;
+> -				clock-names = "pipe0";
+> -				clock-output-names = "usb2_phy0_pipe_clk";
+> -			};
+> +			#phy-cells = <0>;
+> +
+> +			status = "disabled";
+>  		};
+>  
+> -		usb_2_qmpphy1: phy-wrapper@88f1000 {
+> +		usb_2_qmpphy1: phy@88f1000 {
+>  			compatible = "qcom,sc8280xp-qmp-usb3-uni-phy";
+> -			reg = <0 0x088f1000 0 0x1c8>;
+> -			#address-cells = <2>;
+> -			#size-cells = <2>;
+> -			ranges;
+> +			reg = <0 0x088f1000 0 0x2000>;
+>  
+>  			clocks = <&gcc GCC_USB3_MP_PHY_AUX_CLK>,
+>  				 <&rpmhcc RPMH_CXO_CLK>,
+>  				 <&gcc GCC_USB3_MP1_CLKREF_CLK>,
+> -				 <&gcc GCC_USB3_MP_PHY_COM_AUX_CLK>;
+> -			clock-names = "aux", "ref_clk_src", "ref", "com_aux";
+> +				 <&gcc GCC_USB3_MP_PHY_COM_AUX_CLK>,
+> +				 <&gcc GCC_USB3_MP_PHY_PIPE_1_CLK>;
+> +			clock-names = "aux", "ref_clk_src", "ref", "com_aux",
+> +				      "pipe";
+>  
+>  			resets = <&gcc GCC_USB3_UNIPHY_MP1_BCR>,
+>  				 <&gcc GCC_USB3UNIPHY_PHY_MP1_BCR>;
+> -			reset-names = "phy", "common";
+> +			reset-names = "phy", "phy_phy";
+>  
+>  			power-domains = <&gcc USB30_MP_GDSC>;
+>  
+> -			status = "disabled";
+> +			#clock-cells = <0>;
+> +			clock-output-names = "usb2_phy1_pipe_clk";
+>  
+> -			usb_2_ssphy1: phy@88f1e00 {
+> -				reg = <0 0x088f1e00 0 0x160>,
+> -				      <0 0x088f2000 0 0x1ec>,
+> -				      <0 0x088f1200 0 0x1f0>;
+> -				#phy-cells = <0>;
+> -				#clock-cells = <0>;
+> -				clocks = <&gcc GCC_USB3_MP_PHY_PIPE_1_CLK>;
+> -				clock-names = "pipe0";
+> -				clock-output-names = "usb2_phy1_pipe_clk";
+> -			};
+> +			#phy-cells = <0>;
+> +
+> +			status = "disabled";
+>  		};
+>  
+>  		remoteproc_adsp: remoteproc@3000000 {
+> -- 
+> 2.37.4
+> 
+
