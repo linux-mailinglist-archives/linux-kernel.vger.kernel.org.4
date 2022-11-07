@@ -2,125 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E280661F1AB
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 12:18:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B954E61F1AD
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 12:19:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231460AbiKGLSf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 06:18:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39702 "EHLO
+        id S231599AbiKGLTE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 06:19:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229659AbiKGLSd (ORCPT
+        with ESMTP id S229659AbiKGLTC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 06:18:33 -0500
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F41712AF1;
-        Mon,  7 Nov 2022 03:18:31 -0800 (PST)
-Received: by mail-wm1-x330.google.com with SMTP id o30so6656107wms.2;
-        Mon, 07 Nov 2022 03:18:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=bE/B1hEKlsShE0rJtK/wqGe/9FUjw3TNSnOuMMxxx5c=;
-        b=kqG8f+Y6oT2x2fUWNz8vbbbNk4CncuhqoXWlJRRYGp7vCOyhe6FHCC+PhQ2spwH8kD
-         o7ke5mugzwO5NHVfQnSdBhb1xupi+/WPzyUtOCFrTFOJrwh7QHhFxqIck1o3/e8d6sEN
-         a+mXXGKpZV5oUQJntT+wxrjIt1jlD6VN01WMw2g1QXhdXMlzXoexB5vjwOSgwNOjtcTo
-         poo7Kia1UZQHQnurHlLyQfPS6qa1dwa/tyVBm3jrWx2ue1VtYuOlvcKuQhV3sExaMKGB
-         bisoLww9V2O0SuFlZjclSJ76xsL16/rA/g3DJWY7Z454d9Bpl2FQIgJPK+sqbNvHUvya
-         Jn2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bE/B1hEKlsShE0rJtK/wqGe/9FUjw3TNSnOuMMxxx5c=;
-        b=JBsd5WVrDzMSEZXIPG7qQuq8FtkBAgxujukVQWbOoEKpwA7sfis+FXDtbBkW1U/TwQ
-         cpJ2DYyztwJIvJCm46yJrRszkqFUqoHJBsOGBQ58vW8/TuU2ODEPQZF+tkdbTO1RgGmo
-         mg2FweGb0HLnffQHvdEou0V3SnaEGoWJR8boaXe5TbwieYVITplJUJRr6Lw60RdrDjc7
-         p3jTIJt77RCGV6+TtuxvBYYl2rIVxT/LVTJuWVhZXR1JCLfFK2eFO4rjZFj9fdMvk4dF
-         FpXcm2CEbc474z9Mf3jCJshULyG/SK3dPNUHiJ+aMAAcFkl7pL8G0rJAvP2cjFWn2+Jy
-         +QmQ==
-X-Gm-Message-State: ACrzQf02jrCnY7HWdWqZyrpMBH5RcGthh1JV4a8Cog7tPhWPwL1X9fZb
-        GO8It7oOykkxE5xY9ssOoLo=
-X-Google-Smtp-Source: AMsMyM602bjMyEAIMHb7PPY/WchKiT9g7wWxWDeiZVVF/3WBk72v331wPVEgqU98Sqgeey5mI0NOTA==
-X-Received: by 2002:a05:600c:5109:b0:3cf:5fd2:877f with SMTP id o9-20020a05600c510900b003cf5fd2877fmr32712091wms.156.1667819909730;
-        Mon, 07 Nov 2022 03:18:29 -0800 (PST)
-Received: from [192.168.2.177] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id c5-20020a05600c0a4500b003b4a68645e9sm12514451wmq.34.2022.11.07.03.18.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Nov 2022 03:18:28 -0800 (PST)
-Message-ID: <fcec5536-6ba8-9cac-2001-710a7170df70@gmail.com>
-Date:   Mon, 7 Nov 2022 12:18:26 +0100
+        Mon, 7 Nov 2022 06:19:02 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83830CE3C;
+        Mon,  7 Nov 2022 03:19:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667819941; x=1699355941;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=cvxDWNtZzVvqQ3+pEhs6dDAy1QCbFhG4zWxy+4oWNiI=;
+  b=VO97Et4glXrjgp9o+bUUfEFcFseC3yRQxuxCex045QWMNqPTc7Q+Yfn9
+   p6Uis3aGMRXMFSxqB/IsZHCuZWQ10rtQHHCB9DU2MKB1inE1DMK3sSbl1
+   +4bw9vPo/yRNsaqhdoz8+jKRxwROTN63LYy8+zaMSLi4GZjVu+cVU98F4
+   zY8SjUr2LN/DwT4UNzRg6MNfDgyVQk6jMl/22+CQQh4zhI6L9m1ucL2R7
+   VpZ+U/F8RvohmrzfFFwx5yqH75o1HyEFpsEdv/rZ80VJuWMOS4RmxlkPs
+   jInmaxKpC/3yOd1XafPxYjyCcSrQACUROdtR6tSfC/36lkGkmlcisLj85
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10523"; a="297878464"
+X-IronPort-AV: E=Sophos;i="5.96,143,1665471600"; 
+   d="scan'208";a="297878464"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Nov 2022 03:19:01 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10523"; a="725106215"
+X-IronPort-AV: E=Sophos;i="5.96,143,1665471600"; 
+   d="scan'208";a="725106215"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by FMSMGA003.fm.intel.com with ESMTP; 07 Nov 2022 03:18:55 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1os09U-008bap-0v;
+        Mon, 07 Nov 2022 13:18:52 +0200
+Date:   Mon, 7 Nov 2022 13:18:52 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Cc:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
+        Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Minchan Kim <minchan@kernel.org>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Hugh Dickins <hughd@google.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        David Hildenbrand <david@redhat.com>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC v2 3/3] mm, printk: introduce new format %pGt for page_type
+Message-ID: <Y2jpnBLFOgP8+RZ7@smile.fi.intel.com>
+References: <20221106140355.294845-1-42.hyeyoo@gmail.com>
+ <20221106140355.294845-4-42.hyeyoo@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH v3 1/2] dt-bindings: gce: add gce header file for mt8188
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        "Elvis.Wang" <Elvis.Wang@mediatek.com>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     "jason-jh . lin" <jason-jh.lin@mediatek.com>,
-        Yongqiang Niu <yongqiang.niu@mediatek.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20221104074443.26172-1-Elvis.Wang@mediatek.com>
- <20221104074443.26172-2-Elvis.Wang@mediatek.com>
- <bdb46b7c-6e08-26cf-491d-ca68d36f29af@linaro.org>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <bdb46b7c-6e08-26cf-491d-ca68d36f29af@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221106140355.294845-4-42.hyeyoo@gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sun, Nov 06, 2022 at 11:03:55PM +0900, Hyeonggon Yoo wrote:
+> dump_page() uses %pGp format to print 'flags' field of struct page.
+> As some page flags (e.g. PG_buddy, see page-flags.h for more details)
+> are set in page_type field, introduce %pGt format which provides
+> human readable output of page_type. And use it in dump_page().
+> 
+> Note that the sense of bits are different in page_type. if page_type is
+> 0xffffffff, no flags are set. if PG_slab (0x00100000) flag is set,
+> page_type is 0xffefffff. Clearing a bit means we set the bit. Bits in
+> page_type are inverted when printing type names.
+> 
+> Below is examples of dump_page(). One is just after alloc_pages() and
+> the other is after __SetPageSlab().
+> 
+> [    1.814728] page:ffffea000415e200 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x105788
+> [    1.815961] flags: 0x17ffffc0000000(node=0|zone=2|lastcpupid=0x1fffff)
+
+> [    1.816443] page_type: 0xffffffff()
+
+Why do we have empty parentheses? I would expect either something there, or no
+parentheses at all.
+
+> [    1.816704] raw: 0017ffffc0000000 0000000000000000 dead000000000122 0000000000000000
+> [    1.817291] raw: 0000000000000000 0000000000000000 00000001ffffffff 0000000000000000
+> [    1.817870] page dumped because: Before __SetPageSlab()
+> 
+> [    1.818258] page:ffffea000415e200 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x105788
+> [    1.818857] flags: 0x17ffffc0000000(node=0|zone=2|lastcpupid=0x1fffff)
+> [    1.819250] page_type: 0xffefffff(slab)
+> [    1.819483] raw: 0017ffffc0000000 0000000000000000 dead000000000122 0000000000000000
+> [    1.819947] raw: 0000000000000000 0000000000000000 00000001ffefffff 0000000000000000
+> [    1.820410] page dumped because: After __SetPageSlab()
+
+> Cc: Petr Mladek <pmladek@suse.com>
+> Cc: Steven Rostedt <rostedt@goodmis.org>
+> Cc: Sergey Senozhatsky <senozhatsky@chromium.org>
+> Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Cc: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+> Cc: Jonathan Corbet <corbet@lwn.net>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: linux-doc@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Cc: linux-mm@kvack.org
+
+Can you utilize --cc parameter next time and avoid polluting commit message
+with this? We have archives where anybody can check this (and usually maintainers
+add a Link tag for that purpose).
+
+...
+
+> +	%pGt	0xffefffff(slab)
+
+No space before ( ?
+
+...
+
+> +static
+> +char *format_page_type(char *buf, char *end, unsigned int page_type)
+> +{
+> +	if (!(page_type & PAGE_TYPE_BASE))
+> +		return string(buf, end, "no type for user-mapped page", default_str_spec);
+
+It's too long, can we make it shorten?
+
+> +	buf = number(buf, end, page_type, default_flag_spec);
+> +
+> +	if (buf < end)
+> +		*buf = '(';
+> +	buf++;
+
+> +	if (page_type_has_type(page_type))
+
+This should be check for the entire function.
+
+> +		buf = format_flags(buf, end, ~page_type, pagetype_names);
+> +
+> +	if (buf < end)
+> +		*buf = ')';
+> +	buf++;
+> +
+> +	return buf;
+> +}
+
+...
+
+> @@ -36,6 +36,11 @@ const struct trace_print_flags pageflag_names[] = {
+>  	{0, NULL}
+>  };
+>  
+> +const struct trace_print_flags pagetype_names[] = {
+> +	__def_pagetype_names,
 
 
-On 06/11/2022 11:27, Krzysztof Kozlowski wrote:
-> On 04/11/2022 08:44, Elvis.Wang wrote:
->> From: Elvis Wang <Elvis.Wang@mediatek.com>
->>
->> add gce header file to define the gce thread priority, gce subsys id,
->> event and constant for mt8188.
->>
->> Signed-off-by: Elvis Wang <Elvis.Wang@mediatek.com>
->> ---
->> Thanks for the reviews, I have removed the incorrect reviewed message.
->> ---
->>   include/dt-bindings/gce/mediatek,mt8188-gce.h | 966 ++++++++++++++++++
->>   1 file changed, 966 insertions(+)
->>   create mode 100644 include/dt-bindings/gce/mediatek,mt8188-gce.h
->>
->> diff --git a/include/dt-bindings/gce/mediatek,mt8188-gce.h b/include/dt-bindings/gce/mediatek,mt8188-gce.h
->> new file mode 100644
->> index 000000000000..e2e2c56016a1
->> --- /dev/null
->> +++ b/include/dt-bindings/gce/mediatek,mt8188-gce.h
-> 
-> 
-> What is a "gce" subsystem or type of hardware? Why do you put headers in
-> "gce"?
-> 
+> +	{0, NULL}
 
-Yes, I think we should move all header files from the gce folder into the 
-mailbox folder.
+Hmm... I see it's already done like this above, but {}  would suffice, why not
+to convert the rest first to the {} and use it here?
 
-Regards,
-Matthias
+> +};
 
-> Don't continue this pattern. Mediatek devices do not get specific folders...
-> 
-> Best regards,
-> Krzysztof
-> 
+...
+
+>  	pr_warn("%sflags: %pGp%s\n", type, &head->flags,
+>  		page_cma ? " CMA" : "");
+> +	pr_warn("page_type: %pGt\n", &head->page_type);
+> +
+>  	print_hex_dump(KERN_WARNING, "raw: ", DUMP_PREFIX_NONE, 32,
+>  			sizeof(unsigned long), page,
+>  			sizeof(struct page), false);
+> diff --git a/mm/internal.h b/mm/internal.h
+> index cb4c663a714e..956eaa9f12c0 100644
+> --- a/mm/internal.h
+> +++ b/mm/internal.h
+> @@ -773,6 +773,7 @@ static inline void flush_tlb_batched_pending(struct mm_struct *mm)
+>  #endif /* CONFIG_ARCH_WANT_BATCHED_UNMAP_TLB_FLUSH */
+>  
+>  extern const struct trace_print_flags pageflag_names[];
+> +extern const struct trace_print_flags pagetype_names[];
+>  extern const struct trace_print_flags vmaflag_names[];
+>  extern const struct trace_print_flags gfpflag_names[];
+
+I would split this to a separate change, but it's up to PRINTK maintainers.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
