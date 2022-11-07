@@ -2,121 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 320F761F22F
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 12:48:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2069661F230
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 12:49:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231879AbiKGLsl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 06:48:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56346 "EHLO
+        id S231934AbiKGLtO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 06:49:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231714AbiKGLsa (ORCPT
+        with ESMTP id S231995AbiKGLtH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 06:48:30 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E231F07;
-        Mon,  7 Nov 2022 03:48:29 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id l6so10351580pjj.0;
-        Mon, 07 Nov 2022 03:48:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language:subject
-         :references:cc:to:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fvr80PkwpQ6hjNpvYYW8IQLkFqmVccni+PUYRawFuvA=;
-        b=fiukTMYTyjxWsa8x4fgdJLv5PDFoiEE1XxSRatZoFKxoH7GH1RMZsCkCy2fEwy44mA
-         szrXgMAM/yMVeDAVodGIhhtL4XQU6+L0jSha7dJD0UMEfyZcnJYqAhw+5y/QlQutHlvo
-         bv96oclSReRuS4Yak/ILdzhnjThlv2fOXeNzMrIkoPTH39xEaJHLr0BeJ0nKFi18tRW3
-         F+ZszIAILyQcyG3AjjcBi4wpnUJGpRATlBNcBVdvpa+DYnxuQgAaJzBxkMAwnflYrDXu
-         TR4YA2N47q3unWbbUaoqxbqL++NRvVwBxxICbhxtXWMJpcYDpSAAIr35de7NwR26VxOV
-         Ko/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language:subject
-         :references:cc:to:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fvr80PkwpQ6hjNpvYYW8IQLkFqmVccni+PUYRawFuvA=;
-        b=eSNfePrcie8bQJ/b5bZKlnmsOr7cEbQFPuO2tyBx/V3n4yLwBxAl20hC8f/wSUYPbs
-         YDZ64FGeM3Ux1KMj47KadXUXma431CYlCLYXB7Av43xM2b4fU/lMUE+rq0Td84jeBQKZ
-         9HjOjAIyAg9HsWWA0EAHrHT0BlFXx2VZYbO4/rSW8NPKhGQ6F2hRCV2N2I9QfamVBbAd
-         sMb5vH8HgSJ/PrbfmO9vvmeG6ZRTo6PuwumtmpI1Jhx1ZPwSDGz+wK+wHQgw1VX2KOyf
-         xLGVjzg7nx5k1EPERb9Eb2dAYb4xWR8+n2brQ6nDzg+EY3dPNZ2G5P1HzYsEAnb0hbc+
-         kfKQ==
-X-Gm-Message-State: ACrzQf2NB880NH0rLfAcOMcTmyDob3l57F7ZlE8e1XdQWMXxoLBNVJzX
-        gKvfRUWt237Rk4hs+PmRC3Q=
-X-Google-Smtp-Source: AMsMyM5V7PN2Fq+vgPQifeaOqVZZiQmGUcwKXiHgqltKBZooPx0NBJmWSu6MlCOI7pyEwVw5IkPYmQ==
-X-Received: by 2002:a17:902:ba8d:b0:187:11c7:e878 with SMTP id k13-20020a170902ba8d00b0018711c7e878mr44671991pls.67.1667821708620;
-        Mon, 07 Nov 2022 03:48:28 -0800 (PST)
-Received: from [192.168.11.9] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
-        by smtp.gmail.com with ESMTPSA id l16-20020a170903121000b00176b3c9693esm4789489plh.299.2022.11.07.03.48.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Nov 2022 03:48:28 -0800 (PST)
-Message-ID: <af3ec8bf-310e-69ea-9d32-f7aec740b306@gmail.com>
-Date:   Mon, 7 Nov 2022 20:48:23 +0900
+        Mon, 7 Nov 2022 06:49:07 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BA49A1AD96
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 03:49:04 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 934B01FB;
+        Mon,  7 Nov 2022 03:49:10 -0800 (PST)
+Received: from a077893.arm.com (unknown [10.163.40.48])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 6087B3F73D;
+        Mon,  7 Nov 2022 03:49:01 -0800 (PST)
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+To:     linux-arm-kernel@lists.infradead.org
+Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Mark Brown <broonie@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Ard Biesheuvel <ardb@kernel.org>, linux-kernel@vger.kernel.org
+Subject: [PATCH V2] arm64/mm: Simplify and document pte_to_phys() for 52 bit addresses
+Date:   Mon,  7 Nov 2022 17:18:50 +0530
+Message-Id: <20221107114850.2902150-1-anshuman.khandual@arm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     corbet@lwn.net, frederic@kernel.org, jiangshanlai@gmail.com,
-        joel@joelfernandes.org, josh@joshtriplett.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-next@vger.kernel.org, mathieu.desnoyers@efficios.com,
-        paulmck@kernel.org, quic_neeraju@quicinc.com, rcu@vger.kernel.org,
-        rostedt@goodmis.org, sfr@canb.auug.org.au,
-        Akira Yokosawa <akiyks@gmail.com>
-References: <Y2jWAR1QESe3OrhH@debian.me>
-Subject: [PATCH] Documentation: RCU: use code blocks with autogenerated line
- (was: Re: linux-next: build warning after merge of the rcu tree)
-Content-Language: en-US
-From:   Akira Yokosawa <akiyks@gmail.com>
-In-Reply-To: <Y2jWAR1QESe3OrhH@debian.me>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Bagas,
+pte_to_phys() assembly definition does multiple bits field transformations
+to derive physical address, embedded inside a page table entry. Unlike its
+C counter part i.e __pte_to_phys(), pte_to_phys() is not very apparent. It
+simplifies these operations via a new macro PTE_ADDR_HIGH_SHIFT indicating
+how far the pte encoded higher address bits need to be left shifted. While
+here, this also updates __pte_to_phys() and __phys_to_pte_val().
 
-On Mon, 7 Nov 2022 16:55:13 +0700, Bagas Sanjaya wrote:
-> On Sun, Nov 06, 2022 at 09:02:12PM -0800, Paul E. McKenney wrote:
->> On Mon, Nov 07, 2022 at 02:26:41PM +1100, Stephen Rothwell wrote:
->> > Hi all,
->> > 
->> > After merging the rcu tree, today's linux-next build (htmldocs)
->> > produced this warning:
->> > 
->> > Documentation/RCU/rcubarrier.rst:205: WARNING: Literal block ends without a blank line; unexpected unindent.
->> > 
->> > Introduced by commit
->> > 
->> >   21c2e3909721 ("doc: Update rcubarrier.rst")
->> 
->> Huh.  I guess that numbered code samples are not supposed to have more
->> than nine lines?  Ah well, easy to fix by going back to left-justified
->> numbers.  I was wondering about that!
->> 
-> 
-> I think the proper fix is just let Sphinx generates line number:
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Will Deacon <will@kernel.org>
+Cc: Mark Brown <broonie@kernel.org>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Ard Biesheuvel <ardb@kernel.org>
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-kernel@vger.kernel.org
+Suggested-by: Ard Biesheuvel <ardb@kernel.org>
+Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+---
+This applies on v6.1-rc4
 
-That might be true if all you care about were the generated documents,
-but we need to pay attention to readers of .rst files as plain-text.
+Changes in V2:
 
-There are a bunch of references to line numbers in RCU documents.
-If explicit line numbers are removed from snippets, such readers need
-to count the lines by themselves, which doesn't sound reasonable to me.
+- Added PTE_ADDR_HIGH_SHIFT based method per Ard
+ 
+Changes in V1:
 
-If you can put labels to referenced lines within code snippets, auto
-generation of line numbers might work, but as far as I know, Sphinx
-doesn't provide such a nice feature.
+https://lore.kernel.org/all/20221031082421.1957288-1-anshuman.khandual@arm.com/
 
-Of course, you can prove me wrong.
+ arch/arm64/include/asm/assembler.h     | 8 +++-----
+ arch/arm64/include/asm/pgtable-hwdef.h | 1 +
+ arch/arm64/include/asm/pgtable.h       | 4 ++--
+ 3 files changed, 6 insertions(+), 7 deletions(-)
 
-          Thanks, Akira 
+diff --git a/arch/arm64/include/asm/assembler.h b/arch/arm64/include/asm/assembler.h
+index e5957a53be39..6a39a3601cf7 100644
+--- a/arch/arm64/include/asm/assembler.h
++++ b/arch/arm64/include/asm/assembler.h
+@@ -660,12 +660,10 @@ alternative_endif
+ 	.endm
+ 
+ 	.macro	pte_to_phys, phys, pte
+-#ifdef CONFIG_ARM64_PA_BITS_52
+-	ubfiz	\phys, \pte, #(48 - 16 - 12), #16
+-	bfxil	\phys, \pte, #16, #32
+-	lsl	\phys, \phys, #16
+-#else
+ 	and	\phys, \pte, #PTE_ADDR_MASK
++#ifdef CONFIG_ARM64_PA_BITS_52
++	orr \phys, \phys, \phys, lsl #PTE_ADDR_HIGH_SHIFT
++	and \phys, \phys, GENMASK_ULL(PHYS_MASK_SHIFT - 1, PAGE_SHIFT)
+ #endif
+ 	.endm
+ 
+diff --git a/arch/arm64/include/asm/pgtable-hwdef.h b/arch/arm64/include/asm/pgtable-hwdef.h
+index 5ab8d163198f..f658aafc47df 100644
+--- a/arch/arm64/include/asm/pgtable-hwdef.h
++++ b/arch/arm64/include/asm/pgtable-hwdef.h
+@@ -159,6 +159,7 @@
+ #ifdef CONFIG_ARM64_PA_BITS_52
+ #define PTE_ADDR_HIGH		(_AT(pteval_t, 0xf) << 12)
+ #define PTE_ADDR_MASK		(PTE_ADDR_LOW | PTE_ADDR_HIGH)
++#define PTE_ADDR_HIGH_SHIFT	36
+ #else
+ #define PTE_ADDR_MASK		PTE_ADDR_LOW
+ #endif
+diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
+index 71a1af42f0e8..daedd6172227 100644
+--- a/arch/arm64/include/asm/pgtable.h
++++ b/arch/arm64/include/asm/pgtable.h
+@@ -77,11 +77,11 @@ extern unsigned long empty_zero_page[PAGE_SIZE / sizeof(unsigned long)];
+ static inline phys_addr_t __pte_to_phys(pte_t pte)
+ {
+ 	return (pte_val(pte) & PTE_ADDR_LOW) |
+-		((pte_val(pte) & PTE_ADDR_HIGH) << 36);
++		((pte_val(pte) & PTE_ADDR_HIGH) << PTE_ADDR_HIGH_SHIFT);
+ }
+ static inline pteval_t __phys_to_pte_val(phys_addr_t phys)
+ {
+-	return (phys | (phys >> 36)) & PTE_ADDR_MASK;
++	return (phys | (phys >> PTE_ADDR_HIGH_SHIFT)) & PTE_ADDR_MASK;
+ }
+ #else
+ #define __pte_to_phys(pte)	(pte_val(pte) & PTE_ADDR_MASK)
+-- 
+2.25.1
 
-  
