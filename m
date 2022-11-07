@@ -2,104 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9964F61F75C
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 16:15:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7B9B61F759
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 16:15:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232838AbiKGPPk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 10:15:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55904 "EHLO
+        id S232708AbiKGPP1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 10:15:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232756AbiKGPPh (ORCPT
+        with ESMTP id S231714AbiKGPPZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 10:15:37 -0500
-Received: from msg-2.mailo.com (msg-2.mailo.com [213.182.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 858F21EAF8;
-        Mon,  7 Nov 2022 07:15:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
-        t=1667834105; bh=jv4L3CMeB4iLALBmYv14TMVcf39jXzd1TidE3Takkv4=;
-        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:References:
-         MIME-Version:Content-Type:In-Reply-To;
-        b=Ia4gLgAFQpTDBH6+JLLSOZxZNBdVFuEzqSypZeFYPEzFM6O1lmzAi0JE6e/srpXTj
-         /2xc+xGctFYUCfblUIsTIELcxwpMQ0wJVoqHAK1tuxpedPCOst+ZeS85jlBdNlVeRI
-         bNR974G2RUjeQtOKYTVxp1MaRaD2+Vma40LcqL2Y=
-Received: by b-2.in.mailobj.net [192.168.90.12] with ESMTP
-        via ip-206.mailobj.net [213.182.55.206]
-        Mon,  7 Nov 2022 16:15:05 +0100 (CET)
-X-EA-Auth: MrUVv6JFM3UQRU8f0izViYsX4i9dq+0Kl5xYHlgXIlPtB/51k3XCAWeWfHnd4CB3gHATy+AJR4jDoNRz5Ft0sRJvECjcN/TQ
-Date:   Mon, 7 Nov 2022 20:45:00 +0530
-From:   Deepak R Varma <drv@mailo.com>
-To:     Dan Carpenter <error27@gmail.com>
-Cc:     Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-iio@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] staging: iio: meter: use min() for comparison and
- assignment
-Message-ID: <Y2kg9JTuw2erSrpW@qemulion>
-References: <Y2iFGA3A1w+XMlYU@qemulion>
- <Y2kDTxE38epBN368@kadam>
+        Mon, 7 Nov 2022 10:15:25 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D776F192A1;
+        Mon,  7 Nov 2022 07:15:24 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 740FB61165;
+        Mon,  7 Nov 2022 15:15:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA7BBC433C1;
+        Mon,  7 Nov 2022 15:15:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667834123;
+        bh=vBP8cGicq41HNOExdovnKwO+xqM81abEks5/21F16m4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jy4xpmuxYZmN58pstqH5yDuRmf80mFRDtI+TXJGQ/sZvvz+m2KA/q4L79IQSX+Hqs
+         jGuR3nKGrusKDd6ZxVSRrS0HRqg3ifNy8XG+HP95WteBfPX76pE1OXZBv3If1pEz/H
+         2qfcmO/oes4bwWi8xs2vKr8FgD+k6Gu9DyuKkGlVWC+6tdVn3IU7sUKuAs2gOYcpij
+         zzMM3Vnu/fVTPGo1eZp8OXZ4d7fqLAVth+obzrndmg6zZpWNtnm0iuG4HBUCJhRYz8
+         g0vzxY9FnV/66gIrfLOc+jXsG0oM8EJ2x9qqkaR4XQqamLuWkyY5obDFjoY7lOpWos
+         vV554nZojsCpA==
+Date:   Mon, 7 Nov 2022 15:15:17 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Anshuman Khandual <anshuman.khandual@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, peterz@infradead.org,
+        acme@kernel.org, mark.rutland@arm.com, will@kernel.org,
+        catalin.marinas@arm.com, James Clark <james.clark@arm.com>,
+        Rob Herring <robh@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Suzuki Poulose <suzuki.poulose@arm.com>,
+        Ingo Molnar <mingo@redhat.com>
+Subject: Re: [PATCH V5 1/7] arm64/perf: Add BRBE registers and fields
+Message-ID: <Y2khBUNLxhSgWhyI@sirena.org.uk>
+References: <20221107062514.2851047-1-anshuman.khandual@arm.com>
+ <20221107062514.2851047-2-anshuman.khandual@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="MbfPbtMAW7aR1zoM"
 Content-Disposition: inline
-In-Reply-To: <Y2kDTxE38epBN368@kadam>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221107062514.2851047-2-anshuman.khandual@arm.com>
+X-Cookie: Minimum charge for booths.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 07, 2022 at 04:08:31PM +0300, Dan Carpenter wrote:
-> On Mon, Nov 07, 2022 at 09:40:00AM +0530, Deepak R Varma wrote:
-> > Simplify code by using recommended min helper macro for logical
-> > evaluation and value assignment. This issue is identified by
-> > coccicheck using the minmax.cocci file.
-> >
-> > Signed-off-by: Deepak R Varma <drv@mailo.com>
-> > ---
-> >  drivers/staging/iio/meter/ade7854-i2c.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/staging/iio/meter/ade7854-i2c.c b/drivers/staging/iio/meter/ade7854-i2c.c
-> > index a9a06e8dda51..a6ce7b24cc8f 100644
-> > --- a/drivers/staging/iio/meter/ade7854-i2c.c
-> > +++ b/drivers/staging/iio/meter/ade7854-i2c.c
-> > @@ -61,7 +61,7 @@ static int ade7854_i2c_write_reg(struct device *dev,
-> >  unlock:
-> >  	mutex_unlock(&st->buf_lock);
-> >
-> > -	return ret < 0 ? ret : 0;
-> > +	return min(ret, 0);
->
-> The original code is better.
->
-> If it's a failure return the error code.  If it's not return zero.
->
-> You can only compare apples to apples.  min() makes sense if you're
-> talking about two lengths.  But here if ret is negative that's an error
-> code.  If it's positive that's the number of bytes.  If the error
-> code is less than the number of bytes then return that?  What???  It
-> makes no sense.
 
-Thanks for your view point. I agree.
+--MbfPbtMAW7aR1zoM
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
->
-> In terms of run time, this patch is fine but in terms of reading the
-> code using min() makes it less readable.
+On Mon, Nov 07, 2022 at 11:55:08AM +0530, Anshuman Khandual wrote:
+> This adds BRBE related register definitions and various other related field
+> macros there in. These will be used subsequently in a BRBE driver which is
+> being added later on.
 
-Okay, The proposal does not make much difference, so will leave the original
-line as is.
+Reviewed-by: Mark Brown <broonie@kernel.org>
 
-Thank you,
-./drv
+Like I just said to Rob incremental differences are easier to review
+when things are split up into a patch per register but this all looks
+fine now so no worries.
 
->
-> regards,
-> dan carpenter
->
+--MbfPbtMAW7aR1zoM
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmNpIQQACgkQJNaLcl1U
+h9AuYgf/fQLWFRvgiLS5OxBMEG7Mm4HR/bm6OAstqYWhPVSQ7v1h6fM84XEd69nc
+E4s5A2f3Wz4oyPfakuFKH9/YP44t2ZF+XOCdqIoXATuUxWlEyHBnzD1Dew3ffzCv
+EZLaKD8uEDa0QuctNDeJyPHBDPK6NYIqkYAiMIEk5fVsfVoEGtAHzPlTGw02sgoP
+M8AhfpDty6DOpUPOoYUegr2m74gmRnCkD6olHs91Af1aLS1o9pk/kbbWYiV8kQwk
+ndL4JeBjDbZAoYtT043cJUPM8xb2fnF3oj55uf3cYMlZH00mPc/SwZa3bJ3r09x+
+yKZgLbueTkpytpfYjhE9XmqzbckLAA==
+=4Tny
+-----END PGP SIGNATURE-----
+
+--MbfPbtMAW7aR1zoM--
