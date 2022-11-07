@@ -2,136 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B84F461EC4F
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 08:42:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B30061EC5C
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 08:45:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231431AbiKGHm4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 02:42:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47898 "EHLO
+        id S231513AbiKGHpT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 02:45:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231277AbiKGHmw (ORCPT
+        with ESMTP id S231479AbiKGHpJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 02:42:52 -0500
+        Mon, 7 Nov 2022 02:45:09 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D273E74
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Nov 2022 23:41:57 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC0D6D2DE
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Nov 2022 23:44:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667806916;
+        s=mimecast20190719; t=1667807048;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=Vzzqd2jio4AZxTd7QQW36f88T5gwDOYUqqpTsVWYFf0=;
-        b=HrCDpjAM3uu5/eO9OUQprJffXz09I61gaLgg0Zr2XEuwE1j81iOczfioQmczfQYa1yok0h
-        SHqooVqK57vEiuR84KzlLqLYMc5b61j2E4usMbZ/1kexvxQ0Geb3gUfscSWqk6EdDCCLfJ
-        7qp8lEEyWBaL4e4H51xNBfvO1v+A1Ag=
-Received: from mail-oo1-f71.google.com (mail-oo1-f71.google.com
- [209.85.161.71]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=BOakKuOc5QKaCrlWc07vXO968J4uiDQ2dBwbOnh8eLM=;
+        b=giJIPddU9tGdIUZwvyby/vcEHaZ7AjCTeoiOcC6LgaPkhyZVZ3nnVgMpLMPQ7QmMB5Cbrc
+        NkcdErDd78562WcIzRc0GrfOKKwW2NJf+D6Od4zSAFrd7hiSsfKLgTJdFudoUKyJAEVR9E
+        YDqtzkWnCFN+bMwz1hvMFxa/eY5vGxY=
+Received: from mail-oo1-f70.google.com (mail-oo1-f70.google.com
+ [209.85.161.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-652-H_ZOWJICP8OO4Tb_4muaTw-1; Mon, 07 Nov 2022 02:41:54 -0500
-X-MC-Unique: H_ZOWJICP8OO4Tb_4muaTw-1
-Received: by mail-oo1-f71.google.com with SMTP id g28-20020a4a251c000000b0049c515643ecso2568732ooa.14
-        for <linux-kernel@vger.kernel.org>; Sun, 06 Nov 2022 23:41:54 -0800 (PST)
+ us-mta-338-0Nbr9sceMBG_fxGcZ_DIKA-1; Mon, 07 Nov 2022 02:44:07 -0500
+X-MC-Unique: 0Nbr9sceMBG_fxGcZ_DIKA-1
+Received: by mail-oo1-f70.google.com with SMTP id x18-20020a4a9b92000000b004805dc803c3so2552490ooj.16
+        for <linux-kernel@vger.kernel.org>; Sun, 06 Nov 2022 23:44:07 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Vzzqd2jio4AZxTd7QQW36f88T5gwDOYUqqpTsVWYFf0=;
-        b=RbgJ0mP+/ZxADvQkaKCziOqZZlCoLSUE+rI/g49byAbjOj3IzEW7F4vfSRiIW/08XX
-         FkuQX4Goym8yVYUoMSFdyk/kcmcmkSyxpwmi+3ygmndjpXsKsAk7NbA//fkaFiGCeNrL
-         ECf1Jdn4eneJPTokRdWnscKphnPNCUwK6eBLtVUmryILH2bxGxF4d20GHSPHsed/coxN
-         BO1wc4JhptqO98XZQ6fuuZpj37BettH7v4mVjq2dL8uVlceboXLp3BTDqx9UQkBAcAcg
-         DfzShpaoE9ujyA6wA87iPly1U5rqsd6BX0qmW8xTgIuYIAfQ//za9WYv1NT85OYUnUun
-         WiAQ==
-X-Gm-Message-State: ACrzQf3IEmDJ0fbgvKWUEw8tAsAto886vwkVXBI5V1UIIV+QRF5N1gHA
-        nT/z9NPhRn8Uy+jn/yllN5D2bAAwB/RIfenCnREoKxHhiwAbb4c/eo0iJGYtcfJJvdC1Za1T7Ra
-        DGuzd9IIezQzQzhADjiXud9RJem8oDdfKiCZT+PeL
-X-Received: by 2002:a05:6830:16c5:b0:66c:6a63:dd4c with SMTP id l5-20020a05683016c500b0066c6a63dd4cmr16042108otr.201.1667806914212;
-        Sun, 06 Nov 2022 23:41:54 -0800 (PST)
-X-Google-Smtp-Source: AMsMyM7oOAV+uc9t7s8MBz7qTTD7zfFUiw34yn3qYUKtzP5s1gzgwMA5EfGWNJZz9lHNABJ/rakf5LO5N9ismitfWQ8=
-X-Received: by 2002:a05:6830:16c5:b0:66c:6a63:dd4c with SMTP id
- l5-20020a05683016c500b0066c6a63dd4cmr16042098otr.201.1667806913996; Sun, 06
- Nov 2022 23:41:53 -0800 (PST)
+        bh=BOakKuOc5QKaCrlWc07vXO968J4uiDQ2dBwbOnh8eLM=;
+        b=YiPSnEE8iMoFp6mMgUIwa8E2jYVj83Hpwf8EZrRKd+dsO9YU8Sv/mSlYsjWNr60ukQ
+         UGHqjQz4tjOWvnOqqPIBqg8CE/zTkcl6tb/i9WF+YBA2xyB9B+r9E33nUAXSzeuhsgoT
+         h6xJazcV0nfv6G1yHn0UXUzoRHjJxQEqV5xB63Hlmd8NVhkxyjEzvFSCGbKQWssRCR9c
+         KHzK54RgV3tk6FrxUS88G9J1bR3zGhjLD2GtIpu3pm6eMlilklXE6w9qaCR8OL3uMoGO
+         Hkt7wBaTOUqopUKiBDvUL/HoUIPDq459VQaFwW4TVSPsdxsh9wPcz8BxzHWRMAFj7gLR
+         IBvg==
+X-Gm-Message-State: ACrzQf3vF3e9W/snThhRxmj2PwAkXoO/dSxs8+WGorttJn0tWlvS3PHm
+        BwA0SgzlTdjgclrR0yYUtdSMw64qxAnzC71jcUk4It73SIzLCPQCxmKjpLW2xZiiGjbo9OXbcK8
+        YwGXMOLqG0WgK1Rr4sJZzF4V2cRtODf76cpXmzoVR
+X-Received: by 2002:a05:6808:181e:b0:35a:5959:5909 with SMTP id bh30-20020a056808181e00b0035a59595909mr9461205oib.35.1667807046577;
+        Sun, 06 Nov 2022 23:44:06 -0800 (PST)
+X-Google-Smtp-Source: AMsMyM4N4jUfu9pMYeA80Eddf3Hun8DW8URGbJXrQnAHwv6j7MUq23+WDOdMNbHNlB6W/+EqKmTNSP64CeIhwDv3++Q=
+X-Received: by 2002:a05:6808:181e:b0:35a:5959:5909 with SMTP id
+ bh30-20020a056808181e00b0035a59595909mr9461192oib.35.1667807046341; Sun, 06
+ Nov 2022 23:44:06 -0800 (PST)
 MIME-Version: 1.0
-References: <20221104083423.2090463-1-ruanjinjie@huawei.com>
-In-Reply-To: <20221104083423.2090463-1-ruanjinjie@huawei.com>
+References: <cover.1666796792.git.sebastien.boeuf@intel.com> <d8c405c150c6eb25acab58718c38e0ef4c3c0293.1666796792.git.sebastien.boeuf@intel.com>
+In-Reply-To: <d8c405c150c6eb25acab58718c38e0ef4c3c0293.1666796792.git.sebastien.boeuf@intel.com>
 From:   Jason Wang <jasowang@redhat.com>
-Date:   Mon, 7 Nov 2022 15:41:42 +0800
-Message-ID: <CACGkMEuxfB+9m1WW34L3sF6_F1iKCF9CSs9_P2V9jLh4sFXyAA@mail.gmail.com>
-Subject: Re: [PATCH] vdpa_sim: fix possible memory leak in vdpasim_net_init()
- and vdpasim_blk_init()
-To:     ruanjinjie <ruanjinjie@huawei.com>
-Cc:     mst@redhat.com, sgarzare@redhat.com, eperezma@redhat.com,
-        gautam.dawar@xilinx.com, elic@nvidia.com,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org
+Date:   Mon, 7 Nov 2022 15:43:54 +0800
+Message-ID: <CACGkMEt93LU009MVK3cDKAU1fv3ZoaDskWp4hakmeTZyBQa=fg@mail.gmail.com>
+Subject: Re: [PATCH v5 4/4] vdpa_sim: Implement resume vdpa op
+To:     sebastien.boeuf@intel.com
+Cc:     linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, mst@redhat.com,
+        eperezma@redhat.com
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,LOTS_OF_MONEY,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 4, 2022 at 4:41 PM ruanjinjie <ruanjinjie@huawei.com> wrote:
+On Wed, Oct 26, 2022 at 11:09 PM <sebastien.boeuf@intel.com> wrote:
 >
-> If device_register() returns error in vdpasim_net_init() or
-> vdpasim_blk_init(), name of kobject which is allocated in dev_set_name()
-> called in device_add() is leaked.
+> From: Sebastien Boeuf <sebastien.boeuf@intel.com>
 >
-> As comment of device_add() says, it should call put_device() to drop
-> the reference count that was set in device_initialize() when it fails,
-> so the name can be freed in kobject_cleanup().
+> Implement resume operation for vdpa_sim devices, so vhost-vdpa will
+> offer that backend feature and userspace can effectively resume the
+> device.
 >
-> Signed-off-by: ruanjinjie <ruanjinjie@huawei.com>
+> Signed-off-by: Sebastien Boeuf <sebastien.boeuf@intel.com>
+> ---
+>  drivers/vdpa/vdpa_sim/vdpa_sim.c | 28 ++++++++++++++++++++++++++++
+>  drivers/vdpa/vdpa_sim/vdpa_sim.h |  1 +
+>  2 files changed, 29 insertions(+)
+>
+> diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.c b/drivers/vdpa/vdpa_sim/vdpa_sim.c
+> index b071f0d842fb..84fee8bb2929 100644
+> --- a/drivers/vdpa/vdpa_sim/vdpa_sim.c
+> +++ b/drivers/vdpa/vdpa_sim/vdpa_sim.c
+> @@ -357,6 +357,11 @@ static void vdpasim_kick_vq(struct vdpa_device *vdpa, u16 idx)
+>         struct vdpasim *vdpasim = vdpa_to_sim(vdpa);
+>         struct vdpasim_virtqueue *vq = &vdpasim->vqs[idx];
+>
+> +       if (!vdpasim->running) {
+> +               vdpasim->pending_kick = true;
+> +               return;
 
-Acked-by: Jason Wang <jasowang@redhat.com>
-
-Should we have a fixes tag and cc stable?
+I think we may hit here when the driver kicks vq before DRIVER_OK. Do
+we need to check device status in this case and resume?
 
 Thanks
 
-> ---
->  drivers/vdpa/vdpa_sim/vdpa_sim_blk.c | 4 +++-
->  drivers/vdpa/vdpa_sim/vdpa_sim_net.c | 4 +++-
->  2 files changed, 6 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c b/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c
-> index c6db1a1baf76..f745926237a8 100644
-> --- a/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c
-> +++ b/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c
-> @@ -427,8 +427,10 @@ static int __init vdpasim_blk_init(void)
->         int ret;
->
->         ret = device_register(&vdpasim_blk_mgmtdev);
-> -       if (ret)
-> +       if (ret) {
-> +               put_device(&vdpasim_blk_mgmtdev);
->                 return ret;
 > +       }
+> +
+>         if (vq->ready)
+>                 schedule_work(&vdpasim->work);
+>  }
+> @@ -527,6 +532,27 @@ static int vdpasim_suspend(struct vdpa_device *vdpa)
+>         return 0;
+>  }
 >
->         ret = vdpa_mgmtdev_register(&mgmt_dev);
->         if (ret)
-> diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim_net.c b/drivers/vdpa/vdpa_sim/vdpa_sim_net.c
-> index c3cb225ea469..11f5a121df24 100644
-> --- a/drivers/vdpa/vdpa_sim/vdpa_sim_net.c
-> +++ b/drivers/vdpa/vdpa_sim/vdpa_sim_net.c
-> @@ -305,8 +305,10 @@ static int __init vdpasim_net_init(void)
->         int ret;
->
->         ret = device_register(&vdpasim_net_mgmtdev);
-> -       if (ret)
-> +       if (ret) {
-> +               put_device(&vdpasim_net_mgmtdev);
->                 return ret;
+> +static int vdpasim_resume(struct vdpa_device *vdpa)
+> +{
+> +       struct vdpasim *vdpasim = vdpa_to_sim(vdpa);
+> +       int i;
+> +
+> +       spin_lock(&vdpasim->lock);
+> +       vdpasim->running = true;
+> +
+> +       if (vdpasim->pending_kick) {
+> +               /* Process pending descriptors */
+> +               for (i = 0; i < vdpasim->dev_attr.nvqs; ++i)
+> +                       vdpasim_kick_vq(vdpa, i);
+> +
+> +               vdpasim->pending_kick = false;
 > +       }
->
->         ret = vdpa_mgmtdev_register(&mgmt_dev);
->         if (ret)
+> +
+> +       spin_unlock(&vdpasim->lock);
+> +
+> +       return 0;
+> +}
+> +
+>  static size_t vdpasim_get_config_size(struct vdpa_device *vdpa)
+>  {
+>         struct vdpasim *vdpasim = vdpa_to_sim(vdpa);
+> @@ -717,6 +743,7 @@ static const struct vdpa_config_ops vdpasim_config_ops = {
+>         .set_status             = vdpasim_set_status,
+>         .reset                  = vdpasim_reset,
+>         .suspend                = vdpasim_suspend,
+> +       .resume                 = vdpasim_resume,
+>         .get_config_size        = vdpasim_get_config_size,
+>         .get_config             = vdpasim_get_config,
+>         .set_config             = vdpasim_set_config,
+> @@ -750,6 +777,7 @@ static const struct vdpa_config_ops vdpasim_batch_config_ops = {
+>         .set_status             = vdpasim_set_status,
+>         .reset                  = vdpasim_reset,
+>         .suspend                = vdpasim_suspend,
+> +       .resume                 = vdpasim_resume,
+>         .get_config_size        = vdpasim_get_config_size,
+>         .get_config             = vdpasim_get_config,
+>         .set_config             = vdpasim_set_config,
+> diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.h b/drivers/vdpa/vdpa_sim/vdpa_sim.h
+> index 0e78737dcc16..a745605589e2 100644
+> --- a/drivers/vdpa/vdpa_sim/vdpa_sim.h
+> +++ b/drivers/vdpa/vdpa_sim/vdpa_sim.h
+> @@ -67,6 +67,7 @@ struct vdpasim {
+>         u64 features;
+>         u32 groups;
+>         bool running;
+> +       bool pending_kick;
+>         /* spinlock to synchronize iommu table */
+>         spinlock_t iommu_lock;
+>  };
 > --
-> 2.25.1
+> 2.34.1
+>
+> ---------------------------------------------------------------------
+> Intel Corporation SAS (French simplified joint stock company)
+> Registered headquarters: "Les Montalets"- 2, rue de Paris,
+> 92196 Meudon Cedex, France
+> Registration Number:  302 456 199 R.C.S. NANTERRE
+> Capital: 5 208 026.16 Euros
+>
+> This e-mail and any attachments may contain confidential material for
+> the sole use of the intended recipient(s). Any review or distribution
+> by others is strictly prohibited. If you are not the intended
+> recipient, please contact the sender and delete all copies.
 >
 
