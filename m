@@ -2,143 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38D5561F633
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 15:37:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89C4161F63A
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 15:37:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232133AbiKGOhW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 09:37:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51282 "EHLO
+        id S232218AbiKGOh4 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 7 Nov 2022 09:37:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231520AbiKGOhU (ORCPT
+        with ESMTP id S231355AbiKGOhy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 09:37:20 -0500
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2074.outbound.protection.outlook.com [40.107.223.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1720492
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 06:37:19 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Pavp1dB6qhNeOGOgxLOnjukVUb4va/fjrYLu5EnBM8MIDeQXAE7VvxbMNGcoe9930pqQFaGhthjtD+fSi62E8ygYJS4ysskGmeZeWszVzO4tFW1s7H8N7EhkqlYTJuthwtRvvGFSEfB2eqzZ0kMOZkF/H6SHqWvKKCnl/lCbPItlXI44+xAZZaDxTDL0pvc7d/CzmXAsjmbtSbgdZSXorQSPv0SxzoQSbp5qx9qhfK8FDTty2DPNKGufWIxSagd6qWm4553NStE8Y6MOG1XqNX8CXOKSoQGqTnptsOPkvwGTxKpe9VGqFqoalpd69oAe+btJ6rZQvjkdKDQhoCYSWQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=6hf53wAag0K3+P3qF01o3nAmr5ztOjZkGCAlzmjwyhA=;
- b=PSrweUfHimTRNZzkDQfURx+TLky5AUqEYdlNjQwPN3bw8dD9TxKKbHEwsexPlyVLIEf9GZzqvS8ihjQTcxhv0xvvo5bFKWPTkR+bIuexFup3i25U3SNmTT3BFFjubAsV8lruXwmDXLEdHEDJnX3eaULvQB0rCUTh81gMJKn2t2uffp3vgZjO8ufPn5qe6HsyTLyV0JfM6B0X5x9hdHrV61Bs+lH0g1Vv/zrRpC54H2eN2vdS559ONFK86NN0fuApt1EuFj+cVgIc9bGWX2W5YjB1jhRILgTWF0Z7wjMht4D0S0bmphb5rayZ0K8PoHP6oRsY04s4bAxqwXh09bfcCw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=gmail.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=6hf53wAag0K3+P3qF01o3nAmr5ztOjZkGCAlzmjwyhA=;
- b=kOa3y8UEko4E1qnJ+ErXICxUgdDcWvuYms9wJc2MGceCv9VYL3Xh2ypyzq6WEcBlD7fo3NuEJu+youFmgylq5TFYvxbz4Q5N2U0WMQ5Mf30P6qRk8t0Q4VdbixpeUy+PbftViOP6FZNS+1tZ/mI1aLAp9SN/Zkp15XgV6kA+lQc=
-Received: from BN9PR03CA0226.namprd03.prod.outlook.com (2603:10b6:408:f8::21)
- by SN7PR12MB7297.namprd12.prod.outlook.com (2603:10b6:806:2ad::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.22; Mon, 7 Nov
- 2022 14:37:17 +0000
-Received: from BN8NAM11FT062.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:f8:cafe::c3) by BN9PR03CA0226.outlook.office365.com
- (2603:10b6:408:f8::21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.26 via Frontend
- Transport; Mon, 7 Nov 2022 14:37:16 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
-Received: from SATLEXMB03.amd.com (165.204.84.17) by
- BN8NAM11FT062.mail.protection.outlook.com (10.13.177.34) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5791.20 via Frontend Transport; Mon, 7 Nov 2022 14:37:16 +0000
-Received: from SATLEXMB05.amd.com (10.181.40.146) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Mon, 7 Nov
- 2022 08:37:16 -0600
-Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB05.amd.com
- (10.181.40.146) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Mon, 7 Nov
- 2022 08:37:16 -0600
-Received: from iron-maiden.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server id 15.1.2375.31 via Frontend
- Transport; Mon, 7 Nov 2022 08:37:15 -0600
-From:   Carlos Bilbao <carlos.bilbao@amd.com>
-To:     <harry.wentland@amd.com>, <sunpeng.li@amd.com>,
-        <Rodrigo.Siqueira@amd.com>
-CC:     <alexander.deucher@amd.com>, <christian.koenig@amd.com>,
-        <Xinhui.Pan@amd.com>, <airlied@gmail.com>, <daniel@ffwll.ch>,
-        <aric.cyr@amd.com>, <jun.lei@amd.com>,
-        <amd-gfx@lists.freedesktop.org>, <dri-devel@lists.freedesktop.org>,
-        <linux-kernel@vger.kernel.org>, <bilbao@vt.edu>,
-        Carlos Bilbao <carlos.bilbao@amd.com>
-Subject: [PATCH] drm/amd/display: Amend descriptions within enum pipe_split_policy
-Date:   Mon, 7 Nov 2022 08:37:15 -0600
-Message-ID: <20221107143715.279841-1-carlos.bilbao@amd.com>
-X-Mailer: git-send-email 2.34.1
+        Mon, 7 Nov 2022 09:37:54 -0500
+Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99A9E92;
+        Mon,  7 Nov 2022 06:37:53 -0800 (PST)
+Received: by mail-qt1-f179.google.com with SMTP id x15so6933142qtv.9;
+        Mon, 07 Nov 2022 06:37:53 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1TjBAkGxwjp2lubMtDrrYVobZ7PDqd90S/P8hJIEVqU=;
+        b=6cNIwcgDlKI56wBvfQ/JrkeTGKY+HkiZ1u6mdnChmrpFGtleWju/viasbgkDduOk8I
+         syxK4ULb4VkmWCTu1msNyTMcFYGXLooOTx79TTEvm0Bab1Atl/hGVO1Qbf9+byww4J2e
+         mXTPhpq1TxXswLty2RPpPY2VxEjHQYYwNIDEyKudRjvOEHrD6elkOcRntGLNkRhE4ZX+
+         C+pGlJGftBviuEdM6nmWwOGOG+7YnGJk8GwiquSR4b+u4CTtXyEAcLhdypRteJn7jXKb
+         cYay0GgotwS/d32PRy5UEMtUE8Py9A2ef/kfDg1ShHuKdXGeqIau7OMJqnuEfqzPVChh
+         MfuQ==
+X-Gm-Message-State: ACrzQf284dIgSEfj01cg9njMIvBeRk/VW8VvF/BhjgMq1zZ6dQOo5cyG
+        mXKVyTkxeCMUkYqRB3gbiCumiFO6QQxS3+im
+X-Google-Smtp-Source: AMsMyM4B4O0qColug4URI6v367aZVtrSGogAQamMxZKcpQu4oNIHFEKKxhCQhctowogXl6c3J6Tcig==
+X-Received: by 2002:ac8:5c87:0:b0:3a5:704e:4ac7 with SMTP id r7-20020ac85c87000000b003a5704e4ac7mr11247756qta.612.1667831872409;
+        Mon, 07 Nov 2022 06:37:52 -0800 (PST)
+Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com. [209.85.219.176])
+        by smtp.gmail.com with ESMTPSA id w5-20020a05620a424500b006f84ee3a4f3sm6882963qko.48.2022.11.07.06.37.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 07 Nov 2022 06:37:52 -0800 (PST)
+Received: by mail-yb1-f176.google.com with SMTP id 129so13785727ybb.12;
+        Mon, 07 Nov 2022 06:37:51 -0800 (PST)
+X-Received: by 2002:a05:6902:503:b0:6cf:c510:6a23 with SMTP id
+ x3-20020a056902050300b006cfc5106a23mr30783296ybs.380.1667831871538; Mon, 07
+ Nov 2022 06:37:51 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT062:EE_|SN7PR12MB7297:EE_
-X-MS-Office365-Filtering-Correlation-Id: d5f53e9a-392a-41f1-b67b-08dac0cd9187
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: LuDCzdax19SpZWmbmIcio/9ICiKOBZZcmE9//te88IXlwb1QNTpMe7FAVKbZOcNQeU1k4urtwzwAUL0zSqLQUcHevnBd0XzztFUImhbChpD/ZNSRd1Ga9gThZALeNlVXJGw+heaEFY8Neq4lZoXqg7ZZcRoElRmC7Fqm5onjyKTp0C7+p92N0PRBpu0wLRdsiyqGyQOn4GgHS6OOPsWwS+Xy8fshQvZn2kQaMFxgeAJr9h4qLti89llLZQ6icVKQN9LMUVtoqSpyRytHzNP6EfhQM4HnfjfOlM959KF6RUT4d/6NxTnIeQAAipZREHW0OvQaQb1w8TqeUUtSZU94idgjTQCa7YN7Fy50T+58/14GQQ/0PT94hG0ID2IbSoaGSVNsEmsHaGCEzAKYvTuknnCV3zoGTbsEusKGM7RVE9Jq39khlb3Kx6h/oKvutg6vGUoiMuUfZCPH+ZhlRmTpxRrrbANjIOgYHD93zV6WsJx4jMkA2Io/oCWyXyBg+XHjQt3dTHryh4N4dtDGEc8ofe2cXQ+Bdy2hwkB34Co1h5CfuSOf7nFCvBQ9ScvRabqF+j80aLB0+/8nzhBYsWASCVreV6C3/jFTsFwPv/biA8RBWBqQUg2+COfW81isosQZTkqA/3Q/bYzjtIsXjPvJ+I4OB0gzce5nonf0jF9QjduBqNhJeNVRGn7qDdVjEuW6R1aYA6QnpsU9egPV47r4bQ38L3knF/0Zo/CP2tiVifxoUpmi6emqM1ZKEbj2uBFXWsSw8UoTEq8b/me4oqwkaEfH9fK9Cg10KU+gKpMKHYs=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(136003)(346002)(396003)(376002)(39860400002)(451199015)(36840700001)(46966006)(40470700004)(44832011)(41300700001)(8676002)(4326008)(5660300002)(8936002)(86362001)(2906002)(40480700001)(70206006)(82740400003)(2616005)(1076003)(336012)(186003)(83380400001)(54906003)(426003)(356005)(47076005)(110136005)(40460700003)(70586007)(36860700001)(81166007)(316002)(26005)(478600001)(6636002)(7696005)(36756003)(82310400005)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Nov 2022 14:37:16.8296
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: d5f53e9a-392a-41f1-b67b-08dac0cd9187
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT062.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB7297
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20221107135825.583877-1-herve.codina@bootlin.com> <20221107135825.583877-6-herve.codina@bootlin.com>
+In-Reply-To: <20221107135825.583877-6-herve.codina@bootlin.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 7 Nov 2022 15:37:40 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdVod1VqKSBFa5syeSPU=RzgqQ=3tg70V1OSZFOext7kgw@mail.gmail.com>
+Message-ID: <CAMuHMdVod1VqKSBFa5syeSPU=RzgqQ=3tg70V1OSZFOext7kgw@mail.gmail.com>
+Subject: Re: [PATCH 5/7] usb: gadget: udc: add Renesas RZ/N1 USBF controller support
+To:     Herve Codina <herve.codina@bootlin.com>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Gareth Williams <gareth.williams.jx@renesas.com>,
+        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Correct descriptions of two last fields of enum pipe_split_policy, updating
-comments with proper field names.
+Hi Hervé,
 
-Signed-off-by: Carlos Bilbao <carlos.bilbao@amd.com>
----
- drivers/gpu/drm/amd/display/dc/dc.h | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+On Mon, Nov 7, 2022 at 3:00 PM Herve Codina <herve.codina@bootlin.com> wrote:
+> Add support for the Renesas USBF controller.
+> This controller is an USB2.0 UDC controller available in the
+> Renesas r9a06g032 SoC (RZ/N1 family).
+>
+> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
 
-diff --git a/drivers/gpu/drm/amd/display/dc/dc.h b/drivers/gpu/drm/amd/display/dc/dc.h
-index bfc5474c0f4c..277631a899d8 100644
---- a/drivers/gpu/drm/amd/display/dc/dc.h
-+++ b/drivers/gpu/drm/amd/display/dc/dc.h
-@@ -457,15 +457,16 @@ enum pipe_split_policy {
- 	MPC_SPLIT_DYNAMIC = 0,
- 
- 	/**
--	 * @MPC_SPLIT_DYNAMIC: Avoid pipe split, which means that DC will not
-+	 * @MPC_SPLIT_AVOID: Avoid pipe split, which means that DC will not
- 	 * try any sort of split optimization.
- 	 */
- 	MPC_SPLIT_AVOID = 1,
- 
- 	/**
--	 * @MPC_SPLIT_DYNAMIC: With this option, DC will only try to optimize
--	 * the pipe utilization when using a single display; if the user
--	 * connects to a second display, DC will avoid pipe split.
-+	 * @MPC_SPLIT_AVOID_MULT_DISP: With this option, DC will only try
-+	 * to optimize the pipe utilization when using a single display;
-+	 * if the user connects to a second display, DC will avoid pipe
-+	 * split.
- 	 */
- 	MPC_SPLIT_AVOID_MULT_DISP = 2,
- };
--- 
-2.34.1
+> --- /dev/null
+> +++ b/drivers/usb/gadget/udc/renesas_usbf.c
 
+> +struct usbf_udc {
+> +       struct usb_gadget               gadget;
+> +       struct usb_gadget_driver        *driver;
+> +       struct device                   *dev;
+> +       struct clk_bulk_data            *clocks;
+> +       int                             nclocks;
+> +       void __iomem                    *regs;
+> +       spinlock_t                      lock;
+> +       bool                            is_remote_wakeup;
+> +       bool                            is_usb_suspended;
+> +       struct usbf_ep                  ep[USBF_NUM_ENDPOINTS];
+> +       /* for EP0 control messages */
+> +       enum usbf_ep0state              ep0state;
+> +       struct usbf_req                 setup_reply;
+> +       u8                              ep0_buf[USBF_EP0_MAX_PCKT_SIZE];
+> +};
+
+> +static int usbf_probe(struct platform_device *pdev)
+> +{
+> +       struct device *dev = &pdev->dev;
+> +       struct usbf_udc *udc;
+> +       struct usbf_ep *ep;
+> +       bool h2mode;
+> +       int irq;
+> +       int ret;
+> +       int i;
+> +
+> +       ret = r9a06g032_sysctrl_get_usb_h2mode(&h2mode);
+> +       if (ret)
+> +               return ret;
+> +       if (h2mode) {
+> +               dev_warn(dev, "Disabled in H2 (host) mode\n");
+> +               return -ENODEV;
+> +       }
+> +
+> +       udc = devm_kzalloc(dev, sizeof(*udc), GFP_KERNEL);
+> +       if (!udc)
+> +               return -ENOMEM;
+> +       platform_set_drvdata(pdev, udc);
+> +
+> +       udc->dev = dev;
+> +       spin_lock_init(&udc->lock);
+> +
+> +       udc->regs = devm_platform_ioremap_resource(pdev, 0);
+> +       if (IS_ERR(udc->regs))
+> +               return PTR_ERR(udc->regs);
+> +
+> +       devm_pm_runtime_enable(&pdev->dev);
+> +       ret = pm_runtime_resume_and_get(&pdev->dev);
+> +       if (ret < 0)
+> +               return ret;
+> +
+> +       ret = devm_clk_bulk_get_all(dev, &udc->clocks);
+> +       if (ret < 1) {
+> +               dev_err(dev, "failed to get clocks %d\n", ret);
+> +               return ret;
+> +       }
+> +       udc->nclocks = ret;
+> +
+> +       ret = clk_bulk_prepare_enable(udc->nclocks, udc->clocks);
+> +       if (ret) {
+> +               dev_err(dev, "can not enable the clock\n");
+> +               return ret;
+> +       }
+
+As this driver only enables/disables the clocks, perhaps you could
+just delegate this to Runtime PM (through the clock domain pointed
+by the power-domains property in DT), and drop the .clocks and
+.nclocks fields?
+
+> +clk_disable:
+> +       clk_bulk_disable_unprepare(udc->nclocks, udc->clocks);
+> +       return ret;
+> +}
+> +
+> +static int usbf_remove(struct platform_device *pdev)
+> +{
+> +       struct usbf_udc *udc = platform_get_drvdata(pdev);
+> +
+> +       usb_del_gadget_udc(&udc->gadget);
+> +
+> +       clk_bulk_disable_unprepare(udc->nclocks, udc->clocks);
+> +
+> +       pm_runtime_put(&pdev->dev);
+> +
+> +       return 0;
+> +}
+
+> +MODULE_AUTHOR("Herve Codina <herve.codina@bootlin.com>");
+
+Hervé? ;-)
+
+> +MODULE_DESCRIPTION("Renesas R-Car Gen3 & RZ/N1 USB Function driver");
+> +MODULE_LICENSE("GPL");
+
+> --
+> 2.37.3
+>
+
+
+--
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
