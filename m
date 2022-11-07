@@ -2,156 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CC5861EA30
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 05:26:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E723C61EA31
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 05:27:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230388AbiKGE01 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Nov 2022 23:26:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41656 "EHLO
+        id S230404AbiKGE1C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Nov 2022 23:27:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230438AbiKGE0M (ORCPT
+        with ESMTP id S230410AbiKGE0v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Nov 2022 23:26:12 -0500
-Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B01111A23;
-        Sun,  6 Nov 2022 20:26:11 -0800 (PST)
-Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-36ad4cf9132so93628097b3.6;
-        Sun, 06 Nov 2022 20:26:11 -0800 (PST)
+        Sun, 6 Nov 2022 23:26:51 -0500
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C02DE11C0C
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Nov 2022 20:26:50 -0800 (PST)
+Received: by mail-yb1-xb2f.google.com with SMTP id j2so12254712ybb.6
+        for <linux-kernel@vger.kernel.org>; Sun, 06 Nov 2022 20:26:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=hTwEdJ6Q5b7fJb+x3X+z0isTFJ/JKgG4BXZ2DTVYqdY=;
-        b=gdQ9k0zUTVW7tp99OrZdjhE6eMIp4gund8VnOWplDrON6vWqeMM07Eyhmof+kYfS4y
-         DfQtHx555kCxIn7LRsGiPEarVc0RRu8M1ghRDOr6Sm1NOB+C+QxtB7gSM3yn7ibdbFKD
-         MUhj98HWCwG3G5Lvl4V3RyzZ+hTywEXX76NDrmYHwy6KKhoBGQSu/VRTHzN4rwMqtSzK
-         Cnong0G3/XEtAoAiXtPnrY3Q8XLisbAvGVjNVcy3aZmOQdv0bxsRQXCi1R1GAMEgJrF3
-         GvtXIpAc8DW68Pl9Lifir/519zDySPs0TuRJG6WK+qQuzu8jhwxvjM+vt3YPxxaqu22l
-         ip0g==
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=DNFhsPbkfGfOWNF5M4aRb8nwKD8L5aVj2WV/H46NM8s=;
+        b=NOvWTa2ZaI42fdJnpA7o8Jn+Xothi+I6cRGYHX47wDh8/SKnr8NmgjQnfbTE6LB+nc
+         z2RL54LdGiq4BcDHaMDLSu7OCzg9++PgCShQVE9O/JUh8bzZwg5alTFpBecyYbGifSuj
+         dHPq1GYv4c0cM/+Vi7M4VRRNHI8hOBMVr3zHkfFohyCPS7JxyjArWGMV9CpmYCv99KDV
+         4yCQf+d6m3t4SEwjz8glN63FjMmFoV1DMZc6d22ovPG4c5ePw2I0T4XMGB8K/EiDoIqX
+         B483e9J2ZgP3UhIVSJZ8EIxxQ3AlHR24IpDPF71kPWpWrzJ4yJmp5UAyYVwLtQNNIyHf
+         dTTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=hTwEdJ6Q5b7fJb+x3X+z0isTFJ/JKgG4BXZ2DTVYqdY=;
-        b=ERIzNHDjql388RVV3jpPcVF5K2T2WZTrDjAB+ZXnuRCpw5chu+aWGaPr+kpLcwcVJb
-         KkVyDl++0S2xzd5Ai0W76NOqURXb0wpiOVE4GKoTruPrm45T4mKyZLeX/UyLmAXuCwbT
-         EhMC3YMyeOagBDSpcxyzv45nYQNDDbWAa0u3j/yNR+VwvxuAqNiMURKQIAjr87KFIRKq
-         QllJuoC7wwVkbzvW8yYIPP8odI+tHkfwlcv52pJ3GIoKGRcVfCEx17jd+0aMtaENxIvM
-         FyC92OPKzBfVW8COFcJ6Pz39bkpfC9OUoM7kdOVGDJRrwoEBoGIsZ9lnogW1qVUaXnMo
-         lS1g==
-X-Gm-Message-State: ACrzQf2hyzXFNWLJIEdl3cWbOrz6IQnyerK6k49gqhFLWnxPHGRfQK61
-        e1tPw1j+chE7xUivdNJWOvBM6X7A8cRqpU+twwK8xg5sYA==
-X-Google-Smtp-Source: AMsMyM7DIRRe5qZgvO4rXPmMTCXl0aRiOgTf0gsmobU8klbIhRtLMCxsxMNlbLb0FaBRp/k0qD4bPkHrRgi8szRuUfM=
-X-Received: by 2002:a81:1b53:0:b0:373:6185:b72 with SMTP id
- b80-20020a811b53000000b0037361850b72mr24440522ywb.104.1667795170068; Sun, 06
- Nov 2022 20:26:10 -0800 (PST)
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=DNFhsPbkfGfOWNF5M4aRb8nwKD8L5aVj2WV/H46NM8s=;
+        b=OrjZTxqRCatCdiIpv18xD4gYxhgHrYNSBtJ+vecuxg+MCrpCndfkt9mnKtAPsEOyzY
+         raRFJfiOO1xeH9GaKWYJN/ElmmpH+GY7LeqRJs0RX3voIkdw7fE1VOfTc+o4rYD8hIlL
+         vns8awbqLwf+XnmFUK81GAmtWwasCjfXYNIIcfuts9nLmc0aG3ZNLoAgTMaAEyhkTtu9
+         IIMwTQ+smLkygOAlC9mS4hvyUEKky5nrBZWCg097cUFyAJSyEfrKZdQVXANdrF2gC4gt
+         tlHp1TWh5C0kYuAk5avgrCipoA/vzC14gbdTucA3pwJkIUwxdFApAz95s9E8lY63tl5u
+         VWug==
+X-Gm-Message-State: ACrzQf3vgaiMSDYak1AaCKASlEJrAt8O6NXIpQMKU3QNAWoex2WR5X4g
+        KmXSEGgf5oqdC92/3JvtJsSSQbMMn2onapv/5Q==
+X-Google-Smtp-Source: AMsMyM61KZr/tbn+OJC+e7NwbjNDaZsj34pkZv0yskETmC7SIKwMC38mkZBvDx6LWhndmz8bGV5MCcyGCmpfdUZms3c=
+X-Received: by 2002:a25:4dc4:0:b0:6cc:d497:5d91 with SMTP id
+ a187-20020a254dc4000000b006ccd4975d91mr34653442ybb.430.1667795209073; Sun, 06
+ Nov 2022 20:26:49 -0800 (PST)
 MIME-Version: 1.0
-From:   Hao Sun <sunhao.th@gmail.com>
-Date:   Mon, 7 Nov 2022 12:25:59 +0800
-Message-ID: <CACkBjsaRPHUpfST=3-FTWbQycHsNgvWyVFpCLkJEwcrLhSZfnQ@mail.gmail.com>
-Subject: BUG in BPF verifier, 10 insns costs 2 mins+ to load
-To:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>
-Cc:     ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
-        andrii@kernel.org, martin.lau@linux.dev, ong@kernel.org,
-        yhs@fb.com, kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
-        jolsa@kernel.org
+Received: by 2002:a05:7108:6149:0:0:0:0 with HTTP; Sun, 6 Nov 2022 20:26:48
+ -0800 (PST)
+Reply-To: engr.fred_martins@aol.com
+From:   "Engr. Fred Martins." <deliverycompanypossacourier@gmail.com>
+Date:   Sun, 6 Nov 2022 20:26:48 -0800
+Message-ID: <CANPQYVPqwDsAs6uTY0MgMAoCCFT7St-UTSMH+cZ6qmfYr4geNg@mail.gmail.com>
+Subject: Greetings,
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=4.5 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Greetings,
 
-I've just written a BPF verifier fuzzer, targeting logic bugs in the
-BPF verifier.
-The following is an abnormal case it generated. The case only contains 10
-BPF instructions but costs more than 2 mins to load on :
-    HEAD commit: f0c4d9fc9cc9 Linux 6.1-rc4
-    git tree: upstream
-    kernel config: https://pastebin.com/raw/SBxaikiG
-    C reproducer: https://pastebin.com/raw/HsDXdraZ
-    verifier log: https://pastebin.com/raw/sNmSsVxs
+I wonder why you continue neglecting my emails. Please, acknowledge
+the receipt of this message in reference to the subject above as I
+intend to send to you the details of the mail. Sometimes, try to check
+your spam box because most of these correspondences fall out sometimes
+in SPAM folder.
 
-Ideally, the verifier should exit quickly in this case, since R2=42
-always holds.
-The behaviour of the verifier does not make sense to me, seems it lost
-the range information of R2.
-
-Please point out if I missed anything, the C reproducer in the link
-(https://pastebin.com/raw/HsDXdraZ)
-essentially loads the following case into `test_verifier.c`:
-{
-"BVF verifier test",
-.insns = {
-BPF_MOV64_IMM(BPF_REG_1, 42),
-BPF_MOV64_IMM(BPF_REG_2, 0),
-BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 1, 0, 1),
-BPF_EXIT_INSN(),
-BPF_ALU64_REG(BPF_ADD, BPF_REG_2, BPF_REG_1),
-BPF_ALU32_IMM(BPF_DIV, BPF_REG_2, 1),
-BPF_ALU64_IMM(BPF_SUB, BPF_REG_1, 108),
-BPF_JMP32_REG(BPF_JGT, BPF_REG_1, BPF_REG_2, -3),
-BPF_MOV64_REG(BPF_REG_0, BPF_REG_2),
-BPF_EXIT_INSN(),
-},
-.prog_type = BPF_PROG_TYPE_XDP,
-},
-
-The verifier's log is more then 4M, but essentially is:
-    0: R1=ctx(off=0,imm=0) R10=fp0
-    0: (b7) r1 = 42                       ; R1_w=P42
-    1: (b7) r2 = 0                        ; R2_w=P0
-    2: (85) call pc+1
-    caller:
-     R10=fp0
-    callee:
-     frame1: R1_w=P42 R2_w=P0 R10=fp0
-    4: (57) r2 &= -52                     ; frame1: R2_w=P0
-    5: (0f) r2 += r1                      ; frame1: R1_w=P42 R2_w=P42
-    6: (34) w2 /= 1                       ; frame1:
-R2_w=Pscalar(umax=4294967295,var_off=(0x0; 0xffffffff))
-    7: (17) r1 -= 108                     ; frame1: R1_w=P-66
-    8: (2e) if w1 > w2 goto pc-3 6: frame1: R1_w=P-66
-R2_w=Pscalar(umax=4294967229,var_off=(0x0; 0xffffffff)) R10=fp0
-    6: (34) w2 /= 1                       ; frame1:
-R2_w=Pscalar(umax=4294967295,var_off=(0x0; 0xffffffff))
-    7: (17) r1 -= 108                     ; frame1: R1_w=P-174
-    8: (2e) if w1 > w2 goto pc-3 6: frame1: R1_w=P-174
-R2_w=Pscalar(umax=4294967121,var_off=(0x0; 0xffffffff)) R10=fp0
-    6: (34) w2 /= 1                       ; frame1:
-R2_w=Pscalar(umax=4294967295,var_off=(0x0; 0xffffffff))
-    7: (17) r1 -= 108                     ; frame1: R1=P-282
-    8: (2e) if w1 > w2 goto pc-3 6: frame1: R1=P-282
-R2=Pscalar(umax=4294967013,var_off=(0x0; 0xffffffff)) R10=fp0
-    ...
-    6: (34) w2 /= 1                       ; frame1:
-R2_w=Pscalar(umax=4294967295,var_off=(0x0; 0xffffffff))
-    7: (17) r1 -= 108                     ; frame1: R1_w=P-6342690
-    8: (2e) if w1 > w2 goto pc-3 6: frame1: R1_w=P-6342690
-R2_w=Pscalar(umax=4288624605,var_off=(0x0; 0xffffffff)) R10=fp0
-    6: (34) w2 /= 1                       ; frame1:
-R2_w=Pscalar(umax=4294967295,var_off=(0x0; 0xffffffff))
-    7: (17) r1 -= 108                     ; frame1: R1_w=P-6342798
-    8: (2e) if w1 > w2 goto pc-3          ; frame1: R1_w=P-6342798
-R2_w=Pscalar(umin=4288624498,umax=4294967295,var_off=(0xff800000;
-0x7fffff),s32_min=-6342798,s32_max=-1)
-    9: (bf) r0 = r2                       ; frame1:
-R0_w=Pscalar(id=58730,umin=4288624498,umax=4294967295,var_off=(0xff800000;
-0x7fffff),s32_min=-6342798,s32_max=-1)
-R2_w=Pscalar(id=58730,umin=4288624498,umax=4294967295,var_off=(0xff800000;
-0x7fffff),s32_min=-6342798,s32_max=-1)
-    10: (95) exit
-    returning from callee:
-     frame1: R0_w=Pscalar(id=58730,umin=4288624498,umax=4294967295,var_off=(0xff800000;
-0x7fffff),s32_min=-6342798,s32_max=-1) R1_w=P-6342798
-R2_w=Pscalar(id=58730,umin=4288624498,umax=4294967295,var_off=(0xff800000;
-0x7fffff),s32_min=-6342798,s32_max=-1) R10=fp0
-    to caller at 3:
-     R0_w=Pscalar(id=58730,umin=4288624498,umax=429496
+Best regards,
