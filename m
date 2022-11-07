@@ -2,28 +2,28 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4268561FC49
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 18:56:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5ED7A61FC4F
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 18:56:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233003AbiKGR41 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 12:56:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58442 "EHLO
+        id S233017AbiKGR4k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 12:56:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232033AbiKGRzF (ORCPT
+        with ESMTP id S232637AbiKGRzZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 12:55:05 -0500
+        Mon, 7 Nov 2022 12:55:25 -0500
 Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BDA924F3F
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 09:54:18 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1EC424F2C
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 09:54:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1667843595; h=from:from:sender:reply-to:subject:subject:date:date:
+        s=mail; t=1667843596; h=from:from:sender:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=yJBAdivZchmEtJwMCV+Ir3IdI2sK9lAdweiG3PvAk1M=;
-        b=gbQ52Peys2tN5G9YAucMuOQ/E9FwpYYiTaey3zV+AzjXvtY5Pqygg9DUs2xBvjQg0DlWlz
-        4tGvGmoadQ1ochh2n3uL6P0JgRf8/OJYjRywOYuwSYTUOzg1qGnmwJhOOBIdsEwE0NbE7c
-        vTVRPFI5+nMWEh2n17Kbo6Ix3CF3yBA=
+        bh=v5THks8G5thM8MpzfovKFJFQl1Oz6R2zYzhs11WmEBw=;
+        b=wRUg0fzPYgUjWGRA7Zk51JSJfOFCQz6mEfxbR520rZUbVMVAA9VZ7aYLFyg8knC7zr6j76
+        d1DpHWTqb9UgGG/9fSsBi4mTOCrep6aKkMc6LhSA2mZBWOFUgwuSUkD+JfcmQnHGtF3KcI
+        BdiFKNvCT3d8He4siopok9nrVSU5bTk=
 From:   Paul Cercueil <paul@crapouillou.net>
 To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
         Maxime Ripard <mripard@kernel.org>,
@@ -32,11 +32,10 @@ To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
         Daniel Vetter <daniel@ffwll.ch>
 Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
         Paul Cercueil <paul@crapouillou.net>,
-        Jyri Sarha <jyri.sarha@iki.fi>,
-        Tomi Valkeinen <tomba@kernel.org>
-Subject: [PATCH 21/26] drm: tilcdc: Remove #ifdef guards for PM related functions
-Date:   Mon,  7 Nov 2022 17:52:51 +0000
-Message-Id: <20221107175256.360839-11-paul@crapouillou.net>
+        Hans de Goede <hdegoede@redhat.com>
+Subject: [PATCH 22/26] drm: vboxvideo: Remove #ifdef guards for PM related functions
+Date:   Mon,  7 Nov 2022 17:52:52 +0000
+Message-Id: <20221107175256.360839-12-paul@crapouillou.net>
 In-Reply-To: <20221107175256.360839-1-paul@crapouillou.net>
 References: <20221107175106.360578-1-paul@crapouillou.net>
  <20221107175256.360839-1-paul@crapouillou.net>
@@ -51,10 +50,9 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use the DEFINE_SIMPLE_DEV_PM_OPS() and pm_sleep_ptr() macros to handle
-the .suspend/.resume callbacks.
+Use the pm_sleep_ptr() macro to handle the .suspend / .resume callbacks.
 
-These macros allow the suspend and resume functions to be automatically
+This macro allows the suspend and resume functions to be automatically
 dropped by the compiler when CONFIG_SUSPEND is disabled, without having
 to use #ifdef guards.
 
@@ -64,47 +62,41 @@ regressions are subsequently easier to catch.
 
 Signed-off-by: Paul Cercueil <paul@crapouillou.net>
 ---
-Cc: Jyri Sarha <jyri.sarha@iki.fi>
-Cc: Tomi Valkeinen <tomba@kernel.org>
+Cc: Hans de Goede <hdegoede@redhat.com>
 ---
- drivers/gpu/drm/tilcdc/tilcdc_drv.c | 9 +++------
- 1 file changed, 3 insertions(+), 6 deletions(-)
+ drivers/gpu/drm/vboxvideo/vbox_drv.c | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
 
-diff --git a/drivers/gpu/drm/tilcdc/tilcdc_drv.c b/drivers/gpu/drm/tilcdc/tilcdc_drv.c
-index f72755b8ea14..cd5bdc2f803a 100644
---- a/drivers/gpu/drm/tilcdc/tilcdc_drv.c
-+++ b/drivers/gpu/drm/tilcdc/tilcdc_drv.c
-@@ -496,7 +496,6 @@ static const struct drm_driver tilcdc_driver = {
-  * Power management:
-  */
+diff --git a/drivers/gpu/drm/vboxvideo/vbox_drv.c b/drivers/gpu/drm/vboxvideo/vbox_drv.c
+index f4f2bd79a7cb..79318441ed7e 100644
+--- a/drivers/gpu/drm/vboxvideo/vbox_drv.c
++++ b/drivers/gpu/drm/vboxvideo/vbox_drv.c
+@@ -102,7 +102,6 @@ static void vbox_pci_remove(struct pci_dev *pdev)
+ 	vbox_hw_fini(vbox);
+ }
  
 -#ifdef CONFIG_PM_SLEEP
- static int tilcdc_pm_suspend(struct device *dev)
+ static int vbox_pm_suspend(struct device *dev)
  {
- 	struct drm_device *ddev = dev_get_drvdata(dev);
-@@ -518,11 +517,9 @@ static int tilcdc_pm_resume(struct device *dev)
- 	pinctrl_pm_select_default_state(dev);
- 	return  drm_mode_config_helper_resume(ddev);
- }
+ 	struct vbox_private *vbox = dev_get_drvdata(dev);
+@@ -160,16 +159,13 @@ static const struct dev_pm_ops vbox_pm_ops = {
+ 	.poweroff = vbox_pm_poweroff,
+ 	.restore = vbox_pm_resume,
+ };
 -#endif
  
--static const struct dev_pm_ops tilcdc_pm_ops = {
--	SET_SYSTEM_SLEEP_PM_OPS(tilcdc_pm_suspend, tilcdc_pm_resume)
--};
-+static DEFINE_SIMPLE_DEV_PM_OPS(tilcdc_pm_ops,
-+				tilcdc_pm_suspend, tilcdc_pm_resume);
- 
- /*
-  * Platform driver:
-@@ -597,7 +594,7 @@ static struct platform_driver tilcdc_platform_driver = {
- 	.remove     = tilcdc_pdev_remove,
- 	.driver     = {
- 		.name   = "tilcdc",
--		.pm     = &tilcdc_pm_ops,
-+		.pm     = pm_sleep_ptr(&tilcdc_pm_ops),
- 		.of_match_table = tilcdc_of_match,
- 	},
+ static struct pci_driver vbox_pci_driver = {
+ 	.name = DRIVER_NAME,
+ 	.id_table = pciidlist,
+ 	.probe = vbox_pci_probe,
+ 	.remove = vbox_pci_remove,
+-#ifdef CONFIG_PM_SLEEP
+-	.driver.pm = &vbox_pm_ops,
+-#endif
++	.driver.pm = pm_sleep_ptr(&vbox_pm_ops),
  };
+ 
+ DEFINE_DRM_GEM_FOPS(vbox_fops);
 -- 
 2.35.1
 
