@@ -2,96 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C0FD61EE00
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 10:00:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB3AD61EE04
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 10:01:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231464AbiKGJAX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 04:00:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59870 "EHLO
+        id S231488AbiKGJBo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 04:01:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229586AbiKGJAS (ORCPT
+        with ESMTP id S229586AbiKGJBl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 04:00:18 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B40C12AFA;
-        Mon,  7 Nov 2022 01:00:17 -0800 (PST)
+        Mon, 7 Nov 2022 04:01:41 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D34612AFA
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 01:01:40 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3BC12B80E6B;
-        Mon,  7 Nov 2022 09:00:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id D5B48C433D7;
-        Mon,  7 Nov 2022 09:00:14 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 37BBD60F1C
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 09:01:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AF63C433D6;
+        Mon,  7 Nov 2022 09:01:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667811614;
-        bh=4iQF982dX9qc45dSDY4MdBxVjSNki9VdNDupV7NMNYY=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=hYkJSSjW4ZmuPXQ5YP72b/bOOixg6QNiHVylSoBPVwF4Cz4r+KQOiJZA3P/Pmtmom
-         D84Zz4Y4rrtPMnD+JFivfRflGgRdq6KkDFnc58Jmi5OABI48tBSjtonQLr7HIlSH4f
-         ZdAx3goHlNJB532Sgf5BwX8UCu+NfjZ13Kd6VKc7FHQC4b91DWLcYRvqpgPY37TgMA
-         zjVLCXJrQ62gh3cIDeimfDJnWtbOyihdOedVheSVj9nqSYxcwhKpw++yyyi1N1/j2h
-         jcc4EnslzH8evsOX1k6rjjUgy9Mz7ZqF7nDWw/mw5/3bI/PMYrXPJ0WI5qwmS2joAP
-         j2ZWAml5/RFXQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C29E6C41671;
-        Mon,  7 Nov 2022 09:00:14 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        s=k20201202; t=1667811699;
+        bh=SPtH20/96GdEvJGs3c70fuLCrm80coIng1kX3ldY4a0=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=YmhjOp9cdbqjRcY6UGQnj8sR06ymK0olBJdZz81umlUEkTpCg+qydNcahxqIfbJjn
+         neDY9uWn5nVGhAW1RdREC/5ZWtCuZCrHnllqe2M+yWElig/4Qwd3ygJ2pl+uFP0NSR
+         66J9gLXXw3jFXm42ZgFFFHKaF5ksrxJ4yeFb/eXvd2tqT2dw+qXsz4408twr3ayQlh
+         b0gMKTGB3mQdBxhcW3syOQaixNgpfzuemJNOLjK3Qiwg8sGsUO+dG48q3RPabai63m
+         ZnfAIrLkP76QHagXzfHbJ4SNGQ/sKXjf57BZCOH+wYsP3Ls+8Zoaw4lcWqKSa/rlSQ
+         Z6lT3tFIsprwA==
+Message-ID: <f5645515-ccc2-2fd9-8943-f514b20e0c98@kernel.org>
+Date:   Mon, 7 Nov 2022 11:01:33 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v4 1/3] net: hinic: Convert the cmd code from decimal
- to hex to be more readable
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166781161479.8122.7153521073218166910.git-patchwork-notify@kernel.org>
-Date:   Mon, 07 Nov 2022 09:00:14 +0000
-References: <20221103080525.26885-1-cai.huoqing@linux.dev>
-In-Reply-To: <20221103080525.26885-1-cai.huoqing@linux.dev>
-To:     Cai Huoqing <cai.huoqing@linux.dev>
-Cc:     kuba@kernel.org, davem@davemloft.net, edumazet@google.com,
-        pabeni@redhat.com, shaozhengchao@huawei.com,
-        mqaio@linux.alibaba.com, bin.chen@corigine.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] mtd: onenand: omap2: add dependency on GPMC
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     kernel test robot <lkp@intel.com>
+References: <20221104194934.384371-1-krzysztof.kozlowski@linaro.org>
+ <eef60a26-ef23-1b79-22f7-adaee3be9360@kernel.org>
+ <742d9ff1-8af8-8fa1-4f37-4b50bd874e82@linaro.org>
+From:   Roger Quadros <rogerq@kernel.org>
+In-Reply-To: <742d9ff1-8af8-8fa1-4f37-4b50bd874e82@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
 
-This series was applied to netdev/net-next.git (master)
-by David S. Miller <davem@davemloft.net>:
 
-On Thu,  3 Nov 2022 16:05:09 +0800 you wrote:
-> The print cmd code is in hex, so using hex cmd code intead of
-> decimal is easy to check the value with print info.
+On 07/11/2022 10:55, Krzysztof Kozlowski wrote:
+> On 07/11/2022 09:44, Roger Quadros wrote:
+>> Hello Krzysztof,
+>>
+>> On 04/11/2022 21:49, Krzysztof Kozlowski wrote:
+>>> OMAP2 OneNAND driver uses gpmc_omap_onenand_set_timings() provided by
+>>> OMAP GPMC driver, so the latter cannot be module if OneNAND driver is
+>>> built-in:
+>>>
+>>>   /usr/bin/arm-linux-gnueabi-ld: drivers/mtd/nand/onenand/onenand_omap2.o: in function `omap2_onenand_probe':
+>>>   onenand_omap2.c:(.text+0x520): undefined reference to `gpmc_omap_onenand_set_timings'
+>>>
+>>> Reported-by: kernel test robot <lkp@intel.com>
+>>> Fixes: 854fd9209b20 ("memory: omap-gpmc: Allow building as a module")
+>>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>>> ---
+>>>  drivers/mtd/nand/onenand/Kconfig | 1 +
+>>>  1 file changed, 1 insertion(+)
+>>>
+>>> diff --git a/drivers/mtd/nand/onenand/Kconfig b/drivers/mtd/nand/onenand/Kconfig
+>>> index 34d9a7a82ad4..fa94c514626d 100644
+>>> --- a/drivers/mtd/nand/onenand/Kconfig
+>>> +++ b/drivers/mtd/nand/onenand/Kconfig
+>>> @@ -26,6 +26,7 @@ config MTD_ONENAND_OMAP2
+>>>  	tristate "OneNAND on OMAP2/OMAP3 support"
+>>>  	depends on ARCH_OMAP2 || ARCH_OMAP3 || (COMPILE_TEST && ARM)
+>>>  	depends on OF || COMPILE_TEST
+>>> +	depends on OMAP_GPMC || !OMAP_GPMC
+>>
+>> Why did you add !OMAP_GPMC?
+>>
+>> If OMAP_GPMC is not set we don't want to be able to build this driver correct?
 > 
-> Signed-off-by: Cai Huoqing <cai.huoqing@linux.dev>
-> ---
-> v1->v2:
-> 	1.Add net-next prefix.
-> 	The comments link: https://lore.kernel.org/lkml/20221027110241.0340abdf@kernel.org/
-> v2->v3:
-> 	1.Merge PATCH 3/3 to this series.
-> v3->v4:
-> 	1.Revert the empty lines.
-> 	The comments link: https://lore.kernel.org/lkml/20221102203640.1bda5d74@kernel.org/
-> 
-> [...]
+> It will build fine because of stubs, so building is not a problem. We
+> just want to forbid having this built-in if OMAP_GPMC is a module. The
+> question is whether this is a runtime dependency as well?
 
-Here is the summary with links:
-  - [net-next,v4,1/3] net: hinic: Convert the cmd code from decimal to hex to be more readable
-    https://git.kernel.org/netdev/net-next/c/ac33d7ae8f71
-  - [net-next,v4,2/3] net: hinic: Add control command support for VF PMD driver in DPDK
-    https://git.kernel.org/netdev/net-next/c/13265568a863
-  - [net-next,v4,3/3] net: hinic: Add support for configuration of rx-vlan-filter by ethtool
-    https://git.kernel.org/netdev/net-next/c/2acf960e3be6
+Yes, there is a runtime dependency. Without the OMAP_GPMC driver
+this MTD_ONENAND_OMAP2 will not work.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+cheers,
+-roger
