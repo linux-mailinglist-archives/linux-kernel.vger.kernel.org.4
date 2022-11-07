@@ -2,216 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4606461EC47
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 08:41:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53ABA61EC3D
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 08:40:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230470AbiKGHk5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 02:40:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46870 "EHLO
+        id S231448AbiKGHkb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 02:40:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231458AbiKGHky (ORCPT
+        with ESMTP id S231216AbiKGHk3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 02:40:54 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8693BCFF
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Nov 2022 23:39:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667806798;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=gqTH/IxvvklYXKMEdnIMrBW3qua+LAhrbLqR4JyUT5Y=;
-        b=DgPddmXsZRjIKVlvsWt0s3Q1k3wd9nqK0erxuzzwHr9nvgCErdyvf+IulACckTOchD9S/6
-        FlKG+ZuL0KWnW313yPrgnNVpaeRYv7RgQ5zR4DFceOMx9d2SRe+obMAOThNT3pHN7fkHn8
-        rAOzrcRBJJ2lPL2aFMr0gwZvOJ7mXos=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-423-qmo1cUkQPieqy5-dMvIDtg-1; Mon, 07 Nov 2022 02:39:57 -0500
-X-MC-Unique: qmo1cUkQPieqy5-dMvIDtg-1
-Received: by mail-ed1-f71.google.com with SMTP id v18-20020a056402349200b004622e273bbbso7657329edc.14
-        for <linux-kernel@vger.kernel.org>; Sun, 06 Nov 2022 23:39:57 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=gqTH/IxvvklYXKMEdnIMrBW3qua+LAhrbLqR4JyUT5Y=;
-        b=fNwaoVTdY7OGtvQ0nkFhtHi1PhhQTXgdm/Tu5OY4JYoauAu2fnkmj4J31UGdKwLGTE
-         PE618nEgxrYnd4vj1e4ykL/Cj/+aodHtJXZugRqCfXrE5xvwhOECczBnQSPLVGv7BCg6
-         pfNmD66WET2E0XkkC/NVorjsuu5cHVACKJ/ddGMcyVxqTBresuU44P2hFk84Q++WclsN
-         7T+OPls7DfV9ouP1aMTFY0Zygc8b0O0x/IhnFEUqQUWJSj/FrZOozhcO6NZkMoY24iOU
-         KELXKpC4L22LsYnKh9h9b4TtZAdiLRN2Xtm/Z3Mk+2tOB4cJmXizATOjaYwu4NtmmPt0
-         pSxQ==
-X-Gm-Message-State: ANoB5pl9koIdNX0aMqjzbX+WlE3vJ41CINAfj1ZRVZ+UkWh21jlaaUlv
-        R8gGP7rXfWRX1z4YfrpSntQHKrZUh8wyqRq9pXbkW27gSd1DgSCch8L7qIvP5huyD5KfdLbccfD
-        PMsDOCQ/4dMY/LroP7cWuTgG/J3enlXZgFVycpPl8
-X-Received: by 2002:aa7:d385:0:b0:461:8cd3:b38b with SMTP id x5-20020aa7d385000000b004618cd3b38bmr10532983edq.172.1667806796351;
-        Sun, 06 Nov 2022 23:39:56 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf6kEcP7IRVZbDPlLZz1yB6QJ3FRoM6CZNsHc+5ZoCmUj79D76jdLuYBr+2+StZs/5kxjL+vZjuSVSNBbtEMAwc=
-X-Received: by 2002:aa7:d385:0:b0:461:8cd3:b38b with SMTP id
- x5-20020aa7d385000000b004618cd3b38bmr10532968edq.172.1667806796080; Sun, 06
- Nov 2022 23:39:56 -0800 (PST)
+        Mon, 7 Nov 2022 02:40:29 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37831D9A;
+        Sun,  6 Nov 2022 23:40:28 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ABE4560E2C;
+        Mon,  7 Nov 2022 07:40:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F552C433D6;
+        Mon,  7 Nov 2022 07:40:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667806827;
+        bh=Q9sAm/EGEjJ9UW42di1s+Bb/pLDCYceoSWiZMW02CYQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=U2UcuxX3fs0itggbRp+T6jp7dthfdNQfr3Z6g4GVy9gv4EuSmz/mZO/RA1k/vxoet
+         biC4KXEGXJuRwCviYZxZizPLMngz/zNc6fvxBy3yUkOe0wLSecqe6ah2FwakbssSyQ
+         xn/Om35wDC31jqNP+gVt5q8KdfQqQs2ErAiZK/coJdq3fw1olTYx7H6sx6SzGkkgED
+         q79+ozn1rtKi8g0MU4MFYAaWW6MEiuWW+D9BoYQJhykMUuviJFgig4lYDK3wikO3/w
+         k2PSD3mlaX5mBVts7BpSbaTsZWTnmj/XA51Si/HBhkofb0i4h2krjO2wh6ZDoQCgp9
+         mcqOARAghrOOw==
+Date:   Mon, 7 Nov 2022 13:10:15 +0530
+From:   Manivannan Sadhasivam <mani@kernel.org>
+To:     Slark Xiao <slark_xiao@163.com>
+Cc:     Manivannan Sadhasivam <mani@kernel.org>,
+        gregkh@linuxfoundation.org, loic.poulain@linaro.org,
+        dnlplm@gmail.com, yonglin.tan@outlook.com,
+        fabio.porcedda@gmail.com, mhi@lists.linux.dev,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: Re: [PATCH] bus: mhi: host: pci_generic: Add macro for some vids
+Message-ID: <20221107074015.GA5340@thinkpad>
+References: <20221102024437.15248-1-slark_xiao@163.com>
+ <20221103125009.GH8434@thinkpad>
+ <cbb018a.ab1.1844fe4a7e8.Coremail.slark_xiao@163.com>
 MIME-Version: 1.0
-References: <3acf1cc7a974cb4fb9b77b39311c6714@tfwno.gf> <Y2XUNive2KMwTjUF@MiWiFi-R3L-srv>
- <CALu+AoTVtO=-tzbgjeVRQ3uO0yGUPWKPuAiLn0CpaAq_=xr-sw@mail.gmail.com>
- <2f43e1e583a92e1592c48a15a763e1f7@tfwno.gf> <CALu+AoQqb23tnNS6VY4+Q5Mz85NDFfWOP_aynoz7fcoMvzNeKg@mail.gmail.com>
- <CAMj1kXGyo7q1Jgkw8RAfiiyLpe8GAvsWT+jEt4DM-1W9Qf7oUQ@mail.gmail.com> <CALu+AoQeraV2fLx_6q_76rdUXdsY6wYVMNU0o_VVuXLyfqiDNA@mail.gmail.com>
-In-Reply-To: <CALu+AoQeraV2fLx_6q_76rdUXdsY6wYVMNU0o_VVuXLyfqiDNA@mail.gmail.com>
-From:   Dave Young <dyoung@redhat.com>
-Date:   Mon, 7 Nov 2022 15:39:18 +0800
-Message-ID: <CALu+AoTJeMry54KmSWooP5Jm3t0EqCxOid_GzfU51KQmXUYp8Q@mail.gmail.com>
-Subject: Re: Bug: kexec on Lenovo ThinkPad T480 disables EFI mode
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     ns@tfwno.gf, Baoquan He <bhe@redhat.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-efi@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <cbb018a.ab1.1844fe4a7e8.Coremail.slark_xiao@163.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 7 Nov 2022 at 15:36, Dave Young <dyoung@redhat.com> wrote:
->
-> Hi Ard,
->
-> On Mon, 7 Nov 2022 at 15:30, Ard Biesheuvel <ardb@kernel.org> wrote:
+On Mon, Nov 07, 2022 at 10:21:36AM +0800, Slark Xiao wrote:
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> At 2022-11-03 20:50:09, "Manivannan Sadhasivam" <mani@kernel.org> wrote:
+> >On Wed, Nov 02, 2022 at 10:44:37AM +0800, Slark Xiao wrote:
+> >> To make code neat and for convenience purpose, using macro for
+> >> some vids.
 > >
-> > On Mon, 7 Nov 2022 at 07:55, Dave Young <dyoung@redhat.com> wrote:
-> > >
-> > > Hi,
-> > >
-> > > On Sat, 5 Nov 2022 at 22:16, <ns@tfwno.gf> wrote:
-> > > >
-> > > > On 2022-11-05 05:49, Dave Young wrote:
-> > > > > Baoquan, thanks for cc me.
-> > > > >
-> > > > > On Sat, 5 Nov 2022 at 11:10, Baoquan He <bhe@redhat.com> wrote:
-> > > > >>
-> > > > >> Add Dave to CC
-> > > > >>
-> > > > >> On 10/28/22 at 01:02pm, ns@tfwno.gf wrote:
-> > > > >> > Greetings,
-> > > > >> >
-> > > > >> > I've been hitting a bug on my Lenovo ThinkPad T480 where kexecing will
-> > > > >> > cause EFI mode (if that's the right term for it) to be unconditionally
-> > > > >> > disabled, even when not using the --noefi option to kexec.
-> > > > >> >
-> > > > >> > What I mean by "EFI mode" being disabled, more than just EFI runtime
-> > > > >> > services, is that basically nothing about the system's EFI is visible
-> > > > >> > post-kexec. Normally you have a message like this in dmesg when the
-> > > > >> > system is booted in EFI mode:
-> > > > >> >
-> > > > >> > [    0.000000] efi: EFI v2.70 by EDK II
-> > > > >> > [    0.000000] efi: SMBIOS=0x7f98a000 ACPI=0x7fb7e000 ACPI 2.0=0x7fb7e014
-> > > > >> > MEMATTR=0x7ec63018
-> > > > >> > (obviously not the real firmware of the machine I'm talking about, but I
-> > > > >> > can also send that if it would be of any help)
-> > > > >> >
-> > > > >> > No such message pops up in my dmesg as a result of this bug, & this
-> > > > >> > causes some fallout like being unable to find the system's DMI
-> > > > >> > information:
-> > > > >> >
-> > > > >> > <6>[    0.000000] DMI not present or invalid.
-> > > > >> >
-> > > > >> > The efivarfs module also fails to load with -ENODEV.
-> > > > >> >
-> > > > >> > I've tried also booting with efi=runtime explicitly but it doesn't
-> > > > >> > change anything. The kernel still does not print the name of the EFI
-> > > > >> > firmware, DMI is still missing, & efivarfs still fails to load.
-> > > > >> >
-> > > > >> > I've been using the kexec_load syscall for all these tests, if it's
-> > > > >> > important.
-> > > > >> >
-> > > > >> > Also, to make it very clear, all this only ever happens post-kexec. When
-> > > > >> > booting straight from UEFI (with the EFI stub), all the aforementioned
-> > > > >> > stuff that fails works perfectly fine (i.e. name of firmware is printed,
-> > > > >> > DMI is properly found, & efivarfs loads & mounts just fine).
-> > > > >> >
-> > > > >> > This is reproducible with a vanilla 6.1-rc2 kernel. I've been trying to
-> > > > >> > bisect it, but it seems like it goes pretty far back. I've got vanilla
-> > > > >> > mainline kernel builds dating back to 5.17 that have the exact same
-> > > > >> > issue. It might be worth noting that during this testing, I made sure
-> > > > >> > the version of the kernel being kexeced & the kernel kexecing were the
-> > > > >> > same version. It may not have been a problem in older kernels, but that
-> > > > >> > would be difficult to test for me (a pretty important driver for this
-> > > > >> > machine was only merged during v5.17-rc4). So it may not have been a
-> > > > >> > regression & just a hidden problem since time immemorial.
-> > > > >> >
-> > > > >> > I am willing to test any patches I may get to further debug or fix
-> > > > >> > this issue, preferably based on the current state of torvalds/linux.git.
-> > > > >> > I can build & test kernels quite a few times per day.
-> > > > >> >
-> > > > >> > I can also send any important materials (kernel config, dmesg, firmware
-> > > > >> > information, so on & so forth) on request. I'll also just mention I'm
-> > > > >> > using kexec-tools 2.0.24 upfront, if it matters.
-> > > > >
-> > > > > Can you check the efi runtime in sysfs:
-> > > > > ls /sys/firmware/efi/runtime-map/
-> > > > >
-> > > > > If nothing then maybe you did not enable CONFIG_EFI_RUNTIME_MAP=y, it
-> > > > > is needed for kexec UEFI boot on x86_64.
-> > > >
-> > > > Oh my, it really is that simple.
-> > > >
-> > > > Indeed, enabling this in the pre-kexec kernel fixes it all up. I had
-> > > > blindly disabled it in my quest to downsize the pre-kexec kernel to
-> > > > reduce boot time (it only runs a bootloader). In hindsight, the firmware
-> > > > drivers section is not really a good section to tweak on a whim.
-> > > >
-> > > > I'm terribly sorry to have taken your time to "fix" this "bug". But I
-> > > > must ask, is there any reason why this is a visible config option, or at
-> > > > least not gated behind CONFIG_EXPERT? drivers/firmware/efi/runtime-map.c
-> > > > is pretty tiny, & considering it depends on CONFIG_KEXEC_CORE, one
-> > > > probably wants to have kexec work properly if they can even enable it.
-> > >
-> > > Glad to know it works with the .config tweaking. I can not recall any
-> > > reason for that though.
-> > >
-> > > Since it sits in the efi code path, let's see how Ard thinks about
-> > > your proposal.
-> > >
+> >s/using/use
+> >s/vids/VIDs
 > >
-> > I don't understand why EFI_RUNTIME_MAP should depend on KEXEC_CORE at
-> > all: it is documented as a feature that can be enabled for debugging
-> > as well, and kexec does not work as expected without it.
->
-> Probably debugging only mentioned in text, but not been considered in
-> the kconfig logic :(
->
+> >> Refer to previous patch in pci_ids.h side, they are
+> >> not allowed to add new entries of single driver needed. So we
+> >> add it in our local file.
+> >>
 > >
-> > Should we just change it like this perhaps?
+> >Reference to the previous patch has no relationship with this commit once
+> >merged. How about,
 > >
-> > --- a/drivers/firmware/efi/Kconfig
-> > +++ b/drivers/firmware/efi/Kconfig
-> > @@ -28,8 +28,8 @@ config EFI_VARS_PSTORE_DEFAULT_DISABLE
+> >"These macros are supposed to be added to pci_ids.h. But until the macros are
+> >used in multiple places, it is not recommended. So adding it locally for now."
+> > 
+> >> Signed-off-by: Slark Xiao <slark_xiao@163.com>
+> >> ---
+> >>  drivers/bus/mhi/host/pci_generic.c | 18 +++++++++++-------
+> >>  1 file changed, 11 insertions(+), 7 deletions(-)
+> >> 
+> >> diff --git a/drivers/bus/mhi/host/pci_generic.c b/drivers/bus/mhi/host/pci_generic.c
+> >> index c4259cb2d289..5abc778a5290 100644
+> >> --- a/drivers/bus/mhi/host/pci_generic.c
+> >> +++ b/drivers/bus/mhi/host/pci_generic.c
+> >> @@ -24,6 +24,10 @@
+> >>  
+> >>  #define HEALTH_CHECK_PERIOD (HZ * 2)
+> >>  
 > >
-> >  config EFI_RUNTIME_MAP
-> >         bool "Export efi runtime maps to sysfs"
-> > -       depends on X86 && EFI && KEXEC_CORE
-> > -       default y
-> > +       depends on X86 && EFI
-> > +       default KEXEC_CORE
-> >         help
+> >Add a comment,
 > >
-> > and maybe add an 'if EXPERT' so that the option is only visible to
-> > modify when CONFIG_EXPERT=y ?
->
-> Above changes look good to me.
->
+> >/* PCI VID definitions */
 > >
-> > In any case, I intend to move this code into arch/x86 as well, so I'll
-> > have a couple of patches out shortly.
->
-> That would be better since it is X86 only.  Thanks, Ard.
+> >> +#define PCI_VENDOR_ID_THALES	0x1269
+> >> +
+> >
+> >No need of newline
+> >
+> >> +#define PCI_VENDOR_ID_QUECTEL	0x1eac
+> >> +
+> >
+> >Just use a space after PCI_VENDOR_ID_QUECTEL like above.
+> >
+> >Thanks,
+> >Mani
+> Hi Mani,
+> I didn't get the point of this format issue.
+> Do you mean remove that newline between these 2 definitions?
 
-Hmm,  before doing that, do you think it is useful for debugging
-purposes? That could be a reason to sit in efi code instead of x86 ..
+Yes, since both are VIDs, there is no need to add a newline between them.
 
+Thanks,
+Mani
+
+> >
+> >>  /**
+> >>   * struct mhi_pci_dev_info - MHI PCI device specific information
+> >>   * @config: MHI controller configuration
+> >> @@ -557,11 +561,11 @@ static const struct pci_device_id mhi_pci_id_table[] = {
+> >>  		.driver_data = (kernel_ulong_t) &mhi_telit_fn990_info },
+> >>  	{ PCI_DEVICE(PCI_VENDOR_ID_QCOM, 0x0308),
+> >>  		.driver_data = (kernel_ulong_t) &mhi_qcom_sdx65_info },
+> >> -	{ PCI_DEVICE(0x1eac, 0x1001), /* EM120R-GL (sdx24) */
+> >> +	{ PCI_DEVICE(PCI_VENDOR_ID_QUECTEL, 0x1001), /* EM120R-GL (sdx24) */
+> >>  		.driver_data = (kernel_ulong_t) &mhi_quectel_em1xx_info },
+> >> -	{ PCI_DEVICE(0x1eac, 0x1002), /* EM160R-GL (sdx24) */
+> >> +	{ PCI_DEVICE(PCI_VENDOR_ID_QUECTEL, 0x1002), /* EM160R-GL (sdx24) */
+> >>  		.driver_data = (kernel_ulong_t) &mhi_quectel_em1xx_info },
+> >> -	{ PCI_DEVICE(0x1eac, 0x2001), /* EM120R-GL for FCCL (sdx24) */
+> >> +	{ PCI_DEVICE(PCI_VENDOR_ID_QUECTEL, 0x2001), /* EM120R-GL for FCCL (sdx24) */
+> >>  		.driver_data = (kernel_ulong_t) &mhi_quectel_em1xx_info },
+> >>  	/* T99W175 (sdx55), Both for eSIM and Non-eSIM */
+> >>  	{ PCI_DEVICE(PCI_VENDOR_ID_FOXCONN, 0xe0ab),
+> >> @@ -585,16 +589,16 @@ static const struct pci_device_id mhi_pci_id_table[] = {
+> >>  	{ PCI_DEVICE(PCI_VENDOR_ID_FOXCONN, 0xe0d9),
+> >>  		.driver_data = (kernel_ulong_t) &mhi_foxconn_sdx65_info },
+> >>  	/* MV31-W (Cinterion) */
+> >> -	{ PCI_DEVICE(0x1269, 0x00b3),
+> >> +	{ PCI_DEVICE(PCI_VENDOR_ID_THALES, 0x00b3),
+> >>  		.driver_data = (kernel_ulong_t) &mhi_mv31_info },
+> >>  	/* MV31-W (Cinterion), based on new baseline */
+> >> -	{ PCI_DEVICE(0x1269, 0x00b4),
+> >> +	{ PCI_DEVICE(PCI_VENDOR_ID_THALES, 0x00b4),
+> >>  		.driver_data = (kernel_ulong_t) &mhi_mv31_info },
+> >>  	/* MV32-WA (Cinterion) */
+> >> -	{ PCI_DEVICE(0x1269, 0x00ba),
+> >> +	{ PCI_DEVICE(PCI_VENDOR_ID_THALES, 0x00ba),
+> >>  		.driver_data = (kernel_ulong_t) &mhi_mv32_info },
+> >>  	/* MV32-WB (Cinterion) */
+> >> -	{ PCI_DEVICE(0x1269, 0x00bb),
+> >> +	{ PCI_DEVICE(PCI_VENDOR_ID_THALES, 0x00bb),
+> >>  		.driver_data = (kernel_ulong_t) &mhi_mv32_info },
+> >>  	{  }
+> >>  };
+> >> -- 
+> >> 2.17.1
+> >> 
+> >
+> >-- 
+> >மணிவண்ணன் சதாசிவம்
+
+-- 
+மணிவண்ணன் சதாசிவம்
