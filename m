@@ -2,137 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E78861F1A4
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 12:17:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 450D561F1A5
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 12:17:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231896AbiKGLRB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 06:17:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38522 "EHLO
+        id S231359AbiKGLRX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 06:17:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231688AbiKGLQy (ORCPT
+        with ESMTP id S229659AbiKGLRU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 06:16:54 -0500
-Received: from outbound-smtp27.blacknight.com (outbound-smtp27.blacknight.com [81.17.249.195])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A5B0BC9C
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 03:16:52 -0800 (PST)
-Received: from mail.blacknight.com (pemlinmail01.blacknight.ie [81.17.254.10])
-        by outbound-smtp27.blacknight.com (Postfix) with ESMTPS id 0D8A7CAB8F
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 11:16:51 +0000 (GMT)
-Received: (qmail 22850 invoked from network); 7 Nov 2022 11:16:50 -0000
-Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.198.246])
-  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 7 Nov 2022 11:16:50 -0000
-Date:   Mon, 7 Nov 2022 11:16:49 +0000
-From:   Mel Gorman <mgorman@techsingularity.net>
-To:     Hugh Dickins <hughd@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Yu Zhao <yuzhao@google.com>, Vlastimil Babka <vbabka@suse.cz>,
-        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>
-Subject: Re: [PATCH v2] mm/page_alloc: Leave IRQs enabled for per-cpu page
- allocations
-Message-ID: <20221107111649.rzfgqk3ebvicsuyw@techsingularity.net>
-References: <20221104142259.5hohev5hzvwanbi2@techsingularity.net>
- <97b7ae87-797c-4ebb-d2d3-9415975188@google.com>
+        Mon, 7 Nov 2022 06:17:20 -0500
+Received: from smtp.domeneshop.no (smtp.domeneshop.no [IPv6:2a01:5b40:0:3005::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27CBFBCB8
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 03:17:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tronnes.org
+        ; s=ds202112; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=FFI39mP8UtNKgOqsi2a6dT2sTXn4P75XgEouvE9p5L0=; b=TJlNny8m3SQR1E18mL8S98TVQJ
+        1oMLGAbLNfa7jW+weTU/RpdeaudZeLqRm6kCaVOsswVSTJsZMlSx94JwUMDbx/pWcLkW0LURu+GtA
+        gTd1n8X4PGBurLIJWx3ORA1yBMkeDAjMX3TjIVnJEd0jOx0eb52UD7NXCpQIf6FVS/x+64KYMWffm
+        Pm6rATU2FGOE2zwcjsh8BNCdbjEeRZJ1pAWhZE5f/MwMJmMIAJ9rhn5bphtAwzBDB4kn2MTJI4shh
+        aBdvTtiL6xN2cOyVs4gfyQ/DFbibjsDqSXt8FdTAcR/3oJimZzlUC04dsdv9CmpIKnSWk1NTNwAYl
+        AdffaDjQ==;
+Received: from [2a01:799:95a:cb00:fd97:29ff:d72a:349e] (port=49701)
+        by smtp.domeneshop.no with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <noralf@tronnes.org>)
+        id 1os07v-0005Xf-CP; Mon, 07 Nov 2022 12:17:15 +0100
+Message-ID: <022d5c23-6387-55b5-615e-5c6aaa0dc86c@tronnes.org>
+Date:   Mon, 7 Nov 2022 12:17:06 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
-Content-Disposition: inline
-In-Reply-To: <97b7ae87-797c-4ebb-d2d3-9415975188@google.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v6 16/23] drm/probe-helper: Provide a TV get_modes helper
+To:     Maxime Ripard <maxime@cerno.tech>
+Cc:     Mateusz Kwiatkowski <kfyatek@gmail.com>,
+        Karol Herbst <kherbst@redhat.com>,
+        Emma Anholt <emma@anholt.net>, Ben Skeggs <bskeggs@redhat.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Lyude Paul <lyude@redhat.com>, linux-sunxi@lists.linux.dev,
+        intel-gfx@lists.freedesktop.org,
+        Phil Elwell <phil@raspberrypi.com>,
+        linux-arm-kernel@lists.infradead.org,
+        nouveau@lists.freedesktop.org, Hans de Goede <hdegoede@redhat.com>,
+        Dom Cobley <dom@raspberrypi.com>,
+        dri-devel@lists.freedesktop.org,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        linux-kernel@vger.kernel.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
+References: <20220728-rpi-analog-tv-properties-v6-0-e7792734108f@cerno.tech>
+ <20220728-rpi-analog-tv-properties-v6-16-e7792734108f@cerno.tech>
+ <8d0eee22-50f5-5b0a-c1e6-c5f61dd5bbcd@gmail.com>
+ <eb485588-2e7a-8455-7ec4-6a9649d2bef8@tronnes.org>
+ <20221107100751.neijajfrazxloldp@houat>
+From:   =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
+In-Reply-To: <20221107100751.neijajfrazxloldp@houat>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Nov 06, 2022 at 08:42:32AM -0800, Hugh Dickins wrote:
-> On Fri, 4 Nov 2022, Mel Gorman wrote:
-> 
-> > Changelog since v1
-> >  o Use trylock in free_unref_page_list due to IO completion from softirq
-> >    context
-> > 
-> > The pcp_spin_lock_irqsave protecting the PCP lists is IRQ-safe as a task
-> > allocating from the PCP must not re-enter the allocator from IRQ context.
-> > In each instance where IRQ-reentrancy is possible, the lock is acquired using
-> > pcp_spin_trylock_irqsave() even though IRQs are disabled and re-entrancy
-> > is impossible.
-> > 
-> > Demote the lock to pcp_spin_lock avoids an IRQ disable/enable in the common
-> > case at the cost of some IRQ allocations taking a slower path. If the PCP
-> > lists need to be refilled, the zone lock still needs to disable IRQs but
-> > that will only happen on PCP refill and drain. If an IRQ is raised when
-> > a PCP allocation is in progress, the trylock will fail and fallback to
-> > using the buddy lists directly. Note that this may not be a universal win
-> > if an interrupt-intensive workload also allocates heavily from interrupt
-> > context and contends heavily on the zone->lock as a result.
-> > 
-> > [yuzhao@google.com: Reported lockdep issue on IO completion from softirq]
-> > Signed-off-by: Mel Gorman <mgorman@techsingularity.net>
-> 
-> Hi Mel, I think you Cc'ed me for the purpose of giving this patch a
-> run, and reporting if it's not good.  That is the case, I'm afraid.
-> 
 
-Thanks for testing and yes, you were cc'd in the hope you'd run it through a
-stress test of some sort. A lot of the test I run are performance orientated
-and relatively few target functional issues.
 
-> I first tried it on a v6.1-rc3, and very soon crashed under load with
-> something about PageBuddy in the output.  When I reverted, no problem;
-> I thought maybe it's dependent on other commits in akpm's tree.
+Den 07.11.2022 11.07, skrev Maxime Ripard:
+> Hi Noralf,
+> 
+> On Sun, Nov 06, 2022 at 05:59:23PM +0100, Noralf Trønnes wrote:
+>>
+>>
+>> Den 27.10.2022 00.02, skrev Mateusz Kwiatkowski:
+>>> Hi Maxime,
+>>>
+>>> First of all, nice idea with the helper function that can be reused by different
+>>> drivers. This is neat!
+>>>
+>>> But looking at this function, it feels a bit overcomplicated. You're creating
+>>> the two modes, then checking which one is the default, then set the preferred
+>>> one and possibly reorder them. Maybe it can be simplified somehow?
+>>>
+>>> Although when I tried to refactor it myself, I ended up with something that's
+>>> not better at all. Maybe it needs to be complicated, after all :(
+>>>
+>>
+>> I also thought that the function was complicated/difficult to read, in
+>> particular the index stuff at the end, but I also failed in finding a
+>> "better" solution, just a different one ;)
+> 
+> I think I like yours better still :)
+> 
+> Can I bring it into my series, with your authorship and SoB?
 > 
 
-Can you tell me what sort of load it's under? I would like to add something
-similar to the general battery of tests I run all patches affecting the
-page allocator through. Even if this is just a crude shell script, it would
-be enough for me to work with and incorporate into mmtests. If it's there
-and I find mm-unstable has its own problems, bisection can brute force
-the problem.
+Sure, no problem.
 
-> Later I tried on current mm-unstable: which is living up to the name
-> in other ways, but when other issues patched, it soon crashed under
-> load, GPF probably for non-canonical address 0xdead0000000000f8
-> in compact_zone < compact_zone_order < try_to_compact_pages <
-> .... < shmem_alloc_hugefolio < ...
-> 
-
-0xdead000* looks like ILLEGAL_POINTER_VALUE which is used as a poison
-value so a full list of debugging options you apply for the stress test
-would also be useful.
-
-> I do try to exercise compaction as hard as I can, even to the point
-> of having a hack in what used to be called shmem_getpage_gfp(),
-> reverting to the stronger attempt to get huge pages, before Rik
-> weakened the effect of huge=always with vma_thp_gfp_mask() in 5.12:
-> so shmem is probably applying stronger flags for compaction than it
-> would in your tree - I'm using
-> GFP_TRANSHUGE_LIGHT | __GFP_RECLAIM | __GFP_NORETRY there.
-> 
-> Sorry for not giving you more info, I'm rather hoping that compaction
-> is relevant, and will give you a clue (maybe that capture code, which
-> surprised us once before??). 
-
-While capture is a possibility, it's a bad fit for this patch because
-pages are captured under task context.
-
-> What I'm really trying to do is fix
-> the bug in Linus's rmap/TLB series, and its interaction with my
-> rmap series, and report back on his series (asking for temporary
-> drop), before next-20221107 goes down in flames.
-> 
-> I'd advocate for dropping this patch of yours too; but if it's giving
-> nobody else any trouble, I can easily continue to patch it out.
-> 
-
-Given that you tested the patch against v6.1-rc3, it's clear that the
-patch on its own causes problems. Having a reproduction case will help
-me figure out why.
-
--- 
-Mel Gorman
-SUSE Labs
+Noralf.
