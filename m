@@ -2,300 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41C3561FDCF
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 19:45:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B21DA61FDD7
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 19:46:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232357AbiKGSpt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 13:45:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56910 "EHLO
+        id S232380AbiKGSq0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 13:46:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232161AbiKGSpo (ORCPT
+        with ESMTP id S231426AbiKGSqX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 13:45:44 -0500
-Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5039C27177
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 10:45:42 -0800 (PST)
-Received: by mail-oi1-x234.google.com with SMTP id r76so13070632oie.13
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 10:45:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=pkWAOUOhQk6gVAhMXkMhhoFYVpz+sE1WIEuw3gtFhA0=;
-        b=ZunaYDPw7c8/bhbMogn9O05VcaN/gWNZv5vVBP6OLr3kqLxcTL93uaaFCOtpBuCrdi
-         hssY18raOh8aVfgE5ZHAgd0ZSpk2b5kZvcuyIi4w9SItSKsQUn1InnV8wHk040cOBoI7
-         Uq70h68hWGMsTeW4y+CL1AjcG8nph4na2mxaMLIdlA8gLZkkY/Y0FjS2WnC5IKNg/24Z
-         B5jYANEsUQ8zF7caLR1vZ4OewAwSkDeNJ4SkNUUAcMpSpQDIzL8NwOe/z5rUj2uDVzqS
-         4TN7TdAo+6Yi76q1vQnwIPVqah1L9JzVVUE7hu6qCXHsau6SJIBZMZzHxptO8ed3Dy2C
-         2B1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=pkWAOUOhQk6gVAhMXkMhhoFYVpz+sE1WIEuw3gtFhA0=;
-        b=JFLD2SlLObwVgt7crY1AYPtV3UAv2W2Gf8McGd6isW6j/DfMkkyeewmSVOKIelkTTa
-         Cc6PWNsOG1iuLxQOYPYzCym4jlU8PuYAXT5+LySlsv1VY6M+nCU+dXlhdoFwB+Rg4LTf
-         TFHJLk2Nl3ZuBC2kSGHFQ/uC81Iq/L9B/kP2ghXpdIj2TF51/dqTCELdEtxqnB7pQdjp
-         wxAKv/tWOd1LVbYn274WsbejpRGGGbhasizohEIWpkHOsKEBSRS01wTvjHRefZT5azus
-         qGfy9hoH4f8/qv7IEjinNAIY06MbaTgZHNvWljJJDpTQkgORqaHcrjaqc/r0phX4ro7R
-         xQug==
-X-Gm-Message-State: ACrzQf3MQdMx+3gOvAvPl9hboSR2H9/8C0TJ054UiaHvaox6ho0Ah/9i
-        RlpN3AFqDvUQ/KeH3fvApKM59hFtC7Q2toLs6n40OQ==
-X-Google-Smtp-Source: AMsMyM5M9vHb7ur0ocW2M7xZqHnT//wf/xuTIn8Pt/t6rFoYAkF7RaqIfJKOhcor5ZaCrPjjunsjNWFxfwFvpvJv/rc=
-X-Received: by 2002:aca:6007:0:b0:35a:1bda:d213 with SMTP id
- u7-20020aca6007000000b0035a1bdad213mr21438008oib.181.1667846741344; Mon, 07
- Nov 2022 10:45:41 -0800 (PST)
+        Mon, 7 Nov 2022 13:46:23 -0500
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE7A51E3D7;
+        Mon,  7 Nov 2022 10:46:22 -0800 (PST)
+Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2A7Iimdn021894;
+        Mon, 7 Nov 2022 10:45:45 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=s2048-2021-q4;
+ bh=C2jXc+OIYT3lEWKBm6fAkbgnh3e9HUTOnyyHuNCZRcc=;
+ b=MoWxK12Pl2syF5zbhgJgGoJxzQbj5i+K8Z/Rk7of5IDGMWocbHWN/C3jX4wFr/Ltdpkt
+ Tyv4uyozJhq6iE1Udv3FnaNrZGqlOQsC5mwyBxpkPI6HwfoQjA8xyqD/VUABf+m5Qptp
+ VE+y0/zRwD/T97EkkJd3L2T3CUDTaWUBlQit8njiwoW9Mh7RvY22pdkxWi7E1sTL0t9f
+ nbhWfhDfEIoo8ZRv0YY2XiFFZG8Bte9hPlX/dKArI/WHjqwya4/vxq9S+X632SU0uNxO
+ a4i1o5Y9p/YlCCIKU/Lpziql0UUzQzmmea7oJ3eKM4zq3zjao5SjHzSjGETksx0tSCB+ WQ== 
+Received: from nam11-bn8-obe.outbound.protection.outlook.com (mail-bn8nam11lp2169.outbound.protection.outlook.com [104.47.58.169])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3knnhnsapb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 07 Nov 2022 10:45:45 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=H5Q7Idjj4IBQ2EP4CEzjwzJKCUQ8dXNEw4alnWl5MLuXQMcukID33mySC5OIciJKY5FdVnzvC6lkoeX23ksNXBNW6m6PVrvAR4+QuUZ8JODlBhXWdEg6DV1CK9c3lo406f90chhwW5OzgkenQXlrC1FsON6eUm4KEp0Alj7AcL812+/bRbKw4II2haef24+sMF/lUTUHuhzLPJuneBUyIl8WvdiicOx/l40TZ7w3Ju8LLdU9GTvUI6loxDuHjXTIUwKZGT7NFg5qAIBiFE/0NzTGckw5zWdLkoE1sTm665IKyEKjQkEKxg7mifUgVJGfeyMkm4GwZgigwoeuKPdYRA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=C2jXc+OIYT3lEWKBm6fAkbgnh3e9HUTOnyyHuNCZRcc=;
+ b=WX8FN/WlY00wK8q+kxW2XINk1KEuRpVAyP2K6p3ZN9PPPycrr/RC77RrjN/ZQ+uBXwmFBo+moOS5MpJoDx0z7PJIAPMPB2SN4Q3kQUd407xGB/fW0Y4FJaE5LPr7KdaexGnBaFYMwsdMes4NaCyge/PpLnbloy3Or7uWTZAeo/Cy9JckdiibkgkCZ6RB97BY6Kc92546/1jIW72wxnwq8x0WuE5KXCmMfMW7bUnTpuTPqCh/oTEDYH0UtCKQOjV6rLxywCUniP9iRSgq9nyi4R8yeYVgyZdCwO2OffjhWsOlVF6wQ5irirb5K2qY4wFoAxoGOSmjXPgNVM1BrPRnaA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=meta.com; dmarc=pass action=none header.from=meta.com;
+ dkim=pass header.d=meta.com; arc=none
+Received: from SN6PR1501MB2064.namprd15.prod.outlook.com (2603:10b6:805:d::27)
+ by MN2PR15MB2814.namprd15.prod.outlook.com (2603:10b6:208:132::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.26; Mon, 7 Nov
+ 2022 18:45:37 +0000
+Received: from SN6PR1501MB2064.namprd15.prod.outlook.com
+ ([fe80::1f2:1491:9990:c8e3]) by SN6PR1501MB2064.namprd15.prod.outlook.com
+ ([fe80::1f2:1491:9990:c8e3%4]) with mapi id 15.20.5791.026; Mon, 7 Nov 2022
+ 18:45:37 +0000
+Message-ID: <40da21f7-19d7-142f-0380-41abd0d47d1d@meta.com>
+Date:   Mon, 7 Nov 2022 10:45:34 -0800
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.4.1
+Subject: Re: [PATCH bpf] bpf: Add explicit cast to 'void *' for
+ __BPF_DISPATCHER_UPDATE()
+Content-Language: en-US
+To:     Nathan Chancellor <nathan@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>
+Cc:     John Fastabend <john.fastabend@gmail.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        patches@lists.linux.dev, kernel test robot <lkp@intel.com>,
+        "kernelci.org bot" <bot@kernelci.org>
+References: <20221107170711.42409-1-nathan@kernel.org>
+From:   Yonghong Song <yhs@meta.com>
+In-Reply-To: <20221107170711.42409-1-nathan@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+X-ClientProxiedBy: SJ0PR13CA0176.namprd13.prod.outlook.com
+ (2603:10b6:a03:2c7::31) To SN6PR1501MB2064.namprd15.prod.outlook.com
+ (2603:10b6:805:d::27)
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SN6PR1501MB2064:EE_|MN2PR15MB2814:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5d88578c-bff9-4d85-1d9a-08dac0f042c7
+X-FB-Source: Internal
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: +obB+yljg/VKNPxG4mMxTFKmcVzFw5kvnhz6ldQt2d3P5cSi3Dh7zYCWyrgUxSKnwkMjSeamVIrSzew9Q0hJtTkRfNaMHWdseA2zWxXcY15b9KOVSp8BGLdMd8POqXUbaY4bAY43FlkKS5eQ0JswoYz0ypfoVglk8A1UQiU9qKR6yd8FQfocjv/zOf6G5jHCXpVcSljtrUqUvNMI11mm43xdIUNJQM84rWkOZSuAvkAEGIKaY0OZvCMo/mC0zYw/yuKS+hKB9Ov026idMpSbopisxv+9xRsUzeTIhCyOTVj6vp7QKCRc+B/HIIzvSR4IlXOt54RgqawlQZLUOds6waXl706p6kcPyqfYhrWIC4+GbYFM68WXmZriv9SNVQD5+hbsYhXW5+HQ1YYVgm22xRc+Yye8n1+v/VggleRqcNM033Gc4o3Qzi9gDgPlpSApVUuj/tPPxjivnNxlIMAljYwYgiQdfcSwIBzqE0PLU3sLG6t4kgBwbhxXxQ9RGP330TZ3+A3IX1eWmp1xKiSD1oYF1lwM5oi53Qklu80Ozw+Yt4h5akaKljdQ2xt65dZk/naTPqXL3b/np0ZmzvKeyQTxbAlal/RLfk0/sCjSe2iULTjJS4JKlGrp1n1hUgH/D5qzRpR9eOuTGQq8QOdBbvXwhpM3p0EIc+ymRy6JydHqDw1nv8eGxj9eBQuWw3SCTk9NgG2DvgyxuePbJOj+mO+H/sCVVjD/o15cbmF3Y7SUK0EIjjHRjoF5R0PJcGY/SRkiYAyrzUxvXjvD/44g48NR/Uq5kkRIWUeEuk14aJDgTQwtAHapWTawK8gbHq3yO3mA0jGwT8l5GnURuCRImg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR1501MB2064.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(39860400002)(376002)(136003)(396003)(366004)(451199015)(316002)(110136005)(8676002)(54906003)(966005)(4326008)(2906002)(6486002)(31696002)(478600001)(36756003)(66946007)(66476007)(66556008)(86362001)(83380400001)(38100700002)(6506007)(6666004)(6512007)(2616005)(53546011)(186003)(7416002)(8936002)(5660300002)(41300700001)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WkI0Z2JmUzdvcUpRN2ZXSTd4dm9jV3E3cTZnZUFlOS96bzFzRUwrMXIxazJI?=
+ =?utf-8?B?Umw3K3lXUnQ4VU5CbEZocEtNOXV5Q0FXc1JyUENEUWRQYXluZmk2eGdyU0Qw?=
+ =?utf-8?B?U1FhQ0lBc0l3VDFRc2JFNHRMblo1amRreE5INWJYbHhhRHRaQWd1QUpuQWdI?=
+ =?utf-8?B?STNjVHNqSzJYMTY2dytZTDZKajU4d1huNW1TMlpBZkRWbU9xVk1XcjdSTmM3?=
+ =?utf-8?B?NlJLOUdTMWZSMUlEK1NZaFNxbDEvT3Y3MVg1dzkybU5XQkdVUUpTemJuMGhR?=
+ =?utf-8?B?enJiZEtVRXZtazNLVXJDZHRVOVAxUkJTY210ZE5UeDVnemFlWjlSZEdneXpm?=
+ =?utf-8?B?YlhJclllaVZIZXNpQWxFQkxFRTZtR2N5ZzNINmtRZE5MbE5TUzg3NmRrUWFk?=
+ =?utf-8?B?T2xjNXhiOVFwL1ovUjdmNkttU2xhamt3YUNmU0t5ekg4a0RBK1EyZE9kL2M1?=
+ =?utf-8?B?cHltcnpUNHE3eGRuRVhUOWQ1aVZhNDFXTDhScW9wVDVoZWpCdG1BUVV0bnVG?=
+ =?utf-8?B?MXBtamNPMmpYNjRDdGx6bG0xdSszeWNKdGM1YzQxeFN1dHZxUXVTYVJnMlo3?=
+ =?utf-8?B?ZytmdU5qdUdPY1FheWIvMENTT0J6R3Yxb2NKVFFrOUZjOVRjanJETzFjTWFS?=
+ =?utf-8?B?SStFKzhKUE81UEJTM0lkWHdaMmFMN0NvNmNDS01ieEpNNmFKZ2xOUlExTUF6?=
+ =?utf-8?B?SEd4VUtkNzhHWWVrd255YmNNc1lzSjMvYkZPcFd5SlBBbWhEQm5BM2E5Zm1I?=
+ =?utf-8?B?OGdRSFV2U00xTTN5U1gzQmpoa3lteENhQXlFSzU4MkdSVC9OUlp2V1IwVkp1?=
+ =?utf-8?B?R0xUZTE0aUV6TVh1ZkpQa2RPd0Jac2NPanFkUW9NcGtLejRxVURQcjkybXRM?=
+ =?utf-8?B?dUFKMHR2Yzd0VVhHcEFtVU5QOEVJL3J5WjdBR1l2Y2p5RE1kb2VwOWZ5YVdu?=
+ =?utf-8?B?YUNXNUM1NnRMZG4yZnRhK1hPcmxRMVJWdHA3STJTaXZTWkYxNnZrUTN5Zng2?=
+ =?utf-8?B?RnNDRUkvQU9PUzZqY1YzL2o5eVYwK0VkSWlrSFZlUE10WThEdXdoYXZhY2U5?=
+ =?utf-8?B?NmRxa2dxSCs3TmNYNjBxTmJCVG4zd1BtMWJiT0l6eEd5V2RVZTNyeVBETXVL?=
+ =?utf-8?B?NFJBVUdtOVI0RlhZMGVlcDd5TGJLZnVJajkwb3Jld3VDVjZZNFp4VHlXSGFm?=
+ =?utf-8?B?UjdidWhDM2g2WlZ2SWJvcjVCOGxYWkU4MWtvUmVDcWRqOWZBZDBOUHl6Y2g5?=
+ =?utf-8?B?V3lydWFENDQ0TmhleGlQeWthbktlcDg5SjhSVDRZMWYyZnQ0VGpWWkZLWjJt?=
+ =?utf-8?B?T2ZwY3pyaVgveEJoWEtsNS9VTStGL0t2RDF6S050WUY5VFBhK3hDMzVvaTN3?=
+ =?utf-8?B?Sk5kVGN3VC9ITXovQlNSWmJyNENFV3M2S01MYi9uTU03ZHNsS20ydm5QUGgv?=
+ =?utf-8?B?SDV4TmVPeGR4UGJOU1BPclBpcEZmL1o4WGdjUjBsdkhEVFZXK0NoYmlzSERC?=
+ =?utf-8?B?UksrcTNnYS96WGU0NTc0ZnYwZnoyZDlScWMzNXV3UHM3K081VDFrb2NweGZG?=
+ =?utf-8?B?Ukg2SjBOQ1QwcnVaY3hrdXZJdVdFdEU3VEJMejZjUHh4RWJCZTg3T1M2SnNu?=
+ =?utf-8?B?djFqVVBSc2hlOHRPWVg0K3FwOUcrelQrOGlncG9rK3o2bm1RMUQxM1cxc0pH?=
+ =?utf-8?B?a2Q0SUhWTlNPU3VVS0ZSZllPVnRpYU9tVElZUmtIdFBJNHZSQW5ocHBqeG41?=
+ =?utf-8?B?U1B2V0ZwU2RLMElLaFVCVStxd0d2N2szamg4WWhwWHNvUnE5Qzh5K2x3S0c2?=
+ =?utf-8?B?NTZPYzJJQXdPaVF3Y054SDVaNW11TlY0dHV5OWlyUFY4MnJxTW1ORlBWRzRh?=
+ =?utf-8?B?eDFSRG5wYXQvYk8rZURzMzhUTFBJc0NMcXJheTNoN2s1MEthS0kwUVk3R3c1?=
+ =?utf-8?B?VFZGMFZmZytUczZlMGNnZFZOSG5VNTYraUhvb0o5a1N2TVJvZkxrUXc1ZEhX?=
+ =?utf-8?B?SXQ0R0t5cDBGUVNJM2YvUVJKL0w2d3d6aTBGUWRwaFhDM2xvUUcrN1ZmeXZv?=
+ =?utf-8?B?OEROZ1l1cVhGenpiSVl2QjJsdDE2RzZZY3JILzVaTU53c0tYeUtaSnB6QWth?=
+ =?utf-8?B?Mkp1M1FVY1lPOHV3OUNJMG9HalplWlZTU0IvM3pIMFVUYk9pdXdERng5MnBS?=
+ =?utf-8?B?bEE9PQ==?=
+X-OriginatorOrg: meta.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5d88578c-bff9-4d85-1d9a-08dac0f042c7
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR1501MB2064.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Nov 2022 18:45:37.2625
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 1b1OQ+9xCGjxJ8MqNMR3k9lTFdUsR9N0HI8vn/8VSXI2CUB26UACT7OWbRP9mfvn
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR15MB2814
+X-Proofpoint-GUID: BDCL2ezEdYabYccZt2iAF10mlhRH8Dsf
+X-Proofpoint-ORIG-GUID: BDCL2ezEdYabYccZt2iAF10mlhRH8Dsf
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-References: <20221107145436.276079-1-pbonzini@redhat.com> <20221107145436.276079-8-pbonzini@redhat.com>
-In-Reply-To: <20221107145436.276079-8-pbonzini@redhat.com>
-From:   Jim Mattson <jmattson@google.com>
-Date:   Mon, 7 Nov 2022 10:45:30 -0800
-Message-ID: <CALMp9eRDehmWC1gZmSjxjwCvm4VXf_FnR-MiFkHxkTn4_DJ4aA@mail.gmail.com>
-Subject: Re: [PATCH 7/8] KVM: SVM: move MSR_IA32_SPEC_CTRL save/restore to assembly
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        nathan@kernel.org, thomas.lendacky@amd.com,
-        andrew.cooper3@citrix.com, peterz@infradead.org, seanjc@google.com,
-        stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-07_11,2022-11-07_02,2022-06-22_01
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 7, 2022 at 6:54 AM Paolo Bonzini <pbonzini@redhat.com> wrote:
->
-> Restoration of the host IA32_SPEC_CTRL value is probably too late
-> with respect to the return thunk training sequence.
->
-> With respect to the user/kernel boundary, AMD says, "If software chooses
-> to toggle STIBP (e.g., set STIBP on kernel entry, and clear it on kernel
-> exit), software should set STIBP to 1 before executing the return thunk
-> training sequence." I assume the same requirements apply to the guest/host
-> boundary. The return thunk training sequence is in vmenter.S, quite close
-> to the VM-exit. On hosts without V_SPEC_CTRL, however, the host's
-> IA32_SPEC_CTRL value is not restored until much later.
->
-> To avoid this, move the restoration of host SPEC_CTRL to assembly and,
-> for consistency, move the restoration of the guest SPEC_CTRL as well.
-> This is not particularly difficult, apart from some care to cover both
-> 32- and 64-bit, and to share code between SEV-ES and normal vmentry.
->
-> Cc: stable@vger.kernel.org
-> Fixes: a149180fbcf3 ("x86: Add magic AMD return-thunk")
-> Suggested-by: Jim Mattson <jmattson@google.com>
-> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-> ---
->  arch/x86/kernel/asm-offsets.c |  1 +
->  arch/x86/kernel/cpu/bugs.c    | 13 ++---
->  arch/x86/kvm/svm/svm.c        | 38 ++++++---------
->  arch/x86/kvm/svm/svm.h        |  4 +-
->  arch/x86/kvm/svm/vmenter.S    | 92 ++++++++++++++++++++++++++++++++++-
->  5 files changed, 111 insertions(+), 37 deletions(-)
->
-> diff --git a/arch/x86/kernel/asm-offsets.c b/arch/x86/kernel/asm-offsets.c
-> index 69d1fed51086..d0bd68af0a5a 100644
-> --- a/arch/x86/kernel/asm-offsets.c
-> +++ b/arch/x86/kernel/asm-offsets.c
-> @@ -115,6 +115,7 @@ static void __used common(void)
->                 OFFSET(SVM_vcpu_arch_regs, vcpu_svm, vcpu.arch.regs);
->                 OFFSET(SVM_vmcb01, vcpu_svm, vmcb01);
->                 OFFSET(SVM_current_vmcb, vcpu_svm, current_vmcb);
-> +               OFFSET(SVM_spec_ctrl, vcpu_svm, spec_ctrl);
->                 OFFSET(KVM_VMCB_pa, kvm_vmcb_info, pa);
->         }
->
-> diff --git a/arch/x86/kernel/cpu/bugs.c b/arch/x86/kernel/cpu/bugs.c
-> index da7c361f47e0..6ec0b7ce7453 100644
-> --- a/arch/x86/kernel/cpu/bugs.c
-> +++ b/arch/x86/kernel/cpu/bugs.c
-> @@ -196,22 +196,15 @@ void __init check_bugs(void)
->  }
->
->  /*
-> - * NOTE: This function is *only* called for SVM.  VMX spec_ctrl handling is
-> - * done in vmenter.S.
-> + * NOTE: This function is *only* called for SVM, since Intel uses
-> + * MSR_IA32_SPEC_CTRL for SSBD.
->   */
->  void
->  x86_virt_spec_ctrl(u64 guest_spec_ctrl, u64 guest_virt_spec_ctrl, bool setguest)
->  {
-> -       u64 msrval, guestval = guest_spec_ctrl, hostval = spec_ctrl_current();
-> +       u64 guestval, hostval;
->         struct thread_info *ti = current_thread_info();
->
-> -       if (static_cpu_has(X86_FEATURE_MSR_SPEC_CTRL)) {
-> -               if (hostval != guestval) {
-> -                       msrval = setguest ? guestval : hostval;
-> -                       wrmsrl(MSR_IA32_SPEC_CTRL, msrval);
-> -               }
-> -       }
-> -
->         /*
->          * If SSBD is not handled in MSR_SPEC_CTRL on AMD, update
->          * MSR_AMD64_L2_CFG or MSR_VIRT_SPEC_CTRL if supported.
-> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-> index 381c7dcffe25..31aa158a2e10 100644
-> --- a/arch/x86/kvm/svm/svm.c
-> +++ b/arch/x86/kvm/svm/svm.c
-> @@ -731,6 +731,15 @@ static bool msr_write_intercepted(struct kvm_vcpu *vcpu, u32 msr)
->         u32 offset;
->         u32 *msrpm;
->
-> +       /*
-> +        * For non-nested case:
-> +        * If the L01 MSR bitmap does not intercept the MSR, then we need to
-> +        * save it.
-> +        *
-> +        * For nested case:
-> +        * If the L02 MSR bitmap does not intercept the MSR, then we need to
-> +        * save it.
-> +        */
->         msrpm = is_guest_mode(vcpu) ? to_svm(vcpu)->nested.msrpm:
->                                       to_svm(vcpu)->msrpm;
->
-> @@ -3912,18 +3921,19 @@ static fastpath_t svm_exit_handlers_fastpath(struct kvm_vcpu *vcpu)
->         return EXIT_FASTPATH_NONE;
->  }
->
-> -static noinstr void svm_vcpu_enter_exit(struct kvm_vcpu *vcpu)
-> +static noinstr void svm_vcpu_enter_exit(struct kvm_vcpu *vcpu, bool spec_ctrl_intercepted)
->  {
->         struct vcpu_svm *svm = to_svm(vcpu);
->
->         guest_state_enter_irqoff();
->
->         if (sev_es_guest(vcpu->kvm)) {
-> -               __svm_sev_es_vcpu_run(svm);
-> +               __svm_sev_es_vcpu_run(svm, spec_ctrl_intercepted);
->         } else {
->                 struct svm_cpu_data *sd = per_cpu(svm_data, vcpu->cpu);
->
-> -               __svm_vcpu_run(svm, __sme_page_pa(sd->save_area));
-> +               __svm_vcpu_run(svm, __sme_page_pa(sd->save_area),
-> +                              spec_ctrl_intercepted);
->         }
->
->         guest_state_exit_irqoff();
-> @@ -3932,6 +3942,7 @@ static noinstr void svm_vcpu_enter_exit(struct kvm_vcpu *vcpu)
->  static __no_kcsan fastpath_t svm_vcpu_run(struct kvm_vcpu *vcpu)
->  {
->         struct vcpu_svm *svm = to_svm(vcpu);
-> +       bool spec_ctrl_intercepted = msr_write_intercepted(vcpu, MSR_IA32_SPEC_CTRL);
->
->         trace_kvm_entry(vcpu);
->
-> @@ -3990,26 +4001,7 @@ static __no_kcsan fastpath_t svm_vcpu_run(struct kvm_vcpu *vcpu)
->         if (!static_cpu_has(X86_FEATURE_V_SPEC_CTRL))
->                 x86_spec_ctrl_set_guest(svm->spec_ctrl, svm->virt_spec_ctrl);
->
-> -       svm_vcpu_enter_exit(vcpu);
-> -
-> -       /*
-> -        * We do not use IBRS in the kernel. If this vCPU has used the
-> -        * SPEC_CTRL MSR it may have left it on; save the value and
-> -        * turn it off. This is much more efficient than blindly adding
-> -        * it to the atomic save/restore list. Especially as the former
-> -        * (Saving guest MSRs on vmexit) doesn't even exist in KVM.
-> -        *
-> -        * For non-nested case:
-> -        * If the L01 MSR bitmap does not intercept the MSR, then we need to
-> -        * save it.
-> -        *
-> -        * For nested case:
-> -        * If the L02 MSR bitmap does not intercept the MSR, then we need to
-> -        * save it.
-> -        */
-> -       if (!static_cpu_has(X86_FEATURE_V_SPEC_CTRL) &&
-> -           unlikely(!msr_write_intercepted(vcpu, MSR_IA32_SPEC_CTRL)))
-> -               svm->spec_ctrl = native_read_msr(MSR_IA32_SPEC_CTRL);
-> +       svm_vcpu_enter_exit(vcpu, spec_ctrl_intercepted);
->
->         if (!sev_es_guest(vcpu->kvm))
->                 reload_tss(vcpu);
-> diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
-> index 99410651f2a5..9d940d8736f0 100644
-> --- a/arch/x86/kvm/svm/svm.h
-> +++ b/arch/x86/kvm/svm/svm.h
-> @@ -483,7 +483,7 @@ void sev_es_unmap_ghcb(struct vcpu_svm *svm);
->
->  /* vmenter.S */
->
-> -void __svm_sev_es_vcpu_run(struct vcpu_svm *svm);
-> -void __svm_vcpu_run(struct vcpu_svm *svm, unsigned long hsave_pa);
-> +void __svm_sev_es_vcpu_run(struct vcpu_svm *svm, bool spec_ctrl_intercepted);
-> +void __svm_vcpu_run(struct vcpu_svm *svm, unsigned long hsave_pa, bool spec_ctrl_intercepted);
->
->  #endif
-> diff --git a/arch/x86/kvm/svm/vmenter.S b/arch/x86/kvm/svm/vmenter.S
-> index 45a4bd002494..9e381386ffdc 100644
-> --- a/arch/x86/kvm/svm/vmenter.S
-> +++ b/arch/x86/kvm/svm/vmenter.S
-> @@ -32,10 +32,64 @@
->
->  .section .noinstr.text, "ax"
->
-> +.macro RESTORE_GUEST_SPEC_CTRL
-> +       /* No need to do anything if SPEC_CTRL is unset or V_SPEC_CTRL is set */
-> +       ALTERNATIVE_2 "jmp 999f", \
-> +               "", X86_FEATURE_MSR_SPEC_CTRL, \
-> +               "jmp 999f", X86_FEATURE_V_SPEC_CTRL
-> +
-> +       /*
-> +        * SPEC_CTRL handling: if the guest's SPEC_CTRL value differs from the
-> +        * host's, write the MSR.
-> +        *
-> +        * IMPORTANT: To avoid RSB underflow attacks and any other nastiness,
-> +        * there must not be any returns or indirect branches between this code
-> +        * and vmentry.
-> +        */
-> +       movl SVM_spec_ctrl(%_ASM_DI), %eax
-> +       cmp PER_CPU_VAR(x86_spec_ctrl_current), %eax
-> +       je 999f
-> +       mov $MSR_IA32_SPEC_CTRL, %ecx
-> +       xor %edx, %edx
-> +       wrmsr
-> +999:
-> +
-> +.endm
-> +
-> +.macro RESTORE_HOST_SPEC_CTRL
-> +       /* No need to do anything if SPEC_CTRL is unset or V_SPEC_CTRL is set */
-> +       ALTERNATIVE_2 "jmp 999f", \
-> +               "", X86_FEATURE_MSR_SPEC_CTRL, \
-> +               "jmp 999f", X86_FEATURE_V_SPEC_CTRL
-> +
-> +       mov $MSR_IA32_SPEC_CTRL, %ecx
-> +
-> +       /*
-> +        * Load the value that the guest had written into MSR_IA32_SPEC_CTRL,
-> +        * if it was not intercepted during guest execution.
-> +        */
-> +       cmpb $0, (%_ASM_SP)
-> +       jnz 998f
-> +       rdmsr
-> +       movl %eax, SVM_spec_ctrl(%_ASM_DI)
-> +998:
-> +
-> +       /* Now restore the host value of the MSR if different from the guest's.  */
-> +       movl PER_CPU_VAR(x86_spec_ctrl_current), %eax
-> +       cmp SVM_spec_ctrl(%_ASM_DI), %eax
-> +       je 999f
-> +       xor %edx, %edx
-> +       wrmsr
-> +999:
-> +
-> +.endm
-> +
-> +
 
-It seems unfortunate to have the unconditional branches in the more
-common cases.
+
+On 11/7/22 9:07 AM, Nathan Chancellor wrote:
+> When building with clang:
+> 
+>    kernel/bpf/dispatcher.c:126:33: error: pointer type mismatch ('void *' and 'unsigned int (*)(const void *, const struct bpf_insn *, bpf_func_t)' (aka 'unsigned int (*)(const void *, const struct bpf_insn *, unsigned int (*)(const void *, const struct bpf_insn *))')) [-Werror,-Wpointer-type-mismatch]
+>            __BPF_DISPATCHER_UPDATE(d, new ?: &bpf_dispatcher_nop_func);
+>                                       ~~~ ^  ~~~~~~~~~~~~~~~~~~~~~~~~
+>    ./include/linux/bpf.h:1045:54: note: expanded from macro '__BPF_DISPATCHER_UPDATE'
+>            __static_call_update((_d)->sc_key, (_d)->sc_tramp, (_new))
+>                                                                ^~~~
+>    1 error generated.
+> 
+> The warning is pointing out that the type of new ('void *') and
+> &bpf_dispatcher_nop_func are not compatible, which could have side
+> effects coming out of a conditional operator due to promotion rules.
+> 
+> Add the explicit cast to 'void *' to make it clear that this is
+> expected, as __BPF_DISPATCHER_UPDATE() expands to a call to
+> __static_call_update(), which expects a 'void *' as its final argument.
+> 
+> Fixes: c86df29d11df ("bpf: Convert BPF_DISPATCHER to use static_call() (not ftrace)")
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1755
+> Reported-by: kernel test robot <lkp@intel.com>
+> Reported-by: "kernelci.org bot" <bot@kernelci.org>
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+
+Acked-by: Yonghong Song <yhs@fb.com>
