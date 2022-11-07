@@ -2,101 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E87C161FFDF
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 21:54:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78F5561FFC8
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 21:50:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233039AbiKGUyN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 15:54:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43894 "EHLO
+        id S233023AbiKGUuS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 15:50:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232191AbiKGUyL (ORCPT
+        with ESMTP id S232991AbiKGUuQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 15:54:11 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FCE15F40
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 12:54:10 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D645AB816A0
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 20:54:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D43DC433D6;
-        Mon,  7 Nov 2022 20:54:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667854447;
-        bh=imEkwKJJvU1UO54Y2mHW8PLJBKSEvCTZ91B6qYkCO30=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=nkwqEiqZLWe8aigDmczpGxIZOuHgvLzZR9UH6uWXTD2ckRChIwDIMCxR+WYp4Kwfg
-         AfylPCiFayEML+Q7yURI2dybv9juXm2wrURt2UDm01VJLUqN/p6u2LyaLmNTUcvP3t
-         iUbEMILgk4W7YTdE+Jcr+DPNQJEHenkDvPGN1lQ9IF/MvagjJ/T/Fx63MC+QtTn0u0
-         w//yk32F2V7AgWREerpq06HLoN5qeYBOF9Q+kdJHe05ZI8E2jaF5JnvD8niV0LU3ny
-         RFHxtkDLHhigEOzKjtu63KlG6BwxdJ9TOoH5dAAxwSBFe6DpwyYYxGlwLK+bA1tavL
-         elWONZyccVgNw==
-Date:   Mon, 7 Nov 2022 14:54:05 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Peter Collingbourne <pcc@google.com>
-Cc:     Joe Perches <joe@perches.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Whitcroft <apw@canonical.com>,
-        Dwaipayan Ray <dwaipayanray1@gmail.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Kees Cook <keescook@chromium.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        linux-kernel@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>
-Subject: Re: [PATCH] checkpatch: add warning for non-lore mailing list URLs
-Message-ID: <20221107205405.GA419220@bhelgaas>
+        Mon, 7 Nov 2022 15:50:16 -0500
+Received: from mail.rnplus.nl (mail.rnplus.nl [178.251.25.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAEE323BE0
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 12:50:15 -0800 (PST)
+Received: from localhost (unknown [127.0.0.1])
+        by mail.rnplus.nl (Postfix) with ESMTP id 0B34B378526
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 20:55:12 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at rnplus.nl
+Received: from mail.rnplus.nl ([127.0.0.1])
+        by localhost (mail.rnplus.nl [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id OUZ_zwlcCKE6 for <linux-kernel@vger.kernel.org>;
+        Mon,  7 Nov 2022 21:55:09 +0100 (CET)
+Received: from mail.rnplus.nl (mail.rnplus.nl [178.251.25.70])
+        by mail.rnplus.nl (Postfix) with ESMTPSA id 19466377FDD;
+        Mon,  7 Nov 2022 21:55:04 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=rnplus.nl; s=dkim;
+        t=1667854504; bh=j6/hl1Q/eLB5dfplzUEE3Y3Xcn8JgcBaeo5qHF07U1c=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References;
+        b=Sx6Ui834KnjajDINNMaoFkChSB9FS8NXlnkEeBY5rzPxCfrDtDn5EFVA3ubH/3b7e
+         oq6cl58fNCblM17SfHJDJxA03nrHfs3iwPBErDgl3OLaX5rkRXcqI4zmaOK1nWMH+d
+         Vp4BzvS8AGqFVec4tMIHmQfOIKnPjeB7oStdY8ZY=
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMn1gO7tEF+VioB8n0=8vQ4gRPKqSSfPwmbX8ci82D=hBbcfyw@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Date:   Mon, 07 Nov 2022 21:55:04 +0100
+From:   Renze Nicolai <renze@rnplus.nl>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>
+Subject: [PATCH v2] arm64: allwinner: a64: add device tree for SoPine with
+ clusterboard
+In-Reply-To: <334c5f69-2f25-aeb1-b87f-500cf2a6c205@linaro.org>
+References: <b3b8320f0d2b54a0557331977582d05c@rnplus.nl>
+ <334c5f69-2f25-aeb1-b87f-500cf2a6c205@linaro.org>
+User-Agent: RN+ Webmail
+Message-ID: <c2523181268451aa04a2474a2cf5bedb@rnplus.nl>
+X-Sender: renze@rnplus.nl
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 03, 2022 at 06:34:31PM -0700, Peter Collingbourne wrote:
-> On Thu, Nov 3, 2022 at 6:27 PM Joe Perches <joe@perches.com> wrote:
-> > On Thu, 2022-11-03 at 18:07 -0700, Peter Collingbourne wrote:
-> > > On Wed, Oct 19, 2022 at 03:28:43PM -0500, Bjorn Helgaas wrote:
-> > > > From: Bjorn Helgaas <bhelgaas@google.com>
-> > > >
-> > > > The lkml.org, marc.info, spinics.net, etc archives are not quite as useful
-> > > > as lore.kernel.org because they use different styles, add advertising, and
-> > > > may disappear in the future.  The lore archives are more consistent and
-> > > > more likely to stick around, so prefer https://lore.kernel.org URLs when
-> > > > they exist.
-> > >
-> > > If the commit message contains a line like:
-> > >
-> > > Cc: linux-arm-kernel@lists.infradead.org
-> > >
-> > > this patch causes checkpatch.pl to complain. Would it be possible to
-> > > restrict this to URLs?
-> >
-> > Yes, I believe this would probably work well enough:
-> > ---
-> >  scripts/checkpatch.pl | 3 ++-
-> >  1 file changed, 2 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
-> > index 7be93c3df2bcb..fe25642d8bacc 100755
-> > --- a/scripts/checkpatch.pl
-> > +++ b/scripts/checkpatch.pl
-> > @@ -3336,7 +3336,8 @@ sub process {
-> >                 }
-> >
-> >  # Check for mailing list archives other than lore.kernel.org
-> > -               if ($rawline =~ m{\b$obsolete_archives}) {
-> > +               if ($rawline =~ m{\b$obsolete_archives} &&
-> > +                   $rawline !~ /^\s*cc:/i) {
-> 
-> Can we make this (to|cc): instead? Otherwise developers (like me) who
-> use custom scripts to add To: headers to their patches before passing
-> them to checkpatch.pl will also hit this warning if their patch is
-> being sent To: one of these mailing lists.
+Hello Krzysztof,
 
-Why not make it look for "http" instead of the absence of "cc"?
+Thank you for your feedback! I've fixed the indentation and I've added 
+the compatible and model elements.
+
+Greetings,
+Renze Nicolai
+
+
+The Pine64 clusterboard needs a to have the tx delay changed to
+500ps for ethernet to work. This solution was described by multiple
+people on the Pine64 forum years ago and nobody has submitted it.
+
+Add a device tree for SoPine with the clusterboard.
+
+Signed-off-by: Renze Nicolai <renze@rnplus.nl>
+---
+  arch/arm64/boot/dts/allwinner/Makefile           |  1 +
+  .../allwinner/sun50i-a64-sopine-clusterboard.dts | 16 ++++++++++++++++
+  2 files changed, 17 insertions(+)
+  create mode 100644 
+arch/arm64/boot/dts/allwinner/sun50i-a64-sopine-clusterboard.dts
+
+diff --git a/arch/arm64/boot/dts/allwinner/Makefile 
+b/arch/arm64/boot/dts/allwinner/Makefile
+index 6a96494a2e0a..15b011d1aaea 100644
+--- a/arch/arm64/boot/dts/allwinner/Makefile
++++ b/arch/arm64/boot/dts/allwinner/Makefile
+@@ -15,6 +15,7 @@ dtb-$(CONFIG_ARCH_SUNXI) += 
+sun50i-a64-pinephone-1.2.dtb
+  dtb-$(CONFIG_ARCH_SUNXI) += sun50i-a64-pinetab.dtb
+  dtb-$(CONFIG_ARCH_SUNXI) += sun50i-a64-pinetab-early-adopter.dtb
+  dtb-$(CONFIG_ARCH_SUNXI) += sun50i-a64-sopine-baseboard.dtb
++dtb-$(CONFIG_ARCH_SUNXI) += sun50i-a64-sopine-clusterboard.dtb
+  dtb-$(CONFIG_ARCH_SUNXI) += sun50i-a64-teres-i.dtb
+  dtb-$(CONFIG_ARCH_SUNXI) += sun50i-a100-allwinner-perf1.dtb
+  dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h5-bananapi-m2-plus.dtb
+diff --git 
+a/arch/arm64/boot/dts/allwinner/sun50i-a64-sopine-clusterboard.dts 
+b/arch/arm64/boot/dts/allwinner/sun50i-a64-sopine-clusterboard.dts
+new file mode 100644
+index 000000000000..f75325d43d76
+--- /dev/null
++++ b/arch/arm64/boot/dts/allwinner/sun50i-a64-sopine-clusterboard.dts
+@@ -0,0 +1,16 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++// Copyright (c) 2022 Renze Nicolai <renze@rnplus.nl>
++
++/dts-v1/;
++
++#include "sun50i-a64-sopine-baseboard.dts"
++
++/ {
++	model = "SoPine with clusterboard";
++	compatible = "pine64,sopine-clusterboard", "pine64,sopine",
++		     "allwinner,sun50i-a64";
++};
++
++&emac {
++	allwinner,tx-delay-ps = <500>;
++};
+-- 
+2.38.1
+
