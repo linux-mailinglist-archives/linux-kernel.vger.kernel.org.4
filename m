@@ -2,79 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4947F6203E2
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 00:41:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B62DA6203E5
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 00:44:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232602AbiKGXlJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 18:41:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58668 "EHLO
+        id S232586AbiKGXoK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 18:44:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232518AbiKGXlH (ORCPT
+        with ESMTP id S232110AbiKGXoI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 18:41:07 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1453317076;
-        Mon,  7 Nov 2022 15:41:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667864467; x=1699400467;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=HkPqplWnWgKasGuEjl+2C0+gJiDFRh+H10A4rXRH/Z0=;
-  b=PlIfBVJdQYf6s0VPQVtS18XWHJeHthWnS+DAvKp1Gd0x6wuG0KOmAPZo
-   6d3Hb97XbGSgkobs6GD9js9hWExAHDTagmbHnCpgbdIFYQ525nQrLKSOb
-   Ln7eP6jT1wRsZfQH4oGa0EuqNdfMTFyg6DFoezWNpQAi01G4S56PoSak7
-   intSfP4llqIpJA1g7FkIErhXlC9oVnmm4Vl1xa6MdJwebCq8jRpe6/ZnR
-   tpd7nYf+CJFEBz+jmLZZ2S+5GjrmWGWn/kJ7PXbzI4DI406HaRFCzHCgA
-   z8qdLsIR8tE2huoi4RIjK+naLfl1hUzd+JZi3ZhJOP+JcQafVjm/ChECu
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10524"; a="309261744"
-X-IronPort-AV: E=Sophos;i="5.96,145,1665471600"; 
-   d="scan'208";a="309261744"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Nov 2022 15:41:06 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10524"; a="630668969"
-X-IronPort-AV: E=Sophos;i="5.96,145,1665471600"; 
-   d="scan'208";a="630668969"
-Received: from peggykes-mobl.amr.corp.intel.com (HELO [10.251.7.244]) ([10.251.7.244])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Nov 2022 15:41:04 -0800
-Message-ID: <da41d7f0-68ea-0c21-1dca-218f8184a0f3@intel.com>
-Date:   Mon, 7 Nov 2022 15:41:03 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH 2/3] x86/speculation: Support Automatic IBRS
-Content-Language: en-US
-To:     Kim Phillips <kim.phillips@amd.com>,
+        Mon, 7 Nov 2022 18:44:08 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08D101B9C6;
+        Mon,  7 Nov 2022 15:44:05 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4N5nr15w3Lz4xG8;
+        Tue,  8 Nov 2022 10:44:01 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1667864644;
+        bh=6tGnJx4xFcxyi53YuLvDg09sq/vF8JU+F9Dm+Wv/yT8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=EkQi/F6MmlFzMGPjCK8k60/v04HMpBC/xK/WLRTz36xt8wU7hxzDQvN4GHXSI6S9f
+         3BSewDz+BtC48rqrXchFeJXA0yVHze07fdkq8fJvjxZJcV4otWuUZG+kw4W2FtP7fX
+         iJGJKE3QQgBy2swlJaF3vBY7Anehx8XXmm6LYvuLjjlY+mmmYwfkrAM8fOJFnKIioa
+         XiGf5u6mcM/oUOx9WixVcWTxGCa9mcQBsUhV0eVoEtz9Qhkn8DyNRzJ3jp443VbCjd
+         AaC/icJDPZT4Je7wazNR0Cyxfy4yWT7Y2uxggw3xh7350hM3ZqvKtD+0s/j7R2vqdn
+         pBUXApnItPycg==
+Date:   Tue, 8 Nov 2022 10:44:00 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        Borislav Petkov <bp@alien8.de>
-Cc:     x86@kernel.org, Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Joao Martins <joao.m.martins@oracle.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        David Woodhouse <dwmw@amazon.co.uk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Juergen Gross <jgross@suse.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Babu Moger <Babu.Moger@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221104213651.141057-1-kim.phillips@amd.com>
- <20221104213651.141057-3-kim.phillips@amd.com> <Y2WJjdY3wwQl9/q9@zn.tnic>
- <Y2ZEinL+wlIX+1Sn@hirez.programming.kicks-ass.net>
- <d413c064-ee9b-5853-9cf1-544adde22c8a@amd.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <d413c064-ee9b-5853-9cf1-544adde22c8a@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        Will Deacon <will@kernel.org>,
+        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
+        Nick Piggin <npiggin@gmail.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Jann Horn <jannh@google.com>,
+        John Hubbard <jhubbard@nvidia.com>, X86 ML <x86@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        kernel list <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        Uros Bizjak <ubizjak@gmail.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        linux-arch <linux-arch@vger.kernel.org>
+Subject: Re: mm: delay rmap removal until after TLB flush
+Message-ID: <20221108104400.2b9e1e87@canb.auug.org.au>
+In-Reply-To: <20221107150242.722ba8238cab04bf3c6dbc39@linux-foundation.org>
+References: <CAHk-=wjzngbbwHw4nAsqo_RpyOtUDk5G+Wus=O0w0A6goHvBWA@mail.gmail.com>
+        <CAHk-=wio=UKK9fX4z+0CnyuZG7L+U9OB7t7Dcrg4FuFHpdSsfw@mail.gmail.com>
+        <CAHk-=wgz0QQd6KaRYQ8viwkZBt4xDGuZTFiTB8ifg7E3F2FxHg@mail.gmail.com>
+        <CAHk-=wiwt4LC-VmqvYrphraF0=yQV=CQimDCb0XhtXwk8oKCCA@mail.gmail.com>
+        <Y1+XCALog8bW7Hgl@hirez.programming.kicks-ass.net>
+        <CAHk-=wjnvPA7mi-E3jVEfCWXCNJNZEUjm6XODbbzGOh9c8mhgw@mail.gmail.com>
+        <CAHk-=wjjXQP7PTEXO4R76WPy1zfQad_DLKw1GKU_4yWW1N4n7w@mail.gmail.com>
+        <Y2SyJuohLFLqIhlZ@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
+        <CAHk-=wjzp65=-QE1dg8KfqG-tVHiT+yAfHXGx9sro=8yOceELg@mail.gmail.com>
+        <8a1e97c9-bd5-7473-6da8-2aa75198fbe8@google.com>
+        <CAHk-=wgvx5sDaOfCTMkVpZ9+-iFCeh5AOML5aJG1EiR0+e1aBQ@mail.gmail.com>
+        <20221106151416.bc2f942f237de31b6c577e70@linux-foundation.org>
+        <CAHk-=wgA=PyH=OuKzhUhxKyN2jOQNy5VcQwsqtnjBKG3jDhpCg@mail.gmail.com>
+        <20221107150242.722ba8238cab04bf3c6dbc39@linux-foundation.org>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/mDVDEu_/wXxUJFe4K1OL1rQ";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,27 +87,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/7/22 14:39, Kim Phillips wrote:
-> I've started a version that has AUTOIBRS reuse SPECTRE_V2_EIBRS
-> spectre_v2_mitigation enum, but, so far, it's change to bugs.c
-> looks bigger: 58 lines changed vs. 34 (see below).
-> 
-> Let me know if you want me to send it as a part of a v2 submission
-> after I take care of the kvm CPUID review.
+--Sig_/mDVDEu_/wXxUJFe4K1OL1rQ
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Thanks for putting that together.  I generally like how this looks.
+Hi all,
 
-I think it probably goes to a _bit_ too much trouble to turn off
-"eibrs,lfence/retpoline".  If someone goes to the trouble of specifying
-those, a warning or pr_info() is probably enough.  You don't need to
-actively override it.
+On Mon, 7 Nov 2022 15:02:42 -0800 Andrew Morton <akpm@linux-foundation.org>=
+ wrote:
+>
+> On Mon, 7 Nov 2022 08:19:24 -0800 Linus Torvalds <torvalds@linux-foundati=
+on.org> wrote:
+>=20
+> Done, all pushed out to
+> git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm mm-unstable.
 
-> -    } else if (boot_cpu_has(X86_FEATURE_IBRS) && !spectre_v2_in_ibrs_mode(mode) &&
-> -           mode != SPECTRE_V2_AUTO_IBRS) {
-> +    } else if ((boot_cpu_has(X86_FEATURE_IBRS) && !spectre_v2_in_ibrs_mode(mode)) ||
-> +           (boot_cpu_has(X86_FEATURE_AUTOIBRS) && !spectre_v2_in_ibrs_mode(mode))) {
->          setup_force_cpu_cap(X86_FEATURE_USE_IBRS_FW);
->          pr_info("Enabling Restricted Speculation for firmware calls\n"); 
+Will be in today's linux-next.
 
-Did the "mode != SPECTRE_V2_AUTO_IBRS" check get dropped accidentally?
-Or is it unnecessary now?
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/mDVDEu_/wXxUJFe4K1OL1rQ
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNpmEAACgkQAVBC80lX
+0Gx2iwf9G7C0Ujog1oKHiXdDywl9/l0p8fxxuxt4IEmCazjWlttF9OhoYJT2/dd8
+WtbBjrnTqi5g/M+G6ryt7xC0P1vKt1aWxldba2VJGrnx6dP3nG5p9rWGSGCIzzCC
+IWr+tiLVPf/TnaaCsfDcuiUNq916LuYgcWfTAzu/2m8OEgSlNft75fZPNNJ7yiKo
+H/QD8bcN5YgGCPm4jPgW8D/KnvE+/2gAEfxEzV+860AK1qDRjcJAsrotdiWNfC/U
+s9NmrerkkNRanhyI+gV32VUCOqwYRvOtFCY8oH+1Wh7//l9XhbjTcSd15kdoXPiT
+t4bg4hsFBzHhFGTOJLdMFoMsas0J6A==
+=GUew
+-----END PGP SIGNATURE-----
+
+--Sig_/mDVDEu_/wXxUJFe4K1OL1rQ--
