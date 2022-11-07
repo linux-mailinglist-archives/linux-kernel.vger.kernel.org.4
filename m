@@ -2,50 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0166B61F619
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 15:33:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A94F361F61B
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 15:33:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231551AbiKGOdZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 09:33:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45634 "EHLO
+        id S231783AbiKGOda convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 7 Nov 2022 09:33:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232505AbiKGOdD (ORCPT
+        with ESMTP id S232517AbiKGOdE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 09:33:03 -0500
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EF301FFA5;
-        Mon,  7 Nov 2022 06:30:50 -0800 (PST)
-Received: from canpemm500010.china.huawei.com (unknown [172.30.72.56])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4N5YVF147wzJnWc;
-        Mon,  7 Nov 2022 22:27:49 +0800 (CST)
-Received: from [10.174.178.185] (10.174.178.185) by
- canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
+        Mon, 7 Nov 2022 09:33:04 -0500
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6F9C201A3
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 06:30:52 -0800 (PST)
+Received: from fraeml744-chm.china.huawei.com (unknown [172.18.147.226])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4N5YWB3b8Dz6H7Gv;
+        Mon,  7 Nov 2022 22:28:38 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
+ fraeml744-chm.china.huawei.com (10.206.15.225) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 7 Nov 2022 22:30:48 +0800
-Subject: Re: [PATCH] ext4: fix possible memory leak when enable bigalloc
- feature
-To:     Jan Kara <jack@suse.cz>, Ye Bin <yebin@huaweicloud.com>
-References: <20221107015415.2526414-1-yebin@huaweicloud.com>
- <20221107134638.iyihe72m2woj6chm@quack3>
-CC:     <tytso@mit.edu>, <adilger.kernel@dilger.ca>,
-        <linux-ext4@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <syzbot+05a0f0ccab4a25626e38@syzkaller.appspotmail.com>,
-        Eric Whitney <enwlinux@gmail.com>
-From:   "yebin (H)" <yebin10@huawei.com>
-Message-ID: <63691697.8010302@huawei.com>
-Date:   Mon, 7 Nov 2022 22:30:47 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:38.0) Gecko/20100101
- Thunderbird/38.1.0
+ 15.1.2375.31; Mon, 7 Nov 2022 15:30:50 +0100
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Mon, 7 Nov
+ 2022 14:30:49 +0000
+Date:   Mon, 7 Nov 2022 14:30:48 +0000
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     Junhao He <hejunhao3@huawei.com>
+CC:     <mathieu.poirier@linaro.org>, <suzuki.poulose@arm.com>,
+        <mike.leach@linaro.org>, <leo.yan@linaro.org>,
+        <john.garry@huawei.com>, <coresight@lists.linaro.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <linuxarm@huawei.com>,
+        <rdunlap@infradead.org>, <liuqi115@huawei.com>,
+        <f.fangjian@huawei.com>, <prime.zeng@hisilicon.com>,
+        <yangyicong@huawei.com>, <shenyang39@huawei.com>
+Subject: Re: [PATCH v11 1/2] drivers/coresight: Add UltraSoc System Memory
+ Buffer driver
+Message-ID: <20221107143048.00004da2@Huawei.com>
+In-Reply-To: <20221107130624.59886-2-hejunhao3@huawei.com>
+References: <20221107130624.59886-1-hejunhao3@huawei.com>
+        <20221107130624.59886-2-hejunhao3@huawei.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-In-Reply-To: <20221107134638.iyihe72m2woj6chm@quack3>
-Content-Type: text/plain; charset="windows-1252"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.185]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- canpemm500010.china.huawei.com (7.192.105.118)
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 8BIT
+X-Originating-IP: [10.202.227.76]
+X-ClientProxiedBy: lhrpeml100002.china.huawei.com (7.191.160.241) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
 X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,120 +61,448 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, 7 Nov 2022 21:06:23 +0800
+Junhao He <hejunhao3@huawei.com> wrote:
+
+> From: Qi Liu <liuqi115@huawei.com>
+> 
+> This patch adds driver for UltraSoc SMB(System Memory Buffer)
+> device. SMB provides a way to buffer messages from ETM, and
+> store these "CPU instructions trace" in system memory.
+> 
+> SMB is developed by UltraSoc technology, which is acquired by
+> Siemens, and we still use "UltraSoc" to name driver.
+> 
+> Signed-off-by: Qi Liu <liuqi115@huawei.com>
+> Signed-off-by: Junhao He <hejunhao3@huawei.com>
+> Tested-by: JunHao He <hejunhao3@huawei.com>
+
+Hi JunHao,
+
+It's been a while since I last looked at this driver, so I may have
+forgotten or missed previous discussions.
+
+All the comments inline are fairly superficial and mostly concerned
+with making the code easy to review / maintain rather than correctness.
+
+Jonathan
 
 
-On 2022/11/7 21:46, Jan Kara wrote:
-> Let me CC Eric who wrote this code...
->
-> On Mon 07-11-22 09:54:15, Ye Bin wrote:
->> From: Ye Bin <yebin10@huawei.com>
->>
->> Syzbot found the following issue:
->> BUG: memory leak
->> unreferenced object 0xffff8881bde17420 (size 32):
->>    comm "rep", pid 2327, jiffies 4295381963 (age 32.265s)
->>    hex dump (first 32 bytes):
->>      01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->>      00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->>    backtrace:
->>      [<00000000ac6d38f8>] __insert_pending+0x13c/0x2d0
->>      [<00000000d717de3b>] ext4_es_insert_delayed_block+0x399/0x4e0
->>      [<000000004be03913>] ext4_da_map_blocks.constprop.0+0x739/0xfa0
->>      [<00000000885a832a>] ext4_da_get_block_prep+0x10c/0x440
->>      [<0000000029b7f8ef>] __block_write_begin_int+0x28d/0x860
->>      [<00000000e182ebc3>] ext4_da_write_inline_data_begin+0x2d1/0xf30
->>      [<00000000ced0c8a2>] ext4_da_write_begin+0x612/0x860
->>      [<000000008d5f27fa>] generic_perform_write+0x215/0x4d0
->>      [<00000000552c1cde>] ext4_buffered_write_iter+0x101/0x3b0
->>      [<0000000052177ae8>] do_iter_readv_writev+0x19f/0x340
->>      [<000000004b9de834>] do_iter_write+0x13b/0x650
->>      [<00000000e2401b9b>] iter_file_splice_write+0x5a5/0xab0
->>      [<0000000023aa5d90>] direct_splice_actor+0x103/0x1e0
->>      [<0000000089e00fc1>] splice_direct_to_actor+0x2c9/0x7b0
->>      [<000000004386851e>] do_splice_direct+0x159/0x280
->>      [<00000000b567e609>] do_sendfile+0x932/0x1200
->>
->> Now, 'ext4_clear_inode' don't cleanup pending tree which will lead to memory
->> leak.
->> To solve above issue, cleanup pending tree when clear inode.
->>
->> Reported-by: syzbot+05a0f0ccab4a25626e38@syzkaller.appspotmail.com
->> Signed-off-by: Ye Bin <yebin10@huawei.com>
-> So I'd think that by the time we are freeing inode all pending reservations
-> should be resolved and thus the tree should be empty. In that case you'd be
-> just masking some other bug where we failed to cleanup pending information
-> at the right moment. But maybe I'm missing something - that's why I've
-> added Eric to have a look ;)
->
-> 								Honza
-Yes, this is really a circumvention plan. Maybe we can check here. If 
-the pending tree is
-not empty, we still need to clean up resources to prevent memory leaks.
-Let me analyze this process again.
->> ---
->>   fs/ext4/extents_status.c | 22 ++++++++++++++++++++++
->>   fs/ext4/extents_status.h |  1 +
->>   fs/ext4/super.c          |  1 +
->>   3 files changed, 24 insertions(+)
->>
->> diff --git a/fs/ext4/extents_status.c b/fs/ext4/extents_status.c
->> index cd0a861853e3..5f6b218464de 100644
->> --- a/fs/ext4/extents_status.c
->> +++ b/fs/ext4/extents_status.c
->> @@ -1947,6 +1947,28 @@ void ext4_remove_pending(struct inode *inode, ext4_lblk_t lblk)
->>   	write_unlock(&ei->i_es_lock);
->>   }
->>   
->> +void ext4_clear_inode_pending(struct inode *inode)
->> +{
->> +	struct ext4_inode_info *ei = EXT4_I(inode);
->> +	struct pending_reservation *pr;
->> +	struct ext4_pending_tree *tree;
->> +	struct rb_node *node;
->> +
->> +	if (EXT4_SB(inode->i_sb)->s_cluster_ratio == 1)
->> +		return;
->> +
->> +	write_lock(&ei->i_es_lock);
->> +	tree = &EXT4_I(inode)->i_pending_tree;
->> +	node = rb_first(&tree->root);
->> +	while (node) {
->> +		pr = rb_entry(node, struct pending_reservation, rb_node);
->> +		node = rb_next(node);
->> +		rb_erase(&pr->rb_node, &tree->root);
->> +		kmem_cache_free(ext4_pending_cachep, pr);
->> +	}
->> +	write_unlock(&ei->i_es_lock);
->> +}
->> +
->>   /*
->>    * ext4_is_pending - determine whether a cluster has a pending reservation
->>    *                   on it
->> diff --git a/fs/ext4/extents_status.h b/fs/ext4/extents_status.h
->> index 4ec30a798260..25b605309c06 100644
->> --- a/fs/ext4/extents_status.h
->> +++ b/fs/ext4/extents_status.h
->> @@ -248,6 +248,7 @@ extern int __init ext4_init_pending(void);
->>   extern void ext4_exit_pending(void);
->>   extern void ext4_init_pending_tree(struct ext4_pending_tree *tree);
->>   extern void ext4_remove_pending(struct inode *inode, ext4_lblk_t lblk);
->> +extern void ext4_clear_inode_pending(struct inode *inode);
->>   extern bool ext4_is_pending(struct inode *inode, ext4_lblk_t lblk);
->>   extern int ext4_es_insert_delayed_block(struct inode *inode, ext4_lblk_t lblk,
->>   					bool allocated);
->> diff --git a/fs/ext4/super.c b/fs/ext4/super.c
->> index 106fb06e24e8..160667dcf09a 100644
->> --- a/fs/ext4/super.c
->> +++ b/fs/ext4/super.c
->> @@ -1434,6 +1434,7 @@ void ext4_clear_inode(struct inode *inode)
->>   	clear_inode(inode);
->>   	ext4_discard_preallocations(inode, 0);
->>   	ext4_es_remove_extent(inode, 0, EXT_MAX_BLOCKS);
->> +	ext4_clear_inode_pending(inode);
->>   	dquot_drop(inode);
->>   	if (EXT4_I(inode)->jinode) {
->>   		jbd2_journal_release_jbd_inode(EXT4_JOURNAL(inode),
->> -- 
->> 2.31.1
->>
+> ---
+>  drivers/hwtracing/coresight/Kconfig        |  11 +
+>  drivers/hwtracing/coresight/Makefile       |   1 +
+>  drivers/hwtracing/coresight/ultrasoc-smb.c | 631 +++++++++++++++++++++
+>  drivers/hwtracing/coresight/ultrasoc-smb.h | 113 ++++
+>  4 files changed, 756 insertions(+)
+>  create mode 100644 drivers/hwtracing/coresight/ultrasoc-smb.c
+>  create mode 100644 drivers/hwtracing/coresight/ultrasoc-smb.h
+> 
+> diff --git a/drivers/hwtracing/coresight/Kconfig b/drivers/hwtracing/coresight/Kconfig
+> index 45c1eb5dfcb7..05d791cb05e3 100644
+> --- a/drivers/hwtracing/coresight/Kconfig
+> +++ b/drivers/hwtracing/coresight/Kconfig
+> @@ -201,4 +201,15 @@ config CORESIGHT_TRBE
+>  
+>  	  To compile this driver as a module, choose M here: the module will be
+>  	  called coresight-trbe.
+> +
+> +config ULTRASOC_SMB
+> +	tristate "Ultrasoc system memory buffer drivers"
+> +	depends on ACPI && ARM64 && CORESIGHT_LINKS_AND_SINKS
+
+Can you relax this at all in the interests of getting better CI build coverage
+from random configs etc. 
+
+From a quick look, I think you can safely drop the ACPI dependency on basis
+relevant functions are stubbed out in acpi.h
+
+However, it looks like coresight more generally uses such depends, so perhaps
+better to just leave them here for consistency.
+
+> +	help
+> +	  This driver provides support for the Ultrasoc system memory buffer (SMB).
+> +	  SMB is responsible for receiving the trace data from Coresight ETM devices
+> +	  and storing them to a system buffer.
+> +
+> +	  To compile this driver as a module, choose M here: the module will be
+> +	  called ultrasoc-smb.
+>  endif
+
+
+> diff --git a/drivers/hwtracing/coresight/ultrasoc-smb.c b/drivers/hwtracing/coresight/ultrasoc-smb.c
+> new file mode 100644
+> index 000000000000..7fe8bf9623e8
+> --- /dev/null
+> +++ b/drivers/hwtracing/coresight/ultrasoc-smb.c
+> @@ -0,0 +1,631 @@
+
+...
+
+
+> +
+> +static void smb_buffer_sync_status(struct smb_drv_data *drvdata)
+> +{
+> +	struct smb_data_buffer *sdb = &drvdata->sdb;
+> +
+> +	sdb->wr_offset = readl(drvdata->base + SMB_LB_WR_ADDR) - sdb->start_addr;
+> +	sdb->rd_offset = readl(drvdata->base + SMB_LB_RD_ADDR) - sdb->start_addr;
+> +	if (sdb->wr_offset == sdb->rd_offset && !smb_buffer_is_empty(drvdata))
+> +		sdb->full = true;
+> +	else
+> +		sdb->full = false;
+
+Could do as
+	sdb->full = sdb->wr_offset == sdb->rd_offset && !smb_buffer_is_empty(drvdata);
+up to you on which you think is more readable.
+
+> +}
+> +
+
+
+
+> +static struct attribute *smb_sink_attrs[] = {
+> +	coresight_simple_reg32(read_pos, SMB_LB_RD_ADDR),
+> +	coresight_simple_reg32(write_pos, SMB_LB_WR_ADDR),
+> +	coresight_simple_reg32(buf_status, SMB_LB_INT_STS),
+> +	&dev_attr_buf_size.attr,
+> +	NULL,
+As below.
+
+> +};
+> +
+> +static const struct attribute_group smb_sink_group = {
+> +	.attrs = smb_sink_attrs,
+> +	.name = "mgmt",
+> +};
+> +
+> +static const struct attribute_group *smb_sink_groups[] = {
+> +	&smb_sink_group,
+> +	NULL,
+
+Generally no comma after a NULL terminator.  Having a comma
+implies it may make sense to put something after it, which is never
+the case for these.
+
+> +};
+> +
+
+
+...
+
+> +static void smb_sync_perf_buffer(struct smb_drv_data *drvdata,
+> +				 struct cs_buffers *buf,
+> +				 unsigned long head,
+> +				 unsigned long data_size)
+> +{
+> +	struct smb_data_buffer *sdb = &drvdata->sdb;
+> +	char **dst_pages = (char **)buf->data_pages;
+
+Do you need the cast?  It's void ** so implicit cast should work I think.
+	char **dst_pages = buf->data_pages;
+
+> +	unsigned long to_copy;
+> +	long pg_idx, pg_offset;
+> +
+> +	pg_idx = head >> PAGE_SHIFT;
+> +	pg_offset = head & (PAGE_SIZE - 1);
+> +
+> +	while (data_size) {
+> +		unsigned long pg_space = PAGE_SIZE - pg_offset;
+> +
+> +		/* Copy parts of trace data when read pointer wrap around */
+> +		if (sdb->rd_offset + pg_space > sdb->buf_size)
+> +			to_copy = sdb->buf_size - sdb->rd_offset;
+> +		else
+> +			to_copy = min(data_size, pg_space);
+> +
+> +		memcpy(dst_pages[pg_idx] + pg_offset,
+> +			      sdb->buf_base + sdb->rd_offset, to_copy);
+> +
+> +		pg_offset += to_copy;
+> +		if (pg_offset >= PAGE_SIZE) {
+> +			pg_offset = 0;
+> +			pg_idx++;
+> +			pg_idx %= buf->nr_pages;
+> +		}
+> +		data_size -= to_copy;
+> +		sdb->rd_offset += to_copy;
+> +		sdb->rd_offset %= sdb->buf_size;
+> +	}
+> +
+> +	sdb->data_size = 0;
+> +	writel(sdb->start_addr + sdb->rd_offset, drvdata->base + SMB_LB_RD_ADDR);
+> +
+> +	/*
+> +	 * Data remained in link cannot be purged when SMB is full, so
+> +	 * synchronize the read pointer to write pointer, to make sure
+> +	 * these remained data won't influence next trace.
+> +	 */
+> +	if (sdb->full) {
+> +		smb_purge_data(drvdata);
+> +		writel(readl(drvdata->base + SMB_LB_WR_ADDR),
+> +		       drvdata->base + SMB_LB_RD_ADDR);
+> +	}
+> +	smb_reset_buffer_status(drvdata);
+> +}
+
+
+...
+
+> +
+> +static void smb_init_hw(struct smb_drv_data *drvdata)
+> +{
+> +	/* First disable smb and clear the status of SMB buffer */
+
+Check for consistency in capitalization of SMB in all comments.
+
+> +	smb_reset_buffer_status(drvdata);
+> +	smb_disable_hw(drvdata);
+> +	smb_purge_data(drvdata);
+> +
+> +	writel(SMB_BUF_CFG_STREAMING, drvdata->base + SMB_LB_CFG_LO);
+> +	writel(SMB_MSG_FILTER, drvdata->base + SMB_LB_CFG_HI);
+> +	writel(SMB_GLOBAL_CFG, drvdata->base + SMB_CFG_REG);
+> +	writel(SMB_GLB_INT_CFG, drvdata->base + SMB_GLOBAL_INT);
+> +	writel(SMB_BUF_INT_CFG, drvdata->base + SMB_LB_INT_CTRL);
+> +}
+> +
+
+
+...
+
+> +static int smb_probe(struct platform_device *pdev)
+> +{
+> +	struct device *dev = &pdev->dev;
+> +	struct smb_drv_data *drvdata;
+> +	int ret;
+> +
+> +	drvdata = devm_kzalloc(dev, sizeof(*drvdata), GFP_KERNEL);
+> +	if (!drvdata)
+> +		return -ENOMEM;
+> +
+> +	drvdata->base = devm_platform_ioremap_resource(pdev, SMB_BASE_ADDR_RES);
+> +	if (IS_ERR(drvdata->base)) {
+> +		dev_err(dev, "Failed to ioremap resource\n");
+> +		return PTR_ERR(drvdata->base);
+> +	}
+> +
+> +	ret = smb_init_data_buffer(pdev, &drvdata->sdb);
+> +	if (ret) {
+> +		dev_err(dev, "Failed to init buffer, ret = %d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	smb_init_hw(drvdata);
+> +	mutex_init(&drvdata->mutex);
+> +	drvdata->pid = -1;
+> +
+> +	ret = smb_register_sink(pdev, drvdata);
+> +	if (ret) {
+> +		dev_err(dev, "Failed to register smb sink\n");
+> +		return ret;
+> +	}
+> +
+> +	ret = smb_config_inport(dev, true);
+> +	if (ret) {
+> +		smb_unregister_sink(drvdata);
+> +		return ret;
+> +	}
+> +
+> +	platform_set_drvdata(pdev, drvdata);
+> +	return 0;
+> +}
+> +
+> +static int smb_remove(struct platform_device *pdev)
+> +{
+> +	struct smb_drv_data *drvdata = platform_get_drvdata(pdev);
+> +	int ret;
+> +
+> +	ret = smb_config_inport(&pdev->dev, false);
+> +	if (ret)
+> +		return ret;
+> +
+> +	smb_unregister_sink(drvdata);
+
+Trivial: I find a blank line before plane returns like this helps
+a little with readability.  Up to you though!
+
+> +	return 0;
+> +}
+> +
+> +static const struct acpi_device_id ultrasoc_smb_acpi_match[] = {
+> +	{"HISI03A1", 0},
+> +	{},
+Trivial, but little point in a trailing comma on a NULL terminator.
+
+	{}
+};
+
+is normally fine - note this is a bit subsystem specific so maintainer
+may say otherwise.
+
+> +};
+> +MODULE_DEVICE_TABLE(acpi, ultrasoc_smb_acpi_match);
+> +
+> +static struct platform_driver smb_driver = {
+> +	.driver = {
+> +		.name = "ultrasoc-smb",
+> +		.acpi_match_table = ACPI_PTR(ultrasoc_smb_acpi_match),
+> +		.suppress_bind_attrs = true,
+> +	},
+> +	.probe = smb_probe,
+> +	.remove = smb_remove,
+> +};
+> +module_platform_driver(smb_driver);
+> +
+> +MODULE_DESCRIPTION("UltraSoc SMB CoreSight driver");
+> +MODULE_LICENSE("Dual MIT/GPL");
+> +MODULE_AUTHOR("Jonathan Zhou <jonathan.zhouwen@huawei.com>");
+> +MODULE_AUTHOR("Qi Liu <liuqi115@huawei.com>");
+> diff --git a/drivers/hwtracing/coresight/ultrasoc-smb.h b/drivers/hwtracing/coresight/ultrasoc-smb.h
+> new file mode 100644
+> index 000000000000..56170e1a883d
+> --- /dev/null
+> +++ b/drivers/hwtracing/coresight/ultrasoc-smb.h
+> @@ -0,0 +1,113 @@
+> +/* SPDX-License-Identifier: (GPL-2.0 OR MIT) */
+> +/*
+> + * Siemens System Memory Buffer driver.
+> + * Copyright(c) 2022, HiSilicon Limited.
+> + */
+> +
+> +#ifndef _ULTRASOC_SMB_H
+> +#define _ULTRASOC_SMB_H
+> +
+> +#include <linux/coresight.h>
+I think you could move this down into the c files and provide
+a forwards definition of struct coresight device
+
+Always good to keep scope of includes to minimum necessary.
+
+> +#include <linux/miscdevice.h>
+> +#include <linux/mutex.h>
+> +
+> +/* Offset of SMB logical buffer registers */
+> +#define SMB_CFG_REG		0x00
+
+To avoid any naming confusion I would postfix all the register
+addresses with _REG
+Then rethink the naming so the field names make it clear which
+register they are in.
+
+> +#define SMB_GLOBAL_EN		0x04
+> +#define SMB_GLOBAL_INT		0x08
+> +#define SMB_LB_CFG_LO		0x40
+> +#define SMB_LB_CFG_HI		0x44
+> +#define SMB_LB_INT_CTRL		0x48
+> +#define SMB_LB_INT_STS		0x4c
+> +#define SMB_LB_LIMIT		0x58
+> +#define SMB_LB_RD_ADDR		0x5c
+> +#define SMB_LB_WR_ADDR		0x60
+> +#define SMB_LB_PURGE		0x64
+> +
+> +/* Set SMB_CFG_REG register */
+> +#define SMB_BURST_LEN		GENMASK(7, 4)
+> +#define SMB_IDLE_PRD		GENMASK(15, 12)
+> +#define SMB_MEM_WR		GENMASK(17, 16)
+> +#define SMB_MEM_RD		(GENMASK(26, 25) | GENMASK(23, 22))
+
+Are these masks, or default values? Ideally express them as
+a field mask then the value via FIELD_PREP
+
+e.g.
+#define SMB_CFG_BURST_LEN_MSK GENMASK(7, 4)
+#define SMB_GLOBAL_CFG_DEFAULT    ... | FIELD_PREP(SMB_CFG_BURST_LEN_MSK, 0xf) | etc
+
+ 
+> +#define SMB_GLOBAL_CFG		(SMB_IDLE_PRD |	SMB_MEM_WR | SMB_MEM_RD | \
+> +				 SMB_BURST_LEN)
+> +
+> +/* Set SMB_GLOBAL_INT register */
+> +#define SMB_INT_EN		BIT(0)
+> +#define SMB_INT_TYPE_PULSE	BIT(1)
+> +#define SMB_INT_POLARITY_HIGH	BIT(2)
+> +#define SMB_GLB_INT_CFG		(SMB_INT_EN | SMB_INT_TYPE_PULSE |	\
+> +				 SMB_INT_POLARITY_HIGH)
+> +
+> +/* Set SMB_LB_CFG_LO register */
+> +#define SMB_BUF_EN		BIT(0)
+> +#define SMB_BUF_SINGLE_END	BIT(1)
+> +#define SMB_BUF_INIT		BIT(8)
+> +#define SMB_BUF_CONTINUOUS	BIT(11)
+> +#define SMB_FILTER_FLOW		GENMASK(19, 16)
+> +#define SMB_BUF_CFG_STREAMING	(SMB_BUF_INIT | SMB_BUF_CONTINUOUS |	\
+> +				 SMB_FILTER_FLOW | SMB_BUF_SINGLE_END |	\
+> +				 SMB_BUF_EN)
+> +
+> +#define SMB_BASE_LOW_MASK	GENMASK(31, 0)
+> +
+> +/* Set SMB_LB_CFG_HI register */
+> +#define SMB_MSG_FILTER		GENMASK(15, 8)
+> +
+> +/* Set SMB_LB_INT_CTRL */
+> +#define SMB_BUF_INT_EN		BIT(0)
+> +#define SMB_BUF_NOTE_MASK	GENMASK(11, 8)
+> +#define SMB_BUF_INT_CFG		(SMB_BUF_INT_EN | SMB_BUF_NOTE_MASK)
+> +
+> +#define SMB_BUF_NOT_EMPTY       BIT(0)
+> +#define SMB_RESET_BUF_STS       GENMASK(3, 0)
+> +#define SMB_PURGED              BIT(0)
+> +#define SMB_HW_ENABLE           BIT(0)
+
+It is useful to give fields names that reflect which register they are in.
+Perhaps
+SMB_GLOBAL_EN_HW_ENABLE for this one.
+
+> +
+> +#define SMB_BASE_ADDR_RES       0
+> +#define SMB_BUF_INFO_RES        1
+> +
+> +/**
+> + * struct smb_data_buffer - Details of the buffer used by SMB
+> + * @buf_base:	Memory mapped base address of SMB.
+> + * @start_addr:	SMB buffer start Physical address.
+> + * @buf_size:	Size of the buffer.
+> + * @data_size:	Size of Trace data copy to userspace.
+> + * @rd_offset:	Offset of the read pointer in the buffer.
+> + * @wr_offset:	Offset of the write pointer in the buffer.
+> + * @status:	Status of SMB buffer.
+
+Naming wrong. 
+
+> + */
+> +struct smb_data_buffer {
+> +	void __iomem *buf_base;
+> +	u32 start_addr;
+> +	unsigned long buf_size;
+> +	unsigned long data_size;
+> +	unsigned long rd_offset;
+> +	unsigned long wr_offset;
+> +	bool full;
+> +};
+> +
+> +/**
+> + * struct smb_drv_data - specifics associated to an SMB component
+> + * @base:	Memory mapped base address for SMB component.
+> + * @csdev:	Component vitals needed by the framework.
+> + * @sdb:	Data buffer for SMB.
+> + * @miscdev:	Specifics to handle "/dev/xyz.smb" entry.
+> + * @mutex:	Control data access to one at a time.
+> + * @reading:	Synchronise user space access to SMB buffer.
+> + * @pid:	Process ID of the process being monitored by the
+> + * 		session that is using this component.
+> + * @mode:	how this SMB is being used, perf mode or sysfs mode.
+> + */
+> +struct smb_drv_data {
+> +	void __iomem *base;
+> +	struct coresight_device	*csdev;
+> +	struct smb_data_buffer sdb;
+> +	struct miscdevice miscdev;
+> +	struct mutex mutex;
+> +	local_t reading;
+> +	pid_t pid;
+> +	u32 mode;
+> +};
+> +
+> +#endif
 
