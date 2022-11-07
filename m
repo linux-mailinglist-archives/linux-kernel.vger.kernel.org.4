@@ -2,176 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDF5F61EE4D
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 10:10:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B564F61EE53
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 10:10:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231598AbiKGJKV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 04:10:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37906 "EHLO
+        id S231611AbiKGJKr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 04:10:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230515AbiKGJKQ (ORCPT
+        with ESMTP id S231580AbiKGJKp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 04:10:16 -0500
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F445167F3
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 01:10:15 -0800 (PST)
-Received: by mail-ej1-x629.google.com with SMTP id bj12so28171580ejb.13
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 01:10:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=nathanrossi.com; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Rq7f5awERCBOzRjQecmifE8ARalisdBJSDWTzIB4PxQ=;
-        b=ZUFFDsZKDnQfoyM9/MObxP3JEorLMtGF2pXlhdoE9hwl9N54nPUCE7s97sAz+L/81q
-         dqtkmW5Ag6NAZOXcJrAREmLpl45C0hJTaXbScoVWHwA/UOaU9Ljcygb3jiGoI49/Fd77
-         EnwWz/xPj/uXTlTH4u70IqttOvNaZM4wOzKUmn+A78fd3LokucErLFJj5CrY7E/wN/QI
-         18HVOkrowHVA2wmI+Dv8+8mVZrC9l75Rf+//aRQEv9Kc2D4I92+nfdbCybYqvTXov8G5
-         S4J9UHnxdoGdeXuMJBjNgIazvz94uulPoLoWYfetKrFDOUL6BviWgw2iZxTK7+0D2BdX
-         4sbw==
+        Mon, 7 Nov 2022 04:10:45 -0500
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F5F56461
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 01:10:44 -0800 (PST)
+Received: by mail-il1-f198.google.com with SMTP id u7-20020a056e021a4700b00300b1379a2fso8267311ilv.13
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 01:10:44 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Rq7f5awERCBOzRjQecmifE8ARalisdBJSDWTzIB4PxQ=;
-        b=nVjL4B1hz4oBghYMj0gzm4nMZ3BCiXlr3druoyBfznv3EaoY4mU9Y1BRZdRwq1xDbj
-         crN99VHXZ18lu91+LVyV7Z+NYCSURdcXWUmFPavT1voY0tOOjXcjzZBfvEyrqbOHljfw
-         hoxKmf7qJx2PYf3X0SsjniqfXAndXgIw/fg7ViZQB4RfVamCrTDLtX6sxhjKGP+sUaWQ
-         xBq4Mw5JQA+vQQtvsDDXOICFSPWrWlbh600Fj4zNJmCmIK8QXK1N7OapNk86lSL2Litx
-         5qNQ6w0qeAboTHVesu5oRejVX6C8aDqZfvc5QVlpW9hXVMK5701/fQoAw1mabqrjjHJ+
-         zLHw==
-X-Gm-Message-State: ACrzQf3kvuO0PhO/HxAwy/YiMpQTp+c7Xjt9d5Xl38HMmkSIq5oshW8a
-        RPd7KaVrdqV8vkkI2e0iywHbYqc43Hvrx5PD48v0Qg==
-X-Google-Smtp-Source: AMsMyM4UGVtK5cQLWcYKRCKijpzjWIQcbQOb9hXBPbn5fTr0GKFl1wodrAcSHLpgVUU2i3d/nPixC59uVars83S8tVM=
-X-Received: by 2002:a17:906:371a:b0:7ad:c01c:6fa0 with SMTP id
- d26-20020a170906371a00b007adc01c6fa0mr42731140ejc.267.1667812213764; Mon, 07
- Nov 2022 01:10:13 -0800 (PST)
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=tlVBuPXj60Q1X2Uftzi7nOgFj7t+1wvfRBpV6fcx/Mo=;
+        b=sZYbEqhOikMdkMIuT4yvWwoDQlItHHWhJWA173dO9r9w6FbxhaaBgd6eUD3jcCouLU
+         JKNuy2x15ceQBHDE7b7nHlX2zz7wpMOdwJ5DeDdenc1fUUYn0HnXDMAhu9rav9nRha4A
+         y0CNrE6POKVoR73+UvitzfJ9tfXmyP4xXcLYBLCoLbVIY0PP0yPpF/R37K2Cc7KG5HN/
+         X/aRq+JgiH8dqJkp0VSXc3eKvdUzZk1xtzo9z6r4QEZPB5W5jjkO484XhQr5wzTyYz3U
+         xscYIOgD2Tu6JHhBpGuWT3dSruQrCLAEOz1RSFnKTFFZJHjKvtHgyP/wzNIEl9z9O9x/
+         hWkg==
+X-Gm-Message-State: ACrzQf3onLAhJr64T41bRWNo7QV9gNk3AWS4OtOhvLwaiXiUj0wrmcNv
+        eSMTBWOd2tN2ZWpgcDbpdlDVur0McmWlntLiy5Tx99R4rjS5
+X-Google-Smtp-Source: AMsMyM7R0clutN9KKUf7fMNTLDyS4wswTq7TL6Yezf5C5jeRoHCv2RDnXesEDUpB7EqI6ZBs/6zBkbJuSvUNoV5oOi2qta5bpxX8
 MIME-Version: 1.0
-References: <20221107081327.336239-1-nathan@nathanrossi.com> <20221107084346.ksdhcxk7bppvpmqc@pali>
-In-Reply-To: <20221107084346.ksdhcxk7bppvpmqc@pali>
-From:   Nathan Rossi <nathan@nathanrossi.com>
-Date:   Mon, 7 Nov 2022 19:10:02 +1000
-Message-ID: <CA+aJhH0k1zaP0sVNk98qviTiyCEAmQKO4MOD8LSiHiwuzh6-aA@mail.gmail.com>
-Subject: Re: [PATCH] PCI: mvebu: Set Target Link Speed for 2.5GT downstream devices
-To:     =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>
-Cc:     linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Nathan Rossi <nathan.rossi@digi.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>
+X-Received: by 2002:a92:6b0e:0:b0:2ff:df3e:995b with SMTP id
+ g14-20020a926b0e000000b002ffdf3e995bmr27549733ilc.193.1667812243851; Mon, 07
+ Nov 2022 01:10:43 -0800 (PST)
+Date:   Mon, 07 Nov 2022 01:10:43 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000058d01705ecddccb0@google.com>
+Subject: [syzbot] KMSAN: uninit-value in pagecache_write
+From:   syzbot <syzbot+9767be679ef5016b6082@syzkaller.appspotmail.com>
+To:     adilger.kernel@dilger.ca, glider@google.com,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, tytso@mit.edu
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 7 Nov 2022 at 18:43, Pali Roh=C3=A1r <pali@kernel.org> wrote:
->
-> On Monday 07 November 2022 08:13:27 Nathan Rossi wrote:
-> > From: Nathan Rossi <nathan.rossi@digi.com>
-> >
-> > There is a known issue with the mvebu PCIe controller when triggering
-> > retraining of the link (via Link Control) where the link is dropped
-> > completely causing significant delay in the renegotiation of the link.
-> > This occurs only when the downstream device is 2.5GT and the upstream
-> > port is configured to support both 2.5GT and 5GT.
-> >
-> > It is possible to prevent this link dropping by setting the associated
-> > link speed in Target Link Speed of the Link Control 2 register. This
-> > only needs to be done when the downstream is specifically 2.5GT.
-> >
-> > This change applies the required Target Link Speed value during
-> > mvebu_pcie_setup_hw conditionally depending on the current link speed
-> > from the Link Status register, only applying the change when the link
-> > is configured to 2.5GT already.
-> >
-> > Signed-off-by: Nathan Rossi <nathan.rossi@digi.com>
-> > ---
-> >  drivers/pci/controller/pci-mvebu.c | 18 +++++++++++++++++-
-> >  1 file changed, 17 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/pci/controller/pci-mvebu.c b/drivers/pci/controlle=
-r/pci-mvebu.c
-> > index 1ced73726a..6a869a33ba 100644
-> > --- a/drivers/pci/controller/pci-mvebu.c
-> > +++ b/drivers/pci/controller/pci-mvebu.c
-> > @@ -248,7 +248,7 @@ static void mvebu_pcie_setup_wins(struct mvebu_pcie=
-_port *port)
-> >
-> >  static void mvebu_pcie_setup_hw(struct mvebu_pcie_port *port)
-> >  {
-> > -     u32 ctrl, lnkcap, cmd, dev_rev, unmask, sspl;
-> > +     u32 ctrl, lnkcap, cmd, dev_rev, unmask, sspl, lnksta, lnkctl2;
-> >
-> >       /* Setup PCIe controller to Root Complex mode. */
-> >       ctrl =3D mvebu_readl(port, PCIE_CTRL_OFF);
-> > @@ -339,6 +339,22 @@ static void mvebu_pcie_setup_hw(struct mvebu_pcie_=
-port *port)
-> >       unmask |=3D PCIE_INT_INTX(0) | PCIE_INT_INTX(1) |
-> >                 PCIE_INT_INTX(2) | PCIE_INT_INTX(3);
-> >       mvebu_writel(port, unmask, PCIE_INT_UNMASK_OFF);
-> > +
-> > +     /*
-> > +      * Set Target Link Speed within the Link Control 2 register when =
-the
-> > +      * linked downstream device is connected at 2.5GT. This is config=
-ured
-> > +      * in order to avoid issues with the controller when the upstream=
- port
-> > +      * is configured to support 2.5GT and 5GT and the downstream devi=
-ce is
-> > +      * linked at 2.5GT, retraining the link in this case causes the l=
-ink to
-> > +      * drop taking significant time to retrain.
-> > +      */
-> > +     lnksta =3D mvebu_readl(port, PCIE_CAP_PCIEXP + PCI_EXP_LNKCTL) >>=
- 16;
-> > +     if ((lnksta & PCI_EXP_LNKSTA_CLS) =3D=3D PCI_EXP_LNKSTA_CLS_2_5GB=
-) {
->
-> This code does not work because at this stage endpoint device does not
-> have to be ready and therefore link is not established yet.
->
-> Also this code is not running when kernel issue PCIe Hot Reset via
-> PCI Secondary Bus Reset bit.
->
-> And it does not handle possible hot-plug situation.
->
-> That check that code below has to be done _after_ kernel enumerate
-> device. PCI core code has already logic to handle delays for "slow"
-> devices.
->
-> And reverse operation (setting lnkctl2 target speed to original value)
-> has to be called after unplugging device - when link goes down.
->
-> If you want to work on this stuff, I can try to find my notes which I
-> done during investigation of this issue... where is probably the best
-> place in kernel pci core code for handling this issue.
+Hello,
 
-Some notes/direction for implementation would be very appreciated. I
-am not particularly familiar with the pci core code, so I don't have a
-good idea on how to best implement this workaround.
+syzbot found the following issue on:
 
-Thanks,
-Nathan
+HEAD commit:    968c2729e576 x86: kmsan: fix comment in kmsan_shadow.c
+git tree:       https://github.com/google/kmsan.git master
+console output: https://syzkaller.appspot.com/x/log.txt?x=11d01ad6880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=131312b26465c190
+dashboard link: https://syzkaller.appspot.com/bug?extid=9767be679ef5016b6082
+compiler:       clang version 15.0.0 (https://github.com/llvm/llvm-project.git 610139d2d9ce6746b3c617fb3e2f7886272d26ff), GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: i386
 
->
-> > +             lnkctl2 =3D mvebu_readl(port, PCIE_CAP_PCIEXP + PCI_EXP_L=
-NKCTL2);
-> > +             lnkctl2 &=3D ~PCI_EXP_LNKCTL2_TLS;
-> > +             lnkctl2 |=3D PCI_EXP_LNKCTL2_TLS_2_5GT;
-> > +             mvebu_writel(port, lnkctl2, PCIE_CAP_PCIEXP + PCI_EXP_LNK=
-CTL2);
-> > +     }
-> >  }
-> >
-> >  static struct mvebu_pcie_port *mvebu_pcie_find_port(struct mvebu_pcie =
-*pcie,
-> > ---
-> > 2.37.2
+Unfortunately, I don't have any reproducer for this issue yet.
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/c78ce21b953f/disk-968c2729.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/22868d826804/vmlinux-968c2729.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+9767be679ef5016b6082@syzkaller.appspotmail.com
+
+=====================================================
+BUG: KMSAN: uninit-value in pagecache_write+0x655/0x720 fs/ext4/verity.c:91
+ pagecache_write+0x655/0x720 fs/ext4/verity.c:91
+ ext4_write_merkle_tree_block+0x84/0xa0 fs/ext4/verity.c:389
+ build_merkle_tree_level+0x972/0x1250 fs/verity/enable.c:121
+ build_merkle_tree fs/verity/enable.c:182 [inline]
+ enable_verity+0xede/0x1920 fs/verity/enable.c:268
+ fsverity_ioctl_enable+0x895/0xab0 fs/verity/enable.c:392
+ __ext4_ioctl fs/ext4/ioctl.c:1572 [inline]
+ ext4_ioctl+0x26dd/0x8c50 fs/ext4/ioctl.c:1606
+ ext4_compat_ioctl+0x702/0x800 fs/ext4/ioctl.c:1682
+ __do_compat_sys_ioctl fs/ioctl.c:968 [inline]
+ __se_compat_sys_ioctl+0x781/0xfa0 fs/ioctl.c:910
+ __ia32_compat_sys_ioctl+0x8f/0xd0 fs/ioctl.c:910
+ do_syscall_32_irqs_on arch/x86/entry/common.c:112 [inline]
+ __do_fast_syscall_32+0xa2/0x100 arch/x86/entry/common.c:178
+ do_fast_syscall_32+0x33/0x70 arch/x86/entry/common.c:203
+ do_SYSENTER_32+0x1b/0x20 arch/x86/entry/common.c:246
+ entry_SYSENTER_compat_after_hwframe+0x70/0x82
+
+Local variable fsdata created at:
+ pagecache_write+0x21c/0x720 fs/ext4/verity.c:85
+ ext4_write_merkle_tree_block+0x84/0xa0 fs/ext4/verity.c:389
+
+CPU: 1 PID: 15121 Comm: syz-executor.3 Not tainted 6.0.0-rc5-syzkaller-48543-g968c2729e576 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/11/2022
+=====================================================
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
