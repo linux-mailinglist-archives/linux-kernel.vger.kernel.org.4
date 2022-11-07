@@ -2,108 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA7E161FF79
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 21:22:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C223361FF83
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 21:28:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232900AbiKGUWc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 15:22:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56036 "EHLO
+        id S232931AbiKGU2K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 15:28:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231906AbiKGUW3 (ORCPT
+        with ESMTP id S232895AbiKGU1w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 15:22:29 -0500
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A265B1B;
-        Mon,  7 Nov 2022 12:22:28 -0800 (PST)
-Received: by mail-ej1-x630.google.com with SMTP id b2so33242428eja.6;
-        Mon, 07 Nov 2022 12:22:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZWnUgY3H+f2hHbNpDyrd9y8lMZYq8JYfCbySIrmSMWA=;
-        b=doCBwBhczp8/I2UwT7SYVdcEF9a9gIgnRlAGDDlRAdKCh4SHQV4TNvPrSaa5x0Sqry
-         GkmgasqxjuMv2lP+WcYFIM5W9rY31ffQffH1CtwFIfHEYsz52iX0MRx67lMGKyaZH7ud
-         oXFgbm6BZiKkLs8HzzfsWhFow9vRtq2PQmoRon+llUlMqQVIxAJLRCYfoJAty7W9bGQp
-         bCPfQ5SaaTQ9qqzToD2sOdZ11ZWXoOtox3tGBZ0yW12LUcUzOYqYBJRbYx6ITWG3TCno
-         ExEP+pTqTZj3jCbBDM3tPKqTNFjFrRrZaVgI0LKNMHABIATd7Ii453I6xTRfd7328Q1s
-         vhaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZWnUgY3H+f2hHbNpDyrd9y8lMZYq8JYfCbySIrmSMWA=;
-        b=zlqcjuUoaPTmcikBXzdMG0DzHdgzLSTuCEiD30FdMGauDvXFwanytjLEgxwSDB51W0
-         sXEJsm3RGnaz0FGohECRatWSE/ERpG+GN5ZFk6iXmDvNgZ2W/inBuqissHBOOPKPDVlw
-         DZbPiKDTk+c2n3uhCctdUdY7+GMzZ4hZEcVI4KGqbJteNFAQp/WUXKekult4oKHKx5lF
-         st0YcRXTiPuan0ywyzQIyWv/RiU8KjdYdMK6ZFC41Uw/C+PTicOrZ+wdvo6g48KtZk11
-         aM2Qzbf6T47xpmy1doE3CX43Kg0vxEyiDVLUpvxb4PZ5GCMN8vn+CaADjpFurBrcaHb1
-         BB5A==
-X-Gm-Message-State: ACrzQf3cWk4VcO+TQR8fTMIE4w2fJGDyPxpyd0be63MGl/O6cUtr/BG+
-        +dxGTF3dAzlsOzWUpz/n3PM=
-X-Google-Smtp-Source: AMsMyM7vmBCBiz9UcZbHfUkcznt3wshglyqBpTgsfylJlCW1wN5492RzoQkUcuAoYFCRE22b8mmyLw==
-X-Received: by 2002:a17:907:6eab:b0:78d:4c16:a687 with SMTP id sh43-20020a1709076eab00b0078d4c16a687mr49567196ejc.392.1667852546809;
-        Mon, 07 Nov 2022 12:22:26 -0800 (PST)
-Received: from skbuf ([188.27.184.197])
-        by smtp.gmail.com with ESMTPSA id v24-20020aa7d9d8000000b0045c3f6ad4c7sm4641188eds.62.2022.11.07.12.22.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Nov 2022 12:22:26 -0800 (PST)
-Date:   Mon, 7 Nov 2022 22:22:23 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Sean Anderson <sean.anderson@seco.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>, netdev@vger.kernel.org,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
-        Andrew Lunn <andrew@lunn.ch>,
-        Ioana Ciornei <ioana.ciornei@nxp.com>,
-        Madalin Bucur <madalin.bucur@nxp.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Saravana Kannan <saravanak@google.com>,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH net-next v2 08/11] of: property: Add device link support
- for PCS
-Message-ID: <20221107202223.ihdk4ubbqpro5w5y@skbuf>
-References: <20221103210650.2325784-1-sean.anderson@seco.com>
- <20221103210650.2325784-9-sean.anderson@seco.com>
- <20221107201010.GA1525628-robh@kernel.org>
+        Mon, 7 Nov 2022 15:27:52 -0500
+Received: from viti.kaiser.cx (viti.kaiser.cx [IPv6:2a01:238:43fe:e600:cd0c:bd4a:7a3:8e9f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F8F66413
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 12:27:50 -0800 (PST)
+Received: from martin by viti.kaiser.cx with local (Exim 4.89)
+        (envelope-from <martin@viti.kaiser.cx>)
+        id 1os8ie-0004af-G3; Mon, 07 Nov 2022 21:27:44 +0100
+Date:   Mon, 7 Nov 2022 21:27:44 +0100
+From:   Martin Kaiser <martin@kaiser.cx>
+To:     Dan Carpenter <error27@gmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Michael Straube <straube.linux@gmail.com>,
+        Pavel Skripkin <paskripkin@gmail.com>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/3] staging: r8188eu: use a qos_hdr in
+ validate_recv_data_frame
+Message-ID: <20221107202744.cn6t5apcny7jfetp@viti.kaiser.cx>
+References: <20221106170455.743058-1-martin@kaiser.cx>
+ <20221106170455.743058-2-martin@kaiser.cx>
+ <Y2j//dFRONly9kU8@kadam>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221107201010.GA1525628-robh@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Y2j//dFRONly9kU8@kadam>
+User-Agent: NeoMutt/20170113 (1.7.2)
+Sender: Martin Kaiser <martin@viti.kaiser.cx>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 07, 2022 at 02:10:10PM -0600, Rob Herring wrote:
-> On Thu, Nov 03, 2022 at 05:06:47PM -0400, Sean Anderson wrote:
-> > This adds device link support for PCS devices. Both the recommended
-> > pcs-handle and the deprecated pcsphy-handle properties are supported.
-> > This should provide better probe ordering.
-> > 
-> > Signed-off-by: Sean Anderson <sean.anderson@seco.com>
-> > ---
-> > 
-> > (no changes since v1)
-> > 
-> >  drivers/of/property.c | 4 ++++
-> >  1 file changed, 4 insertions(+)
-> 
-> Seems like no dependency on the rest of the series, so I can take this 
-> patch?
+Thus wrote Dan Carpenter (error27@gmail.com):
 
-Is fw_devlink well-behaved these days, so as to not break (forever defer)
-the probing of the device having the pcs-handle, if no driver probed on
-the referenced PCS? Because the latter is what will happen if no one
-picks up Sean's patches to probe PCS devices in the usual device model
-way, I think.
+> On Sun, Nov 06, 2022 at 06:04:53PM +0100, Martin Kaiser wrote:
+> > Define a struct ieee80211_qos_hdr in the validate_recv_data_frame
+> > function. Use this struct to replace some numeric offsets and make the
+> > code easier to understand.
+
+> > Signed-off-by: Martin Kaiser <martin@kaiser.cx>
+> > ---
+> >  drivers/staging/r8188eu/core/rtw_recv.c | 9 +++++----
+> >  1 file changed, 5 insertions(+), 4 deletions(-)
+
+> > diff --git a/drivers/staging/r8188eu/core/rtw_recv.c b/drivers/staging/r8188eu/core/rtw_recv.c
+> > index cb0f35d7ab98..245b931c483d 100644
+> > --- a/drivers/staging/r8188eu/core/rtw_recv.c
+> > +++ b/drivers/staging/r8188eu/core/rtw_recv.c
+> > @@ -1032,7 +1032,6 @@ static int validate_recv_data_frame(struct adapter *adapter,
+> >  				    struct recv_frame *precv_frame)
+> >  {
+> >  	struct sta_info *psta = NULL;
+> > -	u8 *ptr = precv_frame->rx_data;
+> >  	struct ieee80211_hdr *hdr = (struct ieee80211_hdr *)precv_frame->rx_data;
+> >  	struct rx_pkt_attrib	*pattrib = &precv_frame->attrib;
+> >  	struct security_priv	*psecuritypriv = &adapter->securitypriv;
+> > @@ -1071,10 +1070,12 @@ static int validate_recv_data_frame(struct adapter *adapter,
+> >  	pattrib->ack_policy = 0;
+> >  	/* parsing QC field */
+> >  	if (pattrib->qos) {
+> > +		struct ieee80211_qos_hdr *qos_hdr = (struct ieee80211_qos_hdr *)hdr;
+> > +
+> >  		pattrib->priority = ieee80211_get_tid(hdr);
+> > -		pattrib->ack_policy = GetAckpolicy((ptr + 24));
+> > -		pattrib->amsdu = GetAMsdu((ptr + 24));
+> > -		pattrib->hdrlen = 26;
+>                                ^^^
+
+> > +		pattrib->ack_policy = GetAckpolicy(&qos_hdr->qos_ctrl);
+> > +		pattrib->amsdu = GetAMsdu(&qos_hdr->qos_ctrl);
+> > +		pattrib->hdrlen += sizeof(*qos_hdr);
+>                                ^^^^
+> Why did this change from "=" to "+="?
+
+Thanks a lot for spotting this, Dan!
+
+I tried a couple of versions, some of which used +=. For the one I
+submitted, this is wrong, of course.
+
+All of pattrib is initialised to 0 in update_recvframe_attrib_88e and
+pattrib->hdrlen is not updated until the assignment above. That's why
+the += still works and testing didn't show the problem.
+
+v2 is on the way...
+
+Thanks again,
+
+   Martin
