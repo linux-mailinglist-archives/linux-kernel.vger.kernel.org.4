@@ -2,180 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65A0C61FCE1
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 19:09:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E85261FCE5
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 19:10:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232533AbiKGSJu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 13:09:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52616 "EHLO
+        id S231667AbiKGSKB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 13:10:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232545AbiKGSJf (ORCPT
+        with ESMTP id S232701AbiKGSJi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 13:09:35 -0500
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4333226545
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 10:06:09 -0800 (PST)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-37360a6236fso115083757b3.12
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 10:06:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=j60fk1GX1r+NlL9MlNZCmp8WSDoORaTrNw5+KLoJy/4=;
-        b=Mf6r8tPrYM3LamVKchqSLk/dmvuFcNjB5NxU9/TNA/LJR4+Uh6XqGidKCN9FLz9j6m
-         5gN67h9p+bLYpCjhvc8IX2CAcX4UVPj8TTNmTLQlD8LZNhhCBfuUhNVOyi4YFV9Cslm6
-         AhdPCARfNOufm6rPh+qX4CH2KdXaRwv31osB1U4pHViwGvPXTpaxGAj8nSPx7FSGxRB4
-         +bKsZS3bxkBP2fqFSyYSg3BcOjx2bkaxsJ2wtpBxsnFPpuiZfD1FUTU7e48qA9xSUo21
-         QvC3cJW2wJT2ZTT75eLJOPbDmwnzWYEohD/r29NC7k+wM2btkY3eRlPA4CapntnDrd5R
-         pr/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=j60fk1GX1r+NlL9MlNZCmp8WSDoORaTrNw5+KLoJy/4=;
-        b=AfDCG3rTCaBTOhQ+MVN96R4U7sHFMSzdbxFDwfe0CZVrr7+durs4Kwy32LrSsxkImF
-         U9AgdYuZnWOWT6oPAxflD4XmiSKyDww+36xal52AoeoMgF9Sm81vQZn/8ogrYLP9Xcd/
-         IXb2XJepYtsJo+CshJZ60C14zOxSA+4TY3D8Aby0XUcOyQKQX3YdikGFqYl5fUQ39KhW
-         VuofDyzUEagdsZk/Lk8ihSPq6ghXW/ejgI0sysXdb5wL9ddT7FTfhiG1WeQSuXxVORDl
-         e6xU8V3cdLVJ2Z1kUkcXGzz6hkUpxUDk7nY1AI3kstvILPlOvoK/PO+LLfGuKXxZy0eP
-         bi2A==
-X-Gm-Message-State: ACrzQf1MOG3Fmoc4XfpYnCctAx1gvpQC6Iue3wyiVKvNEo7Q9RmuwcxP
-        Ed7jFIxICSfe9y0Ez7IP8byh/Aa5HdGRBTAi
-X-Google-Smtp-Source: AMsMyM7RHwAxsAmUPng5raelGOKXR8aFY878B1n1s2rNW5vI6CWnaeE3l0ZswkUAr2+iO/m1XeFXM+P1fxqlCA2J
-X-Received: from jthoughton.c.googlers.com ([fda3:e722:ac3:cc00:14:4d90:c0a8:2a4f])
- (user=jthoughton job=sendgmr) by 2002:a81:e0f:0:b0:349:a047:655e with SMTP id
- 15-20020a810e0f000000b00349a047655emr50840803ywo.373.1667844368522; Mon, 07
- Nov 2022 10:06:08 -0800 (PST)
-Date:   Mon,  7 Nov 2022 18:05:48 +0000
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
-Message-ID: <20221107180548.2095056-1-jthoughton@google.com>
-Subject: [PATCH v2] hugetlbfs: don't delete error page from pagecache
-From:   James Houghton <jthoughton@google.com>
-To:     Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Yang Shi <shy828301@gmail.com>,
-        Axel Rasmussen <axelrasmussen@google.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        James Houghton <jthoughton@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 7 Nov 2022 13:09:38 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2061D264BB;
+        Mon,  7 Nov 2022 10:06:16 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5A445611EE;
+        Mon,  7 Nov 2022 18:06:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86128C433C1;
+        Mon,  7 Nov 2022 18:06:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667844375;
+        bh=SDj38zhZ2y6S5wzKuopT3v98OgXjZ5t/qd6hJPfIq1Q=;
+        h=Date:From:To:Cc:Subject:From;
+        b=gXtmlImi+vjgkpCX3LhfMyz3zFTfaEbT4u/U6S8Pw9RvpKVbkdsOYDOrzCs9ms5Ev
+         73rDkC0ASYixrRLsG4wPx1kv9Lt8nE9oBHLEQY/jKrHD6+w83nCK5tW6rmfD1khPHa
+         AnUPD9FtPcjhWJOC35YDIMYOTUL3ELWV2Me0J8fowbOzfHO0I1jL+PsxKT7xA5NWoz
+         Cw4GRFQtad1E8VEFMIgwchcxZwifrcGntDmUeJBRYSqcf3NOI+1piCumZyU2HUZR18
+         CGhJl4lKkdwH4P4vVily6EKSX9jSDZMEbtt1GuZe3bIGAKnpzeGgIj7xZ8duX9KhiC
+         80Akdomf9Dh+g==
+Date:   Mon, 7 Nov 2022 12:06:13 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>
+Cc:     wse@tuxedocomputers.com, Konrad J Hambrick <kjhambrick@gmail.com>,
+        linux-usb@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Thunderbolt DMAR errors (bugzilla 214259)
+Message-ID: <20221107180613.GA406714@bhelgaas>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This change is very similar to the change that was made for shmem [1],
-and it solves the same problem but for HugeTLBFS instead.
+See https://bugzilla.kernel.org/show_bug.cgi?id=214259
+From comment 42 of this bugzilla:
 
-Currently, when poison is found in a HugeTLB page, the page is removed
-from the page cache. That means that attempting to map or read that
-hugepage in the future will result in a new hugepage being allocated
-instead of notifying the user that the page was poisoned. As [1] states,
-this is effectively memory corruption.
+v6.1-rc4 on On Clevo X170KM Barebone:
 
-The fix is to leave the page in the page cache. If the user attempts to
-use a poisoned HugeTLB page with a syscall, the syscall will fail with
-EIO, the same error code that shmem uses. For attempts to map the page,
-the thread will get a BUS_MCEERR_AR SIGBUS.
+  [    0.000000] BIOS-e820: [mem 0x00000000694af000-0x000000006b2fefff] reserved
+  [    0.739226] pci 0000:05:00.0: [8086:1137] type 00 class 0x0c0340
+  [    0.739266] pci 0000:05:00.0: reg 0x10: [mem 0x425a000000-0x425a03ffff 64bit pref]
+  [    0.739288] pci 0000:05:00.0: reg 0x18: [mem 0x425a040000-0x425a040fff 64bit pref]
+  [    1.587809] DMAR: [DMA Write NO_PASID] Request device [05:00.0] fault addr 0x69974000 [fault reason 0x05] PTE Write access is not set
+  [   23.594763] DMAR: [DMA Write NO_PASID] Request device [05:00.0] fault addr 0x69974000 [fault reason 0x05] PTE Write access is not set
+  [   44.074761] DMAR: [DMA Write NO_PASID] Request device [05:00.0] fault addr 0x69974000 [fault reason 0x05] PTE Write access is not set
+  [   64.554820] DMAR: [DMA Write NO_PASID] Request device [05:00.0] fault addr 0x69974000 [fault reason 0x05] PTE Write access is not set
+  [   85.031314] thunderbolt 0000:05:00.0: failed to send driver ready to ICM
+  [   85.031403] thunderbolt: probe of 0000:05:00.0 failed with error -110
 
-[1]: commit a76054266661 ("mm: shmem: don't truncate page if memory failure happens")
-
-Fixes: 78bb920344b8 ("mm: hwpoison: dissolve in-use hugepage in unrecoverable memory error")
-Cc: <stable@vger.kernel.org>
-Signed-off-by: James Houghton <jthoughton@google.com>
-Reviewed-by: Mike Kravetz <mike.kravetz@oracle.com>
-Reviewed-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
-Tested-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
----
- fs/hugetlbfs/inode.c | 13 ++++++-------
- mm/hugetlb.c         |  4 ++++
- mm/memory-failure.c  |  5 ++++-
- 3 files changed, 14 insertions(+), 8 deletions(-)
-
-diff --git a/fs/hugetlbfs/inode.c b/fs/hugetlbfs/inode.c
-index dd54f67e47fd..df7772335dc0 100644
---- a/fs/hugetlbfs/inode.c
-+++ b/fs/hugetlbfs/inode.c
-@@ -328,6 +328,12 @@ static ssize_t hugetlbfs_read_iter(struct kiocb *iocb, struct iov_iter *to)
- 		} else {
- 			unlock_page(page);
- 
-+			if (PageHWPoison(page)) {
-+				put_page(page);
-+				retval = -EIO;
-+				break;
-+			}
-+
- 			/*
- 			 * We have the page, copy it to user space buffer.
- 			 */
-@@ -1111,13 +1117,6 @@ static int hugetlbfs_migrate_folio(struct address_space *mapping,
- static int hugetlbfs_error_remove_page(struct address_space *mapping,
- 				struct page *page)
- {
--	struct inode *inode = mapping->host;
--	pgoff_t index = page->index;
--
--	hugetlb_delete_from_page_cache(page);
--	if (unlikely(hugetlb_unreserve_pages(inode, index, index + 1, 1)))
--		hugetlb_fix_reserve_counts(inode);
--
- 	return 0;
- }
- 
-diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-index 546df97c31e4..e48f8ef45b17 100644
---- a/mm/hugetlb.c
-+++ b/mm/hugetlb.c
-@@ -6111,6 +6111,10 @@ int hugetlb_mcopy_atomic_pte(struct mm_struct *dst_mm,
- 
- 	ptl = huge_pte_lock(h, dst_mm, dst_pte);
- 
-+	ret = -EIO;
-+	if (PageHWPoison(page))
-+		goto out_release_unlock;
-+
- 	/*
- 	 * We allow to overwrite a pte marker: consider when both MISSING|WP
- 	 * registered, we firstly wr-protect a none pte which has no page cache
-diff --git a/mm/memory-failure.c b/mm/memory-failure.c
-index 145bb561ddb3..bead6bccc7f2 100644
---- a/mm/memory-failure.c
-+++ b/mm/memory-failure.c
-@@ -1080,6 +1080,7 @@ static int me_huge_page(struct page_state *ps, struct page *p)
- 	int res;
- 	struct page *hpage = compound_head(p);
- 	struct address_space *mapping;
-+	bool extra_pins = false;
- 
- 	if (!PageHuge(hpage))
- 		return MF_DELAYED;
-@@ -1087,6 +1088,8 @@ static int me_huge_page(struct page_state *ps, struct page *p)
- 	mapping = page_mapping(hpage);
- 	if (mapping) {
- 		res = truncate_error_page(hpage, page_to_pfn(p), mapping);
-+		/* The page is kept in page cache. */
-+		extra_pins = true;
- 		unlock_page(hpage);
- 	} else {
- 		unlock_page(hpage);
-@@ -1104,7 +1107,7 @@ static int me_huge_page(struct page_state *ps, struct page *p)
- 		}
- 	}
- 
--	if (has_extra_refcount(ps, p, false))
-+	if (has_extra_refcount(ps, p, extra_pins))
- 		res = MF_FAILED;
- 
- 	return res;
--- 
-2.38.1.431.g37b22c650d-goog
-
+The initial report from wse@ was on v5.15 (faults at the exact same
+address).
