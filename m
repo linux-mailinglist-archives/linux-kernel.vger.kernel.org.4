@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34D8861F169
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 12:06:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B2CD61F16C
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 12:06:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231271AbiKGLGX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 06:06:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59266 "EHLO
+        id S231367AbiKGLG0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 06:06:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229929AbiKGLGU (ORCPT
+        with ESMTP id S230389AbiKGLGU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 7 Nov 2022 06:06:20 -0500
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7771918374;
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C98818375;
         Mon,  7 Nov 2022 03:06:18 -0800 (PST)
 Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2A7B69Rg017242;
-        Mon, 7 Nov 2022 05:06:09 -0600
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2A7B6AMN076508;
+        Mon, 7 Nov 2022 05:06:10 -0600
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1667819169;
-        bh=4bKkHi01uwc0/LlxwI/cnUDjwMac8lv3X+ZRCp/PCT0=;
-        h=From:To:CC:Subject:Date;
-        b=C5/eboOoZ6Ti2pHUaEpWucxB9ogyth3DEITeHcqwyWfob7DaSJV1QVroX71XezyJi
-         oZXoT3iDeUpklMiTiqO2E1KQu6rH2XNkxNFWbocx48JFmdeYjwW2H3HTIejZA/gkHX
-         CAk3s/bo9+NaCK+B90sf+xTAxgrsE8X65bEwne/Y=
-Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2A7B69Uk001664
+        s=ti-com-17Q1; t=1667819170;
+        bh=fuBnItlqZybUIhnMgrmAFZXstp33uvcW+tHsv8HE2DM=;
+        h=From:To:CC:Subject:Date:In-Reply-To:References;
+        b=b99SLdz10DCsDva2cyDrjH9bALJFk/fJB2vqJuPSAb3658NxVNLUl8nY66dl2lrMa
+         JNqqvyyBg3eWElygtOuh5ZncPVHkqRNJNs2motABgii6C0Gn6vN4BHy8mBq6MUQold
+         sFQ3HhWHArqgDkOf3VxANvt4T/oHRinAjCCtzdVE=
+Received: from DLEE111.ent.ti.com (dlee111.ent.ti.com [157.170.170.22])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2A7B6AjJ001674
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 7 Nov 2022 05:06:09 -0600
-Received: from DFLE101.ent.ti.com (10.64.6.22) by DFLE114.ent.ti.com
- (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
+        Mon, 7 Nov 2022 05:06:10 -0600
+Received: from DLEE103.ent.ti.com (157.170.170.33) by DLEE111.ent.ti.com
+ (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Mon, 7 Nov
- 2022 05:06:08 -0600
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE101.ent.ti.com
- (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
+ 2022 05:06:10 -0600
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE103.ent.ti.com
+ (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
- Frontend Transport; Mon, 7 Nov 2022 05:06:08 -0600
-Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2A7B68iX074388;
-        Mon, 7 Nov 2022 05:06:08 -0600
+ Frontend Transport; Mon, 7 Nov 2022 05:06:10 -0600
+Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2A7B698T074407;
+        Mon, 7 Nov 2022 05:06:10 -0600
 From:   Jayesh Choudhary <j-choudhary@ti.com>
 To:     <nm@ti.com>, <vigneshr@ti.com>
 CC:     <kristo@kernel.org>, <robh+dt@kernel.org>, <afd@ti.com>,
@@ -47,10 +47,12 @@ CC:     <kristo@kernel.org>, <robh+dt@kernel.org>, <afd@ti.com>,
         <s-anna@ti.com>, <linux-arm-kernel@lists.infradead.org>,
         <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <j-choudhary@ti.com>
-Subject: [PATCH v2 0/3] RNG clock property cleanup
-Date:   Mon, 7 Nov 2022 16:36:04 +0530
-Message-ID: <20221107110607.59216-1-j-choudhary@ti.com>
+Subject: [PATCH v2 1/3] arm64: dts: ti: k3-am65-main: drop RNG clock
+Date:   Mon, 7 Nov 2022 16:36:05 +0530
+Message-ID: <20221107110607.59216-2-j-choudhary@ti.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20221107110607.59216-1-j-choudhary@ti.com>
+References: <20221107110607.59216-1-j-choudhary@ti.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -64,26 +66,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This series removes the clock property from the rng node of
-K3 devices for TI SoCs as that clock is not dedicated to RNG
-module and it cannot be controlled by the rng driver.
+The x1-clk used by trng submodule comes directly from the system clock
+after a fixed divider. It is always running and has a fixed frequency
+that cannot be changed, making it uncontrollable. Hence this property
+should be dropped from the rng node.
 
-DT binding fix:
-<https://lore.kernel.org/all/20220901171041.32056-1-afd@ti.com/>
+Fixes: b366b2409c97 ("arm64: dts: ti: k3-am6: Add crypto accelarator node")
+Signed-off-by: Jayesh Choudhary <j-choudhary@ti.com>
+---
+ arch/arm64/boot/dts/ti/k3-am65-main.dtsi | 1 -
+ 1 file changed, 1 deletion(-)
 
-Changelog v1 -> v2:
-- Update the commit description properly for each patch
-
-Jayesh Choudhary (3):
-  arm64: dts: ti: k3-am65-main: drop RNG clock
-  arm64: dts: ti: k3-j721e-main: drop RNG clock
-  arm64: dts: ti: k3-am64-main: drop RNG clock
-
- arch/arm64/boot/dts/ti/k3-am64-main.dtsi  | 1 -
- arch/arm64/boot/dts/ti/k3-am65-main.dtsi  | 1 -
- arch/arm64/boot/dts/ti/k3-j721e-main.dtsi | 1 -
- 3 files changed, 3 deletions(-)
-
+diff --git a/arch/arm64/boot/dts/ti/k3-am65-main.dtsi b/arch/arm64/boot/dts/ti/k3-am65-main.dtsi
+index 4005a73cfea9..e166d7b7e3a1 100644
+--- a/arch/arm64/boot/dts/ti/k3-am65-main.dtsi
++++ b/arch/arm64/boot/dts/ti/k3-am65-main.dtsi
+@@ -126,7 +126,6 @@ rng: rng@4e10000 {
+ 			compatible = "inside-secure,safexcel-eip76";
+ 			reg = <0x0 0x4e10000 0x0 0x7d>;
+ 			interrupts = <GIC_SPI 24 IRQ_TYPE_LEVEL_HIGH>;
+-			clocks = <&k3_clks 136 1>;
+ 			status = "disabled"; /* Used by OP-TEE */
+ 		};
+ 	};
 -- 
 2.25.1
 
