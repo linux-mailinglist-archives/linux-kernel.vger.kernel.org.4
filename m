@@ -2,100 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60D4261F45E
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 14:30:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E325761F462
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 14:31:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231466AbiKGNaM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 08:30:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60570 "EHLO
+        id S231361AbiKGNbK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 08:31:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232077AbiKGN3x (ORCPT
+        with ESMTP id S231324AbiKGNbF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 08:29:53 -0500
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 672501D302
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 05:29:42 -0800 (PST)
-Received: by mail-ej1-x634.google.com with SMTP id k2so30131479ejr.2
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 05:29:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=szeredi.hu; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=PM+GvzUOrpzLT7Pau7GHi0eg8fby8y8JxEhzd+k4CsQ=;
-        b=VTrxRNePenGfST2wcxSrNrVGneCGqAxict2RxEPTu4I4YlZxOZQdbWtyBocBb/05PP
-         dzu01Yv75KglfeLY5TfGFVCM/E1b/ZjSI7UAA5mmeGJ3KDyxXn1/rn5N2WVoPfQ1WDo1
-         m1OENUtHehsnS59tJWyVD52Kv066ZBa0iCPCE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=PM+GvzUOrpzLT7Pau7GHi0eg8fby8y8JxEhzd+k4CsQ=;
-        b=6445+Ss/IAR6UHZkUDQR/KfUMd4mSIOJbA1hddx7ZcRM7oQ0qqBOwrF1NDnQP8Xh1/
-         pnsVby4BigcMYRtQTu+veNbH3rgZd3Qq7zMiidNDDdYSOaJY8KSQ2u4EGbcjt7hkB5/w
-         +TG2cvMsT6UloHr5uB9rajQF89E/Wtq/XRDB6bwW/CoV7WSAm9wozXk1g1sXc10MMom8
-         pr/7D0voXBpKauIehfcBZcDA+NTX6p22nTR2BtLlK0o8C7Fwce1KWEj74Ab8z5VQcNr/
-         qPCXhE010XJnQo8R/UK3uvO0nvfyayghMYnqWn3Oj4A994nk9F7PCNG5N0VKhonShTK4
-         +ruA==
-X-Gm-Message-State: ACrzQf2ej4tc41ScIXI2voaw0wbGLH64Y/iuiRieA+Z2Ex9D+5rUrdJt
-        e62EVL1d6+WByKEBKQsLlKeXuP4Z4/2lOfRLMoVW6g==
-X-Google-Smtp-Source: AMsMyM68sr6fthD5zp+UAeoptxjNTP5Wb1s5z2aihH+2ec/bLWdIELqUV8UOT76xZfmV62a3oENwjLwe0QW00TpO9Bs=
-X-Received: by 2002:a17:906:371a:b0:7ad:c01c:6fa0 with SMTP id
- d26-20020a170906371a00b007adc01c6fa0mr43776661ejc.267.1667827781033; Mon, 07
- Nov 2022 05:29:41 -0800 (PST)
+        Mon, 7 Nov 2022 08:31:05 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DBFA1B9FA
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 05:31:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667827865; x=1699363865;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=v1gI9Pe6bvHrL0dWTyJyctWSrUg2IYLGOLoOANLiJ3Y=;
+  b=FUE/MnYuJUdy5AfXF9/nr+Q9403SmU1wcQrDXeze85TLtywAhcV8zxje
+   ko5A3ucGKlZrnUPSK6PnAmj2sMeZXCvmbl8jzX4ZVCRxh63OCCZy22irs
+   pqMCG8FMNo+WtE1jZ/sPkgrQsysC3KBaaPZNEq82MWTOGSgpbHmNKsVwg
+   MRHpfQFjcMoTgZ8t98t0UY/htBKoZfoHUVwyLwLfDKmg0UypNx+wiFXdg
+   zNHgpVNlKWH8ZKBk7R/LbC+DdYkkLM1RodJIVgvYBNOwNGK9nMzlmNUi2
+   AuPCnBCbYacYmQwIIO/P1sN5IDkrcvVM0NUPt3dfvdPbS6cvlqGgbnWE4
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10523"; a="297900053"
+X-IronPort-AV: E=Sophos;i="5.96,145,1665471600"; 
+   d="scan'208";a="297900053"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Nov 2022 05:31:04 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10523"; a="586968694"
+X-IronPort-AV: E=Sophos;i="5.96,145,1665471600"; 
+   d="scan'208";a="586968694"
+Received: from dkthrons-mobl2.amr.corp.intel.com (HELO [10.209.29.113]) ([10.209.29.113])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Nov 2022 05:31:04 -0800
+Message-ID: <3cdb5bf8-7f26-0416-46d2-a5640dd27f22@intel.com>
+Date:   Mon, 7 Nov 2022 05:31:03 -0800
 MIME-Version: 1.0
-References: <20221016170046.171936-1-work.viveris@nightmared.fr>
-In-Reply-To: <20221016170046.171936-1-work.viveris@nightmared.fr>
-From:   Miklos Szeredi <miklos@szeredi.hu>
-Date:   Mon, 7 Nov 2022 14:29:29 +0100
-Message-ID: <CAJfpegspZ5UJJQZNi6Rdn6wPDfoZE6REFJ-XXX3sebhrHnQ=uw@mail.gmail.com>
-Subject: Re: [PATCH] fuse: enable unprivileged mounts for fuseblk
-To:     Simon Thoby <work.viveris@nightmared.fr>
-Cc:     CONZELMANN Francois <Francois.CONZELMANN@viveris.fr>,
-        "Eric W . Biederman" <ebiederm@xmission.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH 2/2] x86/tdx: Do not allow #VE due to EPT violation on the
+ private memory
+Content-Language: en-US
+To:     Guorui Yu <GuoRui.Yu@linux.alibaba.com>,
+        kirill.shutemov@linux.intel.com
+Cc:     ak@linux.intel.com, bp@alien8.de, dan.j.williams@intel.com,
+        david@redhat.com, elena.reshetova@intel.com, hpa@zytor.com,
+        linux-kernel@vger.kernel.org, luto@kernel.org, mingo@redhat.com,
+        peterz@infradead.org, sathyanarayanan.kuppuswamy@linux.intel.com,
+        seanjc@google.com, tglx@linutronix.de, thomas.lendacky@amd.com,
+        x86@kernel.org
+References: <20221028141220.29217-3-kirill.shutemov@linux.intel.com>
+ <b5d04a6c-79b4-bbdc-b613-6958d9f75d53@linux.alibaba.com>
+ <4bfcd256-b926-9b1c-601c-efcff0d16605@intel.com>
+ <c2b60735-84a8-649e-536c-877c790eb101@linux.alibaba.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <c2b60735-84a8-649e-536c-877c790eb101@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 16 Oct 2022 at 19:00, Simon Thoby <work.viveris@nightmared.fr> wrote:
->
-> Commit 4ad769f3c346ec3d458e255548dec26ca5284cf6 ("fuse: Allow fully
-> unprivileged mounts") enabled mounting filesystems with the 'fuse' type for
-> any user with CAP_SYS_ADMIN inside their respective user namespace, but did
-> not do so for the 'fuseblk' filesystem type.
->
-> Some FUSE filesystems implementations - like ntfs-3g - prefer using
-> 'fuseblk' over 'fuse', which imply unprivileged users could not use these
-> tools - in their "out-of-the-box" configuration, as these tools can always
-> be patched to use the 'fuse' filesystem type to circumvent the problem.
->
-> Enable unprivileged mounts for the 'fuseblk' type, thus uniformizing the
-> behavior of the two FUSE filesystem types.
->
-> Signed-off-by: Simon Thoby <work.viveris@nightmared.fr>
+On 11/6/22 21:10, Guorui Yu wrote:
+>> Without ATTR_SEPT_VE_DISABLE, a #VE can occur on basically any
+>> instruction.  We call those kinds of exceptions "paranoid entry" points.
+>>   They need special handling like the NMI or #MC handlers.
+>>
+>> I'd be happy to look at a patch that does the MMIO path check *and*
+>> turns the #VE handler into a robust entry point.
+>>
+>> Bonus points if you can do ~5 lines of C like the approach in this
+>> thread.
+> 
+> Yes, there is a fix to satify your requirement and get the bouns points 😄
+> 
+> Please refer to
+> https://github.com/intel/tdx/commit/f045b0d52a5f7d8bf66cd4410307d05a90523f10
+> 
+> case EXIT_REASON_EPT_VIOLATION:
+> + if (!(ve->gpa & tdx_shared_mask())) {
+> + panic("#VE due to access to unaccepted memory. "
+> + "GPA: %#llx\n", ve->gpa);
+> + }
+> +
+> /* original from Kirill and Kuppuswamy */
+> 
+> It's already there, but it just didn't get into the main branch.
 
-NAK in this form.
+Could you explain how that prevents the #VE from occurring in the
+"syscall gap" or in a place where the kernel is running with the user
+GSBASE value?
 
-Please look at all the places where there's a difference between the
-fuse and the fuseblk behavior and give proof that they won't result in
-a security issue in case fuseblk is mounted unprivileged.
-
-As a possibly much better alternative, try modifying the ntfs-3g code
-to be able to work using the "fuse" fs type as well.
-
-Thanks,
-Miklos
-
-fuseblk enables synchronouse RELEASE and DESTROY requests that are
-unsuitable for unprivileged operation.
-
-
-Thanks,
-Miklos
+It doesn't as far as I can tell.  You need the SEPT_VE_DISABLE check for
+that.
