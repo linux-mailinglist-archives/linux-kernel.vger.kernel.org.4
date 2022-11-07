@@ -2,121 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0CE961FD44
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 19:19:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7315F61FD4A
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 19:20:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232936AbiKGSTu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 13:19:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35714 "EHLO
+        id S233118AbiKGSUP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 13:20:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231701AbiKGSTZ (ORCPT
+        with ESMTP id S233133AbiKGST6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 13:19:25 -0500
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5722A1117E
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 10:18:47 -0800 (PST)
-Received: by mail-lf1-x132.google.com with SMTP id g7so17920584lfv.5
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 10:18:47 -0800 (PST)
+        Mon, 7 Nov 2022 13:19:58 -0500
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FA6424964
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 10:19:29 -0800 (PST)
+Received: by mail-pg1-x52a.google.com with SMTP id s196so11179920pgs.3
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 10:19:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=tWsXLh2L851r8RYCKJq+fTeiBfSiiVKT4hw/fDZo7zY=;
-        b=pnj0uLR9fJ4eXPPSx5vdtLny3B0AGgtcshzTfn3nv25iVQZT59hBKwyjlRsIC9sntp
-         jEuUijaHMRcGw3yti8oH31EW5tMd1hlxPQKFTHFsypbLaGIymVzeU1nXISqhRvdNzC9L
-         PSCbYJsCrzdyzrnrxrmVR6zDmuZ1nVNQaBd6UJ8jWrAsEaOZd9DBvwz+bb4pFuvF+EeR
-         oh9zSgdToRaeLlZiBTwgGWGwU/fyaCoLgF91yPovyLR0G6O3/4L2Du42WrLyqmHdtOwi
-         KxOHR6xJ7HV3MizjMJBJpEeFftaccz93wkl2HmazKT5fA50FNlbD4+LardUi4tu3lJ88
-         5z0A==
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=w7oQlQSGWErcIWmEijXaEvWPIfe56DxtjW2YodF6ZaE=;
+        b=dral5VrDzWpIXTVIhpxyg4cWdu7i694XTx/CtLfAwwl9xnXJw/FNSm8HnbZ+uu1YsQ
+         yzUabaLL/Wcw35lXOJyRUAf4lIYf51cyXMFoNHeJy7AVQ+376aM8en6Il5jJuLibCMas
+         zLH5pw0Yl8eZ7dH3ihR//thkLoLSylcvErhF6x10I6yvnF3yfwEZ7aWOawqm0x6MDe6T
+         NFAe+2RAo1zQrcwTAdDBnY/o5n31RmMMScKrAwj+xgbLXSkgDjbv+G+nhQ54v/df8TA1
+         dVR7wgrXZtuz0UAJT2klX38uJSfKodmXM/uWCkf+m92aaZxca0pwYQwdF5SajPz+pdUV
+         /9nA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tWsXLh2L851r8RYCKJq+fTeiBfSiiVKT4hw/fDZo7zY=;
-        b=2bxtmeS3QRvEAMwb9ZTdnYpfoUQpIBbxOierWp8dO+H62Y7T8JPq9kTVUvsK/CpzaT
-         Gwdufm/jr3CHwv1ZfM2N/g0gD27uZhuxpqkvE3LsfLu55bdJT1CN/HbXabfRbW79X/+L
-         yrj0XomUmu305ROvShK2WLAUjEmgiaQkl1olDyjVOGNEF9MRj+0V14fqfis2riWJ/GAv
-         wazSaMnKqbDbfg9TwLE53XkEFw9dEqLCa9EKPUBvQn44bsYqEiN3JvEwhZUBEsNvBydY
-         CK4P3bLOPysD0nG6uH4Et3PeVr17lbUmQXtxPNMj3w7oCs/S0gjUNKvVYp/XhSF3J+yF
-         378g==
-X-Gm-Message-State: ANoB5pnp1S/NBgn5niqUCdCmvcpPezHU8js4ct8Qxjg6cHCYXhWEK07Y
-        Q+EllG+eJKQQV5HrmUAgufBprBmf9jyJAw==
-X-Google-Smtp-Source: AA0mqf6uQrloA1xdpVDP17NsvKbFFDiNw5PsPA/9ZXq1MuCsgg9JsvymfHX6GczKvE6+iQskp7J4ig==
-X-Received: by 2002:a05:6512:38c9:b0:4b2:1a29:cc44 with SMTP id p9-20020a05651238c900b004b21a29cc44mr4679507lft.176.1667845125716;
-        Mon, 07 Nov 2022 10:18:45 -0800 (PST)
-Received: from [192.168.0.20] (088156142199.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.199])
-        by smtp.gmail.com with ESMTPSA id m18-20020a197112000000b004a2550db9ddsm1350619lfc.245.2022.11.07.10.18.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Nov 2022 10:18:45 -0800 (PST)
-Message-ID: <7b848257-e3a4-3b6b-9986-57174e40319d@linaro.org>
-Date:   Mon, 7 Nov 2022 19:18:44 +0100
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=w7oQlQSGWErcIWmEijXaEvWPIfe56DxtjW2YodF6ZaE=;
+        b=nGLd7QvlOgcSe/EGGFmF6ts3DD8ZkmlNynow+hXVQWFndvpYx5soeM9ocmHmRXsmKZ
+         O7OjvNpCWzrsSpKOtpCzIT5wguzLrPSAhe09UFp7Mqn0XfmboYpj+a4R2JKL/KS6Ll1V
+         KwXTvP/yOceBj87ixGRt6duYDTCzEHbdGsLvc7Cu6WYXI/gYKzcR/T/N/oMji9Iy/5M2
+         M/3J7UjtHltWWW0w37+wOfNwwCLb5Aqrb9CSc4nVuibrtTYqiXapIFeZfKfXS7qTDOhv
+         FpzH1mcweCpzIiXe1fze/JJ0AHSMYNRCN4Uv+QFpBLMMWKTbDI8UmqFEtTaS5dIq1KOK
+         ITAw==
+X-Gm-Message-State: ACrzQf39tZ19I2S9XJBmv1mXTomAVGqnuwhWGQlfwx8bxP7vUL6ASkiq
+        hwolo285u1ntzf/Cat2plljyjA==
+X-Google-Smtp-Source: AMsMyM4rnkRsDtAGEb3zfh89py2cnTFpfYi1YlUckPJ0bJYEmer59wywHW7N5IxQ+TKIT8759KckpQ==
+X-Received: by 2002:a63:8a42:0:b0:46f:5804:8d9e with SMTP id y63-20020a638a42000000b0046f58048d9emr44691332pgd.214.1667845168931;
+        Mon, 07 Nov 2022 10:19:28 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id e9-20020a170902784900b00183e2a96414sm5288040pln.121.2022.11.07.10.19.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Nov 2022 10:19:28 -0800 (PST)
+Date:   Mon, 7 Nov 2022 18:19:25 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     David Matlack <dmatlack@google.com>
+Cc:     Andrew Jones <andrew.jones@linux.dev>,
+        "Wang, Wei W" <wei.w.wang@intel.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "vipinsh@google.com" <vipinsh@google.com>,
+        "ajones@ventanamicro.com" <ajones@ventanamicro.com>,
+        "eric.auger@redhat.com" <eric.auger@redhat.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v1 00/18] KVM selftests code consolidation and cleanup
+Message-ID: <Y2lMLfjiRAF8ZrNT@google.com>
+References: <20221024113445.1022147-1-wei.w.wang@intel.com>
+ <Y1mlJqKdFtlgG3jR@google.com>
+ <DS0PR11MB63731F2B467D4084F5C8D9B5DC339@DS0PR11MB6373.namprd11.prod.outlook.com>
+ <Y1qnWFzekT27rYka@google.com>
+ <CALzav=c4-FWVrWQebuYs--vbgnyPjEwZxfjSS1aMSRL3JMbWYw@mail.gmail.com>
+ <Y1rNm0E6/I5y6K2a@google.com>
+ <20221028124106.oze32j2lkq5ykifj@kamzik>
+ <Y1v6AEInngzRxSJ+@google.com>
+ <CALzav=chUT9v4wYVVy9dSLcevhADxONaf9iCMOWQ_vUOwpkV9g@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v3 2/5] dt-bindings: power: rpmpd: Add QDU1000/QRU1000 to
- rpmpd binding
-Content-Language: en-US
-To:     Bjorn Andersson <andersson@kernel.org>
-Cc:     Melody Olvera <quic_molvera@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Robert Marko <robimarko@gmail.com>,
-        Guru Das Srinagesh <quic_gurus@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221026190549.4005703-1-quic_molvera@quicinc.com>
- <20221026190549.4005703-3-quic_molvera@quicinc.com>
- <23e8a609-345f-a8ce-b0cb-2926fd86a315@linaro.org>
- <20221107174848.lwq4ma62bj5b2fkt@builder.lan>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221107174848.lwq4ma62bj5b2fkt@builder.lan>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CALzav=chUT9v4wYVVy9dSLcevhADxONaf9iCMOWQ_vUOwpkV9g@mail.gmail.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/11/2022 18:48, Bjorn Andersson wrote:
-> On Thu, Oct 27, 2022 at 11:25:42AM -0400, Krzysztof Kozlowski wrote:
->> On 26/10/2022 15:05, Melody Olvera wrote:
->>> Add compatible and constants for the power domains exposed by the RPMH
->>> in the Qualcomm QDU1000 and QRU1000 platforms.
->>>
->>> Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
->>
->> Looks good, but you did not Cc maintainers and  they must see this patch.
->>
+On Mon, Nov 07, 2022, David Matlack wrote:
+> On Fri, Oct 28, 2022 at 8:49 AM Sean Christopherson <seanjc@google.com> wrote:
+> > Anyways, if someone wants to pursue this, these ideas and the "requirement" should
+> > be run by the checkpatch maintainers.  They have far more experience and authority
+> > in this area, and I suspect we aren't the first people to want checkpatch to get
+> > involved in enforcing shortlog scope.
 > 
-> $ ./scripts/get_maintainer.pl -f Documentation/devicetree/bindings/power/qcom,rpmpd.yaml include/dt-bindings/power/qcom-rpmpd.h
-> Andy Gross <agross@kernel.org> (maintainer:ARM/QUALCOMM SUPPORT)
-> Bjorn Andersson <andersson@kernel.org> (maintainer:ARM/QUALCOMM SUPPORT,in file)
-> Konrad Dybcio <konrad.dybcio@somainline.org> (reviewer:ARM/QUALCOMM SUPPORT)
-> Rob Herring <robh+dt@kernel.org> (maintainer:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS)
-> Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org> (maintainer:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS)
-> linux-arm-msm@vger.kernel.org (open list:ARM/QUALCOMM SUPPORT)
-> devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS)
-> linux-kernel@vger.kernel.org (open list)
-> 
-> So you're right; Melody did miss Konrad in the recipients list. But he's
-> typically doing a very good job of keeping an eye on the list - and both
-> you and I got the patch.
-> 
-> 
-> Why didn't you add your R-b if you think it looks good?
+> Documenting would at least be an improvement over what we have today
+> since it would eliminate the need to re-explain the preferred rules
+> every time. We can just point to the documentation when reviewing
+> patches.
 
-Because then you would pick it up and that I did not want. It shall be
-resent so all maintainers get it. I did not check though how many of
-people were missing.
+Agreed.  And there are many other things I want to formalize for KVM x86, e.g.
+testing expectations, health requirements for the various branches, what each
+branch is used for etc...
 
-Best regards,
-Krzysztof
+If you want to send a patch for the shortlogs thing, maybe create
 
+  Documentation/process/maintainer-kvm-x86.rst
+
+and link it into Documentation/process/maintainer-handbooks.rst?
+
+> `git log --pretty=oneline` is not a great way to document shortlog
+> scopes because it does not explain the rules (e.g. when to use "KVM:
+> x86: " vs "KVM: x86/mmu: "), does not explain why things the way they
+> are, and is inconsistent since we don't always catch every patch that
+> goes by with a non-preferred shortlog scope.
