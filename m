@@ -2,566 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E486161EA1B
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 05:13:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1760261EA25
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 05:17:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230419AbiKGENp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Nov 2022 23:13:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38178 "EHLO
+        id S230349AbiKGERU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Nov 2022 23:17:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230239AbiKGENk (ORCPT
+        with ESMTP id S230050AbiKGERP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Nov 2022 23:13:40 -0500
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEEBF5FE7;
-        Sun,  6 Nov 2022 20:13:38 -0800 (PST)
-Received: by mail-wr1-x42e.google.com with SMTP id y16so14354955wrt.12;
-        Sun, 06 Nov 2022 20:13:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jms.id.au; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=dRIfE03XJR4sPtyA9agEpyzis8FHTRoen74Zq17Yutw=;
-        b=ViZ13WAoZ83K5FGafJq0T9w3TlWwTPFhv28BhsqUfBqgwZxLShGalMkifHbKgrRFlp
-         E0KUmCyybL4T5UGWfO78InMgsB6J2NR5mfnbp5eVZ5TvBEvE3SpkkrYS3xT6U9/GiJyz
-         5HExEZrPsJjqabPJkXwml5Cfqnfvp3jKEVww4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=dRIfE03XJR4sPtyA9agEpyzis8FHTRoen74Zq17Yutw=;
-        b=c8DZtHE2eqjCTNbzv+aKHHtwGwIaGfqyrLpQ8GfR0/DYzWjFGTY1OhORzuoUkysfTy
-         Ixvkw4jCqFSmwyPUTgWyIeBH+tkMxfgGedW5+UpPPk8ij52vu0jQam3An1ZdcLWv2iKT
-         JfCy+ewAWEosGUSY1oFm4dBscRWCICqjOg2bN0lo/awI/8TJgJHSI8FrsfpMiXJ3O3Rg
-         14vvgy4usbs5PQ4ta7AGHcHn5ekhOS4M7CoM/dOJLefPAvlfUDYYXO6JTY+XxxOIKXT9
-         d2p18W6molqIZMJieICaDQhT2geYRotr3ZeHIK6u1kEHWKQD19o+uwuOh3Jbg9ldWKI5
-         pJyg==
-X-Gm-Message-State: ACrzQf1O1euSxvG96r5VdiOcIWA3/x4ytnRYWemdrRTu+bvQp8mCWygR
-        vjSmq/iYKLm+QbbJ55PIkxuibKgtkd4pSwx4eqA77KzqYL8=
-X-Google-Smtp-Source: AMsMyM5xnDpHErInoWK3wkYLN8uDCYzLS1RCOwQ2NrTIWnq68hn+yjOewFMu7QrBWBpcChMI2l3FCeB7oXqWcLfLBtU=
-X-Received: by 2002:a05:6000:1008:b0:236:60e8:3d40 with SMTP id
- a8-20020a056000100800b0023660e83d40mr29609200wrx.3.1667794416866; Sun, 06 Nov
- 2022 20:13:36 -0800 (PST)
+        Sun, 6 Nov 2022 23:17:15 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84A22DF10
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Nov 2022 20:17:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667794634; x=1699330634;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=6cG4z8vZ8T/2Jx9qMRLUUV3xn3fI8LtUSSHLRdk9w7M=;
+  b=MyEr656Bk7bft7asDzRDDeXcNWdj5cbwFFxBosqL5Hb7sQAhJ9Fqn0Bi
+   1Z8NegBuwXDoD/KDyrylAmJvJAUp5uF+MxDgjIog7dwSNW3+dkkxEMP5D
+   Saqj2luWrj68CGRNmfaxPjKzTQd+yRKRt9DWHndcMpp37GvAEGaJTdStR
+   adyvywXgDGNyUmx3q8eWrk1Cw5v9jgD+nibBNwfectVEyPfxkKEMG0LI5
+   0F/vjI/pVKXniXyFYSHtvuh49AEti0/R/pZBqgYEryZQ6KKKFiAMa8fRa
+   yBsf6beOf1hfKh//wcvshLCnzert3iaRWABr8BkMgYqsRln44oU8b2Fk5
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10523"; a="290710074"
+X-IronPort-AV: E=Sophos;i="5.96,143,1665471600"; 
+   d="scan'208";a="290710074"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2022 20:17:14 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10523"; a="810700565"
+X-IronPort-AV: E=Sophos;i="5.96,143,1665471600"; 
+   d="scan'208";a="810700565"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by orsmga005.jf.intel.com with ESMTP; 06 Nov 2022 20:17:13 -0800
+Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Sun, 6 Nov 2022 20:17:13 -0800
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Sun, 6 Nov 2022 20:17:13 -0800
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31 via Frontend Transport; Sun, 6 Nov 2022 20:17:13 -0800
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.171)
+ by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2375.31; Sun, 6 Nov 2022 20:17:12 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=FxDAMm95o3EfVidoiOkKrlG5DLs7tL6hUSDzyBLq5lk8XKzTpIFKp3It+nf8iOe+uxFoQ2SQhhTU6XMOWcRyMwhs6XY5IuByvGzHEG8oglGI2+CFln7pv65dzQCSs6oo79N3A/eqKvOtJuDNaA/VPTZ/8lzLtaD54o9J2R3M4DQVTpLJ9LlYeGq5R/x93OS3spQCk6MWHasyEORHe1yuXNFzhja7/e4om0GfRHW9GNVMtrUDBIEvRfOBwNT2YwjaY95WVR2GkiK0PExw3fiZ731dYb5Rgjo80wPoOKSV6P1VUIFTJ9U/RlDPBUXU9fJAByDaIgn9UhfsT8OcFthhHw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=OVbKMgMz8w9uGx/aFBa93v1jgohsCC/IGYcMvFNAL1c=;
+ b=mGlOS8NUVfnwss7fMm+jNwmEl3DWCMT7itHTRhKYksFeOqjM8uYBN5fAC9GJI8akjyIj4FnwN1mlG8N61QcNk6smOjkiJZnaArXYuK6rer5j0JZzwX1QbxGTo6HLAZHzB4/Mx03+KrpTp8m7HrXBlrRdS7l1CkxO1lsYh7FgcSN6NOTcwSiGyW6I5WmLAKdifebCcbLnO8ik11A0OZ884neR36epyORNis57fmNTQCVkXSg/tNSlpM7lUWz9uM8QMHFNHEaUSYhj9d9rdLSDqSuleDpmgNJ4s/K4uYb2Lk+e1DTSmbxVMrIVoflTincxyl5jlbiSar/akEYax/ryfg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from SJ1PR11MB6201.namprd11.prod.outlook.com (2603:10b6:a03:45c::14)
+ by CH0PR11MB5218.namprd11.prod.outlook.com (2603:10b6:610:e1::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.25; Mon, 7 Nov
+ 2022 04:17:10 +0000
+Received: from SJ1PR11MB6201.namprd11.prod.outlook.com
+ ([fe80::6dd2:a8a3:7f9:ad]) by SJ1PR11MB6201.namprd11.prod.outlook.com
+ ([fe80::6dd2:a8a3:7f9:ad%4]) with mapi id 15.20.5791.022; Mon, 7 Nov 2022
+ 04:17:10 +0000
+Date:   Sun, 6 Nov 2022 20:17:07 -0800
+From:   Ashok Raj <ashok.raj@intel.com>
+To:     Borislav Petkov <bp@alien8.de>
+CC:     Thomas Gleixner <tglx@linutronix.de>,
+        LKML Mailing List <linux-kernel@vger.kernel.org>,
+        X86-kernel <x86@kernel.org>, Tony Luck <tony.luck@intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Arjan van de Ven <arjan.van.de.ven@intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        "Jacon Jun Pan" <jacob.jun.pan@intel.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "Kai Huang" <kai.huang@intel.com>,
+        Andrew Cooper <andrew.cooper3@citrix.com>,
+        Ashok Raj <ashok.raj@intel.com>
+Subject: Re: [v2 01/13] x86/microcode/intel: Prevent printing updated
+ microcode rev multiple times
+Message-ID: <Y2iGw8U8JGMJ+aKq@a4bf019067fa.jf.intel.com>
+References: <20221103175901.164783-1-ashok.raj@intel.com>
+ <20221103175901.164783-2-ashok.raj@intel.com>
+ <Y2e4PgwAEXuFzoMd@zn.tnic>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <Y2e4PgwAEXuFzoMd@zn.tnic>
+X-ClientProxiedBy: SJ0PR03CA0343.namprd03.prod.outlook.com
+ (2603:10b6:a03:39c::18) To SJ1PR11MB6201.namprd11.prod.outlook.com
+ (2603:10b6:a03:45c::14)
 MIME-Version: 1.0
-References: <7baebe77f0f8963e06d5ddeec6c737f5@rnplus.nl>
-In-Reply-To: <7baebe77f0f8963e06d5ddeec6c737f5@rnplus.nl>
-From:   Joel Stanley <joel@jms.id.au>
-Date:   Mon, 7 Nov 2022 04:13:24 +0000
-Message-ID: <CACPK8XfnXFt1KHa=xQvC2r_1CBDPeSyHisM=UiU_a=FYaF=R=w@mail.gmail.com>
-Subject: Re: [PATCH] ARM: dts: aspeed: Add ASRock X570D4U BMC
-To:     Renze Nicolai <renze@rnplus.nl>
-Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andrew Jeffery <andrew@aj.id.au>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SJ1PR11MB6201:EE_|CH0PR11MB5218:EE_
+X-MS-Office365-Filtering-Correlation-Id: 82c656c8-1510-4991-6e8f-08dac076f0c3
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: b5Bvgt8SsoHdyIpwsPxMfLHnBKogDMLksflevlK9J5CJijtQKfUkBizOjyX6roydZ9w+MMBMq4BGaULw+flxZts1DqK317BFEnZovZvePWmvBdTTIbPsvY0KavuZpW+Oj1qLTVw4M7UAza+ke/+ITIEHLjg/9gdgJsFktSrD/319P7B481QRZAGQUywrKO78aQV9428Acff/YIDy8U3cDFPeMbNub17j0zqtMYHzYKU9/l/1C9Cb+fRzlXZ5DGS8OwwxGYx4UpDlIQ4NOQUUrWSeFRziXfeRbVvLhbYFc66foZqt0/FR2uQqiCo6/R+aW/BFDf+v0rXPGYjFXUQXrsEmwSWSnhixoM1pTAUi9TGg3bcWnjAF8ydZC0qvMfd88axdgErG+j0Xf3CEjYonkkJZWzutaSEOLHOMSvNBpCIjNz/K9pe0Ll6TOdCiyXLlbkGeU9Q6aUqmGfzzpIg+Ei1hpk2cJP57qF8phQz6RuDz1ltb9SysqkNW4wWgHBHP6Ej0PRxOEhi8GHHx076nQOlD2xe46ZW9mIJ9TRR0fW1yrRgAjGlDamTc1vviIdmtgS1K9xh10F4qwHyHpUqMXQrTM4Zf5b6rHiOlZn2LBfvfGjrcUP8nkl0T2KBdncDpzRsk5wwqzAupWOSB2imnOT3vFENoN3xljE5VFkpD66nR8/0fYVtZI5VLz3rItvTSGCCVd+uysGCoYSo3KWNctbqZi74qTVNZDmQJSDtqzURKmf8hW2gX6oQoPxmPVKsTe7Lu7d41DreMTPFjRdmdjA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ1PR11MB6201.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(376002)(396003)(39860400002)(136003)(366004)(346002)(451199015)(8936002)(5660300002)(478600001)(44832011)(6486002)(66556008)(316002)(26005)(38100700002)(2906002)(6512007)(15650500001)(6506007)(82960400001)(107886003)(6666004)(66476007)(6916009)(41300700001)(54906003)(66946007)(86362001)(8676002)(186003)(4326008)(83380400001)(67856001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Nijy5ySB38mnDTIHxSGWVEEe/TrwKfisj7Vz2IB/hHYZyR3WAhfD9WHnHcsj?=
+ =?us-ascii?Q?hSXG+vnJkITSj2sz5sZNTSDb8LwkabLJIKeuJfnRO+k+lKJtZ8hF1TRyiEhL?=
+ =?us-ascii?Q?peG1wMV61duykCvvV9t3uDK0iseVvr6Rc7iSN3CaXQdEHVFyh895IDjOeWcy?=
+ =?us-ascii?Q?oh3gRuylgekULnxxunby9/Z7dKgcQ93wyIp0/b5JiJoiqpTblWSXHHE5vqKt?=
+ =?us-ascii?Q?9dOaGgns7HBe/7L/C7GSKCTT7keB5QNuCu+z0w2b+U21yP51rNxnJDHXzK4v?=
+ =?us-ascii?Q?fNujunnZY+BJjVnlr1EOZb2ykCdcrurSjeyBu8S/nKHpS2uF4MCjzryigdiE?=
+ =?us-ascii?Q?3KCcLC1VmMvnzHf8YLvAHTt3gMwyN1ZcXLoGdly7+Ib/iFqwFV/JvRncWOay?=
+ =?us-ascii?Q?25t4rZTi6r7PATY4u/MsPGjs5Rv1RwnRybdn6Bhy/2gCffHiEtE0KJIYxNIY?=
+ =?us-ascii?Q?7o0S0z1aWlHKHefCxtxL/FBEQhyH7ZNtfRN1m8WoC2aJk5ExLcg5ENPPsOik?=
+ =?us-ascii?Q?Xw6iyvaEGF1Zf0cmz/2qieyWxHywCHRGq8UKEga4OK7cjFkMwhybn3I5mjdK?=
+ =?us-ascii?Q?aYlw/btlg5su1ktiu+YOIGwskcWno76GjLH5WUjvXTz1ZJtnuYmZ64LjxH0s?=
+ =?us-ascii?Q?DKLWPC1NLT+E5xzcamP17y7fOjDYmSImnMI41r0Mvpj1c9PvE2c10DdU0doi?=
+ =?us-ascii?Q?yD4TVb7qzByJF9qVfOYd6xkgu5xczGoOjjvvsssQDv1YnurHHwwoIQUnLnvT?=
+ =?us-ascii?Q?lH/GAjq8IXkc5orL0PwJHfro+pxKcvsRTaQt3gWEEf4kv5QcA7dVp9lgjhKu?=
+ =?us-ascii?Q?3SifuRa0EcgsqINBb3aBb+lLP13MAy7CV9IAXoRgA3qmIHejOC30hpH+Hrik?=
+ =?us-ascii?Q?2hjNYJS9Tkyvd32308+GtirLmaGD/YgYjmWgxsGQWJ/2f+8CmmWds1/6/5EK?=
+ =?us-ascii?Q?OrD7VeyqY6FwHOXekUXZfqjiw2diVb/zP7Lyx7yQXyBmpPuwJ7e4sGUIuGHb?=
+ =?us-ascii?Q?rj85Xzy3idBOSiAswJBeSEbAn3WbrWC5KoBL41Rjzzx8rSuiNerDci4n9edx?=
+ =?us-ascii?Q?TPHwSWWS1JnDUNK3DyJuWtaYkUZdKvvFwh6Nw7sha74rAa01581OdLXgSvlw?=
+ =?us-ascii?Q?mpOuxyoq2hL2S2FutNdMgZ777FE6OHFvY4Qi0bp/5Uu1UxgVqz9pSXJ94Dzy?=
+ =?us-ascii?Q?rM9FBFk5DrUdTTI+FYVqtQlbvCEW1LmsAIGIWWxtUIeMUBZSZng4kPDoaJah?=
+ =?us-ascii?Q?7q6+qRLNqgP+0WDZlsGgEUXWGweKjcnRhwVloxTDO5AUcIBBDOrwB85CFBBT?=
+ =?us-ascii?Q?cH3+6L8sz4A12kx91u8LXS2rA283v5j9ik1YFiYRTqTTXaWjO71WSnUq1gmT?=
+ =?us-ascii?Q?PnWlU/0pURIol04jHDP57+esMXtoRCirkKAv8V5OQakvvXxHykHj7y+4Wmc2?=
+ =?us-ascii?Q?WQ4SFc608ezB2CyUScGDvL71HHqpTkbmDdKXKojasT7FYvzC6YwD4WT6E6fs?=
+ =?us-ascii?Q?9ZZ5YZ7Mg3GRdUTU5Jbenj6K8ctbg9jXxnQeEXMBhO7sFqWDAjsJCpHhjFdn?=
+ =?us-ascii?Q?QLP8hbwbXdK9gZUF87szBR4it8gKF1cv1ZGXtFrwRk2N+sIbFmp8VEx1mmVa?=
+ =?us-ascii?Q?xw=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 82c656c8-1510-4991-6e8f-08dac076f0c3
+X-MS-Exchange-CrossTenant-AuthSource: SJ1PR11MB6201.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Nov 2022 04:17:10.5609
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: nERRkVCR9zB82g5Pn+eHccgAnoui2X3B5Er+LeMi3F/4CpyhKXP0QBMIh1bn9OOx+EEobGYEl+9L/DB15c1xCw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR11MB5218
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 6 Nov 2022 at 22:42, Renze Nicolai <renze@rnplus.nl> wrote:
->
-> This is a relatively low-cost AST2500-based Amd Ryzen 5000 Series
-> micro-ATX board that we hope can provide a decent platform for OpenBMC
-> development.
->
-> This initial device-tree provides the necessary configuration for
-> basic BMC functionality such as serial console, KVM support
-> and POST code snooping.
+On Sun, Nov 06, 2022 at 02:35:58PM +0100, Borislav Petkov wrote:
+> On Thu, Nov 03, 2022 at 05:58:49PM +0000, Ashok Raj wrote:
+> > @@ -696,8 +697,7 @@ static int collect_cpu_info(int cpu_num, struct cpu_signature *csig)
+> >  
+> >  	csig->rev = c->microcode;
+> >  
+> > -	/* No extra locking on prev, races are harmless. */
+> > -	if (csig->sig != prev.sig || csig->pf != prev.pf || csig->rev != prev.rev) {
+> > +	if (bsp && csig->rev != prev.rev) {
+> >  		pr_info("sig=0x%x, pf=0x%x, revision=0x%x\n",
+> >  			csig->sig, csig->pf, csig->rev);
+> 
+> And now that we've established that we don't do mixed steppings anymore
+> and the microcode revision is the same system-wide, you should simply
+> drop this pr_info(), in your next patch you're adding
+> 
+> +static u32 early_old_rev;
+> 
+> That thing should simply be
+> 
+> /* Currently applied microcode revision */
+> static u32 microcode_rev;
+> 
+> and you simply update that one each time you update microcode and print
+> it as the previous and the new one and then write the new one into this
+> var and that's it. Simple.
+> 
 
-Cool!
-
->
-> Signed-off-by: Renze Nicolai <renze@rnplus.nl>
-> ---
->   arch/arm/boot/dts/Makefile                    |   1 +
->   .../boot/dts/aspeed-bmc-asrock-x570d4u.dts    | 360 ++++++++++++++++++
->   2 files changed, 361 insertions(+)
->   create mode 100644 arch/arm/boot/dts/aspeed-bmc-asrock-x570d4u.dts
->
-> diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-> index 6aa7dc4db2fc..adbbf27dfcee 100644
-> --- a/arch/arm/boot/dts/Makefile
-> +++ b/arch/arm/boot/dts/Makefile
-> @@ -1587,6 +1587,7 @@ dtb-$(CONFIG_ARCH_ASPEED) += \
->         aspeed-bmc-arm-stardragon4800-rep2.dtb \
->         aspeed-bmc-asrock-e3c246d4i.dtb \
->         aspeed-bmc-asrock-romed8hm3.dtb \
-> +       aspeed-bmc-asrock-x570d4u.dtb \
->         aspeed-bmc-bytedance-g220a.dtb \
->         aspeed-bmc-facebook-bletchley.dtb \
->         aspeed-bmc-facebook-cloudripper.dtb \
-> diff --git a/arch/arm/boot/dts/aspeed-bmc-asrock-x570d4u.dts
-> b/arch/arm/boot/dts/aspeed-bmc-asrock-x570d4u.dts
-> new file mode 100644
-> index 000000000000..818c8879e0a0
-> --- /dev/null
-> +++ b/arch/arm/boot/dts/aspeed-bmc-asrock-x570d4u.dts
-> @@ -0,0 +1,360 @@
-> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-> +// Copyright (c) 2022 Renze Nicolai <renze@rnplus.nl>
-> +
-> +/dts-v1/;
-> +#include "aspeed-g5.dtsi"
-> +#include <dt-bindings/gpio/aspeed-gpio.h>
-> +
-> +/ {
-> +       model = "Asrock Rack X570D4U BMC";
-> +       compatible = "asrock,x570d4u-bmc";
-> +
-> +       chosen {
-> +                       stdout-path = &uart5;
-> +                       bootargs = "console=ttyS4,115200 earlycon";
-> +       };
-> +
-> +       memory@80000000 {
-> +                       reg = <0x80000000 0x20000000>;
-> +       };
-> +
-> +       reserved-memory {
-> +                       #address-cells = <1>;
-> +                       #size-cells = <1>;
-> +                       ranges;
-> +
-> +                       flash_memory: region@98000000 {
-> +                                       no-map;
-> +                                       reg = <0x98000000 0x04000000>; /* 64M */
-> +                       };
-
-Do you need this? Normally it's used for loading the host firmware
-from DRAM instead of SPI flash on OpenPower machines.
-
-> +
-> +                       vga_memory: framebuffer@9f000000 {
-> +                               no-map;
-> +                               reg = <0x9f000000 0x01000000>; /* 16M */
-> +                       };
-
-The VGA device is for the BMC driving the display. If you're only
-interested in the host processor driving the display you don't need to
-enable this.
-
-> +
-> +                       pci_memory: region@9A000000 {
-> +                               no-map;
-> +                               reg = <0x9A000000 0x00010000>; /* 64K */
-> +                       };
-> +
-> +                       video_engine_memory: jpegbuffer {
-> +                               size = <0x02800000>;    /* 40M */
-> +                               alignment = <0x01000000>;
-> +                               compatible = "shared-dma-pool";
-> +                               reusable;
-> +                       };
-> +
-> +                       gfx_memory: framebuffer {
-> +                               size = <0x01000000>;
-> +                               alignment = <0x01000000>;
-> +                               compatible = "shared-dma-pool";
-> +                               reusable;
-> +                       };
-> +       };
-> +
-> +       leds {
-> +               compatible = "gpio-leds";
-> +
-> +               heartbeat {
-> +                       /* BMC_HB_LED_N */
-> +                       gpios = <&gpio ASPEED_GPIO(H, 6) GPIO_ACTIVE_LOW>;
-> +                       linux,default-trigger = "timer";
-> +               };
-> +
-> +               system-fault {
-> +                       /* SYSTEM_FAULT_LED_N */
-> +                       gpios = <&gpio ASPEED_GPIO(Z, 2) GPIO_ACTIVE_LOW>;
-> +                       panic-indicator;
-> +               };
-> +       };
-> +
-> +       iio-hwmon {
-> +               compatible = "iio-hwmon";
-> +               io-channels = <&adc 0>, <&adc 1>, <&adc 2>, <&adc 3>, <&adc 4>,
-> +                       <&adc 5>, <&adc 6>, <&adc 7>, <&adc 8>, <&adc 9>,
-> +                       <&adc 10>, <&adc 11>, <&adc 12>;
-> +       };
-> +};
-> +
-> +&gpio {
-> +       status = "okay";
-> +       gpio-line-names =
-
-Are you familiar with this one?
-
-https://github.com/openbmc/docs/blob/master/designs/device-tree-gpio-naming.md
-
-If you can use any of the common names that would be preferred.
-
-> +       /*A0-A3*/       "LOCATORLED_STATUS_N",    "",
-> "NMI_BTN_N",          "BMC_NMI",
-> +       /*A4-A7*/       "",                       "",                     "",
->                   "",
-> +       /*B0-B3*/       "FM_BIOS_POST_CMPLT_N",   "",                     "",
->                   "",
-> +       /*B4-B7*/       "",                       "IRQ_BMC_PCH_SMI_LPC_N","",
->                   "",
-> +       /*C0-C3*/       "",                       "",                     "",
->                   "",
-> +       /*C4-C7*/       "",                       "",
-> "LOCATORBTN",         "",
-> +       /*D0-D3*/       "BMC_PSIN",               "BMC_PSOUT",
-> "BMC_RESETCON",       "RESETCON",
-> +       /*D4-D7*/       "",                       "",                     "",
->                   "",
-> +       /*E0-E3*/       "",                       "",                     "",
->                   "",
-> +       /*E4-E7*/       "",                       "",                     "",
->                   "",
-> +       /*F0-F3*/       "",                       "",                     "",
->                   "",
-> +       /*F4-F7*/       "",                       "",                     "",
->                   "",
-> +       /*G0-G3*/       "HWM_BAT_EN",             "CHASSIS_ID0",
-> "CHASSIS_ID1",        "CHASSIS_ID2",
-> +       /*G4-G7*/       "BMC_ALERT1_N_R",         "BMC_ALERT2_N_R",
-> "BMC_ALERT3_N",       "SML0ALERT",
-> +       /*H0-H3*/       "",                       "O_PWROK",              "",
->                   "",
-> +       /*H4-H7*/       "MFG_MODE_N",             "BMC_RTCRST",
-> "BMC_HB_LED_N",       "BMC_CASEOPEN",
-> +       /*I0-I3*/       "",                       "",                     "",
->                   "",
-> +       /*I4-I7*/       "",                       "",                     "",
->                   "",
-> +       /*J0-J3*/       "BMC_READY",              "",                     "",
->                   "",
-> +       /*J4-J7*/       "VGAHS",                  "VGAVS",
-> "DDCCLK",             "DDCDAT",
-> +       /*K0-K3*/       "I2C_SCL4",               "I2C_SDA4",
-> "I2C_SCL5",           "I2C_SDA5",
-> +       /*K4-K7*/       "",                       "",
-> "I2C_SCL7",           "I2C_SDA7",
-> +       /*L0-L3*/       "BMC_CTS1",               "BMC_DCD1",
-> "BMC_DSR1",           "BMC_RI1",
-> +       /*L4-L7*/       "BMC_DTR1",               "BMC_RTS1",
-> "BMC_TXD1",           "BMC_RXD1",
-> +       /*M0-M3*/       "BMC_LAN0_DIS_N",         "BMC_LAN1_DIS_N",       "",
->                   "",
-> +       /*M4-M7*/       "",                       "",                     "",
->                   "",
-> +       /*N0-N3*/       "PWM_FAN1",               "PWM_FAN2",
-> "PWM_FAN3",           "PWM_FAN4",
-> +       /*N4-N7*/       "PWM_FAN6",               "PWM_FAN5",             "",
->                   "",
-> +       /*O0-O3*/       "TACHO_FAN1",             "TACHO_FAN2",
-> "TACHO_FAN3",         "TACHO_FAN4",
-> +       /*O4-O7*/       "TACHO_FAN5",             "TACHO_FAN6",           "",
->                   "",
-> +       /*P0-P3*/       "",                       "",                     "",
->                   "PS_PWROK",
-> +       /*P4-P7*/       "",                       "",                     "",
->                   "",
-> +       /*Q0-Q3*/       "I2C_SCL2",               "I2C_SDA2",
-> "I2C_SCL3",           "I2C_SDA3",
-> +       /*Q4-Q7*/       "BMC_SBM_PRESENT_1_N",    "BMC_SBM_PRESENT_2_N",
-> "BMC_SBM_PRESENT_3_N","BMC_PCIE_WAKE_N",
-> +       /*R0-R3*/       "",                       "",                     "",
->                   "",
-> +       /*R4-R7*/       "",                       "",                     "",
->                   "",
-> +       /*S0-S3*/       "PCHHOT_BMC_N",           "",
-> "RSMRST",             "",
-> +       /*S4-S7*/       "",                       "",                     "",
->                   "",
-> +       /*T0-T3*/       "RGMII1TXCK",             "RGMII1TXCL",
-> "RGMII1TXD0",         "RGMII1TXD1",
-> +       /*T4-T7*/       "RGMII1TXD2",            "RGMII1TXD3",
-> "RMII2RCLKO",         "RMII2TXEN",
-> +       /*U0-U3*/       "RMII2TXD0",              "RMII2TXD1",            "",
->                   "",
-> +       /*U4-U7*/       "RGMII1RXCK",             "RGMII1RXCTL",
-> "RGMII1RXD0",         "RGMII1RXD1",
-> +       /*V0-V3*/       "RGMII1RXD2",             "RGMII1RXD3",
-> "RMII2RCLKI",         "",
-> +       /*V4-V7*/       "RMII2RXD0",              "RMII2RXD1",
-> "RMII2CRSDV",         "RMII2RXER",
-> +       /*W0-W3*/       "",                       "",                     "",
->                   "",
-> +       /*W4-W7*/       "",                       "",                     "",
->                   "",
-> +       /*X0-X3*/       "",                       "",                     "",
->                   "",
-> +       /*X4-X7*/       "",                       "",                     "",
->                   "",
-> +       /*Y0-Y3*/       "SLP_S3",                 "SLP_S5",               "",
->                   "",
-> +       /*Y4-Y7*/       "I2C_SCL0",               "I2C_SDA0",
-> "I2C_SCL1",           "I2C_SDA1",
-> +       /*Z0-Z3*/       "",                       "",
-> "SYSTEM_FAULT_LED_N", "BMC_THROTTLE_N",
-> +       /*Z4-Z7*/       "",                       "",                     "",
->                   "",
-> +       /*AA0-AA3*/     "CPU1_THERMTRIP_LATCH_N", "",
-> "CPU1_PROCHOT_N",     "",
-> +       /*AA4-AC7*/     "",                       "",                     "",
->                   "",
-> +       /*AB0-AB3*/     "",                       "",                     "",
->                   "",
-> +       /*AB4-AC7*/     "",                       "",                     "",
->                   "",
-> +       /*AC0-AC3*/     "LAD0",                   "LAD1",
-> "LAD2",               "LAD3",
-> +       /*AC4-AC7*/     "CK_33M_BMC",             "LFRAME",
-> "SERIRQ",             "S_PLTRST";
-> +
-> +
-> +       /* Assert BMC_READY so BIOS doesn't sit around waiting for it */
-> +       bmc-ready {
-> +               gpio-hog;
-> +               gpios = <ASPEED_GPIO(J, 0) GPIO_ACTIVE_LOW>;
-> +               output-high;
-> +       };
-> +};
-> +
-> +&fmc {
-> +       status = "okay";
-> +       flash@0 {
-> +                       status = "okay";
-> +                       label = "bmc";
-> +                       m25p,fast-read;
-> +                       spi-max-frequency = <10000000>;
-> +#include "openbmc-flash-layout-64.dtsi"
-> +       };
-> +};
-> +
-> +&uart5 {
-> +       status = "okay";
-> +};
-> +
-> +&vuart {
-> +       status = "okay";
-> +};
-> +
-> +&mac0 {
-> +       status = "okay";
-> +       pinctrl-names = "default";
-> +       pinctrl-0 = <&pinctrl_rgmii1_default &pinctrl_mdio1_default>;
-> +};
-> +
-> +&mac1 {
-> +       status = "okay";
-> +       pinctrl-names = "default";
-> +       pinctrl-0 = <&pinctrl_rmii2_default &pinctrl_mdio2_default>;
-> +       use-ncsi;
-
-mdio and ncsi are mutually exclusive. If this port is connected via
-NCSI, you want to do this:
-
-&mac0 {
-        status = "okay";
-
-        use-ncsi;
-
-        pinctrl-names = "default";
-        pinctrl-0 = <&pinctrl_rmii1_default>;
-        clocks = <&syscon ASPEED_CLK_GATE_MAC1CLK>,
-                 <&syscon ASPEED_CLK_MAC1RCLK>;
-        clock-names = "MACCLK", "RCLK";
-};
-
-(I can't recall if everyone needs to enable RCLK or if that's specific
-to the openpower designs)
-
-> +};
-> +
-> +&i2c0 {
-> +       status = "okay";
-> +};
-> +
-> +&i2c1 {
-> +       status = "okay";
-> +
-> +       w83773g@4c {
-> +               compatible = "nuvoton,w83773g";
-> +               reg = <0x4c>;
-> +       };
-> +};
-> +
-> +&i2c2 {
-> +       status = "okay";
-> +};
-> +
-> +&i2c3 {
-> +       status = "okay";
-> +};
-> +
-> +&i2c4 {
-> +       status = "okay";
-> +
-> +       i2c-switch@70 {
-> +               compatible = "nxp,pca9545";
-> +               #address-cells = <1>;
-> +               #size-cells = <0>;
-> +               reg = <0x70>;
-> +
-> +               interrupt-parent = <&i2c_ic>;
-> +               interrupts = <4>;
-> +               interrupt-controller;
-> +               #interrupt-cells = <2>;
-> +
-> +               i2c@0 {
-> +                       #address-cells = <1>;
-> +                       #size-cells = <0>;
-> +                       reg = <0>;
-> +               };
-> +
-> +               i2c@1 {
-> +                       #address-cells = <1>;
-> +                       #size-cells = <0>;
-> +                       reg = <1>;
-> +               };
-> +
-> +               i2c@2 {
-> +                       #address-cells = <1>;
-> +                       #size-cells = <0>;
-> +                       reg = <2>;
-> +               };
-> +
-> +               i2c@3 {
-> +                       #address-cells = <1>;
-> +                       #size-cells = <0>;
-> +                       reg = <3>;
-> +               };
-> +       };
-> +};
-> +
-> +&i2c5 {
-> +       status = "okay";
-> +};
-> +
-> +&i2c7 {
-> +       status = "okay";
-> +
-> +       eeprom@57 {
-> +               compatible = "st,24c128", "atmel,24c128";
-> +               reg = <0x57>;
-> +               pagesize = <16>;
-> +       };
-> +};
-> +
-> +&gfx {
-> +       status = "okay";
-> +};
-
-You've got GFX twice, see below.
-
-> +
-> +&pinctrl {
-> +       aspeed,external-nodes = <&gfx &lhc>;
-> +};
-> +
-> +&vhub {
-> +       status = "okay";
-> +};
-> +
-> +&ehci1 {
-> +       status = "okay";
-> +};
-> +&uhci {
-> +       status = "okay";
-> +};
-> +
-> +&kcs3 {
-> +       aspeed,lpc-io-reg = <0xca2>;
-> +       status = "okay";
-> +};
-> +
-> +&lpc_ctrl {
-> +       status = "okay";
-> +};
-> +
-> +&lpc_snoop {
-> +       status = "okay";
-> +       snoop-ports = <0x80>;
-> +};
-> +
-> +&p2a {
-> +       status = "okay";
-> +       memory-region = <&pci_memory>;
-> +};
-> +
-> +&video {
-> +       status = "okay";
-> +       memory-region = <&video_engine_memory>;
-> +};
-> +
-> +&gfx {
-> +       status = "okay";
-> +       memory-region = <&gfx_memory>;
-> +};
-> +
-> +&pwm_tacho {
-> +       status = "okay";
-> +       pinctrl-names = "default";
-> +       pinctrl-0 = <&pinctrl_pwm0_default
-> +                               &pinctrl_pwm1_default
-> +                               &pinctrl_pwm2_default
-> +                               &pinctrl_pwm3_default
-> +                               &pinctrl_pwm4_default
-> +                               &pinctrl_pwm5_default>;
-> +       fan@0 {
-> +               reg = <0x00>;
-> +               aspeed,fan-tach-ch = /bits/ 8 <0x00 0x01>;
-> +       };
-> +       fan@1 {
-> +               reg = <0x01>;
-> +               aspeed,fan-tach-ch = /bits/ 8 <0x02 0x03>;
-> +       };
-> +       fan@2 {
-> +               reg = <0x02>;
-> +               aspeed,fan-tach-ch = /bits/ 8 <0x04 0x05>;
-> +       };
-> +       fan@3 {
-> +               reg = <0x03>;
-> +               aspeed,fan-tach-ch = /bits/ 8 <0x06 0x07>;
-> +       };
-> +       fan@4 {
-> +               reg = <0x04>;
-> +               aspeed,fan-tach-ch = /bits/ 8 <0x08 0x09>;
-> +       };
-> +       fan@5 {
-> +               reg = <0x05>;
-> +               aspeed,fan-tach-ch = /bits/ 8 <0x0a 0x0b>;
-> +       };
-> +};
-> +
-> +&adc {
-> +       status = "okay";
-> +       pinctrl-names = "default";
-> +       pinctrl-0 = <&pinctrl_adc0_default
-> +                               &pinctrl_adc1_default
-> +                               &pinctrl_adc2_default
-> +                               &pinctrl_adc3_default
-> +                               &pinctrl_adc4_default
-> +                               &pinctrl_adc5_default
-> +                               &pinctrl_adc6_default
-> +                               &pinctrl_adc7_default
-> +                               &pinctrl_adc8_default
-> +                               &pinctrl_adc9_default
-> +                               &pinctrl_adc10_default
-> +                               &pinctrl_adc11_default
-> +                               &pinctrl_adc12_default
-> +                               &pinctrl_adc13_default
-> +                               &pinctrl_adc14_default
-> +                               &pinctrl_adc15_default>;
-> +};
-> --
-> 2.38.1
+I thought about it... Since microcode/core.c already provides this
+information. Only missing part is the microcode date which the common
+function doesn't seem to get this. Thought it might be useful. But I can
+certainly drop it, if you think this isn't much value.
