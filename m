@@ -2,97 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0797D620148
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 22:36:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AF4F62014B
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 22:36:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233337AbiKGVgg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 16:36:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57752 "EHLO
+        id S233507AbiKGVgx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 16:36:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233151AbiKGVg2 (ORCPT
+        with ESMTP id S233525AbiKGVgt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 16:36:28 -0500
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 032046164
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 13:36:27 -0800 (PST)
-Received: by mail-pf1-x433.google.com with SMTP id m6so11958017pfb.0
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 13:36:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0tQ7MqopprIdRhb/IgvKRUjGQBe2LKpMrEFgj2d9jZg=;
-        b=M1k2UTfxuajNc/oXu0LY2P83Vd6nzF4vsNIzUWoBnmefSmqUYpjNgicnLsxLPpisLb
-         jPkY9vCm6EFryy8KQ1OzKez3Trva3tiqeOp197xzXqo94hWFlu9UwwpjxJwv/WMSC/+G
-         Qvh2gU2cvXsntxroGga6/4cJal+65h+gZdq697jW8ScV1cljBAMaAkJ2N94z8RxfLQ14
-         NAtLJwbhGJ4TKHuz4zUc7huMFbiah9SGAK5A2rhAOrEqP5GCQH8OFP0R7Dfnyf3zBcaX
-         GZIt6Wt64YchXsxJ/6ghFniaO/c+49GjJH3elxH4mHdREZZGQNDDtjbwizo7OdECLKJP
-         HQrQ==
+        Mon, 7 Nov 2022 16:36:49 -0500
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24E5123EBD
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 13:36:43 -0800 (PST)
+Received: by mail-io1-f71.google.com with SMTP id j17-20020a5d93d1000000b006bcdc6b49cbso8159195ioo.22
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 13:36:43 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0tQ7MqopprIdRhb/IgvKRUjGQBe2LKpMrEFgj2d9jZg=;
-        b=dIW5VTNSmmVu+lUw1oQT0gwjho4i1E787jkwxBw3SfgAkFkW2xd6SkxjrRIeEv33L7
-         ce3tuF1pU5iFsCDotDSTUyHesus75Ix5UwGpJn4V0bjMY9jUo4YlZG4XrRhugmToDxvi
-         vG7IGkr2/y3AEguttkiLfkcWJGlZXUmMZ2PV9RdamshbLm/oONW2tKNW6QEWOxLLU/f+
-         TrS/yi/FL/SlvJloRnaEoMMFLryHsXimyBI66A37p3cjyoKQL4b6wRnBlcnlKfhGqyRt
-         nxxX8L7FRwThTrqU9CpZnXqGwv6KVQL2Ba/fyEvhGg3i29tLBKn4KQeGJhTqVegIVEG7
-         ghQw==
-X-Gm-Message-State: ACrzQf3ycCjahVtEotmUYi3R+UiWnFw8bj17aw5r4wPC34zH5zxfbweP
-        kVK1vwDDQrKHcPu/w+iIeA8=
-X-Google-Smtp-Source: AMsMyM7bTMxCsP9dOI+Bl1xuj1IaaaoIqlOYDL8utEB69BRcDrg0hci5JTHfuZuMGkulrILxqo1MmA==
-X-Received: by 2002:a65:41ca:0:b0:434:f92f:d711 with SMTP id b10-20020a6541ca000000b00434f92fd711mr45773572pgq.151.1667856986465;
-        Mon, 07 Nov 2022 13:36:26 -0800 (PST)
-Received: from localhost (fwdproxy-prn-117.fbsv.net. [2a03:2880:ff:75::face:b00c])
-        by smtp.gmail.com with ESMTPSA id d1-20020a170903230100b00178b9c997e5sm5446350plh.138.2022.11.07.13.36.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Nov 2022 13:36:25 -0800 (PST)
-From:   Nhat Pham <nphamcs@gmail.com>
-To:     senozhatsky@chromium.org
-Cc:     hannes@cmpxchg.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, minchan@kernel.org,
-        ngupta@vflare.org, akpm@linux-foundation.org, sjenning@redhat.com,
-        ddstreet@ieee.org, vitaly.wool@konsulko.com
-Subject: Re: [PATCH 4/5] zsmalloc: Add ops fields to zs_pool to store evict handlers
-Date:   Mon,  7 Nov 2022 13:36:25 -0800
-Message-Id: <20221107213625.939660-1-nphamcs@gmail.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <Y2Htmak6+7b+6pBv@google.com>
-References: <Y2Htmak6+7b+6pBv@google.com>
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=XavOv7O7sN5y/ANw4GZ5+1GS3zpa5e7jeG3PXprMkRE=;
+        b=5K9kCEHq7wfQ5t1lHFEX/N373PCANSrt06MpPPC+B9UbTCc14Dmi3NHjZjKRUFvJeC
+         EhC8dS9GGCsNvxP556YbbINE6IKhRwegtLS2zrGM3q7bFTClR3zq7/l3x+4V5iavzJUa
+         uzlERayINC0mLhFpAkAY5741c1H+JP0kJWnsRCXGJs9jq5G6lUHOqf1PK+hvZc3/EVnd
+         Pr4ITKctv3W1N6UbC09Xl4HV5NZEbBApK9O3EGeYkA+A9lBLN9CoKmn7VbqWEYZ4W8eo
+         yV8+HDX0dqP7hLZZBwSuQrkjw2vUpP9OoIw7LA3jEGnB+Z7uhzDa7iEIUFLFUNtTnGRC
+         hWQg==
+X-Gm-Message-State: ACrzQf0b96UkvEBIKOySKXxczaSzRlvXXug6eDobip0ZOQeYJN/kDFcL
+        Y1sy/eUU6fKI1zWxhbfBnFRBu33/Bcr8y1IfDwChfhlfJGxq
+X-Google-Smtp-Source: AMsMyM6HWug/J3hoxbaHsJPmONtnc0ytWo4foqdx9hoV7qB8KsaRd34//0HcI6EmQ8M0JQh3RNimzOXtin5ODcCZlFQTMKeqvq3z
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6638:d11:b0:375:1ba7:bb11 with SMTP id
+ q17-20020a0566380d1100b003751ba7bb11mr31497583jaj.28.1667857002479; Mon, 07
+ Nov 2022 13:36:42 -0800 (PST)
+Date:   Mon, 07 Nov 2022 13:36:42 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000002b449505ece8385e@google.com>
+Subject: [syzbot] BUG: unable to handle kernel paging request in sb_end_write
+From:   syzbot <syzbot+baa30b3f0af34d3b3832@syzkaller.appspotmail.com>
+To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, viro@zeniv.linux.org.uk
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Essentially, the zpool constructor allows us to set things up with a null
-struct zpool, zpool_ops, or zpool_ops->evict, which we have to handle.  A
-similar null-handling pattern can be observed in zbud (mm/zbud.c) and z3fold
-(mm/z3fold.c) - see zbud_zpool_evict and zbud_zpool_create for e.g.
+Hello,
 
-In particular:
+syzbot found the following issue on:
 
-1. pool->zpool_ops is the ops (containing the evict handler zpool_ops->evict)
-passed into the zpool constructor (zs_zpool_create)
+HEAD commit:    f0c4d9fc9cc9 Linux 6.1-rc4
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+console output: https://syzkaller.appspot.com/x/log.txt?x=1325f951880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=ff27f0c8b406726e
+dashboard link: https://syzkaller.appspot.com/bug?extid=baa30b3f0af34d3b3832
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: arm64
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12c3890e880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15d5fede880000
 
-2. pool->ops/zs_zpool_ops (struct zs_ops) is a struct wrapping zs_zpool_evict,
-which itself is a wrapper for the zpool evict handler (pool->zpool_ops->evict).
-zs_zpool_evict also handles the case where zpool or zpool_ops is null, or
-zpool_ops->evict is not defined (i.e return -ENOENT).
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/92c7e839ac32/disk-f0c4d9fc.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/b7bedbc08fb4/vmlinux-f0c4d9fc.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/3fe25e2dfdb7/Image-f0c4d9fc.gz.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/e08ff430eaf4/mount_3.gz
 
-FWIW, I do think this is quite convoluted. In the long run, we might want to
-simplify this design, but for this patch series I think it is wise to err on
-the safe side and follow the other two allocators' design for consistency.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+baa30b3f0af34d3b3832@syzkaller.appspotmail.com
 
-That said, while staring at the code again, I found a bug - in the case
-pool->zpool_ops is null, pool->ops is undefined garbage. The v3 patch will fix
-that to follow zbud's pattern (pool->ops = NULL in this case).
+loop0: detected capacity change from 0 to 79
+Unable to handle kernel paging request at virtual address ffff8001f1dad000
+Mem abort info:
+  ESR = 0x0000000096000005
+  EC = 0x25: DABT (current EL), IL = 32 bits
+  SET = 0, FnV = 0
+  EA = 0, S1PTW = 0
+  FSC = 0x05: level 1 translation fault
+Data abort info:
+  ISV = 0, ISS = 0x00000005
+  CM = 0, WnR = 0
+swapper pgtable: 4k pages, 48-bit VAs, pgdp=00000001c5630000
+[ffff8001f1dad000] pgd=100000023ffff003, p4d=100000023ffff003, pud=0000000000000000
+Internal error: Oops: 0000000096000005 [#1] PREEMPT SMP
+Modules linked in:
+CPU: 1 PID: 3024 Comm: syz-executor176 Not tainted 6.1.0-rc4-syzkaller-31833-gf0c4d9fc9cc9 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/30/2022
+pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : __percpu_add_case_32 arch/arm64/include/asm/percpu.h:127 [inline]
+pc : percpu_up_read include/linux/percpu-rwsem.h:106 [inline]
+pc : __sb_end_write include/linux/fs.h:1821 [inline]
+pc : sb_end_write+0xac/0x22c include/linux/fs.h:1853
+lr : rcu_sync_is_idle include/linux/rcu_sync.h:36 [inline]
+lr : percpu_up_read include/linux/percpu-rwsem.h:105 [inline]
+lr : __sb_end_write include/linux/fs.h:1821 [inline]
+lr : sb_end_write+0x84/0x22c include/linux/fs.h:1853
+sp : ffff800012b9bc00
+x29: ffff800012b9bc00 x28: ffff0000cb107888 x27: ffff80000d3182f0
+x26: 00000000fffffffb x25: 0000000000000021 x24: 0000000000000001
+x23: 0000000020000080 x22: 0000000020000180 x21: ffff0000c6540000
+x20: 0000000000000000 x19: ffff0000c97e7000 x18: 00000000000000c0
+x17: ffff80000dcec198 x16: ffff80000db2a158 x15: ffff0000c6540000
+x14: 0000000000000000 x13: 00000000ffffffff x12: ffff0000c6540000
+x11: ff808000085ff1b0 x10: 0000000000000000 x9 : 00000000ffffffff
+x8 : ffff8001f1dad000 x7 : ffff8000095f3074 x6 : 0000000000000000
+x5 : 0000000000000080 x4 : ffff0001feff2950 x3 : 0000000000002bb9
+x2 : ffff0000c9558000 x1 : 0000000000000000 x0 : 0000000000000000
+Call trace:
+ __sb_end_write include/linux/fs.h:1821 [inline]
+ sb_end_write+0xac/0x22c include/linux/fs.h:1853
+ mnt_drop_write+0x28/0x38 fs/namespace.c:471
+ path_setxattr+0x36c/0x414 fs/xattr.c:638
+ __do_sys_setxattr fs/xattr.c:652 [inline]
+ __se_sys_setxattr fs/xattr.c:648 [inline]
+ __arm64_sys_setxattr+0x2c/0x40 fs/xattr.c:648
+ __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+ invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
+ el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
+ do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
+ el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:637
+ el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
+ el0t_64_sync+0x18c/0x190 arch/arm64/kernel/entry.S:581
+Code: f941fe68 d538d089 8b080128 12800009 (b829011f) 
+---[ end trace 0000000000000000 ]---
+----------------
+Code disassembly (best guess):
+   0:	f941fe68 	ldr	x8, [x19, #1016]
+   4:	d538d089 	mrs	x9, tpidr_el1
+   8:	8b080128 	add	x8, x9, x8
+   c:	12800009 	mov	w9, #0xffffffff            	// #-1
+* 10:	b829011f 	stadd	w9, [x8] <-- trapping instruction
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
