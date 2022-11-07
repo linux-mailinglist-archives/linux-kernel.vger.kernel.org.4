@@ -2,205 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF69A61EAEB
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 07:24:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 278B061EAEF
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 07:25:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230308AbiKGGYw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 01:24:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39802 "EHLO
+        id S231271AbiKGGZk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 01:25:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230204AbiKGGYu (ORCPT
+        with ESMTP id S229768AbiKGGZi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 01:24:50 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FC0AE0FB;
-        Sun,  6 Nov 2022 22:24:49 -0800 (PST)
-Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4N5Lhh3lfTzpVtp;
-        Mon,  7 Nov 2022 14:21:08 +0800 (CST)
-Received: from kwepemm600004.china.huawei.com (7.193.23.242) by
- dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 7 Nov 2022 14:24:46 +0800
-Received: from [10.67.103.231] (10.67.103.231) by
- kwepemm600004.china.huawei.com (7.193.23.242) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 7 Nov 2022 14:24:45 +0800
-Message-ID: <09e0a108-9f22-a9a0-2145-a81936745887@huawei.com>
-Date:   Mon, 7 Nov 2022 14:24:45 +0800
+        Mon, 7 Nov 2022 01:25:38 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1F23110551;
+        Sun,  6 Nov 2022 22:25:37 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B15B81FB;
+        Sun,  6 Nov 2022 22:25:42 -0800 (PST)
+Received: from a077893.blr.arm.com (unknown [10.162.42.7])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 9FCC13F534;
+        Sun,  6 Nov 2022 22:25:31 -0800 (PST)
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+To:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, peterz@infradead.org,
+        acme@kernel.org, mark.rutland@arm.com, will@kernel.org,
+        catalin.marinas@arm.com
+Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
+        Mark Brown <broonie@kernel.org>,
+        James Clark <james.clark@arm.com>,
+        Rob Herring <robh@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Suzuki Poulose <suzuki.poulose@arm.com>,
+        Ingo Molnar <mingo@redhat.com>
+Subject: [PATCH V5 0/7] arm64/perf: Enable branch stack sampling
+Date:   Mon,  7 Nov 2022 11:55:07 +0530
+Message-Id: <20221107062514.2851047-1-anshuman.khandual@arm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [RFC] ACPI: PCC: Support shared interrupt for multiple subspaces
-To:     Robbie King <robbiek@xsightlabs.com>,
-        Sudeep Holla <sudeep.holla@arm.com>
-CC:     <linux-acpi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <rafael@kernel.org>, <rafael.j.wysocki@intel.com>,
-        <wanghuiqiang@huawei.com>, <huangdaode@huawei.com>,
-        <tanxiaofei@huawei.com>
-References: <20221016034043.52227-1-lihuisong@huawei.com>
- <20221027155323.7xmpjfrh7qmil6o3@bogus>
- <f0c408a6-cd94-4963-d4d7-e7d08b6150be@huawei.com>
- <20221031104036.bv6a7i6hxrmtpj23@bogus>
- <925f360d-e6b3-6004-de22-f39eaa86a750@huawei.com>
- <d0b178d3-a036-399f-fb0c-bb7f8c52995c@xsightlabs.com>
- <20221104151530.44sms3fnarqnvvsl@bogus>
- <ca35058d-1f40-3f85-9e2d-bfb29c8625cb@xsightlabs.com>
-From:   "lihuisong (C)" <lihuisong@huawei.com>
-In-Reply-To: <ca35058d-1f40-3f85-9e2d-bfb29c8625cb@xsightlabs.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.103.231]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemm600004.china.huawei.com (7.193.23.242)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This series enables perf branch stack sampling support on arm64 platform
+via a new arch feature called Branch Record Buffer Extension (BRBE). All
+relevant register definitions could be accessed here.
 
-在 2022/11/4 23:39, Robbie King 写道:
-> On 11/4/2022 11:15 AM, Sudeep Holla wrote:
->> On Fri, Nov 04, 2022 at 11:04:22AM -0400, Robbie King wrote:
->>> Hello Huisong, your raising of the shared interrupt issue is very 
->>> timely, I
->>> am working to implement "Extended PCC subspaces (types 3 and 4)" 
->>> using PCC
->>> on the ARM RDN2 reference platform as a proof of concept, and 
->>> encountered
->>> this issue as well.  FWIW, I am currently testing using Sudeep's 
->>> patch with
->>> the "chan_in_use" flag removed, and so far have not encountered any 
->>> issues.
->>>
->>
->> Interesting, do you mean the patch I post in this thread but without the
->> whole chan_in_use flag ?
->
-> That's right, diff I'm running with is attached to end of message.
-Hello Robbie, In multiple subspaces scenario, there is a problem
-that OS doesn't know which channel should respond to the interrupt
-if no this chan_in_use flag. If you have not not encountered any
-issues in this case, it may be related to your register settings.
+https://developer.arm.com/documentation/ddi0601/2021-12/AArch64-Registers
 
-@Sudeep, what shoud we do next?
->
->>
->>> I think the RDN2 may provide an example of a write only interrupt
->>> acknowledge mechanism mentioned by Sudeep.
->>>
->>
->> Yes.
->>
->>> The RDN2 reference design uses the MHUv2 IP for the doorbell 
->>> mechanism.  If
->>> my implementation is correct (and it quite possibly is not), 
->>> acknowledging
->>> the DB interrupt from the platform is accomplished by writing a 1 to 
->>> the
->>> appropriate bit in the receiver channel window CH_CLR register, 
->>> which is
->>> documented as:
->>>
->>>    Channel flag clear.
->>>    Write 0b1 to a bit clears the corresponding bit in the CH_ST and 
->>> CH_ST_MSK.
->>>    Writing 0b0 has no effect.
->>>    Each bit always reads as 0b0.
->>>
->>
->> Correct, on this MHUv[1-2], it is write only register and it reads zero.
->> So basically you will ignore the interrupt if we apply the logic Huisong
->> proposed initially.
->>
->>> in the "Arm Corstone SSE-700 Subsystem Technical Reference Manual".
->>>
->>> Apologies if I am off in the weeds here as I have only been working 
->>> with
->>> PCC/SCMI for a very short period of time.
->>
->> Good to know info :).
->>
->
-> It helps that your linux / firmware code is easy to follow! :)
->
-> One other minor issue I encountered was that a NULL GAS (all zeros) 
-> doesn't
-> seem to be supported by pcc_chan_reg_init, may be a good opportunity 
-> for me
-> to submit my first RFC...
->
-> diff --git a/drivers/mailbox/pcc.c b/drivers/mailbox/pcc.c
-> index ed18936b8ce6..3fa7335d15b0 100644
-> --- a/drivers/mailbox/pcc.c
-> +++ b/drivers/mailbox/pcc.c
-> @@ -100,6 +100,7 @@ struct pcc_chan_info {
->         struct pcc_chan_reg cmd_update;
->         struct pcc_chan_reg error;
->         int plat_irq;
-> +       unsigned int plat_irq_flags;
->  };
->
-> diff --git a/drivers/mailbox/pcc.c b/drivers/mailbox/pcc.c
-> index ed18936b8ce6..3fa7335d15b0 100644
-> --- a/drivers/mailbox/pcc.c
-> +++ b/drivers/mailbox/pcc.c
-> @@ -100,6 +100,7 @@ struct pcc_chan_info {
->         struct pcc_chan_reg cmd_update;
->         struct pcc_chan_reg error;
->         int plat_irq;
-> +       unsigned int plat_irq_flags;
->  };
->
->  #define to_pcc_chan_info(c) container_of(c, struct pcc_chan_info, chan)
-> @@ -221,6 +222,12 @@ static int pcc_map_interrupt(u32 interrupt, u32 
-> flags)
->         return acpi_register_gsi(NULL, interrupt, trigger, polarity);
->  }
->
-> +static bool pcc_chan_plat_irq_can_be_shared(struct pcc_chan_info *pchan)
-> +{
-> +       return (pchan->plat_irq_flags & ACPI_PCCT_INTERRUPT_MODE) ==
-> +               ACPI_LEVEL_SENSITIVE;
-> +}
-> +
->  /**
->   * pcc_mbox_irq - PCC mailbox interrupt handler
->   * @irq:       interrupt number
-> @@ -310,9 +317,12 @@ pcc_mbox_request_channel(struct mbox_client *cl, 
-> int subspace_id)
->
->         if (pchan->plat_irq > 0) {
->                 int rc;
-> +               unsigned long irqflags;
->
-> -               rc = devm_request_irq(dev, pchan->plat_irq, 
-> pcc_mbox_irq, 0,
-> -                                     MBOX_IRQ_NAME, chan);
-> +               irqflags = pcc_chan_plat_irq_can_be_shared(pchan) ?
-> +                           IRQF_SHARED | IRQF_ONESHOT : 0;
-> +               rc = devm_request_irq(dev, pchan->plat_irq, pcc_mbox_irq,
-> +                                     irqflags, MBOX_IRQ_NAME, chan);
->                 if (unlikely(rc)) {
->                         dev_err(dev, "failed to register PCC interrupt 
-> %d\n",
->                                 pchan->plat_irq);
-> @@ -458,6 +468,8 @@ static int pcc_parse_subspace_irq(struct 
-> pcc_chan_info *pchan,
->                 return -EINVAL;
->         }
->
-> +       pchan->plat_irq_flags = pcct_ss->flags;
-> +
->         if (pcct_ss->header.type == 
-> ACPI_PCCT_TYPE_HW_REDUCED_SUBSPACE_TYPE2) {
->                 struct acpi_pcct_hw_reduced_type2 *pcct2_ss = (void 
-> *)pcct_ss;
->
->
-> .
+This series applies on v6.1-rc4.
+
+Changes in V5:
+
+- Changed BRBCR_EL1.VIRTUAL from 0b1 to 0b01
+- Changed BRBFCR_EL1.EnL into BRBFCR_EL1.EnI
+- Changed config ARM_BRBE_PMU from 'tristate' to 'bool'
+
+Changes in V4:
+
+https://lore.kernel.org/all/20221017055713.451092-1-anshuman.khandual@arm.com/
+
+- Changed ../tools/sysreg declarations as suggested
+- Set PERF_SAMPLE_BRANCH_STACK in data.sample_flags
+- Dropped perfmon_capable() check in armpmu_event_init()
+- s/pr_warn_once/pr_info in armpmu_event_init()
+- Added brbe_format element into struct pmu_hw_events
+- Changed v1p1 as brbe_v1p1 in struct pmu_hw_events
+- Dropped pr_info() from arm64_pmu_brbe_probe(), solved LOCKDEP warning
+
+Changes in V3:
+
+https://lore.kernel.org/all/20220929075857.158358-1-anshuman.khandual@arm.com/
+
+- Moved brbe_stack from the stack and now dynamically allocated
+- Return PERF_BR_PRIV_UNKNOWN instead of -1 in brbe_fetch_perf_priv()
+- Moved BRBIDR0, BRBCR, BRBFCR registers and fields into tools/sysreg
+- Created dummy BRBINF_EL1 field definitions in tools/sysreg
+- Dropped ARMPMU_EVT_PRIV framework which cached perfmon_capable()
+- Both exception and exception return branche records are now captured
+  only if the event has PERF_SAMPLE_BRANCH_KERNEL which would already
+  been checked in generic perf via perf_allow_kernel()
+
+Changes in V2:
+
+https://lore.kernel.org/all/20220908051046.465307-1-anshuman.khandual@arm.com/
+
+- Dropped branch sample filter helpers consolidation patch from this series 
+- Added new hw_perf_event.flags element ARMPMU_EVT_PRIV to cache perfmon_capable()
+- Use cached perfmon_capable() while configuring BRBE branch record filters
+
+Changes in V1:
+
+https://lore.kernel.org/linux-arm-kernel/20220613100119.684673-1-anshuman.khandual@arm.com/
+
+- Added CONFIG_PERF_EVENTS wrapper for all branch sample filter helpers
+- Process new perf branch types via PERF_BR_EXTEND_ABI
+
+Changes in RFC V2:
+
+https://lore.kernel.org/linux-arm-kernel/20220412115455.293119-1-anshuman.khandual@arm.com/
+
+- Added branch_sample_priv() while consolidating other branch sample filter helpers
+- Changed all SYS_BRBXXXN_EL1 register definition encodings per Marc
+- Changed the BRBE driver as per proposed BRBE related perf ABI changes (V5)
+- Added documentation for struct arm_pmu changes, updated commit message
+- Updated commit message for BRBE detection infrastructure patch
+- PERF_SAMPLE_BRANCH_KERNEL gets checked during arm event init (outside the driver)
+- Branch privilege state capture mechanism has now moved inside the driver
+
+Changes in RFC V1:
+
+https://lore.kernel.org/all/1642998653-21377-1-git-send-email-anshuman.khandual@arm.com/
+
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Will Deacon <will@kernel.org>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Mark Brown <broonie@kernel.org>
+Cc: James Clark <james.clark@arm.com>
+Cc: Rob Herring <robh@kernel.org>
+Cc: Marc Zyngier <maz@kernel.org>
+Cc: Suzuki Poulose <suzuki.poulose@arm.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-perf-users@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+
+Anshuman Khandual (7):
+  arm64/perf: Add BRBE registers and fields
+  arm64/perf: Update struct arm_pmu for BRBE
+  arm64/perf: Update struct pmu_hw_events for BRBE
+  driver/perf/arm_pmu_platform: Add support for BRBE attributes detection
+  arm64/perf: Drive BRBE from perf event states
+  arm64/perf: Add BRBE driver
+  arm64/perf: Enable branch stack sampling
+
+ arch/arm64/include/asm/sysreg.h | 103 ++++++++
+ arch/arm64/kernel/perf_event.c  |  49 ++++
+ arch/arm64/tools/sysreg         | 161 ++++++++++++
+ drivers/perf/Kconfig            |  11 +
+ drivers/perf/Makefile           |   1 +
+ drivers/perf/arm_pmu.c          |  66 ++++-
+ drivers/perf/arm_pmu_brbe.c     | 441 ++++++++++++++++++++++++++++++++
+ drivers/perf/arm_pmu_brbe.h     | 259 +++++++++++++++++++
+ drivers/perf/arm_pmu_platform.c |  34 +++
+ include/linux/perf/arm_pmu.h    |  68 +++++
+ 10 files changed, 1190 insertions(+), 3 deletions(-)
+ create mode 100644 drivers/perf/arm_pmu_brbe.c
+ create mode 100644 drivers/perf/arm_pmu_brbe.h
+
+-- 
+2.25.1
+
