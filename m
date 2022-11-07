@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5934861F453
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 14:29:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F7F061F457
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 14:29:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231319AbiKGN3V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 08:29:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60474 "EHLO
+        id S231897AbiKGN30 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 08:29:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231667AbiKGN3S (ORCPT
+        with ESMTP id S231860AbiKGN3S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 7 Nov 2022 08:29:18 -0500
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EF211CB0D;
-        Mon,  7 Nov 2022 05:29:05 -0800 (PST)
-Received: by mail-ej1-x630.google.com with SMTP id d26so30036373eje.10;
-        Mon, 07 Nov 2022 05:29:05 -0800 (PST)
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1C851CB28;
+        Mon,  7 Nov 2022 05:29:06 -0800 (PST)
+Received: by mail-ej1-x634.google.com with SMTP id sc25so29998146ejc.12;
+        Mon, 07 Nov 2022 05:29:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=4s/Ptq8qmBpFC+qJpngwSoeByDBagm3Zx2Ag2l+arII=;
-        b=L2PeUV/vUgUVmloujR/vHOf91PEBnyAq+3zmOkc/1hunmGtWrlLICfsUgd0JwBoOUT
-         bBfomTM43fmiMli/d4SrMTUHLjvFhvkyF1DF+Bw66b+QdZoHOJwJ4pIeLR/jVT7tlnii
-         jU1gZJL2rRk6pTzfGaEw1Dmx4kN+yaw88/ofOkt57hseoZ7yMjh4TNuAWbhwmQ8GCCAD
-         HMlgfNfW790FXoM50zTC/NTBLGefApdwayg6+JAmL6phIFVMnuwk5AQlTbZ1k3kDanhm
-         5bHu9GL2FfO9hRr+XK9phvhMELcg9otEYnT0mTBj4kkBtsqN9rXK+wzYUYJpC5BP3LGs
-         rBqw==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xDq+dF/YTBWalc8Ldtbu93f8AMlelceS56nsDHxpWFY=;
+        b=AN7WfcRNngvJVDPpT0OecabQU542LiG7ZfGJ3aRwjFuTIlK2vHkwGk84ZkAYjHJK5q
+         DX+wo9NFVOtMc5YMUfz1m8AmjbFl6mfslo3w57e8nHieYGwLGgIT2N7iaOaQa2IyKVF7
+         GLsRQQb6Earm+QlBMfoRoo53azeVbNRR2/p1ntWnVDFbdFSRpvkkxHF/ngKPrdJYRtTa
+         A1UutbAtAsWR9/Ro2eYmZ722gRT1rxa5zD5gHMFzDVeEme7idVKxXXiTskr9XQ1+SZxE
+         7XbORXZ1/PNFW08JnUNRLH5a3mqtwc8kMsmajR0fgUzODDlD79oLyU+v7efol0d5q2ie
+         ihMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4s/Ptq8qmBpFC+qJpngwSoeByDBagm3Zx2Ag2l+arII=;
-        b=LlCfFSGoE4BWaqBZ+DKn2oaQ4PNye78Gh4e3niJ7SKSd8UHuQqMB6D8erSVD/D0UbD
-         HxCvlAfgDaX0nX8JxJN00BdO9YUuyf6RZhkhLda/CD2KjluK+skiDU/bucL8Cng7KOFK
-         hmO9Ouy4QAMlpfDeY+Y5TG/ODOSHLlll1nOmqtrq8gh6ndS5A3eq0EIFyBf6S8JL4lcx
-         86CX5bOrtIh2Hos66Ob7fnPsgWofRuTcDIQ9+QdBxOh18nb33KrxsAKD59LHXCpSFlJi
-         A8007s43AHYCQb8W8JhQmY4VRRzeVHDanyu7JuxvWpCJa1ikiGv3MllaT1ebVYXcQNjI
-         nMYg==
-X-Gm-Message-State: ACrzQf2bCe75t8Fpl7jXXxqiwfmkg4APsAKqMaAVwzubFBHqz7IRXKVP
-        /g77w1NXwwlf1LPg+fB4Bek=
-X-Google-Smtp-Source: AMsMyM4TLYEv7krxKJO9xwNS3FvCmLCYf5ofH5o7VJkH2pssMqj/zXD3EyEdd1qPST+FPuEXv2IuXg==
-X-Received: by 2002:a17:906:794a:b0:7a0:72b8:2368 with SMTP id l10-20020a170906794a00b007a072b82368mr47657792ejo.601.1667827744013;
-        Mon, 07 Nov 2022 05:29:04 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=xDq+dF/YTBWalc8Ldtbu93f8AMlelceS56nsDHxpWFY=;
+        b=LhwICmhqW5MoKX272ytSGR5d+mG6m7L0xNvEa8aZZRz8oVjWISDtRn1TEAxgCW/0k3
+         uUv1nxbLUh9xnzUvRc9h49G8opkOIK5I1nFQCBJLJ5vJ1rH/C0dK1jxSxICixP0g6BG0
+         Fs4qUbzr54JDJji6psjTqp2afTRbAAQytbp+H0UoB7ZSkaTM4WV5Kle7InaxFsxQYk7y
+         XmqZT/o4xyOQIXXOjj15+PMu/Z84fZwM7ibtBZqpnhVbpTz8kBL+8SNCKWol/jwyPgwN
+         sFnIHBWeZ8o9WSbDXDwZzZC6xLiYRn0UgUc5GQTO0Zryj5LdHw+3DZyHI8AvsUzFbY+f
+         oCEw==
+X-Gm-Message-State: ACrzQf0g1MV7uNhvSbgSzO8sxyamyVb+pwLLBt6ukZsbWX7EptKmajqJ
+        42/G4hJZXtJ16jkQG1dOeCo=
+X-Google-Smtp-Source: AMsMyM50xw5FgmSWx6+qGInHwOD7WrjtxwN78sUG7ovQeIJVMTjaYTUU2cS0rRbrUefXygE7Dds4JA==
+X-Received: by 2002:a17:907:6a09:b0:7ae:2793:aa23 with SMTP id rf9-20020a1709076a0900b007ae2793aa23mr19134094ejc.184.1667827745265;
+        Mon, 07 Nov 2022 05:29:05 -0800 (PST)
 Received: from fedora.. (dh207-98-26.xnet.hr. [88.207.98.26])
-        by smtp.googlemail.com with ESMTPSA id ky14-20020a170907778e00b0073c8d4c9f38sm3446037ejc.177.2022.11.07.05.29.02
+        by smtp.googlemail.com with ESMTPSA id ky14-20020a170907778e00b0073c8d4c9f38sm3446037ejc.177.2022.11.07.05.29.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Nov 2022 05:29:03 -0800 (PST)
+        Mon, 07 Nov 2022 05:29:04 -0800 (PST)
 From:   Robert Marko <robimarko@gmail.com>
 To:     agross@kernel.org, andersson@kernel.org,
         konrad.dybcio@somainline.org, mturquette@baylibre.com,
@@ -57,10 +58,12 @@ To:     agross@kernel.org, andersson@kernel.org,
         linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org
 Cc:     Robert Marko <robimarko@gmail.com>
-Subject: [PATCH 1/3] clk: qcom: reset: support resetting multiple bits
-Date:   Mon,  7 Nov 2022 14:28:59 +0100
-Message-Id: <20221107132901.489240-1-robimarko@gmail.com>
+Subject: [PATCH 2/3] dt-bindings: clock: qcom: ipq8074: add missing networking resets
+Date:   Mon,  7 Nov 2022 14:29:00 +0100
+Message-Id: <20221107132901.489240-2-robimarko@gmail.com>
 X-Mailer: git-send-email 2.38.1
+In-Reply-To: <20221107132901.489240-1-robimarko@gmail.com>
+References: <20221107132901.489240-1-robimarko@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -73,62 +76,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds the support for giving the complete bitmask
-in reset structure and reset operation will use this bitmask
-for all reset operations.
-
-Currently, reset structure only takes a single bit for each reset
-and then calculates the bitmask by using the BIT() macro.
-
-However, this is not sufficient anymore for newer SoC-s like IPQ8074,
-IPQ6018 and more, since their networking resets require multiple bits
-to be asserted in order to properly reset the HW block completely.
-
-So, in order to allow asserting multiple bits add "bitmask" field to
-qcom_reset_map, and then use that bitmask value if its populated in the
-driver, if its not populated, then we just default to existing behaviour
-and calculate the bitmask on the fly.
+Add bindings for the missing networking resets found in IPQ8074 GCC.
 
 Signed-off-by: Robert Marko <robimarko@gmail.com>
 ---
- drivers/clk/qcom/reset.c | 4 ++--
- drivers/clk/qcom/reset.h | 1 +
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ include/dt-bindings/clock/qcom,gcc-ipq8074.h | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
-diff --git a/drivers/clk/qcom/reset.c b/drivers/clk/qcom/reset.c
-index 2a16adb572d2..0e914ec7aeae 100644
---- a/drivers/clk/qcom/reset.c
-+++ b/drivers/clk/qcom/reset.c
-@@ -30,7 +30,7 @@ qcom_reset_assert(struct reset_controller_dev *rcdev, unsigned long id)
+diff --git a/include/dt-bindings/clock/qcom,gcc-ipq8074.h b/include/dt-bindings/clock/qcom,gcc-ipq8074.h
+index e4991d303708..f9ea55811104 100644
+--- a/include/dt-bindings/clock/qcom,gcc-ipq8074.h
++++ b/include/dt-bindings/clock/qcom,gcc-ipq8074.h
+@@ -367,6 +367,20 @@
+ #define GCC_PCIE1_AHB_ARES			129
+ #define GCC_PCIE1_AXI_MASTER_STICKY_ARES	130
+ #define GCC_PCIE0_AXI_SLAVE_STICKY_ARES		131
++#define GCC_PPE_FULL_RESET			132
++#define GCC_UNIPHY0_SOFT_RESET			133
++#define GCC_UNIPHY0_XPCS_RESET			134
++#define GCC_UNIPHY1_SOFT_RESET			135
++#define GCC_UNIPHY1_XPCS_RESET			136
++#define GCC_UNIPHY2_SOFT_RESET			137
++#define GCC_UNIPHY2_XPCS_RESET			138
++#define GCC_EDMA_HW_RESET			139
++#define GCC_NSSPORT1_RESET			140
++#define GCC_NSSPORT2_RESET			141
++#define GCC_NSSPORT3_RESET			142
++#define GCC_NSSPORT4_RESET			143
++#define GCC_NSSPORT5_RESET			144
++#define GCC_NSSPORT6_RESET			145
  
- 	rst = to_qcom_reset_controller(rcdev);
- 	map = &rst->reset_map[id];
--	mask = BIT(map->bit);
-+	mask = map->bitmask ? map->bitmask : BIT(map->bit);
- 
- 	return regmap_update_bits(rst->regmap, map->reg, mask, mask);
- }
-@@ -44,7 +44,7 @@ qcom_reset_deassert(struct reset_controller_dev *rcdev, unsigned long id)
- 
- 	rst = to_qcom_reset_controller(rcdev);
- 	map = &rst->reset_map[id];
--	mask = BIT(map->bit);
-+	mask = map->bitmask ? map->bitmask : BIT(map->bit);
- 
- 	return regmap_update_bits(rst->regmap, map->reg, mask, 0);
- }
-diff --git a/drivers/clk/qcom/reset.h b/drivers/clk/qcom/reset.h
-index b8c113582072..9a47c838d9b1 100644
---- a/drivers/clk/qcom/reset.h
-+++ b/drivers/clk/qcom/reset.h
-@@ -12,6 +12,7 @@ struct qcom_reset_map {
- 	unsigned int reg;
- 	u8 bit;
- 	u8 udelay;
-+	u32 bitmask;
- };
- 
- struct regmap;
+ #define USB0_GDSC				0
+ #define USB1_GDSC				1
 -- 
 2.38.1
 
