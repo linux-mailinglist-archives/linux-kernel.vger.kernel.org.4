@@ -2,99 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F93661E879
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 03:01:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F09B761E880
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 03:04:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230345AbiKGCBo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Nov 2022 21:01:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47144 "EHLO
+        id S230353AbiKGCEP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Nov 2022 21:04:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230136AbiKGCBl (ORCPT
+        with ESMTP id S230136AbiKGCEL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Nov 2022 21:01:41 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17F72DEB8;
-        Sun,  6 Nov 2022 18:01:38 -0800 (PST)
-Received: from dggpeml500021.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4N5Ds12pM8zpWCN;
-        Mon,  7 Nov 2022 09:57:57 +0800 (CST)
-Received: from [10.174.177.174] (10.174.177.174) by
- dggpeml500021.china.huawei.com (7.185.36.21) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 7 Nov 2022 10:01:34 +0800
-Message-ID: <230c5303-2aed-7c36-3147-2c05361067ef@huawei.com>
-Date:   Mon, 7 Nov 2022 10:01:34 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [PATCH v2] ext4: fix use-after-free in ext4_ext_shift_extents
-Content-Language: en-US
-To:     Theodore Ts'o <tytso@mit.edu>, <linux-ext4@vger.kernel.org>
-CC:     <lczerner@redhat.com>, <chengzhihao1@huawei.com>,
-        <enwlinux@gmail.com>, <linux-kernel@vger.kernel.org>,
-        <ritesh.list@gmail.com>, <stable@vger.kernel.org>,
-        <adilger.kernel@dilger.ca>, <yebin10@huawei.com>, <jack@suse.cz>,
-        <yi.zhang@huawei.com>, <yukuai3@huawei.com>
-References: <20220922120434.1294789-1-libaokun1@huawei.com>
- <166450797717.256913.12979997291945870141.b4-ty@mit.edu>
-From:   Baokun Li <libaokun1@huawei.com>
-In-Reply-To: <166450797717.256913.12979997291945870141.b4-ty@mit.edu>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.174]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpeml500021.china.huawei.com (7.185.36.21)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Sun, 6 Nov 2022 21:04:11 -0500
+Received: from mail.nfschina.com (unknown [124.16.136.209])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 911A0A455;
+        Sun,  6 Nov 2022 18:04:10 -0800 (PST)
+Received: from localhost (unknown [127.0.0.1])
+        by mail.nfschina.com (Postfix) with ESMTP id E8CC71E80CE5;
+        Mon,  7 Nov 2022 10:01:49 +0800 (CST)
+X-Virus-Scanned: amavisd-new at test.com
+Received: from mail.nfschina.com ([127.0.0.1])
+        by localhost (mail.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id Xn8leCsuRSGg; Mon,  7 Nov 2022 10:01:47 +0800 (CST)
+Received: from localhost.localdomain (unknown [219.141.250.2])
+        (Authenticated sender: zeming@nfschina.com)
+        by mail.nfschina.com (Postfix) with ESMTPA id AE72D1E80D9D;
+        Mon,  7 Nov 2022 10:01:46 +0800 (CST)
+From:   Li zeming <zeming@nfschina.com>
+To:     code@tyhicks.com, sforshee@digitalocean.com, brauner@kernel.org,
+        amir73il@gmail.com
+Cc:     ecryptfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Li zeming <zeming@nfschina.com>
+Subject: [PATCH] ecryptfs: main: Remove unnecessary (void*) conversions
+Date:   Mon,  7 Nov 2022 10:04:04 +0800
+Message-Id: <20221107020404.3380-1-zeming@nfschina.com>
+X-Mailer: git-send-email 2.18.2
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/9/30 11:19, Theodore Ts'o wrote:
-> On Thu, 22 Sep 2022 20:04:34 +0800, Baokun Li wrote:
->> If the starting position of our insert range happens to be in the hole
->> between the two ext4_extent_idx, because the lblk of the ext4_extent in
->> the previous ext4_extent_idx is always less than the start, which leads
->> to the "extent" variable access across the boundary, the following UAF is
->> triggered:
->> ==================================================================
->> BUG: KASAN: use-after-free in ext4_ext_shift_extents+0x257/0x790
->> Read of size 4 at addr ffff88819807a008 by task fallocate/8010
->> CPU: 3 PID: 8010 Comm: fallocate Tainted: G            E     5.10.0+ #492
->> Call Trace:
->>   dump_stack+0x7d/0xa3
->>   print_address_description.constprop.0+0x1e/0x220
->>   kasan_report.cold+0x67/0x7f
->>   ext4_ext_shift_extents+0x257/0x790
->>   ext4_insert_range+0x5b6/0x700
->>   ext4_fallocate+0x39e/0x3d0
->>   vfs_fallocate+0x26f/0x470
->>   ksys_fallocate+0x3a/0x70
->>   __x64_sys_fallocate+0x4f/0x60
->>   do_syscall_64+0x33/0x40
->>   entry_SYSCALL_64_after_hwframe+0x44/0xa9
->> ==================================================================
->>
->> [...]
-> Applied, thanks!
->
-> [1/1] ext4: fix use-after-free in ext4_ext_shift_extents
->        (no commit info)
->
-> Best regards,
+The ei pointer does not need to cast the type.
 
-Hi Theodore,
+Signed-off-by: Li zeming <zeming@nfschina.com>
+---
+ fs/ecryptfs/main.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Could you tell me why this patch has been applied, but there is no cmmit 
-info,
-
-and the patch cannot be found on any branch?
-
+diff --git a/fs/ecryptfs/main.c b/fs/ecryptfs/main.c
+index 2dd23a82e0de..3e499207d4c6 100644
+--- a/fs/ecryptfs/main.c
++++ b/fs/ecryptfs/main.c
+@@ -649,7 +649,7 @@ MODULE_ALIAS_FS("ecryptfs");
+ static void
+ inode_info_init_once(void *vptr)
+ {
+-	struct ecryptfs_inode_info *ei = (struct ecryptfs_inode_info *)vptr;
++	struct ecryptfs_inode_info *ei = vptr;
+ 
+ 	inode_init_once(&ei->vfs_inode);
+ }
 -- 
-With Best Regards,
-Baokun Li
+2.18.2
 
