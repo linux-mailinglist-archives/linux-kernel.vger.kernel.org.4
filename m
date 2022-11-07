@@ -2,111 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D72EE61F631
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 15:36:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CB6D61F630
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 15:36:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232159AbiKGOgj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 09:36:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50668 "EHLO
+        id S231875AbiKGOgh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 09:36:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232000AbiKGOge (ORCPT
+        with ESMTP id S231551AbiKGOgb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 09:36:34 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0443192;
-        Mon,  7 Nov 2022 06:36:33 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3BEACB811E9;
-        Mon,  7 Nov 2022 14:36:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 858FBC433B5;
-        Mon,  7 Nov 2022 14:36:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667831790;
-        bh=m9xqrpdjytPm9RXLg7Gj85tY2WF2XYvRdNUJgi2UJi0=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=e+kCiuyYrd5fkBBNHVr4CtpTwmImmiM1Pf9Vf35Asqk4sT8SrfCowuYnYbF6VWMEa
-         X3NwkrvbmVMboJXCq7SYAEJvWBXqZL7uoG1RbbqMLa77lXmHWLQoiutFIACiCHPqjP
-         KM4JtmDfUJx6/h5Eq6SS2mbjiO+pk8wiGyrAO+TS2x6wvOUUxHL3mtFEfQbsbVrIup
-         /Fonw2/Q1iQSuOLJqBwHfkcbIG0HF6CoOuXyIsbyBO+vctICzsVo+0G1b5IC0HYTa1
-         pnyEzQZxhCp8uQKv7jCjDpgFsseRM9w+SQq3jQFFDJZu6MIHpB3kbmBn/zthu348EA
-         a2BBrvUnyMD1w==
-Message-ID: <7d2c43b7-1507-7c30-27f7-3081c6ec77ba@kernel.org>
-Date:   Mon, 7 Nov 2022 16:36:24 +0200
+        Mon, 7 Nov 2022 09:36:31 -0500
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD3121FE
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 06:36:29 -0800 (PST)
+Received: by mail-lj1-x236.google.com with SMTP id c25so16543396ljr.8
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 06:36:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LqIVZEeBf3uiHZU4NmaZFcaInDSQv2WV0V3yZxmUSaM=;
+        b=yriZm8CvC+/u6Ha3VhxGKctXjrWrVtg04n+IwoYHZrkNOK1i4AZyiQrN0r5smL+q/Z
+         rMDrz/WV9fTd+TWZurNqWfGl9UVEPubVX0HsnsOTuRkASKznAQ+Py1NI8k6AZIb45bn7
+         JjgadSRwG92CPFIrd80y8SVbIHEuMq8C8SnmeK86rgOhQcZhwLBvOuldlkmHXIRK+fKf
+         xDPbJfjutvOTiUsRrKaebBS8bohdPmB3HeEXgMoULGexEzAyFTwyaS67LHs465jt8Vuu
+         1d+xKFJYqSHms60eWWkaFFmFiVol3KEfwD20ekcqoJRli8n9ChHhO8TakrYLsBvqYUqU
+         yelQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=LqIVZEeBf3uiHZU4NmaZFcaInDSQv2WV0V3yZxmUSaM=;
+        b=qQYFDCEx7htgr5IwoZw0+5U+NStN3txKlh+RnfWLXkubx+q8qNBh1F5LXJk1ZljIvh
+         KeuY0mb8dQr0b04CoOuKWcGjR57Eo1eF0NuDEe5wyf7GSoGekmLiHw0WI/sY9QFdMugS
+         Yu2ERWw+jHnRqC/EtZDkU3YXxASAT8UIqFmRGtPHft4StnBBTtxub90aQKGDqJcIpvsc
+         27mcfD453knPqEinzv4EedtDsBSpWNaAYhkkdtVsUVk5f8cLyPy6p9pEsj4gxsWSDZql
+         mbMSThl0LO/3mESrUIh5hqFuwrEF47DOjLRmhC3K+oP1XoNNbMdnBGiQaPfjON599Mp8
+         CDCw==
+X-Gm-Message-State: ANoB5pklvZKV70RLUuAtsFT5LDJSP3PL6dV92LsJeuH0u0yMhJJ/OHKz
+        9O+lFWC7ncUkn/1Jdv8/Vbz3Uw==
+X-Google-Smtp-Source: AA0mqf5RmQNBqtBRxyGo20Mn+gZ2BBYK+tzFf/gbojSwxL0JPqZy60SjJAwKKAFCXqi8QNURwjvKjQ==
+X-Received: by 2002:a05:651c:212a:b0:278:a461:cb7d with SMTP id a42-20020a05651c212a00b00278a461cb7dmr1576286ljq.246.1667831787939;
+        Mon, 07 Nov 2022 06:36:27 -0800 (PST)
+Received: from krzk-bin.NAT.warszawa.vectranet.pl (088156142199.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.199])
+        by smtp.gmail.com with ESMTPSA id v12-20020a2ea60c000000b0026fb5525ee4sm1250408ljp.116.2022.11.07.06.36.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Nov 2022 06:36:27 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     s.nawrocki@samsung.com, tomasz.figa@gmail.com,
+        cw00.choi@samsung.com, chanho61.park@samsung.com,
+        alim.akhtar@samsung.com, sboyd@kernel.org, mturquette@baylibre.com,
+        robh+dt@kernel.org, Inbaraj E <inbaraj.e@samsung.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-clk@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        pankaj.dubey@samsung.com, devicetree@vger.kernel.org
+Subject: Re: [PATCH v2] dt-bindings: clock: exynosautov9: fix reference to CMU_FSYS1
+Date:   Mon,  7 Nov 2022 15:36:25 +0100
+Message-Id: <166783178314.199427.8409536178718528714.b4-ty@linaro.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20221107124337.114135-1-inbaraj.e@samsung.com>
+References: <CGME20221107123641epcas5p26e310f1ab6addb4fa6757f5147b8e50b@epcas5p2.samsung.com> <20221107124337.114135-1-inbaraj.e@samsung.com>
 MIME-Version: 1.0
-Subject: Re: [PATCH v3 1/3] dt-bindings: interconnect: Remove required reg
- field
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Melody Olvera <quic_molvera@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Odelu Kukatla <quic_okukatla@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221026190520.4004264-1-quic_molvera@quicinc.com>
- <20221026190520.4004264-2-quic_molvera@quicinc.com>
- <a214f513-fe28-2096-c2b0-2107e97f3ce2@linaro.org>
- <64d0e5ef-fd36-6f25-2c39-00e8e1346af7@quicinc.com>
- <1a7fd1fd-4f0d-bec3-ddd5-7c6a99a2ab01@linaro.org>
-From:   Georgi Djakov <djakov@kernel.org>
-In-Reply-To: <1a7fd1fd-4f0d-bec3-ddd5-7c6a99a2ab01@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 2.11.22 23:11, Krzysztof Kozlowski wrote:
-> On 31/10/2022 19:29, Melody Olvera wrote:
->>
->>
->> On 10/27/2022 8:29 AM, Krzysztof Kozlowski wrote:
->>> On 26/10/2022 15:05, Melody Olvera wrote:
->>>> Many of the *-virt compatible devices do not have a reg field
->>>> so remove it as required from the bindings.
->>> and some virt have it... This should be probably separate binding or if
->>> the list is small - allOf:if:then.
->> I attempted this; however I'm still seeing failures in dtb_check. I've added this
->> to the binding; does this look correct?
->>   allOf:
->>     - $ref: qcom,rpmh-common.yaml#
->> +  - if:
->> +      properties:
->> +        compatible:
->> +          contains:
->> +            enum:
->> +              - qcom,qdu1000-clk-virt
->> +              - qcom,qdu1000-mc-virt
->> +
->> +    then:
->> +      required:
->> +        - compatible
+On Mon, 7 Nov 2022 18:13:37 +0530, Inbaraj E wrote:
+> Fix reference to CMU_FSYS1 mmc card clock to gout clock instead of dout.
 > 
-> No, because we talk about reg, not compatible. You should not require
-> reg instead for some compatibles... but then the schema is getting
-> complicated.
+> "gout" is output of a gate clock.
+> Unlike any other clocks, the fsys1 mmc top clock does not have a divider.
+> So, it should be "mout -> gout" instead of "mout -> gout -> dout".
 > 
-> It's difficult to give you recommendation because I do not know what are
-> all these "virt" interconnects. Why some have unit address, why some do not?
+> This fixes make dtbs_check warning as shown below:
+> 
+> [...]
 
-My understanding is that the "reg" property is required for the NoCs that have
-registers for controlling the QoS settings for the ports from Linux side.
-Other NoCs might be controlled by some remote processor and direct access from
-Linux may not be possible, so they do not have unit address and are outside of
-the soc DT node.
-Do we need to strictly define when exactly the "reg" property is required,
-can't we just mark it as optional?
+Applied, thanks!
 
-Thanks,
-Georgi
+[1/1] dt-bindings: clock: exynosautov9: fix reference to CMU_FSYS1
+      https://git.kernel.org/krzk/linux/c/4854e8b083d800b421c02d3a8482fbfe27fb33ec
+
+Best regards,
+-- 
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
