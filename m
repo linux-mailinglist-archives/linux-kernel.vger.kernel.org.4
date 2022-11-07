@@ -2,148 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 738E661F827
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 17:01:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59B9A61F825
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 17:01:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232132AbiKGQBV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 11:01:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54106 "EHLO
+        id S232159AbiKGQBK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 11:01:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231910AbiKGQBL (ORCPT
+        with ESMTP id S231910AbiKGQBH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 11:01:11 -0500
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97DAC1A3AE;
-        Mon,  7 Nov 2022 08:01:09 -0800 (PST)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id B3F2A5C0089;
-        Mon,  7 Nov 2022 11:01:08 -0500 (EST)
-Received: from imap47 ([10.202.2.97])
-  by compute2.internal (MEProxy); Mon, 07 Nov 2022 11:01:08 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
-         h=cc:cc:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1667836868; x=1667923268; bh=Oc
-        MqlVPjKlmKhzuxKa/KdFDe8vaSPreulhqqsYoyPb4=; b=Up9vkF7jYQ1ujCZ/jg
-        9tR1Fodo8WoCA38omMpmbTKogh7+VsfyUZmzQ+fNBR3u0lEtBkd1JS7vXC03ARS8
-        P6HHgQY70t5+z6rTSfTA2bhPyBA7ugGprWAXrzp+PyKuYXUqVj/3pLFS7pa9lXzQ
-        R2/FMn8tLnCddF50pImXfny+KkhkA5/5QMAKGL777+dciORgveJF9vXGGwmzJuVk
-        mRq/Wm17dUQY3+F9jqBAwLzsYOqnWXD/4a/Noc8h9BkQ1YpOiqjx8W5fWXexGUUf
-        qunHhDLgYlQCEDjyaWf90MAlG1TbW0cxqadTrFjjFth1Pc2oi83CGQ3i2dOB0dbA
-        DNlA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1667836868; x=1667923268; bh=OcMqlVPjKlmKhzuxKa/KdFDe8vaS
-        PreulhqqsYoyPb4=; b=ivKfXQ13nP9UNGqwk1nOVSNfuQh+VttwMZtlqnh5X28+
-        WKEIfuMFKCNK3LbwOnSq6sS0SoSJgCYHFnuGtTt4KvIEKRI/ZBDcw/fPcAxA4ocH
-        +tVkc5BFqyGo/2ojaWntoG788LQZ+VxBkJAM0TrwFMNceB8g4Q5/5yB7GGMf2qjI
-        tcTp3DEBtDWK4xAakDZcVVFPUt6j9/mxjBeuEVkOf13kvX5xshuG2OUPtvsUE2V5
-        OCjFeFi/jQi5K0mFEMDdz+3uQCivf/8EokYl6qJaeTF7WsS0hMEPivsmTvsnaTJL
-        A0+zGL0YMI1dVQ5mK7sQFaE77REbahc4UFA3+pvMBw==
-X-ME-Sender: <xms:wytpY4Q9ubqgOYIIoU7btC0XVb9HB-Bo24nQ_ANmFN8Ni1kEkDhQjg>
-    <xme:wytpY1zlyWNaIXIegmj-exZgT-4fOx6zWoIVlkpmAL7PZsLCKzELxwXfsj45OTaTq
-    WrPVGY0mT-YOllfWmE>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrvdekgdekvdcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdfuvhgv
-    nhcurfgvthgvrhdfuceoshhvvghnsehsvhgvnhhpvghtvghrrdguvghvqeenucggtffrrg
-    htthgvrhhnpeelvefggeffheevtdeivefhkeehfeettdejteduveeiheevveeilefghfei
-    veeiueenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    hsvhgvnhesshhvvghnphgvthgvrhdruggvvh
-X-ME-Proxy: <xmx:xCtpY12oNxHYaqKGZv5tZS1BffNlMwuhSc-3wHgQBCUhlWau8cAb7Q>
-    <xmx:xCtpY8CplXYN-aa9GmIIp2QLRTD0vVvrONBNqAvmGj504BaAf01frg>
-    <xmx:xCtpYxiLfy3iLPstkNtKrOi_FsH9HSeBmTUUcv2BOo9WDRVnYVijeA>
-    <xmx:xCtpY_buKGjdSvF1x8m6WLwB607VZT-TBk5_HHW5YiFNj1NYLZn1Pw>
-Feedback-ID: i51094778:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id D70BFA6007C; Mon,  7 Nov 2022 11:01:07 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1115-g8b801eadce-fm-20221102.001-g8b801ead
-Mime-Version: 1.0
-Message-Id: <0bc7b309-6f3b-4821-81d0-435671d64e2f@app.fastmail.com>
-In-Reply-To: <Y2jrQgj53z/mhHmm@smile.fi.intel.com>
-References: <20221106214804.2814-1-j@jannau.net>
- <Y2jrQgj53z/mhHmm@smile.fi.intel.com>
-Date:   Mon, 07 Nov 2022 17:00:47 +0100
-From:   "Sven Peter" <sven@svenpeter.dev>
-To:     "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>,
-        "Janne Grunau" <j@jannau.net>
-Cc:     linux-usb@vger.kernel.org, stable@kernel.org,
-        "Thinh Nguyen" <Thinh.Nguyen@synopsys.com>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        "Andrey Smirnov" <andrew.smirnov@gmail.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/1] usb: dwc3: Do not get extcon device when usb-role-switch is
- used
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 7 Nov 2022 11:01:07 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CA131D0EF;
+        Mon,  7 Nov 2022 08:01:07 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9E77D610E7;
+        Mon,  7 Nov 2022 16:01:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08B43C433D6;
+        Mon,  7 Nov 2022 16:01:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667836866;
+        bh=jnUlaUcgvtn2jWIpYTr0nLM1+fcq5wzwtdQps5fxFhg=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=FLiw5IB0H00vNPMpiTvzqYiP98MaVFZv2XPBbjt6Z31IKe2iPdABt8hi6ofg2P5q9
+         w0/b7hQcfGXj5TlkBXhHb/Q5QDEAoc2iyD/aiN8fOtZp9igVp1aQRVw8MiG/Ls0MED
+         TtkwxB2wGyB3+xEe9+U6Vp+CbUbgeeZkAFIgZcoXVAXWgKZwDU7REdCGRyNWY/QZ3U
+         DhfNxOfjq18K1RxImAhJxKK+LGA8ZLOo+5cgo8kCwX4aaJ5iXWBd/n9a1/mmNrTe+t
+         UGkWxvtvgPT/ZJ1zLYpBoQN168L6sm6MNuUHuG7c+rr8gUbeJzN2Dz27xXlA0TTUHN
+         Tvd0iIkFSwo7g==
+Received: by mail-lj1-f174.google.com with SMTP id a15so16950815ljb.7;
+        Mon, 07 Nov 2022 08:01:05 -0800 (PST)
+X-Gm-Message-State: ACrzQf2WY0XbbEMJq6Z1SqyLuWje99hLTuTSiPWl9GOrJf2ivSTByCi/
+        5CAjT8eFq8NUxHkUrvSk4SWsE7v8X/ZMDym6CEg=
+X-Google-Smtp-Source: AMsMyM4NbcKdEASDwlzXy3yjvge4Ih6cRuAiYXuPttZXl0Sd3TLbjMkaE2UuNz4hQ7DtKp4yRPZnCx6ps4GYkLVN7EI=
+X-Received: by 2002:a05:651c:516:b0:277:2428:3682 with SMTP id
+ o22-20020a05651c051600b0027724283682mr5959901ljp.291.1667836864027; Mon, 07
+ Nov 2022 08:01:04 -0800 (PST)
+MIME-Version: 1.0
+References: <cbbd3548-880c-d2ca-1b67-5bb93b291d5f@huawei.com>
+In-Reply-To: <cbbd3548-880c-d2ca-1b67-5bb93b291d5f@huawei.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Mon, 7 Nov 2022 17:00:52 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXESRP9RvhPC5Wgg38BqyCn5ANv7+X9Ezyx5MXNNvEZ1kA@mail.gmail.com>
+Message-ID: <CAMj1kXESRP9RvhPC5Wgg38BqyCn5ANv7+X9Ezyx5MXNNvEZ1kA@mail.gmail.com>
+Subject: Re: vmlinux.lds.h: Bug report: unable to handle page fault when start
+ the virtual machine with qemu
+To:     "zhaowenhui (A)" <zhaowenhui8@huawei.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Kees Cook <keescook@chromium.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        "open list:GENERIC INCLUDE/ASM HEADER FILES" 
+        <linux-arch@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>, xiafukun@huawei.com,
+        yusongping@huawei.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 7, 2022, at 12:25, Andy Shevchenko wrote:
-> On Sun, Nov 06, 2022 at 10:48:04PM +0100, Janne Grunau wrote:
->> The change breaks device tree based platforms with PHY device and use
->> usb-role-switch instead of an extcon switch. extcon_find_edev_by_node()
->> will return EPROBE_DEFER if it can not find a device so probing without
->> an extcon device will be deferred indefinitely. Fix this by
->> explicitly checking for usb-role-switch.
->> At least the out-of-tree USB3 support on Apple silicon based platforms
->> using dwc3 with tipd USB Type-C and PD controller is affected by this
->> issue.
+On Mon, 7 Nov 2022 at 04:27, zhaowenhui (A) <zhaowenhui8@huawei.com> wrote:
 >
-> We don't care about out-of-tree modules, do we?
+> Hello,
 >
-> OTOH, the problem you are trying to workaround is probably in a (mis)use of
-> deferred probe somewhere.
+> We compiled the kernel with x86_64_defconfig and the following configs
+> from commit  d4c6399900364facd84c9e35ce1540b6046c345f (vmlinux.lds.h:
+> Avoid orphan section with !SMP ):
 >
-> Btw, does it prevent the system boot or you just see the extcon in the list of
-> deferred devices after booting?
+> CONFIG_SMP=n
+> CONFIG_AMD_MEM_ENCRYPT=y
+> CONFIG_HYPERVISOR_GUEST=y
+> CONFIG_KVM=y
+> CONFIG_PARAVIRT=y
+>
+> Then start virtual machine with the following command (OS: Ubuntu; Arch:
+> x86-64):
+>
+> qemu-system-x86_64  -enable-kvm -cpu Skylake-Server -smp 10 -m 8192
+> -boot menu=on,splash-time=1000 \
+> -device virtio-scsi-pci \
+> -initrd ${initramfs} \
+> -kernel ./linux/arch/x86/boot/bzImage \
+> -append "root=/dev/ram rw rdinit=/sbin/init console=tty0
+> console=ttyS0,115200 earlyprintk=ttyS0 debug " \
+> -nographic -vnc :18
+>
+> (Note:  ./linux/arch/x86/boot/bzImage  is the compiled kernel bzImage path
+> On my machine,  initramfs=./x86_procfs.cpio.gz_1 )
+>
+> QEMU reports an error:  BUG: unable to handle page fault for address:
+> ffffffff8ad01040
+>
+> The bug was introduced by commit d4c6399900, and the problem can be
+> avoided by rolling back the patch.
+> Patch link:
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=d4c6399900364facd84c9e35ce1540b6046c345f.
+> We speculate that the problem is related to the hardware memory
+> encryption feature in the virtualization scenario of the AMD platform.
+>
 
-Which extcon? The commit description already mentions that the issue is that there
-is no extcon and that the dwc3 probe gets stuck with EPROBE_DEFER forever.
+That patch looks incorrect to me. Without CONFIG_SMP, the PERCPU
+sections are not instantiated, and the only copy of those variables is
+created in the ordinary .data/.bss sections
 
-This happens because the code after Janne's new check looks for the PHY and then
-just assumes that if the PHY has a "port" that the other end always is an extcon.
-It then tries extcon_find_edev_by_node which will always fail with EPROBE_DEFER
-if that node never registers an extcon.
+Does the change below fix the issue for you?
 
-If "usb-role-switch" is used and configured in the DT there is no extcon.
-There actually cannot ever be a working extcon with "usb-role-switch" because
-the very first thing dwc3_drd_init does is to look for a role switch partner
-and then skip the entire extcon setup:
-
-int dwc3_drd_init(struct dwc3 *dwc)
-{
-	int ret, irq;
-
-	if (ROLE_SWITCH &&
-	    device_property_read_bool(dwc->dev, "usb-role-switch"))
-		return dwc3_setup_role_switch(dwc);
-[....]
-
-
-This entire issue was actually first fixed in ab7aa2866d29, then broken
-again in 0f0101719138 due to a merge resolution, then fixed again with
-7a84e7353e23 (where we actually had a brief discussion about this already
-on the ML) and then broken again in d182c2e1bc92.
-
-Janne's fix is much less subtle and should hopefully survive this time.
-
-For the patch:
-
-Reviewed-by: Sven Peter <sven@svenpeter.dev>
-
-
-Best,
-
-Sven
+--- a/include/asm-generic/vmlinux.lds.h
++++ b/include/asm-generic/vmlinux.lds.h
+@@ -347,6 +347,7 @@
+ #define DATA_DATA                                                      \
+        *(.xiptext)                                                     \
+        *(DATA_MAIN)                                                    \
++       *(.data..decrypted)                                             \
+        *(.ref.data)                                                    \
+        *(.data..shared_aligned) /* percpu related */                   \
+        MEM_KEEP(init.data*)                                            \
+@@ -995,7 +996,6 @@
+ #ifdef CONFIG_AMD_MEM_ENCRYPT
+ #define PERCPU_DECRYPTED_SECTION                                       \
+        . = ALIGN(PAGE_SIZE);                                           \
+-       *(.data..decrypted)                                             \
+        *(.data..percpu..decrypted)                                     \
+        . = ALIGN(PAGE_SIZE);
+ #else
