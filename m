@@ -2,178 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B706261E882
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 03:04:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A45561E887
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 03:10:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230160AbiKGCEY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Nov 2022 21:04:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48004 "EHLO
+        id S230241AbiKGCKk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Nov 2022 21:10:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230356AbiKGCEU (ORCPT
+        with ESMTP id S229782AbiKGCKh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Nov 2022 21:04:20 -0500
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2040.outbound.protection.outlook.com [40.107.94.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52313DF36;
-        Sun,  6 Nov 2022 18:04:19 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dRzHlpHpXPmWSDrDfpdl042oY572M8BOdxr00h7hsTHY8CYxtA8RVNDpQhNpjo/yBLMWF3UVOT9oax9q/h3yz+45Zq9ShYJpTQZitcyAr23d/ZYy8SXxuI3GoGl6lkMvyIo6WAj2B75nOeH2QiVDZ7rjpuIFW+oD/3T1gzesY34bfT0YYRk4BqvAZwa6PsE3q7XIxQgwxgFfHQKXoENc460523x7ecIqLgIe3c2YWEtCf/fYYC2EWbnjWwNsEyEEIihkUX2i4GhD0NUn49jPVqMOcTrdjk5HeCJexhSWXjmG4G1HhiYM40OO8CFfwQq6NlvbB1wCYjtAcvv+tzBHPA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=JFwVOAfIBoKgDrJ2IbCUMR/dSRIqiZ87J4/GsEpqTcI=;
- b=S2LySFzNdphvOVZlEZ5xRdU1pRO9UP1pi5jNNZFKCnTSUomaUVtwLmGnciIjZslCowfgqUSgdeihkOvhhrB5OAloir5gpNx4G9GU1utibp0pm0lJ15bF5RTGz7JyF13vZNO1tcrCf7i0JM27vwsJ/qmDMbOf92ON4ejxBSmOu+gyRHdQotTbyDydiEiNwtB5ZpV+3NGKGl76EmmetL3/9xSBUYm5cQyVmCuhQC80h19z2T3/AREG5ffZpT0BJFhpLK5fCGFnsApSJ1xDPijHflpnuaNAiYbsHiMKxqNla9KVdDmOiKpHVdOzCeCJgxZRySLnDcFlNzivAlHSJpjC9w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=synaptics.com; dmarc=pass action=none
- header.from=synaptics.com; dkim=pass header.d=synaptics.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=Synaptics.onmicrosoft.com; s=selector2-Synaptics-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=JFwVOAfIBoKgDrJ2IbCUMR/dSRIqiZ87J4/GsEpqTcI=;
- b=YHg4bLFtLB2F2lq1Wtgdn+eyEjDRj0epPQi5d6nbseWq1xpucYREhXDv7Ak+sH9WgDONyFiRamQzYx0c+HydDB6nl8TmeCtq0Cji/0qRdpqcOJfzMenQ6P8FPPlHLGAuzDCYWeXVZdQjLxKhGilIoseQinq8p9r+DDOVsRvkxrA=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=synaptics.com;
-Received: from DM6PR03MB5196.namprd03.prod.outlook.com (2603:10b6:5:24a::19)
- by MW4PR03MB6348.namprd03.prod.outlook.com (2603:10b6:303:11f::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.26; Mon, 7 Nov
- 2022 02:04:16 +0000
-Received: from DM6PR03MB5196.namprd03.prod.outlook.com
- ([fe80::a132:66d9:ed0f:e5c1]) by DM6PR03MB5196.namprd03.prod.outlook.com
- ([fe80::a132:66d9:ed0f:e5c1%7]) with mapi id 15.20.5791.026; Mon, 7 Nov 2022
- 02:04:16 +0000
-Message-ID: <41d0e696-c472-eaff-94cf-1327a20f6442@synaptics.com>
-Date:   Mon, 7 Nov 2022 10:04:07 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [RFC PATCH v6 02/11] media: v4l2: Extend pixel formats to unify
- single/multi-planar handling (and more)
-Content-Language: en-US
-To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
-Cc:     mchehab@kernel.org, hans.verkuil@cisco.com,
-        laurent.pinchart@ideasonboard.com, sakari.ailus@iki.fi,
-        boris.brezillon@collabora.com, hiroh@chromium.org,
-        nicolas@ndufresne.ca, Brian.Starkey@arm.com, kernel@collabora.com,
-        narmstrong@baylibre.com, linux-kernel@vger.kernel.org,
-        frkoenig@chromium.org, stanimir.varbanov@linaro.org,
-        tfiga@chromium.org, Hans Verkuil <hverkuil@xs4all.nl>,
-        Helen Koike <helen.koike@collabora.com>,
-        linux-media@vger.kernel.org
-References: <20210114180738.1758707-1-helen.koike@collabora.com>
- <20210114180738.1758707-3-helen.koike@collabora.com>
- <d0d1f74f-7e77-1b18-0529-dbbec8889584@xs4all.nl>
- <577c56bf-146c-f34a-2028-075170076de7@collabora.com>
- <708221e8-a805-c394-6958-6c7ec24bfe66@synaptics.com>
- <b58e2678-8d2a-a323-07e4-12cc01c8c3c2@collabora.com>
-From:   Hsia-Jun Li <Randy.Li@synaptics.com>
-In-Reply-To: <b58e2678-8d2a-a323-07e4-12cc01c8c3c2@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SJ0PR03CA0338.namprd03.prod.outlook.com
- (2603:10b6:a03:39c::13) To DM6PR03MB5196.namprd03.prod.outlook.com
- (2603:10b6:5:24a::19)
+        Sun, 6 Nov 2022 21:10:37 -0500
+Received: from out0.migadu.com (out0.migadu.com [IPv6:2001:41d0:2:267::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B9C7B4B1
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Nov 2022 18:10:35 -0800 (PST)
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1667787033;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=JWCRU0wMC+dzOW6EcNPcg7iP/EOKI6q2MiVyrooXUYw=;
+        b=Xn3zOl5lAYUw6ONBHZHt4eG74DxIo5Goll6gq/JeI01k/JAlWo37TqbzlkK9kRzm3LQr3c
+        +RLDBdglbR5O/ptroHh9JAqRc4BUEhyDs1t2Es2CjWPwNjjmL5+KZCVQEFsW99ZfR/j2nU
+        QU1wKCWbDRlbgnaEDRBPlYDO1+m7S4o=
+From:   Naoya Horiguchi <naoya.horiguchi@linux.dev>
+To:     linux-mm@kvack.org
+Cc:     =?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= 
+        <ville.syrjala@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@redhat.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Liu Shixin <liushixin2@huawei.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v1] arch/x86/mm/hugetlbpage.c: pud_huge() returns 0 when using 2-level paging
+Date:   Mon,  7 Nov 2022 11:10:10 +0900
+Message-Id: <20221107021010.2449306-1-naoya.horiguchi@linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6PR03MB5196:EE_|MW4PR03MB6348:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7f157878-c5a3-4e35-df4a-08dac0645fdd
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: w8CMizhSlRv3YjLwqkE3FAvLn9I7mtyQiPQPHSAIJZLITMVyrUgpdKhX/4rHWNGD0odLiWa2waBaNq/4F2d7+X2r3shRjojn98tF5Ce+i6cwXpA0E/tBn4vR2GdUOR7NPfCLPQQ1bk8kEkhb8BaulpiaMxoHqFX1MY/9jImO+IriUQxklmOtRFldD44gNoQ6dKSTX7ijY3TzIIRavJu4rRgySa3IpSQbKwJFu89Ywuo/kRxPnn8KXo5RcEs7uEWEyoxyMBa0DuoO1KmSFj1eVo1V9PNMzUuqgbkrrihmoOhxAkBNSPrggSCwPlIsxsLsJ33xHvHfhgqhxPwVrfRwgGK2Ahb0ufVf+K6cVzGRfvfNMknPHgyB0h601dlJKCR96iooFLc8mEXJCxX/UzQ3JOxxA+ZiCxGamb7WQMS+lbj3LsLW0oc7N60Pun68YIMA3xohrfA0jOvGHguQo1th2XhchWGNxKS7edu3k8RYmqqx8L4cjTc/3nTrbIqHp1np05XVqu+BmIuNZn3jLcQxTommMJgXtezxSAA3fjroRRts78tG3FkIchuzLPyS0vqYYvGYUUjmrxClRIaClnoRuri6E3rN3N8p/M6IBQNH1OpFBXoXMeYgQjeyxqqun4gN+JcX93KKToakbZaJ6qzXpe8JS22noTUHCmElFidUtUNLSRSKy6u9DhpX7tUeDFhFfdnCBipQIK43f8umuGk7bvbJ7B16UBTD4ZSYq9ZpAZESNHKcRyIyei5HZV9y6ZsephfA6fiVZ62PMZn5eN1TpX98osfvG1RSBZOSEUKTXfpAw6h9irfiFm3m0oJMfGnTKK1XQK1rweSE9aYIl5soMf2HRGE6LR9FMnrOGUR3V38=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR03MB5196.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(396003)(366004)(39860400002)(376002)(136003)(346002)(451199015)(31696002)(86362001)(36756003)(186003)(66946007)(316002)(6916009)(2616005)(66476007)(41300700001)(83380400001)(4326008)(8676002)(52116002)(53546011)(26005)(6506007)(6512007)(6666004)(54906003)(478600001)(966005)(6486002)(38350700002)(38100700002)(66556008)(5660300002)(7416002)(8936002)(2906002)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?b1NneGFadVgxRFBnT0xXdVQwa3o3YWJsTlZITk0vWnBHc2NIMnFkUnpha3lL?=
- =?utf-8?B?WWM4ano3MVFGdDY3cVd6MnpFRDB3NHR1RTlRaFlPUU5DMllmQ1h0RHlsdzlT?=
- =?utf-8?B?L0d1aUhJRk5mdjVkQzVwWExUVzRHd2g0S211elpOcjJHRGFmaXFBL0kzaExE?=
- =?utf-8?B?WlRZTUJjWjBJNWQyeGdmL1BVQ05iMDlqSzZPMmlQYzBDZUliTVorOTUzZEk5?=
- =?utf-8?B?QzltdWM3ZHpXSkhrS1pZcDZweHNvMzJFQWFhQ0IyempTYWVpRjRJSldyNzJZ?=
- =?utf-8?B?Nk1qU0svd25hMHYzM2VCN3pDYTFUVVhFcHVydEI3bEV3b3ZZMGpTVS92bEJl?=
- =?utf-8?B?YzMzRlFlYXd1THJlbldNa01OYlNZR3l6R0ttbXBFMUF2d0lpdmY5aXMvTnl0?=
- =?utf-8?B?UU9nTmhDWmhYbVpZd0FvamFoSW01eWgzYllSRUQ1cDI3dXE5SlZoQkVNZklM?=
- =?utf-8?B?U2FrdkR5TzlsRXp5NDZJY1hDZzVYVVFCQ0xkSHB2cUUyL3FOZnM3c3RhejdT?=
- =?utf-8?B?OS9YOENaL29SbXdEU0prZVBjN3ZBb3NsOCtoMHB3VlVWN00wV1NzcUZYUUlQ?=
- =?utf-8?B?MlBNM0NWZUlsUmovZ0ttK29qcUY4dmJnVHZXYms5T2pGYjVPaEwyZGNXbVNl?=
- =?utf-8?B?TDdnbzd2bExxSFlsYWRmZ2p2YWtDRStDVVFpQW8xQk1BMmNNSjFYL1d3S0tH?=
- =?utf-8?B?aUMwSkx5TlMwOGNiaGNXdnJwcythbmtwUVc4ODZkeEp4MXJyY0d3VHJKcWMx?=
- =?utf-8?B?UWlDYjBYM1J6VmlsQVBvNEhvd0xkN1NRdmM2QmdUSG1na2FkVjh2VFpkWWdu?=
- =?utf-8?B?STV1dkVxUFNxeS96UTVCS3NQakFwc3UwM1NWUnhJME0yczl4anAzWnplS0ZC?=
- =?utf-8?B?Skh0L0xaa3krWlRYN2VTdjRhb1dOcDNDdURJZkRZdmtHVTVYNjM0dndHUkxn?=
- =?utf-8?B?TW42d3phN3JqMTQzMmhuYVUvVHZJNGF6WHo1Mzk1M0FRTUtaQk1jMC9LVUFR?=
- =?utf-8?B?YVc3K1Y1UDRkMHhJT2RrYW0zS3d5enNob2UxQ0M1dEdiTWN4QXFxMGF1RXAx?=
- =?utf-8?B?dk1JN1FqTFU4SXppQllwdkY2b003UWUzYnRBdEhGNnJKUTZySUh4b3pSZHlJ?=
- =?utf-8?B?R2QzVFFkMzA3MnVTQ2k0RVk5RUFLdjd6SHgzKzR0OHMvbWlTUHZyYWlGS0RN?=
- =?utf-8?B?U0tHWXl0SG5jRzcveThCV0Rwa2hkbFc4V1ZNMUh5Rmd5eTlxdlpsK3l0ZE9H?=
- =?utf-8?B?bGpsL2pUNytqNHYvRUhZemFESjBwci9ZOUpYN2FUMzExd25QRkxLMG5nbzVu?=
- =?utf-8?B?elE5azFCQ3lIU1hrR01keXAyL0ZtNW4zSCtWeHFCSEZVeWJNNjViWXBvYThW?=
- =?utf-8?B?WkJiVE9uT3JrN25mOWp5VjF1NGlYNTcySU1OKzJYaEREUHlLMnQ5b01QR1Fn?=
- =?utf-8?B?Z1BHTHBmYVZyZ1lDaC9jOC9EZm1MN3JQT3NjVTJLNXljdW1ScitHUnk5RG4x?=
- =?utf-8?B?MStpZ25OQ3V3b3U1eE9la2FwVlJCMEN2MHJjbzlUYWtwSkkydWZKQXhuNzJs?=
- =?utf-8?B?T1dhOVdMSS95aEsvcEc4bkpwZGxXNDNaUCtyWTZkMzhMMm9xWnhHK3FHdzlJ?=
- =?utf-8?B?N2RKVkxDc0hrWWljRHVFeGdDU0NDeDJJR3ZvQ1pLandIZWVWbFpEOGsvVncz?=
- =?utf-8?B?MHNiOGVhZFhueTlibTl2SmI4MVZCeHU0Rmp2Y21rRWNHdFlQZGx0NnN3Z3pu?=
- =?utf-8?B?Tm51SUlwVkduNmtNNU5UZFl6UEtZSlRHdnRPU1BBakJKanVyYVRHWWwxaFBE?=
- =?utf-8?B?S3hldUh4S3d2RlQ5Y2I5MkpvYjZGcWNSU3FnYUdSL2Rxc3QzRXhpQWFWRjNt?=
- =?utf-8?B?RXhvUm5lQVhHU2FHS2dPeHIrZEVwbjBNSGpxNjhCNlZaQW9yaTZQMUFQNWJu?=
- =?utf-8?B?SG1ZNEUzSSs2VEVYbVZzUE1hNVhXWTBTbkxzSkNFRUY3V0wwNGtPdE9iY1RI?=
- =?utf-8?B?R0tCcHZLOUZSYkR3VWJQYTI5RURtZThueVhKY0NrbDZ4WUhKY09scFViZ1dn?=
- =?utf-8?B?SVlHeHFCbGwvd2lqOGwyMk9TbUZuVFhRemJXc1BXUytTNzlxSXlQZWxWSVVs?=
- =?utf-8?Q?XZU8NV4jFB9x+uNb8Lpsg6S2M?=
-X-OriginatorOrg: synaptics.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7f157878-c5a3-4e35-df4a-08dac0645fdd
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR03MB5196.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Nov 2022 02:04:16.4921
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 335d1fbc-2124-4173-9863-17e7051a2a0e
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: L+TLNMrNiicDNpMLkTFG5XNVng/dzq27ldHijwZQ1rlvH+D9Yfgw4VGOWQx8sPHI4mbQaUlYK4jpScFdscJlmg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR03MB6348
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Naoya Horiguchi <naoya.horiguchi@nec.com>
 
+The following bug is reported to be triggered when starting X on x86-32
+system with i915:
 
-On 11/7/22 06:11, Dmitry Osipenko wrote:
-> CAUTION: Email originated externally, do not click links or open attachments unless you recognize the sender and know the content is safe.
-> 
-> 
-> On 11/5/22 18:19, Hsia-Jun Li wrote:
->> Hello Helen
->>
->> I didn't see any updates from V6 and V7-WIP in your repo. That is what I
->> need to for our complex tile formats in our platform.
->>
->> Any future plane here?
->>
->> Besides I have some ideas on these patches.
-> 
-> I was looking into updating this patchset few months ago and the biggest
-> blocker was the absence of immediate upstream user for this new UAPI.
-> What your platform is? 
-Synaptics VideoSmart
-https://www.synaptics.com/products/multimedia-solutions
+  [  225.777375] kernel BUG at mm/memory.c:2664!
+  [  225.777391] invalid opcode: 0000 [#1] PREEMPT SMP
+  [  225.777405] CPU: 0 PID: 2402 Comm: Xorg Not tainted 6.1.0-rc3-bdg+ #86
+  [  225.777415] Hardware name:  /8I865G775-G, BIOS F1 08/29/2006
+  [  225.777421] EIP: __apply_to_page_range+0x24d/0x31c
+  [  225.777437] Code: ff ff 8b 55 e8 8b 45 cc e8 0a 11 ec ff 89 d8 83 c4 28 5b 5e 5f 5d c3 81 7d e0 a0 ef 96 c1 74 ad 8b 45 d0 e8 2d 83 49 00 eb a3 <0f> 0b 25 00 f0 ff ff 81 eb 00 00 00 40 01 c3 8b 45 ec 8b 00 e8 76
+  [  225.777446] EAX: 00000001 EBX: c53a3b58 ECX: b5c00000 EDX: c258aa00
+  [  225.777454] ESI: b5c00000 EDI: b5900000 EBP: c4b0fdb4 ESP: c4b0fd80
+  [  225.777462] DS: 007b ES: 007b FS: 00d8 GS: 0033 SS: 0068 EFLAGS: 00010202
+  [  225.777470] CR0: 80050033 CR2: b5900000 CR3: 053a3000 CR4: 000006d0
+  [  225.777479] Call Trace:
+  [  225.777486]  ? i915_memcpy_init_early+0x63/0x63 [i915]
+  [  225.777684]  apply_to_page_range+0x21/0x27
+  [  225.777694]  ? i915_memcpy_init_early+0x63/0x63 [i915]
+  [  225.777870]  remap_io_mapping+0x49/0x75 [i915]
+  [  225.778046]  ? i915_memcpy_init_early+0x63/0x63 [i915]
+  [  225.778220]  ? mutex_unlock+0xb/0xd
+  [  225.778231]  ? i915_vma_pin_fence+0x6d/0xf7 [i915]
+  [  225.778420]  vm_fault_gtt+0x2a9/0x8f1 [i915]
+  [  225.778644]  ? lock_is_held_type+0x56/0xe7
+  [  225.778655]  ? lock_is_held_type+0x7a/0xe7
+  [  225.778663]  ? 0xc1000000
+  [  225.778670]  __do_fault+0x21/0x6a
+  [  225.778679]  handle_mm_fault+0x708/0xb21
+  [  225.778686]  ? mt_find+0x21e/0x5ae
+  [  225.778696]  exc_page_fault+0x185/0x705
+  [  225.778704]  ? doublefault_shim+0x127/0x127
+  [  225.778715]  handle_exception+0x130/0x130
+  [  225.778723] EIP: 0xb700468a
 
-Is the driver stack completely opensource?
-If you don't include the trusted application(firmware) then yes.
-I can't post it in a short time, because the firmware is not released 
-yet. While the v4l2 still lacks many features I need here. If I release 
-it in a short time, you would just get a version that outputs non-tile 
-linear pixel formats here, the tile formats were only used for internal 
-buffers.
+Recently pud_huge() got aware of non-present entry by commit 3a194f3f8ad0
+("mm/hugetlb: make pud_huge() and follow_huge_pud() aware of non-present
+pud entry") to handle some special states of gigantic page.  However, it's
+overlooked that pud_none() always returns false when running with 2-level
+paging, and as a result pmd_huge() can return true pointlessly.
 
-Besides this TEE in our platform is not optee, even I posted it I don't 
-think it could be merged in a short time.
-> 
-> --
-> Best regards,
-> Dmitry
-> 
+Introduce "#if CONFIG_PGTABLE_LEVELS > 2" to pud_huge() to deal with this.
 
+Fixes: 3a194f3f8ad0 ("mm/hugetlb: make pud_huge() and follow_huge_pud() aware of non-present pud entry")
+Reported-by: Ville Syrjälä <ville.syrjala@linux.intel.com>
+Signed-off-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
+Cc: <stable@vger.kernel.org>
+---
+ arch/x86/mm/hugetlbpage.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/arch/x86/mm/hugetlbpage.c b/arch/x86/mm/hugetlbpage.c
+index 6b3033845c6d..5804bbae4f01 100644
+--- a/arch/x86/mm/hugetlbpage.c
++++ b/arch/x86/mm/hugetlbpage.c
+@@ -37,8 +37,12 @@ int pmd_huge(pmd_t pmd)
+  */
+ int pud_huge(pud_t pud)
+ {
++#if CONFIG_PGTABLE_LEVELS > 2
+ 	return !pud_none(pud) &&
+ 		(pud_val(pud) & (_PAGE_PRESENT|_PAGE_PSE)) != _PAGE_PRESENT;
++#else
++	return 0;
++#endif
+ }
+ 
+ #ifdef CONFIG_HUGETLB_PAGE
 -- 
-Hsia-Jun(Randy) Li
+2.25.1
+
