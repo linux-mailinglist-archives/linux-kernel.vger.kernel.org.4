@@ -2,66 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5AA061EF7D
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 10:46:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0778961EF89
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 10:48:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231881AbiKGJq5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 04:46:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40946 "EHLO
+        id S231730AbiKGJsm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 04:48:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231880AbiKGJqv (ORCPT
+        with ESMTP id S230449AbiKGJsg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 04:46:51 -0500
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A80CE17A84
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 01:46:50 -0800 (PST)
-Received: by mail-yb1-xb35.google.com with SMTP id k13so9090160ybk.2
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 01:46:50 -0800 (PST)
+        Mon, 7 Nov 2022 04:48:36 -0500
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 836A1E51;
+        Mon,  7 Nov 2022 01:48:35 -0800 (PST)
+Received: by mail-ej1-x62b.google.com with SMTP id b2so28507343eja.6;
+        Mon, 07 Nov 2022 01:48:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=WBuAqvJwNzbK7aFJDRuKKXUc72gKk0jK+U1Jq9qVZBY=;
-        b=iAZrcXgbgrHxR7U/PiFdvmW2Za9asY24vURRJGcl26Jv1tf4hDdSJHFcfm+9UrXHEh
-         c9nSmmOzIjRJw3YUJ+1JHeWjsGoJpqFiEL3swNxDwGvuiN/cBPo81lXOn23FDROKtQ/a
-         jJcf3R+RdrgmRKwyWACsHhB9j5Avm+JTNH11G0Eto2m+nZ61B/I4Kih+ZOfpwXdrjGN1
-         w8VgDhgiqI2UhEIIReyeTrEAbi9wyDL4IVqi+jtAgmRtSpCIe7JGjUOhJj2sjJJwyLRu
-         Io0MV0FErcwEtTs846vXts4qDAI87likEZQM+TTDsIGw6nNaJ3r0L/vPcOIUEnJk6+xR
-         f+vQ==
+        d=gmail.com; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=s5L/b/iiv4bE6DnHSKSmrFG5dDWyQhbSZwF9NlGUYx8=;
+        b=LvU8zWB72HOIroDkSZ7/lodrDW3JujAAGCgt5V/BrjQk7LZlkPClWG7hdpPRAGHWTd
+         nPOS9Guj3pOsR5RNexowZazwzwimNyhP+XTYeA+R75qEej/V3j/UqYLWb5DRN58yByRY
+         oJEJWBgJwP1PPRFe79AxPSvMKu1rVLqJe2NBderzxuvk4Xrte+bTz9MZl2QX73OxKwnC
+         4Jvp6baDTRbD3Fba67Iex7RcVjU4IOFxBu4F6vQRl5/II1yqrM76FGyyfM2TWm3odpWl
+         ahodhBChBL7OeP8jJn4n9bopKtbnL0rMjhB/51As3XeYRyoH15FvrKECAQyb8sbi990T
+         CaSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=WBuAqvJwNzbK7aFJDRuKKXUc72gKk0jK+U1Jq9qVZBY=;
-        b=WIVkTJNL+oO9JgP6eoyk47gLrT7SbLlymB+sKb1xQlLdaYecXtZ59YFIdb8x2YKVp/
-         UW6UJpW/hoEtpafdH0i4Vm5HRcBrwphv+bQurFiGLDy6o7+M3uzreG2XxR4A+i+mhIbx
-         dNGJ+LkND2lFmIDBspFnOm06kFQmx983/Ln3KpWwePfLFZVk/BjeB3WGh25QCvR9U/3E
-         cg2uYHOy1ZGH2HmzOf3t29j6shKS51HMSAErRnK/AfS1kr5AVLcvJs/uVpQTzp9Bp3xY
-         D5tvpos/6QWOE2wabv1VuEFg+fv9/374wmPY/yoPozdrFMa7PN2aertHm5xc3LNgCVwu
-         BItA==
-X-Gm-Message-State: ANoB5pnw1Z+ZRkkpr5tr9nLJ2jkCQ8JcMiD0XajW8MohYLRbXd6254Oz
-        gHCkCEARFPq5HdfyLajs73MY9DNQwEmTm7lgfiPrh77+hH2MYA==
-X-Google-Smtp-Source: AA0mqf60KM7To85c5F3vL7VpopIOeWhfrNlKtLo6tdSAX76P5UHsBuadfmhFw8ekhRczN2CTiAJVk+bDeJVuZzXOKP8=
-X-Received: by 2002:a25:4090:0:b0:6d3:7bde:23fe with SMTP id
- n138-20020a254090000000b006d37bde23femr15025924yba.388.1667814409715; Mon, 07
- Nov 2022 01:46:49 -0800 (PST)
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=s5L/b/iiv4bE6DnHSKSmrFG5dDWyQhbSZwF9NlGUYx8=;
+        b=avvo9N9nKX3ZZ66Va0obskCKOYl/DURW1gSnSh83bbla1ifUXqHNmh/gc344VzPJo7
+         8LQuZWj3Wxak9PxwC3jM7DksKpM/TBaDhxPvu8K7rjNf1/DktQV6Dj4x7ugqUpM7OmhB
+         gd7XR2i0UyzjwySrkGdNt4pWDE5Y667i+IoqH3L99BmpfPY0LwDUns59P9MayEtr+CZ/
+         CNIWn1uJBy2RJ+6CTNiS464MGa7AnBtSIofoNQtAoayqYDAbQKoOh23HGVczZeRXvKIP
+         Qvp7Q9wv17sufwaXZM1vCmiQBLEJcLdymOT3VfRZrQ/Nktnzgoq8F6RF9K+QNmj14FQx
+         NUzQ==
+X-Gm-Message-State: ACrzQf3h8U6BKFgY2bZeqcunHca+qspCUOF3J5fEcx6tEJXqUHnErXH3
+        adj+oNgSF+Gp+7HzdXcVrd4=
+X-Google-Smtp-Source: AMsMyM6vwdAsY7KinVXJMHyPxPpqrdQ/wNM1Ho0qlIueUgBZmzwv11T342tFeKwcw7BjQudiO+GfBw==
+X-Received: by 2002:a17:907:3d88:b0:7ae:943:1cc2 with SMTP id he8-20020a1709073d8800b007ae09431cc2mr25128404ejc.675.1667814513845;
+        Mon, 07 Nov 2022 01:48:33 -0800 (PST)
+Received: from orome (p200300e41f201d00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f20:1d00:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id e17-20020a50fb91000000b0045bd14e241csm3931494edq.76.2022.11.07.01.48.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Nov 2022 01:48:33 -0800 (PST)
+Date:   Mon, 7 Nov 2022 10:48:31 +0100
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Robin Murphy <robin.murphy@arm.com>
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Prathamesh Shete <pshete@nvidia.com>, joro@8bytes.org,
+        adrian.hunter@intel.com, jonathanh@nvidia.com,
+        p.zabel@pengutronix.de, linux-mmc@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
+        will@kernel.org, iommu@lists.linux.dev, anrao@nvidia.com,
+        smangipudi@nvidia.com, kyarlagadda@nvidia.com,
+        Thierry Reding <treding@nvidia.com>
+Subject: Re: [PATCH v10 1/4] iommu: Always define struct iommu_fwspec
+Message-ID: <Y2jUb3UNeEJVekYS@orome>
+References: <CAPDyKFqJdiCDkAfrONfnBVKw1v8=jZ+hEJiKGK70EQ4o7BSxaQ@mail.gmail.com>
+ <20221103043852.24718-1-pshete@nvidia.com>
+ <6be39bae-f325-12e0-374b-a27c9ee2ef2b@arm.com>
+ <Y2PJq27wkVwPg6rp@orome>
+ <CAPDyKFq8szzryFBNkw20wFoPTbAa8YDy0wJnb57yckZ-HFTAMw@mail.gmail.com>
+ <4cae5c8d-d6e9-79dc-670d-22ec9fda10a2@arm.com>
 MIME-Version: 1.0
-References: <00000000000058d01705ecddccb0@google.com>
-In-Reply-To: <00000000000058d01705ecddccb0@google.com>
-From:   Alexander Potapenko <glider@google.com>
-Date:   Mon, 7 Nov 2022 10:46:13 +0100
-Message-ID: <CAG_fn=WAyOc+1GEC+P3PpTM2zLcLcepAX1pPXkj5C6aPyrDVUA@mail.gmail.com>
-Subject: Re: [syzbot] KMSAN: uninit-value in pagecache_write
-To:     syzbot <syzbot+9767be679ef5016b6082@syzkaller.appspotmail.com>
-Cc:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        tytso@mit.edu
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="jYpMxqzTZ1vFLQJC"
+Content-Disposition: inline
+In-Reply-To: <4cae5c8d-d6e9-79dc-670d-22ec9fda10a2@arm.com>
+User-Agent: Mutt/2.2.7 (2022-08-07)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,87 +85,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 7, 2022 at 10:10 AM syzbot
-<syzbot+9767be679ef5016b6082@syzkaller.appspotmail.com> wrote:
->
-> Hello,
->
-> syzbot found the following issue on:
->
-> HEAD commit:    968c2729e576 x86: kmsan: fix comment in kmsan_shadow.c
-> git tree:       https://github.com/google/kmsan.git master
-> console output: https://syzkaller.appspot.com/x/log.txt?x=11d01ad6880000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=131312b26465c190
-> dashboard link: https://syzkaller.appspot.com/bug?extid=9767be679ef5016b6082
-> compiler:       clang version 15.0.0 (https://github.com/llvm/llvm-project.git 610139d2d9ce6746b3c617fb3e2f7886272d26ff), GNU ld (GNU Binutils for Debian) 2.35.2
-> userspace arch: i386
->
-> Unfortunately, I don't have any reproducer for this issue yet.
->
-> Downloadable assets:
-> disk image: https://storage.googleapis.com/syzbot-assets/c78ce21b953f/disk-968c2729.raw.xz
-> vmlinux: https://storage.googleapis.com/syzbot-assets/22868d826804/vmlinux-968c2729.xz
->
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+9767be679ef5016b6082@syzkaller.appspotmail.com
->
-> =====================================================
-> BUG: KMSAN: uninit-value in pagecache_write+0x655/0x720 fs/ext4/verity.c:91
->  pagecache_write+0x655/0x720 fs/ext4/verity.c:91
->  ext4_write_merkle_tree_block+0x84/0xa0 fs/ext4/verity.c:389
->  build_merkle_tree_level+0x972/0x1250 fs/verity/enable.c:121
->  build_merkle_tree fs/verity/enable.c:182 [inline]
->  enable_verity+0xede/0x1920 fs/verity/enable.c:268
->  fsverity_ioctl_enable+0x895/0xab0 fs/verity/enable.c:392
->  __ext4_ioctl fs/ext4/ioctl.c:1572 [inline]
->  ext4_ioctl+0x26dd/0x8c50 fs/ext4/ioctl.c:1606
->  ext4_compat_ioctl+0x702/0x800 fs/ext4/ioctl.c:1682
->  __do_compat_sys_ioctl fs/ioctl.c:968 [inline]
->  __se_compat_sys_ioctl+0x781/0xfa0 fs/ioctl.c:910
->  __ia32_compat_sys_ioctl+0x8f/0xd0 fs/ioctl.c:910
->  do_syscall_32_irqs_on arch/x86/entry/common.c:112 [inline]
->  __do_fast_syscall_32+0xa2/0x100 arch/x86/entry/common.c:178
->  do_fast_syscall_32+0x33/0x70 arch/x86/entry/common.c:203
->  do_SYSENTER_32+0x1b/0x20 arch/x86/entry/common.c:246
->  entry_SYSENTER_compat_after_hwframe+0x70/0x82
->
-> Local variable fsdata created at:
->  pagecache_write+0x21c/0x720 fs/ext4/verity.c:85
->  ext4_write_merkle_tree_block+0x84/0xa0 fs/ext4/verity.c:389
->
-> CPU: 1 PID: 15121 Comm: syz-executor.3 Not tainted 6.0.0-rc5-syzkaller-48543-g968c2729e576 #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/11/2022
-> =====================================================
 
-This is identical to other reports fixed in
-https://lore.kernel.org/lkml/20220915150417.722975-43-glider@google.com/
-To fix the error, we need to initialize fsdata explicitly, because
-aops->write_begin is not guaranteed to do so:
+--jYpMxqzTZ1vFLQJC
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-=============================================================================
-   ext4: initialize fsdata in pagecache_write()
+On Thu, Nov 03, 2022 at 05:35:19PM +0000, Robin Murphy wrote:
+[...]
+> Now, there does happen to be a tacit contract between the ACPI IORT code =
+and
+> the Arm SMMU drivers for how SMMU StreamIDs are encoded in their respecti=
+ve
+> fwspecs, but it was never intended for wider consumption. If Tegra drivers
+> want to have a special relationship with arm-smmu then fair enough, but t=
+hey
+> can do the same as MSM and formalise it somewhere that the SMMU driver
+> maintainers are at least aware of, rather than holding the whole generic
+> IOMMU API hostage.
 
-    When aops->write_begin() does not initialize fsdata, KMSAN reports
-    an error passing the latter to aops->write_end().
+Are you talking about qcom_adrena_smmu_is_gpu_device()? That's the only
+place I can find where MSM uses iommu_fwspec directly and in a "special"
+way.
 
-    Fix this by unconditionally initializing fsdata.
+> Since apparently it wasn't clear, what I was proposing is a driver helper=
+ at
+> least something like this:
+>=20
+> int tegra_arm_smmu_streamid(struct device *dev)
+> {
+> #ifdef CONFIG_IOMMU_API
+> 	struct iommu_fwspec *fwspec =3D dev_iommu_fwspec_get(dev)
+>=20
+> 	if (fwspec && fwspec->num_ids =3D=3D 1)
+> 		return fwspec->ids[0] & 0xffff;
+> #endif
+> 	return -EINVAL;
+> }
 
-    Fixes: c93d8f885809 ("ext4: add basic fs-verity support")
-    Reported-by: syzbot+9767be679ef5016b6082@syzkaller.appspotmail.com
-    Signed-off-by: Alexander Potapenko <glider@google.com>
+We actually also use this mechanism on devices that predate the ARM
+SMMU, so it'd need to be even more generic. Also, since we need to
+access this from a wide range of subsystems, it'd need to be in a
+centralized place. Do you think iommu.h would be acceptable for this?
 
-diff --git a/fs/ext4/verity.c b/fs/ext4/verity.c
-index 3c640bd7ecaeb..30e3b65798b50 100644
---- a/fs/ext4/verity.c
-+++ b/fs/ext4/verity.c
-@@ -79,7 +79,7 @@ static int pagecache_write(struct inode *inode,
-const void *buf, size_t count,
-                size_t n = min_t(size_t, count,
-                                 PAGE_SIZE - offset_in_page(pos));
-                struct page *page;
--               void *fsdata;
-+               void *fsdata = NULL;
-                int res;
+How about if I also add a comment to struct iommu_fwspec about the
+intended use?
 
-                res = aops->write_begin(NULL, mapping, pos, n, &page, &fsdata);
-=============================================================================
+Thierry
+
+--jYpMxqzTZ1vFLQJC
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmNo1G8ACgkQ3SOs138+
+s6G+AhAAuekGtAmbQT+FO9REjTNcbYsrloj9hB5mgAnet2fyTFqbqaJUeyxXAbqI
+F8DfTRRkDH4ivVN3LCySjQxJlP4Gsjs+pokCFZ9fHmUZLXYiVgCMIC1c58c6+NTp
+7Zxl4zim6O9d9xI6FqCPhraTLHtfb30IjNi351Ql2D6qzoUsJvqoctKwlDTmddP0
+vLaAfr1b3c4CYkSd+UkKV7JXWwAtKc+NiXUUpFDNPXA/7XF6M8DGHOGEPsjiPrjw
+Y0y/jixRtybEBixlgEBdDBadi7r2NQ7aKTXSt6U2Y8Z5s939/FL9VXBx6GVGRa3s
+KYZZoJ1Rdk13Q4ZEKj7pcvjdbduIskOtMyKAEOt/pKa+/Mc/y2p1L4PArwo4wFUn
+VGAhRQsFdFHTzNxanwyK6MuTCYXahA1WdSVlAd8dqrVyG9xefH5QD8ty8muwmIJS
+OshziqAHJPPOpPNXEKfXNnIvil+oUkdazKbRyBuybQJpcECcz597WQrzbhuY1BFn
+RWq2lneqzXIeiidn7+vyWxfgjzd8aASh6N3A4T+SYcbNEDvkdtJsahZxF9EFesyT
+s85i1sseVWa+UPFtKds8AKcAg9AzHm40ZJixa/YzNQ8jEH+R14getVCULMLrvYqy
+88RHhjDdRmxg/cxB3Ao+NzP7Lf3KzHcDSit2pVLxh2HXZ0Lb6dw=
+=IlwD
+-----END PGP SIGNATURE-----
+
+--jYpMxqzTZ1vFLQJC--
