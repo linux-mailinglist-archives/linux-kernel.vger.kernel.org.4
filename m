@@ -2,80 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80A1461ECA7
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 09:10:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE82761ECA8
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 09:11:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231514AbiKGIKz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 03:10:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59314 "EHLO
+        id S231570AbiKGILV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 03:11:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229751AbiKGIKu (ORCPT
+        with ESMTP id S229751AbiKGILT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 03:10:50 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C47813F4E;
-        Mon,  7 Nov 2022 00:10:49 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 0197E1F88F;
-        Mon,  7 Nov 2022 08:10:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1667808648; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        Mon, 7 Nov 2022 03:11:19 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8D4913F5A
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 00:11:18 -0800 (PST)
+Date:   Mon, 7 Nov 2022 09:11:11 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1667808676;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=wn3C4j2tq7Ric7uA1MiKmrtd6ucRBH8DGKc7HC5CU8o=;
-        b=rDQ0tXHzYEcdlM3iWOS0EHADYuBi7DO5PHDgE5TyXP1fjjQNDPFBRe40t/zcDzPbLvqaPF
-        2s6I7xtIEfoHIkCa5kAy7ZgQd3/FDdVOYSDEduOuOH0Fvg1I5oALqj608NhgfgLopujlTT
-        /8jE+fvvInBhTN1O/i1aYp8wYC3J7Nw=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D097813AC7;
-        Mon,  7 Nov 2022 08:10:47 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id FpPsL4e9aGNSIAAAMHmgww
-        (envelope-from <mhocko@suse.com>); Mon, 07 Nov 2022 08:10:47 +0000
-Date:   Mon, 7 Nov 2022 09:10:47 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Leonardo =?iso-8859-1?Q?Br=E1s?= <leobras@redhat.com>
-Cc:     Ingo Molnar <mingo@redhat.com>,
+        bh=i8TWACLbeYPnb6i/itaQfQovVtDzXJg8yp8PNvc/44Q=;
+        b=zmxysgUqLH6g5w/1nWOrfc/ALVKleShJAX8HIRN9lFfn1IKvjXnsff41mJ8hsN0dAVWPWr
+        E0j8+fkfLKLIjkpXKm2KjPguDeBLe4Fn7m6eXHvlGx0WGGcIRyjIvJ7eGyI/quBTWOfWgI
+        LEQMk8VWtufQD9f6mSQ2nI7rRMaOzhgnCRp1XnbpteQvsNL1y33FqZlKaZiwcp8HLuMHCd
+        9Lu+19va6fiaZWoUYW0CIsOru99oCT8V0czJUg5snTYsax7rdjEkA73ELnFf9u9YcwI79j
+        fMaejeHz6u5aSnkjslPSKHYgvKoBwTdYIwtX5YKl2d+Al6O4Q7H2Em4UYoYDIA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1667808676;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=i8TWACLbeYPnb6i/itaQfQovVtDzXJg8yp8PNvc/44Q=;
+        b=FAEwpyxGhgJXoSIYFfrcaUo2qmiBe43afbJgDwk/Q9PvG5/3cAq2Zc+3yrriFSMy5OkL91
+        X0I1zwywyWtKFUCg==
+From:   Anna-Maria Behnsen <anna-maria@linutronix.de>
+To:     Frederic Weisbecker <frederic@kernel.org>
+cc:     linux-kernel@vger.kernel.org,
         Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Phil Auld <pauld@redhat.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: Re: [PATCH v1 0/3] Avoid scheduling cache draining to isolated cpus
-Message-ID: <Y2i9h+TRdX9EOs0T@dhcp22.suse.cz>
-References: <20221102020243.522358-1-leobras@redhat.com>
- <Y2IwHVdgAJ6wfOVH@dhcp22.suse.cz>
- <07810c49ef326b26c971008fb03adf9dc533a178.camel@redhat.com>
- <Y2Pe45LHANFxxD7B@dhcp22.suse.cz>
- <0183b60e79cda3a0f992d14b4db5a818cd096e33.camel@redhat.com>
- <Y2TQLavnLVd4qHMT@dhcp22.suse.cz>
- <3c4ae3bb70d92340d9aaaa1856928476641a8533.camel@redhat.com>
+        John Stultz <jstultz@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Eric Dumazet <edumazet@google.com>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Arjan van de Ven <arjan@infradead.org>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Frederic Weisbecker <fweisbec@gmail.com>,
+        Rik van Riel <riel@surriel.com>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, Theodore Ts'o <tytso@mit.edu>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Stephen Boyd <sboyd@kernel.org>, Tejun Heo <tj@kernel.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>
+Subject: Re: [PATCH v4 05/16] add_timer_on(): Make sure callers have TIMER_PINNED
+ flag
+In-Reply-To: <20221104164342.GA1440400@lothringen>
+Message-ID: <f72b4d5d-493d-916-5d19-2bf87e8c41e1@linutronix.de>
+References: <20221104145737.71236-1-anna-maria@linutronix.de> <20221104145737.71236-6-anna-maria@linutronix.de> <20221104164342.GA1440400@lothringen>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <3c4ae3bb70d92340d9aaaa1856928476641a8533.camel@redhat.com>
+Content-Type: text/plain; charset=US-ASCII
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -85,136 +69,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 04-11-22 22:45:58, Leonardo Brás wrote:
-> On Fri, 2022-11-04 at 09:41 +0100, Michal Hocko wrote:
-> > On Thu 03-11-22 13:53:41, Leonardo Brás wrote:
-> > > On Thu, 2022-11-03 at 16:31 +0100, Michal Hocko wrote:
-> > > > On Thu 03-11-22 11:59:20, Leonardo Brás wrote:
-> > [...]
-> > > > > I understand there will be a locking cost being paid in the isolated CPUs when:
-> > > > > a) The isolated CPU is requesting the stock drain,
-> > > > > b) When the isolated CPUs do a syscall and end up using the protected structure
-> > > > > the first time after a remote drain.
-> > > > 
-> > > > And anytime the charging path (consume_stock resp. refill_stock)
-> > > > contends with the remote draining which is out of control of the RT
-> > > > task. It is true that the RT kernel will turn that spin lock into a
-> > > > sleeping RT lock and that could help with potential priority inversions
-> > > > but still quite costly thing I would expect.
-> > > > 
-> > > > > Both (a) and (b) should happen during a syscall, and IIUC the a rt workload
-> > > > > should not expect the syscalls to be have a predictable time, so it should be
-> > > > > fine.
-> > > > 
-> > > > Now I am not sure I understand. If you do not consider charging path to
-> > > > be RT sensitive then why is this needed in the first place? What else
-> > > > would be populating the pcp cache on the isolated cpu? IRQs?
-> > > 
-> > > I am mostly trying to deal with drain_all_stock() calling schedule_work_on() at
-> > > isolated_cpus. Since the scheduled drain_local_stock() will be competing for cpu
-> > > time with the RT workload, we can have preemption of the RT workload, which is a
-> > > problem for meeting the deadlines.
+On Fri, 4 Nov 2022, Frederic Weisbecker wrote:
+
+> On Fri, Nov 04, 2022 at 03:57:26PM +0100, Anna-Maria Behnsen wrote:
+> > The implementation of the hierachical timer pull model will change the
+> > timer bases per CPU. Timers, that have to expire on a specific CPU, require
+> > the TIMER_PINNED flag. Otherwise they will be queued on the dedicated CPU
+> > but in global timer base and those timers could also expire on other
+> > CPUs. Timers with TIMER_DEFERRABLE flag end up in a separate base anyway
+> > and are executed on the local CPU only.
 > > 
-> > Yes, this is understood. But it is not really clear to me why would any
-> > draining be necessary for such an isolated CPU if no workload other than
-> > the RT (which pressumably doesn't charge any memory?) is running on that
-> > CPU? Is that the RT task during the initialization phase that leaves
-> > that cache behind or something else?
+> > Therefore add the missing TIMER_PINNED flag for those callers who use
+> > add_timer_on() without the flag. No functional change.
 > 
-> (I am new to this part of the code, so please correct me when I miss something.)
+> You're fixing the current callers but what about the future ones?
 > 
-> IIUC, if a process belongs to a control group with memory control, the 'charge'
-> will happen when a memory page starts getting used by it.
-
-Yes, very broadly speaking.
-
-> So, if we assume a RT load in a isolated CPU will not charge any memory, we are
-> assuming it will never be part of a memory-controlled cgroup.
-
-If the memory cgroup controler is enabled then each user space process
-is a part of some memcg. If there is no specific memcg assigned then it
-will be a root cgroup and that is skipped during most charges except for
-kmem.
-
-> I mean, can we just assume this? 
+> add_timer_on() should always guarantee that a timer runs on the
+> right destination, which is not the case after your patchset if the
+> timer hasn't been set to TIMER_PINNED.
 > 
-> If I got that right, would not that be considered a limitation? like
-> "If you don't want your workload to be interrupted by perCPU cache draining,
-> don't put it in a cgroup with memory control".
-
-We definitely do not want userspace make any assumptions on internal
-implementation details like caches.
-
-> > Sorry for being so focused on this
-> > but I would like to understand on whether this is avoidable by a
-> > different startup scheme or it really needs to be addressed in some way.
+> Therefore I think we should either have:
 > 
-> No worries, I am in fact happy you are giving it this much attention :)
+> * add_timer_on() enforce TIMER_PINNED (doesn't work because if the timer is
+>   later called with mod_timer(), we should expect it to run anywhere)
 > 
-> I also understand this is a considerable change in the locking strategy, and
-> avoiding that is the first thing that should be tried.
+> or
 > 
-> > 
-> > > One way I thought to solve that was introducing a remote drain, which would
-> > > require a different strategy for locking, since not all accesses to the pcp
-> > > caches would happen on a local CPU. 
-> > 
-> > Yeah, I am not supper happy about additional spin lock TBH. One
-> > potential way to go would be to completely avoid pcp cache for isolated
-> > CPUs. That would have some performance impact of course but on the other
-> > hand it would give a more predictable behavior for those CPUs which
-> > sounds like a reasonable compromise to me. What do you think?
+> * add_timer_on() warns if !TIMER_PINNED
+
+This is already part of the last patch of the queue where also the
+crystalball logic is removed. But the patch where I added the WARN_ONCE()
+might be the wrong patch, it should be better part of the next patch where
+the new timer bases are introduced.
+
+> or
 > 
-> You mean not having a perCPU stock, then? 
-> So consume_stock() for isolated CPUs would always return false, causing
-> try_charge_memcg() always walking the slow path?
-
-Exactly.
-
-> IIUC, both my proposal and yours would degrade performance only when we use
-> isolated CPUs + memcg. Is that correct?
-
-Yes, with a notable difference that with your spin lock option there is
-still a chance that the remote draining could influence the isolated CPU
-workload throug that said spinlock. If there is no pcp cache for that
-cpu being used then there is no potential interaction at all.
-
-> If so, it looks like the impact would be even bigger without perCPU stock ,
-> compared to introducing a spinlock.
+> * have an internal flag TIMER_LOCAL, that is turned on when
+>   add_timer_on() is called or add_timer()/mod_timer() is called
+>   on a TIMER_PINNED. Otherwise it is turned off.
 > 
-> Unless, we are counting to this case where a remote CPU is draining an isolated
-> CPU, and the isolated CPU faults a page, and has to wait for the spinlock to be
-> released in the remote CPU. Well, this seems possible to happen, but I would
-> have to analyze how often would it happen, and how much would it impact the
-> deadlines. I *guess* most of the RT workload's memory pages are pre-faulted
-> before its starts, so it can avoid the faulting latency, but I need to confirm
-> that.
+> The last solution should work with existing API and you don't need to
+> chase the current and future users of add_timer_on().
 
-Yes, that is a general practice and the reason why I was asking how real
-of a problem that is in practice. It is true true that appart from user
-space memory which can be under full control of the userspace there are
-kernel allocations which can be done on behalf of the process and those
-could be charged to memcg as well. So I can imagine the pcp cache could
-be populated even if the process is not faulting anything in during RT
-sensitive phase.
+With the last approach it doesn't matter how the timer is setup. Everything
+is done by timer code implicitly. When a future caller uses add_timer_on()
+and wants to modfiy this "implicitly pinned timer", he will call
+mod_timer() and the timer is no longer pinned (if it do not end up in the
+same bucket it was before). For a user this does not seems to be very
+obvious, or am I wrong?
 
-> On the other hand, compared to how it works now now, this should be a more
-> controllable way of introducing latency than a scheduled cache drain.
-> 
-> Your suggestion on no-stocks/caches in isolated CPUs would be great for
-> predictability, but I am almost sure the cost in overall performance would not
-> be fine.
+But if the caller sets up the timer correctly we do not need this extra
+timer flag. With the WARN_ONCE() in place, callers need to do the timer
+setup properly and it is more clear to the caller what should be done.
 
-It is hard to estimate the overhead without measuring that. Do you think
-you can give it a try? If the performance is not really acceptable
-(which I would be really surprised) then we can think of a more complex
-solution.
+BTW, the hunk in this patch for the workqueue is also not a final fix in my
+opinion. I'm preparing a cleanup queue (it's part of the deferrable cleanup
+queue), where I want to set the timer flags properly when
+initializing/defining the workers. I should have added a comment here...
 
-> With the possibility of prefaulting pages, do you see any scenario that would
-> introduce some undesirable latency in the workload?
+Thanks,
 
-My primary concern would be spin lock contention which is hard to
-predict with something like remote draining.
--- 
-Michal Hocko
-SUSE Labs
+	Anna-Maria
+
