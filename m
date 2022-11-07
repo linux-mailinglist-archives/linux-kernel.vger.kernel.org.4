@@ -2,96 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C268C61FB87
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 18:36:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B62A61FB89
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 18:36:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232896AbiKGRgY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 12:36:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47800 "EHLO
+        id S229695AbiKGRgc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 12:36:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229695AbiKGRgX (ORCPT
+        with ESMTP id S232907AbiKGRg1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 12:36:23 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 982EF639C;
-        Mon,  7 Nov 2022 09:36:22 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 363CD611C0;
-        Mon,  7 Nov 2022 17:36:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ABBFCC433C1;
-        Mon,  7 Nov 2022 17:36:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667842581;
-        bh=AwBvVZIF9qlgA475hSkeq7qNy18IbEKQETL/LT5Aeqc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gIH2JjakcJY2CmwdiPDKG8y+DI2GCGN/BUntJ6gnHTb9fCs3ZgiXxQF2mgS0g8d60
-         LKnoSnHdsrnXYZvkkQedSobAV7/FMDbQlsnp8QW2n6KP8VEE6NEsMfF2OlP2QpupQ9
-         ROMCdiFjpZQvXcJJdD5/PtrV6D0SGEoMyrTAt6PhcYPJ6bnpexzC6dXs8/UF42BER1
-         BiW3BdLi6k38YZcPbiq7t1wzTP/vpe2Uh8bWQY0tl4xdC24qljQeK2CJDQq5+sdWpQ
-         o46w6j54+j8YBFx8Y4WR09Hzup0DCcCx0kUw3Oh+FdNwpbhfGecJzhRoOLisvhKc6A
-         qnSAKuPfZ2ANA==
-Date:   Mon, 7 Nov 2022 11:36:18 -0600
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Melody Olvera <quic_molvera@quicinc.com>
-Cc:     Andy Gross <agross@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Taniya Das <quic_tdas@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 2/5] dt-bindings: clock: Add RPMHCC bindings for
- QDU1000 and QRU1000
-Message-ID: <20221107173618.ws5rrqbrmtu22iut@builder.lan>
-References: <20221026190441.4002212-1-quic_molvera@quicinc.com>
- <20221026190441.4002212-3-quic_molvera@quicinc.com>
+        Mon, 7 Nov 2022 12:36:27 -0500
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 471D822B25
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 09:36:26 -0800 (PST)
+Received: by mail-pg1-x52e.google.com with SMTP id r18so11052858pgr.12
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 09:36:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=gq58p71OCZRt35pItCxZvZwXEFwO9+Zb8yr9Gn+0PNk=;
+        b=K3wDrQzU0lkOt2BVdHY4QcXBLK80/FMNghlhn7+jBoEcXZUO98pFwFjJa8aPm3EgSr
+         lY6t0gsDrWSXhX8WuS7EqJGzo/JgElfm7lWxXUc+42CEP+gwwkjSW+c9TNoOrma3BnTp
+         k3y3WywnethziJX6pT5AGFdDnbJ8Dbt4nVsLgyO2Pn+XRzvoxyB+Xyyey0sJVcn6wqOK
+         4gwhj66DRxdLIbdUqtyDizXjbMeaEB7KpoY7zmUUUajlFA3ycE5k0CGmAc1Ox/vSnsIZ
+         fFy5ErzgerC3LAuhK5zdUD0yHLmWJS1LTZvLUgU+IKd1NiduBDzgb9v9/YTTM7G9PoeK
+         7u9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gq58p71OCZRt35pItCxZvZwXEFwO9+Zb8yr9Gn+0PNk=;
+        b=rr1f3iqj6GiCkrstmrnIZNperumlgc8xDjcMiyumxSnaTgDx2Cl7+odmpsXYfuN0J5
+         Cf0RXbvQ4kJEjlH2VyLuvc0OhfphcCW/+qUUJHRfNj72/V3mt4UaXMY0vzpzTJg6kzpt
+         YPvYkqRcs0dZIkbkrwuW5/NEMOrvlNjV1UIAXG8ortbpLGP/wy/EtsC51SxOGugBVeol
+         fx3UcVeqt3nEMR6WKICPxJ2qkVqBYgEWHoAXECfZCHM5kwx2OvX14ENVHulevl2igVhf
+         XmE64UeBatYnPK9FIro1MjqMRO6B4GvZGRewD4ybyJBuIe6g8Ox9Zmo4Nh1B7krMHAL7
+         M+Sg==
+X-Gm-Message-State: ACrzQf1evcABGtu21h2xg2NY8OYh9Fmpy7sr3pBfLbltTYpMvq05NdmG
+        YX32IEgEquyNyda6e8bHTx/YCOH+fDKSNg==
+X-Google-Smtp-Source: AMsMyM7cYRsugV897xl/VuHBggB96zDE4/VylwMMBycPArzVqgAR1ZrJVL/MTRBgPPXsi33DuzJIfg==
+X-Received: by 2002:a05:6a00:4508:b0:56d:8afe:b7c1 with SMTP id cw8-20020a056a00450800b0056d8afeb7c1mr40069381pfb.29.1667842585648;
+        Mon, 07 Nov 2022 09:36:25 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id d10-20020a17090a2a4a00b00200a85fa777sm6513109pjg.1.2022.11.07.09.36.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Nov 2022 09:36:25 -0800 (PST)
+Date:   Mon, 7 Nov 2022 17:36:21 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Yu Zhang <yu.c.zhang@linux.intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] KVM: VMX: Do not trap VMFUNC instructions for L1 guests.
+Message-ID: <Y2lCFUbAFnbzyKzO@google.com>
+References: <20221107082727.1355797-1-yu.c.zhang@linux.intel.com>
+ <c8f036f4-6ab1-efbe-dd60-b934c21cb21d@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221026190441.4002212-3-quic_molvera@quicinc.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <c8f036f4-6ab1-efbe-dd60-b934c21cb21d@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 26, 2022 at 12:04:38PM -0700, Melody Olvera wrote:
-> Add compatible strings for RPMHCC for QDU1000 and QRU1000.
+On Mon, Nov 07, 2022, Paolo Bonzini wrote:
+> On 11/7/22 09:27, Yu Zhang wrote:
+> > VMFUNC is not supported for L1 guests, and executing VMFUNC in
+> > L1 shall generate a #UD directly. Just disable it in secondary
+> > proc-based execution control for L1, instead of intercepting it
+> > and inject the #UD again.
+> > 
+> > Signed-off-by: Yu Zhang<yu.c.zhang@linux.intel.com>
 > 
-> Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
+> Is this for TDX or similar?  The reason for a patch should be mentioned in
+> the commit message.
 
-This is independent of the GCC binding/driver, so I fixed up the
-$subject per Krzysztof's feedback and picked the two patches.
+It's just a cleanup, but (a) it should be split over two patches as disabling
+VMFUNC for L1 is technically a functional change, where as the changes to
+nested_vmx_setup_ctls_msrs() are pure cleanups, and (b) the !guest_mode path in
+handle_vmfunc() should either be removed or turned into a KVM_BUG_ON().
 
-But like the PDC, it's better to post independent things separately.
+E.g.
 
-Thanks,
-Bjorn
+---
+ arch/x86/kvm/vmx/nested.c | 11 ++---------
+ arch/x86/kvm/vmx/vmx.c    |  7 ++++++-
+ 2 files changed, 8 insertions(+), 10 deletions(-)
 
-> ---
->  Documentation/devicetree/bindings/clock/qcom,rpmhcc.yaml | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/clock/qcom,rpmhcc.yaml b/Documentation/devicetree/bindings/clock/qcom,rpmhcc.yaml
-> index 437a34b930e3..fccb91e78e49 100644
-> --- a/Documentation/devicetree/bindings/clock/qcom,rpmhcc.yaml
-> +++ b/Documentation/devicetree/bindings/clock/qcom,rpmhcc.yaml
-> @@ -17,6 +17,7 @@ description: |
->  properties:
->    compatible:
->      enum:
-> +      - qcom,qdu1000-rpmh-clk
->        - qcom,sc7180-rpmh-clk
->        - qcom,sc7280-rpmh-clk
->        - qcom,sc8180x-rpmh-clk
-> -- 
-> 2.25.1
-> 
+diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
+index 0c62352dda6a..fa4130361187 100644
+--- a/arch/x86/kvm/vmx/nested.c
++++ b/arch/x86/kvm/vmx/nested.c
+@@ -5792,15 +5792,8 @@ static int handle_vmfunc(struct kvm_vcpu *vcpu)
+ 	struct vmcs12 *vmcs12;
+ 	u32 function = kvm_rax_read(vcpu);
+ 
+-	/*
+-	 * VMFUNC is only supported for nested guests, but we always enable the
+-	 * secondary control for simplicity; for non-nested mode, fake that we
+-	 * didn't by injecting #UD.
+-	 */
+-	if (!is_guest_mode(vcpu)) {
+-		kvm_queue_exception(vcpu, UD_VECTOR);
+-		return 1;
+-	}
++	if (KVM_BUG_ON(!is_guest_mode(vcpu), vcpu->kvm))
++		return -EIO;
+ 
+ 	vmcs12 = get_vmcs12(vcpu);
+ 
+diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+index 63247c57c72c..5a66c3c16c2d 100644
+--- a/arch/x86/kvm/vmx/vmx.c
++++ b/arch/x86/kvm/vmx/vmx.c
+@@ -4487,6 +4487,12 @@ static u32 vmx_secondary_exec_control(struct vcpu_vmx *vmx)
+ 				  SECONDARY_EXEC_VIRTUAL_INTR_DELIVERY);
+ 	exec_control &= ~SECONDARY_EXEC_VIRTUALIZE_X2APIC_MODE;
+ 
++	/*
++	 * KVM doesn't support VMFUNC for L1, but the control is set in KVM's
++	 * base configuration as KVM emulates VMFUNC[EPTP_SWITCHING] for L2.
++	 */
++	exec_control &= ~SECONDARY_EXEC_ENABLE_VMFUNC;
++
+ 	/* SECONDARY_EXEC_DESC is enabled/disabled on writes to CR4.UMIP,
+ 	 * in vmx_set_cr4.  */
+ 	exec_control &= ~SECONDARY_EXEC_DESC;
+@@ -6004,7 +6010,6 @@ static int (*kvm_vmx_exit_handlers[])(struct kvm_vcpu *vcpu) = {
+ 	[EXIT_REASON_RDSEED]                  = kvm_handle_invalid_op,
+ 	[EXIT_REASON_PML_FULL]		      = handle_pml_full,
+ 	[EXIT_REASON_INVPCID]                 = handle_invpcid,
+-	[EXIT_REASON_VMFUNC]		      = handle_vmx_instruction,
+ 	[EXIT_REASON_PREEMPTION_TIMER]	      = handle_preemption_timer,
+ 	[EXIT_REASON_ENCLS]		      = handle_encls,
+ 	[EXIT_REASON_BUS_LOCK]                = handle_bus_lock_vmexit,
+
+base-commit: 07341b10fcbd5a7ef18225e0e9a8a40d91e3a2cc
+-- 
+
+
+and then the pure cleanup that is made possible because KVM now does:
+
+	msrs->secondary_ctls_high = vmcs_conf->cpu_based_2nd_exec_ctrl;
+
+---
+ arch/x86/kvm/vmx/nested.c | 14 +++++---------
+ 1 file changed, 5 insertions(+), 9 deletions(-)
+
+diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
+index fa4130361187..981bf5b3a319 100644
+--- a/arch/x86/kvm/vmx/nested.c
++++ b/arch/x86/kvm/vmx/nested.c
+@@ -6801,6 +6801,7 @@ void nested_vmx_setup_ctls_msrs(struct vmcs_config *vmcs_conf, u32 ept_caps)
+ 		SECONDARY_EXEC_VIRTUAL_INTR_DELIVERY |
+ 		SECONDARY_EXEC_RDRAND_EXITING |
+ 		SECONDARY_EXEC_ENABLE_INVPCID |
++		SECONDARY_EXEC_ENABLE_VMFUNC |
+ 		SECONDARY_EXEC_RDSEED_EXITING |
+ 		SECONDARY_EXEC_XSAVES |
+ 		SECONDARY_EXEC_TSC_SCALING;
+@@ -6832,18 +6833,13 @@ void nested_vmx_setup_ctls_msrs(struct vmcs_config *vmcs_conf, u32 ept_caps)
+ 				SECONDARY_EXEC_ENABLE_PML;
+ 			msrs->ept_caps |= VMX_EPT_AD_BIT;
+ 		}
+-	}
+ 
+-	if (cpu_has_vmx_vmfunc()) {
+-		msrs->secondary_ctls_high |=
+-			SECONDARY_EXEC_ENABLE_VMFUNC;
+ 		/*
+-		 * Advertise EPTP switching unconditionally
+-		 * since we emulate it
++		 * Advertise EPTP switching irrespective of hardware support,
++		 * KVM emulates it in software so long as VMFUNC is supported.
+ 		 */
+-		if (enable_ept)
+-			msrs->vmfunc_controls =
+-				VMX_VMFUNC_EPTP_SWITCHING;
++		if (cpu_has_vmx_vmfunc())
++			msrs->vmfunc_controls = VMX_VMFUNC_EPTP_SWITCHING;
+ 	}
+ 
+ 	/*
+
+base-commit: 777dde94dd5e4328b419dcc5cb7118b39588eab1
+-- 
+
