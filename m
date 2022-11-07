@@ -2,72 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01B5F61FCC1
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 19:05:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9749161FCC4
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 19:06:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232490AbiKGSFk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 13:05:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46032 "EHLO
+        id S232711AbiKGSG1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 13:06:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232484AbiKGSFF (ORCPT
+        with ESMTP id S232920AbiKGSGD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 13:05:05 -0500
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CB8424BD2
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 10:02:03 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id c3-20020a1c3503000000b003bd21e3dd7aso10172741wma.1
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 10:02:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:user-agent:message-id:date:references:subject:cc:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=VuTsw6+GkSRwP58GovhtYe/JYxk+oyo+mlW8nXi3XHk=;
-        b=c9L+/2+mr+pVaf+wpuESBoLqmizXoqXWcAlhmtmu9t6DBk0yMBH8Uk0jEUCbKU9YLV
-         5oDUYWjLaGbzaTXz8G2w1DM+iE3tFkI+D8wq4Yrz9k4pId5WbgjBNvanKY3J8Q69aQsm
-         YQ/+H+U6bwxOh7QDA1Ntbys5xrUcQFdOE+3uIKnxEWq5TrZ0SAsQo9EHomlmfg6MPbGG
-         EYezTniaGhsm8bPey5aoHm6x2YZmfb5kaKjPrEImej3mAzM3/4JF/9f0FsiDzjwDOVs6
-         ZIFVtGSzxG+1xoFAEJxrHhJLcBqi6FqUpkbjnVeIu/92+M2eXVYBKfscHvgzjiIPc86Q
-         EDuA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:user-agent:message-id:date:references:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=VuTsw6+GkSRwP58GovhtYe/JYxk+oyo+mlW8nXi3XHk=;
-        b=hDq5plcqGlReZUcBw9DD4MF2TpoVwy/nfOp8moyeHTEiUt0UP4ZildAHTQgi2MDWRR
-         jJXuqNSml5NdKgNzsUlvUcbOR8b3OTUV+hXqn7cLrHhNmczWfPxhh+9Kg33sRDM7O3JN
-         tKzAsu91bAvJR9A4CXuEaNTjsS+RsKX5cKe/EwjYIK3sEuwazNZA53tKRJy86T1KT7oy
-         TDLTndcmSw/QLh8Yi+1xQf3Z6OTYGN1YIe+hn17SLZusMwYtmJ+V+dx+GXuFWOiXq9Ci
-         boTylafPCgJ4PH0kpgfGddfkPmh2kkHHRo6FYfh5O0Vq+UIvE0QvH4weM7yDYMRjq8Ry
-         Kmmw==
-X-Gm-Message-State: ACrzQf05oF1VlOkcJBM75hPk5pYa1AqZl42lcM629lZ7YvuID5AHL2cB
-        BKQEMPTe+6dha3spjOWUMj0rfw==
-X-Google-Smtp-Source: AMsMyM5nRAXExBmaX/9edNvRducHDs1nArzvmQSX0pCwzRaBpCURrnomLsO/Kxet7CldyN/wPn+q+w==
-X-Received: by 2002:a05:600c:4fd5:b0:3cf:9e9b:68f5 with SMTP id o21-20020a05600c4fd500b003cf9e9b68f5mr9168709wmq.60.1667844122108;
-        Mon, 07 Nov 2022 10:02:02 -0800 (PST)
-Received: from localhost ([95.148.15.66])
-        by smtp.gmail.com with ESMTPSA id n1-20020a5d4841000000b002366c3eefccsm7718037wrs.109.2022.11.07.10.02.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Nov 2022 10:02:01 -0800 (PST)
-From:   Punit Agrawal <punit.agrawal@bytedance.com>
-To:     Usama Arif <usama.arif@bytedance.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        kvmarm@lists.cs.columbia.edu, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, linux@armlinux.org.uk,
-        yezengruan@huawei.com, catalin.marinas@arm.com, will@kernel.org,
-        maz@kernel.org, steven.price@arm.com, mark.rutland@arm.com,
-        bagasdotme@gmail.com, fam.zheng@bytedance.com,
-        liangma@liangbit.com, punit.agrawal@bytedance.com
-Subject: Re: [v2 3/6] KVM: arm64: Support pvlock preempted via shared structure
-References: <20221104062105.4119003-1-usama.arif@bytedance.com>
-        <20221104062105.4119003-4-usama.arif@bytedance.com>
-Date:   Mon, 07 Nov 2022 18:02:01 +0000
-Message-ID: <8735au3ap2.fsf@stealth>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Mon, 7 Nov 2022 13:06:03 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB6B02A252
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 10:02:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667844168; x=1699380168;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=fDIy9GNTqYrRaEubc/ZHCrZPmxPfpeXIk3PMc/Gyqec=;
+  b=c68OYk9tZSXmJ8jCOPSEpjwn1321r/PurhpVfnV9daOcZvb9QrZVkFSy
+   3evjHV1Rjel6ReUEDVNZAzLEru7EO3NtiYD73V0EfzqKwlupDAhJjGs4K
+   eOjOjrFBJyR/U/euok33o2uiKezamnqsX3rKOFQEk/WOs//jpwobHEQrV
+   btCliQ5A7mT0xAJfCO2OiXoWraaYIOIfmnHy6Klcg614KqW1fafq6+Tdq
+   uZxEGGe/KkCIp7sq3YG0TiEIpGpqmG36qIWRqoMrJ443B9zv5Uopa5wkh
+   Bg3ouLBNFL1QB8QVspisxgFBZ1MD4RKqFqvS/mp/dctfk+r50PnwvDh0R
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10524"; a="290870719"
+X-IronPort-AV: E=Sophos;i="5.96,145,1665471600"; 
+   d="scan'208";a="290870719"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Nov 2022 10:02:48 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10524"; a="741598319"
+X-IronPort-AV: E=Sophos;i="5.96,145,1665471600"; 
+   d="scan'208";a="741598319"
+Received: from peggykes-mobl.amr.corp.intel.com (HELO [10.251.7.244]) ([10.251.7.244])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Nov 2022 10:02:47 -0800
+Message-ID: <b778fcdd-5c20-e897-9d17-1a884172a826@intel.com>
+Date:   Mon, 7 Nov 2022 10:02:44 -0800
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCHv11 04/16] x86/mm: Handle LAM on context switch
+Content-Language: en-US
+To:     "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Andy Lutomirski <luto@kernel.org>
+Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
+        Kostya Serebryany <kcc@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Taras Madan <tarasmadan@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Bharata B Rao <bharata@amd.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+References: <20221025001722.17466-1-kirill.shutemov@linux.intel.com>
+ <20221025001722.17466-5-kirill.shutemov@linux.intel.com>
+ <b38f15de-436e-489c-b8db-9beff4466748@kernel.org>
+ <20221107171419.k33qd4rz3tyfrovs@box.shutemov.name>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <20221107171419.k33qd4rz3tyfrovs@box.shutemov.name>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,59 +81,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Usama Arif <usama.arif@bytedance.com> writes:
-
-> Implement the service call for configuring a shared structure between a
-> VCPU and the hypervisor in which the hypervisor can tell whether the
-> VCPU is running or not.
->
-> The preempted field is zero if the VCPU is not preempted.
-> Any other value means the VCPU has been preempted.
->
-> Signed-off-by: Zengruan Ye <yezengruan@huawei.com>
-> Signed-off-by: Usama Arif <usama.arif@bytedance.com>
-> ---
->  Documentation/virt/kvm/arm/hypercalls.rst |  3 ++
->  arch/arm64/include/asm/kvm_host.h         | 18 ++++++++++
->  arch/arm64/include/uapi/asm/kvm.h         |  1 +
->  arch/arm64/kvm/Makefile                   |  2 +-
->  arch/arm64/kvm/arm.c                      |  8 +++++
->  arch/arm64/kvm/hypercalls.c               |  8 +++++
->  arch/arm64/kvm/pvlock.c                   | 43 +++++++++++++++++++++++
->  tools/arch/arm64/include/uapi/asm/kvm.h   |  1 +
->  8 files changed, 83 insertions(+), 1 deletion(-)
->  create mode 100644 arch/arm64/kvm/pvlock.c
->
-> diff --git a/Documentation/virt/kvm/arm/hypercalls.rst b/Documentation/virt/kvm/arm/hypercalls.rst
-> index 3e23084644ba..872a16226ace 100644
-> --- a/Documentation/virt/kvm/arm/hypercalls.rst
-> +++ b/Documentation/virt/kvm/arm/hypercalls.rst
-> @@ -127,6 +127,9 @@ The pseudo-firmware bitmap register are as follows:
->      Bit-1: KVM_REG_ARM_VENDOR_HYP_BIT_PTP:
->        The bit represents the Precision Time Protocol KVM service.
->  
-> +    Bit-2: KVM_REG_ARM_VENDOR_HYP_BIT_PV_LOCK:
-> +      The bit represents the Paravirtualized lock service.
+On 11/7/22 09:14, Kirill A. Shutemov wrote:
+> --- a/arch/x86/mm/tlb.c
+> +++ b/arch/x86/mm/tlb.c
+> @@ -561,7 +561,15 @@ void switch_mm_irqs_off(struct mm_struct *prev, struct mm_struct *next,
+>  	if (real_prev == next) {
+>  		VM_WARN_ON(this_cpu_read(cpu_tlbstate.ctxs[prev_asid].ctx_id) !=
+>  			   next->context.ctx_id);
+> -		VM_WARN_ON(prev_lam != new_lam);
 > +
->  Errors:
->  
->      =======  =============================================================
-> diff --git a/arch/arm64/include/asm/kvm_host.h b/arch/arm64/include/asm/kvm_host.h
-> index 45e2136322ba..18303b30b7e9 100644
-> --- a/arch/arm64/include/asm/kvm_host.h
-> +++ b/arch/arm64/include/asm/kvm_host.h
-> @@ -417,6 +417,11 @@ struct kvm_vcpu_arch {
->  		u64 last_steal;
->  		gpa_t base;
->  	} steal;
-> +
-> +	/* Guest PV lock state */
-> +	struct {
-> +		gpa_t base;
-> +	} pv;
+> +		/*
+> +		 * 'prev_lam' does not necessary match 'new_lam' here. In case
+> +		 * of race with LAM enabling, the updated 'lam_cr3_mask' can be
+> +		 * been before LAM-enabling IPI kicks in.
+> +		 *
+> +		 * The race is harmless: it is okay to update CR3 with new LAM
+> +		 * mode. The IPI will rewrite CR3 shortly.
+> +		 */
 
-Using "pv" for the structure isn't quite describing the usage well. It'd
-be better to call it "pv_lock" or "pvlock" at the least.
+So, let's do something like this in switch_mm_irqs_off():
 
-[...]
+		/* Not actually switching mm's */
+		VM_WARN_ON(this_cpu_read(cpu_tlbstate....
 
+		/*
+		 * If this races with another thread that enables
+		 * lam, 'new_lam' might not match 'prev_lam'.
+		 */
+
+Then, in enable_lam_func(), something like this:
+
+	/*
+	 * Update CR3 to get LAM active on the CPU
+	 *
+	 * This might not actually need to update CR3 if a context
+	 * switch happened between updating 'lam_cr3_mask' and
+	 * running this IPI handler.  Update it unconditionally for
+	 * simplicity.
+	 */
+	cr3 = __read_cr3();
+	cr3 &= ~(X86_CR3_LAM_U48 | X86_CR3_LAM_U57);
+	cr3 |= lam_mask;
+	write_cr3(cr3);
+	set_tlbstate_cr3_lam_mask(lam_mask);
+
+
+I'd much rather get folks thinking about IPI races in the IPI handler
+rather than thinking about the IPI handler in the context switch path.
+
+It's kinda silly to be describing the occasional superfluous
+enable_lam_func() activity from switch_mm_irqs_off().
