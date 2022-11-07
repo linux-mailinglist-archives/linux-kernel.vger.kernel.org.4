@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DA1F61EB79
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 08:15:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E32C61EB85
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 08:15:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231400AbiKGHPj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 02:15:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58160 "EHLO
+        id S231179AbiKGHPr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 02:15:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231211AbiKGHPU (ORCPT
+        with ESMTP id S231161AbiKGHP1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 02:15:20 -0500
-Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5501513D3F;
-        Sun,  6 Nov 2022 23:15:17 -0800 (PST)
-Received: by mail-qv1-xf30.google.com with SMTP id i12so7555431qvs.2;
-        Sun, 06 Nov 2022 23:15:17 -0800 (PST)
+        Mon, 7 Nov 2022 02:15:27 -0500
+Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5459913D43;
+        Sun,  6 Nov 2022 23:15:18 -0800 (PST)
+Received: by mail-qt1-x832.google.com with SMTP id c15so6424967qtw.8;
+        Sun, 06 Nov 2022 23:15:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Rujbv6bKgQOEyHFPYldtrR7Cpoq25BGO11nL2f1oX38=;
-        b=iSLvidCkZqtoV2Tl9IDn05Yg1hwAwzWvcwIQeK0ZGCShauUXjF5rgGeEORYUiFhhnB
-         cLOmsGvH388K/cokMP6/QjxfakJbvxydeqYSe6SsWhZ8l1bzmB9SbaiRk5J8iF+1CLXW
-         tW0a0bOuFM1VUyfJIYPC3tLdNssLw3phjq62I6MuKDwCZNhq0EYk6rwiewoxoluBBScq
-         tQsju5Z/c+6BMLtPIXMGiMD2LLWFaV+P3NtdWmcirSFtxYof35CNGmN6CaBXt5YVmNLC
-         qJLO6Rsbdqop1rw7cwM4ZCnvzQVmxyLnVtIKXWccwRiw05E9L+riGL9QrPnh6+tWkEG5
-         b8ig==
+        bh=FevbBLdguXCFmnA0gYiJMt8h51HW7EHdkkwF3DmVtiM=;
+        b=Oj0vqp+43Yq+/jWzQLRnuJhR+XUgWDl31H1CMGjjWKzn9r8KSbLXPNTvPdJEaZ5LZI
+         q0MoSips3u+fpLOOMflvcjpjvyHYCYof38b3K4RFWeTtVCT7vOqgzTstARhu2SGwZ5eN
+         RbfQACddReC7PUwmkvuMRr6z3s8M2BHVvamSCwAp+KQV6AKPJDYvBMPGskowB03uihae
+         DCxz4EXPbPSz3mxqN8S7a+Egc602hA2cYKRn/cia5q81vyKYiIQ0CIzpEgbpQaAM3j7e
+         nf6rKB1Rvpgv2X1vmH/u3iSF/JcwAOHP58jjUrs0TKhaG8DPnACLEyb9VSIJt2HrqZ04
+         5Atw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Rujbv6bKgQOEyHFPYldtrR7Cpoq25BGO11nL2f1oX38=;
-        b=uwKqv4zliM2o17TXwuxjdbfRZ4KBsS3DK/P+Na+PKAKDMAigIMiCu0Nt0tREZPgKs+
-         ZyUPHL2G9+QjB/Qus06k0oYGj920VbxPzSl/jyk+Ei1Ku59QY5GGuN1jlJDL8UyLlRHp
-         4hJFdnCjWzvG0SrQRTSROJnfpyTeblJUMG8zvO7mer/E8TmVeptUPVA0OWJYKIkhYojf
-         LxcuemBDGOps4uroKey+gnxvC0SP3CNipMhB+E9HpLtKeMfUs8jr8AuTcEwDsxPxbp1E
-         PCygaMQQBOPjCpfvCrhhBIS35CFb3RGVbCHAsafOsR1OA6BRmFu2XMXxpF7Bn+kS9LH/
-         N40g==
-X-Gm-Message-State: ACrzQf0nhW02ourOmEVUykHC6kbu/AYwsf/HsTRe07R1ry5xjcVTYZzd
-        zCqRDjhO7mEbvY523g8kxc4=
-X-Google-Smtp-Source: AMsMyM6KsjhgOm4uFsTfXn9s49un2+OpakxWD2QhahyM3daQtCGIEYlmtawlYkVmQj+Da5+ugT01Xg==
-X-Received: by 2002:a05:6214:5015:b0:4bb:5ce1:88c0 with SMTP id jo21-20020a056214501500b004bb5ce188c0mr42492042qvb.15.1667805316339;
-        Sun, 06 Nov 2022 23:15:16 -0800 (PST)
+        bh=FevbBLdguXCFmnA0gYiJMt8h51HW7EHdkkwF3DmVtiM=;
+        b=jM+/D7I9q6aFOaM8uZlWXkPtloGyo9XxF9lsRFQFh0CIWDnNUe0MAkJiv/59k6WtgY
+         edW7JjLvvtwiQ6ULPXehAEJ7PLC+RGIXDG38Jo/tg4wcoi42WubhW1lfG8D6vxUsgS8F
+         gWHY1fOzWq/I6ts+WG4RVHK3wS5BVJwK1129q0fGjDXoCEpaHqyrIq9Pndap2qz78Kaw
+         swKde++1oacE8MLjJqTmoElOHuv5X/wV5Bow1sJgClC/aP5tDw97jkTvNgjhA1xJDFNk
+         fof3oWC4pFencz34sEGiUtg4vxOa9lcQr46Cx3Dp07vCNm6jV2fYTr479mK6YZ+QXzN0
+         jCKQ==
+X-Gm-Message-State: ANoB5pkKnsMY4is+q9ZVsKo16W0zB9yzGfXCyA5xkBx9yRDJX2u97smo
+        hQbU5Vud0vq7gWcpfsv7sbI=
+X-Google-Smtp-Source: AA0mqf7SQASvWKnqHMl5xXSgn1OAMYbUQcQ7wyKnX1Z91mCBgs4y4/2sjwK3qPE81S9M9O3kpXEbRQ==
+X-Received: by 2002:a05:622a:11d0:b0:3a5:8ff2:8496 with SMTP id n16-20020a05622a11d000b003a58ff28496mr2679067qtk.302.1667805317449;
+        Sun, 06 Nov 2022 23:15:17 -0800 (PST)
 Received: from jesse-desktop.jtp-bos.lab (pool-108-26-185-122.bstnma.fios.verizon.net. [108.26.185.122])
-        by smtp.gmail.com with ESMTPSA id br8-20020a05620a460800b006cf38fd659asm6318428qkb.103.2022.11.06.23.15.15
+        by smtp.gmail.com with ESMTPSA id br8-20020a05620a460800b006cf38fd659asm6318428qkb.103.2022.11.06.23.15.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 06 Nov 2022 23:15:16 -0800 (PST)
+        Sun, 06 Nov 2022 23:15:17 -0800 (PST)
 From:   Jesse Taube <mr.bossman075@gmail.com>
 X-Google-Original-From: Jesse Taube <Mr.Bossman075@gmail.com>
 To:     linux-imx@nxp.com
@@ -63,10 +63,10 @@ Cc:     robh+dt@kernel.org, sboyd@kernel.org, shawnguo@kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-gpio@vger.kernel.org, linux-serial@vger.kernel.org,
-        Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [PATCH v1 3/7] dt-bindings: timer: gpt: Add i.MXRT compatible Documentation
-Date:   Mon,  7 Nov 2022 02:15:07 -0500
-Message-Id: <20221107071511.2764628-4-Mr.Bossman075@gmail.com>
+        Rob Herring <robh@kernel.org>
+Subject: [PATCH v1 4/7] dt-bindings: serial: fsl-lpuart: add i.MXRT1170 compatible
+Date:   Mon,  7 Nov 2022 02:15:08 -0500
+Message-Id: <20221107071511.2764628-5-Mr.Bossman075@gmail.com>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20221107071511.2764628-1-Mr.Bossman075@gmail.com>
 References: <20221107071511.2764628-1-Mr.Bossman075@gmail.com>
@@ -82,29 +82,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Both the i.MXRT1170 and 1050 have the same GPT timer as "fsl,imx6dl-gpt"
-Add i.MXRT to the compatible list.
+Add i.MXRT1170 compatible string to Documentation.
 
 Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
-Acked-by: Krzysztof Kozlowski <krzk@kernel.org>
+Acked-by: Rob Herring <robh@kernel.org>
 ---
- Documentation/devicetree/bindings/timer/fsl,imxgpt.yaml | 2 ++
- 1 file changed, 2 insertions(+)
+ Documentation/devicetree/bindings/serial/fsl-lpuart.yaml | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/timer/fsl,imxgpt.yaml b/Documentation/devicetree/bindings/timer/fsl,imxgpt.yaml
-index a4f51f46b7a1..716c6afcca1f 100644
---- a/Documentation/devicetree/bindings/timer/fsl,imxgpt.yaml
-+++ b/Documentation/devicetree/bindings/timer/fsl,imxgpt.yaml
-@@ -31,6 +31,8 @@ properties:
-           - enum:
-               - fsl,imx6sl-gpt
-               - fsl,imx6sx-gpt
-+              - fsl,imxrt1050-gpt
-+              - fsl,imxrt1170-gpt
-           - const: fsl,imx6dl-gpt
+diff --git a/Documentation/devicetree/bindings/serial/fsl-lpuart.yaml b/Documentation/devicetree/bindings/serial/fsl-lpuart.yaml
+index 30eaa62e1aed..74f75f669e77 100644
+--- a/Documentation/devicetree/bindings/serial/fsl-lpuart.yaml
++++ b/Documentation/devicetree/bindings/serial/fsl-lpuart.yaml
+@@ -32,6 +32,9 @@ properties:
+               - fsl,imx8qm-lpuart
+               - fsl,imx8dxl-lpuart
+           - const: fsl,imx8qxp-lpuart
++      - items:
++          - const: fsl,imxrt1050-lpuart
++          - const: fsl,imxrt1170-lpuart
  
    reg:
+     maxItems: 1
 -- 
 2.37.2
 
