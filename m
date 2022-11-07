@@ -2,164 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5554461F254
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 13:03:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51F9D61F2D1
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 13:21:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231600AbiKGMCc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 07:02:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33894 "EHLO
+        id S232113AbiKGMVT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 07:21:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231995AbiKGMCS (ORCPT
+        with ESMTP id S232055AbiKGMVR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 07:02:18 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E27B91AD87
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 04:02:16 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8B40CB81094
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 12:02:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31D2FC43470
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 12:02:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667822534;
-        bh=sMrVEIn/6RFB5zzer5oz4OA0rD8Fs/O31fttuhh2ODI=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=A+IsNmCCXPx77cjN8lAbm0Dlf8bwhj4P+kc4hkZwAcTEhv3+vexmH2jV9K2WpihAi
-         lCF8/iEik17YKNgKWm/9r67c3T5uufyhwgbfCiG1RKGCv+bIL5mMfDcLiej98K0Tta
-         YgvqClDYDYe+4dJEulVVMUr+ezuFvMDta0IV9zricBmogcIsMpkOHM4mnwDbdsCc9A
-         SO6DqtsYK+0OplfyqImRtnsNg7q17g03VuampXlgejeODv7f8OsPIe1btkpD//pOsM
-         WV6VGosHD6jxJjYSexEoasu+vq9M8TU4AUT1t3Yi7twM5TWOTeHcAM29jZBe/fC2FZ
-         pTR5RWUtERPAQ==
-Received: by mail-lf1-f47.google.com with SMTP id be13so16432775lfb.4
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 04:02:14 -0800 (PST)
-X-Gm-Message-State: ACrzQf3TiElDu1TuUXZgP+IIVdSTNALy/T7TXdgFpZbbzoNDZsWWEZVS
-        N1/ggmzq84HjDSs1S1N87VnbbJcCFs1dkb+hC/I=
-X-Google-Smtp-Source: AMsMyM6+E+32jdFkc+LUViYKxp7Bf55P8TksZfxa7MpXuoyBTXfc0PbhVTfOVwlYjKTJgx+PeZHeEzDWtRRWNkvdF0s=
-X-Received: by 2002:ac2:4c47:0:b0:4a2:c07b:4b62 with SMTP id
- o7-20020ac24c47000000b004a2c07b4b62mr16704586lfk.426.1667822532193; Mon, 07
- Nov 2022 04:02:12 -0800 (PST)
+        Mon, 7 Nov 2022 07:21:17 -0500
+Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D3201090;
+        Mon,  7 Nov 2022 04:21:16 -0800 (PST)
+Received: from pps.filterd (m0167088.ppops.net [127.0.0.1])
+        by mx0a-00128a01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2A79b1DM019772;
+        Mon, 7 Nov 2022 07:21:07 -0500
+Received: from nwd2mta3.analog.com ([137.71.173.56])
+        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3kpmgu4d2m-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 07 Nov 2022 07:21:07 -0500
+Received: from ASHBMBX9.ad.analog.com (ASHBMBX9.ad.analog.com [10.64.17.10])
+        by nwd2mta3.analog.com (8.14.7/8.14.7) with ESMTP id 2A7CL63Q056583
+        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 7 Nov 2022 07:21:06 -0500
+Received: from ASHBCASHYB4.ad.analog.com (10.64.17.132) by
+ ASHBMBX9.ad.analog.com (10.64.17.10) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.14; Mon, 7 Nov 2022 07:21:05 -0500
+Received: from ASHBMBX8.ad.analog.com (10.64.17.5) by
+ ASHBCASHYB4.ad.analog.com (10.64.17.132) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.14; Mon, 7 Nov 2022 07:21:04 -0500
+Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx8.ad.analog.com
+ (10.64.17.5) with Microsoft SMTP Server id 15.2.986.14 via Frontend
+ Transport; Mon, 7 Nov 2022 07:21:04 -0500
+Received: from amiclaus-VirtualBox.ad.analog.com (AMICLAUS-L02.ad.analog.com [10.48.65.106])
+        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 2A7CKrRJ022057;
+        Mon, 7 Nov 2022 07:20:55 -0500
+From:   Antoniu Miclaus <antoniu.miclaus@analog.com>
+To:     <jic23@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <linux-iio@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     Antoniu Miclaus <antoniu.miclaus@analog.com>
+Subject: [PATCH v2 1/3] dt-bindings: iio: frequency: add adf4377 doc
+Date:   Mon, 7 Nov 2022 14:02:41 +0200
+Message-ID: <20221107120243.57344-1-antoniu.miclaus@analog.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-References: <20221107114850.2902150-1-anshuman.khandual@arm.com>
-In-Reply-To: <20221107114850.2902150-1-anshuman.khandual@arm.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Mon, 7 Nov 2022 13:02:00 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXF2NyZS7cWiZiPBuySdFnpB_gcHa4KXieje4_G1-zCmog@mail.gmail.com>
-Message-ID: <CAMj1kXF2NyZS7cWiZiPBuySdFnpB_gcHa4KXieje4_G1-zCmog@mail.gmail.com>
-Subject: Re: [PATCH V2] arm64/mm: Simplify and document pte_to_phys() for 52
- bit addresses
-To:     Anshuman Khandual <anshuman.khandual@arm.com>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Mark Brown <broonie@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-ADIRuleOP-NewSCL: Rule Triggered
+X-Proofpoint-GUID: -ynHf3Z_6kwt6FBQIiIbEkpEtpKMsBxG
+X-Proofpoint-ORIG-GUID: -ynHf3Z_6kwt6FBQIiIbEkpEtpKMsBxG
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-07_04,2022-11-07_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 clxscore=1015
+ malwarescore=0 impostorscore=0 phishscore=0 priorityscore=1501 bulkscore=0
+ lowpriorityscore=0 mlxscore=0 suspectscore=0 spamscore=0 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
+ definitions=main-2211070100
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Anshuman,
+Add device tree bindings for the ADF4377 driver.
 
-On Mon, 7 Nov 2022 at 12:49, Anshuman Khandual
-<anshuman.khandual@arm.com> wrote:
->
-> pte_to_phys() assembly definition does multiple bits field transformations
-> to derive physical address, embedded inside a page table entry. Unlike its
-> C counter part i.e __pte_to_phys(), pte_to_phys() is not very apparent. It
-> simplifies these operations via a new macro PTE_ADDR_HIGH_SHIFT indicating
-> how far the pte encoded higher address bits need to be left shifted. While
-> here, this also updates __pte_to_phys() and __phys_to_pte_val().
->
-> Cc: Catalin Marinas <catalin.marinas@arm.com>
-> Cc: Will Deacon <will@kernel.org>
-> Cc: Mark Brown <broonie@kernel.org>
-> Cc: Mark Rutland <mark.rutland@arm.com>
-> Cc: Ard Biesheuvel <ardb@kernel.org>
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-kernel@vger.kernel.org
-> Suggested-by: Ard Biesheuvel <ardb@kernel.org>
-> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+Signed-off-by: Antoniu Miclaus <antoniu.miclaus@analog.com>
+---
+changes in v2:
+ - use GPIO with uppercase in the property description
+ - add `adi,muxout-select` property
+ - add maintainer in this patch
+ - add allOf with reference to spi-peripheral-props.yaml
+ - use unevaluatedProperties
+ .../bindings/iio/frequency/adi,adf4377.yaml   | 92 +++++++++++++++++++
+ MAINTAINERS                                   |  8 ++
+ 2 files changed, 100 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/iio/frequency/adi,adf4377.yaml
 
-With the nit below fixed, this looks good to me
+diff --git a/Documentation/devicetree/bindings/iio/frequency/adi,adf4377.yaml b/Documentation/devicetree/bindings/iio/frequency/adi,adf4377.yaml
+new file mode 100644
+index 000000000000..aa6a3193b4e0
+--- /dev/null
++++ b/Documentation/devicetree/bindings/iio/frequency/adi,adf4377.yaml
+@@ -0,0 +1,92 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/iio/frequency/adi,adf4377.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: ADF4377 Microwave Wideband Synthesizer with Integrated VCO
++
++maintainers:
++  - Antoniu Miclaus <antoniu.miclaus@analog.com>
++  - Dragos Bogdan <dragos.bogdan@analog.com>
++
++description: |
++   The ADF4377 is a high performance, ultralow jitter, dual output integer-N
++   phased locked loop (PLL) with integrated voltage controlled oscillator (VCO)
++   ideally suited for data converter and mixed signal front end (MxFE) clock
++   applications.
++
++   https://www.analog.com/en/products/adf4377.html
++
++properties:
++  compatible:
++    enum:
++      - adi,adf4377
++      - adi,adf4378
++
++  reg:
++    maxItems: 1
++
++  spi-max-frequency:
++    maximum: 10000000
++
++  clocks:
++    maxItems: 1
++
++  clock-names:
++    description:
++      External clock that provides reference input frequency.
++    items:
++      - const: ref_in
++
++  chip-enable-gpios:
++    description:
++      GPIO that controls the Chip Enable Pin.
++    maxItems: 1
++
++  clk1-enable-gpios:
++    description:
++      GPIO that controls the Enable Clock 1 Output Buffer Pin.
++    maxItems: 1
++
++  clk2-enable-gpios:
++    description:
++      GPIO that controls the Enable Clock 2 Output Buffer Pin.
++    maxItems: 1
++
++  adi,muxout-select:
++    description:
++      On chip multiplexer output selection.
++      high_z - MUXOUT Pin set to high-Z.
++      lock_detect - MUXOUT Pin set to lock detector output.
++      muxout_low - MUXOUT Pin set to low.
++      f_div_rclk_2 - MUXOUT Pin set to fDIV_RCLK/2.
++      f_div_nclk_2 - MUXOUT Pin set to fDIV_NCLK/2.
++      muxout_high - MUXOUT Pin set to high.
++    enum: [high_z, lock_detect, muxout_low, f_div_rclk_2, f_div_nclk_2, muxout_high]
++
++required:
++  - compatible
++  - reg
++  - clocks
++  - clock-names
++
++allOf:
++  - $ref: /schemas/spi/spi-peripheral-props.yaml#
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    spi {
++        #address-cells = <1>;
++        #size-cells = <0>;
++        frequency@0 {
++            compatible = "adi,adf4377";
++            reg = <0>;
++            spi-max-frequency = <10000000>;
++            clocks = <&adf4377_ref_in>;
++            clock-names = "ref_in";
++        };
++    };
++...
+diff --git a/MAINTAINERS b/MAINTAINERS
+index e1bc31a6624b..19a2f689e43e 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -1189,6 +1189,14 @@ W:	https://ez.analog.com/linux-software-drivers
+ F:	Documentation/devicetree/bindings/iio/amplifiers/adi,ada4250.yaml
+ F:	drivers/iio/amplifiers/ada4250.c
+ 
++ANALOG DEVICES INC ADF4377 DRIVER
++M:	Antoniu Miclaus <antoniu.miclaus@analog.com>
++L:	linux-iio@vger.kernel.org
++S:	Supported
++W:	https://ez.analog.com/linux-software-drivers
++F:	Documentation/devicetree/bindings/iio/frequency/adi,adf4377.yaml
++F:	drivers/iio/frequency/adf4377.c
++
+ ANALOG DEVICES INC ADGS1408 DRIVER
+ M:	Mircea Caprioru <mircea.caprioru@analog.com>
+ S:	Supported
+-- 
+2.38.1
 
-Reviewed-by: Ard Biesheuvel <ardb@kernel.org>
-
-> ---
-> This applies on v6.1-rc4
->
-> Changes in V2:
->
-> - Added PTE_ADDR_HIGH_SHIFT based method per Ard
->
-> Changes in V1:
->
-> https://lore.kernel.org/all/20221031082421.1957288-1-anshuman.khandual@arm.com/
->
->  arch/arm64/include/asm/assembler.h     | 8 +++-----
->  arch/arm64/include/asm/pgtable-hwdef.h | 1 +
->  arch/arm64/include/asm/pgtable.h       | 4 ++--
->  3 files changed, 6 insertions(+), 7 deletions(-)
->
-> diff --git a/arch/arm64/include/asm/assembler.h b/arch/arm64/include/asm/assembler.h
-> index e5957a53be39..6a39a3601cf7 100644
-> --- a/arch/arm64/include/asm/assembler.h
-> +++ b/arch/arm64/include/asm/assembler.h
-> @@ -660,12 +660,10 @@ alternative_endif
->         .endm
->
->         .macro  pte_to_phys, phys, pte
-> -#ifdef CONFIG_ARM64_PA_BITS_52
-> -       ubfiz   \phys, \pte, #(48 - 16 - 12), #16
-> -       bfxil   \phys, \pte, #16, #32
-> -       lsl     \phys, \phys, #16
-> -#else
->         and     \phys, \pte, #PTE_ADDR_MASK
-> +#ifdef CONFIG_ARM64_PA_BITS_52
-> +       orr \phys, \phys, \phys, lsl #PTE_ADDR_HIGH_SHIFT
-> +       and \phys, \phys, GENMASK_ULL(PHYS_MASK_SHIFT - 1, PAGE_SHIFT)
-
-Please use tabs between the mnemonics and the arguments.
-
->  #endif
->         .endm
->
-> diff --git a/arch/arm64/include/asm/pgtable-hwdef.h b/arch/arm64/include/asm/pgtable-hwdef.h
-> index 5ab8d163198f..f658aafc47df 100644
-> --- a/arch/arm64/include/asm/pgtable-hwdef.h
-> +++ b/arch/arm64/include/asm/pgtable-hwdef.h
-> @@ -159,6 +159,7 @@
->  #ifdef CONFIG_ARM64_PA_BITS_52
->  #define PTE_ADDR_HIGH          (_AT(pteval_t, 0xf) << 12)
->  #define PTE_ADDR_MASK          (PTE_ADDR_LOW | PTE_ADDR_HIGH)
-> +#define PTE_ADDR_HIGH_SHIFT    36
->  #else
->  #define PTE_ADDR_MASK          PTE_ADDR_LOW
->  #endif
-> diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
-> index 71a1af42f0e8..daedd6172227 100644
-> --- a/arch/arm64/include/asm/pgtable.h
-> +++ b/arch/arm64/include/asm/pgtable.h
-> @@ -77,11 +77,11 @@ extern unsigned long empty_zero_page[PAGE_SIZE / sizeof(unsigned long)];
->  static inline phys_addr_t __pte_to_phys(pte_t pte)
->  {
->         return (pte_val(pte) & PTE_ADDR_LOW) |
-> -               ((pte_val(pte) & PTE_ADDR_HIGH) << 36);
-> +               ((pte_val(pte) & PTE_ADDR_HIGH) << PTE_ADDR_HIGH_SHIFT);
->  }
->  static inline pteval_t __phys_to_pte_val(phys_addr_t phys)
->  {
-> -       return (phys | (phys >> 36)) & PTE_ADDR_MASK;
-> +       return (phys | (phys >> PTE_ADDR_HIGH_SHIFT)) & PTE_ADDR_MASK;
->  }
->  #else
->  #define __pte_to_phys(pte)     (pte_val(pte) & PTE_ADDR_MASK)
-> --
-> 2.25.1
->
