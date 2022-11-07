@@ -2,196 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6232E61FC0C
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 18:54:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C460761FBEC
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 18:51:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232611AbiKGRyK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 12:54:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59186 "EHLO
+        id S231995AbiKGRve (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 12:51:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232435AbiKGRxn (ORCPT
+        with ESMTP id S232013AbiKGRv0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 12:53:43 -0500
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EE5524F26
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 09:52:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1667843483; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=a1iA3eBj97Rvq7OWPrwJVhtvp5JKUE1pcF7E3020HnE=;
-        b=C0yI4JVTIUpFCbvbJ/En9ggpLv7PJh2Calp+CdhOu4/DiNEOXY7Aupd/todjjef0wmZOee
-        RS6RWewoLwaCK5zFqrr3I2ebT4be5vTwPYflm1ecpcEtb10fHbDi6UdeNVNQfF94XM3Mdg
-        OCrSx2/2Wzd2ZJ3eqrrGtfrXJAy81oI=
-From:   Paul Cercueil <paul@crapouillou.net>
-To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Paul Cercueil <paul@crapouillou.net>,
-        Laurentiu Palcu <laurentiu.palcu@oss.nxp.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH 10/26] drm: imx/dcss: Remove #ifdef guards for PM related functions
-Date:   Mon,  7 Nov 2022 17:50:50 +0000
-Message-Id: <20221107175106.360578-11-paul@crapouillou.net>
-In-Reply-To: <20221107175106.360578-1-paul@crapouillou.net>
-References: <20221107175106.360578-1-paul@crapouillou.net>
+        Mon, 7 Nov 2022 12:51:26 -0500
+Received: from mail-qk1-f176.google.com (mail-qk1-f176.google.com [209.85.222.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5B6B22BFE;
+        Mon,  7 Nov 2022 09:51:25 -0800 (PST)
+Received: by mail-qk1-f176.google.com with SMTP id k4so7624450qkj.8;
+        Mon, 07 Nov 2022 09:51:25 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+SlUrGbirdQzWHUgwyPncnELFtyuxA8lTkiM6wFuPfo=;
+        b=46iUO0TBeDY2dG47VvZ8QRm0m8nqicwqV8ngfkRE/EYyZiSMpUGaH0I2Olf10W6R20
+         MSYe1f2SQBUC6ncXTqQDnrt8aYB/ZuqIppp3+KvCCaQpsrQQyO38L2Rvw7NTAtq/y2pl
+         tgZ3fwlnszogL4bUuHYTfffu9/mhOm8NGf0/ohyzxw0eMZuUq9tpH9ZZSJMXG6UJyOMY
+         oZbx+fbsruH6C8+LX3gyNEdYEi/gZWIixwflAZ7Jt/SqEmlGbNLlDnc+vznFqwjg0rzB
+         XToRJrg9wnYCVNqJbTFKG5jcutxasQt46gCCvrnoMcoJEEZ5izwsouoB7QArByRQJ4W3
+         gjFg==
+X-Gm-Message-State: ACrzQf0fe5zCqpW5LXEMNL3wDz9Uw1tPw/J2KquRdYFjc4An22UROYBr
+        09rtcbWQtPskivjdCgB8Kbj2NIl0EGWpc2YELXN8ziNsAuY=
+X-Google-Smtp-Source: AMsMyM5zUK+Gh915z1TyTg6StkwnO/8vZLN1whloAVcgcGrRtIM/HNXJDT+11oLUGenW86ULPplS1oQLVef62P+bFiM=
+X-Received: by 2002:a05:620a:d89:b0:6cf:c98b:744c with SMTP id
+ q9-20020a05620a0d8900b006cfc98b744cmr35366284qkl.443.1667843484838; Mon, 07
+ Nov 2022 09:51:24 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221019073443.248215-1-chenzhongjin@huawei.com>
+ <CAJZ5v0hV2AFEgiuxxbDFUWLa0ZthSz3a=-9U4pjXm-GmmSgexw@mail.gmail.com>
+ <CAJZ5v0jPCGoss6X5bmv9Nw9ZxrDxirEEMh6UKSgOoArs2d9ffA@mail.gmail.com> <c01b8c85-59d0-20a8-5e72-4e628a84bf05@huawei.com>
+In-Reply-To: <c01b8c85-59d0-20a8-5e72-4e628a84bf05@huawei.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 7 Nov 2022 18:51:08 +0100
+Message-ID: <CAJZ5v0ixwximCOMPwqMhkBKuTd2yNtbQsphKzpk2jmRZfrj9wA@mail.gmail.com>
+Subject: Re: [PATCH] ACPICA: Fix use-after-free in acpi_ps_parse_aml()
+To:     Chen Zhongjin <chenzhongjin@huawei.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>, robert.moore@intel.com,
+        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
+        rafael.j.wysocki@intel.com, lenb@kernel.org, lv.zheng@intel.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use the EXPORT_GPL_DEV_PM_OPS() and pm_ptr() macros to handle the PM
-callbacks.
+On Mon, Nov 7, 2022 at 10:30 AM Chen Zhongjin <chenzhongjin@huawei.com> wrote:
+>
+> Hi,
+>
+> On 2022/11/6 3:00, Rafael J. Wysocki wrote:
+> > On Fri, Oct 28, 2022 at 5:46 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+> >> On Wed, Oct 19, 2022 at 9:38 AM Chen Zhongjin <chenzhongjin@huawei.com> wrote:
+> >>> KASAN reports a use-after-free problem and causes kernel panic
+> >>> triggered by: modprobe acpiphp_ibm
+> >>>
+> >>> BUG: KASAN:
+> >>> use-after-free in acpi_ds_dump_method_stack (drivers/acpi/acpica/dsdebug.c:145)
+> >>> Read of size 8 at addr ffff888002f843f0 by task modprobe/519
+> >>>
+> >>> CPU: 2 PID: 519 Comm: modprobe Not tainted 6.0.0+
+> >>> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996)
+> >>>      Call Trace:
+> >>>      <TASK>
+> >>>      acpi_ds_dump_method_stack (drivers/acpi/acpica/dsdebug.c:145)
+> >>>      acpi_ds_method_error (drivers/acpi/acpica/dsmethod.c:232)
+> >>>      acpi_ps_parse_aml (drivers/acpi/acpica/psparse.c:607)
+> >>>      ...
+> >>>      </TASK>
+> >>>
+> >>>      Allocated by task 519:
+> >>>      ...
+> >>>      __kasan_kmalloc (mm/kasan/common.c:526)
+> >>>      acpi_ds_create_walk_state (drivers/acpi/acpica/dswstate.c:519)
+> >>>      acpi_ds_call_control_method (drivers/acpi/acpica/dsmethod.c:498)
+> >>>      acpi_ps_parse_aml (drivers/acpi/acpica/psparse.c:607)
+> >>>      ...
+> >>>
+> >>>      Freed by task 519:
+> >>>      ...
+> >>>      __kmem_cache_free+0xb6/0x3c0
+> >>>      acpi_ds_delete_walk_state (drivers/acpi/acpica/dswstate.c:722)
+> >>>      acpi_ds_call_control_method (drivers/acpi/acpica/dsmethod.c:586)
+> >>>      acpi_ps_parse_aml (drivers/acpi/acpica/psparse.c:607)
+> >>>      ...
+> >>> ---[ end Kernel panic - not syncing: Fatal exception ]---
+> >>>
+> >>> In the error path in acpi_ps_parse_aml():
+> >>>
+> >>>      acpi_ds_call_control_method()
+> >>>          acpi_ds_create_walk_state()
+> >>>              acpi_ds_push_walk_state()
+> >>>              # thread->walk_state_list = walk_state
+> >>>
+> >>>          acpi_ds_init_aml_walk # *fail*
+> >>>          goto cleanup:
+> >>>          acpi_ds_delete_walk_state() # ACPI_FREE(walk_state)
+> >>>
+> >>>      acpi_ds_method_error()
+> >>>          acpi_ds_dump_method_stack()
+> >>>          # using freed thread->walk_state_list
+> >>>
+> >>> Briefly, the walk_state is pushed to thread, and freed without being poped.
+> >>> Then it is used in acpi_ds_dump_method_stack() and causes use-after-free.
+> >>>
+> >>> Add acpi_ds_pop_walk_state(thread) to the error path to fix the problem.
+> >>>
+> >>> Fixes: 0bac4295526c ("ACPICA: Dispatcher: Move stack traversal code to dispatcher")
+> >>>
+> >>> Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
+> >> This should be submitted to the upstream project on GitHub, but it
+> >> looks bad enough, so I'll take care of this.
+> >>
+> >> Applied as 6.1-rc material, thanks!
+> >>
+> >>> ---
+> >>>   drivers/acpi/acpica/dsmethod.c | 1 +
+> >>>   1 file changed, 1 insertion(+)
+> >>>
+> >>> diff --git a/drivers/acpi/acpica/dsmethod.c b/drivers/acpi/acpica/dsmethod.c
+> >>> index ae2e768830bf..19da7fc73186 100644
+> >>> --- a/drivers/acpi/acpica/dsmethod.c
+> >>> +++ b/drivers/acpi/acpica/dsmethod.c
+> >>> @@ -581,6 +581,7 @@ acpi_ds_call_control_method(struct acpi_thread_state *thread,
+> >>>
+> >>>          acpi_ds_terminate_control_method(obj_desc, next_walk_state);
+> >>>          acpi_ds_delete_walk_state(next_walk_state);
+> >>> +       acpi_ds_pop_walk_state(thread);
+> > On second thought, though, should it be popped before deleting?
+> > Otherwise it looks like there will be still use-after-free, because
+> > acpi_ds_pop_walk_state() accesses the walk_state at the top of the
+> > queue.
+>
+> You are right it is wrong and sorry I didn't notice that.
+>
+> I have reproduced same problem on current tree... Have no idea why I
+> missed it before.
+>
+>
+> I noticed that this patch have been on next-tree so I submitted another
+> one to fix it.
+>
+> See "ACPICA: Fix pop_walk_state called after walk_state is deleted"
 
-These macros allow the PM functions to be automatically dropped by the
-compiler when CONFIG_PM is disabled, without having to use #ifdef
-guards.
+At this point I have my own version of the fix, please see:
 
-This has the advantage of always compiling these functions in,
-independently of any Kconfig option. Thanks to that, bugs and other
-regressions are subsequently easier to catch.
-
-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
----
-Cc: Laurentiu Palcu <laurentiu.palcu@oss.nxp.com>
-Cc: Lucas Stach <l.stach@pengutronix.de>
-Cc: Philipp Zabel <p.zabel@pengutronix.de>
-Cc: Shawn Guo <shawnguo@kernel.org>
-Cc: Sascha Hauer <s.hauer@pengutronix.de>
-Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
-Cc: Fabio Estevam <festevam@gmail.com>
-Cc: NXP Linux Team <linux-imx@nxp.com>
-Cc: linux-arm-kernel@lists.infradead.org
----
- drivers/gpu/drm/imx/dcss/dcss-dev.c | 17 +++++++++--------
- drivers/gpu/drm/imx/dcss/dcss-dev.h |  7 +++----
- drivers/gpu/drm/imx/dcss/dcss-drv.c |  8 +-------
- 3 files changed, 13 insertions(+), 19 deletions(-)
-
-diff --git a/drivers/gpu/drm/imx/dcss/dcss-dev.c b/drivers/gpu/drm/imx/dcss/dcss-dev.c
-index 3f5750cc2673..66d9233ffb98 100644
---- a/drivers/gpu/drm/imx/dcss/dcss-dev.c
-+++ b/drivers/gpu/drm/imx/dcss/dcss-dev.c
-@@ -249,8 +249,7 @@ void dcss_dev_destroy(struct dcss_dev *dcss)
- 	kfree(dcss);
- }
- 
--#ifdef CONFIG_PM_SLEEP
--int dcss_dev_suspend(struct device *dev)
-+static int dcss_dev_suspend(struct device *dev)
- {
- 	struct dcss_dev *dcss = dcss_drv_dev_to_dcss(dev);
- 	struct drm_device *ddev = dcss_drv_dev_to_drm(dev);
-@@ -273,7 +272,7 @@ int dcss_dev_suspend(struct device *dev)
- 	return 0;
- }
- 
--int dcss_dev_resume(struct device *dev)
-+static int dcss_dev_resume(struct device *dev)
- {
- 	struct dcss_dev *dcss = dcss_drv_dev_to_dcss(dev);
- 	struct drm_device *ddev = dcss_drv_dev_to_drm(dev);
-@@ -296,10 +295,8 @@ int dcss_dev_resume(struct device *dev)
- 
- 	return 0;
- }
--#endif /* CONFIG_PM_SLEEP */
- 
--#ifdef CONFIG_PM
--int dcss_dev_runtime_suspend(struct device *dev)
-+static int dcss_dev_runtime_suspend(struct device *dev)
- {
- 	struct dcss_dev *dcss = dcss_drv_dev_to_dcss(dev);
- 	int ret;
-@@ -313,7 +310,7 @@ int dcss_dev_runtime_suspend(struct device *dev)
- 	return 0;
- }
- 
--int dcss_dev_runtime_resume(struct device *dev)
-+static int dcss_dev_runtime_resume(struct device *dev)
- {
- 	struct dcss_dev *dcss = dcss_drv_dev_to_dcss(dev);
- 
-@@ -325,4 +322,8 @@ int dcss_dev_runtime_resume(struct device *dev)
- 
- 	return 0;
- }
--#endif /* CONFIG_PM */
-+
-+EXPORT_GPL_DEV_PM_OPS(dcss_dev_pm_ops) = {
-+	RUNTIME_PM_OPS(dcss_dev_runtime_suspend, dcss_dev_runtime_resume, NULL)
-+	SYSTEM_SLEEP_PM_OPS(dcss_dev_suspend, dcss_dev_resume)
-+};
-diff --git a/drivers/gpu/drm/imx/dcss/dcss-dev.h b/drivers/gpu/drm/imx/dcss/dcss-dev.h
-index 1e582270c6ea..f27b87c09599 100644
---- a/drivers/gpu/drm/imx/dcss/dcss-dev.h
-+++ b/drivers/gpu/drm/imx/dcss/dcss-dev.h
-@@ -9,6 +9,7 @@
- #include <drm/drm_fourcc.h>
- #include <drm/drm_plane.h>
- #include <linux/io.h>
-+#include <linux/pm.h>
- #include <video/videomode.h>
- 
- #define SET			0x04
-@@ -95,13 +96,11 @@ struct dcss_dev *dcss_drv_dev_to_dcss(struct device *dev);
- struct drm_device *dcss_drv_dev_to_drm(struct device *dev);
- struct dcss_dev *dcss_dev_create(struct device *dev, bool hdmi_output);
- void dcss_dev_destroy(struct dcss_dev *dcss);
--int dcss_dev_runtime_suspend(struct device *dev);
--int dcss_dev_runtime_resume(struct device *dev);
--int dcss_dev_suspend(struct device *dev);
--int dcss_dev_resume(struct device *dev);
- void dcss_enable_dtg_and_ss(struct dcss_dev *dcss);
- void dcss_disable_dtg_and_ss(struct dcss_dev *dcss);
- 
-+extern const struct dev_pm_ops dcss_dev_pm_ops;
-+
- /* BLKCTL */
- int dcss_blkctl_init(struct dcss_dev *dcss, unsigned long blkctl_base);
- void dcss_blkctl_cfg(struct dcss_blkctl *blkctl);
-diff --git a/drivers/gpu/drm/imx/dcss/dcss-drv.c b/drivers/gpu/drm/imx/dcss/dcss-drv.c
-index 1c70f70247f6..431510bd811b 100644
---- a/drivers/gpu/drm/imx/dcss/dcss-drv.c
-+++ b/drivers/gpu/drm/imx/dcss/dcss-drv.c
-@@ -117,19 +117,13 @@ static const struct of_device_id dcss_of_match[] = {
- 
- MODULE_DEVICE_TABLE(of, dcss_of_match);
- 
--static const struct dev_pm_ops dcss_dev_pm = {
--	SET_SYSTEM_SLEEP_PM_OPS(dcss_dev_suspend, dcss_dev_resume)
--	SET_RUNTIME_PM_OPS(dcss_dev_runtime_suspend,
--			   dcss_dev_runtime_resume, NULL)
--};
--
- static struct platform_driver dcss_platform_driver = {
- 	.probe	= dcss_drv_platform_probe,
- 	.remove	= dcss_drv_platform_remove,
- 	.driver	= {
- 		.name = "imx-dcss",
- 		.of_match_table	= dcss_of_match,
--		.pm = &dcss_dev_pm,
-+		.pm = pm_ptr(&dcss_dev_pm_ops),
- 	},
- };
- 
--- 
-2.35.1
-
+https://patchwork.kernel.org/project/linux-acpi/patch/2669303.mvXUDI8C0e@kreacher/
