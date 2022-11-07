@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AECF61F83C
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 17:04:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A36B61F852
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 17:06:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232381AbiKGQEi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 11:04:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56326 "EHLO
+        id S231698AbiKGQGa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 11:06:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230434AbiKGQEc (ORCPT
+        with ESMTP id S232953AbiKGQGG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 11:04:32 -0500
+        Mon, 7 Nov 2022 11:06:06 -0500
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 594331115F;
-        Mon,  7 Nov 2022 08:04:31 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C73D2205D4;
+        Mon,  7 Nov 2022 08:05:54 -0800 (PST)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3EC39ED1;
-        Mon,  7 Nov 2022 08:04:37 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B664A113E;
+        Mon,  7 Nov 2022 08:06:00 -0800 (PST)
 Received: from pierre123.arm.com (pierre123.nice.arm.com [10.34.100.128])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 0AE9A3F534;
-        Mon,  7 Nov 2022 08:04:15 -0800 (PST)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 896EF3F534;
+        Mon,  7 Nov 2022 08:05:39 -0800 (PST)
 From:   Pierre Gondois <pierre.gondois@arm.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Pierre Gondois <pierre.gondois@arm.com>,
@@ -86,33 +86,34 @@ Cc:     Pierre Gondois <pierre.gondois@arm.com>,
         Tero Kristo <kristo@kernel.org>,
         Viorel Suman <viorel.suman@nxp.com>,
         Abel Vesa <abelvesa@kernel.org>, Peng Fan <peng.fan@nxp.com>,
-        Shenwei Wang <shenwei.wang@nxp.com>,
         Ming Qian <ming.qian@nxp.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
+        Shenwei Wang <shenwei.wang@nxp.com>,
         Adam Ford <aford173@gmail.com>,
         Tim Harvey <tharvey@gateworks.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
         Richard Zhu <hongxing.zhu@nxp.com>, Li Jun <jun.li@nxp.com>,
-        Joakim Zhang <qiangqing.zhang@nxp.com>,
         Markus Niebel <Markus.Niebel@ew.tq-group.com>,
         Marco Felsch <m.felsch@pengutronix.de>,
+        Joakim Zhang <qiangqing.zhang@nxp.com>,
         Marek Vasut <marex@denx.de>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Alexander Stein <alexander.stein@ew.tq-group.com>,
         Paul Elder <paul.elder@ideasonboard.com>,
         Martin Kepplinger <martink@posteo.de>,
         David Heidelberg <david@ixit.cz>,
+        Liu Ying <victor.liu@nxp.com>,
         Oliver Graute <oliver.graute@kococonnector.com>,
-        Liu Ying <victor.liu@nxp.com>, Shijie Qin <shijie.qin@nxp.com>,
-        Jacky Bai <ping.bai@nxp.com>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
         Clark Wang <xiaoning.wang@nxp.com>,
+        Jacky Bai <ping.bai@nxp.com>,
         Chris Packham <chris.packham@alliedtelesis.co.nz>,
         Vadym Kochan <vadym.kochan@plvision.eu>,
         Sameer Pujar <spujar@nvidia.com>,
-        Akhil R <akhilrajeev@nvidia.com>,
-        Prathamesh Shete <pshete@nvidia.com>,
-        Sumit Gupta <sumitg@nvidia.com>,
-        Diogo Ivo <diogo.ivo@tecnico.ulisboa.pt>,
         Mikko Perttunen <mperttunen@nvidia.com>,
+        Akhil R <akhilrajeev@nvidia.com>,
+        Sumit Gupta <sumitg@nvidia.com>,
+        Prathamesh Shete <pshete@nvidia.com>,
+        Diogo Ivo <diogo.ivo@tecnico.ulisboa.pt>,
         Vidya Sagar <vidyas@nvidia.com>,
         Ashish Mhetre <amhetre@nvidia.com>,
         Johan Jonker <jbx6244@gmail.com>,
@@ -120,7 +121,7 @@ Cc:     Pierre Gondois <pierre.gondois@arm.com>,
         Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
         Aswani Reddy <aswani.reddy@samsung.com>,
         Shashank Prashar <s.prashar@samsung.com>,
-        Arjun K V <arjun.kv@samsung.com>, devicetree@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>, devicetree@vger.kernel.org,
         linux-rpi-kernel@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org,
         linux-amlogic@lists.infradead.org,
@@ -130,10 +131,12 @@ Cc:     Pierre Gondois <pierre.gondois@arm.com>,
         linux-realtek-soc@lists.infradead.org,
         linux-renesas-soc@vger.kernel.org,
         linux-rockchip@lists.infradead.org
-Subject: [PATCH v2 00/23] Update cache properties for arm64 DTS
-Date:   Mon,  7 Nov 2022 16:56:53 +0100
-Message-Id: <20221107155825.1644604-1-pierre.gondois@arm.com>
+Subject: [PATCH v2 01/23] arm64: dts: Update cache properties for amazon
+Date:   Mon,  7 Nov 2022 16:56:54 +0100
+Message-Id: <20221107155825.1644604-2-pierre.gondois@arm.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20221107155825.1644604-1-pierre.gondois@arm.com>
+References: <20221107155825.1644604-1-pierre.gondois@arm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
@@ -144,168 +147,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-v2:
-- Update/Add patches for missed cache properties requiring to be
-  updated for the following platforns: bcm, amazon, arm, exynos,
-  freescale, marvell, mediatek, nvidia, socinext, tesla, ti.
-  Missed cache properties were detected using Rob Herring's branch:
-  https://github.com/robherring/dt-schema/tree/cache-rework
-- v1 of exynos, tesla were merged.
-- Updated wrong reference in commit message.
-- Added received Rb/Acked-by.
+The DeviceTree Specification v0.3 specifies that the cache node
+'compatible' and 'cache-level' properties are 'required'. Cf.
+s3.8 Multi-level and Shared Cache Nodes
+The 'cache-unified' property should be present if one of the
+properties for unified cache is present ('cache-size', ...).
 
-Align arm64 DTS to the DeviceTree specification v0.3 regarding
-cache properties. The patch-set mainly adds 'cache-level' or
-'cache' compatibility properties.
-For one qcom DTS, level 1 cache nodes are removed as they should
-be in the cpu nodes.
+Update the Device Trees accordingly.
 
-On another node, it seems that the 'cache-unified' is under-used.
-cache-unified:
-  If present, specifies the cache has a unified or-
-  ganization. If not present, specifies that the
-  cache has a Harvard architecture with separate
-  caches for instructions and data.
-Only a few l2 cache nodes have this property, and in the absence
-of [|d|i]-cache-size properties (or other), the cache is assumed to be
-split.
+Signed-off-by: Pierre Gondois <pierre.gondois@arm.com>
+---
+ arch/arm64/boot/dts/amazon/alpine-v3.dtsi | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-The l2 cache of the Rockchip RK3308 platform is thus assumed to be
-split:
-l2: l2-cache {
-	compatible = "cache";
-	cache-level = <2>;
-};
-when the platform datasheet advertises a unified cache.
-
-No modification/check was made to correct that due to the lack of
-cache information for most platforms.
-
-Pierre Gondois (23):
-  arm64: dts: Update cache properties for amazon
-  arm64: dts: Update cache properties for amd
-  arm64: dts: Update cache properties for amlogic
-  arm64: dts: Update cache properties for apm
-  arm64: dts: Update cache properties for arm
-  arm64: dts: Update cache properties for broadcom
-  arm64: dts: Update cache properties for exynos
-  arm64: dts: Update cache properties for freescale
-  arm64: dts: Update cache properties for hisilicon
-  arm64: dts: Update cache properties for lg
-  arm64: dts: Update cache properties for marvell
-  arm64: dts: Update cache properties for mediatek
-  arm64: dts: Update cache properties for microchip
-  arm64: dts: Update cache properties for nuvoton
-  arm64: dts: Update cache properties for nvidia
-  arm64: dts: Update cache properties for qcom
-  arm64: dts: Update cache properties for realtek
-  arm64: dts: Update cache properties for renesas
-  arm64: dts: Update cache properties for rockchip
-  arm64: dts: Update cache properties for socionext
-  arm64: dts: Update cache properties for synaptics
-  arm64: dts: Update cache properties for tesla
-  arm64: dts: Update cache properties for ti
-
- arch/arm/boot/dts/bcm2711.dtsi                |  1 +
- arch/arm/boot/dts/bcm2837.dtsi                |  1 +
- arch/arm64/boot/dts/amazon/alpine-v3.dtsi     |  4 ++
- arch/arm64/boot/dts/amd/amd-seattle-cpus.dtsi |  9 +++
- arch/arm64/boot/dts/amlogic/meson-a1.dtsi     |  1 +
- arch/arm64/boot/dts/amlogic/meson-axg.dtsi    |  1 +
- arch/arm64/boot/dts/amlogic/meson-g12a.dtsi   |  1 +
- arch/arm64/boot/dts/amlogic/meson-g12b.dtsi   |  1 +
- arch/arm64/boot/dts/amlogic/meson-gx.dtsi     |  1 +
- arch/arm64/boot/dts/amlogic/meson-sm1.dtsi    |  1 +
- arch/arm64/boot/dts/apm/apm-shadowcat.dtsi    |  4 ++
- arch/arm64/boot/dts/apm/apm-storm.dtsi        |  4 ++
- arch/arm64/boot/dts/arm/corstone1000.dtsi     |  1 +
- arch/arm64/boot/dts/arm/foundation-v8.dtsi    |  1 +
- arch/arm64/boot/dts/arm/juno-r1.dts           |  2 +
- arch/arm64/boot/dts/arm/juno-r2.dts           |  2 +
- arch/arm64/boot/dts/arm/juno.dts              |  2 +
- arch/arm64/boot/dts/arm/rtsm_ve-aemv8a.dts    |  1 +
- .../boot/dts/arm/vexpress-v2f-1xv7-ca53x2.dts |  1 +
- .../boot/dts/broadcom/bcmbca/bcm4908.dtsi     |  1 +
- .../boot/dts/broadcom/bcmbca/bcm4912.dtsi     |  1 +
- .../boot/dts/broadcom/bcmbca/bcm63146.dtsi    |  1 +
- .../boot/dts/broadcom/bcmbca/bcm63158.dtsi    |  1 +
- .../boot/dts/broadcom/bcmbca/bcm6813.dtsi     |  1 +
- .../boot/dts/broadcom/bcmbca/bcm6856.dtsi     |  1 +
- .../boot/dts/broadcom/bcmbca/bcm6858.dtsi     |  1 +
- .../boot/dts/broadcom/northstar2/ns2.dtsi     |  1 +
- .../boot/dts/broadcom/stingray/stingray.dtsi  |  4 ++
- arch/arm64/boot/dts/exynos/exynos5433.dtsi    |  4 ++
- arch/arm64/boot/dts/exynos/exynos7.dtsi       |  2 +
- .../arm64/boot/dts/freescale/fsl-ls1028a.dtsi |  1 +
- .../arm64/boot/dts/freescale/fsl-ls1043a.dtsi |  1 +
- .../arm64/boot/dts/freescale/fsl-ls1046a.dtsi |  1 +
- .../arm64/boot/dts/freescale/fsl-ls2080a.dtsi |  4 ++
- .../arm64/boot/dts/freescale/fsl-ls2088a.dtsi |  4 ++
- .../arm64/boot/dts/freescale/fsl-lx2160a.dtsi |  8 +++
- arch/arm64/boot/dts/freescale/imx8dxl.dtsi    |  1 +
- arch/arm64/boot/dts/freescale/imx8mm.dtsi     |  1 +
- arch/arm64/boot/dts/freescale/imx8mn.dtsi     |  1 +
- arch/arm64/boot/dts/freescale/imx8mp.dtsi     |  1 +
- arch/arm64/boot/dts/freescale/imx8mq.dtsi     |  1 +
- arch/arm64/boot/dts/freescale/imx8qm.dtsi     |  2 +
- arch/arm64/boot/dts/freescale/imx8qxp.dtsi    |  1 +
- arch/arm64/boot/dts/freescale/imx8ulp.dtsi    |  1 +
- arch/arm64/boot/dts/freescale/s32g2.dtsi      |  2 +
- arch/arm64/boot/dts/freescale/s32v234.dtsi    |  2 +
- arch/arm64/boot/dts/hisilicon/hi3660.dtsi     |  2 +
- arch/arm64/boot/dts/hisilicon/hi6220.dtsi     |  2 +
- arch/arm64/boot/dts/hisilicon/hip05.dtsi      |  4 ++
- arch/arm64/boot/dts/hisilicon/hip06.dtsi      |  4 ++
- arch/arm64/boot/dts/hisilicon/hip07.dtsi      | 16 ++++++
- arch/arm64/boot/dts/lg/lg1312.dtsi            |  1 +
- arch/arm64/boot/dts/lg/lg1313.dtsi            |  1 +
- arch/arm64/boot/dts/marvell/ac5-98dx25xx.dtsi |  1 +
- .../boot/dts/marvell/armada-ap806-dual.dtsi   |  2 +
- .../boot/dts/marvell/armada-ap806-quad.dtsi   |  4 ++
- .../boot/dts/marvell/armada-ap807-quad.dtsi   |  4 ++
- arch/arm64/boot/dts/mediatek/mt8186.dtsi      |  3 +
- arch/arm64/boot/dts/mediatek/mt8192.dtsi      |  3 +
- arch/arm64/boot/dts/mediatek/mt8195.dtsi      |  3 +
- arch/arm64/boot/dts/microchip/sparx5.dtsi     |  1 +
- .../boot/dts/nuvoton/nuvoton-npcm845.dtsi     |  1 +
- arch/arm64/boot/dts/nvidia/tegra194.dtsi      | 15 +++++
- arch/arm64/boot/dts/nvidia/tegra210.dtsi      |  1 +
- arch/arm64/boot/dts/nvidia/tegra234.dtsi      | 33 +++++++++++
- arch/arm64/boot/dts/qcom/msm8953.dtsi         | 56 -------------------
- arch/arm64/boot/dts/qcom/sc7180.dtsi          |  9 +++
- arch/arm64/boot/dts/qcom/sc7280.dtsi          |  9 +++
- arch/arm64/boot/dts/qcom/sc8280xp.dtsi        |  9 +++
- arch/arm64/boot/dts/qcom/sdm845.dtsi          |  9 +++
- arch/arm64/boot/dts/qcom/sm6125.dtsi          |  2 +
- arch/arm64/boot/dts/qcom/sm6350.dtsi          |  9 +++
- arch/arm64/boot/dts/qcom/sm8150.dtsi          |  9 +++
- arch/arm64/boot/dts/qcom/sm8250.dtsi          |  9 +++
- arch/arm64/boot/dts/qcom/sm8350.dtsi          |  9 +++
- arch/arm64/boot/dts/qcom/sm8450.dtsi          |  9 +++
- arch/arm64/boot/dts/realtek/rtd1293.dtsi      |  1 +
- arch/arm64/boot/dts/realtek/rtd1295.dtsi      |  1 +
- arch/arm64/boot/dts/realtek/rtd1296.dtsi      |  1 +
- arch/arm64/boot/dts/realtek/rtd1395.dtsi      |  1 +
- arch/arm64/boot/dts/realtek/rtd16xx.dtsi      |  2 +
- arch/arm64/boot/dts/renesas/r9a07g043.dtsi    |  1 +
- arch/arm64/boot/dts/renesas/r9a07g044.dtsi    |  1 +
- arch/arm64/boot/dts/renesas/r9a07g054.dtsi    |  1 +
- arch/arm64/boot/dts/rockchip/rk3308.dtsi      |  1 +
- arch/arm64/boot/dts/rockchip/rk3328.dtsi      |  1 +
- .../boot/dts/socionext/uniphier-ld11.dtsi     |  1 +
- .../boot/dts/socionext/uniphier-ld20.dtsi     |  2 +
- .../boot/dts/socionext/uniphier-pxs3.dtsi     |  1 +
- arch/arm64/boot/dts/synaptics/berlin4ct.dtsi  |  1 +
- arch/arm64/boot/dts/tesla/fsd.dtsi            |  2 +
- arch/arm64/boot/dts/ti/k3-am625.dtsi          |  1 +
- arch/arm64/boot/dts/ti/k3-am62a7.dtsi         |  1 +
- arch/arm64/boot/dts/ti/k3-am642.dtsi          |  1 +
- arch/arm64/boot/dts/ti/k3-am654.dtsi          |  2 +
- arch/arm64/boot/dts/ti/k3-j7200.dtsi          |  1 +
- arch/arm64/boot/dts/ti/k3-j721e.dtsi          |  1 +
- arch/arm64/boot/dts/ti/k3-j721s2.dtsi         |  1 +
- 98 files changed, 299 insertions(+), 56 deletions(-)
-
+diff --git a/arch/arm64/boot/dts/amazon/alpine-v3.dtsi b/arch/arm64/boot/dts/amazon/alpine-v3.dtsi
+index 73a352ea8fd5..ba7e56dc85db 100644
+--- a/arch/arm64/boot/dts/amazon/alpine-v3.dtsi
++++ b/arch/arm64/boot/dts/amazon/alpine-v3.dtsi
+@@ -246,6 +246,7 @@ cpu@303 {
+ 
+ 		cluster0_l2: cache@0 {
+ 			compatible = "cache";
++			cache-unified;
+ 			cache-size = <0x200000>;
+ 			cache-line-size = <64>;
+ 			cache-sets = <2048>;
+@@ -254,6 +255,7 @@ cluster0_l2: cache@0 {
+ 
+ 		cluster1_l2: cache@100 {
+ 			compatible = "cache";
++			cache-unified;
+ 			cache-size = <0x200000>;
+ 			cache-line-size = <64>;
+ 			cache-sets = <2048>;
+@@ -262,6 +264,7 @@ cluster1_l2: cache@100 {
+ 
+ 		cluster2_l2: cache@200 {
+ 			compatible = "cache";
++			cache-unified;
+ 			cache-size = <0x200000>;
+ 			cache-line-size = <64>;
+ 			cache-sets = <2048>;
+@@ -270,6 +273,7 @@ cluster2_l2: cache@200 {
+ 
+ 		cluster3_l2: cache@300 {
+ 			compatible = "cache";
++			cache-unified;
+ 			cache-size = <0x200000>;
+ 			cache-line-size = <64>;
+ 			cache-sets = <2048>;
 -- 
 2.25.1
 
