@@ -2,212 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EAD461FAC9
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 18:06:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D3CF461FAD0
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 18:07:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232624AbiKGRGC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 12:06:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54810 "EHLO
+        id S232445AbiKGRHk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 12:07:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232465AbiKGRGA (ORCPT
+        with ESMTP id S231995AbiKGRHh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 12:06:00 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8335B1EED1;
-        Mon,  7 Nov 2022 09:05:59 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Mon, 7 Nov 2022 12:07:37 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EB461EED1;
+        Mon,  7 Nov 2022 09:07:36 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id C62E522603;
-        Mon,  7 Nov 2022 17:05:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1667840757; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=te1FgowaQW4ajxXT21DupqE727nwz0E07tdMxGVIwvM=;
-        b=eZrg0Bb6FfKs5zUeME2xDzdDaSCW9wKdPIZQUd/jHn2PtVDZ98avwrl1K0MUWTM9GtLiqb
-        RuQYoaqynCD851IBxgVlcgj/DmHRdugG9EXIppCwNCAK4LZDbxvws5eTI317gD8+K/qi2b
-        qby22iRZ+muOHAIdAqrZg6UuNe4YktM=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1667840757;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=te1FgowaQW4ajxXT21DupqE727nwz0E07tdMxGVIwvM=;
-        b=VxHcEmvMeK3KoFF2RqyDhg8iYFFenBZHRvDc3WJrXtFo3H4VSLhbie1vkwD0Z/zl5ctK2P
-        DnQwl8r2Z2cocXBQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9C94A13ADB;
-        Mon,  7 Nov 2022 17:05:57 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id GOjFJfU6aWOYfwAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Mon, 07 Nov 2022 17:05:57 +0000
-From:   Vlastimil Babka <vbabka@suse.cz>
-To:     Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Joel Fernandes <joel@joelfernandes.org>
-Cc:     Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Matthew Wilcox <willy@infradead.org>, paulmck@kernel.org,
-        rcu@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        Vlastimil Babka <vbabka@suse.cz>
-Subject: [PATCH v2 3/3] mm/sl[au]b: rearrange struct slab fields to allow larger rcu_head
-Date:   Mon,  7 Nov 2022 18:05:54 +0100
-Message-Id: <20221107170554.7869-4-vbabka@suse.cz>
-X-Mailer: git-send-email 2.38.0
-In-Reply-To: <20221107170554.7869-1-vbabka@suse.cz>
-References: <20221107170554.7869-1-vbabka@suse.cz>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 29D8D611B9;
+        Mon,  7 Nov 2022 17:07:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2624C433C1;
+        Mon,  7 Nov 2022 17:07:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667840855;
+        bh=JhvxwGh6CHd/kos2GLFjcIg4ffzMl1S5afABnifg974=;
+        h=From:To:Cc:Subject:Date:From;
+        b=KT+9TnHx220XRrjPA99dqFGYvbztZkzEPy/Gb6QPRBp3heSpQG85+Xs+KiH3THlxt
+         iJ08hNiBO5837fWdJnWDWUD6bJX3QDaaHGYdy6q4DkPD7kvvMWDrXtpnw3DCmOzCd/
+         MZ/76QrKnkIYgld5Qgav+c4n3sKg3gsfLjKy8VRWCVYyLtgztWepGUuYS7xJWt4K/n
+         RkdHXCJ6kteVMslBChX2CxdM1VOqxSfgm3qlFLrRWFDfOVH1IF/YA4mig8stoF7i7Z
+         OKsb5t+kpvtiKh4xBogxIAvM9aI/b+fTotVqPmc1hcjLBzLE7fBM4caDdV1BsOtDW2
+         evw/zwgutMHHw==
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>
+Cc:     John Fastabend <john.fastabend@gmail.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        patches@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>,
+        kernel test robot <lkp@intel.com>,
+        "kernelci.org bot" <bot@kernelci.org>
+Subject: [PATCH bpf] bpf: Add explicit cast to 'void *' for __BPF_DISPATCHER_UPDATE()
+Date:   Mon,  7 Nov 2022 10:07:11 -0700
+Message-Id: <20221107170711.42409-1-nathan@kernel.org>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Joel reports [1] that increasing the rcu_head size for debugging
-purposes used to work before struct slab was split from struct page, but
-now runs into the various SLAB_MATCH() sanity checks of the layout.
+When building with clang:
 
-This is because the rcu_head in struct page is in union with large
-sub-structures and has space to grow without exceeding their size, while
-in struct slab (for SLAB and SLUB) it's in union only with a list_head.
+  kernel/bpf/dispatcher.c:126:33: error: pointer type mismatch ('void *' and 'unsigned int (*)(const void *, const struct bpf_insn *, bpf_func_t)' (aka 'unsigned int (*)(const void *, const struct bpf_insn *, unsigned int (*)(const void *, const struct bpf_insn *))')) [-Werror,-Wpointer-type-mismatch]
+          __BPF_DISPATCHER_UPDATE(d, new ?: &bpf_dispatcher_nop_func);
+                                     ~~~ ^  ~~~~~~~~~~~~~~~~~~~~~~~~
+  ./include/linux/bpf.h:1045:54: note: expanded from macro '__BPF_DISPATCHER_UPDATE'
+          __static_call_update((_d)->sc_key, (_d)->sc_tramp, (_new))
+                                                              ^~~~
+  1 error generated.
 
-On closer inspection (and after the previous patch) we can put all
-fields except slab_cache to a union with rcu_head, as slab_cache is
-sufficient for the rcu freeing callbacks to work and the rest can be
-overwritten by rcu_head without causing issues.
+The warning is pointing out that the type of new ('void *') and
+&bpf_dispatcher_nop_func are not compatible, which could have side
+effects coming out of a conditional operator due to promotion rules.
 
-This is only somewhat complicated by the need to keep SLUB's
-freelist+counters aligned for cmpxchg_double. As a result the fields
-need to be reordered so that slab_cache is first (after page flags) and
-the union with rcu_head follows. For consistency, do that for SLAB as
-well, although not necessary there.
+Add the explicit cast to 'void *' to make it clear that this is
+expected, as __BPF_DISPATCHER_UPDATE() expands to a call to
+__static_call_update(), which expects a 'void *' as its final argument.
 
-As a result, the rcu_head field in struct page and struct slab is no
-longer at the same offset, but that doesn't matter as there is no
-casting that would rely on that in the slab freeing callbacks, so we can
-just drop the respective SLAB_MATCH() check.
-
-Also we need to update the SLAB_MATCH() for compound_head to reflect the
-new ordering.
-
-While at it, also add a static_assert to check the alignment needed for
-cmpxchg_double so mistakes are found sooner than a runtime GPF.
-
-[1] https://lore.kernel.org/all/85afd876-d8bb-0804-b2c5-48ed3055e702@joelfernandes.org/
-
-Reported-by: Joel Fernandes <joel@joelfernandes.org>
-Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
-Acked-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Fixes: c86df29d11df ("bpf: Convert BPF_DISPATCHER to use static_call() (not ftrace)")
+Link: https://github.com/ClangBuiltLinux/linux/issues/1755
+Reported-by: kernel test robot <lkp@intel.com>
+Reported-by: "kernelci.org bot" <bot@kernelci.org>
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 ---
- mm/slab.h | 54 ++++++++++++++++++++++++++++++++----------------------
- 1 file changed, 32 insertions(+), 22 deletions(-)
+ kernel/bpf/dispatcher.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/mm/slab.h b/mm/slab.h
-index 0202a8c2f0d2..b373952eef70 100644
---- a/mm/slab.h
-+++ b/mm/slab.h
-@@ -11,37 +11,43 @@ struct slab {
+diff --git a/kernel/bpf/dispatcher.c b/kernel/bpf/dispatcher.c
+index 7dfb8d0d5202..c19719f48ce0 100644
+--- a/kernel/bpf/dispatcher.c
++++ b/kernel/bpf/dispatcher.c
+@@ -123,7 +123,7 @@ static void bpf_dispatcher_update(struct bpf_dispatcher *d, int prev_num_progs)
+ 			return;
+ 	}
  
- #if defined(CONFIG_SLAB)
+-	__BPF_DISPATCHER_UPDATE(d, new ?: &bpf_dispatcher_nop_func);
++	__BPF_DISPATCHER_UPDATE(d, new ?: (void *)&bpf_dispatcher_nop_func);
  
-+	struct kmem_cache *slab_cache;
- 	union {
--		struct list_head slab_list;
-+		struct {
-+			struct list_head slab_list;
-+			void *freelist;	/* array of free object indexes */
-+			void *s_mem;	/* first object */
-+		};
- 		struct rcu_head rcu_head;
- 	};
--	struct kmem_cache *slab_cache;
--	void *freelist;	/* array of free object indexes */
--	void *s_mem;	/* first object */
- 	unsigned int active;
- 
- #elif defined(CONFIG_SLUB)
- 
--	union {
--		struct list_head slab_list;
--		struct rcu_head rcu_head;
--#ifdef CONFIG_SLUB_CPU_PARTIAL
--		struct {
--			struct slab *next;
--			int slabs;	/* Nr of slabs left */
--		};
--#endif
--	};
- 	struct kmem_cache *slab_cache;
--	/* Double-word boundary */
--	void *freelist;		/* first free object */
- 	union {
--		unsigned long counters;
- 		struct {
--			unsigned inuse:16;
--			unsigned objects:15;
--			unsigned frozen:1;
-+			union {
-+				struct list_head slab_list;
-+#ifdef CONFIG_SLUB_CPU_PARTIAL
-+				struct {
-+					struct slab *next;
-+					int slabs;	/* Nr of slabs left */
-+				};
-+#endif
-+			};
-+			/* Double-word boundary */
-+			void *freelist;		/* first free object */
-+			union {
-+				unsigned long counters;
-+				struct {
-+					unsigned inuse:16;
-+					unsigned objects:15;
-+					unsigned frozen:1;
-+				};
-+			};
- 		};
-+		struct rcu_head rcu_head;
- 	};
- 	unsigned int __unused;
- 
-@@ -66,9 +72,10 @@ struct slab {
- #define SLAB_MATCH(pg, sl)						\
- 	static_assert(offsetof(struct page, pg) == offsetof(struct slab, sl))
- SLAB_MATCH(flags, __page_flags);
--SLAB_MATCH(compound_head, slab_list);	/* Ensure bit 0 is clear */
- #ifndef CONFIG_SLOB
--SLAB_MATCH(rcu_head, rcu_head);
-+SLAB_MATCH(compound_head, slab_cache);	/* Ensure bit 0 is clear */
-+#else
-+SLAB_MATCH(compound_head, slab_list);	/* Ensure bit 0 is clear */
- #endif
- SLAB_MATCH(_refcount, __page_refcount);
- #ifdef CONFIG_MEMCG
-@@ -76,6 +83,9 @@ SLAB_MATCH(memcg_data, memcg_data);
- #endif
- #undef SLAB_MATCH
- static_assert(sizeof(struct slab) <= sizeof(struct page));
-+#if defined(CONFIG_HAVE_CMPXCHG_DOUBLE) && defined(CONFIG_SLUB)
-+static_assert(IS_ALIGNED(offsetof(struct slab, freelist), 2*sizeof(void *)));
-+#endif
- 
- /**
-  * folio_slab - Converts from folio to slab.
+ 	if (new)
+ 		d->image_off = noff;
+
+base-commit: c86df29d11dfba27c0a1f5039cd6fe387fbf4239
 -- 
-2.38.0
+2.38.1
 
