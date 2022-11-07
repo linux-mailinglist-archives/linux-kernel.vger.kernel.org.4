@@ -2,368 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08A6061E993
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 04:23:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B111A61E992
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 04:23:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231158AbiKGDXi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Nov 2022 22:23:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49042 "EHLO
+        id S230486AbiKGDXf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Nov 2022 22:23:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230371AbiKGDXc (ORCPT
+        with ESMTP id S230490AbiKGDXa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Nov 2022 22:23:32 -0500
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 526A3246
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Nov 2022 19:23:30 -0800 (PST)
-Received: by mail-ed1-x529.google.com with SMTP id i21so15500739edj.10
-        for <linux-kernel@vger.kernel.org>; Sun, 06 Nov 2022 19:23:30 -0800 (PST)
+        Sun, 6 Nov 2022 22:23:30 -0500
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB49B1136
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Nov 2022 19:23:28 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id j15so14326169wrq.3
+        for <linux-kernel@vger.kernel.org>; Sun, 06 Nov 2022 19:23:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=EyNJAB/zJ7Mx8V83c0ByQ2xHLLcAbZ8WVP3stUfzzSc=;
-        b=t1d2KaDtBTvOV8ATE1ZHhzD63MlM6A0HN6LqloD/NxajQJKBjonIJLNo4fD7cRQV2N
-         ltgapx8O/xHVdQYdxsdwQe83rCStDZMeFrG9cqTssqJvPeqzQOlQ7jijrDfEhOn3Oc+6
-         VyY3lyejnM0npnFOV05jKdOI6lYIWorWqJH+SlZKgmIotYYLsU8Cud6O/IkkG3zKMZP2
-         qBiu8tMIXCD7ms+UfBdj71i3yoeM4B0qRx5Mo/1pWDFBwA94ry30mj8ynYrowSuy6R7B
-         zoBRAB1TS9oVS9gQqcTQ232X8BzXZK2ck5oLhsccNtQRvs/gvqv1hLFiCrIISAuHwd1s
-         +7vw==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=BoCqJFFEwga8HLbIPvad2ONk7YeJiUs7YZ46dNA2Vj4=;
+        b=M+NsIlRxwZJQco2DVxK1IC+XpxvBfEGXljI3xoieudB8Dp7htzA/oYgJL89345JbZ+
+         7BoyTX1W1WcfOMa+KHyY+gKXeBIuks8pizpXsllvVUowdYYcGBbMv7Bln5uyqx2DGIKp
+         ZCfCr4sz6dLi3G+gA0hvqJKk/MKNeV2ECIwtNIq+4QfoAGXxSa2YKrg3gTP4NvhM4s/i
+         Sa1/9J1bmFdujrYV67hmPlRq6GtF6sPNSr0mwRUCCOmIN6nMoDi80n6eF9z4KzuQkcfM
+         MPZiy8m2hvR7FIyRcWqGUhDdkcn9+NOywPjnUtFb1Eo/Das+NUpl69PUfbWyyXz/02aJ
+         zYaw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=EyNJAB/zJ7Mx8V83c0ByQ2xHLLcAbZ8WVP3stUfzzSc=;
-        b=iyeql4p7EU1ip19c5YhVbV/oi7MjPD++j0XoahKYWkiYmGRjv5u1PSHDSHHkdLqdlq
-         vvxNVmIvNhND3RddP/TPMU/9DoJgr9R44Vq+gfF5+GlawH2+9hfj/+Vl9iSHlpJZaZL/
-         svN8YvwF1SwoeWOekENnIAi5g/Lkv+rg7d9Vb7rY1ZkWyVPZiC/892liItmppnCNl3GX
-         JvOuSSHy8TJdftXQPDLMhBq6PUN+MlMccYh+brYPj/XtbCuZCwplg6x5E8JJgvXTO2Mt
-         V3mclSCYFDjeitblbdVKHSRuGgWZd9RgZbTIRZCA8jAlw4kLdidUVgp9YZfLcK5haXAm
-         Sfew==
-X-Gm-Message-State: ACrzQf3MlgKP8BDrSsOBeBTKD/jH6yZPCLmkyDmWEHP3qA/Z9qZhCSY7
-        xh6e/wIJ+5B5Svp8cKsmM3lUgzG8rCqcoCboCd32gQ==
-X-Google-Smtp-Source: AMsMyM4/9I7ba6l9I5J+qbYuNdeEvaxV7Lxl/Gc/ej/a4VF/lw48+pQkJ9OuBQQawv1SOYHKpHdIUyflQTYJMm9plx4=
-X-Received: by 2002:aa7:da84:0:b0:463:7873:119a with SMTP id
- q4-20020aa7da84000000b004637873119amr36598544eds.329.1667791408731; Sun, 06
- Nov 2022 19:23:28 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=BoCqJFFEwga8HLbIPvad2ONk7YeJiUs7YZ46dNA2Vj4=;
+        b=qxxMCMyFbwKuDG1WRtmO3hhd62qGi2cE/KvhbOOeUOLzmOID3hcVEyD9YcnH0uY1jP
+         cttW8SsipJdlQ4lTWqZc0FYjGtJPoI/MsLlnwGg7JTWY3IkvdBWzwfpXv73TdUmOOsPK
+         8ElRy30XApFJ/1YPoqpPfyY6ZKtb33NDUPlj0mvf0ityBAL8CFPSFyUOTOePH9VSiYTr
+         PPdWzu3Q5fsS20yFj8KOSZO76T8aZ51RHkefrQeojjLdwglk4ZIHOosQ9Z1cJUPI9xh1
+         Jhq3KxR8ADssXrtG2YhEBrqTK/nDo32CCYen/lB2EQrDkY8QwNqz7N55qTmecL5M7c6C
+         dAHA==
+X-Gm-Message-State: ACrzQf0kKmAPm/OJzrOKIHdHQ+nHlECc8sjfi++Go7vPLiTxHxaClaKG
+        XS8Qek1fj+xxpuMuULDnNhmyiB0M9CHUqQ==
+X-Google-Smtp-Source: AMsMyM7Xpy/hX5YLOqDGvmPFqG6e7WURl4Q/vq45MrPiOVdJ2okbjVVyQLWJwIkvgw+axxmR69Wsig==
+X-Received: by 2002:adf:fd4a:0:b0:236:87bc:a900 with SMTP id h10-20020adffd4a000000b0023687bca900mr29075747wrs.706.1667791407388;
+        Sun, 06 Nov 2022 19:23:27 -0800 (PST)
+Received: from [192.168.36.1] (92.40.199.16.threembb.co.uk. [92.40.199.16])
+        by smtp.gmail.com with ESMTPSA id e5-20020adfef05000000b00225307f43fbsm6004290wro.44.2022.11.06.19.23.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 06 Nov 2022 19:23:26 -0800 (PST)
+Message-ID: <83faab03-30df-cc2e-c447-110f345cc1d5@linaro.org>
+Date:   Mon, 7 Nov 2022 03:23:25 +0000
 MIME-Version: 1.0
-References: <20221102231911.3107438-1-seanjc@google.com> <20221102231911.3107438-45-seanjc@google.com>
-In-Reply-To: <20221102231911.3107438-45-seanjc@google.com>
-From:   Anup Patel <anup@brainfault.org>
-Date:   Mon, 7 Nov 2022 08:53:16 +0530
-Message-ID: <CAAhSdy307ziQVnq=bSJ_KO3kr0w_wqJ+zf3S54z_FHwt6VAmEg@mail.gmail.com>
-Subject: Re: [PATCH 44/44] KVM: Opt out of generic hardware enabling on s390
- and PPC
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        Eric Farman <farman@linux.ibm.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Atish Patra <atishp@atishpatra.org>,
-        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Isaku Yamahata <isaku.yamahata@intel.com>,
-        Fabiano Rosas <farosas@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Chao Gao <chao.gao@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Yuan Yao <yuan.yao@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH 0/5] arm64: dts: qcom: add and enable the pmi8998 RRADC
+Content-Language: en-US
+To:     Bjorn Andersson <andersson@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        linux-arm-msm@vger.kernel.org, konrad.dybcio@somainline.org,
+        luca@z3ntu.xyz, linux-kernel@vger.kernel.org,
+        Andy Gross <agross@kernel.org>
+References: <20221016180330.1912214-1-caleb.connolly@linaro.org>
+ <166779074258.500303.6143441430945522925.b4-ty@kernel.org>
+From:   Caleb Connolly <caleb.connolly@linaro.org>
+In-Reply-To: <166779074258.500303.6143441430945522925.b4-ty@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 3, 2022 at 4:50 AM Sean Christopherson <seanjc@google.com> wrote:
->
-> Allow architectures to opt out of the generic hardware enabling logic,
-> and opt out on both s390 and PPC, which don't need to manually enable
-> virtualization as it's always on (when available).
->
-> In addition to letting s390 and PPC drop a bit of dead code, this will
-> hopefully also allow ARM to clean up its related code, e.g. ARM has its
-> own per-CPU flag to track which CPUs have enable hardware due to the
-> need to keep hardware enabled indefinitely when pKVM is enabled.
->
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
 
-For KVM RISC-V:
-Acked-by: Anup Patel <anup@brainfault.org>
 
-Thanks,
-Anup
+On 07/11/2022 03:11, Bjorn Andersson wrote:
+> On Sun, 16 Oct 2022 19:03:24 +0100, Caleb Connolly wrote:
+>> This contains patches 6 through 10 of the series adding a driver
+>> for the RRADC
+>> https://lore.kernel.org/linux-arm-msm/20220429220904.137297-1-caleb.connolly@linaro.org/
+>>
+>> The driver and DT bindings have been in mainline for a while.
+>>
+>> This introduces a new dtbs_check warning which is fixed in
+>> https://lore.kernel.org/linux-arm-msm/20221016175757.1911016-1-caleb.connolly@linaro.org/
+>> and depends on Luca's series:
+>> https://lore.kernel.org/linux-arm-msm/20220925211744.133947-2-luca@z3ntu.xyz/
+>>
+>> [...]
+> 
+> Applied, thanks!
 
-> ---
->  arch/arm64/kvm/Kconfig              |  1 +
->  arch/mips/kvm/Kconfig               |  1 +
->  arch/powerpc/include/asm/kvm_host.h |  1 -
->  arch/powerpc/kvm/powerpc.c          |  5 -----
->  arch/riscv/kvm/Kconfig              |  1 +
->  arch/s390/include/asm/kvm_host.h    |  1 -
->  arch/s390/kvm/kvm-s390.c            |  6 ------
->  arch/x86/kvm/Kconfig                |  1 +
->  include/linux/kvm_host.h            |  4 ++++
->  virt/kvm/Kconfig                    |  3 +++
->  virt/kvm/kvm_main.c                 | 30 +++++++++++++++++++++++------
->  11 files changed, 35 insertions(+), 19 deletions(-)
->
-> diff --git a/arch/arm64/kvm/Kconfig b/arch/arm64/kvm/Kconfig
-> index 815cc118c675..0a7d2116b27b 100644
-> --- a/arch/arm64/kvm/Kconfig
-> +++ b/arch/arm64/kvm/Kconfig
-> @@ -21,6 +21,7 @@ if VIRTUALIZATION
->  menuconfig KVM
->         bool "Kernel-based Virtual Machine (KVM) support"
->         depends on HAVE_KVM
-> +       select KVM_GENERIC_HARDWARE_ENABLING
->         select MMU_NOTIFIER
->         select PREEMPT_NOTIFIERS
->         select HAVE_KVM_CPU_RELAX_INTERCEPT
-> diff --git a/arch/mips/kvm/Kconfig b/arch/mips/kvm/Kconfig
-> index 91d197bee9c0..29e51649203b 100644
-> --- a/arch/mips/kvm/Kconfig
-> +++ b/arch/mips/kvm/Kconfig
-> @@ -28,6 +28,7 @@ config KVM
->         select MMU_NOTIFIER
->         select SRCU
->         select INTERVAL_TREE
-> +       select KVM_GENERIC_HARDWARE_ENABLING
->         help
->           Support for hosting Guest kernels.
->
-> diff --git a/arch/powerpc/include/asm/kvm_host.h b/arch/powerpc/include/asm/kvm_host.h
-> index 0a80e80c7b9e..959f566a455c 100644
-> --- a/arch/powerpc/include/asm/kvm_host.h
-> +++ b/arch/powerpc/include/asm/kvm_host.h
-> @@ -876,7 +876,6 @@ struct kvm_vcpu_arch {
->  #define __KVM_HAVE_ARCH_WQP
->  #define __KVM_HAVE_CREATE_DEVICE
->
-> -static inline void kvm_arch_hardware_disable(void) {}
->  static inline void kvm_arch_sync_events(struct kvm *kvm) {}
->  static inline void kvm_arch_memslots_updated(struct kvm *kvm, u64 gen) {}
->  static inline void kvm_arch_flush_shadow_all(struct kvm *kvm) {}
-> diff --git a/arch/powerpc/kvm/powerpc.c b/arch/powerpc/kvm/powerpc.c
-> index 51268be60dac..ed426c9ee0e9 100644
-> --- a/arch/powerpc/kvm/powerpc.c
-> +++ b/arch/powerpc/kvm/powerpc.c
-> @@ -436,11 +436,6 @@ int kvmppc_ld(struct kvm_vcpu *vcpu, ulong *eaddr, int size, void *ptr,
->  }
->  EXPORT_SYMBOL_GPL(kvmppc_ld);
->
-> -int kvm_arch_hardware_enable(void)
-> -{
-> -       return 0;
-> -}
-> -
->  int kvm_arch_init_vm(struct kvm *kvm, unsigned long type)
->  {
->         struct kvmppc_ops *kvm_ops = NULL;
-> diff --git a/arch/riscv/kvm/Kconfig b/arch/riscv/kvm/Kconfig
-> index f36a737d5f96..d5a658a047a7 100644
-> --- a/arch/riscv/kvm/Kconfig
-> +++ b/arch/riscv/kvm/Kconfig
-> @@ -20,6 +20,7 @@ if VIRTUALIZATION
->  config KVM
->         tristate "Kernel-based Virtual Machine (KVM) support (EXPERIMENTAL)"
->         depends on RISCV_SBI && MMU
-> +       select KVM_GENERIC_HARDWARE_ENABLING
->         select MMU_NOTIFIER
->         select PREEMPT_NOTIFIERS
->         select KVM_MMIO
-> diff --git a/arch/s390/include/asm/kvm_host.h b/arch/s390/include/asm/kvm_host.h
-> index b1e98a9ed152..d3e4b5d7013a 100644
-> --- a/arch/s390/include/asm/kvm_host.h
-> +++ b/arch/s390/include/asm/kvm_host.h
-> @@ -1023,7 +1023,6 @@ extern char sie_exit;
->  extern int kvm_s390_gisc_register(struct kvm *kvm, u32 gisc);
->  extern int kvm_s390_gisc_unregister(struct kvm *kvm, u32 gisc);
->
-> -static inline void kvm_arch_hardware_disable(void) {}
->  static inline void kvm_arch_sync_events(struct kvm *kvm) {}
->  static inline void kvm_arch_sched_in(struct kvm_vcpu *vcpu, int cpu) {}
->  static inline void kvm_arch_free_memslot(struct kvm *kvm,
-> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
-> index 949231f1393e..129c159ab5ee 100644
-> --- a/arch/s390/kvm/kvm-s390.c
-> +++ b/arch/s390/kvm/kvm-s390.c
-> @@ -248,12 +248,6 @@ debug_info_t *kvm_s390_dbf;
->  debug_info_t *kvm_s390_dbf_uv;
->
->  /* Section: not file related */
-> -int kvm_arch_hardware_enable(void)
-> -{
-> -       /* every s390 is virtualization enabled ;-) */
-> -       return 0;
-> -}
-> -
->  /* forward declarations */
->  static void kvm_gmap_notifier(struct gmap *gmap, unsigned long start,
->                               unsigned long end);
-> diff --git a/arch/x86/kvm/Kconfig b/arch/x86/kvm/Kconfig
-> index fbeaa9ddef59..8e578311ca9d 100644
-> --- a/arch/x86/kvm/Kconfig
-> +++ b/arch/x86/kvm/Kconfig
-> @@ -49,6 +49,7 @@ config KVM
->         select SRCU
->         select INTERVAL_TREE
->         select HAVE_KVM_PM_NOTIFIER if PM
-> +       select KVM_GENERIC_HARDWARE_ENABLING
->         help
->           Support hosting fully virtualized guest machines using hardware
->           virtualization extensions.  You will need a fairly recent
-> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-> index 0b96d836a051..23c89c1e7788 100644
-> --- a/include/linux/kvm_host.h
-> +++ b/include/linux/kvm_host.h
-> @@ -1441,8 +1441,10 @@ void kvm_arch_create_vcpu_debugfs(struct kvm_vcpu *vcpu, struct dentry *debugfs_
->  static inline void kvm_create_vcpu_debugfs(struct kvm_vcpu *vcpu) {}
->  #endif
->
-> +#ifdef CONFIG_KVM_GENERIC_HARDWARE_ENABLING
->  int kvm_arch_hardware_enable(void);
->  void kvm_arch_hardware_disable(void);
-> +#endif
->  int kvm_arch_vcpu_runnable(struct kvm_vcpu *vcpu);
->  bool kvm_arch_vcpu_in_kernel(struct kvm_vcpu *vcpu);
->  int kvm_arch_vcpu_should_kick(struct kvm_vcpu *vcpu);
-> @@ -2074,7 +2076,9 @@ static inline bool kvm_check_request(int req, struct kvm_vcpu *vcpu)
->         }
->  }
->
-> +#ifdef CONFIG_KVM_GENERIC_HARDWARE_ENABLING
->  extern bool kvm_rebooting;
-> +#endif
->
->  extern unsigned int halt_poll_ns;
->  extern unsigned int halt_poll_ns_grow;
-> diff --git a/virt/kvm/Kconfig b/virt/kvm/Kconfig
-> index 800f9470e36b..d28df77345e1 100644
-> --- a/virt/kvm/Kconfig
-> +++ b/virt/kvm/Kconfig
-> @@ -86,3 +86,6 @@ config KVM_XFER_TO_GUEST_WORK
->
->  config HAVE_KVM_PM_NOTIFIER
->         bool
-> +
-> +config KVM_GENERIC_HARDWARE_ENABLING
-> +       bool
-> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> index 859bc27091cd..6736b36cf469 100644
-> --- a/virt/kvm/kvm_main.c
-> +++ b/virt/kvm/kvm_main.c
-> @@ -102,9 +102,6 @@ EXPORT_SYMBOL_GPL(halt_poll_ns_shrink);
->  DEFINE_MUTEX(kvm_lock);
->  LIST_HEAD(vm_list);
->
-> -static DEFINE_PER_CPU(bool, hardware_enabled);
-> -static int kvm_usage_count;
-> -
->  static struct kmem_cache *kvm_vcpu_cache;
->
->  static __read_mostly struct preempt_ops kvm_preempt_ops;
-> @@ -146,9 +143,6 @@ static void hardware_disable_all(void);
->
->  static void kvm_io_bus_destroy(struct kvm_io_bus *bus);
->
-> -__visible bool kvm_rebooting;
-> -EXPORT_SYMBOL_GPL(kvm_rebooting);
-> -
->  #define KVM_EVENT_CREATE_VM 0
->  #define KVM_EVENT_DESTROY_VM 1
->  static void kvm_uevent_notify_change(unsigned int type, struct kvm *kvm);
-> @@ -5005,6 +4999,13 @@ static struct miscdevice kvm_dev = {
->         &kvm_chardev_ops,
->  };
->
-> +#ifdef CONFIG_KVM_GENERIC_HARDWARE_ENABLING
-> +__visible bool kvm_rebooting;
-> +EXPORT_SYMBOL_GPL(kvm_rebooting);
-> +
-> +static DEFINE_PER_CPU(bool, hardware_enabled);
-> +static int kvm_usage_count;
-> +
->  static int __hardware_enable_nolock(void)
->  {
->         if (__this_cpu_read(hardware_enabled))
-> @@ -5171,6 +5172,17 @@ static struct syscore_ops kvm_syscore_ops = {
->         .suspend = kvm_suspend,
->         .resume = kvm_resume,
->  };
-> +#else /* CONFIG_KVM_GENERIC_HARDWARE_ENABLING */
-> +static int hardware_enable_all(void)
-> +{
-> +       return 0;
-> +}
-> +
-> +static void hardware_disable_all(void)
-> +{
-> +
-> +}
-> +#endif /* CONFIG_KVM_GENERIC_HARDWARE_ENABLING */
->
->  static void kvm_io_bus_destroy(struct kvm_io_bus *bus)
->  {
-> @@ -5859,6 +5871,7 @@ int kvm_init(unsigned vcpu_size, unsigned vcpu_align, struct module *module)
->         int r;
->         int cpu;
->
-> +#ifdef CONFIG_KVM_GENERIC_HARDWARE_ENABLING
->         r = cpuhp_setup_state_nocalls(CPUHP_AP_KVM_ONLINE, "kvm/cpu:online",
->                                       kvm_online_cpu, kvm_offline_cpu);
->         if (r)
-> @@ -5866,6 +5879,7 @@ int kvm_init(unsigned vcpu_size, unsigned vcpu_align, struct module *module)
->
->         register_reboot_notifier(&kvm_reboot_notifier);
->         register_syscore_ops(&kvm_syscore_ops);
-> +#endif
->
->         /* A kmem cache lets us meet the alignment requirements of fx_save. */
->         if (!vcpu_align)
-> @@ -5933,9 +5947,11 @@ int kvm_init(unsigned vcpu_size, unsigned vcpu_align, struct module *module)
->                 free_cpumask_var(per_cpu(cpu_kick_mask, cpu));
->         kmem_cache_destroy(kvm_vcpu_cache);
->  out_free_3:
-> +#ifdef CONFIG_KVM_GENERIC_HARDWARE_ENABLING
->         unregister_syscore_ops(&kvm_syscore_ops);
->         unregister_reboot_notifier(&kvm_reboot_notifier);
->         cpuhp_remove_state_nocalls(CPUHP_AP_KVM_ONLINE);
-> +#endif
->         return r;
->  }
->  EXPORT_SYMBOL_GPL(kvm_init);
-> @@ -5957,9 +5973,11 @@ void kvm_exit(void)
->         kmem_cache_destroy(kvm_vcpu_cache);
->         kvm_vfio_ops_exit();
->         kvm_async_pf_deinit();
-> +#ifdef CONFIG_KVM_GENERIC_HARDWARE_ENABLING
->         unregister_syscore_ops(&kvm_syscore_ops);
->         unregister_reboot_notifier(&kvm_reboot_notifier);
->         cpuhp_remove_state_nocalls(CPUHP_AP_KVM_ONLINE);
-> +#endif
->         kvm_irqfd_exit();
->  }
->  EXPORT_SYMBOL_GPL(kvm_exit);
-> --
-> 2.38.1.431.g37b22c650d-goog
->
+Hi Bjorn,
+
+Apologies, I should have left a reply about re-spinning this; it's 
+been dropped to a single patch as Krzysztof suggested in [1] and is 
+currently pending a v4 (v3 can be found at [2]).
+
+The changes aren't major, actually just enabling it by default rather 
+than per-device. If it would need to be reverted I could instead send 
+a followup to do this as well as add the missing dt bindings.
+
+[1]: 
+https://lore.kernel.org/linux-arm-msm/5929051d-d2be-5b51-0cf9-294affa51df2@linaro.org/
+[2]: 
+https://lore.kernel.org/linux-arm-msm/20221017190902.2282899-1-caleb.connolly@linaro.org/
+
+> 
+> [1/5] arm64: dts: qcom: pmi8998: add rradc node
+>        commit: 1cb78978d34e1b65bbb912d8265eb95713ae7a45
+> [2/5] arm64: dts: qcom: sdm845-oneplus: enable rradc
+>        commit: 868985181a69df53321035d96aa668d90f6cd5cb
+> [3/5] arm64: dts: qcom: sdm845-db845c: enable rradc
+>        commit: e779eb99859cc26d051f6fc723d2bd2d5990a812
+> [4/5] arm64: dts: qcom: sdm845-xiaomi-beryllium: enable rradc
+>        commit: 53c54069d9ffd556b52893077324e628655cd591
+> [5/5] arm64: dts: qcom: msm8998-oneplus-common: enable RRADC
+>        commit: aac16a9d247e5496361bfe20d651f2c1333eb5dc
+> 
+> Best regards,
+
+-- 
+Kind Regards,
+Caleb (they/them)
