@@ -2,52 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E685861E964
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 04:15:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0768461E96B
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 04:15:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231419AbiKGDPF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Nov 2022 22:15:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35684 "EHLO
+        id S231181AbiKGDPM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Nov 2022 22:15:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231324AbiKGDOW (ORCPT
+        with ESMTP id S230417AbiKGDO1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Nov 2022 22:14:22 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C8E71261D;
+        Sun, 6 Nov 2022 22:14:27 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D604A12639;
         Sun,  6 Nov 2022 19:13:17 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7FB8BB80D92;
-        Mon,  7 Nov 2022 03:13:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3049AC43141;
-        Mon,  7 Nov 2022 03:13:13 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 41FC760EA3;
+        Mon,  7 Nov 2022 03:13:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E51DC433D7;
+        Mon,  7 Nov 2022 03:13:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667790794;
-        bh=VuNnQKYThnBK9z3zO/CI43DuaPMKOazjjt6IfMOPodo=;
+        s=k20201202; t=1667790795;
+        bh=0C/zbEncLKIgdwTUgPdnJzB1OdI/BNrdVQy8KMAVTnQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Hz/30DQGV5kU11tcAWXMhersziNCnHe7E1B/iaDvOH7y6LIu6oc8FPFjVjGAg2Zk0
-         X/0R1znhm5Zj/9O7RKxoZYt4J1g2uloTqh/6rpxWicKoEmp7EHyTI/W0D87j5nZUYt
-         7K3g9ZydkWmsx2qJAD/IliM+aDIwRgB56pqyjWVqckhjDpa33WMiiYM/oSISZQPgfC
-         KJVRK7ijhFIFTrg6IWqMi2DUI3vSKOCyehYmZIPaAdiBuxxKOJoaRX3md+Hi0bq4nK
-         WrQtFMgZCn/o2ltoxFNTdSejakpWhQjT+519Ge9dagIeVmfX14QF6XBgsIYBSJJ/Cx
-         V8+6ftS0EwxIw==
+        b=rzKEHCYTm6agWkPhLLAlZIT8HDWZmylleqE+pLE5GDaVzmWR9BuSGQ/Bu+D2JAXHu
+         7Y8AiNYgXrEpl72oyueU+IEB+LGdEWJGMtivC0/TA8o9L+pIn2MYICjdBXoBAL8dMJ
+         8oEwnkRl7qOo8rF4ZZBadbN0C8gDk/R3zez07spjI8/15iNKEADJCIX98DG53pqoLh
+         bSFNe5Vm7wshc4eyLXYIDXX+KT3XOAooItL0gnZB6V0qVYzoLQYFQic1NI7Wz+LmwU
+         JHuoleNNFJlZiLM/cGtYDzaGWZZTvISSWwrPRroGhwnk8qBd13Q+/FxiemGTO3iwc4
+         hx9gmjwAwAfVQ==
 From:   Bjorn Andersson <andersson@kernel.org>
 To:     krzysztof.kozlowski+dt@linaro.org,
-        Rob Herring <robh+dt@kernel.org>, konrad.dybcio@somainline.org,
-        lgirdwood@gmail.com, broonie@kernel.org, linus.walleij@linaro.org,
-        lee@kernel.org, Andy Gross <agross@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, a.zummo@towertech.it,
+        konrad.dybcio@somainline.org, alexandre.belloni@bootlin.com,
+        dmitry.torokhov@gmail.com, lee@kernel.org,
+        quic_c_skakit@quicinc.com, Andy Gross <agross@kernel.org>,
         neil.armstrong@linaro.org
-Cc:     devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-gpio@vger.kernel.org,
+Cc:     linux-input@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Rob Herring <robh@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         linux-kernel@vger.kernel.org
-Subject: Re: (subset) [PATCH v3 0/5] arm: qcom: mdm9615: second round of bindings and DT fixes
-Date:   Sun,  6 Nov 2022 21:12:31 -0600
-Message-Id: <166779074263.500303.1566494509148180650.b4-ty@kernel.org>
+Subject: Re: (subset) [PATCH v4 00/11] arm: qcom: mdm9615: first round of bindings and DT fixes
+Date:   Sun,  6 Nov 2022 21:12:32 -0600
+Message-Id: <166779074262.500303.9983316398546692832.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20221005-mdm9615-pinctrl-yaml-v3-0-e5e045644971@linaro.org>
-References: <20221005-mdm9615-pinctrl-yaml-v3-0-e5e045644971@linaro.org>
+In-Reply-To: <20220928-mdm9615-dt-schema-fixes-v4-0-dac2dfaac703@linaro.org>
+References: <20220928-mdm9615-dt-schema-fixes-v4-0-dac2dfaac703@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -60,27 +62,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 21 Oct 2022 17:27:52 +0200, Neil Armstrong wrote:
-> This is a second round of bindings & DT fixes for the MDM9615 platform.
+On Fri, 21 Oct 2022 11:06:36 +0200, Neil Armstrong wrote:
+> This is a first round of trivial bindings & DT fixes for the MDM9615 platform.
 > 
-> This second round focuses on less trivial changes like pinctrl & regulators bindings,
-> the remaining work will mainly be fixing the qcom,kpss-timer/qcom,msm-timer situation and
-> add bindings for qcom,lcc-mdm9615, qcom,kpss-gcc & swir,mangoh-iotport-spi.
+> This first round focuses on trivial changes, the remaining work will
+> mainly be .txt to .yaml transition of old qcom pmic & co device bindings.
 > 
-> Dependencies:
-> - patch 1,3-4: None
-> - patch 2: bindings dependency on 20221005-mdm9615-sx1509q-yaml-v2-0-a4a5b8eecc7b@linaro.org
 > 
-> [...]
 
 Applied, thanks!
 
-[1/5] arm: dts: qcom: mdm9615: align pinctrl subnodes with dt-schema bindings
-      commit: fadae8fe73c6b30f759189209c24746a1dae7b1a
-[2/5] arm: dts: qcom: mdm9615: wp8548-mangoh-green: fix sx150xq node names and probe-reset property
-      commit: c7e34943d909f1a7872603d834347b478466cb09
-[5/5] arm: dts: qcom-msm8660: align RPM regulators node name with bindings
-      commit: 85055a1eecc17f38d92b36f6b774bb37a1cc7a53
+[01/11] dt-bindings: arm: qcom: move swir,mangoh-green-wp8548 board documentation to qcom.yaml
+        commit: f4ec5f28af13e2b8e62ae173cb6827e137cdd8cc
+[02/11] arm: dts: qcom: mdm9615*: add SPDX-License-Identifier
+        commit: c69af934db18ad165b1dc84f5450fa55afb34acb
+[03/11] arm: dts: qcom: mdm9615: add missing reg in cpu@0 node
+        commit: e58bdf93db08c16dd06bc1967e978708b44d9c83
+[04/11] arm: dts: qcom: mdm9615: remove invalid spi-max-frequency gsbi3_spi node
+        commit: 75353420d0d0abe3a57cedf4a6cfa00ea05842a3
+[10/11] arm: dts: qcom: mdm9615: remove invalid interrupt-names from pl18x mmc nodes
+        commit: 3627dd180c67d3e589c38a10b4be29a0352a70b6
+[11/11] arm: dts: qcom: mdm9615: remove useless amba subnode
+        commit: 10de96ba6d4287220962cdd82826b6a14af90e2e
 
 Best regards,
 -- 
