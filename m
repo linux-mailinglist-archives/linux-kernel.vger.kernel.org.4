@@ -2,280 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1F4A61EB19
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 07:38:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A96FA61EB1B
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 07:39:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229675AbiKGGif (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 01:38:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48044 "EHLO
+        id S231319AbiKGGjF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 01:39:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231373AbiKGGi2 (ORCPT
+        with ESMTP id S231365AbiKGGi5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 01:38:28 -0500
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92BB3E82
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Nov 2022 22:38:27 -0800 (PST)
-Received: by mail-pg1-x52b.google.com with SMTP id b62so9647640pgc.0
-        for <linux-kernel@vger.kernel.org>; Sun, 06 Nov 2022 22:38:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kylehuey.com; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BvEzpa366uwfXvIWXqplMREsN3llp6jn3XS48IWwJVU=;
-        b=JbvFkHTg6F3sZyinEDT4lwm/oP2vJjWifwvuI06HryqR3mSh9b1yubfFMtwo5ZR3Y1
-         JbbbdfUeRw4rpOEBeBFTZ/yFFQxcJR3Z5xIcDeQLx9WtUS59mLXzorgJaqTTzKiziJQ0
-         yxqXeJh0PFM/EE95MrnIEDzRQM4d1p+LK7gXp0mZsqvnNx27Rweu9QmShysofFnSgtr6
-         zYHDChv8prjwyglRUgKAh6M84nkJ+k1RaXXdvHY75liLUxh5nGIu6/5hexcO71IZI/ma
-         jet2ZMKl+bt99S3q/qjspXQGzaLoOTUVimHeeLYUIEnpdheeLh+S10Lkiksnz+OOQiTn
-         EEhg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=BvEzpa366uwfXvIWXqplMREsN3llp6jn3XS48IWwJVU=;
-        b=xdrCIHX1g0lJekOTbBdnNcpQYZMqfRwH6MMXMcQcePIOvkAjRzOWNZzm9XpiuMtzG9
-         zIS5bnP+EegSqdBT5Z2KxzA3VQ7oc4FqKdZ8nR5G1eP+xY4OIoErvAzKTehiz8v4lj//
-         KzK+ZOZxLnZFTdEQPt22TrRFsXsWPyoNQWUl4DaBS8kbfO5zAxqvgDMHIW1j54W9sV5e
-         fOP4XyUOppDiOSV9oyF8AaQBYmt3XO9DAfXvZNPdRxIZm2W+aczbTvULct2iHROeHgkV
-         MCDloRnGGQ2mhyu3uh1dTQ1t8HkKf08e1xLwAifPySidO1puRVCYX9h6K2hp2S+B5LSZ
-         a2yA==
-X-Gm-Message-State: ACrzQf16TJLComtlitdLjL8sN/biUaSk2NrJli95GDZhW4Ur/f68BEcR
-        zoQCm36+yZPkPxyixJIF2mVXTw==
-X-Google-Smtp-Source: AMsMyM7bP/DZc38x2vStZJX9UcU3C/eBBsS9GvgYL3XQ+tf8tEuAS1ipH+mzKtMVYfpAiV69pifvNA==
-X-Received: by 2002:a63:2547:0:b0:46f:793f:197b with SMTP id l68-20020a632547000000b0046f793f197bmr42505736pgl.35.1667803107020;
-        Sun, 06 Nov 2022 22:38:27 -0800 (PST)
-Received: from minbar.home.kylehuey.com (c-71-198-251-229.hsd1.ca.comcast.net. [71.198.251.229])
-        by smtp.gmail.com with ESMTPSA id b20-20020a63d814000000b004468cb97c01sm3453803pgh.56.2022.11.06.22.38.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 06 Nov 2022 22:38:26 -0800 (PST)
-From:   Kyle Huey <me@kylehuey.com>
-X-Google-Original-From: Kyle Huey <khuey@kylehuey.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Sean Christopherson <seanjc@google.com>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Robert O'Callahan <robert@ocallahan.org>,
-        David Manouchehri <david.manouchehri@riseup.net>,
-        Kyle Huey <me@kylehuey.com>
-Subject: [RESEND PATCH v6 2/2] selftests/vm/pkeys: Add a regression test for setting PKRU through ptrace
-Date:   Sun,  6 Nov 2022 22:38:08 -0800
-Message-Id: <20221107063807.81774-3-khuey@kylehuey.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221107063807.81774-1-khuey@kylehuey.com>
-References: <20221107063807.81774-1-khuey@kylehuey.com>
-MIME-Version: 1.0
+        Mon, 7 Nov 2022 01:38:57 -0500
+Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2056.outbound.protection.outlook.com [40.107.21.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6C6965D5
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Nov 2022 22:38:56 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=GrwlqpTteRBKZKnFCVVf0ZjXgVChj1Uz3xNL/zY87AQtmH1ziPuhgMqU7f4SwNkEWt/pOq+eNqo5A65wllXDY1D7fLC1jrMM+IEELURRfeUnULLAQo1BnOSvQLMSrJUQCzyP5ioObbvH5hiuwUupme+j1ytC8wevkPBRtabhHd+E5bHNHqLqkzyhhFqub4LzbCnRq6vUeQEgJc6bUHKi8FpHgfTVOJTUBEj82VG224CB3+0cIP/tBr/p5ro8yMwf3agk9hFp20yfdeIaODfgogPi8m6isBl1xnFD/DD6m5LBnX+fhjLCg44wnAIXoD/ha8fEb8Qm1jNrENdcufbHwA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=P4SadKCAqgvuBKkkSvglHFkKVXfNVQ4H25m63L/FRc0=;
+ b=io8Apm34vpsCK2nTqdqD/kFSROm5st/jW66un7zS6yUTE8cYv3b/j0Klvj2xuwe5fusdiXJGUu/ZH+x3fZAybVHlqRxVIMwpsH0mNDCU8vVk8RWSfneGD/rSF8AQf+XSMaFK4UZdATkjsTdjQwI0LP0VUsid7Cwqrd+aiXbslih1Mn7bMR42O+BtHg3RbTFhHszb9inhOEpDcqGnDoHJfd/am9B01sD2aEwB6E+gjqB6TmJYmP6c5dPhEtfr9Uf+rJgz74FWmY081dqrWYbLfjPR7qmIoAmL5U3lGHQLz0Ed+4qsaZsaNsTMbgzDCFxJkICdYBbX/CtF965u7jgnRA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=P4SadKCAqgvuBKkkSvglHFkKVXfNVQ4H25m63L/FRc0=;
+ b=ZdV/jjkS27rtpGtsUxNtIjuElJMwe3c6cuo0sMyJWdzzv+tBZpU3RleoDE1zyRJnDA9ZynfR7r8T/KQg13f3DZPb+JbRtRUZyJnMJ63nipmJudtARytkfD2z/idNabCpS11ctR67scL7Qg6x79A1pbe058nlvGWldH0s/rM9/90=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from VI1PR04MB4222.eurprd04.prod.outlook.com (2603:10a6:803:46::19)
+ by DBBPR04MB8010.eurprd04.prod.outlook.com (2603:10a6:10:1f1::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.22; Mon, 7 Nov
+ 2022 06:38:53 +0000
+Received: from VI1PR04MB4222.eurprd04.prod.outlook.com
+ ([fe80::d09d:ac92:bd65:c390]) by VI1PR04MB4222.eurprd04.prod.outlook.com
+ ([fe80::d09d:ac92:bd65:c390%7]) with mapi id 15.20.5791.025; Mon, 7 Nov 2022
+ 06:38:53 +0000
+From:   Chancel Liu <chancel.liu@nxp.com>
+To:     lgirdwood@gmail.com, broonie@kernel.org, perex@perex.cz,
+        tiwai@suse.com, ckeepax@opensource.cirrus.com,
+        luca.ceresoli@bootlin.com, ojeda@kernel.org, cmo@melexis.com,
+        u.kleine-koenig@pengutronix.de, xiaolei.wang@windriver.com,
+        steve@sk2.org, chi.minghao@zte.com.cn,
+        patches@opensource.cirrus.com, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+Cc:     shengjiu.wang@nxp.com, Chancel Liu <chancel.liu@nxp.com>
+Subject: [PATCH] ASoC: wm8962: Wait for updated value of WM8962_CLOCKING1 register
+Date:   Mon,  7 Nov 2022 14:38:18 +0800
+Message-Id: <20221107063818.2468193-1-chancel.liu@nxp.com>
+X-Mailer: git-send-email 2.25.1
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SG2PR06CA0238.apcprd06.prod.outlook.com
+ (2603:1096:4:ac::22) To VI1PR04MB4222.eurprd04.prod.outlook.com
+ (2603:10a6:803:46::19)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: VI1PR04MB4222:EE_|DBBPR04MB8010:EE_
+X-MS-Office365-Filtering-Correlation-Id: 898f5662-35c6-43c5-a78d-08dac08abcfc
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 2sF8f9niR8wmPL5GO4mDrmMbypiumiIgTfKEosD/oRAruyte+kK9DS/v1bXXyOqWGOGjB4r3f5AGfvxaztplbWZQbjlUlm7GOoTjoNYzjdNqrxPak1gd8mc7X12jA9rX8WJiMfuecqUfQrwYDKWZpXDpmg3c95bfWYE4/25tjiG8pxql2jzlHPqb5a69sC2hPt5VV4kwxBGDo1Ss5w6fXUNsLBCeCEU5hjKCTMp0tcozxmzpnDFTlH16tkKsQSyxA+EqjHfE8n7lnUEL/g8l6mGzPJm6pP8xTezHNiA4gWyDbbW8An2eQ/FbccZWa9IpUzYQ8qglC3+hbjTgiuWnxlNxGpMvsQDW+y01j5TG8r+UE0fnajFMxv0QfL3YKBpUiLWSjlhx0mSR/v+nik2WX9RU7By0ySC9axg0LmSoi/HqCw/20uBCMUqATKta9RP9drIbpcG+cmzgnj7iIBpEc0lQIr9uA1Cu7M14HZP5/hOEQhbbIxx7++bLbIi9V7kC454QfVyzBkRWnif8m4GDOxeOtHDyYfr8WXPwo/bNmmDqIsItsJc+biDh0gkt+Q3Kpqn1gCW06qj/RSak/He75YxtM1xKTbbRvlNTfVxOvpfy9xaoaewSnzwo97cC1l+lMsARZTIoBTakcKuc9DrJXx04a0S7lcuVlLiiGQuGScxtw+niqC9OfGfNW8g7NfJnfD5yKs0JJiODw0yB2LK3GD0WF7MiE7an4BH4Mh8qKSkoejoJEFeZTXgjApnyGcd+Llgun9NHcKMMqpRtYRtS41Fh4WBdXrccFMsrgZ9uXkk=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB4222.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(396003)(346002)(376002)(136003)(366004)(451199015)(36756003)(2906002)(38350700002)(41300700001)(5660300002)(6506007)(66556008)(6666004)(7416002)(38100700002)(8936002)(66476007)(4326008)(8676002)(66946007)(6486002)(15650500001)(44832011)(316002)(86362001)(921005)(26005)(52116002)(83380400001)(186003)(1076003)(478600001)(6512007)(2616005);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?IeVAXVW3mtJvvsE5OVxu83r9XdFl4xweNWe/pB19eZF/unxrpi/hrb4jb2lj?=
+ =?us-ascii?Q?1inQJtxGHqL07ymLSESAlZsb5tOQvk7z60al4VIDijAX7DmYEvAvhRMxZkZR?=
+ =?us-ascii?Q?sRoXygHbVSYh2XBa5EPTg1hu0AP8Bm4eKhNuMT/H8/eH46NqYFCKb4J9FByx?=
+ =?us-ascii?Q?9utgts9kTl7q12zepPRcYR8MXV/LkumYHxuizNjzxvqtFWTPsI1t07h9hTwJ?=
+ =?us-ascii?Q?7D1KVOvw/KvNjHhsH6LVHOEJiDKirhvZ7bc/EE0yg2objnfS6NnJ7haoZFul?=
+ =?us-ascii?Q?31rKQcxLEdQBXoVGsNuTggWOQBqS7xXeWVbeqeM2TFVqYlTQDnf+13phMhh3?=
+ =?us-ascii?Q?cZhMv8nPuv0fN14c13F0wzz+iXkItckCRao1+4SNQrZaAhykDM28m52qps2R?=
+ =?us-ascii?Q?eqcuN3IrjD4i4ZCWBm6PAFWp96NdHjjLGCSs76DVYIPdURiTFTmtWseBwDl5?=
+ =?us-ascii?Q?JMzt2jDS3jyiefbOypLkzAdOy85O3HrjgqkfA4WgG/c+3nQfumbss0j1+ViZ?=
+ =?us-ascii?Q?ZwAIcnvHWAqZ3l0AWi2VlpkiLdAiiDGMbGi1501fagTWPgrNbPIh9V0vyDxo?=
+ =?us-ascii?Q?vRUbl/73VK7MjgX8Yo78PYWW9Cz+pk1SRkFOvsn9ZHXMXbMBAdBifg9J6XmB?=
+ =?us-ascii?Q?8euxKZnUAUjukfAzWoFegTOPr8daqbw1vXuMtTv4QbEXWuBZ0u1i8DOr2Ac+?=
+ =?us-ascii?Q?PIbuU+S878+xzj+SXqeNI9YBJ7zioDcAw8TfqGB3a3A7UCobARRL5MfcTu6v?=
+ =?us-ascii?Q?PBMC/yz8FKCbudXUNy1L7z1QSyACXpf6DD8fyEvAtTEPYxvq0lJc/Gsw0Pmx?=
+ =?us-ascii?Q?n3c1chMAhML2gj+6snoytVmBv7zP5is2YqGcS7qGCdlCS/MZdV3y6jBxxBK+?=
+ =?us-ascii?Q?DNLoh4X9ncSdDCfbd8+e5t/Cz0HN65bhp6jiIUCCOWSmPmAWoB+bhYXBjpWc?=
+ =?us-ascii?Q?X9yJ/fP3cWvSLemf+VKXTFGbqsVF/A6ksqwJtR1+Sk+C113LnAHdWWjq9MF9?=
+ =?us-ascii?Q?DWLRvPcDotCw1zHckJtZBDfaSEXxBRYBEkFEaQWhJsp4F3BSjBqKy0IkQWhp?=
+ =?us-ascii?Q?Jik0YhxgulzZaqlnM929a/rcaFmj6424xUeV2KHPqNMt5Ne2AswUV2SGAb8U?=
+ =?us-ascii?Q?KASNCJvpLOIL31lLx+SZZvlFAXDa79FmTnyKKLitlvTxTDwa4ESzizblvUT1?=
+ =?us-ascii?Q?CWWXkhGt3TxbfTTDpvlAf3SGmZz433Zp0C3YheuhMkh4CYp+cs/Aa67mirLc?=
+ =?us-ascii?Q?EjrjJZraX1GKj1PJIMt3M0HWZjS2vSlIa+yfXlqo48vFNv7MjXY07vfiJa9/?=
+ =?us-ascii?Q?haG/0Edu/fwXniGrJLpOuLBMDfYIMi8vXn+AvhXD3tXw6xZiKt4OksVcZIWH?=
+ =?us-ascii?Q?VYFFsKQC57xh2JyuXEy7cAvXzQ4ytMtLUEni6feYRYbeogh6L7/WCzZKUPdx?=
+ =?us-ascii?Q?63yzt3S75O8H0KBc4Ctz1khPll1PaBZR0mnBNklKgzMXRFQ2vfO0842NAAel?=
+ =?us-ascii?Q?SoXHsHkTxz3dWlXmr6X5wsItnBj0SHmauCOpHZ4iBtZoifMwZCZR5N7Ul07j?=
+ =?us-ascii?Q?vhM/HEtPvYZTOqrj3pAzU0AdVtWtXoTq0YcjuhIE?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 898f5662-35c6-43c5-a78d-08dac08abcfc
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB4222.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Nov 2022 06:38:53.6759
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: eNmRQ64Xt3s93fnAHO7N2HvQYlknFlDvYH9mJaMife8f0FKGKoQ0U6D+5HXjgpv5PjjHZg9a1APpw66Syes5hg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBBPR04MB8010
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kyle Huey <me@kylehuey.com>
+DSPCLK_DIV field in WM8962_CLOCKING1 register is used to generate
+correct frequency of LRCLK and BCLK. Sometimes the read-only value
+can't be updated timely after enabling SYSCLK. This results in wrong
+calculation values. Delay is introduced here to wait for newest value
+from register. The time of the delay should be at least 500~1000us
+according to test.
 
-This tests PTRACE_SETREGSET with NT_X86_XSTATE modifying PKRU directly and
-removing the PKRU bit from XSTATE_BV.
-
-Signed-off-by: Kyle Huey <me@kylehuey.com>
+Signed-off-by: Chancel Liu <chancel.liu@nxp.com>
 ---
- tools/testing/selftests/vm/pkey-x86.h        |  12 ++
- tools/testing/selftests/vm/protection_keys.c | 131 ++++++++++++++++++-
- 2 files changed, 141 insertions(+), 2 deletions(-)
+ sound/soc/codecs/wm8962.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/tools/testing/selftests/vm/pkey-x86.h b/tools/testing/selftests/vm/pkey-x86.h
-index b078ce9c6d2a..72c14cd3ddc7 100644
---- a/tools/testing/selftests/vm/pkey-x86.h
-+++ b/tools/testing/selftests/vm/pkey-x86.h
-@@ -104,6 +104,18 @@ static inline int cpu_has_pkeys(void)
- 	return 1;
- }
+diff --git a/sound/soc/codecs/wm8962.c b/sound/soc/codecs/wm8962.c
+index b4b4355c6728..563843565f68 100644
+--- a/sound/soc/codecs/wm8962.c
++++ b/sound/soc/codecs/wm8962.c
+@@ -2503,6 +2503,14 @@ static void wm8962_configure_bclk(struct snd_soc_component *component)
+ 		snd_soc_component_update_bits(component, WM8962_CLOCKING2,
+ 				WM8962_SYSCLK_ENA_MASK, WM8962_SYSCLK_ENA);
  
-+static inline int cpu_max_xsave_size(void)
-+{
-+	unsigned long XSTATE_CPUID = 0xd;
-+	unsigned int eax;
-+	unsigned int ebx;
-+	unsigned int ecx;
-+	unsigned int edx;
-+
-+	__cpuid_count(XSTATE_CPUID, 0, eax, ebx, ecx, edx);
-+	return ecx;
-+}
-+
- static inline u32 pkey_bit_position(int pkey)
- {
- 	return pkey * PKEY_BITS_PER_PKEY;
-diff --git a/tools/testing/selftests/vm/protection_keys.c b/tools/testing/selftests/vm/protection_keys.c
-index 291bc1e07842..95f403a0c46d 100644
---- a/tools/testing/selftests/vm/protection_keys.c
-+++ b/tools/testing/selftests/vm/protection_keys.c
-@@ -18,12 +18,13 @@
-  *	do a plain mprotect() to a mprotect_pkey() area and make sure the pkey sticks
-  *
-  * Compile like this:
-- *	gcc      -o protection_keys    -O2 -g -std=gnu99 -pthread -Wall protection_keys.c -lrt -ldl -lm
-- *	gcc -m32 -o protection_keys_32 -O2 -g -std=gnu99 -pthread -Wall protection_keys.c -lrt -ldl -lm
-+ *	gcc -mxsave      -o protection_keys    -O2 -g -std=gnu99 -pthread -Wall protection_keys.c -lrt -ldl -lm
-+ *	gcc -mxsave -m32 -o protection_keys_32 -O2 -g -std=gnu99 -pthread -Wall protection_keys.c -lrt -ldl -lm
-  */
- #define _GNU_SOURCE
- #define __SANE_USERSPACE_TYPES__
- #include <errno.h>
-+#include <linux/elf.h>
- #include <linux/futex.h>
- #include <time.h>
- #include <sys/time.h>
-@@ -1550,6 +1551,129 @@ void test_implicit_mprotect_exec_only_memory(int *ptr, u16 pkey)
- 	do_not_expect_pkey_fault("plain read on recently PROT_EXEC area");
- }
++	/* DSPCLK_DIV field in WM8962_CLOCKING1 register is used to generate
++	 * correct frequency of LRCLK and BCLK. Sometimes the read-only value
++	 * can't be updated timely after enabling SYSCLK. This results in wrong
++	 * calculation values. Delay is introduced here to wait for newest
++	 * value from register. The time of the delay should be at least
++	 * 500~1000us according to test.
++	 */
++	msleep(1);
+ 	dspclk = snd_soc_component_read(component, WM8962_CLOCKING1);
  
-+#if defined(__i386__) || defined(__x86_64__)
-+void test_ptrace_modifies_pkru(int *ptr, u16 pkey)
-+{
-+	u32 new_pkru;
-+	pid_t child;
-+	int status, ret;
-+	int pkey_offset = pkey_reg_xstate_offset();
-+	size_t xsave_size = cpu_max_xsave_size();
-+	void *xsave;
-+	u32 *pkey_register;
-+	u64 *xstate_bv;
-+	struct iovec iov;
-+
-+	new_pkru = ~read_pkey_reg();
-+	/* Don't make PROT_EXEC mappings inaccessible */
-+	new_pkru &= ~3;
-+
-+	child = fork();
-+	pkey_assert(child >= 0);
-+	dprintf3("[%d] fork() ret: %d\n", getpid(), child);
-+	if (!child) {
-+		ptrace(PTRACE_TRACEME, 0, 0, 0);
-+		/* Stop and allow the tracer to modify PKRU directly */
-+		raise(SIGSTOP);
-+
-+		/*
-+		 * need __read_pkey_reg() version so we do not do shadow_pkey_reg
-+		 * checking
-+		 */
-+		if (__read_pkey_reg() != new_pkru)
-+			exit(1);
-+
-+		/* Stop and allow the tracer to clear XSTATE_BV for PKRU */
-+		raise(SIGSTOP);
-+
-+		if (__read_pkey_reg() != 0)
-+			exit(1);
-+
-+		/* Stop and allow the tracer to examine PKRU */
-+		raise(SIGSTOP);
-+
-+		exit(0);
-+	}
-+
-+	pkey_assert(child == waitpid(child, &status, 0));
-+	dprintf3("[%d] waitpid(%d) status: %x\n", getpid(), child, status);
-+	pkey_assert(WIFSTOPPED(status) && WSTOPSIG(status) == SIGSTOP);
-+
-+	xsave = (void *)malloc(xsave_size);
-+	pkey_assert(xsave > 0);
-+
-+	/* Modify the PKRU register directly */
-+	iov.iov_base = xsave;
-+	iov.iov_len = xsave_size;
-+	ret = ptrace(PTRACE_GETREGSET, child, (void *)NT_X86_XSTATE, &iov);
-+	pkey_assert(ret == 0);
-+
-+	pkey_register = (u32 *)(xsave + pkey_offset);
-+	pkey_assert(*pkey_register == read_pkey_reg());
-+
-+	*pkey_register = new_pkru;
-+
-+	ret = ptrace(PTRACE_SETREGSET, child, (void *)NT_X86_XSTATE, &iov);
-+	pkey_assert(ret == 0);
-+
-+	/* Test that the modification is visible in ptrace before any execution */
-+	memset(xsave, 0xCC, xsave_size);
-+	ret = ptrace(PTRACE_GETREGSET, child, (void *)NT_X86_XSTATE, &iov);
-+	pkey_assert(ret == 0);
-+	pkey_assert(*pkey_register == new_pkru);
-+
-+	/* Execute the tracee */
-+	ret = ptrace(PTRACE_CONT, child, 0, 0);
-+	pkey_assert(ret == 0);
-+
-+	/* Test that the tracee saw the PKRU value change */
-+	pkey_assert(child == waitpid(child, &status, 0));
-+	dprintf3("[%d] waitpid(%d) status: %x\n", getpid(), child, status);
-+	pkey_assert(WIFSTOPPED(status) && WSTOPSIG(status) == SIGSTOP);
-+
-+	/* Test that the modification is visible in ptrace after execution */
-+	memset(xsave, 0xCC, xsave_size);
-+	ret = ptrace(PTRACE_GETREGSET, child, (void *)NT_X86_XSTATE, &iov);
-+	pkey_assert(ret == 0);
-+	pkey_assert(*pkey_register == new_pkru);
-+
-+	/* Clear the PKRU bit from XSTATE_BV */
-+	xstate_bv = (u64 *)(xsave + 512);
-+	*xstate_bv &= ~(1 << 9);
-+
-+	ret = ptrace(PTRACE_SETREGSET, child, (void *)NT_X86_XSTATE, &iov);
-+	pkey_assert(ret == 0);
-+
-+	/* Test that the modification is visible in ptrace before any execution */
-+	memset(xsave, 0xCC, xsave_size);
-+	ret = ptrace(PTRACE_GETREGSET, child, (void *)NT_X86_XSTATE, &iov);
-+	pkey_assert(ret == 0);
-+	pkey_assert(*pkey_register == 0);
-+
-+	ret = ptrace(PTRACE_CONT, child, 0, 0);
-+	pkey_assert(ret == 0);
-+
-+	/* Test that the tracee saw the PKRU value go to 0 */
-+	pkey_assert(child == waitpid(child, &status, 0));
-+	dprintf3("[%d] waitpid(%d) status: %x\n", getpid(), child, status);
-+	pkey_assert(WIFSTOPPED(status) && WSTOPSIG(status) == SIGSTOP);
-+
-+	/* Test that the modification is visible in ptrace after execution */
-+	memset(xsave, 0xCC, xsave_size);
-+	ret = ptrace(PTRACE_GETREGSET, child, (void *)NT_X86_XSTATE, &iov);
-+	pkey_assert(ret == 0);
-+	pkey_assert(*pkey_register == 0);
-+
-+	ret = ptrace(PTRACE_CONT, child, 0, 0);
-+	pkey_assert(ret == 0);
-+	pkey_assert(child == waitpid(child, &status, 0));
-+	dprintf3("[%d] waitpid(%d) status: %x\n", getpid(), child, status);
-+	pkey_assert(WIFEXITED(status));
-+	pkey_assert(WEXITSTATUS(status) == 0);
-+	free(xsave);
-+}
-+#endif
-+
- void test_mprotect_pkey_on_unsupported_cpu(int *ptr, u16 pkey)
- {
- 	int size = PAGE_SIZE;
-@@ -1585,6 +1709,9 @@ void (*pkey_tests[])(int *ptr, u16 pkey) = {
- 	test_pkey_syscalls_bad_args,
- 	test_pkey_alloc_exhaust,
- 	test_pkey_alloc_free_attach_pkey0,
-+#if defined(__i386__) || defined(__x86_64__)
-+	test_ptrace_modifies_pkru,
-+#endif
- };
- 
- void run_tests_once(void)
+ 	if (snd_soc_component_get_bias_level(component) != SND_SOC_BIAS_ON)
 -- 
-2.37.3
+2.25.1
 
