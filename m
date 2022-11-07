@@ -2,138 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 565CA61F052
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 11:23:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FDAA61F08B
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 11:24:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231324AbiKGKXC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 05:23:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34082 "EHLO
+        id S231976AbiKGKYu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 05:24:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231243AbiKGKWm (ORCPT
+        with ESMTP id S231975AbiKGKY1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 05:22:42 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A01D4183BD;
-        Mon,  7 Nov 2022 02:22:41 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 53678225CC;
-        Mon,  7 Nov 2022 10:22:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1667816560; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=jCn4MseqJcnTtCYiGPVCPesbMSniSjoMzrXJhKB4vOo=;
-        b=XaQBv0h9JvOYe7ohJxNKojp4Gtl5Alz8BCNE73/RUsBKadqlIIfNqd7q4NI0AFPJ/SDHDs
-        mEKdVd97gJJo2+CmnHBqB9rq/ePUz3+wytLxKPYfcWdtSLCVMvYV6FdGmJJtDYrp4GYdYF
-        jMWdzsuBq9Zz30AOd1MfRbQGuukHvmk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1667816560;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=jCn4MseqJcnTtCYiGPVCPesbMSniSjoMzrXJhKB4vOo=;
-        b=g7JjvHSdfn1Wj9M/78AHzwkucfxbJUA4DRoLNUT68gTUjyaBkgq+AKVKY8vbi7Wv6/9aDf
-        ZBlnYrFLauvWwmCg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id EE47C13AC7;
-        Mon,  7 Nov 2022 10:22:39 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id yXU8N2/caGMibQAAMHmgww
-        (envelope-from <lhenriques@suse.de>); Mon, 07 Nov 2022 10:22:39 +0000
-Received: from localhost (brahms.olymp [local])
-        by brahms.olymp (OpenSMTPD) with ESMTPA id 6389e19a;
-        Mon, 7 Nov 2022 10:23:41 +0000 (UTC)
-Date:   Mon, 7 Nov 2022 10:23:41 +0000
-From:   =?iso-8859-1?Q?Lu=EDs?= Henriques <lhenriques@suse.de>
-To:     Xiubo Li <xiubli@redhat.com>
-Cc:     Ilya Dryomov <idryomov@gmail.com>,
-        Jeff Layton <jlayton@kernel.org>, ceph-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ceph: fix memory leak in mount error path when using
- test_dummy_encryption
-Message-ID: <Y2jcrbZxgmLO/psM@suse.de>
-References: <20221103153619.11068-1-lhenriques@suse.de>
- <700018a6-aff7-6e7a-98df-2fc8cca39acb@redhat.com>
+        Mon, 7 Nov 2022 05:24:27 -0500
+Received: from mail-qv1-xf43.google.com (mail-qv1-xf43.google.com [IPv6:2607:f8b0:4864:20::f43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E7AE1901D
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 02:24:04 -0800 (PST)
+Received: by mail-qv1-xf43.google.com with SMTP id lf15so7329872qvb.9
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 02:24:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=AOmtRIzmF5dcnWrT0j3skK83MYTC+QvduwZ6ndeN2Ks=;
+        b=Zv++OJ/ncK2pWuUWAQT+z52+cIoHK/WVJU4bVze52hunD5wDL4D5XJdl5mW2VbRjhi
+         PKA0tQ/z42/ONfUnPJoBfdYRGEG2gwiyoDRW7hecaxcg+/0t0u3g44ISFlpe+B9l1fvu
+         TmkNgtKOyak6WThRMAIvY+g5IgPZxvnz63e21BpajeaX9653GP4qpHUHyfV7BL4cSNb4
+         pCU1fNGxZBn7NlKzWZCMHMxM9LSs8sKofgpQ0FSoeb/qTDQ+CPP+tvlBe/vGQ8T8hOyn
+         vdUZr48/zTuwVxtBDF6IrOR7pT19nf73qD9i1Q8QUWEzM8dVJjwmGS+xVbVCXqFaE09J
+         SKzA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=AOmtRIzmF5dcnWrT0j3skK83MYTC+QvduwZ6ndeN2Ks=;
+        b=xnOvFooeabnueZzQoAxxB8v7gTMlEPo/8Pmk1oR7M6HLPCZudPmCgR4c4+qiuWqoqD
+         VKeWwlvA+x/JSTk8BsTEb0XxTa+0roNcJ2Uf/ivTydZTgSw7obrGh1iK2dEwuoZPssM7
+         2QdotYZUwiYQUlR4+Vtau+RPKL4PFVJPjaE6aGr+W9Klt5JqXa83G+7RIdytYtHQq82s
+         WHpewswaUA95kJk+hl3/Mg8GFpDed80TK+bdaG2MKusl7Fc2taW9Imv9DzSuYzBy5DX3
+         ey4LJZtrCzcCk6T6JLHsCStOtXYQjQoNoHRJyruV2RgKWHCsvmdZucyeV/XDuRzVlQUH
+         fbpQ==
+X-Gm-Message-State: ACrzQf08AQZFdVjdVYy+7uZeBxnncNhqJo8BWbRykolPaDdaLKDnROqy
+        srn2oHGsTpgUFX1dExxuKF/sE+0s7cmXTPs8j3dsyaZvKpg=
+X-Google-Smtp-Source: AMsMyM7DPjaK7bSeUBIcMTkNZUaqK+NSwCEUfp88ZZDLY5TXShnQ2+B86xH3ryBKqTyGQWW3ozA/96x60VupsK8qo34=
+X-Received: by 2002:a17:902:8a90:b0:186:b145:f5ec with SMTP id
+ p16-20020a1709028a9000b00186b145f5ecmr50774476plo.103.1667816632274; Mon, 07
+ Nov 2022 02:23:52 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <700018a6-aff7-6e7a-98df-2fc8cca39acb@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:6a06:925:b0:587:19e0:c567 with HTTP; Mon, 7 Nov 2022
+ 02:23:51 -0800 (PST)
+Reply-To: contact@ammico.it
+From:   =?UTF-8?Q?Mrs=2E_Monika_Everenov=C3=A1?= <977638ib@gmail.com>
+Date:   Mon, 7 Nov 2022 11:23:51 +0100
+Message-ID: <CAHAXD+bPNCns8Ez=7iXmPLADMtJgZj3-mFTk3NMhWC-Ca1b9rw@mail.gmail.com>
+Subject: Re:
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=5.8 required=5.0 tests=ADVANCE_FEE_2_NEW_MONEY,
+        BAYES_40,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FREEMAIL_FROM,FROM_STARTS_WITH_NUMS,LOTS_OF_MONEY,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,UNDISC_MONEY autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:f43 listed in]
+        [list.dnswl.org]
+        * -0.0 BAYES_40 BODY: Bayes spam probability is 20 to 40%
+        *      [score: 0.2087]
+        *  0.7 FROM_STARTS_WITH_NUMS From: starts with several numbers
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [977638ib[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        *  3.3 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+        *  2.0 ADVANCE_FEE_2_NEW_MONEY Advance Fee fraud and lots of money
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 07, 2022 at 03:47:23PM +0800, Xiubo Li wrote:
-> 
-> On 03/11/2022 23:36, Luís Henriques wrote:
-> > Because ceph_init_fs_context() will never be invoced in case we get a
-> > mount error, destroy_mount_options() won't be releasing fscrypt resources
-> > with fscrypt_free_dummy_policy().  This will result in a memory leak.  Add
-> > an invocation to this function in the mount error path.
-> > 
-> > Signed-off-by: Luís Henriques <lhenriques@suse.de>
-> > ---
-> >   fs/ceph/super.c | 1 +
-> >   1 file changed, 1 insertion(+)
-> > 
-> > diff --git a/fs/ceph/super.c b/fs/ceph/super.c
-> > index 2224d44d21c0..6b9fd04b25cd 100644
-> > --- a/fs/ceph/super.c
-> > +++ b/fs/ceph/super.c
-> > @@ -1362,6 +1362,7 @@ static int ceph_get_tree(struct fs_context *fc)
-> >   	ceph_mdsc_close_sessions(fsc->mdsc);
-> >   	deactivate_locked_super(sb);
-> > +	fscrypt_free_dummy_policy(&fsc->fsc_dummy_enc_policy);
-> 
-> Hi Luis,
-> 
-> BTW, any reason the following code won't be triggered ?
-> 
-> deactivate_locked_super(sb);
-> 
->   --> fs->kill_sb(s);
-> 
->         --> ceph_kill_sb()
-> 
->               --> kill_anon_super()
-> 
->                     --> generic_shutdown_super()
-> 
->                           --> sop->put_super()
-> 
->                                 --> ceph_put_super()
-> 
->                                       --> ceph_fscrypt_free_dummy_policy()
-> 
->                                            --> fscrypt_free_dummy_policy(
-> 
-
-Here's what I'm seeing here:
-
-  sys_mount->path_mount->do_new_mount->vfs_get_tree->ceph_get_tree
-
-ceph_get_tree() fails due to ceph_real_mount() returning an error.  My
-understanding is that that, since fc->root is never set, that code path
-will never be triggered.  Does that make sense?
-
-An easy way to reproduce is by running fstest ceph/005 with the
-'test_dummy_encryption' option.  (I'll probably need to send a patch to
-disable this test when this option is present.)
-
-Cheers,
---
-Luís
+Hei ja miten voit?
+Nimeni on rouva Evereen, l=C3=A4het=C3=A4n t=C3=A4m=C3=A4n viestin suurella=
+ toivolla
+v=C3=A4lit=C3=B6n vastaus, koska minun on teht=C3=A4v=C3=A4 uusi syd=C3=A4n=
+leikkaus
+t=C3=A4ll=C3=A4 hetkell=C3=A4 huonokuntoinen ja v=C3=A4h=C3=A4iset mahdolli=
+suudet selviyty=C3=A4.
+Mutta ennen kuin min=C3=A4
+Tee toinen vaarallinen operaatio, annan sen sinulle
+Minulla on 6 550 000 dollaria yhdysvaltalaisella pankkitilill=C3=A4
+sijoittamista, hallinnointia ja k=C3=A4ytt=C3=B6=C3=A4 varten
+voittoa hyv=C3=A4ntekev=C3=A4isyysprojektin toteuttamiseen. Tarkoitan saira=
+iden auttamista
+ja k=C3=B6yh=C3=A4t ovat viimeinen haluni maan p=C3=A4=C3=A4ll=C3=A4, sill=
+=C3=A4 minulla ei ole niit=C3=A4
+kenelt=C3=A4 perii rahaa.
+Vastaa minulle nopeasti
+terveisi=C3=A4
+Rouva Monika Evereen
+Florida, Amerikan Yhdysvallat
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+Hi and how are you?
+My name is Mrs. Evereen, I am sending this message with great hope for
+an immediate response, as I have to undergo heart reoperation in my
+current poor health with little chance of survival. But before I
+undertake the second dangerous operation, I will give you the
+$6,550,000 I have in my US bank account to invest well, manage and use
+the profits to run a charity project for me. I count helping the sick
+and the poor as my last wish on earth, because I have no one to
+inherit money from.
+Please give me a quick reply
+regards
+Mrs. Monika Evereen
+Florida, United States of America
