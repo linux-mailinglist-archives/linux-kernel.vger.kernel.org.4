@@ -2,181 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 438B061EC99
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 09:09:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80A1461ECA7
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 09:10:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231582AbiKGIJW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 03:09:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58448 "EHLO
+        id S231514AbiKGIKz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 03:10:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231567AbiKGIJU (ORCPT
+        with ESMTP id S229751AbiKGIKu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 03:09:20 -0500
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 842A013F2E
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 00:09:19 -0800 (PST)
-Received: by mail-lj1-x235.google.com with SMTP id t10so15043912ljj.0
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 00:09:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=I/1C2eJ0mQS9HScu7or8tU8miNli5M+Crwcb5WX+lzs=;
-        b=vPtIjrGwdX18Hu7NEl5SK8N6LLWQ673WfxlhcQWAqu4lCg5QD+vCxVNVPzlkFNt6pv
-         FEWoPfVYA5Mh3+C5w8e4YH9E5471fXSWCTW5siWNZIp/1POWa9l+ow9kXdV89VoLAoN5
-         i920jkmHQfUYLrZRX8KXpbCs9AMO7cv+JGZlQpuh0JK+lgAqPCZlZaVdkc4KczZ0j0c+
-         2bOPOhjJA3JQS83k9HsmfzLUN0mDS8BBXpl7I6mr4DpCPQA0+ahEiMvYxTi5FHrS41Ab
-         EOCFJUcECyyj+naL37gVb8tlbyFpZij1Py0235de2Ft8lfWxkGhLFZE76p8oXNK/Krlv
-         tR2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=I/1C2eJ0mQS9HScu7or8tU8miNli5M+Crwcb5WX+lzs=;
-        b=GaA4P4u+DgQ2FVhiAZC8fSiffcATU7MrrBVZ46D5r1Dn6p5rOh9gSOxHoDZg59Wr00
-         nvvfMN+opTQQKog1EP2g0DxuQHrEcZ9cpr6T0H4zxti/US2S20KRgG2K2fQe++CekOQL
-         kcoRp4fOi59I3oyTpl6RXK2iMCVabgVbISKD5gxkosKGyHxKCSVFvlB+w3cJy1HXllP0
-         IZLjCAzOeXwli8SDc7n8+b5Yf00prC5ILdI1+xQE9mzlGDZckuuSal0qOkVXA6MTEWRb
-         nt2Azmjyfu2y+pRzxoOqNdNs4nLySl+JnTJEoCyF9jGT2pNwI67/TdfM8QMLeXJ8PL5y
-         BY6A==
-X-Gm-Message-State: ACrzQf3Nrz61vNrQCWhT/G6QC9Y6e9bFOuW4m+7ZJ7osLzi9TF8kfq7s
-        zZx8tmuTmQBP0szsjYm+pNcvKA==
-X-Google-Smtp-Source: AMsMyM4X9owA9AnNEuYVbK1IhD5sMvkwhQN4JUedQjJGTT1YOIZXpChyG96lkTdqFVER6gdVauAd/A==
-X-Received: by 2002:a2e:b6c6:0:b0:277:a45:5a38 with SMTP id m6-20020a2eb6c6000000b002770a455a38mr5404022ljo.377.1667808557798;
-        Mon, 07 Nov 2022 00:09:17 -0800 (PST)
-Received: from [192.168.0.20] (088156142199.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.199])
-        by smtp.gmail.com with ESMTPSA id j29-20020a056512029d00b004a03fd4476esm1103200lfp.287.2022.11.07.00.09.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Nov 2022 00:09:16 -0800 (PST)
-Message-ID: <2400e167-073e-65fa-7fe6-b64a34bce256@linaro.org>
-Date:   Mon, 7 Nov 2022 09:09:15 +0100
+        Mon, 7 Nov 2022 03:10:50 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C47813F4E;
+        Mon,  7 Nov 2022 00:10:49 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 0197E1F88F;
+        Mon,  7 Nov 2022 08:10:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1667808648; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=wn3C4j2tq7Ric7uA1MiKmrtd6ucRBH8DGKc7HC5CU8o=;
+        b=rDQ0tXHzYEcdlM3iWOS0EHADYuBi7DO5PHDgE5TyXP1fjjQNDPFBRe40t/zcDzPbLvqaPF
+        2s6I7xtIEfoHIkCa5kAy7ZgQd3/FDdVOYSDEduOuOH0Fvg1I5oALqj608NhgfgLopujlTT
+        /8jE+fvvInBhTN1O/i1aYp8wYC3J7Nw=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D097813AC7;
+        Mon,  7 Nov 2022 08:10:47 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id FpPsL4e9aGNSIAAAMHmgww
+        (envelope-from <mhocko@suse.com>); Mon, 07 Nov 2022 08:10:47 +0000
+Date:   Mon, 7 Nov 2022 09:10:47 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     Leonardo =?iso-8859-1?Q?Br=E1s?= <leobras@redhat.com>
+Cc:     Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Phil Auld <pauld@redhat.com>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: Re: [PATCH v1 0/3] Avoid scheduling cache draining to isolated cpus
+Message-ID: <Y2i9h+TRdX9EOs0T@dhcp22.suse.cz>
+References: <20221102020243.522358-1-leobras@redhat.com>
+ <Y2IwHVdgAJ6wfOVH@dhcp22.suse.cz>
+ <07810c49ef326b26c971008fb03adf9dc533a178.camel@redhat.com>
+ <Y2Pe45LHANFxxD7B@dhcp22.suse.cz>
+ <0183b60e79cda3a0f992d14b4db5a818cd096e33.camel@redhat.com>
+ <Y2TQLavnLVd4qHMT@dhcp22.suse.cz>
+ <3c4ae3bb70d92340d9aaaa1856928476641a8533.camel@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 3/8] dt-bindings: spi: Add Nuvoton WPCM450 Flash Interface
- Unit (FIU)
-Content-Language: en-US
-To:     =?UTF-8?Q?Jonathan_Neusch=c3=a4fer?= <j.neuschaefer@gmx.net>
-Cc:     linux-spi@vger.kernel.org, openbmc@lists.ozlabs.org,
-        Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org
-References: <20221105185911.1547847-1-j.neuschaefer@gmx.net>
- <20221105185911.1547847-4-j.neuschaefer@gmx.net>
- <066919b1-c43d-f8ed-0191-cce8c575ee37@linaro.org> <Y2fIjSKAGleEtjHe@probook>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <Y2fIjSKAGleEtjHe@probook>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <3c4ae3bb70d92340d9aaaa1856928476641a8533.camel@redhat.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/11/2022 15:45, Jonathan Neusch√§fer wrote:
-> On Sun, Nov 06, 2022 at 10:38:45AM +0100, Krzysztof Kozlowski wrote:
->> On 05/11/2022 19:59, Jonathan Neusch√§fer wrote:
->>> The Flash Interface Unit (FIU) is the SPI flash controller in the
->>> Nuvoton WPCM450 BMC SoC. It supports four chip selects, and direct
->>> (memory-mapped) access to 16 MiB per chip. Larger flash chips can be
->>> accessed by software-defined SPI transfers.
->>>
->>> The FIU in newer NPCM7xx SoCs is not compatible with the WPCM450 FIU.
->>>
->>> Signed-off-by: Jonathan Neusch√§fer <j.neuschaefer@gmx.net>
->>> ---
-> [...]
->>> +allOf:
->>> +  - $ref: "/schemas/spi/spi-controller.yaml#"
->>
->> Drop the quotes.
+On Fri 04-11-22 22:45:58, Leonardo Br·s wrote:
+> On Fri, 2022-11-04 at 09:41 +0100, Michal Hocko wrote:
+> > On Thu 03-11-22 13:53:41, Leonardo Br·s wrote:
+> > > On Thu, 2022-11-03 at 16:31 +0100, Michal Hocko wrote:
+> > > > On Thu 03-11-22 11:59:20, Leonardo Br·s wrote:
+> > [...]
+> > > > > I understand there will be a locking cost being paid in the isolated CPUs when:
+> > > > > a) The isolated CPU is requesting the stock drain,
+> > > > > b) When the isolated CPUs do a syscall and end up using the protected structure
+> > > > > the first time after a remote drain.
+> > > > 
+> > > > And anytime the charging path (consume_stock resp. refill_stock)
+> > > > contends with the remote draining which is out of control of the RT
+> > > > task. It is true that the RT kernel will turn that spin lock into a
+> > > > sleeping RT lock and that could help with potential priority inversions
+> > > > but still quite costly thing I would expect.
+> > > > 
+> > > > > Both (a) and (b) should happen during a syscall, and IIUC the a rt workload
+> > > > > should not expect the syscalls to be have a predictable time, so it should be
+> > > > > fine.
+> > > > 
+> > > > Now I am not sure I understand. If you do not consider charging path to
+> > > > be RT sensitive then why is this needed in the first place? What else
+> > > > would be populating the pcp cache on the isolated cpu? IRQs?
+> > > 
+> > > I am mostly trying to deal with drain_all_stock() calling schedule_work_on() at
+> > > isolated_cpus. Since the scheduled drain_local_stock() will be competing for cpu
+> > > time with the RT workload, we can have preemption of the RT workload, which is a
+> > > problem for meeting the deadlines.
+> > 
+> > Yes, this is understood. But it is not really clear to me why would any
+> > draining be necessary for such an isolated CPU if no workload other than
+> > the RT (which pressumably doesn't charge any memory?) is running on that
+> > CPU? Is that the RT task during the initialization phase that leaves
+> > that cache behind or something else?
 > 
-> Will do.
+> (I am new to this part of the code, so please correct me when I miss something.)
 > 
-> 
->>> +
->>> +properties:
->>> +  compatible:
->>> +    const: nuvoton,wpcm450-fiu
->>> +
->>> +  reg:
->>> +    items:
->>> +      - description: FIU registers
->>> +      - description: Memory-mapped flash contents
->>> +
->>> +  reg-names:
->>> +    items:
->>> +      - const: control
->>> +      - const: memory
->>> +    minItems: 1
->>
->> This does not match your 'reg'. Two items are required there.
-> 
-> My intention was rather to make the second reg item actually optional,
-> i.e. add minItems: 1 for reg as well.  (But, further discussion below.)
-> 
-> 
->>> +    spi@c8000000 {
->>> +      compatible = "nuvoton,wpcm450-fiu";
->>> +      #address-cells = <1>;
->>> +      #size-cells = <0>;
->>> +      reg = <0xc8000000 0x1000>, <0xc0000000 0x4000000>;
->>
->> reg is the second property.
-> 
-> Ok, I'll move it up.
-> 
->>
->>> +      reg-names = "control", "memory";
->>> +      clocks = <&clk WPCM450_CLK_FIU>;
->>> +      nuvoton,shm = <&shm>;
->>> +
->>> +      flash@0 {
->>> +        compatible = "jedec,spi-nor";
->>> +      };
->>> +    };
->>> +
->>> +    shm: syscon@c8001000 {
->>> +      compatible = "nuvoton,wpcm450-shm", "syscon";
->>> +      reg = <0xc8001000 0x1000>;
->>> +    };
->>> +
->>> +  - |
->>> +    #include <dt-bindings/clock/nuvoton,wpcm450-clk.h>
->>> +    spi@c8000000 {
->>> +      compatible = "nuvoton,wpcm450-fiu";
->>> +      // the "memory" resource may be omitted
->>
->> This is rather obvious, so what you should comment is WHY or WHEN second
->> resource can be omitted.
-> 
-> Ok, I'll add more reasoning, which is basically: The "memory" mapping is
-> only an optimization for faster access, knowledge of it is not necessary
-> for full operation of the device.
-> 
->> Not every instance on the hardware has it?
-> 
-> AFAIK every instance has it, and there's unlikely to be any variation on
-> this fact anymore, because newer Nuvoton SoCs replaced the FIU with a
-> redesigned and incompatible version.
-> 
-> I admit that the value of making the "memory" mapping optional is rather
-> theoretical, and I'm open to making this reg item mandatory to simplify
-> the binding.
+> IIUC,†if a process belongs to a control group with memory control, the 'charge'
+> will happen when a memory page starts getting used by it.
 
-If every instance has it, then regardless whether it is actually used or
-not, just require second address?
+Yes, very broadly speaking.
 
-Best regards,
-Krzysztof
+> So, if we assume a RT load in a isolated CPU will not charge any memory, we are
+> assuming it will never be part of a memory-controlled cgroup.
 
+If the memory cgroup controler is enabled then each user space process
+is a part of some memcg. If there is no specific memcg assigned then it
+will be a root cgroup and that is skipped during most charges except for
+kmem.
+
+> I mean, can we just assume this? 
+> 
+> If I got that right, would not that be considered a limitation? like
+> "If you don't want your workload to be interrupted by perCPU cache draining,
+> don't put it in a cgroup with memory control".
+
+We definitely do not want userspace make any assumptions on internal
+implementation details like caches.
+
+> > Sorry for being so focused on this
+> > but I would like to understand on whether this is avoidable by a
+> > different startup scheme or it really needs to be addressed in some way.
+> 
+> No worries, I am in fact happy you are giving it this much attention :)
+> 
+> I also understand this is a considerable change in the locking strategy, and
+> avoiding that is the first thing that should be tried.
+> 
+> > 
+> > > One way I thought to solve that was introducing a remote drain, which would
+> > > require a different strategy for locking, since not all accesses to the pcp
+> > > caches would happen on a local CPU. 
+> > 
+> > Yeah, I am not supper happy about additional spin lock TBH. One
+> > potential way to go would be to completely avoid pcp cache for isolated
+> > CPUs.†That would have some performance impact of course but on the other
+> > hand it would give a more predictable behavior for those CPUs which
+> > sounds like a reasonable compromise to me. What do you think?
+> 
+> You mean not having a perCPU stock, then? 
+> So consume_stock() for isolated CPUs would always return false, causing
+> try_charge_memcg() always walking the slow path?
+
+Exactly.
+
+> IIUC, both my proposal and yours would degrade performance only when we use
+> isolated CPUs + memcg. Is that correct?
+
+Yes, with a notable difference that with your spin lock option there is
+still a chance that the remote draining could influence the isolated CPU
+workload throug that said spinlock. If there is no pcp cache for that
+cpu being used then there is no potential interaction at all.
+
+> If so, it looks like the impact would be even bigger without perCPU stock ,
+> compared to introducing a spinlock.
+> 
+> Unless, we are counting to this case where a remote CPU is draining an isolated
+> CPU, and the isolated CPU faults a page, and has to wait for the spinlock to be
+> released in the remote CPU. Well, this seems possible to happen, but I would
+> have to analyze how often would it happen, and how much would it impact the
+> deadlines. I *guess* most of the RT workload's memory pages are pre-faulted
+> before its starts, so it can avoid the faulting latency, but I need to confirm
+> that.
+
+Yes, that is a general practice and the reason why I was asking how real
+of a problem that is in practice. It is true true that appart from user
+space memory which can be under full control of the userspace there are
+kernel allocations which can be done on behalf of the process and those
+could be charged to memcg as well. So I can imagine the pcp cache could
+be populated even if the process is not faulting anything in during RT
+sensitive phase.
+
+> On the other hand, compared to how it works now now, this should be a more
+> controllable way of introducing latency than a scheduled cache drain.
+> 
+> Your suggestion on no-stocks/caches in isolated CPUs would be great for
+> predictability, but I am almost sure the cost in overall performance would not
+> be fine.
+
+It is hard to estimate the overhead without measuring that. Do you think
+you can give it a try? If the performance is not really acceptable
+(which I would be really surprised) then we can think of a more complex
+solution.
+
+> With the possibility of prefaulting pages, do you see any scenario that would
+> introduce some undesirable latency in the workload?
+
+My primary concern would be spin lock contention which is hard to
+predict with something like remote draining.
+-- 
+Michal Hocko
+SUSE Labs
