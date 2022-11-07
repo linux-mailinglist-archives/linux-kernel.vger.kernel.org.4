@@ -2,104 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B11761FB7C
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 18:34:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4131C61FB81
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 18:35:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232854AbiKGReT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 12:34:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46686 "EHLO
+        id S231789AbiKGRfL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 12:35:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231464AbiKGReQ (ORCPT
+        with ESMTP id S229695AbiKGRfJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 12:34:16 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F7FA21816;
-        Mon,  7 Nov 2022 09:34:15 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C0BA2611DA;
-        Mon,  7 Nov 2022 17:34:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BEDD3C433D6;
-        Mon,  7 Nov 2022 17:34:13 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="lVLa1BG4"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1667842451;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=B4SMF6oVs5RRpJDRVxFyeTr9TfajDc8wD+p7wUzg6d0=;
-        b=lVLa1BG4y7erbzc5C/3bpbaTgEY+pR8MFJfu8uqrcp/NRDzcASGe/cOufRrtuwEurMJo/9
-        wxvX1aahpUD1jRmawKwQqQDjzXjC7CR3OwE1gbX5EA4zZpURAXV+gkQ9WlkG9pH385KqH+
-        nj3t74P+vn1W/y9IueAxh6yp9xs2cfI=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id a4e34559 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Mon, 7 Nov 2022 17:34:10 +0000 (UTC)
-Date:   Mon, 7 Nov 2022 18:34:07 +0100
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Frank Rowand <frowand.list@gmail.com>
-Subject: Re: [PATCH] of: fdt: parse early params before adding bootloader
- randomness
-Message-ID: <Y2lBj1ZIdFRf9HdR@zx2c4.com>
-References: <20221105014613.113503-1-Jason@zx2c4.com>
- <CAL_JsqKA1_HV5V17mHkKn8X72c_UN2Jg=TYtJkt93YM6SSDMSg@mail.gmail.com>
+        Mon, 7 Nov 2022 12:35:09 -0500
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1599221B0
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 09:35:08 -0800 (PST)
+Received: by mail-lf1-x133.google.com with SMTP id f37so17733361lfv.8
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 09:35:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:user-agent:from:references
+         :in-reply-to:mime-version:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2vBV15/t75rMwmc5x5QmAZ8tvqjlJL8SG6UbJno1k6k=;
+        b=eKf2NTY8glHETLli+gjYNG+IL7W9ro7LFV1OPSmNRquYMgpRtorVcFqvCMK6rfgWAs
+         cF6QvwJC1qhgA6LiF45tB12iNeE+ZX0qgEVYC74n0t9+FbB0YDPFe74JOy4cLjGKERdF
+         GSbeGl7gTWXX8YH8SOEvG4oEVe40EX3D9qUn8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:user-agent:from:references
+         :in-reply-to:mime-version:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2vBV15/t75rMwmc5x5QmAZ8tvqjlJL8SG6UbJno1k6k=;
+        b=FzkQ4EDnh+t9eHVu0Un91KkxXSjTFl5YKyDzV7VAvgdXzF3ULLzGDoB6By1ZfqqtaJ
+         fVbELyCqPlAc7VzO3kz0EmcA6fceBOB5URDg00DlwmkvQYvA1XNMSTEak2Xn2QEp7XtU
+         rPIQgoBhdR/+bPRf7r1RRRbZuPK8Ljaawi97dFiALg883YaM+6i01a3J9IBzllB2w0Up
+         uUERDZcasSF/xVf4wmlN5LrHB1YtR1hytKWFLzxL0/YuvNAZiADbGf9g9Xc2k4q83wz4
+         YK4HQNzloXJteqEYbGQh3wiFlTOKtLysV+vdCutWtJU+C3/KtUubH+XprjR+AWRZAlvr
+         /CWg==
+X-Gm-Message-State: ACrzQf3cLXp5zDVTMwt8c3LMoe1/N1l2zo749eahS0B1qQ2gy7aO9usF
+        Ikg1Hhz5CwSSRoDU4svysaXrteCfnzY9MXs6tzoekA==
+X-Google-Smtp-Source: AMsMyM7peMcJhcxlagtzkci1EPQ3TVIfAF1dZ2y0sH/gOy81Qea1b0adzI4yu1Ty8KXCcPs0CqJkhVw/hwKwbbPcUs0=
+X-Received: by 2002:ac2:52af:0:b0:4a9:d072:f5c4 with SMTP id
+ r15-20020ac252af000000b004a9d072f5c4mr390873lfm.82.1667842506322; Mon, 07 Nov
+ 2022 09:35:06 -0800 (PST)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Mon, 7 Nov 2022 09:35:05 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAL_JsqKA1_HV5V17mHkKn8X72c_UN2Jg=TYtJkt93YM6SSDMSg@mail.gmail.com>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221104082828.14386-1-quic_youghand@quicinc.com>
+References: <20221104082828.14386-1-quic_youghand@quicinc.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Mon, 7 Nov 2022 09:35:05 -0800
+Message-ID: <CAE-0n5260hssngqWE6j4A_YK0Rq_OSnscpkyVTTiPEMEDz6AGg@mail.gmail.com>
+Subject: Re: [PATCH v2] wifi: ath10k: Add WLAN firmware image version info
+ into smem
+To:     Youghandhar Chintala <quic_youghand@quicinc.com>,
+        ath11k@lists.infradead.org
+Cc:     linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_mpubbise@quicinc.com, linux-arm-msm@vger.kernel.org,
+        kernel test robot <lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 07, 2022 at 11:28:20AM -0600, Rob Herring wrote:
-> On Fri, Nov 4, 2022 at 8:46 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
-> >
-> > FDT is examined so early that it's before the first incidental call to
-> > parse_early_param(). This is similar to EFI, except EFI actually added
-> > an explicitly call to parse_early_param(). Let's do the same here, so
-> > that specifying `random.trust_bootloader=0` is not ignored.
-> >
-> > Fixes: d97c68d178fb ("random: treat bootloader trust toggle the same way as cpu trust toggle")
-> > Cc: Rob Herring <robh@kernel.org>
-> > Cc: Frank Rowand <frowand.list@gmail.com>
-> > Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-> > ---
-> >  drivers/of/fdt.c | 3 +++
-> >  1 file changed, 3 insertions(+)
-> >
-> > diff --git a/drivers/of/fdt.c b/drivers/of/fdt.c
-> > index 7b571a631639..6d959117fd4f 100644
-> > --- a/drivers/of/fdt.c
-> > +++ b/drivers/of/fdt.c
-> > @@ -1195,6 +1195,9 @@ int __init early_init_dt_scan_chosen(char *cmdline)
-> >
-> >         rng_seed = of_get_flat_dt_prop(node, "rng-seed", &l);
-> >         if (rng_seed && l > 0) {
-> > +               /* Parse random.trust_bootloader if it's in command line. */
-> > +               parse_early_param();
-> 
-> I don't think it's good that the timing of calling this is dependent
-> on "rng-seed" being present or not. So perhaps move it up to after the
-> cmdline is set.
-> 
-> Either way, the other issue is the cmdline is not necessarily fixed at
-> this point with some architectures doing their own
-> append/prepend/override of the cmdline. We can't seem to get common
-> implementation there finished. I'm doubtful that corner case would
-> actually be hit though.
+Quoting Youghandhar Chintala (2022-11-04 01:28:28)
+> In a SoC based solution, it would be useful to know the versions of the
+> various binary firmware blobs the system is running on. On a QCOM based
+> SoC, this info can be obtained from socinfo debugfs infrastructure. For
+> this to work, respective subsystem drivers have to export the firmware
+> version information to an SMEM based version information table.
+>
+> Having firmware version information at one place will help quickly
+> figure out the firmware versions of various subsystems on the device
+> instead of going through builds/logs in an event of a system crash.
+>
+> Fill WLAN firmware version information in SMEM version table to be
+> printed as part of socinfo debugfs infrastructure on a Qualcomm based
+> SoC.
+>
+> This change is applicable only for WCN399X targets.
+>
+> Reported-by: kernel test robot <lkp@intel.com>
+>
+> Tested-on: WCN3990 hw1.0 SNOC WLAN.HL.3.2.2.c10-00754-QCAHLSWMTPL-1
+>
+> Signed-off-by: Youghandhar Chintala <quic_youghand@quicinc.com>
 
-Hm, yea. I'm actually now having second thoughts about this one too for
-other reasons: FDT isn't the only arch that has this issue. It's also a
-problem on x86 and m68k. Maybe the random.trust_bootloader toggle should
-just go away, since already your bootloader can do whatever it wants to
-the kernel it executes? Not sure; I'll think on it a bit I guess...
+The trailers go together, no blank lines between them.
 
-Jason
+>
+> ---
+> Changes from v1:
+>  - Changed print format specifier to %zu from %i
+>  - Changed ath10k_qmi_add_wlan_ver_smem() API argument
+>           to const char *fw_build_id from char *fw_build_id
+>  - Changed version_string_size with MACRO
+> ---
+>  drivers/net/wireless/ath/ath10k/qmi.c | 28 +++++++++++++++++++++++++++
+>  1 file changed, 28 insertions(+)
+>
+> diff --git a/drivers/net/wireless/ath/ath10k/qmi.c b/drivers/net/wireless/ath/ath10k/qmi.c
+> index 66cb7a1e628a..928d78f6d494 100644
+> --- a/drivers/net/wireless/ath/ath10k/qmi.c
+> +++ b/drivers/net/wireless/ath/ath10k/qmi.c
+> @@ -14,6 +14,7 @@
+>  #include <linux/net.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/qcom_scm.h>
+> +#include <linux/soc/qcom/smem.h>
+>  #include <linux/string.h>
+>  #include <net/sock.h>
+>
+> @@ -22,6 +23,8 @@
+>
+>  #define ATH10K_QMI_CLIENT_ID           0x4b4e454c
+>  #define ATH10K_QMI_TIMEOUT             30
+> +#define ATH10K_SMEM_IMAGE_VERSION_TABLE       469
+> +#define ATH10K_SMEM_IMAGE_TABLE_CNSS_INDEX     13
+>
+>  static int ath10k_qmi_map_msa_permission(struct ath10k_qmi *qmi,
+>                                          struct ath10k_msa_mem_info *mem_info)
+> @@ -536,6 +539,29 @@ int ath10k_qmi_wlan_disable(struct ath10k *ar)
+>         return ath10k_qmi_mode_send_sync_msg(ar, QMI_WLFW_OFF_V01);
+>  }
+>
+> +static void ath10k_qmi_add_wlan_ver_smem(struct ath10k *ar, const char *fw_build_id)
+> +{
+> +       u8 *smem_table_ptr;
+> +       size_t smem_block_size;
+> +       const u32 version_string_size = MAX_BUILD_ID_LEN;
+
+Why not make this size_t as well so the type is the same for the
+comparison with smem_block_size?
+
+> +       const u32 smem_img_idx_wlan = ATH10K_SMEM_IMAGE_TABLE_CNSS_INDEX * 128;
+
+> +
+> +       smem_table_ptr = qcom_smem_get(QCOM_SMEM_HOST_ANY,
+> +                                      ATH10K_SMEM_IMAGE_VERSION_TABLE,
+> +                                      &smem_block_size);
+> +       if (IS_ERR(smem_table_ptr)) {
+> +               ath10k_dbg(ar, ATH10K_DBG_QMI, "smem image version table not found");
+
+Is this missing a newline?
+
+> +               return;
+> +       }
+> +       if (smem_img_idx_wlan + version_string_size > smem_block_size) {
+> +               ath10k_dbg(ar, ATH10K_DBG_QMI, "smem block size too small: %zu",
+
+Same newline question.
+
+> +                          smem_block_size);
+> +               return;
+> +       }
+> +       memcpy(smem_table_ptr + smem_img_idx_wlan, fw_build_id,
+
+Is it a string? Does it need to be NUL terminated? Should this use some
+sort of strcpy()? Does the comparison above need to leave a space for
+the NUL terminator?
+
+> +              version_string_size);
+> +}
+> +
+>  static int ath10k_qmi_cap_send_sync_msg(struct ath10k_qmi *qmi)
+>  {
+>         struct wlfw_cap_resp_msg_v01 *resp;
