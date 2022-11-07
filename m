@@ -2,119 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6C8661ED0B
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 09:40:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3716661ED18
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 09:41:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231337AbiKGIkB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 03:40:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44952 "EHLO
+        id S231373AbiKGIlL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 03:41:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231226AbiKGIj6 (ORCPT
+        with ESMTP id S231226AbiKGIlJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 03:39:58 -0500
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D5F515709;
-        Mon,  7 Nov 2022 00:39:57 -0800 (PST)
-Received: (Authenticated sender: maxime.chevallier@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id AE13B240012;
-        Mon,  7 Nov 2022 08:39:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1667810395;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Kt3YaVgos6aTLVWYjMs61pa3ceG8lp2j8XYt+Ucplyw=;
-        b=AscLybvqBkKKgJLxu4it0nKtw+XOslDBXsHBsvlHVxB0Quj8CJoOpqRBmXiqfOd1/kasH9
-        I+cRuyTQ77O+3UrGUe3ZGeH7rU1c/DtCrPXXS+URrPf5lzaNMrG7+Bc9qi70AWFk/HuaSt
-        jolcAbhp1rSvg2qX53A0bk241bSR4UCNLi0r3AMKmZCI5JP75FU80j+GTBU53Iy1XyffQi
-        Uv2CTDUq7j4BuVRIrD5Rb5nvrcN87Urg4Q7WbnybzhsxcFFSPae5Z7j42qmFbMKsj+HI3J
-        vXojYdsYBdNtD5o2z/B8c6rgd+JXFd3YWUtUB46TeWGWJbN4757yjat0WVARgg==
-Date:   Mon, 7 Nov 2022 09:39:50 +0100
-From:   Maxime Chevallier <maxime.chevallier@bootlin.com>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     davem@davemloft.net, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        thomas.petazzoni@bootlin.com, Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        linux-arm-kernel@lists.infradead.org,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Luka Perkov <luka.perkov@sartura.hr>,
-        Robert Marko <robert.marko@sartura.hr>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>
-Subject: Re: [PATCH net-next v8 3/5] net: dsa: add out-of-band tagging
- protocol
-Message-ID: <20221107093950.74de3fa1@pc-8.home>
-In-Reply-To: <20221104200530.3bbe18c6@kernel.org>
-References: <20221104174151.439008-1-maxime.chevallier@bootlin.com>
-        <20221104174151.439008-4-maxime.chevallier@bootlin.com>
-        <20221104200530.3bbe18c6@kernel.org>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+        Mon, 7 Nov 2022 03:41:09 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 668BE1570D
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 00:41:07 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 225FBB80E2D
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 08:41:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 633EFC433C1;
+        Mon,  7 Nov 2022 08:41:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667810464;
+        bh=vPUGMuhh4vwQGB7vfUji7HjpKe37cpDybwv17Ul9VtQ=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=YYuq9IMfO07xQLYKc2hx3hnNFfrUJ/+/sleJ97Dle7Ns8hhjLRcK63ToCi8CgoDf3
+         /Bw11E/uMCl/DLpOl80Dpp7QYahrHRqkKntfbvN+MfOkVkyLuaPr+HAJlW40/90oQ1
+         dYRXlDGnPVrGiwx/tJc8B0H22yIVD6ZnUDBfeiiJC9tZGHsiqlFT8wmcUDjLN+m3wO
+         lQVRfcU1xF0bxwnG6Lhq5qbR1zXf5QQoqePpzqXWOl7dH3m7VHMrt8oV9c+rim3Fio
+         9fWydxw8xC6s/4IB3Uf+ehCneK07TV7im9D8ZGtWwrP1ITNSJhanMHq/2iDvcrCSWi
+         jDPBPSXy3NY6w==
+Message-ID: <1937d7b5-89f4-0cb2-957a-bda2dcbbdb37@kernel.org>
+Date:   Mon, 7 Nov 2022 10:41:00 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: ld.lld: error: undefined symbol: gpmc_omap_onenand_set_timings
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzk@kernel.org>,
+        kernel test robot <lkp@intel.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+References: <202211050325.XVtPvMvy-lkp@intel.com>
+ <402e120a-044e-12ac-7d10-cf8b3b5a1404@kernel.org>
+From:   Roger Quadros <rogerq@kernel.org>
+In-Reply-To: <402e120a-044e-12ac-7d10-cf8b3b5a1404@kernel.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Jakub,
 
-On Fri, 4 Nov 2022 20:05:30 -0700
-Jakub Kicinski <kuba@kernel.org> wrote:
 
-> On Fri,  4 Nov 2022 18:41:49 +0100 Maxime Chevallier wrote:
-> > This tagging protocol is designed for the situation where the link
-> > between the MAC and the Switch is designed such that the Destination
-> > Port, which is usually embedded in some part of the Ethernet
-> > Header, is sent out-of-band, and isn't present at all in the
-> > Ethernet frame.
-> > 
-> > This can happen when the MAC and Switch are tightly integrated on an
-> > SoC, as is the case with the Qualcomm IPQ4019 for example, where
-> > the DSA tag is inserted directly into the DMA descriptors. In that
-> > case, the MAC driver is responsible for sending the tag to the
-> > switch using the out-of-band medium. To do so, the MAC driver needs
-> > to have the information of the destination port for that skb.
-> > 
-> > Add a new tagging protocol based on SKB extensions to convey the
-> > information about the destination port to the MAC driver  
+On 04/11/2022 21:36, Krzysztof Kozlowski wrote:
+> On 04/11/2022 15:29, kernel test robot wrote:
+>> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+>> head:   ee6050c8af96bba2f81e8b0793a1fc2f998fcd20
+>> commit: 854fd9209b20837ab48c2e6714e5e44dd8ea33a2 memory: omap-gpmc: Allow building as a module
+>> date:   6 months ago
+>> config: arm-buildonly-randconfig-r004-20221104
+>> compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 2bbafe04fe785a9469bea5a3737f8d7d3ce4aca2)
+>> reproduce (this is a W=1 build):
+>>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>>         chmod +x ~/bin/make.cross
+>>         # install arm cross compiling tool for clang build
+>>         # apt-get install binutils-arm-linux-gnueabi
+>>         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=854fd9209b20837ab48c2e6714e5e44dd8ea33a2
+>>         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+>>         git fetch --no-tags linus master
+>>         git checkout 854fd9209b20837ab48c2e6714e5e44dd8ea33a2
+>>         # save the config file
+>>         mkdir build_dir && cp config build_dir/.config
+>>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+>>
+>> If you fix the issue, kindly add following tag where applicable
+>> | Reported-by: kernel test robot <lkp@intel.com>
 > 
-> This is what METADATA_HW_PORT_MUX is for, you shouldn't have 
-> to allocate a piece of memory for every single packet.
+> +Cc Miquel,
+> 
+> Hm, I am pretty sure we already fixed it... but it seems not. I think
+> this needs dependency in MTD_ONENAND_OMAP2 - one is module, second
+> cannot be built-in.
 
-Does this work with DSA ? The information conveyed in the extension is
-the DSA port identifier. I'm not familiar at all with
-METADATA_HW_PORT_MUX, should we extend that mechanism to convey the
-DSA port id ?
+We fixed MTD_NAND_OMAP2 but missed this MTD_ONENAND_OMAP2.
 
-I also agree that allocating data isn't the best way to go, but from
-the history of this series, we've tried 3 approaches so far :
+I'll send out a patch soon.
 
- - Adding a new field to struct sk_buff, which isn't a good idea
- - Using the skb headroom, but then we can't know for sure is the skb
-   contains a DSA tag or not
- - Using skb extensions, that comes with the cost of this memory
-   allocation. Is this approach also incorrect then ?
-
-> Also the series doesn't build.
-
-Can you elaborate more ? I can't reproduce the build failure on my
-side, and I didn't get any reports from the kbuild bot, are you using a
-specific config file ?
-
-Thanks,
-
-Maxime
+cheers,
+-roger
