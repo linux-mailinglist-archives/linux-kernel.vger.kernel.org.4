@@ -2,172 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A4E5620245
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 23:29:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB72162024A
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 23:31:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231589AbiKGW3w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 17:29:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52350 "EHLO
+        id S231734AbiKGWbG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 17:31:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230186AbiKGW3u (ORCPT
+        with ESMTP id S230186AbiKGWbE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 17:29:50 -0500
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1480821262;
-        Mon,  7 Nov 2022 14:29:49 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=h/kfQ6cy/R03CdfnN0bIFLNbh+IN8PbV+0TueqXAKfelYoyA2u/D8M+RQAXHNZKEnBC0oEjrVQvXiFZxrwkCErlJ3/AjXMg/7esjmnSZeyiLxR2WCmUYF/Cmxuo5bvFzMzrzMX/8iia7rO+ta1T9zVHbzs/dn6OL+Ubi5dlS/TyfomIiV6FbH+bTGPm7YtjxLvQkGG5VY5PwM/rd9EkBR9bRSeALm2Uu3mYIzI6cJGgRcwaqPgdrmnC0EhYqArcPwg2BdflxHL18iF1Xt6W7kTeJ+td4gQnr3iG1PVzzQ8PtF8DXPZCDB2PQPMVn3ALIomfwl9AW893B/czUpBQ7bQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ZLrFr57HupA6O5T8cpvT38WQofxfu8AoxEQNbqZIasQ=;
- b=WkRjQg6EcvzHqxG/suHzH7PYb6T6raUeDk8HtQ8bUGIAjx465Y8b4QFuliiqlBPQUEUs5SLQAVyNDUaRmaix7N2vJ2QExfEwCb8LMYPDuEO0pFklkhvSTix5ugXON/gPnX+qeyOQHwnScHiUHsXwPSCYTzVDAmNplxgYnqIqlu0ytwGhBiYn5juVelDKKwrI125hDQkKLT/lFufyXtHRlDteSUDpvUjVG1+FQ+pkvKqxTugfPDj+L5gpFwXnFGjQYdYlzG3YK22PaDQlD+faTuFh1yTK38pO6BSb+w0IWJVCEokMX5xqYmlVN+bTkAGUPNb7KkGdt5I0vsvMmYtlsg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ZLrFr57HupA6O5T8cpvT38WQofxfu8AoxEQNbqZIasQ=;
- b=REAvmaZfZ9uggjWVJmkjHU5XLBs/t7i6NRelmx/kS2tGlZPhwWahjBLeM0McBqS0RceMFPcKRjV3AuELTOB8Eq4FOp1yps1V4PqHEELuop5f871MofICFa15cOCvv/wL6vaCbBaJhHdvFClklh7t0jiTvbIno3dx738ZvV7rFKo=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DS7PR12MB6263.namprd12.prod.outlook.com (2603:10b6:8:95::17) by
- IA1PR12MB6164.namprd12.prod.outlook.com (2603:10b6:208:3e8::8) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5791.26; Mon, 7 Nov 2022 22:29:46 +0000
-Received: from DS7PR12MB6263.namprd12.prod.outlook.com
- ([fe80::6f5:7c8f:32d9:e72c]) by DS7PR12MB6263.namprd12.prod.outlook.com
- ([fe80::6f5:7c8f:32d9:e72c%3]) with mapi id 15.20.5791.026; Mon, 7 Nov 2022
- 22:29:46 +0000
-Message-ID: <f25152d2-7045-94f4-d5dc-69b609c0be6a@amd.com>
-Date:   Mon, 7 Nov 2022 16:29:44 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Content-Language: en-US
-To:     Jim Mattson <jmattson@google.com>
-Cc:     x86@kernel.org, Borislav Petkov <bp@alien8.de>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Joao Martins <joao.m.martins@oracle.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        David Woodhouse <dwmw@amazon.co.uk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Juergen Gross <jgross@suse.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Babu Moger <Babu.Moger@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221104213651.141057-1-kim.phillips@amd.com>
- <20221104213651.141057-4-kim.phillips@amd.com>
- <CALMp9eSpKGCYK_1r3o326ui5RVoH73_RR5-LR2Div9Jm5zvk6A@mail.gmail.com>
-From:   Kim Phillips <kim.phillips@amd.com>
-Subject: Re: [PATCH 3/3] x86/speculation: Support Automatic IBRS under
- virtualization
-In-Reply-To: <CALMp9eSpKGCYK_1r3o326ui5RVoH73_RR5-LR2Div9Jm5zvk6A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: CH2PR12CA0017.namprd12.prod.outlook.com
- (2603:10b6:610:57::27) To DS7PR12MB6263.namprd12.prod.outlook.com
- (2603:10b6:8:95::17)
+        Mon, 7 Nov 2022 17:31:04 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E7BB2126C;
+        Mon,  7 Nov 2022 14:31:00 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 51B99B810C2;
+        Mon,  7 Nov 2022 22:30:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F7D4C433D6;
+        Mon,  7 Nov 2022 22:30:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667860258;
+        bh=XKo5S07i/ljM5DE1VsdqDN0PornhI4jPwJP1HNcqn1Y=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fhwEY4GNHVdgzAC+DXY0eF6rASV17RImf2S+IiTgcaJsifRUpScntfdrIPcr9018O
+         dLjEDTqDBp+2qFQUNFfLLC2CdXp9nG0LduFyLpqWyR8k+3GoF6bkDn9yHiKQWLlIAa
+         31SLQE5t+rPLjmphVG92aA0wkLpPzmgb6KHA7p3qHfEr7lkdVbhivyUeqKWQTNmccI
+         cbQPdbvnX4XIqJcIYdJrNqQsMrdXxBPmeWxQudN2XqLBW1GTlyqr/rMAqirZzEv65Z
+         v8TDvoBnKqAo78VIQ4yd/VCjFcnu4VHqbsHWEr5wW8297lZaikKsQgh6yBksGb1xe3
+         7Aqcq8Sa8khDw==
+Date:   Mon, 7 Nov 2022 16:30:55 -0600
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     viresh.kumar@linaro.org, krzysztof.kozlowski+dt@linaro.org,
+        rafael@kernel.org, robh+dt@kernel.org, johan@kernel.org,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v4 3/3] cpufreq: qcom-hw: Add CPU clock provider support
+Message-ID: <20221107223055.k6bc7bp7djww5lxg@builder.lan>
+References: <20221102090818.65321-1-manivannan.sadhasivam@linaro.org>
+ <20221102090818.65321-4-manivannan.sadhasivam@linaro.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS7PR12MB6263:EE_|IA1PR12MB6164:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3d6ae764-1082-4103-7d38-08dac10f9315
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: HGmnFqxxW2f8Z9l4Z91BOxYOY7n1LzbBu+5+BCUd62/sJEl58r6jaQCqpwDfqc2bMcVuIseBSW2n/Y+iUxTTYXE6qmzh+11EERRNH4yFG+h5HEYGthP32ciySDIeMDvCl9d1gK3DMXlYBV59+bl/E19KJA5RDQfilVJ46LxCc3j5pli0062Xa59/+OMV25ARcRpkysBaf3JEwrbj1cK2ZWil7WztduQLV8zrZjqnqloOEY7wIGhQQf+heBl6Fc/t7+BFycK+mIU5k7fJJF/p/cmUnFaoorSnf/G7o2gci+X/RGd08PVBb/w9qegd83pwv0ORV9e1to6BodK+vLBBFbq5izbIUEzEzERvU95EHumE7rYOttgxMNDoTWQWegjJ3B5GluSp19j2TZJKmeTGmMeI3v7Tb0qAadNH3bz9yc3X84Xhz7vENq5F5GYOD9apwvvhK21xJpMe4SSkBv6E0M5F7sAQ+MXMcXimkwwpFYW3ge/hvF7Q4ofC4ApZaYtC+oTlMFXWp6PH1jvM0zSESJi2xt5JEI+ZT0ToBRMTNx6dyT2DXF/3pfASP+hxRN42ztrmc9qN5hEnIcYu8PYrP8NUvGheISpAi0MCfmT6lEUm3JWz4QP7dYylpkOAjsImPLnanDTxgV8PvlaFeRh/84z7xLQkYyrAbEjC5s/FgAQm7+05xtFaAuOQzqAlS79ovPEqofZml55m4yLefSC8GQSGGjj1b51uIdz+okRrCrGrIZhenTMmTROuyGt6Jro+qVw4aOhabnWBpRTRHcMlbaFUugKy+UMK/i6qpwUlTEg=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB6263.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(39860400002)(366004)(136003)(396003)(376002)(451199015)(6916009)(2616005)(186003)(41300700001)(38100700002)(8936002)(4326008)(8676002)(66556008)(66476007)(5660300002)(2906002)(44832011)(7416002)(54906003)(6506007)(6512007)(53546011)(26005)(316002)(478600001)(6486002)(66946007)(31686004)(86362001)(31696002)(36756003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?SkQyb3V3YWZoWmZ1bXNOZUNLZUd0U2xLcEI5QXJtSURVbDlXZmw4Y3RLWXhI?=
- =?utf-8?B?NXQ5ZzY3YUVKU08yVjZZTVB2NGR5clpybXNnWDRlY0g0a1huaUxydGpQZk04?=
- =?utf-8?B?MWpRb3htcGExVEkyYTcrVTM3ZW40NWRaM3c5VHR0SS81b1BwVVRVaTIxRUI4?=
- =?utf-8?B?YUZkWkxDRE03cmNkYktqd1B0THkxblAxaytLU25hRUZKSUJGdlhuYlNScHlV?=
- =?utf-8?B?Sk51SldyanY3UlVodWlYRVdGSFBYdE43aUZCQ2hINGZQS1RkTXFGWndBTzEr?=
- =?utf-8?B?czdwOHNFVnNBRm1LQlRuUkY2bWt1UFJDMVZnM2R0dit3U2V0dFdQdzYvZllE?=
- =?utf-8?B?c0dRVGJIdGt1MmNxemtFMXpXZ3BGOUp4Vm4zaXBWR3hsZVdqVE1mVEE1cjNx?=
- =?utf-8?B?ZG43QW1hZzRudk4ya0M0bGN3Q29iMlU1SHRzanlabVljK2szeEd2Q1I2ZU5R?=
- =?utf-8?B?SlMyODlVR1hDZDZoNG84TXFhVGJpcTVJekRSK3B5L2dkYnB1ODhGeXg1Rllj?=
- =?utf-8?B?b01JcStsUHNxclFkNXd6WE02enZ1c1JsNXh5b214VDAwR09MKzhiRDRGczJo?=
- =?utf-8?B?bTR0ZTlLYlM5VjErZXN3cnNkNndBVll5cWdxaDd0Tk1uZUwvYkE2aVMvY2Zv?=
- =?utf-8?B?QzdLNGtTSjQ4bVNKcnNhVmt2VGJKN0hOa01tbXF3UCtwL0doQXBsV0tLWDlq?=
- =?utf-8?B?NlVkbDR3U3RTdkpNbEcwUzZoWUlTWFhVbFl3ZHF2UUNhMERNclFhUnBvaFpV?=
- =?utf-8?B?MThZVzJud2JSd2VKQU9OMmhGeHJ5aDBQQVF4OXpoK25vSkk3VWJySUtRRStD?=
- =?utf-8?B?WUZ3dzVMVlQyNlREZmM3N3M2UUtEVkdhWmZoTGgzMm0rakx3TmpMTHNqbWpl?=
- =?utf-8?B?NGtCdkZCOHV0cDVWb2JTckd1VGUxMmZUTWc1cmQxUE1CNTFQVHFFM3dxMm90?=
- =?utf-8?B?Z2xCai9kK0hUa3RCSkZlcDdqb3ViUzdZRjdIQ2Q5Rzdvb0dpamU1UGJpR3F2?=
- =?utf-8?B?aGIySEVhdUtrREVRU3A1SlRScWRLUFJNNkRXNWNhZzIwVXFFYjBVNnRJTllq?=
- =?utf-8?B?a0Vad1V2eGJKNG1GN1U3SHhBdzYyNGx0REtZNm1UaTdRY3JPTHpkRy93QmhF?=
- =?utf-8?B?OWYwTTJPdzRSaTIvdzNIZWRDbkhRNno4NzVhOHZ4VTNXcVhWdzVNK1k4RDU2?=
- =?utf-8?B?QWVRdEQ1RTNEUHV5clR6VlJzUWZWYm1XemhWS3JNVDhHZUVDMEdiVE5Gd0pG?=
- =?utf-8?B?M0lxWW10cGpIN3BYN3hxck5BZDhUNjZHRnRNNDF5RldLZ0ZUM0lwamIzcjFi?=
- =?utf-8?B?N21wR1FyMjRRdHJaSFdza0FkcjI1eHdtWXJkQjRkUmpPUStzczdRYkx3WlJU?=
- =?utf-8?B?SVNEVHVNTE55WXVudkJjWEJ5Z0JoUkdkSnhySTNiT2NtUlMxV1FZZnVVSUdz?=
- =?utf-8?B?cXJ4OFYxRS9KcTQveFdYOFVmSVUyblVhY2VKU0h4T2g4YmlPRVo2Zmo2ODhu?=
- =?utf-8?B?WTFVZTBMbER1VmtDQ1NzUDVUOW4wZVp0SXdnQXZPMnVjRERyZ1BPZjg1SHA3?=
- =?utf-8?B?SnVlVVBMUytSQ2F2S1V6Sk5aazYxMWt3dHVNWE1YZFF5UkZGYUtUcVhNaFJS?=
- =?utf-8?B?L0pBYTZPTTluQTNXQTh1VzgzeFY0bjRKOXB3bDJYSytYa2xIRmh1V1p3YTBG?=
- =?utf-8?B?bHlxOXhaNW9RVm1lek5OTWRJNVNZcXBMMUNOYTJJNEd3NHk4T09QSENoSTda?=
- =?utf-8?B?VmhMK0hJUzQrdUs5aDRveVA4WVhsWDZmYWR6VTE0cHJucTIxcVJvNlh6c1JG?=
- =?utf-8?B?S3dHUkM4cWxMMW1mcC8zb2xvODNjS1RrWGdWempwM2l0NGtONG1QSHZZb1ox?=
- =?utf-8?B?eERSMVhhcThhMDdzTSs5Sk85bmtPK2Z4dGtHdnF0L2lIUFBJSmlaNlJoMFZ1?=
- =?utf-8?B?dHhzTDR0Z2NZNUFYUG5pSnpsc3VDVjF4cUVaTm1wd3dwK2hjekF6MDRpK1R3?=
- =?utf-8?B?SUNuVlRZN2dVNCtOTS80dEJDZndLNlRMcVdkMHMwVGlnN1hyZXN5MDEwVWx4?=
- =?utf-8?B?UkJsNDFJMkxlQXY0VktvakVwZ01QS2c3UVA4N0UvdWsraHBFaWcwdkxHYWJK?=
- =?utf-8?Q?cE4KcUyXuBNbS3apfluWupcP7?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3d6ae764-1082-4103-7d38-08dac10f9315
-X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB6263.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Nov 2022 22:29:46.4227
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: /MBCb2txAiCiPaQKNryHxI3t5I0Jc+IS3q6nrLFIPlxOOsQVj1BNuTXDulqg/xT+IpeDZ9+ocWDNZYVAWvAqTQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6164
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221102090818.65321-4-manivannan.sadhasivam@linaro.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/4/22 5:00 PM, Jim Mattson wrote:
-> On Fri, Nov 4, 2022 at 2:38 PM Kim Phillips <kim.phillips@amd.com> wrote:
->>
->> VM Guests may want to use Auto IBRS, so propagate the CPUID to them.
->>
->> Co-developed-by: Babu Moger <Babu.Moger@amd.com>
->> Signed-off-by: Kim Phillips <kim.phillips@amd.com>
+On Wed, Nov 02, 2022 at 02:38:18PM +0530, Manivannan Sadhasivam wrote:
+> Qcom CPUFreq hardware (EPSS/OSM) controls clock and voltage to the CPU
+> cores. But this relationship is not represented with the clk framework
+> so far.
 > 
-> The APM says that, under AutoIBRS, CPL0 processes "have IBRS
-> protection." I'm taking this to mean only that indirect branches in
-> CPL0 are not subject to steering from a less privileged predictor
-> mode. This would imply that indirect branches executed at CPL0 in L1
-> could potentially be subject to steering by code running at CPL0 in
-> L2, since L1 and L2 share hardware predictor modes.
+> So, let's make the qcom-cpufreq-hw driver a clock provider. This makes the
+> clock producer/consumer relationship cleaner and is also useful for CPU
+> related frameworks like OPP to know the frequency at which the CPUs are
+> running.
+> 
+> The clock frequency provided by the driver is for each frequency domain.
+> We cannot get the frequency of each CPU core because, not all platforms
+> support per-core DCVS feature.
+> 
+> Also the frequency supplied by the driver is the actual frequency that
+> comes out of the EPSS/OSM block after the DCVS operation. This frequency is
+> not same as what the CPUFreq framework has set but it is the one that gets
+> supplied to the CPUs after throttling by LMh.
+> 
+> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> ---
+>  drivers/cpufreq/qcom-cpufreq-hw.c | 43 +++++++++++++++++++++++++++++++
+>  1 file changed, 43 insertions(+)
+> 
+> diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
+> index 5e0598730a04..5b5f9a4d1466 100644
+> --- a/drivers/cpufreq/qcom-cpufreq-hw.c
+> +++ b/drivers/cpufreq/qcom-cpufreq-hw.c
+> @@ -4,6 +4,7 @@
+>   */
+>  
+>  #include <linux/bitfield.h>
+> +#include <linux/clk-provider.h>
+>  #include <linux/cpufreq.h>
+>  #include <linux/init.h>
+>  #include <linux/interconnect.h>
+> @@ -54,6 +55,7 @@ struct qcom_cpufreq_data {
+>  	bool cancel_throttle;
+>  	struct delayed_work throttle_work;
+>  	struct cpufreq_policy *policy;
+> +	struct clk_hw cpu_clk;
+>  
+>  	bool per_core_dcvs;
+>  
+> @@ -615,8 +617,20 @@ static struct cpufreq_driver cpufreq_qcom_hw_driver = {
+>  	.ready		= qcom_cpufreq_ready,
+>  };
+>  
+> +static unsigned long qcom_cpufreq_hw_recalc_rate(struct clk_hw *hw, unsigned long parent_rate)
+> +{
+> +	struct qcom_cpufreq_data *data = container_of(hw, struct qcom_cpufreq_data, cpu_clk);
+> +
+> +	return qcom_lmh_get_throttle_freq(data) / HZ_PER_KHZ;
 
-That's true for AMD processors that don't support Same Mode IBRS, also
-documented in the APM.
+Shouldn't this just be qcom_lmh_get_throttle_freq()? So that we get a
+value in Hz.
 
-Processors that support AutoIBRS also support Same Mode IBRS (see
-CPUID Fn8000_0008_EBX[IbrsSameMode] (bit 19)).
 
-> Fortunately, there is an IBPB when switching VMCBs in svm_vcpu_load().
-> But it might be worth noting that this is necessary for AutoIBRS to
-> work (unless it actually isn't).
+I presume you got the division from qcom_lmh_dcvs_notify(), where
+throttled_freq seems to supposed to be in kHz when passed to
+topology_update_thermal_pressure(), as it contains a division by 1000
+and a comment that it takes us to units of MHz.
 
-It is needed, but not for kernel/CPL0 code, rather to protect one
-guest's user-space code from another's.
+But it's not clear what the frequency unit for freq_qos_update_request()
+would be - but it's a 31 bit value, so better hope it's kHz there as
+well(?)
 
-Kim
+Regards,
+Bjorn
+
+> +}
+> +
+> +static const struct clk_ops qcom_cpufreq_hw_clk_ops = {
+> +	.recalc_rate = qcom_cpufreq_hw_recalc_rate,
+> +};
+> +
+>  static int qcom_cpufreq_hw_driver_probe(struct platform_device *pdev)
+>  {
+> +	struct clk_hw_onecell_data *clk_data;
+>  	struct device *dev = &pdev->dev;
+>  	struct device *cpu_dev;
+>  	struct clk *clk;
+> @@ -659,8 +673,16 @@ static int qcom_cpufreq_hw_driver_probe(struct platform_device *pdev)
+>  
+>  	qcom_cpufreq.soc_data = of_device_get_match_data(dev);
+>  
+> +	clk_data = devm_kzalloc(dev, struct_size(clk_data, hws, num_domains), GFP_KERNEL);
+> +	if (!clk_data)
+> +		return -ENOMEM;
+> +
+> +	clk_data->num = num_domains;
+> +
+>  	for (i = 0; i < num_domains; i++) {
+>  		struct qcom_cpufreq_data *data = &qcom_cpufreq.data[i];
+> +		struct clk_init_data init = {};
+> +		const char *clk_name;
+>  		struct resource *res;
+>  		void __iomem *base;
+>  
+> @@ -672,6 +694,27 @@ static int qcom_cpufreq_hw_driver_probe(struct platform_device *pdev)
+>  
+>  		data->base = base;
+>  		data->res = res;
+> +
+> +		/* Register CPU clock for each frequency domain */
+> +		clk_name = devm_kasprintf(dev, GFP_KERNEL, "qcom_cpufreq%d", i);
+> +		init.name = clk_name;
+> +		init.flags = CLK_GET_RATE_NOCACHE;
+> +		init.ops = &qcom_cpufreq_hw_clk_ops;
+> +		data->cpu_clk.init = &init;
+> +
+> +		ret = devm_clk_hw_register(dev, &data->cpu_clk);
+> +		if (ret < 0) {
+> +			dev_err(dev, "Failed to register Qcom CPUFreq clock\n");
+> +			return ret;
+> +		}
+> +
+> +		clk_data->hws[i] = &data->cpu_clk;
+> +	}
+> +
+> +	ret = devm_of_clk_add_hw_provider(dev, of_clk_hw_onecell_get, clk_data);
+> +	if (ret < 0) {
+> +		dev_err(dev, "Failed to add Qcom CPUFreq clock provider\n");
+> +		return ret;
+>  	}
+>  
+>  	ret = cpufreq_register_driver(&cpufreq_qcom_hw_driver);
+> -- 
+> 2.25.1
+> 
