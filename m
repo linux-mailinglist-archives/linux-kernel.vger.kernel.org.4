@@ -2,134 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED2B561ECDC
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 09:28:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 041D361ECE4
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 09:29:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231221AbiKGI2N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 03:28:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39672 "EHLO
+        id S231241AbiKGI3c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 03:29:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229659AbiKGI2L (ORCPT
+        with ESMTP id S230379AbiKGI33 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 03:28:11 -0500
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1201A14002
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 00:28:10 -0800 (PST)
-Received: by mail-lj1-x22a.google.com with SMTP id d3so15064806ljl.1
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 00:28:09 -0800 (PST)
+        Mon, 7 Nov 2022 03:29:29 -0500
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 591C7A3
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 00:29:28 -0800 (PST)
+Received: by mail-lf1-x12c.google.com with SMTP id be13so15730175lfb.4
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 00:29:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=SJ/Mwnct3TZ7HIih3opk7ydhGcqvBaH59swvlRhyi5o=;
-        b=xa7T5BQxzXkz/boFwpbQFJiXwgrhpUrx5A0mnmE58r+XBnsnebuPQ3CYeOndGP7bUw
-         2wzd+Jb7YiaY5Er2T77/2Ydj/QZfzOD7/qP6mXoyuD5JQO+eZqKau6HSkpK1wohfxj3l
-         UnGU4DGm9F3uufcxBQdyL14prPXU337j/SglQRAOOCNurYqwg1ILSPT6MH8eMVxtHPeS
-         miLsRIYaNY1dm4U7JagrKWVX4RseouKjAomkH1eQ/n4nfeQrGXX2LSD9sYhecX1ZCdRH
-         cGZIZkM6j66nZCelPNSba3Qfbdzmm6aewa9QCszHGPG1brZsM8HiLUlhUnwa/n6G3WGa
-         bE7w==
+        bh=+G+Z3fRjw+YmVPah8QnDEbPwrQNevzGVNtku2Zteqko=;
+        b=p/Ivu84VjaM2s6AOOjS2hGlpuazO2Ifv/qX1ZLT5UgyP37/xADglycLuhgfyqSjppS
+         a85YRL3hjoYVYNjpEANZEBQw4A3ra2/S7Lx6eI6Jxqdk0+oqUWkAK5LDMKqRGsEMPASK
+         9X+itdiBrXDbpxpEPygy9iOHvWAk9xvIVOpGy2sVlc1/Un5ZBNaOP5Xuej51L9khne6P
+         jz8jfGaPMEzTRoSyt7ACKf3kXdxiFGoj3PnGkfjAY3/uVsdBpoB7DevdXZDv9Z+m9dxa
+         RBnjjk27Yt3Mbme5DRNBNyc+yAG6pQaAJrXQIx4t7K9kfoYc2emH1pPLWY+fPCjEb9JP
+         TpVg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SJ/Mwnct3TZ7HIih3opk7ydhGcqvBaH59swvlRhyi5o=;
-        b=DmDFjPV0jrGF110QcGN5B55ZMr42GR65iIjKW0gtANgF6oBnou8zpeT6zcroJPH+8+
-         PeOq9/lSJNqlKvEAIYLzOvXixHCIO1GoOtOJkQpSq0zlKRwwOjm3nMqgh4CByFas3xRt
-         uraccnh/0sXVIGVO0CpJInCG3batT0osKjm8Hs08TxdMXySl2cTJh9A/iOu6GE/YyGbj
-         /m6ARH7sE9APWje/lNXHJLlMrPH19TvLnH66RLAotgjCxJPuh512bzAcaAtg7r2rdKec
-         6OQGI3dlIN4VKcwRyBFI2QrR+ULDTdKlKTTDr5nG6nw1AFdiAdyEU7SWcQ7l9r9R7w02
-         AIAg==
-X-Gm-Message-State: ACrzQf0reSzItn+5U+aTzUa+8YPCqY6PI7dM9Hk5vUJ/J0WHmbvup+i3
-        qhGVcheXzgp6141AE0ODa1UQfQ==
-X-Google-Smtp-Source: AMsMyM773skFoC6OdBSf7t8Ae0cisF6SiTWYbW/Zdmmo7u8JVCVXqxcgwqDj6Hx38fvKc8n74dfqPQ==
-X-Received: by 2002:a05:651c:516:b0:26f:2a03:b969 with SMTP id o22-20020a05651c051600b0026f2a03b969mr4921918ljp.343.1667809688422;
-        Mon, 07 Nov 2022 00:28:08 -0800 (PST)
+        bh=+G+Z3fRjw+YmVPah8QnDEbPwrQNevzGVNtku2Zteqko=;
+        b=K9CD/KC3R2DX2BSlVymEp7hR58tu+t6Fwwb61G9wVuEo1J4wfalMRY2R5oT7Cu+VAD
+         C1k1O6TAo1UatfrA3KDCoAZ/rvLcHEXNCN7s/JF9edpYmXOYoZi1T3jlWNZLD746pBwA
+         3AdwzHiX3+3eBW7NBWTK/D5mh0zEF9mkinVry08faUPbYy2P9EqNoyB/Ma0RLV05tXdt
+         6DfGAK1tsySdjtf4Rjaj/O21WiW43sMxoGzq9i+rvWDmMlJGCpsQgiRppaNdoE8U9a5N
+         mPxx+AnXYxOxFRhAGZNttMvCGoN1esqcwMISSeIV3zzH0BkthvdHqH9KQTXbhJm07O4c
+         lOkw==
+X-Gm-Message-State: ACrzQf0rLTPBOHEheQwxsmDZhlySNmyH3mz3+mCWVRgPtoktx4cUHEQr
+        3y81qoSQHA6pFDu63TIK5QPCDA==
+X-Google-Smtp-Source: AMsMyM4itr+2Ipxo0hSi6ESJOXGaPvYia4F+z40sfL+6uusvTHsZiF9bFWl1BTOgHUrh5IA2WU92fQ==
+X-Received: by 2002:ac2:5dd5:0:b0:4a2:2960:a855 with SMTP id x21-20020ac25dd5000000b004a22960a855mr18201090lfq.399.1667809766713;
+        Mon, 07 Nov 2022 00:29:26 -0800 (PST)
 Received: from [192.168.0.20] (088156142199.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.199])
-        by smtp.gmail.com with ESMTPSA id q21-20020a2e9155000000b0026acc9edecdsm1098071ljg.47.2022.11.07.00.28.07
+        by smtp.gmail.com with ESMTPSA id a17-20020a056512201100b004a26b9cea32sm1114789lfb.271.2022.11.07.00.29.25
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Nov 2022 00:28:07 -0800 (PST)
-Message-ID: <b45b8cf8-de9d-7132-1a35-48deeb4b79d5@linaro.org>
-Date:   Mon, 7 Nov 2022 09:28:07 +0100
+        Mon, 07 Nov 2022 00:29:26 -0800 (PST)
+Message-ID: <334c5f69-2f25-aeb1-b87f-500cf2a6c205@linaro.org>
+Date:   Mon, 7 Nov 2022 09:29:25 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.2
-Subject: Re: [PATCH 2/2] dt-bindings: interrupt-controller: add yaml for
- LoongArch CPU interrupt controller
+Subject: Re: [PATCH] arm64: allwinner: a64: add device tree for SoPine with
+ clusterboard
 Content-Language: en-US
-To:     Liu Peibao <liupeibao@loongson.cn>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
+To:     renze@rnplus.nl, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        devicetree@vger.kernel.org
+Cc:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>
-Cc:     Jianmin Lv <lvjianmin@loongson.cn>,
-        Yinbo Zhu <zhuyinbo@loongson.cn>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221107023404.26730-1-liupeibao@loongson.cn>
- <20221107023404.26730-2-liupeibao@loongson.cn>
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>
+References: <b3b8320f0d2b54a0557331977582d05c@rnplus.nl>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221107023404.26730-2-liupeibao@loongson.cn>
+In-Reply-To: <b3b8320f0d2b54a0557331977582d05c@rnplus.nl>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/11/2022 03:34, Liu Peibao wrote:
-
-Add commit msg explaining what you are doing here (e.g. the hardware).
-
-> Signed-off-by: Liu Peibao <liupeibao@loongson.cn>
-> ---
->  .../loongarch,cpu-interrupt-controller.yaml   | 42 +++++++++++++++++++
->  1 file changed, 42 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/interrupt-controller/loongarch,cpu-interrupt-controller.yaml
+On 06/11/2022 22:40, renze@rnplus.nl wrote:
+> The Pine64 clusterboard needs a to have the tx delay changed to
+> 500ps for ethernet to work. This solution was described by multiple
+> people on the Pine64 forum years ago and nobody has submitted it.
 > 
-> diff --git a/Documentation/devicetree/bindings/interrupt-controller/loongarch,cpu-interrupt-controller.yaml b/Documentation/devicetree/bindings/interrupt-controller/loongarch,cpu-interrupt-controller.yaml
+> Add a device tree for SoPine with the clusterboard.
+> 
+> Signed-off-by: Renze Nicolai <renze@rnplus.nl>
+> ---
+>   arch/arm64/boot/dts/allwinner/Makefile                 |  1 +
+>   .../dts/allwinner/sun50i-a64-sopine-clusterboard.dts   | 10 ++++++++++
+>   2 files changed, 11 insertions(+)
+>   create mode 100644 
+> arch/arm64/boot/dts/allwinner/sun50i-a64-sopine-clusterboard.dts
+> 
+> diff --git a/arch/arm64/boot/dts/allwinner/Makefile 
+> b/arch/arm64/boot/dts/allwinner/Makefile
+> index 6a96494a2e0a..15b011d1aaea 100644
+> --- a/arch/arm64/boot/dts/allwinner/Makefile
+> +++ b/arch/arm64/boot/dts/allwinner/Makefile
+> @@ -15,6 +15,7 @@ dtb-$(CONFIG_ARCH_SUNXI) += 
+> sun50i-a64-pinephone-1.2.dtb
+>   dtb-$(CONFIG_ARCH_SUNXI) += sun50i-a64-pinetab.dtb
+>   dtb-$(CONFIG_ARCH_SUNXI) += sun50i-a64-pinetab-early-adopter.dtb
+>   dtb-$(CONFIG_ARCH_SUNXI) += sun50i-a64-sopine-baseboard.dtb
+> +dtb-$(CONFIG_ARCH_SUNXI) += sun50i-a64-sopine-clusterboard.dtb
+
+This does not look like matching indentation of other entries...
+
+>   dtb-$(CONFIG_ARCH_SUNXI) += sun50i-a64-teres-i.dtb
+>   dtb-$(CONFIG_ARCH_SUNXI) += sun50i-a100-allwinner-perf1.dtb
+>   dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h5-bananapi-m2-plus.dtb
+> diff --git 
+> a/arch/arm64/boot/dts/allwinner/sun50i-a64-sopine-clusterboard.dts 
+> b/arch/arm64/boot/dts/allwinner/sun50i-a64-sopine-clusterboard.dts
 > new file mode 100644
-> index 000000000000..30b742661a3f
+> index 000000000000..6f8020a22670
 > --- /dev/null
-> +++ b/Documentation/devicetree/bindings/interrupt-controller/loongarch,cpu-interrupt-controller.yaml
-> @@ -0,0 +1,42 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/interrupt-controller/loongarch,cpu-interrupt-controller.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +++ b/arch/arm64/boot/dts/allwinner/sun50i-a64-sopine-clusterboard.dts
+> @@ -0,0 +1,10 @@
+> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+> +// Copyright (c) 2022 Renze Nicolai <renze@rnplus.nl>
 > +
-> +title: LoongArch CPU Interrupt Controller
+> +/dts-v1/;
 > +
-> +description: >
-> +   On LoongArch the loongarch_cpu_irq_of_init() helper can be used to initialize
-> +   the 14 CPU IRQs from a devicetree file and create a irq_domain for this IRQ
-> +   controller.
-> +
-> +   With the irq_domain in place we can describe how the 14 IRQs are wired to the
-> +   platforms internal interrupt controller cascade.
+> +#include "sun50i-a64-sopine-baseboard.dts"
 
-This should be the description of hardware, not Linux drivers.
+You miss compatible and model. You need to document the compatible in
+bindings (just like other top-level).
 
 > +
-> +maintainers:
-> +  - Liu Peibao <liupeibao@loongson.cn>
-> +
-> +properties:
-> +  compatible:
-> +    const: loongarch,cpu-interrupt-controller
-
-You have exactly one and only one type of CPU interrupt controller for
-all your Loongarch designs? All current and all future? All?
-
-> +
-> +  '#interrupt-cells':
+> +&emac {
+> +       allwinner,tx-delay-ps = <500>;
+> +};
 
 Best regards,
 Krzysztof
