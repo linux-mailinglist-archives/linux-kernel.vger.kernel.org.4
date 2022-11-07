@@ -2,69 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6ED9A61F85C
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 17:07:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 944FF61F85F
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 17:07:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232163AbiKGQHH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 11:07:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57504 "EHLO
+        id S232674AbiKGQHO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 11:07:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232234AbiKGQGP (ORCPT
+        with ESMTP id S232795AbiKGQGj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 11:06:15 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B4AB201AB;
-        Mon,  7 Nov 2022 08:06:09 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3DB96B812A8;
-        Mon,  7 Nov 2022 16:06:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48C25C433C1;
-        Mon,  7 Nov 2022 16:06:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667837166;
-        bh=QEeTPjTTUhlRPhDXz1hYJehaOMwD4NwQVKrn8Tqo/tA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=gX9ZlDCOd3itoUufEUVTX3zrIQF5O/FCFl3WsB4p9ntW4uVEdXNBRdZJYyUVUXQCf
-         2JQnkrdsML2CRYLPfFSNLwWNxLjQZhtdGRITKj+oQeTxFO5v4M9PGf1oPxvswJoUfy
-         R1NdhSXUlgmyXTKMMU6z52Sh+xZbkN43IhVj08sV836YWlCFRAwL4eaHaIyi7EWyhF
-         C0nkUYtPgIDh3vfHV7krZF2emg0yYTQNXBnO57ysllNWjzf7n3i8WLX5rxfi9fjNaJ
-         biJGI9/rY7FzH2rl7nVnsxiM1UlCMmInTcJF33LrHg0j6M74r0bJpqTbuqguN8Acqm
-         KocMVFLHKd9Iw==
-Date:   Mon, 7 Nov 2022 08:06:05 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Leon Romanovsky <leon@kernel.org>
-Cc:     Ajit Khaparde <ajit.khaparde@broadcom.com>,
-        andrew.gospodarek@broadcom.com, davem@davemloft.net,
-        edumazet@google.com, jgg@ziepe.ca, linux-kernel@vger.kernel.org,
-        linux-rdma@vger.kernel.org, michael.chan@broadcom.com,
-        netdev@vger.kernel.org, pabeni@redhat.com,
-        selvin.xavier@broadcom.com
-Subject: Re: [PATCH v3 0/6] Add Auxiliary driver support
-Message-ID: <20221107080605.35ef5622@kernel.org>
-In-Reply-To: <Y2inmdbpoRm2VbuE@unreal>
-References: <CACZ4nhtmE9Dh9z_O9-A934+q0_8yHEyj+V-DcEsuEWFbPH6BGg@mail.gmail.com>
-        <20221104162733.73345-1-ajit.khaparde@broadcom.com>
-        <Y2inmdbpoRm2VbuE@unreal>
+        Mon, 7 Nov 2022 11:06:39 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 788A720358;
+        Mon,  7 Nov 2022 08:06:31 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 68E0CED1;
+        Mon,  7 Nov 2022 08:06:37 -0800 (PST)
+Received: from FVFF77S0Q05N (unknown [10.57.69.132])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D5E0A3F534;
+        Mon,  7 Nov 2022 08:06:28 -0800 (PST)
+Date:   Mon, 7 Nov 2022 16:06:26 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Will Deacon <will@kernel.org>
+Cc:     Jianlin Lv <iecedge@gmail.com>, corbet@lwn.net,
+        catalin.marinas@arm.com, rostedt@goodmis.org, mingo@redhat.com,
+        naveen.n.rao@linux.ibm.com, anil.s.keshavamurthy@intel.com,
+        davem@davemloft.net, mhiramat@kernel.org, arnd@arndb.de,
+        zhengzengkai@huawei.com, jianlv@ebay.com,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] arm64/kprobes: Add support for KPROBES_ON_FTRACE
+Message-ID: <Y2ktAisfFAr0aU2V@FVFF77S0Q05N>
+References: <20220728020250.1699-1-iecedge@gmail.com>
+ <20221107144931.GA20793@willie-the-truck>
+ <Y2klCLj7F7fKsza+@FVFF77S0Q05N>
+ <20221107153506.GA21157@willie-the-truck>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221107153506.GA21157@willie-the-truck>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 7 Nov 2022 08:37:13 +0200 Leon Romanovsky wrote:
-> Please send this series as standalone one and not as a reply
-> to previous discussion. Reply-to messes review flow, especially
-> for series.
+On Mon, Nov 07, 2022 at 03:35:07PM +0000, Will Deacon wrote:
+> On Mon, Nov 07, 2022 at 03:32:24PM +0000, Mark Rutland wrote:
+> > On Mon, Nov 07, 2022 at 02:49:31PM +0000, Will Deacon wrote:
+> > > [+Mark R]
+> > > 
+> > > On Thu, Jul 28, 2022 at 02:02:50AM +0000, Jianlin Lv wrote:
+> > > > This is the arm64 version of ftrace-based kprobes to avoid the overhead
+> > > > with regular kprobes, by using the ftrace infrastructure.
+> > > > 
+> > > > Signed-off-by: Jianlin Lv <iecedge@gmail.com>
+> > > > ---
+> > > >  .../debug/kprobes-on-ftrace/arch-support.txt  |  2 +-
+> > > >  arch/arm64/Kconfig                            |  1 +
+> > > >  arch/arm64/kernel/probes/Makefile             |  1 +
+> > > >  arch/arm64/kernel/probes/kprobes-ftrace.c     | 81 +++++++++++++++++++
+> > > >  include/linux/kprobes.h                       |  2 +
+> > > >  kernel/kprobes.c                              |  4 +-
+> > > >  6 files changed, 88 insertions(+), 3 deletions(-)
+> > > >  create mode 100644 arch/arm64/kernel/probes/kprobes-ftrace.c
+> > > 
+> > > Sorry for the slow reply on this, but I think this deserved to be split
+> > > into two patches: the first one reworking the core check_ftrace_location()
+> > > logic to work properly with branch-and-link style architectures, and the
+> > > second one adding support for arm64.
+> > 
+> > I'd prefer we don't do this at all; there a bunch of issues with kprobes *not*
+> > taking an exception, since we get a dodgy not-quite-real pt_regs, and to clean
+> > up the existing issues the plan is:
+> > 
+> > 1) Move ftrace over to ftrace_regs
+> > 2) Implement fprobes using ftrace_regs
+> > 3) Remove kretprobes
+> > 
+> > ... and regular kprobes will need to take an exception (via BRK) to get a real
+> > pt_regs, so that can't be optimized to use ftrace.
 > 
-> Jakub, I'll review it once Ajit will send it properly.
+> OKey doke. Does that mean that other architectures will follow the same
+> approach of taking an exception,
 
-IIUC we wait for you or Jason to review any of the RoCE bifurcation
-patches before considering them for inclusion.
+I think once everyone has FPROBE, KPROBES_ON_FTRACE becomes redundant, and
+could be removed (leaving kprobes to always follow a take-an-exception flow on
+all architectures).
+
+> or do they somehow work by magic?
+
+Some architectures don't need to take an exception to be able to create a full
+pt_regs (e.g. x86's flags are accessible in a way arm64's PSTATE isn't), but
+that needs to be generated / restored differently to exception entry/return,
+and so even where it's possible it can be painful to maintain (and slower than
+using ftrace_regs), so I suspect KPROBES_ON_FTRACE would be removed.
+
+So different constaints more than magic.
+
+Thanks,
+Mark.
