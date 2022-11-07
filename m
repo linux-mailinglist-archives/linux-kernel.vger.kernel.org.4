@@ -2,79 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7107161ECD8
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 09:26:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3874661ECD9
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 09:26:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231175AbiKGIZ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 03:25:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38774 "EHLO
+        id S231214AbiKGI0k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 03:26:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230263AbiKGIZ4 (ORCPT
+        with ESMTP id S230263AbiKGI0h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 03:25:56 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E94813F7A;
-        Mon,  7 Nov 2022 00:25:56 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9EB0060F2D;
-        Mon,  7 Nov 2022 08:25:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1820C433D6;
-        Mon,  7 Nov 2022 08:25:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667809555;
-        bh=BgvfSDSm1KzNyxI29x4rNw5VHuvwCpeNH5GsLnzFpWM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hebR34ZdME225oyD8T0lUlNi/yquuSWbZqGGPugMTfQsGWJVLUpv/v1ndpgbUYuNn
-         UnlKQKHLrmocbOS8m9KFpY8MaFf66n/TfGubmxKrWqkO3EvI4eQH/oOC6Z1lx5av2J
-         avi4vMWYwNQ/qRbBO21wZx+H8HLPWIrSJ81cPVbDK/2Zq7ScKt+ueAx7WMB5d4Wy+s
-         H2/WLqX0CIog5fFOV+outYWTm4XCoz0nDMZSUGPTJdBx8Wj/xlb4UQB9iv100ZhGYX
-         ixCHOALz6c81yn4UyBdF3Z+k6ExiYWDGbW5Uaw0bXvRNwbOyayusD+jMjVs3RRIubS
-         IojL+C6Uf/rJg==
-Date:   Mon, 7 Nov 2022 08:25:46 +0000
-From:   Lee Jones <lee@kernel.org>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     agross@kernel.org, andersson@kernel.org,
-        konrad.dybcio@somainline.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, ulf.hansson@linaro.org,
-        srinivas.kandagatla@linaro.org, jic23@kernel.org, lars@metafoo.de,
-        keescook@chromium.org, tony.luck@intel.com, gpiccoli@igalia.com,
-        bhupesh.sharma@linaro.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-hardening@vger.kernel.org, marijn.suijten@somainline.org,
-        kernel@collabora.com, luca@z3ntu.xyz, a39.skl@gmail.com
-Subject: Re: [PATCH 6/9] dt-bindings: mfd: qcom,tcsr: Add compatible for
- MSM8976
-Message-ID: <Y2jBCh0PI/2uhVH9@google.com>
-References: <20221104172122.252761-1-angelogioacchino.delregno@collabora.com>
- <20221104172122.252761-7-angelogioacchino.delregno@collabora.com>
+        Mon, 7 Nov 2022 03:26:37 -0500
+Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2B4314002
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 00:26:36 -0800 (PST)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.west.internal (Postfix) with ESMTP id 2832D3200930;
+        Mon,  7 Nov 2022 03:26:35 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute3.internal (MEProxy); Mon, 07 Nov 2022 03:26:36 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1667809594; x=
+        1667895994; bh=AMFmSDbfoi+g257DIcHWURYqpQsU+fk5FVNcvUts1PI=; b=C
+        0fYiZElKgzsizJiInh3BG1lRdsj3Oi3hMmnjP+SxfsNDIe8cvWvrl2+d30OvGVlH
+        JsI7yZLB+uxP1e/buDEr/V89mRouz9Sc2U5P/uUFrZWlLdQSp7DPILBntshjxenM
+        9Byxlh5DbMbxwmjbiqz86pOeDhnS3E6goORf7okO2ln3b9bshgSePD5zi2Hxwnld
+        h0OSzy+td7dPA4zuZ9fmhcYL8DlZOeMRDJg1YZoJMIoclVXEnBuhJQvdLNhSiFc7
+        95WzoYxhf1nG+GvkeEDhdpEVVbD59yD9bxglkEifBy2oppGKmn2W1AEgUMZZnUV5
+        vtBM6WXqe/o7ASekSi3rQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1667809594; x=
+        1667895994; bh=AMFmSDbfoi+g257DIcHWURYqpQsU+fk5FVNcvUts1PI=; b=u
+        4hmxmrE+vzZCPq40xS9bH2ywaqulLPOgAowLcF+gmhKKE8Ots9qiohgkMY14sKy8
+        n42S88XdRcSO/ft9zue21FLLVhiF2p4xUxFhCUHpWckVLJ7uxwzp47LUryxBEMbP
+        YFmkyNZcNh+od8RRADtl96sPqd5Mly8RavJihuqulX8BYRyw5GWvVDQI2a5yA/8y
+        CGzwAv5/5dc50DnIuoUN2TQErM+hBv59N4XsZnGmoRpyjKueNOrZiTkxfOeeNTCY
+        DOqZorAE7vXMEs6l7oSMn37b4MazfE8L7t9ZGBP5atgL/Y58YmIhYeEtGsgYYA76
+        VYm5oFplWykzTmdJW5qWw==
+X-ME-Sender: <xms:OsFoY9Zn2nZ6KwkG3W2Jq13cKIlv0o5RGhhvnSkHeicHgIZtX82Owg>
+    <xme:OsFoY0aWhmm1wp6ynAD58NSiq5pSsG04MJL9faTHBRhvF-ZqTSK0up4sztLrQybDJ
+    RSwgzKO5w4NvKIXpsc>
+X-ME-Received: <xmr:OsFoY_83OQ0ufDTedAxMjvz_KOoa-ko-Amm6ylnSZq5hWVqGl8QcJTPcmAJ9cRGAUYZrPjpLWCyy9vf-b1ndDcB2eecG6AATpKZ4dnnvN7OJdA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrvdejgdduvddtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggugfgjsehtqhertddttddunecuhfhrohhmpeforgig
+    ihhmvgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrf
+    grthhtvghrnhepleelfeeileelteetfedvieekfeefffevhfdtvefgheevudevheejvddv
+    ieeltdeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    epmhgrgihimhgvsegtvghrnhhordhtvggthh
+X-ME-Proxy: <xmx:OsFoY7pdow_8txrv47_8saudJahZPVQkjMKyKDQBSz6OQCmW0-cO6w>
+    <xmx:OsFoY4rIf16Iy2spECFQTS-Yr-CgpVfm2aYEhMZUlMPzh5jH2hW4hA>
+    <xmx:OsFoYxT7shYW7dw4zz0xKxm3TH-6mpZkqohtHwAPa_tLDtxP5F0lHg>
+    <xmx:OsFoY1iR8SxFf71nHgIXS5H2kaEEKGf_jBPEDj6NhMzr8IAaL_4emw>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 7 Nov 2022 03:26:34 -0500 (EST)
+Date:   Mon, 7 Nov 2022 09:26:30 +0100
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     =?utf-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>
+Cc:     emma@anholt.net, airlied@gmail.com, daniel@ffwll.ch,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] drm/vc4: hdmi: Fix pointer dereference before check
+Message-ID: <20221107082630.tjebvwt4hevhdsos@houat>
+References: <20221029093413.546103-1-jose.exposito89@gmail.com>
+ <20221102090153.tujblkvd3jlhdtxr@houat>
+ <20221102111003.GA3233@elementary>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221104172122.252761-7-angelogioacchino.delregno@collabora.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20221102111003.GA3233@elementary>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 04 Nov 2022, AngeloGioacchino Del Regno wrote:
+On Wed, Nov 02, 2022 at 12:10:03PM +0100, Jos=E9 Exp=F3sito wrote:
+> Hi Maxime,
+>=20
+> Thanks a lot for looking into the patch.
+>=20
+> On Wed, Nov 02, 2022 at 10:01:53AM +0100, Maxime Ripard wrote:
+> > Hi,
+> >=20
+> > On Sat, Oct 29, 2022 at 11:34:13AM +0200, Jos=E9 Exp=F3sito wrote:
+> > > Commit 6bed2ea3cb38 ("drm/vc4: hdmi: Reset link on hotplug") introduc=
+ed
+> > > the vc4_hdmi_reset_link() function. This function dereferences the
+> > > "connector" pointer before checking whether it is NULL or not.
+> > >=20
+> > > Rework variable assignment to avoid this issue.
+> > >=20
+> > > Fixes: 6bed2ea3cb38 ("drm/vc4: hdmi: Reset link on hotplug")
+> > > Signed-off-by: Jos=E9 Exp=F3sito <jose.exposito89@gmail.com>
+> > > ---
+> > >  drivers/gpu/drm/vc4/vc4_hdmi.c | 10 +++++++---
+> > >  1 file changed, 7 insertions(+), 3 deletions(-)
+> > >=20
+> > > diff --git a/drivers/gpu/drm/vc4/vc4_hdmi.c b/drivers/gpu/drm/vc4/vc4=
+_hdmi.c
+> > > index 4a73fafca51b..07d058b6afb7 100644
+> > > --- a/drivers/gpu/drm/vc4/vc4_hdmi.c
+> > > +++ b/drivers/gpu/drm/vc4/vc4_hdmi.c
+> > > @@ -319,9 +319,9 @@ static int reset_pipe(struct drm_crtc *crtc,
+> > >  static int vc4_hdmi_reset_link(struct drm_connector *connector,
+> > >  			       struct drm_modeset_acquire_ctx *ctx)
+> > >  {
+> > > -	struct drm_device *drm =3D connector->dev;
+> > > -	struct vc4_hdmi *vc4_hdmi =3D connector_to_vc4_hdmi(connector);
+> > > -	struct drm_encoder *encoder =3D &vc4_hdmi->encoder.base;
+> > > +	struct drm_device *drm;
+> > > +	struct vc4_hdmi *vc4_hdmi;
+> > > +	struct drm_encoder *encoder;
+> > >  	struct drm_connector_state *conn_state;
+> > >  	struct drm_crtc_state *crtc_state;
+> > >  	struct drm_crtc *crtc;
+> > > @@ -332,6 +332,10 @@ static int vc4_hdmi_reset_link(struct drm_connec=
+tor *connector,
+> > >  	if (!connector)
+> > >  		return 0;
+> > > =20
+> > > +	drm =3D connector->dev;
+> > > +	vc4_hdmi =3D connector_to_vc4_hdmi(connector);
+> > > +	encoder =3D &vc4_hdmi->encoder.base;
+> > > +
+> >=20
+> > I don't think that's right. Connector shouldn't be NULL to begin with,
+> > how did you notice this?
+> >=20
+> > Maxime
+>=20
+> This issue was reported by Coverity. At the moment this function is not
+> invoked with a NULL connector by any code path. However, since the NULL
+> check is present, in my opinion, it makes sense to either remove it or
+> make it usefull just in case the preconditions change in the future.
 
-> Document the qcom,msm8976-tcsr compatible.
-> 
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> ---
->  Documentation/devicetree/bindings/mfd/qcom,tcsr.yaml | 1 +
->  1 file changed, 1 insertion(+)
+Yeah, it makes sense
 
-Applied, thanks.
+I'd ask for a small cosmetic change then, could you add the assignments
+where they are actually needed instead of at the top of the function?
 
--- 
-Lee Jones [李琼斯]
+Something like
+
+ if (!connector)
+ 	return 0;
+
++drm =3D connector->dev;
+ ret =3D drm_modeset_lock(&drm->mode_config.connection_mutex, ctx);
+
+=2E..
+
++vc4_hdmi =3D connector_to_vc4_hdmi(connector);
+ if (!vc4_hdmi_supports_scrambling(vc4_hdmi))
+
+=2E..
+
+Changing the prototype of vc4_hdmi_supports_scrambling to take a struct
+vc4_hdmi pointer would also help, it's much more convenient.
+
+Maxime
