@@ -2,137 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13A3961EEAD
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 10:21:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97BAD61EEDC
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 10:25:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231359AbiKGJVX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 04:21:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47972 "EHLO
+        id S231852AbiKGJZe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 04:25:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229638AbiKGJVU (ORCPT
+        with ESMTP id S231848AbiKGJZM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 04:21:20 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6D1E3F5AF;
-        Mon,  7 Nov 2022 01:21:17 -0800 (PST)
-Received: from loongson.cn (unknown [10.20.42.77])
-        by gateway (Coremail) with SMTP id _____8Bx37cMzmhj2_8EAA--.11645S3;
-        Mon, 07 Nov 2022 17:21:16 +0800 (CST)
-Received: from [10.20.42.77] (unknown [10.20.42.77])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxLeALzmhjs2IOAA--.39954S3;
-        Mon, 07 Nov 2022 17:21:15 +0800 (CST)
-Subject: Re: [PATCH 2/2] dt-bindings: interrupt-controller: add yaml for
- LoongArch CPU interrupt controller
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>
-Cc:     Jianmin Lv <lvjianmin@loongson.cn>,
-        Yinbo Zhu <zhuyinbo@loongson.cn>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221107023404.26730-1-liupeibao@loongson.cn>
- <20221107023404.26730-2-liupeibao@loongson.cn>
- <b45b8cf8-de9d-7132-1a35-48deeb4b79d5@linaro.org>
-From:   Liu Peibao <liupeibao@loongson.cn>
-Message-ID: <196e80d8-f4fb-7393-81a5-bca757c805f5@loongson.cn>
-Date:   Mon, 7 Nov 2022 17:21:15 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Mon, 7 Nov 2022 04:25:12 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58E3E186F3;
+        Mon,  7 Nov 2022 01:24:39 -0800 (PST)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4N5QhC1nf6zpSsj;
+        Mon,  7 Nov 2022 17:20:59 +0800 (CST)
+Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 7 Nov 2022 17:24:37 +0800
+Received: from ubuntu1804.huawei.com (10.67.175.36) by
+ dggpemm500013.china.huawei.com (7.185.36.172) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 7 Nov 2022 17:24:37 +0800
+From:   Chen Zhongjin <chenzhongjin@huawei.com>
+To:     <linux-kernel@vger.kernel.org>, <linux-acpi@vger.kernel.org>,
+        <devel@acpica.org>
+CC:     <robert.moore@intel.com>, <rafael.j.wysocki@intel.com>,
+        <lenb@kernel.org>, <chenzhongjin@huawei.com>
+Subject: [PATCH] ACPICA: Fix pop_walk_state called after walk_state is deleted
+Date:   Mon, 7 Nov 2022 17:21:22 +0800
+Message-ID: <20221107092122.110204-1-chenzhongjin@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-In-Reply-To: <b45b8cf8-de9d-7132-1a35-48deeb4b79d5@linaro.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf8DxLeALzmhjs2IOAA--.39954S3
-X-CM-SenderInfo: xolx1vpled0qxorr0wxvrqhubq/1tbiAQADCmNno+QOXQABsZ
-X-Coremail-Antispam: 1Uk129KBjvJXoW7try5GF1fKFyktFyDCF18AFb_yoW8Kw1fpF
-        y7CanxuF40qF43Cws2g3WF9rnxZrn3Jr1S9anxt3yxC34ag343XFW2vF95uFWrGryxXr4U
-        Zr1093W0qFnrJFJanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        baAYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
-        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
-        e2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2
-        IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r4j6F4U
-        McvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487Mx
-        kF7I0En4kS14v26r126r1DMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4U
-        MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67
-        AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0
-        cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z2
-        80aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI
-        43ZEXa7IU8JfQtUUUUU==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.67.175.36]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500013.china.huawei.com (7.185.36.172)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/7/22 4:28 PM, Krzysztof Kozlowski wrote:
-> On 07/11/2022 03:34, Liu Peibao wrote:
-> 
-> Add commit msg explaining what you are doing here (e.g. the hardware).
-> 
+In the previous fix patch acpi_ds_pop_walk_state() is called after
+acpi_ds_delete_walk_state() in cleanup, so the problem is not fixed
+because it is acpi_ds_pop_walk_state(NULL) called actually.
 
-I just add this yaml for what I did in patch 1/2 and the header seems enough
-to describe what I want to, so I did not add the commit log.
+Also, when acpi_ds_create_walk_state() failed and next_walk_state is
+NULL, it pops the normal walk_state_list and make the memory leaked.
 
->> Signed-off-by: Liu Peibao <liupeibao@loongson.cn>
->> ---
->>  .../loongarch,cpu-interrupt-controller.yaml   | 42 +++++++++++++++++++
->>  1 file changed, 42 insertions(+)
->>  create mode 100644 Documentation/devicetree/bindings/interrupt-controller/loongarch,cpu-interrupt-controller.yaml
->>
->> diff --git a/Documentation/devicetree/bindings/interrupt-controller/loongarch,cpu-interrupt-controller.yaml b/Documentation/devicetree/bindings/interrupt-controller/loongarch,cpu-interrupt-controller.yaml
->> new file mode 100644
->> index 000000000000..30b742661a3f
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/interrupt-controller/loongarch,cpu-interrupt-controller.yaml
->> @@ -0,0 +1,42 @@
->> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/interrupt-controller/loongarch,cpu-interrupt-controller.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: LoongArch CPU Interrupt Controller
->> +
->> +description: >
->> +   On LoongArch the loongarch_cpu_irq_of_init() helper can be used to initialize
->> +   the 14 CPU IRQs from a devicetree file and create a irq_domain for this IRQ
->> +   controller.
->> +
->> +   With the irq_domain in place we can describe how the 14 IRQs are wired to the
->> +   platforms internal interrupt controller cascade.
-> 
-> This should be the description of hardware, not Linux drivers.
-> 
+Check if next_walk_state is NULL, and do pop_walk_state() before it is
+deleted.
 
-OK, I will remove this in the next version of this patch.
+Fixes: 539663bb068f ("ACPICA: Fix use-after-free in acpi_ps_parse_aml()")
+Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
+---
+ drivers/acpi/acpica/dsmethod.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
->> +
->> +maintainers:
->> +  - Liu Peibao <liupeibao@loongson.cn>
->> +
->> +properties:
->> +  compatible:
->> +    const: loongarch,cpu-interrupt-controller
-> 
-> You have exactly one and only one type of CPU interrupt controller for
-> all your Loongarch designs? All current and all future? All?
-> 
-
-It is sure of that "all current and recent designs". It is really hard to limit the
-design in the distant future.
-
-And if there is updating, maybe I will add additional things like this:
-"loongarch,cpu-interrupt-controller-2.0".
-
-BR,
-Peibao
+diff --git a/drivers/acpi/acpica/dsmethod.c b/drivers/acpi/acpica/dsmethod.c
+index 19da7fc73186..cb15c66d5aac 100644
+--- a/drivers/acpi/acpica/dsmethod.c
++++ b/drivers/acpi/acpica/dsmethod.c
+@@ -580,8 +580,9 @@ acpi_ds_call_control_method(struct acpi_thread_state *thread,
+ 	/* On error, we must terminate the method properly */
+ 
+ 	acpi_ds_terminate_control_method(obj_desc, next_walk_state);
++	if (next_walk_state)
++		acpi_ds_pop_walk_state(thread);
+ 	acpi_ds_delete_walk_state(next_walk_state);
+-	acpi_ds_pop_walk_state(thread);
+ 
+ 	return_ACPI_STATUS(status);
+ }
+-- 
+2.17.1
 
