@@ -2,64 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1299261F797
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 16:27:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA0DD61F79C
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 16:28:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232616AbiKGP1B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 10:27:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33936 "EHLO
+        id S232878AbiKGP2X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 10:28:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232879AbiKGP04 (ORCPT
+        with ESMTP id S231675AbiKGP2V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 10:26:56 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFB2EBC93;
-        Mon,  7 Nov 2022 07:26:55 -0800 (PST)
+        Mon, 7 Nov 2022 10:28:21 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C03CEA1B3
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 07:28:19 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 57D2D6113D;
-        Mon,  7 Nov 2022 15:26:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45829C433C1;
-        Mon,  7 Nov 2022 15:26:49 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id D5F52CE16E0
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 15:28:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B0E0C433C1;
+        Mon,  7 Nov 2022 15:28:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667834814;
-        bh=W675gqNAfxBDemkU93uk7keZsNkIbPSTt12Mk3qnGOg=;
+        s=k20201202; t=1667834896;
+        bh=A6uwQhL+fjnIdp9jAg9GckWiE18J06ATVgZz3sYXlK0=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CtQqMj5pvofsT6RL6c73nOHyJPNzYHtWR26lgwhR5lL+mFr3DLmnfXNOyM2ctk2EB
-         DXSnyVmwBDVWCuh6t/jOYy4sGDpVuaah8fWod0gReT/fuEvZjRhpL+WKjRyfD3KxA5
-         StyJ8iTVWr2AYevyJncv9jcjUdKTGN08CG+c4sb5sthZwvKGwtnyE5ke3jg/Iw5YSO
-         IG58eDQv1Bu1n7fbiBR5ddQtysHqTwy/hn4mRBxbfYaLnb08KeHt4dh1qmmSMB2QnU
-         Rbls6y5O+krcPIpTHylZ9sv6MHtZf+7JOJAm12EOSyHvBewer8sDqrAkrqaWflTupW
-         qNvv+jC8xzkbQ==
-Date:   Mon, 7 Nov 2022 15:26:45 +0000
+        b=ogoprlb/DCm9XG9EhNnNWeyeBGyo9GCGHyQtaDHUTtP/kSPHbTnxuc5RlmbYt+FSv
+         uHX8YYh7lyc8ARZrkKiZ2dFtG1+sUHHoiBCq/HlY4bbuVQAFJ/xB4mscm8murPiJ6M
+         o+ffQKvZrZayFOX2M34fPZoZaoA/0MEfrQ5JLUTWl9J6JyOiqQzJ1m+DzqqCyZkVAI
+         eMYLCVepOnlGbHNEAcDuGaLwetx1/8vOM90H/ULtmhbEQSJZ/qZGk0c5p5VFp8CQbB
+         mYAh1wh5ZgW2tJ+OgFYZH62tuDDXwfKvU2gZOTmiZSncx7cyci4p1oXQZcrqHIdBAM
+         45nTWInF1Rr1g==
+Date:   Mon, 7 Nov 2022 15:28:10 +0000
 From:   Will Deacon <will@kernel.org>
-To:     Nicolin Chen <nicolinc@nvidia.com>
-Cc:     joro@8bytes.org, robin.murphy@arm.com, jgg@nvidia.com,
-        kevin.tian@intel.com, quic_jjohnson@quicinc.com,
-        suravee.suthikulpanit@amd.com, robdclark@gmail.com,
-        dwmw2@infradead.org, baolu.lu@linux.intel.com,
-        yong.wu@mediatek.com, matthias.bgg@gmail.com, orsonzhai@gmail.com,
-        baolin.wang@linux.alibaba.com, zhang.lyra@gmail.com,
-        thierry.reding@gmail.com, vdumpa@nvidia.com, jonathanh@nvidia.com,
-        jean-philippe@linaro.org, tglx@linutronix.de,
-        shameerali.kolothum.thodi@huawei.com,
-        christophe.jaillet@wanadoo.fr, yangyicong@hisilicon.com,
-        yangyingliang@huawei.com, quic_saipraka@quicinc.com,
-        jon@solid-run.com, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-tegra@vger.kernel.org,
-        virtualization@lists.linux-foundation.org
-Subject: Re: [PATCH v7 4/5] iommu: Use EINVAL for incompatible device/domain
- in ->attach_dev
-Message-ID: <20221107152645.GD21002@willie-the-truck>
-References: <cover.1666042872.git.nicolinc@nvidia.com>
- <f52a07f7320da94afe575c9631340d0019a203a7.1666042873.git.nicolinc@nvidia.com>
+To:     Shuai Xue <xueshuai@linux.alibaba.com>
+Cc:     Jonathan.Cameron@Huawei.com, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, rdunlap@infradead.org,
+        robin.murphy@arm.com, mark.rutland@arm.com,
+        baolin.wang@linux.alibaba.com, zhuo.song@linux.alibaba.com
+Subject: Re: [PATCH v1 1/3] docs: perf: Add description for Synopsys
+ DesignWare PCIe PMU driver
+Message-ID: <20221107152809.GE21002@willie-the-truck>
+References: <20220917121036.14864-1-xueshuai@linux.alibaba.com>
+ <20220917121036.14864-2-xueshuai@linux.alibaba.com>
+ <20220922132543.GA12095@willie-the-truck>
+ <a01eae44-5daf-08bb-ea28-eeacd7006ab9@linux.alibaba.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <f52a07f7320da94afe575c9631340d0019a203a7.1666042873.git.nicolinc@nvidia.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <a01eae44-5daf-08bb-ea28-eeacd7006ab9@linux.alibaba.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -70,66 +61,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 17, 2022 at 04:02:21PM -0700, Nicolin Chen wrote:
-> Following the new rules in include/linux/iommu.h kdocs, update all drivers
-> ->attach_dev callback functions to return EINVAL in the failure paths that
-> are related to domain incompatibility.
+On Fri, Sep 23, 2022 at 09:51:40PM +0800, Shuai Xue wrote:
 > 
-> Also, drop adjacent error prints to prevent a kernel log spam.
 > 
-> Reviewed-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
-> Reviewed-by: Lu Baolu <baolu.lu@linux.intel.com>
-> Reviewed-by: Kevin Tian <kevin.tian@intel.com>
-> Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
-> Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
-> ---
->  drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c | 11 +----------
->  drivers/iommu/arm/arm-smmu/arm-smmu.c       |  3 ---
->  drivers/iommu/arm/arm-smmu/qcom_iommu.c     |  7 +------
->  drivers/iommu/intel/iommu.c                 | 10 +++-------
->  drivers/iommu/ipmmu-vmsa.c                  |  2 --
->  drivers/iommu/omap-iommu.c                  |  2 +-
->  drivers/iommu/sprd-iommu.c                  |  4 +---
->  drivers/iommu/tegra-gart.c                  |  2 +-
->  drivers/iommu/virtio-iommu.c                |  3 +--
->  9 files changed, 9 insertions(+), 35 deletions(-)
+> 在 2022/9/22 PM9:25, Will Deacon 写道:
+> > On Sat, Sep 17, 2022 at 08:10:34PM +0800, Shuai Xue wrote:
+> >> Alibaba's T-Head Yitan 710 SoC is built on Synopsys' widely deployed and
+> >> silicon-proven DesignWare Core PCIe controller which implements PMU for
+> >> performance and functional debugging to facilitate system maintenance.
+> >> Document it to provide guidance on how to use it.
+> >>
+> >> Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
+> >> ---
+> >>  .../admin-guide/perf/dwc_pcie_pmu.rst         | 61 +++++++++++++++++++
+> >>  Documentation/admin-guide/perf/index.rst      |  1 +
+> >>  2 files changed, 62 insertions(+)
+> >>  create mode 100644 Documentation/admin-guide/perf/dwc_pcie_pmu.rst
+> >>
+> >> diff --git a/Documentation/admin-guide/perf/dwc_pcie_pmu.rst b/Documentation/admin-guide/perf/dwc_pcie_pmu.rst
+> >> new file mode 100644
+> >> index 000000000000..fbcbf10b23b7
+> >> --- /dev/null
+> >> +++ b/Documentation/admin-guide/perf/dwc_pcie_pmu.rst
+> >> @@ -0,0 +1,61 @@
+> >> +======================================================================
+> >> +Synopsys DesignWare Cores (DWC) PCIe Performance Monitoring Unit (PMU)
+> >> +======================================================================
+> >> +
+> >> +DesignWare Cores (DWC) PCIe PMU
+> >> +===============================
+> >> +
+> >> +To facilitate collection of statistics, Synopsys DesignWare Cores PCIe
+> >> +controller provides the following two features:
+> >> +
+> >> +- Time Based Analysis (RX/TX data throughput and time spent in each
+> >> +  low-power LTSSM state)
+> >> +- Lane Event counters (Error and Non-Error for lanes)
+> >> +
+> >> +The PMU is not a PCIe Root Complex integrated End Point (RCiEP) device but
+> >> +only register counters provided by each PCIe Root Port.
+> >> +
+> >> +Time Based Analysis
+> >> +-------------------
+> >> +
+> >> +Using this feature you can obtain information regarding RX/TX data
+> >> +throughput and time spent in each low-power LTSSM state by the controller.
+> >> +
+> >> +The counters are 64-bit width and measure data in two categories,
+> >> +
+> >> +- percentage of time does the controller stay in LTSSM state in a
+> >> +  configurable duration. The measurement range of each Event in Group#0.
+> >> +- amount of data processed (Units of 16 bytes). The measurement range of
+> >> +  each Event in Group#1.
+> >> +
+> >> +Lane Event counters
+> >> +-------------------
+> >> +
+> >> +Using this feature you can obtain Error and Non-Error information in
+> >> +specific lane by the controller.
+> >> +
+> >> +The counters are 32-bit width and the measured event is select by:
+> >> +
+> >> +- Group i
+> >> +- Event j within the Group i
+> >> +- and Lank k
+> >> +
+> >> +Some of the event counters only exist for specific configurations.
+> >> +
+> >> +DesignWare Cores (DWC) PCIe PMU Driver
+> >> +=======================================
+> >> +
+> >> +This driver add PMU devices for each PCIe Root Port. And the PMU device is
+> >> +named based the BDF of Root Port. For example,
+> >> +
+> >> +    10:00.0 PCI bridge: Device 1ded:8000 (rev 01)
+> >> +
+> >> +the PMU device name for this Root Port is pcie_bdf_100000.
+> >> +
+> >> +Example usage of counting PCIe RX TLP data payload (Units of 16 bytes)::
+> >> +
+> >> +    $# perf stat -a -e pcie_bdf_200/Rx_PCIe_TLP_Data_Payload/
+> > 
+> > Do you really need to expose a separate PMU instance to userspace for each
+> > BDF? I think it would be much cleaner if you could follow the approach used
+> > by hisilicon/hisi_pcie_pmu.c and hide these details in the driver, exposing
+> > a `bdf=' selector to userspace instead.
 > 
-> diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-> index ba47c73f5b8c..01fd7df16cb9 100644
-> --- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-> +++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-> @@ -2430,23 +2430,14 @@ static int arm_smmu_attach_dev(struct iommu_domain *domain, struct device *dev)
->  			goto out_unlock;
->  		}
->  	} else if (smmu_domain->smmu != smmu) {
-> -		dev_err(dev,
-> -			"cannot attach to SMMU %s (upstream of %s)\n",
-> -			dev_name(smmu_domain->smmu->dev),
-> -			dev_name(smmu->dev));
-> -		ret = -ENXIO;
-> +		ret = -EINVAL;
->  		goto out_unlock;
->  	} else if (smmu_domain->stage == ARM_SMMU_DOMAIN_S1 &&
->  		   master->ssid_bits != smmu_domain->s1_cfg.s1cdmax) {
-> -		dev_err(dev,
-> -			"cannot attach to incompatible domain (%u SSID bits != %u)\n",
-> -			smmu_domain->s1_cfg.s1cdmax, master->ssid_bits);
->  		ret = -EINVAL;
->  		goto out_unlock;
->  	} else if (smmu_domain->stage == ARM_SMMU_DOMAIN_S1 &&
->  		   smmu_domain->stall_enabled != master->stall_enabled) {
-> -		dev_err(dev, "cannot attach to stall-%s domain\n",
-> -			smmu_domain->stall_enabled ? "enabled" : "disabled");
->  		ret = -EINVAL;
->  		goto out_unlock;
->  	}
+> Thank you for your valuable comments.
+> 
+> It's a good idea to encode bdf in bitmap and exposing a `bdf=' selector to userspace.
+> The problem of bdf selector is that the user need to compute bdf from lanes, do you
+> think it is user friendly? I'm worried about increasing the burden of users.
 
-I think it would be helpful to preserve these messages using
-dev_err_ratelimited() so that attach failure can be diagnosed without
-having to hack the messages back into the driver.
-
-With that:
-
-Acked-by: Will Deacon <will@kernel.org>
+I don't see this as being an issue, particularly if you document how to do
+it.
 
 Will
