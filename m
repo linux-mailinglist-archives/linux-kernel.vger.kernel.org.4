@@ -2,227 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9949261EF13
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 10:33:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA09E61EF1B
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 10:33:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231433AbiKGJdE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 04:33:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58020 "EHLO
+        id S231808AbiKGJdg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 04:33:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231158AbiKGJdC (ORCPT
+        with ESMTP id S231767AbiKGJdV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 04:33:02 -0500
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F657167FB;
-        Mon,  7 Nov 2022 01:33:01 -0800 (PST)
-Received: by mail-pg1-x534.google.com with SMTP id s196so9960871pgs.3;
-        Mon, 07 Nov 2022 01:33:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=HyF0E2uS8X0XmlEoNWDzlwWSu7iz2vHvvgzUM/YnP+A=;
-        b=CoSZl3HBAWY7ETrvTdR5S7+/MmJmuqylZeECCz9wlPJT+OIEeoDq009df1e+5/csjW
-         rx8+mP8rUTmBT88nDvqZCEnQF3Zh1qesZN5TDb47yft5nJx6V0SEPpg4uf93sRBVPwc4
-         R2ju+NpUXsrXpu5IXVYKruw/6TMl2hSxJsbNv/0xx4ymRqb5SDPWdkmXoV8U7CIrp5Xa
-         8ux57lPMa4NT+ctiVfq/Sf1EuliuFnjiO7+JhlL0byaECuR0a2HaMnFKKK8Po5F4lOZb
-         UryIBc1oJi/HPwu8ISeMI65d8Oa1uOd6toUbydYIYctLpmpMOvQDaeywxveMCslUQMdN
-         8AmQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=HyF0E2uS8X0XmlEoNWDzlwWSu7iz2vHvvgzUM/YnP+A=;
-        b=tafENdFCTVKLO38FQYCFCXZ7TSYURJyFzUkUxn+JSW0kzmFODIsaDV3OhAEQC5RVRK
-         8c6wS/GFsSyW5MbUXWZKYIno//9tOmoGQV6NHhj+aJXyytA+3zwFWpf99rtsytm6w4qB
-         MzcNpZi8DV2uaFVsVZ3J+Eo+Sgg5TWqXBWJpXHlZcrYK4eIl0IZ5GwW9vSOTzmmBtJh5
-         ENKhn9uSXd808HCOo0s7iYtW05e+kGCmYKD+MwD2hRm6MLOxTdl1EIrQXIt72GrM30Um
-         YsUZh3cQ9m00dfcr0iOKh5BwI5x+OZtfc/5VuZwcQ4J16F79YN6wteVPoOUxJJIoBwjx
-         LMAA==
-X-Gm-Message-State: ACrzQf2tdQFmWGZ/Ov/5OkaiDKoNkwAUxCDmvAU1RaSYOTnMGq+8CyXi
-        Qv2ej2+tE7UzUCv8KBv/4fg=
-X-Google-Smtp-Source: AMsMyM5Awr0jJbRUWHXZ5qyYgIfGaxsEijvpVNZMKUQ+4/4fy+co78DyrzE+K9CCq9kjgWxVM8rnTw==
-X-Received: by 2002:a63:2bd4:0:b0:451:5df1:4b15 with SMTP id r203-20020a632bd4000000b004515df14b15mr42870684pgr.518.1667813580875;
-        Mon, 07 Nov 2022 01:33:00 -0800 (PST)
-Received: from mail.google.com (125-237-50-34-fibre.sparkbb.co.nz. [125.237.50.34])
-        by smtp.gmail.com with ESMTPSA id e24-20020a63db18000000b00460fbe0d75esm3768526pgg.31.2022.11.07.01.32.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Nov 2022 01:33:00 -0800 (PST)
-Date:   Mon, 7 Nov 2022 22:32:51 +1300
-From:   Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
-To:     Harry Wentland <harry.wentland@amd.com>,
-        Leo Li <sunpeng.li@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>,
-        Slark Xiao <slark_xiao@163.com>,
-        Rongguang Wei <weirongguang@kylinos.cn>,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
-Cc:     linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
-        paulo.miguel.almeida.rodenas@gmail.com
-Subject: [PATCH] [next] drm/amdgpu: Replace 1-element array with
- flexible-array member
-Message-ID: <Y2jQw6ve83Bvb/D9@mail.google.com>
+        Mon, 7 Nov 2022 04:33:21 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E1AB167FB;
+        Mon,  7 Nov 2022 01:33:20 -0800 (PST)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 523C066023A6;
+        Mon,  7 Nov 2022 09:33:18 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1667813598;
+        bh=Ym/ve3dGuUXNciexSXw9euMcwMya4gk/aCexVTu+KNk=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=NFuasTuN/NSU9Y3uOchBqk0ZQoqmWWoS6Gkn3a3g0LPmfvGjYkDt6TKK7mRdi9MBQ
+         oTW5aIXxGhde7ocI/UzsR/vfIp5+NgEfst8tw+iWnxOlolFmaWZNEeJecIJmz/haA8
+         NqFUiFHrlibL/C33Gt+JxlC/uQdNLSxMLjVoUKn5ESmECNUlptEyobSXlY29+c3C/y
+         tqqdeHr/2zqiONg/7eyaUSi/TKs8tGUxd4eW1XVT0cNN9tDI/cPGCNVgRK5eSa4OrY
+         38aYhQ9FnnnAWcXiu9IFmfettzHF3imFLYBjC7OgTTVW3SrztWZYYzCk3kl4viLTWc
+         I4TYqHKOWuWdw==
+Message-ID: <4b1fb965-60ec-66d6-f511-13c7f71a3a77@collabora.com>
+Date:   Mon, 7 Nov 2022 10:33:15 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Subject: Re: [PATCH v2 6/6] pinctrl: mediatek: add pull_type attribute for
+ mediatek MT7986 SoC
+Content-Language: en-US
+To:     Frank Wunderlich <linux@fw-web.de>,
+        linux-mediatek@lists.infradead.org
+Cc:     devicetree@vger.kernel.org, Sam Shih <sam.shih@mediatek.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Sean Wang <sean.wang@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-arm-kernel@lists.infradead.org
+References: <20221106080114.7426-1-linux@fw-web.de>
+ <20221106080114.7426-7-linux@fw-web.de>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20221106080114.7426-7-linux@fw-web.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-One-element arrays are deprecated, and we are replacing them with
-flexible array members instead. So, replace one-element array with
-flexible-array member in structs _ATOM_GPIO_PIN_ASSIGNMENT,
-_ATOM_DISPLAY_OBJECT_PATH, _ATOM_DISPLAY_OBJECT_PATH_TABLE,
-_ATOM_OBJECT_TABLE and refactor the rest of the code accordingly.
+Il 06/11/22 09:01, Frank Wunderlich ha scritto:
+> From: Sam Shih <sam.shih@mediatek.com>
+> 
+> Commit fb34a9ae383a ("pinctrl: mediatek: support rsel feature")
+> add SoC specify 'pull_type' attribute for bias configuration.
+> 
+> This patch add pull_type attribute to pinctrl-mt7986.c, and make
+> bias_set_combo and bias_get_combo available to mediatek MT7986 SoC.
+> 
+> Signed-off-by: Sam Shih <sam.shih@mediatek.com>
+> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
 
-Important to mention is that doing a build before/after this patch results
-in no functional binary output differences.
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-This helps with the ongoing efforts to tighten the FORTIFY_SOURCE
-routines on memcpy() and help us make progress towards globally
-enabling -fstrict-flex-arrays=3 [1].
 
-Link: https://github.com/KSPP/linux/issues/79
-Link: https://github.com/KSPP/linux/issues/238
-Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=101836 [1]
-
-Signed-off-by: Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
----
-
-Binary difference findings:
-
-	Some changes took more than a single line which changed the line
-	number parameter passed to the drm_dbg function (which leverages
-	kernel's dynamic debugging). Functionally-wise, nothing changed
-	after doing a before/after patch build.
-
-Additional one-element arrays to be changed:
-
-	There are more instances of one-element arrays to be changed but
-	I will keep patches small so they are easy to review. [and I can
-	only dedicate a few hours per day on this :-) ]
-
----
- .../gpu/drm/amd/display/dc/bios/bios_parser.c | 23 ++++++++++++-------
- drivers/gpu/drm/amd/include/atombios.h        |  8 +++----
- 2 files changed, 19 insertions(+), 12 deletions(-)
-
-diff --git a/drivers/gpu/drm/amd/display/dc/bios/bios_parser.c b/drivers/gpu/drm/amd/display/dc/bios/bios_parser.c
-index 9b8ea6e9a2b9..39dd8b2dc254 100644
---- a/drivers/gpu/drm/amd/display/dc/bios/bios_parser.c
-+++ b/drivers/gpu/drm/amd/display/dc/bios/bios_parser.c
-@@ -138,7 +138,9 @@ static uint8_t get_number_of_objects(struct bios_parser *bp, uint32_t offset)
- 
- 	uint32_t object_table_offset = bp->object_info_tbl_offset + offset;
- 
--	table = GET_IMAGE(ATOM_OBJECT_TABLE, object_table_offset);
-+	table = ((ATOM_OBJECT_TABLE *) bios_get_image(&bp->base,
-+				object_table_offset,
-+				struct_size(table, asObjects, 1)));
- 
- 	if (!table)
- 		return 0;
-@@ -166,8 +168,9 @@ static struct graphics_object_id bios_parser_get_connector_id(
- 	uint32_t connector_table_offset = bp->object_info_tbl_offset
- 		+ le16_to_cpu(bp->object_info_tbl.v1_1->usConnectorObjectTableOffset);
- 
--	ATOM_OBJECT_TABLE *tbl =
--		GET_IMAGE(ATOM_OBJECT_TABLE, connector_table_offset);
-+	ATOM_OBJECT_TABLE *tbl = ((ATOM_OBJECT_TABLE *) bios_get_image(&bp->base,
-+				connector_table_offset,
-+				struct_size(tbl, asObjects, 1)));
- 
- 	if (!tbl) {
- 		dm_error("Can't get connector table from atom bios.\n");
-@@ -1789,11 +1792,13 @@ static enum bp_result bios_parser_get_gpio_pin_info(
- 	if (!DATA_TABLES(GPIO_Pin_LUT))
- 		return BP_RESULT_BADBIOSTABLE;
- 
--	header = GET_IMAGE(ATOM_GPIO_PIN_LUT, DATA_TABLES(GPIO_Pin_LUT));
-+	header = ((ATOM_GPIO_PIN_LUT *) bios_get_image(&bp->base,
-+				DATA_TABLES(GPIO_Pin_LUT),
-+				struct_size(header, asGPIO_Pin, 1)));
- 	if (!header)
- 		return BP_RESULT_BADBIOSTABLE;
- 
--	if (sizeof(ATOM_COMMON_TABLE_HEADER) + sizeof(ATOM_GPIO_PIN_LUT)
-+	if (sizeof(ATOM_COMMON_TABLE_HEADER) + struct_size(header, asGPIO_Pin, 1)
- 			> le16_to_cpu(header->sHeader.usStructureSize))
- 		return BP_RESULT_BADBIOSTABLE;
- 
-@@ -1978,7 +1983,8 @@ static ATOM_OBJECT *get_bios_object(struct bios_parser *bp,
- 
- 	offset += bp->object_info_tbl_offset;
- 
--	tbl = GET_IMAGE(ATOM_OBJECT_TABLE, offset);
-+	tbl = ((ATOM_OBJECT_TABLE *) bios_get_image(&bp->base, offset,
-+				struct_size(tbl, asObjects, 1)));
- 	if (!tbl)
- 		return NULL;
- 
-@@ -2709,8 +2715,9 @@ static enum bp_result get_bracket_layout_record(
- 
- 	genericTableOffset = bp->object_info_tbl_offset +
- 		bp->object_info_tbl.v1_3->usMiscObjectTableOffset;
--	object_table = (ATOM_OBJECT_TABLE *)
--		GET_IMAGE(ATOM_OBJECT_TABLE, genericTableOffset);
-+	object_table = ((ATOM_OBJECT_TABLE *) bios_get_image(&bp->base,
-+				genericTableOffset,
-+				struct_size(object_table, asObjects, 1)));
- 	if (!object_table)
- 		return BP_RESULT_FAILURE;
- 
-diff --git a/drivers/gpu/drm/amd/include/atombios.h b/drivers/gpu/drm/amd/include/atombios.h
-index b5b1d073f8e2..55ae93c1e365 100644
---- a/drivers/gpu/drm/amd/include/atombios.h
-+++ b/drivers/gpu/drm/amd/include/atombios.h
-@@ -4386,7 +4386,7 @@ typedef struct _ATOM_GPIO_PIN_ASSIGNMENT
- typedef struct _ATOM_GPIO_PIN_LUT
- {
-   ATOM_COMMON_TABLE_HEADER  sHeader;
--  ATOM_GPIO_PIN_ASSIGNMENT   asGPIO_Pin[1];
-+  ATOM_GPIO_PIN_ASSIGNMENT   asGPIO_Pin[];
- }ATOM_GPIO_PIN_LUT;
- 
- /****************************************************************************/
-@@ -4513,7 +4513,7 @@ typedef struct  _ATOM_DISPLAY_OBJECT_PATH
-   USHORT    usSize;                                        //the size of ATOM_DISPLAY_OBJECT_PATH
-   USHORT    usConnObjectId;                                //Connector Object ID
-   USHORT    usGPUObjectId;                                 //GPU ID
--  USHORT    usGraphicObjIds[1];                            //1st Encoder Obj source from GPU to last Graphic Obj destinate to connector.
-+  USHORT    usGraphicObjIds[];                            //1st Encoder Obj source from GPU to last Graphic Obj destinate to connector.
- }ATOM_DISPLAY_OBJECT_PATH;
- 
- typedef struct  _ATOM_DISPLAY_EXTERNAL_OBJECT_PATH
-@@ -4530,7 +4530,7 @@ typedef struct _ATOM_DISPLAY_OBJECT_PATH_TABLE
-   UCHAR                           ucNumOfDispPath;
-   UCHAR                           ucVersion;
-   UCHAR                           ucPadding[2];
--  ATOM_DISPLAY_OBJECT_PATH        asDispPath[1];
-+  ATOM_DISPLAY_OBJECT_PATH        asDispPath[];
- }ATOM_DISPLAY_OBJECT_PATH_TABLE;
- 
- typedef struct _ATOM_OBJECT                                //each object has this structure
-@@ -4545,7 +4545,7 @@ typedef struct _ATOM_OBJECT_TABLE                         //Above 4 object table
- {
-   UCHAR               ucNumberOfObjects;
-   UCHAR               ucPadding[3];
--  ATOM_OBJECT         asObjects[1];
-+  ATOM_OBJECT         asObjects[];
- }ATOM_OBJECT_TABLE;
- 
- typedef struct _ATOM_SRC_DST_TABLE_FOR_ONE_OBJECT         //usSrcDstTableOffset pointing to this structure
--- 
-2.37.3
 
