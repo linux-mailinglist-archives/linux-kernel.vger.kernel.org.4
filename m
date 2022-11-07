@@ -2,105 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4633761F2C3
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 13:17:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A87761F2C6
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 13:18:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232105AbiKGMRw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 07:17:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45208 "EHLO
+        id S232055AbiKGMSm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 07:18:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232053AbiKGMRb (ORCPT
+        with ESMTP id S232030AbiKGMS0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 07:17:31 -0500
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D4B31B7B1
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 04:17:23 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id o30so6751820wms.2
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 04:17:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:reply-to:organization:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=xH58tesGHB8cYWMBvsr3HiUtTm3R7vrGcMS78GCszzI=;
-        b=nEfiADr+cZuJExNoKj9KxB5sOrmAr7ZP0Hg+vcQWt2ghuUaVowk7vMX1S+0CDWhl/U
-         xbAQRDvdJ7KmrkC0i+M1L3+iuJ3lIcbnMOhhmsKyoSVpkYWYxpn+PzZvIQDXR9p0D8V/
-         qPIT6r7n/p8qtfX06yic6zu2IHqF+IJO8y+TvYALB+Yy0frcwMdUXnsWdPfQIiufqeEj
-         6espEPL+2PM9KI8DOYyFAm8UMkq3JqqSa0JjazHKctv36UAWyuqCYP9vVimxu/elCCYc
-         icAVQ+Wvitw0N6d+6kmrJsFF4Kutj4IjUfWnfRqIH2sBXhZ7btPVlv2TKj4QlmQWEeDn
-         4Vbg==
+        Mon, 7 Nov 2022 07:18:26 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CFCE140E0
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 04:17:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1667823431;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=ZTWKAuVDT83fFNqwk1O5ig1lK6i4L5TSFkF7nc/9Uwc=;
+        b=UNLifTcTSxPhL+V0B5qVVgi+/39icwIlsQsfi7FTGT3NTNGZVA+j6Fu8wtPUXNxGzB1rYv
+        JLbt7FkziLNrhCGQU8WjfQGqoxltNba2krtkThpYqxOU02NYnSVJQ3U6yZzKnXx+7vuj/m
+        7B7UBprPwvJyBFZbf3H52IB6RloAgCA=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-447-ZPD5yBT5Oim9z8t5gVaxyw-1; Mon, 07 Nov 2022 07:17:10 -0500
+X-MC-Unique: ZPD5yBT5Oim9z8t5gVaxyw-1
+Received: by mail-ed1-f71.google.com with SMTP id b14-20020a056402278e00b004621a2642d7so8153587ede.1
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 04:17:10 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:reply-to:organization:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xH58tesGHB8cYWMBvsr3HiUtTm3R7vrGcMS78GCszzI=;
-        b=OwUlXhDVz9vBaSzIMGAG2u3RLyDS8S6FKHsYI2LrdEc+sgmbRZqpx35hHxlfhndzmh
-         OybWviA4SlQs3J6gZXK9Tv5MrhTxDyKs17SOdW6PwkR2dcKt3a6RMf1MUb3RXBOLVMVa
-         GEYTp8pDIIjpiRMFPUS7MU3ZXCCprwVB7vnKL9sEsscIui7HJ32IAW8rn9Le5QYPAm1u
-         N4Nd29TYdXicIYml45K3Z7l9r5cgpfYFndOr8a+NQPsh2JVF9N1XiCl5Jz6/vFeink7c
-         ORoRTF32RRxsb49THSJlZiJxOt4i/oNvEK9hFKscw2a5JclZ9XwNTyUgg7f1hhxAhEdR
-         7l0g==
-X-Gm-Message-State: ACrzQf1jm+qfmAeakclHU3HlYdpkVC6+Xrwy7cmhLp5k+1Fb2uMLSr6D
-        tycKDy4E/2KxzPddeQPvGd8eqA==
-X-Google-Smtp-Source: AMsMyM4HxXIZHvHy5OIylB0y/B+DICBebdf6fw2Ao2Hz3nrxHGZGQqKsojfeV2LZKZDz7nLarrHAFw==
-X-Received: by 2002:a05:600c:1614:b0:3cf:816e:4a69 with SMTP id m20-20020a05600c161400b003cf816e4a69mr22653291wmn.33.1667823420861;
-        Mon, 07 Nov 2022 04:17:00 -0800 (PST)
-Received: from ?IPV6:2a01:e0a:982:cbb0:1335:cf6:1309:c14? ([2a01:e0a:982:cbb0:1335:cf6:1309:c14])
-        by smtp.gmail.com with ESMTPSA id n19-20020a05600c4f9300b003c5571c27a1sm10594181wmq.32.2022.11.07.04.17.00
+        h=content-transfer-encoding:content-language:cc:to:subject:from
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=ZTWKAuVDT83fFNqwk1O5ig1lK6i4L5TSFkF7nc/9Uwc=;
+        b=7PA9cAnH+dyV9Cw/xgOxP3REyMqWbZZuigmZn5skGDJWvzTGawZPrLboPYE8Xomm1e
+         V48AvXzy5fM3gMlvPbT/LdRCPG/WXRpIbMjre6qzA/iGOYFSRuPZp31X57yj0bo3I2UW
+         RitMi4Y5+hvQMpFMImQo6mkge2G0psovho9RcGF5ymC7qROnlZK2uqgoUQcWn8iikuCd
+         Q4zv/B01MfitCWCKl4TKdiX74o3zs5IG0w/brXSRhJ7vVmaf2uVJvKEI436Hz8h9jNqq
+         D56xqPAo3r6LyWM7nh3jnk5rg5cfnUNM1gB8ETLX6yfxQuV26v7zcPQKuflkLKKd0a39
+         uexQ==
+X-Gm-Message-State: ANoB5pmyh2bPu8IZaV15fqf6Fqsf3IYGtxKGa9/2MasKgsaAoKDUtzed
+        rZ1rjPPuw0wub7HGD5EroU5usR2AIsW2Y+QZm8y3+hleA0gylPOsVmRKBT39CuxnUr7yU1ppvrp
+        QM4qOjqD7/Fc5A4V6ZLiDbPcK
+X-Received: by 2002:a17:906:4ecc:b0:7ae:4f8e:1d7 with SMTP id i12-20020a1709064ecc00b007ae4f8e01d7mr10050769ejv.339.1667823429503;
+        Mon, 07 Nov 2022 04:17:09 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf57HiGsXfdZdGvP8OHlSyBlkc1l75EKYj1DzSKjHrWdu2vtsPjQLjOzLsvrMyaqctPFhUF06Q==
+X-Received: by 2002:a17:906:4ecc:b0:7ae:4f8e:1d7 with SMTP id i12-20020a1709064ecc00b007ae4f8e01d7mr10050750ejv.339.1667823429238;
+        Mon, 07 Nov 2022 04:17:09 -0800 (PST)
+Received: from [10.40.98.142] ([78.108.130.194])
+        by smtp.gmail.com with ESMTPSA id v6-20020a50a446000000b00463597d2c25sm4195864edb.74.2022.11.07.04.17.08
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Nov 2022 04:17:00 -0800 (PST)
-Message-ID: <3319f872-5138-9b05-35dd-2904c4693f36@linaro.org>
-Date:   Mon, 7 Nov 2022 13:16:59 +0100
+        Mon, 07 Nov 2022 04:17:08 -0800 (PST)
+Message-ID: <bab3412a-6328-953e-81c2-cea423908c21@redhat.com>
+Date:   Mon, 7 Nov 2022 13:17:07 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [PATCH] MAINTAINERS: Update Konrad Dybcio's email address
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org
-Cc:     patches@linaro.org, Konrad Dybcio <konrad.dybcio@somainline.org>,
-        linux-kernel@vger.kernel.org
-References: <20221107092207.5832-1-konrad.dybcio@linaro.org>
+ Thunderbird/102.3.1
+From:   Hans de Goede <hdegoede@redhat.com>
+Subject: [GIT PULL] platform-drivers-x86 for 6.1-3
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Mark Gross <mgross@linux.intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        platform-driver-x86@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>
 Content-Language: en-US
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Organization: Linaro Developer Services
-Reply-To: neil.armstrong@linaro.org
-In-Reply-To: <20221107092207.5832-1-konrad.dybcio@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/11/2022 10:22, Konrad Dybcio wrote:
-> Use my new Linaro address in place of my SoMainline one.
-> 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
->   MAINTAINERS | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 03ae061c5f6f..16751383a233 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -2641,7 +2641,7 @@ W:	http://www.armlinux.org.uk/
->   ARM/QUALCOMM SUPPORT
->   M:	Andy Gross <agross@kernel.org>
->   M:	Bjorn Andersson <andersson@kernel.org>
-> -R:	Konrad Dybcio <konrad.dybcio@somainline.org>
-> +R:	Konrad Dybcio <konrad.dybcio@linaro.org>
->   L:	linux-arm-msm@vger.kernel.org
->   S:	Maintained
->   T:	git git://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git
+Hi Linus,
+
+Here is the second round of fixes for platform-drivers-x86 for 6.1.
+
+The most important fixes here are a set of fixes for the ACPI backlight
+detection refactor which landed in 6.1. These fix regressions reported
+on some laptop models by making acpi_video_backlight_use_native() always
+return true for now, which in essence undoes some of the changes.
+
+Note I plan to take another shot at having only 1 /sys/class/backlight
+class device per panel with 6.2, with modified detection heuristics
+to avoid the (known) regressions.
+
+I just realized I forgot to add Rafael's Acked-by to the 3 "ACPI: video: ..."
+patches, since I already have pushed out the signed tag I cannot
+(easily/cleanly) fix this now, sorry. Rafael's Ack for these is here:
+https://lore.kernel.org/linux-acpi/CAJZ5v0h8FvqLwTixFALfOT2xbgiSqbT3XCMCbubwad4fHpK0hQ@mail.gmail.com/
+
+Other then that nothing special to report just various small fixes
+and hardware-id additions.
+
+Regards,
+
+Hans
 
 
-Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
+The following changes since commit e9cf4d9b9a6fdb1df6401a59f5ac5d24006bfeae:
+
+  ACPI: video: Fix missing native backlight on Chromebooks (2022-10-24 17:02:13 +0200)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git tags/platform-drivers-x86-v6.1-3
+
+for you to fetch changes up to 53eb64c88f17b14b324fbdfd417f56c5d3fa6fee:
+
+  platform/x86: p2sb: Don't fail if unknown CPU is found (2022-11-07 12:33:49 +0100)
+
+----------------------------------------------------------------
+platform-drivers-x86 for v6.1-3
+
+Highlights:
+ -  ACPI: video: Fix regressions from 6.1 backlight refactor by making
+    acpi_video_backlight_use_native() always return true for now
+ -  Misc. other bugfixes and HW id additions
+
+The following is an automated git shortlog grouped by driver:
+
+ACPI:
+ -  video: Add backlight=native DMI quirk for Dell G15 5515
+ -  video: Make acpi_video_backlight_use_native() always return true
+ -  video: Improve Chromebook checks
+
+hp_wmi:
+ -  Fix rfkill causing soft blocked wifi
+
+ideapad-laptop:
+ -  Disable touchpad_switch
+
+p2sb:
+ -  Don't fail if unknown CPU is found
+
+platform/x86/intel/hid:
+ -  Add some ACPI device IDs
+
+platform/x86/intel/pmt:
+ -  Sapphire Rapids PMT errata fix
+
+touchscreen_dmi:
+ -  Add info for the RCA Cambio W101 v2 2-in-1
+
+----------------------------------------------------------------
+Andy Shevchenko (1):
+      platform/x86: p2sb: Don't fail if unknown CPU is found
+
+David E. Box (1):
+      platform/x86/intel/pmt: Sapphire Rapids PMT errata fix
+
+Hans de Goede (4):
+      ACPI: video: Improve Chromebook checks
+      ACPI: video: Make acpi_video_backlight_use_native() always return true
+      ACPI: video: Add backlight=native DMI quirk for Dell G15 5515
+      platform/x86: touchscreen_dmi: Add info for the RCA Cambio W101 v2 2-in-1
+
+Ivan Hu (1):
+      platform/x86/intel/hid: Add some ACPI device IDs
+
+Jorge Lopez (1):
+      platform/x86: hp_wmi: Fix rfkill causing soft blocked wifi
+
+Manyi Li (1):
+      platform/x86: ideapad-laptop: Disable touchpad_switch
+
+ drivers/acpi/video_detect.c            | 41 ++++++++++++++++++++++++++--------
+ drivers/platform/x86/hp-wmi.c          | 12 ++++++++--
+ drivers/platform/x86/ideapad-laptop.c  | 25 ++++++++++++++++++++-
+ drivers/platform/x86/intel/hid.c       |  3 +++
+ drivers/platform/x86/intel/pmt/class.c | 31 ++++++++++++++++++++++++-
+ drivers/platform/x86/p2sb.c            | 15 +++++--------
+ drivers/platform/x86/touchscreen_dmi.c | 25 +++++++++++++++++++++
+ 7 files changed, 130 insertions(+), 22 deletions(-)
+
