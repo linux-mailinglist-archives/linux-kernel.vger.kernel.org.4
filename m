@@ -2,91 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18CB161E9C5
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 04:34:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6BD461E9D7
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 04:45:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230369AbiKGDem (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Nov 2022 22:34:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54540 "EHLO
+        id S231243AbiKGDp5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Nov 2022 22:45:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230050AbiKGDej (ORCPT
+        with ESMTP id S231208AbiKGDpy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Nov 2022 22:34:39 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B123C762;
-        Sun,  6 Nov 2022 19:34:39 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4N5H0X3ySXz4x2c;
-        Mon,  7 Nov 2022 14:34:36 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1667792077;
-        bh=7QswCPknYMQsyPr+9m1Gl5AC25USxTtQlaen++tznBc=;
-        h=Date:From:To:Cc:Subject:From;
-        b=bTf1G+O4QwiWZMGRGAtl1DT3gpo9KShSEaMhfZH8ATbFz3QCjrQsgmdl27WFhCl4J
-         1iVjkq3OEj8CePqhfWDJ4M74UF/lH+SbcFv/U/CzyFZ7zWHCLffBa26H+tVvRPVBFJ
-         CzW4FCKhIEtk94DWDcFgu1CU7JjtSR1R1Ajt9crXR8ZEw/xchpBeNTJSnPl12373qy
-         QcUvdC89H/0HHBWP2TkYuc+8CyN7ImpsWgH2OvTIAX9ye7EWabVW5e2ZnmP6yK7AHT
-         Ehub270Iu5Kz3m4XRIzSphRPqdPAbeR/Dg7Gisyu6Wfo+829XuSCCqDVw1u/Tl8OJD
-         s9thIxkbQvBZg==
-Date:   Mon, 7 Nov 2022 14:34:34 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Greg KH <greg@kroah.com>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the tty tree
-Message-ID: <20221107143434.66f7be35@canb.auug.org.au>
+        Sun, 6 Nov 2022 22:45:54 -0500
+X-Greylist: delayed 657 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 06 Nov 2022 19:45:52 PST
+Received: from mx2.zhaoxin.com (mx2.zhaoxin.com [203.110.167.99])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24046656B
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Nov 2022 19:45:51 -0800 (PST)
+X-ASG-Debug-ID: 1667792092-1eb14e7e6270db0001-xx1T2L
+Received: from ZXSHMBX1.zhaoxin.com (ZXSHMBX1.zhaoxin.com [10.28.252.163]) by mx2.zhaoxin.com with ESMTP id 0s7bCf8yw66UkIBv (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO); Mon, 07 Nov 2022 11:34:52 +0800 (CST)
+X-Barracuda-Envelope-From: TonyWWang-oc@zhaoxin.com
+X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.163
+Received: from zxbjmbx1.zhaoxin.com (10.29.252.163) by ZXSHMBX1.zhaoxin.com
+ (10.28.252.163) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12; Mon, 7 Nov
+ 2022 11:34:52 +0800
+Received: from tony-HX002EA0.zhaoxin.com (10.32.64.2) by zxbjmbx1.zhaoxin.com
+ (10.29.252.163) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12; Mon, 7 Nov
+ 2022 11:34:50 +0800
+X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.163
+From:   Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>
+X-Barracuda-RBL-Trusted-Forwarder: 10.29.252.163
+To:     <rafael@kernel.org>, <len.brown@intel.com>, <pavel@ucw.cz>,
+        <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
+        <dave.hansen@linux.intel.com>, <x86@kernel.org>, <hpa@zytor.com>,
+        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <linux-acpi@vger.kernel.org>, <CobeChen@zhaoxin.com>,
+        <TimGuo@zhaoxin.com>, <LindaChai@zhaoxin.com>, <LeoLiu@zhaoxin.com>
+Subject: [PATCH v2] x86/acpi/cstate: Optimize ARB_DISABLE on Centaur CPUs
+Date:   Mon, 7 Nov 2022 11:34:49 +0800
+X-ASG-Orig-Subj: [PATCH v2] x86/acpi/cstate: Optimize ARB_DISABLE on Centaur CPUs
+Message-ID: <1667792089-4904-1-git-send-email-TonyWWang-oc@zhaoxin.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/A+wwO2mwquoSTT6Uue5tnDG";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.32.64.2]
+X-ClientProxiedBy: zxbjmbx1.zhaoxin.com (10.29.252.163) To
+ zxbjmbx1.zhaoxin.com (10.29.252.163)
+X-Barracuda-Connect: ZXSHMBX1.zhaoxin.com[10.28.252.163]
+X-Barracuda-Start-Time: 1667792092
+X-Barracuda-Encrypted: ECDHE-RSA-AES128-GCM-SHA256
+X-Barracuda-URL: https://10.28.252.36:4443/cgi-mod/mark.cgi
+X-Virus-Scanned: by bsmtpd at zhaoxin.com
+X-Barracuda-Scan-Msg-Size: 2020
+X-Barracuda-BRTS-Status: 1
+X-Barracuda-Bayes: INNOCENT GLOBAL 0.0000 1.0000 -2.0210
+X-Barracuda-Spam-Score: -2.02
+X-Barracuda-Spam-Status: No, SCORE=-2.02 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=9.0 tests=
+X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.101960
+        Rule breakdown below
+         pts rule name              description
+        ---- ---------------------- --------------------------------------------------
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/A+wwO2mwquoSTT6Uue5tnDG
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On all recent Centaur platforms, ARB_DISABLE is handled by PMU
+automatically while entering C3 type state. No need for OS to
+issue the ARB_DISABLE, so set bm_control to zero to indicate that.
 
-Hi all,
+Signed-off-by: Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>
+---
+Changes in V2:
+ - fix typo in comments.
+---
+ arch/x86/kernel/acpi/cstate.c | 26 +++++++++++++++++---------
+ 1 file changed, 17 insertions(+), 9 deletions(-)
 
-After merging the tty tree, today's linux-next build (htmldocs) produced
-this warning:
+diff --git a/arch/x86/kernel/acpi/cstate.c b/arch/x86/kernel/acpi/cstate.c
+index 7945eae..da71679 100644
+--- a/arch/x86/kernel/acpi/cstate.c
++++ b/arch/x86/kernel/acpi/cstate.c
+@@ -52,17 +52,25 @@ void acpi_processor_power_init_bm_check(struct acpi_processor_flags *flags,
+ 	if (c->x86_vendor == X86_VENDOR_INTEL &&
+ 	    (c->x86 > 0xf || (c->x86 == 6 && c->x86_model >= 0x0f)))
+ 			flags->bm_control = 0;
+-	/*
+-	 * For all recent Centaur CPUs, the ucode will make sure that each
+-	 * core can keep cache coherence with each other while entering C3
+-	 * type state. So, set bm_check to 1 to indicate that the kernel
+-	 * doesn't need to execute a cache flush operation (WBINVD) when
+-	 * entering C3 type state.
+-	 */
++
+ 	if (c->x86_vendor == X86_VENDOR_CENTAUR) {
+ 		if (c->x86 > 6 || (c->x86 == 6 && c->x86_model == 0x0f &&
+-		    c->x86_stepping >= 0x0e))
+-			flags->bm_check = 1;
++		    c->x86_stepping >= 0x0e)) {
++			/*
++			 * For all recent Centaur CPUs, the ucode will make sure that each
++			 * core can keep cache coherence with each other while entering C3
++			 * type state. So, set bm_check to 1 to indicate that the kernel
++			 * doesn't need to execute a cache flush operation (WBINVD) when
++			 * entering C3 type state.
++			 */
++			flags->bm_check = 1;
++			/*
++			 * For all recent Centaur platforms, ARB_DISABLE is a nop.
++			 * Set bm_control to zero to indicate that ARB_DISABLE is
++			 * not required while entering C3 type state.
++			 */
++			flags->bm_control = 0;
++		}
+ 	}
+ 
+ 	if (c->x86_vendor == X86_VENDOR_ZHAOXIN) {
+-- 
+2.7.4
 
-drivers/tty/tty_io.c:2271: warning: cannot understand function prototype: '=
-bool tty_legacy_tiocsti __read_mostly =3D IS_ENABLED(CONFIG_LEGACY_TIOCSTI)=
-; '
-
-Introduced by commit
-
-  83efeeeb3d04 ("tty: Allow TIOCSTI to be disabled")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/A+wwO2mwquoSTT6Uue5tnDG
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNofMoACgkQAVBC80lX
-0Gz2tQf/enPT5KUbwFpN7Ka7dzJpOtRPxTIoeWyaV1vw8dBOqhUZvLt+QUXUAkgS
-CHEGNsLF3WymcSOYEReEJ0Zdqf+t8VI1Ys3U2yaYGBMxv2QwbBXjPC4QgS+NB6gx
-8e9gCXDmsaH/Nq88gmB8ptW3Y1eHEaTtXb0T9BBXT5DdL+GLtPSDOlcvsRIHMPOP
-nwozgffNX3aogH1qhDFkxTZ6iW6oz331uv+cS0Q6LCBaL86UcZ5H8Rw0+3X0PNL4
-SreXnGB+YBiq9zgDcAGRsJwGKTwslAL9qFT+1XhpXQICUhua4lR9dTf2Lr5mA/D8
-+QvELSeF2e93wqG4zd/yxH+wjbuPkg==
-=DhZ0
------END PGP SIGNATURE-----
-
---Sig_/A+wwO2mwquoSTT6Uue5tnDG--
