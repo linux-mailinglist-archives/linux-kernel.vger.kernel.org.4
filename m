@@ -2,182 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16EF561ECBE
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 09:18:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B333161ECBB
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 09:17:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230418AbiKGIS3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 03:18:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35712 "EHLO
+        id S230214AbiKGIRn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 03:17:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230304AbiKGISY (ORCPT
+        with ESMTP id S229503AbiKGIRj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 03:18:24 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1A4F244;
-        Mon,  7 Nov 2022 00:18:22 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 7 Nov 2022 03:17:39 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12D40B7FF;
+        Mon,  7 Nov 2022 00:17:39 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5FA1BB80E2D;
-        Mon,  7 Nov 2022 08:18:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 037A5C433D6;
-        Mon,  7 Nov 2022 08:18:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667809100;
-        bh=j88niuCnMaWKRA1D9Tj+CFIRdasfCLQF6vaVFEFj1hY=;
-        h=From:To:Cc:Subject:Date:From;
-        b=l19TsNhTWnCAxWk0yNb9IdBjsFgTpEdeolXBRMeqA022OkA4/Ao0rFJKQBzG90Ihv
-         6sbL3Py7nFZzNbqi7szpCLPJmwYPuRHp/Q3fAU3ohIPCS6jy6HyK1FeNBJ46IO4Ntk
-         X9kLlHJLFFQ7deZMjokLmfJ9Jtxp756vSiopdCbC120vHqMyvPiiBngxeBPhRuIrd/
-         DwtYHhq0UlimumfIN81WG56CEj/os2Qy3sDKY3MKWJfPhQk78WkVTC87KwcIExYA9L
-         ZiTePZMjQeRV5udtRZSfYBhFb7KAoSZ/nLjDYug5MSwAOTtrvBeZP+YpLz6/9C47Vm
-         QpOe6Hl0zCu/w==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan+linaro@kernel.org>)
-        id 1orxKO-0004oF-8B; Mon, 07 Nov 2022 09:17:56 +0100
-From:   Johan Hovold <johan+linaro@kernel.org>
-To:     Bjorn Andersson <andersson@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH] arm64: dts: qcom: sc8280xp: fix USB MP QMP PHY nodes
-Date:   Mon,  7 Nov 2022 09:17:05 +0100
-Message-Id: <20221107081705.18446-1-johan+linaro@kernel.org>
-X-Mailer: git-send-email 2.37.4
+        by smtp-out2.suse.de (Postfix) with ESMTPS id C07A11F88F;
+        Mon,  7 Nov 2022 08:17:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1667809057; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=yhWHJ2J3mSTc7a4l8DLtwjtj9XcPdTj9FcFSpoWpr2c=;
+        b=t8ZU6zp1GfpIYKpTERHBEmxxZa1ZI6WSDt+HtNFMqEM9YuuAhN7Wf8M0WRha9BmexJQ1Hx
+        BeGVslsxal3j4CZgzDRp2e2bavLZV1suFz3jlmJaCyOpqMA6D0iyMIxDeAtZLOiFCJIZKX
+        37ufVDxAE4xTtaolcw6E4ze1Q1exgJI=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9EF4413AC7;
+        Mon,  7 Nov 2022 08:17:37 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 9viDJCG/aGPWIwAAMHmgww
+        (envelope-from <mhocko@suse.com>); Mon, 07 Nov 2022 08:17:37 +0000
+Date:   Mon, 7 Nov 2022 09:17:36 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     Feng Tang <feng.tang@intel.com>
+Cc:     "Huang, Ying" <ying.huang@intel.com>,
+        Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Waiman Long <longman@redhat.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "cgroups@vger.kernel.org" <cgroups@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        "Chen, Tim C" <tim.c.chen@intel.com>,
+        "Yin, Fengwei" <fengwei.yin@intel.com>
+Subject: Re: [PATCH] mm/vmscan: respect cpuset policy during page demotion
+Message-ID: <Y2i/IMs/KWpppQtS@dhcp22.suse.cz>
+References: <Y1ou5DGHrEsKnhri@dhcp22.suse.cz>
+ <87o7txk963.fsf@yhuang6-desk2.ccr.corp.intel.com>
+ <Y1o63SWD2KmQkT3v@dhcp22.suse.cz>
+ <87fsf9k3yg.fsf@yhuang6-desk2.ccr.corp.intel.com>
+ <Y1p5vaN1AWhpNWZx@dhcp22.suse.cz>
+ <87bkpwkg24.fsf@yhuang6-desk2.ccr.corp.intel.com>
+ <Y1+J7+1V1nJXF+3b@dhcp22.suse.cz>
+ <Y1/XC+witPxFj04T@feng-clx>
+ <Y1/cgrgdVP+KdYzf@dhcp22.suse.cz>
+ <Y2i8UbaOjGyqwJQ6@feng-clx>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y2i8UbaOjGyqwJQ6@feng-clx>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Update the USB MP QMP PHY nodes to match the new binding which
-specifically includes the missing register regions (e.g. PCS_USB).
+On Mon 07-11-22 16:05:37, Feng Tang wrote:
+> On Mon, Oct 31, 2022 at 03:32:34PM +0100, Michal Hocko wrote:
+> > > > OK, then let's stop any complicated solution right here then. Let's
+> > > > start simple with a per-mm flag to disable demotion of an address space.
+> > > > Should there ever be a real demand for a more fine grained solution
+> > > > let's go further but I do not think we want a half baked solution
+> > > > without real usecases.
+> > > 
+> > > Yes, the concern about the high cost for mempolicy from you and Yang is
+> > > valid. 
+> > > 
+> > > How about the cpuset part?
+> > 
+> > Cpusets fall into the same bucket as per task mempolicies wrt costs. Geting a
+> > cpuset requires knowing all tasks associated with a page. Or am I just
+> > missing any magic? And no memcg->cpuset association is not a proper
+> > solution at all.
+> 
+> No, you are not missing anything. It's really difficult to find a
+> solution for all holes. And the patch is actually a best-efforts
+> approach, trying to cover cgroup v2 + memory controller enabled case,
+> which we think is a common user case for newer platforms with tiering
+> memory.
 
-Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
----
+Best effort is OK but it shouldn't create an unexpected behavior and
+this approach does that.
 
-The corresponding binding and driver fixes are now in linux-next so that
-the devicetree can be updated. [1]
+I thought I have already explained that. But let me be more
+explicit this time.  Please have a look at how controllers can be
+enabled/disabled at different levels of the hierarchy. Unless memcg
+grows a hard dependency on another controller (as it does with the blk
+io controller) then this approach can point to a wrong cpuset. See my
+point?
 
-Note that there's yet no support for the multiport controller in
-mainline.
-
-Johan
-
-[1] https://lore.kernel.org/lkml/20221028160435.26948-1-johan+linaro@kernel.org/
-
-
- arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 62 ++++++++++----------------
- 1 file changed, 24 insertions(+), 38 deletions(-)
-
-diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-index 1b309fa93484..506172206b8a 100644
---- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-@@ -1090,70 +1090,56 @@ usb_2_hsphy3: phy@88ea000 {
- 			status = "disabled";
- 		};
- 
--		usb_2_qmpphy0: phy-wrapper@88ef000 {
-+		usb_2_qmpphy0: phy@88ef000 {
- 			compatible = "qcom,sc8280xp-qmp-usb3-uni-phy";
--			reg = <0 0x088ef000 0 0x1c8>;
--			#address-cells = <2>;
--			#size-cells = <2>;
--			ranges;
-+			reg = <0 0x088ef000 0 0x2000>;
- 
- 			clocks = <&gcc GCC_USB3_MP_PHY_AUX_CLK>,
- 				 <&rpmhcc RPMH_CXO_CLK>,
- 				 <&gcc GCC_USB3_MP0_CLKREF_CLK>,
--				 <&gcc GCC_USB3_MP_PHY_COM_AUX_CLK>;
--			clock-names = "aux", "ref_clk_src", "ref", "com_aux";
-+				 <&gcc GCC_USB3_MP_PHY_COM_AUX_CLK>,
-+				 <&gcc GCC_USB3_MP_PHY_PIPE_0_CLK>;
-+			clock-names = "aux", "ref_clk_src", "ref", "com_aux",
-+				      "pipe";
- 
- 			resets = <&gcc GCC_USB3_UNIPHY_MP0_BCR>,
- 				 <&gcc GCC_USB3UNIPHY_PHY_MP0_BCR>;
--			reset-names = "phy", "common";
-+			reset-names = "phy", "phy_phy";
- 
- 			power-domains = <&gcc USB30_MP_GDSC>;
- 
--			status = "disabled";
-+			#clock-cells = <0>;
-+			clock-output-names = "usb2_phy0_pipe_clk";
- 
--			usb_2_ssphy0: phy@88efe00 {
--				reg = <0 0x088efe00 0 0x160>,
--				      <0 0x088f0000 0 0x1ec>,
--				      <0 0x088ef200 0 0x1f0>;
--				#phy-cells = <0>;
--				#clock-cells = <0>;
--				clocks = <&gcc GCC_USB3_MP_PHY_PIPE_0_CLK>;
--				clock-names = "pipe0";
--				clock-output-names = "usb2_phy0_pipe_clk";
--			};
-+			#phy-cells = <0>;
-+
-+			status = "disabled";
- 		};
- 
--		usb_2_qmpphy1: phy-wrapper@88f1000 {
-+		usb_2_qmpphy1: phy@88f1000 {
- 			compatible = "qcom,sc8280xp-qmp-usb3-uni-phy";
--			reg = <0 0x088f1000 0 0x1c8>;
--			#address-cells = <2>;
--			#size-cells = <2>;
--			ranges;
-+			reg = <0 0x088f1000 0 0x2000>;
- 
- 			clocks = <&gcc GCC_USB3_MP_PHY_AUX_CLK>,
- 				 <&rpmhcc RPMH_CXO_CLK>,
- 				 <&gcc GCC_USB3_MP1_CLKREF_CLK>,
--				 <&gcc GCC_USB3_MP_PHY_COM_AUX_CLK>;
--			clock-names = "aux", "ref_clk_src", "ref", "com_aux";
-+				 <&gcc GCC_USB3_MP_PHY_COM_AUX_CLK>,
-+				 <&gcc GCC_USB3_MP_PHY_PIPE_1_CLK>;
-+			clock-names = "aux", "ref_clk_src", "ref", "com_aux",
-+				      "pipe";
- 
- 			resets = <&gcc GCC_USB3_UNIPHY_MP1_BCR>,
- 				 <&gcc GCC_USB3UNIPHY_PHY_MP1_BCR>;
--			reset-names = "phy", "common";
-+			reset-names = "phy", "phy_phy";
- 
- 			power-domains = <&gcc USB30_MP_GDSC>;
- 
--			status = "disabled";
-+			#clock-cells = <0>;
-+			clock-output-names = "usb2_phy1_pipe_clk";
- 
--			usb_2_ssphy1: phy@88f1e00 {
--				reg = <0 0x088f1e00 0 0x160>,
--				      <0 0x088f2000 0 0x1ec>,
--				      <0 0x088f1200 0 0x1f0>;
--				#phy-cells = <0>;
--				#clock-cells = <0>;
--				clocks = <&gcc GCC_USB3_MP_PHY_PIPE_1_CLK>;
--				clock-names = "pipe0";
--				clock-output-names = "usb2_phy1_pipe_clk";
--			};
-+			#phy-cells = <0>;
-+
-+			status = "disabled";
- 		};
- 
- 		remoteproc_adsp: remoteproc@3000000 {
+Really, solution for this is not going to be cheap and also I am not
+sure all the hessles is really worth it until there is a clear usecase
+in sight.
 -- 
-2.37.4
-
+Michal Hocko
+SUSE Labs
