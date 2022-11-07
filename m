@@ -2,88 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7873461F139
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 11:55:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A548361F140
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 11:56:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231688AbiKGKzP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 05:55:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54344 "EHLO
+        id S231788AbiKGK4V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 05:56:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231237AbiKGKzN (ORCPT
+        with ESMTP id S231237AbiKGK4T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 05:55:13 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 70EC7F9
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 02:55:11 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5789C1FB;
-        Mon,  7 Nov 2022 02:55:17 -0800 (PST)
-Received: from bogus (unknown [10.57.6.137])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 728B33F73D;
-        Mon,  7 Nov 2022 02:55:09 -0800 (PST)
-Date:   Mon, 7 Nov 2022 10:55:06 +0000
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Samuel Holland <samuel@sholland.org>
-Cc:     Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 2/2] firmware/psci: Switch to the sys-off handler API
-Message-ID: <20221107105506.pfoxmngp7shhci3p@bogus>
-References: <20221105214841.7828-1-samuel@sholland.org>
- <20221105214841.7828-3-samuel@sholland.org>
+        Mon, 7 Nov 2022 05:56:19 -0500
+Received: from mout-y-111.mailbox.org (mout-y-111.mailbox.org [91.198.250.236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E62C0F9;
+        Mon,  7 Nov 2022 02:56:17 -0800 (PST)
+Received: from smtp202.mailbox.org (smtp202.mailbox.org [IPv6:2001:67c:2050:b231:465::202])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mout-y-111.mailbox.org (Postfix) with ESMTPS id 4N5Sp60VxGz9spb;
+        Mon,  7 Nov 2022 11:56:14 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=noorman.info;
+        s=MBO0001; t=1667818574;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=zR6Mhv/vRVdGbEmRy19xWFBS8xMO4Kg6VmBSaKKrkYA=;
+        b=D4i5c2f/FPiucTd8gLwUgzy7BdbilM406LibcE3v+l0kIaPoYMCxkwh+c0izQ0w9Mve3Kd
+        dB2PZN3DTdaRbhGva09h9nAelS95ode61ws4EzenCodoVD+Mk069cGqTFSISyrcL35xUq3
+        1dkXq+d0C3R5ZPQmXW6NQ+UtEXydx2ujVM5AEHcET59ZJG/RRvgNyyKQZpIpdX5Lqr2Fm6
+        skyDUfWLRcfK0rttIJTRbegZ454O9xTXyd2VLvnFSfSf4dK4o/cA5MOWV8PWxBkrdEZ3ZJ
+        2XV7KYSGdHZ/7dnkPPK5j8sWaX1jtgigCioAxLjTFYOxdREj1OhzPzaZYM8dFw==
+From:   Job Noorman <job@noorman.info>
+To:     Job Noorman <job@noorman.info>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Henrik Rydberg <rydberg@bitmath.org>
+Cc:     linux-input@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Luca Weiss <luca@z3ntu.xyz>
+Subject: [PATCH RESEND v6 0/3] Add Himax hx83112b touchscreen driver
+Date:   Mon,  7 Nov 2022 11:56:01 +0100
+Message-Id: <20221107105604.26541-1-job@noorman.info>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221105214841.7828-3-samuel@sholland.org>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Rspamd-Queue-Id: 4N5Sp60VxGz9spb
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Nov 05, 2022 at 04:48:40PM -0500, Samuel Holland wrote:
-> Any other poweroff handlers registered at the default priority will
-> run before the legacy pm_power_off() function. Register the PSCI
-> poweroff handler with the correct priority to ensure it runs first.
-> 
-> Signed-off-by: Samuel Holland <samuel@sholland.org>
-> ---
-> 
->  drivers/firmware/psci/psci.c | 9 ++++++---
->  1 file changed, 6 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/firmware/psci/psci.c b/drivers/firmware/psci/psci.c
-> index e7bcfca4159f..6d528021925d 100644
-> --- a/drivers/firmware/psci/psci.c
-> +++ b/drivers/firmware/psci/psci.c
-> @@ -13,7 +13,6 @@
->  #include <linux/errno.h>
->  #include <linux/linkage.h>
->  #include <linux/of.h>
-> -#include <linux/pm.h>
->  #include <linux/printk.h>
->  #include <linux/psci.h>
->  #include <linux/reboot.h>
-> @@ -322,9 +321,11 @@ static struct notifier_block psci_sys_reset_nb = {
->  	.priority = 129,
->  };
->  
-> -static void psci_sys_poweroff(void)
-> +static int psci_sys_poweroff(struct sys_off_data *data)
->  {
->  	invoke_psci_fn(PSCI_0_2_FN_SYSTEM_OFF, 0, 0, 0);
-> +
-> +	return NOTIFY_DONE;
+Hi all,
 
-Just note that PSCI SYSTEM_OFF doesn't return and hence the above return
-is useless. I understand the generic idea here and should be fine, just
-thought of pointing that the firmware won't return from the call.
+This series adds support for the Himax hx83112b. The hx83112b supports 10
+point multitouch with hardware tracking of touch points. It is the
+touchschreen used by the Fairphone 3.
 
+Note that a datasheet was unavailable for this device, so it was built
+based on the Android driver that was tagged as GPLv2. This series is a
+complete rewrite, though, and the code bears no resemblence to the original
+implementation.
+
+It is expected that this driver can be made to work on other hx83xxx
+devices, especially the hx83112a used in the Fairphone 4. However, since we
+have been unable to verify this, this driver only declares compatibility
+with the hx83112b and uses very specific file names.
+
+Changes since v5 (based on Jeff LaBundy's 3rd round of comments):
+- Consistently reuse local variable dev in himax_probe()
+
+Changes since v4 (based on Jeff LaBundy's 2nd round of comments):
+- Kconfig: depend on I2C and select REGMAP_I2C
+- Don't suppress dev_err() on EPROBE_DEFER
+- Some minor coding style updates
+
+Changes since v3 (based on Dmitry Torokhov's comments):
+- Use gpiod_set_value_cansleep (instead of gpiod_set_value) during probe
+- Inline some small helper functions
+- Use DEFINE_SIMPLE_DEV_PM_OPS() and pm_sleep_ptr()
+- Use PTR_ERR_OR_ZERO instead of IS_ERR+PTR_ERR
+- Some minor coding style updates (e.g., use C-style comments)
+
+Changes since v2 (based on Jeff LaBundy's comments):
+- Kconfig: depend on REGMAP_I2C instead of I2C
+- Don't use dev_err_probe()
+- Return IRQ_NONE on failed register reads to prevent possible interrupt
+  storm
+- Add small delay after de-asserting reset pin
+- Some minor coding style updates
+- dt-bindings: make touchscreen-size-{x,y} required
+
+Changes since v1:
+- Fix sparse warnings. Reported-by: kernel test robot <lkp@intel.com>.
+- Fix dt_binding_check.
+
+Best regards,
+Job
+
+Previous versions:
+- v5: https://lore.kernel.org/lkml/20221023163032.144150-1-job@noorman.info/
+- v4: https://lore.kernel.org/lkml/20221017100409.189293-1-job@noorman.info/
+- v3: https://lore.kernel.org/lkml/20221016102756.40345-1-job@noorman.info/
+- v2: https://lore.kernel.org/lkml/20221012202341.295351-1-job@noorman.info/
+- v1: https://lore.kernel.org/lkml/20221011190729.14747-1-job@noorman.info/
+
+Job Noorman (3):
+  dt-bindings: touchscreen: add Himax hx83112b bindings
+  Input: add driver for Himax hx83112b touchscreen devices
+  arm64: dts: qcom: sdm632: fairphone-fp3: add touchscreen
+
+ .../input/touchscreen/himax,hx83112b.yaml     |  63 +++
+ MAINTAINERS                                   |   7 +
+ .../boot/dts/qcom/sdm632-fairphone-fp3.dts    |  14 +
+ drivers/input/touchscreen/Kconfig             |  12 +
+ drivers/input/touchscreen/Makefile            |   1 +
+ drivers/input/touchscreen/himax_hx83112b.c    | 361 ++++++++++++++++++
+ 6 files changed, 458 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/input/touchscreen/himax,hx83112b.yaml
+ create mode 100644 drivers/input/touchscreen/himax_hx83112b.c
+
+
+base-commit: 153a197077d33861744be5a2d4bd17cec2c2dca3
 -- 
-Regards,
-Sudeep
+2.38.1
+
