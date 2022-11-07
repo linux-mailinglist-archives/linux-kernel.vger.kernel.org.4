@@ -2,103 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FDAE61FB23
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 18:22:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79B8361FB31
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 18:24:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232017AbiKGRWK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 12:22:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37076 "EHLO
+        id S231967AbiKGRYA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 12:24:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231829AbiKGRWC (ORCPT
+        with ESMTP id S231829AbiKGRX6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 12:22:02 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F9792315C
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 09:22:01 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 8CA9FCE16E0
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 17:21:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B76DC433D7;
-        Mon,  7 Nov 2022 17:21:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667841717;
-        bh=I73tNza4oxz8JX4yGvw/47qdbUlRa9qyt36gyUC68qY=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=Hfq/PCBTSirpCpEvqjM6/q+o3q1tAAJbMNmyPnIGlLcvgwCPVNCQfyjycNO6BXj0K
-         FpAPlRG1zH5GQGo8+NvMt0QiZwtqrnPlRUunSiB81PeR1M8yIiNBSjy1CLSK2zF9Sw
-         OiqLDSzUjGLZIWqeoLttICGwWzB2Kv89qSq9m1SCsa0suthy9mkD4tWul39OM1nX4l
-         yYhhRPWbDjpmPDt6PEb2BReKaJl+oO9K1wprRkZ22anYTQb+qr6Mi+b/UX4fR37U51
-         4X22DNjH9fX29+0nOCB+AwuO8o8glPBhUrxbP3wbEpCVlDAWcAMJuqtX9ZmGBrYKKK
-         3nlJNfN7LXLoA==
-From:   =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-To:     Chris Stillson <stillson@rivosinc.com>
-Cc:     Greentime Hu <greentime.hu@sifive.com>,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Vincent Chen <vincent.chen@sifive.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v12 04/17] riscv: Add vector feature to compile
-In-Reply-To: <20220921214439.1491510-4-stillson@rivosinc.com>
-References: <20220921214439.1491510-1-stillson@rivosinc.com>
- <20220921214439.1491510-4-stillson@rivosinc.com>
-Date:   Mon, 07 Nov 2022 18:21:54 +0100
-Message-ID: <87zgd2d6j1.fsf@all.your.base.are.belong.to.us>
+        Mon, 7 Nov 2022 12:23:58 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36ED7140E5
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 09:22:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1667841777;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=rZ09hkMmaoZyaAHo1tsMTz2+wpqw+JOCPiAMroMDJUc=;
+        b=f2bbVvFWtSz/4C5a+W6T4PiaMQbBgHrjQMfsXreywUX7mg2mAn2KrtsKso7p4fxBZm7Qv6
+        QZYKGkq5O7Vd5sLonmTZ1z4fu1fyvQjTEnzRwr2HUkYbaWyDAG2fXN4+Hd9iLZAQnairYE
+        JKpKtabCrL+Grbh7/vEmkSZZmJsOagc=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-126-K399CrYCPmmWbaTX_4tglA-1; Mon, 07 Nov 2022 12:22:56 -0500
+X-MC-Unique: K399CrYCPmmWbaTX_4tglA-1
+Received: by mail-wr1-f71.google.com with SMTP id e21-20020adfa455000000b002365c221b59so3064960wra.22
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 09:22:55 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=rZ09hkMmaoZyaAHo1tsMTz2+wpqw+JOCPiAMroMDJUc=;
+        b=v1xeQ+a3CIoF4IlFkUyb0i3NDjmPonxYKp+0fI6DuZx3N/iLHjpci43IViCwkQBcij
+         QxbhLj/elsjkpD/kfRAN3aZVg5f2eEtjXfrGlbK9ZsVH+E2dHkMjZVqibeYu2wrldBw6
+         aahAMrPui9xZvxYrTJPTypfj1LrWU8Ao/Quql6ewPMF5Z4DYsTfjM9nyqAf7AXQ8gLjr
+         LY8dSKPsYJ4VYkFWdS9Sh88Y5DoZYTgR1xmcrfcKVOStxKZnuuczd9Cohq+wV2bMYFYV
+         lDaxvL7G2EhzMy7I/f1UNgur42GSB/Xmld5NiXe6WgH12OietFDJdQ0PEuafrx9BpFoP
+         2zYQ==
+X-Gm-Message-State: ANoB5plDg59I/L/LPil2XzKSWu3Qv5bs/5Ml72syllLsMi6c7XvGq0GC
+        T55RYdAps9ojGuPohsfqI6TsRXfZtngVzjgX2D+hijjN2iSgEi7wJMOCjjAgupj5YhthQXxoekd
+        MsDQE13IuF3rRS2tdapA1l0oa
+X-Received: by 2002:a05:600c:230d:b0:3cf:acc6:ba97 with SMTP id 13-20020a05600c230d00b003cfacc6ba97mr3544879wmo.102.1667841774872;
+        Mon, 07 Nov 2022 09:22:54 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf7qokg77pGCfqZ79Xlcw58RP/DEA32EcgvzY5lzjy3O/cLRok4O78DHfLKUoSjy0W/V37mzEA==
+X-Received: by 2002:a05:600c:230d:b0:3cf:acc6:ba97 with SMTP id 13-20020a05600c230d00b003cfacc6ba97mr3544869wmo.102.1667841774642;
+        Mon, 07 Nov 2022 09:22:54 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
+        by smtp.googlemail.com with ESMTPSA id p15-20020adfce0f000000b0022cbf4cda62sm9477730wrn.27.2022.11.07.09.22.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 07 Nov 2022 09:22:53 -0800 (PST)
+Message-ID: <f86a6ea3-3197-4009-0b67-9c9f99963805@redhat.com>
+Date:   Mon, 7 Nov 2022 18:22:52 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH 2/8] KVM: SVM: replace regs argument of __svm_vcpu_run
+ with vcpu_svm
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        nathan@kernel.org, thomas.lendacky@amd.com,
+        andrew.cooper3@citrix.com, peterz@infradead.org,
+        jmattson@google.com, stable@vger.kernel.org
+References: <20221107145436.276079-1-pbonzini@redhat.com>
+ <20221107145436.276079-3-pbonzini@redhat.com> <Y2k8DilImFBVcZPG@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <Y2k8DilImFBVcZPG@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[Cropping the huge Cc:-list.]
+On 11/7/22 18:10, Sean Christopherson wrote:
+> Needs to include asm/asm-offsets.h, otherwise the compiler may think that
+> SVM_vcpu_arch_regs is a symbol.
+> 
+>    ERROR: modpost: "SVM_vcpu_arch_regs" [arch/x86/kvm/kvm-amd.ko] undefined!
+> 
+> diff --git a/arch/x86/kvm/svm/vmenter.S b/arch/x86/kvm/svm/vmenter.S
+> index 8fac744361e5..8d0b0781462e 100644
+> --- a/arch/x86/kvm/svm/vmenter.S
+> +++ b/arch/x86/kvm/svm/vmenter.S
+> @@ -1,6 +1,7 @@
+>   /* SPDX-License-Identifier: GPL-2.0 */
+>   #include <linux/linkage.h>
+>   #include <asm/asm.h>
+> +#include <asm/asm-offsets.h>
+>   #include <asm/bitsperlong.h>
+>   #include <asm/kvm_vcpu_regs.h>
+>   #include <asm/nospec-branch.h>
 
-Chris Stillson <stillson@rivosinc.com> writes:
+Yeah, it's included slightly later (I did test each patch independently, 
+but I'm not sure how it ended up disappearing from this one).
 
-> From: Guo Ren <guoren@linux.alibaba.com>
->
-> This patch adds a new config option which could enable assembler's
-> vector feature.
->
-> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> Co-developed-by: Greentime Hu <greentime.hu@sifive.com>
-> Signed-off-by: Greentime Hu <greentime.hu@sifive.com>
-> ---
->  arch/riscv/Kconfig  | 15 +++++++++++++--
->  arch/riscv/Makefile |  1 +
->  2 files changed, 14 insertions(+), 2 deletions(-)
->
-> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> index ed66c31e4655..e294d85bfb7d 100644
-> --- a/arch/riscv/Kconfig
-> +++ b/arch/riscv/Kconfig
-> @@ -432,7 +432,17 @@ config FPU
->=20=20
->  	  If you don't know what to do here, say Y.
->=20=20
-> -endmenu # "Platform type"
-> +config VECTOR
-> +	bool "VECTOR support"
-> +	depends on GCC_VERSION >=3D 120000 || CLANG_VERSION >=3D 130000
-> +	default n
-> +	help
-> +	  Say N here if you want to disable all vector related procedure
-> +	  in the kernel.
-> +
-> +	  If you don't know what to do here, say Y.
-> +
-> +endmenu
+Paolo
 
-"VECTOR" is not really consistent to how the other configs are named;
-RISCV_ISA_V, RISCV_ISA_VECTOR, RISCV_VECTOR?
-
-
-Bj=C3=B6rn
