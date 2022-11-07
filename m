@@ -2,120 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8ABC2620149
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 22:36:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0797D620148
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 22:36:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233449AbiKGVgl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 16:36:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58072 "EHLO
+        id S233337AbiKGVgg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 16:36:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233319AbiKGVgb (ORCPT
+        with ESMTP id S233151AbiKGVg2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 16:36:31 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 069E5DA2;
-        Mon,  7 Nov 2022 13:36:29 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AC264B816AA;
-        Mon,  7 Nov 2022 21:36:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59FE5C4347C;
-        Mon,  7 Nov 2022 21:36:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667856987;
-        bh=fhSLuMFsDIXZTyGC5V/74ol9l/TQbCSvyukyKs6zDLc=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=XYph1WMMA0b9TxY1XmamRAgMiZDX4dLtn7hlfCKqpr3XgUBYDHlxOJu5tzbZiEf9Y
-         U+96SdOLqUCJFqv6A8z6qROTM33UhGOUo5p92cR7qCtqNhXHVpbCfbU4yRdGT0YhjD
-         gw40/B8OC7NooL9jk2Ku/1sFERozCmCtQxctalXbpNNPrNNhGp1IBLIgUKgUtTL7Qi
-         wS5ZBKhi6TeGSf1dMV8MXL2vbUoeoMVrHPVK4dpW7GqsZ/yXXi82+xbG0bKXqmxpDA
-         wjamJsKLQItFyM9z/jaJZ3PwvS2UE4bZdleN3Dg2S25L1raAXnC4xokiShLpqgBmw6
-         gy93X/gjYHK6w==
-Received: by mail-lj1-f174.google.com with SMTP id d3so18332255ljl.1;
-        Mon, 07 Nov 2022 13:36:27 -0800 (PST)
-X-Gm-Message-State: ACrzQf2troSyCfQhGD+fkLs26g7Aj66qLilSWWPTxrFZorZoJj86n0S5
-        GCzG1TOMd/8EqFaoa4WsZSzp9KHVBMxr2tuudQ==
-X-Google-Smtp-Source: AMsMyM4tx5YQl80AevtfnGWbnhBrN3sG0NTkgJ6voYrQpSySVeZNzfrLe4SOOGqRrTLPdBUeWEHVGVZ4kM920ag340Y=
-X-Received: by 2002:a05:651c:114a:b0:25d:5ae6:42a4 with SMTP id
- h10-20020a05651c114a00b0025d5ae642a4mr18168309ljo.255.1667856985359; Mon, 07
- Nov 2022 13:36:25 -0800 (PST)
+        Mon, 7 Nov 2022 16:36:28 -0500
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 032046164
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 13:36:27 -0800 (PST)
+Received: by mail-pf1-x433.google.com with SMTP id m6so11958017pfb.0
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 13:36:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0tQ7MqopprIdRhb/IgvKRUjGQBe2LKpMrEFgj2d9jZg=;
+        b=M1k2UTfxuajNc/oXu0LY2P83Vd6nzF4vsNIzUWoBnmefSmqUYpjNgicnLsxLPpisLb
+         jPkY9vCm6EFryy8KQ1OzKez3Trva3tiqeOp197xzXqo94hWFlu9UwwpjxJwv/WMSC/+G
+         Qvh2gU2cvXsntxroGga6/4cJal+65h+gZdq697jW8ScV1cljBAMaAkJ2N94z8RxfLQ14
+         NAtLJwbhGJ4TKHuz4zUc7huMFbiah9SGAK5A2rhAOrEqP5GCQH8OFP0R7Dfnyf3zBcaX
+         GZIt6Wt64YchXsxJ/6ghFniaO/c+49GjJH3elxH4mHdREZZGQNDDtjbwizo7OdECLKJP
+         HQrQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=0tQ7MqopprIdRhb/IgvKRUjGQBe2LKpMrEFgj2d9jZg=;
+        b=dIW5VTNSmmVu+lUw1oQT0gwjho4i1E787jkwxBw3SfgAkFkW2xd6SkxjrRIeEv33L7
+         ce3tuF1pU5iFsCDotDSTUyHesus75Ix5UwGpJn4V0bjMY9jUo4YlZG4XrRhugmToDxvi
+         vG7IGkr2/y3AEguttkiLfkcWJGlZXUmMZ2PV9RdamshbLm/oONW2tKNW6QEWOxLLU/f+
+         TrS/yi/FL/SlvJloRnaEoMMFLryHsXimyBI66A37p3cjyoKQL4b6wRnBlcnlKfhGqyRt
+         nxxX8L7FRwThTrqU9CpZnXqGwv6KVQL2Ba/fyEvhGg3i29tLBKn4KQeGJhTqVegIVEG7
+         ghQw==
+X-Gm-Message-State: ACrzQf3ycCjahVtEotmUYi3R+UiWnFw8bj17aw5r4wPC34zH5zxfbweP
+        kVK1vwDDQrKHcPu/w+iIeA8=
+X-Google-Smtp-Source: AMsMyM7bTMxCsP9dOI+Bl1xuj1IaaaoIqlOYDL8utEB69BRcDrg0hci5JTHfuZuMGkulrILxqo1MmA==
+X-Received: by 2002:a65:41ca:0:b0:434:f92f:d711 with SMTP id b10-20020a6541ca000000b00434f92fd711mr45773572pgq.151.1667856986465;
+        Mon, 07 Nov 2022 13:36:26 -0800 (PST)
+Received: from localhost (fwdproxy-prn-117.fbsv.net. [2a03:2880:ff:75::face:b00c])
+        by smtp.gmail.com with ESMTPSA id d1-20020a170903230100b00178b9c997e5sm5446350plh.138.2022.11.07.13.36.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Nov 2022 13:36:25 -0800 (PST)
+From:   Nhat Pham <nphamcs@gmail.com>
+To:     senozhatsky@chromium.org
+Cc:     hannes@cmpxchg.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, minchan@kernel.org,
+        ngupta@vflare.org, akpm@linux-foundation.org, sjenning@redhat.com,
+        ddstreet@ieee.org, vitaly.wool@konsulko.com
+Subject: Re: [PATCH 4/5] zsmalloc: Add ops fields to zs_pool to store evict handlers
+Date:   Mon,  7 Nov 2022 13:36:25 -0800
+Message-Id: <20221107213625.939660-1-nphamcs@gmail.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <Y2Htmak6+7b+6pBv@google.com>
+References: <Y2Htmak6+7b+6pBv@google.com>
 MIME-Version: 1.0
-References: <20221103210650.2325784-1-sean.anderson@seco.com>
- <20221103210650.2325784-9-sean.anderson@seco.com> <20221107201010.GA1525628-robh@kernel.org>
- <20221107202223.ihdk4ubbqpro5w5y@skbuf> <7caf2d6a-3be9-4261-9e92-db55fe161f7e@seco.com>
-In-Reply-To: <7caf2d6a-3be9-4261-9e92-db55fe161f7e@seco.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Mon, 7 Nov 2022 15:36:16 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqKw=1iP6KUj=c6stgCMo7V6hGO9iB+MgixA5tiackeNnA@mail.gmail.com>
-Message-ID: <CAL_JsqKw=1iP6KUj=c6stgCMo7V6hGO9iB+MgixA5tiackeNnA@mail.gmail.com>
-Subject: Re: [PATCH net-next v2 08/11] of: property: Add device link support
- for PCS
-To:     Sean Anderson <sean.anderson@seco.com>
-Cc:     Vladimir Oltean <olteanv@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>, netdev@vger.kernel.org,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
-        Andrew Lunn <andrew@lunn.ch>,
-        Ioana Ciornei <ioana.ciornei@nxp.com>,
-        Madalin Bucur <madalin.bucur@nxp.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Saravana Kannan <saravanak@google.com>,
-        devicetree@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 7, 2022 at 2:50 PM Sean Anderson <sean.anderson@seco.com> wrote:
->
-> On 11/7/22 15:22, Vladimir Oltean wrote:
-> > On Mon, Nov 07, 2022 at 02:10:10PM -0600, Rob Herring wrote:
-> >> On Thu, Nov 03, 2022 at 05:06:47PM -0400, Sean Anderson wrote:
-> >> > This adds device link support for PCS devices. Both the recommended
-> >> > pcs-handle and the deprecated pcsphy-handle properties are supported.
-> >> > This should provide better probe ordering.
-> >> >
-> >> > Signed-off-by: Sean Anderson <sean.anderson@seco.com>
-> >> > ---
-> >> >
-> >> > (no changes since v1)
-> >> >
-> >> >  drivers/of/property.c | 4 ++++
-> >> >  1 file changed, 4 insertions(+)
-> >>
-> >> Seems like no dependency on the rest of the series, so I can take this
-> >> patch?
-> >
-> > Is fw_devlink well-behaved these days, so as to not break (forever defer)
-> > the probing of the device having the pcs-handle, if no driver probed on
-> > the referenced PCS? Because the latter is what will happen if no one
-> > picks up Sean's patches to probe PCS devices in the usual device model
-> > way, I think.
->
-> Last time [1], Saravana suggested to move this to the end of the series to
-> avoid such problems. FWIW, I just tried booting a LS1046A with the
-> following patches applied
->
-> 01/11 (compatibles) 05/11 (device) 08/11 (link) 09/11 (consumer)
-> =================== ============== ============ ================
-> Y                   N              Y            N
-> Y                   Y              Y            Y
-> Y                   Y              Y            N
-> N                   Y              Y            N
-> N                   N              Y            N
->
-> and all interfaces probed each time. So maybe it is safe to pick
-> this patch.
+Essentially, the zpool constructor allows us to set things up with a null
+struct zpool, zpool_ops, or zpool_ops->evict, which we have to handle.  A
+similar null-handling pattern can be observed in zbud (mm/zbud.c) and z3fold
+(mm/z3fold.c) - see zbud_zpool_evict and zbud_zpool_create for e.g.
 
-Maybe? Just take it with the rest of the series.
+In particular:
 
-Acked-by: Rob Herring <robh@kernel.org>
+1. pool->zpool_ops is the ops (containing the evict handler zpool_ops->evict)
+passed into the zpool constructor (zs_zpool_create)
+
+2. pool->ops/zs_zpool_ops (struct zs_ops) is a struct wrapping zs_zpool_evict,
+which itself is a wrapper for the zpool evict handler (pool->zpool_ops->evict).
+zs_zpool_evict also handles the case where zpool or zpool_ops is null, or
+zpool_ops->evict is not defined (i.e return -ENOENT).
+
+FWIW, I do think this is quite convoluted. In the long run, we might want to
+simplify this design, but for this patch series I think it is wise to err on
+the safe side and follow the other two allocators' design for consistency.
+
+That said, while staring at the code again, I found a bug - in the case
+pool->zpool_ops is null, pool->ops is undefined garbage. The v3 patch will fix
+that to follow zbud's pattern (pool->ops = NULL in this case).
