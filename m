@@ -2,61 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58BC061F98F
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 17:26:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B560A61F991
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 17:26:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232674AbiKGQ0B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 11:26:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51714 "EHLO
+        id S231894AbiKGQ0S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 11:26:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232243AbiKGQZr (ORCPT
+        with ESMTP id S232777AbiKGQZ5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 11:25:47 -0500
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::224])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EF3727B01;
-        Mon,  7 Nov 2022 08:22:17 -0800 (PST)
+        Mon, 7 Nov 2022 11:25:57 -0500
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF1D927CF2
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 08:22:25 -0800 (PST)
 Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id DCD9FE000D;
-        Mon,  7 Nov 2022 16:22:12 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id 592CC20014;
+        Mon,  7 Nov 2022 16:22:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1667838134;
+        t=1667838141;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=rjjELctFESp7irdpKdkiJYoito1nOsPFkddC5B+aubE=;
-        b=SdmdWDUYP4zm9smi9oF7/3BdmRNEEvLW9N713dXxVP4YZWbf7RhTSBGbP7dhmuZ+7DC/Ho
-        kmEOEnVaP+CYusyinFsU8fVSzKNAjTlGSdtcSo/RiPaAlfWfZ8lczxeGvnCOtE30P4d9tO
-        U1XMw+v4lY+wqNdjX/sMsT4V3KDG9vp1MGbZd/5AZ1tyTXsGMGj1Q/yK10qtFZcOlWfTgL
-        msj3oFIQC58YunfQmoOW26ReKIS+LPgJIsE/UZIBz0EB1cJ113z4CzSgm/zIrD2jtc4Z0Z
-        k5zFrdypQz65YRyV3YVDG21eq8G1rCbApzVqQGBqNhf7dh7wmt05GA+ErP1Ogg==
+        bh=n1voTN4LOSxnG5Yjl7R7hFiznO+MJNTPM5HgV+HO9Oc=;
+        b=SglMUE/Y6qtcDNFpdlirWQm77GeroELPQgBDBkzaJRJTEIZ6ZH2G9lbmTE6XchNstJvMAV
+        CtaD4o8VRma5ZaMZ1WDRhDMGCHf7+tn2M9CjEDt34d8EZfvBxG6kncFHPqKOx0dZP010Y0
+        2TzksIXCiJsxPGu34hwtwA4O3LfoO3qr8A7AX29F2cGSGr34bp7Y7HYSf/U6SFh4cFAtL/
+        HA+J5TKjzqFxXyhNBVjuwfdosWWJ3l/7zjiuWBUiL2g4RgKsCAYTyCGjTYChH8ST0btQq7
+        QPqlcVkZQcCm4Qb0s/XpOFtkt0w11/CNyHegNBmgOz4nRM/UdfB+I2uafRBUNA==
 From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     =?utf-8?b?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+To:     Arnd Bergmann <arnd@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Russell King <linux@armlinux.org.uk>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Lubomir Rintel <lkundrak@v3.sk>,
         Miquel Raynal <miquel.raynal@bootlin.com>,
         Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Mikhail Zhilkin <csharper2005@gmail.com>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        =?utf-8?b?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
-Subject: Re: [PATCH V3 1/2] dt-bindings: mtd: partitions: support marking rootfs partition
-Date:   Mon,  7 Nov 2022 17:22:12 +0100
-Message-Id: <20221107162212.49114-1-miquel.raynal@bootlin.com>
+        Vignesh Raghavendra <vigneshr@ti.com>
+Cc:     linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        linux-mtd@lists.infradead.org
+Subject: Re: [PATCH 06/11] mtd: remove lart flash driver
+Date:   Mon,  7 Nov 2022 17:22:19 +0100
+Message-Id: <20221107162219.49208-1-miquel.raynal@bootlin.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221022211318.32009-1-zajec5@gmail.com>
+In-Reply-To: <20221021155000.4108406-7-arnd@kernel.org>
 References: 
 MIME-Version: 1.0
 X-linux-mtd-patch-notification: thanks
-X-linux-mtd-patch-commit: b'2b9a31d762f0441ab87cb76524c005adf54d6719'
-Content-Type: text/plain; charset=UTF-8
+X-linux-mtd-patch-commit: b'a6c5f12b0df22574f8eb02b0159bc71ac66c1a64'
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
@@ -67,24 +60,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 2022-10-22 at 21:13:17 UTC, =?utf-8?b?UmFmYcWCIE1pxYJlY2tp?= wrote:
-> From: Rafał Miłecki <rafal@milecki.pl>
+On Fri, 2022-10-21 at 15:49:36 UTC, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
 > 
-> Linux needs to know what to use as root device. On embedded devices with
-> flash the only common way to specify that is cmdline & root= parameter.
+> The sa1100 lart platform was removed, so its flash driver is
+> no longer useful.
 > 
-> That solution works with U-Boot which is Linux & cmdline aware but isn't
-> available with all market bootloaders. Also that method is fragile:
-> 1. Requires specific probing order on multi-flash devices
-> 2. Uses hardcoded partitions indexes
-> 
-> A lot of devices use different partitioning methods. It may be
-> "fixed-partitions" or some dynamic partitioning (e.g. based on parts
-> table). For such cases allow "linux,rootfs" property to mark correct
-> flash partition.
-> 
-> Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
-> Reviewed-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
 Applied to https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git mtd/next, thanks.
 
