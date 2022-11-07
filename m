@@ -2,124 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8495A61E7D1
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 01:06:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0492E61E7EB
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 01:46:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230235AbiKGAGu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Nov 2022 19:06:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51146 "EHLO
+        id S230211AbiKGAqZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Nov 2022 19:46:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230184AbiKGAGs (ORCPT
+        with ESMTP id S229782AbiKGAqX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Nov 2022 19:06:48 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9D49BE39;
-        Sun,  6 Nov 2022 16:06:47 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4N5BNg6v9Cz4xDK;
-        Mon,  7 Nov 2022 11:06:43 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1667779606;
-        bh=PEtFVE11aUocVEWH3BRg2hxUlPqEtbP6pNHSK4p3WHg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=ScVpQ5QGU5/oOCeqNiAlmxRs+0O1+WBCdfkk+kUsu8Lr2oaP/D8T/dfznelRDbljp
-         vrG2UjZTUnK4653vqrl51kSihLWFUz6UPq2r+NA9HaaVojWFSjmefAYboVZ3ja4lvr
-         fxMp2eMO58LSv30Q6cYZ/dbjD6Oj0KFN9RZwIpFYQDXRPH06M54OffSoqaYCKi2ulA
-         5bbgTdjKKKJXJP5LPldGAplZ0yKHPvwAhDGiQcgTImZX2ZX+mQLo9EYXZlNaqUp6P/
-         y1idlrBie29pi/mf8TudAtivkNcoRE5NntrhkHvYXMbjeg96QRdaZiPGbPyyT151AR
-         yrKI+3BlLm5Ag==
-Date:   Mon, 7 Nov 2022 11:06:42 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>,
-        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
-        Nick Piggin <npiggin@gmail.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Jann Horn <jannh@google.com>,
-        John Hubbard <jhubbard@nvidia.com>, X86 ML <x86@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        kernel list <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Joerg Roedel <jroedel@suse.de>,
-        Uros Bizjak <ubizjak@gmail.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        linux-arch <linux-arch@vger.kernel.org>
-Subject: Re: mm: delay rmap removal until after TLB flush
-Message-ID: <20221107110642.0f7cf886@canb.auug.org.au>
-In-Reply-To: <20221106151416.bc2f942f237de31b6c577e70@linux-foundation.org>
-References: <CAHk-=wjzngbbwHw4nAsqo_RpyOtUDk5G+Wus=O0w0A6goHvBWA@mail.gmail.com>
-        <CAHk-=wijU_YHSZq5N7vYK+qHPX0aPkaePaGOyWk4aqMvvSXxJA@mail.gmail.com>
-        <140B437E-B994-45B7-8DAC-E9B66885BEEF@gmail.com>
-        <CAHk-=wjX_P78xoNcGDTjhkgffs-Bhzcwp-mdsE1maeF57Sh0MA@mail.gmail.com>
-        <CAHk-=wio=UKK9fX4z+0CnyuZG7L+U9OB7t7Dcrg4FuFHpdSsfw@mail.gmail.com>
-        <CAHk-=wgz0QQd6KaRYQ8viwkZBt4xDGuZTFiTB8ifg7E3F2FxHg@mail.gmail.com>
-        <CAHk-=wiwt4LC-VmqvYrphraF0=yQV=CQimDCb0XhtXwk8oKCCA@mail.gmail.com>
-        <Y1+XCALog8bW7Hgl@hirez.programming.kicks-ass.net>
-        <CAHk-=wjnvPA7mi-E3jVEfCWXCNJNZEUjm6XODbbzGOh9c8mhgw@mail.gmail.com>
-        <CAHk-=wjjXQP7PTEXO4R76WPy1zfQad_DLKw1GKU_4yWW1N4n7w@mail.gmail.com>
-        <Y2SyJuohLFLqIhlZ@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
-        <CAHk-=wjzp65=-QE1dg8KfqG-tVHiT+yAfHXGx9sro=8yOceELg@mail.gmail.com>
-        <8a1e97c9-bd5-7473-6da8-2aa75198fbe8@google.com>
-        <CAHk-=wgvx5sDaOfCTMkVpZ9+-iFCeh5AOML5aJG1EiR0+e1aBQ@mail.gmail.com>
-        <20221106151416.bc2f942f237de31b6c577e70@linux-foundation.org>
+        Sun, 6 Nov 2022 19:46:23 -0500
+Received: from esa7.hc1455-7.c3s2.iphmx.com (esa7.hc1455-7.c3s2.iphmx.com [139.138.61.252])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A9F1BF42
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Nov 2022 16:46:21 -0800 (PST)
+X-IronPort-AV: E=McAfee;i="6500,9779,10523"; a="73766662"
+X-IronPort-AV: E=Sophos;i="5.96,143,1665414000"; 
+   d="scan'208";a="73766662"
+Received: from unknown (HELO yto-r3.gw.nic.fujitsu.com) ([218.44.52.219])
+  by esa7.hc1455-7.c3s2.iphmx.com with ESMTP; 07 Nov 2022 09:46:18 +0900
+Received: from yto-m3.gw.nic.fujitsu.com (yto-nat-yto-m3.gw.nic.fujitsu.com [192.168.83.66])
+        by yto-r3.gw.nic.fujitsu.com (Postfix) with ESMTP id 05CCDE8524
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 09:46:18 +0900 (JST)
+Received: from m3003.s.css.fujitsu.com (m3003.s.css.fujitsu.com [10.128.233.114])
+        by yto-m3.gw.nic.fujitsu.com (Postfix) with ESMTP id 51A05D39C2
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 09:46:17 +0900 (JST)
+Received: from localhost.localdomain (unknown [10.125.5.220])
+        by m3003.s.css.fujitsu.com (Postfix) with ESMTP id 34C5E2026135;
+        Mon,  7 Nov 2022 09:46:17 +0900 (JST)
+From:   Rei Yamamoto <yamamoto.rei@jp.fujitsu.com>
+To:     tglx@linutronix.de
+Cc:     geert+renesas@glider.be, linux-kernel@vger.kernel.org,
+        yamamoto.rei@jp.fujitsu.com
+Subject: Re: [PATCH] hrtimer: CPU and entry_time is added to a warning message in hrtimer_interrupt()
+Date:   Mon,  7 Nov 2022 09:20:44 +0900
+Message-Id: <20221107002044.95213-1-yamamoto.rei@jp.fujitsu.com>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20220909052211.2415-1-yamamoto.rei@jp.fujitsu.com>
+References: <20220909052211.2415-1-yamamoto.rei@jp.fujitsu.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/bAuVKIBtYnHc4hWVhD/GQqd";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/bAuVKIBtYnHc4hWVhD/GQqd
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi, Thomas Gleixner.
 
-Hi all,
-
-On Sun, 6 Nov 2022 15:14:16 -0800 Andrew Morton <akpm@linux-foundation.org>=
- wrote:
+On Fri,  9 Sep 2022 14:22:11, Rei Yamamoto wrote:
+> On Fri, 24 Jun 2022 16:00:11, Rei Yamamoto wrote:
+>> A warning message in hrtimer_interrupt() is output up to 5 times
+>> by default, and CPU and entry_time are also shown.
+>> These changes are helpful that the function spending a lot of time is clear
+>> by using ftrace:
+>> -----
+>> dmesg
+>> :
+>> [ 1462.836971] start repro_hrtimer_interrupt
+>> [ 1462.836976] test_handler = test_handler [repro] 0xffff9788f7bb3048
+>> :
+>> [ 1462.879117] hrtimer: CPU 7, entry_time = 1462807264840, interrupt took
+>> 60048886 ns             ^^^^^               ^^^^^^^^^^^^^
+>>
+>> cat /sys/kernel/debug/tracing/trace
+>> :
+>>           <idle>-0       [007] d.h1.  1462.838075: hrtimer_expire_entry:
+>>                          ^^^^^
+>> hrtimer=0000000041fcee42 function=test_handler [repro] now=1462807264840
+>>                                                            ^^^^^^^^^^^^^
+>> -----
+>>
+>> Signed-off-by: Rei Yamamoto <yamamoto.rei@jp.fujitsu.com>
+>> ---
+>>  include/linux/hrtimer.h |  1 +
+>>  kernel/sysctl.c         | 10 ++++++++++
+>>  kernel/time/hrtimer.c   | 16 +++++++++++++++-
+>>  3 files changed, 26 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/include/linux/hrtimer.h b/include/linux/hrtimer.h
+>> index 0ee140176f10..1a6e03b3015b 100644
+>> --- a/include/linux/hrtimer.h
+>> +++ b/include/linux/hrtimer.h
+>> @@ -317,6 +317,7 @@ static inline int hrtimer_is_hres_active(struct hrtimer *timer)
+>>  struct clock_event_device;
+>>
+>>  extern void hrtimer_interrupt(struct clock_event_device *dev);
+>> +extern int sysctl_hrtimer_interrupt_warnings;
+>>
+>>  extern unsigned int hrtimer_resolution;
+>>
+>> diff --git a/kernel/sysctl.c b/kernel/sysctl.c
+>> index e52b6e372c60..b0420d60cec9 100644
+>> --- a/kernel/sysctl.c
+>> +++ b/kernel/sysctl.c
+>> @@ -64,6 +64,7 @@
+>>  #include <linux/mount.h>
+>>  #include <linux/userfaultfd_k.h>
+>>  #include <linux/pid.h>
+>> +#include <linux/hrtimer.h>
+>>
+>>  #include "../lib/kstrtox.h"
+>>
+>> @@ -2038,6 +2039,15 @@ static struct ctl_table kern_table[] = {
+>>               .extra1         = SYSCTL_ONE,
+>>               .extra2         = SYSCTL_INT_MAX,
+>>       },
+>> +#endif
+>> +#ifdef CONFIG_HIGH_RES_TIMERS
+>> +     {
+>> +             .procname       = "hrtimer_interrupt_warnings",
+>> +             .data           = &sysctl_hrtimer_interrupt_warnings,
+>> +             .maxlen         = sizeof(int),
+>> +             .mode           = 0644,
+>> +             .proc_handler   = proc_dointvec,
+>> +     },
+>>  #endif
+>>       { }
+>>  };
+>> diff --git a/kernel/time/hrtimer.c b/kernel/time/hrtimer.c
+>> index 0ea8702eb516..19adcbcf92e4 100644
+>> --- a/kernel/time/hrtimer.c
+>> +++ b/kernel/time/hrtimer.c
+>> @@ -1773,6 +1773,7 @@ static __latent_entropy void hrtimer_run_softirq(struct softirq_action *h)
+>>  }
+>>
+>>  #ifdef CONFIG_HIGH_RES_TIMERS
+>> +int sysctl_hrtimer_interrupt_warnings = 5;
+>>
+>>  /*
+>>   * High resolution timer interrupt
+>> @@ -1866,7 +1867,20 @@ void hrtimer_interrupt(struct clock_event_device *dev)
+>>       else
+>>               expires_next = ktime_add(now, delta);
+>>       tick_program_event(expires_next, 1);
+>> -     pr_warn_once("hrtimer: interrupt took %llu ns\n", ktime_to_ns(delta));
+>> +
+>> +     /*
+>> +      * If a message is output many times, the delayed funciton
+>> +      * may be identified by resetting sysctl_hrtimer_interrupt_warnings
+>> +      * and enabling ftrace.
+>> +      */
+>> +     if (sysctl_hrtimer_interrupt_warnings) {
+>> +             if (sysctl_hrtimer_interrupt_warnings > 0)
+>> +                     sysctl_hrtimer_interrupt_warnings--;
+>> +             pr_warn("hrtimer: CPU %d, entry_time = %llu, "
+>> +                             "interrupt took %llu ns\n",
+>> +                             cpu_base->cpu, entry_time,
+>> +                             ktime_to_ns(delta));
+>> +     }
+>>  }
+>>
+>>  /* called with interrupts disabled */
 >
-> Yes, I've removed both serieses and shall push the tree out within half
-> an hour from now.
+> Could you pick this patch up?
 
-And I have picked up the new version for today's linux-next.  Thanks all.
+Do you have any comments?
 
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/bAuVKIBtYnHc4hWVhD/GQqd
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNoTBIACgkQAVBC80lX
-0GzqCwgAkzgOwwKSyOvOOPT+9Jvf8ki09kLVKQ795ok8w5kz3sGzCoOMyKSUPUGo
-+isMdjE7ctVDXyDyNt38WrkoepLeuiO9G9r0xVLvD7mIMAewNHf8x6oPxUB38fA+
-O4wI5ewtQGmWugOj4uGcvqXds9r8k93ByX+9gIxcwbdCQXVkVRwSkyfxabH40fTW
-847Kdv6C/giBasAxPyIRBphdDa1m9QUR1xcVI+lROSZ0ouuXzU5lgyor/uk/Gwa2
-QQC1zL58LzibCUU1HFmY2SkRSLfRWEB+h++iCv5NvfSNW7ZKJF4dcrPPICH598KN
-biLKRWXv9sH8oy6X2RX/369eWh9A9A==
-=adI7
------END PGP SIGNATURE-----
-
---Sig_/bAuVKIBtYnHc4hWVhD/GQqd--
+Thanks,
+Rei
