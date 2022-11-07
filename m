@@ -2,129 +2,383 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7D4B61FF21
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 21:07:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E82DD61FF24
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 21:07:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232141AbiKGUHK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 15:07:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46198 "EHLO
+        id S232328AbiKGUHT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 15:07:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232133AbiKGUHI (ORCPT
+        with ESMTP id S232133AbiKGUHN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 15:07:08 -0500
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B21D321829
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 12:07:06 -0800 (PST)
-Received: by mail-io1-xd36.google.com with SMTP id n191so9798311iod.13
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 12:07:06 -0800 (PST)
+        Mon, 7 Nov 2022 15:07:13 -0500
+Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A0EB2714F
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 12:07:11 -0800 (PST)
+Received: by mail-qt1-x829.google.com with SMTP id h21so7563550qtu.2
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 12:07:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=8hV5ZSh2seubDdRrNeUCchubOhAcqvi4PJAb4HdDdB0=;
-        b=XFhq0Xs1jn9mlb/AMwxtrT0VkUmekAjemvzCWhPsc1Ud0+riFpyDUOqaiMwrJeA3Z6
-         YwvXvpSGLpp5GbahQ7vv81j2ecpKUXWI0A0BSqH60uAjtpy68h6e/ejR+/LIKk93mcTa
-         jO+VPdm7g7f7628BIvfrcFqI2yT5xKpz+qHCM=
+        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=QGhIjGOM7LH5cBL9V+b1Hgf76N1SYrX+psA/lfoLx1k=;
+        b=3vfuIqEk6ZZfYKZPgvFEh0TKpQwxwbWGlf3w1SXLpmwnTr9Q3QohuCMGikajtiJRsV
+         Rqn5E2cBxwp12teblefpCX8tVIBBriP1i5pj548hy0bbcCtAWud3iCkLJMp+CL32nLSP
+         AdumUa0126gxmhGFrJmW3KCUkdjx9UZzo/AUj6gC1CnKdmGQygYG+C4c//sLR8maIdim
+         eEtOr6Y+9gl33xQNw6tvOzO8ydyH05g5x3roYQPak14YOfFr0eRmErSsgFmvmCLwLztm
+         8WLNcIi/fFoNpT8yk5XWu5RoIeIlnqTxpuIdwm5pv48JXX3xUpiwoOlh8opbI5GJe8Kd
+         Mklg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8hV5ZSh2seubDdRrNeUCchubOhAcqvi4PJAb4HdDdB0=;
-        b=QLZZAS0Qe+9jOoT14tNa7Y/CrOPmo7/nOJv8Ses2BkbHMD86rfI8iLgq9CZUedgYT8
-         zinevYMxf5iIF5lL2Q/tnr2vygRMCs2zsH+1SAOUWo78jet2/p5X3T3qPafvB0P9ftj8
-         fXbzMoguP8UMjAQJJxXoWjSJoSRvdak8XPrAzZIUaU6RmkCF29Y8ZLPvtWJDOI1aF3aH
-         kHgpzbIo6vnigGOgZKO4ikuUuiDv+ANwp7OY/Ay5rnZGVe4DIHtNDR0rnccqAoEVU2LP
-         /G1B11dstKdcSdtSeJslshvgSG1k7bscxc3E3cDDuVDSJc4Py5dRpC09SBufjXfFJebQ
-         f8EQ==
-X-Gm-Message-State: ACrzQf1Eu8mnf69ydHwNs0PRFvy6nGBPMdcS6uTg+HySLxW0V09M64nQ
-        71Z3HCWidd1TTAiTFl4Ute5kpnQov2Mzj4GM1uSX1w==
-X-Google-Smtp-Source: AMsMyM766uk95+uCyh+ZkJmMUM61FCimR1/A3TW5Hx+jV3LnaGnqApC2gedZ+O3jgliaPdRUfL3HL1UMwKMghdeC55E=
-X-Received: by 2002:a05:6638:e8a:b0:374:f6c5:cff6 with SMTP id
- p10-20020a0566380e8a00b00374f6c5cff6mr31358868jas.187.1667851626098; Mon, 07
- Nov 2022 12:07:06 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QGhIjGOM7LH5cBL9V+b1Hgf76N1SYrX+psA/lfoLx1k=;
+        b=4+4DOqdi1F8LknOdsjXJfj3YJg7C6sTLiRv+FqRzjvCYMuzHA5QCwR03h9tWcNc155
+         NVhGehWSfr8vDvI8LXxaGLi/vyucyyTb5FXUEgYAmlCidlFUK4tCFUyiykX30NU3RQUA
+         HErR3znyeV5VDq+zoe5MLv22EAw0sXZ98/c/HaELBBnbzVX2NjlXP7gM4Wo5kZZsW2g5
+         rx1hyzGcFsqF95D8LzsVy+YVdJru2+fnHhgNToGESx2LX7iZyGGGTbFHED9uJeXI0feG
+         zhHW1hNXyVL4y3CebURzNm1J1pICHXEurYKrZXi63c0Mt3+f/qW5rJgL1scY24PUvIBZ
+         Y5rA==
+X-Gm-Message-State: ACrzQf21sXcJvZvgetZq6m/PqWEBaTDAqJRxLKxp0SxxH7UsdYP2W1Ih
+        QzTnyy2wFk7r7+p66jSRw1Kzbw==
+X-Google-Smtp-Source: AMsMyM44eIMhZRpBYWP10QIsv5DCqWT2z0tjrH+JdllBvBGdHc89NcdEhaQwU7qM53N0sj/fKX4BQw==
+X-Received: by 2002:a05:622a:1ba5:b0:3a4:ffd9:22d8 with SMTP id bp37-20020a05622a1ba500b003a4ffd922d8mr40753206qtb.356.1667851630723;
+        Mon, 07 Nov 2022 12:07:10 -0800 (PST)
+Received: from localhost ([2620:10d:c091:480::25f1])
+        by smtp.gmail.com with ESMTPSA id u12-20020a05620a454c00b006e16dcf99c8sm7656628qkp.71.2022.11.07.12.07.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Nov 2022 12:07:09 -0800 (PST)
+Date:   Mon, 7 Nov 2022 15:07:13 -0500
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Hugh Dickins <hughd@google.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>,
+        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
+        Nick Piggin <npiggin@gmail.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Jann Horn <jannh@google.com>,
+        John Hubbard <jhubbard@nvidia.com>, X86 ML <x86@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        kernel list <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        Uros Bizjak <ubizjak@gmail.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        linux-arch <linux-arch@vger.kernel.org>
+Subject: Re: mm: delay rmap removal until after TLB flush
+Message-ID: <Y2llcRiDLHc2kg/N@cmpxchg.org>
+References: <CAHk-=wjX_P78xoNcGDTjhkgffs-Bhzcwp-mdsE1maeF57Sh0MA@mail.gmail.com>
+ <CAHk-=wio=UKK9fX4z+0CnyuZG7L+U9OB7t7Dcrg4FuFHpdSsfw@mail.gmail.com>
+ <CAHk-=wgz0QQd6KaRYQ8viwkZBt4xDGuZTFiTB8ifg7E3F2FxHg@mail.gmail.com>
+ <CAHk-=wiwt4LC-VmqvYrphraF0=yQV=CQimDCb0XhtXwk8oKCCA@mail.gmail.com>
+ <Y1+XCALog8bW7Hgl@hirez.programming.kicks-ass.net>
+ <CAHk-=wjnvPA7mi-E3jVEfCWXCNJNZEUjm6XODbbzGOh9c8mhgw@mail.gmail.com>
+ <CAHk-=wjjXQP7PTEXO4R76WPy1zfQad_DLKw1GKU_4yWW1N4n7w@mail.gmail.com>
+ <Y2SyJuohLFLqIhlZ@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
+ <CAHk-=wjzp65=-QE1dg8KfqG-tVHiT+yAfHXGx9sro=8yOceELg@mail.gmail.com>
+ <8a1e97c9-bd5-7473-6da8-2aa75198fbe8@google.com>
 MIME-Version: 1.0
-References: <20221027104406.549734-1-daniel.vetter@ffwll.ch> <87tu3n6cb2.fsf@meer.lwn.net>
-In-Reply-To: <87tu3n6cb2.fsf@meer.lwn.net>
-From:   Daniel Vetter <daniel.vetter@ffwll.ch>
-Date:   Mon, 7 Nov 2022 21:06:54 +0100
-Message-ID: <CAKMK7uHXz7kteQ_sckTQx=E9cWSqGXS_Y0_pLjX2CRcApOvKRQ@mail.gmail.com>
-Subject: Re: [PATCH] docs/sphinx: More depth in the rtd sidebar toc
-To:     Jonathan Corbet <corbet@lwn.net>
-Cc:     DRI Development <dri-devel@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Daniel Vetter <daniel.vetter@intel.com>,
-        linux-doc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8a1e97c9-bd5-7473-6da8-2aa75198fbe8@google.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 28 Oct 2022 at 20:19, Jonathan Corbet <corbet@lwn.net> wrote:
->
-> Daniel Vetter <daniel.vetter@ffwll.ch> writes:
->
-> > We love to nest our documenation for good structure, but that means
-> > the table of contents needs to keep up or you can't navigate them.
-> >
-> > Realized this trying to find the drm property documentation, which
-> > with some shuffling around disappeared. Why I didn't realize we can do
-> > this earlier, no idea.
-> >
-> > Since the relevant parts of the toc are only loaded if you're in the
-> > right .html file there's no harm in going all the way to unlimited.
-> >
-> > Note that this has no impact on the classic theme (which doesn't have
-> > the sidebar) nor on the various :toctree: rendered inline in the
-> > output.
-> >
-> > Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
-> > Cc: Jonathan Corbet <corbet@lwn.net>
-> > Cc: linux-doc@vger.kernel.org
-> > ---
-> >  Documentation/conf.py | 4 ++++
-> >  1 file changed, 4 insertions(+)
-> >
-> > diff --git a/Documentation/conf.py b/Documentation/conf.py
-> > index 934727e23e0e..5dc141c66726 100644
-> > --- a/Documentation/conf.py
-> > +++ b/Documentation/conf.py
-> > @@ -240,6 +240,10 @@ if html_theme == 'sphinx_rtd_theme' or html_theme == 'sphinx_rtd_dark_mode':
-> >                  # Add color-specific RTD normal mode
-> >                  html_css_files.append('theme_rtd_colors.css')
-> >
-> > +        html_theme_options = {
-> > +            'navigation_depth': -1,
-> > +        }
-> > +
-> >      except ImportError:
-> >          html_theme = 'classic'
->
-> So this patch isn't against docs-next, and applies to the RTD theme,
-> which is no longer the default.  I have no objection to it, but have you
-> looked at how your docs come out with the alabaster theme?
+Hello,
 
-[sorry took a bit longer to get back to this]
+On Sun, Nov 06, 2022 at 01:06:19PM -0800, Hugh Dickins wrote:
+> lock_page_memcg (uncertain)
+> ---------------------------
+> Johannes, please help! Linus has got quite upset by lock_page_memcg(),
+> its calls from mm/rmap.c anyway, and most particularly by the way
+> in which it is called at the start of page_remove_rmap(), before
+> anyone's critical atomic_add_negative(), yet its use is to guarantee
+> the stability of page memcg while doing the stats updates, done only
+> when atomic_add_negative() says so.
 
-Hm looks pretty, but more in a print style than using it dynamically,
-you can't really click through the sidebar toc at all to quickly find
-something, and if you're wrong, navigate up a few levels again. It's
-just the toc for exactly the local document, nothing else at all. rtd
-theme always gives you the full toc all the way up, and if you have
-epic patience could actually give you the full toc on every document
-(but that's probably not a good idea for the kernel). Do you need me
-to send the rebased version or can you smash this one in?
+As you mentioned, the pte lock historically wasn't always taken on the
+move side. And so the reason lock_page_memcg() covers the mapcount
+update is that move_account() needs to atomically see either a) the
+page is mapped and counted, or b) unmapped and uncounted. If we lock
+after mapcountdec, move_account() could miss pending updates that need
+transferred, and it would break the scheme breaks thusly:
 
-btw on today's linux-next the sphinx.rst page isn't updated with the
-new default theme choice of alabaster. That seems to have been
-forgotten.
--Daniel
+memcg1->nr_mapped = 1
+memcg2->nr_mapped = 0
+
+page_remove_rmap:                              mem_cgroup_move_account():
+  if atomic_add_negative(page->mapcount):
+                                                 lock_page_memcg()
+                                                 if page->mapcount: // NOT TAKEN
+                                                   memcg1->nr_mapped--
+                                                   memcg2->nr_mapped++
+                                                 page->memcg = memcg2
+                                                 unlock_page_memcg()
+    lock_page_memcg()
+    page->memcg->nr_mapped-- // UNDERFLOW memcg2->nr_mapped
+    unlock_page_memcg()
+
+> I do have one relevant insight on this.  It (or its antecedents under
+> other names) date from the days when we did "reparenting" of memcg
+> charges from an LRU: and in those days the lock_page_memcg() before
+> mapcount adjustment was vital, to pair with the uses of folio_mapped()
+> or page_mapped() in mem_cgroup_move_account() - those "mapped" checks
+> are precisely around the stats which the rmap functions affect.
+> 
+> But nowadays mem_cgroup_move_account() is only called, with page table
+> lock held, on matching pages found in a task's page table: so its
+> "mapped" checks are redundant - I've sometimes thought in the past of
+> removing them, but held back, because I always have the notion (not
+> hope!) that "reparenting" may one day be brought back from the grave.
+> I'm too out of touch with memcg to know where that notion stands today.
+>
+> I've gone through a multiverse of opinions on those lock_page_memcg()s
+> in the last day: I currently believe that Linus is right, that the
+> lock_page_memcg()s could and should be moved just before the stats
+> updates.  But I am not 100% certain of that - is there still some
+> reason why it's important that the page memcg at the instant of the
+> critical mapcount transition be kept unchanged until the stats are
+> updated?  I've tried running scenarios through my mind but given up.
+
+Okay, I think there are two options.
+
+- If we don't want to codify the pte lock requirement on the move
+  side, then moving the lock_page_memcg() like that would break the
+  locking scheme, as per above.
+
+- If we DO want to codify the pte lock requirement, we should just
+  remove the lock_page_memcg() altogether, as it's fully redundant.
+
+I'm leaning toward the second option. If somebody brings back
+reparenting they can bring the lock back along with it.
+
+[ If it's even still necessary by then.
+
+  It's conceivable reparenting is brought back only for cgroup2, where
+  the race wouldn't matter because of the hierarchical stats. The
+  reparenting side wouldn't have to move page state to the parent -
+  it's already there. And whether rmap would see the dying child or
+  the parent doesn't matter much either: the parent will see the
+  update anyway, directly or recursively, and we likely don't care to
+  balance the books on a dying cgroup.
+
+  It's then just a matter of lifetime - which should be guaranteed
+  also, as long as the pte lock prevents an RCU quiescent state. ]
+
+So how about something like below?
+
+UNTESTED, just for illustration. This is cgroup1 code, which I haven't
+looked at too closely in a while. If you can't spot an immediate hole
+in it, I'd go ahead and test it and send a proper patch.
+
+---
+From 88a32b1b5737630fb981114f6333d8fd057bd8e9 Mon Sep 17 00:00:00 2001
+From: Johannes Weiner <hannes@cmpxchg.org>
+Date: Mon, 7 Nov 2022 12:05:09 -0500
+Subject: [PATCH] mm: remove lock_page_memcg() from rmap
+
+rmap changes (mapping and unmapping) of a page currently take
+lock_page_memcg() to serialize 1) update of the mapcount and the
+cgroup mapped counter with 2) cgroup moving the page and updating the
+old cgroup and the new cgroup counters based on page_mapped().
+
+Before b2052564e66d ("mm: memcontrol: continue cache reclaim from
+offlined groups"), we used to reassign all pages that could be found
+on a cgroup's LRU list on deletion - something that rmap didn't
+naturally serialize against. Since that commit, however, the only
+pages that get moved are those mapped into page tables of a task
+that's being migrated. In that case, the pte lock is always held (and
+we know the page is mapped), which keeps rmap changes at bay already.
+
+The additional lock_page_memcg() by rmap is redundant. Remove it.
+
+NOT-Signed-off-by: Johannes Weiner <hannes@cmpxchg.org>
+---
+ mm/memcontrol.c | 27 ++++++++++++---------------
+ mm/rmap.c       | 30 ++++++++++++------------------
+ 2 files changed, 24 insertions(+), 33 deletions(-)
+
+diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+index 2d8549ae1b30..f7716e9038e9 100644
+--- a/mm/memcontrol.c
++++ b/mm/memcontrol.c
+@@ -5666,7 +5666,10 @@ static struct page *mc_handle_file_pte(struct vm_area_struct *vma,
+  * @from: mem_cgroup which the page is moved from.
+  * @to:	mem_cgroup which the page is moved to. @from != @to.
+  *
+- * The caller must make sure the page is not on LRU (isolate_page() is useful.)
++ * This function acquires folio_lock() and folio_lock_memcg(). The
++ * caller must exclude all other possible ways of accessing
++ * page->memcg, such as LRU isolation (to lock out isolation) and
++ * having the page mapped and pte-locked (to lock out rmap).
+  *
+  * This function doesn't do "charge" to new cgroup and doesn't do "uncharge"
+  * from old cgroup.
+@@ -5685,6 +5688,7 @@ static int mem_cgroup_move_account(struct page *page,
+ 	VM_BUG_ON(from == to);
+ 	VM_BUG_ON_FOLIO(folio_test_lru(folio), folio);
+ 	VM_BUG_ON(compound && !folio_test_large(folio));
++	VM_WARN_ON_ONCE(!folio_mapped(folio));
+ 
+ 	/*
+ 	 * Prevent mem_cgroup_migrate() from looking at
+@@ -5705,30 +5709,23 @@ static int mem_cgroup_move_account(struct page *page,
+ 	folio_memcg_lock(folio);
+ 
+ 	if (folio_test_anon(folio)) {
+-		if (folio_mapped(folio)) {
+-			__mod_lruvec_state(from_vec, NR_ANON_MAPPED, -nr_pages);
+-			__mod_lruvec_state(to_vec, NR_ANON_MAPPED, nr_pages);
+-			if (folio_test_transhuge(folio)) {
+-				__mod_lruvec_state(from_vec, NR_ANON_THPS,
+-						   -nr_pages);
+-				__mod_lruvec_state(to_vec, NR_ANON_THPS,
+-						   nr_pages);
+-			}
++		__mod_lruvec_state(from_vec, NR_ANON_MAPPED, -nr_pages);
++		__mod_lruvec_state(to_vec, NR_ANON_MAPPED, nr_pages);
++		if (folio_test_transhuge(folio)) {
++			__mod_lruvec_state(from_vec, NR_ANON_THPS, -nr_pages);
++			__mod_lruvec_state(to_vec, NR_ANON_THPS, nr_pages);
+ 		}
+ 	} else {
+ 		__mod_lruvec_state(from_vec, NR_FILE_PAGES, -nr_pages);
+ 		__mod_lruvec_state(to_vec, NR_FILE_PAGES, nr_pages);
++		__mod_lruvec_state(from_vec, NR_FILE_MAPPED, -nr_pages);
++		__mod_lruvec_state(to_vec, NR_FILE_MAPPED, nr_pages);
+ 
+ 		if (folio_test_swapbacked(folio)) {
+ 			__mod_lruvec_state(from_vec, NR_SHMEM, -nr_pages);
+ 			__mod_lruvec_state(to_vec, NR_SHMEM, nr_pages);
+ 		}
+ 
+-		if (folio_mapped(folio)) {
+-			__mod_lruvec_state(from_vec, NR_FILE_MAPPED, -nr_pages);
+-			__mod_lruvec_state(to_vec, NR_FILE_MAPPED, nr_pages);
+-		}
+-
+ 		if (folio_test_dirty(folio)) {
+ 			struct address_space *mapping = folio_mapping(folio);
+ 
+diff --git a/mm/rmap.c b/mm/rmap.c
+index 2ec925e5fa6a..60c31375f274 100644
+--- a/mm/rmap.c
++++ b/mm/rmap.c
+@@ -1197,11 +1197,6 @@ void page_add_anon_rmap(struct page *page,
+ 	bool compound = flags & RMAP_COMPOUND;
+ 	bool first;
+ 
+-	if (unlikely(PageKsm(page)))
+-		lock_page_memcg(page);
+-	else
+-		VM_BUG_ON_PAGE(!PageLocked(page), page);
+-
+ 	if (compound) {
+ 		atomic_t *mapcount;
+ 		VM_BUG_ON_PAGE(!PageLocked(page), page);
+@@ -1217,19 +1212,19 @@ void page_add_anon_rmap(struct page *page,
+ 	if (first) {
+ 		int nr = compound ? thp_nr_pages(page) : 1;
+ 		/*
+-		 * We use the irq-unsafe __{inc|mod}_zone_page_stat because
+-		 * these counters are not modified in interrupt context, and
+-		 * pte lock(a spinlock) is held, which implies preemption
+-		 * disabled.
++		 * We use the irq-unsafe __{inc|mod}_zone_page_stat
++		 * because these counters are not modified in
++		 * interrupt context, and pte lock(a spinlock) is
++		 * held, which implies preemption disabled.
++		 *
++		 * The pte lock also stabilizes page->memcg wrt
++		 * mem_cgroup_move_account().
+ 		 */
+ 		if (compound)
+ 			__mod_lruvec_page_state(page, NR_ANON_THPS, nr);
+ 		__mod_lruvec_page_state(page, NR_ANON_MAPPED, nr);
+ 	}
+ 
+-	if (unlikely(PageKsm(page)))
+-		unlock_page_memcg(page);
+-
+ 	/* address might be in next vma when migration races vma_adjust */
+ 	else if (first)
+ 		__page_set_anon_rmap(page, vma, address,
+@@ -1290,7 +1285,6 @@ void page_add_file_rmap(struct page *page,
+ 	int i, nr = 0;
+ 
+ 	VM_BUG_ON_PAGE(compound && !PageTransHuge(page), page);
+-	lock_page_memcg(page);
+ 	if (compound && PageTransHuge(page)) {
+ 		int nr_pages = thp_nr_pages(page);
+ 
+@@ -1311,6 +1305,7 @@ void page_add_file_rmap(struct page *page,
+ 		if (nr == nr_pages && PageDoubleMap(page))
+ 			ClearPageDoubleMap(page);
+ 
++		/* The pte lock stabilizes page->memcg */
+ 		if (PageSwapBacked(page))
+ 			__mod_lruvec_page_state(page, NR_SHMEM_PMDMAPPED,
+ 						nr_pages);
+@@ -1328,7 +1323,6 @@ void page_add_file_rmap(struct page *page,
+ out:
+ 	if (nr)
+ 		__mod_lruvec_page_state(page, NR_FILE_MAPPED, nr);
+-	unlock_page_memcg(page);
+ 
+ 	mlock_vma_page(page, vma, compound);
+ }
+@@ -1356,6 +1350,7 @@ static void page_remove_file_rmap(struct page *page, bool compound)
+ 		}
+ 		if (!atomic_add_negative(-1, compound_mapcount_ptr(page)))
+ 			goto out;
++		/* The pte lock stabilizes page->memcg */
+ 		if (PageSwapBacked(page))
+ 			__mod_lruvec_page_state(page, NR_SHMEM_PMDMAPPED,
+ 						-nr_pages);
+@@ -1423,8 +1418,6 @@ static void page_remove_anon_compound_rmap(struct page *page)
+ void page_remove_rmap(struct page *page,
+ 	struct vm_area_struct *vma, bool compound)
+ {
+-	lock_page_memcg(page);
+-
+ 	if (!PageAnon(page)) {
+ 		page_remove_file_rmap(page, compound);
+ 		goto out;
+@@ -1443,6 +1436,9 @@ void page_remove_rmap(struct page *page,
+ 	 * We use the irq-unsafe __{inc|mod}_zone_page_stat because
+ 	 * these counters are not modified in interrupt context, and
+ 	 * pte lock(a spinlock) is held, which implies preemption disabled.
++	 *
++	 * The pte lock also stabilizes page->memcg wrt
++	 * mem_cgroup_move_account().
+ 	 */
+ 	__dec_lruvec_page_state(page, NR_ANON_MAPPED);
+ 
+@@ -1459,8 +1455,6 @@ void page_remove_rmap(struct page *page,
+ 	 * faster for those pages still in swapcache.
+ 	 */
+ out:
+-	unlock_page_memcg(page);
+-
+ 	munlock_vma_page(page, vma, compound);
+ }
+ 
 -- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+2.38.1
