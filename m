@@ -2,93 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70CBA61FD8E
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 19:29:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE0AF61FD8F
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 19:29:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232976AbiKGS3a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 13:29:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45110 "EHLO
+        id S232000AbiKGS3u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 13:29:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231398AbiKGS32 (ORCPT
+        with ESMTP id S231440AbiKGS3s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 13:29:28 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 251EF1583A;
-        Mon,  7 Nov 2022 10:29:28 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id q1-20020a17090a750100b002139ec1e999so11095428pjk.1;
-        Mon, 07 Nov 2022 10:29:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=eN4gCo4viSKLR9l2H7SMr1s7pIJk6iyJI80l9uCghwc=;
-        b=Pm/75p3+d7EjBEmeEpXn5RdHbax0ol8g7SL55o+KoP3ZyVkBFHOU9GJZhSx007XWC2
-         ZUnTZPlEoKv5dC30DUOhS9E+FSDz62FOIHAD+ZCFb9ctohP6O8LoO5ceB7hQiKLnqePR
-         +z6D9mlxa67Ruln3rGnb0skJZ/A9g61014DauJW0KX2eu0ZQGJuFlvi0X8cpoum4BqDh
-         ImpuzePwgneNg6HZ1dmyenTYv1smIt/EcN55Iwt44W0tVl+0RNAg/xCMFzNJ+kyqWstX
-         GI477szKZX2v7cmRrqwHTvD1M2My5y6TZyICI120zy6KWwVb4yL43OV2NDkd4p9TuvRv
-         VY6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eN4gCo4viSKLR9l2H7SMr1s7pIJk6iyJI80l9uCghwc=;
-        b=D2HwQd0UyOPpdk60xNVHlLgnn5Yv+CCqXfX2OqQfeLT3EImJFlGG7s6EhmRTlbdxj+
-         q0or6T18dKR+RrSqDMYS38jUBlBYnWL+FTZ4K55jEGLqB4tdKUn6uF717Ue4XZjUDPu7
-         7uE2o9yWPmtqpyD6JLjwHd14VeMYdGPy6/DUBs075UKiaHT71orrvG90IvqffgcHEdzP
-         VNVv9qLhGZ+SDtGAjooJHMEk3nU2oPXc4qPNFlX/g4FCoxmYJgQZrdEFg0x5cQ06Pe3d
-         DQANJUBr0/TuFcDgH/OREpXipABuDlk5jJd+kbBhNolYZE5F0QdktQlRsr5bDO/VdcqI
-         LXnQ==
-X-Gm-Message-State: ACrzQf2Mmo2E9N5wkPME8z1CaSzMmYtiQRj+pHN52BI6zeKuK1oI5Uqd
-        kvOH85bN9QnWICGJc8KijG8=
-X-Google-Smtp-Source: AMsMyM7VV+hXeDPXk+Tu1I0m04KAH7TXGs8QFRkXWC3dCtUsM1SpAsogWuckuaPCvt0oJ2N5aVCSCQ==
-X-Received: by 2002:a17:903:2348:b0:186:970e:739e with SMTP id c8-20020a170903234800b00186970e739emr52469089plh.115.1667845767422;
-        Mon, 07 Nov 2022 10:29:27 -0800 (PST)
-Received: from google.com ([2620:15c:9d:2:626:eb80:9eb9:1fd7])
-        by smtp.gmail.com with ESMTPSA id c27-20020aa7953b000000b0053e38ac0ff4sm4825325pfp.115.2022.11.07.10.29.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Nov 2022 10:29:26 -0800 (PST)
-Date:   Mon, 7 Nov 2022 10:29:23 -0800
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Cc:     Greg Tulli <greg.iforce@gmail.com>,
-        syzbot <syzbot+4dd880c1184280378821@syzkaller.appspotmail.com>,
-        syzkaller-bugs@googlegroups.com, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org, glider@google.com
-Subject: Re: [PATCH] Input: iforce - invert valid length check when fetching
- device IDs
-Message-ID: <Y2lOg/xnjxNt+vUi@google.com>
-References: <0000000000003adfa805ecde42f8@google.com>
- <531fb432-7396-ad37-ecba-3e42e7f56d5c@I-love.SAKURA.ne.jp>
+        Mon, 7 Nov 2022 13:29:48 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A23B515FFC
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 10:29:47 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3D62A61254
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 18:29:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D4E8C433C1;
+        Mon,  7 Nov 2022 18:29:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667845786;
+        bh=RleFIJ19EIjYun3T5mhwYBHqIeaFPrPEjF/L+QsTRHA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=W4HRnjIuj+Q7p+dL0+imqQPNyYDX+i+xNplmtZlhI+oOY1yuxhUSEienrlYmqdfib
+         ybC2lLz9knzQTQo+9iWpKG1d7Pm7T66QNVQ9/Xy0zKyzDopJ7UxvSB/tVYp5eYhYBp
+         sjl8g7jCXEYPrws5IA1HbuBmip5ZiU8R9eORXzJJwx7t843KEJEh2oub8c4PUvxSyB
+         R67YnT2O3N6vNA/EcjYvGtvZAGv5XoL19ISvq9HWwOJ6LFCu+nsoXAIK/WVyDmyQN1
+         kNqzRFpvV0XDXCv2I/8AZSFBld4GGIlXRSo8OsB3tzMnOnUYGf7HJ1R3wu6/6aXVAo
+         tTBxsnn2aDnxw==
+Date:   Mon, 7 Nov 2022 10:29:44 -0800
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Chao Yu <chao@kernel.org>
+Cc:     jaegeuk@kernel.org, Wei Chen <harperchen1110@gmail.com>,
+        linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net
+Subject: Re: [f2fs-dev] [PATCH] f2fs: speed up f2fs_empty_dir()
+Message-ID: <Y2lOmCIt5gZmFJ5H@sol.localdomain>
+References: <20221106094855.131967-1-chao@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <531fb432-7396-ad37-ecba-3e42e7f56d5c@I-love.SAKURA.ne.jp>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221106094855.131967-1-chao@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 07, 2022 at 07:47:15PM +0900, Tetsuo Handa wrote:
-> syzbot is reporting uninitialized value at iforce_init_device() [1], for
-> commit 6ac0aec6b0a6 ("Input: iforce - allow callers supply data buffer
-> when fetching device IDs") is checking that valid length is shorter than
-> bytes to read. Since iforce_get_id_packet() stores valid length when
-> returning 0, the caller needs to check that valid length is longer than or
-> equals to bytes to read.
+On Sun, Nov 06, 2022 at 05:48:55PM +0800, Chao Yu wrote:
+> Wei Chen reports a kernel bug as blew:
 > 
-> Link: https://syzkaller.appspot.com/bug?extid=4dd880c1184280378821 [1]
-> Reported-by: syzbot <syzbot+4dd880c1184280378821@syzkaller.appspotmail.com>
-> Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-> Fixes: 6ac0aec6b0a6 ("Input: iforce - allow callers supply data buffer when fetching device IDs")
+> INFO: task syz-executor.0:29056 blocked for more than 143 seconds.
+>       Not tainted 5.15.0-rc5 #1
+> "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+> task:syz-executor.0  state:D stack:14632 pid:29056 ppid:  6574 flags:0x00000004
+> Call Trace:
+>  __schedule+0x4a1/0x1720
+>  schedule+0x36/0xe0
+>  rwsem_down_write_slowpath+0x322/0x7a0
+>  fscrypt_ioctl_set_policy+0x11f/0x2a0
+>  __f2fs_ioctl+0x1a9f/0x5780
+>  f2fs_ioctl+0x89/0x3a0
+>  __x64_sys_ioctl+0xe8/0x140
+>  do_syscall_64+0x34/0xb0
+>  entry_SYSCALL_64_after_hwframe+0x44/0xae
+> 
+> Eric did some investigation on this issue, quoted from reply of Eric:
+> 
+> "Well, the quality of this bug report has a lot to be desired (not on
+> upstream kernel, reproducer is full of totally irrelevant stuff, not
+> sent to the mailing list of the filesystem whose disk image is being
+> fuzzed, etc.).  But what is going on is that f2fs_empty_dir() doesn't
+> consider the case of a directory with an extremely large i_size on a
+> malicious disk image.
+> 
+> Specifically, the reproducer mounts an f2fs image with a directory
+> that has an i_size of 14814520042850357248, then calls
+> FS_IOC_SET_ENCRYPTION_POLICY on it.
+> 
+> That results in a call to f2fs_empty_dir() to check whether the
+> directory is empty.  f2fs_empty_dir() then iterates through all
+> 3616826182336513 blocks the directory allegedly contains to check
+> whether any contain anything.  i_rwsem is held during this, so
+> anything else that tries to take it will hang."
+> 
+> In order to solve this issue, let's use f2fs_get_next_page_offset()
+> to speed up iteration by skipping holes for all below functions:
+> - f2fs_empty_dir
+> - f2fs_readdir
+> - find_in_level
+> 
+> The way why we can speed up iteration was described in
+> 'commit 3cf4574705b4 ("f2fs: introduce get_next_page_offset to speed
+> up SEEK_DATA")'.
+> 
+> Meanwhile, in f2fs_empty_dir(), let's use f2fs_find_data_page()
+> instead f2fs_get_lock_data_page(), due to i_rwsem was held in
+> caller of f2fs_empty_dir(), there shouldn't be any races, so it's
+> fine to not lock dentry page during lookuping dirents in the page.
+> 
+> Link: https://lore.kernel.org/lkml/536944df-a0ae-1dd8-148f-510b476e1347@kernel.org/T/
+> Reported-by: Wei Chen <harperchen1110@gmail.com>
+> Cc: Eric Biggers <ebiggers@google.com>
+> Signed-off-by: Chao Yu <chao@kernel.org>
+> ---
+>  fs/f2fs/data.c | 17 ++++++++++++-----
+>  fs/f2fs/dir.c  | 34 ++++++++++++++++++++++++----------
+>  fs/f2fs/f2fs.h |  5 +++--
+>  fs/f2fs/gc.c   |  4 ++--
+>  4 files changed, 41 insertions(+), 19 deletions(-)
 
-Applied, thank you.
+Thanks.  I'm not an expert on all the details, but this patch looks good to me.
 
--- 
-Dmitry
+Given that it optimizes lookups and readdirs too, a better title for the patch
+might be something like "f2fs: optimize iteration over sparse directories".
+
+- Eric
