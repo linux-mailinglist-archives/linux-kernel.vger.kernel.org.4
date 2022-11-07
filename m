@@ -2,208 +2,249 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFC6861FBCC
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 18:48:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35D0161FBD2
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 18:48:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232965AbiKGRrb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 12:47:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54404 "EHLO
+        id S232958AbiKGRsf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 12:48:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232032AbiKGRrM (ORCPT
+        with ESMTP id S232873AbiKGRsG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 12:47:12 -0500
-Received: from DEU01-BE0-obe.outbound.protection.outlook.com (mail-be0deu01on2126.outbound.protection.outlook.com [40.107.127.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73E2B17A97;
-        Mon,  7 Nov 2022 09:47:10 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=oLD/mKQG+9z0qtVcVAPQM37X6RR7Yp4AhbnPUzDWQerhOqnIFkZ3XABduFRwk3509HfRrp35FoVCuLyZY1Y8mvEpZHS94kzJ5i/auiTrO1ZFKzo4zeX22DuPaZam5Mp4EkAHtEkgbr006FP9JbrdkPnY63CDzfs8/xZM4IVEtWTx/PteYAuqXjFnOx5z7sXTn84J58VzLZX0gMu8FfyP1VjfgTZGt+Fai4A8dBgT/sQbhOKNVHS7RgNE/rtWaYwTrRlgTqSdubxmiE+FYi/fJmtf/qpu8VVemDv1fDXBoIE13QEhKEZfHo3GD7D+gPUZoF6RXxAyd0nklYHZPWyCIw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ch75lriZrDObsE9T4y1aCNQI4WflB83oVTXsfBnUVzk=;
- b=NneDOtYVptUEX/DMv/pvq7UEF8F2sCOzrN5/tYqwgZQtE3oKLPDUivPrWUXiN3t6sAfsyuLTDRREOZLxZb9XwWA/K1s0gbOG50y58kS2xqbI9NFCQ6peZ07rjXT/MQ7yARtPyGeG1GEWButjAYcQic/5Kn/NoxJtYuFrT9qB2LyIClb8q5Xib4upBAYCjcfisHtLkk4qjxmrAP6RhmEOEWIq0x68DVmmoZKM4J0Hbrh8ly13j6OUeT4vJQ1rBwy+KCIbjsjw8VicGiLCMxcXlwVJG9iFP4aSoDBPNml4VnaHlSOm5pKTTMzAobfBwFHtf+eq4NgYbFDR0gPsii8FfA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fi.rohmeurope.com; dmarc=pass action=none
- header.from=fi.rohmeurope.com; dkim=pass header.d=fi.rohmeurope.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=rohmsemiconductor.onmicrosoft.com;
- s=selector2-rohmsemiconductor-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ch75lriZrDObsE9T4y1aCNQI4WflB83oVTXsfBnUVzk=;
- b=BbNBaAMJdyhebMSnq/u1cAefVOARc6xOctbFgApUqm6ql8eY4y7sndmEZW5XKKDG03Hv7IRz2Zca1vzeFONUukh7A0CNOorcbmV1yJm218V/6RD+rTxIrKeFuQG2SUvBAqvbss+RPKPXeMz9mg4Oq/H01CrDLwZ9IW/Jc7vV7VA=
-Received: from BEZP281MB2454.DEUP281.PROD.OUTLOOK.COM (2603:10a6:b10:59::10)
- by FR2P281MB1733.DEUP281.PROD.OUTLOOK.COM (2603:10a6:d10:89::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.26; Mon, 7 Nov
- 2022 17:47:07 +0000
-Received: from BEZP281MB2454.DEUP281.PROD.OUTLOOK.COM
- ([fe80::33b1:3599:eb56:8fd2]) by BEZP281MB2454.DEUP281.PROD.OUTLOOK.COM
- ([fe80::33b1:3599:eb56:8fd2%5]) with mapi id 15.20.5791.025; Mon, 7 Nov 2022
- 17:47:07 +0000
-From:   "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
-To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>
-CC:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Luca Ceresoli <luca@lucaceresoli.net>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Peter Rosin <peda@axentia.se>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        "satish.nagireddy@getcruise.com" <satish.nagireddy@getcruise.com>
-Subject: Re: [PATCH v4 0/8] i2c-atr and FPDLink
-Thread-Topic: [PATCH v4 0/8] i2c-atr and FPDLink
-Thread-Index: AQHY7fTKrOgLFkwn6kaLMHWF/jZCsK4zkPEAgAAQ2oCAACQyAA==
-Date:   Mon, 7 Nov 2022 17:47:07 +0000
-Message-ID: <74d8aa71-1133-537d-3de9-e6efd458025f@fi.rohmeurope.com>
-References: <20221101132032.1542416-1-tomi.valkeinen@ideasonboard.com>
- <b0319f7c-54af-3132-2775-fba7dcad6bbe@fi.rohmeurope.com>
- <50f0e9a2-33a4-9afb-4105-eadd6da21e99@ideasonboard.com>
-In-Reply-To: <50f0e9a2-33a4-9afb-4105-eadd6da21e99@ideasonboard.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=fi.rohmeurope.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BEZP281MB2454:EE_|FR2P281MB1733:EE_
-x-ms-office365-filtering-correlation-id: 2c0f4484-4775-4b3d-96eb-08dac0e816a9
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: vh1EX8ioOxtNDqefogkdkDMMt4cU5vNVwmFf01Bl7aa9mvvewBZQb9H9d4YRu+9FY8KkG2W70QHpYPUAyznBQAqBjezoltksty0FSCFGZfqGJTO/UPhsl9kpnbzw4vZwXBBMtohvWA4MdlR91I5Zuq9D9678meLLTf3CZAWcZtSed5PsiowUmEr+1ieHxVBcSw3r3tlOunTfJnZwbe/PMfUBbUku/6ZesbAWWD/CfrZ+q4zhMGXE6K5Mwy87ncPuR1DFb/fNiHsy2FbgFrv6M+Jihj6P9930f4rca9Vc4fNM6cYMKMzG64Oa6H340oi/TKITkvYjaD7ucvxyjXP6jIfSpZu14wUm780PnKjHtWeIcb536/2mUSyB9+Q6mRuxg39bIG6LFnhAxIhwIpC5rAho+lrjXXHxeNqwX8HEeV1xMW/akcLNgvGOmhGNQzCf/v41ZPXIvMnC3xjppRMqiHd3X5dY12Kv7cHa2wGgnzL6sM6sJANdnAUhVpZW3dBUq2paxmtvAnp9wejYNdOxAotsA4hqBBH2CEwYxO7VgxVLyudcfKbj4pZziGaN4G+ohEJ4aMFcWN59GIojTjLSkXJ7mJA8q1fPiS4tux3ySsJ5iUGaMsMCtwmejGt1HDHyQ0eL7AV+Xd7vfZPEER4RQpu0jDTWklE9xDsuUneXmvtr1KDa6Pu51ISP5gy/5DgJ+BeBIBDgjZhOGU0J3+DDcDHzEoYbY3+I3CrbTlaJWTwVTyB7xF5pmZDxNEsSXtBVlt4C0NbUKlYtHg8n2ZvJcO0gf+dgluF/ImklWeF5xcHc48wG4MDyCe8DE4u4KZCYAPGAb9Ucolz4fKq2AbVakQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BEZP281MB2454.DEUP281.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(346002)(136003)(376002)(396003)(39840400004)(451199015)(91956017)(8676002)(66556008)(4326008)(66946007)(76116006)(66446008)(66476007)(64756008)(6486002)(71200400001)(316002)(54906003)(110136005)(38100700002)(122000001)(2906002)(7416002)(5660300002)(8936002)(6506007)(38070700005)(186003)(2616005)(6512007)(53546011)(83380400001)(478600001)(31696002)(41300700001)(86362001)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?YlhucmRJb3hPZm5ENVhYLzZnRUZUMktlMUZxVTdzNDB2b3ozS1NRSlFvZFdv?=
- =?utf-8?B?cjRMQmxyeDJKcXB2MGh6dDBiRUxvTHRyUERKNnIvSm1DRUpTbUZxbGJDemJx?=
- =?utf-8?B?REJkRlZ1dFdPNGh2d2ZuUEF2ajlKNGFvNE1PUFZlaHVIS2V4ODFxdXlzQ0FI?=
- =?utf-8?B?SnZEM1cvSUtLVFg2bDZJa2tqbVNsWC9lTU9ockRwOHNhUEZlMjdBaUhoYlBs?=
- =?utf-8?B?ZW5iRndLTFQ5amp4dXAxZGVMMDJoZm9LUVp4RDlnRXltS3J0b0lhVTJ3eG12?=
- =?utf-8?B?NzI3dW1XRVZURHpZVEVZb1J2SmkxQmwxVXl4TTJkU3hUYjh6Tm5LODB0TTB4?=
- =?utf-8?B?UW5yT045MDZoK0NYb1hWeEc0UkFFOFA0ZVlUcWZsMTU5LzBsWDgvdnd2aWp3?=
- =?utf-8?B?ZmxCUVlpVzRURVlLY1llMGtDMmliQW1yK05FQU5tczVkUkhkdUVVYXB3V3ow?=
- =?utf-8?B?MDRPaUNVQjh2ZWMrclNCQzJPdWhVcEE5b2llcHAzcEI3WWMrS0tFMjRWL3Z1?=
- =?utf-8?B?OUVpdmZJRERGNG5idGFpem96dm9tTzkrZ2hBN004cjJBY1RlNTk0UGNFN1Q5?=
- =?utf-8?B?Q0ZRMnpYYjFWdVVzZEJjcHd1akxzTkZqNWFhSzNjMzA0WTdOenBsdVZNN0s2?=
- =?utf-8?B?Q2lqRWIyU0p0TCtYdkhsTzZsQnNuZzFtQ081c01KZmlIZUQ2OWVzaDcyMW5S?=
- =?utf-8?B?eEpCTmEwRVZkSG1LYVoxczFJd3FmYWEyVkZlaHdtRmZXQTdVNjNwbGYyVHVR?=
- =?utf-8?B?ZktveURqdVAxZzBNWDhDT2pjRTZBbkxKTmsvMUFIdjI1dTZnUVh6WWd3Wkph?=
- =?utf-8?B?NTZnMEczOE93NXpucXdQb2NMNEdFN1NFTFd2YW1XRmJ0QVQ5RlZ4T3lNRXJx?=
- =?utf-8?B?VlBCMGorLzh0MDQ0SXBoSXQ5Q2JXQ3RleGhITE5YVXUrR0NQbmZ1a1liUnZh?=
- =?utf-8?B?Ulc4WFNOYVRxY2kzRkhyTmsvbGVrR0IzSUE4Rnl0MjJFVGMxN2NjSTdLS0xh?=
- =?utf-8?B?OUJuZGl2aXJudmh0Q3dVSkxLOFNLaUFad0dDWCtzbjlQNWt2UUk0TDVHWm9Y?=
- =?utf-8?B?NGZ5MUdOTmlPdkZEbjB3YVhVeDQ0VU82QW5IOUt3aFdGdFpYRFQrTnlFWGdH?=
- =?utf-8?B?cGpRK0xjT2NkUUxPclBUUWNZVk9GLzZSOVJVVFRSZXNyN1IyMWpNNXNjT2Zi?=
- =?utf-8?B?Ujd6NW52citydHUvWnJ6Y3dGeDlSS3hWV0NPZWxUZjFOS3Jta0FySnlIRnl0?=
- =?utf-8?B?VlNnK1dYNG5WUDVmaGttOXNpZ0IrdllRZ1RxTFJJVGl5WnBISUc2TEV5dU1G?=
- =?utf-8?B?UU5UTUNYcnptVTU3b1Q5YWxteGUxajlQQUxNZno4MUd6QW1ONHNoZTFyTC9h?=
- =?utf-8?B?OU5iM3dIcVVHKzVZeHVKRlkwT2tVNjBmMzVnMW1sY0pMWXFFVXRvQ0RyTTNQ?=
- =?utf-8?B?QnhRb3JhVURzVlFZZlVsZlZ5VUQ2aTFJK05RZEJ0dlUzVnNtakdibDE4cnh4?=
- =?utf-8?B?T2FqQzRWeXNOQ3pwYW5UZldBZU5MZWlqUmR5L0ZEaEw3TnNZQVVTNWJLWnZT?=
- =?utf-8?B?QS9KaEhlSXlsVUlFQjU5WHZQaStESVlGeTJYT2NMbWRkdThPMi9Qa3ZjRjBz?=
- =?utf-8?B?RDhoc2xJc0Z3YVNjZEd3N1hSSjQ2YzhyN3RKZUlVRTJqOVJPS21kSEgvUTBo?=
- =?utf-8?B?dVVDVk9JSHZWNFJCTmg5V1M1UGY2OUhBTzc3N2VCb0c4U25oWUhFS1JjalJq?=
- =?utf-8?B?MndGaFN6MnhPSjBWQThlTUhjUU1rL202Y1A4WjcwRkFJRmlzRi82Q21xYy9v?=
- =?utf-8?B?cG41WndpZUcvSk1TOTgySTZyU3Jpc3JlNUdZQVlFZVdidXRKaGxWWHN0dmdu?=
- =?utf-8?B?WGtJMEVJbzI2U0UyWkF6TEhGN3ZWaVVoN09BMjdocEc3bGgrSVNzdk8zaTI4?=
- =?utf-8?B?ZmlidWVLcEdQSTg5L0xibU9FN2RPVC93a3NvQ0JHUW1HdlM2TjRHQ242Sklz?=
- =?utf-8?B?RWR1dkJ0L3FITWtFcmVVV05ITWU4aFhzMHJwbU1vTHFhMUR4VTRuTUF0a0My?=
- =?utf-8?B?cEV4aEM1Y0xER0tQRFQ1aHJIODZxVjNRTVdlM3BNR2RLL3NjNGwza0dEWUpu?=
- =?utf-8?B?QXBUdGZJbEVEZCs0L1o3aDZsOVFyZ2ZJWC9ZZ3FkS2I4OWtXczBoNkl5Nlg1?=
- =?utf-8?Q?fTYftpWzqrRxx+4DeM1UrvU=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <1E199C1C2B66D745B1C848A28642EB4B@DEUP281.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
+        Mon, 7 Nov 2022 12:48:06 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F2B122BFE;
+        Mon,  7 Nov 2022 09:48:05 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id CD6F6CE0880;
+        Mon,  7 Nov 2022 17:48:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 127F9C43148;
+        Mon,  7 Nov 2022 17:48:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667843282;
+        bh=RI2MgLObJIpn7b0R2bASoglQ3WQKt2sFm05VPg8x8l0=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=rxOsyxJ7qAGRV40PnFl+zEXb9+D8url2to7hcs1pQs/t76HYy/ZYDhZ+3SNSOXeFo
+         UgD6BmfiU3e1g5t8ePwtYM6gUYZwI4uFlb5ol0uMZsR5f3KdrIJ3oyA4VTlrwd8jMY
+         eCM9fLwrDDRq6ZuRL2r5qvBJ2aFzZuleGS9MS3D3qmtrLGWsg1vXiP9iI8PQqpK6y6
+         sg+GBly/55z6zUgmOBU9qShWoaI1ALKSRaBrOmom3a60hhLNoS/erg4mlk1NVS+eJu
+         zADHRzsMByBB9Kq+KDiu2A7rUP7cCdcFQ25AkStt34rGdY8q1TXV0vbba6AwRvOarl
+         Y+QyqIvq2ShKg==
+Received: by mail-lf1-f41.google.com with SMTP id o12so17787300lfq.9;
+        Mon, 07 Nov 2022 09:48:01 -0800 (PST)
+X-Gm-Message-State: ACrzQf07OXhLTNkYinALrse/Jd5xex4EFrVfa3JXJKf/VkGLpMupgK/6
+        1IAupI8yiJvA/X51cIESbnniqUSpJws1o0cyJ2U=
+X-Google-Smtp-Source: AMsMyM4vUVfkXQ/n/3d++E0fbrGmb/6BkYqUvAHcpIJgWiPxHoedPsAe/HK5dOYKXio3RKYT8AhcrD+ibuOHCOfZiJ4=
+X-Received: by 2002:ac2:4c47:0:b0:4a2:c07b:4b62 with SMTP id
+ o7-20020ac24c47000000b004a2c07b4b62mr17187527lfk.426.1667843280043; Mon, 07
+ Nov 2022 09:48:00 -0800 (PST)
 MIME-Version: 1.0
-X-OriginatorOrg: fi.rohmeurope.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BEZP281MB2454.DEUP281.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2c0f4484-4775-4b3d-96eb-08dac0e816a9
-X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Nov 2022 17:47:07.1348
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: b24d4f96-5b40-44b1-ac2e-2ed7fdbde1c7
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: jkRAIIIOjJUOHx3lcs0nTmeY8c3vHineU/Ek1Q3eCrLHm8geJgfwxuPziYo0Aq7FQ7pHdmxl1KE+oZn/0AeBfqVkwCQi97hbJRMwUHrFn5/NwNWQXYByGJveGg5X55+S
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: FR2P281MB1733
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <Y2lAB508TrrjpDPi@monolith.localdoman>
+In-Reply-To: <Y2lAB508TrrjpDPi@monolith.localdoman>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Mon, 7 Nov 2022 18:47:48 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXE1jXd_+UAgBvi2kKMMxQErH8EDAHU06mD85Es0OfsYsQ@mail.gmail.com>
+Message-ID: <CAMj1kXE1jXd_+UAgBvi2kKMMxQErH8EDAHU06mD85Es0OfsYsQ@mail.gmail.com>
+Subject: Re: [Possible BUG] arm64: efi: efi_runtime_fixup_exception() and
+ efi_call_virt_check_flags() both taint the kernel
+To:     Alexandru Elisei <alexandru.elisei@arm.com>
+Cc:     catalin.marinas@arm.com, will@kernel.org,
+        linux-efi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RXZlbmluZyBUb21pLA0KDQpPbiAxMS83LzIyIDE3OjM3LCBUb21pIFZhbGtlaW5lbiB3cm90ZToN
-Cj4gSGkgTWF0dGksDQo+IA0KPiBPbiAwNy8xMS8yMDIyIDE2OjM3LCBWYWl0dGluZW4sIE1hdHRp
-IHdyb3RlOg0KPiANCj4gSSBvbmx5IGhhZCB0aW1lIHRvIGhhdmUgYSBicmllZiBsb29rIGF0IHlv
-dXIgY29kZSwgYnV0IEkgaGF2ZSBhIGZldyANCj4gcXVpY2sgcXVlc3Rpb25zLg0KPiANCj4+IEkg
-dGhpbmsgaXQgd2FzIFRvbWkgd2hvIGFza2VkIG1lIHRoZSBiZW5lZml0IG9mIHVzaW5nIE1GRC4g
-SW4gc29tZSBjYXNlcw0KPj4gdGhlIGRpZ2l0YWwgaW50ZXJmYWNlIHRvd2FyZHMgcGluY3RybC9H
-UElPIG9yIG90aGVyIGZ1bmN0aW9uYWwgYmxvY2tzIGluDQo+PiBTRVIvREVTIGlzIHJlLXVzZWQg
-ZnJvbSBvdGhlciBwcm9kdWN0cyAtIG9yIHRoZSBibG9ja3MgYXJlIHJlLXVzZWQgb24NCj4+IG90
-aGVyIHByb2R1Y3RzLiBTZXBhcmF0aW5nIHRoZW0gaW4gb3duIHBsYXRmb3JtLWRyaXZlcnMgaXMg
-YSBuaWNlIHdheSB0bw0KPj4gcmUtdXNlIGRyaXZlcnMgYW5kIGF2b2lkIGNvZGUgZHVwbGljYXRp
-b24uDQo+IA0KPiBJcyB0aGVyZSBhbnl0aGluZyB0aGF0IHByZXZlbnRzIHVzIChvciBtYWtlcyBp
-dCBkaWZmaWN1bHQpIGZyb20gDQo+IHJlZmFjdG9yaW5nIGEgIm1vbm9saXRoaWMiIGRyaXZlciBp
-bnRvIGFuIE1GRCBsYXRlcj8gSWYgd2Ugc2VlIHN1Y2ggSVAgDQo+IHJlLXVzZSwgY2FuIHdlIHRo
-ZW4gbW92ZSB0byBhbiBNRkQ/DQoNCkkgaGF2ZW4ndCBkb25lIHN1Y2ggY29udmVyc2lvbi4gSSB0
-aGluayB0aGUgd29yayBmb3IgZG9pbmcgdGhlIA0KY29udmVyc2lvbiBhdCBsYXRlciBwaGFzZSBp
-cyByb3VnaGx5IHNhbWUgaXQgd291bGQgYmUgbm93LiBIb3dldmVyLCANCnN5bmNocm9uaXppbmcg
-c3VjaCBjaGFuZ2Ugd2l0aCByZWxhdGVkIHN1YnN5c3RlbSB0cmVlcyBtaWdodCBiZSBzb21lIA0K
-ZXh0cmEgd29yay4NCg0KPiBJIGFkbWl0IEkgaGF2ZSBuZXZlciB3cml0dGVuIGFuIE1GRCBkcml2
-ZXIgKGJ1dCBJIGhhdmUgaGFja2VkIHdpdGggYSBmZXcgDQo+IHllYXJzIGJhY2spLiBBcyBJIHNl
-ZSBpdCwgdGhlICJzdWJjb21wb25lbnRzIiBpbiBGUERMaW5rIElDcyBhcmUgbW9yZSBvciANCj4g
-bGVzcyB0aWVkIHRvIHRoZSBGUERMaW5rLiBJdCdzIG5vdCBsaWtlIHRoZXkncmUgaW5kZXBlbmRl
-bnQuIENvbXBhcmUgdG8sIA0KPiBmb3IgZXhhbXBsZSwgYSBQTUlDIHdoaWNoIHByb3ZpZGVzIHJl
-Z3VsYXRvcnMgYW5kIEdQSU9zLCBhbmQgcG9zc2libHkgDQo+IHRoZSBvbmx5IHNoYXJlZCBwYXJ0
-IGJldHdlZW4gdGhvc2UgdHdvIGZlYXR1cmVzIGFyZSB0aGUgcGlucy4NCg0KSSB0aGluayB0aGF0
-IGluIFNlckRlcyBkcml2ZXIgY2FzZSB0aGUgYmVuZWZpdCBtYXkgY29tZSBmcm9tIHJlLXVzZSBh
-bmQgDQpjbGFyaXR5LiBTbWFsbGVyIGRyaXZlcnMgdGVuZCB0byBiZSBlYXNpZXIgdG8gY29tcHJl
-aGVuZCwgYWx0aG91Z2ggSSANCmxpa2VkIHRoZSB3YXkgeW91IGhhZCBkaXZpZGVkIHRoZSBkcml2
-ZXJzIGluIHNlY3Rpb25zLg0KDQo+IFNvLCBJIHRoaW5rIEknbSBzdGlsbCB3b25kZXJpbmcgYWJv
-dXQgdGhlIGJlbmVmaXQuLi4NCj4gDQo+IEluIHRoZSBjdXJyZW50IHZlcnNpb24gSSBoYXZlIHRo
-ZSBkZXNlciBkcml2ZXIgc3VwcG9ydGluZyBVQjk2MCBhbmQgDQo+IFVCOTcwMi4gSSBndWVzcyBJ
-IGNvdWxkIHNwbGl0IHRob3NlIGludG8gc2VwYXJhdGUgZHJpdmVycywNCg0KSSB3b3VsZG4ndCBi
-cmVhayB0aGUgZHJpdmVyIHBlciBJQy4gSWYgdGhlIElDcyBhcmUgc2ltaWxhciBlbm91Z2ggdG8g
-YmUgDQpuaWNlbHkgaGFuZGxlZCBieSBzYW1lIGRyaXZlciwgdGhlbiB0aGV5IHByb2JhYmx5IHNo
-b3VsZC4NCg0KPiANCj4gVGhlIGJlbmVmaXQgd291bGQgYmUgbW9yZSBvYnZpb3VzIGlmIHRoZXJl
-IHdhcyBzb21lIG90aGVyIHR5cGUgb2YgSUMgDQo+IHRoYXQgdXNlcyB0aGUgc2FtZSBJUCBzdWJj
-b21wb25lbnRzLg0KDQpZZXMuIFNhbWUgb3Igc2ltaWxhciBzdWJjb21wb25lbnRzLiBUaGlzIGlu
-ZGVlZCBpcyB0aGUgYmVuZWZpdCBJIHNlZS4gSSANCmRvbid0IGtub3cgaWYgVEkgY291bGQgdXNl
-IHNhbWUgLSBzYXkgR1BJTyAtIGNvbnRyb2wgbG9naWMgb24gYW5vdGhlciANCnR5cGUgb2YgZGV2
-aWNlPyBPciwgbWF5YmUgc2VwYXJhdGluZyB0aGUgbG9naWMgY291bGQgZ3VpZGUgb25lIHRvIHVz
-ZSANCnNvbWUgZ2VuZXJpYyBzdHVmZiBsaWtlIHJlZ21hcF9ncGlvIGRyaXZlcj8gQW5kIGZpbmFs
-bHksIHN1Ym1pdHRpbmcgDQpzbWFsbCBwbGF0Zm9ybSBkcml2ZXJzIHZpYSByZXNwZWN0aXZlIHN1
-YnN5c3RlbXMgY2FuIHlpZWxkIGJldHRlciByZXZpZXcgOykNCg0KPiANCj4gQWxzbywgaXNuJ3Qg
-dGhlIHVzZSBvciBub24tdXNlIG9mIE1GRCBzdHJpY3RseSBhIGRyaXZlciBwcml2YXRlIHRoaW5n
-LCANCg0KSSBhbSB0ZW1wdGVkIHRvIHNheSAieWVzIiwgYnV0IHdoZW4gZ2l2aW5nIGl0IGEgdGhv
-dWdodCAtIGl0J3MgcmVhbGx5IA0Kbm90IGZ1bGx5IHRoYXQuIFNwbGl0dGluZyBhIGRyaXZlciB0
-byBzdWJkcml2ZXJzIGNhbiBhbGxvdyByZS11c2Ugb2YgDQpzdWJjb21wb25lbnRzIGJ5IHVucmVs
-YXRlZCBJQ3MuIE9UT0gsIGFsd2F5cyBzdHVmZmluZyBldmVyeXRoaW5nIGluIGEgDQpkcml2ZXIg
-ImJlY2F1c2UgaXQgaXMgZHJpdmVyIGludGVybmFsIGRlY2lzaW9uIiBjYW4gbGVhZCB0byBjb2Rl
-IA0KZHVwbGljYXRpb24gYW5kIGJsb2F0Lg0KDQo+IGl0IHNob3VsZCBub3QgYWZmZWN0IGFueSBz
-aGFyZWQgcGFydHMgb3Igc2hhcmVkIGRlc2lnbnM/IEluIG90aGVyIHdvcmRzLCANCj4gaWYgeW91
-IGhhdmUgeW91ciBST0hNIGhhdCBvbiwgd2h5IGRvIHlvdSBjYXJlIGhvdyB0aGUgVUI5eHggZHJp
-dmVyIGlzIA0KPiBzdHJ1Y3R1cmVkIGludGVybmFsbHk/IDspDQoNCkFzIEkgd3JvdGU6DQogPiA+
-IFBsZWFzZSwgZG8gbm90IHRyZWF0IHRoaXMgYXMgYSByZXF1aXJlbWVudCAtIHBsZWFzZSB0cmVh
-dCBpdCBhcyBhIA0KZm9vZCBmb3IgdGhvdWdodHMgOykNCg0KRWcsIEkgYW0gbm90IHRyeWluZyB0
-byB0ZWxsIHlvdSBob3cgdG8gZG8gdGhlIFVCOXh4IGRyaXZlcnMuIEkganVzdCANCnRoaW5rIHRo
-YXQgY29uc2lkZXJpbmcgYW5vdGhlciBkZXNpZ24gX21pZ2h0XyByZXN1bHQgbW9yZSBvcHRpbWFs
-IGRlc2lnbiANCi0gYnV0IEkgZG8gbGVhdmUgdGhlIGRlY2lzaW9uIHRvIHlvdSB3aG8ga25vdyB0
-aGlzIGFyZWEgYmV0dGVyIHRoYW4gSSBkby4NCg0KWW91cnMNCgktLSBNYXR0aQ0KDQotLSANCk1h
-dHRpIFZhaXR0aW5lbg0KTGludXgga2VybmVsIGRldmVsb3BlciBhdCBST0hNIFNlbWljb25kdWN0
-b3JzDQpPdWx1IEZpbmxhbmQNCg0Kfn4gV2hlbiB0aGluZ3MgZ28gdXR0ZXJseSB3cm9uZyB2aW0g
-dXNlcnMgY2FuIGFsd2F5cyB0eXBlIDpoZWxwISB+fg0KDQo=
+Hello Alexandru,
+
+Thanks a lot for the report.
+
+On Mon, 7 Nov 2022 at 18:27, Alexandru Elisei <alexandru.elisei@arm.com> wrote:
+>
+> I'm going to preface this by saying that I'm extremely unfamiliar with the
+> EFI code.
+>
+> Commit d3549a938b73 ("efi/arm64: libstub: avoid SetVirtualAddressMap() when
+> possible") skipped the call to SetVirtualAddressMap() for certain
+> configurations, and that started causing kernel panics on an Ampere Altra
+> machine due to an EFI synchronous exception.
+>
+> Commit 23715a26c8d8 ("arm64: efi: Recover from synchronous exceptions
+> occurring in firmware") made the EFI exception non-fatal.
+>
+> With a kernel built from v6.1-rc4 (which has both patches), I'm now getting
+> two splats on the same Altra machine (log below). Looks to me like the
+> second splat is caused by efi_call_virt_check_flags() using the
+> PSTATE.{I,F} values from when taking the exception. Shouldn't
+> efi_runtime_fixup_exception() fix up the exception so the error isn't
+> propagated along the call chain?
+>
+
+No, that is not exactly how I intended this to work.
+
+The new code will essentially do a pseudo-longjmp() back to the asm
+wrapper if a sync exception occurs during a runtime services call, and
+return EFI_ABORTED to the caller. This return will go via the ordinary
+setup/teardown helpers that check whether interrupts were left in a
+different state by the firmware.
+
+> I'm asking this because efi_runtime_fixup_exception() has this add_taint()
+> call:
+>
+>         pr_err(FW_BUG "Unable to handle %s in EFI runtime service\n", msg);
+>         add_taint(TAINT_FIRMWARE_WORKAROUND, LOCKDEP_STILL_OK);
+>
+
+So this one runs first, and sets the taint because we crashed in the
+firmware. There is no shared state between the firmware and the
+kernel, so we should be able to carry on as usual.
+
+> and then efi_call_virt_check_flags() has this call:
+>
+>         mismatch = flags ^ cur_flags;
+>         if (!WARN_ON_ONCE(mismatch & ARCH_EFI_IRQ_FLAGS_MASK))
+>                 return;
+>
+>         add_taint(TAINT_FIRMWARE_WORKAROUND, LOCKDEP_NOW_UNRELIABLE);
+>
+> It looks to me like LOCKDEP_STILL_OK from the first call is at odds with
+> LOCKDEP_NOW_UNRELIABLE from the second add_taint() call.
+>
+
+This one runs next, and sets the taint because the sync exception
+occurred when the EFI runtime services was running with interrupts
+disabled.
+
+The latter check was added because when we started running runtime
+services with interrupts enabled (which wasn't the case before), we
+started to see issues with firmware that disabled interrupts but never
+re-enabled them again. So this is really a different issue.
+
+So the question is whether we can assume that we can carry on as usual
+when we abort a runtime service call that has disabled interrupts,
+while we set the LOCKDEP_NOW_UNRELIABLE flag if the runtime service
+simply returned that way.
+
+So my assumption here was that we cannot, and the double taint is
+simply the result of two different things happening at the same time.
+
+
+> Here is the relevant part of the log (I can send the .config, kernel
+> command line and full log, or any other information that might be needed):
+>
+
+Thanks, this is really useful.
+
+> [   55.479519] [Firmware Bug]: Unable to handle paging request in EFI runtime service
+> [   55.487122] CPU: 62 PID: 9 Comm: kworker/u320:0 Tainted: G          I        6.1.0-rc4 #60
+> [   55.487128] Hardware name: WIWYNN Mt.Jade Server System B81.03001.0005/Mt.Jade Motherboard, BIOS 1.08.20220218 (SCP: 1.08.20220218) 2022/02/18
+> [   55.487131] Workqueue: efi_rts_wq efi_call_rts
+> [   55.487158] Call trace:
+> [   55.487161]  dump_backtrace.part.0+0xdc/0xf0
+> [   55.487177]  show_stack+0x18/0x40
+> [   55.487180]  dump_stack_lvl+0x68/0x84
+> [   55.487190]  dump_stack+0x18/0x34
+> [   55.487192]  efi_runtime_fixup_exception+0x74/0x88
+> [   55.487199]  __do_kernel_fault+0x108/0x1b0
+> [   55.487204]  do_page_fault+0xd0/0x400
+> [   55.487207]  do_translation_fault+0xac/0xc0
+> [   55.487209]  do_mem_abort+0x44/0x94
+> [   55.487212]  el1_abort+0x40/0x6c
+> [   55.487214]  el1h_64_sync_handler+0xd8/0xe4
+> [   55.487218]  el1h_64_sync+0x64/0x68
+> [   55.487221]  0xb7eb7ae4
+> [   55.487224]  0xb7eb8668
+> [   55.487225]  0xb7eb6e08
+> [   55.487227]  0xb7eb68ec
+> [   55.487228]  0xb7eb3824
+> [   55.487230]  0xb7eb05a8
+> [   55.487231]  0xb7eb12a0
+> [   55.487232]  0xb7e43504
+> [   55.487234]  0xb7e43650
+> [   55.487235]  0xb7e482d0
+> [   55.487237]  0xb7e4907c
+> [   55.487238]  0xb7e49ff4
+> [   55.487239]  0xb7e40888
+> [   55.487241]  0xb7cb3328
+> [   55.487242]  0xb7cb0674
+> [   55.487243]  __efi_rt_asm_wrapper+0x54/0x70
+> [   55.487246]  efi_call_rts+0x28c/0x3d0
+> [   55.487249]  process_one_work+0x1d0/0x320
+> [   55.487258]  worker_thread+0x14c/0x444
+> [   55.487261]  kthread+0x10c/0x110
+> [   55.487264]  ret_from_fork+0x10/0x20
+> [   55.487268] [Firmware Bug]: Synchronous exception occurred in EFI runtime service set_time()
+
+Interestingly, this occurs on set_time() rather than get_time(), which
+is called first when the efi-rtc driver loads.
+
+If you blacklist the driver, do the EFI variables still work on this
+machine? This is mostly relevant for the vendor I suppose, but
+interesting nonetheless
+
+Ultimately, we might end up having to revert d3549a938b73 ("efi/arm64:
+libstub: avoid SetVirtualAddressMap() when possible"), but this would
+be rather unfortunate: that puts us in the same situation as x86,
+where some systems need SetVirtualAddressMap() to be called, and some
+crash when you call it (the Snapdragon WoA laptops)
+
+
+
+
+> [   55.495735] ------------[ cut here ]------------
+> [   55.495739] WARNING: CPU: 62 PID: 9 at drivers/firmware/efi/runtime-wrappers.c:111 efi_call_virt_check_flags+0x40/0xac
+> [   55.495746] Modules linked in:
+> [   55.495749] CPU: 62 PID: 9 Comm: kworker/u320:0 Tainted: G          I        6.1.0-rc4 #60
+> [   55.495751] Hardware name: WIWYNN Mt.Jade Server System B81.03001.0005/Mt.Jade Motherboard, BIOS 1.08.20220218 (SCP: 1.08.20220218) 2022/02/18
+> [   55.495753] Workqueue: efi_rts_wq efi_call_rts
+> [   55.495757] pstate: 004000c9 (nzcv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> [   55.495761] pc : efi_call_virt_check_flags+0x40/0xac
+> [   55.495764] lr : efi_call_rts+0x29c/0x3d0
+> [   55.495767] sp : ffff80000861bd40
+> [   55.495768] x29: ffff80000861bd40 x28: 0000000000000000 x27: 0000000000000000
+> [   55.495772] x26: ffffb251470e9e68 x25: ffff3fff89714805 x24: 0000000000000000
+> [   55.495775] x23: 0000000000000000 x22: 0000000000000000 x21: 00000000000000c0
+> [   55.495778] x20: ffffb25146688de0 x19: 0000000000000000 x18: ffffffffffffffff
+> [   55.495780] x17: 657320656d69746e x16: 757220494645206e x15: 6920646572727563
+> [   55.495784] x14: 636f206e6f697470 x13: ffff403e40540000 x12: 0000000000001c14
+> [   55.495787] x11: 000000000000095c x10: ffff403e40800000 x9 : ffff403e40540000
+> [   55.495790] x8 : 00000000ffff7fff x7 : ffff403e40800000 x6 : 0000000000000000
+> [   55.495792] x5 : ffff083e7fe9aaa0 x4 : 0000000000000000 x3 : 0000000000000000
+> [   55.495796] x2 : 0000000000000000 x1 : ffffb25146688de0 x0 : 00000000000000c0
+> [   55.495799] Call trace:
+> [   55.495800]  efi_call_virt_check_flags+0x40/0xac
+> [   55.495802]  efi_call_rts+0x29c/0x3d0
+> [   55.495805]  process_one_work+0x1d0/0x320
+> [   55.495808]  worker_thread+0x14c/0x444
+> [   55.495811]  kthread+0x10c/0x110
+> [   55.495814]  ret_from_fork+0x10/0x20
+> [   55.495815] ---[ end trace 0000000000000000 ]---
+> [   55.495818] Disabling lock debugging due to kernel taint
+> [   55.495822] efi: [Firmware Bug]: IRQ flags corrupted (0x00000000=>0x000000c0) by EFI set_time
+> [   55.504434] efi: EFI Runtime Services are disabled!
+> [   55.504465] rtc-efi rtc-efi.0: can't read time
+> [   56.479370] efi: EFI Runtime Services are disabled!
+> [   56.479394] rtc-efi rtc-efi.0: can't read time
+> [   57.479574] rtc-efi rtc-efi.0: can't read time
+> [   57.484030] rtc-efi rtc-efi.0: can't read time
+> [   57.488474] rtc-efi rtc-efi.0: can't read time
+> [   58.479692] rtc-efi rtc-efi.0: can't read time
+> [   58.484139] rtc-efi rtc-efi.0: can't read time
+>
+> (rtc-efi error message repeats ad nauseum)
+>
+> Note: this error message from the EFI rtc driver fires over and over and
+> clutters dmesg, will send a different report for this as I don't think it's
+> necessarily related to the two functions.
+>
+
+Yes, please. That should at least have a rate limit on it, but maybe a
+warn_once is better here.
