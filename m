@@ -2,50 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9CFB61E8A4
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 03:41:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C972361E8B6
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 03:52:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230306AbiKGClk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Nov 2022 21:41:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55690 "EHLO
+        id S230302AbiKGCwv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Nov 2022 21:52:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229995AbiKGClh (ORCPT
+        with ESMTP id S230050AbiKGCws (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Nov 2022 21:41:37 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B87A3634D;
-        Sun,  6 Nov 2022 18:41:36 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A2D0D1FB;
-        Sun,  6 Nov 2022 18:41:41 -0800 (PST)
-Received: from [10.162.42.7] (unknown [10.162.42.7])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 456083F703;
-        Sun,  6 Nov 2022 18:41:30 -0800 (PST)
-Message-ID: <a3e223bb-fdfa-4acc-a2f0-c12cd585e1a6@arm.com>
-Date:   Mon, 7 Nov 2022 08:11:28 +0530
+        Sun, 6 Nov 2022 21:52:48 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01EA2DE81;
+        Sun,  6 Nov 2022 18:52:45 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4N5G4C5VFpz4xG8;
+        Mon,  7 Nov 2022 13:52:43 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1667789564;
+        bh=yW3DO2jzP+a8S5PL8vmgBqBntPr0iyhX4uNvTOoFaY8=;
+        h=Date:From:To:Cc:Subject:From;
+        b=A83rCxj+8Ms+S/fVVi1k5p+z3YLXyFx/6O0QIDiAmvrA1T+iWHudELckKPM9ojJeD
+         vwWmWMSsxcs+mfnPr901FpyISfFnwAw4VlwOVQ62epzQ+7Z23iCpgSztacKSkL8Pa5
+         Zq0GjJuk1Bz5zudH8rFHCUMmKSFmlGR3QrbY08sBjEgaSj5O80xay4MK3dCwql6PRr
+         Djl4LgXbCkrQbGQWlkxTgruhNPHDSRIoUdH9YEkxBkk7kB6b9u+1oJIpq5rvumuwds
+         vicBSM3kbmJOyo0EaGIel9r/8fomQkE1LytVgtcqzQBB5LkLuLRY95AOu/7dU4PDhI
+         SrjlksSJQDdFw==
+Date:   Mon, 7 Nov 2022 13:52:39 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
+        Rafael Mendonca <rafaelmendsr@gmail.com>,
+        wuqiang <wuqiang.matt@bytedance.com>
+Subject: linux-next: manual merge of the mm tree with Linus' tree
+Message-ID: <20221107135239.77e8b1da@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH V4 6/7] arm64/perf: Add BRBE driver
-Content-Language: en-US
-To:     James Clark <james.clark@arm.com>
-Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Suzuki Poulose <suzuki.poulose@arm.com>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, peterz@infradead.org,
-        acme@kernel.org, mark.rutland@arm.com, will@kernel.org,
-        catalin.marinas@arm.com
-References: <20221017055713.451092-1-anshuman.khandual@arm.com>
- <20221017055713.451092-7-anshuman.khandual@arm.com>
- <c5585dd1-4491-c48d-311d-ddc27aaa01a3@arm.com>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <c5585dd1-4491-c48d-311d-ddc27aaa01a3@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: multipart/signed; boundary="Sig_/WxTQCICi2oFaP.G7a75LoQB";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,112 +53,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+--Sig_/WxTQCICi2oFaP.G7a75LoQB
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
+
+Hi all,
+
+Today's linux-next merge of the mm tree got a conflict in:
+
+  kernel/trace/fprobe.c
+
+between commit:
+
+  d05ea35e7eea ("fprobe: Check rethook_alloc() return in rethook initializa=
+tion")
+
+from Linus' tree and commit:
+
+  7ceeb4e77fec ("kprobes,lib: kretprobe scalability improvement")
+
+from the mm tree.
+
+I fixed it up (the latter included the fix from the former, so I just
+used the latter) and can carry the fix as necessary. This is now fixed
+as far as linux-next is concerned, but any non trivial conflicts should
+be mentioned to your upstream maintainer when your tree is submitted for
+merging.  You may also want to consider cooperating with the maintainer
+of the conflicting tree to minimise any particularly complex conflicts.
 
 
-On 11/2/22 21:06, James Clark wrote:
-> 
-> On 17/10/2022 06:57, Anshuman Khandual wrote:
->> This adds a BRBE driver which implements all the required helper functions
->> for struct arm_pmu. Following functions are defined by this driver which
->> will configure, enable, capture, reset and disable BRBE buffer HW as and
->> when requested via perf branch stack sampling framework.
->>
->> - arm64_pmu_brbe_filter()
->> - arm64_pmu_brbe_enable()
->> - arm64_pmu_brbe_disable()
->> - arm64_pmu_brbe_read()
->> - arm64_pmu_brbe_probe()
->> - arm64_pmu_brbe_reset()
->> - arm64_pmu_brbe_supported()
->>
->> Cc: Peter Zijlstra <peterz@infradead.org>
->> Cc: Ingo Molnar <mingo@redhat.com>
->> Cc: Arnaldo Carvalho de Melo <acme@kernel.org>
->> Cc: Mark Rutland <mark.rutland@arm.com>
->> Cc: Will Deacon <will@kernel.org>
->> Cc: Catalin Marinas <catalin.marinas@arm.com>
->> Cc: linux-arm-kernel@lists.infradead.org
->> Cc: linux-perf-users@vger.kernel.org
->> Cc: linux-kernel@vger.kernel.org
->> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
->> ---
->>  arch/arm64/kernel/perf_event.c |   8 +-
->>  drivers/perf/Kconfig           |  11 +
->>  drivers/perf/Makefile          |   1 +
->>  drivers/perf/arm_pmu_brbe.c    | 441 +++++++++++++++++++++++++++++++++
->>  drivers/perf/arm_pmu_brbe.h    | 259 +++++++++++++++++++
->>  include/linux/perf/arm_pmu.h   |  20 ++
->>  6 files changed, 739 insertions(+), 1 deletion(-)
->>  create mode 100644 drivers/perf/arm_pmu_brbe.c
->>  create mode 100644 drivers/perf/arm_pmu_brbe.h
->>
->> diff --git a/arch/arm64/kernel/perf_event.c b/arch/arm64/kernel/perf_event.c
->> index 97db333d1208..85a3aaefc0fb 100644
->> --- a/arch/arm64/kernel/perf_event.c
->> +++ b/arch/arm64/kernel/perf_event.c
->> @@ -1034,31 +1034,37 @@ static int armv8pmu_filter_match(struct perf_event *event)
->>  
->>  static void armv8pmu_brbe_filter(struct pmu_hw_events *hw_event, struct perf_event *event)
->>  {
->> +	arm64_pmu_brbe_filter(hw_event, event);
->>  }
->>  
->>  static void armv8pmu_brbe_enable(struct pmu_hw_events *hw_event)
->>  {
->> +	arm64_pmu_brbe_enable(hw_event);
->>  }
->>  
->>  static void armv8pmu_brbe_disable(struct pmu_hw_events *hw_event)
->>  {
->> +	arm64_pmu_brbe_disable(hw_event);
->>  }
->>  
->>  static void armv8pmu_brbe_read(struct pmu_hw_events *hw_event, struct perf_event *event)
->>  {
->> +	arm64_pmu_brbe_read(hw_event, event);
->>  }
->>  
->>  static void armv8pmu_brbe_probe(struct pmu_hw_events *hw_event)
->>  {
->> +	arm64_pmu_brbe_probe(hw_event);
->>  }
->>  
->>  static void armv8pmu_brbe_reset(struct pmu_hw_events *hw_event)
->>  {
->> +	arm64_pmu_brbe_reset(hw_event);
->>  }
->>  
->>  static bool armv8pmu_brbe_supported(struct perf_event *event)
->>  {
->> -	return false;
->> +	return arm64_pmu_brbe_supported(event);
->>  }
->>  
->>  static void armv8pmu_reset(void *info)
->> diff --git a/drivers/perf/Kconfig b/drivers/perf/Kconfig
->> index 341010f20b77..4efd0a77c5ff 100644
->> --- a/drivers/perf/Kconfig
->> +++ b/drivers/perf/Kconfig
->> @@ -190,6 +190,17 @@ config ALIBABA_UNCORE_DRW_PMU
->>  	  Support for Driveway PMU events monitoring on Yitian 710 DDR
->>  	  Sub-system.
->>  
->> +config ARM_BRBE_PMU
->> +	tristate "Enable support for Branch Record Buffer Extension (BRBE)"
-> Hi Anshuman,
-> 
-> I get a few build errors if this is enabled as a module, and it's
-> missing the module boilerplate stuff. I'm wondering if tristate is a
-> mistake and it's supposed to be static only? Otherwise it probably needs
-> a few different things fixing up.
-> 
-> It would be nice to have it as a module so it's easy to work on in the
-> future.
-> 
->> +	depends on ARM64 && ARM_PMU
->> +	default y
-> Should this be default m?
-> 
 
-Right, "Tristate" here does not really make sense as ARM_BRBE_PMU is dependent
-on base ARM_PMU, where as ARM_SPE is abstracted as a separate PMU in itself.
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/WxTQCICi2oFaP.G7a75LoQB
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNocvcACgkQAVBC80lX
+0GyigQf/YU6AngrZ4iMRaiXZ+rvGKVT8Y5yNpeMNo7V8Y/w6u6jS2UxNY0CcqGeT
+TJ2xcQ7U5xD4Lr+BfMRYd48YiD6Z1p5upzTW5uCZ3h70Wf3WeUgs9uP/hVqgPNOj
+io0IZqfSuKF3+vvCK3b1bfv8AYY+Hh5skbnecwBY5VHjKqHTTFZTPOCJKIH9j/45
+sylptiYY/51YGVbveQBPtp+GRkY0+FhD+450j4hzTMFkIiFHNs67uRKbrDnSOQie
+Ld8bEkigwU6E2FwIdb5sX+qv4ZPlo8jx4f5SyrqFG2IIlgE5zYXuGV3XhTDjz/9C
++C7sDW1y5y5UWt9b7Kbl9S+erYeuGw==
+=mJZR
+-----END PGP SIGNATURE-----
+
+--Sig_/WxTQCICi2oFaP.G7a75LoQB--
