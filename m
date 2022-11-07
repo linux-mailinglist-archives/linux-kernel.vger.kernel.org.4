@@ -2,114 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A57D61F688
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 15:48:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ACE4B61F68A
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 15:49:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231972AbiKGOsk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 09:48:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60664 "EHLO
+        id S232077AbiKGOtl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 09:49:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231249AbiKGOsi (ORCPT
+        with ESMTP id S231355AbiKGOtk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 09:48:38 -0500
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 815FD1581D;
-        Mon,  7 Nov 2022 06:48:36 -0800 (PST)
-Received: by mail-wr1-x435.google.com with SMTP id z14so16575551wrn.7;
-        Mon, 07 Nov 2022 06:48:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=L1N3AZluJC5PMpvDgMOhDOY9j2qE8n3HGiZz4zfJ5qE=;
-        b=Rkma8QkCBGz3zCp7ddqCDHMuRgU+2izMkr6rzs57tin6XmNxRbMNYFmppsEOzu3wC2
-         hNmOzbRFJE+74isWC8SSJm7e2W//5OXwaD5IZp6A80s+S2134FKGJMc1T7caEhBPYP5w
-         7ODJYi3CQclJS72auvHJd6ht/V6ADz7jr1t9FL5VIocQO/UsL71DL9GmAFrc+eQUE2+O
-         D0rqz+TcfQVdd5x4LTIdEMp1GkUeZH0Ngi+uhZmZNrw8jszu3bRqG18DtubxS2SjrwCa
-         I3iJbFsxOfOH9aauVXOPlJDmwRWMZGRG/hiFsjVGtIR+1TChqqjGiUqHgw6BjOjpMGgk
-         Rhsw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=L1N3AZluJC5PMpvDgMOhDOY9j2qE8n3HGiZz4zfJ5qE=;
-        b=Y5ILIWttf4c9U058Mca3LTdbGS8DCy9plRqTP/L9nPf0NDkU3VKGKckBAmoRh8Okzs
-         kBTwQ1puRIWlrJ9Ists12gKis9bwR4+wuAip3liZoggF4vyqZ+qpu0mtpGz8bn9kplqU
-         y0cdA/kJlnKQfaJQ+XyC8WOBMWWGrrpE+3T+wk3PKDuEj2J8YjIgS9sXakEIplixeo+E
-         I3nmI3rrw8PwuAmKNbhzRUOy2NuFu0nD+jUxpKAYv3cpXlao0DnUva+SE/LgpJ3UVfiD
-         P7HrXZ1too4Q8iL6lTa9OBlVng+hy8sH/ltz0GvNH+153PW3N7TghxjPNRzP7r1+qEzw
-         s50A==
-X-Gm-Message-State: ACrzQf3ycsBwCc7iftKn+ob1lV5vBTUY93kgLgeuJWB6jbDEAi3QoXnN
-        n+LT5AN4KSHvNCx0vxUny8w=
-X-Google-Smtp-Source: AMsMyM5csMmCF4sPQjKZxYDdIAvNi0HAaSVzsB8zbHm1KYlUHCevLnyCUiLlWhfuEGTYLQivB1eXpQ==
-X-Received: by 2002:a5d:5e84:0:b0:236:cdb8:c67f with SMTP id ck4-20020a5d5e84000000b00236cdb8c67fmr25941828wrb.159.1667832514985;
-        Mon, 07 Nov 2022 06:48:34 -0800 (PST)
-Received: from localhost.localdomain ([95.183.227.98])
-        by smtp.gmail.com with ESMTPSA id m1-20020a7bca41000000b003c6c3fb3cf6sm8418820wml.18.2022.11.07.06.48.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Nov 2022 06:48:34 -0800 (PST)
-From:   Yassine Oudjana <yassine.oudjana@gmail.com>
-X-Google-Original-From: Yassine Oudjana <y.oudjana@protonmail.com>
-To:     MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        =?UTF-8?q?Alvin=20=C5=A0ipraga?= <alsi@bang-olufsen.dk>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Marek Vasut <marex@denx.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Yassine Oudjana <yassine.oudjana@gmail.com>,
-        Yassine Oudjana <y.oudjana@protonmail.com>
-Subject: [PATCH] extcon: usbc-tusb320: Call the Type-C IRQ handler only if a port is registered
-Date:   Mon,  7 Nov 2022 17:48:10 +0300
-Message-Id: <20221107144810.588755-1-y.oudjana@protonmail.com>
-X-Mailer: git-send-email 2.38.1
+        Mon, 7 Nov 2022 09:49:40 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 843861BEB8;
+        Mon,  7 Nov 2022 06:49:39 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 155D561143;
+        Mon,  7 Nov 2022 14:49:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F677C433D6;
+        Mon,  7 Nov 2022 14:49:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667832578;
+        bh=3WK9Jq/Qe/BgudIXrjjalPxMr2bjl68Gs+psLSmfhcc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=FWGGMUUeRPCsiDwZofNcQpiJuk6DroMw24HvO46ZQ5KbOwVn2En6Ex4K/E/3Ny3ZS
+         Rmt1UCF4RMrQst0hl4lW2S89wcz1bOzLlOkLDbRTu4SqJ05E+qXrTndRkKW1CiHpyP
+         mK6eRUMpIwGo5r73WpfyjC4+Vxo7NoC/yMr5bOUi0Gmg/d63Quw54+O3dLndMC4OUK
+         ruFvx0YL33X4+GDxk0dpoOUaebskl1oCl+LhOjs6W2fQv9FQZe9VLD0tuWab3tE5O3
+         4zxX7XmeN3tVXT1JlgjRf+xaE4rVtWC3Sn35j+hsWnc6VjGBYbobr4jwQqHwfOaWT2
+         UKkOIZXwaGuZQ==
+Date:   Mon, 7 Nov 2022 14:49:31 +0000
+From:   Will Deacon <will@kernel.org>
+To:     Jianlin Lv <iecedge@gmail.com>
+Cc:     corbet@lwn.net, catalin.marinas@arm.com, rostedt@goodmis.org,
+        mingo@redhat.com, naveen.n.rao@linux.ibm.com,
+        anil.s.keshavamurthy@intel.com, davem@davemloft.net,
+        mhiramat@kernel.org, arnd@arndb.de, zhengzengkai@huawei.com,
+        jianlv@ebay.com, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        mark.rutland@arm.com
+Subject: Re: [PATCH] arm64/kprobes: Add support for KPROBES_ON_FTRACE
+Message-ID: <20221107144931.GA20793@willie-the-truck>
+References: <20220728020250.1699-1-iecedge@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220728020250.1699-1-iecedge@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yassine Oudjana <y.oudjana@protonmail.com>
+[+Mark R]
 
-Commit bf7571c00dca ("extcon: usbc-tusb320: Add USB TYPE-C support")
-added an optional Type-C interface to the driver but missed to check
-if it is in use when calling the IRQ handler. This causes an oops on
-devices currently using the old extcon interface. Check if a Type-C
-port is registered before calling the Type-C IRQ handler.
+On Thu, Jul 28, 2022 at 02:02:50AM +0000, Jianlin Lv wrote:
+> This is the arm64 version of ftrace-based kprobes to avoid the overhead
+> with regular kprobes, by using the ftrace infrastructure.
+> 
+> Signed-off-by: Jianlin Lv <iecedge@gmail.com>
+> ---
+>  .../debug/kprobes-on-ftrace/arch-support.txt  |  2 +-
+>  arch/arm64/Kconfig                            |  1 +
+>  arch/arm64/kernel/probes/Makefile             |  1 +
+>  arch/arm64/kernel/probes/kprobes-ftrace.c     | 81 +++++++++++++++++++
+>  include/linux/kprobes.h                       |  2 +
+>  kernel/kprobes.c                              |  4 +-
+>  6 files changed, 88 insertions(+), 3 deletions(-)
+>  create mode 100644 arch/arm64/kernel/probes/kprobes-ftrace.c
 
-Fixes: bf7571c00dca ("extcon: usbc-tusb320: Add USB TYPE-C support")
-Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
----
- drivers/extcon/extcon-usbc-tusb320.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+Sorry for the slow reply on this, but I think this deserved to be split
+into two patches: the first one reworking the core check_ftrace_location()
+logic to work properly with branch-and-link style architectures, and the
+second one adding support for arm64.
 
-diff --git a/drivers/extcon/extcon-usbc-tusb320.c b/drivers/extcon/extcon-usbc-tusb320.c
-index 41041ff0fadb..037bc11b2a48 100644
---- a/drivers/extcon/extcon-usbc-tusb320.c
-+++ b/drivers/extcon/extcon-usbc-tusb320.c
-@@ -327,7 +327,14 @@ static irqreturn_t tusb320_irq_handler(int irq, void *dev_id)
- 		return IRQ_NONE;
- 
- 	tusb320_extcon_irq_handler(priv, reg);
--	tusb320_typec_irq_handler(priv, reg);
-+
-+	/*
-+	 * Type-C support is optional for backward compatibility.
-+	 * Only call the Type-C handler if a port had been registered
-+	 * previously.
-+	 */
-+	if (priv->port)
-+		tusb320_typec_irq_handler(priv, reg);
- 
- 	regmap_write(priv->regmap, TUSB320_REG9, reg);
- 
--- 
-2.38.1
+I'd also prefer that we don't just punt the whole of check_ftrace_location()
+to the arch code using weak symbols. I'd have thought it would be cleaner
+for architectures to specify the offset which needs to be applied to the
+PC instead.
 
+Having said that, how do architectures such as PowerPC and Risc-V handle
+this today without changing the core code?
+
+Will
