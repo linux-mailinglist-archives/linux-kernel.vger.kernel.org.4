@@ -2,251 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5879461FB4F
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 18:27:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2CD361FB77
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 18:33:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232038AbiKGR1Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 12:27:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40616 "EHLO
+        id S232853AbiKGRdQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 12:33:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232797AbiKGR1K (ORCPT
+        with ESMTP id S232815AbiKGRdN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 12:27:10 -0500
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C469C23EBD
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 09:27:08 -0800 (PST)
-Received: by mail-wm1-x330.google.com with SMTP id c3-20020a1c3503000000b003bd21e3dd7aso10108620wma.1
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 09:27:08 -0800 (PST)
+        Mon, 7 Nov 2022 12:33:13 -0500
+Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EE3A1F9FC
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 09:33:12 -0800 (PST)
+Received: by mail-oi1-x234.google.com with SMTP id c129so12936248oia.0
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 09:33:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=/Pcc8LRKgOyNv6WsjXvv239va06IdZNjx9Vjm48MX3I=;
-        b=PLmwVV82R5Wj8J0VZxf7f7iWHEEQqSkq3KHI8gpsvXg2CFmMAgjzLBPraztFCHyRoU
-         xvYI3cuwIukME3111uI0OL5iMLrEoZAV+zwL5SLn8xGBfE7AAloAmtlsETM11/6c5OvY
-         mrcbx5+2SlJVT0raHHxZ+rJxavVscGLpLD4s2dNGhskwBAtkWehBBTETyWBEfhJLP7zO
-         EUCpH1bo4cIeoYIH5K50cNP3vz7QukPKTY77f+gEj/Vr9YAIXbXeVLmUDDTu87rMRw77
-         2/P5aCzcws0xLi/FBlISevTDKeK3I2TqDWFxW9Oy+WB5DcMpgxhWrFK+95FuGO5Ja84a
-         kH1Q==
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=OtwMIMageNgEFgITDbP/X4AlmExFVOD7QsjK39jRkOs=;
+        b=ZrBbGd0NE5W3bFjfpMfVEGchJiOqL5vKGUnJZWHQEDCz71oryF6CDiPscJkkJaNeeg
+         /pKDfIl6hW5yw8tjgrcZSOwrloCrFqYb1/s9Bc1/cV94xFkaKkZwH1bCSgyaTCtOH5Nq
+         2ijwSehO6aXkrD87GuWevIaaXGPhzXmGc/u0k=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=/Pcc8LRKgOyNv6WsjXvv239va06IdZNjx9Vjm48MX3I=;
-        b=35DB+whWt7ubE5Lmn9+9PfGfnCaL7yEIpaSrwD3ehdwH/0Wya2JL3CB9h19Xbnu/gc
-         yl9qh1DWkpRq/ZXRA/nXFBoaOLtoe8bq6ulKhzQmYgDq/iny/+guj1dZg65CUAOwuhsL
-         1umrUMuDeIBxn4Kqy6v6+NmW7zXT6CkvoZnGq6UKYt3H8PvQY3w2Yu2SxrS30UXs9iJk
-         aObcigAQ5S0KnIwGp42VoiA2PB17JPx7B0/gEcLXquvZua/4ITcP7rryMAFHW2e/GJp2
-         2c6crZxVMYwpn11sc6DHGXzDhMnIP3YDOuoaj9Q9nh7zjZGQ7zrNAKHjmS8+bdJb8y0/
-         2LjQ==
-X-Gm-Message-State: ACrzQf2dpDnxk5q9yc0KrE6gI0hCHNQMcHwlNA7SQaphqLDhbHPYjSL3
-        8T3drKb0wMXROPdS3QzBdfWtWw==
-X-Google-Smtp-Source: AMsMyM6q6PZGGJUkukBvogL8l9nQiTpwonjfKWwZwZJBCkrL7u7qFaLzMj9WHibspzoBS2eqtJ9qhQ==
-X-Received: by 2002:a7b:cc13:0:b0:3cf:8297:d61 with SMTP id f19-20020a7bcc13000000b003cf82970d61mr23045340wmh.160.1667842027294;
-        Mon, 07 Nov 2022 09:27:07 -0800 (PST)
-Received: from ?IPV6:2a01:e0a:982:cbb0:64c8:555c:905:adc6? ([2a01:e0a:982:cbb0:64c8:555c:905:adc6])
-        by smtp.gmail.com with ESMTPSA id m6-20020a1c2606000000b003c6edc05159sm12139091wmm.1.2022.11.07.09.27.06
+        bh=OtwMIMageNgEFgITDbP/X4AlmExFVOD7QsjK39jRkOs=;
+        b=hFRvHh4CsrK9dzjO1E67Eks+0NeigmxoPvd/ezg4UqX21eSHIwpudnreSjeFwfaHpz
+         Hd+MWpp0kYz/YWH/W9zB7W8B9OkAeF+9m2aycv26C0q9WhRdWeotvGl3EeapowhL32Er
+         EFa8tIpUmKQ7bq1ckMq2a6R7NqW0aIB9gnUNuwISbDSrjire0OYmGfSvC2OUDjcc5JoA
+         wvYAkbSDns/Ft42o7liPYQCsWVz7O/l4f/7zu4oKhnDh2stP8FRIdcakQpeBkiB+kX9e
+         JI+S+JeeOSB++wJW7l/Fo5UyZiw6b2iSdp6EEaGuv9hEcd3bbLQ0UtSmKMXDLNEXDO3r
+         zy+g==
+X-Gm-Message-State: ACrzQf0127i1G+feATMVQaR9QEpfQgNAimf04Q9niaKZjYOtYEikUqYE
+        rB+bO2d3dQHNu16R9FCUyzgUuJ1DcZbR4g==
+X-Google-Smtp-Source: AMsMyM58URHlet91YVc1ZTCOgcPmck7PwChUtJRD93+Pe7zPa+yANJZKicGRDYFVxXEcOAezWKb1oQ==
+X-Received: by 2002:a05:6808:490:b0:359:fcf5:3c0f with SMTP id z16-20020a056808049000b00359fcf53c0fmr24740171oid.65.1667842391642;
+        Mon, 07 Nov 2022 09:33:11 -0800 (PST)
+Received: from mail-oo1-f41.google.com (mail-oo1-f41.google.com. [209.85.161.41])
+        by smtp.gmail.com with ESMTPSA id x51-20020a9d37b6000000b00666a5b5d20fsm3115030otb.32.2022.11.07.09.33.09
+        for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Nov 2022 09:27:06 -0800 (PST)
-Message-ID: <cb47f89f-00ea-96e8-1e10-ae84406b924b@linaro.org>
-Date:   Mon, 7 Nov 2022 18:27:05 +0100
+        Mon, 07 Nov 2022 09:33:10 -0800 (PST)
+Received: by mail-oo1-f41.google.com with SMTP id x196-20020a4a41cd000000b0049f064d2591so156543ooa.11
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 09:33:09 -0800 (PST)
+X-Received: by 2002:a05:6902:1352:b0:6bb:3f4b:9666 with SMTP id
+ g18-20020a056902135200b006bb3f4b9666mr46634218ybu.101.1667842059236; Mon, 07
+ Nov 2022 09:27:39 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH] arm64: dts: meson-s4-s805x2: add 12V/3.3V/1.8V/vddcpu
- nodes for Regulator
-Content-Language: en-US
-To:     Chao Zhang <chao.zhang@amlogic.com>,
+References: <20221107161740.144456-1-david@redhat.com>
+In-Reply-To: <20221107161740.144456-1-david@redhat.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon, 7 Nov 2022 09:27:23 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wj51-dtxf8BQBYP+9Kc3ejq4Y0=-6hCbf_XAnkT3fsgDQ@mail.gmail.com>
+Message-ID: <CAHk-=wj51-dtxf8BQBYP+9Kc3ejq4Y0=-6hCbf_XAnkT3fsgDQ@mail.gmail.com>
+Subject: Re: [PATCH RFC 00/19] mm/gup: remove FOLL_FORCE usage from drivers
+ (reliable R/O long-term pinning)
+To:     David Hildenbrand <david@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        etnaviv@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
         linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Amjad Ouled-Ameur <aouledameur@baylibre.com>
-References: <20221107021116.2732032-1-chao.zhang@amlogic.com>
-Organization: Linaro Developer Services
-In-Reply-To: <20221107021116.2732032-1-chao.zhang@amlogic.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        linux-samsung-soc@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Peter Xu <peterx@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Hugh Dickins <hughd@google.com>, Nadav Amit <namit@vmware.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        David Airlie <airlied@gmail.com>,
+        Oded Gabbay <ogabbay@kernel.org>, Arnd Bergmann <arnd@arndb.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Mon, Nov 7, 2022 at 8:18 AM David Hildenbrand <david@redhat.com> wrote:
+>
+> So instead, make R/O long-term pinning work as expected, by breaking COW
+> in a COW mapping early, such that we can remove any FOLL_FORCE usage from
+> drivers.
 
-On 07/11/2022 03:11, Chao Zhang wrote:
-> From: "chao.zhang" <chao.zhang@amlogic.com>
-> 
-> Add 12V/3.3V/1.8V/vddcpu nodes for Regulator on Amlogic S4 SoCs.
-> 
-> Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
-> Signed-off-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
-> Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-> Link: https://lore.kernel.org/r/20221004-up-aml-fix-spi-v4-3-0342d8e10c49@baylibre.com
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+Nothing makes me unhappy from a quick scan through these patches.
 
-I think you did a bad copy paste because those lines comes from another already applied commit.
+And I'd really love to just have this long saga ended, and FOLL_FORCE
+finally relegated to purely ptrace accesses.
 
-Please add your own Signed-off-by.
+So an enthusiastic Ack from me.
 
-> ---
->   .../dts/amlogic/meson-s4-s805x2-aq222.dts     | 85 +++++++++++++++++++
->   arch/arm64/boot/dts/amlogic/meson-s4.dtsi     |  4 +
->   2 files changed, 89 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/amlogic/meson-s4-s805x2-aq222.dts b/arch/arm64/boot/dts/amlogic/meson-s4-s805x2-aq222.dts
-> index 8ffbcb2b1ac5..80c959766b79 100644
-> --- a/arch/arm64/boot/dts/amlogic/meson-s4-s805x2-aq222.dts
-> +++ b/arch/arm64/boot/dts/amlogic/meson-s4-s805x2-aq222.dts
-> @@ -22,6 +22,91 @@ memory@0 {
->   		device_type = "memory";
->   		reg = <0x0 0x0 0x0 0x40000000>;
->   	};
-> +	main_12v: regulator-main_12v {
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "12V";
-> +		regulator-min-microvolt = <12000000>;
-> +		regulator-max-microvolt = <12000000>;
-> +		regulator-always-on;
-> +	};
-> +
-> +	vddao_3v3: regulator-vddao_3v3 {
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "VDDAO_3V3";
-> +		regulator-min-microvolt = <3300000>;
-> +		regulator-max-microvolt = <3300000>;
-> +		vin-supply = <&main_12v>;
-> +		regulator-always-on;
-> +	};
-> +
-> +	vddio_ao1v8: regulator-vddio_ao1v8 {
-> +	       compatible = "regulator-fixed";
-> +	       regulator-name = "VDDIO_AO1V8";
-> +	       regulator-min-microvolt = <1800000>;
-> +	       regulator-max-microvolt = <1800000>;
-> +	       vin-supply = <&vddao_3v3>;
-> +	       regulator-always-on;
-> +	};
-> +
-> +	vddcpu: regulator-vddcpu {
-> +		/*
-> +		 * SY8120B1ABC DC/DC Regulator.
-> +		 */
-> +		compatible = "pwm-regulator";
-> +
-> +		regulator-name = "VDDCPU";
-> +		regulator-min-microvolt = <689000>;
-> +		regulator-max-microvolt = <1049000>;
-> +
-> +		vin-supply = <&main_12v>;
-> +
-> +		pwms = <&pwm_ij 1 1500 0>;
-
-Without the PWM node this won't apply.
-
-> +		pwm-dutycycle-range = <100 0>;
-> +
-> +		regulator-boot-on;
-> +		regulator-always-on;
-> +		max-duty-cycle = <1500>;
-> +		/* Voltage Duty-Cycle */
-> +		voltage-table = <1049000 0>,
-> +				<1039000 3>,
-> +				<1029000 6>,
-> +				<1019000 9>,
-> +				<1009000 12>,
-> +				<999000 14>,
-> +				<989000 17>,
-> +				<979000 20>,
-> +				<969000 23>,
-> +				<959000 26>,
-> +				<949000 29>,
-> +				<939000 31>,
-> +				<929000 34>,
-> +				<919000 37>,
-> +				<909000 40>,
-> +				<899000 43>,
-> +				<889000 45>,
-> +				<879000 48>,
-> +				<869000 51>,
-> +				<859000 54>,
-> +				<849000 56>,
-> +				<839000 59>,
-> +				<829000 62>,
-> +				<819000 65>,
-> +				<809000 68>,
-> +				<799000 70>,
-> +				<789000 73>,
-> +				<779000 76>,
-> +				<769000 79>,
-> +				<759000 81>,
-> +				<749000 84>,
-> +				<739000 87>,
-> +				<729000 89>,
-> +				<719000 92>,
-> +				<709000 95>,
-> +				<699000 98>,
-> +				<689000 100>;
-
-This is wrong, the regulator-min-microvolt and regulator-max-microvolt + pwm-dutycycle-range is enough.
-
-> +		status = "okay";
-> +	};
-> +
->   
->   };
->   
-> diff --git a/arch/arm64/boot/dts/amlogic/meson-s4.dtsi b/arch/arm64/boot/dts/amlogic/meson-s4.dtsi
-> index ad50cba42d19..405a5af9ac1d 100644
-> --- a/arch/arm64/boot/dts/amlogic/meson-s4.dtsi
-> +++ b/arch/arm64/boot/dts/amlogic/meson-s4.dtsi
-> @@ -17,6 +17,7 @@ cpu0: cpu@0 {
->   			compatible = "arm,cortex-a35";
->   			reg = <0x0 0x0>;
->   			enable-method = "psci";
-> +			cpu-supply = <&vddcpu>;
->   		};
->   
->   		cpu1: cpu@1 {
-> @@ -24,6 +25,7 @@ cpu1: cpu@1 {
->   			compatible = "arm,cortex-a35";
->   			reg = <0x0 0x1>;
->   			enable-method = "psci";
-> +			cpu-supply = <&vddcpu>;
->   		};
->   
->   		cpu2: cpu@2 {
-> @@ -31,6 +33,7 @@ cpu2: cpu@2 {
->   			compatible = "arm,cortex-a35";
->   			reg = <0x0 0x2>;
->   			enable-method = "psci";
-> +			cpu-supply = <&vddcpu>;
->   		};
->   
->   		cpu3: cpu@3 {
-> @@ -38,6 +41,7 @@ cpu3: cpu@3 {
->   			compatible = "arm,cortex-a35";
->   			reg = <0x0 0x3>;
->   			enable-method = "psci";
-> +			cpu-supply = <&vddcpu>;
->   		};
->   	};
->   
-
-Without a clock, this is useless.
-
-Neil
-
+                   Linus
