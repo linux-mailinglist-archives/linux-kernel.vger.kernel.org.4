@@ -2,165 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0900E61FAEB
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 18:14:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B690A61FAEE
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 18:15:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232466AbiKGROo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 12:14:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59952 "EHLO
+        id S232308AbiKGRPL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 12:15:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232445AbiKGROl (ORCPT
+        with ESMTP id S231350AbiKGRPK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 12:14:41 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F4071CB38;
-        Mon,  7 Nov 2022 09:14:40 -0800 (PST)
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2A7GVWUq010003;
-        Mon, 7 Nov 2022 17:14:33 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pp1;
- bh=kdALMMXxbkxzLHn276hXvIKGsTAIHW3diqQ49ApReSU=;
- b=cRHeeDJ302tr+BRwwyg/64M8HgerBPriwwnJ0m0vKxQM/azAaUUn7H/iC5uLAR8k7zlm
- AeU9Xp3IRqBHipw4XHoL7UNF3kletXE04y/hm8A66Cv49MOg+1n+JeTQjTu4AZKYZhrJ
- TVNcgJ6zwa1rfh6TXHzpSKqiYtBlHFRijb9Ec9faBX6wto6u4bnwfWNv/SAael2o/eu1
- KaPumcZG/LBSLVItS0rQdhazE+eEXjmLgv35YfvGr4Xn81iH/cLPq5nCLSuTBvlyGvrI
- TvCBtM/utQYKXaoRhDag3kerssIDbRGvjfHJXVp8RMAGt801GDeo0m3f/2N3FzcDCJlc yg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3kp1w8k5bf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 07 Nov 2022 17:14:32 +0000
-Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2A7EwjqK010163;
-        Mon, 7 Nov 2022 17:14:32 GMT
-Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3kp1w8k5at-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 07 Nov 2022 17:14:32 +0000
-Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
-        by ppma02dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2A7H51aO018021;
-        Mon, 7 Nov 2022 17:14:31 GMT
-Received: from b01cxnp22036.gho.pok.ibm.com (b01cxnp22036.gho.pok.ibm.com [9.57.198.26])
-        by ppma02dal.us.ibm.com with ESMTP id 3kngnd5825-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 07 Nov 2022 17:14:31 +0000
-Received: from smtpav01.wdc07v.mail.ibm.com ([9.208.128.113])
-        by b01cxnp22036.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2A7HEUS023593568
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 7 Nov 2022 17:14:30 GMT
-Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CFD3558066;
-        Mon,  7 Nov 2022 17:14:29 +0000 (GMT)
-Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B36ED5806C;
-        Mon,  7 Nov 2022 17:14:28 +0000 (GMT)
-Received: from slate16.aus.stglabs.ibm.com (unknown [9.65.228.202])
-        by smtpav01.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Mon,  7 Nov 2022 17:14:28 +0000 (GMT)
-From:   Eddie James <eajames@linux.ibm.com>
-To:     linux-integrity@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, peterhuewe@gmx.de, jarkko@kernel.org,
-        jgg@ziepe.ca, joel@jms.id.au, Eddie James <eajames@linux.ibm.com>
-Subject: [PATCH v2] tpm: Add flag to use default cancellation policy
-Date:   Mon,  7 Nov 2022 11:14:23 -0600
-Message-Id: <20221107171423.51019-1-eajames@linux.ibm.com>
-X-Mailer: git-send-email 2.31.1
+        Mon, 7 Nov 2022 12:15:10 -0500
+Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41D5D1C42C;
+        Mon,  7 Nov 2022 09:15:09 -0800 (PST)
+Received: by mail-qk1-x72c.google.com with SMTP id x18so7558789qki.4;
+        Mon, 07 Nov 2022 09:15:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=lNZBxRCT6IoAOSKA4oKxRQJpHQcbfNkzKSkfJsFKok8=;
+        b=qRICBuBNJv6NB+1PB2j41AL/m8SvYi7+EvVl85EQCCNPH/+jQEK9uTAyfj945g1WMU
+         rBWhD5wZfyr4Bs24XemL3APERdst6BR/i0Iz1QpaKX0Nn02tXF8ApsB4PjVgcKes//co
+         jhVCbO5K/KSZPQ7D2dSW2qm4wTgHCtXT3CYxm+N08uVSS6fFbiblth8cxKkkWtMVjSsO
+         DfdPr6HEbvHryUdo8kTACRaMIqVRfQZtMXrO0GI8KuzUD10QAtdJReVX7FdXWd+J5jBB
+         GTRMp5f674A2nePjRtwpdF3a23kzs7O26Vm7ReVa47Nw42JVc76B1WeRBJYSspkNMIEA
+         5JKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=lNZBxRCT6IoAOSKA4oKxRQJpHQcbfNkzKSkfJsFKok8=;
+        b=X/K8V3rKDgcNXOIiC5Srov4GgXdxg1tQYkiZ50Kd5pPRw8eGbW06pEXbJLDY/I9Ib5
+         kCk1mc+bTWrAdV3n+eng7O7utCBNW5GsSi8XRbR8VSmMfFFqEH0AqQFU7B/T9EN9y9UK
+         Y8vzPUbyxJ7bv0rSzxlm1AP41N+hPqXgY3m6raLGJBhwile96mksv5dRp920bdn84XHW
+         jLh78Pa5JJR0cj7mSE9vsmWlvgTnCWY9Xs6LVWHU8BbzWg3sC7AffgJbogNF+PeO9as4
+         fkBDVwypAPct40VGLPIubPh/AbAta8JBwCjrneDp/dNnu8icAWG0gtzNO+Y3IdzJCDgq
+         H2RA==
+X-Gm-Message-State: ACrzQf1d+T5FQKQBn1iUErDoFbks+f0GhSH/djcjnhndR74F0lz4rsYn
+        N1JxAeKVWfAPdlY57Vn3Qt7s1Sr9eQkaYw==
+X-Google-Smtp-Source: AMsMyM6Fm9D00A5eYTrA5OD7zVWM0jWQTjM1Qkkzrb+Cs++Ch/5U1B6aI2DpxcQPvwgH8VkzE6I1IA==
+X-Received: by 2002:a05:620a:15ba:b0:6fa:ae91:b2b7 with SMTP id f26-20020a05620a15ba00b006faae91b2b7mr8129203qkk.611.1667841308049;
+        Mon, 07 Nov 2022 09:15:08 -0800 (PST)
+Received: from glsvmlin.ini.cmu.edu (GLSVMLIN.INI.CMU.EDU. [128.2.16.9])
+        by smtp.gmail.com with ESMTPSA id az36-20020a05620a172400b006ce9e880c6fsm7333611qkb.111.2022.11.07.09.15.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Nov 2022 09:15:07 -0800 (PST)
+From:   Gabriel Somlo <gsomlo@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-serial@vger.kernel.org, gregkh@linuxfoundation.org,
+        jirislaby@kernel.org, kgugala@antmicro.com, mholenko@antmicro.com,
+        joel@jms.id.au, david.abdurachmanov@sifive.com,
+        florent@enjoy-digital.fr
+Subject: [PATCH v1 0/3] serial: liteuart: add IRQ support
+Date:   Mon,  7 Nov 2022 12:14:57 -0500
+Message-Id: <20221107171500.2537938-1-gsomlo@gmail.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: hNEq05GQKO2g2wofjFjkh_5Thp3_ml6Z
-X-Proofpoint-ORIG-GUID: 9ZmhVW84EwKhEtmf1VRKBf_1DMl19ZiS
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-07_08,2022-11-07_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 adultscore=0
- mlxscore=0 clxscore=1011 lowpriorityscore=0 bulkscore=0 impostorscore=0
- phishscore=0 priorityscore=1501 spamscore=0 suspectscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
- definitions=main-2211070137
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The check for cancelled request depends on the VID of the chip, but
-some chips share VID which shouldn't share their cancellation
-behavior. This is the case for the Nuvoton NPCT75X, which should use
-the default cancellation check, not the Winbond one.
-To avoid changing the existing behavior, add a new flag to indicate
-that the chip should use the default cancellation check and set it
-for the I2C TPM2 TIS driver.
+Add IRQ support to the LiteX LiteUART serial interface.
 
-Signed-off-by: Eddie James <eajames@linux.ibm.com>
----
-Changes since v1:
- - Update switch statement with default: break;
+Gabriel Somlo (3):
+  serial: liteuart: cosmetic changes
+  serial: liteuart: separate RX loop from poll timer
+  serial: liteuart: add IRQ support
 
- drivers/char/tpm/tpm_tis_core.c | 20 ++++++++++++--------
- drivers/char/tpm/tpm_tis_core.h |  1 +
- drivers/char/tpm/tpm_tis_i2c.c  |  1 +
- 3 files changed, 14 insertions(+), 8 deletions(-)
+ drivers/tty/serial/liteuart.c | 124 ++++++++++++++++++++++------------
+ 1 file changed, 81 insertions(+), 43 deletions(-)
 
-diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
-index 757623bacfd5..3f98e587b3e8 100644
---- a/drivers/char/tpm/tpm_tis_core.c
-+++ b/drivers/char/tpm/tpm_tis_core.c
-@@ -682,15 +682,19 @@ static bool tpm_tis_req_canceled(struct tpm_chip *chip, u8 status)
- {
- 	struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
- 
--	switch (priv->manufacturer_id) {
--	case TPM_VID_WINBOND:
--		return ((status == TPM_STS_VALID) ||
--			(status == (TPM_STS_VALID | TPM_STS_COMMAND_READY)));
--	case TPM_VID_STM:
--		return (status == (TPM_STS_VALID | TPM_STS_COMMAND_READY));
--	default:
--		return (status == TPM_STS_COMMAND_READY);
-+	if (!test_bit(TPM_TIS_DEFAULT_CANCELLATION, &priv->flags)) {
-+		switch (priv->manufacturer_id) {
-+		case TPM_VID_WINBOND:
-+			return ((status == TPM_STS_VALID) ||
-+				(status == (TPM_STS_VALID | TPM_STS_COMMAND_READY)));
-+		case TPM_VID_STM:
-+			return (status == (TPM_STS_VALID | TPM_STS_COMMAND_READY));
-+		default:
-+			break;
-+		}
- 	}
-+
-+	return status == TPM_STS_COMMAND_READY;
- }
- 
- static irqreturn_t tis_int_handler(int dummy, void *dev_id)
-diff --git a/drivers/char/tpm/tpm_tis_core.h b/drivers/char/tpm/tpm_tis_core.h
-index 66a5a13cd1df..b68479e0de10 100644
---- a/drivers/char/tpm/tpm_tis_core.h
-+++ b/drivers/char/tpm/tpm_tis_core.h
-@@ -86,6 +86,7 @@ enum tis_defaults {
- enum tpm_tis_flags {
- 	TPM_TIS_ITPM_WORKAROUND		= BIT(0),
- 	TPM_TIS_INVALID_STATUS		= BIT(1),
-+	TPM_TIS_DEFAULT_CANCELLATION	= BIT(2),
- };
- 
- struct tpm_tis_data {
-diff --git a/drivers/char/tpm/tpm_tis_i2c.c b/drivers/char/tpm/tpm_tis_i2c.c
-index 45f388127f4b..91451ee1ef8d 100644
---- a/drivers/char/tpm/tpm_tis_i2c.c
-+++ b/drivers/char/tpm/tpm_tis_i2c.c
-@@ -329,6 +329,7 @@ static int tpm_tis_i2c_probe(struct i2c_client *dev,
- 	if (!phy->io_buf)
- 		return -ENOMEM;
- 
-+	set_bit(TPM_TIS_DEFAULT_CANCELLATION, &phy->priv.flags);
- 	phy->i2c_client = dev;
- 
- 	/* must precede all communication with the tpm */
 -- 
-2.31.1
+2.37.3
 
