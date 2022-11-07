@@ -2,77 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6826861F9A0
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 17:27:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA37A61F9A3
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 17:28:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232419AbiKGQ1k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 11:27:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51390 "EHLO
+        id S232616AbiKGQ2e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 11:28:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233015AbiKGQ1G (ORCPT
+        with ESMTP id S232702AbiKGQ2M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 11:27:06 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3E4D20F51
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 08:23:41 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 8D1511F889;
-        Mon,  7 Nov 2022 16:23:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1667838220; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=VdVD9Iy0J2qFkVY2cKemTlbtgmWlhAb1cl0vbCf5xbI=;
-        b=vBUVPW0o/dbrqtz3mD/bXG7oo6YeijAN4TfU7xNCshIE4vb3PPu8hZczD4I3vtd5i7da8X
-        V/MOmSToQIx36MlFVgWhlmcqD9zSCGDCrqN+cmOFEbl+GVaF4Nac9WNHolAHYrlLsnq0FW
-        I2+wck7CmtdTpc/HxJ6U7rNEEoN8gJI=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1667838220;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=VdVD9Iy0J2qFkVY2cKemTlbtgmWlhAb1cl0vbCf5xbI=;
-        b=n92vtlvGc69ogFNhO2Gpbw4jMAXPuHVc2k8fAnvoasp1beVEu/t59Ut6ly5HDIvHmM8EO4
-        enKwkl9y6dIDPYBA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5BEE213AC7;
-        Mon,  7 Nov 2022 16:23:40 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id zbAlFQwxaWM+WQAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Mon, 07 Nov 2022 16:23:40 +0000
-Message-ID: <71b57f2d-37cd-9c33-c6b2-7f4b14b2b691@suse.cz>
-Date:   Mon, 7 Nov 2022 17:23:40 +0100
+        Mon, 7 Nov 2022 11:28:12 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9E3224BE8
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 08:25:17 -0800 (PST)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2A7CrqAV013913;
+        Mon, 7 Nov 2022 16:24:56 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=s50hR/GCzmFQRvNbtM/53m/Jdy4zBTTllf2Oe2mGHDA=;
+ b=QigOjB/rYStnzvlgyYK2BJof3turH6m6rO9epIxXz6AdxRNTOXAmrr25XjraelCQyAav
+ PBL2UgdC+V5QqzfbW3LPSbIGLtJoi/n9i6H8LcyCWU9On9xoT/ghXbImvkEOgF+gMpfh
+ JA5+v9mb3OkouZVbRqaYCski0PHLaN2cb61ZvAiupbeS2hX6TJFyNfJEoRQmLGKBKD/g
+ onp4kQt5hwijqIxmsrAS/s+jrOa8zEJR2ejDYFXVZcHJ57sjm66LVr4i5TuQlpuce8Gn
+ m8AjCYJwTO1XW5+GdyLFHCx/FQo2lja8qYo2gazo9MDye4JIIGmhqvJf6+FP0OMAmSoW 7w== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kphj8j8qa-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 07 Nov 2022 16:24:56 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2A7GOtS3011461
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 7 Nov 2022 16:24:55 GMT
+Received: from [10.226.59.182] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Mon, 7 Nov 2022
+ 08:24:53 -0800
+Message-ID: <2537e41d-f863-4819-57d2-09b9554f801b@quicinc.com>
+Date:   Mon, 7 Nov 2022 09:24:52 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: Duplicate kernel-doc comments for ksize()
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [RFC PATCH v3 3/3] drm: initialize accel framework
 Content-Language: en-US
-To:     Akira Yokosawa <akiyks@gmail.com>,
-        Kees Cook <keescook@chromium.org>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>
-Cc:     Jonathan Corbet <corbet@lwn.net>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-References: <d33440f6-40cf-9747-3340-e54ffaf7afb8@gmail.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <d33440f6-40cf-9747-3340-e54ffaf7afb8@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Oded Gabbay <ogabbay@kernel.org>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <linux-kernel@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Alex Deucher <alexander.deucher@amd.com>
+CC:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>,
+        Jiho Chu <jiho.chu@samsung.com>,
+        Daniel Stone <daniel@fooishbar.org>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>,
+        Maciej Kwapulinski <maciej.kwapulinski@linux.intel.com>,
+        Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>,
+        Randy Dunlap <rdunlap@infradead.org>
+References: <20221106210225.2065371-1-ogabbay@kernel.org>
+ <20221106210225.2065371-4-ogabbay@kernel.org>
+From:   Jeffrey Hugo <quic_jhugo@quicinc.com>
+In-Reply-To: <20221106210225.2065371-4-ogabbay@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: -yaopUW5-8pXniYB_FOCekDEa0cF5-fA
+X-Proofpoint-ORIG-GUID: -yaopUW5-8pXniYB_FOCekDEa0cF5-fA
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-07_08,2022-11-07_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 spamscore=0
+ impostorscore=0 adultscore=0 priorityscore=1501 phishscore=0 bulkscore=0
+ malwarescore=0 lowpriorityscore=0 suspectscore=0 mlxscore=0 clxscore=1015
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
+ definitions=main-2211070131
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,57 +97,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/7/22 11:41, Akira Yokosawa wrote:
-> Hi Kees,
-> 
-> "make htmldocs" reports duplicate C declaration of ksize()
-> as follows:
-> 
-> /linux/Documentation/core-api/mm-api:43: ./mm/slab_common.c:1428: WARNING: Duplicate C declaration, also defined at core-api/mm-api:212.
-> Declaration is '.. c:function:: size_t ksize (const void *objp)'.
-> 
-> This is due to the kernel-doc comment for ksize() added in
-> include/linux/slab.h by a commit you have authored:
->   05a940656e1e ("slab:Introduce kmalloc_size_roundup()").
-> 
-> /**
->  * ksize - Report actual allocation size of associated object
->  *
->  * @objp: Pointer returned from a prior kmalloc()-family allocation.
->  *
->  * This should not be used for writing beyond the originally requested
->  * allocation size. Either use krealloc() or round up the allocation size
->  * with kmalloc_size_roundup() prior to allocation. If this is used to
->  * access beyond the originally requested allocation size, UBSAN_BOUNDS
->  * and/or FORTIFY_SOURCE may trip, since they only know about the
->  * originally allocated size via the __alloc_size attribute.
->  */
-> 
-> There is another kernel-doc comment in mm/slab_common.c (originally
-> by Manfred, since v2.6.14):
-> 
-> /**
->  * ksize - get the actual amount of memory allocated for a given object
->  * @objp: Pointer to the object
->  *
->  * kmalloc may internally round up allocations and return more memory
->  * than requested. ksize() can be used to determine the actual amount of
->  * memory allocated. The caller may use this additional memory, even though
->  * a smaller amount of memory was initially specified with the kmalloc call.
->  * The caller must guarantee that objp points to a valid object previously
->  * allocated with either kmalloc() or kmem_cache_alloc(). The object
->  * must not be freed during the duration of the call.
->  *
->  * Return: size of the actual memory used by @objp in bytes
->  */
-> 
-> I guess the one in slab_common.c is outdated and can be removed.
-> Can you please take care of it?
+On 11/6/2022 2:02 PM, Oded Gabbay wrote:
 
-Thanks for the report, I've removed the comment myself in a slab.git fixes
-branch I'll be sending a PR for this week:
+> @@ -603,6 +626,14 @@ static int drm_dev_init(struct drm_device *dev,
+>   	/* no per-device feature limits by default */
+>   	dev->driver_features = ~0u;
+> 
+> +	if (drm_core_check_feature(dev, DRIVER_COMPUTE_ACCEL) &&
+> +				(drm_core_check_feature(dev, DRIVER_RENDER) ||
+> +				drm_core_check_feature(dev, DRIVER_MODESET))) {
 
-https://git.kernel.org/pub/scm/linux/kernel/git/vbabka/slab.git/commit/?h=slab/for-6.1-rc4/fixes&id=c18c20f16219516b12a4f2fd29c25e06be97e064
-
->         Thanks, Akira
-
+Shouldn't the indentation for the 2nd and 3rd line be such that the 
+start of the lines is aligned with the "(" on the first line?
