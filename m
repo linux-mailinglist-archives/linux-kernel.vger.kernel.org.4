@@ -2,109 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEC8161EE95
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 10:16:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0702561EE9C
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 10:18:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231728AbiKGJQw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 04:16:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44244 "EHLO
+        id S231271AbiKGJSg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 04:18:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231726AbiKGJQf (ORCPT
+        with ESMTP id S231292AbiKGJSU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 04:16:35 -0500
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BD1D15827
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 01:16:34 -0800 (PST)
-Received: by mail-lf1-x129.google.com with SMTP id r12so15898413lfp.1
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 01:16:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ee9rRE2EZYR3AFslDfAa5vqk35kYdBztnuAgp9P1svM=;
-        b=rLgN8Ab0FHYbqyHfhx61S13OglQV0IxcL7oh3Q2DBIZpIffz/Sd22ckP2kXKhUWdoD
-         XvrViZQmsTqi88VTF76St/XTn4YOdfkVFy5KKxKwnLTMQOjcTmoq8VR0FA+Xs2zANdP3
-         uLffjmEj/GWzqAs9SLlrGU/opeVKi69yxnPhm545g7nJbioLzKGdmfMC0bdtU3cNLSCk
-         a4T+Bk+uJUJKNk037idWb8jzsGZRaIlvfDF09tEqF/KG7mUN3b7m0jw4jEI6SaghYjBb
-         ZvmvKp53XDqFo6SK4VuyIQsHh3B0qvWgJvurbkZ5lrnMxKVpRrLvHPb6hY/Vn7F1SBVe
-         kbKQ==
+        Mon, 7 Nov 2022 04:18:20 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 679081789B
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 01:17:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1667812634;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=/06Zdswwk5u6ptmrFeG9CH1ESyHDETkaDN7bYalcrtY=;
+        b=GDrW8Kr5WdIoJBS3MMWacb2g4Sb9/MvAqYlhtT6k6JKjodgLr81bgQxbs4m59DKQfnw9RH
+        Kown+MMqzBd93IOc9k5FvS6HgC8XlgCJlmwMIckJ8acMx92Th5nlfrS61X183P4B1HpelO
+        UlKu0w4dFOnAB7itKhXD9eXXUlPJtWU=
+Received: from mail-pf1-f197.google.com (mail-pf1-f197.google.com
+ [209.85.210.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-568-O2iwV5zCMDuG3Bekc9jxNQ-1; Mon, 07 Nov 2022 04:17:13 -0500
+X-MC-Unique: O2iwV5zCMDuG3Bekc9jxNQ-1
+Received: by mail-pf1-f197.google.com with SMTP id bq6-20020a056a000e0600b0056bcbc6720fso5305409pfb.22
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 01:17:13 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        h=content-language:content-transfer-encoding:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ee9rRE2EZYR3AFslDfAa5vqk35kYdBztnuAgp9P1svM=;
-        b=pOOycO9p4pSi/Xk+vB9V8Xq7IHLOAr1+rtHvm6rtWjVmNBhdD+VcZQLhE5Rf9U6rTJ
-         xy5Q+5gPcNQZHJE70HTI1hvBYPY1J1Yna6RJy7Xq0/hh1mwzdib8pcUc/IlPzKyWI4WJ
-         /KX87wIeW/EjQil41OsI1t0KlNbLElhdh3NHvl4q0l9F41EtioN5dgDKuy1EuzYvMnM7
-         0+kAfP7NmJE8e7L5dcD1rA8TRBn9qxKu9zCYQl16T6UjsIqaJPXWgypDK+dq4gx90gHc
-         OSxJau8kJ3DIN4kKPOmAzbSR4U8AmunBy3vBsqhvoPyUypBWZC8ou4RSl0vigHGL9Y06
-         7T3g==
-X-Gm-Message-State: ACrzQf27PXf8+0H1LmPVDxjGZmrX+sCyMdBedttjnu6uyZyfFa7yjZBq
-        +c1F57EQEQBzOpdqv9i6I114Ww==
-X-Google-Smtp-Source: AMsMyM640xZfzovEVbRzAzA3JwN3fsqXmGXCqtuz5rmj/QtkLofAuR/i6wzcJkcTdHZb+Jm513To6A==
-X-Received: by 2002:a05:6512:b21:b0:4ae:391c:e655 with SMTP id w33-20020a0565120b2100b004ae391ce655mr16423127lfu.45.1667812592555;
-        Mon, 07 Nov 2022 01:16:32 -0800 (PST)
-Received: from [192.168.0.20] (088156142199.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.199])
-        by smtp.gmail.com with ESMTPSA id t20-20020a2e8e74000000b0027755f52a94sm1129600ljk.80.2022.11.07.01.16.31
+        bh=/06Zdswwk5u6ptmrFeG9CH1ESyHDETkaDN7bYalcrtY=;
+        b=ZunQOrOMxkaI+BPb4YlkmVcUkgCb1798XwSbwq2XEEMCKcMU1Nip95S/W3/8lEetnv
+         HorHLDTLdPbWdcyZE5tGO/tfq0b02zs8jHZYvxgqWrk2FZjntWUA0MeRFpT1q9aa5yjK
+         /L+7G8rCEqh/UCjb7FpjmCJzTKPEspKINQpPGWe5qdIcP3u+wH+6Nbw73bn2nBe8xh0/
+         vIMRZQmQuynF47lLtOKaOt1Z9C96bRQ0IwfxPmQmrVd95OX0YL6ElTnFNY/rodI2py7r
+         Pl4956iasOk68Rte7g6QYogqp/wmRxbYjyl4OGIazicvyhz1CykIN79MSU0+a6jHXHnI
+         nwJQ==
+X-Gm-Message-State: ANoB5pnOQi/RXqUYjOnx6nwKDmpE4TQfQwdr/+qAmes/kPy9YAs7PLd+
+        C24L1vJeCKRiPz7xBQsiMHN1goaoqmTA2H1B9eUU9fSTeElMDs3Nsfm5BfVgyOkxsUtrO5elOAB
+        A6NsXNKFg2P1+aNiO8Unm8UB2NO8WlLWXODROiY406XP9uYkSDSoDxgcTVlZFqlNovrbZWiAtkw
+        ==
+X-Received: by 2002:a63:f306:0:b0:470:514e:1f4a with SMTP id l6-20020a63f306000000b00470514e1f4amr9182530pgh.523.1667812632076;
+        Mon, 07 Nov 2022 01:17:12 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf5r/6cQLpU43OkWVOCzxFBhk/I+3HK7SXpcOST2y4DWW/yZyxsewljQ73zUAbyy8U82gT7GTg==
+X-Received: by 2002:a63:f306:0:b0:470:514e:1f4a with SMTP id l6-20020a63f306000000b00470514e1f4amr9182497pgh.523.1667812631729;
+        Mon, 07 Nov 2022 01:17:11 -0800 (PST)
+Received: from [10.72.12.88] ([209.132.188.80])
+        by smtp.gmail.com with ESMTPSA id i193-20020a6287ca000000b00561d79f1064sm3961945pfe.57.2022.11.07.01.17.09
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Nov 2022 01:16:32 -0800 (PST)
-Message-ID: <9ddc0bc9-c5cf-6c94-d15e-77a7a7e2b7f1@linaro.org>
-Date:   Mon, 7 Nov 2022 10:16:31 +0100
+        Mon, 07 Nov 2022 01:17:11 -0800 (PST)
+Subject: Re: [RFC PATCH v2] ceph: allow encrypting a directory while not
+ having Ax caps
+To:     =?UTF-8?Q?Lu=c3=ads_Henriques?= <lhenriques@suse.de>,
+        Ilya Dryomov <idryomov@gmail.com>,
+        Jeff Layton <jlayton@kernel.org>
+Cc:     ceph-devel@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221103140640.30850-1-lhenriques@suse.de>
+From:   Xiubo Li <xiubli@redhat.com>
+Message-ID: <25c35887-fe77-348d-9f4b-5f92a2362cec@redhat.com>
+Date:   Mon, 7 Nov 2022 17:17:04 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [v2 2/2] dt-bindings: iio: adc: Remove the property
- "aspeed,trim-data-valid"
+In-Reply-To: <20221103140640.30850-1-lhenriques@suse.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Content-Language: en-US
-To:     Billy Tsai <billy_tsai@aspeedtech.com>, jic23@kernel.org,
-        lars@metafoo.de, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, joel@jms.id.au, andrew@aj.id.au,
-        linmq006@gmail.com, linux-iio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
-References: <20221107091506.28630-1-billy_tsai@aspeedtech.com>
- <20221107091506.28630-2-billy_tsai@aspeedtech.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221107091506.28630-2-billy_tsai@aspeedtech.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/11/2022 10:15, Billy Tsai wrote:
-> The valid of the trimming data will use the otp default value as a
-> criterion.
-> 
-> Fixes: 2bdb2f00a895 ("dt-bindings: iio: adc: Add ast2600-adc bindings")
 
-If this is a fix, you need to describe the bug.
+On 03/11/2022 22:06, Luís Henriques wrote:
+> If a client doesn't have Fx caps on a directory, it will get errors while
+> trying encrypt it:
+>
+> ceph: handle_cap_grant: cap grant attempt to change fscrypt_auth on non-I_NEW inode (old len 0 new len 48)
+> fscrypt (ceph, inode 1099511627812): Error -105 getting encryption context
+>
+> A simple way to reproduce this is to use two clients:
+>
+>      client1 # mkdir /mnt/mydir
+>
+>      client2 # ls /mnt/mydir
+>
+>      client1 # fscrypt encrypt /mnt/mydir
+>      client1 # echo hello > /mnt/mydir/world
+>
+> This happens because, in __ceph_setattr(), we only initialize
+> ci->fscrypt_auth if we have Ax and ceph_fill_inode() won't use the
+> fscrypt_auth received if the inode state isn't I_NEW.  Fix it by allowing
+> ceph_fill_inode() to also set ci->fscrypt_auth if the inode doesn't have
+> it set already.
+>
+> Signed-off-by: Luís Henriques <lhenriques@suse.de>
+> ---
+>   fs/ceph/inode.c | 3 ++-
+>   1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/fs/ceph/inode.c b/fs/ceph/inode.c
+> index fb507d57cb26..c7831f801911 100644
+> --- a/fs/ceph/inode.c
+> +++ b/fs/ceph/inode.c
+> @@ -1016,7 +1016,8 @@ int ceph_fill_inode(struct inode *inode, struct page *locked_page,
+>   	__ceph_update_quota(ci, iinfo->max_bytes, iinfo->max_files);
+>   
+>   #ifdef CONFIG_FS_ENCRYPTION
+> -	if (iinfo->fscrypt_auth_len && (inode->i_state & I_NEW)) {
+> +	if (iinfo->fscrypt_auth_len &&
+> +	    ((inode->i_state & I_NEW) || (ci->fscrypt_auth_len == 0))) {
+>   		kfree(ci->fscrypt_auth);
+>   		ci->fscrypt_auth_len = iinfo->fscrypt_auth_len;
+>   		ci->fscrypt_auth = iinfo->fscrypt_auth;
+>
+Hi Luis,
 
-> Signed-off-by: Billy Tsai <billy_tsai@aspeedtech.com>
+This looks good to me.
 
-This is a friendly reminder during the review process.
+I will test it and merge it if everything goes well.
 
-It looks like you received a tag and forgot to add it.
+Thanks!
 
-If you do not know the process, here is a short explanation:
-Please add Acked-by/Reviewed-by/Tested-by tags when posting new
-versions. However, there's no need to repost patches *only* to add the
-tags. The upstream maintainer will do that for acks received on the
-version they apply.
-
-https://elixir.bootlin.com/linux/v5.17/source/Documentation/process/submitting-patches.rst#L540
-
-If a tag was not added on purpose, please state why and what changed.
-
-
-Best regards,
-Krzysztof
+- Xiubo
 
