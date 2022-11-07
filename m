@@ -2,48 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6BBA61FC24
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 18:54:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1BD461FC40
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 18:55:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231705AbiKGRys (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 12:54:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58544 "EHLO
+        id S232599AbiKGRzx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 12:55:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231776AbiKGRyG (ORCPT
+        with ESMTP id S232559AbiKGRyZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 12:54:06 -0500
-Received: from msg-1.mailo.com (msg-1.mailo.com [213.182.54.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A505252B4
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 09:53:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
-        t=1667843571; bh=58ErT4QpRqXdWTiUxomBj2IPCdd8QNB/JsnhQ4gVmuI=;
-        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:References:
-         MIME-Version:Content-Type:In-Reply-To;
-        b=MzYP0h4+syPx/Nby1i/2hY8QlHazvNLx7JxqB1ojnfmg0eZD2S6SaOmNiiWHHMWgz
-         S+URdsYJEBopjph01agkD4sbyj1bYZgDmAL8xt+pYILSyIFENwBlJM6p9TOl1fYSaS
-         Ef7YHt5WJuciDMS0hPie+4nYGUjxidDbEPXnR4tY=
-Received: by b-4.in.mailobj.net [192.168.90.14] with ESMTP
-        via ip-206.mailobj.net [213.182.55.206]
-        Mon,  7 Nov 2022 18:52:50 +0100 (CET)
-X-EA-Auth: 9lejEj7kUnOJLlXO/mv+0blyfacoZBYDob5YtkXUEAdj8FhObVwkt+9O17zeDxBX6MFBl7Lb+Ypx6+KX/d4OUIsxwHxL+qLH
-Date:   Mon, 7 Nov 2022 23:22:45 +0530
-From:   Deepak R Varma <drv@mailo.com>
-To:     Dan Carpenter <error27@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] staging: most: video: use min_t() for comparison and
- assignment
-Message-ID: <Y2lF7dHx3aHfrSoB@qemulion>
-References: <Y2iHl5CuqyR2vEc8@qemulion>
- <Y2kGG3zuvvDLZKWq@kadam>
- <Y2kf40kSbFWkWkLl@qemulion>
- <Y2kiixRDxjxSwFp+@kadam>
+        Mon, 7 Nov 2022 12:54:25 -0500
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3A6C55B5
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 09:53:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1667843589; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Nveh5A0ZF11TSwS4JhZjKC3Y/bPmA5nmXXuqH0bCb0s=;
+        b=I8zUD5O3Bx1m2wIDTORObkapN5qU/n+Su4ptCE+Ovuh6LAXXMJB1lM4OibbpHF35qBUxu6
+        f2OSNvVVe3vGJN8tUOlIUVJTrxeNLIVIBG+chjckV/MYzxlH/VxQl+QVEp0b8DeBJEKv+0
+        QjCHo8S8IIfHjvChJnS2kmTqPM5J5Cg=
+From:   Paul Cercueil <paul@crapouillou.net>
+To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Paul Cercueil <paul@crapouillou.net>,
+        Tomi Valkeinen <tomba@kernel.org>
+Subject: [PATCH 15/26] drm: omap: Remove #ifdef guards for PM related functions
+Date:   Mon,  7 Nov 2022 17:52:45 +0000
+Message-Id: <20221107175256.360839-5-paul@crapouillou.net>
+In-Reply-To: <20221107175256.360839-1-paul@crapouillou.net>
+References: <20221107175106.360578-1-paul@crapouillou.net>
+ <20221107175256.360839-1-paul@crapouillou.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y2kiixRDxjxSwFp+@kadam>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,95 +50,138 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 07, 2022 at 06:21:47PM +0300, Dan Carpenter wrote:
-> On Mon, Nov 07, 2022 at 08:40:27PM +0530, Deepak R Varma wrote:
-> > On Mon, Nov 07, 2022 at 04:20:27PM +0300, Dan Carpenter wrote:
-> > > On Mon, Nov 07, 2022 at 09:50:39AM +0530, Deepak R Varma wrote:
-> > > > Simplify code by using min_t helper macro for logical evaluation
-> > > > and value assignment. Use the _t variant of min macro since the
-> > > > variable types are not same.
-> > > > This issue is identified by coccicheck using the minmax.cocci file.
-> > > >
-> > > > Signed-off-by: Deepak R Varma <drv@mailo.com>
-> > > > ---
-> > > >
-> > > > Changes in v2:
-> > > >    1. Revise patch description. No functional change.
-> > > >
-> > > >  drivers/staging/most/video/video.c | 2 +-
-> > > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > > >
-> > > > diff --git a/drivers/staging/most/video/video.c b/drivers/staging/most/video/video.c
-> > > > index ffa97ef21ea5..d5cc7eea3b52 100644
-> > > > --- a/drivers/staging/most/video/video.c
-> > > > +++ b/drivers/staging/most/video/video.c
-> > > > @@ -173,7 +173,7 @@ static ssize_t comp_vdev_read(struct file *filp, char __user *buf,
-> > > >  	while (count > 0 && data_ready(mdev)) {
-> > > >  		struct mbo *const mbo = get_top_mbo(mdev);
-> > > >  		int const rem = mbo->processed_length - fh->offs;
-> > > > -		int const cnt = rem < count ? rem : count;
-> > > > +		int const cnt = min_t(int, rem, count);
-> > >
-> > > TL;DR use size_t instead of int.
-> >
-> > Hi Dan,
-> > Thank you for reviewing the patch. Please see my queries inline.
-> >
-> > >
-> > > Using "int" here is wrong.  size_t is unsigned long meaning that it has
-> > > 64 bits to use to represent positive values.  (Let's ignore 32 bit
-> > > arches).  You have chopped it down to say that it now has 31 bits for
-> > > positives and if BIT(31) is set then treat it as negative.  Everything
-> > > which is larger than INT_MAX will be broken.
-> >
-> > I did worry about the truncation int might cause to the size_t variable,
-> > however, as the result is being assigned to an int, I decided to go for int to
-> > be the typecast for min_t.
->
-> Let's ignore that other layers prevent "count" from being greater than
-> INT_MAX.  mbo->processed_length is a u16.  Also if "fh->offs" is more
-> than mbo->processed_length that's a separate bug and we are already
-> screwed.
+Use the DEFINE_SIMPLE_DEV_PM_OPS() and pm_sleep_ptr() macros to handle
+the .suspend/.resume callbacks.
 
-Yes, "u16 - u32" looks wrong on the face, but it should always evaluat
-positive, else we would have had other issues down the line.
+These macros allow the suspend and resume functions to be automatically
+dropped by the compiler when CONFIG_SUSPEND is disabled, without having
+to use #ifdef guards.
 
->
-> So that means rem is a relatively small number.  A small number can
-> easily fit in "int cnt".  So we are eating a big pie ("count") but we
-> are taking small bites ("cnt").  Everything works fine.
->
-> But if we chop the pie in half or treat it as negative pie then the
-> math breaks.
+This has the advantage of always compiling these functions in,
+independently of any Kconfig option. Thanks to that, bugs and other
+regressions are subsequently easier to catch.
 
-That makes perfect sense. Thank you so much Dan for the explanation.
+The #ifdef CONFIG_PM guard around omap_gem_resume() was also removed,
+and replaced by a "if (IS_ENABLED(CONFIG_PM_SLEEP))" guard in-line.
+The change to CONFIG_PM_SLEEP is because it is only ever called in this
+configuration.
 
->
-> >
-> > Also, won't size_t will force the int rem to be treated as unsigned value which
-> > will impact the comparison when rem indeed is negative. If rem will never be
-> > -ve, my worry will be void.
->
-> Is "-ve" the TikTok way of abbreviating negative?  Am I old?
+Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+---
+Cc: Tomi Valkeinen <tomba@kernel.org>
+---
+ drivers/gpu/drm/omapdrm/omap_dmm_tiler.c | 6 ++----
+ drivers/gpu/drm/omapdrm/omap_drv.c       | 7 +++----
+ drivers/gpu/drm/omapdrm/omap_gem.c       | 5 +++--
+ drivers/gpu/drm/omapdrm/omap_gem.h       | 2 --
+ 4 files changed, 8 insertions(+), 12 deletions(-)
 
-No no... sorry. My fingers were catching up with the thoughts. :)
-
->
-> The small bites are always positive.  But if we are eating negative
-> pie then we take negative size bites.  min_t() should almost always use
-> unsigned types.  Everything else is a headache.  I have often wondered
-> why people do it but I think it's because of the 80 character rule and
-> the word "int" is shorter than "unsigned long".
-
-Understood. I will send in a revision with size_t type for min_t.
-Thank you once again for the detailed answer. Much appreciate.
-
-./drv
-
->
-> regards,
-> dan carpenter
->
->
-
+diff --git a/drivers/gpu/drm/omapdrm/omap_dmm_tiler.c b/drivers/gpu/drm/omapdrm/omap_dmm_tiler.c
+index 61a27dd7392e..14cc4cb457d1 100644
+--- a/drivers/gpu/drm/omapdrm/omap_dmm_tiler.c
++++ b/drivers/gpu/drm/omapdrm/omap_dmm_tiler.c
+@@ -1161,7 +1161,6 @@ int tiler_map_show(struct seq_file *s, void *arg)
+ }
+ #endif
+ 
+-#ifdef CONFIG_PM_SLEEP
+ static int omap_dmm_resume(struct device *dev)
+ {
+ 	struct tcm_area area;
+@@ -1185,9 +1184,8 @@ static int omap_dmm_resume(struct device *dev)
+ 
+ 	return 0;
+ }
+-#endif
+ 
+-static SIMPLE_DEV_PM_OPS(omap_dmm_pm_ops, NULL, omap_dmm_resume);
++static DEFINE_SIMPLE_DEV_PM_OPS(omap_dmm_pm_ops, NULL, omap_dmm_resume);
+ 
+ #if defined(CONFIG_OF)
+ static const struct dmm_platform_data dmm_omap4_platform_data = {
+@@ -1218,7 +1216,7 @@ struct platform_driver omap_dmm_driver = {
+ 		.owner = THIS_MODULE,
+ 		.name = DMM_DRIVER_NAME,
+ 		.of_match_table = of_match_ptr(dmm_of_match),
+-		.pm = &omap_dmm_pm_ops,
++		.pm = pm_sleep_ptr(&omap_dmm_pm_ops),
+ 	},
+ };
+ 
+diff --git a/drivers/gpu/drm/omapdrm/omap_drv.c b/drivers/gpu/drm/omapdrm/omap_drv.c
+index eaf67b9e5f12..5f22e63e26c7 100644
+--- a/drivers/gpu/drm/omapdrm/omap_drv.c
++++ b/drivers/gpu/drm/omapdrm/omap_drv.c
+@@ -877,7 +877,6 @@ static int pdev_remove(struct platform_device *pdev)
+ 	return 0;
+ }
+ 
+-#ifdef CONFIG_PM_SLEEP
+ static int omap_drm_suspend(struct device *dev)
+ {
+ 	struct omap_drm_private *priv = dev_get_drvdata(dev);
+@@ -895,14 +894,14 @@ static int omap_drm_resume(struct device *dev)
+ 
+ 	return omap_gem_resume(drm_dev);
+ }
+-#endif
+ 
+-static SIMPLE_DEV_PM_OPS(omapdrm_pm_ops, omap_drm_suspend, omap_drm_resume);
++static DEFINE_SIMPLE_DEV_PM_OPS(omapdrm_pm_ops,
++				omap_drm_suspend, omap_drm_resume);
+ 
+ static struct platform_driver pdev = {
+ 	.driver = {
+ 		.name = "omapdrm",
+-		.pm = &omapdrm_pm_ops,
++		.pm = pm_sleep_ptr(&omapdrm_pm_ops),
+ 	},
+ 	.probe = pdev_probe,
+ 	.remove = pdev_remove,
+diff --git a/drivers/gpu/drm/omapdrm/omap_gem.c b/drivers/gpu/drm/omapdrm/omap_gem.c
+index cf571796fd26..119e829c40de 100644
+--- a/drivers/gpu/drm/omapdrm/omap_gem.c
++++ b/drivers/gpu/drm/omapdrm/omap_gem.c
+@@ -1104,7 +1104,6 @@ void *omap_gem_vaddr(struct drm_gem_object *obj)
+  * Power Management
+  */
+ 
+-#ifdef CONFIG_PM
+ /* re-pin objects in DMM in resume path: */
+ int omap_gem_resume(struct drm_device *dev)
+ {
+@@ -1112,6 +1111,9 @@ int omap_gem_resume(struct drm_device *dev)
+ 	struct omap_gem_object *omap_obj;
+ 	int ret = 0;
+ 
++	if (!IS_ENABLED(CONFIG_PM_SLEEP))
++		return 0;
++
+ 	mutex_lock(&priv->list_lock);
+ 	list_for_each_entry(omap_obj, &priv->obj_list, mm_list) {
+ 		if (omap_obj->block) {
+@@ -1133,7 +1135,6 @@ int omap_gem_resume(struct drm_device *dev)
+ 	mutex_unlock(&priv->list_lock);
+ 	return ret;
+ }
+-#endif
+ 
+ /* -----------------------------------------------------------------------------
+  * DebugFS
+diff --git a/drivers/gpu/drm/omapdrm/omap_gem.h b/drivers/gpu/drm/omapdrm/omap_gem.h
+index 4d4488939f6b..edcd92ecc2ea 100644
+--- a/drivers/gpu/drm/omapdrm/omap_gem.h
++++ b/drivers/gpu/drm/omapdrm/omap_gem.h
+@@ -32,9 +32,7 @@ union omap_gem_size;
+ void omap_gem_init(struct drm_device *dev);
+ void omap_gem_deinit(struct drm_device *dev);
+ 
+-#ifdef CONFIG_PM
+ int omap_gem_resume(struct drm_device *dev);
+-#endif
+ 
+ #ifdef CONFIG_DEBUG_FS
+ void omap_gem_describe(struct drm_gem_object *obj, struct seq_file *m);
+-- 
+2.35.1
 
