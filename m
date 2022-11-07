@@ -2,197 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56EA761F75F
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 16:16:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC7B861F76B
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 16:18:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232844AbiKGPQi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 10:16:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56488 "EHLO
+        id S231601AbiKGPSY convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 7 Nov 2022 10:18:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232249AbiKGPQh (ORCPT
+        with ESMTP id S231481AbiKGPSU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 10:16:37 -0500
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CD871EAF8
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 07:16:36 -0800 (PST)
-Received: by mail-wr1-x42c.google.com with SMTP id bk15so16655711wrb.13
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 07:16:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Q908VuZ5cJytv2/gI78/GYL+1PN9gGzcS5yUknzV+T0=;
-        b=Wpu9rKvfoUbVgTy0zuO9ScrrxoN6dp/6O05Txoc99yp3KdpHUu2iomCgFM3yq0gdme
-         19bjClFCaEYbac4o4yNLc3bzOgwXmmYtwyHSpnSKqgce7WGpliizIQLzwuOtJZwr10/B
-         MW9WFpAASjpSop6DF7zi7txivZ06BFKg1HqPjp8E5bK1IS/ppA043ESQIxyh1nZZuPD+
-         Fd4S9i9T3foDUZIenDxkW+DgMdNATDKJXEsrhyObQk5bAy0+ZcpicmGNsDL1IdVK+ejN
-         vPI3O0eEhMAydvRV0rVheFxvUcuXfFYXN5jQ1yG8qd41LTdGZbovaGl9XfS5qnhblMui
-         bUXg==
+        Mon, 7 Nov 2022 10:18:20 -0500
+Received: from mail-qk1-f173.google.com (mail-qk1-f173.google.com [209.85.222.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE5511EAF8;
+        Mon,  7 Nov 2022 07:18:19 -0800 (PST)
+Received: by mail-qk1-f173.google.com with SMTP id x21so7347308qkj.0;
+        Mon, 07 Nov 2022 07:18:19 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Q908VuZ5cJytv2/gI78/GYL+1PN9gGzcS5yUknzV+T0=;
-        b=lny8P/sL/Aax/8wCJUDYEYqT9dtnKKN2zKJ7h8Pte/wTEdATvlGYOYH/T5QgKN6hzy
-         Jo/Poxf/RY9N9PSxP9opzN5lB7jE5RU2lzleHUc01NuliiDkziGjYJWJjeyP8tfIuzO1
-         xlv8BvcFSYZAFhUnIi6Y0T+sPUBgux+P9p87vgBuSDFhu7hG72e/oUTqAjsmwJGHVoUj
-         DR4d3k9BZ9iYcIj3BbQ3IA0eQvXr8EWNxGgUHT19oCVbvJnLNtvBrPDLAlH1FPt0evhH
-         3QkzzDWmn6v+cIDkBcDbOjb8fuv7uUOs9+uN3abIy8/Iv+90YajgXkje7eS2OCAKPlMH
-         zwBA==
-X-Gm-Message-State: ACrzQf2993vhcAXmGZlbtD+lMe/pbQCN8tLR6nM/vgCgeh8cMGPqprpk
-        1h6p8TxpnbDhxkpCFvygTHw=
-X-Google-Smtp-Source: AMsMyM6cPcZM0jL6k4OqPbT+5EwFiAHx1Ei9YgybnmxozUr4ENJVn0werjS597XLtu9Tw0++xRinBA==
-X-Received: by 2002:a5d:5292:0:b0:236:ccb9:673b with SMTP id c18-20020a5d5292000000b00236ccb9673bmr27567091wrv.317.1667834194880;
-        Mon, 07 Nov 2022 07:16:34 -0800 (PST)
-Received: from [192.168.2.181] (84-238-195-21.ip.btc-net.bg. [84.238.195.21])
-        by smtp.gmail.com with ESMTPSA id n37-20020a05600c3ba500b003cfa3a12660sm13232566wms.1.2022.11.07.07.16.33
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=41bg/V6C1tOqJ9fv/+V5kseVmkby+8ASnDXXHqgf6AE=;
+        b=hkxDvyO+0SCcHx91eVSw3gekw9enTCquiYlFuwhhUNBLUWoi1dcv50pmkPJEv8uuwr
+         UnhvKtn+0y3IueZgVauD4WGNfzjN06InZqTqzejtl0jlHa9QjKA58JHbzUqxPq5oom3n
+         dikm/O48geOI2Ji5HyF9RtDj4FRUTvCM7/IJvV6VagCwX74+POKq3Ktld0Ry6qBG9/wx
+         ZwDjfdvEHYKW3PPqMtqxUo5iFobZYD6iFvAfkLi0Nl+w1B5aopdbhLDfFE1r1S/r4+8d
+         3S+1AX9g71LZ7Ox+qLFw8egrBOxa39YAEXpwY2+SQyNqjvBIAT8+NUqj3aXDeH63knof
+         kfMw==
+X-Gm-Message-State: ACrzQf3zyVR0/BgyvhMduLvtLhc9qEIFHIBMCLRyfEBHvYxENE3F8Vlm
+        NgS+i13phnNZxCMDei+IV2iNl6/LNfB+CGOw
+X-Google-Smtp-Source: AMsMyM6vfARP7bAuXyS/rlS0frMt7k8RaJi0Mf1YB8l/LMgJiXieGO/dOYMmV6RgeMDdZVvzCVzPDw==
+X-Received: by 2002:a05:620a:458a:b0:6fa:2522:9c56 with SMTP id bp10-20020a05620a458a00b006fa25229c56mr733423qkb.22.1667834298659;
+        Mon, 07 Nov 2022 07:18:18 -0800 (PST)
+Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com. [209.85.219.175])
+        by smtp.gmail.com with ESMTPSA id k1-20020ac81401000000b003434d3b5938sm6231877qtj.2.2022.11.07.07.18.17
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Nov 2022 07:16:34 -0800 (PST)
-Message-ID: <a722801b-e8b1-ccce-41e3-5951958baa9f@gmail.com>
-Date:   Mon, 7 Nov 2022 17:16:33 +0200
+        Mon, 07 Nov 2022 07:18:18 -0800 (PST)
+Received: by mail-yb1-f175.google.com with SMTP id g127so13980445ybg.8;
+        Mon, 07 Nov 2022 07:18:17 -0800 (PST)
+X-Received: by 2002:a25:6b07:0:b0:6cd:3a43:bfe5 with SMTP id
+ g7-20020a256b07000000b006cd3a43bfe5mr37368541ybc.89.1667834297660; Mon, 07
+ Nov 2022 07:18:17 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v2] drm/vmwgfx: Protect pin_user_pages with mmap_lock
-To:     Dawei Li <set_pte_at@outlook.com>, zackr@vmware.com,
-        airlied@gmail.com, daniel@ffwll.ch
-Cc:     krastevm@vmware.com, linux-graphics-maintainer@vmware.com,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
-References: <TYCP286MB23235B138D18ECA0797A6D0FCA3D9@TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM>
-Content-Language: en-US
-From:   "Martin Krastev (VMware)" <martinkrastev768@gmail.com>
-In-Reply-To: <TYCP286MB23235B138D18ECA0797A6D0FCA3D9@TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221107135825.583877-1-herve.codina@bootlin.com> <20221107135825.583877-4-herve.codina@bootlin.com>
+In-Reply-To: <20221107135825.583877-4-herve.codina@bootlin.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 7 Nov 2022 16:18:06 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdX17=GJgn3=gYUHo7=1r3amXnPYE4h-45pEH=neAV4oKQ@mail.gmail.com>
+Message-ID: <CAMuHMdX17=GJgn3=gYUHo7=1r3amXnPYE4h-45pEH=neAV4oKQ@mail.gmail.com>
+Subject: Re: [PATCH 3/7] soc: renesas: r9a06g032-sysctrl: Handle h2mode
+ device-tree property
+To:     Herve Codina <herve.codina@bootlin.com>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Gareth Williams <gareth.williams.jx@renesas.com>,
+        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Martin Krastev <krastevm@vmware.com>
+Hi Hervé,
 
-
-
-Thanks for the catch. LGTM, with the following remarks:
-
-
-1) Original design used erroneously pin_user_pages() in place of 
-pin_user_pages_fast(); you could just substitute pin_user_pages for 
-pin_user_pages_fast and call it a day, Please, consider that option 
-after reading (2) below.
-
-2) Re exception handling in vmw_mksstat_add_ioctl(), the 'incorrect 
-exception handling' would be incorrect in the context of the new 
-refactor, i.e. with a common entry point to all pin_user_pages() 
-exceptions; it was correct originally, with dedicated entry points, as 
-all nr_pinned_* were used only after being assigned.
-
-
-Basically, you could keep everything as it was and just do the 
-substitution suggested in (1) and the patch would be as good.
-
-
-Regards,
-
-Martin
-
-
-On 6.11.22 г. 17:47 ч., Dawei Li wrote:
-> This patch includes changes below:
-> 1) pin_user_pages() is unsafe without protection of mmap_lock,
->     fix it by calling mmap_read_lock() & mmap_read_unlock().
-> 2) fix & refactor the incorrect exception handling procedure in
->     vmw_mksstat_add_ioctl().
+On Mon, Nov 7, 2022 at 2:59 PM Herve Codina <herve.codina@bootlin.com> wrote:
+> Handle the h2mode property and forces the CFG_USB[H2MODE] bit
+> accordingly.
 >
-> Fixes: 7a7a933edd6c ("drm/vmwgfx: Introduce VMware mks-guest-stats")
-> Signed-off-by: Dawei Li <set_pte_at@outlook.com>
-> ---
-> v1:
-> https://lore.kernel.org/all/TYCP286MB23235C9A9FCF85C045F95EA7CA4F9@TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM/
+> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+
+Thanks for your patch!
+
+> --- a/drivers/clk/renesas/r9a06g032-clocks.c
+> +++ b/drivers/clk/renesas/r9a06g032-clocks.c
+> @@ -946,6 +946,7 @@ static int __init r9a06g032_clocks_probe(struct platform_device *pdev)
+>         struct clk *mclk;
+>         unsigned int i;
+>         u16 uart_group_sel[2];
+> +       u32 usb, h2mode;
+>         int error;
 >
-> v1->v2:
-> Rebased to latest vmwgfx/drm-misc-fixes
-> ---
->   drivers/gpu/drm/vmwgfx/vmwgfx_msg.c | 23 ++++++++++++++---------
->   1 file changed, 14 insertions(+), 9 deletions(-)
->
-> diff --git a/drivers/gpu/drm/vmwgfx/vmwgfx_msg.c b/drivers/gpu/drm/vmwgfx/vmwgfx_msg.c
-> index 089046fa21be..ec40a3364e0a 100644
-> --- a/drivers/gpu/drm/vmwgfx/vmwgfx_msg.c
-> +++ b/drivers/gpu/drm/vmwgfx/vmwgfx_msg.c
-> @@ -1020,9 +1020,9 @@ int vmw_mksstat_add_ioctl(struct drm_device *dev, void *data,
->   	const size_t num_pages_info = PFN_UP(arg->info_len);
->   	const size_t num_pages_strs = PFN_UP(arg->strs_len);
->   	long desc_len;
-> -	long nr_pinned_stat;
-> -	long nr_pinned_info;
-> -	long nr_pinned_strs;
-> +	long nr_pinned_stat = 0;
-> +	long nr_pinned_info = 0;
-> +	long nr_pinned_strs = 0;
->   	struct page *pages_stat[ARRAY_SIZE(pdesc->statPPNs)];
->   	struct page *pages_info[ARRAY_SIZE(pdesc->infoPPNs)];
->   	struct page *pages_strs[ARRAY_SIZE(pdesc->strsPPNs)];
-> @@ -1084,28 +1084,33 @@ int vmw_mksstat_add_ioctl(struct drm_device *dev, void *data,
->   	reset_ppn_array(pdesc->infoPPNs, ARRAY_SIZE(pdesc->infoPPNs));
->   	reset_ppn_array(pdesc->strsPPNs, ARRAY_SIZE(pdesc->strsPPNs));
->   
-> +	/* pin_user_pages() needs protection of mmap_lock */
-> +	mmap_read_lock(current->mm);
+>         clocks = devm_kzalloc(dev, sizeof(*clocks), GFP_KERNEL);
+> @@ -966,6 +967,26 @@ static int __init r9a06g032_clocks_probe(struct platform_device *pdev)
+>         clocks->reg = of_iomap(np, 0);
+>         if (WARN_ON(!clocks->reg))
+>                 return -ENOMEM;
 > +
->   	/* Pin mksGuestStat user pages and store those in the instance descriptor */
->   	nr_pinned_stat = pin_user_pages(arg->stat, num_pages_stat, FOLL_LONGTERM, pages_stat, NULL);
->   	if (num_pages_stat != nr_pinned_stat)
-> -		goto err_pin_stat;
-> +		goto __err_pin_pages;
->   
->   	for (i = 0; i < num_pages_stat; ++i)
->   		pdesc->statPPNs[i] = page_to_pfn(pages_stat[i]);
->   
->   	nr_pinned_info = pin_user_pages(arg->info, num_pages_info, FOLL_LONGTERM, pages_info, NULL);
->   	if (num_pages_info != nr_pinned_info)
-> -		goto err_pin_info;
-> +		goto __err_pin_pages;
->   
->   	for (i = 0; i < num_pages_info; ++i)
->   		pdesc->infoPPNs[i] = page_to_pfn(pages_info[i]);
->   
->   	nr_pinned_strs = pin_user_pages(arg->strs, num_pages_strs, FOLL_LONGTERM, pages_strs, NULL);
->   	if (num_pages_strs != nr_pinned_strs)
-> -		goto err_pin_strs;
-> +		goto __err_pin_pages;
->   
->   	for (i = 0; i < num_pages_strs; ++i)
->   		pdesc->strsPPNs[i] = page_to_pfn(pages_strs[i]);
->   
-> +	mmap_read_unlock(current->mm);
+> +       error = of_property_read_u32(np, "renesas,h2mode", &h2mode);
+> +       if (!error) {
+> +               usb = readl(clocks->reg + R9A06G032_SYSCTRL_USB);
+> +               switch (h2mode) {
+> +               case 0:
+> +                       /* 1 host, 1 device */
+> +                       usb &= ~R9A06G032_SYSCTRL_USB_H2MODE;
+> +                       break;
+> +               case 1:
+> +                       /* 2 hosts */
+> +                       usb |= R9A06G032_SYSCTRL_USB_H2MODE;
+> +                       break;
+> +               default:
+> +                       dev_err(dev, "invalid h2mode %d\n", h2mode);
+> +                       return -EINVAL;
+> +               }
+> +               writel(usb, clocks->reg + R9A06G032_SYSCTRL_USB);
+
+Reading the big fat warnings in the documentation about changing
+this at runtime (disconnect nodes, reset clocks, ...), I'm wondering if
+the above is sufficient?
+
+> +       }
 > +
->   	/* Send the descriptor to the host via a hypervisor call. The mksGuestStat
->   	   pages will remain in use until the user requests a matching remove stats
->   	   or a stats reset occurs. */
-> @@ -1120,15 +1125,15 @@ int vmw_mksstat_add_ioctl(struct drm_device *dev, void *data,
->   
->   	return 0;
->   
-> -err_pin_strs:
-> +__err_pin_pages:
-> +	mmap_read_unlock(current->mm);
-> +
->   	if (nr_pinned_strs > 0)
->   		unpin_user_pages(pages_strs, nr_pinned_strs);
->   
-> -err_pin_info:
->   	if (nr_pinned_info > 0)
->   		unpin_user_pages(pages_info, nr_pinned_info);
->   
-> -err_pin_stat:
->   	if (nr_pinned_stat > 0)
->   		unpin_user_pages(pages_stat, nr_pinned_stat);
->   
+>         for (i = 0; i < ARRAY_SIZE(r9a06g032_clocks); ++i) {
+>                 const struct r9a06g032_clkdesc *d = &r9a06g032_clocks[i];
+>                 const char *parent_name = d->source ?
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
