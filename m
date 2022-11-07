@@ -2,92 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4967C61F1DE
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 12:30:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0855A61F1DF
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 12:30:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231723AbiKGLaX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 06:30:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46348 "EHLO
+        id S231819AbiKGLam (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 06:30:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229659AbiKGLaU (ORCPT
+        with ESMTP id S229659AbiKGLaj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 06:30:20 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F860F3D;
-        Mon,  7 Nov 2022 03:30:18 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 59F83B8101F;
-        Mon,  7 Nov 2022 11:30:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E7564C433D7;
-        Mon,  7 Nov 2022 11:30:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667820616;
-        bh=cb5dwF1IkVJGTe7DJ/2CzobyMHYTx1Umgpq8tkUo5gg=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=fctU8VtyolVdVacrOmVTViNNfTvD18i913KCEdGAPe+oFAn8E9NNd6N0CNdHqxMid
-         9hEE7yUBTiDemhThutRDgauAD5EfUaU+EPnOf3uE7Vyqy8Su4H/ofWS/Bzu2CbDJ3N
-         GVX1tg1dTF34tDFUbiZdylq/aTP9yLXMHCbqkM9vdMaOVT6xqE0PlQofCw6yglsSKH
-         lRPlppywZwhAaY9WudtVoBXGKDiKt5lbmKZM85b9X344jUPEpPRg4c3Ah2EVUY6gX7
-         Gha9XdBmnl/zkDb9am1IIhBRTQ41VNdmrGSAgu/8yELjliCzOFnxuIvGElaQ43h+WN
-         LgjJjGQA0lS9A==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id CA490C41671;
-        Mon,  7 Nov 2022 11:30:15 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Mon, 7 Nov 2022 06:30:39 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9765F186CF
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 03:30:38 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7858B1FB;
+        Mon,  7 Nov 2022 03:30:44 -0800 (PST)
+Received: from donnerap.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4D99C3F73D;
+        Mon,  7 Nov 2022 03:30:37 -0800 (PST)
+Date:   Mon, 7 Nov 2022 11:30:29 +0000
+From:   Andre Przywara <andre.przywara@arm.com>
+To:     Samuel Holland <samuel@sholland.org>
+Cc:     Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev
+Subject: Re: [PATCH v2 2/2] bus: sunxi-rsb: Support atomic transfers
+Message-ID: <20221107112949.21f52e50@donnerap.cambridge.arm.com>
+In-Reply-To: <20221107052201.65477-3-samuel@sholland.org>
+References: <20221107052201.65477-1-samuel@sholland.org>
+        <20221107052201.65477-3-samuel@sholland.org>
+Organization: ARM
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; aarch64-unknown-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v2 1/3] s390/ctcm: Fix return type of ctc{mp,}m_tx()
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166782061582.15100.14489619331442535139.git-patchwork-notify@kernel.org>
-Date:   Mon, 07 Nov 2022 11:30:15 +0000
-References: <20221103170130.1727408-1-nathan@kernel.org>
-In-Reply-To: <20221103170130.1727408-1-nathan@kernel.org>
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     wintera@linux.ibm.com, wenjia@linux.ibm.com, hca@linux.ibm.com,
-        gor@linux.ibm.com, agordeev@linux.ibm.com,
-        borntraeger@linux.ibm.com, svens@linux.ibm.com,
-        linux-s390@vger.kernel.org, netdev@vger.kernel.org,
-        ndesaulniers@google.com, trix@redhat.com, keescook@chromium.org,
-        samitolvanen@google.com, llvm@lists.linux.dev,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+On Sun,  6 Nov 2022 23:22:00 -0600
+Samuel Holland <samuel@sholland.org> wrote:
 
-This series was applied to netdev/net-next.git (master)
-by David S. Miller <davem@davemloft.net>:
+Hi,
 
-On Thu,  3 Nov 2022 10:01:28 -0700 you wrote:
-> With clang's kernel control flow integrity (kCFI, CONFIG_CFI_CLANG),
-> indirect call targets are validated against the expected function
-> pointer prototype to make sure the call target is valid to help mitigate
-> ROP attacks. If they are not identical, there is a failure at run time,
-> which manifests as either a kernel panic or thread getting killed. A
-> proposed warning in clang aims to catch these at compile time, which
-> reveals:
+> When communicating with a PMIC during system poweroff (pm_power_off()),
+> IRQs are disabled and we are in a RCU read-side critical section, so we
+> cannot use wait_for_completion_io_timeout(). Instead, poll the status
+> register for transfer completion.
 > 
-> [...]
+> Fixes: d787dcdb9c8f ("bus: sunxi-rsb: Add driver for Allwinner Reduced Serial Bus")
+> Signed-off-by: Samuel Holland <samuel@sholland.org>
+> ---
+> 
+> Changes in v2:
+>  - Add Fixes tag to patch 2
+>  - Only check for specific status bits when polling
+> 
+>  drivers/bus/sunxi-rsb.c | 27 ++++++++++++++++++++-------
+>  1 file changed, 20 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/bus/sunxi-rsb.c b/drivers/bus/sunxi-rsb.c
+> index 17343cd75338..012e82f9b7b0 100644
+> --- a/drivers/bus/sunxi-rsb.c
+> +++ b/drivers/bus/sunxi-rsb.c
+> @@ -267,6 +267,9 @@ EXPORT_SYMBOL_GPL(sunxi_rsb_driver_register);
+>  /* common code that starts a transfer */
+>  static int _sunxi_rsb_run_xfer(struct sunxi_rsb *rsb)
+>  {
+> +	u32 int_mask, status;
+> +	bool timeout;
+> +
+>  	if (readl(rsb->regs + RSB_CTRL) & RSB_CTRL_START_TRANS) {
+>  		dev_dbg(rsb->dev, "RSB transfer still in progress\n");
+>  		return -EBUSY;
+> @@ -274,13 +277,23 @@ static int _sunxi_rsb_run_xfer(struct sunxi_rsb *rsb)
+>  
+>  	reinit_completion(&rsb->complete);
+>  
+> -	writel(RSB_INTS_LOAD_BSY | RSB_INTS_TRANS_ERR | RSB_INTS_TRANS_OVER,
+> +	int_mask = RSB_INTS_LOAD_BSY | RSB_INTS_TRANS_ERR | RSB_INTS_TRANS_OVER;
+> +	writel(int_mask,
+>  	       rsb->regs + RSB_INTE);
+>  	writel(RSB_CTRL_START_TRANS | RSB_CTRL_GLOBAL_INT_ENB,
+>  	       rsb->regs + RSB_CTRL);
+>  
+> -	if (!wait_for_completion_io_timeout(&rsb->complete,
+> -					    msecs_to_jiffies(100))) {
+> +	if (irqs_disabled()) {
+> +		timeout = readl_poll_timeout_atomic(rsb->regs + RSB_INTS,
+> +						    status, (status & int_mask),
+> +						    10, 100000);
 
-Here is the summary with links:
-  - [v2,1/3] s390/ctcm: Fix return type of ctc{mp,}m_tx()
-    https://git.kernel.org/netdev/net-next/c/aa5bf80c3c06
-  - [v2,2/3] s390/netiucv: Fix return type of netiucv_tx()
-    https://git.kernel.org/netdev/net-next/c/88d86d18d7cf
-  - [v2,3/3] s390/lcs: Fix return type of lcs_start_xmit()
-    https://git.kernel.org/netdev/net-next/c/bb16db839365
+So if I understand correctly, this mimics the operation of
+sunxi_rsb_irq(), just replacing rsb->status with status.
+But wouldn't that also mean that we need to clear the interrupt bits in
+INTS, since we are about to handle them below?
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+It probably doesn't matter in practise, since we call this during power
+down only, but looks like more robust to do, from a driver's perspective.
 
+Cheers,
+Andre
+
+> +	} else {
+> +		timeout = !wait_for_completion_io_timeout(&rsb->complete,
+> +							  msecs_to_jiffies(100));
+> +		status = rsb->status;
+> +	}
+> +
+> +	if (timeout) {
+>  		dev_dbg(rsb->dev, "RSB timeout\n");
+>  
+>  		/* abort the transfer */
+> @@ -292,18 +305,18 @@ static int _sunxi_rsb_run_xfer(struct sunxi_rsb *rsb)
+>  		return -ETIMEDOUT;
+>  	}
+>  
+> -	if (rsb->status & RSB_INTS_LOAD_BSY) {
+> +	if (status & RSB_INTS_LOAD_BSY) {
+>  		dev_dbg(rsb->dev, "RSB busy\n");
+>  		return -EBUSY;
+>  	}
+>  
+> -	if (rsb->status & RSB_INTS_TRANS_ERR) {
+> -		if (rsb->status & RSB_INTS_TRANS_ERR_ACK) {
+> +	if (status & RSB_INTS_TRANS_ERR) {
+> +		if (status & RSB_INTS_TRANS_ERR_ACK) {
+>  			dev_dbg(rsb->dev, "RSB slave nack\n");
+>  			return -EINVAL;
+>  		}
+>  
+> -		if (rsb->status & RSB_INTS_TRANS_ERR_DATA) {
+> +		if (status & RSB_INTS_TRANS_ERR_DATA) {
+>  			dev_dbg(rsb->dev, "RSB transfer data error\n");
+>  			return -EIO;
+>  		}
 
