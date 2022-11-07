@@ -2,139 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A4EA61EC69
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 08:48:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27DEA61EC66
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 08:48:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231490AbiKGHsn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 02:48:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50834 "EHLO
+        id S231421AbiKGHsU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 02:48:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231235AbiKGHse (ORCPT
+        with ESMTP id S231235AbiKGHsR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 02:48:34 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 352B912618
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Nov 2022 23:47:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667807257;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=52WLTkQahESKRvbE8wwCRR9ybE1ehJc40vrQX6Z9vt4=;
-        b=Vwdg5FGzEZGTLF3EecFikoWx7+CRbcvdtozxNRWRmOpJozP8omuAHL4jTb07wf/QV0QMMl
-        XljQjZ5wayFo74kgi1V9Yw0u4WbBOuSyFBlPx+MwdAUuOiS8SC1K/OQjXkQI1zDABNuPGD
-        xs88ahjo4DzOXk0Sonzxbpn1IlxdpRg=
-Received: from mail-pl1-f197.google.com (mail-pl1-f197.google.com
- [209.85.214.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-619-Exnr4IrYOGSBXwxKvs_F4w-1; Mon, 07 Nov 2022 02:47:31 -0500
-X-MC-Unique: Exnr4IrYOGSBXwxKvs_F4w-1
-Received: by mail-pl1-f197.google.com with SMTP id e13-20020a17090301cd00b001871e6f8714so8618004plh.14
-        for <linux-kernel@vger.kernel.org>; Sun, 06 Nov 2022 23:47:30 -0800 (PST)
+        Mon, 7 Nov 2022 02:48:17 -0500
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03C291274E
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Nov 2022 23:48:15 -0800 (PST)
+Received: by mail-wr1-x42e.google.com with SMTP id o4so14871898wrq.6
+        for <linux-kernel@vger.kernel.org>; Sun, 06 Nov 2022 23:48:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=q1jSgj+U/oKtaUwAKWdJ0q9enxrmXsa4MWrdIDPYzjo=;
+        b=YwB1XtYslLRT+McdZxUKV8yMM4nmOwfu0SWqcHcFyHZRzqC3CR1yDxEnbBhQhBbjbT
+         TklYKnvLtsMtVFk9qhnwLTnVGJ0dWpn1l7zQxaUOEoIyywFshy+dZ2xjHAK22bzuocuk
+         RkoPnXDIrpBo8Usygsjo2qMg3LVnUlomg7t2714EWbM0CbrCbbC79p/cNioQn0MNSSA/
+         GllxnGVZls4gUCvuMoILe8u/r/qjLa/9ZNqSZ36gscBHKLF1VQTEk8FPbD0meaSKYVoU
+         v+lleHze+8TwEXJpXjTc6xd1H+M1tlNfxMhH5MAR/ww5NYCjvhMSZBp1mHW2tZKeP7Hk
+         quvA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-language:content-transfer-encoding:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=52WLTkQahESKRvbE8wwCRR9ybE1ehJc40vrQX6Z9vt4=;
-        b=Beu+R8ZiuuFey12FiWU7OhtsV3+sMS8w/97JZQfjIILTcuNz6T4dyvQeStmF+IHacL
-         RBMmZ+hWt3rHw1up1e6VDH5ibhltYmbb9XDjGX4vn8uVmaUARlDv6dipblzLQNQTbMwR
-         VwtEkC54OjUjS5a+TlSoF7di1Y2vPgeviejUxQTIsHQL/O2Z4hKzUk6AaQPMLcbA9i+4
-         3ejwiIHwFm3UEIoeqhv4sGFLThnS08NmG9vl4ibtSGg/Rld7eB1sglH5yoZ20VhKJhDN
-         YxzU/dJ8+Nbpk3wJAh65EUsGxWwynOfdkgf7PHyfhQ8sETAK/oqIftYIfsnthGwGK6YJ
-         IUYQ==
-X-Gm-Message-State: ACrzQf0VJOjS1W0Ss1tMu3huh6/TyWwPyt20UV7BHKrWJMlbNs+ah0h0
-        B/7AAuwfschgYgVva/BapBwxLZyiZAQqPRlcREzjxgRAMG6Bj7uVZygdBYSTe+mMinc/MsCl5dM
-        41MQJVYp+sRj0TjC1Ng/AUQT6FiqrkscS+w1sEQCMsW0UyhBK4c9iFazhM6z3dhn6U18eWvDGaA
-        ==
-X-Received: by 2002:aa7:8750:0:b0:56c:318a:f811 with SMTP id g16-20020aa78750000000b0056c318af811mr48662454pfo.14.1667807249802;
-        Sun, 06 Nov 2022 23:47:29 -0800 (PST)
-X-Google-Smtp-Source: AMsMyM58IgxAa4t6zhJ5Ig9aVRVRRguY43dC1mCgSfPeAWW24MmCEWrDnBo8UXHD4us991OwHxOLIg==
-X-Received: by 2002:aa7:8750:0:b0:56c:318a:f811 with SMTP id g16-20020aa78750000000b0056c318af811mr48662426pfo.14.1667807249400;
-        Sun, 06 Nov 2022 23:47:29 -0800 (PST)
-Received: from [10.72.12.88] ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id u15-20020a170903124f00b0016d72804664sm4294618plh.205.2022.11.06.23.47.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 06 Nov 2022 23:47:29 -0800 (PST)
-Subject: Re: [PATCH] ceph: fix memory leak in mount error path when using
- test_dummy_encryption
-To:     =?UTF-8?Q?Lu=c3=ads_Henriques?= <lhenriques@suse.de>,
-        Ilya Dryomov <idryomov@gmail.com>,
-        Jeff Layton <jlayton@kernel.org>
-Cc:     ceph-devel@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221103153619.11068-1-lhenriques@suse.de>
-From:   Xiubo Li <xiubli@redhat.com>
-Message-ID: <700018a6-aff7-6e7a-98df-2fc8cca39acb@redhat.com>
-Date:   Mon, 7 Nov 2022 15:47:23 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=q1jSgj+U/oKtaUwAKWdJ0q9enxrmXsa4MWrdIDPYzjo=;
+        b=lB4BkEKvurrQVu1+fyF/N9awy+Ha/gDn5YeMd+nqqZ3+NFGVsKDiBan/IRpICeMJBU
+         wyq7P5F/9Obc+6inri1DR7YnbVxQTIt19GOTSzf6Q9jhnQFl9sG8qZM2uOB9DyXgB5BZ
+         NlojUzwlVvK2i8NZsvLvwb4W0FqmVx0EgQlKqjNyZzjYbLPsqj5TS802UvQxXzNNxcmQ
+         UIdyvn5gPfibWhN8KDz64wBw2n9QEj8h5vCszu2WpyM2y0AVM0ENv3AIBcLaII9cmJnk
+         EZFyUTT873hMyCIEFbgbTbqk1BTRugdmGX5HAwC5UaMEicACiltxK9J/0FInTEMCfdft
+         x0AA==
+X-Gm-Message-State: ACrzQf12vHWxEsucQjQ9vJEb6nJBDEe0AgWtSm19tTiKMG0ze0AlOx2J
+        6kEZnEFRDWOZZfyTMRIi7RQ=
+X-Google-Smtp-Source: AMsMyM7pgVeuWyX0WAdA8dyzBSWxvK9Sdd171FLRVAi/fD0R8nx5LC8yte9TNyXAEVfdJCoqdEdW9Q==
+X-Received: by 2002:a5d:59af:0:b0:236:6b90:1e65 with SMTP id p15-20020a5d59af000000b002366b901e65mr30272621wrr.362.1667807293295;
+        Sun, 06 Nov 2022 23:48:13 -0800 (PST)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id fc15-20020a05600c524f00b003cf57329221sm11571562wmb.14.2022.11.06.23.48.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 06 Nov 2022 23:48:12 -0800 (PST)
+Date:   Mon, 7 Nov 2022 10:48:10 +0300
+From:   Dan Carpenter <error27@gmail.com>
+To:     Chuck Lever III <chuck.lever@oracle.com>
+Cc:     "oe-kbuild@lists.linux.dev" <oe-kbuild@lists.linux.dev>,
+        Jeff Layton <jlayton@kernel.org>,
+        "lkp@intel.com" <lkp@intel.com>,
+        "oe-kbuild-all@lists.linux.dev" <oe-kbuild-all@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: fs/nfsd/filecache.c:1118 nfsd_file_do_acquire() warn: passing
+ freed memory 'nf'
+Message-ID: <Y2i4Olz9GHpO02bP@kadam>
+References: <202211051543.2bnSgTQW-lkp@intel.com>
+ <6F00D08C-6D94-486A-A3F2-B11C9FF5E9E2@oracle.com>
 MIME-Version: 1.0
-In-Reply-To: <20221103153619.11068-1-lhenriques@suse.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6F00D08C-6D94-486A-A3F2-B11C9FF5E9E2@oracle.com>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sat, Nov 05, 2022 at 03:39:59PM +0000, Chuck Lever III wrote:
+> 
+> 
+> > On Nov 5, 2022, at 7:17 AM, Dan Carpenter <error27@gmail.com> wrote:
+> > 
+> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> > head:   b208b9fbbcba743fb269d15cb46a4036b01936b1
+> > commit: 243a5263014a30436c93ed3f1f864c1da845455e nfsd: rework hashtable handling in nfsd_do_file_acquire
+> > config: alpha-randconfig-m041-20221030
+> > compiler: alpha-linux-gcc (GCC) 12.1.0
+> > 
+> > If you fix the issue, kindly add following tag where applicable
+> > | Reported-by: kernel test robot <lkp@intel.com>
+> > | Reported-by: Dan Carpenter <error27@gmail.com>
+> > 
+> > smatch warnings:
+> > fs/nfsd/filecache.c:1118 nfsd_file_do_acquire() warn: passing freed memory 'nf'
+> > 
+> > vim +/nf +1118 fs/nfsd/filecache.c
+> > 
+> > fb70bf124b051d Chuck Lever     2022-03-30  1036  static __be32
+> > be0230069fcbf7 Chuck Lever     2022-07-08  1037  nfsd_file_do_acquire(struct svc_rqst *rqstp, struct svc_fh *fhp,
+> > fb70bf124b051d Chuck Lever     2022-03-30  1038  		     unsigned int may_flags, struct nfsd_file **pnf, bool open)
+> > 65294c1f2c5e72 Jeff Layton     2019-08-18  1039  {
+> > ce502f81ba884c Chuck Lever     2022-07-08  1040  	struct nfsd_file_lookup_key key = {
+> > ce502f81ba884c Chuck Lever     2022-07-08  1041  		.type	= NFSD_FILE_KEY_FULL,
+> > ce502f81ba884c Chuck Lever     2022-07-08  1042  		.need	= may_flags & NFSD_FILE_MAY_MASK,
+> > ce502f81ba884c Chuck Lever     2022-07-08  1043  		.net	= SVC_NET(rqstp),
+> > ce502f81ba884c Chuck Lever     2022-07-08  1044  	};
+> > 243a5263014a30 Jeff Layton     2022-10-04  1045  	bool open_retry = true;
+> > 243a5263014a30 Jeff Layton     2022-10-04  1046  	struct nfsd_file *nf;
+> > ce502f81ba884c Chuck Lever     2022-07-08  1047  	__be32 status;
+> > 243a5263014a30 Jeff Layton     2022-10-04  1048  	int ret;
+> > 65294c1f2c5e72 Jeff Layton     2019-08-18  1049  
+> > 65294c1f2c5e72 Jeff Layton     2019-08-18  1050  	status = fh_verify(rqstp, fhp, S_IFREG,
+> > 65294c1f2c5e72 Jeff Layton     2019-08-18  1051  				may_flags|NFSD_MAY_OWNER_OVERRIDE);
+> > 65294c1f2c5e72 Jeff Layton     2019-08-18  1052  	if (status != nfs_ok)
+> > 65294c1f2c5e72 Jeff Layton     2019-08-18  1053  		return status;
+> > ce502f81ba884c Chuck Lever     2022-07-08  1054  	key.inode = d_inode(fhp->fh_dentry);
+> > ce502f81ba884c Chuck Lever     2022-07-08  1055  	key.cred = get_current_cred();
+> > 65294c1f2c5e72 Jeff Layton     2019-08-18  1056  
+> > 65294c1f2c5e72 Jeff Layton     2019-08-18  1057  retry:
+> > 243a5263014a30 Jeff Layton     2022-10-04  1058  	rcu_read_lock();
+> > 243a5263014a30 Jeff Layton     2022-10-04  1059  	nf = rhashtable_lookup(&nfsd_file_rhash_tbl, &key,
+> > ce502f81ba884c Chuck Lever     2022-07-08  1060  			       nfsd_file_rhash_params);
+> > ce502f81ba884c Chuck Lever     2022-07-08  1061  	if (nf)
+> > ce502f81ba884c Chuck Lever     2022-07-08  1062  		nf = nfsd_file_get(nf);
+> > 243a5263014a30 Jeff Layton     2022-10-04  1063  	rcu_read_unlock();
+> > 65294c1f2c5e72 Jeff Layton     2019-08-18  1064  	if (nf)
+> > 65294c1f2c5e72 Jeff Layton     2019-08-18  1065  		goto wait_for_construction;
+> > 65294c1f2c5e72 Jeff Layton     2019-08-18  1066  
+> > 243a5263014a30 Jeff Layton     2022-10-04  1067  	nf = nfsd_file_alloc(&key, may_flags);
+> > 243a5263014a30 Jeff Layton     2022-10-04  1068  	if (!nf) {
+> > 54f7df7094b329 Chuck Lever     2022-07-08  1069  		status = nfserr_jukebox;
+> > 54f7df7094b329 Chuck Lever     2022-07-08  1070  		goto out_status;
+> > 65294c1f2c5e72 Jeff Layton     2019-08-18  1071  	}
+> > 65294c1f2c5e72 Jeff Layton     2019-08-18  1072  
+> > 243a5263014a30 Jeff Layton     2022-10-04  1073  	ret = rhashtable_lookup_insert_key(&nfsd_file_rhash_tbl,
+> > 243a5263014a30 Jeff Layton     2022-10-04  1074  					   &key, &nf->nf_rhash,
+> > ce502f81ba884c Chuck Lever     2022-07-08  1075  					   nfsd_file_rhash_params);
+> > 243a5263014a30 Jeff Layton     2022-10-04  1076  	if (likely(ret == 0))
+> > 65294c1f2c5e72 Jeff Layton     2019-08-18  1077  		goto open_file;
+> > 243a5263014a30 Jeff Layton     2022-10-04  1078  
+> > 243a5263014a30 Jeff Layton     2022-10-04  1079  	nfsd_file_slab_free(&nf->nf_rcu);
+> > 243a5263014a30 Jeff Layton     2022-10-04  1080  	if (ret == -EEXIST)
+> > 243a5263014a30 Jeff Layton     2022-10-04  1081  		goto retry;
+> > 243a5263014a30 Jeff Layton     2022-10-04  1082  	trace_nfsd_file_insert_err(rqstp, key.inode, may_flags, ret);
+> > 243a5263014a30 Jeff Layton     2022-10-04  1083  	status = nfserr_jukebox;
+> > 243a5263014a30 Jeff Layton     2022-10-04  1084  	goto out_status;
+> > 65294c1f2c5e72 Jeff Layton     2019-08-18  1085  
+> > 65294c1f2c5e72 Jeff Layton     2019-08-18  1086  wait_for_construction:
+> > 65294c1f2c5e72 Jeff Layton     2019-08-18  1087  	wait_on_bit(&nf->nf_flags, NFSD_FILE_PENDING, TASK_UNINTERRUPTIBLE);
+> > 65294c1f2c5e72 Jeff Layton     2019-08-18  1088  
+> > 65294c1f2c5e72 Jeff Layton     2019-08-18  1089  	/* Did construction of this file fail? */
+> > 65294c1f2c5e72 Jeff Layton     2019-08-18  1090  	if (!test_bit(NFSD_FILE_HASHED, &nf->nf_flags)) {
+> > ce502f81ba884c Chuck Lever     2022-07-08  1091  		trace_nfsd_file_cons_err(rqstp, key.inode, may_flags, nf);
+> > 243a5263014a30 Jeff Layton     2022-10-04  1092  		if (!open_retry) {
+> > 28c7d86bb6172f Trond Myklebust 2020-01-06  1093  			status = nfserr_jukebox;
+> > 28c7d86bb6172f Trond Myklebust 2020-01-06  1094  			goto out;
+> > 28c7d86bb6172f Trond Myklebust 2020-01-06  1095  		}
+> > 243a5263014a30 Jeff Layton     2022-10-04  1096  		open_retry = false;
+> > 65294c1f2c5e72 Jeff Layton     2019-08-18  1097  		nfsd_file_put_noref(nf);
+> > 65294c1f2c5e72 Jeff Layton     2019-08-18  1098  		goto retry;
+> > 65294c1f2c5e72 Jeff Layton     2019-08-18  1099  	}
+> > 65294c1f2c5e72 Jeff Layton     2019-08-18  1100  
+> > 4a0e73e635e3f3 Chuck Lever     2022-07-08  1101  	nfsd_file_lru_remove(nf);
+> > 65294c1f2c5e72 Jeff Layton     2019-08-18  1102  	this_cpu_inc(nfsd_file_cache_hits);
+> > 65294c1f2c5e72 Jeff Layton     2019-08-18  1103  
+> > 23ba98de6dcec6 Jeff Layton     2022-07-29  1104  	status = nfserrno(nfsd_open_break_lease(file_inode(nf->nf_file), may_flags));
+> > 65294c1f2c5e72 Jeff Layton     2019-08-18  1105  out:
+> > 65294c1f2c5e72 Jeff Layton     2019-08-18  1106  	if (status == nfs_ok) {
+> > 29d4bdbbb910f3 Chuck Lever     2022-07-08  1107  		if (open)
+> > 29d4bdbbb910f3 Chuck Lever     2022-07-08  1108  			this_cpu_inc(nfsd_file_acquisitions);
+> > 65294c1f2c5e72 Jeff Layton     2019-08-18  1109  		*pnf = nf;
+> > 65294c1f2c5e72 Jeff Layton     2019-08-18  1110  	} else {
+> > 65294c1f2c5e72 Jeff Layton     2019-08-18  1111  		nfsd_file_put(nf);
+> > 65294c1f2c5e72 Jeff Layton     2019-08-18  1112  		nf = NULL;
+> > 65294c1f2c5e72 Jeff Layton     2019-08-18  1113  	}
+> > 65294c1f2c5e72 Jeff Layton     2019-08-18  1114  
+> > 54f7df7094b329 Chuck Lever     2022-07-08  1115  out_status:
+> > ce502f81ba884c Chuck Lever     2022-07-08  1116  	put_cred(key.cred);
+> > be0230069fcbf7 Chuck Lever     2022-07-08  1117  	if (open)
+> > ce502f81ba884c Chuck Lever     2022-07-08 @1118  		trace_nfsd_file_acquire(rqstp, key.inode, may_flags, nf, status);
+> > 
+> > Passing freed pointers to the trace code is a border line case...  Not
+> > sure if we care.
+> 
+> Speaking only for NFSD, let me echo Jeff and say yes, we care.
+> 
+> In general, I think Linux users/customers and of course our fellow
+> sustaining engineers want to feel confident that enabling tracing
+> on a production kernel isn't going to result in less stability.
+> 
+> Thanks for the report!
 
-On 03/11/2022 23:36, Luís Henriques wrote:
-> Because ceph_init_fs_context() will never be invoced in case we get a
-> mount error, destroy_mount_options() won't be releasing fscrypt resources
-> with fscrypt_free_dummy_policy().  This will result in a memory leak.  Add
-> an invocation to this function in the mount error path.
->
-> Signed-off-by: Luís Henriques <lhenriques@suse.de>
-> ---
->   fs/ceph/super.c | 1 +
->   1 file changed, 1 insertion(+)
->
-> diff --git a/fs/ceph/super.c b/fs/ceph/super.c
-> index 2224d44d21c0..6b9fd04b25cd 100644
-> --- a/fs/ceph/super.c
-> +++ b/fs/ceph/super.c
-> @@ -1362,6 +1362,7 @@ static int ceph_get_tree(struct fs_context *fc)
->   
->   	ceph_mdsc_close_sessions(fsc->mdsc);
->   	deactivate_locked_super(sb);
-> +	fscrypt_free_dummy_policy(&fsc->fsc_dummy_enc_policy);
+Your welcome.  What I meant was that it's only a problem if we
+dereference the pointer...  (I haven't used tracing output so I wasn't
+sure on this).
 
-Hi Luis,
-
-BTW, any reason the following code won't be triggered ?
-
-deactivate_locked_super(sb);
-
-   --> fs->kill_sb(s);
-
-         --> ceph_kill_sb()
-
-               --> kill_anon_super()
-
-                     --> generic_shutdown_super()
-
-                           --> sop->put_super()
-
-                                 --> ceph_put_super()
-
-                                       --> ceph_fscrypt_free_dummy_policy()
-
-                                            --> fscrypt_free_dummy_policy(
-
-Thanks!
-
-- Xiubo
-
-
->   	goto out_final;
->   
->   out:
->
+regards,
+dan carpenter
 
