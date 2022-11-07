@@ -2,130 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6177861FF03
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 21:03:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7ECF61FF1D
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 21:06:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232764AbiKGUDk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 15:03:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43308 "EHLO
+        id S232037AbiKGUGC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 15:06:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231398AbiKGUDh (ORCPT
+        with ESMTP id S231351AbiKGUGA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 15:03:37 -0500
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56F7F178BB;
-        Mon,  7 Nov 2022 12:03:35 -0800 (PST)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.0.0)
- id 0badc597a4899159; Mon, 7 Nov 2022 21:03:31 +0100
-Received: from kreacher.localnet (unknown [213.134.188.205])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id D8CB46682BE;
-        Mon,  7 Nov 2022 21:03:30 +0100 (CET)
-Authentication-Results: v370.home.net.pl; dmarc=none (p=none dis=none) header.from=rjwysocki.net
-Authentication-Results: v370.home.net.pl; spf=fail smtp.mailfrom=rjwysocki.net
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-rtc@vger.kernel.org
-Cc:     Linux ACPI <linux-acpi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1 5/5] rtc: rtc-cmos: Disable ACPI RTC event on removal
-Date:   Mon, 07 Nov 2022 21:03:06 +0100
-Message-ID: <2219830.iZASKD2KPV@kreacher>
-In-Reply-To: <2276401.ElGaqSPkdT@kreacher>
-References: <2276401.ElGaqSPkdT@kreacher>
+        Mon, 7 Nov 2022 15:06:00 -0500
+Received: from mail-ot1-f44.google.com (mail-ot1-f44.google.com [209.85.210.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D922527CC3;
+        Mon,  7 Nov 2022 12:05:59 -0800 (PST)
+Received: by mail-ot1-f44.google.com with SMTP id cn2-20020a056830658200b0066c74617e3dso7204976otb.2;
+        Mon, 07 Nov 2022 12:05:59 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mzxwEFNUScRHad0GSitNuAPUAQgYGoYkKZUbn1eKG18=;
+        b=Pk7c3069xNX4M+ZFbRx1Kg4eokduxQiU4Ya7kmipQd6L8+/a6//TQfwWAvHhWxxTEv
+         /dQvBT0WD8rQzh5IPiIjLlaez7mffx5zbRRIcC/KqSaDIKsQmW0SBFh/vJGTwEhrcTYW
+         mPB8mC7OuvaGEP9j9ycemv+J6NPRuAbKJewyyrC5reKwPpEiu11JsVdKSRk+tYuJBAVu
+         aPLWgiQme7jCVt7a8Hqp49AUZAkC6xhi8Wa215qfSbluW3rHjw82SCTAcRU8FFrvUVKY
+         IoDi6O6HogkLk0QoW53xkl1RQMd2Uw7NNnVQ27JXIwFtW7UzztWkUmN7dGV0i8GTZMfZ
+         31gg==
+X-Gm-Message-State: ACrzQf0Asqv0GGV8K9RVMril0+v3ho0ydyRvzXeNVYndArt/QWUBm5C2
+        +RcLk1bfiAmkcrn7w49Bhb0jTW2nGA==
+X-Google-Smtp-Source: AMsMyM5F0ZUoojX9ufwQfzy1dN0QLHEBHTBy2a9TmPWOTk7MHOTPAWpdcmmZ5GfaQLGlHKVMLnBdiQ==
+X-Received: by 2002:a05:6830:410b:b0:66c:9a3a:53e with SMTP id w11-20020a056830410b00b0066c9a3a053emr8419415ott.225.1667851558934;
+        Mon, 07 Nov 2022 12:05:58 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id m6-20020a4a9506000000b0049201e2b8f4sm2522674ooi.4.2022.11.07.12.05.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Nov 2022 12:05:58 -0800 (PST)
+Received: (nullmailer pid 1504075 invoked by uid 1000);
+        Mon, 07 Nov 2022 20:06:00 -0000
+Date:   Mon, 7 Nov 2022 14:06:00 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Dipen Patel <dipenp@nvidia.com>
+Cc:     thierry.reding@gmail.com, jonathanh@nvidia.com,
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linus.walleij@linaro.org,
+        devicetree@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: Re: [PATCH 4/7] dt-bindings: timestamp: Add Tegra234 support
+Message-ID: <20221107200600.GA1489762-robh@kernel.org>
+References: <20221103174523.29592-1-dipenp@nvidia.com>
+ <20221103174523.29592-5-dipenp@nvidia.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 213.134.188.205
-X-CLIENT-HOSTNAME: 213.134.188.205
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvgedrvdekgddufedtucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepvdffueeitdfgvddtudegueejtdffteetgeefkeffvdeftddttdeuhfegfedvjefhnecukfhppedvudefrddufeegrddukeekrddvtdehnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvddufedrudefgedrudekkedrvddthedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohepkedprhgtphhtthhopegrlhgvgigrnhgurhgvrdgsvghllhhonhhisegsohhothhlihhnrdgtohhmpdhrtghpthhtoheplhhinhhugidqrhhttgesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdgrtghpihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgv
- lhdrohhrghdprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehruhhirdiihhgrnhhgsehinhhtvghlrdgtohhmpdhrtghpthhtoheprgdriihumhhmohesthhofigvrhhtvggthhdrihhtpdhrtghpthhtoheprghnughrihihrdhshhgvvhgthhgvnhhkoheslhhinhhugidrihhnthgvlhdrtghomh
-X-DCC--Metrics: v370.home.net.pl 1024; Body=8 Fuz1=8 Fuz2=8
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221103174523.29592-5-dipenp@nvidia.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On Thu, Nov 03, 2022 at 10:45:20AM -0700, Dipen Patel wrote:
+> Added timestamp provider support for the Tegra234 in devicetree
+> bindings.
+> 
+> Signed-off-by: Dipen Patel <dipenp@nvidia.com>
+> ---
+>  .../timestamp/nvidia,tegra194-hte.yaml        | 44 +++++++++++++++++--
+>  1 file changed, 40 insertions(+), 4 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/timestamp/nvidia,tegra194-hte.yaml b/Documentation/devicetree/bindings/timestamp/nvidia,tegra194-hte.yaml
+> index c31e207d1652..158dbe58c49f 100644
+> --- a/Documentation/devicetree/bindings/timestamp/nvidia,tegra194-hte.yaml
+> +++ b/Documentation/devicetree/bindings/timestamp/nvidia,tegra194-hte.yaml
+> @@ -4,7 +4,7 @@
+>  $id: http://devicetree.org/schemas/timestamp/nvidia,tegra194-hte.yaml#
+>  $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  
+> -title: Tegra194 on chip generic hardware timestamping engine (HTE)
+> +title: Tegra on chip generic hardware timestamping engine (HTE) provider
+>  
+>  maintainers:
+>    - Dipen Patel <dipenp@nvidia.com>
+> @@ -23,6 +23,8 @@ properties:
+>      enum:
+>        - nvidia,tegra194-gte-aon
+>        - nvidia,tegra194-gte-lic
+> +      - nvidia,tegra234-gte-aon
+> +      - nvidia,tegra234-gte-lic
 
-Make cmos_do_remove() drop the ACPI RTC fixed event handler so as to
-prevent it from operating on stale data in case the event triggers
-after driver removal.
+How is the h/w in this chip different from the existing one? I'm 
+assuming it must be because you don't have a fallback compatible.
 
-While at it, make cmos_do_remove() also clear the driver data pointer
-of the device and make cmos_acpi_wake_setup() do that in the error path
-too.
+>  
+>    reg:
+>      maxItems: 1
+> @@ -43,9 +45,8 @@ properties:
+>      description:
+>        HTE lines are arranged in 32 bit slice where each bit represents different
+>        line/signal that it can enable/configure for the timestamp. It is u32
+> -      property and depends on the HTE instance in the chip. The value 3 is for
+> -      GPIO GTE and 11 for IRQ GTE.
+> -    enum: [3, 11]
+> +      property and the value depends on the HTE instance in the chip.
 
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/rtc/rtc-cmos.c |   15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+If this statement was true, then this property makes sense...
 
-Index: linux-pm/drivers/rtc/rtc-cmos.c
-===================================================================
---- linux-pm.orig/drivers/rtc/rtc-cmos.c
-+++ linux-pm/drivers/rtc/rtc-cmos.c
-@@ -798,6 +798,12 @@ static inline void acpi_rtc_event_setup(
- 	acpi_disable_event(ACPI_EVENT_RTC, 0);
- }
- 
-+static inline void acpi_rtc_event_cleanup(void)
-+{
-+	if (!acpi_disabled)
-+		acpi_remove_fixed_event_handler(ACPI_EVENT_RTC, rtc_handler);
-+}
-+
- static void rtc_wake_on(struct device *dev)
- {
- 	acpi_clear_event(ACPI_EVENT_RTC);
-@@ -884,6 +890,10 @@ static inline void acpi_rtc_event_setup(
- {
- }
- 
-+static inline void acpi_rtc_event_cleanup(void)
-+{
-+}
-+
- static inline void cmos_acpi_wake_setup(struct device *dev)
- {
- }
-@@ -1109,6 +1119,7 @@ cleanup2:
- 		free_irq(rtc_irq, cmos_rtc.rtc);
- cleanup1:
- 	cmos_rtc.dev = NULL;
-+	dev_set_drvdata(dev, NULL);
- cleanup0:
- 	if (RTC_IOMAPPED)
- 		release_region(ports->start, resource_size(ports));
-@@ -1138,6 +1149,9 @@ static void cmos_do_remove(struct device
- 			hpet_unregister_irq_handler(cmos_interrupt);
- 	}
- 
-+	if (!dev_get_platdata(dev))
-+		acpi_rtc_event_cleanup();
-+
- 	cmos->rtc = NULL;
- 
- 	ports = cmos->iomem;
-@@ -1148,6 +1162,7 @@ static void cmos_do_remove(struct device
- 	cmos->iomem = NULL;
- 
- 	cmos->dev = NULL;
-+	dev_set_drvdata(dev, NULL);
- }
- 
- static int cmos_aie_poweroff(struct device *dev)
+> +    enum: [3, 11, 17]
+>  
+>    '#timestamp-cells':
+>      description:
+> @@ -55,6 +56,41 @@ properties:
+>        mentioned in the nvidia GPIO device tree binding document.
+>      const: 1
+>  
+> +allOf:
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - nvidia,tegra194-gte-aon
+> +              - nvidia,tegra234-gte-aon
+> +    then:
+> +      properties:
+> +        nvidia,slices:
+> +          const: 3
+> +
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - nvidia,tegra194-gte-lic
+> +    then:
+> +      properties:
+> +        nvidia,slices:
+> +          const: 11
+> +
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - nvidia,tegra234-gte-lic
+> +    then:
+> +      properties:
+> +        nvidia,slices:
+> +          const: 17
 
+However, if there is only one possible value for each compatible, then 
+being per instance can't really be true. I guess 'aon' or 'lic' define 
+the instance? That's not normal practice. Are there other differences?
 
+It seems like 'nvidia,slices' should be implied from the compatible 
+string.
 
+Rob
