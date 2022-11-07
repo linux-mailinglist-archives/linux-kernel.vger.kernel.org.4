@@ -2,130 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C74761FC66
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 18:59:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4ABA61FC74
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 19:00:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232557AbiKGR72 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 12:59:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40080 "EHLO
+        id S232362AbiKGSAT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 13:00:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233033AbiKGR7G (ORCPT
+        with ESMTP id S232637AbiKGR7v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 12:59:06 -0500
-Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C422529C87
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 09:55:57 -0800 (PST)
-Received: by mail-qt1-x82a.google.com with SMTP id l2so7298307qtq.11
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 09:55:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=txnqL8BcE2RRAo21gLgkdDMpojWqsMMMnFuwGP+yEnI=;
-        b=Bn/PA42/xq/GpLo/zOBhqTPpFJHuoYg09pjDkvjl0BPNa37aNPb4KczjBKqfEdRyYX
-         3OPYpwkgNHcwInED8kN5kZ0Ja+ghNCnEXmbS0DcRAdcXFIXI+B1qMbHIOFTBzdsf8vAz
-         AjNccSZTYJFTgWippEn+/nYATOaqZs+mK45kI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=txnqL8BcE2RRAo21gLgkdDMpojWqsMMMnFuwGP+yEnI=;
-        b=uZaRo7Ep/9C4CBpEM208t0Ty523wO4v6jiTh/kjdrphYghGfv61O7msoANF68bxDHd
-         nFdagi/f+WSUj5etEU0fZ62+Xrj4j8iuwygkQqfKsUtAR1Guvc4P/TDYCumhQv8tMSmn
-         G6rXfmcEBG9JfR4JRBcyHTO6JzUk82aBcDDrz7MoOH0bBpd8zcHYI+xGFCabmv/iJ/yR
-         6vzfM80MzKjiUfNn+c2L9V7roVx4y6SAQXQRGZLskfC1QivYJSpVhQZM3TfkaKftKfci
-         8yPiwFZPB9yokjQx5Ees7OPRCIY6fSo4reQlDqg7mMllNHPdSyg2jcZHp5bLxLpXuoHe
-         Semw==
-X-Gm-Message-State: ACrzQf0t6Jvt3X0kmciyKiaWga/Smss36IFqgAuTWbAjmsd9NoFax0if
-        QPS/wbz+/mWrBOJi2N6Vw0HWcNIyu6a+Og==
-X-Google-Smtp-Source: AMsMyM6+nVWU7Puml6DGWwPwDYwPJXXiqdChPF9BCLw/1+7EWkz5azGIC/lIP+oFYcVwppxABzre4w==
-X-Received: by 2002:ac8:6b46:0:b0:3a5:57f1:5159 with SMTP id x6-20020ac86b46000000b003a557f15159mr17301584qts.421.1667843756161;
-        Mon, 07 Nov 2022 09:55:56 -0800 (PST)
-Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com. [209.85.128.169])
-        by smtp.gmail.com with ESMTPSA id bj17-20020a05620a191100b006ef1a8f1b81sm7358928qkb.5.2022.11.07.09.55.50
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Nov 2022 09:55:53 -0800 (PST)
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-3321c2a8d4cso111876357b3.5
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 09:55:50 -0800 (PST)
-X-Received: by 2002:a81:8241:0:b0:370:5fad:47f0 with SMTP id
- s62-20020a818241000000b003705fad47f0mr41550793ywf.441.1667843750307; Mon, 07
- Nov 2022 09:55:50 -0800 (PST)
+        Mon, 7 Nov 2022 12:59:51 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 218C72A979;
+        Mon,  7 Nov 2022 09:56:25 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BDF1FB81614;
+        Mon,  7 Nov 2022 17:56:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47D1FC433B5;
+        Mon,  7 Nov 2022 17:56:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667843781;
+        bh=ZvL2SvtXE64bNOxyjKwcULAZARPmSKUdp63Db30oirg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=WBeUdztn9sHxvNsgWQfovmFSno8CtLLbEzI/cLd+0RDyW2W+qe5jT79Azqc39pnpr
+         FaJtkX+T4V5x+FEx7Tf/zWzO4+OlF9YxcJBJklqg62qsvYMJTS21DbBvUpOqO431kQ
+         CcbJqpU+yw0mhWjbvZx3AD3+M92PKyEPSUIlFZFWI6iKFjoIDSwZI+3bqye5SWJQ1+
+         6ojP23RTjkv4vzlwm4bkkSK0zmnli6uqnLlYtPkpMpWKjmpG/8AuAsFHpN5mqhe6tV
+         aIEXJyNLQXWt+wVROZWAhqL1JdYLb3O0LsMDcPTwZqDpIZbx8uBIJqs+yzboM07Zjs
+         7nCv6wfyDMsiw==
+Date:   Mon, 7 Nov 2022 09:56:11 -0800
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Alexander Potapenko <glider@google.com>
+Cc:     syzbot <syzbot+9767be679ef5016b6082@syzkaller.appspotmail.com>,
+        adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        tytso@mit.edu
+Subject: Re: [syzbot] KMSAN: uninit-value in pagecache_write
+Message-ID: <Y2lGu/QTIWNpzFI3@sol.localdomain>
+References: <00000000000058d01705ecddccb0@google.com>
+ <CAG_fn=WAyOc+1GEC+P3PpTM2zLcLcepAX1pPXkj5C6aPyrDVUA@mail.gmail.com>
 MIME-Version: 1.0
-References: <20221019225939.1646349-1-yury.norov@gmail.com>
- <xhsmhtu3evcme.mognet@vschneid.remote.csb> <Y2WT5qVi+YU2VEXU@yury-laptop> <xhsmhzgd3lyqx.mognet@vschneid.remote.csb>
-In-Reply-To: <xhsmhzgd3lyqx.mognet@vschneid.remote.csb>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 7 Nov 2022 09:55:34 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wjSVUpjh0UZW+w0C633gQo=-JhGH9ja8kUmRW0TUcSMpw@mail.gmail.com>
-Message-ID: <CAHk-=wjSVUpjh0UZW+w0C633gQo=-JhGH9ja8kUmRW0TUcSMpw@mail.gmail.com>
-Subject: Re: [PATCH v2] cpumask: limit visibility of FORCE_NR_CPUS
-To:     Valentin Schneider <vschneid@redhat.com>
-Cc:     Yury Norov <yury.norov@gmail.com>, linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Sander Vanheule <sander@svanheule.net>,
-        Alexey Klimov <klimov.linux@gmail.com>,
-        Eric Biggers <ebiggers@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAG_fn=WAyOc+1GEC+P3PpTM2zLcLcepAX1pPXkj5C6aPyrDVUA@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 7, 2022 at 4:45 AM Valentin Schneider <vschneid@redhat.com> wrote:
->
-> True, this would have been neater as a single config, but AIUI it's a
-> required "trick" for allyesconfig. I would have expected other configs to
-> have hit similar issues in the past, but didn't find any.
+On Mon, Nov 07, 2022 at 10:46:13AM +0100, 'Alexander Potapenko' via syzkaller-bugs wrote:
+>    ext4: initialize fsdata in pagecache_write()
+> 
+>     When aops->write_begin() does not initialize fsdata, KMSAN reports
+>     an error passing the latter to aops->write_end().
+> 
+>     Fix this by unconditionally initializing fsdata.
+> 
+>     Fixes: c93d8f885809 ("ext4: add basic fs-verity support")
+>     Reported-by: syzbot+9767be679ef5016b6082@syzkaller.appspotmail.com
+>     Signed-off-by: Alexander Potapenko <glider@google.com>
+> 
+> diff --git a/fs/ext4/verity.c b/fs/ext4/verity.c
+> index 3c640bd7ecaeb..30e3b65798b50 100644
+> --- a/fs/ext4/verity.c
+> +++ b/fs/ext4/verity.c
+> @@ -79,7 +79,7 @@ static int pagecache_write(struct inode *inode,
+> const void *buf, size_t count,
+>                 size_t n = min_t(size_t, count,
+>                                  PAGE_SIZE - offset_in_page(pos));
+>                 struct page *page;
+> -               void *fsdata;
+> +               void *fsdata = NULL;
+>                 int res;
+> 
+>                 res = aops->write_begin(NULL, mapping, pos, n, &page, &fsdata);
 
-Actually, the standard trick for allmodconfig and allyesconfig is to
-use the "COMPILE_TEST" config variable.
+Are you sure that KMSAN should be reporting this?  The uninitialized value is
+passed as a function parameter, but it's never actually used.
 
-It's basically a variable for "I'm not going to *run* the result, but
-I want to make sure to get build coverage".
+Anyway, this patch doesn't hurt, I suppose.  Can please you send it out as a
+formal patch to linux-ext4?  It would be easy for people to miss this patch
+buried in this thread.  Also, can you please send a patch to linux-f2fs-devel
+for the same code in fs/f2fs/verity.c?
 
-And both allmodconfig and allyesconfig set that config option.
+Thanks!
 
-In most cases, the "COMPILE_TEST" config variable is used to enable
-things that wouldn't make sense on the chosen hardware platform, so
-you have things like
-
-        depends on ARCH_DAVINCI || COMPILE_TEST
-
-because some driver only makes sense on ARCH_DAVINCI, but people still
-want the build coverage.
-
-But sometimes it's used the other way around, so fro example on x86 we have
-
-     config X86_DECODER_SELFTEST
-
-which explicitly depends on COMPILE_TEST *not* being set, because it's
-a test that takes forever to run (particularly for huge kernels), and
-so it's actually disabled for the  common all{yes,mod}config cases.
-
-Same goes for things like LTO_CLANG_FULL. It's just expensive for big
-build tests, plus causes too many issues for now.
-
-End result: if some option actually *reduces* test coverage, or has
-some other reason why it makes no sense for build tests, use that
-
-        depends on !COMPILE_TEST
-
-to not have allmodconfig and allyesconfig pick it.
-
-                    Linus
+- Eric
