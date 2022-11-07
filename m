@@ -2,285 +2,240 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C8C961FD30
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 19:18:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DFF1161FD2D
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 19:17:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232955AbiKGSR7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 13:17:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56446 "EHLO
+        id S232122AbiKGSRy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 13:17:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232624AbiKGSRg (ORCPT
+        with ESMTP id S233193AbiKGSRc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 13:17:36 -0500
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 665BB1AF06
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 10:16:07 -0800 (PST)
-Received: by mail-ed1-x535.google.com with SMTP id s12so9310140edd.5
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 10:16:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=vtrMkZFocbzvh3Fb7sIjN2QjJcyDrliJV+MQq6spUEQ=;
-        b=JtFUkF6lW0iiArnwsSga6axf7pcO3ebIRhdLrfWgfAGGASUFX/xUsjttKiW5cf4NwE
-         ZYtfHDGd9LDqxyx/u0nQTmayhxKq9k+Dv7nMPLoWp25gc2FrsOAEOcjSU4jcV/QWoWUj
-         G25cehRcqY6dnUgNfcgH/qJKkyrru5zj1FF44=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vtrMkZFocbzvh3Fb7sIjN2QjJcyDrliJV+MQq6spUEQ=;
-        b=eWaBZrsOGSegdRLYNsbtrKx4PAwrqeM3YsXCuM18rANbcab2qiFFbNc5EOva7CNOdm
-         FWMPJGTU+2wekyaexb6jOg9BuWQs+gu+SSnhhY1+qvMeLuSCRe9wen2sJbAwmz3XY9Nl
-         OhWtU8gW5xt22zX1m3cIS0OFzeNNmFdO2M2JTcOWqmcL7MwBBfNuxRKRxw+TVzRqPete
-         Qa0mmKqresEgzmt0cSIrP+OFbcyCMa9asCD7ousQH5++w3GXoau58zyvCsgpv8nbkHtW
-         9ndfOQE/lpGN9wnxyIScPFBYpa/0Ihu2QbzOcRBoSnvjxcLAZtq6tdqXB7a8LOQO7fYI
-         seLQ==
-X-Gm-Message-State: ACrzQf3aKz35cpZNhT2aUpgOQZLB/mSU3zMUHj1gVIeNckjn+68ALSp8
-        6Cup7p6wIxWe5JKYx1gAES4UdFVULdexGA==
-X-Google-Smtp-Source: AMsMyM5tKnluDg+K5p9ylWz9JryJQaEIxeREobg4rLvaGyNSadZSlH52p1UxlhTxPq4uxmXmhiZxrQ==
-X-Received: by 2002:a05:6402:5299:b0:461:d052:be34 with SMTP id en25-20020a056402529900b00461d052be34mr51740083edb.42.1667844965611;
-        Mon, 07 Nov 2022 10:16:05 -0800 (PST)
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com. [209.85.128.53])
-        by smtp.gmail.com with ESMTPSA id ue5-20020a170907c68500b007a559542fcfsm3754323ejc.70.2022.11.07.10.16.03
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Nov 2022 10:16:04 -0800 (PST)
-Received: by mail-wm1-f53.google.com with SMTP id p13-20020a05600c468d00b003cf8859ed1bso7687100wmo.1
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 10:16:03 -0800 (PST)
-X-Received: by 2002:a1c:e90b:0:b0:3b4:fb6c:7654 with SMTP id
- q11-20020a1ce90b000000b003b4fb6c7654mr33681795wmc.98.1667844963446; Mon, 07
- Nov 2022 10:16:03 -0800 (PST)
+        Mon, 7 Nov 2022 13:17:32 -0500
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2041.outbound.protection.outlook.com [40.107.243.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66DE729838;
+        Mon,  7 Nov 2022 10:16:08 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ls7VJnsEwVDPzMmQz9ZeI0ArX6pWklD5hiSWdIZc3MZRQvPq2bSvSQPYPcc49kn5z8wcVAzGvCU/9zlO+LsCvWbrKL9JQ1V1I0f8emlgpiFZEKHWwj5owrmpfdTZ4QeOaCAQzFG/pmOqX7wQNYf+4soY8knZ3yGh3d5u4ZE0X3e2khGG7P5JxOks/i0atpIW1H90AiMY4DUg2XtHNfFBWigj0ipPlO6PYXe9UQhvGSldbioAt2TNANqQW9nZR/1mywy180TGFncAch5R4wVf+vh8yKebn9eIiUa12lOA7XR1z3qv5KWgomF8OjmL2Oi+sKHjs6p8XtNVQJx70L7dmw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=zx8vWEdogkOq9K85mOgAuTWXrPehFEmKqK24k5EbteU=;
+ b=C/KrEsxQd0FAPUQlJ+Zlj41TFuFtjp9td5J+OrIePE/Fm34TrkejiMOoqat4YWz4g2DdS6KCGNbQlS8SRZ17cfsOv6HuP4LRPHLSSnz2MHmzhGddp9rAwmzwuLs5aFWJSDJeJ/oBZtXSxMBduKp8qxP7hvuqUrLxpX2p4J7SsOd4a0U529n0ID/lZRqhCaFpk+8WylZVzALPm5u/WdidybW3lAn50OSxTqjfSBO70u20ubCZ7UA8Wi1PXwQsICaQWqSyQiJHGHBSgeRaGNW5gwqKMBUsa+g1xBBzuTGfIImS8S219itbSLkp+hbqeElJCDYcs68Y21mQSg/oZ3IqQw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=zx8vWEdogkOq9K85mOgAuTWXrPehFEmKqK24k5EbteU=;
+ b=QXOo9eR4WUE7HuKm9db9MtjsXkMO2le6ml2jc17/ZmRngfhoomBNzZ39Wy7no0sOl0fuNkbDvCiwDTs8pXpJGd08ud4V772N1SWaARC9zvmQ+MsCLVS7sR9RLf5v0Fv8bPwoqGUp3cFGQtZyimaeuFD24DF8+NtVAHbzpcYJD20=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
+ by BY5PR12MB4146.namprd12.prod.outlook.com (2603:10b6:a03:20d::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.27; Mon, 7 Nov
+ 2022 18:16:04 +0000
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::f842:a9ba:3f41:3c3c]) by MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::f842:a9ba:3f41:3c3c%5]) with mapi id 15.20.5791.026; Mon, 7 Nov 2022
+ 18:16:04 +0000
+Message-ID: <1b7a5cd5-6ecf-8529-f10b-4f7f06fc7462@amd.com>
+Date:   Mon, 7 Nov 2022 12:16:00 -0600
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH v3 7/8] cpufreq: amd-pstate: add frequency dynamic boost
+ sysfs control
+Content-Language: en-US
+To:     Perry Yuan <Perry.Yuan@amd.com>, rafael.j.wysocki@intel.com,
+        ray.huang@amd.com, viresh.kumar@linaro.org
+Cc:     Deepak.Sharma@amd.com, Nathan.Fontenot@amd.com,
+        Alexander.Deucher@amd.com, Shimmer.Huang@amd.com,
+        Xiaojian.Du@amd.com, Li.Meng@amd.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, wyes.karny@amd.com
+References: <20221107175705.2207842-1-Perry.Yuan@amd.com>
+ <20221107175705.2207842-8-Perry.Yuan@amd.com>
+From:   "Limonciello, Mario" <mario.limonciello@amd.com>
+In-Reply-To: <20221107175705.2207842-8-Perry.Yuan@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: CH2PR10CA0009.namprd10.prod.outlook.com
+ (2603:10b6:610:4c::19) To MN0PR12MB6101.namprd12.prod.outlook.com
+ (2603:10b6:208:3cb::10)
 MIME-Version: 1.0
-References: <20221103180120.752659-1-evgreen@chromium.org> <20221103105558.v4.3.I9ded8c8caad27403e9284dfc78ad6cbd845bc98d@changeid>
- <Y2jujfZ01h5JriYc@kernel.org>
-In-Reply-To: <Y2jujfZ01h5JriYc@kernel.org>
-From:   Evan Green <evgreen@chromium.org>
-Date:   Mon, 7 Nov 2022 10:15:27 -0800
-X-Gmail-Original-Message-ID: <CAE=gft750QYs-AWQ9MC1Z1E==v=m-tf4aKUWjrjBtoWqRJz5dQ@mail.gmail.com>
-Message-ID: <CAE=gft750QYs-AWQ9MC1Z1E==v=m-tf4aKUWjrjBtoWqRJz5dQ@mail.gmail.com>
-Subject: Re: [PATCH v4 03/11] tpm: Allow PCR 23 to be restricted to
- kernel-only use
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, corbet@lwn.net,
-        linux-pm@vger.kernel.org, rjw@rjwysocki.net, gwendal@chromium.org,
-        apronin@chromium.org, Pavel Machek <pavel@ucw.cz>,
-        Kees Cook <keescook@chromium.org>,
-        Matthew Garrett <mgarrett@aurora.tech>,
-        linux-integrity@vger.kernel.org, jejb@linux.ibm.com,
-        zohar@linux.ibm.com, dlunev@google.com,
-        Eric Biggers <ebiggers@kernel.org>,
-        Ben Boeckel <me@benboeckel.net>,
-        Matthew Garrett <matthewgarrett@google.com>,
-        Matthew Garrett <mjg59@google.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Peter Huewe <peterhuewe@gmx.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|BY5PR12MB4146:EE_
+X-MS-Office365-Filtering-Correlation-Id: 136b7024-f38d-4193-574b-08dac0ec21e0
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: KKYHK00KhhbXKlq7HUVLLGJBde+op5Xr9t/0KiXKBBDzl8+0JbWqpROi9qMvlj04amVkHji1O04pRsBiFJjP1rpqf2q4Df1C/vX99o8zMv4drvdOmHFgEme7tpR5JaX7N/kAoiDkyXwUG3fUtjPzyPiBPXajSBxD3AEe7yAybfrP6QZRADuLrOesk9zAWFd518JRSirW+IUKTJoS2xki/qG3/7uzoZ41OCUHvVz8xrXWGY4OPRdOWggNloEWggAD+WZ/qTW085SdLoaFjFdbdRPB4H+4C3MUZlWPWy4VkyKWFUcBgf5QPqOIFjAPFE0pyftRHJ/sb39KRvAPUO6HQZQ85JxDTbE3aB2MGyBDe+9dpiFsSmsfkg0xKrP/rtKxIjlGJCP/+uXIy5uGlxUlKz7Z+moCZVTaEN7k6vtnP/0UMMBrzlWkyWV1xanGtgjtOOB5W8DaHFPPibpoXTt9e9F/aGobDEH2xTu/d7UEjOkzP6U0c+28Djf3OOLpB0NJ6i1TIigWS2OvFG4rAZ2XPm+euQqWIslU105Mr+iJ2OJcwtK1sWcdRudG6vWJN8FTKpXfi1LBEWIHajj60AVfGmoAuNkP4FJRWQl5At5qDESgm8zvowyj18VsZ7GYoSZd/jaA6cClXDxSOKLIFqqjOW5/a7zgR/x73BcKarRYCB1NJohkqK6SPXDtoob6aqOVp/8XWXMlJ4ubAV8a6b/oADFRydrZGnLdL35fo5ReFoi680BB4ufr1mkusQ+p5eLVJ3iheSc5oZ/XQ/xHVsILS9Q7doCfn6m+blVCfJaeKBbsD5N7nPp1A3hn7OhbUssBs+jVzWrSuoXfbu6T2+tCBw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(39860400002)(396003)(136003)(346002)(366004)(451199015)(26005)(186003)(6512007)(83380400001)(2616005)(38100700002)(2906002)(5660300002)(8936002)(53546011)(6486002)(478600001)(6666004)(6506007)(4326008)(66556008)(8676002)(41300700001)(66946007)(316002)(66476007)(31686004)(31696002)(86362001)(36756003)(43740500002)(45980500001)(309714004);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?SllDTWE0MG1pYmlEUmd2Vlk0cm80UVBMa3JlQ0FaaWQ1WTlZZ01rYm9PRHBI?=
+ =?utf-8?B?S01lMUgvMjdCNHVPUkU2RWhOL0grK1hQQzZsZnppNWc3SFhUVXNmZ1Fja09B?=
+ =?utf-8?B?dDNTVm14c2tKRzBGQndubnh6SnNCcjV6eTVnR1k2TFJmV1R6cEs4b3hpQzUr?=
+ =?utf-8?B?NjVuYUwrbkxyT01xR3l1enR4Ly9kS0hUdGh4dHNBdUl3NkFSdnVEOW9pOWpr?=
+ =?utf-8?B?c2NMcEpDdDRUUlQ4d0hYdjBpd3o2a3ZoQnJHQlh3Z0Q2c3VqM1U2MFlXV0pm?=
+ =?utf-8?B?T2Z6NitmekxqZWVIdW9tK0F0VlNRaGNiWjV1K0ZaN0J1QVFicmdzNk9tOXAw?=
+ =?utf-8?B?dDlDamNMUlQxUkFBcFF4SktXWEUwRjZIM3BZNWx3U1ZkRG5UdnhqV0ZsT0Jx?=
+ =?utf-8?B?QjZxUHFMdkFlTWQxbDJCOGR0OUNiUm9RcXo2TlVORFdtaUZ0TGUzT0NnM0FV?=
+ =?utf-8?B?b2p3eVBIek43aGJKMHRoWXB0cmdBL3N4d0xVN3lZV1d4clkzbFozeWNSZ0U3?=
+ =?utf-8?B?OGtSelFuRHZqNWdGaUZmbXZJSFdHdjJtRkYvWThYY25nb1UrdmRpeHliVTFH?=
+ =?utf-8?B?aEdXTHFSdSt2VHVNb2F1ZWZWUW9hSkZUV1FXVmNjMVpicncwdHBCTitIZFAr?=
+ =?utf-8?B?VGVGQ0l0dEVuT1ljZW54NmdRQkVzQUwraGZPY0xGVCsrV05PMTQySEdTQnNR?=
+ =?utf-8?B?K1UxUW42N0NWTUdVckJLMitySklRVXpRejR2d1UvekZWaEhpVU85Y0VMbGtD?=
+ =?utf-8?B?SnlKb2pvUFAvcEE1ZDNIczkzOHIwN1RJaFR5Z0Rzbk5sTm5GSHFmZktCYmNz?=
+ =?utf-8?B?aWRpSHJjV2I4cnhZNE8zc1ZNL1FVNy8vRTdqKzJKWGJ6dDBTRXNIcFN2ellt?=
+ =?utf-8?B?RjY0OEdQL1ZFSi9sUnAyZStVVi9PTUk4S3lrYm9SMm82RXMreGtXUjJJdXBx?=
+ =?utf-8?B?MDZJRkhKTDhWRGFMT1JFeDBnaDZKcE1xek40ODZXZ2Z4emhpS1pnL0EyTFZQ?=
+ =?utf-8?B?M1M1a0dzZ1RDZUpQNkErR3ZPQWtIeFQzbEptbTN6bnJPdG03RWNpOFA5UUJO?=
+ =?utf-8?B?bTR6SEY2a1FYQzVpRmxuc2NyeGpnVU9oVCs3MWl3V1hBUllyUjlKOUM5ZWNP?=
+ =?utf-8?B?TjJwb2tLUFpNWW1ZM3J6TGtOSDRNZ2xDMG5pdEd5U0phRXhPRjk2L3BobHlW?=
+ =?utf-8?B?NFdpZkg5NmFuNUtYcHNWYnNYcEZLSEFRQlVYOEl5czkvUGhlZXVFdXFmdWJn?=
+ =?utf-8?B?MzRsYlVpeTZYUjFBRnNqdWwxK20wK2krUkxDYnltOG93NHZCSUVxOTdQOGdR?=
+ =?utf-8?B?MCthRkRoc3RmZWtTNTc5M3MxVk42UE1aU1c5ME5CeWZ3UHFzVUdXeFl6eHJZ?=
+ =?utf-8?B?SmxaTzJobWdUU3I3Y3NUSnMzRTNqV3ViVlRZWlUwdHJWZW5kS0NKL2xiOW40?=
+ =?utf-8?B?OTZva3NSeDhsRnhsNk1IYjFxM0NKT2xqZHR6Mm9VeW8zOXlFOTNoYml2eFBD?=
+ =?utf-8?B?SWJsU2RpNXpKejM3ZDgwUFFWN0dqZll3RDJxRkRYemJWZ2dKQUZZZHhhT25K?=
+ =?utf-8?B?aHNEZG5GK1NFbVoyTWZseTZXL0xLNkhSVTJ2QXQ3TmNHWko1MVdyVmZWYzNM?=
+ =?utf-8?B?MHdTN3ZQSWtKbTFFeEFxaS9JYzBvMzRrNFV3TnpDc3lHQzJPY2o2VzFiMEQ0?=
+ =?utf-8?B?TG5nMjE2cFJMWExRL3dtSFFraHdZTkYyeGlvbGpmdFBvNGR2RlcwV3gza2hi?=
+ =?utf-8?B?UjN1amZ4QzluNXpuem5SN1VsV1l6MHMrZTdtanFrL0NnZHcvejJrY0IxYmVn?=
+ =?utf-8?B?STR5NUdGVC8yUkNkd1Bpc0ZBQ2swY1hqTkJZNXoyU2VZZUdmTFV0VExLTWZx?=
+ =?utf-8?B?Z1dLYkZZSGUvcjlIQ3ZjOVljVjFkejlaTmNYUExxYWVlVzd4eTVlZWZhVDhU?=
+ =?utf-8?B?bi90ZWc3My9NWFcvbGxxY3ZxRTJvTHZNRDJ4N0UyREtJdWFVNlBsL3hRQVNX?=
+ =?utf-8?B?YVEwOXRQRERSTGJXaGxsaWFWV1BtUng2eU8rcytiREdHSFUvM2J3amc3Q3ZL?=
+ =?utf-8?B?cjhBZDZRb1pneFB4Mmdkd1NFSTRtKzZuK05OZTZBczltcDNEcEdMdW95d3BK?=
+ =?utf-8?Q?BJMxO60HjRHjlc+QpN0Ah3Fm1?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 136b7024-f38d-4193-574b-08dac0ec21e0
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Nov 2022 18:16:04.1243
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: /x6cUlB8qp9j49TZaih7s0ArekLdCC69poXNT1IUHBRks05H8VDYMC+kYie879Irr3ejwX1mv1/vmqOfFEUtWw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4146
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 7, 2022 at 3:40 AM Jarkko Sakkinen <jarkko@kernel.org> wrote:
->
-> On Thu, Nov 03, 2022 at 11:01:11AM -0700, Evan Green wrote:
-> > From: Matthew Garrett <matthewgarrett@google.com>
-> >
-> > Introduce a new Kconfig, TCG_TPM_RESTRICT_PCR, which if enabled
-> > restricts usermode's ability to extend or reset PCR 23.
-> >
-> > Under certain circumstances it might be desirable to enable the creation
-> > of TPM-backed secrets that are only accessible to the kernel. In an
-> > ideal world this could be achieved by using TPM localities, but these
-> > don't appear to be available on consumer systems. An alternative is to
-> > simply block userland from modifying one of the resettable PCRs, leaving
-> > it available to the kernel. If the kernel ensures that no userland can
-> > access the TPM while it is carrying out work, it can reset PCR 23,
-> > extend it to an arbitrary value, create or load a secret, and then reset
-> > the PCR again. Even if userland somehow obtains the sealed material, it
-> > will be unable to unseal it since PCR 23 will never be in the
-> > appropriate state.
-> >
-> > This Kconfig is only properly supported for systems with TPM2 devices.
-> > For systems with TPM1 devices, having this Kconfig enabled completely
-> > restricts usermode's access to the TPM. TPM1 contains support for
-> > tunnelled transports, which usermode could use to smuggle commands
-> > through that this Kconfig is attempting to restrict.
-> >
-> > Link: https://lore.kernel.org/lkml/20210220013255.1083202-3-matthewgarrett@google.com/
-> > Signed-off-by: Matthew Garrett <mjg59@google.com>
-> > Signed-off-by: Evan Green <evgreen@chromium.org>
-> > ---
-> >
-> > Changes in v4:
-> >  - Augment the commit message (Jarkko)
-> >
-> > Changes in v3:
-> >  - Fix up commit message (Jarkko)
-> >  - tpm2_find_and_validate_cc() was split (Jarkko)
-> >  - Simply fully restrict TPM1 since v2 failed to account for tunnelled
-> >    transport sessions (Stefan and Jarkko).
-> >
-> > Changes in v2:
-> >  - Fixed sparse warnings
-> >
-> >  drivers/char/tpm/Kconfig          | 12 ++++++++++++
-> >  drivers/char/tpm/tpm-dev-common.c |  8 ++++++++
-> >  drivers/char/tpm/tpm.h            | 19 +++++++++++++++++++
-> >  drivers/char/tpm/tpm1-cmd.c       | 13 +++++++++++++
-> >  drivers/char/tpm/tpm2-cmd.c       | 22 ++++++++++++++++++++++
-> >  5 files changed, 74 insertions(+)
-> >
-> > diff --git a/drivers/char/tpm/Kconfig b/drivers/char/tpm/Kconfig
-> > index 927088b2c3d3f2..c8ed54c66e399a 100644
-> > --- a/drivers/char/tpm/Kconfig
-> > +++ b/drivers/char/tpm/Kconfig
-> > @@ -211,4 +211,16 @@ config TCG_FTPM_TEE
-> >         This driver proxies for firmware TPM running in TEE.
-> >
-> >  source "drivers/char/tpm/st33zp24/Kconfig"
-> > +
-> > +config TCG_TPM_RESTRICT_PCR
-> > +     bool "Restrict userland access to PCR 23"
-> > +     depends on TCG_TPM
-> > +     help
-> > +       If set, block userland from extending or resetting PCR 23. This allows it
-> > +       to be restricted to in-kernel use, preventing userland from being able to
-> > +       make use of data sealed to the TPM by the kernel. This is required for
-> > +       secure hibernation support, but should be left disabled if any userland
-> > +       may require access to PCR23. This is a TPM2-only feature, and if enabled
-> > +       on a TPM1 machine will cause all usermode TPM commands to return EPERM due
-> > +       to the complications introduced by tunnelled sessions in TPM1.2.
-> >  endif # TCG_TPM
-> > diff --git a/drivers/char/tpm/tpm-dev-common.c b/drivers/char/tpm/tpm-dev-common.c
-> > index dc4c0a0a512903..7a4e618c7d1942 100644
-> > --- a/drivers/char/tpm/tpm-dev-common.c
-> > +++ b/drivers/char/tpm/tpm-dev-common.c
-> > @@ -198,6 +198,14 @@ ssize_t tpm_common_write(struct file *file, const char __user *buf,
-> >       priv->response_read = false;
-> >       *off = 0;
-> >
-> > +     if (priv->chip->flags & TPM_CHIP_FLAG_TPM2)
-> > +             ret = tpm2_cmd_restricted(priv->chip, priv->data_buffer, size);
-> > +     else
-> > +             ret = tpm1_cmd_restricted(priv->chip, priv->data_buffer, size);
-> > +
-> > +     if (ret)
-> > +             goto out;
-> > +
-> >       /*
-> >        * If in nonblocking mode schedule an async job to send
-> >        * the command return the size.
-> > diff --git a/drivers/char/tpm/tpm.h b/drivers/char/tpm/tpm.h
-> > index f1e0f490176f01..c0845e3f9eda17 100644
-> > --- a/drivers/char/tpm/tpm.h
-> > +++ b/drivers/char/tpm/tpm.h
-> > @@ -245,4 +245,23 @@ void tpm_bios_log_setup(struct tpm_chip *chip);
-> >  void tpm_bios_log_teardown(struct tpm_chip *chip);
-> >  int tpm_dev_common_init(void);
-> >  void tpm_dev_common_exit(void);
-> > +
-> > +#ifdef CONFIG_TCG_TPM_RESTRICT_PCR
-> > +#define TPM_RESTRICTED_PCR 23
-> > +
-> > +int tpm1_cmd_restricted(struct tpm_chip *chip, u8 *buffer, size_t size);
-> > +int tpm2_cmd_restricted(struct tpm_chip *chip, u8 *buffer, size_t size);
-> > +#else
-> > +static inline int tpm1_cmd_restricted(struct tpm_chip *chip, u8 *buffer,
-> > +                                   size_t size)
-> > +{
-> > +     return 0;
-> > +}
-> > +
-> > +static inline int tpm2_cmd_restricted(struct tpm_chip *chip, u8 *buffer,
-> > +                                   size_t size)
-> > +{
-> > +     return 0;
-> > +}
-> > +#endif
-> >  #endif
-> > diff --git a/drivers/char/tpm/tpm1-cmd.c b/drivers/char/tpm/tpm1-cmd.c
-> > index cf64c738510529..1869e89215fcb9 100644
-> > --- a/drivers/char/tpm/tpm1-cmd.c
-> > +++ b/drivers/char/tpm/tpm1-cmd.c
-> > @@ -811,3 +811,16 @@ int tpm1_get_pcr_allocation(struct tpm_chip *chip)
-> >
-> >       return 0;
-> >  }
-> > +
-> > +#ifdef CONFIG_TCG_TPM_RESTRICT_PCR
-> > +int tpm1_cmd_restricted(struct tpm_chip *chip, u8 *buffer, size_t size)
-> > +{
-> > +     /*
-> > +      * Restrict all usermode commands on TPM1.2. Ideally we'd just restrict
-> > +      * TPM_ORD_PCR_EXTEND and TPM_ORD_PCR_RESET, but TPM1.2 also supports
-> > +      * tunnelled transport sessions where the kernel would be unable to filter
-> > +      * commands.
-> > +      */
-> > +     return -EPERM;
-> > +}
-> > +#endif
-> > diff --git a/drivers/char/tpm/tpm2-cmd.c b/drivers/char/tpm/tpm2-cmd.c
-> > index 303ce2ea02a4b0..e0503cfd7bcfee 100644
-> > --- a/drivers/char/tpm/tpm2-cmd.c
-> > +++ b/drivers/char/tpm/tpm2-cmd.c
-> > @@ -778,3 +778,25 @@ int tpm2_find_cc(struct tpm_chip *chip, u32 cc)
-> >
-> >       return -1;
-> >  }
-> > +
-> > +#ifdef CONFIG_TCG_TPM_RESTRICT_PCR
-> > +int tpm2_cmd_restricted(struct tpm_chip *chip, u8 *buffer, size_t size)
-> > +{
-> > +     int cc = tpm2_find_and_validate_cc(chip, NULL, buffer, size);
-> > +     __be32 *handle;
-> > +
-> > +     switch (cc) {
-> > +     case TPM2_CC_PCR_EXTEND:
-> > +     case TPM2_CC_PCR_RESET:
-> > +             if (size < (TPM_HEADER_SIZE + sizeof(u32)))
-> > +                     return -EINVAL;
-> > +
-> > +             handle = (__be32 *)&buffer[TPM_HEADER_SIZE];
-> > +             if (be32_to_cpu(*handle) == TPM_RESTRICTED_PCR)
-> > +                     return -EPERM;
-> > +             break;
-> > +     }
-> > +
-> > +     return 0;
-> > +}
-> > +#endif
-> > --
-> > 2.38.1.431.g37b22c650d-goog
-> >
->
-> This looks otherwise good but I have still one remark: what is the reason
-> for restricting PCR23 for TPM 1.x?
++wyes.karny@amd.com
 
-Mostly I was trying to do the least surprising thing for someone who
-had compiled with this RESTRICT_PCR Kconfig enabled but booted a TPM1
-system. If we do nothing for TPM1, then the encrypted hibernation
-mechanism appears to work fine, but leaves a gaping hole where
-usermode can manipulate PCR23 themselves to create forged encrypted
-hibernate images. Denying all usermode access makes the Kconfig
-correct on TPM1 systems, at the expense of all usermode access (rather
-than just access to PCR23).
+On 11/7/2022 11:57, Perry Yuan wrote:
+> Add one sysfs entry to control the CPU cores frequency boost state
+> The attribute file can allow user to set max performance boosted or
+> keeping at normal perf level.
+> 
+> Signed-off-by: Perry Yuan <Perry.Yuan@amd.com>
+> ---
+>   drivers/cpufreq/amd-pstate.c | 53 ++++++++++++++++++++++++++++++++++++
+>   1 file changed, 53 insertions(+)
 
-An alternative that might be friendlier to users would be to do a
-runtime check in the encrypted hibernate code to simply fail if this
-isn't TPM2. The tradeoff there is that it waters down the Kconfig
-significantly to "RESTRICT_PCR sometimes, if you can, otherwise meh".
-That seemed a bit dangerous, as any future features that may want to
-rely on this Kconfig would have to remember to restrict their support
-to TPM2 as well.
+Make sure that you update the documentation for this new sysfs file as well.
 
--Evan
+> 
+> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
+> index 841b1e2383b8..6958c5fd9e1c 100644
+> --- a/drivers/cpufreq/amd-pstate.c
+> +++ b/drivers/cpufreq/amd-pstate.c
+> @@ -786,12 +786,46 @@ static ssize_t show_energy_performance_preference(
+>   		return  sprintf(buf, "%s\n", energy_perf_strings[preference]);
+>   }
+>   
+> +static void amd_pstate_update_policies(void)
+> +{
+> +	int cpu;
+> +
+> +	for_each_possible_cpu(cpu)
+> +		cpufreq_update_policy(cpu);
+> +}
+> +
+> +static ssize_t show_pstate_dynamic_boost(struct kobject *kobj,
+> +				struct kobj_attribute *attr, char *buf)
+> +{
+> +	return sprintf(buf, "%u\n", cppc_boost);
+> +}
+> +
+> +static ssize_t store_pstate_dynamic_boost(struct kobject *a,
+> +				       struct kobj_attribute *b,
+> +				       const char *buf, size_t count)
+> +{
+> +	unsigned int input;
+> +	int ret;
+> +
+> +	ret = kstrtouint(buf, 10, &input);
+> +	if (ret)
+> +		return ret;
 
->
-> BR, Jarkko
->
+To be more flexible maybe kstrtobool would be better here instead?
+
+> +
+> +	mutex_lock(&amd_pstate_driver_lock);
+> +	cppc_boost = !!input;
+> +	amd_pstate_update_policies();
+> +	mutex_unlock(&amd_pstate_driver_lock);
+> +
+> +	return count;
+> +}
+> +
+>   cpufreq_freq_attr_ro(amd_pstate_max_freq);
+>   cpufreq_freq_attr_ro(amd_pstate_lowest_nonlinear_freq);
+>   
+>   cpufreq_freq_attr_ro(amd_pstate_highest_perf);
+>   cpufreq_freq_attr_rw(energy_performance_preference);
+>   cpufreq_freq_attr_ro(energy_performance_available_preferences);
+> +define_one_global_rw(pstate_dynamic_boost);
+>   
+>   static struct freq_attr *amd_pstate_attr[] = {
+>   	&amd_pstate_max_freq,
+> @@ -809,6 +843,15 @@ static struct freq_attr *amd_pstate_epp_attr[] = {
+>   	NULL,
+>   };
+>   
+> +static struct attribute *pstate_global_attributes[] = {
+> +	&pstate_dynamic_boost.attr,
+> +	NULL
+> +};
+> +
+> +static const struct attribute_group amd_pstate_global_attr_group = {
+> +	.attrs = pstate_global_attributes,
+> +};
+> +
+>   static inline void update_boost_state(void)
+>   {
+>   	u64 misc_en;
+> @@ -1416,6 +1459,16 @@ static int __init amd_pstate_init(void)
+>   		pr_err("failed to register amd pstate driver with return %d\n",
+>   		       ret);
+>   
+> +	amd_pstate_kobj = kobject_create_and_add("amd-pstate", &cpu_subsys.dev_root->kobj);
+> +	if (!amd_pstate_kobj)
+> +		pr_err("amd-pstate: Global sysfs registration failed.\n");
+> +
+> +	ret = sysfs_create_group(amd_pstate_kobj, &amd_pstate_global_attr_group);
+> +	if (ret) {
+> +		pr_err("amd-pstate: Sysfs attribute export failed with error %d.\n",
+> +		       ret);
+
+amd-pstate can currently be a module too.  So don't you need the 
+matching cleanup path for this code too?
+
+Also, regarding the error messages you don't need to prefix with 
+"amd-pstate: ", amd-pstate.c already sets `pr_fmt`.
+
+> +	}
+> +
+>   	return ret;
+>   }
+>   device_initcall(amd_pstate_init);
+
