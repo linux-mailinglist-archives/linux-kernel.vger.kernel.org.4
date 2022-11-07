@@ -2,122 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36F7C61F0F0
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 11:41:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB50861F06A
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 11:24:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231350AbiKGKlO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 05:41:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47868 "EHLO
+        id S231935AbiKGKYS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 05:24:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229530AbiKGKlM (ORCPT
+        with ESMTP id S231790AbiKGKX6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 05:41:12 -0500
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F1311900F
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 02:41:11 -0800 (PST)
-Received: by mail-pf1-x434.google.com with SMTP id q9so10210170pfg.5
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 02:41:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tEufRRTntxUkAcRUT4L6QYUBosoXo1+hroxdMyZBxDM=;
-        b=PnA7GFo5D4nL5XJOksZE+4RMVKV1U1CG4zXsx57EcIlt9icfkb7RUA5IIX/o3vgaoZ
-         G0opN7HkRFnO7nm+8ZGa+XxvIqo5XHIrxCx7H/eEx/tQCMEcVfiZZED7MJ8oRm6cKi30
-         HrS4ZvKKENQznAXWQvY4AB/vLUrOFMLGSMgLKYh98BrPwG2kXApk8ftTAPU0I+OaOJr7
-         YV6EBkPi9bZ3vio2fjKOF6So3GFVqI12Nh0dOIachekWDdMjPDE8SP3x2px2tnm0TX7l
-         99E6zxEp0XUsPhy+WOtczf4t7kr61pt6VQqbb9GCNrEAW3XlPUfqK2w7XUWiH37zLkG9
-         OdGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=tEufRRTntxUkAcRUT4L6QYUBosoXo1+hroxdMyZBxDM=;
-        b=PeT/8BL0yxqAZoF+vx4ZYU5qxc4xIbOoH4fu0k9J9IZnzp/23uGlwq7REyN4Al+TS/
-         A5eSxtc5h/CeYaY4k2D0YBsrejuDXX8I9ll5PyJOs3OW92ukeXiiEnn81+O6owQDorja
-         BQFUpCDVe0TMcFo8wKAuwLnttxYQSu4kRbg4Suw3E3bZIjvkPoPz1W2zaBbVqqv6y1De
-         jGoAZPKCnOuHIunIxR2Csvwr4Xd4GXINZBl4LUlT0JZZKjh9njXCBDtA4Ay/tFHF97Am
-         UT/8DChaYwczWpB85a1VN99wWcJKsJinRv3CEzyzgTx0Z1un6eTUIwngduRwUlrJOUqL
-         tNDQ==
-X-Gm-Message-State: ACrzQf31CvPQzq9e/F9q9bOTVrwIWke7UmALY9eisMKGu+cGVgZXsUdj
-        0YOCyFbnFmw8gxQ70lbwdHQ=
-X-Google-Smtp-Source: AMsMyM5+h/uaeniMLrEluJC846E6MxmoYkm+Ihy2TQJwnEL1nL5fIMZsQYtxGfNvPQtJ86tJ23EtXg==
-X-Received: by 2002:a05:6a00:1348:b0:56b:f5c0:1d9d with SMTP id k8-20020a056a00134800b0056bf5c01d9dmr49735461pfu.45.1667817670873;
-        Mon, 07 Nov 2022 02:41:10 -0800 (PST)
-Received: from [192.168.11.9] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
-        by smtp.gmail.com with ESMTPSA id l5-20020a622505000000b0056be1581126sm4317626pfl.143.2022.11.07.02.41.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Nov 2022 02:41:09 -0800 (PST)
-Message-ID: <d33440f6-40cf-9747-3340-e54ffaf7afb8@gmail.com>
-Date:   Mon, 7 Nov 2022 19:41:05 +0900
+        Mon, 7 Nov 2022 05:23:58 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3426165AA
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 02:23:57 -0800 (PST)
+Received: from canpemm500010.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4N5S0d3zNrzpW9j;
+        Mon,  7 Nov 2022 18:20:17 +0800 (CST)
+Received: from localhost.localdomain (10.175.112.70) by
+ canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 7 Nov 2022 18:23:55 +0800
+From:   Wang Yufen <wangyufen@huawei.com>
+To:     <linux-kernel@vger.kernel.org>
+CC:     <rostedt@goodmis.org>, <mhiramat@kernel.org>,
+        Wang Yufen <wangyufen@huawei.com>
+Subject: [PATCH] tracing: fix memory leak in tracing_read_pipe
+Date:   Mon, 7 Nov 2022 18:44:22 +0800
+Message-ID: <1667817862-48989-1-git-send-email-wangyufen@huawei.com>
+X-Mailer: git-send-email 1.8.3.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Content-Language: en-US
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Vlastimil Babka <vbabka@suse.cz>, Jonathan Corbet <corbet@lwn.net>,
-        Akira Yokosawa <akiyks@gmail.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-From:   Akira Yokosawa <akiyks@gmail.com>
-Subject: Duplicate kernel-doc comments for ksize()
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.175.112.70]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ canpemm500010.china.huawei.com (7.192.105.118)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kees,
+kmemleak reports this issue:
 
-"make htmldocs" reports duplicate C declaration of ksize()
-as follows:
+unreferenced object 0xffff888105a18900 (size 128):
+  comm "test_progs", pid 18933, jiffies 4336275356 (age 22801.766s)
+  hex dump (first 32 bytes):
+    25 73 00 90 81 88 ff ff 26 05 00 00 42 01 58 04  %s......&...B.X.
+    03 00 00 00 02 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<00000000560143a1>] __kmalloc_node_track_caller+0x4a/0x140
+    [<000000006af00822>] krealloc+0x8d/0xf0
+    [<00000000c309be6a>] trace_iter_expand_format+0x99/0x150
+    [<000000005a53bdb6>] trace_check_vprintf+0x1e0/0x11d0
+    [<0000000065629d9d>] trace_event_printf+0xb6/0xf0
+    [<000000009a690dc7>] trace_raw_output_bpf_trace_printk+0x89/0xc0
+    [<00000000d22db172>] print_trace_line+0x73c/0x1480
+    [<00000000cdba76ba>] tracing_read_pipe+0x45c/0x9f0
+    [<0000000015b58459>] vfs_read+0x17b/0x7c0
+    [<000000004aeee8ed>] ksys_read+0xed/0x1c0
+    [<0000000063d3d898>] do_syscall_64+0x3b/0x90
+    [<00000000a06dda7f>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
-/linux/Documentation/core-api/mm-api:43: ./mm/slab_common.c:1428: WARNING: Duplicate C declaration, also defined at core-api/mm-api:212.
-Declaration is '.. c:function:: size_t ksize (const void *objp)'.
+iter->fmt alloced in
+  tracing_read_pipe() -> .. ->trace_iter_expand_format(), but not
+freed, to fix, add free in tracing_release_pipe()
 
-This is due to the kernel-doc comment for ksize() added in
-include/linux/slab.h by a commit you have authored:
-  05a940656e1e ("slab:Introduce kmalloc_size_roundup()").
+Signed-off-by: Wang Yufen <wangyufen@huawei.com>
+---
+ kernel/trace/trace.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-/**
- * ksize - Report actual allocation size of associated object
- *
- * @objp: Pointer returned from a prior kmalloc()-family allocation.
- *
- * This should not be used for writing beyond the originally requested
- * allocation size. Either use krealloc() or round up the allocation size
- * with kmalloc_size_roundup() prior to allocation. If this is used to
- * access beyond the originally requested allocation size, UBSAN_BOUNDS
- * and/or FORTIFY_SOURCE may trip, since they only know about the
- * originally allocated size via the __alloc_size attribute.
- */
+diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
+index 47a44b0..ced81a9 100644
+--- a/kernel/trace/trace.c
++++ b/kernel/trace/trace.c
+@@ -6657,6 +6657,8 @@ static int tracing_release_pipe(struct inode *inode, struct file *file)
+ 	mutex_unlock(&trace_types_lock);
+ 
+ 	free_cpumask_var(iter->started);
++	if (iter->fmt)
++		kfree(iter->fmt);
+ 	mutex_destroy(&iter->mutex);
+ 	kfree(iter);
+ 
+-- 
+1.8.3.1
 
-There is another kernel-doc comment in mm/slab_common.c (originally
-by Manfred, since v2.6.14):
-
-/**
- * ksize - get the actual amount of memory allocated for a given object
- * @objp: Pointer to the object
- *
- * kmalloc may internally round up allocations and return more memory
- * than requested. ksize() can be used to determine the actual amount of
- * memory allocated. The caller may use this additional memory, even though
- * a smaller amount of memory was initially specified with the kmalloc call.
- * The caller must guarantee that objp points to a valid object previously
- * allocated with either kmalloc() or kmem_cache_alloc(). The object
- * must not be freed during the duration of the call.
- *
- * Return: size of the actual memory used by @objp in bytes
- */
-
-I guess the one in slab_common.c is outdated and can be removed.
-Can you please take care of it?
-
-        Thanks, Akira
