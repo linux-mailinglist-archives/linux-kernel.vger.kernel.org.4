@@ -2,118 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EB3E61EFFE
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 11:11:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93DCD61F003
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 11:11:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231617AbiKGKLF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 05:11:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56444 "EHLO
+        id S231719AbiKGKLf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 05:11:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231727AbiKGKK7 (ORCPT
+        with ESMTP id S232008AbiKGKLZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 05:10:59 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D687618B0C
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 02:10:58 -0800 (PST)
-From:   John Ogness <john.ogness@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1667815857;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=DJz2ooychjBsKMZBl04F3l2gQeHKKq6YHrxTeMQ600g=;
-        b=C+9+sbSajSMFIbT4q21lRn9bRksRO/EsPHUOIed9bl+CI/bCwrGzqKaKJIMbTJ3OrM6uJ1
-        1eDjRguh0Zc/TExv8YoH7rTab2GarJqMFatQUc1G9TkPoMK/dbMqUOZuWde5eZNpqxTHqx
-        6JQjW+sk4tPr+xal39nM2/R3Ftu0Ekm29kGtmV6wgdiEniRd+zIF4kGJDy5ZlSTm1XN/I5
-        In8yEGsiodZQP0Nd+7WPau+H7KtFqoYErn6HcZqYfgBAZhTYI64ulTvzqfF7c4hzaGOZhK
-        9kVlA/aQkJ2lvC4pZ7tVVdNRFLln3CzvIJh5zIfnO5M5yAZye5xuFbkU0HcBfg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1667815857;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=DJz2ooychjBsKMZBl04F3l2gQeHKKq6YHrxTeMQ600g=;
-        b=R3XyG3gPTBWCXcDWL2NyrsGbGS/q24oaZTmhB8yw7fAdcJx+Sbz09aPHNxzftY+jLENndn
-        wiy1xV4+8HRxeRCw==
-To:     paulmck@kernel.org, Petr Mladek <pmladek@suse.com>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
+        Mon, 7 Nov 2022 05:11:25 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D76F518B37
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 02:11:21 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 72E7460FB8
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 10:11:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4D87C433C1;
+        Mon,  7 Nov 2022 10:11:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667815880;
+        bh=sLdgJtsgT7FBdmNyKtUpUc7S0X3GgvJlwORdilW7IN4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=NLp5PaJsInoYz8sdVEPlOZuaOsmV38yvMgSnU7J3OJMwN1LYQ8ExYge1cTiSbWBvZ
+         6pzooYSfvMP4pCqhTOBbYKGpAJmknSX8oRzmSoTznrBR1TPcIjOv/nKMOxxBwbijyE
+         kGSXULSHcb6dFZgkLcAgnMgo7oDuyIvzOteLlEnYvC3NZsELIzUybk8Yd0SUAsBnhX
+         Nd2r5B0OYSX1TBylDYChC8yz9rHIvdKNaT5JpcDLACj8EeSS4glPOnVzjMd1u0USq4
+         66ppg/MjOXsHlx7NQ/MpeJQ0vRDVeuhZIf3LVJghcLumwyIQNUazu5vOBTBaytvAAs
+         ejNmiFVn+Xwcw==
+Date:   Mon, 7 Nov 2022 11:11:15 +0100
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     Anna-Maria Behnsen <anna-maria@linutronix.de>
+Cc:     linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        John Stultz <jstultz@google.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        boqun.feng@gmail.com
-Subject: Re: [PATCH printk v2 33/38] printk: introduce console_list_lock
-In-Reply-To: <20221027185007.GG5600@paulmck-ThinkPad-P17-Gen-1>
-References: <20221019145600.1282823-1-john.ogness@linutronix.de>
- <20221019145600.1282823-34-john.ogness@linutronix.de>
- <Y1pY3I1ufABvroYj@alley>
- <20221027185007.GG5600@paulmck-ThinkPad-P17-Gen-1>
-Date:   Mon, 07 Nov 2022 11:16:56 +0106
-Message-ID: <87a6539irz.fsf@jogness.linutronix.de>
+        Eric Dumazet <edumazet@google.com>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Arjan van de Ven <arjan@infradead.org>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Frederic Weisbecker <fweisbec@gmail.com>,
+        Rik van Riel <riel@surriel.com>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, Theodore Ts'o <tytso@mit.edu>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Stephen Boyd <sboyd@kernel.org>, Tejun Heo <tj@kernel.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>
+Subject: Re: [PATCH v4 05/16] add_timer_on(): Make sure callers have
+ TIMER_PINNED flag
+Message-ID: <20221107101115.GA3279@lothringen>
+References: <20221104145737.71236-1-anna-maria@linutronix.de>
+ <20221104145737.71236-6-anna-maria@linutronix.de>
+ <20221104164342.GA1440400@lothringen>
+ <f72b4d5d-493d-916-5d19-2bf87e8c41e1@linutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f72b4d5d-493d-916-5d19-2bf87e8c41e1@linutronix.de>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-10-27, "Paul E. McKenney" <paulmck@kernel.org> wrote:
-> One way to save a line is as follows:
->
-> 	WARN_ON_ONCE(IS_ENABLED(CONFIG_DEBUG_LOCK_ALLOC) &&
-> 		     debug_lockdep_rcu_enabled() &&
-> 		     srcu_read_lock_held(&console_srcu));
+On Mon, Nov 07, 2022 at 09:11:11AM +0100, Anna-Maria Behnsen wrote:
+> On Fri, 4 Nov 2022, Frederic Weisbecker wrote:
+> 
+> > On Fri, Nov 04, 2022 at 03:57:26PM +0100, Anna-Maria Behnsen wrote:
+> > > The implementation of the hierachical timer pull model will change the
+> > > timer bases per CPU. Timers, that have to expire on a specific CPU, require
+> > > the TIMER_PINNED flag. Otherwise they will be queued on the dedicated CPU
+> > > but in global timer base and those timers could also expire on other
+> > > CPUs. Timers with TIMER_DEFERRABLE flag end up in a separate base anyway
+> > > and are executed on the local CPU only.
+> > > 
+> > > Therefore add the missing TIMER_PINNED flag for those callers who use
+> > > add_timer_on() without the flag. No functional change.
+> > 
+> > You're fixing the current callers but what about the future ones?
+> > 
+> > add_timer_on() should always guarantee that a timer runs on the
+> > right destination, which is not the case after your patchset if the
+> > timer hasn't been set to TIMER_PINNED.
+> > 
+> > Therefore I think we should either have:
+> > 
+> > * add_timer_on() enforce TIMER_PINNED (doesn't work because if the timer is
+> >   later called with mod_timer(), we should expect it to run anywhere)
+> > 
+> > or
+> > 
+> > * add_timer_on() warns if !TIMER_PINNED
+> 
+> This is already part of the last patch of the queue where also the
+> crystalball logic is removed. But the patch where I added the WARN_ONCE()
+> might be the wrong patch, it should be better part of the next patch where
+> the new timer bases are introduced.
 
-Unfortunately this suggestion does not work because
-debug_lockdep_rcu_enabled() only exists if CONFIG_DEBUG_LOCK_ALLOC is
-enabled. Would you be interested in having an empty implementation?
-Then my check would not need to be concerned about
-CONFIG_DEBUG_LOCK_ALLOC at all. It would become:
+Ok.
 
- 	WARN_ON_ONCE(debug_lockdep_rcu_enabled() &&
- 		     srcu_read_lock_held(&console_srcu));
+> 
+> > or
+> > 
+> > * have an internal flag TIMER_LOCAL, that is turned on when
+> >   add_timer_on() is called or add_timer()/mod_timer() is called
+> >   on a TIMER_PINNED. Otherwise it is turned off.
+> > 
+> > The last solution should work with existing API and you don't need to
+> > chase the current and future users of add_timer_on().
+> 
+> With the last approach it doesn't matter how the timer is setup. Everything
+> is done by timer code implicitly. When a future caller uses add_timer_on()
+> and wants to modfiy this "implicitly pinned timer", he will call
+> mod_timer() and the timer is no longer pinned (if it do not end up in the
+> same bucket it was before). For a user this does not seems to be very
+> obvious, or am I wrong?
 
-The patch below could be used to achieve that.
+That's right indeed.
 
-John
+> 
+> But if the caller sets up the timer correctly we do not need this extra
+> timer flag. With the WARN_ONCE() in place, callers need to do the timer
+> setup properly and it is more clear to the caller what should be done.
 
---------8<-------------
-From 71d9e484d5128cd1e57e5bff5391d91789f444fa Mon Sep 17 00:00:00 2001
-From: John Ogness <john.ogness@linutronix.de>
-Date: Mon, 7 Nov 2022 11:06:40 +0106
-Subject: [PATCH] rcu: implement lockdep_rcu_enabled for
- !CONFIG_DEBUG_LOCK_ALLOC
+Yeah that sounds better.
 
-Provide an implementation for debug_lockdep_rcu_enabled() when
-CONFIG_DEBUG_LOCK_ALLOC is not enabled. This allows code to check
-if rcu lockdep debugging is available without needing an extra
-check if CONFIG_DEBUG_LOCK_ALLOC is enabled.
+> BTW, the hunk in this patch for the workqueue is also not a final fix in my
+> opinion. I'm preparing a cleanup queue (it's part of the deferrable cleanup
+> queue), where I want to set the timer flags properly when
+> initializing/defining the workers. I should have added a comment here...
 
-Signed-off-by: John Ogness <john.ogness@linutronix.de>
----
- include/linux/rcupdate.h | 5 +++++
- 1 file changed, 5 insertions(+)
+Ok, if we have some pinned initializers such as DECLARE_DELAYED_WORK_PINNED()
+and DECLARE_DEFERRABKE_WORK_PINNED() then I think that cleans the situation.
 
-diff --git a/include/linux/rcupdate.h b/include/linux/rcupdate.h
-index 08605ce7379d..65178c40ab6f 100644
---- a/include/linux/rcupdate.h
-+++ b/include/linux/rcupdate.h
-@@ -340,6 +340,11 @@ static inline int rcu_read_lock_any_held(void)
- 	return !preemptible();
- }
- 
-+static inline int debug_lockdep_rcu_enabled(void)
-+{
-+	return 0;
-+}
-+
- #endif /* #else #ifdef CONFIG_DEBUG_LOCK_ALLOC */
- 
- #ifdef CONFIG_PROVE_RCU
--- 
-2.30.2
+Sounds good, thanks!
+
+> 
+> Thanks,
+> 
+> 	Anna-Maria
+> 
