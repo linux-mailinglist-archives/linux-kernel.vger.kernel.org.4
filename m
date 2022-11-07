@@ -2,68 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B98161FA8E
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 17:52:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8A7061FA98
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 17:54:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231667AbiKGQwU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 11:52:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45904 "EHLO
+        id S231965AbiKGQyF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 11:54:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232790AbiKGQwL (ORCPT
+        with ESMTP id S232356AbiKGQyC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 11:52:11 -0500
-Received: from mail-oi1-f174.google.com (mail-oi1-f174.google.com [209.85.167.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EB28220FD;
-        Mon,  7 Nov 2022 08:52:10 -0800 (PST)
-Received: by mail-oi1-f174.google.com with SMTP id q83so1047638oib.10;
-        Mon, 07 Nov 2022 08:52:10 -0800 (PST)
+        Mon, 7 Nov 2022 11:54:02 -0500
+Received: from mail-oa1-f51.google.com (mail-oa1-f51.google.com [209.85.160.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 270281B1DE;
+        Mon,  7 Nov 2022 08:53:59 -0800 (PST)
+Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-13be3ef361dso13287336fac.12;
+        Mon, 07 Nov 2022 08:53:59 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=qQ64GEaHNoYqaSyJPET6HqEloEtKzKHKFpQ8WjiqbOY=;
-        b=K1j3UaNAmK7TXgzFvQVd5yi4X10Q4DsMHao6D23ewVhcK1btH1hFTb4lZfeP2nmFyt
-         qXhb95tCo14rMP2EhpShmKk3Xo2gEJKTbhYpTtuJZ0DZMVBEhrf2vJsvxd+nWgGmLXub
-         WyjeF9GMTDkAlJaa1WHq/3Q5Y/HXfQLdIe+ovvA5J1BTddV0tLFlKNpMWn3571EVKPJ/
-         FfOo87qXLRIBAoEakslT55FCLhyuSYHPC/xmPIIvmzdGVv3MDB6p3xm42/y4Ij6Q2oXu
-         txSB8gYVUe3/O+vZ+xXvGf4xvjp40jpy3Ay5BakgZ+v6VJaT6idFQFJblViI9ICB5PuI
-         h95A==
-X-Gm-Message-State: ACrzQf353hKzy1jxpBE/bXjP8T+V1es0truFtU4+uThPHVnZsEw8RtJV
-        85oXDmcyicnmS38IRGfw5Q==
-X-Google-Smtp-Source: AMsMyM7ZHh3wfKMz5itrgmKht6rWjBQJpRWxKulZfspcnTiaTzZ/Z14rbOnaTEE8glR459/Ok4a7HQ==
-X-Received: by 2002:aca:d0b:0:b0:359:cb6e:809b with SMTP id 11-20020aca0d0b000000b00359cb6e809bmr30548387oin.137.1667839929799;
-        Mon, 07 Nov 2022 08:52:09 -0800 (PST)
+        bh=+PcP8wC7lb5ag85bvZs+rYndJyQLHPkyds3DxDsQNOc=;
+        b=DE7gh0cWiKRGtTkbFvRD7OP8dmx8xfH2e0PfKKCJp75HpXW0SifI8kPWufctauQUNd
+         nC4ILka48G4Ausj5VluP4ei8K+6uPD/v9hZYOEVx9taT4nrCTCjb44rvSFpCFBYtrThP
+         p60k/v/1VnvvVx7yerUHZDNtY5cbdv5aUSK2tVEU47narkjIWbzbhyomZdk8Bcm3pg9u
+         kjckT+YtJw9ltyBIpnmbJV/eGbJBfpMdabvE2dEQKlBSDvIhY7ckgA57GJ1iqa8oKZ+1
+         URB6QK6HEVWlmkshA7VeKm5oxz/j7A3o4Z1sjQgVtWd1sG2jYQbRu4SLXeBwmXwGxcvm
+         gmyA==
+X-Gm-Message-State: ACrzQf29cRoZMl9/f6wDbyulZ/0yVlskWbCsFWEuD2O1C2RUhZa7rG8v
+        3X9UvqQ19nMAjj1vRB0bG3otYzNvsw==
+X-Google-Smtp-Source: AMsMyM5TZkLd6F+o2p7/Lwc56E/Qc2MgZFrunv0JFh+6G/BRXz4sInHxVmUkPArq6yQ0Q0dHUZ9gSA==
+X-Received: by 2002:a05:6870:96ab:b0:13b:8fb9:47a with SMTP id o43-20020a05687096ab00b0013b8fb9047amr39251897oaq.15.1667840038904;
+        Mon, 07 Nov 2022 08:53:58 -0800 (PST)
 Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id h25-20020a056870171900b0013d9bd4ad2esm3307622oae.12.2022.11.07.08.52.08
+        by smtp.gmail.com with ESMTPSA id v26-20020a4ac91a000000b0049e9a80c690sm2374793ooq.1.2022.11.07.08.53.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Nov 2022 08:52:09 -0800 (PST)
-Received: (nullmailer pid 1229987 invoked by uid 1000);
-        Mon, 07 Nov 2022 16:52:11 -0000
-Date:   Mon, 7 Nov 2022 10:52:11 -0600
+        Mon, 07 Nov 2022 08:53:58 -0800 (PST)
+Received: (nullmailer pid 1231990 invoked by uid 1000);
+        Mon, 07 Nov 2022 16:54:00 -0000
+Date:   Mon, 7 Nov 2022 10:54:00 -0600
 From:   Rob Herring <robh@kernel.org>
 To:     Cosmin Tanislav <demonsingur@gmail.com>
-Cc:     Lars-Peter Clausen <lars@metafoo.de>, devicetree@vger.kernel.org,
-        Jonathan Cameron <jic23@kernel.org>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        linux-iio@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        linux-kernel@vger.kernel.org,
-        Cosmin Tanislav <cosmin.tanislav@analog.com>,
+Cc:     linux-iio@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>,
+        Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>
-Subject: Re: [PATCH v4 05/13] dt-bindings: iio: temperature: ltc2983:
- describe matrix items
-Message-ID: <166783993054.1229931.10283754977945608290.robh@kernel.org>
+        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        devicetree@vger.kernel.org, Jonathan Cameron <jic23@kernel.org>,
+        Cosmin Tanislav <cosmin.tanislav@analog.com>
+Subject: Re: [PATCH v4 06/13] dt-bindings: iio: temperature: ltc2983: require
+ custom sensor tables
+Message-ID: <166784003974.1231935.5638789744921485795.robh@kernel.org>
 References: <20221103130041.2153295-1-demonsingur@gmail.com>
- <20221103130041.2153295-6-demonsingur@gmail.com>
+ <20221103130041.2153295-7-demonsingur@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221103130041.2153295-6-demonsingur@gmail.com>
+In-Reply-To: <20221103130041.2153295-7-demonsingur@gmail.com>
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -71,20 +71,16 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On Thu, 03 Nov 2022 15:00:33 +0200, Cosmin Tanislav wrote:
+On Thu, 03 Nov 2022 15:00:34 +0200, Cosmin Tanislav wrote:
 > From: Cosmin Tanislav <cosmin.tanislav@analog.com>
 > 
-> Give a little bit of information on what each item in the matrix is
-> supposed to be.
-> 
-> Also, some matrices put the 'minItems' and 'maxItems' keywords in the
-> wrong level. They should be on the same level as the 'items' keyword.
-> Fix it.
+> The driver will error out when a custom sensor type is used but a
+> custom sensor table is not provided. Require it in the binding too.
 > 
 > Signed-off-by: Cosmin Tanislav <cosmin.tanislav@analog.com>
 > ---
->  .../bindings/iio/temperature/adi,ltc2983.yaml | 23 ++++++++++---------
->  1 file changed, 12 insertions(+), 11 deletions(-)
+>  .../bindings/iio/temperature/adi,ltc2983.yaml | 34 +++++++++++++++++++
+>  1 file changed, 34 insertions(+)
 > 
 
 Reviewed-by: Rob Herring <robh@kernel.org>
