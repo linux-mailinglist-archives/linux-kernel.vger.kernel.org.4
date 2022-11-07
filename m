@@ -2,55 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27F9D61F7FD
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 16:53:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1C6461F7FF
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 16:54:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232601AbiKGPxW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 10:53:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49258 "EHLO
+        id S232864AbiKGPy0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 10:54:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232444AbiKGPxU (ORCPT
+        with ESMTP id S231539AbiKGPyY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 10:53:20 -0500
+        Mon, 7 Nov 2022 10:54:24 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF86EB39;
-        Mon,  7 Nov 2022 07:53:19 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F21AB39B
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 07:54:23 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8663E60F4F;
-        Mon,  7 Nov 2022 15:53:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CEB80C433C1;
-        Mon,  7 Nov 2022 15:53:15 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8F93560EBB
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 15:54:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3578C4314D
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 15:54:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667836398;
-        bh=zSri8bOYt/cciQZNAvfd+4Ix4mWsGf9Zn9QOVwBCLWc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=stK7yGqs2kBjcMyP0Xmt0GoeWtyDcWPCmTx/qzfCsr9tkTF4+rj9lby8wywxOV/IV
-         9wrizNHEAMcc7Ddv0H23dKQu9+8ZffHbhv/V6KAWhOSiaLYPdiY8aK5YC9otG9CtXT
-         7h+52DDvsRaLp9juGTiZYnDaJ5uQsINuyRbreqg9qOY000W0mjgRvf+KEf4VPdZRuN
-         vx9JbHoZ6QwDBK0ACJWn9b8TA86tRrvsb3y6gNAEd59sdInstT3Rw2pWG3PJwGcOjd
-         VAs9go51dEB/tTQ8gq20DSi74ntY6b2ptlPDcjGi9Y639uwuI/O74jzuTfpJCIjipx
-         NxeXvH5+oD6gw==
-Date:   Mon, 7 Nov 2022 15:53:12 +0000
-From:   Will Deacon <will@kernel.org>
-To:     Besar Wicaksono <bwicaksono@nvidia.com>
-Cc:     suzuki.poulose@arm.com, robin.murphy@arm.com,
-        catalin.marinas@arm.com, mark.rutland@arm.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-tegra@vger.kernel.org, sudeep.holla@arm.com,
-        thanu.rangarajan@arm.com, Michael.Williams@arm.com,
-        treding@nvidia.com, jonathanh@nvidia.com, vsethi@nvidia.com,
-        mathieu.poirier@linaro.org, mike.leach@linaro.org,
-        leo.yan@linaro.org
-Subject: Re: [PATCH v6 0/2] perf: ARM CoreSight PMU support
-Message-ID: <20221107155311.GD21157@willie-the-truck>
-References: <20220930023443.9463-1-bwicaksono@nvidia.com>
+        s=k20201202; t=1667836463;
+        bh=Du4ly8cNdD6kjhACACFPcG0D53BO1orBmWkVY19SAC8=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=jSPZaL/qYt8lVzFah4sOQFP9Y9mdruk+onCFhiT9URVGSdOSv3knpSF1Tk37S7thp
+         PHHx00VeajRbHY7NBuGNHSDLPqWjOd3GpwzLTCfVtgN776UoUIP+YBwXKiW+jOLv0L
+         tkiSm7J51AL2RDTJrh2EgcatR0blclMSwsAs0jZuM2pVfiZrcl55qddGU7wCgf7J69
+         cGpiC4oFjOZZiz9G+nXka9UlJtj3d6AXPM48wwU7/MRegtBEMfqvAA3+dq4Usy28yo
+         DSqV6wZWp2w121L1Ju/KiEsaua4pukpDAoF/DoCI0K+sSSbwqIfv0ewsVpo7Zgu0Kr
+         OUBJbkUw/dZog==
+Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-36a4b86a0abso108356237b3.7
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 07:54:22 -0800 (PST)
+X-Gm-Message-State: ACrzQf0/XNn0qnjcZgGS8UUjw2J/+W+FDtIeOTm/0xHwwCflaAy6SVHw
+        fH0QC6Tn6j0VhaPaLEKaWa5Mg4Rh7d2fHVEvg7g=
+X-Google-Smtp-Source: AMsMyM4jwnUpLxOtIWwo+X7ZHHcfMiwY9qO4EgINDShI8Y6XVbjNjiu+ZLswLYHTygF5kRDP46mEmEeYgHV6lgGl9vg=
+X-Received: by 2002:a05:690c:825:b0:36a:b160:21b with SMTP id
+ by5-20020a05690c082500b0036ab160021bmr48865140ywb.211.1667836461563; Mon, 07
+ Nov 2022 07:54:21 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220930023443.9463-1-bwicaksono@nvidia.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20221102203405.1797491-1-ogabbay@kernel.org> <20221102203405.1797491-2-ogabbay@kernel.org>
+ <Y2MMCIe5wND2XPqE@kroah.com> <CAFCwf13uLj=P6u6FAcY8M5qAXoaBdb+Ha-TYj0j2FAZnFAPFYg@mail.gmail.com>
+ <CAFCwf12yRUG4593ozJMEwaaJBKyWqXTTCjef9O_fzWdQBxVrtw@mail.gmail.com>
+ <Y2kAcCu4z2LUMN7u@nvidia.com> <CAFCwf10K-dTu455QfOK8i6thismY-FUN2Rws830EGiqOcGWFgA@mail.gmail.com>
+ <Y2kDzPswkKyZyRpS@nvidia.com> <CAFCwf10A=-bj2nR8WasNxyQQ07D24Je04tzKxqv2X_XnA0BUSQ@mail.gmail.com>
+ <Y2kRvyR8VrZrO/1H@nvidia.com>
+In-Reply-To: <Y2kRvyR8VrZrO/1H@nvidia.com>
+From:   Oded Gabbay <ogabbay@kernel.org>
+Date:   Mon, 7 Nov 2022 17:53:55 +0200
+X-Gmail-Original-Message-ID: <CAFCwf12E4K7bpLcDvTtG1mKxoy1JnchXGCKDvcKAayCFvGWXXQ@mail.gmail.com>
+Message-ID: <CAFCwf12E4K7bpLcDvTtG1mKxoy1JnchXGCKDvcKAayCFvGWXXQ@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 1/3] drivers/accel: define kconfig and register a
+ new major
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Arnd Bergmann <arnd@arndb.de>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        John Hubbard <jhubbard@nvidia.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>,
+        Jiho Chu <jiho.chu@samsung.com>,
+        Daniel Stone <daniel@fooishbar.org>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Jeffrey Hugo <quic_jhugo@quicinc.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>,
+        Maciej Kwapulinski <maciej.kwapulinski@linux.intel.com>,
+        stanislaw.gruszka@intel.com
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -60,28 +85,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 29, 2022 at 09:34:41PM -0500, Besar Wicaksono wrote:
-> Add driver support for ARM CoreSight PMU device and event attributes for NVIDIA
-> implementation. The code is based on ARM Coresight PMU architecture and ACPI ARM
-> Performance Monitoring Unit table (APMT) specification below:
->  * ARM Coresight PMU:
->         https://developer.arm.com/documentation/ihi0091/latest
->  * APMT: https://developer.arm.com/documentation/den0117/latest
-> 
-> The patchset applies on top of
->   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
->   master next-20220524
-> 
-> For APMT support, please see patchset: https://lkml.org/lkml/2022/4/19/1395 
-> 
-> Changes from v5:
->  * Default get_event/format_attrs callback now returns copy of default array.
-> Thanks to suzuki.poulose@arm.com for the review comments.
-> v5: https://lore.kernel.org/linux-arm-kernel/20220928201830.45637-1-bwicaksono@nvidia.com/
+On Mon, Nov 7, 2022 at 4:10 PM Jason Gunthorpe <jgg@nvidia.com> wrote:
+>
+> On Mon, Nov 07, 2022 at 04:02:01PM +0200, Oded Gabbay wrote:
+> > On Mon, Nov 7, 2022 at 3:10 PM Jason Gunthorpe <jgg@nvidia.com> wrote:
+> > >
+> > > On Mon, Nov 07, 2022 at 03:01:08PM +0200, Oded Gabbay wrote:
+> > > > I don't agree with your statement that it should be "a layer over top of DRM".
+> > > > Anything on top of DRM is a device driver.
+> > > > Accel is not a device driver, it is a new type of drm minor / drm driver.
+> > >
+> > > Yeah, I still think this is not the right way, you are getting almost
+> > > nothing from DRM and making everything more complicated in the
+> > > process.
+> > >
+> > > > The only alternative imo to that is to abandon the idea of reusing
+> > > > drm, and just make an independant accel core code.
+> > >
+> > > Not quite really, layer it properly and librarize parts of DRM into
+> > > things accel can re-use so they are not intimately tied to the DRM
+> > > struct device notion.
+> > >
+> > > IMHO this is much better, because accel has very little need of DRM to
+> > > manage a struct device/cdev in the first place.
+> > >
+> > > Jason
+> > I'm not following. How can an accel device be a new type of drm_minor,
+> > if it doesn't have access to all its functions and members ?
+>
+> "drm_minor" is not necessary anymore. Strictly managing minor numbers
+> lost its value years ago when /dev/ was reorganized. Just use
+> dynamic minors fully.
+drm minor is not just about handling minor numbers. It contains the
+entire code to manage devices that register with drm framework (e.g.
+supply callbacks to file operations), manage their lifecycle,
+resources (e.g. automatic free of resources on release), sysfs,
+debugfs, etc.
 
-These patches no longer apply. Please can you rebase onto -rc4 and drop the
-defconfig change from the first patch?
+To take all of that out of drm.ko and make it a separate kernel module
+is a big change, which I don't know if the drm people even want me to
+do.
 
-Thanks,
+>
+> > How will accel device leverage, for example, the GEM code without
+> > being a drm_minor ?
+>
+> Split GEM into a library so it doesn't require that.
+I don't see the advantage of doing that over defining accel as a new
+type of drm minor.
+>
+> > Librarizing parts of DRM sounds nice in theory but the reality is that
+> > everything there is interconnected, all the structures are
+> > interdependent.
+>
+> Yes, the kernel is full of stuff that needs improving. Let's not take
+> shortcuts.
+It's not about shortcuts. It's about a different way to solve this
+issue which I don't think is anyway hacky or inappropriate.
 
-Will
+>
+> > I would have to re-write the entire DRM library to make such a thing
+> > work. I don't think this was the intention.
+>
+> Not necessarily you, whoever someday needs GEM would have to do some
+> work.
+>
+> > The current design makes the accel device an integral part of drm,
+> > with very minimal code duplication and without re-writing DRM.
+>
+> And it smells bad, you can't even make it into a proper module. Who
+> knows what other problems will come.
+I would argue that if accel is part of drm, it doesn't have to be a
+proper module. I don't see that as a hard requirement.
+Oded
+
+>
+> Jason
