@@ -2,102 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB54A61EBE7
+	by mail.lfdr.de (Postfix) with ESMTP id 859F161EBE6
 	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 08:27:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231375AbiKGH0e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 02:26:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36998 "EHLO
+        id S231356AbiKGH0b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 02:26:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231477AbiKGH0V (ORCPT
+        with ESMTP id S231476AbiKGH0V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 7 Nov 2022 02:26:21 -0500
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 217A0BE19;
-        Sun,  6 Nov 2022 23:26:20 -0800 (PST)
-Received: by mail-pf1-x431.google.com with SMTP id m6so9848642pfb.0;
-        Sun, 06 Nov 2022 23:26:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=KVq68Qs/TMwcZHogjsQmq/uIiLZOFgV4gD8jaho36t4=;
-        b=cb+5skGlWUAvNodNHcvclXRCJm6IQzky5RJkWzuCJMaTiZzbL4HACsCTzygxiMyYvj
-         IuUeduu4WZAtjNR+LYirQ9P6wcF/+Pots1UhvcNhN2y/HYSw6YRERTTazKBuARHqrdwO
-         Z1CvkaTHag9uPC+W5BGBCTgO9DMcZ5HktwnYrWmcahLLG9R5U/e6zC0eb7fUFtstg/Zb
-         GkgZ8lV4Kh2MDTQuNEg4lWm116Uy0795vL5hfWvbbHot9Cmg85BGMZEMVX0ybBwrQi/2
-         gSH9EimvEDOujtVd+nfaF0tHwRxZr8suiyVWDMEPvhjG9jw+LVpdfDMPjFVAvkpqdqVG
-         MjlQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KVq68Qs/TMwcZHogjsQmq/uIiLZOFgV4gD8jaho36t4=;
-        b=OgoZoviBvgjoa1lEzJV5fyeP9bm7/Wef820UeerTLzchMFW4dUgsr3vLlBRjj6rQG6
-         72AP5rao2vAdFIuOv1kpfhCDyRux8pyRljdekn8JzvxeXDmvFXpCObgY4FIWsp7CV5D/
-         vWaEtOyI8pHHUOqu6tdSpOD+y2mj13kxzQqxpLj1HpikSk19jr5hQpUT2lECO1OX5JMw
-         UucSa0lmC3U6n3xQUk+uTEjFotUnkxnD9crlKzQmskRVH+SNE6MlcyxX0wprQLYIql2y
-         wAtheCJz0IHL7a73aW82t0AjK6vCYo0m/GUQVx4Izf54YNqynVkTaa/jcRxE0Ei86pMJ
-         e7Ng==
-X-Gm-Message-State: ACrzQf1HMX1l0eh0H+Xnxwp+lZuE+bcCgA6CXkJIXRl6cT9Qny13iV/w
-        jxcxk4wC3ISRu4TNBJWw8Q0=
-X-Google-Smtp-Source: AMsMyM5fjQ2o9+NbX1Jsi3q88fWAklrxMKVs/Tiqnk95fzy/z42rh7+SU68zl+Y33sCsh/cpEdgxyQ==
-X-Received: by 2002:a05:6a00:14d2:b0:56d:b981:8da8 with SMTP id w18-20020a056a0014d200b0056db9818da8mr33486439pfu.36.1667805979592;
-        Sun, 06 Nov 2022 23:26:19 -0800 (PST)
-Received: from [192.168.255.10] ([103.7.29.32])
-        by smtp.gmail.com with ESMTPSA id s4-20020a170902ea0400b001837463f654sm4234918plg.251.2022.11.06.23.26.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 06 Nov 2022 23:26:19 -0800 (PST)
-Message-ID: <524f23fa-b069-1468-dfc6-fa342c11cb7f@gmail.com>
-Date:   Mon, 7 Nov 2022 15:26:12 +0800
+Received: from out30-45.freemail.mail.aliyun.com (out30-45.freemail.mail.aliyun.com [115.124.30.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DF8CFE7
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Nov 2022 23:26:17 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0VU8EpIc_1667805973;
+Received: from 30.97.48.51(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VU8EpIc_1667805973)
+          by smtp.aliyun-inc.com;
+          Mon, 07 Nov 2022 15:26:14 +0800
+Message-ID: <63a8f509-6acb-48b5-1aa1-c278deaaa719@linux.alibaba.com>
+Date:   Mon, 7 Nov 2022 15:26:18 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.4.1
-Subject: Re: [PATCH v3 1/3] KVM: x86/pmu: Stop adding speculative Intel GP
- PMCs that don't exist yet
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Jim Mattson <jmattson@google.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220919091008.60695-1-likexu@tencent.com>
- <Y0CAHch5UR2Lp0tU@google.com>
- <a90c28df-eb54-f20a-13a5-9ee4172f870e@gmail.com>
- <Y0mL3g2Eamp4bMHD@google.com>
-From:   Like Xu <like.xu.linux@gmail.com>
-In-Reply-To: <Y0mL3g2Eamp4bMHD@google.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH 1/2] migrate: convert unmap_and_move() to use folios
+To:     Huang Ying <ying.huang@intel.com>, linux-mm@kvack.org
+Cc:     linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Zi Yan <ziy@nvidia.com>, Yang Shi <shy828301@gmail.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        Matthew Wilcox <willy@infradead.org>
+References: <20221104083020.155835-1-ying.huang@intel.com>
+ <20221104083020.155835-2-ying.huang@intel.com>
+From:   Baolin Wang <baolin.wang@linux.alibaba.com>
+In-Reply-To: <20221104083020.155835-2-ying.huang@intel.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/10/2022 12:18 am, Sean Christopherson wrote:
-> On Fri, Oct 14, 2022, Like Xu wrote:
->> On 8/10/2022 3:38 am, Sean Christopherson wrote:
->>> Does this need Cc:stable@vger.kernel.org?  Or is this benign enough that we don't
->>> care?
->>
->> Considering stable kernel may access IA32_OVERCLOCKING_STATUS as well,
->> cc stable list helps to remove the illusion of pmu msr scope for stable tree
->> maintainers.
+
+
+On 11/4/2022 4:30 PM, Huang Ying wrote:
+> Quite straightforward, the page functions are converted to
+> corresponding folio functions.  Same for comments.
+>
+
+LGTM. Please feel free to add:
+Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+
+> Signed-off-by: "Huang, Ying" <ying.huang@intel.com>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: Zi Yan <ziy@nvidia.com>
+> Cc: Yang Shi <shy828301@gmail.com>
+> Cc: Baolin Wang <baolin.wang@linux.alibaba.com>
+> Cc: Oscar Salvador <osalvador@suse.de>
+> Cc: Matthew Wilcox <willy@infradead.org>
+> ---
+>   mm/migrate.c | 54 ++++++++++++++++++++++++++--------------------------
+>   1 file changed, 27 insertions(+), 27 deletions(-)
 > 
-> Is that a "yes, this should be Cc'd stable" or "no, don't bother"?
-
-Oops, I missed this one. "Yes, this should be Cc'd" as I have received a few 
-complaints on this.
-
-Please let me know if I need to post a new version of this minor patch set, 
-considering the previous
-comment "No need for a v4, the above nits can be handled when applying. "
-
-Thanks,
-Like Xu
+> diff --git a/mm/migrate.c b/mm/migrate.c
+> index dff333593a8a..f6dd749dd2f8 100644
+> --- a/mm/migrate.c
+> +++ b/mm/migrate.c
+> @@ -1150,79 +1150,79 @@ static int __unmap_and_move(struct folio *src, struct folio *dst,
+>   }
+>   
+>   /*
+> - * Obtain the lock on page, remove all ptes and migrate the page
+> - * to the newly allocated page in newpage.
+> + * Obtain the lock on folio, remove all ptes and migrate the folio
+> + * to the newly allocated folio in dst.
+>    */
+>   static int unmap_and_move(new_page_t get_new_page,
+>   				   free_page_t put_new_page,
+> -				   unsigned long private, struct page *page,
+> +				   unsigned long private, struct folio *src,
+>   				   int force, enum migrate_mode mode,
+>   				   enum migrate_reason reason,
+>   				   struct list_head *ret)
+>   {
+> -	struct folio *dst, *src = page_folio(page);
+> +	struct folio *dst;
+>   	int rc = MIGRATEPAGE_SUCCESS;
+>   	struct page *newpage = NULL;
+>   
+> -	if (!thp_migration_supported() && PageTransHuge(page))
+> +	if (!thp_migration_supported() && folio_test_transhuge(src))
+>   		return -ENOSYS;
+>   
+> -	if (page_count(page) == 1) {
+> -		/* Page was freed from under us. So we are done. */
+> -		ClearPageActive(page);
+> -		ClearPageUnevictable(page);
+> +	if (folio_ref_count(src) == 1) {
+> +		/* Folio was freed from under us. So we are done. */
+> +		folio_clear_active(src);
+> +		folio_clear_unevictable(src);
+>   		/* free_pages_prepare() will clear PG_isolated. */
+>   		goto out;
+>   	}
+>   
+> -	newpage = get_new_page(page, private);
+> +	newpage = get_new_page(&src->page, private);
+>   	if (!newpage)
+>   		return -ENOMEM;
+>   	dst = page_folio(newpage);
+>   
+> -	newpage->private = 0;
+> +	dst->private = 0;
+>   	rc = __unmap_and_move(src, dst, force, mode);
+>   	if (rc == MIGRATEPAGE_SUCCESS)
+> -		set_page_owner_migrate_reason(newpage, reason);
+> +		set_page_owner_migrate_reason(&dst->page, reason);
+>   
+>   out:
+>   	if (rc != -EAGAIN) {
+>   		/*
+> -		 * A page that has been migrated has all references
+> -		 * removed and will be freed. A page that has not been
+> +		 * A folio that has been migrated has all references
+> +		 * removed and will be freed. A folio that has not been
+>   		 * migrated will have kept its references and be restored.
+>   		 */
+> -		list_del(&page->lru);
+> +		list_del(&src->lru);
+>   	}
+>   
+>   	/*
+>   	 * If migration is successful, releases reference grabbed during
+> -	 * isolation. Otherwise, restore the page to right list unless
+> +	 * isolation. Otherwise, restore the folio to right list unless
+>   	 * we want to retry.
+>   	 */
+>   	if (rc == MIGRATEPAGE_SUCCESS) {
+>   		/*
+> -		 * Compaction can migrate also non-LRU pages which are
+> +		 * Compaction can migrate also non-LRU folios which are
+>   		 * not accounted to NR_ISOLATED_*. They can be recognized
+> -		 * as __PageMovable
+> +		 * as __folio_test_movable
+>   		 */
+> -		if (likely(!__PageMovable(page)))
+> -			mod_node_page_state(page_pgdat(page), NR_ISOLATED_ANON +
+> -					page_is_file_lru(page), -thp_nr_pages(page));
+> +		if (likely(!__folio_test_movable(src)))
+> +			mod_node_page_state(folio_pgdat(src), NR_ISOLATED_ANON +
+> +					folio_is_file_lru(src), -folio_nr_pages(src));
+>   
+>   		if (reason != MR_MEMORY_FAILURE)
+>   			/*
+> -			 * We release the page in page_handle_poison.
+> +			 * We release the folio in page_handle_poison.
+>   			 */
+> -			put_page(page);
+> +			folio_put(src);
+>   	} else {
+>   		if (rc != -EAGAIN)
+> -			list_add_tail(&page->lru, ret);
+> +			list_add_tail(&src->lru, ret);
+>   
+>   		if (put_new_page)
+> -			put_new_page(newpage, private);
+> +			put_new_page(&dst->page, private);
+>   		else
+> -			put_page(newpage);
+> +			folio_put(dst);
+>   	}
+>   
+>   	return rc;
+> @@ -1459,7 +1459,7 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
+>   						&ret_pages);
+>   			else
+>   				rc = unmap_and_move(get_new_page, put_new_page,
+> -						private, page, pass > 2, mode,
+> +						private, page_folio(page), pass > 2, mode,
+>   						reason, &ret_pages);
+>   			/*
+>   			 * The rules are:
