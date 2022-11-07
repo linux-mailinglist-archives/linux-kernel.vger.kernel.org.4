@@ -2,65 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C12D620391
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 00:14:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA65C6203A4
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 00:20:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232942AbiKGXOu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 18:14:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50668 "EHLO
+        id S230186AbiKGXUE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 18:20:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232964AbiKGXOr (ORCPT
+        with ESMTP id S232196AbiKGXUC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 18:14:47 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E07D427142;
-        Mon,  7 Nov 2022 15:14:43 -0800 (PST)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2A7MQcQm022859;
-        Mon, 7 Nov 2022 23:14:35 GMT
+        Mon, 7 Nov 2022 18:20:02 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD67D26AED;
+        Mon,  7 Nov 2022 15:20:01 -0800 (PST)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2A7LW55p025114;
+        Mon, 7 Nov 2022 23:19:46 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
  mime-version : subject : to : cc : references : from : in-reply-to :
  content-type : content-transfer-encoding; s=qcppdkim1;
- bh=lNxErk04K4OaaYsp9XOQ8PIihndtEF1NzdzJY7i350w=;
- b=DG5w6SD/zX4fPVIS2Yo9nsvmR+vXZkJXGDlPwJot4dPt2hvcbwC2q839BRBEeiN9L4fh
- M4/2tb5QzY2ULiNf3woV9Qkhw4P5sX/8AtHriwCU0MK7tAIbCzpWNOBeVYMns5wDo8z9
- Ae2IuxPqJB2tLlG5cFLceyWityJfCK4Ifvm0sQMFFBI+y2Kb+NQRpZOHXHlWNS9Mjxuy
- hvD82qTOqAt0vViBPpCaOsBGv5f6x8LXavUkrO1biMjp66xcL/WKuoAYyWzILATG3PMi
- gq1MHfF5YF3UplXitLcHoZCv0voS7r6+qz1MiXAwZ5O8729sKc/J4wG7ytA4LMe2Q/LB Rw== 
-Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kq7g4gmw4-1
+ bh=ZH8/YoYPMWTivQ0j+TQjnMyauY4UExY1dnSgQnRNGPk=;
+ b=m/eJI2d+0zu9Ys9D0oEZ9MbIAaIUAQr0UQeDGrBZtxWYBBtV1r98Lzaa/SiFTMJQWAVg
+ 4mkUuS9PlRFzFq6U4sMAtX3Qt6EbHUWIkCqayG8cOQ1mXcN7c2+MBNh1X1UvFoRoX4Ug
+ E5ewIg4zYFe0SMRfRirEdLVn6shBoxrOWQfeh6kRE21lAR3+lXPCcz9xQcevTbP+7AYJ
+ vN03Hy/HGKtWSyIRYnYNpUltoh1Hp3ramJSqRy06GKUqxWg9oOHR+m2VOKJxmY2EIuYO
+ 9mtwfYmEPIgm49tOrKiXp/tG3Fesw/s0uTAduK4B15Z2c8TczCcWvpZDA/326eda9WqC ag== 
+Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kq5s38t6q-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 07 Nov 2022 23:14:35 +0000
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2A7NEYJA009699
+        Mon, 07 Nov 2022 23:19:45 +0000
+Received: from nasanex01b.na.qualcomm.com (corens_vlan604_snip.qualcomm.com [10.53.140.1])
+        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2A7NJi1c023138
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 7 Nov 2022 23:14:34 GMT
+        Mon, 7 Nov 2022 23:19:44 GMT
 Received: from [10.110.0.244] (10.80.80.8) by nasanex01b.na.qualcomm.com
  (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Mon, 7 Nov 2022
- 15:14:34 -0800
-Message-ID: <a1c8aa27-5c67-6cfc-39fd-15157c91bedb@quicinc.com>
-Date:   Mon, 7 Nov 2022 15:14:33 -0800
+ 15:19:44 -0800
+Message-ID: <f3fb0b66-66bb-b39b-8d45-f5c4105e2076@quicinc.com>
+Date:   Mon, 7 Nov 2022 15:19:43 -0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.2.2
-Subject: Re: [PATCH v3 1/5] dt-bindings: firmware: scm: Add QDU1000/QRU1000
- compatibles
+Subject: Re: [PATCH v3 3/5] clk: qcom: Add QDU1000 and QRU1000 GCC support
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
+To:     Bjorn Andersson <andersson@kernel.org>
+CC:     Andy Gross <agross@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-CC:     Robert Marko <robimarko@gmail.com>,
-        Guru Das Srinagesh <quic_gurus@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20221026190549.4005703-1-quic_molvera@quicinc.com>
- <20221026190549.4005703-2-quic_molvera@quicinc.com>
- <e607fe3a-b243-fbd4-51a3-d10738d456c4@linaro.org>
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Taniya Das <quic_tdas@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20221026190441.4002212-1-quic_molvera@quicinc.com>
+ <20221026190441.4002212-4-quic_molvera@quicinc.com>
+ <20221107173237.xkeigtihoes3vsux@builder.lan>
 From:   Melody Olvera <quic_molvera@quicinc.com>
-In-Reply-To: <e607fe3a-b243-fbd4-51a3-d10738d456c4@linaro.org>
+In-Reply-To: <20221107173237.xkeigtihoes3vsux@builder.lan>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
 X-Originating-IP: [10.80.80.8]
@@ -68,15 +69,15 @@ X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
  nasanex01b.na.qualcomm.com (10.46.141.250)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: cm7niuOJB24jkE3yvEijKxx33JWiDqBV
-X-Proofpoint-GUID: cm7niuOJB24jkE3yvEijKxx33JWiDqBV
+X-Proofpoint-GUID: zJtG6TbzauyUkd9Ke6miLMauZ2Pw16sT
+X-Proofpoint-ORIG-GUID: zJtG6TbzauyUkd9Ke6miLMauZ2Pw16sT
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
  definitions=2022-11-07_11,2022-11-07_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 adultscore=0
- suspectscore=0 priorityscore=1501 mlxscore=0 mlxlogscore=999 bulkscore=0
- spamscore=0 impostorscore=0 lowpriorityscore=0 malwarescore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 clxscore=1015
+ malwarescore=0 bulkscore=0 spamscore=0 mlxscore=0 suspectscore=0
+ priorityscore=1501 adultscore=0 lowpriorityscore=0 mlxlogscore=999
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2210170000 definitions=main-2211070174
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
@@ -89,61 +90,96 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 10/27/2022 8:24 AM, Krzysztof Kozlowski wrote:
-> On 26/10/2022 15:05, Melody Olvera wrote:
->> Add compatibles for scm driver for QDU1000 and QRU1000 platforms.
->>
->> Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
->> ---
->>  .../devicetree/bindings/firmware/qcom,scm.yaml    | 15 +++++++++++++++
->>  1 file changed, 15 insertions(+)
->>
->> diff --git a/Documentation/devicetree/bindings/firmware/qcom,scm.yaml b/Documentation/devicetree/bindings/firmware/qcom,scm.yaml
->> index be1b5746eddb..5352181aa393 100644
->> --- a/Documentation/devicetree/bindings/firmware/qcom,scm.yaml
->> +++ b/Documentation/devicetree/bindings/firmware/qcom,scm.yaml
->> @@ -38,6 +38,7 @@ properties:
->>            - qcom,scm-msm8994
->>            - qcom,scm-msm8996
->>            - qcom,scm-msm8998
->> +          - qcom,scm-qdu1000
->>            - qcom,scm-sc7180
->>            - qcom,scm-sc7280
->>            - qcom,scm-sc8280xp
->> @@ -81,6 +82,20 @@ properties:
->>      description: TCSR hardware block
->>  
->>  allOf:
->> +  - if:
->> +      properties:
->> +        compatible:
->> +          contains:
->> +            const: qcom,scm-qdu1000
->> +    then:
->> +      properties:
->> +        '#reset-cells':
->> +          maxItems: 1
-> This is wrong... how can you have here more items?
+On 11/7/2022 9:32 AM, Bjorn Andersson wrote:
+> On Wed, Oct 26, 2022 at 12:04:39PM -0700, Melody Olvera wrote:
+>> diff --git a/drivers/clk/qcom/gcc-qdu1000.c b/drivers/clk/qcom/gcc-qdu1000.c
+>> new file mode 100644
+>> index 000000000000..7bd8ebf0ddb5
+>> --- /dev/null
+>> +++ b/drivers/clk/qcom/gcc-qdu1000.c
+>> @@ -0,0 +1,2645 @@
+>> +// SPDX-License-Identifier: GPL-2.0-only
+>> +/*
+>> + * Copyright (c) 2022, Qualcomm Innovation Center, Inc. All rights reserved.
+>> + */
+>> +
+>> +#include <linux/clk-provider.h>
+>> +#include <linux/module.h>
+>> +#include <linux/of_device.h>
+>> +#include <linux/regmap.h>
+>> +
+>> +#include <dt-bindings/clock/qcom,gcc-qdu1000.h>
+>> +
+>> +#include "clk-alpha-pll.h"
+>> +#include "clk-branch.h"
+>> +#include "clk-rcg.h"
+>> +#include "clk-regmap.h"
+>> +#include "clk-regmap-divider.h"
+>> +#include "clk-regmap-mux.h"
+>> +#include "clk-regmap-phy-mux.h"
+>> +#include "reset.h"
+>> +
+>> +enum {
+>> +	P_BI_TCXO,
+>> +	P_GCC_GPLL0_OUT_EVEN,
+>> +	P_GCC_GPLL0_OUT_MAIN,
+>> +	P_GCC_GPLL1_OUT_MAIN,
+>> +	P_GCC_GPLL2_OUT_MAIN,
+>> +	P_GCC_GPLL3_OUT_MAIN,
+>> +	P_GCC_GPLL4_OUT_MAIN,
+>> +	P_GCC_GPLL5_OUT_MAIN,
+>> +	P_GCC_GPLL6_OUT_MAIN,
+>> +	P_GCC_GPLL7_OUT_MAIN,
+>> +	P_GCC_GPLL8_OUT_MAIN,
+>> +	P_PCIE_0_PHY_AUX_CLK,
+>> +	P_PCIE_0_PIPE_CLK,
+>> +	P_SLEEP_CLK,
+>> +	P_USB3_PHY_WRAPPER_GCC_USB30_PIPE_CLK,
+>> +};
+> [..]
+>> +static const struct clk_parent_data gcc_parent_data_1[] = {
+>> +	{ .index = P_BI_TCXO },
+>> +	{ .hw = &gcc_gpll0.clkr.hw },
+>> +	{ .index = P_SLEEP_CLK },
+> .index here refers to the index in the clocks property in DT.
+>
+> I think it's okay to reuse the parent-enum, but the entries within must
+> then match the order defined in the DT binding. So you need to ensure
+> that the first N entires in the enum matches the binding.
+>
+> Perhaps it's cleaner to just carry a separate enum for the clocks order,
+> as we've done in the other drivers?
+>
+> If nothing else it makes it clear that one number space is arbitrary and
+> internal to the driver and the other is ABI.
 
-Being removed anyways.
+Yeah that makes plenty of sense. Will update the driver with a separate enum.
 
 >
->> +        clocks: false
->> +        clock-names: false
+>> +	{ .hw = &gcc_gpll0_out_even.clkr.hw },
+>> +};
 >> +
->> +      required:
->> +        - '#reset-cells'
-> Missing blank line.
+> [..]
+>> +static struct clk_regmap_mux gcc_pcie_0_phy_aux_clk_src = {
+>> +	.reg = 0x9d080,
+>> +	.shift = 0,
+>> +	.width = 2,
+>> +	.parent_map = gcc_parent_map_6,
+>> +	.clkr = {
+>> +		.hw.init = &(const struct clk_init_data){
+> Sorry for being picky, but I do like when there's a space between the
+> ')' and '{' in these lines...
 
-Ack.
+No worries. Will fix.
 
+>
+>> +			.name = "gcc_pcie_0_phy_aux_clk_src",
+>> +			.parent_data = gcc_parent_data_6,
+>> +			.num_parents = ARRAY_SIZE(gcc_parent_data_6),
+>> +			.ops = &clk_regmap_mux_closest_ops,
+>> +		},
+>> +	},
+>> +};
+>
 Thanks,
 Melody
->
->>    - if:
->>        properties:
->>          compatible:
-> Best regards,
-> Krzysztof
->
-
