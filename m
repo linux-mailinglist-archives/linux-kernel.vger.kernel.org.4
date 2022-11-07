@@ -2,162 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E13361F75E
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 16:16:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56EA761F75F
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 16:16:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232841AbiKGPQN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 10:16:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56178 "EHLO
+        id S232844AbiKGPQi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 10:16:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232249AbiKGPQK (ORCPT
+        with ESMTP id S232249AbiKGPQh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 10:16:10 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C25AE1EAF8
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 07:16:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1667834166; x=1699370166;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=Hua8FnSNgyK0XNfauia0YSWtJJuQvu8Oq20DaFtM3II=;
-  b=lBB4Tz5un807k34fQ9KYque8Lrg4iJNgI5jwS5QJz0M0XxLQGxoY/i2I
-   69jMd7TnGnd1NrY9RlG8Rj2pBzc5CikTMQ7PhHwBNvG7ISb8M2Qa5i1cP
-   7yiFA5kpxOnH8j4QwcLQi3gSUnPiTM5BkRZYuCze5IytiqKzwUO47CJE8
-   MXQHhH6aN9aV+Y2GyYNahXE5ZfYWTPBNBayCy/pYVSCDYlpACiRHHlJX+
-   4V1l9THS68xDGTWXabELfu2Hwpinkx3Aa9zS9R/gTmBdrO+DfhRkAoheQ
-   W9aHG47sQtS5yAnYG6/8WUQ0VgwuoQART0x38XHRe1Q/mBrfYZKlcg4W3
-   w==;
-X-IronPort-AV: E=Sophos;i="5.96,145,1665471600"; 
-   d="scan'208";a="198734479"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 07 Nov 2022 08:16:06 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
- chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Mon, 7 Nov 2022 08:16:05 -0700
-Received: from wendy.microchip.com (10.10.115.15) by chn-vm-ex02.mchp-main.com
- (10.10.85.144) with Microsoft SMTP Server id 15.1.2507.12 via Frontend
- Transport; Mon, 7 Nov 2022 08:16:03 -0700
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Palmer Dabbelt <palmer@dabbelt.com>
-CC:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        "Daire McNamara" <daire.mcnamara@microchip.com>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@rivosinc.com>,
-        Nick Kossifidis <mick@ics.forth.gr>,
-        <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        "Valentina Fernandez" <valentina.fernandezalanis@microchip.com>,
-        Evgenii Shatokhin <e.shatokhin@yadro.com>
-Subject: [PATCH v1] riscv: fix reserved memory setup
-Date:   Mon, 7 Nov 2022 15:15:25 +0000
-Message-ID: <20221107151524.3941467-1-conor.dooley@microchip.com>
-X-Mailer: git-send-email 2.38.0
+        Mon, 7 Nov 2022 10:16:37 -0500
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CD871EAF8
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 07:16:36 -0800 (PST)
+Received: by mail-wr1-x42c.google.com with SMTP id bk15so16655711wrb.13
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 07:16:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Q908VuZ5cJytv2/gI78/GYL+1PN9gGzcS5yUknzV+T0=;
+        b=Wpu9rKvfoUbVgTy0zuO9ScrrxoN6dp/6O05Txoc99yp3KdpHUu2iomCgFM3yq0gdme
+         19bjClFCaEYbac4o4yNLc3bzOgwXmmYtwyHSpnSKqgce7WGpliizIQLzwuOtJZwr10/B
+         MW9WFpAASjpSop6DF7zi7txivZ06BFKg1HqPjp8E5bK1IS/ppA043ESQIxyh1nZZuPD+
+         Fd4S9i9T3foDUZIenDxkW+DgMdNATDKJXEsrhyObQk5bAy0+ZcpicmGNsDL1IdVK+ejN
+         vPI3O0eEhMAydvRV0rVheFxvUcuXfFYXN5jQ1yG8qd41LTdGZbovaGl9XfS5qnhblMui
+         bUXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Q908VuZ5cJytv2/gI78/GYL+1PN9gGzcS5yUknzV+T0=;
+        b=lny8P/sL/Aax/8wCJUDYEYqT9dtnKKN2zKJ7h8Pte/wTEdATvlGYOYH/T5QgKN6hzy
+         Jo/Poxf/RY9N9PSxP9opzN5lB7jE5RU2lzleHUc01NuliiDkziGjYJWJjeyP8tfIuzO1
+         xlv8BvcFSYZAFhUnIi6Y0T+sPUBgux+P9p87vgBuSDFhu7hG72e/oUTqAjsmwJGHVoUj
+         DR4d3k9BZ9iYcIj3BbQ3IA0eQvXr8EWNxGgUHT19oCVbvJnLNtvBrPDLAlH1FPt0evhH
+         3QkzzDWmn6v+cIDkBcDbOjb8fuv7uUOs9+uN3abIy8/Iv+90YajgXkje7eS2OCAKPlMH
+         zwBA==
+X-Gm-Message-State: ACrzQf2993vhcAXmGZlbtD+lMe/pbQCN8tLR6nM/vgCgeh8cMGPqprpk
+        1h6p8TxpnbDhxkpCFvygTHw=
+X-Google-Smtp-Source: AMsMyM6cPcZM0jL6k4OqPbT+5EwFiAHx1Ei9YgybnmxozUr4ENJVn0werjS597XLtu9Tw0++xRinBA==
+X-Received: by 2002:a5d:5292:0:b0:236:ccb9:673b with SMTP id c18-20020a5d5292000000b00236ccb9673bmr27567091wrv.317.1667834194880;
+        Mon, 07 Nov 2022 07:16:34 -0800 (PST)
+Received: from [192.168.2.181] (84-238-195-21.ip.btc-net.bg. [84.238.195.21])
+        by smtp.gmail.com with ESMTPSA id n37-20020a05600c3ba500b003cfa3a12660sm13232566wms.1.2022.11.07.07.16.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 07 Nov 2022 07:16:34 -0800 (PST)
+Message-ID: <a722801b-e8b1-ccce-41e3-5951958baa9f@gmail.com>
+Date:   Mon, 7 Nov 2022 17:16:33 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v2] drm/vmwgfx: Protect pin_user_pages with mmap_lock
+To:     Dawei Li <set_pte_at@outlook.com>, zackr@vmware.com,
+        airlied@gmail.com, daniel@ffwll.ch
+Cc:     krastevm@vmware.com, linux-graphics-maintainer@vmware.com,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
+References: <TYCP286MB23235B138D18ECA0797A6D0FCA3D9@TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM>
+Content-Language: en-US
+From:   "Martin Krastev (VMware)" <martinkrastev768@gmail.com>
+In-Reply-To: <TYCP286MB23235B138D18ECA0797A6D0FCA3D9@TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, RISC-V sets up reserved memory using the "early" copy of the
-device tree. As a result, when trying to get a reserved memory region
-using of_reserved_mem_lookup(), the pointer to reserved memory regions
-is using the early, pre-virtual-memory address which causes a kernel
-panic when trying to use the buffer's name:
+From: Martin Krastev <krastevm@vmware.com>
 
- Unable to handle kernel paging request at virtual address 00000000401c31ac
- Oops [#1]
- Modules linked in:
- CPU: 0 PID: 0 Comm: swapper Not tainted 6.0.0-rc1-00001-g0d9d6953d834 #1
- Hardware name: Microchip PolarFire-SoC Icicle Kit (DT)
- epc : string+0x4a/0xea
-  ra : vsnprintf+0x1e4/0x336
- epc : ffffffff80335ea0 ra : ffffffff80338936 sp : ffffffff81203be0
-  gp : ffffffff812e0a98 tp : ffffffff8120de40 t0 : 0000000000000000
-  t1 : ffffffff81203e28 t2 : 7265736572203a46 s0 : ffffffff81203c20
-  s1 : ffffffff81203e28 a0 : ffffffff81203d22 a1 : 0000000000000000
-  a2 : ffffffff81203d08 a3 : 0000000081203d21 a4 : ffffffffffffffff
-  a5 : 00000000401c31ac a6 : ffff0a00ffffff04 a7 : ffffffffffffffff
-  s2 : ffffffff81203d08 s3 : ffffffff81203d00 s4 : 0000000000000008
-  s5 : ffffffff000000ff s6 : 0000000000ffffff s7 : 00000000ffffff00
-  s8 : ffffffff80d9821a s9 : ffffffff81203d22 s10: 0000000000000002
-  s11: ffffffff80d9821c t3 : ffffffff812f3617 t4 : ffffffff812f3617
-  t5 : ffffffff812f3618 t6 : ffffffff81203d08
- status: 0000000200000100 badaddr: 00000000401c31ac cause: 000000000000000d
- [<ffffffff80338936>] vsnprintf+0x1e4/0x336
- [<ffffffff80055ae2>] vprintk_store+0xf6/0x344
- [<ffffffff80055d86>] vprintk_emit+0x56/0x192
- [<ffffffff80055ed8>] vprintk_default+0x16/0x1e
- [<ffffffff800563d2>] vprintk+0x72/0x80
- [<ffffffff806813b2>] _printk+0x36/0x50
- [<ffffffff8068af48>] print_reserved_mem+0x1c/0x24
- [<ffffffff808057ec>] paging_init+0x528/0x5bc
- [<ffffffff808031ae>] setup_arch+0xd0/0x592
- [<ffffffff8080070e>] start_kernel+0x82/0x73c
 
-early_init_fdt_scan_reserved_mem() takes no arguments as it operates on
-initial_boot_params, which is populated by early_init_dt_verify(). On
-RISC-V, early_init_dt_verify() is called twice. Once, directly, in
-setup_arch() if CONFIG_BUILTIN_DTB is not enabled and once indirectly,
-very early in the boot process, by parse_dtb() when it calls
-early_init_dt_scan_nodes().
 
-This first call uses dtb_early_va to set initial_boot_params, which is
-not usable later in the boot process when
-early_init_fdt_scan_reserved_mem() is called. On arm64 for example, the
-corresponding call to early_init_dt_scan_nodes() uses fixmap addresses
-and doesn't suffer the same fate.
+Thanks for the catch. LGTM, with the following remarks:
 
-Move early_init_fdt_scan_reserved_mem() further along the boot sequence,
-after the direct call to early_init_dt_verify() in setup_arch() so that
-the names use the correct virtual memory addresses. The above supposed
-that CONFIG_BUILTIN_DTB was not set, but should work equally in the case
-where it is - unflatted_and_copy_device_tree() also updates
-initial_boot_params.
 
-Reported-by: Valentina Fernandez <valentina.fernandezalanis@microchip.com>
-Reported-by: Evgenii Shatokhin <e.shatokhin@yadro.com>
-Link: https://lore.kernel.org/linux-riscv/f8e67f82-103d-156c-deb0-d6d6e2756f5e@microchip.com/
-Fixes: 922b0375fc93 ("riscv: Fix memblock reservation for device tree blob")
-Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
----
- arch/riscv/kernel/setup.c | 1 +
- arch/riscv/mm/init.c      | 1 -
- 2 files changed, 1 insertion(+), 1 deletion(-)
+1) Original design used erroneously pin_user_pages() in place of 
+pin_user_pages_fast(); you could just substitute pin_user_pages for 
+pin_user_pages_fast and call it a day, Please, consider that option 
+after reading (2) below.
 
-diff --git a/arch/riscv/kernel/setup.c b/arch/riscv/kernel/setup.c
-index ad76bb59b059..67ec1fadcfe2 100644
---- a/arch/riscv/kernel/setup.c
-+++ b/arch/riscv/kernel/setup.c
-@@ -283,6 +283,7 @@ void __init setup_arch(char **cmdline_p)
- 	else
- 		pr_err("No DTB found in kernel mappings\n");
- #endif
-+	early_init_fdt_scan_reserved_mem();
- 	misc_mem_init();
- 
- 	init_resources();
-diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
-index b56a0a75533f..50a1b6edd491 100644
---- a/arch/riscv/mm/init.c
-+++ b/arch/riscv/mm/init.c
-@@ -262,7 +262,6 @@ static void __init setup_bootmem(void)
- 			memblock_reserve(dtb_early_pa, fdt_totalsize(dtb_early_va));
- 	}
- 
--	early_init_fdt_scan_reserved_mem();
- 	dma_contiguous_reserve(dma32_phys_limit);
- 	if (IS_ENABLED(CONFIG_64BIT))
- 		hugetlb_cma_reserve(PUD_SHIFT - PAGE_SHIFT);
--- 
-2.38.0
+2) Re exception handling in vmw_mksstat_add_ioctl(), the 'incorrect 
+exception handling' would be incorrect in the context of the new 
+refactor, i.e. with a common entry point to all pin_user_pages() 
+exceptions; it was correct originally, with dedicated entry points, as 
+all nr_pinned_* were used only after being assigned.
 
+
+Basically, you could keep everything as it was and just do the 
+substitution suggested in (1) and the patch would be as good.
+
+
+Regards,
+
+Martin
+
+
+On 6.11.22 г. 17:47 ч., Dawei Li wrote:
+> This patch includes changes below:
+> 1) pin_user_pages() is unsafe without protection of mmap_lock,
+>     fix it by calling mmap_read_lock() & mmap_read_unlock().
+> 2) fix & refactor the incorrect exception handling procedure in
+>     vmw_mksstat_add_ioctl().
+>
+> Fixes: 7a7a933edd6c ("drm/vmwgfx: Introduce VMware mks-guest-stats")
+> Signed-off-by: Dawei Li <set_pte_at@outlook.com>
+> ---
+> v1:
+> https://lore.kernel.org/all/TYCP286MB23235C9A9FCF85C045F95EA7CA4F9@TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM/
+>
+> v1->v2:
+> Rebased to latest vmwgfx/drm-misc-fixes
+> ---
+>   drivers/gpu/drm/vmwgfx/vmwgfx_msg.c | 23 ++++++++++++++---------
+>   1 file changed, 14 insertions(+), 9 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/vmwgfx/vmwgfx_msg.c b/drivers/gpu/drm/vmwgfx/vmwgfx_msg.c
+> index 089046fa21be..ec40a3364e0a 100644
+> --- a/drivers/gpu/drm/vmwgfx/vmwgfx_msg.c
+> +++ b/drivers/gpu/drm/vmwgfx/vmwgfx_msg.c
+> @@ -1020,9 +1020,9 @@ int vmw_mksstat_add_ioctl(struct drm_device *dev, void *data,
+>   	const size_t num_pages_info = PFN_UP(arg->info_len);
+>   	const size_t num_pages_strs = PFN_UP(arg->strs_len);
+>   	long desc_len;
+> -	long nr_pinned_stat;
+> -	long nr_pinned_info;
+> -	long nr_pinned_strs;
+> +	long nr_pinned_stat = 0;
+> +	long nr_pinned_info = 0;
+> +	long nr_pinned_strs = 0;
+>   	struct page *pages_stat[ARRAY_SIZE(pdesc->statPPNs)];
+>   	struct page *pages_info[ARRAY_SIZE(pdesc->infoPPNs)];
+>   	struct page *pages_strs[ARRAY_SIZE(pdesc->strsPPNs)];
+> @@ -1084,28 +1084,33 @@ int vmw_mksstat_add_ioctl(struct drm_device *dev, void *data,
+>   	reset_ppn_array(pdesc->infoPPNs, ARRAY_SIZE(pdesc->infoPPNs));
+>   	reset_ppn_array(pdesc->strsPPNs, ARRAY_SIZE(pdesc->strsPPNs));
+>   
+> +	/* pin_user_pages() needs protection of mmap_lock */
+> +	mmap_read_lock(current->mm);
+> +
+>   	/* Pin mksGuestStat user pages and store those in the instance descriptor */
+>   	nr_pinned_stat = pin_user_pages(arg->stat, num_pages_stat, FOLL_LONGTERM, pages_stat, NULL);
+>   	if (num_pages_stat != nr_pinned_stat)
+> -		goto err_pin_stat;
+> +		goto __err_pin_pages;
+>   
+>   	for (i = 0; i < num_pages_stat; ++i)
+>   		pdesc->statPPNs[i] = page_to_pfn(pages_stat[i]);
+>   
+>   	nr_pinned_info = pin_user_pages(arg->info, num_pages_info, FOLL_LONGTERM, pages_info, NULL);
+>   	if (num_pages_info != nr_pinned_info)
+> -		goto err_pin_info;
+> +		goto __err_pin_pages;
+>   
+>   	for (i = 0; i < num_pages_info; ++i)
+>   		pdesc->infoPPNs[i] = page_to_pfn(pages_info[i]);
+>   
+>   	nr_pinned_strs = pin_user_pages(arg->strs, num_pages_strs, FOLL_LONGTERM, pages_strs, NULL);
+>   	if (num_pages_strs != nr_pinned_strs)
+> -		goto err_pin_strs;
+> +		goto __err_pin_pages;
+>   
+>   	for (i = 0; i < num_pages_strs; ++i)
+>   		pdesc->strsPPNs[i] = page_to_pfn(pages_strs[i]);
+>   
+> +	mmap_read_unlock(current->mm);
+> +
+>   	/* Send the descriptor to the host via a hypervisor call. The mksGuestStat
+>   	   pages will remain in use until the user requests a matching remove stats
+>   	   or a stats reset occurs. */
+> @@ -1120,15 +1125,15 @@ int vmw_mksstat_add_ioctl(struct drm_device *dev, void *data,
+>   
+>   	return 0;
+>   
+> -err_pin_strs:
+> +__err_pin_pages:
+> +	mmap_read_unlock(current->mm);
+> +
+>   	if (nr_pinned_strs > 0)
+>   		unpin_user_pages(pages_strs, nr_pinned_strs);
+>   
+> -err_pin_info:
+>   	if (nr_pinned_info > 0)
+>   		unpin_user_pages(pages_info, nr_pinned_info);
+>   
+> -err_pin_stat:
+>   	if (nr_pinned_stat > 0)
+>   		unpin_user_pages(pages_stat, nr_pinned_stat);
+>   
