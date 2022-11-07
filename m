@@ -2,170 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2898F61FEA1
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 20:28:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C35FD61FEA2
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 20:28:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232132AbiKGT2S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 14:28:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57290 "EHLO
+        id S231887AbiKGT2V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 14:28:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231636AbiKGT2N (ORCPT
+        with ESMTP id S231995AbiKGT2O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 14:28:13 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6184286E3
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 11:27:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667849235;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=patZqZFG+VP3DSfi5ljEiY21OGL00v17le5HXIzu3EI=;
-        b=MjpZ0iLWffF3KHMejyx3ycZLjlR7Fe0Sjig2BoNU4yjhZzR+P9EF3rVDcsRPNEysnfW9JI
-        inv2HWCpsvDkjZt3SwHULlS7xK7aMzaXNlf9KPXJJaSa4lSWT+q9AtZeS455461/QO3+tu
-        O1awj4I3pnwu6ejFWoNUyiYSUgeuNr4=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-237-3o3TbWKVOvmLBtDFhx5uQg-1; Mon, 07 Nov 2022 14:27:13 -0500
-X-MC-Unique: 3o3TbWKVOvmLBtDFhx5uQg-1
-Received: by mail-wr1-f69.google.com with SMTP id u13-20020adfa18d000000b00236566b5b40so3148697wru.9
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 11:27:13 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=patZqZFG+VP3DSfi5ljEiY21OGL00v17le5HXIzu3EI=;
-        b=oA/M3WdbCXqcXJEcebt2w1PTE/FsoZRSASPmoCK9Yha7uDDAb5GDq8zNDI1ekdicCn
-         U3SpPRSUQPqagji/FuTyOfjbAvEixe4sQn965OD7gnefMzMcGA9TjtkL6QTc0WqW+69f
-         gfmyrUDxXYUCHRg7l8OuTN/+XGUHncnqdTeMAJB2Zr7XJ55NuP4RNd+talZ3YcqdK3UK
-         +qZxUgXF5kRaY/v0GtvXJ6ZOt2Jz77ErZK9u63i1u6pzmWlIbpEeJd3kO57xXMVI3T2V
-         HTbTWkmuVzNRH3VGp6LhKSXnU8l3aXuOC6/UoIz5YrH4BadCDxR8Jpapv4rJv5XpSm9V
-         QNqw==
-X-Gm-Message-State: ACrzQf11RNSjzN8NfdjSrXNwy6krLSWwrzIrvq5gNddpdfPCjLK55vVe
-        OiliG1iHjbPx+X9sxzazvQ5SMuo2tHvzSEdby2fQG0dJiBTUAhmR5o2sfzWPyxzfb7O7KKYZXk9
-        jObVa7GYv0ca6NpMZM5t5Z/j+
-X-Received: by 2002:a5d:4487:0:b0:22e:3292:75ab with SMTP id j7-20020a5d4487000000b0022e329275abmr614276wrq.166.1667849232531;
-        Mon, 07 Nov 2022 11:27:12 -0800 (PST)
-X-Google-Smtp-Source: AMsMyM7WA0QO9a9aE/aCsv95kc1/GI2mA1rxsv3w8NpMMhNZXKsgaEBfixEFS4BMiXoamohO6ncLKQ==
-X-Received: by 2002:a5d:4487:0:b0:22e:3292:75ab with SMTP id j7-20020a5d4487000000b0022e329275abmr614274wrq.166.1667849232188;
-        Mon, 07 Nov 2022 11:27:12 -0800 (PST)
-Received: from ?IPV6:2003:cb:c704:7800:3f13:77ac:9360:5e22? (p200300cbc70478003f1377ac93605e22.dip0.t-ipconnect.de. [2003:cb:c704:7800:3f13:77ac:9360:5e22])
-        by smtp.gmail.com with ESMTPSA id t20-20020a05600c199400b003cf9bf5208esm10877851wmq.19.2022.11.07.11.27.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Nov 2022 11:27:11 -0800 (PST)
-Message-ID: <c58fe356-62b5-bdec-92a7-6153a27e19b7@redhat.com>
-Date:   Mon, 7 Nov 2022 20:27:08 +0100
+        Mon, 7 Nov 2022 14:28:14 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A65D02AC7C
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 11:28:13 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 45FB561299
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 19:28:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE368C43149
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 19:28:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667849292;
+        bh=TZKyIaX0u5nJ3UCma7bzPt1mKZ6/XSl9drIlz/9920I=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=sXWkVldcgB3q6cs/Wz7FXe2KoWwpioNLFzaTOmsrZerJ8v3hxPfwk21YXuqprbS6R
+         mTpkEok0mR2rU+E52CySxPevkNICPzrenDdbDEslasbEJKFROGLzKSwWrpDk6jsZRd
+         ftPmiARRNape3VGPO/niNQo9CFG0dZfuMKKEIDquAuLeoLCVrCObNikUmUH1rk99Mn
+         4S9JV84eYtgOzCn6CzGLAXIXhO89T+HoI2jkBFn+z72pKQnbL/F7czyOTb4sxAJxhU
+         T8Yz3HRG8SbJmjVyHj+3Jf4GaWbDCsw8kW+BOPVjU+doCLHJP+xx+0e6TC/a3vQvCI
+         GW/rpNOAOLhnQ==
+Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-370547b8ca0so114524977b3.0
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 11:28:12 -0800 (PST)
+X-Gm-Message-State: ACrzQf132M0hgFsxVH8FjaGNiUUEMoXW9eAutxf44AohCFQsuGv5kmSu
+        gPiwmk35q1goag3Yk1OdFhfkTfq+lSp8ppehXt4=
+X-Google-Smtp-Source: AMsMyM5sSsqkCEAZ6ZNJYdROpT7FWWWPULEgBRn6snyuHnepkxvU3yGCTRWry1wc7DqPA+3ZyNclkz3eUjO5EJdtpkg=
+X-Received: by 2002:a81:5f46:0:b0:370:2d8c:8193 with SMTP id
+ t67-20020a815f46000000b003702d8c8193mr777050ywb.221.1667849291594; Mon, 07
+ Nov 2022 11:28:11 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH RFC 05/19] mm: add early FAULT_FLAG_WRITE consistency
- checks
-To:     Nadav Amit <namit@vmware.com>
-Cc:     kernel list <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        "etnaviv@lists.freedesktop.org" <etnaviv@lists.freedesktop.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-samsung-soc@vger.kernel.org" 
-        <linux-samsung-soc@vger.kernel.org>,
-        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Peter Xu <peterx@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Hugh Dickins <hughd@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
+References: <20221102203405.1797491-2-ogabbay@kernel.org> <Y2MMCIe5wND2XPqE@kroah.com>
+ <CAFCwf13uLj=P6u6FAcY8M5qAXoaBdb+Ha-TYj0j2FAZnFAPFYg@mail.gmail.com>
+ <CAFCwf12yRUG4593ozJMEwaaJBKyWqXTTCjef9O_fzWdQBxVrtw@mail.gmail.com>
+ <Y2kAcCu4z2LUMN7u@nvidia.com> <CAFCwf10K-dTu455QfOK8i6thismY-FUN2Rws830EGiqOcGWFgA@mail.gmail.com>
+ <Y2kDzPswkKyZyRpS@nvidia.com> <CAFCwf10A=-bj2nR8WasNxyQQ07D24Je04tzKxqv2X_XnA0BUSQ@mail.gmail.com>
+ <Y2kRvyR8VrZrO/1H@nvidia.com> <CAFCwf12E4K7bpLcDvTtG1mKxoy1JnchXGCKDvcKAayCFvGWXXQ@mail.gmail.com>
+ <Y2kyvswuCsO0x1/2@nvidia.com>
+In-Reply-To: <Y2kyvswuCsO0x1/2@nvidia.com>
+From:   Oded Gabbay <ogabbay@kernel.org>
+Date:   Mon, 7 Nov 2022 21:27:45 +0200
+X-Gmail-Original-Message-ID: <CAFCwf11x1pwsgu=UWGOhjCYcLzRWOiAaiPonRB9Nh3TCo4KiUw@mail.gmail.com>
+Message-ID: <CAFCwf11x1pwsgu=UWGOhjCYcLzRWOiAaiPonRB9Nh3TCo4KiUw@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 1/3] drivers/accel: define kconfig and register a
+ new major
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         David Airlie <airlied@gmail.com>,
-        Oded Gabbay <ogabbay@kernel.org>, Arnd Bergmann <arnd@arndb.de>
-References: <20221107161740.144456-1-david@redhat.com>
- <20221107161740.144456-6-david@redhat.com>
- <E1E8C21A-EAEB-4FA3-A9B9-1DFF81FCDA70@vmware.com>
-Content-Language: en-US
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <E1E8C21A-EAEB-4FA3-A9B9-1DFF81FCDA70@vmware.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Daniel Vetter <daniel@ffwll.ch>, Arnd Bergmann <arnd@arndb.de>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        John Hubbard <jhubbard@nvidia.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>,
+        Jiho Chu <jiho.chu@samsung.com>,
+        Daniel Stone <daniel@fooishbar.org>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Jeffrey Hugo <quic_jhugo@quicinc.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>,
+        Maciej Kwapulinski <maciej.kwapulinski@linux.intel.com>,
+        stanislaw.gruszka@intel.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07.11.22 20:03, Nadav Amit wrote:
-> On Nov 7, 2022, at 8:17 AM, David Hildenbrand <david@redhat.com> wrote:
-> 
->> !! External Email
->>
->> Let's catch abuse of FAULT_FLAG_WRITE early, such that we don't have to
->> care in all other handlers and might get "surprises" if we forget to do
->> so.
->>
->> Write faults without VM_MAYWRITE don't make any sense, and our
->> maybe_mkwrite() logic could have hidden such abuse for now.
->>
->> Write faults without VM_WRITE on something that is not a COW mapping is
->> similarly broken, and e.g., do_wp_page() could end up placing an
->> anonymous page into a shared mapping, which would be bad.
->>
->> This is a preparation for reliable R/O long-term pinning of pages in
->> private mappings, whereby we want to make sure that we will never break
->> COW in a read-only private mapping.
->>
->> Signed-off-by: David Hildenbrand <david@redhat.com>
->> ---
->> mm/memory.c | 8 ++++++++
->> 1 file changed, 8 insertions(+)
->>
->> diff --git a/mm/memory.c b/mm/memory.c
->> index fe131273217a..826353da7b23 100644
->> --- a/mm/memory.c
->> +++ b/mm/memory.c
->> @@ -5159,6 +5159,14 @@ static vm_fault_t sanitize_fault_flags(struct vm_area_struct *vma,
->>                  */
->>                 if (!is_cow_mapping(vma->vm_flags))
->>                         *flags &= ~FAULT_FLAG_UNSHARE;
->> +       } else if (*flags & FAULT_FLAG_WRITE) {
->> +               /* Write faults on read-only mappings are impossible ... */
->> +               if (WARN_ON_ONCE(!(vma->vm_flags & VM_MAYWRITE)))
->> +                       return VM_FAULT_SIGSEGV;
->> +               /* ... and FOLL_FORCE only applies to COW mappings. */
->> +               if (WARN_ON_ONCE(!(vma->vm_flags & VM_WRITE) &&
->> +                                !is_cow_mapping(vma->vm_flags)))
->> +                       return VM_FAULT_SIGSEGV;
-> 
-> Not sure about the WARN_*(). Seems as if it might trigger in benign even if
-> rare scenarios, e.g., mprotect() racing with page-fault.
-> 
+On Mon, Nov 7, 2022 at 6:31 PM Jason Gunthorpe <jgg@nvidia.com> wrote:
+>
+> On Mon, Nov 07, 2022 at 05:53:55PM +0200, Oded Gabbay wrote:
+> > On Mon, Nov 7, 2022 at 4:10 PM Jason Gunthorpe <jgg@nvidia.com> wrote:
+> > >
+> > > On Mon, Nov 07, 2022 at 04:02:01PM +0200, Oded Gabbay wrote:
+> > > > On Mon, Nov 7, 2022 at 3:10 PM Jason Gunthorpe <jgg@nvidia.com> wrote:
+> > > > >
+> > > > > On Mon, Nov 07, 2022 at 03:01:08PM +0200, Oded Gabbay wrote:
+> > > > > > I don't agree with your statement that it should be "a layer over top of DRM".
+> > > > > > Anything on top of DRM is a device driver.
+> > > > > > Accel is not a device driver, it is a new type of drm minor / drm driver.
+> > > > >
+> > > > > Yeah, I still think this is not the right way, you are getting almost
+> > > > > nothing from DRM and making everything more complicated in the
+> > > > > process.
+> > > > >
+> > > > > > The only alternative imo to that is to abandon the idea of reusing
+> > > > > > drm, and just make an independant accel core code.
+> > > > >
+> > > > > Not quite really, layer it properly and librarize parts of DRM into
+> > > > > things accel can re-use so they are not intimately tied to the DRM
+> > > > > struct device notion.
+> > > > >
+> > > > > IMHO this is much better, because accel has very little need of DRM to
+> > > > > manage a struct device/cdev in the first place.
+> > > > >
+> > > > > Jason
+> > > > I'm not following. How can an accel device be a new type of drm_minor,
+> > > > if it doesn't have access to all its functions and members ?
+> > >
+> > > "drm_minor" is not necessary anymore. Strictly managing minor numbers
+> > > lost its value years ago when /dev/ was reorganized. Just use
+> > > dynamic minors fully.
+> > drm minor is not just about handling minor numbers. It contains the
+> > entire code to manage devices that register with drm framework (e.g.
+> > supply callbacks to file operations), manage their lifecycle,
+> > resources (e.g. automatic free of resources on release), sysfs,
+> > debugfs, etc.
+>
+> This is why you are having such troubles, this is already good library
+> code. You don't need DRM to wrapper debugfs APIs, for instance. We
+> have devm, though maybe it is not a good idea, etc
+>
+> Greg already pointed out the sysfs was not being done correctly
+> anyhow.
+>
+> I don't think DRM is improving on these core kernel services. Just use
+> the normal stuff directly.
+I get what you are saying but if I do all that, then how is this
+subsystem related to DRM and re-using its code ? (at least at this
+stage)
+btw, using the basic stuff directly was my original intention, if you
+remember the original accel mail thread from July/August.
+And then we all decided in LPC that we shouldn't do that and instead
+accel should use the DRM code and just expose a new major+minor for
+the new drivers.
 
-We most certainly would want to catch any such broken/racy cases. There 
-are no benign cases I could possibly think of.
+So, something doesn't add up...
+imo, we need to choose between doing accel either as a small new
+feature in drm, or as an independent subsystem.
+I just don't see how I do the former without calling drm code directly
+and using all its wrappers.
 
-Page faults need the mmap lock in read. mprotect() / VMA changes need 
-the mmap lock in write. Whoever calls handle_mm_fault() is supposed to 
-properly check VMA permissions.
+>
+> > > > How will accel device leverage, for example, the GEM code without
+> > > > being a drm_minor ?
+> > >
+> > > Split GEM into a library so it doesn't require that.
+> > I don't see the advantage of doing that over defining accel as a new
+> > type of drm minor.
+>
+> Making things into smaller libraries is recognized as a far better
+> kernel approach than trying to make a gigantic wide midlayer that stuffs
+> itself into everything. LWN called this the "midlayer mistake" and
+> wrote about the pitfalls a long time ago:
+>
+> https://lwn.net/Articles/336262/
+>
+> It is exactly what you are experiencing trying to stretch a
+> midlayer even further out.
+>
+> Jason
+I'm all for breaking it down to smaller libraries, I completely agree with you.
+But as you wrote above, why do I even need to use the drm wrappers for
+the basic stuff ? I'll just call the kernel api directly.
+And if that's the case then I don't need to rip that code out of the
+heart of drm and make it a separate module.
 
+For GEM (as an example of something less basic) it might be a
+different story, but we are not there yet.
 
--- 
-Thanks,
-
-David / dhildenb
-
+Oded
