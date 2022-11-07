@@ -2,125 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D32361F3CD
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 13:57:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ABF4261F3CA
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 13:56:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231976AbiKGM5I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 07:57:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42214 "EHLO
+        id S231903AbiKGM4W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 07:56:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231911AbiKGM5G (ORCPT
+        with ESMTP id S231186AbiKGM4U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 07:57:06 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D36D1BEAB
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 04:56:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667825771;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=rHtgFX/B8XH3LTgcp/LhB7WPFD9d+PyceMtR9H35JPs=;
-        b=F3hSRk58B2vQzEJvkpd1hh+q/GeXIU/PxCZwqMTS852c/TjCP/29uRoSg0Ba0aF0XJvwv1
-        vmf34YZSDrs3FJMa5YXXsgaqOFmdDzrxlqd/mGF+0vpjEh1e8w6exqWQId19bVS1MvH5F5
-        Mx78uHYWJhCsRw8v0deTgcS0GMyLYlg=
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
- [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-120-YOoWuqdDNJe7ufNS113TgQ-1; Mon, 07 Nov 2022 07:56:10 -0500
-X-MC-Unique: YOoWuqdDNJe7ufNS113TgQ-1
-Received: by mail-ej1-f70.google.com with SMTP id hq18-20020a1709073f1200b007ade8dd3494so6276337ejc.2
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 04:56:10 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rHtgFX/B8XH3LTgcp/LhB7WPFD9d+PyceMtR9H35JPs=;
-        b=yytuQPmu2N8O5UEss0TsC1pxBb5eNWTZgZu+cxA5v9qoz2Fc3AbrnOA7TG0Tj91sPK
-         n3a40Tgn14L/uR88Ig21z0w+8i0dF5MwJ6+FJtzCnJO8OWzhYx+XA8M49xyCjeepSIaM
-         eDE8XVrasuwDVW9wi8LZwo/08erlBGe2zJN0zWdgsevFeHvMMm31BLlXBOYBkHe2SmCV
-         nEvMHfqgXKKthhneOjptG0wI8A5NFX4AJn5VUF/u+Gfg0ow4EG1mDx7sRbknrHqKsC5S
-         niAGD81gKqjEJW8zn7jObWJAAP9u643L6Ck5qs2gWtFJkVsz9A5U7cz87VWXAbYlVREi
-         in6g==
-X-Gm-Message-State: ACrzQf3l7SWN4bQcYHduLvixJ7vMkbM8aaPy38wn7RPG9L7ku+Y1CLqJ
-        pSWUkT3l1OGg5z1rekX1oY6MrW/l+943iSubhn78i1bEVYh9q3a6sAHgvSRNEdOe5Cgw3bBcd2d
-        iQikIYX4x5cfK9A5nCQtxiVKu
-X-Received: by 2002:a17:907:d10:b0:79a:a1fe:8be5 with SMTP id gn16-20020a1709070d1000b0079aa1fe8be5mr48171234ejc.125.1667825769204;
-        Mon, 07 Nov 2022 04:56:09 -0800 (PST)
-X-Google-Smtp-Source: AMsMyM7wtrW2YeWpnGVAVLtlufEtogz3R4cc9ySPpXR06CSqITL7+vZA00ORTLFGUt23KAW9Mhz8rg==
-X-Received: by 2002:a17:907:d10:b0:79a:a1fe:8be5 with SMTP id gn16-20020a1709070d1000b0079aa1fe8be5mr48171189ejc.125.1667825768586;
-        Mon, 07 Nov 2022 04:56:08 -0800 (PST)
-Received: from [10.40.98.142] ([78.108.130.194])
-        by smtp.gmail.com with ESMTPSA id fd25-20020a056402389900b0045b910b0542sm4172540edb.15.2022.11.07.04.56.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Nov 2022 04:56:07 -0800 (PST)
-Message-ID: <c83ba53b-30ea-caef-1419-4a3edc623bc3@redhat.com>
-Date:   Mon, 7 Nov 2022 13:56:07 +0100
+        Mon, 7 Nov 2022 07:56:20 -0500
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam07on2041.outbound.protection.outlook.com [40.107.212.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 521DC1C112
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 04:56:19 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=AKn4Ek8bTuEeoq5GH/75I+CILCp1mVJPDIxnD0tSNt1MDlCbWDKJzJzTafje0KjKz3F9kRCqTFHMfBnKYrVmqgT3g50njpvt9wJWu7lSa3vSPeT6eDH9vjGrBB0gulC5k6uuGEK/gBUYzo25ixaVY/Rp8n/gRzfc3UBcxukbnR1v4CXcuWpcD0QaQOGXjTMH/oDImY2psNwtQ5VJeZbpjpmgb3jhnVLWgPyxW+w2fDa8uIiMaInNkYhX1HCgjlM+gCy8AnzJ0fLlqUWcSNqOcod4HPDvKWg1LRO9UzB4AtMsGCh6oBTVcEKuTR68Z+kHz3bUvcihgCiAocFxf8rUag==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=iAgn3zVWLdlP03Eg/9KFD+rIXZWtNE3QBsDLAWSYeZk=;
+ b=Q/31KqBq1Q939PWKa6EnnwkdjgbXVErQ3u1nAxiWNZkWu/viqk3d8FoVvOGc601UHB62RFCNrMV346Hv5753FVyu6OGIue8it1QmRsP+6qn10iFHLFSJ1vBKq3zSkfUOzyvvd9QtvelOFoWBWmXxBSqoKKbJX9yRnzIvyK0QHldlJhzupCitcJzdJ1WPJqqAZgc8yLUw4b7vwp+J2vZONk/HtllLW7LXcIJVLVglzDs1rXyc4zBzP4LDue3e5Mjjt8bdI1HJFl+Uho3BsNDu8MIWL0Uw4AjfUJ88pYDuUg0ufR2BjchKmzO/xsF0dYbQoSYLMJGk0gVT8w89Jrc75A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=iAgn3zVWLdlP03Eg/9KFD+rIXZWtNE3QBsDLAWSYeZk=;
+ b=YBTkVAphjZh0d3lB7mUkncvOzXt6VdDoreJjIAXWtL50ep60Bh557Zf+fa9O/gvGn97/JB/r9tHIj8mehBpUFEJlFHRiU4FRh6O/3GEo2SYdFV/hAEAuoecadmAq+xANnJPbCoCA1SyaNeQ8OKhgKGXXEGkJJ5ydIPJ4jMOFeCbwelaildTIqXW3OK5xC66lIz9XmMAVPPU0TskWCCJyrRk5O2BCOC7vQy8vnyA/AuJKWhORuiBX9cBC51RsdS7ZuCsbTm0G1NNtsbfPRCJIEt1u80oc1LBC+rrN1/+hgkRmnVr7JbJNNXYYLmVEOQFBWMG+0F4FJPBVs86PsSInhQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by BL1PR12MB5334.namprd12.prod.outlook.com (2603:10b6:208:31d::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.26; Mon, 7 Nov
+ 2022 12:56:17 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::7a81:a4e4:bb9c:d1de]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::7a81:a4e4:bb9c:d1de%6]) with mapi id 15.20.5791.026; Mon, 7 Nov 2022
+ 12:56:17 +0000
+Date:   Mon, 7 Nov 2022 08:56:16 -0400
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Oded Gabbay <ogabbay@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Arnd Bergmann <arnd@arndb.de>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        John Hubbard <jhubbard@nvidia.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>,
+        Jiho Chu <jiho.chu@samsung.com>,
+        Daniel Stone <daniel@fooishbar.org>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Jeffrey Hugo <quic_jhugo@quicinc.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>,
+        Maciej Kwapulinski <maciej.kwapulinski@linux.intel.com>,
+        stanislaw.gruszka@intel.com
+Subject: Re: [RFC PATCH v2 1/3] drivers/accel: define kconfig and register a
+ new major
+Message-ID: <Y2kAcCu4z2LUMN7u@nvidia.com>
+References: <20221102203405.1797491-1-ogabbay@kernel.org>
+ <20221102203405.1797491-2-ogabbay@kernel.org>
+ <Y2MMCIe5wND2XPqE@kroah.com>
+ <CAFCwf13uLj=P6u6FAcY8M5qAXoaBdb+Ha-TYj0j2FAZnFAPFYg@mail.gmail.com>
+ <CAFCwf12yRUG4593ozJMEwaaJBKyWqXTTCjef9O_fzWdQBxVrtw@mail.gmail.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAFCwf12yRUG4593ozJMEwaaJBKyWqXTTCjef9O_fzWdQBxVrtw@mail.gmail.com>
+X-ClientProxiedBy: BLAPR05CA0001.namprd05.prod.outlook.com
+ (2603:10b6:208:36e::6) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH] platform/x86/intel: fix repeated words in comments
-Content-Language: en-US
-To:     Jilin Yuan <yuanjilin@cdjrlc.com>, irenic.rajneesh@gmail.com,
-        david.e.box@intel.com, markgross@kernel.org
-Cc:     platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221019125355.50674-1-yuanjilin@cdjrlc.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20221019125355.50674-1-yuanjilin@cdjrlc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|BL1PR12MB5334:EE_
+X-MS-Office365-Filtering-Correlation-Id: aa6e3214-adbf-4ab6-eb68-08dac0bf7593
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 9MXh7VlySWAuRz0qD/b9pM4hhoVBg2jS2rouzP8kNE3Gh/N2v5mRdtyK1lJmsq5hgFZBMpZuKWSVLmpKLIu40EiKmb/hmxc3+CN9VTC5nRQADkw3871Fs3GEao2EnaCVl4Hu07xeRl1tIAHklDNwMrAIjHe4VX1hET/yE36BTGhIEC+xUzssChIg0QrFjbO8oIPOq4FBkBZYFFolc7vf1kqJbt+l32/HY6P4kGCcRbfE2TS2BKsr1n0TPVu52cfMH9LYIrWkSCk1KoCzmuyMTINfI9v91Wuc4jQ4WKKkh5wozK4Jznz2j1cgJZImrBqZi7F6OJdp8YM6N/pr8UUCO0kYVrnKzBVWGG8o7L5pNyhL1rWEuTrHjIFUm14HmONufwTqpTaL6ZTdwgKetr+PqrCYAMyWJ9M0ZjSxoW5Krvy7cqK0lou+IL0PM6/na7yRilcqa1EYMw3GIEVeQ89bSLo96T4FLisLSzRLfnqdKMAZEwGm03KvGNoGOfY3W2gy2rRNWHnXhxuqTtFGzetByUwbZYaBGEOcJ3mO55i6gmlE+3X2hRUx6HuEPwp1sUzqSxt/ZXmFjN/pJYGp/jvnqXTmyaraiGj7Ky7nBXphA+nsNyJSP9g0r7FmHN0imaxZPsb6WNryYj6Rrba1cQkqg1kVfrJ3qonm6U5ZN2zgV8c4XTU0EySldyUBROGRZg8+X40h02E7KdCNoNRUlFjD9Q==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(366004)(396003)(376002)(346002)(136003)(451199015)(5660300002)(8936002)(38100700002)(7416002)(41300700001)(8676002)(4326008)(66946007)(66476007)(66556008)(2906002)(83380400001)(316002)(36756003)(6916009)(86362001)(54906003)(478600001)(53546011)(26005)(6512007)(6506007)(6486002)(2616005)(186003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?sVgXKt+CrtvbWqrgNUaUYQFN1pN88g5czUrmppHIDMOB5tzIC9wGa1pCrnta?=
+ =?us-ascii?Q?sOsq5avPN33SeT6PlopFqjpt0wCLErYlVD1FAPur4SlsDmjHdVdDa57cilaV?=
+ =?us-ascii?Q?omkNzior6G+aj0pgpkyqWIBzs2EowmGsRj0Q8jruVK5D/E0Xd6YpEozIkIfU?=
+ =?us-ascii?Q?X8VczBLWoaDOn0Qz9SmzJcj9fhbZeOLJ8uF4ncPlez2JIcNeUgStDNiBLojR?=
+ =?us-ascii?Q?Tn7sO16JbNyRlZojSkTYtkr+dByU0HIsaHHVIkwqL/5vRUx+BFSZ8rH9ZyNM?=
+ =?us-ascii?Q?fLCRahARmoxXhx2HPegipDtU2HNYwvO7gEtVByYhxpXIYWYM6HRUiBejYlXF?=
+ =?us-ascii?Q?l1YO8RiRadHhsmooyNocx7STcyaah2sCViQMdD0FkBaIxPC/bnNqnQwJFOGe?=
+ =?us-ascii?Q?/+IIlGOkTkpebyLrQobGcyJKz6INeCyf2ac8CjAfoPmfrAk1uzHoPDtxeAmI?=
+ =?us-ascii?Q?HYaJetZTdpnO7J6nMtRkXmD+i9pALmB3AoGR1xqtfZw9AlqdOJz+w2EX6eiq?=
+ =?us-ascii?Q?sxLixqJUjCEDFsEUk2t7GGRYiHJE8omluA4q8tru5vrM4VQSJLDei+iIZA84?=
+ =?us-ascii?Q?DbBMQNoJWXmPaWpgOCD5aRjo/WMYseg9BD3tnXMA9dYgw4rMG+eHwwaIcqKI?=
+ =?us-ascii?Q?Xs4dPGe6HQWjaDYa5ktP5MiCcr+Aganq2jpeJkQC1m9aQoMiwpWsFsWGRjMd?=
+ =?us-ascii?Q?JiKRxMQn0siwV0rWaWa//+10K8BDS4wzqSOismoLi5qVZl+IczXcQyNBxl/n?=
+ =?us-ascii?Q?qMPHMHlQ1aAI23Besudic3I3McutQzhHgypkqSYCCCGbBnrtqthVYGPL6a4H?=
+ =?us-ascii?Q?pB358BKuZ2pBgJKE51ZslQSSHSyKOH817dzPXiwhhwrOepYkw4jJ1iyMUJDG?=
+ =?us-ascii?Q?b4DLIyiL9jxPttoYVRTzWIpzI0YjOg2qtOnU56g5FQR/CvK2WAySP0hR5kt+?=
+ =?us-ascii?Q?vlptGqVUJg+Kq6ZSpOeQNtxMSpCFcX+HtyTy+sYEcdhV38nXvOieuSJsm4JX?=
+ =?us-ascii?Q?uB5D8JQhRcQFRTvlJqVQC/KzdYC4JRW05L525onj+84fGGacLsv+ViUuabgH?=
+ =?us-ascii?Q?gOR2IxntykaYtrd+cBg5Oqha+yl42V8WmlHY73xDEjNJHLShp2yMhZZQKA7F?=
+ =?us-ascii?Q?Pz5zqjEPepLDTaB/gNnsSSyJ4ZAAfsVxqjwaslqyFCWPgADw9hF8KXXsTg/o?=
+ =?us-ascii?Q?Sr4Q32rDFNZZ5SkEhIMc9DdIUEWlUU6+Neb6CEEk3XeG9MgRy1rbX8DCA/4h?=
+ =?us-ascii?Q?43QK1xShsZQJNOAyb1hWNPqXnChXirkjKLMXYGYn9/v7wFYMfyY8tlLP8jIP?=
+ =?us-ascii?Q?0iIwvem1w4QVGP9L0MU9iuFyXal21RJgMwv3zbfETYqxn53Q7pAbYQQjC5if?=
+ =?us-ascii?Q?S8GBxyWDWgp4u9BYTxB1bMnqZZ73qsOq6EX9ETUkRcN/PJCA3rmz8uzJPzow?=
+ =?us-ascii?Q?B0vBc/isY0d6tzncAfCAhEVhVgfqzGSMqrFG9J4vVsvrnQbC2dq/FDEXBbJO?=
+ =?us-ascii?Q?G+sE9SCneVfUCCWbHFWuEIKydClbejiYMSKTLSyNqJBiRpb7qEGKi40g4MVx?=
+ =?us-ascii?Q?xhKzctWlxi6IldUQYMftP9bjkqQjbtQHqptUM2th?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: aa6e3214-adbf-4ab6-eb68-08dac0bf7593
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Nov 2022 12:56:17.3073
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Ef0KuyMsIMxv5MKNgjtYxVnqnwAEKqlYPZibh6qN1zyJquFZ/YTSfMvkP4BzNyHG
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5334
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Thu, Nov 03, 2022 at 10:39:36PM +0200, Oded Gabbay wrote:
+> On Thu, Nov 3, 2022 at 3:31 PM Oded Gabbay <ogabbay@kernel.org> wrote:
+> >
+> > On Thu, Nov 3, 2022 at 2:31 AM Greg Kroah-Hartman
+> > <gregkh@linuxfoundation.org> wrote:
+> > >
+> > > On Wed, Nov 02, 2022 at 10:34:03PM +0200, Oded Gabbay wrote:
+> > > > --- /dev/null
+> > > > +++ b/drivers/accel/Kconfig
+> > > > @@ -0,0 +1,24 @@
+> > > > +# SPDX-License-Identifier: GPL-2.0-only
+> > > > +#
+> > > > +# Compute Acceleration device configuration
+> > > > +#
+> > > > +# This framework provides support for compute acceleration devices, such
+> > > > +# as, but not limited to, Machine-Learning and Deep-Learning acceleration
+> > > > +# devices
+> > > > +#
+> > > > +menuconfig ACCEL
+> > > > +     tristate "Compute Acceleration Framework"
+> > > > +     depends on DRM
+> > > > +     help
+> > > > +       Framework for device drivers of compute acceleration devices, such
+> > > > +       as, but not limited to, Machine-Learning and Deep-Learning
+> > > > +       acceleration devices.
+> > > > +       If you say Y here, you need to select the module that's right for
+> > > > +       your acceleration device from the list below.
+> > > > +       This framework is integrated with the DRM subsystem as compute
+> > > > +       accelerators and GPUs share a lot in common and can use almost the
+> > > > +       same infrastructure code.
+> > > > +       Having said that, acceleration devices will have a different
+> > > > +       major number than GPUs, and will be exposed to user-space using
+> > > > +       different device files, called accel/accel* (in /dev, sysfs
+> > > > +       and debugfs)
+> > >
+> > > Module name if "M" is chosen?
+> > Will add
+> So, unfortunately, the path of doing accel as a kernel module won't
+> work cleanly (Thanks stanislaw for pointing this out to me).
+> The reason is the circular dependency between drm and accel. drm calls
+> accel exported symbols during init and when devices are registering
+> (all the minor handling), and accel calls drm exported symbols because
+> I don't want to duplicate the entire drm core code.
 
-On 10/19/22 14:53, Jilin Yuan wrote:
-> Delete the redundant word 'toZ'.
-> 
-> Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
+I really don't think this is the right way to integrate with
+DRM. Accel should be a layer over top of DRM, not have these wakky
+co-dependencies.
 
-Thank you for your patch, I've applied this patch to my review-hans 
-branch:
-https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
+The fact you are running into stuff like this already smells really
+bad.
 
-Note it will show up in my review-hans branch once I've pushed my
-local branch there, which might take a while.
-
-Once I've run some tests on this branch the patches there will be
-added to the platform-drivers-x86/for-next branch and eventually
-will be included in the pdx86 pull-request to Linus for the next
-merge-window.
-
-Regards,
-
-Hans
-
-
-
-> ---
->  drivers/platform/x86/intel/pmc/core.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/platform/x86/intel/pmc/core.h b/drivers/platform/x86/intel/pmc/core.h
-> index 7a059e02c265..4c7e77f1ccac 100644
-> --- a/drivers/platform/x86/intel/pmc/core.h
-> +++ b/drivers/platform/x86/intel/pmc/core.h
-> @@ -264,7 +264,7 @@ struct pmc_bit_map {
->   * @slp_s0_offset:	PWRMBASE offset to read SLP_S0 residency
->   * @ltr_ignore_offset:	PWRMBASE offset to read/write LTR ignore bit
->   * @regmap_length:	Length of memory to map from PWRMBASE address to access
-> - * @ppfear0_offset:	PWRMBASE offset to to read PPFEAR*
-> + * @ppfear0_offset:	PWRMBASE offset to read PPFEAR*
->   * @ppfear_buckets:	Number of 8 bits blocks to read all IP blocks from
->   *			PPFEAR
->   * @pm_cfg_offset:	PWRMBASE offset to PM_CFG register
-
+Jason
