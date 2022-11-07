@@ -2,102 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23EB161F714
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 16:04:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFA3961F71D
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 16:05:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232475AbiKGPEC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 10:04:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47690 "EHLO
+        id S232686AbiKGPFv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 10:05:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232520AbiKGPD7 (ORCPT
+        with ESMTP id S232011AbiKGPFt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 10:03:59 -0500
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D24BA458
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 07:03:58 -0800 (PST)
-Received: by mail-lf1-x136.google.com with SMTP id c1so15485513lfi.7
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 07:03:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=i5cqfO9vASlyV1UQ/Ymj1gXHUZKIE6uTQs8zVm2OS0g=;
-        b=ABMi7gpaZVTAukaw/B77ZaYTM4PQVevR8kKr1nU9K4X++l13EbJhVlgU7PHLsi2qM3
-         N/qL452zRKmaOU/WbFpspe3Zm3J2MQP9pxzBAFH2bkyXe+Ig08aw17weJ3kYpvD12aBk
-         uiK/nD15Bk0yhAwt4tF9FyPb0lEDvgf/yRApUJqDRzOD05r3+uhsqYvXQA2sGaKhAvwz
-         sbbZxXc61tY1HYsMOuwhX7e9BFOk6NofwvNR9apE/Nz2g52B8yQnVZDZagcv0+sD1dFj
-         F25Xcx38iJU9LwhzHq45KMbzXpAPYJ3ZEQU9InHvpZO8NsLhkURjIKtewRDXbiHlMIUe
-         AqFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=i5cqfO9vASlyV1UQ/Ymj1gXHUZKIE6uTQs8zVm2OS0g=;
-        b=N0aR1VPwiDp/yp4IyYfmBL7yKER6/11qebeuEM0IJ0ykdNqLdkiROnkhxBn5AZkEPQ
-         vTLkNzO0yETSGHl5hVaXhZNZxnDmxiNTvBQW5xGJ+SQDi3OJk69fkJhPw+nWL7U2DqjO
-         a1cKyiUWjDLsnzmLjGg6djflnRO9572Ryiw+I2LLJAuPGAUgRczd3Nq7ZR1RefSBBe0W
-         myDy7y8ZTS7XmzrjM/xTTj6dNlJ14TiCluJN25bTV4dIbKMOxSU3gaJaUN6+Kla+O9Lr
-         EuXuuVU5xh10BBC5//+YjyoopZfs2NJL8DfZGUX06SckmGdNa9u1Y9WWtv8zVWAy6MbA
-         B1PQ==
-X-Gm-Message-State: ACrzQf02ZNu1MgDYH7CheBSavBIzgWxds71stSeXleCoxf45yz/lFS/a
-        6eQQLTSJvD2PoVSz7zlTaWOQ/w==
-X-Google-Smtp-Source: AMsMyM4wGYjZBicYju8APQdvIo86aRDOkUKW+W36UmLcDJ2UOsVG1nnMwIluDHwG4hCvF4MiB0U8Dg==
-X-Received: by 2002:a05:6512:298e:b0:4a2:9ffd:d084 with SMTP id du14-20020a056512298e00b004a29ffdd084mr17142217lfb.449.1667833435023;
-        Mon, 07 Nov 2022 07:03:55 -0800 (PST)
-Received: from [192.168.0.20] (088156142199.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.199])
-        by smtp.gmail.com with ESMTPSA id t7-20020a056512208700b004b18830af7asm1277912lfr.54.2022.11.07.07.03.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Nov 2022 07:03:54 -0800 (PST)
-Message-ID: <03994d2e-261a-5ca1-36ca-b9380fe4085b@linaro.org>
-Date:   Mon, 7 Nov 2022 16:03:52 +0100
+        Mon, 7 Nov 2022 10:05:49 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88DCE643F
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 07:05:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667833548; x=1699369548;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=cm8ffb5GHq5ear3HHr7w7HEJfMOXAl8tcZ1AMebuD6s=;
+  b=Ul8Fx8u/+w+BOoDD+Ocx6cSFIQEGbjC2Bql0DxER5TIndZCnCZMF7z8i
+   a4E0SDOea+wAlYOBoe/MsYuRC7KQ/fPaCVr6+Sr+nKDbJFZXYD5dYrYj9
+   uoX7ap37qECOvXl70Vz3xvlDP6d9cy/Bzb9b+kHCVLNuOk7oGoc6/TLmP
+   iYiUhLDX7NqDVoX4ARBWbvdYuwwV30usVN2CU+FsFGYwGvdXyQwAWbeQT
+   m+swCuxcIClgDuzNcz/mHUsrkvrFhmLhCT+W0YYEbkFtDfbHeqLmlZL5l
+   D+UyrlDUdjQf92IDL3Tg/5F8zGVS1wOcIm2KJTWlppzsNnV+p7TpZ7ZLZ
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10524"; a="293779919"
+X-IronPort-AV: E=Sophos;i="5.96,145,1665471600"; 
+   d="scan'208";a="293779919"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Nov 2022 07:04:33 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10524"; a="635940451"
+X-IronPort-AV: E=Sophos;i="5.96,145,1665471600"; 
+   d="scan'208";a="635940451"
+Received: from seanabue-mobl.amr.corp.intel.com (HELO [10.212.82.80]) ([10.212.82.80])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Nov 2022 07:04:31 -0800
+Message-ID: <2ac3f9c9-5fa0-1b2f-de57-0774eb0acc5e@linux.intel.com>
+Date:   Mon, 7 Nov 2022 09:04:30 -0600
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v4 2/3] arm64: dts: qcom: Remove redundant soundwire
- property
+ Firefox/102.0 Thunderbird/102.2.2
+Subject: Re: [PATCH] CHROMIUM: ASoC: amd: acp: Add tdm support for codecs in
+ machine driver
 Content-Language: en-US
-To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
-        vkoul@kernel.org, agross@kernel.org, andersson@kernel.org,
-        robh+dt@kernel.org, broonie@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        quic_rohkumar@quicinc.com, srinivas.kandagatla@linaro.org,
-        dianders@chromium.org, swboyd@chromium.org, judyhsiao@chromium.org,
-        alsa-devel@alsa-project.org, quic_rjendra@quicinc.com,
-        konrad.dybcio@somainline.org, mka@chromium.org
-Cc:     Ratna Deepthi Kudaravalli <quic_rkudarav@quicinc.com>
-References: <1667830844-31566-1-git-send-email-quic_srivasam@quicinc.com>
- <1667830844-31566-3-git-send-email-quic_srivasam@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <1667830844-31566-3-git-send-email-quic_srivasam@quicinc.com>
+To:     Venkata Prasad Potturu <venkataprasad.potturu@amd.com>,
+        Mark Brown <broonie@kernel.org>
+Cc:     alsa-devel@alsa-project.org, Sunil-kumar.Dommati@amd.com,
+        ssabakar@amd.com, Ajit Kumar Pandey <AjitKumar.Pandey@amd.com>,
+        ye xingchen <ye.xingchen@zte.com.cn>,
+        Basavaraj.Hiregoudar@amd.com, Takashi Iwai <tiwai@suse.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Venkata Prasad Potturu 
+        <venkataprasad.potturu@amd.corp-partner.google.com>,
+        Vijendar.Mukunda@amd.com, vsujithkumar.reddy@amd.com,
+        Akihiko Odaki <akihiko.odaki@gmail.com>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20221028103443.30375-1-venkataprasad.potturu@amd.corp-partner.google.com>
+ <Y1u1vj0K3m33wCTd@sirena.org.uk>
+ <b384e012-31c5-8412-8b05-cd026c5d6a0f@amd.com>
+ <Y2EttkwUvMReQcqg@sirena.org.uk>
+ <ca006546-9b0c-34df-2a33-a4f10b68f815@amd.com>
+ <Y2JVWmJsprt0xnKH@sirena.org.uk>
+ <7b97682d-5cf1-8be1-9c62-41c9fbd89018@amd.com>
+ <dff6e7af-6a07-587e-79d0-706fe7ec6504@linux.intel.com>
+ <02a0dfa6-fb6a-25cf-4111-fb609b9b6b68@amd.com>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <02a0dfa6-fb6a-25cf-4111-fb609b9b6b68@amd.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/11/2022 15:20, Srinivasa Rao Mandadapu wrote:
-> Remove redundant property qcom,port-offset in soundwire
 
-redundant and undocumented property
 
-> controller nodes.
-> This patch is required to avoid dtbs_check errors with
-> qcom,soundwie.yaml
+On 11/7/22 09:02, Venkata Prasad Potturu wrote:
 > 
-> Fixes: 12ef689f09ab ("arm64: dts: qcom: sc7280: Add nodes for soundwire and va tx rx digital macro codecs")
-> Fixes: 24f52ef0c4bf ("arm64: dts: qcom: sm8250: Add nodes for tx and rx macros with soundwire masters")
+> On 11/7/22 19:44, Pierre-Louis Bossart wrote:
+>> Caution: This message originated from an External Source. Use proper
+>> caution when opening attachments, clicking links, or responding.
+>>
+>>
+>> On 11/7/22 04:34, Venkata Prasad Potturu wrote:
+>>> On 11/2/22 17:02, Mark Brown wrote:
+>>>>> On 11/1/22 20:01, Mark Brown wrote:
+>>>>>> On Tue, Nov 01, 2022 at 03:15:08PM +0530, Venkata Prasad Potturu
+>>>>>> wrote:
+>>>>>> Right, that's what the code does but why is this something that
+>>>>>> should
+>>>>>> be controlled in this fashion?
+>>>>> This machine driver is common for TDM mode and I2S mode, user can
+>>>>> select TDM
+>>>>> mode or I2S mode.
+>>>> Why would the user choose one value or the other, and why would this
+>>>> choice be something that only changes at module load time?  If this is
+>>>> user controllable I'd really expect it to be runtime controllable.
+>>>> You're not explaining why this is a module parameter.
+>>> Different vendors/OEM's use the same hardware as one need I2S mode and
+>>> other need TDM mode, using common driver  to support  I2S and TDM mode
+>>> with this parameter.
+>>>
+>>>
+>>> static int tdm_mode = 0;
+>>> module_param_named(tdm_mode, tdm_mode, int, 0444);
+>>>
+>>> And this can be runtime controllable by setting permissions as 0644, we
+>>> will change and send next version patch.
+>> kernel parameters are difficult to manage for distributions using a
+>> single-build. Either all platforms use the kernel parameter or none of
+>> them do. That would not allow a per-platform choice of parameters.
+>> Using DMI quirks or ACPI identifiers would be a lot less problematic, no?
+> 
+> All platforms use the kernel parameter to select the I2S/TDM mode.
+> Runtime parameters are not required here, by default it is in I2S mode and
+> when the platform needs to enable TDM mode then pass tdm_mode module
+> parameter as 1.
 
-These should be two separate commits.
-
-
-Best regards,
-Krzysztof
+How would a distribution decide to set this kernel parameter, what
+criteria would be used to determine that the TDM mode is required?
+You've got to think of who uses that parameter.
+This may work for a Chrome solution given that there are per-product
+overlays but won't work in the general case IMHO.
 
