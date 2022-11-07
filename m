@@ -2,197 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D4F561FF1F
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 21:06:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7D4B61FF21
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 21:07:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232111AbiKGUGq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 15:06:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45906 "EHLO
+        id S232141AbiKGUHK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 15:07:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229695AbiKGUGo (ORCPT
+        with ESMTP id S232133AbiKGUHI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 15:06:44 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28824178BB;
-        Mon,  7 Nov 2022 12:06:43 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C5E13612AB;
-        Mon,  7 Nov 2022 20:06:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7A55C433D6;
-        Mon,  7 Nov 2022 20:06:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667851602;
-        bh=9m6X4lP4tvtcLVkdLhhNRclK4e94Mh5/KEch2uhPrdc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=uthuFFZgVGGbU3VKT6COTWtTkbxGo96/ahQGh0cUp29YFlSvQ/f/c9LGvJSYhUcB5
-         CNwS/cYWnVh17/fZKoyXTzCIZY8OHQ7CquUuPrtlsGIVc6G0MoMwG8o+7XI3kmjqac
-         Sl2M7F73B5N8x72C5FfXTWrUAGKDV6aibYf9C+uX7Hzxa831MKd6fduJYHO1GL5Si5
-         RB3RysInhNpgDhrWPb5wHkV96oJ2M1hHHXdjxysRjFJ+Y/OYVRjSq1DW29GARYQlSU
-         RHLZIMxExqCbfwQP6Sq2dOWuhG/EcRV3Wdy+rV0+AjQtg/o+bxG1rRip5wVB6+C0n9
-         Y/gnI0tERaAGQ==
-Received: by pali.im (Postfix)
-        id E170189B; Mon,  7 Nov 2022 21:06:37 +0100 (CET)
-Date:   Mon, 7 Nov 2022 21:06:37 +0100
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Nathan Rossi <nathan@nathanrossi.com>
-Cc:     linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Nathan Rossi <nathan.rossi@digi.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>
-Subject: Re: [PATCH] PCI: mvebu: Set Target Link Speed for 2.5GT downstream
- devices
-Message-ID: <20221107200637.heoakrpzob4yz7c5@pali>
-References: <20221107081327.336239-1-nathan@nathanrossi.com>
- <20221107084346.ksdhcxk7bppvpmqc@pali>
- <CA+aJhH0k1zaP0sVNk98qviTiyCEAmQKO4MOD8LSiHiwuzh6-aA@mail.gmail.com>
+        Mon, 7 Nov 2022 15:07:08 -0500
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B21D321829
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 12:07:06 -0800 (PST)
+Received: by mail-io1-xd36.google.com with SMTP id n191so9798311iod.13
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 12:07:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=8hV5ZSh2seubDdRrNeUCchubOhAcqvi4PJAb4HdDdB0=;
+        b=XFhq0Xs1jn9mlb/AMwxtrT0VkUmekAjemvzCWhPsc1Ud0+riFpyDUOqaiMwrJeA3Z6
+         YwvXvpSGLpp5GbahQ7vv81j2ecpKUXWI0A0BSqH60uAjtpy68h6e/ejR+/LIKk93mcTa
+         jO+VPdm7g7f7628BIvfrcFqI2yT5xKpz+qHCM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8hV5ZSh2seubDdRrNeUCchubOhAcqvi4PJAb4HdDdB0=;
+        b=QLZZAS0Qe+9jOoT14tNa7Y/CrOPmo7/nOJv8Ses2BkbHMD86rfI8iLgq9CZUedgYT8
+         zinevYMxf5iIF5lL2Q/tnr2vygRMCs2zsH+1SAOUWo78jet2/p5X3T3qPafvB0P9ftj8
+         fXbzMoguP8UMjAQJJxXoWjSJoSRvdak8XPrAzZIUaU6RmkCF29Y8ZLPvtWJDOI1aF3aH
+         kHgpzbIo6vnigGOgZKO4ikuUuiDv+ANwp7OY/Ay5rnZGVe4DIHtNDR0rnccqAoEVU2LP
+         /G1B11dstKdcSdtSeJslshvgSG1k7bscxc3E3cDDuVDSJc4Py5dRpC09SBufjXfFJebQ
+         f8EQ==
+X-Gm-Message-State: ACrzQf1Eu8mnf69ydHwNs0PRFvy6nGBPMdcS6uTg+HySLxW0V09M64nQ
+        71Z3HCWidd1TTAiTFl4Ute5kpnQov2Mzj4GM1uSX1w==
+X-Google-Smtp-Source: AMsMyM766uk95+uCyh+ZkJmMUM61FCimR1/A3TW5Hx+jV3LnaGnqApC2gedZ+O3jgliaPdRUfL3HL1UMwKMghdeC55E=
+X-Received: by 2002:a05:6638:e8a:b0:374:f6c5:cff6 with SMTP id
+ p10-20020a0566380e8a00b00374f6c5cff6mr31358868jas.187.1667851626098; Mon, 07
+ Nov 2022 12:07:06 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CA+aJhH0k1zaP0sVNk98qviTiyCEAmQKO4MOD8LSiHiwuzh6-aA@mail.gmail.com>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221027104406.549734-1-daniel.vetter@ffwll.ch> <87tu3n6cb2.fsf@meer.lwn.net>
+In-Reply-To: <87tu3n6cb2.fsf@meer.lwn.net>
+From:   Daniel Vetter <daniel.vetter@ffwll.ch>
+Date:   Mon, 7 Nov 2022 21:06:54 +0100
+Message-ID: <CAKMK7uHXz7kteQ_sckTQx=E9cWSqGXS_Y0_pLjX2CRcApOvKRQ@mail.gmail.com>
+Subject: Re: [PATCH] docs/sphinx: More depth in the rtd sidebar toc
+To:     Jonathan Corbet <corbet@lwn.net>
+Cc:     DRI Development <dri-devel@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Daniel Vetter <daniel.vetter@intel.com>,
+        linux-doc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Monday 07 November 2022 19:10:02 Nathan Rossi wrote:
-> On Mon, 7 Nov 2022 at 18:43, Pali Rohár <pali@kernel.org> wrote:
+On Fri, 28 Oct 2022 at 20:19, Jonathan Corbet <corbet@lwn.net> wrote:
+>
+> Daniel Vetter <daniel.vetter@ffwll.ch> writes:
+>
+> > We love to nest our documenation for good structure, but that means
+> > the table of contents needs to keep up or you can't navigate them.
 > >
-> > On Monday 07 November 2022 08:13:27 Nathan Rossi wrote:
-> > > From: Nathan Rossi <nathan.rossi@digi.com>
-> > >
-> > > There is a known issue with the mvebu PCIe controller when triggering
-> > > retraining of the link (via Link Control) where the link is dropped
-> > > completely causing significant delay in the renegotiation of the link.
-> > > This occurs only when the downstream device is 2.5GT and the upstream
-> > > port is configured to support both 2.5GT and 5GT.
-> > >
-> > > It is possible to prevent this link dropping by setting the associated
-> > > link speed in Target Link Speed of the Link Control 2 register. This
-> > > only needs to be done when the downstream is specifically 2.5GT.
-> > >
-> > > This change applies the required Target Link Speed value during
-> > > mvebu_pcie_setup_hw conditionally depending on the current link speed
-> > > from the Link Status register, only applying the change when the link
-> > > is configured to 2.5GT already.
-> > >
-> > > Signed-off-by: Nathan Rossi <nathan.rossi@digi.com>
-> > > ---
-> > >  drivers/pci/controller/pci-mvebu.c | 18 +++++++++++++++++-
-> > >  1 file changed, 17 insertions(+), 1 deletion(-)
-> > >
-> > > diff --git a/drivers/pci/controller/pci-mvebu.c b/drivers/pci/controller/pci-mvebu.c
-> > > index 1ced73726a..6a869a33ba 100644
-> > > --- a/drivers/pci/controller/pci-mvebu.c
-> > > +++ b/drivers/pci/controller/pci-mvebu.c
-> > > @@ -248,7 +248,7 @@ static void mvebu_pcie_setup_wins(struct mvebu_pcie_port *port)
-> > >
-> > >  static void mvebu_pcie_setup_hw(struct mvebu_pcie_port *port)
-> > >  {
-> > > -     u32 ctrl, lnkcap, cmd, dev_rev, unmask, sspl;
-> > > +     u32 ctrl, lnkcap, cmd, dev_rev, unmask, sspl, lnksta, lnkctl2;
-> > >
-> > >       /* Setup PCIe controller to Root Complex mode. */
-> > >       ctrl = mvebu_readl(port, PCIE_CTRL_OFF);
-> > > @@ -339,6 +339,22 @@ static void mvebu_pcie_setup_hw(struct mvebu_pcie_port *port)
-> > >       unmask |= PCIE_INT_INTX(0) | PCIE_INT_INTX(1) |
-> > >                 PCIE_INT_INTX(2) | PCIE_INT_INTX(3);
-> > >       mvebu_writel(port, unmask, PCIE_INT_UNMASK_OFF);
-> > > +
-> > > +     /*
-> > > +      * Set Target Link Speed within the Link Control 2 register when the
-> > > +      * linked downstream device is connected at 2.5GT. This is configured
-> > > +      * in order to avoid issues with the controller when the upstream port
-> > > +      * is configured to support 2.5GT and 5GT and the downstream device is
-> > > +      * linked at 2.5GT, retraining the link in this case causes the link to
-> > > +      * drop taking significant time to retrain.
-> > > +      */
-> > > +     lnksta = mvebu_readl(port, PCIE_CAP_PCIEXP + PCI_EXP_LNKCTL) >> 16;
-> > > +     if ((lnksta & PCI_EXP_LNKSTA_CLS) == PCI_EXP_LNKSTA_CLS_2_5GB) {
+> > Realized this trying to find the drm property documentation, which
+> > with some shuffling around disappeared. Why I didn't realize we can do
+> > this earlier, no idea.
 > >
-> > This code does not work because at this stage endpoint device does not
-> > have to be ready and therefore link is not established yet.
+> > Since the relevant parts of the toc are only loaded if you're in the
+> > right .html file there's no harm in going all the way to unlimited.
 > >
-> > Also this code is not running when kernel issue PCIe Hot Reset via
-> > PCI Secondary Bus Reset bit.
+> > Note that this has no impact on the classic theme (which doesn't have
+> > the sidebar) nor on the various :toctree: rendered inline in the
+> > output.
 > >
-> > And it does not handle possible hot-plug situation.
+> > Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
+> > Cc: Jonathan Corbet <corbet@lwn.net>
+> > Cc: linux-doc@vger.kernel.org
+> > ---
+> >  Documentation/conf.py | 4 ++++
+> >  1 file changed, 4 insertions(+)
 > >
-> > That check that code below has to be done _after_ kernel enumerate
-> > device. PCI core code has already logic to handle delays for "slow"
-> > devices.
+> > diff --git a/Documentation/conf.py b/Documentation/conf.py
+> > index 934727e23e0e..5dc141c66726 100644
+> > --- a/Documentation/conf.py
+> > +++ b/Documentation/conf.py
+> > @@ -240,6 +240,10 @@ if html_theme == 'sphinx_rtd_theme' or html_theme == 'sphinx_rtd_dark_mode':
+> >                  # Add color-specific RTD normal mode
+> >                  html_css_files.append('theme_rtd_colors.css')
 > >
-> > And reverse operation (setting lnkctl2 target speed to original value)
-> > has to be called after unplugging device - when link goes down.
-> >
-> > If you want to work on this stuff, I can try to find my notes which I
-> > done during investigation of this issue... where is probably the best
-> > place in kernel pci core code for handling this issue.
-> 
-> Some notes/direction for implementation would be very appreciated. I
-> am not particularly familiar with the pci core code, so I don't have a
-> good idea on how to best implement this workaround.
+> > +        html_theme_options = {
+> > +            'navigation_depth': -1,
+> > +        }
+> > +
+> >      except ImportError:
+> >          html_theme = 'classic'
+>
+> So this patch isn't against docs-next, and applies to the RTD theme,
+> which is no longer the default.  I have no objection to it, but have you
+> looked at how your docs come out with the alabaster theme?
 
-Ok, I have checked and seems that I have removed my notes :-(
+[sorry took a bit longer to get back to this]
 
-So trying to reconstruct information from my memory...
+Hm looks pretty, but more in a print style than using it dynamically,
+you can't really click through the sidebar toc at all to quickly find
+something, and if you're wrong, navigate up a few levels again. It's
+just the toc for exactly the local document, nothing else at all. rtd
+theme always gives you the full toc all the way up, and if you have
+epic patience could actually give you the full toc on every document
+(but that's probably not a good idea for the kernel). Do you need me
+to send the rebased version or can you smash this one in?
 
-Target link speed in Root port's lnkctl2 register must be set to
-_correct_ value before configuring ASPM. Because link retraining (part
-of ASPM configuration) fails. ASPM is initialized by calling function
-pcie_aspm_init_link_state() from _non-endpoint_ device and it is called
-at the end of function pci_scan_slot().
-
-Look also at the tree-traversal functions pci_scan_child_bus_extend()
-and pci_scan_bridge_extend() and try to find the best place where should
-be this "fix" called.
-
-Because same issue as you are trying to fix is also in pci-aardvark.c
-hardware (Marvell too), I think that you can introduce some flag in
-struct pci_host_bridge, set it in pci-mvebu.c (later I can do same in
-pci-aardvark.c) and then in core pci code (in some of above mentioned
-function when you find the proper place in tree traversal) add code
-which "fixes" lnkctl2 register.
-
-Because both pci hotplug and static initialization calls those pci core
-scan functions, this should fix init-probe part.
-
-Second thing is fixing unplugging part. Because in hotplug setup you can
-connect 2.5GT/s GEN1 card (which requires this workaround), then
-disconnect it and connect some 5GT/s GEN2 card, it is needed to set
-target link back to 5GT/s to use full speed of GEN2 card.
-
-For this second part, I think that it is needed to change target link
-speed back to 5GT/s after card is disconnected. As a good candidates
-where to do it is probably pci_stop_dev() or pci_destroy_dev() function.
-Beware that it is needed to change link speed of device on the other end
-of link - not the device which is being removed/unregistered. And check
-if it is the last kernel device being unregistered from the bus
-(endpoint card may be multifunction device).
-
-I hope that this information would help you. I'm really sorry that I do
-not have my notes about this issue where I documented it. Anyway I would
-try to provide other information if needed.
-
-> Thanks,
-> Nathan
-> 
-> >
-> > > +             lnkctl2 = mvebu_readl(port, PCIE_CAP_PCIEXP + PCI_EXP_LNKCTL2);
-> > > +             lnkctl2 &= ~PCI_EXP_LNKCTL2_TLS;
-> > > +             lnkctl2 |= PCI_EXP_LNKCTL2_TLS_2_5GT;
-> > > +             mvebu_writel(port, lnkctl2, PCIE_CAP_PCIEXP + PCI_EXP_LNKCTL2);
-> > > +     }
-> > >  }
-> > >
-> > >  static struct mvebu_pcie_port *mvebu_pcie_find_port(struct mvebu_pcie *pcie,
-> > > ---
-> > > 2.37.2
+btw on today's linux-next the sphinx.rst page isn't updated with the
+new default theme choice of alabaster. That seems to have been
+forgotten.
+-Daniel
+-- 
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch
