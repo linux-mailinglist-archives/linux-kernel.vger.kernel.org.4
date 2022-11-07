@@ -2,173 +2,252 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED5D061F86F
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 17:09:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F36E361F889
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 17:11:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231972AbiKGQI7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 11:08:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57134 "EHLO
+        id S232536AbiKGQLZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 11:11:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232533AbiKGQIn (ORCPT
+        with ESMTP id S232579AbiKGQLW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 11:08:43 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A44F20F41
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 08:08:01 -0800 (PST)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2A7FP1aN004108;
-        Mon, 7 Nov 2022 16:07:32 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=sGNP3t/VS5t8CiFaoNcaIFwb9G2LQ14GZqqeeXLbyTI=;
- b=NfIdxftgqUoJyll44+omONY3NAZNh5StgXfbd2h6gXEZqgJ+FuFo+fFtg7g5sTYZVWrM
- 6lGUzh7hDTm0lRIRlAs7iPHhJZqHRUEXF0QqLoH6jnMeS0G8eo4476MYKM75WQT/42/p
- GLj6V1Edk0Yvbpe+T/FWOy97Un1AnQLfmZRyf9GJazEsFmynzQ/9Fm0jtnStLnGyx/AH
- YIyCNosV91ljUjGVlWgmuFVxrjJaN9Vf1zrxUQlEINsVTaCuXsMui3GFZA84NvcyKxsa
- 735rdXWuF/o7ibEK+pnTwWEDqomVdNjq9zCqwCimflb9CYFXypWFKSPydM2trg8Ka/Ht DA== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kppqj1v2f-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 07 Nov 2022 16:07:32 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2A7G7U6u027262
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 7 Nov 2022 16:07:30 GMT
-Received: from [10.226.59.182] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Mon, 7 Nov 2022
- 08:07:29 -0800
-Message-ID: <6f756dec-b386-a822-5f52-c121c00525b4@quicinc.com>
-Date:   Mon, 7 Nov 2022 09:07:28 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [RFC PATCH v3 0/3] new subsystem for compute accelerator devices
-Content-Language: en-US
-To:     Oded Gabbay <ogabbay@kernel.org>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Arnd Bergmann <arnd@arndb.de>,
+        Mon, 7 Nov 2022 11:11:22 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB53C1C93D
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 08:11:19 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 9A11A1F383;
+        Mon,  7 Nov 2022 16:11:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1667837478; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=a0DskdtjDHY2pvABZnHBZOTRokFpVmSX8d11g6UxtqQ=;
+        b=end9PIz63/KLNxeJwN6LOKQS5l4an+ti4FGYJoVZZozusCdHWw9Uz314cbadcMRSbv1EQd
+        7BJKtrNJegT2eLStDzAEBlgW1mm+Gy3z/HLGfcvsmjTMQead3Ggs7nwfHqyZgVeOSgdsDg
+        ToPQjXCMMbMa1YfkFQwzh1x5wf+h+uQ=
+Received: from suse.cz (unknown [10.100.201.202])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 3ED852C141;
+        Mon,  7 Nov 2022 16:11:18 +0000 (UTC)
+Date:   Mon, 7 Nov 2022 17:10:09 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        John Ogness <john.ogness@linutronix.de>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Linus Torvalds <torvalds@linuxfoundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <linux-kernel@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Matthew Wilcox <willy@infradead.org>
-CC:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>,
-        Jiho Chu <jiho.chu@samsung.com>,
-        Daniel Stone <daniel@fooishbar.org>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>,
-        Maciej Kwapulinski <maciej.kwapulinski@linux.intel.com>,
-        Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>,
-        Randy Dunlap <rdunlap@infradead.org>
-References: <20221106210225.2065371-1-ogabbay@kernel.org>
-From:   Jeffrey Hugo <quic_jhugo@quicinc.com>
-In-Reply-To: <20221106210225.2065371-1-ogabbay@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: ejok4OBQVTOa0uwWOCEAXGmLUF5m1pUV
-X-Proofpoint-ORIG-GUID: ejok4OBQVTOa0uwWOCEAXGmLUF5m1pUV
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-07_08,2022-11-07_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- lowpriorityscore=0 suspectscore=0 mlxlogscore=999 phishscore=0 spamscore=0
- malwarescore=0 clxscore=1011 adultscore=0 mlxscore=0 bulkscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211070129
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Helge Deller <deller@gmx.de>,
+        Jason Wessel <jason.wessel@windriver.com>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        John Ogness <jogness@linutronix.de>
+Subject: cosmetic: was: Re: [patch RFC 19/29] printk: Add basic
+ infrastructure for non-BKL consoles
+Message-ID: <Y2kt4Wf22SKeH9XI@alley>
+References: <20220910221947.171557773@linutronix.de>
+ <20220910222301.479172669@linutronix.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220910222301.479172669@linutronix.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/6/2022 2:02 PM, Oded Gabbay wrote:
-> This is the third version of the RFC following the comments given on the
-> second version, but more importantly, following testing done by the VPU
-> driver people and myself. We found out that there is a circular dependency
-> between DRM and accel. DRM calls accel exported symbols during init and when
-> accel devices are registering (all the minor handling), then accel calls DRM
-> exported symbols. Therefore, if the two components are compiled as modules,
-> there is a circular dependency.
+On Sun 2022-09-11 00:28:01, Thomas Gleixner wrote:
+> The current console/printk subsystem is protected by a Big Kernel Lock,
+> aka. console_lock which has has ill defined semantics and is more or less
+> stateless. This puts severe limitations on the console subsystem and makes
+> forced takeover and output in emergency and panic situations a fragile
+> endavour which is based on try and pray.
 > 
-> To overcome this, I have decided to compile the accel core code as part of
-> the DRM kernel module (drm.ko). IMO, this is inline with the spirit of the
-> design choice to have accel reuse the DRM core code and avoid code
-> duplication.
+> The goal of non-BKL consoles is to break out of the console lock jail and
+> to provide a new infrastructure which avoids the pitfalls and allows
+> console drivers to be gradually converted over.
 > 
-> Another important change is that I have reverted back to use IDR for minor
-> handling instead of xarray. This is because I have found that xarray doesn't
-> handle well the scenario where you allocate a NULL entry and then exchange it
-> with a real pointer. It appears xarray still considers that entry a "zero"
-> entry. This is unfortunate because DRM works that way (first allocates a NULL
-> entry and then replaces the entry with a real pointer).
+> The proposed infrastructure aims for the following properties:
 > 
-> I decided to revert to IDR because I don't want to hold up these patches,
-> as many people are blocked until the support for accel is merged. The xarray
-> issue should be fixed as a separate patch by either fixing the xarray code or
-> changing how DRM + ACCEL do minor id handling.
+>   - Lockless (SCRU protected) console list walk
+>   - Per console locking instead of global locking
+>   - Per console state which allows to make informed decisions
+>   - Stateful handover and takeover
+> 
+> As a first step this adds state to struct console. The per console state is
+> a atomic_long_t with a 32bit bit field and on 64bit a 32bit sequence for
+> tracking the last printed ringbuffer sequence number. On 32bit the sequence
+> is seperate from state for obvious reasons which requires to handle a few
+> extra race conditions.
+> 
+> Add the initial state with the most basic 'alive' and 'enabled' bits and
+> wire it up into the console register/unregister functionality and exclude
+> such consoles from being handled in the console BKL mechanisms.
+> 
+> The decision to use a bitfield was made as using a plain u32 and mask/shift
+> operations turned out to result in uncomprehensible code.
+> 
+> --- a/include/linux/console.h
+> +++ b/include/linux/console.h
+> @@ -237,6 +272,9 @@ struct console {
+>  	unsigned long		dropped;
+>  	void			*data;
+>  	struct hlist_node	node;
+> +
+> +	/* NOBKL console specific members */
+> +	atomic_long_t __private	atomic_state[2];
 
-This sounds sane to me.  However, this appears to be something that 
-Matthew Wilcox should be aware of (added for visibility).  Perhaps he 
-has a very quick solution.  If not, at-least he might have ideas on how 
-to best address in the future.
+Just to be sure about the meaning. "real" state means the current
+state and "handover" means a requested state.
 
-> The patches are in the following repo:
-> https://git.kernel.org/pub/scm/linux/kernel/git/ogabbay/accel.git/log/?h=accel_v3
-> 
-> As in v2, The HEAD of that branch is a commit adding a dummy driver that
-> registers an accel device using the new framework. This can be served
-> as a simple reference. I have checked inserting and removing the dummy driver,
-> and opening and closing /dev/accel/accel0 and nothing got broken :)
-> 
-> v1 cover letter:
-> https://lkml.org/lkml/2022/10/22/544
-> 
-> v2 cover letter:
-> https://lore.kernel.org/lkml/20221102203405.1797491-1-ogabbay@kernel.org/T/
-> 
-> Thanks,
-> Oded.
-> 
-> Oded Gabbay (3):
->    drivers/accel: define kconfig and register a new major
->    accel: add dedicated minor for accelerator devices
->    drm: initialize accel framework
-> 
->   Documentation/admin-guide/devices.txt |   5 +
->   MAINTAINERS                           |   8 +
->   drivers/Kconfig                       |   2 +
->   drivers/accel/Kconfig                 |  24 ++
->   drivers/accel/drm_accel.c             | 322 ++++++++++++++++++++++++++
->   drivers/gpu/drm/Makefile              |   1 +
->   drivers/gpu/drm/drm_drv.c             | 102 +++++---
->   drivers/gpu/drm/drm_file.c            |   2 +-
->   drivers/gpu/drm/drm_sysfs.c           |  24 +-
->   include/drm/drm_accel.h               |  97 ++++++++
->   include/drm/drm_device.h              |   3 +
->   include/drm/drm_drv.h                 |   8 +
->   include/drm/drm_file.h                |  21 +-
->   13 files changed, 582 insertions(+), 37 deletions(-)
->   create mode 100644 drivers/accel/Kconfig
->   create mode 100644 drivers/accel/drm_accel.c
->   create mode 100644 include/drm/drm_accel.h
-> 
-> --
-> 2.25.1
-> 
+>  };
+>  
+>  #ifdef CONFIG_LOCKDEP
+> --- a/kernel/printk/printk.c
+> +++ b/kernel/printk/printk.c
+> @@ -2339,7 +2339,9 @@ static bool suppress_message_printing(in
+>  static bool pr_flush(int timeout_ms, bool reset_on_progress) { return true; }
+>  static bool __pr_flush(struct console *con, int timeout_ms, bool reset_on_progress) { return true; }
+>  
+> -#endif /* CONFIG_PRINTK */
+> +#endif /* !CONFIG_PRINTK */
+> +
+> +#include "printk_nobkl.c"
 
+Is there any chance to get rid of this?
+
+If we need to use some of this API in printk.c then please declare
+it either in "internal.h" or in a new "printk_noblk.h".
+
+Honestly, I do not have any real arguments why it is bad. But there
+are probably reasons why it is not a common pattern. IMHO, split
+sources might help to:
+
+    + speed up compilation
+    + separate public and internal API
+    + keep #ifdef/#else/#endif close each other in .h files
+    + keep the sources somehow usable even without cscope
+    + ???
+
+
+>  #ifdef CONFIG_EARLY_PRINTK
+>  struct console *early_console;
+> @@ -2635,6 +2637,13 @@ static bool abandon_console_lock_in_pani
+>   */
+>  static inline bool console_is_usable(struct console *con)
+>  {
+> +	/*
+> +	 * Exclude the NOBKL consoles. They are handled seperately
+> +	 * as they do not require the console BKL
+> +	 */
+> +	if ((con->flags & CON_NO_BKL))
+> +		return false;
+
+This is confusing. Nobody would expect that a function called
+"console_is_usable()" would return false just because the console
+has CON_NO_BLK flag set.
+
+Either we need a better name, for example, console_is_blk_and_usable().
+Or please put the test into a separate function, e.g. console_is_blk()
+and check it separately where needed.
+
+IMHO, the original console_is_usable() would be useful even for
+CON_NO_BLK consoles.
+
+
+> +
+>  	if (!(con->flags & CON_ENABLED))
+>  		return false;
+>  
+> --- /dev/null
+> +++ b/kernel/printk/printk_nobkl.c
+> @@ -0,0 +1,176 @@
+> +
+> +enum state_selector {
+> +	STATE_REAL,
+> +	STATE_HANDOVER,
+> +};
+
+It might be problem that I am not a native speaker. But the names
+are a bit ambiguous to me. I would personally use:
+
+enum state_selector {
+	CON_STATE_CURRENT,
+	CON_STATE_REQUESTED,
+};
+
+or if it is too long: CON_STATE_CUR and CON_STATE_REQ.
+
+Well, I do not resist on the change. I am not sure how the proposed names
+would play with the followup patches. The original names might
+be good after all. They are not that bad. I primary wanted
+to document my first reaction ;-)
+
+> +/**
+> + * cons_nobkl_init - Initialize the NOBKL console state
+> + * @con:	Console to initialize
+> + */
+> +static void cons_nobkl_init(struct console *con)
+> +{
+> +	struct cons_state state = {
+> +		.alive = 1,
+> +		.enabled = !!(con->flags & CON_ENABLED),
+> +	};
+> +
+> +	cons_state_set(con, STATE_REAL, &state);
+> +}
+
+IMHO. we need to update the function description, e.g.
+
+/**
+ * cons_nobkl_init - Initialize the NOBKL console specific data
+ * @con:	Console to initialize
+ */
+
+
+Background:
+
+The function name does not match the rest:
+
+  + The function name suggests that it initializes NOBLK console.
+
+  + The function description and the implementation suggests that
+    it initializes struct cons_state.
+
+I see that the followup patches update this function. It initializes
+all the members needed by noblk consoles in struct console. It
+allocates per-CPU data and creates the kthread. It means
+that the function name is reasonable after all.
+
+
+> +
+> +/**
+> + * cons_nobkl_cleanup - Cleanup the NOBKL console state
+> + * @con:	Console to cleanup
+> + */
+> +static void cons_nobkl_cleanup(struct console *con)
+> +{
+> +	struct cons_state state = { };
+> +
+> +	cons_state_set(con, STATE_REAL, &state);
+> +}
+
+Same as with cons_noblk_init(). The function does a lot
+more in the later patches. The description should be
+
+/**
+ * cons_nobkl_cleanup - Cleanup the NOBKL console specific data
+ * @con:	Console to cleanup
+ */
+
+Best Regards,
+Petr
