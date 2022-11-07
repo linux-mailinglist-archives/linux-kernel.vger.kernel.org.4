@@ -2,147 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C023962022C
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 23:14:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AEDDE62022E
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 23:15:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232249AbiKGWOD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 17:14:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48472 "EHLO
+        id S231993AbiKGWPN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 17:15:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232307AbiKGWN4 (ORCPT
+        with ESMTP id S231172AbiKGWPL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 17:13:56 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F44F20191
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 14:13:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667859234; x=1699395234;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=wTFoYQh/CL22ztAqNuaBrPon8YAI9IJv18TxizlD190=;
-  b=WDEOrx6mEKrQMd6/AKfCetvxiVxojyQdmETkRDs6RWoM3s+TJkzoBsiS
-   bJ/vXYVIvZDRTAw7u9FuqYtOaBd32a1sckdn19D6E8DeRQKnNCrxzba9+
-   HbByVzSHPDX3B8nOGQtDEHC4wPjxaiWVoqTkZjOYN+hoxeqUEZCX25GzO
-   fTXyYbpdvs86atE/VWutu+X2OqmUvI+xMCSE89IRgcFMbpVs8z+Zqh/kg
-   9DrSlxwOEc8raklT1Qx5io6FE3R7A9aqT59fduILtCM6HeN3X5a0dklED
-   pQGr9h3mXtOKmCB/IfZ8C7udQf8cgCb145EPyW/6PUANinlR2UW/Slnbm
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10524"; a="337259522"
-X-IronPort-AV: E=Sophos;i="5.96,145,1665471600"; 
-   d="scan'208";a="337259522"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Nov 2022 14:13:53 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10524"; a="881251508"
-X-IronPort-AV: E=Sophos;i="5.96,145,1665471600"; 
-   d="scan'208";a="881251508"
-Received: from peggykes-mobl.amr.corp.intel.com (HELO [10.251.7.244]) ([10.251.7.244])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Nov 2022 14:13:53 -0800
-Message-ID: <50b2113d-d6a8-ab36-028d-b78c41142c18@intel.com>
-Date:   Mon, 7 Nov 2022 14:13:52 -0800
+        Mon, 7 Nov 2022 17:15:11 -0500
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 569C020191;
+        Mon,  7 Nov 2022 14:15:06 -0800 (PST)
+Received: by mail-lf1-x12e.google.com with SMTP id g7so18695283lfv.5;
+        Mon, 07 Nov 2022 14:15:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=xzjpq5XPZvUD1SGRN0dO+XiFdKDQrabShm+K+q5Ki74=;
+        b=XBd6JY1zQ1jDCiVBcrndeR6XrFo2gkNsWZFCretTY7V6BlBQq3Qq90GaX667+nxIKx
+         mqM9y7Syg9ejqJqUSkaorL7zVunEoVLL1GlnrRp7ErsgCt+2qvFXC2jSl/YwoCbbCYe/
+         emSbC7Q0XVbDkh2ilajtJYq6lvK1SxUAIlZ+M8V7l0I7ao4/yqMgFhqMFEZFqzfaxu+2
+         JjvwifrgsfRObcGwZUDm9HJAzhqajXCLIPd0XC+oc/7vvCclhoHV1Pv4rZIwut0/0tTP
+         KKpqVqncp2VSOJgZUMfu272wnsu1zBvLTUQngAZfRAm1nYmcT7z5t8wvmXdbCbvnHyIA
+         fxPA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=xzjpq5XPZvUD1SGRN0dO+XiFdKDQrabShm+K+q5Ki74=;
+        b=v7HL6jtprc5g+yyzjjUw+Ny4hdZZUY4ZhKeUM+uQAzaESWHZyVUgWMJOuy0VO9o5pq
+         MOaQNn72Yxovp5pvm4qqW/BxgmO3/LI+Vqbgcy6hQyqR5tkJS1CAQ2sQdp5u22WEwlBZ
+         tlGXnbedryReg8x8AseuMGEHS7hv3VhYPh32uUPaokDNZf530rbSrfTS2BokzBgRo9EI
+         xaNyuaKZQ8fg0vrwmQOtc+ZOBi8eKiDblUn9qPKybCN3BQ64i5EpzzR5DRVqXRdx7MF/
+         rw0ha5aShvFFunO9a7CoTppLKLMSRQrxUqVrecZUeJbG6lMcKGYAkmL81b/HyOypeKQx
+         sYtg==
+X-Gm-Message-State: ACrzQf1rOYmis2ASNYwrHFNuHfM+Z54GsI3vq7LGn3h5dtt07MYyA4Yd
+        aQoK1BAxG1qnFwnfgMhRiJdaomFtN+MlYw==
+X-Google-Smtp-Source: AMsMyM7VdmDB8EzyWj8i1ytIbkn9jf4VHBv0i//kMsDQbCCPQdGTX839TbiafUUQ96vta+sjCGqQGw==
+X-Received: by 2002:ac2:52a3:0:b0:4b1:785c:7a56 with SMTP id r3-20020ac252a3000000b004b1785c7a56mr8745635lfm.187.1667859304550;
+        Mon, 07 Nov 2022 14:15:04 -0800 (PST)
+Received: from [192.168.0.251] (dsl-hkibng42-56733b-36.dhcp.inet.fi. [86.115.59.36])
+        by smtp.gmail.com with ESMTPSA id f8-20020a2ea0c8000000b0025ebaef9570sm1436436ljm.40.2022.11.07.14.15.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 07 Nov 2022 14:15:04 -0800 (PST)
+Message-ID: <fb155814-2e95-3f3b-0826-2c9aed8d0a63@gmail.com>
+Date:   Tue, 8 Nov 2022 00:15:00 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.2.2
-Subject: Re: [PATCH] x86/cpu: Start documenting what the X86_FEATURE_ flag
- testing macros do
+Subject: Re: linux-next: build failure after merge of the qcom tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Andy Gross <agross@kernel.org>
+Cc:     Bjorn Andersson <andersson@kernel.org>,
+        Rayyan Ansari <rayyan@ansari.sh>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20221108090018.44624610@canb.auug.org.au>
 Content-Language: en-US
-To:     Borislav Petkov <bp@alien8.de>, X86 ML <x86@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>
-References: <20221107211505.8572-1-bp@alien8.de>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <20221107211505.8572-1-bp@alien8.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+From:   =?UTF-8?Q?Matti_Lehtim=c3=a4ki?= <matti.lehtimaki@gmail.com>
+In-Reply-To: <20221108090018.44624610@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/7/22 13:15, Borislav Petkov wrote:
->  /*
-> - * This macro is for detection of features which need kernel
-> - * infrastructure to be used.  It may *not* directly test the CPU
-> - * itself.  Use the cpu_has() family if you want true runtime
-> - * testing of CPU features, like in hypervisor code where you are
-> - * supporting a possible guest feature where host support for it
-> - * is not relevant.
-> + * This is the preferred macro to use when testing X86_FEATURE_ bits
-> + * support without the need to test on a particular CPU but rather
-> + * system-wide. It takes into account build-time disabled feature
-> + * support too. All those macros mirror the kernel's idea of enabled
-> + * CPU features and not necessarily what real, hardware CPUID bits are
-> + * set or clear. For that use tools/arch/x86/kcpuid/ and/or potentially
-> + * extend if it's feature list is lacking.
->   */
->  #define cpu_feature_enabled(bit)	\
->  	(__builtin_constant_p(bit) && DISABLED_MASK_BIT_SET(bit) ? 0 : static_cpu_has(bit))
+Hi,
 
-Thanks for kicking this off!  It's sorely needed.
+This happened because one of the dts patches in the patch series which 
+contained "ARM: dts: qcom: msm8226: Add CCI bus" was not applied when 
+the other two dts patches were applied qcom tree. The patch number 1 
+"ARM: dts: qcom: msm8226: Add MMCC node" in that patch series 
+(https://lore.kernel.org/linux-arm-msm/20221002122859.75525-1-matti.lehtimaki@gmail.com/T/#m920039b455ad024249d000332d1f07f9e4c19008) 
+is required for that "ARM: dts: qcom: msm8226: Add CCI bus".
 
-This also makes me wonder if we should update the
-_static_cpu_has() comment:
+-- 
+Matti Lehtimäki
 
- * Static testing of CPU features. Used the same as boot_cpu_has(). It
- * statically patches the target code for additional performance. Use
- * static_cpu_has() only in fast paths, where every cycle counts. Which
- * means that the boot_cpu_has() variant is already fast enough for the
- * majority of cases and you should stick to using it as it is generally
- * only two instructions: a RIP-relative MOV and a TEST.
-
-It seems to be mildly warning against using _static_cpu_has()
-indiscriminately.  Should we tone that down a bit if we're recommending
-implicit use of static_cpu_has() via cpu_feature_enabled() everywhere?
-
-I was also thinking that some longer-form stuff in Documentation/ might
-be a good idea, along with some examples.  I'd be happy to follow this
-up with another patch that added Documentation/ like:
-
---
-
-New processor features often have specific Kconfig options as well as
-enumeration in CPUID and/or and X86_FEATURE_* flags.  In most cases, the
-feature must both be compiled in and have processor support, so checks
-for the feature might take this form:
-
-void enable_foo(void)
-{
-	if (!IS_ENABLED(CONFIG_X86_FOO))
-		return;
-	if (!static_cpu_has(X86_FEATURE_FOO))
-		return;
-
-	... do some enabling here
-}
-
-Or something equivalent with #ifdefs.  The preferred form is:
-
-void enable_foo(void)
-{
-	if (!cpu_feature_enabled(X86_FEATURE_FOO))
-		return;
-
-	... do some enabling here
-}
-
-plus adding X86_FEATURE_FOO to arch/x86/include/asm/disabled-features.h,
-like:
-
-#ifdef CONFIG_X86_FOO
-# define DISABLE_FOO   0
-#else
-# define DISABLE_FOO   (1<<(X86_FEATURE_FOO & 31))
-#endif
-
-
-That form has two "hidden" optimizations:
-1. Compile-time optimization: If the Kconfig option is disabled,
-   cpu_feature_enabled() will evaluate at compile-time to 0.  It can
-   entirely replace an IS_ENABLED() check, or an #ifdef in most cases.
-2. The conditional branch will be statically patched out using
-   _static_cpu_has().  This allows the normal runtime code to execute
-   without any conditional branches that might be mispredicted.
+On 8.11.2022 0.00, Stephen Rothwell wrote:
+> Hi all,
+> 
+> After merging the qcom tree, today's linux-next build (arm
+> multi_v7_defconfig) failed like this:
+> 
+> arch/arm/boot/dts/qcom-msm8226.dtsi:302.21-327.5: ERROR (phandle_references): /soc/cci@fda0c000: Reference to non-existent node or label "mmcc"
+> 
+> Caused by commit
+> 
+>    4ab2f41b0850 ("ARM: dts: qcom: msm8226: Add CCI bus")
+> 
+> I have used the qcom tree from next-20221107 for today.
+> 
