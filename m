@@ -2,77 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 845A861F355
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 13:32:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2168A61F360
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 13:33:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232324AbiKGMb6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 07:31:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54552 "EHLO
+        id S232252AbiKGMdv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 07:33:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232154AbiKGMbM (ORCPT
+        with ESMTP id S232161AbiKGMdq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 07:31:12 -0500
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E6641B9C5;
-        Mon,  7 Nov 2022 04:31:11 -0800 (PST)
-Received: by mail-wr1-x42e.google.com with SMTP id g12so15927129wrs.10;
-        Mon, 07 Nov 2022 04:31:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=yC8xgVazfP+f7YY+MmwlBVPU23N1YUdB4Go1JaLvyaM=;
-        b=DdzJxJAgNMs9+fhBDxWJ9SLu0wpVHnn58T0rAqTG+lkYqt2r0ipW4Ej5kxraxDeMEV
-         Q1Rtbc5vc/72qgZg4d7uha2Q2GzDkk+BJ7q9yuFQ1FE3+8qyTR3f/+q+ZLXup0VdBzhi
-         NJGs55U4lxOwfUrHaA5QJRZ4WMy6lLhbYAkyDQhB4ZSt00qaDhKopvhqFAhYB39sJKMx
-         KaZ5XMUQvCpLC9vEKSh/6o7aCiG4KB6rQfFcvmGLZlKW9SgmfjBVil4JyV5LfEOmyAVg
-         M1G5VZ9xp9uBifAGetbjmEiWJVGKaqN2YmM89COENECKqjWRqRllm9ysyF+mEyA9XcKQ
-         4crQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yC8xgVazfP+f7YY+MmwlBVPU23N1YUdB4Go1JaLvyaM=;
-        b=ZfsHr4PMC5882gZu70WL/xtO/jmYek9fRWDG5g3kbLZeD4YU9yOuC2Zii2pbNsyJZg
-         etw+AArVkLdzrtEjWtHqkUbAiJsAzEmAN0EhcdiQVmY6Jjp9ojsGjf0Al7TbVt7L3gtg
-         noSJg69V4LypgPbZmeWzBg3NumNkgM+lq3sNz5CaysK4NfcNKDw096tTOdUd18aB74/2
-         dv8LBK2cjwbJCtOxLkpiwm1HEjrpkfsA9SBhb91NHSUlfuMLsPewEk0GVLhqDy37/3ai
-         Ejm5ZU7vJ5cXevmmpP3Qqtazm2xPKk97ElSUsUdRa4pColIkweDCC1JFTwaUnMWGtSsT
-         PmnQ==
-X-Gm-Message-State: ACrzQf3gVeaYKyUozEwuEvSsg1EBW9FG+cPDS50UQjayTPJra3dAyaTG
-        v6sZj8qmcnd/JaGc89rZqy8=
-X-Google-Smtp-Source: AMsMyM4rZ0g9bl931hSQC+RmUdmDMLLUpzU1HkY+7SRwliWbZgmg36+xnF7W52a3SaHaNgeKvLiImQ==
-X-Received: by 2002:adf:e94b:0:b0:236:64a5:4038 with SMTP id m11-20020adfe94b000000b0023664a54038mr33063834wrn.321.1667824269727;
-        Mon, 07 Nov 2022 04:31:09 -0800 (PST)
-Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
-        by smtp.gmail.com with ESMTPSA id w2-20020a5d6802000000b0023662245d3csm7171950wru.95.2022.11.07.04.31.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Nov 2022 04:31:09 -0800 (PST)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Mon, 7 Nov 2022 13:31:06 +0100
-To:     Hao Sun <sunhao.th@gmail.com>, ast@kernel.org
-Cc:     Jiri Olsa <olsajiri@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        andrii@kernel.org, bpf <bpf@vger.kernel.org>, daniel@iogearbox.net,
-        haoluo@google.com, john.fastabend@gmail.com, kpsingh@kernel.org,
-        martin.lau@linux.dev, sdf@google.com, song@kernel.org, yhs@fb.com
-Subject: Re: WARNING in bpf_bprintf_prepare
-Message-ID: <Y2j6ivTwFmA0FtvY@krava>
-References: <CACkBjsakT_yWxnSWr4r-0TpPvbKm9-OBmVUhJb7hV3hY8fdCkw@mail.gmail.com>
- <Y1pqWPRmP0M+hcXf@krava>
- <CACkBjsbP-iw-gpnYN=Ormcu2zXAeOgjeptjGAFXNNJRRVhRAag@mail.gmail.com>
- <Y2J+n7SqmtfyA7ZM@krava>
+        Mon, 7 Nov 2022 07:33:46 -0500
+X-Greylist: delayed 63 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 07 Nov 2022 04:33:45 PST
+Received: from esa7.fujitsucc.c3s2.iphmx.com (esa7.fujitsucc.c3s2.iphmx.com [68.232.159.87])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2968C270F
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 04:33:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=fujitsu.com; i=@fujitsu.com; q=dns/txt; s=fj1;
+  t=1667824425; x=1699360425;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=eu7tVovsb2J9HY0OF8i2Hn8n+sI75YpqMDVSlaPaaxE=;
+  b=kOsT1jZulwWUiPqWNF4ObnKruiLrHCWjH9F/LshsUgxygFANeSTswJX3
+   nuOiEceqhIjTKUCjGrbOS7RmzhkZCCJuZJjGKYb+S84n4Fhi1OUKw87ES
+   mkfCFWmZSEP3sTrErP6YrTKec+LL5xFoAkBVUUG+A2IwSYXAFwuxte8lJ
+   rUDSXZE9FEpvp+UZFyLq8bLZYr21Npv4UF+UcQc7C7txsUoi58rFx0msL
+   TdPESLxQqjdGTCSAisgKYuIXW+c8AIOU7ccdICix2wRsWddkj865on80K
+   v3+DJaC9PrhlPpv7JKHNlLU6wwWN/VCdlN+Wul81zY3ZEwQuMWkmc6O9z
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10523"; a="69461715"
+X-IronPort-AV: E=Sophos;i="5.96,143,1665414000"; 
+   d="scan'208";a="69461715"
+Received: from mail-os0jpn01lp2113.outbound.protection.outlook.com (HELO JPN01-OS0-obe.outbound.protection.outlook.com) ([104.47.23.113])
+  by ob1.fujitsucc.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Nov 2022 21:32:37 +0900
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=NKBTom+etCHkOaKeVJf9KbGTFf72lhhuVO0+Wa/HJG41p4hNfQEv7Qjn43pOO9uQuCSdFebWZX0+yrLfc6LGzccKZGPn4PmeHVviwx7Sn756rnY/pMHgM5Wd2SalovtHeaDyK5pBL6sjMbdC3YqdBifAjRce0IxrIvPq788hq/w6W16v6wUvbp0GrPqftCpe4VcjuGPLP4qntX8B7QCZzfCziVUpw4Tr5kc5wUwvgfUFJPHmlUZwPRWRNuKhpMLAAKu62YmGBPWh1fLIH24K7aIbdJmSnkEWYDySEoriPVmewhx8UrisLgwIXmpCg/5uLo0YoFj1vnSIjXPh21T6qA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=hjZr2OSQmClvn1uJmKa3TQ+IkuHd0an2ZfKQH6eK3s0=;
+ b=UBnoOoqYJH2RNr2DJZtS1fMLoGoQVvi6bpErhaBo+2uI65Tnrh0/9lJaQ5eQuYHayxjcYrgfJFQ8UUAVMPlZCDBtBUU61Bb8gHy/QQZC/DpSdJFTzSiombDAOxkt2+YLgTRzXZw3k7HmiLKtt4WF1CV+nUZd056f0ku0aZtHsWr/nJXtup3fKd3JD317BU3K8E9Vt5VBkIbw92j0HCDSiekMlN7eywhH8101ZCCaZm7KzrxySPCOZwBIN8wKaANekzYPpEc93CWdO5OS/trn/vNDb7jksNFTRYfn+HsiwJC0Ewt/rVDSDjK4nQSEmJQ2gSY1Y/OYy3JaIwM/azmiTw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fujitsu.com; dmarc=pass action=none header.from=fujitsu.com;
+ dkim=pass header.d=fujitsu.com; arc=none
+Received: from TYCPR01MB7775.jpnprd01.prod.outlook.com (2603:1096:400:180::5)
+ by TYCPR01MB10713.jpnprd01.prod.outlook.com (2603:1096:400:295::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.26; Mon, 7 Nov
+ 2022 12:32:34 +0000
+Received: from TYCPR01MB7775.jpnprd01.prod.outlook.com
+ ([fe80::2c55:97e2:6dff:bfe6]) by TYCPR01MB7775.jpnprd01.prod.outlook.com
+ ([fe80::2c55:97e2:6dff:bfe6%9]) with mapi id 15.20.5791.025; Mon, 7 Nov 2022
+ 12:32:34 +0000
+From:   "Akira Naribayashi (Fujitsu)" <a.naribayashi@fujitsu.com>
+To:     "akpm@linux-foundation.org" <akpm@linux-foundation.org>
+CC:     "vbabka@suse.cz" <vbabka@suse.cz>,
+        "mgorman@techsingularity.net" <mgorman@techsingularity.net>,
+        "rientjes@google.com" <rientjes@google.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        "Akira Naribayashi (Fujitsu)" <a.naribayashi@fujitsu.com>
+Subject: RE: [PATCH] mm, compaction: fix fast_isolate_around() to stay within
+ boundaries
+Thread-Topic: [PATCH] mm, compaction: fix fast_isolate_around() to stay within
+ boundaries
+Thread-Index: AQHY6S3O4xnDu8L77EevMVig1gEQ/64iskiAgAVyM4CAC1JoQA==
+Date:   Mon, 7 Nov 2022 12:32:34 +0000
+Message-ID: <TYCPR01MB77752C15C512BB7EC952F05BE53C9@TYCPR01MB7775.jpnprd01.prod.outlook.com>
+References: <20221027132557.5f724149bd5753036f41512a@linux-foundation.org>
+ <20221031073559.36021-1-a.naribayashi@fujitsu.com>
+In-Reply-To: <20221031073559.36021-1-a.naribayashi@fujitsu.com>
+Accept-Language: ja-JP, en-US
+Content-Language: ja-JP
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: =?iso-2022-jp?B?TVNJUF9MYWJlbF9hNzI5NWNjMS1kMjc5LTQyYWMtYWI0ZC0zYjBmNGZl?=
+ =?iso-2022-jp?B?Y2UwNTBfQWN0aW9uSWQ9MWY4ZTYyNTItZDU0OC00NGZlLWJkM2ItMzRj?=
+ =?iso-2022-jp?B?ZjdiY2FiMDRkO01TSVBfTGFiZWxfYTcyOTVjYzEtZDI3OS00MmFjLWFi?=
+ =?iso-2022-jp?B?NGQtM2IwZjRmZWNlMDUwX0NvbnRlbnRCaXRzPTA7TVNJUF9MYWJlbF9h?=
+ =?iso-2022-jp?B?NzI5NWNjMS1kMjc5LTQyYWMtYWI0ZC0zYjBmNGZlY2UwNTBfRW5hYmxl?=
+ =?iso-2022-jp?B?ZD10cnVlO01TSVBfTGFiZWxfYTcyOTVjYzEtZDI3OS00MmFjLWFiNGQt?=
+ =?iso-2022-jp?B?M2IwZjRmZWNlMDUwX01ldGhvZD1TdGFuZGFyZDtNU0lQX0xhYmVsX2E3?=
+ =?iso-2022-jp?B?Mjk1Y2MxLWQyNzktNDJhYy1hYjRkLTNiMGY0ZmVjZTA1MF9OYW1lPUZV?=
+ =?iso-2022-jp?B?SklUU1UtUkVTVFJJQ1RFRBskQiJMJT8lUhsoQjtNU0lQX0xhYmVsX2E3?=
+ =?iso-2022-jp?B?Mjk1Y2MxLWQyNzktNDJhYy1hYjRkLTNiMGY0ZmVjZTA1MF9TZXREYXRl?=
+ =?iso-2022-jp?B?PTIwMjItMTEtMDdUMTI6Mjk6NDdaO01TSVBfTGFiZWxfYTcyOTVjYzEt?=
+ =?iso-2022-jp?B?ZDI3OS00MmFjLWFiNGQtM2IwZjRmZWNlMDUwX1NpdGVJZD1hMTlmMTIx?=
+ =?iso-2022-jp?B?ZC04MWUxLTQ4NTgtYTlkOC03MzZlMjY3ZmQ0Yzc7?=
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=fujitsu.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: TYCPR01MB7775:EE_|TYCPR01MB10713:EE_
+x-ms-office365-filtering-correlation-id: 865e44e1-173a-4eec-ace3-08dac0bc258c
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 7MTpHp2rJyHCCJTmiTA1XG6LqJJBKFUnBIpfRaUjCRGJ0K75rrVmbQdvu5SPr13L416zqXHDHjHfcFMtHhDlW044uhivsRJu3ybddVsdJlzKNzG8FxUqctyQdYIABJmrYn4GboJafDiY55lV/9Ze94wsiAvqw0PMSFEugmFi7uggaOjIzaXEIU1iwtRhITNJoE4QNMX9/PVcuk0pQjc0rDJo5QKd48yzWquDjckUbGjf/z2B+P4ti+/3uxWsSwXsQH/TmAO9D+5ZhC4a4dvStp1CF3KRXLRYmF1lUPOVqtHT1Wx1Qaz4ZJYkonKyE/V6UOtLpPiFLqriGbO0dLhJ08t5oNL65NBW2YNk3fOKxQx/P79qGRiyU5bc9iep8+wzpYq7u3vZ0IrHmBjhnqBLVXD2X5WciqqkpqZJBN+BPwPBn1U+mwGVZsiWTbjQQqdTBR54HIN+KSWmdDq+iy6Mr0XNMjbVFryI1lZEaE20itSnulV15ffH4HHjZyMs+ROxf+H6SyMhhLTS3ETerkhMBA43c086Y4ukI9X8VuDIUu4H9/ei1JtzGVlr1w2rqjha/O/SKwjhv7NVjX3eh59BRlKvvwMr9m1kP/iM2WJI18XnR1U/yup7NhX6OF2UUq8rwLoq9TWW2kLE3VzIB8Go5D+nFsiueWLxh7EB9zSAYhNZEHKMShoSxF/9uq4nT3ASHISvc2EqNMrUD4eq3RwB7Qu4WwgDRJyp9GZuOAkJV94Do87T3WrdpByxBYKcYDt/pqLxUViH6OxAiciRQdq8VXJmDgR68FphLjUtILYDweE=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYCPR01MB7775.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(366004)(136003)(39860400002)(346002)(376002)(451199015)(1590799012)(5660300002)(6506007)(26005)(9686003)(82960400001)(478600001)(316002)(54906003)(6916009)(2906002)(122000001)(71200400001)(7696005)(86362001)(52536014)(41300700001)(8936002)(38100700002)(33656002)(107886003)(55016003)(85182001)(83380400001)(4326008)(76116006)(8676002)(38070700005)(186003)(64756008)(66946007)(66446008)(66556008)(1580799009)(66476007);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-2022-jp?B?UUpPcWNraDZLYVp3L1BrMW5LTEhOSGVLYkNSM2p1VGY2eEVKRkJJajE3?=
+ =?iso-2022-jp?B?ZFltZFVKK0xFWlZYMzhzR2gzRWRyUitBc21zOGdQUzJncGE1RVQ4YUVi?=
+ =?iso-2022-jp?B?QjNQWlVWOE5nQ2xxTUxhT1A1YXBWSEpVNW1helFnaHZIRGhLcEU4MDhq?=
+ =?iso-2022-jp?B?YWNCRTZGRVBUblRtWDNUSytocDlYaDFjcDBXb1hkMndvSCs2YVVES0lu?=
+ =?iso-2022-jp?B?bkZoSnNxeVdRYTVDZy9HNzFZNWZKdW5XdW4wempKZ0pGa2U0Kytobnll?=
+ =?iso-2022-jp?B?NHpHUHNYQXNxYWxlYlZhMHU5WE5kVWkzS0pRdnZnMEZPd25sL2F0Y0tD?=
+ =?iso-2022-jp?B?RzhmUkpoaW1DLzE5NW01MHlrbVo2eS9PTzNCalArUWs3K2liaFRaUHNC?=
+ =?iso-2022-jp?B?R20zYy8xWWdlc3ppRWZ6REFoR3lYUXVkcVBGUkw4ZmZTVXk1ZHBiZkRu?=
+ =?iso-2022-jp?B?WEJ6c0NPUHl4cGRNT3crd2dzZFdXeGVlUnhxeUV5bjlnMW1ZRnMySVhJ?=
+ =?iso-2022-jp?B?bVJvQSs1bWQzMDBDVnVoREc5N3NlQ2ZiTkRzZTBRWWJxVk82YXVwdmdp?=
+ =?iso-2022-jp?B?QUM1K1djYSttZHRZTEt2TE45YU5VdDRJK1pEN0FzN21JUkY4REVvcVBk?=
+ =?iso-2022-jp?B?VGRqcDhicVdueVRUZUk5eHFTbGRNUWI1aW0zeGVGcHlRTmJMcThFSHJv?=
+ =?iso-2022-jp?B?ZHRWR3NlRXlQMXVMSk83bVdnWWx1KzZIT3dtenkvdGRzV09rOWtXVEVI?=
+ =?iso-2022-jp?B?TDQ1WGxxUEJFSkFLSEgwbDBKZEk5ajlJdHFNSlpsRHdGTEk2Nmx4MGsz?=
+ =?iso-2022-jp?B?eUh3cG9pNWllaGVmOWkvS2pkTG8zK1RwcGZvN3ZxTG4rQWVFeTVoSTJ0?=
+ =?iso-2022-jp?B?RmQrVGwyeGtSMWJJb0pMQ3dHcFNLWGZWbjFkSUJBQlBlbnpra3JWcmNC?=
+ =?iso-2022-jp?B?eWRlb0UrUFZMUExtRENJcktVZUxMNkhWSkdVcHV5VUlGdW1oVm5sUFVG?=
+ =?iso-2022-jp?B?UnRqeGE1dU5Na3MxOFUwTHVvZkZKN2x2dGZZVis2OWJKeENIYVhueEJG?=
+ =?iso-2022-jp?B?NDZ2U3FYZzlUbU83dkFtaW1nVVBNV1NmM2VzRUQvbEVHWWtBUncySjBq?=
+ =?iso-2022-jp?B?MHBET1JsUTlEMFZzaFpVaDlPbHUyNVJ5dCtHeDRqUVZZMDVNUUJldHdD?=
+ =?iso-2022-jp?B?UDhyMWlPYk5VUHlOaTRQb3pSWFhMVDZXa2NmTGYyRjNvdzNmbzJ2Ri9U?=
+ =?iso-2022-jp?B?QzdIN1V3NGY1ZWl1RXhnN1BXRGluVSs5TnFuczhxS2liV0lpZWdBRHlj?=
+ =?iso-2022-jp?B?aW5UUm85NDF4RWlhT1ZIOSticWFzL2hBd3E2MC9zSmN5aTNsc2FCam9Q?=
+ =?iso-2022-jp?B?MmVkVEwxakswS2ROUzZWYkQwRnlVRGJrcFRhaU5Jclg1T1ZnUGFiQlFR?=
+ =?iso-2022-jp?B?WHBRaEN6TGFjQnRURFdMUmpVRlVMVzlVTkU2THFGcnhiZjA4UHVhc2R2?=
+ =?iso-2022-jp?B?cGZOelo2U29oL2JTMUUrZUExbC9MbVQxcllFTnpQNkhLT2VpL244b3pX?=
+ =?iso-2022-jp?B?SHBoZjFNZ29odHViWHd4cEhDb3d3TURaemZZazdxdWJKMHhPRHI4VjU4?=
+ =?iso-2022-jp?B?NGlOcEFoZmZncjZNRTNCSEwweW1ROUVOSW1wSFc4NVBoU2ZaVmZnaUl4?=
+ =?iso-2022-jp?B?a2hxQkJLUFRsRFVWY3d5Vkh1enBmaGk3K1pKUTRrNzRpUXJoenVUak1K?=
+ =?iso-2022-jp?B?ZWtKUEptUXRNTGorNytYc1RmK1Qyc2VoUm9HV0xMOGpZdndFMnRYQ0kz?=
+ =?iso-2022-jp?B?b1l4WDQzYTQ4Q21rQUU5ckhaYVNqcnlFUjBFNUlsRzY1ZzlXMURZRFdB?=
+ =?iso-2022-jp?B?WDN5UlNRR3FSaDBhdDVJTVAwMU1GdTNDbWdGZmFud0FwZkV0RzIvekJ2?=
+ =?iso-2022-jp?B?VzVlWWZpWVI1V2xpbVkzbFUwTk1yODd5R2YxeGZmRFFNNDFnMVkxMU9k?=
+ =?iso-2022-jp?B?THRGdzZPeXdVYTJOaHFtcHhyVUUyZkFmM0Qra1BGamZqYlRNUmRZZk1N?=
+ =?iso-2022-jp?B?WjBLcWs1Wm4xSmFSbEY4eVozYzVMaG10YVY0SHFMcWx3K1lBWk5VNDAx?=
+ =?iso-2022-jp?B?NThIcmxPak5sK0ZvNUZuN0xJNjA0U20yNmgxSkwvTHg1U2pXZk84OHRq?=
+ =?iso-2022-jp?B?ZXBhajV1MUJJYzdPdUFwK1lwc2k4SFllN0VkTmIxTGpYTStRT3BaR3Nx?=
+ =?iso-2022-jp?B?UkpIaDk0MXdHenNRQ0pRK05tZzIvQ2xxNk90V29sOVRlTTNTSFZ5UjNv?=
+ =?iso-2022-jp?B?UFl2Mm5ZeVl6emNxVlFMNGk5Qm9ZTUFrMUE9PQ==?=
+Content-Type: text/plain; charset="iso-2022-jp"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Y2J+n7SqmtfyA7ZM@krava>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-OriginatorOrg: fujitsu.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TYCPR01MB7775.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 865e44e1-173a-4eec-ace3-08dac0bc258c
+X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Nov 2022 12:32:34.2238
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: a19f121d-81e1-4858-a9d8-736e267fd4c7
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: ofnvbKnkY5JtmMrzs4hUvK5QM8yep80mUXL5s3AJCU29wUMl5kf2i3KmE3BsxVObyJwhWmZn4gkrJRN1CjaZDbxo2Yy6lAhann7gpPocQhU=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYCPR01MB10713
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,176 +162,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 02, 2022 at 03:28:47PM +0100, Jiri Olsa wrote:
-> On Thu, Oct 27, 2022 at 07:45:16PM +0800, Hao Sun wrote:
-> > Jiri Olsa <olsajiri@gmail.com> 于2022年10月27日周四 19:24写道：
-> > >
-> > > On Thu, Oct 27, 2022 at 10:27:28AM +0800, Hao Sun wrote:
-> > > > Hi,
-> > > >
-> > > > The following warning can be triggered with the C reproducer in the link.
-> > > > Syzbot also reported this several days ago, Jiri posted a patch that
-> > > > uses bpf prog `active` field to fix this by 05b24ff9b2cfab (bpf:
-> > > > Prevent bpf program recursion...) according to syzbot dashboard
-> > > > (https://syzkaller.appspot.com/bug?id=179313fb375161d50a98311a28b8e2fc5f7350f9).
-> > > > But this warning can still be triggered on 247f34f7b803
-> > > > (Linux-v6.1-rc2) that already merged the patch, so it seems that this
-> > > > still is an issue.
-> > > >
-> > > > HEAD commit: 247f34f7b803 Linux 6.1-rc2
-> > > > git tree: upstream
-> > > > console output: https://pastebin.com/raw/kNw8JCu5
-> > > > kernel config: https://pastebin.com/raw/sE5QK5HL
-> > > > C reproducer: https://pastebin.com/raw/X96ASi27
-> > >
-> > > hi,
-> > > right, that fix addressed that issue for single bpf program,
-> > > and it won't prevent if there are multiple programs hook on
-> > > contention_begin tracepoint and calling bpf_trace_printk,
-> > >
-> > > I'm not sure we can do something there.. will check
-> > >
-> > > do you run just the reproducer, or you load the server somehow?
-> > > I cannot hit the issue so far
-> > >
-> > 
-> > Hi,
-> > 
-> > Last email has format issues, resend it here.
-> > 
-> > I built the kernel with the config in the link, which contains
-> > “CONFIG_CMDLINE="earlyprintk=serial net.ifnames=0
-> > sysctl.kernel.hung_task_all_cpu_backtrace=1 panic_on_warn=1 …”, and
-> > boot the kernel with normal qemu setup and then the warning can be
-> > triggered by executing the reproducer.
-> > 
-> > Also, I’m willing to test the proposed patch if any.
-> 
-> fyi I reproduced that.. will check if we can do anything about that
+Sorry, I may not have sent the email correctly.=20
+I will resend it.
 
-I reproduced this with set of 8 programs all hooked to contention_begin
-tracepoint and here's what I think is happening:
-
-all programs (prog1 .. prog8) call just bpf_trace_printk helper and I'm
-running 'perf bench sched messaging' to load the machine
-
-at some point some contended lock triggers trace_contention_begin:
-
-  trace_contention_begin
-    __traceiter_contention_begin                                <-- iterates all functions attached to tracepoint
-      __bpf_trace_run(prog1)
-        prog1->active = 1
-        bpf_prog_run(prog1)
-          bpf_trace_printk
-            bpf_bprintf_prepare                                 <-- takes buffer 1 out of 3
-            raw_spin_lock_irqsave(trace_printk_lock)
-
-              # we have global single trace_printk_lock, so we will trigger
-              # its trace_contention_begin at some point
-
-              trace_contention_begin
-                __traceiter_contention_begin
-                  __bpf_trace_run(prog1)
-                    prog1->active block                         <-- prog1 is already 'running', skipping the execution
-                  __bpf_trace_run(prog2)
-                    prog2->active = 1
-                    bpf_prog_run(prog2)
-                      bpf_trace_printk
-                        bpf_bprintf_prepare                     <-- takes buffer 2 out of 3
-                        raw_spin_lock_irqsave(trace_printk_lock)
-                          trace_contention_begin
-                            __traceiter_contention_begin
-                              __bpf_trace_run(prog1)
-                                prog1->active block             <-- prog1 is already 'running', skipping the execution
-                              __bpf_trace_run(prog2)
-                                prog2->active block             <-- prog2 is already 'running', skipping the execution
-                              __bpf_trace_run(prog3)
-                                 prog3->active = 1
-                                 bpf_prog_run(prog3)
-                                   bpf_trace_printk
-                                     bpf_bprintf_prepare        <-- takes buffer 3 out of 3
-                                     raw_spin_lock_irqsave(trace_printk_lock)
-                                       trace_contention_begin
-                                         __traceiter_contention_begin
-                                           __bpf_trace_run(prog1)
-                                             prog1->active block      <-- prog1 is already 'running', skipping the execution
-                                           __bpf_trace_run(prog2)
-                                             prog2->active block      <-- prog2 is already 'running', skipping the execution
-                                           __bpf_trace_run(prog3)
-                                             prog3->active block      <-- prog3 is already 'running', skipping the execution
-                                           __bpf_trace_run(prog4)
-                                             prog4->active = 1
-                                             bpf_prog_run(prog4)
-                                               bpf_trace_printk
-                                                 bpf_bprintf_prepare  <-- tries to take buffer 4 out of 3 -> WARNING
+On Thu, 27 Oct 2022 20:26:04 +0000 Andrew Morton <akpm@linux-foundation.org=
+> wrote:
+> On Wed, 26 Oct 2022 20:24:38 +0900 NARIBAYASHI Akira <a.naribayashi@fujit=
+su.com> wrote:
+>=20
+> > Depending on the memory configuration, isolate_freepages_block() may
+> > scan pages out of the target range and causes panic.
+> >=20
+> > The problem is that pfn as argument of fast_isolate_around() could
+> > be out of the target range. Therefore we should consider the case
+> > where pfn < start_pfn, and also the case where end_pfn < pfn.
+> >=20
+> > This problem should have been addressd by the commit 6e2b7044c199
+> > ("mm, compaction: make fast_isolate_freepages() stay within zone")
+> > but there was an oversight.
+> >=20
+> >  Case1: pfn < start_pfn
+> >=20
+> >   <at memory compaction for node Y>
+> >   |  node X's zone  | node Y's zone
+> >   +-----------------+------------------------------...
+> >    pageblock    ^   ^     ^
+> >   +-----------+-----------+-----------+-----------+...
+> >                 ^   ^     ^
+> >                 ^   ^      end_pfn
+> >                 ^    start_pfn =3D cc->zone->zone_start_pfn
+> >                  pfn
+> >                 <---------> scanned range by "Scan After"
+> >=20
+> >  Case2: end_pfn < pfn
+> >=20
+> >   <at memory compaction for node X>
+> >   |  node X's zone  | node Y's zone
+> >   +-----------------+------------------------------...
+> >    pageblock  ^     ^   ^
+> >   +-----------+-----------+-----------+-----------+...
+> >               ^     ^   ^
+> >               ^     ^    pfn
+> >               ^      end_pfn
+> >                start_pfn
+> >               <---------> scanned range by "Scan Before"
+> >=20
+> > It seems that there is no good reason to skip nr_isolated pages
+> > just after given pfn. So let perform simple scan from start to end
+> > instead of dividing the scan into "Before" and "After".
+>=20
+> Under what circumstances will this panic occur?  I assume those
+> circumstnces are pretty rare, give that 6e2b7044c1992 was nearly two
+> years ago.
+>=20
+> Did you consider the desirability of backporting this fix into earlier
+> kernels?
 
 
-the code path may vary based on the contention of the trace_printk_lock,
-so I saw different nesting within 8 programs, but all eventually ended up
-at 4 levels of nesting and hit the warning
+Panic can occur on systems with multiple zones in a single pageblock.
 
-I think we could perhaps move the 'active' flag protection from program
-to the tracepoint level (in the patch below), to prevent nesting execution
-of the same tracepoint, so it'd look like:
-
-  trace_contention_begin
-    __traceiter_contention_begin
-      __bpf_trace_run(prog1) {
-        contention_begin.active = 1
-        bpf_prog_run(prog1)
-          bpf_trace_printk
-            bpf_bprintf_prepare
-            raw_spin_lock_irqsave(trace_printk_lock)
-              trace_contention_begin
-                __traceiter_contention_begin
-                  __bpf_trace_run(prog1)
-                    blocked because contention_begin.active == 1
-                  __bpf_trace_run(prog2)
-                    blocked because contention_begin.active == 1
-                  __bpf_trace_run(prog3)
-                  ...
-                  __bpf_trace_run(prog8)
-                    blocked because contention_begin.active == 1
-
-            raw_spin_unlock_irqrestore
-            bpf_bprintf_cleanup
-
-        contention_begin.active = 0
-      }
-
-      __bpf_trace_run(prog2) {
-        contention_begin.active = 1
-        bpf_prog_run(prog2)
-          ...
-        contention_begin.active = 0
-      }
-
-do we need bpf program execution in nested tracepoints?
-we could actually allow 3 nesting levels for this case.. thoughts?
-
-thanks,
-jirka
-
-
----
-diff --git a/include/trace/bpf_probe.h b/include/trace/bpf_probe.h
-index 6a13220d2d27..5a354ae096e5 100644
---- a/include/trace/bpf_probe.h
-+++ b/include/trace/bpf_probe.h
-@@ -78,11 +78,15 @@
- #define CAST_TO_U64(...) CONCATENATE(__CAST, COUNT_ARGS(__VA_ARGS__))(__VA_ARGS__)
- 
- #define __BPF_DECLARE_TRACE(call, proto, args)				\
-+static DEFINE_PER_CPU(int, __bpf_trace_tp_active_##call);		\
- static notrace void							\
- __bpf_trace_##call(void *__data, proto)					\
- {									\
- 	struct bpf_prog *prog = __data;					\
--	CONCATENATE(bpf_trace_run, COUNT_ARGS(args))(prog, CAST_TO_U64(args));	\
-+									\
-+	if (likely(this_cpu_inc_return(__bpf_trace_tp_active_##call) == 1))		\
-+		CONCATENATE(bpf_trace_run, COUNT_ARGS(args))(prog, CAST_TO_U64(args));	\
-+	this_cpu_dec(__bpf_trace_tp_active_##call);					\
- }
- 
- #undef DECLARE_EVENT_CLASS
+The reason it is rare is that it only happens in special configurations.
+Depending on how many similar systems there are, it may be a good idea to f=
+ix this problem for older kernels as well.
