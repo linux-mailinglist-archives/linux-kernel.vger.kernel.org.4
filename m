@@ -2,49 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56A9461E91D
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 04:13:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CFE6361E924
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 04:13:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231186AbiKGDNc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Nov 2022 22:13:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34776 "EHLO
+        id S231222AbiKGDNi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Nov 2022 22:13:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230445AbiKGDM6 (ORCPT
+        with ESMTP id S230479AbiKGDNJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Nov 2022 22:12:58 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 059BC10551;
-        Sun,  6 Nov 2022 19:12:53 -0800 (PST)
+        Sun, 6 Nov 2022 22:13:09 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 767DCDFE1;
+        Sun,  6 Nov 2022 19:12:55 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7A55C60E86;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1E41AB80D90;
+        Mon,  7 Nov 2022 03:12:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 208D9C43470;
         Mon,  7 Nov 2022 03:12:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32720C43152;
-        Mon,  7 Nov 2022 03:12:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667790771;
-        bh=mweBuL50kxsp/aioXeFamnDpfnxNOo+ji52Azj8DQi4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pFiujuQQprBMUq4qe7Q7UNX6rHJNHmuRVkitKVMqoXPgXaykPe3e/ERcC7u8QbsUh
-         HlcdurDBRDW2tezIngRX4HHcuhIU+h119d4CjtPkJ4zfLOux1euJPEybwEBhPitkpT
-         5z3jMo+0aLLH8js8XwzPh4cjbHDGkmH9ZTnd7NkyBhhDnEoVKdHWFiwqMViEDcNN3+
-         YmP2y7KcpbC0MyhPXIlSj+BDpBUYLyYij4NR7lbBfZVTwG5ghmX3r2ZqasC1o1OJoG
-         3asofeR+75ZI375mDwsdtrVV9q2118gbRfyLBVadEEf5ZPGU1s42qGSU/VOBQMOE2Y
-         FvCqBHh6nltUw==
+        s=k20201202; t=1667790772;
+        bh=UMDPCvoqo2sWQ6McTJbSAELNREOn/h2Fg9CR2Zr7WfQ=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=HKawyi+0hyNnRmueQZb6aX/B3GKu3mo38UtPi1vd4wqU9HFV6XnV4z7rrJFgZzLUE
+         dKrtUOBGbSy/NnElUHa247h/TWYRMJwnffRORhFSk4wDOoGMp8MRVJNCJkfE4rW3BI
+         AB0WpI6OU1J1q5cy6WY36WTkSuDPB/4V6F7lRI9JHSno7QkNrBWzvHAwUqzBi+7lNN
+         ARWeLzxdsLCZPOf9C0j/yCtZMyXeavmYaIsJYaSKkyPmfnsUC3XHUv9v2fPM7LngK3
+         V2ud1YJu1o2SqRB/NOIhEfJH8ppTvYOGiYxh9xYGSLj55WTcfKx8ayLWCIjW8qhEes
+         aqxmyM6MGYOyQ==
 From:   Bjorn Andersson <andersson@kernel.org>
 To:     krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
         Rob Herring <robh+dt@kernel.org>,
         linux-arm-msm@vger.kernel.org, konrad.dybcio@somainline.org,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         linux-kernel@vger.kernel.org, Andy Gross <agross@kernel.org>
-Cc:     dmitry.baryshkov@linaro.org
-Subject: Re: [PATCH 0/4] arm64: dts: qcom: sm8450: add SDHCI
-Date:   Sun,  6 Nov 2022 21:12:09 -0600
-Message-Id: <166779074265.500303.15502116502642876255.b4-ty@kernel.org>
+Subject: Re: (subset) [PATCH 1/2] dt-bindings: arm: qcom: document Mikrotik RB3011 board
+Date:   Sun,  6 Nov 2022 21:12:10 -0600
+Message-Id: <166779074258.500303.16980893196856423664.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20221026200357.391635-1-krzysztof.kozlowski@linaro.org>
-References: <20221026200357.391635-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221017014653.12970-1-krzysztof.kozlowski@linaro.org>
+References: <20221017014653.12970-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -57,31 +56,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 26 Oct 2022 16:03:53 -0400, Krzysztof Kozlowski wrote:
-> Depends on:
-> https://lore.kernel.org/all/20220410205127.1670705-2-dmitry.baryshkov@linaro.org/
+On Sun, 16 Oct 2022 21:46:52 -0400, Krzysztof Kozlowski wrote:
+> Add compatible for existing Mikrotik RB3011 board.
 > 
-> Best regards,
-> Krzysztof
 > 
-> Krzysztof Kozlowski (4):
->   arm64: dts: qcom: sm8450: move SDHCI pin configuration to DTSI
->   arm64: dts: qcom: sm8450: disable SDHCI SDR104/SDR50 on all boards
->   arm64: dts: qcom: sm8450-hdk: add SDHCI for microSD
->   arm64: dts: qcom: sm8450-qrd: add SDHCI for microSD
-> 
-> [...]
 
 Applied, thanks!
 
-[1/4] arm64: dts: qcom: sm8450: move SDHCI pin configuration to DTSI
-      commit: a0646262ec94faaf95b3dba8f17774d9762ee9ac
-[2/4] arm64: dts: qcom: sm8450: disable SDHCI SDR104/SDR50 on all boards
-      commit: 9d561dc4e5cc31e757f91eb7bb709d2e2a8c9ce0
-[3/4] arm64: dts: qcom: sm8450-hdk: add SDHCI for microSD
-      commit: 1f52331285ed9f412f85e321ae6574714725d634
-[4/4] arm64: dts: qcom: sm8450-qrd: add SDHCI for microSD
-      commit: 4a5923fe4e1df52fafa4026363a349f30c061a15
+[1/2] dt-bindings: arm: qcom: document Mikrotik RB3011 board
+      commit: fb27202bc549a4469576c5b4a18ba3b6d0dd926f
+[2/2] ARM: dts: qcom: ipq8064-rb3011: Add SoC compatible
+      commit: 78c80faf07c06e1de7d09ded2667cae5bda9df34
 
 Best regards,
 -- 
