@@ -2,92 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5223361E9C9
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 04:39:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B040661E981
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 04:21:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230371AbiKGDjH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Nov 2022 22:39:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56168 "EHLO
+        id S230298AbiKGDVP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Nov 2022 22:21:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230228AbiKGDjD (ORCPT
+        with ESMTP id S230303AbiKGDVA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Nov 2022 22:39:03 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B105D63;
-        Sun,  6 Nov 2022 19:39:03 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4N5H5d1C6fz4xG8;
-        Mon,  7 Nov 2022 14:39:00 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1667792341;
-        bh=sAF/VAs4bVZneFveAgK5h87NaaJF7EqwoY/5dS35PcA=;
-        h=Date:From:To:Cc:Subject:From;
-        b=s298iSYcIEn/fT7AJaNyQZGjRCEW2dSi0LXZUHmD1oL3fBckih0QIztPHktMhIeRC
-         UrhJL/Hvg6qZ0tYLLMx2rsFLjkjeZd27eYdTjAtrnH5MSX6RtrmlFiY3hhKhLFKqhM
-         DGWOHl0y8IQ2AQ49V4S55vF07wNHuLrAPVGd1uhd6eaDBA629Fl/bh1W80loyI3dgw
-         0yDRZ35EQGmpGJ6r60g8csCMeepRqzTg/cXF3NRND2zu/YC7kykfS9HLQEv0sunB4o
-         U+o7sU78Wx0ASk/yEDqX3S8gGSiRtPWCi4v0SqTTcvZuUuaS1n3p2xZqfz0NmCEOQO
-         XmPs5rITd9cEQ==
-Date:   Mon, 7 Nov 2022 14:38:58 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>
-Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the drm-misc tree
-Message-ID: <20221107143858.0253a8ff@canb.auug.org.au>
+        Sun, 6 Nov 2022 22:21:00 -0500
+Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFB3D1178;
+        Sun,  6 Nov 2022 19:18:32 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4N5Gds5vsKz4f4Qk1;
+        Mon,  7 Nov 2022 11:18:25 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.127.227])
+        by APP2 (Coremail) with SMTP id Syh0CgBnfbgDeWhjLBJwAA--.9127S4;
+        Mon, 07 Nov 2022 11:18:28 +0800 (CST)
+From:   Ye Bin <yebin@huaweicloud.com>
+To:     axboe@kernel.dk, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     ming.lei@redhat.com, Ye Bin <yebin10@huawei.com>,
+        syzbot+746a4eece09f86bc39d7@syzkaller.appspotmail.com
+Subject: [PATCH] block: fix crash in 'blk_mq_elv_switch_none'
+Date:   Mon,  7 Nov 2022 11:39:56 +0800
+Message-Id: <20221107033956.3276891-1-yebin@huaweicloud.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/blIYOki0/Vg8Y5atyMWpuJf";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: Syh0CgBnfbgDeWhjLBJwAA--.9127S4
+X-Coremail-Antispam: 1UD129KBjvJXoWxGrW3Cw15KF1UuFyxtrykGrg_yoW5Zry8pr
+        47Jr4DGFW0gr17ZF48t3W7Jw1UJr9akF45Ww17ur1qyF1UCry7JF18KayUAr18Jr48JFZF
+        qr1DX3W8tw1UGaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkYb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6r1S6rWUM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+        0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+        Cjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxkF7I0En4kS14v26r1q6r43MxAIw28IcxkI
+        7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxV
+        Cjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY
+        6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6x
+        AIw20EY4v20xvaj40_Wr1j6rW3Jr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280
+        aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU17KsUUUUUU==
+X-CM-SenderInfo: p1hex046kxt4xhlfz01xgou0bp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/blIYOki0/Vg8Y5atyMWpuJf
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+From: Ye Bin <yebin10@huawei.com>
 
-Hi all,
+Syzbot found the following issue:
+general protection fault, probably for non-canonical address 0xdffffc000000001d: 0000 [#1] PREEMPT SMP KASAN
+KASAN: null-ptr-deref in range [0x00000000000000e8-0x00000000000000ef]
+CPU: 0 PID: 5234 Comm: syz-executor931 Not tainted 6.1.0-rc3-next-20221102-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/11/2022
+RIP: 0010:__elevator_get block/elevator.h:94 [inline]
+RIP: 0010:blk_mq_elv_switch_none block/blk-mq.c:4593 [inline]
+RIP: 0010:__blk_mq_update_nr_hw_queues block/blk-mq.c:4658 [inline]
+RIP: 0010:blk_mq_update_nr_hw_queues+0x304/0xe40 block/blk-mq.c:4709
+RSP: 0018:ffffc90003cdfc08 EFLAGS: 00010206
+RAX: 0000000000000000 RBX: dffffc0000000000 RCX: 0000000000000000
+RDX: 000000000000001d RSI: 0000000000000002 RDI: 00000000000000e8
+RBP: ffff88801dbd0000 R08: ffff888027c89398 R09: ffffffff8de2e517
+R10: fffffbfff1bc5ca2 R11: 0000000000000000 R12: ffffc90003cdfc70
+R13: ffff88801dbd0008 R14: ffff88801dbd03f8 R15: ffff888027c89380
+FS:  0000555557259300(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00000000005d84c8 CR3: 000000007a7cb000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ nbd_start_device+0x153/0xc30 drivers/block/nbd.c:1355
+ nbd_start_device_ioctl drivers/block/nbd.c:1405 [inline]
+ __nbd_ioctl drivers/block/nbd.c:1481 [inline]
+ nbd_ioctl+0x5a1/0xbd0 drivers/block/nbd.c:1521
+ blkdev_ioctl+0x36e/0x800 block/ioctl.c:614
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:870 [inline]
+ __se_sys_ioctl fs/ioctl.c:856 [inline]
+ __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:856
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
-After merging the drm-misc tree, today's linux-next build (htmldocs)
-produced this warning:
+As after dd6f7f17bf58 commit move '__elevator_get(qe->type)' before set
+'qe->type', so will lead to access wild pointer.
+To solve above issue get 'qe->type' after set 'qe->type'.
 
-include/drm/drm_fb_helper.h:204: warning: Function parameter or member 'hin=
-t_leak_smem_start' not described in 'drm_fb_helper'
+Reported-by: syzbot+746a4eece09f86bc39d7@syzkaller.appspotmail.com
+Fixes:dd6f7f17bf58("block: add proper helpers for elevator_type module refcount management")
+Signed-off-by: Ye Bin <yebin10@huawei.com>
+---
+ block/blk-mq.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Introduced by commit
+diff --git a/block/blk-mq.c b/block/blk-mq.c
+index 2757368dc83f..3173d621f1f7 100644
+--- a/block/blk-mq.c
++++ b/block/blk-mq.c
+@@ -4589,9 +4589,9 @@ static bool blk_mq_elv_switch_none(struct list_head *head,
+ 
+ 	INIT_LIST_HEAD(&qe->node);
+ 	qe->q = q;
++	qe->type = q->elevator->type;
+ 	/* keep a reference to the elevator module as we'll switch back */
+ 	__elevator_get(qe->type);
+-	qe->type = q->elevator->type;
+ 	list_add(&qe->node, head);
+ 	elevator_disable(q);
+ 	mutex_unlock(&q->sysfs_lock);
+-- 
+2.31.1
 
-  e7c5c29a9eb1 ("drm/fb-helper: Set flag in struct drm_fb_helper for leakin=
-g physical addresses")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/blIYOki0/Vg8Y5atyMWpuJf
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNofdMACgkQAVBC80lX
-0Gz5Agf+OXwpimukDV8k+J5jCHIAYcEP70XSS168xmn5MdrD+WDccqXrkf6u0hzZ
-VSG7dpf6U0SyRWZzRxkvTXtjz6wer/8y1kQPFcm/7xB6jIY9RTeJH4l9rQVJHALM
-LDa+HhzSCx6wJ7XdW9FyzdldrKGe+moFTLNJeQTRnJ+M5BH/wfGEa7x8tANm6DHS
-cNUsY/llFncC34kfcgK/7d+8y6jtTmVY20Du30i6nwtZxf52fGBUUSRkhuw9Rjvn
-5CaprVqsV928zgCqZ3lByLBHVNVrrhTdktlA1rfXnAWA1BRsv4p4WaB5H51iGAa1
-GlUmjqS6RDbp78h9cZ7fAaekdYL00A==
-=tSVU
------END PGP SIGNATURE-----
-
---Sig_/blIYOki0/Vg8Y5atyMWpuJf--
