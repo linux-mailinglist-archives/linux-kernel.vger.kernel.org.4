@@ -2,113 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1018261EEFC
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 10:29:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6C9961EF00
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 10:30:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231637AbiKGJ3q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 04:29:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55546 "EHLO
+        id S231651AbiKGJaJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 04:30:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231359AbiKGJ3i (ORCPT
+        with ESMTP id S231749AbiKGJaC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 04:29:38 -0500
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD7E115732;
-        Mon,  7 Nov 2022 01:29:37 -0800 (PST)
-Received: by mail-ej1-x632.google.com with SMTP id f5so28427062ejc.5;
-        Mon, 07 Nov 2022 01:29:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9C4ZpIu9MoFe/21Uj/Vi0AVSvYvZIvhlEsa/ecQ+D1U=;
-        b=jOs+RksedWn2abnSKpQ1jJsuiitFNo12IAfdDaIE3X0PObmWfJuN8RX77sN4cYiYx6
-         2v+xMqbkZz5+rYNAIR0x7vl1Xwd5WnWT9OjpaQC/arJ7a3moVxFoDhKiw0XwKbwPiBc8
-         sbaT36vI5RKbxmm+zd6sXAN4w87VeMxdyXanncMxRHCVc0Hx56RF2NdsKFGvysdpDeBJ
-         CjRG9QBNZzaNU6xc6jeeA1gss5FCUDEUti6Wb2wRdkNsBlvUlbFrd1Zfw7NfyhCK1mCq
-         oD1IxEOtcydCAdFljN15WO4q+ymPSLH5SA4IzwVqt90VINQHhP3dKXosgxf64DxeHWKE
-         yNeQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9C4ZpIu9MoFe/21Uj/Vi0AVSvYvZIvhlEsa/ecQ+D1U=;
-        b=1D49ioXc605wMPBAvoUpsJdmTRZrD3i7wFWqn/NqUxvnbxFWiZ6p2HDznF9FnbzCKO
-         4jMo03IgiWbZ9NlZQkY1JuUR8vKb2LxgvmA2afjpdfU6KPBEK6TkB7gpZkzSApWBH6Pe
-         ceby8T7Dt2CRaVe2LEyPbu1cfrMfXmDL0vPzr43bfug94Kkl8OGlsvUe5EJfnMOxvpwV
-         0pnQ3Vt7+j9eKUxX+Y5x8A1rWPQlkgXmXn8c5rip6lyZSmUrTaptOxr3PdChXKYFD6Gp
-         AGFbbcw+KdBLJs46E29AufDpbz9/LchtHx/YRrjLVXjeNs/cX57kqDQAADJnkVzajfoJ
-         8GSA==
-X-Gm-Message-State: ACrzQf3VDhSBuNhCPG+zF7nHextrC//qKbyu2K/7k3nGXe0s46MAXgmK
-        0zAFNKrYPbqQK9upAuxPhjI=
-X-Google-Smtp-Source: AMsMyM6y/wC+MJslmKIVv6GrQApqPb1rv72L0C9GHzobMnQcDkSbAck3Cm8dKTcnGoCFXwSc4PCizw==
-X-Received: by 2002:a17:907:a4e:b0:77d:94d:8148 with SMTP id be14-20020a1709070a4e00b0077d094d8148mr45090255ejc.607.1667813376243;
-        Mon, 07 Nov 2022 01:29:36 -0800 (PST)
-Received: from fedora.. (dh207-98-26.xnet.hr. [88.207.98.26])
-        by smtp.googlemail.com with ESMTPSA id u10-20020a056402110a00b0045b3853c4b7sm3912837edv.51.2022.11.07.01.29.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Nov 2022 01:29:35 -0800 (PST)
-From:   Robert Marko <robimarko@gmail.com>
-To:     agross@kernel.org, andersson@kernel.org,
-        konrad.dybcio@somainline.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Robert Marko <robimarko@gmail.com>
-Subject: [PATCH 3/3] arm64: dts: qcom: hk01: use GPIO flags for tlmm
-Date:   Mon,  7 Nov 2022 10:29:30 +0100
-Message-Id: <20221107092930.33325-3-robimarko@gmail.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221107092930.33325-1-robimarko@gmail.com>
-References: <20221107092930.33325-1-robimarko@gmail.com>
+        Mon, 7 Nov 2022 04:30:02 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAFBA17A9B;
+        Mon,  7 Nov 2022 01:29:58 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5456960F83;
+        Mon,  7 Nov 2022 09:29:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B3FCC433C1;
+        Mon,  7 Nov 2022 09:29:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1667813397;
+        bh=DCiuz6LTY7l26h6R3wPtgXXRsGfpQyNAt3IMbr+A5bI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=2UY2VRx4lvFjc4K5NkWOGnKR+WkrD231zYQ5MW0fZmm5xJpuexUdyEJz6Sy2mOCm3
+         r28HkswseGOZuGcn337tstBklRfzb2Z3afKCoaQ2ELdBGc0cUZ1b9QN4a77VS7QaAN
+         DqBK74SihJ5lqS/Ms0tveVkbtTjsdAub3F9m0LCc=
+Date:   Mon, 7 Nov 2022 10:29:55 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Jonas Rabenstein <rabenstein@cs.fau.de>
+Cc:     stable@vger.kernel.org, Jiri Olsa <jolsa@kernel.org>,
+        Song Liu <song@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] bpf: mark get_entry_ip as __maybe_unused
+Message-ID: <Y2jQEwGJZ0fANWAb@kroah.com>
+References: <20221103150303.974028-1-rabenstein@cs.fau.de>
+ <20221103153247.zal3czlsxvanfnc3@kashyyyk>
+ <Y2jISpQUOTxXxpxN@kroah.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y2jISpQUOTxXxpxN@kroah.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use respective GPIO_ACTIVE_LOW/HIGH flags for tlmm GPIOs instead of
-harcoding the cell value.
+On Mon, Nov 07, 2022 at 09:56:42AM +0100, Greg KH wrote:
+> On Thu, Nov 03, 2022 at 04:32:47PM +0100, Jonas Rabenstein wrote:
+> > Hi again,
+> > after sending this out, I noticed this is only a problem in the stable
+> > versions (starting from v6.0.3), as c09eb2e578eb1668bbc has been applied (as
+> > 03f148c159a250dd454) but not 0e253f7e558a3e250902 ("bpf: Return value in kprobe
+> > get_func_ip only for entry address") which makes always use of get_entry_ip.
+> > I therefore think, 0e253f7e558a3e250902 needs to be added to the stable v6.0
+> > series as well as otherwise it can't be compiled with -Werror if
+> > CONFIG_X6_KERNEL_IBT is set but CONFIG_FPROBE isn't.
+> 
+> Ok, now queued up, thanks.
 
-Signed-off-by: Robert Marko <robimarko@gmail.com>
----
- arch/arm64/boot/dts/qcom/ipq8074-hk01.dts | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+Oops, this breaks the build, now dropping.
 
-diff --git a/arch/arm64/boot/dts/qcom/ipq8074-hk01.dts b/arch/arm64/boot/dts/qcom/ipq8074-hk01.dts
-index b60b2d4c2ea5..c3f3f78271e9 100644
---- a/arch/arm64/boot/dts/qcom/ipq8074-hk01.dts
-+++ b/arch/arm64/boot/dts/qcom/ipq8074-hk01.dts
-@@ -4,6 +4,7 @@
-  */
- #include "ipq8074.dtsi"
- #include "pmp8074.dtsi"
-+#include <dt-bindings/gpio/gpio.h>
- 
- / {
- 	model = "Qualcomm Technologies, Inc. IPQ8074-HK01";
-@@ -52,12 +53,12 @@ &blsp1_uart5 {
- 
- &pcie0 {
- 	status = "okay";
--	perst-gpios = <&tlmm 61 0x1>;
-+	perst-gpios = <&tlmm 61 GPIO_ACTIVE_LOW>;
- };
- 
- &pcie1 {
- 	status = "okay";
--	perst-gpios = <&tlmm 58 0x1>;
-+	perst-gpios = <&tlmm 58 GPIO_ACTIVE_LOW>;
- };
- 
- &pcie_phy0 {
--- 
-2.38.1
-
+greg k-h
