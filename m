@@ -2,228 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9140861EE48
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 10:10:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CDF5F61EE4D
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 10:10:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231586AbiKGJKB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 04:10:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37634 "EHLO
+        id S231598AbiKGJKV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 04:10:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230515AbiKGJJ6 (ORCPT
+        with ESMTP id S230515AbiKGJKQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 04:09:58 -0500
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C13C763EF;
-        Mon,  7 Nov 2022 01:09:57 -0800 (PST)
-Received: by mail-pj1-x1033.google.com with SMTP id r61-20020a17090a43c300b00212f4e9cccdso13910920pjg.5;
-        Mon, 07 Nov 2022 01:09:57 -0800 (PST)
+        Mon, 7 Nov 2022 04:10:16 -0500
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F445167F3
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 01:10:15 -0800 (PST)
+Received: by mail-ej1-x629.google.com with SMTP id bj12so28171580ejb.13
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 01:10:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=7s5/qb1nSXLZnJZGYNn4Wzlw1M+hVX8xrWCLqS93kyE=;
-        b=jsZFj6rnuGvjrA0j9safRVQ5ub46rEH1AZfLSqW2ttOPIj5JHT/WdKQlIhtr2nVEJS
-         nsSd+7WepQB+ugVUZrR8cMRMWVAadLJGsKUD7ZMEmHnnorqSXESEhIo5Vs1mo64JT9Gn
-         EXN+KW+LZieQD50nvey2BtAtDAGfVSkRXtCnxgZ09na2YxBeKwn60+lx/DKjy9/h0e9u
-         a/LlbxjMOUCjBcaaO1oYdcLOnb3uXZaoHIg0gLPfqklgoYL60KLY++/34/uecscDXpHH
-         iyuhqr6ey99c7HW4fQ6LCJg1q6bKDyceQMGcopTLm/2geH7+8Dph0PbIimVSvA2YKfA9
-         X0LA==
+        d=nathanrossi.com; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Rq7f5awERCBOzRjQecmifE8ARalisdBJSDWTzIB4PxQ=;
+        b=ZUFFDsZKDnQfoyM9/MObxP3JEorLMtGF2pXlhdoE9hwl9N54nPUCE7s97sAz+L/81q
+         dqtkmW5Ag6NAZOXcJrAREmLpl45C0hJTaXbScoVWHwA/UOaU9Ljcygb3jiGoI49/Fd77
+         EnwWz/xPj/uXTlTH4u70IqttOvNaZM4wOzKUmn+A78fd3LokucErLFJj5CrY7E/wN/QI
+         18HVOkrowHVA2wmI+Dv8+8mVZrC9l75Rf+//aRQEv9Kc2D4I92+nfdbCybYqvTXov8G5
+         S4J9UHnxdoGdeXuMJBjNgIazvz94uulPoLoWYfetKrFDOUL6BviWgw2iZxTK7+0D2BdX
+         4sbw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=7s5/qb1nSXLZnJZGYNn4Wzlw1M+hVX8xrWCLqS93kyE=;
-        b=SVgEIR85I/gbehpP8P8yWjImXXfdvTr6AZFqc45oYCKCj8qqgIYyrRJXdfPYMWGGKS
-         itWfRDHYFosKuJuO1jyfnJOjrJRUwym9J+wC3wRXHp3C8hHYVIjsP47L2lss7dKzgvY3
-         Kl5zXPDCWeZSGxQNKhB/oMq3UUduVgeiulE23lgIRZy0ulntz/lpXjLlXqL2xeuuHZLS
-         0cLVZUz9cbt8+35IKWfGzrlgJAn3AMFXSUEbQeFN3laPbgrKCzaCpakxB5Wud3uyB1Fd
-         Obfc9b02yXPY2iZX64xNu83ixMvjyASXogU7kFZDNSMflmPfjkXUUZfTIUGnpJWNrwp7
-         AUDg==
-X-Gm-Message-State: ACrzQf0URqpgnXQI36W1B6eEg9n24m5muyPT6nRjWsbqI4ouBLkx1lPp
-        EoMWB1/MUf9qk2vOrteDxrE=
-X-Google-Smtp-Source: AMsMyM4gl/gScKEXAGRR2lnQ8YwqcbIK1OxMz9XJeChJTovFnpwVuWj5tN1PpbxaSJtL26M8yoNddQ==
-X-Received: by 2002:a17:90a:a781:b0:214:2921:41ca with SMTP id f1-20020a17090aa78100b00214292141camr29126567pjq.118.1667812197190;
-        Mon, 07 Nov 2022 01:09:57 -0800 (PST)
-Received: from localhost.localdomain ([47.242.114.172])
-        by smtp.gmail.com with ESMTPSA id o5-20020a170902d4c500b001886863c6absm4493809plg.97.2022.11.07.01.09.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Nov 2022 01:09:56 -0800 (PST)
-From:   Chuang Wang <nashuiliang@gmail.com>
-Cc:     Chuang Wang <nashuiliang@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v1] net: tun: rebuild error handling in tun_get_user
-Date:   Mon,  7 Nov 2022 17:09:40 +0800
-Message-Id: <20221107090940.686229-1-nashuiliang@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Rq7f5awERCBOzRjQecmifE8ARalisdBJSDWTzIB4PxQ=;
+        b=nVjL4B1hz4oBghYMj0gzm4nMZ3BCiXlr3druoyBfznv3EaoY4mU9Y1BRZdRwq1xDbj
+         crN99VHXZ18lu91+LVyV7Z+NYCSURdcXWUmFPavT1voY0tOOjXcjzZBfvEyrqbOHljfw
+         hoxKmf7qJx2PYf3X0SsjniqfXAndXgIw/fg7ViZQB4RfVamCrTDLtX6sxhjKGP+sUaWQ
+         xBq4Mw5JQA+vQQtvsDDXOICFSPWrWlbh600Fj4zNJmCmIK8QXK1N7OapNk86lSL2Litx
+         5qNQ6w0qeAboTHVesu5oRejVX6C8aDqZfvc5QVlpW9hXVMK5701/fQoAw1mabqrjjHJ+
+         zLHw==
+X-Gm-Message-State: ACrzQf3kvuO0PhO/HxAwy/YiMpQTp+c7Xjt9d5Xl38HMmkSIq5oshW8a
+        RPd7KaVrdqV8vkkI2e0iywHbYqc43Hvrx5PD48v0Qg==
+X-Google-Smtp-Source: AMsMyM4UGVtK5cQLWcYKRCKijpzjWIQcbQOb9hXBPbn5fTr0GKFl1wodrAcSHLpgVUU2i3d/nPixC59uVars83S8tVM=
+X-Received: by 2002:a17:906:371a:b0:7ad:c01c:6fa0 with SMTP id
+ d26-20020a170906371a00b007adc01c6fa0mr42731140ejc.267.1667812213764; Mon, 07
+ Nov 2022 01:10:13 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20221107081327.336239-1-nathan@nathanrossi.com> <20221107084346.ksdhcxk7bppvpmqc@pali>
+In-Reply-To: <20221107084346.ksdhcxk7bppvpmqc@pali>
+From:   Nathan Rossi <nathan@nathanrossi.com>
+Date:   Mon, 7 Nov 2022 19:10:02 +1000
+Message-ID: <CA+aJhH0k1zaP0sVNk98qviTiyCEAmQKO4MOD8LSiHiwuzh6-aA@mail.gmail.com>
+Subject: Re: [PATCH] PCI: mvebu: Set Target Link Speed for 2.5GT downstream devices
+To:     =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>
+Cc:     linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Nathan Rossi <nathan.rossi@digi.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The error handling in tun_get_user is very scattered.
-This patch unifies error handling, reduces duplication of code, and
-makes the logic clearer.
+On Mon, 7 Nov 2022 at 18:43, Pali Roh=C3=A1r <pali@kernel.org> wrote:
+>
+> On Monday 07 November 2022 08:13:27 Nathan Rossi wrote:
+> > From: Nathan Rossi <nathan.rossi@digi.com>
+> >
+> > There is a known issue with the mvebu PCIe controller when triggering
+> > retraining of the link (via Link Control) where the link is dropped
+> > completely causing significant delay in the renegotiation of the link.
+> > This occurs only when the downstream device is 2.5GT and the upstream
+> > port is configured to support both 2.5GT and 5GT.
+> >
+> > It is possible to prevent this link dropping by setting the associated
+> > link speed in Target Link Speed of the Link Control 2 register. This
+> > only needs to be done when the downstream is specifically 2.5GT.
+> >
+> > This change applies the required Target Link Speed value during
+> > mvebu_pcie_setup_hw conditionally depending on the current link speed
+> > from the Link Status register, only applying the change when the link
+> > is configured to 2.5GT already.
+> >
+> > Signed-off-by: Nathan Rossi <nathan.rossi@digi.com>
+> > ---
+> >  drivers/pci/controller/pci-mvebu.c | 18 +++++++++++++++++-
+> >  1 file changed, 17 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/pci/controller/pci-mvebu.c b/drivers/pci/controlle=
+r/pci-mvebu.c
+> > index 1ced73726a..6a869a33ba 100644
+> > --- a/drivers/pci/controller/pci-mvebu.c
+> > +++ b/drivers/pci/controller/pci-mvebu.c
+> > @@ -248,7 +248,7 @@ static void mvebu_pcie_setup_wins(struct mvebu_pcie=
+_port *port)
+> >
+> >  static void mvebu_pcie_setup_hw(struct mvebu_pcie_port *port)
+> >  {
+> > -     u32 ctrl, lnkcap, cmd, dev_rev, unmask, sspl;
+> > +     u32 ctrl, lnkcap, cmd, dev_rev, unmask, sspl, lnksta, lnkctl2;
+> >
+> >       /* Setup PCIe controller to Root Complex mode. */
+> >       ctrl =3D mvebu_readl(port, PCIE_CTRL_OFF);
+> > @@ -339,6 +339,22 @@ static void mvebu_pcie_setup_hw(struct mvebu_pcie_=
+port *port)
+> >       unmask |=3D PCIE_INT_INTX(0) | PCIE_INT_INTX(1) |
+> >                 PCIE_INT_INTX(2) | PCIE_INT_INTX(3);
+> >       mvebu_writel(port, unmask, PCIE_INT_UNMASK_OFF);
+> > +
+> > +     /*
+> > +      * Set Target Link Speed within the Link Control 2 register when =
+the
+> > +      * linked downstream device is connected at 2.5GT. This is config=
+ured
+> > +      * in order to avoid issues with the controller when the upstream=
+ port
+> > +      * is configured to support 2.5GT and 5GT and the downstream devi=
+ce is
+> > +      * linked at 2.5GT, retraining the link in this case causes the l=
+ink to
+> > +      * drop taking significant time to retrain.
+> > +      */
+> > +     lnksta =3D mvebu_readl(port, PCIE_CAP_PCIEXP + PCI_EXP_LNKCTL) >>=
+ 16;
+> > +     if ((lnksta & PCI_EXP_LNKSTA_CLS) =3D=3D PCI_EXP_LNKSTA_CLS_2_5GB=
+) {
+>
+> This code does not work because at this stage endpoint device does not
+> have to be ready and therefore link is not established yet.
+>
+> Also this code is not running when kernel issue PCIe Hot Reset via
+> PCI Secondary Bus Reset bit.
+>
+> And it does not handle possible hot-plug situation.
+>
+> That check that code below has to be done _after_ kernel enumerate
+> device. PCI core code has already logic to handle delays for "slow"
+> devices.
+>
+> And reverse operation (setting lnkctl2 target speed to original value)
+> has to be called after unplugging device - when link goes down.
+>
+> If you want to work on this stuff, I can try to find my notes which I
+> done during investigation of this issue... where is probably the best
+> place in kernel pci core code for handling this issue.
 
-Signed-off-by: Chuang Wang <nashuiliang@gmail.com>
----
-v0 -> v1:
-- rename tags
+Some notes/direction for implementation would be very appreciated. I
+am not particularly familiar with the pci core code, so I don't have a
+good idea on how to best implement this workaround.
 
- drivers/net/tun.c | 68 ++++++++++++++++++++++-------------------------
- 1 file changed, 32 insertions(+), 36 deletions(-)
+Thanks,
+Nathan
 
-diff --git a/drivers/net/tun.c b/drivers/net/tun.c
-index 4bf2b268df4a..5ceec73baf98 100644
---- a/drivers/net/tun.c
-+++ b/drivers/net/tun.c
-@@ -1742,11 +1742,11 @@ static ssize_t tun_get_user(struct tun_struct *tun, struct tun_file *tfile,
- 	int good_linear;
- 	int copylen;
- 	bool zerocopy = false;
--	int err;
-+	int err = 0;
- 	u32 rxhash = 0;
- 	int skb_xdp = 1;
- 	bool frags = tun_napi_frags_enabled(tfile);
--	enum skb_drop_reason drop_reason;
-+	enum skb_drop_reason drop_reason = SKB_DROP_REASON_NOT_SPECIFIED;
- 
- 	if (!(tun->flags & IFF_NO_PI)) {
- 		if (len < sizeof(pi))
-@@ -1808,11 +1808,11 @@ static ssize_t tun_get_user(struct tun_struct *tun, struct tun_file *tfile,
- 		 */
- 		skb = tun_build_skb(tun, tfile, from, &gso, len, &skb_xdp);
- 		if (IS_ERR(skb)) {
--			dev_core_stats_rx_dropped_inc(tun->dev);
--			return PTR_ERR(skb);
-+			err = PTR_ERR(skb);
-+			goto drop;
- 		}
- 		if (!skb)
--			return total_len;
-+			goto out;
- 	} else {
- 		if (!zerocopy) {
- 			copylen = len;
-@@ -1836,11 +1836,8 @@ static ssize_t tun_get_user(struct tun_struct *tun, struct tun_file *tfile,
- 		}
- 
- 		if (IS_ERR(skb)) {
--			if (PTR_ERR(skb) != -EAGAIN)
--				dev_core_stats_rx_dropped_inc(tun->dev);
--			if (frags)
--				mutex_unlock(&tfile->napi_mutex);
--			return PTR_ERR(skb);
-+			err = PTR_ERR(skb);
-+			goto drop;
- 		}
- 
- 		if (zerocopy)
-@@ -1851,27 +1848,14 @@ static ssize_t tun_get_user(struct tun_struct *tun, struct tun_file *tfile,
- 		if (err) {
- 			err = -EFAULT;
- 			drop_reason = SKB_DROP_REASON_SKB_UCOPY_FAULT;
--drop:
--			dev_core_stats_rx_dropped_inc(tun->dev);
--			kfree_skb_reason(skb, drop_reason);
--			if (frags) {
--				tfile->napi.skb = NULL;
--				mutex_unlock(&tfile->napi_mutex);
--			}
--
--			return err;
-+			goto drop;
- 		}
- 	}
- 
- 	if (virtio_net_hdr_to_skb(skb, &gso, tun_is_little_endian(tun))) {
- 		atomic_long_inc(&tun->rx_frame_errors);
--		kfree_skb(skb);
--		if (frags) {
--			tfile->napi.skb = NULL;
--			mutex_unlock(&tfile->napi_mutex);
--		}
--
--		return -EINVAL;
-+		err = -EINVAL;
-+		goto drop;
- 	}
- 
- 	switch (tun->flags & TUN_TYPE_MASK) {
-@@ -1887,9 +1871,9 @@ static ssize_t tun_get_user(struct tun_struct *tun, struct tun_file *tfile,
- 				pi.proto = htons(ETH_P_IPV6);
- 				break;
- 			default:
--				dev_core_stats_rx_dropped_inc(tun->dev);
--				kfree_skb(skb);
--				return -EINVAL;
-+				err = -EINVAL;
-+				drop_reason = SKB_DROP_REASON_INVALID_PROTO;
-+				goto drop;
- 			}
- 		}
- 
-@@ -1931,11 +1915,7 @@ static ssize_t tun_get_user(struct tun_struct *tun, struct tun_file *tfile,
- 			if (ret != XDP_PASS) {
- 				rcu_read_unlock();
- 				local_bh_enable();
--				if (frags) {
--					tfile->napi.skb = NULL;
--					mutex_unlock(&tfile->napi_mutex);
--				}
--				return total_len;
-+				goto unlock_frags;
- 			}
- 		}
- 		rcu_read_unlock();
-@@ -1952,8 +1932,8 @@ static ssize_t tun_get_user(struct tun_struct *tun, struct tun_file *tfile,
- 
- 	rcu_read_lock();
- 	if (unlikely(!(tun->dev->flags & IFF_UP))) {
--		err = -EIO;
- 		rcu_read_unlock();
-+		err = -EIO;
- 		drop_reason = SKB_DROP_REASON_DEV_READY;
- 		goto drop;
- 	}
-@@ -2007,7 +1987,23 @@ static ssize_t tun_get_user(struct tun_struct *tun, struct tun_file *tfile,
- 	if (rxhash)
- 		tun_flow_update(tun, rxhash, tfile);
- 
--	return total_len;
-+	goto out;
-+
-+drop:
-+	if (err != -EAGAIN)
-+		dev_core_stats_rx_dropped_inc(tun->dev);
-+
-+	if (!IS_ERR_OR_NULL(skb))
-+		kfree_skb_reason(skb, drop_reason);
-+
-+unlock_frags:
-+	if (frags) {
-+		tfile->napi.skb = NULL;
-+		mutex_unlock(&tfile->napi_mutex);
-+	}
-+
-+out:
-+	return err ?: total_len;
- }
- 
- static ssize_t tun_chr_write_iter(struct kiocb *iocb, struct iov_iter *from)
--- 
-2.37.2
-
+>
+> > +             lnkctl2 =3D mvebu_readl(port, PCIE_CAP_PCIEXP + PCI_EXP_L=
+NKCTL2);
+> > +             lnkctl2 &=3D ~PCI_EXP_LNKCTL2_TLS;
+> > +             lnkctl2 |=3D PCI_EXP_LNKCTL2_TLS_2_5GT;
+> > +             mvebu_writel(port, lnkctl2, PCIE_CAP_PCIEXP + PCI_EXP_LNK=
+CTL2);
+> > +     }
+> >  }
+> >
+> >  static struct mvebu_pcie_port *mvebu_pcie_find_port(struct mvebu_pcie =
+*pcie,
+> > ---
+> > 2.37.2
