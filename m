@@ -2,160 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F76261F6AC
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 15:53:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C28261F6EA
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 15:57:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232463AbiKGOxh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 09:53:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35816 "EHLO
+        id S232657AbiKGO5Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 09:57:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231438AbiKGOxc (ORCPT
+        with ESMTP id S232621AbiKGO4g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 09:53:32 -0500
-Received: from vern.gendns.com (vern.gendns.com [98.142.107.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3682B7660;
-        Mon,  7 Nov 2022 06:53:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=lechnology.com; s=default; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=yY2+3tqYHY5/Nj0gegT3dgan1cJadcoMTwqFRr5L2kw=; b=uoFE+zNkTW8nSe/gzYuumfpsP+
-        NvcVijNGM28CoRMokRZKPl1GdsfUdYxaotECOilfwMGqj6BDffp/BjbYJ4yNFbz+s2CxdyH6cX5Lr
-        MQbgkIJMMe4KCteld8LCqTAZGoq+yD1zwmKygBYrGlp9J890ITSxlUQinxYNMXaiIbjzZUNRkZLPc
-        eQ2bF+MdrKjTwAU1agFFumWE06f/sHmpU9d19bt9GE5dpUDqDWL2FEa0Etn1r/hl1rGdDPytmUEgS
-        3qcGJfAXI4zguO45vQRaGV2eDPPiAkD2S2PXeDRuGclR0xc+REj5X8IrdHJHPFg3D/FX3vIL0qFxd
-        Z+O33w3Q==;
-Received: from ip98-183-112-30.ok.ok.cox.net ([98.183.112.30]:44606 helo=[192.168.0.134])
-        by vern.gendns.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.95)
-        (envelope-from <david@lechnology.com>)
-        id 1os3Ut-00DZTt-S5;
-        Mon, 07 Nov 2022 09:53:15 -0500
-Message-ID: <7a2bf9aa-9489-fc91-9338-ec9d0835a43c@lechnology.com>
-Date:   Mon, 7 Nov 2022 08:52:56 -0600
+        Mon, 7 Nov 2022 09:56:36 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 070FD1DF2F
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 06:54:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1667832883;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=TlMjd/2CU7uAhpVg7cB+yVdFYGEY40Ps8qhqieVo7Po=;
+        b=iTvFg8DjtXWtXV876KX/X4En+HTs9jtKpnaO24PI3J+9uVg6nR5KtR5wUYV5eGEALPZdMA
+        zSkvAUBt4/LvCr8TVVypThzIV+3A88Bv1kPA5qZ/gWv9+uFec6nSrfoUhD4vlE8ZDdJwAq
+        YWbA6XFF6z6Vgx5qDI55B6lVTRvhC6U=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-564-UTqozkQ5NdyG5uvXMHhq8w-1; Mon, 07 Nov 2022 09:54:38 -0500
+X-MC-Unique: UTqozkQ5NdyG5uvXMHhq8w-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 77F7685A59D;
+        Mon,  7 Nov 2022 14:54:37 +0000 (UTC)
+Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 40AF62028CE4;
+        Mon,  7 Nov 2022 14:54:37 +0000 (UTC)
+From:   Paolo Bonzini <pbonzini@redhat.com>
+To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     nathan@kernel.org, thomas.lendacky@amd.com,
+        andrew.cooper3@citrix.com, peterz@infradead.org,
+        jmattson@google.com, seanjc@google.com
+Subject: [PATCH 0/8] KVM: SVM: fixes for vmentry code
+Date:   Mon,  7 Nov 2022 09:54:28 -0500
+Message-Id: <20221107145436.276079-1-pbonzini@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v2 21/65] clk: davinci: da8xx-cfgchip: Add a
- determine_rate hook
-Content-Language: en-US
-To:     Maxime Ripard <maxime@cerno.tech>
-Cc:     Stephen Boyd <sboyd@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Chen-Yu Tsai <wens@csie.org>, Daniel Vetter <daniel@ffwll.ch>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        =?UTF-8?Q?Andreas_F=c3=a4rber?= <afaerber@suse.de>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Abel Vesa <abelvesa@kernel.org>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Prashant Gaikwad <pgaikwad@nvidia.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Sekhar Nori <nsekhar@ti.com>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Takashi Iwai <tiwai@suse.com>,
-        David Airlie <airlied@gmail.com>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Mark Brown <broonie@kernel.org>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        alsa-devel@alsa-project.org, linux-mediatek@lists.infradead.org,
-        linux-phy@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        linux-actions@lists.infradead.org, linux-clk@vger.kernel.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        patches@opensource.cirrus.com, linux-tegra@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-References: <20221018-clk-range-checks-fixes-v2-0-f6736dec138e@cerno.tech>
- <20221018-clk-range-checks-fixes-v2-21-f6736dec138e@cerno.tech>
- <187e61cd-7d02-2453-acf1-30180559d42f@lechnology.com>
- <20221107120611.vutsgpgpcorsgzwp@houat>
-From:   David Lechner <david@lechnology.com>
-In-Reply-To: <20221107120611.vutsgpgpcorsgzwp@houat>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - vern.gendns.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - lechnology.com
-X-Get-Message-Sender-Via: vern.gendns.com: authenticated_id: davidmain+lechnology.com/only user confirmed/virtual account not confirmed
-X-Authenticated-Sender: vern.gendns.com: davidmain@lechnology.com
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/7/22 6:06 AM, Maxime Ripard wrote:
-> Hi David,
-> 
-> On Fri, Nov 04, 2022 at 11:45:17AM -0500, David Lechner wrote:
->> On 11/4/22 8:17 AM, Maxime Ripard wrote:
->>> The Davinci DA8xxx cfgchip mux clock implements a mux with a set_parent
->>> hook, but doesn't provide a determine_rate implementation.
->>>
->>> This is a bit odd, since set_parent() is there to, as its name implies,
->>> change the parent of a clock. However, the most likely candidate to
->>> trigger that parent change is a call to clk_set_rate(), with
->>> determine_rate() figuring out which parent is the best suited for a
->>> given rate.
->>>
->>> The other trigger would be a call to clk_set_parent(), but it's far less
->>> used, and it doesn't look like there's any obvious user for that clock.
->>>
->>> So, the set_parent hook is effectively unused, possibly because of an
->>> oversight. However, it could also be an explicit decision by the
->>> original author to avoid any reparenting but through an explicit call to
->>> clk_set_parent().
->>
->>
->> The parent is defined in the device tree and is not expected to change
->> at runtime, so if I am understanding the patch correctly, setting the
->> CLK_SET_RATE_NO_REPARENT flag seems correct.
-> 
-> Is that an acked-by/reviewed-by?
-> 
-> Thanks!
-> Maxime
+This series comprises two related fixes:
 
-The commit message could be updated to be more certain now, but sure...
+- the FILL_RETURN_BUFFER macro in -next needs to access percpu data,
+  hence the GS segment base needs to be loaded before FILL_RETURN_BUFFER.
+  This means moving guest vmload/vmsave and host vmload to assembly
+  (patches 4 and 6).
 
-Acked-by: David Lechner <david@lechnology.com>
+- because AMD wants the OS to set STIBP to 1 before executing the
+  return thunk (un)training sequence, IA32_SPEC_CTRL must be restored
+  before UNTRAIN_RET, too.  This must also be moved to assembly and,
+  for consistency, the guest SPEC_CTRL is also loaded in there
+  (patch 7).
+
+Neither is particularly hard, however because of 32-bit systems one needs
+to keep the number of arguments to __svm_vcpu_run to three or fewer.
+One is taken for whether IA32_SPEC_CTRL is intercepted, and one for the
+host save area, so all accesses to the vcpu_svm struct have to be done
+from assembly too.  This is done in patches 2, 3 and 5 and it turns out
+not to be that bad; in fact I don't think the code is much harder to
+follow than before despite doing a lot more stuff.  Care has been taken
+to keep the "normal" and SEV-ES code as similar as possible, too.
+
+The above summary leaves out the more mundane patches 1 and 8.  They
+are respectively preparation for adding more asm-offsets, and dead
+code removal.  Most of the scary diffstat comes from patch 1, which is
+purely moving inline functions to a separate header file than svm.h.
+
+Peter Zijlstra had already sent a similar patch for the first issue last
+Friday.  Unfortunately it did not take care of the 32-bit issue with the
+number of arguments.  This series is independent of his, but I did steal
+his organization of the exception fixup code because it's pretty.
+
+Tested on 64-bit bare metal including SEV-ES, and on 32-bit nested.  On
+top of this I also spent way too much time comparing the output of
+the compiler code before the patch with the assembly code after.
+
+Paolo
+
+Supersedes: <20221028230723.3254250-1-pbonzini@redhat.com>
+
+Paolo Bonzini (8):
+  KVM: SVM: extract VMCB accessors to a new file
+  KVM: SVM: replace regs argument of __svm_vcpu_run with vcpu_svm
+  KVM: SVM: adjust register allocation for __svm_vcpu_run
+  KVM: SVM: move guest vmsave/vmload to assembly
+  KVM: SVM: retrieve VMCB from assembly
+  KVM: SVM: restore host save area from assembly
+  KVM: SVM: move MSR_IA32_SPEC_CTRL save/restore to assembly
+  x86, KVM: remove unnecessary argument to x86_virt_spec_ctrl and
+    callers
+
+ arch/x86/include/asm/spec-ctrl.h |  10 +-
+ arch/x86/kernel/asm-offsets.c    |  10 ++
+ arch/x86/kernel/cpu/bugs.c       |  15 +-
+ arch/x86/kvm/svm/avic.c          |   1 +
+ arch/x86/kvm/svm/nested.c        |   1 +
+ arch/x86/kvm/svm/sev.c           |   1 +
+ arch/x86/kvm/svm/svm.c           |  54 +++-----
+ arch/x86/kvm/svm/svm.h           | 204 +--------------------------
+ arch/x86/kvm/svm/svm_onhyperv.c  |   1 +
+ arch/x86/kvm/svm/svm_ops.h       |   5 -
+ arch/x86/kvm/svm/vmcb.h          | 211 ++++++++++++++++++++++++++++
+ arch/x86/kvm/svm/vmenter.S       | 231 ++++++++++++++++++++++++-------
+ 12 files changed, 434 insertions(+), 310 deletions(-)
+ create mode 100644 arch/x86/kvm/svm/vmcb.h
+
+-- 
+2.31.1
+
