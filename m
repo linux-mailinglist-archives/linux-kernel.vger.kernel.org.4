@@ -2,69 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFD3761F5F6
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 15:28:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FE0A61F5FC
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 15:28:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232569AbiKGO2h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 09:28:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39530 "EHLO
+        id S232390AbiKGO2w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 09:28:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232401AbiKGO1l (ORCPT
+        with ESMTP id S232554AbiKGO20 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 09:27:41 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D8BF1EAC9
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 06:22:14 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id u8-20020a17090a5e4800b002106dcdd4a0so14756015pji.1
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 06:22:14 -0800 (PST)
+        Mon, 7 Nov 2022 09:28:26 -0500
+Received: from mail-wm1-x34a.google.com (mail-wm1-x34a.google.com [IPv6:2a00:1450:4864:20::34a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 605D5103E
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 06:23:06 -0800 (PST)
+Received: by mail-wm1-x34a.google.com with SMTP id az40-20020a05600c602800b003cfa26c40easo2206817wmb.1
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 06:23:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ik2+y8IF52g+m5bk/aYkFet3pzFw8bcdKkBwNiPEt0M=;
-        b=O6GsnmkroB+yLenPGib3vLB6XCa713TB2eFHALv47vfGZ+iUkcwn72gn+eruvUNoDe
-         /DuTQVeRXHGbVb/ISMmwQ9fkihMqluxPc7VRwL2YLO9JWvpDRp6qGysP5ggH8FZ3Wmu2
-         O+M+njIVIcLy7ZiogIkVKjL96R7msY/VC7iXd2999bcVVtWMXGfzJdXxjofRUKGrPx6G
-         fPlceLpYm7eQyFlF35qtksa/JsXzxUrQLyjAHUKDgN+sxIJfp8g962yZteCu0deZ/PRA
-         LQPW6OB2CmgjJB0Quu7jAx7eLvGjKuDuzQaCzJQbQ8Pis3X5v9AABj19IKHLCpf/Ltfw
-         ldEw==
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=8RGh8EDyO4osN/zuXgwdm42OK5Fa8r6gvjPxQC6gE/Y=;
+        b=VgwTO2WLIG/eNYpKhvHVsWOH1/2vXRWz1GBPQ2+DhvTTM0v0Uw6bmYoEH/VsZKKBJc
+         6mdtXBQgUyCnKCG7gTTHe5XIRP088G78goMUw0LBr4bkpDKLPN9JIBuA69W7/NEycR+N
+         H5unjWkIcLtBemlDT6L0bdfdf1xptjjMi/c+d/szx2vIrRB7IuhleiE6GVNekX/zPh18
+         1xake7337x70KY8KTKx4wrTDraE4d0ZetccyrjzYPfd2Rd0qicc0697BXjcc7HUPomWL
+         5ThYDGIQ/tvU38H5aLbJ38hMByTWpFXgYyKSfp0VyCIoB2gvQnkcQBNc/zviMST/iGXe
+         Yxmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ik2+y8IF52g+m5bk/aYkFet3pzFw8bcdKkBwNiPEt0M=;
-        b=O9TpNs4008gB//Wlv9RcxuT7ly7kIKTHA4h2bO9TWP6KARr22zJpbVVPE2EN0CFTFN
-         bj9O/ptfajIZwsf4F7tD12jzVksnaHiB4jWGIhFvV+Va2nQH3QWeH9SXDLB3U+TOu8tM
-         xM/0PLqgEx3i0znyCPdFIY80qXgBPay8CLeHumZMI1k9Y4K0Sf9qb/TeYj33G4PL0MU6
-         j4iniGrcNkQu/yqZXjyhEVI+7oeRRNrJ/gJxiPUhRyMDfRhk7t7dYGeoWgxkMYx9GAKo
-         xtCEVnT6UVJLPJSB4dAzO8G3BWwIM9x+ypyBONSn7wd3DG+55ThniYCVW8ZfuYLVuC/B
-         UNvQ==
-X-Gm-Message-State: ACrzQf1Y62swfFaoNN61QHtVtw/x+5lkBwDxkWAC7VE1Eg/tIhEWdLfP
-        2zisaC9SjiOKFLZhVTBNxKUuyv6JJiuzCYbU
-X-Google-Smtp-Source: AMsMyM5eOXuxL/d9kFFYFKnRWdYXVtHtUAmNQOKshJPGdfxXjQDv6JeTY/Ru2NGOqwuACdYvJdKj7A==
-X-Received: by 2002:a17:902:9888:b0:186:9c32:79ca with SMTP id s8-20020a170902988800b001869c3279camr50375067plp.17.1667830933937;
-        Mon, 07 Nov 2022 06:22:13 -0800 (PST)
-Received: from [127.0.0.1] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id i2-20020a170902c94200b001869394a372sm5074355pla.201.2022.11.07.06.22.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Nov 2022 06:22:13 -0800 (PST)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     Yang Li <yang.lee@linux.alibaba.com>
-Cc:     Abaci Robot <abaci@linux.alibaba.com>,
-        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org
-In-Reply-To: <20221107062255.2685-1-yang.lee@linux.alibaba.com>
-References: <20221107062255.2685-1-yang.lee@linux.alibaba.com>
-Subject: Re: [PATCH -next] block: Fix some kernel-doc comments
-Message-Id: <166783093301.6467.9896856409636651914.b4-ty@kernel.dk>
-Date:   Mon, 07 Nov 2022 07:22:13 -0700
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.11.0-dev-d9ed3
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=8RGh8EDyO4osN/zuXgwdm42OK5Fa8r6gvjPxQC6gE/Y=;
+        b=U+oEKn+9ivRHyXYkx7rwgfdsClOBXvlh5kMqVff7PS5boN6xqQlJyfUbZaB4topmzP
+         eSKlYCsLgqUdkg7Cl6v4FUVFKwg0DiCiZXaiZyfdr73xK9f0559FCZKkvR8ZnlP73GK9
+         i/957ZgLo3HOgwMM4tN/lmOXNQ2Xcuf5qH1uyQVDTfuZDQ/ESuULdxQtit+BrChRhONm
+         ByE4If6KgzpltGFSNqg/vnow6kcR5y7MyM1N8Mp/pmCaipOFPFAJZJO2aXRZZUBBEoIr
+         fWQqK+dlV31vm3TTq3wLafXZlDlJ77KMM23ZaaRK4646LnyeHNYnfc1Um4NEVqYmwyOb
+         +VlQ==
+X-Gm-Message-State: ACrzQf1qTaNAvQ/8/rMB1cXwaBDYp9MHQhrUUzLg5kDHYsH2d0Puj914
+        vW9dkNTZLlNdspLPf8U6SW978hz5At0=
+X-Google-Smtp-Source: AMsMyM4IhkSYiYM8vVqwDYha8HmlDgTkXxJ5kHYECa/1lQghvzAc8W/Eq0cUYfhcePBSnBP+qJTZ4HCZ2LA=
+X-Received: from glider.muc.corp.google.com ([2a00:79e0:9c:201:4f3e:16fb:f499:bb9d])
+ (user=glider job=sendgmr) by 2002:adf:e78d:0:b0:236:debd:f681 with SMTP id
+ n13-20020adfe78d000000b00236debdf681mr23955346wrm.17.1667830984850; Mon, 07
+ Nov 2022 06:23:04 -0800 (PST)
+Date:   Mon,  7 Nov 2022 15:22:55 +0100
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
+Message-ID: <20221107142255.4038811-1-glider@google.com>
+Subject: [PATCH] docs: kmsan: fix formatting of "Example report"
+From:   Alexander Potapenko <glider@google.com>
+To:     glider@google.com
+Cc:     linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        akpm@linux-foundation.org, corbet@lwn.net,
+        kasan-dev@googlegroups.com, Bagas Sanjaya <bagasdotme@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,21 +67,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 7 Nov 2022 14:22:55 +0800, Yang Li wrote:
-> Remove the description of @required_features in elevator_match()
-> to clear the below warning:
-> 
-> block/elevator.c:103: warning: Excess function parameter 'required_features' description in 'elevator_match'
-> 
-> 
+Add a blank line to make the sentence before the list render as a
+separate paragraph, not a definition.
 
-Applied, thanks!
+Fixes: 93858ae70cf4 ("kmsan: add ReST documentation")
+Suggested-by: Bagas Sanjaya <bagasdotme@gmail.com>
+Signed-off-by: Alexander Potapenko <glider@google.com>
+---
+ Documentation/dev-tools/kmsan.rst | 1 +
+ 1 file changed, 1 insertion(+)
 
-[1/1] block: Fix some kernel-doc comments
-      commit: 5b2560c4c20e6d6933625b4b56f6843d6c7faf0f
-
-Best regards,
+diff --git a/Documentation/dev-tools/kmsan.rst b/Documentation/dev-tools/kmsan.rst
+index 2a53a801198cb..55fa82212eb25 100644
+--- a/Documentation/dev-tools/kmsan.rst
++++ b/Documentation/dev-tools/kmsan.rst
+@@ -67,6 +67,7 @@ uninitialized in the local variable, as well as the stack where the value was
+ copied to another memory location before use.
+ 
+ A use of uninitialized value ``v`` is reported by KMSAN in the following cases:
++
+  - in a condition, e.g. ``if (v) { ... }``;
+  - in an indexing or pointer dereferencing, e.g. ``array[v]`` or ``*v``;
+  - when it is copied to userspace or hardware, e.g. ``copy_to_user(..., &v, ...)``;
 -- 
-Jens Axboe
-
+2.38.1.431.g37b22c650d-goog
 
