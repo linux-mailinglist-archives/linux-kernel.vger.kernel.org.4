@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84C4661EB6F
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 08:15:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F80461EB70
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 08:15:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231178AbiKGHPX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 02:15:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58028 "EHLO
+        id S231264AbiKGHP0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 02:15:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231135AbiKGHPP (ORCPT
+        with ESMTP id S231146AbiKGHPR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 02:15:15 -0500
-Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0315413D13;
-        Sun,  6 Nov 2022 23:15:15 -0800 (PST)
-Received: by mail-qv1-xf2b.google.com with SMTP id x15so7567265qvp.1;
-        Sun, 06 Nov 2022 23:15:14 -0800 (PST)
+        Mon, 7 Nov 2022 02:15:17 -0500
+Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21C0113D13;
+        Sun,  6 Nov 2022 23:15:16 -0800 (PST)
+Received: by mail-qk1-x72e.google.com with SMTP id g10so6681234qkl.6;
+        Sun, 06 Nov 2022 23:15:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=JTuGs4Qr8OjIPTV0EW+3fOR56dGgW7kE0R2qX2cKw3M=;
-        b=lGzX8P6W7zgpcKY2ylsffT7ItgS2ThQqmOG+9r35EVmd8AMXBLsiGPK6JE/5FQdgvE
-         D71/a3QofCTUTYPSoHE12mcp+HW0ZF0DehozUwvTPMmvlwYXlmGEZ/1qBZ7L0o7i1D9i
-         FFowQIO82vroCPcleeWyOVCYnnlDXKghRhmA2U4QQUBwbH2H0mzzlAPxUB2PgOZ3u5VJ
-         yn5x8ZFKobFI3vVr5j6It5Hu8m6S3+i0iZ/shOGJknfQE5+sosUJ5/zIC0DLJ43X9Lp2
-         dEXqIMU1kMBMwbBfd1V1ETase9Wf9qx1QKFARiEHAC4cdNPZA8TghoraBmM+D+07hPEd
-         uZsA==
+        bh=8XNx+rgJgduq7rCvuRhTlcngQGfS0jYPWbvWIVqx1qM=;
+        b=fkfG9ot2ZJgYRbjgmfQajtUOKmevc7ckdcsndCM1TmZAPhW6j+EysoQPGDBwIJRxgq
+         NE3yWYDf/T5yPZRzXdSOGT+vS4p83A0LAfW44V+LJFZgK9HfZBlMxEsYoYeWeMyXy4KR
+         Qneape2Fqn0VRYB72SmDoFFfjTxZNdaDxjcD54Ie9/QNzwfLHy0GVt7fFqgpiWOfVIiO
+         2/ZnikDSmoABsfIoxJ0p34AQIgAg6jtB3imD0BYedVnBBB1qfS1wnApFT2H7f1Kd0Gti
+         Xqzt60nux9KRPbQAhfoM1GMffCVsXXi2CEJKKCPjXbrYLSbVeV2PowzLNHs5MP37kAl2
+         UIMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=JTuGs4Qr8OjIPTV0EW+3fOR56dGgW7kE0R2qX2cKw3M=;
-        b=TmT1D3AOUI0a8qXcM2iXDYw94Utw37oJfK7HQPqnoxQCYwL1fFv/KalTJZX2CVIQlY
-         KMRrDCXuGjJnYj/74QlUzl36IM2zNClTev6lM8amAYC2idu0BaDrmOWNjVdaqp7V9A9t
-         sTh59BH74aUcftGgOU12akJE0UhtGnvmahFnHYJ51UUlFyKHV11k0kh06GdNQUEwYlgz
-         VdzPqzps665W7rGJ/zGGvVkvLLXQ/XJxC4iZfS4k7qgxkyzPASRWwoCDojn+vIrcUij+
-         DI6VGyhdJcV7eiPXSDBrBYr1ai3AkWcHMP2RYuQfDagbW9dZUF6fdi0B41WB1IV02FEv
-         XTnw==
-X-Gm-Message-State: ACrzQf2MbeFzsmA6Dg09FLvwC055lxphNE7ks96hdK0hH/0lQKYxXD5g
-        ApD+zS23GPy5Ec+eArS3y3Y=
-X-Google-Smtp-Source: AMsMyM7EMf8qeKS1zjYmLF98QBhhMYd9qMDGQBRAc31DPFEcgLyErj+9GDeMmbDWbhjXCx77hWl0jg==
-X-Received: by 2002:a0c:8107:0:b0:496:a715:dc8c with SMTP id 7-20020a0c8107000000b00496a715dc8cmr43396491qvc.96.1667805314146;
-        Sun, 06 Nov 2022 23:15:14 -0800 (PST)
+        bh=8XNx+rgJgduq7rCvuRhTlcngQGfS0jYPWbvWIVqx1qM=;
+        b=ie7sg38fc+QZo7klBrQEAgQaFAQz6opW2NGnKb4Q89NabrPOLlHMaEJlE3ndDsKFjN
+         aXF/IZvEOIWFMtLj1mY66RxetuoReWfy8fS7qDaSA45QXcxOYXwhbImcAso1H5JUlgLi
+         rVB4O7G7+dJUj5WV54LqTWY0bpaUuRz7gtBhQxJOIZP3Wuixb+5sU0icGeUmOfIXBzo+
+         3QBYC+qu+03usCR0vD7Hwq+jeIimoYfftWC9WbTCR2/x9N0uqC/Amni3gEAwNyNw1UVD
+         3k7fMHO6OFPoQGm/Zgj5nAYBGHG3v/x5Rtyrwx3VWirjRWYwiSi/dtoDFTAvu8Lsmv99
+         lNXg==
+X-Gm-Message-State: ACrzQf27dUlypD50525aRbXObid7qN5Qi8THERjnRBMdnSWrTWdm3D9C
+        aQiLjeeqZUR4xnVT/xo++nI=
+X-Google-Smtp-Source: AMsMyM77e+VuZnZM7E7UgYqBiy6cpufDm9treTU+akYNQtE5dR3s7GTF4Q0lLO9teekpOEtECVAWow==
+X-Received: by 2002:a05:620a:2b45:b0:6fa:509f:d0c2 with SMTP id dp5-20020a05620a2b4500b006fa509fd0c2mr21882138qkb.302.1667805315213;
+        Sun, 06 Nov 2022 23:15:15 -0800 (PST)
 Received: from jesse-desktop.jtp-bos.lab (pool-108-26-185-122.bstnma.fios.verizon.net. [108.26.185.122])
-        by smtp.gmail.com with ESMTPSA id br8-20020a05620a460800b006cf38fd659asm6318428qkb.103.2022.11.06.23.15.13
+        by smtp.gmail.com with ESMTPSA id br8-20020a05620a460800b006cf38fd659asm6318428qkb.103.2022.11.06.23.15.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 06 Nov 2022 23:15:13 -0800 (PST)
+        Sun, 06 Nov 2022 23:15:14 -0800 (PST)
 From:   Jesse Taube <mr.bossman075@gmail.com>
 X-Google-Original-From: Jesse Taube <Mr.Bossman075@gmail.com>
 To:     linux-imx@nxp.com
@@ -62,11 +62,10 @@ Cc:     robh+dt@kernel.org, sboyd@kernel.org, shawnguo@kernel.org,
         Mr.Bossman075@gmail.com, giulio.benetti@benettiengineering.com,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-gpio@vger.kernel.org, linux-serial@vger.kernel.org,
-        Rob Herring <robh@kernel.org>
-Subject: [PATCH v1 1/7] dt-bindings: arm: imx: Add i.MXRT compatible Documentation
-Date:   Mon,  7 Nov 2022 02:15:05 -0500
-Message-Id: <20221107071511.2764628-2-Mr.Bossman075@gmail.com>
+        linux-gpio@vger.kernel.org, linux-serial@vger.kernel.org
+Subject: [PATCH v1 2/7] dt-bindings: pinctrl: Fix file path for pinfunc include
+Date:   Mon,  7 Nov 2022 02:15:06 -0500
+Message-Id: <20221107071511.2764628-3-Mr.Bossman075@gmail.com>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20221107071511.2764628-1-Mr.Bossman075@gmail.com>
 References: <20221107071511.2764628-1-Mr.Bossman075@gmail.com>
@@ -82,39 +81,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Recently the imxrt1050 was added but the cpu compatible node wasn't
-added. Add both i.MXRT1170 and 1050 compatibles to fsl.yaml.
+Reference to pinfunc.h was wrong. Fix it.
 
 Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
-Acked-by: Rob Herring <robh@kernel.org>
 ---
- Documentation/devicetree/bindings/arm/fsl.yaml | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ Documentation/devicetree/bindings/pinctrl/fsl,imxrt1050.yaml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/arm/fsl.yaml b/Documentation/devicetree/bindings/arm/fsl.yaml
-index 59e6e8b4dab3..a95b774e5d67 100644
---- a/Documentation/devicetree/bindings/arm/fsl.yaml
-+++ b/Documentation/devicetree/bindings/arm/fsl.yaml
-@@ -1046,6 +1046,18 @@ properties:
-               - fsl,imx93-11x11-evk       # i.MX93 11x11 EVK Board
-           - const: fsl,imx93
- 
-+      - description: i.MXRT1050 based Boards
-+        items:
-+          - enum:
-+              - fsl,imxrt1050-evk         # i.MXRT1050 EVK Board
-+          - const: fsl,imxrt1050
-+
-+      - description: i.MXRT1170 based Boards
-+        items:
-+          - enum:
-+              - fsl,imxrt1170-evk         # i.MXRT1170 EVK Board
-+          - const: fsl,imxrt1170
-+
-       - description:
-           Freescale Vybrid Platform Device Tree Bindings
- 
+diff --git a/Documentation/devicetree/bindings/pinctrl/fsl,imxrt1050.yaml b/Documentation/devicetree/bindings/pinctrl/fsl,imxrt1050.yaml
+index 1278f7293560..db5fe66ad873 100644
+--- a/Documentation/devicetree/bindings/pinctrl/fsl,imxrt1050.yaml
++++ b/Documentation/devicetree/bindings/pinctrl/fsl,imxrt1050.yaml
+@@ -35,7 +35,7 @@ patternProperties:
+           each entry consists of 6 integers and represents the mux and config
+           setting for one pin. The first 5 integers <mux_reg conf_reg input_reg
+           mux_val input_val> are specified using a PIN_FUNC_ID macro, which can
+-          be found in <include/dt-bindings/pinctrl/pins-imxrt1050.h>. The last
++          be found in <arch/arm/boot/dts/imxrt1050-pinfunc.h>. The last
+           integer CONFIG is the pad setting value like pull-up on this pin. Please
+           refer to i.MXRT1050 Reference Manual for detailed CONFIG settings.
+         $ref: /schemas/types.yaml#/definitions/uint32-matrix
 -- 
 2.37.2
 
