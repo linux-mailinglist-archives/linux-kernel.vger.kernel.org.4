@@ -2,402 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 357E361EF29
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 10:36:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D691B61EF34
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 10:38:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231444AbiKGJgi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 04:36:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60394 "EHLO
+        id S231580AbiKGJil (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 04:38:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229778AbiKGJgg (ORCPT
+        with ESMTP id S230460AbiKGJih (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 04:36:36 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B2A4C2C;
-        Mon,  7 Nov 2022 01:36:35 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C4A7CB80E80;
-        Mon,  7 Nov 2022 09:36:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA2E0C433C1;
-        Mon,  7 Nov 2022 09:36:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667813792;
-        bh=QkBQeKZeJY0MJMmAxi1AZtHEbBvFtwGmoy8z8AX9ANY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=g8hzCOWFgwGFFxYBhDUDb1w+IP99Xl31OZDv9XjQm7ZRoQVFnjiuepEglqSnc/b9e
-         XmJKlV84lpu38LgDlCwv/BezMJcchjo4HWic5GfTGfavBcLpI3W2sfC0xu8SKodYBU
-         3UFPSZC/HMQP356SOQ+9wIpqrcCC2CUh63HMGHvsgz2/wMYyfDf3iefTEQ5nqWUbVH
-         H8AagrZwbxe84wbix0CynxX3ppKhGL0AijUWoWsknhEqZg1k8hg5X5ceeCk032p50H
-         9n9IbsMKgSxbPziijd2eeecBd04zq7kpr9nHMDWjrGg/0jEJsahbM+mJcth10rI+wj
-         LkmBdgo3tcw/Q==
-Date:   Mon, 7 Nov 2022 09:36:27 +0000
-From:   Lee Jones <lee@kernel.org>
-To:     Naresh Solanki <naresh.solanki@9elements.com>
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Patrick Rudolph <patrick.rudolph@9elements.com>,
-        Marcello Sylvester Bauer <sylv@sylv.io>
-Subject: Re: [PATCH v8 2/2] mfd: max597x: Add support for MAX5970 and MAX5978
-Message-ID: <Y2jRm2J4tvK5ET1e@google.com>
-References: <20221103213425.2474772-1-Naresh.Solanki@9elements.com>
- <20221103213425.2474772-3-Naresh.Solanki@9elements.com>
+        Mon, 7 Nov 2022 04:38:37 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6A73C10
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 01:37:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1667813859;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=RA5h23L4uCyLHhh8VO30UEa386MUEsaDniZmx0LN9mo=;
+        b=NmAsIghB9OmoFeYrB0WOanNVyeigAaVhFbJm6WG69CN+xKOrBjmqx6x2VYv8af8qxW9AhP
+        /EUr9bmV8g4QDahEInysW2A6/kyBDE1LC/8en3TDLFcx/72GhrYiTdtqyQcJN6ozH4455K
+        JPU28hX5qtRnNMYryAGM9L+FEBPSkCM=
+Received: from mail-vk1-f198.google.com (mail-vk1-f198.google.com
+ [209.85.221.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-372-ogBbAQK4MeuZCHdYF5tFXA-1; Mon, 07 Nov 2022 04:37:37 -0500
+X-MC-Unique: ogBbAQK4MeuZCHdYF5tFXA-1
+Received: by mail-vk1-f198.google.com with SMTP id u186-20020a1fabc3000000b003b80089c9e6so3153049vke.2
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 01:37:37 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RA5h23L4uCyLHhh8VO30UEa386MUEsaDniZmx0LN9mo=;
+        b=6UbY6IFR/l39AJg7j8ctRSox7WeOJ9xKmh+agcnA+zuQBJ4VIBXZtZwvlwRCX6uhqe
+         jB7vPGIJeT112/Vnvk/z94L8Wis4tkWqU0aZX5Bm2UBmtgqpweJ+Xa9czBroCLQ28oKz
+         aycRq6L/9oK/gyn0Gmsh0+olOIp6ZyYwan++FuDqo0q4KSVTt6mEtEf9kUs2O1yOWwU0
+         xlNAo9rkvbGCsDD25a0zCu+c0P8yq52hqxKJdfX+8wOKal2mKzXEY8l6kFtvqmGRAn0l
+         7QQpo1/B3HujRFYAydexV+ow19gMfzuqTS1R9ZwcNhgWivx/14o6QaYRLlJNxBHQC7OU
+         f1aw==
+X-Gm-Message-State: ACrzQf1UQ6AaQpwbjR3mNBVHKt9l3VDdrsl/l9TLsZ8jnQ83/YocggKd
+        KPeJj2coM2uW/v+M/o81bLjyzgUcQHIjv8DjMzFcegks40DZeGPBwtMCNoiIuyKc9AiK4VJPSGG
+        YMfWXdUnYn4fMMdZxxd30ZJMJkjKFF9Uz68ODAFzD
+X-Received: by 2002:a67:c997:0:b0:3aa:1d0c:6bc7 with SMTP id y23-20020a67c997000000b003aa1d0c6bc7mr26593164vsk.16.1667813857378;
+        Mon, 07 Nov 2022 01:37:37 -0800 (PST)
+X-Google-Smtp-Source: AMsMyM4iooYOJKgVrQAXHtKWqN/IHYiqmUVm64ZXPIaHfP7hfWHBzsSjnEhIQGt/4NX3Mkvyi+CxSL8AlhQFAmOXHds=
+X-Received: by 2002:a67:c997:0:b0:3aa:1d0c:6bc7 with SMTP id
+ y23-20020a67c997000000b003aa1d0c6bc7mr26593145vsk.16.1667813857115; Mon, 07
+ Nov 2022 01:37:37 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221103213425.2474772-3-Naresh.Solanki@9elements.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220915111039.092790446@infradead.org> <20220915111147.890071690@infradead.org>
+ <Y1HVZKW4o0KRsMtq@dev-arch.thelio-3990X> <Y1JsBQAhDFB2C0OE@hirez.programming.kicks-ass.net>
+ <Y1K5D2u6pzXRQz6a@dev-arch.thelio-3990X> <08bbd7ab-049e-3cc3-f814-636669b856be@citrix.com>
+ <Y2UJPrgYTtKHblnh@hirez.programming.kicks-ass.net>
+In-Reply-To: <Y2UJPrgYTtKHblnh@hirez.programming.kicks-ass.net>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+Date:   Mon, 7 Nov 2022 10:37:26 +0100
+Message-ID: <CABgObfb1yhuKMo6_qCrJxAoA6=-3ZkmQYdFLMJWDmgJbPWbGmA@mail.gmail.com>
+Subject: Re: KVM vs AMD: Re: [PATCH v3 48/59] x86/retbleed: Add SKL return thunk
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Andrew Cooper <Andrew.Cooper3@citrix.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Johannes Wikner <kwikner@ethz.ch>,
+        Alyssa Milburn <alyssa.milburn@linux.intel.com>,
+        Jann Horn <jannh@google.com>, "H.J. Lu" <hjl.tools@gmail.com>,
+        Joao Moreira <joao.moreira@intel.com>,
+        Joseph Nuzman <joseph.nuzman@intel.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Juergen Gross <jgross@suse.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        K Prateek Nayak <kprateek.nayak@amd.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        kvm list <kvm@vger.kernel.org>,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 03 Nov 2022, Naresh Solanki wrote:
+On Fri, Nov 4, 2022 at 1:45 PM Peter Zijlstra <peterz@infradead.org> wrote:
+>
+> On Thu, Nov 03, 2022 at 10:53:54PM +0000, Andrew Cooper wrote:
+> > On 21/10/2022 16:21, Nathan Chancellor wrote:
+> > > On Fri, Oct 21, 2022 at 11:53:09AM +0200, Peter Zijlstra wrote:
+> > >> On Thu, Oct 20, 2022 at 04:10:28PM -0700, Nathan Chancellor wrote:
+> > >>> This commit is now in -next as commit 5d8213864ade ("x86/retbleed: Add
+> > >>> SKL return thunk"). I just bisected an immediate reboot on my AMD test
+> > >>> system when starting a virtual machine with QEMU + KVM to it (see the
+> > >>> bisect log below). My Intel test systems do not show this.
+> > >>> Unfortunately, I do not have much more information, as there are no logs
+> > >>> in journalctl, which makes sense as the reboot occurs immediately after
+> > >>> I hit the enter key for the QEMU command.
+> > >>>
+> > >>> If there is any further information I can provide or patches I can test
+> > >>> for further debugging, I am more than happy to do so.
+> > >> Moo :-(
+> > >>
+> > >> you happen to have a .config for me?
+> > > Sure thing, sorry I did not provide it in the first place! Attached. It
+> > > has been run through localmodconfig for the particular machine but I
+> > > assume the core pieces should still be present.
+> >
+> > Following up from some debugging on IRC.
+> >
+> > The problem is that FILL_RETURN_BUFFER now has a per-cpu variable
+> > access, and AMD SVM has a fun optimisation where the VMRUN instruction
+> > doesn't swap, amongst other things, %gs.
+> >
+> > per-cpu variables only become safe following
+> > vmload(__sme_page_pa(sd->save_area)); in svm_vcpu_enter_exit().
+> >
+> > Given that retbleed=force ought to work on non-skylake hardware, the
+> > appropriate fix is to move the VMLOAD/VMSAVE's down into asm and put
+> > them adjacent to VMRUN.
+> >
+> > This also addresses an undocumented dependency where its only the memory
+> > clobber in vmload() which stops the compiler moving
+> > svm_vcpu_enter_exit()'s calculation of sd into an unsafe position.
+>
+> So, aside from wasting the entire morning on resuscitating my AMD
+> Interlagos, I ended up with the below patch which seems to work.
+>
+> Not being a virt person, I'm sure I've messed up something, please
+> advise.
 
-> From: Patrick Rudolph <patrick.rudolph@9elements.com>
-> 
-> Implement a regulator driver with IRQ support for fault management.
+Oh, that was fast. I was doing similar stuff to move MSR_IA32_SPEC_CTRL
+save/restore to assembly, because we're not sure it's safe to do the restore
+in C code, and there is overlap with this change. I'll get it out today.
 
-This is not a "regulator driver".
+The main issue in the patch below is that _ASM_ARG4 does not exist
+on 32-bits, and also _ASM_ARG3 is kinda offlimits because I need it
+for the aforementioned MSR_IA32_SPEC_CTRL change.
 
-> Written against documentation [1] and [2] and tested on real hardware.
-> 
-> Every channel has its own regulator supplies nammed 'vss1-supply' and
-> 'vss2-supply'. The regulator supply is used to determine the output
-> voltage, as the smart switch provides no output regulation.
-> The driver requires the 'shunt-resistor-micro-ohms' property to be
-> present in Device Tree to properly calculate current related
-> values.
-> 
-> Datasheet links:
-> 1: https://datasheets.maximintegrated.com/en/ds/MAX5970.pdf
-> 2: https://datasheets.maximintegrated.com/en/ds/MAX5978.pdf
-> 
-> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
-> Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
-> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+Otherwise it's similar to my change.
 
-Can you explain these tags to me please?
+Paolo
 
-Patrick wrote it.  Then what happened?
-
-> ---
->  drivers/mfd/Kconfig         |  12 +++++
->  drivers/mfd/Makefile        |   1 +
->  drivers/mfd/max597x.c       |  92 ++++++++++++++++++++++++++++++++
->  include/linux/mfd/max597x.h | 103 ++++++++++++++++++++++++++++++++++++
->  4 files changed, 208 insertions(+)
->  create mode 100644 drivers/mfd/max597x.c
->  create mode 100644 include/linux/mfd/max597x.h
-> 
-> diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
-> index 8b93856de432..416fe7986b7b 100644
-> --- a/drivers/mfd/Kconfig
-> +++ b/drivers/mfd/Kconfig
-> @@ -253,6 +253,18 @@ config MFD_MADERA_SPI
->  	  Support for the Cirrus Logic Madera platform audio SoC
->  	  core functionality controlled via SPI.
->  
-> +config MFD_MAX597X
-> +	tristate "Maxim 597x Power Switch and Monitor"
-> +	depends on I2C
-> +	depends on OF
-> +	select MFD_CORE
-> +	select REGMAP_I2C
-> +	help
-> +	  This driver controls a Maxim 5970/5978 switch via I2C bus.
-> +	  The MAX5970/5978 is a smart switch with no output regulation, but
-> +	  fault protection and voltage and current monitoring capabilities.
-> +	  Also it supports upto 4 indication LEDs.
-> +
->  config MFD_CS47L15
->  	bool "Cirrus Logic CS47L15"
->  	select PINCTRL_CS47L15
-> diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
-> index 7ed3ef4a698c..819d711fa748 100644
-> --- a/drivers/mfd/Makefile
-> +++ b/drivers/mfd/Makefile
-> @@ -161,6 +161,7 @@ obj-$(CONFIG_MFD_DA9063)	+= da9063.o
->  obj-$(CONFIG_MFD_DA9150)	+= da9150-core.o
->  
->  obj-$(CONFIG_MFD_MAX14577)	+= max14577.o
-> +obj-$(CONFIG_MFD_MAX597X)	+= max597x.o
->  obj-$(CONFIG_MFD_MAX77620)	+= max77620.o
->  obj-$(CONFIG_MFD_MAX77650)	+= max77650.o
->  obj-$(CONFIG_MFD_MAX77686)	+= max77686.o
-> diff --git a/drivers/mfd/max597x.c b/drivers/mfd/max597x.c
-> new file mode 100644
-> index 000000000000..2c64edb6b6dd
-> --- /dev/null
-> +++ b/drivers/mfd/max597x.c
-> @@ -0,0 +1,92 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Maxim MAX5970/MAX5978 MFD Driver
-
-Please drop "MFD Driver" and replace it with what it does.
-
-"Power Switch and Monitor"?
-
-> + * Copyright (c) 2022 9elements GmbH
-> + *
-> + * Author: Patrick Rudolph <patrick.rudolph@9elements.com>
-> + */
-> +
-> +#include <linux/i2c.h>
-> +#include <linux/mfd/core.h>
-> +#include <linux/mfd/max597x.h>
-> +#include <linux/regmap.h>
-> +
-> +static const struct regmap_config max597x_regmap_config = {
-> +	.reg_bits = 8,
-> +	.val_bits = 8,
-> +	.max_register = MAX_REGISTERS,
-> +};
-> +
-> +static const struct mfd_cell max597x_cells[] = {
-> +	{ .name = "max597x-regulator", },
-> +	{ .name = "max597x-iio", },
-> +	{ .name = "max597x-led", },
-> +};
-> +
-> +static int max597x_probe(struct i2c_client *i2c, const struct i2c_device_id *id)
-> +{
-> +	struct max597x_data *ddata;
-> +	enum max597x_chip_type chip = id->driver_data;
-> +
-> +	ddata = devm_kzalloc(&i2c->dev, sizeof(*ddata),	GFP_KERNEL);
-> +	if (!ddata)
-> +		return -ENOMEM;
-> +
-> +	/* Initialize num of switch based on chip type for later use by regulator
-> +	 * & iio cells
-> +	 */
-
-Please use proper multi-line comment structure.
-
-Also use proper words, unlike 'num'.
-
-In fact, it looks like this whole comment could do with some love.
-
-> +	switch (chip) {
-> +	case MAX597x_TYPE_MAX5970:
-> +		ddata->num_switches = MAX5970_NUM_SWITCHES;
-> +		break;
-> +	case MAX597x_TYPE_MAX5978:
-> +		ddata->num_switches = MAX5978_NUM_SWITCHES;
-> +		break;
-> +	}
-> +
-> +	ddata->regmap = devm_regmap_init_i2c(i2c, &max597x_regmap_config);
-> +	if (IS_ERR(ddata->regmap)) {
-> +		dev_err(&i2c->dev, "Failed to initialise regmap");
-
-Are you using American spelling or English?
-
-Please make up your mind and be consistent.
-
-> +		return -EINVAL;
-
-Shouldn't you be propagating the error you received?
-
-> +	}
-> +
-> +	/* IRQ used by regulator cell */
-
-What IRQ is this?  Does it have a name?
-
-If it's only used in Regulator, why not fetch it there?
-
-> +	ddata->irq = i2c->irq;
-> +	ddata->dev = &i2c->dev;
-
-You should already have access to the Driver, else how are you going
-to fetch the data back in the first place?
-
-> +	i2c_set_clientdata(i2c, ddata);
-> +
-> +	return devm_mfd_add_devices(ddata->dev, PLATFORM_DEVID_AUTO,
-> +				    max597x_cells, ARRAY_SIZE(max597x_cells),
-> +				    NULL, 0, NULL);
-> +}
-> +
-> +static const struct i2c_device_id max597x_table[] = {
-> +	{ .name = "max5970", MAX597x_TYPE_MAX5970 },
-> +	{ .name = "max5978", MAX597x_TYPE_MAX5978 },
-
-You don't need ".name = ".
-
-> +};
-> +
-> +MODULE_DEVICE_TABLE(i2c, max597x_table);
-> +
-> +static const struct of_device_id max597x_of_match[] = {
-> +	{ .compatible = "maxim,max5970", .data = (void *)MAX597x_TYPE_MAX5970 },
-> +	{ .compatible = "maxim,max5978", .data = (void *)MAX597x_TYPE_MAX5978 },
-
-Where is .data used?
-
-> +	{ /* sentinel */ }
-
-Drop the comment.  We know what a NULL entry means.
-
-> +};
-> +
-> +MODULE_DEVICE_TABLE(of, max597x_of_match);
-> +
-> +static struct i2c_driver max597x_driver = {
-> +	.id_table = max597x_table,
-> +	.driver = {
-> +		.name = "max597x",
-> +		.of_match_table = of_match_ptr(max597x_of_match),
-> +		},
-
-Tabbing error.
-
-> +	.probe = max597x_probe,
-> +};
-> +
-
-Remove this line.
-
-> +module_i2c_driver(max597x_driver);
-> +
-> +MODULE_AUTHOR("Patrick Rudolph <patrick.rudolph@9elements.com>");
-> +MODULE_DESCRIPTION("MAX597X Power Switch and Monitor");
-> +MODULE_LICENSE("GPL v2");
-> diff --git a/include/linux/mfd/max597x.h b/include/linux/mfd/max597x.h
-> new file mode 100644
-> index 000000000000..f88a57f0e4f2
-> --- /dev/null
-> +++ b/include/linux/mfd/max597x.h
-> @@ -0,0 +1,103 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * Maxim MAX5970/MAX5978 MFD Driver
-
-Same here.
-
-> + * Copyright (c) 2022 9elements GmbH
-> + *
-> + * Author: Patrick Rudolph <patrick.rudolph@9elements.com>
-> + */
-> +
-> +#ifndef MFD_MAX597X_H
-> +#define MFD_MAX597X_H
-> +
-> +#include <linux/device.h>
-> +#include <linux/regmap.h>
-> +
-> +/* Number of switch based on chip variant */
-
-This comment is superfluous.
-
-> +#define MAX5970_NUM_SWITCHES 2
-> +#define MAX5978_NUM_SWITCHES 1
-> +/* Both chip variant have 4 indication LEDs used by LED cell */
-
-Here too I think.
-
-> +#define MAX597X_NUM_LEDS     4
-> +
-> +enum max597x_chip_type {
-> +	MAX597x_TYPE_MAX5978 = 1,
-
-Why 1?
-
-> +	MAX597x_TYPE_MAX5970,
-> +};
-> +
-> +#define MAX5970_REG_CURRENT_L(ch)		(0x01 + (ch) * 4)
-> +#define MAX5970_REG_CURRENT_H(ch)		(0x00 + (ch) * 4)
-> +#define MAX5970_REG_VOLTAGE_L(ch)		(0x03 + (ch) * 4)
-> +#define MAX5970_REG_VOLTAGE_H(ch)		(0x02 + (ch) * 4)
-> +#define MAX5970_REG_MON_RANGE			0x18
-> +#define  MAX5970_MON_MASK				0x3
-> +#define  MAX5970_MON(reg, ch)		(((reg) >> ((ch) * 2)) & MAX5970_MON_MASK)
-> +#define  MAX5970_MON_MAX_RANGE_UV		16000000
-> +
-> +#define MAX5970_REG_CH_UV_WARN_H(ch)	(0x1A + (ch) * 10)
-> +#define MAX5970_REG_CH_UV_WARN_L(ch)	(0x1B + (ch) * 10)
-> +#define MAX5970_REG_CH_UV_CRIT_H(ch)	(0x1C + (ch) * 10)
-> +#define MAX5970_REG_CH_UV_CRIT_L(ch)	(0x1D + (ch) * 10)
-> +#define MAX5970_REG_CH_OV_WARN_H(ch)	(0x1E + (ch) * 10)
-> +#define MAX5970_REG_CH_OV_WARN_L(ch)	(0x1F + (ch) * 10)
-> +#define MAX5970_REG_CH_OV_CRIT_H(ch)	(0x20 + (ch) * 10)
-> +#define MAX5970_REG_CH_OV_CRIT_L(ch)	(0x21 + (ch) * 10)
-> +
-> +#define  MAX5970_VAL2REG_H(x)			(((x) >> 2) & 0xFF)
-> +#define  MAX5970_VAL2REG_L(x)			((x) & 0x3)
-> +
-> +#define MAX5970_REG_DAC_FAST(ch)		(0x2E + (ch))
-> +
-> +#define MAX5970_FAST2SLOW_RATIO			200
-> +
-> +#define MAX5970_REG_STATUS0				0x31
-> +#define  MAX5970_CB_IFAULTF(ch)			(1 << (ch))
-> +#define  MAX5970_CB_IFAULTS(ch)			(1 << ((ch) + 4))
-> +
-> +#define MAX5970_REG_STATUS1				0x32
-> +#define  STATUS1_PROT_MASK				0x3
-> +#define  STATUS1_PROT(reg) \
-> +	(((reg) >> 6) & STATUS1_PROT_MASK)
-> +#define  STATUS1_PROT_SHUTDOWN			0
-> +#define  STATUS1_PROT_CLEAR_PG			1
-> +#define  STATUS1_PROT_ALERT_ONLY		2
-> +
-> +#define MAX5970_REG_STATUS2				0x33
-> +#define  MAX5970_IRNG_MASK				0x3
-> +#define  MAX5970_IRNG(reg, ch)	\
-> +						(((reg) >> ((ch) * 2)) & MAX5970_IRNG_MASK)
-> +
-> +#define MAX5970_REG_STATUS3				0x34
-> +#define  MAX5970_STATUS3_ALERT			BIT(4)
-> +#define  MAX5970_STATUS3_PG(ch)			BIT(ch)
-> +
-> +#define MAX5970_REG_FAULT0				0x35
-> +#define  UV_STATUS_WARN(ch)				BIT(ch)
-> +#define  UV_STATUS_CRIT(ch)				BIT(ch + 4)
-> +
-> +#define MAX5970_REG_FAULT1				0x36
-> +#define  OV_STATUS_WARN(ch)				BIT(ch)
-> +#define  OV_STATUS_CRIT(ch)				BIT(ch + 4)
-> +
-> +#define MAX5970_REG_FAULT2				0x37
-> +#define  OC_STATUS_WARN(ch)				BIT(ch)
-> +
-> +#define MAX5970_REG_CHXEN				0x3b
-> +#define  CHXEN(ch)						(3 << (ch * 2))
-> +
-> +#define MAX5970_REG_LED_FLASH			0x43
-
-Do these all need to be shared?
-
-Or can they be isolated into, say, the Regulator driver?
-
-> +#define MAX_REGISTERS					0x49
-> +#define ADC_MASK						0x3FF
-> +
-> +struct max597x_data {
-> +	struct device *dev;
-> +	int irq;
-> +	int num_switches;
-> +	struct regmap *regmap;
-> +	/* Chip specific parameters needed by regulator & iio cells */
-> +	u32 irng[MAX5970_NUM_SWITCHES];
-> +	u32 mon_rng[MAX5970_NUM_SWITCHES];
-> +	u32 shunt_micro_ohms[MAX5970_NUM_SWITCHES];
-> +};
-> +
-> +#endif				/* _MAX597X_H */
-
-                                       This is incorrect and doesn't
-				       need to be tabbed out over
-				       here.
-
--- 
-Lee Jones [李琼斯]
