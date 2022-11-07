@@ -2,29 +2,28 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F44C61FC43
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 18:56:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BE7961FC44
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 18:56:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232741AbiKGR4D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 12:56:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58544 "EHLO
+        id S232986AbiKGR4G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 12:56:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232681AbiKGRya (ORCPT
+        with ESMTP id S232745AbiKGRyl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 12:54:30 -0500
+        Mon, 7 Nov 2022 12:54:41 -0500
 Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50CEB22539
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 09:53:56 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9852724964;
+        Mon,  7 Nov 2022 09:54:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1667843592; h=from:from:sender:reply-to:subject:subject:date:date:
+        s=mail; t=1667843593; h=from:from:sender:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+         content-type:content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=H8pAyOlP7Xx5OwjiRIaFlkfD4bNit3L8bl0IUhfSO6I=;
-        b=qsyxCgN0sN+ARh1+P1h+1FIkwlPwMd4Ug9gjGO+OK/xM3oPoWKF4SwUC9zdgEu0+UZk+7a
-        HcyfcQ0Rkg6+Nb8IU7mPqnwdzz40vRFn1HYCsiYVDidekFLfuRB3IyRWFoWpIB+TXFlz9G
-        /BuGBtZVO03djzY3tdYyK7MoVCOTFtU=
+        bh=xCJ8ZGsBKBthoKA4jzLPBZ2ybOb/+gNvRRdW1QwBz4Y=;
+        b=x/cHs9n23E7v0YHvlDCnlvm5lAxyTNY8LuZdAnJgsMnlHn7GFX3CrEwVo8nVDfdzrpwSlO
+        yyJsTchR+f58Ymg5S70kxHNP28/T3Sey+nowqoSYIloJpjPz63x99ppQTGwrXXl2HKtRzZ
+        KrksU6FRmue0BZFvuTDnrdil5MimVUM=
 From:   Paul Cercueil <paul@crapouillou.net>
 To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
         Maxime Ripard <mripard@kernel.org>,
@@ -33,18 +32,16 @@ To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
         Daniel Vetter <daniel@ffwll.ch>
 Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
         Paul Cercueil <paul@crapouillou.net>,
-        Sandy Huang <hjc@rock-chips.com>,
-        =?UTF-8?q?Heiko=20St=C3=BCbner?= <heiko@sntech.de>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org
-Subject: [PATCH 18/26] drm: rockchip: Remove #ifdef guards for PM related functions
-Date:   Mon,  7 Nov 2022 17:52:48 +0000
-Message-Id: <20221107175256.360839-8-paul@crapouillou.net>
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        linux-renesas-soc@vger.kernel.org
+Subject: [PATCH 19/26] drm: shmobile: Remove #ifdef guards for PM related functions
+Date:   Mon,  7 Nov 2022 17:52:49 +0000
+Message-Id: <20221107175256.360839-9-paul@crapouillou.net>
 In-Reply-To: <20221107175256.360839-1-paul@crapouillou.net>
 References: <20221107175106.360578-1-paul@crapouillou.net>
  <20221107175256.360839-1-paul@crapouillou.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
@@ -55,10 +52,10 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use the pm_sleep_ptr() macros to handle the .suspend_late /
-.resume_early callbacks.
+Use the DEFINE_SIMPLE_DEV_PM_OPS() and pm_sleep_ptr() macros to handle
+the .suspend/.resume callbacks.
 
-This macro allows the suspend and resume functions to be automatically
+These macros allow the suspend and resume functions to be automatically
 dropped by the compiler when CONFIG_SUSPEND is disabled, without having
 to use #ifdef guards.
 
@@ -68,49 +65,48 @@ regressions are subsequently easier to catch.
 
 Signed-off-by: Paul Cercueil <paul@crapouillou.net>
 ---
-Cc: Sandy Huang <hjc@rock-chips.com>
-Cc: "Heiko Stübner" <heiko@sntech.de>
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-rockchip@lists.infradead.org
+Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+Cc: linux-renesas-soc@vger.kernel.org
 ---
- drivers/gpu/drm/rockchip/analogix_dp-rockchip.c | 6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
+ drivers/gpu/drm/shmobile/shmob_drm_drv.c | 9 +++------
+ 1 file changed, 3 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/gpu/drm/rockchip/analogix_dp-rockchip.c b/drivers/gpu/drm/rockchip/analogix_dp-rockchip.c
-index ad2d3ae7e621..0df0fa540d7e 100644
---- a/drivers/gpu/drm/rockchip/analogix_dp-rockchip.c
-+++ b/drivers/gpu/drm/rockchip/analogix_dp-rockchip.c
-@@ -429,7 +429,6 @@ static int rockchip_dp_remove(struct platform_device *pdev)
+diff --git a/drivers/gpu/drm/shmobile/shmob_drm_drv.c b/drivers/gpu/drm/shmobile/shmob_drm_drv.c
+index 3d511fa38913..337040fa6438 100644
+--- a/drivers/gpu/drm/shmobile/shmob_drm_drv.c
++++ b/drivers/gpu/drm/shmobile/shmob_drm_drv.c
+@@ -143,7 +143,6 @@ static const struct drm_driver shmob_drm_driver = {
+  * Power management
+  */
+ 
+-#ifdef CONFIG_PM_SLEEP
+ static int shmob_drm_pm_suspend(struct device *dev)
+ {
+ 	struct shmob_drm_device *sdev = dev_get_drvdata(dev);
+@@ -165,11 +164,9 @@ static int shmob_drm_pm_resume(struct device *dev)
+ 	drm_kms_helper_poll_enable(sdev->ddev);
  	return 0;
  }
- 
--#ifdef CONFIG_PM_SLEEP
- static int rockchip_dp_suspend(struct device *dev)
- {
- 	struct rockchip_dp_device *dp = dev_get_drvdata(dev);
-@@ -449,13 +448,10 @@ static int rockchip_dp_resume(struct device *dev)
- 
- 	return analogix_dp_resume(dp->adp);
- }
 -#endif
  
- static const struct dev_pm_ops rockchip_dp_pm_ops = {
--#ifdef CONFIG_PM_SLEEP
- 	.suspend_late = rockchip_dp_suspend,
- 	.resume_early = rockchip_dp_resume,
--#endif
- };
+-static const struct dev_pm_ops shmob_drm_pm_ops = {
+-	SET_SYSTEM_SLEEP_PM_OPS(shmob_drm_pm_suspend, shmob_drm_pm_resume)
+-};
++static DEFINE_SIMPLE_DEV_PM_OPS(shmob_drm_pm_ops,
++				shmob_drm_pm_suspend, shmob_drm_pm_resume);
  
- static const struct rockchip_dp_chip_data rk3399_edp = {
-@@ -484,7 +480,7 @@ struct platform_driver rockchip_dp_driver = {
- 	.remove = rockchip_dp_remove,
- 	.driver = {
- 		   .name = "rockchip-dp",
--		   .pm = &rockchip_dp_pm_ops,
-+		   .pm = pm_sleep_ptr(&rockchip_dp_pm_ops),
- 		   .of_match_table = rockchip_dp_dt_ids,
+ /* -----------------------------------------------------------------------------
+  * Platform driver
+@@ -292,7 +289,7 @@ static struct platform_driver shmob_drm_platform_driver = {
+ 	.remove		= shmob_drm_remove,
+ 	.driver		= {
+ 		.name	= "shmob-drm",
+-		.pm	= &shmob_drm_pm_ops,
++		.pm	= pm_sleep_ptr(&shmob_drm_pm_ops),
  	},
  };
+ 
 -- 
 2.35.1
 
