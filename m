@@ -2,164 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9A2261F82A
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 17:02:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FD7B61F831
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 17:02:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231989AbiKGQCg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 11:02:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54884 "EHLO
+        id S232284AbiKGQCt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 11:02:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231553AbiKGQCf (ORCPT
+        with ESMTP id S232273AbiKGQCq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 11:02:35 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0096620180
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 08:02:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=oO821jkjlpuWvMjorfVycJRbysjDeH9qbTWtMmciLn8=; b=n1P1Ab7fp7eMKEsOzFUWRPPdyh
-        W93J6IgWS8yqluVC18qzmMGlyjQZ8H4RWfV/w5rBPa8ztmIPaeGlYeSZUtGRYaiQTVXOWpyugfp7H
-        fAfx1OJHTs/VyPdjJE5AAj1t0AHlnWvxOoKd69ukhuJpnmdeL+ho9mGYO71JyYE0EdHT6tyJqAqsv
-        2xnO6ks0Pwzjc9SSOz3dCg7GrPSU8JdV7ewEBocGbNsRoQmyw9efsuCMZsFJwmqNBuOHczPA8Lic/
-        TXq33T0yo0Hi5q/20aT2YJiL0GQHwopaTTfzR818g5ClOVX4KpLhwT45FEW7F3828oE3/Q4Hojw14
-        LbBinlug==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1os4Zn-009U4Y-3Z; Mon, 07 Nov 2022 16:02:19 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 67F3B30026A;
-        Mon,  7 Nov 2022 17:02:13 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 50C6E2B1A6BC5; Mon,  7 Nov 2022 17:02:13 +0100 (CET)
-Date:   Mon, 7 Nov 2022 17:02:13 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     kernel test robot <oliver.sang@intel.com>
-Cc:     oe-lkp@lists.linux.dev, lkp@intel.com,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        Dave Hansen <dave.hansen@intel.com>
-Subject: Re: [tip:x86/mm] [x86/mm]  b389949485:
- WARNING:at_arch/x86/mm/pat/set_memory.c:#__change_page_attr
-Message-ID: <Y2ksBbNMsRKFzN4Y@hirez.programming.kicks-ass.net>
-References: <202211061748.eb591682-oliver.sang@intel.com>
- <Y2kgVE+etZ1+F2PW@hirez.programming.kicks-ass.net>
+        Mon, 7 Nov 2022 11:02:46 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 854FE1FFBC;
+        Mon,  7 Nov 2022 08:02:44 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E4D81610E7;
+        Mon,  7 Nov 2022 16:02:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54F88C433D6;
+        Mon,  7 Nov 2022 16:02:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667836963;
+        bh=Q/9M3qSa1bFKeX3VjOKXXNeZQ8B6sH7ewCOsQSJl+z0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=XOmgvny4UUp7BZnQahaV6KsWUNhmwIhMxpmcOq3tw9+9teYm6GP3wrPKa3hZGoLnw
+         E8JjujtcqktG/KkrpbyyurTKPktTQdPK912YFUTtXWMPkM5Mc8ahGVOnmMw4Uhs9uI
+         cTBlpsSY6QMvq4ve9Z36ouACRIQs64gqbTRuCpXHF7tFc/7x4f8H/Qv0fo1LJXDNr9
+         JzeHD9nkKpifY1CmMZpd4sb8KMqk3fuEl3XqfTd7Ru1lKOsEk7X40/JP1ugM9/6yCX
+         WursSOfQ18hBTkSv25XwIi5vVUTkBzpxlLxQrxg8iYZ3853WT5wCALjP37Nihp0/J3
+         NEZKY1McJ+eyw==
+Date:   Mon, 7 Nov 2022 16:02:28 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Maxime Ripard <maxime@cerno.tech>
+Cc:     Stephen Boyd <sboyd@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Chen-Yu Tsai <wens@csie.org>, Daniel Vetter <daniel@ffwll.ch>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Abel Vesa <abelvesa@kernel.org>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Prashant Gaikwad <pgaikwad@nvidia.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Sekhar Nori <nsekhar@ti.com>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Takashi Iwai <tiwai@suse.com>,
+        David Airlie <airlied@gmail.com>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        David Lechner <david@lechnology.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        alsa-devel@alsa-project.org, linux-mediatek@lists.infradead.org,
+        linux-phy@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        linux-actions@lists.infradead.org, linux-clk@vger.kernel.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        patches@opensource.cirrus.com, linux-tegra@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH v2 43/65] ASoC: tlv320aic32x4: Add a determine_rate hook
+Message-ID: <Y2ksFHGNIEVm1ldF@sirena.org.uk>
+References: <20221018-clk-range-checks-fixes-v2-0-f6736dec138e@cerno.tech>
+ <20221018-clk-range-checks-fixes-v2-43-f6736dec138e@cerno.tech>
+ <Y2UzdYyjgahJsbHg@sirena.org.uk>
+ <20221104155123.qomguvthehnogkdd@houat>
+ <Y2U2+ePwRieYkNjv@sirena.org.uk>
+ <20221107084322.gk4j75r52zo5k7xk@houat>
+ <Y2j0r0wX1XtQBvqO@sirena.org.uk>
+ <20221107152603.57qimyzkinhifx5p@houat>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="hTyRvcr/YAY3aApU"
 Content-Disposition: inline
-In-Reply-To: <Y2kgVE+etZ1+F2PW@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221107152603.57qimyzkinhifx5p@houat>
+X-Cookie: Minimum charge for booths.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 07, 2022 at 04:12:20PM +0100, Peter Zijlstra wrote:
-> On Sun, Nov 06, 2022 at 08:38:27PM +0800, kernel test robot wrote:
-> > 
-> > Greeting,
-> > 
-> > FYI, we noticed WARNING:at_arch/x86/mm/pat/set_memory.c:#__change_page_attr due to commit (built with gcc-11):
-> > 
-> > commit: b38994948567e6d6b62947401c57f4ab2efe070c ("x86/mm: Implement native set_memory_rox()")
-> > https://git.kernel.org/cgit/linux/kernel/git/tip/tip.git x86/mm
-> > 
-> > [test failed on linux-next/master 0cdb3579f1ee4c1e55acf8dfb0697b660067b1f8]
-> > 
-> > in testcase: boot
-> > 
-> > on test machine: qemu-system-x86_64 -enable-kvm -cpu SandyBridge -smp 2 -m 16G
-> > 
-> > caused below changes (please refer to attached dmesg/kmsg for entire log/backtrace):
-> > 
-> > 
-> > If you fix the issue, kindly add following tag
-> > | Reported-by: kernel test robot <oliver.sang@intel.com>
-> > | Link: https://lore.kernel.org/oe-lkp/202211061748.eb591682-oliver.sang@intel.com
-> > 
-> > 
-> > [   44.943065][   T11] ------------[ cut here ]------------
-> > [   44.943725][   T11] CPA detected W^X violation: 0000000000000060 -> 0000000000000063 range: 0xffff8881beca5000 - 0xffff8881beca5fff PFN 1beca5
-> > [ 44.944929][ T11] WARNING: CPU: 0 PID: 11 at arch/x86/mm/pat/set_memory.c:609 __change_page_attr (arch/x86/mm/pat/set_memory.c:609 arch/x86/mm/pat/set_memory.c:1582) 
-> > [   44.945824][   T11] Modules linked in:
-> > [   44.946229][   T11] CPU: 0 PID: 11 Comm: kworker/0:1 Tainted: G        W          6.1.0-rc3-00010-gb38994948567 #1 f37474c2082f37dd433f70907b94c2b0df8d70b8
-> > [   44.947518][   T11] Workqueue: events bpf_prog_free_deferred
-> > [ 44.948074][ T11] RIP: 0010:__change_page_attr (arch/x86/mm/pat/set_memory.c:609 arch/x86/mm/pat/set_memory.c:1582) 
-> 
-> Urgh, as spotted by dhansen, the code in change_page_attr_set_clr(),
-> specifically the checkalias thing, seems to rely on single bit flips for
-> NX.
-> 
-> Let me try to make sense of this stuff....
 
-This appears to appease the test case, but I definitely need to look at
-this again with a fresh mind, horrid stuff this and I'm sure I hate this
-patch.
+--hTyRvcr/YAY3aApU
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
+On Mon, Nov 07, 2022 at 04:26:03PM +0100, Maxime Ripard wrote:
+> On Mon, Nov 07, 2022 at 12:06:07PM +0000, Mark Brown wrote:
+> > On Mon, Nov 07, 2022 at 09:43:22AM +0100, Maxime Ripard wrote:
 
----
-diff --git a/arch/x86/mm/pat/set_memory.c b/arch/x86/mm/pat/set_memory.c
-index f275605892df..07339ac8bc41 100644
---- a/arch/x86/mm/pat/set_memory.c
-+++ b/arch/x86/mm/pat/set_memory.c
-@@ -69,10 +69,11 @@ static const int cpa_warn_level = CPA_PROTECT;
-  */
- static DEFINE_SPINLOCK(cpa_lock);
- 
--#define CPA_FLUSHTLB 1
--#define CPA_ARRAY 2
--#define CPA_PAGES_ARRAY 4
--#define CPA_NO_CHECK_ALIAS 8 /* Do not search for aliases */
-+#define CPA_FLUSHTLB		0x01
-+#define CPA_ARRAY		0x02
-+#define CPA_PAGES_ARRAY		0x04
-+#define CPA_NO_CHECK_ALIAS	0x08 /* Do not search for aliases */
-+#define CPA_HAS_NX		0x10
- 
- static inline pgprot_t cachemode2pgprot(enum page_cache_mode pcm)
- {
-@@ -1708,9 +1709,21 @@ static int __change_page_attr_set_clr(struct cpa_data *cpa, int checkalias)
- 			goto out;
- 
- 		if (checkalias) {
--			ret = cpa_process_alias(cpa);
--			if (ret)
--				goto out;
-+			pgprot_t set = cpa->mask_set;
-+			pgprot_t clr = cpa->mask_clr;
-+
-+			if (cpa->flags & CPA_HAS_NX) {
-+				cpa->mask_set.pgprot &= ~_PAGE_NX;
-+				cpa->mask_clr.pgprot &= ~_PAGE_NX;
-+			}
-+			if (pgprot_val(cpa->mask_set) | pgprot_val(cpa->mask_clr)) {
-+				ret = cpa_process_alias(cpa);
-+				if (ret)
-+					goto out;
-+			}
-+
-+			cpa->mask_set = set;
-+			cpa->mask_clr = clr;
- 		}
- 
- 		/*
-@@ -1788,8 +1801,10 @@ static int change_page_attr_set_clr(unsigned long *addr, int numpages,
- 	if (in_flag & (CPA_ARRAY | CPA_PAGES_ARRAY))
- 		cpa.flags |= in_flag;
- 
--	/* No alias checking for _NX bit modifications */
--	checkalias = (pgprot_val(mask_set) | pgprot_val(mask_clr)) != _PAGE_NX;
-+	if ((pgprot_val(mask_set) | pgprot_val(mask_clr)) & _PAGE_NX)
-+		cpa.flags |= CPA_HAS_NX;
-+
-+	checkalias = 1;
- 	/* Has caller explicitly disabled alias checking? */
- 	if (in_flag & CPA_NO_CHECK_ALIAS)
- 		checkalias = 0;
+> > The series does fill in __clk_mux_determine_rate for everything though -
+> > if it was just assumed by default the only thing that'd be needed would
+> > be adding the flag.
+
+> The behavior assumed by default was equivalent to
+> __clk_mux_determine_rate + CLK_SET_RATE_NO_REPARENT. We could indeed set
+> both if determine_rate is missing in the core, but that's unprecedented
+> in the clock framework so I think we'll want Stephen to comment here :)
+
+> It's also replacing one implicit behavior by another. The point of this
+> series was to raise awareness on that particular point, so I'm not sure
+> it actually fixes things. We'll see what Stephen thinks about it.
+
+We could also just set the operation and still require the flag to be
+specified.  I'm a little surprised to learn that it's something you
+might want to override, never mind that the API didn't have a default -
+it feels like a bit of a landmine that this is the case and is probably
+why there's so many cases to fix up.
+
+--hTyRvcr/YAY3aApU
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmNpLBMACgkQJNaLcl1U
+h9BS0gf/chIMp6chtu1p8LwUn+lniQOfOjVm2GoGAQ06qSr9+3KsWgvPO3J4pFNa
+l036gwiNNFPM5gXlEj19YU0NgiAQIt2hoh9q92PY1kN8vmSQutr8U6QVxq27pphZ
+5T2AVdZG2/L1Za5fy+qtwzx6ji1EENFmdLOF/NRrtc1zJPm/bT9E14uqwH7vmK0f
+Jh1uBONY+x2wM44EMNgt3p4HTS/37ARwT9njBao9UUdt1uFWnUx05o0lerkyk4Xg
+QlkvyC2hU+mXML3s6FVEbx0TQImsJItRx7Fk4E0Pij30qxWDtd0uybSJOzuWo16R
+emQv+2HsLgl0L3qkctPVJREpPwCQuQ==
+=mfv5
+-----END PGP SIGNATURE-----
+
+--hTyRvcr/YAY3aApU--
