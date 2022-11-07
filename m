@@ -2,162 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 394A361F390
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 13:45:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9869861F39B
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 13:45:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231838AbiKGMpG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 07:45:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36326 "EHLO
+        id S232418AbiKGMpw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 07:45:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232271AbiKGMpA (ORCPT
+        with ESMTP id S232375AbiKGMpj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 07:45:00 -0500
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 016B81B9FC;
-        Mon,  7 Nov 2022 04:44:54 -0800 (PST)
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2A7C3WcJ013598;
-        Mon, 7 Nov 2022 12:44:28 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=corp-2022-7-12;
- bh=2zwbn8YvJimiiSa4u8jaU8kKFeTduYnibWVelKWOPeY=;
- b=O954ggi6wsxhWvylHx/d1pkAQJ9yuQRWlVplGZF1sfmJZGDFKlei3vCmDZ5pTwbNwSiO
- DSB4tS3DbRbHA4lliBYzmkib1wTniAk1OTsar8BCke7moqW1gfIwFaiXhodbQLWRxK/E
- DbZlCJQdO4hH1MOfTAqypiUDIxKLohsMzAWIeFV/Uj0aGi0pWuF8CQt5Jey2bR2n6xL5
- h8wullC4Y/azIEpdFJ1EiJQLb82PNQ5bx90vAdWiwivANC5AOBL8IKLDOm9nQFx4JROT
- E6VxQl76yrVCdm7tjk6asF9LvBGBBpWZ0ALF+th4VcHo1eWTIbLHfhSiFi/5Ija/G1wh PQ== 
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3kngkfusgx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 07 Nov 2022 12:44:28 +0000
-Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 2A7AejkT007979;
-        Mon, 7 Nov 2022 12:44:27 GMT
-Received: from nam10-bn7-obe.outbound.protection.outlook.com (mail-bn7nam10lp2106.outbound.protection.outlook.com [104.47.70.106])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3kpctj8bd4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 07 Nov 2022 12:44:27 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QEf/WJIdPw71LZxtvi8sP6VL2V9OZexEJ1nBqazwACk27ghduaWam+6TFhCqpuYlXvEwlX6zGrf0ZHrlSXLKMrlbO1yTNl+xIysTpkYlXpIGTHhlMGFUL8XJDEPIYDr3Pu4M9zs/wLPkfdwyPoWnIbGuXVis5m721fHa8ojThiRdv1tOJwhUsRAhhlgPiQFRVxklhxWlyEPc0WZoJX2eGx1VhxUF7icmYSY+7ahQuhJWxG86OaSLyU/YH4K/8gxlOj232+BhST1okPS6WaDq7rp7Q8PwOAd7RdY098U/Crcuj1U15kW0NRAcyfRtyr9rC3TpYEnV7DJXZ9vDlAPcZA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2zwbn8YvJimiiSa4u8jaU8kKFeTduYnibWVelKWOPeY=;
- b=DytK5hexOlik4ADls24Lb0fBfSFsgBeJR5rlx/ZeCmH813Ro3pWCIkOIbqkEi+Qyi+dwfYnC1qbcUv3I0j2Lc8NoHKOifF4XjhU2vv/WoEBfldBupdNzDVI2CgZski4CCb5SKMbvAXeFiKTStF7iEObcJ4qdLmjM2FsM7qs3VGoOocnQsL69lf2yHKBOL9Q/zurQsrIxMBKLvpiTkAAW/SHIcovgHwnDC9i/x70RiaTMYUkBGClOD2NK9381VbQhZKG7awx6G9mFYBMDiOZr0gQ49qA1zfK7CV///vWZFull+y2hysXMTvksobybazU834ZssTr2hmtU1V0PoWGbIw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2zwbn8YvJimiiSa4u8jaU8kKFeTduYnibWVelKWOPeY=;
- b=MmQOu0Xq7hSV6LfvdJTHzMhU0ETAQorvX4AHB6m/F5zYXtO1ldltUZNhHQN332jOE/XSewkSUD8c9MUvtMXmsfcr95wZ5lYLQYlzkyiVK2XnTs0CUn6IColJqG3i6907QwjczuKP9U2NFU1zecUA8JGVWJsNoNpfhJxi7pDQHC8=
-Received: from DM6PR10MB4313.namprd10.prod.outlook.com (2603:10b6:5:212::20)
- by CH3PR10MB6810.namprd10.prod.outlook.com (2603:10b6:610:140::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.26; Mon, 7 Nov
- 2022 12:44:25 +0000
-Received: from DM6PR10MB4313.namprd10.prod.outlook.com
- ([fe80::d0c4:8da4:2702:8b3b]) by DM6PR10MB4313.namprd10.prod.outlook.com
- ([fe80::d0c4:8da4:2702:8b3b%4]) with mapi id 15.20.5791.026; Mon, 7 Nov 2022
- 12:44:25 +0000
-Message-ID: <6971d59e-2a72-2812-d289-53e61121f35a@oracle.com>
-Date:   Mon, 7 Nov 2022 12:44:20 +0000
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.1
-Subject: Re: [External] : Re: [PATCH] scsi: libsas: Check and update the link
- rate during discovery
-Content-Language: en-US
-To:     Yihang Li <liyihang9@huawei.com>, jejb@linux.ibm.com,
-        martin.petersen@oracle.com
-Cc:     bvanassche@acm.org, chenxiang66@hisilicon.com,
-        daejun7.park@samsung.com, damien.lemoal@opensource.wdc.com,
-        yanaijie@huawei.com, duoming@zju.edu.cn,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        prime.zeng@hisilicon.com, yangxingui@huawei.com,
-        linuxarm@huawei.com
-References: <20221102100555.3537275-1-liyihang9@huawei.com>
- <90217102-8767-b077-2615-1a5e41b58660@oracle.com>
- <43f496c4-4808-bee2-5a67-93e1114f646a@huawei.com>
-From:   John Garry <john.g.garry@oracle.com>
-Organization: Oracle Corporation
-In-Reply-To: <43f496c4-4808-bee2-5a67-93e1114f646a@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: LO2P265CA0335.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:a4::35) To DM6PR10MB4313.namprd10.prod.outlook.com
- (2603:10b6:5:212::20)
+        Mon, 7 Nov 2022 07:45:39 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 665A61B7AE
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 04:44:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1667825079;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=2hqgA/TRgZw1DzPVWmvs/bi2bDcerUKILSHp4k/Qv2I=;
+        b=f7EMFN9Xsur14JhZg3H3ilyEK03fuywrxHRba7S2t5aB7+4LSOxNNb4JzQ7201A0qhVsIh
+        4r6iulr/IYRInwZLCldYpxr33sy7seTYLnYT7hcR8lz0lH7WQVRkPmKsr0Ci+aJqz/fWrM
+        i3+3rm5FrGyxVtygqgo05pu5yDbdh8E=
+Received: from mail-pl1-f198.google.com (mail-pl1-f198.google.com
+ [209.85.214.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-191-Jn9u6rUePGqWzPiV2khzOw-1; Mon, 07 Nov 2022 07:44:33 -0500
+X-MC-Unique: Jn9u6rUePGqWzPiV2khzOw-1
+Received: by mail-pl1-f198.google.com with SMTP id s15-20020a170902ea0f00b00187050232fcso8992379plg.3
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 04:44:33 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-language:content-transfer-encoding:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=2hqgA/TRgZw1DzPVWmvs/bi2bDcerUKILSHp4k/Qv2I=;
+        b=hgjHBAlecp6+Azu6pRqva3zNuwjv5GSJ1KsQPlqcB2BbIG6YTIJlEhySW6oK5qyGNQ
+         LHQtfm2IQ4p7sNcMOPyB4BK871VBsmDePqA5Bi3i7NzzbcJgIn0qdmAuIQYBN5sEaBjk
+         X/XYFAbRj9jRHqKSAgtq4z1lfWkob399BRCGhf5Jn46f9Ts2unDgBv0kK6UE3wF2TOom
+         Vm0bFNzckULJJAoXa27GrYu7YVhLVV0pLeSS8SxQaxUQbHmnd4GPRygPhFXqgryRS0rt
+         asseTYRk7FrrhZrJIo/LAiR/j6Tqti6aVUsFTMk9WFDb52Cz0Gioa+PBhKPadD9C2kto
+         hCIQ==
+X-Gm-Message-State: ACrzQf1+bcB3tLXb7ptz6GmZO737/pqnr6qAbQRasLCz90wIvBNxQXPi
+        duq8KRUujNHADfX8Y07BbRwLMdAb68/KoMBBfVaaFdegLoe0EQtINo2InmsAB+wsYJYo0lFLyzP
+        5XM+RIt682rl4SxLxz96os/oo
+X-Received: by 2002:a05:6a00:21cc:b0:56c:ba99:795d with SMTP id t12-20020a056a0021cc00b0056cba99795dmr50314884pfj.84.1667825072149;
+        Mon, 07 Nov 2022 04:44:32 -0800 (PST)
+X-Google-Smtp-Source: AMsMyM6Z8VizXTILvpkDYYRHc1gOLDg0bA5X+HhAJoGWKY3jU2FfCdpEd9AI46CqQAZaCoZ5DX+GxA==
+X-Received: by 2002:a05:6a00:21cc:b0:56c:ba99:795d with SMTP id t12-20020a056a0021cc00b0056cba99795dmr50314862pfj.84.1667825071873;
+        Mon, 07 Nov 2022 04:44:31 -0800 (PST)
+Received: from [10.72.12.88] ([43.228.180.230])
+        by smtp.gmail.com with ESMTPSA id pv7-20020a17090b3c8700b00213c7cf21c0sm4240009pjb.5.2022.11.07.04.44.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 07 Nov 2022 04:44:31 -0800 (PST)
+Subject: Re: [RFC PATCH] fs/lock: increase the filp's reference for
+ Posix-style locks
+To:     Jeff Layton <jlayton@kernel.org>, viro@zeniv.linux.org.uk,
+        chuck.lever@oracle.com
+Cc:     axboe@kernel.dk, asml.silence@gmail.com,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        io-uring@vger.kernel.org, ceph-devel@vger.kernel.org,
+        mchangir@redhat.com, idryomov@gmail.com, lhenriques@suse.de,
+        gfarnum@redhat.com
+References: <20221107095232.36828-1-xiubli@redhat.com>
+ <2f1fe2fe57f39ab420c7855584ae7b6bb85a7692.camel@kernel.org>
+ <c5a2cf05-8e30-1fac-3c48-d4b508ea9009@redhat.com>
+ <88511dabbfb0cfad748100f59f2ce4025db29dc0.camel@kernel.org>
+From:   Xiubo Li <xiubli@redhat.com>
+Message-ID: <b1333f15-fb3d-5698-1852-47a55546bdb8@redhat.com>
+Date:   Mon, 7 Nov 2022 20:44:24 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6PR10MB4313:EE_|CH3PR10MB6810:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3269227e-6d69-40c2-c2ad-08dac0bdcd36
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: DJjujQ4kc9F+4lNd83vaZOmsy7lUdcplAnTbaUuiABszUntM7J4eMqO5TCmOAMPGG3ZrimWl2VquZJamyoJ74SIHwQ8aLmUD+0hk7X1g9VDhvrosS4lU/sE9PxY4ZOnT2g6Ne8tBqJ9waKFfMDG6R70WUMMLEuMxiLDW9vKo3EgfG1kyBocxJYhWYCcKk25AoyFxbp3nUtgls21RAwQY/a4ves91edzN8fHS7Y81hNFQshcXu+T8J8CGNzlUKpxj39fQyn6tiXu3wSGgyCQXnKubsPc+NxTHTTePNgE6M3CLNDo/jNoqGobjwh2MlK9HXPvKbsk89P/mtDrP6vCbUwrYERqEv08QnHwN2s0bGLnQYPsu6M0MRgdqKWXbVqtfLOeRNP2D4LZgS6tN+6aLcpkdfyOF8DPKwqUTgymzYkquza4AhDnB3EAXDelFNN3KPKtiSPxV/ZKLDU58Oo0x+EAk8z+t1jcnmOfkeCYndS4x1l8mSxLsvMyYqVaK3zefNDB2XDmIUNkMHVIeIyP1GUjKyl9ftPizDvL4C+e1srNc1JCce8bM+Pup7wA51uB67geLBQ9Tjd4bO66uXQ5bNV83ZiA3cDlI6HQZACUdymGOQlY7cUA373MyYrPTP+mNyMHIzwtcwU5GOmvbIj3TUbjq4pFAiZoSYMOrWF7X682ZV7t2cbdQHSmXvnJCpeLVYVi7u2OB+QWBkAhHp4se/oxu+M0hPVFNDmHYw7I0EEwLI0Sx2rDd6ZjzhPjFmSQ6bNMbv8WE4qHOqyjdOchM9yLakVZXr2SpB6WDg6KYyxw=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR10MB4313.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(366004)(136003)(39860400002)(346002)(376002)(396003)(451199015)(478600001)(6486002)(5660300002)(8936002)(41300700001)(4326008)(15650500001)(2906002)(7416002)(8676002)(66556008)(66946007)(66476007)(6636002)(316002)(83380400001)(38100700002)(86362001)(6666004)(31696002)(186003)(6506007)(26005)(36916002)(6512007)(2616005)(31686004)(36756003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?QlpKaDlCaGUweU8xS1hGY2RQOHM0TUdmN2JONkZ1VVg4Y1B4ZU1wdERKbmVq?=
- =?utf-8?B?ZmtDclNqMkdoRDAwbk1ISVpZUnoxT0kyN3JUcE43M0JmUDB6VUpmUHlrK2l3?=
- =?utf-8?B?TWpSN1ZpSHlQOStRbzc5NzV4TlhzK3VjOGsvOW1hZDgwUGhVdUVzRXViNUg0?=
- =?utf-8?B?Zmd3TGk5S0pKSjFEZlRQSk82YTAreGFvd0xZWWQ0a2pJSVY0UDNhN1JFSUFl?=
- =?utf-8?B?V2d0d0d6THJybE1lSExNa0p1UnNqdytJOGE2OGg0S2Znd0lOQ3l2UllFZWlI?=
- =?utf-8?B?Y1hvWDZhUU04SUt2RFFMVGNkbHNZdUhtTTJJR29TUWRXcEJOWjRxdDNMNC8x?=
- =?utf-8?B?dzIrbFdWWEw3NmpGdlRMelE1QVMyamN1TjdVQWpveFExSEtrbUt2bEw0NDND?=
- =?utf-8?B?bDRMVW9udU55bVJQY1FJK3gzaXhtNkhUdkVZTituZktxcXZCRWs4N0VGdktP?=
- =?utf-8?B?dXJkbFZleEcxWGk1K1p0Mmh6MkVLZldzZzZzV3RFOWw2bWlOVlNLeC83MU1n?=
- =?utf-8?B?VkJON05hUmJTRmd4SXJObGk5TndlOFc5bTJUQXdTcWVxejJWZGtpTFZjYlBI?=
- =?utf-8?B?T0FQQkpYS3Vpa0R3Nnd0b0orS1F3RC82M005WjBSZmU3d2Q1ZnlxU2FuNjdX?=
- =?utf-8?B?eFlVQ2E0YmRXV1lKclBGZjk4RFNXOGQyOXFkbEtYZDVYWkZFaUV0bGtzTnF5?=
- =?utf-8?B?OGJKdDNhOUh2TW5sR2NWS2Fza2dVektwb0lQcXh5MTIvZmlXL0lMcU9CS0kv?=
- =?utf-8?B?ZTFWcjJERGhqdnNrSTV0eWRMcUJYb0h5cUM4UFlyQVZaWGUvUzBhNlNYdGVU?=
- =?utf-8?B?Qlo5Z3NxMVNEazVZM1BvVlRmRjZxR2lkNEw5dm1NK3QxSG1WZUptWlNUMWpy?=
- =?utf-8?B?MFlWdXg5OEl5K1M0clc3SE1ockRqWlY2anM0QStnWDQ4U1RUZVo5OWlKQkxT?=
- =?utf-8?B?MjNlT1FKOUdOcFg4eCtHU3VZSllyczJwcjZ5RWJQem9MNVpnM3B1ZE9wNjRy?=
- =?utf-8?B?SDdHY2lhQi9iemZlS2NKQkUyWjBMcXpJbFUwQlVyVnB6RHdvRWVTWVFiOU8v?=
- =?utf-8?B?M3hzTlNJZmJRYklTblppYWJULzBVQzBVVUNtUldOY0tQZ0wyVTQ2dklqQ3p2?=
- =?utf-8?B?enM4d1NiTTZLNTVmVmdyTHdUK1MvRkpMMi94SXZSZ3BsbHpPMEd3QTBFbHNp?=
- =?utf-8?B?U01paEt3SXBKYjBCaDRKd2wxcm9JTmlXc096cG9iYWE3dncxbkV5MkNmRVhM?=
- =?utf-8?B?WEIrMExuSFVQelZkNzVvNlNTaTJCdEVDOVNkaVRScnR2blplVzRLeWNNcGlZ?=
- =?utf-8?B?azVMZkVETnJlY0hoR1ZHS296dHlvbWFraGEwYjM3TnBaejRaQ2F0dkEya3lv?=
- =?utf-8?B?SVBrT055eStmTnpkY1V5SnFsVzJwVzlJQ1IvaWpGeXBJNVJZbU5mMlJ6N2U0?=
- =?utf-8?B?TkdMUFpGU20ySXJVWjRaeFhUa3FSNzlIRDhlaGpMTE1WUWRtaWxDSkxxTHJ1?=
- =?utf-8?B?MUJ6R3VSTGxZNUwrSW9tS2l5TTRUR2NpMTVjQnVoaS84ZDFNeFZuMkQyLzlR?=
- =?utf-8?B?SnQ3MlRrRXpiNjlCa2M2TFVET0YzN3NGUUUraUhoREtEMTN2aE1JcUFWZm50?=
- =?utf-8?B?L3B1QjdQd3FnWjU0UEVFOHJ2WmdrWXBCa080aUZBa0lXUHR3UVdXVXJqT2Jj?=
- =?utf-8?B?ZXc5M2tuNkdMSENaVXBNMGxpWnVtdjRQRXI2dzJsY3A2TlF2RzZ1VDlIdXd6?=
- =?utf-8?B?cE9qNHFXQ0VWL05wUk1VV243MzJXMTVEaFhuVFc1SFRvckFicmVvT0ZaV1hq?=
- =?utf-8?B?eXVqMkVTVm83VEZPVVhRTW5tN2xxSjNETURLaWxIK3U5a0ZNeTRsUjFtU2xF?=
- =?utf-8?B?aFVSMEp3VmpJcmRJcjF3U2tRY0V5NDRZVEdCTVBjVE1Yb0pPVWk4Nnc1V2hK?=
- =?utf-8?B?MFdWanRuVHlDVmJBQWpQWW5oZGhmMHJlc203bnEyT293c3hjSGxlZ090Qk9q?=
- =?utf-8?B?UTZFbmJOM1p3aFhuV3JXWlhlZkpub3ozbUtUUXFabzh6dGdTczNSeDNqbVZJ?=
- =?utf-8?B?OWJlK2tKVE5JODNwaFVnaVBWWk13Z0tRajVhTmp6WEZLMDR5aDRXRnBqQW5u?=
- =?utf-8?Q?LPe9lhtISGlWGQNhzgBtuJhlt?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3269227e-6d69-40c2-c2ad-08dac0bdcd36
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR10MB4313.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Nov 2022 12:44:25.2179
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: TVICqlMtFrCPh6DPEjvazDEKhXxmA7ztkVr//VkjE6TcllJdPJs+MoB/TSKTeThdZao1VOQBR77QRZgHy/5Y2A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR10MB6810
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-07_05,2022-11-07_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 spamscore=0 bulkscore=0
- adultscore=0 mlxscore=0 suspectscore=0 malwarescore=0 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
- definitions=main-2211070104
-X-Proofpoint-ORIG-GUID: d2HaTSkUZ3Ez4AtnAbLvGn_Iy_IjjAiD
-X-Proofpoint-GUID: d2HaTSkUZ3Ez4AtnAbLvGn_Iy_IjjAiD
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <88511dabbfb0cfad748100f59f2ce4025db29dc0.camel@kernel.org>
+Content-Type: text/plain; charset=iso-8859-15; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -165,90 +90,123 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
->>>
->>> SATA disk which connected to expander PHY maybe reject IO request due to
->>> the connection setup error (OPEN_REJECT-CONNECTION RATE NOT SUPPORTED).
->>> The log as follows:
->>>
->>> [175712.419423] hisi_sas_v3_hw 0000:74:02.0: erroneous completion iptt=2985 task=00000000268357f1 dev id=10 exp 0x500e004aaaaaaa1f phy9 addr=500e004aaaaaaa09 CQ hdr: 0x102b 0xa0ba9 0x1000 0x20000 Error info: 0x200 0x0 0x0 0x0
->>>
->>> After analysis, it is concluded that: when one of the physical links
->>> connected on the wide port is re-established, the link rate of the port
->>> and expander device and the expander SATA PHY are not updated. As a
->>> result, the expander PHY attached to a SATA PHY is using link rate
->>> (6.0 Gbit) greater than the physical PHY link rate (3.0 Gbit).
+On 07/11/2022 20:29, Jeff Layton wrote:
+> On Mon, 2022-11-07 at 20:03 +0800, Xiubo Li wrote:
+>> On 07/11/2022 18:33, Jeff Layton wrote:
+>>> On Mon, 2022-11-07 at 17:52 +0800, xiubli@redhat.com wrote:
+[...]
+>>>> diff --git a/io_uring/openclose.c b/io_uring/openclose.c
+>>>> index 67178e4bb282..5a12cdf7f8d0 100644
+>>>> --- a/io_uring/openclose.c
+>>>> +++ b/io_uring/openclose.c
+>>>> @@ -212,6 +212,7 @@ int io_close_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
+>>>>    int io_close(struct io_kiocb *req, unsigned int issue_flags)
+>>>>    {
+>>>>    	struct files_struct *files = current->files;
+>>>> +	fl_owner_t owner = file_lock_make_thread_owner(files);
+>>>>    	struct io_close *close = io_kiocb_to_cmd(req, struct io_close);
+>>>>    	struct fdtable *fdt;
+>>>>    	struct file *file;
+>>>> @@ -247,7 +248,7 @@ int io_close(struct io_kiocb *req, unsigned int issue_flags)
+>>>>    		goto err;
+>>>>    
+>>>>    	/* No ->flush() or already async, safely close from here */
+>>>> -	ret = filp_close(file, current->files);
+>>>> +	ret = filp_close(file, owner);
+>>>>    err:
+>>>>    	if (ret < 0)
+>>>>    		req_set_fail(req);
+>>> I think this is the wrong approach to fixing this. It also looks like
+>>> you could hit a similar problem with OFD locks and this patch wouldn't
+>>> address that issue.
+>> For the OFD locks they will set the 'file' struct as the owner just as
+>> the flock does, it should be okay and I don't think it has this issue if
+>> my understanding is correct here.
 >>
->> Please mention the SAS spec section in which min pathway is described.
-> 
-> Do you mean the original text of the SAS spec section needs to be added here?
-> 
+> They set the the owner to "file", but they don't hold a reference to it.
+> With OFD locks, the file is what holds references to the lock, not the
+> reverse.
 
-I mean to at least mention the spec version and section number and title 
-(in that spec version).
+Yeah, right. But for both OFD and flock they shouldn't hit this issue, 
+because it when removing all the locks having the same owner, which is 
+the 'file', passed by filp_close(filp), the 'file' reference counter 
+must be larger than 0. Because the filp_close() is still using it.
 
-> Like this:
-> 
-> According to Serial Attached SCSI:
-> If an STP initiator port discovers a SATA device behind an STP/SATA bridge with a physical link rate greater
-> than the maximum connection rate supported by the pathway from the STP initiator port, the STP initiator port
-> should use the SMP PHY CONTROL function (see 10.4.3.10) to set the MAXIMUM PHYSICAL LINK RATE field of
-> the expander phy attached to the SATA device to the maximum connection rate supported by the pathway.
+This is why using the thread id as the owner is a special case for 
+Posix-style lock.
 
-I think that this condition in the spec is a flaw. Or at least annoying.
-
-> 
+>
+>>> The real bug seems to be that ceph_fl_release_lock dereferences fl_file,
+>>> at a point when it shouldn't rely on that being valid. Most filesystems
+>>> stash some info in fl->fl_u if they need to do bookkeeping after
+>>> releasing a lock. Perhaps ceph should be doing something similar?
+>> This is the 'filp' memory in filp_close(filp, ...):
 >>
->>>
->>> Therefore, add function sas_check_port_linkrate() to check whether the
->>> link rate of physical PHY which is connected to the wide port changes
->>> after the phy up occur, if the link rate of the newly established
->>> physical phy is lower than the link rate of the port, a smaller link rate
->>> value is transmitted to port->linkrate.
->>>
->>> Use the sas_update_linkrate_root_expander() function to update the root
->>> expander link rate. Traverse all expanders connected to the port, check
->>> and update expander PHYs that need to be updated and triggers revalidation.
+>> crash> file.f_path.dentry,f_inode 0xffff952d7ab46200
+>>     f_path.dentry = 0xffff9521b121cb40
+>>     f_inode = 0xffff951f3ea33550,
 >>
->> So are you saying that you want to lower the linkrate on all pathways to the SATA disk? In your example, that would be 3Gbps. If so, won't that affect the end-to-end linkrate of all other devices attached (and lower throughput drastically)?
-> 
-> Yes, this will lower performance drastically, but I consider the following two things:
-> 
-> a. Ensure that all disks work properly when the issue we discussed occurs.
-> 
-> b. When the user limits the linkrate to a lower level through the sysfs interface, the linkrate on all pathways to the SATA disk should be reduced.
-> 
-> [root@localhost phy-5:0]# lsscsi
-> [5:0:0:0]    disk    HUAWEI   HWE32SS3008M001N 2774  /dev/sda
-> [5:0:1:0]    disk    ATA      ST4000NM0035-1V4 TN03  /dev/sdb
-> [5:0:12:0]   enclosu HUAWEI   Expander 12Gx16  131   -
-> [root@localhost phy-5:0]# cat maximum_linkrate
-> 12.0 Gbit
-> [root@localhost phy-5:0]# cat minimum_linkrate
-> 1.5 Gbit
-> [root@localhost phy-5:0]# echo 1.5 Gbit > maximum_linkrate
-> [root@localhost phy-5:0]# cat negotiated_linkrate
-> 1.5 Gbit
-> [root@localhost phy-5:0]# lsscsi
-> [5:0:0:0]    disk    HUAWEI   HWE32SS3008M001N 2774  /dev/sda
-> [5:0:12:0]   enclosu HUAWEI   Expander 12Gx16  131   -
-> [5:0:13:0]   disk    ATA      ST4000NM0035-1V4 TN03  /dev/sdb
-> [root@localhost phy-5:0]# cd ../phy-5\:0:1
-> [root@localhost phy-5:0:1]# cat negotiated_linkrate
+>> We can see the 'f_inode' is pointing to the correct inode memory.
+>>
+>>
+>>
+>> While later in 'ceph_fl_release_lock()':
+>>
+>> 41 static void ceph_fl_release_lock(struct file_lock *fl)
+>> 42 {
+>> 43     struct ceph_file_info *fi = fl->fl_file->private_data;
+>> 44     struct inode *inode = file_inode(fl->fl_file);
+>> 45     struct ceph_inode_info *ci = ceph_inode(inode);
+>> 46     atomic_dec(&fi->num_locks);
+>> 47     if (atomic_dec_and_test(&ci->i_filelock_ref)) {
+>> 48         /* clear error when all locks are released */
+>> 49         spin_lock(&ci->i_ceph_lock);
+>> 50         ci->i_ceph_flags &= ~CEPH_I_ERROR_FILELOCK;
+>> 51         spin_unlock(&ci->i_ceph_lock);
+>> 52     }
+>> 53 }
+>>
+> You only need the inode for most of this. The exception is
+> fi->num_locks, so you may need to test for that in a different way.
+>
+>> It crashed in Line#47 and the 'fl->fl_file' memory is:
+>>
+>> crash> file.f_path.dentry,f_inode 0xffff952d4ebd8a00
+>>     f_path.dentry = 0x0
+>>     f_inode = 0x0,
+>>
+>> Please NOTE: the 'filp' and 'fl->fl_file' are two different 'file struct'.
+>>
+> Yep, I understand the bug. I just don't like the proposed fix. :)
 
-So do we reset the linkrate of the SATA-attached phy, right? Could that 
-cause the disk to be lost and found again? If so, doesn't seem useful if 
-that disk had a filesystem mounted...
+Yeah, I also think this approach is ugly :-)
 
-> 1.5 Gbit
-> 
-> 
+>> Can we fix this by using 'fl->fl_u' here ?
+>>
+> Probably. You could take and hold an inode reference in there, and maybe
+> add a function that looks at whether there are any locks held against a
+> particular file, rather than trying to count locks in ceph_file_info.
 
-I just wonder if it is better to disable that phy altogether rather than 
-drag every other pathway down to this lower linkrate:
+Okay, this sounds good.
 
-a. that would be simpler than trying to maintain this min pathway
-b. the condition that gives rise to issue is very rare (so don't need to 
-burden libsas with supporting it according to the spec).
+Let me try this tomorrow.
 
-Thanks,
-John
+>> I was also thinking I could just call the 'get_file(file)' in
+>> ceph_lock() and then in ceph_fl_release_lock() release the reference
+>> counter. How about this ?
+>>
+> That may work too, though again, I'd be worried about cyclical
+> dependencies, particularly with OFD locks. If the lock holds a reference
+> to the file, then can the file's refcount ever go to zero if the lock is
+> never explicitly released? I think not.
+>
+> You may also need to consider flock locks too, since they have similar
+> ownership semantics to OFD locks.
+
+I will send a V2 later.
+
+Thanks Jeff!
+
+- Xiubo
+
+
