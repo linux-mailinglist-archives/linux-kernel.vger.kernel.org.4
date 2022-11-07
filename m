@@ -2,106 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14EAD61F860
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 17:07:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6ED9A61F85C
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 17:07:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232186AbiKGQHL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 11:07:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57018 "EHLO
+        id S232163AbiKGQHH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 11:07:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232677AbiKGQGX (ORCPT
+        with ESMTP id S232234AbiKGQGP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 11:06:23 -0500
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5742C20379
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 08:06:18 -0800 (PST)
-Received: by mail-wm1-x32a.google.com with SMTP id m7-20020a05600c090700b003cf8a105d9eso7440036wmp.5
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 08:06:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=zKkGanfErhlV5mHrMqbRP0uwulJPPEG7DEmhVp/Qms0=;
-        b=etjpu8zEt7ZExNWzH7ZrOo9UVdycXv8AO1R3ZfiZbX/Rm6pFVwow+68LI8VWzIold/
-         0GJqZ3vAozWmZItmLR8jZzhEXmMLRTqyUcEM47XL5VJIqFcGbjemJWsUETVrHpkwVgKJ
-         oGFC4W+H4CizP6hj3LAvlkQkREaGFUj/OpzDrxCYeXippBCB3kptadn65tcB7GCcGcE9
-         imzLaSOKSnc0OoJPNKF8KoEcdLEIN1LlGQJxwTriTVwF7ccbYyWTyJN5qFwQtaLwUnze
-         mRsWpIB3K2Hd2KK6m2U2LY5f1oCVR9ZqNvVlSOOLbi5kO0BKxay3k9sjeLFxRQYwaMZL
-         a3dw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zKkGanfErhlV5mHrMqbRP0uwulJPPEG7DEmhVp/Qms0=;
-        b=AHA1w1KivsAI/Oh87bGnXncAHTUf7N9oZjiAf6aBdBh73U43pe0Pr8E1bV7hqVf/q6
-         skk1DDEvngfbQ2rM3jQPBdc8YmdaDsAA89bY8T1BByH7VD/dm/Edgr9APr3EyfcsYjDl
-         ZeEV1BNHZrWjXsVMWkH4HuunADqAuMO8sTLFu7LrGEoP5h2um2+bhq4iv8x01o7hZuxF
-         R5xQyjhccfbuAq3LXDgi7IjFh1n5XJFGbROO/jNIflxxdMpFNCNVFGT2SDq4Dmqo8Nhj
-         JbY+F5dm8FtEavlUhKacq03OsCLme6ynhRiLoPLyaZROyJoPqsF/NUF/jRKf59TtLTgo
-         xHoQ==
-X-Gm-Message-State: ACrzQf0mJ100v/vsmMtU4MZ/Lx0W6hVUP9O6SBP9bitZp4zesT8SHg7V
-        DR8Vmt1AoAz/WPwP9t0gGwJ3qg==
-X-Google-Smtp-Source: AMsMyM5qxUxi1hy66Hsl1b/Y3LEl94Vnk85I8Vjw4USufUawO98NJwdSQZX9z9GEAhEGqiE2tqVCYQ==
-X-Received: by 2002:a05:600c:3781:b0:3b4:63c8:554b with SMTP id o1-20020a05600c378100b003b463c8554bmr44226823wmr.25.1667837176906;
-        Mon, 07 Nov 2022 08:06:16 -0800 (PST)
-Received: from localhost.localdomain (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.googlemail.com with ESMTPSA id bg20-20020a05600c3c9400b003c6bd12ac27sm9183347wmb.37.2022.11.07.08.06.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Nov 2022 08:06:15 -0800 (PST)
-From:   Corentin Labbe <clabbe@baylibre.com>
-To:     wsa@kernel.org
-Cc:     jdelvare@suse.de, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Corentin Labbe <clabbe@baylibre.com>
-Subject: [PATCH] i2c: smbus: support new RAM variant for SPD
-Date:   Mon,  7 Nov 2022 16:06:02 +0000
-Message-Id: <20221107160602.1912225-1-clabbe@baylibre.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 7 Nov 2022 11:06:15 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B4AB201AB;
+        Mon,  7 Nov 2022 08:06:09 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3DB96B812A8;
+        Mon,  7 Nov 2022 16:06:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48C25C433C1;
+        Mon,  7 Nov 2022 16:06:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667837166;
+        bh=QEeTPjTTUhlRPhDXz1hYJehaOMwD4NwQVKrn8Tqo/tA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=gX9ZlDCOd3itoUufEUVTX3zrIQF5O/FCFl3WsB4p9ntW4uVEdXNBRdZJYyUVUXQCf
+         2JQnkrdsML2CRYLPfFSNLwWNxLjQZhtdGRITKj+oQeTxFO5v4M9PGf1oPxvswJoUfy
+         R1NdhSXUlgmyXTKMMU6z52Sh+xZbkN43IhVj08sV836YWlCFRAwL4eaHaIyi7EWyhF
+         C0nkUYtPgIDh3vfHV7krZF2emg0yYTQNXBnO57ysllNWjzf7n3i8WLX5rxfi9fjNaJ
+         biJGI9/rY7FzH2rl7nVnsxiM1UlCMmInTcJF33LrHg0j6M74r0bJpqTbuqguN8Acqm
+         KocMVFLHKd9Iw==
+Date:   Mon, 7 Nov 2022 08:06:05 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Leon Romanovsky <leon@kernel.org>
+Cc:     Ajit Khaparde <ajit.khaparde@broadcom.com>,
+        andrew.gospodarek@broadcom.com, davem@davemloft.net,
+        edumazet@google.com, jgg@ziepe.ca, linux-kernel@vger.kernel.org,
+        linux-rdma@vger.kernel.org, michael.chan@broadcom.com,
+        netdev@vger.kernel.org, pabeni@redhat.com,
+        selvin.xavier@broadcom.com
+Subject: Re: [PATCH v3 0/6] Add Auxiliary driver support
+Message-ID: <20221107080605.35ef5622@kernel.org>
+In-Reply-To: <Y2inmdbpoRm2VbuE@unreal>
+References: <CACZ4nhtmE9Dh9z_O9-A934+q0_8yHEyj+V-DcEsuEWFbPH6BGg@mail.gmail.com>
+        <20221104162733.73345-1-ajit.khaparde@broadcom.com>
+        <Y2inmdbpoRm2VbuE@unreal>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On my x05 laptop I got:
-Memory type 0x12 not supported yet, not instantiating SPD
+On Mon, 7 Nov 2022 08:37:13 +0200 Leon Romanovsky wrote:
+> Please send this series as standalone one and not as a reply
+> to previous discussion. Reply-to messes review flow, especially
+> for series.
+> 
+> Jakub, I'll review it once Ajit will send it properly.
 
-Adding the 0x12 case lead to a successful instantiated SPD AT24 EEPROM.
-i801_smbus 0000:00:1f.3: SMBus using polling
-i2c i2c-6: 2/2 memory slots populated (from DMI)
-at24 6-0050: 256 byte spd EEPROM, read-only
-i2c i2c-6: Successfully instantiated SPD at 0x50
-at24 6-0051: 256 byte spd EEPROM, read-only
-i2c i2c-6: Successfully instantiated SPD at 0x51
-
-And then, I decoded it successfully via decode-dimms.
-
-Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
----
-The result of decode-dimms could be found at http://kernel.montjoie.ovh/zoo/x05/decode-dimms.txt
-Since RAM is DDR, I wanted to add '/* DDR */' comment, but I didnt find any document with
-proof that this 0x12 is for DDR.
-
- drivers/i2c/i2c-smbus.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/i2c/i2c-smbus.c b/drivers/i2c/i2c-smbus.c
-index 07c92c8495a3..6dca19c994db 100644
---- a/drivers/i2c/i2c-smbus.c
-+++ b/drivers/i2c/i2c-smbus.c
-@@ -362,6 +362,7 @@ void i2c_register_spd(struct i2c_adapter *adap)
- 	}
- 
- 	switch (common_mem_type) {
-+	case 0x12:
- 	case 0x13:	/* DDR2 */
- 	case 0x18:	/* DDR3 */
- 	case 0x1C:	/* LPDDR2 */
--- 
-2.37.4
-
+IIUC we wait for you or Jason to review any of the RoCE bifurcation
+patches before considering them for inclusion.
