@@ -2,242 +2,254 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 694D061F883
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 17:10:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27BF061F893
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 17:12:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232677AbiKGQKZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 11:10:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34564 "EHLO
+        id S231922AbiKGQMa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 11:12:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232511AbiKGQKT (ORCPT
+        with ESMTP id S231419AbiKGQM2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 11:10:19 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48E0413FBE;
-        Mon,  7 Nov 2022 08:10:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667837410; x=1699373410;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=ob2VcCD8eQ1INAspt4Ij3GP7vl0BcLPuHM41kGRdqME=;
-  b=gPV4zWBuSiQIcYQUcRggBpU+pUC+f5u+9OlIDhTC82vgN7Rw9v4cOueW
-   vXVMqieMyOltjxggqFxyE+whEc6NuTOnP9YP6GahSBL5s+cmRMj1QOBD8
-   OBCJI3qbhYYaRAd4FqcH4u/ACcK/OUjokQWBotfLzNvezp8QVikQbllzp
-   MYnCGBNdjpLPJ/T4xnKLD+dRzw3bOFBRSFF2ZMWNFzjRrfgk9T25z+aTR
-   wWF2BStZK6JOS6Mn119K16ERnYVIPHIJKyDdvTvbMS7jCdneRxlRnOV2T
-   FLwRwA8cPLmIFr55f+cHl24unT730sBWjUWyOHJFymeaE6LTdgpdh0fQR
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10524"; a="312215920"
-X-IronPort-AV: E=Sophos;i="5.96,145,1665471600"; 
-   d="scan'208";a="312215920"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Nov 2022 08:10:09 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10524"; a="613910899"
-X-IronPort-AV: E=Sophos;i="5.96,145,1665471600"; 
-   d="scan'208";a="613910899"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga006.jf.intel.com with ESMTP; 07 Nov 2022 08:10:08 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id F0074D0; Mon,  7 Nov 2022 18:10:31 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Bartosz Golaszewski <brgl@bgdev.pl>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Linus Walleij <linus.walleij@linaro.org>
-Subject: [PATCH v1 2/2] gpiolib: of: Integrate of_gpiochip_init_valid_mask() into gpiochip_init_valid_mask()
-Date:   Mon,  7 Nov 2022 18:10:27 +0200
-Message-Id: <20221107161027.43384-2-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221107161027.43384-1-andriy.shevchenko@linux.intel.com>
-References: <20221107161027.43384-1-andriy.shevchenko@linux.intel.com>
+        Mon, 7 Nov 2022 11:12:28 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 92BA0A186;
+        Mon,  7 Nov 2022 08:12:26 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 81BE01FB;
+        Mon,  7 Nov 2022 08:12:32 -0800 (PST)
+Received: from [10.34.100.128] (pierre123.nice.arm.com [10.34.100.128])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6FDA93F534;
+        Mon,  7 Nov 2022 08:12:24 -0800 (PST)
+Message-ID: <903e4690-e2da-f3c9-0c8e-bd11ae922088@arm.com>
+Date:   Mon, 7 Nov 2022 17:12:22 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH 02/20] arm64: dts: Update cache properties for amlogic
+To:     Rob Herring <robh+dt@kernel.org>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc:     neil.armstrong@linaro.org, linux-kernel@vger.kernel.org,
+        Rob.Herring@arm.com,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org
+References: <20221031091918.531607-1-pierre.gondois@arm.com>
+ <fac3eae5-687e-9eb0-ddfb-c659d3816d81@linaro.org>
+ <3c54db0a-44fe-ee24-1833-7637e249ec79@arm.com>
+ <CAFBinCBi_xT-pgdMSROHyZUfyZZE33S2YXczr9ijE52AfQVYHQ@mail.gmail.com>
+ <CAL_JsqJMxH9hFo7uXRJ6rFcqhZL0AUhedk7Fq1xMdKcSDe5ciQ@mail.gmail.com>
+ <CAL_JsqLnmDDPpFOcRSv9qEm5nphskhUvQFiKCFkZ6+KGtZLXJQ@mail.gmail.com>
+Content-Language: en-US
+From:   Pierre Gondois <pierre.gondois@arm.com>
+In-Reply-To: <CAL_JsqLnmDDPpFOcRSv9qEm5nphskhUvQFiKCFkZ6+KGtZLXJQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In preparation to complete fwnode switch, integrate
-of_gpiochip_init_valid_mask() into gpiochip_init_valid_mask().
+Hello Rob,
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/gpio/gpiolib-of.c | 42 -------------------------------
- drivers/gpio/gpiolib-of.h |  5 ----
- drivers/gpio/gpiolib.c    | 52 ++++++++++++++++++++++++++++++++++++++-
- 3 files changed, 51 insertions(+), 48 deletions(-)
+On 11/2/22 15:31, Rob Herring wrote:
+> On Mon, Oct 31, 2022 at 5:19 PM Rob Herring <robh+dt@kernel.org> wrote:
+>>
+>> On Mon, Oct 31, 2022 at 4:09 PM Martin Blumenstingl
+>> <martin.blumenstingl@googlemail.com> wrote:
+>>>
+>>> Hi Pierre,
+>>>
+>>> On Mon, Oct 31, 2022 at 2:33 PM Pierre Gondois <pierre.gondois@arm.com> wrote:
+>>> [...]
+>>>> To avoid cc-ing people to DTs they are not related, the get_maintainers.pl
+>>>> script was run on each patch individually. The cover-letter is at:
+>>>> https://lore.kernel.org/all/20221031091848.530938-1-pierre.gondois@arm.com/
+>>> I think Neil's question is the same as mine: is there a dt-bindings
+>>> (yaml schema) change for this as well? The idea is to alert people (or
+>>> let bots alert people) in future when adding a cache to a .dts{,i}
+>>> where the cache-level property is missing.
+>>
+>> There's not one, but it's something to look at adding. I'm not sure
+>> how we'd check for missing 'unified-cache' which is a common problem.
+>> The challenge here is a lot of what needs to be checked is based on
+>> the overall structure. This probably is better checked in dtc which is
+>> better suited to do cross node checks.
+> 
+> Now there is an improved binding:
+> 
+> https://github.com/robherring/dt-schema/tree/cache-rework
 
-diff --git a/drivers/gpio/gpiolib-of.c b/drivers/gpio/gpiolib-of.c
-index 000020eb78d8..4be3c21aa718 100644
---- a/drivers/gpio/gpiolib-of.c
-+++ b/drivers/gpio/gpiolib-of.c
-@@ -112,24 +112,6 @@ static struct gpio_desc *of_xlate_and_get_gpiod_flags(struct gpio_chip *chip,
- 	return gpiochip_get_desc(chip, ret);
- }
- 
--/**
-- * of_gpio_need_valid_mask() - figure out if the OF GPIO driver needs
-- * to set the .valid_mask
-- * @gc: the target gpio_chip
-- *
-- * Return: true if the valid mask needs to be set
-- */
--bool of_gpio_need_valid_mask(const struct gpio_chip *gc)
--{
--	int size;
--	const struct device_node *np = gc->of_node;
--
--	size = of_property_count_u32_elems(np,  "gpio-reserved-ranges");
--	if (size > 0 && size % 2 == 0)
--		return true;
--	return false;
--}
--
- /*
-  * Overrides stated polarity of a gpio line and warns when there is a
-  * discrepancy.
-@@ -989,28 +971,6 @@ void of_mm_gpiochip_remove(struct of_mm_gpio_chip *mm_gc)
- }
- EXPORT_SYMBOL_GPL(of_mm_gpiochip_remove);
- 
--static void of_gpiochip_init_valid_mask(struct gpio_chip *chip)
--{
--	int len, i;
--	u32 start, count;
--	struct device_node *np = chip->of_node;
--
--	len = of_property_count_u32_elems(np,  "gpio-reserved-ranges");
--	if (len < 0 || len % 2 != 0)
--		return;
--
--	for (i = 0; i < len; i += 2) {
--		of_property_read_u32_index(np, "gpio-reserved-ranges",
--					   i, &start);
--		of_property_read_u32_index(np, "gpio-reserved-ranges",
--					   i + 1, &count);
--		if (start >= chip->ngpio || start + count > chip->ngpio)
--			continue;
--
--		bitmap_clear(chip->valid_mask, start, count);
--	}
--};
--
- #ifdef CONFIG_PINCTRL
- static int of_gpiochip_add_pin_range(struct gpio_chip *chip)
- {
-@@ -1119,8 +1079,6 @@ int of_gpiochip_add(struct gpio_chip *chip)
- 	if (chip->of_gpio_n_cells > MAX_PHANDLE_ARGS)
- 		return -EINVAL;
- 
--	of_gpiochip_init_valid_mask(chip);
--
- 	ret = of_gpiochip_add_pin_range(chip);
- 	if (ret)
- 		return ret;
-diff --git a/drivers/gpio/gpiolib-of.h b/drivers/gpio/gpiolib-of.h
-index 1b5df39a952e..2a2f7d17fa7e 100644
---- a/drivers/gpio/gpiolib-of.h
-+++ b/drivers/gpio/gpiolib-of.h
-@@ -23,7 +23,6 @@ struct gpio_desc *of_find_gpio(struct device *dev,
- int of_gpiochip_add(struct gpio_chip *gc);
- void of_gpiochip_remove(struct gpio_chip *gc);
- int of_gpio_get_count(struct device *dev, const char *con_id);
--bool of_gpio_need_valid_mask(const struct gpio_chip *gc);
- void of_gpio_dev_init(struct gpio_chip *gc, struct gpio_device *gdev);
- #else
- static inline struct gpio_desc *of_find_gpio(struct device *dev,
-@@ -39,10 +38,6 @@ static inline int of_gpio_get_count(struct device *dev, const char *con_id)
- {
- 	return 0;
- }
--static inline bool of_gpio_need_valid_mask(const struct gpio_chip *gc)
--{
--	return false;
--}
- static inline void of_gpio_dev_init(struct gpio_chip *gc,
- 				    struct gpio_device *gdev)
- {
-diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
-index e8faedca6b14..2ab7b7949171 100644
---- a/drivers/gpio/gpiolib.c
-+++ b/drivers/gpio/gpiolib.c
-@@ -445,9 +445,20 @@ static unsigned long *gpiochip_allocate_mask(struct gpio_chip *gc)
- 	return p;
- }
- 
-+static unsigned int gpiochip_count_reserved_ranges(struct gpio_chip *gc)
-+{
-+	int size;
-+
-+	size = fwnode_property_count_u32(gc->fwnode, "gpio-reserved-ranges");
-+	if (size > 0 && size % 2 == 0)
-+		return size;
-+
-+	return 0;
-+}
-+
- static int gpiochip_alloc_valid_mask(struct gpio_chip *gc)
- {
--	if (!(of_gpio_need_valid_mask(gc) || gc->init_valid_mask))
-+	if (!(gpiochip_count_reserved_ranges(gc) || gc->init_valid_mask))
- 		return 0;
- 
- 	gc->valid_mask = gpiochip_allocate_mask(gc);
-@@ -457,8 +468,47 @@ static int gpiochip_alloc_valid_mask(struct gpio_chip *gc)
- 	return 0;
- }
- 
-+static int gpiochip_apply_reserved_ranges(struct gpio_chip *gc, unsigned int sz)
-+{
-+	u32 *ranges;
-+	int ret;
-+
-+	ranges = kmalloc_array(sz, sizeof(*ranges), GFP_KERNEL);
-+	if (!ranges)
-+		return -ENOMEM;
-+
-+	ret = fwnode_property_read_u32_array(gc->fwnode, "gpio-reserved-ranges", ranges, sz);
-+	if (ret) {
-+		kfree(ranges);
-+		return ret;
-+	}
-+
-+	while (sz) {
-+		u32 count = ranges[--sz];
-+		u32 start = ranges[--sz];
-+
-+		if (start >= gc->ngpio || start + count > gc->ngpio)
-+			continue;
-+
-+		bitmap_clear(gc->valid_mask, start, count);
-+	}
-+
-+	kfree(ranges);
-+	return 0;
-+}
-+
- static int gpiochip_init_valid_mask(struct gpio_chip *gc)
- {
-+	unsigned int sz;
-+	int ret;
-+
-+	sz = gpiochip_count_reserved_ranges(gc);
-+	if (sz) {
-+		ret = gpiochip_apply_reserved_ranges(gc, sz);
-+		if (ret)
-+			return ret;
-+	}
-+
- 	if (gc->init_valid_mask)
- 		return gc->init_valid_mask(gc,
- 					   gc->valid_mask,
--- 
-2.35.1
+Thanks for the branch, I used it to make the v2. I don't think it is likely
+to happen, but dt-schema doesn't generate a warning if there is a
+'unified-cache' property along a '[d|i]-cache-size' property (for instance).
 
+> 
+> With that schema and this series applied, I get the following errors:
+> 
+> arch/arm64/boot/dts/socionext/uniphier-ld11-global.dtb: l2-cache:
+> 'cache-level' is a required property
+> arch/arm64/boot/dts/mediatek/mt8186-evb.dtb: l2-cache0: 'cache-level'
+> is a required property
+> arch/arm64/boot/dts/mediatek/mt8186-evb.dtb: l2-cache1: 'cache-level'
+> is a required property
+> arch/arm64/boot/dts/mediatek/mt8186-evb.dtb: l3-cache: 'cache-level'
+> is a required property
+> arch/arm64/boot/dts/freescale/imx8dxl-evk.dtb: l2-cache0:
+> 'cache-level' is a required property
+> arch/arm64/boot/dts/socionext/uniphier-ld11-ref.dtb: l2-cache:
+> 'cache-level' is a required property
+> arch/arm64/boot/dts/socionext/uniphier-ld20-akebi96.dtb: l2-cache0:
+> 'cache-level' is a required property
+> arch/arm64/boot/dts/socionext/uniphier-ld20-akebi96.dtb: l2-cache1:
+> 'cache-level' is a required property
+> arch/arm64/boot/dts/socionext/uniphier-ld20-global.dtb: l2-cache0:
+> 'cache-level' is a required property
+> arch/arm64/boot/dts/socionext/uniphier-ld20-global.dtb: l2-cache1:
+> 'cache-level' is a required property
+> arch/arm64/boot/dts/socionext/uniphier-ld20-ref.dtb: l2-cache0:
+> 'cache-level' is a required property
+> arch/arm64/boot/dts/socionext/uniphier-ld20-ref.dtb: l2-cache1:
+> 'cache-level' is a required property
+> arch/arm64/boot/dts/socionext/uniphier-pxs3-ref-gadget0.dtb: l2-cache:
+> 'cache-level' is a required property
+> arch/arm64/boot/dts/socionext/uniphier-pxs3-ref.dtb: l2-cache:
+> 'cache-level' is a required property
+> arch/arm64/boot/dts/socionext/uniphier-pxs3-ref-gadget1.dtb: l2-cache:
+> 'cache-level' is a required property
+> 
+> Cases missing 'cache-unified':
+> 
+> arch/arm64/boot/dts/amazon/alpine-v3-evp.dtb
+> arch/arm64/boot/dts/arm/corstone1000-fvp.dtb
+> arch/arm64/boot/dts/arm/corstone1000-mps3.dtb
+> arch/arm64/boot/dts/arm/juno.dtb
+> arch/arm64/boot/dts/arm/juno-r1.dtb
+> arch/arm64/boot/dts/arm/juno-r1-scmi.dtb
+> arch/arm64/boot/dts/arm/juno-r2.dtb
+> arch/arm64/boot/dts/arm/juno-r2-scmi.dtb
+> arch/arm64/boot/dts/arm/juno-scmi.dtb
+> arch/arm64/boot/dts/broadcom/bcm2711-rpi-400.dtb
+> arch/arm64/boot/dts/broadcom/bcm2711-rpi-4-b.dtb
+> arch/arm64/boot/dts/broadcom/bcm2711-rpi-cm4-io.dtb
+> arch/arm64/boot/dts/broadcom/bcm2837-rpi-3-a-plus.dtb
+> arch/arm64/boot/dts/broadcom/bcm2837-rpi-3-b.dtb
+> arch/arm64/boot/dts/broadcom/bcm2837-rpi-3-b-plus.dtb
+> arch/arm64/boot/dts/broadcom/bcm2837-rpi-cm3-io3.dtb
+> arch/arm64/boot/dts/broadcom/bcm2837-rpi-zero-2-w.dtb
+> arch/arm64/boot/dts/exynos/exynos5433-tm2.dtb
+> arch/arm64/boot/dts/exynos/exynos5433-tm2e.dtb
+> arch/arm64/boot/dts/exynos/exynos7-espresso.dtb
+> arch/arm64/boot/dts/freescale/fsl-lx2160a-bluebox3.dtb
+> arch/arm64/boot/dts/freescale/fsl-lx2160a-bluebox3-rev-a.dtb
+> arch/arm64/boot/dts/freescale/fsl-lx2160a-clearfog-cx.dtb
+> arch/arm64/boot/dts/freescale/fsl-lx2160a-honeycomb.dtb
+> arch/arm64/boot/dts/freescale/fsl-lx2160a-qds.dtb
+> arch/arm64/boot/dts/freescale/fsl-lx2160a-rdb.dtb
+> arch/arm64/boot/dts/freescale/fsl-lx2162a-qds.dtb
+> arch/arm64/boot/dts/freescale/imx8mm-beacon-kit.dtb
+> arch/arm64/boot/dts/freescale/imx8mm-data-modul-edm-sbc.dtb
+> arch/arm64/boot/dts/freescale/imx8mm-ddr4-evk.dtb
+> arch/arm64/boot/dts/freescale/imx8mm-emcon-avari.dtb
+> arch/arm64/boot/dts/freescale/imx8mm-evk.dtb
+> arch/arm64/boot/dts/freescale/imx8mm-icore-mx8mm-ctouch2.dtb
+> arch/arm64/boot/dts/freescale/imx8mm-icore-mx8mm-edimm2.2.dtb
+> arch/arm64/boot/dts/freescale/imx8mm-kontron-bl.dtb
+> arch/arm64/boot/dts/freescale/imx8mm-kontron-bl-osm-s.dtb
+> arch/arm64/boot/dts/freescale/imx8mm-mx8menlo.dtb
+> arch/arm64/boot/dts/freescale/imx8mm-nitrogen-r2.dtb
+> arch/arm64/boot/dts/freescale/imx8mm-phyboard-polis-rdk.dtb
+> arch/arm64/boot/dts/freescale/imx8mm-tqma8mqml-mba8mx.dtb
+> arch/arm64/boot/dts/freescale/imx8mm-var-som-symphony.dtb
+> arch/arm64/boot/dts/freescale/imx8mm-venice-gw71xx-0x.dtb
+> arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx-0x.dtb
+> arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx-0x.dtb
+> arch/arm64/boot/dts/freescale/imx8mm-venice-gw7901.dtb
+> arch/arm64/boot/dts/freescale/imx8mm-venice-gw7902.dtb
+> arch/arm64/boot/dts/freescale/imx8mm-venice-gw7903.dtb
+> arch/arm64/boot/dts/freescale/imx8mm-venice-gw7904.dtb
+> arch/arm64/boot/dts/freescale/imx8mm-verdin-nonwifi-dahlia.dtb
+> arch/arm64/boot/dts/freescale/imx8mm-verdin-nonwifi-dev.dtb
+> arch/arm64/boot/dts/freescale/imx8mm-verdin-wifi-dahlia.dtb
+> arch/arm64/boot/dts/freescale/imx8mm-verdin-wifi-dev.dtb
+> arch/arm64/boot/dts/freescale/imx8mn-beacon-kit.dtb
+> arch/arm64/boot/dts/freescale/imx8mn-bsh-smm-s2.dtb
+> arch/arm64/boot/dts/freescale/imx8mn-bsh-smm-s2pro.dtb
+> arch/arm64/boot/dts/freescale/imx8mn-ddr3l-evk.dtb
+> arch/arm64/boot/dts/freescale/imx8mn-ddr4-evk.dtb
+> arch/arm64/boot/dts/freescale/imx8mn-evk.dtb
+> arch/arm64/boot/dts/freescale/imx8mn-tqma8mqnl-mba8mx.dtb
+> arch/arm64/boot/dts/freescale/imx8mn-var-som-symphony.dtb
+> arch/arm64/boot/dts/freescale/imx8mn-venice-gw7902.dtb
+> arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk2.dtb
+> arch/arm64/boot/dts/freescale/imx8mp-evk.dtb
+> arch/arm64/boot/dts/freescale/imx8mp-icore-mx8mp-edimm2.2.dtb
+> arch/arm64/boot/dts/freescale/imx8mp-msc-sm2s-ep1.dtb
+> arch/arm64/boot/dts/freescale/imx8mp-phyboard-pollux-rdk.dtb
+> arch/arm64/boot/dts/freescale/imx8mp-tqma8mpql-mba8mpxl.dtb
+> arch/arm64/boot/dts/freescale/imx8mp-venice-gw74xx.dtb
+> arch/arm64/boot/dts/freescale/imx8mp-verdin-nonwifi-dahlia.dtb
+> arch/arm64/boot/dts/freescale/imx8mp-verdin-nonwifi-dev.dtb
+> arch/arm64/boot/dts/freescale/imx8mp-verdin-wifi-dahlia.dtb
+> arch/arm64/boot/dts/freescale/imx8mp-verdin-wifi-dev.dtb
+> arch/arm64/boot/dts/freescale/imx8mq-evk.dtb
+> arch/arm64/boot/dts/freescale/imx8mq-hummingboard-pulse.dtb
+> arch/arm64/boot/dts/freescale/imx8mq-kontron-pitx-imx8m.dtb
+> arch/arm64/boot/dts/freescale/imx8mq-librem5-devkit.dtb
+> arch/arm64/boot/dts/freescale/imx8mq-librem5-r2.dtb
+> arch/arm64/boot/dts/freescale/imx8mq-librem5-r3.dtb
+> arch/arm64/boot/dts/freescale/imx8mq-librem5-r4.dtb
+> arch/arm64/boot/dts/freescale/imx8mq-mnt-reform2.dtb
+> arch/arm64/boot/dts/freescale/imx8mq-nitrogen.dtb
+> arch/arm64/boot/dts/freescale/imx8mq-phanbell.dtb
+> arch/arm64/boot/dts/freescale/imx8mq-pico-pi.dtb
+> arch/arm64/boot/dts/freescale/imx8mq-thor96.dtb
+> arch/arm64/boot/dts/freescale/imx8mq-tqma8mq-mba8mx.dtb
+> arch/arm64/boot/dts/freescale/imx8mq-zii-ultra-rmb3.dtb
+> arch/arm64/boot/dts/freescale/imx8mq-zii-ultra-zest.dtb
+> arch/arm64/boot/dts/freescale/imx8qm-mek.dtb
+> arch/arm64/boot/dts/freescale/imx8qxp-ai_ml.dtb
+> arch/arm64/boot/dts/freescale/imx8qxp-colibri-eval-v3.dtb
+> arch/arm64/boot/dts/freescale/imx8qxp-mek.dtb
+> arch/arm64/boot/dts/marvell/armada-7040-db.dtb
+> arch/arm64/boot/dts/marvell/armada-7040-mochabin.dtb
+> arch/arm64/boot/dts/marvell/armada-8040-clearfog-gt-8k.dtb
+> arch/arm64/boot/dts/marvell/armada-8040-db.dtb
+> arch/arm64/boot/dts/marvell/armada-8040-mcbin.dtb
+> arch/arm64/boot/dts/marvell/armada-8040-mcbin-singleshot.dtb
+> arch/arm64/boot/dts/marvell/armada-8040-puzzle-m801.dtb
+> arch/arm64/boot/dts/marvell/cn9130-crb-A.dtb
+> arch/arm64/boot/dts/marvell/cn9130-crb-B.dtb
+> arch/arm64/boot/dts/marvell/cn9130-db-B.dtb
+> arch/arm64/boot/dts/marvell/cn9130-db.dtb
+> arch/arm64/boot/dts/marvell/cn9131-db-B.dtb
+> arch/arm64/boot/dts/marvell/cn9131-db.dtb
+> arch/arm64/boot/dts/marvell/cn9132-db-B.dtb
+> arch/arm64/boot/dts/marvell/cn9132-db.dtb
+> arch/arm64/boot/dts/nvidia/tegra194-p2972-0000.dtb
+> arch/arm64/boot/dts/nvidia/tegra194-p3509-0000+p3668-0000.dtb
+> arch/arm64/boot/dts/nvidia/tegra194-p3509-0000+p3668-0001.dtb
+> arch/arm64/boot/dts/nvidia/tegra234-p3737-0000+p3701-0000.dtb
+> arch/arm64/boot/dts/nvidia/tegra234-sim-vdk.dtb
+> arch/arm64/boot/dts/tesla/fsd-evb.dtb
+> arch/arm64/boot/dts/ti/k3-am625-sk.dtb
+> arch/arm64/boot/dts/ti/k3-am62a7-sk.dtb
+> arch/arm64/boot/dts/ti/k3-am642-sk.dtb
+> arch/arm64/boot/dts/ti/k3-am6528-iot2050-basic.dtb
+> arch/arm64/boot/dts/ti/k3-am6528-iot2050-basic-pg2.dtb
+> arch/arm64/boot/dts/ti/k3-am6548-iot2050-advanced.dtb
+> arch/arm64/boot/dts/ti/k3-am6548-iot2050-advanced-pg2.dtb
+> arch/arm64/boot/dts/ti/k3-am654-base-board.dtb
+> arch/arm64/boot/dts/ti/k3-j7200-common-proc-board.dtb
+> arch/arm64/boot/dts/ti/k3-j721e-common-proc-board.dtb
+> arch/arm64/boot/dts/ti/k3-j721e-sk.dtb
+> arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dtb
+> 
+> 
+> Rob
