@@ -2,209 +2,363 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5255862025E
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 23:37:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4780620262
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 23:39:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232416AbiKGWh0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 17:37:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55610 "EHLO
+        id S232417AbiKGWjQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 17:39:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232258AbiKGWhY (ORCPT
+        with ESMTP id S231883AbiKGWjN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 17:37:24 -0500
-Received: from mx0b-002e3701.pphosted.com (mx0b-002e3701.pphosted.com [148.163.143.35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FA7F17A9C;
-        Mon,  7 Nov 2022 14:37:23 -0800 (PST)
-Received: from pps.filterd (m0134423.ppops.net [127.0.0.1])
-        by mx0b-002e3701.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2A7KWNq3028029;
-        Mon, 7 Nov 2022 22:36:54 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : subject :
- date : message-id : references : in-reply-to : content-type : content-id :
- content-transfer-encoding : mime-version; s=pps0720;
- bh=yy9cVGaKyD20oHziGJGbDYEQqI+ud6MuB7MO1J0sa10=;
- b=Cs4CBjSKRAjE9x5tWCl8/WjpjXmtSS3ZgDUvbrBos6cYTmAwbVhbFGCIWwkUp4FAwJMS
- ydDMskysBO6JUCMwt3jAjgn3in90xtLvfdlrzO208K6dMvMO0SLMPT0/uxogCG0L+A0w
- pk/nXK0cNUH1VFYun9kx4lnOpQTg+f/8rrS5gYPH3Do7Jdvc/jsrgm3mvP0Nv5vk/jRz
- KosuIhnooqjAK3un+XA96nfIsXjP3/QbG0TRYaOqX0D5bRsmal0WnheViMZC+gV0Iyu2
- 3cD5pL4Swrvp2j5GYm3DZ5fBObolPO5CHYv71arBmFknhsJyxjTj+iq0z6kNeLG8kXHs KA== 
-Received: from p1lg14881.it.hpe.com (p1lg14881.it.hpe.com [16.230.97.202])
-        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3kq94xgs2t-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 07 Nov 2022 22:36:53 +0000
-Received: from p1wg14924.americas.hpqcorp.net (unknown [10.119.18.113])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by p1lg14881.it.hpe.com (Postfix) with ESMTPS id E180380471E;
-        Mon,  7 Nov 2022 22:36:52 +0000 (UTC)
-Received: from p1wg14925.americas.hpqcorp.net (10.119.18.114) by
- p1wg14924.americas.hpqcorp.net (10.119.18.113) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Mon, 7 Nov 2022 10:36:52 -1200
-Received: from P1WG14918.americas.hpqcorp.net (16.230.19.121) by
- p1wg14925.americas.hpqcorp.net (10.119.18.114) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.15
- via Frontend Transport; Mon, 7 Nov 2022 10:36:52 -1200
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (192.58.206.38)
- by edge.it.hpe.com (16.230.19.121) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Mon, 7 Nov 2022 22:36:50 +0000
+        Mon, 7 Nov 2022 17:39:13 -0500
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2054.outbound.protection.outlook.com [40.107.237.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2C54205D3;
+        Mon,  7 Nov 2022 14:39:11 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=g532hu+VUP9G8PrCwvMvvdCeRsRCxp6G1i49L14QNwK1jZeEBLXmcSBQmKy5SrM6s7n183Sl9ptF7CjLIjab6rI8T5iSXULZKQR+ysIyjhbD65GW6MD1X5FfGJBy+Oyk4fltywHogZgvCZPrYK3ntTzGISZ0vO3NjfA+ZntedIdYvsQUywod53QgfV7rD+OAEWeQZ9cpZuqg9ZIxXbaN2kKxs13ttW1CNPqNMH/+BYbS9L8pdvy9BLeQ8D/UZIbgDHgIBqfkAagBOY6MSxl3c8VU1YymsHs4tYNGD9LdFBSZRT+EJ9kXokB5YC4z3H1k6lnd+nLbJ1rayw1e9NaN8w==
+ b=Wu4zIoBCAwIIuj4TYDafxRQjkNFNV5s5P62e+NClOERobPlNEyg+kAPH8Sn0T+Ix7pRql/vu46N/EaHMI31Enkadj1b6dJ6d8RsEMOTY+WPrtcsmZMfulxYOw8g8dzbYYyshgV3JQE5OekLMFI/LfM+OFWnChnclr1+j4gsNEw66PXaj9LEEMTy4MX0xNSp/RUUm9fZPMOpLO4PnTT9nIZrLaLKSWALI0gxgwhitHI2Kps9547CMQgHI5kABwbutJB9ua7oMyIGH6jKVmZ8SVVVb61kHJW7AMlBwA4nIzRSZB/mDkDbTicSa6X/LbcQsZjqYUWShvJsuxrdKJpQPJw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=yy9cVGaKyD20oHziGJGbDYEQqI+ud6MuB7MO1J0sa10=;
- b=IcxgyNsNnjbzbm6TQTdYjGQEftx1wQZsARrfjFdSHjOsxSOMUQ+9d8d4zJw8glXQl68NWT1iP171P+TgoC74+ceFyHoFMwo1BeGuyfHznhhy+dDIg2qu7m9eK6MQtr9LQ5JyNEo2KASxkjklaPkEdRkaXHH9wMHKZJLHUcTXYiGm4sroPYiQ4RwSLMUcLvWivA1RsGc9rp/4mfuK8CmBGsNb5BYczr0hvf7Q2KauCKOtTOBKAGIjxQBM+HGh1BSYfn7z+QftvS+5AEpyemrWegrLFFp8ohYipm9V8gyA3pptar7mciQrTwmX2leGR0+yK2Fz3V9HQpgLx+speUnE9Q==
+ bh=Ff4kri761zhyB9UmgJ+kZOLnMozkJU3rP0RRRjPP9MY=;
+ b=C1lLNWA2pnyvmIjCUFL/0GuMiZR8ADxke3IEkU+V7LpT5+7p1VO9iuEcCHtlRVeU/dfYanVIIvrVZO6GBCejnhwxcc/Ha1/EtUz/ZxJEA6LYB3+6qXp98IYMnDXgxURVmlwe8b7K+DkkFhppDYI8V2Ch/aUYOTHx3nrOGFwJzWPAiqdHbKFxA0KMXEgYwYa31CSoLXkM41qc65Y+599p5MbUSnviG+/LSLc7LdNmfcZ1vFM92YB2zGZfDp6A8Jk92eeOdAD9wnvPPZ0FGOxo18A6zg9+pQP0yxW5sCHNpsJfpF7OUMd7x39kzp50Ru7m+O9FgAHeWI3uMz1ZXgTPYw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=hpe.com; dmarc=pass action=none header.from=hpe.com; dkim=pass
- header.d=hpe.com; arc=none
-Received: from DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:8:4e::10) by
- MW4PR84MB1682.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:303:1a5::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.26; Mon, 7 Nov
- 2022 22:36:48 +0000
-Received: from DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM
- ([fe80::7949:4505:4974:ad5f]) by DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM
- ([fe80::7949:4505:4974:ad5f%5]) with mapi id 15.20.5791.026; Mon, 7 Nov 2022
- 22:36:48 +0000
-From:   "Hawkins, Nick" <nick.hawkins@hpe.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        "jdelvare@suse.com" <jdelvare@suse.com>,
-        "linux@roeck-us.net" <linux@roeck-us.net>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "Verdun, Jean-Marie" <verdun@hpe.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH v1 3/6] dt-bindings: hwmon: Add hpe,gxp-fan-ctrl
-Thread-Topic: [PATCH v1 3/6] dt-bindings: hwmon: Add hpe,gxp-fan-ctrl
-Thread-Index: AQHY8IUEH8BHEDSFJkCt/7SN3E/8Qa4xtsSAgAH2dAA=
-Date:   Mon, 7 Nov 2022 22:36:48 +0000
-Message-ID: <236F9C0A-797D-41C6-B342-4C32DF28C426@hpe.com>
-References: <20221104193657.105130-1-nick.hawkins@hpe.com>
- <20221104193657.105130-4-nick.hawkins@hpe.com>
- <1b90f86c-9c0f-225b-38b5-6f37a4eded69@linaro.org>
-In-Reply-To: <1b90f86c-9c0f-225b-38b5-6f37a4eded69@linaro.org>
-Accept-Language: en-US
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Ff4kri761zhyB9UmgJ+kZOLnMozkJU3rP0RRRjPP9MY=;
+ b=rB4A5yd6t/XZyXm/qqh3afeQb+fsvD3XZ+1L2zCQFIyIgcsDWFtD29RN5ou9aGXMLhSBr86Xfh2l1SXG7I1QYl7wlFZ+xJJ5SEV6Es07um3EvaI1mOsVwUWcAmGgyZBdwV0gOqu74Zb7smObYcKZ8ZvHMNSZ+TfsR5UwEKy64gs=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DS7PR12MB6263.namprd12.prod.outlook.com (2603:10b6:8:95::17) by
+ CH0PR12MB5347.namprd12.prod.outlook.com (2603:10b6:610:d6::18) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5791.25; Mon, 7 Nov 2022 22:39:05 +0000
+Received: from DS7PR12MB6263.namprd12.prod.outlook.com
+ ([fe80::6f5:7c8f:32d9:e72c]) by DS7PR12MB6263.namprd12.prod.outlook.com
+ ([fe80::6f5:7c8f:32d9:e72c%3]) with mapi id 15.20.5791.026; Mon, 7 Nov 2022
+ 22:39:05 +0000
+Message-ID: <d413c064-ee9b-5853-9cf1-544adde22c8a@amd.com>
+Date:   Mon, 7 Nov 2022 16:39:02 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
 Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Microsoft-MacOutlook/16.66.22102801
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DM4PR84MB1927:EE_|MW4PR84MB1682:EE_
-x-ms-office365-filtering-correlation-id: 9a4beafd-1982-4d55-3aea-08dac1108ee0
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: jOkQQYipdjCNYYJQCvWIwI29VhtyPa2XtGoBJSx03flGag2mirJ1hN/pE4nRUXQ3SUCUhy2/9m2T6RpbuGzdt3eW5PSNOui+zplFF/fNF4ToUuiVdR8/8QBB0gOGaEvCfcskubfrBHTx7BDCqqtpLXxcb32ztCQUUUXDtvTPqjMp1bMCbIBzFVYCIzq+cZfCrAYImX52dQBpHQds8K/bRJKv3IT8NiqdXNiSpqb4f+Uev6wNtCgn8k8OG05qcUt4lTOSWpHPrEz2gQ0wUd4gT8j5PiC95O6FoEfO+S5IAUiF6nn0HGUG4y2XMmAlNn9cMUCDGB7rn8wKhKnz1wJ15WNPNKxt/HVgOGtZOumZewLk57on+yy02qIVU7sMK9kC3gyJkCXG5wNbP1+8HP2YWu8DVKsGKeZjoEnutPjI7bMxdvoLDWmdNYi65/ht1ex7aAyLscwilci89sdla3btAFp44viXFvEVm5s0dUjFe6fuCUE961Nz19afK/ueli8cyenL0pgw4hQN3AXNss9dcsTtBzCpZMA/n8beFtxnGK9reVvZjQJnKZbKxKM0fZfpP4UXAArcNTUo13YCTuXvFyEqqEuQCJZ7fP4aTXoF6bamRtwdydZ9f0Cg06+5KjZW3uqQ0zrYJvFrXmgzvTV8T7FACYB4hlBUdAv8HxEu4hzYV7E5t+zEMR/oKxybfrskMaBmeNG5OGN6ilZoiw2qMnNJo4PU8/YIu4IWm97vnW50Bu9Ixrq+I7krRMYD5JqWeFZfPMP+FyiOOq8e6Cka8z9EmIUuNkpfQSyeLEtGqvqcEw/cQ9Ou3Vn+yzxn5ZOmBbyG3/G+eeUZLgHkN0ig6g==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(39860400002)(366004)(346002)(376002)(396003)(136003)(451199015)(2616005)(186003)(6512007)(38100700002)(6506007)(122000001)(26005)(83380400001)(2906002)(7416002)(8676002)(110136005)(316002)(478600001)(6486002)(71200400001)(966005)(41300700001)(5660300002)(8936002)(91956017)(76116006)(66446008)(66556008)(64756008)(66946007)(66476007)(33656002)(36756003)(38070700005)(921005)(82960400001)(86362001)(45980500001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?ZkNIRFYxbkxCZTVHL1E5Sjd6NVRic3FNVjdXRW5YN2oxWXd1Q2N0cnlhOUwv?=
- =?utf-8?B?OFp6TElreCttL2V6M3lydnBBRVNCSndiQ2hsekI0QUZWMGVteDFGUEtpdkRH?=
- =?utf-8?B?d0o1RmFaa3dVbk5CcXlpUG9aamFXSTZDdmdLMnA4NGhJY21RWUJEUmFCMTN1?=
- =?utf-8?B?Mm4yT3FVSEhaakZSQmxSVFZPUjNXeE00dEVhOFFOWVdzVlNFUFo5N0x4VC9Z?=
- =?utf-8?B?ZGVqUlJCcm1zUWJ4SzlQMWpubFFuUDVNdVhDdjd0MDRVOGtueVZLWmZUL09T?=
- =?utf-8?B?MTl1QjRJZWFQcDU3Ry9peFlHdFBxR2lSeENqS3ZtQ24rcUQwREtXS0dTUjVu?=
- =?utf-8?B?YzQ5SXNtNlZoYlpLdWFranZFRE9zRVhHUFplOTZ6VXArLzRzZEVuNWY3THBF?=
- =?utf-8?B?cnVWbzdzZHNvSU11eEpYaWNYREFvL1V4VFY2ckkwMEJIVG1Gb2ZvcWp1dW5w?=
- =?utf-8?B?M09zUFYyVFRERW5pSWlmc3VTaG0zU29uVG03eWxySzZ1ZEJIWVZXNHRYQ0Fs?=
- =?utf-8?B?WUMvZ0dyYlhlQWZTVElVblppdW5JSlNLVUh3MStsOHBvWkRCOVhnRnlXZW50?=
- =?utf-8?B?VHN0cFNvbXV2Q1VEc3IwdnByUC9QdGJnSnVzcXlkQWE1VkxXZU9HSUVrWm5y?=
- =?utf-8?B?TWM3WFNENmFxWXVRMVlDQjlESVh3UjBYZmNuaU1DYjJlWjFNRk5UWGJGRUU2?=
- =?utf-8?B?b0UvcVh6UzFtejRIQXVnVVc3RUg5bytsaUlGbS95WTl1anduckZ5eUNKZExj?=
- =?utf-8?B?cU84YlJXZGQ4MDRNdThXY3IvSXZRZ3hnQ0JtandPVUpkRUtOanpQeW5GVXEv?=
- =?utf-8?B?U3F3dXBWS3BhSmhWUldQM29Ec1REUGpSbnhVZTJlekg1YWU1dytIbVlRdko1?=
- =?utf-8?B?ejZRRXFwZjRwNDdSY003Zm94aWFjNjMwUTBSVkVqdmt6UnVDeHE5V2c1NWVs?=
- =?utf-8?B?T0hVSWJvZnJwVVl2YjBXVHE1MmZTajJNcDJHLzlIOGZtMXlnSWdNejZmaGx6?=
- =?utf-8?B?T1o4VHNka2tCakhPcVFFSktvTHlCQmZ3dUJveCtBZkxhKzdzUndFMkNvRFhi?=
- =?utf-8?B?U3JqN2x5Q0c3YjltWDBiSzJ4YWNlM2Z5WWJZdzRrMG91em52VWpsaVY0YjMv?=
- =?utf-8?B?dit1ck96S3dnUGtJdnlhcHJxWHVpdGRyVUlWRzR5K1dWU3JHK0ZlUkdmUmF4?=
- =?utf-8?B?cE5ob09xeEZnNVlKUGFkaW5PaVV3RzNheVZqTEY1cWY0VGhSU01PUUJ1MnZH?=
- =?utf-8?B?eVpTQm5pWjN3TjQ0TVk2SnFyblM4aXJJRUJGUXc2VERGUmVJUGhzSmhoaStx?=
- =?utf-8?B?VnVubnRYQmQ5MHU0b0lSVk1WM2kyNEVuY3BJWjZQdkQ5a0pLc25VdndVY1N3?=
- =?utf-8?B?b1B2VXdPc1F0bmtONS9PU0hScDhQTzNUd3JkdURjWDBYeDFoYlJ1U1VUdmVK?=
- =?utf-8?B?L2xHVXVmMHVNdmJ5Nm5OL0paVTcyeldlbitLUXF3c2t4enNKb3dKbnYyOHBr?=
- =?utf-8?B?WnJJOXRGTWVVb1E1YUpDNHplSjNEMnBTOFVScktvTWlkUCtlTmJIWGFlVXFa?=
- =?utf-8?B?amxsYndkSjVjY1NTamlLbXY0VlkvSEN3SmtBUlh3ZWZrOCtzTVpCS1YzYllM?=
- =?utf-8?B?YjRIUHBRMjRLb1NyQThvb3ovZ0lCc1pNczIwSEZCeHpNeFV1M2RDYjI3dzhS?=
- =?utf-8?B?Sm9zMDJTSWc2OWxPTElzL2pBaW80SjhPVXhudXd6enNTNEM5SngzVTBXY1Y1?=
- =?utf-8?B?bFBlWlRxNmVZb3hLdkFJK0g0T0VhUDJvV3JFVktIdFg4T2pJcDY3eHBWenhl?=
- =?utf-8?B?YUpvOE5JZW1OYWJjK0NNOXQ2QnQ3TDBOZmVWcklNWGxkNVRhOEZBbzE1T0lB?=
- =?utf-8?B?Z0tqK0ptQ3lXWUdNWnR4Snp1ME5jekRHdEtSWWp3M1JlZ25Camlya1RMNEVJ?=
- =?utf-8?B?S2VuRWkxQmx1THZodGFybnRoR3B3dmMyeGlmZVo3RmZXWm1TVEtCS1pOckFN?=
- =?utf-8?B?SUN4QzhDd0VpR0tBcmUvRUN1VnFCYVZ5SlV4ZFBHTWs5ZysvSm9aQy95dExy?=
- =?utf-8?B?VkJYZFFYaVdrMWxQV2V4MEw1UVJXdFdWRUVrcmZuWDlqcmtTVXRJQ2wzRFZw?=
- =?utf-8?B?b3JkRWRFbWZZSHBJWVJaWm5VM3d6STBZQlFRby9VQ3RWNWhQcER2MlhLUGtm?=
- =?utf-8?B?T3c9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <F5720AA577A5E04A8CF196A473BBF3B0@NAMPRD84.PROD.OUTLOOK.COM>
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9a4beafd-1982-4d55-3aea-08dac1108ee0
-X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Nov 2022 22:36:48.6887
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 105b2061-b669-4b31-92ac-24d304d195dc
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 66vgEjhtUea1Q6xa0D3I1eGlryO+CzxNAqrGscBNol9izmHXm5MoHb6G9HAaGjkomRWT6BZ/mPw6WLDuQYkyRw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR84MB1682
-X-OriginatorOrg: hpe.com
-X-Proofpoint-GUID: 2a9BHeMtAM5NMWJmidN3yqibN5IVNZoR
-X-Proofpoint-ORIG-GUID: 2a9BHeMtAM5NMWJmidN3yqibN5IVNZoR
-Content-Transfer-Encoding: base64
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Borislav Petkov <bp@alien8.de>
+Cc:     x86@kernel.org, Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        Joao Martins <joao.m.martins@oracle.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Juergen Gross <jgross@suse.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Babu Moger <Babu.Moger@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221104213651.141057-1-kim.phillips@amd.com>
+ <20221104213651.141057-3-kim.phillips@amd.com> <Y2WJjdY3wwQl9/q9@zn.tnic>
+ <Y2ZEinL+wlIX+1Sn@hirez.programming.kicks-ass.net>
+From:   Kim Phillips <kim.phillips@amd.com>
+Subject: Re: [PATCH 2/3] x86/speculation: Support Automatic IBRS
+In-Reply-To: <Y2ZEinL+wlIX+1Sn@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: CH0PR03CA0349.namprd03.prod.outlook.com
+ (2603:10b6:610:11a::33) To DS7PR12MB6263.namprd12.prod.outlook.com
+ (2603:10b6:8:95::17)
 MIME-Version: 1.0
-X-HPE-SCL: -1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-07_11,2022-11-07_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 adultscore=0
- priorityscore=1501 lowpriorityscore=0 malwarescore=0 clxscore=1015
- mlxlogscore=999 impostorscore=0 phishscore=0 spamscore=0 mlxscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211070170
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS7PR12MB6263:EE_|CH0PR12MB5347:EE_
+X-MS-Office365-Filtering-Correlation-Id: 65b21f86-9b9e-46cd-5619-08dac110e040
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: iwOp/0IBko65mikwcgAiJ7IjT+ZFUUVoK1XiH46d0kvHdMVTWr0s3P2zlMSAxB1m34fST6OE6XwjeXNdfzUzV0T942koRYFrzS4dgH/YgzcEIt9bIJxCzfKivMvKpG/577uHyKnHdrg0RyyUoRAXVjowEcPSiazznETJuqFhU/uX33x5pxVeU6FRpVdnd0UexRugMNrcJRqhC+SpQBtbIk6Bh/QYpvRLLPmIVhR2iKiUtYMz4GKWdOpRuWcCJU+ZytOENZVWWc3QcV8fCX2FaNHFj3A7bu6UxFYtx+JGYd9OXBXmTNrB/U2ZGvssKoYH37NLlDeUCW9vtUXqq8N521iTT7ICbiX6T8qfnPuNHr4u/M21+QTL2gDGCEp3P8WkNTat6bIEColAUAsqykYheER+9EPRzIunoLNijdtdyBK+r+nqWwRIBOdjRd7fD51y6snQ/OAscXD/5ZPBYixZ50s6OXk3qfgnM3vlGuewTnir/Eac5BMYb+7brRVmp/Lr+HnnLFB7Cj/hxIwDvq/ZOH0wbCHNk+wTm3xoH5VRp77lYGd6Eti8dSsU5sZA42T95VeufQYqZcd3stthldT8hHFSIAyj/YcOx8RFK0ZW4vckAUd096SG7XiENlAnNs76aKq89GrlcFhbYBNJHUGU99KkoQfkyh9Qb6jprMVNJVQaD7kV9RNZqsGMLjSZ891PSN8sTgSv3DBPzjokpapPnRx0xOvmjvNS2d6roT+sp4ioKhKhH83d7hEOEMgt04geZ5ACLgDoBbdgPksJo2SyALusRJo/YxqjWMCe25YJunA=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB6263.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(346002)(366004)(376002)(136003)(39860400002)(451199015)(7416002)(66556008)(8676002)(66946007)(4326008)(66476007)(110136005)(2906002)(83380400001)(8936002)(44832011)(6486002)(478600001)(316002)(5660300002)(36756003)(2616005)(6512007)(186003)(53546011)(31686004)(26005)(38100700002)(41300700001)(54906003)(31696002)(86362001)(6506007)(6666004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dWhoTjJGLytxRzlpMnFHV1lKODFFRFRNL3FFM09FcnFDaUtrT1dOcjVFMENx?=
+ =?utf-8?B?ektCOGhpaUxDNFFRaEE0WDFZRUVXUWJhcWNEL0ExcGFOZjNvMDBqTFZYbDF3?=
+ =?utf-8?B?N2hYaG5OVXFBQ2hmb2RrbE1RWG5ndHdXQnVsWWJYZzZZR1pxY2pkbE4rb0pD?=
+ =?utf-8?B?eWFhdllPeHZ2Z2FqRm10WUt0L3hoY3hCNmlxTWZlNWdSTUIyRGVIOWtIZlY4?=
+ =?utf-8?B?NkgyeTUwdjVueTd2VTdHcXBsVVZybE5JVXpJLzNON1NNekNyaDhBczhMOEdK?=
+ =?utf-8?B?emp3c0ZOdklxVGFobk1Bb21xUEp3RzJZNHJ6alpMa0s3cStlQnRXNitIcUtO?=
+ =?utf-8?B?UFNWUU56dUlWKzlwRFVHajVtcWs2eHVWTlpSeCtad2dBZjVRVFFQN3BVYTAy?=
+ =?utf-8?B?SzlTeGlNNkZHdnFWU25FdXZPZGZCUzlEZllUUUd2S2RGTnFmK3J3WE42RFJC?=
+ =?utf-8?B?ZmJ0K2tBWmV6dEs5c1JPdGpMLzV1WFdzOHd0dUFPc21SUWZBZldIRHozd0FC?=
+ =?utf-8?B?bjJzVjY5VUJ2Q2o5cjF3YWJBTHM1S0xFVzZYVXVoSWd1VFNibmNCdVE4L0Ro?=
+ =?utf-8?B?cTBHb2p1WDFoUElpdzBaOXpUSm1IemhnS1VEZkRVNFhjcXJJanM0REhxOFFR?=
+ =?utf-8?B?NXZIQUNkWTBTRTlhbXlOM1c4SjluNVlxR3p0bFl1bVozNEVaUDhJV1FoTFl5?=
+ =?utf-8?B?a3NtWDNWVWY4MitSWG1tTm5TUllQUVZyZERDMUFwNURldGJFTWRKUG9jMVBz?=
+ =?utf-8?B?NWJiWlpJR2VLYUlCNTh5Vm9SSi9RNGl3TENtWDV0NERJVDhuZ0ROTnB6RmN5?=
+ =?utf-8?B?YTRWQzB0R2c3NktETDVxeDJmMEo5MFlqUGc3MUNoRmFJMnpLamQvb0tiQ3ph?=
+ =?utf-8?B?R3VpRWFGK1BWQnFpK045UVN6cDdqcytkT0NmM0FJT1Z4UFREcXN5QkVrT1d0?=
+ =?utf-8?B?dmZqUWhmSCtGQXdaVEdDbjViT1pTV2J0d1YybjBYS3ZVRWtZS0RQRVl2YllP?=
+ =?utf-8?B?VzRwZ0Rwa0t5ME1pZnNBaUlrNnNqKzdrakY0MzFIQ3QyZjBYajRZS2o3djhH?=
+ =?utf-8?B?bEVFVkNkNWtYbXpIbStOeHBsTmk4aWlxbVhWRTFMUzQza3hmOW1MRWZVWU53?=
+ =?utf-8?B?cnovdmt1ZGNQK1F2WXBHQ25NSGtrSmxPNVl6c0R5OHhlYWszc0IxTGxnVHpN?=
+ =?utf-8?B?cDJ2bENTb1FJVm9CV0dyZEZpYldtUUJOK1hFSDcwbFRoOWxzRXFKOHdPS3hj?=
+ =?utf-8?B?b3B3ZWZQYmkrei9hQ3FSdjVuclpSUlczTWZVU2E2MDhYVjlJZmJ2WVBxYURm?=
+ =?utf-8?B?S0JXajBQNW50Ymd6SEZ1R1dWTDRkREhvb3FHdGJCZ2Z4bmVKTmFucFg1bHhE?=
+ =?utf-8?B?WUdiOGZBckRRVzQ0aHRRR0dSclBBdk1vK0JrVWhjQTgvYWJvRURPM25rNStK?=
+ =?utf-8?B?U3FmT3F3RVplaFA2L1pYM202ZEpYcDdNMmVaMXJyUkV2bEsxVk5QbFRGc1VH?=
+ =?utf-8?B?anBlV3dBKzc1alZjVks4Q0trbG8vUmxwSkNnUTlCaDBTaWJxQThuU0lpNzZ4?=
+ =?utf-8?B?eHFybEtuSjhGUG1RclpBUCtCUlQ5Ymt3bVo1MGxSbURlekQ1WjVBZ25ybGpM?=
+ =?utf-8?B?M0o4SkhmSTJvQXNseWM1L2pydEtCZEVoOVVENjNQQzFtemFNZXEyeWpyc3cw?=
+ =?utf-8?B?eFZQWXJQaHBKUk13WVBmdkFQTVZLUHQyQ04xNExqeFBwVVlobi9WaS9FMHI0?=
+ =?utf-8?B?bXhwUGdjelY3MGZXVkZ1cHNvNS9zekhMTHpkN3V6QzI3eXl1RUtoYnVETW1y?=
+ =?utf-8?B?OENobk1ZeXVTV1ErRmlxRFIvaVdkYlh6Qmhyd2VlOHFyZVRWRy9zdW91NUhx?=
+ =?utf-8?B?c0hYZTZtYk9CTGx3NnliQTNQVmVHZ3phQVdTTjRRRW9pdlJrRmttUjE0K1JM?=
+ =?utf-8?B?NENFZkVnUGErTGdocCs3VmRoUW0zZENhVnZpTW05Zm9EeHdENTlqTGdPRWJG?=
+ =?utf-8?B?cGVQSGRpUzRFYkYydFZabUh1K3lNd1BaSk9RU0ZIZmg1clpMeW1wYjhQNVY2?=
+ =?utf-8?B?MGs3dmdBMEgzTXlVWlBqNFRTbjRXdzlqUCtLK0c5dDJUK3p5LzFCOE11a1hR?=
+ =?utf-8?Q?ZAF6a2X4LYkEFfogqJ6H810VN?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 65b21f86-9b9e-46cd-5619-08dac110e040
+X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB6263.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Nov 2022 22:39:05.3403
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: GPCy0yMVGGnUtgBJN0+SqvGcTDAgv1GHHKlxMFQmnp5/SXlQUFbvRj3IAQSnpGnEhp/Ab3/SGIDPouqh7wReSg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB5347
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQogICAgPiA+IFRoaXMgcHJvdmlkZXMgdGhlIGJhc2UgcmVnaXN0ZXJzIGFkZHJlc3MsIHByb2dy
-YW1tYWJsZSBsb2dpYyByZWdpc3RlcnMNCiAgICA+ID4gYWRkcmVzcywgYW5kIHRoZSBmdW5jdGlv
-biAyIHJlZ2lzdGVycyB0byBhbGxvdyBjb250cm9sIGFjY2VzcyBvZiB0aGUgSFBFDQogICAgPiA+
-IGZhbnMgb24gdGhlIEdYUCBTb0MuDQoNCiAgICA+IFdoYXQgaXMgIlRoaXMiPyBJZiAiVGhpcyBw
-YXRjaCIsIHRoZW4gZHJvcCBpdC4NCiAgICA+IGh0dHBzOi8vZWxpeGlyLmJvb3RsaW4uY29tL2xp
-bnV4L3Y1LjE3LjEvc291cmNlL0RvY3VtZW50YXRpb24vcHJvY2Vzcy9zdWJtaXR0aW5nLXBhdGNo
-ZXMucnN0I0w5NQ0KDQogICAgPiBJZiAiVGhpcyBoYXJkd2FyZSIgdGhlbiBwbGVhc2UgaW5zdGVh
-ZCBkZXNjcmliZSB0aGUgaGFyZHdhcmUsIG5vdCBpdA0KICAgIGNvbXBvbmVudHMuIFdoYXQgYXJl
-IGl0cyBmZWF0dXJlcz8gSWYgaXQgY29udHJvbHMgdGhlIGZhbiwgdGhlbiB3aHkNCiAgICB0aGVy
-ZSBhcmUgbm8gUFdNLXJlbGF0ZWQgY2VsbHM/IEhvdyBkbyB5b3Ugc2V0IHRoZSBzcGVlZD8NCg0K
-R3JlZXRpbmdzIEtyenlzenRvZiwNCg0KICAgIFRoYW5rIHlvdSBmb3IgdGhlIGZlZWRiYWNrLiBU
-aGUgaW50ZW50aW9uIHdhcyB0aGlzIGJpbmRpbmcuLiBob3dldmVyLCB0aGF0IHdhcyBhbiBlcnJv
-ciBvbiBteSBwYXJ0LCBhbmQgSSB3aWxsIGNvcnJlY3QgaXQgdG8gcmVmbGVjdCB0aGUgaGFyZHdh
-cmUgc2l0dWF0aW9uIG9mIHRoZSBHWFAgd2l0aCB0aGUgZmFuIGNvbnRyb2xsZXIgYW5kIGhvdyBl
-YWNoIG9mIHRoZSBtYXBwZWQgcmVnaXN0ZXJzIHByb3ZpZGUgY29udHJvbCB0byB0aGUgc3lzdGVt
-LiBUbyBhbnN3ZXIgeW91ciBxdWVzdGlvbnM6IFRoZSBmYW5zIHNwZWVkcyBhcmUgY29udHJvbGxl
-ZCB0aHJvdWdoIGFuIGV4dGVybmFsIENQTEQgZGV2aWNlIHdoaWNoIHdlIHByb3ZpZGUgYSBQV00g
-dmFsdWUgKDAtMjU1KSB1c2luZyB0aGUgImJhc2UiIHJlZ2lzdGVyIHRvIHRoZSBDSUYgaW50ZXJm
-YWNlLiBUaGlzIGludGVyZmFjZSBwcm92aWRlcyBhY2Nlc3MgdG8gdGhlIENQTEQuIFRoZSBDUExE
-IHRoZW4gZHJpdmVzIHRoZSBmYW4uIFRoZSBDUExEIGNhbiBnZW5lcmF0ZSB1cCB0byA4IHVuaXF1
-ZSBkaWZmZXJlbnQgUFdNcyB0byBtdWx0aXBsZSBmYW5zLiBUaGUgQ1BMRCBtb25pdG9ycyB0aGUg
-ZmFucyBhbmQgcmVwb3J0cyB0aGUgc3RhdHVzIGJhY2sgdG8gdGhlIFNvQyB0aHJvdWdoIHRoZSBD
-SUYgaW50ZXJmYWNlIHRvIHRoZSAicGxyZWcgYmFzZSIuIFRoZSBwbHJlZyBpbmNsdWRlcyB0aGUg
-aW5zdGFsbGF0aW9uLCBmYWlsZWQsIGFuZCBpZGVudGlmaWNhdGlvbiBzdGF0dXNlcy4gVGhlIGZ1
-bmN0aW9uIDIgcmVnaXN0ZXIgYmFzZSBpcyB1c2VkIHRvIGNoZWNrIHRoZSBwb3dlciBzdGF0ZSBv
-ZiB0aGUgc3lzdGVtIGFzIHRoYXQgaW5mbHVlbmNlcyB0aGUgUFdNIHZhbHVlcyByZWFkIGJhY2su
-DQoNCkFzIHRoZSBQV00gZ2VuZXJhdGlvbiBoYXBwZW5zIG91dHNpZGUgdGhlIFNvQyBkbyB3ZSBz
-dGlsbCBuZWVkIHB3bS1jZWxscz8gSWYgc28sIHNob3VsZCB3ZSBoYXZlIGEgY3VzdG9tIGNvbXBh
-dGlibGUgZm9yIHRoYXQ/DQoNClRoYW5rcywNCg0KLU5pY2sNCg0KDQo=
+On 11/5/22 6:10 AM, Peter Zijlstra wrote:
+> On Fri, Nov 04, 2022 at 10:52:13PM +0100, Borislav Petkov wrote:
+>> On Fri, Nov 04, 2022 at 04:36:50PM -0500, Kim Phillips wrote:
+>>>   - Allow for spectre_v2=autoibrs in the kernel command line,
+>>>     reverting to auto-selection if the feature isn't available.
+>>
+>> Why?
+>>
+>> What the whole logic here should do is enable autoibrs when detected
+>> automatically, without the need for the user to even select it as it is
+>> the superior mitigation.
+> 
+> Well; perhaps the whole autoibrs thing should be mapped to the existing
+> eIBRS options. AFAICT this is the same thing under a new name, no need
+> to invent yet more options. bugs.c is quite insane enough already.
+
+I've started a version that has AUTOIBRS reuse SPECTRE_V2_EIBRS
+spectre_v2_mitigation enum, but, so far, it's change to bugs.c
+looks bigger: 58 lines changed vs. 34 (see below).
+
+Let me know if you want me to send it as a part of a v2 submission
+after I take care of the kvm CPUID review.
+
+Thanks,
+
+Kim
+
+Autoibrs-as-eibrs diff:
+
+diff --git a/arch/x86/include/asm/nospec-branch.h b/arch/x86/include/asm/nospec-branch.h
+index 2e9dd8823244..3ab90f23e7f7 100644
+--- a/arch/x86/include/asm/nospec-branch.h
++++ b/arch/x86/include/asm/nospec-branch.h
+@@ -442,7 +442,6 @@ enum spectre_v2_mitigation {
+  	SPECTRE_V2_EIBRS_RETPOLINE,
+  	SPECTRE_V2_EIBRS_LFENCE,
+  	SPECTRE_V2_IBRS,
+-	SPECTRE_V2_AUTO_IBRS,
+  };
+
+  /* The indirect branch speculation control variants */
+diff --git a/arch/x86/kernel/cpu/bugs.c b/arch/x86/kernel/cpu/bugs.c
+index 31e5af78baa0..ccfd8fb12095 100644
+--- a/arch/x86/kernel/cpu/bugs.c
++++ b/arch/x86/kernel/cpu/bugs.c
+@@ -1005,6 +1005,7 @@ static inline const char *spectre_v2_module_string(void) { return ""; }
+  #endif
+
+  #define SPECTRE_V2_LFENCE_MSG "WARNING: LFENCE mitigation is not recommended for this CPU, data leaks possible!\n"
++#define SPECTRE_V2_EIBRS_AMD_MSG "WARNING: AutoIBRS does not need additional RETPOLINE/LFENCE mitigations, not doing them\n"
+  #define SPECTRE_V2_EIBRS_EBPF_MSG "WARNING: Unprivileged eBPF is enabled with eIBRS on, data leaks possible via Spectre v2 BHB attacks!\n"
+  #define SPECTRE_V2_EIBRS_LFENCE_EBPF_SMT_MSG "WARNING: Unprivileged eBPF is enabled with eIBRS+LFENCE mitigation and SMT, data leaks possible via Spectre v2 BHB attacks!\n"
+  #define SPECTRE_V2_IBRS_PERF_MSG "WARNING: IBRS mitigation selected on Enhanced IBRS CPU, this may cause unnecessary performance loss\n"
+@@ -1125,7 +1126,7 @@ spectre_v2_parse_user_cmdline(void)
+  	return SPECTRE_V2_USER_CMD_AUTO;
+  }
+
+-/* Checks for Intel IBRS versions */
++/* Checks for IBRS versions */
+  static inline bool spectre_v2_in_ibrs_mode(enum spectre_v2_mitigation mode)
+  {
+  	return mode == SPECTRE_V2_IBRS ||
+@@ -1201,7 +1202,8 @@ spectre_v2_user_select_mitigation(void)
+  	 */
+  	if (!boot_cpu_has(X86_FEATURE_STIBP) ||
+  	    !smt_possible ||
+-	    spectre_v2_in_ibrs_mode(spectre_v2_enabled))
++	    (spectre_v2_in_ibrs_mode(spectre_v2_enabled) &&
++	     !boot_cpu_has(X86_FEATURE_AUTOIBRS)))
+  		return;
+
+  	/*
+@@ -1231,11 +1233,10 @@ static const char * const spectre_v2_strings[] = {
+  	[SPECTRE_V2_NONE]			= "Vulnerable",
+  	[SPECTRE_V2_RETPOLINE]			= "Mitigation: Retpolines",
+  	[SPECTRE_V2_LFENCE]			= "Mitigation: LFENCE",
+-	[SPECTRE_V2_EIBRS]			= "Mitigation: Enhanced IBRS",
++	[SPECTRE_V2_EIBRS]			= "Mitigation: Enhanced / Automatic IBRS",
+  	[SPECTRE_V2_EIBRS_LFENCE]		= "Mitigation: Enhanced IBRS + LFENCE",
+  	[SPECTRE_V2_EIBRS_RETPOLINE]		= "Mitigation: Enhanced IBRS + Retpolines",
+  	[SPECTRE_V2_IBRS]			= "Mitigation: IBRS",
+-	[SPECTRE_V2_AUTO_IBRS]			= "Mitigation: Automatic IBRS",
+  };
+
+  static const struct {
+@@ -1250,9 +1251,9 @@ static const struct {
+  	{ "retpoline,lfence",	SPECTRE_V2_CMD_RETPOLINE_LFENCE,  false },
+  	{ "retpoline,generic",	SPECTRE_V2_CMD_RETPOLINE_GENERIC, false },
+  	{ "eibrs",		SPECTRE_V2_CMD_EIBRS,		  false },
++	{ "autoibrs",		SPECTRE_V2_CMD_EIBRS,		  false },
+  	{ "eibrs,lfence",	SPECTRE_V2_CMD_EIBRS_LFENCE,	  false },
+  	{ "eibrs,retpoline",	SPECTRE_V2_CMD_EIBRS_RETPOLINE,	  false },
+-	{ "autoibrs",		SPECTRE_V2_CMD_AUTOIBRS,	  false },
+  	{ "auto",		SPECTRE_V2_CMD_AUTO,		  false },
+  	{ "ibrs",		SPECTRE_V2_CMD_IBRS,              false },
+  };
+@@ -1303,15 +1304,17 @@ static enum spectre_v2_mitigation_cmd __init spectre_v2_parse_cmdline(void)
+  	if ((cmd == SPECTRE_V2_CMD_EIBRS ||
+  	     cmd == SPECTRE_V2_CMD_EIBRS_LFENCE ||
+  	     cmd == SPECTRE_V2_CMD_EIBRS_RETPOLINE) &&
+-	    !boot_cpu_has(X86_FEATURE_IBRS_ENHANCED)) {
+-		pr_err("%s selected but CPU doesn't have eIBRS. Switching to AUTO select\n",
++	    (!boot_cpu_has(X86_FEATURE_IBRS_ENHANCED) ||
++	     !boot_cpu_has(X86_FEATURE_AUTOIBRS))) {
++		pr_err("%s selected but CPU doesn't have Enhanced or Automatic IBRS. Switching to AUTO select\n",
+  		       mitigation_options[i].option);
+  		return SPECTRE_V2_CMD_AUTO;
+  	}
+
+-	if (cmd == SPECTRE_V2_CMD_AUTOIBRS &&
+-	    !boot_cpu_has(X86_FEATURE_AUTOIBRS)) {
+-		pr_err("%s selected but CPU doesn't have AMD Automatic IBRS. Switching to AUTO select\n",
++	if ((cmd == SPECTRE_V2_CMD_EIBRS_LFENCE ||
++	     cmd == SPECTRE_V2_CMD_EIBRS_RETPOLINE) &&
++	    boot_cpu_has(X86_FEATURE_AUTOIBRS)) {
++		pr_err("%s selected but AMD Automatic IBRS doesn't need extra retpoline mitigations. Switching to AUTO select\n",
+  		       mitigation_options[i].option);
+  		return SPECTRE_V2_CMD_AUTO;
+  	}
+@@ -1403,7 +1406,6 @@ static void __init spectre_v2_determine_rsb_fill_type_at_vmexit(enum spectre_v2_
+  	 */
+  	switch (mode) {
+  	case SPECTRE_V2_NONE:
+-	case SPECTRE_V2_AUTO_IBRS:
+  		return;
+
+  	case SPECTRE_V2_EIBRS_LFENCE:
+@@ -1447,12 +1449,8 @@ static void __init spectre_v2_select_mitigation(void)
+
+  	case SPECTRE_V2_CMD_FORCE:
+  	case SPECTRE_V2_CMD_AUTO:
+-		if (boot_cpu_has(X86_FEATURE_AUTOIBRS)) {
+-			mode = SPECTRE_V2_AUTO_IBRS;
+-			break;
+-		}
+-
+-		if (boot_cpu_has(X86_FEATURE_IBRS_ENHANCED)) {
++		if (boot_cpu_has(X86_FEATURE_IBRS_ENHANCED) ||
++		    boot_cpu_has(X86_FEATURE_AUTOIBRS)) {
+  			mode = SPECTRE_V2_EIBRS;
+  			break;
+  		}
+@@ -1488,19 +1486,24 @@ static void __init spectre_v2_select_mitigation(void)
+  		break;
+
+  	case SPECTRE_V2_CMD_EIBRS:
++	case SPECTRE_V2_CMD_AUTOIBRS:
+  		mode = SPECTRE_V2_EIBRS;
+  		break;
+
+  	case SPECTRE_V2_CMD_EIBRS_LFENCE:
+-		mode = SPECTRE_V2_EIBRS_LFENCE;
++		if (boot_cpu_has(X86_FEATURE_AUTOIBRS)) {
++			pr_err(SPECTRE_V2_EIBRS_AMD_MSG);
++			mode = SPECTRE_V2_EIBRS;
++		} else
++			mode = SPECTRE_V2_EIBRS_LFENCE;
+  		break;
+
+  	case SPECTRE_V2_CMD_EIBRS_RETPOLINE:
+-		mode = SPECTRE_V2_EIBRS_RETPOLINE;
+-		break;
+-
+-	case SPECTRE_V2_CMD_AUTOIBRS:
+-		mode = SPECTRE_V2_AUTO_IBRS;
++		if (boot_cpu_has(X86_FEATURE_AUTOIBRS)) {
++			pr_err(SPECTRE_V2_EIBRS_AMD_MSG);
++			mode = SPECTRE_V2_EIBRS;
++		} else
++			mode = SPECTRE_V2_EIBRS_RETPOLINE;
+  		break;
+  	}
+
+@@ -1508,8 +1511,13 @@ static void __init spectre_v2_select_mitigation(void)
+  		pr_err(SPECTRE_V2_EIBRS_EBPF_MSG);
+
+  	if (spectre_v2_in_ibrs_mode(mode)) {
+-		x86_spec_ctrl_base |= SPEC_CTRL_IBRS;
+-		write_spec_ctrl_current(x86_spec_ctrl_base, true);
++		if (boot_cpu_has(X86_FEATURE_AUTOIBRS)) {
++			rdmsrl(MSR_EFER, efer);
++			wrmsrl(MSR_EFER, efer | EFER_AUTOIBRS);
++		} else {
++			x86_spec_ctrl_base |= SPEC_CTRL_IBRS;
++			write_spec_ctrl_current(x86_spec_ctrl_base, true);
++		}
+  	}
+
+  	switch (mode) {
+@@ -1517,11 +1525,6 @@ static void __init spectre_v2_select_mitigation(void)
+  	case SPECTRE_V2_EIBRS:
+  		break;
+
+-	case SPECTRE_V2_AUTO_IBRS:
+-		rdmsrl(MSR_EFER, efer);
+-		wrmsrl(MSR_EFER, efer | EFER_AUTOIBRS);
+-		break;
+-
+  	case SPECTRE_V2_IBRS:
+  		setup_force_cpu_cap(X86_FEATURE_KERNEL_IBRS);
+  		if (boot_cpu_has(X86_FEATURE_IBRS_ENHANCED))
+@@ -1616,8 +1619,8 @@ static void __init spectre_v2_select_mitigation(void)
+  			pr_info("Enabling Speculation Barrier for firmware calls\n");
+  		}
+
+-	} else if (boot_cpu_has(X86_FEATURE_IBRS) && !spectre_v2_in_ibrs_mode(mode) &&
+-		   mode != SPECTRE_V2_AUTO_IBRS) {
++	} else if ((boot_cpu_has(X86_FEATURE_IBRS) && !spectre_v2_in_ibrs_mode(mode)) ||
++		   (boot_cpu_has(X86_FEATURE_AUTOIBRS) && !spectre_v2_in_ibrs_mode(mode))) {
+  		setup_force_cpu_cap(X86_FEATURE_USE_IBRS_FW);
+  		pr_info("Enabling Restricted Speculation for firmware calls\n");
+  	}
+@@ -2353,7 +2356,8 @@ static ssize_t mmio_stale_data_show_state(char *buf)
+
+  static char *stibp_state(void)
+  {
+-	if (spectre_v2_in_ibrs_mode(spectre_v2_enabled))
++	if (spectre_v2_in_ibrs_mode(spectre_v2_enabled) &&
++	    !boot_cpu_has(X86_FEATURE_AUTOIBRS))
+  		return "";
+
+  	switch (spectre_v2_user_stibp) {
