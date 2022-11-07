@@ -2,152 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4515C61F387
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 13:42:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3349E61F38A
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 13:42:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232271AbiKGMma (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 07:42:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34668 "EHLO
+        id S232311AbiKGMmt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 07:42:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232320AbiKGMm0 (ORCPT
+        with ESMTP id S231810AbiKGMmr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 07:42:26 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E4501BE94
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 04:42:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667824944; x=1699360944;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=BX7eo7H9OERqmqXuT+A61UmoX2D5HQEHW51CjFYURsA=;
-  b=TyZ2nTbxmh42FGvlUoVOVYMjXSbIjRrimy3nY+6ohthJvaRjCcML9c2N
-   svEJW+vBuaMRSd7r9xY1njYyk0/AuFXLDkgC27fI0topVgsguMcpLJg4a
-   M63WfXXYAziW6LP0yJ6zapZZSLan7od+qkVAGnrSg0sdV7CeSCEAyRIk4
-   GSHKzXAdc78ZKmnjaRAaR96xE4mz7ZD2xXCSf7HTiM8FAOxvW4IE0RcPK
-   4ivO1lncdJSXnhhauOo4dka9oQ+hfds2pZ9FVHFHSen9FWUOi0fDzrMdk
-   8pkn+PB/igXA28rdKRO1yPlfkLmnbE7HQ3rOtgnzxieDYMN9MBvFXdUv6
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10523"; a="312164627"
-X-IronPort-AV: E=Sophos;i="5.96,143,1665471600"; 
-   d="scan'208";a="312164627"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Nov 2022 04:42:24 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10523"; a="586956156"
-X-IronPort-AV: E=Sophos;i="5.96,143,1665471600"; 
-   d="scan'208";a="586956156"
-Received: from stinkpipe.fi.intel.com (HELO stinkbox) ([10.237.72.191])
-  by orsmga003.jf.intel.com with SMTP; 07 Nov 2022 04:42:19 -0800
-Received: by stinkbox (sSMTP sendmail emulation); Mon, 07 Nov 2022 14:42:18 +0200
-Date:   Mon, 7 Nov 2022 14:42:18 +0200
-From:   Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>
-To:     Naoya Horiguchi <naoya.horiguchi@linux.dev>
-Cc:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Liu Shixin <liushixin2@huawei.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1] arch/x86/mm/hugetlbpage.c: pud_huge() returns 0 when
- using 2-level paging
-Message-ID: <Y2j9KqIY9sAIDize@intel.com>
-References: <20221107021010.2449306-1-naoya.horiguchi@linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+        Mon, 7 Nov 2022 07:42:47 -0500
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2070.outbound.protection.outlook.com [40.107.92.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 504261B9C1;
+        Mon,  7 Nov 2022 04:42:46 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=QS1ElGTqlrEg1Q+nDsTzcvPoct4C1nrMG9qyZdgosE+P8HcnzfChBnxK+gZTMuNc8ccneBe3QvmJF/DTNGjV7epzwgy+pd5rA1dk7NuAVBw29by+TtUyEk/9CXZveb4CW3mf5UXTe/IS3RltjaGQFx9yW9ISUIiCKbsba0SXlNcY3rcTdp7LHYRYXRsEJ8+HP/iWWMC9V+OiRXlZ1NRYf+2YW8Vsstei2phzeXmteNB6KnmSROfMIJQS9EJd3LSsBy4g4E+DYPBnXtxgNMWwcIsJR5K+HhmG5VhH4VZRX1A9NPPKG/+x261P47UxjE2XBHOF3OT4nC5Q25qW64zAew==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=I1djnWP+YLdl5ZAr84eyFvFmtgcor4LgWZeqpKGewWU=;
+ b=HKYCe08BqWbTiAQ+pNFW0rO/49+SPy3nyj06b2S36OJmaC8y34DwY5ScLl78EMaihdd9LLUdQo+PAiKnsaZbzKeqSbx0g3CXswyfd16/Lpt6yG/M9mDJoPwwVI9GJXVjtHf/o1fK5Cbofg1ZdUCodHFEUo8gCvRWYYiir526AiJsyd3AqpyA3Xdjif4zm8MiZq3CR8ItgcgGsKZYjo8me+ZN7lDOoB+DfH+AlPRcQTNKnqXpzq5r9I+7n8cr4QryK1s+L9ugAXoCrHLWRTsUzWH2V+ntSh5TeMJenTZkWUh9B2pn2cii3CwryPamqNeiAHVProeWl8trLutJ6Mccog==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=I1djnWP+YLdl5ZAr84eyFvFmtgcor4LgWZeqpKGewWU=;
+ b=IGa6KksDndXnEl4cv65ITa3LQbaKA8Co6Ij0z/EHSyAbwv4CtgGIntmyejSk3tw+Tp6Uo8DfSPYlRQuq6FeLRHiQwMLx6QSD3eY8HV/Ti8hTdUfe90K0maElEDw0SonelOuO8Tc1gNIPxMy+vTUUkah+Z24Cco6I2outFtz7iXIMcsBOGogdBrjbBfy58cC/nqIqm40GPjoEfuBWjIVe/ymGQKnYWCZoR/vBCGG7zeFTvOqrjqKzylAhnxhRyub1iNprT+gvcjnyoEsq7xpjbNRAgLFIvkgzFw7eNWQVTPca0ldpeQGGrtQ/1Cv24OLo2tOTK/eAS1HzeirZHGOB3A==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by SN7PR12MB7131.namprd12.prod.outlook.com (2603:10b6:806:2a3::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.26; Mon, 7 Nov
+ 2022 12:42:44 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::7a81:a4e4:bb9c:d1de]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::7a81:a4e4:bb9c:d1de%6]) with mapi id 15.20.5791.026; Mon, 7 Nov 2022
+ 12:42:44 +0000
+Date:   Mon, 7 Nov 2022 08:42:43 -0400
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Qi Zheng <zhengqi.arch@bytedance.com>
+Cc:     dvyukov@google.com, willy@infradead.org, akinobu.mita@gmail.com,
+        akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: Re: [PATCH] mm: fix unexpected changes to
+ {failslab|fail_page_alloc}.attr
+Message-ID: <Y2j9Q/yMmqgPPUoO@nvidia.com>
+References: <CACT4Y+Zc21Aj+5KjeTEsvOysJGHRYDSKgu_+_xN1LUYfG_H0sg@mail.gmail.com>
+ <20221107033109.59709-1-zhengqi.arch@bytedance.com>
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221107021010.2449306-1-naoya.horiguchi@linux.dev>
-X-Patchwork-Hint: comment
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221107033109.59709-1-zhengqi.arch@bytedance.com>
+X-ClientProxiedBy: BL0PR02CA0036.namprd02.prod.outlook.com
+ (2603:10b6:207:3c::49) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|SN7PR12MB7131:EE_
+X-MS-Office365-Filtering-Correlation-Id: 228dba4f-4354-4fbc-de88-08dac0bd912a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: aNSfkMMrnZGHvS11H1FLT0HVRw5AgXJi7evQhvCfkGFzJNrmjrwxQ9feJ7vtHka41PnXfsgpEd4K2opOlGzYmsnLj08Ni9rfgOxrSxx6YiwT4PuMZENg5DNpLU7sOlVvAwqFiFZRbA4eYgSrnNGyOZsoQJTsVptR02nPBRU7Rs33zXW1ba4nQQ0BckaiO99+gWWlpWUMyfTqAIF3rhIj0R9jRyTZLI5kNVFwNVUvxV/lF64N5T0jLwLXu2kPN26OnwR1AIjSe6ZydkIa3Kz1VyahxtIFRI9xGP4fX7sd0gxjWVnP+LNvCWBBoF9kyLjW4k6p3vIP/Nkx5TklNQ6iaoRM7Id49sSeH5H8F2pyzwJ/dcV1oMe9yl5GrbHfETc4IABddJnhmjTAFVcPWz8bYxlGIufNtgLLhSa4PWTgKKbGvYOtRx3jMGA59y1yWgZMzhTQP7qxBlKeRqz6XT18/UNwwDT+C0IfkCInUP4gBr55/YvzkdrNPN/N9kwZP96f9b9H33x+j3RGV/aNDiagZ2R3RD8DYn7DH0qcUEi/EEe9i7tp5Y9EYUzFGxaZe4C25TQ8GEiN+kQOC3Iva62DN/uT03GIY1zM8CYAS8vVncUBP7+yOR527b9Ap00r2lsqQWdcq55UTkVngIKRdEvdNY/zE2oDsoboB/CtIgQzYXhlRZo5bAlHJd17PvSuga154cGyXCHGgVVahmvn7JXiTQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(396003)(346002)(39860400002)(136003)(376002)(451199015)(36756003)(86362001)(66476007)(186003)(66556008)(66946007)(316002)(6916009)(8676002)(2616005)(83380400001)(4326008)(41300700001)(6512007)(6506007)(26005)(478600001)(6486002)(38100700002)(5660300002)(4744005)(8936002)(2906002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?hay6GTfL00OxAGzM7EHNT3MeAx+NmoQfAFXTF4fPtgQS3DCYkSbyKGdlo5cK?=
+ =?us-ascii?Q?g/kBkZyCvXk8UCVXldJbVoDg+ZUllw+NeoQmxK5eu59LnLGwQLfzoQQX1F6i?=
+ =?us-ascii?Q?ltsQVnyFDCx4SdTn2VnaTy0Lw0m89GiG80F8JAs/jWaHQwKHJLQpu4Bx8JRS?=
+ =?us-ascii?Q?MQF6LvSxPjHeW57DBegJQcIs+S1ZtaETS5GTxNS+d1IIIzUgUvbUZYVAkhs0?=
+ =?us-ascii?Q?2XqZmRRJ+sLDJgkPzvQ8iAcFhZqWScPn1n9AOUeYhWn7tfhcqbYDcgPW/DRC?=
+ =?us-ascii?Q?BTkhvFEDi3PYx5Lk8oyU7qoG0Z0k8FMqgrPS+2WiA7NZmBPLIoNbjnYW6//N?=
+ =?us-ascii?Q?ktz47f0NyDIQWkRQB1pCO5u9yaA/V7vS/Jiic0o/UUh4qsklp5Tu4f4dmsuZ?=
+ =?us-ascii?Q?IBOMnDTRjFjB07MCk+2GFZ6PGKiGORdZc6DUhc4qaP8MwilkryP96aW5LcDR?=
+ =?us-ascii?Q?+yh+KN7oySBQvcr/ZdU8LJelkc89EJm2n9UyOoacmXMcJxaxcGPDQFA2TDE0?=
+ =?us-ascii?Q?++HkI02tdjdcFzv7grr5Bm4WHJDOmWx3ufxDISYc1Ey3VMbxmH9/bmwK0P6m?=
+ =?us-ascii?Q?vHzdGlGRzQcvVit/9eVgdOjgB7P3CnXaX97SFjfPsi9HUtvrz6QrCZ8tWYS1?=
+ =?us-ascii?Q?FXGOJGx0jxeWfSdJGSeBIsuu/Bk+1d3CbCURcUSbA6hjkTmZRP1CHLyNy2lX?=
+ =?us-ascii?Q?crekpV4jE42FqDJvJWXFGzWLyWvVe8Bt7QeF2HZ1X2++2r1ZdZmvmwhGbomU?=
+ =?us-ascii?Q?Om2BVJ6zgxUeBPTjsKlQkXQlkG16Mjb3mGVBvas6DHu8vaeqnckvxKiYXYla?=
+ =?us-ascii?Q?tix433txluPlSH8PS6FsYC3rgGTkexPm/oypvn+D1JMlsMhbUQ08wGeB3RX9?=
+ =?us-ascii?Q?n0v5cymF6QeqLmMWW0F8bomXk3sYp6/rhW+ME7VmR/NRsBGct+CI5eiE5UyY?=
+ =?us-ascii?Q?gXn1W6zux3HAPoGjqBg5gfoyvvDo+nZL8DAvw/nh77cw7+3TPu3nRXiXmTxv?=
+ =?us-ascii?Q?FxeMC0bTCKJsni65KkDHGEe+W1vHZw3E/AVDWLE39YPlBES9/pFtdNRzBjr2?=
+ =?us-ascii?Q?NDz2PWY0roK6QxIzhfSOwkyVjMK2ZMPySmm18TGXYyJxAUi1E3lgncc5wIrp?=
+ =?us-ascii?Q?djIGmLZXa96/KXtbQWCgDhUAWCP6dUdPjc8/8pEvaYvfalK4fC1pgp5ywlF9?=
+ =?us-ascii?Q?6YEM/XbmI/qRprB0+lccocmv+J7tlzhaZXUElMDpB3RqrCz43fS0vTt+DJQy?=
+ =?us-ascii?Q?Luq9RUz0uuMXP+eMVipluAlIIO9XX0uHboK7miwzi4a81juHxti/AFSFibaf?=
+ =?us-ascii?Q?eH9NIHN9w/uvdUPw/nxk9aFkn/aV+TY3mLZ2qo9kRvy+fqlo2x6YVU33YMIu?=
+ =?us-ascii?Q?GnkOnVVnzF0EUxWxEFtqWpvpIK8x+K5C2WqtUP/HCa5PaxNVVNK0G8zZp/Ms?=
+ =?us-ascii?Q?znocwVTWoOg7I1sxgT6zgkeX/XPOdTlxBnShhHK8XdmR7ajkhmd6gt0EbW6V?=
+ =?us-ascii?Q?p5ZkYjtTzIn39MO4whVsK8s2R+8h7omPlGyOiMmwkPJW6OdMlqkiFVtDZAYz?=
+ =?us-ascii?Q?YcmU8Mke5my+Rwdrw9c=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 228dba4f-4354-4fbc-de88-08dac0bd912a
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Nov 2022 12:42:44.4922
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: kV2g1/uJ17WaYw6bd4tcY5uURIJ+cJjSsjxRJxKUQ1Xwv/CVXI9rR1KU5TULk+oR
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB7131
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 07, 2022 at 11:10:10AM +0900, Naoya Horiguchi wrote:
-> From: Naoya Horiguchi <naoya.horiguchi@nec.com>
-> 
-> The following bug is reported to be triggered when starting X on x86-32
-> system with i915:
-> 
->   [  225.777375] kernel BUG at mm/memory.c:2664!
->   [  225.777391] invalid opcode: 0000 [#1] PREEMPT SMP
->   [  225.777405] CPU: 0 PID: 2402 Comm: Xorg Not tainted 6.1.0-rc3-bdg+ #86
->   [  225.777415] Hardware name:  /8I865G775-G, BIOS F1 08/29/2006
->   [  225.777421] EIP: __apply_to_page_range+0x24d/0x31c
->   [  225.777437] Code: ff ff 8b 55 e8 8b 45 cc e8 0a 11 ec ff 89 d8 83 c4 28 5b 5e 5f 5d c3 81 7d e0 a0 ef 96 c1 74 ad 8b 45 d0 e8 2d 83 49 00 eb a3 <0f> 0b 25 00 f0 ff ff 81 eb 00 00 00 40 01 c3 8b 45 ec 8b 00 e8 76
->   [  225.777446] EAX: 00000001 EBX: c53a3b58 ECX: b5c00000 EDX: c258aa00
->   [  225.777454] ESI: b5c00000 EDI: b5900000 EBP: c4b0fdb4 ESP: c4b0fd80
->   [  225.777462] DS: 007b ES: 007b FS: 00d8 GS: 0033 SS: 0068 EFLAGS: 00010202
->   [  225.777470] CR0: 80050033 CR2: b5900000 CR3: 053a3000 CR4: 000006d0
->   [  225.777479] Call Trace:
->   [  225.777486]  ? i915_memcpy_init_early+0x63/0x63 [i915]
->   [  225.777684]  apply_to_page_range+0x21/0x27
->   [  225.777694]  ? i915_memcpy_init_early+0x63/0x63 [i915]
->   [  225.777870]  remap_io_mapping+0x49/0x75 [i915]
->   [  225.778046]  ? i915_memcpy_init_early+0x63/0x63 [i915]
->   [  225.778220]  ? mutex_unlock+0xb/0xd
->   [  225.778231]  ? i915_vma_pin_fence+0x6d/0xf7 [i915]
->   [  225.778420]  vm_fault_gtt+0x2a9/0x8f1 [i915]
->   [  225.778644]  ? lock_is_held_type+0x56/0xe7
->   [  225.778655]  ? lock_is_held_type+0x7a/0xe7
->   [  225.778663]  ? 0xc1000000
->   [  225.778670]  __do_fault+0x21/0x6a
->   [  225.778679]  handle_mm_fault+0x708/0xb21
->   [  225.778686]  ? mt_find+0x21e/0x5ae
->   [  225.778696]  exc_page_fault+0x185/0x705
->   [  225.778704]  ? doublefault_shim+0x127/0x127
->   [  225.778715]  handle_exception+0x130/0x130
->   [  225.778723] EIP: 0xb700468a
-> 
-> Recently pud_huge() got aware of non-present entry by commit 3a194f3f8ad0
-> ("mm/hugetlb: make pud_huge() and follow_huge_pud() aware of non-present
-> pud entry") to handle some special states of gigantic page.  However, it's
-> overlooked that pud_none() always returns false when running with 2-level
-> paging, and as a result pmd_huge() can return true pointlessly.
-> 
-> Introduce "#if CONFIG_PGTABLE_LEVELS > 2" to pud_huge() to deal with this.
-> 
-> Fixes: 3a194f3f8ad0 ("mm/hugetlb: make pud_huge() and follow_huge_pud() aware of non-present pud entry")
-> Reported-by: Ville Syrjälä <ville.syrjala@linux.intel.com>
-> Signed-off-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
-> Cc: <stable@vger.kernel.org>
+On Mon, Nov 07, 2022 at 11:31:09AM +0800, Qi Zheng wrote:
 
-Works for me.
-Tested-by: Ville Syrjälä <ville.syrjala@linux.intel.com>
-
-> ---
->  arch/x86/mm/hugetlbpage.c | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/arch/x86/mm/hugetlbpage.c b/arch/x86/mm/hugetlbpage.c
-> index 6b3033845c6d..5804bbae4f01 100644
-> --- a/arch/x86/mm/hugetlbpage.c
-> +++ b/arch/x86/mm/hugetlbpage.c
-> @@ -37,8 +37,12 @@ int pmd_huge(pmd_t pmd)
->   */
->  int pud_huge(pud_t pud)
->  {
-> +#if CONFIG_PGTABLE_LEVELS > 2
->  	return !pud_none(pud) &&
->  		(pud_val(pud) & (_PAGE_PRESENT|_PAGE_PSE)) != _PAGE_PRESENT;
-> +#else
-> +	return 0;
-> +#endif
->  }
+> @@ -31,9 +33,9 @@ bool __should_failslab(struct kmem_cache *s, gfp_t gfpflags)
+>  		return false;
 >  
->  #ifdef CONFIG_HUGETLB_PAGE
-> -- 
-> 2.25.1
+>  	if (gfpflags & __GFP_NOWARN)
+> -		failslab.attr.no_warn = true;
+> +		flags |= FAULT_NOWARN;
 
--- 
-Ville Syrjälä
-Intel
+You should add a comment here about why this is required, to avoid
+deadlocking printk
+
+Jason
