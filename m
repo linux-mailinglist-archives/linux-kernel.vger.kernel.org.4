@@ -2,78 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9749161FCC4
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 19:06:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14E4961FCD7
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 19:08:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232711AbiKGSG1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 13:06:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46088 "EHLO
+        id S232519AbiKGSIb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 13:08:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232920AbiKGSGD (ORCPT
+        with ESMTP id S233020AbiKGSIC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 13:06:03 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB6B02A252
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 10:02:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667844168; x=1699380168;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=fDIy9GNTqYrRaEubc/ZHCrZPmxPfpeXIk3PMc/Gyqec=;
-  b=c68OYk9tZSXmJ8jCOPSEpjwn1321r/PurhpVfnV9daOcZvb9QrZVkFSy
-   3evjHV1Rjel6ReUEDVNZAzLEru7EO3NtiYD73V0EfzqKwlupDAhJjGs4K
-   eOjOjrFBJyR/U/euok33o2uiKezamnqsX3rKOFQEk/WOs//jpwobHEQrV
-   btCliQ5A7mT0xAJfCO2OiXoWraaYIOIfmnHy6Klcg614KqW1fafq6+Tdq
-   uZxEGGe/KkCIp7sq3YG0TiEIpGpqmG36qIWRqoMrJ443B9zv5Uopa5wkh
-   Bg3ouLBNFL1QB8QVspisxgFBZ1MD4RKqFqvS/mp/dctfk+r50PnwvDh0R
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10524"; a="290870719"
-X-IronPort-AV: E=Sophos;i="5.96,145,1665471600"; 
-   d="scan'208";a="290870719"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Nov 2022 10:02:48 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10524"; a="741598319"
-X-IronPort-AV: E=Sophos;i="5.96,145,1665471600"; 
-   d="scan'208";a="741598319"
-Received: from peggykes-mobl.amr.corp.intel.com (HELO [10.251.7.244]) ([10.251.7.244])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Nov 2022 10:02:47 -0800
-Message-ID: <b778fcdd-5c20-e897-9d17-1a884172a826@intel.com>
-Date:   Mon, 7 Nov 2022 10:02:44 -0800
+        Mon, 7 Nov 2022 13:08:02 -0500
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11BC52C139;
+        Mon,  7 Nov 2022 10:04:10 -0800 (PST)
+Received: by mail-ej1-x62b.google.com with SMTP id bj12so32222111ejb.13;
+        Mon, 07 Nov 2022 10:04:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Sg0lwZYTU9JWcjNHK3+96CsLpgsQAQHMbXUOoXcTWAw=;
+        b=VgvQeRKGXjpN7rsFy94zWCr9OA0dpnIfL2CawpFJYijveycNO8+9xWYnPS7ZVKjqsJ
+         QU94MOffg+97/ZUT1HNpEf0h9rVGh7CXC3zjQbTVmpbY0SQC0tVZYJlGaGr5M3O8trva
+         iHeRGHHGEoBD9/8ZjrZtiIUElt7yj7rKO/WgaxbUi2XLbns2vr0dej9wz8FmY2oT2GHe
+         IibTpgRZF1ZIPO+acBn94a/vy7DZx0xmBwJ1tyiZr8g3X96PHURRJV7seC/Y7ZTnlYtC
+         7+dkOAoUHGL8DGNPkklXkPipQ5gv9b119vAovISr39kdgAIS+T8h7Q4xDbTQny5dRg/K
+         gQrw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Sg0lwZYTU9JWcjNHK3+96CsLpgsQAQHMbXUOoXcTWAw=;
+        b=7xZWUEV3OHeeOIFofkVtXhxjb5DcZuvskWRY9lhNN890CbHSUFQwRG07BjQKki7Gbn
+         0WWZ7VPe14qadP1H1EVOSPPSND47cMYVDOdzBEXXJixn+YoN9tz3tTiEej8nSAcVJrl1
+         XAL/XWF8SLwOFYHSFQxx+Jyl2HnC68k/4ZdUJh7lVdJhHLQBh6DepmHLUGHpGO5ZmnsQ
+         NjR9nVErrnVOfcKPn0Q3nnq9Q4WS0kCjjfjpUm0aCiKTosYVctQuDb6aQZ7YomQMei4I
+         G5g/u6QvjBHIVmZvtAvXzmOcpISjLxMwBztDrfyk182q4Kq4q/3GcdF+7LaQ2XrC4Zav
+         LLQg==
+X-Gm-Message-State: ACrzQf1X8tmyLjcrgevRweouxEGx8bGxlLzY7HVAFtjs1OvHvxKLMARb
+        17UcChX04X81Pv6GD/GQRezlxnIyTjG3QxNcOy0=
+X-Google-Smtp-Source: AMsMyM7n2WA+ZnLi0QcBe9sJOWeOu60VDFD0EZ1jJifo/fM9/FZPKUKady57RAJ7Z/vjacnBySXxjJd0TDPhpih5svc=
+X-Received: by 2002:a17:907:270b:b0:7ad:ae01:e0d9 with SMTP id
+ w11-20020a170907270b00b007adae01e0d9mr46374041ejk.196.1667844248212; Mon, 07
+ Nov 2022 10:04:08 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCHv11 04/16] x86/mm: Handle LAM on context switch
-Content-Language: en-US
-To:     "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Andy Lutomirski <luto@kernel.org>
-Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
-        Kostya Serebryany <kcc@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Taras Madan <tarasmadan@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Bharata B Rao <bharata@amd.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-References: <20221025001722.17466-1-kirill.shutemov@linux.intel.com>
- <20221025001722.17466-5-kirill.shutemov@linux.intel.com>
- <b38f15de-436e-489c-b8db-9beff4466748@kernel.org>
- <20221107171419.k33qd4rz3tyfrovs@box.shutemov.name>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <20221107171419.k33qd4rz3tyfrovs@box.shutemov.name>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+References: <20221028165921.94487-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <Y17BWPuEcmY7Bba3@spud> <CA+V-a8uKQ8QvYi5qLC9O=QAQN5CxNB7cOTmw4vk+ndB2R8d3nQ@mail.gmail.com>
+ <Y17+pHAg/SBJAEXq@spud> <CA+V-a8t-niCHSWo_CSRSkPS4ND12DAkiwxWxOM1vNn=oBKKd_w@mail.gmail.com>
+In-Reply-To: <CA+V-a8t-niCHSWo_CSRSkPS4ND12DAkiwxWxOM1vNn=oBKKd_w@mail.gmail.com>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Mon, 7 Nov 2022 18:03:41 +0000
+Message-ID: <CA+V-a8utoDSKcZFdtJ0BKwvPfcvf0WVH2Va-Fv_-pKC1FOOVsQ@mail.gmail.com>
+Subject: Re: [PATCH v5 0/7] Add support for Renesas RZ/Five SoC
+To:     Conor Dooley <conor@kernel.org>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Guo Ren <guoren@kernel.org>, Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@rivosinc.com>,
+        Heinrich Schuchardt <heinrich.schuchardt@canonical.com>,
+        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,53 +83,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/7/22 09:14, Kirill A. Shutemov wrote:
-> --- a/arch/x86/mm/tlb.c
-> +++ b/arch/x86/mm/tlb.c
-> @@ -561,7 +561,15 @@ void switch_mm_irqs_off(struct mm_struct *prev, struct mm_struct *next,
->  	if (real_prev == next) {
->  		VM_WARN_ON(this_cpu_read(cpu_tlbstate.ctxs[prev_asid].ctx_id) !=
->  			   next->context.ctx_id);
-> -		VM_WARN_ON(prev_lam != new_lam);
-> +
-> +		/*
-> +		 * 'prev_lam' does not necessary match 'new_lam' here. In case
-> +		 * of race with LAM enabling, the updated 'lam_cr3_mask' can be
-> +		 * been before LAM-enabling IPI kicks in.
-> +		 *
-> +		 * The race is harmless: it is okay to update CR3 with new LAM
-> +		 * mode. The IPI will rewrite CR3 shortly.
-> +		 */
+Hi Conor,
 
-So, let's do something like this in switch_mm_irqs_off():
+On Sun, Oct 30, 2022 at 11:01 PM Lad, Prabhakar
+<prabhakar.csengg@gmail.com> wrote:
+>
+> Hi Conor,
+>
+> On Sun, Oct 30, 2022 at 10:46 PM Conor Dooley <conor@kernel.org> wrote:
+> >
+> > On Sun, Oct 30, 2022 at 10:37:01PM +0000, Lad, Prabhakar wrote:
+> > > Hi Conor,
+> > >
+> > > On Sun, Oct 30, 2022 at 6:24 PM Conor Dooley <conor@kernel.org> wrote:
+> > > >
+> > > > On Fri, Oct 28, 2022 at 05:59:14PM +0100, Prabhakar wrote:
+> > > > > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > > > >
+> > > > > Hi All,
+> > > > >
+> > > > > The RZ/Five microprocessor includes a RISC-V CPU Core (AX45MP Single)
+> > > > > 1.0 GHz, 16-bit DDR3L/DDR4 interface. And it also has many interfaces such
+> > > > > as Gbit-Ether, CAN, and USB 2.0, making it ideal for applications such as
+> > > > > entry-class social infrastructure gateway control and industrial gateway
+> > > > > control.
+> > > > >
+> > > > > This patch series adds initial SoC DTSi support for Renesas RZ/Five
+> > > > > (R9A07G043) SoC. Below is the list of IP blocks enabled in the initial
+> > > > > board DTS which can be used to boot via initramfs on RZ/Five SMARC EVK:
+> > > > > - AX45MP CPU
+> > > > > - CPG
+> > > > > - PINCTRL
+> > > >
+> > > > Hey,
+> > > > Looks like you've got a pair of warnings here from dtbs_check. I tested
+> > > > this on top of 20221028's next, with the three branches below merged in,
+> > > > hopefully my merges aren't the source of them:
+> > > >
+> > > > linux/arch/riscv/boot/dts/renesas/r9a07g043f01-smarc.dtb: pinctrl@11030000: 'interrupt-controller' is a required property
+> > > >         From schema: Documentation/devicetree/bindings/pinctrl/renesas,rzg2l-pinctrl.yaml
+> > > > linux/arch/riscv/boot/dts/renesas/r9a07g043f01-smarc.dtb: pinctrl@11030000: '#interrupt-cells' is a required property
+> > > >         From schema: linux/Documentation/devicetree/bindings/pinctrl/renesas,rzg2l-pinctrl.yaml
+> > > >
+> > > Thanks for the review and test. The warnings above are coming from [0]
+> > > as support for IRQC is missing, once that is added the warnings should
+> > > go away.
+> >
+> > Right. I merged in the stuff in Geert's trees & I don't think I saw any
+> > pending patches in the cover that I missed. Is there something else that
+> > adds the support that's not going to make v6.2? I got rid of all the
+> > dtbs_check warnings for v6.1 and I'd really like to keep things that
+> > way!
+> >
+> Sorry that pacth wasn't posted yet so I hadn't mentioned it in the
+> cover letter. I'll make sure I get it posted asap and merged for v6.2.
+>
+I have got the patches out [0] which will fix the warnings seen above.
 
-		/* Not actually switching mm's */
-		VM_WARN_ON(this_cpu_read(cpu_tlbstate....
+BTW on the riscv patchwork I see status as fail "Patch does not apply
+to for-next" does that mean I need to resend re-basing on your tree?
 
-		/*
-		 * If this races with another thread that enables
-		 * lam, 'new_lam' might not match 'prev_lam'.
-		 */
+[0] https://patchwork.kernel.org/project/linux-renesas-soc/cover/20221107175305.63975-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
 
-Then, in enable_lam_func(), something like this:
-
-	/*
-	 * Update CR3 to get LAM active on the CPU
-	 *
-	 * This might not actually need to update CR3 if a context
-	 * switch happened between updating 'lam_cr3_mask' and
-	 * running this IPI handler.  Update it unconditionally for
-	 * simplicity.
-	 */
-	cr3 = __read_cr3();
-	cr3 &= ~(X86_CR3_LAM_U48 | X86_CR3_LAM_U57);
-	cr3 |= lam_mask;
-	write_cr3(cr3);
-	set_tlbstate_cr3_lam_mask(lam_mask);
-
-
-I'd much rather get folks thinking about IPI races in the IPI handler
-rather than thinking about the IPI handler in the context switch path.
-
-It's kinda silly to be describing the occasional superfluous
-enable_lam_func() activity from switch_mm_irqs_off().
+Cheers,
+Prabhakar
