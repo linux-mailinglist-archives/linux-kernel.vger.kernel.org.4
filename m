@@ -2,147 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD95961FE4E
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 20:11:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 023EB61FE55
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 20:11:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232344AbiKGTLJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 14:11:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46076 "EHLO
+        id S232387AbiKGTLL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 14:11:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232483AbiKGTKp (ORCPT
+        with ESMTP id S232611AbiKGTKt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 14:10:45 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ABF914D25;
-        Mon,  7 Nov 2022 11:10:44 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Mon, 7 Nov 2022 14:10:49 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4DF629C82;
+        Mon,  7 Nov 2022 11:10:48 -0800 (PST)
+Received: from zn.tnic (p200300ea9733e71f329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e71f:329c:23ff:fea6:a903])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2F58DB81670;
-        Mon,  7 Nov 2022 19:10:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52CA7C433D7;
-        Mon,  7 Nov 2022 19:10:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667848241;
-        bh=sx18lClMexihvXvYPtPJeHIqpLhp8A2J1jWg0z5jVbg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gOyZI/DzlYTrvJq8IyKW9aN21QPXmyCHVsV2ItjZ8Y5xhYoHVWt3TMlgK/vHAK37e
-         jrd8qrAhs6/GrH8dw1DX7ur8DuM5BFmgUFeedrmtnZBG+5FPTWQ7kDWKgdsQ8RyRMy
-         rA/T5EwTx+FdSQ0QGkfqKLEUKIza3WMWgtQpn9mlGgLRV2yuySROYr3ves3RGkxcDO
-         b9cWfG4MakMGjLDqxE6fZpFWSe6uR/Aa/L5mT97Y5Pw40wxyI9rZQ/9cig+Cp/yDnk
-         T9lBTESD+FDxVvTfvapnBLFQftoiMU88yaTAxATJVMQ0h6T+UEcbwfQ820V8+VWcKW
-         t8G8hrz97jTfA==
-Date:   Mon, 7 Nov 2022 19:10:35 +0000
-From:   Will Deacon <will@kernel.org>
-To:     Besar Wicaksono <bwicaksono@nvidia.com>
-Cc:     rafael@kernel.org, lenb@kernel.org, catalin.marinas@arm.com,
-        lorenzo.pieralisi@arm.com, guohanjun@huawei.com,
-        sudeep.holla@arm.com, linux-tegra@vger.kernel.org,
-        treding@nvidia.com, jonathanh@nvidia.com, vsethi@nvidia.com,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2] ACPI: ARM Performance Monitoring Unit Table (APMT)
- initial support
-Message-ID: <20221107191034.GB21991@willie-the-truck>
-References: <20220929002834.32664-1-bwicaksono@nvidia.com>
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 5052F1EC0567;
+        Mon,  7 Nov 2022 20:10:47 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1667848247;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=zgafXme/YlkPVTuatr/YKPrpFzsJCUOJ17VfQBIvcIA=;
+        b=YJ2hJxTGDz78MWs+NfxNQAyMXBGKrEZmSid4LJPUTmJhcqkjulwoXe2CRpAhwfWGGNZKQ6
+        6JPQWgbT+W8ye6miqzwlNMJ9vi0JFMbpNL4rbENdJMpKUORXbbOn5W6v74Kv+p7xWGIUiR
+        Qu2rcfVifxdsrSfF/1L0UBDJJRgfyW0=
+Date:   Mon, 7 Nov 2022 20:10:42 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Maxim Levitsky <mlevitsk@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "Chang S. Bae" <chang.seok.bae@intel.com>,
+        Jane Malalane <jane.malalane@citrix.com>,
+        Kees Cook <keescook@chromium.org>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        linux-perf-users@vger.kernel.org,
+        "open list:CRYPTO API" <linux-crypto@vger.kernel.org>
+Subject: Re: [PATCH v2 2/5] x86/cpuid: refactor
+ setup_clear_cpu_cap()/clear_cpu_cap()
+Message-ID: <Y2lYMqLVP+00Rpu5@zn.tnic>
+References: <20220718141123.136106-1-mlevitsk@redhat.com>
+ <20220718141123.136106-3-mlevitsk@redhat.com>
+ <Y1LGkTXCksqAYLHD@zn.tnic>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220929002834.32664-1-bwicaksono@nvidia.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y1LGkTXCksqAYLHD@zn.tnic>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 28, 2022 at 07:28:34PM -0500, Besar Wicaksono wrote:
-> diff --git a/drivers/acpi/arm64/apmt.c b/drivers/acpi/arm64/apmt.c
-> new file mode 100644
-> index 000000000000..f55167ca51e7
-> --- /dev/null
-> +++ b/drivers/acpi/arm64/apmt.c
-> @@ -0,0 +1,177 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * ARM APMT table support.
-> + * Design document number: ARM DEN0117.
-> + *
-> + * Copyright (c) 2022, NVIDIA CORPORATION & AFFILIATES.
-> + *
-> + */
-> +
-> +#define pr_fmt(fmt)	"ACPI: APMT: " fmt
-> +
-> +#include <linux/acpi.h>
-> +#include <linux/acpi_apmt.h>
-> +#include <linux/init.h>
-> +#include <linux/kernel.h>
-> +#include <linux/platform_device.h>
-> +
-> +#define DEV_NAME "arm-cs-arch-pmu"
-> +
-> +/* There can be up to 3 resources: page 0 and 1 address, and interrupt. */
-> +#define DEV_MAX_RESOURCE_COUNT 3
-> +
-> +/* Root pointer to the mapped APMT table */
-> +static struct acpi_table_header *apmt_table;
-> +
-> +static int __init apmt_init_resources(struct resource *res,
-> +					      struct acpi_apmt_node *node)
-> +{
-> +	int irq, trigger;
-> +	int num_res = 0;
-> +
-> +	res[num_res].start = node->base_address0;
-> +	res[num_res].end = node->base_address0 + SZ_4K - 1;
-> +	res[num_res].flags = IORESOURCE_MEM;
-> +
-> +	num_res++;
-> +
-> +	res[num_res].start = node->base_address1;
-> +	res[num_res].end = node->base_address1 + SZ_4K - 1;
-> +	res[num_res].flags = IORESOURCE_MEM;
-> +
-> +	num_res++;
-> +
-> +	if (node->ovflw_irq != 0) {
-> +		trigger = (node->ovflw_irq_flags & ACPI_APMT_OVFLW_IRQ_FLAGS_MODE);
-> +		trigger = (trigger == ACPI_APMT_OVFLW_IRQ_FLAGS_MODE_LEVEL) ?
-> +			ACPI_LEVEL_SENSITIVE : ACPI_EDGE_SENSITIVE;
-> +		irq = acpi_register_gsi(NULL, node->ovflw_irq, trigger,
-> +						ACPI_ACTIVE_HIGH);
-> +
-> +		if (irq <= 0) {
-> +			pr_warn("APMT could not register gsi hwirq %d\n", irq);
-> +			return num_res;
-> +		}
-> +
-> +		res[num_res].start = irq;
-> +		res[num_res].end = irq;
-> +		res[num_res].flags = IORESOURCE_IRQ;
-> +
-> +		num_res++;
-> +	}
-> +
-> +	return num_res;
-> +}
-> +
-> +/**
-> + * apmt_add_platform_device() - Allocate a platform device for APMT node
-> + * @node: Pointer to device ACPI APMT node
-> + *
-> + * Returns: 0 on success, <0 failure
-> + */
-> +static int __init apmt_add_platform_device(struct acpi_apmt_node *node,
-> +							struct fwnode_handle *fwnode)
+On Fri, Oct 21, 2022 at 06:19:29PM +0200, Borislav Petkov wrote:
+> On Mon, Jul 18, 2022 at 05:11:20PM +0300, Maxim Levitsky wrote:
+> > Currently setup_clear_cpu_cap passes NULL 'struct cpuinfo_x86*'
+> > to clear_cpu_cap to indicate that capability should be cleared from boot_cpu_data.
+> > 
+> > Later that is used in clear_feature to do recursive call to
+> > clear_cpu_cap together with clearing the feature bit from 'cpu_caps_cleared'
+> > 
+> > Remove that code and just call the do_clear_cpu_cap on boot_cpu_data directly
+> > from the setup_clear_cpu_cap.
+> > 
+> > The only functional change this introduces is that now calling clear_cpu_cap
+> > explicitly on boot_cpu_data also sets the bits in cpu_caps_cleared,
+> > which is the only thing that makes sense anyway.
+> > 
+> > All callers of both functions were checked for this and fixed.
+> 
+> Change looks ok. What I can't grok is this sentence: what was checked
+> and fixed where?
 
-I queued this already, but my testing kicked up a nit that 'fwnode' is not
-described in the kerneldoc. Please can you send a follow-up fix for that,
-based on for-next/acpi? The indentation is also pretty weird with extra
-parameter.
+Ok, I think I know what you mean. That:
 
-Will
+git grep -E "clear_cpu_cap.*boot"
+arch/x86/events/intel/lbr.c:1599:       clear_cpu_cap(&boot_cpu_data, X86_FEATURE_ARCH_LBR);
+arch/x86/kernel/alternative.c:746:              clear_cpu_cap(&boot_cpu_data, X86_FEATURE_UP);
+
+Right, so here's the difference:
+
+When you call setup_clear_cpu_cap(), it basically means, to disable the
+cap on *every* CPU. This is done with cpu_caps_cleared which gets ANDed
+in in apply_forced_caps().
+
+clear_cpu_cap() clears the bit *only* in the first parameter supplied.
+
+Now, that first parameter can be boot_cpu_data too but then, strictly
+speaking, clear_cpu_cap() would really do what you want it to do - to
+clear it only in its first param.
+
+If you really want to enforce that bit cleared everywhere, you need to
+use the setup_* variant.
+
+So this patch is actually incorrect but I admit, the CPU caps handling
+are kinda subtle and probably need cleaning.
+
+Lemme document it so that it is at least clear. Who knows, we might end
+up improving it in the process.
+
+:-)
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
