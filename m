@@ -2,85 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CEDF61FCA7
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 19:03:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B089C61FCB2
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 19:05:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233015AbiKGSDv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 13:03:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40442 "EHLO
+        id S232701AbiKGSFL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 13:05:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233278AbiKGSCR (ORCPT
+        with ESMTP id S233026AbiKGSEt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 13:02:17 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 23F03248FF
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 09:59:03 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C4F471FB;
-        Mon,  7 Nov 2022 09:59:08 -0800 (PST)
-Received: from [10.34.100.128] (pierre123.nice.arm.com [10.34.100.128])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7B0C23F534;
-        Mon,  7 Nov 2022 09:59:01 -0800 (PST)
-Message-ID: <e5fe39f3-d000-5c07-a76c-044a3ac8dda5@arm.com>
-Date:   Mon, 7 Nov 2022 18:58:55 +0100
+        Mon, 7 Nov 2022 13:04:49 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9AD224F26;
+        Mon,  7 Nov 2022 10:00:43 -0800 (PST)
+Received: from zn.tnic (p200300ea9733e71f329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e71f:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 49F851EC059D;
+        Mon,  7 Nov 2022 19:00:42 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1667844042;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=UkSYnjmUQupdoESl0cYE22dAydPPeLNDAdR5Iz0pnhU=;
+        b=bXNIbKBf++r6UJZ1YxkMPFeTEsnxN+C6+C+eLrtUPptX7sJ1W2m3VuISpp81WPCK4PTYdm
+        mK9DduVUBLvg9bqJuQ6msgSIq572Li4j8FEI7OJElPzWdein5uvqIVmWrwPB6EpjLMZqtf
+        Xphdp9jPHy+GLhx1wExdY8rJG2XIe+E=
+Date:   Mon, 7 Nov 2022 19:00:37 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
+Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        John Allen <john.allen@amd.com>, kcc@google.com,
+        eranian@google.com, rppt@kernel.org, jamorris@linux.microsoft.com,
+        dethoma@microsoft.com, akpm@linux-foundation.org,
+        Yu-cheng Yu <yu-cheng.yu@intel.com>
+Subject: Re: [PATCH v3 04/37] x86/cpufeatures: Enable CET CR4 bit for shadow
+ stack
+Message-ID: <Y2lHxb5BnbQi499s@zn.tnic>
+References: <20221104223604.29615-1-rick.p.edgecombe@intel.com>
+ <20221104223604.29615-5-rick.p.edgecombe@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v2 06/23] arm64: dts: Update cache properties for broadcom
-Content-Language: en-US
-To:     Florian Fainelli <f.fainelli@gmail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        William Zhang <william.zhang@broadcom.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-References: <20221107155825.1644604-1-pierre.gondois@arm.com>
- <20221107155825.1644604-7-pierre.gondois@arm.com>
- <8ee17547-30ef-bc85-b163-f0d9efe70fcc@gmail.com>
-From:   Pierre Gondois <pierre.gondois@arm.com>
-In-Reply-To: <8ee17547-30ef-bc85-b163-f0d9efe70fcc@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20221104223604.29615-5-rick.p.edgecombe@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Nov 04, 2022 at 03:35:31PM -0700, Rick Edgecombe wrote:
+>  static __always_inline void setup_cet(struct cpuinfo_x86 *c)
+>  {
+> -	u64 msr = CET_ENDBR_EN;
+> +	bool kernel_ibt = HAS_KERNEL_IBT && cpu_feature_enabled(X86_FEATURE_IBT);
+> +	bool user_shstk;
+> +	u64 msr = 0;
+>  
+> -	if (!HAS_KERNEL_IBT ||
+> -	    !cpu_feature_enabled(X86_FEATURE_IBT))
+> +	/*
+> +	 * Enable user shadow stack only if the Linux defined user shadow stack
+> +	 * cap was not cleared by command line.
+> +	 */
+> +	user_shstk = cpu_feature_enabled(X86_FEATURE_SHSTK) &&
+> +		     IS_ENABLED(CONFIG_X86_USER_SHADOW_STACK) &&
+> +		     !test_bit(X86_FEATURE_USER_SHSTK, (unsigned long *)cpu_caps_cleared);
 
+Huh, why poke at cpu_caps_cleared? 
 
-On 11/7/22 18:31, Florian Fainelli wrote:
-> (way too many recipients, gmail's SMTP server would not allow me to
-> respond unless I moved most people to BCC now done).
-> 
-> On 11/7/22 07:56, Pierre Gondois wrote:
->> The DeviceTree Specification v0.3 specifies that the cache node
->> 'compatible' and 'cache-level' properties are 'required'. Cf.
->> s3.8 Multi-level and Shared Cache Nodes
->> The 'cache-unified' property should be present if one of the
->> properties for unified cache is present ('cache-size', ...).
->>
->> Update the Device Trees accordingly.
->>
->> Signed-off-by: Pierre Gondois <pierre.gondois@arm.com>
->> Acked-by: William Zhang <william.zhang@broadcom.com>
-> 
-> This looks fine, but incomplete, you seem to have missed:
-> 
-> - adding 'cache-unified' to all of the cache nodes modified in this
-> patch set that did not have one already
-> 
-> - bcm63148.dtsi, bcm63178.dtsi, bcm6756.dtsi, bcm6846.dtsi,
-> bcm6855.dtsi, bcm6878.dtsi, bcm47622.dtsi
-> 
-> Thanks
+Look below:
 
-I indeed forgot to update some platforms in the broadcom folder.
-The other folders should be complete.
+> +	if (!kernel_ibt && !user_shstk)
+>  		return;
+>  
+> +	if (user_shstk)
+> +		set_cpu_cap(c, X86_FEATURE_USER_SHSTK);
+> +
+> +	if (kernel_ibt)
+> +		msr = CET_ENDBR_EN;
+> +
+>  	wrmsrl(MSR_IA32_S_CET, msr);
+>  	cr4_set_bits(X86_CR4_CET);
+>  
+> -	if (!ibt_selftest()) {
+> +	if (kernel_ibt && !ibt_selftest()) {
+>  		pr_err("IBT selftest: Failed!\n");
+>  		setup_clear_cpu_cap(X86_FEATURE_IBT);
+>  		return;
+>  	}
+>  }
+> +#else /* CONFIG_X86_CET */
+> +static inline void setup_cet(struct cpuinfo_x86 *c) {}
+> +#endif
+>  
+>  __noendbr void cet_disable(void)
+>  {
+> -	if (cpu_feature_enabled(X86_FEATURE_IBT))
+> -		wrmsrl(MSR_IA32_S_CET, 0);
+> +	if (!(cpu_feature_enabled(X86_FEATURE_IBT) ||
+> +	      cpu_feature_enabled(X86_FEATURE_SHSTK)))
+> +		return;
+> +
+> +	wrmsrl(MSR_IA32_S_CET, 0);
+> +	wrmsrl(MSR_IA32_U_CET, 0);
 
-Regards,
-Pierre
+Here you need to do
+
+	setup_clear_cpu_cap(X86_FEATURE_IBT);
+	setup_clear_cpu_cap(X86_FEATURE_SHSTK);
+
+and then the cpu_feature_enabled() test above alone should suffice.
+
+But, before you do that, I'd like to ask you to update your patchset
+ontop of tip/master because the conflicts are getting non-trivial. This
+one doesn't even want to apply with a large fuzz:
+
+$ patch -p1 --dry-run -F20 -i /tmp/new
+checking file arch/x86/kernel/cpu/common.c
+Hunk #1 FAILED at 596.
+1 out of 1 hunk FAILED
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
