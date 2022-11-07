@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F71C61F87E
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 17:10:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1986861F890
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 17:11:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232211AbiKGQKI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 11:10:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34250 "EHLO
+        id S232692AbiKGQLg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 11:11:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231302AbiKGQKF (ORCPT
+        with ESMTP id S232579AbiKGQLc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 11:10:05 -0500
+        Mon, 7 Nov 2022 11:11:32 -0500
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 10689A186;
-        Mon,  7 Nov 2022 08:10:04 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B4C7B2019C;
+        Mon,  7 Nov 2022 08:11:31 -0800 (PST)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 00EA4139F;
-        Mon,  7 Nov 2022 08:10:10 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7B33D113E;
+        Mon,  7 Nov 2022 08:11:37 -0800 (PST)
 Received: from pierre123.arm.com (pierre123.nice.arm.com [10.34.100.128])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id C7D3F3F534;
-        Mon,  7 Nov 2022 08:09:48 -0800 (PST)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 105343F534;
+        Mon,  7 Nov 2022 08:11:15 -0800 (PST)
 From:   Pierre Gondois <pierre.gondois@arm.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Pierre Gondois <pierre.gondois@arm.com>,
@@ -86,31 +86,34 @@ Cc:     Pierre Gondois <pierre.gondois@arm.com>,
         Tero Kristo <kristo@kernel.org>,
         Viorel Suman <viorel.suman@nxp.com>,
         Abel Vesa <abelvesa@kernel.org>,
+        Zhou Peng <eagle.zhou@nxp.com>,
+        Shijie Qin <shijie.qin@nxp.com>, Ming Qian <ming.qian@nxp.com>,
+        Peng Fan <peng.fan@nxp.com>,
         Shenwei Wang <shenwei.wang@nxp.com>,
-        Ming Qian <ming.qian@nxp.com>, Peng Fan <peng.fan@nxp.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
         Adam Ford <aford173@gmail.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
         Tim Harvey <tharvey@gateworks.com>, Li Jun <jun.li@nxp.com>,
         Richard Zhu <hongxing.zhu@nxp.com>,
-        Marek Vasut <marex@denx.de>,
         Markus Niebel <Markus.Niebel@ew.tq-group.com>,
+        Marco Felsch <m.felsch@pengutronix.de>,
+        Marek Vasut <marex@denx.de>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
         Joakim Zhang <qiangqing.zhang@nxp.com>,
         Paul Elder <paul.elder@ideasonboard.com>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
         Martin Kepplinger <martink@posteo.de>,
         David Heidelberg <david@ixit.cz>,
         Liu Ying <victor.liu@nxp.com>,
         Oliver Graute <oliver.graute@kococonnector.com>,
-        Shijie Qin <shijie.qin@nxp.com>,
+        Ahmad Fatoum <a.fatoum@pengutronix.de>,
         Clark Wang <xiaoning.wang@nxp.com>,
-        Jacky Bai <ping.bai@nxp.com>, Wei Fang <wei.fang@nxp.com>,
+        Jacky Bai <ping.bai@nxp.com>,
         Chris Packham <chris.packham@alliedtelesis.co.nz>,
         Vadym Kochan <vadym.kochan@plvision.eu>,
         Sameer Pujar <spujar@nvidia.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
         Prathamesh Shete <pshete@nvidia.com>,
         Akhil R <akhilrajeev@nvidia.com>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
         Sumit Gupta <sumitg@nvidia.com>,
         Diogo Ivo <diogo.ivo@tecnico.ulisboa.pt>,
         Vidya Sagar <vidyas@nvidia.com>,
@@ -120,8 +123,8 @@ Cc:     Pierre Gondois <pierre.gondois@arm.com>,
         Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
         Aswani Reddy <aswani.reddy@samsung.com>,
         Shashank Prashar <s.prashar@samsung.com>,
-        Ajay Kumar <ajaykumar.rs@samsung.com>,
-        devicetree@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
+        Arnd Bergmann <arnd@arndb.de>, devicetree@vger.kernel.org,
+        linux-rpi-kernel@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org,
         linux-amlogic@lists.infradead.org,
         linux-samsung-soc@vger.kernel.org,
@@ -130,9 +133,9 @@ Cc:     Pierre Gondois <pierre.gondois@arm.com>,
         linux-realtek-soc@lists.infradead.org,
         linux-renesas-soc@vger.kernel.org,
         linux-rockchip@lists.infradead.org
-Subject: [PATCH v2 04/23] arm64: dts: Update cache properties for apm
-Date:   Mon,  7 Nov 2022 16:56:57 +0100
-Message-Id: <20221107155825.1644604-5-pierre.gondois@arm.com>
+Subject: [PATCH v2 05/23] arm64: dts: Update cache properties for arm
+Date:   Mon,  7 Nov 2022 16:56:58 +0100
+Message-Id: <20221107155825.1644604-6-pierre.gondois@arm.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221107155825.1644604-1-pierre.gondois@arm.com>
 References: <20221107155825.1644604-1-pierre.gondois@arm.com>
@@ -156,53 +159,118 @@ Update the Device Trees accordingly.
 
 Signed-off-by: Pierre Gondois <pierre.gondois@arm.com>
 ---
- arch/arm64/boot/dts/apm/apm-shadowcat.dtsi | 4 ++++
- arch/arm64/boot/dts/apm/apm-storm.dtsi     | 4 ++++
- 2 files changed, 8 insertions(+)
+ arch/arm64/boot/dts/arm/corstone1000.dtsi            | 1 +
+ arch/arm64/boot/dts/arm/foundation-v8.dtsi           | 1 +
+ arch/arm64/boot/dts/arm/juno-r1.dts                  | 2 ++
+ arch/arm64/boot/dts/arm/juno-r2.dts                  | 2 ++
+ arch/arm64/boot/dts/arm/juno.dts                     | 2 ++
+ arch/arm64/boot/dts/arm/rtsm_ve-aemv8a.dts           | 1 +
+ arch/arm64/boot/dts/arm/vexpress-v2f-1xv7-ca53x2.dts | 1 +
+ 7 files changed, 10 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/apm/apm-shadowcat.dtsi b/arch/arm64/boot/dts/apm/apm-shadowcat.dtsi
-index a8526f8157ec..68ba865fcd58 100644
---- a/arch/arm64/boot/dts/apm/apm-shadowcat.dtsi
-+++ b/arch/arm64/boot/dts/apm/apm-shadowcat.dtsi
-@@ -97,15 +97,19 @@ cpu@301 {
- 		};
- 		xgene_L2_0: l2-cache-0 {
- 			compatible = "cache";
-+			cache-level = <2>;
- 		};
- 		xgene_L2_1: l2-cache-1 {
- 			compatible = "cache";
-+			cache-level = <2>;
- 		};
- 		xgene_L2_2: l2-cache-2 {
- 			compatible = "cache";
-+			cache-level = <2>;
- 		};
- 		xgene_L2_3: l2-cache-3 {
+diff --git a/arch/arm64/boot/dts/arm/corstone1000.dtsi b/arch/arm64/boot/dts/arm/corstone1000.dtsi
+index 4e46826f883a..21f1f952e985 100644
+--- a/arch/arm64/boot/dts/arm/corstone1000.dtsi
++++ b/arch/arm64/boot/dts/arm/corstone1000.dtsi
+@@ -53,6 +53,7 @@ gic: interrupt-controller@1c000000 {
+ 
+ 	L2_0: l2-cache0 {
+ 		compatible = "cache";
++		cache-unified;
+ 		cache-level = <2>;
+ 		cache-size = <0x80000>;
+ 		cache-line-size = <64>;
+diff --git a/arch/arm64/boot/dts/arm/foundation-v8.dtsi b/arch/arm64/boot/dts/arm/foundation-v8.dtsi
+index 83e3e7e3984f..c8bd23b1a7ba 100644
+--- a/arch/arm64/boot/dts/arm/foundation-v8.dtsi
++++ b/arch/arm64/boot/dts/arm/foundation-v8.dtsi
+@@ -58,6 +58,7 @@ cpu3: cpu@3 {
+ 
+ 		L2_0: l2-cache0 {
  			compatible = "cache";
 +			cache-level = <2>;
  		};
  	};
  
-diff --git a/arch/arm64/boot/dts/apm/apm-storm.dtsi b/arch/arm64/boot/dts/apm/apm-storm.dtsi
-index f56d687f772d..9ac7417f65eb 100644
---- a/arch/arm64/boot/dts/apm/apm-storm.dtsi
-+++ b/arch/arm64/boot/dts/apm/apm-storm.dtsi
-@@ -81,15 +81,19 @@ cpu@301 {
- 		};
- 		xgene_L2_0: l2-cache-0 {
+diff --git a/arch/arm64/boot/dts/arm/juno-r1.dts b/arch/arm64/boot/dts/arm/juno-r1.dts
+index 6451c62146fd..1d90eeebb37d 100644
+--- a/arch/arm64/boot/dts/arm/juno-r1.dts
++++ b/arch/arm64/boot/dts/arm/juno-r1.dts
+@@ -189,6 +189,7 @@ A53_3: cpu@103 {
+ 
+ 		A57_L2: l2-cache0 {
+ 			compatible = "cache";
++			cache-unified;
+ 			cache-size = <0x200000>;
+ 			cache-line-size = <64>;
+ 			cache-sets = <2048>;
+@@ -197,6 +198,7 @@ A57_L2: l2-cache0 {
+ 
+ 		A53_L2: l2-cache1 {
+ 			compatible = "cache";
++			cache-unified;
+ 			cache-size = <0x100000>;
+ 			cache-line-size = <64>;
+ 			cache-sets = <1024>;
+diff --git a/arch/arm64/boot/dts/arm/juno-r2.dts b/arch/arm64/boot/dts/arm/juno-r2.dts
+index 438cd1ff4bd0..d2ada69b0a43 100644
+--- a/arch/arm64/boot/dts/arm/juno-r2.dts
++++ b/arch/arm64/boot/dts/arm/juno-r2.dts
+@@ -195,6 +195,7 @@ A53_3: cpu@103 {
+ 
+ 		A72_L2: l2-cache0 {
+ 			compatible = "cache";
++			cache-unified;
+ 			cache-size = <0x200000>;
+ 			cache-line-size = <64>;
+ 			cache-sets = <2048>;
+@@ -203,6 +204,7 @@ A72_L2: l2-cache0 {
+ 
+ 		A53_L2: l2-cache1 {
+ 			compatible = "cache";
++			cache-unified;
+ 			cache-size = <0x100000>;
+ 			cache-line-size = <64>;
+ 			cache-sets = <1024>;
+diff --git a/arch/arm64/boot/dts/arm/juno.dts b/arch/arm64/boot/dts/arm/juno.dts
+index cf4a58211399..5e48a01a5b9f 100644
+--- a/arch/arm64/boot/dts/arm/juno.dts
++++ b/arch/arm64/boot/dts/arm/juno.dts
+@@ -194,6 +194,7 @@ A53_3: cpu@103 {
+ 
+ 		A57_L2: l2-cache0 {
+ 			compatible = "cache";
++			cache-unified;
+ 			cache-size = <0x200000>;
+ 			cache-line-size = <64>;
+ 			cache-sets = <2048>;
+@@ -202,6 +203,7 @@ A57_L2: l2-cache0 {
+ 
+ 		A53_L2: l2-cache1 {
+ 			compatible = "cache";
++			cache-unified;
+ 			cache-size = <0x100000>;
+ 			cache-line-size = <64>;
+ 			cache-sets = <1024>;
+diff --git a/arch/arm64/boot/dts/arm/rtsm_ve-aemv8a.dts b/arch/arm64/boot/dts/arm/rtsm_ve-aemv8a.dts
+index 258991ad7cc0..ef68f5aae7dd 100644
+--- a/arch/arm64/boot/dts/arm/rtsm_ve-aemv8a.dts
++++ b/arch/arm64/boot/dts/arm/rtsm_ve-aemv8a.dts
+@@ -71,6 +71,7 @@ cpu@3 {
+ 
+ 		L2_0: l2-cache0 {
  			compatible = "cache";
 +			cache-level = <2>;
  		};
- 		xgene_L2_1: l2-cache-1 {
- 			compatible = "cache";
-+			cache-level = <2>;
- 		};
- 		xgene_L2_2: l2-cache-2 {
- 			compatible = "cache";
-+			cache-level = <2>;
- 		};
- 		xgene_L2_3: l2-cache-3 {
+ 	};
+ 
+diff --git a/arch/arm64/boot/dts/arm/vexpress-v2f-1xv7-ca53x2.dts b/arch/arm64/boot/dts/arm/vexpress-v2f-1xv7-ca53x2.dts
+index 5b6d9d8e934d..796cd7d02eb5 100644
+--- a/arch/arm64/boot/dts/arm/vexpress-v2f-1xv7-ca53x2.dts
++++ b/arch/arm64/boot/dts/arm/vexpress-v2f-1xv7-ca53x2.dts
+@@ -57,6 +57,7 @@ cpu@1 {
+ 
+ 		L2_0: l2-cache0 {
  			compatible = "cache";
 +			cache-level = <2>;
  		};
