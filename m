@@ -2,132 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DB9F61F620
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 15:34:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CBED61F623
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 15:34:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232038AbiKGOeS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 09:34:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46114 "EHLO
+        id S232435AbiKGOef (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 09:34:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232481AbiKGOdw (ORCPT
+        with ESMTP id S231602AbiKGOeO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 09:33:52 -0500
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3E286448
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 06:33:32 -0800 (PST)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.nyi.internal (Postfix) with ESMTP id 86B975C0176;
-        Mon,  7 Nov 2022 09:33:30 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Mon, 07 Nov 2022 09:33:30 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        cc:cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1667831610; x=
-        1667918010; bh=BjJnberaFPu4tZv9skyQ3hu0t7GFddFpNxu474a2Huk=; b=e
-        rlcKb7LuKGtVk7EOLWHf2CSMjy/mo5HYXjY2eyvC3KWafvHsEoyuwI6I0DP8rBq+
-        ccqmtLctcUbqR09xJUeAQfojmTy4QJkjiymlboPiS3aBSBEGwrd/kloNkgHhHTOP
-        O1sBBuYPgur4eYwfnYN1INwoDlMy/FplF50Yj2cvWXzti5l89gXp73OtJEUPUTZh
-        ji7VypB667afJrnTcThRiW1El6wysDU7crsV6R79VLzs3ekksZRaCsQaE8awiAwM
-        I1hRh8BIE4t3LJhvl6CrZqkPvKstHwuPp1EyT57aZHiPCi8MUt9zxnCHEFAPysDm
-        XUZ39hSLv3t4AKF7K1D/g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1667831610; x=
-        1667918010; bh=BjJnberaFPu4tZv9skyQ3hu0t7GFddFpNxu474a2Huk=; b=f
-        DIw4Kj9pJCHEsqbZDT5gjrT4rPnVMyT40y3XXRHe/0VlqxJPMvn8WpZGmylp/Ggs
-        e/DeJVs2mrU/My2wH/GXqFIr8r4lumoJnJoocizqBQEyqOAYZtKUHPGfakXFHdHJ
-        lvHFFK6357FIT7xA5Qu/rkTvnXnKsKhJkxoRl7imnd2Qo+8I/LppNliPT/o2TAhy
-        7LStb3KXth9bAbXxFRX1gx+mpnCNG/rYVV6QVP6VW/0pNqg9wFg30TXGWnujX2lF
-        nzk118vXWW93UQm/3uA+U+PAClCgtQ/wLuMUosioBOpcErfT4A+VS4ZA775vWhic
-        LcDSpwsH02LX132pRFxrQ==
-X-ME-Sender: <xms:ORdpY8KIty8crBmCcjBFGSZNne55ZaBK1KmxH37zPOoD_7X8lWbuTg>
-    <xme:ORdpY8Ki0cx9pZ_XBCU5NdFH8kKhdvTfed4wVmaWH3SL8qWM3R87mK3xjom5D9glU
-    Qdr1k1Y0x3PtFTSAQ>
-X-ME-Received: <xmr:ORdpY8vwtMsuir4Wgx7nejUuTCZ7x1HrG_iEo_VkDikQBad7_ZP2yQlH8oGrzL4lkdghIj9jNEEUordyBkJ-ZH-hRt6SEff035CDFsh9DAzajGFwi7plqkSAqA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrvdekgdeigecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefkffggfgfuvfevfhfhjggtgfesthejredttdefjeenucfhrhhomhepufgrmhhu
-    vghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecugg
-    ftrfgrthhtvghrnhepkeejleelfeeitdfhtdfgkeeghedufeduueegffdvhfdukeelleef
-    tdetjeehuddtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
-    homhepshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
-X-ME-Proxy: <xmx:ORdpY5ZUaJZ07-rfMmNRyNTmcA4OHd-lzi_4dWP-Y7v1UIRt3X2nEQ>
-    <xmx:ORdpYzaM9hB17RmoSn8tyvgS-F6ZmLoN8NGkqSVQ2EoTYQvGvuEN5A>
-    <xmx:ORdpY1DToFG2c9c1TuZaxvGRLbuljr44qpJQu8Mx90EabNNBGHP74w>
-    <xmx:OhdpY-yBGdmeBY34Ymc_aXbcK6G_cqaKqcvRfLZdyMf7Yr0WyiQdAw>
-Feedback-ID: i0ad843c9:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 7 Nov 2022 09:33:28 -0500 (EST)
-Message-ID: <0fe5680d-a41b-3c03-72a4-1a505788a9cc@sholland.org>
-Date:   Mon, 7 Nov 2022 08:33:27 -0600
+        Mon, 7 Nov 2022 09:34:14 -0500
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A71E21D0DE
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 06:33:52 -0800 (PST)
+Received: by mail-lf1-x136.google.com with SMTP id j4so17075495lfk.0
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 06:33:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=kUuozjWJK2/rL8jydSa75kSlVHyBIRHKnWnX8IibZdI=;
+        b=a63VNHxyH1PYuH/fCGaI2yxhpNerLg9xaWbyXCB34s3cWtMhA3XaC65eeLTpnjtqDg
+         1UDeRith8fE1SKEY+KNPDRkMIgTndYqbL5+A9lg8cFeniC1KX4xxYJQH7iPrwbybte4a
+         xqpAjv1l/vUM7pWC9rkI7FDHeJN8qZTp7ZDILMmtlXeRZZWotv5yauWnbuwPERyAPuzZ
+         R9+iAqPwC96xt9t/5AfbR93js5XFn5zgZo8Y6sreUtw0/T25i4vAw63D5rKLaTaPgF00
+         ePTH+2qxVHTJYYGkeENi9f0sHDY41wFB1pbypS5ek6RvGYzlQm2kSrJMYR0F8rYx4M6k
+         od9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=kUuozjWJK2/rL8jydSa75kSlVHyBIRHKnWnX8IibZdI=;
+        b=KQeT37EwRhmCM5iUvRhlIHevqaeeEe4Cz+DuKY/Ta4IcyTCRbgEQbmkyQeoru/RSC7
+         l5xATrJAk9Ryn+/aJKXqAoIBAOfM/K7rValn9oW6D01MQKW2/4O/aVJlRTFUOgBrlUmn
+         uBuvzURqtHJC45QymgkOiP4ChNip60B9iVIZOPW/cbS5A32eIpjpV/uapqsjYTld6WHk
+         QmOvEqw2Nq5PmVYOn2lhU6mRX16HFOnYQESTSa9vZRrc1nYnB8SUJ9pMT2AbE6QFwrCH
+         /2hv44KBjggO6y4IChF3Nsi/RCESKZqloeA6Tq1DK+gQX/CS9pevmKYFqP0EjvdxPbX7
+         elzw==
+X-Gm-Message-State: ACrzQf3/NqmaDJT2gYXwMa4xJ8/Z//QIcVyiJg6ldsws0hMaif9RwlML
+        vbasSABCVdKdTeC0xx6S0aPbaQ==
+X-Google-Smtp-Source: AMsMyM4wKRcZg5aUnzZa9vxE9pF4C+zjDXbo9H+0j3GiLP9O017cisStK57GfJ9Y2pLoplwY9KVY/A==
+X-Received: by 2002:a05:6512:228b:b0:4a2:3e53:4af2 with SMTP id f11-20020a056512228b00b004a23e534af2mr17163113lfu.280.1667831631021;
+        Mon, 07 Nov 2022 06:33:51 -0800 (PST)
+Received: from [192.168.0.20] (088156142199.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.199])
+        by smtp.gmail.com with ESMTPSA id g4-20020a056512118400b00497a1f92a72sm1269818lfr.221.2022.11.07.06.33.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 07 Nov 2022 06:33:50 -0800 (PST)
+Message-ID: <c0ffd719-f1d6-9a2f-acb0-b777d9758397@linaro.org>
+Date:   Mon, 7 Nov 2022 15:33:48 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux ppc64le; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [PATCH] mfd: axp20x: Do not sleep in the power off handler
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v11 2/2] arm64: dts: qcom: sagit: add initial device tree
+ for sagit
 Content-Language: en-US
-To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        Chen-Yu Tsai <wens@csie.org>, Lee Jones <lee@kernel.org>
-Cc:     =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        linux-kernel@vger.kernel.org
-References: <20221105212909.6526-1-samuel@sholland.org>
- <a3488b0c-dbc7-0109-8ba7-9f319f018e22@collabora.com>
-From:   Samuel Holland <samuel@sholland.org>
-In-Reply-To: <a3488b0c-dbc7-0109-8ba7-9f319f018e22@collabora.com>
+To:     Dzmitry Sankouski <dsankouski@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Kees Cook <keescook@chromium.org>,
+        Anton Vorontsov <anton@enomsg.org>,
+        Colin Cross <ccross@android.com>,
+        Tony Luck <tony.luck@intel.com>,
+        "open list:ARM/QUALCOMM SUPPORT" <linux-arm-msm@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>
+References: <20221102155558.1895829-1-dsankouski@gmail.com>
+ <20221102155558.1895829-3-dsankouski@gmail.com>
+ <1a8bab07-46c4-1585-45ff-8780c02afd4e@linaro.org>
+ <CABTCjFBth=jON-uuMU54cQi3zDcGYtGMbpaKitc1WHx+ciNiRQ@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CABTCjFBth=jON-uuMU54cQi3zDcGYtGMbpaKitc1WHx+ciNiRQ@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/6/22 16:40, Dmitry Osipenko wrote:
-> On 11/6/22 00:29, Samuel Holland wrote:
->> Since commit 856c288b0039 ("ARM: Use do_kernel_power_off()"), the
->> function axp20x_power_off() now runs inside a RCU read-side critical
->> section, so it is not allowed to call msleep(). Use mdelay() instead.
->>
->> Fixes: 856c288b0039 ("ARM: Use do_kernel_power_off()")
->> Signed-off-by: Samuel Holland <samuel@sholland.org>
->> ---
->>
->>  drivers/mfd/axp20x.c | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/mfd/axp20x.c b/drivers/mfd/axp20x.c
->> index 88a212a8168c..880c41fa7021 100644
->> --- a/drivers/mfd/axp20x.c
->> +++ b/drivers/mfd/axp20x.c
->> @@ -842,7 +842,7 @@ static void axp20x_power_off(void)
->>  		     AXP20X_OFF);
->>  
->>  	/* Give capacitors etc. time to drain to avoid kernel panic msg. */
->> -	msleep(500);
->> +	mdelay(500);
->>  }
->>  
->>  int axp20x_match_device(struct axp20x_dev *axp20x)
+On 07/11/2022 15:24, Dzmitry Sankouski wrote:
+> Is the master branch of
+> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+> proper rebase?
+
+Yes, next/master is ok.
+
+> Or do I need to search and apply device tree doc patches somehow
+> before running dtbs_check?
+> I rebased on linux-next/master, and my dts is ok.
 > 
-> ARM was doing local_irq_disable() on power-off before
-> do_kernel_power_off() was introduced, so this should've been incorrect
-> for a couple years at least. If I'm not missing anything.
+> A lot of warnings for msm8998.dtsi, though. I think it should be fixed
+> in a separate patch series.
 
-Yes, you're right. Then the correct tag is
+Your DTS is not OK and it introduces wrong pinctrl entry, which I
+commented under. It also does not pass test, as I said:
 
-Fixes: 179dc63d06c5 ("mfd: axp20x: Add a 500ms delay at the end of
-axp20x_power_off")
+  DTC_CHK arch/arm64/boot/dts/qcom/msm8998-xiaomi-sagit.dtb
+/home/krzk/dev/linux/linux/out/arch/arm64/boot/dts/qcom/msm8998-xiaomi-sagit.dtb:
+pinctrl@3400000: blsp1-uart3-on-state: 'oneOf' conditional failed, one
+must be fixed:
+	'function' is a required property
+	'pins' is a required property
+	'cts', 'cts-pins', 'rfr-pins', 'rx', 'rx-pins', 'tx-pins' do not match
+any of the regexes: 'pinctrl-[0-9]+'
+	'cts', 'rx' do not match any of the regexes: '-pins$', 'pinctrl-[0-9]+'
+	From schema:
+/home/krzk/dev/linux/linux/Documentation/devicetree/bindings/pinctrl/qcom,msm8998-pinctrl.yaml
+make[1]: Leaving directory '/home/krzk/dev/linux/linux/out'
 
-Regards,
-Samuel
+
+Best regards,
+Krzysztof
 
