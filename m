@@ -2,114 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FF7861ECD0
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 09:24:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8571D61ECCD
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 09:23:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231148AbiKGIYt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 03:24:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38116 "EHLO
+        id S230527AbiKGIXx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 03:23:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229586AbiKGIYr (ORCPT
+        with ESMTP id S229586AbiKGIXt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 03:24:47 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C44910CD
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 00:23:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667809426;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=4NlaTcXgAoZxfJFwezekk0EZPDhmSaS61HBI7QDfTXU=;
-        b=NzZQk7hhwYl4Iq0F3fB/7fYul6ZurE5AEq21l3sp8MUSvkxk1WHV9cfPM/+N8VHVJm+1j3
-        MQ5RfwkbsQ7wSqy54jTb/num9bpiwlKezI/4RI5S/IPUZb2Gp9JE508ktd8noZTl5pZVw7
-        dL3fudaZHUdcojjxQWBmzN5Kf8aGZ1k=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-594-1Nt4XhUGOTaLNHEo_-iX9A-1; Mon, 07 Nov 2022 03:23:43 -0500
-X-MC-Unique: 1Nt4XhUGOTaLNHEo_-iX9A-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Mon, 7 Nov 2022 03:23:49 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04FAB26CA;
+        Mon,  7 Nov 2022 00:23:48 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C343C86F130;
-        Mon,  7 Nov 2022 08:23:42 +0000 (UTC)
-Received: from localhost (ovpn-13-134.pek2.redhat.com [10.72.13.134])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 770B940C6FA1;
-        Mon,  7 Nov 2022 08:23:41 +0000 (UTC)
-Date:   Mon, 7 Nov 2022 16:23:37 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Dennis Zhou <dennis@kernel.org>
-Cc:     Vlastimil Babka <vbabka@suse.cz>, linux-kernel@vger.kernel.org,
-        Tejun Heo <tj@kernel.org>, Christoph Lameter <cl@linux.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>
-Subject: Re: [PATCH 8/8] mm/slub, percpu: correct the calculation of early
- percpu allocation size
-Message-ID: <Y2jAiWmVAgrzWyPh@MiWiFi-R3L-srv>
-References: <20221024081435.204970-1-bhe@redhat.com>
- <20221024081435.204970-9-bhe@redhat.com>
- <b3776af5-65c7-62b4-7624-184420d0da63@suse.cz>
- <Y2iLLIL/jBL4dftJ@MiWiFi-R3L-srv>
- <Y2ixuDbcQgtqE1Ox@fedora>
+        by ams.source.kernel.org (Postfix) with ESMTPS id B548CB80E34;
+        Mon,  7 Nov 2022 08:23:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D10AC433D6;
+        Mon,  7 Nov 2022 08:23:43 +0000 (UTC)
+Message-ID: <daab81c3-4592-5ef0-5a0e-5f89fe58a3e7@xs4all.nl>
+Date:   Mon, 7 Nov 2022 09:23:41 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y2ixuDbcQgtqE1Ox@fedora>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH v6 5/5] drivers: media: platform: Add NPCM Video
+ Capture/Encode Engine driver
+To:     Kun-Fa Lin <milkfafa@gmail.com>
+Cc:     mchehab@kernel.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org,
+        avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
+        kwliu@nuvoton.com, kflin@nuvoton.com
+References: <20221104033810.1324686-1-milkfafa@gmail.com>
+ <20221104033810.1324686-6-milkfafa@gmail.com>
+ <357a3098-918b-895b-7305-0f1a63aacdb0@xs4all.nl>
+ <CADnNmFp4r-3+pvHa+_HOxcXAkORadMzgg6fFKbLcgs66a_90gw@mail.gmail.com>
+Content-Language: en-US
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+In-Reply-To: <CADnNmFp4r-3+pvHa+_HOxcXAkORadMzgg6fFKbLcgs66a_90gw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/06/22 at 11:20pm, Dennis Zhou wrote:
-> Hi Baoquan,
+On 07/11/2022 08:20, Kun-Fa Lin wrote:
+> Hi Hans,
 > 
-> On Mon, Nov 07, 2022 at 12:35:56PM +0800, Baoquan He wrote:
-> > On 11/06/22 at 09:56pm, Vlastimil Babka wrote:
-> > > On 10/24/22 10:14, Baoquan He wrote:
-> > > > SLUB allocator relies on percpu allocator to initialize its ->cpu_slab
-> > > > during early boot. For that, the dynamic chunk of percpu which serves
-> > > > the early allocation need be large enough to satisfy the kmalloc
-> > > > creation.
-> > > > 
-> > > > However, the current BUILD_BUG_ON() in alloc_kmem_cache_cpus() doesn't
-> > > > consider the kmalloc array with NR_KMALLOC_TYPES length. Fix that
-> > > > with correct calculation.
-> > > > 
-> > > > Signed-off-by: Baoquan He <bhe@redhat.com>
-> > > > Cc: Christoph Lameter <cl@linux.com>
-> > > > Cc: Pekka Enberg <penberg@kernel.org>
-> > > > Cc: David Rientjes <rientjes@google.com>
-> > > > Cc: Joonsoo Kim <iamjoonsoo.kim@lge.com>
-> > > > Cc: Andrew Morton <akpm@linux-foundation.org>
-> > > > Cc: Vlastimil Babka <vbabka@suse.cz>
-> > > > Cc: Roman Gushchin <roman.gushchin@linux.dev>
-> > > > Cc: Hyeonggon Yoo <42.hyeyoo@gmail.com>
-> > > > ---
-> > > >  mm/slub.c | 3 ++-
-> > > >  1 file changed, 2 insertions(+), 1 deletion(-)
-> > > 
-> > > As only slub is touched and there's no prerequsities in the previous
-> > > patches, I took this to the slab tree, branch
-> > > slab/for-6.2/cleanups
-> > 
-> > Yes, it only changes slub code. Thanks for taking it.
-> > 
-> > I will resend v2 with the left 7 percpu only patches with update.
-> > 
-> > 
+> Thanks for the review.
 > 
-> Don't worry about resending them, I'll pick them up tomorrow morning.
+>>
+>> These functions are not usually present when capturing from video. You don't
+>> have a choice w.r.t. resolution and fps, since that's determined by the
+>> incoming video. I would drop support for this.
+> 
+> Just to confirm, do you mean `npcm_video_enum_framesizes` and
+> `npcm_video_enum_frameintervals` functions?
 
-That's great. Thanks a lot, Dennis.
+Right.
 
+> 
+> 
+>>> +     switch (ctrl->id) {
+>>> +     case V4L2_CID_DETECT_MD_MODE:
+>>> +             if (ctrl->val == V4L2_DETECT_MD_MODE_GLOBAL)
+>>> +                     video->ctrl_cmd = VCD_CMD_OPERATION_CAPTURE;
+>>> +             else
+>>> +                     video->ctrl_cmd = VCD_CMD_OPERATION_COMPARE;
+>>> +     break;
+>>
+>> Incorrect indentation for the 'break'.
+> 
+> Will correct it.
+> 
+> 
+>>> +     v4l2_ctrl_new_std_menu(&video->ctrl_handler, &npcm_video_ctrl_ops,
+>>> +                            V4L2_CID_DETECT_MD_MODE,
+>>> +                            V4L2_DETECT_MD_MODE_REGION_GRID, 0,
+>>> +                            V4L2_DETECT_MD_MODE_GLOBAL);
+>>
+>> Why is this driver using a control designed for motion detection devices?
+>> That seems odd, and it looks like you are abusing this control to do something
+>> else.
+> 
+> The Video Capture/Differentiation (VCD) engine supports two modes:
+> - COMPLETE (capture the next "complete frame" into memory)
+> - DIFF (compare the incoming frame with the frame stored in memory,
+> and updates the "diff frame" in memory)
+> 
+> The purpose here is to provide a way for application to switch the
+> COMPLETE/DIFF mode. Since I couldn't find an appropriate ioctl that is
+> designed for this purpose, so I used VIDIOC_S_CTRL with control values
+> of V4L2_DETECT_MD_MODE_GLOBAL (for COMPLETE) and
+> V4L2_DETECT_MD_MODE_REGION_GRID (for DIFF). It would be appreciated if
+> you could point me in the right direction.
+
+This is very much a driver-specific control. So you have to make your
+own.
+
+This series is a good example on how to add a custom control:
+
+https://lore.kernel.org/linux-media/20221028023554.928-1-jammy_huang@aspeedtech.com/
+
+Driver-specific controls are fine, as long as they are properly documented.
+
+> 
+> 
+>> When you post v7, please also include the output of v4l2-compliance to the
+>> cover letter!
+>> Make sure you compile v4l2-compliance from the v4l-utils git repo, do not
+>> use a version from a distro, that will be too old.
+> 
+> OK, I'll try to compile v4l2-compliance and include the output.
+> 
+> Regards,
+> Marvin
+
+Regards,
+
+	Hans
