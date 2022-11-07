@@ -2,149 +2,360 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55EDC61FDE5
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 19:50:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F64E61FDE9
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 19:52:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232877AbiKGSuw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 13:50:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60768 "EHLO
+        id S232800AbiKGSwa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 13:52:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232800AbiKGSus (ORCPT
+        with ESMTP id S232408AbiKGSwY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 13:50:48 -0500
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA86C20BE1
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 10:50:47 -0800 (PST)
-Received: by mail-pl1-x62e.google.com with SMTP id v17so11909638plo.1
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 10:50:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6F6Iijyy/39XMB5DWSlZ4cyFVlxZqZqXMo2iBv4u9CM=;
-        b=KnjutuB4R3SwMHEc5hufYGnDlgQTQIzehE4y/tIoueLHrhYyJj7FX813dKiht99s5Z
-         /j2LirqdNiHU4DG4JULK3cYIDOOllICNuZLgo8tsJxipEsCSjD1zuuPx8KEhsEtTAcv+
-         hvw4N8LDFlFcPTwSC6gl/jMo1wDUocbJXM18MCV1L5b6d6260j0gQPH7mXHjaMs4xmS4
-         hj0iWKkvhtK2mwvWu5zwhh61pKPr2u0iXh5DvOmKAV5stpUS60mJO1aoi0B+33b2ygOE
-         uz74UcaXUCJLX731mvZA1egMCcZLB22Ahe+JkjTVvXIcxtRZMJm4gjulMlBwfSTGBm0u
-         YK0w==
+        Mon, 7 Nov 2022 13:52:24 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B82C20BE1
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 10:51:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1667847091;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=TwNJ5l0LenrpgzAGzR5lW9fGTrxZv+vJR+aIBTTnE5k=;
+        b=Y2sbBLBsBfnVhhOjTRoWNiI9qOfrbbA75WGzUzZW3ZSry71iO639pairEbACFdFkdQvxeJ
+        sLznqYJ7AJoH0ddUunf65DBIZuE5tCpRC/goIytGDxBRV0HQta6ySeCbaJC/q3i0yQq4PQ
+        BmrGTJOs1/qHoK56I7m9M7iPVWzu/tk=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-656-ZEjcWEjIPF-xgkJdOQsH2g-1; Mon, 07 Nov 2022 13:51:29 -0500
+X-MC-Unique: ZEjcWEjIPF-xgkJdOQsH2g-1
+Received: by mail-wm1-f69.google.com with SMTP id c5-20020a1c3505000000b003c56da8e894so8848506wma.0
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 10:51:29 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6F6Iijyy/39XMB5DWSlZ4cyFVlxZqZqXMo2iBv4u9CM=;
-        b=ewBzCLcW/UqPLY634L7SUJwUwz6+aTZN43GEYWXhsd7TsL9viP0BgVvNyRVD+x2xeu
-         EnGq4whK7uYjnMYeNhHePzeXG1XNPti1m5AIsZQzHjpLiPN3sD10UlfLfd9j3+FdGdYg
-         UwjojeWkkd5sLKx85SMADLiVlBUy1EyIBxqhIrvnX35hlxtssmDc7gmeIszoH7CaUhuI
-         IC/iM4KlAg00pCW/w86t3sVgYusRbeqhE8UXR1eL8WK8UVMo9ZF6batxml0gt05ikI/l
-         MyS3lx+2YPJ3PE6ZVdLHN0RP0FXCSwQav/+Q1guCPExNeFJbqlENlIxX+NVu/OqeSlpy
-         j3VA==
-X-Gm-Message-State: ACrzQf1NzMwxUevVrauwkhMlGeQTFfiUcjH25FFhZEaleacaRnSA9Ck4
-        FUdjm0rDORU32YrZAVTj/opdeURx2FmzcmR/shE=
-X-Google-Smtp-Source: AMsMyM4JRASTk7uGXBgx86EaCOJTBDqvYoGoEq9e+xUimN/ehKNSvXyXwK7O6oAuPd7F5PpdfxBPs4aFiiXR6DAx3jM=
-X-Received: by 2002:a17:90a:558c:b0:213:8cf1:2ac2 with SMTP id
- c12-20020a17090a558c00b002138cf12ac2mr56909211pji.67.1667847047525; Mon, 07
- Nov 2022 10:50:47 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=TwNJ5l0LenrpgzAGzR5lW9fGTrxZv+vJR+aIBTTnE5k=;
+        b=d8xQ/4LMjGto98oQvW5iGKFw3gnlWbF42Lqa+XG9lPm/S+TRgfkzD4EBB6aws3dixX
+         MlC5uqgBEuFp1LsSauI9LyDYwTfHvDGHSOVMVH8P5Pjm2otv1A3pNYO3q0H5nmKeI+xk
+         P1VrjAbRRKRKV4oAhGYPet8OHij0z7UCx0gCsblut63to6xn5y5ZzUALNMbeSwrlvB5w
+         U7R3vYK/vBL4fzGcYWRA/rdipH6N0/AltNBdLd+kEEv1P9LbZ7kbABaYPBmf+BXeWhwf
+         9vtuwCqXCu4xbnBKnA/7XJQLEopTfYBry0jjwKl6qMaOvxmJ6oBReu7/1KbRacH/pvlm
+         NUVw==
+X-Gm-Message-State: ACrzQf0Fu9XFLiwa651CNLY2BzL/3N5UN6UaB9b7Yi/FgH3xfdodPTSC
+        oT0wf+K7W5Ueykq83wAnAeWkDOkPHuZHuBRZQU0IioC7CDCMn88XNWCDTpqMJC4mPv9Rzgp81zE
+        We5kXy+iTT0YzHLiC3pUYjl0y
+X-Received: by 2002:a05:600c:1989:b0:3c6:fabb:ea73 with SMTP id t9-20020a05600c198900b003c6fabbea73mr33484454wmq.19.1667847088691;
+        Mon, 07 Nov 2022 10:51:28 -0800 (PST)
+X-Google-Smtp-Source: AMsMyM5FqkHG4PLA7haQOcF3RqLp6ElVkM7k4uuYAslxPFp/HquyvkF9ui+ofK7m6K+27wyBlsgorw==
+X-Received: by 2002:a05:600c:1989:b0:3c6:fabb:ea73 with SMTP id t9-20020a05600c198900b003c6fabbea73mr33484433wmq.19.1667847088380;
+        Mon, 07 Nov 2022 10:51:28 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
+        by smtp.googlemail.com with ESMTPSA id n10-20020a5d420a000000b0023682011c1dsm7958580wrq.104.2022.11.07.10.51.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 07 Nov 2022 10:51:27 -0800 (PST)
+Message-ID: <b4195ffb-f9ce-869b-e3d6-a6ded38d4efb@redhat.com>
+Date:   Mon, 7 Nov 2022 19:51:26 +0100
 MIME-Version: 1.0
-References: <20221018200125.848471-1-jthoughton@google.com>
- <20221104021035.GA297167@hori.linux.bs1.fc.nec.co.jp> <Y2UTUNBHVY5U9si2@monkey>
- <20221107042544.GA436198@hori.linux.bs1.fc.nec.co.jp>
-In-Reply-To: <20221107042544.GA436198@hori.linux.bs1.fc.nec.co.jp>
-From:   Yang Shi <shy828301@gmail.com>
-Date:   Mon, 7 Nov 2022 10:50:35 -0800
-Message-ID: <CAHbLzkpb5+sPmKLNjoL27mNoVFiKnNCwU6JJY_R7VquJL7VG5Q@mail.gmail.com>
-Subject: Re: [PATCH] hugetlbfs: don't delete error page from pagecache
-To:     =?UTF-8?B?SE9SSUdVQ0hJIE5BT1lBKOWggOWPoyDnm7TkuZ8p?= 
-        <naoya.horiguchi@nec.com>
-Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
-        James Houghton <jthoughton@google.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH 1/8] KVM: SVM: extract VMCB accessors to a new file
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        nathan@kernel.org, thomas.lendacky@amd.com,
+        andrew.cooper3@citrix.com, peterz@infradead.org,
+        jmattson@google.com, stable@vger.kernel.org
+References: <20221107145436.276079-1-pbonzini@redhat.com>
+ <20221107145436.276079-2-pbonzini@redhat.com> <Y2k7o8i/qhBm9bpC@google.com>
+ <3ca5e8b6-c786-2f15-8f81-fd6353c43692@redhat.com>
+ <Y2lLFEt3tQBoZTDe@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <Y2lLFEt3tQBoZTDe@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Nov 6, 2022 at 8:25 PM HORIGUCHI NAOYA(=E5=A0=80=E5=8F=A3=E3=80=80=
-=E7=9B=B4=E4=B9=9F)
-<naoya.horiguchi@nec.com> wrote:
->
-> On Fri, Nov 04, 2022 at 06:27:44AM -0700, Mike Kravetz wrote:
-> > On 11/04/22 02:10, HORIGUCHI NAOYA(=E5=A0=80=E5=8F=A3 =E7=9B=B4=E4=B9=
-=9F) wrote:
-> > > On Tue, Oct 18, 2022 at 08:01:25PM +0000, James Houghton wrote:
-> > > > This change is very similar to the change that was made for shmem [=
-1],
-> > > > and it solves the same problem but for HugeTLBFS instead.
-> > > >
-> > > > Currently, when poison is found in a HugeTLB page, the page is remo=
-ved
-> > > > from the page cache. That means that attempting to map or read that
-> > > > hugepage in the future will result in a new hugepage being allocate=
-d
-> > > > instead of notifying the user that the page was poisoned. As [1] st=
-ates,
-> > > > this is effectively memory corruption.
-> > > >
-> > > > The fix is to leave the page in the page cache. If the user attempt=
-s to
-> > > > use a poisoned HugeTLB page with a syscall, the syscall will fail w=
-ith
-> > > > EIO, the same error code that shmem uses. For attempts to map the p=
-age,
-> > > > the thread will get a BUS_MCEERR_AR SIGBUS.
-> > > >
-> > > > [1]: commit a76054266661 ("mm: shmem: don't truncate page if memory=
- failure happens")
-> > > >
-> > > > Signed-off-by: James Houghton <jthoughton@google.com>
-> > >
-> > > I did some testing and found no issue. So I agree with this patch.
-> > > Thank you very much.
-> > >
-> > > Tested-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
-> > > Reviewed-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
-> > >
-> > > As for whether to go with HGM patchset or not, I have no strong opini=
-on.
-> > > As you stated in another email this patch is correct without HGM patc=
-h,
-> > > so it's OK to me to make this merged first.
-> >
-> > Thanks Naoya.
-> >
-> > This is a late thought, but ...
-> > Should this patch and Yang Shi's shmem patch be backported to stable re=
-leases?
-> > Both address potential data corruption/loss, so it certainly seems like
-> > stable material.
->
-> Yes, I agree that backporting these could be helpful.
+On 11/7/22 19:14, Sean Christopherson wrote:
+> On Mon, Nov 07, 2022, Paolo Bonzini wrote:
+>> On 11/7/22 18:08, Sean Christopherson wrote:
+>>> What about making KVM self-sufficient?
+>>
+>> You mean having a different asm-offsets.h file just for arch/x86/kvm/?
+> 
+> Yeah.
 
-+1
+I'll try tomorrow, wish me luck. :)
 
->
-> So I think that I'll try to backport commit a7605426666 and its dependenc=
-ies
-> to 5.15 (and older LTS if possible).  For this patch, just adding "Cc: st=
-able"
-> should be enough for now.
+>> The problem is that the _existing_ include of kvm_cache_regs.h in svm.h
+>> fails, with
+>>
+>> arch/x86/kernel/../kvm/svm/svm.h:25:10: fatal error: kvm_cache_regs.h: No
+>> such file or directory
+>>     25 | #include "kvm_cache_regs.h"
+>>        |          ^~~~~~~~~~~~~~~~~~
+>> compilation terminated.
+> 
+> Duh.  Now the changelog makes more sense...
 
-Thanks, Naoya.
+I'll add the commit message, though I also would not mind getting rid of 
+this patch.
 
->
-> Thanks,
-> Naoya Horiguchi
+>> The other two solutions here are:
+>>
+>> 1) move kvm_cache_regs.h to arch/x86/include/asm/ so it can be included
+>> normally
+>>
+>> 2) extract the structs to arch/x86/kvm/svm/svm_types.h and include that from
+>> asm-offsets.h, basically the opposite of this patch.
+>>
+>> (2) is my preference if having a different asm-offsets.h file turns out to
+>> be too complex.  We can do the same for VMX as well.
+> 
+> What about adding dedicated structs to hold the non-regs params for VM-Enter and
+> VMRUN?  Grabbing stuff willy-nilly in the assembly code makes the flows difficult
+> to read as there's nothing in the C code that describes what fields are actually
+> used.
+
+What fields are actually used is (like with any other function) 
+"potentially all, you'll have to read the source code and in fact you 
+can just read asm-offsets.c instead".  What I mean is, I cannot offhand 
+see or remember what fields are touched by svm_prepare_switch_to_guest, 
+why would __svm_vcpu_run be any different?  And the new SVM assembly 
+code is quite readable overall.
+
+> And due to 32-bit's restriction on the number of params, maintaining the
+> ad hoc approach will be annoying as passing in new info will require shuffling,
+> and any KVM refactorings will need updates to asm-offsets.c, e.g. "spec_ctrl"
+> should really live in "struct kvm_vcpu" since it's common to both AMD and Intel.
+
+So what? :)  We're talking of 2 fields (regs, spec_ctrl) for VMX and 4 
+(regs, spec_ctrl, svm->current_vmcb and svm->vmcb01---for simplicity all 
+of them) for SVM, and they don't change very often at all.  If 
+hypothetically KVM had used similar assembly code from the get go, there 
+would have been 3 changes in 15 years: spec_ctrl was added for SSBD, and 
+the other two fields correspond to two changes to the nesed VMCB 
+handling (svm->current_vmcb was first introduced together with vmcb02, 
+and later VMSAVE/VMLOAD started always using vmcb01).  That's not too bad.
+
+> That would also allow fixing the bugs introduced by commit bb06650634d3 ("KVM:
+> VMX: Convert launched argument to flags").  nested_vmx_check_vmentry_hw() never
+> fully enters the guest; at worst, it triggers a "VM-Exit on VM-Enter" consistency
+> check.  Thus there's no need to load the guest's spec control and zero chance that
+> the guest can write to spec control.
+
+Hmm, I'm not sure how it's related to this series.  Is the problem also 
+with the three-argument limit?
+
+Paolo
+
+> E.g. as a very rough starting point
+> 
+> ---
+>   arch/x86/include/asm/kvm_host.h |  8 ++++++++
+>   arch/x86/kvm/svm/svm.c          | 13 ++++++++++---
+>   arch/x86/kvm/svm/svm.h          |  4 ++--
+>   arch/x86/kvm/vmx/nested.c       |  8 ++++++--
+>   arch/x86/kvm/vmx/run_flags.h    |  8 --------
+>   arch/x86/kvm/vmx/vmx.c          | 32 +++++++++-----------------------
+>   arch/x86/kvm/vmx/vmx.h          |  4 +---
+>   7 files changed, 36 insertions(+), 41 deletions(-)
+>   delete mode 100644 arch/x86/kvm/vmx/run_flags.h
+> 
+> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> index 415113dea951..d56fe6151656 100644
+> --- a/arch/x86/include/asm/kvm_host.h
+> +++ b/arch/x86/include/asm/kvm_host.h
+> @@ -204,6 +204,14 @@ enum exit_fastpath_completion {
+>   };
+>   typedef enum exit_fastpath_completion fastpath_t;
+>   
+> +struct kvm_vmrun_params {
+> +	...
+> +};
+> +
+> +struct kvm_vmenter_params {
+> +	...
+> +};
+> +
+>   struct x86_emulate_ctxt;
+>   struct x86_exception;
+>   union kvm_smram;
+> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+> index 627c126cd9bb..7df9ea3ad3f1 100644
+> --- a/arch/x86/kvm/svm/svm.c
+> +++ b/arch/x86/kvm/svm/svm.c
+> @@ -3925,16 +3925,23 @@ static fastpath_t svm_exit_handlers_fastpath(struct kvm_vcpu *vcpu)
+>   static noinstr void svm_vcpu_enter_exit(struct kvm_vcpu *vcpu, bool spec_ctrl_intercepted)
+>   {
+>   	struct vcpu_svm *svm = to_svm(vcpu);
+> +	struct kvm_vmrun_params vmrun = {
+> +		.regs = vcpu->arch.regs,
+> +		.vmcb01 = svm->vmcb01.ptr,
+> +		.vmcb = svm->current_vmcb->ptr,
+> +		.spec_ctrl = svm->current_vmcb->ptr,
+> +		.spec_ctrl_intercepted = spec_ctrl_intercepted,
+> +	};
+>   
+>   	guest_state_enter_irqoff();
+>   
+>   	if (sev_es_guest(vcpu->kvm)) {
+> -		__svm_sev_es_vcpu_run(svm, spec_ctrl_intercepted);
+> +		__svm_sev_es_vcpu_run(&params);
+>   	} else {
+>   		struct svm_cpu_data *sd = per_cpu(svm_data, vcpu->cpu);
+>   
+> -		__svm_vcpu_run(svm, __sme_page_pa(sd->save_area),
+> -			       spec_ctrl_intercepted);
+> +		params.save_save_pa = __sme_page_pa(sd->save_area);
+> +		__svm_vcpu_run(vcpu->arch.regs, &params);
+>   	}
+>   
+>   	guest_state_exit_irqoff();
+> diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
+> index 9d940d8736f0..bf321b755a15 100644
+> --- a/arch/x86/kvm/svm/svm.h
+> +++ b/arch/x86/kvm/svm/svm.h
+> @@ -483,7 +483,7 @@ void sev_es_unmap_ghcb(struct vcpu_svm *svm);
+>   
+>   /* vmenter.S */
+>   
+> -void __svm_sev_es_vcpu_run(struct vcpu_svm *svm, bool spec_ctrl_intercepted);
+> -void __svm_vcpu_run(struct vcpu_svm *svm, unsigned long hsave_pa, bool spec_ctrl_intercepted);
+> +void __svm_sev_es_vcpu_run(struct kvm_vmrun_params *params);
+> +void __svm_vcpu_run(unsigned long *regs, struct kvm_vmrun_params *params);
+>   
+>   #endif
+> diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
+> index 61a2e551640a..da6c9b8c3a4f 100644
+> --- a/arch/x86/kvm/vmx/nested.c
+> +++ b/arch/x86/kvm/vmx/nested.c
+> @@ -3058,6 +3058,11 @@ static int nested_vmx_check_guest_state(struct kvm_vcpu *vcpu,
+>   
+>   static int nested_vmx_check_vmentry_hw(struct kvm_vcpu *vcpu)
+>   {
+> +	struct kvm_vmenter_params params = {
+> +		.launched = vmx->loaded_vmcs->launched,
+> +		.spec_ctrl = this_cpu_read(x86_spec_ctrl_current),
+> +		.spec_ctrl_intercepted = true,
+> +	};
+>   	struct vcpu_vmx *vmx = to_vmx(vcpu);
+>   	unsigned long cr3, cr4;
+>   	bool vm_fail;
+> @@ -3094,8 +3099,7 @@ static int nested_vmx_check_vmentry_hw(struct kvm_vcpu *vcpu)
+>   		vmx->loaded_vmcs->host_state.cr4 = cr4;
+>   	}
+>   
+> -	vm_fail = __vmx_vcpu_run(vmx, (unsigned long *)&vcpu->arch.regs,
+> -				 __vmx_vcpu_run_flags(vmx));
+> +	vm_fail = __vmx_vcpu_run(vcpu->arch.regs, &params);
+>   
+>   	if (vmx->msr_autoload.host.nr)
+>   		vmcs_write32(VM_EXIT_MSR_LOAD_COUNT, vmx->msr_autoload.host.nr);
+> diff --git a/arch/x86/kvm/vmx/run_flags.h b/arch/x86/kvm/vmx/run_flags.h
+> deleted file mode 100644
+> index edc3f16cc189..000000000000
+> --- a/arch/x86/kvm/vmx/run_flags.h
+> +++ /dev/null
+> @@ -1,8 +0,0 @@
+> -/* SPDX-License-Identifier: GPL-2.0 */
+> -#ifndef __KVM_X86_VMX_RUN_FLAGS_H
+> -#define __KVM_X86_VMX_RUN_FLAGS_H
+> -
+> -#define VMX_RUN_VMRESUME	(1 << 0)
+> -#define VMX_RUN_SAVE_SPEC_CTRL	(1 << 1)
+> -
+> -#endif /* __KVM_X86_VMX_RUN_FLAGS_H */
+> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+> index 05a747c9a9ff..307380cd2000 100644
+> --- a/arch/x86/kvm/vmx/vmx.c
+> +++ b/arch/x86/kvm/vmx/vmx.c
+> @@ -847,24 +847,6 @@ static bool msr_write_intercepted(struct vcpu_vmx *vmx, u32 msr)
+>   	return vmx_test_msr_bitmap_write(vmx->loaded_vmcs->msr_bitmap, msr);
+>   }
+>   
+> -unsigned int __vmx_vcpu_run_flags(struct vcpu_vmx *vmx)
+> -{
+> -	unsigned int flags = 0;
+> -
+> -	if (vmx->loaded_vmcs->launched)
+> -		flags |= VMX_RUN_VMRESUME;
+> -
+> -	/*
+> -	 * If writes to the SPEC_CTRL MSR aren't intercepted, the guest is free
+> -	 * to change it directly without causing a vmexit.  In that case read
+> -	 * it after vmexit and store it in vmx->spec_ctrl.
+> -	 */
+> -	if (unlikely(!msr_write_intercepted(vmx, MSR_IA32_SPEC_CTRL)))
+> -		flags |= VMX_RUN_SAVE_SPEC_CTRL;
+> -
+> -	return flags;
+> -}
+> -
+>   static __always_inline void clear_atomic_switch_msr_special(struct vcpu_vmx *vmx,
+>   		unsigned long entry, unsigned long exit)
+>   {
+> @@ -7065,9 +7047,14 @@ static fastpath_t vmx_exit_handlers_fastpath(struct kvm_vcpu *vcpu)
+>   }
+>   
+>   static noinstr void vmx_vcpu_enter_exit(struct kvm_vcpu *vcpu,
+> -					struct vcpu_vmx *vmx,
+> -					unsigned long flags)
+> +					struct vcpu_vmx *vmx)
+>   {
+> +	struct kvm_vmenter_params params = {
+> +		.launched = vmx->loaded_vmcs->launched,
+> +		.spec_ctrl = vmx->spec_ctrl,
+> +		.spec_ctrl_intercepted = msr_write_intercepted(vmx, MSR_IA32_SPEC_CTRL),
+> +	};
+> +
+>   	guest_state_enter_irqoff();
+>   
+>   	/* L1D Flush includes CPU buffer clear to mitigate MDS */
+> @@ -7084,8 +7071,7 @@ static noinstr void vmx_vcpu_enter_exit(struct kvm_vcpu *vcpu,
+>   	if (vcpu->arch.cr2 != native_read_cr2())
+>   		native_write_cr2(vcpu->arch.cr2);
+>   
+> -	vmx->fail = __vmx_vcpu_run(vmx, (unsigned long *)&vcpu->arch.regs,
+> -				   flags);
+> +	vmx->fail = __vmx_vcpu_run(vcpu->arch.regs, &params);
+>   
+>   	vcpu->arch.cr2 = native_read_cr2();
+>   
+> @@ -7185,7 +7171,7 @@ static fastpath_t vmx_vcpu_run(struct kvm_vcpu *vcpu)
+>   	kvm_wait_lapic_expire(vcpu);
+>   
+>   	/* The actual VMENTER/EXIT is in the .noinstr.text section. */
+> -	vmx_vcpu_enter_exit(vcpu, vmx, __vmx_vcpu_run_flags(vmx));
+> +	vmx_vcpu_enter_exit(vcpu, vmx);
+>   
+>   	/* All fields are clean at this point */
+>   	if (static_branch_unlikely(&enable_evmcs)) {
+> diff --git a/arch/x86/kvm/vmx/vmx.h b/arch/x86/kvm/vmx/vmx.h
+> index a3da84f4ea45..4eb196f88b47 100644
+> --- a/arch/x86/kvm/vmx/vmx.h
+> +++ b/arch/x86/kvm/vmx/vmx.h
+> @@ -421,9 +421,7 @@ struct vmx_uret_msr *vmx_find_uret_msr(struct vcpu_vmx *vmx, u32 msr);
+>   void pt_update_intercept_for_msr(struct kvm_vcpu *vcpu);
+>   void vmx_update_host_rsp(struct vcpu_vmx *vmx, unsigned long host_rsp);
+>   void vmx_spec_ctrl_restore_host(struct vcpu_vmx *vmx, unsigned int flags);
+> -unsigned int __vmx_vcpu_run_flags(struct vcpu_vmx *vmx);
+> -bool __vmx_vcpu_run(struct vcpu_vmx *vmx, unsigned long *regs,
+> -		    unsigned int flags);
+> +bool __vmx_vcpu_run(unsigned long *regs, struct kvm_vmenter_params *params);
+>   int vmx_find_loadstore_msr_slot(struct vmx_msrs *m, u32 msr);
+>   void vmx_ept_load_pdptrs(struct kvm_vcpu *vcpu);
+>   
+> 
+> base-commit: 0443d79faa4575a5871b54801ed4a36eecce32e3
+
