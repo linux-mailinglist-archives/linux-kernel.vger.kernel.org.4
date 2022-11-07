@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A683861F9DB
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 17:32:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FF6061F9E4
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 17:33:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232374AbiKGQc1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 11:32:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54178 "EHLO
+        id S231946AbiKGQda (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 11:33:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232348AbiKGQcL (ORCPT
+        with ESMTP id S232656AbiKGQdN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 11:32:11 -0500
+        Mon, 7 Nov 2022 11:33:13 -0500
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0018C26121;
-        Mon,  7 Nov 2022 08:30:17 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BDDE521E07;
+        Mon,  7 Nov 2022 08:31:51 -0800 (PST)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E3502ED1;
-        Mon,  7 Nov 2022 08:30:23 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A3673ED1;
+        Mon,  7 Nov 2022 08:31:57 -0800 (PST)
 Received: from pierre123.arm.com (pierre123.nice.arm.com [10.34.100.128])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id B80A53F534;
-        Mon,  7 Nov 2022 08:30:02 -0800 (PST)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 376173F534;
+        Mon,  7 Nov 2022 08:31:36 -0800 (PST)
 From:   Pierre Gondois <pierre.gondois@arm.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Pierre Gondois <pierre.gondois@arm.com>,
@@ -86,33 +86,35 @@ Cc:     Pierre Gondois <pierre.gondois@arm.com>,
         Tero Kristo <kristo@kernel.org>,
         Viorel Suman <viorel.suman@nxp.com>,
         Abel Vesa <abelvesa@kernel.org>,
+        Shijie Qin <shijie.qin@nxp.com>, Ming Qian <ming.qian@nxp.com>,
+        Peng Fan <peng.fan@nxp.com>,
         Shenwei Wang <shenwei.wang@nxp.com>,
-        Peng Fan <peng.fan@nxp.com>, Ming Qian <ming.qian@nxp.com>,
         Adam Ford <aford173@gmail.com>,
         Lucas Stach <l.stach@pengutronix.de>,
-        Tim Harvey <tharvey@gateworks.com>,
-        Richard Zhu <hongxing.zhu@nxp.com>, Li Jun <jun.li@nxp.com>,
-        Marek Vasut <marex@denx.de>,
-        Markus Niebel <Markus.Niebel@ew.tq-group.com>,
+        Tim Harvey <tharvey@gateworks.com>, Li Jun <jun.li@nxp.com>,
+        Richard Zhu <hongxing.zhu@nxp.com>,
         Joakim Zhang <qiangqing.zhang@nxp.com>,
+        Markus Niebel <Markus.Niebel@ew.tq-group.com>,
+        Marek Vasut <marex@denx.de>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
         Paul Elder <paul.elder@ideasonboard.com>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
         Martin Kepplinger <martink@posteo.de>,
-        Joy Zou <joy.zou@nxp.com>, David Heidelberg <david@ixit.cz>,
-        Liu Ying <victor.liu@nxp.com>,
+        David Heidelberg <david@ixit.cz>,
         Oliver Graute <oliver.graute@kococonnector.com>,
-        Shijie Qin <shijie.qin@nxp.com>, Jacky Bai <ping.bai@nxp.com>,
-        Wei Fang <wei.fang@nxp.com>,
+        Liu Ying <victor.liu@nxp.com>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        Ahmad Fatoum <a.fatoum@pengutronix.de>,
         Clark Wang <xiaoning.wang@nxp.com>,
+        Wei Fang <wei.fang@nxp.com>, Jacky Bai <ping.bai@nxp.com>,
         Chris Packham <chris.packham@alliedtelesis.co.nz>,
         Vadym Kochan <vadym.kochan@plvision.eu>,
         Sameer Pujar <spujar@nvidia.com>,
         Prathamesh Shete <pshete@nvidia.com>,
         Akhil R <akhilrajeev@nvidia.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
         Sumit Gupta <sumitg@nvidia.com>,
         Diogo Ivo <diogo.ivo@tecnico.ulisboa.pt>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
         Vidya Sagar <vidyas@nvidia.com>,
         Ashish Mhetre <amhetre@nvidia.com>,
         Johan Jonker <jbx6244@gmail.com>,
@@ -120,6 +122,7 @@ Cc:     Pierre Gondois <pierre.gondois@arm.com>,
         Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
         Aswani Reddy <aswani.reddy@samsung.com>,
         Shashank Prashar <s.prashar@samsung.com>,
+        Chandrasekar R <rcsekar@samsung.com>,
         devicetree@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org,
         linux-amlogic@lists.infradead.org,
@@ -129,9 +132,9 @@ Cc:     Pierre Gondois <pierre.gondois@arm.com>,
         linux-realtek-soc@lists.infradead.org,
         linux-renesas-soc@vger.kernel.org,
         linux-rockchip@lists.infradead.org
-Subject: [PATCH v2 18/23] arm64: dts: Update cache properties for renesas
-Date:   Mon,  7 Nov 2022 16:57:11 +0100
-Message-Id: <20221107155825.1644604-19-pierre.gondois@arm.com>
+Subject: [PATCH v2 19/23] arm64: dts: Update cache properties for rockchip
+Date:   Mon,  7 Nov 2022 16:57:12 +0100
+Message-Id: <20221107155825.1644604-20-pierre.gondois@arm.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221107155825.1644604-1-pierre.gondois@arm.com>
 References: <20221107155825.1644604-1-pierre.gondois@arm.com>
@@ -155,44 +158,31 @@ Update the Device Trees accordingly.
 
 Signed-off-by: Pierre Gondois <pierre.gondois@arm.com>
 ---
- arch/arm64/boot/dts/renesas/r9a07g043.dtsi | 1 +
- arch/arm64/boot/dts/renesas/r9a07g044.dtsi | 1 +
- arch/arm64/boot/dts/renesas/r9a07g054.dtsi | 1 +
- 3 files changed, 3 insertions(+)
+ arch/arm64/boot/dts/rockchip/rk3308.dtsi | 1 +
+ arch/arm64/boot/dts/rockchip/rk3328.dtsi | 1 +
+ 2 files changed, 2 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/renesas/r9a07g043.dtsi b/arch/arm64/boot/dts/renesas/r9a07g043.dtsi
-index 689aa4ba416b..18c69a187ecb 100644
---- a/arch/arm64/boot/dts/renesas/r9a07g043.dtsi
-+++ b/arch/arm64/boot/dts/renesas/r9a07g043.dtsi
-@@ -88,6 +88,7 @@ L3_CA55: cache-controller-0 {
+diff --git a/arch/arm64/boot/dts/rockchip/rk3308.dtsi b/arch/arm64/boot/dts/rockchip/rk3308.dtsi
+index 2dfa67f1cd67..dd228a256a32 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3308.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk3308.dtsi
+@@ -96,6 +96,7 @@ CPU_SLEEP: cpu-sleep {
+ 
+ 		l2: l2-cache {
  			compatible = "cache";
- 			cache-unified;
- 			cache-size = <0x40000>;
-+			cache-level = <3>;
++			cache-level = <2>;
  		};
  	};
  
-diff --git a/arch/arm64/boot/dts/renesas/r9a07g044.dtsi b/arch/arm64/boot/dts/renesas/r9a07g044.dtsi
-index 2283d4fb8736..86866d9dc7c4 100644
---- a/arch/arm64/boot/dts/renesas/r9a07g044.dtsi
-+++ b/arch/arm64/boot/dts/renesas/r9a07g044.dtsi
-@@ -109,6 +109,7 @@ L3_CA55: cache-controller-0 {
- 			compatible = "cache";
- 			cache-unified;
- 			cache-size = <0x40000>;
-+			cache-level = <3>;
- 		};
- 	};
+diff --git a/arch/arm64/boot/dts/rockchip/rk3328.dtsi b/arch/arm64/boot/dts/rockchip/rk3328.dtsi
+index 49ae15708a0b..8741914cea44 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3328.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk3328.dtsi
+@@ -102,6 +102,7 @@ CPU_SLEEP: cpu-sleep {
  
-diff --git a/arch/arm64/boot/dts/renesas/r9a07g054.dtsi b/arch/arm64/boot/dts/renesas/r9a07g054.dtsi
-index 358d4c34465f..b36dd5291e5a 100644
---- a/arch/arm64/boot/dts/renesas/r9a07g054.dtsi
-+++ b/arch/arm64/boot/dts/renesas/r9a07g054.dtsi
-@@ -109,6 +109,7 @@ L3_CA55: cache-controller-0 {
+ 		l2: l2-cache0 {
  			compatible = "cache";
- 			cache-unified;
- 			cache-size = <0x40000>;
-+			cache-level = <3>;
++			cache-level = <2>;
  		};
  	};
  
