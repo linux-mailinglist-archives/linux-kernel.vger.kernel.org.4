@@ -2,263 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDB0061F810
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 16:58:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F5BD61F81B
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 16:59:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232127AbiKGP6V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 10:58:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52292 "EHLO
+        id S232075AbiKGP7u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 10:59:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231355AbiKGP6U (ORCPT
+        with ESMTP id S231682AbiKGP7r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 10:58:20 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8CDF1D0EF
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 07:58:18 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id A64441F88B;
-        Mon,  7 Nov 2022 15:58:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1667836697; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=HwyeGbyF6xyA3VZxkMsXJCEwAnKw5p/3+qMk4oWNRJw=;
-        b=jqQuCs3t3UEBxJg7SJLoB1MaQqUsfBI3frLubFthjX5lqViOAHUNKC0l/BArO3aQuuDL/k
-        aHm6e9I2S4IWuJhZYKAuGVcDEWdXtEdBjlQEqUOrdXvhjuBFpu/ULPk7GgN6S02CUis0Rw
-        YL9Wv4v++iiF3TPV6T7W/Y7JZVYYOY4=
-Received: from suse.cz (unknown [10.100.201.202])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 07D7C2C141;
-        Mon,  7 Nov 2022 15:58:16 +0000 (UTC)
-Date:   Mon, 7 Nov 2022 16:58:16 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        John Ogness <john.ogness@linutronix.de>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Linus Torvalds <torvalds@linuxfoundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Helge Deller <deller@gmx.de>,
-        Jason Wessel <jason.wessel@windriver.com>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        John Ogness <jogness@linutronix.de>
-Subject: functionality: was: Re: [patch RFC 19/29] printk: Add basic
- infrastructure for non-BKL consoles
-Message-ID: <Y2krGJwMQHaNoper@alley>
-References: <20220910221947.171557773@linutronix.de>
- <20220910222301.479172669@linutronix.de>
+        Mon, 7 Nov 2022 10:59:47 -0500
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 604DA6361
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 07:59:46 -0800 (PST)
+Received: by mail-ej1-x62f.google.com with SMTP id sc25so31257575ejc.12
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 07:59:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=soleen.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=IITd8EQrY06zpsnvdK0dLKdgj3UcdcbIn9cavEKCvvE=;
+        b=Zyh+TFztkylFfIJjhF7e3ln1pqKsHjlcPRTlwDPW040eSVRHTt0unIS2z0vhwrpwlR
+         gMP2vb8ln3hscKXDKYkmMnQ3/qm/hIdHKiLQoJCZuasZgekNVu57Prdtuk6LnIq0MqzT
+         +fz1ya4IIIMn4+c5F640/fuxSsWS8PjcHvyVyhjL72Fxxl36TdXJrwBW1ZP7cnZENFHS
+         zLmY+Ta1T+fdWDBBKIvf92W8VN/gKQ5/8PebZRqH8GSJBwusRTFXJl4UV/jSMmL9Muk+
+         wzdu8GwFLpVkPfuEA2Ra1EVIiwqIwHqvGWB1OoJVr72DmJB3xNUS/1WayxPrN6MAqY05
+         nQog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=IITd8EQrY06zpsnvdK0dLKdgj3UcdcbIn9cavEKCvvE=;
+        b=H7musHinXxfias+jsckd2SZE5++Nih7wKQ3yNyl7wqPwlcFoCTz4viiA1g9knGiU2W
+         MrFRmUhDh7tl9z66ga1u8/rTU7tlQnBwV7a3hhoQXj/qgFr6+MhVWJIRlf3Zy53GAKpB
+         ody0J4D4ArHyfOZDvojpskc1Tsvrw7z9bo483KPjOSk8p7kBM1/TvCH+VUH66+CiQSV2
+         d1XatnEHC4Amb3r4sEeoN82gDZa/FNz4YaQ/UOCX09KimgH0nwv/S7nc+wtvTXEkgEJ9
+         Gj+AwI5sd3J9LevrU8nJiXjy35fNu1ClqEo0crLevJhGoOrqHf7cOAk5/G++8rRMytyf
+         WD2Q==
+X-Gm-Message-State: ACrzQf0agg2Pej9GFJGJRnXP28Zn457pNMdPT/0zUfWYk1Uof+e5ZXxE
+        oVnOxjYdAi2KTmWjjmP36xCVDttbJhC1Vu1FeUsPkw==
+X-Google-Smtp-Source: AMsMyM6eF24oy4Q00nqEXNLtxRfg2QD7eeW1/AHtxkxp9g4K556Ph5XLWbzIFR8X3u4YTP0rNgLgqHrCfId/TXUbV0U=
+X-Received: by 2002:a17:907:c26:b0:7ad:f6c8:d6c with SMTP id
+ ga38-20020a1709070c2600b007adf6c80d6cmr31255335ejc.640.1667836784893; Mon, 07
+ Nov 2022 07:59:44 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220910222301.479172669@linutronix.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221105025342.3130038-1-pasha.tatashin@soleen.com>
+ <20221106133351.ukb5quoizkkzyrge@box.shutemov.name> <CA+CK2bDK=oUYM-HZsYfZoq_n5BQMGpysMq395WK78r+SwYk99A@mail.gmail.com>
+ <20221106165204.odb7febmnykhna2h@box.shutemov.name>
+In-Reply-To: <20221106165204.odb7febmnykhna2h@box.shutemov.name>
+From:   Pasha Tatashin <pasha.tatashin@soleen.com>
+Date:   Mon, 7 Nov 2022 10:59:08 -0500
+Message-ID: <CA+CK2bBQik_=a5vuaXs+=Zrnod5bn8XcKHdz=aqsudhcS=PijA@mail.gmail.com>
+Subject: Re: [PATCH] mm: anonymous shared memory naming
+To:     "Kirill A. Shutemov" <kirill@shutemov.name>
+Cc:     corbet@lwn.net, akpm@linux-foundation.org, hughd@google.com,
+        hannes@cmpxchg.org, david@redhat.com, vincent.whitchurch@axis.com,
+        seanjc@google.com, rppt@kernel.org, shy828301@gmail.com,
+        paul.gortmaker@windriver.com, peterx@redhat.com, vbabka@suse.cz,
+        Liam.Howlett@oracle.com, ccross@google.com, willy@infradead.org,
+        arnd@arndb.de, cgel.zte@gmail.com, yuzhao@google.com,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun 2022-09-11 00:28:01, Thomas Gleixner wrote:
-> The current console/printk subsystem is protected by a Big Kernel Lock,
-> aka. console_lock which has has ill defined semantics and is more or less
-> stateless. This puts severe limitations on the console subsystem and makes
-> forced takeover and output in emergency and panic situations a fragile
-> endavour which is based on try and pray.
-> 
-> The goal of non-BKL consoles is to break out of the console lock jail and
-> to provide a new infrastructure which avoids the pitfalls and allows
-> console drivers to be gradually converted over.
-> 
-> The proposed infrastructure aims for the following properties:
-> 
->   - Lockless (SCRU protected) console list walk
->   - Per console locking instead of global locking
->   - Per console state which allows to make informed decisions
->   - Stateful handover and takeover
-> 
-> As a first step this adds state to struct console. The per console state is
-> a atomic_long_t with a 32bit bit field and on 64bit a 32bit sequence for
-> tracking the last printed ringbuffer sequence number. On 32bit the sequence
-> is seperate from state for obvious reasons which requires to handle a few
-> extra race conditions.
-> 
-> Add the initial state with the most basic 'alive' and 'enabled' bits and
-> wire it up into the console register/unregister functionality and exclude
-> such consoles from being handled in the console BKL mechanisms.
-> 
-> The decision to use a bitfield was made as using a plain u32 and mask/shift
-> operations turned out to result in uncomprehensible code.
-> 
-> --- a/include/linux/console.h
-> +++ b/include/linux/console.h
-> @@ -170,6 +172,37 @@ enum cons_flags {
->  	CON_ANYTIME		= BIT(4),
->  	CON_BRL			= BIT(5),
->  	CON_EXTENDED		= BIT(6),
-> +	CON_NO_BKL		= BIT(7),
-> +};
-> +
-> +/**
-> + * struct cons_state - console state for NOBKL consoles
-> + * @atom:	Compound of the state fields for atomic operations
-> + * @seq:	Sequence for record tracking (64bit only)
-> + * @bits:	Compound of the state bits below
-> + *
-> + * @alive:	Console is alive. Required for teardown
+On Sun, Nov 6, 2022 at 11:52 AM Kirill A. Shutemov <kirill@shutemov.name> wrote:
+>
+> On Sun, Nov 06, 2022 at 08:45:44AM -0500, Pasha Tatashin wrote:
+> > On Sun, Nov 6, 2022 at 8:34 AM Kirill A. Shutemov <kirill@shutemov.name> wrote:
+> > >
+> > > On Sat, Nov 05, 2022 at 02:53:42AM +0000, Pasha Tatashin wrote:
+> > > > Since:
+> > > > commit 9a10064f5625 ("mm: add a field to store names for private anonymous
+> > > > memory")
+> > > >
+> > > > We can set names for private anonymous memory but not for shared
+> > > > anonymous memory. However, naming shared anonymous memory just as
+> > > > useful for tracking purposes.
+> > > >
+> > > > Extend the functionality to be able to set names for shared anon.
+> > > >
+> > > > / [anon_shmem:<name>]      an anonymous shared memory mapping that has
+> > > >                            been named by userspace
+> > > >
+> > > > Sample output:
+> > > >         share = mmap(NULL, SIZE, PROT_READ | PROT_WRITE,
+> > > >                      MAP_SHARED | MAP_ANONYMOUS, -1, 0);
+> > > >         rv = prctl(PR_SET_VMA, PR_SET_VMA_ANON_NAME,
+> > > >                    share, SIZE, "shared anon");
+> > > >
+> > > > /proc/<pid>/maps (and smaps):
+> > > > 7fc8e2b4c000-7fc8f2b4c000 rw-s 00000000 00:01 1024
+> > > > /dev/zero (deleted) [anon_shmem:shared anon]
+> > > >
+> > > > pmap $(pgrep a.out)
+> > > > 254:   pub/a.out
+> > > > 000056093fab2000      4K r---- a.out
+> > > > 000056093fab3000      4K r-x-- a.out
+> > > > 000056093fab4000      4K r---- a.out
+> > > > 000056093fab5000      4K r---- a.out
+> > > > 000056093fab6000      4K rw--- a.out
+> > > > 000056093fdeb000    132K rw---   [ anon ]
+> > > > 00007fc8e2b4c000 262144K rw-s- zero (deleted) [anon_shmem:shared anon]
+> > > >
+> > > > Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
+> > > > ---
+> > > >  Documentation/filesystems/proc.rst |  4 +++-
+> > > >  fs/proc/task_mmu.c                 |  7 ++++---
+> > > >  include/linux/mm.h                 |  2 ++
+> > > >  include/linux/mm_types.h           | 27 +++++++++++++--------------
+> > > >  mm/madvise.c                       |  7 ++-----
+> > > >  mm/shmem.c                         | 13 +++++++++++--
+> > > >  6 files changed, 35 insertions(+), 25 deletions(-)
+> > > >
+> > > > diff --git a/Documentation/filesystems/proc.rst b/Documentation/filesystems/proc.rst
+> > > > index 898c99eae8e4..8f1e68460da5 100644
+> > > > --- a/Documentation/filesystems/proc.rst
+> > > > +++ b/Documentation/filesystems/proc.rst
+> > > > @@ -431,8 +431,10 @@ is not associated with a file:
+> > > >   [stack]                    the stack of the main process
+> > > >   [vdso]                     the "virtual dynamic shared object",
+> > > >                              the kernel system call handler
+> > > > - [anon:<name>]              an anonymous mapping that has been
+> > > > + [anon:<name>]              a private anonymous mapping that has been
+> > > >                              named by userspace
+> > > > + path [anon_shmem:<name>]   an anonymous shared memory mapping that has
+> > > > +                            been named by userspace
+> > >
+> > > I expect it to break existing parsers. If the field starts with '/' it is
+> > > reasonable to assume the rest of the string to be a path, but it is not
+> > > the case now.
+> >
+> > This is actually exactly why I kept the "path" part. It stays the same
+> > as today for  anon-shared memory, but prevents pmap to change
+> > anon-shared memory from showing it as simply [anon].
+> >
+> > Here is what we have today in /proc/<pid>/maps (and smaps):
+> > 7fc8e2b4c000-7fc8f2b4c000 rw-s 00000000 00:01 1024  /dev/zero (deleted)
+> >
+> > So, the path points to /dev/zero but appended with (deleted) mark. The
+> > pmap shows the same thing, as it is looking for leading '/' to
+> > determine that this is a path.
+> >
+> > With my change the above changes only when user specifically changed
+> > the name like this:
+> >
+> > 7fc8e2b4c000-7fc8f2b4c000 rw-s 00000000 00:01 1024  /dev/zero
+> > (deleted) [USER-SPECIFIED-NAME]
+> >
+> > So, the path stays, the (deleted) mark stays, and a name is added.
+>
+> Okay, fair enough.
 
-What do you exactly mean with teardown, please?
+After thinking about this, it makes sense to remove "path" entirely.
+The pmap without arguments will show the user named segment as
+"[anon]", but with -X argument it will show the full name:
 
-I somehow do not understand the meaning. The bit "alive" seems
-to always be "1" in this patchset.
+pmap -X
+7fa84fcef000 rw-s 00000000  00:01      1024 262144    0   0         0
+        0         0        0              0             0
+0               0    0       0      0           0 [anon_shmem:named
+shared anon]
+7fa85fcef000 rw-p 00000000  00:00         0 262144    0   0         0
+        0         0        0              0             0
+0               0    0       0      0           0 [anon:named anon]
 
-> + * @enabled:	Console is enabled. If 0, do not use
-> + *
-> + * To be used for state read and preparation of atomic_long_cmpxchg()
-> + * operations.
-> + */
-> +struct cons_state {
-> +	union {
-> +		unsigned long	atom;
-> +		struct {
-> +#ifdef CONFIG_64BIT
-> +			u32	seq;
-> +#endif
-> +			union {
-> +				u32	bits;
-> +				struct {
-> +					u32 alive	:  1;
-> +					u32 enabled	:  1;
-> +				};
-> +			};
-> +		};
-> +	};
->  };
->  
->  /**
-> --- a/kernel/printk/printk.c
-> +++ b/kernel/printk/printk.c
-> @@ -3079,7 +3088,10 @@ void console_stop(struct console *consol
->  	console_list_lock();
->  	console_lock();
->  	console->flags &= ~CON_ENABLED;
-> +	cons_state_disable(console);
->  	console_unlock();
-> +	/* Ensure that all SRCU list walks have completed */
-> +	synchronize_srcu(&console_srcu);
+In my opinion this is better to stay consistent with regular anon
+memory, and also to minimize the chance to surprise the existing
+scripts.
 
-I have few questions here:
+Pasha
 
-1. Do we need separate "enabled" flags for BLK and non-blk consoles?
-
-   Hmm, it might be problem to remove CON_ENABLED flag
-   because it is exported to userspace via /proc/consoles.
-
-   Well, what is the purpose of the "enabled" flag for atomic
-   consoles? Are we going to stop them in the middle of a line?
-   Does the flag has to be atomic and part of atomic_state?
-
-
-2. What is the purpose of synchronize_srcu(), please?
-
-   It probably should make sure that all consoles with CON_NO_BLK
-   flag are really stopped once it returns.
-
-   IMHO, this would work only when the "enabled" flag and the
-   con->write*() callback is called under srcu_read_lock().
-
-   I do not see it in the code. Do I miss something, please?
-
-
-3. Is the ordering of console_unlock() and synchronize_srcu()
-   important, please?
-
-   IMHO, it would be important if we allowed the following code:
-
-      srcu_read_lock(&console_srcu);
-      console_lock();
-      // do something
-      console_unlock();
-      srcu_read_unlock(&console_srcu);
-
-   then we would always have to call synchronize_srcu() outside
-   console_lock() otherwise there might be ABBA deadlock.
-
-   I do not see this code yet. But it might make sense.
-   Anyway, we should probably document the rules somewhere.
-
-
-4. Is it important to call cons_state_disable(console) under
-   console_lock() ?
-
-   I guess that it isn't. But it is not clear from the code.
-   The picture is even more complicated because everything is done
-   under console_list_lock().
-
-   It would make sense to explain the purpose of each lock.
-   My understanding is the following:
-
-      + console_list_lock() synchronizes manipulation of
-	con->flags.
-
-      + console_lock() makes sure that no console will
-	be calling con->write() callback after console_unlock().
-
-      + synchronize_srcu() is supposed to make sure that
-	any console is calling neither con->write_kthread()
-	nor con->atomic_write() after this synchronization.
-	Except that it does not work from my POV.
-
-    Anyway, I might make sense to separate the two approaches.
-    Let's say:
-
-	console_list_lock()
-	if (con->flags & CON_NO_BLK) {
-		noblk_console_disable(con);
-	} else {
-		/* cons->flags are synchronized using console_list_lock */
-		console->flags &= ~CON_ENABLED;
-		/*
-		 * Make sure that no console calls con->write()	anymore.
-		 *
-		 * This ordering looks a bit ugly. But it shows how
-		 * the things are serialized.
-		 */
-		console_lock();
-		console_unlock();
-	}
-
-     , where noblk_console_disable(con) must be more complicated.
-     It must be somehow synchronized with all con->write_kthread() and
-     write_atomic() callers.
-
-     I wonder if noblk_console_disable(con) might somehow use
-     the hangover mechanism so that it becomes the owner of
-     the console and disables the enabled flag. I mean
-     to implement some sleepable cons_acquire(). But this sounds
-     a bit like con->mutex that you wanted to avoid.
-
-     It might be easier to check the flag and call con->write() under
-     srcu_read_lock() so that synchronize_srcu() really waits until
-     the current message gets printed.
-
-
->  	console_list_unlock();
->  }
->  EXPORT_SYMBOL(console_stop);
-
-
-Best Regards,
-Petr
-
-PS: I am going to review v3 of "reduce console_lock scope" patchset
-    which has arrived few hours ago.
-
-    I just wanted to send my notes that I made last Friday
-    when I continued review of this RFC.
+>
+> --
+>   Kiryl Shutsemau / Kirill A. Shutemov
