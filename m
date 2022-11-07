@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02CA561F6CC
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 15:56:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EF1861F6CA
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 15:56:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232601AbiKGO4H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 09:56:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36970 "EHLO
+        id S232672AbiKGO4J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 09:56:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232463AbiKGOzy (ORCPT
+        with ESMTP id S232508AbiKGOzy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 7 Nov 2022 09:55:54 -0500
 Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37AFD1E3F9
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 06:55:33 -0800 (PST)
-Received: by mail-ed1-x529.google.com with SMTP id v17so17971283edc.8
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 06:55:33 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8A4F1E3FE
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 06:55:34 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id i21so17946283edj.10
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 06:55:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=dldDZ70y+b7MDohQcfrDCQaQZYKlYYCAp1iwtrwncm4=;
-        b=c8LaljHJTFpjiwPHR5pIY/tnWXKbry/2yhYp8PA1JzTGOrVz2kGQt4oK1Qpd23dvx1
-         oXVII7AAo/+UeVMuyswE9pIvuwB8yBX+0gw61WPJUjG7l9ZpOtmrgxZ/BzLxMTeyo5G8
-         cCNUsjCLjrCXuTqT6LAN3HwnvWliMgr49n5XI+ba+RnXLj8OflaI5Sv7mQYF7T1oS3mt
-         jXXiuep+NK1OConxgiqNRaTLaLh/da/UCAXgoIn1KVJZ9RZsv2wORFzKKp2F7lWRFsKC
-         7HvbYdHvv8Ile1kOUEKsO+7KC/uFQ6fpUDicMie7nLtKs1F06PtNJijQfPNIB87La2EW
-         amSg==
+        bh=FdBb6nGD4RtzMeFCF0mI0hXgihUtUj9UKHVMO3S1XYw=;
+        b=tE9UgVX+L9hpaWpxckXaST/M9xzZhZFJ247XS/nQWuAdOzE9i+a4Puj9HnIcvgyMKJ
+         fFfB2+zkGCQcs+TpbU7aS+FMmDBSrlJ6b4cR+solyXsKDHUta5wR8KIoFDWCT8MM7zi/
+         wcLqzcgH15mXIdGjtta/inudCqfZULwGkvhL2feKeQRGgV4MyU9tAP0ZuN0Yg6Uu1Yok
+         qGwkpe+wU7qkVI2KwWuPJTWTjnjOhODDul/QcyB9RqJ74AXKwFeEz/lTeq1Xzqh6F8UY
+         5gS3vDxGnyx+Kz3jeUuick3cR0/nVqc+g1IAlTwSBrPxaq3ABTWWAqJSV15JEFJLv7iv
+         SfsA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=dldDZ70y+b7MDohQcfrDCQaQZYKlYYCAp1iwtrwncm4=;
-        b=IgIrli4oYoiYqgeBSIefpP+I0C2/B98hWSwgfrKjt0XIkzvS9upyUUiElfnWvD50AZ
-         GT03JWXHmAr6dYoHY2vjqnCikq/JG0MNgGC1EsZL3LHqugA5eRdCdVY2LbP4MmLAb6e3
-         Lo0lrx2zpURF7qhf9D3ziyFVCRn1btmUIL0zGQtySYNtOdojCawcJsa7+D0NDKhDRiZJ
-         YBWr0jQy4nMvwRu6Ws6mvWx7Op3p3DabMOoC/rQ4sVO7y+OkrQ3wlRld6LqsehpSu9qH
-         TU9YCJIDjtThz7I5ghhmtAKto/TDzpgSH0lML9yEsPwqrCT77VgX8dp5SZVRQKfS8o95
-         gMjw==
-X-Gm-Message-State: ACrzQf3dKPv3Xv11HY4815wPlPhCHWpI4wlmG/yGrjntGUE2KfrJFSE8
-        i8FWPPf6mXjweqpz9VwXOJvtmA==
-X-Google-Smtp-Source: AMsMyM7GgFItfIygRdsrLmX45sXTgEQvDsF/o1ZbLxFCJZ/6P8S2koOYrWwPfusQdTSxZ8l/vaqx/Q==
-X-Received: by 2002:aa7:d710:0:b0:463:bd7b:2b44 with SMTP id t16-20020aa7d710000000b00463bd7b2b44mr34682459edq.385.1667832931798;
-        Mon, 07 Nov 2022 06:55:31 -0800 (PST)
+        bh=FdBb6nGD4RtzMeFCF0mI0hXgihUtUj9UKHVMO3S1XYw=;
+        b=IP9MWpDZT0Xf0QNPscNgVHqlpmbCcJewPtsMNCxZIDgr1S4NKetZYEwBmaRNuIsaAw
+         2l0gZN5H4Q0nLXO7EaFJaHnQfWAcl+ftdV/9ZImAU4ZaDXsvOAhmDKuY6AtcZRteVrZ9
+         TQi/EYcyxXkxUsO6cn0ezJslrKXwVZjwc1py+hZi7mipRoVDQW2cMSGfLci25zF+hPMK
+         KdvB8yMJXv9mYcAiU46qn0EK1qAfQzHuFD5CATOdzDO4uf45shvbj4D4SPefVe0HnrAa
+         p+KluEjQX/9ReS0hCDymRScML0j/AZTG6Q6k1mdUXXJrZGZgVV4voqSOie2z1UpwkmpQ
+         2FPg==
+X-Gm-Message-State: ACrzQf0CVTXuwa3HyY/uwsIjsGDEardNpLNnVkj4zuaUAjsBdV3aiv8A
+        clT1gTtOtvExliAWdGwx7u/XVQ==
+X-Google-Smtp-Source: AMsMyM6GdA0cFt5vchQrAwlYjCJEeZRHRs+ODCxUWXs2gBoK/ldVG6erdBp3IXVici6hF/wayLA4/A==
+X-Received: by 2002:a05:6402:46:b0:45c:bd68:6ab0 with SMTP id f6-20020a056402004600b0045cbd686ab0mr51049112edu.16.1667832933383;
+        Mon, 07 Nov 2022 06:55:33 -0800 (PST)
 Received: from localhost.localdomain ([194.29.137.22])
-        by smtp.gmail.com with ESMTPSA id d1-20020a1709067f0100b0078907275a44sm3503049ejr.42.2022.11.07.06.55.30
+        by smtp.gmail.com with ESMTPSA id d1-20020a1709067f0100b0078907275a44sm3503049ejr.42.2022.11.07.06.55.32
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Mon, 07 Nov 2022 06:55:31 -0800 (PST)
+        Mon, 07 Nov 2022 06:55:32 -0800 (PST)
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
 To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
         agross@kernel.org, krzysztof.kozlowski@linaro.org
@@ -58,9 +58,9 @@ Cc:     patches@linaro.org, Konrad Dybcio <konrad.dybcio@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 03/11] arm64: dts: qcom: msm8953: Fix up comments
-Date:   Mon,  7 Nov 2022 15:55:13 +0100
-Message-Id: <20221107145522.6706-4-konrad.dybcio@linaro.org>
+Subject: [PATCH 04/11] arm64: dts: qcom: msm8998-*: Fix up comments
+Date:   Mon,  7 Nov 2022 15:55:14 +0100
+Message-Id: <20221107145522.6706-5-konrad.dybcio@linaro.org>
 X-Mailer: git-send-email 2.32.0 (Apple Git-132)
 In-Reply-To: <20221107145522.6706-1-konrad.dybcio@linaro.org>
 References: <20221107145522.6706-1-konrad.dybcio@linaro.org>
@@ -79,38 +79,54 @@ Switch '//' comments to C-style /* */ and fix up the contents of some.
 
 Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
- arch/arm64/boot/dts/qcom/msm8953.dtsi | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ arch/arm64/boot/dts/qcom/msm8998-fxtec-pro1.dts | 8 ++------
+ arch/arm64/boot/dts/qcom/msm8998-mtp.dts        | 8 ++------
+ 2 files changed, 4 insertions(+), 12 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/msm8953.dtsi b/arch/arm64/boot/dts/qcom/msm8953.dtsi
-index f2ff18ac9141..32349174c4bd 100644
---- a/arch/arm64/boot/dts/qcom/msm8953.dtsi
-+++ b/arch/arm64/boot/dts/qcom/msm8953.dtsi
-@@ -948,21 +948,21 @@ apps_iommu: iommu@1e00000 {
- 			#iommu-cells = <1>;
- 			#size-cells = <1>;
+diff --git a/arch/arm64/boot/dts/qcom/msm8998-fxtec-pro1.dts b/arch/arm64/boot/dts/qcom/msm8998-fxtec-pro1.dts
+index 2aee2fd29a07..310f7a2df1e8 100644
+--- a/arch/arm64/boot/dts/qcom/msm8998-fxtec-pro1.dts
++++ b/arch/arm64/boot/dts/qcom/msm8998-fxtec-pro1.dts
+@@ -310,15 +310,11 @@ &funnel3 {
+ };
  
--			// vfe
-+			/* VFE */
- 			iommu-ctx@14000 {
- 				compatible = "qcom,msm-iommu-v1-ns";
- 				reg = <0x14000 0x1000>;
- 				interrupts = <GIC_SPI 111 IRQ_TYPE_LEVEL_HIGH>;
- 			};
+ &funnel4 {
+-	// FIXME: Figure out why clock late_initcall crashes the board with
+-	// this enabled.
+-	// status = "okay";
++	/* FIXME: Figure out why clock late_initcall crashes the board with this enabled. */
+ };
  
--			// mdp_0
-+			/* MDP_0 */
- 			iommu-ctx@15000 {
- 				compatible = "qcom,msm-iommu-v1-ns";
- 				reg = <0x15000 0x1000>;
- 				interrupts = <GIC_SPI 112 IRQ_TYPE_LEVEL_HIGH>;
- 			};
+ &funnel5 {
+-	// FIXME: Figure out why clock late_initcall crashes the board with
+-	// this enabled.
+-	// status = "okay";
++	/* FIXME: Figure out why clock late_initcall crashes the board with this enabled. */
+ };
  
--			// venus_ns
-+			/* VENUS_NS */
- 			iommu-ctx@16000 {
- 				compatible = "qcom,msm-iommu-v1-ns";
- 				reg = <0x16000 0x1000>;
+ &pcie0 {
+diff --git a/arch/arm64/boot/dts/qcom/msm8998-mtp.dts b/arch/arm64/boot/dts/qcom/msm8998-mtp.dts
+index 00032ed3f4aa..453a1c9e9808 100644
+--- a/arch/arm64/boot/dts/qcom/msm8998-mtp.dts
++++ b/arch/arm64/boot/dts/qcom/msm8998-mtp.dts
+@@ -124,15 +124,11 @@ &funnel3 {
+ };
+ 
+ &funnel4 {
+-	// FIXME: Figure out why clock late_initcall crashes the board with
+-	// this enabled.
+-	// status = "okay";
++	/* FIXME: Figure out why clock late_initcall crashes the board with this enabled. */
+ };
+ 
+ &funnel5 {
+-	// FIXME: Figure out why clock late_initcall crashes the board with
+-	// this enabled.
+-	// status = "okay";
++	/* FIXME: Figure out why clock late_initcall crashes the board with this enabled. */
+ };
+ 
+ &pcie0 {
 -- 
 2.38.1
 
