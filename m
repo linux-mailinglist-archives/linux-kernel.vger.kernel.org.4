@@ -2,235 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E96261ECA3
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 09:10:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 438B061EC99
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 09:09:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231288AbiKGIKU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 03:10:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58414 "EHLO
+        id S231582AbiKGIJW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 03:09:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230239AbiKGIKP (ORCPT
+        with ESMTP id S231567AbiKGIJU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 03:10:15 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4531413F5E
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 00:09:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667808555;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=xkjAKYc9FXb8vAKFUk+ZLuky94BRi1m+VajvOgs9/zk=;
-        b=HIcK9a54NA6bNl3RA7+RX3YCVc8uHk3or8HFSx54TApcz36iAH5SjPQP7X11YnVGKDuGt/
-        SdRYktHI/oIpFqa+iQo0Vy8Je66pO9IGYiIW4O+S6ZrWz5kPc+mvbyrJOnYjnh7LiefZfh
-        pjpIcnJk74p/xSMxAmOhiS/XqhDZeAs=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-658-TXqeKo-zP_aioF-1Mk1VyA-1; Mon, 07 Nov 2022 03:09:14 -0500
-X-MC-Unique: TXqeKo-zP_aioF-1Mk1VyA-1
-Received: by mail-ed1-f71.google.com with SMTP id h9-20020a05640250c900b00461d8ee12e2so7832073edb.23
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 00:09:13 -0800 (PST)
+        Mon, 7 Nov 2022 03:09:20 -0500
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 842A013F2E
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 00:09:19 -0800 (PST)
+Received: by mail-lj1-x235.google.com with SMTP id t10so15043912ljj.0
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 00:09:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=I/1C2eJ0mQS9HScu7or8tU8miNli5M+Crwcb5WX+lzs=;
+        b=vPtIjrGwdX18Hu7NEl5SK8N6LLWQ673WfxlhcQWAqu4lCg5QD+vCxVNVPzlkFNt6pv
+         FEWoPfVYA5Mh3+C5w8e4YH9E5471fXSWCTW5siWNZIp/1POWa9l+ow9kXdV89VoLAoN5
+         i920jkmHQfUYLrZRX8KXpbCs9AMO7cv+JGZlQpuh0JK+lgAqPCZlZaVdkc4KczZ0j0c+
+         2bOPOhjJA3JQS83k9HsmfzLUN0mDS8BBXpl7I6mr4DpCPQA0+ahEiMvYxTi5FHrS41Ab
+         EOCFJUcECyyj+naL37gVb8tlbyFpZij1Py0235de2Ft8lfWxkGhLFZE76p8oXNK/Krlv
+         tR2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=xkjAKYc9FXb8vAKFUk+ZLuky94BRi1m+VajvOgs9/zk=;
-        b=eLr7X04AoN5z1bsfHgO7fhTXFcl20Oz9R5k9j1rhwhi1fBsiBRW9oUQXaqVo+6jmp9
-         n2G9pJL4L7CEMPTJPa/vl+PAceVFbCVkzAGOBc99l+7U5jfZyucE6bit0JEk+Xn3+GlV
-         dRaoOnkRYBZa2LfFeZScrW3Y8LcShkwR3G+EEw8Y7YCDK6FqU6/D/1EnTzVEtBoq+Z7m
-         TkYEwAV1+omwwz+oqAFx/tEubMqocbpWV/0Qvrsprbq4c+R0G46B/HbkKunJpKmdMXGj
-         RHmubkOM5DhN3DjRDjxy2LTrylaHuQ+9eE2DFuWW21n4FWayMgUaQxcCMJQZHMKlKkOH
-         l6CQ==
-X-Gm-Message-State: ANoB5pk9qCPT7YDO/OL5zFgvp13ce3HRmNBaGV+BJ3PdpUFCJk0QooYU
-        iPl7EaEp1NvRHOpCGU49AkdmQDSiqHj1Ps6DCsrqZNctLBqSzfCncLGojubsdo4sedcocj6RaZz
-        jM2PR2YIFvKVlqu901TuWZwIZrsRbuTUFilvpc6/G
-X-Received: by 2002:a17:906:3ada:b0:7ae:566e:3a1c with SMTP id z26-20020a1709063ada00b007ae566e3a1cmr8476266ejd.223.1667808552869;
-        Mon, 07 Nov 2022 00:09:12 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf4Dia6htrl0R5Guk3LG6AOv/99O/QRcaC9BRqw2VBHRFhGzOyBhNhbrqYghSv7xD3REtrqxle3Zo6xkCi1mkbQ=
-X-Received: by 2002:a17:906:3ada:b0:7ae:566e:3a1c with SMTP id
- z26-20020a1709063ada00b007ae566e3a1cmr8476241ejd.223.1667808552587; Mon, 07
- Nov 2022 00:09:12 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=I/1C2eJ0mQS9HScu7or8tU8miNli5M+Crwcb5WX+lzs=;
+        b=GaA4P4u+DgQ2FVhiAZC8fSiffcATU7MrrBVZ46D5r1Dn6p5rOh9gSOxHoDZg59Wr00
+         nvvfMN+opTQQKog1EP2g0DxuQHrEcZ9cpr6T0H4zxti/US2S20KRgG2K2fQe++CekOQL
+         kcoRp4fOi59I3oyTpl6RXK2iMCVabgVbISKD5gxkosKGyHxKCSVFvlB+w3cJy1HXllP0
+         IZLjCAzOeXwli8SDc7n8+b5Yf00prC5ILdI1+xQE9mzlGDZckuuSal0qOkVXA6MTEWRb
+         nt2Azmjyfu2y+pRzxoOqNdNs4nLySl+JnTJEoCyF9jGT2pNwI67/TdfM8QMLeXJ8PL5y
+         BY6A==
+X-Gm-Message-State: ACrzQf3Nrz61vNrQCWhT/G6QC9Y6e9bFOuW4m+7ZJ7osLzi9TF8kfq7s
+        zZx8tmuTmQBP0szsjYm+pNcvKA==
+X-Google-Smtp-Source: AMsMyM4X9owA9AnNEuYVbK1IhD5sMvkwhQN4JUedQjJGTT1YOIZXpChyG96lkTdqFVER6gdVauAd/A==
+X-Received: by 2002:a2e:b6c6:0:b0:277:a45:5a38 with SMTP id m6-20020a2eb6c6000000b002770a455a38mr5404022ljo.377.1667808557798;
+        Mon, 07 Nov 2022 00:09:17 -0800 (PST)
+Received: from [192.168.0.20] (088156142199.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.199])
+        by smtp.gmail.com with ESMTPSA id j29-20020a056512029d00b004a03fd4476esm1103200lfp.287.2022.11.07.00.09.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 07 Nov 2022 00:09:16 -0800 (PST)
+Message-ID: <2400e167-073e-65fa-7fe6-b64a34bce256@linaro.org>
+Date:   Mon, 7 Nov 2022 09:09:15 +0100
 MIME-Version: 1.0
-References: <3acf1cc7a974cb4fb9b77b39311c6714@tfwno.gf> <Y2XUNive2KMwTjUF@MiWiFi-R3L-srv>
- <CALu+AoTVtO=-tzbgjeVRQ3uO0yGUPWKPuAiLn0CpaAq_=xr-sw@mail.gmail.com>
- <2f43e1e583a92e1592c48a15a763e1f7@tfwno.gf> <CALu+AoQqb23tnNS6VY4+Q5Mz85NDFfWOP_aynoz7fcoMvzNeKg@mail.gmail.com>
- <CAMj1kXGyo7q1Jgkw8RAfiiyLpe8GAvsWT+jEt4DM-1W9Qf7oUQ@mail.gmail.com>
- <CALu+AoQeraV2fLx_6q_76rdUXdsY6wYVMNU0o_VVuXLyfqiDNA@mail.gmail.com>
- <CALu+AoTJeMry54KmSWooP5Jm3t0EqCxOid_GzfU51KQmXUYp8Q@mail.gmail.com> <CAMj1kXEyR=fwYO2z3w8C+otpxB33owv6fEBTXs_-++Ln=P4g8w@mail.gmail.com>
-In-Reply-To: <CAMj1kXEyR=fwYO2z3w8C+otpxB33owv6fEBTXs_-++Ln=P4g8w@mail.gmail.com>
-From:   Dave Young <dyoung@redhat.com>
-Date:   Mon, 7 Nov 2022 16:08:34 +0800
-Message-ID: <CALu+AoQs_msyxpB=072qL9FyVYJzabJ12Xwj_dYA7qab9Pt85g@mail.gmail.com>
-Subject: Re: Bug: kexec on Lenovo ThinkPad T480 disables EFI mode
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     ns@tfwno.gf, Baoquan He <bhe@redhat.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-efi@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 3/8] dt-bindings: spi: Add Nuvoton WPCM450 Flash Interface
+ Unit (FIU)
+Content-Language: en-US
+To:     =?UTF-8?Q?Jonathan_Neusch=c3=a4fer?= <j.neuschaefer@gmx.net>
+Cc:     linux-spi@vger.kernel.org, openbmc@lists.ozlabs.org,
+        Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org
+References: <20221105185911.1547847-1-j.neuschaefer@gmx.net>
+ <20221105185911.1547847-4-j.neuschaefer@gmx.net>
+ <066919b1-c43d-f8ed-0191-cce8c575ee37@linaro.org> <Y2fIjSKAGleEtjHe@probook>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <Y2fIjSKAGleEtjHe@probook>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 7 Nov 2022 at 15:55, Ard Biesheuvel <ardb@kernel.org> wrote:
->
-> On Mon, 7 Nov 2022 at 08:40, Dave Young <dyoung@redhat.com> wrote:
-> >
-> > On Mon, 7 Nov 2022 at 15:36, Dave Young <dyoung@redhat.com> wrote:
-> > >
-> > > Hi Ard,
-> > >
-> > > On Mon, 7 Nov 2022 at 15:30, Ard Biesheuvel <ardb@kernel.org> wrote:
-> > > >
-> > > > On Mon, 7 Nov 2022 at 07:55, Dave Young <dyoung@redhat.com> wrote:
-> > > > >
-> > > > > Hi,
-> > > > >
-> > > > > On Sat, 5 Nov 2022 at 22:16, <ns@tfwno.gf> wrote:
-> > > > > >
-> > > > > > On 2022-11-05 05:49, Dave Young wrote:
-> > > > > > > Baoquan, thanks for cc me.
-> > > > > > >
-> > > > > > > On Sat, 5 Nov 2022 at 11:10, Baoquan He <bhe@redhat.com> wrote:
-> > > > > > >>
-> > > > > > >> Add Dave to CC
-> > > > > > >>
-> > > > > > >> On 10/28/22 at 01:02pm, ns@tfwno.gf wrote:
-> > > > > > >> > Greetings,
-> > > > > > >> >
-> > > > > > >> > I've been hitting a bug on my Lenovo ThinkPad T480 where kexecing will
-> > > > > > >> > cause EFI mode (if that's the right term for it) to be unconditionally
-> > > > > > >> > disabled, even when not using the --noefi option to kexec.
-> > > > > > >> >
-> > > > > > >> > What I mean by "EFI mode" being disabled, more than just EFI runtime
-> > > > > > >> > services, is that basically nothing about the system's EFI is visible
-> > > > > > >> > post-kexec. Normally you have a message like this in dmesg when the
-> > > > > > >> > system is booted in EFI mode:
-> > > > > > >> >
-> > > > > > >> > [    0.000000] efi: EFI v2.70 by EDK II
-> > > > > > >> > [    0.000000] efi: SMBIOS=0x7f98a000 ACPI=0x7fb7e000 ACPI 2.0=0x7fb7e014
-> > > > > > >> > MEMATTR=0x7ec63018
-> > > > > > >> > (obviously not the real firmware of the machine I'm talking about, but I
-> > > > > > >> > can also send that if it would be of any help)
-> > > > > > >> >
-> > > > > > >> > No such message pops up in my dmesg as a result of this bug, & this
-> > > > > > >> > causes some fallout like being unable to find the system's DMI
-> > > > > > >> > information:
-> > > > > > >> >
-> > > > > > >> > <6>[    0.000000] DMI not present or invalid.
-> > > > > > >> >
-> > > > > > >> > The efivarfs module also fails to load with -ENODEV.
-> > > > > > >> >
-> > > > > > >> > I've tried also booting with efi=runtime explicitly but it doesn't
-> > > > > > >> > change anything. The kernel still does not print the name of the EFI
-> > > > > > >> > firmware, DMI is still missing, & efivarfs still fails to load.
-> > > > > > >> >
-> > > > > > >> > I've been using the kexec_load syscall for all these tests, if it's
-> > > > > > >> > important.
-> > > > > > >> >
-> > > > > > >> > Also, to make it very clear, all this only ever happens post-kexec. When
-> > > > > > >> > booting straight from UEFI (with the EFI stub), all the aforementioned
-> > > > > > >> > stuff that fails works perfectly fine (i.e. name of firmware is printed,
-> > > > > > >> > DMI is properly found, & efivarfs loads & mounts just fine).
-> > > > > > >> >
-> > > > > > >> > This is reproducible with a vanilla 6.1-rc2 kernel. I've been trying to
-> > > > > > >> > bisect it, but it seems like it goes pretty far back. I've got vanilla
-> > > > > > >> > mainline kernel builds dating back to 5.17 that have the exact same
-> > > > > > >> > issue. It might be worth noting that during this testing, I made sure
-> > > > > > >> > the version of the kernel being kexeced & the kernel kexecing were the
-> > > > > > >> > same version. It may not have been a problem in older kernels, but that
-> > > > > > >> > would be difficult to test for me (a pretty important driver for this
-> > > > > > >> > machine was only merged during v5.17-rc4). So it may not have been a
-> > > > > > >> > regression & just a hidden problem since time immemorial.
-> > > > > > >> >
-> > > > > > >> > I am willing to test any patches I may get to further debug or fix
-> > > > > > >> > this issue, preferably based on the current state of torvalds/linux.git.
-> > > > > > >> > I can build & test kernels quite a few times per day.
-> > > > > > >> >
-> > > > > > >> > I can also send any important materials (kernel config, dmesg, firmware
-> > > > > > >> > information, so on & so forth) on request. I'll also just mention I'm
-> > > > > > >> > using kexec-tools 2.0.24 upfront, if it matters.
-> > > > > > >
-> > > > > > > Can you check the efi runtime in sysfs:
-> > > > > > > ls /sys/firmware/efi/runtime-map/
-> > > > > > >
-> > > > > > > If nothing then maybe you did not enable CONFIG_EFI_RUNTIME_MAP=y, it
-> > > > > > > is needed for kexec UEFI boot on x86_64.
-> > > > > >
-> > > > > > Oh my, it really is that simple.
-> > > > > >
-> > > > > > Indeed, enabling this in the pre-kexec kernel fixes it all up. I had
-> > > > > > blindly disabled it in my quest to downsize the pre-kexec kernel to
-> > > > > > reduce boot time (it only runs a bootloader). In hindsight, the firmware
-> > > > > > drivers section is not really a good section to tweak on a whim.
-> > > > > >
-> > > > > > I'm terribly sorry to have taken your time to "fix" this "bug". But I
-> > > > > > must ask, is there any reason why this is a visible config option, or at
-> > > > > > least not gated behind CONFIG_EXPERT? drivers/firmware/efi/runtime-map.c
-> > > > > > is pretty tiny, & considering it depends on CONFIG_KEXEC_CORE, one
-> > > > > > probably wants to have kexec work properly if they can even enable it.
-> > > > >
-> > > > > Glad to know it works with the .config tweaking. I can not recall any
-> > > > > reason for that though.
-> > > > >
-> > > > > Since it sits in the efi code path, let's see how Ard thinks about
-> > > > > your proposal.
-> > > > >
-> > > >
-> > > > I don't understand why EFI_RUNTIME_MAP should depend on KEXEC_CORE at
-> > > > all: it is documented as a feature that can be enabled for debugging
-> > > > as well, and kexec does not work as expected without it.
-> > >
-> > > Probably debugging only mentioned in text, but not been considered in
-> > > the kconfig logic :(
-> > >
-> > > >
-> > > > Should we just change it like this perhaps?
-> > > >
-> > > > --- a/drivers/firmware/efi/Kconfig
-> > > > +++ b/drivers/firmware/efi/Kconfig
-> > > > @@ -28,8 +28,8 @@ config EFI_VARS_PSTORE_DEFAULT_DISABLE
-> > > >
-> > > >  config EFI_RUNTIME_MAP
-> > > >         bool "Export efi runtime maps to sysfs"
-> > > > -       depends on X86 && EFI && KEXEC_CORE
-> > > > -       default y
-> > > > +       depends on X86 && EFI
-> > > > +       default KEXEC_CORE
-> > > >         help
-> > > >
-> > > > and maybe add an 'if EXPERT' so that the option is only visible to
-> > > > modify when CONFIG_EXPERT=y ?
-> > >
-> > > Above changes look good to me.
-> > >
-> > > >
-> > > > In any case, I intend to move this code into arch/x86 as well, so I'll
-> > > > have a couple of patches out shortly.
-> > >
-> > > That would be better since it is X86 only.  Thanks, Ard.
-> >
-> > Hmm,  before doing that, do you think it is useful for debugging
-> > purposes? That could be a reason to sit in efi code instead of x86 ..
-> >
->
-> This code was only ever enabled on x86, and on ARM/arm64, we can
-> capture the memory map via efi=debug on any kernel build, and capture
-> the virtual mappings using PTDUMP (which also gives us the exact
-> attributes for each mapped region)
->
-> So I don't think it has that much value on non-x86 tbh.
+On 06/11/2022 15:45, Jonathan Neuschäfer wrote:
+> On Sun, Nov 06, 2022 at 10:38:45AM +0100, Krzysztof Kozlowski wrote:
+>> On 05/11/2022 19:59, Jonathan Neuschäfer wrote:
+>>> The Flash Interface Unit (FIU) is the SPI flash controller in the
+>>> Nuvoton WPCM450 BMC SoC. It supports four chip selects, and direct
+>>> (memory-mapped) access to 16 MiB per chip. Larger flash chips can be
+>>> accessed by software-defined SPI transfers.
+>>>
+>>> The FIU in newer NPCM7xx SoCs is not compatible with the WPCM450 FIU.
+>>>
+>>> Signed-off-by: Jonathan Neuschäfer <j.neuschaefer@gmx.net>
+>>> ---
+> [...]
+>>> +allOf:
+>>> +  - $ref: "/schemas/spi/spi-controller.yaml#"
+>>
+>> Drop the quotes.
+> 
+> Will do.
+> 
+> 
+>>> +
+>>> +properties:
+>>> +  compatible:
+>>> +    const: nuvoton,wpcm450-fiu
+>>> +
+>>> +  reg:
+>>> +    items:
+>>> +      - description: FIU registers
+>>> +      - description: Memory-mapped flash contents
+>>> +
+>>> +  reg-names:
+>>> +    items:
+>>> +      - const: control
+>>> +      - const: memory
+>>> +    minItems: 1
+>>
+>> This does not match your 'reg'. Two items are required there.
+> 
+> My intention was rather to make the second reg item actually optional,
+> i.e. add minItems: 1 for reg as well.  (But, further discussion below.)
+> 
+> 
+>>> +    spi@c8000000 {
+>>> +      compatible = "nuvoton,wpcm450-fiu";
+>>> +      #address-cells = <1>;
+>>> +      #size-cells = <0>;
+>>> +      reg = <0xc8000000 0x1000>, <0xc0000000 0x4000000>;
+>>
+>> reg is the second property.
+> 
+> Ok, I'll move it up.
+> 
+>>
+>>> +      reg-names = "control", "memory";
+>>> +      clocks = <&clk WPCM450_CLK_FIU>;
+>>> +      nuvoton,shm = <&shm>;
+>>> +
+>>> +      flash@0 {
+>>> +        compatible = "jedec,spi-nor";
+>>> +      };
+>>> +    };
+>>> +
+>>> +    shm: syscon@c8001000 {
+>>> +      compatible = "nuvoton,wpcm450-shm", "syscon";
+>>> +      reg = <0xc8001000 0x1000>;
+>>> +    };
+>>> +
+>>> +  - |
+>>> +    #include <dt-bindings/clock/nuvoton,wpcm450-clk.h>
+>>> +    spi@c8000000 {
+>>> +      compatible = "nuvoton,wpcm450-fiu";
+>>> +      // the "memory" resource may be omitted
+>>
+>> This is rather obvious, so what you should comment is WHY or WHEN second
+>> resource can be omitted.
+> 
+> Ok, I'll add more reasoning, which is basically: The "memory" mapping is
+> only an optimization for faster access, knowledge of it is not necessary
+> for full operation of the device.
+> 
+>> Not every instance on the hardware has it?
+> 
+> AFAIK every instance has it, and there's unlikely to be any variation on
+> this fact anymore, because newer Nuvoton SoCs replaced the FIU with a
+> redesigned and incompatible version.
+> 
+> I admit that the value of making the "memory" mapping optional is rather
+> theoretical, and I'm open to making this reg item mandatory to simplify
+> the binding.
 
-Ok, fair enough.
+If every instance has it, then regardless whether it is actually used or
+not, just require second address?
 
-Thanks
-Dave
+Best regards,
+Krzysztof
 
