@@ -2,82 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31ED961F00B
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 11:13:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E280161F163
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 12:03:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231376AbiKGKNI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 05:13:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57960 "EHLO
+        id S231145AbiKGLDh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 06:03:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231145AbiKGKNC (ORCPT
+        with ESMTP id S229929AbiKGLDf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 05:13:02 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6285B2BC
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 02:13:00 -0800 (PST)
-Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4N5Rm0032PzpW35;
-        Mon,  7 Nov 2022 18:09:19 +0800 (CST)
-Received: from M910t.huawei.com (10.110.54.157) by
- kwepemi500013.china.huawei.com (7.221.188.120) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 7 Nov 2022 18:12:57 +0800
-From:   Changbin Du <changbin.du@huawei.com>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>
-CC:     "H. Peter Anvin" <hpa@zytor.com>, <linux-kernel@vger.kernel.org>,
-        <hw.huiwang@huawei.com>, Changbin Du <changbin.du@huawei.com>
-Subject: [PATCH] x86: use HW_BREAKPOINT_RW where possible
-Date:   Tue, 8 Nov 2022 10:12:52 +0800
-Message-ID: <20221108021252.605986-1-changbin.du@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 7 Nov 2022 06:03:35 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 25104BE30
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 03:03:34 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0CB501FB;
+        Mon,  7 Nov 2022 03:03:40 -0800 (PST)
+Received: from FVFF77S0Q05N (unknown [10.57.69.132])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 21D9A3F73D;
+        Mon,  7 Nov 2022 03:03:32 -0800 (PST)
+Date:   Mon, 7 Nov 2022 11:03:29 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Anna-Maria Gleixner <anna-maria@linutronix.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v5a 2/5] clocksource/drivers/arm_arch_timer: Do not use
+ timer namespace for timer_shutdown() function
+Message-ID: <Y2jmAWxLjaCMQx/O@FVFF77S0Q05N>
+References: <20221106054535.709068702@goodmis.org>
+ <20221106054648.549609750@goodmis.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.110.54.157]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemi500013.china.huawei.com (7.221.188.120)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.0 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_12_24,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221106054648.549609750@goodmis.org>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use enum HW_BREAKPOINT_RW where possible instead of individual
-(HW_BREAKPOINT_R | HW_BREAKPOINT_W).
+On Sun, Nov 06, 2022 at 01:45:37AM -0400, Steven Rostedt wrote:
+> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+> 
+> A new "shutdown" timer state is being added to the generic timer code. One
+> of the functions to change the timer into the state is called
+> "timer_shutdown()". This means that there can not be other functions
+> called "timer_shutdown()" as the timer code owns the "timer_*" name space.
+> 
+> Rename timer_shutdown() to arch_timer_shutdown() to avoid this conflict.
+> 
+> Link: https://lore.kernel.org/all/20221105060155.409832154@goodmis.org/
+> 
+> Cc: Mark Rutland <mark.rutland@arm.com>
+> Cc: Marc Zyngier <maz@kernel.org>
+> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: linux-arm-kernel@lists.infradead.org
+> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 
-Signed-off-by: Changbin Du <changbin.du@huawei.com>
----
- arch/x86/kernel/hw_breakpoint.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Acked-by: Mark Rutland <mark.rutland@arm.com>
 
-diff --git a/arch/x86/kernel/hw_breakpoint.c b/arch/x86/kernel/hw_breakpoint.c
-index 668a4a6533d9..cccfb446ce80 100644
---- a/arch/x86/kernel/hw_breakpoint.c
-+++ b/arch/x86/kernel/hw_breakpoint.c
-@@ -213,7 +213,7 @@ int arch_bp_generic_fields(int x86_len, int x86_type,
- 		*gen_type = HW_BREAKPOINT_W;
- 		break;
- 	case X86_BREAKPOINT_RW:
--		*gen_type = HW_BREAKPOINT_W | HW_BREAKPOINT_R;
-+		*gen_type = HW_BREAKPOINT_RW;
- 		break;
- 	default:
- 		return -EINVAL;
-@@ -347,7 +347,7 @@ static int arch_build_bp_info(struct perf_event *bp,
- 	case HW_BREAKPOINT_W:
- 		hw->type = X86_BREAKPOINT_WRITE;
- 		break;
--	case HW_BREAKPOINT_W | HW_BREAKPOINT_R:
-+	case HW_BREAKPOINT_RW:
- 		hw->type = X86_BREAKPOINT_RW;
- 		break;
- 	case HW_BREAKPOINT_X:
--- 
-2.25.1
+Mark.
 
+> ---
+>  drivers/clocksource/arm_arch_timer.c | 12 ++++++------
+>  1 file changed, 6 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/clocksource/arm_arch_timer.c b/drivers/clocksource/arm_arch_timer.c
+> index a7ff77550e17..9c3420a0d19d 100644
+> --- a/drivers/clocksource/arm_arch_timer.c
+> +++ b/drivers/clocksource/arm_arch_timer.c
+> @@ -687,8 +687,8 @@ static irqreturn_t arch_timer_handler_virt_mem(int irq, void *dev_id)
+>  	return timer_handler(ARCH_TIMER_MEM_VIRT_ACCESS, evt);
+>  }
+>  
+> -static __always_inline int timer_shutdown(const int access,
+> -					  struct clock_event_device *clk)
+> +static __always_inline int arch_timer_shutdown(const int access,
+> +					       struct clock_event_device *clk)
+>  {
+>  	unsigned long ctrl;
+>  
+> @@ -701,22 +701,22 @@ static __always_inline int timer_shutdown(const int access,
+>  
+>  static int arch_timer_shutdown_virt(struct clock_event_device *clk)
+>  {
+> -	return timer_shutdown(ARCH_TIMER_VIRT_ACCESS, clk);
+> +	return arch_timer_shutdown(ARCH_TIMER_VIRT_ACCESS, clk);
+>  }
+>  
+>  static int arch_timer_shutdown_phys(struct clock_event_device *clk)
+>  {
+> -	return timer_shutdown(ARCH_TIMER_PHYS_ACCESS, clk);
+> +	return arch_timer_shutdown(ARCH_TIMER_PHYS_ACCESS, clk);
+>  }
+>  
+>  static int arch_timer_shutdown_virt_mem(struct clock_event_device *clk)
+>  {
+> -	return timer_shutdown(ARCH_TIMER_MEM_VIRT_ACCESS, clk);
+> +	return arch_timer_shutdown(ARCH_TIMER_MEM_VIRT_ACCESS, clk);
+>  }
+>  
+>  static int arch_timer_shutdown_phys_mem(struct clock_event_device *clk)
+>  {
+> -	return timer_shutdown(ARCH_TIMER_MEM_PHYS_ACCESS, clk);
+> +	return arch_timer_shutdown(ARCH_TIMER_MEM_PHYS_ACCESS, clk);
+>  }
+>  
+>  static __always_inline void set_next_event(const int access, unsigned long evt,
+> -- 
+> 2.35.1
