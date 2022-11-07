@@ -2,85 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26EF961F7A7
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 16:30:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B149561F7AE
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 16:32:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232041AbiKGPal (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 10:30:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35868 "EHLO
+        id S232306AbiKGPcB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 10:32:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231671AbiKGPae (ORCPT
+        with ESMTP id S231698AbiKGPb7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 10:30:34 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6F0613D20
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 07:30:32 -0800 (PST)
-Received: from zn.tnic (p200300ea9733e71f329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e71f:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 25C211EC0716;
-        Mon,  7 Nov 2022 16:30:31 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1667835031;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=QUo3Yz5ia9UMUQGTPgPFcFGdU9WNRAlf7H3KnO5VN4Q=;
-        b=HSFUJUttLvRpbfId/bjL5ZOhWnD0ziekIu2cal3mX1/0FzlHMJUDZuIrjQE2BEdl5d5t5U
-        37fg/Jlc8bCYy639dA15egpFLCta5pEMAC81JKOPBcbeYaZmSSuHpe8QQ4bob6rGZ188FE
-        TwNW0iUgT9yWcx2SAP+ILxgHImghNGI=
-Date:   Mon, 7 Nov 2022 16:30:27 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Fei Li <fei1.li@intel.com>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org, peterz@infradead.org,
-        dave.hansen@intel.com, gregkh@linuxfoundation.org,
-        tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
-        hpa@zytor.com, Yu1.Wang@intel.com, conghui.chen@intel.com,
-        fengwei.yin@intel.com
-Subject: Re: [PATCH v2] x86/acrn: Set X86_FEATURE_TSC_KNOWN_FREQ
-Message-ID: <Y2kkk+XqBP3u6ObI@zn.tnic>
-References: <20221101053019.174948-1-fei1.li@intel.com>
+        Mon, 7 Nov 2022 10:31:59 -0500
+Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDFFE1F2FB;
+        Mon,  7 Nov 2022 07:31:57 -0800 (PST)
+Received: by mail-pj1-x1042.google.com with SMTP id e7-20020a17090a77c700b00216928a3917so10114410pjs.4;
+        Mon, 07 Nov 2022 07:31:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Xe7Vf2fqmhjfKJbAENjC282hA0fF9hfDgyTK1BSujFM=;
+        b=Fr1d+LDHwevMeyCpAaZMAQA0nOzCctwpC44IJanDyPOeP/1jasRetxNDorlo9j7TgZ
+         6hfhveZRk7O0o3+65DTj5BLCPE/O6tG97G/vt4BFWOJwECH7VbJBD5beIJiorbXiBIP1
+         8CYSFIq6K8/q1aQsLaHYJwhRLcheHbHRFOG9z3RM1VWYKDuf3mBLoegyg9rQjcankFTL
+         0ZDK7GtY9XOgzp3ZDMiaIwl5ViUXhW5K4zn1vP/cJVe0UilbBOKRd8MWIuKyNFX55oqR
+         LV6IuUFxp/mQyfwmppSTbybh+fQmoCTZQG6K9sOF1arOLVNCp7OJcEUKSCubVIImDNwM
+         1zLQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Xe7Vf2fqmhjfKJbAENjC282hA0fF9hfDgyTK1BSujFM=;
+        b=ViL0/27HP/evwfDxsuTx550W272K3ynDwGBze2VOkZZeLo8eE/cJ2zp+V/bJNOdUr3
+         PmBWmfx6TBgL599wjPtuUK/j32VKUKIMlVHbavW8+S61AuixydzMxUsLV36ROM2d2Ybb
+         GMcAZ8X77qLDskYBaftFKpgDIXru31sjqiJ9SirZjrvlgu3PdHhZWIvALMm0PwtFH9bd
+         vN+3bwu0h7CO7N1fYgYJrjNM2NgsHn4oLmqTSXirPNRSq74nlrWUPDJKUDg+ftU0q/2G
+         i93au46InPFQX0zOdrEJ1DyduP+KB75YLHigi1i7MCetQVDbg6nUR0xY3rEFXvRrCXHu
+         0TWQ==
+X-Gm-Message-State: ACrzQf2xWAo1E9BGCywBKJoHNj3LSNMgB8lh5RJr8jlVyiQ+tiDv2jbT
+        9YgUzZOvyxe6A71QLobkekOme6n5OIntdQ==
+X-Google-Smtp-Source: AMsMyM76YngygHaPtJLkp0nl39HicmW2EAkqC2cac5M+80l1HPl93v9HBRoJvkwmFywH0B2I/w47gA==
+X-Received: by 2002:a17:90b:3c0c:b0:216:ab4c:5bfc with SMTP id pb12-20020a17090b3c0c00b00216ab4c5bfcmr20368718pjb.135.1667835117396;
+        Mon, 07 Nov 2022 07:31:57 -0800 (PST)
+Received: from junjun.localdomain ([113.140.248.157])
+        by smtp.gmail.com with ESMTPSA id o15-20020a170902d4cf00b00180a7ff78ccsm5139343plg.126.2022.11.07.07.31.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Nov 2022 07:31:56 -0800 (PST)
+From:   JunDong Song <jundongsong1@gmail.com>
+To:     jingoohan1@gmail.com, gustavo.pimentel@synopsys.com,
+        lpieralisi@kernel.org
+Cc:     robh@kernel.org, kw@linux.com, bhelgaas@google.com,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        JunDong Song <jundongsong1@gmail.com>
+Subject: [PATCH 1/2] PCI: dwc-host: Add a warning to prevent invalid values
+Date:   Mon,  7 Nov 2022 23:31:07 +0800
+Message-Id: <20221107153108.5770-1-jundongsong1@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221101053019.174948-1-fei1.li@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 01, 2022 at 01:30:19PM +0800, Fei Li wrote:
-> If the TSC frequency is known from the acrn_get_tsc_khz(),
-> the TSC frequency does not need to be recalibrated.
+of_pci_get_max_link_speed() may return a negative value,
+causing the controller to not set the speed correctly.
+Add a warning in case the driver engineer misses it.
 
-What if the HV has unstable TSCs? How do you handle that?
+Signed-off-by: JunDong Song <jundongsong1@gmail.com>
+---
 
-> Avoiding recalibration by setting X86_FEATURE_TSC_KNOWN_FREQ.
+When I use the pcie dwc driver, the controller speed is abnormal,
+but it has not been detected because of the @max-link-speed error,
+so I think I need to return an error or warning here.
 
-Pls read section "2) Describe your changes" in
-Documentation/process/submitting-patches.rst for more details on how to
-write your commit message.
+Thanks.
 
-> This patch also removes `inline` for acrn_get_tsc_khz() since
-> it doesn't make sense.
+ drivers/pci/controller/dwc/pcie-designware-ep.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-Avoid having "This patch" or "This commit" in the commit message. It is
-tautologically useless.
-
-Also, do
-
-$ git grep 'This patch' Documentation/process
-
-for more details.
-
-Thx.
-
+diff --git a/drivers/pci/controller/dwc/pcie-designware-ep.c b/drivers/pci/controller/dwc/pcie-designware-ep.c
+index 83ddb1902..573342601 100644
+--- a/drivers/pci/controller/dwc/pcie-designware-ep.c
++++ b/drivers/pci/controller/dwc/pcie-designware-ep.c
+@@ -739,8 +739,11 @@ int dw_pcie_ep_init(struct dw_pcie_ep *ep)
+ 		return -ENOMEM;
+ 	ep->outbound_addr = addr;
+ 
+-	if (pci->link_gen < 1)
++	if (pci->link_gen < 1) {
+ 		pci->link_gen = of_pci_get_max_link_speed(np);
++		if (unlikely(pci->link_gen < 0))
++			dev_warn(dev, "Failed to get max link speed\n");
++	}
+ 
+ 	epc = devm_pci_epc_create(dev, &epc_ops);
+ 	if (IS_ERR(epc)) {
 -- 
-Regards/Gruss,
-    Boris.
+2.25.1
 
-https://people.kernel.org/tglx/notes-about-netiquette
