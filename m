@@ -2,105 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEDDE62022E
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 23:15:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E411562023C
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 23:20:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231993AbiKGWPN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 17:15:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48750 "EHLO
+        id S231657AbiKGWU0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 17:20:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231172AbiKGWPL (ORCPT
+        with ESMTP id S230186AbiKGWUZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 17:15:11 -0500
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 569C020191;
-        Mon,  7 Nov 2022 14:15:06 -0800 (PST)
-Received: by mail-lf1-x12e.google.com with SMTP id g7so18695283lfv.5;
-        Mon, 07 Nov 2022 14:15:06 -0800 (PST)
+        Mon, 7 Nov 2022 17:20:25 -0500
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E6B917898
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 14:20:24 -0800 (PST)
+Received: by mail-ej1-x633.google.com with SMTP id sc25so33842719ejc.12
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 14:20:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=xzjpq5XPZvUD1SGRN0dO+XiFdKDQrabShm+K+q5Ki74=;
-        b=XBd6JY1zQ1jDCiVBcrndeR6XrFo2gkNsWZFCretTY7V6BlBQq3Qq90GaX667+nxIKx
-         mqM9y7Syg9ejqJqUSkaorL7zVunEoVLL1GlnrRp7ErsgCt+2qvFXC2jSl/YwoCbbCYe/
-         emSbC7Q0XVbDkh2ilajtJYq6lvK1SxUAIlZ+M8V7l0I7ao4/yqMgFhqMFEZFqzfaxu+2
-         JjvwifrgsfRObcGwZUDm9HJAzhqajXCLIPd0XC+oc/7vvCclhoHV1Pv4rZIwut0/0tTP
-         KKpqVqncp2VSOJgZUMfu272wnsu1zBvLTUQngAZfRAm1nYmcT7z5t8wvmXdbCbvnHyIA
-         fxPA==
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=KmaLh+Y0txSwlFeZ+F1TyYarBRir0ReRvhvoxrN1/tk=;
+        b=o7ibBTCt6mjngdXQwApj6/FHmHYOQmVIHjmrQlMxJoxrGQEk7AXFhwxW18uV5CSEdJ
+         hwNDSD6MycnMev2e8K7uaIb+Uy328heQdCgC0XD5V4Tw5f9dgNVSuVkwCIna8SWLkh+x
+         2x4XKsokHJld1C9DLuTkSkp5eBiFCzXr+bwPTLyOV2nL3VAWuf1T1+Yb/cxt+8uXnR70
+         jYLMY49EZ9D2e1Y+EdB+XqAUbh7tN3cqaqOBdG1oR7Vua/YGwLX44BiMjNx/7OBhWyfQ
+         GL1oCo95Us6c2GBE/P+Pl+cQRCiazGra4tUXjMorIU25zIDRs8Dt+V5Hzsuzy0NrlrYH
+         tDbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xzjpq5XPZvUD1SGRN0dO+XiFdKDQrabShm+K+q5Ki74=;
-        b=v7HL6jtprc5g+yyzjjUw+Ny4hdZZUY4ZhKeUM+uQAzaESWHZyVUgWMJOuy0VO9o5pq
-         MOaQNn72Yxovp5pvm4qqW/BxgmO3/LI+Vqbgcy6hQyqR5tkJS1CAQ2sQdp5u22WEwlBZ
-         tlGXnbedryReg8x8AseuMGEHS7hv3VhYPh32uUPaokDNZf530rbSrfTS2BokzBgRo9EI
-         xaNyuaKZQ8fg0vrwmQOtc+ZOBi8eKiDblUn9qPKybCN3BQ64i5EpzzR5DRVqXRdx7MF/
-         rw0ha5aShvFFunO9a7CoTppLKLMSRQrxUqVrecZUeJbG6lMcKGYAkmL81b/HyOypeKQx
-         sYtg==
-X-Gm-Message-State: ACrzQf1rOYmis2ASNYwrHFNuHfM+Z54GsI3vq7LGn3h5dtt07MYyA4Yd
-        aQoK1BAxG1qnFwnfgMhRiJdaomFtN+MlYw==
-X-Google-Smtp-Source: AMsMyM7VdmDB8EzyWj8i1ytIbkn9jf4VHBv0i//kMsDQbCCPQdGTX839TbiafUUQ96vta+sjCGqQGw==
-X-Received: by 2002:ac2:52a3:0:b0:4b1:785c:7a56 with SMTP id r3-20020ac252a3000000b004b1785c7a56mr8745635lfm.187.1667859304550;
-        Mon, 07 Nov 2022 14:15:04 -0800 (PST)
-Received: from [192.168.0.251] (dsl-hkibng42-56733b-36.dhcp.inet.fi. [86.115.59.36])
-        by smtp.gmail.com with ESMTPSA id f8-20020a2ea0c8000000b0025ebaef9570sm1436436ljm.40.2022.11.07.14.15.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Nov 2022 14:15:04 -0800 (PST)
-Message-ID: <fb155814-2e95-3f3b-0826-2c9aed8d0a63@gmail.com>
-Date:   Tue, 8 Nov 2022 00:15:00 +0200
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KmaLh+Y0txSwlFeZ+F1TyYarBRir0ReRvhvoxrN1/tk=;
+        b=KagrAviy9lIkJz/rH9aC7w1YgFsc9BrHXw89H/vsn9GHDWrDGOoOWWqM+Zc61DdaVa
+         LE3iW6BwUi9mgQ3d5Fmj3NY1GFVUzGk6thZyEz0GbKhtlTZele3K1RUIhhepYEPbfgel
+         IrM8ga0vgFe1DCfbGuAa3YxrkcMItORlFn7z35gfOZ5q7tIoIVpmUVU/WQLsG0sDdCvz
+         +pk1hwBL4nN0vmY8epJvrolSspPQhZe5c6Wh4cOCedhajkXjTV9o3AxTiW8efVn0FsMG
+         qyuok9PGpzc4iRi3kyuQxVXv58fa4gS1FZsrUlhWh+Un1wTGkBiVHx6oZYmsOovxS71O
+         /fvA==
+X-Gm-Message-State: ANoB5pnZyJ2BQ6l+FOii6aweoF48KtL+kLxAeq7HBvaBtCLFxz8m6hOd
+        5w090hv+PbQ5j+hgti6lbUsw90xSVmxqBNd5m5MccsGqawo=
+X-Google-Smtp-Source: AA0mqf5WLD1wiOz8HYbxMlkveOPZ539jbNCd5F9LkoyVWHpJzSvCqUbGTfggSOkTs1ZOAnPQLeocqDWmLwxFDrKih0c=
+X-Received: by 2002:a17:906:6acc:b0:7ae:658c:ee45 with SMTP id
+ q12-20020a1709066acc00b007ae658cee45mr8110470ejs.190.1667859622772; Mon, 07
+ Nov 2022 14:20:22 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: linux-next: build failure after merge of the qcom tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Andy Gross <agross@kernel.org>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        Rayyan Ansari <rayyan@ansari.sh>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20221108090018.44624610@canb.auug.org.au>
-Content-Language: en-US
-From:   =?UTF-8?Q?Matti_Lehtim=c3=a4ki?= <matti.lehtimaki@gmail.com>
-In-Reply-To: <20221108090018.44624610@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20221020124558.38060-1-wangjianli@cdjrlc.com>
+In-Reply-To: <20221020124558.38060-1-wangjianli@cdjrlc.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Mon, 7 Nov 2022 23:20:11 +0100
+Message-ID: <CACRpkdYmWEPL+B4TyZvAPRnReLhV6eqyA6KQRk6nyv+yH7b+tA@mail.gmail.com>
+Subject: Re: [PATCH] arm/mach-ux500: fix repeated words in comments
+To:     wangjianli <wangjianli@cdjrlc.com>
+Cc:     linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Thu, Oct 20, 2022 at 2:46 PM wangjianli <wangjianli@cdjrlc.com> wrote:
 
-This happened because one of the dts patches in the patch series which 
-contained "ARM: dts: qcom: msm8226: Add CCI bus" was not applied when 
-the other two dts patches were applied qcom tree. The patch number 1 
-"ARM: dts: qcom: msm8226: Add MMCC node" in that patch series 
-(https://lore.kernel.org/linux-arm-msm/20221002122859.75525-1-matti.lehtimaki@gmail.com/T/#m920039b455ad024249d000332d1f07f9e4c19008) 
-is required for that "ARM: dts: qcom: msm8226: Add CCI bus".
+> Delete the redundant word 'in'.
+>
+> Signed-off-by: wangjianli <wangjianli@cdjrlc.com>
 
--- 
-Matti Lehtimäki
+Patch applied.
 
-On 8.11.2022 0.00, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the qcom tree, today's linux-next build (arm
-> multi_v7_defconfig) failed like this:
-> 
-> arch/arm/boot/dts/qcom-msm8226.dtsi:302.21-327.5: ERROR (phandle_references): /soc/cci@fda0c000: Reference to non-existent node or label "mmcc"
-> 
-> Caused by commit
-> 
->    4ab2f41b0850 ("ARM: dts: qcom: msm8226: Add CCI bus")
-> 
-> I have used the qcom tree from next-20221107 for today.
-> 
+Yours,
+Linus Walleij
