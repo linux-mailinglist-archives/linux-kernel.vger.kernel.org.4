@@ -2,104 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6279461F050
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 11:22:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 565CA61F052
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 11:23:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231627AbiKGKWF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 05:22:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33064 "EHLO
+        id S231324AbiKGKXC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 05:23:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231727AbiKGKVw (ORCPT
+        with ESMTP id S231243AbiKGKWm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 05:21:52 -0500
-Received: from mail-ed1-x54a.google.com (mail-ed1-x54a.google.com [IPv6:2a00:1450:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC04A18E35
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 02:21:38 -0800 (PST)
-Received: by mail-ed1-x54a.google.com with SMTP id c9-20020a05640227c900b00463de74bc15so7933699ede.13
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 02:21:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ihUiIO3ZLwpQKr6BgSjeEHYERb79BZdv2hX+HIlwkJI=;
-        b=L5X++DuCad+8UxHidtzd0ia2QhWMBne6T5ULMfNTvrrMHUXXqX//6iwiE924aWtDl2
-         LHjk8+PQvvWwiUAW4IM7/Jbaw9xPV3bB92LqE/4ckIEGVB9eU+8rjRaBGxYzVKh62B+3
-         pffzH8ZFW3ICBI06YUAqiRNAyj/S9rF5NbVVXaC7T9sH/bXhSk9qFdYMgedpUpqAvXiL
-         uOlBxfs1km20u40N9rIMzarYVjNpodlyESEmZHq/LZVkUhYHweZ5DLwmdEJc3n025kH6
-         sBBYgobP0SiZSy/OJEJpKNxmdbVQ3Z+k3kee+L3N6Dx/f4OR8oKfE6aMdDBEnuoU2Rps
-         i3Wg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ihUiIO3ZLwpQKr6BgSjeEHYERb79BZdv2hX+HIlwkJI=;
-        b=A96Sz51cgfEvqtRc1Lgy2uiMWyheyDlFAcY07qfd7fLGBR0ryXJUPDOMuD+FC2S42w
-         9ZpueakplPG5eK4R07iHcpDyXML9qniCREwVabFJ0LLeedVPslUlSQtNCrb4/KiooTL7
-         /6QLbjNnW07bRHvJaM5HmDYl3MsEE0oslsf8kk7UwCMmU1rLxy861PgeUN/Iupcar0hv
-         q2VdBhhhbTxjp7CzYVaF+V0l7gi+q5yw3qo3bHPVXg7WsYa20wZVQDbX+qx9ypNjQee4
-         Y6gOeIOclep1SfmA7E+hUl8meuJ+g1XibHpOuqtKBJN2QErvKCMRpSuwRJ7/KOUGWaNd
-         XrhQ==
-X-Gm-Message-State: ACrzQf3DIWoZkqEM85cFv8zjsmMCrrSGuyGVnKSt7jr4Y8yAWZ4eYzU/
-        cr0E1rCgxGwTGoyy1K3oRPRoJJtZYZ4Ubhii6g==
-X-Google-Smtp-Source: AMsMyM4jq5TdocedxtCJg2krWmLr2HLqOAo0hc+LmOQKo7sUV/41w3aF32a0u2yLv+C9qrJe1WC8ojLmdAcUQOQh8Q==
-X-Received: from peternewman10.zrh.corp.google.com ([2a00:79e0:9d:6:ce1e:a203:209a:548c])
- (user=peternewman job=sendgmr) by 2002:a17:907:788:b0:741:4d1a:595d with SMTP
- id xd8-20020a170907078800b007414d1a595dmr46434575ejb.737.1667816497306; Mon,
- 07 Nov 2022 02:21:37 -0800 (PST)
-Date:   Mon,  7 Nov 2022 11:21:34 +0100
-In-Reply-To: <166759206900.3281208.11975514088019160962.stgit@bmoger-ubuntu>
-Mime-Version: 1.0
-References: <166759206900.3281208.11975514088019160962.stgit@bmoger-ubuntu>
-X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
-Message-ID: <20221107102134.255757-1-peternewman@google.com>
-Subject: Re: [PATCH v8 10/13] x86/resctrl: Add sysfs interface to write mbm_total_bytes_config
-From:   Peter Newman <peternewman@google.com>
-To:     babu.moger@amd.com
-Cc:     akpm@linux-foundation.org, bagasdotme@gmail.com, bp@alien8.de,
-        chang.seok.bae@intel.com, corbet@lwn.net,
-        damien.lemoal@opensource.wdc.com, daniel.sneddon@linux.intel.com,
-        dave.hansen@linux.intel.com, eranian@google.com,
-        fenghua.yu@intel.com, hpa@zytor.com, james.morse@arm.com,
-        jmattson@google.com, jpoimboe@kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mingo@redhat.com, paulmck@kernel.org,
-        pawan.kumar.gupta@linux.intel.com, pbonzini@redhat.com,
-        peterz@infradead.org, quic_neeraju@quicinc.com,
-        rdunlap@infradead.org, reinette.chatre@intel.com,
-        sandipan.das@amd.com, songmuchun@bytedance.com, tglx@linutronix.de,
-        tony.luck@intel.com, x86@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Mon, 7 Nov 2022 05:22:42 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A01D4183BD;
+        Mon,  7 Nov 2022 02:22:41 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 53678225CC;
+        Mon,  7 Nov 2022 10:22:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1667816560; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=jCn4MseqJcnTtCYiGPVCPesbMSniSjoMzrXJhKB4vOo=;
+        b=XaQBv0h9JvOYe7ohJxNKojp4Gtl5Alz8BCNE73/RUsBKadqlIIfNqd7q4NI0AFPJ/SDHDs
+        mEKdVd97gJJo2+CmnHBqB9rq/ePUz3+wytLxKPYfcWdtSLCVMvYV6FdGmJJtDYrp4GYdYF
+        jMWdzsuBq9Zz30AOd1MfRbQGuukHvmk=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1667816560;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=jCn4MseqJcnTtCYiGPVCPesbMSniSjoMzrXJhKB4vOo=;
+        b=g7JjvHSdfn1Wj9M/78AHzwkucfxbJUA4DRoLNUT68gTUjyaBkgq+AKVKY8vbi7Wv6/9aDf
+        ZBlnYrFLauvWwmCg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id EE47C13AC7;
+        Mon,  7 Nov 2022 10:22:39 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id yXU8N2/caGMibQAAMHmgww
+        (envelope-from <lhenriques@suse.de>); Mon, 07 Nov 2022 10:22:39 +0000
+Received: from localhost (brahms.olymp [local])
+        by brahms.olymp (OpenSMTPD) with ESMTPA id 6389e19a;
+        Mon, 7 Nov 2022 10:23:41 +0000 (UTC)
+Date:   Mon, 7 Nov 2022 10:23:41 +0000
+From:   =?iso-8859-1?Q?Lu=EDs?= Henriques <lhenriques@suse.de>
+To:     Xiubo Li <xiubli@redhat.com>
+Cc:     Ilya Dryomov <idryomov@gmail.com>,
+        Jeff Layton <jlayton@kernel.org>, ceph-devel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ceph: fix memory leak in mount error path when using
+ test_dummy_encryption
+Message-ID: <Y2jcrbZxgmLO/psM@suse.de>
+References: <20221103153619.11068-1-lhenriques@suse.de>
+ <700018a6-aff7-6e7a-98df-2fc8cca39acb@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <700018a6-aff7-6e7a-98df-2fc8cca39acb@redhat.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Babu,
+On Mon, Nov 07, 2022 at 03:47:23PM +0800, Xiubo Li wrote:
+> 
+> On 03/11/2022 23:36, Luís Henriques wrote:
+> > Because ceph_init_fs_context() will never be invoced in case we get a
+> > mount error, destroy_mount_options() won't be releasing fscrypt resources
+> > with fscrypt_free_dummy_policy().  This will result in a memory leak.  Add
+> > an invocation to this function in the mount error path.
+> > 
+> > Signed-off-by: Luís Henriques <lhenriques@suse.de>
+> > ---
+> >   fs/ceph/super.c | 1 +
+> >   1 file changed, 1 insertion(+)
+> > 
+> > diff --git a/fs/ceph/super.c b/fs/ceph/super.c
+> > index 2224d44d21c0..6b9fd04b25cd 100644
+> > --- a/fs/ceph/super.c
+> > +++ b/fs/ceph/super.c
+> > @@ -1362,6 +1362,7 @@ static int ceph_get_tree(struct fs_context *fc)
+> >   	ceph_mdsc_close_sessions(fsc->mdsc);
+> >   	deactivate_locked_super(sb);
+> > +	fscrypt_free_dummy_policy(&fsc->fsc_dummy_enc_policy);
+> 
+> Hi Luis,
+> 
+> BTW, any reason the following code won't be triggered ?
+> 
+> deactivate_locked_super(sb);
+> 
+>   --> fs->kill_sb(s);
+> 
+>         --> ceph_kill_sb()
+> 
+>               --> kill_anon_super()
+> 
+>                     --> generic_shutdown_super()
+> 
+>                           --> sop->put_super()
+> 
+>                                 --> ceph_put_super()
+> 
+>                                       --> ceph_fscrypt_free_dummy_policy()
+> 
+>                                            --> fscrypt_free_dummy_policy(
+> 
 
-On Fri, Nov 04, 2022 at 03:01:09PM -0500, Babu Moger wrote:
-> +	/*
-> +	 * When an Event Configuration is changed, the bandwidth counters
-> +	 * for all RMIDs and Events will be cleared by the hardware. The
-> +	 * hardware also sets MSR_IA32_QM_CTR.Unavailable (bit 62) for
-> +	 * every RMID on the next read to any event for every RMID.
-> +	 * Subsequent reads will have MSR_IA32_QM_CTR.Unavailable (bit 62)
-> +	 * cleared while it is tracked by the hardware. Clear the
-> +	 * mbm_local and mbm_total counts for all the RMIDs.
-> +	 */
-> +	memset(d->mbm_local, 0, sizeof(struct mbm_state) * r->num_rmid);
-> +	memset(d->mbm_total, 0, sizeof(struct mbm_state) * r->num_rmid);
+Here's what I'm seeing here:
 
-Looking around, I can't find a reader for mbm_total anymore. It looks
-like the last place it was used went away in James's recent change:
+  sys_mount->path_mount->do_new_mount->vfs_get_tree->ceph_get_tree
 
-https://lore.kernel.org/all/20220902154829.30399-19-james.morse@arm.com
+ceph_get_tree() fails due to ceph_real_mount() returning an error.  My
+understanding is that that, since fc->root is never set, that code path
+will never be triggered.  Does that make sense?
 
-Are we supposed to be clearing arch_mbm_total now?
+An easy way to reproduce is by running fstest ceph/005 with the
+'test_dummy_encryption' option.  (I'll probably need to send a patch to
+disable this test when this option is present.)
 
-Thanks!
--Peter
+Cheers,
+--
+Luís
