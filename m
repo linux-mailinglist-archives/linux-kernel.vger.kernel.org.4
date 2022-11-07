@@ -2,110 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A587D61F412
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 14:13:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5E9F61F41B
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 14:17:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232194AbiKGNNx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 08:13:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52564 "EHLO
+        id S232270AbiKGNRW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 08:17:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231829AbiKGNNu (ORCPT
+        with ESMTP id S231551AbiKGNRU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 08:13:50 -0500
-Received: from wnew3-smtp.messagingengine.com (wnew3-smtp.messagingengine.com [64.147.123.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D5E855AD;
-        Mon,  7 Nov 2022 05:13:49 -0800 (PST)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.west.internal (Postfix) with ESMTP id 77F852B066D2;
-        Mon,  7 Nov 2022 08:13:45 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute3.internal (MEProxy); Mon, 07 Nov 2022 08:13:47 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1667826825; x=
-        1667834025; bh=gzFmsKb28RRV6aTHwSd32zSKbP4ruxh8B+/J4PqCwTo=; b=S
-        ggAXxM9D+SbpZ9rMhVLLaSfq7m1uc2XpDznokcUUlsO+4Pb8qCBn+xRhhfN8jUgq
-        FpF6AXLT1LhGrcfuqVl43MsGGn6vldVkgxjAc4YIIVWW2XLHpXYVq+7X7IX/auE+
-        e0PGMe0CpQJzQsfkv9lqyt6TU5XFOGDatcHk2HpQ9RKMbMQLnkUw03BIXvnAmpf2
-        xGDU+58haUwQU28zadYuwnNyDbmRx2WlaIv1LntuqKmQ66zxwQVizEC+SXsqbmTt
-        yq7rviFdc9BMgtG0xrFi3rzKjzWMoGBapcHWvbT64szDrJUTADd4LM6Y93oiXllz
-        JQ2S5LNmFm1GNRorb0T6g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1667826825; x=
-        1667834025; bh=gzFmsKb28RRV6aTHwSd32zSKbP4ruxh8B+/J4PqCwTo=; b=f
-        OLaRc1MIcBUnZInXZHy7Qd8hVVUBFfwwre4WcjM6KmXZp0UrzawMSP2EzM9v2bMX
-        tcLM9PKlu0y4X4+8AIC+JGFfQxU+Wd93vEfkv+/mbIBrDpKQPFDk8bgefiNu5cvG
-        KpUmeqW4Az3JOK7LlZa8hxDRyRGiKrV2jzrQwcHvA/M+JVqo1d7JoHe24c7WxWQb
-        1c6AeoUAmqqwy4q5PuVYhV/FaaZ7smqqUW93H+80RJQdUwJDg4Rwh3xytmWH/Woi
-        tDynAfXCWwfByP2TMIg53vBds47UKVCV2vBqJpirsm5jG2JqebqlY2gnrhD2dHvw
-        3q6Wa89noKriOmHFJ3eUA==
-X-ME-Sender: <xms:iARpY5OY25HDymg5DH-ie89NFFuTQ_tpNB0zwPJ8RbtsIzZoIJnFdg>
-    <xme:iARpY78kDs8Gr883aCcVhvgfUK6xpgBfbAOKwsQqUAF2xtSCHi-2f9Xtx0eTZc41F
-    _7g0LMx9l886JLkdK0>
-X-ME-Received: <xmr:iARpY4SXfVcoanuZ5ibDJKtkYKfQ49V2uumXyxiHcwJ21amOnrngvmIK7Iv8nm8nbgQfsKdLc-uwXY_hfF5RQAso8yV_eXwhClHps3t1eh1KrQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrvdekgdegkecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefhvfevjghfuffkffggtgfgofesthekredtredtjeenucfhrhhomhepofgrgihi
-    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
-    htthgvrhhnpeeifeeigeelhfehkeeltdetjeetueelteeuveekueevffduhefffefhhfeh
-    gfehieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    hmrgigihhmvgestggvrhhnohdrthgvtghh
-X-ME-Proxy: <xmx:iARpY1uHLYE89zuPgzQmd72chgY8kQ3GD1WqVJD1cJL7Hotut9yW7g>
-    <xmx:iARpYxcoJtYs6UFU90XrAM_A5pfR1NGKF8D2-rFcCY6eVlrWIezPiQ>
-    <xmx:iARpYx1YXt67AV9nPn7Xl3rmQ5jQ5yQP_blhenTPP60saug38B0a3Q>
-    <xmx:iQRpY0xjFrmpNgU4q9TdEM4obv-T2YBGFbrXMDqajko2HLPRF1EUUOC0kvQ>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 7 Nov 2022 08:13:44 -0500 (EST)
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Samuel Holland <samuel@sholland.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Maxime Ripard <mripard@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-sunxi@lists.linux.dev,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@gmail.com>,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-In-Reply-To: <20221107053552.2330-1-samuel@sholland.org>
-References: <20221107053552.2330-1-samuel@sholland.org>
-Subject: Re: [PATCH v2 0/4] drm/sun4i: dsi: Support the A100/D1 controller variant
-Message-Id: <166782681040.2738607.11879377629762805271.b4-ty@cerno.tech>
-Date:   Mon, 07 Nov 2022 14:13:30 +0100
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+        Mon, 7 Nov 2022 08:17:20 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 617A6615C
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 05:17:16 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 11238B80DF2
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 13:17:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EEB42C433C1;
+        Mon,  7 Nov 2022 13:17:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667827033;
+        bh=tisMPvmQNILTB7LyB3EX0agbELSzq8kO29YbQ9xN0Jc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=IJDf4vhRTqNwvRn2xO+C0oA6M2BJBQNtVfvf34X/iDAxnbWeNBCX0ZZI6WOk7HTJM
+         oSzU0vbvpXb3aHMcbakCvYJNpisj8K3rkrjROnKwDALVQcIuUvXHpjKxCJTh+S7OE5
+         xKtgWA9pFz2SuSD7zxM7aw1S3WwoCziLxBjhmSyjasxVDkv4oDyvJBzSeSe5x73RJZ
+         b62JZJCxFgfhsmA1sHhHqFcWGtbUZ8n6SBAQANN0n7G7nzV47aPMDPXxuyPJrah9NR
+         fvWPDHnvICMvk2Smd49/Hx9bsOLIjhvNPj8c/hJ7gCzWv/6fWu/Fr18Q4vIXZ1EXBn
+         5mIcSkcQcHWlw==
+Date:   Mon, 7 Nov 2022 22:17:10 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     wangyufen <wangyufen@huawei.com>
+Cc:     <linux-kernel@vger.kernel.org>, <rostedt@goodmis.org>,
+        <mhiramat@kernel.org>
+Subject: Re: [PATCH v2] tracing: fix memory leak in tracing_read_pipe
+Message-Id: <20221107221710.23d90a4cf74043a9b5f7d6fc@kernel.org>
+In-Reply-To: <a5a79265-be08-0375-ad50-fbe568c7a769@huawei.com>
+References: <1667819090-4643-1-git-send-email-wangyufen@huawei.com>
+        <a5a79265-be08-0375-ad50-fbe568c7a769@huawei.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.10.1
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 6 Nov 2022 23:35:48 -0600, Samuel Holland wrote:
-> This series adds support for the digital part of the DSI controller
-> found in the A100 and D1 SoCs (plus T7, which is not supported by
-> mainline Linux). There are two changes to the hardware integration:
->   1) the module clock routes through the TCON TOP, and
->   2) the separate I/O domain is removed.
-> 
-> The actual register interface appears to be the same as before. The
-> register definitions in the D1 BSP exactly match the A64 BSP.
-> 
-> [...]
+On Mon, 7 Nov 2022 19:45:04 +0800
+wangyufen <wangyufen@huawei.com> wrote:
 
-Applied to drm/drm-misc (drm-misc-next).
+> 
+> 在 2022/11/7 19:04, Wang Yufen 写道:
+> > kmemleak reports this issue:
+> >
+> > unreferenced object 0xffff888105a18900 (size 128):
+> >    comm "test_progs", pid 18933, jiffies 4336275356 (age 22801.766s)
+> >    hex dump (first 32 bytes):
+> >      25 73 00 90 81 88 ff ff 26 05 00 00 42 01 58 04  %s......&...B.X.
+> >      03 00 00 00 02 00 00 00 00 00 00 00 00 00 00 00  ................
+> >    backtrace:
+> >      [<00000000560143a1>] __kmalloc_node_track_caller+0x4a/0x140
+> >      [<000000006af00822>] krealloc+0x8d/0xf0
+> >      [<00000000c309be6a>] trace_iter_expand_format+0x99/0x150
+> >      [<000000005a53bdb6>] trace_check_vprintf+0x1e0/0x11d0
+> >      [<0000000065629d9d>] trace_event_printf+0xb6/0xf0
+> >      [<000000009a690dc7>] trace_raw_output_bpf_trace_printk+0x89/0xc0
+> >      [<00000000d22db172>] print_trace_line+0x73c/0x1480
+> >      [<00000000cdba76ba>] tracing_read_pipe+0x45c/0x9f0
+> >      [<0000000015b58459>] vfs_read+0x17b/0x7c0
+> >      [<000000004aeee8ed>] ksys_read+0xed/0x1c0
+> >      [<0000000063d3d898>] do_syscall_64+0x3b/0x90
+> >      [<00000000a06dda7f>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> >
+> > iter->fmt alloced in
+> >    tracing_read_pipe() -> .. ->trace_iter_expand_format(), but not
+> > freed, to fix, add free in tracing_release_pipe()
+> Fixes: efbbdaa22bb7 ("tracing: Show real address for trace event arguments")
 
-Thanks!
-Maxime
+Oops, good catch!
+
+Cc: stable@vger.kernel.org
+
+Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+
+Thank you,
+
+> > Signed-off-by: Wang Yufen <wangyufen@huawei.com>
+> > ---
+> > v1 -> v2: del if (iter->fmt), free iter->fmt directly
+> >   kernel/trace/trace.c | 1 +
+> >   1 file changed, 1 insertion(+)
+> >
+> > diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
+> > index 47a44b0..f9d98e7 100644
+> > --- a/kernel/trace/trace.c
+> > +++ b/kernel/trace/trace.c
+> > @@ -6657,6 +6657,7 @@ static int tracing_release_pipe(struct inode *inode, struct file *file)
+> >   	mutex_unlock(&trace_types_lock);
+> >   
+> >   	free_cpumask_var(iter->started);
+> > +	kfree(iter->fmt);
+> >   	mutex_destroy(&iter->mutex);
+> >   	kfree(iter);
+> >   
+
+
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
