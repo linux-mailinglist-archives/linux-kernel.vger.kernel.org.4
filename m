@@ -2,86 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0498D61F4F0
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 15:07:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2182B61F4F6
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 15:09:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231646AbiKGOHV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 09:07:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51764 "EHLO
+        id S232020AbiKGOJE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 09:09:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231875AbiKGOHS (ORCPT
+        with ESMTP id S231875AbiKGOJC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 09:07:18 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D61F1A055;
-        Mon,  7 Nov 2022 06:07:16 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 7 Nov 2022 09:09:02 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C714D1B9E6;
+        Mon,  7 Nov 2022 06:09:01 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5C5CCB811E4;
-        Mon,  7 Nov 2022 14:07:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 288D9C433D6;
-        Mon,  7 Nov 2022 14:07:11 +0000 (UTC)
-Date:   Mon, 7 Nov 2022 14:07:07 +0000
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Zhen Lei <thunder.leizhen@huawei.com>
-Cc:     Dave Young <dyoung@redhat.com>, Baoquan He <bhe@redhat.com>,
-        Vivek Goyal <vgoyal@redhat.com>, kexec@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        "Eric W . Biederman" <ebiederm@xmission.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Feng Zhou <zhoufeng.zf@bytedance.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Chen Zhou <dingguo.cz@antgroup.com>,
-        John Donnelly <John.p.donnelly@oracle.com>,
-        Dave Kleikamp <dave.kleikamp@oracle.com>
-Subject: Re: [PATCH v3 1/2] arm64: kdump: Provide default size when
- crashkernel=Y,low is not specified
-Message-ID: <Y2kRC7JALMQQRsxE@arm.com>
-References: <20220711090319.1604-1-thunder.leizhen@huawei.com>
- <20220711090319.1604-2-thunder.leizhen@huawei.com>
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 6F4CD220FE;
+        Mon,  7 Nov 2022 14:09:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1667830140; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=LO1zxWnY9+/5ve5/yjzWxZu7y80ZAaMIi5i5Mc7a2IE=;
+        b=RH6twAdhmeXWeZ6yNZc8izlA9niIVTClP7P75Z7NZ6uMf/G+8mlqya0yJr08tXtH6rSOqa
+        9wQgpIDZpagr6HI0IliLz175ntBST0mvpoRq2rSh4K8HbLeycKHV0etO2ikm+KFNGHI7Hx
+        9Ns9f4OWA37nsdtQsaegad3+PL4o7s0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1667830140;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=LO1zxWnY9+/5ve5/yjzWxZu7y80ZAaMIi5i5Mc7a2IE=;
+        b=LszfF74DBGlEjV2GvJnOczziN7VvrNntdvfbJ5nk4aVO3IC9x+mO10ZbvxYQG1qyJw0ZEO
+        1y6ZDUMiTsETT/AQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 574DC13AC7;
+        Mon,  7 Nov 2022 14:09:00 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id VglIFXwRaWNdcgAAMHmgww
+        (envelope-from <jack@suse.cz>); Mon, 07 Nov 2022 14:09:00 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 7408FA0704; Mon,  7 Nov 2022 15:08:59 +0100 (CET)
+Date:   Mon, 7 Nov 2022 15:08:59 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     syzbot <syzbot+bd13648a53ed6933ca49@syzkaller.appspotmail.com>
+Cc:     gregkh@linuxfoundation.org, jack@suse.cz, lczerner@redhat.com,
+        linux-ext4@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable-commits@vger.kernel.org,
+        stable@kernel.org, stable@vger.kernel.org,
+        syzkaller-android-bugs@googlegroups.com, tadeusz.struk@linaro.org,
+        tytso@mit.edu
+Subject: Re: kernel BUG in ext4_writepages
+Message-ID: <20221107140859.lk7sok74nxs6srxe@quack3>
+References: <000000000000c3a53d05de992007@google.com>
+ <000000000000bc92bf05ece0af6f@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220711090319.1604-2-thunder.leizhen@huawei.com>
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <000000000000bc92bf05ece0af6f@google.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SORTED_RECIPS,
+        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 11, 2022 at 05:03:18PM +0800, Zhen Lei wrote:
-> diff --git a/arch/arm64/mm/init.c b/arch/arm64/mm/init.c
-> index 339ee84e5a61a0b..5390f361208ccf7 100644
-> --- a/arch/arm64/mm/init.c
-> +++ b/arch/arm64/mm/init.c
-> @@ -96,6 +96,14 @@ phys_addr_t __ro_after_init arm64_dma_phys_limit = PHYS_MASK + 1;
->  #define CRASH_ADDR_LOW_MAX		arm64_dma_phys_limit
->  #define CRASH_ADDR_HIGH_MAX		(PHYS_MASK + 1)
->  
-> +/*
-> + * This is an empirical value in x86_64 and taken here directly. Please
-> + * refer to the code comment in reserve_crashkernel_low() of x86_64 for more
-> + * details.
-> + */
-> +#define DEFAULT_CRASH_KERNEL_LOW_SIZE	\
-> +	max(swiotlb_size_or_default() + (8UL << 20), 256UL << 20)
+On Mon 07-11-22 04:37:28, syzbot wrote:
+> This bug is marked as fixed by commit:
+> ext4: Avoid crash when inline data creation follows DIO write
+> But I can't find it in any tested tree for more than 90 days.
+> Is it a correct commit? Please update it by replying:
+> #syz fix: exact-commit-title
+> Until then the bug is still considered open and
+> new crashes with the same signature are ignored.
 
-I agree with Will here, we need a better comment and we might as well
-change the default value to something else until someone tells us that
-the default is not large enough. The default swiotlb size is 64M, so we
-need to cover that. The extra 8MB for any additional low allocations are
-ok as well but the 256MB doesn't make much sense to me, or at least not
-together with the rest.
+#syz fix: ext4: avoid crash when inline data creation follows DIO write
 
-If the main kernel got a command line option for a larger swiotlb, does
-the crash kernel boot with the same command line? If not, we can just go
-for a fixed 128M value here, which is double the default swiotlb buffer.
+								Honza
 
 -- 
-Catalin
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
