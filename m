@@ -2,91 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB50861F06A
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 11:24:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03C7C61F0F8
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 11:44:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231935AbiKGKYS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 05:24:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35142 "EHLO
+        id S231572AbiKGKoo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 05:44:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231790AbiKGKX6 (ORCPT
+        with ESMTP id S231501AbiKGKom (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 05:23:58 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3426165AA
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 02:23:57 -0800 (PST)
-Received: from canpemm500010.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4N5S0d3zNrzpW9j;
-        Mon,  7 Nov 2022 18:20:17 +0800 (CST)
-Received: from localhost.localdomain (10.175.112.70) by
- canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 7 Nov 2022 18:23:55 +0800
-From:   Wang Yufen <wangyufen@huawei.com>
-To:     <linux-kernel@vger.kernel.org>
-CC:     <rostedt@goodmis.org>, <mhiramat@kernel.org>,
-        Wang Yufen <wangyufen@huawei.com>
-Subject: [PATCH] tracing: fix memory leak in tracing_read_pipe
-Date:   Mon, 7 Nov 2022 18:44:22 +0800
-Message-ID: <1667817862-48989-1-git-send-email-wangyufen@huawei.com>
-X-Mailer: git-send-email 1.8.3.1
+        Mon, 7 Nov 2022 05:44:42 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC82117E33;
+        Mon,  7 Nov 2022 02:44:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667817881; x=1699353881;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=5MDBSNazN+stxKATiIsjwIv/7ZUGHGTaPVJKKdrTNO4=;
+  b=WAfNzR8ZeZ+NkWHWY6dwCBFDVfyv9BXwYa4pPLJb0+cowyDC3nesZFYG
+   tjtMIYsLCaXxlmkQl4Di0+paP79Qxd0JyNKweWqGrxyxGsU+IboXtSDp7
+   BvYnjn0nMXlMUz3LjGuCsmK9Z6nOi86Asy869pTlmUwMBj7JACOYEZHHC
+   7HyFe2OKd7LfrGU6bLxGyppjpibzg/u2LYYRjOSzVX4tAnzZk1RsG5JW1
+   T0WQipexHLqcWp0AQm7x4/Q4y9mYWRx/TaohOBCBZH/yWzElBlswqU8cy
+   ZdJBfAdXD5LvZCVa3NXhXGc2OvXWJvabx4ohfrCBWDU0u3ZX/OZLTF4km
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10523"; a="297873426"
+X-IronPort-AV: E=Sophos;i="5.96,143,1665471600"; 
+   d="scan'208";a="297873426"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Nov 2022 02:44:41 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10523"; a="778442885"
+X-IronPort-AV: E=Sophos;i="5.96,143,1665471600"; 
+   d="scan'208";a="778442885"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga001.fm.intel.com with ESMTP; 07 Nov 2022 02:44:39 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1orzcL-008b3M-29;
+        Mon, 07 Nov 2022 12:44:37 +0200
+Date:   Mon, 7 Nov 2022 12:44:37 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        linux-acpi@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 5/6] gpiolib: consolidate GPIO lookups
+Message-ID: <Y2jhlY+rnNeQ8aEk@smile.fi.intel.com>
+References: <20221031-gpiolib-swnode-v1-0-a0ab48d229c7@gmail.com>
+ <20221031-gpiolib-swnode-v1-5-a0ab48d229c7@gmail.com>
+ <Y2VJJ8CYhGY69c/z@smile.fi.intel.com>
+ <Y2Vfatm3VRGcktNN@google.com>
+ <Y2V+8tiwstXbTWoq@smile.fi.intel.com>
+ <Y2XtGTAjEB24tqrF@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.112.70]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- canpemm500010.china.huawei.com (7.192.105.118)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y2XtGTAjEB24tqrF@google.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-kmemleak reports this issue:
+On Fri, Nov 04, 2022 at 09:56:57PM -0700, Dmitry Torokhov wrote:
+> On Fri, Nov 04, 2022 at 11:06:58PM +0200, Andy Shevchenko wrote:
+> > On Fri, Nov 04, 2022 at 11:52:26AM -0700, Dmitry Torokhov wrote:
+> > > On Fri, Nov 04, 2022 at 07:17:27PM +0200, Andy Shevchenko wrote:
+> > > > On Thu, Nov 03, 2022 at 11:10:15PM -0700, Dmitry Torokhov wrote:
 
-unreferenced object 0xffff888105a18900 (size 128):
-  comm "test_progs", pid 18933, jiffies 4336275356 (age 22801.766s)
-  hex dump (first 32 bytes):
-    25 73 00 90 81 88 ff ff 26 05 00 00 42 01 58 04  %s......&...B.X.
-    03 00 00 00 02 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<00000000560143a1>] __kmalloc_node_track_caller+0x4a/0x140
-    [<000000006af00822>] krealloc+0x8d/0xf0
-    [<00000000c309be6a>] trace_iter_expand_format+0x99/0x150
-    [<000000005a53bdb6>] trace_check_vprintf+0x1e0/0x11d0
-    [<0000000065629d9d>] trace_event_printf+0xb6/0xf0
-    [<000000009a690dc7>] trace_raw_output_bpf_trace_printk+0x89/0xc0
-    [<00000000d22db172>] print_trace_line+0x73c/0x1480
-    [<00000000cdba76ba>] tracing_read_pipe+0x45c/0x9f0
-    [<0000000015b58459>] vfs_read+0x17b/0x7c0
-    [<000000004aeee8ed>] ksys_read+0xed/0x1c0
-    [<0000000063d3d898>] do_syscall_64+0x3b/0x90
-    [<00000000a06dda7f>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
+...
 
-iter->fmt alloced in
-  tracing_read_pipe() -> .. ->trace_iter_expand_format(), but not
-freed, to fix, add free in tracing_release_pipe()
+> > > > > +		desc = gpiod_find_by_fwnode(fwnode, consumer, con_id, idx,
+> > > > > +					    &flags, &lookupflags);
+> > 
+> > Looking into drivers/base/property.c makes me realize that you might need to
+> > test for error pointer as well.
+> > 
+> > Perhaps something like
+> > 
+> > 	if (IS_ERR_OR_NULL(fwnode))
+> > 		return ERR_PTR(-ENOENT);
+> > 
+> > in the gpiod_find_by_fwnode() needs to be added. Can you check this?
+> 
+> No, only fwnode->secondary pointer can be PTR_ERR()-encoded.
+> 
+> From comment to set_primary_fwnode() in drivers/base/core.c
+> 
+>  * Valid fwnode cases are:
+>  *  - primary --> secondary --> -ENODEV
+>  *  - primary --> NULL
+>  *  - secondary --> -ENODEV
+>  *  - NULL
+> 
+> I do not believe we should be concerned about someone passing secondary
+> pointers from fwnodes directly into gpiolib.
 
-Signed-off-by: Wang Yufen <wangyufen@huawei.com>
----
- kernel/trace/trace.c | 2 ++
- 1 file changed, 2 insertions(+)
+It's not only about secondary vs. primary notation, some of fwnode API calls
+may return error pointer and hence entire stack should be prepared for that.
 
-diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
-index 47a44b0..ced81a9 100644
---- a/kernel/trace/trace.c
-+++ b/kernel/trace/trace.c
-@@ -6657,6 +6657,8 @@ static int tracing_release_pipe(struct inode *inode, struct file *file)
- 	mutex_unlock(&trace_types_lock);
- 
- 	free_cpumask_var(iter->started);
-+	if (iter->fmt)
-+		kfree(iter->fmt);
- 	mutex_destroy(&iter->mutex);
- 	kfree(iter);
- 
+See 002752af7b89 ("device property: Allow error pointer to be passed to
+fwnode APIs") as an example.
+
 -- 
-1.8.3.1
+With Best Regards,
+Andy Shevchenko
+
 
