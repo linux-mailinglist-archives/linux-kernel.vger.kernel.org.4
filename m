@@ -2,190 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4820461F0F3
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 11:41:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36F7C61F0F0
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 11:41:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231440AbiKGKlv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 05:41:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47782 "EHLO
+        id S231350AbiKGKlO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 05:41:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231375AbiKGKlt (ORCPT
+        with ESMTP id S229530AbiKGKlM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 05:41:49 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FBAF12D0B
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 02:40:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667817654;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=mOI04EjI3O9ZzvsFWiAIDa7+u7EqLZMtqbHkmMa9+zY=;
-        b=OlPSj2G9Sx+MBTZqrFcFxUOCKIrN6gASKxCrG5Ky7w7jktEEQ51Hru5+cR6h4HTKo9HxWw
-        hLHxgkV02uRvRCq+FLAMydbT0SqvLqMXu+2X/iLDzOk9uW2bq+xbL0fku3Iv7vp4qUBKYX
-        owYEJzfB0RDzKgqnV3WvskD5CcC/DAc=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-385-oQ9v69KmNGukgm4g7X9YKQ-1; Mon, 07 Nov 2022 05:40:52 -0500
-X-MC-Unique: oQ9v69KmNGukgm4g7X9YKQ-1
-Received: by mail-ed1-f69.google.com with SMTP id q13-20020a056402518d00b00462b0599644so8169257edd.20
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 02:40:52 -0800 (PST)
+        Mon, 7 Nov 2022 05:41:12 -0500
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F1311900F
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 02:41:11 -0800 (PST)
+Received: by mail-pf1-x434.google.com with SMTP id q9so10210170pfg.5
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 02:41:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tEufRRTntxUkAcRUT4L6QYUBosoXo1+hroxdMyZBxDM=;
+        b=PnA7GFo5D4nL5XJOksZE+4RMVKV1U1CG4zXsx57EcIlt9icfkb7RUA5IIX/o3vgaoZ
+         G0opN7HkRFnO7nm+8ZGa+XxvIqo5XHIrxCx7H/eEx/tQCMEcVfiZZED7MJ8oRm6cKi30
+         HrS4ZvKKENQznAXWQvY4AB/vLUrOFMLGSMgLKYh98BrPwG2kXApk8ftTAPU0I+OaOJr7
+         YV6EBkPi9bZ3vio2fjKOF6So3GFVqI12Nh0dOIachekWDdMjPDE8SP3x2px2tnm0TX7l
+         99E6zxEp0XUsPhy+WOtczf4t7kr61pt6VQqbb9GCNrEAW3XlPUfqK2w7XUWiH37zLkG9
+         OdGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mOI04EjI3O9ZzvsFWiAIDa7+u7EqLZMtqbHkmMa9+zY=;
-        b=jSrCQHBtR+ihChd76/IUCka/Rkgp6uSfQJHGM88Uy27iHcT6Vhljk11rjNOajk27/T
-         drba46XYJkbrsTuY18/5X9BdKPmxuqYeaPv6lQj2jQSzBMjYaRFj99XZ4MmrhYkSn+yz
-         E4JgKRIiFTwK124b6gYb97e+ENmvaCmYQeadwJ7MYan2E2MLhcCjC3890nXSmpkGOOBZ
-         YbIuNmd+CK7RsBGEZhIS+IBkXPEsf+IzrSk5ruTUIi6PvSJarNc3CBgYrAz4yQeT2EYu
-         akWr/7hFQ/kJUQgMmDdKnl72atl31bLadYzBjlx/9jTwgJT0MT2ZrDKwUjT9UKC9TReI
-         gQ3A==
-X-Gm-Message-State: ACrzQf0DRWfPX0dtf6xWHgLsaanCVyLxirBWEW1xtxoPiBksKP+PVt6F
-        JmVZO7MFJqbi+TKghw5CNX+mEe3d5b9+Vt5CTNrgRBxgdeOfKZ2rxy7Uqf23VxZIVAKoKe2iugT
-        KNoX6a7dliJ0fNfe/xCMX+TVV
-X-Received: by 2002:a17:907:969e:b0:7a6:fe3:6f11 with SMTP id hd30-20020a170907969e00b007a60fe36f11mr47854631ejc.501.1667817651415;
-        Mon, 07 Nov 2022 02:40:51 -0800 (PST)
-X-Google-Smtp-Source: AMsMyM5yuuVGtrX6nqxx0QzI2KV2bH4Ckq5XZu6QTRAyQ52BRH+Jsx6QTaPYbCZFV/iTxAa6SrTNPA==
-X-Received: by 2002:a17:907:969e:b0:7a6:fe3:6f11 with SMTP id hd30-20020a170907969e00b007a60fe36f11mr47854622ejc.501.1667817651237;
-        Mon, 07 Nov 2022 02:40:51 -0800 (PST)
-Received: from [10.40.98.142] ([78.108.130.194])
-        by smtp.gmail.com with ESMTPSA id g22-20020a50ee16000000b004616b006871sm3979043eds.82.2022.11.07.02.40.50
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=tEufRRTntxUkAcRUT4L6QYUBosoXo1+hroxdMyZBxDM=;
+        b=PeT/8BL0yxqAZoF+vx4ZYU5qxc4xIbOoH4fu0k9J9IZnzp/23uGlwq7REyN4Al+TS/
+         A5eSxtc5h/CeYaY4k2D0YBsrejuDXX8I9ll5PyJOs3OW92ukeXiiEnn81+O6owQDorja
+         BQFUpCDVe0TMcFo8wKAuwLnttxYQSu4kRbg4Suw3E3bZIjvkPoPz1W2zaBbVqqv6y1De
+         jGoAZPKCnOuHIunIxR2Csvwr4Xd4GXINZBl4LUlT0JZZKjh9njXCBDtA4Ay/tFHF97Am
+         UT/8DChaYwczWpB85a1VN99wWcJKsJinRv3CEzyzgTx0Z1un6eTUIwngduRwUlrJOUqL
+         tNDQ==
+X-Gm-Message-State: ACrzQf31CvPQzq9e/F9q9bOTVrwIWke7UmALY9eisMKGu+cGVgZXsUdj
+        0YOCyFbnFmw8gxQ70lbwdHQ=
+X-Google-Smtp-Source: AMsMyM5+h/uaeniMLrEluJC846E6MxmoYkm+Ihy2TQJwnEL1nL5fIMZsQYtxGfNvPQtJ86tJ23EtXg==
+X-Received: by 2002:a05:6a00:1348:b0:56b:f5c0:1d9d with SMTP id k8-20020a056a00134800b0056bf5c01d9dmr49735461pfu.45.1667817670873;
+        Mon, 07 Nov 2022 02:41:10 -0800 (PST)
+Received: from [192.168.11.9] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
+        by smtp.gmail.com with ESMTPSA id l5-20020a622505000000b0056be1581126sm4317626pfl.143.2022.11.07.02.41.08
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Nov 2022 02:40:50 -0800 (PST)
-Message-ID: <718b55db-5597-45eb-893a-aabd59646bf2@redhat.com>
-Date:   Mon, 7 Nov 2022 11:40:49 +0100
+        Mon, 07 Nov 2022 02:41:09 -0800 (PST)
+Message-ID: <d33440f6-40cf-9747-3340-e54ffaf7afb8@gmail.com>
+Date:   Mon, 7 Nov 2022 19:41:05 +0900
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH v1] hp_wmi causing rfkill soft blocked wifi
+ Thunderbird/102.2.2
 Content-Language: en-US
-To:     "Limonciello, Mario" <Mario.Limonciello@amd.com>,
-        Jorge Lopez <jorgealtxwork@gmail.com>,
-        "balalic.enver@gmail.com" <balalic.enver@gmail.com>,
-        "platform-driver-x86@vger.kernel.org" 
-        <platform-driver-x86@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Cc:     "markgross@kernel.org" <markgross@kernel.org>,
-        "Tsao, Anson" <anson.tsao@amd.com>
-References: <20221028155527.7724-1-jorge.lopez2@hp.com>
- <MN0PR12MB6101426E91BB9B6D1A4F03F6E2329@MN0PR12MB6101.namprd12.prod.outlook.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <MN0PR12MB6101426E91BB9B6D1A4F03F6E2329@MN0PR12MB6101.namprd12.prod.outlook.com>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Vlastimil Babka <vbabka@suse.cz>, Jonathan Corbet <corbet@lwn.net>,
+        Akira Yokosawa <akiyks@gmail.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+From:   Akira Yokosawa <akiyks@gmail.com>
+Subject: Duplicate kernel-doc comments for ksize()
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi Kees,
 
-On 10/28/22 18:08, Limonciello, Mario wrote:
-> [Public]
-> 
-> +Anson
-> 
->> -----Original Message-----
->> From: Jorge Lopez <jorgealtxwork@gmail.com>
->> Sent: Friday, October 28, 2022 10:55
->> To: hdegoede@redhat.com; balalic.enver@gmail.com; platform-driver-
->> x86@vger.kernel.org; linux-kernel@vger.kernel.org
->> Cc: markgross@kernel.org
->> Subject: [PATCH v1] hp_wmi causing rfkill soft blocked wifi
->>
->> After upgrading BIOS to U82 01.02.01 Rev.A, the console is flooded
->> strange char "^@" which printed out every second and makes login
->> nearly impossible. Also the below messages were shown both in console
->> and journal/dmesg every second:
->>
->> usb 1-3: Device not responding to setup address.
->> usb 1-3: device not accepting address 4, error -71
->> usb 1-3: device descriptor read/all, error -71
->> usb usb1-port3: unable to enumerate USB device
->>
->> Wifi is soft blocked by checking rfkill. When unblocked manually,
->> after few seconds it would be soft blocked again. So I was suspecting
->> something triggered rfkill to soft block wifi.  At the end it was
->> fixed by removing hp_wmi module.
->>
->> The root cause is the way hp-wmi driver handles command 1B on
->> post-2009 BIOS.  In pre-2009 BIOS, command 1Bh return 0x4 to indicate
->> that BIOS no longer controls the power for the wireless devices.
->>
->> Signed-off-by: Jorge Lopez <jorge.lopez2@hp.com>
-> 
-> Link: https://bugzilla.kernel.org/show_bug.cgi?id=216468
-> Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
-> 
-> Hans,
-> 
-> Since this is effectively essentially removing the broken BIOS RFKILL interface
-> for numerous machines I think this should probably go to stable too, if you agree.
+"make htmldocs" reports duplicate C declaration of ksize()
+as follows:
 
-I agree, I've added a Cc: stable while merging this and I'll include this
-in my next fixes pull-req to Linus.
+/linux/Documentation/core-api/mm-api:43: ./mm/slab_common.c:1428: WARNING: Duplicate C declaration, also defined at core-api/mm-api:212.
+Declaration is '.. c:function:: size_t ksize (const void *objp)'.
 
-Jorge, many thanks for fixing this!
+This is due to the kernel-doc comment for ksize() added in
+include/linux/slab.h by a commit you have authored:
+  05a940656e1e ("slab:Introduce kmalloc_size_roundup()").
 
-Thank you for your patch, I've applied this patch to my review-hans 
-branch:
-https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
+/**
+ * ksize - Report actual allocation size of associated object
+ *
+ * @objp: Pointer returned from a prior kmalloc()-family allocation.
+ *
+ * This should not be used for writing beyond the originally requested
+ * allocation size. Either use krealloc() or round up the allocation size
+ * with kmalloc_size_roundup() prior to allocation. If this is used to
+ * access beyond the originally requested allocation size, UBSAN_BOUNDS
+ * and/or FORTIFY_SOURCE may trip, since they only know about the
+ * originally allocated size via the __alloc_size attribute.
+ */
 
-Note it will show up in my review-hans branch once I've pushed my
-local branch there, which might take a while.
+There is another kernel-doc comment in mm/slab_common.c (originally
+by Manfred, since v2.6.14):
 
-Once I've run some tests on this branch the patches there will be
-added to the platform-drivers-x86/for-next branch and eventually
-will be included in the pdx86 pull-request to Linus for the next
-merge-window.
+/**
+ * ksize - get the actual amount of memory allocated for a given object
+ * @objp: Pointer to the object
+ *
+ * kmalloc may internally round up allocations and return more memory
+ * than requested. ksize() can be used to determine the actual amount of
+ * memory allocated. The caller may use this additional memory, even though
+ * a smaller amount of memory was initially specified with the kmalloc call.
+ * The caller must guarantee that objp points to a valid object previously
+ * allocated with either kmalloc() or kmem_cache_alloc(). The object
+ * must not be freed during the duration of the call.
+ *
+ * Return: size of the actual memory used by @objp in bytes
+ */
 
-Regards,
+I guess the one in slab_common.c is outdated and can be removed.
+Can you please take care of it?
 
-Hans
-
-
-
-> 
->>
->> ---
->> Based on the latest platform-drivers-x86.git/for-next
->> ---
->>  drivers/platform/x86/hp-wmi.c | 11 +++++++++--
->>  1 file changed, 9 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/platform/x86/hp-wmi.c b/drivers/platform/x86/hp-wmi.c
->> index 627a6d0eaf83..29cd4e437d97 100644
->> --- a/drivers/platform/x86/hp-wmi.c
->> +++ b/drivers/platform/x86/hp-wmi.c
->> @@ -1300,8 +1300,15 @@ static int __init hp_wmi_bios_setup(struct
->> platform_device *device)
->>  	wwan_rfkill = NULL;
->>  	rfkill2_count = 0;
->>
->> -	if (hp_wmi_rfkill_setup(device))
->> -		hp_wmi_rfkill2_setup(device);
->> +	/*
->> +	 * In pre-2009 BIOS, command 1Bh return 0x4 to indicate that
->> +	 * BIOS no longer controls the power for the wireless
->> +	 * devices. All features supported by this command will no
->> +	 * longer be supported.
->> +	 */
->> +	if (!hp_wmi_bios_2009_later())
->> +		if (hp_wmi_rfkill_setup(device))
->> +			hp_wmi_rfkill2_setup(device);
->>
->>  	err = hp_wmi_hwmon_init();
->>
->> --
->> 2.34.1
-> 
-
+        Thanks, Akira
