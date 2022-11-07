@@ -2,169 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6DA7620379
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 00:12:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40D72620382
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 00:12:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232448AbiKGXMC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 18:12:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48582 "EHLO
+        id S232942AbiKGXMc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 18:12:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232619AbiKGXLy (ORCPT
+        with ESMTP id S232927AbiKGXMX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 18:11:54 -0500
-Received: from mail-oa1-f43.google.com (mail-oa1-f43.google.com [209.85.160.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98B6724BF2;
-        Mon,  7 Nov 2022 15:11:53 -0800 (PST)
-Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-13b23e29e36so14438538fac.8;
-        Mon, 07 Nov 2022 15:11:53 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YsY32S3Ci2xQSLvyGjHjsxCXhkDvmP8cF1HLMu57Vb8=;
-        b=CgSj+1WwbPpZhIVVZgNW9nrkptDgRV/GzCWx20zQzgiDHSDFWJOO8YWrBYrqqarYSk
-         LdnuGo41PU2SgNI+k4/WV1xluxkDRiujnft1nmxQiXc/sxSOCNMzB0bU/lyRfucXL7Mv
-         kmqP4/RAQqNtMMWb+1y8PD1w8tXPdd42+tY464u+enbRjShWveV4sPL+QWmbenEhIslG
-         kSJYQubsTLxBBoUHLQ6QqeF3tngiuVyNVSY1vIGxoxHr6XgImsojhjkDU7XnsYqYYlPJ
-         rDSYL37exOjQmIZuCECMLq8z+5x9drE8xATwkM2sza0IoWt7MYcw+0M/EEw3/68MaK5y
-         Auuw==
-X-Gm-Message-State: ACrzQf0arPMJqQ+VaYxwaAmzW77QoBMz6k8NHw+hJdWcM/8TCoqLBkUu
-        HPCizLcIOgz1jTNC87o2+A==
-X-Google-Smtp-Source: AMsMyM7nXVwMcu5ISDcRp634syLg/5x3kTrKGqWMfvQM7YOn46opCf+Bo3bZ5zc/ZQ7ccM5Zb/iR6g==
-X-Received: by 2002:a05:6870:58a4:b0:11c:9b6d:f066 with SMTP id be36-20020a05687058a400b0011c9b6df066mr31211751oab.155.1667862712788;
-        Mon, 07 Nov 2022 15:11:52 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id i13-20020a056870890d00b0013b09a56d59sm3774129oao.27.2022.11.07.15.11.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Nov 2022 15:11:52 -0800 (PST)
-Received: (nullmailer pid 1834437 invoked by uid 1000);
-        Mon, 07 Nov 2022 23:11:52 -0000
-Date:   Mon, 7 Nov 2022 17:11:52 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Pierre Gondois <pierre.gondois@arm.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Tsahee Zidenberg <tsahee@annapurnalabs.com>,
-        Antoine Tenart <atenart@kernel.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        =?UTF-8?Q?Andreas_F=C3=A4rber?= <afaerber@suse.de>,
-        Matthias Brugger <mbrugger@suse.com>,
-        Wei Xu <xuwei5@hisilicon.com>, Chanho Min <chanho.min@lge.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Steen Hegelund <Steen.Hegelund@microchip.com>,
-        Daniel Machon <daniel.machon@microchip.com>,
-        Avi Fishman <avifishman70@gmail.com>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Jisheng Zhang <jszhang@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>, Peng Fan <peng.fan@nxp.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Adam Ford <aford173@gmail.com>,
-        Tim Harvey <tharvey@gateworks.com>,
-        Richard Zhu <hongxing.zhu@nxp.com>,
-        Joakim Zhang <qiangqing.zhang@nxp.com>,
-        Markus Niebel <Markus.Niebel@ew.tq-group.com>,
-        Marek Vasut <marex@denx.de>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Paul Elder <paul.elder@ideasonboard.com>,
-        David Heidelberg <david@ixit.cz>,
-        Oliver Graute <oliver.graute@kococonnector.com>,
-        Liu Ying <victor.liu@nxp.com>, Jacky Bai <ping.bai@nxp.com>,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>,
-        Vidya Sagar <vidyas@nvidia.com>,
-        Johan Jonker <jbx6244@gmail.com>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2 00/23] Update cache properties for arm64 DTS
-Message-ID: <20221107231152.GB1779129-robh@kernel.org>
-References: <20221107155825.1644604-1-pierre.gondois@arm.com>
+        Mon, 7 Nov 2022 18:12:23 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D58A252A2;
+        Mon,  7 Nov 2022 15:12:20 -0800 (PST)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2A7NB6U8012309;
+        Mon, 7 Nov 2022 23:12:16 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=rx9W3BIhzS5QtgEfhCcmVgNCP1dr8FiEALyBkoDsobA=;
+ b=GJin8FMx9KMZYAiwXknNo8YnmW9GV07P8XHRsDdd6VEnVY0H5ku+sY8F6SI1YB5+0U7J
+ 8d+B9MW5ypZz9YdMpllHIbaZ77xBWqUz7wBPeWNWTJ5ErTufGIzHpa9qG3jumV6KV5Ma
+ N91i4YxGhFRoMpYpKSVi9FXSHaYm7qJg6a/TTF7ezN5RrJOS9D1j1fpd7r3qo74qWk94
+ Gu9IM8yjV9c8x8WSzKymeQd0W2y00t8YYoe4u477KfPHezWMueq0pHFZHvCFgwuCYqBu
+ 3brx+eSCLJyG1z47vXgaevl54K0lFTfd7UjX3lR03x1L05k8YaOek8zNECp0pdT5HqM2 Dg== 
+Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kq5ftruay-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 07 Nov 2022 23:12:16 +0000
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2A7NCFIu023855
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 7 Nov 2022 23:12:15 GMT
+Received: from [10.110.0.244] (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Mon, 7 Nov 2022
+ 15:12:14 -0800
+Message-ID: <bf9b6c4a-189e-b528-10e4-7660a098c648@quicinc.com>
+Date:   Mon, 7 Nov 2022 15:12:14 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221107155825.1644604-1-pierre.gondois@arm.com>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v3 1/5] dt-bindings: firmware: scm: Add QDU1000/QRU1000
+ compatibles
+Content-Language: en-US
+To:     Bjorn Andersson <andersson@kernel.org>
+CC:     Andy Gross <agross@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Robert Marko <robimarko@gmail.com>,
+        Guru Das Srinagesh <quic_gurus@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20221026190549.4005703-1-quic_molvera@quicinc.com>
+ <20221026190549.4005703-2-quic_molvera@quicinc.com>
+ <20221107173842.6ct43x7wyuulqv33@builder.lan>
+From:   Melody Olvera <quic_molvera@quicinc.com>
+In-Reply-To: <20221107173842.6ct43x7wyuulqv33@builder.lan>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: YgknJlRt5q6lQXqs-efM9bJZdmtbyHNw
+X-Proofpoint-ORIG-GUID: YgknJlRt5q6lQXqs-efM9bJZdmtbyHNw
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-07_11,2022-11-07_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 impostorscore=0
+ malwarescore=0 adultscore=0 bulkscore=0 suspectscore=0 mlxlogscore=999
+ priorityscore=1501 mlxscore=0 phishscore=0 lowpriorityscore=0 spamscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
+ definitions=main-2211070174
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 07, 2022 at 04:56:53PM +0100, Pierre Gondois wrote:
-> v2:
-> - Update/Add patches for missed cache properties requiring to be
->   updated for the following platforns: bcm, amazon, arm, exynos,
->   freescale, marvell, mediatek, nvidia, socinext, tesla, ti.
->   Missed cache properties were detected using Rob Herring's branch:
->   https://github.com/robherring/dt-schema/tree/cache-rework
-> - v1 of exynos, tesla were merged.
-> - Updated wrong reference in commit message.
-> - Added received Rb/Acked-by.
-> 
-> Align arm64 DTS to the DeviceTree specification v0.3 regarding
-> cache properties. The patch-set mainly adds 'cache-level' or
-> 'cache' compatibility properties.
-> For one qcom DTS, level 1 cache nodes are removed as they should
-> be in the cpu nodes.
-> 
-> On another node, it seems that the 'cache-unified' is under-used.
-> cache-unified:
->   If present, specifies the cache has a unified or-
->   ganization. If not present, specifies that the
->   cache has a Harvard architecture with separate
->   caches for instructions and data.
-> Only a few l2 cache nodes have this property, and in the absence
-> of [|d|i]-cache-size properties (or other), the cache is assumed to be
-> split.
-> 
-> The l2 cache of the Rockchip RK3308 platform is thus assumed to be
-> split:
-> l2: l2-cache {
-> 	compatible = "cache";
-> 	cache-level = <2>;
-> };
-> when the platform datasheet advertises a unified cache.
-> 
-> No modification/check was made to correct that due to the lack of
-> cache information for most platforms.
 
-I suppose in theory a split L2 is possible, but I think in practice that 
-doesn't exist. The Arm ARM allows for such a thing, but this[1] says L2 
-caches are unified. IMO, we should just define level 2+ is unified in 
-the schema and we can relax that if ever needed. I've updated the cache 
-schema branch[2] with that requirement.
 
-Rob
+On 11/7/2022 9:38 AM, Bjorn Andersson wrote:
+> On Wed, Oct 26, 2022 at 12:05:45PM -0700, Melody Olvera wrote:
+>> Add compatibles for scm driver for QDU1000 and QRU1000 platforms.
+>>
+>> Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
+>> ---
+>>  .../devicetree/bindings/firmware/qcom,scm.yaml    | 15 +++++++++++++++
+>>  1 file changed, 15 insertions(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/firmware/qcom,scm.yaml b/Documentation/devicetree/bindings/firmware/qcom,scm.yaml
+>> index be1b5746eddb..5352181aa393 100644
+>> --- a/Documentation/devicetree/bindings/firmware/qcom,scm.yaml
+>> +++ b/Documentation/devicetree/bindings/firmware/qcom,scm.yaml
+>> @@ -38,6 +38,7 @@ properties:
+>>            - qcom,scm-msm8994
+>>            - qcom,scm-msm8996
+>>            - qcom,scm-msm8998
+>> +          - qcom,scm-qdu1000
+>>            - qcom,scm-sc7180
+>>            - qcom,scm-sc7280
+>>            - qcom,scm-sc8280xp
+>> @@ -81,6 +82,20 @@ properties:
+>>      description: TCSR hardware block
+>>  
+>>  allOf:
+>> +  - if:
+>> +      properties:
+>> +        compatible:
+>> +          contains:
+>> +            const: qcom,scm-qdu1000
+>> +    then:
+>> +      properties:
+>> +        '#reset-cells':
+>> +          maxItems: 1
+>> +        clocks: false
+>> +        clock-names: false
+>> +
+>> +      required:
+>> +        - '#reset-cells'
+> Please document what this reset is expected to be wired to, and write a
+> sentence or two in the commit message how the QDU differs from existing
+> platforms supported by the binding.
+>
 
-[1] https://developer.arm.com/documentation/den0024/a/Caches/Cache-terminology
-[2] https://github.com/robherring/dt-schema/tree/cache-rework
+Honestly, I can't remember what this is here for. Will remove from here and DT.
+Will also add a quick blurb about not needing clocks.
+
+Thanks,
+Melody
+>
+>>    - if:
+>>        properties:
+>>          compatible:
+>> -- 
+>> 2.25.1
+>>
+
