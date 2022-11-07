@@ -2,51 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F74661FC3E
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 18:55:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6BBA61FC24
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 18:54:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232160AbiKGRzr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 12:55:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59320 "EHLO
+        id S231705AbiKGRys (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 12:54:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232459AbiKGRyZ (ORCPT
+        with ESMTP id S231776AbiKGRyG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 12:54:25 -0500
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 062452670
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 09:53:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1667843588; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=CL7OS3zNzCh06Be+7/qgqOMluJ9oQWh2haWI6qGfS0c=;
-        b=jLLnGL/9f2JDrJH58XLM/6o5cp6HQ1F1qCSbSlQ1pxuXLDotQ5OUMyELZPKv7LixR6kC7j
-        lecrrVbllOZEPqDOC3ObQoJ381+3fF3cbtIowNkEbiRBzAZ4eAdfgy3ItQoLrShjIs7ckS
-        w8bhXq6p/Ngr3vGuvcc14DFra0pKc/4=
-From:   Paul Cercueil <paul@crapouillou.net>
-To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Paul Cercueil <paul@crapouillou.net>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH 14/26] drm: mediatek: Remove #ifdef guards for PM related functions
-Date:   Mon,  7 Nov 2022 17:52:44 +0000
-Message-Id: <20221107175256.360839-4-paul@crapouillou.net>
-In-Reply-To: <20221107175256.360839-1-paul@crapouillou.net>
-References: <20221107175106.360578-1-paul@crapouillou.net>
- <20221107175256.360839-1-paul@crapouillou.net>
+        Mon, 7 Nov 2022 12:54:06 -0500
+Received: from msg-1.mailo.com (msg-1.mailo.com [213.182.54.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A505252B4
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 09:53:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
+        t=1667843571; bh=58ErT4QpRqXdWTiUxomBj2IPCdd8QNB/JsnhQ4gVmuI=;
+        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:References:
+         MIME-Version:Content-Type:In-Reply-To;
+        b=MzYP0h4+syPx/Nby1i/2hY8QlHazvNLx7JxqB1ojnfmg0eZD2S6SaOmNiiWHHMWgz
+         S+URdsYJEBopjph01agkD4sbyj1bYZgDmAL8xt+pYILSyIFENwBlJM6p9TOl1fYSaS
+         Ef7YHt5WJuciDMS0hPie+4nYGUjxidDbEPXnR4tY=
+Received: by b-4.in.mailobj.net [192.168.90.14] with ESMTP
+        via ip-206.mailobj.net [213.182.55.206]
+        Mon,  7 Nov 2022 18:52:50 +0100 (CET)
+X-EA-Auth: 9lejEj7kUnOJLlXO/mv+0blyfacoZBYDob5YtkXUEAdj8FhObVwkt+9O17zeDxBX6MFBl7Lb+Ypx6+KX/d4OUIsxwHxL+qLH
+Date:   Mon, 7 Nov 2022 23:22:45 +0530
+From:   Deepak R Varma <drv@mailo.com>
+To:     Dan Carpenter <error27@gmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] staging: most: video: use min_t() for comparison and
+ assignment
+Message-ID: <Y2lF7dHx3aHfrSoB@qemulion>
+References: <Y2iHl5CuqyR2vEc8@qemulion>
+ <Y2kGG3zuvvDLZKWq@kadam>
+ <Y2kf40kSbFWkWkLl@qemulion>
+ <Y2kiixRDxjxSwFp+@kadam>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y2kiixRDxjxSwFp+@kadam>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,95 +51,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use the DEFINE_SIMPLE_DEV_PM_OPS() and pm_sleep_ptr() macros to handle
-the .suspend/.resume callbacks.
+On Mon, Nov 07, 2022 at 06:21:47PM +0300, Dan Carpenter wrote:
+> On Mon, Nov 07, 2022 at 08:40:27PM +0530, Deepak R Varma wrote:
+> > On Mon, Nov 07, 2022 at 04:20:27PM +0300, Dan Carpenter wrote:
+> > > On Mon, Nov 07, 2022 at 09:50:39AM +0530, Deepak R Varma wrote:
+> > > > Simplify code by using min_t helper macro for logical evaluation
+> > > > and value assignment. Use the _t variant of min macro since the
+> > > > variable types are not same.
+> > > > This issue is identified by coccicheck using the minmax.cocci file.
+> > > >
+> > > > Signed-off-by: Deepak R Varma <drv@mailo.com>
+> > > > ---
+> > > >
+> > > > Changes in v2:
+> > > >    1. Revise patch description. No functional change.
+> > > >
+> > > >  drivers/staging/most/video/video.c | 2 +-
+> > > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > > >
+> > > > diff --git a/drivers/staging/most/video/video.c b/drivers/staging/most/video/video.c
+> > > > index ffa97ef21ea5..d5cc7eea3b52 100644
+> > > > --- a/drivers/staging/most/video/video.c
+> > > > +++ b/drivers/staging/most/video/video.c
+> > > > @@ -173,7 +173,7 @@ static ssize_t comp_vdev_read(struct file *filp, char __user *buf,
+> > > >  	while (count > 0 && data_ready(mdev)) {
+> > > >  		struct mbo *const mbo = get_top_mbo(mdev);
+> > > >  		int const rem = mbo->processed_length - fh->offs;
+> > > > -		int const cnt = rem < count ? rem : count;
+> > > > +		int const cnt = min_t(int, rem, count);
+> > >
+> > > TL;DR use size_t instead of int.
+> >
+> > Hi Dan,
+> > Thank you for reviewing the patch. Please see my queries inline.
+> >
+> > >
+> > > Using "int" here is wrong.  size_t is unsigned long meaning that it has
+> > > 64 bits to use to represent positive values.  (Let's ignore 32 bit
+> > > arches).  You have chopped it down to say that it now has 31 bits for
+> > > positives and if BIT(31) is set then treat it as negative.  Everything
+> > > which is larger than INT_MAX will be broken.
+> >
+> > I did worry about the truncation int might cause to the size_t variable,
+> > however, as the result is being assigned to an int, I decided to go for int to
+> > be the typecast for min_t.
+>
+> Let's ignore that other layers prevent "count" from being greater than
+> INT_MAX.  mbo->processed_length is a u16.  Also if "fh->offs" is more
+> than mbo->processed_length that's a separate bug and we are already
+> screwed.
 
-These macros allow the suspend and resume functions to be automatically
-dropped by the compiler when CONFIG_SUSPEND is disabled, without having
-to use #ifdef guards.
+Yes, "u16 - u32" looks wrong on the face, but it should always evaluat
+positive, else we would have had other issues down the line.
 
-This has the advantage of always compiling these functions in,
-independently of any Kconfig option. Thanks to that, bugs and other
-regressions are subsequently easier to catch.
+>
+> So that means rem is a relatively small number.  A small number can
+> easily fit in "int cnt".  So we are eating a big pie ("count") but we
+> are taking small bites ("cnt").  Everything works fine.
+>
+> But if we chop the pie in half or treat it as negative pie then the
+> math breaks.
 
-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
----
-Cc: Chun-Kuang Hu <chunkuang.hu@kernel.org>
-Cc: Philipp Zabel <p.zabel@pengutronix.de>
-Cc: Matthias Brugger <matthias.bgg@gmail.com>
-Cc: linux-mediatek@lists.infradead.org
-Cc: linux-arm-kernel@lists.infradead.org
----
- drivers/gpu/drm/mediatek/mtk_dp.c   | 6 ++----
- drivers/gpu/drm/mediatek/mtk_hdmi.c | 9 ++++-----
- 2 files changed, 6 insertions(+), 9 deletions(-)
+That makes perfect sense. Thank you so much Dan for the explanation.
 
-diff --git a/drivers/gpu/drm/mediatek/mtk_dp.c b/drivers/gpu/drm/mediatek/mtk_dp.c
-index 9d085c05c49c..00861a914855 100644
---- a/drivers/gpu/drm/mediatek/mtk_dp.c
-+++ b/drivers/gpu/drm/mediatek/mtk_dp.c
-@@ -2590,7 +2590,6 @@ static int mtk_dp_remove(struct platform_device *pdev)
- 	return 0;
- }
- 
--#ifdef CONFIG_PM_SLEEP
- static int mtk_dp_suspend(struct device *dev)
- {
- 	struct mtk_dp *mtk_dp = dev_get_drvdata(dev);
-@@ -2613,9 +2612,8 @@ static int mtk_dp_resume(struct device *dev)
- 
- 	return 0;
- }
--#endif
- 
--static SIMPLE_DEV_PM_OPS(mtk_dp_pm_ops, mtk_dp_suspend, mtk_dp_resume);
-+static DEFINE_SIMPLE_DEV_PM_OPS(mtk_dp_pm_ops, mtk_dp_suspend, mtk_dp_resume);
- 
- static const struct mtk_dp_data mt8195_edp_data = {
- 	.bridge_type = DRM_MODE_CONNECTOR_eDP,
-@@ -2650,7 +2648,7 @@ static struct platform_driver mtk_dp_driver = {
- 	.driver = {
- 		.name = "mediatek-drm-dp",
- 		.of_match_table = mtk_dp_of_match,
--		.pm = &mtk_dp_pm_ops,
-+		.pm = pm_sleep_ptr(&mtk_dp_pm_ops),
- 	},
- };
- 
-diff --git a/drivers/gpu/drm/mediatek/mtk_hdmi.c b/drivers/gpu/drm/mediatek/mtk_hdmi.c
-index 4c80b6896dc3..93b2a36d3fc5 100644
---- a/drivers/gpu/drm/mediatek/mtk_hdmi.c
-+++ b/drivers/gpu/drm/mediatek/mtk_hdmi.c
-@@ -1754,7 +1754,6 @@ static int mtk_drm_hdmi_remove(struct platform_device *pdev)
- 	return 0;
- }
- 
--#ifdef CONFIG_PM_SLEEP
- static int mtk_hdmi_suspend(struct device *dev)
- {
- 	struct mtk_hdmi *hdmi = dev_get_drvdata(dev);
-@@ -1777,9 +1776,9 @@ static int mtk_hdmi_resume(struct device *dev)
- 
- 	return 0;
- }
--#endif
--static SIMPLE_DEV_PM_OPS(mtk_hdmi_pm_ops,
--			 mtk_hdmi_suspend, mtk_hdmi_resume);
-+
-+static DEFINE_SIMPLE_DEV_PM_OPS(mtk_hdmi_pm_ops,
-+				mtk_hdmi_suspend, mtk_hdmi_resume);
- 
- static const struct mtk_hdmi_conf mtk_hdmi_conf_mt2701 = {
- 	.tz_disabled = true,
-@@ -1809,7 +1808,7 @@ static struct platform_driver mtk_hdmi_driver = {
- 	.driver = {
- 		.name = "mediatek-drm-hdmi",
- 		.of_match_table = mtk_drm_hdmi_of_ids,
--		.pm = &mtk_hdmi_pm_ops,
-+		.pm = pm_sleep_ptr(&mtk_hdmi_pm_ops),
- 	},
- };
- 
--- 
-2.35.1
+>
+> >
+> > Also, won't size_t will force the int rem to be treated as unsigned value which
+> > will impact the comparison when rem indeed is negative. If rem will never be
+> > -ve, my worry will be void.
+>
+> Is "-ve" the TikTok way of abbreviating negative?  Am I old?
+
+No no... sorry. My fingers were catching up with the thoughts. :)
+
+>
+> The small bites are always positive.  But if we are eating negative
+> pie then we take negative size bites.  min_t() should almost always use
+> unsigned types.  Everything else is a headache.  I have often wondered
+> why people do it but I think it's because of the 80 character rule and
+> the word "int" is shorter than "unsigned long".
+
+Understood. I will send in a revision with size_t type for min_t.
+Thank you once again for the detailed answer. Much appreciate.
+
+./drv
+
+>
+> regards,
+> dan carpenter
+>
+>
+
 
