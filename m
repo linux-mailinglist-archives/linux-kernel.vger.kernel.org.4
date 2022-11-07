@@ -2,165 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0C1861FECB
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 20:40:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CD6261FED0
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 20:40:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232476AbiKGTkT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 14:40:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35032 "EHLO
+        id S232574AbiKGTkr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 14:40:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231589AbiKGTkP (ORCPT
+        with ESMTP id S232153AbiKGTkp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 14:40:15 -0500
-X-Greylist: delayed 11954 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 07 Nov 2022 11:40:13 PST
-Received: from smtp-1909.mail.infomaniak.ch (smtp-1909.mail.infomaniak.ch [185.125.25.9])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54F571002
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 11:40:13 -0800 (PST)
-Received: from smtp-2-0001.mail.infomaniak.ch (unknown [10.5.36.108])
-        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4N5hQg66hwzMpnwh;
-        Mon,  7 Nov 2022 20:40:11 +0100 (CET)
-Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
-        by smtp-2-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4N5hQf1g6kzMppr8;
-        Mon,  7 Nov 2022 20:40:10 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
-        s=20191114; t=1667850011;
-        bh=VH93TVKDv81HuBQ2xHBKdoTVjfRzV8BT2O9T7VUP1yU=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=1FSixZE59TqN7/U2wk6U358AgKcPAc215cfWjYqdZd8499FHiwXvxC4hhrjTocp+S
-         GrM+Uau+gfxhk+Ko1o7Y75FwYY4xhbblREVkyllHPImuHcXA27SxxrF2mAXsPwUxEz
-         bmpRUBLo4dihIijNPrr10GQ6EDBCfJ0/57vGOnqE=
-Message-ID: <e2909fe5-7fc4-c73a-b33a-e65fed1d837f@digikod.net>
-Date:   Mon, 7 Nov 2022 20:40:09 +0100
+        Mon, 7 Nov 2022 14:40:45 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1D73193D9;
+        Mon,  7 Nov 2022 11:40:44 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id e7-20020a17090a77c700b00216928a3917so10814552pjs.4;
+        Mon, 07 Nov 2022 11:40:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=Lr2LJh1ynsT6o7QECxrCpd8COAMFXtNJpOsEdVPq6mA=;
+        b=Jr9uTsc3hShwQ7UX2Tm2tx7F4XmAu9jfoZX9sYL1gH4GV0IK0c7jM2ADozP+FVLK3f
+         Y2Eg2BUdbWvwaNL4BCY2BOMc4a/NxJ2qn3phYseVokjP7f9+/LgaO0P1E+Hn9G+WH2wq
+         4kasZWGcR5RUgGz7bh3Yeutr9FijqrFbbRi9n+NBJPxUrANZG1Q9BJn18SJBjnxUVz3y
+         8Jy1TqwaL+Sv5q/ewqUzH0+pC6gT9KZIVdv2ACMxaPkqfzeGwNBUkP43aXSueCgRTr61
+         L04ukJ5uLTzY0cJkybksbAvC3VRHVKdb7WxfU9dvCZ3u4zO9OQtrMYIpFneaW6fx5eNB
+         dLrg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Lr2LJh1ynsT6o7QECxrCpd8COAMFXtNJpOsEdVPq6mA=;
+        b=M9x9l3Ws3P4KB4uvb7FGdLCKDwHd6CgBctPDNdj4XcIGSqOpGUegB0ui0n6DlaQX9D
+         1NrAe2XLMSal0mdrI9Mxp6FTBe2yQVsPPTXQKK7Kl16NhkkY5ryje7/9EnUNkWQbs//g
+         nGFG1VT9oUJb0DZijK15E0iAKklv/Yu59/nLIHUEYsEi4ikovnQbhLVC9PFOL5iZlhe4
+         ypYHeD8UhG8bPLbcsrC7Zec/RFWjL3rNqA+D5jirqPnBijnJjRwuapTXzS0g8yPbMQb9
+         ieXiqVvESuU5npDEudeQg3HVhlzx1+SieDS/QYpKmYmwOH7UG1TfXEpaiOj30hH6ui0V
+         oDiQ==
+X-Gm-Message-State: ACrzQf2Ng/dVJQA77B8yNbGR1/YUnNHbejvrL8JTRRfc4E7f2sjBzUxP
+        zd7ihnSvjdBUsWpiNLvSZCU=
+X-Google-Smtp-Source: AMsMyM4Z1WSLG/2s+85sT5YwneM/XauDZnGvse8TolrZ9Zs1DIAvczdZAQ2Z5UH9Z7fHC4PrnIbGWA==
+X-Received: by 2002:a17:902:da82:b0:186:ee5a:47c7 with SMTP id j2-20020a170902da8200b00186ee5a47c7mr52582931plx.82.1667850044133;
+        Mon, 07 Nov 2022 11:40:44 -0800 (PST)
+Received: from google.com ([2620:15c:9d:2:626:eb80:9eb9:1fd7])
+        by smtp.gmail.com with ESMTPSA id x1-20020a633101000000b00464858cf6b0sm4510500pgx.54.2022.11.07.11.40.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Nov 2022 11:40:43 -0800 (PST)
+Date:   Mon, 7 Nov 2022 11:40:40 -0800
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-input@vger.kernel.org
+Subject: Re: [PATCH 12/30] input: Use kstrtobool() instead of strtobool()
+Message-ID: <Y2lfOBAFo7jcpeTO@google.com>
+References: <cover.1667336095.git.christophe.jaillet@wanadoo.fr>
+ <4311e9cb62687449f4175e2b062abcd77aada059.1667336095.git.christophe.jaillet@wanadoo.fr>
+ <Y2Qowvjn+7jT767t@google.com>
+ <a0a59528-6af4-adb2-e4e2-cb4cbe15e986@wanadoo.fr>
 MIME-Version: 1.0
-User-Agent: 
-Subject: Re: [PATCH] certs: Prevent spurious errors on repeated blacklisting
-Content-Language: en-US
-To:     =?UTF-8?Q?Thomas_Wei=c3=9fschuh?= <linux@weissschuh.net>
-Cc:     David Howells <dhowells@redhat.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Jarkko Sakkinen <jarkko@kernel.org>, keyrings@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Mark Pearson <markpearson@lenovo.com>,
-        Eric Snowberg <eric.snowberg@oracle.com>,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-References: <20221104014704.3469-1-linux@weissschuh.net>
- <3b997266-067c-975c-911a-da146fe9033a@digikod.net>
- <db5890d8-3a3d-4ca7-bb58-655c26164587@t-8ch.de>
- <8692915f-437c-56fd-8984-d6febf533fa9@digikod.net>
- <706c75af-9569-42fd-ba68-533ed931d55d@t-8ch.de>
-From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-In-Reply-To: <706c75af-9569-42fd-ba68-533ed931d55d@t-8ch.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <a0a59528-6af4-adb2-e4e2-cb4cbe15e986@wanadoo.fr>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Nov 03, 2022 at 10:37:19PM +0100, Christophe JAILLET wrote:
+> Le 03/11/2022 � 21:46, Dmitry Torokhov a �crit�:
+> > On Tue, Nov 01, 2022 at 10:14:00PM +0100, Christophe JAILLET wrote:
+> > > strtobool() is the same as kstrtobool().
+> > > However, the latter is more used within the kernel.
+> > > 
+> > > In order to remove strtobool() and slightly simplify kstrtox.h, switch to
+> > > the other function name.
+> > > 
+> > > While at it, include the corresponding header file (<linux/kstrtox.h>)
+> > > 
+> > > Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> > 
+> > Acked-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+> > 
+> > Please feel free to merge with the rest of the series. Or let me know if
+> > you want me to pick just this one through my tree.
+> > 
+> > Thanks.
+> > 
+> 
+> Hi,
+> 
+> the patch can go through your tree.
+> There is no plan to merge the whole serie at once, and some other
+> maintainers have asked for some patches to be re-sent as individual patches.
 
-On 07/11/2022 17:35, Thomas Weißschuh wrote:
-> On 2022-11-07 17:20+0100, Mickaël Salaün wrote:
->> On 07/11/2022 16:55, Thomas Weißschuh wrote:
->>> On 2022-11-07 14:12+0100, Mickaël Salaün wrote:
->>>> This is a follow-up of
->>>> https://lore.kernel.org/r/c8c65713-5cda-43ad-8018-20f2e32e4432@t-8ch.de
->>>>
->>>> Added Jarkko, Mark Pearson, Eric Snowberg and more ML in Cc.
->>>>
->>>>
->>>> On 04/11/2022 02:47, Thomas Weißschuh wrote:
->>>>> When the blacklist keyring was changed to allow updates from the root
->>>>> user it gained an ->update() function that disallows all updates.
->>>>> When the a hash is blacklisted multiple times from the builtin or
->>>>> firmware-provided blacklist this spams prominent logs during boot:
->>>>>
->>>>> [    0.890814] blacklist: Problem blacklisting hash (-13)
->>>>>
->>>>> As all these repeated calls to mark_raw_hash_blacklisted() would create
->>>>> the same keyring entry again anyways these errors can be safely ignored.
->>>>
->>>> These errors can indeed be safely ignored, however they highlight issues
->>>> with some firmware vendors not checking nor optimizing their blocked hashes.
->>>> This raises security concerns, and it should be fixed by firmware vendors.
->>>
->>> Thanks, I was not aware that these are worth fixing.
->>>
->>>>> Fixes: 6364d106e041 ("certs: Allow root user to append signed hashes to the blacklist keyring")
->>>>> Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
->>>>> ---
->>>>>     certs/blacklist.c | 4 +++-
->>>>>     1 file changed, 3 insertions(+), 1 deletion(-)
->>>>>
->>>>> diff --git a/certs/blacklist.c b/certs/blacklist.c
->>>>> index 41f10601cc72..5f7f2882ced7 100644
->>>>> --- a/certs/blacklist.c
->>>>> +++ b/certs/blacklist.c
->>>>> @@ -191,7 +191,9 @@ static int mark_raw_hash_blacklisted(const char *hash)
->>>>>     				   BLACKLIST_KEY_PERM,
->>>>>     				   KEY_ALLOC_NOT_IN_QUOTA |
->>>>>     				   KEY_ALLOC_BUILT_IN);
->>>>> -	if (IS_ERR(key)) {
->>>>> +
->>>>> +	/* Blacklisting the same hash twice fails but would be idempotent */
->>>>> +	if (IS_ERR(key) && PTR_ERR(key) != -EACCES) {
->>>>
->>>> We should not hide EACCES errors. This logs issues, which is correct for
->>>> duplicate hashes, and can help firmware vendors to fix their database. I'd
->>>> really like to see a different log message instead: change the duplicate
->>>> entry error code from EACCES to EEXIST, and call pr_warn for this specific
->>>> case.
->>>
->>> Returning EACCES would require some deeper changes to how the keyring is set up
->>
->> I guess you meant EEXIST?
-> 
-> Indeed, sorry.
-> 
->>> or even changes to the keyring core itself to introduce a key_create() (without
->>> update) function.
->>>
->>> Is this something you would take a look at, or should I try to do it?
->>> (I have no previous knowledge about the keyring subsystem)
->>
->> Please take a look. I think it should not be too complex.
-> 
-> Will do.
-> 
-> My plan is to create a new function key_create() that does takes the core logic
-> of key_create_or_update() and fails with EEXIST if needed.
-> 
->>> In any case it probably would also be good to log the problematic hashes
->>> themselves, so users can properly report the issue to their firmware vendors.
->>
->> Agree
-> 
-> I'll send a patch for that, too.
+OK, applied, thank you.
 
-Good!
-
-Jarkko, David, any though?
-
-> 
-> As for this patch's Fixes-tag, it could refer to either the commit that
-> introduced the logging in the first place or the one that actively started to
-> trigger it:
-> * 734114f8782f ("KEYS: Add a system blacklist keyring")
-> * 6364d106e041 ("certs: Allow root user to append signed hashes to the blacklist keyring")
-> 
-> Personally I'd tend to use the latter.
-
-Even if commit 6364d106e041 is not directly the cause of the issue, it 
-makes it visible, so I agree that you should keep the current Fixes tag.
-
-
-> 
->>>>>     		pr_err("Problem blacklisting hash (%ld)\n", PTR_ERR(key));
->>>>>     		return PTR_ERR(key);
->>>>>     	}
->>>>>
->>>>> base-commit: ee6050c8af96bba2f81e8b0793a1fc2f998fcd20
+-- 
+Dmitry
