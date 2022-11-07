@@ -2,51 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9711961E91A
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 04:13:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56A9461E91D
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 04:13:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231171AbiKGDNZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Nov 2022 22:13:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35048 "EHLO
+        id S231186AbiKGDNc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Nov 2022 22:13:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230442AbiKGDM6 (ORCPT
+        with ESMTP id S230445AbiKGDM6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sun, 6 Nov 2022 22:12:58 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B129A10549;
-        Sun,  6 Nov 2022 19:12:52 -0800 (PST)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 059BC10551;
+        Sun,  6 Nov 2022 19:12:53 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4FC27B80D7C;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7A55C60E86;
         Mon,  7 Nov 2022 03:12:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F40F3C433C1;
-        Mon,  7 Nov 2022 03:12:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32720C43152;
+        Mon,  7 Nov 2022 03:12:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1667790771;
-        bh=6lrQKUqM298XVGBM7THXqZcqeym2M8+q+3KjUjaSB/Q=;
+        bh=mweBuL50kxsp/aioXeFamnDpfnxNOo+ji52Azj8DQi4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YpokX/ngw5X7XWAVgbCKvki0z/4i8+36mIswI9FVVlveeQk26wmpZGSHqfs1x8PY3
-         bdiqLvg/S8L2yDk/qNKetIhKJlJSsCDZ6XRiEd4bpy7n6xyQfMP7BtqLw6Wgbms6O1
-         89+wNqOHTQgJWWKu6iMRjjPJ6RWR9SMAyoTCeMZWVvcewNNVP1lvRxWskbEPLqPsai
-         7jtQF7B7dn4qPWoiLj6I6iB32qUWQkkc3eKCHjT5jAurizjVR0qY5DrWf0tuPcaDAY
-         rEL5jTz+Eh2ETo3MtYq/73LgSWaxVl8tDGm5G/4TsFzckx/b3psG5TduC6AKCn05bd
-         /u2Nv8XBHV9+g==
+        b=pFiujuQQprBMUq4qe7Q7UNX6rHJNHmuRVkitKVMqoXPgXaykPe3e/ERcC7u8QbsUh
+         HlcdurDBRDW2tezIngRX4HHcuhIU+h119d4CjtPkJ4zfLOux1euJPEybwEBhPitkpT
+         5z3jMo+0aLLH8js8XwzPh4cjbHDGkmH9ZTnd7NkyBhhDnEoVKdHWFiwqMViEDcNN3+
+         YmP2y7KcpbC0MyhPXIlSj+BDpBUYLyYij4NR7lbBfZVTwG5ghmX3r2ZqasC1o1OJoG
+         3asofeR+75ZI375mDwsdtrVV9q2118gbRfyLBVadEEf5ZPGU1s42qGSU/VOBQMOE2Y
+         FvCqBHh6nltUw==
 From:   Bjorn Andersson <andersson@kernel.org>
-To:     ~postmarketos/upstreaming@lists.sr.ht, konrad.dybcio@somainline.org
-Cc:     pashadubrova@gmail.com, mturquette@baylibre.com,
-        linux-clk@vger.kernel.org, marijn.suijten@somainline.org,
-        linux-arm-msm@vger.kernel.org,
-        angelogioacchino.delregno@somainline.org,
-        linux-kernel@vger.kernel.org, sboyd@kernel.org,
-        martin.botka@somainline.org, Andy Gross <agross@kernel.org>,
-        jami.kettunen@somainline.org
-Subject: Re: [PATCH] clk: qcom: dispcc-sm6350: Add CLK_OPS_PARENT_ENABLE to pixel&byte src
-Date:   Sun,  6 Nov 2022 21:12:08 -0600
-Message-Id: <166779074257.500303.7313241594081608053.b4-ty@kernel.org>
+To:     krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-msm@vger.kernel.org, konrad.dybcio@somainline.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-kernel@vger.kernel.org, Andy Gross <agross@kernel.org>
+Cc:     dmitry.baryshkov@linaro.org
+Subject: Re: [PATCH 0/4] arm64: dts: qcom: sm8450: add SDHCI
+Date:   Sun,  6 Nov 2022 21:12:09 -0600
+Message-Id: <166779074265.500303.15502116502642876255.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20221010155546.73884-1-konrad.dybcio@somainline.org>
-References: <20221010155546.73884-1-konrad.dybcio@somainline.org>
+In-Reply-To: <20221026200357.391635-1-krzysztof.kozlowski@linaro.org>
+References: <20221026200357.391635-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -59,16 +57,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 10 Oct 2022 17:55:46 +0200, Konrad Dybcio wrote:
-> Add the CLK_OPS_PARENT_ENABLE flag to pixel and byte clk srcs to
-> ensure set_rate can succeed.
+On Wed, 26 Oct 2022 16:03:53 -0400, Krzysztof Kozlowski wrote:
+> Depends on:
+> https://lore.kernel.org/all/20220410205127.1670705-2-dmitry.baryshkov@linaro.org/
 > 
+> Best regards,
+> Krzysztof
 > 
+> Krzysztof Kozlowski (4):
+>   arm64: dts: qcom: sm8450: move SDHCI pin configuration to DTSI
+>   arm64: dts: qcom: sm8450: disable SDHCI SDR104/SDR50 on all boards
+>   arm64: dts: qcom: sm8450-hdk: add SDHCI for microSD
+>   arm64: dts: qcom: sm8450-qrd: add SDHCI for microSD
+> 
+> [...]
 
 Applied, thanks!
 
-[1/1] clk: qcom: dispcc-sm6350: Add CLK_OPS_PARENT_ENABLE to pixel&byte src
-      commit: 92039e8c080c63748f8e133e7cfad33a75daefb6
+[1/4] arm64: dts: qcom: sm8450: move SDHCI pin configuration to DTSI
+      commit: a0646262ec94faaf95b3dba8f17774d9762ee9ac
+[2/4] arm64: dts: qcom: sm8450: disable SDHCI SDR104/SDR50 on all boards
+      commit: 9d561dc4e5cc31e757f91eb7bb709d2e2a8c9ce0
+[3/4] arm64: dts: qcom: sm8450-hdk: add SDHCI for microSD
+      commit: 1f52331285ed9f412f85e321ae6574714725d634
+[4/4] arm64: dts: qcom: sm8450-qrd: add SDHCI for microSD
+      commit: 4a5923fe4e1df52fafa4026363a349f30c061a15
 
 Best regards,
 -- 
