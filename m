@@ -2,131 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59B9A61F825
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 17:01:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9A2261F82A
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 17:02:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232159AbiKGQBK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 11:01:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53884 "EHLO
+        id S231989AbiKGQCg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 11:02:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231910AbiKGQBH (ORCPT
+        with ESMTP id S231553AbiKGQCf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 11:01:07 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CA131D0EF;
-        Mon,  7 Nov 2022 08:01:07 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9E77D610E7;
-        Mon,  7 Nov 2022 16:01:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08B43C433D6;
-        Mon,  7 Nov 2022 16:01:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667836866;
-        bh=jnUlaUcgvtn2jWIpYTr0nLM1+fcq5wzwtdQps5fxFhg=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=FLiw5IB0H00vNPMpiTvzqYiP98MaVFZv2XPBbjt6Z31IKe2iPdABt8hi6ofg2P5q9
-         w0/b7hQcfGXj5TlkBXhHb/Q5QDEAoc2iyD/aiN8fOtZp9igVp1aQRVw8MiG/Ls0MED
-         TtkwxB2wGyB3+xEe9+U6Vp+CbUbgeeZkAFIgZcoXVAXWgKZwDU7REdCGRyNWY/QZ3U
-         DhfNxOfjq18K1RxImAhJxKK+LGA8ZLOo+5cgo8kCwX4aaJ5iXWBd/n9a1/mmNrTe+t
-         UGkWxvtvgPT/ZJ1zLYpBoQN168L6sm6MNuUHuG7c+rr8gUbeJzN2Dz27xXlA0TTUHN
-         Tvd0iIkFSwo7g==
-Received: by mail-lj1-f174.google.com with SMTP id a15so16950815ljb.7;
-        Mon, 07 Nov 2022 08:01:05 -0800 (PST)
-X-Gm-Message-State: ACrzQf2WY0XbbEMJq6Z1SqyLuWje99hLTuTSiPWl9GOrJf2ivSTByCi/
-        5CAjT8eFq8NUxHkUrvSk4SWsE7v8X/ZMDym6CEg=
-X-Google-Smtp-Source: AMsMyM4NbcKdEASDwlzXy3yjvge4Ih6cRuAiYXuPttZXl0Sd3TLbjMkaE2UuNz4hQ7DtKp4yRPZnCx6ps4GYkLVN7EI=
-X-Received: by 2002:a05:651c:516:b0:277:2428:3682 with SMTP id
- o22-20020a05651c051600b0027724283682mr5959901ljp.291.1667836864027; Mon, 07
- Nov 2022 08:01:04 -0800 (PST)
+        Mon, 7 Nov 2022 11:02:35 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0096620180
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 08:02:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=oO821jkjlpuWvMjorfVycJRbysjDeH9qbTWtMmciLn8=; b=n1P1Ab7fp7eMKEsOzFUWRPPdyh
+        W93J6IgWS8yqluVC18qzmMGlyjQZ8H4RWfV/w5rBPa8ztmIPaeGlYeSZUtGRYaiQTVXOWpyugfp7H
+        fAfx1OJHTs/VyPdjJE5AAj1t0AHlnWvxOoKd69ukhuJpnmdeL+ho9mGYO71JyYE0EdHT6tyJqAqsv
+        2xnO6ks0Pwzjc9SSOz3dCg7GrPSU8JdV7ewEBocGbNsRoQmyw9efsuCMZsFJwmqNBuOHczPA8Lic/
+        TXq33T0yo0Hi5q/20aT2YJiL0GQHwopaTTfzR818g5ClOVX4KpLhwT45FEW7F3828oE3/Q4Hojw14
+        LbBinlug==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1os4Zn-009U4Y-3Z; Mon, 07 Nov 2022 16:02:19 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 67F3B30026A;
+        Mon,  7 Nov 2022 17:02:13 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 50C6E2B1A6BC5; Mon,  7 Nov 2022 17:02:13 +0100 (CET)
+Date:   Mon, 7 Nov 2022 17:02:13 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     kernel test robot <oliver.sang@intel.com>
+Cc:     oe-lkp@lists.linux.dev, lkp@intel.com,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        Dave Hansen <dave.hansen@intel.com>
+Subject: Re: [tip:x86/mm] [x86/mm]  b389949485:
+ WARNING:at_arch/x86/mm/pat/set_memory.c:#__change_page_attr
+Message-ID: <Y2ksBbNMsRKFzN4Y@hirez.programming.kicks-ass.net>
+References: <202211061748.eb591682-oliver.sang@intel.com>
+ <Y2kgVE+etZ1+F2PW@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-References: <cbbd3548-880c-d2ca-1b67-5bb93b291d5f@huawei.com>
-In-Reply-To: <cbbd3548-880c-d2ca-1b67-5bb93b291d5f@huawei.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Mon, 7 Nov 2022 17:00:52 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXESRP9RvhPC5Wgg38BqyCn5ANv7+X9Ezyx5MXNNvEZ1kA@mail.gmail.com>
-Message-ID: <CAMj1kXESRP9RvhPC5Wgg38BqyCn5ANv7+X9Ezyx5MXNNvEZ1kA@mail.gmail.com>
-Subject: Re: vmlinux.lds.h: Bug report: unable to handle page fault when start
- the virtual machine with qemu
-To:     "zhaowenhui (A)" <zhaowenhui8@huawei.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Kees Cook <keescook@chromium.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        "open list:GENERIC INCLUDE/ASM HEADER FILES" 
-        <linux-arch@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>, xiafukun@huawei.com,
-        yusongping@huawei.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y2kgVE+etZ1+F2PW@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 7 Nov 2022 at 04:27, zhaowenhui (A) <zhaowenhui8@huawei.com> wrote:
->
-> Hello,
->
-> We compiled the kernel with x86_64_defconfig and the following configs
-> from commit  d4c6399900364facd84c9e35ce1540b6046c345f (vmlinux.lds.h:
-> Avoid orphan section with !SMP ):
->
-> CONFIG_SMP=n
-> CONFIG_AMD_MEM_ENCRYPT=y
-> CONFIG_HYPERVISOR_GUEST=y
-> CONFIG_KVM=y
-> CONFIG_PARAVIRT=y
->
-> Then start virtual machine with the following command (OS: Ubuntu; Arch:
-> x86-64):
->
-> qemu-system-x86_64  -enable-kvm -cpu Skylake-Server -smp 10 -m 8192
-> -boot menu=on,splash-time=1000 \
-> -device virtio-scsi-pci \
-> -initrd ${initramfs} \
-> -kernel ./linux/arch/x86/boot/bzImage \
-> -append "root=/dev/ram rw rdinit=/sbin/init console=tty0
-> console=ttyS0,115200 earlyprintk=ttyS0 debug " \
-> -nographic -vnc :18
->
-> (Note:  ./linux/arch/x86/boot/bzImage  is the compiled kernel bzImage path
-> On my machine,  initramfs=./x86_procfs.cpio.gz_1 )
->
-> QEMU reports an error:  BUG: unable to handle page fault for address:
-> ffffffff8ad01040
->
-> The bug was introduced by commit d4c6399900, and the problem can be
-> avoided by rolling back the patch.
-> Patch link:
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=d4c6399900364facd84c9e35ce1540b6046c345f.
-> We speculate that the problem is related to the hardware memory
-> encryption feature in the virtualization scenario of the AMD platform.
->
+On Mon, Nov 07, 2022 at 04:12:20PM +0100, Peter Zijlstra wrote:
+> On Sun, Nov 06, 2022 at 08:38:27PM +0800, kernel test robot wrote:
+> > 
+> > Greeting,
+> > 
+> > FYI, we noticed WARNING:at_arch/x86/mm/pat/set_memory.c:#__change_page_attr due to commit (built with gcc-11):
+> > 
+> > commit: b38994948567e6d6b62947401c57f4ab2efe070c ("x86/mm: Implement native set_memory_rox()")
+> > https://git.kernel.org/cgit/linux/kernel/git/tip/tip.git x86/mm
+> > 
+> > [test failed on linux-next/master 0cdb3579f1ee4c1e55acf8dfb0697b660067b1f8]
+> > 
+> > in testcase: boot
+> > 
+> > on test machine: qemu-system-x86_64 -enable-kvm -cpu SandyBridge -smp 2 -m 16G
+> > 
+> > caused below changes (please refer to attached dmesg/kmsg for entire log/backtrace):
+> > 
+> > 
+> > If you fix the issue, kindly add following tag
+> > | Reported-by: kernel test robot <oliver.sang@intel.com>
+> > | Link: https://lore.kernel.org/oe-lkp/202211061748.eb591682-oliver.sang@intel.com
+> > 
+> > 
+> > [   44.943065][   T11] ------------[ cut here ]------------
+> > [   44.943725][   T11] CPA detected W^X violation: 0000000000000060 -> 0000000000000063 range: 0xffff8881beca5000 - 0xffff8881beca5fff PFN 1beca5
+> > [ 44.944929][ T11] WARNING: CPU: 0 PID: 11 at arch/x86/mm/pat/set_memory.c:609 __change_page_attr (arch/x86/mm/pat/set_memory.c:609 arch/x86/mm/pat/set_memory.c:1582) 
+> > [   44.945824][   T11] Modules linked in:
+> > [   44.946229][   T11] CPU: 0 PID: 11 Comm: kworker/0:1 Tainted: G        W          6.1.0-rc3-00010-gb38994948567 #1 f37474c2082f37dd433f70907b94c2b0df8d70b8
+> > [   44.947518][   T11] Workqueue: events bpf_prog_free_deferred
+> > [ 44.948074][ T11] RIP: 0010:__change_page_attr (arch/x86/mm/pat/set_memory.c:609 arch/x86/mm/pat/set_memory.c:1582) 
+> 
+> Urgh, as spotted by dhansen, the code in change_page_attr_set_clr(),
+> specifically the checkalias thing, seems to rely on single bit flips for
+> NX.
+> 
+> Let me try to make sense of this stuff....
 
-That patch looks incorrect to me. Without CONFIG_SMP, the PERCPU
-sections are not instantiated, and the only copy of those variables is
-created in the ordinary .data/.bss sections
+This appears to appease the test case, but I definitely need to look at
+this again with a fresh mind, horrid stuff this and I'm sure I hate this
+patch.
 
-Does the change below fix the issue for you?
 
---- a/include/asm-generic/vmlinux.lds.h
-+++ b/include/asm-generic/vmlinux.lds.h
-@@ -347,6 +347,7 @@
- #define DATA_DATA                                                      \
-        *(.xiptext)                                                     \
-        *(DATA_MAIN)                                                    \
-+       *(.data..decrypted)                                             \
-        *(.ref.data)                                                    \
-        *(.data..shared_aligned) /* percpu related */                   \
-        MEM_KEEP(init.data*)                                            \
-@@ -995,7 +996,6 @@
- #ifdef CONFIG_AMD_MEM_ENCRYPT
- #define PERCPU_DECRYPTED_SECTION                                       \
-        . = ALIGN(PAGE_SIZE);                                           \
--       *(.data..decrypted)                                             \
-        *(.data..percpu..decrypted)                                     \
-        . = ALIGN(PAGE_SIZE);
- #else
+---
+diff --git a/arch/x86/mm/pat/set_memory.c b/arch/x86/mm/pat/set_memory.c
+index f275605892df..07339ac8bc41 100644
+--- a/arch/x86/mm/pat/set_memory.c
++++ b/arch/x86/mm/pat/set_memory.c
+@@ -69,10 +69,11 @@ static const int cpa_warn_level = CPA_PROTECT;
+  */
+ static DEFINE_SPINLOCK(cpa_lock);
+ 
+-#define CPA_FLUSHTLB 1
+-#define CPA_ARRAY 2
+-#define CPA_PAGES_ARRAY 4
+-#define CPA_NO_CHECK_ALIAS 8 /* Do not search for aliases */
++#define CPA_FLUSHTLB		0x01
++#define CPA_ARRAY		0x02
++#define CPA_PAGES_ARRAY		0x04
++#define CPA_NO_CHECK_ALIAS	0x08 /* Do not search for aliases */
++#define CPA_HAS_NX		0x10
+ 
+ static inline pgprot_t cachemode2pgprot(enum page_cache_mode pcm)
+ {
+@@ -1708,9 +1709,21 @@ static int __change_page_attr_set_clr(struct cpa_data *cpa, int checkalias)
+ 			goto out;
+ 
+ 		if (checkalias) {
+-			ret = cpa_process_alias(cpa);
+-			if (ret)
+-				goto out;
++			pgprot_t set = cpa->mask_set;
++			pgprot_t clr = cpa->mask_clr;
++
++			if (cpa->flags & CPA_HAS_NX) {
++				cpa->mask_set.pgprot &= ~_PAGE_NX;
++				cpa->mask_clr.pgprot &= ~_PAGE_NX;
++			}
++			if (pgprot_val(cpa->mask_set) | pgprot_val(cpa->mask_clr)) {
++				ret = cpa_process_alias(cpa);
++				if (ret)
++					goto out;
++			}
++
++			cpa->mask_set = set;
++			cpa->mask_clr = clr;
+ 		}
+ 
+ 		/*
+@@ -1788,8 +1801,10 @@ static int change_page_attr_set_clr(unsigned long *addr, int numpages,
+ 	if (in_flag & (CPA_ARRAY | CPA_PAGES_ARRAY))
+ 		cpa.flags |= in_flag;
+ 
+-	/* No alias checking for _NX bit modifications */
+-	checkalias = (pgprot_val(mask_set) | pgprot_val(mask_clr)) != _PAGE_NX;
++	if ((pgprot_val(mask_set) | pgprot_val(mask_clr)) & _PAGE_NX)
++		cpa.flags |= CPA_HAS_NX;
++
++	checkalias = 1;
+ 	/* Has caller explicitly disabled alias checking? */
+ 	if (in_flag & CPA_NO_CHECK_ALIAS)
+ 		checkalias = 0;
