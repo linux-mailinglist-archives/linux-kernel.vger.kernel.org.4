@@ -2,166 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D00261FB55
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 18:28:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8E8A61FB5A
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 18:28:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232085AbiKGR17 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 12:27:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41132 "EHLO
+        id S231974AbiKGR2q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 12:28:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232000AbiKGR1s (ORCPT
+        with ESMTP id S232566AbiKGR2k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 12:27:48 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DCF0723E9C;
-        Mon,  7 Nov 2022 09:27:47 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CA40F1FB;
-        Mon,  7 Nov 2022 09:27:53 -0800 (PST)
-Received: from monolith.localdoman (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 88B7A3F534;
-        Mon,  7 Nov 2022 09:27:46 -0800 (PST)
-Date:   Mon, 7 Nov 2022 17:27:35 +0000
-From:   Alexandru Elisei <alexandru.elisei@arm.com>
-To:     ardb@kernel.org, catalin.marinas@arm.com, will@kernel.org,
-        linux-efi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: [Possible BUG] arm64: efi: efi_runtime_fixup_exception() and
- efi_call_virt_check_flags() both taint the kernel
-Message-ID: <Y2lAB508TrrjpDPi@monolith.localdoman>
+        Mon, 7 Nov 2022 12:28:40 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10C3D201BA;
+        Mon,  7 Nov 2022 09:28:39 -0800 (PST)
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2A7GM3Jw009625;
+        Mon, 7 Nov 2022 17:28:21 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : content-type : content-transfer-encoding :
+ mime-version; s=pp1; bh=IgGlGZGYc3SRutp12/MeehDn+EWQ3ENWU3VqTURQTVA=;
+ b=HQ+l3usUreiR4M/+tqAL1NHSu7o0zC1lOMUxZ1lhL+k1C6J3oLTdxF5nPrszjCVFzRuA
+ SVl4wL9Jd3QSwNlJZ6u8d9TkWWxT2q9mioE9UAnJtQsLweS/S8NvK79bayASHZZXqAcI
+ vr2T+GuExpL//xreBPu9WUKZacBvjsx3A5fC9+L6VSvaDL4+oIYFUCrzK8ut9W0sGKkX
+ U7BfZv3/Dtuywq1ltyh8GEJHYOqOewTJvwTE5D9cK02Kyy+JPnOn6q4lCMfZtD12L/ox
+ 02R0D0KRgpbfclpNZbASP1I4H6gUXCYPAEgjYZWjgBuTBt/8LUf8Yh65jAYhwbNg4hpj QA== 
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3kp1w8kmv9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 07 Nov 2022 17:28:21 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2A7HL9Jk011693;
+        Mon, 7 Nov 2022 17:28:19 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma04ams.nl.ibm.com with ESMTP id 3kngqdawv3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 07 Nov 2022 17:28:19 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2A7HSH2j2884322
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 7 Nov 2022 17:28:17 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1AD2C11C050;
+        Mon,  7 Nov 2022 17:28:17 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B24C411C04A;
+        Mon,  7 Nov 2022 17:28:16 +0000 (GMT)
+Received: from dilbert4 (unknown [9.171.88.237])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon,  7 Nov 2022 17:28:16 +0000 (GMT)
+Message-ID: <fad4d2d5e24eabe1a4fcab75c5d080a6229dc88b.camel@linux.ibm.com>
+Subject: nvme-pci: NULL pointer dereference in nvme_dev_disable() on
+ linux-next
+From:   Gerd Bayer <gbayer@linux.ibm.com>
+To:     Jens Axboe <axboe@fb.com>, Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>
+Cc:     Niklas Schnelle <schnelle@linux.ibm.com>,
+        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
+        linux-nvme@lists.infradead.org
+Date:   Mon, 07 Nov 2022 18:28:16 +0100
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: -bi40E-Fsn90wTCZ25FrdaqF68kpOJw1
+X-Proofpoint-ORIG-GUID: -bi40E-Fsn90wTCZ25FrdaqF68kpOJw1
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-07_08,2022-11-07_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=944 adultscore=0
+ mlxscore=0 clxscore=1011 lowpriorityscore=0 bulkscore=0 impostorscore=0
+ phishscore=0 priorityscore=1501 spamscore=0 suspectscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
+ definitions=main-2211070137
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I'm going to preface this by saying that I'm extremely unfamiliar with the
-EFI code.
+Hi,
 
-Commit d3549a938b73 ("efi/arm64: libstub: avoid SetVirtualAddressMap() when
-possible") skipped the call to SetVirtualAddressMap() for certain
-configurations, and that started causing kernel panics on an Ampere Altra
-machine due to an EFI synchronous exception.
+our internal s390 CI pointed us to a potential racy "use after free" or similar 
+issue in drivers/nvme/host/pci.c by ending one of the tests in the following 
+kernel panic:
 
-Commit 23715a26c8d8 ("arm64: efi: Recover from synchronous exceptions
-occurring in firmware") made the EFI exception non-fatal.
+[ 1836.550881] nvme nvme0: pci function 0004:00:00.0
+[ 1836.563814] nvme nvme0: Shutdown timeout set to 15 seconds
+[ 1836.569587] nvme nvme0: 63/0/0 default/read/poll queues
+[ 1836.577114]  nvme0n1: p1 p2
+[ 1861.856726] nvme nvme0: pci function 0004:00:00.0
+[ 1861.869539] nvme nvme0: failed to mark controller CONNECTING
+[ 1861.869542] nvme nvme0: Removing after probe failure status: -16
+[ 1861.869552] Unable to handle kernel pointer dereference in virtual kernel address space
+[ 1861.869554] Failing address: 0000000000000000 TEID: 0000000000000483
+[ 1861.869555] Fault in home space mode while using kernel ASCE.
+[ 1861.869558] AS:0000000135c4c007 R3:00000003fffe0007 S:00000003fffe6000 P:000000000000013d 
+[ 1861.869587] Oops: 0004 ilc:3 [#1] SMP 
+[ 1861.869591] Modules linked in: nft_fib_inet nft_fib_ipv4 nft_fib_ipv6 nft_fib nft_reject_inet nf_reject_ipv4
+nf_reject_ipv6 nft_reject nft_ct nft_chain_nat nf_nat nf_conntrack nf_defrag_ipv6 nf_defrag_ipv4 ip_set nf_tables
+nfnetlink mlx5_ib ib_uverbs uvdevice s390_trng ib_core vfio_ccw mdev vfio_iommu_type1 eadm_sch
+ vfio sch_fq_codel configfs dm_service_time mlx5_core ghash_s390 prng chacha_s390 libchacha aes_s390 des_s390 libdes
+sha3_512_s390 sha3_256_s390 sha512_s390 sha256_s390 sha1_s390 nvme sha_common nvme_core zfcp scsi_transport_fc
+dm_multipath scsi_dh_rdac scsi_dh_emc scsi_dh_alua dm_mirror dm_region_hash dm_log pkey zcry
+pt rng_core autofs4
+[ 1861.869627] CPU: 4 PID: 2929 Comm: kworker/u800:0 Not tainted 6.1.0-rc3-next-20221104 #4
+[ 1861.869630] Hardware name: IBM 3931 A01 701 (LPAR)
+[ 1861.869631] Workqueue: nvme-reset-wq nvme_reset_work [nvme]
+[ 1861.869637] Krnl PSW : 0704c00180000000 0000000134f026d0 (mutex_lock+0x10/0x28)
+[ 1861.869643]            R:0 T:1 IO:1 EX:1 Key:0 M:1 W:0 P:0 AS:3 CC:0 PM:0 RI:0 EA:3
+[ 1861.869646] Krnl GPRS: 0000000001000000 0000000000000000 0000000000000078 00000000a5f8c200
+[ 1861.869648]            000003800309601c 0000000000000004 0000000000000000 0000000088e64220
+[ 1861.869650]            0000000000000078 0000000000000000 0000000000000098 0000000088e64000
+[ 1861.869651]            00000000a5f8c200 0000000088e641e0 00000001349bdac2 0000038003ea7c20
+[ 1861.869658] Krnl Code: 0000000134f026c0: c0040008cfb8        brcl    0,000000013501c630
+[ 1861.869658]            0000000134f026c6: a7190000            lghi    %r1,0
+[ 1861.869658]           #0000000134f026ca: e33003400004        lg      %r3,832
+[ 1861.869658]           >0000000134f026d0: eb1320000030        csg     %r1,%r3,0(%r2)
+[ 1861.869658]            0000000134f026d6: ec160006007c        cgij    %r1,0,6,0000000134f026e2
+[ 1861.869658]            0000000134f026dc: 07fe                bcr     15,%r14
+[ 1861.869658]            0000000134f026de: 47000700            bc      0,1792
+[ 1861.869658]            0000000134f026e2: c0f4ffffffe7        brcl    15,0000000134f026b0
+[ 1861.869715] Call Trace:
+[ 1861.869716]  [<0000000134f026d0>] mutex_lock+0x10/0x28 
+[ 1861.869719]  [<000003ff7fc381d6>] nvme_dev_disable+0x1b6/0x2b0 [nvme] 
+[ 1861.869722]  [<000003ff7fc3929e>] nvme_reset_work+0x49e/0x6a0 [nvme] 
+[ 1861.869724]  [<0000000134309158>] process_one_work+0x200/0x458 
+[ 1861.869730]  [<00000001343098e6>] worker_thread+0x66/0x480 
+[ 1861.869732]  [<0000000134312888>] kthread+0x108/0x110 
+[ 1861.869735]  [<0000000134297354>] __ret_from_fork+0x3c/0x58 
+[ 1861.869738]  [<0000000134f074ea>] ret_from_fork+0xa/0x40 
+[ 1861.869740] Last Breaking-Event-Address:
+[ 1861.869741]  [<00000001349bdabc>] blk_mq_quiesce_tagset+0x2c/0xc0
+[ 1861.869747] Kernel panic - not syncing: Fatal exception: panic_on_oops
 
-With a kernel built from v6.1-rc4 (which has both patches), I'm now getting
-two splats on the same Altra machine (log below). Looks to me like the
-second splat is caused by efi_call_virt_check_flags() using the
-PSTATE.{I,F} values from when taking the exception. Shouldn't
-efi_runtime_fixup_exception() fix up the exception so the error isn't
-propagated along the call chain?
+On a stock kernel from
+https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tag/?h=next-20221104
+we have been able to reproduce this at will with
+this small script 
 
-I'm asking this because efi_runtime_fixup_exception() has this add_taint()
-call:
+#!/usr/bin/env bash
 
-	pr_err(FW_BUG "Unable to handle %s in EFI runtime service\n", msg);
-	add_taint(TAINT_FIRMWARE_WORKAROUND, LOCKDEP_STILL_OK);
+echo $1 > /sys/bus/pci/drivers/nvme/unbind
+echo $1 > /sys/bus/pci/drivers/nvme/bind
+echo 1 > /sys/bus/pci/devices/$1/remove
 
-and then efi_call_virt_check_flags() has this call:
+when filling in the NVMe drives' PCI identifier.
 
-        mismatch = flags ^ cur_flags;
-        if (!WARN_ON_ONCE(mismatch & ARCH_EFI_IRQ_FLAGS_MASK))
-                return;
+We believe this to be a race-condition somewhere, since this sequence does not produce the panic
+when executed interactively.
 
-        add_taint(TAINT_FIRMWARE_WORKAROUND, LOCKDEP_NOW_UNRELIABLE);
+Could this be linked to the recent (refactoring) work by Christoph Hellwig?
+E.g. https://lore.kernel.org/all/20221101150050.3510-3-hch@lst.de/
 
-It looks to me like LOCKDEP_STILL_OK from the first call is at odds with
-LOCKDEP_NOW_UNRELIABLE from the second add_taint() call.
+Thank you,
+Gerd Bayer
 
-Here is the relevant part of the log (I can send the .config, kernel
-command line and full log, or any other information that might be needed):
-
-[   55.479519] [Firmware Bug]: Unable to handle paging request in EFI runtime service
-[   55.487122] CPU: 62 PID: 9 Comm: kworker/u320:0 Tainted: G          I        6.1.0-rc4 #60
-[   55.487128] Hardware name: WIWYNN Mt.Jade Server System B81.03001.0005/Mt.Jade Motherboard, BIOS 1.08.20220218 (SCP: 1.08.20220218) 2022/02/18
-[   55.487131] Workqueue: efi_rts_wq efi_call_rts
-[   55.487158] Call trace:
-[   55.487161]  dump_backtrace.part.0+0xdc/0xf0
-[   55.487177]  show_stack+0x18/0x40
-[   55.487180]  dump_stack_lvl+0x68/0x84
-[   55.487190]  dump_stack+0x18/0x34
-[   55.487192]  efi_runtime_fixup_exception+0x74/0x88
-[   55.487199]  __do_kernel_fault+0x108/0x1b0
-[   55.487204]  do_page_fault+0xd0/0x400
-[   55.487207]  do_translation_fault+0xac/0xc0
-[   55.487209]  do_mem_abort+0x44/0x94
-[   55.487212]  el1_abort+0x40/0x6c
-[   55.487214]  el1h_64_sync_handler+0xd8/0xe4
-[   55.487218]  el1h_64_sync+0x64/0x68
-[   55.487221]  0xb7eb7ae4
-[   55.487224]  0xb7eb8668
-[   55.487225]  0xb7eb6e08
-[   55.487227]  0xb7eb68ec
-[   55.487228]  0xb7eb3824
-[   55.487230]  0xb7eb05a8
-[   55.487231]  0xb7eb12a0
-[   55.487232]  0xb7e43504
-[   55.487234]  0xb7e43650
-[   55.487235]  0xb7e482d0
-[   55.487237]  0xb7e4907c
-[   55.487238]  0xb7e49ff4
-[   55.487239]  0xb7e40888
-[   55.487241]  0xb7cb3328
-[   55.487242]  0xb7cb0674
-[   55.487243]  __efi_rt_asm_wrapper+0x54/0x70
-[   55.487246]  efi_call_rts+0x28c/0x3d0
-[   55.487249]  process_one_work+0x1d0/0x320
-[   55.487258]  worker_thread+0x14c/0x444
-[   55.487261]  kthread+0x10c/0x110
-[   55.487264]  ret_from_fork+0x10/0x20
-[   55.487268] [Firmware Bug]: Synchronous exception occurred in EFI runtime service set_time()
-[   55.495735] ------------[ cut here ]------------
-[   55.495739] WARNING: CPU: 62 PID: 9 at drivers/firmware/efi/runtime-wrappers.c:111 efi_call_virt_check_flags+0x40/0xac
-[   55.495746] Modules linked in:
-[   55.495749] CPU: 62 PID: 9 Comm: kworker/u320:0 Tainted: G          I        6.1.0-rc4 #60
-[   55.495751] Hardware name: WIWYNN Mt.Jade Server System B81.03001.0005/Mt.Jade Motherboard, BIOS 1.08.20220218 (SCP: 1.08.20220218) 2022/02/18
-[   55.495753] Workqueue: efi_rts_wq efi_call_rts
-[   55.495757] pstate: 004000c9 (nzcv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-[   55.495761] pc : efi_call_virt_check_flags+0x40/0xac
-[   55.495764] lr : efi_call_rts+0x29c/0x3d0
-[   55.495767] sp : ffff80000861bd40
-[   55.495768] x29: ffff80000861bd40 x28: 0000000000000000 x27: 0000000000000000
-[   55.495772] x26: ffffb251470e9e68 x25: ffff3fff89714805 x24: 0000000000000000
-[   55.495775] x23: 0000000000000000 x22: 0000000000000000 x21: 00000000000000c0
-[   55.495778] x20: ffffb25146688de0 x19: 0000000000000000 x18: ffffffffffffffff
-[   55.495780] x17: 657320656d69746e x16: 757220494645206e x15: 6920646572727563
-[   55.495784] x14: 636f206e6f697470 x13: ffff403e40540000 x12: 0000000000001c14
-[   55.495787] x11: 000000000000095c x10: ffff403e40800000 x9 : ffff403e40540000
-[   55.495790] x8 : 00000000ffff7fff x7 : ffff403e40800000 x6 : 0000000000000000
-[   55.495792] x5 : ffff083e7fe9aaa0 x4 : 0000000000000000 x3 : 0000000000000000
-[   55.495796] x2 : 0000000000000000 x1 : ffffb25146688de0 x0 : 00000000000000c0
-[   55.495799] Call trace:
-[   55.495800]  efi_call_virt_check_flags+0x40/0xac
-[   55.495802]  efi_call_rts+0x29c/0x3d0
-[   55.495805]  process_one_work+0x1d0/0x320
-[   55.495808]  worker_thread+0x14c/0x444
-[   55.495811]  kthread+0x10c/0x110
-[   55.495814]  ret_from_fork+0x10/0x20
-[   55.495815] ---[ end trace 0000000000000000 ]---
-[   55.495818] Disabling lock debugging due to kernel taint
-[   55.495822] efi: [Firmware Bug]: IRQ flags corrupted (0x00000000=>0x000000c0) by EFI set_time
-[   55.504434] efi: EFI Runtime Services are disabled!
-[   55.504465] rtc-efi rtc-efi.0: can't read time
-[   56.479370] efi: EFI Runtime Services are disabled!
-[   56.479394] rtc-efi rtc-efi.0: can't read time
-[   57.479574] rtc-efi rtc-efi.0: can't read time
-[   57.484030] rtc-efi rtc-efi.0: can't read time
-[   57.488474] rtc-efi rtc-efi.0: can't read time
-[   58.479692] rtc-efi rtc-efi.0: can't read time
-[   58.484139] rtc-efi rtc-efi.0: can't read time
-
-(rtc-efi error message repeats ad nauseum)
-
-Note: this error message from the EFI rtc driver fires over and over and
-clutters dmesg, will send a different report for this as I don't think it's
-necessarily related to the two functions.
-
-Thanks,
-Alex
