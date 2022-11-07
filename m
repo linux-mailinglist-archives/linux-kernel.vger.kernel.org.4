@@ -2,252 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C527161FEC9
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 20:38:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0C1861FECB
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 20:40:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232547AbiKGTiw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 14:38:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34634 "EHLO
+        id S232476AbiKGTkT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 14:40:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231589AbiKGTiu (ORCPT
+        with ESMTP id S231589AbiKGTkP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 14:38:50 -0500
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FC13765D
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 11:38:49 -0800 (PST)
-Received: by mail-pf1-x431.google.com with SMTP id d10so11588402pfh.6
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 11:38:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=B0nXNO5F4X/OEmXK4qyRkwnY+iEOGE2IttriqghKIjI=;
-        b=H0EsCVeOp6uX+lVL8IGvqBrSOYej/AdnZNwBC9spMLX3GFT2aUlp0L1z/MW8YLShWh
-         7hdCkB/7BpAsxR0Pr/4d1uVYOCXJmdydMzOmSfkFyTeYmC1H/9KELfR29I3qyo6TLO7k
-         fFxETRVZQPvglBN5YSXicLYULHl3PDAE+PMMdN4scg9NC2vdP4qmPwtHY5b03il//QG8
-         UNcaYo9q5yDKJ90FivqopuhhzhJXrj5jG1m0AB0j0L3sRF0IzquRQ6ETMV/e0hplthgL
-         hlBFp1EZgy0KwEab4VtvFqFSaRNSF5uwd8pSEW3/DNBMtTb5Fcg1IztTf8jovNhkzJBy
-         OgIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=B0nXNO5F4X/OEmXK4qyRkwnY+iEOGE2IttriqghKIjI=;
-        b=MGgsYV17B+Dgw/EwMWBGZkDF1ay3o7t0KUomyQU2ClzafsIf0xTB6DcRRMY6A9Gdu5
-         tcwb4w6W6FPsqfX3ajLnZfCPrDPcLeyy0rFo7gtAsXgSi44MlF7/aeA79f2r1jrPDihZ
-         kv0KNZZKPztg4GHyDWAuHU3GTHYHfh6yY17YcYcd0BQMpVdW32ENzutSwV7sHMHLamtm
-         p7HWDLnUeNn03Jrs/qrO4TcB1oOj4uYcoYgVfnLDVDmwQ+sMPJXnaJgWDQr6JKVVZsrB
-         r4E2888t0rXATHJIpfR54o0WD9ZH73TpZwV9LIo2dq5LQEsecrDjABMMfODEHMq2CkRg
-         /eCg==
-X-Gm-Message-State: ACrzQf3o7OktdnZ+sgmzzGQlL2BBlEXG0+qdjhUqGuCgnyc/K14DUSf0
-        eKCb9xDeyjdBegA4wDoUYzkDN+9QgqBu4kAbsCBYaQ==
-X-Google-Smtp-Source: AMsMyM4SAI/mt2eRKPzk+f9Lc7lUfmQBiUXM0dkY2aiLLgowOnkWZkBjpfh6EgPradnfJEKO1GNtMo6lQne9kPMbeYI=
-X-Received: by 2002:a63:689:0:b0:46e:be81:566c with SMTP id
- 131-20020a630689000000b0046ebe81566cmr45392731pgg.403.1667849928801; Mon, 07
- Nov 2022 11:38:48 -0800 (PST)
+        Mon, 7 Nov 2022 14:40:15 -0500
+X-Greylist: delayed 11954 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 07 Nov 2022 11:40:13 PST
+Received: from smtp-1909.mail.infomaniak.ch (smtp-1909.mail.infomaniak.ch [185.125.25.9])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54F571002
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 11:40:13 -0800 (PST)
+Received: from smtp-2-0001.mail.infomaniak.ch (unknown [10.5.36.108])
+        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4N5hQg66hwzMpnwh;
+        Mon,  7 Nov 2022 20:40:11 +0100 (CET)
+Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
+        by smtp-2-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4N5hQf1g6kzMppr8;
+        Mon,  7 Nov 2022 20:40:10 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
+        s=20191114; t=1667850011;
+        bh=VH93TVKDv81HuBQ2xHBKdoTVjfRzV8BT2O9T7VUP1yU=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=1FSixZE59TqN7/U2wk6U358AgKcPAc215cfWjYqdZd8499FHiwXvxC4hhrjTocp+S
+         GrM+Uau+gfxhk+Ko1o7Y75FwYY4xhbblREVkyllHPImuHcXA27SxxrF2mAXsPwUxEz
+         bmpRUBLo4dihIijNPrr10GQ6EDBCfJ0/57vGOnqE=
+Message-ID: <e2909fe5-7fc4-c73a-b33a-e65fed1d837f@digikod.net>
+Date:   Mon, 7 Nov 2022 20:40:09 +0100
 MIME-Version: 1.0
-References: <1667568213-26227-1-git-send-email-quic_mojha@quicinc.com>
- <CAKwvOdkdeLEvtOmX423oYaWCami0kAFatWe25DdJq7gbmGb+5g@mail.gmail.com> <fda57ad1-bc92-a7ae-53a0-47c2a8467c47@quicinc.com>
-In-Reply-To: <fda57ad1-bc92-a7ae-53a0-47c2a8467c47@quicinc.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Mon, 7 Nov 2022 11:38:37 -0800
-Message-ID: <CAKwvOdmJcmnKWNSFkzCPKmJ5eVDqJ5u631hWWmEQNwPszMg_Kg@mail.gmail.com>
-Subject: Re: [PATCH] gcov: clang: fix the buffer overflow issue
-To:     Mukesh Ojha <quic_mojha@quicinc.com>, oberpar@linux.ibm.com
-Cc:     nathan@kernel.org, trix@redhat.com, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: 
+Subject: Re: [PATCH] certs: Prevent spurious errors on repeated blacklisting
+Content-Language: en-US
+To:     =?UTF-8?Q?Thomas_Wei=c3=9fschuh?= <linux@weissschuh.net>
+Cc:     David Howells <dhowells@redhat.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Jarkko Sakkinen <jarkko@kernel.org>, keyrings@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Mark Pearson <markpearson@lenovo.com>,
+        Eric Snowberg <eric.snowberg@oracle.com>,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+References: <20221104014704.3469-1-linux@weissschuh.net>
+ <3b997266-067c-975c-911a-da146fe9033a@digikod.net>
+ <db5890d8-3a3d-4ca7-bb58-655c26164587@t-8ch.de>
+ <8692915f-437c-56fd-8984-d6febf533fa9@digikod.net>
+ <706c75af-9569-42fd-ba68-533ed931d55d@t-8ch.de>
+From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+In-Reply-To: <706c75af-9569-42fd-ba68-533ed931d55d@t-8ch.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 4, 2022 at 12:58 PM Mukesh Ojha <quic_mojha@quicinc.com> wrote:
->
-> Hi Nick,
->
-> Thanks for looking into this.
->
-> On 11/4/2022 11:18 PM, Nick Desaulniers wrote:
-> > On Fri, Nov 4, 2022 at 6:23 AM Mukesh Ojha <quic_mojha@quicinc.com> wrote:
-> >>
-> >> Currently, in clang version of gcov code when module is getting removed
-> >> gcov_info_add() incorrectly adds the sfn_ptr->counter to all the
-> >> dst->functions and it result in the kernel panic in below crash report.
-> >> Fix this by properly handling it.
-> >>
-> >> [    8.899094][  T599] Unable to handle kernel write to read-only memory at virtual address ffffff80461cc000
-> >> [    8.899100][  T599] Mem abort info:
-> >> [    8.899102][  T599]   ESR = 0x9600004f
-> >> [    8.899103][  T599]   EC = 0x25: DABT (current EL), IL = 32 bits
-> >> [    8.899105][  T599]   SET = 0, FnV = 0
-> >> [    8.899107][  T599]   EA = 0, S1PTW = 0
-> >> [    8.899108][  T599]   FSC = 0x0f: level 3 permission fault
-> >> [    8.899110][  T599] Data abort info:
-> >> [    8.899111][  T599]   ISV = 0, ISS = 0x0000004f
-> >> [    8.899113][  T599]   CM = 0, WnR = 1
-> >> [    8.899114][  T599] swapper pgtable: 4k pages, 39-bit VAs, pgdp=00000000ab8de000
-> >> [    8.899116][  T599] [ffffff80461cc000] pgd=18000009ffcde003, p4d=18000009ffcde003, pud=18000009ffcde003, pmd=18000009ffcad003, pte=00600000c61cc787
-> >> [    8.899124][  T599] Internal error: Oops: 9600004f [#1] PREEMPT SMP
-> >> [    8.899265][  T599] Skip md ftrace buffer dump for: 0x1609e0
-> >> ....
-> >> ..,
-> >> [    8.899544][  T599] CPU: 7 PID: 599 Comm: modprobe Tainted: G S         OE     5.15.41-android13-8-g38e9b1af6bce #1
-> >> [    8.899547][  T599] Hardware name: XXX (DT)
-> >> [    8.899549][  T599] pstate: 82400005 (Nzcv daif +PAN -UAO +TCO -DIT -SSBS BTYPE=--)
-> >> [    8.899551][  T599] pc : gcov_info_add+0x9c/0xb8
-> >> [    8.899557][  T599] lr : gcov_event+0x28c/0x6b8
-> >> [    8.899559][  T599] sp : ffffffc00e733b00
-> >> [    8.899560][  T599] x29: ffffffc00e733b00 x28: ffffffc00e733d30 x27: ffffffe8dc297470
-> >> [    8.899563][  T599] x26: ffffffe8dc297000 x25: ffffffe8dc297000 x24: ffffffe8dc297000
-> >> [    8.899566][  T599] x23: ffffffe8dc0a6200 x22: ffffff880f68bf20 x21: 0000000000000000
-> >> [    8.899569][  T599] x20: ffffff880f68bf00 x19: ffffff8801babc00 x18: ffffffc00d7f9058
-> >> [    8.899572][  T599] x17: 0000000000088793 x16: ffffff80461cbe00 x15: 9100052952800785
-> >> [    8.899575][  T599] x14: 0000000000000200 x13: 0000000000000041 x12: 9100052952800785
-> >> [    8.899577][  T599] x11: ffffffe8dc297000 x10: ffffffe8dc297000 x9 : ffffff80461cbc80
-> >> [    8.899580][  T599] x8 : ffffff8801babe80 x7 : ffffffe8dc2ec000 x6 : ffffffe8dc2ed000
-> >> [    8.899583][  T599] x5 : 000000008020001f x4 : fffffffe2006eae0 x3 : 000000008020001f
-> >> [    8.899586][  T599] x2 : ffffff8027c49200 x1 : ffffff8801babc20 x0 : ffffff80461cb3a0
-> >> [    8.899589][  T599] Call trace:
-> >> [    8.899590][  T599]  gcov_info_add+0x9c/0xb8
-> >> [    8.899592][  T599]  gcov_module_notifier+0xbc/0x120
-> >> [    8.899595][  T599]  blocking_notifier_call_chain+0xa0/0x11c
-> >> [    8.899598][  T599]  do_init_module+0x2a8/0x33c
-> >> [    8.899600][  T599]  load_module+0x23cc/0x261c
-> >> [    8.899602][  T599]  __arm64_sys_finit_module+0x158/0x194
-> >> [    8.899604][  T599]  invoke_syscall+0x94/0x2bc
-> >> [    8.899607][  T599]  el0_svc_common+0x1d8/0x34c
-> >> [    8.899609][  T599]  do_el0_svc+0x40/0x54
-> >> [    8.899611][  T599]  el0_svc+0x94/0x2f0
-> >> [    8.899613][  T599]  el0t_64_sync_handler+0x88/0xec
-> >> [    8.899615][  T599]  el0t_64_sync+0x1b4/0x1b8
-> >> [    8.899618][  T599] Code: f905f56c f86e69ec f86e6a0f 8b0c01ec (f82e6a0c)
-> >> [    8.899620][  T599] ---[ end trace ed5218e9e5b6e2e6 ]---
-> >>
-> >> Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
-> >> ---
-> >>   kernel/gcov/clang.c | 13 +++++++++----
-> >>   1 file changed, 9 insertions(+), 4 deletions(-)
-> >>
-> >> diff --git a/kernel/gcov/clang.c b/kernel/gcov/clang.c
-> >> index cbb0bed..0aabb9a 100644
-> >> --- a/kernel/gcov/clang.c
-> >> +++ b/kernel/gcov/clang.c
-> >> @@ -271,15 +271,20 @@ int gcov_info_is_compatible(struct gcov_info *info1, struct gcov_info *info2)
-> >>    */
-> >>   void gcov_info_add(struct gcov_info *dst, struct gcov_info *src)
-> >>   {
-> >> -       struct gcov_fn_info *dfn_ptr;
-> >> -       struct gcov_fn_info *sfn_ptr = list_first_entry_or_null(&src->functions,
-> >> -                       struct gcov_fn_info, head);
-> >
-> > Hi Mukesh,
-> > Thanks for the report and patch!
-> >
-> > Looking closer at the existing implementation, it looks curious to me
-> > that we use list_first_entry_or_null() since that may return NULL,
-> > which we never check for.  I'm curious if that's safe to remove?
-> > Probably, since we haven't had any issues reported thus far.
-> >
-> >> +       struct gcov_fn_info *sfn_ptr;
-> >> +       struct gcov_fn_info *dfn_ptr = list_first_entry_or_null(
-> >> +                       &dst->functions, struct gcov_fn_info, head);
-> >>
-> >> -       list_for_each_entry(dfn_ptr, &dst->functions, head) {
-> >> +       list_for_each_entry(sfn_ptr, &src->functions, head) {
-> >
-> > This seems to be iterating BOTH src and dest, whereas previously we
-> > were only iterating dest AFAICT.  Is this correct?  Seems to be a
-> > change of behavior, at the least, which seems orthogonal to fixing the
-> > panic.
->
-> Can you just check the implementation here once ?
->
-> https://elixir.bootlin.com/linux/v6.1-rc3/source/kernel/gcov/gcc_4_7.c#L241
->
-> By looking at the above link clang version does not seem to doing right ?
 
-Oh, indeed, the GCC variant is looping over BOTH src+dest together,
-then the counters.
+On 07/11/2022 17:35, Thomas Weißschuh wrote:
+> On 2022-11-07 17:20+0100, Mickaël Salaün wrote:
+>> On 07/11/2022 16:55, Thomas Weißschuh wrote:
+>>> On 2022-11-07 14:12+0100, Mickaël Salaün wrote:
+>>>> This is a follow-up of
+>>>> https://lore.kernel.org/r/c8c65713-5cda-43ad-8018-20f2e32e4432@t-8ch.de
+>>>>
+>>>> Added Jarkko, Mark Pearson, Eric Snowberg and more ML in Cc.
+>>>>
+>>>>
+>>>> On 04/11/2022 02:47, Thomas Weißschuh wrote:
+>>>>> When the blacklist keyring was changed to allow updates from the root
+>>>>> user it gained an ->update() function that disallows all updates.
+>>>>> When the a hash is blacklisted multiple times from the builtin or
+>>>>> firmware-provided blacklist this spams prominent logs during boot:
+>>>>>
+>>>>> [    0.890814] blacklist: Problem blacklisting hash (-13)
+>>>>>
+>>>>> As all these repeated calls to mark_raw_hash_blacklisted() would create
+>>>>> the same keyring entry again anyways these errors can be safely ignored.
+>>>>
+>>>> These errors can indeed be safely ignored, however they highlight issues
+>>>> with some firmware vendors not checking nor optimizing their blocked hashes.
+>>>> This raises security concerns, and it should be fixed by firmware vendors.
+>>>
+>>> Thanks, I was not aware that these are worth fixing.
+>>>
+>>>>> Fixes: 6364d106e041 ("certs: Allow root user to append signed hashes to the blacklist keyring")
+>>>>> Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+>>>>> ---
+>>>>>     certs/blacklist.c | 4 +++-
+>>>>>     1 file changed, 3 insertions(+), 1 deletion(-)
+>>>>>
+>>>>> diff --git a/certs/blacklist.c b/certs/blacklist.c
+>>>>> index 41f10601cc72..5f7f2882ced7 100644
+>>>>> --- a/certs/blacklist.c
+>>>>> +++ b/certs/blacklist.c
+>>>>> @@ -191,7 +191,9 @@ static int mark_raw_hash_blacklisted(const char *hash)
+>>>>>     				   BLACKLIST_KEY_PERM,
+>>>>>     				   KEY_ALLOC_NOT_IN_QUOTA |
+>>>>>     				   KEY_ALLOC_BUILT_IN);
+>>>>> -	if (IS_ERR(key)) {
+>>>>> +
+>>>>> +	/* Blacklisting the same hash twice fails but would be idempotent */
+>>>>> +	if (IS_ERR(key) && PTR_ERR(key) != -EACCES) {
+>>>>
+>>>> We should not hide EACCES errors. This logs issues, which is correct for
+>>>> duplicate hashes, and can help firmware vendors to fix their database. I'd
+>>>> really like to see a different log message instead: change the duplicate
+>>>> entry error code from EACCES to EEXIST, and call pr_warn for this specific
+>>>> case.
+>>>
+>>> Returning EACCES would require some deeper changes to how the keyring is set up
+>>
+>> I guess you meant EEXIST?
+> 
+> Indeed, sorry.
+> 
+>>> or even changes to the keyring core itself to introduce a key_create() (without
+>>> update) function.
+>>>
+>>> Is this something you would take a look at, or should I try to do it?
+>>> (I have no previous knowledge about the keyring subsystem)
+>>
+>> Please take a look. I think it should not be too complex.
+> 
+> Will do.
+> 
+> My plan is to create a new function key_create() that does takes the core logic
+> of key_create_or_update() and fails with EEXIST if needed.
+> 
+>>> In any case it probably would also be good to log the problematic hashes
+>>> themselves, so users can properly report the issue to their firmware vendors.
+>>
+>> Agree
+> 
+> I'll send a patch for that, too.
 
-I expect this patch to change the counter values, but I suspect they
-haven't been correct previously and we've only noticed whether
-branches were taken vs not.
+Good!
 
-Thanks for the patch.
+Jarkko, David, any though?
 
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+> 
+> As for this patch's Fixes-tag, it could refer to either the commit that
+> introduced the logging in the first place or the one that actively started to
+> trigger it:
+> * 734114f8782f ("KEYS: Add a system blacklist keyring")
+> * 6364d106e041 ("certs: Allow root user to append signed hashes to the blacklist keyring")
+> 
+> Personally I'd tend to use the latter.
 
-Peter, can you pick this up?
-
->
-> >
-> > Otherwise it sounds like we could just add NULL ptr checks against
-> > sfn_ptr outside the loop, and against dfn_ptr inside the loop.
-> > Something like this?
-> > ```
-> > diff --git a/kernel/gcov/clang.c b/kernel/gcov/clang.c
-> > index cbb0bed958ab..5d4cb801aa9c 100644
-> > --- a/kernel/gcov/clang.c
-> > +++ b/kernel/gcov/clang.c
-> > @@ -275,10 +275,13 @@ void gcov_info_add(struct gcov_info *dst, struct
-> > gcov_info *src)
-> >          struct gcov_fn_info *sfn_ptr = list_first_entry_or_null(&src->functions,
-> >                          struct gcov_fn_info, head);
-> >
-> > -       list_for_each_entry(dfn_ptr, &dst->functions, head) {
-> > -               u32 i;
-> > +       if (!sfn_ptr)
-> > +               return;
-> >
-> > -               for (i = 0; i < sfn_ptr->num_counters; i++)
-> > +       list_for_each_entry(dfn_ptr, &dst->functions, head) {
-> > +               if (!dfn_ptr)
-> > +                       continue;
-> > +               for (u32 i = 0, e = sfn_ptr->num_counters; i != e; ++i)
-> >                          dfn_ptr->counters[i] += sfn_ptr->counters[i];
-> >          }
-> >   }
-> > ```
-> > Can you test the above hunk or comment on whether it addresses the issue?
->
->
-> BTW, it just handles NUL pointer issue and not the one which is
-> mentioned here.
->
-> "Unable to handle kernel write to read-only memory at virtual address
-> ffffff80461cc000"
->
-> -Mukesh
->
-> >
-> >>                  u32 i;
-> >>
-> >> +               if (!dfn_ptr)
-> >> +                       return;
-> >> +
-> >>                  for (i = 0; i < sfn_ptr->num_counters; i++)
-> >>                          dfn_ptr->counters[i] += sfn_ptr->counters[i];
-> >> +
-> >> +               dfn_ptr = list_next_entry(dfn_ptr, head);
-> >>          }
-> >>   }
-> >>
-> >> --
-> >> 2.7.4
-> >>
-> >
-> >
+Even if commit 6364d106e041 is not directly the cause of the issue, it 
+makes it visible, so I agree that you should keep the current Fixes tag.
 
 
-
--- 
-Thanks,
-~Nick Desaulniers
+> 
+>>>>>     		pr_err("Problem blacklisting hash (%ld)\n", PTR_ERR(key));
+>>>>>     		return PTR_ERR(key);
+>>>>>     	}
+>>>>>
+>>>>> base-commit: ee6050c8af96bba2f81e8b0793a1fc2f998fcd20
