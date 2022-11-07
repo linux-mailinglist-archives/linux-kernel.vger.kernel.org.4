@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BE7E620415
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 00:57:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B57762041B
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 00:57:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232624AbiKGX5H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 18:57:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35820 "EHLO
+        id S231974AbiKGX5K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 18:57:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232648AbiKGX5E (ORCPT
+        with ESMTP id S232676AbiKGX5H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 18:57:04 -0500
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14D6927176
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 15:57:00 -0800 (PST)
-Received: by mail-wm1-x330.google.com with SMTP id l39-20020a05600c1d2700b003cf93c8156dso6573071wms.4
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 15:57:00 -0800 (PST)
+        Mon, 7 Nov 2022 18:57:07 -0500
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6671D27908
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 15:57:01 -0800 (PST)
+Received: by mail-wm1-x32c.google.com with SMTP id c3-20020a1c3503000000b003bd21e3dd7aso10655053wma.1
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 15:57:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=cGZG96v8cqz0v6+uEmiwdHlinvJUjde03wda6QbENf0=;
-        b=QEGO01djriBqoKxzJ2ibVdcEexNGpvy2oGh2bKckK11kSgma5ioa9nJerlGD/uP6YG
-         3tY+s9/fo8hCbW7/HUc+8lfdqauXsxKm+Z67xvM2xxyD3BQTDHqJKbJjQEl/EJQPuMgJ
-         5F/plRZ17atZZDd+s5h2iROyOkSF12h+DsarrDCexPJlLxe+k2nQV2siBIrlOyi2+E9t
-         xCM+oq5z5naoZ1YV0hVa96EfXCfbhhONOXcIXguNUcSi7k+ZS3+N882EAR0blgp+yP1V
-         Er/SOD/Lh5GsmWqCVE/BBQ3QOmjZ3L/1Axl/kYyvmWp15eUf/xMJZXWz8WA8/mHIH6pb
-         V5Zw==
+        bh=j6+k+VnBlUqDvk2kkm8jof+dC2sdOCi6gT/1zjBraSs=;
+        b=i8bcjlRLWz2eVfBMXkZ+YP2GXHL+oICNaqk7chAMX1OPwEKT+r2xr+BagAoqefWCle
+         Cp57t5oK7tzFmSGPg5BujBFd5C2xazKjfVDVREUg29hAUAuP/Of9NOIiET104ftzW/k6
+         9qa78qJG3L4iry45JEQYBRN0iC3WjqCvTVKD617TmcrYi85srsf2Z5U+z+aXcko4Zj4o
+         unXqjgpxrbk7JVk3AMaITpUL/CMpI0n9NsylkUSj3PljH+eRTtL/Fc/82xqvreHIz3bS
+         8BoXVZW/wUEgyr7ryKuVtRvuvIFIMRdCI302mst4RICl3FXerToMirc2M5rMq9bfh6Az
+         bXmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=cGZG96v8cqz0v6+uEmiwdHlinvJUjde03wda6QbENf0=;
-        b=WD0LaPvlgLyUEjhkYW1r6tQTc7LvAuRdUCm3BlbXVp7jXDg/u8ryT2p/TOeDPcCV2H
-         j96hUlUYb6ksccjgJrqzpWosphrlQli070wZ4Jbkn5lM650sV2/ToXW13W3tmFDtbBDl
-         VpYbiMQhPOUYbjQJSBJnb/ifjEdoKo97EadwRH5JxfzMRUpcwo5hAjzFgWA0/1s5VT+D
-         I0kl7vvtoaStEhzx54iXodwnf4e98q89zC2V1Hfp5TleYyLVy/LRU/7JC6/AbI5ye0uI
-         UZ2yS5uUudgIuTf+qkZQTgDoH8CvH4AI6UNRL/rBQtL2mhGHcPc8jiYq9QsQxsUUVBuE
-         qIIw==
-X-Gm-Message-State: ACrzQf0EviyF0D8tT/2qwsXjv8Ut/HDsaKe0a92WV+caIH8vS2uKg8LS
-        Vh3SqSgWXHSpAZhp1HMQKd/LAA==
-X-Google-Smtp-Source: AMsMyM4w4Ckhv54D7JLNzKMt1Q9DvaH2u/V2Xm6iRFvGnw31LRME1uZA+oZkp/Yl56q8o8B+5Opphw==
-X-Received: by 2002:a7b:c341:0:b0:3c4:552d:2ea7 with SMTP id l1-20020a7bc341000000b003c4552d2ea7mr35599801wmj.82.1667865418625;
-        Mon, 07 Nov 2022 15:56:58 -0800 (PST)
+        bh=j6+k+VnBlUqDvk2kkm8jof+dC2sdOCi6gT/1zjBraSs=;
+        b=MhFGfgcXGbff+Pi+L/g1mFy4EZEpFc34PbPDa/gh6v0wXeR8aqIWQeImxcegRvI394
+         VONwG7/dphn7r6CzA2E/+ZiJ+tKWU5x7yvc02iaFjwMKoQ/3DbSOBcR2dOuTxmAV++eZ
+         GbjLv4TVJKuRwGDaFjdXv/O77gNdfwQnVJV8l1a5DGZAgE+Nbdx4kiTCl25eIKX09Cif
+         OcMKjqs2KsT/rvOe80WP9QfU4S7dafGA3KZeWwVx3D6pcqkNgBYrwzA12AY5sdWoIA1G
+         cYlC3AAiMAGJG2nQ7RB1qf2fQAJ+hStRvqva/aXbvGJWLI5oJ4mTUPWsuVwY3sO8bHzk
+         2z6A==
+X-Gm-Message-State: ACrzQf2J/y+IkD+9/QfmAKDpXt8gTThUFhJ55yKDk6YPoMMrsJGoM3fB
+        eh1FQr2gcEKRuCGH1fpf+6D6ZQ==
+X-Google-Smtp-Source: AMsMyM4BjviatZxI4AXfbI//77GZJxjhD+ZNpWnd4ktfs4CcSRgEUb++H9AvtkRJj7nhqNoH3JXbQA==
+X-Received: by 2002:a05:600c:4d86:b0:3cf:7257:ba15 with SMTP id v6-20020a05600c4d8600b003cf7257ba15mr29852243wmp.22.1667865419855;
+        Mon, 07 Nov 2022 15:56:59 -0800 (PST)
 Received: from sagittarius-a.chello.ie (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id b18-20020a056000055200b00236545edc91sm8386161wrf.76.2022.11.07.15.56.57
+        by smtp.gmail.com with ESMTPSA id b18-20020a056000055200b00236545edc91sm8386161wrf.76.2022.11.07.15.56.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Nov 2022 15:56:58 -0800 (PST)
+        Mon, 07 Nov 2022 15:56:59 -0800 (PST)
 From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 To:     robdclark@gmail.com, quic_abhinavk@quicinc.com,
         dmitry.baryshkov@linaro.org, krzysztof.kozlowski+dt@linaro.org,
@@ -60,9 +60,9 @@ Cc:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
         Daniel Vetter <daniel@ffwll.ch>,
         dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 02/18] dt-bindings: msm: dsi-controller-main: Fix power-domain constraint
-Date:   Mon,  7 Nov 2022 23:56:38 +0000
-Message-Id: <20221107235654.1769462-3-bryan.odonoghue@linaro.org>
+Subject: [PATCH v2 03/18] dt-bindings: msm: dsi-controller-main: Add vdd* descriptions back in
+Date:   Mon,  7 Nov 2022 23:56:39 +0000
+Message-Id: <20221107235654.1769462-4-bryan.odonoghue@linaro.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221107235654.1769462-1-bryan.odonoghue@linaro.org>
 References: <20221107235654.1769462-1-bryan.odonoghue@linaro.org>
@@ -70,34 +70,29 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-power-domain is required for the sc7180 dispcc GDSC but not every qcom SoC
-has a similar dependency for example the aqp8064.
+When converting from .txt to .yaml we didn't include descriptions for the
+existing regulator supplies.
 
-Most Qcom SoC's using mdss-dsi-ctrl seem to have the ability to
-power-collapse the MDP without collapsing DSI.
+- vdd
+- vdda
+- vddio
 
-For example the qcom vendor kernel commit for apq8084, msm8226, msm8916, msm8974
+Add those descriptions into the yaml now as they were prior to the
+conversion. Mark the supplies as required as was previously the case in the
+.txt implementation.
 
-https://review.carbonrom.org/plugins/gitiles/CarbonROM/android_kernel_oneplus_msm8994/+/7b5c011a770daa2811778937ed646237a28a8694
-
-"ARM: dts: msm: add mdss gdsc supply to dsi controller device
-
- It is possible for the DSI controller to be active when MDP is
- power collapsed. DSI controller needs to have it's own vote for
- mdss gdsc to ensure that gdsc remains on in such cases."
-
-This however doesn't appear to be the case for the apq8064 so we shouldn't
-be marking power-domain as required in yaml checks.
+Warnings about missing regulators can be resolved by updating the relevant
+dtsi files to point to fixed always-on regulators where appropriate.
 
 Fixes: 4dbe55c97741 ("dt-bindings: msm: dsi: add yaml schemas for DSI bindings")
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 Cc: Rob Clark <robdclark@gmail.com>
 Cc: Abhinav Kumar <quic_abhinavk@quicinc.com>
 Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
@@ -113,21 +108,42 @@ Cc: devicetree@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org
 Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 ---
- .../devicetree/bindings/display/msm/dsi-controller-main.yaml     | 1 -
- 1 file changed, 1 deletion(-)
+ .../bindings/display/msm/dsi-controller-main.yaml | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
 diff --git a/Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml b/Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml
-index 27ebfd5ffb22f..cf782c5f5bdb0 100644
+index cf782c5f5bdb0..0f7747e55b9be 100644
 --- a/Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml
 +++ b/Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml
-@@ -134,7 +134,6 @@ required:
-   - phys
+@@ -124,6 +124,18 @@ properties:
+       - port@0
+       - port@1
+ 
++  vdd-supply:
++    description:
++      Phandle to vdd regulator device node
++
++  vddio-supply:
++    description:
++      Phandle to vdd-io regulator device node
++
++  vdda-supply:
++    description:
++      Phandle to vdda regulator device node
++
+ required:
+   - compatible
+   - reg
+@@ -135,6 +147,9 @@ required:
    - assigned-clocks
    - assigned-clock-parents
--  - power-domains
    - ports
++  - vdd-supply
++  - vddio-supply
++  - vdda-supply
  
  additionalProperties: false
+ 
 -- 
 2.38.1
 
