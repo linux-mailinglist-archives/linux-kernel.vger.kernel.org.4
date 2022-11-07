@@ -2,117 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A8D361F477
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 14:36:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30F2F61F479
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 14:37:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232018AbiKGNgr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 08:36:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37100 "EHLO
+        id S231667AbiKGNhK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 08:37:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231793AbiKGNgp (ORCPT
+        with ESMTP id S232098AbiKGNgy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 08:36:45 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E59041CB36
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 05:36:44 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A6D441FB;
-        Mon,  7 Nov 2022 05:36:50 -0800 (PST)
-Received: from [10.163.40.48] (unknown [10.163.40.48])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2798D3F73D;
-        Mon,  7 Nov 2022 05:36:41 -0800 (PST)
-Message-ID: <375f4f58-e071-c102-43d7-7fdff3970f72@arm.com>
-Date:   Mon, 7 Nov 2022 19:06:39 +0530
+        Mon, 7 Nov 2022 08:36:54 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D76DD1B7A9;
+        Mon,  7 Nov 2022 05:36:52 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 879792242A;
+        Mon,  7 Nov 2022 13:36:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1667828211; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=raGJW7jQAEFZWQL2P9hVCzPvkr9DVzerde0b9hfQjIw=;
+        b=RC9lkDnijSfPpwGQUIoG5tQKNx5Gp/WlUzZRNjsSeJI58wRVtj4aXaCusHxlLNGQNfPB40
+        JjIJL/s6FQOrqLKZaGtqVpoQ/OlmJVTr6NwCtpTMaW6734hhTkF8Nx+MbArFPFfLSnu22g
+        iGpU/aineidYBs4GKTmpGZMPsBD+ggA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1667828211;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=raGJW7jQAEFZWQL2P9hVCzPvkr9DVzerde0b9hfQjIw=;
+        b=2firwJlk06VWiXu7xU1GJGxOrJWwi3ju8w6e+Squ9MDKZEHbcDusl1yRkO14xKf/0LH9K2
+        U9IzFanBIQAlzFCw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7800E13494;
+        Mon,  7 Nov 2022 13:36:51 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id Oh5CHfMJaWO6XwAAMHmgww
+        (envelope-from <jack@suse.cz>); Mon, 07 Nov 2022 13:36:51 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 0CD25A0704; Mon,  7 Nov 2022 14:36:51 +0100 (CET)
+Date:   Mon, 7 Nov 2022 14:36:51 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     Ye Bin <yebin@huaweicloud.com>
+Cc:     tytso@mit.edu, adilger.kernel@dilger.ca,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jack@suse.cz, Ye Bin <yebin10@huawei.com>,
+        syzbot+98346927678ac3059c77@syzkaller.appspotmail.com
+Subject: Re: [PATCH] ext4: init quota for 'old.inode' in 'ext4_rename'
+Message-ID: <20221107133651.qmitthhev3lq4h5q@quack3>
+References: <20221107015335.2524319-1-yebin@huaweicloud.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH V2] arm64/mm: Simplify and document pte_to_phys() for 52
- bit addresses
-Content-Language: en-US
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Mark Brown <broonie@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        linux-kernel@vger.kernel.org
-References: <20221107114850.2902150-1-anshuman.khandual@arm.com>
- <CAMj1kXF2NyZS7cWiZiPBuySdFnpB_gcHa4KXieje4_G1-zCmog@mail.gmail.com>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <CAMj1kXF2NyZS7cWiZiPBuySdFnpB_gcHa4KXieje4_G1-zCmog@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221107015335.2524319-1-yebin@huaweicloud.com>
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon 07-11-22 09:53:35, Ye Bin wrote:
+> From: Ye Bin <yebin10@huawei.com>
+> 
+> Syzbot found the following issue:
+> ext4_parse_param: s_want_extra_isize=128
+> ext4_inode_info_init: s_want_extra_isize=32
+> ext4_rename: old.inode=ffff88823869a2c8 old.dir=ffff888238699828 new.inode=ffff88823869d7e8 new.dir=ffff888238699828
+> __ext4_mark_inode_dirty: inode=ffff888238699828 ea_isize=32 want_ea_size=128
+> __ext4_mark_inode_dirty: inode=ffff88823869a2c8 ea_isize=32 want_ea_size=128
+> ext4_xattr_block_set: inode=ffff88823869a2c8
+> ------------[ cut here ]------------
+> WARNING: CPU: 13 PID: 2234 at fs/ext4/xattr.c:2070 ext4_xattr_block_set.cold+0x22/0x980
+> Modules linked in:
+> RIP: 0010:ext4_xattr_block_set.cold+0x22/0x980
+> RSP: 0018:ffff888227d3f3b0 EFLAGS: 00010202
+> RAX: 0000000000000001 RBX: ffff88823007a000 RCX: 0000000000000000
+> RDX: 0000000000000a03 RSI: 0000000000000040 RDI: ffff888230078178
+> RBP: 0000000000000000 R08: 000000000000002c R09: ffffed1075c7df8e
+> R10: ffff8883ae3efc6b R11: ffffed1075c7df8d R12: 0000000000000000
+> R13: ffff88823869a2c8 R14: ffff8881012e0460 R15: dffffc0000000000
+> FS:  00007f350ac1f740(0000) GS:ffff8883ae200000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 00007f350a6ed6a0 CR3: 0000000237456000 CR4: 00000000000006e0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> Call Trace:
+>  <TASK>
+>  ? ext4_xattr_set_entry+0x3b7/0x2320
+>  ? ext4_xattr_block_set+0x0/0x2020
+>  ? ext4_xattr_set_entry+0x0/0x2320
+>  ? ext4_xattr_check_entries+0x77/0x310
+>  ? ext4_xattr_ibody_set+0x23b/0x340
+>  ext4_xattr_move_to_block+0x594/0x720
+>  ext4_expand_extra_isize_ea+0x59a/0x10f0
+>  __ext4_expand_extra_isize+0x278/0x3f0
+>  __ext4_mark_inode_dirty.cold+0x347/0x410
+>  ext4_rename+0xed3/0x174f
+>  vfs_rename+0x13a7/0x2510
+>  do_renameat2+0x55d/0x920
+>  __x64_sys_rename+0x7d/0xb0
+>  do_syscall_64+0x3b/0xa0
+>  entry_SYSCALL_64_after_hwframe+0x72/0xdc
+> 
+> As 'ext4_rename' will modify 'old.inode' ctime and mark inode dirty, which may
+> trigger expand 'extra_isize' and allocate block. If inode didn't init quota
+> will lead to warning.
+> To solve above issue, init 'old.inode' firstly in 'ext4_rename'.
+> 
+> Reported-by: syzbot+98346927678ac3059c77@syzkaller.appspotmail.com
+> Signed-off-by: Ye Bin <yebin10@huawei.com>
 
+OK, nice catch. Feel free to add:
 
-On 11/7/22 17:32, Ard Biesheuvel wrote:
-> Hello Anshuman,
-> 
-> On Mon, 7 Nov 2022 at 12:49, Anshuman Khandual
-> <anshuman.khandual@arm.com> wrote:
->>
->> pte_to_phys() assembly definition does multiple bits field transformations
->> to derive physical address, embedded inside a page table entry. Unlike its
->> C counter part i.e __pte_to_phys(), pte_to_phys() is not very apparent. It
->> simplifies these operations via a new macro PTE_ADDR_HIGH_SHIFT indicating
->> how far the pte encoded higher address bits need to be left shifted. While
->> here, this also updates __pte_to_phys() and __phys_to_pte_val().
->>
->> Cc: Catalin Marinas <catalin.marinas@arm.com>
->> Cc: Will Deacon <will@kernel.org>
->> Cc: Mark Brown <broonie@kernel.org>
->> Cc: Mark Rutland <mark.rutland@arm.com>
->> Cc: Ard Biesheuvel <ardb@kernel.org>
->> Cc: linux-arm-kernel@lists.infradead.org
->> Cc: linux-kernel@vger.kernel.org
->> Suggested-by: Ard Biesheuvel <ardb@kernel.org>
->> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
-> 
-> With the nit below fixed, this looks good to me
-> 
-> Reviewed-by: Ard Biesheuvel <ardb@kernel.org>
-> 
->> ---
->> This applies on v6.1-rc4
->>
->> Changes in V2:
->>
->> - Added PTE_ADDR_HIGH_SHIFT based method per Ard
->>
->> Changes in V1:
->>
->> https://lore.kernel.org/all/20221031082421.1957288-1-anshuman.khandual@arm.com/
->>
->>  arch/arm64/include/asm/assembler.h     | 8 +++-----
->>  arch/arm64/include/asm/pgtable-hwdef.h | 1 +
->>  arch/arm64/include/asm/pgtable.h       | 4 ++--
->>  3 files changed, 6 insertions(+), 7 deletions(-)
->>
->> diff --git a/arch/arm64/include/asm/assembler.h b/arch/arm64/include/asm/assembler.h
->> index e5957a53be39..6a39a3601cf7 100644
->> --- a/arch/arm64/include/asm/assembler.h
->> +++ b/arch/arm64/include/asm/assembler.h
->> @@ -660,12 +660,10 @@ alternative_endif
->>         .endm
->>
->>         .macro  pte_to_phys, phys, pte
->> -#ifdef CONFIG_ARM64_PA_BITS_52
->> -       ubfiz   \phys, \pte, #(48 - 16 - 12), #16
->> -       bfxil   \phys, \pte, #16, #32
->> -       lsl     \phys, \phys, #16
->> -#else
->>         and     \phys, \pte, #PTE_ADDR_MASK
->> +#ifdef CONFIG_ARM64_PA_BITS_52
->> +       orr \phys, \phys, \phys, lsl #PTE_ADDR_HIGH_SHIFT
->> +       and \phys, \phys, GENMASK_ULL(PHYS_MASK_SHIFT - 1, PAGE_SHIFT)
-> 
-> Please use tabs between the mnemonics and the arguments.
+Reviewed-by: Jan Kara <jack@suse.cz>
 
-Sure, will do that.
+								Honza
+
+> ---
+>  fs/ext4/namei.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/fs/ext4/namei.c b/fs/ext4/namei.c
+> index b8a91d74fdd1..6e40dfc8bd30 100644
+> --- a/fs/ext4/namei.c
+> +++ b/fs/ext4/namei.c
+> @@ -3784,6 +3784,9 @@ static int ext4_rename(struct user_namespace *mnt_userns, struct inode *old_dir,
+>  		return -EXDEV;
+>  
+>  	retval = dquot_initialize(old.dir);
+> +	if (retval)
+> +		return retval;
+> +	retval = dquot_initialize(old.inode);
+>  	if (retval)
+>  		return retval;
+>  	retval = dquot_initialize(new.dir);
+> -- 
+> 2.31.1
+> 
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
