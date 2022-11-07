@@ -2,160 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A84F61F64F
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 15:41:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A44E361F655
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 15:41:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231821AbiKGOlF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 09:41:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54178 "EHLO
+        id S231875AbiKGOlT convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 7 Nov 2022 09:41:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231527AbiKGOlD (ORCPT
+        with ESMTP id S231552AbiKGOlI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 09:41:03 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AE5812AD0
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 06:40:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667832002;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=FIV7vTHfSEDhPuKiIHyuGI+SN25V+GeNVs7hK16ZTWo=;
-        b=NCmHpckRQ1FwXViZzwSeVkuoiEtN2cEXTuEQ18guX6ppHYifpX29MSEeVwDdSVgACsDglj
-        5zRfAa24jzbr9lrX2k3231etuxoN6pHF92wI4OEzgw78XJtESLOuV8hY7axeO3bEXsQ6Qw
-        73T8raLi6S/CI37c6ZrCsRKscKa8CqA=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-363-jP6GsFPCNfiluyXwmV1QhA-1; Mon, 07 Nov 2022 09:40:01 -0500
-X-MC-Unique: jP6GsFPCNfiluyXwmV1QhA-1
-Received: by mail-ed1-f72.google.com with SMTP id q13-20020a056402518d00b00462b0599644so8616757edd.20
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 06:40:01 -0800 (PST)
+        Mon, 7 Nov 2022 09:41:08 -0500
+Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D9F314D3E;
+        Mon,  7 Nov 2022 06:41:06 -0800 (PST)
+Received: by mail-qt1-f181.google.com with SMTP id c15so6940569qtw.8;
+        Mon, 07 Nov 2022 06:41:06 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FIV7vTHfSEDhPuKiIHyuGI+SN25V+GeNVs7hK16ZTWo=;
-        b=DbFyylaUfx+p1eXsfJeM6CYzdwk1VZpNIfbvlnxSYcIdtH7e2XvFoOY0PNMoUMB/5U
-         26qOzCdmAKpR3V8j+8k4Q7d7cEXe21P6bHi6/IFGJm2/hGD6pjUsmPrX2E8pR4LbhpEr
-         ihy6GETlfK1h35TPqiJ/JlxOXVMo4tMFeNraYgtPSQdqmP2oB0oeMsSdN2MzSgyzKcFj
-         0abQK/Q8VY6x10+nyObLyuAnv3S7d6sdrdFNzeFLjudXVSgVyvvQVdAd5VHNsJW1ZxSI
-         xBQognFsF8sOEF+Rjs24/4HilndAL+PRmqN3HJtDi1lbhq/BFjR2dFpNxWDKZb48oizB
-         mw6w==
-X-Gm-Message-State: ACrzQf3sbIBtyQ68eRNy6xttRPW6FwJSFgWFGVG/8phmHTDbwTv/hnw7
-        2a4IT8IPaCq0Zb1FMAkoe8i2OH/SmTrNdmx3ZTsCuwssum46YXmMhOxpHvi9v/bN9cKytIhgVwJ
-        mRUVmzJpkRUfuUcnS15/FC8sr
-X-Received: by 2002:a17:907:788:b0:741:4d1a:595d with SMTP id xd8-20020a170907078800b007414d1a595dmr47454405ejb.737.1667832000127;
-        Mon, 07 Nov 2022 06:40:00 -0800 (PST)
-X-Google-Smtp-Source: AMsMyM5UuCE6gKwXd7BPEQWXtgyxuPI+UrMCN3cveCwSawRky1Cf9tjEpwZVc7SEWEHV8Eay3qqE9g==
-X-Received: by 2002:a17:907:788:b0:741:4d1a:595d with SMTP id xd8-20020a170907078800b007414d1a595dmr47454391ejb.737.1667831999954;
-        Mon, 07 Nov 2022 06:39:59 -0800 (PST)
-Received: from [10.40.98.142] ([78.108.130.194])
-        by smtp.gmail.com with ESMTPSA id g26-20020a056402321a00b00463bc1ddc76sm4294827eda.28.2022.11.07.06.39.59
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=auAl3TG+WCd06b713vu/zKhrp7Pm1giyKjxfMJDpScA=;
+        b=6LdH5Bz3zyvdrARzQaBh2TH2VoqndfqauBYBfZMmnFyFx9XnXeQvE7ce2lEtoQ+3QD
+         rJusGU6EW/4w5rFLyuP3JnnWr2XsoaVyf2uBV2jZu2qrmnbblLPEaGFcsYyfe8HVvBwv
+         tVPnWCysRTgNjSDDCkYnngKWgph+KMKJ9YSwIqOsd6k+TmvuApTagrjTXsnGYrHmgRDI
+         GGwN+WmoMsRxdqZBqreypkTnXw10AG6QyPZdOur5Pyg3aOHag6NHbpCbeoiLeflKCU2z
+         hjclZBRqdbE3XM/T7m6/kmoCahh5b4VMpEhcVLkRmaFfJQBcDSmgSomjg6QCK1FjwSTb
+         CIpw==
+X-Gm-Message-State: ACrzQf2PIUr9yJd0WIqq9F/G2m0xqt0tduIpqgyBdnl2MAZ+U9+9bzdD
+        WHDY3Cbs4XCSoJCcsQiUTG4yXN1KgFOifc48
+X-Google-Smtp-Source: AMsMyM7U+myaKVvR4QyMTfQx7LX3oJpIGGCXIrDhFlQihir7IqggDZufrOJkOBU+k8R0JIzOhz32aQ==
+X-Received: by 2002:a05:622a:4010:b0:3a5:3131:34f4 with SMTP id cf16-20020a05622a401000b003a5313134f4mr28932164qtb.54.1667832065660;
+        Mon, 07 Nov 2022 06:41:05 -0800 (PST)
+Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com. [209.85.128.178])
+        by smtp.gmail.com with ESMTPSA id t12-20020a37ea0c000000b006bb82221013sm7080121qkj.0.2022.11.07.06.41.05
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Nov 2022 06:39:59 -0800 (PST)
-Message-ID: <30f78533-45f3-e1b6-44b1-f349b8c9bea6@redhat.com>
-Date:   Mon, 7 Nov 2022 15:39:58 +0100
+        Mon, 07 Nov 2022 06:41:05 -0800 (PST)
+Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-367b8adf788so106311287b3.2;
+        Mon, 07 Nov 2022 06:41:05 -0800 (PST)
+X-Received: by 2002:a0d:e301:0:b0:374:a8ba:99b0 with SMTP id
+ m1-20020a0de301000000b00374a8ba99b0mr2185019ywe.358.1667832064943; Mon, 07
+ Nov 2022 06:41:04 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH 1/2] platform/x86: dell-ddv: Improve buffer handling
-Content-Language: en-US
-To:     Armin Wolf <W_Armin@gmx.de>, markgross@kernel.org
-Cc:     platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221102212336.380257-1-W_Armin@gmx.de>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20221102212336.380257-1-W_Armin@gmx.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221107135825.583877-1-herve.codina@bootlin.com> <20221107135825.583877-2-herve.codina@bootlin.com>
+In-Reply-To: <20221107135825.583877-2-herve.codina@bootlin.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 7 Nov 2022 15:40:53 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdVbWGYPkspMx40S02cr6sX2LZkGwye3JQCtiPtLhuDCPw@mail.gmail.com>
+Message-ID: <CAMuHMdVbWGYPkspMx40S02cr6sX2LZkGwye3JQCtiPtLhuDCPw@mail.gmail.com>
+Subject: Re: [PATCH 1/7] soc: renesas: r9a06g032-sysctrl: Export function to
+ get H2MODE from CFG_USB register
+To:     Herve Codina <herve.codina@bootlin.com>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Gareth Williams <gareth.williams.jx@renesas.com>,
+        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi Hervé,
 
-On 11/2/22 22:23, Armin Wolf wrote:
-> When the DDV interface returns a buffer, it actually
-> returns a acpi buffer containing an integer (buffer size)
-> and another acpi buffer (buffer content).
-> The size of the buffer may be smaller than the size of
-> the buffer content, which is perfectly valid and should not
-> be treated as an error.
-> Also use the buffer size instead of the buffer content size
-> when accessing the buffer to prevent accessing bogus data.
-> 
-> Tested on a Dell Inspiron 3505.
-> 
-> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+On Mon, Nov 7, 2022 at 2:59 PM Herve Codina <herve.codina@bootlin.com> wrote:
+> The CFG_USB register is located within the system controller.
+>
+> We need a helper to get the H2MODE value from the CFG_USB register
+> without syscon.
+>
+> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
 
-Thank you for your patch-series, I've applied the series to my
-review-hans branch:
-https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
+> --- a/drivers/clk/renesas/r9a06g032-clocks.c
+> +++ b/drivers/clk/renesas/r9a06g032-clocks.c
+> @@ -25,6 +25,8 @@
+>  #include <linux/spinlock.h>
+>  #include <dt-bindings/clock/r9a06g032-sysctrl.h>
+>
+> +#define R9A06G032_SYSCTRL_USB    0x00
+> +#define R9A06G032_SYSCTRL_USB_H2MODE  (1<<1)
+>  #define R9A06G032_SYSCTRL_DMAMUX 0xA0
+>
+>  struct r9a06g032_gate {
+> @@ -341,6 +343,22 @@ int r9a06g032_sysctrl_set_dmamux(u32 mask, u32 val)
+>  }
+>  EXPORT_SYMBOL_GPL(r9a06g032_sysctrl_set_dmamux);
+>
+> +
+> +/* Exported helper to get the H2MODE bit from USB register */
+> +int r9a06g032_sysctrl_get_usb_h2mode(bool *h2mode)
+> +{
+> +       u32 usb;
+> +
+> +       if (!sysctrl_priv)
+> +               return -EPROBE_DEFER;
+> +
+> +       usb = readl(sysctrl_priv->reg + R9A06G032_SYSCTRL_USB);
+> +       *h2mode = (usb & R9A06G032_SYSCTRL_USB_H2MODE) ? true : false;
+> +
+> +       return 0;
 
-Note it will show up in my review-hans branch once I've pushed my
-local branch there, which might take a while.
+Perhaps not pass *h2mode, but just return USB_ROLE_{HOST,DEVICE}
+(enum usb_role in <linux/usb/role.h>), or a negative error code?
 
-Once I've run some tests on this branch the patches there will be
-added to the platform-drivers-x86/for-next branch and eventually
-will be included in the pdx86 pull-request to Linus for the next
-merge-window.
+Gr{oetje,eeting}s,
 
-Regards,
+                        Geert
 
-Hans
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-
-
-> ---
->  drivers/platform/x86/dell/dell-wmi-ddv.c | 12 +++++++-----
->  1 file changed, 7 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/platform/x86/dell/dell-wmi-ddv.c b/drivers/platform/x86/dell/dell-wmi-ddv.c
-> index 699feae3c435..1a001296e8c6 100644
-> --- a/drivers/platform/x86/dell/dell-wmi-ddv.c
-> +++ b/drivers/platform/x86/dell/dell-wmi-ddv.c
-> @@ -129,9 +129,9 @@ static int dell_wmi_ddv_query_buffer(struct wmi_device *wdev, enum dell_ddv_meth
->  	if (obj->package.elements[1].type != ACPI_TYPE_BUFFER)
->  		goto err_free;
-> 
-> -	if (buffer_size != obj->package.elements[1].buffer.length) {
-> +	if (buffer_size > obj->package.elements[1].buffer.length) {
->  		dev_warn(&wdev->dev,
-> -			 FW_WARN "ACPI buffer size (%llu) does not match WMI buffer size (%d)\n",
-> +			 FW_WARN "WMI buffer size (%llu) exceeds ACPI buffer size (%d)\n",
->  			 buffer_size, obj->package.elements[1].buffer.length);
-> 
->  		goto err_free;
-> @@ -271,15 +271,17 @@ static int dell_wmi_ddv_buffer_read(struct seq_file *seq, enum dell_ddv_method m
->  	struct device *dev = seq->private;
->  	struct dell_wmi_ddv_data *data = dev_get_drvdata(dev);
->  	union acpi_object *obj;
-> -	union acpi_object buf;
-> +	u64 size;
-> +	u8 *buf;
->  	int ret;
-> 
->  	ret = dell_wmi_ddv_query_buffer(data->wdev, method, 0, &obj);
->  	if (ret < 0)
->  		return ret;
-> 
-> -	buf = obj->package.elements[1];
-> -	ret = seq_write(seq, buf.buffer.pointer, buf.buffer.length);
-> +	size = obj->package.elements[0].integer.value;
-> +	buf = obj->package.elements[1].buffer.pointer;
-> +	ret = seq_write(seq, buf, size);
->  	kfree(obj);
-> 
->  	return ret;
-> --
-> 2.30.2
-> 
-
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
