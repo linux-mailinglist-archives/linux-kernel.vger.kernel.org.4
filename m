@@ -2,53 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5E9F61F41B
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 14:17:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F2BE61F41D
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 14:18:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232270AbiKGNRW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 08:17:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53322 "EHLO
+        id S232243AbiKGNSi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 08:18:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231551AbiKGNRU (ORCPT
+        with ESMTP id S231462AbiKGNSf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 08:17:20 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 617A6615C
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 05:17:16 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 11238B80DF2
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 13:17:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EEB42C433C1;
-        Mon,  7 Nov 2022 13:17:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667827033;
-        bh=tisMPvmQNILTB7LyB3EX0agbELSzq8kO29YbQ9xN0Jc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=IJDf4vhRTqNwvRn2xO+C0oA6M2BJBQNtVfvf34X/iDAxnbWeNBCX0ZZI6WOk7HTJM
-         oSzU0vbvpXb3aHMcbakCvYJNpisj8K3rkrjROnKwDALVQcIuUvXHpjKxCJTh+S7OE5
-         xKtgWA9pFz2SuSD7zxM7aw1S3WwoCziLxBjhmSyjasxVDkv4oDyvJBzSeSe5x73RJZ
-         b62JZJCxFgfhsmA1sHhHqFcWGtbUZ8n6SBAQANN0n7G7nzV47aPMDPXxuyPJrah9NR
-         fvWPDHnvICMvk2Smd49/Hx9bsOLIjhvNPj8c/hJ7gCzWv/6fWu/Fr18Q4vIXZ1EXBn
-         5mIcSkcQcHWlw==
-Date:   Mon, 7 Nov 2022 22:17:10 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     wangyufen <wangyufen@huawei.com>
-Cc:     <linux-kernel@vger.kernel.org>, <rostedt@goodmis.org>,
-        <mhiramat@kernel.org>
-Subject: Re: [PATCH v2] tracing: fix memory leak in tracing_read_pipe
-Message-Id: <20221107221710.23d90a4cf74043a9b5f7d6fc@kernel.org>
-In-Reply-To: <a5a79265-be08-0375-ad50-fbe568c7a769@huawei.com>
-References: <1667819090-4643-1-git-send-email-wangyufen@huawei.com>
-        <a5a79265-be08-0375-ad50-fbe568c7a769@huawei.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Mon, 7 Nov 2022 08:18:35 -0500
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC2B719025
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 05:18:33 -0800 (PST)
+Received: by mail-yb1-xb33.google.com with SMTP id 129so13502682ybb.12
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 05:18:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5SoqAUcnwiRm88ADd2ljnWMq6OYtUHzfrs6KNHdyEzE=;
+        b=UGhWJk4HpX9TKsQWQGTHKMh66inqZKg22bG/7kNXFFQ3kZkidg97XqTIHwxg7WPOXu
+         0v2Y5ywyxTm8lK4tBBVrN7AiivG6csBLgRaKdyQnRao7nV8N5aOvbgLHoSMCgmQFQyDc
+         P87IdNxHWNAAYgvfcEc11SC556SRE2deFJ7I51lI/P+WQ0tCIlZuVbZPBUAraptpo1iV
+         HPagSQ3kgZQp0lwo+iU90EWh3daa+XDUDbFYJP15USWHYAYV+3YZqa69ti4roaHutWsS
+         tlruEWldOByyLJJXOYjkavzkTQ0kST9VtsXYHB6M93pJmTmgUHEwb1+kVsYuJB9mdnqY
+         4lew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=5SoqAUcnwiRm88ADd2ljnWMq6OYtUHzfrs6KNHdyEzE=;
+        b=vor2uJlZI9gneL7DdUVvVJWNb5qUmmCO+W2ecel1ledCsJQg+Qez1zEwTfSgGWXVxC
+         pUlqbfsqsYr5c6p/nJTDvEZyCZZot26VDFUU2cLDGkj+9tBfHRZ0mlKDW3oQ2URY5fUJ
+         GBBO3gRcKRzuFbZC0EEplt7QFxMwlow93hMi1teIJTxXnfw+KQudIt3NO8QSz79ZyPBQ
+         u7y/x21rao7GNosCE2KA0xRC9V1rNzDKtnUBncefRbXcpw+ujFHgLBuIXaVcIMOO32Og
+         zoB2JkMqai/bkUt9wZOs0AeW91G+oGNiRCdl94JMArlbh8a3TNY8gMV+HgF+3Me3BpS1
+         GOkw==
+X-Gm-Message-State: ANoB5pkGdaOhJhPcTIJmd2t/wN2n3qWMfZIB/xim5iCFk6j+0vZXpigB
+        a8j6Eo2gG7GkKd1uaxTALz2UrWuUQ2Nlh+jrfnoFPA==
+X-Google-Smtp-Source: AA0mqf5/eEsy8pyLnv/X6ea7Qff2XeVAQvDcA+/uWKpr7VBmhDic4hY9dpkmZ5Hj8IbqB8MTAJmRX3TqClSEXMTqEFY=
+X-Received: by 2002:a25:4090:0:b0:6d3:7bde:23fe with SMTP id
+ n138-20020a254090000000b006d37bde23femr15834157yba.388.1667827112974; Mon, 07
+ Nov 2022 05:18:32 -0800 (PST)
+MIME-Version: 1.0
+References: <20221102081620.1465154-1-zhongbaisong@huawei.com>
+ <CAG_fn=UDAjNd2xFrRxSVyLTZOAGapjSq2Zu5Xht12JNq-A7S=A@mail.gmail.com> <Y2je9dJxUjEchB9k@FVFF77S0Q05N>
+In-Reply-To: <Y2je9dJxUjEchB9k@FVFF77S0Q05N>
+From:   Alexander Potapenko <glider@google.com>
+Date:   Mon, 7 Nov 2022 14:17:56 +0100
+Message-ID: <CAG_fn=UdPzBp9uSayPWvtRgjSKoLyfiYacofTS-bbbTauc2F-w@mail.gmail.com>
+Subject: Re: [PATCH -next,v2] bpf, test_run: fix alignment problem in bpf_prog_test_run_skb()
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     Baisong Zhong <zhongbaisong@huawei.com>, elver@google.com,
+        Catalin Marinas <catalin.marinas@arm.com>, edumazet@google.com,
+        keescook@chromium.org, kuba@kernel.org, ast@kernel.org,
+        daniel@iogearbox.net, davem@davemloft.net, pabeni@redhat.com,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,64 +75,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 7 Nov 2022 19:45:04 +0800
-wangyufen <wangyufen@huawei.com> wrote:
-
-> 
-> 在 2022/11/7 19:04, Wang Yufen 写道:
-> > kmemleak reports this issue:
+On Mon, Nov 7, 2022 at 11:33 AM Mark Rutland <mark.rutland@arm.com> wrote:
+>
+> On Fri, Nov 04, 2022 at 06:06:05PM +0100, Alexander Potapenko wrote:
+> > On Wed, Nov 2, 2022 at 9:16 AM Baisong Zhong <zhongbaisong@huawei.com> =
+wrote:
+> > >
+> > > we got a syzkaller problem because of aarch64 alignment fault
+> > > if KFENCE enabled.
+> > >
+> > > When the size from user bpf program is an odd number, like
+> > > 399, 407, etc, it will cause the struct skb_shared_info's
+> > > unaligned access. As seen below:
+> > >
+> > > BUG: KFENCE: use-after-free read in __skb_clone+0x23c/0x2a0 net/core/=
+skbuff.c:1032
 > >
-> > unreferenced object 0xffff888105a18900 (size 128):
-> >    comm "test_progs", pid 18933, jiffies 4336275356 (age 22801.766s)
-> >    hex dump (first 32 bytes):
-> >      25 73 00 90 81 88 ff ff 26 05 00 00 42 01 58 04  %s......&...B.X.
-> >      03 00 00 00 02 00 00 00 00 00 00 00 00 00 00 00  ................
-> >    backtrace:
-> >      [<00000000560143a1>] __kmalloc_node_track_caller+0x4a/0x140
-> >      [<000000006af00822>] krealloc+0x8d/0xf0
-> >      [<00000000c309be6a>] trace_iter_expand_format+0x99/0x150
-> >      [<000000005a53bdb6>] trace_check_vprintf+0x1e0/0x11d0
-> >      [<0000000065629d9d>] trace_event_printf+0xb6/0xf0
-> >      [<000000009a690dc7>] trace_raw_output_bpf_trace_printk+0x89/0xc0
-> >      [<00000000d22db172>] print_trace_line+0x73c/0x1480
-> >      [<00000000cdba76ba>] tracing_read_pipe+0x45c/0x9f0
-> >      [<0000000015b58459>] vfs_read+0x17b/0x7c0
-> >      [<000000004aeee8ed>] ksys_read+0xed/0x1c0
-> >      [<0000000063d3d898>] do_syscall_64+0x3b/0x90
-> >      [<00000000a06dda7f>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> > It's interesting that KFENCE is reporting a UAF without a deallocation
+> > stack here.
 > >
-> > iter->fmt alloced in
-> >    tracing_read_pipe() -> .. ->trace_iter_expand_format(), but not
-> > freed, to fix, add free in tracing_release_pipe()
-> Fixes: efbbdaa22bb7 ("tracing: Show real address for trace event arguments")
-
-Oops, good catch!
-
-Cc: stable@vger.kernel.org
-
-Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-
-Thank you,
-
-> > Signed-off-by: Wang Yufen <wangyufen@huawei.com>
-> > ---
-> > v1 -> v2: del if (iter->fmt), free iter->fmt directly
-> >   kernel/trace/trace.c | 1 +
-> >   1 file changed, 1 insertion(+)
+> > Looks like an unaligned access to 0xffff6254fffac077 causes the ARM
+> > CPU to throw a fault handled by __do_kernel_fault()
+>
+> Importantly, an unaligned *atomic*, which is a bug regardless of KFENCE.
+>
+> > This isn't technically a page fault, but anyway the access address
+> > gets passed to kfence_handle_page_fault(), which defaults to a
+> > use-after-free, because the address belongs to the object page, not
+> > the redzone page.
 > >
-> > diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
-> > index 47a44b0..f9d98e7 100644
-> > --- a/kernel/trace/trace.c
-> > +++ b/kernel/trace/trace.c
-> > @@ -6657,6 +6657,7 @@ static int tracing_release_pipe(struct inode *inode, struct file *file)
-> >   	mutex_unlock(&trace_types_lock);
-> >   
-> >   	free_cpumask_var(iter->started);
-> > +	kfree(iter->fmt);
-> >   	mutex_destroy(&iter->mutex);
-> >   	kfree(iter);
-> >   
+> > Catalin, Mark, what is the right way to only handle traps caused by
+> > reading/writing to a page for which `set_memory_valid(addr, 1, 0)` was
+> > called?
+>
+> That should appear as a translation fault, so we could add an
+> is_el1_translation_fault() helper for that. I can't immediately recall ho=
+w
+> misaligned atomics are presented, but I presume as something other than a
+> translation fault.
+>
+> If the below works for you, I can go spin that as a real patch.
 
+Thanks!
+It works for me in QEMU (doesn't report UAF for an unaligned atomic
+access and doesn't break the original KFENCE tests), and matches my
+reading of https://developer.arm.com/documentation/ddi0595/2020-12/AArch64-=
+Registers/ESR-EL1--Exception-Syndrome-Register--EL1-
 
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Feel free to add:
+  Reviewed-by: Alexander Potapenko <glider@google.com>
+  Tested-by: Alexander Potapenko <glider@google.com>
+
+> Mark.
+>
+> ---->8----
+> diff --git a/arch/arm64/mm/fault.c b/arch/arm64/mm/fault.c
+> index 5b391490e045b..1de4b6afa8515 100644
+> --- a/arch/arm64/mm/fault.c
+> +++ b/arch/arm64/mm/fault.c
+> @@ -239,6 +239,11 @@ static bool is_el1_data_abort(unsigned long esr)
+>         return ESR_ELx_EC(esr) =3D=3D ESR_ELx_EC_DABT_CUR;
+>  }
+>
+> +static bool is_el1_translation_fault(unsigned long esr)
+> +{
+> +       return (esr & ESR_ELx_FSC_TYPE) =3D=3D ESR_ELx_FSC_FAULT;
+
+Should we also introduce ESR_ELx_FSC(esr) for this?
+
+> +}
+> +
+>  static inline bool is_el1_permission_fault(unsigned long addr, unsigned =
+long esr,
+>                                            struct pt_regs *regs)
+>  {
+> @@ -385,7 +390,8 @@ static void __do_kernel_fault(unsigned long addr, uns=
+igned long esr,
+>         } else if (addr < PAGE_SIZE) {
+>                 msg =3D "NULL pointer dereference";
+>         } else {
+> -               if (kfence_handle_page_fault(addr, esr & ESR_ELx_WNR, reg=
+s))
+> +               if (is_el1_translation_fault(esr) &&
+> +                   kfence_handle_page_fault(addr, esr & ESR_ELx_WNR, reg=
+s))
+>                         return;
+>
+>                 msg =3D "paging request";
+--
+Alexander Potapenko
+Software Engineer
+
+Google Germany GmbH
+Erika-Mann-Stra=C3=9Fe, 33
+80636 M=C3=BCnchen
+
+Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Liana Sebastian
+Registergericht und -nummer: Hamburg, HRB 86891
+Sitz der Gesellschaft: Hamburg
