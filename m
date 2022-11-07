@@ -2,161 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47CF761F982
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 17:24:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F9F561F981
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 17:23:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232830AbiKGQYD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 11:24:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43228 "EHLO
+        id S232402AbiKGQXn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 11:23:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231590AbiKGQXi (ORCPT
+        with ESMTP id S232133AbiKGQXL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 11:23:38 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3794248D4
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 08:21:11 -0800 (PST)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2A7FbdUC018072;
-        Mon, 7 Nov 2022 16:20:42 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=PwyzBbiNauQajDFMxNbdVRKyQZV5qg0JV6t5f6Gs0e8=;
- b=ePc2N1LZ1yXeEogzJddAi+FdyFsBFxujfLjtywMHEyBsY+PmoCcJqbc2ODOf9uDuH+Zp
- 1d3JgQAgS2Z542FgGtx0t5xT0erMIQmMk4m/G0Qhpw22qigQ9jNLBJ7ZrXkX/f04/rvZ
- WkrEpN47hWmVIsAnL/3dfMcCGZIK1xAuzXEuqLIg1+MXc5P6HGwov/CYHPr/+oq0VCGw
- LxtF9undnS1rtkped8wSGQKOUjmcv7UHocqq5SoUrDMGdnFsELTPxFkQrhr4YMRjJ04V
- PIIGR/bIB484P2aKOR0ZmYMzJN5bXt9lGrlWR/iclxTt+nIn24Nqbdd3n+UCKtvms6Px Gg== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kpu9ch6th-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 07 Nov 2022 16:20:42 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2A7GKfC1016486
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 7 Nov 2022 16:20:41 GMT
-Received: from [10.226.59.182] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Mon, 7 Nov 2022
- 08:20:39 -0800
-Message-ID: <2f415e77-9332-2d66-cd59-05db8d5790ea@quicinc.com>
-Date:   Mon, 7 Nov 2022 09:20:38 -0700
+        Mon, 7 Nov 2022 11:23:11 -0500
+Received: from smtp-1908.mail.infomaniak.ch (smtp-1908.mail.infomaniak.ch [IPv6:2001:1600:4:17::1908])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9DC4240BB
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 08:21:00 -0800 (PST)
+Received: from smtp-2-0000.mail.infomaniak.ch (unknown [10.5.36.107])
+        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4N5c0n3vwFzMq4Rq;
+        Mon,  7 Nov 2022 17:20:57 +0100 (CET)
+Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
+        by smtp-2-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4N5c0k0hNRzMppDn;
+        Mon,  7 Nov 2022 17:20:54 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
+        s=20191114; t=1667838057;
+        bh=/Hxzji7LOlrPI3D4EEkzO0ARX8DsTpF3mgj/GUpF6Pk=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=gFUGW4Fw6Ro4F87y5z93lAFXMNDQZkpgvZFUYBth1xVO6RFSg0Y/jNrArCaLGqe35
+         TSBOCoY9PGKmpc3SkoK5uTdTeNIgngOdglJXnnNg5tnBX8WbJBdiO5Hlt012/cN+7y
+         1VhNMm1AnRtPLiI+eoj2usye0DamHZ44AldN0MM8=
+Message-ID: <8692915f-437c-56fd-8984-d6febf533fa9@digikod.net>
+Date:   Mon, 7 Nov 2022 17:20:53 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [RFC PATCH v3 2/3] accel: add dedicated minor for accelerator
- devices
+User-Agent: 
+Subject: Re: [PATCH] certs: Prevent spurious errors on repeated blacklisting
 Content-Language: en-US
-To:     Oded Gabbay <ogabbay@kernel.org>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <linux-kernel@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Alex Deucher <alexander.deucher@amd.com>
-CC:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>,
-        Jiho Chu <jiho.chu@samsung.com>,
-        Daniel Stone <daniel@fooishbar.org>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>,
-        Maciej Kwapulinski <maciej.kwapulinski@linux.intel.com>,
-        Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>,
-        Randy Dunlap <rdunlap@infradead.org>
-References: <20221106210225.2065371-1-ogabbay@kernel.org>
- <20221106210225.2065371-3-ogabbay@kernel.org>
-From:   Jeffrey Hugo <quic_jhugo@quicinc.com>
-In-Reply-To: <20221106210225.2065371-3-ogabbay@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: M6hr2hrplincyuJoha-UwR6GNOBhAMwV
-X-Proofpoint-ORIG-GUID: M6hr2hrplincyuJoha-UwR6GNOBhAMwV
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-07_08,2022-11-07_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 clxscore=1015
- malwarescore=0 spamscore=0 priorityscore=1501 mlxlogscore=999
- impostorscore=0 adultscore=0 lowpriorityscore=0 bulkscore=0 mlxscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211070131
+To:     =?UTF-8?Q?Thomas_Wei=c3=9fschuh?= <linux@weissschuh.net>
+Cc:     David Howells <dhowells@redhat.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Jarkko Sakkinen <jarkko@kernel.org>, keyrings@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Mark Pearson <markpearson@lenovo.com>,
+        Eric Snowberg <eric.snowberg@oracle.com>,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+References: <20221104014704.3469-1-linux@weissschuh.net>
+ <3b997266-067c-975c-911a-da146fe9033a@digikod.net>
+ <db5890d8-3a3d-4ca7-bb58-655c26164587@t-8ch.de>
+From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+In-Reply-To: <db5890d8-3a3d-4ca7-bb58-655c26164587@t-8ch.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/6/2022 2:02 PM, Oded Gabbay wrote:
-> --- a/drivers/accel/drm_accel.c
-> +++ b/drivers/accel/drm_accel.c
-> @@ -8,14 +8,25 @@
+
+On 07/11/2022 16:55, Thomas Weißschuh wrote:
+> On 2022-11-07 14:12+0100, Mickaël Salaün wrote:
+>> This is a follow-up of
+>> https://lore.kernel.org/r/c8c65713-5cda-43ad-8018-20f2e32e4432@t-8ch.de
+>>
+>> Added Jarkko, Mark Pearson, Eric Snowberg and more ML in Cc.
+>>
+>>
+>> On 04/11/2022 02:47, Thomas Weißschuh wrote:
+>>> When the blacklist keyring was changed to allow updates from the root
+>>> user it gained an ->update() function that disallows all updates.
+>>> When the a hash is blacklisted multiple times from the builtin or
+>>> firmware-provided blacklist this spams prominent logs during boot:
+>>>
+>>> [    0.890814] blacklist: Problem blacklisting hash (-13)
+>>>
+>>> As all these repeated calls to mark_raw_hash_blacklisted() would create
+>>> the same keyring entry again anyways these errors can be safely ignored.
+>>
+>> These errors can indeed be safely ignored, however they highlight issues
+>> with some firmware vendors not checking nor optimizing their blocked hashes.
+>> This raises security concerns, and it should be fixed by firmware vendors.
 > 
->   #include <linux/debugfs.h>
->   #include <linux/device.h>
-> +#include <linux/xarray.h>
+> Thanks, I was not aware that these are worth fixing.
+> 
+>>> Fixes: 6364d106e041 ("certs: Allow root user to append signed hashes to the blacklist keyring")
+>>> Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+>>> ---
+>>>    certs/blacklist.c | 4 +++-
+>>>    1 file changed, 3 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/certs/blacklist.c b/certs/blacklist.c
+>>> index 41f10601cc72..5f7f2882ced7 100644
+>>> --- a/certs/blacklist.c
+>>> +++ b/certs/blacklist.c
+>>> @@ -191,7 +191,9 @@ static int mark_raw_hash_blacklisted(const char *hash)
+>>>    				   BLACKLIST_KEY_PERM,
+>>>    				   KEY_ALLOC_NOT_IN_QUOTA |
+>>>    				   KEY_ALLOC_BUILT_IN);
+>>> -	if (IS_ERR(key)) {
+>>> +
+>>> +	/* Blacklisting the same hash twice fails but would be idempotent */
+>>> +	if (IS_ERR(key) && PTR_ERR(key) != -EACCES) {
+>>
+>> We should not hide EACCES errors. This logs issues, which is correct for
+>> duplicate hashes, and can help firmware vendors to fix their database. I'd
+>> really like to see a different log message instead: change the duplicate
+>> entry error code from EACCES to EEXIST, and call pr_warn for this specific
+>> case.
+> 
+> Returning EACCES would require some deeper changes to how the keyring is set up
 
-If we are not using xarray at this time, do we still need this include?
+I guess you meant EEXIST?
+
+> or even changes to the keyring core itself to introduce a key_create() (without
+> update) function.
+> 
+> Is this something you would take a look at, or should I try to do it?
+> (I have no previous knowledge about the keyring subsystem)
+
+Please take a look. I think it should not be too complex.
 
 > 
->   #include <drm/drm_accel.h>
-> +#include <drm/drm_debugfs.h>
-> +#include <drm/drm_drv.h>
-> +#include <drm/drm_file.h>
->   #include <drm/drm_ioctl.h>
->   #include <drm/drm_print.h>
+> In any case it probably would also be good to log the problematic hashes
+> themselves, so users can properly report the issue to their firmware vendors.
+
+Agree
+
 > 
-> +static DEFINE_SPINLOCK(accel_minor_lock);
-> +static struct idr accel_minors_idr;
-
-I beleive we should have an explicit include for the IDR header.
-
-> --- a/include/drm/drm_accel.h
-> +++ b/include/drm/drm_accel.h
-> @@ -8,12 +8,56 @@
->   #ifndef DRM_ACCEL_H_
->   #define DRM_ACCEL_H_
-> 
-> -#define ACCEL_MAJOR     261
-> +#include <drm/drm_file.h>
-> +
-> +#define ACCEL_MAJOR		261
-> +#define ACCEL_MAX_MINORS	256
-
-This diff seems really weird.  The changes to the ACCEL_MAJOR define 
-could get pushed to the previous patch, no?
-
-> @@ -23,9 +67,31 @@ static inline void accel_core_exit(void)
-> 
->   static inline int __init accel_core_init(void)
->   {
-> +	/* Return 0 to allow drm_core_init to complete successfully */
-
-Move to previous patch?
-
-> --- a/include/drm/drm_drv.h
-> +++ b/include/drm/drm_drv.h
-> @@ -94,6 +94,14 @@ enum drm_driver_feature {
->   	 * synchronization of command submission.
->   	 */
->   	DRIVER_SYNCOBJ_TIMELINE         = BIT(6),
-> +	/**
-> +	 * @DRIVER_COMPUTE_ACCEL:
-> +	 *
-> +	 * Driver supports compute acceleration devices. This flag is mutually exclusive with
-> +	 * @DRIVER_RENDER and @DRIVER_MODESET. Devices that support both graphics and compute
-> +	 * acceleration should be handled by two drivers that are connected using auxiliry bus.
-
-auxiliry -> auxiliary
-
+>>>    		pr_err("Problem blacklisting hash (%ld)\n", PTR_ERR(key));
+>>>    		return PTR_ERR(key);
+>>>    	}
+>>>
+>>> base-commit: ee6050c8af96bba2f81e8b0793a1fc2f998fcd20
