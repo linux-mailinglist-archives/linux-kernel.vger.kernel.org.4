@@ -2,68 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93DCD61F003
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 11:11:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0B0B61F00A
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 11:13:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231719AbiKGKLf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 05:11:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56468 "EHLO
+        id S231249AbiKGKM7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 05:12:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232008AbiKGKLZ (ORCPT
+        with ESMTP id S229530AbiKGKM4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 05:11:25 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D76F518B37
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 02:11:21 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 7 Nov 2022 05:12:56 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A9FA2BC;
+        Mon,  7 Nov 2022 02:12:54 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 72E7460FB8
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 10:11:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4D87C433C1;
-        Mon,  7 Nov 2022 10:11:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667815880;
-        bh=sLdgJtsgT7FBdmNyKtUpUc7S0X3GgvJlwORdilW7IN4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NLp5PaJsInoYz8sdVEPlOZuaOsmV38yvMgSnU7J3OJMwN1LYQ8ExYge1cTiSbWBvZ
-         6pzooYSfvMP4pCqhTOBbYKGpAJmknSX8oRzmSoTznrBR1TPcIjOv/nKMOxxBwbijyE
-         kGSXULSHcb6dFZgkLcAgnMgo7oDuyIvzOteLlEnYvC3NZsELIzUybk8Yd0SUAsBnhX
-         Nd2r5B0OYSX1TBylDYChC8yz9rHIvdKNaT5JpcDLACj8EeSS4glPOnVzjMd1u0USq4
-         66ppg/MjOXsHlx7NQ/MpeJQ0vRDVeuhZIf3LVJghcLumwyIQNUazu5vOBTBaytvAAs
-         ejNmiFVn+Xwcw==
-Date:   Mon, 7 Nov 2022 11:11:15 +0100
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     Anna-Maria Behnsen <anna-maria@linutronix.de>
-Cc:     linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        John Stultz <jstultz@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Eric Dumazet <edumazet@google.com>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Arjan van de Ven <arjan@infradead.org>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Frederic Weisbecker <fweisbec@gmail.com>,
-        Rik van Riel <riel@surriel.com>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, Theodore Ts'o <tytso@mit.edu>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Stephen Boyd <sboyd@kernel.org>, Tejun Heo <tj@kernel.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>
-Subject: Re: [PATCH v4 05/16] add_timer_on(): Make sure callers have
- TIMER_PINNED flag
-Message-ID: <20221107101115.GA3279@lothringen>
-References: <20221104145737.71236-1-anna-maria@linutronix.de>
- <20221104145737.71236-6-anna-maria@linutronix.de>
- <20221104164342.GA1440400@lothringen>
- <f72b4d5d-493d-916-5d19-2bf87e8c41e1@linutronix.de>
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 2C2A91F88B;
+        Mon,  7 Nov 2022 10:12:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1667815973; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZLvhz3ELkFvg4pJU2+R5NKKqsKnBAtaL/3kPZVxAp30=;
+        b=lAZxXxpsoLLorzuWwUADkrbbozhkMX93mi/tu9UJmE4RyoSuNlvP4mbuaykdDu8nsucBHb
+        YnlBXjz5jYwNiTgcA4LXU6BmT+axQS8QJUwLx4FRNOUy68c6SIXNI5Muao+cbTxyGdSxoY
+        r+kMIm1k/3m/VxecoaMVgPc//CJ0Xbw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1667815973;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZLvhz3ELkFvg4pJU2+R5NKKqsKnBAtaL/3kPZVxAp30=;
+        b=7Nlzvt3donEftG338hrtk0FQhvnN4c8wrDJPI2neGsIZX/lwoqKHfBOdnIKEzXDQRkavdu
+        PVBiAUrk/YQbAmDQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id EF16913AC7;
+        Mon,  7 Nov 2022 10:12:52 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id ZVccOiTaaGOgZwAAMHmgww
+        (envelope-from <hare@suse.de>); Mon, 07 Nov 2022 10:12:52 +0000
+Message-ID: <75aea0e8-4fa4-593c-0024-3c39ac3882f3@suse.de>
+Date:   Mon, 7 Nov 2022 11:12:52 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f72b4d5d-493d-916-5d19-2bf87e8c41e1@linutronix.de>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        John Garry <john.g.garry@oracle.com>,
+        John Garry <john.garry@huawei.com>, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, bvanassche@acm.org, hch@lst.de,
+        ming.lei@redhat.com, niklas.cassel@wdc.com
+Cc:     axboe@kernel.dk, jinpu.wang@cloud.ionos.com,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-ide@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linuxarm@huawei.com, john.garry2@mail.dcu.ie
+References: <1666693976-181094-1-git-send-email-john.garry@huawei.com>
+ <1666693976-181094-3-git-send-email-john.garry@huawei.com>
+ <08fdb698-0df3-7bc8-e6af-7d13cc96acfa@opensource.wdc.com>
+ <83d9dc82-ea37-4a3c-7e67-1c097f777767@huawei.com>
+ <9a2f30cc-d0e9-b454-d7cd-1b0bd3cf0bb9@opensource.wdc.com>
+ <0e60fab5-8a76-9b7e-08cf-fb791e01ae08@huawei.com>
+ <71b56949-e4d7-fd94-c44a-867080b7a4fa@opensource.wdc.com>
+ <b03b37a2-35dc-5218-7279-ae68678a47ff@huawei.com>
+ <0e4994f7-f131-39b0-c876-f447b71566cd@opensource.wdc.com>
+ <05cf6d61-987b-025d-b694-a58981226b97@oracle.com>
+ <ff0c2ab7-8e82-40d9-1adf-78ee12846e1f@opensource.wdc.com>
+ <39f9afc5-9aab-6f7c-b67a-e74e694543d4@suse.de>
+ <0de1c3fd-4be7-1690-0780-720505c3692b@opensource.wdc.com>
+Content-Language: en-US
+From:   Hannes Reinecke <hare@suse.de>
+Subject: Re: [PATCH RFC v3 2/7] ata: libata-scsi: Add
+ ata_internal_queuecommand()
+In-Reply-To: <0de1c3fd-4be7-1690-0780-720505c3692b@opensource.wdc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,80 +92,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 07, 2022 at 09:11:11AM +0100, Anna-Maria Behnsen wrote:
-> On Fri, 4 Nov 2022, Frederic Weisbecker wrote:
+On 11/2/22 12:25, Damien Le Moal wrote:
+> On 11/2/22 20:12, Hannes Reinecke wrote:
+>> On 11/2/22 11:07, Damien Le Moal wrote:
+>>> On 11/2/22 18:52, John Garry wrote:
+>>>> Hi Damien,
+>>>>
+>> [ .. ] >> So we only need to find a way of 're-using' that tag, then we won't have
+>> to set aside a reserved tag and everything would be dandy...
 > 
-> > On Fri, Nov 04, 2022 at 03:57:26PM +0100, Anna-Maria Behnsen wrote:
-> > > The implementation of the hierachical timer pull model will change the
-> > > timer bases per CPU. Timers, that have to expire on a specific CPU, require
-> > > the TIMER_PINNED flag. Otherwise they will be queued on the dedicated CPU
-> > > but in global timer base and those timers could also expire on other
-> > > CPUs. Timers with TIMER_DEFERRABLE flag end up in a separate base anyway
-> > > and are executed on the local CPU only.
-> > > 
-> > > Therefore add the missing TIMER_PINNED flag for those callers who use
-> > > add_timer_on() without the flag. No functional change.
-> > 
-> > You're fixing the current callers but what about the future ones?
-> > 
-> > add_timer_on() should always guarantee that a timer runs on the
-> > right destination, which is not the case after your patchset if the
-> > timer hasn't been set to TIMER_PINNED.
-> > 
-> > Therefore I think we should either have:
-> > 
-> > * add_timer_on() enforce TIMER_PINNED (doesn't work because if the timer is
-> >   later called with mod_timer(), we should expect it to run anywhere)
-> > 
-> > or
-> > 
-> > * add_timer_on() warns if !TIMER_PINNED
+> I tried that. It is very ugly... Problem is that integration with EH in
+> case a real NCQ error happens when all that read-log-complete dance is
+> happening is hard. And don't get me started with the need to save/restore
+> the scsi command context of the command we are reusing the tag from.
 > 
-> This is already part of the last patch of the queue where also the
-> crystalball logic is removed. But the patch where I added the WARN_ONCE()
-> might be the wrong patch, it should be better part of the next patch where
-> the new timer bases are introduced.
-
-Ok.
-
+> And given that the code is changing to use regular submission path for
+> internal commands, right now, we need a reserved tag. Or a way to "borrow"
+> the tag from a request that we need to check. Which means we need some
+> additional api to not always try to allocate a tag.
 > 
-> > or
-> > 
-> > * have an internal flag TIMER_LOCAL, that is turned on when
-> >   add_timer_on() is called or add_timer()/mod_timer() is called
-> >   on a TIMER_PINNED. Otherwise it is turned off.
-> > 
-> > The last solution should work with existing API and you don't need to
-> > chase the current and future users of add_timer_on().
+>>
+>> Maybe we can stop processing when we receive an error (should be doing
+>> that anyway as otherwise the log might be overwritten), then we should
+>> be having a pretty good chance of getting that tag.
 > 
-> With the last approach it doesn't matter how the timer is setup. Everything
-> is done by timer code implicitly. When a future caller uses add_timer_on()
-> and wants to modfiy this "implicitly pinned timer", he will call
-> mod_timer() and the timer is no longer pinned (if it do not end up in the
-> same bucket it was before). For a user this does not seems to be very
-> obvious, or am I wrong?
-
-That's right indeed.
-
+> Hmmm.... that would be no better than using EH which does stop processing
+> until the internal house keeping is done.
 > 
-> But if the caller sets up the timer correctly we do not need this extra
-> timer flag. With the WARN_ONCE() in place, callers need to do the timer
-> setup properly and it is more clear to the caller what should be done.
-
-Yeah that sounds better.
-
-> BTW, the hunk in this patch for the workqueue is also not a final fix in my
-> opinion. I'm preparing a cleanup queue (it's part of the deferrable cleanup
-> queue), where I want to set the timer flags properly when
-> initializing/defining the workers. I should have added a comment here...
-
-Ok, if we have some pinned initializers such as DECLARE_DELAYED_WORK_PINNED()
-and DECLARE_DEFERRABKE_WORK_PINNED() then I think that cleans the situation.
-
-Sounds good, thanks!
-
+>> Or, precisely, getting _any_ tag as at least one tag is free at that point.
+>> Hmm?
 > 
-> Thanks,
+> See above. Not free, but usable as far as the device is concerned since we
+> have at least on command we need to check completed at the device level
+> (but not yet completed from scsi/block layer point of view).
 > 
-> 	Anna-Maria
-> 
+So, having had an entire weekend pondering this issue why don't we 
+allocate an _additional_ set of requests?
+After all, we had been very generous with allocating queues and requests 
+(what with us doing a full provisioning of the requests for all queues 
+already for the non-shared tag case).
+
+Idea would be to keep the single tag bitmap, but add eg a new rq state
+MQ_RQ_ERROR. Once that flag is set we'll fetch the error request instead 
+of the normal one:
+
+@@ -761,6 +763,8 @@ static inline struct request 
+*blk_mq_tag_to_rq(struct blk_mq_tags *tags,
+  {
+         if (tag < tags->nr_tags) {
+                 prefetch(tags->rqs[tag]);
++               if (unlikely(blk_mq_request_error(tags->rqs[tag])))
++                       return tags->error_rqs[tag];
+                 return tags->rqs[tag];
+         }
+
+and, of course, we would need to provision the error request first.
+
+Rationale here is that this will be primarily for devices with a low 
+number of tags, so doubling the number of request isn't much of an 
+overhead (as we'll be doing it essentially anyway in the error case as 
+we'll have to save the original request _somewhere_), and that it would 
+remove quite some cruft from the subsystem; look at SCSI EH trying to 
+store the original request contents and then after EH restoring them again.
+
+Hmm?
+
+Cheers,
+
+Hannes
+-- 
+Dr. Hannes Reinecke		           Kernel Storage Architect
+hare@suse.de			                  +49 911 74053 688
+SUSE Software Solutions Germany GmbH, Maxfeldstr. 5, 90409 Nürnberg
+HRB 36809 (AG Nürnberg), GF: Felix Imendörffer
+
