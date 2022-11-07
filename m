@@ -2,98 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D25161EFEA
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 11:06:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8E1F61EFED
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 11:08:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231557AbiKGKGv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 05:06:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54424 "EHLO
+        id S231697AbiKGKIB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 05:08:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231144AbiKGKGt (ORCPT
+        with ESMTP id S231349AbiKGKIA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 05:06:49 -0500
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4894F178BA
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 02:06:48 -0800 (PST)
-Received: by mail-lj1-x233.google.com with SMTP id x21so15392407ljg.10
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 02:06:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=q2t/IRH3FU2z4DLn2lUIQsd3+AJ/93+PFAgIWkFQYFo=;
-        b=fw3TPKkzGwx0H8Qw2Rirj2E5FQYLwcbehEkxLCd4RFCCXvAfnFwyUHTOjjXdgngxrK
-         JDdOCp4udZABjlk9NgeevE/vFAa4ZvkRadyHprWNfScm7iyMS12LyUhlB1oVrQlDVCcf
-         zOPS7Parn5kClzmREe4AvA46xWj1WtQvgSf/tmNdNpSPSlNB9eG7WrtqYA3HfwxgPCOh
-         YltCDK1Rc3jWSgsAmMO2eYdHUWxmxvS++xuMytTy+KvMVX3+0Zmc9oagaqzkuyOPKf+C
-         xvMGY/EyVv8aZiY4SfnCNpwQlCv/i2Jxz1uccMn29e8dHXjH8vtn1qqniGbUFsRZrS1W
-         Nrmw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=q2t/IRH3FU2z4DLn2lUIQsd3+AJ/93+PFAgIWkFQYFo=;
-        b=rdo6IZvSaewE1zCnD0QfRTTgLg8b5kb65n9ISYRVs3bGT5qiItHjP3SwVSHVc6h/XJ
-         Rl45j8ky2cFZ7ag1ci9uYUOEu6nr0cab89JcO7d+0OqhiCIyUSumXD7wbpdkLdPO5PTF
-         XhFV3ZeIb2i5yhYpUQ4Jwnbubw/ig2jwBLpylsfacTov1VBD2YsPakiEwpNsX4LZchPH
-         v8NQx0uAtphf31o42WHuGUK3RWIMo+jHuKes3jxZhU9J57muc6xq9u1brhXD5fkaP9jj
-         hAocYsQJh0htDbai1uX13/OI9BchH9aQLJQ4YEwRvmE4A2pw6VtuaFtSKIyiyTTu86T9
-         iI+A==
-X-Gm-Message-State: ACrzQf1fuUEfHlBPIvUugonItRIR6EMnaBMaTeK9nx8oZvmkqR36vbog
-        rPLbpQIzBA+rmxuhZseddAT85A==
-X-Google-Smtp-Source: AMsMyM6FCksyiqn6bhFeKSn2j/rKLgmrtcp0FYcK5IEzv0PW2r9h+gwVEvvUyZ5QhzUcMeiAICFFJA==
-X-Received: by 2002:a2e:b163:0:b0:277:6bc:2ab0 with SMTP id a3-20020a2eb163000000b0027706bc2ab0mr4874111ljm.142.1667815606667;
-        Mon, 07 Nov 2022 02:06:46 -0800 (PST)
-Received: from [192.168.0.20] (088156142199.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.199])
-        by smtp.gmail.com with ESMTPSA id j9-20020a056512108900b004ab0f2a8acdsm1155833lfg.212.2022.11.07.02.06.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Nov 2022 02:06:46 -0800 (PST)
-Message-ID: <caeccd9f-432c-d029-da9d-8dca27c02a9b@linaro.org>
-Date:   Mon, 7 Nov 2022 11:06:45 +0100
+        Mon, 7 Nov 2022 05:08:00 -0500
+Received: from wnew1-smtp.messagingengine.com (wnew1-smtp.messagingengine.com [64.147.123.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 763B715816
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 02:07:59 -0800 (PST)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailnew.west.internal (Postfix) with ESMTP id 49D4E2B060A4;
+        Mon,  7 Nov 2022 05:07:54 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Mon, 07 Nov 2022 05:07:59 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1667815673; x=1667822873; bh=H188XHf92e
+        tTDREXnb/OEU+uV1P6JQ1CLPf/Yjdde+M=; b=gEu++7F4AOlflnhqJ5+fnbojCK
+        nkwxbyG1C9qowPqmGKvGXMfSnZd6Na5Cv9NZc9vFSXozr0ESux2jCMak+G2yFE8v
+        MRzjga1u5opjXxwqvSqZfjde5PoujC57ardG3mpdwwQDOxZxwc64AY90SeESm1vN
+        4gE+nXkcGGxEbSLlyJ731jwgbcpXqQuvjgJub0eB8pwqZAiinUtQ8f2iJmdkVCE4
+        BIxqpv/330HO8THURUc28ZD79L+iHrB19SHbRInPdsvoaHzVbq1AYHReSZLLVc9M
+        KbAB4lzMj2Gmvu/WoqVnAECku015lEjiIwihD8aGuOvH5wanb/d+Ca+VWDtQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1667815673; x=1667822873; bh=H188XHf92etTDREXnb/OEU+uV1P6
+        JQ1CLPf/Yjdde+M=; b=GPwBvSEh+VbRha1ATDffxsUxKJoKHXR0U4/4a72EmZ8m
+        cvfOAdBBsFYfn1A+CaJfX0/fipVj7UC9aX9mz+sNlvWy8wC1e31MTWnviAeODQGa
+        EUeHf0O2qXXPjiczR42LfsVeOc6+g3odf0RnzSFQvyG6nNKS8sJAaK9VMrrN7rg1
+        +Gm10gYCJVRLDhFQ9+9nsv1bfInv6kJ0jwf9x44kiYI8V4zI7Rl4fZYTT6LqFhDK
+        emDylnIlbdMhmhT7jsKRpb97XHqH/xiaujF1mXFbix4zBDhEveG4Dm2phwDSx5TL
+        vVEot2nZ2gCC9DfW3n9JGnhQfOqxTr/8e4RSE7WL5g==
+X-ME-Sender: <xms:-dhoYyARoCxVJrmtEvIS0_FmWfcCThrM8hWD7_kymH-uoy_vWS0xhA>
+    <xme:-dhoY8gmAKHH-2SJ6SQcrQN2P971eTRB37opBZnb46FC8CqkapUP0iRX9igmmnE45
+    nR529tZDD9KsccHerI>
+X-ME-Received: <xmr:-dhoY1mLqNcrIR-iY8kn8Sr3xavRV6VyoQE8T8hOFtWm9p4ZwNrBovAe4WksBtEk5rK8s0jJIg_kKmqp6DtLKnZ_Az0m44nEenLBfbtGmL-xOA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrvdekgdduudcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvvefukfhfgggtuggjsehgtderredttddunecuhfhrohhmpeforgigihhm
+    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
+    htvghrnhepjeevfeehfeekieffgeevleevtefgffefkedtfeeuhfettdegjeehgfegudff
+    ffdunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmh
+    grgihimhgvsegtvghrnhhordhtvggthh
+X-ME-Proxy: <xmx:-dhoYwy35CgOY1mfusEKLuDywIwMdZh4S1RlyqVfAtfVe6RM4Do_Pw>
+    <xmx:-dhoY3R8KkmhZLS8NSi4YHFEoTKBj8jDEQBwbtgdE0hbV4S6VmumWg>
+    <xmx:-dhoY7bRvSYaXa8ZhULjpaGyHJFHKsxu144f2Aml4Vu43uds7EFUSQ>
+    <xmx:-dhoY_yGyPAWT16mttzlT_5aevro2ZdJyAl9T3TVozzrbs9R5OR_wQNfK0g>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 7 Nov 2022 05:07:52 -0500 (EST)
+Date:   Mon, 7 Nov 2022 11:07:51 +0100
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Noralf =?utf-8?Q?Tr=C3=B8nnes?= <noralf@tronnes.org>
+Cc:     Mateusz Kwiatkowski <kfyatek@gmail.com>,
+        Karol Herbst <kherbst@redhat.com>,
+        Emma Anholt <emma@anholt.net>, Ben Skeggs <bskeggs@redhat.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Lyude Paul <lyude@redhat.com>, linux-sunxi@lists.linux.dev,
+        intel-gfx@lists.freedesktop.org,
+        Phil Elwell <phil@raspberrypi.com>,
+        linux-arm-kernel@lists.infradead.org,
+        nouveau@lists.freedesktop.org, Hans de Goede <hdegoede@redhat.com>,
+        Dom Cobley <dom@raspberrypi.com>,
+        dri-devel@lists.freedesktop.org,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        linux-kernel@vger.kernel.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Subject: Re: [PATCH v6 16/23] drm/probe-helper: Provide a TV get_modes helper
+Message-ID: <20221107100751.neijajfrazxloldp@houat>
+References: <20220728-rpi-analog-tv-properties-v6-0-e7792734108f@cerno.tech>
+ <20220728-rpi-analog-tv-properties-v6-16-e7792734108f@cerno.tech>
+ <8d0eee22-50f5-5b0a-c1e6-c5f61dd5bbcd@gmail.com>
+ <eb485588-2e7a-8455-7ec4-6a9649d2bef8@tronnes.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v4 1/2] dt-bindings: PCI: xilinx-pcie: Convert to YAML
- schemas of Xilinx AXI PCIe Root Port Bridge
-Content-Language: en-US
-To:     Thippeswamy Havalige <thippeswamy.havalige@amd.com>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Cc:     bhelgaas@google.com, michals@xilinx.com, robh+dt@kernel.org,
-        nagaradhesh.yeleswarapu@amd.com, bharat.kumar.gogada@amd.com
-References: <20221107095408.924778-1-thippeswamy.havalige@amd.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221107095408.924778-1-thippeswamy.havalige@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="gnrypjdevshxh5ih"
+Content-Disposition: inline
+In-Reply-To: <eb485588-2e7a-8455-7ec4-6a9649d2bef8@tronnes.org>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/11/2022 10:54, Thippeswamy Havalige wrote:
-> Convert to YAML dtschemas of Xilinx AXI PCIe Root Port Bridge
-> dt binding.
-> 
-> 
 
-Just one blank line before SoB.
+--gnrypjdevshxh5ih
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-With commit fixes:
+Hi Noralf,
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+On Sun, Nov 06, 2022 at 05:59:23PM +0100, Noralf Tr=F8nnes wrote:
+>=20
+>=20
+> Den 27.10.2022 00.02, skrev Mateusz Kwiatkowski:
+> > Hi Maxime,
+> >=20
+> > First of all, nice idea with the helper function that can be reused by =
+different
+> > drivers. This is neat!
+> >=20
+> > But looking at this function, it feels a bit overcomplicated. You're cr=
+eating
+> > the two modes, then checking which one is the default, then set the pre=
+ferred
+> > one and possibly reorder them. Maybe it can be simplified somehow?
+> >=20
+> > Although when I tried to refactor it myself, I ended up with something =
+that's
+> > not better at all. Maybe it needs to be complicated, after all :(
+> >=20
+>=20
+> I also thought that the function was complicated/difficult to read, in
+> particular the index stuff at the end, but I also failed in finding a
+> "better" solution, just a different one ;)
 
-> Signed-off-by: Thippeswamy Havalige <thippeswamy.havalige@amd.com>
-> ---
+I think I like yours better still :)
 
+Can I bring it into my series, with your authorship and SoB?
 
+Maxime
 
-Best regards,
-Krzysztof
+--gnrypjdevshxh5ih
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCY2jY9wAKCRDj7w1vZxhR
+xQwNAP4m8wqBDbHwkCGeLkJY5dnG5iYXcSUpkoA/Zr4bM1OOTgD/fQIl3YCLdhl3
+wENLHmgU8SYR+x7PQD/yXPYL48w/Cgk=
+=0OBV
+-----END PGP SIGNATURE-----
+
+--gnrypjdevshxh5ih--
