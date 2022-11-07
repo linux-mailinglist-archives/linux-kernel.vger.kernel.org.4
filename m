@@ -2,263 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9899961F46B
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 14:34:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F8FD61F46A
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 14:34:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231294AbiKGNei (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 08:34:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35904 "EHLO
+        id S231793AbiKGNeb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 08:34:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231867AbiKGNed (ORCPT
+        with ESMTP id S231361AbiKGNe3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 08:34:33 -0500
-Received: from wnew2-smtp.messagingengine.com (wnew2-smtp.messagingengine.com [64.147.123.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D873B15813
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 05:34:32 -0800 (PST)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailnew.west.internal (Postfix) with ESMTP id 2E60E2B06702;
-        Mon,  7 Nov 2022 08:34:27 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Mon, 07 Nov 2022 08:34:32 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1667828066; x=1667835266; bh=euMdwanfMk
-        OYDEpc4wB0uixBbNEYF5sJFd9/UJyNdCY=; b=bkw76/u5ZYZbQahAvsPYoo8IQG
-        LcHGuGHIXi8HCjhw4OYcAWT30Ol0Wn+jYP1l44qbVRmgLwmDnhosZ3uA6uNjhQjL
-        ioJEgtTKYzh1M+2NZq1JoCcj1onDGF0TH5WP7U+0cjtS0kzx+hvVlia8GUf72U0x
-        RvMmk31Q77Uivz75wkgFhyZZj7ohYiKbQZ2hREYhZrAck2nWG1zN5Ru1+EVS5g97
-        LxqEj6CfzUGm3f65dYFQx/JwcNnpdTNQpi+AWw7niXI7QyVGf6ZY38U7zb6EHj4G
-        GBx5vTA5xL45elayXVZ1ZMvRHECSvQwahmDrw23tM/fPWMNrMQsB2AzMrs4A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1667828066; x=1667835266; bh=euMdwanfMkOYDEpc4wB0uixBbNEY
-        F5sJFd9/UJyNdCY=; b=kid7A/lFEMRYdSlRHUAbP10h3b5B6GqzIFwJ7s6gbB0t
-        WpjUg1oMTN9uu/L46ufdrj+GmDdd9IqH4CvLqUeljmmEBdP+YJhMQVxPUCS2BnpI
-        v4Ru9CamYJCnCPTr3hMquRyY/NJTD+xAHKkQ2W2WFuBatXgmHRCkSTLKmFSd75/2
-        k01ShiWOfm0j3nYPSCuBrawztOfFU2j0A7YozMiucrP1nq/04sJkP45VwqUc5QZW
-        ukdMDjH1cPbLpZpr2mHDntcosTrtF9zvvVRlx/Jj+JmdokRLh6qtGk+yhakRF9C7
-        8zrz3V0g8NseHrHsKPA6rjSIGYDr71WT7ky/u694rw==
-X-ME-Sender: <xms:YQlpYzqUzcKBEZzDOlDuLDr1DtGvw8gQ6k2wBZQG4mY0RJSCFXjmig>
-    <xme:YQlpY9pUIt5pX-eq0nd61vIYEpSEv-wNJQ9HDG6RxL-38WBzL56eDiEg6sTkGoL8J
-    lrNqgHoGVz4ZpM4DBI>
-X-ME-Received: <xmr:YQlpYwNVMqmNz1TWP4KnWosubFEZ-Wv8n0D8GKRH0ewQ4tv7UFVq1Tuer4U-V06PR9eq0ZCrqJr-1jp6BWsgR42ROjxVwck-2o6zob05dYpVBA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrvdekgdehfecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvvefukfhfgggtuggjsehgtderredttddunecuhfhrohhmpeforgigihhm
-    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
-    htvghrnhepieehffffvefgiedthfeiieeutdfgffekhfehgfehgfeiuddutdfftdekffeh
-    heevnecuffhomhgrihhnpegsohhothhlihhnrdgtohhmnecuvehluhhsthgvrhfuihiivg
-    eptdenucfrrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggt
-    hh
-X-ME-Proxy: <xmx:YQlpY25QdoDReJ-2Q7rlTZUBzKtioyIRdY2alrAOs5RtHY-uXcXXrQ>
-    <xmx:YQlpYy7XTsQ1rEuGWv1PveGlsKDveYqIBrsoZZ4e7mQOpHFCDDCx0g>
-    <xmx:YQlpY-iOMy6q641PnxcV3EM-5ZPmsncNh2HiEz8AB4cNLJ4aPLcVbQ>
-    <xmx:YglpYxa0h_DI8UuAJa5L-oZODorTkrwsRbenBhcQSAdI8QJ9V2n0aTLaY2g>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 7 Nov 2022 08:34:25 -0500 (EST)
-Date:   Mon, 7 Nov 2022 14:34:23 +0100
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Noralf =?utf-8?Q?Tr=C3=B8nnes?= <noralf@tronnes.org>
-Cc:     Karol Herbst <kherbst@redhat.com>, Emma Anholt <emma@anholt.net>,
-        Ben Skeggs <bskeggs@redhat.com>, Chen-Yu Tsai <wens@csie.org>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Lyude Paul <lyude@redhat.com>, linux-sunxi@lists.linux.dev,
-        intel-gfx@lists.freedesktop.org,
-        Phil Elwell <phil@raspberrypi.com>,
-        linux-arm-kernel@lists.infradead.org,
-        nouveau@lists.freedesktop.org, Hans de Goede <hdegoede@redhat.com>,
-        Dom Cobley <dom@raspberrypi.com>,
-        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
-        dri-devel@lists.freedesktop.org,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Subject: Re: [PATCH v6 14/23] drm/modes: Properly generate a drm_display_mode
- from a named mode
-Message-ID: <20221107133423.o344y4cb5zxpyrm4@houat>
-References: <20220728-rpi-analog-tv-properties-v6-0-e7792734108f@cerno.tech>
- <20220728-rpi-analog-tv-properties-v6-14-e7792734108f@cerno.tech>
- <0a748a39-a387-5bdb-ffc8-6cc6593b56e7@tronnes.org>
+        Mon, 7 Nov 2022 08:34:29 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E9B86242
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 05:34:28 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id b3so16782012lfv.2
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 05:34:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=vdz+1Q7zBiRW6MF3qhB7WV4Qg0sOEM6CF8MdyibKzIg=;
+        b=ZqcfiCwwWO1bfGxaW+NajK7Ah+0AkL6zpxSFjpBZFKO/maY69WkC/T2O3p/Tn/WjMH
+         cklt7vc97aY090LnP49+TE7qz/nTsbsOTi2OIf9mpPLcpwnIrhcjXDxShflGXDqYTORn
+         a4hTVFOp6T58XWb4NtCn0BwCKci62yTUqpoC+sHKS/ofuk1AiJS78L4lV+YQIWX6kDKH
+         K2QsA96zTowh5Jgon3MJf8mSIUBx4Q4IH7iVo6oojVVoI9DbH3lO3CVeWtrDsUDr4KW0
+         NWVtS2BoI8/fYsE1zU9XV4UY6yRaCMCYHTydWLwkjrwVHryAUz2JAx7oKOECRRoIQast
+         M7xw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=vdz+1Q7zBiRW6MF3qhB7WV4Qg0sOEM6CF8MdyibKzIg=;
+        b=UBlwMReQ29gCHSC58t+DTD2lwl6see6hnIwcia+NdfeLfTI5xwbnd+PCd4oBHokR/y
+         V0Tf7JGamNXG4fROfTrNkYz/e0jSOz393MGSIV+eaKFr0DajQHR+v9r9JUu+DL2MvmpQ
+         kvW8MJ3yFpFgFQyEXl3U4i/aZDyFdXbEbyHWn+4nRh7gLMHmUEEcNu4KCNPggQ1CmoFV
+         LydY9k+f9dhJvnkBknQCi+Q7TjX5hy4HMeZbtmQTVQdtV+1HpE455/KCpYiy50sHRD9n
+         s6xSjrfgWdQOnL50tA7VNSelQqzafGge0D0MydODZUC4WKi3VE3J52YfBxJFgSNStlqJ
+         8cPQ==
+X-Gm-Message-State: ANoB5plEr1RTDIpRXQJZRDcMcj2A79BE5GveYHBw6SHAOWdwTJCD9GIZ
+        mjUcQ6TrkZcV13NCzC1Fk4sApQ==
+X-Google-Smtp-Source: AA0mqf7Or3CcEibqyWEIh2bUM8AoblrV6X1Yf77y41Fbgy2z6wfFhhTpXR7/I0nZJPSrix0ZbST8wA==
+X-Received: by 2002:ac2:4642:0:b0:4b3:e507:695e with SMTP id s2-20020ac24642000000b004b3e507695emr541281lfo.256.1667828066537;
+        Mon, 07 Nov 2022 05:34:26 -0800 (PST)
+Received: from [192.168.0.20] (088156142199.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.199])
+        by smtp.gmail.com with ESMTPSA id bi39-20020a0565120ea700b00492e3a8366esm1246878lfb.9.2022.11.07.05.34.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 07 Nov 2022 05:34:25 -0800 (PST)
+Message-ID: <8b547e46-04a4-6410-8394-70b9ea0c638b@linaro.org>
+Date:   Mon, 7 Nov 2022 14:34:24 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="skctp4fj6rxepcpb"
-Content-Disposition: inline
-In-Reply-To: <0a748a39-a387-5bdb-ffc8-6cc6593b56e7@tronnes.org>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH V2 1/3] dt-bindings: arm: ti: Add binding for AM68 SK
+Content-Language: en-US
+To:     Sinthu Raja <sinthu.raja@mistralsolutions.com>,
+        Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Vignesh Raghavendra <vigneshr@ti.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Sinthu Raja <sinthu.raja@ti.com>
+References: <20221107123852.8063-1-sinthu.raja@ti.com>
+ <20221107123852.8063-2-sinthu.raja@ti.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221107123852.8063-2-sinthu.raja@ti.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 07/11/2022 13:38, Sinthu Raja wrote:
+> From: Sinthu Raja <sinthu.raja@ti.com>
+> 
+> AM68 Starter Kit is a low cost, small form factor board designed for
+> TI's AM68 SoC which is optimized to provide best in class performance
+> for industrial applications and add binding for the same.
+> 
+> Signed-off-by: Sinthu Raja <sinthu.raja@ti.com>
+> ---
 
---skctp4fj6rxepcpb
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Sat, Nov 05, 2022 at 06:50:30PM +0100, Noralf Tr=F8nnes wrote:
-> Den 26.10.2022 17.33, skrev maxime@cerno.tech:
-> > The framework will get the drm_display_mode from the drm_cmdline_mode it
-> > got by parsing the video command line argument by calling
-> > drm_connector_pick_cmdline_mode().
-> >=20
-> > The heavy lifting will then be done by the drm_mode_create_from_cmdline=
-_mode()
-> > function.
-> >=20
-> > In the case of the named modes though, there's no real code to make that
-> > translation and we rely on the drivers to guess which actual display mo=
-de
-> > we meant.
-> >=20
-> > Let's modify drm_mode_create_from_cmdline_mode() to properly generate t=
-he
-> > drm_display_mode we mean when passing a named mode.
-> >=20
-> > Signed-off-by: Maxime Ripard <maxime@cerno.tech>
-> >=20
-> > ---
-> > Changes in v6:
-> > - Fix get_modes to return 0 instead of an error code
-> > - Rename the tests to follow the DRM test naming convention
-> >=20
-> > Changes in v5:
-> > - Switched to KUNIT_ASSERT_NOT_NULL
-> > ---
-> >  drivers/gpu/drm/drm_modes.c                     | 34 ++++++++++-
-> >  drivers/gpu/drm/tests/drm_client_modeset_test.c | 77 +++++++++++++++++=
-+++++++-
-> >  2 files changed, 109 insertions(+), 2 deletions(-)
-> >=20
-> > diff --git a/drivers/gpu/drm/drm_modes.c b/drivers/gpu/drm/drm_modes.c
-> > index dc037f7ceb37..85aa9898c229 100644
-> > --- a/drivers/gpu/drm/drm_modes.c
-> > +++ b/drivers/gpu/drm/drm_modes.c
-> > @@ -2497,6 +2497,36 @@ bool drm_mode_parse_command_line_for_connector(c=
-onst char *mode_option,
-> >  }
-> >  EXPORT_SYMBOL(drm_mode_parse_command_line_for_connector);
-> > =20
-> > +static struct drm_display_mode *drm_named_mode(struct drm_device *dev,
-> > +					       struct drm_cmdline_mode *cmd)
-> > +{
-> > +	struct drm_display_mode *mode;
-> > +	unsigned int i;
-> > +
-> > +	for (i =3D 0; i < ARRAY_SIZE(drm_named_modes); i++) {
-> > +		const struct drm_named_mode *named_mode =3D &drm_named_modes[i];
-> > +
-> > +		if (strcmp(cmd->name, named_mode->name))
-> > +			continue;
-> > +
-> > +		if (!named_mode->tv_mode)
-> > +			continue;
-> > +
-> > +		mode =3D drm_analog_tv_mode(dev,
-> > +					  named_mode->tv_mode,
-> > +					  named_mode->pixel_clock_khz * 1000,
-> > +					  named_mode->xres,
-> > +					  named_mode->yres,
-> > +					  named_mode->flags & DRM_MODE_FLAG_INTERLACE);
-> > +		if (!mode)
-> > +			return NULL;
-> > +
-> > +		return mode;
-> > +	}
-> > +
-> > +	return NULL;
-> > +}
-> > +
-> >  /**
-> >   * drm_mode_create_from_cmdline_mode - convert a command line modeline=
- into a DRM display mode
-> >   * @dev: DRM device to create the new mode for
-> > @@ -2514,7 +2544,9 @@ drm_mode_create_from_cmdline_mode(struct drm_devi=
-ce *dev,
-> >  	if (cmd->xres =3D=3D 0 || cmd->yres =3D=3D 0)
-> >  		return NULL;
-> > =20
-> > -	if (cmd->cvt)
-> > +	if (strlen(cmd->name))
-> > +		mode =3D drm_named_mode(dev, cmd);
->=20
-> I'm trying to track how this generated mode fits into to it all and
-> AFAICS if the connector already supports a mode with the same xres/yres
-> as the named mode, the named mode will never be created because of the
-> check at the beginning of drm_helper_probe_add_cmdline_mode(). It will
-> just mark the existing mode with USERDEF and return.
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Yep, you're right
+Best regards,
+Krzysztof
 
-> If the connector doesn't already support a mode with such a resolution
-> it will be created, but should we do that? If the driver supported such
-> a mode it would certainly already have added it to the mode list,
-> wouldn't it? After all it's just 2 variants NTSC and PAL.
-
-I wasn't so sure about this part. I think it's still benefitial because
-some users (Geert at least has expressed that need) might want a smaller
-mode than 480i/576i, whereas the driver is realistically only going to
-register those two.
-
-So creating that mode if it isn't declared seems to have value to some.
-
-> We have this in drm_client_modeset.c:drm_connector_pick_cmdline_mode():
->=20
-> 	list_for_each_entry(mode, &connector->modes, head) {
-> 		/* Check (optional) mode name first */
-> 		if (!strcmp(mode->name, cmdline_mode->name))
-> 			return mode;
->=20
-> Here it looks like the named mode thing is a way to choose a mode, not
-> to add one.
->=20
-> I couldn't find any documentation on how named modes is supposed to
-> work, have you seen any?
-
-Eh, I guess I'm to blame for that :)
-
-Named modes are really only about the command-line name. The way it was
-initially introduced was pretty much to only pass down the name to
-drivers for them to figure it out, like we've been doing in sun4i:
-
-https://elixir.bootlin.com/linux/latest/source/drivers/gpu/drm/sun4i/sun4i_=
-tv.c#L292
-
-It wasn't really working, especially because the userspace pretty much
-ignores it. One of the point of this series is to create a proper mode
-(and state, really) from the name passed on the command line so that
-drivers don't have to behave any different from usual, and userspace can
-be involved there too.
-
-Maxime
-
---skctp4fj6rxepcpb
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCY2kJXwAKCRDj7w1vZxhR
-xXK+AQDbZjS2J5WC2ceGRjMPlRP+aZSBzWDC5fwiCGIaR3oGigEA5D4seApvXZv1
-QLznHu/XaZfYUQXUOM6K43F6nknfDQI=
-=HyxE
------END PGP SIGNATURE-----
-
---skctp4fj6rxepcpb--
