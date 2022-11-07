@@ -2,51 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6905D61FA78
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 17:50:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50A0E61FA81
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 17:51:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232873AbiKGQuc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 11:50:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43380 "EHLO
+        id S232854AbiKGQvV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 11:51:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232690AbiKGQuJ (ORCPT
+        with ESMTP id S232748AbiKGQvG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 11:50:09 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A226E20BFE;
-        Mon,  7 Nov 2022 08:50:08 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5ED08B815D5;
-        Mon,  7 Nov 2022 16:50:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D3E2C4347C;
-        Mon,  7 Nov 2022 16:50:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667839806;
-        bh=9HGMZvb82sypIRoPvUis/kF/0CFkMhQKBGHkFijQToc=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nPectMM1/5QJ1zmK7cZ7bFJgbJp7443q6YznAqCicO+0SL7aIL9Ou2v5xPpXfmSAr
-         0t3jEcSv68Hquf8wJKa8BFtg1tdZKx+GZV+3JQksHxTobX2UIy36CKcbe8WB6mSjHX
-         LVA0JKqVZ7dGy7I5p6DnZ+XgB1Y9bUONIy2kwYw0Z5WNEng7FgZzKdSsSjdNP7AeyE
-         HAwkI+upl+9Z3udy7DsKPi72rtgbiRJ4XxS1eDPBrlIch1b3WYrELHSZ/i7k5X3yLV
-         vvV0sSmOfuqImb6yC++5lvOQ338tCW1j8ooYAfkAQRvzrhqoxYrCDMdoXC1XvfP21k
-         QbWp0n7zkh3Kg==
-From:   SeongJae Park <sj@kernel.org>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Shuah Khan <shuah@kernel.org>, damon@lists.linux.dev,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, SeongJae Park <sj@kernel.org>
-Subject: [PATCH v2 2/2] selftests/damon: test non-context inputs to rm_contexts file
-Date:   Mon,  7 Nov 2022 16:50:01 +0000
-Message-Id: <20221107165001.5717-3-sj@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221107165001.5717-1-sj@kernel.org>
-References: <20221107165001.5717-1-sj@kernel.org>
+        Mon, 7 Nov 2022 11:51:06 -0500
+Received: from relmlie6.idc.renesas.com (relmlor2.renesas.com [210.160.252.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4405823E81;
+        Mon,  7 Nov 2022 08:50:40 -0800 (PST)
+X-IronPort-AV: E=Sophos;i="5.96,145,1665414000"; 
+   d="scan'208";a="141793940"
+Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
+  by relmlie6.idc.renesas.com with ESMTP; 08 Nov 2022 01:50:40 +0900
+Received: from mulinux.home (unknown [10.226.92.51])
+        by relmlir5.idc.renesas.com (Postfix) with ESMTP id 2CAFB40078CD;
+        Tue,  8 Nov 2022 01:50:35 +0900 (JST)
+From:   Fabrizio Castro <fabrizio.castro.jz@renesas.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Wolfram Sang <wsa@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        Biju Das <biju.das@bp.renesas.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Jacopo Mondi <jacopo@jmondi.org>
+Subject: [PATCH v2 0/2] Fix r9a09g011 specific I2C compatible string
+Date:   Mon,  7 Nov 2022 16:50:25 +0000
+Message-Id: <20221107165027.54150-1-fabrizio.castro.jz@renesas.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-1.9 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,56 +49,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There was a bug[1] that triggered by writing non-context DAMON debugfs
-file names to the 'rm_contexts' DAMON debugfs file.  Add a selftest for
-the bug to avoid it happen again.
+Dear All,
 
-[1] https://lore.kernel.org/damon/000000000000ede3ac05ec4abf8e@google.com/
+The preferred form for Renesas' compatible strings is:
+"<vendor>,<family>-<module>"
 
-Signed-off-by: SeongJae Park <sj@kernel.org>
----
- tools/testing/selftests/damon/Makefile        |  1 +
- .../damon/debugfs_rm_non_contexts.sh          | 19 +++++++++++++++++++
- 2 files changed, 20 insertions(+)
- create mode 100755 tools/testing/selftests/damon/debugfs_rm_non_contexts.sh
+Somehow the compatible string for the r9a09g011 I2C IP was upstreamed
+as renesas,i2c-r9a09g011 instead of renesas,r9a09g011-i2c, which
+is really confusing, especially considering the generic fallback
+is renesas,rzv2m-i2c.
 
-diff --git a/tools/testing/selftests/damon/Makefile b/tools/testing/selftests/damon/Makefile
-index af490acc5348..838a8e49f77b 100644
---- a/tools/testing/selftests/damon/Makefile
-+++ b/tools/testing/selftests/damon/Makefile
-@@ -7,6 +7,7 @@ TEST_FILES = _chk_dependency.sh _debugfs_common.sh
- TEST_PROGS = debugfs_attrs.sh debugfs_schemes.sh debugfs_target_ids.sh
- TEST_PROGS += debugfs_empty_targets.sh debugfs_huge_count_read_write.sh
- TEST_PROGS += debugfs_duplicate_context_creation.sh
-+TEST_PROGS += debugfs_rm_non_contexts.sh
- TEST_PROGS += sysfs.sh
- TEST_PROGS += reclaim.sh lru_sort.sh
- 
-diff --git a/tools/testing/selftests/damon/debugfs_rm_non_contexts.sh b/tools/testing/selftests/damon/debugfs_rm_non_contexts.sh
-new file mode 100755
-index 000000000000..48b7af6b022c
---- /dev/null
-+++ b/tools/testing/selftests/damon/debugfs_rm_non_contexts.sh
-@@ -0,0 +1,19 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+
-+source _debugfs_common.sh
-+
-+# Test putting non-ctx files/dirs to rm_contexts file
-+# ===================================================
-+
-+dmesg -C
-+
-+for file in "$DBGFS/"*
-+do
-+	echo "$(basename "$f")" > "$DBGFS/rm_contexts"
-+	if dmesg | grep -q BUG
-+	then
-+		dmesg
-+		exit 1
-+	fi
-+done
+Since it's early days for r9a09g011.dtsi, and compatible
+renesas,i2c-r9a09g011 isn't being actively used at the moment,
+I think it's safe to change to make compatible strings less
+confusing.
+
+v2 - Improved changelogs
+
+Thanks,
+Fab
+Fabrizio Castro (2):
+  dt-bindings: i2c: renesas,rzv2m: Fix SoC specific string
+  arm64: dts: renesas: r9a09g011: Fix I2C SoC specific strings
+
+ Documentation/devicetree/bindings/i2c/renesas,rzv2m.yaml | 4 ++--
+ arch/arm64/boot/dts/renesas/r9a09g011.dtsi               | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
 -- 
-2.25.1
+2.34.1
 
