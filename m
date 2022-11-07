@@ -2,94 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2013061F4E8
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 15:00:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B921961F4EC
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 15:02:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230507AbiKGOAy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 09:00:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47988 "EHLO
+        id S231821AbiKGOCh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 09:02:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232217AbiKGOA1 (ORCPT
+        with ESMTP id S229638AbiKGOCd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 09:00:27 -0500
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 348C763A8;
-        Mon,  7 Nov 2022 06:00:23 -0800 (PST)
-Received: (Authenticated sender: herve.codina@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPA id 2F6264000C;
-        Mon,  7 Nov 2022 14:00:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1667829622;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=mN6bMISN8/quik0hVN/Gi0mi4nBwMPhsvIb81fONIic=;
-        b=fIGwx3ckq2fKf8XeucWm++XpjTJiYkDBQ5cFSyUp51u8xFmwF9X1kfh2G0VvHNeVi5k7uk
-        t15D4Q4fqQ1/Kw+u5YMNy8hXTJLZl0wYK0X3vRaVuMkzbXMuc3z7k+59XbB36EoYxKh8Hq
-        fJspvhdiWfFl4HDsEP62TRTFCK4DTMc4NpeJXM37j8GEyav4JqNAX5Pu5gXLaFkt9CosQd
-        NA4mBWrXml62FAIZ/9zYlbyIiUf3xpCH++RAUCo7xZk8opqjLJM5uKprteGWAuCN6JOmR8
-        eOkE4Qpg3CP6x44G44fjaP809DCHQcr5AZIO1HU8KWXI+6e27J9YWfJN+UU7ZA==
-From:   Herve Codina <herve.codina@bootlin.com>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Herve Codina <herve.codina@bootlin.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Gareth Williams <gareth.williams.jx@renesas.com>
-Cc:     linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>
-Subject: [PATCH 7/7] MAINTAINERS: add the Renesas RZ/N1 USBF controller entry
-Date:   Mon,  7 Nov 2022 14:58:25 +0100
-Message-Id: <20221107135825.583877-8-herve.codina@bootlin.com>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221107135825.583877-1-herve.codina@bootlin.com>
-References: <20221107135825.583877-1-herve.codina@bootlin.com>
+        Mon, 7 Nov 2022 09:02:33 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 539562D5
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 06:02:32 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C6B14B811B3
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 14:02:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71C66C4314A
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 14:02:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667829749;
+        bh=zpEewj5MVZ9bJoL7Xyycxj043AlHeiHMJ1ICTR3y2NY=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=pRZyW4UC7Ll6EfhjsbK2sIj0ikxPuum4Ko0AFlkCmugkQ/nuOe3IuDU6f8P+OSUl1
+         Z8bM1GtcXmd2J73yD5qM7pUd6iRXB47W7Tp5xThpcYEqXk/z9x6cMA/Mq0DsO8wl36
+         K8M8aejSY+kOhw+CpvJxPU0mvKr/Hu+19q2RNLZT+5psj5nyMiBZ398WhfplP2vVFx
+         F0xfAzys7foBtOXggxlJGKl+wysv6IG/oXVvftlVaU8EZgH6KDRCVsl771ZkyumRL1
+         IhpH68FqqTqCVe4dDG0j4MQfJAcCrmJ0RuxatsKsd4tbn1dR7/NpKkEBwPh5kj3jst
+         eDGd0comBLbyg==
+Received: by mail-yb1-f177.google.com with SMTP id g127so13693562ybg.8
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 06:02:29 -0800 (PST)
+X-Gm-Message-State: ACrzQf1Br9o11MeGKew0XabNFl+SVHv0E/wyBCrvnKn2dIW1zJh/dDm7
+        ec7KxSAagMfuVtmnQK2DvgET/LRbUgbC7OKiWyE=
+X-Google-Smtp-Source: AMsMyM5LwoynkPx1YgLfmCY0hq4wGMOnnRu54M0d8kjmNIi1lWDudU/pHVKjj0vORMrz7+eEz3Io0Wz53F1fu2OMj3E=
+X-Received: by 2002:a05:6902:152:b0:6ca:8fa:105b with SMTP id
+ p18-20020a056902015200b006ca08fa105bmr49184993ybh.550.1667829748282; Mon, 07
+ Nov 2022 06:02:28 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221102203405.1797491-1-ogabbay@kernel.org> <20221102203405.1797491-2-ogabbay@kernel.org>
+ <Y2MMCIe5wND2XPqE@kroah.com> <CAFCwf13uLj=P6u6FAcY8M5qAXoaBdb+Ha-TYj0j2FAZnFAPFYg@mail.gmail.com>
+ <CAFCwf12yRUG4593ozJMEwaaJBKyWqXTTCjef9O_fzWdQBxVrtw@mail.gmail.com>
+ <Y2kAcCu4z2LUMN7u@nvidia.com> <CAFCwf10K-dTu455QfOK8i6thismY-FUN2Rws830EGiqOcGWFgA@mail.gmail.com>
+ <Y2kDzPswkKyZyRpS@nvidia.com>
+In-Reply-To: <Y2kDzPswkKyZyRpS@nvidia.com>
+From:   Oded Gabbay <ogabbay@kernel.org>
+Date:   Mon, 7 Nov 2022 16:02:01 +0200
+X-Gmail-Original-Message-ID: <CAFCwf10A=-bj2nR8WasNxyQQ07D24Je04tzKxqv2X_XnA0BUSQ@mail.gmail.com>
+Message-ID: <CAFCwf10A=-bj2nR8WasNxyQQ07D24Je04tzKxqv2X_XnA0BUSQ@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 1/3] drivers/accel: define kconfig and register a
+ new major
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Arnd Bergmann <arnd@arndb.de>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        John Hubbard <jhubbard@nvidia.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>,
+        Jiho Chu <jiho.chu@samsung.com>,
+        Daniel Stone <daniel@fooishbar.org>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Jeffrey Hugo <quic_jhugo@quicinc.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>,
+        Maciej Kwapulinski <maciej.kwapulinski@linux.intel.com>,
+        stanislaw.gruszka@intel.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After contributing the driver, add myself as the maintainer
-for Renesas RZ/N1 USBF controller.
+On Mon, Nov 7, 2022 at 3:10 PM Jason Gunthorpe <jgg@nvidia.com> wrote:
+>
+> On Mon, Nov 07, 2022 at 03:01:08PM +0200, Oded Gabbay wrote:
+> > I don't agree with your statement that it should be "a layer over top of DRM".
+> > Anything on top of DRM is a device driver.
+> > Accel is not a device driver, it is a new type of drm minor / drm driver.
+>
+> Yeah, I still think this is not the right way, you are getting almost
+> nothing from DRM and making everything more complicated in the
+> process.
+>
+> > The only alternative imo to that is to abandon the idea of reusing
+> > drm, and just make an independant accel core code.
+>
+> Not quite really, layer it properly and librarize parts of DRM into
+> things accel can re-use so they are not intimately tied to the DRM
+> struct device notion.
+>
+> IMHO this is much better, because accel has very little need of DRM to
+> manage a struct device/cdev in the first place.
+>
+> Jason
+I'm not following. How can an accel device be a new type of drm_minor,
+if it doesn't have access to all its functions and members ?
+How will accel device leverage, for example, the GEM code without
+being a drm_minor ?
 
-Signed-off-by: Herve Codina <herve.codina@bootlin.com>
----
- MAINTAINERS | 8 ++++++++
- 1 file changed, 8 insertions(+)
+Librarizing parts of DRM sounds nice in theory but the reality is that
+everything there is interconnected, all the structures are
+interdependent.
+I would have to re-write the entire DRM library to make such a thing
+work. I don't think this was the intention.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 379945f82a64..9ccac3275a88 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -17627,6 +17627,14 @@ S:	Maintained
- F:	Documentation/devicetree/bindings/rtc/renesas,rzn1-rtc.yaml
- F:	drivers/rtc/rtc-rzn1.c
- 
-+RENESAS RZ/N1 USBF CONTROLLER DRIVER
-+M:	Herve Codina <herve.codina@bootlin.com>
-+L:	linux-renesas-soc@vger.kernel.org
-+L:	linux-usb@vger.kernel.org
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/usb/renesas,usbf.yaml
-+F:	drivers/usb/gadget/udc/renesas_usbf.c
-+
- RENESAS R-CAR GEN3 & RZ/N1 NAND CONTROLLER DRIVER
- M:	Miquel Raynal <miquel.raynal@bootlin.com>
- L:	linux-mtd@lists.infradead.org
--- 
-2.37.3
+The current design makes the accel device an integral part of drm,
+with very minimal code duplication and without re-writing DRM.
 
+Oded
