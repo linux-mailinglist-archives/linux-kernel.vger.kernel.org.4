@@ -2,145 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C587361F250
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 13:01:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5554461F254
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 13:03:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231193AbiKGMA5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 07:00:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33096 "EHLO
+        id S231600AbiKGMCc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 07:02:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231993AbiKGMAs (ORCPT
+        with ESMTP id S231995AbiKGMCS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 07:00:48 -0500
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49D891AD81
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 04:00:47 -0800 (PST)
-Received: by mail-wr1-x42f.google.com with SMTP id l14so15870647wrw.2
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 04:00:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=zWvz8bh4+vQKDNdPBDvtEEjozaiA8NxpItsV7tm0Qy0=;
-        b=RM2XZktvK25OAmJHVCsqxExlx2YDb8taU5jJP6p51IieAMAC7rVqfwilaQF7Xqqe3G
-         UwMWWVo3jrRu5oK/J3jJN4bG6MrzlcwfXbL/gDA98pemG49BzKD6bgFyow0xVV6hIC4N
-         cf6zx1TH/gu3ilDDICAD4lfW6uErG3Aj8PE+aPiMsDZzvwiNA5Y84Nf0p0SZtWeekrp2
-         3qdK1/twOpDLX49v/t/ybYncTBiauIlLPODLWk6KsnXmtK/KZ/QbdXqSQ3r7uxN3WAvW
-         bCAtytlDiReH1KhZkxHPGBBrCC7+BrOifMA+vx31z4AXM6SLhrkDGFn6tpeXsfo6CyjO
-         Ug9w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zWvz8bh4+vQKDNdPBDvtEEjozaiA8NxpItsV7tm0Qy0=;
-        b=tYoC/927TX6WsEB4G3zK/cUaYWk7+ODj4ccXwjx/8px0u7DVI9w0mq7Zg/d2ZSOKHF
-         AxymfF1n5cXMhGHCYT9oY18vh0RKS+V1Px2/IlQ23Xlu4aaGLwcgFG2ChQIEJm0hK+h9
-         Wrjy5tXQSyXjBuIYu7l5FyjLWAOLWYu9W1V8jnTV8cbI38OVCDCJal476x4umHwfsvaC
-         GLVdn4dz+LeAhyeLHKBK5eiL4NqKQ6B4JK0nry5j7UShXtLf1UKMs4VbrbSQpnne9pLJ
-         26kYWaW0z/XAqjXWHdfWt4KTR98lioagweoN7olYrPpeam8S37IwNFie6DlJE0fiRbbg
-         oM6g==
-X-Gm-Message-State: ACrzQf2imc50rsFtgYfN+KTqqUY1cfjSrqBhP8a4L0oBL6iDj4YoNhRB
-        rsomCO6Aj68K2uGFzjA8fi48Iw==
-X-Google-Smtp-Source: AMsMyM59k115pH9o+6WIgEa9CaPh3ktLnt7NSnldWl3F1VAmeY4BCiQWWWW9a39fkvnQOQN6hJYR7A==
-X-Received: by 2002:adf:e241:0:b0:238:3c64:decc with SMTP id bl1-20020adfe241000000b002383c64deccmr15833238wrb.698.1667822445787;
-        Mon, 07 Nov 2022 04:00:45 -0800 (PST)
-Received: from ?IPV6:2a02:6b6a:b4d7:0:ebf7:de38:f6bc:8fe8? ([2a02:6b6a:b4d7:0:ebf7:de38:f6bc:8fe8])
-        by smtp.gmail.com with ESMTPSA id g2-20020a5d4882000000b00236cb3fec8fsm8600966wrq.9.2022.11.07.04.00.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Nov 2022 04:00:45 -0800 (PST)
-Message-ID: <180b91af-a2aa-2cfd-eb7f-b2825c4e3dbe@bytedance.com>
-Date:   Mon, 7 Nov 2022 12:00:44 +0000
+        Mon, 7 Nov 2022 07:02:18 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E27B91AD87
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 04:02:16 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8B40CB81094
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 12:02:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31D2FC43470
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 12:02:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667822534;
+        bh=sMrVEIn/6RFB5zzer5oz4OA0rD8Fs/O31fttuhh2ODI=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=A+IsNmCCXPx77cjN8lAbm0Dlf8bwhj4P+kc4hkZwAcTEhv3+vexmH2jV9K2WpihAi
+         lCF8/iEik17YKNgKWm/9r67c3T5uufyhwgbfCiG1RKGCv+bIL5mMfDcLiej98K0Tta
+         YgvqClDYDYe+4dJEulVVMUr+ezuFvMDta0IV9zricBmogcIsMpkOHM4mnwDbdsCc9A
+         SO6DqtsYK+0OplfyqImRtnsNg7q17g03VuampXlgejeODv7f8OsPIe1btkpD//pOsM
+         WV6VGosHD6jxJjYSexEoasu+vq9M8TU4AUT1t3Yi7twM5TWOTeHcAM29jZBe/fC2FZ
+         pTR5RWUtERPAQ==
+Received: by mail-lf1-f47.google.com with SMTP id be13so16432775lfb.4
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 04:02:14 -0800 (PST)
+X-Gm-Message-State: ACrzQf3TiElDu1TuUXZgP+IIVdSTNALy/T7TXdgFpZbbzoNDZsWWEZVS
+        N1/ggmzq84HjDSs1S1N87VnbbJcCFs1dkb+hC/I=
+X-Google-Smtp-Source: AMsMyM6+E+32jdFkc+LUViYKxp7Bf55P8TksZfxa7MpXuoyBTXfc0PbhVTfOVwlYjKTJgx+PeZHeEzDWtRRWNkvdF0s=
+X-Received: by 2002:ac2:4c47:0:b0:4a2:c07b:4b62 with SMTP id
+ o7-20020ac24c47000000b004a2c07b4b62mr16704586lfk.426.1667822532193; Mon, 07
+ Nov 2022 04:02:12 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [External] Re: [v2 0/6] KVM: arm64: implement vcpu_is_preempted
- check
-Content-Language: en-US
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        kvmarm@lists.cs.columbia.edu, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, linux@armlinux.org.uk,
-        yezengruan@huawei.com, catalin.marinas@arm.com, will@kernel.org,
-        steven.price@arm.com, mark.rutland@arm.com, bagasdotme@gmail.com,
-        fam.zheng@bytedance.com, liangma@liangbit.com,
-        punit.agrawal@bytedance.com
-References: <20221104062105.4119003-1-usama.arif@bytedance.com>
- <87k048f3cm.wl-maz@kernel.org>
-From:   Usama Arif <usama.arif@bytedance.com>
-In-Reply-To: <87k048f3cm.wl-maz@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20221107114850.2902150-1-anshuman.khandual@arm.com>
+In-Reply-To: <20221107114850.2902150-1-anshuman.khandual@arm.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Mon, 7 Nov 2022 13:02:00 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXF2NyZS7cWiZiPBuySdFnpB_gcHa4KXieje4_G1-zCmog@mail.gmail.com>
+Message-ID: <CAMj1kXF2NyZS7cWiZiPBuySdFnpB_gcHa4KXieje4_G1-zCmog@mail.gmail.com>
+Subject: Re: [PATCH V2] arm64/mm: Simplify and document pte_to_phys() for 52
+ bit addresses
+To:     Anshuman Khandual <anshuman.khandual@arm.com>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Mark Brown <broonie@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello Anshuman,
 
+On Mon, 7 Nov 2022 at 12:49, Anshuman Khandual
+<anshuman.khandual@arm.com> wrote:
+>
+> pte_to_phys() assembly definition does multiple bits field transformations
+> to derive physical address, embedded inside a page table entry. Unlike its
+> C counter part i.e __pte_to_phys(), pte_to_phys() is not very apparent. It
+> simplifies these operations via a new macro PTE_ADDR_HIGH_SHIFT indicating
+> how far the pte encoded higher address bits need to be left shifted. While
+> here, this also updates __pte_to_phys() and __phys_to_pte_val().
+>
+> Cc: Catalin Marinas <catalin.marinas@arm.com>
+> Cc: Will Deacon <will@kernel.org>
+> Cc: Mark Brown <broonie@kernel.org>
+> Cc: Mark Rutland <mark.rutland@arm.com>
+> Cc: Ard Biesheuvel <ardb@kernel.org>
+> Cc: linux-arm-kernel@lists.infradead.org
+> Cc: linux-kernel@vger.kernel.org
+> Suggested-by: Ard Biesheuvel <ardb@kernel.org>
+> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
 
-On 06/11/2022 16:35, Marc Zyngier wrote:
-> On Fri, 04 Nov 2022 06:20:59 +0000,
-> Usama Arif <usama.arif@bytedance.com> wrote:
->>
->> This patchset adds support for vcpu_is_preempted in arm64, which
->> allows the guest to check if a vcpu was scheduled out, which is
->> useful to know incase it was holding a lock. vcpu_is_preempted can
->> be used to improve performance in locking (see owner_on_cpu usage in
->> mutex_spin_on_owner, mutex_can_spin_on_owner, rtmutex_spin_on_owner
->> and osq_lock) and scheduling (see available_idle_cpu which is used
->> in several places in kernel/sched/fair.c for e.g. in wake_affine to
->> determine which CPU can run soonest):
-> 
-> [...]
-> 
->> pvcy shows a smaller overall improvement (50%) compared to
->> vcpu_is_preempted (277%).  Host side flamegraph analysis shows that
->> ~60% of the host time when using pvcy is spent in kvm_handle_wfx,
->> compared with ~1.5% when using vcpu_is_preempted, hence
->> vcpu_is_preempted shows a larger improvement.
-> 
-> And have you worked out *why* we spend so much time handling WFE?
-> 
-> 	M.
+With the nit below fixed, this looks good to me
 
-Its from the following change in pvcy patchset:
+Reviewed-by: Ard Biesheuvel <ardb@kernel.org>
 
-diff --git a/arch/arm64/kvm/handle_exit.c b/arch/arm64/kvm/handle_exit.c
-index e778eefcf214..915644816a85 100644
---- a/arch/arm64/kvm/handle_exit.c
-+++ b/arch/arm64/kvm/handle_exit.c
-@@ -118,7 +118,12 @@ static int kvm_handle_wfx(struct kvm_vcpu *vcpu)
-         }
+> ---
+> This applies on v6.1-rc4
+>
+> Changes in V2:
+>
+> - Added PTE_ADDR_HIGH_SHIFT based method per Ard
+>
+> Changes in V1:
+>
+> https://lore.kernel.org/all/20221031082421.1957288-1-anshuman.khandual@arm.com/
+>
+>  arch/arm64/include/asm/assembler.h     | 8 +++-----
+>  arch/arm64/include/asm/pgtable-hwdef.h | 1 +
+>  arch/arm64/include/asm/pgtable.h       | 4 ++--
+>  3 files changed, 6 insertions(+), 7 deletions(-)
+>
+> diff --git a/arch/arm64/include/asm/assembler.h b/arch/arm64/include/asm/assembler.h
+> index e5957a53be39..6a39a3601cf7 100644
+> --- a/arch/arm64/include/asm/assembler.h
+> +++ b/arch/arm64/include/asm/assembler.h
+> @@ -660,12 +660,10 @@ alternative_endif
+>         .endm
+>
+>         .macro  pte_to_phys, phys, pte
+> -#ifdef CONFIG_ARM64_PA_BITS_52
+> -       ubfiz   \phys, \pte, #(48 - 16 - 12), #16
+> -       bfxil   \phys, \pte, #16, #32
+> -       lsl     \phys, \phys, #16
+> -#else
+>         and     \phys, \pte, #PTE_ADDR_MASK
+> +#ifdef CONFIG_ARM64_PA_BITS_52
+> +       orr \phys, \phys, \phys, lsl #PTE_ADDR_HIGH_SHIFT
+> +       and \phys, \phys, GENMASK_ULL(PHYS_MASK_SHIFT - 1, PAGE_SHIFT)
 
-         if (esr & ESR_ELx_WFx_ISS_WFE) {
--               kvm_vcpu_on_spin(vcpu, vcpu_mode_priv(vcpu));
-+               int state;
-+               while ((state = kvm_pvcy_check_state(vcpu)) == 0)
-+                       schedule();
-+
-+               if (state == -1)
-+                       kvm_vcpu_on_spin(vcpu, vcpu_mode_priv(vcpu));
-         } else {
-                 if (esr & ESR_ELx_WFx_ISS_WFxT)
-                         vcpu_set_flag(vcpu, IN_WFIT);
+Please use tabs between the mnemonics and the arguments.
 
-
-If my understanding is correct of the pvcy changes, whenever pvcy 
-returns an unchanged vcpu state, we would schedule to another vcpu. And 
-its the constant scheduling where the time is spent. I guess the affects 
-are much higher when the lock contention is very high. This can be seem 
-from the pvcy host side flamegraph as well with (~67% of the time spent 
-in the schedule() call in kvm_handle_wfx), For reference, I have put the 
-graph at:
-https://uarif1.github.io/pvlock/perf_host_pvcy_nmi.svg
-
-Thanks,
-Usama
-
-> 
+>  #endif
+>         .endm
+>
+> diff --git a/arch/arm64/include/asm/pgtable-hwdef.h b/arch/arm64/include/asm/pgtable-hwdef.h
+> index 5ab8d163198f..f658aafc47df 100644
+> --- a/arch/arm64/include/asm/pgtable-hwdef.h
+> +++ b/arch/arm64/include/asm/pgtable-hwdef.h
+> @@ -159,6 +159,7 @@
+>  #ifdef CONFIG_ARM64_PA_BITS_52
+>  #define PTE_ADDR_HIGH          (_AT(pteval_t, 0xf) << 12)
+>  #define PTE_ADDR_MASK          (PTE_ADDR_LOW | PTE_ADDR_HIGH)
+> +#define PTE_ADDR_HIGH_SHIFT    36
+>  #else
+>  #define PTE_ADDR_MASK          PTE_ADDR_LOW
+>  #endif
+> diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
+> index 71a1af42f0e8..daedd6172227 100644
+> --- a/arch/arm64/include/asm/pgtable.h
+> +++ b/arch/arm64/include/asm/pgtable.h
+> @@ -77,11 +77,11 @@ extern unsigned long empty_zero_page[PAGE_SIZE / sizeof(unsigned long)];
+>  static inline phys_addr_t __pte_to_phys(pte_t pte)
+>  {
+>         return (pte_val(pte) & PTE_ADDR_LOW) |
+> -               ((pte_val(pte) & PTE_ADDR_HIGH) << 36);
+> +               ((pte_val(pte) & PTE_ADDR_HIGH) << PTE_ADDR_HIGH_SHIFT);
+>  }
+>  static inline pteval_t __phys_to_pte_val(phys_addr_t phys)
+>  {
+> -       return (phys | (phys >> 36)) & PTE_ADDR_MASK;
+> +       return (phys | (phys >> PTE_ADDR_HIGH_SHIFT)) & PTE_ADDR_MASK;
+>  }
+>  #else
+>  #define __pte_to_phys(pte)     (pte_val(pte) & PTE_ADDR_MASK)
+> --
+> 2.25.1
+>
