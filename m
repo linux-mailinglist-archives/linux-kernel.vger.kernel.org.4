@@ -2,507 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A94F361F61B
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 15:33:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DB9F61F620
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 15:34:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231783AbiKGOda convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 7 Nov 2022 09:33:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45252 "EHLO
+        id S232038AbiKGOeS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 09:34:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232517AbiKGOdE (ORCPT
+        with ESMTP id S232481AbiKGOdw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 09:33:04 -0500
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6F9C201A3
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 06:30:52 -0800 (PST)
-Received: from fraeml744-chm.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4N5YWB3b8Dz6H7Gv;
-        Mon,  7 Nov 2022 22:28:38 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
- fraeml744-chm.china.huawei.com (10.206.15.225) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 7 Nov 2022 15:30:50 +0100
-Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Mon, 7 Nov
- 2022 14:30:49 +0000
-Date:   Mon, 7 Nov 2022 14:30:48 +0000
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     Junhao He <hejunhao3@huawei.com>
-CC:     <mathieu.poirier@linaro.org>, <suzuki.poulose@arm.com>,
-        <mike.leach@linaro.org>, <leo.yan@linaro.org>,
-        <john.garry@huawei.com>, <coresight@lists.linaro.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <linuxarm@huawei.com>,
-        <rdunlap@infradead.org>, <liuqi115@huawei.com>,
-        <f.fangjian@huawei.com>, <prime.zeng@hisilicon.com>,
-        <yangyicong@huawei.com>, <shenyang39@huawei.com>
-Subject: Re: [PATCH v11 1/2] drivers/coresight: Add UltraSoc System Memory
- Buffer driver
-Message-ID: <20221107143048.00004da2@Huawei.com>
-In-Reply-To: <20221107130624.59886-2-hejunhao3@huawei.com>
-References: <20221107130624.59886-1-hejunhao3@huawei.com>
-        <20221107130624.59886-2-hejunhao3@huawei.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        Mon, 7 Nov 2022 09:33:52 -0500
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3E286448
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 06:33:32 -0800 (PST)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailout.nyi.internal (Postfix) with ESMTP id 86B975C0176;
+        Mon,  7 Nov 2022 09:33:30 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute1.internal (MEProxy); Mon, 07 Nov 2022 09:33:30 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1667831610; x=
+        1667918010; bh=BjJnberaFPu4tZv9skyQ3hu0t7GFddFpNxu474a2Huk=; b=e
+        rlcKb7LuKGtVk7EOLWHf2CSMjy/mo5HYXjY2eyvC3KWafvHsEoyuwI6I0DP8rBq+
+        ccqmtLctcUbqR09xJUeAQfojmTy4QJkjiymlboPiS3aBSBEGwrd/kloNkgHhHTOP
+        O1sBBuYPgur4eYwfnYN1INwoDlMy/FplF50Yj2cvWXzti5l89gXp73OtJEUPUTZh
+        ji7VypB667afJrnTcThRiW1El6wysDU7crsV6R79VLzs3ekksZRaCsQaE8awiAwM
+        I1hRh8BIE4t3LJhvl6CrZqkPvKstHwuPp1EyT57aZHiPCi8MUt9zxnCHEFAPysDm
+        XUZ39hSLv3t4AKF7K1D/g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1667831610; x=
+        1667918010; bh=BjJnberaFPu4tZv9skyQ3hu0t7GFddFpNxu474a2Huk=; b=f
+        DIw4Kj9pJCHEsqbZDT5gjrT4rPnVMyT40y3XXRHe/0VlqxJPMvn8WpZGmylp/Ggs
+        e/DeJVs2mrU/My2wH/GXqFIr8r4lumoJnJoocizqBQEyqOAYZtKUHPGfakXFHdHJ
+        lvHFFK6357FIT7xA5Qu/rkTvnXnKsKhJkxoRl7imnd2Qo+8I/LppNliPT/o2TAhy
+        7LStb3KXth9bAbXxFRX1gx+mpnCNG/rYVV6QVP6VW/0pNqg9wFg30TXGWnujX2lF
+        nzk118vXWW93UQm/3uA+U+PAClCgtQ/wLuMUosioBOpcErfT4A+VS4ZA775vWhic
+        LcDSpwsH02LX132pRFxrQ==
+X-ME-Sender: <xms:ORdpY8KIty8crBmCcjBFGSZNne55ZaBK1KmxH37zPOoD_7X8lWbuTg>
+    <xme:ORdpY8Ki0cx9pZ_XBCU5NdFH8kKhdvTfed4wVmaWH3SL8qWM3R87mK3xjom5D9glU
+    Qdr1k1Y0x3PtFTSAQ>
+X-ME-Received: <xmr:ORdpY8vwtMsuir4Wgx7nejUuTCZ7x1HrG_iEo_VkDikQBad7_ZP2yQlH8oGrzL4lkdghIj9jNEEUordyBkJ-ZH-hRt6SEff035CDFsh9DAzajGFwi7plqkSAqA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrvdekgdeigecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefkffggfgfuvfevfhfhjggtgfesthejredttdefjeenucfhrhhomhepufgrmhhu
+    vghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecugg
+    ftrfgrthhtvghrnhepkeejleelfeeitdfhtdfgkeeghedufeduueegffdvhfdukeelleef
+    tdetjeehuddtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
+    homhepshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
+X-ME-Proxy: <xmx:ORdpY5ZUaJZ07-rfMmNRyNTmcA4OHd-lzi_4dWP-Y7v1UIRt3X2nEQ>
+    <xmx:ORdpYzaM9hB17RmoSn8tyvgS-F6ZmLoN8NGkqSVQ2EoTYQvGvuEN5A>
+    <xmx:ORdpY1DToFG2c9c1TuZaxvGRLbuljr44qpJQu8Mx90EabNNBGHP74w>
+    <xmx:OhdpY-yBGdmeBY34Ymc_aXbcK6G_cqaKqcvRfLZdyMf7Yr0WyiQdAw>
+Feedback-ID: i0ad843c9:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 7 Nov 2022 09:33:28 -0500 (EST)
+Message-ID: <0fe5680d-a41b-3c03-72a4-1a505788a9cc@sholland.org>
+Date:   Mon, 7 Nov 2022 08:33:27 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 8BIT
-X-Originating-IP: [10.202.227.76]
-X-ClientProxiedBy: lhrpeml100002.china.huawei.com (7.191.160.241) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux ppc64le; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Subject: Re: [PATCH] mfd: axp20x: Do not sleep in the power off handler
+Content-Language: en-US
+To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        Chen-Yu Tsai <wens@csie.org>, Lee Jones <lee@kernel.org>
+Cc:     =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        linux-kernel@vger.kernel.org
+References: <20221105212909.6526-1-samuel@sholland.org>
+ <a3488b0c-dbc7-0109-8ba7-9f319f018e22@collabora.com>
+From:   Samuel Holland <samuel@sholland.org>
+In-Reply-To: <a3488b0c-dbc7-0109-8ba7-9f319f018e22@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 7 Nov 2022 21:06:23 +0800
-Junhao He <hejunhao3@huawei.com> wrote:
-
-> From: Qi Liu <liuqi115@huawei.com>
+On 11/6/22 16:40, Dmitry Osipenko wrote:
+> On 11/6/22 00:29, Samuel Holland wrote:
+>> Since commit 856c288b0039 ("ARM: Use do_kernel_power_off()"), the
+>> function axp20x_power_off() now runs inside a RCU read-side critical
+>> section, so it is not allowed to call msleep(). Use mdelay() instead.
+>>
+>> Fixes: 856c288b0039 ("ARM: Use do_kernel_power_off()")
+>> Signed-off-by: Samuel Holland <samuel@sholland.org>
+>> ---
+>>
+>>  drivers/mfd/axp20x.c | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/mfd/axp20x.c b/drivers/mfd/axp20x.c
+>> index 88a212a8168c..880c41fa7021 100644
+>> --- a/drivers/mfd/axp20x.c
+>> +++ b/drivers/mfd/axp20x.c
+>> @@ -842,7 +842,7 @@ static void axp20x_power_off(void)
+>>  		     AXP20X_OFF);
+>>  
+>>  	/* Give capacitors etc. time to drain to avoid kernel panic msg. */
+>> -	msleep(500);
+>> +	mdelay(500);
+>>  }
+>>  
+>>  int axp20x_match_device(struct axp20x_dev *axp20x)
 > 
-> This patch adds driver for UltraSoc SMB(System Memory Buffer)
-> device. SMB provides a way to buffer messages from ETM, and
-> store these "CPU instructions trace" in system memory.
-> 
-> SMB is developed by UltraSoc technology, which is acquired by
-> Siemens, and we still use "UltraSoc" to name driver.
-> 
-> Signed-off-by: Qi Liu <liuqi115@huawei.com>
-> Signed-off-by: Junhao He <hejunhao3@huawei.com>
-> Tested-by: JunHao He <hejunhao3@huawei.com>
+> ARM was doing local_irq_disable() on power-off before
+> do_kernel_power_off() was introduced, so this should've been incorrect
+> for a couple years at least. If I'm not missing anything.
 
-Hi JunHao,
+Yes, you're right. Then the correct tag is
 
-It's been a while since I last looked at this driver, so I may have
-forgotten or missed previous discussions.
+Fixes: 179dc63d06c5 ("mfd: axp20x: Add a 500ms delay at the end of
+axp20x_power_off")
 
-All the comments inline are fairly superficial and mostly concerned
-with making the code easy to review / maintain rather than correctness.
-
-Jonathan
-
-
-> ---
->  drivers/hwtracing/coresight/Kconfig        |  11 +
->  drivers/hwtracing/coresight/Makefile       |   1 +
->  drivers/hwtracing/coresight/ultrasoc-smb.c | 631 +++++++++++++++++++++
->  drivers/hwtracing/coresight/ultrasoc-smb.h | 113 ++++
->  4 files changed, 756 insertions(+)
->  create mode 100644 drivers/hwtracing/coresight/ultrasoc-smb.c
->  create mode 100644 drivers/hwtracing/coresight/ultrasoc-smb.h
-> 
-> diff --git a/drivers/hwtracing/coresight/Kconfig b/drivers/hwtracing/coresight/Kconfig
-> index 45c1eb5dfcb7..05d791cb05e3 100644
-> --- a/drivers/hwtracing/coresight/Kconfig
-> +++ b/drivers/hwtracing/coresight/Kconfig
-> @@ -201,4 +201,15 @@ config CORESIGHT_TRBE
->  
->  	  To compile this driver as a module, choose M here: the module will be
->  	  called coresight-trbe.
-> +
-> +config ULTRASOC_SMB
-> +	tristate "Ultrasoc system memory buffer drivers"
-> +	depends on ACPI && ARM64 && CORESIGHT_LINKS_AND_SINKS
-
-Can you relax this at all in the interests of getting better CI build coverage
-from random configs etc. 
-
-From a quick look, I think you can safely drop the ACPI dependency on basis
-relevant functions are stubbed out in acpi.h
-
-However, it looks like coresight more generally uses such depends, so perhaps
-better to just leave them here for consistency.
-
-> +	help
-> +	  This driver provides support for the Ultrasoc system memory buffer (SMB).
-> +	  SMB is responsible for receiving the trace data from Coresight ETM devices
-> +	  and storing them to a system buffer.
-> +
-> +	  To compile this driver as a module, choose M here: the module will be
-> +	  called ultrasoc-smb.
->  endif
-
-
-> diff --git a/drivers/hwtracing/coresight/ultrasoc-smb.c b/drivers/hwtracing/coresight/ultrasoc-smb.c
-> new file mode 100644
-> index 000000000000..7fe8bf9623e8
-> --- /dev/null
-> +++ b/drivers/hwtracing/coresight/ultrasoc-smb.c
-> @@ -0,0 +1,631 @@
-
-...
-
-
-> +
-> +static void smb_buffer_sync_status(struct smb_drv_data *drvdata)
-> +{
-> +	struct smb_data_buffer *sdb = &drvdata->sdb;
-> +
-> +	sdb->wr_offset = readl(drvdata->base + SMB_LB_WR_ADDR) - sdb->start_addr;
-> +	sdb->rd_offset = readl(drvdata->base + SMB_LB_RD_ADDR) - sdb->start_addr;
-> +	if (sdb->wr_offset == sdb->rd_offset && !smb_buffer_is_empty(drvdata))
-> +		sdb->full = true;
-> +	else
-> +		sdb->full = false;
-
-Could do as
-	sdb->full = sdb->wr_offset == sdb->rd_offset && !smb_buffer_is_empty(drvdata);
-up to you on which you think is more readable.
-
-> +}
-> +
-
-
-
-> +static struct attribute *smb_sink_attrs[] = {
-> +	coresight_simple_reg32(read_pos, SMB_LB_RD_ADDR),
-> +	coresight_simple_reg32(write_pos, SMB_LB_WR_ADDR),
-> +	coresight_simple_reg32(buf_status, SMB_LB_INT_STS),
-> +	&dev_attr_buf_size.attr,
-> +	NULL,
-As below.
-
-> +};
-> +
-> +static const struct attribute_group smb_sink_group = {
-> +	.attrs = smb_sink_attrs,
-> +	.name = "mgmt",
-> +};
-> +
-> +static const struct attribute_group *smb_sink_groups[] = {
-> +	&smb_sink_group,
-> +	NULL,
-
-Generally no comma after a NULL terminator.  Having a comma
-implies it may make sense to put something after it, which is never
-the case for these.
-
-> +};
-> +
-
-
-...
-
-> +static void smb_sync_perf_buffer(struct smb_drv_data *drvdata,
-> +				 struct cs_buffers *buf,
-> +				 unsigned long head,
-> +				 unsigned long data_size)
-> +{
-> +	struct smb_data_buffer *sdb = &drvdata->sdb;
-> +	char **dst_pages = (char **)buf->data_pages;
-
-Do you need the cast?  It's void ** so implicit cast should work I think.
-	char **dst_pages = buf->data_pages;
-
-> +	unsigned long to_copy;
-> +	long pg_idx, pg_offset;
-> +
-> +	pg_idx = head >> PAGE_SHIFT;
-> +	pg_offset = head & (PAGE_SIZE - 1);
-> +
-> +	while (data_size) {
-> +		unsigned long pg_space = PAGE_SIZE - pg_offset;
-> +
-> +		/* Copy parts of trace data when read pointer wrap around */
-> +		if (sdb->rd_offset + pg_space > sdb->buf_size)
-> +			to_copy = sdb->buf_size - sdb->rd_offset;
-> +		else
-> +			to_copy = min(data_size, pg_space);
-> +
-> +		memcpy(dst_pages[pg_idx] + pg_offset,
-> +			      sdb->buf_base + sdb->rd_offset, to_copy);
-> +
-> +		pg_offset += to_copy;
-> +		if (pg_offset >= PAGE_SIZE) {
-> +			pg_offset = 0;
-> +			pg_idx++;
-> +			pg_idx %= buf->nr_pages;
-> +		}
-> +		data_size -= to_copy;
-> +		sdb->rd_offset += to_copy;
-> +		sdb->rd_offset %= sdb->buf_size;
-> +	}
-> +
-> +	sdb->data_size = 0;
-> +	writel(sdb->start_addr + sdb->rd_offset, drvdata->base + SMB_LB_RD_ADDR);
-> +
-> +	/*
-> +	 * Data remained in link cannot be purged when SMB is full, so
-> +	 * synchronize the read pointer to write pointer, to make sure
-> +	 * these remained data won't influence next trace.
-> +	 */
-> +	if (sdb->full) {
-> +		smb_purge_data(drvdata);
-> +		writel(readl(drvdata->base + SMB_LB_WR_ADDR),
-> +		       drvdata->base + SMB_LB_RD_ADDR);
-> +	}
-> +	smb_reset_buffer_status(drvdata);
-> +}
-
-
-...
-
-> +
-> +static void smb_init_hw(struct smb_drv_data *drvdata)
-> +{
-> +	/* First disable smb and clear the status of SMB buffer */
-
-Check for consistency in capitalization of SMB in all comments.
-
-> +	smb_reset_buffer_status(drvdata);
-> +	smb_disable_hw(drvdata);
-> +	smb_purge_data(drvdata);
-> +
-> +	writel(SMB_BUF_CFG_STREAMING, drvdata->base + SMB_LB_CFG_LO);
-> +	writel(SMB_MSG_FILTER, drvdata->base + SMB_LB_CFG_HI);
-> +	writel(SMB_GLOBAL_CFG, drvdata->base + SMB_CFG_REG);
-> +	writel(SMB_GLB_INT_CFG, drvdata->base + SMB_GLOBAL_INT);
-> +	writel(SMB_BUF_INT_CFG, drvdata->base + SMB_LB_INT_CTRL);
-> +}
-> +
-
-
-...
-
-> +static int smb_probe(struct platform_device *pdev)
-> +{
-> +	struct device *dev = &pdev->dev;
-> +	struct smb_drv_data *drvdata;
-> +	int ret;
-> +
-> +	drvdata = devm_kzalloc(dev, sizeof(*drvdata), GFP_KERNEL);
-> +	if (!drvdata)
-> +		return -ENOMEM;
-> +
-> +	drvdata->base = devm_platform_ioremap_resource(pdev, SMB_BASE_ADDR_RES);
-> +	if (IS_ERR(drvdata->base)) {
-> +		dev_err(dev, "Failed to ioremap resource\n");
-> +		return PTR_ERR(drvdata->base);
-> +	}
-> +
-> +	ret = smb_init_data_buffer(pdev, &drvdata->sdb);
-> +	if (ret) {
-> +		dev_err(dev, "Failed to init buffer, ret = %d\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	smb_init_hw(drvdata);
-> +	mutex_init(&drvdata->mutex);
-> +	drvdata->pid = -1;
-> +
-> +	ret = smb_register_sink(pdev, drvdata);
-> +	if (ret) {
-> +		dev_err(dev, "Failed to register smb sink\n");
-> +		return ret;
-> +	}
-> +
-> +	ret = smb_config_inport(dev, true);
-> +	if (ret) {
-> +		smb_unregister_sink(drvdata);
-> +		return ret;
-> +	}
-> +
-> +	platform_set_drvdata(pdev, drvdata);
-> +	return 0;
-> +}
-> +
-> +static int smb_remove(struct platform_device *pdev)
-> +{
-> +	struct smb_drv_data *drvdata = platform_get_drvdata(pdev);
-> +	int ret;
-> +
-> +	ret = smb_config_inport(&pdev->dev, false);
-> +	if (ret)
-> +		return ret;
-> +
-> +	smb_unregister_sink(drvdata);
-
-Trivial: I find a blank line before plane returns like this helps
-a little with readability.  Up to you though!
-
-> +	return 0;
-> +}
-> +
-> +static const struct acpi_device_id ultrasoc_smb_acpi_match[] = {
-> +	{"HISI03A1", 0},
-> +	{},
-Trivial, but little point in a trailing comma on a NULL terminator.
-
-	{}
-};
-
-is normally fine - note this is a bit subsystem specific so maintainer
-may say otherwise.
-
-> +};
-> +MODULE_DEVICE_TABLE(acpi, ultrasoc_smb_acpi_match);
-> +
-> +static struct platform_driver smb_driver = {
-> +	.driver = {
-> +		.name = "ultrasoc-smb",
-> +		.acpi_match_table = ACPI_PTR(ultrasoc_smb_acpi_match),
-> +		.suppress_bind_attrs = true,
-> +	},
-> +	.probe = smb_probe,
-> +	.remove = smb_remove,
-> +};
-> +module_platform_driver(smb_driver);
-> +
-> +MODULE_DESCRIPTION("UltraSoc SMB CoreSight driver");
-> +MODULE_LICENSE("Dual MIT/GPL");
-> +MODULE_AUTHOR("Jonathan Zhou <jonathan.zhouwen@huawei.com>");
-> +MODULE_AUTHOR("Qi Liu <liuqi115@huawei.com>");
-> diff --git a/drivers/hwtracing/coresight/ultrasoc-smb.h b/drivers/hwtracing/coresight/ultrasoc-smb.h
-> new file mode 100644
-> index 000000000000..56170e1a883d
-> --- /dev/null
-> +++ b/drivers/hwtracing/coresight/ultrasoc-smb.h
-> @@ -0,0 +1,113 @@
-> +/* SPDX-License-Identifier: (GPL-2.0 OR MIT) */
-> +/*
-> + * Siemens System Memory Buffer driver.
-> + * Copyright(c) 2022, HiSilicon Limited.
-> + */
-> +
-> +#ifndef _ULTRASOC_SMB_H
-> +#define _ULTRASOC_SMB_H
-> +
-> +#include <linux/coresight.h>
-I think you could move this down into the c files and provide
-a forwards definition of struct coresight device
-
-Always good to keep scope of includes to minimum necessary.
-
-> +#include <linux/miscdevice.h>
-> +#include <linux/mutex.h>
-> +
-> +/* Offset of SMB logical buffer registers */
-> +#define SMB_CFG_REG		0x00
-
-To avoid any naming confusion I would postfix all the register
-addresses with _REG
-Then rethink the naming so the field names make it clear which
-register they are in.
-
-> +#define SMB_GLOBAL_EN		0x04
-> +#define SMB_GLOBAL_INT		0x08
-> +#define SMB_LB_CFG_LO		0x40
-> +#define SMB_LB_CFG_HI		0x44
-> +#define SMB_LB_INT_CTRL		0x48
-> +#define SMB_LB_INT_STS		0x4c
-> +#define SMB_LB_LIMIT		0x58
-> +#define SMB_LB_RD_ADDR		0x5c
-> +#define SMB_LB_WR_ADDR		0x60
-> +#define SMB_LB_PURGE		0x64
-> +
-> +/* Set SMB_CFG_REG register */
-> +#define SMB_BURST_LEN		GENMASK(7, 4)
-> +#define SMB_IDLE_PRD		GENMASK(15, 12)
-> +#define SMB_MEM_WR		GENMASK(17, 16)
-> +#define SMB_MEM_RD		(GENMASK(26, 25) | GENMASK(23, 22))
-
-Are these masks, or default values? Ideally express them as
-a field mask then the value via FIELD_PREP
-
-e.g.
-#define SMB_CFG_BURST_LEN_MSK GENMASK(7, 4)
-#define SMB_GLOBAL_CFG_DEFAULT    ... | FIELD_PREP(SMB_CFG_BURST_LEN_MSK, 0xf) | etc
-
- 
-> +#define SMB_GLOBAL_CFG		(SMB_IDLE_PRD |	SMB_MEM_WR | SMB_MEM_RD | \
-> +				 SMB_BURST_LEN)
-> +
-> +/* Set SMB_GLOBAL_INT register */
-> +#define SMB_INT_EN		BIT(0)
-> +#define SMB_INT_TYPE_PULSE	BIT(1)
-> +#define SMB_INT_POLARITY_HIGH	BIT(2)
-> +#define SMB_GLB_INT_CFG		(SMB_INT_EN | SMB_INT_TYPE_PULSE |	\
-> +				 SMB_INT_POLARITY_HIGH)
-> +
-> +/* Set SMB_LB_CFG_LO register */
-> +#define SMB_BUF_EN		BIT(0)
-> +#define SMB_BUF_SINGLE_END	BIT(1)
-> +#define SMB_BUF_INIT		BIT(8)
-> +#define SMB_BUF_CONTINUOUS	BIT(11)
-> +#define SMB_FILTER_FLOW		GENMASK(19, 16)
-> +#define SMB_BUF_CFG_STREAMING	(SMB_BUF_INIT | SMB_BUF_CONTINUOUS |	\
-> +				 SMB_FILTER_FLOW | SMB_BUF_SINGLE_END |	\
-> +				 SMB_BUF_EN)
-> +
-> +#define SMB_BASE_LOW_MASK	GENMASK(31, 0)
-> +
-> +/* Set SMB_LB_CFG_HI register */
-> +#define SMB_MSG_FILTER		GENMASK(15, 8)
-> +
-> +/* Set SMB_LB_INT_CTRL */
-> +#define SMB_BUF_INT_EN		BIT(0)
-> +#define SMB_BUF_NOTE_MASK	GENMASK(11, 8)
-> +#define SMB_BUF_INT_CFG		(SMB_BUF_INT_EN | SMB_BUF_NOTE_MASK)
-> +
-> +#define SMB_BUF_NOT_EMPTY       BIT(0)
-> +#define SMB_RESET_BUF_STS       GENMASK(3, 0)
-> +#define SMB_PURGED              BIT(0)
-> +#define SMB_HW_ENABLE           BIT(0)
-
-It is useful to give fields names that reflect which register they are in.
-Perhaps
-SMB_GLOBAL_EN_HW_ENABLE for this one.
-
-> +
-> +#define SMB_BASE_ADDR_RES       0
-> +#define SMB_BUF_INFO_RES        1
-> +
-> +/**
-> + * struct smb_data_buffer - Details of the buffer used by SMB
-> + * @buf_base:	Memory mapped base address of SMB.
-> + * @start_addr:	SMB buffer start Physical address.
-> + * @buf_size:	Size of the buffer.
-> + * @data_size:	Size of Trace data copy to userspace.
-> + * @rd_offset:	Offset of the read pointer in the buffer.
-> + * @wr_offset:	Offset of the write pointer in the buffer.
-> + * @status:	Status of SMB buffer.
-
-Naming wrong. 
-
-> + */
-> +struct smb_data_buffer {
-> +	void __iomem *buf_base;
-> +	u32 start_addr;
-> +	unsigned long buf_size;
-> +	unsigned long data_size;
-> +	unsigned long rd_offset;
-> +	unsigned long wr_offset;
-> +	bool full;
-> +};
-> +
-> +/**
-> + * struct smb_drv_data - specifics associated to an SMB component
-> + * @base:	Memory mapped base address for SMB component.
-> + * @csdev:	Component vitals needed by the framework.
-> + * @sdb:	Data buffer for SMB.
-> + * @miscdev:	Specifics to handle "/dev/xyz.smb" entry.
-> + * @mutex:	Control data access to one at a time.
-> + * @reading:	Synchronise user space access to SMB buffer.
-> + * @pid:	Process ID of the process being monitored by the
-> + * 		session that is using this component.
-> + * @mode:	how this SMB is being used, perf mode or sysfs mode.
-> + */
-> +struct smb_drv_data {
-> +	void __iomem *base;
-> +	struct coresight_device	*csdev;
-> +	struct smb_data_buffer sdb;
-> +	struct miscdevice miscdev;
-> +	struct mutex mutex;
-> +	local_t reading;
-> +	pid_t pid;
-> +	u32 mode;
-> +};
-> +
-> +#endif
+Regards,
+Samuel
 
