@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E85261FCE5
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 19:10:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3131961FCEB
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 19:10:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231667AbiKGSKB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 13:10:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51300 "EHLO
+        id S233074AbiKGSKn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 13:10:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232701AbiKGSJi (ORCPT
+        with ESMTP id S232540AbiKGSKX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 13:09:38 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2061D264BB;
-        Mon,  7 Nov 2022 10:06:16 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5A445611EE;
-        Mon,  7 Nov 2022 18:06:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86128C433C1;
-        Mon,  7 Nov 2022 18:06:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667844375;
-        bh=SDj38zhZ2y6S5wzKuopT3v98OgXjZ5t/qd6hJPfIq1Q=;
-        h=Date:From:To:Cc:Subject:From;
-        b=gXtmlImi+vjgkpCX3LhfMyz3zFTfaEbT4u/U6S8Pw9RvpKVbkdsOYDOrzCs9ms5Ev
-         73rDkC0ASYixrRLsG4wPx1kv9Lt8nE9oBHLEQY/jKrHD6+w83nCK5tW6rmfD1khPHa
-         AnUPD9FtPcjhWJOC35YDIMYOTUL3ELWV2Me0J8fowbOzfHO0I1jL+PsxKT7xA5NWoz
-         Cw4GRFQtad1E8VEFMIgwchcxZwifrcGntDmUeJBRYSqcf3NOI+1piCumZyU2HUZR18
-         CGhJl4lKkdwH4P4vVily6EKSX9jSDZMEbtt1GuZe3bIGAKnpzeGgIj7xZ8duX9KhiC
-         80Akdomf9Dh+g==
-Date:   Mon, 7 Nov 2022 12:06:13 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>
-Cc:     wse@tuxedocomputers.com, Konrad J Hambrick <kjhambrick@gmail.com>,
-        linux-usb@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Thunderbolt DMAR errors (bugzilla 214259)
-Message-ID: <20221107180613.GA406714@bhelgaas>
+        Mon, 7 Nov 2022 13:10:23 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91191108E
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 10:07:54 -0800 (PST)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[IPv6:::1])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <l.stach@pengutronix.de>)
+        id 1os6X0-0005Ct-6o; Mon, 07 Nov 2022 19:07:34 +0100
+Message-ID: <d63e2214c464b029a15967d81968c27a5a4a88d4.camel@pengutronix.de>
+Subject: Re: [PATCH 12/26] drm: etnaviv: Remove #ifdef guards for PM related
+ functions
+From:   Lucas Stach <l.stach@pengutronix.de>
+To:     Paul Cercueil <paul@crapouillou.net>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Russell King <linux+etnaviv@armlinux.org.uk>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        etnaviv@lists.freedesktop.org
+Date:   Mon, 07 Nov 2022 19:07:32 +0100
+In-Reply-To: <20221107175256.360839-2-paul@crapouillou.net>
+References: <20221107175106.360578-1-paul@crapouillou.net>
+         <20221107175256.360839-1-paul@crapouillou.net>
+         <20221107175256.360839-2-paul@crapouillou.net>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.40.4 (3.40.4-1.fc34) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: l.stach@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,21 +55,133 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-See https://bugzilla.kernel.org/show_bug.cgi?id=214259
-From comment 42 of this bugzilla:
+Am Montag, dem 07.11.2022 um 17:52 +0000 schrieb Paul Cercueil:
+> Use the RUNTIME_PM_OPS() and pm_ptr() macros to handle the
+> .runtime_suspend/.runtime_resume callbacks.
+> 
+> These macros allow the suspend and resume functions to be automatically
+> dropped by the compiler when CONFIG_PM is disabled, without having
+> to use #ifdef guards.
+> 
+> This has the advantage of always compiling these functions in,
+> independently of any Kconfig option. Thanks to that, bugs and other
+> regressions are subsequently easier to catch.
+> 
+> Some #ifdef CONFIG_PM guards were protecting simple statements, and were
+> also converted to "if (IS_ENABLED(CONFIG_PM))".
+> 
+Reasoning and the change itself look good.
 
-v6.1-rc4 on On Clevo X170KM Barebone:
+> Note that this driver should probably use the
+> DEFINE_RUNTIME_DEV_PM_OPS() macro instead, which will provide
+> .suspend/.resume callbacks, pointing to pm_runtime_force_suspend() and
+> pm_runtime_force_resume() respectively; unless those callbacks really
+> aren't needed.
 
-  [    0.000000] BIOS-e820: [mem 0x00000000694af000-0x000000006b2fefff] reserved
-  [    0.739226] pci 0000:05:00.0: [8086:1137] type 00 class 0x0c0340
-  [    0.739266] pci 0000:05:00.0: reg 0x10: [mem 0x425a000000-0x425a03ffff 64bit pref]
-  [    0.739288] pci 0000:05:00.0: reg 0x18: [mem 0x425a040000-0x425a040fff 64bit pref]
-  [    1.587809] DMAR: [DMA Write NO_PASID] Request device [05:00.0] fault addr 0x69974000 [fault reason 0x05] PTE Write access is not set
-  [   23.594763] DMAR: [DMA Write NO_PASID] Request device [05:00.0] fault addr 0x69974000 [fault reason 0x05] PTE Write access is not set
-  [   44.074761] DMAR: [DMA Write NO_PASID] Request device [05:00.0] fault addr 0x69974000 [fault reason 0x05] PTE Write access is not set
-  [   64.554820] DMAR: [DMA Write NO_PASID] Request device [05:00.0] fault addr 0x69974000 [fault reason 0x05] PTE Write access is not set
-  [   85.031314] thunderbolt 0000:05:00.0: failed to send driver ready to ICM
-  [   85.031403] thunderbolt: probe of 0000:05:00.0 failed with error -110
+This however isn't true, specifically this driver can _not_ use
+pm_runtime_force_suspend, as the GPU can't be forced into suspend by
+calling the rpm callback. A real suspend implementation would first
+need to make sure the GPU finished working on the current queued jobs,
+only then it would be able to power it down via the rpm suspend
+callback.
 
-The initial report from wse@ was on v5.15 (faults at the exact same
-address).
+Regards,
+Lucas
+
+> 
+> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+> ---
+> Cc: Lucas Stach <l.stach@pengutronix.de>
+> Cc: Russell King <linux+etnaviv@armlinux.org.uk>
+> Cc: Christian Gmeiner <christian.gmeiner@gmail.com>
+> Cc: etnaviv@lists.freedesktop.org
+> ---
+>  drivers/gpu/drm/etnaviv/etnaviv_gpu.c | 30 +++++++++++----------------
+>  1 file changed, 12 insertions(+), 18 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/etnaviv/etnaviv_gpu.c b/drivers/gpu/drm/etnaviv/etnaviv_gpu.c
+> index 37018bc55810..e9a5444ec1c7 100644
+> --- a/drivers/gpu/drm/etnaviv/etnaviv_gpu.c
+> +++ b/drivers/gpu/drm/etnaviv/etnaviv_gpu.c
+> @@ -1605,7 +1605,6 @@ static int etnaviv_gpu_hw_suspend(struct etnaviv_gpu *gpu)
+>  	return etnaviv_gpu_clk_disable(gpu);
+>  }
+>  
+> -#ifdef CONFIG_PM
+>  static int etnaviv_gpu_hw_resume(struct etnaviv_gpu *gpu)
+>  {
+>  	int ret;
+> @@ -1621,7 +1620,6 @@ static int etnaviv_gpu_hw_resume(struct etnaviv_gpu *gpu)
+>  
+>  	return 0;
+>  }
+> -#endif
+>  
+>  static int
+>  etnaviv_gpu_cooling_get_max_state(struct thermal_cooling_device *cdev,
+> @@ -1689,11 +1687,10 @@ static int etnaviv_gpu_bind(struct device *dev, struct device *master,
+>  	if (ret)
+>  		goto out_workqueue;
+>  
+> -#ifdef CONFIG_PM
+> -	ret = pm_runtime_get_sync(gpu->dev);
+> -#else
+> -	ret = etnaviv_gpu_clk_enable(gpu);
+> -#endif
+> +	if (IS_ENABLED(CONFIG_PM))
+> +		ret = pm_runtime_get_sync(gpu->dev);
+> +	else
+> +		ret = etnaviv_gpu_clk_enable(gpu);
+>  	if (ret < 0)
+>  		goto out_sched;
+>  
+> @@ -1737,12 +1734,12 @@ static void etnaviv_gpu_unbind(struct device *dev, struct device *master,
+>  
+>  	etnaviv_sched_fini(gpu);
+>  
+> -#ifdef CONFIG_PM
+> -	pm_runtime_get_sync(gpu->dev);
+> -	pm_runtime_put_sync_suspend(gpu->dev);
+> -#else
+> -	etnaviv_gpu_hw_suspend(gpu);
+> -#endif
+> +	if (IS_ENABLED(CONFIG_PM)) {
+> +		pm_runtime_get_sync(gpu->dev);
+> +		pm_runtime_put_sync_suspend(gpu->dev);
+> +	} else {
+> +		etnaviv_gpu_hw_suspend(gpu);
+> +	}
+>  
+>  	if (gpu->mmu_context)
+>  		etnaviv_iommu_context_put(gpu->mmu_context);
+> @@ -1856,7 +1853,6 @@ static int etnaviv_gpu_platform_remove(struct platform_device *pdev)
+>  	return 0;
+>  }
+>  
+> -#ifdef CONFIG_PM
+>  static int etnaviv_gpu_rpm_suspend(struct device *dev)
+>  {
+>  	struct etnaviv_gpu *gpu = dev_get_drvdata(dev);
+> @@ -1899,18 +1895,16 @@ static int etnaviv_gpu_rpm_resume(struct device *dev)
+>  
+>  	return 0;
+>  }
+> -#endif
+>  
+>  static const struct dev_pm_ops etnaviv_gpu_pm_ops = {
+> -	SET_RUNTIME_PM_OPS(etnaviv_gpu_rpm_suspend, etnaviv_gpu_rpm_resume,
+> -			   NULL)
+> +	RUNTIME_PM_OPS(etnaviv_gpu_rpm_suspend, etnaviv_gpu_rpm_resume, NULL)
+>  };
+>  
+>  struct platform_driver etnaviv_gpu_driver = {
+>  	.driver = {
+>  		.name = "etnaviv-gpu",
+>  		.owner = THIS_MODULE,
+> -		.pm = &etnaviv_gpu_pm_ops,
+> +		.pm = pm_ptr(&etnaviv_gpu_pm_ops),
+>  		.of_match_table = etnaviv_gpu_match,
+>  	},
+>  	.probe = etnaviv_gpu_platform_probe,
+
+
