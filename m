@@ -2,145 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C838161F1A0
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 12:15:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A8A261F1A1
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 12:15:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231599AbiKGLPn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 06:15:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37888 "EHLO
+        id S231747AbiKGLPx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 06:15:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230379AbiKGLPl (ORCPT
+        with ESMTP id S229659AbiKGLPq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 06:15:41 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 97EAD101CE
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 03:15:39 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 75F401FB;
-        Mon,  7 Nov 2022 03:15:45 -0800 (PST)
-Received: from [10.57.67.115] (unknown [10.57.67.115])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2C5583F73D;
-        Mon,  7 Nov 2022 03:15:37 -0800 (PST)
-Message-ID: <5cf4b3b9-9c0d-8e30-3159-d63c7f5b9648@arm.com>
-Date:   Mon, 7 Nov 2022 11:15:35 +0000
+        Mon, 7 Nov 2022 06:15:46 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C6EEDF6B
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 03:15:45 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1667819744;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ks74wjsDzqc1arU7J8lzMZXr87mU8v99qH9Cogt/w/8=;
+        b=YsMEj0dTiNNIIQikNlk4tjX2YWmwJIDB1wnDA66PHDsgDcSNQPD6aXoOyXBkQgTY4Yk/qH
+        OTYOJOVv+Zbs6d+sKjdG3NHK1ZmjuCF+9s+hQPneIa8N0KPe1rVaSse64jSy2GZ36jXDLU
+        kcxQSYi22DVBfYMAXwrWpW0qha8J/ODfYxKvguWRCVcHT5ZqrcsXKYQIMxiyJDppRibaop
+        tUykzRsSAgS1wCsWwkosqx1wFcmuBFDskU8U1AjaPJPiw6/GmzuZyxMf0uipe+w358KhT3
+        AMpUCn+CytBBrKW8EjZhJAN7xObawvwobOgtL1YYADcXASYQ4lZ5YVEopjWoEA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1667819744;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ks74wjsDzqc1arU7J8lzMZXr87mU8v99qH9Cogt/w/8=;
+        b=VveFVbwn7EK7ynKoYzIUt3ey/4moh+S7x7w7FUz3T91KRbKHTV5L5wX2Quq0KcdrHNszzi
+        gJSmFKHu3M4DGVDA==
+To:     Steven Rostedt <rostedt@goodmis.org>, linux-kernel@vger.kernel.org
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Anna-Maria Gleixner <anna-maria@linutronix.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Julia Lawall <Julia.Lawall@inria.fr>
+Subject: Re: [for-linus][PATCH 4/5] timers: Add timer_shutdown_sync() and
+ timer_shutdown() to be called before freeing timers
+In-Reply-To: <87sfivvy91.ffs@tglx>
+References: <20221106233037.815236769@goodmis.org>
+ <20221106233434.425162916@goodmis.org> <87sfivvy91.ffs@tglx>
+Date:   Mon, 07 Nov 2022 12:15:43 +0100
+Message-ID: <87mt93vwv4.ffs@tglx>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.4.1
-Subject: Re: [PATCH 5.10] coresight: cti: Fix hang in cti_disable_hw()
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     James Clark <james.clark@arm.com>, stable@kernel.org,
-        Aishwarya TCV <Aishwarya.TCV@arm.com>,
-        Cristian Marussi <Cristian.Marussi@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-References: <20221102112003.2318583-1-james.clark@arm.com>
- <Y2jLvmF0GZ6yHY0m@kroah.com> <4d44d2c8-a8ec-1729-d3cc-9ae8beb48045@arm.com>
- <Y2jVXdX1Mx5eXAiB@kroah.com> <99b25aab-ba87-b875-9f5f-c7dd9444b8c8@arm.com>
- <Y2jc4f+iEfA9qAQA@kroah.com>
-From:   Suzuki K Poulose <suzuki.poulose@arm.com>
-In-Reply-To: <Y2jc4f+iEfA9qAQA@kroah.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
-
-On 07/11/2022 10:24, Greg Kroah-Hartman wrote:
-> On Mon, Nov 07, 2022 at 09:59:24AM +0000, Suzuki K Poulose wrote:
->> On 07/11/2022 09:52, Greg Kroah-Hartman wrote:
->>> On Mon, Nov 07, 2022 at 09:23:26AM +0000, Suzuki K Poulose wrote:
->>>> On 07/11/2022 09:11, Greg Kroah-Hartman wrote:
->>>>> On Wed, Nov 02, 2022 at 11:20:03AM +0000, James Clark wrote:
->>>>>> commit 6746eae4bbaddcc16b40efb33dab79210828b3ce upstream.
->>>>>
->>>>> Isn't this commit 665c157e0204176023860b51a46528ba0ba62c33 instead?
->>>>
->>>> This was reverted in commit d76308f03ee1 and pushed in later
->>>> with fixups as 6746eae4bbadd.
->>>
->>> So which should be applied?
+On Mon, Nov 07 2022 at 11:45, Thomas Gleixner wrote:
+> On Sun, Nov 06 2022 at 18:30, Steven Rostedt wrote:
 >>
->> Sorry, this particular post is a backport for v5.10 stable branch.
+>> Link: https://lore.kernel.org/all/87pmlrkgi3.ffs@tglx/
+>> Link: https://lkml.kernel.org/r/20221106212702.363575800@goodmis.org
+>> Link: https://lore.kernel.org/all/20221105060024.598488967@goodmis.org/
 >>
->>>
->>> confused,
->>
->> Now I am too. What is expected here ? My understanding is, we
->> should stick the "upstream" commit that is getting backported
->> at the beginning of the commit description. In that sense,
->> the commit id in this patch looks correct to me. Please let
->> me know if this is not the case.
->>
->> As such, this is only for 5.10.x branch. The rest are taken
->> care of.
->>
->> Please let us know if we are something missing.
-> 
-> We already have commit 665c157e0204176023860b51a46528ba0ba62c33 queued
-> up in the 5.10 stable queue.  Is that not correct?  It has the same
+>> Cc: Linus Torvalds <torvalds@linux-foundation.org>
+>> Cc: Thomas Gleixner <tglx@linutronix.de>
+>> Cc: Stephen Boyd <sboyd@kernel.org>
+>> Cc: Anna-Maria Gleixner <anna-maria@linutronix.de>
+>> Cc: Andrew Morton <akpm@linux-foundation.org>
+>> Cc: Julia Lawall <Julia.Lawall@inria.fr>
+>> Tested-by: Guenter Roeck <linux@roeck-us.net>
+>> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+>
+> And please follow the guidelines of the tip tree for changelogs and tags.
+>
+> I'll just grab it from the list and let my scripts run over it.
 
-We pushed the fix as part of the coresight fixes for 6.1 [0], as
+Duh. This thing is unreviewable.
 
-commit: 6746eae4bbad "coresight: cti: Fix hang in cti_disable_hw()"
+Can you please split it up into pieces which are digestable?
 
+Thanks,
 
-But, the version in there, produced a build warning with "unused
-variable" (with CONFIG_WERROR) [1] and thus was reverted in [2],
-
-commit: d76308f03ee1: Revert "coresight: cti: Fix hang in cti_disable_hw()"
-
-
-Later, we sent you the corrected fix separately [3], which was queued as
-commit "6746eae4bbadd".
-
-6746eae4bbad coresight: cti: Fix hang in cti_disable_hw()
-
-So, in effect, here is what we have in the tree :
-
-$ git log --oneline | grep "cti: Fix"
-6746eae4bbad coresight: cti: Fix hang in cti_disable_hw()
-d76308f03ee1 Revert "coresight: cti: Fix hang in cti_disable_hw()"
-665c157e0204 coresight: cti: Fix hang in cti_disable_hw()
-
-> subject line as this one.
-
-I understand the "same" subject line has caused this confusion. Will
-modify it in the future avoid this confusion.
-
-So, kindly drop "665c157e0204" from the queue for 5.10, it would fail to
-apply there anyway so does the correct "6746eae4bbad". This backport
-is appropriate for 5.10 branch, with the correct version.
-
-I have double checked the versions pulled into 6.0.x [4] and 5.15.x [5] 
-branches and they all have the correct one (6746eae4bbad) applied.
-
-[0] https://lkml.kernel.org/r/16664341837810@kroah.com
-[1] https://lkml.kernel.org/r/20221024135752.2b83af97@canb.auug.org.au
-[2] https://lkml.kernel.org/r/166659326494120@kroah.com
-[3] https://lkml.kernel.org/r/1666717705115206@kroah.com
-[4] https://lkml.kernel.org/r/166719866563237@kroah.com
-[5] https://lkml.kernel.org/r/16671983698786@kroah.com
-
-
-Hope this helps.
-
-Suzuki
-
-> 
-> Still confused.
-> 
-> thanks,
-> 
-> greg k-h
-
+        tglx
