@@ -2,111 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6F9661EE7B
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 10:15:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AEC8161EE95
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 10:16:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231608AbiKGJP1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 04:15:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43204 "EHLO
+        id S231728AbiKGJQw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 04:16:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231487AbiKGJPZ (ORCPT
+        with ESMTP id S231726AbiKGJQf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 04:15:25 -0500
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD5382B3
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 01:15:24 -0800 (PST)
-Received: by mail-lf1-x132.google.com with SMTP id r12so15894465lfp.1
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 01:15:24 -0800 (PST)
+        Mon, 7 Nov 2022 04:16:35 -0500
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BD1D15827
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 01:16:34 -0800 (PST)
+Received: by mail-lf1-x129.google.com with SMTP id r12so15898413lfp.1
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 01:16:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=9uKTBrb1cZ8JuClZS3AGG9aisdrkJ7CzIFst1hgk3qs=;
-        b=oDJNR31hj7iUbwjauab9UvB3Q9h9onQgb7TbWvtG4rm7WHKo7YonXPQBbM51Z74olx
-         e9Goa2k6AMJfwomNn+qPUFKY0/UJemsbDejiKJNTan/eQeaLAvNhkukaLci0U49Py7ow
-         YPXN3gYV7QDU7aGA6AjofZGtDuD4BEmNiT5a9Y+IMVBRc/LmmPR0QWrt++f4Jg98QTnu
-         i/PeIjHwqMK8K+QfvFTjTt4jzkYdbqIAslPP3O+45m1YFMDns1+OOU7GNumZ6XLT2ZQ4
-         zBj/HqvcMR9kZw3luuh6b5oypg8YqZmaIM96TzvwO4SqPRTXobUDdVYG7zkky19YRCGR
-         wqoQ==
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ee9rRE2EZYR3AFslDfAa5vqk35kYdBztnuAgp9P1svM=;
+        b=rLgN8Ab0FHYbqyHfhx61S13OglQV0IxcL7oh3Q2DBIZpIffz/Sd22ckP2kXKhUWdoD
+         XvrViZQmsTqi88VTF76St/XTn4YOdfkVFy5KKxKwnLTMQOjcTmoq8VR0FA+Xs2zANdP3
+         uLffjmEj/GWzqAs9SLlrGU/opeVKi69yxnPhm545g7nJbioLzKGdmfMC0bdtU3cNLSCk
+         a4T+Bk+uJUJKNk037idWb8jzsGZRaIlvfDF09tEqF/KG7mUN3b7m0jw4jEI6SaghYjBb
+         ZvmvKp53XDqFo6SK4VuyIQsHh3B0qvWgJvurbkZ5lrnMxKVpRrLvHPb6hY/Vn7F1SBVe
+         kbKQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9uKTBrb1cZ8JuClZS3AGG9aisdrkJ7CzIFst1hgk3qs=;
-        b=sz0A8K6kH5feqGIp6pt/FQ44S8v49za4kVxHG+7kFOL87T26K9iDt30wwhXtFGNqul
-         bxQVUhzNJYp7+NMo+Hc4oQ9/awz5p4CBvSfagy7PqZem6vECEC1Vx0kFZmmEwhZfASzO
-         4kdndl0gTG46wRL76rFdXm/Fr8vQStb5KJx2GwJ58NpBX+m7Suz4AHBp9n77ckGJBb1+
-         Wuw0lqEfzuEhVDLyEaI8PbIrVXlaeRuwI4OB6Yv6vwx6GxQKJnnk4AI7LYaxMTIXu8Aq
-         VG+KZ/u09NRa+mWLFyrR6m+L7FH8A4BDHWaySG5pvE5dTINzKgGLY3F4nTgjYSLtrnTi
-         i9Gw==
-X-Gm-Message-State: ACrzQf08l3y+1OHPY+4UlcYVxoWz2kTDr6/eSb8G+iUKSDhlnRK70Lvc
-        lsquA+hWCMVeMgcrFXj9OKxuM2NwMpZAVw==
-X-Google-Smtp-Source: AMsMyM6YWPkIuKdP98rWv6xcwRnTEE1S5vHzsHTFZZwL75lSkeSRTzSr+lizaqvB8PzLV/E4+XZy6A==
-X-Received: by 2002:ac2:47fc:0:b0:4a2:4e9a:64f5 with SMTP id b28-20020ac247fc000000b004a24e9a64f5mr18556671lfp.434.1667812523272;
-        Mon, 07 Nov 2022 01:15:23 -0800 (PST)
-Received: from krzk-bin.NAT.warszawa.vectranet.pl (088156142199.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.199])
-        by smtp.gmail.com with ESMTPSA id h20-20020ac250d4000000b004a240eb0217sm1133588lfm.251.2022.11.07.01.15.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Nov 2022 01:15:22 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Kyungmin Park <kyungmin.park@samsung.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Roger Quadros <rogerq@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     kernel test robot <lkp@intel.com>
-Subject: [PATCH v2] mtd: onenand: omap2: add dependency on GPMC
-Date:   Mon,  7 Nov 2022 10:15:20 +0100
-Message-Id: <20221107091520.127053-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ee9rRE2EZYR3AFslDfAa5vqk35kYdBztnuAgp9P1svM=;
+        b=pOOycO9p4pSi/Xk+vB9V8Xq7IHLOAr1+rtHvm6rtWjVmNBhdD+VcZQLhE5Rf9U6rTJ
+         xy5Q+5gPcNQZHJE70HTI1hvBYPY1J1Yna6RJy7Xq0/hh1mwzdib8pcUc/IlPzKyWI4WJ
+         /KX87wIeW/EjQil41OsI1t0KlNbLElhdh3NHvl4q0l9F41EtioN5dgDKuy1EuzYvMnM7
+         0+kAfP7NmJE8e7L5dcD1rA8TRBn9qxKu9zCYQl16T6UjsIqaJPXWgypDK+dq4gx90gHc
+         OSxJau8kJ3DIN4kKPOmAzbSR4U8AmunBy3vBsqhvoPyUypBWZC8ou4RSl0vigHGL9Y06
+         7T3g==
+X-Gm-Message-State: ACrzQf27PXf8+0H1LmPVDxjGZmrX+sCyMdBedttjnu6uyZyfFa7yjZBq
+        +c1F57EQEQBzOpdqv9i6I114Ww==
+X-Google-Smtp-Source: AMsMyM640xZfzovEVbRzAzA3JwN3fsqXmGXCqtuz5rmj/QtkLofAuR/i6wzcJkcTdHZb+Jm513To6A==
+X-Received: by 2002:a05:6512:b21:b0:4ae:391c:e655 with SMTP id w33-20020a0565120b2100b004ae391ce655mr16423127lfu.45.1667812592555;
+        Mon, 07 Nov 2022 01:16:32 -0800 (PST)
+Received: from [192.168.0.20] (088156142199.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.199])
+        by smtp.gmail.com with ESMTPSA id t20-20020a2e8e74000000b0027755f52a94sm1129600ljk.80.2022.11.07.01.16.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 07 Nov 2022 01:16:32 -0800 (PST)
+Message-ID: <9ddc0bc9-c5cf-6c94-d15e-77a7a7e2b7f1@linaro.org>
+Date:   Mon, 7 Nov 2022 10:16:31 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [v2 2/2] dt-bindings: iio: adc: Remove the property
+ "aspeed,trim-data-valid"
+Content-Language: en-US
+To:     Billy Tsai <billy_tsai@aspeedtech.com>, jic23@kernel.org,
+        lars@metafoo.de, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, joel@jms.id.au, andrew@aj.id.au,
+        linmq006@gmail.com, linux-iio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
+References: <20221107091506.28630-1-billy_tsai@aspeedtech.com>
+ <20221107091506.28630-2-billy_tsai@aspeedtech.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221107091506.28630-2-billy_tsai@aspeedtech.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-OMAP2 OneNAND driver uses gpmc_omap_onenand_set_timings() provided by
-OMAP_GPMC driver, so the latter cannot be module if OneNAND driver is
-built-in:
+On 07/11/2022 10:15, Billy Tsai wrote:
+> The valid of the trimming data will use the otp default value as a
+> criterion.
+> 
+> Fixes: 2bdb2f00a895 ("dt-bindings: iio: adc: Add ast2600-adc bindings")
 
-  /usr/bin/arm-linux-gnueabi-ld: drivers/mtd/nand/onenand/onenand_omap2.o: in function `omap2_onenand_probe':
-  onenand_omap2.c:(.text+0x520): undefined reference to `gpmc_omap_onenand_set_timings'
+If this is a fix, you need to describe the bug.
 
-The OMAP_GPMC is also a runtime dependency.
+> Signed-off-by: Billy Tsai <billy_tsai@aspeedtech.com>
 
-Reported-by: kernel test robot <lkp@intel.com>
-Fixes: 854fd9209b20 ("memory: omap-gpmc: Allow building as a module")
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+This is a friendly reminder during the review process.
 
----
+It looks like you received a tag and forgot to add it.
 
-Changes since v1:
-1. Always require OMAP_GPMC (drop !OMAP_GPMC).
-2. Adjust commit msg.
----
- drivers/mtd/nand/onenand/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+If you do not know the process, here is a short explanation:
+Please add Acked-by/Reviewed-by/Tested-by tags when posting new
+versions. However, there's no need to repost patches *only* to add the
+tags. The upstream maintainer will do that for acks received on the
+version they apply.
 
-diff --git a/drivers/mtd/nand/onenand/Kconfig b/drivers/mtd/nand/onenand/Kconfig
-index 34d9a7a82ad4..c94bf483541e 100644
---- a/drivers/mtd/nand/onenand/Kconfig
-+++ b/drivers/mtd/nand/onenand/Kconfig
-@@ -26,6 +26,7 @@ config MTD_ONENAND_OMAP2
- 	tristate "OneNAND on OMAP2/OMAP3 support"
- 	depends on ARCH_OMAP2 || ARCH_OMAP3 || (COMPILE_TEST && ARM)
- 	depends on OF || COMPILE_TEST
-+	depends on OMAP_GPMC
- 	help
- 	  Support for a OneNAND flash device connected to an OMAP2/OMAP3 SoC
- 	  via the GPMC memory controller.
--- 
-2.34.1
+https://elixir.bootlin.com/linux/v5.17/source/Documentation/process/submitting-patches.rst#L540
+
+If a tag was not added on purpose, please state why and what changed.
+
+
+Best regards,
+Krzysztof
 
