@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A36B61F852
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 17:06:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79B6261F86B
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 17:08:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231698AbiKGQGa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 11:06:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57580 "EHLO
+        id S232795AbiKGQH6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 11:07:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232953AbiKGQGG (ORCPT
+        with ESMTP id S232766AbiKGQHg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 11:06:06 -0500
+        Mon, 7 Nov 2022 11:07:36 -0500
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C73D2205D4;
-        Mon,  7 Nov 2022 08:05:54 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 24EC220BEC;
+        Mon,  7 Nov 2022 08:07:17 -0800 (PST)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B664A113E;
-        Mon,  7 Nov 2022 08:06:00 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 14AAC139F;
+        Mon,  7 Nov 2022 08:07:23 -0800 (PST)
 Received: from pierre123.arm.com (pierre123.nice.arm.com [10.34.100.128])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 896EF3F534;
-        Mon,  7 Nov 2022 08:05:39 -0800 (PST)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id DE0053F534;
+        Mon,  7 Nov 2022 08:07:01 -0800 (PST)
 From:   Pierre Gondois <pierre.gondois@arm.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Pierre Gondois <pierre.gondois@arm.com>,
@@ -85,34 +85,35 @@ Cc:     Pierre Gondois <pierre.gondois@arm.com>,
         Vignesh Raghavendra <vigneshr@ti.com>,
         Tero Kristo <kristo@kernel.org>,
         Viorel Suman <viorel.suman@nxp.com>,
-        Abel Vesa <abelvesa@kernel.org>, Peng Fan <peng.fan@nxp.com>,
-        Ming Qian <ming.qian@nxp.com>,
+        Abel Vesa <abelvesa@kernel.org>,
+        Zhou Peng <eagle.zhou@nxp.com>,
         Shenwei Wang <shenwei.wang@nxp.com>,
-        Adam Ford <aford173@gmail.com>,
+        Ming Qian <ming.qian@nxp.com>, Peng Fan <peng.fan@nxp.com>,
         Tim Harvey <tharvey@gateworks.com>,
+        Adam Ford <aford173@gmail.com>,
         Lucas Stach <l.stach@pengutronix.de>,
         Richard Zhu <hongxing.zhu@nxp.com>, Li Jun <jun.li@nxp.com>,
         Markus Niebel <Markus.Niebel@ew.tq-group.com>,
-        Marco Felsch <m.felsch@pengutronix.de>,
         Joakim Zhang <qiangqing.zhang@nxp.com>,
         Marek Vasut <marex@denx.de>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
         Paul Elder <paul.elder@ideasonboard.com>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
         Martin Kepplinger <martink@posteo.de>,
         David Heidelberg <david@ixit.cz>,
         Liu Ying <victor.liu@nxp.com>,
         Oliver Graute <oliver.graute@kococonnector.com>,
         Dong Aisheng <aisheng.dong@nxp.com>,
+        Wei Fang <wei.fang@nxp.com>,
         Clark Wang <xiaoning.wang@nxp.com>,
         Jacky Bai <ping.bai@nxp.com>,
         Chris Packham <chris.packham@alliedtelesis.co.nz>,
         Vadym Kochan <vadym.kochan@plvision.eu>,
         Sameer Pujar <spujar@nvidia.com>,
+        Prathamesh Shete <pshete@nvidia.com>,
         Mikko Perttunen <mperttunen@nvidia.com>,
         Akhil R <akhilrajeev@nvidia.com>,
         Sumit Gupta <sumitg@nvidia.com>,
-        Prathamesh Shete <pshete@nvidia.com>,
         Diogo Ivo <diogo.ivo@tecnico.ulisboa.pt>,
         Vidya Sagar <vidyas@nvidia.com>,
         Ashish Mhetre <amhetre@nvidia.com>,
@@ -121,8 +122,7 @@ Cc:     Pierre Gondois <pierre.gondois@arm.com>,
         Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
         Aswani Reddy <aswani.reddy@samsung.com>,
         Shashank Prashar <s.prashar@samsung.com>,
-        Arnd Bergmann <arnd@arndb.de>, devicetree@vger.kernel.org,
-        linux-rpi-kernel@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org,
         linux-amlogic@lists.infradead.org,
         linux-samsung-soc@vger.kernel.org,
@@ -131,9 +131,9 @@ Cc:     Pierre Gondois <pierre.gondois@arm.com>,
         linux-realtek-soc@lists.infradead.org,
         linux-renesas-soc@vger.kernel.org,
         linux-rockchip@lists.infradead.org
-Subject: [PATCH v2 01/23] arm64: dts: Update cache properties for amazon
-Date:   Mon,  7 Nov 2022 16:56:54 +0100
-Message-Id: <20221107155825.1644604-2-pierre.gondois@arm.com>
+Subject: [PATCH v2 02/23] arm64: dts: Update cache properties for amd
+Date:   Mon,  7 Nov 2022 16:56:55 +0100
+Message-Id: <20221107155825.1644604-3-pierre.gondois@arm.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221107155825.1644604-1-pierre.gondois@arm.com>
 References: <20221107155825.1644604-1-pierre.gondois@arm.com>
@@ -157,45 +157,61 @@ Update the Device Trees accordingly.
 
 Signed-off-by: Pierre Gondois <pierre.gondois@arm.com>
 ---
- arch/arm64/boot/dts/amazon/alpine-v3.dtsi | 4 ++++
- 1 file changed, 4 insertions(+)
+ arch/arm64/boot/dts/amd/amd-seattle-cpus.dtsi | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/amazon/alpine-v3.dtsi b/arch/arm64/boot/dts/amazon/alpine-v3.dtsi
-index 73a352ea8fd5..ba7e56dc85db 100644
---- a/arch/arm64/boot/dts/amazon/alpine-v3.dtsi
-+++ b/arch/arm64/boot/dts/amazon/alpine-v3.dtsi
-@@ -246,6 +246,7 @@ cpu@303 {
+diff --git a/arch/arm64/boot/dts/amd/amd-seattle-cpus.dtsi b/arch/arm64/boot/dts/amd/amd-seattle-cpus.dtsi
+index 93688a0b6820..9f2d983e082d 100644
+--- a/arch/arm64/boot/dts/amd/amd-seattle-cpus.dtsi
++++ b/arch/arm64/boot/dts/amd/amd-seattle-cpus.dtsi
+@@ -163,38 +163,47 @@ CPU7: cpu@301 {
+ 	};
  
- 		cluster0_l2: cache@0 {
- 			compatible = "cache";
-+			cache-unified;
- 			cache-size = <0x200000>;
- 			cache-line-size = <64>;
- 			cache-sets = <2048>;
-@@ -254,6 +255,7 @@ cluster0_l2: cache@0 {
+ 	L2_0: l2-cache0 {
++		compatible = "cache";
+ 		cache-size = <0x100000>;
+ 		cache-line-size = <64>;
+ 		cache-sets = <1024>;
+ 		cache-unified;
++		cache-level = <2>;
+ 		next-level-cache = <&L3>;
+ 	};
  
- 		cluster1_l2: cache@100 {
- 			compatible = "cache";
-+			cache-unified;
- 			cache-size = <0x200000>;
- 			cache-line-size = <64>;
- 			cache-sets = <2048>;
-@@ -262,6 +264,7 @@ cluster1_l2: cache@100 {
+ 	L2_1: l2-cache1 {
++		compatible = "cache";
+ 		cache-size = <0x100000>;
+ 		cache-line-size = <64>;
+ 		cache-sets = <1024>;
+ 		cache-unified;
++		cache-level = <2>;
+ 		next-level-cache = <&L3>;
+ 	};
  
- 		cluster2_l2: cache@200 {
- 			compatible = "cache";
-+			cache-unified;
- 			cache-size = <0x200000>;
- 			cache-line-size = <64>;
- 			cache-sets = <2048>;
-@@ -270,6 +273,7 @@ cluster2_l2: cache@200 {
+ 	L2_2: l2-cache2 {
++		compatible = "cache";
+ 		cache-size = <0x100000>;
+ 		cache-line-size = <64>;
+ 		cache-sets = <1024>;
+ 		cache-unified;
++		cache-level = <2>;
+ 		next-level-cache = <&L3>;
+ 	};
  
- 		cluster3_l2: cache@300 {
- 			compatible = "cache";
-+			cache-unified;
- 			cache-size = <0x200000>;
- 			cache-line-size = <64>;
- 			cache-sets = <2048>;
+ 	L2_3: l2-cache3 {
++		compatible = "cache";
+ 		cache-size = <0x100000>;
+ 		cache-line-size = <64>;
+ 		cache-sets = <1024>;
+ 		cache-unified;
++		cache-level = <2>;
+ 		next-level-cache = <&L3>;
+ 	};
+ 
+ 	L3: l3-cache {
++		compatible = "cache";
+ 		cache-level = <3>;
+ 		cache-size = <0x800000>;
+ 		cache-line-size = <64>;
 -- 
 2.25.1
 
