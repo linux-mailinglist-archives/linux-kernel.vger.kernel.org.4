@@ -2,102 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFBBA61EAF6
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 07:26:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A203061EAF8
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 07:26:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231347AbiKGG0h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 01:26:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41476 "EHLO
+        id S231442AbiKGG0v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 01:26:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231324AbiKGG0T (ORCPT
+        with ESMTP id S231317AbiKGG0b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 01:26:19 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2809612AC9;
-        Sun,  6 Nov 2022 22:26:14 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1752C113E;
-        Sun,  6 Nov 2022 22:26:20 -0800 (PST)
-Received: from a077893.blr.arm.com (unknown [10.162.42.7])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id E30903F534;
-        Sun,  6 Nov 2022 22:26:08 -0800 (PST)
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-To:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, peterz@infradead.org,
-        acme@kernel.org, mark.rutland@arm.com, will@kernel.org,
-        catalin.marinas@arm.com
-Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
-        Mark Brown <broonie@kernel.org>,
-        James Clark <james.clark@arm.com>,
-        Rob Herring <robh@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Suzuki Poulose <suzuki.poulose@arm.com>,
-        Ingo Molnar <mingo@redhat.com>
-Subject: [PATCH V5 7/7] arm64/perf: Enable branch stack sampling
-Date:   Mon,  7 Nov 2022 11:55:14 +0530
-Message-Id: <20221107062514.2851047-8-anshuman.khandual@arm.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221107062514.2851047-1-anshuman.khandual@arm.com>
-References: <20221107062514.2851047-1-anshuman.khandual@arm.com>
+        Mon, 7 Nov 2022 01:26:31 -0500
+Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CF2712AFA;
+        Sun,  6 Nov 2022 22:26:28 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VU6xedu_1667802385;
+Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0VU6xedu_1667802385)
+          by smtp.aliyun-inc.com;
+          Mon, 07 Nov 2022 14:26:26 +0800
+From:   Yang Li <yang.lee@linux.alibaba.com>
+To:     kuba@kernel.org
+Cc:     davem@davemloft.net, fw@strlen.de, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Yang Li <yang.lee@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH -next] lib: Fix some kernel-doc comments
+Date:   Mon,  7 Nov 2022 14:26:23 +0800
+Message-Id: <20221107062623.6709-1-yang.lee@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now that all the required pieces are already in place, just enable the perf
-branch stack sampling support on arm64 platform, by removing the gate which
-blocks it in armpmu_event_init().
+Make the description of @policy to @p in nla_policy_len()
+to clear the below warnings:
 
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: Will Deacon <will@kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: linux-kernel@vger.kernel.org
-Cc: linux-arm-kernel@lists.infradead.org
-Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+lib/nlattr.c:660: warning: Function parameter or member 'p' not described in 'nla_policy_len'
+lib/nlattr.c:660: warning: Excess function parameter 'policy' description in 'nla_policy_len'
+
+Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=2736
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
 ---
- drivers/perf/arm_pmu.c | 25 ++++++++++++++++++++++---
- 1 file changed, 22 insertions(+), 3 deletions(-)
+ lib/nlattr.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/perf/arm_pmu.c b/drivers/perf/arm_pmu.c
-index 1a8dca4e513e..dc5e4f9aca22 100644
---- a/drivers/perf/arm_pmu.c
-+++ b/drivers/perf/arm_pmu.c
-@@ -537,9 +537,28 @@ static int armpmu_event_init(struct perf_event *event)
- 		!cpumask_test_cpu(event->cpu, &armpmu->supported_cpus))
- 		return -ENOENT;
+diff --git a/lib/nlattr.c b/lib/nlattr.c
+index b67a53e29b8f..9055e8b4d144 100644
+--- a/lib/nlattr.c
++++ b/lib/nlattr.c
+@@ -646,7 +646,7 @@ EXPORT_SYMBOL(__nla_validate);
  
--	/* does not support taken branch sampling */
--	if (has_branch_stack(event))
--		return -EOPNOTSUPP;
-+	if (has_branch_stack(event)) {
-+		/*
-+		 * BRBE support is absent. Select CONFIG_ARM_BRBE_PMU
-+		 * in the config, before branch stack sampling events
-+		 * can be requested.
-+		 */
-+		if (!IS_ENABLED(CONFIG_ARM_BRBE_PMU)) {
-+			pr_info("BRBE is disabled, select CONFIG_ARM_BRBE_PMU\n");
-+			return -EOPNOTSUPP;
-+		}
-+
-+		/*
-+		 * Branch stack sampling event can not be supported in
-+		 * case either the required driver itself is absent or
-+		 * BRBE buffer, is not supported. Besides checking for
-+		 * the callback prevents a crash in case it's absent.
-+		 */
-+		if (!armpmu->brbe_supported || !armpmu->brbe_supported(event)) {
-+			pr_info("BRBE is not supported\n");
-+			return -EOPNOTSUPP;
-+		}
-+	}
- 
- 	if (armpmu->map_event(event) == -ENOENT)
- 		return -ENOENT;
+ /**
+  * nla_policy_len - Determine the max. length of a policy
+- * @policy: policy to use
++ * @p: policy to use
+  * @n: number of policies
+  *
+  * Determines the max. length of the policy.  It is currently used
 -- 
-2.25.1
+2.20.1.7.g153144c
 
