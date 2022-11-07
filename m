@@ -2,111 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 951A961FA86
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 17:51:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B98161FA8E
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 17:52:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232875AbiKGQvc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 11:51:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43848 "EHLO
+        id S231667AbiKGQwU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 11:52:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232792AbiKGQvM (ORCPT
+        with ESMTP id S232790AbiKGQwL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 11:51:12 -0500
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 713CB22506
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 08:50:55 -0800 (PST)
-Received: by mail-ej1-x635.google.com with SMTP id y14so31748630ejd.9
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 08:50:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=iyMhELtxZmy7LysjRxs5koPIPiBWXacQeXByz4XAWq8=;
-        b=SB/go7ORYqxZZfdBrbyfG2GmTEbMOWGqLEqoNc+0uv6nh8+5+mS4V9HIuuT8AmOZjz
-         x6Vm6fxOhVnjXIOZEW/ue9mKhxe1sdm5EbBux0/CaioMil4IxpsOJJHjSM5F1PSBv5iF
-         CoufIDf0RF0y52GBQt1USA8W9XhrTAedwNAvc=
+        Mon, 7 Nov 2022 11:52:11 -0500
+Received: from mail-oi1-f174.google.com (mail-oi1-f174.google.com [209.85.167.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EB28220FD;
+        Mon,  7 Nov 2022 08:52:10 -0800 (PST)
+Received: by mail-oi1-f174.google.com with SMTP id q83so1047638oib.10;
+        Mon, 07 Nov 2022 08:52:10 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=iyMhELtxZmy7LysjRxs5koPIPiBWXacQeXByz4XAWq8=;
-        b=vUH7asRjCMs2TQFM2cTIBfrfhW7x3YBazs40tDgpmEMp1H2qR1Vivj5BcaJiQnFQtg
-         dmyZ309Qq+N9iNehtTixXsmyw++L7jb3Ac3D6HX3kGffbondm5EBcnuQ/ChPIMBxAm+k
-         4j1cK3+p3OXtR+vUH2QSxzsTt0zlOVuD20VGm/kCYia4L/u+vXphRwhSCNZoq3YEjToD
-         qtQ42rbBXAwqL5RrUKE8nEV3h7P0qF4sOalT3QfdFdgs/CwKL/cdVcPQVp9VILaxVV+x
-         ZkLDPqWVKFypdLKAWQ1GGSxxdIj71RkO6n1iExFaMC6nJqVAvpmB1c+ar3Uu+IyELr+V
-         90rg==
-X-Gm-Message-State: ACrzQf2yhrxRutt9YjP+P0rrhFhXPTPlLlTqgxbxFjqD4EL/4OvBcUDo
-        /lVDrSElM0fn6wDtq4sLlfIurmEYje/ITQ==
-X-Google-Smtp-Source: AMsMyM48hJALYAyWpbG6XBjhVarfWOaNU8g/9bCzFMOKbpNVjO17V6Rb/1WW8crInK4klRyCnc6BUQ==
-X-Received: by 2002:a17:906:dc93:b0:7ad:ca82:4cb9 with SMTP id cs19-20020a170906dc9300b007adca824cb9mr42076638ejc.521.1667839854075;
-        Mon, 07 Nov 2022 08:50:54 -0800 (PST)
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com. [209.85.221.52])
-        by smtp.gmail.com with ESMTPSA id fd25-20020a056402389900b0045b910b0542sm4458763edb.15.2022.11.07.08.50.53
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Nov 2022 08:50:53 -0800 (PST)
-Received: by mail-wr1-f52.google.com with SMTP id a14so17141828wru.5
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 08:50:53 -0800 (PST)
-X-Received: by 2002:adf:cd86:0:b0:236:6056:14d3 with SMTP id
- q6-20020adfcd86000000b00236605614d3mr33705613wrj.30.1667839852819; Mon, 07
- Nov 2022 08:50:52 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qQ64GEaHNoYqaSyJPET6HqEloEtKzKHKFpQ8WjiqbOY=;
+        b=K1j3UaNAmK7TXgzFvQVd5yi4X10Q4DsMHao6D23ewVhcK1btH1hFTb4lZfeP2nmFyt
+         qXhb95tCo14rMP2EhpShmKk3Xo2gEJKTbhYpTtuJZ0DZMVBEhrf2vJsvxd+nWgGmLXub
+         WyjeF9GMTDkAlJaa1WHq/3Q5Y/HXfQLdIe+ovvA5J1BTddV0tLFlKNpMWn3571EVKPJ/
+         FfOo87qXLRIBAoEakslT55FCLhyuSYHPC/xmPIIvmzdGVv3MDB6p3xm42/y4Ij6Q2oXu
+         txSB8gYVUe3/O+vZ+xXvGf4xvjp40jpy3Ay5BakgZ+v6VJaT6idFQFJblViI9ICB5PuI
+         h95A==
+X-Gm-Message-State: ACrzQf353hKzy1jxpBE/bXjP8T+V1es0truFtU4+uThPHVnZsEw8RtJV
+        85oXDmcyicnmS38IRGfw5Q==
+X-Google-Smtp-Source: AMsMyM7ZHh3wfKMz5itrgmKht6rWjBQJpRWxKulZfspcnTiaTzZ/Z14rbOnaTEE8glR459/Ok4a7HQ==
+X-Received: by 2002:aca:d0b:0:b0:359:cb6e:809b with SMTP id 11-20020aca0d0b000000b00359cb6e809bmr30548387oin.137.1667839929799;
+        Mon, 07 Nov 2022 08:52:09 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id h25-20020a056870171900b0013d9bd4ad2esm3307622oae.12.2022.11.07.08.52.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Nov 2022 08:52:09 -0800 (PST)
+Received: (nullmailer pid 1229987 invoked by uid 1000);
+        Mon, 07 Nov 2022 16:52:11 -0000
+Date:   Mon, 7 Nov 2022 10:52:11 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Cosmin Tanislav <demonsingur@gmail.com>
+Cc:     Lars-Peter Clausen <lars@metafoo.de>, devicetree@vger.kernel.org,
+        Jonathan Cameron <jic23@kernel.org>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        linux-iio@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        linux-kernel@vger.kernel.org,
+        Cosmin Tanislav <cosmin.tanislav@analog.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>
+Subject: Re: [PATCH v4 05/13] dt-bindings: iio: temperature: ltc2983:
+ describe matrix items
+Message-ID: <166783993054.1229931.10283754977945608290.robh@kernel.org>
+References: <20221103130041.2153295-1-demonsingur@gmail.com>
+ <20221103130041.2153295-6-demonsingur@gmail.com>
 MIME-Version: 1.0
-References: <20210114180738.1758707-1-helen.koike@collabora.com>
- <20210114180738.1758707-3-helen.koike@collabora.com> <d0d1f74f-7e77-1b18-0529-dbbec8889584@xs4all.nl>
- <577c56bf-146c-f34a-2028-075170076de7@collabora.com> <708221e8-a805-c394-6958-6c7ec24bfe66@synaptics.com>
- <b58e2678-8d2a-a323-07e4-12cc01c8c3c2@collabora.com>
-In-Reply-To: <b58e2678-8d2a-a323-07e4-12cc01c8c3c2@collabora.com>
-From:   Fritz Koenig <frkoenig@chromium.org>
-Date:   Mon, 7 Nov 2022 08:50:41 -0800
-X-Gmail-Original-Message-ID: <CAMfZQbxxD8oAAKES5c-=2Zw-id20ac7kg4T5=7xrih2WeYbKhQ@mail.gmail.com>
-Message-ID: <CAMfZQbxxD8oAAKES5c-=2Zw-id20ac7kg4T5=7xrih2WeYbKhQ@mail.gmail.com>
-Subject: Re: [RFC PATCH v6 02/11] media: v4l2: Extend pixel formats to unify
- single/multi-planar handling (and more)
-To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
-Cc:     Hsia-Jun Li <Randy.Li@synaptics.com>,
-        Helen Koike <helen.koike@collabora.com>, mchehab@kernel.org,
-        hans.verkuil@cisco.com, laurent.pinchart@ideasonboard.com,
-        sakari.ailus@iki.fi, boris.brezillon@collabora.com,
-        hiroh@chromium.org, nicolas@ndufresne.ca, Brian.Starkey@arm.com,
-        kernel@collabora.com, narmstrong@baylibre.com,
-        linux-kernel@vger.kernel.org, frkoenig@chromium.org,
-        stanimir.varbanov@linaro.org, tfiga@chromium.org,
-        Hans Verkuil <hverkuil@xs4all.nl>, linux-media@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221103130041.2153295-6-demonsingur@gmail.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Nov 6, 2022 at 2:11 PM Dmitry Osipenko
-<dmitry.osipenko@collabora.com> wrote:
->
-> On 11/5/22 18:19, Hsia-Jun Li wrote:
-> > Hello Helen
-> >
-> > I didn't see any updates from V6 and V7-WIP in your repo. That is what I
-> > need to for our complex tile formats in our platform.
-> >
-> > Any future plane here?
-> >
-> > Besides I have some ideas on these patches.
->
-> I was looking into updating this patchset few months ago and the biggest
-> blocker was the absence of immediate upstream user for this new UAPI.
-> What your platform is? Is the driver stack completely opensource?
->
-ChromeOS had interest in this for enabling UBWC for the venus driver.
-We have a workaround at the moment, but would be interested.  So not
-immediate need, but would hopefully be a user at some point.
 
--Fritz
-> --
-> Best regards,
-> Dmitry
->
+On Thu, 03 Nov 2022 15:00:33 +0200, Cosmin Tanislav wrote:
+> From: Cosmin Tanislav <cosmin.tanislav@analog.com>
+> 
+> Give a little bit of information on what each item in the matrix is
+> supposed to be.
+> 
+> Also, some matrices put the 'minItems' and 'maxItems' keywords in the
+> wrong level. They should be on the same level as the 'items' keyword.
+> Fix it.
+> 
+> Signed-off-by: Cosmin Tanislav <cosmin.tanislav@analog.com>
+> ---
+>  .../bindings/iio/temperature/adi,ltc2983.yaml | 23 ++++++++++---------
+>  1 file changed, 12 insertions(+), 11 deletions(-)
+> 
+
+Reviewed-by: Rob Herring <robh@kernel.org>
