@@ -2,160 +2,245 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8E1F61EFED
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 11:08:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 791F761EFF0
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 11:08:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231697AbiKGKIB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 05:08:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55026 "EHLO
+        id S231349AbiKGKIJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 05:08:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231349AbiKGKIA (ORCPT
+        with ESMTP id S231902AbiKGKIG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 05:08:00 -0500
-Received: from wnew1-smtp.messagingengine.com (wnew1-smtp.messagingengine.com [64.147.123.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 763B715816
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 02:07:59 -0800 (PST)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailnew.west.internal (Postfix) with ESMTP id 49D4E2B060A4;
-        Mon,  7 Nov 2022 05:07:54 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Mon, 07 Nov 2022 05:07:59 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1667815673; x=1667822873; bh=H188XHf92e
-        tTDREXnb/OEU+uV1P6JQ1CLPf/Yjdde+M=; b=gEu++7F4AOlflnhqJ5+fnbojCK
-        nkwxbyG1C9qowPqmGKvGXMfSnZd6Na5Cv9NZc9vFSXozr0ESux2jCMak+G2yFE8v
-        MRzjga1u5opjXxwqvSqZfjde5PoujC57ardG3mpdwwQDOxZxwc64AY90SeESm1vN
-        4gE+nXkcGGxEbSLlyJ731jwgbcpXqQuvjgJub0eB8pwqZAiinUtQ8f2iJmdkVCE4
-        BIxqpv/330HO8THURUc28ZD79L+iHrB19SHbRInPdsvoaHzVbq1AYHReSZLLVc9M
-        KbAB4lzMj2Gmvu/WoqVnAECku015lEjiIwihD8aGuOvH5wanb/d+Ca+VWDtQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1667815673; x=1667822873; bh=H188XHf92etTDREXnb/OEU+uV1P6
-        JQ1CLPf/Yjdde+M=; b=GPwBvSEh+VbRha1ATDffxsUxKJoKHXR0U4/4a72EmZ8m
-        cvfOAdBBsFYfn1A+CaJfX0/fipVj7UC9aX9mz+sNlvWy8wC1e31MTWnviAeODQGa
-        EUeHf0O2qXXPjiczR42LfsVeOc6+g3odf0RnzSFQvyG6nNKS8sJAaK9VMrrN7rg1
-        +Gm10gYCJVRLDhFQ9+9nsv1bfInv6kJ0jwf9x44kiYI8V4zI7Rl4fZYTT6LqFhDK
-        emDylnIlbdMhmhT7jsKRpb97XHqH/xiaujF1mXFbix4zBDhEveG4Dm2phwDSx5TL
-        vVEot2nZ2gCC9DfW3n9JGnhQfOqxTr/8e4RSE7WL5g==
-X-ME-Sender: <xms:-dhoYyARoCxVJrmtEvIS0_FmWfcCThrM8hWD7_kymH-uoy_vWS0xhA>
-    <xme:-dhoY8gmAKHH-2SJ6SQcrQN2P971eTRB37opBZnb46FC8CqkapUP0iRX9igmmnE45
-    nR529tZDD9KsccHerI>
-X-ME-Received: <xmr:-dhoY1mLqNcrIR-iY8kn8Sr3xavRV6VyoQE8T8hOFtWm9p4ZwNrBovAe4WksBtEk5rK8s0jJIg_kKmqp6DtLKnZ_Az0m44nEenLBfbtGmL-xOA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrvdekgdduudcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvvefukfhfgggtuggjsehgtderredttddunecuhfhrohhmpeforgigihhm
-    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
-    htvghrnhepjeevfeehfeekieffgeevleevtefgffefkedtfeeuhfettdegjeehgfegudff
-    ffdunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmh
-    grgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:-dhoYwy35CgOY1mfusEKLuDywIwMdZh4S1RlyqVfAtfVe6RM4Do_Pw>
-    <xmx:-dhoY3R8KkmhZLS8NSi4YHFEoTKBj8jDEQBwbtgdE0hbV4S6VmumWg>
-    <xmx:-dhoY7bRvSYaXa8ZhULjpaGyHJFHKsxu144f2Aml4Vu43uds7EFUSQ>
-    <xmx:-dhoY_yGyPAWT16mttzlT_5aevro2ZdJyAl9T3TVozzrbs9R5OR_wQNfK0g>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 7 Nov 2022 05:07:52 -0500 (EST)
-Date:   Mon, 7 Nov 2022 11:07:51 +0100
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Noralf =?utf-8?Q?Tr=C3=B8nnes?= <noralf@tronnes.org>
-Cc:     Mateusz Kwiatkowski <kfyatek@gmail.com>,
-        Karol Herbst <kherbst@redhat.com>,
-        Emma Anholt <emma@anholt.net>, Ben Skeggs <bskeggs@redhat.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Lyude Paul <lyude@redhat.com>, linux-sunxi@lists.linux.dev,
-        intel-gfx@lists.freedesktop.org,
-        Phil Elwell <phil@raspberrypi.com>,
-        linux-arm-kernel@lists.infradead.org,
-        nouveau@lists.freedesktop.org, Hans de Goede <hdegoede@redhat.com>,
-        Dom Cobley <dom@raspberrypi.com>,
-        dri-devel@lists.freedesktop.org,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Subject: Re: [PATCH v6 16/23] drm/probe-helper: Provide a TV get_modes helper
-Message-ID: <20221107100751.neijajfrazxloldp@houat>
-References: <20220728-rpi-analog-tv-properties-v6-0-e7792734108f@cerno.tech>
- <20220728-rpi-analog-tv-properties-v6-16-e7792734108f@cerno.tech>
- <8d0eee22-50f5-5b0a-c1e6-c5f61dd5bbcd@gmail.com>
- <eb485588-2e7a-8455-7ec4-6a9649d2bef8@tronnes.org>
+        Mon, 7 Nov 2022 05:08:06 -0500
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42A1F18B0C
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 02:08:04 -0800 (PST)
+Received: by mail-lf1-x12c.google.com with SMTP id c1so14400332lfi.7
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 02:08:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Ihj0upNdkTP55gXuF0SUa0clYb3PNSzxkMOUUfBgT4M=;
+        b=Paae27v+L/eQvjKoT4BCsAJ2K+JkOAm+t4Ad6nE8rK+fhE68s629t83Il/dn4z/qVr
+         79BR61WYsX7AX9UeyqNFIOV6OV6nKTr3jWMx0tH2nCXCkGD8Z2PesilplJn9gPsSo2Cz
+         TregEhz6VT9GF4EdD23J2FOXcR5KJzlB7Eil+aj55fy+jbtm9YNLlBua0esNafGjNVJb
+         /hlhqzOGXm0sZTmdx/R/Xu5g6cUfGfwIEvNiKCrMuHnwdg/MiqM3jN0Z3OoBdq/jhPOe
+         pOgTqUGXpsrsdBlCo3rjKyeQzr+FBaGq2++eB8JbmAqKhmNmpDhQmncG83jDmJeAgUXv
+         FESA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ihj0upNdkTP55gXuF0SUa0clYb3PNSzxkMOUUfBgT4M=;
+        b=U29BJAdrEPd4jX2QO8VPNILt7z+CG+Q1MdG8JyORX5E9zkIWvm1afksU+c4T64d6S3
+         2CJZcl7lxsAm+yzEc0Mx1FmK+3+EtpUGVTS+gvaJ5EZoQcfpWwqmmiZmBPDL554lcv63
+         Z0wYirrXqi0maCpMrst9cx2QKSBsQE18U6NOtytl4GgKbXOTdLYaaKL3MZ8Z8FAYLccu
+         T4UE4gf38zEf4rDpwLEa8YBmkxv0F9w1//RT1UGP3ulOEHmnsmrJ1KW2K8jLeybjSgUq
+         qgfVdkhCgLB3w4cFAmka0DhFcl5hkdcGzP/Iz9VLi4NIO4rg9TjFEt9rr4D5UimlGBha
+         /nbw==
+X-Gm-Message-State: ANoB5pnOKWTBnQmRKbIppoKXy8OiaTXXxYLMGQDxb3yE9a0OATExZFE5
+        Ut986+8f3uOnbHvbC5wuFb6NRQ==
+X-Google-Smtp-Source: AA0mqf6Jn0feh+iMrb5BBlE+JQYZx1nv9rkhFWyyWQVlwaOcW+zjT9ZWEVzYNTj5t6u7wOikBTRCWA==
+X-Received: by 2002:a05:6512:21ae:b0:4b3:daf9:8647 with SMTP id c14-20020a05651221ae00b004b3daf98647mr566521lft.92.1667815681106;
+        Mon, 07 Nov 2022 02:08:01 -0800 (PST)
+Received: from [192.168.0.20] (088156142199.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.199])
+        by smtp.gmail.com with ESMTPSA id j29-20020a056512029d00b004a03fd4476esm1152261lfp.287.2022.11.07.02.07.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 07 Nov 2022 02:08:00 -0800 (PST)
+Message-ID: <f2d5982d-f1cc-ba49-dd82-62302c08a029@linaro.org>
+Date:   Mon, 7 Nov 2022 11:07:59 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="gnrypjdevshxh5ih"
-Content-Disposition: inline
-In-Reply-To: <eb485588-2e7a-8455-7ec4-6a9649d2bef8@tronnes.org>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v4 2/2] dt-bindings: PCI: xilinx-nwl: Convert to YAML
+ schemas of Xilinx NWL PCIe Root Port Bridge
+Content-Language: en-US
+To:     Thippeswamy Havalige <thippeswamy.havalige@amd.com>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Cc:     bhelgaas@google.com, michals@xilinx.com, robh+dt@kernel.org,
+        nagaradhesh.yeleswarapu@amd.com, bharat.kumar.gogada@amd.com
+References: <20221107095408.924778-1-thippeswamy.havalige@amd.com>
+ <20221107095408.924778-2-thippeswamy.havalige@amd.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221107095408.924778-2-thippeswamy.havalige@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 07/11/2022 10:54, Thippeswamy Havalige wrote:
+> Convert to YAML schemas for Xilinx NWL PCIe Root Port Bridge
+> dt binding.
+> 
+> Signed-off-by: Thippeswamy Havalige <thippeswamy.havalige@amd.com>
+> ---
+> Changes in v4:
+> Dropped, msi-controller property as it comes from msi schema.
+> Rearranged interrupts description as per example.
+> Used same style of quotes.
+> ---
+>  .../bindings/pci/xilinx-nwl-pcie.txt          |  73 ---------
+>  .../bindings/pci/xlnx,nwl-pcie.yaml           | 149 ++++++++++++++++++
+>  2 files changed, 149 insertions(+), 73 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/pci/xilinx-nwl-pcie.txt
+>  create mode 100644 Documentation/devicetree/bindings/pci/xlnx,nwl-pcie.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/pci/xilinx-nwl-pcie.txt b/Documentation/devicetree/bindings/pci/xilinx-nwl-pcie.txt
+> deleted file mode 100644
+> index f56f8c58c5d9..000000000000
+> --- a/Documentation/devicetree/bindings/pci/xilinx-nwl-pcie.txt
+> +++ /dev/null
+> @@ -1,73 +0,0 @@
+> -* Xilinx NWL PCIe Root Port Bridge DT description
+> -
+> -Required properties:
+> -- compatible: Should contain "xlnx,nwl-pcie-2.11"
+> -- #address-cells: Address representation for root ports, set to <3>
+> -- #size-cells: Size representation for root ports, set to <2>
+> -- #interrupt-cells: specifies the number of cells needed to encode an
+> -	interrupt source. The value must be 1.
+> -- reg: Should contain Bridge, PCIe Controller registers location,
+> -	configuration space, and length
+> -- reg-names: Must include the following entries:
+> -	"breg": bridge registers
+> -	"pcireg": PCIe controller registers
+> -	"cfg": configuration space region
+> -- device_type: must be "pci"
+> -- interrupts: Should contain NWL PCIe interrupt
+> -- interrupt-names: Must include the following entries:
+> -	"msi1, msi0": interrupt asserted when an MSI is received
+> -	"intx": interrupt asserted when a legacy interrupt is received
+> -	"misc": interrupt asserted when miscellaneous interrupt is received
+> -- interrupt-map-mask and interrupt-map: standard PCI properties to define the
+> -	mapping of the PCI interface to interrupt numbers.
+> -- ranges: ranges for the PCI memory regions (I/O space region is not
+> -	supported by hardware)
+> -	Please refer to the standard PCI bus binding document for a more
+> -	detailed explanation
+> -- msi-controller: indicates that this is MSI controller node
+> -- msi-parent:  MSI parent of the root complex itself
+> -- legacy-interrupt-controller: Interrupt controller device node for Legacy
+> -	interrupts
+> -	- interrupt-controller: identifies the node as an interrupt controller
+> -	- #interrupt-cells: should be set to 1
+> -	- #address-cells: specifies the number of cells needed to encode an
+> -		address. The value must be 0.
+> -
+> -Optional properties:
+> -- dma-coherent: present if DMA operations are coherent
+> -- clocks: Input clock specifier. Refer to common clock bindings
+> -
+> -Example:
+> -++++++++
+> -
+> -nwl_pcie: pcie@fd0e0000 {
+> -	#address-cells = <3>;
+> -	#size-cells = <2>;
+> -	compatible = "xlnx,nwl-pcie-2.11";
+> -	#interrupt-cells = <1>;
+> -	msi-controller;
+> -	device_type = "pci";
+> -	interrupt-parent = <&gic>;
+> -	interrupts = <0 114 4>, <0 115 4>, <0 116 4>, <0 117 4>, <0 118 4>;
+> -	interrupt-names = "msi0", "msi1", "intx", "dummy", "misc";
+> -	interrupt-map-mask = <0x0 0x0 0x0 0x7>;
+> -	interrupt-map = <0x0 0x0 0x0 0x1 &pcie_intc 0x1>,
+> -			<0x0 0x0 0x0 0x2 &pcie_intc 0x2>,
+> -			<0x0 0x0 0x0 0x3 &pcie_intc 0x3>,
+> -			<0x0 0x0 0x0 0x4 &pcie_intc 0x4>;
+> -
+> -	msi-parent = <&nwl_pcie>;
+> -	reg = <0x0 0xfd0e0000 0x0 0x1000>,
+> -	      <0x0 0xfd480000 0x0 0x1000>,
+> -	      <0x80 0x00000000 0x0 0x1000000>;
+> -	reg-names = "breg", "pcireg", "cfg";
+> -	ranges = <0x02000000 0x00000000 0xe0000000 0x00000000 0xe0000000 0x00000000 0x10000000  /* non-prefetchable memory */
+> -		  0x43000000 0x00000006 0x00000000 0x00000006 0x00000000 0x00000002 0x00000000>;/* prefetchable memory */
+> -
+> -	pcie_intc: legacy-interrupt-controller {
+> -		interrupt-controller;
+> -		#address-cells = <0>;
+> -		#interrupt-cells = <1>;
+> -	};
+> -
+> -};
+> diff --git a/Documentation/devicetree/bindings/pci/xlnx,nwl-pcie.yaml b/Documentation/devicetree/bindings/pci/xlnx,nwl-pcie.yaml
+> new file mode 100644
+> index 000000000000..35c2d9fb3b9b
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/pci/xlnx,nwl-pcie.yaml
+> @@ -0,0 +1,149 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/pci/xlnx,nwl-pcie.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Xilinx NWL PCIe Root Port Bridge
+> +
+> +maintainers:
+> +  - Thippeswamy Havalige <thippeswamy.havalige@amd.com>
+> +
+> +allOf:
+> +  - $ref: /schemas/pci/pci-bus.yaml#
+> +  - $ref: /schemas/interrupt-controller/msi-controller.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    const: xlnx,nwl-pcie-2.11
+> +
+> +  reg:
+> +    items:
+> +      - description: PCIe bridge registers location.
+> +      - description: PCIe Controller registers location.
+> +      - description: PCIe Configuration space region.
+> +
+> +  reg-names:
+> +    items:
+> +      - const: breg
+> +      - const: pcireg
+> +      - const: cfg
+> +
+> +  interrupts:
+> +    items:
+> +      - description: interrupt asserted when miscellaneous interrupt is received
+> +      - description: unused interrupt(dummy)
+> +      - description: interrupt asserted when a legacy interrupt is received
+> +      - description: msi1 interrupt asserted when an MSI is received
+> +      - description: msi0 interrupt asserted when an MSI is received
+> +
+> +  interrupt-names:
+> +    minItems: 4
 
---gnrypjdevshxh5ih
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This still does not match your interrupts. It should not be different.
+Either you require 4 or 5 interrupts. Not 4 and 5...
 
-Hi Noralf,
+> +    items:
+> +      - const: misc
+> +      - const: dummy
+> +      - const: intx
+> +      - const: msi1
+> +      - const: msi0
+> +
+> +  interrupt-map-mask:
+> +    items:
+> +      - const: 0
+> +      - const: 0
+> +      - const: 0
+> +      - const: 7
+> +
 
-On Sun, Nov 06, 2022 at 05:59:23PM +0100, Noralf Tr=F8nnes wrote:
->=20
->=20
-> Den 27.10.2022 00.02, skrev Mateusz Kwiatkowski:
-> > Hi Maxime,
-> >=20
-> > First of all, nice idea with the helper function that can be reused by =
-different
-> > drivers. This is neat!
-> >=20
-> > But looking at this function, it feels a bit overcomplicated. You're cr=
-eating
-> > the two modes, then checking which one is the default, then set the pre=
-ferred
-> > one and possibly reorder them. Maybe it can be simplified somehow?
-> >=20
-> > Although when I tried to refactor it myself, I ended up with something =
-that's
-> > not better at all. Maybe it needs to be complicated, after all :(
-> >=20
->=20
-> I also thought that the function was complicated/difficult to read, in
-> particular the index stuff at the end, but I also failed in finding a
-> "better" solution, just a different one ;)
+Best regards,
+Krzysztof
 
-I think I like yours better still :)
-
-Can I bring it into my series, with your authorship and SoB?
-
-Maxime
-
---gnrypjdevshxh5ih
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCY2jY9wAKCRDj7w1vZxhR
-xQwNAP4m8wqBDbHwkCGeLkJY5dnG5iYXcSUpkoA/Zr4bM1OOTgD/fQIl3YCLdhl3
-wENLHmgU8SYR+x7PQD/yXPYL48w/Cgk=
-=0OBV
------END PGP SIGNATURE-----
-
---gnrypjdevshxh5ih--
