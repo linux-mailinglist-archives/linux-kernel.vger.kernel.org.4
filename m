@@ -2,113 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D73261F0BF
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 11:34:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AF2D61F0C0
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 11:34:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231524AbiKGKd7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 05:33:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41836 "EHLO
+        id S231717AbiKGKeD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 05:34:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231807AbiKGKdu (ORCPT
+        with ESMTP id S229659AbiKGKdw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 05:33:50 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CD3B6EA6;
+        Mon, 7 Nov 2022 05:33:52 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD47B273B;
         Mon,  7 Nov 2022 02:33:49 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DDB7A1FB;
-        Mon,  7 Nov 2022 02:33:54 -0800 (PST)
-Received: from FVFF77S0Q05N (unknown [10.57.69.132])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 96A1D3F534;
-        Mon,  7 Nov 2022 02:33:46 -0800 (PST)
-Date:   Mon, 7 Nov 2022 10:33:25 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Alexander Potapenko <glider@google.com>
-Cc:     Baisong Zhong <zhongbaisong@huawei.com>, elver@google.com,
-        Catalin Marinas <catalin.marinas@arm.com>, edumazet@google.com,
-        keescook@chromium.org, kuba@kernel.org, ast@kernel.org,
-        daniel@iogearbox.net, davem@davemloft.net, pabeni@redhat.com,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH -next,v2] bpf, test_run: fix alignment problem in
- bpf_prog_test_run_skb()
-Message-ID: <Y2je9dJxUjEchB9k@FVFF77S0Q05N>
-References: <20221102081620.1465154-1-zhongbaisong@huawei.com>
- <CAG_fn=UDAjNd2xFrRxSVyLTZOAGapjSq2Zu5Xht12JNq-A7S=A@mail.gmail.com>
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0DF7160FBA;
+        Mon,  7 Nov 2022 10:33:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9FBAC433D6;
+        Mon,  7 Nov 2022 10:33:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667817228;
+        bh=xMmwTKgR8xLv7D04js/Rsm1kq7uL9UsHHojenyPZTeU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=WriRVPK6jCgwq0iia9J5qANNqDfT/vbLN3rLaezsJL95JRMRaEeLvqa5CTqYs0KlF
+         657Xnf6DBkkRdAxCIEF+2O0Ztjakt8B3kkXaf8f2Cj/I/9d2kMCEV/i4tCHOt7fqE6
+         ju3CqWZaT5zXCUlG5lNM9OLz0wCnDer+mKM5iqrBTThtlXpK4NSR1AaPz0KXVfjm2m
+         g8UuhojD3yCtFkaOegtZkihpAnBJEhL4Xbljnnyizd1jE9+IxXz7EZGRWagiPsGik6
+         imaoqukvWyPbK08pt2eY28kTt77HUi/89g5W/G9Lib/nU9ughrZKw1V4wGfD9hHMY6
+         SbF9J2AQmCc2w==
+Date:   Mon, 7 Nov 2022 10:33:43 +0000
+From:   Lee Jones <lee@kernel.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Frank Rowand <frowand.list@gmail.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH] scripts/dtc: Update to upstream version
+ v1.6.1-63-g55778a03df61
+Message-ID: <Y2jfB2YErvi+EIvN@google.com>
+References: <20221101181427.1808703-1-robh@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CAG_fn=UDAjNd2xFrRxSVyLTZOAGapjSq2Zu5Xht12JNq-A7S=A@mail.gmail.com>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221101181427.1808703-1-robh@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 04, 2022 at 06:06:05PM +0100, Alexander Potapenko wrote:
-> On Wed, Nov 2, 2022 at 9:16 AM Baisong Zhong <zhongbaisong@huawei.com> wrote:
-> >
-> > we got a syzkaller problem because of aarch64 alignment fault
-> > if KFENCE enabled.
-> >
-> > When the size from user bpf program is an odd number, like
-> > 399, 407, etc, it will cause the struct skb_shared_info's
-> > unaligned access. As seen below:
-> >
-> > BUG: KFENCE: use-after-free read in __skb_clone+0x23c/0x2a0 net/core/skbuff.c:1032
+On Tue, 01 Nov 2022, Rob Herring wrote:
+
+> It's been a while since the last sync and Lee needs commit 73590342fc85
+> ("libfdt: prevent integer overflow in fdt_next_tag").
 > 
-> It's interesting that KFENCE is reporting a UAF without a deallocation
-> stack here.
+> This adds the following commits from upstream:
 > 
-> Looks like an unaligned access to 0xffff6254fffac077 causes the ARM
-> CPU to throw a fault handled by __do_kernel_fault()
+> 55778a03df61 libfdt: tests: add get_next_tag_invalid_prop_len
+> 73590342fc85 libfdt: prevent integer overflow in fdt_next_tag
+> 035fb90d5375 libfdt: add fdt_get_property_by_offset_w helper
+> 98a07006c48d Makefile: fix infinite recursion by dropping non-existent `%.output`
+> a036cc7b0c10 Makefile: limit make re-execution to avoid infinite spin
+> c6e92108bcd9 libdtc: remove duplicate judgments
+> e37c25677dc9 Don't generate erroneous fixups from reference to path
+> 50454658f2b5 libfdt: Don't mask fdt_get_name() returned error
+> e64a204196c9 manual.txt: Follow README.md and remove Jon
+> f508c83fe6f0 Update README in MANIFEST.in and setup.py to README.md
+> c2ccf8a77dd2 Add description of Signed-off-by lines
+> 90b9d9de42ca Split out information for contributors to CONTRIBUTING.md
+> 0ee1d479b23a Remove Jon Loeliger from maintainers list
+> b33a73c62c1c Convert README to README.md
+> 7ad60734b1c1 Allow static building with meson
+> fd9b8c96c780 Allow static building with make
+> fda71da26e7f libfdt: Handle failed get_name() on BEGIN_NODE
+> c7c7f17a83d5 Fix test script to run also on dash shell
+> 01f23ffe1679 Add missing relref_merge test to meson test list
+> ed310803ea89 pylibfdt: add FdtRo.get_path()
+> c001fc01a43e pylibfdt: fix swig build in install
+> 26c54f840d23 tests: add test cases for label-relative path references
+> ec7986e682cf dtc: introduce label relative path references
+> 651410e54cb9 util: introduce xstrndup helper
+> 4048aed12b81 setup.py: fix out of tree build
+> ff5afb96d0c0 Handle integer overflow in check_property_phandle_args()
+> ca7294434309 README: Explain how to add a new API function
+> c0c2e115f82e Fix a UB when fdt_get_string return null
+> cd5f69cbc0d4 tests: setprop_inplace: use xstrdup instead of unchecked strdup
+> a04f69025003 pylibfdt: add Property.as_*int*_array()
+> 83102717d7c4 pylibfdt: add Property.as_stringlist()
+> d152126bb029 Fix Python crash on getprop deallocation
+> 17739b7ef510 Support 'r' format for printing raw bytes with fdtget
+> 45f3d1a095dd libfdt: overlay: make overlay_get_target() public
+> c19a4bafa514 libfdt: fix an incorrect integer promotion
+> 1cc41b1c969f pylibfdt: Add packaging metadata
+> db72398cd437 README: Update pylibfdt install instructions
+> 383e148b70a4 pylibfdt: fix with Python 3.10
+> 23b56cb7e189 pylibfdt: Move setup.py to the top level
+> 69a760747d8d pylibfdt: Split setup.py author name and email
+> 0b106a77dbdc pylibfdt: Use setuptools_scm for the version
+> c691776ddb26 pylibfdt: Use setuptools instead of distutils
+> 5216f3f1bbb7 libfdt: Add static lib to meson build
+> 4eda2590f481 CI: Cirrus: bump used FreeBSD from 12.1 to 13.0
 
-Importantly, an unaligned *atomic*, which is a bug regardless of KFENCE.
+At least one of these patches fixes security concerns.
 
-> This isn't technically a page fault, but anyway the access address
-> gets passed to kfence_handle_page_fault(), which defaults to a
-> use-after-free, because the address belongs to the object page, not
-> the redzone page.
-> 
-> Catalin, Mark, what is the right way to only handle traps caused by
-> reading/writing to a page for which `set_memory_valid(addr, 1, 0)` was
-> called?
+Could we also have this in Stable please?
 
-That should appear as a translation fault, so we could add an
-is_el1_translation_fault() helper for that. I can't immediately recall how
-misaligned atomics are presented, but I presume as something other than a
-translation fault.
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+>  scripts/dtc/checks.c               | 15 +++++++-----
+>  scripts/dtc/dtc-lexer.l            |  2 +-
+>  scripts/dtc/dtc-parser.y           | 13 ++++++++++
+>  scripts/dtc/libfdt/fdt.c           | 20 +++++++++------
+>  scripts/dtc/libfdt/fdt.h           |  4 +--
+>  scripts/dtc/libfdt/fdt_addresses.c |  2 +-
+>  scripts/dtc/libfdt/fdt_overlay.c   | 29 ++++++----------------
+>  scripts/dtc/libfdt/fdt_ro.c        |  2 +-
+>  scripts/dtc/libfdt/libfdt.h        | 25 +++++++++++++++++++
+>  scripts/dtc/livetree.c             | 39 +++++++++++++++++++++++++++---
+>  scripts/dtc/util.c                 | 15 ++++++++++--
+>  scripts/dtc/util.h                 |  4 ++-
+>  scripts/dtc/version_gen.h          |  2 +-
+>  13 files changed, 124 insertions(+), 48 deletions(-)
 
-If the below works for you, I can go spin that as a real patch.
-
-Mark.
-
----->8----
-diff --git a/arch/arm64/mm/fault.c b/arch/arm64/mm/fault.c
-index 5b391490e045b..1de4b6afa8515 100644
---- a/arch/arm64/mm/fault.c
-+++ b/arch/arm64/mm/fault.c
-@@ -239,6 +239,11 @@ static bool is_el1_data_abort(unsigned long esr)
-        return ESR_ELx_EC(esr) == ESR_ELx_EC_DABT_CUR;
- }
- 
-+static bool is_el1_translation_fault(unsigned long esr)
-+{
-+       return (esr & ESR_ELx_FSC_TYPE) == ESR_ELx_FSC_FAULT;
-+}
-+
- static inline bool is_el1_permission_fault(unsigned long addr, unsigned long esr,
-                                           struct pt_regs *regs)
- {
-@@ -385,7 +390,8 @@ static void __do_kernel_fault(unsigned long addr, unsigned long esr,
-        } else if (addr < PAGE_SIZE) {
-                msg = "NULL pointer dereference";
-        } else {
--               if (kfence_handle_page_fault(addr, esr & ESR_ELx_WNR, regs))
-+               if (is_el1_translation_fault(esr) &&
-+                   kfence_handle_page_fault(addr, esr & ESR_ELx_WNR, regs))
-                        return;
- 
-                msg = "paging request";
+-- 
+Lee Jones [李琼斯]
