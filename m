@@ -2,134 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A173620170
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 22:47:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A487620175
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 22:48:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233576AbiKGVrl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 16:47:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37070 "EHLO
+        id S232871AbiKGVsj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 16:48:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233042AbiKGVrj (ORCPT
+        with ESMTP id S233086AbiKGVsf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 16:47:39 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2EC927FF5;
-        Mon,  7 Nov 2022 13:47:37 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 72B141F889;
-        Mon,  7 Nov 2022 21:47:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1667857656;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=TlVbo42sNig1NHmDEtnPq6ibjLSSFwdkdUylt0cyH2Q=;
-        b=Tgk9qSm80ZFvuHAk2hjDWm9hmWHyMAFhJeIzscpPPIs0Glsh57hT4wRdgBiqhX62Ajz7qW
-        ePM/ABozz8yo5scLagq6XTzh2fSyE0O0GFNKCWi6m1EoTO41NhkHb0UnekHUr6YfSsf7XA
-        qf0HL5kAvwWNtre+MRgIF53024nO9J0=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1667857656;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=TlVbo42sNig1NHmDEtnPq6ibjLSSFwdkdUylt0cyH2Q=;
-        b=vEJQnljCKIsMt0jZnSmxqtA6QM7E66/z63M7wHL5TIEsbPv1j6QdnP892ieVefiZ6EZbgj
-        BRlcDqfoSETxBOCg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 14CFD13AC7;
-        Mon,  7 Nov 2022 21:47:36 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id ZY5FA/h8aWOrKgAAMHmgww
-        (envelope-from <pvorel@suse.cz>); Mon, 07 Nov 2022 21:47:36 +0000
-Date:   Mon, 7 Nov 2022 22:47:33 +0100
-From:   Petr Vorel <pvorel@suse.cz>
-To:     Minchan Kim <minchan@kernel.org>
-Cc:     ltp@lists.linux.it, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Nitin Gupta <ngupta@vflare.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>,
-        Martin Doucha <mdoucha@suse.cz>,
-        Yang Xu <xuyang2018.jy@fujitsu.com>
-Subject: Re: [PATCH 0/1] Possible bug in zram on ppc64le on vfat
-Message-ID: <Y2l89dt/t8M6+9go@pevik>
-Reply-To: Petr Vorel <pvorel@suse.cz>
-References: <20221107191136.18048-1-pvorel@suse.cz>
- <Y2l3vJb1y2Jynf50@google.com>
+        Mon, 7 Nov 2022 16:48:35 -0500
+Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49FFC2BED;
+        Mon,  7 Nov 2022 13:48:33 -0800 (PST)
+Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-13be3ef361dso14205120fac.12;
+        Mon, 07 Nov 2022 13:48:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=I46IWU9HY2ruNBy3JjstNCm87DjtFShdlj2dycepamI=;
+        b=nIrkWr7jjloh2uAuMz/dJfFAvESxMqswgPNAj0cN4PvnsyXfOEXPIdW/w5XRUtyZ66
+         GjRfZC3xVTE2hbJgF9HhnefWJEszLzFdHatbVc9B1lSPCARmDDtOOU9SHFA52ARys0N3
+         1iaF5k+52u242vUyC3Jn9HQOhamLi/eQefNj7WTUXetZ6Lve4u/fi1i0QDMFvXCy1/Ny
+         B20x1p0+zxjxBZZekosoTISB/iiY+N1v/XXbZS62ZdQzrKkgvP/gz7wka6dhbuQhUJ4O
+         8ETkbJWYpk5hFp11MZOS2xG4Ste+XOc1YOCpZdB09ytSr37Nwd/NPlVdS3B3uELQN3eR
+         UfJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=I46IWU9HY2ruNBy3JjstNCm87DjtFShdlj2dycepamI=;
+        b=IilGekM+0/HGVUdxXESja8LvdsVJzeYNykVQmr350S351fr5OHbeRsRIVf4IEu9E4P
+         VGCwn5VWz0n9SxxNA7HUVQ5reuU3PzsdDiMoeRdR+9WN8kRb/65V1Wi//XsvC8qOqJ0O
+         mLv8vgF7B/RKNK4WrrksavXRHOrnoMszECN2aAADb7moBHbjHUPVrN+MuQThaps3G8QY
+         qnsUTPiDUkQ6aXdhF8NnIQaLGg0TfKEy65tNp27ubRXN1/Dk/Dy6aZf5goZiCrbdSZAM
+         JTeovmqltWI7iV1WCdC7KJ1YhKH1SszD1ele2lYVhdSNgNW+AsO7a0ai1cp4XxtPrM0r
+         UKOA==
+X-Gm-Message-State: ACrzQf2xbWSiEcijJkTJ9BOHSUL1bVZlgMRZwCeZoQPG9d83RyJRr9z7
+        KL6/R4MGnDJGlAAVZF2OH+WZWJLRQOHfmBvevOo=
+X-Google-Smtp-Source: AMsMyM4gNGsRmPP0akudxVGkG68/crhXiv8O0loidyj+0lxizRpWSxU58sjRDG5uC8rpYM5nRMtUJ/WUywt+8i5cjHc=
+X-Received: by 2002:a05:6870:f5a4:b0:136:3e0d:acdd with SMTP id
+ eh36-20020a056870f5a400b001363e0dacddmr33027556oab.298.1667857712559; Mon, 07
+ Nov 2022 13:48:32 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y2l3vJb1y2Jynf50@google.com>
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL autolearn=ham autolearn_force=no version=3.4.6
+References: <20221104223604.29615-1-rick.p.edgecombe@intel.com>
+ <20221104223604.29615-38-rick.p.edgecombe@intel.com> <CAMe9rOpfSccXVWmgK6E0Y0DXC=VX3PpdxXookN1Ty8soeAxrKw@mail.gmail.com>
+ <87iljs4ecp.fsf@oldenburg.str.redhat.com> <ca106fe1b5005f54525e7a644684108f6a823e14.camel@intel.com>
+ <87h6zaiu05.fsf@oldenburg.str.redhat.com> <f60f1138813f850d52dd92bc6b3df067c021a197.camel@intel.com>
+ <CAMe9rOpVUwCccRb5DAyraEKO48rix+Xfiamfp_Vc_aHhjp7=LQ@mail.gmail.com>
+ <73b8f726c424db1af1c10a48e101bf74703a186a.camel@intel.com>
+ <CAMe9rOo6+Di5-mdWa6rviZ7zdO3yMgFPeTw-CXxXZNSQc=-8Wg@mail.gmail.com> <31b5284ce7930835b055e4207059e4bea32367be.camel@intel.com>
+In-Reply-To: <31b5284ce7930835b055e4207059e4bea32367be.camel@intel.com>
+From:   "H.J. Lu" <hjl.tools@gmail.com>
+Date:   Mon, 7 Nov 2022 13:47:56 -0800
+Message-ID: <CAMe9rOr1XpnisqWHh6C6Wi6tUAu5avhbKb_7E7ZpN_eMkktTww@mail.gmail.com>
+Subject: Re: [RFC 37/37] fs/binfmt_elf: Block old shstk elf bit
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+Cc:     "bsingharora@gmail.com" <bsingharora@gmail.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "Syromiatnikov, Eugene" <esyr@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
+        "Eranian, Stephane" <eranian@google.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "fweimer@redhat.com" <fweimer@redhat.com>,
+        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
+        "jannh@google.com" <jannh@google.com>,
+        "dethoma@microsoft.com" <dethoma@microsoft.com>,
+        "kcc@google.com" <kcc@google.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "bp@alien8.de" <bp@alien8.de>, "oleg@redhat.com" <oleg@redhat.com>,
+        "Yang, Weijiang" <weijiang.yang@intel.com>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "pavel@ucw.cz" <pavel@ucw.cz>,
+        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "john.allen@amd.com" <john.allen@amd.com>,
+        "rppt@kernel.org" <rppt@kernel.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "gorcunov@gmail.com" <gorcunov@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Minchan,
+On Mon, Nov 7, 2022 at 1:34 PM Edgecombe, Rick P
+<rick.p.edgecombe@intel.com> wrote:
+>
+> On Mon, 2022-11-07 at 13:21 -0800, H.J. Lu wrote:
+> > > > Some applications and libraries are compiled with -fcf-
+> > > > protection,
+> > > > but
+> > > > they manipulate the stack in such a way that they aren't
+> > > > compatible
+> > > > with the shadow stack.   However, if the build/test setup doesn't
+> > > > support
+> > > > shadow stack, it is impossible to validate.
+> > > >
+> > >
+> > > When we have everything in place, the problems would be much more
+> > > obvious when distros started turning it on. But we can't turn it on
+> > > as
+> >
+> > Not necessarily.  The problem will show up only in a CET enabled
+> > environment since build/test setup may not be on a CET capable
+> > hardware.
+>
+> Well, I'm not sure of the details of distro testing, but there are
+> plenty of TGL and later systems out there today. With kernel support,
+> I'm thinking these types of problems couldn't lurk for years like they
+> have.
 
-> On Mon, Nov 07, 2022 at 08:11:35PM +0100, Petr Vorel wrote:
-> > Hi all,
+If this is the case, we would have nothing to worry about since the CET
+enabled applications won't pass validation if they aren't CET compatible.
 
-> > following bug is trying to workaround an error on ppc64le, where
-> > zram01.sh LTP test (there is also kernel selftest
-> > tools/testing/selftests/zram/zram01.sh, but LTP test got further
-> > updates) has often mem_used_total 0 although zram is already filled.
+> >
+> > > planned without breaking things for existing binaries. We can have
+> > > both
+> > > by:
+> > > 1. Choosing a new bit, adding it to the tools, and never supporting
+> > > the
+> > > old bit in glibc.
+> > > 2. Providing the option to have the kernel block the old bit, so
+> > > upgraded users can decide what experience they would like. Then
+> > > distros
+> > > can find the problems and adjust their packages. I'm starting to
+> > > think
+> > > a default off sysctl toggle might be better than a Kconfig.
+> > > 3. Any other ideas?
+> >
+> > Don't enable CET in glibc until we can validate CET functionality.
+>
+> Can you elaborate on what you mean by this? Not upstream glibc CET
+> support? Or have users not enable it? If the latter, how would they
+> know about all these problems.
 
-> Hi, Petr,
+The current glibc doesn't support CET.  To enable CET in an application,
+one should validate it together with the CET enabled glibc under the CET
+enabled kernel on a CET capable machine.
 
-> Is it happening on only ppc64le?
-I haven't seen it on other archs (x86_64, aarch64).
+>
+> And what is wrong with the cleanest option, number 1? The ABI document
+> can be updated.
 
-> Is it a new regression? What kernel version did you use?
-Found on openSUSE kernel, which uses stable kernel releases 6.0.x.
-It's probably much older, first I've seen it some years ago (I'm not able to find kernel version), but it was random. Now it's much more common.
+It doesn't help resolve any issues.
 
-Test runs on VM (I can give qemu command or whatever you need to know about it)
-I'll try to verify it on some bare metal ppc64le.
-
-> Actually, mem_used_total indicates how many *physical memory* were
-> currently used to keep original data size.
-
-> However, if the test data is repeated pattern of unsigned long
-> (https://github.com/torvalds/linux/blob/master/drivers/block/zram/zram_drv.c#L210)
-> zram doesn't allocate the physical memory but just mark the unsigned long's value
-> in meta area for decompression later.
-
-> Not sure you hit the this case.
-Thanks for a hint, I'll try to debug it.
-
-Kind regards,
-Petr
-
-> > Patch tries to repeatedly read /sys/block/zram*/mm_stat for 1 sec,
-> > waiting for mem_used_total > 0. The question if this is expected and
-> > should be workarounded or a bug which should be fixed.
-
-> > REPRODUCE THE ISSUE
-> > Quickest way to install only zram tests and their dependencies:
-> > make autotools && ./configure && for i in testcases/lib/ testcases/kernel/device-drivers/zram/; do cd $i && make -j$(getconf _NPROCESSORS_ONLN) && make install && cd -; done
-
-> > Run the test (only on vfat)
-> > PATH="/opt/ltp/testcases/bin:$PATH" LTP_SINGLE_FS_TYPE=vfat zram01.sh
-
-> > Petr Vorel (1):
-> >   zram01.sh: Workaround division by 0 on vfat on ppc64le
-
-> >  .../kernel/device-drivers/zram/zram01.sh      | 27 +++++++++++++++++--
-> >  1 file changed, 25 insertions(+), 2 deletions(-)
-
-> > -- 
-> > 2.38.0
-
+-- 
+H.J.
