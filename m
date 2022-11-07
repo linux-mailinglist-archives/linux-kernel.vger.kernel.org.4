@@ -2,78 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B59561EE2E
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 10:07:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EE0661EE34
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 10:07:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231317AbiKGJHL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 04:07:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35330 "EHLO
+        id S231540AbiKGJHe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 04:07:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231292AbiKGJHJ (ORCPT
+        with ESMTP id S229586AbiKGJHc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 04:07:09 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1AD2165A8
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 01:07:07 -0800 (PST)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        Mon, 7 Nov 2022 04:07:32 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45B4F167FC;
+        Mon,  7 Nov 2022 01:07:31 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id B3378660239F;
-        Mon,  7 Nov 2022 09:07:05 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1667812026;
-        bh=prmGmYokfxjatbKpcc4DQXf1AZmk9zVLfrXHS15NugY=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=JY3SBDqc0y+wUpmIZtCHEyo/Y2S9DGJBc4bzw8gaJOf4eOE0ng0bVT+aFGsIYg/oo
-         BYDCAb9OgYO5bp2DBPTUvwxCAx9Jqn+HCvVQCFGjpkv4rGgwhMgSxBY73g2zBH2Y+0
-         KB6ess79kEPv/lnwLGFL2iVICMuaIZu86Mbm1V3vF0ScgXNTc1vwx0SYBAN0LPIA5f
-         WerpxNGiElXw9P5Iz5SI1s7aFkqHSRqExET7dkoqS6luj9mYbd0H0IaXo7puG0WFzM
-         iy/gz+AIGkWJdT84jbR3TEB4qCh7Cxxv5L6KRt4gV6rqRUFuajw+K9zYiIeGqCy/lz
-         KKuxkxUVCycxQ==
-Message-ID: <b4e53cc6-ad6e-dfc1-608f-ce9243f73bbc@collabora.com>
-Date:   Mon, 7 Nov 2022 10:07:03 +0100
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D4F7260F6A;
+        Mon,  7 Nov 2022 09:07:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45D30C433D7;
+        Mon,  7 Nov 2022 09:07:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667812050;
+        bh=NExr18SAzyXYkii6f9h88e7VFGJJiIJjiIyLxLarNyE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=CbRu5qlUwoVm6c4Vn1uOZOm3uDLldohqcEkHf2r/F+UkX4FspEnqHdoF1f6lqsiXA
+         Y5J/zX3+wv89K8F0nawnRdQ1FO0Zren7eKtvipsZP4vTfv7Rs3B4HPM3GfupB55NmV
+         FpbPfHVAkFe6TP9s/6oQLASaGIMY/AOX3JBU25W/UcNhwgQQVgU4rfwNc+/L2OWDpe
+         2Xi9B8GaGdKX4nZQmpN0lMxTBqDfDGZ7XF2zCbpx+XP++vlJXh/JIaI1icnRjCYvn/
+         fKbxpADaJpuMytMeH5O83sAztqs2TRo+pu9vUXUiGdOiGEBEBakO+pDeH5oMelDju0
+         QGEOZKC9dDXbA==
+Date:   Mon, 7 Nov 2022 09:07:23 +0000
+From:   Lee Jones <lee@kernel.org>
+To:     Luca Weiss <luca@z3ntu.xyz>
+Cc:     linux-arm-msm@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        afd@ti.com, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/3] dt-bindings: mfd: qcom,spmi-pmic: support more
+ types
+Message-ID: <Y2jKyyZqAssNiRNB@google.com>
+References: <20221031173933.936147-1-luca@z3ntu.xyz>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [PATCH 2/2] ASoC: mediatek: mt8183-mt6358: Register to module
- device table
-Content-Language: en-US
-To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
-        <nfraprado@collabora.com>, Mark Brown <broonie@kernel.org>
-Cc:     kernel@collabora.com, Akihiko Odaki <akihiko.odaki@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Jiaxin Yu <jiaxin.yu@mediatek.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Takashi Iwai <tiwai@suse.com>,
-        Tzung-Bi Shih <tzungbi@kernel.org>,
-        alsa-devel@alsa-project.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org
-References: <20221104212409.603970-1-nfraprado@collabora.com>
- <20221104212409.603970-2-nfraprado@collabora.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20221104212409.603970-2-nfraprado@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221031173933.936147-1-luca@z3ntu.xyz>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 04/11/22 22:24, Nícolas F. R. A. Prado ha scritto:
-> Register the compatibles for this module on the module device table so
-> it can be automatically loaded when a matching device is found on the
-> system.
+On Mon, 31 Oct 2022, Luca Weiss wrote:
+
+> * 'adc@' is either spmi-iadc or spmi-vadc
+> * 'charger@' is either pm8941-charger or pm8941-coincell
+> * 'usb-vbus-regulator@' is usb-vbus-regulator
+> * 'vibrator@' is now in yaml format, so add it
 > 
-> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+> ---
+> Changes since v1:
+> * Change dcdc@ to usb-vbus-regulator@
+> * Link to pm8xxx-vib.yaml
+> 
+>  .../devicetree/bindings/mfd/qcom,spmi-pmic.yaml  | 16 ++++++++++++++--
+>  1 file changed, 14 insertions(+), 2 deletions(-)
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+I don't see the other 2 patches.
 
+Is this okay to take on its own?
 
+> diff --git a/Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml b/Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml
+> index 777f2da52f1e..cf10d62ace54 100644
+> --- a/Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml
+> +++ b/Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml
+> @@ -105,7 +105,9 @@ properties:
+>  patternProperties:
+>    "^adc@[0-9a-f]+$":
+>      type: object
+> -    $ref: /schemas/iio/adc/qcom,spmi-vadc.yaml#
+> +    oneOf:
+> +      - $ref: /schemas/iio/adc/qcom,spmi-iadc.yaml#
+> +      - $ref: /schemas/iio/adc/qcom,spmi-vadc.yaml#
+>  
+>    "^adc-tm@[0-9a-f]+$":
+>      type: object
+> @@ -115,6 +117,12 @@ patternProperties:
+>      type: object
+>      additionalProperties: true # FIXME qcom,pm8916-wcd-analog-codec binding not converted yet
+>  
+> +  "^charger@[0-9a-f]+$":
+> +    type: object
+> +    oneOf:
+> +      - $ref: /schemas/power/supply/qcom,pm8941-charger.yaml#
+> +      - $ref: /schemas/power/supply/qcom,pm8941-coincell.yaml#
+> +
+>    "extcon@[0-9a-f]+$":
+>      type: object
+>      $ref: /schemas/extcon/qcom,pm8941-misc.yaml#
+> @@ -135,9 +143,13 @@ patternProperties:
+>      type: object
+>      $ref: /schemas/thermal/qcom,spmi-temp-alarm.yaml#
+>  
+> +  "^usb-vbus-regulator@[0-9a-f]+$":
+> +    type: object
+> +    $ref: /schemas/regulator/qcom,usb-vbus-regulator.yaml#
+> +
+>    "^vibrator@[0-9a-f]+$":
+>      type: object
+> -    additionalProperties: true # FIXME qcom,pm8916-vib binding not converted yet
+> +    $ref: /schemas/input/qcom,pm8xxx-vib.yaml#
+>  
+>    "^mpps@[0-9a-f]+$":
+>      type: object
+
+-- 
+Lee Jones [李琼斯]
