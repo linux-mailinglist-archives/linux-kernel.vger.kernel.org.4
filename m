@@ -2,100 +2,245 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C32D61F2F9
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 13:24:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12FD561F306
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 13:25:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232195AbiKGMYX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 07:24:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50266 "EHLO
+        id S232200AbiKGMZc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 07:25:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232174AbiKGMYQ (ORCPT
+        with ESMTP id S232202AbiKGMZM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 07:24:16 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5CF2262D;
-        Mon,  7 Nov 2022 04:24:14 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 646D26101C;
-        Mon,  7 Nov 2022 12:24:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC3B1C433D7;
-        Mon,  7 Nov 2022 12:24:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667823853;
-        bh=iQ5ViS/Km14zaC7mgBP0y2BtAXFP1Zx2+Nc0cPz+2qA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Cjo/qXHYDinqnN1BP/cR4oeVGmag98le5Rk5ncBzR62I69Fw268at7QCX1YlMexDs
-         cYsR6k3RHR3tfPbvEeOzkiaWT6N9rawd5MC1JTSWjOpi02oykFYTdnYSEEZrKRshkS
-         lZRGonQGVwvMXfHpmxqhifkluwQLYdW2ric5Ig0eODnqS3Vp/5oU7aFwKcyW7IFeNb
-         hjpmQDzp7CktfXP5ghOjSepmNfg2eTsoOo02ssHsmhDeojtrjRS900yNpfXGzJipJK
-         XNKzSCLix4khBHtq05cl/AVx0RXjO9Zy27GtkoYKeaG7vTHok6UmjqZcANYTz1Ytj1
-         OFPJ+xVgD9Hcw==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1os1AL-0004DQ-56; Mon, 07 Nov 2022 13:23:49 +0100
-Date:   Mon, 7 Nov 2022 13:23:49 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Brian Masney <bmasney@redhat.com>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shazad Hussain <quic_shazhuss@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH 1/2] arm64: dts: qcom: sc8280xp: fix UFS reference clocks
-Message-ID: <Y2j41epn0FTT2Asb@hovoldconsulting.com>
-References: <20221104092045.17410-1-johan+linaro@kernel.org>
- <20221104092045.17410-2-johan+linaro@kernel.org>
- <Y2jnWJ0FI6Fmy8/O@x1>
+        Mon, 7 Nov 2022 07:25:12 -0500
+Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EC5A1A064
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 04:25:11 -0800 (PST)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailout.west.internal (Postfix) with ESMTP id CB2DB3200951;
+        Mon,  7 Nov 2022 07:25:08 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute1.internal (MEProxy); Mon, 07 Nov 2022 07:25:11 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1667823908; x=1667910308; bh=8zbcJPjw6I
+        Bg2prP+2YZ7c39PRUZiLjGL6NLamslrCQ=; b=i7v+HKoT68Yj/H9ge7J+TH/mv8
+        nln1uIVWt7OXdH9oTX3dq+TjqxOYrYpU6RKQbGQ/aXjJU9Jh2tk+o3C7I6Fzdn01
+        m5y2GXnrbqTqVXdhlCwb2vZqB6tto0ffcHnk4Hj0dpZFQXDhs/EtSYoe2Ta3BbQw
+        IuAyGTkPXmr5DSCWx6ENPnyjdNSl9lVguyUEbMnUDLDriyyWqyBSL4rcZE3OvE4x
+        Omx/xxT/EYBoXxdiZIthnx+zaLUDruj3AIttTnqbmbMeCCfsWgNy9/qxV/0qWvnv
+        sSLd83VgsRZsJlksnT1gbA0rtYBYwr0E0Pl5rM0yNTooulcy7scZIV6rJ53A==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1667823908; x=1667910308; bh=8zbcJPjw6IBg2prP+2YZ7c39PRUZ
+        iLjGL6NLamslrCQ=; b=SRWpX/MomPQWny7iBPt8NmW7wUPfxNmgRMGJIsVWXv/S
+        Jzq0ZFeDZ+kR70RtGQ/zadTphiWoAksP/PlcQBJ6FC3flJLXhREvDSrvYG77Ma1q
+        6TWST8bFsYRpmQjxlrwwg1ZGpyEA9TgDSTydOHzx9XuTE/mLLf69AE7f+bpKndle
+        2EsWFHxCc+DtZScWMf/7Jz57jAkv5MXTBMMT1AcOw5prXyHrmv8Y4idRiVb9e7jW
+        YMNvbjSCJGj1eETMD7baEd1aRrTC38FSgSTHK8cK4W1fnxdlhEwqPSkKMSzdUMks
+        8yAnB/peGqg/OIKVGJ5uXUvwYjNaon4OuOegn22ZcQ==
+X-ME-Sender: <xms:IvloY3l87bh-n3PmDwJghNGij4k7K6MCd2iroNKP4nOkJ449ALOyBw>
+    <xme:IvloY63RdBDcFO13gYxZj2JXxHcP9dKI8NjbJp_SeLzaqq3V2nl7_aOauYASXxTZ7
+    NWzPPj6IyYvNnYP_Os>
+X-ME-Received: <xmr:IvloY9oM-z5hJMfyVu5i49BpvJXP2MsHYVXhC83YGZ1wMQpVzB2J2snpP6-In5QmZYNUcOQpbEE6W5ZiWZATwmM1VB7ZPvpBF8BNQuNMioenLg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrvdekgdefkecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvvefukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgigihhm
+    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
+    htvghrnhepteefffefgfektdefgfeludfgtdejfeejvddttdekteeiffejvdfgheehfffh
+    vedunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmh
+    grgihimhgvsegtvghrnhhordhtvggthh
+X-ME-Proxy: <xmx:IvloY_nAS4ikOCawbgDU3YSNZ4wbGNPzuL5hIdDq3RAB8g-HbzDLKQ>
+    <xmx:IvloY12kcCfrKpvJn-Usw0ytBt_X8yUDW9BkZBNJUI7HYaA-R1VnJw>
+    <xmx:IvloY-slRKspol3OO_qRRtqSigBoQKO08YBYvjo-_wK9F1m5UkwO8w>
+    <xmx:JPloY5J6IsqGyE33nufbHO6Vcb-3AfJuziuhAh3mTZdUmECmwdnPpA>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 7 Nov 2022 07:25:06 -0500 (EST)
+Date:   Mon, 7 Nov 2022 13:25:04 +0100
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Michael Rodin <mrodin@de.adit-jv.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Sean Paul <seanpaul@chromium.org>,
+        Vincent Abriou <vincent.abriou@st.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        michael@rodin.online, erosca@de.adit-jv.com
+Subject: Re: [PATCH] drm: do not call detect for connectors which are forced
+ on
+Message-ID: <20221107122504.tejlb24bjbaxw5t6@houat>
+References: <20220826091121.389315-1-mrodin@de.adit-jv.com>
+ <YzYrNJbfGcch1UtX@pendragon.ideasonboard.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="62xmu4e52wowxf7x"
 Content-Disposition: inline
-In-Reply-To: <Y2jnWJ0FI6Fmy8/O@x1>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YzYrNJbfGcch1UtX@pendragon.ideasonboard.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 07, 2022 at 06:09:12AM -0500, Brian Masney wrote:
-> On Fri, Nov 04, 2022 at 10:20:44AM +0100, Johan Hovold wrote:
-> > There are three UFS reference clocks on SC8280XP which are used as
-> > follows:
-> > 
-> >  - The GCC_UFS_REF_CLKREF_CLK clock is fed to any UFS device connected
-> >    to either controller.
-> > 
-> >  - The GCC_UFS_1_CARD_CLKREF_CLK and GCC_UFS_CARD_CLKREF_CLK clocks
-> >    provide reference clocks to the two PHYs.
-> > 
-> > Note that this depends on first updating the clock driver to reflect
-> > that all three clocks are sourced from CXO. Specifically, the UFS
-> > controller driver expects the device reference clock to have a valid
-> > frequency:
-> > 
-> > 	ufshcd-qcom 1d84000.ufs: invalid ref_clk setting = 0
-> > 
-> > Fixes: 152d1faf1e2f ("arm64: dts: qcom: add SC8280XP platform")
-> > Fixes: 8d6b458ce6e9 ("arm64: dts: qcom: sc8280xp: fix ufs_card_phy ref clock")
-> > Fixes: f3aa975e230e ("arm64: dts: qcom: sc8280xp: correct ref clock for ufs_mem_phy")
-> > Link: https://lore.kernel.org/lkml/Y2OEjNAPXg5BfOxH@hovoldconsulting.com/
-> > Cc: stable@vger.kernel.org	# 5.20
-> > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> 
-> Reviewed-by: Brian Masney <bmasney@redhat.com>
-> 
-> Note that there was no 5.20 kernel; that should be 6.0. Bjorn should be
-> able to fix this up during merge.
 
-Good catch. I based this on a tag created before 6.0 was released and
-failed to notice.
+--62xmu4e52wowxf7x
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Johan
+On Fri, Sep 30, 2022 at 02:33:08AM +0300, Laurent Pinchart wrote:
+> Hello Michael,
+>=20
+> Thank you for the patch. Sorry for the late reply, I wasn't on the CC
+> list so I didn't notice it.
+>=20
+> On Fri, Aug 26, 2022 at 11:11:21AM +0200, Michael Rodin wrote:
+> > "detect" should not be called and its return value shall not be used wh=
+en a
+> > connector is forced as hinted in the commit d50ba256b5f1 ("drm/kms: sta=
+rt
+> > adding command line interface using fb.") and the commit 6fe14acd496e
+> > ("drm: Document drm_connector_funcs"). One negative side effect of doing
+> > this is observed on the RCar3 SoCs which use the dw-hdmi driver. It
+> > continues executing drm_helper_hpd_irq_event even if its connector is
+> > forced to ON. As consequence drm_helper_hpd_irq_event calls "detect" so=
+ the
+> > connector status is updated to "disconnected":
+> >=20
+> > [  420.201527] [drm:drm_helper_hpd_irq_event] [CONNECTOR:76:HDMI-A-1] s=
+tatus updated from connected to disconnected
+> >=20
+> > This status is corrected by drm_helper_probe_single_connector_modes sho=
+rtly
+> > after this because this function checks if a connector is forced:
+> >=20
+> > [  420.218703] [drm:drm_helper_probe_single_connector_modes] [CONNECTOR=
+:76:HDMI-A-1] status updated from disconnected to connected
+> >=20
+> > To avoid similar issues this commit adapts functions which call "detect"
+> > so they check if a connector is forced and return the correct status.
+> >=20
+> > Fixes: 949f08862d66 ("drm: Make the connector .detect() callback option=
+al")
+>=20
+> Is this really the right fixes tag ? The call to .detect() in
+> drm_helper_hpd_irq_event() predates that commit.
+>=20
+> > Signed-off-by: Michael Rodin <mrodin@de.adit-jv.com>
+> > ---
+> >  drivers/gpu/drm/drm_probe_helper.c | 16 ++++++++++++++--
+> >  1 file changed, 14 insertions(+), 2 deletions(-)
+> >=20
+> > diff --git a/drivers/gpu/drm/drm_probe_helper.c b/drivers/gpu/drm/drm_p=
+robe_helper.c
+> > index bb427c5a4f1f..1691047d0472 100644
+> > --- a/drivers/gpu/drm/drm_probe_helper.c
+> > +++ b/drivers/gpu/drm/drm_probe_helper.c
+> > @@ -289,7 +289,12 @@ drm_helper_probe_detect_ctx(struct drm_connector *=
+connector, bool force)
+> >  retry:
+> >  	ret =3D drm_modeset_lock(&connector->dev->mode_config.connection_mute=
+x, &ctx);
+> >  	if (!ret) {
+> > -		if (funcs->detect_ctx)
+> > +		if (connector->force =3D=3D DRM_FORCE_ON ||
+> > +		    connector->force =3D=3D DRM_FORCE_ON_DIGITAL)
+> > +			ret =3D connector_status_connected;
+> > +		else if (connector->force =3D=3D DRM_FORCE_OFF)
+> > +			ret =3D connector_status_disconnected;
+> > +		else if (funcs->detect_ctx)
+> >  			ret =3D funcs->detect_ctx(connector, &ctx, force);
+> >  		else if (connector->funcs->detect)
+> >  			ret =3D connector->funcs->detect(connector, force);
+> > @@ -340,7 +345,14 @@ drm_helper_probe_detect(struct drm_connector *conn=
+ector,
+> >  	if (ret)
+> >  		return ret;
+> > =20
+> > -	if (funcs->detect_ctx)
+> > +	if (connector->force =3D=3D DRM_FORCE_ON ||
+> > +	    connector->force =3D=3D DRM_FORCE_ON_DIGITAL)
+> > +		ret =3D connector_status_connected;
+> > +	else if (connector->force =3D=3D DRM_FORCE_OFF)
+> > +		ret =3D connector_status_disconnected;
+> > +	else if (funcs->detect_ctx)
+> > +		ret =3D funcs->detect_ctx(connector, ctx, force);
+> > +	else if (funcs->detect_ctx)
+> >  		ret =3D funcs->detect_ctx(connector, ctx, force);
+>=20
+> Those two conditions are identical.
+>=20
+> >  	else if (connector->funcs->detect)
+> >  		ret =3D connector->funcs->detect(connector, force);
+>=20
+> The same logic is used in two places in this patch. Could this be
+> factored out to a separate function ? It may even be possible to
+> refactor drm_helper_probe_detect() and drm_helper_probe_detect_ctx() to
+> share more code between the two functions.
+
+I just had a look, and it doesn't seem trivial. The obvious way would be
+to make drm_helper_probe_detect_ctx allocate a context and call
+drm_helper_probe_detect. The thing is, drm_helper_probe_detect will call
+drm_helper_probe_detect_ctx if its context is NULL.
+
+I guess we could have drm_helper_probe_detect allocate the context
+itself if it's null, but handling differently the back-off and freeing
+logic is probably going to add more complexity.
+
+I'm not sure it's worth it for simple functions like this.
+
+> This being said, I'm not sure this is the right fix. Beside the i915 and
+> nouveau drivers, the only callers of drm_helper_probe_detect() are
+> drm_helper_probe_single_connector_modes(), output_poll_execute() and
+> check_connector_changed() in this file. The first two functions already
+> check connector->force and skip the call to drm_helper_probe_detect() if
+> the connector is forced. Only check_connector_changed() is missing that
+> check. Wouldn't it be simpler to return false in that function if
+> connector->force is set ?
+
+I guess, but the drm_helper_probe_detect documentation states that it
+"probe connector status" and "This function calls the detect callbacks
+of the connector.", which I guess could be interpreted as it always runs
+the detect callback but won't do more.
+
+But it also returns that the connector is connected if the detect
+callback is missing and thus it feels like putting it here both respect
+the "probe connector status " (even though it's forced), and the general
+idea behind that function.
+
+> Another question is whether it is valid for the dw-hdmi driver to call
+> drm_helper_hpd_irq_event() when the connector status is forced.
+
+I guess drm_connector_helper_hpd_irq_event would be a better choice, but
+it seems fine to me. Especially since pretty much every other driver
+does it that way, I'd rather assume that the driver doesn't have to
+track the connection status itself and leave that to the framework.
+
+It's more convenient, and it's what virtually all drivers are doing.
+
+Maxime
+
+--62xmu4e52wowxf7x
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCY2j5IAAKCRDj7w1vZxhR
+xdtoAQCeP+2Wy8wUXcqRzZKIAKffBRxySoBZdpo5YkatBmicRAD/QMBsVrltHoGT
+gs93r8Yu1m+T4e+2ll1xHXWPrgObcQY=
+=6/I8
+-----END PGP SIGNATURE-----
+
+--62xmu4e52wowxf7x--
