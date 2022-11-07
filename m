@@ -2,79 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5B3661E9FE
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 05:00:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF25A61EA18
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 05:10:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231143AbiKGEAi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Nov 2022 23:00:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35600 "EHLO
+        id S230209AbiKGEKh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Nov 2022 23:10:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230136AbiKGEAZ (ORCPT
+        with ESMTP id S230239AbiKGEKc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Nov 2022 23:00:25 -0500
-Received: from mail-vk1-xa29.google.com (mail-vk1-xa29.google.com [IPv6:2607:f8b0:4864:20::a29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC5DD12D;
-        Sun,  6 Nov 2022 20:00:23 -0800 (PST)
-Received: by mail-vk1-xa29.google.com with SMTP id t85so5833405vkb.7;
-        Sun, 06 Nov 2022 20:00:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=OYmRm7oG51RbUpQkbwP4pUo2C/0pgsAKRA0ejIgXRzc=;
-        b=eDWyjimtWuPJKWH1qX2FEfWNE6ve/pF1mSsox+rNfpMI3iIvGdDKpTdQ827vKYOrGC
-         UGPkYwQY8QB9UdR+4RoDRYK7QivxJtUJULxId0KC6KtqUKhnfYZqiAuTEWQvgZZ8kvip
-         D00EVUwxKDcVJDoYXLQwZ4S8Z6NiuLWG1w6TObgtp+20nneX0YPLICxkjPg5zNPhh9ye
-         3RXLnIPzZPKEGV/qbDIo7hzNKGZhYYNqwk1VIYxFW+d6XtsW3GeD2SXKdeSwWImaN6sb
-         /+8GZ1rF+IzLa8Vm1bPc+EnN2ZuG4yxZn3nTtnlAwZ0Ehtr0R+ZqJVhC63xELqEtFTcb
-         20lw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=OYmRm7oG51RbUpQkbwP4pUo2C/0pgsAKRA0ejIgXRzc=;
-        b=q2QzQXp+IkenCBw9boU6XIkXnp9ZVLzfEXIkyfpKkINLzesRXKLPq+RllHGJbbN5zB
-         GhN+ZTwuc8DlufGfu9gOHyK5vjJ5xP1kVhGMM9IGwws/T6mJqKZxLFVtUvJgfq+jKcva
-         9iWyelY4xFsgMDUdrTLE7U2jTibLjd+3Vdy41cnmtnR2eCkBzy0iVo8l8O14KP+OSg9c
-         29eYUi/KE+2yc4RCf2gS0ZLNbBiodl1/YxtClGK+m9KrSV9lGCb/Od3IqcHnYvGpYtQ+
-         lG4Lh1Dwu27gMC1BAnknCOB/ryClu0r75lTm+1XNtINHwqaxe9fwggpZ/XYsMTeWVotY
-         RVow==
-X-Gm-Message-State: ACrzQf2dFBhu/YrLBspsPqi1sLjkwSEUjs2XNVO3wJ8lKLUk0uHKc7Bl
-        XECwDlcXMJ2yd7Mjb8eCKvNLP8w8pl/e9+Is0kTpTOKqBfc=
-X-Google-Smtp-Source: AMsMyM7IiGVA9SCS1uAK1ObapKXvMnZtoaCcBznY2DwQxVgjrVhnQv72JWmX9y71CgTz0bgMuYyXKS+LMF7BFdM9Vlo=
-X-Received: by 2002:a1f:2356:0:b0:3ab:820:316f with SMTP id
- j83-20020a1f2356000000b003ab0820316fmr7671445vkj.15.1667793622488; Sun, 06
- Nov 2022 20:00:22 -0800 (PST)
+        Sun, 6 Nov 2022 23:10:32 -0500
+Received: from msg-4.mailo.com (msg-4.mailo.com [213.182.54.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE3FEC742;
+        Sun,  6 Nov 2022 20:10:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
+        t=1667794206; bh=4vpubAxBJPLICHSVHvPCZgQDNFOK73r6037oLcqxRNw=;
+        h=X-EA-Auth:Date:From:To:Subject:Message-ID:MIME-Version:
+         Content-Type;
+        b=C9iFnW7RbBKdhCtxtXzOLa3JlnRrnJ7VcaqFqQVVR90dK9DJVByEiltrZ1pYEHdXW
+         HaZ8FnufHYDVsG2dFR2FWw551lYOjE8LaT6/W7ah0A/HFTvl89M+WhaAXckJee0i1y
+         ThqaZvQWeOJGzQDG1BwXvTM7OKTLYLbeKpByI7oE=
+Received: by b-4.in.mailobj.net [192.168.90.14] with ESMTP
+        via ip-206.mailobj.net [213.182.55.206]
+        Mon,  7 Nov 2022 05:10:06 +0100 (CET)
+X-EA-Auth: xmv0Uzdl1lJntsxK/BrE7s8F1LLtHp58aHBwFEduoB5F/pQe89jIg2LygmBdI/VKxLWHU6Cnupv4LfA4oPG2e08H69d/mTW0
+Date:   Mon, 7 Nov 2022 09:40:00 +0530
+From:   Deepak R Varma <drv@mailo.com>
+To:     Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-iio@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] staging: iio: meter: use min() for comparison and assignment
+Message-ID: <Y2iFGA3A1w+XMlYU@qemulion>
 MIME-Version: 1.0
-References: <20221104033810.1324686-1-milkfafa@gmail.com> <1d770c8e-1ac5-34b5-7c09-f55b8325c9cb@xs4all.nl>
-In-Reply-To: <1d770c8e-1ac5-34b5-7c09-f55b8325c9cb@xs4all.nl>
-From:   Kun-Fa Lin <milkfafa@gmail.com>
-Date:   Mon, 7 Nov 2022 12:00:11 +0800
-Message-ID: <CADnNmFqnmEfqzO0QvOXw6FcaMURMKu2JmYz6TBYxH9Dz5s78Lw@mail.gmail.com>
-Subject: Re: [PATCH v6 0/5] Support Nuvoton NPCM Video Capture/Encode Engine
-To:     Hans Verkuil <hverkuil@xs4all.nl>
-Cc:     mchehab@kernel.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org,
-        avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
-        kwliu@nuvoton.com, kflin@nuvoton.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Hans,
+Simplify code by using recommended min helper macro for logical
+evaluation and value assignment. This issue is identified by
+coccicheck using the minmax.cocci file.
 
-> FYI: you need to CC this series to devicetree@vger.kernel.org so they can review
-> the bindings.
+Signed-off-by: Deepak R Varma <drv@mailo.com>
+---
+ drivers/staging/iio/meter/ade7854-i2c.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thanks for the reminder. I'll CC devicetree group in next version.
+diff --git a/drivers/staging/iio/meter/ade7854-i2c.c b/drivers/staging/iio/meter/ade7854-i2c.c
+index a9a06e8dda51..a6ce7b24cc8f 100644
+--- a/drivers/staging/iio/meter/ade7854-i2c.c
++++ b/drivers/staging/iio/meter/ade7854-i2c.c
+@@ -61,7 +61,7 @@ static int ade7854_i2c_write_reg(struct device *dev,
+ unlock:
+ 	mutex_unlock(&st->buf_lock);
 
-Regards,
-Marvin
+-	return ret < 0 ? ret : 0;
++	return min(ret, 0);
+ }
+
+ static int ade7854_i2c_read_reg(struct device *dev,
+--
+2.34.1
+
+
+
