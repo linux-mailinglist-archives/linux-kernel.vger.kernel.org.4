@@ -2,62 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8F1161E8D4
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 04:05:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6453161E8D7
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 04:06:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230356AbiKGDFf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Nov 2022 22:05:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60142 "EHLO
+        id S230340AbiKGDGw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Nov 2022 22:06:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230300AbiKGDFa (ORCPT
+        with ESMTP id S230267AbiKGDGu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Nov 2022 22:05:30 -0500
-Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC155DFA7
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Nov 2022 19:05:25 -0800 (PST)
-Content-Type: text/plain;
-        charset=us-ascii
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1667790323;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=iIx4i6pObocFNzXbeoE4pSq5DVyynY/Lm8s58LJ7UO0=;
-        b=CclYp24GeT1121zYFWnCbLO9Vyc9IgSni0MiGLV9rcD0+aVdlUKc9/+1i/eQNyRsW8EnTc
-        Z6msyylgBkR04NlhsiJGYkngYuV6aBBt++pEBNsZbymc5VF3mAyrt3qg4xBNgmUXwMF8g8
-        zkwtnO2KEK1i74TGzvlJwoBjjrNB/C0=
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.200.110.1.12\))
-Subject: Re: [PATCH] hugetlbfs: inode: Remove unnecessary (void*) conversions
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Muchun Song <muchun.song@linux.dev>
-In-Reply-To: <20221107015659.3221-1-zeming@nfschina.com>
-Date:   Mon, 7 Nov 2022 11:05:08 +0800
-Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        linux-kernel@vger.kernel.org
+        Sun, 6 Nov 2022 22:06:50 -0500
+Received: from out28-4.mail.aliyun.com (out28-4.mail.aliyun.com [115.124.28.4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCC0E60E6;
+        Sun,  6 Nov 2022 19:06:48 -0800 (PST)
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.10578|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_enroll_verification|0.0166433-0.00299348-0.980363;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047194;MF=kant@allwinnertech.com;NM=1;PH=DS;RN=9;RT=9;SR=0;TI=SMTPD_---.Q12-nI._1667790403;
+Received: from 192.168.220.136(mailfrom:kant@allwinnertech.com fp:SMTPD_---.Q12-nI._1667790403)
+          by smtp.aliyun-inc.com;
+          Mon, 07 Nov 2022 11:06:46 +0800
+Message-ID: <ba875656-01bb-3e87-75ce-a83b556b7911@allwinnertech.com>
+Date:   Mon, 7 Nov 2022 11:06:42 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v3] PM/devfreq: governor: Add a private governor_data for
+ governor
+Content-Language: en-US
+From:   Kant Fan <kant@allwinnertech.com>
+To:     Chanwoo Choi <cwchoi00@gmail.com>, myungjoo.ham@samsung.com,
+        kyungmin.park@samsung.com, cw00.choi@samsung.com, khilman@ti.com,
+        rjw@rjwysocki.net, mturquette@ti.com
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221014094359.100995-1-kant@allwinnertech.com>
+ <bdbed01c-0e86-14fc-4efa-32a010431d67@gmail.com>
+ <f0d68beb-f115-88f8-9901-5e7dfac5da77@allwinnertech.com>
+In-Reply-To: <f0d68beb-f115-88f8-9901-5e7dfac5da77@allwinnertech.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Message-Id: <8C051BD7-7728-440F-9C02-68D1EE53785E@linux.dev>
-References: <20221107015659.3221-1-zeming@nfschina.com>
-To:     Li zeming <zeming@nfschina.com>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-> On Nov 7, 2022, at 09:56, Li zeming <zeming@nfschina.com> wrote:
+On 10/25/2022 3:57 PM, Kant Fan wrote:
+> On 10/22/2022 7:41 AM, Chanwoo Choi wrote:
+>> Hi,
+>>
+>> Looks good to me. But, you need to send it to the stable mailing list
+>> too as I commented on previous mail.
+>>
+>> Please add stable@vger.kernel.org to Cc.
+>>
 > 
-> The ei pointer does not need to cast the type.
+> Hi Chanwoo,
+> Thanks for the notice. Please review this patch-v4 [1].
 > 
-> Signed-off-by: Li zeming <zeming@nfschina.com>
+> [1]
+> https://lore.kernel.org/all/20221025072109.64025-1-kant@allwinnertech.com/
+> 
 
-Reviewed-by: Muchun Song <songmuchun@bytedance.com>
+Dear Chanwoo,
+Is there any updated progress about this patch? Thank you
 
+-- 
+Best Regards,
+Kant Fan
