@@ -2,195 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBCDA61EED3
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 10:24:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 13A3961EEAD
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 10:21:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231812AbiKGJYK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 04:24:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49956 "EHLO
+        id S231359AbiKGJVX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 04:21:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231732AbiKGJXx (ORCPT
+        with ESMTP id S229638AbiKGJVU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 04:23:53 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 026A0656E;
-        Mon,  7 Nov 2022 01:23:52 -0800 (PST)
-Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4N5QlH6BprzmVWB;
-        Mon,  7 Nov 2022 17:23:39 +0800 (CST)
-Received: from kwepemm600003.china.huawei.com (7.193.23.202) by
- dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 7 Nov 2022 17:23:50 +0800
-Received: from ubuntu1804.huawei.com (10.67.174.61) by
- kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 7 Nov 2022 17:23:49 +0800
-From:   Yang Jihong <yangjihong1@huawei.com>
-To:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
-        <martin.lau@linux.dev>, <song@kernel.org>, <yhs@fb.com>,
-        <john.fastabend@gmail.com>, <kpsingh@kernel.org>, <sdf@google.com>,
-        <haoluo@google.com>, <jolsa@kernel.org>,
-        <illusionist.neo@gmail.com>, <linux@armlinux.org.uk>,
-        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <mykolal@fb.com>, <shuah@kernel.org>,
-        <benjamin.tissoires@redhat.com>, <memxor@gmail.com>,
-        <asavkov@redhat.com>, <delyank@fb.com>, <bpf@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>
-CC:     <yangjihong1@huawei.com>
-Subject: [PATCH bpf v2 5/5] bpf:selftests: Add kfunc_call test for mixing 32-bit and 64-bit parameters
-Date:   Mon, 7 Nov 2022 17:20:32 +0800
-Message-ID: <20221107092032.178235-6-yangjihong1@huawei.com>
-X-Mailer: git-send-email 2.30.GIT
-In-Reply-To: <20221107092032.178235-1-yangjihong1@huawei.com>
-References: <20221107092032.178235-1-yangjihong1@huawei.com>
+        Mon, 7 Nov 2022 04:21:20 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6D1E3F5AF;
+        Mon,  7 Nov 2022 01:21:17 -0800 (PST)
+Received: from loongson.cn (unknown [10.20.42.77])
+        by gateway (Coremail) with SMTP id _____8Bx37cMzmhj2_8EAA--.11645S3;
+        Mon, 07 Nov 2022 17:21:16 +0800 (CST)
+Received: from [10.20.42.77] (unknown [10.20.42.77])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxLeALzmhjs2IOAA--.39954S3;
+        Mon, 07 Nov 2022 17:21:15 +0800 (CST)
+Subject: Re: [PATCH 2/2] dt-bindings: interrupt-controller: add yaml for
+ LoongArch CPU interrupt controller
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>
+Cc:     Jianmin Lv <lvjianmin@loongson.cn>,
+        Yinbo Zhu <zhuyinbo@loongson.cn>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221107023404.26730-1-liupeibao@loongson.cn>
+ <20221107023404.26730-2-liupeibao@loongson.cn>
+ <b45b8cf8-de9d-7132-1a35-48deeb4b79d5@linaro.org>
+From:   Liu Peibao <liupeibao@loongson.cn>
+Message-ID: <196e80d8-f4fb-7393-81a5-bca757c805f5@loongson.cn>
+Date:   Mon, 7 Nov 2022 17:21:15 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.174.61]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemm600003.china.huawei.com (7.193.23.202)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <b45b8cf8-de9d-7132-1a35-48deeb4b79d5@linaro.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: AQAAf8DxLeALzmhjs2IOAA--.39954S3
+X-CM-SenderInfo: xolx1vpled0qxorr0wxvrqhubq/1tbiAQADCmNno+QOXQABsZ
+X-Coremail-Antispam: 1Uk129KBjvJXoW7try5GF1fKFyktFyDCF18AFb_yoW8Kw1fpF
+        y7CanxuF40qF43Cws2g3WF9rnxZrn3Jr1S9anxt3yxC34ag343XFW2vF95uFWrGryxXr4U
+        Zr1093W0qFnrJFJanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        baAYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
+        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
+        e2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2
+        IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r4j6F4U
+        McvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487Mx
+        kF7I0En4kS14v26r126r1DMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4U
+        MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67
+        AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0
+        cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z2
+        80aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI
+        43ZEXa7IU8JfQtUUUUU==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-32-bit ARM has four registers to save function parameters,
-add test cases to cover additional scenarios.
+On 11/7/22 4:28 PM, Krzysztof Kozlowski wrote:
+> On 07/11/2022 03:34, Liu Peibao wrote:
+> 
+> Add commit msg explaining what you are doing here (e.g. the hardware).
+> 
 
-Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
----
- net/bpf/test_run.c                            | 18 +++++++
- .../selftests/bpf/prog_tests/kfunc_call.c     |  3 ++
- .../selftests/bpf/progs/kfunc_call_test.c     | 52 +++++++++++++++++++
- 3 files changed, 73 insertions(+)
+I just add this yaml for what I did in patch 1/2 and the header seems enough
+to describe what I want to, so I did not add the commit log.
 
-diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
-index 13d578ce2a09..e7eb5bd4cf0e 100644
---- a/net/bpf/test_run.c
-+++ b/net/bpf/test_run.c
-@@ -551,6 +551,21 @@ struct sock * noinline bpf_kfunc_call_test3(struct sock *sk)
- 	return sk;
- }
- 
-+u64 noinline bpf_kfunc_call_test4(struct sock *sk, u64 a, u64 b, u32 c, u32 d)
-+{
-+	return a + b + c + d;
-+}
-+
-+u64 noinline bpf_kfunc_call_test5(u64 a, u64 b)
-+{
-+	return a + b;
-+}
-+
-+u64 noinline bpf_kfunc_call_test6(u32 a, u32 b, u32 c, u32 d, u32 e)
-+{
-+	return a + b + c + d + e;
-+}
-+
- struct prog_test_member1 {
- 	int a;
- };
-@@ -739,6 +754,9 @@ BTF_SET8_START(test_sk_check_kfunc_ids)
- BTF_ID_FLAGS(func, bpf_kfunc_call_test1)
- BTF_ID_FLAGS(func, bpf_kfunc_call_test2)
- BTF_ID_FLAGS(func, bpf_kfunc_call_test3)
-+BTF_ID_FLAGS(func, bpf_kfunc_call_test4)
-+BTF_ID_FLAGS(func, bpf_kfunc_call_test5)
-+BTF_ID_FLAGS(func, bpf_kfunc_call_test6)
- BTF_ID_FLAGS(func, bpf_kfunc_call_test_acquire, KF_ACQUIRE | KF_RET_NULL)
- BTF_ID_FLAGS(func, bpf_kfunc_call_memb_acquire, KF_ACQUIRE | KF_RET_NULL)
- BTF_ID_FLAGS(func, bpf_kfunc_call_test_release, KF_RELEASE)
-diff --git a/tools/testing/selftests/bpf/prog_tests/kfunc_call.c b/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
-index 5af1ee8f0e6e..6a6822e99071 100644
---- a/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
-+++ b/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
-@@ -72,6 +72,9 @@ static struct kfunc_test_params kfunc_tests[] = {
- 	/* success cases */
- 	TC_TEST(kfunc_call_test1, 12),
- 	TC_TEST(kfunc_call_test2, 3),
-+	TC_TEST(kfunc_call_test4, 16),
-+	TC_TEST(kfunc_call_test5, 7),
-+	TC_TEST(kfunc_call_test6, 15),
- 	TC_TEST(kfunc_call_test_ref_btf_id, 0),
- 	TC_TEST(kfunc_call_test_get_mem, 42),
- 	SYSCALL_TEST(kfunc_syscall_test, 0),
-diff --git a/tools/testing/selftests/bpf/progs/kfunc_call_test.c b/tools/testing/selftests/bpf/progs/kfunc_call_test.c
-index f636e50be259..0385ce2d4c6e 100644
---- a/tools/testing/selftests/bpf/progs/kfunc_call_test.c
-+++ b/tools/testing/selftests/bpf/progs/kfunc_call_test.c
-@@ -6,6 +6,11 @@
- extern int bpf_kfunc_call_test2(struct sock *sk, __u32 a, __u32 b) __ksym;
- extern __u64 bpf_kfunc_call_test1(struct sock *sk, __u32 a, __u64 b,
- 				  __u32 c, __u64 d) __ksym;
-+extern __u64 bpf_kfunc_call_test4(struct sock *sk, __u64 a, __u64 b,
-+				  __u32 c, __u32 d) __ksym;
-+extern __u64 bpf_kfunc_call_test5(__u64 a, __u64 b) __ksym;
-+extern __u64 bpf_kfunc_call_test6(__u32 a, __u32 b, __u32 c, __u32 d,
-+				  __u32 e) __ksym;
- 
- extern struct prog_test_ref_kfunc *bpf_kfunc_call_test_acquire(unsigned long *sp) __ksym;
- extern void bpf_kfunc_call_test_release(struct prog_test_ref_kfunc *p) __ksym;
-@@ -17,6 +22,53 @@ extern void bpf_kfunc_call_test_mem_len_fail2(__u64 *mem, int len) __ksym;
- extern int *bpf_kfunc_call_test_get_rdwr_mem(struct prog_test_ref_kfunc *p, const int rdwr_buf_size) __ksym;
- extern int *bpf_kfunc_call_test_get_rdonly_mem(struct prog_test_ref_kfunc *p, const int rdonly_buf_size) __ksym;
- 
-+SEC("tc")
-+int kfunc_call_test6(struct __sk_buff *skb)
-+{
-+	__u64 a = 1ULL << 32;
-+	__u32 ret;
-+
-+	a = bpf_kfunc_call_test6(1, 2, 3, 4, 5);
-+	ret = a >> 32;   /* ret should be 0 */
-+	ret += (__u32)a; /* ret should be 15 */
-+
-+	return ret;
-+}
-+
-+SEC("tc")
-+int kfunc_call_test5(struct __sk_buff *skb)
-+{
-+	__u64 a = 1ULL << 32;
-+	__u32 ret;
-+
-+	a = bpf_kfunc_call_test5(a | 2, a | 3);
-+	ret = a >> 32;   /* ret should be 2 */
-+	ret += (__u32)a; /* ret should be 7 */
-+
-+	return ret;
-+}
-+
-+SEC("tc")
-+int kfunc_call_test4(struct __sk_buff *skb)
-+{
-+	struct bpf_sock *sk = skb->sk;
-+	__u64 a = 1ULL << 32;
-+	__u32 ret;
-+
-+	if (!sk)
-+		return -1;
-+
-+	sk = bpf_sk_fullsock(sk);
-+	if (!sk)
-+		return -1;
-+
-+	a = bpf_kfunc_call_test4((struct sock *)sk, a | 2, a | 3, 4, 5);
-+	ret = a >> 32;   /* ret should be 2 */
-+	ret += (__u32)a; /* ret should be 16 */
-+
-+	return ret;
-+}
-+
- SEC("tc")
- int kfunc_call_test2(struct __sk_buff *skb)
- {
--- 
-2.30.GIT
+>> Signed-off-by: Liu Peibao <liupeibao@loongson.cn>
+>> ---
+>>  .../loongarch,cpu-interrupt-controller.yaml   | 42 +++++++++++++++++++
+>>  1 file changed, 42 insertions(+)
+>>  create mode 100644 Documentation/devicetree/bindings/interrupt-controller/loongarch,cpu-interrupt-controller.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/interrupt-controller/loongarch,cpu-interrupt-controller.yaml b/Documentation/devicetree/bindings/interrupt-controller/loongarch,cpu-interrupt-controller.yaml
+>> new file mode 100644
+>> index 000000000000..30b742661a3f
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/interrupt-controller/loongarch,cpu-interrupt-controller.yaml
+>> @@ -0,0 +1,42 @@
+>> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/interrupt-controller/loongarch,cpu-interrupt-controller.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: LoongArch CPU Interrupt Controller
+>> +
+>> +description: >
+>> +   On LoongArch the loongarch_cpu_irq_of_init() helper can be used to initialize
+>> +   the 14 CPU IRQs from a devicetree file and create a irq_domain for this IRQ
+>> +   controller.
+>> +
+>> +   With the irq_domain in place we can describe how the 14 IRQs are wired to the
+>> +   platforms internal interrupt controller cascade.
+> 
+> This should be the description of hardware, not Linux drivers.
+> 
+
+OK, I will remove this in the next version of this patch.
+
+>> +
+>> +maintainers:
+>> +  - Liu Peibao <liupeibao@loongson.cn>
+>> +
+>> +properties:
+>> +  compatible:
+>> +    const: loongarch,cpu-interrupt-controller
+> 
+> You have exactly one and only one type of CPU interrupt controller for
+> all your Loongarch designs? All current and all future? All?
+> 
+
+It is sure of that "all current and recent designs". It is really hard to limit the
+design in the distant future.
+
+And if there is updating, maybe I will add additional things like this:
+"loongarch,cpu-interrupt-controller-2.0".
+
+BR,
+Peibao
 
