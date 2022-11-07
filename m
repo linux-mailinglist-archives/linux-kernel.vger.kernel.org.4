@@ -2,131 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B111A61E992
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 04:23:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 027CB61E998
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 04:26:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230486AbiKGDXf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Nov 2022 22:23:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49106 "EHLO
+        id S230456AbiKGD0v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Nov 2022 22:26:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230490AbiKGDXa (ORCPT
+        with ESMTP id S230228AbiKGD0t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Nov 2022 22:23:30 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB49B1136
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Nov 2022 19:23:28 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id j15so14326169wrq.3
-        for <linux-kernel@vger.kernel.org>; Sun, 06 Nov 2022 19:23:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=BoCqJFFEwga8HLbIPvad2ONk7YeJiUs7YZ46dNA2Vj4=;
-        b=M+NsIlRxwZJQco2DVxK1IC+XpxvBfEGXljI3xoieudB8Dp7htzA/oYgJL89345JbZ+
-         7BoyTX1W1WcfOMa+KHyY+gKXeBIuks8pizpXsllvVUowdYYcGBbMv7Bln5uyqx2DGIKp
-         ZCfCr4sz6dLi3G+gA0hvqJKk/MKNeV2ECIwtNIq+4QfoAGXxSa2YKrg3gTP4NvhM4s/i
-         Sa1/9J1bmFdujrYV67hmPlRq6GtF6sPNSr0mwRUCCOmIN6nMoDi80n6eF9z4KzuQkcfM
-         MPZiy8m2hvR7FIyRcWqGUhDdkcn9+NOywPjnUtFb1Eo/Das+NUpl69PUfbWyyXz/02aJ
-         zYaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BoCqJFFEwga8HLbIPvad2ONk7YeJiUs7YZ46dNA2Vj4=;
-        b=qxxMCMyFbwKuDG1WRtmO3hhd62qGi2cE/KvhbOOeUOLzmOID3hcVEyD9YcnH0uY1jP
-         cttW8SsipJdlQ4lTWqZc0FYjGtJPoI/MsLlnwGg7JTWY3IkvdBWzwfpXv73TdUmOOsPK
-         8ElRy30XApFJ/1YPoqpPfyY6ZKtb33NDUPlj0mvf0ityBAL8CFPSFyUOTOePH9VSiYTr
-         PPdWzu3Q5fsS20yFj8KOSZO76T8aZ51RHkefrQeojjLdwglk4ZIHOosQ9Z1cJUPI9xh1
-         Jhq3KxR8ADssXrtG2YhEBrqTK/nDo32CCYen/lB2EQrDkY8QwNqz7N55qTmecL5M7c6C
-         dAHA==
-X-Gm-Message-State: ACrzQf0kKmAPm/OJzrOKIHdHQ+nHlECc8sjfi++Go7vPLiTxHxaClaKG
-        XS8Qek1fj+xxpuMuULDnNhmyiB0M9CHUqQ==
-X-Google-Smtp-Source: AMsMyM7Xpy/hX5YLOqDGvmPFqG6e7WURl4Q/vq45MrPiOVdJ2okbjVVyQLWJwIkvgw+axxmR69Wsig==
-X-Received: by 2002:adf:fd4a:0:b0:236:87bc:a900 with SMTP id h10-20020adffd4a000000b0023687bca900mr29075747wrs.706.1667791407388;
-        Sun, 06 Nov 2022 19:23:27 -0800 (PST)
-Received: from [192.168.36.1] (92.40.199.16.threembb.co.uk. [92.40.199.16])
-        by smtp.gmail.com with ESMTPSA id e5-20020adfef05000000b00225307f43fbsm6004290wro.44.2022.11.06.19.23.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 06 Nov 2022 19:23:26 -0800 (PST)
-Message-ID: <83faab03-30df-cc2e-c447-110f345cc1d5@linaro.org>
-Date:   Mon, 7 Nov 2022 03:23:25 +0000
+        Sun, 6 Nov 2022 22:26:49 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F06FEF6F;
+        Sun,  6 Nov 2022 19:26:47 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4N5GqQ4ngxz4x1G;
+        Mon,  7 Nov 2022 14:26:42 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1667791602;
+        bh=swEp5zGA/Yzk77gfrQSnH+5KnVOcWngrWdKzL4MWyr4=;
+        h=Date:From:To:Cc:Subject:From;
+        b=P/r8egMiZn1kID4OEbhctNzQlDgOWxrvFKC8DOwF9fFZAaaqEHoZjDI2o4ZulEYMu
+         0IE8RYNeMizymfbK8gusyVjE6GD/3TGfh97O1G4X/byZNySOcrP5mvpPGrv8KeEz09
+         +3A7/FUfHWMgjYXn4lvxTKq3ro+oQa9lBceFZTSHRW5ACA5ixuhB1FREGomGeqUWlF
+         WTGf6KKi+RD7ozGj6Qvb050KgdNhaD3cE0zHpDu5twhSecH1SG2pIgaMnJJ8Hr6cTn
+         Ovgy5NYIIgeuPdKB9MY9jgj03puEJtVwiT81qUCNaPY4cGijqY+cy5ixhiB1Yf/FsP
+         MY5l2Ri7k30Gw==
+Date:   Mon, 7 Nov 2022 14:26:41 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build warning after merge of the rcu tree
+Message-ID: <20221107142641.527396ea@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH 0/5] arm64: dts: qcom: add and enable the pmi8998 RRADC
-Content-Language: en-US
-To:     Bjorn Andersson <andersson@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org, konrad.dybcio@somainline.org,
-        luca@z3ntu.xyz, linux-kernel@vger.kernel.org,
-        Andy Gross <agross@kernel.org>
-References: <20221016180330.1912214-1-caleb.connolly@linaro.org>
- <166779074258.500303.6143441430945522925.b4-ty@kernel.org>
-From:   Caleb Connolly <caleb.connolly@linaro.org>
-In-Reply-To: <166779074258.500303.6143441430945522925.b4-ty@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/xQq1nE+F/_o1rHlU5/bec34";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+--Sig_/xQq1nE+F/_o1rHlU5/bec34
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
+Hi all,
 
-On 07/11/2022 03:11, Bjorn Andersson wrote:
-> On Sun, 16 Oct 2022 19:03:24 +0100, Caleb Connolly wrote:
->> This contains patches 6 through 10 of the series adding a driver
->> for the RRADC
->> https://lore.kernel.org/linux-arm-msm/20220429220904.137297-1-caleb.connolly@linaro.org/
->>
->> The driver and DT bindings have been in mainline for a while.
->>
->> This introduces a new dtbs_check warning which is fixed in
->> https://lore.kernel.org/linux-arm-msm/20221016175757.1911016-1-caleb.connolly@linaro.org/
->> and depends on Luca's series:
->> https://lore.kernel.org/linux-arm-msm/20220925211744.133947-2-luca@z3ntu.xyz/
->>
->> [...]
-> 
-> Applied, thanks!
+After merging the rcu tree, today's linux-next build (htmldocs)
+produced this warning:
 
-Hi Bjorn,
+Documentation/RCU/rcubarrier.rst:205: WARNING: Literal block ends without a=
+ blank line; unexpected unindent.
 
-Apologies, I should have left a reply about re-spinning this; it's 
-been dropped to a single patch as Krzysztof suggested in [1] and is 
-currently pending a v4 (v3 can be found at [2]).
+Introduced by commit
 
-The changes aren't major, actually just enabling it by default rather 
-than per-device. If it would need to be reverted I could instead send 
-a followup to do this as well as add the missing dt bindings.
+  21c2e3909721 ("doc: Update rcubarrier.rst")
 
-[1]: 
-https://lore.kernel.org/linux-arm-msm/5929051d-d2be-5b51-0cf9-294affa51df2@linaro.org/
-[2]: 
-https://lore.kernel.org/linux-arm-msm/20221017190902.2282899-1-caleb.connolly@linaro.org/
+--=20
+Cheers,
+Stephen Rothwell
 
-> 
-> [1/5] arm64: dts: qcom: pmi8998: add rradc node
->        commit: 1cb78978d34e1b65bbb912d8265eb95713ae7a45
-> [2/5] arm64: dts: qcom: sdm845-oneplus: enable rradc
->        commit: 868985181a69df53321035d96aa668d90f6cd5cb
-> [3/5] arm64: dts: qcom: sdm845-db845c: enable rradc
->        commit: e779eb99859cc26d051f6fc723d2bd2d5990a812
-> [4/5] arm64: dts: qcom: sdm845-xiaomi-beryllium: enable rradc
->        commit: 53c54069d9ffd556b52893077324e628655cd591
-> [5/5] arm64: dts: qcom: msm8998-oneplus-common: enable RRADC
->        commit: aac16a9d247e5496361bfe20d651f2c1333eb5dc
-> 
-> Best regards,
+--Sig_/xQq1nE+F/_o1rHlU5/bec34
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
--- 
-Kind Regards,
-Caleb (they/them)
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNoevEACgkQAVBC80lX
+0GwZQwf/dK2SYwpnnhCpFjGwTlrXc8sEOCHyzAT+bzhYC0o3e4MU4T8VJqYfx4Vk
+YuyziEzLc1R3ft4pC4zLi72sUolMu7JHdBA9tiru8e5KYdH01tR2HlnzxfoQ6LAz
+NxPfresJDjXgf/2CRfPNBd3eWaO9OPULbRhQeGvFL6QrYkpYaB5nzVI3ZUWvFvSt
+YsTIUtECR5g/nzU+A3GC0Jhee1dYevsFsC1HIRezmtNR0ELWSU/txyc6E+NUfZzP
+HIEMBoLraZKjSZaaJtO+BL5BioNs9viCMJetijcZDPP9XE9v1X4VoWiG7U9WWUxc
+HYUIyZc77Ozvw2cVGwlY6mg4HrEGBg==
+=enEZ
+-----END PGP SIGNATURE-----
+
+--Sig_/xQq1nE+F/_o1rHlU5/bec34--
