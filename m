@@ -2,29 +2,28 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 227DE61F877
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 17:09:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F71C61F87E
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 17:10:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232322AbiKGQJb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 11:09:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57410 "EHLO
+        id S232211AbiKGQKI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 11:10:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232672AbiKGQJA (ORCPT
+        with ESMTP id S231302AbiKGQKF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 11:09:00 -0500
+        Mon, 7 Nov 2022 11:10:05 -0500
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1930F1BEB6;
-        Mon,  7 Nov 2022 08:08:41 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 10689A186;
+        Mon,  7 Nov 2022 08:10:04 -0800 (PST)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EDB4A139F;
-        Mon,  7 Nov 2022 08:08:46 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 00EA4139F;
+        Mon,  7 Nov 2022 08:10:10 -0800 (PST)
 Received: from pierre123.arm.com (pierre123.nice.arm.com [10.34.100.128])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id C1D153F534;
-        Mon,  7 Nov 2022 08:08:25 -0800 (PST)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id C7D3F3F534;
+        Mon,  7 Nov 2022 08:09:48 -0800 (PST)
 From:   Pierre Gondois <pierre.gondois@arm.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Pierre Gondois <pierre.gondois@arm.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Florian Fainelli <f.fainelli@gmail.com>,
@@ -40,6 +39,7 @@ Cc:     Pierre Gondois <pierre.gondois@arm.com>,
         Neil Armstrong <neil.armstrong@linaro.org>,
         Kevin Hilman <khilman@baylibre.com>,
         Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
         Khuong Dinh <khuong@os.amperecomputing.com>,
         Liviu Dudau <liviu.dudau@arm.com>,
         Sudeep Holla <sudeep.holla@arm.com>,
@@ -88,29 +88,29 @@ Cc:     Pierre Gondois <pierre.gondois@arm.com>,
         Abel Vesa <abelvesa@kernel.org>,
         Shenwei Wang <shenwei.wang@nxp.com>,
         Ming Qian <ming.qian@nxp.com>, Peng Fan <peng.fan@nxp.com>,
-        Tim Harvey <tharvey@gateworks.com>,
         Lucas Stach <l.stach@pengutronix.de>,
         Adam Ford <aford173@gmail.com>,
-        Richard Zhu <hongxing.zhu@nxp.com>, Li Jun <jun.li@nxp.com>,
-        Joakim Zhang <qiangqing.zhang@nxp.com>,
-        Markus Niebel <Markus.Niebel@ew.tq-group.com>,
+        Tim Harvey <tharvey@gateworks.com>, Li Jun <jun.li@nxp.com>,
+        Richard Zhu <hongxing.zhu@nxp.com>,
         Marek Vasut <marex@denx.de>,
+        Markus Niebel <Markus.Niebel@ew.tq-group.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Joakim Zhang <qiangqing.zhang@nxp.com>,
         Paul Elder <paul.elder@ideasonboard.com>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
         Martin Kepplinger <martink@posteo.de>,
         David Heidelberg <david@ixit.cz>,
         Liu Ying <victor.liu@nxp.com>,
         Oliver Graute <oliver.graute@kococonnector.com>,
-        Zhou Peng <eagle.zhou@nxp.com>, Wei Fang <wei.fang@nxp.com>,
-        Jacky Bai <ping.bai@nxp.com>,
+        Shijie Qin <shijie.qin@nxp.com>,
         Clark Wang <xiaoning.wang@nxp.com>,
+        Jacky Bai <ping.bai@nxp.com>, Wei Fang <wei.fang@nxp.com>,
         Chris Packham <chris.packham@alliedtelesis.co.nz>,
         Vadym Kochan <vadym.kochan@plvision.eu>,
         Sameer Pujar <spujar@nvidia.com>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
         Prathamesh Shete <pshete@nvidia.com>,
         Akhil R <akhilrajeev@nvidia.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
         Sumit Gupta <sumitg@nvidia.com>,
         Diogo Ivo <diogo.ivo@tecnico.ulisboa.pt>,
         Vidya Sagar <vidyas@nvidia.com>,
@@ -120,8 +120,8 @@ Cc:     Pierre Gondois <pierre.gondois@arm.com>,
         Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
         Aswani Reddy <aswani.reddy@samsung.com>,
         Shashank Prashar <s.prashar@samsung.com>,
-        Arjun K V <arjun.kv@samsung.com>, devicetree@vger.kernel.org,
-        linux-rpi-kernel@lists.infradead.org,
+        Ajay Kumar <ajaykumar.rs@samsung.com>,
+        devicetree@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org,
         linux-amlogic@lists.infradead.org,
         linux-samsung-soc@vger.kernel.org,
@@ -130,9 +130,9 @@ Cc:     Pierre Gondois <pierre.gondois@arm.com>,
         linux-realtek-soc@lists.infradead.org,
         linux-renesas-soc@vger.kernel.org,
         linux-rockchip@lists.infradead.org
-Subject: [PATCH v2 03/23] arm64: dts: Update cache properties for amlogic
-Date:   Mon,  7 Nov 2022 16:56:56 +0100
-Message-Id: <20221107155825.1644604-4-pierre.gondois@arm.com>
+Subject: [PATCH v2 04/23] arm64: dts: Update cache properties for apm
+Date:   Mon,  7 Nov 2022 16:56:57 +0100
+Message-Id: <20221107155825.1644604-5-pierre.gondois@arm.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221107155825.1644604-1-pierre.gondois@arm.com>
 References: <20221107155825.1644604-1-pierre.gondois@arm.com>
@@ -155,83 +155,54 @@ properties for unified cache is present ('cache-size', ...).
 Update the Device Trees accordingly.
 
 Signed-off-by: Pierre Gondois <pierre.gondois@arm.com>
-Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
 ---
- arch/arm64/boot/dts/amlogic/meson-a1.dtsi   | 1 +
- arch/arm64/boot/dts/amlogic/meson-axg.dtsi  | 1 +
- arch/arm64/boot/dts/amlogic/meson-g12a.dtsi | 1 +
- arch/arm64/boot/dts/amlogic/meson-g12b.dtsi | 1 +
- arch/arm64/boot/dts/amlogic/meson-gx.dtsi   | 1 +
- arch/arm64/boot/dts/amlogic/meson-sm1.dtsi  | 1 +
- 6 files changed, 6 insertions(+)
+ arch/arm64/boot/dts/apm/apm-shadowcat.dtsi | 4 ++++
+ arch/arm64/boot/dts/apm/apm-storm.dtsi     | 4 ++++
+ 2 files changed, 8 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/amlogic/meson-a1.dtsi b/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
-index b4000cf65a9a..d2f7cb4e5375 100644
---- a/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
-+++ b/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
-@@ -36,6 +36,7 @@ cpu1: cpu@1 {
- 
- 		l2: l2-cache0 {
+diff --git a/arch/arm64/boot/dts/apm/apm-shadowcat.dtsi b/arch/arm64/boot/dts/apm/apm-shadowcat.dtsi
+index a8526f8157ec..68ba865fcd58 100644
+--- a/arch/arm64/boot/dts/apm/apm-shadowcat.dtsi
++++ b/arch/arm64/boot/dts/apm/apm-shadowcat.dtsi
+@@ -97,15 +97,19 @@ cpu@301 {
+ 		};
+ 		xgene_L2_0: l2-cache-0 {
+ 			compatible = "cache";
++			cache-level = <2>;
+ 		};
+ 		xgene_L2_1: l2-cache-1 {
+ 			compatible = "cache";
++			cache-level = <2>;
+ 		};
+ 		xgene_L2_2: l2-cache-2 {
+ 			compatible = "cache";
++			cache-level = <2>;
+ 		};
+ 		xgene_L2_3: l2-cache-3 {
  			compatible = "cache";
 +			cache-level = <2>;
  		};
  	};
  
-diff --git a/arch/arm64/boot/dts/amlogic/meson-axg.dtsi b/arch/arm64/boot/dts/amlogic/meson-axg.dtsi
-index 04f797b5a012..1648e67afbb6 100644
---- a/arch/arm64/boot/dts/amlogic/meson-axg.dtsi
-+++ b/arch/arm64/boot/dts/amlogic/meson-axg.dtsi
-@@ -105,6 +105,7 @@ cpu3: cpu@3 {
- 
- 		l2: l2-cache0 {
+diff --git a/arch/arm64/boot/dts/apm/apm-storm.dtsi b/arch/arm64/boot/dts/apm/apm-storm.dtsi
+index f56d687f772d..9ac7417f65eb 100644
+--- a/arch/arm64/boot/dts/apm/apm-storm.dtsi
++++ b/arch/arm64/boot/dts/apm/apm-storm.dtsi
+@@ -81,15 +81,19 @@ cpu@301 {
+ 		};
+ 		xgene_L2_0: l2-cache-0 {
  			compatible = "cache";
 +			cache-level = <2>;
  		};
- 	};
- 
-diff --git a/arch/arm64/boot/dts/amlogic/meson-g12a.dtsi b/arch/arm64/boot/dts/amlogic/meson-g12a.dtsi
-index fb0ab27d1f64..af23d7968181 100644
---- a/arch/arm64/boot/dts/amlogic/meson-g12a.dtsi
-+++ b/arch/arm64/boot/dts/amlogic/meson-g12a.dtsi
-@@ -50,6 +50,7 @@ cpu3: cpu@3 {
- 
- 		l2: l2-cache0 {
+ 		xgene_L2_1: l2-cache-1 {
  			compatible = "cache";
 +			cache-level = <2>;
  		};
- 	};
- 
-diff --git a/arch/arm64/boot/dts/amlogic/meson-g12b.dtsi b/arch/arm64/boot/dts/amlogic/meson-g12b.dtsi
-index ee8fcae9f9f0..9978e619accc 100644
---- a/arch/arm64/boot/dts/amlogic/meson-g12b.dtsi
-+++ b/arch/arm64/boot/dts/amlogic/meson-g12b.dtsi
-@@ -105,6 +105,7 @@ cpu103: cpu@103 {
- 
- 		l2: l2-cache0 {
+ 		xgene_L2_2: l2-cache-2 {
  			compatible = "cache";
 +			cache-level = <2>;
  		};
- 	};
- };
-diff --git a/arch/arm64/boot/dts/amlogic/meson-gx.dtsi b/arch/arm64/boot/dts/amlogic/meson-gx.dtsi
-index 023a52005494..e3c12e0be99d 100644
---- a/arch/arm64/boot/dts/amlogic/meson-gx.dtsi
-+++ b/arch/arm64/boot/dts/amlogic/meson-gx.dtsi
-@@ -132,6 +132,7 @@ cpu3: cpu@3 {
- 
- 		l2: l2-cache0 {
- 			compatible = "cache";
-+			cache-level = <2>;
- 		};
- 	};
- 
-diff --git a/arch/arm64/boot/dts/amlogic/meson-sm1.dtsi b/arch/arm64/boot/dts/amlogic/meson-sm1.dtsi
-index 80737731af3f..d845eb19d93d 100644
---- a/arch/arm64/boot/dts/amlogic/meson-sm1.dtsi
-+++ b/arch/arm64/boot/dts/amlogic/meson-sm1.dtsi
-@@ -88,6 +88,7 @@ cpu3: cpu@3 {
- 
- 		l2: l2-cache0 {
+ 		xgene_L2_3: l2-cache-3 {
  			compatible = "cache";
 +			cache-level = <2>;
  		};
