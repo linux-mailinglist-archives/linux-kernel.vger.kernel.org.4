@@ -2,101 +2,242 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68C3A61F7CC
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 16:38:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA73161F7D1
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 16:39:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232868AbiKGPio (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 10:38:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42060 "EHLO
+        id S232469AbiKGPjR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 10:39:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232411AbiKGPil (ORCPT
+        with ESMTP id S232912AbiKGPjO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 10:38:41 -0500
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39F271F612;
-        Mon,  7 Nov 2022 07:38:40 -0800 (PST)
-Received: by mail-wr1-x42c.google.com with SMTP id h9so16863700wrt.0;
-        Mon, 07 Nov 2022 07:38:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=oPAYTOGqtJ5XNV/1AT7caGCJRWNvYtUi2mlJFlDAdFo=;
-        b=abAkHaHp92Z2vtzOj1SozYZLRTomRw3rmtSms/q6U5bxMks3IC1kG7T1Jj4coIvsix
-         tRZ9kGDrhxY2WOBrqZ+srAh5EIXZeZZJu8Nw9C0e+XWMxLvKW+GszXbLWi4Zuu1oDmsY
-         C3w27S4X2EkcCE9alBkubM8pg6EYA0ATRKTF2b6HAgkRSRRp8U0fq2y75zHN2JoBgaOP
-         UR5BramKRFnMm+wjf/Wx0Ii3mOE6drzHT/JySGDZA2yeSBtjdejVQReg9OBVH6nBzhs2
-         PPL6fT0xAnExUe9uKeBMQ9K0QV8nNEfAY4MTG22q1++GvoL6Dd6asO5aL+b5v2S9S/Uu
-         HEtg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oPAYTOGqtJ5XNV/1AT7caGCJRWNvYtUi2mlJFlDAdFo=;
-        b=4eDdvZ9lPN5eThl/0guDxWWjG45v3oYmIBqBKbSBTqbNQ7P75hfmVK4jOVdhOGcTDl
-         v05ExThEoqWZkgPaMy6hcuu8PRmp2/78pb58TOPpr+pGvwTKEBcQ+/nXP2KpbC6qtjW1
-         EkIkgIZfTQin8m4PbSfecp95wLLuzi3yRw1DrgmKt9yRYvlQfc0b/fUDEsaZNRwjj+lz
-         vPP5m823DNGq4bnwN9TeZVwkhW1ZNE0c8zJ6fOg9W2HckohcQo0y539CHmBbRPwgJ8Ja
-         uXAyBX/Lpa5BhsTVZyYPx6OIO0XlmXDDoRuYqLsCvRWdc4JmtauDGAD9ihwHCrrCYrpn
-         dM/w==
-X-Gm-Message-State: ACrzQf0cmtg6W59wSG363ciwzkNJqqfqt7WKpVT3rIXwXT+k+Mvs5zJx
-        piOICZEcNOOK5qJuLic9EnY=
-X-Google-Smtp-Source: AMsMyM6ogAqWyRekdBf34FVtsdxyzLUCwPGo0tD7wXyPyPl0rvifJ3bdaOFSULsXiP7FU2+hhTrvXg==
-X-Received: by 2002:a05:6000:18d:b0:236:8f9d:6d41 with SMTP id p13-20020a056000018d00b002368f9d6d41mr33498809wrx.658.1667835518709;
-        Mon, 07 Nov 2022 07:38:38 -0800 (PST)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id r17-20020a05600c35d100b003c6cd82596esm12778680wmq.43.2022.11.07.07.38.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Nov 2022 07:38:38 -0800 (PST)
-Date:   Mon, 7 Nov 2022 18:38:35 +0300
-From:   Dan Carpenter <error27@gmail.com>
-To:     Joe Perches <joe@perches.com>
-Cc:     Deepak R Varma <drv@mailo.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-iio@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] staging: iio: meter: use min() for comparison and
- assignment
-Message-ID: <Y2kme/FDg/4K2VW5@kadam>
-References: <Y2iFGA3A1w+XMlYU@qemulion>
- <Y2kDTxE38epBN368@kadam>
- <41a43f3865f3c86c6c2d1fbf3d82c42b685c7041.camel@perches.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <41a43f3865f3c86c6c2d1fbf3d82c42b685c7041.camel@perches.com>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 7 Nov 2022 10:39:14 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 112CF1F9F5;
+        Mon,  7 Nov 2022 07:39:11 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A275060EC9;
+        Mon,  7 Nov 2022 15:39:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF7BEC433D6;
+        Mon,  7 Nov 2022 15:39:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667835550;
+        bh=LJTIX6EOyaGeco5U/ATP5mMAgf2Y3X8oNl0EWEryn5o=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=nsdFJc9TqagjKvmFhMqOxOGFd9zPtEIUDgrKBq1eaNwvFUXm/2MT2aEvrvPfmz7J7
+         JIw+bt+4p8KLa/zn3pkuPjPS8R0Bh1J+xpk+eX/gVzh8hVLMkb52DFNTZXSq14utSE
+         rzVVJDENJRiZLmhavv6oR67vreSXOvHPNGz4XhvbYqOCH8AIs9rXMVSsclitgNiG5x
+         ZNL1FBuqhtZnRUidWMLLrEGZCt5miwTj+H9/522i6VgM2oCNT94tTEvR4849xFqzdm
+         vUxQ0Vvsh/UD0V7Kfavqdl7K4xON3elnskuxhxpest11c2Ytv1bhlBIsg/gC2bctp8
+         7upVCChMDUuLA==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1os4DL-004Qsn-Ss;
+        Mon, 07 Nov 2022 15:39:08 +0000
+Date:   Mon, 07 Nov 2022 15:39:07 +0000
+Message-ID: <86y1smpyec.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Leo Yan <leo.yan@linaro.org>
+Cc:     James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        John Garry <john.garry@huawei.com>,
+        James Clark <james.clark@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org
+Subject: Re: [PATCH v1 3/3] perf arm64: Support virtual CPU ID for kvm-stat
+In-Reply-To: <Y2kabsQdddiX4G+O@leoy-huanghe.lan>
+References: <20221105072311.8214-1-leo.yan@linaro.org>
+        <20221105072311.8214-4-leo.yan@linaro.org>
+        <868rkpr0mv.wl-maz@kernel.org>
+        <Y2kabsQdddiX4G+O@leoy-huanghe.lan>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: leo.yan@linaro.org, james.morse@arm.com, alexandru.elisei@arm.com, suzuki.poulose@arm.com, oliver.upton@linux.dev, catalin.marinas@arm.com, will@kernel.org, acme@kernel.org, john.garry@huawei.com, james.clark@arm.com, mike.leach@linaro.org, peterz@infradead.org, mingo@redhat.com, mark.rutland@arm.com, alexander.shishkin@linux.intel.com, jolsa@kernel.org, namhyung@kernel.org, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 07, 2022 at 07:22:24AM -0800, Joe Perches wrote:
-> > In terms of run time, this patch is fine but in terms of reading the
-> > code using min() makes it less readable.
+On Mon, 07 Nov 2022 14:47:10 +0000,
+Leo Yan <leo.yan@linaro.org> wrote:
 > 
-> It's not a runtime question, either should compile to the same object
-> code.  It's definitely a readabiity and standardization issue.
+> On Sat, Nov 05, 2022 at 01:28:40PM +0000, Marc Zyngier wrote:
 > 
-> In this case, IMO it'd be better to use the much more common
+> [...]
 > 
-> 	if (ret < 0)
-> 		return ret;
+> > > Before:
+> > > 
+> > >   # perf kvm stat report --vcpu 27
+> > > 
+> > >   Analyze events for all VMs, VCPU 27:
+> > > 
+> > >                VM-EXIT    Samples  Samples%     Time%    Min Time    Max Time         Avg time
+> > > 
+> > >   Total Samples:0, Total events handled time:0.00us.
+> > >
+> > > After:
+> > > 
+> > >   # perf kvm stat report --vcpu 27
+> > > 
+> > >   Analyze events for all VMs, VCPU 27:
+> > > 
+> > >                VM-EXIT    Samples  Samples%     Time%    Min Time    Max Time         Avg time
+> > > 
+> > >                  SYS64        808    98.54%    91.24%      0.00us    303.76us      3.46us ( +-  13.54% )
+> > >                    WFx         10     1.22%     7.79%      0.00us     69.48us     23.91us ( +-  25.91% )
+> > >                    IRQ          2     0.24%     0.97%      0.00us     22.64us     14.82us ( +-  52.77% )
+> > > 
+> > >   Total Samples:820, Total events handled time:3068.28us.
+> > 
+> > Please educate me: how useful is it to filter on a vcpu number across
+> > all VMs? What sense does it even make?
 > 
-> 	return 0;
+> Now "perf kvm" tool is not sophisticated since it doesn't capture VMID
+> and virtual CPU ID together.
 
-I also prefer this format.
+VMID is not a relevant indicator anyway, as it can change at any
+point. But that's only to show that everybody has a different view on
+what they need to collect. At which point, we need to provide an
+infrastructure for data extraction, and not the data itself.
 
-But at the same time, I can't advise Deepak to go around changing
-existing code where the author like ternaries.
+> I think a case is we can spin a program on a specific virtual CPU with
+> taskset in VM, in this way we can check if any bottleneck is caused by
+> VM entry/exit, but I have to say that it's inaccurate if we only filter
+> on VCPU ID, we should consider tracing VMID and VCPU ID together in
+> later's enhancement.
+> 
+> > Conversely, what would be the purpose of filtering on a 5th thread of
+> > any process irrespective of what the process does? To me, this is the
+> > same level of non-sense.
+> 
+> I agree.
+> 
+> > AFAICT, this is just piling more arbitrary data extraction for no
+> > particular reason other than "just because we can", and there is
+> > absolutely no guarantee that this is fit for anyone else's purpose.
+> > 
+> > I'd rather you have a generic tracepoint taking the vcpu as a context
+> > and a BPF program that spits out the information people actually need,
+> > keeping things out of the kernel. Or even a tracehook (like the
+> > scheduler does), and let people load a module to dump whatever
+> > information they please.
+> 
+> Actually I considered three options:
+> 
+> Option 1: Simply add new version's trace events for recording more info.
+> This is not flexible and we even have risk to add more version's trace
+> event if later we might find that more data should traced.
+> 
+> This approach is straightforward and the implementation would be
+> simple.  This is main reason why finally I choosed to add new trace
+> events.
 
-regards,
-dan carpenter
+But that doesn't scale at all.
+
+> 
+> Option 2: use Kprobe to dynamically insert tracepoints; but this means
+> the user must have the corresponding vmlinux file, otherwise, perf
+> tool might inject tracepoint at an incorrect address.  This is the
+> main reason I didn't use Kprobe to add dynamic tracepoints.
+>
+> Option 3: As you suggested, I can bind KVM tracepoints with a eBPF
+> program and the eBPF program records perf events.
+> 
+> When I reviewed Arm64's kvm_entry / kvm_exit trace events, they don't
+> have vcpu context in the arguments, this means I need to add new trace
+> events for accessing "vcpu" context.
+
+I'm not opposed to adding new trace{point,hook}s if you demonstrate
+that they are generic enough or will never need to evolve.
+
+> 
+> Option 1 and 3 both need to add trace events; option 1 is more
+> straightforward solution and this is why it was choosed in current patch
+> set.
+> 
+> I recognized that I made a mistake, actually we can modify the trace
+> event's definition for kvm_entry / kvm_exit, note we only modify the
+> trace event's arguments, this will change the trace function's
+> definition but it will not break ABI (the format is exactly same for
+> the user space).  Below changes demonstrate what's my proposing:
+> 
+> diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
+> index 94d33e296e10..16f6b61abfec 100644
+> --- a/arch/arm64/kvm/arm.c
+> +++ b/arch/arm64/kvm/arm.c
+> @@ -917,7 +917,7 @@ int kvm_arch_vcpu_ioctl_run(struct kvm_vcpu *vcpu)
+>                 /**************************************************************
+>                  * Enter the guest
+>                  */
+> -               trace_kvm_entry(*vcpu_pc(vcpu));
+> +               trace_kvm_entry(vcpu);
+>                 guest_timing_enter_irqoff();
+>  
+>                 ret = kvm_arm_vcpu_enter_exit(vcpu);
+> diff --git a/arch/arm64/kvm/trace_arm.h b/arch/arm64/kvm/trace_arm.h
+> index 33e4e7dd2719..9df4fd30093c 100644
+> --- a/arch/arm64/kvm/trace_arm.h
+> +++ b/arch/arm64/kvm/trace_arm.h
+> @@ -12,15 +12,15 @@
+>   * Tracepoints for entry/exit to guest
+>   */
+>  TRACE_EVENT(kvm_entry,
+> -       TP_PROTO(unsigned long vcpu_pc),
+> -       TP_ARGS(vcpu_pc),
+> +       TP_PROTO(struct kvm_vcpu *vcpu),
+> +       TP_ARGS(vcpu),
+>  
+>         TP_STRUCT__entry(
+>                 __field(        unsigned long,  vcpu_pc         )
+>         ),
+>  
+>         TP_fast_assign(
+> -               __entry->vcpu_pc                = vcpu_pc;
+> +               __entry->vcpu_pc                = *vcpu_pc(vcpu);
+>         ),
+>  
+>         TP_printk("PC: 0x%016lx", __entry->vcpu_pc)
+> 
+> Please let me know your opinion, if you don't object, I can move
+> forward with this approach.
+
+I have no issue with this if this doesn't change anything else.
+
+And if you can make use of this with a BPF program and get to the same
+result as your initial patch, then please submit it for inclusion in
+the kernel as an example. We can then point people to it next time
+this crop up (probably before Xmas).
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
