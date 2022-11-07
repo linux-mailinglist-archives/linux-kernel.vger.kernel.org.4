@@ -2,63 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EA3961EEF7
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 10:29:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7928961EEFB
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 10:29:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231393AbiKGJ3i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 04:29:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55544 "EHLO
+        id S231462AbiKGJ3m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 04:29:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229659AbiKGJ3h (ORCPT
+        with ESMTP id S230426AbiKGJ3h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 7 Nov 2022 04:29:37 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79A9A15732;
-        Mon,  7 Nov 2022 01:29:35 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id u24so16482602edd.13;
-        Mon, 07 Nov 2022 01:29:35 -0800 (PST)
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92BF915807;
+        Mon,  7 Nov 2022 01:29:36 -0800 (PST)
+Received: by mail-ej1-x62c.google.com with SMTP id kt23so28356241ejc.7;
+        Mon, 07 Nov 2022 01:29:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=RIjYm6JTwnli9URljlXV5J28hyaAyKTX8x4XHK8UduA=;
-        b=IqkNR0fop9Go2dkeLda9lCJlfJaAr82zYUTLhYFK0IwkCE94Q8U2LRn/OB9RXM7IUl
-         UoGTFNltkwtzJeMJpEynHM+EVSUDmmz65KBv8VAzbJ24Q2eRRSBAzXOFc57jVfbj+idP
-         FWGxQc6dHEjxhbAUsPhzVznuyHb6nbdjioeOLdv5XMf+jOOK2mIjNEte2c7ugA+zzrnB
-         l5XbASRDO+qJ5BRzPYdIFivUwSEy2ocY6TqMBeNtT+L2U1dFeaSvzgp8DL475t/Vx2vZ
-         GxXETIyv7AFY2ivYStZeojkMkzA3yZdwIlp4oICAc2W1ZOwLFQljaI5da7LZO6B2XBB/
-         7MNg==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WeRjTdKZuVcd4geSfmVx+hLppnod+v8Q60h8FnReYds=;
+        b=SUw+WmxmfTgWTqU1ZbVTw4omEu3cA/sjbVF3oE2A54z3kf61zsIUqijg1GMo3B4V7v
+         IyTZlHJhihRPrEpoOKuFvUrJ4UyQIgglDWqYUuqkzePlpQBH+ij/YvTxmvQSxr5/NfRc
+         6BLfzHijtr1YJ/H3qGBxwCiy7ECIzdmWRgca5KaO4tX3fA4TDs3e2cjDihYt3TRhoTXi
+         aO6nWNWZAueAN3G6ngR31OGYQV2oNxVBGJUKQ5QsDv41gOPKlitFL0yOcNbSect3IOJP
+         9CLwvrwy4nbIKIZwkqKiE5E/KXhcSPUhQxKsiTK3A83w15IuQYLkF7Mi0h5C53yjAt3q
+         ZYpA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=RIjYm6JTwnli9URljlXV5J28hyaAyKTX8x4XHK8UduA=;
-        b=d+ycXhAyyJ1tlFE2NNq8btD8QDDk4g5MNS8S5rNzjj/WNjxoBi2WnXdtQ49qIExaAM
-         DzBO1117rEiAUYfuzZlg7PgNjFJ/aPaTU6HtpKeR8ILOS3ee2pAC/92tPJ0MwFuAR399
-         Ryd38QF0GW3NZTdKM/erCLyANiCByaarYPBMFGJfwphq/FHicADXTm9iLRd1KdEommEh
-         h5R3HfcXN5YGvSbOFOmRPbwiooKVC81TFVY5+KiEO7JPeY5t71SSxTnsQRGUYHPRGRf3
-         ZT3oSJK/0VD31X8NjETT6JKGenoXZ+wjqykLKa0CdkdU/5gwyi+b8GKrOFUJ7ME4oagZ
-         +uXQ==
-X-Gm-Message-State: ACrzQf1LxVndQp3bi41OEVdNcH71nbA7OUtxrYt2tL6bnPXRP66hBuu3
-        IXcoKJ1hXTWg33+jfOpbULo=
-X-Google-Smtp-Source: AMsMyM5yUYRtpQfi9bM7MsDVeoB62ejIyeGeDBrlAENB4nI4fjY7PCvsk7O9SAMoOVLfYuvAZ1BgAw==
-X-Received: by 2002:aa7:ce8d:0:b0:461:50fd:e358 with SMTP id y13-20020aa7ce8d000000b0046150fde358mr48982185edv.194.1667813373894;
-        Mon, 07 Nov 2022 01:29:33 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=WeRjTdKZuVcd4geSfmVx+hLppnod+v8Q60h8FnReYds=;
+        b=4OciHPQc4dlU0Y/MYNKmmM54rVMISw7n4kiksOR/5dqqs9mLV0wpw6Z3G37e9VQKI0
+         C1Qr4wj4F3axh70Aia+nNPllXR0VN52ndwH3WpPoAVnfFmIbaLiN/qWQjf0JUFouucEd
+         Ko+12/RfxeVPao/wInKQ6wm2IcsMzjuNPQ87Gn6x20OrVCrhrjUrWuDjC3UPHoTLIBmS
+         zfMs04j26kh3Voj/+m985L81QF9hiKkGc92/5LXqfuVURscuKUqddsap2EnhjcaczMmL
+         fWWOHLphP+vO9aU3lLV0cMsVI7ldALe8QX/FCUsmWYGAhF5bRBwAlcU4ZrIbCd4QX5K9
+         /TUA==
+X-Gm-Message-State: ACrzQf0VtskDsXYBAQUArDz68ouJaQ+rm/2iWc8aZQnIOmRS7jhDWn91
+        gss0PGAx+A/yI2bjolBW6FM=
+X-Google-Smtp-Source: AMsMyM7D8aj6QDvTKE9KzdGkeeJY1rAJnc6L8MO5dTbQIhiwxuV0onATWy3ZaInFJopLMgA+Q+Zmtw==
+X-Received: by 2002:a17:907:763a:b0:7ad:e517:246 with SMTP id jy26-20020a170907763a00b007ade5170246mr34992210ejc.128.1667813375081;
+        Mon, 07 Nov 2022 01:29:35 -0800 (PST)
 Received: from fedora.. (dh207-98-26.xnet.hr. [88.207.98.26])
-        by smtp.googlemail.com with ESMTPSA id u10-20020a056402110a00b0045b3853c4b7sm3912837edv.51.2022.11.07.01.29.32
+        by smtp.googlemail.com with ESMTPSA id u10-20020a056402110a00b0045b3853c4b7sm3912837edv.51.2022.11.07.01.29.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Nov 2022 01:29:33 -0800 (PST)
+        Mon, 07 Nov 2022 01:29:34 -0800 (PST)
 From:   Robert Marko <robimarko@gmail.com>
 To:     agross@kernel.org, andersson@kernel.org,
         konrad.dybcio@somainline.org, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Robert Marko <robimarko@gmail.com>
-Subject: [PATCH 1/3] arm64: dts: qcom: hk10: use "okay" instead of "ok"
-Date:   Mon,  7 Nov 2022 10:29:28 +0100
-Message-Id: <20221107092930.33325-1-robimarko@gmail.com>
+Subject: [PATCH 2/3] arm64: dts: qcom: hk10: use GPIO flags for tlmm
+Date:   Mon,  7 Nov 2022 10:29:29 +0100
+Message-Id: <20221107092930.33325-2-robimarko@gmail.com>
 X-Mailer: git-send-email 2.38.1
+In-Reply-To: <20221107092930.33325-1-robimarko@gmail.com>
+References: <20221107092930.33325-1-robimarko@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -71,67 +74,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use "okay" instead of "ok" in USB nodes as "ok" is deprecated.
+Use respective GPIO_ACTIVE_LOW/HIGH flags for tlmm GPIOs instead of
+harcoding the cell value.
 
 Signed-off-by: Robert Marko <robimarko@gmail.com>
 ---
- arch/arm64/boot/dts/qcom/ipq8074-hk10.dtsi | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+ arch/arm64/boot/dts/qcom/ipq8074-hk10.dtsi | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
 diff --git a/arch/arm64/boot/dts/qcom/ipq8074-hk10.dtsi b/arch/arm64/boot/dts/qcom/ipq8074-hk10.dtsi
-index db4b87944cdf..262b937e0bc6 100644
+index 262b937e0bc6..651a231554e0 100644
 --- a/arch/arm64/boot/dts/qcom/ipq8074-hk10.dtsi
 +++ b/arch/arm64/boot/dts/qcom/ipq8074-hk10.dtsi
-@@ -22,7 +22,7 @@ memory {
- };
+@@ -5,6 +5,7 @@
+ /dts-v1/;
  
- &blsp1_spi1 {
--	status = "ok";
-+	status = "okay";
+ #include "ipq8074.dtsi"
++#include <dt-bindings/gpio/gpio.h>
  
- 	flash@0 {
- 		#address-cells = <1>;
-@@ -34,33 +34,33 @@ flash@0 {
- };
- 
- &blsp1_uart5 {
--	status = "ok";
-+	status = "okay";
- };
+ / {
+ 	aliases {
+@@ -39,12 +40,12 @@ &blsp1_uart5 {
  
  &pcie0 {
--	status = "ok";
-+	status = "okay";
- 	perst-gpios = <&tlmm 58 0x1>;
+ 	status = "okay";
+-	perst-gpios = <&tlmm 58 0x1>;
++	perst-gpios = <&tlmm 58 GPIO_ACTIVE_LOW>;
  };
  
  &pcie1 {
--	status = "ok";
-+	status = "okay";
- 	perst-gpios = <&tlmm 61 0x1>;
+ 	status = "okay";
+-	perst-gpios = <&tlmm 61 0x1>;
++	perst-gpios = <&tlmm 61 GPIO_ACTIVE_LOW>;
  };
  
  &pcie_phy0 {
--	status = "ok";
-+	status = "okay";
- };
- 
- &pcie_phy1 {
--	status = "ok";
-+	status = "okay";
- };
- 
- &qpic_bam {
--	status = "ok";
-+	status = "okay";
- };
- 
- &qpic_nand {
--	status = "ok";
-+	status = "okay";
- 
- 	nand@0 {
- 		reg = <0>;
 -- 
 2.38.1
 
