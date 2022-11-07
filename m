@@ -2,28 +2,28 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1116961FBED
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 18:51:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBA5661FBF3
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 18:51:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232033AbiKGRvi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 12:51:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57708 "EHLO
+        id S232076AbiKGRvz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 12:51:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231464AbiKGRv3 (ORCPT
+        with ESMTP id S232077AbiKGRvf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 12:51:29 -0500
+        Mon, 7 Nov 2022 12:51:35 -0500
 Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A62F723E9C
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 09:51:27 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 580A12317E
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 09:51:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1667843473; h=from:from:sender:reply-to:subject:subject:date:date:
+        s=mail; t=1667843474; h=from:from:sender:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=EDRHgJeXjD/Lfgp6cHobjOELEmX34fviCtkXalmd8+c=;
-        b=f0JM/l8sjONQLMbeKaV/13rSiNUmMjvk1GSAMsTvoHb8ClwnThUWo7yB/bPzQpKMojrQtX
-        Gh+xqUDRaNWRqQcrKl8qKs/IwLSiuWGYy+8WGZDAG8aG6KtfazclijdWmWPoJ0kmCQY5n5
-        I6QP0f4xD6v2Df9PkdLUssmfIjwqs2U=
+        bh=Z0IvuxOw+z5I1Jelwxg7JYk5e8a4KTZtu0lWisuvsAA=;
+        b=xno/RlzPPkwiCU8bqZQTuoUebofUxgdKbbJ3ikbUar9R21y2dFcY8v7URWtBk4yx2rW02I
+        B/7hMKxtjPc7pYtPpHqP9a4KEwcRFeouwDajgB7tQ37tIvXv57VU4dMwTY7diOceMuMIDA
+        WY3U+xUXIo4G32BxIK89jr4B6hjSpvU=
 From:   Paul Cercueil <paul@crapouillou.net>
 To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
         Maxime Ripard <mripard@kernel.org>,
@@ -32,11 +32,16 @@ To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
         Daniel Vetter <daniel@ffwll.ch>
 Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
         Paul Cercueil <paul@crapouillou.net>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        virtualization@lists.linux-foundation.org
-Subject: [PATCH 02/26] drm: bochs: Use the dev_pm_ops provided by modeset helper
-Date:   Mon,  7 Nov 2022 17:50:42 +0000
-Message-Id: <20221107175106.360578-3-paul@crapouillou.net>
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH 03/26] drm: imx: Use the dev_pm_ops provided by modeset helper
+Date:   Mon,  7 Nov 2022 17:50:43 +0000
+Message-Id: <20221107175106.360578-4-paul@crapouillou.net>
 In-Reply-To: <20221107175106.360578-1-paul@crapouillou.net>
 References: <20221107175106.360578-1-paul@crapouillou.net>
 MIME-Version: 1.0
@@ -56,40 +61,42 @@ drm_modeset_helper.c, which provides the exact same PM callbacks.
 
 Signed-off-by: Paul Cercueil <paul@crapouillou.net>
 ---
-Cc: Gerd Hoffmann <kraxel@redhat.com>
-Cc: virtualization@lists.linux-foundation.org
+Cc: Philipp Zabel <p.zabel@pengutronix.de>
+Cc: Shawn Guo <shawnguo@kernel.org>
+Cc: Sascha Hauer <s.hauer@pengutronix.de>
+Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
+Cc: Fabio Estevam <festevam@gmail.com>
+Cc: NXP Linux Team <linux-imx@nxp.com>
+Cc: linux-arm-kernel@lists.infradead.org
 ---
- drivers/gpu/drm/tiny/bochs.c | 27 ++-------------------------
- 1 file changed, 2 insertions(+), 25 deletions(-)
+ drivers/gpu/drm/imx/imx-drm-core.c | 21 ++-------------------
+ 1 file changed, 2 insertions(+), 19 deletions(-)
 
-diff --git a/drivers/gpu/drm/tiny/bochs.c b/drivers/gpu/drm/tiny/bochs.c
-index 04682f831544..26e9cba89f68 100644
---- a/drivers/gpu/drm/tiny/bochs.c
-+++ b/drivers/gpu/drm/tiny/bochs.c
-@@ -2,6 +2,7 @@
- 
+diff --git a/drivers/gpu/drm/imx/imx-drm-core.c b/drivers/gpu/drm/imx/imx-drm-core.c
+index 8dd8b0f912af..4cbd15c2c8ea 100644
+--- a/drivers/gpu/drm/imx/imx-drm-core.c
++++ b/drivers/gpu/drm/imx/imx-drm-core.c
+@@ -10,6 +10,7 @@
+ #include <linux/dma-buf.h>
  #include <linux/module.h>
- #include <linux/pci.h>
+ #include <linux/platform_device.h>
 +#include <linux/pm.h>
  
- #include <drm/drm_aperture.h>
- #include <drm/drm_atomic_helper.h>
-@@ -610,30 +611,6 @@ static const struct drm_driver bochs_driver = {
- 	DRM_GEM_VRAM_DRIVER,
- };
+ #include <video/imx-ipu-v3.h>
  
--/* ---------------------------------------------------------------------- */
--/* pm interface                                                           */
--
+@@ -298,24 +299,6 @@ static int imx_drm_platform_remove(struct platform_device *pdev)
+ 	return 0;
+ }
+ 
 -#ifdef CONFIG_PM_SLEEP
--static int bochs_pm_suspend(struct device *dev)
+-static int imx_drm_suspend(struct device *dev)
 -{
 -	struct drm_device *drm_dev = dev_get_drvdata(dev);
 -
 -	return drm_mode_config_helper_suspend(drm_dev);
 -}
 -
--static int bochs_pm_resume(struct device *dev)
+-static int imx_drm_resume(struct device *dev)
 -{
 -	struct drm_device *drm_dev = dev_get_drvdata(dev);
 -
@@ -97,23 +104,20 @@ index 04682f831544..26e9cba89f68 100644
 -}
 -#endif
 -
--static const struct dev_pm_ops bochs_pm_ops = {
--	SET_SYSTEM_SLEEP_PM_OPS(bochs_pm_suspend,
--				bochs_pm_resume)
--};
+-static SIMPLE_DEV_PM_OPS(imx_drm_pm_ops, imx_drm_suspend, imx_drm_resume);
 -
- /* ---------------------------------------------------------------------- */
- /* pci interface                                                          */
- 
-@@ -721,7 +698,7 @@ static struct pci_driver bochs_pci_driver = {
- 	.id_table =	bochs_pci_tbl,
- 	.probe =	bochs_pci_probe,
- 	.remove =	bochs_pci_remove,
--	.driver.pm =    &bochs_pm_ops,
-+	.driver.pm =    pm_sleep_ptr(&drm_mode_config_pm_ops),
+ static const struct of_device_id imx_drm_dt_ids[] = {
+ 	{ .compatible = "fsl,imx-display-subsystem", },
+ 	{ /* sentinel */ },
+@@ -327,7 +310,7 @@ static struct platform_driver imx_drm_pdrv = {
+ 	.remove		= imx_drm_platform_remove,
+ 	.driver		= {
+ 		.name	= "imx-drm",
+-		.pm	= &imx_drm_pm_ops,
++		.pm	= pm_sleep_ptr(&drm_mode_config_pm_ops),
+ 		.of_match_table = imx_drm_dt_ids,
+ 	},
  };
- 
- /* ---------------------------------------------------------------------- */
 -- 
 2.35.1
 
