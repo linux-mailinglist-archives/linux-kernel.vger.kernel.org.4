@@ -2,222 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3038961F438
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 14:23:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE8AC61F43D
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 14:25:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230379AbiKGNXX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 08:23:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57012 "EHLO
+        id S231438AbiKGNZN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 08:25:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231433AbiKGNXV (ORCPT
+        with ESMTP id S230434AbiKGNZK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 08:23:21 -0500
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74CA31C41E;
-        Mon,  7 Nov 2022 05:23:20 -0800 (PST)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2A7DNFYi102192;
-        Mon, 7 Nov 2022 07:23:15 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1667827395;
-        bh=jzboITK7Wb0XVXubjpJtUn2rXNJZJ9vNCV/qB95ry50=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=GWEtIyZd8pK1XKxkXTBHOMWPHXNrufmgiwEbt2fsIZWuEnfOuQ5QvLuJmdgsZ1Cd1
-         4+O92B6lWK0Q8j20DsIpMCT7QOcqha9wTX/oyV42hZFFHruzyF8KbsLfoWkMNughPf
-         bMHAvVP+YBiPjvbEGdqyL3kiHbYifjDowknDAVAs=
-Received: from DLEE115.ent.ti.com (dlee115.ent.ti.com [157.170.170.26])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2A7DNFm7063269
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 7 Nov 2022 07:23:15 -0600
-Received: from DLEE112.ent.ti.com (157.170.170.23) by DLEE115.ent.ti.com
- (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Mon, 7 Nov
- 2022 07:23:15 -0600
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE112.ent.ti.com
- (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
- Frontend Transport; Mon, 7 Nov 2022 07:23:15 -0600
-Received: from [10.250.135.52] (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2A7DN9Sr059466;
-        Mon, 7 Nov 2022 07:23:10 -0600
-Message-ID: <4d82c447-f957-5595-e5d2-f8a0dd629921@ti.com>
-Date:   Mon, 7 Nov 2022 15:23:08 +0200
+        Mon, 7 Nov 2022 08:25:10 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD097113C
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 05:25:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667827509; x=1699363509;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=hlL+DfWEWMRR8orTzyWzhpO4GGMnYRYRp0nALpNPto8=;
+  b=X7qAZPTYfUYF7ZpFotp6VmDpiGkvkYDQId5/CWOWVqRzYgLGQAD6qRcC
+   af20o2zCoAjlqwDDAJZdjdBs/mfrVYzczm3t830BgeGtO+4Msa28dETdx
+   4nxUuVVn/5BydJrvnlIsudA1GK0r1AMeuFddq8VfKfeIKebit/mL1VEee
+   VlTHANS7wpfnQprnAGQ229iX9/nffruYqbNyT1K/oNO3Mp4c1/cKAuXkO
+   Cv3farN5+PaVuoR+bxRYFZO1PFs5sWSqtiUqWEnSHVSYaNjN+/rD8cJF8
+   dLk5t0AwjXK3FW73vg2XKSh3Dh8938ckYNGovQAFGfQsT72jE+3PT1uiu
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10523"; a="297899194"
+X-IronPort-AV: E=Sophos;i="5.96,145,1665471600"; 
+   d="scan'208";a="297899194"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Nov 2022 05:25:09 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10523"; a="761093220"
+X-IronPort-AV: E=Sophos;i="5.96,145,1665471600"; 
+   d="scan'208";a="761093220"
+Received: from joe-255.igk.intel.com (HELO localhost) ([172.22.229.67])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Nov 2022 05:25:05 -0800
+Date:   Mon, 7 Nov 2022 14:25:03 +0100
+From:   Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Oded Gabbay <ogabbay@kernel.org>, dri-devel@lists.freedesktop.org,
+        Maciej Kwapulinski <maciej.kwapulinski@linux.intel.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        stanislaw.gruszka@intel.com, Jeffrey Hugo <quic_jhugo@quicinc.com>,
+        Arnd Bergmann <arnd@arndb.de>, Jiho Chu <jiho.chu@samsung.com>,
+        Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>,
+        Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Alex Deucher <alexander.deucher@amd.com>
+Subject: Re: [RFC PATCH v2 1/3] drivers/accel: define kconfig and register a
+ new major
+Message-ID: <20221107132503.GA3590860@linux.intel.com>
+References: <20221102203405.1797491-1-ogabbay@kernel.org>
+ <20221102203405.1797491-2-ogabbay@kernel.org>
+ <Y2MMCIe5wND2XPqE@kroah.com>
+ <CAFCwf13uLj=P6u6FAcY8M5qAXoaBdb+Ha-TYj0j2FAZnFAPFYg@mail.gmail.com>
+ <CAFCwf12yRUG4593ozJMEwaaJBKyWqXTTCjef9O_fzWdQBxVrtw@mail.gmail.com>
+ <Y2kAcCu4z2LUMN7u@nvidia.com>
+ <CAFCwf10K-dTu455QfOK8i6thismY-FUN2Rws830EGiqOcGWFgA@mail.gmail.com>
+ <Y2kDzPswkKyZyRpS@nvidia.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH v2] dmaengine: k3-udma: Add system suspend/resume support
-To:     =?UTF-8?Q?P=c3=a9ter_Ujfalusi?= <peter.ujfalusi@gmail.com>,
-        Vinod Koul <vkoul@kernel.org>
-CC:     Nishanth Menon <nm@ti.com>, <dmaengine@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Roger Quadros <rogerq@kernel.org>
-References: <20221103203021.83929-1-g-vlaev@ti.com>
- <be967357-6ecb-5ecf-c860-5265e1527b2a@gmail.com>
-Content-Language: en-US
-From:   Georgi Vlaev <g-vlaev@ti.com>
-In-Reply-To: <be967357-6ecb-5ecf-c860-5265e1527b2a@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y2kDzPswkKyZyRpS@nvidia.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Peter,
+Hi
 
-On 11/5/22 20:49, Péter Ujfalusi wrote:
+On Mon, Nov 07, 2022 at 09:10:36AM -0400, Jason Gunthorpe wrote:
+> On Mon, Nov 07, 2022 at 03:01:08PM +0200, Oded Gabbay wrote:
+> > I don't agree with your statement that it should be "a layer over top of DRM".
+> > Anything on top of DRM is a device driver.
+> > Accel is not a device driver, it is a new type of drm minor / drm driver.
 > 
+> Yeah, I still think this is not the right way, you are getting almost
+> nothing from DRM and making everything more complicated in the
+> process.
 > 
-> On 03/11/2022 22:30, Georgi Vlaev wrote:
->> From: Vignesh Raghavendra <vigneshr@ti.com>
->>
->> The K3 platforms configure the DMA resources with the
->> help of the TI's System Firmware's Device Manager(DM)
->> over TISCI. The group of DMA related Resource Manager[1]
->> TISCI messages includes: INTA, RINGACC, UDMAP, and PSI-L.
->> This configuration however, does not persist in the DM
->> after leaving from Suspend-to-RAM state. We have to restore
->> the DMA channel configuration over TISCI for all configured
->> channels when returning from suspend.
->>
->> The TISCI resource management calls for each DMA type (UDMA,
->> PKTDMA, BCDMA) happen in device_free_chan_resources() and
->> device_alloc_chan_resources(). In pm_suspend() we store
->> the current udma_chan_config for channels that still have
->> attached clients and call device_free_chan_resources().
->> In pm_resume() restore the udma_channel_config from backup
->> and call device_alloc_chan_resources() for those channels.
->> Drivers like CPSW can do their own DMA resource management,
->> so use the late system suspend/resume hooks.
+> > The only alternative imo to that is to abandon the idea of reusing
+> > drm, and just make an independant accel core code.
 > 
-> It is wrong to push the DMA context store/restore task to a client driver (cpsw or icss), it has to be done by the glue layer.
-> 
-> With this patch the DMAengine side of the UDMA/BCDMA/PKTDMA will support suspend/resume while the networking will remain broken, right?
+> Not quite really, layer it properly and librarize parts of DRM into
+> things accel can re-use so they are not intimately tied to the DRM
+> struct device notion.
 
-The CPSW suspend/resume patch [0] releases the DMA resources in
-suspend() and this one follows up in suspend_late() to deal with
-what's left. The order is reversed when we resume back from suspend. 
+What do you mean by "struct device notion" ? struct drm_devce ? 
 
-> 
-> I can not test this atm since my setup relies solely on NFS rootfs via cpsw, I might be able to check with a USB-ethernet dongle..
-> 
-
-In this case you'll probably need CPSW suspend/resume patches [0]
-and apply this one on top of that sequence.
-
-> Please do a followup for the glue layer support.
-> 
-
-Okay, will do. This may have some effect on the cpsw sequence though.
-
-> Acked-by: Peter Ujfalusi <peter.ujfalusi@gmail.com>
-> 
-
-Thanks.
-
-[0] https://lore.kernel.org/netdev/20221104132310.31577-1-rogerq@kernel.org/
-
->> [1] https://software-dl.ti.com/tisci/esd/latest/2_tisci_msgs/index.html#resource-management-rm
->>
->> Signed-off-by: Vignesh Raghavendra <vigneshr@ti.com>
->> [g-vlaev@ti.com: Add patch description and config backup]
->> [g-vlaev@ti.com: Supend only channels with clients]
->> Signed-off-by: Georgi Vlaev <g-vlaev@ti.com>
->> ---
->> Changes:
->>
->> v2:
->> * Update the commit message
->> * Use list_for_each_entry() to iterate over the channel list.
->>
->>   drivers/dma/ti/k3-udma.c | 54 ++++++++++++++++++++++++++++++++++++++++
->>   1 file changed, 54 insertions(+)
->>
->> diff --git a/drivers/dma/ti/k3-udma.c b/drivers/dma/ti/k3-udma.c
->> index ce8b80bb34d7..29844044132c 100644
->> --- a/drivers/dma/ti/k3-udma.c
->> +++ b/drivers/dma/ti/k3-udma.c
->> @@ -304,6 +304,8 @@ struct udma_chan {
->>         /* Channel configuration parameters */
->>       struct udma_chan_config config;
->> +    /* Channel configuration parameters (backup) */
->> +    struct udma_chan_config backup_config;
->>         /* dmapool for packet mode descriptors */
->>       bool use_dma_pool;
->> @@ -5491,11 +5493,63 @@ static int udma_probe(struct platform_device *pdev)
->>       return ret;
->>   }
->>   +static int udma_pm_suspend(struct device *dev)
->> +{
->> +    struct udma_dev *ud = dev_get_drvdata(dev);
->> +    struct dma_device *dma_dev = &ud->ddev;
->> +    struct dma_chan *chan;
->> +    struct udma_chan *uc;
->> +
->> +    list_for_each_entry(chan, &dma_dev->channels, device_node) {
->> +        if (chan->client_count) {
->> +            uc = to_udma_chan(chan);
->> +            /* backup the channel configuration */
->> +            memcpy(&uc->backup_config, &uc->config,
->> +                   sizeof(struct udma_chan_config));
->> +            dev_dbg(dev, "Suspending channel %s\n",
->> +                dma_chan_name(chan));
->> +            ud->ddev.device_free_chan_resources(chan);
->> +        }
->> +    }
->> +
->> +    return 0;
->> +}
->> +
->> +static int udma_pm_resume(struct device *dev)
->> +{
->> +    struct udma_dev *ud = dev_get_drvdata(dev);
->> +    struct dma_device *dma_dev = &ud->ddev;
->> +    struct dma_chan *chan;
->> +    struct udma_chan *uc;
->> +    int ret;
->> +
->> +    list_for_each_entry(chan, &dma_dev->channels, device_node) {
->> +        if (chan->client_count) {
->> +            uc = to_udma_chan(chan);
->> +            /* restore the channel configuration */
->> +            memcpy(&uc->config, &uc->backup_config,
->> +                   sizeof(struct udma_chan_config));
->> +            dev_dbg(dev, "Resuming channel %s\n",
->> +                dma_chan_name(chan));
->> +            ret = ud->ddev.device_alloc_chan_resources(chan);
->> +            if (ret)
->> +                return ret;
->> +        }
->> +    }
->> +
->> +    return 0;
->> +}
->> +
->> +static const struct dev_pm_ops udma_pm_ops = {
->> +    SET_LATE_SYSTEM_SLEEP_PM_OPS(udma_pm_suspend, udma_pm_resume)
->> +};
->> +
->>   static struct platform_driver udma_driver = {
->>       .driver = {
->>           .name    = "ti-udma",
->>           .of_match_table = udma_of_match,
->>           .suppress_bind_attrs = true,
->> +        .pm = &udma_pm_ops,
->>       },
->>       .probe        = udma_probe,
->>   };
->>
->> base-commit: 81214a573d19ae2fa5b528286ba23cd1cb17feec
-> 
-
--- 
-Regards,
-Georgi
+Regards
+Stanislaw
