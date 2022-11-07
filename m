@@ -2,256 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6033F61FBB2
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 18:43:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BAD861FBBD
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 18:43:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232958AbiKGRnB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 12:43:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52002 "EHLO
+        id S232968AbiKGRnL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 12:43:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231403AbiKGRm7 (ORCPT
+        with ESMTP id S232965AbiKGRnF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 12:42:59 -0500
-Received: from mx0b-003ede02.pphosted.com (mx0b-003ede02.pphosted.com [205.220.181.153])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04EDF220FD
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 09:42:56 -0800 (PST)
-Received: from pps.filterd (m0286619.ppops.net [127.0.0.1])
-        by mx0b-003ede02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2A7HEam6031843
-        for <linux-kernel@vger.kernel.org>; Mon, 7 Nov 2022 09:42:55 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=getcruise.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding;
- s=ppemail; bh=EKZW+OM0YYzxIQ5sUbXqtVvs9Qv6OwNWnQDM6JO7I7I=;
- b=h1CFx+qC2SlJ+ColhkHHN1aqwaNUZZHjqKeBrdDZQ8ubbaHqOEPbH7uppLNkA1qS+G1U
- eBMHuiAwUsE0+ZqPHaep4801a4F+RkIBT/8cbfAdJ91sWPS5cbtphe34GI04TlhDKbL8
- AnH4USafe47viow6pQhFjkznkjLK6Twv8jlKr4x9wtN/6zDuI1jVQt9m9/tBU/Ye8rp/
- ny5awc28GWVXgX/SLwxzTh8XEysDz4dc6bkls9jb4G42KKW37rL3/tD4FmJFRDWBuNBN
- 00gHpyvOltVrPSk80W2vItFAgzhAW5NnDsao9/pJm3JC7sLniMi3Ly4qodOYR2V6dWXp GA== 
-Received: from mail-pl1-f198.google.com (mail-pl1-f198.google.com [209.85.214.198])
-        by mx0b-003ede02.pphosted.com (PPS) with ESMTPS id 3kq68d81q6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 09:42:55 -0800
-Received: by mail-pl1-f198.google.com with SMTP id e13-20020a17090301cd00b001871e6f8714so9480862plh.14
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 09:42:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=getcruise.com; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=EKZW+OM0YYzxIQ5sUbXqtVvs9Qv6OwNWnQDM6JO7I7I=;
-        b=i2+VxAsn3kUgmIUwbHwzyDITUZY6YYCDyUdzRWSYNzpPfElyfbicZAUTYTgZrifyhO
-         M4rhyyuPIqxfC3iNFRFEJ4YoMXx2PCC/CeHiHmwZ9uXhBYCn+zTyI1MO/rF1tOSfVm9V
-         anbLkmPdapTEUPxUVke1MlY8o9Cm+UFc5SI6xu716POrkrlKZiXy0ULlWRm42vxNUuZk
-         m6PPvvc/QRKeAhwJA5Tsh7EorPgNUTmEbSQUB51hnTILn4zrMBq5z7S5NWUkOkUyiqxp
-         Rl6CCy3F+qKrzv4xq9FpK5n9aLh7Mr1TdnIursF6tO/PoHedEnmtCFXSpZicPc48z1X9
-         ciRw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=EKZW+OM0YYzxIQ5sUbXqtVvs9Qv6OwNWnQDM6JO7I7I=;
-        b=oLrvLgslmXnac9jDLMxGKYwHa9k2foA7YBPmMbmrJdSDOfZtMWxFzl2f+aKVaipuS9
-         C25d9gtuUGD7Mi2FEUBzrqO0FwH92M95lzPDLFc7HPE0JWE19Kbwtrn8GVhrOcOvFs8D
-         7qaZ2YrLlI8QL/n0+eOzXR+Z89JlVHm7heXKIgJge3B0xj8mU5XDyYj94s/aXYnEoD0G
-         t/KsUViRy/Bi6BMp5n/TwQWBMFgVQD9x458RhEZ5yKXtBFypyY7lh/q7FzXcgJFEti5x
-         yN6g6taoxntDpuFVQQWTdj/LGPZWDvZyMg6bNGsCcS1zjEDLSe7fn9ZU5or5Yf/yBM3p
-         8agA==
-X-Gm-Message-State: ACrzQf0Jc0ilU6YeeiqHuN9OKFbE6Lhzp8/IfBpYTEcWIai6AbkfGOJw
-        olQLJ69wsDoClVjMjOnEJJl7KtLD0VGcyOuqIEeP6o1Ug8QJffYPq23LVzG1zxFaEcqpD1auGUN
-        C2kODoz65y27z5uJk7X81kAQ=
-X-Received: by 2002:a17:90b:1c8d:b0:203:cc25:4eb5 with SMTP id oo13-20020a17090b1c8d00b00203cc254eb5mr52879035pjb.132.1667842974152;
-        Mon, 07 Nov 2022 09:42:54 -0800 (PST)
-X-Google-Smtp-Source: AMsMyM5nYWRanWLVyNGIsYCZVe4KUdR09guccyr+xLtnOFC9P2dlbCS7RA+fHkHbpYO9YMYerhZLDA==
-X-Received: by 2002:a17:90b:1c8d:b0:203:cc25:4eb5 with SMTP id oo13-20020a17090b1c8d00b00203cc254eb5mr52879010pjb.132.1667842973895;
-        Mon, 07 Nov 2022 09:42:53 -0800 (PST)
-Received: from 4VPLMR2-DT.corp.robot.car ([199.73.125.241])
-        by smtp.gmail.com with ESMTPSA id l9-20020a17090a384900b001f94d25bfabsm6397792pjf.28.2022.11.07.09.42.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Nov 2022 09:42:53 -0800 (PST)
-From:   Andy Ren <andy.ren@getcruise.com>
-To:     netdev@vger.kernel.org
-Cc:     richardbgobert@gmail.com, davem@davemloft.net,
-        wsa+renesas@sang-engineering.com, edumazet@google.com,
-        petrm@nvidia.com, kuba@kernel.org, pabeni@redhat.com,
-        corbet@lwn.net, andrew@lunn.ch, dsahern@gmail.com,
-        sthemmin@microsoft.com, idosch@idosch.org,
-        sridhar.samudrala@intel.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, roman.gushchin@linux.dev,
-        Andy Ren <andy.ren@getcruise.com>
-Subject: [PATCH net-next v3] net/core: Allow live renaming when an interface is up
-Date:   Mon,  7 Nov 2022 09:42:42 -0800
-Message-Id: <20221107174242.1947286-1-andy.ren@getcruise.com>
-X-Mailer: git-send-email 2.38.1
+        Mon, 7 Nov 2022 12:43:05 -0500
+Received: from mout02.posteo.de (mout02.posteo.de [185.67.36.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E265B24088
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 09:43:03 -0800 (PST)
+Received: from submission (posteo.de [185.67.36.169]) 
+        by mout02.posteo.de (Postfix) with ESMTPS id 6FACE240105
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 18:43:02 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.net; s=2017;
+        t=1667842982; bh=3Zd2LzTn35gGPZH57ZQu9I2pZQgysxz4Yi4s55fsDAA=;
+        h=Date:From:To:Cc:Subject:From;
+        b=SPRH4rRUnoiSw1sMFZVGvbd4orWrduz7iu/JNsrZC07JbOcMP3A3OWNU+KbIliydx
+         dwJIn0lrFX7IcE045BPxvTqFpBpZ1lqYuEDeCbwTGtPYUI1kI0TFenVGCEmoeOG5XE
+         S1jpGNVvtiMkg2l6Xi2Bb8dGk/XfplNGgnkguDqdu7q7UrpJFK9kAn7W1crVaTmZjT
+         h+Xb/eGTY6fD82Q5CrXsNQOU7hI1dA4QF8iYUldGtaYxC1xwCdtncmAcYD23DzaDa6
+         PAX1iRDXxCH2zi/1xfPK6mskDp1ConSBCUscivKBJnYhK1r/vqrfkVt2kn7ocpoY5A
+         90D7mKzHHhNAg==
+Received: from customer (localhost [127.0.0.1])
+        by submission (posteo.de) with ESMTPSA id 4N5dqM3Y1fz6tpl;
+        Mon,  7 Nov 2022 18:42:55 +0100 (CET)
+Date:   Mon,  7 Nov 2022 17:42:52 +0000
+From:   Daniel =?utf-8?Q?M=C3=BCller?= <deso@posteo.net>
+To:     Andrea Mayer <andrea.mayer@uniroma2.it>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Stefano Salsano <stefano.salsano@uniroma2.it>,
+        Paolo Lungaroni <paolo.lungaroni@uniroma2.it>,
+        Ahmed Abdelsalam <ahabdels.dev@gmail.com>
+Subject: Re: [net] seg6: selftests/bpf: fix BPF object file name in
+ test_lwt_seg6local.sh
+Message-ID: <20221107174252.7ycgyedc575ojs4l@muellerd-fedora-PC2BDTX9>
+References: <20221107143044.27763-1-andrea.mayer@uniroma2.it>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: gR5S9NnYbsZC-XZJDRl3A2ZxA0o1t1qB
-X-Proofpoint-ORIG-GUID: gR5S9NnYbsZC-XZJDRl3A2ZxA0o1t1qB
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-07_08,2022-11-07_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 suspectscore=0
- lowpriorityscore=0 impostorscore=0 mlxscore=0 clxscore=1015 phishscore=0
- spamscore=0 mlxlogscore=999 malwarescore=0 adultscore=0 priorityscore=1501
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
- definitions=main-2211070141
+In-Reply-To: <20221107143044.27763-1-andrea.mayer@uniroma2.it>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Allow a network interface to be renamed when the interface
-is up.
+Hi Andrea,
 
-As described in the netconsole documentation [1], when netconsole is
-used as a built-in, it will bring up the specified interface as soon as
-possible. As a result, user space will not be able to rename the
-interface since the kernel disallows renaming of interfaces that are
-administratively up unless the 'IFF_LIVE_RENAME_OK' private flag was set
-by the kernel.
+On Mon, Nov 07, 2022 at 03:30:44PM +0100, Andrea Mayer wrote:
+> The test_lwt_seg6local.c implements several eBPF programs which are
+> used to test the SRv6 End.BPF behavior.
+> Since commit afef88e65554 ("selftests/bpf: Store BPF object files with
+> .bpf.o extension"), part of the build system and test programs loading
+> BPF object files are supposed to work with the .bpf.o extension.
+> 
+> Consequently, the test_lwt_seg6local.c is compiled into
+> test_lwt_seg6local.bpf.o and the corresponding test_lwt_seg6local.sh
+> script is not updated to deal with the correct .bpf.o extension.
+> 
+> This patch fixes the test_lwt_seg6local.sh, using the correct .bpf.o
+> extension for the testing BPF object file, i.e. test_lwt_seg6local.bpf.o.
+> 
+> Fixes: afef88e65554 ("selftests/bpf: Store BPF object files with .bpf.o extension")
+> Signed-off-by: Andrea Mayer <andrea.mayer@uniroma2.it>
+> ---
+>  tools/testing/selftests/bpf/test_lwt_seg6local.sh | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/bpf/test_lwt_seg6local.sh b/tools/testing/selftests/bpf/test_lwt_seg6local.sh
+> index 826f4423ce02..bfe76ab78481 100755
+> --- a/tools/testing/selftests/bpf/test_lwt_seg6local.sh
+> +++ b/tools/testing/selftests/bpf/test_lwt_seg6local.sh
+> @@ -117,18 +117,18 @@ ip netns exec ${NS6} ip -6 addr add fb00::109/16 dev veth10 scope link
+>  ip netns exec ${NS1} ip -6 addr add fb00::1/16 dev lo
+>  ip netns exec ${NS1} ip -6 route add fb00::6 dev veth1 via fb00::21
+>  
+> -ip netns exec ${NS2} ip -6 route add fb00::6 encap bpf in obj test_lwt_seg6local.o sec encap_srh dev veth2
+> +ip netns exec ${NS2} ip -6 route add fb00::6 encap bpf in obj test_lwt_seg6local.bpf.o sec encap_srh dev veth2
+>  ip netns exec ${NS2} ip -6 route add fd00::1 dev veth3 via fb00::43 scope link
+>  
+>  ip netns exec ${NS3} ip -6 route add fc42::1 dev veth5 via fb00::65
+> -ip netns exec ${NS3} ip -6 route add fd00::1 encap seg6local action End.BPF endpoint obj test_lwt_seg6local.o sec add_egr_x dev veth4
+> +ip netns exec ${NS3} ip -6 route add fd00::1 encap seg6local action End.BPF endpoint obj test_lwt_seg6local.bpf.o sec add_egr_x dev veth4
+>  
+> -ip netns exec ${NS4} ip -6 route add fd00::2 encap seg6local action End.BPF endpoint obj test_lwt_seg6local.o sec pop_egr dev veth6
+> +ip netns exec ${NS4} ip -6 route add fd00::2 encap seg6local action End.BPF endpoint obj test_lwt_seg6local.bpf.o sec pop_egr dev veth6
+>  ip netns exec ${NS4} ip -6 addr add fc42::1 dev lo
+>  ip netns exec ${NS4} ip -6 route add fd00::3 dev veth7 via fb00::87
+>  
+>  ip netns exec ${NS5} ip -6 route add fd00::4 table 117 dev veth9 via fb00::109
+> -ip netns exec ${NS5} ip -6 route add fd00::3 encap seg6local action End.BPF endpoint obj test_lwt_seg6local.o sec inspect_t dev veth8
+> +ip netns exec ${NS5} ip -6 route add fd00::3 encap seg6local action End.BPF endpoint obj test_lwt_seg6local.bpf.o sec inspect_t dev veth8
+>  
+>  ip netns exec ${NS6} ip -6 addr add fb00::6/16 dev lo
+>  ip netns exec ${NS6} ip -6 addr add fd00::4/16 dev lo
 
-The original solution [2] to this problem was to add a new parameter to
-the netconsole configuration parameters that allows renaming of
-the interface used by netconsole while it is administratively up.
-However, during the discussion that followed, it became apparent that we
-have no reason to keep the current restriction and instead we should
-allow user space to rename interfaces regardless of their administrative
-state:
+The change looks good to me. Thanks for the fix.
 
-1. The restriction was put in place over 20 years ago when renaming was
-only possible via IOCTL and before rtnetlink started notifying user
-space about such changes like it does today.
+Daniel
 
-2. The 'IFF_LIVE_RENAME_OK' flag was added over 3 years ago in version
-5.2 and no regressions were reported.
-
-3. In-kernel listeners to 'NETDEV_CHANGENAME' do not seem to care about
-the administrative state of interface.
-
-Therefore, allow user space to rename running interfaces by removing the
-restriction and the associated 'IFF_LIVE_RENAME_OK' flag. Help in
-possible triage by emitting a message to the kernel log that an
-interface was renamed while UP.
-
-[1] https://www.kernel.org/doc/Documentation/networking/netconsole.rst
-[2] https://lore.kernel.org/netdev/20221102002420.2613004-1-andy.ren@getcruise.com/
-
-Signed-off-by: Andy Ren <andy.ren@getcruise.com>
----
-
-Notes:
-    Changes from v1->v2
-    - Added placeholder comment in place of removed IFF_LIVE_RENAME_OK flag
-    - Added extra logging hints to indicate whether a network interface was
-    renamed while UP
-    
-    Changes from v2->v3
-    - Patch description changes
-
- include/linux/netdevice.h |  4 +---
- net/core/dev.c            | 19 ++-----------------
- net/core/failover.c       |  6 +++---
- 3 files changed, 6 insertions(+), 23 deletions(-)
-
-diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
-index d45713a06568..4be87b89e481 100644
---- a/include/linux/netdevice.h
-+++ b/include/linux/netdevice.h
-@@ -1650,7 +1650,6 @@ struct net_device_ops {
-  * @IFF_FAILOVER: device is a failover master device
-  * @IFF_FAILOVER_SLAVE: device is lower dev of a failover master device
-  * @IFF_L3MDEV_RX_HANDLER: only invoke the rx handler of L3 master device
-- * @IFF_LIVE_RENAME_OK: rename is allowed while device is up and running
-  * @IFF_TX_SKB_NO_LINEAR: device/driver is capable of xmitting frames with
-  *	skb_headlen(skb) == 0 (data starts from frag0)
-  * @IFF_CHANGE_PROTO_DOWN: device supports setting carrier via IFLA_PROTO_DOWN
-@@ -1686,7 +1685,7 @@ enum netdev_priv_flags {
- 	IFF_FAILOVER			= 1<<27,
- 	IFF_FAILOVER_SLAVE		= 1<<28,
- 	IFF_L3MDEV_RX_HANDLER		= 1<<29,
--	IFF_LIVE_RENAME_OK		= 1<<30,
-+	/* was IFF_LIVE_RENAME_OK */
- 	IFF_TX_SKB_NO_LINEAR		= BIT_ULL(31),
- 	IFF_CHANGE_PROTO_DOWN		= BIT_ULL(32),
- };
-@@ -1721,7 +1720,6 @@ enum netdev_priv_flags {
- #define IFF_FAILOVER			IFF_FAILOVER
- #define IFF_FAILOVER_SLAVE		IFF_FAILOVER_SLAVE
- #define IFF_L3MDEV_RX_HANDLER		IFF_L3MDEV_RX_HANDLER
--#define IFF_LIVE_RENAME_OK		IFF_LIVE_RENAME_OK
- #define IFF_TX_SKB_NO_LINEAR		IFF_TX_SKB_NO_LINEAR
- 
- /* Specifies the type of the struct net_device::ml_priv pointer */
-diff --git a/net/core/dev.c b/net/core/dev.c
-index 3bacee3bee78..707de6b841d0 100644
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -1163,22 +1163,6 @@ int dev_change_name(struct net_device *dev, const char *newname)
- 
- 	net = dev_net(dev);
- 
--	/* Some auto-enslaved devices e.g. failover slaves are
--	 * special, as userspace might rename the device after
--	 * the interface had been brought up and running since
--	 * the point kernel initiated auto-enslavement. Allow
--	 * live name change even when these slave devices are
--	 * up and running.
--	 *
--	 * Typically, users of these auto-enslaving devices
--	 * don't actually care about slave name change, as
--	 * they are supposed to operate on master interface
--	 * directly.
--	 */
--	if (dev->flags & IFF_UP &&
--	    likely(!(dev->priv_flags & IFF_LIVE_RENAME_OK)))
--		return -EBUSY;
--
- 	down_write(&devnet_rename_sem);
- 
- 	if (strncmp(newname, dev->name, IFNAMSIZ) == 0) {
-@@ -1195,7 +1179,8 @@ int dev_change_name(struct net_device *dev, const char *newname)
- 	}
- 
- 	if (oldname[0] && !strchr(oldname, '%'))
--		netdev_info(dev, "renamed from %s\n", oldname);
-+		netdev_info(dev, "renamed from %s%s\n", oldname,
-+			    dev->flags & IFF_UP ? " (while UP)" : "");
- 
- 	old_assign_type = dev->name_assign_type;
- 	dev->name_assign_type = NET_NAME_RENAMED;
-diff --git a/net/core/failover.c b/net/core/failover.c
-index 864d2d83eff4..655411c4ca51 100644
---- a/net/core/failover.c
-+++ b/net/core/failover.c
-@@ -80,14 +80,14 @@ static int failover_slave_register(struct net_device *slave_dev)
- 		goto err_upper_link;
- 	}
- 
--	slave_dev->priv_flags |= (IFF_FAILOVER_SLAVE | IFF_LIVE_RENAME_OK);
-+	slave_dev->priv_flags |= IFF_FAILOVER_SLAVE;
- 
- 	if (fops && fops->slave_register &&
- 	    !fops->slave_register(slave_dev, failover_dev))
- 		return NOTIFY_OK;
- 
- 	netdev_upper_dev_unlink(slave_dev, failover_dev);
--	slave_dev->priv_flags &= ~(IFF_FAILOVER_SLAVE | IFF_LIVE_RENAME_OK);
-+	slave_dev->priv_flags &= ~IFF_FAILOVER_SLAVE;
- err_upper_link:
- 	netdev_rx_handler_unregister(slave_dev);
- done:
-@@ -121,7 +121,7 @@ int failover_slave_unregister(struct net_device *slave_dev)
- 
- 	netdev_rx_handler_unregister(slave_dev);
- 	netdev_upper_dev_unlink(slave_dev, failover_dev);
--	slave_dev->priv_flags &= ~(IFF_FAILOVER_SLAVE | IFF_LIVE_RENAME_OK);
-+	slave_dev->priv_flags &= ~IFF_FAILOVER_SLAVE;
- 
- 	if (fops && fops->slave_unregister &&
- 	    !fops->slave_unregister(slave_dev, failover_dev))
--- 
-2.38.1
-
+Acked-by: Daniel Müller <deso@posteo.net>
