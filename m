@@ -2,71 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74F3A61FCDE
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 19:09:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65A0C61FCE1
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 19:09:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232897AbiKGSJY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 13:09:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51338 "EHLO
+        id S232533AbiKGSJu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 13:09:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232796AbiKGSJD (ORCPT
+        with ESMTP id S232545AbiKGSJf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 13:09:03 -0500
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4F2DBE1
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 10:05:36 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id x2so18891686edd.2
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 10:05:36 -0800 (PST)
+        Mon, 7 Nov 2022 13:09:35 -0500
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4333226545
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 10:06:09 -0800 (PST)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-37360a6236fso115083757b3.12
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 10:06:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VCTpqEx+nj1n6HjmRbfujsCzReaOepaCfo3WlWBlSOs=;
-        b=kkw8H1QERm0GF5D+iS4KT6fZ4SYYp6uvTjhGEoGPgwq4dVWvWQjaCel2y3WVJlaOaE
-         e5RStAF8t1Pu63/2phYMxZ3eMnlV8avzvgW8eaZg0kjlNhuonZsrQ+N3F29oFWWrbQJa
-         0XVweEG5LvZrQIkVPfXx6PQxtjzmogkRZ8eqbG/jSCdy2MHJMkMLcPkpBEt1otOhJYmn
-         /5Sc1TtwiGnxrxCE2p+iu+jd3zCXnPCD0XO8jVbQI6zSVlLPWgVWZ53XA5kXJlQFadqg
-         et0hOf+R8C8fwCn5J8LpjKtYNuZiFG6vjBLWY1Oo5dx42Q4PDYm3/bFeE+WuqhN6s16z
-         avfQ==
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=j60fk1GX1r+NlL9MlNZCmp8WSDoORaTrNw5+KLoJy/4=;
+        b=Mf6r8tPrYM3LamVKchqSLk/dmvuFcNjB5NxU9/TNA/LJR4+Uh6XqGidKCN9FLz9j6m
+         5gN67h9p+bLYpCjhvc8IX2CAcX4UVPj8TTNmTLQlD8LZNhhCBfuUhNVOyi4YFV9Cslm6
+         AhdPCARfNOufm6rPh+qX4CH2KdXaRwv31osB1U4pHViwGvPXTpaxGAj8nSPx7FSGxRB4
+         +bKsZS3bxkBP2fqFSyYSg3BcOjx2bkaxsJ2wtpBxsnFPpuiZfD1FUTU7e48qA9xSUo21
+         QvC3cJW2wJT2ZTT75eLJOPbDmwnzWYEohD/r29NC7k+wM2btkY3eRlPA4CapntnDrd5R
+         pr/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VCTpqEx+nj1n6HjmRbfujsCzReaOepaCfo3WlWBlSOs=;
-        b=t0DhpKys9h+VGkEFVZFE8rdl2jO65MAi0RIFs927vsAN2KWKxIaH1359+cknyOgKqK
-         ymOF2TF9f7T3A1rZXKi/rwtjzAdMdVIVnEJ8rN5JhucJ7mbixP3FtVaRd1aNOzmZRGwW
-         4E/tCViJf+sHh6GczNnY1xJ5NqnveGOl7leOQVvdKWlBUDzoMi5ZupCKMdZkvqWVxcri
-         4EzW7gnvblDse5nqDVXC0aX5822YXpiEZ9C0rnjwIduopJWPvj6x850l+Vrc73aTBhbL
-         XbMjehjIhwHKDCIypf1rjKY39XXyY82zb6hm5aPgm0qWlptV8NcI5SkTC+SxY08bOPoA
-         HOOg==
-X-Gm-Message-State: ACrzQf3ee83MuxlY+9nHU9hhgOp/5zeXwd344I+udQ2aNG00D2vaTGp+
-        yNPbuQ4OmqvP4fBGS71ZaEw=
-X-Google-Smtp-Source: AMsMyM6Goj84logVrQ5XP20UoYPJnj8X72vsGoAAviPjLBcIzvX+wqD4eLNfV4AQDTIEyo+FSyuFaQ==
-X-Received: by 2002:a05:6402:1d4f:b0:461:d2ed:788c with SMTP id dz15-20020a0564021d4f00b00461d2ed788cmr51595245edb.418.1667844335245;
-        Mon, 07 Nov 2022 10:05:35 -0800 (PST)
-Received: from kista.localnet (82-149-19-102.dynamic.telemach.net. [82.149.19.102])
-        by smtp.gmail.com with ESMTPSA id p20-20020a17090653d400b007adf2e4c6f7sm3694732ejo.195.2022.11.07.10.05.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Nov 2022 10:05:34 -0800 (PST)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     Samuel Holland <samuel@sholland.org>,
-        Andre Przywara <andre.przywara@arm.com>
-Cc:     Chen-Yu Tsai <wens@csie.org>, linux-arm-kernel@lists.infradead.org,
-        Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev
-Subject: Re: Re: [PATCH v2 2/2] bus: sunxi-rsb: Support atomic transfers
-Date:   Mon, 07 Nov 2022 19:05:33 +0100
-Message-ID: <1929426.usQuhbGJ8B@kista>
-In-Reply-To: <20221107112949.21f52e50@donnerap.cambridge.arm.com>
-References: <20221107052201.65477-1-samuel@sholland.org> <20221107052201.65477-3-samuel@sholland.org> <20221107112949.21f52e50@donnerap.cambridge.arm.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=j60fk1GX1r+NlL9MlNZCmp8WSDoORaTrNw5+KLoJy/4=;
+        b=AfDCG3rTCaBTOhQ+MVN96R4U7sHFMSzdbxFDwfe0CZVrr7+durs4Kwy32LrSsxkImF
+         U9AgdYuZnWOWT6oPAxflD4XmiSKyDww+36xal52AoeoMgF9Sm81vQZn/8ogrYLP9Xcd/
+         IXb2XJepYtsJo+CshJZ60C14zOxSA+4TY3D8Aby0XUcOyQKQX3YdikGFqYl5fUQ39KhW
+         VuofDyzUEagdsZk/Lk8ihSPq6ghXW/ejgI0sysXdb5wL9ddT7FTfhiG1WeQSuXxVORDl
+         e6xU8V3cdLVJ2Z1kUkcXGzz6hkUpxUDk7nY1AI3kstvILPlOvoK/PO+LLfGuKXxZy0eP
+         bi2A==
+X-Gm-Message-State: ACrzQf1MOG3Fmoc4XfpYnCctAx1gvpQC6Iue3wyiVKvNEo7Q9RmuwcxP
+        Ed7jFIxICSfe9y0Ez7IP8byh/Aa5HdGRBTAi
+X-Google-Smtp-Source: AMsMyM7RHwAxsAmUPng5raelGOKXR8aFY878B1n1s2rNW5vI6CWnaeE3l0ZswkUAr2+iO/m1XeFXM+P1fxqlCA2J
+X-Received: from jthoughton.c.googlers.com ([fda3:e722:ac3:cc00:14:4d90:c0a8:2a4f])
+ (user=jthoughton job=sendgmr) by 2002:a81:e0f:0:b0:349:a047:655e with SMTP id
+ 15-20020a810e0f000000b00349a047655emr50840803ywo.373.1667844368522; Mon, 07
+ Nov 2022 10:06:08 -0800 (PST)
+Date:   Mon,  7 Nov 2022 18:05:48 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
+Message-ID: <20221107180548.2095056-1-jthoughton@google.com>
+Subject: [PATCH v2] hugetlbfs: don't delete error page from pagecache
+From:   James Houghton <jthoughton@google.com>
+To:     Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Yang Shi <shy828301@gmail.com>,
+        Axel Rasmussen <axelrasmussen@google.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        James Houghton <jthoughton@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,139 +72,110 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dne ponedeljek, 07. november 2022 ob 12:30:29 CET je Andre Przywara 
-napisal(a):
-> On Sun,  6 Nov 2022 23:22:00 -0600
-> Samuel Holland <samuel@sholland.org> wrote:
-> 
-> Hi,
-> 
-> > When communicating with a PMIC during system poweroff (pm_power_off()),
-> > IRQs are disabled and we are in a RCU read-side critical section, so we
-> > cannot use wait_for_completion_io_timeout(). Instead, poll the status
-> > register for transfer completion.
-> > 
-> > Fixes: d787dcdb9c8f ("bus: sunxi-rsb: Add driver for Allwinner Reduced
-> > Serial Bus") Signed-off-by: Samuel Holland <samuel@sholland.org>
-> > ---
-> > 
-> > Changes in v2:
-> >  - Add Fixes tag to patch 2
-> >  - Only check for specific status bits when polling
-> >  
-> >  drivers/bus/sunxi-rsb.c | 27 ++++++++++++++++++++-------
-> >  1 file changed, 20 insertions(+), 7 deletions(-)
-> > 
-> > diff --git a/drivers/bus/sunxi-rsb.c b/drivers/bus/sunxi-rsb.c
-> > index 17343cd75338..012e82f9b7b0 100644
-> > --- a/drivers/bus/sunxi-rsb.c
-> > +++ b/drivers/bus/sunxi-rsb.c
-> > @@ -267,6 +267,9 @@ EXPORT_SYMBOL_GPL(sunxi_rsb_driver_register);
-> > 
-> >  /* common code that starts a transfer */
-> >  static int _sunxi_rsb_run_xfer(struct sunxi_rsb *rsb)
-> >  {
-> > 
-> > +	u32 int_mask, status;
-> > +	bool timeout;
-> > +
-> > 
-> >  	if (readl(rsb->regs + RSB_CTRL) & RSB_CTRL_START_TRANS) {
-> >  	
-> >  		dev_dbg(rsb->dev, "RSB transfer still in progress\n");
-> >  		return -EBUSY;
-> > 
-> > @@ -274,13 +277,23 @@ static int _sunxi_rsb_run_xfer(struct sunxi_rsb
-> > *rsb)
-> > 
-> >  	reinit_completion(&rsb->complete);
-> > 
-> > -	writel(RSB_INTS_LOAD_BSY | RSB_INTS_TRANS_ERR | 
-RSB_INTS_TRANS_OVER,
-> > +	int_mask = RSB_INTS_LOAD_BSY | RSB_INTS_TRANS_ERR | 
-RSB_INTS_TRANS_OVER;
-> > +	writel(int_mask,
-> > 
-> >  	       rsb->regs + RSB_INTE);
-> >  	
-> >  	writel(RSB_CTRL_START_TRANS | RSB_CTRL_GLOBAL_INT_ENB,
-> >  	
-> >  	       rsb->regs + RSB_CTRL);
-> > 
-> > -	if (!wait_for_completion_io_timeout(&rsb->complete,
-> > -					    
-msecs_to_jiffies(100))) {
-> > +	if (irqs_disabled()) {
-> > +		timeout = readl_poll_timeout_atomic(rsb->regs + 
-RSB_INTS,
-> > +						    status, 
-(status & int_mask),
-> > +						    10, 
-100000);
-> 
-> So if I understand correctly, this mimics the operation of
-> sunxi_rsb_irq(), just replacing rsb->status with status.
-> But wouldn't that also mean that we need to clear the interrupt bits in
-> INTS, since we are about to handle them below?
+This change is very similar to the change that was made for shmem [1],
+and it solves the same problem but for HugeTLBFS instead.
 
-Yes, I pointed out that in review of v1.
+Currently, when poison is found in a HugeTLB page, the page is removed
+from the page cache. That means that attempting to map or read that
+hugepage in the future will result in a new hugepage being allocated
+instead of notifying the user that the page was poisoned. As [1] states,
+this is effectively memory corruption.
 
-Best regards,
-Jernej
+The fix is to leave the page in the page cache. If the user attempts to
+use a poisoned HugeTLB page with a syscall, the syscall will fail with
+EIO, the same error code that shmem uses. For attempts to map the page,
+the thread will get a BUS_MCEERR_AR SIGBUS.
 
-> 
-> It probably doesn't matter in practise, since we call this during power
-> down only, but looks like more robust to do, from a driver's perspective.
-> 
-> Cheers,
-> Andre
-> 
-> > +	} else {
-> > +		timeout = !wait_for_completion_io_timeout(&rsb-
->complete,
-> > +							  
-msecs_to_jiffies(100));
-> > +		status = rsb->status;
-> > +	}
-> > +
-> > +	if (timeout) {
-> > 
-> >  		dev_dbg(rsb->dev, "RSB timeout\n");
-> >  		
-> >  		/* abort the transfer */
-> > 
-> > @@ -292,18 +305,18 @@ static int _sunxi_rsb_run_xfer(struct sunxi_rsb
-> > *rsb)
-> > 
-> >  		return -ETIMEDOUT;
-> >  	
-> >  	}
-> > 
-> > -	if (rsb->status & RSB_INTS_LOAD_BSY) {
-> > +	if (status & RSB_INTS_LOAD_BSY) {
-> > 
-> >  		dev_dbg(rsb->dev, "RSB busy\n");
-> >  		return -EBUSY;
-> >  	
-> >  	}
-> > 
-> > -	if (rsb->status & RSB_INTS_TRANS_ERR) {
-> > -		if (rsb->status & RSB_INTS_TRANS_ERR_ACK) {
-> > +	if (status & RSB_INTS_TRANS_ERR) {
-> > +		if (status & RSB_INTS_TRANS_ERR_ACK) {
-> > 
-> >  			dev_dbg(rsb->dev, "RSB slave nack\n");
-> >  			return -EINVAL;
-> >  		
-> >  		}
-> > 
-> > -		if (rsb->status & RSB_INTS_TRANS_ERR_DATA) {
-> > +		if (status & RSB_INTS_TRANS_ERR_DATA) {
-> > 
-> >  			dev_dbg(rsb->dev, "RSB transfer data 
-error\n");
-> >  			return -EIO;
-> >  		
-> >  		}
+[1]: commit a76054266661 ("mm: shmem: don't truncate page if memory failure happens")
 
+Fixes: 78bb920344b8 ("mm: hwpoison: dissolve in-use hugepage in unrecoverable memory error")
+Cc: <stable@vger.kernel.org>
+Signed-off-by: James Houghton <jthoughton@google.com>
+Reviewed-by: Mike Kravetz <mike.kravetz@oracle.com>
+Reviewed-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
+Tested-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
+---
+ fs/hugetlbfs/inode.c | 13 ++++++-------
+ mm/hugetlb.c         |  4 ++++
+ mm/memory-failure.c  |  5 ++++-
+ 3 files changed, 14 insertions(+), 8 deletions(-)
+
+diff --git a/fs/hugetlbfs/inode.c b/fs/hugetlbfs/inode.c
+index dd54f67e47fd..df7772335dc0 100644
+--- a/fs/hugetlbfs/inode.c
++++ b/fs/hugetlbfs/inode.c
+@@ -328,6 +328,12 @@ static ssize_t hugetlbfs_read_iter(struct kiocb *iocb, struct iov_iter *to)
+ 		} else {
+ 			unlock_page(page);
+ 
++			if (PageHWPoison(page)) {
++				put_page(page);
++				retval = -EIO;
++				break;
++			}
++
+ 			/*
+ 			 * We have the page, copy it to user space buffer.
+ 			 */
+@@ -1111,13 +1117,6 @@ static int hugetlbfs_migrate_folio(struct address_space *mapping,
+ static int hugetlbfs_error_remove_page(struct address_space *mapping,
+ 				struct page *page)
+ {
+-	struct inode *inode = mapping->host;
+-	pgoff_t index = page->index;
+-
+-	hugetlb_delete_from_page_cache(page);
+-	if (unlikely(hugetlb_unreserve_pages(inode, index, index + 1, 1)))
+-		hugetlb_fix_reserve_counts(inode);
+-
+ 	return 0;
+ }
+ 
+diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+index 546df97c31e4..e48f8ef45b17 100644
+--- a/mm/hugetlb.c
++++ b/mm/hugetlb.c
+@@ -6111,6 +6111,10 @@ int hugetlb_mcopy_atomic_pte(struct mm_struct *dst_mm,
+ 
+ 	ptl = huge_pte_lock(h, dst_mm, dst_pte);
+ 
++	ret = -EIO;
++	if (PageHWPoison(page))
++		goto out_release_unlock;
++
+ 	/*
+ 	 * We allow to overwrite a pte marker: consider when both MISSING|WP
+ 	 * registered, we firstly wr-protect a none pte which has no page cache
+diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+index 145bb561ddb3..bead6bccc7f2 100644
+--- a/mm/memory-failure.c
++++ b/mm/memory-failure.c
+@@ -1080,6 +1080,7 @@ static int me_huge_page(struct page_state *ps, struct page *p)
+ 	int res;
+ 	struct page *hpage = compound_head(p);
+ 	struct address_space *mapping;
++	bool extra_pins = false;
+ 
+ 	if (!PageHuge(hpage))
+ 		return MF_DELAYED;
+@@ -1087,6 +1088,8 @@ static int me_huge_page(struct page_state *ps, struct page *p)
+ 	mapping = page_mapping(hpage);
+ 	if (mapping) {
+ 		res = truncate_error_page(hpage, page_to_pfn(p), mapping);
++		/* The page is kept in page cache. */
++		extra_pins = true;
+ 		unlock_page(hpage);
+ 	} else {
+ 		unlock_page(hpage);
+@@ -1104,7 +1107,7 @@ static int me_huge_page(struct page_state *ps, struct page *p)
+ 		}
+ 	}
+ 
+-	if (has_extra_refcount(ps, p, false))
++	if (has_extra_refcount(ps, p, extra_pins))
+ 		res = MF_FAILED;
+ 
+ 	return res;
+-- 
+2.38.1.431.g37b22c650d-goog
 
