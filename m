@@ -2,117 +2,284 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34B1561F154
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 11:58:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9ECE61F153
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 11:58:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231922AbiKGK5o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 05:57:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55740 "EHLO
+        id S231736AbiKGK5j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 05:57:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231808AbiKGK5a (ORCPT
+        with ESMTP id S231965AbiKGK5V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 05:57:30 -0500
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0C751A061;
-        Mon,  7 Nov 2022 02:57:29 -0800 (PST)
-Received: by mail-ej1-x62f.google.com with SMTP id t25so28965164ejb.8;
-        Mon, 07 Nov 2022 02:57:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9+Z2+ck32GlpQgV/uBGlJrkyX3/Vf2IzJOHORrIT1MY=;
-        b=XFFyTmL7BSv4J4Wq1E+s9vtLhWCkieiq+QZhvKznof880A9tcPYTH7fnAW4IWQDkTe
-         vkPTrSTPhhq+1pOcbw0zlF6zg1prsrr2WYym5Pc58X2PY/4NjVCWx+03Yab1XvCcann+
-         O4gG7kTNce/XcWV3xi+oBITARBXYdNnH7XCqqpt8D1Wt/JT3SMRjrkf0KlcG2kRukrcj
-         WI0BsNOJu6lqQ8Qs17prqMpqyslaH0LHQFTWx6MO1d0tCZQQOGyw6PO3u3gYyVbt1Hhg
-         1BiKkaRdcomr2mNejNy17nOiy8JM0C9GyYIHSqxNAbHYOZXVzJjXG46S5uYITS8HI4UU
-         GKbA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9+Z2+ck32GlpQgV/uBGlJrkyX3/Vf2IzJOHORrIT1MY=;
-        b=M9/l7DoxWM2DDPnSp2ts3HNz8mqZnDDqi05QrwnHp9rpI/0O67fI/E6y70joCFHyfN
-         tWg1SzqqRlqY34lG0ren0+sT1drXojwwAFQMQRQlIVSwixaZioiKhmancPcood6Y4vao
-         UQuiRdTuUI/cjfMqQM/UQ5KOkkpnleC2or+zARM6FY27xJmMdFGBg9+Tz3VqHy9nFmPy
-         ZSSN72x9IfFUcPZWf4C/PeDhquGt+3VOHGUqAw1R1Z0TLmLzIN5F84ESHhUtuJHduo1z
-         P0PyOlG16oqGrc5nH0aSSyhvO2189GrbGTvV72YXDvfGtSbZ5G4inw/cjvH7kHJz6Mdv
-         9ONQ==
-X-Gm-Message-State: ACrzQf316eEPkESBgOv0vl9K2sIoNPjAukT4h1Enm4cAEjU+5/hNzSrV
-        IJBagKM36JImGOYU3BtKBiyOEdsXuEQ=
-X-Google-Smtp-Source: AMsMyM4NvgfZgWsr6EjuRh9MkFgv0bBQd9NonzB5fp9eFJcOmOlXfJonMayyfIaL6OdMMGpuR07UDA==
-X-Received: by 2002:a17:906:7948:b0:7ac:d6f9:eb3e with SMTP id l8-20020a170906794800b007acd6f9eb3emr46181609ejo.350.1667818648080;
-        Mon, 07 Nov 2022 02:57:28 -0800 (PST)
-Received: from felia.fritz.box (200116b826b04a00c13f470e37e07cb6.dip.versatel-1u1.de. [2001:16b8:26b0:4a00:c13f:470e:37e0:7cb6])
-        by smtp.gmail.com with ESMTPSA id et10-20020a056402378a00b0045c47b2a800sm3949250edb.67.2022.11.07.02.57.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Nov 2022 02:57:27 -0800 (PST)
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-To:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        linux-pm@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [PATCH] notifier: repair slips in kernel-doc comments
-Date:   Mon,  7 Nov 2022 11:56:57 +0100
-Message-Id: <20221107105657.19002-1-lukas.bulwahn@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 7 Nov 2022 05:57:21 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26198F9;
+        Mon,  7 Nov 2022 02:57:20 -0800 (PST)
+Date:   Mon, 07 Nov 2022 10:57:16 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1667818638;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ojyhmC5nSs/8l/PRtjCUnjDv76wFPTRobpfNj/XTuzw=;
+        b=03r8jzbsG0SG+kevuAOQxZ7eoqlsPgTuErn/4HRahrWhBcQgI/JA+gC1RW2J5EtuRLiTHw
+        IpUy/IPVKT1pB8+xUr95Ho2tdF4c69ddppAHbrUsR1nmlGb8kbINzUcDJWNk5C1GNtwEZl
+        0KgqETgCjjuTpVXYZlXHQ53g9jXafMNLbsNCrmCV8JeWksdbuZF0cTu4HNaG2g2UlL5UtM
+        eGjQ5bkSnYWycbf4BImmLeZsDR2UyTkmawmS6Wt+OdWwvTc4rpiSMYh7JT7seQWqHy5ovM
+        7iu4cyTT4bx5P4uBJT65kVX5+kKEq0D86y+262bIcWRYqHw+apsmIwG4vaHv9w==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1667818638;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ojyhmC5nSs/8l/PRtjCUnjDv76wFPTRobpfNj/XTuzw=;
+        b=7aiCwWb+a72m28WoEgDSE+OchdR5NMbyaTl3+fhQ7mNSe08AiQtuhU62Gu1iwTB3HDlNd+
+        KqlLcFQ/QJXAfuAA==
+From:   "tip-bot2 for Pasha Tatashin" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/mm] x86/mm: Remove P*D_PAGE_MASK and P*D_PAGE_SIZE macros
+Cc:     Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Borislav Petkov <bp@suse.de>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Mike Rapoport <rppt@linux.ibm.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20220516185202.604654-1-tatashin@google.com>
+References: <20220516185202.604654-1-tatashin@google.com>
+MIME-Version: 1.0
+Message-ID: <166781863693.4906.7439885617350806494.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Invoking ./scripts/kernel-doc -none kernel/notifier.c warns:
+The following commit has been merged into the x86/mm branch of tip:
 
-  kernel/notifier.c:71: warning: Excess function parameter 'returns' description in 'notifier_call_chain'
-  kernel/notifier.c:119: warning: Function parameter or member 'v' not described in 'notifier_call_chain_robust'
+Commit-ID:     0008712a508f72242d185142cfdbd0646a661a18
+Gitweb:        https://git.kernel.org/tip/0008712a508f72242d185142cfdbd0646a661a18
+Author:        Pasha Tatashin <pasha.tatashin@soleen.com>
+AuthorDate:    Mon, 16 May 2022 18:52:02 
+Committer:     Borislav Petkov <bp@suse.de>
+CommitterDate: Mon, 07 Nov 2022 11:11:27 +01:00
 
-These two warning are easy to fix, as they are just due to some minor slips
-that makes the comment not follow kernel-doc's syntactic expectation.
+x86/mm: Remove P*D_PAGE_MASK and P*D_PAGE_SIZE macros
 
-Fix those minor slips in kernel-doc comments for make W=1 happiness.
+Other architectures and the common mm/ use P*D_MASK, and P*D_SIZE.
+Remove the duplicated P*D_PAGE_MASK and P*D_PAGE_SIZE which are only
+used in x86/*.
 
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Reviewed-by: Anshuman Khandual <anshuman.khandual@arm.com>
+Acked-by: Mike Rapoport <rppt@linux.ibm.com>
+Link: https://lore.kernel.org/r/20220516185202.604654-1-tatashin@google.com
 ---
-Rafael, please pick this minor non-urgent patch for your pm tree. Thanks.
+ arch/x86/include/asm/page_types.h  | 12 +++---------
+ arch/x86/kernel/amd_gart_64.c      |  2 +-
+ arch/x86/kernel/head64.c           |  2 +-
+ arch/x86/mm/mem_encrypt_boot.S     |  4 ++--
+ arch/x86/mm/mem_encrypt_identity.c | 18 +++++++++---------
+ arch/x86/mm/pat/set_memory.c       |  6 +++---
+ arch/x86/mm/pti.c                  |  2 +-
+ 7 files changed, 20 insertions(+), 26 deletions(-)
 
- kernel/notifier.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/kernel/notifier.c b/kernel/notifier.c
-index 0d5bd62c480e..ab75637fd904 100644
---- a/kernel/notifier.c
-+++ b/kernel/notifier.c
-@@ -62,7 +62,7 @@ static int notifier_chain_unregister(struct notifier_block **nl,
-  *			value of this parameter is -1.
-  *	@nr_calls:	Records the number of notifications sent. Don't care
-  *			value of this field is NULL.
-- *	@returns:	notifier_call_chain returns the value returned by the
-+ *	Return:		notifier_call_chain returns the value returned by the
-  *			last notifier function called.
+diff --git a/arch/x86/include/asm/page_types.h b/arch/x86/include/asm/page_types.h
+index a506a41..86bd431 100644
+--- a/arch/x86/include/asm/page_types.h
++++ b/arch/x86/include/asm/page_types.h
+@@ -11,20 +11,14 @@
+ #define PAGE_SIZE		(_AC(1,UL) << PAGE_SHIFT)
+ #define PAGE_MASK		(~(PAGE_SIZE-1))
+ 
+-#define PMD_PAGE_SIZE		(_AC(1, UL) << PMD_SHIFT)
+-#define PMD_PAGE_MASK		(~(PMD_PAGE_SIZE-1))
+-
+-#define PUD_PAGE_SIZE		(_AC(1, UL) << PUD_SHIFT)
+-#define PUD_PAGE_MASK		(~(PUD_PAGE_SIZE-1))
+-
+ #define __VIRTUAL_MASK		((1UL << __VIRTUAL_MASK_SHIFT) - 1)
+ 
+-/* Cast *PAGE_MASK to a signed type so that it is sign-extended if
++/* Cast P*D_MASK to a signed type so that it is sign-extended if
+    virtual addresses are 32-bits but physical addresses are larger
+    (ie, 32-bit PAE). */
+ #define PHYSICAL_PAGE_MASK	(((signed long)PAGE_MASK) & __PHYSICAL_MASK)
+-#define PHYSICAL_PMD_PAGE_MASK	(((signed long)PMD_PAGE_MASK) & __PHYSICAL_MASK)
+-#define PHYSICAL_PUD_PAGE_MASK	(((signed long)PUD_PAGE_MASK) & __PHYSICAL_MASK)
++#define PHYSICAL_PMD_PAGE_MASK	(((signed long)PMD_MASK) & __PHYSICAL_MASK)
++#define PHYSICAL_PUD_PAGE_MASK	(((signed long)PUD_MASK) & __PHYSICAL_MASK)
+ 
+ #define HPAGE_SHIFT		PMD_SHIFT
+ #define HPAGE_SIZE		(_AC(1,UL) << HPAGE_SHIFT)
+diff --git a/arch/x86/kernel/amd_gart_64.c b/arch/x86/kernel/amd_gart_64.c
+index 19a0207..56a917d 100644
+--- a/arch/x86/kernel/amd_gart_64.c
++++ b/arch/x86/kernel/amd_gart_64.c
+@@ -504,7 +504,7 @@ static __init unsigned long check_iommu_size(unsigned long aper, u64 aper_size)
+ 	}
+ 
+ 	a = aper + iommu_size;
+-	iommu_size -= round_up(a, PMD_PAGE_SIZE) - a;
++	iommu_size -= round_up(a, PMD_SIZE) - a;
+ 
+ 	if (iommu_size < 64*1024*1024) {
+ 		pr_warn("PCI-DMA: Warning: Small IOMMU %luMB."
+diff --git a/arch/x86/kernel/head64.c b/arch/x86/kernel/head64.c
+index 6a3cfaf..387e4b1 100644
+--- a/arch/x86/kernel/head64.c
++++ b/arch/x86/kernel/head64.c
+@@ -203,7 +203,7 @@ unsigned long __head __startup_64(unsigned long physaddr,
+ 	load_delta = physaddr - (unsigned long)(_text - __START_KERNEL_map);
+ 
+ 	/* Is the address not 2M aligned? */
+-	if (load_delta & ~PMD_PAGE_MASK)
++	if (load_delta & ~PMD_MASK)
+ 		for (;;);
+ 
+ 	/* Include the SME encryption mask in the fixup value */
+diff --git a/arch/x86/mm/mem_encrypt_boot.S b/arch/x86/mm/mem_encrypt_boot.S
+index 9de3d90..e25288e 100644
+--- a/arch/x86/mm/mem_encrypt_boot.S
++++ b/arch/x86/mm/mem_encrypt_boot.S
+@@ -26,7 +26,7 @@ SYM_FUNC_START(sme_encrypt_execute)
+ 	 *   RCX - virtual address of the encryption workarea, including:
+ 	 *     - stack page (PAGE_SIZE)
+ 	 *     - encryption routine page (PAGE_SIZE)
+-	 *     - intermediate copy buffer (PMD_PAGE_SIZE)
++	 *     - intermediate copy buffer (PMD_SIZE)
+ 	 *    R8 - physical address of the pagetables to use for encryption
+ 	 */
+ 
+@@ -123,7 +123,7 @@ SYM_FUNC_START(__enc_copy)
+ 	wbinvd				/* Invalidate any cache entries */
+ 
+ 	/* Copy/encrypt up to 2MB at a time */
+-	movq	$PMD_PAGE_SIZE, %r12
++	movq	$PMD_SIZE, %r12
+ 1:
+ 	cmpq	%r12, %r9
+ 	jnb	2f
+diff --git a/arch/x86/mm/mem_encrypt_identity.c b/arch/x86/mm/mem_encrypt_identity.c
+index f415498..88cccd6 100644
+--- a/arch/x86/mm/mem_encrypt_identity.c
++++ b/arch/x86/mm/mem_encrypt_identity.c
+@@ -93,7 +93,7 @@ struct sme_populate_pgd_data {
+  * section is 2MB aligned to allow for simple pagetable setup using only
+  * PMD entries (see vmlinux.lds.S).
   */
- static int notifier_call_chain(struct notifier_block **nl,
-@@ -105,13 +105,13 @@ NOKPROBE_SYMBOL(notifier_call_chain);
-  * @val_up:	Value passed unmodified to the notifier function
-  * @val_down:	Value passed unmodified to the notifier function when recovering
-  *              from an error on @val_up
-- * @v		Pointer passed unmodified to the notifier function
-+ * @v:		Pointer passed unmodified to the notifier function
-  *
-  * NOTE:	It is important the @nl chain doesn't change between the two
-  *		invocations of notifier_call_chain() such that we visit the
-  *		exact same notifier callbacks; this rules out any RCU usage.
-  *
-- * Returns:	the return value of the @val_up call.
-+ * Return:	the return value of the @val_up call.
-  */
- static int notifier_call_chain_robust(struct notifier_block **nl,
- 				     unsigned long val_up, unsigned long val_down,
--- 
-2.17.1
-
+-static char sme_workarea[2 * PMD_PAGE_SIZE] __section(".init.scratch");
++static char sme_workarea[2 * PMD_SIZE] __section(".init.scratch");
+ 
+ static char sme_cmdline_arg[] __initdata = "mem_encrypt";
+ static char sme_cmdline_on[]  __initdata = "on";
+@@ -198,8 +198,8 @@ static void __init __sme_map_range_pmd(struct sme_populate_pgd_data *ppd)
+ 	while (ppd->vaddr < ppd->vaddr_end) {
+ 		sme_populate_pgd_large(ppd);
+ 
+-		ppd->vaddr += PMD_PAGE_SIZE;
+-		ppd->paddr += PMD_PAGE_SIZE;
++		ppd->vaddr += PMD_SIZE;
++		ppd->paddr += PMD_SIZE;
+ 	}
+ }
+ 
+@@ -225,11 +225,11 @@ static void __init __sme_map_range(struct sme_populate_pgd_data *ppd,
+ 	vaddr_end = ppd->vaddr_end;
+ 
+ 	/* If start is not 2MB aligned, create PTE entries */
+-	ppd->vaddr_end = ALIGN(ppd->vaddr, PMD_PAGE_SIZE);
++	ppd->vaddr_end = ALIGN(ppd->vaddr, PMD_SIZE);
+ 	__sme_map_range_pte(ppd);
+ 
+ 	/* Create PMD entries */
+-	ppd->vaddr_end = vaddr_end & PMD_PAGE_MASK;
++	ppd->vaddr_end = vaddr_end & PMD_MASK;
+ 	__sme_map_range_pmd(ppd);
+ 
+ 	/* If end is not 2MB aligned, create PTE entries */
+@@ -325,7 +325,7 @@ void __init sme_encrypt_kernel(struct boot_params *bp)
+ 
+ 	/* Physical addresses gives us the identity mapped virtual addresses */
+ 	kernel_start = __pa_symbol(_text);
+-	kernel_end = ALIGN(__pa_symbol(_end), PMD_PAGE_SIZE);
++	kernel_end = ALIGN(__pa_symbol(_end), PMD_SIZE);
+ 	kernel_len = kernel_end - kernel_start;
+ 
+ 	initrd_start = 0;
+@@ -355,12 +355,12 @@ void __init sme_encrypt_kernel(struct boot_params *bp)
+ 	 *   executable encryption area size:
+ 	 *     stack page (PAGE_SIZE)
+ 	 *     encryption routine page (PAGE_SIZE)
+-	 *     intermediate copy buffer (PMD_PAGE_SIZE)
++	 *     intermediate copy buffer (PMD_SIZE)
+ 	 *   pagetable structures for the encryption of the kernel
+ 	 *   pagetable structures for workarea (in case not currently mapped)
+ 	 */
+ 	execute_start = workarea_start;
+-	execute_end = execute_start + (PAGE_SIZE * 2) + PMD_PAGE_SIZE;
++	execute_end = execute_start + (PAGE_SIZE * 2) + PMD_SIZE;
+ 	execute_len = execute_end - execute_start;
+ 
+ 	/*
+@@ -383,7 +383,7 @@ void __init sme_encrypt_kernel(struct boot_params *bp)
+ 	 * before it is mapped.
+ 	 */
+ 	workarea_len = execute_len + pgtable_area_len;
+-	workarea_end = ALIGN(workarea_start + workarea_len, PMD_PAGE_SIZE);
++	workarea_end = ALIGN(workarea_start + workarea_len, PMD_SIZE);
+ 
+ 	/*
+ 	 * Set the address to the start of where newly created pagetable
+diff --git a/arch/x86/mm/pat/set_memory.c b/arch/x86/mm/pat/set_memory.c
+index f275605..06eb891 100644
+--- a/arch/x86/mm/pat/set_memory.c
++++ b/arch/x86/mm/pat/set_memory.c
+@@ -743,11 +743,11 @@ phys_addr_t slow_virt_to_phys(void *__virt_addr)
+ 	switch (level) {
+ 	case PG_LEVEL_1G:
+ 		phys_addr = (phys_addr_t)pud_pfn(*(pud_t *)pte) << PAGE_SHIFT;
+-		offset = virt_addr & ~PUD_PAGE_MASK;
++		offset = virt_addr & ~PUD_MASK;
+ 		break;
+ 	case PG_LEVEL_2M:
+ 		phys_addr = (phys_addr_t)pmd_pfn(*(pmd_t *)pte) << PAGE_SHIFT;
+-		offset = virt_addr & ~PMD_PAGE_MASK;
++		offset = virt_addr & ~PMD_MASK;
+ 		break;
+ 	default:
+ 		phys_addr = (phys_addr_t)pte_pfn(*pte) << PAGE_SHIFT;
+@@ -1037,7 +1037,7 @@ __split_large_page(struct cpa_data *cpa, pte_t *kpte, unsigned long address,
+ 	case PG_LEVEL_1G:
+ 		ref_prot = pud_pgprot(*(pud_t *)kpte);
+ 		ref_pfn = pud_pfn(*(pud_t *)kpte);
+-		pfninc = PMD_PAGE_SIZE >> PAGE_SHIFT;
++		pfninc = PMD_SIZE >> PAGE_SHIFT;
+ 		lpaddr = address & PUD_MASK;
+ 		lpinc = PMD_SIZE;
+ 		/*
+diff --git a/arch/x86/mm/pti.c b/arch/x86/mm/pti.c
+index ffe3b3a..78414c6 100644
+--- a/arch/x86/mm/pti.c
++++ b/arch/x86/mm/pti.c
+@@ -592,7 +592,7 @@ static void pti_set_kernel_image_nonglobal(void)
+ 	 * of the image.
+ 	 */
+ 	unsigned long start = PFN_ALIGN(_text);
+-	unsigned long end = ALIGN((unsigned long)_end, PMD_PAGE_SIZE);
++	unsigned long end = ALIGN((unsigned long)_end, PMD_SIZE);
+ 
+ 	/*
+ 	 * This clears _PAGE_GLOBAL from the entire kernel image.
