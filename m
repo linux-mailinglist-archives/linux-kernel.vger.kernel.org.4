@@ -2,95 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D473620255
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 23:34:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E552620257
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 23:36:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232408AbiKGWeu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 17:34:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54300 "EHLO
+        id S232365AbiKGWgA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 17:36:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232060AbiKGWem (ORCPT
+        with ESMTP id S231659AbiKGWf6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 17:34:42 -0500
-Received: from smtp-fw-80006.amazon.com (smtp-fw-80006.amazon.com [99.78.197.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0044929C83;
-        Mon,  7 Nov 2022 14:34:41 -0800 (PST)
+        Mon, 7 Nov 2022 17:35:58 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DE1B29C83
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 14:35:57 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id l22-20020a17090a3f1600b00212fbbcfb78so16162859pjc.3
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 14:35:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1667860482; x=1699396482;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=rz44s32SzBaIslZ/a+ZFEBJu0zp3UqQQK8+5CHa7kYY=;
-  b=txKrQWoWlO9blvZlT4D1KwXk/MfLxHNX75wZkyYY/HakPvLhMq2LbwDB
-   jrpDZBQPYhzVowl/f5ZiQ8oFzQakIC8bVImLyeLOmC8vXjYI7rkD9G0C1
-   bMX8vAPInbii2Wc/OXSAKgYMUVI/7PsgywhfVhAJEOsnSWvOGnWp2gvFH
-   w=;
-X-IronPort-AV: E=Sophos;i="5.96,145,1665446400"; 
-   d="scan'208";a="148638493"
-Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-pdx-2c-m6i4x-fad5e78e.us-west-2.amazon.com) ([10.25.36.210])
-  by smtp-border-fw-80006.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Nov 2022 22:34:42 +0000
-Received: from EX13MTAUWB001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
-        by email-inbound-relay-pdx-2c-m6i4x-fad5e78e.us-west-2.amazon.com (Postfix) with ESMTPS id 09AA7A1255;
-        Mon,  7 Nov 2022 22:34:40 +0000 (UTC)
-Received: from EX19D035UWB004.ant.amazon.com (10.13.138.104) by
- EX13MTAUWB001.ant.amazon.com (10.43.161.249) with Microsoft SMTP Server (TLS)
- id 15.0.1497.42; Mon, 7 Nov 2022 22:34:35 +0000
-Received: from dev-dsk-grecojay-2b-e6934ae5.us-west-2.amazon.com
- (10.43.161.14) by EX19D035UWB004.ant.amazon.com (10.13.138.104) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.15; Mon, 7 Nov 2022
- 22:34:35 +0000
-From:   Jay Greco <grecojay@amazon.com>
-To:     <linux-iio@vger.kernel.org>
-CC:     <jorcrous@amazon.com>, Jay Greco <grecojay@amazon.com>,
-        "Jean-Baptiste Maneyrol" <jmaneyrol@invensense.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH 2/2] iio: imu: inv_icm42600: Add icm42631 documentation
-Date:   Mon, 7 Nov 2022 22:33:51 +0000
-Message-ID: <20221107223351.61142-3-grecojay@amazon.com>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20221107223351.61142-1-grecojay@amazon.com>
-References: <20221107223351.61142-1-grecojay@amazon.com>
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ScCG4xySl+iVdb3fADGlRx/eKjLXF30jrWX/i1bgXJs=;
+        b=nzuTWt2r7F2EccPeNgiYTPeTar5wjblrT687MlvLcPBgETTl0nIs6hxBIgdEXBUYhZ
+         C/r5k2chl2CVI4e17lFHcVRz9t71RXev8R3G9Zvfm1UQ6T3NM++yesn8dxapWtAKdOUT
+         Y9jwlaASUyHiIY1UTpQCVrANRSsqOTYP3NXjy1ZcpbulDTQjo/cf6VBg6kW7ab7+FgsX
+         iicuRJ537mhvLVCEtBe8k0LBCUs5eridjyUbpQSl2+edKRWipSOINEL+5pMMf7badaQi
+         JQLfZnTdvyOc2O3IaizLul5iJB4KhxMN9LViOLqens1yQ9rWq+Ls5a5scTXqiICqjhcJ
+         Y4aA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ScCG4xySl+iVdb3fADGlRx/eKjLXF30jrWX/i1bgXJs=;
+        b=lt2dIYENamk4YmhwePC2P6kUl19bIscJTnSL0QaMvJzmnnvfRDdxcYuYe8LuOniNuT
+         X3NWKBtUTZNwWzH4QdfISvKX1ijC0WeGE/C65YYC5YqHYsQNUuHb5V8qnOv7MUfa0dUu
+         NJl8myR7Y8ZJr1YrFYOuDk92M2Nrxb2VFvnnKsyVWcss0LjCxJgyReE5FkRUqQ3KgMtZ
+         4pmevlsBU9I8zpn4U435eqw74Qx+V3ra3J78hvvcKrHOVJwxFAVbz9rz8rfqyS67sZFH
+         jdnDLOJepOMVKodaWY5wlHNppq5mV9SQqxISJ251HfZPgBgPur0xAKeaXEHb807eFCk5
+         KfRA==
+X-Gm-Message-State: ANoB5pk05ZrQTJE99x2Sp5/LBY3+UGX9RoKvahLN/SnMxfDksHfICJ+q
+        HDihAYnNQGqimH20/gknbAw=
+X-Google-Smtp-Source: AA0mqf5fPwg+u5G0WX6I3elzKWc92F38WOU80BIX7vGpfIsnEwxT1BjfPHEMZKZp948SucURtPpzPw==
+X-Received: by 2002:a17:903:230f:b0:188:649b:a0c9 with SMTP id d15-20020a170903230f00b00188649ba0c9mr678532plh.150.1667860556986;
+        Mon, 07 Nov 2022 14:35:56 -0800 (PST)
+Received: from google.com ([2620:15c:211:201:594a:f636:e461:590b])
+        by smtp.gmail.com with ESMTPSA id q10-20020aa7982a000000b005618189b0ffsm5003579pfl.104.2022.11.07.14.35.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Nov 2022 14:35:56 -0800 (PST)
+Sender: Minchan Kim <minchan.kim@gmail.com>
+Date:   Mon, 7 Nov 2022 14:35:54 -0800
+From:   Minchan Kim <minchan@kernel.org>
+To:     Nhat Pham <nphamcs@gmail.com>
+Cc:     senozhatsky@chromium.org, hannes@cmpxchg.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, ngupta@vflare.org,
+        akpm@linux-foundation.org, sjenning@redhat.com, ddstreet@ieee.org,
+        vitaly.wool@konsulko.com
+Subject: Re: [PATCH 2/5] zsmalloc: Consolidate zs_pool's migrate_lock and
+ size_class's locks
+Message-ID: <Y2mISkYYjst0qxkY@google.com>
+References: <Y2SN5tMH8CqYHsYK@google.com>
+ <20221107213114.916231-1-nphamcs@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.43.161.14]
-X-ClientProxiedBy: EX13D48UWA004.ant.amazon.com (10.43.163.61) To
- EX19D035UWB004.ant.amazon.com (10.13.138.104)
-X-Spam-Status: No, score=-11.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221107213114.916231-1-nphamcs@gmail.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Update the required documentation for the icm42631.
+On Mon, Nov 07, 2022 at 01:31:14PM -0800, Nhat Pham wrote:
+> We have benchmarked the lock consolidation to see the performance effect of
+> this change on zram. First, we ran a synthetic FS workload on a server machine
+> with 36 cores (same machine for all runs), using this benchmark script:
+> 
+> https://github.com/josefbacik/fs_mark
+> 
+> using 32 threads, and cranking the pressure up to > 80% FS usage.
+> 
+> Here is the result (unit is file/second):
+> 
+> With lock consolidation (btrfs):
+> Average: 13520.2, Median: 13531.0, Stddev: 137.5961482019028
+> 
+> Without lock consolidation (btrfs):
+> Average: 13487.2, Median: 13575.0, Stddev: 309.08283679298665
+> 
+> With lock consolidation (ext4):
+> Average: 16824.4, Median: 16839.0, Stddev: 89.97388510006668
+> 
+> Without lock consolidation (ext4)
+> Average: 16958.0, Median: 16986.0, Stddev: 194.7370021336469
+> 
+> As you can see, we observe a 0.3% regression for btrfs, and a 0.9% regression
+> for ext4. This is a small, barely measurable difference in my opinion.
+> 
+> For a more realistic scenario, we also tries building the kernel on zram.
+> Here is the time it takes (in seconds):
+> 
+> With lock consolidation (btrfs):
+> real
+> Average: 319.6, Median: 320.0, Stddev: 0.8944271909999159
+> user
+> Average: 6894.2, Median: 6895.0, Stddev: 25.528415540334656
+> sys
+> Average: 521.4, Median: 522.0, Stddev: 1.51657508881031
+> 
+> Without lock consolidation (btrfs):
+> real
+> Average: 319.8, Median: 320.0, Stddev: 0.8366600265340756
+> user
+> Average: 6896.6, Median: 6899.0, Stddev: 16.04057355583023
+> sys
+> Average: 520.6, Median: 521.0, Stddev: 1.140175425099138
+> 
+> With lock consolidation (ext4):
+> real
+> Average: 320.0, Median: 319.0, Stddev: 1.4142135623730951
+> user
+> Average: 6896.8, Median: 6878.0, Stddev: 28.621670111997307
+> sys
+> Average: 521.2, Median: 521.0, Stddev: 1.7888543819998317
+> 
+> Without lock consolidation (ext4)
+> real
+> Average: 319.6, Median: 319.0, Stddev: 0.8944271909999159
+> user
+> Average: 6886.2, Median: 6887.0, Stddev: 16.93221781102523
+> sys
+> Average: 520.4, Median: 520.0, Stddev: 1.140175425099138
+> 
+> The difference is entirely within the noise of a typical run on zram. This
+> hardly justifies the complexity of maintaining both the pool lock and the class
+> lock. In fact, for writeback, we would need to introduce yet another lock to
 
-Signed-off-by: Jay Greco <grecojay@amazon.com>
----
+I am glad to make the zsmalloc lock scheme simpler without meaning
+regression since it introduced a lot mess. Please include the test
+result in description.
 
- .../devicetree/bindings/iio/imu/invensense,icm42600.yaml         | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/Documentation/devicetree/bindings/iio/imu/invensense,icm42600.yaml b/Documentation/devicetree/bindings/iio/imu/invensense,icm42600.yaml
-index 488349755c99..13c9abdd3131 100644
---- a/Documentation/devicetree/bindings/iio/imu/invensense,icm42600.yaml
-+++ b/Documentation/devicetree/bindings/iio/imu/invensense,icm42600.yaml
-@@ -31,6 +31,7 @@ properties:
-       - invensense,icm42602
-       - invensense,icm42605
-       - invensense,icm42622
-+      - invensense,icm42631
- 
-   reg:
-     maxItems: 1
--- 
-2.37.1
-
+Thanks for the testing, Nhat.
