@@ -2,125 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B040661E981
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 04:21:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9979B61E9D0
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 04:43:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230298AbiKGDVP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Nov 2022 22:21:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46308 "EHLO
+        id S231128AbiKGDnw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Nov 2022 22:43:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230303AbiKGDVA (ORCPT
+        with ESMTP id S230228AbiKGDns (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Nov 2022 22:21:00 -0500
-Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFB3D1178;
-        Sun,  6 Nov 2022 19:18:32 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4N5Gds5vsKz4f4Qk1;
-        Mon,  7 Nov 2022 11:18:25 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.175.127.227])
-        by APP2 (Coremail) with SMTP id Syh0CgBnfbgDeWhjLBJwAA--.9127S4;
-        Mon, 07 Nov 2022 11:18:28 +0800 (CST)
-From:   Ye Bin <yebin@huaweicloud.com>
-To:     axboe@kernel.dk, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     ming.lei@redhat.com, Ye Bin <yebin10@huawei.com>,
-        syzbot+746a4eece09f86bc39d7@syzkaller.appspotmail.com
-Subject: [PATCH] block: fix crash in 'blk_mq_elv_switch_none'
-Date:   Mon,  7 Nov 2022 11:39:56 +0800
-Message-Id: <20221107033956.3276891-1-yebin@huaweicloud.com>
-X-Mailer: git-send-email 2.31.1
+        Sun, 6 Nov 2022 22:43:48 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA0C62670;
+        Sun,  6 Nov 2022 19:43:47 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 37BD660EAE;
+        Mon,  7 Nov 2022 03:43:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 858C2C433C1;
+        Mon,  7 Nov 2022 03:43:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667792626;
+        bh=vJMXMhjRRH2tAhkB+zZFrEC95x2s5+eyVMSNAanNWaA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=emduUXpgAlRw70W/ylbLGfsPUZACpE/fZpJCQKVSGFOxHeX3em1cArMbRvdeAtgth
+         pzV4fRYyox7qyAgMPxSpL0/EVjCxyzPDaQh6Tc96wstY3G35dqEDbuZvGpFdL5jfiZ
+         RsVqXu9KI8bN1msv/7HuGhvj12Ex+pbWOE9yleYmSyGqrX0WNTd4royflPPeGXxtQi
+         e0NNyB7eNUAoovOP3SDKGvRToRZlMRe2GoUzWw9xHfZ5btmpbQ/sFs/Z4BA18ZWkQG
+         Pka8yThO0dcQLUYK4A76Kz+SjT0u97r9gs97LEBjzqhHsfl7DEDLAnDMTjXp+zOY8t
+         Uuj6kijSL9oxw==
+Date:   Sun, 6 Nov 2022 21:43:43 -0600
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-crypto@vger.kernel.org, devicetree@vger.kernel.org,
+        agross@kernel.org, herbert@gondor.apana.org.au,
+        linux-kernel@vger.kernel.org, robh+dt@kernel.org,
+        linux-arm-msm@vger.kernel.org, thara.gopinath@gmail.com,
+        robh@kernel.org, bhupesh.linux@gmail.com, davem@davemloft.net,
+        Jordan Crouse <jorcrous@amazon.com>
+Subject: Re: [PATCH v7 6/9] crypto: qce: core: Add new compatibles for qce
+ crypto driver
+Message-ID: <20221107034343.iyknmiztjuxcuqqs@builder.lan>
+References: <20220920114051.1116441-1-bhupesh.sharma@linaro.org>
+ <20220920114051.1116441-7-bhupesh.sharma@linaro.org>
+ <b4016460-f43a-13f8-432e-47c27237e005@linaro.org>
+ <9b111583-519b-95a6-15b5-243e88dc8d39@linaro.org>
+ <37b509ff-4fc2-73f1-b135-c0930075ec29@linaro.org>
+ <94ff2006-0051-19be-5eee-a5f71a07e26b@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: Syh0CgBnfbgDeWhjLBJwAA--.9127S4
-X-Coremail-Antispam: 1UD129KBjvJXoWxGrW3Cw15KF1UuFyxtrykGrg_yoW5Zry8pr
-        47Jr4DGFW0gr17ZF48t3W7Jw1UJr9akF45Ww17ur1qyF1UCry7JF18KayUAr18Jr48JFZF
-        qr1DX3W8tw1UGaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkYb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6r1S6rWUM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
-        0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-        Cjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxkF7I0En4kS14v26r1q6r43MxAIw28IcxkI
-        7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxV
-        Cjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY
-        6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6x
-        AIw20EY4v20xvaj40_Wr1j6rW3Jr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280
-        aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU17KsUUUUUU==
-X-CM-SenderInfo: p1hex046kxt4xhlfz01xgou0bp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <94ff2006-0051-19be-5eee-a5f71a07e26b@linaro.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ye Bin <yebin10@huawei.com>
+On Wed, Sep 21, 2022 at 12:22:03PM +0530, Bhupesh Sharma wrote:
+> On 9/21/22 11:57 AM, Krzysztof Kozlowski wrote:
+> > On 21/09/2022 08:16, Bhupesh Sharma wrote:
+> > > 
+> > > 
+> > > On 9/20/22 8:42 PM, Krzysztof Kozlowski wrote:
+> > > > On 20/09/2022 13:40, Bhupesh Sharma wrote:
+> > > > > Since we decided to use soc specific compatibles for describing
+> > > > > the qce crypto IP nodes in the device-trees, adapt the driver
+> > > > > now to handle the same.
+> > > > > 
+> > > > > Keep the old deprecated compatible strings still in the driver,
+> > > > > to ensure backward compatibility.
+> > > > > 
+> > > > > Cc: Bjorn Andersson <andersson@kernel.org>
+> > > > > Cc: Rob Herring <robh@kernel.org>
+> > > > > Cc: herbert@gondor.apana.org.au
+> > > > > Tested-by: Jordan Crouse <jorcrous@amazon.com>
+> > > > > Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+> > > > > ---
+> > > > >    drivers/crypto/qce/core.c | 9 +++++++++
+> > > > >    1 file changed, 9 insertions(+)
+> > > > > 
+> > > > > diff --git a/drivers/crypto/qce/core.c b/drivers/crypto/qce/core.c
+> > > > > index 63be06df5519..99ed540611ab 100644
+> > > > > --- a/drivers/crypto/qce/core.c
+> > > > > +++ b/drivers/crypto/qce/core.c
+> > > > > @@ -291,8 +291,17 @@ static int qce_crypto_remove(struct platform_device *pdev)
+> > > > >    }
+> > > > >    static const struct of_device_id qce_crypto_of_match[] = {
+> > > > > +	/* Following two entries are deprecated (kept only for backward compatibility) */
+> > > > >    	{ .compatible = "qcom,crypto-v5.1", },
+> > > > >    	{ .compatible = "qcom,crypto-v5.4", },
+> > > > 
+> > > > This is okay, so there is no ABI break.
+> > > 
+> > > Great. Thanks for the confirmation.
+> > > 
+> > > > > +	/* Add compatible strings as per updated dt-bindings, here: */
+> > > > > +	{ .compatible = "qcom,ipq4019-qce", },
+> > > > > +	{ .compatible = "qcom,ipq6018-qce", },
+> > > > > +	{ .compatible = "qcom,ipq8074-qce", },
+> > > > > +	{ .compatible = "qcom,msm8996-qce", },
+> > > > > +	{ .compatible = "qcom,sdm845-qce", },
+> > > > > +	{ .compatible = "qcom,sm8150-qce", },
+> > > > > +	{ .compatible = "qcom,sm8250-qce", },
+> > > > 
+> > > > This is a bit odd... you have 7 devices which are simply compatible or
+> > > > even the same. This should be instead one compatible.
+> > > > 
+> > > > I don't really get why do you want to deprecate "qcom,crypto-v5.1".
+> > > > Commit msg only says "we decided" but I do not know who is "we" and "why
+> > > > we decided like this". If you want to deprecate it, perfectly fine by
+> > > > me, but please say in commit msg why you are doing it.
+> > > 
+> > > I understand. This patchset has been in flight for some time and hence I
+> > > might have missed sharing some detailed information about the review
+> > > comments and rework done along the way (in the cover letter for this
+> > > series).
+> > > 
+> > > Coming back to your concern, here is the relevant background:
+> > > - Please see:
+> > > https://lore.kernel.org/linux-arm-msm/20210316222825.GA3792517@robh.at.kernel.org/
+> > > 
+> > > - Rob shared some comments on the v1 series regarding the soc-specific
+> > > compatibles. He mentioned in the above thread that 'you should stick
+> > > with SoC specific compatibles as *everyone* else does (including most
+> > > QCom bindings).'
+> > > 
+> > > - So, while I had proposed "qcom,crypto-v5.1" (for ipq6018) and
+> > > "qcom,crypto-v5.4" (for sdm845, sm8150) etc. as the compatible(s) in the
+> > > v1 series, I shifted to using the soc-specific compatibles from the v2
+> > > series, onwards.
+> > 
+> > Then the reason could be - Reviewers preferred SoC-based compatible
+> > instead of IP-block-version-based.
+> > 
+> > What is confusing is the difference between that link and here. That
+> > link wanted to introduce 4 different compatibles... and here you have
+> > even 7 compatibles being the same.
+> 
+> The link points to v1 version and we are on v7 currently. So there have been
+> other comments and reworks along the way :)
+> 
+> All of these have been referred to in the cover letter logs.
+> 
+> Again please refer to Vladimir's comments on v5 version here, where he
+> suggested adding soc compatibles for 'ipq8074' and 'msm8996' as well.
+> 
+> -
+> https://lore.kernel.org/lkml/7328ae17-1dc7-eaa1-5993-411b986e5e02@linaro.org/
+> -
+> https://lore.kernel.org/lkml/f5b7c89c-3bdd-1e1e-772e-721aa5e95bbf@linaro.org/
+> -
+> https://lore.kernel.org/lkml/7328ae17-1dc7-eaa1-5993-411b986e5e02@linaro.org/
+> 
+> Also the 7 SoC compatibles do not point to the same crypto IP version. We
+> have two IP versions currently supported upstream, "qcom,crypto-v5.1" and
+> "qcom,crypto-v5.4" (with patches for support for newer versions under work
+> and can be expected to land upstream in near future).
+> 
+> However, if you suggest, we can add some comments in the dt-binding doc
+> to reflect which SoC supports which version.
+> 
+> > > - Basically, since we are going to have newer qce IP versions available
+> > > in near future, e.g. "qcom,crypto-v5.5" etc, and we will have 2 or more
+> > > SoCs also sharing 1 version, these compatibles would grow and become
+> > > more confusing. IMO, having a soc-specific compatible in such cases is
+> > > probably a much cleaner approach.
+> > > 
+> > > Hope this helps answer some of your concerns and provides some relevant
+> > > background information.
+> > 
+> > Sure, but I still think you should have only one compatible in the
+> > driver in such case. You don't have differences between them from the
+> > driver point of view, so the devices seem to be compatible.
+> > 
+> > If not, what are the differences?
+> 
+> There can always be requirements for compatible specific handling done in
+> the driver. See Bjorn's comment here for example:
+> https://lore.kernel.org/lkml/YZKhqJuFlRVeQkCc@builder.lan/ , as an example
+> of 'clk_get' calls conditional based on the compatible instead.
+> 
 
-Syzbot found the following issue:
-general protection fault, probably for non-canonical address 0xdffffc000000001d: 0000 [#1] PREEMPT SMP KASAN
-KASAN: null-ptr-deref in range [0x00000000000000e8-0x00000000000000ef]
-CPU: 0 PID: 5234 Comm: syz-executor931 Not tainted 6.1.0-rc3-next-20221102-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/11/2022
-RIP: 0010:__elevator_get block/elevator.h:94 [inline]
-RIP: 0010:blk_mq_elv_switch_none block/blk-mq.c:4593 [inline]
-RIP: 0010:__blk_mq_update_nr_hw_queues block/blk-mq.c:4658 [inline]
-RIP: 0010:blk_mq_update_nr_hw_queues+0x304/0xe40 block/blk-mq.c:4709
-RSP: 0018:ffffc90003cdfc08 EFLAGS: 00010206
-RAX: 0000000000000000 RBX: dffffc0000000000 RCX: 0000000000000000
-RDX: 000000000000001d RSI: 0000000000000002 RDI: 00000000000000e8
-RBP: ffff88801dbd0000 R08: ffff888027c89398 R09: ffffffff8de2e517
-R10: fffffbfff1bc5ca2 R11: 0000000000000000 R12: ffffc90003cdfc70
-R13: ffff88801dbd0008 R14: ffff88801dbd03f8 R15: ffff888027c89380
-FS:  0000555557259300(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00000000005d84c8 CR3: 000000007a7cb000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- nbd_start_device+0x153/0xc30 drivers/block/nbd.c:1355
- nbd_start_device_ioctl drivers/block/nbd.c:1405 [inline]
- __nbd_ioctl drivers/block/nbd.c:1481 [inline]
- nbd_ioctl+0x5a1/0xbd0 drivers/block/nbd.c:1521
- blkdev_ioctl+0x36e/0x800 block/ioctl.c:614
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:870 [inline]
- __se_sys_ioctl fs/ioctl.c:856 [inline]
- __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:856
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
+How about providing a generic compatible without the version number
+(i.e. qcom,crypto) and then in the DT binding require this and
+qcom,<platform>-crypto, and if we have such quirky integration behavior
+for a particular platform we can add the special handling in the driver
+for the platform compatible.
 
-As after dd6f7f17bf58 commit move '__elevator_get(qe->type)' before set
-'qe->type', so will lead to access wild pointer.
-To solve above issue get 'qe->type' after set 'qe->type'.
+(And we obviously keep the two existing version-based compatibles in the
+driver, for backwards compatibility)
 
-Reported-by: syzbot+746a4eece09f86bc39d7@syzkaller.appspotmail.com
-Fixes:dd6f7f17bf58("block: add proper helpers for elevator_type module refcount management")
-Signed-off-by: Ye Bin <yebin10@huawei.com>
----
- block/blk-mq.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Regards,
+Bjorn
 
-diff --git a/block/blk-mq.c b/block/blk-mq.c
-index 2757368dc83f..3173d621f1f7 100644
---- a/block/blk-mq.c
-+++ b/block/blk-mq.c
-@@ -4589,9 +4589,9 @@ static bool blk_mq_elv_switch_none(struct list_head *head,
- 
- 	INIT_LIST_HEAD(&qe->node);
- 	qe->q = q;
-+	qe->type = q->elevator->type;
- 	/* keep a reference to the elevator module as we'll switch back */
- 	__elevator_get(qe->type);
--	qe->type = q->elevator->type;
- 	list_add(&qe->node, head);
- 	elevator_disable(q);
- 	mutex_unlock(&q->sysfs_lock);
--- 
-2.31.1
-
+> This series is to get some early comments and might need some further rework
+> / rearrangement.
+> 
+> However, I would request Rob to share his views as well on the soc specific
+> compatibles, since it was originally his suggestion. I can rework the
+> patchset accordingly.
+> 
+> Thanks,
+> Bhupesh
