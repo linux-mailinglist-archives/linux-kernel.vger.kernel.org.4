@@ -2,101 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E912F61EACE
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 07:09:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5EFA61EAD0
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 07:12:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231175AbiKGGJx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 01:09:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35480 "EHLO
+        id S231191AbiKGGML (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 01:12:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229586AbiKGGJv (ORCPT
+        with ESMTP id S229586AbiKGGMJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 01:09:51 -0500
-Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85488BF58
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Nov 2022 22:09:50 -0800 (PST)
-Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-3691e040abaso94954057b3.9
-        for <linux-kernel@vger.kernel.org>; Sun, 06 Nov 2022 22:09:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=81OwnGwvJnQYmOVDKkykoPFn7wFRcskQuKrp/5MV0cA=;
-        b=FgDvnNYcbah826ClKQr0dNF/O5K1NK1Y3ToNyjx/BeE43Jl8E9VCxI+JUUAWeEYCru
-         lWFCS8amfGMSfKYGtnrMQKm3gBbT9Pgqk/iiJ3nI/mnEi+bkeZ5yI7Do+xZs2MjYWEW4
-         2rNz8j05el5kRHXZbBt6Y8WhbolzI4wKTnDtBL0soWL1qDgzVakhyDY1xTpuWp2v4ZJs
-         DpP8UdN6IIF0ZYhklfvSQVqyFHZI3Bk83t27Uw1vFqSbBnFKznP3z/SthAL+R2scEkqG
-         OxijTFjDCHogAJpiajima2cnUvC7V9sdA+eIGHluqYFmXxq0IcWZBN/kOqHzW3B0KTg/
-         eR0w==
+        Mon, 7 Nov 2022 01:12:09 -0500
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF30ABF58;
+        Sun,  6 Nov 2022 22:12:07 -0800 (PST)
+Received: by mail-ej1-f53.google.com with SMTP id 13so27375849ejn.3;
+        Sun, 06 Nov 2022 22:12:07 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=81OwnGwvJnQYmOVDKkykoPFn7wFRcskQuKrp/5MV0cA=;
-        b=VopX4DEYIlsL6JloBMEbihA0nnBERVMnF/7O1/ArMvDVCQme0635lUIwN5eRNv0WGJ
-         2XCoaZHzqWe2R89XJT5dpsMBTBh3icCyy94uy0u9fG0uV7/FhY1iJ38R5qDuKz9cRvwn
-         f4czeiO/jXTVzGBnOtnBDAvUwcW7b/xfRWxabvIx3a6aZHACt61xRe4K5OA6sMsfV1zE
-         Poqk6tFR+HZX3asbkXkvIQbGhHPMLXXPf391S0TdJ1FcRXBQ3briVipt68kEf6INK/EB
-         +fELb60D0gWmOnDVetYD5+D+pak4ByNRmb+gF/kDvzGnXkVq8o943IpGbZ2VZUMWtTkA
-         NBAw==
-X-Gm-Message-State: ACrzQf3sBGpl6LUs6kzu9ILUSi3cpd4BXi/cfSwh73mxwZtgSbaW1Lj+
-        3s5vzo3pkjn1PUkkwPdnMvHF1q/igjOksO1c5tdYvy2hng0=
-X-Google-Smtp-Source: AMsMyM4sWzWZdeNRBWGTamabtDqOb9fla3MuSyVyGsHdbdMJ63mrzdP8vG82YIQEBYmbUXDdqMLpZWvKVROpO5RrCLk=
-X-Received: by 2002:a81:1243:0:b0:36f:ced7:9826 with SMTP id
- 64-20020a811243000000b0036fced79826mr46158117yws.507.1667801389557; Sun, 06
- Nov 2022 22:09:49 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=DPuU0hi8uE8q7bgFrAs5k/BnugkiDikdtVxUAcn1Rec=;
+        b=H4jcBXNhYT0nJBGgJg6w6mXiOWKxT+9yQznL+a5AmlG/ZqtrsNqGLJq6g6SRO2ezQQ
+         HsORnxSSJrdboAOHh6X5wtIRWADdK2jfpdyJd9MeexJ4+qB/FWtiehLBgOfvMDTxucYM
+         bs+LufVWgwBP4B0mfH/pdswePO81z2mpjbL9GyhJUGvLX4BEgrNBDVjtIjk5EYCvi1Wh
+         FSzxqQgCalTH0M7Bbg4q3+f7jZnaJR/4m+EvaDcYrePnSILIs9sizSvSXHEK+iI5XSdu
+         7CpuY3RyfogDfKsnkpYzDS9f0NscrezimTRtek/OMLgVUDRdW5/fSFWE/b+EQkDWKvoJ
+         Pdyg==
+X-Gm-Message-State: ANoB5pm+nqgE0c7lyw0khEJ1Tl8WGDjjbawBD5tqCG4081ALJQkRFmr7
+        +go6kYSSFEKZnSi88TShYQE=
+X-Google-Smtp-Source: AA0mqf4HIkH6+Ky8ihONOy9Q4MDe/SmrvynSJdaUXpiXx/xwU7NwiWqqece33B4bhf7VlgJDk3aQVw==
+X-Received: by 2002:a17:906:4996:b0:7ae:6cb9:6c5c with SMTP id p22-20020a170906499600b007ae6cb96c5cmr1883918eju.695.1667801526085;
+        Sun, 06 Nov 2022 22:12:06 -0800 (PST)
+Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
+        by smtp.gmail.com with ESMTPSA id 5-20020a170906310500b007add28659b0sm2941437ejx.140.2022.11.06.22.12.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 06 Nov 2022 22:12:05 -0800 (PST)
+Message-ID: <34906659-94df-9de5-dcf7-0e787b7caf17@kernel.org>
+Date:   Mon, 7 Nov 2022 07:12:04 +0100
 MIME-Version: 1.0
-References: <Y2h7PgIkraOI1zVC@xpf.sh.intel.com>
-In-Reply-To: <Y2h7PgIkraOI1zVC@xpf.sh.intel.com>
-From:   Eyal Birger <eyal.birger@gmail.com>
-Date:   Mon, 7 Nov 2022 08:09:39 +0200
-Message-ID: <CAHsH6Gt92EH7eC5MyL23G7ySYk4OyNoC9U=0Y7vXbbqVyyZ7SQ@mail.gmail.com>
-Subject: Re: [syzkaller] There is "lwtunnel_valid_encap_type" WARNING in
- 6.1-rc3 mainline kernel
-To:     Pengfei Xu <pengfei.xu@intel.com>
-Cc:     linux-kernel@vger.kernel.org, heng.su@intel.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [RFC PATCH] kbuild: pass objects instead of archives to linker
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Ard Biesheuvel <ardb@kernel.org>, linux-kbuild@vger.kernel.org,
+        Michael Matz <matz@suse.de>, Kees Cook <keescook@chromium.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Fangrui Song <maskray@google.com>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+References: <20221102091308.11568-1-masahiroy@kernel.org>
+ <CAMj1kXGzFEnUGkoD_JV6=mrKQ+eXLo=SYU8823mPezHZfY_FRQ@mail.gmail.com>
+ <CAK7LNASjBm=WWpkSaL1+QuLokhnepUucvhYyP3CCeZYx6nOTHA@mail.gmail.com>
+ <9fe8615c-fe31-ebf7-09bd-453fae189666@kernel.org>
+ <CAK7LNATBuERrR4QvLzDNOw1TVmMP+2J=sJviihBdy8gF=CfA=w@mail.gmail.com>
+Content-Language: en-US
+From:   Jiri Slaby <jirislaby@kernel.org>
+In-Reply-To: <CAK7LNATBuERrR4QvLzDNOw1TVmMP+2J=sJviihBdy8gF=CfA=w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 03. 11. 22, 15:47, Masahiro Yamada wrote:
+> Can I see your LTO implementation somewhere in public?
 
-On Mon, Nov 7, 2022 at 5:27 AM Pengfei Xu <pengfei.xu@intel.com> wrote:
->
-> Hi Birger and net expert,
->
-> Greeting!
->
-> There is "lwtunnel_valid_encap_type" WARNING in 6.1-rc3 mainline kernel in syzkaller test in guest:
+Sure:
+https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git/commit/?h=lto
 
-<snip>
+FWIW, I plan to send a v1 for comments soon as I finished the patch 
+order, CCs and commit logs finally.
 
->
-> Bisect and found the first bad commit is 2c2493b9da9166478fe072e3054f8a5741dadb02.
-> "xfrm: lwtunnel: add lwtunnel support for xfrm interfaces in collect_md mode"
-> And revert this commit, this issue could not be reproduced.
->
-> All bisect and test dmesg log, kconfig, repro.c and repro binary are in link:
-> https://github.com/xupengfe/syzkaller_logs/tree/main/221103_152117_lwtunnel_valid_encap_type
->
-> Kconfig, repro.c are in attached.
->
-> If you fix this issue, thanks to add the Reported tag.
->
-> Resend the email due to previous large attachment.
+thanks,
+-- 
+js
+suse labs
 
-Thanks for the report.
-
-A fix was submitted to the IPsec tree:
-https://lore.kernel.org/netdev/Y0UwqMZQ6n+G%2F%2FaD@shredder/
-
-Thanks,
-Eyal.
