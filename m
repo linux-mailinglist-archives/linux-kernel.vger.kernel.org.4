@@ -2,85 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C257861ED6F
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 09:50:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1788861ECFE
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 09:35:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231473AbiKGIu2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 03:50:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50510 "EHLO
+        id S231290AbiKGIfX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 03:35:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231450AbiKGIuV (ORCPT
+        with ESMTP id S231264AbiKGIfU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 03:50:21 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77DD015A13;
-        Mon,  7 Nov 2022 00:50:18 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 31FC1B80E6B;
-        Mon,  7 Nov 2022 08:50:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id BF3D5C43470;
-        Mon,  7 Nov 2022 08:50:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667811015;
-        bh=DwR4PbtQVE5wpoJY9KuWV7/XWsVC3U4ti2JdPzfpfvw=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=hc+BoSJZUhCTOf+O/FMwJ++ugO7vY7WZ6ZKwHSW2zsFT645Sk3XSF0jb/7kievCgJ
-         +5vI4sh9Y9uLAq2bjlMwn06HB5losjFOJf2F1LhtOu9ZoMJcAkWg57ZXyYoG2tYm+H
-         3IO9xKPL3ImDzAglM7gNspUG+A+hAuZaIf6EXDCeTMZw8gBJtaaDASXAdc7gtvAYBj
-         WP6YfPuQsnjt0P+ejrd39YegpD4Urb6zJ96dY7U9+3Lp7rg5/vkQ7HhXH1XQheR2v9
-         LVldmToz7tGDQGdytepDG2eGFkZ2X563HA5pVbLLTUxz3MLdonarsK5ne7NgBXFBVN
-         RoRvougJfVqow==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A6983C4166D;
-        Mon,  7 Nov 2022 08:50:15 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Mon, 7 Nov 2022 03:35:20 -0500
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7FD0140D0;
+        Mon,  7 Nov 2022 00:35:18 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4N5PgN3cppz4f4G0R;
+        Mon,  7 Nov 2022 16:35:12 +0800 (CST)
+Received: from k01.huawei.com (unknown [10.67.174.197])
+        by APP2 (Coremail) with SMTP id Syh0CgBHXrlCw2hjV_t7AA--.38382S2;
+        Mon, 07 Nov 2022 16:35:15 +0800 (CST)
+From:   Xu Kuohai <xukuohai@huaweicloud.com>
+To:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>
+Subject: [PATCH bpf-next] bpf: Initialize same number of free nodes for each pcpu_freelist
+Date:   Mon,  7 Nov 2022 03:50:30 -0500
+Message-Id: <20221107085030.3901608-1-xukuohai@huaweicloud.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v6] net: mv643xx_eth: support MII/GMII/RGMII modes for
- Kirkwood
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166781101567.969.3739834944008609773.git-patchwork-notify@kernel.org>
-Date:   Mon, 07 Nov 2022 08:50:15 +0000
-References: <20221028020104.347329-1-mmyangfl@gmail.com>
-In-Reply-To: <20221028020104.347329-1-mmyangfl@gmail.com>
-To:     David Yang <mmyangfl@gmail.com>
-Cc:     sebastian.hesselbarth@gmail.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: Syh0CgBHXrlCw2hjV_t7AA--.38382S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7uFyxArWrJr4fXw4UXFyrJFb_yoW8AFWxpF
+        4fAw1jqw1vgrn5Wws5G3WrW343t3ykGw13Ga98Kr1Yvry3GFyqvr1vyF4aqFWagF4Ivr4F
+        kFsI9FZFyayUXFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkFb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
+        0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IY
+        c2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s
+        026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF
+        0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0x
+        vE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2
+        jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UWE__UUUUU=
+X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+From: Xu Kuohai <xukuohai@huawei.com>
 
-This patch was applied to netdev/net-next.git (master)
-by David S. Miller <davem@davemloft.net>:
+pcpu_freelist_populate() initializes nr_elems / num_possible_cpus() + 1
+free nodes for each CPU except the last initialized CPU, always making
+the last CPU get fewer free nodes. For example, when nr_elems == 256
+and num_possible_cpus() == 32, if CPU 0 is the current cpu, CPU 0~27
+each gets 9 free nodes, CPU 28 gets 4 free nodes, CPU 29~31 get 0 free
+nodes, while in fact each CPU should get 8 nodes equally.
 
-On Fri, 28 Oct 2022 10:01:01 +0800 you wrote:
-> Support mode switch properly, which is not available before.
-> 
-> If SoC has two Ethernet controllers, by setting both of them into MII
-> mode, the first controller enters GMII mode, while the second
-> controller is effectively disabled. This requires configuring (and
-> maybe enabling) the second controller in the device tree, even though
-> it cannot be used.
-> 
-> [...]
+This patch initializes nr_elems / num_possible_cpus() free nodes for each
+CPU firstly, and then allocates the remaining free nodes by one for each
+CPU until no free nodes left.
 
-Here is the summary with links:
-  - [v6] net: mv643xx_eth: support MII/GMII/RGMII modes for Kirkwood
-    https://git.kernel.org/netdev/net-next/c/d08cb2555677
+Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
+---
+ kernel/bpf/percpu_freelist.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-You are awesome, thank you!
+diff --git a/kernel/bpf/percpu_freelist.c b/kernel/bpf/percpu_freelist.c
+index b6e7f5c5b9ab..89e84f7381cc 100644
+--- a/kernel/bpf/percpu_freelist.c
++++ b/kernel/bpf/percpu_freelist.c
+@@ -100,12 +100,15 @@ void pcpu_freelist_populate(struct pcpu_freelist *s, void *buf, u32 elem_size,
+ 			    u32 nr_elems)
+ {
+ 	struct pcpu_freelist_head *head;
+-	int i, cpu, pcpu_entries;
++	int i, cpu, pcpu_entries, remain_entries;
++
++	pcpu_entries = nr_elems / num_possible_cpus();
++	remain_entries = nr_elems % num_possible_cpus();
+ 
+-	pcpu_entries = nr_elems / num_possible_cpus() + 1;
+ 	i = 0;
+ 
+ 	for_each_possible_cpu(cpu) {
++		int j = i + pcpu_entries + (remain_entries-- > 0 ? 1 : 0);
+ again:
+ 		head = per_cpu_ptr(s->freelist, cpu);
+ 		/* No locking required as this is not visible yet. */
+@@ -114,7 +117,7 @@ void pcpu_freelist_populate(struct pcpu_freelist *s, void *buf, u32 elem_size,
+ 		buf += elem_size;
+ 		if (i == nr_elems)
+ 			break;
+-		if (i % pcpu_entries)
++		if (i < j)
+ 			goto again;
+ 	}
+ }
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.30.2
 
