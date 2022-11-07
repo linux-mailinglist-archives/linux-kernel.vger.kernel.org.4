@@ -2,74 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C242D61FD04
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 19:13:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0BB361FD02
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 19:13:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233135AbiKGSNS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 13:13:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56036 "EHLO
+        id S233110AbiKGSNA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 13:13:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233046AbiKGSM4 (ORCPT
+        with ESMTP id S233113AbiKGSMk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 13:12:56 -0500
-Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 431151DA77
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 10:11:33 -0800 (PST)
-Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-3704852322fso112088597b3.8
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 10:11:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=+XR/b1ELU8/BVxOd8KJkVYQZI42Oa0wfjRxT+gnAx+U=;
-        b=P2qRlGbRPeqjLnI25F3mlMqHC9MQEvfb/R1VhsDfsj+3sxStnSBKp7oW00gxieIEdq
-         vwkWdCy5N5FYiNDhJTkyr2Hn3ANnmuOzvLyFsKjwghh1r8HYPVxCNY5ELwn+lK6HAfK+
-         s1kW2cbdSkIL3ns2vbgiAVUUfvgKv+Ky8cWER4mn9NC2Q/Dk0bYDKDD7tAcI6pVKAHRx
-         pv468WUAsasfb52N/R8vXARQN2tnVAh/w0vY4Fj/bVc0hzOJ9rp73SutEppwO5gDEPZf
-         Fa5lzA0x6TTFVjpVy4ZTc+Wm2DZljleRTc8C87xscnT0llGzkxTG+GlWrlvXICWo3bQF
-         HIow==
+        Mon, 7 Nov 2022 13:12:40 -0500
+Received: from mail-ot1-f47.google.com (mail-ot1-f47.google.com [209.85.210.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B34AD27CF3;
+        Mon,  7 Nov 2022 10:11:16 -0800 (PST)
+Received: by mail-ot1-f47.google.com with SMTP id f4-20020a056830264400b0066c8e56828aso5296816otu.1;
+        Mon, 07 Nov 2022 10:11:16 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+XR/b1ELU8/BVxOd8KJkVYQZI42Oa0wfjRxT+gnAx+U=;
-        b=2XygLJBQlAwYX/V2s+e+XURRUmWyQqXU7FBzbDVZSKDOFQ6l4RLZmHmfbQoG+MS/LV
-         SloUDDkWawp3KdIPxrVkulVlG44SJvvM2+7dBtegxSoDH9ESf6U7yx6kQD3Ne/zd2M9Z
-         VpC66SqnTX67/6BNzfpv44WAUGWskOffC0aGF9+jvsVq8CojCjnyVSIGOJsUSa+wTyOF
-         raLl9EX0tnZ08enEZFTBcCIs4wR3lFH77ZgdgNXpTYMHlV8rWnTl+pdOI3ZX5S5Kidwl
-         DCEduVyPaCQPZZ935mnRGJAJhyNLXs668nzZk6+3jtrEIJOwMpTlcWCtVFKh9iv+zs8N
-         xYDw==
-X-Gm-Message-State: ACrzQf3fQQp611sJlX6BWNRt7Hexlr0z420O7eUDRxU0/cwxSYlJpr+G
-        pEsYKdwoWxwRu53t1m3IlOeDwdaSYOaQ1FbdH5jaVw==
-X-Google-Smtp-Source: AMsMyM4LCFaBMQSBBqMcThZ2SC66h3bgqrjpMiuecv55jF7Iu6VtJhRuJKKefxNn3lw/FHv9MNftX0YqeEpDb/8v1sU=
-X-Received: by 2002:a81:8201:0:b0:370:c85:7e4a with SMTP id
- s1-20020a818201000000b003700c857e4amr48094046ywf.209.1667844692893; Mon, 07
- Nov 2022 10:11:32 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0D6OVZD+rAPMP/hoh0bQusyWB1khk2iGM0R5V/xmNp8=;
+        b=WEJh3EcLIqjrq0obrfMddmNRCLa2Lwcy8acRwE7lkDSboT3KOQpsK7obTKh91NmOHY
+         aY/9jzw780laCauMQFkSgPf5AEHbPt2pZnXPy/hp1lXVZ7RVfTxCjG3/UblN/WsDq/vJ
+         ypG2Rc+mfRy+gNDIL5um4TtEyom/IkWpbyBg0La+3O/n9NpZJMmWrFX6oJDn2h+FsXCa
+         AzmJqVnOU4tFeHTYpJlzO85adjdYZgK/hInK02kEWVMm8wwpvHzIXqourC0pN/IWIhjW
+         Uy7gqmv4wGwG40KO1WuTnvleXmvo4gc5zwELVfEP8CrpxWBbLvfn8lofBt24wNgRtkQl
+         JEsw==
+X-Gm-Message-State: ANoB5pmKd0xIfr4y3x0TijG6JFhjhuhFwSR7tdgBESIP1bBDmWf0+VVe
+        eroeeNZgZ9tcnCw/XRGe7A==
+X-Google-Smtp-Source: AA0mqf5nHAp98AhScX8C1mpbn4jbE9ZM7lRdvCtv3X/Tkj5j0eJpBHjPGhLgkjp4BgSK7Is8vFsCDA==
+X-Received: by 2002:a9d:62cb:0:b0:66c:e6c9:8704 with SMTP id z11-20020a9d62cb000000b0066ce6c98704mr3274349otk.61.1667844675752;
+        Mon, 07 Nov 2022 10:11:15 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id x12-20020a05683000cc00b0065c2c46077dsm3163833oto.67.2022.11.07.10.11.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Nov 2022 10:11:15 -0800 (PST)
+Received: (nullmailer pid 1353624 invoked by uid 1000);
+        Mon, 07 Nov 2022 18:11:17 -0000
+Date:   Mon, 7 Nov 2022 12:11:17 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Cosmin Tanislav <demonsingur@gmail.com>
+Cc:     Jonathan Cameron <jic23@kernel.org>, devicetree@vger.kernel.org,
+        Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-kernel@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Cosmin Tanislav <cosmin.tanislav@analog.com>,
+        linux-iio@vger.kernel.org, Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH v4 10/13] dt-bindings: iio: temperature: ltc2983:
+ describe broken mux delay property
+Message-ID: <166784467673.1353361.2438556555715268552.robh@kernel.org>
+References: <20221103130041.2153295-1-demonsingur@gmail.com>
+ <20221103130041.2153295-11-demonsingur@gmail.com>
 MIME-Version: 1.0
-References: <20221024113445.1022147-1-wei.w.wang@intel.com>
- <Y1mlJqKdFtlgG3jR@google.com> <DS0PR11MB63731F2B467D4084F5C8D9B5DC339@DS0PR11MB6373.namprd11.prod.outlook.com>
- <Y1qnWFzekT27rYka@google.com> <CALzav=c4-FWVrWQebuYs--vbgnyPjEwZxfjSS1aMSRL3JMbWYw@mail.gmail.com>
- <Y1rNm0E6/I5y6K2a@google.com> <20221028124106.oze32j2lkq5ykifj@kamzik> <Y1v6AEInngzRxSJ+@google.com>
-In-Reply-To: <Y1v6AEInngzRxSJ+@google.com>
-From:   David Matlack <dmatlack@google.com>
-Date:   Mon, 7 Nov 2022 10:11:06 -0800
-Message-ID: <CALzav=chUT9v4wYVVy9dSLcevhADxONaf9iCMOWQ_vUOwpkV9g@mail.gmail.com>
-Subject: Re: [PATCH v1 00/18] KVM selftests code consolidation and cleanup
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Andrew Jones <andrew.jones@linux.dev>,
-        "Wang, Wei W" <wei.w.wang@intel.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "vipinsh@google.com" <vipinsh@google.com>,
-        "ajones@ventanamicro.com" <ajones@ventanamicro.com>,
-        "eric.auger@redhat.com" <eric.auger@redhat.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221103130041.2153295-11-demonsingur@gmail.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,76 +70,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 28, 2022 at 8:49 AM Sean Christopherson <seanjc@google.com> wrote:
->
-> On Fri, Oct 28, 2022, Andrew Jones wrote:
-> > On Thu, Oct 27, 2022 at 06:27:39PM +0000, Sean Christopherson wrote:
-> > > On Thu, Oct 27, 2022, David Matlack wrote:
-> > > > On Thu, Oct 27, 2022 at 8:44 AM Sean Christopherson <seanjc@google.com> wrote:
-> > > > > I like the idea in theory, but that'd be a daunting task to set up, and quite the
-> > > > > maintenance nightmare.  There are probably thousands of file => scope mappings
-> > > > > throughout the kernel, with any number of exceptions and arbitrary rules.
-> > > >
-> > > > I was thinking about proposing this in checkpatch.pl, or in some
-> > > > KVM-specific check script. It seems like the following rule: If a
-> > > > commit only modifies files in tools/testing/selftests/kvm/*, then
-> > > > requires the shortlog match the regex "KVM: selftests: .*". That would
-> > > > handle the vast majority of cases without affecting other subsystems.
-> > > >
-> > > > Sean are you more concerned that if we start validating shortlogs in
-> > > > checkpatch.pl then eventually it will get too out of hand? (i.e. not
-> > > > so concerned with this specific case, but the general problem?)
-> > >
-> > > Ya, the general problem.  Hardcoding anything KVM specific in checkpatch.pl isn't
-> > > going to fly.  The checkpatch maintainers most definitely don't want to take on
-> > > the burden of maintaining subsystem rules.  Letting one subsystem add custom rules
-> > > effectively opens the flood gates to all subsystems adding custom rules.  And from
-> > > a KVM perspective, I don't want to have to get an Acked-by from a checkpatch
-> > > maintiainer just to tweak a KVM rule.
-> > >
-> > > The only somewhat feasible approach I can think of would be to provide a generic
-> > > "language" for shortlog scope rules, and have checkpatch look for a well-known
-> > > file in relevant directories, e.g. add arch/x86/kvm/SCOPES or whatever.  But even
-> > > that is a non-trivial problem to solve, as it means coming up with a "language"
-> > > that has a reasonable chance of working for many subsystems without generating too
-> > > many false positives.
-> > >
-> > > It's definitely doable, and likely not actually a maintenance nightmare (I wrote
-> > > that thinking of modifying a common rules file).  But it's still fairly daunting
-> > > as getting buy-in on something that affects the kernel at large tends to be easier
-> > > said then done.  Then again, I'm probably being pessimistic due to my sub-par
-> > > regex+scripting skills :-)
-> >
-> > How about adding support for checkpatch extension plugins? If we could add
-> > a plugin script, e.g. tools/testing/selftests/kvm/.checkpatch, and modify
-> > checkpatch to run .checkpatch scripts in the patched files' directories
-> > (and recursively in the parent directories) when found, then we'd get
-> > custom checkpatch behaviors. The scripts wouldn't even have to be written
-> > in Perl (but I say that a bit sadly, because I like Perl).
->
-> That will work for simple cases, but patches that touch files in multiple directories
-> will be messy.  E.g. a patch that touches virt/kvm/ and arch/x86/kvm/ will have
-> two separate custom rules enforcing two different scopes.
->
-> Recursively executing plugins will also be problematic, e.g. except for KVM, arch/x86/
-> is maintained by the tip-tree folks, and the tip-tree is quite opinionated on all
-> sorts of things, whereas KVM tends to be a bit more relaxed.
->
-> Enforcing scope through plugins would also lead to some amount of duplicate code
-> throught subsystems.
->
-> Anyways, if someone wants to pursue this, these ideas and the "requirement" should
-> be run by the checkpatch maintainers.  They have far more experience and authority
-> in this area, and I suspect we aren't the first people to want checkpatch to get
-> involved in enforcing shortlog scope.
 
-Documenting would at least be an improvement over what we have today
-since it would eliminate the need to re-explain the preferred rules
-every time. We can just point to the documentation when reviewing
-patches.
+On Thu, 03 Nov 2022 15:00:38 +0200, Cosmin Tanislav wrote:
+> From: Cosmin Tanislav <cosmin.tanislav@analog.com>
+> 
+> The 'adi,mux-delay-config-us' property is broken. It was supposed to
+> be in us, but the value is actually written directly to the register.
+> Describe the fact that it is broken and how it actually works.
+> 
+> Signed-off-by: Cosmin Tanislav <cosmin.tanislav@analog.com>
+> ---
+>  .../devicetree/bindings/iio/temperature/adi,ltc2983.yaml       | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
 
-`git log --pretty=oneline` is not a great way to document shortlog
-scopes because it does not explain the rules (e.g. when to use "KVM:
-x86: " vs "KVM: x86/mmu: "), does not explain why things the way they
-are, and is inconsistent since we don't always catch every patch that
-goes by with a non-preferred shortlog scope.
+Reviewed-by: Rob Herring <robh@kernel.org>
