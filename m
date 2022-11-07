@@ -2,135 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA88761FE5E
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 20:12:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3249C61FE61
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 20:12:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232611AbiKGTMX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 14:12:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47896 "EHLO
+        id S232439AbiKGTMp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 14:12:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232712AbiKGTMA (ORCPT
+        with ESMTP id S232654AbiKGTM2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 14:12:00 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEDF12A240;
-        Mon,  7 Nov 2022 11:11:59 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 7B34422534;
-        Mon,  7 Nov 2022 19:11:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1667848318; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=IDZ+1J9gbkdeI4Dq1QHKthecD/b0UCy0MKie46ulwZw=;
-        b=oIErcstqUTvnyCIaNr2MynlO/sInNGy8OeQRYWuUtmsni2xUSucAsaolcL0hxrbvpQmM9r
-        HGZjGTkEKIX5bRip51TQwuVWmU8pMqM2erjJmzZ/NRaIM5G1ybKD++4VV4PFkuiok+v94n
-        5+8+rYslVbI7gX2sF8n6LY+eXjTUNE4=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1667848318;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=IDZ+1J9gbkdeI4Dq1QHKthecD/b0UCy0MKie46ulwZw=;
-        b=MvgZMh0mSA1s7DaPqJILE+epydRvG7/9BFn/TNq6Q2lSPtGgzuoZK1SshRKp231AyPCcTw
-        GaGcrGxbHU7jkFDw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A7D2A13AC7;
-        Mon,  7 Nov 2022 19:11:57 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id sLg8I31YaWMjJgAAMHmgww
-        (envelope-from <pvorel@suse.cz>); Mon, 07 Nov 2022 19:11:57 +0000
-From:   Petr Vorel <pvorel@suse.cz>
-To:     ltp@lists.linux.it
-Cc:     Petr Vorel <pvorel@suse.cz>, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Minchan Kim <minchan@kernel.org>,
-        Nitin Gupta <ngupta@vflare.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>,
-        Martin Doucha <mdoucha@suse.cz>,
-        Yang Xu <xuyang2018.jy@fujitsu.com>
-Subject: [PATCH 1/1] zram01.sh: Workaround division by 0 on vfat on ppc64le
-Date:   Mon,  7 Nov 2022 20:11:36 +0100
-Message-Id: <20221107191136.18048-2-pvorel@suse.cz>
-X-Mailer: git-send-email 2.38.0
-In-Reply-To: <20221107191136.18048-1-pvorel@suse.cz>
-References: <20221107191136.18048-1-pvorel@suse.cz>
+        Mon, 7 Nov 2022 14:12:28 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECF5228E08;
+        Mon,  7 Nov 2022 11:12:24 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id a5so19122210edb.11;
+        Mon, 07 Nov 2022 11:12:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NvL/1cFUsL3p3X3LC8k460k8YFidRmeQtOlvn66hT5c=;
+        b=L9KbpQy8GmRLe8WezLbdNadTVnX1iELu6qPXRgi3FtSkeS0cHYjxUbwxxhZUjAXf2r
+         YRUfcgA7jrgfDAt5yq7E5hqv/euUeQLaatyYF8+YCPrSvwCDp9VhLFc28vUZpPhJkFM/
+         U3SDwV32EgkskScgs/pchyFeDu87L77tn1oCQ79pJ6hw8TcbTTQh84B1jVXetPfvKQa9
+         YMai1q8Vf8taf9Ktlj9UYdMX7RncfGQA0Y/w6N/ro8+pqGhMdMfPLFkmrAil3kRsqKuK
+         /MJOKF6KPvb/ygCKsZcJ5H9CBY9FkLBEbK94pPqKhK9BoJJfnsY7vKjawhV6zTtAqsAJ
+         LvBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=NvL/1cFUsL3p3X3LC8k460k8YFidRmeQtOlvn66hT5c=;
+        b=oyiWLgStL8fZ6b2MoXfhXC+g/RioEH5tgOENwvy43LfjVcJsFe5/D9jT0wk/e74GE+
+         5ZbjqahsHXertxo6p4lUOPt0skpFRoVau3TW8V5ozRsKPF6Yz5z2grJ1HUlgGnDlMmU9
+         m1X3hHxbeUogYALn+pGOSrM3x2XYDeHzeNI1GRAJfirw9hhpGoT3o08jTYu2IWQn9JWa
+         WU1zdUEYJpQ7ZBjUwa9v0YSDqJ9nL5cCSrmXw5CTQdDia2Njz+hHXODQe/oCVC4aPHvl
+         1TAwCEM2xLSJnOVk4SOs6H52Z9FMaX4hyMijAI/HgmIfsYYW/DKoMQxqeGPjCzgRkvw4
+         +jmg==
+X-Gm-Message-State: ACrzQf3z6nRNfjOzgswOB5vkItqo3bth3qi/ln8NxICKg17EdDI45PgH
+        NshFx5dCroq7jN0hyiBRACcaX9ogPTSQAg==
+X-Google-Smtp-Source: AMsMyM45BewjPXyzYPbE2qLoXyx+2V33Q8EG3+MjSy4qWA1xQl9O/BIF27MyIvjPTTeXeOK2sXCBLA==
+X-Received: by 2002:a05:6402:1052:b0:459:2c49:1aed with SMTP id e18-20020a056402105200b004592c491aedmr51731588edu.212.1667848343564;
+        Mon, 07 Nov 2022 11:12:23 -0800 (PST)
+Received: from kista.localnet (82-149-19-102.dynamic.telemach.net. [82.149.19.102])
+        by smtp.gmail.com with ESMTPSA id o17-20020a170906601100b0073d83f80b05sm3790021ejj.94.2022.11.07.11.12.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Nov 2022 11:12:23 -0800 (PST)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     Samuel Holland <samuel@sholland.org>,
+        Bastian Germann <bage@debian.org>
+Cc:     Vasily Khoruzhick <anarsoul@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org, Bastian Germann <bage@debian.org>
+Subject: Re: [PATCH v2 1/1] arm64: dts: allwinner: a64: enable Bluetooth on Pinebook
+Date:   Mon, 07 Nov 2022 20:12:22 +0100
+Message-ID: <2320960.NG923GbCHz@kista>
+In-Reply-To: <20221105153319.19345-2-bage@debian.org>
+References: <20221105153319.19345-1-bage@debian.org> <20221105153319.19345-2-bage@debian.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Repeatedly read /sys/block/zram*/mm_stat for 1 sec. This should fix bug
-on ppc64le on stable kernels, where mem_used_total is often 0.
+Dne sobota, 05. november 2022 ob 16:33:19 CET je Bastian Germann napisal(a):
+> From: Vasily Khoruzhick <anarsoul@gmail.com>
+> 
+> Pinebook has an RTL8723CS WiFi + BT chip. BT is connected to UART1
+> and uses PL5 as device wake GPIO and PL6 as host wake GPIO.
+> 
+> Enable it in the device tree.
+> 
+> Signed-off-by: Vasily Khoruzhick <anarsoul@gmail.com>
+> Signed-off-by: Bastian Germann <bage@debian.org>
 
-Signed-off-by: Petr Vorel <pvorel@suse.cz>
----
- .../kernel/device-drivers/zram/zram01.sh      | 27 +++++++++++++++++--
- 1 file changed, 25 insertions(+), 2 deletions(-)
+Applied, thanks!
 
-diff --git a/testcases/kernel/device-drivers/zram/zram01.sh b/testcases/kernel/device-drivers/zram/zram01.sh
-index 58d233f91..76a8ccab4 100755
---- a/testcases/kernel/device-drivers/zram/zram01.sh
-+++ b/testcases/kernel/device-drivers/zram/zram01.sh
-@@ -105,6 +105,26 @@ zram_mount()
- 	tst_res TPASS "mount of zram device(s) succeeded"
- }
- 
-+read_mem_used_total()
-+{
-+	echo $(awk '{print $3}' $1)
-+}
-+
-+# Reads /sys/block/zram*/mm_stat until mem_used_total is not 0.
-+loop_read_mem_used_total()
-+{
-+	local file="$1"
-+	local mem_used_total
-+
-+	tst_res TINFO "$file"
-+	cat $file >&2
-+
-+	mem_used_total=$(read_mem_used_total $file)
-+	[ "$mem_used_total" -eq 0 ] && return 1
-+
-+	return 0
-+}
-+
- zram_fill_fs()
- {
- 	local mem_used_total
-@@ -133,9 +153,12 @@ zram_fill_fs()
- 			continue
- 		fi
- 
--		mem_used_total=`awk '{print $3}' "/sys/block/zram$i/mm_stat"`
-+		TST_RETRY_FUNC "loop_read_mem_used_total /sys/block/zram$i/mm_stat" 0
-+		mem_used_total=$(read_mem_used_total /sys/block/zram$i/mm_stat)
-+		tst_res TINFO "mem_used_total: $mem_used_total"
-+
- 		v=$((100 * 1024 * $b / $mem_used_total))
--		r=`echo "scale=2; $v / 100 " | bc`
-+		r=$(echo "scale=2; $v / 100 " | bc)
- 
- 		if [ "$v" -lt 100 ]; then
- 			tst_res TFAIL "compression ratio: $r:1"
--- 
-2.38.0
+Best regards,
+Jernej
+
 
