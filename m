@@ -2,19 +2,19 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45D4161F59F
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 15:19:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F086F61F5A4
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 15:19:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232366AbiKGOTR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 09:19:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56794 "EHLO
+        id S231630AbiKGOTZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 09:19:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232254AbiKGOR2 (ORCPT
+        with ESMTP id S232100AbiKGORk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 09:17:28 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6125F1D331
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 06:16:57 -0800 (PST)
+        Mon, 7 Nov 2022 09:17:40 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C10171D315;
+        Mon,  7 Nov 2022 06:16:57 -0800 (PST)
 From:   John Ogness <john.ogness@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020; t=1667830616;
@@ -22,31 +22,31 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=OuuuTA4YWeOsJFG5PLdantkjarf2V1vxrJ2SuyPt64s=;
-        b=Ad8er1f7f8T+qnj0Gixt4/Eb+4c4OBJuex8lcfrI6Qt9I87cz3Yhpp3wFd3F8c5QAakGi7
-        n0yYpOb0XzwK6fAjOBesCSJAdkcc9KpXBouFayqOhvycH3D3yadGi/NrkdtoGLbncezA5X
-        YjxkitS3+oQNxU51jX06dua+f/JTR0XVGlDIr8XnD/7XQCOkEkGQV7za9feSO1p2qDYB97
-        UumWZEnga12d8kYgQTwG2oUlZ8itzYhywnpRTKu8Ks8TF1Bk4XdZtBxWxmXB+X1cV+LfUg
-        IEtga3BtJP43iP9Aa+RQ9n71Ed9jlHvrLDju9BL47ap7+sIADoEpSefIdM/kVg==
+        bh=gLhbxNRRzLzgVuMAENy9jlZuW5IHKymo+X5t98vmt7E=;
+        b=biEAGa+Rugsj2SX4G+BNsq8EPIYMc1nSHftM4sNymF14x7nqnHnqTM5bbTrZC4Ao72JdFD
+        eTy9sSnuQ/YAdPEZmjeT39aFM4mepO2NY5cv7tgSQN2ng7Gm+FW5FWq4V0zEJ+Rp0Qhjvp
+        D5EmBmxObSSi6Z/MBmXKgXU7wzspNfdcTkPvjiNC6PGqowBwn21MikFz/RTx0ZSe6a3WvK
+        GCyQUMHYmlc9dRQ0lruWDtK9A2vkliI2cC+r41Jo8RkhUyycUsPBPPzKGGCgUWnwbGWcTV
+        4/XDTbEtoaG7rBuDjtnF+UqOmm2kRbKMvRA3cXZa7n008/WBKIM/yFusvkZFfw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1667830616;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=OuuuTA4YWeOsJFG5PLdantkjarf2V1vxrJ2SuyPt64s=;
-        b=zK+1fRr2slLJAgCrOQ92XALV5x6DkTtyLpaf7GZ9DoHDzskWr2XYcAOYzCFmWcOd1UDl2W
-        031PveM/i8gqIXAg==
+        bh=gLhbxNRRzLzgVuMAENy9jlZuW5IHKymo+X5t98vmt7E=;
+        b=SH/lU/D4g49aRYA0T5dcgahfw8R97npuTuD4r52dmy41thUx2GTJ6aduLe1DBo7JG4JFCb
+        zYNyNAOKDVecz9AA==
 To:     Petr Mladek <pmladek@suse.com>
 Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
         Steven Rostedt <rostedt@goodmis.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         linux-kernel@vger.kernel.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>
-Subject: [PATCH printk v3 34/40] tty: tty_io: use console_list_lock for list synchronization
-Date:   Mon,  7 Nov 2022 15:22:32 +0106
-Message-Id: <20221107141638.3790965-35-john.ogness@linutronix.de>
+        linux-fsdevel@vger.kernel.org
+Subject: [PATCH printk v3 35/40] proc: consoles: use console_list_lock for list iteration
+Date:   Mon,  7 Nov 2022 15:22:33 +0106
+Message-Id: <20221107141638.3790965-36-john.ogness@linutronix.de>
 In-Reply-To: <20221107141638.3790965-1-john.ogness@linutronix.de>
 References: <20221107141638.3790965-1-john.ogness@linutronix.de>
 MIME-Version: 1.0
@@ -61,69 +61,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-show_cons_active() uses the console_lock to gather information
-on registered consoles. It requires that no consoles are unregistered
-until it is finished. The console_list_lock should be used because
-list synchronization responsibility will be removed from the
-console_lock in a later change.
+The console_lock is used in part to guarantee safe list iteration.
+The console_list_lock should be used because list synchronization
+responsibility will be removed from the console_lock in a later
+change.
 
 Note, the console_lock is still needed to serialize the device()
 callback with other console operations.
 
 Signed-off-by: John Ogness <john.ogness@linutronix.de>
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Reviewed-by: Petr Mladek <pmladek@suse.com>
 ---
- drivers/tty/tty_io.c | 18 ++++++++++++------
- 1 file changed, 12 insertions(+), 6 deletions(-)
+ fs/proc/consoles.c | 19 ++++++++++++-------
+ 1 file changed, 12 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/tty/tty_io.c b/drivers/tty/tty_io.c
-index ee4da2fec328..cafdff575716 100644
---- a/drivers/tty/tty_io.c
-+++ b/drivers/tty/tty_io.c
-@@ -3527,16 +3527,13 @@ static ssize_t show_cons_active(struct device *dev,
- 	ssize_t count = 0;
+diff --git a/fs/proc/consoles.c b/fs/proc/consoles.c
+index 46b305fa04ed..e0758fe7936d 100644
+--- a/fs/proc/consoles.c
++++ b/fs/proc/consoles.c
+@@ -33,7 +33,16 @@ static int show_console_dev(struct seq_file *m, void *v)
+ 	if (con->device) {
+ 		const struct tty_driver *driver;
+ 		int index;
++
++		/*
++		 * Take console_lock to serialize device() callback with
++		 * other console operations. For example, fg_console is
++		 * modified under console_lock when switching vt.
++		 */
++		console_lock();
+ 		driver = con->device(con, &index);
++		console_unlock();
++
+ 		if (driver) {
+ 			dev = MKDEV(driver->major, driver->minor_start);
+ 			dev += index;
+@@ -64,15 +73,11 @@ static void *c_start(struct seq_file *m, loff_t *pos)
+ 	loff_t off = 0;
  
  	/*
--	 * Hold the console_lock to guarantee that no consoles are
-+	 * Hold the console_list_lock to guarantee that no consoles are
- 	 * unregistered until all console processing is complete.
- 	 * This also allows safe traversal of the console list and
- 	 * race-free reading of @flags.
--	 *
 -	 * Take console_lock to serialize device() callback with
 -	 * other console operations. For example, fg_console is
 -	 * modified under console_lock when switching vt.
+-	 *
+-	 * Hold the console_lock to guarantee safe traversal of the
++	 * Hold the console_list_lock to guarantee safe traversal of the
+ 	 * console list. SRCU cannot be used because there is no
+ 	 * place to store the SRCU cookie.
  	 */
 -	console_lock();
 +	console_list_lock();
-+
- 	for_each_console(c) {
- 		if (!c->device)
- 			continue;
-@@ -3548,6 +3545,13 @@ static ssize_t show_cons_active(struct device *dev,
- 		if (i >= ARRAY_SIZE(cs))
+ 	for_each_console(con)
+ 		if (off++ == *pos)
  			break;
- 	}
-+
-+	/*
-+	 * Take console_lock to serialize device() callback with
-+	 * other console operations. For example, fg_console is
-+	 * modified under console_lock when switching vt.
-+	 */
-+	console_lock();
- 	while (i--) {
- 		int index = cs[i]->index;
- 		struct tty_driver *drv = cs[i]->device(cs[i], &index);
-@@ -3563,6 +3567,8 @@ static ssize_t show_cons_active(struct device *dev,
- 	}
- 	console_unlock();
+@@ -90,7 +95,7 @@ static void *c_next(struct seq_file *m, void *v, loff_t *pos)
  
+ static void c_stop(struct seq_file *m, void *v)
+ {
+-	console_unlock();
 +	console_list_unlock();
-+
- 	return count;
  }
- static DEVICE_ATTR(active, S_IRUGO, show_cons_active, NULL);
+ 
+ static const struct seq_operations consoles_op = {
 -- 
 2.30.2
 
