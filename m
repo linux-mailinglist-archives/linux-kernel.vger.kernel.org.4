@@ -2,142 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C12E361ED33
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 09:44:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6F8A61ED42
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 09:45:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231421AbiKGIn7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 03:43:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47064 "EHLO
+        id S230430AbiKGIpE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 03:45:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231436AbiKGIny (ORCPT
+        with ESMTP id S230239AbiKGIpC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 03:43:54 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 463BC2626;
-        Mon,  7 Nov 2022 00:43:52 -0800 (PST)
+        Mon, 7 Nov 2022 03:45:02 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F689C01
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 00:45:01 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 885D5B80B8D;
-        Mon,  7 Nov 2022 08:43:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C78A9C433D6;
-        Mon,  7 Nov 2022 08:43:49 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E881B60F2F
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 08:45:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71230C433B5;
+        Mon,  7 Nov 2022 08:44:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667810630;
-        bh=s4O1eWmHOa86wpGByLAydZl7UeUpyu0CzKU4kzn7HJA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MhgD1Pf/z4Zk/gdeXMJs9kUIANWO+7c+0fmALFzCB9LukvqLiTjzOSmgRrhynTJZc
-         RUZgdQr7bkstW75ta9UD5I3kWWlDhXX75e12JHmjjjDgVl/2Hqx+8xZLntzFr0iU+o
-         WXJr2KfNVz/5fI9xzxfXNlp4WZwYJQ+VM5ZWxZDgYopfm28mrbQFRWOEnwILXM8YVh
-         GHqJzJY1XKp+DwD4Xws+0TBmD19aE6Gq3sqxl3fVVxOeaGj/Pa7dj9G9Rabm4Tel4O
-         TVsROk5+fwJyVe3lipwoT1L9zsYpCt/9N3lEsVy9jGKydUKig19xJN7P2UfdQqyskZ
-         1sGeWlfHwTtRA==
-Received: by pali.im (Postfix)
-        id EE84489B; Mon,  7 Nov 2022 09:43:46 +0100 (CET)
-Date:   Mon, 7 Nov 2022 09:43:46 +0100
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Nathan Rossi <nathan@nathanrossi.com>
-Cc:     linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Nathan Rossi <nathan.rossi@digi.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>
-Subject: Re: [PATCH] PCI: mvebu: Set Target Link Speed for 2.5GT downstream
- devices
-Message-ID: <20221107084346.ksdhcxk7bppvpmqc@pali>
-References: <20221107081327.336239-1-nathan@nathanrossi.com>
+        s=k20201202; t=1667810700;
+        bh=5bhUp/7RhhEmhXQkR8+nWueOvcoq5Jl/02Kb6lv1QMk=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=F2dOkFdLo01D1SyGxCwRrxxvk7mi3A9T8CuC8scJ59HG/zbsSW6TPZFinFqfFuiax
+         /F0dTfX8yAcxENPtgSDYrjXbP2bAlq7O6KQ3SBUykZD1iIee1U0Rhb9Og7IHQE5Apy
+         XEUX0gWrfhLREJH9tlEHrkg5/HPF0ofe53RJWn415OMz2Opohlf0znuDkkHJZZuRG7
+         pXCTs7NcEnfZKQHGXlJZQtNhEC7a9iA+iZP1g6DLz+KFZRYXqcNPDP28GZwcnKLtns
+         rmDU0q9/SNi0iz//YQS+eJbUdKxzIzWUwyAjSf1u8cI9hpC+4/Gf/RX138zEm6eggT
+         ii3FrMRIsTLbA==
+Message-ID: <eef60a26-ef23-1b79-22f7-adaee3be9360@kernel.org>
+Date:   Mon, 7 Nov 2022 10:44:56 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221107081327.336239-1-nathan@nathanrossi.com>
-User-Agent: NeoMutt/20180716
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] mtd: onenand: omap2: add dependency on GPMC
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     kernel test robot <lkp@intel.com>
+References: <20221104194934.384371-1-krzysztof.kozlowski@linaro.org>
+From:   Roger Quadros <rogerq@kernel.org>
+In-Reply-To: <20221104194934.384371-1-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Monday 07 November 2022 08:13:27 Nathan Rossi wrote:
-> From: Nathan Rossi <nathan.rossi@digi.com>
+Hello Krzysztof,
+
+On 04/11/2022 21:49, Krzysztof Kozlowski wrote:
+> OMAP2 OneNAND driver uses gpmc_omap_onenand_set_timings() provided by
+> OMAP GPMC driver, so the latter cannot be module if OneNAND driver is
+> built-in:
 > 
-> There is a known issue with the mvebu PCIe controller when triggering
-> retraining of the link (via Link Control) where the link is dropped
-> completely causing significant delay in the renegotiation of the link.
-> This occurs only when the downstream device is 2.5GT and the upstream
-> port is configured to support both 2.5GT and 5GT.
+>   /usr/bin/arm-linux-gnueabi-ld: drivers/mtd/nand/onenand/onenand_omap2.o: in function `omap2_onenand_probe':
+>   onenand_omap2.c:(.text+0x520): undefined reference to `gpmc_omap_onenand_set_timings'
 > 
-> It is possible to prevent this link dropping by setting the associated
-> link speed in Target Link Speed of the Link Control 2 register. This
-> only needs to be done when the downstream is specifically 2.5GT.
-> 
-> This change applies the required Target Link Speed value during
-> mvebu_pcie_setup_hw conditionally depending on the current link speed
-> from the Link Status register, only applying the change when the link
-> is configured to 2.5GT already.
-> 
-> Signed-off-by: Nathan Rossi <nathan.rossi@digi.com>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Fixes: 854fd9209b20 ("memory: omap-gpmc: Allow building as a module")
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > ---
->  drivers/pci/controller/pci-mvebu.c | 18 +++++++++++++++++-
->  1 file changed, 17 insertions(+), 1 deletion(-)
+>  drivers/mtd/nand/onenand/Kconfig | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> diff --git a/drivers/pci/controller/pci-mvebu.c b/drivers/pci/controller/pci-mvebu.c
-> index 1ced73726a..6a869a33ba 100644
-> --- a/drivers/pci/controller/pci-mvebu.c
-> +++ b/drivers/pci/controller/pci-mvebu.c
-> @@ -248,7 +248,7 @@ static void mvebu_pcie_setup_wins(struct mvebu_pcie_port *port)
->  
->  static void mvebu_pcie_setup_hw(struct mvebu_pcie_port *port)
->  {
-> -	u32 ctrl, lnkcap, cmd, dev_rev, unmask, sspl;
-> +	u32 ctrl, lnkcap, cmd, dev_rev, unmask, sspl, lnksta, lnkctl2;
->  
->  	/* Setup PCIe controller to Root Complex mode. */
->  	ctrl = mvebu_readl(port, PCIE_CTRL_OFF);
-> @@ -339,6 +339,22 @@ static void mvebu_pcie_setup_hw(struct mvebu_pcie_port *port)
->  	unmask |= PCIE_INT_INTX(0) | PCIE_INT_INTX(1) |
->  		  PCIE_INT_INTX(2) | PCIE_INT_INTX(3);
->  	mvebu_writel(port, unmask, PCIE_INT_UNMASK_OFF);
-> +
-> +	/*
-> +	 * Set Target Link Speed within the Link Control 2 register when the
-> +	 * linked downstream device is connected at 2.5GT. This is configured
-> +	 * in order to avoid issues with the controller when the upstream port
-> +	 * is configured to support 2.5GT and 5GT and the downstream device is
-> +	 * linked at 2.5GT, retraining the link in this case causes the link to
-> +	 * drop taking significant time to retrain.
-> +	 */
-> +	lnksta = mvebu_readl(port, PCIE_CAP_PCIEXP + PCI_EXP_LNKCTL) >> 16;
-> +	if ((lnksta & PCI_EXP_LNKSTA_CLS) == PCI_EXP_LNKSTA_CLS_2_5GB) {
+> diff --git a/drivers/mtd/nand/onenand/Kconfig b/drivers/mtd/nand/onenand/Kconfig
+> index 34d9a7a82ad4..fa94c514626d 100644
+> --- a/drivers/mtd/nand/onenand/Kconfig
+> +++ b/drivers/mtd/nand/onenand/Kconfig
+> @@ -26,6 +26,7 @@ config MTD_ONENAND_OMAP2
+>  	tristate "OneNAND on OMAP2/OMAP3 support"
+>  	depends on ARCH_OMAP2 || ARCH_OMAP3 || (COMPILE_TEST && ARM)
+>  	depends on OF || COMPILE_TEST
+> +	depends on OMAP_GPMC || !OMAP_GPMC
 
-This code does not work because at this stage endpoint device does not
-have to be ready and therefore link is not established yet.
+Why did you add !OMAP_GPMC?
 
-Also this code is not running when kernel issue PCIe Hot Reset via
-PCI Secondary Bus Reset bit.
+If OMAP_GPMC is not set we don't want to be able to build this driver correct?
 
-And it does not handle possible hot-plug situation.
+>  	help
+>  	  Support for a OneNAND flash device connected to an OMAP2/OMAP3 SoC
+>  	  via the GPMC memory controller.
 
-That check that code below has to be done _after_ kernel enumerate
-device. PCI core code has already logic to handle delays for "slow"
-devices.
-
-And reverse operation (setting lnkctl2 target speed to original value)
-has to be called after unplugging device - when link goes down.
-
-If you want to work on this stuff, I can try to find my notes which I
-done during investigation of this issue... where is probably the best
-place in kernel pci core code for handling this issue.
-
-> +		lnkctl2 = mvebu_readl(port, PCIE_CAP_PCIEXP + PCI_EXP_LNKCTL2);
-> +		lnkctl2 &= ~PCI_EXP_LNKCTL2_TLS;
-> +		lnkctl2 |= PCI_EXP_LNKCTL2_TLS_2_5GT;
-> +		mvebu_writel(port, lnkctl2, PCIE_CAP_PCIEXP + PCI_EXP_LNKCTL2);
-> +	}
->  }
->  
->  static struct mvebu_pcie_port *mvebu_pcie_find_port(struct mvebu_pcie *pcie,
-> ---
-> 2.37.2
+cheers,
+-roger
