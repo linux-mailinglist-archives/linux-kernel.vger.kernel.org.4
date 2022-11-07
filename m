@@ -2,183 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 898F361F823
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 17:00:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 738E661F827
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 17:01:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231530AbiKGQAt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 11:00:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53698 "EHLO
+        id S232132AbiKGQBV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 11:01:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232178AbiKGQAo (ORCPT
+        with ESMTP id S231910AbiKGQBL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 11:00:44 -0500
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD1471FFB9;
-        Mon,  7 Nov 2022 08:00:43 -0800 (PST)
-Received: by mail-pg1-x535.google.com with SMTP id h193so10804015pgc.10;
-        Mon, 07 Nov 2022 08:00:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zM62t9T1ZdT2U/84XnMAZPGX/TCN0Lrw5CQPxGSu9nE=;
-        b=XIaFH84W6acrnXuOb0f2berYl14VEU8MabIMSt7LOmsiDV1x5DfnPaYwARgcnxWHky
-         HlvbwdljMoTUqaPwCTeG6xecsHSnIj7FsCIxkc4qlZEhOLxopc9EgTDlsVOihCMDqd5W
-         7crghGrWdDEh262g2ofsCg5CieErR6/do3LP3lDEi2+xC8qiO40d1UvtN319d0TAmj4o
-         5zs6fpceGhbe646zXfprWRAnMzTSoShLEIUPQzJrTKBpHmx9n9CD0n2YV8+A9EfMCztn
-         b9qbwW0pcTfcGrNHLqcFW+e+iMSJ6NyGsScE6LCxoTYhpOz6xsHSFIpcAfzCnBSDr//D
-         RnlQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zM62t9T1ZdT2U/84XnMAZPGX/TCN0Lrw5CQPxGSu9nE=;
-        b=muKo/dp0493I9SREn1iTVdCzvHv28zKbxzNpjVSXnNS6IOQjfW5EtHqnkPdv4DRl+2
-         xgsqYPQo/AZJ0LSL20AfV/V7GmSHlYf7D/pyX9Y9xfj5VzF8/VWeNNjZYrwpAPW16zx4
-         1b89FoGQW9fSyInQnOkwn5BlsDTT7p1WB+PImWescEoSCONPnMN+nDPHNbSnibhUfhdI
-         MB5ifpoA2PMf6RrZAKmsDG4aeJuvAMNigWffoRbpFhvOKWt6UW5YudS6+2/fF4iP6uJo
-         4QbQY0XSBH6gA6uuf2DgzsViGj5lH3B0JULJsdCvOLF8UZWTIvKeQBEOIP769MNuiXc4
-         nPhg==
-X-Gm-Message-State: ACrzQf1eB0XR2A+xd0NN1VUbE1C+jQ7B19hH2V4DDHFmG6r6vojytUMT
-        S96O8+JaBW7ClsrsNZFjd9A=
-X-Google-Smtp-Source: AMsMyM7WYoPgOmXg3H1xSeSZ5zwMlyIdssD++Q+DTDBrW76qZMaJHmCQZIjYmH9Nc6tqcsWQj08wiQ==
-X-Received: by 2002:a63:1308:0:b0:440:5517:c99d with SMTP id i8-20020a631308000000b004405517c99dmr29092127pgl.550.1667836843187;
-        Mon, 07 Nov 2022 08:00:43 -0800 (PST)
-Received: from localhost ([183.242.254.174])
-        by smtp.gmail.com with ESMTPSA id y13-20020a170902b48d00b001869f2120a5sm5139984plr.34.2022.11.07.08.00.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Nov 2022 08:00:42 -0800 (PST)
-From:   Hawkins Jiawei <yin31149@gmail.com>
-To:     xiyou.wangcong@gmail.com, Jamal Hadi Salim <jhs@mojatatu.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     18801353760@163.com, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org,
-        syzbot+232ebdbd36706c965ebf@syzkaller.appspotmail.com,
-        syzkaller-bugs@googlegroups.com, yin31149@gmail.com
-Subject: Re: [PATCH] net: sched: fix memory leak in tcindex_set_parms
-Date:   Tue,  8 Nov 2022 00:00:36 +0800
-Message-Id: <20221107160036.175401-1-yin31149@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <Y2fznI8JgkTBCVAA@pop-os.localdomain>
-References: <Y2fznI8JgkTBCVAA@pop-os.localdomain>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 7 Nov 2022 11:01:11 -0500
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97DAC1A3AE;
+        Mon,  7 Nov 2022 08:01:09 -0800 (PST)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id B3F2A5C0089;
+        Mon,  7 Nov 2022 11:01:08 -0500 (EST)
+Received: from imap47 ([10.202.2.97])
+  by compute2.internal (MEProxy); Mon, 07 Nov 2022 11:01:08 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
+         h=cc:cc:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1667836868; x=1667923268; bh=Oc
+        MqlVPjKlmKhzuxKa/KdFDe8vaSPreulhqqsYoyPb4=; b=Up9vkF7jYQ1ujCZ/jg
+        9tR1Fodo8WoCA38omMpmbTKogh7+VsfyUZmzQ+fNBR3u0lEtBkd1JS7vXC03ARS8
+        P6HHgQY70t5+z6rTSfTA2bhPyBA7ugGprWAXrzp+PyKuYXUqVj/3pLFS7pa9lXzQ
+        R2/FMn8tLnCddF50pImXfny+KkhkA5/5QMAKGL777+dciORgveJF9vXGGwmzJuVk
+        mRq/Wm17dUQY3+F9jqBAwLzsYOqnWXD/4a/Noc8h9BkQ1YpOiqjx8W5fWXexGUUf
+        qunHhDLgYlQCEDjyaWf90MAlG1TbW0cxqadTrFjjFth1Pc2oi83CGQ3i2dOB0dbA
+        DNlA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1667836868; x=1667923268; bh=OcMqlVPjKlmKhzuxKa/KdFDe8vaS
+        PreulhqqsYoyPb4=; b=ivKfXQ13nP9UNGqwk1nOVSNfuQh+VttwMZtlqnh5X28+
+        WKEIfuMFKCNK3LbwOnSq6sS0SoSJgCYHFnuGtTt4KvIEKRI/ZBDcw/fPcAxA4ocH
+        +tVkc5BFqyGo/2ojaWntoG788LQZ+VxBkJAM0TrwFMNceB8g4Q5/5yB7GGMf2qjI
+        tcTp3DEBtDWK4xAakDZcVVFPUt6j9/mxjBeuEVkOf13kvX5xshuG2OUPtvsUE2V5
+        OCjFeFi/jQi5K0mFEMDdz+3uQCivf/8EokYl6qJaeTF7WsS0hMEPivsmTvsnaTJL
+        A0+zGL0YMI1dVQ5mK7sQFaE77REbahc4UFA3+pvMBw==
+X-ME-Sender: <xms:wytpY4Q9ubqgOYIIoU7btC0XVb9HB-Bo24nQ_ANmFN8Ni1kEkDhQjg>
+    <xme:wytpY1zlyWNaIXIegmj-exZgT-4fOx6zWoIVlkpmAL7PZsLCKzELxwXfsj45OTaTq
+    WrPVGY0mT-YOllfWmE>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrvdekgdekvdcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdfuvhgv
+    nhcurfgvthgvrhdfuceoshhvvghnsehsvhgvnhhpvghtvghrrdguvghvqeenucggtffrrg
+    htthgvrhhnpeelvefggeffheevtdeivefhkeehfeettdejteduveeiheevveeilefghfei
+    veeiueenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hsvhgvnhesshhvvghnphgvthgvrhdruggvvh
+X-ME-Proxy: <xmx:xCtpY12oNxHYaqKGZv5tZS1BffNlMwuhSc-3wHgQBCUhlWau8cAb7Q>
+    <xmx:xCtpY8CplXYN-aa9GmIIp2QLRTD0vVvrONBNqAvmGj504BaAf01frg>
+    <xmx:xCtpYxiLfy3iLPstkNtKrOi_FsH9HSeBmTUUcv2BOo9WDRVnYVijeA>
+    <xmx:xCtpY_buKGjdSvF1x8m6WLwB607VZT-TBk5_HHW5YiFNj1NYLZn1Pw>
+Feedback-ID: i51094778:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id D70BFA6007C; Mon,  7 Nov 2022 11:01:07 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1115-g8b801eadce-fm-20221102.001-g8b801ead
+Mime-Version: 1.0
+Message-Id: <0bc7b309-6f3b-4821-81d0-435671d64e2f@app.fastmail.com>
+In-Reply-To: <Y2jrQgj53z/mhHmm@smile.fi.intel.com>
+References: <20221106214804.2814-1-j@jannau.net>
+ <Y2jrQgj53z/mhHmm@smile.fi.intel.com>
+Date:   Mon, 07 Nov 2022 17:00:47 +0100
+From:   "Sven Peter" <sven@svenpeter.dev>
+To:     "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>,
+        "Janne Grunau" <j@jannau.net>
+Cc:     linux-usb@vger.kernel.org, stable@kernel.org,
+        "Thinh Nguyen" <Thinh.Nguyen@synopsys.com>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        "Andrey Smirnov" <andrew.smirnov@gmail.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/1] usb: dwc3: Do not get extcon device when usb-role-switch is
+ used
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 7 Nov 2022 at 01:49, Cong Wang <xiyou.wangcong@gmail.com> wrote:
+On Mon, Nov 7, 2022, at 12:25, Andy Shevchenko wrote:
+> On Sun, Nov 06, 2022 at 10:48:04PM +0100, Janne Grunau wrote:
+>> The change breaks device tree based platforms with PHY device and use
+>> usb-role-switch instead of an extcon switch. extcon_find_edev_by_node()
+>> will return EPROBE_DEFER if it can not find a device so probing without
+>> an extcon device will be deferred indefinitely. Fix this by
+>> explicitly checking for usb-role-switch.
+>> At least the out-of-tree USB3 support on Apple silicon based platforms
+>> using dwc3 with tipd USB Type-C and PD controller is affected by this
+>> issue.
 >
-> On Sun, Nov 06, 2022 at 10:55:31PM +0800, Hawkins Jiawei wrote:
-> > Hi Cong,
-> >
-> > >
-> > >
-> > > diff --git a/net/sched/cls_tcindex.c b/net/sched/cls_tcindex.c
-> > > index 1c9eeb98d826..00a6c04a4b42 100644
-> > > --- a/net/sched/cls_tcindex.c
-> > > +++ b/net/sched/cls_tcindex.c
-> > > @@ -479,6 +479,7 @@ tcindex_set_parms(struct net *net, struct tcf_proto *tp, unsigned long base,
-> > >         }
-> > >
-> > >         if (old_r && old_r != r) {
-> > > +               tcf_exts_destroy(&old_r->exts);
-> > >                 err = tcindex_filter_result_init(old_r, cp, net);
-> > >                 if (err < 0) {
-> > >                         kfree(f);
-> >
-> > As for the position of the tcf_exts_destroy(), should we
-> > call it after the RCU updating, after
-> > `rcu_assign_pointer(tp->root, cp)` ?
-> >
-> > Or the concurrent RCU readers may derefer this freed memory
-> > (Please correct me If I am wrong).
+> We don't care about out-of-tree modules, do we?
 >
-> I don't think so, because we already have tcf_exts_change() in multiple
-> places within tcindex_set_parms(). Even if this is really a problem,
-
-Do you mean that, if this is a problem, then these tcf_exts_change()
-should have already triggered the Use-after-Free?(Please correct me
-if I get wrong)
-
-But it seems that these tcf_exts_change() don't destory the old_r,
-so it doesn't face the above concurrent problems.
-
-I find there are two tcf_exts_chang() in tcindex_set_parms().
-One is
-
-	oldp = p;
-	r->res = cr;
-	tcf_exts_change(&r->exts, &e);
-
-	rcu_assign_pointer(tp->root, cp);
-
-the other is
-
-	f->result.res = r->res;
-	tcf_exts_change(&f->result.exts, &r->exts);
-
-	fp = cp->h + (handle % cp->hash);
-	for (nfp = rtnl_dereference(*fp);
-	     nfp;
-	     fp = &nfp->next, nfp = rtnl_dereference(*fp))
-			; /* nothing */
-
-	rcu_assign_pointer(*fp, f);
-
-*r->exts* or *f->result.exts*, both are newly allocated in
-`tcindex_set_params()`, so the concurrent RCU readers won't read them
-before RCU updating.
-
-> moving it after rcu_assign_pointer() does not help, you need to wait for
-> a grace period.
-
-Yes, you are right. So if this is really a problem, I wonder if we can
-add the synchronize_rcu() before freeing the old->exts, like:
-
-diff --git a/net/sched/cls_tcindex.c b/net/sched/cls_tcindex.c
-index 1c9eeb98d826..57d900c664cf 100644
---- a/net/sched/cls_tcindex.c
-+++ b/net/sched/cls_tcindex.c
-@@ -338,6 +338,7 @@ tcindex_set_parms(struct net *net, struct tcf_proto *tp, unsigned long base,
-        struct tcf_result cr = {};
-        int err, balloc = 0;
-        struct tcf_exts e;
-+       struct tcf_exts old_e = {};
- 
-        err = tcf_exts_init(&e, net, TCA_TCINDEX_ACT, TCA_TCINDEX_POLICE);
-        if (err < 0)
-@@ -479,6 +480,7 @@ tcindex_set_parms(struct net *net, struct tcf_proto *tp, unsigned long base,
-        }
- 
-        if (old_r && old_r != r) {
-+               old_e = old_r->exts;
-                err = tcindex_filter_result_init(old_r, cp, net);
-                if (err < 0) {
-                        kfree(f);
-@@ -510,6 +512,9 @@ tcindex_set_parms(struct net *net, struct tcf_proto *tp, unsigned long base,
-                tcf_exts_destroy(&new_filter_result.exts);
-        }
- 
-+       synchronize_rcu();
-+       tcf_exts_destroy(&old_e);
-+
-        if (oldp)
-                tcf_queue_work(&oldp->rwork, tcindex_partial_destroy_work);
-        return 0;
-
+> OTOH, the problem you are trying to workaround is probably in a (mis)use of
+> deferred probe somewhere.
 >
-> Thanks.
+> Btw, does it prevent the system boot or you just see the extcon in the list of
+> deferred devices after booting?
+
+Which extcon? The commit description already mentions that the issue is that there
+is no extcon and that the dwc3 probe gets stuck with EPROBE_DEFER forever.
+
+This happens because the code after Janne's new check looks for the PHY and then
+just assumes that if the PHY has a "port" that the other end always is an extcon.
+It then tries extcon_find_edev_by_node which will always fail with EPROBE_DEFER
+if that node never registers an extcon.
+
+If "usb-role-switch" is used and configured in the DT there is no extcon.
+There actually cannot ever be a working extcon with "usb-role-switch" because
+the very first thing dwc3_drd_init does is to look for a role switch partner
+and then skip the entire extcon setup:
+
+int dwc3_drd_init(struct dwc3 *dwc)
+{
+	int ret, irq;
+
+	if (ROLE_SWITCH &&
+	    device_property_read_bool(dwc->dev, "usb-role-switch"))
+		return dwc3_setup_role_switch(dwc);
+[....]
+
+
+This entire issue was actually first fixed in ab7aa2866d29, then broken
+again in 0f0101719138 due to a merge resolution, then fixed again with
+7a84e7353e23 (where we actually had a brief discussion about this already
+on the ML) and then broken again in d182c2e1bc92.
+
+Janne's fix is much less subtle and should hopefully survive this time.
+
+For the patch:
+
+Reviewed-by: Sven Peter <sven@svenpeter.dev>
+
+
+Best,
+
+Sven
