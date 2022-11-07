@@ -2,105 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0B1161E987
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 04:22:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38F4861E98A
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 04:23:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230435AbiKGDWq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Nov 2022 22:22:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48164 "EHLO
+        id S230460AbiKGDXN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Nov 2022 22:23:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230287AbiKGDWn (ORCPT
+        with ESMTP id S230245AbiKGDXL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Nov 2022 22:22:43 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CC8C18D;
-        Sun,  6 Nov 2022 19:22:42 -0800 (PST)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4N5GkZ4XBRzmVFC;
-        Mon,  7 Nov 2022 11:22:30 +0800 (CST)
-Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 7 Nov 2022 11:22:40 +0800
-Received: from [10.67.108.67] (10.67.108.67) by dggpemm500013.china.huawei.com
- (7.185.36.172) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Mon, 7 Nov
- 2022 11:22:40 +0800
-Message-ID: <917fab11-ae57-07b9-ae67-7c290c7c6723@huawei.com>
-Date:   Mon, 7 Nov 2022 11:22:40 +0800
+        Sun, 6 Nov 2022 22:23:11 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9014418D;
+        Sun,  6 Nov 2022 19:23:10 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2F38660E94;
+        Mon,  7 Nov 2022 03:23:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01F4FC433D6;
+        Mon,  7 Nov 2022 03:23:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667791389;
+        bh=pOxqdvUNwlSuddkrk73+R+1FtROmLMcWlByKk7dKqNo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=UX+dffelzyzczZWahzTO5Lo9DCJVAJv02Ot7qHU/YJxG6zABnUwn5CYKi3v3lIyGj
+         EmelS66jYBTmbtOoIX+nzp1u8hrNAKgZi7bOeQqEm2f/J13a9lxpOzNzUNrrpTGDzL
+         irlyLMA+mTVAoYJZSF7YBnfC9AIOiL74zCZG3KhIoOC0tP7nEZlIXaEFo8XQKoDCbn
+         dKNT2svommn8TQAuGUW2bEdK3b0tHnYCNBU3GQRvtffG2uyDb54HBqUesVDaQ9r0Gr
+         LysLPuELmHUnEqCRu5KO73vXeeTQsFo/FOjbviD92D2dBu++pz+TxvxCATxcUe3W/E
+         vcqrEq6d2sfKg==
+Date:   Sun, 6 Nov 2022 21:23:07 -0600
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Cc:     quic_jjohnson@quicinc.com, agross@kernel.org,
+        bjorn.andersson@linaro.org, konrad.dybcio@somainline.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6] soc: qcom: apr: Add check for idr_alloc and
+ of_property_read_string_index
+Message-ID: <20221107032307.rcbdwqa7isljjk2q@builder.lan>
+References: <20221107014403.3606-1-jiasheng@iscas.ac.cn>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.0
-Subject: Re: [PATCH net] xfrm: Fix ignored return value in xfrm6_init()
-Content-Language: en-US
-To:     Leon Romanovsky <leon@kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <steffen.klassert@secunet.com>, <herbert@gondor.apana.org.au>,
-        <davem@davemloft.net>, <yoshfuji@linux-ipv6.org>,
-        <dsahern@kernel.org>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <mkubecek@suse.cz>
-References: <20221103090713.188740-1-chenzhongjin@huawei.com>
- <Y2gGIuwY368X8Won@unreal>
-From:   Chen Zhongjin <chenzhongjin@huawei.com>
-In-Reply-To: <Y2gGIuwY368X8Won@unreal>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.108.67]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpemm500013.china.huawei.com (7.185.36.172)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221107014403.3606-1-jiasheng@iscas.ac.cn>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Mon, Nov 07, 2022 at 09:44:03AM +0800, Jiasheng Jiang wrote:
+> As idr_alloc() and of_property_read_string_index() can return negative
+> numbers, it should be better to check the return value and deal with
+> the exception.
+> Therefore, it should be better to use goto statement to stop and return
+> error.
+> 
+> Fixes: 6adba21eb434 ("soc: qcom: Add APR bus driver")
+> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 
-On 2022/11/7 3:08, Leon Romanovsky wrote:
-> On Thu, Nov 03, 2022 at 05:07:13PM +0800, Chen Zhongjin wrote:
->> When IPv6 module initializing in xfrm6_init(), register_pernet_subsys()
->> is possible to fail but its return value is ignored.
->>
->> If IPv6 initialization fails later and xfrm6_fini() is called,
->> removing uninitialized list in xfrm6_net_ops will cause null-ptr-deref:
->>
->> KASAN: null-ptr-deref in range [0x0000000000000008-0x000000000000000f]
->> CPU: 1 PID: 330 Comm: insmod
->> RIP: 0010:unregister_pernet_operations+0xc9/0x450
->> Call Trace:
->>   <TASK>
->>   unregister_pernet_subsys+0x31/0x3e
->>   xfrm6_fini+0x16/0x30 [ipv6]
->>   ip6_route_init+0xcd/0x128 [ipv6]
->>   inet6_init+0x29c/0x602 [ipv6]
->>   ...
->>
->> Fix it by catching the error return value of register_pernet_subsys().
->>
->> Fixes: 8d068875caca ("xfrm: make gc_thresh configurable in all namespaces")
->> Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
->> ---
->>   net/ipv6/xfrm6_policy.c | 6 +++++-
->>   1 file changed, 5 insertions(+), 1 deletion(-)
-> I see same error in net/ipv4/xfrm4_policy.c which introduced by same
-> commit mentioned in Fixes line.
+Reviewed-by: Bjorn Andersson <andersson@kernel.org>
 
-It's true that in xfrm4_init() the ops->init is possible to fail as well.
+Thanks,
+Bjorn
 
-However there is no error handling or exit path for ipv4, so IIUC the 
-ops won't be unregistered anyway.
-
-Considering that ipv4 don't handle most of error in initialization, 
-maybe it's better to keep it as it is?
-
-
-Best,
-
-Chen
-
-> Thanks
->
+> ---
+> Changelog:
+> 
+> v5 -> v6:
+> 
+> 1. Remove the put_device.
+> 
+> v4 -> v5:
+> 
+> 1. Change dev_err and goto statements.
+> 
+> v3 -> v4:
+> 
+> 1. Change the title and remove the kfree.
+> 
+> v2 -> v3:
+> 
+> 1. Change the title and use goto statement to deal with the exception.
+> 
+> v1 -> v2:
+> 
+> 1. Add dev_err and put_device in order to maintain the code consistency.
+> ---
+>  drivers/soc/qcom/apr.c | 15 ++++++++++++---
+>  1 file changed, 12 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/soc/qcom/apr.c b/drivers/soc/qcom/apr.c
+> index b4046f393575..cd44f17dad3d 100644
+> --- a/drivers/soc/qcom/apr.c
+> +++ b/drivers/soc/qcom/apr.c
+> @@ -454,11 +454,19 @@ static int apr_add_device(struct device *dev, struct device_node *np,
+>  	adev->dev.driver = NULL;
+>  
+>  	spin_lock(&apr->svcs_lock);
+> -	idr_alloc(&apr->svcs_idr, svc, svc_id, svc_id + 1, GFP_ATOMIC);
+> +	ret = idr_alloc(&apr->svcs_idr, svc, svc_id, svc_id + 1, GFP_ATOMIC);
+>  	spin_unlock(&apr->svcs_lock);
+> +	if (ret < 0) {
+> +		dev_err(dev, "idr_alloc failed: %d\n", ret);
+> +		goto out;
+> +	}
+>  
+> -	of_property_read_string_index(np, "qcom,protection-domain",
+> -				      1, &adev->service_path);
+> +	ret = of_property_read_string_index(np, "qcom,protection-domain",
+> +					    1, &adev->service_path);
+> +	if (ret < 0) {
+> +		dev_err(dev, "Failed to read second value of qcom,protection-domain\n");
+> +		goto out;
+> +	}
+>  
+>  	dev_info(dev, "Adding APR/GPR dev: %s\n", dev_name(&adev->dev));
+>  
+> @@ -468,6 +476,7 @@ static int apr_add_device(struct device *dev, struct device_node *np,
+>  		put_device(&adev->dev);
+>  	}
+>  
+> +out:
+>  	return ret;
+>  }
+>  
+> -- 
+> 2.25.1
+> 
