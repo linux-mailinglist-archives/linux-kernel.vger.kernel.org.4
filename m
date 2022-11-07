@@ -2,193 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68DC862014C
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 22:37:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86D3862014E
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 22:37:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233508AbiKGVhb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 16:37:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58968 "EHLO
+        id S233533AbiKGVhp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 16:37:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233145AbiKGVh2 (ORCPT
+        with ESMTP id S233514AbiKGVhn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 16:37:28 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18A9CD9
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 13:37:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667857048; x=1699393048;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=cWyRCW5aKXNWtiucVf5kkixxGLClq+OtEfuUo4LHoho=;
-  b=ACZhRB6Zj8oClnlG2tsVALHsfQR/D6mBX4uTz0Fb7iWK1RV0Fr7W1X8+
-   QfgzCUuXxh3eTRDCnfjVXc1Zarxx5r3JaM0j4px8MeP4ZRNmsy4WxmCCo
-   z1su85xbO0aoFovE842MQnrHT33IVFEIXxNRRACQEouovLYAkA8x7nTbd
-   MwhU3ka1huRcpkPDwwvwV8tdhOItvghdkihoxSWydctmmsRAFSBO3l/p4
-   nyRjm+3eEpmP0s9ClMz/ppSdvXCxkJ9Pp9Qp9Sg/p2wX14Dqa8Ru/j/Lw
-   PZvDUYnaoxJIhJCbV/HalqsJSPHpHUzmkStsekm6sdCLc8gGNEmDfzV9e
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10524"; a="396827877"
-X-IronPort-AV: E=Sophos;i="5.96,145,1665471600"; 
-   d="scan'208";a="396827877"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Nov 2022 13:37:27 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10524"; a="965326539"
-X-IronPort-AV: E=Sophos;i="5.96,145,1665471600"; 
-   d="scan'208";a="965326539"
-Received: from biancabe-mobl1.ger.corp.intel.com (HELO box.shutemov.name) ([10.251.218.140])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Nov 2022 13:37:23 -0800
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id E49C010964A; Tue,  8 Nov 2022 00:37:20 +0300 (+03)
-From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-To:     kirill.shutemov@linux.intel.com
-Cc:     ak@linux.intel.com, andreyknvl@gmail.com, ashok.raj@intel.com,
-        bharata@amd.com, dave.hansen@linux.intel.com, dvyukov@google.com,
-        glider@google.com, hjl.tools@gmail.com,
-        jacob.jun.pan@linux.intel.com, kcc@google.com,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org, luto@kernel.org,
-        peterz@infradead.org, rick.p.edgecombe@intel.com,
-        ryabinin.a.a@gmail.com, tarasmadan@google.com, x86@kernel.org
-Subject: [PATCHv11.1 07/16] x86/mm: Provide arch_prctl() interface for LAM
-Date:   Tue,  8 Nov 2022 00:37:09 +0300
-Message-Id: <20221107213709.28330-1-kirill.shutemov@linux.intel.com>
-X-Mailer: git-send-email 2.38.0
-In-Reply-To: <20221025001722.17466-8-kirill.shutemov@linux.intel.com>
-References: <20221025001722.17466-8-kirill.shutemov@linux.intel.com>
+        Mon, 7 Nov 2022 16:37:43 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B1A8D9;
+        Mon,  7 Nov 2022 13:37:42 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DBF78612D5;
+        Mon,  7 Nov 2022 21:37:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FDC7C433D6;
+        Mon,  7 Nov 2022 21:37:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667857061;
+        bh=T2Ymb2x245aa2ScFXcWkFua5HIUae1DGKTKUll+OBec=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=HdhozuACVbWX6bKTRIioUFaE5L3ZgEt4f5bqfJPjfhUL/TkWVTdFN8DBM9WwppI9m
+         TXQLUZkj7BjVHq36fHM+6D3+Q+VNAABtzQ0jCbkQ5XvvMIkUw957s2HOLXhsC4Rmuq
+         tJx0Bk2meKFUDRhTxpPOT5+gABL5tfBkAU0Oz/c7PuGPeEpPKrrGUpKPzgMRLQb2Wf
+         MIXx2qqEnOHnUIpRt4mAer3Rln01RG+rMGKcOW28zGs1Po482XYwBMCutR6QhgvoX2
+         jBWgY3uyK7whMZG+Z8XaAW/6+2EVrlLFVXy6k+QEuIscQMDZ5SQcGzmMmpZ2FHGjWq
+         4UXbGnuzlbuFA==
+Date:   Mon, 7 Nov 2022 15:37:39 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
+Cc:     Christophe Fergeau <cfergeau@redhat.com>, bhelgaas@google.com,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] PCI: Clear PCI_STATUS when setting up the device
+Message-ID: <20221107213739.GA422107@bhelgaas>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221104155339.GA95864@bhelgaas>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a couple of arch_prctl() handles:
+On Fri, Nov 04, 2022 at 10:53:39AM -0500, Bjorn Helgaas wrote:
+> On Tue, May 17, 2022 at 12:37:38PM +0800, Kai-Heng Feng wrote:
+> > We are seeing Master Abort bit is set on Intel I350 ethernet device and its
+> > root port right after boot, probably happened during BIOS phase:
+> > 
+> > 00:06.0 PCI bridge [0604]: Intel Corporation Device [8086:464d] (rev 05) (prog-if 00 [Normal decode])
+> >         Control: I/O+ Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr- Stepping- SERR- FastB2B- DisINTx+
+> >         Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=fast >TAbort- <TAbort- <MAbort+ >SERR- <PERR- INTx-
+> > 
+> > 6e:00.0 Ethernet controller [0200]: Intel Corporation I350 Gigabit Network Connection [8086:1521] (rev 01)
+> >         Subsystem: Intel Corporation Ethernet Server Adapter I350-T2 [8086:00a2]
+> >         Control: I/O- Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr- Stepping- SERR- FastB2B- DisINTx+
+> >         Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=fast >TAbort- <TAbort- <MAbort+ >SERR- <PERR- INTx-
+> > 
+> > 6e:00.1 Ethernet controller [0200]: Intel Corporation I350 Gigabit Network Connection [8086:1521] (rev 01)
+> >         Subsystem: Intel Corporation Ethernet Server Adapter I350-T2 [8086:00a2]
+> >         Control: I/O- Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr- Stepping- SERR- FastB2B- DisINTx+
+> >         Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=fast >TAbort- <TAbort- <MAbort+ >SERR- <PERR- INTx-
+> > 
+> > And the Master Abort bit is cleared after S3.
+> > 
+> > Since there's no functional impact found, clear the PCI_STATUS to treat
+> > it anew at setting up.
+> > 
+> > Bugzilla: https://bugzilla.kernel.org/show_bug.cgi?id=215989
+> > Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> 
+> This patch appeared in v6.0 as 6cd514e58f12 ("PCI: Clear PCI_STATUS
+> when setting up device").  Christophe reported in the bugzilla that it
+> causes boot failures:
+> 
+> > --- Comment #3 from Christophe Fergeau (cfergeau@redhat.com) ---
+> > This commit
+> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=6c
+> > d514e58f12b211d638dbf6f791fa18d854f09c
+> > references this issue.
+> > This commit causes boot failures when trying to start linux guests with Apple's
+> > hypervisor framework (for example using https://github.com/evansm7/vftool ).
+> > After reverting it, I can successfully boot 6.1-rc kernels on my macOS12 x86_64
+> > macbook. With this commit, the VM fails to start, additional details in
+> > https://bugzilla.redhat.com/show_bug.cgi?id=2137803
 
- - ARCH_ENABLE_TAGGED_ADDR enabled LAM. The argument is required number
-   of tag bits. It is rounded up to the nearest LAM mode that can
-   provide it. For now only LAM_U57 is supported, with 6 tag bits.
+I queued up a revert for v6.2.  Obviously I would prefer if we could
+figure out how to clear PCI_STATUS while still letting the guests
+boot, but I have no idea how to debug the boot failures.
 
- - ARCH_GET_UNTAG_MASK returns untag mask. It can indicates where tag
-   bits located in the address.
+  commit 44e985938e85 ("Revert "PCI: Clear PCI_STATUS when setting up device"")
+  Author: Bjorn Helgaas <bhelgaas@google.com>
+  Date:   Mon Nov 7 15:31:08 2022 -0600
 
- - ARCH_GET_MAX_TAG_BITS returns the maximum tag bits user can request.
-   Zero if LAM is not supported.
+      Revert "PCI: Clear PCI_STATUS when setting up device"
+      
+      This reverts commit 6cd514e58f12b211d638dbf6f791fa18d854f09c.
+      
+      Christophe Fergeau reported that 6cd514e58f12 ("PCI: Clear PCI_STATUS when
+      setting up device") causes boot failures when trying to start linux guests
+      with Apple's virtualization framework (for example using
+      https://developer.apple.com/documentation/virtualization/running_linux_in_a_virtual_machine?language=objc)
+      
+      6cd514e58f12 only solved a cosmetic problem, so revert it to fix the boot
+      failures.
+      
+      Link: https://bugzilla.redhat.com/show_bug.cgi?id=2137803
+      Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
 
-Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-Tested-by: Alexander Potapenko <glider@google.com>
-Reviewed-by: Alexander Potapenko <glider@google.com>
-Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
----
- arch/x86/include/uapi/asm/prctl.h |  4 ++
- arch/x86/kernel/process_64.c      | 71 ++++++++++++++++++++++++++++++-
- 2 files changed, 74 insertions(+), 1 deletion(-)
+  diff --git a/drivers/pci/probe.c b/drivers/pci/probe.c
+  index b66fa42c4b1f..1d6f7b502020 100644
+  --- a/drivers/pci/probe.c
+  +++ b/drivers/pci/probe.c
+  @@ -1891,9 +1891,6 @@ int pci_setup_device(struct pci_dev *dev)
+   
+	  dev->broken_intx_masking = pci_intx_mask_broken(dev);
+   
+  -	/* Clear errors left from system firmware */
+  -	pci_write_config_word(dev, PCI_STATUS, 0xffff);
+  -
+	  switch (dev->hdr_type) {		    /* header type */
+	  case PCI_HEADER_TYPE_NORMAL:		    /* standard header */
+		  if (class == PCI_CLASS_BRIDGE_PCI)
 
-diff --git a/arch/x86/include/uapi/asm/prctl.h b/arch/x86/include/uapi/asm/prctl.h
-index 500b96e71f18..a31e27b95b19 100644
---- a/arch/x86/include/uapi/asm/prctl.h
-+++ b/arch/x86/include/uapi/asm/prctl.h
-@@ -20,4 +20,8 @@
- #define ARCH_MAP_VDSO_32		0x2002
- #define ARCH_MAP_VDSO_64		0x2003
- 
-+#define ARCH_GET_UNTAG_MASK		0x4001
-+#define ARCH_ENABLE_TAGGED_ADDR		0x4002
-+#define ARCH_GET_MAX_TAG_BITS		0x4003
-+
- #endif /* _ASM_X86_PRCTL_H */
-diff --git a/arch/x86/kernel/process_64.c b/arch/x86/kernel/process_64.c
-index 6b3418bff326..b8f2558a3aeb 100644
---- a/arch/x86/kernel/process_64.c
-+++ b/arch/x86/kernel/process_64.c
-@@ -743,6 +743,66 @@ static long prctl_map_vdso(const struct vdso_image *image, unsigned long addr)
- }
- #endif
- 
-+static void enable_lam_func(void *mm)
-+{
-+	struct mm_struct *loaded_mm = this_cpu_read(cpu_tlbstate.loaded_mm);
-+	unsigned long lam_mask;
-+	unsigned long cr3;
-+
-+	if (loaded_mm != mm)
-+		return;
-+
-+	lam_mask = READ_ONCE(loaded_mm->context.lam_cr3_mask);
-+
-+	/*
-+	 * Update CR3 to get LAM active on the CPU.
-+	 *
-+	 * This might not actually need to update CR3 if a context switch
-+	 * happened between updating 'lam_cr3_mask' and running this IPI
-+	 * handler.  Update it unconditionally for simplicity.
-+	 */
-+	cr3 = __read_cr3();
-+	cr3 &= ~(X86_CR3_LAM_U48 | X86_CR3_LAM_U57);
-+	cr3 |= lam_mask;
-+	write_cr3(cr3);
-+	set_tlbstate_cr3_lam_mask(lam_mask);
-+}
-+
-+#define LAM_U57_BITS 6
-+
-+static int prctl_enable_tagged_addr(struct mm_struct *mm, unsigned long nr_bits)
-+{
-+	int ret = 0;
-+
-+	if (!cpu_feature_enabled(X86_FEATURE_LAM))
-+		return -ENODEV;
-+
-+	if (mmap_write_lock_killable(mm))
-+		return -EINTR;
-+
-+	/* Already enabled? */
-+	if (mm->context.lam_cr3_mask) {
-+		ret = -EBUSY;
-+		goto out;
-+	}
-+
-+	if (!nr_bits) {
-+		ret = -EINVAL;
-+		goto out;
-+	} else if (nr_bits <= LAM_U57_BITS) {
-+		mm->context.lam_cr3_mask = X86_CR3_LAM_U57;
-+		mm->context.untag_mask =  ~GENMASK(62, 57);
-+	} else {
-+		ret = -EINVAL;
-+		goto out;
-+	}
-+
-+	on_each_cpu_mask(mm_cpumask(mm), enable_lam_func, mm, true);
-+out:
-+	mmap_write_unlock(mm);
-+	return ret;
-+}
-+
- long do_arch_prctl_64(struct task_struct *task, int option, unsigned long arg2)
- {
- 	int ret = 0;
-@@ -830,7 +890,16 @@ long do_arch_prctl_64(struct task_struct *task, int option, unsigned long arg2)
- 	case ARCH_MAP_VDSO_64:
- 		return prctl_map_vdso(&vdso_image_64, arg2);
- #endif
--
-+	case ARCH_GET_UNTAG_MASK:
-+		return put_user(task->mm->context.untag_mask,
-+				(unsigned long __user *)arg2);
-+	case ARCH_ENABLE_TAGGED_ADDR:
-+		return prctl_enable_tagged_addr(task->mm, arg2);
-+	case ARCH_GET_MAX_TAG_BITS:
-+		if (!cpu_feature_enabled(X86_FEATURE_LAM))
-+			return put_user(0, (unsigned long __user *)arg2);
-+		else
-+			return put_user(LAM_U57_BITS, (unsigned long __user *)arg2);
- 	default:
- 		ret = -EINVAL;
- 		break;
--- 
-2.38.0
-
+> > ---
+> >  drivers/pci/probe.c | 3 +++
+> >  1 file changed, 3 insertions(+)
+> > 
+> > diff --git a/drivers/pci/probe.c b/drivers/pci/probe.c
+> > index 17a969942d370..414f659dc8735 100644
+> > --- a/drivers/pci/probe.c
+> > +++ b/drivers/pci/probe.c
+> > @@ -1890,6 +1890,9 @@ int pci_setup_device(struct pci_dev *dev)
+> >  
+> >  	dev->broken_intx_masking = pci_intx_mask_broken(dev);
+> >  
+> > +	/* Clear errors left from system firmware */
+> > +	pci_write_config_word(dev, PCI_STATUS, 0xffff);
+> > +
+> >  	switch (dev->hdr_type) {		    /* header type */
+> >  	case PCI_HEADER_TYPE_NORMAL:		    /* standard header */
+> >  		if (class == PCI_CLASS_BRIDGE_PCI)
+> > -- 
+> > 2.34.1
+> > 
