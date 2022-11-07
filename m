@@ -2,111 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8ABBD6200E8
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 22:19:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4738A6200EA
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 22:19:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232864AbiKGVS6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 16:18:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41144 "EHLO
+        id S233360AbiKGVTJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 16:19:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233619AbiKGVSP (ORCPT
+        with ESMTP id S233369AbiKGVSq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 16:18:15 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2909326C7
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 13:15:18 -0800 (PST)
-Received: from zn.tnic (p200300ea9733e764329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e764:329c:23ff:fea6:a903])
+        Mon, 7 Nov 2022 16:18:46 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43A993E09E;
+        Mon,  7 Nov 2022 13:15:28 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 509E71EC059D;
-        Mon,  7 Nov 2022 22:15:17 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1667855717;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:
-         content-transfer-encoding:content-transfer-encoding:in-reply-to:
-         references; bh=rbOTxD9ZKYlilVo5kI9gEidbFcfzuiyGtj4TcpECXu8=;
-        b=DDfYNpFeTRMchdM0zB46lZpL48UYZdZzPzivVPw4P3pVwGaS3U8nPQgcgud1I4aocQ9CVV
-        bAh2I6THf6v173aVuwdcmsXeaMGL5e5d9Qum20MRkjY+D0ba2ogrT9DGkSZm+gork34ZpF
-        iszaL1Q3Tbr4CPSeLcOVoXoi3tkL1KU=
-From:   Borislav Petkov <bp@alien8.de>
-To:     X86 ML <x86@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>
-Subject: [PATCH] x86/cpu: Start documenting what the X86_FEATURE_ flag testing macros do
-Date:   Mon,  7 Nov 2022 22:15:05 +0100
-Message-Id: <20221107211505.8572-1-bp@alien8.de>
-X-Mailer: git-send-email 2.35.1
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A0364612FB;
+        Mon,  7 Nov 2022 21:15:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B438AC433D6;
+        Mon,  7 Nov 2022 21:15:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667855727;
+        bh=I4oqu/LBW91Hy9RiY77bfpNiDxS7N+HlwjXTr0S9q28=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=YEGwKRGm+z9JQWds8LiAQBhmUqgNX5OjzruFT1O1n2DkVMuQbX/4KAMazlHlz+ZPq
+         aYDjPOJY8FR1sBE+EhJUEjVjZLLKvuu8GdN1NoWxQfNqMiYKpr8DMP94EGdeTSMioZ
+         GZrGFjGnzST48v9nVmSCfhN7Yu2Q6OprCIYMzz03Gv2QqBdz+qjRFvKgUyaZ3QIizF
+         2NuyHm8GP046qKFKHQdOkmOorwCT1XqgC07S1U+8IBhZ8ZXx/NcTrJyFbaOelt/Rs0
+         oxM/PiBPoMGatII9aXHEx5eX3Fgd3AyrOm4a4yv8Nq+ek9yttH/5l1mrDyLEeXBo0U
+         gaqYowsXqT7AQ==
+Date:   Mon, 7 Nov 2022 15:15:25 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Liu Peibao <liupeibao@loongson.cn>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Jianmin Lv <lvjianmin@loongson.cn>,
+        Yinbo Zhu <zhuyinbo@loongson.cn>, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] PCI: loongson: skip scanning unavailable child device
+Message-ID: <20221107211525.GA419924@bhelgaas>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221104105340.20610-1-liupeibao@loongson.cn>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Borislav Petkov <bp@suse.de>
+Capitalize subject line to match other commits:
 
-... and how and when they should be used.
+  930c6074d7dd ("PCI: loongson: Work around LS7A incorrect Interrupt Pin registers")
+  2410e3301fcc ("PCI: loongson: Don't access non-existent devices")
+  cd89edda4002 ("PCI: loongson: Add ACPI init support")
+  dee449aafd48 ("PCI: loongson: Use generic 8/16/32-bit config ops on LS2K/LS7A")
 
-This keeps popping up everytime people start poking at the CPU features
-testing machinery - which has admittedly grown some warts and would need
-cleaning up - or when they are wondering what function/macro to use.
+On Fri, Nov 04, 2022 at 06:53:40PM +0800, Liu Peibao wrote:
+> The PCI Controller of 2k1000 could not mask devices by
+> setting vender id or device id in configuration space header
+> as invalid values. When there are pins shareble between
+> the platform device and PCI device, if the platform device
+> is preferred, we should not scan this PCI device. In the
+> above scene, add `status = "disabled"` property in DT node
+> of this PCI device.
 
-Start documenting it first. Proper cleanup will follow once all the
-functionality has been agreed upon.
+Rewrap this to fill 75 columns.
 
-No functional changes.
+s/id/ID/
+s/shareble/shareable/
 
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Link: https://lore.kernel.org/r/20220718141123.136106-3-mlevitsk@redhat.com
----
- arch/x86/include/asm/cpufeature.h | 21 ++++++++++++++-------
- 1 file changed, 14 insertions(+), 7 deletions(-)
+> Signed-off-by: Liu Peibao <liupeibao@loongson.cn>
+> ---
+> V2 -> V3: 1. use list_for_each_entry() for more clearly.
+>           2. fix wrong use of sizeof().
+> V1 -> V2: use existing property "status" instead of adding new property.
+> 
+> 
+>  drivers/pci/controller/pci-loongson.c | 55 +++++++++++++++++++++++++++
+>  1 file changed, 55 insertions(+)
+> 
+> diff --git a/drivers/pci/controller/pci-loongson.c b/drivers/pci/controller/pci-loongson.c
+> index 05c50408f13b..c7dd88eac885 100644
+> --- a/drivers/pci/controller/pci-loongson.c
+> +++ b/drivers/pci/controller/pci-loongson.c
+> @@ -40,11 +40,21 @@ struct loongson_pci_data {
+>  	struct pci_ops *ops;
+>  };
+>  
+> +#ifdef CONFIG_OF
+> +struct mask_entry {
+> +	struct list_head entry;
+> +	unsigned int devfn;
+> +};
+> +#endif
+> +
+>  struct loongson_pci {
+>  	void __iomem *cfg0_base;
+>  	void __iomem *cfg1_base;
+>  	struct platform_device *pdev;
+>  	const struct loongson_pci_data *data;
+> +#ifdef CONFIG_OF
+> +	struct list_head masklist;
+> +#endif
+>  };
+>  
+>  /* Fixup wrong class code in PCIe bridges */
+> @@ -194,6 +204,18 @@ static void __iomem *pci_loongson_map_bus(struct pci_bus *bus,
+>  			return NULL;
+>  	}
+>  
+> +#ifdef CONFIG_OF
+> +	/* Don't access devices in masklist */
+> +	if (pci_is_root_bus(bus)) {
+> +		struct mask_entry *entry;
+> +
+> +		list_for_each_entry(entry, &priv->masklist, entry) {
+> +			if (devfn == entry->devfn)
+> +				return NULL;
+> +		}
+> +	}
+> +#endif
 
-diff --git a/arch/x86/include/asm/cpufeature.h b/arch/x86/include/asm/cpufeature.h
-index 1a85e1fb0922..47ff025e7387 100644
---- a/arch/x86/include/asm/cpufeature.h
-+++ b/arch/x86/include/asm/cpufeature.h
-@@ -131,12 +131,13 @@ extern const char * const x86_bug_flags[NBUGINTS*32];
- 		(unsigned long __percpu *)&cpu_info.x86_capability))
- 
- /*
-- * This macro is for detection of features which need kernel
-- * infrastructure to be used.  It may *not* directly test the CPU
-- * itself.  Use the cpu_has() family if you want true runtime
-- * testing of CPU features, like in hypervisor code where you are
-- * supporting a possible guest feature where host support for it
-- * is not relevant.
-+ * This is the preferred macro to use when testing X86_FEATURE_ bits
-+ * support without the need to test on a particular CPU but rather
-+ * system-wide. It takes into account build-time disabled feature
-+ * support too. All those macros mirror the kernel's idea of enabled
-+ * CPU features and not necessarily what real, hardware CPUID bits are
-+ * set or clear. For that use tools/arch/x86/kcpuid/ and/or potentially
-+ * extend if it's feature list is lacking.
-  */
- #define cpu_feature_enabled(bit)	\
- 	(__builtin_constant_p(bit) && DISABLED_MASK_BIT_SET(bit) ? 0 : static_cpu_has(bit))
-@@ -145,9 +146,15 @@ extern const char * const x86_bug_flags[NBUGINTS*32];
- 
- #define set_cpu_cap(c, bit)	set_bit(bit, (unsigned long *)((c)->x86_capability))
- 
--extern void setup_clear_cpu_cap(unsigned int bit);
- extern void clear_cpu_cap(struct cpuinfo_x86 *c, unsigned int bit);
- 
-+/*
-+ * The setup_* prefixed variants enable/disable feature bits on all
-+ * CPUs in the system and are used to replicate those settings before
-+ * apply_forced_caps() has synthesized enabled and disabled bits across
-+ * every CPU.
-+ */
-+extern void setup_clear_cpu_cap(unsigned int bit);
- #define setup_force_cpu_cap(bit) do { \
- 	set_cpu_cap(&boot_cpu_data, bit);	\
- 	set_bit(bit, (unsigned long *)cpu_caps_set);	\
--- 
-2.35.1
+I would probably get rid of the masklist and just search for a disabled
+property when reading config offset 0 (vendor ID).  That's not a
+performance path anyway.  And this seems similar to the
+FLAG_DEV_HIDDEN path where you probably don't need to do it for all
+controllers.
 
+>  	/* CFG0 can only access standard space */
+>  	if (where < PCI_CFG_SPACE_SIZE && priv->cfg0_base)
+>  		return cfg0_map(priv, bus, devfn, where);
+> @@ -206,6 +228,36 @@ static void __iomem *pci_loongson_map_bus(struct pci_bus *bus,
+>  }
+>  
+>  #ifdef CONFIG_OF
+> +static int setup_masklist(struct loongson_pci *priv)
+> +{
+> +	struct device *dev = &priv->pdev->dev;
+> +	struct device_node *dn, *parent = dev->of_node;
+> +	struct mask_entry *entry;
+> +	int devfn;
+> +
+> +	INIT_LIST_HEAD(&priv->masklist);
+> +
+> +	for_each_child_of_node(parent, dn) {
+> +		/*
+> +		 * if device is not available, add this to masklist
+> +		 * to avoid scanning it.
+> +		 */
+> +		if (!of_device_is_available(dn)) {
+> +			devfn = of_pci_get_devfn(dn);
+> +			if (devfn < 0)
+> +				continue;
+> +
+> +			entry = devm_kzalloc(dev, sizeof(*entry), GFP_KERNEL);
+> +			if (!entry)
+> +				return -ENOMEM;
+> +
+> +			entry->devfn = devfn;
+> +			list_add_tail(&entry->entry, &priv->masklist);
+> +		}
+> +	}
+> +
+> +	return 0;
+> +}
+>  
+>  static int loongson_map_irq(const struct pci_dev *dev, u8 slot, u8 pin)
+>  {
+> @@ -305,6 +357,9 @@ static int loongson_pci_probe(struct platform_device *pdev)
+>  		}
+>  	}
+>  
+> +	if (setup_masklist(priv))
+> +		return -ENOMEM;
+> +
+>  	bridge->sysdata = priv;
+>  	bridge->ops = priv->data->ops;
+>  	bridge->map_irq = loongson_map_irq;
+> -- 
+> 2.20.1
+> 
