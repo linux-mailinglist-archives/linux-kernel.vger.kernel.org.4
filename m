@@ -2,48 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91C3E61F3DD
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 14:01:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1A7D61F3E2
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 14:02:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232140AbiKGNBq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 08:01:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44656 "EHLO
+        id S232145AbiKGNCV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 08:02:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231736AbiKGNBg (ORCPT
+        with ESMTP id S231374AbiKGNCH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 08:01:36 -0500
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3F6813F5B
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 05:01:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1667826094; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=jg77whTZveEoQ4sEVKCo7IpSsBmp7pePPNkjnV6eYEg=;
-        b=iOPNyAbZkJoMiPOsLg/c6jtp5DOovGsw0OK1QlusFqCJaikvF+7HoqshP/uAVBPlS6jsEC
-        6W7tjsyTGC8MvWDJNXqq7zqdxUcd9rYNWbWdouEUQIL/1TE3OGMAeq9x224hILegRFdApk
-        M6HBKtP3l9TPbqVK3CUeD2aNMlXvrVw=
-Date:   Mon, 07 Nov 2022 13:01:24 +0000
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH] ASoC: dapm: Don't use prefix for regulator name
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org
-Message-Id: <CUAZKR.FFCM32N7ZV5C@crapouillou.net>
-In-Reply-To: <Y2kAoV8gCEZZgHhk@sirena.org.uk>
-References: <20221025150149.113129-1-paul@crapouillou.net>
-        <166680764848.867857.6473365992161385316.b4-ty@kernel.org>
-        <C32ZKR.QZWY19EUAOMQ3@crapouillou.net> <Y2kAoV8gCEZZgHhk@sirena.org.uk>
+        Mon, 7 Nov 2022 08:02:07 -0500
+Received: from vps.xff.cz (vps.xff.cz [195.181.215.36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE2EA1C425;
+        Mon,  7 Nov 2022 05:02:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xff.cz; s=mail;
+        t=1667826120; bh=Z5HZQ0FJ5zop6RxxhYVUF6pwXoF1Wmv4094FaI/3RFs=;
+        h=From:To:Cc:Subject:Date:From;
+        b=n8Q020NDFCcVdsopFtB8ts4Gk0wCoh5ew+3NXPQL6DBMcHNBJz8cYvtO4pGdraY8x
+         KRiHiA89QGcLSSNvckYb2RwEmDEa6NwaKMNvBHTOqiLptjOrwZRBiFrlP8itzXuzS8
+         pmwwV2vKj5YyWNyzSKJZY9tklB8a2fXP6EVLwBLE=
+From:   Ondrej Jirman <megi@xff.cz>
+To:     linux-rockchip@lists.infradead.org
+Cc:     Ondrej Jirman <megi@xff.cz>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Chris Morgan <macromorgan@hotmail.com>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED
+        DEVICE TREE BINDINGS),
+        linux-arm-kernel@lists.infradead.org (moderated list:ARM/Rockchip SoC
+        support), linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH v3] arm64: dts: rockchip: rk356x: Fix PCIe register map and ranges
+Date:   Mon,  7 Nov 2022 14:01:56 +0100
+Message-Id: <20221107130157.1425882-1-megi@xff.cz>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,30 +51,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+I have two Realtek PCIe wifi cards connected over the 4 port PCIe bridge
+to Quartz64-A. The cards fail to work, when nvme SSD is connected at the
+same time to the bridge. Without nvme connected, cards work fine. The
+issue seems to be related to mixed use of devices which make use of I/O
+ranges and memory ranges.
 
+This patch changes I/O, MEM and config mappings so that these use the
+32bit outbound address space at  0xf4000000, and 64bit MEM range uses
+the whole 0x3_0000_0000 outbound address range.
 
-Le lun. 7 nov. 2022 =E0 12:57:05 +0000, Mark Brown <broonie@kernel.org>=20
-a =E9crit :
-> On Mon, Nov 07, 2022 at 09:52:24AM +0000, Paul Cercueil wrote:
->>  Le mer. 26 oct. 2022 =E0 19:07:28 +0100, Mark Brown=20
->> <broonie@kernel.org> a
->=20
->>  > Applied to
->>  >
->>  >   =20
->> https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git
->>  > for-next
->=20
->>  Small reminder that this is a fix for a bug introduced in -rc1, so=20
->> it should
->>  be queued for the next RC.
->=20
-> This is already queued as a fix.
+These values were suggested by pgwipeout:
 
-Ok, thanks. I didn't see it in -rc4 and thought that it was queued for=20
-6.2 instead.
+  https://lore.kernel.org/lkml/875ygbsrf3.fsf@bloch.sibelius.xs4all.nl/T/#m84b5f6992cc26dffe0d3783c0d8c9c86e5e10c10
 
-Cheers,
--Paul
+This is identical to how BSP does the mappings.
 
+This change to the regs/ranges makes the issue go away and both nvme and
+wifi cards work when connected at the same time to the bridge. I tested
+the nvme with large amount of reads/writes, both behind the PCIe bridge
+and when directly connected to Quartz64-A board.
+
+Signed-off-by: Ondrej Jirman <megi@xff.cz>
+---
+v3:
+- changed ranges to the ones suggested by pgwipeout
+
+ arch/arm64/boot/dts/rockchip/rk356x.dtsi | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/rockchip/rk356x.dtsi b/arch/arm64/boot/dts/rockchip/rk356x.dtsi
+index 164708f1eb67..726c948ccbf0 100644
+--- a/arch/arm64/boot/dts/rockchip/rk356x.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk356x.dtsi
+@@ -951,7 +951,8 @@ pcie2x1: pcie@fe260000 {
+ 		compatible = "rockchip,rk3568-pcie";
+ 		reg = <0x3 0xc0000000 0x0 0x00400000>,
+ 		      <0x0 0xfe260000 0x0 0x00010000>,
+-		      <0x3 0x3f000000 0x0 0x01000000>;
++		      <0x0 0xf4000000 0x0 0x00100000>;
++
+ 		reg-names = "dbi", "apb", "config";
+ 		interrupts = <GIC_SPI 75 IRQ_TYPE_LEVEL_HIGH>,
+ 			     <GIC_SPI 74 IRQ_TYPE_LEVEL_HIGH>,
+@@ -973,15 +974,17 @@ pcie2x1: pcie@fe260000 {
+ 				<0 0 0 4 &pcie_intc 3>;
+ 		linux,pci-domain = <0>;
+ 		num-ib-windows = <6>;
+-		num-ob-windows = <2>;
++		num-ob-windows = <8>;
+ 		max-link-speed = <2>;
+ 		msi-map = <0x0 &gic 0x0 0x1000>;
+ 		num-lanes = <1>;
+ 		phys = <&combphy2 PHY_TYPE_PCIE>;
+ 		phy-names = "pcie-phy";
+ 		power-domains = <&power RK3568_PD_PIPE>;
+-		ranges = <0x01000000 0x0 0x3ef00000 0x3 0x3ef00000 0x0 0x00100000
+-			  0x02000000 0x0 0x00000000 0x3 0x00000000 0x0 0x3ef00000>;
++		ranges = <0x01000000 0x0 0xf4100000 0x0 0xf4100000 0x0 0x00100000>,
++			<0x02000000 0x0 0xf4200000 0x0 0xf4200000 0x0 0x01e00000>,
++			<0x03000000 0x0 0x40000000 0x3 0x00000000 0x0 0x40000000>;
++
+ 		resets = <&cru SRST_PCIE20_POWERUP>;
+ 		reset-names = "pipe";
+ 		#address-cells = <3>;
+-- 
+2.38.1
 
