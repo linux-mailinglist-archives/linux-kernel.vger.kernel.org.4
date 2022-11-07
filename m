@@ -2,813 +2,1504 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93207620085
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 22:11:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17ED962001C
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 22:02:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233335AbiKGVLL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 16:11:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53898 "EHLO
+        id S233153AbiKGVCh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 16:02:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233280AbiKGVKa (ORCPT
+        with ESMTP id S233132AbiKGVCZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 16:10:30 -0500
-Received: from post.baikalelectronics.com (post.baikalelectronics.com [213.79.110.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 87EA72CDD9;
-        Mon,  7 Nov 2022 13:07:24 -0800 (PST)
-Received: from post.baikalelectronics.com (localhost.localdomain [127.0.0.1])
-        by post.baikalelectronics.com (Proxmox) with ESMTP id 6F85BE0EC8;
-        Mon,  7 Nov 2022 23:50:35 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        baikalelectronics.ru; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:from:from:in-reply-to:message-id
-        :mime-version:references:reply-to:subject:subject:to:to; s=post;
-         bh=mTbQ+1qg/49OjZsDzPM6tnGJ5LaA3ZNEpYipTxarVgY=; b=EStF/Umnn+lS
-        X5rKjKwOsV1O6M/UEF+KNXhcYd5xm54yqGmAWNfIF9ARrtHm4L91xlU6I/r/PRrG
-        wihyByaGwQNfWqoYw9XH7X1Lo71+FH3/EOekOrnErdI1sENHJ6+WoxloP1vohvXi
-        OOdm+xOFzu5c60tfT81/E/F3c9OD4NI=
-Received: from mail.baikal.int (mail.baikal.int [192.168.51.25])
-        by post.baikalelectronics.com (Proxmox) with ESMTP id 590D3E0E1D;
-        Mon,  7 Nov 2022 23:50:35 +0300 (MSK)
-Received: from localhost (192.168.168.10) by mail (192.168.51.25) with
- Microsoft SMTP Server (TLS) id 15.0.1395.4; Mon, 7 Nov 2022 23:50:34 +0300
-From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Rob Herring <robh+dt@kernel.org>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Cai Huoqing <cai.huoqing@linux.dev>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>
-CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Frank Li <Frank.Li@nxp.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        caihuoqing <caihuoqing@baidu.com>, Vinod Koul <vkoul@kernel.org>,
-        <linux-pci@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v6 20/20] PCI: dwc: Add Baikal-T1 PCIe controller support
-Date:   Mon, 7 Nov 2022 23:49:34 +0300
-Message-ID: <20221107204934.32655-21-Sergey.Semin@baikalelectronics.ru>
-X-Mailer: git-send-email 2.38.0
-In-Reply-To: <20221107204934.32655-1-Sergey.Semin@baikalelectronics.ru>
-References: <20221107204934.32655-1-Sergey.Semin@baikalelectronics.ru>
+        Mon, 7 Nov 2022 16:02:25 -0500
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B858CD;
+        Mon,  7 Nov 2022 13:02:22 -0800 (PST)
+Received: by mail-ej1-x62a.google.com with SMTP id q9so33621636ejd.0;
+        Mon, 07 Nov 2022 13:02:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QczV3OAQFi4R9Fzu3IjmJPxTdu5aiNf6vGwlT6+WFlQ=;
+        b=fVTxz91QbsudrM2oDeJMOtF34S3a1J3zZkIY6KOWYVSwv77egPL3+RK0R0fQkUnrwe
+         TpJXlzHdrAR70CawaVc9aDKPyQZ0oEYRgVcV/LPQ5OAlZ8zBOCRP1veYFk77s0nwx/NR
+         OSMfi3LnTD5IqR5M6lh45ZzF4hVNeYO2RZml+oXV0fYBVr5ijzmg1zSixNxPJ0YyssdL
+         TJwzdy221JQjbIp4jW4WPPeIwi5/Zftb3xJNoNooVPEp/vadP9L6xKKm5o/81mqFhWbe
+         Zv/VsMQMHSFEHL/nXfpYzi9PUbYpElGtY7YiW9dSm2hbsROSEadN2hjb/aKW5ysv6aNU
+         7oUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=QczV3OAQFi4R9Fzu3IjmJPxTdu5aiNf6vGwlT6+WFlQ=;
+        b=GAu7CgOXO9LJrrFhJP4ub6dtKcoXmIQk3tHI01qbFzXR3ncnWpKLm8P4B6xs5lPTk6
+         pl7mw87Qy6b7c4FIQ/ZTg2r+huF7n3cv10Injv5MhgfcsVWE3pkHY5Jz+F4krpju6rSS
+         GLjxCeSb/oa+IIf4rP56evT0tcIe4O5ycFVqUNRZEeqWx/e42IV1F0RO83ps3c7Mzo35
+         JZ5FIKtb34bZRC9H2v1PjQqHNpRn1IlEpN3UuHVsYb2XkOQCWecp5PmOymS324HTDAIa
+         /Z3q4vPLPCOIu6tD1iGXViJABpMcSa8X5fMbnhqH0BsTjblj7OM86QB1KUNqxAAZ2lkL
+         w/tQ==
+X-Gm-Message-State: ACrzQf1AJsgOtiY6uohudKw85ZgqE5DjrG7IFQKMwzRQGiumHtRGiarI
+        zjP+ZyyqzvlYg7MwjTchPUzpJQqxuauVmg==
+X-Google-Smtp-Source: AMsMyM7DnvUsNfGXFbdasM19t/jlSDD9HGY6jH3+pQLEKN64lWBGBPbyQ23NIYiTDuHY4Hxza9K56A==
+X-Received: by 2002:a17:907:75d1:b0:7a8:291:2050 with SMTP id jl17-20020a17090775d100b007a802912050mr50526848ejc.287.1667854940635;
+        Mon, 07 Nov 2022 13:02:20 -0800 (PST)
+Received: from kista.localdomain (82-149-19-102.dynamic.telemach.net. [82.149.19.102])
+        by smtp.gmail.com with ESMTPSA id k18-20020a05640212d200b0044ef2ac2650sm4638472edx.90.2022.11.07.13.02.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Nov 2022 13:02:20 -0800 (PST)
+From:   Jernej Skrabec <jernej.skrabec@gmail.com>
+To:     mchehab@kernel.org, hverkuil-cisco@xs4all.nl
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        wens@csie.org, samuel@sholland.org, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Jernej Skrabec <jernej.skrabec@gmail.com>
+Subject: [PATCH v2 2/3] media: sunxi: Add H6 deinterlace driver
+Date:   Mon,  7 Nov 2022 22:02:07 +0100
+Message-Id: <20221107210208.284261-3-jernej.skrabec@gmail.com>
+X-Mailer: git-send-email 2.38.1
+In-Reply-To: <20221107210208.284261-1-jernej.skrabec@gmail.com>
+References: <20221107210208.284261-1-jernej.skrabec@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [192.168.168.10]
-X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Baikal-T1 SoC is equipped with DWC PCIe v4.60a host controller. It can be
-trained to work up to Gen.3 speed over up to x4 lanes. The host controller
-is attached to the DW PCIe 3.0 PCS via the PIPE-4 interface, which in its
-turn is connected to the DWC 10G PHY. The whole system is supposed to be
-fed up with four clock sources: DBI peripheral clock, AXI application
-clocks and external PHY/core reference clock generating the 100MHz signal.
-In addition to that the platform provide a way to reset each part of the
-controller: sticky/non-sticky bits, host controller core, PIPE interface,
-PCS/PHY and Hot/Power reset signal. The driver also provides a way to
-handle the GPIO-based PERST# signal.
+This driver covers H6 deinterlace core, which is marked in vendor driver
+as v2.3. Contrary to older cores, covered by sun8i-di, it doesn't
+support scaling, but it supports iommu and has additional motion
+compensated deinterlacing algorithm.
 
-Note due to the Baikal-T1 MMIO peculiarity we have to implement the DBI
-interface accessors which make sure the IO operations are dword-aligned.
-
-Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-
+Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 ---
+ MAINTAINERS                                   |    4 +-
+ drivers/media/platform/sunxi/Kconfig          |    1 +
+ drivers/media/platform/sunxi/Makefile         |    1 +
+ .../media/platform/sunxi/sun50i-di/Kconfig    |   15 +
+ .../media/platform/sunxi/sun50i-di/Makefile   |    2 +
+ .../platform/sunxi/sun50i-di/sun50i-di.c      | 1149 +++++++++++++++++
+ .../platform/sunxi/sun50i-di/sun50i-di.h      |  175 +++
+ 7 files changed, 1346 insertions(+), 1 deletion(-)
+ create mode 100644 drivers/media/platform/sunxi/sun50i-di/Kconfig
+ create mode 100644 drivers/media/platform/sunxi/sun50i-di/Makefile
+ create mode 100644 drivers/media/platform/sunxi/sun50i-di/sun50i-di.c
+ create mode 100644 drivers/media/platform/sunxi/sun50i-di/sun50i-di.h
 
-Changelog v2:
-- Rename 'syscon' property to 'baikal,bt1-syscon'.
-
-Changelog v3:
-- Use the clocks/resets handlers defined in the DW PCIe core descriptor.
-  (@Rob)
-- Redefine PCI host bridge config space accessors with the generic
-  pci_generic_config_read32() and pci_generic_config_write32() methods.
-  (@Rob)
-
-Changelog v4:
-- Drop PCIBIOS_* macros usage. (@Rob)
-- Add "static const" to the dw_pcie_ops and dw_pcie_host_ops structure
-  instances. (@Bjorn)
-- Rename bt1_pcie_dw_ops to bt1_pcie_ops. (@Bjorn)
-- Rename bt1_pcie_ops to bt1_pci_ops. (@Bjorn)
-- Use start_link/stop_link suffixes in the corresponding callbacks.
-  (@Bjorn)
-- Change the get_res() method suffix to being get_resources(). (@Bjorn)
-- Change *_{add,del}_dw_port() method to *_{add,del}_port(). (@Bjorn)
-- Drop dma_coerce_mask_and_coherent() applied to the PCI host bridge
-  kernel device instance. (@Bjorn)
-- Add the comment above the dma_set_mask_and_coherent() method usage
-  regarding the controller eDMA feature. (@Bjorn)
-- Fix the comment above the core reset controls assertion. (@Bjorn)
-- Replace delays and timeout numeric literals with macros. (@Bjorn)
-
-Changelog v6:
-- Move the DMA-mask setup to the eDMA driver. (@Robin)
----
- drivers/pci/controller/dwc/Kconfig    |   9 +
- drivers/pci/controller/dwc/Makefile   |   1 +
- drivers/pci/controller/dwc/pcie-bt1.c | 645 ++++++++++++++++++++++++++
- 3 files changed, 655 insertions(+)
- create mode 100644 drivers/pci/controller/dwc/pcie-bt1.c
-
-diff --git a/drivers/pci/controller/dwc/Kconfig b/drivers/pci/controller/dwc/Kconfig
-index 62ce3abf0f19..771b8b146623 100644
---- a/drivers/pci/controller/dwc/Kconfig
-+++ b/drivers/pci/controller/dwc/Kconfig
-@@ -222,6 +222,15 @@ config PCIE_ARTPEC6_EP
- 	  Enables support for the PCIe controller in the ARTPEC-6 SoC to work in
- 	  endpoint mode. This uses the DesignWare core.
+diff --git a/MAINTAINERS b/MAINTAINERS
+index cf0f18502372..df35acab10fc 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -5781,12 +5781,14 @@ M:	"Maciej W. Rozycki" <macro@orcam.me.uk>
+ S:	Maintained
+ F:	drivers/net/fddi/defza.*
  
-+config PCIE_BT1
-+	tristate "Baikal-T1 PCIe controller"
-+	depends on MIPS_BAIKAL_T1 || COMPILE_TEST
-+	depends on PCI_MSI_IRQ_DOMAIN
-+	select PCIE_DW_HOST
-+	help
-+	  Enables support for the PCIe controller in the Baikal-T1 SoC to work
-+	  in host mode. It's based on the Synopsys DWC PCIe v4.60a IP-core.
-+
- config PCIE_ROCKCHIP_DW_HOST
- 	bool "Rockchip DesignWare PCIe controller"
- 	select PCIE_DW
-diff --git a/drivers/pci/controller/dwc/Makefile b/drivers/pci/controller/dwc/Makefile
-index 8ba7b67f5e50..bf5c311875a1 100644
---- a/drivers/pci/controller/dwc/Makefile
-+++ b/drivers/pci/controller/dwc/Makefile
-@@ -3,6 +3,7 @@ obj-$(CONFIG_PCIE_DW) += pcie-designware.o
- obj-$(CONFIG_PCIE_DW_HOST) += pcie-designware-host.o
- obj-$(CONFIG_PCIE_DW_EP) += pcie-designware-ep.o
- obj-$(CONFIG_PCIE_DW_PLAT) += pcie-designware-plat.o
-+obj-$(CONFIG_PCIE_BT1) += pcie-bt1.o
- obj-$(CONFIG_PCI_DRA7XX) += pci-dra7xx.o
- obj-$(CONFIG_PCI_EXYNOS) += pci-exynos.o
- obj-$(CONFIG_PCIE_FU740) += pcie-fu740.o
-diff --git a/drivers/pci/controller/dwc/pcie-bt1.c b/drivers/pci/controller/dwc/pcie-bt1.c
+-DEINTERLACE DRIVERS FOR ALLWINNER H3
++DEINTERLACE DRIVERS FOR ALLWINNER SOCS
+ M:	Jernej Skrabec <jernej.skrabec@gmail.com>
+ L:	linux-media@vger.kernel.org
+ S:	Maintained
+ T:	git git://linuxtv.org/media_tree.git
++F:	Documentation/devicetree/bindings/media/allwinner,sun50i-h6-deinterlace.yaml
+ F:	Documentation/devicetree/bindings/media/allwinner,sun8i-h3-deinterlace.yaml
++F:	drivers/media/platform/sunxi/sun50i-di/
+ F:	drivers/media/platform/sunxi/sun8i-di/
+ 
+ DELL LAPTOP DRIVER
+diff --git a/drivers/media/platform/sunxi/Kconfig b/drivers/media/platform/sunxi/Kconfig
+index 2dd15083a1d9..413a79d23625 100644
+--- a/drivers/media/platform/sunxi/Kconfig
++++ b/drivers/media/platform/sunxi/Kconfig
+@@ -7,4 +7,5 @@ source "drivers/media/platform/sunxi/sun6i-csi/Kconfig"
+ source "drivers/media/platform/sunxi/sun6i-mipi-csi2/Kconfig"
+ source "drivers/media/platform/sunxi/sun8i-a83t-mipi-csi2/Kconfig"
+ source "drivers/media/platform/sunxi/sun8i-di/Kconfig"
++source "drivers/media/platform/sunxi/sun50i-di/Kconfig"
+ source "drivers/media/platform/sunxi/sun8i-rotate/Kconfig"
+diff --git a/drivers/media/platform/sunxi/Makefile b/drivers/media/platform/sunxi/Makefile
+index 9aa01cb01883..f92927f49f93 100644
+--- a/drivers/media/platform/sunxi/Makefile
++++ b/drivers/media/platform/sunxi/Makefile
+@@ -5,4 +5,5 @@ obj-y		+= sun6i-csi/
+ obj-y		+= sun6i-mipi-csi2/
+ obj-y		+= sun8i-a83t-mipi-csi2/
+ obj-y		+= sun8i-di/
++obj-y		+= sun50i-di/
+ obj-y		+= sun8i-rotate/
+diff --git a/drivers/media/platform/sunxi/sun50i-di/Kconfig b/drivers/media/platform/sunxi/sun50i-di/Kconfig
 new file mode 100644
-index 000000000000..babbbf675a28
+index 000000000000..cc92f5086862
 --- /dev/null
-+++ b/drivers/pci/controller/dwc/pcie-bt1.c
-@@ -0,0 +1,645 @@
-+// SPDX-License-Identifier: GPL-2.0-only
++++ b/drivers/media/platform/sunxi/sun50i-di/Kconfig
+@@ -0,0 +1,15 @@
++# SPDX-License-Identifier: GPL-2.0-only
++config VIDEO_SUN50I_DEINTERLACE
++	tristate "Allwinner Deinterlace v2 driver"
++	depends on V4L_MEM2MEM_DRIVERS
++	depends on VIDEO_DEV
++	depends on ARCH_SUNXI || COMPILE_TEST
++	depends on COMMON_CLK && OF
++	depends on PM
++	select VIDEOBUF2_DMA_CONTIG
++	select V4L2_MEM2MEM_DEV
++	help
++	  Support for the Allwinner deinterlace v2 unit found on
++	  some SoCs, like H6.
++	  To compile this driver as a module choose m here. The
++	  module will be called sun50i-di.
+diff --git a/drivers/media/platform/sunxi/sun50i-di/Makefile b/drivers/media/platform/sunxi/sun50i-di/Makefile
+new file mode 100644
+index 000000000000..225b3b808069
+--- /dev/null
++++ b/drivers/media/platform/sunxi/sun50i-di/Makefile
+@@ -0,0 +1,2 @@
++# SPDX-License-Identifier: GPL-2.0
++obj-$(CONFIG_VIDEO_SUN50I_DEINTERLACE) += sun50i-di.o
+diff --git a/drivers/media/platform/sunxi/sun50i-di/sun50i-di.c b/drivers/media/platform/sunxi/sun50i-di/sun50i-di.c
+new file mode 100644
+index 000000000000..b2e53052c12b
+--- /dev/null
++++ b/drivers/media/platform/sunxi/sun50i-di/sun50i-di.c
+@@ -0,0 +1,1149 @@
++// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * Copyright (C) 2021 BAIKAL ELECTRONICS, JSC
++ * Allwinner sun50i deinterlacer driver
 + *
-+ * Authors:
-+ *   Vadim Vlasov <Vadim.Vlasov@baikalelectronics.ru>
-+ *   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-+ *
-+ * Baikal-T1 PCIe controller driver
++ * Copyright (C) 2022 Jernej Skrabec <jernej.skrabec@gmail.com>
 + */
 +
-+#include <linux/bitfield.h>
-+#include <linux/bits.h>
-+#include <linux/clk.h>
 +#include <linux/delay.h>
-+#include <linux/gpio/consumer.h>
-+#include <linux/kernel.h>
-+#include <linux/mfd/syscon.h>
++#include <linux/interrupt.h>
++#include <linux/io.h>
 +#include <linux/module.h>
-+#include <linux/pci.h>
-+#include <linux/platform_device.h>
-+#include <linux/regmap.h>
-+#include <linux/reset.h>
-+#include <linux/types.h>
++#include <linux/of.h>
++#include <linux/pm_runtime.h>
 +
-+#include "pcie-designware.h"
++#include <media/v4l2-ioctl.h>
++#include <media/videobuf2-dma-contig.h>
 +
-+/* Baikal-T1 System CCU control registers */
-+#define BT1_CCU_PCIE_CLKC			0x140
-+#define BT1_CCU_PCIE_REQ_PCS_CLK		BIT(16)
-+#define BT1_CCU_PCIE_REQ_MAC_CLK		BIT(17)
-+#define BT1_CCU_PCIE_REQ_PIPE_CLK		BIT(18)
++#include "sun50i-di.h"
 +
-+#define BT1_CCU_PCIE_RSTC			0x144
-+#define BT1_CCU_PCIE_REQ_LINK_RST		BIT(13)
-+#define BT1_CCU_PCIE_REQ_SMLH_RST		BIT(14)
-+#define BT1_CCU_PCIE_REQ_PHY_RST		BIT(16)
-+#define BT1_CCU_PCIE_REQ_CORE_RST		BIT(24)
-+#define BT1_CCU_PCIE_REQ_STICKY_RST		BIT(26)
-+#define BT1_CCU_PCIE_REQ_NSTICKY_RST		BIT(27)
++#define FLAG_PITCH (DEINTERLACE_MAX_WIDTH / 4)
++#define FLAG_SIZE (FLAG_PITCH * DEINTERLACE_MAX_HEIGHT)
 +
-+#define BT1_CCU_PCIE_PMSC			0x148
-+#define BT1_CCU_PCIE_LTSSM_STATE_MASK		GENMASK(5, 0)
-+#define BT1_CCU_PCIE_LTSSM_DET_QUIET		0x00
-+#define BT1_CCU_PCIE_LTSSM_DET_ACT		0x01
-+#define BT1_CCU_PCIE_LTSSM_POLL_ACT		0x02
-+#define BT1_CCU_PCIE_LTSSM_POLL_COMP		0x03
-+#define BT1_CCU_PCIE_LTSSM_POLL_CONF		0x04
-+#define BT1_CCU_PCIE_LTSSM_PRE_DET_QUIET	0x05
-+#define BT1_CCU_PCIE_LTSSM_DET_WAIT		0x06
-+#define BT1_CCU_PCIE_LTSSM_CFG_LNKWD_START	0x07
-+#define BT1_CCU_PCIE_LTSSM_CFG_LNKWD_ACEPT	0x08
-+#define BT1_CCU_PCIE_LTSSM_CFG_LNNUM_WAIT	0x09
-+#define BT1_CCU_PCIE_LTSSM_CFG_LNNUM_ACEPT	0x0a
-+#define BT1_CCU_PCIE_LTSSM_CFG_COMPLETE		0x0b
-+#define BT1_CCU_PCIE_LTSSM_CFG_IDLE		0x0c
-+#define BT1_CCU_PCIE_LTSSM_RCVR_LOCK		0x0d
-+#define BT1_CCU_PCIE_LTSSM_RCVR_SPEED		0x0e
-+#define BT1_CCU_PCIE_LTSSM_RCVR_RCVRCFG		0x0f
-+#define BT1_CCU_PCIE_LTSSM_RCVR_IDLE		0x10
-+#define BT1_CCU_PCIE_LTSSM_L0			0x11
-+#define BT1_CCU_PCIE_LTSSM_L0S			0x12
-+#define BT1_CCU_PCIE_LTSSM_L123_SEND_IDLE	0x13
-+#define BT1_CCU_PCIE_LTSSM_L1_IDLE		0x14
-+#define BT1_CCU_PCIE_LTSSM_L2_IDLE		0x15
-+#define BT1_CCU_PCIE_LTSSM_L2_WAKE		0x16
-+#define BT1_CCU_PCIE_LTSSM_DIS_ENTRY		0x17
-+#define BT1_CCU_PCIE_LTSSM_DIS_IDLE		0x18
-+#define BT1_CCU_PCIE_LTSSM_DISABLE		0x19
-+#define BT1_CCU_PCIE_LTSSM_LPBK_ENTRY		0x1a
-+#define BT1_CCU_PCIE_LTSSM_LPBK_ACTIVE		0x1b
-+#define BT1_CCU_PCIE_LTSSM_LPBK_EXIT		0x1c
-+#define BT1_CCU_PCIE_LTSSM_LPBK_EXIT_TOUT	0x1d
-+#define BT1_CCU_PCIE_LTSSM_HOT_RST_ENTRY	0x1e
-+#define BT1_CCU_PCIE_LTSSM_HOT_RST		0x1f
-+#define BT1_CCU_PCIE_LTSSM_RCVR_EQ0		0x20
-+#define BT1_CCU_PCIE_LTSSM_RCVR_EQ1		0x21
-+#define BT1_CCU_PCIE_LTSSM_RCVR_EQ2		0x22
-+#define BT1_CCU_PCIE_LTSSM_RCVR_EQ3		0x23
-+#define BT1_CCU_PCIE_SMLH_LINKUP		BIT(6)
-+#define BT1_CCU_PCIE_RDLH_LINKUP		BIT(7)
-+#define BT1_CCU_PCIE_PM_LINKSTATE_L0S		BIT(8)
-+#define BT1_CCU_PCIE_PM_LINKSTATE_L1		BIT(9)
-+#define BT1_CCU_PCIE_PM_LINKSTATE_L2		BIT(10)
-+#define BT1_CCU_PCIE_L1_PENDING			BIT(12)
-+#define BT1_CCU_PCIE_REQ_EXIT_L1		BIT(14)
-+#define BT1_CCU_PCIE_LTSSM_RCVR_EQ		BIT(15)
-+#define BT1_CCU_PCIE_PM_DSTAT_MASK		GENMASK(18, 16)
-+#define BT1_CCU_PCIE_PM_PME_EN			BIT(20)
-+#define BT1_CCU_PCIE_PM_PME_STATUS		BIT(21)
-+#define BT1_CCU_PCIE_AUX_PM_EN			BIT(22)
-+#define BT1_CCU_PCIE_AUX_PWR_DET		BIT(23)
-+#define BT1_CCU_PCIE_WAKE_DET			BIT(24)
-+#define BT1_CCU_PCIE_TURNOFF_REQ		BIT(30)
-+#define BT1_CCU_PCIE_TURNOFF_ACK		BIT(31)
-+
-+#define BT1_CCU_PCIE_GENC			0x14c
-+#define BT1_CCU_PCIE_LTSSM_EN			BIT(1)
-+#define BT1_CCU_PCIE_DBI2_MODE			BIT(2)
-+#define BT1_CCU_PCIE_MGMT_EN			BIT(3)
-+#define BT1_CCU_PCIE_RXLANE_FLIP_EN		BIT(16)
-+#define BT1_CCU_PCIE_TXLANE_FLIP_EN		BIT(17)
-+#define BT1_CCU_PCIE_SLV_XFER_PEND		BIT(24)
-+#define BT1_CCU_PCIE_RCV_XFER_PEND		BIT(25)
-+#define BT1_CCU_PCIE_DBI_XFER_PEND		BIT(26)
-+#define BT1_CCU_PCIE_DMA_XFER_PEND		BIT(27)
-+
-+#define BT1_CCU_PCIE_LTSSM_LINKUP(_pmsc) \
-+({ \
-+	int __state = FIELD_GET(BT1_CCU_PCIE_LTSSM_STATE_MASK, _pmsc); \
-+	__state >= BT1_CCU_PCIE_LTSSM_L0 && __state <= BT1_CCU_PCIE_LTSSM_L2_WAKE; \
-+})
-+
-+/* Baikal-T1 PCIe specific control registers */
-+#define BT1_PCIE_AXI2MGM_LANENUM		0xd04
-+#define BT1_PCIE_AXI2MGM_LANESEL_MASK		GENMASK(3, 0)
-+
-+#define BT1_PCIE_AXI2MGM_ADDRCTL		0xd08
-+#define BT1_PCIE_AXI2MGM_PHYREG_ADDR_MASK	GENMASK(20, 0)
-+#define BT1_PCIE_AXI2MGM_READ_FLAG		BIT(29)
-+#define BT1_PCIE_AXI2MGM_DONE			BIT(30)
-+#define BT1_PCIE_AXI2MGM_BUSY			BIT(31)
-+
-+#define BT1_PCIE_AXI2MGM_WRITEDATA		0xd0c
-+#define BT1_PCIE_AXI2MGM_WDATA			GENMASK(15, 0)
-+
-+#define BT1_PCIE_AXI2MGM_READDATA		0xd10
-+#define BT1_PCIE_AXI2MGM_RDATA			GENMASK(15, 0)
-+
-+/* Generic Baikal-T1 PCIe interface resources */
-+#define BT1_PCIE_NUM_APP_CLKS			ARRAY_SIZE(bt1_pcie_app_clks)
-+#define BT1_PCIE_NUM_CORE_CLKS			ARRAY_SIZE(bt1_pcie_core_clks)
-+#define BT1_PCIE_NUM_APP_RSTS			ARRAY_SIZE(bt1_pcie_app_rsts)
-+#define BT1_PCIE_NUM_CORE_RSTS			ARRAY_SIZE(bt1_pcie_core_rsts)
-+
-+/* PCIe bus setup delays and timeouts */
-+#define BT1_PCIE_RST_DELAY_MS			100
-+#define BT1_PCIE_RUN_DELAY_US			100
-+#define BT1_PCIE_REQ_DELAY_US			1
-+#define BT1_PCIE_REQ_TIMEOUT_US			1000
-+#define BT1_PCIE_LNK_DELAY_US			1000
-+#define BT1_PCIE_LNK_TIMEOUT_US			1000000
-+
-+static const enum dw_pcie_app_clk bt1_pcie_app_clks[] = {
-+	DW_PCIE_DBI_CLK, DW_PCIE_MSTR_CLK, DW_PCIE_SLV_CLK,
++static const u32 deinterlace_formats[] = {
++	V4L2_PIX_FMT_NV12,
++	V4L2_PIX_FMT_NV21,
++	V4L2_PIX_FMT_YUV420,
++	V4L2_PIX_FMT_NV16,
++	V4L2_PIX_FMT_NV61,
++	V4L2_PIX_FMT_YUV422P
 +};
 +
-+static const enum dw_pcie_core_clk bt1_pcie_core_clks[] = {
-+	DW_PCIE_REF_CLK,
-+};
-+
-+static const enum dw_pcie_app_rst bt1_pcie_app_rsts[] = {
-+	DW_PCIE_MSTR_RST, DW_PCIE_SLV_RST,
-+};
-+
-+static const enum dw_pcie_core_rst bt1_pcie_core_rsts[] = {
-+	DW_PCIE_NON_STICKY_RST, DW_PCIE_STICKY_RST, DW_PCIE_CORE_RST,
-+	DW_PCIE_PIPE_RST, DW_PCIE_PHY_RST, DW_PCIE_HOT_RST, DW_PCIE_PWR_RST,
-+};
-+
-+struct bt1_pcie {
-+	struct dw_pcie dw;
-+	struct platform_device *pdev;
-+	struct regmap *sys_regs;
-+};
-+#define to_bt1_pcie(_dw) container_of(_dw, struct bt1_pcie, dw)
-+
-+/*
-+ * Baikal-T1 MMIO space must be read/written by the dword-aligned
-+ * instructions. Note the methods are optimized to have the dword operations
-+ * performed with minimum overhead as the most frequently used ones.
-+ */
-+static int bt1_pcie_read_mmio(void __iomem *addr, int size, u32 *val)
++static u32 deinterlace_read(struct deinterlace_dev *dev, u32 reg)
 +{
-+	unsigned int ofs = (uintptr_t)addr & 0x3;
++	return readl(dev->base + reg);
++}
 +
-+	if (!IS_ALIGNED((uintptr_t)addr, size))
-+		return -EINVAL;
++static void deinterlace_write(struct deinterlace_dev *dev,
++			      u32 reg, u32 value)
++{
++	writel(value, dev->base + reg);
++}
 +
-+	*val = readl(addr - ofs) >> ofs * BITS_PER_BYTE;
-+	if (size == 4) {
-+		return 0;
-+	} else if (size == 2) {
-+		*val &= 0xffff;
-+		return 0;
-+	} else if (size == 1) {
-+		*val &= 0xff;
++static void deinterlace_device_run(void *priv)
++{
++	dma_addr_t buf, prev, curr, next, addr[4][3];
++	struct deinterlace_ctx *ctx = priv;
++	struct deinterlace_dev *dev = ctx->dev;
++	struct vb2_v4l2_buffer *src, *dst;
++	u32 reg, pitch[3], offset[2];
++	unsigned int val;
++	bool motion;
++
++	src = v4l2_m2m_next_src_buf(ctx->fh.m2m_ctx);
++	dst = v4l2_m2m_next_dst_buf(ctx->fh.m2m_ctx);
++
++	v4l2_m2m_buf_copy_metadata(src, dst, true);
++
++	reg = DEINTERLACE_SIZE_WIDTH(ctx->src_fmt.width);
++	reg |= DEINTERLACE_SIZE_HEIGHT(ctx->src_fmt.height);
++	deinterlace_write(dev, DEINTERLACE_SIZE, reg);
++
++	switch (ctx->src_fmt.pixelformat) {
++	case V4L2_PIX_FMT_NV12:
++	case V4L2_PIX_FMT_NV21:
++		reg = DEINTERLACE_FORMAT_YUV420SP;
++		break;
++	case V4L2_PIX_FMT_YUV420:
++		reg = DEINTERLACE_FORMAT_YUV420P;
++		break;
++	case V4L2_PIX_FMT_NV16:
++	case V4L2_PIX_FMT_NV61:
++		reg = DEINTERLACE_FORMAT_YUV422SP;
++		break;
++	case V4L2_PIX_FMT_YUV422P:
++		reg = DEINTERLACE_FORMAT_YUV422P;
++		break;
++	}
++	deinterlace_write(dev, DEINTERLACE_FORMAT, reg);
++
++	pitch[0] = ctx->src_fmt.bytesperline;
++	switch (ctx->src_fmt.pixelformat) {
++	case V4L2_PIX_FMT_YUV420:
++	case V4L2_PIX_FMT_YUV422P:
++		pitch[1] = pitch[0] / 2;
++		pitch[2] = pitch[1];
++		break;
++	case V4L2_PIX_FMT_NV12:
++	case V4L2_PIX_FMT_NV21:
++	case V4L2_PIX_FMT_NV16:
++	case V4L2_PIX_FMT_NV61:
++		pitch[1] = pitch[0];
++		pitch[2] = 0;
++		break;
++	}
++
++	/*
++	 * Deinterlacer assumes that each input has a single field. In
++	 * reality, each input has two interlaced fields. By doubling
++	 * pitches we satisfy deinterlacer's assumption. That way
++	 * every second line will be skipped and it will appear to
++	 * the deinterlacer as a single field.
++	 */
++	deinterlace_write(dev, DEINTERLACE_IN_PITCH0, pitch[0] * 2);
++	deinterlace_write(dev, DEINTERLACE_IN_PITCH1, pitch[1] * 2);
++	deinterlace_write(dev, DEINTERLACE_IN_PITCH2, pitch[2] * 2);
++
++	deinterlace_write(dev, DEINTERLACE_OUT_PITCH0, pitch[0]);
++	deinterlace_write(dev, DEINTERLACE_OUT_PITCH1, pitch[1]);
++	deinterlace_write(dev, DEINTERLACE_OUT_PITCH2, pitch[2]);
++
++	deinterlace_write(dev, DEINTERLACE_FLAG_PITCH, FLAG_PITCH);
++
++	offset[0] = pitch[0] * ctx->src_fmt.height;
++	switch (ctx->src_fmt.pixelformat) {
++	case V4L2_PIX_FMT_YUV420:
++		offset[1] = offset[0] + offset[0] / 4;
++		break;
++	case V4L2_PIX_FMT_YUV422P:
++		offset[1] = offset[0] + offset[0] / 2;
++		break;
++	default:
++		offset[1] = 0;
++		break;
++	}
++
++	/*
++	 * Make sure that all inputs are valid. If history is not
++	 * long enough, reuse last buffer as many times as needed.
++	 */
++	buf = vb2_dma_contig_plane_dma_addr(&src->vb2_buf, 0);
++	next = buf;
++	if (ctx->prev[0])
++		buf = vb2_dma_contig_plane_dma_addr(&ctx->prev[0]->vb2_buf, 0);
++	curr = buf;
++	if (ctx->prev[1])
++		buf = vb2_dma_contig_plane_dma_addr(&ctx->prev[1]->vb2_buf, 0);
++	prev = buf;
++
++	if (ctx->first_field == 0) {
++		if (ctx->field == 0) {
++			addr[0][0] = prev;
++			addr[0][1] = prev;
++			addr[0][2] = prev;
++			addr[1][0] = prev + pitch[0];
++			addr[1][1] = prev + pitch[1];
++			addr[1][2] = prev + pitch[2];
++			addr[2][0] = curr;
++			addr[2][1] = curr;
++			addr[2][2] = curr;
++			addr[3][0] = curr + pitch[0];
++			addr[3][1] = curr + pitch[1];
++			addr[3][2] = curr + pitch[2];
++		} else {
++			addr[0][0] = prev + pitch[0];
++			addr[0][1] = prev + pitch[1];
++			addr[0][2] = prev + pitch[2];
++			addr[1][0] = curr;
++			addr[1][1] = curr;
++			addr[1][2] = curr;
++			addr[2][0] = curr + pitch[0];
++			addr[2][1] = curr + pitch[1];
++			addr[2][2] = curr + pitch[2];
++			addr[3][0] = next;
++			addr[3][1] = next;
++			addr[3][2] = next;
++		}
++	} else {
++		if (ctx->field == 0) {
++			addr[0][0] = prev;
++			addr[0][1] = prev;
++			addr[0][2] = prev;
++			addr[1][0] = curr + pitch[0];
++			addr[1][1] = curr + pitch[1];
++			addr[1][2] = curr + pitch[2];
++			addr[2][0] = curr;
++			addr[2][1] = curr;
++			addr[2][2] = curr;
++			addr[3][0] = next + pitch[0];
++			addr[3][1] = next + pitch[1];
++			addr[3][2] = next + pitch[2];
++		} else {
++			addr[0][0] = prev + pitch[0];
++			addr[0][1] = prev + pitch[1];
++			addr[0][2] = prev + pitch[2];
++			addr[1][0] = prev;
++			addr[1][1] = prev;
++			addr[1][2] = prev;
++			addr[2][0] = curr + pitch[0];
++			addr[2][1] = curr + pitch[1];
++			addr[2][2] = curr + pitch[2];
++			addr[3][0] = curr;
++			addr[3][1] = curr;
++			addr[3][2] = curr;
++		}
++	}
++
++	deinterlace_write(dev, DEINTERLACE_IN0_ADDR0, addr[0][0]);
++	deinterlace_write(dev, DEINTERLACE_IN0_ADDR1, addr[0][1] + offset[0]);
++	deinterlace_write(dev, DEINTERLACE_IN0_ADDR2, addr[0][2] + offset[1]);
++
++	deinterlace_write(dev, DEINTERLACE_IN1_ADDR0, addr[1][0]);
++	deinterlace_write(dev, DEINTERLACE_IN1_ADDR1, addr[1][1] + offset[0]);
++	deinterlace_write(dev, DEINTERLACE_IN1_ADDR2, addr[1][2] + offset[1]);
++
++	deinterlace_write(dev, DEINTERLACE_IN2_ADDR0, addr[2][0]);
++	deinterlace_write(dev, DEINTERLACE_IN2_ADDR1, addr[2][1] + offset[0]);
++	deinterlace_write(dev, DEINTERLACE_IN2_ADDR2, addr[2][2] + offset[1]);
++
++	deinterlace_write(dev, DEINTERLACE_IN3_ADDR0, addr[3][0]);
++	deinterlace_write(dev, DEINTERLACE_IN3_ADDR1, addr[3][1] + offset[0]);
++	deinterlace_write(dev, DEINTERLACE_IN3_ADDR2, addr[3][2] + offset[1]);
++
++	buf = vb2_dma_contig_plane_dma_addr(&dst->vb2_buf, 0);
++	deinterlace_write(dev, DEINTERLACE_OUT_ADDR0, buf);
++	deinterlace_write(dev, DEINTERLACE_OUT_ADDR1, buf + offset[0]);
++	deinterlace_write(dev, DEINTERLACE_OUT_ADDR2, buf + offset[1]);
++
++	if (ctx->field) {
++		deinterlace_write(dev, DEINTERLACE_IN_FLAG_ADDR,
++				  ctx->flag1_buf_dma);
++		deinterlace_write(dev, DEINTERLACE_OUT_FLAG_ADDR,
++				  ctx->flag2_buf_dma);
++	} else {
++		deinterlace_write(dev, DEINTERLACE_IN_FLAG_ADDR,
++				  ctx->flag2_buf_dma);
++		deinterlace_write(dev, DEINTERLACE_OUT_FLAG_ADDR,
++				  ctx->flag1_buf_dma);
++	}
++
++	if (ctx->first_field == 0)
++		val = 4;
++	else
++		val = 5;
++
++	reg = DEINTERLACE_INTP_PARAM0_ANGLE_LIMIT(20);
++	reg |= DEINTERLACE_INTP_PARAM0_ANGLE_CONST_TH(5);
++	reg |= DEINTERLACE_INTP_PARAM0_LUMA_CUR_FAC_MODE(val);
++	reg |= DEINTERLACE_INTP_PARAM0_CHROMA_CUR_FAC_MODE(val);
++	deinterlace_write(dev, DEINTERLACE_INTP_PARAM0, reg);
++
++	reg = DEINTERLACE_POLAR_FIELD(ctx->field);
++	deinterlace_write(dev, DEINTERLACE_POLAR, reg);
++
++	motion = ctx->prev[0] && ctx->prev[1];
++	reg = DEINTERLACE_MODE_DEINT_LUMA;
++	reg |= DEINTERLACE_MODE_DEINT_CHROMA;
++	reg |= DEINTERLACE_MODE_INTP_EN;
++	reg |= DEINTERLACE_MODE_AUTO_UPD_MODE(ctx->first_field);
++	if (motion)
++		reg |= DEINTERLACE_MODE_MOTION_EN;
++	else
++		reg |= DEINTERLACE_MODE_FIELD_MODE;
++	deinterlace_write(dev, DEINTERLACE_MODE, reg);
++
++	/* Start the watchdog timer. */
++	schedule_delayed_work(&dev->watchdog_work, msecs_to_jiffies(1000));
++
++	deinterlace_write(dev, DEINTERLACE_INT_CTRL, DEINTERLACE_INT_EN);
++
++	reg = DEINTERLACE_CTRL_START;
++	if (device_iommu_mapped(dev->dev))
++		reg |= DEINTERLACE_CTRL_IOMMU_EN;
++	deinterlace_write(dev, DEINTERLACE_CTRL, reg);
++}
++
++static void deinterlace_end_job(struct deinterlace_dev *dev,
++				enum vb2_buffer_state state)
++{
++	struct deinterlace_ctx *ctx;
++	struct vb2_v4l2_buffer *dst;
++
++	deinterlace_write(dev, DEINTERLACE_INT_CTRL, 0);
++	deinterlace_write(dev, DEINTERLACE_STATUS, DEINTERLACE_STATUS_FINISHED);
++
++	/* vendor driver always resets the core, so do that here too */
++	deinterlace_write(dev, DEINTERLACE_CTRL, DEINTERLACE_CTRL_RESET);
++	udelay(1);
++	deinterlace_write(dev, DEINTERLACE_CTRL, 0);
++
++	ctx = v4l2_m2m_get_curr_priv(dev->m2m_dev);
++	if (!ctx) {
++		v4l2_err(&dev->v4l2_dev,
++			 "Instance released before the end of transaction\n");
++		return;
++	}
++
++	if (state == VB2_BUF_STATE_ERROR) {
++		memset(ctx->flag1_buf, 0, FLAG_SIZE);
++		memset(ctx->flag2_buf, 0, FLAG_SIZE);
++	}
++
++	dst = v4l2_m2m_dst_buf_remove(ctx->fh.m2m_ctx);
++	v4l2_m2m_buf_done(dst, state);
++
++	if (ctx->field != ctx->first_field || ctx->aborting) {
++		ctx->field = ctx->first_field;
++
++		if (ctx->prev[1])
++			v4l2_m2m_buf_done(ctx->prev[1], VB2_BUF_STATE_DONE);
++		ctx->prev[1] = ctx->prev[0];
++		ctx->prev[0] = v4l2_m2m_src_buf_remove(ctx->fh.m2m_ctx);
++
++		v4l2_m2m_job_finish(dev->m2m_dev, ctx->fh.m2m_ctx);
++	} else {
++		ctx->field = !ctx->first_field;
++		deinterlace_device_run(ctx);
++	}
++}
++
++static irqreturn_t deinterlace_irq(int irq, void *data)
++{
++	struct deinterlace_dev *dev = data;
++	unsigned int status;
++
++	status = deinterlace_read(dev, DEINTERLACE_STATUS);
++	if (!(status & DEINTERLACE_STATUS_FINISHED))
++		return IRQ_NONE;
++
++	/*
++	 * If cancel_delayed_work returns false it means watchdog already
++	 * executed and finished the job.
++	 */
++	if (!cancel_delayed_work(&dev->watchdog_work))
++		return IRQ_HANDLED;
++
++	deinterlace_end_job(dev, VB2_BUF_STATE_DONE);
++
++	return IRQ_HANDLED;
++}
++
++static void deinterlace_watchdog(struct work_struct *work)
++{
++	struct deinterlace_dev *dev;
++
++	dev = container_of(to_delayed_work(work),
++			   struct deinterlace_dev, watchdog_work);
++
++	deinterlace_end_job(dev, VB2_BUF_STATE_ERROR);
++}
++
++static void deinterlace_init(struct deinterlace_dev *dev)
++{
++	u32 reg;
++
++	deinterlace_write(dev, DEINTERLACE_OUT_PATH, 0);
++
++	reg = DEINTERLACE_MD_PARAM0_MIN_LUMA_TH(4);
++	reg |= DEINTERLACE_MD_PARAM0_MAX_LUMA_TH(12);
++	reg |= DEINTERLACE_MD_PARAM0_AVG_LUMA_SHIFT(6);
++	reg |= DEINTERLACE_MD_PARAM0_TH_SHIFT(1);
++	deinterlace_write(dev, DEINTERLACE_MD_PARAM0, reg);
++
++	reg = DEINTERLACE_MD_PARAM1_MOV_FAC_NONEDGE(2);
++	deinterlace_write(dev, DEINTERLACE_MD_PARAM1, reg);
++
++	reg = DEINTERLACE_MD_PARAM2_CHROMA_SPATIAL_TH(128);
++	reg |= DEINTERLACE_MD_PARAM2_CHROMA_DIFF_TH(5);
++	reg |= DEINTERLACE_MD_PARAM2_PIX_STATIC_TH(3);
++	deinterlace_write(dev, DEINTERLACE_MD_PARAM2, reg);
++
++	reg = DEINTERLACE_MD_CH_PARAM_BLEND_MODE(1);
++	reg |= DEINTERLACE_MD_CH_PARAM_FONT_PRO_EN;
++	reg |= DEINTERLACE_MD_CH_PARAM_FONT_PRO_TH(48);
++	reg |= DEINTERLACE_MD_CH_PARAM_FONT_PRO_FAC(4);
++	deinterlace_write(dev, DEINTERLACE_MD_CH_PARAM, reg);
++
++	reg = DEINTERLACE_INTP_PARAM1_A(4);
++	reg |= DEINTERLACE_INTP_PARAM1_EN;
++	reg |= DEINTERLACE_INTP_PARAM1_C(10);
++	reg |= DEINTERLACE_INTP_PARAM1_CMAX(64);
++	reg |= DEINTERLACE_INTP_PARAM1_MAXRAT(2);
++	deinterlace_write(dev, DEINTERLACE_INTP_PARAM1, reg);
++
++	/* only 32-bit addresses are supported, so high bits are always 0 */
++	deinterlace_write(dev, DEINTERLACE_IN0_ADDRH, 0);
++	deinterlace_write(dev, DEINTERLACE_IN1_ADDRH, 0);
++	deinterlace_write(dev, DEINTERLACE_IN2_ADDRH, 0);
++	deinterlace_write(dev, DEINTERLACE_IN3_ADDRH, 0);
++	deinterlace_write(dev, DEINTERLACE_OUT_ADDRH, 0);
++	deinterlace_write(dev, DEINTERLACE_FLAG_ADDRH, 0);
++}
++
++static int deinterlace_job_ready(void *priv)
++{
++	struct deinterlace_ctx *ctx = priv;
++
++	return v4l2_m2m_num_src_bufs_ready(ctx->fh.m2m_ctx) >= 1 &&
++	       v4l2_m2m_num_dst_bufs_ready(ctx->fh.m2m_ctx) >= 2;
++}
++
++static void deinterlace_job_abort(void *priv)
++{
++	struct deinterlace_ctx *ctx = priv;
++
++	/* Will cancel the transaction in the next interrupt handler */
++	ctx->aborting = 1;
++}
++
++static inline struct deinterlace_ctx *deinterlace_file2ctx(struct file *file)
++{
++	return container_of(file->private_data, struct deinterlace_ctx, fh);
++}
++
++static bool deinterlace_check_format(u32 pixelformat)
++{
++	unsigned int i;
++
++	for (i = 0; i < ARRAY_SIZE(deinterlace_formats); i++)
++		if (deinterlace_formats[i] == pixelformat)
++			return true;
++
++	return false;
++}
++
++static void deinterlace_prepare_format(struct v4l2_pix_format *pix_fmt)
++{
++	unsigned int bytesperline = pix_fmt->bytesperline;
++	unsigned int height = pix_fmt->height;
++	unsigned int width = pix_fmt->width;
++	unsigned int sizeimage;
++
++	width = clamp(width, DEINTERLACE_MIN_WIDTH,
++		      DEINTERLACE_MAX_WIDTH);
++	height = clamp(height, DEINTERLACE_MIN_HEIGHT,
++		       DEINTERLACE_MAX_HEIGHT);
++
++	/* try to respect userspace wishes about pitch */
++	bytesperline = ALIGN(bytesperline, 2);
++	if (bytesperline < ALIGN(width, 2))
++		bytesperline = ALIGN(width, 2);
++
++	/* luma */
++	sizeimage = bytesperline * height;
++
++	/* chroma */
++	switch (pix_fmt->pixelformat) {
++	case V4L2_PIX_FMT_NV12:
++	case V4L2_PIX_FMT_NV21:
++	case V4L2_PIX_FMT_YUV420:
++		sizeimage += bytesperline * height / 2;
++		break;
++	case V4L2_PIX_FMT_NV16:
++	case V4L2_PIX_FMT_NV61:
++	case V4L2_PIX_FMT_YUV422P:
++		sizeimage += bytesperline * height;
++		break;
++	}
++
++	if (pix_fmt->sizeimage < sizeimage)
++		pix_fmt->sizeimage = sizeimage;
++
++	pix_fmt->width = width;
++	pix_fmt->height = height;
++	pix_fmt->bytesperline = bytesperline;
++}
++
++static int deinterlace_querycap(struct file *file, void *priv,
++				struct v4l2_capability *cap)
++{
++	strscpy(cap->driver, DEINTERLACE_NAME, sizeof(cap->driver));
++	strscpy(cap->card, DEINTERLACE_NAME, sizeof(cap->card));
++	snprintf(cap->bus_info, sizeof(cap->bus_info),
++		 "platform:%s", DEINTERLACE_NAME);
++
++	return 0;
++}
++
++static int deinterlace_enum_fmt(struct file *file, void *priv,
++				struct v4l2_fmtdesc *f)
++{
++	if (f->index < ARRAY_SIZE(deinterlace_formats)) {
++		f->pixelformat = deinterlace_formats[f->index];
++
 +		return 0;
 +	}
 +
 +	return -EINVAL;
 +}
 +
-+static int bt1_pcie_write_mmio(void __iomem *addr, int size, u32 val)
++static int deinterlace_enum_framesizes(struct file *file, void *priv,
++				       struct v4l2_frmsizeenum *fsize)
 +{
-+	unsigned int ofs = (uintptr_t)addr & 0x3;
-+	u32 tmp, mask;
-+
-+	if (!IS_ALIGNED((uintptr_t)addr, size))
++	if (fsize->index != 0)
 +		return -EINVAL;
 +
-+	if (size == 4) {
-+		writel(val, addr);
-+		return 0;
-+	} else if (size == 2 || size == 1) {
-+		mask = GENMASK(size * BITS_PER_BYTE - 1, 0);
-+		tmp = readl(addr - ofs) & ~(mask << ofs * BITS_PER_BYTE);
-+		tmp |= (val & mask) << ofs * BITS_PER_BYTE;
-+		writel(tmp, addr - ofs);
-+		return 0;
-+	}
++	if (!deinterlace_check_format(fsize->pixel_format))
++		return -EINVAL;
 +
-+	return -EINVAL;
-+}
++	fsize->type = V4L2_FRMSIZE_TYPE_STEPWISE;
++	fsize->stepwise.min_width = DEINTERLACE_MIN_WIDTH;
++	fsize->stepwise.min_height = DEINTERLACE_MIN_HEIGHT;
++	fsize->stepwise.max_width = DEINTERLACE_MAX_WIDTH;
++	fsize->stepwise.max_height = DEINTERLACE_MAX_HEIGHT;
++	fsize->stepwise.step_width = 2;
 +
-+static u32 bt1_pcie_read_dbi(struct dw_pcie *pci, void __iomem *base, u32 reg,
-+			     size_t size)
-+{
-+	int ret;
-+	u32 val;
-+
-+	ret = bt1_pcie_read_mmio(base + reg, size, &val);
-+	if (ret) {
-+		dev_err(pci->dev, "Read DBI address failed\n");
-+		return ~0U;
-+	}
-+
-+	return val;
-+}
-+
-+static void bt1_pcie_write_dbi(struct dw_pcie *pci, void __iomem *base, u32 reg,
-+			       size_t size, u32 val)
-+{
-+	int ret;
-+
-+	ret = bt1_pcie_write_mmio(base + reg, size, val);
-+	if (ret)
-+		dev_err(pci->dev, "Write DBI address failed\n");
-+}
-+
-+static void bt1_pcie_write_dbi2(struct dw_pcie *pci, void __iomem *base, u32 reg,
-+				size_t size, u32 val)
-+{
-+	struct bt1_pcie *btpci = to_bt1_pcie(pci);
-+	int ret;
-+
-+	regmap_update_bits(btpci->sys_regs, BT1_CCU_PCIE_GENC,
-+			   BT1_CCU_PCIE_DBI2_MODE, BT1_CCU_PCIE_DBI2_MODE);
-+
-+	ret = bt1_pcie_write_mmio(base + reg, size, val);
-+	if (ret)
-+		dev_err(pci->dev, "Write DBI2 address failed\n");
-+
-+	regmap_update_bits(btpci->sys_regs, BT1_CCU_PCIE_GENC,
-+			   BT1_CCU_PCIE_DBI2_MODE, 0);
-+}
-+
-+static int bt1_pcie_start_link(struct dw_pcie *pci)
-+{
-+	struct bt1_pcie *btpci = to_bt1_pcie(pci);
-+	u32 val;
-+	int ret;
-+
-+	/*
-+	 * Enable LTSSM and make sure it was able to establish both PHY and
-+	 * data links. This procedure shall work fine to reach 2.5 GT/s speed.
-+	 */
-+	regmap_update_bits(btpci->sys_regs, BT1_CCU_PCIE_GENC,
-+			   BT1_CCU_PCIE_LTSSM_EN, BT1_CCU_PCIE_LTSSM_EN);
-+
-+	ret = regmap_read_poll_timeout(btpci->sys_regs, BT1_CCU_PCIE_PMSC, val,
-+				       (val & BT1_CCU_PCIE_SMLH_LINKUP),
-+				       BT1_PCIE_LNK_DELAY_US, BT1_PCIE_LNK_TIMEOUT_US);
-+	if (ret) {
-+		dev_err(pci->dev, "LTSSM failed to set PHY link up\n");
-+		return ret;
-+	}
-+
-+	ret = regmap_read_poll_timeout(btpci->sys_regs, BT1_CCU_PCIE_PMSC, val,
-+				       (val & BT1_CCU_PCIE_RDLH_LINKUP),
-+				       BT1_PCIE_LNK_DELAY_US, BT1_PCIE_LNK_TIMEOUT_US);
-+	if (ret) {
-+		dev_err(pci->dev, "LTSSM failed to set data link up\n");
-+		return ret;
-+	}
-+
-+	/*
-+	 * Activate direct speed change after the link is established in an
-+	 * attempt to reach a higher bus performance (up to Gen.3 - 8.0 GT/s).
-+	 * This is required at least to get 8.0 GT/s speed.
-+	 */
-+	val = dw_pcie_readl_dbi(pci, PCIE_LINK_WIDTH_SPEED_CONTROL);
-+	val |= PORT_LOGIC_SPEED_CHANGE;
-+	dw_pcie_writel_dbi(pci, PCIE_LINK_WIDTH_SPEED_CONTROL, val);
-+
-+	ret = regmap_read_poll_timeout(btpci->sys_regs, BT1_CCU_PCIE_PMSC, val,
-+				       BT1_CCU_PCIE_LTSSM_LINKUP(val),
-+				       BT1_PCIE_LNK_DELAY_US, BT1_PCIE_LNK_TIMEOUT_US);
-+	if (ret)
-+		dev_err(pci->dev, "LTSSM failed to get into L0 state\n");
-+
-+	return ret;
-+}
-+
-+static void bt1_pcie_stop_link(struct dw_pcie *pci)
-+{
-+	struct bt1_pcie *btpci = to_bt1_pcie(pci);
-+
-+	regmap_update_bits(btpci->sys_regs, BT1_CCU_PCIE_GENC,
-+			   BT1_CCU_PCIE_LTSSM_EN, 0);
-+}
-+
-+static const struct dw_pcie_ops bt1_pcie_ops = {
-+	.read_dbi = bt1_pcie_read_dbi,
-+	.write_dbi = bt1_pcie_write_dbi,
-+	.write_dbi2 = bt1_pcie_write_dbi2,
-+	.start_link = bt1_pcie_start_link,
-+	.stop_link = bt1_pcie_stop_link,
-+};
-+
-+static struct pci_ops bt1_pci_ops = {
-+	.map_bus = dw_pcie_own_conf_map_bus,
-+	.read = pci_generic_config_read32,
-+	.write = pci_generic_config_write32,
-+};
-+
-+static int bt1_pcie_get_resources(struct bt1_pcie *btpci)
-+{
-+	struct device *dev = btpci->dw.dev;
-+	int i;
-+
-+	/* DBI access is supposed to be performed by the dword-aligned IOs */
-+	btpci->dw.pp.bridge->ops = &bt1_pci_ops;
-+
-+	/* These CSRs are in MMIO so we won't check the regmap-methods status */
-+	btpci->sys_regs =
-+		syscon_regmap_lookup_by_phandle(dev->of_node, "baikal,bt1-syscon");
-+	if (IS_ERR(btpci->sys_regs))
-+		return dev_err_probe(dev, PTR_ERR(btpci->sys_regs),
-+				     "Failed to get syscon\n");
-+
-+	/* Make sure all the required resources have been specified */
-+	for (i = 0; i < BT1_PCIE_NUM_APP_CLKS; i++) {
-+		if (!btpci->dw.app_clks[bt1_pcie_app_clks[i]].clk) {
-+			dev_err(dev, "App clocks set is incomplete\n");
-+			return -ENOENT;
-+		}
-+	}
-+
-+	for (i = 0; i < BT1_PCIE_NUM_CORE_CLKS; i++) {
-+		if (!btpci->dw.core_clks[bt1_pcie_core_clks[i]].clk) {
-+			dev_err(dev, "Core clocks set is incomplete\n");
-+			return -ENOENT;
-+		}
-+	}
-+
-+	for (i = 0; i < BT1_PCIE_NUM_APP_RSTS; i++) {
-+		if (!btpci->dw.app_rsts[bt1_pcie_app_rsts[i]].rstc) {
-+			dev_err(dev, "App resets set is incomplete\n");
-+			return -ENOENT;
-+		}
-+	}
-+
-+	for (i = 0; i < BT1_PCIE_NUM_CORE_RSTS; i++) {
-+		if (!btpci->dw.core_rsts[bt1_pcie_core_rsts[i]].rstc) {
-+			dev_err(dev, "Core resets set is incomplete\n");
-+			return -ENOENT;
-+		}
++	switch (fsize->pixel_format) {
++	case V4L2_PIX_FMT_NV12:
++	case V4L2_PIX_FMT_NV21:
++	case V4L2_PIX_FMT_YUV420:
++		fsize->stepwise.step_height = 2;
++		break;
++	case V4L2_PIX_FMT_NV16:
++	case V4L2_PIX_FMT_NV61:
++	case V4L2_PIX_FMT_YUV422P:
++		fsize->stepwise.step_height = 1;
++		break;
 +	}
 +
 +	return 0;
 +}
 +
-+static void bt1_pcie_full_stop_bus(struct bt1_pcie *btpci, bool init)
++static int deinterlace_g_fmt_vid_cap(struct file *file, void *priv,
++				     struct v4l2_format *f)
 +{
-+	struct device *dev = btpci->dw.dev;
-+	struct dw_pcie *pci = &btpci->dw;
-+	int ret;
++	struct deinterlace_ctx *ctx = deinterlace_file2ctx(file);
 +
-+	/* Disable LTSSM for sure */
-+	regmap_update_bits(btpci->sys_regs, BT1_CCU_PCIE_GENC,
-+			   BT1_CCU_PCIE_LTSSM_EN, 0);
-+
-+	/*
-+	 * Application reset controls are trigger-based so assert the core
-+	 * resets only.
-+	 */
-+	ret = reset_control_bulk_assert(DW_PCIE_NUM_CORE_RSTS, pci->core_rsts);
-+	if (ret)
-+		dev_err(dev, "Failed to assert core resets\n");
-+
-+	/*
-+	 * Clocks are disabled by default at least in accordance with the clk
-+	 * enable counter value on init stage.
-+	 */
-+	if (!init) {
-+		clk_bulk_disable_unprepare(DW_PCIE_NUM_CORE_CLKS, pci->core_clks);
-+
-+		clk_bulk_disable_unprepare(DW_PCIE_NUM_APP_CLKS, pci->app_clks);
-+	}
-+
-+	/* The peripheral devices are unavailable anyway so reset them too */
-+	gpiod_set_value_cansleep(pci->pe_rst, 1);
-+
-+	/* Make sure all the resets are settled */
-+	msleep(BT1_PCIE_RST_DELAY_MS);
-+}
-+
-+/*
-+ * Implements the cold reset procedure in accordance with the reference manual
-+ * and available PM signals.
-+ */
-+static int bt1_pcie_cold_start_bus(struct bt1_pcie *btpci)
-+{
-+	struct device *dev = btpci->dw.dev;
-+	struct dw_pcie *pci = &btpci->dw;
-+	u32 val;
-+	int ret;
-+
-+	/* First get out of the Power/Hot reset state */
-+	ret = reset_control_deassert(pci->core_rsts[DW_PCIE_PWR_RST].rstc);
-+	if (ret) {
-+		dev_err(dev, "Failed to deassert PHY reset\n");
-+		return ret;
-+	}
-+
-+	ret = reset_control_deassert(pci->core_rsts[DW_PCIE_HOT_RST].rstc);
-+	if (ret) {
-+		dev_err(dev, "Failed to deassert hot reset\n");
-+		goto err_assert_pwr_rst;
-+	}
-+
-+	/* Wait for the PM-core to stop requesting the PHY reset */
-+	ret = regmap_read_poll_timeout(btpci->sys_regs, BT1_CCU_PCIE_RSTC, val,
-+				       !(val & BT1_CCU_PCIE_REQ_PHY_RST),
-+				       BT1_PCIE_REQ_DELAY_US, BT1_PCIE_REQ_TIMEOUT_US);
-+	if (ret) {
-+		dev_err(dev, "Timed out waiting for PM to stop PHY resetting\n");
-+		goto err_assert_hot_rst;
-+	}
-+
-+	ret = reset_control_deassert(pci->core_rsts[DW_PCIE_PHY_RST].rstc);
-+	if (ret) {
-+		dev_err(dev, "Failed to deassert PHY reset\n");
-+		goto err_assert_hot_rst;
-+	}
-+
-+	/* Clocks can be now enabled, but the ref one is crucial at this stage */
-+	ret = clk_bulk_prepare_enable(DW_PCIE_NUM_APP_CLKS, pci->app_clks);
-+	if (ret) {
-+		dev_err(dev, "Failed to enable app clocks\n");
-+		goto err_assert_phy_rst;
-+	}
-+
-+	ret = clk_bulk_prepare_enable(DW_PCIE_NUM_CORE_CLKS, pci->core_clks);
-+	if (ret) {
-+		dev_err(dev, "Failed to enable ref clocks\n");
-+		goto err_disable_app_clk;
-+	}
-+
-+	/* Wait for the PM to stop requesting the controller core reset */
-+	ret = regmap_read_poll_timeout(btpci->sys_regs, BT1_CCU_PCIE_RSTC, val,
-+				       !(val & BT1_CCU_PCIE_REQ_CORE_RST),
-+				       BT1_PCIE_REQ_DELAY_US, BT1_PCIE_REQ_TIMEOUT_US);
-+	if (ret) {
-+		dev_err(dev, "Timed out waiting for PM to stop core resetting\n");
-+		goto err_disable_core_clk;
-+	}
-+
-+	/* PCS-PIPE interface and controller core can be now activated */
-+	ret = reset_control_deassert(pci->core_rsts[DW_PCIE_PIPE_RST].rstc);
-+	if (ret) {
-+		dev_err(dev, "Failed to deassert PIPE reset\n");
-+		goto err_disable_core_clk;
-+	}
-+
-+	ret = reset_control_deassert(pci->core_rsts[DW_PCIE_CORE_RST].rstc);
-+	if (ret) {
-+		dev_err(dev, "Failed to deassert core reset\n");
-+		goto err_assert_pipe_rst;
-+	}
-+
-+	/* It's recommended to reset the core and application logic together */
-+	ret = reset_control_bulk_reset(DW_PCIE_NUM_APP_RSTS, pci->app_rsts);
-+	if (ret) {
-+		dev_err(dev, "Failed to reset app domain\n");
-+		goto err_assert_core_rst;
-+	}
-+
-+	/* Sticky/Non-sticky CSR flags can be now unreset too */
-+	ret = reset_control_deassert(pci->core_rsts[DW_PCIE_STICKY_RST].rstc);
-+	if (ret) {
-+		dev_err(dev, "Failed to deassert sticky reset\n");
-+		goto err_assert_core_rst;
-+	}
-+
-+	ret = reset_control_deassert(pci->core_rsts[DW_PCIE_NON_STICKY_RST].rstc);
-+	if (ret) {
-+		dev_err(dev, "Failed to deassert non-sticky reset\n");
-+		goto err_assert_sticky_rst;
-+	}
-+
-+	/* Activate the PCIe bus peripheral devices */
-+	gpiod_set_value_cansleep(pci->pe_rst, 0);
-+
-+	/* Make sure the state is settled (LTSSM is still disabled though) */
-+	usleep_range(BT1_PCIE_RUN_DELAY_US, BT1_PCIE_RUN_DELAY_US + 100);
-+
-+	return 0;
-+
-+err_assert_sticky_rst:
-+	reset_control_assert(pci->core_rsts[DW_PCIE_STICKY_RST].rstc);
-+
-+err_assert_core_rst:
-+	reset_control_assert(pci->core_rsts[DW_PCIE_CORE_RST].rstc);
-+
-+err_assert_pipe_rst:
-+	reset_control_assert(pci->core_rsts[DW_PCIE_PIPE_RST].rstc);
-+
-+err_disable_core_clk:
-+	clk_bulk_disable_unprepare(DW_PCIE_NUM_CORE_CLKS, pci->core_clks);
-+
-+err_disable_app_clk:
-+	clk_bulk_disable_unprepare(DW_PCIE_NUM_APP_CLKS, pci->app_clks);
-+
-+err_assert_phy_rst:
-+	reset_control_assert(pci->core_rsts[DW_PCIE_PHY_RST].rstc);
-+
-+err_assert_hot_rst:
-+	reset_control_assert(pci->core_rsts[DW_PCIE_HOT_RST].rstc);
-+
-+err_assert_pwr_rst:
-+	reset_control_assert(pci->core_rsts[DW_PCIE_PWR_RST].rstc);
-+
-+	return ret;
-+}
-+
-+static int bt1_pcie_host_init(struct dw_pcie_rp *pp)
-+{
-+	struct dw_pcie *pci = to_dw_pcie_from_pp(pp);
-+	struct bt1_pcie *btpci = to_bt1_pcie(pci);
-+	int ret;
-+
-+	ret = bt1_pcie_get_resources(btpci);
-+	if (ret)
-+		return ret;
-+
-+	bt1_pcie_full_stop_bus(btpci, true);
-+
-+	return bt1_pcie_cold_start_bus(btpci);
-+}
-+
-+static void bt1_pcie_host_deinit(struct dw_pcie_rp *pp)
-+{
-+	struct dw_pcie *pci = to_dw_pcie_from_pp(pp);
-+	struct bt1_pcie *btpci = to_bt1_pcie(pci);
-+
-+	bt1_pcie_full_stop_bus(btpci, false);
-+}
-+
-+static const struct dw_pcie_host_ops bt1_pcie_host_ops = {
-+	.host_init = bt1_pcie_host_init,
-+	.host_deinit = bt1_pcie_host_deinit,
-+};
-+
-+static struct bt1_pcie *bt1_pcie_create_data(struct platform_device *pdev)
-+{
-+	struct bt1_pcie *btpci;
-+
-+	btpci = devm_kzalloc(&pdev->dev, sizeof(*btpci), GFP_KERNEL);
-+	if (!btpci)
-+		return ERR_PTR(-ENOMEM);
-+
-+	btpci->pdev = pdev;
-+
-+	platform_set_drvdata(pdev, btpci);
-+
-+	return btpci;
-+}
-+
-+static int bt1_pcie_add_port(struct bt1_pcie *btpci)
-+{
-+	struct device *dev = &btpci->pdev->dev;
-+	int ret;
-+
-+	btpci->dw.version = DW_PCIE_VER_460A;
-+	btpci->dw.dev = dev;
-+	btpci->dw.ops = &bt1_pcie_ops;
-+
-+	btpci->dw.pp.num_vectors = MAX_MSI_IRQS;
-+	btpci->dw.pp.ops = &bt1_pcie_host_ops;
-+
-+	dw_pcie_cap_set(&btpci->dw, REQ_RES);
-+
-+	ret = dw_pcie_host_init(&btpci->dw.pp);
-+	if (ret)
-+		dev_err_probe(dev, ret, "Failed to initialize DWC PCIe host\n");
-+
-+	return ret;
-+}
-+
-+static void bt1_pcie_del_port(struct bt1_pcie *btpci)
-+{
-+	dw_pcie_host_deinit(&btpci->dw.pp);
-+}
-+
-+static int bt1_pcie_probe(struct platform_device *pdev)
-+{
-+	struct bt1_pcie *btpci;
-+
-+	btpci = bt1_pcie_create_data(pdev);
-+	if (IS_ERR(btpci))
-+		return PTR_ERR(btpci);
-+
-+	return bt1_pcie_add_port(btpci);
-+}
-+
-+static int bt1_pcie_remove(struct platform_device *pdev)
-+{
-+	struct bt1_pcie *btpci = platform_get_drvdata(pdev);
-+
-+	bt1_pcie_del_port(btpci);
++	f->fmt.pix = ctx->dst_fmt;
 +
 +	return 0;
 +}
 +
-+static const struct of_device_id bt1_pcie_of_match[] = {
-+	{ .compatible = "baikal,bt1-pcie" },
-+	{},
-+};
-+MODULE_DEVICE_TABLE(of, bt1_pcie_of_match);
++static int deinterlace_g_fmt_vid_out(struct file *file, void *priv,
++				     struct v4l2_format *f)
++{
++	struct deinterlace_ctx *ctx = deinterlace_file2ctx(file);
 +
-+static struct platform_driver bt1_pcie_driver = {
-+	.probe = bt1_pcie_probe,
-+	.remove = bt1_pcie_remove,
-+	.driver = {
-+		.name	= "bt1-pcie",
-+		.of_match_table = bt1_pcie_of_match,
++	f->fmt.pix = ctx->src_fmt;
++
++	return 0;
++}
++
++static void deinterlace_try_cap_format(struct deinterlace_ctx *ctx,
++				       struct v4l2_pix_format *fmt)
++{
++	fmt->pixelformat = ctx->src_fmt.pixelformat;
++	fmt->field = V4L2_FIELD_NONE;
++	fmt->width = ctx->src_fmt.width;
++	fmt->height = ctx->src_fmt.height;
++
++	deinterlace_prepare_format(fmt);
++}
++
++static void deinterlace_try_out_format(struct v4l2_pix_format *fmt)
++{
++	if (!deinterlace_check_format(fmt->pixelformat))
++		fmt->pixelformat = deinterlace_formats[0];
++
++	if (fmt->field != V4L2_FIELD_INTERLACED_TB &&
++	    fmt->field != V4L2_FIELD_INTERLACED_BT &&
++	    fmt->field != V4L2_FIELD_INTERLACED)
++		fmt->field = V4L2_FIELD_INTERLACED;
++
++	deinterlace_prepare_format(fmt);
++}
++
++static int deinterlace_try_fmt_vid_cap(struct file *file, void *priv,
++				       struct v4l2_format *f)
++{
++	deinterlace_try_cap_format(deinterlace_file2ctx(file), &f->fmt.pix);
++
++	return 0;
++}
++
++static int deinterlace_try_fmt_vid_out(struct file *file, void *priv,
++				       struct v4l2_format *f)
++{
++	deinterlace_try_out_format(&f->fmt.pix);
++
++	return 0;
++}
++
++static void deinterlace_set_cap_format(struct deinterlace_ctx *ctx,
++				       struct v4l2_pix_format *fmt)
++{
++	deinterlace_try_cap_format(ctx, fmt);
++
++	ctx->dst_fmt = *fmt;
++}
++
++static void deinterlace_set_out_format(struct deinterlace_ctx *ctx,
++				       struct v4l2_pix_format *fmt)
++{
++	deinterlace_try_out_format(fmt);
++
++	ctx->src_fmt = *fmt;
++
++	/* Propagate colorspace information to capture. */
++	ctx->dst_fmt.colorspace = fmt->colorspace;
++	ctx->dst_fmt.xfer_func = fmt->xfer_func;
++	ctx->dst_fmt.ycbcr_enc = fmt->ycbcr_enc;
++	ctx->dst_fmt.quantization = fmt->quantization;
++
++	deinterlace_set_cap_format(ctx, &ctx->dst_fmt);
++}
++
++static int deinterlace_s_fmt_vid_cap(struct file *file, void *priv,
++				     struct v4l2_format *f)
++{
++	struct deinterlace_ctx *ctx = deinterlace_file2ctx(file);
++	struct vb2_queue *vq;
++
++	vq = v4l2_m2m_get_vq(ctx->fh.m2m_ctx, f->type);
++	if (vb2_is_busy(vq))
++		return -EBUSY;
++
++	deinterlace_set_cap_format(ctx, &f->fmt.pix);
++
++	return 0;
++}
++
++static int deinterlace_s_fmt_vid_out(struct file *file, void *priv,
++				     struct v4l2_format *f)
++{
++	struct deinterlace_ctx *ctx = deinterlace_file2ctx(file);
++	struct vb2_queue *vq;
++
++	vq = v4l2_m2m_get_vq(ctx->fh.m2m_ctx, f->type);
++	if (vb2_is_busy(vq))
++		return -EBUSY;
++
++	/*
++	 * Pixel format and size must be propagated to capture format too,
++	 * so capture queue must not be busy.
++	 */
++	vq = v4l2_m2m_get_vq(ctx->fh.m2m_ctx, V4L2_BUF_TYPE_VIDEO_CAPTURE);
++	if (vb2_is_busy(vq))
++		return -EBUSY;
++
++	deinterlace_set_out_format(ctx, &f->fmt.pix);
++
++	return 0;
++}
++
++static const struct v4l2_ioctl_ops deinterlace_ioctl_ops = {
++	.vidioc_querycap		= deinterlace_querycap,
++
++	.vidioc_enum_framesizes		= deinterlace_enum_framesizes,
++
++	.vidioc_enum_fmt_vid_cap	= deinterlace_enum_fmt,
++	.vidioc_g_fmt_vid_cap		= deinterlace_g_fmt_vid_cap,
++	.vidioc_try_fmt_vid_cap		= deinterlace_try_fmt_vid_cap,
++	.vidioc_s_fmt_vid_cap		= deinterlace_s_fmt_vid_cap,
++
++	.vidioc_enum_fmt_vid_out	= deinterlace_enum_fmt,
++	.vidioc_g_fmt_vid_out		= deinterlace_g_fmt_vid_out,
++	.vidioc_try_fmt_vid_out		= deinterlace_try_fmt_vid_out,
++	.vidioc_s_fmt_vid_out		= deinterlace_s_fmt_vid_out,
++
++	.vidioc_reqbufs			= v4l2_m2m_ioctl_reqbufs,
++	.vidioc_querybuf		= v4l2_m2m_ioctl_querybuf,
++	.vidioc_qbuf			= v4l2_m2m_ioctl_qbuf,
++	.vidioc_dqbuf			= v4l2_m2m_ioctl_dqbuf,
++	.vidioc_prepare_buf		= v4l2_m2m_ioctl_prepare_buf,
++	.vidioc_create_bufs		= v4l2_m2m_ioctl_create_bufs,
++	.vidioc_expbuf			= v4l2_m2m_ioctl_expbuf,
++
++	.vidioc_streamon		= v4l2_m2m_ioctl_streamon,
++	.vidioc_streamoff		= v4l2_m2m_ioctl_streamoff,
++};
++
++static int deinterlace_queue_setup(struct vb2_queue *vq, unsigned int *nbuffers,
++				   unsigned int *nplanes, unsigned int sizes[],
++				   struct device *alloc_devs[])
++{
++	struct deinterlace_ctx *ctx = vb2_get_drv_priv(vq);
++	struct v4l2_pix_format *pix_fmt;
++
++	if (V4L2_TYPE_IS_OUTPUT(vq->type))
++		pix_fmt = &ctx->src_fmt;
++	else
++		pix_fmt = &ctx->dst_fmt;
++
++	if (*nplanes) {
++		if (sizes[0] < pix_fmt->sizeimage)
++			return -EINVAL;
++	} else {
++		sizes[0] = pix_fmt->sizeimage;
++		*nplanes = 1;
++	}
++
++	return 0;
++}
++
++static int deinterlace_buf_prepare(struct vb2_buffer *vb)
++{
++	struct vb2_queue *vq = vb->vb2_queue;
++	struct deinterlace_ctx *ctx = vb2_get_drv_priv(vq);
++	struct v4l2_pix_format *pix_fmt;
++
++	if (V4L2_TYPE_IS_OUTPUT(vq->type))
++		pix_fmt = &ctx->src_fmt;
++	else
++		pix_fmt = &ctx->dst_fmt;
++
++	if (vb2_plane_size(vb, 0) < pix_fmt->sizeimage)
++		return -EINVAL;
++
++	vb2_set_plane_payload(vb, 0, pix_fmt->sizeimage);
++
++	return 0;
++}
++
++static void deinterlace_buf_queue(struct vb2_buffer *vb)
++{
++	struct vb2_v4l2_buffer *vbuf = to_vb2_v4l2_buffer(vb);
++	struct deinterlace_ctx *ctx = vb2_get_drv_priv(vb->vb2_queue);
++
++	v4l2_m2m_buf_queue(ctx->fh.m2m_ctx, vbuf);
++}
++
++static void deinterlace_queue_cleanup(struct vb2_queue *vq, u32 state)
++{
++	struct deinterlace_ctx *ctx = vb2_get_drv_priv(vq);
++	struct vb2_v4l2_buffer *vbuf;
++
++	do {
++		if (V4L2_TYPE_IS_OUTPUT(vq->type))
++			vbuf = v4l2_m2m_src_buf_remove(ctx->fh.m2m_ctx);
++		else
++			vbuf = v4l2_m2m_dst_buf_remove(ctx->fh.m2m_ctx);
++
++		if (vbuf)
++			v4l2_m2m_buf_done(vbuf, state);
++	} while (vbuf);
++
++	if (V4L2_TYPE_IS_OUTPUT(vq->type)) {
++		if (ctx->prev[0])
++			v4l2_m2m_buf_done(ctx->prev[0], state);
++		if (ctx->prev[1])
++			v4l2_m2m_buf_done(ctx->prev[1], state);
++	}
++}
++
++static int deinterlace_start_streaming(struct vb2_queue *vq, unsigned int count)
++{
++	struct deinterlace_ctx *ctx = vb2_get_drv_priv(vq);
++	struct device *dev = ctx->dev->dev;
++	int ret;
++
++	if (V4L2_TYPE_IS_OUTPUT(vq->type)) {
++		ret = pm_runtime_resume_and_get(dev);
++		if (ret < 0) {
++			dev_err(dev, "Failed to enable module\n");
++
++			goto err_runtime_get;
++		}
++
++		ctx->first_field =
++			ctx->src_fmt.field == V4L2_FIELD_INTERLACED_BT;
++		ctx->field = ctx->first_field;
++
++		ctx->prev[0] = NULL;
++		ctx->prev[1] = NULL;
++		ctx->aborting = 0;
++
++		ctx->flag1_buf = dma_alloc_coherent(dev, FLAG_SIZE,
++						    &ctx->flag1_buf_dma,
++						    GFP_KERNEL);
++		if (!ctx->flag1_buf) {
++			ret = -ENOMEM;
++
++			goto err_no_mem1;
++		}
++
++		ctx->flag2_buf = dma_alloc_coherent(dev, FLAG_SIZE,
++						    &ctx->flag2_buf_dma,
++						    GFP_KERNEL);
++		if (!ctx->flag2_buf) {
++			ret = -ENOMEM;
++
++			goto err_no_mem2;
++		}
++	}
++
++	return 0;
++
++err_no_mem2:
++	dma_free_coherent(dev, FLAG_SIZE, ctx->flag1_buf,
++			  ctx->flag1_buf_dma);
++err_no_mem1:
++	pm_runtime_put(dev);
++err_runtime_get:
++	deinterlace_queue_cleanup(vq, VB2_BUF_STATE_QUEUED);
++
++	return ret;
++}
++
++static void deinterlace_stop_streaming(struct vb2_queue *vq)
++{
++	struct deinterlace_ctx *ctx = vb2_get_drv_priv(vq);
++
++	if (V4L2_TYPE_IS_OUTPUT(vq->type)) {
++		struct device *dev = ctx->dev->dev;
++
++		dma_free_coherent(dev, FLAG_SIZE, ctx->flag1_buf,
++				  ctx->flag1_buf_dma);
++		dma_free_coherent(dev, FLAG_SIZE, ctx->flag2_buf,
++				  ctx->flag2_buf_dma);
++
++		pm_runtime_put(dev);
++	}
++
++	deinterlace_queue_cleanup(vq, VB2_BUF_STATE_ERROR);
++}
++
++static const struct vb2_ops deinterlace_qops = {
++	.queue_setup		= deinterlace_queue_setup,
++	.buf_prepare		= deinterlace_buf_prepare,
++	.buf_queue		= deinterlace_buf_queue,
++	.start_streaming	= deinterlace_start_streaming,
++	.stop_streaming		= deinterlace_stop_streaming,
++	.wait_prepare		= vb2_ops_wait_prepare,
++	.wait_finish		= vb2_ops_wait_finish,
++};
++
++static int deinterlace_queue_init(void *priv, struct vb2_queue *src_vq,
++				  struct vb2_queue *dst_vq)
++{
++	struct deinterlace_ctx *ctx = priv;
++	int ret;
++
++	src_vq->type = V4L2_BUF_TYPE_VIDEO_OUTPUT;
++	src_vq->io_modes = VB2_MMAP | VB2_DMABUF;
++	src_vq->drv_priv = ctx;
++	src_vq->buf_struct_size = sizeof(struct v4l2_m2m_buffer);
++	src_vq->min_buffers_needed = 1;
++	src_vq->ops = &deinterlace_qops;
++	src_vq->mem_ops = &vb2_dma_contig_memops;
++	src_vq->timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_COPY;
++	src_vq->lock = &ctx->dev->dev_mutex;
++	src_vq->dev = ctx->dev->dev;
++
++	ret = vb2_queue_init(src_vq);
++	if (ret)
++		return ret;
++
++	dst_vq->type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
++	dst_vq->io_modes = VB2_MMAP | VB2_DMABUF;
++	dst_vq->drv_priv = ctx;
++	dst_vq->buf_struct_size = sizeof(struct v4l2_m2m_buffer);
++	dst_vq->min_buffers_needed = 2;
++	dst_vq->ops = &deinterlace_qops;
++	dst_vq->mem_ops = &vb2_dma_contig_memops;
++	dst_vq->timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_COPY;
++	dst_vq->lock = &ctx->dev->dev_mutex;
++	dst_vq->dev = ctx->dev->dev;
++
++	ret = vb2_queue_init(dst_vq);
++	if (ret)
++		return ret;
++
++	return 0;
++}
++
++static int deinterlace_open(struct file *file)
++{
++	struct deinterlace_dev *dev = video_drvdata(file);
++	struct deinterlace_ctx *ctx = NULL;
++	int ret;
++
++	ctx = kzalloc(sizeof(*ctx), GFP_KERNEL);
++	if (!ctx)
++		return -ENOMEM;
++
++	if (mutex_lock_interruptible(&dev->dev_mutex))
++		return -ERESTARTSYS;
++
++	/* set default output and capture format */
++	deinterlace_set_out_format(ctx, &ctx->src_fmt);
++
++	v4l2_fh_init(&ctx->fh, video_devdata(file));
++	file->private_data = &ctx->fh;
++	ctx->dev = dev;
++
++	ctx->fh.m2m_ctx = v4l2_m2m_ctx_init(dev->m2m_dev, ctx,
++					    &deinterlace_queue_init);
++	if (IS_ERR(ctx->fh.m2m_ctx)) {
++		ret = PTR_ERR(ctx->fh.m2m_ctx);
++		goto err_free;
++	}
++
++	v4l2_fh_add(&ctx->fh);
++
++	mutex_unlock(&dev->dev_mutex);
++
++	return 0;
++
++err_free:
++	kfree(ctx);
++	mutex_unlock(&dev->dev_mutex);
++
++	return ret;
++}
++
++static int deinterlace_release(struct file *file)
++{
++	struct deinterlace_dev *dev = video_drvdata(file);
++	struct deinterlace_ctx *ctx = container_of(file->private_data,
++						   struct deinterlace_ctx, fh);
++
++	mutex_lock(&dev->dev_mutex);
++
++	v4l2_fh_del(&ctx->fh);
++	v4l2_fh_exit(&ctx->fh);
++	v4l2_m2m_ctx_release(ctx->fh.m2m_ctx);
++
++	mutex_unlock(&dev->dev_mutex);
++
++	kfree(ctx);
++
++	return 0;
++}
++
++static const struct v4l2_file_operations deinterlace_fops = {
++	.owner		= THIS_MODULE,
++	.open		= deinterlace_open,
++	.release	= deinterlace_release,
++	.poll		= v4l2_m2m_fop_poll,
++	.unlocked_ioctl	= video_ioctl2,
++	.mmap		= v4l2_m2m_fop_mmap,
++};
++
++static const struct video_device deinterlace_video_device = {
++	.name		= DEINTERLACE_NAME,
++	.vfl_dir	= VFL_DIR_M2M,
++	.fops		= &deinterlace_fops,
++	.ioctl_ops	= &deinterlace_ioctl_ops,
++	.minor		= -1,
++	.release	= video_device_release_empty,
++	.device_caps	= V4L2_CAP_VIDEO_M2M | V4L2_CAP_STREAMING,
++};
++
++static const struct v4l2_m2m_ops deinterlace_m2m_ops = {
++	.device_run	= deinterlace_device_run,
++	.job_ready	= deinterlace_job_ready,
++	.job_abort	= deinterlace_job_abort,
++};
++
++static int deinterlace_probe(struct platform_device *pdev)
++{
++	struct deinterlace_dev *dev;
++	struct video_device *vfd;
++	int irq, ret;
++
++	dev = devm_kzalloc(&pdev->dev, sizeof(*dev), GFP_KERNEL);
++	if (!dev)
++		return -ENOMEM;
++
++	dev->vfd = deinterlace_video_device;
++	dev->dev = &pdev->dev;
++	platform_set_drvdata(pdev, dev);
++
++	irq = platform_get_irq(pdev, 0);
++	if (irq <= 0)
++		return irq;
++
++	dev->base = devm_platform_ioremap_resource(pdev, 0);
++	if (IS_ERR(dev->base))
++		return PTR_ERR(dev->base);
++
++	dev->bus_clk = devm_clk_get(dev->dev, "bus");
++	if (IS_ERR(dev->bus_clk))
++		return dev_err_probe(dev->dev, PTR_ERR(dev->bus_clk),
++				     "Failed to get bus clock\n");
++
++	dev->mod_clk = devm_clk_get(dev->dev, "mod");
++	if (IS_ERR(dev->mod_clk))
++		return dev_err_probe(dev->dev, PTR_ERR(dev->mod_clk),
++				     "Failed to get mod clock\n");
++
++	dev->ram_clk = devm_clk_get(dev->dev, "ram");
++	if (IS_ERR(dev->ram_clk))
++		return dev_err_probe(dev->dev, PTR_ERR(dev->ram_clk),
++				     "Failed to get ram clock\n");
++
++	dev->rstc = devm_reset_control_get(dev->dev, NULL);
++	if (IS_ERR(dev->rstc))
++		return dev_err_probe(dev->dev, PTR_ERR(dev->rstc),
++				     "Failed to get reset control\n");
++
++	dma_set_mask_and_coherent(dev->dev, DMA_BIT_MASK(32));
++	dma_set_max_seg_size(dev->dev, UINT_MAX);
++
++	mutex_init(&dev->dev_mutex);
++
++	INIT_DELAYED_WORK(&dev->watchdog_work, deinterlace_watchdog);
++
++	ret = devm_request_irq(dev->dev, irq, deinterlace_irq,
++			       0, dev_name(dev->dev), dev);
++	if (ret) {
++		dev_err(dev->dev, "Failed to request IRQ\n");
++
++		return ret;
++	}
++
++	ret = v4l2_device_register(&pdev->dev, &dev->v4l2_dev);
++	if (ret) {
++		dev_err(dev->dev, "Failed to register V4L2 device\n");
++
++		return ret;
++	}
++
++	vfd = &dev->vfd;
++	vfd->lock = &dev->dev_mutex;
++	vfd->v4l2_dev = &dev->v4l2_dev;
++
++	snprintf(vfd->name, sizeof(vfd->name), "%s",
++		 deinterlace_video_device.name);
++	video_set_drvdata(vfd, dev);
++
++	ret = video_register_device(vfd, VFL_TYPE_VIDEO, 0);
++	if (ret) {
++		v4l2_err(&dev->v4l2_dev, "Failed to register video device\n");
++
++		goto err_v4l2;
++	}
++
++	v4l2_info(&dev->v4l2_dev,
++		  "Device registered as /dev/video%d\n", vfd->num);
++
++	dev->m2m_dev = v4l2_m2m_init(&deinterlace_m2m_ops);
++	if (IS_ERR(dev->m2m_dev)) {
++		v4l2_err(&dev->v4l2_dev,
++			 "Failed to initialize V4L2 M2M device\n");
++		ret = PTR_ERR(dev->m2m_dev);
++
++		goto err_video;
++	}
++
++	pm_runtime_enable(dev->dev);
++
++	return 0;
++
++err_video:
++	video_unregister_device(&dev->vfd);
++err_v4l2:
++	v4l2_device_unregister(&dev->v4l2_dev);
++
++	return ret;
++}
++
++static int deinterlace_remove(struct platform_device *pdev)
++{
++	struct deinterlace_dev *dev = platform_get_drvdata(pdev);
++
++	v4l2_m2m_release(dev->m2m_dev);
++	video_unregister_device(&dev->vfd);
++	v4l2_device_unregister(&dev->v4l2_dev);
++
++	pm_runtime_force_suspend(&pdev->dev);
++
++	return 0;
++}
++
++static int deinterlace_runtime_resume(struct device *device)
++{
++	struct deinterlace_dev *dev = dev_get_drvdata(device);
++	int ret;
++
++	ret = clk_set_rate_exclusive(dev->mod_clk, 300000000);
++	if (ret) {
++		dev_err(dev->dev, "Failed to set exclusive mod clock rate\n");
++
++		return ret;
++	}
++
++	ret = reset_control_deassert(dev->rstc);
++	if (ret) {
++		dev_err(dev->dev, "Failed to apply reset\n");
++
++		return ret;
++	}
++
++	ret = clk_prepare_enable(dev->bus_clk);
++	if (ret) {
++		dev_err(dev->dev, "Failed to enable bus clock\n");
++
++		goto err_assert_reset;
++	}
++
++	ret = clk_prepare_enable(dev->mod_clk);
++	if (ret) {
++		dev_err(dev->dev, "Failed to enable mod clock\n");
++
++		goto err_disable_bus_clk;
++	}
++
++	ret = clk_prepare_enable(dev->ram_clk);
++	if (ret) {
++		dev_err(dev->dev, "Failed to enable ram clock\n");
++
++		goto err_disable_mod_clk;
++	}
++
++	deinterlace_init(dev);
++
++	return 0;
++
++err_disable_mod_clk:
++	clk_disable_unprepare(dev->mod_clk);
++err_disable_bus_clk:
++	clk_disable_unprepare(dev->bus_clk);
++err_assert_reset:
++	reset_control_assert(dev->rstc);
++err_put_exclusive_rate:
++	clk_rate_exclusive_put(dev->mod_clk);
++
++	return ret;
++}
++
++static int deinterlace_runtime_suspend(struct device *device)
++{
++	struct deinterlace_dev *dev = dev_get_drvdata(device);
++
++	clk_disable_unprepare(dev->ram_clk);
++	clk_disable_unprepare(dev->mod_clk);
++	clk_disable_unprepare(dev->bus_clk);
++	clk_rate_exclusive_put(dev->mod_clk);
++
++	reset_control_assert(dev->rstc);
++
++	return 0;
++}
++
++static const struct of_device_id deinterlace_dt_match[] = {
++	{ .compatible = "allwinner,sun50i-h6-deinterlace" },
++	{ }
++};
++MODULE_DEVICE_TABLE(of, deinterlace_dt_match);
++
++static const struct dev_pm_ops deinterlace_pm_ops = {
++	.runtime_resume		= deinterlace_runtime_resume,
++	.runtime_suspend	= deinterlace_runtime_suspend,
++};
++
++static struct platform_driver deinterlace_driver = {
++	.probe		= deinterlace_probe,
++	.remove		= deinterlace_remove,
++	.driver		= {
++		.name		= DEINTERLACE_NAME,
++		.of_match_table	= deinterlace_dt_match,
++		.pm		= &deinterlace_pm_ops,
 +	},
 +};
-+module_platform_driver(bt1_pcie_driver);
++module_platform_driver(deinterlace_driver);
 +
-+MODULE_AUTHOR("Serge Semin <Sergey.Semin@baikalelectronics.ru>");
-+MODULE_DESCRIPTION("Baikal-T1 PCIe driver");
 +MODULE_LICENSE("GPL");
++MODULE_AUTHOR("Jernej Skrabec <jernej.skrabec@gmail.com>");
++MODULE_DESCRIPTION("Allwinner sun50i deinterlace driver");
+diff --git a/drivers/media/platform/sunxi/sun50i-di/sun50i-di.h b/drivers/media/platform/sunxi/sun50i-di/sun50i-di.h
+new file mode 100644
+index 000000000000..fa2135624e91
+--- /dev/null
++++ b/drivers/media/platform/sunxi/sun50i-di/sun50i-di.h
+@@ -0,0 +1,175 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Allwinner Deinterlace driver
++ *
++ * Copyright (C) 2022 Jernej Skrabec <jernej.skrabec@gmail.com>
++ */
++
++#ifndef _SUN50I_DI_H_
++#define _SUN50I_DI_H_
++
++#include <linux/clk.h>
++#include <linux/platform_device.h>
++#include <linux/reset.h>
++#include <linux/workqueue.h>
++
++#include <media/v4l2-device.h>
++#include <media/v4l2-mem2mem.h>
++#include <media/videobuf2-v4l2.h>
++
++#define DEINTERLACE_NAME		"sun50i-di"
++
++#define DEINTERLACE_CTRL			0x00
++#define DEINTERLACE_CTRL_START				BIT(0)
++#define DEINTERLACE_CTRL_IOMMU_EN			BIT(16)
++#define DEINTERLACE_CTRL_RESET				BIT(31)
++
++#define DEINTERLACE_INT_CTRL			0x04
++#define DEINTERLACE_INT_EN				BIT(0)
++
++#define DEINTERLACE_STATUS			0x08
++#define DEINTERLACE_STATUS_FINISHED			BIT(0)
++#define DEINTERLACE_STATUS_BUSY				BIT(8)
++
++#define DEINTERLACE_SIZE			0x10
++#define DEINTERLACE_SIZE_WIDTH(w) \
++	(((w) - 1) & 0x7ff)
++#define DEINTERLACE_SIZE_HEIGHT(h) \
++	((((h) - 1) & 0x7ff) << 16)
++
++#define DEINTERLACE_FORMAT			0x14
++#define DEINTERLACE_FORMAT_YUV420P			0
++#define DEINTERLACE_FORMAT_YUV420SP			1
++#define DEINTERLACE_FORMAT_YUV422P			2
++#define DEINTERLACE_FORMAT_YUV422SP			3
++
++#define DEINTERLACE_POLAR			0x18
++#define DEINTERLACE_POLAR_FIELD(x)			((x) & 1)
++
++/* all pitch registers accept 16-bit values */
++#define DEINTERLACE_IN_PITCH0			0x20
++#define DEINTERLACE_IN_PITCH1			0x24
++#define DEINTERLACE_IN_PITCH2			0x28
++#define DEINTERLACE_OUT_PITCH0			0x30
++#define DEINTERLACE_OUT_PITCH1			0x34
++#define DEINTERLACE_OUT_PITCH2			0x38
++#define DEINTERLACE_FLAG_PITCH			0x40
++#define DEINTERLACE_IN0_ADDR0			0x50
++#define DEINTERLACE_IN0_ADDR1			0x54
++#define DEINTERLACE_IN0_ADDR2			0x58
++#define DEINTERLACE_IN0_ADDRH			0x5c
++#define DEINTERLACE_IN1_ADDR0			0x60
++#define DEINTERLACE_IN1_ADDR1			0x64
++#define DEINTERLACE_IN1_ADDR2			0x68
++#define DEINTERLACE_IN1_ADDRH			0x6c
++#define DEINTERLACE_IN2_ADDR0			0x70
++#define DEINTERLACE_IN2_ADDR1			0x74
++#define DEINTERLACE_IN2_ADDR2			0x78
++#define DEINTERLACE_IN2_ADDRH			0x7c
++#define DEINTERLACE_IN3_ADDR0			0x80
++#define DEINTERLACE_IN3_ADDR1			0x84
++#define DEINTERLACE_IN3_ADDR2			0x88
++#define DEINTERLACE_IN3_ADDRH			0x8c
++#define DEINTERLACE_OUT_ADDR0			0x90
++#define DEINTERLACE_OUT_ADDR1			0x94
++#define DEINTERLACE_OUT_ADDR2			0x98
++#define DEINTERLACE_OUT_ADDRH			0x9c
++#define DEINTERLACE_IN_FLAG_ADDR		0xa0
++#define DEINTERLACE_OUT_FLAG_ADDR		0xa4
++#define DEINTERLACE_FLAG_ADDRH			0xa8
++
++#define DEINTERLACE_ADDRH0(x)				((x) & 0xff)
++#define DEINTERLACE_ADDRH1(x)				(((x) & 0xff) << 8)
++#define DEINTERLACE_ADDRH2(x)				(((x) & 0xff) << 16)
++
++#define DEINTERLACE_MODE			0xb0
++#define DEINTERLACE_MODE_DEINT_LUMA			BIT(0)
++#define DEINTERLACE_MODE_MOTION_EN			BIT(4)
++#define DEINTERLACE_MODE_INTP_EN			BIT(5)
++#define DEINTERLACE_MODE_AUTO_UPD_MODE(x)		(((x) & 3) << 12)
++#define DEINTERLACE_MODE_DEINT_CHROMA			BIT(16)
++#define DEINTERLACE_MODE_FIELD_MODE			BIT(31)
++
++#define DEINTERLACE_MD_PARAM0			0xb4
++#define DEINTERLACE_MD_PARAM0_MIN_LUMA_TH(x)		((x) & 0xff)
++#define DEINTERLACE_MD_PARAM0_MAX_LUMA_TH(x)		(((x) & 0xff) << 8)
++#define DEINTERLACE_MD_PARAM0_AVG_LUMA_SHIFT(x)		(((x) & 0xf) << 16)
++#define DEINTERLACE_MD_PARAM0_TH_SHIFT(x)		(((x) & 0xf) << 24)
++
++#define DEINTERLACE_MD_PARAM1			0xb8
++#define DEINTERLACE_MD_PARAM1_MOV_FAC_NONEDGE(x)	(((x) & 0x3) << 28)
++
++#define DEINTERLACE_MD_PARAM2			0xbc
++#define DEINTERLACE_MD_PARAM2_CHROMA_SPATIAL_TH(x)	(((x) & 0xff) << 8)
++#define DEINTERLACE_MD_PARAM2_CHROMA_DIFF_TH(x)		(((x) & 0xff) << 16)
++#define DEINTERLACE_MD_PARAM2_PIX_STATIC_TH(x)		(((x) & 0x3) << 28)
++
++#define DEINTERLACE_INTP_PARAM0			0xc0
++#define DEINTERLACE_INTP_PARAM0_ANGLE_LIMIT(x)		((x) & 0x1f)
++#define DEINTERLACE_INTP_PARAM0_ANGLE_CONST_TH(x)	(((x) & 7) << 8)
++#define DEINTERLACE_INTP_PARAM0_LUMA_CUR_FAC_MODE(x)	(((x) & 7) << 16)
++#define DEINTERLACE_INTP_PARAM0_CHROMA_CUR_FAC_MODE(x)	(((x) & 7) << 20)
++
++#define DEINTERLACE_MD_CH_PARAM			0xc4
++#define DEINTERLACE_MD_CH_PARAM_BLEND_MODE(x)		((x) & 0xf)
++#define DEINTERLACE_MD_CH_PARAM_FONT_PRO_EN		BIT(8)
++#define DEINTERLACE_MD_CH_PARAM_FONT_PRO_TH(x)		(((x) & 0xff) << 16)
++#define DEINTERLACE_MD_CH_PARAM_FONT_PRO_FAC(x)		(((x) & 0x1f) << 24)
++
++#define DEINTERLACE_INTP_PARAM1			0xc8
++#define DEINTERLACE_INTP_PARAM1_A(x)			((x) & 7)
++#define DEINTERLACE_INTP_PARAM1_EN			BIT(3)
++#define DEINTERLACE_INTP_PARAM1_C(x)			(((x) & 0xf) << 4)
++#define DEINTERLACE_INTP_PARAM1_CMAX(x)			(((x) & 0xff) << 8)
++#define DEINTERLACE_INTP_PARAM1_MAXRAT(x)		(((x) & 3) << 16)
++
++/* there is no explanation what this register does */
++#define DEINTERLACE_OUT_PATH			0x200
++
++#define DEINTERLACE_MIN_WIDTH	32U
++#define DEINTERLACE_MIN_HEIGHT	32U
++#define DEINTERLACE_MAX_WIDTH	2048U
++#define DEINTERLACE_MAX_HEIGHT	1280U
++
++struct deinterlace_dev {
++	struct v4l2_device	v4l2_dev;
++	struct video_device	vfd;
++	struct device		*dev;
++	struct v4l2_m2m_dev	*m2m_dev;
++
++	/* Device file mutex */
++	struct mutex		dev_mutex;
++
++	void __iomem		*base;
++
++	struct clk		*bus_clk;
++	struct clk		*mod_clk;
++	struct clk		*ram_clk;
++
++	struct reset_control	*rstc;
++
++	struct delayed_work	watchdog_work;
++};
++
++struct deinterlace_ctx {
++	struct v4l2_fh		fh;
++	struct deinterlace_dev	*dev;
++
++	struct v4l2_pix_format	src_fmt;
++	struct v4l2_pix_format	dst_fmt;
++
++	void			*flag1_buf;
++	dma_addr_t		flag1_buf_dma;
++
++	void			*flag2_buf;
++	dma_addr_t		flag2_buf_dma;
++
++	struct vb2_v4l2_buffer	*prev[2];
++
++	unsigned int		first_field;
++	unsigned int		field;
++
++	int			aborting;
++};
++
++#endif
 -- 
-2.38.0
-
+2.38.1
 
