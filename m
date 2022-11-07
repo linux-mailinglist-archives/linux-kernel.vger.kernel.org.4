@@ -2,148 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14E4961FCD7
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 19:08:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 950C461FCD3
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 19:08:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232519AbiKGSIb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 13:08:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45364 "EHLO
+        id S232934AbiKGSIB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 13:08:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233020AbiKGSIC (ORCPT
+        with ESMTP id S231579AbiKGSHp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 13:08:02 -0500
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11BC52C139;
-        Mon,  7 Nov 2022 10:04:10 -0800 (PST)
-Received: by mail-ej1-x62b.google.com with SMTP id bj12so32222111ejb.13;
-        Mon, 07 Nov 2022 10:04:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Sg0lwZYTU9JWcjNHK3+96CsLpgsQAQHMbXUOoXcTWAw=;
-        b=VgvQeRKGXjpN7rsFy94zWCr9OA0dpnIfL2CawpFJYijveycNO8+9xWYnPS7ZVKjqsJ
-         QU94MOffg+97/ZUT1HNpEf0h9rVGh7CXC3zjQbTVmpbY0SQC0tVZYJlGaGr5M3O8trva
-         iHeRGHHGEoBD9/8ZjrZtiIUElt7yj7rKO/WgaxbUi2XLbns2vr0dej9wz8FmY2oT2GHe
-         IibTpgRZF1ZIPO+acBn94a/vy7DZx0xmBwJ1tyiZr8g3X96PHURRJV7seC/Y7ZTnlYtC
-         7+dkOAoUHGL8DGNPkklXkPipQ5gv9b119vAovISr39kdgAIS+T8h7Q4xDbTQny5dRg/K
-         gQrw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Sg0lwZYTU9JWcjNHK3+96CsLpgsQAQHMbXUOoXcTWAw=;
-        b=7xZWUEV3OHeeOIFofkVtXhxjb5DcZuvskWRY9lhNN890CbHSUFQwRG07BjQKki7Gbn
-         0WWZ7VPe14qadP1H1EVOSPPSND47cMYVDOdzBEXXJixn+YoN9tz3tTiEej8nSAcVJrl1
-         XAL/XWF8SLwOFYHSFQxx+Jyl2HnC68k/4ZdUJh7lVdJhHLQBh6DepmHLUGHpGO5ZmnsQ
-         NjR9nVErrnVOfcKPn0Q3nnq9Q4WS0kCjjfjpUm0aCiKTosYVctQuDb6aQZ7YomQMei4I
-         G5g/u6QvjBHIVmZvtAvXzmOcpISjLxMwBztDrfyk182q4Kq4q/3GcdF+7LaQ2XrC4Zav
-         LLQg==
-X-Gm-Message-State: ACrzQf1X8tmyLjcrgevRweouxEGx8bGxlLzY7HVAFtjs1OvHvxKLMARb
-        17UcChX04X81Pv6GD/GQRezlxnIyTjG3QxNcOy0=
-X-Google-Smtp-Source: AMsMyM7n2WA+ZnLi0QcBe9sJOWeOu60VDFD0EZ1jJifo/fM9/FZPKUKady57RAJ7Z/vjacnBySXxjJd0TDPhpih5svc=
-X-Received: by 2002:a17:907:270b:b0:7ad:ae01:e0d9 with SMTP id
- w11-20020a170907270b00b007adae01e0d9mr46374041ejk.196.1667844248212; Mon, 07
- Nov 2022 10:04:08 -0800 (PST)
+        Mon, 7 Nov 2022 13:07:45 -0500
+Received: from smtp.domeneshop.no (smtp.domeneshop.no [IPv6:2a01:5b40:0:3005::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 066632C669
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 10:03:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tronnes.org
+        ; s=ds202112; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=3Bf+KcHaW9GVk8+e0qwYG7pDVa7qGqnwKbjfeHC+JJg=; b=J/2pe6qYb5J7p2zVDvNn2y2J2z
+        nOUYFLV3uh28gG/8jdajK+ENWZXy4cnCy5f8yIZZisUtv8a6oX6QYsy6dTBPVZsawqeDDyWnLC5LZ
+        Lj71hcQnXQcJRwdxn2RTEdxJB7vHLhBzj1s97uAqUGTKNH5ch8GbJlqF7VaVAu5245EbIPRx6HQk2
+        KKaLpA1YjAAaRnHSFn3F0iCK/29HrLGAYo17Yxytus4J5ulx5hRzLSEj1SVWyRe7kMnmhOqWFlLQf
+        A/UNuLiiTnbVG+/ePVNcCCZ3GhyHPJ36YAT63jSmGknUWy3cwAIIq0WuJ2NESE+CSNhVwzSAfbtqp
+        Un8MhtCA==;
+Received: from [2a01:799:95a:cb00:cca0:57ac:c55d:a485] (port=63947)
+        by smtp.domeneshop.no with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <noralf@tronnes.org>)
+        id 1os6TP-0001Dd-AZ; Mon, 07 Nov 2022 19:03:51 +0100
+Message-ID: <262f0953-1e05-e68e-3e96-2ac2132a1e57@tronnes.org>
+Date:   Mon, 7 Nov 2022 19:03:47 +0100
 MIME-Version: 1.0
-References: <20221028165921.94487-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <Y17BWPuEcmY7Bba3@spud> <CA+V-a8uKQ8QvYi5qLC9O=QAQN5CxNB7cOTmw4vk+ndB2R8d3nQ@mail.gmail.com>
- <Y17+pHAg/SBJAEXq@spud> <CA+V-a8t-niCHSWo_CSRSkPS4ND12DAkiwxWxOM1vNn=oBKKd_w@mail.gmail.com>
-In-Reply-To: <CA+V-a8t-niCHSWo_CSRSkPS4ND12DAkiwxWxOM1vNn=oBKKd_w@mail.gmail.com>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Mon, 7 Nov 2022 18:03:41 +0000
-Message-ID: <CA+V-a8utoDSKcZFdtJ0BKwvPfcvf0WVH2Va-Fv_-pKC1FOOVsQ@mail.gmail.com>
-Subject: Re: [PATCH v5 0/7] Add support for Renesas RZ/Five SoC
-To:     Conor Dooley <conor@kernel.org>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Guo Ren <guoren@kernel.org>, Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@rivosinc.com>,
-        Heinrich Schuchardt <heinrich.schuchardt@canonical.com>,
-        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v7 15/23] drm/modes: Introduce more named modes
+To:     Maxime Ripard <maxime@cerno.tech>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Samuel Holland <samuel@sholland.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Emma Anholt <emma@anholt.net>,
+        Karol Herbst <kherbst@redhat.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Chen-Yu Tsai <wens@csie.org>,
+        Lyude Paul <lyude@redhat.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>
+Cc:     Phil Elwell <phil@raspberrypi.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Dom Cobley <dom@raspberrypi.com>,
+        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
+        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        nouveau@lists.freedesktop.org,
+        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
+References: <20220728-rpi-analog-tv-properties-v7-0-7072a478c6b3@cerno.tech>
+ <20220728-rpi-analog-tv-properties-v7-15-7072a478c6b3@cerno.tech>
+From:   =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
+In-Reply-To: <20220728-rpi-analog-tv-properties-v7-15-7072a478c6b3@cerno.tech>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Conor,
 
-On Sun, Oct 30, 2022 at 11:01 PM Lad, Prabhakar
-<prabhakar.csengg@gmail.com> wrote:
->
-> Hi Conor,
->
-> On Sun, Oct 30, 2022 at 10:46 PM Conor Dooley <conor@kernel.org> wrote:
-> >
-> > On Sun, Oct 30, 2022 at 10:37:01PM +0000, Lad, Prabhakar wrote:
-> > > Hi Conor,
-> > >
-> > > On Sun, Oct 30, 2022 at 6:24 PM Conor Dooley <conor@kernel.org> wrote:
-> > > >
-> > > > On Fri, Oct 28, 2022 at 05:59:14PM +0100, Prabhakar wrote:
-> > > > > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > > > >
-> > > > > Hi All,
-> > > > >
-> > > > > The RZ/Five microprocessor includes a RISC-V CPU Core (AX45MP Single)
-> > > > > 1.0 GHz, 16-bit DDR3L/DDR4 interface. And it also has many interfaces such
-> > > > > as Gbit-Ether, CAN, and USB 2.0, making it ideal for applications such as
-> > > > > entry-class social infrastructure gateway control and industrial gateway
-> > > > > control.
-> > > > >
-> > > > > This patch series adds initial SoC DTSi support for Renesas RZ/Five
-> > > > > (R9A07G043) SoC. Below is the list of IP blocks enabled in the initial
-> > > > > board DTS which can be used to boot via initramfs on RZ/Five SMARC EVK:
-> > > > > - AX45MP CPU
-> > > > > - CPG
-> > > > > - PINCTRL
-> > > >
-> > > > Hey,
-> > > > Looks like you've got a pair of warnings here from dtbs_check. I tested
-> > > > this on top of 20221028's next, with the three branches below merged in,
-> > > > hopefully my merges aren't the source of them:
-> > > >
-> > > > linux/arch/riscv/boot/dts/renesas/r9a07g043f01-smarc.dtb: pinctrl@11030000: 'interrupt-controller' is a required property
-> > > >         From schema: Documentation/devicetree/bindings/pinctrl/renesas,rzg2l-pinctrl.yaml
-> > > > linux/arch/riscv/boot/dts/renesas/r9a07g043f01-smarc.dtb: pinctrl@11030000: '#interrupt-cells' is a required property
-> > > >         From schema: linux/Documentation/devicetree/bindings/pinctrl/renesas,rzg2l-pinctrl.yaml
-> > > >
-> > > Thanks for the review and test. The warnings above are coming from [0]
-> > > as support for IRQC is missing, once that is added the warnings should
-> > > go away.
-> >
-> > Right. I merged in the stuff in Geert's trees & I don't think I saw any
-> > pending patches in the cover that I missed. Is there something else that
-> > adds the support that's not going to make v6.2? I got rid of all the
-> > dtbs_check warnings for v6.1 and I'd really like to keep things that
-> > way!
-> >
-> Sorry that pacth wasn't posted yet so I hadn't mentioned it in the
-> cover letter. I'll make sure I get it posted asap and merged for v6.2.
->
-I have got the patches out [0] which will fix the warnings seen above.
 
-BTW on the riscv patchwork I see status as fail "Patch does not apply
-to for-next" does that mean I need to resend re-basing on your tree?
+Den 07.11.2022 15.16, skrev Maxime Ripard:
+> Now that we can easily extend the named modes list, let's add a few more
+> analog TV modes that were used in the wild, and some unit tests to make
+> sure it works as intended.
+> 
+> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+> 
+> ---
+> Changes in v6:
+> - Renamed the tests to follow DRM test naming convention
+> 
+> Changes in v5:
+> - Switched to KUNIT_ASSERT_NOT_NULL
+> ---
+>  drivers/gpu/drm/drm_modes.c                     |  2 +
+>  drivers/gpu/drm/tests/drm_client_modeset_test.c | 54 +++++++++++++++++++++++++
+>  2 files changed, 56 insertions(+)
+> 
+> diff --git a/drivers/gpu/drm/drm_modes.c b/drivers/gpu/drm/drm_modes.c
+> index 49441cabdd9d..17c5b6108103 100644
+> --- a/drivers/gpu/drm/drm_modes.c
+> +++ b/drivers/gpu/drm/drm_modes.c
+> @@ -2272,7 +2272,9 @@ struct drm_named_mode {
+>  
+>  static const struct drm_named_mode drm_named_modes[] = {
+>  	NAMED_MODE("NTSC", 13500, 720, 480, DRM_MODE_FLAG_INTERLACE, DRM_MODE_TV_MODE_NTSC),
+> +	NAMED_MODE("NTSC-J", 13500, 720, 480, DRM_MODE_FLAG_INTERLACE, DRM_MODE_TV_MODE_NTSC_J),
+>  	NAMED_MODE("PAL", 13500, 720, 576, DRM_MODE_FLAG_INTERLACE, DRM_MODE_TV_MODE_PAL),
+> +	NAMED_MODE("PAL-M", 13500, 720, 480, DRM_MODE_FLAG_INTERLACE, DRM_MODE_TV_MODE_PAL_M),
+>  };
 
-[0] https://patchwork.kernel.org/project/linux-renesas-soc/cover/20221107175305.63975-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
+I'm now having second thoughts about the tv_mode commandline option. Can
+we just add all the variants to this table and drop the tv_mode option?
+IMO this will be more user friendly and less confusing.
 
-Cheers,
-Prabhakar
+The named modes needs to be documented in modedb.rst.
+
+Noralf.
+
+>  
+>  static int drm_mode_parse_cmdline_named_mode(const char *name,
+> diff --git a/drivers/gpu/drm/tests/drm_client_modeset_test.c b/drivers/gpu/drm/tests/drm_client_modeset_test.c
+> index fdfe9e20702e..b3820d25beca 100644
+> --- a/drivers/gpu/drm/tests/drm_client_modeset_test.c
+> +++ b/drivers/gpu/drm/tests/drm_client_modeset_test.c
+> @@ -133,6 +133,32 @@ static void drm_test_pick_cmdline_named_ntsc(struct kunit *test)
+>  	KUNIT_EXPECT_TRUE(test, drm_mode_equal(drm_mode_analog_ntsc_480i(drm), mode));
+>  }
+>  
+> +static void drm_test_pick_cmdline_named_ntsc_j(struct kunit *test)
+> +{
+> +	struct drm_client_modeset_test_priv *priv = test->priv;
+> +	struct drm_device *drm = priv->drm;
+> +	struct drm_connector *connector = &priv->connector;
+> +	struct drm_cmdline_mode *cmdline_mode = &connector->cmdline_mode;
+> +	struct drm_display_mode *mode;
+> +	const char *cmdline = "NTSC-J";
+> +	int ret;
+> +
+> +	KUNIT_ASSERT_TRUE(test,
+> +			  drm_mode_parse_command_line_for_connector(cmdline,
+> +								    connector,
+> +								    cmdline_mode));
+> +
+> +	mutex_lock(&drm->mode_config.mutex);
+> +	ret = drm_helper_probe_single_connector_modes(connector, 1920, 1080);
+> +	mutex_unlock(&drm->mode_config.mutex);
+> +	KUNIT_ASSERT_GT(test, ret, 0);
+> +
+> +	mode = drm_connector_pick_cmdline_mode(connector);
+> +	KUNIT_ASSERT_NOT_NULL(test, mode);
+> +
+> +	KUNIT_EXPECT_TRUE(test, drm_mode_equal(drm_mode_analog_ntsc_480i(drm), mode));
+> +}
+> +
+>  static void drm_test_pick_cmdline_named_pal(struct kunit *test)
+>  {
+>  	struct drm_client_modeset_test_priv *priv = test->priv;
+> @@ -159,10 +185,38 @@ static void drm_test_pick_cmdline_named_pal(struct kunit *test)
+>  	KUNIT_EXPECT_TRUE(test, drm_mode_equal(drm_mode_analog_pal_576i(drm), mode));
+>  }
+>  
+> +static void drm_test_pick_cmdline_named_pal_m(struct kunit *test)
+> +{
+> +	struct drm_client_modeset_test_priv *priv = test->priv;
+> +	struct drm_device *drm = priv->drm;
+> +	struct drm_connector *connector = &priv->connector;
+> +	struct drm_cmdline_mode *cmdline_mode = &connector->cmdline_mode;
+> +	struct drm_display_mode *mode;
+> +	const char *cmdline = "PAL-M";
+> +	int ret;
+> +
+> +	KUNIT_ASSERT_TRUE(test,
+> +			  drm_mode_parse_command_line_for_connector(cmdline,
+> +								    connector,
+> +								    cmdline_mode));
+> +
+> +	mutex_lock(&drm->mode_config.mutex);
+> +	ret = drm_helper_probe_single_connector_modes(connector, 1920, 1080);
+> +	mutex_unlock(&drm->mode_config.mutex);
+> +	KUNIT_ASSERT_GT(test, ret, 0);
+> +
+> +	mode = drm_connector_pick_cmdline_mode(connector);
+> +	KUNIT_ASSERT_NOT_NULL(test, mode);
+> +
+> +	KUNIT_EXPECT_TRUE(test, drm_mode_equal(drm_mode_analog_ntsc_480i(drm), mode));
+> +}
+> +
+>  static struct kunit_case drm_test_pick_cmdline_tests[] = {
+>  	KUNIT_CASE(drm_test_pick_cmdline_res_1920_1080_60),
+>  	KUNIT_CASE(drm_test_pick_cmdline_named_ntsc),
+> +	KUNIT_CASE(drm_test_pick_cmdline_named_ntsc_j),
+>  	KUNIT_CASE(drm_test_pick_cmdline_named_pal),
+> +	KUNIT_CASE(drm_test_pick_cmdline_named_pal_m),
+>  	{}
+>  };
+>  
+> 
