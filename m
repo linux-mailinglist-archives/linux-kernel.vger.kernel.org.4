@@ -2,185 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D46C61FD57
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 19:22:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F17D61FD63
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 19:22:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231734AbiKGSWO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 13:22:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38210 "EHLO
+        id S232412AbiKGSWt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 13:22:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231975AbiKGSWL (ORCPT
+        with ESMTP id S231946AbiKGSWk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 13:22:11 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16DB4E46
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 10:22:09 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id o7so11359271pjj.1
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 10:22:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=tpT45N40f/pI5q3L2453R/CKzvW2wciFDYE+3wyT6us=;
-        b=Q0SeJAPQZqGnx+XTzL/DkYG3PZs0Ot5oEXmOAjN+DVwgy0yFHp9VU6aGkAsHz2XNU1
-         DpltU/0IXUU8Kc8LUxkxMYSuTYTfWzdjNhCfE8z1dShXL6NIYXfWIfJMKyS5OB2haID9
-         kJWyeF4zX3gt/GSsSgx5vgRwJ9dJSCk91rLIk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=tpT45N40f/pI5q3L2453R/CKzvW2wciFDYE+3wyT6us=;
-        b=D9ZGOTw56+BCzC/oRytIm5PQJjONwXXJ9ql3kug1V8WAhCSw1T9RbFEaAkY9spn6mZ
-         BKcb1hhxrc49wqself1M5VBcY2naFurbostdU/G/GiJ0CBVEK67vxQ91hQmHYE8txTIe
-         xKYVioTRkMDVPP5G7BmNLzYCqb0mv+nXTmoWnI7rC6MoZ7LmmJYdX5bXDiUeFh/DMZwd
-         HNqAnpzo4nbV3+C4NBmJUD4KronFxrof5CHgUm/LOzoaNcbcFlYF+pedovcRS+7ed0fj
-         zpMFOyixMPvZTxYo6xLrYJY6GW+33s673P9XOJKVpLSnADChJHkPx8+T7T9ZQnQ8wcBz
-         IUiQ==
-X-Gm-Message-State: ACrzQf16DSlUiscIFZH9WriBBPVwBeQARY3rBffL62UwQsQjTZ8gnIIN
-        WNK/ORyTeOk3CI7jgfKQ/yddhbXfOqqg14JFh5HaRYfcKFk=
-X-Google-Smtp-Source: AMsMyM6qcLVXHWVNTj3S7EFWsYVL3wnmn7H71kbkQ651zQiBsGNCtx3WR8B4X19YO6cGD0QtxeAk5X9IgO82llseqtU=
-X-Received: by 2002:a17:90b:2248:b0:210:10dc:a314 with SMTP id
- hk8-20020a17090b224800b0021010dca314mr67839364pjb.15.1667845328509; Mon, 07
- Nov 2022 10:22:08 -0800 (PST)
+        Mon, 7 Nov 2022 13:22:40 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2A8FB56;
+        Mon,  7 Nov 2022 10:22:38 -0800 (PST)
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2A7IBq2u003348;
+        Mon, 7 Nov 2022 18:22:12 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=DdfWgA9vouqG75fSo60uN652MOW4sllCxUOKeP3RfcQ=;
+ b=eebFqKmEkCdsVhVRi/XbOsQdRoLwq4ZqlPHzBEH8C4MPmOdN3J6x8ZbxV5zTXLIgDm15
+ qQMOH8r09V5AhYha+kX4r724Ee4Rs17OS5mdepLKgsCtM6E+cKKeEzVbWBSKtzUU4YY/
+ aol74r7eqOMb3RVogdjXRRpLoaEf7XKjZLctN4O010ACm93+mKOIeOp847ulP5z3lJdS
+ a6r/G22054YYfe1JEjnORfLH3epvLYpdmC1s98grcGDpk1fzOzBAhj8oDY55/damEQhE
+ H/H/yzX12ifeRs3++3u3YxAL0OCP8U9NqLLbLLjBZeOyB0VpgKfGjSVo9Axrk8+wTTm8 9Q== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kp1uuwfut-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 07 Nov 2022 18:22:12 +0000
+Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2A7Gap89020063;
+        Mon, 7 Nov 2022 18:22:11 GMT
+Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kp1uuwfu3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 07 Nov 2022 18:22:11 +0000
+Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
+        by ppma02dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2A7IL2m0022680;
+        Mon, 7 Nov 2022 18:22:10 GMT
+Received: from b01cxnp22034.gho.pok.ibm.com (b01cxnp22034.gho.pok.ibm.com [9.57.198.24])
+        by ppma02dal.us.ibm.com with ESMTP id 3kngnd5nhx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 07 Nov 2022 18:22:10 +0000
+Received: from smtpav04.wdc07v.mail.ibm.com ([9.208.128.116])
+        by b01cxnp22034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2A7IM8k714090930
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 7 Nov 2022 18:22:09 GMT
+Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D47C358062;
+        Mon,  7 Nov 2022 18:22:07 +0000 (GMT)
+Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1A18E5805F;
+        Mon,  7 Nov 2022 18:22:04 +0000 (GMT)
+Received: from li-479af74c-31f9-11b2-a85c-e4ddee11713b.ibm.com (unknown [9.65.225.56])
+        by smtpav04.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Mon,  7 Nov 2022 18:22:03 +0000 (GMT)
+Message-ID: <1166ac40ae848d81e7fa7aeec056c91079d768d4.camel@linux.ibm.com>
+Subject: Re: [PATCH 09/44] KVM: Drop arch hardware (un)setup hooks
+From:   Eric Farman <farman@linux.ibm.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Anup Patel <anup@brainfault.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc:     James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Atish Patra <atishp@atishpatra.org>,
+        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Isaku Yamahata <isaku.yamahata@intel.com>,
+        Fabiano Rosas <farosas@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Chao Gao <chao.gao@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Yuan Yao <yuan.yao@intel.com>
+Date:   Mon, 07 Nov 2022 13:22:03 -0500
+In-Reply-To: <20221102231911.3107438-10-seanjc@google.com>
+References: <20221102231911.3107438-1-seanjc@google.com>
+         <20221102231911.3107438-10-seanjc@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
 MIME-Version: 1.0
-References: <CACZ4nhtmE9Dh9z_O9-A934+q0_8yHEyj+V-DcEsuEWFbPH6BGg@mail.gmail.com>
- <20221104162733.73345-1-ajit.khaparde@broadcom.com> <Y2inmdbpoRm2VbuE@unreal>
-In-Reply-To: <Y2inmdbpoRm2VbuE@unreal>
-From:   Ajit Khaparde <ajit.khaparde@broadcom.com>
-Date:   Mon, 7 Nov 2022 10:21:51 -0800
-Message-ID: <CACZ4nhv_2qbTtQ_7ijHAi+mNJK07-ZL=0pjnGcH5PtLC2P0+5g@mail.gmail.com>
-Subject: Re: [PATCH v3 0/6] Add Auxiliary driver support
-To:     Leon Romanovsky <leon@kernel.org>
-Cc:     kuba@kernel.org, andrew.gospodarek@broadcom.com,
-        davem@davemloft.net, edumazet@google.com, jgg@ziepe.ca,
-        linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
-        michael.chan@broadcom.com, netdev@vger.kernel.org,
-        pabeni@redhat.com, selvin.xavier@broadcom.com
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000005d9efb05ece58057"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: otjvlxlCigjzwqXdeFPxNBxJt_I7IxRm
+X-Proofpoint-ORIG-GUID: dd3fkNzioIT2BrJda-qHcffczlDpzuYb
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-07_08,2022-11-07_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 bulkscore=0
+ mlxlogscore=888 clxscore=1015 impostorscore=0 malwarescore=0
+ lowpriorityscore=0 mlxscore=0 adultscore=0 spamscore=0 phishscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211070144
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---0000000000005d9efb05ece58057
-Content-Type: text/plain; charset="UTF-8"
+T24gV2VkLCAyMDIyLTExLTAyIGF0IDIzOjE4ICswMDAwLCBTZWFuIENocmlzdG9waGVyc29uIHdy
+b3RlOgo+IERyb3Aga3ZtX2FyY2hfaGFyZHdhcmVfc2V0dXAoKSBhbmQga3ZtX2FyY2hfaGFyZHdh
+cmVfdW5zZXR1cCgpIG5vdwo+IHRoYXQKPiBhbGwgaW1wbGVtZW50YXRpb25zIGFyZSBub3BzLgo+
+IAo+IE5vIGZ1bmN0aW9uYWwgY2hhbmdlIGludGVuZGVkLgo+IAo+IFNpZ25lZC1vZmYtYnk6IFNl
+YW4gQ2hyaXN0b3BoZXJzb24gPHNlYW5qY0Bnb29nbGUuY29tPgo+IC0tLQo+IMKgYXJjaC9hcm02
+NC9pbmNsdWRlL2FzbS9rdm1faG9zdC5owqDCoCB8wqAgMSAtCj4gwqBhcmNoL2FybTY0L2t2bS9h
+cm0uY8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB8wqAgNSAtLS0tLQo+IMKgYXJjaC9t
+aXBzL2luY2x1ZGUvYXNtL2t2bV9ob3N0LmjCoMKgwqAgfMKgIDEgLQo+IMKgYXJjaC9taXBzL2t2
+bS9taXBzLmPCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgfMKgIDUgLS0tLS0KPiDCoGFy
+Y2gvcG93ZXJwYy9pbmNsdWRlL2FzbS9rdm1faG9zdC5oIHzCoCAxIC0KPiDCoGFyY2gvcG93ZXJw
+Yy9rdm0vcG93ZXJwYy5jwqDCoMKgwqDCoMKgwqDCoMKgIHzCoCA1IC0tLS0tCj4gwqBhcmNoL3Jp
+c2N2L2luY2x1ZGUvYXNtL2t2bV9ob3N0LmjCoMKgIHzCoCAxIC0KPiDCoGFyY2gvcmlzY3Yva3Zt
+L21haW4uY8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgfMKgIDUgLS0tLS0KPiDCoGFyY2gv
+czM5MC9rdm0va3ZtLXMzOTAuY8KgwqDCoMKgwqDCoMKgwqDCoMKgwqAgfCAxMCAtLS0tLS0tLS0t
+Cj4gwqBhcmNoL3g4Ni9rdm0veDg2LmPCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+IHwgMTAgLS0tLS0tLS0tLQo+IMKgaW5jbHVkZS9saW51eC9rdm1faG9zdC5owqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoCB8wqAgMiAtLQo+IMKgdmlydC9rdm0va3ZtX21haW4uY8KgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgIHzCoCA3IC0tLS0tLS0KPiDCoDEyIGZpbGVzIGNoYW5nZWQsIDUz
+IGRlbGV0aW9ucygtKQoKUmV2aWV3ZWQtYnk6IEVyaWMgRmFybWFuIDxmYXJtYW5AbGludXguaWJt
+LmNvbT4JIyBzMzkwCg==
 
-On Sun, Nov 6, 2022 at 10:37 PM Leon Romanovsky <leon@kernel.org> wrote:
->
-> On Fri, Nov 04, 2022 at 09:27:27AM -0700, Ajit Khaparde wrote:
-> > Add auxiliary device driver for Broadcom devices.
-> > The bnxt_en driver will register and initialize an aux device
-> > if RDMA is enabled in the underlying device.
-> > The bnxt_re driver will then probe and initialize the
-> > RoCE interfaces with the infiniband stack.
-> >
-> > v1->v2:
-> > - Incorporated review comments including usage of ulp_id &
-> >   complex function indirections.
-> > - Used function calls provided by the auxiliary bus interface
-> >   instead of proprietary calls.
-> > - Refactor code to remove ROCE driver's access to bnxt structure.
-> >
-> > v2->v3:
-> > - Addressed review comments including cleanup of some unnecessary wrappers
-> > - Fixed warnings seen during cross compilation
-> >
-> > Please apply. Thanks.
->
-> Please send this series as standalone one and not as a reply
-> to previous discussion. Reply-to messes review flow, especially
-> for series.
-ACK.
-
->
-> Jakub, I'll review it once Ajit will send it properly.
->
-> Thanks
-
---0000000000005d9efb05ece58057
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-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
-pZEyqKnwS1lKCzjX7mV5W955rFsFxChdAKfw0HilwtqdY24mhy62+GeaEkD0gYIj1tCmw9gnQToc
-K+0s7xEunfR9pBrzmOwS3OQbcP0nJ8SmQ8R+reroH6LYuFpaqK1rgQIDAQABo4IB2zCCAdcwDgYD
-VR0PAQH/BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3Vy
-ZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEG
-CCsGAQUFBzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWdu
-MmNhMjAyMDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93
-d3cuZ2xvYmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6
-hjhodHRwOi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNy
-bDAlBgNVHREEHjAcgRphaml0LmtoYXBhcmRlQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEF
-BQcDBDAfBgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUbrcTuh0mr2qP
-xYdtyDgFeRIiE/gwDQYJKoZIhvcNAQELBQADggEBALrc1TljKrDhXicOaZlzIQyqOEkKAZ324i8X
-OwzA0n2EcPGmMZvgARurvanSLD3mLeeuyq1feCcjfGM1CJFh4+EY7EkbFbpVPOIdstSBhbnAJnOl
-aC/q0wTndKoC/xXBhXOZB8YL/Zq4ZclQLMUO6xi/fFRyHviI5/IrosdrpniXFJ9ukJoOXtvdrEF+
-KlMYg/Deg9xo3wddCqQIsztHSkR4XaANdn+dbLRQpctZ13BY1lim4uz5bYn3M0IxyZWkQ1JuPHCK
-aRJv0SfR88PoI4RB7NCEHqFwARTj1KvFPQi8pK/YISFydZYbZrxQdyWDidqm4wSuJfpE6i0cWvCd
-u50xggJtMIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNh
-MTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwM2Vrj
-4nZK0WWosNswDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIBX+f9UhDgfPvSMXotu3
-pPq2koy/NNTZRNbnLY7D2Fv6MBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkF
-MQ8XDTIyMTEwNzE4MjIwOFowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUD
-BAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsG
-CWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQCkp66ZsD4v4PITOZBkQC03SoyUCeczdxYOFGNA
-eeX+vWoI2VOzTkD9Zxs7iiso3jsj/gIdAzAmUScMkYGRjCJJq1WtcVdoRY9G+ZFS97I2qw7Thvs2
-rHboBdd6wlrncpDJTlbKpm3HaXcJrAjUq5PLEIOalwrpkpiEVMJgqHBCN5kPH6Yk0w7RgrJK1JFx
-EoXOuvOn4aEU0oyFZc4kDND+JZWixJgPDUX8XtFhkmGucemIprm2EkL0PXQ7uMfcIBpGNyIBq/fo
-yWF2oo7sfgrN1ChXpGo5OUzpXE6+CjLR3ZXMKG1mSP+Ukb98CFX+FSE6NF5VGcefV9sT+f0cpaeN
---0000000000005d9efb05ece58057--
