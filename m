@@ -2,79 +2,225 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2C5C61ECEB
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 09:31:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0651661ECF8
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 09:32:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231274AbiKGIbP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 03:31:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41824 "EHLO
+        id S231367AbiKGIcJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 03:32:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231169AbiKGIbN (ORCPT
+        with ESMTP id S231313AbiKGIcE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 03:31:13 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E35691400D
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 00:31:12 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7EBD360F2F
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 08:31:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29537C433D7;
-        Mon,  7 Nov 2022 08:31:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667809871;
-        bh=SXaMq7XgLY8aBlYPIo1uopSs8Oc3lioDXEO/2P56rXw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Ziz8TJBpB/oa0/Tlj1HshNIu5rZ4O8sY+k6G4qRPSeUxDM2KKp+fzkWD4YEpVnznv
-         QcYwzzj+/CF7og0CTg8XRtkz8LYKTIr2LpDWCRRqyUApoJpPT8uruJg6D5QZ6qYVpB
-         dj0wKtmCmyTISL36Sbymk+RsAd7pjzDVG3diob9h6uiORkzRoZcv0o0mev7Dg/hbbw
-         04HRyJ9IXkhJe25ut6n9ySZR3j7XZSGqBMlAuCHMIHezAoEkbfOuqXa2uL/Mvkbc8J
-         ZwV4LKmkM4yBcRsaaQLWBCJ3Yd9Sbjba+ccv38end6W+hwsqRgstIRro//TAzE43tc
-         hjqrYmT9MPDhQ==
-Date:   Mon, 7 Nov 2022 08:31:07 +0000
-From:   Lee Jones <lee@kernel.org>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, Andy Shevchenko <andy@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: [PATCH] mfd: intel_soc_pmic: allow COMPILE_TEST or
- I2C_DESIGNWARE_PLATFORM
-Message-ID: <Y2jCS/qfYibpOlG9@google.com>
-References: <20221101055433.16891-1-rdunlap@infradead.org>
+        Mon, 7 Nov 2022 03:32:04 -0500
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64A3514002;
+        Mon,  7 Nov 2022 00:32:03 -0800 (PST)
+Received: by mail-pl1-x62f.google.com with SMTP id c2so10395370plz.11;
+        Mon, 07 Nov 2022 00:32:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=BQ9Z4bc9iFOixXTMmuVqqXWRg72dHOOtqIyMVDHCuI0=;
+        b=ciEc6wWN290+pHsj0unsWuRhg2OSaL7h+mJiRzgvuBUK9PYthe7IpI7JWLpI42pPBH
+         lMGM3xA8cfXilotWph7PUs1DGe6NlIGg0BQW5ZfDlR4ocMJWWBWeJ1m8GrA1EoEtcC2y
+         8xxXS1eIP3LVK/spN1Lah/euoh1qaRXTNG9AkIQC6jNOIlDEb5DJx10j+w0oPs6rnP5C
+         LvsIXeoQwPm7mvS25W7bxfGh3H540jPma7cgF9+tvjilWnzKcrcA8+mPAxn/WgIgGuaB
+         wxnTZZbnIjLuCTGsIkhlwyKQaMJnQmZO7JK1mNVMfsvqvdtSuJj5ASdquK6oEKO2Y/tY
+         wN7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=BQ9Z4bc9iFOixXTMmuVqqXWRg72dHOOtqIyMVDHCuI0=;
+        b=Ay0YUG0D/Nh9eJqgljqHHTRtiV/t3G0nLIC95JovN3KQ3t9WzUOuyTpKFmLBKyrkht
+         dwYxY/9BoqGQNOgbqaGzvxiAeVNuJOb3EJaAdEdGAQTmHQvTYqL6sU2hYuljOZInAPK4
+         VpYkpxI0DnXINmCBSOPc9kdDCdaR/ZQFW4uBfnVOJdFaXCk4rE1DLkNvkcgeJIrS6cL1
+         T/1Sh1qdL1ZdzAYZpnqPwq6zcVkRlrs2SQ0+Mralsb/NUAd1x1Cs3sVQct4SZGKaLHG7
+         jaMw+bi/N7SHGInHnMrMJmG6DTsgy1uepalJsz5vnvCs/WlQK+7y5WlhqqHQ8mQ/+Keh
+         7PiA==
+X-Gm-Message-State: ANoB5pnUSY5ExvLcKu+tu/faR0/bR/wO8bQF6AFk3Jy3Irfczl9tisoj
+        4ZZvEXEi8qgVCWgu6NyNbf6vpl+sphY=
+X-Google-Smtp-Source: AA0mqf4x9hlvHwl8La/F5SlFkVpAuwZ0Unj8UMbGtbPLhwI9sH41tZmJG1hbtJueoWmH8owdt5R8Bg==
+X-Received: by 2002:a17:902:f687:b0:188:6cce:671b with SMTP id l7-20020a170902f68700b001886cce671bmr14394231plg.71.1667809922707;
+        Mon, 07 Nov 2022 00:32:02 -0800 (PST)
+Received: from localhost.localdomain ([47.242.114.172])
+        by smtp.gmail.com with ESMTPSA id p1-20020a170902a40100b00177f4ef7970sm4424631plq.11.2022.11.07.00.32.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Nov 2022 00:32:02 -0800 (PST)
+From:   Chuang Wang <nashuiliang@gmail.com>
+Cc:     Chuang Wang <nashuiliang@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] net: tun: rebuild error handling in tun_get_user
+Date:   Mon,  7 Nov 2022 16:31:44 +0800
+Message-Id: <20221107083145.685824-1-nashuiliang@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221101055433.16891-1-rdunlap@infradead.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 31 Oct 2022, Randy Dunlap wrote:
+The error handling in tun_get_user is very scattered.
+This patch unifies error handling, reduces duplication of code, and
+makes the logic clearer.
 
-> Linus expressed a desire to have intel_soc_pmic_crc.o (INTEL_SOC_PMIC,
-> for Crystal Cove) be built on an "allmodconfig" build, when
-> I2C_DESIGNWARE_PLATFORM=m, to enhance build test coverage.
-> 
-> The PMIC driver won't work in this case since it requires
-> I2C_DESIGNWARE_PLATFORM=y to operate properly, but adding
-> "|| COMPILE_TEST" does improve the build test coverage.
-> 
-> Link: https://lore.kernel.org/all/CAHk-=wg=hh8xkPjiySnjAyR66AG64eyZ1Y9gHw+MCs8uuSZReA@mail.gmail.com/
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
-> ---
->  drivers/mfd/Kconfig |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Signed-off-by: Chuang Wang <nashuiliang@gmail.com>
+---
+ drivers/net/tun.c | 68 ++++++++++++++++++++++-------------------------
+ 1 file changed, 32 insertions(+), 36 deletions(-)
 
-Applied, thanks.
-
+diff --git a/drivers/net/tun.c b/drivers/net/tun.c
+index 4bf2b268df4a..6a214c2251b9 100644
+--- a/drivers/net/tun.c
++++ b/drivers/net/tun.c
+@@ -1742,11 +1742,11 @@ static ssize_t tun_get_user(struct tun_struct *tun, struct tun_file *tfile,
+ 	int good_linear;
+ 	int copylen;
+ 	bool zerocopy = false;
+-	int err;
++	int err = 0;
+ 	u32 rxhash = 0;
+ 	int skb_xdp = 1;
+ 	bool frags = tun_napi_frags_enabled(tfile);
+-	enum skb_drop_reason drop_reason;
++	enum skb_drop_reason drop_reason = SKB_DROP_REASON_NOT_SPECIFIED;
+ 
+ 	if (!(tun->flags & IFF_NO_PI)) {
+ 		if (len < sizeof(pi))
+@@ -1808,11 +1808,11 @@ static ssize_t tun_get_user(struct tun_struct *tun, struct tun_file *tfile,
+ 		 */
+ 		skb = tun_build_skb(tun, tfile, from, &gso, len, &skb_xdp);
+ 		if (IS_ERR(skb)) {
+-			dev_core_stats_rx_dropped_inc(tun->dev);
+-			return PTR_ERR(skb);
++			err = PTR_ERR(skb);
++			goto drop;
+ 		}
+ 		if (!skb)
+-			return total_len;
++			goto out;
+ 	} else {
+ 		if (!zerocopy) {
+ 			copylen = len;
+@@ -1836,11 +1836,8 @@ static ssize_t tun_get_user(struct tun_struct *tun, struct tun_file *tfile,
+ 		}
+ 
+ 		if (IS_ERR(skb)) {
+-			if (PTR_ERR(skb) != -EAGAIN)
+-				dev_core_stats_rx_dropped_inc(tun->dev);
+-			if (frags)
+-				mutex_unlock(&tfile->napi_mutex);
+-			return PTR_ERR(skb);
++			err = PTR_ERR(skb);
++			goto drop;
+ 		}
+ 
+ 		if (zerocopy)
+@@ -1851,27 +1848,14 @@ static ssize_t tun_get_user(struct tun_struct *tun, struct tun_file *tfile,
+ 		if (err) {
+ 			err = -EFAULT;
+ 			drop_reason = SKB_DROP_REASON_SKB_UCOPY_FAULT;
+-drop:
+-			dev_core_stats_rx_dropped_inc(tun->dev);
+-			kfree_skb_reason(skb, drop_reason);
+-			if (frags) {
+-				tfile->napi.skb = NULL;
+-				mutex_unlock(&tfile->napi_mutex);
+-			}
+-
+-			return err;
++			goto drop;
+ 		}
+ 	}
+ 
+ 	if (virtio_net_hdr_to_skb(skb, &gso, tun_is_little_endian(tun))) {
+ 		atomic_long_inc(&tun->rx_frame_errors);
+-		kfree_skb(skb);
+-		if (frags) {
+-			tfile->napi.skb = NULL;
+-			mutex_unlock(&tfile->napi_mutex);
+-		}
+-
+-		return -EINVAL;
++		err = -EINVAL;
++		goto drop;
+ 	}
+ 
+ 	switch (tun->flags & TUN_TYPE_MASK) {
+@@ -1887,9 +1871,9 @@ static ssize_t tun_get_user(struct tun_struct *tun, struct tun_file *tfile,
+ 				pi.proto = htons(ETH_P_IPV6);
+ 				break;
+ 			default:
+-				dev_core_stats_rx_dropped_inc(tun->dev);
+-				kfree_skb(skb);
+-				return -EINVAL;
++				err = -EINVAL;
++				drop_reason = SKB_DROP_REASON_INVALID_PROTO;
++				goto drop;
+ 			}
+ 		}
+ 
+@@ -1931,11 +1915,7 @@ static ssize_t tun_get_user(struct tun_struct *tun, struct tun_file *tfile,
+ 			if (ret != XDP_PASS) {
+ 				rcu_read_unlock();
+ 				local_bh_enable();
+-				if (frags) {
+-					tfile->napi.skb = NULL;
+-					mutex_unlock(&tfile->napi_mutex);
+-				}
+-				return total_len;
++				goto unlock_unlock;
+ 			}
+ 		}
+ 		rcu_read_unlock();
+@@ -1952,8 +1932,8 @@ static ssize_t tun_get_user(struct tun_struct *tun, struct tun_file *tfile,
+ 
+ 	rcu_read_lock();
+ 	if (unlikely(!(tun->dev->flags & IFF_UP))) {
+-		err = -EIO;
+ 		rcu_read_unlock();
++		err = -EIO;
+ 		drop_reason = SKB_DROP_REASON_DEV_READY;
+ 		goto drop;
+ 	}
+@@ -2007,7 +1987,23 @@ static ssize_t tun_get_user(struct tun_struct *tun, struct tun_file *tfile,
+ 	if (rxhash)
+ 		tun_flow_update(tun, rxhash, tfile);
+ 
+-	return total_len;
++	goto out;
++
++drop:
++	if (err != -EAGAIN)
++		dev_core_stats_rx_dropped_inc(tun->dev);
++
++	if (!IS_ERR_OR_NULL(skb))
++		kfree_skb_reason(skb, drop_reason);
++
++unlock_unlock:
++	if (frags) {
++		tfile->napi.skb = NULL;
++		mutex_unlock(&tfile->napi_mutex);
++	}
++
++out:
++	return err ?: total_len;
+ }
+ 
+ static ssize_t tun_chr_write_iter(struct kiocb *iocb, struct iov_iter *from)
 -- 
-Lee Jones [李琼斯]
+2.37.2
+
