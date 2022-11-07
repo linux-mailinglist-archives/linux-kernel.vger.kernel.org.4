@@ -2,54 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 452BD61EB91
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 08:17:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7854A61EB98
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 08:18:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231462AbiKGHRn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 02:17:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59714 "EHLO
+        id S231478AbiKGHSh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 02:18:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230410AbiKGHRZ (ORCPT
+        with ESMTP id S231415AbiKGHSQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 02:17:25 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C9E013DC1;
-        Sun,  6 Nov 2022 23:16:09 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0629C60EF5;
-        Mon,  7 Nov 2022 07:16:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD4A8C433C1;
-        Mon,  7 Nov 2022 07:16:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1667805368;
-        bh=6o+ij8HzFHZTDLoPetlk1sVAlITTr+Mf+bJTqZ37038=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=W6YyHP20mAGxAt4xEmyMqKjb3M8ftsIA9RxPlyRWroCUJRW0KnOD91xMCIW0ZfGHv
-         np7qkgxHemArgBEIBpvxY8S+wOnhl1HQDAe6dmDXYBZ1IfRufkBgQRyVVWc8fQgwdI
-         9jIuHjlKNBRB9Xuf0Kd/VReaM4mbCFLCbBBvJgfQ=
-Date:   Mon, 7 Nov 2022 08:16:05 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Aaron Lu <aaron.lu@intel.com>
-Cc:     Dave Hansen <dave.hansen@intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        "Yin, Fengwei" <fengwei.yin@intel.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        "Huang, Ying" <ying.huang@intel.com>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH v2] selftest/x86/meltdown: Add a selftest for meltdown
-Message-ID: <Y2iwtXiWHUqPBXMK@kroah.com>
-References: <Y1kwa0ZLI9xbEaHx@ziqianlu-desk1>
- <Y2eKO48Tv+UD0IpV@ziqianlu-desk1>
- <Y2eaEG5IX+tk4wuA@kroah.com>
- <Y2htPReffG50xnu8@ziqianlu-desk>
+        Mon, 7 Nov 2022 02:18:16 -0500
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CE6D13D1C
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Nov 2022 23:17:36 -0800 (PST)
+Received: from kwepemi500016.china.huawei.com (unknown [172.30.72.55])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4N5MtM35RtzJnWL;
+        Mon,  7 Nov 2022 15:14:35 +0800 (CST)
+Received: from huawei.com (10.175.100.227) by kwepemi500016.china.huawei.com
+ (7.221.188.220) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Mon, 7 Nov
+ 2022 15:17:33 +0800
+From:   Shang XiaoJing <shangxiaojing@huawei.com>
+To:     <rostedt@goodmis.org>, <mhiramat@kernel.org>, <zanussi@kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <shangxiaojing@huawei.com>
+Subject: [PATCH 0/2] tracing: kprobe: Fix some bug in kprobe_event_gen_test.c
+Date:   Mon, 7 Nov 2022 15:16:15 +0800
+Message-ID: <20221107071617.21644-1-shangxiaojing@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y2htPReffG50xnu8@ziqianlu-desk>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain
+X-Originating-IP: [10.175.100.227]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemi500016.china.huawei.com (7.221.188.220)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,63 +44,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 07, 2022 at 10:28:13AM +0800, Aaron Lu wrote:
-> Hi Greg,
-> 
-> Thanks for taking a look.
-> 
-> On Sun, Nov 06, 2022 at 12:27:12PM +0100, Greg KH wrote:
-> > On Sun, Nov 06, 2022 at 06:19:39PM +0800, Aaron Lu wrote:
-> > > To capture potential programming errors like mistakenly setting Global
-> > > bit on kernel page table entries, a selftest for meltdown is added.
-> > > 
-> > > This selftest is based on https://github.com/IAIK/meltdown. What this
-> > > test does is to firstly set a predefined string at a random user address
-> > > and then with pagemap, get the physical address of this string. Finally,
-> > > try to fetch the data using kernel's directmap address for this physical
-> > > address to see if user space can use kernel's page table.
-> > 
-> > As this is based on someone else's code, what happened to the proper
-> > credit for them as the author and copyright owner?
-> 
-> Should I list the contributors in the patch header comment section?
-> Something like this:
-> 
-> The original code is contributed by:
-> $ git shortlog -sne --all
->     24  Michael Schwarz <michael.schwarz91@gmail.com>
->     23  Michael Schwarz <michael.schwarz@student.tugraz.at>
->      9  Pavel Boldin <boldin.pavel@gmail.com>
->      6  Daniel Gruss <lava@gruss.cc>
->      3  Daniel Gruss <daniel.gruss@iaik.tugraz.at>
->      3  Jared Deckard <jdeckard@equityins.net>
->      3  Moritz Lipp <github@mlq.me>
->      2  Matteo Croce <mcroce@redhat.com>
->      2  Raphael Carvalho <raphael.scarv@gmail.com>
->      2  asgh <asgh@users.noreply.github.com>
->      1  Eduardo Marques <eduardorbmarques@gmail.com>
->      1  Egor Vorontsov <sdoregor@sdore.me>
->      1  Jakub Wilk <jwilk@jwilk.net>
->      1  Jason Davies <jason@jasondavies.com>
->      1  Lukasz Gryglicki <lukaszgryglicki@o2.pl>
->      1  Michael Schwarz <michael.schwarz@iaik.tugraz.at>
->      1  Raphael S. Carvalho <raphaelsc@scylladb.com>
->      1  Steven <steven@ceriously.com>
->      1  Vamsi Krishna <vamsi3@outlook.com>
->      1  pierwill <19642016+pierwill@users.noreply.github.com>
->      1  ysiyer <yegnesh.s.iyer@intel.com>
-> 
-> As for copyright, the only copyright I can find in the referenced repo
-> is in the LICENSE file and it is: Copyright (c) 2018 meltdown, I'm not
-> sure if I'm allowed to add copyright statement for others.
+Due to lack of the checking and setting-NULL on pointer, there are some
+null pointer dereference or page fault bugs were found when insert
+module, and fixed by this patch set. 
 
-Again, please work with your lawyers so that they can give you the
-correct legal advice, one that they are comfortable having a patch with
-a signed-off-by from an Intel employee to have.
+Shang XiaoJing (2):
+  tracing: kprobe: Fix potential null-ptr-deref on trace_event_file in
+    kprobe_event_gen_test_exit()
+  tracing: kprobe: Fix potential null-ptr-deref on trace_array in
+    kprobe_event_gen_test_exit()
 
-So next time you submit this, please have an Intel lawyer on the
-signed-off-by chain so that we know it is meeting their rules.
+ kernel/trace/kprobe_event_gen_test.c | 51 +++++++++++++++++++---------
+ 1 file changed, 35 insertions(+), 16 deletions(-)
 
-thanks,
+-- 
+2.17.1
 
-greg k-h
