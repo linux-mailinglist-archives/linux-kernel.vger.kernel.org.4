@@ -2,112 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B25E561EBAB
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 08:20:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7780161EBB5
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 08:20:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231158AbiKGHUb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 02:20:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35014 "EHLO
+        id S231259AbiKGHUv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 02:20:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230095AbiKGHU3 (ORCPT
+        with ESMTP id S230095AbiKGHUu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 02:20:29 -0500
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07760EA
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Nov 2022 23:20:29 -0800 (PST)
-Received: by mail-pl1-f181.google.com with SMTP id c2so10264934plz.11
-        for <linux-kernel@vger.kernel.org>; Sun, 06 Nov 2022 23:20:29 -0800 (PST)
+        Mon, 7 Nov 2022 02:20:50 -0500
+Received: from mail-ua1-x92a.google.com (mail-ua1-x92a.google.com [IPv6:2607:f8b0:4864:20::92a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BC44F2;
+        Sun,  6 Nov 2022 23:20:49 -0800 (PST)
+Received: by mail-ua1-x92a.google.com with SMTP id c31so3773519uae.10;
+        Sun, 06 Nov 2022 23:20:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=LCSC1Xt7ibn8IOvDjJqPliEyiNhSv3szasXlPzJli/I=;
+        b=V21INu9spLmVlUlsn2AwTd97U5fwSzKN/ig69ACcD0O4udIelk4GOxznlRKCnLr2G9
+         oNApzsJ/WMmuFjJDmIaihCvcdkWz0RcLNazxgns6Dy/v9R0R5EO2aNCY5qYIoSEaw2WQ
+         NlTUBE5P/mjNhZSZl8/MuytNtSWTOGNzV0M/OwE6JXwgFrkOkc7E3IkhuFX/z8tajJ//
+         v4NvEiwegteNF9aOihus+vTMOulkUYSHrLMLZOKlJby7KLmOggwJgAndnIWB+4uygltQ
+         S7A7rvanFY7hWv42zNgKHDuGS1g9K8L1ynKW7XZ9MJZUvu3ER2hy95K2tGaw/IyafoIT
+         ENFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PgoRVUgxwXJrcmiPeyTeFWYr8HX0hdcHEbm1EMJUS3k=;
-        b=tGuVmynlCKS41wB+STnS20ND816H1/6aCKBJZ+D9TzdUKKd2lQGOKaJvNTbAPVrzwW
-         35QIUzAX3701Y4qKB8vKyREpSHgNqn2q+YuGVvQ3PlFm9Iy+LHROgKiqcbcE7pkQHGXP
-         pq67v1awBFylWTGOemLQp6h6+P3IZw1pgFLlAEy8bKyWhStFmf6uZ01i3K3SbKTqvmwd
-         9/or89fZ6LdPlcLW2PAff1ymF/eY6ZPwVQlFaAG5Yyu/dW1iyxvY7Hgap3AEAUvs3i8S
-         LvwwiQ3YLKPNMp/jeIC6rKbfEscgerIYmvEh7/CHgB/1Oj3vFO7r373RlsgnXPF8HH35
-         ad8g==
-X-Gm-Message-State: ANoB5pmyECSvMWaHXCSUoU18NEfhm2HRSm87/4QOA+crzWw4WhD03ot1
-        t0iQW/u2aGsPFwGoz8lyOJo=
-X-Google-Smtp-Source: AA0mqf6S7IR5t8Rig4uve/uPxrkEQhBeAoMqQb/ZrHuiItMUuOyPSx0Ho7wrdZlqWsgf1aPXmXNB9Q==
-X-Received: by 2002:a17:902:bf0a:b0:188:6862:cc3d with SMTP id bi10-20020a170902bf0a00b001886862cc3dmr15727874plb.17.1667805628385;
-        Sun, 06 Nov 2022 23:20:28 -0800 (PST)
-Received: from fedora ([47.153.164.177])
-        by smtp.gmail.com with ESMTPSA id x12-20020aa78f0c000000b0056cee8af3a5sm3710764pfr.29.2022.11.06.23.20.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 06 Nov 2022 23:20:27 -0800 (PST)
-Date:   Sun, 6 Nov 2022 23:20:24 -0800
-From:   Dennis Zhou <dennis@kernel.org>
-To:     Baoquan He <bhe@redhat.com>
-Cc:     Vlastimil Babka <vbabka@suse.cz>, linux-kernel@vger.kernel.org,
-        Tejun Heo <tj@kernel.org>, Christoph Lameter <cl@linux.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>
-Subject: Re: [PATCH 8/8] mm/slub, percpu: correct the calculation of early
- percpu allocation size
-Message-ID: <Y2ixuDbcQgtqE1Ox@fedora>
-References: <20221024081435.204970-1-bhe@redhat.com>
- <20221024081435.204970-9-bhe@redhat.com>
- <b3776af5-65c7-62b4-7624-184420d0da63@suse.cz>
- <Y2iLLIL/jBL4dftJ@MiWiFi-R3L-srv>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LCSC1Xt7ibn8IOvDjJqPliEyiNhSv3szasXlPzJli/I=;
+        b=dIHtDjE1BW5nYud8Hh0vNHIAWV2mc8cE5yRNddF3Llu5cljXbVFgTRsWpyMpHWL6oi
+         /n/D+y/6BqjX58MB6oaPyyPmKSqkPF9ui0gKvWJRif/kKKfsbwWGJ3WbBdQDuio3r21z
+         ruskyP69/H/HuDzqqt9hvWaFcHR358J7gicts19dT3VEeLOgFxYqYl/tPQvhZj1C76nC
+         9Baa1cEQdqwX+tyDutv8x4YJbCd5UdWduPLt2Z0HUl0JOzYlAq06FO2bHyogDqZi9IYW
+         D6rqZbKgGtWmoONh28daw+EReHFKvp5GlXMZ34gtoIpix5NGbHqUDIbsEKbyahSz3v1u
+         PI6g==
+X-Gm-Message-State: ACrzQf1gmsShDtJeS95XVxmZ4kRrOejR3YENJGKw6ChRvdyJYO1uEjgu
+        g/w2N5ZlbEEaucRPjZNoCQHY+cqpT088wZiK+Mg=
+X-Google-Smtp-Source: AMsMyM7GfHOoHTGIzy2QFrYqJaeS2plU7RtHustmbzsq9n87vaiRutdb5sBeo92zjeDyjKKkvMt3kYZNmYL+k2oyopM=
+X-Received: by 2002:ab0:7702:0:b0:402:956d:377a with SMTP id
+ z2-20020ab07702000000b00402956d377amr13928347uaq.19.1667805648195; Sun, 06
+ Nov 2022 23:20:48 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y2iLLIL/jBL4dftJ@MiWiFi-R3L-srv>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+References: <20221104033810.1324686-1-milkfafa@gmail.com> <20221104033810.1324686-6-milkfafa@gmail.com>
+ <357a3098-918b-895b-7305-0f1a63aacdb0@xs4all.nl>
+In-Reply-To: <357a3098-918b-895b-7305-0f1a63aacdb0@xs4all.nl>
+From:   Kun-Fa Lin <milkfafa@gmail.com>
+Date:   Mon, 7 Nov 2022 15:20:36 +0800
+Message-ID: <CADnNmFp4r-3+pvHa+_HOxcXAkORadMzgg6fFKbLcgs66a_90gw@mail.gmail.com>
+Subject: Re: [PATCH v6 5/5] drivers: media: platform: Add NPCM Video
+ Capture/Encode Engine driver
+To:     Hans Verkuil <hverkuil@xs4all.nl>
+Cc:     mchehab@kernel.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org,
+        avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
+        kwliu@nuvoton.com, kflin@nuvoton.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Baoquan,
+Hi Hans,
 
-On Mon, Nov 07, 2022 at 12:35:56PM +0800, Baoquan He wrote:
-> On 11/06/22 at 09:56pm, Vlastimil Babka wrote:
-> > On 10/24/22 10:14, Baoquan He wrote:
-> > > SLUB allocator relies on percpu allocator to initialize its ->cpu_slab
-> > > during early boot. For that, the dynamic chunk of percpu which serves
-> > > the early allocation need be large enough to satisfy the kmalloc
-> > > creation.
-> > > 
-> > > However, the current BUILD_BUG_ON() in alloc_kmem_cache_cpus() doesn't
-> > > consider the kmalloc array with NR_KMALLOC_TYPES length. Fix that
-> > > with correct calculation.
-> > > 
-> > > Signed-off-by: Baoquan He <bhe@redhat.com>
-> > > Cc: Christoph Lameter <cl@linux.com>
-> > > Cc: Pekka Enberg <penberg@kernel.org>
-> > > Cc: David Rientjes <rientjes@google.com>
-> > > Cc: Joonsoo Kim <iamjoonsoo.kim@lge.com>
-> > > Cc: Andrew Morton <akpm@linux-foundation.org>
-> > > Cc: Vlastimil Babka <vbabka@suse.cz>
-> > > Cc: Roman Gushchin <roman.gushchin@linux.dev>
-> > > Cc: Hyeonggon Yoo <42.hyeyoo@gmail.com>
-> > > ---
-> > >  mm/slub.c | 3 ++-
-> > >  1 file changed, 2 insertions(+), 1 deletion(-)
-> > 
-> > As only slub is touched and there's no prerequsities in the previous
-> > patches, I took this to the slab tree, branch
-> > slab/for-6.2/cleanups
-> 
-> Yes, it only changes slub code. Thanks for taking it.
-> 
-> I will resend v2 with the left 7 percpu only patches with update.
-> 
-> 
+Thanks for the review.
 
-Don't worry about resending them, I'll pick them up tomorrow morning.
+>
+> These functions are not usually present when capturing from video. You don't
+> have a choice w.r.t. resolution and fps, since that's determined by the
+> incoming video. I would drop support for this.
 
-Thanks,
-Dennis
+Just to confirm, do you mean `npcm_video_enum_framesizes` and
+`npcm_video_enum_frameintervals` functions?
+
+
+> > +     switch (ctrl->id) {
+> > +     case V4L2_CID_DETECT_MD_MODE:
+> > +             if (ctrl->val == V4L2_DETECT_MD_MODE_GLOBAL)
+> > +                     video->ctrl_cmd = VCD_CMD_OPERATION_CAPTURE;
+> > +             else
+> > +                     video->ctrl_cmd = VCD_CMD_OPERATION_COMPARE;
+> > +     break;
+>
+> Incorrect indentation for the 'break'.
+
+Will correct it.
+
+
+> > +     v4l2_ctrl_new_std_menu(&video->ctrl_handler, &npcm_video_ctrl_ops,
+> > +                            V4L2_CID_DETECT_MD_MODE,
+> > +                            V4L2_DETECT_MD_MODE_REGION_GRID, 0,
+> > +                            V4L2_DETECT_MD_MODE_GLOBAL);
+>
+> Why is this driver using a control designed for motion detection devices?
+> That seems odd, and it looks like you are abusing this control to do something
+> else.
+
+The Video Capture/Differentiation (VCD) engine supports two modes:
+- COMPLETE (capture the next "complete frame" into memory)
+- DIFF (compare the incoming frame with the frame stored in memory,
+and updates the "diff frame" in memory)
+
+The purpose here is to provide a way for application to switch the
+COMPLETE/DIFF mode. Since I couldn't find an appropriate ioctl that is
+designed for this purpose, so I used VIDIOC_S_CTRL with control values
+of V4L2_DETECT_MD_MODE_GLOBAL (for COMPLETE) and
+V4L2_DETECT_MD_MODE_REGION_GRID (for DIFF). It would be appreciated if
+you could point me in the right direction.
+
+
+> When you post v7, please also include the output of v4l2-compliance to the
+> cover letter!
+> Make sure you compile v4l2-compliance from the v4l-utils git repo, do not
+> use a version from a distro, that will be too old.
+
+OK, I'll try to compile v4l2-compliance and include the output.
+
+Regards,
+Marvin
