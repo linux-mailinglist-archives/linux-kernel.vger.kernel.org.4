@@ -2,67 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DEF161FED6
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 20:44:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7084A61FED7
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 20:44:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232592AbiKGToa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 14:44:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36754 "EHLO
+        id S232249AbiKGTol (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 14:44:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231956AbiKGTo1 (ORCPT
+        with ESMTP id S231956AbiKGToi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 14:44:27 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1D21BFC
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 11:43:28 -0800 (PST)
+        Mon, 7 Nov 2022 14:44:38 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC2C218E10
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 11:43:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667850208;
+        s=mimecast20190719; t=1667850219;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=T+MYGNwBR+Rwvao8mlrqDH2JgeLYoIf95UPfWCfEU38=;
-        b=CecgA0lpD7yyA/GY5HFqa0Uc5bFPWMB85FepJvjO53iWsEggQQw+swVI6RRhnTzxaDIoND
-        rgG5j6UCBf+vZjVB0DBtzbvZNghaWWN3Szfx8pfTzkgsrerbjtqd+dWm3IBvjjJlNDYnoF
-        8uw16eAxDfYf5BReRZigcDbu1MVeyiM=
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
- [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=5AnQkkxeXV0W5i5BhTk5A0lEhldRduibOLeYJDu0I1c=;
+        b=QF6XU33vyoXNVcKWrIfuUB8Od5/thKpBA+L7cMxzqM9UwxRtp1eLTCt9H4uxOCXqnI0g20
+        Xar2s9gGimt/eQRA53CHZp3L3xJDu3+fQdui5wg3Akxm/+Pl+6YziCW+JFr2GTJOl4zLax
+        ag3WiYdt/j330BA++Hwif0gPdYlTRqc=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-59-d2R_v86yO6-GuKWsBiSgkw-1; Mon, 07 Nov 2022 14:43:26 -0500
-X-MC-Unique: d2R_v86yO6-GuKWsBiSgkw-1
-Received: by mail-ej1-f72.google.com with SMTP id hb35-20020a170907162300b007ae6746f240so1944162ejc.12
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 11:43:26 -0800 (PST)
+ us-mta-180-IuSGfYTyMAuLEHjNyvwyng-1; Mon, 07 Nov 2022 14:43:38 -0500
+X-MC-Unique: IuSGfYTyMAuLEHjNyvwyng-1
+Received: by mail-ej1-f69.google.com with SMTP id xj11-20020a170906db0b00b0077b6ecb23fcso6937152ejb.5
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 11:43:37 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=T+MYGNwBR+Rwvao8mlrqDH2JgeLYoIf95UPfWCfEU38=;
-        b=O+Sngh//uxKPfhPltokKH8+SIl4GNDMktw06OTC2Y+olcbsgxCk5e+Qe0Bhqiw5/Qk
-         Bp64MG4vLLF51SRtZz8Cxs+pfaGFOKMWm0YkWPHhzIkvzA9GaEl+PyHhl/sfjDmj8FRK
-         BaFX0STx4YHfSZAWVaCVUWhRNtrVt9UDUno2/rDZeE5yy0I2+P2QUIptfoHnxWm0L6r9
-         OV3cGAV8zOCRZCRknJLSUQczr9ljpGQD2RDUDSGA4tg+tQAEeF8/I5NiMtHvAy2blath
-         BstGcVBY1p5U0+DQIF9vklE8QbwbktONZLy/TmSvQeM73R7viEb9GNpa64x2lgmAcRo8
-         7HeQ==
-X-Gm-Message-State: ACrzQf12WofG3m/uOwzFla6EqCCr+FCE/UQZKAnM08pnMiXt0Z14a4gr
-        Kvs7wtVemxag0M13LukSCCfrnuIUXldJC2AZGzjEUkUzbONEN96Lc5V86MSEGQ7PkZpOSZg185L
-        CNr1LvQkjtQtzSVnIdLlOKSG/
-X-Received: by 2002:a17:907:843:b0:73a:5b0e:8352 with SMTP id ww3-20020a170907084300b0073a5b0e8352mr50156240ejb.438.1667850205647;
-        Mon, 07 Nov 2022 11:43:25 -0800 (PST)
-X-Google-Smtp-Source: AMsMyM5XGEYvVOH24leZFvJk1jRnNxFGb8iDc1hjDsapTa1/D/RlUw0BoWIqz6C4vc7/k6hNl7gtEA==
-X-Received: by 2002:a17:907:843:b0:73a:5b0e:8352 with SMTP id ww3-20020a170907084300b0073a5b0e8352mr50156220ejb.438.1667850205421;
-        Mon, 07 Nov 2022 11:43:25 -0800 (PST)
+        bh=5AnQkkxeXV0W5i5BhTk5A0lEhldRduibOLeYJDu0I1c=;
+        b=HDQTbMQDBV71uy0BjsVUsa/uFWoQjjY2JPLP7XnZ2rGbUJLYaUCmDybBqYpeYWu4I6
+         9wO/PPCjlAntTRgjWTQgOBL+WeXJ1nprqG9qNkzoT2gYt4mAAwkqmvrMD8a+5dH37ke0
+         jqdkuNhaVowpIikFPXKkrohuUiH9DaZPp4xZ2bCA7Ua9y/WgJwmMIxB9MFsv5Jn+kJ+3
+         +fy+uxADTilHMLXMDBSplSItWNtmmMMJyAwlTDfpSSi0dW7t4bqLuLLyRla6sgwA3+E2
+         LmZuN2JE6QJKgOZxzNcqDB/ZO7/O/yZNDd0E20femGwwmG8hcUtQT7Li4w2cLG7BYkXP
+         wqCg==
+X-Gm-Message-State: ACrzQf1Vvsle674DuWiSvvd+1ZLtiG7GwIrjMRGWt6XA2xmYZPShpmDU
+        jJN6ImqxkSsV7A6roow5yBdCwbwGm9tltgnUkarvCk4aQqMj4DWLeFBk01d/JaafxA8uk5jp2Ku
+        SfVNlNZaGnNA9JE91Umg5nUHI
+X-Received: by 2002:a17:907:5cb:b0:791:96ec:f436 with SMTP id wg11-20020a17090705cb00b0079196ecf436mr51337752ejb.100.1667850216728;
+        Mon, 07 Nov 2022 11:43:36 -0800 (PST)
+X-Google-Smtp-Source: AMsMyM5RNrhsn5Af//r93f7uPW0HNWc61mhMfbgCMrZaZgjDVlmL3t7weeTQSsc7gXvpt9u7R88CyQ==
+X-Received: by 2002:a17:907:5cb:b0:791:96ec:f436 with SMTP id wg11-20020a17090705cb00b0079196ecf436mr51337737ejb.100.1667850216558;
+        Mon, 07 Nov 2022 11:43:36 -0800 (PST)
 Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
-        by smtp.gmail.com with ESMTPSA id et19-20020a170907295300b0077205dd15basm3807232ejc.66.2022.11.07.11.43.24
+        by smtp.gmail.com with ESMTPSA id pj27-20020a170906d79b00b007ad96726c42sm3794816ejb.91.2022.11.07.11.43.35
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Nov 2022 11:43:24 -0800 (PST)
-Message-ID: <d2dd6f25-222e-322b-8af9-25d844224c75@redhat.com>
-Date:   Mon, 7 Nov 2022 20:43:23 +0100
+        Mon, 07 Nov 2022 11:43:36 -0800 (PST)
+Message-ID: <00889f1f-d9e5-9607-6932-f72417953ea7@redhat.com>
+Date:   Mon, 7 Nov 2022 20:43:35 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.3.1
-Subject: Re: [PATCH 22/26] drm: vboxvideo: Remove #ifdef guards for PM related
+Subject: Re: [PATCH 24/26] drm: gm12u320: Remove #ifdef guards for PM related
  functions
+Content-Language: en-US, nl
 To:     Paul Cercueil <paul@crapouillou.net>,
         Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
         Maxime Ripard <mripard@kernel.org>,
@@ -71,11 +72,9 @@ To:     Paul Cercueil <paul@crapouillou.net>,
         Daniel Vetter <daniel@ffwll.ch>
 Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
 References: <20221107175106.360578-1-paul@crapouillou.net>
- <20221107175256.360839-1-paul@crapouillou.net>
- <20221107175256.360839-12-paul@crapouillou.net>
-Content-Language: en-US, nl
+ <20221107175510.361051-1-paul@crapouillou.net>
 From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20221107175256.360839-12-paul@crapouillou.net>
+In-Reply-To: <20221107175510.361051-1-paul@crapouillou.net>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -90,16 +89,18 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi,
 
-On 11/7/22 18:52, Paul Cercueil wrote:
-> Use the pm_sleep_ptr() macro to handle the .suspend / .resume callbacks.
+On 11/7/22 18:55, Paul Cercueil wrote:
+> Use the pm_ptr() macro to handle the .suspend / .resume / .reset_resume
+> callbacks.
 > 
 > This macro allows the suspend and resume functions to be automatically
-> dropped by the compiler when CONFIG_SUSPEND is disabled, without having
+> dropped by the compiler when CONFIG_PM is disabled, without having
 > to use #ifdef guards.
 > 
 > This has the advantage of always compiling these functions in,
 > independently of any Kconfig option. Thanks to that, bugs and other
-> regressions are subsequently easier to catch.
+> regressions are subsequently easier to catch. It also allows to drop the
+> __maybe_unused tags.
 > 
 > Signed-off-by: Paul Cercueil <paul@crapouillou.net>
 > ---
@@ -115,37 +116,53 @@ Hans
 
 
 > ---
->  drivers/gpu/drm/vboxvideo/vbox_drv.c | 6 +-----
->  1 file changed, 1 insertion(+), 5 deletions(-)
+>  drivers/gpu/drm/tiny/gm12u320.c | 15 +++++++--------
+>  1 file changed, 7 insertions(+), 8 deletions(-)
 > 
-> diff --git a/drivers/gpu/drm/vboxvideo/vbox_drv.c b/drivers/gpu/drm/vboxvideo/vbox_drv.c
-> index f4f2bd79a7cb..79318441ed7e 100644
-> --- a/drivers/gpu/drm/vboxvideo/vbox_drv.c
-> +++ b/drivers/gpu/drm/vboxvideo/vbox_drv.c
-> @@ -102,7 +102,6 @@ static void vbox_pci_remove(struct pci_dev *pdev)
->  	vbox_hw_fini(vbox);
+> diff --git a/drivers/gpu/drm/tiny/gm12u320.c b/drivers/gpu/drm/tiny/gm12u320.c
+> index 7441d992a5d7..0a901201142e 100644
+> --- a/drivers/gpu/drm/tiny/gm12u320.c
+> +++ b/drivers/gpu/drm/tiny/gm12u320.c
+> @@ -4,6 +4,7 @@
+>   */
+>  
+>  #include <linux/module.h>
+> +#include <linux/pm.h>
+>  #include <linux/usb.h>
+>  
+>  #include <drm/drm_atomic_helper.h>
+> @@ -718,15 +719,15 @@ static void gm12u320_usb_disconnect(struct usb_interface *interface)
+>  	drm_atomic_helper_shutdown(dev);
 >  }
 >  
-> -#ifdef CONFIG_PM_SLEEP
->  static int vbox_pm_suspend(struct device *dev)
+> -static __maybe_unused int gm12u320_suspend(struct usb_interface *interface,
+> -					   pm_message_t message)
+> +static int gm12u320_suspend(struct usb_interface *interface,
+> +			    pm_message_t message)
 >  {
->  	struct vbox_private *vbox = dev_get_drvdata(dev);
-> @@ -160,16 +159,13 @@ static const struct dev_pm_ops vbox_pm_ops = {
->  	.poweroff = vbox_pm_poweroff,
->  	.restore = vbox_pm_resume,
->  };
-> -#endif
+>  	struct drm_device *dev = usb_get_intfdata(interface);
 >  
->  static struct pci_driver vbox_pci_driver = {
->  	.name = DRIVER_NAME,
->  	.id_table = pciidlist,
->  	.probe = vbox_pci_probe,
->  	.remove = vbox_pci_remove,
-> -#ifdef CONFIG_PM_SLEEP
-> -	.driver.pm = &vbox_pm_ops,
+>  	return drm_mode_config_helper_suspend(dev);
+>  }
+>  
+> -static __maybe_unused int gm12u320_resume(struct usb_interface *interface)
+> +static int gm12u320_resume(struct usb_interface *interface)
+>  {
+>  	struct drm_device *dev = usb_get_intfdata(interface);
+>  	struct gm12u320_device *gm12u320 = to_gm12u320(dev);
+> @@ -747,11 +748,9 @@ static struct usb_driver gm12u320_usb_driver = {
+>  	.probe = gm12u320_usb_probe,
+>  	.disconnect = gm12u320_usb_disconnect,
+>  	.id_table = id_table,
+> -#ifdef CONFIG_PM
+> -	.suspend = gm12u320_suspend,
+> -	.resume = gm12u320_resume,
+> -	.reset_resume = gm12u320_resume,
 > -#endif
-> +	.driver.pm = pm_sleep_ptr(&vbox_pm_ops),
+> +	.suspend = pm_ptr(gm12u320_suspend),
+> +	.resume = pm_ptr(gm12u320_resume),
+> +	.reset_resume = pm_ptr(gm12u320_resume),
 >  };
 >  
->  DEFINE_DRM_GEM_FOPS(vbox_fops);
+>  module_usb_driver(gm12u320_usb_driver);
 
