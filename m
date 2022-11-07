@@ -2,64 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FE0A61F5FC
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 15:28:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1785461F606
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 15:29:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232390AbiKGO2w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 09:28:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39528 "EHLO
+        id S232579AbiKGO3x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 09:29:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232554AbiKGO20 (ORCPT
+        with ESMTP id S232532AbiKGO3h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 09:28:26 -0500
-Received: from mail-wm1-x34a.google.com (mail-wm1-x34a.google.com [IPv6:2a00:1450:4864:20::34a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 605D5103E
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 06:23:06 -0800 (PST)
-Received: by mail-wm1-x34a.google.com with SMTP id az40-20020a05600c602800b003cfa26c40easo2206817wmb.1
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 06:23:06 -0800 (PST)
+        Mon, 7 Nov 2022 09:29:37 -0500
+Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF3A01FCDB;
+        Mon,  7 Nov 2022 06:24:55 -0800 (PST)
+Received: by mail-ot1-x32e.google.com with SMTP id r13-20020a056830418d00b0065601df69c0so6611356otu.7;
+        Mon, 07 Nov 2022 06:24:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=8RGh8EDyO4osN/zuXgwdm42OK5Fa8r6gvjPxQC6gE/Y=;
-        b=VgwTO2WLIG/eNYpKhvHVsWOH1/2vXRWz1GBPQ2+DhvTTM0v0Uw6bmYoEH/VsZKKBJc
-         6mdtXBQgUyCnKCG7gTTHe5XIRP088G78goMUw0LBr4bkpDKLPN9JIBuA69W7/NEycR+N
-         H5unjWkIcLtBemlDT6L0bdfdf1xptjjMi/c+d/szx2vIrRB7IuhleiE6GVNekX/zPh18
-         1xake7337x70KY8KTKx4wrTDraE4d0ZetccyrjzYPfd2Rd0qicc0697BXjcc7HUPomWL
-         5ThYDGIQ/tvU38H5aLbJ38hMByTWpFXgYyKSfp0VyCIoB2gvQnkcQBNc/zviMST/iGXe
-         Yxmg==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=IG4UQVZgFzf5wzCzoJA49RijDyqcF2v5Wg1wz+or46w=;
+        b=DuuD8pG5alSGOKfFryOtNi6kxRJuDHNQZhwdHObMWH6AinCIul5RLrmDXBV8fSaSbG
+         DDWqGSw5uJeTFgGLvBa4mSdEkcOPUDPsN64segrwzD0nhTCl3p0a1Ci4Uq+ZddRS644S
+         9GGCrufcXNzS0rBP4ARHU2voJ7N0/rjpccMgJDKAirZClEqT13BFVcI2mlaXVmOKVpUR
+         yEUcevMNEMAi0cPGp70O5b6WZAi5SLssW6CwD7+kEfMDE1gsmH9IVvnACDikAy5LVlBu
+         yUnPRF9w1LP/ww3LWO9Rd+9ert42PvZ1j9bfwjyPtWFeNY0H/BuIsOgML3qDRcnWqhqt
+         VUpw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=8RGh8EDyO4osN/zuXgwdm42OK5Fa8r6gvjPxQC6gE/Y=;
-        b=U+oEKn+9ivRHyXYkx7rwgfdsClOBXvlh5kMqVff7PS5boN6xqQlJyfUbZaB4topmzP
-         eSKlYCsLgqUdkg7Cl6v4FUVFKwg0DiCiZXaiZyfdr73xK9f0559FCZKkvR8ZnlP73GK9
-         i/957ZgLo3HOgwMM4tN/lmOXNQ2Xcuf5qH1uyQVDTfuZDQ/ESuULdxQtit+BrChRhONm
-         ByE4If6KgzpltGFSNqg/vnow6kcR5y7MyM1N8Mp/pmCaipOFPFAJZJO2aXRZZUBBEoIr
-         fWQqK+dlV31vm3TTq3wLafXZlDlJ77KMM23ZaaRK4646LnyeHNYnfc1Um4NEVqYmwyOb
-         +VlQ==
-X-Gm-Message-State: ACrzQf1qTaNAvQ/8/rMB1cXwaBDYp9MHQhrUUzLg5kDHYsH2d0Puj914
-        vW9dkNTZLlNdspLPf8U6SW978hz5At0=
-X-Google-Smtp-Source: AMsMyM4IhkSYiYM8vVqwDYha8HmlDgTkXxJ5kHYECa/1lQghvzAc8W/Eq0cUYfhcePBSnBP+qJTZ4HCZ2LA=
-X-Received: from glider.muc.corp.google.com ([2a00:79e0:9c:201:4f3e:16fb:f499:bb9d])
- (user=glider job=sendgmr) by 2002:adf:e78d:0:b0:236:debd:f681 with SMTP id
- n13-20020adfe78d000000b00236debdf681mr23955346wrm.17.1667830984850; Mon, 07
- Nov 2022 06:23:04 -0800 (PST)
-Date:   Mon,  7 Nov 2022 15:22:55 +0100
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
-Message-ID: <20221107142255.4038811-1-glider@google.com>
-Subject: [PATCH] docs: kmsan: fix formatting of "Example report"
-From:   Alexander Potapenko <glider@google.com>
-To:     glider@google.com
-Cc:     linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        akpm@linux-foundation.org, corbet@lwn.net,
-        kasan-dev@googlegroups.com, Bagas Sanjaya <bagasdotme@gmail.com>
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=IG4UQVZgFzf5wzCzoJA49RijDyqcF2v5Wg1wz+or46w=;
+        b=GLMOAYtHG2BYnBccYPiwJMCLUvvR5DkYjN5J5x/7YOlUGHQA9KWFtZiPRmXu963+V1
+         spcidoDLYolT+ThhvIsbmmj13sCP/V2vZgoFs9eb4mNjwdPfCOytHYW14l+7KK/p8hxz
+         zcpv3E+FlSaOFl3zO9c1PNnXbwzAKbd8pUyghvqAAl9AdMRdVWNQwprW3PpsmeLX8Va+
+         FLCWuGPlDRW6g14QSVgW57hDrwqKAO+s3UmyHevVjYds6+A0WbrJuthaur8zxW4wCFJW
+         WBQC38JMYDuNj7LI2uWr35MA/bvCNLMawUffDn7ZnCrj/zPj6zkqAlimniW0dO3dsgJQ
+         ZWcQ==
+X-Gm-Message-State: ACrzQf0Kh3CKg3H+mJlFBrVNkR/BKGXQXvQzGtVsduNr+oH60N6SFqoV
+        mPSn6J9UPyaRoq3sBVTOfbq+wda2q1fu/5EFpQw=
+X-Google-Smtp-Source: AMsMyM6s/NUbomfeK10UhYLZsIsefU9QwYjEfjYygF9tunUt3jy5PYwg8zkHinaXgQaqjcDvBGpx4Ay7pq1oyZUee4o=
+X-Received: by 2002:a9d:f44:0:b0:663:bfe6:2a6d with SMTP id
+ 62-20020a9d0f44000000b00663bfe62a6dmr24418402ott.214.1667831095098; Mon, 07
+ Nov 2022 06:24:55 -0800 (PST)
+MIME-Version: 1.0
+References: <20221102155558.1895829-1-dsankouski@gmail.com>
+ <20221102155558.1895829-3-dsankouski@gmail.com> <1a8bab07-46c4-1585-45ff-8780c02afd4e@linaro.org>
+In-Reply-To: <1a8bab07-46c4-1585-45ff-8780c02afd4e@linaro.org>
+From:   Dzmitry Sankouski <dsankouski@gmail.com>
+Date:   Mon, 7 Nov 2022 17:24:44 +0300
+Message-ID: <CABTCjFBth=jON-uuMU54cQi3zDcGYtGMbpaKitc1WHx+ciNiRQ@mail.gmail.com>
+Subject: Re: [PATCH v11 2/2] arm64: dts: qcom: sagit: add initial device tree
+ for sagit
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Kees Cook <keescook@chromium.org>,
+        Anton Vorontsov <anton@enomsg.org>,
+        Colin Cross <ccross@android.com>,
+        Tony Luck <tony.luck@intel.com>,
+        "open list:ARM/QUALCOMM SUPPORT" <linux-arm-msm@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,28 +81,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a blank line to make the sentence before the list render as a
-separate paragraph, not a definition.
+Is the master branch of
+https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+proper rebase?
+Or do I need to search and apply device tree doc patches somehow
+before running dtbs_check?
+I rebased on linux-next/master, and my dts is ok.
 
-Fixes: 93858ae70cf4 ("kmsan: add ReST documentation")
-Suggested-by: Bagas Sanjaya <bagasdotme@gmail.com>
-Signed-off-by: Alexander Potapenko <glider@google.com>
----
- Documentation/dev-tools/kmsan.rst | 1 +
- 1 file changed, 1 insertion(+)
+A lot of warnings for msm8998.dtsi, though. I think it should be fixed
+in a separate patch series.
 
-diff --git a/Documentation/dev-tools/kmsan.rst b/Documentation/dev-tools/kmsan.rst
-index 2a53a801198cb..55fa82212eb25 100644
---- a/Documentation/dev-tools/kmsan.rst
-+++ b/Documentation/dev-tools/kmsan.rst
-@@ -67,6 +67,7 @@ uninitialized in the local variable, as well as the stack where the value was
- copied to another memory location before use.
- 
- A use of uninitialized value ``v`` is reported by KMSAN in the following cases:
-+
-  - in a condition, e.g. ``if (v) { ... }``;
-  - in an indexing or pointer dereferencing, e.g. ``array[v]`` or ``*v``;
-  - when it is copied to userspace or hardware, e.g. ``copy_to_user(..., &v, ...)``;
--- 
-2.38.1.431.g37b22c650d-goog
-
+=D1=81=D1=80, 2 =D0=BD=D0=BE=D1=8F=D0=B1. 2022 =D0=B3. =D0=B2 22:20, Krzysz=
+tof Kozlowski
+<krzysztof.kozlowski@linaro.org>:
+>
+> On 02/11/2022 11:55, Dzmitry Sankouski wrote:
+> > New device support - Xiaomi Mi6 phone
+> >
+> > What works:
+> > - storage
+> > - usb
+> > - power regulators
+> >
+> > Signed-off-by: Dzmitry Sankouski <dsankouski@gmail.com>
+> > ---
+>
+> (...)
+>
+> > +
+> > +&blsp1_i2c5_sleep {
+> > +     /delete-property/ bias-pull-up;
+> > +     bias-disable;
+> > +};
+> > +
+> > +&blsp1_uart3 {
+> > +     status =3D "okay";
+> > +
+> > +     bluetooth {
+> > +             compatible =3D "qcom,wcn3990-bt";
+> > +
+> > +             vddio-supply =3D <&vreg_s4a_1p8>;
+> > +             vddxo-supply =3D <&vreg_l7a_1p8>;
+> > +             vddrf-supply =3D <&vreg_l17a_1p3>;
+> > +             vddch0-supply =3D <&vreg_l25a_3p3>;
+> > +             max-speed =3D <3200000>;
+> > +     };
+> > +};
+> > +
+> > +&blsp1_uart3_on {
+> > +     rx {
+>
+> This is a friendly reminder during the review process.
+>
+> It seems my previous comments were not fully addressed. Maybe my
+> feedback got lost between the quotes, maybe you just forgot to apply it.
+> Please go back to the previous discussion and either implement all
+> requested changes or keep discussing them.
+>
+> Thank you.
+>
+> 6.1-rc3 is not a proper rebase... You *must* include maintainers'
+> entries. This *must* align with stuff has Bjorn. Also I expect it passes
+> dtbs_check on stuff in the next.
+>
+> Best regards,
+> Krzysztof
+>
