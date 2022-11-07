@@ -2,357 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0DD561F3C8
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 13:55:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D421B61F3C6
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 13:54:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231829AbiKGMzX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 07:55:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41726 "EHLO
+        id S231682AbiKGMy3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 07:54:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231186AbiKGMzV (ORCPT
+        with ESMTP id S231186AbiKGMy1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 07:55:21 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29C441BEAB
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 04:54:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667825664;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=+wKWUeAqFeaW9VBySVJp7mIdsLyeRMqN5qSA3MR8za8=;
-        b=MvvDLNeFtX/eXn10RfKieM9dolEMMnbuZxuNMLkyh5X2x6jQMiR5zpur/KLahkX/VhGiCD
-        odjkVD0XA6tZAl2t6aUY39zEs/Jd7BnsA6fesV8EXWCAPMLN3gqRvXGbjkxcLkhJNlkU9L
-        LHAt+LeZJ8+d1j4xgZhgfN7Mt5e+Fuw=
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
- [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-497-AT10qC-xMsmaSWly18mTxw-1; Mon, 07 Nov 2022 07:54:23 -0500
-X-MC-Unique: AT10qC-xMsmaSWly18mTxw-1
-Received: by mail-ej1-f72.google.com with SMTP id qk31-20020a1709077f9f00b00791a3e02c80so6402346ejc.21
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 04:54:22 -0800 (PST)
+        Mon, 7 Nov 2022 07:54:27 -0500
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E4041ADBB
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 04:54:27 -0800 (PST)
+Received: by mail-wm1-x32c.google.com with SMTP id t25-20020a1c7719000000b003cfa34ea516so2075560wmi.1
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 04:54:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=x/gjDZ1YQuAcmh+CpxdZMBXAa/U5srszeLdkjriKYp8=;
+        b=NTivC4ETZtU1/X5wyJLZC4F00LZcyxyp6iUGzeEP7hmotz6pr+yEv0LFjjLw9XXq0e
+         X9m5nLTr38Nhsensx1D1EvPBAtc2jqbfE57V13cgCuWiPxiWhAh5ytiCiHgiARar0t7F
+         /EBYDNtpe+d8F509xzyJDp3RfBQjiiWkwCOJE1AHQBTAKoGcf8VJ/CnTInXFNZuPzfEM
+         BLcpRfypWkjm2V++ZnXNO4yUK6R/ETXupadcgdui5e5f05tlJHSdm6ywR28CHImkVnyM
+         vbGUSP4Rth750H7l8Qb3JtoKS2qf1UaDkHQmOGFsnTXE0701fZeFTDr+Jo4Gjl9OTsmp
+         qG9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+wKWUeAqFeaW9VBySVJp7mIdsLyeRMqN5qSA3MR8za8=;
-        b=Zd5k2wP36LTvI1RvgvF1WKxwMGQ4kMxpIWXhUAOW+khFPUnm8VrFr+NUiiYzcNf/Aa
-         iW9y+GQFRi52iNnfyS3/Hgpz2Dg4RV9i7sRcBbLow8E1UqRCIi59jTvKpg+cq+5Powwl
-         gFrGyZ6t4lkJJqROL5COrmXevmgi+YCYZ4qjQ35jSOOmjaqMOEJbI6NUJDHnXsqrWhWa
-         GFPABKr3htfpYKk+usTB9MezRTH9cB4Kk6VOXlljEM/VgjiayJNe77HhHmM/8rSWhvNS
-         ByH6nN+rHC90/crSo3bdFF+rV0Rteg97ZENcZ5LrWGZ3luNPPKFW2pmvi7ZNy6QAu6Pm
-         Hh/g==
-X-Gm-Message-State: ACrzQf04CEcDREFe42z2+llTjOP7oXBBJ+Y1vuPQ6OR9685WGo5dTQn1
-        P36BJ1VGyoAMeQ0WVqU+/ymHFThoqzt//4EhbiISnrHwtrmf3qZHaeT1AAOVaob6pI8GQoBi21J
-        +jw41HDiTWOw+9C5pTqAjoZqT
-X-Received: by 2002:a17:907:6e29:b0:7ad:d7f7:c924 with SMTP id sd41-20020a1709076e2900b007add7f7c924mr38516034ejc.749.1667825661782;
-        Mon, 07 Nov 2022 04:54:21 -0800 (PST)
-X-Google-Smtp-Source: AMsMyM5mKlEvBaZ85Rnl9dwinMI/6DhF0XuruvV2WZYvuQw/A6SxaXPy6A7VFNKfk2w/7uNlin88cA==
-X-Received: by 2002:a17:907:6e29:b0:7ad:d7f7:c924 with SMTP id sd41-20020a1709076e2900b007add7f7c924mr38516009ejc.749.1667825661462;
-        Mon, 07 Nov 2022 04:54:21 -0800 (PST)
-Received: from [10.40.98.142] ([78.108.130.194])
-        by smtp.gmail.com with ESMTPSA id rh16-20020a17090720f000b0077016f4c6d4sm3393958ejb.55.2022.11.07.04.54.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Nov 2022 04:54:20 -0800 (PST)
-Message-ID: <971170ce-94af-26f7-a9aa-9c83a84bb3c3@redhat.com>
-Date:   Mon, 7 Nov 2022 13:54:20 +0100
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=x/gjDZ1YQuAcmh+CpxdZMBXAa/U5srszeLdkjriKYp8=;
+        b=I9J7rlGkZ6jGx9bjpT/fes9pRY08aphiJaD1B6VI0a5rToEtFsFoIBd/OJRqNJFgAJ
+         jX5YMWDb30AN3wDvCcWgfICsL5k7DEgaT8nnbftMc/sCHVXIiz64oceOPyoESPbFzsz5
+         FGlt63G+yjQ8pLF7QfktHnT9AjC46lIO2HAsy6hsx0ieH5hIs+IvgHfy+KlcLFvbI3jy
+         5S2wYPzhCr21njhZmmb+6Uzae+FEdhiILNRvaXupbgcx3aXQ2qhDO5Utk+LLwehL9CPx
+         yBs+ZabgurExNSo0U2vH0VjrF+WFQlctqw1C15N5eu+9Fhjnm9CdYePLwABmncK4ngWc
+         kxIA==
+X-Gm-Message-State: ACrzQf2TJSkI/XaVaQ6H/QMxMMvoScCVp9WTWyO3/5WbR8TYGQJh1vcA
+        fAjPvnjPmDPplNPbar4qJ/8=
+X-Google-Smtp-Source: AMsMyM7v49Nb+m2ayKO03i9bfCDc5uGPlIaBmmQYN5ErSV36EtHAfWw6o0TPzeRNwHLxP78KaHbpLw==
+X-Received: by 2002:a05:600c:4b27:b0:3cf:67ab:3ac6 with SMTP id i39-20020a05600c4b2700b003cf67ab3ac6mr31931942wmp.35.1667825665526;
+        Mon, 07 Nov 2022 04:54:25 -0800 (PST)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id m2-20020a056000008200b0023662d97130sm7218408wrx.20.2022.11.07.04.54.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Nov 2022 04:54:25 -0800 (PST)
+Date:   Mon, 7 Nov 2022 15:54:21 +0300
+From:   Dan Carpenter <error27@gmail.com>
+To:     Martin Kaiser <martin@kaiser.cx>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Michael Straube <straube.linux@gmail.com>,
+        Pavel Skripkin <paskripkin@gmail.com>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/3] staging: r8188eu: use a qos_hdr in
+ validate_recv_data_frame
+Message-ID: <Y2j//dFRONly9kU8@kadam>
+References: <20221106170455.743058-1-martin@kaiser.cx>
+ <20221106170455.743058-2-martin@kaiser.cx>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH v2] platform/mellanox: Add BlueField-3 support in the
- tmfifo driver
-Content-Language: en-US
-To:     Liming Sun <limings@nvidia.com>,
-        David Thompson <davthompson@nvidia.com>,
-        Vadim Pasternak <vadimp@mellanox.com>,
-        Mark Gross <markgross@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        Vadim Pasternak <vadimp@nvidia.com>
-References: <33bfcba9d1ad5a52ae9a63e817167b9ee3f0123a.1666024788.git.limings@nvidia.com>
- <20221018133303.243920-1-limings@nvidia.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20221018133303.243920-1-limings@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221106170455.743058-2-martin@kaiser.cx>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 10/18/22 15:33, Liming Sun wrote:
-> BlueField-3 uses the same control registers in tmfifo access but
-> at different addresses. This commit replaces the offset reference
-> with pointers, and set up these pointers in the probe functions
-> accordingly.
+On Sun, Nov 06, 2022 at 06:04:53PM +0100, Martin Kaiser wrote:
+> Define a struct ieee80211_qos_hdr in the validate_recv_data_frame
+> function. Use this struct to replace some numeric offsets and make the
+> code easier to understand.
 > 
-> Signed-off-by: Liming Sun <limings@nvidia.com>
-> Reviewed-by: David Thompson <davthompson@nvidia.com>
-> Reviewed-by: Vadim Pasternak <vadimp@nvidia.com>
-
-Thank you for your patch, I've applied this patch to my review-hans 
-branch:
-https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
-
-Note it will show up in my review-hans branch once I've pushed my
-local branch there, which might take a while.
-
-Once I've run some tests on this branch the patches there will be
-added to the platform-drivers-x86/for-next branch and eventually
-will be included in the pdx86 pull-request to Linus for the next
-merge-window.
-
-Regards,
-
-Hans
-
-
-
+> Signed-off-by: Martin Kaiser <martin@kaiser.cx>
 > ---
-> v1->v2:
->   Resend with updated reviewer list
-> v1: Initial version
-> ---
->  drivers/platform/mellanox/mlxbf-tmfifo-regs.h | 10 +++
->  drivers/platform/mellanox/mlxbf-tmfifo.c      | 86 ++++++++++++++-----
->  2 files changed, 74 insertions(+), 22 deletions(-)
+>  drivers/staging/r8188eu/core/rtw_recv.c | 9 +++++----
+>  1 file changed, 5 insertions(+), 4 deletions(-)
 > 
-> diff --git a/drivers/platform/mellanox/mlxbf-tmfifo-regs.h b/drivers/platform/mellanox/mlxbf-tmfifo-regs.h
-> index e4f0d2eda714..44fb8c5b1484 100644
-> --- a/drivers/platform/mellanox/mlxbf-tmfifo-regs.h
-> +++ b/drivers/platform/mellanox/mlxbf-tmfifo-regs.h
-> @@ -60,4 +60,14 @@
->  #define MLXBF_TMFIFO_RX_CTL__MAX_ENTRIES_RMASK		GENMASK_ULL(8, 0)
->  #define MLXBF_TMFIFO_RX_CTL__MAX_ENTRIES_MASK		GENMASK_ULL(40, 32)
->  
-> +/* BF3 register offsets within resource 0. */
-> +#define MLXBF_TMFIFO_RX_DATA_BF3	0x0000
-> +#define MLXBF_TMFIFO_TX_DATA_BF3	0x1000
-> +
-> +/* BF3 register offsets within resource 1. */
-> +#define MLXBF_TMFIFO_RX_STS_BF3		0x0000
-> +#define MLXBF_TMFIFO_RX_CTL_BF3		0x0008
-> +#define MLXBF_TMFIFO_TX_STS_BF3		0x0100
-> +#define MLXBF_TMFIFO_TX_CTL_BF3		0x0108
-> +
->  #endif /* !defined(__MLXBF_TMFIFO_REGS_H__) */
-> diff --git a/drivers/platform/mellanox/mlxbf-tmfifo.c b/drivers/platform/mellanox/mlxbf-tmfifo.c
-> index 1ae3c56b66b0..91a077c35b8b 100644
-> --- a/drivers/platform/mellanox/mlxbf-tmfifo.c
-> +++ b/drivers/platform/mellanox/mlxbf-tmfifo.c
-> @@ -47,6 +47,9 @@
->  /* Message with data needs at least two words (for header & data). */
->  #define MLXBF_TMFIFO_DATA_MIN_WORDS		2
->  
-> +/* ACPI UID for BlueField-3. */
-> +#define TMFIFO_BF3_UID				1
-> +
->  struct mlxbf_tmfifo;
->  
->  /**
-> @@ -136,12 +139,26 @@ struct mlxbf_tmfifo_irq_info {
->  	int index;
->  };
->  
-> +/**
-> + * mlxbf_tmfifo_io - Structure of the TmFifo IO resource (for both rx & tx)
-> + * @ctl: control register offset (TMFIFO_RX_CTL / TMFIFO_TX_CTL)
-> + * @sts: status register offset (TMFIFO_RX_STS / TMFIFO_TX_STS)
-> + * @data: data register offset (TMFIFO_RX_DATA / TMFIFO_TX_DATA)
-> + */
-> +struct mlxbf_tmfifo_io {
-> +	void __iomem *ctl;
-> +	void __iomem *sts;
-> +	void __iomem *data;
-> +};
-> +
->  /**
->   * mlxbf_tmfifo - Structure of the TmFifo
->   * @vdev: array of the virtual devices running over the TmFifo
->   * @lock: lock to protect the TmFifo access
-> - * @rx_base: mapped register base address for the Rx FIFO
-> - * @tx_base: mapped register base address for the Tx FIFO
-> + * @res0: mapped resource block 0
-> + * @res1: mapped resource block 1
-> + * @rx: rx io resource
-> + * @tx: tx io resource
->   * @rx_fifo_size: number of entries of the Rx FIFO
->   * @tx_fifo_size: number of entries of the Tx FIFO
->   * @pend_events: pending bits for deferred events
-> @@ -155,8 +172,10 @@ struct mlxbf_tmfifo_irq_info {
->  struct mlxbf_tmfifo {
->  	struct mlxbf_tmfifo_vdev *vdev[MLXBF_TMFIFO_VDEV_MAX];
->  	struct mutex lock;		/* TmFifo lock */
-> -	void __iomem *rx_base;
-> -	void __iomem *tx_base;
-> +	void __iomem *res0;
-> +	void __iomem *res1;
-> +	struct mlxbf_tmfifo_io rx;
-> +	struct mlxbf_tmfifo_io tx;
->  	int rx_fifo_size;
->  	int tx_fifo_size;
->  	unsigned long pend_events;
-> @@ -472,7 +491,7 @@ static int mlxbf_tmfifo_get_rx_avail(struct mlxbf_tmfifo *fifo)
+> diff --git a/drivers/staging/r8188eu/core/rtw_recv.c b/drivers/staging/r8188eu/core/rtw_recv.c
+> index cb0f35d7ab98..245b931c483d 100644
+> --- a/drivers/staging/r8188eu/core/rtw_recv.c
+> +++ b/drivers/staging/r8188eu/core/rtw_recv.c
+> @@ -1032,7 +1032,6 @@ static int validate_recv_data_frame(struct adapter *adapter,
+>  				    struct recv_frame *precv_frame)
 >  {
->  	u64 sts;
->  
-> -	sts = readq(fifo->rx_base + MLXBF_TMFIFO_RX_STS);
-> +	sts = readq(fifo->rx.sts);
->  	return FIELD_GET(MLXBF_TMFIFO_RX_STS__COUNT_MASK, sts);
->  }
->  
-> @@ -489,7 +508,7 @@ static int mlxbf_tmfifo_get_tx_avail(struct mlxbf_tmfifo *fifo, int vdev_id)
->  	else
->  		tx_reserve = 1;
->  
-> -	sts = readq(fifo->tx_base + MLXBF_TMFIFO_TX_STS);
-> +	sts = readq(fifo->tx.sts);
->  	count = FIELD_GET(MLXBF_TMFIFO_TX_STS__COUNT_MASK, sts);
->  	return fifo->tx_fifo_size - tx_reserve - count;
->  }
-> @@ -525,7 +544,7 @@ static void mlxbf_tmfifo_console_tx(struct mlxbf_tmfifo *fifo, int avail)
->  	/* Write header. */
->  	hdr.type = VIRTIO_ID_CONSOLE;
->  	hdr.len = htons(size);
-> -	writeq(*(u64 *)&hdr, fifo->tx_base + MLXBF_TMFIFO_TX_DATA);
-> +	writeq(*(u64 *)&hdr, fifo->tx.data);
->  
->  	/* Use spin-lock to protect the 'cons->tx_buf'. */
->  	spin_lock_irqsave(&fifo->spin_lock[0], flags);
-> @@ -542,7 +561,7 @@ static void mlxbf_tmfifo_console_tx(struct mlxbf_tmfifo *fifo, int avail)
->  			memcpy((u8 *)&data + seg, cons->tx_buf.buf,
->  			       sizeof(u64) - seg);
->  		}
-> -		writeq(data, fifo->tx_base + MLXBF_TMFIFO_TX_DATA);
-> +		writeq(data, fifo->tx.data);
->  
->  		if (size >= sizeof(u64)) {
->  			cons->tx_buf.tail = (cons->tx_buf.tail + sizeof(u64)) %
-> @@ -573,7 +592,7 @@ static void mlxbf_tmfifo_rxtx_word(struct mlxbf_tmfifo_vring *vring,
->  
->  	/* Read a word from FIFO for Rx. */
->  	if (is_rx)
-> -		data = readq(fifo->rx_base + MLXBF_TMFIFO_RX_DATA);
-> +		data = readq(fifo->rx.data);
->  
->  	if (vring->cur_len + sizeof(u64) <= len) {
->  		/* The whole word. */
-> @@ -595,7 +614,7 @@ static void mlxbf_tmfifo_rxtx_word(struct mlxbf_tmfifo_vring *vring,
->  
->  	/* Write the word into FIFO for Tx. */
->  	if (!is_rx)
-> -		writeq(data, fifo->tx_base + MLXBF_TMFIFO_TX_DATA);
-> +		writeq(data, fifo->tx.data);
->  }
->  
->  /*
-> @@ -617,7 +636,7 @@ static void mlxbf_tmfifo_rxtx_header(struct mlxbf_tmfifo_vring *vring,
->  	/* Read/Write packet header. */
->  	if (is_rx) {
->  		/* Drain one word from the FIFO. */
-> -		*(u64 *)&hdr = readq(fifo->rx_base + MLXBF_TMFIFO_RX_DATA);
-> +		*(u64 *)&hdr = readq(fifo->rx.data);
->  
->  		/* Skip the length 0 packets (keepalive). */
->  		if (hdr.len == 0)
-> @@ -661,7 +680,7 @@ static void mlxbf_tmfifo_rxtx_header(struct mlxbf_tmfifo_vring *vring,
->  		hdr.type = (vring->vdev_id == VIRTIO_ID_NET) ?
->  			    VIRTIO_ID_NET : VIRTIO_ID_CONSOLE;
->  		hdr.len = htons(vring->pkt_len - hdr_len);
-> -		writeq(*(u64 *)&hdr, fifo->tx_base + MLXBF_TMFIFO_TX_DATA);
-> +		writeq(*(u64 *)&hdr, fifo->tx.data);
->  	}
->  
->  	vring->cur_len = hdr_len;
-> @@ -1157,7 +1176,7 @@ static void mlxbf_tmfifo_set_threshold(struct mlxbf_tmfifo *fifo)
->  	u64 ctl;
->  
->  	/* Get Tx FIFO size and set the low/high watermark. */
-> -	ctl = readq(fifo->tx_base + MLXBF_TMFIFO_TX_CTL);
-> +	ctl = readq(fifo->tx.ctl);
->  	fifo->tx_fifo_size =
->  		FIELD_GET(MLXBF_TMFIFO_TX_CTL__MAX_ENTRIES_MASK, ctl);
->  	ctl = (ctl & ~MLXBF_TMFIFO_TX_CTL__LWM_MASK) |
-> @@ -1166,17 +1185,17 @@ static void mlxbf_tmfifo_set_threshold(struct mlxbf_tmfifo *fifo)
->  	ctl = (ctl & ~MLXBF_TMFIFO_TX_CTL__HWM_MASK) |
->  		FIELD_PREP(MLXBF_TMFIFO_TX_CTL__HWM_MASK,
->  			   fifo->tx_fifo_size - 1);
-> -	writeq(ctl, fifo->tx_base + MLXBF_TMFIFO_TX_CTL);
-> +	writeq(ctl, fifo->tx.ctl);
->  
->  	/* Get Rx FIFO size and set the low/high watermark. */
-> -	ctl = readq(fifo->rx_base + MLXBF_TMFIFO_RX_CTL);
-> +	ctl = readq(fifo->rx.ctl);
->  	fifo->rx_fifo_size =
->  		FIELD_GET(MLXBF_TMFIFO_RX_CTL__MAX_ENTRIES_MASK, ctl);
->  	ctl = (ctl & ~MLXBF_TMFIFO_RX_CTL__LWM_MASK) |
->  		FIELD_PREP(MLXBF_TMFIFO_RX_CTL__LWM_MASK, 0);
->  	ctl = (ctl & ~MLXBF_TMFIFO_RX_CTL__HWM_MASK) |
->  		FIELD_PREP(MLXBF_TMFIFO_RX_CTL__HWM_MASK, 1);
-> -	writeq(ctl, fifo->rx_base + MLXBF_TMFIFO_RX_CTL);
-> +	writeq(ctl, fifo->rx.ctl);
->  }
->  
->  static void mlxbf_tmfifo_cleanup(struct mlxbf_tmfifo *fifo)
-> @@ -1197,8 +1216,15 @@ static int mlxbf_tmfifo_probe(struct platform_device *pdev)
->  	struct virtio_net_config net_config;
->  	struct device *dev = &pdev->dev;
->  	struct mlxbf_tmfifo *fifo;
-> +	u64 dev_id;
->  	int i, rc;
->  
-> +	rc = acpi_dev_uid_to_integer(ACPI_COMPANION(dev), &dev_id);
-> +	if (rc) {
-> +		dev_err(dev, "Cannot retrieve UID\n");
-> +		return rc;
-> +	}
+>  	struct sta_info *psta = NULL;
+> -	u8 *ptr = precv_frame->rx_data;
+>  	struct ieee80211_hdr *hdr = (struct ieee80211_hdr *)precv_frame->rx_data;
+>  	struct rx_pkt_attrib	*pattrib = &precv_frame->attrib;
+>  	struct security_priv	*psecuritypriv = &adapter->securitypriv;
+> @@ -1071,10 +1070,12 @@ static int validate_recv_data_frame(struct adapter *adapter,
+>  	pattrib->ack_policy = 0;
+>  	/* parsing QC field */
+>  	if (pattrib->qos) {
+> +		struct ieee80211_qos_hdr *qos_hdr = (struct ieee80211_qos_hdr *)hdr;
 > +
->  	fifo = devm_kzalloc(dev, sizeof(*fifo), GFP_KERNEL);
->  	if (!fifo)
->  		return -ENOMEM;
-> @@ -1209,14 +1235,30 @@ static int mlxbf_tmfifo_probe(struct platform_device *pdev)
->  	mutex_init(&fifo->lock);
->  
->  	/* Get the resource of the Rx FIFO. */
-> -	fifo->rx_base = devm_platform_ioremap_resource(pdev, 0);
-> -	if (IS_ERR(fifo->rx_base))
-> -		return PTR_ERR(fifo->rx_base);
-> +	fifo->res0 = devm_platform_ioremap_resource(pdev, 0);
-> +	if (IS_ERR(fifo->res0))
-> +		return PTR_ERR(fifo->res0);
->  
->  	/* Get the resource of the Tx FIFO. */
-> -	fifo->tx_base = devm_platform_ioremap_resource(pdev, 1);
-> -	if (IS_ERR(fifo->tx_base))
-> -		return PTR_ERR(fifo->tx_base);
-> +	fifo->res1 = devm_platform_ioremap_resource(pdev, 1);
-> +	if (IS_ERR(fifo->res1))
-> +		return PTR_ERR(fifo->res1);
-> +
-> +	if (dev_id == TMFIFO_BF3_UID) {
-> +		fifo->rx.ctl = fifo->res1 + MLXBF_TMFIFO_RX_CTL_BF3;
-> +		fifo->rx.sts = fifo->res1 + MLXBF_TMFIFO_RX_STS_BF3;
-> +		fifo->rx.data = fifo->res0 + MLXBF_TMFIFO_RX_DATA_BF3;
-> +		fifo->tx.ctl = fifo->res1 + MLXBF_TMFIFO_TX_CTL_BF3;
-> +		fifo->tx.sts = fifo->res1 + MLXBF_TMFIFO_TX_STS_BF3;
-> +		fifo->tx.data = fifo->res0 + MLXBF_TMFIFO_TX_DATA_BF3;
-> +	} else {
-> +		fifo->rx.ctl = fifo->res0 + MLXBF_TMFIFO_RX_CTL;
-> +		fifo->rx.sts = fifo->res0 + MLXBF_TMFIFO_RX_STS;
-> +		fifo->rx.data = fifo->res0 + MLXBF_TMFIFO_RX_DATA;
-> +		fifo->tx.ctl = fifo->res1 + MLXBF_TMFIFO_TX_CTL;
-> +		fifo->tx.sts = fifo->res1 + MLXBF_TMFIFO_TX_STS;
-> +		fifo->tx.data = fifo->res1 + MLXBF_TMFIFO_TX_DATA;
-> +	}
->  
->  	platform_set_drvdata(pdev, fifo);
->  
+>  		pattrib->priority = ieee80211_get_tid(hdr);
+> -		pattrib->ack_policy = GetAckpolicy((ptr + 24));
+> -		pattrib->amsdu = GetAMsdu((ptr + 24));
+> -		pattrib->hdrlen = 26;
+                               ^^^
+
+> +		pattrib->ack_policy = GetAckpolicy(&qos_hdr->qos_ctrl);
+> +		pattrib->amsdu = GetAMsdu(&qos_hdr->qos_ctrl);
+> +		pattrib->hdrlen += sizeof(*qos_hdr);
+                               ^^^^
+Why did this change from "=" to "+="?
+
+regards,
+dan carpenter
 
