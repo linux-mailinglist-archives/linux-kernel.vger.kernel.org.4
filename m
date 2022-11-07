@@ -2,119 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDC3361FB02
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 18:17:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4120261FB19
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 18:19:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232321AbiKGRRg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 12:17:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33960 "EHLO
+        id S232372AbiKGRTb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 12:19:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231302AbiKGRRf (ORCPT
+        with ESMTP id S232742AbiKGRT2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 12:17:35 -0500
-Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C3131C918
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 09:17:34 -0800 (PST)
-Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-13c569e5ff5so13427344fac.6
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 09:17:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=SRHt20QQdW41qCnj/h+AEbqKGhHMt/R43V9B84bg+ZA=;
-        b=fSO2QPhlm6JTbU5gJOnfsh1Vq2ERS2+ZP18Vs3OaG7KmqC1dEGgrTo80WC07DPZX+t
-         rsnY6BN1lKWCGSVKmk0u+rrzilFaZHjrKjatdmbeOMyKTsJuQTl5qXBv+vAUoqS348fy
-         oG/B+/clAS92cQ4DGK0NQ4rS9kIFa470qgsCbXsghBZurnNVrNa5rTiEEXWi52fBH9AZ
-         VtNE3efqGOW+BGCI3n7ePBT+Rw8qFDytkPwsErt20SlWmzLqyG+0GJFas8YU4erE0Wvw
-         KlWqxbXGQiM6yD2/oy5gzBS++QddW7dqm9CP4KP8lsarddLDNb1zwB5w2/lzJelfzH90
-         eHvg==
+        Mon, 7 Nov 2022 12:19:28 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17C2A14D16
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 09:18:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1667841508;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=25F0RsFD4mqDqAUGeX5SQy6BXG8Wv/fUaLilwYLMjok=;
+        b=hft8mv7ffG6p86lsu0PGGBk2BmnHwghtvYPuN5kXMc5OiwUH+j3qDi6L1PQ5ANi8iHm6eG
+        t2OOAmkUaiUYWfxRxZFO9cJx1QslgbFrSYczKopxQYUAGRhJsIu43v0yg3WVv/fBpkwzc8
+        +w2BfGIyFk6ws58W6+y3Av+2a4h6EEc=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-284-lxRsZzD8OhK-mf-07-js6g-1; Mon, 07 Nov 2022 12:18:26 -0500
+X-MC-Unique: lxRsZzD8OhK-mf-07-js6g-1
+Received: by mail-wr1-f72.google.com with SMTP id r4-20020adfbb04000000b00236639438e9so3075479wrg.11
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 09:18:25 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SRHt20QQdW41qCnj/h+AEbqKGhHMt/R43V9B84bg+ZA=;
-        b=lh4CrMneRugCnL+O5E5kHeT70fXwZgFongPOQ0gwHtPz+AlQYdVKLGVI0INInPaNTK
-         nn1tLSPg5GT97jHuRt0Ahb017aERsegVd88VDpp4dOnn+5cInEA5v+HnqFVnS+T9S5Iz
-         6nN3dprk6rEATLiOXW4kaDhj2JR6KD3xy9JvyjWNq/EUt1yX2mus+9cXXTN1HdFM7PbI
-         iw/hN8dSoxYZgXKnIcWHe71dK3A7C2O82S0Xt7vl9U3EFXsgn4XWjMjk5FJJRjYzaZpa
-         adNKAw3+AU3mRo/Semb+j9zAkx8WyTG6TFaj/rSlrKv26Z+0FML+VZMeImDZa7tTRu63
-         d7/A==
-X-Gm-Message-State: ACrzQf2Ddgjz0BnRpJYHCOqsSxUll/cu3MIGecSssR2hEyBGRKua9ES9
-        NUavtkHCR+1jzJIBJjRIwVA=
-X-Google-Smtp-Source: AMsMyM7H4xTZUOsEN8Jcv+dwvct3redLdzSnv5OEOa879RRQkQi2HyYzvgLO4OGcd7UKHvm8nyp9IA==
-X-Received: by 2002:a05:6871:4107:b0:13b:becc:138 with SMTP id la7-20020a056871410700b0013bbecc0138mr582684oab.28.1667841453618;
-        Mon, 07 Nov 2022 09:17:33 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id bd6-20020a056870d78600b0013320d9d9casm3339440oab.44.2022.11.07.09.17.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Nov 2022 09:17:31 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 7 Nov 2022 09:17:29 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Aashish Sharma <shraash@google.com>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Arun Easi <aeasi@marvell.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] tracing: Fix warning on variable 'struct trace_array'
-Message-ID: <20221107171729.GA299776@roeck-us.net>
-References: <20221107160556.2139463-1-shraash@google.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=25F0RsFD4mqDqAUGeX5SQy6BXG8Wv/fUaLilwYLMjok=;
+        b=TWfuuhPafUZ7vjlvRTWACEBp5+t346cVOHq1DDrvo6NiMctsLMuCQp2rwSUmwdvWik
+         ZzQN9KiUgC7tvpR3B51hS0SxMMfwFqbJmWqK67WKtNF8tztg1PVo7KAgsNXoIBX//tVH
+         BaWTfcQWfZEqm4KkAS/AmQi2BkQV3LYd6iqGQPk3baxwcJsTPKDrtHdY9RjVwRsZI2GU
+         kUgXKQ/K19+QmuPqCwGfmxEIgtKvszES0XhDVnefzD6FGHM5M3Q9f0wGxQwLRRW25pqA
+         f/eOnOmaBHEBV/MbiPBXVeZN1lZ49Fz+F4TtVdxUHqK1ktB1xLhOOZApRy12DkVH8CyA
+         5b7A==
+X-Gm-Message-State: ACrzQf2xQx13yco8zzChGxBZj0b0DfdnKBH4w9SK0VY9pPv9380HyD5J
+        KPMMTOpuFCXMgGt44OmUhLks8FSvscHG77ziPG5Ih8ttkIf3dmIt0tfnTmQOvANnN5f36x9Yg95
+        x+kGJe1q9JZuRJpxxFEWEUhi5
+X-Received: by 2002:a05:6000:684:b0:236:839f:9276 with SMTP id bo4-20020a056000068400b00236839f9276mr31416581wrb.586.1667841503921;
+        Mon, 07 Nov 2022 09:18:23 -0800 (PST)
+X-Google-Smtp-Source: AMsMyM5Mt76JkHtenwSt6wdcL6YXqzVxEu6N9UN61xT9azVxfn/F/fR35Ax6I65hpIPIyLb+Dr2JAA==
+X-Received: by 2002:a05:6000:684:b0:236:839f:9276 with SMTP id bo4-20020a056000068400b00236839f9276mr31416568wrb.586.1667841503688;
+        Mon, 07 Nov 2022 09:18:23 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
+        by smtp.googlemail.com with ESMTPSA id v2-20020adfedc2000000b00228daaa84aesm7862025wro.25.2022.11.07.09.18.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 07 Nov 2022 09:18:22 -0800 (PST)
+Message-ID: <e13afbf9-f4ed-10c1-cf78-bd634c554d4d@redhat.com>
+Date:   Mon, 7 Nov 2022 18:18:21 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221107160556.2139463-1-shraash@google.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH V2] KVM: SVM: Only dump VSMA to klog for debugging
+Content-Language: en-US
+To:     Peter Gonda <pgonda@google.com>, jarkko@kernel.org
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Harald Hoyer <harald@profian.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+References: <20221104142220.469452-1-pgonda@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <20221104142220.469452-1-pgonda@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 07, 2022 at 09:35:56PM +0530, Aashish Sharma wrote:
-> Move the declaration of 'struct trace_array' out of #ifdef
-> CONFIG_TRACING block, to fix the following warning when CONFIG_TRACING
-> is not set:
+On 11/4/22 15:22, Peter Gonda wrote:
+> Explicitly print the VMSA dump at KERN_DEBUG log level, KERN_CONT uses
+> KERNEL_DEFAULT if the previous log line has a newline, i.e. if there's
+> nothing to continuing, and as a result the VMSA gets dumped when it
+> shouldn't.
 > 
-> >> include/linux/trace.h:63:45: warning: 'struct trace_array' declared
-> inside parameter list will not be visible outside of this definition or
-> declaration
+> The KERN_CONT documentation says it defaults back to KERNL_DEFAULT if the
+> previous log line has a newline. So switch from KERN_CONT to
+> print_hex_dump_debug().
 > 
-> Fixes: 1a77dd1c2bb5 ("scsi: tracing: Fix compile error in trace_array calls when TRACING is disabled")
-> Cc: Arun Easi <aeasi@marvell.com>
-> Signed-off-by: Aashish Sharma <shraash@google.com>
-
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-
+> Jarkko pointed this out in reference to the original patch. See:
+> https://lore.kernel.org/all/YuPMeWX4uuR1Tz3M@kernel.org/
+> print_hex_dump(KERN_DEBUG, ...) was pointed out there, but
+> print_hex_dump_debug() should similar.
+> 
+> Fixes: 6fac42f127b8 ("KVM: SVM: Dump Virtual Machine Save Area (VMSA) to klog")
+> Signed-off-by: Peter Gonda <pgonda@google.com>
+> Reviewed-by: Sean Christopherson <seanjc@google.com>
+> Cc: Jarkko Sakkinen <jarkko@kernel.org>
+> Cc: Harald Hoyer <harald@profian.com>
+> Cc: Paolo Bonzini <pbonzini@redhat.com>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Ingo Molnar <mingo@redhat.com>
+> Cc: Borislav Petkov <bp@alien8.de>
+> Cc: Dave Hansen <dave.hansen@linux.intel.com>
+> Cc: x86@kernel.org
+> Cc: "H. Peter Anvin" <hpa@zytor.com>
+> Cc: kvm@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Cc: stable@vger.kernel.org
 > ---
->  include/linux/trace.h | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>   arch/x86/kvm/svm/sev.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/include/linux/trace.h b/include/linux/trace.h
-> index b5e16e438448..80ffda871749 100644
-> --- a/include/linux/trace.h
-> +++ b/include/linux/trace.h
-> @@ -26,13 +26,13 @@ struct trace_export {
->  	int flags;
->  };
->  
-> +struct trace_array;
-> +
->  #ifdef CONFIG_TRACING
->  
->  int register_ftrace_export(struct trace_export *export);
->  int unregister_ftrace_export(struct trace_export *export);
->  
-> -struct trace_array;
-> -
->  void trace_printk_init_buffers(void);
->  __printf(3, 4)
->  int trace_array_printk(struct trace_array *tr, unsigned long ip,
-> -- 
-> 2.38.1.431.g37b22c650d-goog
-> 
+> diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
+> index c0c9ed5e279cb..9b8db157cf773 100644
+> --- a/arch/x86/kvm/svm/sev.c
+> +++ b/arch/x86/kvm/svm/sev.c
+> @@ -605,7 +605,7 @@ static int sev_es_sync_vmsa(struct vcpu_svm *svm)
+>   	save->dr6  = svm->vcpu.arch.dr6;
+>   
+>   	pr_debug("Virtual Machine Save Area (VMSA):\n");
+> -	print_hex_dump(KERN_CONT, "", DUMP_PREFIX_NONE, 16, 1, save, sizeof(*save), false);
+> +	print_hex_dump_debug("", DUMP_PREFIX_NONE, 16, 1, save, sizeof(*save), false);
+>   
+>   	return 0;
+>   }
+
+Queued, thanks.
+
+Paolo
+
