@@ -2,96 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34CED62028E
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 23:48:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61B1962029F
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 23:52:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232707AbiKGWsv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 17:48:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33768 "EHLO
+        id S232179AbiKGWw5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 17:52:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232679AbiKGWsm (ORCPT
+        with ESMTP id S230186AbiKGWwy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 17:48:42 -0500
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D86192AE1D
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 14:48:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:MIME-Version:References:
-        In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=N58UJpNNAExktwhfZVLTshsZnQ2VVILEtn44kEC8lhE=; b=aBTAUl7EESx7XqVKDnD6YS7wbj
-        8/vNDRacf5mqYJTrbPEn+ZEhFXJmKIZAq537t3odJDE2x9hKTX4hzTkK7xoRewIxuTHz8ZvfINQrM
-        8trMpHc+FYEYh7MumOFYd1uACya663nsFCtK+imVa5c8s5MUnC/OMtBVwau/H2gHIgO72gc6C/R30
-        0TIQq5EfB2xhLe/DIl5cY16ASG6VjyDD6zFlb2o3GUfMdcSSLVuaQJdyZ72u60AfEzfC6UG12gsOq
-        nRz7jSuoVzZvGAH3/X8FK7M3fX26tTWljUqPeUX93a5wrs4tpIao/81IOQvcYU8lPh9l+dowMw558
-        AvVFSEzA==;
-Received: from [177.34.169.227] (helo=bowie..)
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-        id 1osAuz-00E9qX-5g; Mon, 07 Nov 2022 23:48:37 +0100
-From:   =?UTF-8?q?Ma=C3=ADra=20Canal?= <mcanal@igalia.com>
-To:     Melissa Wen <mwen@igalia.com>, Emma Anholt <emma@anholt.net>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@igalia.com>,
-        "Juan A . Suarez" <jasuarez@igalia.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Ma=C3=ADra=20Canal?= <mcanal@igalia.com>
-Subject: [PATCH 2/2] drm/v3d: add missing mutex_destroy
-Date:   Mon,  7 Nov 2022 19:46:56 -0300
-Message-Id: <20221107224656.278135-3-mcanal@igalia.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221107224656.278135-1-mcanal@igalia.com>
-References: <20221107224656.278135-1-mcanal@igalia.com>
+        Mon, 7 Nov 2022 17:52:54 -0500
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C420A1AD;
+        Mon,  7 Nov 2022 14:52:52 -0800 (PST)
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id A2A41FF803;
+        Mon,  7 Nov 2022 22:52:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1667861571;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=+Igg3eaSSbsFgdGyb2PSWE7yjdySxbKxEfPo8FPLAq0=;
+        b=KwYPSyHZUkWR3Yjwvo8IXartUFN2UtJQqOk9dXKuPUap/XTV8uyIyvC0xXP8bZ0B5ZD3C8
+        8rPmZEt9lRpvUVZDedJDC4SnakTZTFg9HQrnrIUPdTD6hWIb1EKC9D5p/5HYXyFboRW5ii
+        RBvw1bMXHfCLolD8OqnGDdS0ziUQ/153TvePYbEy/WniUhx+8fGYKb0MGNjfZLul9/t7c/
+        NlDUUfjUuwLfOEsLcpVuO2eAL3MzmK9hVzr61rEVImB9dGim8FikC+7xYDH4XTfzGfBGRk
+        kZy9KW8ZFTUb4syFlst7g8/UV9auh9ahfzefxFOWjK5mTQiZV+IQf6UyareG9Q==
+Date:   Mon, 7 Nov 2022 23:52:50 +0100
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        Benson Leung <bleung@chromium.org>, linux-rtc@vger.kernel.org,
+        chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Brian Norris <briannorris@chromium.org>
+Subject: Re: [PATCH] rtc: cros-ec: Limit RTC alarm range if needed
+Message-ID: <Y2mMQifOl7BzPCZm@mail.local>
+References: <20221029005400.2712577-1-linux@roeck-us.net>
+ <Y2ABnbBGSJGM3gSS@mail.local>
+ <20221031181913.GA3841664@roeck-us.net>
+ <Y2BIv21U7lpN0z23@mail.local>
+ <20221031230749.GB2082109@roeck-us.net>
+ <20221102184804.GA1918067@roeck-us.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221102184804.GA1918067@roeck-us.net>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-v3d_perfmon_open_file() instantiates a mutex for a particular file
-instance, but it never destroys it by calling mutex_destroy() in
-v3d_perfmon_close_file().
+Hi,
 
-Similarly, v3d_perfmon_create_ioctl() instantiates a mutex for a
-particular perfmon, but it never destroys it by calling mutex_destroy()
-in v3d_perfmon_destroy_ioctl().
+On 02/11/2022 11:48:04-0700, Guenter Roeck wrote:
+> Alexandre,
+> 
+> On Mon, Oct 31, 2022 at 04:07:51PM -0700, Guenter Roeck wrote:
+> [ ... ]
+> > > > 
+> > > > On a side note, I tried an alternate implementation by adding a retry into
+> > > > alarmtimer_suspend(), where it would request a smaller timeout if the
+> > > > requested timeout failed. I did not pursue/submit this since it seemed
+> > > > hacky. To solve that problem, I'd rather discuss extending the RTC API
+> > > > to provide a maximum offset to its users. Such a solution would probably
+> > > > be desirable, but that it more longer term and would not solve the
+> > > > immediate problem.
+> > > 
+> > > Yes, this is what I was aiming for. This is something that is indeed
+> > > missing in the RTC API and that I already thought about. But indeed, it
+> > > would be great to have a way to set the alarm range separately from the
+> > > time keeping range. This would indeed have to be a range relative to the
+> > > current time.
+> > > 
+> > > alarmtimer_suspend() can then get the allowed alarm range for the RTC,
+> > > and set the alarm to max(alarm range, timer value) and loop until the
+> > > timer has expired. Once we have this API, userspace can do the same.
+> > > 
+> > > I guess that ultimately, this doesn't help your driver unless you are
+> > > wanting to wakeup all the chromebooks at least once a day regardless of
+> > > their EC.
+> > 
+> > That is a no-go. It would reduce battery lifetime on all Chromebooks,
+> > including those not affected by the problem (that is, almost all of them).
+> > 
+> > To implement reporting the maximum supported offset, I'd probably either
+> > try to identify affected Chromebooks using devicetree information,
+> > or by sending am alarm request > 24h in the future in the probe function
+> > and setting the maximum offset just below 24h if that request fails.
+> > We'd have to discuss the best approach internally.
+> > 
+> > Either case, that doesn't help with the short term problem that we
+> > have to solve now and that can be backported to older kernels. It also
+> > won't help userspace - userspace alarm requests, as Brian has pointed out,
+> > are separate from limits supported by the RTC hardware. We can not change
+> > the API for CLOCK_xxx_ALARM to userspace, and doing so would not make
+> > sense anyway since it works just fine as long as the system isn't
+> > suspended. Besides, changing alarmtimer_suspend() as you suggest above
+> > would solve the problem for userspace, so I don't see a need for a
+> > userspace API/ABI change unless I am missing something.
+> >
+> 
+> Would you be open to accepting this patch, with me starting to work
+> on the necessary infastructure changes as suggested above for a more
+> comprehensive solution ?
+> 
 
-So, add the missing mutex_destroy on both cases.
+I'll take the patch as-is so you can backport it and have a solution.
+I'll also work on the alarm range and I'll let you get the series once
+this is ready so you can test.
 
-Signed-off-by: Maíra Canal <mcanal@igalia.com>
----
- drivers/gpu/drm/v3d/v3d_perfmon.c | 2 ++
- 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/gpu/drm/v3d/v3d_perfmon.c b/drivers/gpu/drm/v3d/v3d_perfmon.c
-index 48aaaa972c49..292c73544255 100644
---- a/drivers/gpu/drm/v3d/v3d_perfmon.c
-+++ b/drivers/gpu/drm/v3d/v3d_perfmon.c
-@@ -113,6 +113,7 @@ void v3d_perfmon_close_file(struct v3d_file_priv *v3d_priv)
- 	idr_for_each(&v3d_priv->perfmon.idr, v3d_perfmon_idr_del, NULL);
- 	idr_destroy(&v3d_priv->perfmon.idr);
- 	mutex_unlock(&v3d_priv->perfmon.lock);
-+	mutex_destroy(&v3d_priv->perfmon.lock);
- }
- 
- int v3d_perfmon_create_ioctl(struct drm_device *dev, void *data,
-@@ -177,6 +178,7 @@ int v3d_perfmon_destroy_ioctl(struct drm_device *dev, void *data,
- 	if (!perfmon)
- 		return -EINVAL;
- 
-+	mutex_destroy(&perfmon->lock);
- 	v3d_perfmon_put(perfmon);
- 
- 	return 0;
 -- 
-2.38.1
-
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
