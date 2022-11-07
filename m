@@ -2,129 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3041661F37C
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 13:38:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3A4961F384
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 13:41:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232301AbiKGMiM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 07:38:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60596 "EHLO
+        id S232153AbiKGMlM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 07:41:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232290AbiKGMiL (ORCPT
+        with ESMTP id S232255AbiKGMlJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 07:38:11 -0500
-Received: from mail-yw1-x1141.google.com (mail-yw1-x1141.google.com [IPv6:2607:f8b0:4864:20::1141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19F10183AC
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 04:38:10 -0800 (PST)
-Received: by mail-yw1-x1141.google.com with SMTP id 00721157ae682-370547b8ca0so103188597b3.0
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 04:38:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=mhoGGbYeONawMA1PCbUjtFr+da13jRYhUpIiPOl0t5A=;
-        b=euJsxLz6Xk86Ir+WBglMdQYg+ZeGf0R2vco6G55CJy7DL4RXIjOeW9WIQLwTvWb+4S
-         wvoAEpGKuh71Pd4zWfLjc/YDycr4I1Z9vcCxped1g422vy/ZcyeW7TfIxCn2EzwXfzCa
-         7VcJuspy+kVuAaD+8fADUXjLmnvLApBZ1uXDdMRMM3oqUQFOFnJi+M65+6soNdwL5WWp
-         fiKLRpnTxAhfl60UPYlekQFqUKB/fLJ7xTWSmplFJo4EM8hbazwHnM2VFJnjmRcW8CWf
-         SvndSyStV17TPPLMeKmg6GzvCvG3gCncfdXgdDSIYHgaWUxVK/j2OatfeWmCEuWwOtci
-         e77Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mhoGGbYeONawMA1PCbUjtFr+da13jRYhUpIiPOl0t5A=;
-        b=KIag3EIKWaocraivDmgElgIgWx2mgS1Z5yqmBW1L+yu3Ba6EROjZsksHyCY28aieB8
-         JUoniRnnJgYhSP5DooKT+LXT8gPyoIOQsjWTCv1AKYz/CWDf7YjRjM01QeAlpaV8o1sh
-         KOSlmWw/45dafOz4iV53l+6mJSnRJL6ZzvqKehXYga4LYCvB2iQ5OYH33vnaI/OugidD
-         k/RDxWlRUBvV3vWVhBofnptY2jNWfv+6Iqa3SKq499gk76maQQE75JlklaAWaZF6fWpS
-         e+c6+dpMTsIUsF/FAQYkQBFo6d0E7E4OJHH6E4OwSlpgwpJQbdY0jnH3Cg9ZoKZwaZ8c
-         4XVA==
-X-Gm-Message-State: ACrzQf2EkE9wjGxQv5lZDF/epwaoMNMfmEzSU0oVYPkfWBW0slWJIAeA
-        +xv4XTFsq68bGpOfpnsZgf9KWS4lv3cVOrWXmeA=
-X-Google-Smtp-Source: AMsMyM6BGBq4N05ktH2ImSM4o+Ub1wlbuHU1Xui7enE5VnE4Q2tE3S9p1blqw0KvoTwgeZUucI4twptQIqD7+K5PFcU=
-X-Received: by 2002:a0d:c486:0:b0:370:2f43:e848 with SMTP id
- g128-20020a0dc486000000b003702f43e848mr46109078ywd.361.1667824689258; Mon, 07
- Nov 2022 04:38:09 -0800 (PST)
+        Mon, 7 Nov 2022 07:41:09 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E2B11B7AF;
+        Mon,  7 Nov 2022 04:41:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667824868; x=1699360868;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=JrFUNJUR+xfBmaFKXTf1XB9n1c5qjS+akAmoKJWoy8o=;
+  b=CTKRrZWcjIFUT/nYqSTFt6GzEXbBA0wKj7SswhMGSAxolaL8Ldkx41Sj
+   +avB/Vfaks6OJf6CmZ/GVyAnB2H9DUF2PoIE+hZLgra6AaycwWhhl5Le/
+   zwdnbLIoCk53JWl6Ypzd/xhyjPZtwF0PwLBnHr4vmgx2b48rIhtRYjYd4
+   /SpcHazLDp4dNK4bR7B5mXNUKQbjUoOkamFR+qXYMJekkmmPA5Cp5GCA2
+   XXCF/3yNrv7rX2mHJo/dHI2wBegpzJJNCE8eANt4IOpIVdp66Qq3xtOgi
+   jkM0vCIR7YrkVzk+C5hWdtvHoAMEfuRMnc047N295es8Uv1Il/MsI1WHJ
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10523"; a="311533783"
+X-IronPort-AV: E=Sophos;i="5.96,143,1665471600"; 
+   d="scan'208";a="311533783"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Nov 2022 04:41:07 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10523"; a="669123382"
+X-IronPort-AV: E=Sophos;i="5.96,143,1665471600"; 
+   d="scan'208";a="669123382"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga001.jf.intel.com with ESMTP; 07 Nov 2022 04:41:05 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+        id 59A19155; Mon,  7 Nov 2022 14:41:29 +0200 (EET)
+Date:   Mon, 7 Nov 2022 14:41:29 +0200
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Rajat Khandelwal <rajat.khandelwal@intel.com>
+Cc:     michael.jamet@intel.com, YehezkelShB@gmail.com,
+        andreas.noever@gmail.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] thunderbolt: Add wake on connect/disconnect on USB4
+ ports
+Message-ID: <Y2j8+f/wAvUCDii5@black.fi.intel.com>
+References: <20221101115042.248187-1-rajat.khandelwal@intel.com>
 MIME-Version: 1.0
-Received: by 2002:a05:7108:7654:0:0:0:0 with HTTP; Mon, 7 Nov 2022 04:38:08
- -0800 (PST)
-Reply-To: cfc.ubaatmbank03i@gmail.com
-From:   "MRS.KRISTALINA GEORGIEVA" <cfcjohnnybrown@gmail.com>
-Date:   Mon, 7 Nov 2022 04:38:08 -0800
-Message-ID: <CAC7rMb3v++fMbU=XHzn=U8zDxM7S5WvaFFTHaZQTvkNZ2cQxCw@mail.gmail.com>
-Subject: =?UTF-8?B?0KXQntCg0J7QqNCGINCd0J7QktCY0J3QmA==?=
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=4.5 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221101115042.248187-1-rajat.khandelwal@intel.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-0KXQntCg0J7QqNCGINCd0J7QktCY0J3QmA0KDQrQqNCw0L3QvtCy0L3QuNC5INCy0LvQsNGB0L3Q
-uNC6INC10LvQtdC60YLRgNC+0L3QvdC+0Zcg0L/QvtGI0YLQuC/QvtC00LXRgNC20YPQstCw0Ycg
-0LrQvtGI0YLRltCyOg0KDQrQryDQv9C+0YHQu9Cw0LIg0YLQvtCx0ZYg0YbRjNC+0LPQviDQu9C4
-0YHRgtCwINC80ZbRgdGP0YbRjCDRgtC+0LzRgywg0LDQu9C1INGPINC90LUg0YfRg9CyINCy0ZbQ
-tCDRgtC10LHQtSwg0Y8g0L3QtQ0K0LfQvdCw0Y4sINGH0Lgg0YLQuCDQudC+0LPQviDQvtGC0YDQ
-uNC80LDQsiwg0ZYg0YLQvtC80YMg0Y8g0LfQvdC+0LLRgyDQvdCw0LTRltGB0LvQsNCyINC50L7Q
-s9C+INGC0L7QsdGWLiDQn9C10YDRiCDQt9CwDQrQstGB0LUsINGPIE1ycy4g0JrRgNGW0YHRgtCw
-0LvRltC90LAg0JPQtdC+0YDQs9GW0ZTQstCwLCDQtNC40YDQtdC60YLQvtGALdGA0L7Qt9C/0L7R
-gNGP0LTQvdC40Log0L/RgNC10LfQuNC00LXQvdGC0LANCtCc0ZbQttC90LDRgNC+0LTQvdC+0LPQ
-viDQstCw0LvRjtGC0L3QvtCz0L4g0YTQvtC90LTRgy4NCg0K0J3QsNGB0L/RgNCw0LLQtNGWINC8
-0Lgg0YDQvtC30LPQu9GP0L3Rg9C70Lgg0LLRgdGWINC/0LXRgNC10YjQutC+0LTQuCDRgtCwINC/
-0YDQvtCx0LvQtdC80LgsINC/0L7QsuKAmdGP0LfQsNC90ZYg0Lcg0LLQsNGI0L7Rjg0K0L3QtdC3
-0LDQstC10YDRiNC10L3QvtGOINGC0YDQsNC90LfQsNC60YbRltGU0Y4g0YLQsCDQstCw0YjQvtGO
-INC90LXQt9C00LDRgtC90ZbRgdGC0Y4g0YHQv9C70LDRgtC40YLQuCDQutC+0LzRltGB0ZbRlyDQ
-t9CwDQrQv9C10YDQtdC60LDQtywg0Y/QutGWINGB0YLRj9Cz0YPRjtGC0YzRgdGPINC3INCy0LDR
-gSDQt9CwINC90LDQstC10LTQtdC90ZYg0LLQuNGJ0LUg0LLQsNGA0ZbQsNC90YLQuCDQv9C10YDQ
-tdC60LDQt9GDLA0K0LLRltC00LLRltC00LDQudGC0LUg0L3QsNGIINGB0LDQudGCINC00LvRjyDQ
-v9GW0LTRgtCy0LXRgNC00LbQtdC90L3RjyAzOCDCsCA1M+KAsjU2IOKAsyBOIDc3IMKwIDIg4oCy
-Mzkg4oCzINCSDQoNCtCc0LgsINCg0LDQtNCwINC00LjRgNC10LrRgtC+0YDRltCyLCDQodCy0ZbR
-gtC+0LLQuNC5INCx0LDQvdC6INGWINCc0ZbQttC90LDRgNC+0LTQvdC40Lkg0LLQsNC70Y7RgtC9
-0LjQuSDRhNC+0L3QtCAo0JzQktCkKQ0K0JLQsNGI0LjQvdCz0YLQvtC9LCDQvtC60YDRg9CzINCa
-0L7Qu9GD0LzQsdGW0Y8sINCwINGC0LDQutC+0LYg0KHQqNCQINCc0ZbQvdGW0YHRgtC10YDRgdGC
-0LLQviDRhNGW0L3QsNC90YHRltCyINGC0LAg0LTQtdGP0LrRlg0K0ZbQvdGI0ZYg0LLRltC00L/Q
-vtCy0ZbQtNC90ZYg0YHQu9GW0LTRh9GWINCw0LPQtdC90YbRltGXINGC0YPRgiwg0YMg0KHQv9C+
-0LvRg9GH0LXQvdC40YUg0KjRgtCw0YLQsNGFINCQ0LzQtdGA0LjQutC4LA0K0L3QsNC60LDQt9Cw
-0LvQuCDQvdCw0YjQvtC80YMg0LLRltC00LTRltC70YMg0ZbQvdC+0LfQtdC80L3QuNGFINC/0LvQ
-sNGC0ZbQttC90LjRhSDQv9C10YDQtdC60LDQt9GW0LIgVW5pdGVkIEJhbmsgb2YNCkFmcmljYSBM
-b21lIFRvZ28g0LLQuNC00LDRgtC4INCy0LDQvCDQutCw0YDRgtC60YMgVklTQSwg0L3QsCDRj9C6
-0YMg0LHRg9C70L4g0LfQsNCy0LDQvdGC0LDQttC10L3QviDQstCw0YgNCtGE0L7QvdC0INGDINGA
-0L7Qt9C80ZbRgNGWIDIgNjAwIDAwMCwwMCDQtNC+0LvQsNGA0ZbQsiDQodCo0JAuINC00L7QtNCw
-0YLQutC+0LLRliDQt9C90Y/RgtGC0Y8uDQoNCtCjINGF0L7QtNGWINC90LDRiNC+0LPQviDRgNC+
-0LfRgdC70ZbQtNGD0LLQsNC90L3RjyDQvNC4INCy0LjRj9Cy0LjQu9C4LCDQvdCwINC90LDRiCDR
-gNC+0LfRh9Cw0YDRg9Cy0LDQvdC90Y8sINGJ0L4NCtC60L7RgNGD0LzQv9C+0LLQsNC90ZYg0YHQ
-u9GD0LbQsdC+0LLRhtGWINCx0LDQvdC60YMg0LHQtdC30L/RltC00YHRgtCw0LLQvdC+INC30LDR
-gtGA0LjQvNCw0LvQuCDQstCw0Ygg0L/Qu9Cw0YLRltC2INGWDQrQvdCw0LzQsNCz0LDRjtGC0YzR
-gdGPINC/0LXRgNC10LLQtdGB0YLQuCDQstCw0YjRliDQutC+0YjRgtC4INC90LAg0YHQstC+0Zcg
-0L/RgNC40LLQsNGC0L3RliDRgNCw0YXRg9C90LrQuC4NCg0K0IYg0YHRjNC+0LPQvtC00L3RliDQ
-vNC4INC/0L7QstGW0LTQvtC80LvRj9GU0LzQviwg0YnQviDQstCw0YjRliDQutC+0YjRgtC4INC3
-0LDRgNCw0YXQvtCy0LDQvdGWINCj0JHQkCDQkdCw0L3QutC+0Lwg0L3QsA0K0LrQsNGA0YLRgyBW
-SVNBINGWINGC0LDQutC+0LYg0LPQvtGC0L7QstGWINC00L4g0LTQvtGB0YLQsNCy0LrQuC4NCg0K
-0KLQtdC/0LXRgCDQt9Cy4oCZ0Y/QttGW0YLRjNGB0Y8g0Lcg0LTQuNGA0LXQutGC0L7RgNC+0Lwg
-0J7QseKAmdGU0LTQvdCw0L3QvtCz0L4g0LHQsNC90LrRgyDQtNC70Y8g0JDRhNGA0LjQutC4INC1
-0LvQtdC60YLRgNC+0L3QvdC+0Y4NCtC/0L7RiNGC0L7RjiDQvdC40LbRh9C1LCDRh9C40ZQg0ZbQ
-vOKAmdGPDQoNCtCc0ZbRgdGC0LXRgC4g0KLQvtC90ZYg0J4uINCV0LvRg9C80LXQu9GDLg0K0JXQ
-u9C10LrRgtGA0L7QvdC90LAg0L/QvtGI0YLQsDogKGNmYy51YmFhdG1iYW5rMDNpQGdtYWlsLmNv
-bSkNCldoYXRzYXBwICsyMjg5MzkxMTczNg0KDQrQndCw0LTRltGI0LvRltGC0Ywg0L3QsNCy0LXQ
-tNC10L3RgyDQvdC40LbRh9C1INGW0L3RhNC+0YDQvNCw0YbRltGOINC00LvRjyDQtNC+0YHRgtCw
-0LLQutC4INC60YDQtdC00LjRgtC90L7RlyDQutCw0YDRgtC60LggVklTQQ0K0LHQsNC90LrQvtC8
-0LDRgtCwINC90LAg0LLQutCw0LfQsNC90YMg0LLQuNGJ0LUg0LXQu9C10LrRgtGA0L7QvdC90YMg
-0LDQtNGA0LXRgdGDINCx0LDQvdC60YMuDQoNCigxKSDQktCw0YjQtSDQv9C+0LLQvdC1INGW0Lwn
-0Y87PT09PT09DQooMikg0JLQsNGI0LAg0LTQvtC80LDRiNC90Y8g0LDQtNGA0LXRgdCwOz09PT09
-PT0NCigzKSDQktCw0YjQsCDQutGA0LDRl9C90LA7PT09PT09DQooNCkg0JLRltC00YHQutCw0L3Q
-vtCy0LDQvdCwINC60L7Qv9GW0Y8g0LLQsNGI0L7Qs9C+INC/0L7RgdCy0ZbQtNGH0LXQvdC90Y87
-PT09PT0NCig1KSDQhiDQstCw0Ygg0L/RgNGP0LzQuNC5INC90L7QvNC10YAg0YLQtdC70LXRhNC+
-0L3Rgzs9PT09DQooNikg0J/QvtGI0YLQvtCy0LjQuSDRltC90LTQtdC60YE7PT09PT09DQooNykg
-0JLQsNGI0LAg0L/RgNC+0YTQtdGB0ZbRjzs9PT09PQ0KKDgpINCh0YLQsNGC0Yw7PT09PT09PQ0K
-DQrQoNC+0LHQvtGH0LjQuSDRh9Cw0YEuDQrQv9C+0L3QtdC00ZbQu9C+0LogLSDQvyfRj9GC0L3Q
-uNGG0Y86INC3IDA3OjQ1INC00L4gMTc6MDA7INCh0YPQsdC+0YLQsCA5OjAwIC0gMTM6MDANCg0K
-0Jcg0L/QvtCy0LDQs9C+0Y4sDQrQn9Cw0L3Rli4g0JrRgNC40YHRgtCw0LvRltC90LAg0JPQtdC+
-0YDQs9GW0ZTQstCwDQoo0JzQktCkKSDQn9GA0LXQt9C40LTQtdC90YIuDQo=
+On Tue, Nov 01, 2022 at 05:20:42PM +0530, Rajat Khandelwal wrote:
+> Wake on connect/disconnect is only supported while runtime suspend
+> for now, which is obviously necessary. It is also not inherently
+> desired for the system to wakeup on thunderbolt/USB4 hot plug events.
+> However, we can still make user in control of waking up the system
+> in the events of hot plug/unplug.
+> This patch adds 'wakeup' attribute under 'usb4_portX/power' sysfs
+> attribute and only enables wakes on connect/disconnect to the
+> respective port when 'wakeup' is set to 'enabled'. The attribute
+> is set to 'disabled' by default.
+> 
+> Signed-off-by: Rajat Khandelwal <rajat.khandelwal@intel.com>
+> Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+
+Applied to thunderbolt.git/next, thanks!
