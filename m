@@ -2,245 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12FD561F306
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 13:25:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32CCE61F31C
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 13:27:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232200AbiKGMZc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 07:25:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51228 "EHLO
+        id S232218AbiKGM1U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 07:27:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232202AbiKGMZM (ORCPT
+        with ESMTP id S232248AbiKGM1N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 07:25:12 -0500
-Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EC5A1A064
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 04:25:11 -0800 (PST)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.west.internal (Postfix) with ESMTP id CB2DB3200951;
-        Mon,  7 Nov 2022 07:25:08 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Mon, 07 Nov 2022 07:25:11 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1667823908; x=1667910308; bh=8zbcJPjw6I
-        Bg2prP+2YZ7c39PRUZiLjGL6NLamslrCQ=; b=i7v+HKoT68Yj/H9ge7J+TH/mv8
-        nln1uIVWt7OXdH9oTX3dq+TjqxOYrYpU6RKQbGQ/aXjJU9Jh2tk+o3C7I6Fzdn01
-        m5y2GXnrbqTqVXdhlCwb2vZqB6tto0ffcHnk4Hj0dpZFQXDhs/EtSYoe2Ta3BbQw
-        IuAyGTkPXmr5DSCWx6ENPnyjdNSl9lVguyUEbMnUDLDriyyWqyBSL4rcZE3OvE4x
-        Omx/xxT/EYBoXxdiZIthnx+zaLUDruj3AIttTnqbmbMeCCfsWgNy9/qxV/0qWvnv
-        sSLd83VgsRZsJlksnT1gbA0rtYBYwr0E0Pl5rM0yNTooulcy7scZIV6rJ53A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1667823908; x=1667910308; bh=8zbcJPjw6IBg2prP+2YZ7c39PRUZ
-        iLjGL6NLamslrCQ=; b=SRWpX/MomPQWny7iBPt8NmW7wUPfxNmgRMGJIsVWXv/S
-        Jzq0ZFeDZ+kR70RtGQ/zadTphiWoAksP/PlcQBJ6FC3flJLXhREvDSrvYG77Ma1q
-        6TWST8bFsYRpmQjxlrwwg1ZGpyEA9TgDSTydOHzx9XuTE/mLLf69AE7f+bpKndle
-        2EsWFHxCc+DtZScWMf/7Jz57jAkv5MXTBMMT1AcOw5prXyHrmv8Y4idRiVb9e7jW
-        YMNvbjSCJGj1eETMD7baEd1aRrTC38FSgSTHK8cK4W1fnxdlhEwqPSkKMSzdUMks
-        8yAnB/peGqg/OIKVGJ5uXUvwYjNaon4OuOegn22ZcQ==
-X-ME-Sender: <xms:IvloY3l87bh-n3PmDwJghNGij4k7K6MCd2iroNKP4nOkJ449ALOyBw>
-    <xme:IvloY63RdBDcFO13gYxZj2JXxHcP9dKI8NjbJp_SeLzaqq3V2nl7_aOauYASXxTZ7
-    NWzPPj6IyYvNnYP_Os>
-X-ME-Received: <xmr:IvloY9oM-z5hJMfyVu5i49BpvJXP2MsHYVXhC83YGZ1wMQpVzB2J2snpP6-In5QmZYNUcOQpbEE6W5ZiWZATwmM1VB7ZPvpBF8BNQuNMioenLg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrvdekgdefkecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvvefukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgigihhm
-    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
-    htvghrnhepteefffefgfektdefgfeludfgtdejfeejvddttdekteeiffejvdfgheehfffh
-    vedunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmh
-    grgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:IvloY_nAS4ikOCawbgDU3YSNZ4wbGNPzuL5hIdDq3RAB8g-HbzDLKQ>
-    <xmx:IvloY12kcCfrKpvJn-Usw0ytBt_X8yUDW9BkZBNJUI7HYaA-R1VnJw>
-    <xmx:IvloY-slRKspol3OO_qRRtqSigBoQKO08YBYvjo-_wK9F1m5UkwO8w>
-    <xmx:JPloY5J6IsqGyE33nufbHO6Vcb-3AfJuziuhAh3mTZdUmECmwdnPpA>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 7 Nov 2022 07:25:06 -0500 (EST)
-Date:   Mon, 7 Nov 2022 13:25:04 +0100
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Michael Rodin <mrodin@de.adit-jv.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Sean Paul <seanpaul@chromium.org>,
-        Vincent Abriou <vincent.abriou@st.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        michael@rodin.online, erosca@de.adit-jv.com
-Subject: Re: [PATCH] drm: do not call detect for connectors which are forced
- on
-Message-ID: <20221107122504.tejlb24bjbaxw5t6@houat>
-References: <20220826091121.389315-1-mrodin@de.adit-jv.com>
- <YzYrNJbfGcch1UtX@pendragon.ideasonboard.com>
+        Mon, 7 Nov 2022 07:27:13 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44823178A7
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 04:27:12 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id s12so7666816edd.5
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 04:27:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Spa9i7ZZi/PqL0mkZcklMgIzofmfvMGIgf+WKCkXIMQ=;
+        b=jLvnLgvlxGE5ngnjopyA4a2yysB33if8in8kuEiUGZz0XMRPhT3N3XX2UU0Z02SjJa
+         FE7atSEyVzKKdtrwY0PVb8zYTIeaOgJnpezWILnMIUcd6Q6BvMdB5Blys/Sk+si0wdoi
+         cxJWltzEJODEgrR6eSFlCqNwS9ZFIsMPbmeuGAi4XjatM6S9lPMiOqDUaJXOEPV65I5q
+         6nYIe3M7IkieIO++K+hxKwvxBHwyObk4oDxX+GtHhKVKU5ifHEuRcpYBBaF/NJWhWQo2
+         wxtsM5/WVBHfJTmKg1iAMoZWyNIEo94nUZkVDFxVJGHi00fgYNWEYCMAvqPlT6szNE4i
+         pocw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Spa9i7ZZi/PqL0mkZcklMgIzofmfvMGIgf+WKCkXIMQ=;
+        b=qoE+1eZUsQpkuTT5O60cLF983lDWIdKnO0lEFPslUcQjzNHS4PYXJ9hr47okkG76/K
+         4yTmW1KiK71I8shktj1KGQ5b7I68b7jyKfRDWDKQ1VIHc5M4wz60Qh2Nbia27Q9CYEkK
+         QBNOyibIk/y52XKIho7cN4EoPAixpPgD0hmOy5aFHcGKtBKoxMNlay5gF5nsu9Gzi3yA
+         Wa3SP+NVu6DKx2Yrax3JDAE1xut42/PFD97Kr/nT1BiYrbfNnXqydisbswRc6wGFHz5z
+         zVl40OiYWXZARGgvazKvbUb0oWSTLFw017fM+BrfRHVPW3fO4Kr2OvqVA5nH+rMlixda
+         fbHw==
+X-Gm-Message-State: ACrzQf2MauqhifsDbmFWyYojJ44CqPShcOGngW5q72tuGiESjm5D/JZI
+        2mWoQyqgVfutBzfLL1EHuTmiuZmK8nt8vYSJHW0Nkg==
+X-Google-Smtp-Source: AMsMyM6P4MUoGjkj6W0BuOtOqQhVLj9fCKtgk0YVH9i2+0GMg02EXI0DnuuovMLuo6xJlqXa24LIp4zGDBEoY6Qo63g=
+X-Received: by 2002:a05:6402:386:b0:463:c43f:6628 with SMTP id
+ o6-20020a056402038600b00463c43f6628mr32856779edv.53.1667824030610; Mon, 07
+ Nov 2022 04:27:10 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="62xmu4e52wowxf7x"
-Content-Disposition: inline
-In-Reply-To: <YzYrNJbfGcch1UtX@pendragon.ideasonboard.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221103145353.3049303-1-usama.anjum@collabora.com> <20221103145353.3049303-3-usama.anjum@collabora.com>
+In-Reply-To: <20221103145353.3049303-3-usama.anjum@collabora.com>
+From:   =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
+Date:   Mon, 7 Nov 2022 13:26:59 +0100
+Message-ID: <CABb0KFFaYZG62TS+iM3Y92+hDyB35XR8dTX-5hDgWrXCcDQx7Q@mail.gmail.com>
+Subject: Re: [PATCH v5 2/3] fs/proc/task_mmu: Implement IOCTL to get and/or
+ the clear info about PTEs
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     Andrei Vagin <avagin@gmail.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Peter Xu <peterx@redhat.com>, Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Zach O'Keefe" <zokeefe@google.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>, kernel@collabora.com,
+        Gabriel Krisman Bertazi <krisman@collabora.com>,
+        David Hildenbrand <david@redhat.com>,
+        Peter Enderborg <peter.enderborg@sony.com>,
+        "open list : KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, Shuah Khan <shuah@kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list : PROC FILESYSTEM" <linux-fsdevel@vger.kernel.org>,
+        "open list : MEMORY MANAGEMENT" <linux-mm@kvack.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 3 Nov 2022 at 15:54, Muhammad Usama Anjum
+<usama.anjum@collabora.com> wrote:
+> This IOCTL, PAGEMAP_SCAN can be used to get and/or clear the info about
+> page table entries. The following operations are supported in this ioctl:
+> - Get the information if the pages are soft-dirty, file mapped, present
+>   or swapped.
+> - Clear the soft-dirty PTE bit of the pages.
+> - Get and clear the soft-dirty PTE bit of the pages.
+>
+> Only the soft-dirty bit can be read and cleared atomically. struct
+> pagemap_sd_args is used as the argument of the IOCTL. In this struct:
+> - The range is specified through start and len.
+> - The output buffer and size is specified as vec and vec_len.
+> - The optional maximum requested pages are specified in the max_pages.
+> - The flags can be specified in the flags field. The PAGEMAP_SD_CLEAR
+>   and PAGEMAP_SD_NO_REUSED_REGIONS are supported.
+> - The masks are specified in rmask, amask, emask and return_mask.
+[...]
+> --- a/include/uapi/linux/fs.h
+> +++ b/include/uapi/linux/fs.h
+> @@ -305,4 +305,57 @@ typedef int __bitwise __kernel_rwf_t;
+>  #define RWF_SUPPORTED  (RWF_HIPRI | RWF_DSYNC | RWF_SYNC | RWF_NOWAIT |\
+>                          RWF_APPEND)
+>
+> +/* PAGEMAP IOCTL */
+> +#define PAGEMAP_SCAN   _IOWR('f', 16, struct pagemap_scan_arg)
+> +
+> +/* Bits are set in the bitmap of the page_region and masks in pagemap_sd=
+_args */
+> +#define PAGE_IS_SD     (1 << 0)
 
---62xmu4e52wowxf7x
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Can we name it PAGE_IS_SOFTDIRTY? "SD" can mean so many things.
 
-On Fri, Sep 30, 2022 at 02:33:08AM +0300, Laurent Pinchart wrote:
-> Hello Michael,
->=20
-> Thank you for the patch. Sorry for the late reply, I wasn't on the CC
-> list so I didn't notice it.
->=20
-> On Fri, Aug 26, 2022 at 11:11:21AM +0200, Michael Rodin wrote:
-> > "detect" should not be called and its return value shall not be used wh=
-en a
-> > connector is forced as hinted in the commit d50ba256b5f1 ("drm/kms: sta=
-rt
-> > adding command line interface using fb.") and the commit 6fe14acd496e
-> > ("drm: Document drm_connector_funcs"). One negative side effect of doing
-> > this is observed on the RCar3 SoCs which use the dw-hdmi driver. It
-> > continues executing drm_helper_hpd_irq_event even if its connector is
-> > forced to ON. As consequence drm_helper_hpd_irq_event calls "detect" so=
- the
-> > connector status is updated to "disconnected":
-> >=20
-> > [  420.201527] [drm:drm_helper_hpd_irq_event] [CONNECTOR:76:HDMI-A-1] s=
-tatus updated from connected to disconnected
-> >=20
-> > This status is corrected by drm_helper_probe_single_connector_modes sho=
-rtly
-> > after this because this function checks if a connector is forced:
-> >=20
-> > [  420.218703] [drm:drm_helper_probe_single_connector_modes] [CONNECTOR=
-:76:HDMI-A-1] status updated from disconnected to connected
-> >=20
-> > To avoid similar issues this commit adapts functions which call "detect"
-> > so they check if a connector is forced and return the correct status.
-> >=20
-> > Fixes: 949f08862d66 ("drm: Make the connector .detect() callback option=
-al")
->=20
-> Is this really the right fixes tag ? The call to .detect() in
-> drm_helper_hpd_irq_event() predates that commit.
->=20
-> > Signed-off-by: Michael Rodin <mrodin@de.adit-jv.com>
-> > ---
-> >  drivers/gpu/drm/drm_probe_helper.c | 16 ++++++++++++++--
-> >  1 file changed, 14 insertions(+), 2 deletions(-)
-> >=20
-> > diff --git a/drivers/gpu/drm/drm_probe_helper.c b/drivers/gpu/drm/drm_p=
-robe_helper.c
-> > index bb427c5a4f1f..1691047d0472 100644
-> > --- a/drivers/gpu/drm/drm_probe_helper.c
-> > +++ b/drivers/gpu/drm/drm_probe_helper.c
-> > @@ -289,7 +289,12 @@ drm_helper_probe_detect_ctx(struct drm_connector *=
-connector, bool force)
-> >  retry:
-> >  	ret =3D drm_modeset_lock(&connector->dev->mode_config.connection_mute=
-x, &ctx);
-> >  	if (!ret) {
-> > -		if (funcs->detect_ctx)
-> > +		if (connector->force =3D=3D DRM_FORCE_ON ||
-> > +		    connector->force =3D=3D DRM_FORCE_ON_DIGITAL)
-> > +			ret =3D connector_status_connected;
-> > +		else if (connector->force =3D=3D DRM_FORCE_OFF)
-> > +			ret =3D connector_status_disconnected;
-> > +		else if (funcs->detect_ctx)
-> >  			ret =3D funcs->detect_ctx(connector, &ctx, force);
-> >  		else if (connector->funcs->detect)
-> >  			ret =3D connector->funcs->detect(connector, force);
-> > @@ -340,7 +345,14 @@ drm_helper_probe_detect(struct drm_connector *conn=
-ector,
-> >  	if (ret)
-> >  		return ret;
-> > =20
-> > -	if (funcs->detect_ctx)
-> > +	if (connector->force =3D=3D DRM_FORCE_ON ||
-> > +	    connector->force =3D=3D DRM_FORCE_ON_DIGITAL)
-> > +		ret =3D connector_status_connected;
-> > +	else if (connector->force =3D=3D DRM_FORCE_OFF)
-> > +		ret =3D connector_status_disconnected;
-> > +	else if (funcs->detect_ctx)
-> > +		ret =3D funcs->detect_ctx(connector, ctx, force);
-> > +	else if (funcs->detect_ctx)
-> >  		ret =3D funcs->detect_ctx(connector, ctx, force);
->=20
-> Those two conditions are identical.
->=20
-> >  	else if (connector->funcs->detect)
-> >  		ret =3D connector->funcs->detect(connector, force);
->=20
-> The same logic is used in two places in this patch. Could this be
-> factored out to a separate function ? It may even be possible to
-> refactor drm_helper_probe_detect() and drm_helper_probe_detect_ctx() to
-> share more code between the two functions.
+> +#define PAGE_IS_FILE   (1 << 1)
+> +#define PAGE_IS_PRESENT        (1 << 2)
+> +#define PAGE_IS_SWAPED (1 << 3)
 
-I just had a look, and it doesn't seem trivial. The obvious way would be
-to make drm_helper_probe_detect_ctx allocate a context and call
-drm_helper_probe_detect. The thing is, drm_helper_probe_detect will call
-drm_helper_probe_detect_ctx if its context is NULL.
+PAGE_IS_SWAPPED?
 
-I guess we could have drm_helper_probe_detect allocate the context
-itself if it's null, but handling differently the back-off and freeing
-logic is probably going to add more complexity.
+> +
+> +/*
+> + * struct page_region - Page region with bitmap flags
+> + * @start:     Start of the region
+> + * @len:       Length of the region
+> + * bitmap:     Bits sets for the region
+> + */
+> +struct page_region {
+> +       __u64 start;
+> +       __u64 len;
+> +       __u32 bitmap;
+> +       __u32 __reserved;
 
-I'm not sure it's worth it for simple functions like this.
+"u64 flags"? If an extension is needed it would already require a new
+ioctl or something in the `arg` struct.
 
-> This being said, I'm not sure this is the right fix. Beside the i915 and
-> nouveau drivers, the only callers of drm_helper_probe_detect() are
-> drm_helper_probe_single_connector_modes(), output_poll_execute() and
-> check_connector_changed() in this file. The first two functions already
-> check connector->force and skip the call to drm_helper_probe_detect() if
-> the connector is forced. Only check_connector_changed() is missing that
-> check. Wouldn't it be simpler to return false in that function if
-> connector->force is set ?
+> +
+> +/*
+> + * struct pagemap_scan_arg - Soft-dirty IOCTL argument
 
-I guess, but the drm_helper_probe_detect documentation states that it
-"probe connector status" and "This function calls the detect callbacks
-of the connector.", which I guess could be interpreted as it always runs
-the detect callback but won't do more.
+Since this is no longer a soft-dirty-specific call, it might be better
+to describe it as "VM scan ioctl" or similar. BTW, the implementation
+is currently guarded by CONFIG_MEM_SOFT_DIRTY, but CRIU doesn't need
+that but needs the other bits handling.
 
-But it also returns that the connector is connected if the detect
-callback is missing and thus it feels like putting it here both respect
-the "probe connector status " (even though it's forced), and the general
-idea behind that function.
+> + * @start:             Starting address of the region
+> + * @len:               Length of the region (All the pages in this lengt=
+h are included)
+> + * @vec:               Address of page_region struct array for output
+> + * @vec_len:           Length of the page_region struct array
+> + * @max_pages:         Optional max return pages (It must be less than v=
+ec_len if specified)
 
-> Another question is whether it is valid for the dw-hdmi driver to call
-> drm_helper_hpd_irq_event() when the connector status is forced.
+I think we discussed that this is not counting the same things as
+vec_len, so there should not be a reference between the two. The limit
+is whatever fits under both conditions (IOW: n_vecs <=3D vec_len &&
+(!max_pages || n_pages <=3D max_pages).
 
-I guess drm_connector_helper_hpd_irq_event would be a better choice, but
-it seems fine to me. Especially since pretty much every other driver
-does it that way, I'd rather assume that the driver doesn't have to
-track the connection status itself and leave that to the framework.
+> + * @flags:             Special flags for the IOCTL
 
-It's more convenient, and it's what virtually all drivers are doing.
+Just "Flags for the IOCTL".
 
-Maxime
+> + * @rmask:             Required mask - All of these bits have to be set =
+in the PTE
+> + * @amask:             Any mask - Any of these bits are set in the PTE
+> + * @emask:             Exclude mask - None of these bits are set in the =
+PTE
 
---62xmu4e52wowxf7x
-Content-Type: application/pgp-signature; name="signature.asc"
+It might be easier for developers if those were named e.g.
+"required_mask", "anyof_mask", "excluded_mask".
 
------BEGIN PGP SIGNATURE-----
+> + * @return_mask:       Bits that have to be reported to the user in page=
+_region
 
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCY2j5IAAKCRDj7w1vZxhR
-xdtoAQCeP+2Wy8wUXcqRzZKIAKffBRxySoBZdpo5YkatBmicRAD/QMBsVrltHoGT
-gs93r8Yu1m+T4e+2ll1xHXWPrgObcQY=
-=6/I8
------END PGP SIGNATURE-----
+"Bits that are to be reported in page_region"?
 
---62xmu4e52wowxf7x--
+> + */
+> +struct pagemap_scan_arg {
+> +       __u64 start;
+> +       __u64 len;
+> +       __u64 vec;
+> +       __u64 vec_len;
+> +       __u32 max_pages;
+> +       __u32 flags;
+> +       __u32 rmask;
+> +       __u32 amask;
+> +       __u32 emask;
+> +       __u32 return_mask;
+> +};
+> +
+> +/* Special flags */
+> +#define PAGEMAP_SD_CLEAR               (1 << 0)
+
+SD -> SOFTDIRTY
+
+> +/* Check the individual pages if they are soft-dirty to find dirty pages=
+ faster. */
+> +#define PAGEMAP_NO_REUSED_REGIONS      (1 << 1)
+
+Please include the description from commitmsg of what this flag does
+(i.e. how the behaviour differs because of the flag). I'd drop the
+part about it being faster, as if so - why have the flag at all
+instead of just always using the faster way?
+
+(I only reviewed the API now. The implementation I think could be
+simpler, but let's leave that to after the API is agreed on.)
+
+Best Regards
+Micha=C5=82 Miros=C5=82aw
