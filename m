@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D45E661F9CC
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 17:30:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A683861F9DB
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 17:32:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232648AbiKGQax (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 11:30:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56866 "EHLO
+        id S232374AbiKGQc1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 11:32:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231374AbiKGQa2 (ORCPT
+        with ESMTP id S232348AbiKGQcL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 11:30:28 -0500
+        Mon, 7 Nov 2022 11:32:11 -0500
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7B7EE2181B;
-        Mon,  7 Nov 2022 08:28:36 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0018C26121;
+        Mon,  7 Nov 2022 08:30:17 -0800 (PST)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5E570ED1;
-        Mon,  7 Nov 2022 08:28:42 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E3502ED1;
+        Mon,  7 Nov 2022 08:30:23 -0800 (PST)
 Received: from pierre123.arm.com (pierre123.nice.arm.com [10.34.100.128])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 11F933F534;
-        Mon,  7 Nov 2022 08:28:20 -0800 (PST)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id B80A53F534;
+        Mon,  7 Nov 2022 08:30:02 -0800 (PST)
 From:   Pierre Gondois <pierre.gondois@arm.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Pierre Gondois <pierre.gondois@arm.com>,
@@ -88,30 +88,29 @@ Cc:     Pierre Gondois <pierre.gondois@arm.com>,
         Abel Vesa <abelvesa@kernel.org>,
         Shenwei Wang <shenwei.wang@nxp.com>,
         Peng Fan <peng.fan@nxp.com>, Ming Qian <ming.qian@nxp.com>,
+        Adam Ford <aford173@gmail.com>,
         Lucas Stach <l.stach@pengutronix.de>,
         Tim Harvey <tharvey@gateworks.com>,
-        Adam Ford <aford173@gmail.com>, Li Jun <jun.li@nxp.com>,
-        Richard Zhu <hongxing.zhu@nxp.com>,
+        Richard Zhu <hongxing.zhu@nxp.com>, Li Jun <jun.li@nxp.com>,
         Marek Vasut <marex@denx.de>,
         Markus Niebel <Markus.Niebel@ew.tq-group.com>,
         Joakim Zhang <qiangqing.zhang@nxp.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Paul Elder <paul.elder@ideasonboard.com>,
         Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Paul Elder <paul.elder@ideasonboard.com>,
         Martin Kepplinger <martink@posteo.de>,
-        David Heidelberg <david@ixit.cz>,
+        Joy Zou <joy.zou@nxp.com>, David Heidelberg <david@ixit.cz>,
         Liu Ying <victor.liu@nxp.com>,
         Oliver Graute <oliver.graute@kococonnector.com>,
-        Shijie Qin <shijie.qin@nxp.com>,
+        Shijie Qin <shijie.qin@nxp.com>, Jacky Bai <ping.bai@nxp.com>,
+        Wei Fang <wei.fang@nxp.com>,
         Clark Wang <xiaoning.wang@nxp.com>,
-        Haibo Chen <haibo.chen@nxp.com>, Wei Fang <wei.fang@nxp.com>,
-        Jacky Bai <ping.bai@nxp.com>,
         Chris Packham <chris.packham@alliedtelesis.co.nz>,
         Vadym Kochan <vadym.kochan@plvision.eu>,
         Sameer Pujar <spujar@nvidia.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        Akhil R <akhilrajeev@nvidia.com>,
         Prathamesh Shete <pshete@nvidia.com>,
+        Akhil R <akhilrajeev@nvidia.com>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
         Sumit Gupta <sumitg@nvidia.com>,
         Diogo Ivo <diogo.ivo@tecnico.ulisboa.pt>,
         Vidya Sagar <vidyas@nvidia.com>,
@@ -121,8 +120,7 @@ Cc:     Pierre Gondois <pierre.gondois@arm.com>,
         Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
         Aswani Reddy <aswani.reddy@samsung.com>,
         Shashank Prashar <s.prashar@samsung.com>,
-        Arjun K V <arjun.kv@samsung.com>, devicetree@vger.kernel.org,
-        linux-rpi-kernel@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org,
         linux-amlogic@lists.infradead.org,
         linux-samsung-soc@vger.kernel.org,
@@ -131,9 +129,9 @@ Cc:     Pierre Gondois <pierre.gondois@arm.com>,
         linux-realtek-soc@lists.infradead.org,
         linux-renesas-soc@vger.kernel.org,
         linux-rockchip@lists.infradead.org
-Subject: [PATCH v2 17/23] arm64: dts: Update cache properties for realtek
-Date:   Mon,  7 Nov 2022 16:57:10 +0100
-Message-Id: <20221107155825.1644604-18-pierre.gondois@arm.com>
+Subject: [PATCH v2 18/23] arm64: dts: Update cache properties for renesas
+Date:   Mon,  7 Nov 2022 16:57:11 +0100
+Message-Id: <20221107155825.1644604-19-pierre.gondois@arm.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221107155825.1644604-1-pierre.gondois@arm.com>
 References: <20221107155825.1644604-1-pierre.gondois@arm.com>
@@ -157,76 +155,43 @@ Update the Device Trees accordingly.
 
 Signed-off-by: Pierre Gondois <pierre.gondois@arm.com>
 ---
- arch/arm64/boot/dts/realtek/rtd1293.dtsi | 1 +
- arch/arm64/boot/dts/realtek/rtd1295.dtsi | 1 +
- arch/arm64/boot/dts/realtek/rtd1296.dtsi | 1 +
- arch/arm64/boot/dts/realtek/rtd1395.dtsi | 1 +
- arch/arm64/boot/dts/realtek/rtd16xx.dtsi | 2 ++
- 5 files changed, 6 insertions(+)
+ arch/arm64/boot/dts/renesas/r9a07g043.dtsi | 1 +
+ arch/arm64/boot/dts/renesas/r9a07g044.dtsi | 1 +
+ arch/arm64/boot/dts/renesas/r9a07g054.dtsi | 1 +
+ 3 files changed, 3 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/realtek/rtd1293.dtsi b/arch/arm64/boot/dts/realtek/rtd1293.dtsi
-index 2d92b56ac94d..0696b99fc40d 100644
---- a/arch/arm64/boot/dts/realtek/rtd1293.dtsi
-+++ b/arch/arm64/boot/dts/realtek/rtd1293.dtsi
-@@ -30,6 +30,7 @@ cpu1: cpu@1 {
- 
- 		l2: l2-cache {
+diff --git a/arch/arm64/boot/dts/renesas/r9a07g043.dtsi b/arch/arm64/boot/dts/renesas/r9a07g043.dtsi
+index 689aa4ba416b..18c69a187ecb 100644
+--- a/arch/arm64/boot/dts/renesas/r9a07g043.dtsi
++++ b/arch/arm64/boot/dts/renesas/r9a07g043.dtsi
+@@ -88,6 +88,7 @@ L3_CA55: cache-controller-0 {
  			compatible = "cache";
-+			cache-level = <2>;
+ 			cache-unified;
+ 			cache-size = <0x40000>;
++			cache-level = <3>;
  		};
  	};
  
-diff --git a/arch/arm64/boot/dts/realtek/rtd1295.dtsi b/arch/arm64/boot/dts/realtek/rtd1295.dtsi
-index 1402abe80ea1..4ca322e420e6 100644
---- a/arch/arm64/boot/dts/realtek/rtd1295.dtsi
-+++ b/arch/arm64/boot/dts/realtek/rtd1295.dtsi
-@@ -44,6 +44,7 @@ cpu3: cpu@3 {
- 
- 		l2: l2-cache {
+diff --git a/arch/arm64/boot/dts/renesas/r9a07g044.dtsi b/arch/arm64/boot/dts/renesas/r9a07g044.dtsi
+index 2283d4fb8736..86866d9dc7c4 100644
+--- a/arch/arm64/boot/dts/renesas/r9a07g044.dtsi
++++ b/arch/arm64/boot/dts/renesas/r9a07g044.dtsi
+@@ -109,6 +109,7 @@ L3_CA55: cache-controller-0 {
  			compatible = "cache";
-+			cache-level = <2>;
+ 			cache-unified;
+ 			cache-size = <0x40000>;
++			cache-level = <3>;
  		};
  	};
  
-diff --git a/arch/arm64/boot/dts/realtek/rtd1296.dtsi b/arch/arm64/boot/dts/realtek/rtd1296.dtsi
-index fb864a139c97..03fccd48f0c0 100644
---- a/arch/arm64/boot/dts/realtek/rtd1296.dtsi
-+++ b/arch/arm64/boot/dts/realtek/rtd1296.dtsi
-@@ -44,6 +44,7 @@ cpu3: cpu@3 {
- 
- 		l2: l2-cache {
+diff --git a/arch/arm64/boot/dts/renesas/r9a07g054.dtsi b/arch/arm64/boot/dts/renesas/r9a07g054.dtsi
+index 358d4c34465f..b36dd5291e5a 100644
+--- a/arch/arm64/boot/dts/renesas/r9a07g054.dtsi
++++ b/arch/arm64/boot/dts/renesas/r9a07g054.dtsi
+@@ -109,6 +109,7 @@ L3_CA55: cache-controller-0 {
  			compatible = "cache";
-+			cache-level = <2>;
- 		};
- 	};
- 
-diff --git a/arch/arm64/boot/dts/realtek/rtd1395.dtsi b/arch/arm64/boot/dts/realtek/rtd1395.dtsi
-index 05c9216a87ee..94c0a8cf4953 100644
---- a/arch/arm64/boot/dts/realtek/rtd1395.dtsi
-+++ b/arch/arm64/boot/dts/realtek/rtd1395.dtsi
-@@ -44,6 +44,7 @@ cpu3: cpu@3 {
- 
- 		l2: l2-cache {
- 			compatible = "cache";
-+			cache-level = <2>;
- 		};
- 	};
- 
-diff --git a/arch/arm64/boot/dts/realtek/rtd16xx.dtsi b/arch/arm64/boot/dts/realtek/rtd16xx.dtsi
-index afba5f04c8ec..2ee9ba1ecdc1 100644
---- a/arch/arm64/boot/dts/realtek/rtd16xx.dtsi
-+++ b/arch/arm64/boot/dts/realtek/rtd16xx.dtsi
-@@ -87,12 +87,14 @@ cpu5: cpu@500 {
- 
- 		l2: l2-cache {
- 			compatible = "cache";
-+			cache-level = <2>;
- 			next-level-cache = <&l3>;
- 
- 		};
- 
- 		l3: l3-cache {
- 			compatible = "cache";
+ 			cache-unified;
+ 			cache-size = <0x40000>;
 +			cache-level = <3>;
  		};
  	};
