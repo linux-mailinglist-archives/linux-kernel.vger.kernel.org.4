@@ -2,98 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E82DD61FF24
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 21:07:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2B4861FF27
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 21:07:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232328AbiKGUHT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 15:07:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46258 "EHLO
+        id S232412AbiKGUHs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 15:07:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232133AbiKGUHN (ORCPT
+        with ESMTP id S232032AbiKGUHp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 15:07:13 -0500
-Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A0EB2714F
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 12:07:11 -0800 (PST)
-Received: by mail-qt1-x829.google.com with SMTP id h21so7563550qtu.2
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 12:07:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=QGhIjGOM7LH5cBL9V+b1Hgf76N1SYrX+psA/lfoLx1k=;
-        b=3vfuIqEk6ZZfYKZPgvFEh0TKpQwxwbWGlf3w1SXLpmwnTr9Q3QohuCMGikajtiJRsV
-         Rqn5E2cBxwp12teblefpCX8tVIBBriP1i5pj548hy0bbcCtAWud3iCkLJMp+CL32nLSP
-         AdumUa0126gxmhGFrJmW3KCUkdjx9UZzo/AUj6gC1CnKdmGQygYG+C4c//sLR8maIdim
-         eEtOr6Y+9gl33xQNw6tvOzO8ydyH05g5x3roYQPak14YOfFr0eRmErSsgFmvmCLwLztm
-         8WLNcIi/fFoNpT8yk5XWu5RoIeIlnqTxpuIdwm5pv48JXX3xUpiwoOlh8opbI5GJe8Kd
-         Mklg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QGhIjGOM7LH5cBL9V+b1Hgf76N1SYrX+psA/lfoLx1k=;
-        b=4+4DOqdi1F8LknOdsjXJfj3YJg7C6sTLiRv+FqRzjvCYMuzHA5QCwR03h9tWcNc155
-         NVhGehWSfr8vDvI8LXxaGLi/vyucyyTb5FXUEgYAmlCidlFUK4tCFUyiykX30NU3RQUA
-         HErR3znyeV5VDq+zoe5MLv22EAw0sXZ98/c/HaELBBnbzVX2NjlXP7gM4Wo5kZZsW2g5
-         rx1hyzGcFsqF95D8LzsVy+YVdJru2+fnHhgNToGESx2LX7iZyGGGTbFHED9uJeXI0feG
-         zhHW1hNXyVL4y3CebURzNm1J1pICHXEurYKrZXi63c0Mt3+f/qW5rJgL1scY24PUvIBZ
-         Y5rA==
-X-Gm-Message-State: ACrzQf21sXcJvZvgetZq6m/PqWEBaTDAqJRxLKxp0SxxH7UsdYP2W1Ih
-        QzTnyy2wFk7r7+p66jSRw1Kzbw==
-X-Google-Smtp-Source: AMsMyM44eIMhZRpBYWP10QIsv5DCqWT2z0tjrH+JdllBvBGdHc89NcdEhaQwU7qM53N0sj/fKX4BQw==
-X-Received: by 2002:a05:622a:1ba5:b0:3a4:ffd9:22d8 with SMTP id bp37-20020a05622a1ba500b003a4ffd922d8mr40753206qtb.356.1667851630723;
-        Mon, 07 Nov 2022 12:07:10 -0800 (PST)
-Received: from localhost ([2620:10d:c091:480::25f1])
-        by smtp.gmail.com with ESMTPSA id u12-20020a05620a454c00b006e16dcf99c8sm7656628qkp.71.2022.11.07.12.07.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Nov 2022 12:07:09 -0800 (PST)
-Date:   Mon, 7 Nov 2022 15:07:13 -0500
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     Hugh Dickins <hughd@google.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>,
-        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
-        Nick Piggin <npiggin@gmail.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Jann Horn <jannh@google.com>,
-        John Hubbard <jhubbard@nvidia.com>, X86 ML <x86@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        kernel list <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Joerg Roedel <jroedel@suse.de>,
-        Uros Bizjak <ubizjak@gmail.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        linux-arch <linux-arch@vger.kernel.org>
-Subject: Re: mm: delay rmap removal until after TLB flush
-Message-ID: <Y2llcRiDLHc2kg/N@cmpxchg.org>
-References: <CAHk-=wjX_P78xoNcGDTjhkgffs-Bhzcwp-mdsE1maeF57Sh0MA@mail.gmail.com>
- <CAHk-=wio=UKK9fX4z+0CnyuZG7L+U9OB7t7Dcrg4FuFHpdSsfw@mail.gmail.com>
- <CAHk-=wgz0QQd6KaRYQ8viwkZBt4xDGuZTFiTB8ifg7E3F2FxHg@mail.gmail.com>
- <CAHk-=wiwt4LC-VmqvYrphraF0=yQV=CQimDCb0XhtXwk8oKCCA@mail.gmail.com>
- <Y1+XCALog8bW7Hgl@hirez.programming.kicks-ass.net>
- <CAHk-=wjnvPA7mi-E3jVEfCWXCNJNZEUjm6XODbbzGOh9c8mhgw@mail.gmail.com>
- <CAHk-=wjjXQP7PTEXO4R76WPy1zfQad_DLKw1GKU_4yWW1N4n7w@mail.gmail.com>
- <Y2SyJuohLFLqIhlZ@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
- <CAHk-=wjzp65=-QE1dg8KfqG-tVHiT+yAfHXGx9sro=8yOceELg@mail.gmail.com>
- <8a1e97c9-bd5-7473-6da8-2aa75198fbe8@google.com>
+        Mon, 7 Nov 2022 15:07:45 -0500
+Received: from EUR03-AM7-obe.outbound.protection.outlook.com (mail-am7eur03on2084.outbound.protection.outlook.com [40.107.105.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67A6427145;
+        Mon,  7 Nov 2022 12:07:44 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Lw/LRUSdBWmw+GZT4zmJiZ+UIHxYExoUpIszK/k7Q4oc/5LZLIrNZJARXC1mtCtB3CiEgPzT1SGHaAHBv12/kMa0bas3fMQTzXyUXm0vwAZTvHab3Fw1KGwNxzI4oj4lTbgTyqEywr6Y7jccWVIEbmhFRTFlSEg9pf5jfZmm8/pg2M5HcOzqtQONFE8ZRNgvqbG9UYiOH9nIGUgKdjwvNUCOy2+MrR57kaVF4kXqyjNadyk9eOVZFn9kbPqxSB/M/APJ/nsEA26fl2+2HIgrbwtFBW9pK0Lw0PszRzNsmn3B6SAfUHlY1A/vm0zOY2DEUsGbIBD5gR5oyQwSXu5X2g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=WE85osMLjxGzueznE2urcU1wSZD8BbjPoFiwWk1pn64=;
+ b=jmoXoi6R85H/MAD/oetLEXlklbT8WSPAUBq9swODT3JMS6/W4O88I3UDQulI8qj7xV2D4pa3n3YAxuM0vqsJEZtwwCf75/ZsbUfj4FLil88S40ztdT1/QlVnp0DW/I7hbts0r3feMLxin+JN6LRSBiZOIIeK9TUocBJLJo8/UxaJNJX3+t4EMMCbKcWMMSfyEi5dQG1b1iX/mQgbpvNUiYWidck+UlYAcWLZn9E5ZFO7mIAC5fHuHwFIEvru9Hd1HQKwL0xkapwsaIl3Yrxiq/JNmu2fDtCnEzLPm9Js99sLIA6zqLFZAu6WA5Bz6MBbPH+yLsEHSp1XCma+dLo/uA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=WE85osMLjxGzueznE2urcU1wSZD8BbjPoFiwWk1pn64=;
+ b=b9Uibpku+djmgM5frWDotZ5Y6P7vrJnsbyRASVvHWUbcSWaixcEWgZz4wEiGwjYsAF+eZwSbE9kJvL/1zWbYt6k8/yepv9XkxnH0mzPTeGJRL4O4bXHoDeVdFYo8L2cepV4ZUtTcF1rRuKad59tVTHLlkrYbq1iuRd/+AKH7swo=
+Received: from VI1PR04MB5136.eurprd04.prod.outlook.com (2603:10a6:803:55::19)
+ by VE1PR04MB7488.eurprd04.prod.outlook.com (2603:10a6:800:1b0::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.22; Mon, 7 Nov
+ 2022 20:07:41 +0000
+Received: from VI1PR04MB5136.eurprd04.prod.outlook.com
+ ([fe80::4a73:29eb:28e3:f66d]) by VI1PR04MB5136.eurprd04.prod.outlook.com
+ ([fe80::4a73:29eb:28e3:f66d%7]) with mapi id 15.20.5791.027; Mon, 7 Nov 2022
+ 20:07:41 +0000
+From:   Vladimir Oltean <vladimir.oltean@nxp.com>
+To:     Jakub Kicinski <kuba@kernel.org>
+CC:     Maxime Chevallier <maxime.chevallier@bootlin.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "thomas.petazzoni@bootlin.com" <thomas.petazzoni@bootlin.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        Luka Perkov <luka.perkov@sartura.hr>,
+        Robert Marko <robert.marko@sartura.hr>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>
+Subject: Re: [PATCH net-next v8 3/5] net: dsa: add out-of-band tagging
+ protocol
+Thread-Topic: [PATCH net-next v8 3/5] net: dsa: add out-of-band tagging
+ protocol
+Thread-Index: AQHY8HTAfetHoGxM5E6HcRPQNrr8s64vpgIAgAOw8wCAAFjYgIAADBEAgAAPngCAABzHAA==
+Date:   Mon, 7 Nov 2022 20:07:41 +0000
+Message-ID: <20221107200740.3zx7lwjtyei3fcqp@skbuf>
+References: <20221104174151.439008-1-maxime.chevallier@bootlin.com>
+ <20221104174151.439008-4-maxime.chevallier@bootlin.com>
+ <20221104200530.3bbe18c6@kernel.org> <20221107112736.mbdfflh6z37sijwg@skbuf>
+ <20221107084535.61317862@kernel.org> <20221107172846.y5nmi3plzd4wemmv@skbuf>
+ <20221107102440.1aecdbdb@kernel.org>
+In-Reply-To: <20221107102440.1aecdbdb@kernel.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: VI1PR04MB5136:EE_|VE1PR04MB7488:EE_
+x-ms-office365-filtering-correlation-id: f80f46e0-5a39-4e92-542e-08dac0fbb9f0
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: GnuToWVVzoCxsAuypBYiftg8sjYKQEGif4m40m55SAOrRBtVDs7zxHOy+W3i/Ca+W1MeLcOHdXpcdwU88/rfeJIhXF/XZ2Y5hIZBl6BAd03dTGS9DJmtPUfMyplYz+2LfJ/j4QCGdfpwYLOO8uHB9tZg6XgCWgyXl4Qk/J1PEC5U0vUA8/x0n1nclauaIEbiFGc9D9sS/5+YIRcOddFzceBN4H6uygPzv/ARdWvK1BAdflpMsNYouzmzM1kLLRDB1ApsXLJlhWkv0qFZ3k4v9tStY4WFio/jju6G32pgtKjYkneNoN//AFlZVYCwsSp0Cd4NZPYfAwzgNAfoDSpt+XcepBIruZiTd7aUI/OgBBPM/dEofg/O+SfchsZejRymeCxAwWPdMEijqZ0JXewDiTsgf43Gl9tE1His05ovUEBnyxri6ewNDSG0RJm4CzzQKNdQU7uNkXCHA1wsQpRf9fqmDgGknutn0RAmi1y4G1V4HGeIZDedPtLQ0bWo/XT//tUwAdhPENrTXtWf4zm8YnltLgJl7wmPkUCJFIqWaarp3aluPP3P1Au6frp9GjYn4VEKRPrOJqyntG0ePbsbsXdHqSoDVJTBdr9XMSSkwwphvoHEwf1HNK5+S+Fbgsa3dPv6Sp7sawPoqS6sOr32EVnCeOvRleSXtNL7Y/OuwDMnJaXstkgvMZEh6RrMpcvuums8XUQ5mzPQVIPJpRvJuYT0+XwFUgH9fVyvCwmgQyywuRnLH+wGHJxx/43bIvBfeq1HDAzFokSttwzHWxlQpCYSvkATLOJwNIfwmFdgv9w=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5136.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(4636009)(396003)(39860400002)(366004)(136003)(346002)(376002)(451199015)(6486002)(2906002)(478600001)(6512007)(9686003)(26005)(6506007)(966005)(8936002)(41300700001)(316002)(38100700002)(6916009)(76116006)(122000001)(91956017)(38070700005)(7416002)(66476007)(66946007)(66556008)(66446008)(4326008)(64756008)(8676002)(71200400001)(86362001)(33716001)(5660300002)(54906003)(44832011)(83380400001)(1076003)(186003);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?RZRx3bDR11CeuYhjBBNtgymULvgCewwNcnNCXBYw9SVdIfFDP7VLWlZJnOxL?=
+ =?us-ascii?Q?5MpXnJ9R0bYguTrxR28nnu9jh8FIcFVY1QMDaN873wgILsaGDfz/kTi78nVz?=
+ =?us-ascii?Q?AUICxsoFgaMS8uWlzgVurX7LeWfFDN8NmkxsEtaRivI8w7VojgBWImErO8D+?=
+ =?us-ascii?Q?vcTe4fsIOc/0csyiS5xbpLfs55zU+8S+ydat+Si5pCisqzSTZi/3kSyCiaLR?=
+ =?us-ascii?Q?lASksCW5r0b8CORWDCQFwXJPI0EoIlbRJFBaDbO9jGlq47PnXxKKi20wyl2C?=
+ =?us-ascii?Q?zbeyKhaS4ep8rbaUdRpkkf3cfoTQd/t3s5elHnYLQSEMjln8PRILunjkPt9K?=
+ =?us-ascii?Q?nrQT/Nh1WIHxas5zT1oUxTNRMn3M7xa4NIKPmIyHJ50KTs3UKoE3NmrNHs7u?=
+ =?us-ascii?Q?tyHVjfYrVgy2jJj0CF6si0ZaB8r07or6zk+c72MuYM3Jqwd2Go4hCdfEh8+D?=
+ =?us-ascii?Q?JleeaZ+IahyHSpsFSdMqfXnXV3/pXeztNSS810uuGUuAr+RqtigqwN+wgAB1?=
+ =?us-ascii?Q?CD7Qr1fxJipEpDECWDF18Ciz6g4zKtaLm7X9rl6ihsd8gXmysVMPf7p4HAg0?=
+ =?us-ascii?Q?3rmCBezY5XemaHM2wFPTI2egdSm49XDOZKY3ACbH+WCyUkPDJgNoHX/21au4?=
+ =?us-ascii?Q?nUn1U50wcAHg8v7V2LQ7LoRZLEKF84GAO7Du2FJWTh5mrIakMfQSoMG/rfaU?=
+ =?us-ascii?Q?zmY6Yi+tL6yNhp2Zo/M2u1HMwlPkBwAAIhL66EQfrhn3lPDn/tuPF4PddmAz?=
+ =?us-ascii?Q?rZnAechi2rSeINeDMXe4xyv+0E6r7tqxn5JU2TZcxVcP3OqVb8nShR9yWhSq?=
+ =?us-ascii?Q?eapfacbh+WLQQ0xN7tz9UoOj7v0Cj+KDrf9jtzwMqq5tWOTM1cSN5YOr/xlJ?=
+ =?us-ascii?Q?PzV5wyPkm3FSxXyd0a/9tR8hYR1vStylALuzK8VjCi2ii/RMgAEWBP9ih//o?=
+ =?us-ascii?Q?SVkK1kttZPsmXL6p8dfrxAgMLHBeBPOdMS1Ej/nuLzVqPDaPHNyxXAsHU/eG?=
+ =?us-ascii?Q?kSeNpmr7lAbB3qxZqvNEk8fLLLkU35FRe7IfjblBfDc78DP0VWgkDiOyncKh?=
+ =?us-ascii?Q?FY08LjftetDEw2R2bCWb2IxcYiVB9ncCftrFVlmgWylxn3qmsB3kvHRriTse?=
+ =?us-ascii?Q?SDA43MTfWwazOJOYikQ9StKIEwfWxxiO7mqwCBUS1I+e6awV6EzRMr1n03Jw?=
+ =?us-ascii?Q?082gDwioS2qEHzeYHPA9spUpsrwLgv2N/5lVliYUW3uwK5iGOEiMz5vvh5+L?=
+ =?us-ascii?Q?lPllFAjSDk1C8e82shxsiluTfgu1eF/FKEe3QDKtUukMDeJryqPjB7173IcR?=
+ =?us-ascii?Q?xkA/BXEDgYhJ6cpNmo6rU2QuJ3myBg+1bf0ZdsUmydYSkddWRuH75q61pa4g?=
+ =?us-ascii?Q?MWN2/69J7c4pQ8yIQ5LxnBunIuadKwaaC0Qs+0fKENg/P9Oh6jewwC2DlSHy?=
+ =?us-ascii?Q?BACoEpiTKzN8M8LKSFPI6JC8Md04OrEq8gxPHe7nU7o9J2D/19be0KRqbx7D?=
+ =?us-ascii?Q?xmLmksnH2gRMSU2HisfajDp+yrJsG5C9CPx1eVfb+DHVIJDSfdjUWc251hV2?=
+ =?us-ascii?Q?3J3l6CGlmxDu10/4rRNlz670causb+Xbr/kHCSqntO4+n0FROw7pj+oHmqgf?=
+ =?us-ascii?Q?Aw=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <8012C7D01477B54E82FB7EC29A44AB46@eurprd04.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8a1e97c9-bd5-7473-6da8-2aa75198fbe8@google.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5136.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f80f46e0-5a39-4e92-542e-08dac0fbb9f0
+X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Nov 2022 20:07:41.5049
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: sSmbRcmfEPnvHXHAdWOiT/8fhpPm65xx3bBfJ24C9C7OMEFcVSZSIDl8y5gpuuMIfNTFVD++knJpyWpXVJDZkg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VE1PR04MB7488
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -101,284 +142,132 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
-
-On Sun, Nov 06, 2022 at 01:06:19PM -0800, Hugh Dickins wrote:
-> lock_page_memcg (uncertain)
-> ---------------------------
-> Johannes, please help! Linus has got quite upset by lock_page_memcg(),
-> its calls from mm/rmap.c anyway, and most particularly by the way
-> in which it is called at the start of page_remove_rmap(), before
-> anyone's critical atomic_add_negative(), yet its use is to guarantee
-> the stability of page memcg while doing the stats updates, done only
-> when atomic_add_negative() says so.
-
-As you mentioned, the pte lock historically wasn't always taken on the
-move side. And so the reason lock_page_memcg() covers the mapcount
-update is that move_account() needs to atomically see either a) the
-page is mapped and counted, or b) unmapped and uncounted. If we lock
-after mapcountdec, move_account() could miss pending updates that need
-transferred, and it would break the scheme breaks thusly:
-
-memcg1->nr_mapped = 1
-memcg2->nr_mapped = 0
-
-page_remove_rmap:                              mem_cgroup_move_account():
-  if atomic_add_negative(page->mapcount):
-                                                 lock_page_memcg()
-                                                 if page->mapcount: // NOT TAKEN
-                                                   memcg1->nr_mapped--
-                                                   memcg2->nr_mapped++
-                                                 page->memcg = memcg2
-                                                 unlock_page_memcg()
-    lock_page_memcg()
-    page->memcg->nr_mapped-- // UNDERFLOW memcg2->nr_mapped
-    unlock_page_memcg()
-
-> I do have one relevant insight on this.  It (or its antecedents under
-> other names) date from the days when we did "reparenting" of memcg
-> charges from an LRU: and in those days the lock_page_memcg() before
-> mapcount adjustment was vital, to pair with the uses of folio_mapped()
-> or page_mapped() in mem_cgroup_move_account() - those "mapped" checks
-> are precisely around the stats which the rmap functions affect.
-> 
-> But nowadays mem_cgroup_move_account() is only called, with page table
-> lock held, on matching pages found in a task's page table: so its
-> "mapped" checks are redundant - I've sometimes thought in the past of
-> removing them, but held back, because I always have the notion (not
-> hope!) that "reparenting" may one day be brought back from the grave.
-> I'm too out of touch with memcg to know where that notion stands today.
+On Mon, Nov 07, 2022 at 10:24:40AM -0800, Jakub Kicinski wrote:
+> IIRC the skb extensions were initially proposed as a way to handle rare
+> exception packets (e.g. first packet of a connection-tracked flow in OvS
+> offloads). Also MPTCP but that's also edge / slow path (sorry MPTCP).
 >
-> I've gone through a multiverse of opinions on those lock_page_memcg()s
-> in the last day: I currently believe that Linus is right, that the
-> lock_page_memcg()s could and should be moved just before the stats
-> updates.  But I am not 100% certain of that - is there still some
-> reason why it's important that the page memcg at the instant of the
-> critical mapcount transition be kept unchanged until the stats are
-> updated?  I've tried running scenarios through my mind but given up.
+> Now the usage is spreading and I have to keep fighting to keep them out
+> of the datacenter production kernel I co-maintain.
+>
+> So, yeah, I hate them :)
 
-Okay, I think there are two options.
+To be fair, most people see CPU-terminated traffic on a DSA switch
+(i.e. what you see in net/dsa/tag_*.c) as slow path which needs no
+optimization. It's not that I condone this, but it's factually true.
+If it wasn't the case, then out of the drivers I maintain, a control
+packet wouldn't be delivered via SPI on SJA1105, and flow control
+wouldn't be broken on the CPU port of switches from the Ocelot family.
+And more importantly, software bridging between a switchdev and a
+non-switchdev port wouldn't be such an oversight for more than 3/4 of
+all switch drivers.
 
-- If we don't want to codify the pte lock requirement on the move
-  side, then moving the lock_page_memcg() like that would break the
-  locking scheme, as per above.
+Also, I didn't really get *why* you hate them, just that you do.
+Seems circular: slow =3D> hate; hate =3D> slow?
 
-- If we DO want to codify the pte lock requirement, we should just
-  remove the lock_page_memcg() altogether, as it's fully redundant.
+I don't think that skb->_skb_refdst is the hallmark of clean or simple
+designs either, a pointer and a refcount bit squashed into a single
+sk_buff field that is also in a union with 2 other things, and which is
+reused in other network layers for purposes that have nothing to do with
+L3 routing. Nope, sorry, this is highly optimized design at its finest,
+true, but I have no interest in doing mental gymnastics in order to
+maintain such a thing, just because some hardware manufacturer thought
+that it would be a smart idea to split up device ownership in this way,
+and neither build a 'switch with rings' nor a 'switch with tags', but
+rather 'a switch with somebody else's rings'. The people who built this
+monstrosity should step in and maintain the software architecture that's
+a direct consequence of their design choices. Otherwise I'm going to opt
+for the simplest thing to maintain that works. It's unfair to not care
+about software support for your own hardware enough to study frameworks
+beforehand, *and* to complain about performance.
 
-I'm leaning toward the second option. If somebody brings back
-reparenting they can bring the lock back along with it.
+> > > > The latter are more general; AFAIK they can be used between any lay=
+er
+> > > > and any other layer, like for example between RX and TX in the
+> > > > forwarding path.
+> > >
+> > > You can't be using lower-dev / upper-dev metadata across forwarding,
+> > > how would that ever work?
+> >
+> > What makes metadata dst's preferable to skb extensions?
+> >            ~~~~~~~~~~~~                 ~~~~~~~~~~~~~~
+> >            former                       latter
+> >
+> > I said: "The latter [aka skb extensions, not metadata dst's] are more g=
+eneral".
+> > I did not say that you can use metadata dst's across forwarding, quite
+> > the opposite.
+>
+> No, no, I'm asking how you'd use either. I'm questioning the entire
+> flow, not whether either mechanism can be used to fulfill it.
 
-[ If it's even still necessary by then.
+Well, we are probably talking about different things. I said that skb
+extensions are a more general concept which *allows* you to pass metadata
+from the iif to the oif. Metadata dst's don't. So what is the need for
+metadata dst's, if skb extensions can do what those can do, and more.
+Not that this use case is particularly relevant to DSA OOB. Just that I
+think a reasonable expectation would have been to make skb extensions
+more performant, than to introduce a parallel mechanism.
 
-  It's conceivable reparenting is brought back only for cgroup2, where
-  the race wouldn't matter because of the hierarchical stats. The
-  reparenting side wouldn't have to move page state to the parent -
-  it's already there. And whether rmap would see the dying child or
-  the parent doesn't matter much either: the parent will see the
-  update anyway, directly or recursively, and we likely don't care to
-  balance the books on a dying cgroup.
+> TBH I mostly have experience on the Tx side, given that on the Rx side
+> there is no queuing so the entire abstraction of tag implementation
+> being separate is not strictly necessary. But if you find that the Rx
+> doesn't work, and you really want the skb extensions - then, well,
+> I acquiesce. And hope the Meta prod kernel never needs OOB DSA :)
 
-  It's then just a matter of lifetime - which should be guaranteed
-  also, as long as the pte lock prevents an RCU quiescent state. ]
+I would never enable this feature, either. I would love not having to
+see it.
 
-So how about something like below?
+> > > > More importantly, what happens if a DSA switch is used together wit=
+h a
+> > > > SRIOV-capable DSA master which already uses METADATA_HW_PORT_MUX fo=
+r
+> > > > PF-VF communication? (if I understood the commit message of 3fcece1=
+2bc1b
+> > > > ("net: store port/representator id in metadata_dst") correctly)
+> > >
+> > > Let's be clear that the OOB metadata model only works if both upper a=
+nd
+> > > lower are aware of the metadata. In fact they are pretty tightly boun=
+d.
+> > > So chances of a mismatch are extremely low and theorizing about them =
+is
+> > > academic.
+> >
+> > Legally I'm not allowed to say too much, but let's say I've heard about
+> > something which makes the above not theoretical. Anyway, let's assume
+> > it's not a concern.
+>
+> But in that case the same vendor designs both ends, right?
 
-UNTESTED, just for illustration. This is cgroup1 code, which I haven't
-looked at too closely in a while. If you can't spot an immediate hole
-in it, I'd go ahead and test it and send a proper patch.
+Yes.
 
----
-From 88a32b1b5737630fb981114f6333d8fd057bd8e9 Mon Sep 17 00:00:00 2001
-From: Johannes Weiner <hannes@cmpxchg.org>
-Date: Mon, 7 Nov 2022 12:05:09 -0500
-Subject: [PATCH] mm: remove lock_page_memcg() from rmap
+> So there should be no conflict between the metadata assigned for reprs
+> vs dsa ports.
 
-rmap changes (mapping and unmapping) of a page currently take
-lock_page_memcg() to serialize 1) update of the mapcount and the
-cgroup mapped counter with 2) cgroup moving the page and updating the
-old cgroup and the new cgroup counters based on page_mapped().
+Can't say more, sorry.
 
-Before b2052564e66d ("mm: memcontrol: continue cache reclaim from
-offlined groups"), we used to reassign all pages that could be found
-on a cgroup's LRU list on deletion - something that rmap didn't
-naturally serialize against. Since that commit, however, the only
-pages that get moved are those mapped into page tables of a task
-that's being migrated. In that case, the pte lock is always held (and
-we know the page is mapped), which keeps rmap changes at bay already.
+> > > In general, I'm not sure if pretending this is DSA is not an unnecess=
+ary
+> > > complication which will end up hurting both ends of the equation.
+> >
+> > This is a valid point. We've refused wacky "not DSA, not switchdev"
+> > hardware before:
+> > https://lore.kernel.org/netdev/20201125232459.378-1-lukma@denx.de/
+> > There's also the option of doing what I did with ocelot/felix: a common
+> > switch lib and 2 distinct front-ends, one switchdev and one DSA.
+>
+> Exactly.
+>
+> > Not a lot of people seem to be willing to put that effort in, though.
+> > The imx28 patch set was eventually abandoned. I though I'd try a
+> > different approach this time. Idk, maybe it's a waste of time.
+>
+> Yeah, it's a balancing act. Please explore the metadata option, I think
+> most people jump to the skb extension because they don't know about
+> metadata. If you still want skb extension after, I'll look away.
 
-The additional lock_page_memcg() by rmap is redundant. Remove it.
-
-NOT-Signed-off-by: Johannes Weiner <hannes@cmpxchg.org>
----
- mm/memcontrol.c | 27 ++++++++++++---------------
- mm/rmap.c       | 30 ++++++++++++------------------
- 2 files changed, 24 insertions(+), 33 deletions(-)
-
-diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-index 2d8549ae1b30..f7716e9038e9 100644
---- a/mm/memcontrol.c
-+++ b/mm/memcontrol.c
-@@ -5666,7 +5666,10 @@ static struct page *mc_handle_file_pte(struct vm_area_struct *vma,
-  * @from: mem_cgroup which the page is moved from.
-  * @to:	mem_cgroup which the page is moved to. @from != @to.
-  *
-- * The caller must make sure the page is not on LRU (isolate_page() is useful.)
-+ * This function acquires folio_lock() and folio_lock_memcg(). The
-+ * caller must exclude all other possible ways of accessing
-+ * page->memcg, such as LRU isolation (to lock out isolation) and
-+ * having the page mapped and pte-locked (to lock out rmap).
-  *
-  * This function doesn't do "charge" to new cgroup and doesn't do "uncharge"
-  * from old cgroup.
-@@ -5685,6 +5688,7 @@ static int mem_cgroup_move_account(struct page *page,
- 	VM_BUG_ON(from == to);
- 	VM_BUG_ON_FOLIO(folio_test_lru(folio), folio);
- 	VM_BUG_ON(compound && !folio_test_large(folio));
-+	VM_WARN_ON_ONCE(!folio_mapped(folio));
- 
- 	/*
- 	 * Prevent mem_cgroup_migrate() from looking at
-@@ -5705,30 +5709,23 @@ static int mem_cgroup_move_account(struct page *page,
- 	folio_memcg_lock(folio);
- 
- 	if (folio_test_anon(folio)) {
--		if (folio_mapped(folio)) {
--			__mod_lruvec_state(from_vec, NR_ANON_MAPPED, -nr_pages);
--			__mod_lruvec_state(to_vec, NR_ANON_MAPPED, nr_pages);
--			if (folio_test_transhuge(folio)) {
--				__mod_lruvec_state(from_vec, NR_ANON_THPS,
--						   -nr_pages);
--				__mod_lruvec_state(to_vec, NR_ANON_THPS,
--						   nr_pages);
--			}
-+		__mod_lruvec_state(from_vec, NR_ANON_MAPPED, -nr_pages);
-+		__mod_lruvec_state(to_vec, NR_ANON_MAPPED, nr_pages);
-+		if (folio_test_transhuge(folio)) {
-+			__mod_lruvec_state(from_vec, NR_ANON_THPS, -nr_pages);
-+			__mod_lruvec_state(to_vec, NR_ANON_THPS, nr_pages);
- 		}
- 	} else {
- 		__mod_lruvec_state(from_vec, NR_FILE_PAGES, -nr_pages);
- 		__mod_lruvec_state(to_vec, NR_FILE_PAGES, nr_pages);
-+		__mod_lruvec_state(from_vec, NR_FILE_MAPPED, -nr_pages);
-+		__mod_lruvec_state(to_vec, NR_FILE_MAPPED, nr_pages);
- 
- 		if (folio_test_swapbacked(folio)) {
- 			__mod_lruvec_state(from_vec, NR_SHMEM, -nr_pages);
- 			__mod_lruvec_state(to_vec, NR_SHMEM, nr_pages);
- 		}
- 
--		if (folio_mapped(folio)) {
--			__mod_lruvec_state(from_vec, NR_FILE_MAPPED, -nr_pages);
--			__mod_lruvec_state(to_vec, NR_FILE_MAPPED, nr_pages);
--		}
--
- 		if (folio_test_dirty(folio)) {
- 			struct address_space *mapping = folio_mapping(folio);
- 
-diff --git a/mm/rmap.c b/mm/rmap.c
-index 2ec925e5fa6a..60c31375f274 100644
---- a/mm/rmap.c
-+++ b/mm/rmap.c
-@@ -1197,11 +1197,6 @@ void page_add_anon_rmap(struct page *page,
- 	bool compound = flags & RMAP_COMPOUND;
- 	bool first;
- 
--	if (unlikely(PageKsm(page)))
--		lock_page_memcg(page);
--	else
--		VM_BUG_ON_PAGE(!PageLocked(page), page);
--
- 	if (compound) {
- 		atomic_t *mapcount;
- 		VM_BUG_ON_PAGE(!PageLocked(page), page);
-@@ -1217,19 +1212,19 @@ void page_add_anon_rmap(struct page *page,
- 	if (first) {
- 		int nr = compound ? thp_nr_pages(page) : 1;
- 		/*
--		 * We use the irq-unsafe __{inc|mod}_zone_page_stat because
--		 * these counters are not modified in interrupt context, and
--		 * pte lock(a spinlock) is held, which implies preemption
--		 * disabled.
-+		 * We use the irq-unsafe __{inc|mod}_zone_page_stat
-+		 * because these counters are not modified in
-+		 * interrupt context, and pte lock(a spinlock) is
-+		 * held, which implies preemption disabled.
-+		 *
-+		 * The pte lock also stabilizes page->memcg wrt
-+		 * mem_cgroup_move_account().
- 		 */
- 		if (compound)
- 			__mod_lruvec_page_state(page, NR_ANON_THPS, nr);
- 		__mod_lruvec_page_state(page, NR_ANON_MAPPED, nr);
- 	}
- 
--	if (unlikely(PageKsm(page)))
--		unlock_page_memcg(page);
--
- 	/* address might be in next vma when migration races vma_adjust */
- 	else if (first)
- 		__page_set_anon_rmap(page, vma, address,
-@@ -1290,7 +1285,6 @@ void page_add_file_rmap(struct page *page,
- 	int i, nr = 0;
- 
- 	VM_BUG_ON_PAGE(compound && !PageTransHuge(page), page);
--	lock_page_memcg(page);
- 	if (compound && PageTransHuge(page)) {
- 		int nr_pages = thp_nr_pages(page);
- 
-@@ -1311,6 +1305,7 @@ void page_add_file_rmap(struct page *page,
- 		if (nr == nr_pages && PageDoubleMap(page))
- 			ClearPageDoubleMap(page);
- 
-+		/* The pte lock stabilizes page->memcg */
- 		if (PageSwapBacked(page))
- 			__mod_lruvec_page_state(page, NR_SHMEM_PMDMAPPED,
- 						nr_pages);
-@@ -1328,7 +1323,6 @@ void page_add_file_rmap(struct page *page,
- out:
- 	if (nr)
- 		__mod_lruvec_page_state(page, NR_FILE_MAPPED, nr);
--	unlock_page_memcg(page);
- 
- 	mlock_vma_page(page, vma, compound);
- }
-@@ -1356,6 +1350,7 @@ static void page_remove_file_rmap(struct page *page, bool compound)
- 		}
- 		if (!atomic_add_negative(-1, compound_mapcount_ptr(page)))
- 			goto out;
-+		/* The pte lock stabilizes page->memcg */
- 		if (PageSwapBacked(page))
- 			__mod_lruvec_page_state(page, NR_SHMEM_PMDMAPPED,
- 						-nr_pages);
-@@ -1423,8 +1418,6 @@ static void page_remove_anon_compound_rmap(struct page *page)
- void page_remove_rmap(struct page *page,
- 	struct vm_area_struct *vma, bool compound)
- {
--	lock_page_memcg(page);
--
- 	if (!PageAnon(page)) {
- 		page_remove_file_rmap(page, compound);
- 		goto out;
-@@ -1443,6 +1436,9 @@ void page_remove_rmap(struct page *page,
- 	 * We use the irq-unsafe __{inc|mod}_zone_page_stat because
- 	 * these counters are not modified in interrupt context, and
- 	 * pte lock(a spinlock) is held, which implies preemption disabled.
-+	 *
-+	 * The pte lock also stabilizes page->memcg wrt
-+	 * mem_cgroup_move_account().
- 	 */
- 	__dec_lruvec_page_state(page, NR_ANON_MAPPED);
- 
-@@ -1459,8 +1455,6 @@ void page_remove_rmap(struct page *page,
- 	 * faster for those pages still in swapcache.
- 	 */
- out:
--	unlock_page_memcg(page);
--
- 	munlock_vma_page(page, vma, compound);
- }
- 
--- 
-2.38.1
+Well, I guess I'm still not really convinced about metadata_dst, you're
+still not really convinced about skb extensions, but what we have in
+common is that "one switch lib, two front ends" is an alternative worth
+exploring as a design that's both clean and efficient? :)=
