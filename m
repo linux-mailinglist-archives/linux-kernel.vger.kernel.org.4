@@ -2,114 +2,326 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24A8461E8B8
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 03:55:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1652061E8C5
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 04:01:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230304AbiKGCzk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Nov 2022 21:55:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57978 "EHLO
+        id S230249AbiKGDBU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Nov 2022 22:01:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229995AbiKGCzh (ORCPT
+        with ESMTP id S230263AbiKGDBS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Nov 2022 21:55:37 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF3DDDF10;
-        Sun,  6 Nov 2022 18:55:36 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id k5so9303555pjo.5;
-        Sun, 06 Nov 2022 18:55:36 -0800 (PST)
+        Sun, 6 Nov 2022 22:01:18 -0500
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15210DF66
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Nov 2022 19:01:15 -0800 (PST)
+Received: by mail-ej1-x630.google.com with SMTP id ud5so26736467ejc.4
+        for <linux-kernel@vger.kernel.org>; Sun, 06 Nov 2022 19:01:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=aWOoCPraIwKfT3TJ2UGqA8BagIEiXV7VcCLfAdgHcas=;
-        b=h5CuqOt9UMbb8pINbacScKFwgI4Ki3Ph8JYaNPx52uZwSKkj6zmSJoWfBasg9PZN/y
-         AvHz7nbYC1DsbeUpFs/cgkfHaCBsW9iHbZ4pRMWI0K0snMMtFoDgtjpQvvOrCY79HMcH
-         clHQhYqiSrPbqDUqDai7SWgYVbChL6dcUearVCGuPinzZKT5TDUWO52kbGJYqGTCiWKQ
-         8zr+vGYFkY6K6tTrDMDktCPxTRcLpMvRZ4GO5g4UtQ/2shNCq5uyFxomNXoCeFKbhsEg
-         w8zi78RKDrpnWwvTtP/NFyWtA2BuEr06V9OuuMo92LdyOj8wBRvpACMtbzKRzkSntv3L
-         zs5A==
+        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=JlY2OstXwROXIDpT6VsXnJfzUqv1irH1Acsts2GGjpg=;
+        b=wH7KmpU7jVwmAquM9Wvk3ttImj9+lvZI8Rxq1i6YYsElC8cWksh48ZwROArAULlZ7C
+         tWe8M8ahyJHdHwo2Ck68YVw1aHJ/MLoYcQlrnfABVok8QpmzXxG1ffcBMZXcH6h5LAvm
+         0tBbIsqoRxCX/KnzpT+CYyHXfKhw4foQW6+Ax6UY2aF+XO4GKByYk/PtdVxGB2RT0Fbu
+         ysRYJ78VJd30TMAFhUzwFf/xZ7AJ2g1baQLCe9iqAVhA1Yqqkk67FLLNxduytkqwDB7v
+         JP5zJ/Gyoc7JfJxpc+R8WHDqVMk2NzGLLCgzvKh3qN6XuvMHVMMnDXEN4atLvrkjLInL
+         jZnA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=aWOoCPraIwKfT3TJ2UGqA8BagIEiXV7VcCLfAdgHcas=;
-        b=34i5EOIUj0SacUV+CcnKPQyMT+8edJDQrEDMLQq6CzOt4u1ShBSqoN9PLfw53uX8jR
-         lsIV2LaUnp6SJ/TMBnEWWfkcpbolXFZ62R46s/o/OmD7BjKPQh5O+M6jXFntv8t1vZbV
-         Zm+RlM610q0pDA5WLEn9vqI8T7oPinHAmQU0QThwmQVscpksH9CWkgxKJi9AEMT0rnwA
-         amjGr9aEnSBItDa6h5JNrrLTPIZ5wB3jboKz8YnTHO5nMBNCqYs7Fg+k5vNnVNiAm8AH
-         gL57tt6mq68VyMFYWtyfV22lZ9uUFOYpcW9cu8sqkuqXMoq8odNKQvV3QbrZSau1OUl7
-         ISGw==
-X-Gm-Message-State: ANoB5pnkrYDi12+mLLquCyE1iob7a7+TnTd5pZbx8DPk6TYnfWxIjLAI
-        RFbs3Yd6O5sr58TYJnYDf4w=
-X-Google-Smtp-Source: AA0mqf5jDapJui4VBzarerUQi6R4XZ5/ZzYjPi4B3w2KuxTJKcAjPn9b+PpNdbqfiFQ2iY9N1B0xCA==
-X-Received: by 2002:a17:902:bc49:b0:188:760f:d843 with SMTP id t9-20020a170902bc4900b00188760fd843mr8958398plz.111.1667789736161;
-        Sun, 06 Nov 2022 18:55:36 -0800 (PST)
-Received: from [192.168.43.80] (subs02-180-214-232-14.three.co.id. [180.214.232.14])
-        by smtp.gmail.com with ESMTPSA id v126-20020a626184000000b00565cf8c52c8sm3315179pfb.174.2022.11.06.18.55.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 06 Nov 2022 18:55:35 -0800 (PST)
-Message-ID: <aebae1eb-ed56-00a9-101f-c4e5ab0af91a@gmail.com>
-Date:   Mon, 7 Nov 2022 09:55:31 +0700
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=JlY2OstXwROXIDpT6VsXnJfzUqv1irH1Acsts2GGjpg=;
+        b=t4AEdHWRuQ/5ne9M1NSVYoMnrCumWCqRDAzmebUSqlfrVxQYFsqfZwj3glvY9a4Yl8
+         R5pK61HaOLB1Ql5UZLOQn9pwoo8gqLdurb4eKEHGONAFlfPcIKuJ8/10BEEQV/D/vb3n
+         iar+oyq4+RFqtrTU/Ot44aSvE2BIoJIx8x2jrPtKnOo6HYQC5NekJt17wUaRq55b9lqT
+         FpRataHiq0j3Xbp4O4IV/YTC129dTu6iXIchxWln0pD9zxowgigcuCsDx7bufFvdKk8n
+         AV7EH/lEkN2CSifEkbAqpdRh/YnFNflr+TeiIExfyzXCwTtAIIaKPx3ThAVRNaw4rA7Y
+         Rn3Q==
+X-Gm-Message-State: ACrzQf2QRyPVcskvLfxbIIusWwE9KQjKAvhgn7XVywswzLKfRhB5ZwG3
+        c+wa7+aMGLTBndkG4LQIWB097189LT/3dw08z2Xbgw==
+X-Google-Smtp-Source: AMsMyM6JBSnXu9W+mu2GHeFQ3pcqBebFarC8BvVQZEanz3Zu4tMlcAMijwZHL0jNoTpD/MpfGKS3dVLLizMbV1pDGog=
+X-Received: by 2002:a17:906:dac8:b0:741:545b:796a with SMTP id
+ xi8-20020a170906dac800b00741545b796amr45605430ejb.240.1667790073283; Sun, 06
+ Nov 2022 19:01:13 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH] Documentation: riscv: tableize memory layout
-To:     Conor Dooley <conor@kernel.org>
-Cc:     linux-doc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+References: <20221102231911.3107438-1-seanjc@google.com> <20221102231911.3107438-10-seanjc@google.com>
+In-Reply-To: <20221102231911.3107438-10-seanjc@google.com>
+From:   Anup Patel <anup@brainfault.org>
+Date:   Mon, 7 Nov 2022 08:31:01 +0530
+Message-ID: <CAAhSdy10dC+_S5PZ=QziYqVJKHh6Gi6D0H0C7GSsxWdFVrTQjA@mail.gmail.com>
+Subject: Re: [PATCH 09/44] KVM: Drop arch hardware (un)setup hooks
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
         Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
         Albert Ou <aou@eecs.berkeley.edu>,
-        Alexandre Ghiti <alexandre.ghiti@canonical.com>
-References: <20221106100239.53704-1-bagasdotme@gmail.com>
- <Y2eY+LulWaKm7MHl@spud>
-Content-Language: en-US
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <Y2eY+LulWaKm7MHl@spud>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        Eric Farman <farman@linux.ibm.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Atish Patra <atishp@atishpatra.org>,
+        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Isaku Yamahata <isaku.yamahata@intel.com>,
+        Fabiano Rosas <farosas@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Chao Gao <chao.gao@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Yuan Yao <yuan.yao@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/6/22 18:22, Conor Dooley wrote:
->> +   +------------------+---------+------------------+---------+----------------------------------------------------------+
->> +   |    Start addr    | Offset  |     End addr     |  Size   | VM area description                                      |
->> +   +==================+=========+==================+=========+==========================================================+
->> +   | 0000000000000000 |    0    | 0000003fffffffff | 256 GB  | user-space virtual memory, different per mm              |
->> +   +------------------+---------+------------------+---------+----------------------------------------------------------+
->> +   | 0000004000000000 | +256 GB | ffffffbfffffffff | ~16M TB | ... huge, almost 64 bits wide hole of non-canonical      |
->> +   |                  |         |                  |         | virtual memory addresses up to the -256 GB               |
->> +   |                  |         |                  |         | starting offset of kernel mappings.                      |
->> +   +------------------+---------+------------------+---------+----------------------------------------------------------+
->> +   |                             Kernel-space virtual memory, shared between all processes:                             |
->> +   +------------------+---------+------------------+---------+----------------------------------------------------------+
->> +   | ffffffc6fee00000 | -228 GB | ffffffc6feffffff | 2 MB    | fixmap                                                   |
->> +   +------------------+---------+------------------+---------+----------------------------------------------------------+
->> +   | ffffffc6ff000000 | -228 GB | ffffffc6ffffffff | 16 MB   | PCI io                                                   |
->> +   +------------------+---------+------------------+---------+----------------------------------------------------------+
->                                                         ^
-> Will these numbers remain right-aligned in the formatted doc? They were
-> aligned before in the text form & no longer appear to be.
-> 
+On Thu, Nov 3, 2022 at 4:49 AM Sean Christopherson <seanjc@google.com> wrote:
+>
+> Drop kvm_arch_hardware_setup() and kvm_arch_hardware_unsetup() now that
+> all implementations are nops.
+>
+> No functional change intended.
+>
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
 
-These numbers also become wrapped in their cells.
+For KVM RISC-V:
+Acked-by: Anup Patel <anup@brainfault.org>
 
-However, in order to fix alignment of these, custom CSS is needed, similar
-to one in StackOverflow [1].
+Thanks,
+Anup
 
-[1]: https://stackoverflow.com/a/7351383
-
-Thanks.
-
--- 
-An old man doll... just what I always wanted! - Clara
-
+> ---
+>  arch/arm64/include/asm/kvm_host.h   |  1 -
+>  arch/arm64/kvm/arm.c                |  5 -----
+>  arch/mips/include/asm/kvm_host.h    |  1 -
+>  arch/mips/kvm/mips.c                |  5 -----
+>  arch/powerpc/include/asm/kvm_host.h |  1 -
+>  arch/powerpc/kvm/powerpc.c          |  5 -----
+>  arch/riscv/include/asm/kvm_host.h   |  1 -
+>  arch/riscv/kvm/main.c               |  5 -----
+>  arch/s390/kvm/kvm-s390.c            | 10 ----------
+>  arch/x86/kvm/x86.c                  | 10 ----------
+>  include/linux/kvm_host.h            |  2 --
+>  virt/kvm/kvm_main.c                 |  7 -------
+>  12 files changed, 53 deletions(-)
+>
+> diff --git a/arch/arm64/include/asm/kvm_host.h b/arch/arm64/include/asm/kvm_host.h
+> index 45e2136322ba..5d5a887e63a5 100644
+> --- a/arch/arm64/include/asm/kvm_host.h
+> +++ b/arch/arm64/include/asm/kvm_host.h
+> @@ -859,7 +859,6 @@ static inline bool kvm_system_needs_idmapped_vectors(void)
+>
+>  void kvm_arm_vcpu_ptrauth_trap(struct kvm_vcpu *vcpu);
+>
+> -static inline void kvm_arch_hardware_unsetup(void) {}
+>  static inline void kvm_arch_sync_events(struct kvm *kvm) {}
+>  static inline void kvm_arch_sched_in(struct kvm_vcpu *vcpu, int cpu) {}
+>
+> diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
+> index 94d33e296e10..2ee729f54ce0 100644
+> --- a/arch/arm64/kvm/arm.c
+> +++ b/arch/arm64/kvm/arm.c
+> @@ -63,11 +63,6 @@ int kvm_arch_vcpu_should_kick(struct kvm_vcpu *vcpu)
+>         return kvm_vcpu_exiting_guest_mode(vcpu) == IN_GUEST_MODE;
+>  }
+>
+> -int kvm_arch_hardware_setup(void *opaque)
+> -{
+> -       return 0;
+> -}
+> -
+>  int kvm_arch_check_processor_compat(void *opaque)
+>  {
+>         return 0;
+> diff --git a/arch/mips/include/asm/kvm_host.h b/arch/mips/include/asm/kvm_host.h
+> index 5cedb28e8a40..28f0ba97db71 100644
+> --- a/arch/mips/include/asm/kvm_host.h
+> +++ b/arch/mips/include/asm/kvm_host.h
+> @@ -888,7 +888,6 @@ extern unsigned long kvm_mips_get_ramsize(struct kvm *kvm);
+>  extern int kvm_vcpu_ioctl_interrupt(struct kvm_vcpu *vcpu,
+>                              struct kvm_mips_interrupt *irq);
+>
+> -static inline void kvm_arch_hardware_unsetup(void) {}
+>  static inline void kvm_arch_sync_events(struct kvm *kvm) {}
+>  static inline void kvm_arch_free_memslot(struct kvm *kvm,
+>                                          struct kvm_memory_slot *slot) {}
+> diff --git a/arch/mips/kvm/mips.c b/arch/mips/kvm/mips.c
+> index a25e0b73ee70..af29490d9740 100644
+> --- a/arch/mips/kvm/mips.c
+> +++ b/arch/mips/kvm/mips.c
+> @@ -135,11 +135,6 @@ void kvm_arch_hardware_disable(void)
+>         kvm_mips_callbacks->hardware_disable();
+>  }
+>
+> -int kvm_arch_hardware_setup(void *opaque)
+> -{
+> -       return 0;
+> -}
+> -
+>  int kvm_arch_check_processor_compat(void *opaque)
+>  {
+>         return 0;
+> diff --git a/arch/powerpc/include/asm/kvm_host.h b/arch/powerpc/include/asm/kvm_host.h
+> index caea15dcb91d..5d2c3a487e73 100644
+> --- a/arch/powerpc/include/asm/kvm_host.h
+> +++ b/arch/powerpc/include/asm/kvm_host.h
+> @@ -877,7 +877,6 @@ struct kvm_vcpu_arch {
+>  #define __KVM_HAVE_CREATE_DEVICE
+>
+>  static inline void kvm_arch_hardware_disable(void) {}
+> -static inline void kvm_arch_hardware_unsetup(void) {}
+>  static inline void kvm_arch_sync_events(struct kvm *kvm) {}
+>  static inline void kvm_arch_memslots_updated(struct kvm *kvm, u64 gen) {}
+>  static inline void kvm_arch_flush_shadow_all(struct kvm *kvm) {}
+> diff --git a/arch/powerpc/kvm/powerpc.c b/arch/powerpc/kvm/powerpc.c
+> index b850b0efa201..74ea5687ecbc 100644
+> --- a/arch/powerpc/kvm/powerpc.c
+> +++ b/arch/powerpc/kvm/powerpc.c
+> @@ -441,11 +441,6 @@ int kvm_arch_hardware_enable(void)
+>         return 0;
+>  }
+>
+> -int kvm_arch_hardware_setup(void *opaque)
+> -{
+> -       return 0;
+> -}
+> -
+>  int kvm_arch_check_processor_compat(void *opaque)
+>  {
+>         return kvmppc_core_check_processor_compat();
+> diff --git a/arch/riscv/include/asm/kvm_host.h b/arch/riscv/include/asm/kvm_host.h
+> index dbbf43d52623..8c771fc4f5d2 100644
+> --- a/arch/riscv/include/asm/kvm_host.h
+> +++ b/arch/riscv/include/asm/kvm_host.h
+> @@ -229,7 +229,6 @@ struct kvm_vcpu_arch {
+>         bool pause;
+>  };
+>
+> -static inline void kvm_arch_hardware_unsetup(void) {}
+>  static inline void kvm_arch_sync_events(struct kvm *kvm) {}
+>  static inline void kvm_arch_sched_in(struct kvm_vcpu *vcpu, int cpu) {}
+>
+> diff --git a/arch/riscv/kvm/main.c b/arch/riscv/kvm/main.c
+> index df2d8716851f..a146fa0ce4d2 100644
+> --- a/arch/riscv/kvm/main.c
+> +++ b/arch/riscv/kvm/main.c
+> @@ -25,11 +25,6 @@ int kvm_arch_check_processor_compat(void *opaque)
+>         return 0;
+>  }
+>
+> -int kvm_arch_hardware_setup(void *opaque)
+> -{
+> -       return 0;
+> -}
+> -
+>  int kvm_arch_hardware_enable(void)
+>  {
+>         unsigned long hideleg, hedeleg;
+> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
+> index 1aaee15211f2..7fcd2d3b3558 100644
+> --- a/arch/s390/kvm/kvm-s390.c
+> +++ b/arch/s390/kvm/kvm-s390.c
+> @@ -321,16 +321,6 @@ static struct notifier_block kvm_clock_notifier = {
+>         .notifier_call = kvm_clock_sync,
+>  };
+>
+> -int kvm_arch_hardware_setup(void *opaque)
+> -{
+> -       return 0;
+> -}
+> -
+> -void kvm_arch_hardware_unsetup(void)
+> -{
+> -
+> -}
+> -
+>  static void allow_cpu_feat(unsigned long nr)
+>  {
+>         set_bit_inv(nr, kvm_s390_available_cpu_feat);
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index 80ee580a9cd4..40d4bfaa17a4 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -11985,16 +11985,6 @@ void kvm_arch_hardware_disable(void)
+>         drop_user_return_notifiers();
+>  }
+>
+> -int kvm_arch_hardware_setup(void *opaque)
+> -{
+> -       return 0;
+> -}
+> -
+> -void kvm_arch_hardware_unsetup(void)
+> -{
+> -
+> -}
+> -
+>  int kvm_arch_check_processor_compat(void *opaque)
+>  {
+>         struct cpuinfo_x86 *c = &cpu_data(smp_processor_id());
+> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+> index 18592bdf4c1b..9b52bd40be56 100644
+> --- a/include/linux/kvm_host.h
+> +++ b/include/linux/kvm_host.h
+> @@ -1447,8 +1447,6 @@ static inline void kvm_create_vcpu_debugfs(struct kvm_vcpu *vcpu) {}
+>
+>  int kvm_arch_hardware_enable(void);
+>  void kvm_arch_hardware_disable(void);
+> -int kvm_arch_hardware_setup(void *opaque);
+> -void kvm_arch_hardware_unsetup(void);
+>  int kvm_arch_check_processor_compat(void *opaque);
+>  int kvm_arch_vcpu_runnable(struct kvm_vcpu *vcpu);
+>  bool kvm_arch_vcpu_in_kernel(struct kvm_vcpu *vcpu);
+> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> index f592dd4ce8f2..27ce263a80e4 100644
+> --- a/virt/kvm/kvm_main.c
+> +++ b/virt/kvm/kvm_main.c
+> @@ -5843,10 +5843,6 @@ int kvm_init(void *opaque, unsigned vcpu_size, unsigned vcpu_align,
+>         if (r)
+>                 return r;
+>
+> -       r = kvm_arch_hardware_setup(opaque);
+> -       if (r < 0)
+> -               goto err_hw_setup;
+> -
+>         if (!zalloc_cpumask_var(&cpus_hardware_enabled, GFP_KERNEL)) {
+>                 r = -ENOMEM;
+>                 goto err_hw_enabled;
+> @@ -5939,8 +5935,6 @@ int kvm_init(void *opaque, unsigned vcpu_size, unsigned vcpu_align,
+>  out_free_2:
+>         free_cpumask_var(cpus_hardware_enabled);
+>  err_hw_enabled:
+> -       kvm_arch_hardware_unsetup();
+> -err_hw_setup:
+>         kvm_arch_exit();
+>         return r;
+>  }
+> @@ -5969,7 +5963,6 @@ void kvm_exit(void)
+>         on_each_cpu(hardware_disable_nolock, NULL, 1);
+>         kvm_irqfd_exit();
+>         free_cpumask_var(cpus_hardware_enabled);
+> -       kvm_arch_hardware_unsetup();
+>         kvm_arch_exit();
+>  }
+>  EXPORT_SYMBOL_GPL(kvm_exit);
+> --
+> 2.38.1.431.g37b22c650d-goog
+>
