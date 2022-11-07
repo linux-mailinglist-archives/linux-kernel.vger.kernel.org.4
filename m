@@ -2,58 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 362CD61EEA1
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 10:19:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A176261EEA9
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 10:20:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231520AbiKGJTs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 04:19:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47176 "EHLO
+        id S231433AbiKGJUi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 04:20:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230340AbiKGJTp (ORCPT
+        with ESMTP id S231308AbiKGJUd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 04:19:45 -0500
+        Mon, 7 Nov 2022 04:20:33 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB5466477;
-        Mon,  7 Nov 2022 01:19:44 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A117FF5AF;
+        Mon,  7 Nov 2022 01:20:32 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6ACB960F46;
-        Mon,  7 Nov 2022 09:19:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2455C433D6;
-        Mon,  7 Nov 2022 09:19:40 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3D89B60F69;
+        Mon,  7 Nov 2022 09:20:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AE90C433D6;
+        Mon,  7 Nov 2022 09:20:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667812783;
-        bh=6Nx7JDwmY/apf1WMX6YISTNpp3UAtiSL9C8XwycAYTU=;
+        s=k20201202; t=1667812831;
+        bh=IohQRHyGWeft5/zFcaoSpTCgQ1fp32d/mBaMOehI0iQ=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lO0/lhqbioWDTQ/5vtK84wlT34ZgObkWs9sKdEuTkY8BNneqaclvfW3i3qsuPEXyp
-         bMl6PpxFyQU1l8pfYzdAthVgWTQVgd1CUFOuom31C2owGUBUbctk9cmQRQHwv/o6Wj
-         +Cdh7jISPD2SWN4GZfCuaoIIvUFrFZ5pVw0un7uhoygpZLLfMx2C75dwYMDpFBQObW
-         UMMXML2+UoRUX1Fujk1WhMTrGBlMX45qcOEFuc5IxIvixDO0aBwE3q3J7ZYPVYty9H
-         g8ZPR9if40EI8Dx9dZaJhGZQRcMbR2olZ7MejPt72Z9j55X+gOOVnshEJEHU0Ul3kN
-         r+LCCU5RQBkpw==
-Date:   Mon, 7 Nov 2022 09:19:36 +0000
+        b=X3ce1B0+BJ5nN98fzPunOzYTXdhR+jiBqHcXII6WIR/xcqhD+X1MF8Kpsh9f8xuxF
+         JRZc3DNGQY7stIqdNJqut73aXN/1vNFbS8LbdHyahl27S4CDHobC/r3YrMTQPd/0yr
+         WnoV8NTlcnoY/lSpkBvhPwiHA3/vKBG47w1N6KVuVr6u1oZXXfRmJcyfTO7M6qTkuo
+         Cf6OLCPqMuoCT/TZn/iT3N2+kxxodIkvBUo4XOvAeY9Q0pyT0C4rdQA0wb/AGqOxWV
+         H7FrvsjHkYDBrXF74mbTIs40HiyREhCnq/WNgaiJ2Tb9nPw/MG/FWvgfU64Un4T6J+
+         hKDfu+ukG64fA==
+Date:   Mon, 7 Nov 2022 09:20:26 +0000
 From:   Lee Jones <lee@kernel.org>
-To:     Luca Weiss <luca@z3ntu.xyz>
-Cc:     linux-arm-msm@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
+To:     Jonathan =?iso-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>
+Cc:     linux-spi@vger.kernel.org, openbmc@lists.ozlabs.org,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Kiran Gunda <kgunda@codeaurora.org>,
-        dri-devel@lists.freedesktop.org, linux-leds@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/2] dt-bindings: backlight: qcom-wled: Add PMI8950
- compatible
-Message-ID: <Y2jNqChLjixM9grL@google.com>
-References: <20221101161801.1058969-1-luca@z3ntu.xyz>
+        Mark Brown <broonie@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org
+Subject: Re: [PATCH 4/8] dt-bindings: mfd: syscon: Add nuvoton,wpcm450-shm
+Message-ID: <Y2jN2s9hfVBNc6Y5@google.com>
+References: <20221105185911.1547847-1-j.neuschaefer@gmx.net>
+ <20221105185911.1547847-5-j.neuschaefer@gmx.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221101161801.1058969-1-luca@z3ntu.xyz>
+In-Reply-To: <20221105185911.1547847-5-j.neuschaefer@gmx.net>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -63,16 +60,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 01 Nov 2022, Luca Weiss wrote:
+On Sat, 05 Nov 2022, Jonathan Neuschäfer wrote:
 
-> Document the compatible for the wled block found in PMI8950.
+> The Shared Memory interface (SHM) is a piece of hardware in Nuvoton BMCs
+> that allows a host processor (connected via LPC) to access flash and RAM
+> that belong to the BMC. The SHM includes a register block accessible from
+> the BMC side.
 > 
-> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+> Signed-off-by: Jonathan Neuschäfer <j.neuschaefer@gmx.net>
 > ---
-> Changes since v2:
-> * New patch
-> 
->  Documentation/devicetree/bindings/leds/backlight/qcom-wled.yaml | 1 +
+>  Documentation/devicetree/bindings/mfd/syscon.yaml | 1 +
 >  1 file changed, 1 insertion(+)
 
 Applied, thanks.
