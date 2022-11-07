@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F80461EB70
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 08:15:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DA1F61EB79
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 08:15:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231264AbiKGHP0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 02:15:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58064 "EHLO
+        id S231400AbiKGHPj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 02:15:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231146AbiKGHPR (ORCPT
+        with ESMTP id S231211AbiKGHPU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 02:15:17 -0500
-Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21C0113D13;
-        Sun,  6 Nov 2022 23:15:16 -0800 (PST)
-Received: by mail-qk1-x72e.google.com with SMTP id g10so6681234qkl.6;
-        Sun, 06 Nov 2022 23:15:16 -0800 (PST)
+        Mon, 7 Nov 2022 02:15:20 -0500
+Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5501513D3F;
+        Sun,  6 Nov 2022 23:15:17 -0800 (PST)
+Received: by mail-qv1-xf30.google.com with SMTP id i12so7555431qvs.2;
+        Sun, 06 Nov 2022 23:15:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=8XNx+rgJgduq7rCvuRhTlcngQGfS0jYPWbvWIVqx1qM=;
-        b=fkfG9ot2ZJgYRbjgmfQajtUOKmevc7ckdcsndCM1TmZAPhW6j+EysoQPGDBwIJRxgq
-         NE3yWYDf/T5yPZRzXdSOGT+vS4p83A0LAfW44V+LJFZgK9HfZBlMxEsYoYeWeMyXy4KR
-         Qneape2Fqn0VRYB72SmDoFFfjTxZNdaDxjcD54Ie9/QNzwfLHy0GVt7fFqgpiWOfVIiO
-         2/ZnikDSmoABsfIoxJ0p34AQIgAg6jtB3imD0BYedVnBBB1qfS1wnApFT2H7f1Kd0Gti
-         Xqzt60nux9KRPbQAhfoM1GMffCVsXXi2CEJKKCPjXbrYLSbVeV2PowzLNHs5MP37kAl2
-         UIMw==
+        bh=Rujbv6bKgQOEyHFPYldtrR7Cpoq25BGO11nL2f1oX38=;
+        b=iSLvidCkZqtoV2Tl9IDn05Yg1hwAwzWvcwIQeK0ZGCShauUXjF5rgGeEORYUiFhhnB
+         cLOmsGvH388K/cokMP6/QjxfakJbvxydeqYSe6SsWhZ8l1bzmB9SbaiRk5J8iF+1CLXW
+         tW0a0bOuFM1VUyfJIYPC3tLdNssLw3phjq62I6MuKDwCZNhq0EYk6rwiewoxoluBBScq
+         tQsju5Z/c+6BMLtPIXMGiMD2LLWFaV+P3NtdWmcirSFtxYof35CNGmN6CaBXt5YVmNLC
+         qJLO6Rsbdqop1rw7cwM4ZCnvzQVmxyLnVtIKXWccwRiw05E9L+riGL9QrPnh6+tWkEG5
+         b8ig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=8XNx+rgJgduq7rCvuRhTlcngQGfS0jYPWbvWIVqx1qM=;
-        b=ie7sg38fc+QZo7klBrQEAgQaFAQz6opW2NGnKb4Q89NabrPOLlHMaEJlE3ndDsKFjN
-         aXF/IZvEOIWFMtLj1mY66RxetuoReWfy8fS7qDaSA45QXcxOYXwhbImcAso1H5JUlgLi
-         rVB4O7G7+dJUj5WV54LqTWY0bpaUuRz7gtBhQxJOIZP3Wuixb+5sU0icGeUmOfIXBzo+
-         3QBYC+qu+03usCR0vD7Hwq+jeIimoYfftWC9WbTCR2/x9N0uqC/Amni3gEAwNyNw1UVD
-         3k7fMHO6OFPoQGm/Zgj5nAYBGHG3v/x5Rtyrwx3VWirjRWYwiSi/dtoDFTAvu8Lsmv99
-         lNXg==
-X-Gm-Message-State: ACrzQf27dUlypD50525aRbXObid7qN5Qi8THERjnRBMdnSWrTWdm3D9C
-        aQiLjeeqZUR4xnVT/xo++nI=
-X-Google-Smtp-Source: AMsMyM77e+VuZnZM7E7UgYqBiy6cpufDm9treTU+akYNQtE5dR3s7GTF4Q0lLO9teekpOEtECVAWow==
-X-Received: by 2002:a05:620a:2b45:b0:6fa:509f:d0c2 with SMTP id dp5-20020a05620a2b4500b006fa509fd0c2mr21882138qkb.302.1667805315213;
-        Sun, 06 Nov 2022 23:15:15 -0800 (PST)
+        bh=Rujbv6bKgQOEyHFPYldtrR7Cpoq25BGO11nL2f1oX38=;
+        b=uwKqv4zliM2o17TXwuxjdbfRZ4KBsS3DK/P+Na+PKAKDMAigIMiCu0Nt0tREZPgKs+
+         ZyUPHL2G9+QjB/Qus06k0oYGj920VbxPzSl/jyk+Ei1Ku59QY5GGuN1jlJDL8UyLlRHp
+         4hJFdnCjWzvG0SrQRTSROJnfpyTeblJUMG8zvO7mer/E8TmVeptUPVA0OWJYKIkhYojf
+         LxcuemBDGOps4uroKey+gnxvC0SP3CNipMhB+E9HpLtKeMfUs8jr8AuTcEwDsxPxbp1E
+         PCygaMQQBOPjCpfvCrhhBIS35CFb3RGVbCHAsafOsR1OA6BRmFu2XMXxpF7Bn+kS9LH/
+         N40g==
+X-Gm-Message-State: ACrzQf0nhW02ourOmEVUykHC6kbu/AYwsf/HsTRe07R1ry5xjcVTYZzd
+        zCqRDjhO7mEbvY523g8kxc4=
+X-Google-Smtp-Source: AMsMyM6KsjhgOm4uFsTfXn9s49un2+OpakxWD2QhahyM3daQtCGIEYlmtawlYkVmQj+Da5+ugT01Xg==
+X-Received: by 2002:a05:6214:5015:b0:4bb:5ce1:88c0 with SMTP id jo21-20020a056214501500b004bb5ce188c0mr42492042qvb.15.1667805316339;
+        Sun, 06 Nov 2022 23:15:16 -0800 (PST)
 Received: from jesse-desktop.jtp-bos.lab (pool-108-26-185-122.bstnma.fios.verizon.net. [108.26.185.122])
-        by smtp.gmail.com with ESMTPSA id br8-20020a05620a460800b006cf38fd659asm6318428qkb.103.2022.11.06.23.15.14
+        by smtp.gmail.com with ESMTPSA id br8-20020a05620a460800b006cf38fd659asm6318428qkb.103.2022.11.06.23.15.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 06 Nov 2022 23:15:14 -0800 (PST)
+        Sun, 06 Nov 2022 23:15:16 -0800 (PST)
 From:   Jesse Taube <mr.bossman075@gmail.com>
 X-Google-Original-From: Jesse Taube <Mr.Bossman075@gmail.com>
 To:     linux-imx@nxp.com
@@ -62,10 +62,11 @@ Cc:     robh+dt@kernel.org, sboyd@kernel.org, shawnguo@kernel.org,
         Mr.Bossman075@gmail.com, giulio.benetti@benettiengineering.com,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-gpio@vger.kernel.org, linux-serial@vger.kernel.org
-Subject: [PATCH v1 2/7] dt-bindings: pinctrl: Fix file path for pinfunc include
-Date:   Mon,  7 Nov 2022 02:15:06 -0500
-Message-Id: <20221107071511.2764628-3-Mr.Bossman075@gmail.com>
+        linux-gpio@vger.kernel.org, linux-serial@vger.kernel.org,
+        Krzysztof Kozlowski <krzk@kernel.org>
+Subject: [PATCH v1 3/7] dt-bindings: timer: gpt: Add i.MXRT compatible Documentation
+Date:   Mon,  7 Nov 2022 02:15:07 -0500
+Message-Id: <20221107071511.2764628-4-Mr.Bossman075@gmail.com>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20221107071511.2764628-1-Mr.Bossman075@gmail.com>
 References: <20221107071511.2764628-1-Mr.Bossman075@gmail.com>
@@ -81,27 +82,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reference to pinfunc.h was wrong. Fix it.
+Both the i.MXRT1170 and 1050 have the same GPT timer as "fsl,imx6dl-gpt"
+Add i.MXRT to the compatible list.
 
 Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
+Acked-by: Krzysztof Kozlowski <krzk@kernel.org>
 ---
- Documentation/devicetree/bindings/pinctrl/fsl,imxrt1050.yaml | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ Documentation/devicetree/bindings/timer/fsl,imxgpt.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/pinctrl/fsl,imxrt1050.yaml b/Documentation/devicetree/bindings/pinctrl/fsl,imxrt1050.yaml
-index 1278f7293560..db5fe66ad873 100644
---- a/Documentation/devicetree/bindings/pinctrl/fsl,imxrt1050.yaml
-+++ b/Documentation/devicetree/bindings/pinctrl/fsl,imxrt1050.yaml
-@@ -35,7 +35,7 @@ patternProperties:
-           each entry consists of 6 integers and represents the mux and config
-           setting for one pin. The first 5 integers <mux_reg conf_reg input_reg
-           mux_val input_val> are specified using a PIN_FUNC_ID macro, which can
--          be found in <include/dt-bindings/pinctrl/pins-imxrt1050.h>. The last
-+          be found in <arch/arm/boot/dts/imxrt1050-pinfunc.h>. The last
-           integer CONFIG is the pad setting value like pull-up on this pin. Please
-           refer to i.MXRT1050 Reference Manual for detailed CONFIG settings.
-         $ref: /schemas/types.yaml#/definitions/uint32-matrix
+diff --git a/Documentation/devicetree/bindings/timer/fsl,imxgpt.yaml b/Documentation/devicetree/bindings/timer/fsl,imxgpt.yaml
+index a4f51f46b7a1..716c6afcca1f 100644
+--- a/Documentation/devicetree/bindings/timer/fsl,imxgpt.yaml
++++ b/Documentation/devicetree/bindings/timer/fsl,imxgpt.yaml
+@@ -31,6 +31,8 @@ properties:
+           - enum:
+               - fsl,imx6sl-gpt
+               - fsl,imx6sx-gpt
++              - fsl,imxrt1050-gpt
++              - fsl,imxrt1170-gpt
+           - const: fsl,imx6dl-gpt
+ 
+   reg:
 -- 
 2.37.2
 
