@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3899561F997
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 17:27:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C52161F9A2
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 17:27:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231490AbiKGQ0u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 11:26:50 -0500
+        id S232032AbiKGQ1o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 11:27:44 -0500
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232302AbiKGQ0c (ORCPT
+        with ESMTP id S233092AbiKGQ1N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 11:26:32 -0500
+        Mon, 7 Nov 2022 11:27:13 -0500
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 93F83286E4;
-        Mon,  7 Nov 2022 08:22:47 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3E380240A3;
+        Mon,  7 Nov 2022 08:24:11 -0800 (PST)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EAD2F1FB;
-        Mon,  7 Nov 2022 08:22:51 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 90300113E;
+        Mon,  7 Nov 2022 08:24:17 -0800 (PST)
 Received: from pierre123.arm.com (pierre123.nice.arm.com [10.34.100.128])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 811213F534;
-        Mon,  7 Nov 2022 08:22:30 -0800 (PST)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 5AB3E3F534;
+        Mon,  7 Nov 2022 08:23:56 -0800 (PST)
 From:   Pierre Gondois <pierre.gondois@arm.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Pierre Gondois <pierre.gondois@arm.com>,
@@ -85,32 +85,32 @@ Cc:     Pierre Gondois <pierre.gondois@arm.com>,
         Vignesh Raghavendra <vigneshr@ti.com>,
         Tero Kristo <kristo@kernel.org>,
         Viorel Suman <viorel.suman@nxp.com>,
-        Abel Vesa <abelvesa@kernel.org>, Peng Fan <peng.fan@nxp.com>,
-        Ming Qian <ming.qian@nxp.com>,
+        Abel Vesa <abelvesa@kernel.org>,
+        Shijie Qin <shijie.qin@nxp.com>,
+        Zhou Peng <eagle.zhou@nxp.com>,
         Shenwei Wang <shenwei.wang@nxp.com>,
+        Peng Fan <peng.fan@nxp.com>, Ming Qian <ming.qian@nxp.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
         Adam Ford <aford173@gmail.com>,
         Tim Harvey <tharvey@gateworks.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
         Richard Zhu <hongxing.zhu@nxp.com>, Li Jun <jun.li@nxp.com>,
         Markus Niebel <Markus.Niebel@ew.tq-group.com>,
         Joakim Zhang <qiangqing.zhang@nxp.com>,
         Marek Vasut <marex@denx.de>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
         Paul Elder <paul.elder@ideasonboard.com>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
         Martin Kepplinger <martink@posteo.de>,
-        David Heidelberg <david@ixit.cz>, Joy Zou <joy.zou@nxp.com>,
+        David Heidelberg <david@ixit.cz>,
         Oliver Graute <oliver.graute@kococonnector.com>,
-        Liu Ying <victor.liu@nxp.com>, Zhou Peng <eagle.zhou@nxp.com>,
-        Shijie Qin <shijie.qin@nxp.com>, Wei Fang <wei.fang@nxp.com>,
-        Jacky Bai <ping.bai@nxp.com>,
+        Liu Ying <victor.liu@nxp.com>, Jacky Bai <ping.bai@nxp.com>,
         Clark Wang <xiaoning.wang@nxp.com>,
         Chris Packham <chris.packham@alliedtelesis.co.nz>,
         Vadym Kochan <vadym.kochan@plvision.eu>,
         Sameer Pujar <spujar@nvidia.com>,
-        Akhil R <akhilrajeev@nvidia.com>,
         Mikko Perttunen <mperttunen@nvidia.com>,
         Prathamesh Shete <pshete@nvidia.com>,
+        Akhil R <akhilrajeev@nvidia.com>,
         Sumit Gupta <sumitg@nvidia.com>,
         Diogo Ivo <diogo.ivo@tecnico.ulisboa.pt>,
         Vidya Sagar <vidyas@nvidia.com>,
@@ -120,8 +120,8 @@ Cc:     Pierre Gondois <pierre.gondois@arm.com>,
         Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
         Aswani Reddy <aswani.reddy@samsung.com>,
         Shashank Prashar <s.prashar@samsung.com>,
-        Arnd Bergmann <arnd@arndb.de>, devicetree@vger.kernel.org,
-        linux-rpi-kernel@lists.infradead.org,
+        Bharat Uppal <bharat.uppal@samsung.com>,
+        devicetree@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org,
         linux-amlogic@lists.infradead.org,
         linux-samsung-soc@vger.kernel.org,
@@ -130,9 +130,9 @@ Cc:     Pierre Gondois <pierre.gondois@arm.com>,
         linux-realtek-soc@lists.infradead.org,
         linux-renesas-soc@vger.kernel.org,
         linux-rockchip@lists.infradead.org
-Subject: [PATCH v2 13/23] arm64: dts: Update cache properties for microchip
-Date:   Mon,  7 Nov 2022 16:57:06 +0100
-Message-Id: <20221107155825.1644604-14-pierre.gondois@arm.com>
+Subject: [PATCH v2 14/23] arm64: dts: Update cache properties for nuvoton
+Date:   Mon,  7 Nov 2022 16:57:07 +0100
+Message-Id: <20221107155825.1644604-15-pierre.gondois@arm.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221107155825.1644604-1-pierre.gondois@arm.com>
 References: <20221107155825.1644604-1-pierre.gondois@arm.com>
@@ -156,16 +156,16 @@ Update the Device Trees accordingly.
 
 Signed-off-by: Pierre Gondois <pierre.gondois@arm.com>
 ---
- arch/arm64/boot/dts/microchip/sparx5.dtsi | 1 +
+ arch/arm64/boot/dts/nuvoton/nuvoton-npcm845.dtsi | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/arch/arm64/boot/dts/microchip/sparx5.dtsi b/arch/arm64/boot/dts/microchip/sparx5.dtsi
-index 2dd5e38820b1..c4bca23b96b9 100644
---- a/arch/arm64/boot/dts/microchip/sparx5.dtsi
-+++ b/arch/arm64/boot/dts/microchip/sparx5.dtsi
-@@ -52,6 +52,7 @@ cpu1: cpu@1 {
- 		};
- 		L2_0: l2-cache0 {
+diff --git a/arch/arm64/boot/dts/nuvoton/nuvoton-npcm845.dtsi b/arch/arm64/boot/dts/nuvoton/nuvoton-npcm845.dtsi
+index 12118b75c0e6..4c196140634b 100644
+--- a/arch/arm64/boot/dts/nuvoton/nuvoton-npcm845.dtsi
++++ b/arch/arm64/boot/dts/nuvoton/nuvoton-npcm845.dtsi
+@@ -49,6 +49,7 @@ cpu3: cpu@3 {
+ 
+ 		l2: l2-cache {
  			compatible = "cache";
 +			cache-level = <2>;
  		};
