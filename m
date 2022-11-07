@@ -2,115 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C508661F784
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 16:23:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 720FA61F786
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Nov 2022 16:23:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231918AbiKGPX3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 10:23:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60452 "EHLO
+        id S232349AbiKGPXc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 10:23:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232861AbiKGPXY (ORCPT
+        with ESMTP id S231438AbiKGPX3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 10:23:24 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 582D0CD9;
-        Mon,  7 Nov 2022 07:23:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=4vgRGnuVtkTGEKsFjUHCzmRGxBEch8B2PbVdx00wfIY=; b=r4KpmD8YQg8XB7hbcAadnPrE6n
-        jwfLNXaVezrfXQi1O1mdc+6ow3TXholNpOy0J4rqHFRyl2Ty5kq35FtNMUIfir/x8qCdnt4q7vf1H
-        uq/Iu1Z5luOhf/DKVmfEA9RFMvRIY4jE6WJ4otVcaUj0TCHzpCe8RIf0PHf73ju3bzwJ2k2MBBV+L
-        m5vqNMv/b+hVsIVuKHOA3bgtEaudnRJBjdm4baPQN3WYwG7B6JBfpuaaPiBhsgCcrzhcBIMQTyx/0
-        OGNTa4lCru3Jc5RLzKQvXgyLtCXLnD6GAmB+GKO27jX3LAuu3lMDDITO/dPfhyVfAcSAjm4MCwo7Q
-        +xhekxJA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1os3y2-009SXw-B1; Mon, 07 Nov 2022 15:23:18 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id A69EE30007E;
-        Mon,  7 Nov 2022 16:23:12 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 8F2942B8046C9; Mon,  7 Nov 2022 16:23:12 +0100 (CET)
-Date:   Mon, 7 Nov 2022 16:23:12 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        nathan@kernel.org, thomas.lendacky@amd.com,
-        andrew.cooper3@citrix.com, jmattson@google.com, seanjc@google.com,
-        stable@vger.kernel.org
-Subject: Re: [PATCH 4/8] KVM: SVM: move guest vmsave/vmload to assembly
-Message-ID: <Y2ki4Iz8AZzTODKS@hirez.programming.kicks-ass.net>
-References: <20221107145436.276079-1-pbonzini@redhat.com>
- <20221107145436.276079-5-pbonzini@redhat.com>
+        Mon, 7 Nov 2022 10:23:29 -0500
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A9CECD9;
+        Mon,  7 Nov 2022 07:23:24 -0800 (PST)
+Received: (Authenticated sender: herve.codina@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 4F5BF240007;
+        Mon,  7 Nov 2022 15:23:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1667834603;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=SJd93Y5HIkbd3Alvti1JPtGvDBLfYghJCCdXFuuDQuY=;
+        b=oa6r8eHOhRqhyq8m0OyGQMeXXLO+mcrcHTch6Sxrcj+ToRz4YE1Pjfq5pgFZyZ+KoSMwf9
+        oZrCPxvhvmALjaTn2UyYyKJIqTOz8HEuqVpkCYHBbMjEAQ0+Q5CWMcFZ7d4np9xSjS1z8M
+        5ZETcxVWIiJ59CLrOBZzIuIqVfHcmEUNSrMTUfTp60LirRgQzSKMVoAQNrXSnrgPZ6i4lA
+        b4vFUl1iCad/M8DwIiK8RcISyYi7J1BebN4suQzD4xBTVORiwfLer29EeEHbDv/3zhpb28
+        ykYPaKzQgdmBxAhRPtOFbMb5BlmCoSe3coP40G18XD/FOZ8eMYQP3+QNC8hR5g==
+Date:   Mon, 7 Nov 2022 16:23:19 +0100
+From:   Herve Codina <herve.codina@bootlin.com>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Gareth Williams <gareth.williams.jx@renesas.com>,
+        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+Subject: Re: [PATCH 5/7] usb: gadget: udc: add Renesas RZ/N1 USBF controller
+ support
+Message-ID: <20221107162319.7945f241@bootlin.com>
+In-Reply-To: <CAMuHMdVod1VqKSBFa5syeSPU=RzgqQ=3tg70V1OSZFOext7kgw@mail.gmail.com>
+References: <20221107135825.583877-1-herve.codina@bootlin.com>
+        <20221107135825.583877-6-herve.codina@bootlin.com>
+        <CAMuHMdVod1VqKSBFa5syeSPU=RzgqQ=3tg70V1OSZFOext7kgw@mail.gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221107145436.276079-5-pbonzini@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 07, 2022 at 09:54:32AM -0500, Paolo Bonzini wrote:
-> @@ -56,6 +59,16 @@ SYM_FUNC_START(__svm_vcpu_run)
->  	/* Move @svm to RDI. */
->  	mov %_ASM_ARG2, %_ASM_DI
->  
-> +	/*
-> +	 * Use a single vmcb (vmcb01 because it's always valid) for
-> +	 * context switching guest state via VMLOAD/VMSAVE, that way
-> +	 * the state doesn't need to be copied between vmcb01 and
-> +	 * vmcb02 when switching vmcbs for nested virtualization.
-> +	 */
-> +	mov SVM_vmcb01_pa(%_ASM_DI), %_ASM_AX
-> +1:	vmload %_ASM_AX
-> +2:
-> +
->  	/* "POP" @vmcb to RAX. */
->  	pop %_ASM_AX
->  
-> @@ -80,16 +93,11 @@ SYM_FUNC_START(__svm_vcpu_run)
->  	/* Enter guest mode */
->  	sti
->  
-> +3:	vmrun %_ASM_AX
-> +4:
-> +	cli
->  
-> +	/* Pop @svm to RAX while it's the only available register. */
->  	pop %_ASM_AX
->  
->  	/* Save all guest registers.  */
+Hi Geert,
 
-So Andrew noted that once the vmload has executed any exception taken
-(say at 3) will crash and burn because %gs is scribbled.
+On Mon, 7 Nov 2022 15:37:40 +0100
+Geert Uytterhoeven <geert@linux-m68k.org> wrote:
 
-Might be good to make a record of this in the code so it can be cleaned
-up some day.
+> Hi Herv=C3=A9,
+>=20
+> On Mon, Nov 7, 2022 at 3:00 PM Herve Codina <herve.codina@bootlin.com> wr=
+ote:
+> > Add support for the Renesas USBF controller.
+> > This controller is an USB2.0 UDC controller available in the
+> > Renesas r9a06g032 SoC (RZ/N1 family).
+> >
+> > Signed-off-by: Herve Codina <herve.codina@bootlin.com> =20
+>=20
+> > --- /dev/null
+> > +++ b/drivers/usb/gadget/udc/renesas_usbf.c =20
+>=20
+> > +struct usbf_udc {
+> > +       struct usb_gadget               gadget;
+> > +       struct usb_gadget_driver        *driver;
+> > +       struct device                   *dev;
+> > +       struct clk_bulk_data            *clocks;
+> > +       int                             nclocks;
+> > +       void __iomem                    *regs;
+> > +       spinlock_t                      lock;
+> > +       bool                            is_remote_wakeup;
+> > +       bool                            is_usb_suspended;
+> > +       struct usbf_ep                  ep[USBF_NUM_ENDPOINTS];
+> > +       /* for EP0 control messages */
+> > +       enum usbf_ep0state              ep0state;
+> > +       struct usbf_req                 setup_reply;
+> > +       u8                              ep0_buf[USBF_EP0_MAX_PCKT_SIZE];
+> > +}; =20
+>=20
+> > +static int usbf_probe(struct platform_device *pdev)
+> > +{
+> > +       struct device *dev =3D &pdev->dev;
+> > +       struct usbf_udc *udc;
+> > +       struct usbf_ep *ep;
+> > +       bool h2mode;
+> > +       int irq;
+> > +       int ret;
+> > +       int i;
+> > +
+> > +       ret =3D r9a06g032_sysctrl_get_usb_h2mode(&h2mode);
+> > +       if (ret)
+> > +               return ret;
+> > +       if (h2mode) {
+> > +               dev_warn(dev, "Disabled in H2 (host) mode\n");
+> > +               return -ENODEV;
+> > +       }
+> > +
+> > +       udc =3D devm_kzalloc(dev, sizeof(*udc), GFP_KERNEL);
+> > +       if (!udc)
+> > +               return -ENOMEM;
+> > +       platform_set_drvdata(pdev, udc);
+> > +
+> > +       udc->dev =3D dev;
+> > +       spin_lock_init(&udc->lock);
+> > +
+> > +       udc->regs =3D devm_platform_ioremap_resource(pdev, 0);
+> > +       if (IS_ERR(udc->regs))
+> > +               return PTR_ERR(udc->regs);
+> > +
+> > +       devm_pm_runtime_enable(&pdev->dev);
+> > +       ret =3D pm_runtime_resume_and_get(&pdev->dev);
+> > +       if (ret < 0)
+> > +               return ret;
+> > +
+> > +       ret =3D devm_clk_bulk_get_all(dev, &udc->clocks);
+> > +       if (ret < 1) {
+> > +               dev_err(dev, "failed to get clocks %d\n", ret);
+> > +               return ret;
+> > +       }
+> > +       udc->nclocks =3D ret;
+> > +
+> > +       ret =3D clk_bulk_prepare_enable(udc->nclocks, udc->clocks);
+> > +       if (ret) {
+> > +               dev_err(dev, "can not enable the clock\n");
+> > +               return ret;
+> > +       } =20
+>=20
+> As this driver only enables/disables the clocks, perhaps you could
+> just delegate this to Runtime PM (through the clock domain pointed
+> by the power-domains property in DT), and drop the .clocks and
+> .nclocks fields?
 
-> @@ -159,11 +179,19 @@ SYM_FUNC_START(__svm_vcpu_run)
->  	pop %_ASM_BP
->  	RET
->  
-> +10:	cmpb $0, kvm_rebooting
->  	jne 2b
->  	ud2
-> +30:	cmpb $0, kvm_rebooting
-> +	jne 4b
-> +	ud2
-> +50:	cmpb $0, kvm_rebooting
-> +	jne 6b
-> +	ud2
->  
-> +	_ASM_EXTABLE(1b, 10b)
-> +	_ASM_EXTABLE(3b, 30b)
-> +	_ASM_EXTABLE(5b, 50b)
+Yes, indeed.
+I tested it and it works.
+I will remove the the clocks handling from this driver in v2 series.
+
+>=20
+> > +clk_disable:
+> > +       clk_bulk_disable_unprepare(udc->nclocks, udc->clocks);
+> > +       return ret;
+> > +}
+> > +
+> > +static int usbf_remove(struct platform_device *pdev)
+> > +{
+> > +       struct usbf_udc *udc =3D platform_get_drvdata(pdev);
+> > +
+> > +       usb_del_gadget_udc(&udc->gadget);
+> > +
+> > +       clk_bulk_disable_unprepare(udc->nclocks, udc->clocks);
+> > +
+> > +       pm_runtime_put(&pdev->dev);
+> > +
+> > +       return 0;
+> > +} =20
+>=20
+> > +MODULE_AUTHOR("Herve Codina <herve.codina@bootlin.com>"); =20
+>=20
+> Herv=C3=A9? ;-)
+
+Just to be consistent with other places where my email appears,
+I keep "Herve" :)
+
+>=20
+> > +MODULE_DESCRIPTION("Renesas R-Car Gen3 & RZ/N1 USB Function driver");
+> > +MODULE_LICENSE("GPL"); =20
+>=20
+> > --
+> > 2.37.3
+> > =20
+>=20
+>=20
+> --
+> Gr{oetje,eeting}s,
+>=20
+>                         Geert
+>=20
+> --
+> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m6=
+8k.org
+>=20
+> In personal conversations with technical people, I call myself a hacker. =
+But
+> when I'm talking to journalists I just say "programmer" or something like=
+ that.
+>                                 -- Linus Torvalds
+
+Thanks for this review,
+Herv=C3=A9
+
+--=20
+Herv=C3=A9 Codina, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
