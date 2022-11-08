@@ -2,48 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3437E62091B
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 06:51:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF37262091E
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 06:52:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233262AbiKHFvi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 00:51:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52266 "EHLO
+        id S233284AbiKHFwI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 00:52:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230154AbiKHFvc (ORCPT
+        with ESMTP id S230154AbiKHFwG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 00:51:32 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F0562CDE3;
-        Mon,  7 Nov 2022 21:51:29 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4N5y001VZPz4xGj;
-        Tue,  8 Nov 2022 16:51:28 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1667886688;
-        bh=Q15WKHNU871697DRgpNRD0yvpWDv5RNlY8hxDm5DjIw=;
-        h=Date:From:To:Cc:Subject:From;
-        b=HGu5u/vgv1gxE2pKCZ7RYUPGmGFFX2fief3fGYhvk4iAfq/Vbjti1vSEh1lDoRtEK
-         Z7vGlSNNBEJzrnIxUDr+kTM6QEvIYFiDbIFl/V2WhYlIhhALVXWn4kBW4uLv0MidFB
-         wCdFUC6A8z1hTeqK3dvw1mM5GEbzQE4VemtH7itqveifJgIVbcpJO4AXAKLaVwVE1N
-         h4iUDIgsvyBpOotDwfd1Oae4SDt4OvGhT2InODzj9MgjQu3EGB3fc7NVUbIfQ3OFwn
-         35Xes/iPDGz6t3kQdpMrrSw9iUT9qae0skgNLuH278Rzz0MgmTJu769OI8MogUkDj5
-         B0zJORD876/Fw==
-Date:   Tue, 8 Nov 2022 16:51:25 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Jason Gunthorpe <jgg@ziepe.ca>, Nicolin Chen <nicolinc@nvidia.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the iommufd tree
-Message-ID: <20221108165125.3bf96028@canb.auug.org.au>
+        Tue, 8 Nov 2022 00:52:06 -0500
+Received: from mail2-relais-roc.national.inria.fr (mail2-relais-roc.national.inria.fr [192.134.164.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD6FB2DA8C;
+        Mon,  7 Nov 2022 21:51:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=inria.fr; s=dc;
+  h=date:from:to:cc:message-id:in-reply-to:references:
+   subject:mime-version:content-transfer-encoding;
+  bh=lsrFGeuHZ9wh8asjvxV7/MIVVp+g7KTY9yxrdvD0P6c=;
+  b=UWLpBxlDy/VnAHHLh1j7OGv93INeQFb4X2fth/yxf6QW/qB4xy02eUmw
+   qHlEzYkmm9meSFlp7ymIezuH6ykcq4B6zaQ5ZNSz3oMF0X/EmzjCUcFOt
+   ECOJwaH7JXu2Mr3mvs9oQLZhiRyF442P/iiESZjTcsj2hvRtz7+ZUlQyn
+   M=;
+Authentication-Results: mail2-relais-roc.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; spf=None smtp.helo=postmaster@zcs-store9.inria.fr
+Received-SPF: SoftFail (mail2-relais-roc.national.inria.fr:
+  domain of julia.lawall@inria.fr is inclined to not designate
+  128.93.142.36 as permitted sender) identity=mailfrom;
+  client-ip=128.93.142.36;
+  receiver=mail2-relais-roc.national.inria.fr;
+  envelope-from="julia.lawall@inria.fr";
+  x-sender="julia.lawall@inria.fr"; x-conformance=spf_only;
+  x-record-type="v=spf1"; x-record-text="v=spf1
+  ip4:192.134.164.0/24 mx ~all"
+Received-SPF: None (mail2-relais-roc.national.inria.fr: no sender
+  authenticity information available from domain of
+  postmaster@zcs-store9.inria.fr) identity=helo;
+  client-ip=128.93.142.36;
+  receiver=mail2-relais-roc.national.inria.fr;
+  envelope-from="julia.lawall@inria.fr";
+  x-sender="postmaster@zcs-store9.inria.fr";
+  x-conformance=spf_only
+X-IronPort-AV: E=Sophos;i="5.96,145,1665439200"; 
+   d="scan'208";a="77134485"
+X-MGA-submission: =?us-ascii?q?MDEs0A+XODSBwig36FY8W1LHf9eQB1swn5ImB2?=
+ =?us-ascii?q?RJVGBYwaOpOX5VeMpKjrHc00AoyGbu3XqmnQSTYBPYnZrEn/sj4nrnsV?=
+ =?us-ascii?q?OS4cDKK44TcnrkpMcOfEy0MDS92UrHy8Z3joTvvnC8mrytnfaRRWEz41?=
+ =?us-ascii?q?rvLlpTwYsyE/jUq56bqOVtow=3D=3D?=
+Received: from zcs-store9.inria.fr ([128.93.142.36])
+  by mail2-relais-roc.national.inria.fr with ESMTP; 08 Nov 2022 06:51:53 +0100
+Date:   Tue, 8 Nov 2022 06:51:53 +0100 (CET)
+From:   Julia Lawall <julia.lawall@inria.fr>
+To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     Markus Elfring <Markus.Elfring@web.de>, cocci@inria.fr,
+        kernel-janitors <kernel-janitors@vger.kernel.org>,
+        nicolas palix <nicolas.palix@imag.fr>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        kernel@pengutronix.de
+Message-ID: <257596884.6156222.1667886713273.JavaMail.zimbra@inria.fr>
+In-Reply-To: <20221107200815.u7hcwejileeabnct@pengutronix.de>
+References: <20221107114702.15706-1-u.kleine-koenig@pengutronix.de> <bd13da2d-6d18-4f33-0987-a193e3c9b761@web.de> <20221107200815.u7hcwejileeabnct@pengutronix.de>
+Subject: Re: [cocci] [PATCH] coccinelle: api: Don't use
+ devm_platform_get_and_ioremap_resource with res==NULL
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/oI6T=2XI64qrAU_VvNrS6iz";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=ISO-8859-1
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [122.11.248.245]
+X-Mailer: Zimbra 8.8.15_GA_4464 (ZimbraWebClient - FF106 (Linux)/8.8.15_GA_4468)
+Thread-Topic: coccinelle: api: Don't use devm_platform_get_and_ioremap_resource with res==NULL
+Thread-Index: SY9eA2PxzCVONI9yuvNaH3ovzzKcCw==
+X-Spam-Status: No, score=1.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,NO_DNS_FOR_FROM,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
+        RCVD_IN_SBL_CSS,T_SPF_HELO_TEMPERROR,T_SPF_TEMPERROR autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,40 +81,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/oI6T=2XI64qrAU_VvNrS6iz
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+> After uninstalling python2 this ends in:
+> 
+>	Cannot find Python library
+>	coccicheck failed
+>	make: *** [Makefile:2076: coccicheck] Error 255
+> 
+> Didn't try to debug that any further. Is that worth a bug report against
+> coccinelle (which is shipped by my distribution)?
+> 
+> I tried to adapt the org and report modes from other patches in the same
+> directory. So a critical glimpse by someone more knowledgable than me is
+> recommended. However I don't know how to react to "I doubt ... is
+> appropriate", I'd need a more constructive feedback to act on.
 
-After merging the iommufd tree, today's linux-next build (htmldocs)
-produced this warning:
+I'm not a python expert, so I'm not sure what to do about this python2 vs python3 problem.  Is there some strategy for printing that works in both of them?
 
-include/uapi/linux/iommufd.h:277: warning: Cannot understand  * @size: size=
-of(struct iommu_option)
-
-Introduced by commit
-
-  5a013b3b3b2f ("iommufd: IOCTLs for the io_pagetable")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/oI6T=2XI64qrAU_VvNrS6iz
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNp7l0ACgkQAVBC80lX
-0GwmJAf/Sn2IO4+hPclLkZlqwEY7PCXvtHbaZlkA335LcQsGAsJbLVgS6sCdgzFK
-tPsBaU/8W7+xdqSvFuFXmMUjtxtT9776P3+z2bxj7FVGAPHDCe6qFby6j3yPxZEg
-QlWIqQ/h+nAgrX2z4d5g/VnFRzOPGxE6E5+k5O56nnzGjhrdGy5igrjDhen5Egmi
-Bg4uIoCdGRPQsVQylpFgQLZTVzaNN+jqMFBXJcTl7a5TckwprY379zTSRAHhOiRt
-1FOBQgpzRATPb04RCG55ZUbZ5BXrqbWJqx4cEHLX0KWrqRJ4CViJhkkmDK72ddVT
-7BoW2b4Pl1HAa1mztLQczb0PNpIaFQ==
-=vDhu
------END PGP SIGNATURE-----
-
---Sig_/oI6T=2XI64qrAU_VvNrS6iz--
+julia
