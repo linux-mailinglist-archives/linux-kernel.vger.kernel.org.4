@@ -2,224 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B26B2620C7F
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 10:41:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B5EB620C80
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 10:41:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233660AbiKHJlU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 04:41:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54020 "EHLO
+        id S233709AbiKHJlM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 04:41:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233790AbiKHJlG (ORCPT
+        with ESMTP id S233761AbiKHJlA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 04:41:06 -0500
-Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69B6232048
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 01:41:01 -0800 (PST)
-Received: by mail-qv1-xf2b.google.com with SMTP id x13so9884611qvn.6
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 01:41:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=06saDDydwz8unKSIFpQsb4FEsWN246BAnZfaE3y0tqg=;
-        b=N+PxBuSKeKQ9yJR3cOSBBM8A3aYFU4ONq6BbkMh4DkgVezmXJJKaFa9OcnG65xy99x
-         jwWmPPSYffHNTdZWY4YLq6Od3lcv3lkfOaDTNMuWIYsbQGWh5xAwg0QzqGZn1ioZFn+Y
-         /Zc7Ub4Oa15VS0kyyATdUGRsC12r4L104z3llfRWjkfw/5qylm0aeakvvBQQ1IuoPzkJ
-         cnwUHp3hemwT7C6knL6+23Tn3isjKu6zf2Oifcoe/RneXrPwm0tSX1wr4p//j0GwsujM
-         cgdoT4RnUHu3ZRdrEDHg3eJAeGUnHE66tIlYyWZMjMRWsyCpV73EZCDOxvsdwC0SdlHf
-         V2vQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=06saDDydwz8unKSIFpQsb4FEsWN246BAnZfaE3y0tqg=;
-        b=yPvANyGW2rWJM5lFXi3ORqkp3ac/tZNkzNgnbslHI2oAsStqrDtmoHeeubYHeCv/J0
-         uReGVwMM1Q4Nz+YSk1tD97pRv8Y67OREk+x3uw3WULCoYwYY9kyBqaRSj4wfIzFDovVB
-         0QLeXbtKJasqWEl9aLYXwne2A0c5FIWSJF77aLS1Q3pDKIN0D+jKTNeRFViZk1m2TjZS
-         V2rBGojwaExy9E4sfgT0LyEYst6RugA87UCSOk8NdXIziVeBVWDQ2KP/yJkKXjj50z6c
-         ApnvgtF9Ex6J7PeDI5pY/5buflVuAEoOXABy5L/+lsWzoPvX3xE+bsSKfq5NDye+BpJU
-         fcnA==
-X-Gm-Message-State: ACrzQf0DRg+gxYRIiDX4iNdOBDPD/1TC1tyM/21z4hobDS1tTQss0sne
-        BKHBeOzOZo6lAJ1YlwVPUyDYhQ==
-X-Google-Smtp-Source: AMsMyM4znueRCQJfDqMb84ah94aDdcgGIknHyT2Bdjzubp286wfZuWZNjt+FdbBdereRbpKI79ilCA==
-X-Received: by 2002:a05:6214:19cb:b0:4bb:6a28:83bc with SMTP id j11-20020a05621419cb00b004bb6a2883bcmr49493452qvc.102.1667900460408;
-        Tue, 08 Nov 2022 01:41:00 -0800 (PST)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id ay14-20020a05620a178e00b006bb366779a4sm8982965qkb.6.2022.11.08.01.40.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Nov 2022 01:40:59 -0800 (PST)
-Date:   Tue, 8 Nov 2022 01:40:48 -0800 (PST)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.attlocal.net
-To:     Mel Gorman <mgorman@techsingularity.net>
-cc:     Hugh Dickins <hughd@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Yu Zhao <yuzhao@google.com>, Vlastimil Babka <vbabka@suse.cz>,
-        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>
-Subject: Re: [PATCH v2] mm/page_alloc: Leave IRQs enabled for per-cpu page
- allocations
-In-Reply-To: <20221107111649.rzfgqk3ebvicsuyw@techsingularity.net>
-Message-ID: <486a93d7-4140-60c9-1aa8-8dafc8c66210@google.com>
-References: <20221104142259.5hohev5hzvwanbi2@techsingularity.net> <97b7ae87-797c-4ebb-d2d3-9415975188@google.com> <20221107111649.rzfgqk3ebvicsuyw@techsingularity.net>
+        Tue, 8 Nov 2022 04:41:00 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3AED53134B;
+        Tue,  8 Nov 2022 01:40:59 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 217251FB;
+        Tue,  8 Nov 2022 01:41:05 -0800 (PST)
+Received: from [10.57.67.115] (unknown [10.57.67.115])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7A8493F534;
+        Tue,  8 Nov 2022 01:40:56 -0800 (PST)
+Message-ID: <64c239e6-2df9-fd98-ee1e-151218d0d070@arm.com>
+Date:   Tue, 8 Nov 2022 09:40:54 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.4.1
+Subject: Re: [PATCH v14 0/9] Coresight: Add support for TPDM and TPDA
+From:   Suzuki K Poulose <suzuki.poulose@arm.com>
+To:     Jinlong Mao <quic_jinlmao@quicinc.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Konrad Dybcio <konradybcio@gmail.com>,
+        Mike Leach <mike.leach@linaro.org>
+Cc:     Leo Yan <leo.yan@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Tingwei Zhang <quic_tingweiz@quicinc.com>,
+        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
+        Tao Zhang <quic_taozha@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Hao Zhang <quic_hazha@quicinc.com>,
+        linux-arm-msm@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+References: <20221102091915.15281-1-quic_jinlmao@quicinc.com>
+ <69a3cd4b-c4b0-b998-b4c1-70a928690972@arm.com>
+ <102a8c21-2b78-56ca-874a-194e878dff8f@quicinc.com>
+ <9072665a-f019-975b-7b3b-d3f37ea71425@arm.com>
+In-Reply-To: <9072665a-f019-975b-7b3b-d3f37ea71425@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 7 Nov 2022, Mel Gorman wrote:
-> On Sun, Nov 06, 2022 at 08:42:32AM -0800, Hugh Dickins wrote:
-> > On Fri, 4 Nov 2022, Mel Gorman wrote:
-> > 
-> > > Changelog since v1
-> > >  o Use trylock in free_unref_page_list due to IO completion from softirq
-> > >    context
-> > > 
-> > > The pcp_spin_lock_irqsave protecting the PCP lists is IRQ-safe as a task
-> > > allocating from the PCP must not re-enter the allocator from IRQ context.
-> > > In each instance where IRQ-reentrancy is possible, the lock is acquired using
-> > > pcp_spin_trylock_irqsave() even though IRQs are disabled and re-entrancy
-> > > is impossible.
-> > > 
-> > > Demote the lock to pcp_spin_lock avoids an IRQ disable/enable in the common
-> > > case at the cost of some IRQ allocations taking a slower path. If the PCP
-> > > lists need to be refilled, the zone lock still needs to disable IRQs but
-> > > that will only happen on PCP refill and drain. If an IRQ is raised when
-> > > a PCP allocation is in progress, the trylock will fail and fallback to
-> > > using the buddy lists directly. Note that this may not be a universal win
-> > > if an interrupt-intensive workload also allocates heavily from interrupt
-> > > context and contends heavily on the zone->lock as a result.
-> > > 
-> > > [yuzhao@google.com: Reported lockdep issue on IO completion from softirq]
-> > > Signed-off-by: Mel Gorman <mgorman@techsingularity.net>
-> > 
-> > Hi Mel, I think you Cc'ed me for the purpose of giving this patch a
-> > run, and reporting if it's not good.  That is the case, I'm afraid.
-> > 
-> 
-> Thanks for testing and yes, you were cc'd in the hope you'd run it through a
-> stress test of some sort. A lot of the test I run are performance orientated
-> and relatively few target functional issues.
-> 
-> > I first tried it on a v6.1-rc3, and very soon crashed under load with
-> > something about PageBuddy in the output.  When I reverted, no problem;
-> > I thought maybe it's dependent on other commits in akpm's tree.
-> > 
-> 
-> Can you tell me what sort of load it's under? I would like to add something
-> similar to the general battery of tests I run all patches affecting the
-> page allocator through. Even if this is just a crude shell script, it would
-> be enough for me to work with and incorporate into mmtests. If it's there
-> and I find mm-unstable has its own problems, bisection can brute force
-> the problem.
-> 
-> > Later I tried on current mm-unstable: which is living up to the name
-> > in other ways, but when other issues patched, it soon crashed under
-> > load, GPF probably for non-canonical address 0xdead0000000000f8
-> > in compact_zone < compact_zone_order < try_to_compact_pages <
-> > .... < shmem_alloc_hugefolio < ...
-> > 
-> 
-> 0xdead000* looks like ILLEGAL_POINTER_VALUE which is used as a poison
-> value so a full list of debugging options you apply for the stress test
-> would also be useful.
-> 
-> > I do try to exercise compaction as hard as I can, even to the point
-> > of having a hack in what used to be called shmem_getpage_gfp(),
-> > reverting to the stronger attempt to get huge pages, before Rik
-> > weakened the effect of huge=always with vma_thp_gfp_mask() in 5.12:
-> > so shmem is probably applying stronger flags for compaction than it
-> > would in your tree - I'm using
-> > GFP_TRANSHUGE_LIGHT | __GFP_RECLAIM | __GFP_NORETRY there.
-> > 
-> > Sorry for not giving you more info, I'm rather hoping that compaction
-> > is relevant, and will give you a clue (maybe that capture code, which
-> > surprised us once before??). 
-> 
-> While capture is a possibility, it's a bad fit for this patch because
-> pages are captured under task context.
-> 
-> > What I'm really trying to do is fix
-> > the bug in Linus's rmap/TLB series, and its interaction with my
-> > rmap series, and report back on his series (asking for temporary
-> > drop), before next-20221107 goes down in flames.
-> > 
-> > I'd advocate for dropping this patch of yours too; but if it's giving
-> > nobody else any trouble, I can easily continue to patch it out.
-> > 
-> 
-> Given that you tested the patch against v6.1-rc3, it's clear that the
-> patch on its own causes problems. Having a reproduction case will help
-> me figure out why.
+On 08/11/2022 09:37, Suzuki K Poulose wrote:
+> On 08/11/2022 05:54, Jinlong Mao wrote:
+>>
+>> On 11/8/2022 2:38 AM, Suzuki K Poulose wrote:
+>>> On 02/11/2022 09:19, Mao Jinlong wrote:
+>>>> This series adds support for the trace performance monitoring and
+>>>> diagnostics hardware (TPDM and TPDA). It is composed of two major
+>>>> elements.
+>>>> a) Changes for original coresight framework to support for TPDM and 
+>>>> TPDA.
+>>>> b) Add driver code for TPDM and TPDA.
+>>>>
+>>>> Introduction of changes for original coresight framework
+>>>> Support TPDM as new coresight source.
+>>>> Since only STM and ETM are supported as coresight source originally.
+>>>> TPDM is a newly added coresight source. We need to change
+>>>> the original way of saving coresight path to support more types source
+>>>> for coresight driver.
+>>>> The following patch is to add support more coresight sources.
+>>>>      coresight: core: Use IDR for non-cpu bound sources' paths.
+>>>>
+>>> ---8>---
+>>>
+>>>> Introduction of TPDM and TPDA
+>>>> TPDM - The trace performance monitoring and diagnostics monitor or 
+>>>> TPDM in
+>>>> short serves as data collection component for various dataset types
+>>>> specified in the QPMDA(Qualcomm performance monitoring and diagnostics
+>>>> architecture) spec. The primary use case of the TPDM is to collect data
+>>>> from different data sources and send it to a TPDA for packetization,
+>>>> timestamping and funneling.
+>>>>       Coresight: Add coresight TPDM source driver
+>>>>       dt-bindings: arm: Adds CoreSight TPDM hardware definitions
+>>>>       coresight-tpdm: Add DSB dataset support
+>>>>       coresight-tpdm: Add integration test support
+>>>>       docs: sysfs: coresight: Add sysfs ABI documentation for TPDM
+>>>>
+>>>> TPDA - The trace performance monitoring and diagnostics aggregator or
+>>>> TPDA in short serves as an arbitration and packetization engine for the
+>>>> performance monitoring and diagnostics network as specified in the 
+>>>> QPMDA
+>>>> (Qualcomm performance monitoring and diagnostics architecture)
+>>>> specification. The primary use case of the TPDA is to provide
+>>>> packetization, funneling and timestamping of Monitor data as specified
+>>>> in the QPMDA specification.
+>>>> The following patch is to add driver for TPDA.
+>>>>       Coresight: Add TPDA link driver
+>>>>       dt-bindings: arm: Adds CoreSight TPDA hardware definitions
+>>>>
+>>>> The last patch of this series is a device tree modification, which add
+>>>> the TPDM and TPDA configuration to device tree for validating.
+>>>>      ARM: dts: msm: Add coresight components for SM8250
+>>>>      ARM: dts: msm: Add tpdm mm/prng for sm8250
+>>>>
+>>>> Once this series patches are applied properly, the tpdm and tpda nodes
+>>>> should be observed at the coresight path /sys/bus/coresight/devices
+>>>> e.g.
+>>>> /sys/bus/coresight/devices # ls -l | grep tpd
+>>>> tpda0 -> ../../../devices/platform/soc@0/6004000.tpda/tpda0
+>>>> tpdm0 -> ../../../devices/platform/soc@0/6c08000.mm.tpdm/tpdm0
+>>>>
+>>>> We can use the commands are similar to the below to validate TPDMs.
+>>>> Enable coresight sink first.
+>>>>
+>>>> echo 1 > /sys/bus/coresight/devices/tmc_etf0/enable_sink
+>>>> echo 1 > /sys/bus/coresight/devices/tpdm0/enable_source
+>>>> echo 1 > /sys/bus/coresight/devices/tpdm0/integration_test
+>>>> echo 2 > /sys/bus/coresight/devices/tpdm0/integration_test
+>>>> The test data will be collected in the coresight sink which is enabled.
+>>>> If rwp register of the sink is keeping updating when do
+>>>> integration_test (by cat tmc_etf0/mgmt/rwp), it means there is data
+>>>> generated from TPDM to sink.
+>>>>
+>>>> There must be a tpda between tpdm and the sink. When there are some
+>>>> other trace event hw components in the same HW block with tpdm, tpdm
+>>>> and these hw components will connect to the coresight funnel. When
+>>>> there is only tpdm trace hw in the HW block, tpdm will connect to
+>>>> tpda directly.
+>>>>         +---------------+                +-------------+
+>>>>      |  tpdm@6c08000 |                |tpdm@684C000 |
+>>>>      +-------|-------+                +------|------+
+>>>>              |                               |
+>>>>      +-------|-------+                       |
+>>>>      | funnel@6c0b000|                       |
+>>>>      +-------|-------+                       |
+>>>>              |                               |
+>>>>      +-------|-------+                       |
+>>>>      |funnel@6c2d000 |                       |
+>>>>      +-------|-------+                       |
+>>>>              |                               |
+>>>>              |    +---------------+          |
+>>>>              +----- tpda@6004000  -----------+
+>>>>                   +-------|-------+
+>>>>                           |
+>>>>                   +-------|-------+
+>>>>                   |funnel@6005000 |
+>>>>                   +---------------+
+>>>>
+>>>
+>>> --8<--
+>>>
+>>> Please could you add the above to a Documentation file (Of course
+>>> skip the description of patches).
+>> Sure. I will add them to the Documentation file.
+>>>
+>>>
+>>>> This patch series depends on patch series:
+>>>> "[v5,00/14] coresight: Add new API to allocate trace source ID values"
+>>>> https://patchwork.kernel.org/project/linux-arm-kernel/cover/20221101163103.17921-1-mike.leach@linaro.org/
+>>>
+>>> So, is there a strict binding between a TPDM and a TPDA ?
+>>> i.e., Multiple TPDMs could never end up reaching the sam
+>>> TPDA ? I see that the TPDMs could be connected to funnels
+>>> and thus other TPDMs could be connected to the same funnels
+>>> and thus reach the same TPDA.
+>> There is no strict binding between TPDM and TPDA.
+>> TPDA can have multiple TPDMs connect to it.
+>> But There must be only one TPDA in the path from the TPDM source to 
+>> TMC sink.
+>> TPDM can directly connect to TPDA's inport
+>> or connect to funnel which will connect to TPDA's inport.
+>>>
+>>> Also, the trace-id is bound to TPDA and not TPDM. So, if
+>>> we have multiple TPDMs, trace decoding is going to be
+>>> impossible.
+>> The TPDMs which are connected to same TPDA shares the same
+>> trace-id. When TPDA does packetization, different port will have
+>> unique channel number for decoding.
 
-Sorry for appearing to ignore your requests all day, Mel, but I just
-had slightly more confidence in debugging it here, than in conveying
-all the details of my load (some other time), and my config, and
-actually enabling you to reproduce it.  Had to focus.
+So this assumes that nobody connects two TPDMs to a funnel, which
+then connects to a TPDA ? (i.e. tpdm@684C000 above must not be
+connected to funnel@6c0b000 or funnel@6c2d000).
+In which case, two of them end up in the same port of the TPDA.
 
-Got it at last: free_unref_page_list() has been surviving on the
-"next" in its list_for_each_entry_safe() for years(?), without doing
-a proper list_del() in that block: only with your list_del() before
-free_one_page() did it start to go so very wrong.  (Or was there any
-way in which it might already have been wrong, and needs backport?)
+Suzuki
 
-Here's a few things to fold into your patch: I've moved your
-list_del() up to cover both cases, that's the important fix;
-but prior to finding that, I did notice a "locked_zone = NULL"
-needed, and was very disappointed when that didn't fix the issues;
-zone instead of page_zone(page), batch_count = 0, lock hold times
-were just improvements I noticed along the way.
 
-Now running fine, and can be reinstated in akpm's tree.
-
-Hugh
-
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -3515,6 +3515,8 @@ void free_unref_page_list(struct list_he
- 	list_for_each_entry_safe(page, next, list, lru) {
- 		struct zone *zone = page_zone(page);
- 
-+		list_del(&page->lru);
-+
- 		/* Different zone, different pcp lock. */
- 		if (zone != locked_zone) {
- 			if (pcp) {
-@@ -3530,13 +3532,13 @@ void free_unref_page_list(struct list_he
- 			pcp = pcp_spin_trylock(zone->per_cpu_pageset);
- 			if (!pcp) {
- 				pcp_trylock_finish(UP_flags);
--				list_del(&page->lru);
--				free_one_page(page_zone(page), page,
--					      page_to_pfn(page), 0, migratetype,
--					      FPI_NONE);
-+				free_one_page(zone, page, page_to_pfn(page),
-+					      0, migratetype, FPI_NONE);
-+				locked_zone = NULL;
- 				continue;
- 			}
- 			locked_zone = zone;
-+			batch_count = 0;
- 		}
- 
- 		/*
-@@ -3551,7 +3553,7 @@ void free_unref_page_list(struct list_he
- 		free_unref_page_commit(zone, pcp, page, migratetype, 0);
- 
- 		/*
--		 * Guard against excessive IRQ disabled times when freeing
-+		 * Guard against excessive lock hold times when freeing
- 		 * a large list of pages. Lock will be reacquired if
- 		 * necessary on the next iteration.
- 		 */
