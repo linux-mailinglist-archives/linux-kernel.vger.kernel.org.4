@@ -2,177 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8301C62096C
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 07:18:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A6A4162096D
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 07:18:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232956AbiKHGR6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 01:17:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36924 "EHLO
+        id S233220AbiKHGSL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 01:18:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbiKHGRz (ORCPT
+        with ESMTP id S233237AbiKHGSH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 01:17:55 -0500
-Received: from nbd.name (nbd.name [46.4.11.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C97961AD95;
-        Mon,  7 Nov 2022 22:17:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=nbd.name;
-        s=20160729; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:Subject:From
-        :References:Cc:To:MIME-Version:Date:Message-ID:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=kXHT3OV3Sy5eJ5+6znkGvJWy1L+yHwOVWv37w7Ji/M0=; b=biGHaUTVuiP339mg/UexJyeZxE
-        lxrMngemoM8L6ADQwk1Iaqx1NpHmybt0IUhIi18v6VDLykaQkof9uDH0T/it/l3ZEXseQ+GYfTnhI
-        /Yl4KODK+TPhQayMfR3qgKk1/U44MbUQOblj6hKL/85cmIjN3VoYO7A1rYVcjgGar8Ds=;
-Received: from p200300daa72ee1006d973cebf3767a25.dip0.t-ipconnect.de ([2003:da:a72e:e100:6d97:3ceb:f376:7a25] helo=nf.local)
-        by ds12 with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <nbd@nbd.name>)
-        id 1osHvW-000S77-Q3; Tue, 08 Nov 2022 07:17:38 +0100
-Message-ID: <56a5a15c-a26f-1ff2-9ecf-46b3e1c07806@nbd.name>
-Date:   Tue, 8 Nov 2022 07:17:38 +0100
+        Tue, 8 Nov 2022 01:18:07 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A22743FBAA
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 22:18:05 -0800 (PST)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2A86Bb2q008674;
+        Tue, 8 Nov 2022 06:18:01 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=qcppdkim1; bh=zzOS5pPi5maIyqpURKH5fpfqqaMBm8cpkLoYaZVS4Ek=;
+ b=D47b91wNsLz+Y24umxIGjqU/7Ts0dc+YSdU3fEwjdZc7Vmahs1wbzakK6AtHTu1Hd16h
+ pLdhnqKugF55bqyst3mIrctA3AsPB9FFZAZshPf+kA9pgCTTmsxfXbBQhLVDXU/+w7rX
+ 1lTnyRj9Jft11o3hzL66hvjbjWFSOex4Zrhfk2PH3Kkek4OYzarDwTa15mLKW5u9UzQr
+ cDQP24pHoM7+2M7fsGGS1bnUHPz3I/HQYrXDekL/fJlUUtOfKC1SkDi1Hq7bzDJNXG9z
+ Ggz623hYKLimLi6CqXvbcf2WtAd45cKig9VOiCBAuHMFx3Z0dILsATXsKiy4wYbwFJr1 Ew== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kqhmk80d7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 08 Nov 2022 06:18:01 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2A86I01O025091
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 8 Nov 2022 06:18:00 GMT
+Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.29; Mon, 7 Nov 2022 22:17:58 -0800
+Date:   Tue, 8 Nov 2022 11:47:53 +0530
+From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
+To:     Charan Teja Kalla <quic_charante@quicinc.com>
+CC:     <akpm@linux-foundation.org>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>, <vbabka@suse.cz>
+Subject: Re: [PATCH] mm: fix compiler warning with make W=1
+Message-ID: <20221108061753.GA23955@hu-pkondeti-hyd.qualcomm.com>
+References: <1667884582-2465-1-git-send-email-quic_charante@quicinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.3.2
-Content-Language: en-US
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     netdev@vger.kernel.org, John Crispin <john@phrozen.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20221107185452.90711-1-nbd@nbd.name>
- <20221107185452.90711-11-nbd@nbd.name>
- <20221107233229.qzwuex4nwm44xbe4@skbuf>
-From:   Felix Fietkau <nbd@nbd.name>
-Subject: Re: [PATCH 11/14] net: ethernet: mtk_eth_soc: fix VLAN rx hardware
- acceleration
-In-Reply-To: <20221107233229.qzwuex4nwm44xbe4@skbuf>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <1667884582-2465-1-git-send-email-quic_charante@quicinc.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: KFnAbdgKXMlmzn-cDPYajl9jD79cbb0j
+X-Proofpoint-ORIG-GUID: KFnAbdgKXMlmzn-cDPYajl9jD79cbb0j
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-07_11,2022-11-07_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ priorityscore=1501 clxscore=1011 lowpriorityscore=0 mlxlogscore=526
+ phishscore=0 suspectscore=0 mlxscore=0 spamscore=0 adultscore=0
+ impostorscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2210170000 definitions=main-2211080032
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08.11.22 00:32, Vladimir Oltean wrote:
-> On Mon, Nov 07, 2022 at 07:54:49PM +0100, Felix Fietkau wrote:
->> - enable VLAN untagging for PDMA rx
->> - make it possible to disable the feature via ethtool
->> - pass VLAN tag to the DSA driver
->> - untag special tag on PDMA only if no non-DSA devices are in use
->> - disable special tag untagging on 7986 for now, since it's not working yet
-> 
-> What is the downside of not enabling VLAN RX offloading, is it a
-> performance or a functional need to have it?
-> 
->> 
->> Signed-off-by: Felix Fietkau <nbd@nbd.name>
->> ---
->>  drivers/net/ethernet/mediatek/mtk_eth_soc.c | 36 +++++++++++++--------
->>  drivers/net/ethernet/mediatek/mtk_eth_soc.h |  3 ++
->>  2 files changed, 25 insertions(+), 14 deletions(-)
->> 
->> diff --git a/drivers/net/ethernet/mediatek/mtk_eth_soc.c b/drivers/net/ethernet/mediatek/mtk_eth_soc.c
->> index ab31dda2cd66..3b8995a483aa 100644
->> --- a/drivers/net/ethernet/mediatek/mtk_eth_soc.c
->> +++ b/drivers/net/ethernet/mediatek/mtk_eth_soc.c
->> @@ -2015,16 +2015,9 @@ static int mtk_poll_rx(struct napi_struct *napi, int budget,
->>  						htons(RX_DMA_VPID(trxd.rxd4)),
->>  						RX_DMA_VID(trxd.rxd4));
->>  			} else if (trxd.rxd2 & RX_DMA_VTAG) {
->> -				__vlan_hwaccel_put_tag(skb, htons(ETH_P_8021Q),
->> +				__vlan_hwaccel_put_tag(skb, htons(RX_DMA_VPID(trxd.rxd3)),
-> 
-> Why make this change? The network stack doesn't like it when you feed it
-> non-standard VLAN protocols, as you've noticed.
-To make the hardware untag the DSA special tag, which is faster than 
-doing it in the DSA tag driver.
+Hi Charan,
 
->>  						       RX_DMA_VID(trxd.rxd3));
->>  			}
->> -
->> -			/* If the device is attached to a dsa switch, the special
->> -			 * tag inserted in VLAN field by hw switch can * be offloaded
->> -			 * by RX HW VLAN offload. Clear vlan info.
+On Tue, Nov 08, 2022 at 10:46:22AM +0530, Charan Teja Kalla wrote:
+> Fix the below compiler warnings reported with 'make W=1 mm/'.
+> mm/page_ext.c:178: warning: Function parameter or member 'page_ext' not
+> described in 'page_ext_put'.
 > 
-> What is the format of this special tag, what does it contain? The same
-> thing as what mtk_tag_rcv() parses?
-Yes
+> Reported-by: Vlastimil Babka <vbabka@suse.cz>
+> Signed-off-by: Charan Teja Kalla <quic_charante@quicinc.com>
+> ---
+>  mm/page_ext.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/mm/page_ext.c b/mm/page_ext.c
+> index affe8024..ddf1968 100644
+> --- a/mm/page_ext.c
+> +++ b/mm/page_ext.c
+> @@ -166,7 +166,7 @@ struct page_ext *page_ext_get(struct page *page)
+>  
+>  /**
+>   * page_ext_put() - Working with page extended information is done.
+> - * @page_ext - Page extended information received from page_ext_get().
+> + * @page_ext: Page extended information received from page_ext_get().
+>   *
+>   * The page extended information of the page may not be valid after this
+>   * function is called.
+> 
 
->> -			 */
->> -			if (netdev_uses_dsa(netdev))
->> -				__vlan_hwaccel_clear_tag(skb);
-> 
-> If the DSA switch information is present in the VLAN hwaccel, and the
-> VLAN hwaccel is cleared, and that up until this change,
-> NETIF_F_HW_VLAN_CTAG_RX was not configurable, it means that every
-> mtk_soc_data with MTK_HW_FEATURES would be broken as a DSA master?Before my change, the hardware wasn't actually untagging packets with 
-the DSA special tag. Because of that, the code that I'm removing here 
-was never used.
+Looks good to me. Your patch fixes the warning emitted earlier by
 
->>  		}
->>  
->>  		skb_record_rx_queue(skb, 0);
->> @@ -2847,15 +2840,17 @@ static netdev_features_t mtk_fix_features(struct net_device *dev,
->>  
->>  static int mtk_set_features(struct net_device *dev, netdev_features_t features)
->>  {
->> -	int err = 0;
->> -
->> -	if (!((dev->features ^ features) & NETIF_F_LRO))
->> -		return 0;
->> +	struct mtk_mac *mac = netdev_priv(dev);
->> +	struct mtk_eth *eth = mac->hw;
->> +	netdev_features_t diff = dev->features ^ features;
->>  
->> -	if (!(features & NETIF_F_LRO))
->> +	if ((diff & NETIF_F_LRO) && !(features & NETIF_F_LRO))
->>  		mtk_hwlro_netdev_disable(dev);
->>  
->> -	return err;
->> +	/* Set RX VLAN offloading */
->> +	mtk_w32(eth, !!(features & NETIF_F_HW_VLAN_CTAG_RX), MTK_CDMP_EG_CTRL);
-> 
-> Nit: do this only if (diff & NETIF_F_HW_VLAN_CTAG_RX).
-Will fix that in v2.
-> 
->> +
->> +	return 0;
->>  }
->>  
->>  /* wait for DMA to finish whatever it is doing before we start using it again */
->> @@ -3176,6 +3171,15 @@ static int mtk_open(struct net_device *dev)
->>  	else
->>  		refcount_inc(&eth->dma_refcnt);
->>  
->> +	/* Hardware special tag parsing needs to be disabled if at least
->> +	 * one MAC does not use DSA.
->> +	 */
-> 
-> Don't understand why, sorry.
-The hardware has multiple ethernet MACs connected to the same DMA ring. 
-The parsing flag can't be turned off per MAC and it makes the hardware 
-assume that a DSA special tag is present.
+./scripts/kernel-doc -none mm/page_ext.c
+mm/page_ext.c:178: warning: Function parameter or member 'page_ext' not described in 'page_ext_put'
 
->> +	if (!netdev_uses_dsa(dev)) {
->> +		u32 val = mtk_r32(eth, MTK_CDMP_IG_CTRL);
->> +		val &= ~MTK_CDMP_STAG_EN;
->> +		mtk_w32(eth, val, MTK_CDMP_IG_CTRL);
->> +	}
->> +
->>  	phylink_start(mac->phylink);
->>  	netif_tx_start_all_queues(dev);
->>  
+one nit comment on the changelog summary
 
-- Felix
+mm: fix compiler warning with make W=1
+
+Can you make it more specific like "mm/page_exit: fix kernel doc warning in page_ext_put()"
+
+Thanks,
+Pavan
