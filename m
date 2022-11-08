@@ -2,105 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B0F9621DF8
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 21:47:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B430621DFB
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 21:47:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229840AbiKHUrY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 15:47:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54532 "EHLO
+        id S229797AbiKHUrm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 15:47:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229740AbiKHUrF (ORCPT
+        with ESMTP id S229947AbiKHUr2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 15:47:05 -0500
-Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92EE82EA
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 12:47:04 -0800 (PST)
-Received: by mail-qk1-x730.google.com with SMTP id p18so5291167qkg.2
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 12:47:04 -0800 (PST)
+        Tue, 8 Nov 2022 15:47:28 -0500
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E75163ED
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 12:47:27 -0800 (PST)
+Received: by mail-lj1-x22c.google.com with SMTP id t10so22962124ljj.0
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 12:47:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=M8apV+JQ/XDpdKpjldXGN9Lci+S/grtcg+KJXQEl4jE=;
-        b=B2pLdhd/PAfx5qL/KnZxHJ+Qarj0kriv6H2ySGnRIl61x3KIa4NRmdkU41vjNtSVlc
-         A6nA9iJkSqi8K72XbR8QU1lo2aDUBSfpHOMTii8Qr4fJ+MgRnElYd1veASRKGfQ3dMQW
-         ieiih7hSSX3zQPJ964A5ie3NUPOrTp8Wcbpco=
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WH0kqwpxGIZYfxFpOcVNB2gb2+jLt3tA6OnKcaJzpJw=;
+        b=LL6DhQeKueOBbZ0yrubELXYbG9bPM4jB+g3J6wp2AZiF0Ec7wh822/bdNIG2FlCVSr
+         ZZVoRE50QEjtc268iTWooeNSE5nWjiUlAOyz1aPLWKw4Jn9MxZavtqZhoekuA5yzcw9+
+         jplSY2C5WMO7lW1lK/0ncvZjCxyVLsPKNIjXY2bVcu5eQKa7VT8Nx1BCt90f21CWfEdp
+         KtxIzZN9AhJWpPwZ/iLgdcpmDXc5TFJwOBElnl+fs0ROvU4DoVs+JIWeQ+GkHhqYoG/K
+         3O9GZ64tm31dj30hx63slzfEg3hKDTl0WRlAw5UIXJxU+0e/+/StEBzdOsvtkNHsyaIU
+         isPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=M8apV+JQ/XDpdKpjldXGN9Lci+S/grtcg+KJXQEl4jE=;
-        b=g5WNMPP5vMTu4BWo0GE+3YWG/DPl6nM+epVge4Qw610tY6atS/M4wq/89KPvFb7OWg
-         Ki1dce7EU+CmNge8hBFMUBJ6iLHklTc9P0wLGpKDRoBlP64ZXfSlZaisSbfA+bbQWiH9
-         aO5zGTKaT56m9reKKyGhWxvrxQr2smx0hdvRGnQRMQQpo78qQokvheZEDZElksBlEzLb
-         N1YgTAbiZhFc/O2OLpA51qzfxpHxzpk+IJ9BYgh5X9KNke04lceE1JA2B5NjmHmaysTc
-         EAYH7FGNQ5md1WMHoL0J8RsmXVkeLZOgSAkTELQDkjEa8P5FcMoipf4/7JiXfbvH05YP
-         aT3Q==
-X-Gm-Message-State: ACrzQf3Jfg6Jq3vq6fmq6w5AEaRPE1Of5deHC8l8yhKoM7W5YG5AWYzU
-        l2ChQrxABHwyjm+FjZtFCQ37cWBNhgOrSA==
-X-Google-Smtp-Source: AMsMyM53LjLCxXrrjmOH+Gw+T51jgPLC4JmJt2Vr9gX8miVfzy26TiERKKW5AXojo75GpaMBfbPquw==
-X-Received: by 2002:a37:bc02:0:b0:6fa:5af3:4208 with SMTP id m2-20020a37bc02000000b006fa5af34208mr25788383qkf.557.1667940423564;
-        Tue, 08 Nov 2022 12:47:03 -0800 (PST)
-Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com. [209.85.219.171])
-        by smtp.gmail.com with ESMTPSA id u7-20020a05620a0c4700b006fa22f0494bsm10105460qki.117.2022.11.08.12.47.00
-        for <linux-kernel@vger.kernel.org>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=WH0kqwpxGIZYfxFpOcVNB2gb2+jLt3tA6OnKcaJzpJw=;
+        b=svTnyECrq0wl9K2SdRxHEac6MwWZ32V2yFS1KJOnLEx+TYlhEitMpYv80bSzG5J5Jp
+         kkiTxvigk5Cel2lLVnCwqr9ps5saHp5x6BdEkbYduO9pA2jPQIXKzcvmt+l6SKdE/Vl/
+         RnzqlOAZbHiPEL2wZ8/fxrfiiFC5Pm9qqBd0NzDZnksevPLx3ON6uCtaLJsJtt9MWhGk
+         B3k2F8XsBbWLpi4RbKB3HRJ1ubdYDWnm14GLCQY24e85NAUjg/lLg6luHK13WFA6Uh1g
+         pTqNP66z79xkwUIKxhinZyHfJcydU/4MGCMivKpp/ZLNz7VAsD9iTo5xCTyxl2osJLVe
+         S+uA==
+X-Gm-Message-State: ACrzQf07TAuQM1dCbnA0WIwEmXADZbpyGv2EfPTmXh6T9znHlNTJPbeI
+        IOIhre/DvU/X8h6IYla2OOn/tg==
+X-Google-Smtp-Source: AMsMyM6WchxytjU83P1mNKppO4lxP/cfuiEpegw2PhzeLuNkIqtJuWOB+GSEATPdCX7+GwDNlIMbCw==
+X-Received: by 2002:a05:651c:30b:b0:277:6cc:c6ae with SMTP id a11-20020a05651c030b00b0027706ccc6aemr18907935ljp.179.1667940445769;
+        Tue, 08 Nov 2022 12:47:25 -0800 (PST)
+Received: from [192.168.31.208] ([194.29.137.22])
+        by smtp.gmail.com with ESMTPSA id w20-20020a05651c119400b0026c4c1a0b4dsm1856127ljo.126.2022.11.08.12.47.24
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Nov 2022 12:47:01 -0800 (PST)
-Received: by mail-yb1-f171.google.com with SMTP id g127so18776066ybg.8
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 12:47:00 -0800 (PST)
-X-Received: by 2002:a05:6902:124f:b0:66e:e3da:487e with SMTP id
- t15-20020a056902124f00b0066ee3da487emr58479884ybu.310.1667940420295; Tue, 08
- Nov 2022 12:47:00 -0800 (PST)
+        Tue, 08 Nov 2022 12:47:25 -0800 (PST)
+Message-ID: <11d29754-3e36-895b-e791-2c2f88c6dbed@linaro.org>
+Date:   Tue, 8 Nov 2022 21:47:23 +0100
 MIME-Version: 1.0
-References: <CAHk-=wh6MxaCA4pXpt1F5Bn2__6MxCq0Dr-rES4i=MOL9ibjpg@mail.gmail.com>
- <20221108194139.57604-1-torvalds@linux-foundation.org> <15A1A033-73DC-4ACA-87B0-3535E9236F7F@gmail.com>
-In-Reply-To: <15A1A033-73DC-4ACA-87B0-3535E9236F7F@gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 8 Nov 2022 12:46:44 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wj10fOhx9-dkmRrttgXmhVihhwfTT=bdhqVQwC=sPUE2A@mail.gmail.com>
-Message-ID: <CAHk-=wj10fOhx9-dkmRrttgXmhVihhwfTT=bdhqVQwC=sPUE2A@mail.gmail.com>
-Subject: Re: [PATCH 1/4] mm: introduce 'encoded' page pointers with embedded
- extra bits
-To:     Nadav Amit <nadav.amit@gmail.com>
-Cc:     Hugh Dickins <hughd@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        kernel list <linux-kernel@vger.kernel.org>, linux-mm@kvack.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.4.1
+Subject: Re: [PATCH] arm64: dts: qcom: sc7280-idp: don't modify &ipa twice
+To:     Alex Elder <elder@linaro.org>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, andersson@kernel.org,
+        agross@kernel.org
+Cc:     devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221108201625.1220919-1-elder@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20221108201625.1220919-1-elder@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 8, 2022 at 12:37 PM Nadav Amit <nadav.amit@gmail.com> wrote:
->
-> > +static inline bool encoded_page_flags(struct encoded_page *page)
-> > +{
-> > +     return ENCODE_PAGE_BITS & (unsigned long)page;
-> > +}
->
-> I think this one wants to be some unsigned, as otherwise why have
-> ENCODE_PAGE_BITS as 3ul ?
 
-Right you are. That came from my old old version where this was just
-"bool dirty".
 
-Will fix.
+On 08/11/2022 21:16, Alex Elder wrote:
+> In "sc7280-idp.dts", the IPA node is modified after being defined.
+> However that file includes "sc7280-idp.dtsi", which also modifies
+> the IPA node (in the same way).  This only needs to be done in
+> "sc7280-idp.dtsi".
+> 
+> Signed-off-by: Alex Elder <elder@linaro.org>
+> ---
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-Doesn't matter for the TLB flushing case, but I really did hope that
-we could use this for mlock too, and that case needs both bits.
-
-I did look at converting mlock (and it's why I wanted to make
-release_pages() take that whole encoded thing in general, rather than
-make some special case for it), but the mlock code uses that "struct
-pagevec" abstraction that seems entirely pointless ("pvec->nr" becomes
-"pagevec_count(pvec)", which really doesn't seem to be any clearer at
-alll), but whatever.
-
-               Linus
+Konrad
+>   arch/arm64/boot/dts/qcom/sc7280-idp.dts | 5 -----
+>   1 file changed, 5 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sc7280-idp.dts b/arch/arm64/boot/dts/qcom/sc7280-idp.dts
+> index 7559164cdda08..9ddfdfdd354ee 100644
+> --- a/arch/arm64/boot/dts/qcom/sc7280-idp.dts
+> +++ b/arch/arm64/boot/dts/qcom/sc7280-idp.dts
+> @@ -61,11 +61,6 @@ &bluetooth {
+>   	vddio-supply = <&vreg_l19b_1p8>;
+>   };
+>   
+> -&ipa {
+> -	status = "okay";
+> -	modem-init;
+> -};
+> -
+>   &pmk8350_rtc {
+>   	status = "okay";
+>   };
