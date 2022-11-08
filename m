@@ -2,207 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A60D6206B8
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 03:27:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B924662063B
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 02:39:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233218AbiKHC1f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 21:27:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53480 "EHLO
+        id S233362AbiKHBjo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 20:39:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbiKHC1c (ORCPT
+        with ESMTP id S229534AbiKHBjn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 21:27:32 -0500
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9150C183A1;
-        Mon,  7 Nov 2022 18:27:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=Cs3x9tc+ZgMBqe3I18ShxSkvk/KNHstoAyiOxOiMD/A=; b=IyKri1AWH2/qZZca8gTYBCxvn4
-        rroDdxIZk2HZSCtF665/NYyXTCUDgT1k5NulxF8NZVZrt9AbnG/Q35/62FGOlSSl+e891+JqZvXQa
-        dD0z/z2YJgvlG+SQTdHcq0PJgxlCLYALl3rualxXad6VNd75YqK8IokwYmP36kXQfSuY=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1osEJM-001m0U-Dl; Tue, 08 Nov 2022 03:26:00 +0100
-Date:   Tue, 8 Nov 2022 03:26:00 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Shenwei Wang <shenwei.wang@nxp.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        imx@lists.linux.dev
-Subject: Re: [PATCH 2/2] net: fec: add xdp and page pool statistics
-Message-ID: <Y2m+OHPaS6aV6GYx@lunn.ch>
-References: <20221107143825.3368602-1-shenwei.wang@nxp.com>
- <20221107143825.3368602-3-shenwei.wang@nxp.com>
+        Mon, 7 Nov 2022 20:39:43 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E557186FF
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 17:39:42 -0800 (PST)
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4N5rPK0LYHzRp63;
+        Tue,  8 Nov 2022 09:39:33 +0800 (CST)
+Received: from dggpemm100009.china.huawei.com (7.185.36.113) by
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 8 Nov 2022 09:39:40 +0800
+Received: from huawei.com (10.175.113.32) by dggpemm100009.china.huawei.com
+ (7.185.36.113) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Tue, 8 Nov
+ 2022 09:39:39 +0800
+From:   Liu Shixin <liushixin2@huawei.com>
+To:     Jan Kara <jack@suse.com>
+CC:     <linux-kernel@vger.kernel.org>, Liu Shixin <liushixin2@huawei.com>
+Subject: [PATCH] udf: fix NULL pointer dereference in udf_rename()
+Date:   Tue, 8 Nov 2022 10:27:41 +0800
+Message-ID: <20221108022741.492573-1-liushixin2@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221107143825.3368602-3-shenwei.wang@nxp.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.113.32]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm100009.china.huawei.com (7.185.36.113)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> +enum {
-> +	RX_XDP_REDIRECT = 0,
-> +	RX_XDP_PASS,
-> +	RX_XDP_DROP,
-> +	RX_XDP_TX,
-> +	RX_XDP_TX_ERRORS,
-> +	TX_XDP_XMIT,
-> +	TX_XDP_XMIT_ERRORS,
-> +	XDP_STATS_TOTAL,
-> +};
-> +
->  struct fec_enet_priv_tx_q {
->  	struct bufdesc_prop bd;
->  	unsigned char *tx_bounce[TX_RING_SIZE];
-> @@ -546,6 +557,7 @@ struct fec_enet_priv_rx_q {
->  	/* page_pool */
->  	struct page_pool *page_pool;
->  	struct xdp_rxq_info xdp_rxq;
-> +	u32 stats[XDP_STATS_TOTAL];
->  
->  	/* rx queue number, in the range 0-7 */
->  	u8 id;
-> diff --git a/drivers/net/ethernet/freescale/fec_main.c b/drivers/net/ethernet/freescale/fec_main.c
-> index 3fb870340c22..89fef370bc10 100644
-> --- a/drivers/net/ethernet/freescale/fec_main.c
-> +++ b/drivers/net/ethernet/freescale/fec_main.c
-> @@ -1523,10 +1523,12 @@ fec_enet_run_xdp(struct fec_enet_private *fep, struct bpf_prog *prog,
->  
->  	switch (act) {
->  	case XDP_PASS:
-> +		rxq->stats[RX_XDP_PASS]++;
->  		ret = FEC_ENET_XDP_PASS;
->  		break;
->  
->  	case XDP_REDIRECT:
-> +		rxq->stats[RX_XDP_REDIRECT]++;
->  		err = xdp_do_redirect(fep->netdev, xdp, prog);
->  		if (!err) {
->  			ret = FEC_ENET_XDP_REDIR;
-> @@ -1549,6 +1551,7 @@ fec_enet_run_xdp(struct fec_enet_private *fep, struct bpf_prog *prog,
->  		fallthrough;    /* handle aborts by dropping packet */
->  
->  	case XDP_DROP:
-> +		rxq->stats[RX_XDP_DROP]++;
->  		ret = FEC_ENET_XDP_CONSUMED;
->  		page = virt_to_head_page(xdp->data);
->  		page_pool_put_page(rxq->page_pool, page, sync, true);
-> @@ -2657,37 +2660,91 @@ static const struct fec_stat {
->  	{ "IEEE_rx_octets_ok", IEEE_R_OCTETS_OK },
->  };
->  
-> -#define FEC_STATS_SIZE		(ARRAY_SIZE(fec_stats) * sizeof(u64))
-> +static struct fec_xdp_stat {
-> +	char name[ETH_GSTRING_LEN];
-> +	u64 count;
-> +} fec_xdp_stats[XDP_STATS_TOTAL] = {
-> +	{ "rx_xdp_redirect", 0 },           /* RX_XDP_REDIRECT = 0, */
-> +	{ "rx_xdp_pass", 0 },               /* RX_XDP_PASS, */
-> +	{ "rx_xdp_drop", 0 },               /* RX_XDP_DROP, */
-> +	{ "rx_xdp_tx", 0 },                 /* RX_XDP_TX, */
-> +	{ "rx_xdp_tx_errors", 0 },          /* RX_XDP_TX_ERRORS, */
-> +	{ "tx_xdp_xmit", 0 },               /* TX_XDP_XMIT, */
-> +	{ "tx_xdp_xmit_errors", 0 },        /* TX_XDP_XMIT_ERRORS, */
-> +};
+Syzbot reported a NULL pointer dereference:
 
-Why do you mix the string and the count?
+ Unable to handle kernel NULL pointer dereference at virtual address 0000000000000020
+[...]
+ Call trace:
+  __memset+0x84/0x188 arch/arm64/lib/memset.S:98
+  udf_delete_entry fs/udf/namei.c:577 [inline]
+  udf_rename+0x47c/0x6d0 fs/udf/namei.c:1173
+  vfs_rename+0x59c/0x7f8 fs/namei.c:4756
+  do_renameat2+0x490/0x758 fs/namei.c:4907
+  __do_sys_renameat2 fs/namei.c:4940 [inline]
+[...]
 
-> +
-> +#define FEC_STATS_SIZE	((ARRAY_SIZE(fec_stats) + \
-> +			ARRAY_SIZE(fec_xdp_stats)) * sizeof(u64))
->  
->  static void fec_enet_update_ethtool_stats(struct net_device *dev)
->  {
->  	struct fec_enet_private *fep = netdev_priv(dev);
-> -	int i;
-> +	struct fec_xdp_stat xdp_stats[7];
+Fix this by check return value of udf_find_entry() since ofi may be NULL
+or error code.
 
-You are allocating 7 x name[ETH_GSTRING_LEN], here, which you are not
-going to use. All you really need is u64 xdp_stats[XDP_STATS_TOTAL]
+Reported-by: syzbot+17fcf98a689ff64f669b@syzkaller.appspotmail.com
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Signed-off-by: Liu Shixin <liushixin2@huawei.com>
+---
+ fs/udf/namei.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-> +	int off = ARRAY_SIZE(fec_stats);
-> +	struct fec_enet_priv_rx_q *rxq;
-> +	int i, j;
->  
->  	for (i = 0; i < ARRAY_SIZE(fec_stats); i++)
->  		fep->ethtool_stats[i] = readl(fep->hwp + fec_stats[i].offset);
-> +
-> +	for (i = fep->num_rx_queues - 1; i >= 0; i--) {
-> +		rxq = fep->rx_queue[i];
-> +		for (j = 0; j < XDP_STATS_TOTAL; j++)
-> +			xdp_stats[j].count += rxq->stats[j];
-> +	}
-> +
-> +	for (i = 0; i < XDP_STATS_TOTAL; i++)
-> +		fep->ethtool_stats[i + off] = xdp_stats[i].count;
+diff --git a/fs/udf/namei.c b/fs/udf/namei.c
+index fb4c30e05245..e0267e72cebb 100644
+--- a/fs/udf/namei.c
++++ b/fs/udf/namei.c
+@@ -1170,6 +1170,11 @@ static int udf_rename(struct user_namespace *mnt_userns, struct inode *old_dir,
+ 
+ 	/* The old fid may have moved - find it again */
+ 	ofi = udf_find_entry(old_dir, &old_dentry->d_name, &ofibh, &ocfi);
++	if (IS_ERR_OR_NULL(ofi)) {
++		retval = PTR_ERR(ofi);
++		goto end_rename;
++	}
++
+ 	udf_delete_entry(old_dir, ofi, &ofibh, &ocfi);
+ 
+ 	if (new_inode) {
+-- 
+2.25.1
 
-It would be more logical to use j here.
-
-It is also pretty messy. For fec_enet_get_strings() and
-fec_enet_get_sset_count() you deal with the three sets of stats
-individually. But here you combine normal stats and xdp stats in
-one. It will probably come out cleaner if you keep it all separate.
-
->  static void fec_enet_get_ethtool_stats(struct net_device *dev,
->  				       struct ethtool_stats *stats, u64 *data)
->  {
->  	struct fec_enet_private *fep = netdev_priv(dev);
-> +	u64 *dst = data + FEC_STATS_SIZE / 8;
-
-Why 8? sizeof(u64) would be a bit clearer. Or just use
-ARRAY_SIZE(fec_stats) which is what you are actually wanting.
-
->  
->  	if (netif_running(dev))
->  		fec_enet_update_ethtool_stats(dev);
->  
->  	memcpy(data, fep->ethtool_stats, FEC_STATS_SIZE);
-> +
-> +	fec_enet_page_pool_stats(fep, dst);
->  }
->  
->  static void fec_enet_get_strings(struct net_device *netdev,
->  	u32 stringset, u8 *data)
->  {
-> +	int off = ARRAY_SIZE(fec_stats);
->  	int i;
->  	switch (stringset) {
->  	case ETH_SS_STATS:
->  		for (i = 0; i < ARRAY_SIZE(fec_stats); i++)
->  			memcpy(data + i * ETH_GSTRING_LEN,
->  				fec_stats[i].name, ETH_GSTRING_LEN);
-> +		for (i = 0; i < ARRAY_SIZE(fec_xdp_stats); i++)
-> +			memcpy(data + (i + off) * ETH_GSTRING_LEN,
-> +			       fec_xdp_stats[i].name, ETH_GSTRING_LEN);
-> +		off = (i + off) * ETH_GSTRING_LEN;
-> +		page_pool_ethtool_stats_get_strings(data + off);
-
-Probably simpler is:
-
-		for (i = 0; i < ARRAY_SIZE(fec_stats); i++) {
-			memcpy(data, fec_stats[i].name, ETH_GSTRING_LEN);
-			data += ETH_GSTRING_LEN;
-		}
-		for (i = 0; i < ARRAY_SIZE(fec_xdp_stats); i++) {
-			memcpy(data, fec_xdp_stats[i].name, ETH_GSTRING_LEN);
-			data += ETH_GSTRING_LEN;
-		}
-		page_pool_ethtool_stats_get_strings(data);
-		
-	Andrew
