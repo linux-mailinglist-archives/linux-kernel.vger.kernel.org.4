@@ -2,59 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61F83620B65
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 09:43:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0155620B66
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 09:43:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233658AbiKHIno (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 03:43:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49298 "EHLO
+        id S233607AbiKHIns (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 03:43:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233569AbiKHInd (ORCPT
+        with ESMTP id S233599AbiKHIng (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 03:43:33 -0500
+        Tue, 8 Nov 2022 03:43:36 -0500
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B8A75FE6
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 00:43:30 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87DA5558C
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 00:43:32 -0800 (PST)
 Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
         (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
         (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id B6562660299E;
-        Tue,  8 Nov 2022 08:43:28 +0000 (GMT)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 8CDA266003EF;
+        Tue,  8 Nov 2022 08:43:30 +0000 (GMT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1667897009;
+        s=mail; t=1667897011;
         bh=q6qqpBqwMQgI0Wus+7X9VLIEmROhuwDUjEYSYZTBgvA=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=oYHJb2lTtqeanl6/Y9ZrUQ/UJ9GPs8dEAkVygeid7QP3yK1A3iW0ewETprTusGvQA
-         EUiH2eSsegxiWoAuH4UcLIVoplcxzSeI5fNUey84OdSYLa4aQ4UIOYme7HHh3OALJ9
-         F5qJvAfNjK/p6E47pf256nA17fzT3sF1ejG2UW0YoPPZNjrIPWug7d8Zge2i3lEke2
-         fjN5qWlAt1pjlSfjXa3R/dlMRtCOAyjBqBdWmCatj/8YwI92VCaJMHxwF06WU8YBVh
-         nCJI7sSkxabOrk4YipVua88Am/06tIzHRBeNWerQosBF3OK//CNKQZMfsFe2AdHhXA
-         fV6KgjFShitcQ==
-Message-ID: <f329d007-1b67-1010-fccc-17dd0174fd83@collabora.com>
-Date:   Tue, 8 Nov 2022 09:43:26 +0100
+        b=kHYgo+ZfVVeNHM+XU/s9aYJLPn5XF2JrEarPfga85dei003HizH/3elmkMSzsBSMY
+         K+hzj3pVzzG7QBw4lJVwW82aKIedPKqA7j4VB+YBHbKxRgIJJZplhq758wz6BWfix2
+         AQYbvm+7YHPo48R1pcPqGuGlfkaXxnr7pff8C6ObTMF2b/0/xzBawm+0SfRR06Ruqt
+         I96Jb1nzEGSSZMijUFFQzedcvhSXxJYJJPVlr3NpMdEsncr05E/UVS2EtPzMTVTR47
+         1fW9+YS7M/j2llVVvHdTDq4q5uy24vTyC2l7yAQo/7WxijGTD+Lnq9FyzLwBwKlraK
+         wlgEH6RJS9fMQ==
+Message-ID: <1814aa2d-a2fc-fd38-9341-000080e68311@collabora.com>
+Date:   Tue, 8 Nov 2022 09:43:28 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.3.3
-Subject: Re: [PATCH 6/9] ASoC: mediatek: mt8186-da7219: Register to module
+Subject: Re: [PATCH 3/9] ASoC: mediatek: mt6797-mt6351: Register to module
  device table
 Content-Language: en-US
 To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
         <nfraprado@collabora.com>, Mark Brown <broonie@kernel.org>
 Cc:     kernel@collabora.com, Jaroslav Kysela <perex@perex.cz>,
-        Jiaxin Yu <jiaxin.yu@mediatek.com>,
         Liam Girdwood <lgirdwood@gmail.com>,
         Matthias Brugger <matthias.bgg@gmail.com>,
+        Miaoqian Lin <linmq006@gmail.com>,
         Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
-        "chunxu.li" <chunxu.li@mediatek.com>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-mediatek@lists.infradead.org
 References: <20221107160437.740353-1-nfraprado@collabora.com>
- <20221107160437.740353-7-nfraprado@collabora.com>
+ <20221107160437.740353-4-nfraprado@collabora.com>
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20221107160437.740353-7-nfraprado@collabora.com>
+In-Reply-To: <20221107160437.740353-4-nfraprado@collabora.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
