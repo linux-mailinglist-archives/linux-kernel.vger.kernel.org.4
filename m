@@ -2,78 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D354E620F25
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 12:34:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70E44620F26
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 12:34:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233756AbiKHLd7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 06:33:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42930 "EHLO
+        id S233910AbiKHLeE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 06:34:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232654AbiKHLd5 (ORCPT
+        with ESMTP id S233846AbiKHLd7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 06:33:57 -0500
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EE861277E
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 03:33:55 -0800 (PST)
-Received: by mail-wm1-x329.google.com with SMTP id ay14-20020a05600c1e0e00b003cf6ab34b61so11488789wmb.2
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 03:33:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=layalina-io.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=tydk6A1vUHzb19qfF3RhmJ3O+utBlcG181vL7xWHS+E=;
-        b=TQsBcPp6f5lb3uLfJsHvB9eseFQcXaW1SDi/9RqpZ3fjAqD9TDxHcoKRW7ROCVxgmm
-         khNyE9oIkJOV6sEbgN20bZBimtH+ZF16dZazPEaDCyRFAznHuKJkBSfAhjKWxXU5yUyJ
-         idguAp6MjlP+8hit1GwazYBBN6S1ETqm9q4L/2rdG550lqB29rbQbou5OCF10KM2SXt7
-         naKD7LDV1NJpDRjM7uC89rgap9Gz7Enu0jRtMwjoyejHbPtA95+5rLmZ16X2EW5iCW8W
-         nyFqO+04EWqMQ7av2M09H5pzs2EKL3lWxgHCPIeBPCcOsuZDS1QywCfFriaMndVpHl3b
-         6wIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tydk6A1vUHzb19qfF3RhmJ3O+utBlcG181vL7xWHS+E=;
-        b=uvrfQKgH8WzHNZ/j+ODcNRxrH08fq8OKoyr+IR4qgE3VTakHLaP+s7n3N7rQfoqGF3
-         eTOEi1hokK6OrQnHx0NKTdobaYNJ/iSYxtxFSVz7yYY53iRHkigx1/wRC578TjCGIS/W
-         SQxQ3oBZwgGZalBI0vniXGTwIhrc8M2+lMV3htXnwfdQXRTSLDiwDiZPdoOEN3cvUzj2
-         GNVrOWxrN82FX0Kpx6xPrhAUXdqyT9BCc2IeMynYrjlPnc/TTDAIXOfhkj+pypmz/X6o
-         O5C6sYdfMRK5wQB4HoNqda4a1JzMw/JKW6x8NKblQi7bXJH0oF9PtN4s0G13izLXxrXy
-         1fZA==
-X-Gm-Message-State: ACrzQf0Utk8PkrJyBXVqVczBRsFErBkJS96scxMADVq4DzFj9QbW+KVJ
-        fbLXuRo3sl8XirHrxR6/O2oNpA==
-X-Google-Smtp-Source: AMsMyM7GV4PhnE1vLoGzwYkpCLqSzY6e3TVi13CfdbOQWz4VwbbzqopJsBwkvux77rCuINlro6KbxA==
-X-Received: by 2002:a05:600c:3c82:b0:3b5:60a6:c80f with SMTP id bg2-20020a05600c3c8200b003b560a6c80fmr37149375wmb.199.1667907233622;
-        Tue, 08 Nov 2022 03:33:53 -0800 (PST)
-Received: from airbuntu ([104.132.45.106])
-        by smtp.gmail.com with ESMTPSA id i5-20020adffc05000000b0023660f6cecfsm10023313wrr.80.2022.11.08.03.33.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Nov 2022 03:33:53 -0800 (PST)
-Date:   Tue, 8 Nov 2022 11:33:51 +0000
-From:   Qais Yousef <qyousef@layalina.io>
-To:     Valentin Schneider <vschneid@redhat.com>
-Cc:     Qais Yousef <qais.yousef@arm.com>, Ingo Molnar <mingo@kernel.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        linux-kernel@vger.kernel.org, Xuewen Yan <xuewen.yan94@gmail.com>,
-        Lukasz Luba <lukasz.luba@arm.com>, Wei Wang <wvw@google.com>,
-        Jonathan JMChen <Jonathan.JMChen@mediatek.com>,
-        Hank <han.lin@mediatek.com>
-Subject: Re: [PATCH v2 1/9] sched/uclamp: Fix relationship between uclamp and
- migration margin
-Message-ID: <20221108113351.ne4kobarl5ooqffp@airbuntu>
-References: <20220804143609.515789-1-qais.yousef@arm.com>
- <20220804143609.515789-2-qais.yousef@arm.com>
- <xhsmhy1sqvd0a.mognet@vschneid.remote.csb>
- <20221105192452.e6lgq55uyiij7ecf@airbuntu>
- <xhsmhpmdymw1n.mognet@vschneid.remote.csb>
+        Tue, 8 Nov 2022 06:33:59 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B17611277E
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 03:33:57 -0800 (PST)
+Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4N65Vw2fD9zpWG1;
+        Tue,  8 Nov 2022 19:30:16 +0800 (CST)
+Received: from [10.67.110.108] (10.67.110.108) by
+ kwepemi500012.china.huawei.com (7.221.188.12) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 8 Nov 2022 19:33:55 +0800
+Message-ID: <598bc40d-e826-f9cc-14fd-f4570051f4c6@huawei.com>
+Date:   Tue, 8 Nov 2022 19:33:54 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <xhsmhpmdymw1n.mognet@vschneid.remote.csb>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v4 0/8] Add OPTPROBES feature on RISCV
+To:     Xim <chenguokai17@mails.ucas.ac.cn>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+CC:     <paul.walmsley@sifive.com>, <palmer@dabbelt.com>,
+        <aou@eecs.berkeley.edu>, <rostedt@goodmis.org>, <mingo@redhat.com>,
+        <sfr@canb.auug.org.au>, <linux-riscv@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, Liao Chang <liaoclark@163.com>
+References: <20221106100316.2803176-1-chenguokai17@mails.ucas.ac.cn>
+ <87y1sm1z8j.fsf@all.your.base.are.belong.to.us>
+ <9A705974-A007-45E2-BC5D-A7E90821A258@mails.ucas.ac.cn>
+From:   "liaochang (A)" <liaochang1@huawei.com>
+In-Reply-To: <9A705974-A007-45E2-BC5D-A7E90821A258@mails.ucas.ac.cn>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.110.108]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemi500012.china.huawei.com (7.221.188.12)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,74 +54,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/07/22 18:58, Valentin Schneider wrote:
-> On 05/11/22 19:24, Qais Yousef wrote:
-> > On 11/04/22 17:35, Valentin Schneider wrote:
-> >
-> >> > +	/*
-> >> > +	 * We must use capacity_orig_of() for comparing against uclamp_min and
-> >> > +	 * uclamp_max. We only care about capacity pressure (by using
-> >> > +	 * capacity_of()) for comparing against the real util.
-> >> > +	 *
-> >> > +	 * If a task is boosted to 1024 for example, we don't want a tiny
-> >> > +	 * pressure to skew the check whether it fits a CPU or not.
-> >> > +	 *
-> >> > +	 * Similarly if a task is capped to capacity_orig_of(little_cpu), it
-> >> > +	 * should fit a little cpu even if there's some pressure.
-> >> > +	 *
-> >> > +	 * Only exception is for thermal pressure since it has a direct impact
-> >> > +	 * on available OPP of the system.
-> >> > +	 *
-> >> > +	 * We honour it for uclamp_min only as a drop in performance level
-> >> > +	 * could result in not getting the requested minimum performance level.
-> >> > +	 *
-> >>
-> >> Why specifically care about OPPs here? Per our CPU capacity model, a task
-> >> alone on a CPUx throttled to f=fmax/2 and a task coscheduled on a CPUy with
-> >> RT/DL tasks and/or IRQs such that cpu_capacity(CPUy) = 50% are both getting
-> >> (roughly) the same performance level.
-> >
-> > Depends how you define performance level. What you call performance level,
-> > I think is better called bandwidth. Uclamp is a performance and not a bandwidth
-> > hint.
-> >
-> > If a 10% task:
-> >
-> >       p->util_avg = 10% * 1024
-> >
-> > is requesting max performance level
-> >
-> >       p->uclamp_min = 1024
-> >
-> > This will translate to running at highest frequency and in case of big.LITTLE
-> > system, the biggest CPU too.
-> >
-> > RT/DL pressure has no impact in the task being able to achieve this; that is
-> > running at max frequency and biggest cpu.
-> >
-> > If the cpu has no bandwidth to fit this task, then our usual comparison of
-> > util_avg with capacity_of() should fail as usual.
-> >
-> 
-> Ok so we *do* have this with how the fitting criteria are combined (I
-> didn't get that when I first scanned through the code); thanks for
-> elaborating on that.
 
-Oh yeah, this hasn't changed.
+
+在 2022/11/8 19:04, Xim 写道:
+> Hi Björn,
+> 
+> Thanks for your great review! Some explanations below.
+> 
+>> 2022年11月8日 00:54，Björn Töpel <bjorn@kernel.org> 写道：
+>>
+>> Have you run the series on real hardware, or just qemu?
+> 
+> Currently only qemu tests are made, I will try to test it on a FPGA real hardware soon.
+> 
+>> AFAIU, the algorithm only tracks registers that are *in use*. You are
+>> already scanning the whole function (next patch). What about the caller
+>> saved registers that are *not* used by the function in the probe range?
+>> Can those, potentially unused, regs be used?
+> 
+> Great missing part! I have made a static analyzation right upon receiving this mail.
+> The result shows that this newly purposed idea reaches about the same
+> success rate on my test set (rv64 defconf with RVI only) while when combined,
+> they can reach a higher success rate, 1/3 above their baseline. A patch that
+> includes this strategy will be sent soon.
+>>
+>>> +static void arch_find_register(unsigned long start, unsigned long end,
+>>
+>> Nit; When I see "arch_" I think it's functionality that can be
+>> overridden per-arch. This is not the case, but just a helper for RV.
+> 
+> It can be explained from two aspects. First, it can be extended to most RISC
+> archs, which can be extracted into the common flow of Kprobe. Second, it is indeed
+> a internal helper for now, so I will correct the name in the next version.
+> 
+>>> static void find_free_registers(struct kprobe *kp, struct optimized_kprobe *op,
+>>> -				int *rd1, int *rd2)
+>>> +				int *rd, int *ra)
+>>
+>> Nit; Please get rid of this code churn, just name the parameters
+>> correctly on introduction in the previous patch.
+> 
+> Will be fixed.
+> 
+>>> +	*rd = ((kw | ow) == 1UL) ? 0 : __builtin_ctzl((kw | ow) & ~1UL);
+>>> +	*ra = (kw == 1UL) ? 0 : __builtin_ctzl(kw & ~1UL);
+>>
+>> Hmm, __builtin_ctzl is undefined for 0, right? Can that be triggered
+>> here?
+
+This corner case has been taken into account, look these condition parts,
+if kw == 1UL this expression will return 0 directly, no chance to invoke __builtin_ctzl.
+
+Thanks.
 
 > 
-> > In the example above, the RT/DL pressure has to be pretty high for the 10% task
-> > not to fit from bandwidth point of view. Which has nothing to do with
-> > uclamp_min.  Only thermal pressure which drops OPPs can actually affect the
-> > uclamp_min hint/request.
-> >
-> > That is, when the task runs it will run at maximum frequency regardless of the
-> > RT/DL pressure. The fact that the bandwidth of the CPU can be stolen has
-> > nothing to do with uclamp_min hint.
-> >
-> >
-> > Thanks!
-> >
-> > --
-> > Qais Yousef
+> Will be fixed.
 > 
+> Regards,
+> Guokai Chen
+> 
+
+-- 
+BR,
+Liao, Chang
