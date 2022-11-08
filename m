@@ -2,203 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E38BA620D38
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 11:26:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 843BE620D3D
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 11:28:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233927AbiKHK0J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 05:26:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51450 "EHLO
+        id S233413AbiKHK2B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 05:28:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233253AbiKHK0H (ORCPT
+        with ESMTP id S229657AbiKHK2A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 05:26:07 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E61762037D
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 02:25:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667903110;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=afO1C9dBkLO8NP2atOwjr3MahU4mzs/QvNV6Z1Wz+Hk=;
-        b=cY6nIqOihOgIaMgwV+4tcpvBcpu7v+fch/d7CgrX+drcIiT9ICGvVtwDYUZZDxipx5jJxC
-        vj4Gb2oi5iX/ol+MoBVbdFtAY/cZ8vjRBbbrFk4tBiU7lmDHkIkgYIdGFPM0BBumNDKsSA
-        i2BndXO0kuX1Il05bkiut1/g2JtBqdw=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-651-0UjkcYfKM1SfNRs2UEL5tg-1; Tue, 08 Nov 2022 05:25:06 -0500
-X-MC-Unique: 0UjkcYfKM1SfNRs2UEL5tg-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Tue, 8 Nov 2022 05:28:00 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48160B873
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 02:27:59 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 28C6B29324B0;
-        Tue,  8 Nov 2022 10:25:06 +0000 (UTC)
-Received: from p1.luc.cera.cz (ovpn-193-136.brq.redhat.com [10.40.193.136])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 5CF48C01555;
-        Tue,  8 Nov 2022 10:25:03 +0000 (UTC)
-From:   Ivan Vecera <ivecera@redhat.com>
-To:     netdev@vger.kernel.org
-Cc:     sassmann@redhat.com, Jacob Keller <jacob.e.keller@intel.com>,
-        Patryk Piotrowski <patryk.piotrowski@intel.com>,
-        SlawomirX Laba <slawomirx.laba@intel.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        intel-wired-lan@lists.osuosl.org (moderated list:INTEL ETHERNET DRIVERS),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH net] iavf: Do not restart Tx queues after reset task failure
-Date:   Tue,  8 Nov 2022 11:25:02 +0100
-Message-Id: <20221108102502.2147389-1-ivecera@redhat.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 05D22B81A00
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 10:27:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B151C433D6;
+        Tue,  8 Nov 2022 10:27:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667903276;
+        bh=XmXAMhLprGXDMRo5fiZJmyS/+wonVwXxZx5NgkKFdeM=;
+        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+        b=q8c5nrc987RX11a4APalb9zO+ZIbGbiAnje+fmuo710RL+hB5/IIzHlv+fcoxiGyf
+         nqye7T1N4JW9WqHVidOCBzTt2v9Lvf76eGGx5Nk7N6yA3Co6kHEbIu7i+fIrx2W54d
+         PIJ8NC+4VxgveAbA0txKScaMqEqMELjrh7zxRGwtmAJge1LcMBdF6L0DPFAaWOTMEs
+         4CXwpq12p5Dr8zuIy2bXamE/XA7F2dmbcW0x/chT0VYnY8r7iV6s+ryoHqNZ5FJpCH
+         eU83U7pvZ07c4tQJw7IzAM9nIgiBu3HBVZc+mut/GJ5e/KV9FLzm0pmh1GsNY32V4u
+         qgMJiNYRgDaRg==
+Date:   Tue, 08 Nov 2022 10:27:51 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     linux-riscv@lists.infradead.org, guoren@kernel.org,
+        anup@brainfault.org, paul.walmsley@sifive.com, palmer@dabbelt.com,
+        conor.dooley@microchip.com, heiko@sntech.de,
+        philipp.tomsich@vrull.eu
+CC:     linux-kernel@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>,
+        Guo Ren <guoren@kernel.org>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Palmer Dabbelt <palmer@rivosinc.com>
+Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_RESEND=5D_riscv=3A_asid=3A_Fixup_?= =?US-ASCII?Q?stale_TLB_entry_cause_application_crash?=
+User-Agent: K-9 Mail for Android
+In-Reply-To: <20221108102044.3317793-1-guoren@kernel.org>
+References: <20221108102044.3317793-1-guoren@kernel.org>
+Message-ID: <D91557B5-7E60-4A29-8669-34FF42454F8C@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After commit aa626da947e9 ("iavf: Detach device during reset task")
-the device is detached during reset task and re-attached at its end.
-The problem occurs when reset task fails because Tx queues are
-restarted during device re-attach and this leads later to a crash.
 
-To resolve this issue properly close the net device in cause of
-failure in reset task to avoid restarting of tx queues at the end.
-Also replace the hacky manipulation with IFF_UP flag by device close
-that clears properly both IFF_UP and __LINK_STATE_START flags.
-In these case iavf_close() does not do anything because the adapter
-state is already __IAVF_DOWN.
 
-Reproducer:
-1) Run some Tx traffic (e.g. iperf3) over iavf interface
-2) Set VF trusted / untrusted in loop
+On 8 November 2022 10:20:44 GMT, guoren@kernel=2Eorg wrote:
+>From: Guo Ren <guoren@linux=2Ealibaba=2Ecom>
+>
+>After use_asid_allocator enabled, the userspace application will
+>crash for stale tlb entry=2E Because only using cpumask_clear_cpu without
+>local_flush_tlb_all couldn't guarantee CPU's tlb entries fresh=2E Then
+>set_mm_asid would cause user space application get a stale value by
+>the stale tlb entry, but set_mm_noasid is okay=2E
+>
+>Here is the symptom of the bug:
+>unhandled signal 11 code 0x1 (coredump)
+>   0x0000003fd6d22524 <+4>:     auipc   s0,0x70
+>   0x0000003fd6d22528 <+8>:     ld      s0,-148(s0) # 0x3fd6d92490
+>=3D> 0x0000003fd6d2252c <+12>:    ld      a5,0(s0)
+>(gdb) i r s0
+>s0          0x8082ed1cc3198b21       0x8082ed1cc3198b21
+>(gdb) x/16 0x3fd6d92490
+>0x3fd6d92490:   0xd80ac8a8      0x0000003f
+>The core dump file shows that the value of register s0 is wrong, but the
+>value in memory is right=2E This is because 'ld s0, -148(s0)' use a stale
+>mapping entry in TLB and got a wrong value from a stale physical
+>address=2E
+>
+>When task run on CPU0, the task loaded/speculative-loaded the value of
+>address(0x3fd6d92490), and the first version of tlb mapping entry was
+>PTWed into CPU0's tlb=2E
+>When the task switched from CPU0 to CPU1 without local_tlb_flush_all
+>(because of asid), the task happened to write a value on address
+>(0x3fd6d92490)=2E It caused do_page_fault -> wp_page_copy ->
+>ptep_clear_flush -> ptep_get_and_clear & flush_tlb_page=2E
+>The flush_tlb_page used mm_cpumask(mm) to determine which CPUs need
+>tlb flush, but CPU0 had cleared the CPU0's mm_cpumask in previous switch_=
+mm=2E
+>So we only flushed the CPU1 tlb, and setted second version mapping
+>of the pte=2E When the task switch from CPU1 to CPU0 again, CPU0 still us=
+ed a
+>stale tlb mapping entry which contained a wrong target physical address=
+=2E
+>When the task happened to read that value, the bug would be raised=2E
+>
+>Fixes: 65d4b9c53017 ("RISC-V: Implement ASID allocator")
+>Signed-off-by: Guo Ren <guoren@linux=2Ealibaba=2Ecom>
+>Signed-off-by: Guo Ren <guoren@kernel=2Eorg>
+>Cc: Anup Patel <apatel@ventanamicro=2Ecom>
+>Cc: Palmer Dabbelt <palmer@rivosinc=2Ecom>
+>---
+> arch/riscv/mm/context=2Ec | 4 +++-
+> 1 file changed, 3 insertions(+), 1 deletion(-)
+>
+>diff --git a/arch/riscv/mm/context=2Ec b/arch/riscv/mm/context=2Ec
+>index 7acbfbd14557=2E=2E8ad6c2493e93 100644
+>--- a/arch/riscv/mm/context=2Ec
+>+++ b/arch/riscv/mm/context=2Ec
+>@@ -317,7 +317,9 @@ void switch_mm(struct mm_struct *prev, struct mm_stru=
+ct *next,
+> 	 */
+> 	cpu =3D smp_processor_id();
+>=20
+>-	cpumask_clear_cpu(cpu, mm_cpumask(prev));
+>+	if (!static_branch_unlikely(&use_asid_allocator))
+>+		cpumask_clear_cpu(cpu, mm_cpumask(prev));
+>+
+> 	cpumask_set_cpu(cpu, mm_cpumask(next));
+>=20
+> 	set_mm(next, cpu);
 
-[root@host ~]# cat repro.sh
-#!/bin/sh
-
-PF=enp65s0f0
-IF=${PF}v0
-
-ip link set up $IF
-ip addr add 192.168.0.2/24 dev $IF
-sleep 1
-
-iperf3 -c 192.168.0.1 -t 600 --logfile /dev/null &
-sleep 2
-
-while :; do
-        ip link set $PF vf 0 trust on
-        ip link set $PF vf 0 trust off
-done
-[root@host ~]# ./repro.sh
-
-Result:
-[ 2006.650969] iavf 0000:41:01.0: Failed to init adminq: -53
-[ 2006.675662] ice 0000:41:00.0: VF 0 is now trusted
-[ 2006.689997] iavf 0000:41:01.0: Reset task did not complete, VF disabled
-[ 2006.696611] iavf 0000:41:01.0: failed to allocate resources during reinit
-[ 2006.703209] ice 0000:41:00.0: VF 0 is now untrusted
-[ 2006.737011] ice 0000:41:00.0: VF 0 is now trusted
-[ 2006.764536] ice 0000:41:00.0: VF 0 is now untrusted
-[ 2006.768919] BUG: kernel NULL pointer dereference, address: 0000000000000b4a
-[ 2006.776358] #PF: supervisor read access in kernel mode
-[ 2006.781488] #PF: error_code(0x0000) - not-present page
-[ 2006.786620] PGD 0 P4D 0
-[ 2006.789152] Oops: 0000 [#1] PREEMPT SMP NOPTI
-[ 2006.792903] ice 0000:41:00.0: VF 0 is now trusted
-[ 2006.793501] CPU: 4 PID: 0 Comm: swapper/4 Kdump: loaded Not tainted 6.1.0-rc3+ #2
-[ 2006.805668] Hardware name: Abacus electric, s.r.o. - servis@abacus.cz Super Server/H12SSW-iN, BIOS 2.4 04/13/2022
-[ 2006.815915] RIP: 0010:iavf_xmit_frame_ring+0x96/0xf70 [iavf]
-[ 2006.821028] ice 0000:41:00.0: VF 0 is now untrusted
-[ 2006.821572] Code: 48 83 c1 04 48 c1 e1 04 48 01 f9 48 83 c0 10 6b 50 f8 55 c1 ea 14 45 8d 64 14 01 48 39 c8 75 eb 41 83 fc 07 0f 8f e9 08 00 00 <0f> b7 45 4a 0f b7 55 48 41 8d 74 24 05 31 c9 66 39 d0 0f 86 da 00
-[ 2006.845181] RSP: 0018:ffffb253004bc9e8 EFLAGS: 00010293
-[ 2006.850397] RAX: ffff9d154de45b00 RBX: ffff9d15497d52e8 RCX: ffff9d154de45b00
-[ 2006.856327] ice 0000:41:00.0: VF 0 is now trusted
-[ 2006.857523] RDX: 0000000000000000 RSI: 00000000000005a8 RDI: ffff9d154de45ac0
-[ 2006.857525] RBP: 0000000000000b00 R08: ffff9d159cb010ac R09: 0000000000000001
-[ 2006.857526] R10: ffff9d154de45940 R11: 0000000000000000 R12: 0000000000000002
-[ 2006.883600] R13: ffff9d1770838dc0 R14: 0000000000000000 R15: ffffffffc07b8380
-[ 2006.885840] ice 0000:41:00.0: VF 0 is now untrusted
-[ 2006.890725] FS:  0000000000000000(0000) GS:ffff9d248e900000(0000) knlGS:0000000000000000
-[ 2006.890727] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[ 2006.909419] CR2: 0000000000000b4a CR3: 0000000c39c10002 CR4: 0000000000770ee0
-[ 2006.916543] PKRU: 55555554
-[ 2006.918254] ice 0000:41:00.0: VF 0 is now trusted
-[ 2006.919248] Call Trace:
-[ 2006.919250]  <IRQ>
-[ 2006.919252]  dev_hard_start_xmit+0x9e/0x1f0
-[ 2006.932587]  sch_direct_xmit+0xa0/0x370
-[ 2006.936424]  __dev_queue_xmit+0x7af/0xd00
-[ 2006.940429]  ip_finish_output2+0x26c/0x540
-[ 2006.944519]  ip_output+0x71/0x110
-[ 2006.947831]  ? __ip_finish_output+0x2b0/0x2b0
-[ 2006.952180]  __ip_queue_xmit+0x16d/0x400
-[ 2006.952721] ice 0000:41:00.0: VF 0 is now untrusted
-[ 2006.956098]  __tcp_transmit_skb+0xa96/0xbf0
-[ 2006.965148]  __tcp_retransmit_skb+0x174/0x860
-[ 2006.969499]  ? cubictcp_cwnd_event+0x40/0x40
-[ 2006.973769]  tcp_retransmit_skb+0x14/0xb0
-...
-
-Fixes: aa626da947e9 ("iavf: Detach device during reset task")
-Cc: Jacob Keller <jacob.e.keller@intel.com>
-Cc: Patryk Piotrowski <patryk.piotrowski@intel.com>
-Cc: SlawomirX Laba <slawomirx.laba@intel.com>
-Signed-off-by: Ivan Vecera <ivecera@redhat.com>
----
- drivers/net/ethernet/intel/iavf/iavf_main.c | 16 +++++++++++++++-
- 1 file changed, 15 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/net/ethernet/intel/iavf/iavf_main.c b/drivers/net/ethernet/intel/iavf/iavf_main.c
-index 5abcd66e7c7a..b66f8fa1d83b 100644
---- a/drivers/net/ethernet/intel/iavf/iavf_main.c
-+++ b/drivers/net/ethernet/intel/iavf/iavf_main.c
-@@ -2921,7 +2921,6 @@ static void iavf_disable_vf(struct iavf_adapter *adapter)
- 	iavf_free_queues(adapter);
- 	memset(adapter->vf_res, 0, IAVF_VIRTCHNL_VF_RESOURCE_SIZE);
- 	iavf_shutdown_adminq(&adapter->hw);
--	adapter->netdev->flags &= ~IFF_UP;
- 	adapter->flags &= ~IAVF_FLAG_RESET_PENDING;
- 	iavf_change_state(adapter, __IAVF_DOWN);
- 	wake_up(&adapter->down_waitqueue);
-@@ -3021,6 +3020,11 @@ static void iavf_reset_task(struct work_struct *work)
- 		iavf_disable_vf(adapter);
- 		mutex_unlock(&adapter->client_lock);
- 		mutex_unlock(&adapter->crit_lock);
-+		if (netif_running(netdev)) {
-+			rtnl_lock();
-+			dev_close(netdev);
-+			rtnl_unlock();
-+		}
- 		return; /* Do not attempt to reinit. It's dead, Jim. */
- 	}
- 
-@@ -3173,6 +3177,16 @@ static void iavf_reset_task(struct work_struct *work)
- 
- 	mutex_unlock(&adapter->client_lock);
- 	mutex_unlock(&adapter->crit_lock);
-+
-+	if (netif_running(netdev)) {
-+		/* Close device to ensure that Tx queues will not be started
-+		 * during netif_device_attach() at the end of the reset task.
-+		 */
-+		rtnl_lock();
-+		dev_close(netdev);
-+		rtnl_unlock();
-+	}
-+
- 	dev_err(&adapter->pdev->dev, "failed to allocate resources during reinit\n");
- reset_finish:
- 	rtnl_lock();
--- 
-2.37.4
-
+This is a completely different patch to what you already sent=2E Why have =
+you marked it RESEND rather than v2?
