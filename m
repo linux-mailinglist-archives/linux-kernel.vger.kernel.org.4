@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DABA2621044
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 13:20:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F4BA621048
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 13:20:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234171AbiKHMU0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 07:20:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39426 "EHLO
+        id S234172AbiKHMUd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 07:20:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234153AbiKHMUS (ORCPT
+        with ESMTP id S234147AbiKHMUW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 07:20:18 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C14413EBE;
-        Tue,  8 Nov 2022 04:20:15 -0800 (PST)
+        Tue, 8 Nov 2022 07:20:22 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9905E13F1A;
+        Tue,  8 Nov 2022 04:20:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667910015; x=1699446015;
+  t=1667910021; x=1699446021;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=JLWjR1QhfIzzz63zvvQ1hW3NXrVYq+1ORm+qFn4evPQ=;
-  b=H+fztD5nJTicnbF1On56Tq8LoLYsdaCJGuhmoaVE3IFKNPOKl96xp6PH
-   rqll8cGfJGG5xHGm6PQOCxEFo2e3+x2uVnQHR6rlMHcAHfuyyIdy/hVfd
-   ESFNYyowpIjbxNDPqbpVu6l0nrKmxq8acMZBbvt9+XnKrwVn+DEo8pD+k
-   CBOHujmuxVPGgqM6X7IGQOVYAEY/F6ydyNt83SawBh9M3CJlZF6gG4J+3
-   cJ73Rm48QTUBTOAPgC5l6i5iOTyPqyHMXan7H8SUeE+kFXuZt1iZGMoSr
-   15rs1LOeYIc+0HMD8MApSH3R7klwQIzmlvnVt9KzJo66wqalsQrw1qbht
+  bh=U3IZ849nN3cT/APl5Y2asdOcNM93x6vO1SV0zIv20QY=;
+  b=Qax7mrGSGeYBpn/CaFXYJltw4Gg3DtYwjToKeGya+YPxMhmJHacscoXZ
+   BPqplRx+rL3FjUxQequuozACbBayotfztyi+zjgCpvkQ6noqF2UQ7XBru
+   IAZNjM5Y1s82Q2lD0qsKDMoy0suudY620MVzSi34TPlg4W7uXXehEV9Gc
+   v8yOUUZoc9SjtggPOk+URBtnWnZTU1avRoUtMcHkjm5Mh5MK/cezvy2ei
+   SiQDNkPmwS+AR+0zsjeXAR1tOFDgzUc+uKRT7quX9ItnNq70/co0h63lb
+   h1RJKreLCZsuw5v89xIHyAYAAdWAjTftc1f9J4aW4LIxrVMQ4XZml0leP
    Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10524"; a="311834679"
+X-IronPort-AV: E=McAfee;i="6500,9779,10524"; a="374951461"
 X-IronPort-AV: E=Sophos;i="5.96,147,1665471600"; 
-   d="scan'208";a="311834679"
+   d="scan'208";a="374951461"
 Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2022 04:20:15 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10524"; a="741932198"
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2022 04:20:21 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10524"; a="741932222"
 X-IronPort-AV: E=Sophos;i="5.96,147,1665471600"; 
-   d="scan'208";a="741932198"
+   d="scan'208";a="741932222"
 Received: from ppkrause-mobl.ger.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.249.44.73])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2022 04:20:12 -0800
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2022 04:20:17 -0800
 From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
 To:     linux-serial@vger.kernel.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -45,10 +45,11 @@ To:     linux-serial@vger.kernel.org,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
         linux-kernel@vger.kernel.org
-Cc:     Gilles BULOZ <gilles.buloz@kontron.com>, stable <stable@kernel.org>
-Subject: [PATCH v2 2/4] serial: 8250_lpss: Configure DMA also w/o DMA filter
-Date:   Tue,  8 Nov 2022 14:19:50 +0200
-Message-Id: <20221108121952.5497-3-ilpo.jarvinen@linux.intel.com>
+Cc:     Gilles BULOZ <gilles.buloz@kontron.com>, stable@vger.kernel.org,
+        Wentong Wu <wentong.wu@intel.com>
+Subject: [PATCH v2 3/4] serial: 8250_lpss: Use 16B DMA burst with Elkhart Lake
+Date:   Tue,  8 Nov 2022 14:19:51 +0200
+Message-Id: <20221108121952.5497-4-ilpo.jarvinen@linux.intel.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20221108121952.5497-1-ilpo.jarvinen@linux.intel.com>
 References: <20221108121952.5497-1-ilpo.jarvinen@linux.intel.com>
@@ -56,68 +57,43 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If the platform doesn't use DMA device filter (as is the case with
-Elkhart Lake), whole lpss8250_dma_setup() setup is skipped. This
-results in skipping also *_maxburst setup which is undesirable.
-Refactor lpss8250_dma_setup() to configure DMA even if filter is not
-setup.
+Configure DMA to use 16B burst size with Elkhart Lake. This makes the
+bus use more efficient and works around an issue which occurs with the
+previously used 1B.
 
-Cc: stable <stable@kernel.org>
+The fix was initially developed by Srikanth Thokala and Aman Kumar.
+This together with the previous config change is the cleaned up version
+of the original fix.
+
+Fixes: 0a9410b981e9 ("serial: 8250_lpss: Enable DMA on Intel Elkhart Lake")
+Cc: <stable@vger.kernel.org> # serial: 8250_lpss: Configure DMA also w/o DMA filter
+Reported-by: Wentong Wu <wentong.wu@intel.com>
 Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 ---
- drivers/tty/serial/8250/8250_lpss.c | 15 +++++++++++----
- 1 file changed, 11 insertions(+), 4 deletions(-)
+ drivers/tty/serial/8250/8250_lpss.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
 diff --git a/drivers/tty/serial/8250/8250_lpss.c b/drivers/tty/serial/8250/8250_lpss.c
-index 44cc755b1a29..7d9cddbfef40 100644
+index 7d9cddbfef40..0e43bdfb7459 100644
 --- a/drivers/tty/serial/8250/8250_lpss.c
 +++ b/drivers/tty/serial/8250/8250_lpss.c
-@@ -277,8 +277,13 @@ static int lpss8250_dma_setup(struct lpss8250 *lpss, struct uart_8250_port *port
- 	struct dw_dma_slave *rx_param, *tx_param;
- 	struct device *dev = port->port.dev;
+@@ -174,6 +174,8 @@ static int ehl_serial_setup(struct lpss8250 *lpss, struct uart_port *port)
+ 	 */
+ 	up->dma = dma;
  
--	if (!lpss->dma_param.dma_dev)
-+	if (!lpss->dma_param.dma_dev) {
-+		dma = port->dma;
-+		if (dma)
-+			goto out_configuration_only;
++	lpss->dma_maxburst = 16;
 +
- 		return 0;
-+	}
+ 	port->set_termios = dw8250_do_set_termios;
  
- 	rx_param = devm_kzalloc(dev, sizeof(*rx_param), GFP_KERNEL);
- 	if (!rx_param)
-@@ -289,16 +294,18 @@ static int lpss8250_dma_setup(struct lpss8250 *lpss, struct uart_8250_port *port
- 		return -ENOMEM;
- 
- 	*rx_param = lpss->dma_param;
--	dma->rxconf.src_maxburst = lpss->dma_maxburst;
--
- 	*tx_param = lpss->dma_param;
--	dma->txconf.dst_maxburst = lpss->dma_maxburst;
- 
- 	dma->fn = lpss8250_dma_filter;
- 	dma->rx_param = rx_param;
- 	dma->tx_param = tx_param;
- 
- 	port->dma = dma;
-+
-+out_configuration_only:
-+	dma->rxconf.src_maxburst = lpss->dma_maxburst;
-+	dma->txconf.dst_maxburst = lpss->dma_maxburst;
-+
  	return 0;
- }
- 
 -- 
 2.30.2
 
