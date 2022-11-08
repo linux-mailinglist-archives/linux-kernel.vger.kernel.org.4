@@ -2,134 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4987621029
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 13:18:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F04B621039
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 13:19:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234102AbiKHMSx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 07:18:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37982 "EHLO
+        id S234129AbiKHMTj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 07:19:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234072AbiKHMSu (ORCPT
+        with ESMTP id S233722AbiKHMTe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 07:18:50 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5BC2DFA4;
-        Tue,  8 Nov 2022 04:18:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667909929; x=1699445929;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=+6VvK9ha+KX6/9CqNxcOWvA6lggCRnEoSwH1MbiLuN8=;
-  b=dbiC09xreq8AwleDPgR0MXk6Ixx4E4YxyxRp39xIY5F+VU/3Idege/t9
-   rAAQkO99qBosMLlvguplT7iIy587O8LoQk3UaSEyw5tGtrfDTn6UKyt9W
-   6pfFw9XiAnbkW6rg09F1KkW9RB1DWIsYFiJKhnUCS5bHL8U0qiN+E87rF
-   q85AxZRGkeSPKM809GGAP8alJwk708bdpTdZ8Zl1KXBrAl8pT/kUBGEOl
-   cS7heWHtc5Mhfp57kLrcANXjWd7HCHUBSkdgJ76hcmm71wPoSJwUBHKzP
-   JAQZmmqhi1Eh8Z4cbJf877B2lSds21BEoXsD7RdPHb7+c2L5ap6+GkW5j
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10524"; a="311834500"
-X-IronPort-AV: E=Sophos;i="5.96,147,1665471600"; 
-   d="scan'208";a="311834500"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2022 04:18:49 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10524"; a="667568306"
-X-IronPort-AV: E=Sophos;i="5.96,147,1665471600"; 
-   d="scan'208";a="667568306"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga008.jf.intel.com with ESMTP; 08 Nov 2022 04:18:47 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1osNYz-0097h3-1a;
-        Tue, 08 Nov 2022 14:18:45 +0200
-Date:   Tue, 8 Nov 2022 14:18:45 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Tudor.Ambarus@microchip.com
-Cc:     vkoul@kernel.org, Nicolas.Ferre@microchip.com,
-        linux-arm-kernel@lists.infradead.org, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Ludovic.Desroches@microchip.com
-Subject: Re: [PATCH v1 1/2] at_hdmac: check and return DMA_PAUSED status when
- suitable
-Message-ID: <Y2pJJb6KwwcAMZw8@smile.fi.intel.com>
-References: <20221108074938.48853-1-andriy.shevchenko@linux.intel.com>
- <d3d93452-70e6-72e5-b28e-1b259d1e489c@microchip.com>
+        Tue, 8 Nov 2022 07:19:34 -0500
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACE532339E;
+        Tue,  8 Nov 2022 04:19:32 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4N66bd5nRmz4f3w16;
+        Tue,  8 Nov 2022 20:19:25 +0800 (CST)
+Received: from localhost.localdomain (unknown [10.67.175.61])
+        by APP4 (Coremail) with SMTP id gCh0CgCH+dZQSWpjw668AA--.47234S2;
+        Tue, 08 Nov 2022 20:19:28 +0800 (CST)
+From:   Pu Lehui <pulehui@huaweicloud.com>
+To:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Eduard Zingerman <eddyz87@gmail.com>,
+        Pu Lehui <pulehui@huawei.com>,
+        Pu Lehui <pulehui@huaweicloud.com>
+Subject: [PATCH bpf] selftests/bpf: Fix casting error when cross-compiling test_verifier for 32-bit platforms
+Date:   Tue,  8 Nov 2022 20:19:45 +0800
+Message-Id: <20221108121945.4104644-1-pulehui@huaweicloud.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d3d93452-70e6-72e5-b28e-1b259d1e489c@microchip.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: gCh0CgCH+dZQSWpjw668AA--.47234S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7CFykKF1UKw48KFyDCry5XFb_yoW8GryUpF
+        WrG3sFgFy8X3W3Kr1UAF4UtrW8KF1qqa48Gry3tryDZF4DKF92gFyxKrWqvr93uFWrXwna
+        y347Was8Xw1qyrJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUU9Y14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+        6r4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628v
+        n2kIc2xKxwCY1x0262kKe7AKxVWUAVWUtwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7x
+        kEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E
+        67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCw
+        CI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6Fyj6rWU
+        JwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCT
+        nIWIevJa73UjIFyTuYvjfUr2-eDUUUU
+X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 08, 2022 at 11:50:19AM +0000, Tudor.Ambarus@microchip.com wrote:
-> On 11/8/22 09:49, Andy Shevchenko wrote:
-> > EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
-> > 
-> > device_tx_status() may return DMA_PAUSED status when driver supports it.
-> 
-> Yeah, but you haven't described the why. And that's because dma_cookie_status()
-> currently considers just DMA_COMPLETE and DMA_IN_PROGRESS for the status of the
-> cookie, so the controller drivers are forced to query the DMA_PAUSED state
-> themselves.
+From: Pu Lehui <pulehui@huawei.com>
 
-At last without this change it's inconvenient and requires a lot of additional
-(unneeded) code to be written by the caller. Moreover, it's racy. If you query
-status twice in a raw, it may be well changed (for example from PAUSED to
-IN_PROGRESS or COMPETE).
+When cross-compiling test_verifier for 32-bit platforms, the casting error is shown below:
 
-I will add a word summarizing this.
+test_verifier.c:1263:27: error: cast from pointer to integer of different size [-Werror=pointer-to-int-cast]
+ 1263 |  info.xlated_prog_insns = (__u64)*buf;
+      |                           ^
+cc1: all warnings being treated as errors
 
-> Also, I noticed that Vinod prefers that you use the full paragraph in the commit
-> message, and not a continuation of the patch title, so you may want to reword
-> the commit message.
+Fix it by adding zero-extension for it.
 
-Yes, I will fix that.
+Fixes: 933ff53191eb ("selftests/bpf: specify expected instructions in test_verifier tests")
+Signed-off-by: Pu Lehui <pulehui@huawei.com>
+---
+ tools/testing/selftests/bpf/test_verifier.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-...
-
-> > +       if (!txstate) {
-> > +               if (test_bit(ATC_IS_PAUSED, &atchan->status))
-> 
-> there's a helper function that you can use instead: atc_chan_is_paused()
-
-Will use it.
-
-> > +                       return DMA_PAUSED;
-> > +               return DMA_ERROR;
-> 
-> return dma_status please
-
-Will squash the patch.
-
-> > +       }
-
-...
-
-> > +       if (test_bit(ATC_IS_PAUSED, &atchan->status))
-> 
-> The status may change after spin_unlock_irqrestore(). Should the residue
-> be in sync with the dma status? If yes, you should check the status while
-> holding the lock.
-
-You should tell me actually. Because I'm a bit puzzled why we need a spin lock
-_and_ atomic bit operations together.
-
-> > +               dma_status = DMA_PAUSED;
-
-...
-
-Thank you for the review.
-
+diff --git a/tools/testing/selftests/bpf/test_verifier.c b/tools/testing/selftests/bpf/test_verifier.c
+index 2dbcbf363c18..b605a70d4f6b 100644
+--- a/tools/testing/selftests/bpf/test_verifier.c
++++ b/tools/testing/selftests/bpf/test_verifier.c
+@@ -1260,7 +1260,7 @@ static int get_xlated_program(int fd_prog, struct bpf_insn **buf, int *cnt)
+ 
+ 	bzero(&info, sizeof(info));
+ 	info.xlated_prog_len = xlated_prog_len;
+-	info.xlated_prog_insns = (__u64)*buf;
++	info.xlated_prog_insns = (__u64)(unsigned long)*buf;
+ 	if (bpf_obj_get_info_by_fd(fd_prog, &info, &info_len)) {
+ 		perror("second bpf_obj_get_info_by_fd failed");
+ 		goto out_free_buf;
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.25.1
 
