@@ -2,56 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF579620593
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 02:06:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B272062059A
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 02:08:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233067AbiKHBGk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 20:06:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40916 "EHLO
+        id S232924AbiKHBH4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 20:07:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233297AbiKHBGg (ORCPT
+        with ESMTP id S232083AbiKHBHx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 20:06:36 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 215122613A
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 17:06:32 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 60EC2CE1853
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 01:06:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F47BC433C1;
-        Tue,  8 Nov 2022 01:06:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667869589;
-        bh=fMLhUX07pSNSkDg8dzTeiM4tsFWqD3ltLaK0XNYd6PM=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=XizbBn9GVFMc1LSh2/SH4G3uzK9q9Wul+darKM9jn0tb/GxkIZA02wLPiYKIOx5CG
-         RYuf2KEG2/L/8EKnNUWg+PJA6IrlDjMXPKv1dYXLvHRrOamv/f15KbhW4smdkSIz4e
-         9wxCwzXdoh29fzlB6AnQ85FbZaqNYn82C9gJCIpY94yd+26u8eyMgwE5wa7ejhVM2n
-         /HyhlzKcSz9mkzVqJ0IzBS7J57Wc30F2p33ZlR5QkX4yH0tavRrO5wRN1Q3MVo197d
-         KUmgyf8Lt3+ck4rATWGTtJgvnwM5m2AqDyYyNiyIk7dMvLhF7JXvs/pb6J6NyuCwmN
-         71fE1aAoKOYlw==
-Message-ID: <b42f9a77-942b-9e55-2637-93821255b370@kernel.org>
-Date:   Tue, 8 Nov 2022 09:06:25 +0800
+        Mon, 7 Nov 2022 20:07:53 -0500
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF573248CA;
+        Mon,  7 Nov 2022 17:07:52 -0800 (PST)
+Received: by mail-ej1-x634.google.com with SMTP id f27so34741850eje.1;
+        Mon, 07 Nov 2022 17:07:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Tz4DXUwB8MapeXYHJsCdHftchNNLXz8UNlurMY6/9pU=;
+        b=k1lwV6cTVWO0lVK0eV6W8mfgRjranpkmcFc04FvVS2YggyrwV1MLiGfprsJYgRgyYR
+         m/17SeVYABfYWCB/CRjVrQ/VgMV0+OSEjS2X0oi1VQXqBZFe5KadyqKYoUlYXMgxBZxf
+         NUTWWUJoX3JOjufPoplM5bCc20m+WGl+JJz35IQJ6W+F+k+DVoRDZ8HEUX53FuCKZUyH
+         4vvDbZvnb2DT4xJVkOgPr54qLjsmHZdPO6FUNIeV+LZLnR3VodZNbovX5qEwaH+c0VWU
+         y6MqIHvzAeDNFtDtfA+uBTmwmgm7fhzEPusQNXR7J7xdOwAcqU2El5g69n5/xUyWLBkV
+         Mn0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Tz4DXUwB8MapeXYHJsCdHftchNNLXz8UNlurMY6/9pU=;
+        b=Nz/mM1PIexFTmfZXv8zszoO+CvoAVb8kitQjVA1x1fyuMI2g022q+KUBmL/DirlTRK
+         nLcQy6jkxri6+C/Qa8I4PraFIdMzNRTMhakyvHM3izj8Es8pICDASVw2QiMqJ488/fP2
+         lpMnmaqjH2ksfuLlY49YvwogU/rAXaKf6rlMjHbZT1Vv5vn4MjwYueZozeDu2MK/Gmho
+         /sDjZt7kej1TMHAtTLkbO368QnTduFAosf0PnsRydTQHpkByjQm1tUinkhBzpZI2EMQR
+         hmTN8GApHh6pQ6YRam933T4kzSl5aHyS+Zb/Vl/c/N0GMcVq8LIWdY73Ix3mvFDNMY0i
+         QQTQ==
+X-Gm-Message-State: ACrzQf26vAs34mil03GYy0wOko9yXEf0Dg3iU/Jw4FUW2BnMGbA6VFdO
+        QffXEM9D8B0F25XX3QsJJCLddoDpU4ugYszNNGM=
+X-Google-Smtp-Source: AMsMyM7F/wfMIAI3Pzk6zlUhjURIiB8mQML2zO0akN3+D3xP5rRkJy5XRZoc47qAoqbfK9eQtPt/3eIZHRUKm7zf6tc=
+X-Received: by 2002:a17:906:99c5:b0:73d:70c5:1a4f with SMTP id
+ s5-20020a17090699c500b0073d70c51a4fmr50095400ejn.302.1667869671316; Mon, 07
+ Nov 2022 17:07:51 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [f2fs-dev] [PATCH] f2fs: speed up f2fs_empty_dir()
-Content-Language: en-US
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     jaegeuk@kernel.org, Wei Chen <harperchen1110@gmail.com>,
-        linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net
-References: <20221106094855.131967-1-chao@kernel.org>
- <Y2lOmCIt5gZmFJ5H@sol.localdomain>
-From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <Y2lOmCIt5gZmFJ5H@sol.localdomain>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20221103083254.237646-1-yangjihong1@huawei.com>
+ <20221103083254.237646-3-yangjihong1@huawei.com> <CAEf4BzY+qP1wwVddjg7_rypcUAW8iPRzSa=1O6aFG5dSLX+1Gg@mail.gmail.com>
+ <CAADnVQJW3CisB3L2nNOC0aGkPPBTHnyM-ZCXoZJc-KtNNEj+QQ@mail.gmail.com>
+In-Reply-To: <CAADnVQJW3CisB3L2nNOC0aGkPPBTHnyM-ZCXoZJc-KtNNEj+QQ@mail.gmail.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Mon, 7 Nov 2022 17:07:39 -0800
+Message-ID: <CAEf4Bzb+qJ-jzMkvWkBV0nXYj51P8DSbEHagT7h5ujCjCrRu8Q@mail.gmail.com>
+Subject: Re: [PATCH 2/4] bpf: Remove size check for sk in bpf_skb_is_valid_access
+ for 32-bit architecture
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Yang Jihong <yangjihong1@huawei.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Shubham Bansal <illusionist.neo@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Delyan Kratunov <delyank@fb.com>,
+        Artem Savkov <asavkov@redhat.com>, colin.i.king@gmail.com,
+        bpf <bpf@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,78 +95,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/11/8 2:29, Eric Biggers wrote:
-> On Sun, Nov 06, 2022 at 05:48:55PM +0800, Chao Yu wrote:
->> Wei Chen reports a kernel bug as blew:
->>
->> INFO: task syz-executor.0:29056 blocked for more than 143 seconds.
->>        Not tainted 5.15.0-rc5 #1
->> "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
->> task:syz-executor.0  state:D stack:14632 pid:29056 ppid:  6574 flags:0x00000004
->> Call Trace:
->>   __schedule+0x4a1/0x1720
->>   schedule+0x36/0xe0
->>   rwsem_down_write_slowpath+0x322/0x7a0
->>   fscrypt_ioctl_set_policy+0x11f/0x2a0
->>   __f2fs_ioctl+0x1a9f/0x5780
->>   f2fs_ioctl+0x89/0x3a0
->>   __x64_sys_ioctl+0xe8/0x140
->>   do_syscall_64+0x34/0xb0
->>   entry_SYSCALL_64_after_hwframe+0x44/0xae
->>
->> Eric did some investigation on this issue, quoted from reply of Eric:
->>
->> "Well, the quality of this bug report has a lot to be desired (not on
->> upstream kernel, reproducer is full of totally irrelevant stuff, not
->> sent to the mailing list of the filesystem whose disk image is being
->> fuzzed, etc.).  But what is going on is that f2fs_empty_dir() doesn't
->> consider the case of a directory with an extremely large i_size on a
->> malicious disk image.
->>
->> Specifically, the reproducer mounts an f2fs image with a directory
->> that has an i_size of 14814520042850357248, then calls
->> FS_IOC_SET_ENCRYPTION_POLICY on it.
->>
->> That results in a call to f2fs_empty_dir() to check whether the
->> directory is empty.  f2fs_empty_dir() then iterates through all
->> 3616826182336513 blocks the directory allegedly contains to check
->> whether any contain anything.  i_rwsem is held during this, so
->> anything else that tries to take it will hang."
->>
->> In order to solve this issue, let's use f2fs_get_next_page_offset()
->> to speed up iteration by skipping holes for all below functions:
->> - f2fs_empty_dir
->> - f2fs_readdir
->> - find_in_level
->>
->> The way why we can speed up iteration was described in
->> 'commit 3cf4574705b4 ("f2fs: introduce get_next_page_offset to speed
->> up SEEK_DATA")'.
->>
->> Meanwhile, in f2fs_empty_dir(), let's use f2fs_find_data_page()
->> instead f2fs_get_lock_data_page(), due to i_rwsem was held in
->> caller of f2fs_empty_dir(), there shouldn't be any races, so it's
->> fine to not lock dentry page during lookuping dirents in the page.
->>
->> Link: https://lore.kernel.org/lkml/536944df-a0ae-1dd8-148f-510b476e1347@kernel.org/T/
->> Reported-by: Wei Chen <harperchen1110@gmail.com>
->> Cc: Eric Biggers <ebiggers@google.com>
->> Signed-off-by: Chao Yu <chao@kernel.org>
->> ---
->>   fs/f2fs/data.c | 17 ++++++++++++-----
->>   fs/f2fs/dir.c  | 34 ++++++++++++++++++++++++----------
->>   fs/f2fs/f2fs.h |  5 +++--
->>   fs/f2fs/gc.c   |  4 ++--
->>   4 files changed, 41 insertions(+), 19 deletions(-)
-> 
-> Thanks.  I'm not an expert on all the details, but this patch looks good to me.
-> 
-> Given that it optimizes lookups and readdirs too, a better title for the patch
-> might be something like "f2fs: optimize iteration over sparse directories".
+On Fri, Nov 4, 2022 at 4:32 PM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> On Fri, Nov 4, 2022 at 2:56 PM Andrii Nakryiko
+> <andrii.nakryiko@gmail.com> wrote:
+> >
+> > On Thu, Nov 3, 2022 at 1:36 AM Yang Jihong <yangjihong1@huawei.com> wrote:
+> > >
+> > > The error code -EACCES is returned when bpf prog is tested in 32-bit environment,
+> > > This is because bpf_object__relocate modifies the instruction to change memory
+> > > size to 4 bytes, as shown in the following messages:
+> > >
+> > > libbpf: prog 'kfunc_call_test1': relo #2: matching candidate #0 <byte_off> [18342] struct __sk_buff.sk (0:30:0 @ offset 168)
+> > > libbpf: prog 'kfunc_call_test1': relo #2: patched insn #1 (LDX/ST/STX) off 168 -> 168
+> > > libbpf: prog 'kfunc_call_test1': relo #2: patched insn #1 (LDX/ST/STX) mem_sz 8 -> 4
+> > >
+> > > As a result, the bpf_skb_is_valid_access check fails. For 32-bit architecture,
+> > > unnecessary checks need to be deleted.
+> > >
+> > > Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
+> > > ---
+> > >  net/core/filter.c | 2 --
+> > >  1 file changed, 2 deletions(-)
+> > >
+> > > diff --git a/net/core/filter.c b/net/core/filter.c
+> > > index bb0136e7a8e4..eab7ce89740c 100644
+> > > --- a/net/core/filter.c
+> > > +++ b/net/core/filter.c
+> > > @@ -8269,8 +8269,6 @@ static bool bpf_skb_is_valid_access(int off, int size, enum bpf_access_type type
+> > >                         return false;
+> > >                 break;
+> > >         case offsetof(struct __sk_buff, sk):
+> > > -               if (type == BPF_WRITE || size != sizeof(__u64))
+> > > -                       return false;
+> >
+> > this probably should be specific to host architecture bitness? I'd
+> > imagine that size = 4 should be invalid on 64-bit arches (reading half
+> > of the pointer is bad)
+>
+> Not quite.
+> In __sk_buff the field 'sk' is defined as:
+> __bpf_md_ptr(struct bpf_sock *, sk);
+> so it's always 64-bit load when bpf prog reads it.
+> In this case CO_RE shouldn't have been applied to uapi struct __sk_buff.
 
-Yes, thanks for your suggestion, will update in v2.
+Ok, hold on. __bpf_md_ptr just creates a 8-byte sized and aligned
+union. It doesn't change the pointer itself in any way:
 
-Thanks,
+union {
+    struct bpf_sock* sk;
+    __u64 :64;
+};
 
-> 
-> - Eric
+
+It's a 64-bit pointer only because any pointer in the BPF target is
+64-bit. But on 32-bit architectures such struct bpf_sock *sk pointer
+will *actually* be 4-byte pointer (and __u64 :64 will just make
+compiler add 4 bytes of padding after it, effectively), and BPF
+verifier will actually generate LDX instruction of BPF_W size (4 byte
+load):
+
+        case offsetof(struct __sk_buff, sk):
+                *insn++ = BPF_LDX_MEM(BPF_FIELD_SIZEOF(struct sk_buff, sk),
+                                      si->dst_reg, si->src_reg,
+                                      offsetof(struct sk_buff, sk));
+                break;
+
+
+BPF_FIELD_SIZEOF(struct sk_buff, sk) is 4 for 32-bit kernels.
+
+So while you are correct that it will be 8-byte load from the BPF
+side, allowing 4-byte load for such pointers should also be correct.
+It's our choice, there is no fundamental limitation why this shouldn't
+be the case.
+
+Note also that we do this transformation when fentry/fexit/raw_tp_btf
+programs traverse pointers in kernel structures. There pretending like
+pointer to an 8-byte value is actually invalid. So libbpf adjusts such
+loads to 4-byte loads for CO-RE-relocatable types, which makes it all
+work transparently on 32-bit architectures. Context accesses deviate
+from that, as they came earlier and we didn't have CO-RE at that time.
+
+So what you are saying is that __sk_buff shouldn't be
+CO-RE-relocatable, and yes, that would be good. But I think that's
+orthogonal in this case.
