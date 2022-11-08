@@ -2,108 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15244621CFE
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 20:27:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE6BC621D00
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 20:28:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229834AbiKHT1x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 14:27:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59644 "EHLO
+        id S229645AbiKHT2q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 14:28:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229686AbiKHT1v (ORCPT
+        with ESMTP id S229447AbiKHT2o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 14:27:51 -0500
-Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF7962228E;
-        Tue,  8 Nov 2022 11:27:50 -0800 (PST)
-Received: by mail-qv1-xf2f.google.com with SMTP id h10so10894284qvq.7;
-        Tue, 08 Nov 2022 11:27:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=EF69t9SF3x61lH/czl++mmCOkbNRPl0mdOxYpEl0ZJY=;
-        b=i/R/UyK00fjhw0Gd1bgCB8+Wxb7ibJvCxm18utgoIFJt6d6GVhSv68rLdnzfFEHSnE
-         Nb7AHIHbmmlfl4WZr5eBaERoXudsUFgt+qOnT3k53Lr4F2gijlVOQmxNskxw9NBLiafX
-         DBajWxgwsPFzHwZlKOQUaHgcM2RO/J2RP/qFu5I0Y5yF6NDrlyeAwfid7Ft8Nup2Ca3d
-         YTa2fsoNFbbLhvlzNaWJX+EFUBsD/GuDXGF+ZU1U+C0Wp5GQJF7xySKPCHj/LFbs4JiW
-         6CrH4XhjdcxzDgnYhMKJo1v2o4dI7YpjeuLnoZHohABlyTa5wkmlWyo6qWetoGycZM4a
-         xptA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=EF69t9SF3x61lH/czl++mmCOkbNRPl0mdOxYpEl0ZJY=;
-        b=jenCZ0BRS/8jVXy20qlJidBovky7btYPz03c6ZVWLXs/gc+RXicMCCMGPxO9GCVs2B
-         5Kqvayx8Iqb1dL/dz3PAUonGvp76D0FGX5NGBS3BFOtJBD09K81ZwDn0ZKm7+cUTXK47
-         vwHqT5fzUoD1K2ww/h6+LM6+L2IEza3h4Dx9QvRW6RTkEkny65/+o6CnJN1nCsAj2YYY
-         MXtuhV/yf8vLDkNpSSQ3bEzZCqSKFFFjkp8CPuzSw7/5fMQe3X931dhjDw0N/FdPkQuX
-         DRRhGYkpq02q+eo+J/YGhIiXycxQ2MfbTuFhzadEZHdZnQQpm22jpagal58SoXYij87Q
-         d5GA==
-X-Gm-Message-State: ACrzQf1G+mNVNY2NWOSjdjqpQ25POQTFRNy5fqqnvNbW8Z0crmuOzdgV
-        qP++/QzbvSKtJmfzPCPrFHs=
-X-Google-Smtp-Source: AMsMyM6BBm6ib7X3NTmbMzqQ4gCyTQwLwGpv9L8fijeutqCGsSZZ6bF7OzYf7J1Ecm+IRsyH/fafZw==
-X-Received: by 2002:a05:6214:76d:b0:4bb:e59a:17dc with SMTP id f13-20020a056214076d00b004bbe59a17dcmr47088968qvz.125.1667935669746;
-        Tue, 08 Nov 2022 11:27:49 -0800 (PST)
-Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
-        by smtp.gmail.com with ESMTPSA id u22-20020a05620a431600b006cfc01b4461sm9647505qko.118.2022.11.08.11.27.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Nov 2022 11:27:49 -0800 (PST)
-Message-ID: <682a9f6a-d8d0-8f73-b262-2d38c55bc4be@gmail.com>
-Date:   Tue, 8 Nov 2022 11:27:46 -0800
+        Tue, 8 Nov 2022 14:28:44 -0500
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [81.169.146.167])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 708F7193F8;
+        Tue,  8 Nov 2022 11:28:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1667935713;
+    s=strato-dkim-0002; d=iokpp.de;
+    h=References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=XAL3s5j75Kq2jhzOQEusmr7a0Cgo2qohGoilcfq/xf4=;
+    b=cHbVnCCXWcwfxWCZlcbKF7m6KfX+30BGIYu6AlrzTHjHMRV7PKTJppFo9ZgCEfblhO
+    C3NFauFyawmgV8mwoD6BUaYnwAb2Z2eAHf+GUv8lghmCk7jvzVmJ8jCxd26GLSqPQW5V
+    I5f/zSy4AeLk4kbwfnnqVK2KKJgRPdnu3iaJejnyFxwIDPhp0zeSA/AxOmnnD2HuhZyS
+    2rT8O4VQQibM7y8aYLMyxYTEkhAIXlQ+zkA0KMCAvLYXrd3Ui9+y0pV7Rz1E2Y+b48vB
+    LoiNxyxA/V+CvwyGvcaQl73RQsY/7fV5mq7p3PlX7Ca0S4XKep6rTRd9vh4RRBMW3Pop
+    tkSg==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":LmkFe0i9dN8c2t4QQyGBB/NDXvjDB6pBSeBwhhSxarlUcu05JCAPyj3VPAceccYJs0uz"
+X-RZG-CLASS-ID: mo00
+Received: from blinux
+    by smtp.strato.de (RZmta 48.2.1 AUTH)
+    with ESMTPSA id z9cfbfyA8JSUpIh
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Tue, 8 Nov 2022 20:28:30 +0100 (CET)
+Message-ID: <fa3905bff8ba47b0ed45f9221dd1d033ca553179.camel@iokpp.de>
+Subject: Re: [RFC PATCH v1 2/2] ufs: core: Add advanced RPMB support in
+ ufs_bsg
+From:   Bean Huo <beanhuo@iokpp.de>
+To:     Avri Altman <Avri.Altman@wdc.com>,
+        "alim.akhtar@samsung.com" <alim.akhtar@samsung.com>,
+        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "stanley.chu@mediatek.com" <stanley.chu@mediatek.com>,
+        "beanhuo@micron.com" <beanhuo@micron.com>,
+        "bvanassche@acm.org" <bvanassche@acm.org>,
+        "tomas.winkler@intel.com" <tomas.winkler@intel.com>,
+        "daejun7.park@samsung.com" <daejun7.park@samsung.com>,
+        "quic_cang@quicinc.com" <quic_cang@quicinc.com>,
+        "quic_nguyenb@quicinc.com" <quic_nguyenb@quicinc.com>,
+        "quic_xiaosenh@quicinc.com" <quic_xiaosenh@quicinc.com>,
+        "quic_richardp@quicinc.com" <quic_richardp@quicinc.com>,
+        "quic_asutoshd@quicinc.com" <quic_asutoshd@quicinc.com>,
+        "hare@suse.de" <hare@suse.de>
+Cc:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Date:   Tue, 08 Nov 2022 20:28:29 +0100
+In-Reply-To: <DM6PR04MB657518129522996B2B5C9640FC3F9@DM6PR04MB6575.namprd04.prod.outlook.com>
+References: <20221107131038.201724-1-beanhuo@iokpp.de>
+         <20221107131038.201724-3-beanhuo@iokpp.de>
+         <DM6PR04MB657518129522996B2B5C9640FC3F9@DM6PR04MB6575.namprd04.prod.outlook.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-From:   Florian Fainelli <f.fainelli@gmail.com>
-Subject: Re: [PATCH 5.10 000/118] 5.10.154-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net
-References: <20221108133340.718216105@linuxfoundation.org>
-Content-Language: en-US
-In-Reply-To: <20221108133340.718216105@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Avri, 
+thanks for your comments and review.
 
 
-On 11/8/2022 5:37 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.10.154 release.
-> There are 118 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Tue, 2022-11-08 at 19:09 +0000, Avri Altman wrote:
+> > Add advanced RPMB support in ufs_bsg. For these reasons, we try to
+> > implement Advanced RPMB in ufs_bsg:
+> > 1. According to the UFS specification, only one RPMB operation can
+> > be
+> > performed at any time. We can ensure this by using reserved slot
+> > and its
+> > dev_cmd sync operation protection mechanism.
 > 
-> Responses should be made by Thu, 10 Nov 2022 13:33:17 +0000.
-> Anything received after that time might be too late.
+> Regardless of its technical convenience, this approach unfortunately
+> breaks the spec.
 > 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.154-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
-> and the diffstat can be found below.
+> The spec say (please note the line numbers):
 > 
-> thanks,
+> ".....
 > 
-> greg k-h
+> 5197 12.4.5.1 Advanced RPMB Message
+> 
+> 5198 An Advanced RPMB Message is composed of an Advanced RPMB Meta
+> Information and a MAC/KEY in
+> 
+> 5199 the EHS field in *COMMAND UPIU* and *RESPONSE UPIU*. Advanced
+> RPMB Data is delivered through
+> 
+> ....."
 
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
-BMIPS_GENERIC:
+> Moreover, in the examples that are provided, it is still expected to
+> be carried via SECURITY PROTOCOL IN and SECURITY PROTOCOL OUT,
+> 
+> See e.g. Figure 12.15 — Authenticated Data Write Flow (in Advanced
+> RPMB Mode).
+> 
+> 
+not quite get what you meant here.
+> 
 
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+> 
+> Therefore, wrapping the rpmb packets in a query-request upiu and
+> query-response upiu is not allowed.
+> 
+> 
+
+no, I didn't wrap RPMB packet in query-request/response, it is inupiu_req and upiu_rsp, it is upiu command. Based on Bart's suggestion,
+we shouldn't change the current ufs_bsg structure. I think his concern
+is that if we change ufs_bsg structure, the user space tool also
+needs to change as well. 
+
+> 
+> Still, I agree that the approach you suggested, namely to rely on the
+> ufs-bsg driver, is the cleanest way to handle the advance rpmb
+> access.
+> 
+> However, IMHO, you need to do it is by adding command UPIU to the
+> ufs-bsg driver.
+> 
+> 
+
+Yes, agree with you on this point. But we still need to use reserved
+slots for RPMB or command UPIU, we don't want to affect IO requests on
+the normal path.
+
+One problem is that we didn't split the dev_manage command and the RPMB
+command in their completion handlers. I would like to change dev_man to
+passthrough or something else, and then split dev_man and RPMB,
+otherwise, they would be mixed in one dev_man completion handler. No
+technical issues here, just want to make it more readable and
+maintainable.
+
+
+
+Kind regards,
+Bean
+
+> 
+> Thanks,
+> 
+> Avri
 
