@@ -2,50 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE370620602
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 02:29:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADC4D620607
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 02:29:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233420AbiKHB3G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 20:29:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50396 "EHLO
+        id S233443AbiKHB3K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 20:29:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233414AbiKHB2g (ORCPT
+        with ESMTP id S233350AbiKHB2l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 20:28:36 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 386D02B250;
-        Mon,  7 Nov 2022 17:28:09 -0800 (PST)
+        Mon, 7 Nov 2022 20:28:41 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A5772CE1A;
+        Mon,  7 Nov 2022 17:28:11 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C707761388;
-        Tue,  8 Nov 2022 01:28:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13AB3C43470;
-        Tue,  8 Nov 2022 01:28:07 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B60436137D;
+        Tue,  8 Nov 2022 01:28:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60DE0C433D7;
+        Tue,  8 Nov 2022 01:28:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667870888;
-        bh=kHb/0kaYEYHJy6WjyZh1ezGPAYiw7Je+ByX/XxqPxYM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RsjDexSxkUp3X/k2rua3Pw24Bfq9Ummk9HLefx4t5stmb+hmFOj5ocoGPfK9A8dA/
-         0ZOJRUppf6/5SUCopSEJQefH+9+qsr0wMPMGa2+x0tIyZYMnqsoJ29vBg2q2FV7GT+
-         Z84jYb1dj8Ri94DAybtVgf+1HW0b2U7rTsWRgbYrpGQ0EDeB5tUWhkObtkTtKmG/Gy
-         Y21zqb9um2H46do2i+oavulBi2Ykvyzl/JKgJ0PU+UcfjaD/VB7Xpeo6D6ub5KXSJy
-         6gar01OrATqKAOgNxoDZSYi+NDThuYxzC+/hsGIhG00tsmNLCEI2MkrGTksbfRlgdo
-         oCnZzw4+3d4ZQ==
+        s=k20201202; t=1667870890;
+        bh=68+SlGEJC+NRZ/GSU6DohJ3JEpRl9bp8CmJ0b2lc5HM=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=fL2dq1FkPG5m8FCU5QUOxsJVnn7e2xs1F3hJoOLrEmIfbV1GERulEw6+HNlZfumX3
+         tcLEeLBrzu1rCaoxzF1PiCzEekyX6GhYtGctmcSk8Y/GRVX2dCt4rIB7p6eOzEVcbt
+         tdOlz5EMMbNwVqcbV1J/+iSEeDJwY55672epRYDxfiYDkdxdEkpi9zxHqWgP8ntcey
+         SL2nUJIFTzCsRX3Vs58DIdrvb7jjEYqZ7VSTNCitVSM0CU/Tn3SyjXqHk974E2HZ69
+         ZZIcsOSPiEj0VzN1bU8puoa05SKj9VJlwF0H9+7WMoU3k0/lryEiKP1V7x47GXpB2n
+         tYYa+Wx1Yy2Yw==
 From:   Bjorn Andersson <andersson@kernel.org>
-To:     quic_molvera@quicinc.com, mturquette@baylibre.com,
-        sboyd@kernel.org, robh+dt@kernel.org,
+To:     robimarko@gmail.com, devicetree@vger.kernel.org,
+        robh+dt@kernel.org, konrad.dybcio@somainline.org,
         krzysztof.kozlowski+dt@linaro.org, agross@kernel.org,
-        maz@kernel.org, tglx@linutronix.de
-Cc:     devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-        quic_tdas@quicinc.com, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Subject: Re: (subset) [PATCH v3 0/5] clk: qcom: Add clocks for the QDU1000 and QRU1000 SoCs
-Date:   Mon,  7 Nov 2022 19:27:37 -0600
-Message-Id: <166787084679.599230.10880542049435908148.b4-ty@kernel.org>
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
+Subject: Re: (subset) [PATCH 1/3] arm64: dts: qcom: hk10: use "okay" instead of "ok"
+Date:   Mon,  7 Nov 2022 19:27:39 -0600
+Message-Id: <166787084686.599230.5173354507578697761.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20221026190441.4002212-1-quic_molvera@quicinc.com>
-References: <20221026190441.4002212-1-quic_molvera@quicinc.com>
+In-Reply-To: <20221107092930.33325-1-robimarko@gmail.com>
+References: <20221107092930.33325-1-robimarko@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -58,22 +55,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 26 Oct 2022 12:04:36 -0700, Melody Olvera wrote:
-> This series adds the GCC, RPMh, and PDC clock support required for the
-> QDU1000 and QRU1000 SoCs along with the devicetree bindings for them.
+On Mon, 7 Nov 2022 10:29:28 +0100, Robert Marko wrote:
+> Use "okay" instead of "ok" in USB nodes as "ok" is deprecated.
 > 
-> The Qualcomm Technologies, Inc. Distributed Unit 1000 and Radio Unit
-> 1000 are new SoCs meant for enabling Open RAN solutions. See more at
-> https://www.qualcomm.com/content/dam/qcomm-martech/dm-assets/documents/qualcomm_5g_ran_platforms_product_brief.pdf
 > 
-> [...]
 
 Applied, thanks!
 
-[2/5] dt-bindings: clock: Add RPMHCC bindings for QDU1000 and QRU1000
-      commit: 70d9f589918aaadd6d5547ecb27355b7b69fc32c
-[4/5] clk: qcom: Add support for QDU1000 and QRU1000 RPMh clocks
-      commit: 05e5c125b120c75b9313af0a6dc8c4f5a71e8e7c
+[1/3] arm64: dts: qcom: hk10: use "okay" instead of "ok"
+      commit: 7284a3943909606016128b79fb18dd107bc0fe26
+[2/3] arm64: dts: qcom: hk10: use GPIO flags for tlmm
+      commit: 3f49bdaf6f84959bb8fc3ed5add7983907491240
+[3/3] arm64: dts: qcom: hk01: use GPIO flags for tlmm
+      commit: 1bc6b7f26bc72c8fd5a49ff000bb76a234e75e11
 
 Best regards,
 -- 
