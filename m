@@ -2,105 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B64E621154
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 13:48:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5986D621158
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 13:48:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234243AbiKHMr7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 07:47:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34092 "EHLO
+        id S233203AbiKHMsw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 07:48:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233603AbiKHMr5 (ORCPT
+        with ESMTP id S234279AbiKHMsT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 07:47:57 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CD1252891
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 04:47:55 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 2E3911F88D;
-        Tue,  8 Nov 2022 12:47:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1667911674; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=J124qO1Z9y6DzHbvakiNCQhSpW1cqMUfl1QPHuvbt2U=;
-        b=r3HTL/vjpwM9jB75W0UF8rnnuQsQprAxiWFueVsQCSUtZ44uwXWIru7zNWdMLxrOqovXYQ
-        viqos2Es+rKWjJ0Omasox4CUr5G9QZ5i8KvUhXDzY1zclHeAm/9o4mJ2c6O6kWfs7hPgAC
-        DHrDK9k33BIl2SqIUi6/TgkkKs7ANR4=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1667911674;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=J124qO1Z9y6DzHbvakiNCQhSpW1cqMUfl1QPHuvbt2U=;
-        b=z9+z/v40XHfv+V1NDIh+6O/xq4eB4FlowkcTGrmkcQq7qGQsGcOymKJ76tgqghzVh5gDSP
-        uokMDUgHuRh5kOAw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 131D713398;
-        Tue,  8 Nov 2022 12:47:54 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id GYOUA/pPamOragAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Tue, 08 Nov 2022 12:47:54 +0000
-Message-ID: <eb620736-9078-6c87-1fde-3132ec8739f8@suse.cz>
-Date:   Tue, 8 Nov 2022 13:47:53 +0100
+        Tue, 8 Nov 2022 07:48:19 -0500
+Received: from out162-62-57-137.mail.qq.com (out162-62-57-137.mail.qq.com [162.62.57.137])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96FE853EDF
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 04:48:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1667911694;
+        bh=oVLc4gaktdNCNVvwWLVkFb2ZvH20wWVNUBsMSq/8jp0=;
+        h=From:To:Cc:Subject:Date;
+        b=p2uJJhg41B0S76vGxe88P+iivQGF2oFPGqLrQ/VYbtEtAfGUBZW7kmdUc/2EXdDL+
+         TLPJATz2rir4rgxUvjIxRQZCILYV+gpPEqj91lOi+aFOeyHeQYVEksJjtYk/s+1lKn
+         WTPnqnA6fbs9C4geNYTXfpIAduy7535qG/dWdFt0=
+Received: from localhost.localdomain ([111.199.191.46])
+        by newxmesmtplogicsvrszb1-0.qq.com (NewEsmtp) with SMTP
+        id C0BAF88A; Tue, 08 Nov 2022 20:48:11 +0800
+X-QQ-mid: xmsmtpt1667911691tuo6mpdjb
+Message-ID: <tencent_C9D7A6D118445E036021CE2CB4CB4495E207@qq.com>
+X-QQ-XMAILINFO: M7uElAZZZMmFNpXVH2eRjE7JTPiOgzhK0+tfEcnsEo7BhLIgc0wKXQ+SgIjF+H
+         1Vrbuk1XzFMRi43EVGYY80TZNohlUE2f4iGSDtuqtIJB8nZhl3tAkvPIuHchUMf9B071iiWZ03Cc
+         O+Vm4fAB8Or5mnlKb5qbBjGgPYpIkAh3YFK5R63CwPvH5jj4r9y+VUCr9de71vQtbyfe4t8fUPKq
+         qJL+H+kykgycJD1GAioNzY8bQzb3ue8bUrZvTVJb8RZiv2CJhvhp+kfBkZCPzPn5w8l1D9b5KxHK
+         ekOmRxE+VJybiNfUiqyAcawp6I991iNvq/PcH+lzQtUVVO98cnF+xj0huVTrXqcCUYbx6Ji/rnsj
+         iKaZrEcVy1sXF/PmYug8esjM6T5ln0DgtEIHI7p7YNw8DTF3bVrJcs3BZEkbbZa89UvG5jLE7Au6
+         I6GrpXEvqFcu2zLuNoUmkxSibxZ1kfv4ZE2gZcIJUB3CicWuuPoX3o9xRqCmICIH16ZlYoaHABBx
+         bXUDoCEUM4/5L1XSGtBCx9wa6Jgx8eIS8IIrBVLp6iqvVZiuqiVY9jOl0OKxjljH7AuoqmvWt3zy
+         76e0qaf+2r6Y+5F8ayoMJlPogapPNp9ZF4pv/Kd73XLDxbN13bBgwqhypCdAYCo5Ghv7NgGlpzCC
+         lfUOHYIJ1VNPmjz7RrgMHwt55ipd091kXRWDwCcrwGU3XxBWoGaZ5+8Gf8iac8A6R/4LfWTG0R2r
+         WrxLg9j5nmwQM4O1Cn21I5BV3VM9hIu+SehQwsvrQCdOCAPOTBSoKM40CnChyix+Moas0lQA34d9
+         M++X2c4jwaP61h65/dKXkr2JOKMrNfuakcMOE68TSM+i42v6QzYNvqbKylYRgK39OIKZOT3kQT/A
+         Ogiro9QKJ1qSldmoVVgYOpgOKVZmn5QdhrQTZFb9eUzZiRiRPKnzlgs37LF1gjJo3ihc/kxm4Aab
+         b2tEOgh/F4mYmQP5j4Hn+x3z1d7EUNK/sWIjZFLvoS2984VrVOmHWKyrwLbhnFe9QL3KcekSNqVH
+         F0kpSWdA==
+From:   Rong Tao <rtoax@foxmail.com>
+To:     akpm@linux-foundation.org
+Cc:     Rong Tao <rongtao@cestc.cn>, Vlastimil Babka <vbabka@suse.cz>,
+        =?UTF-8?q?St=C3=A9phane=20Graber?= <stgraber@ubuntu.com>,
+        Yuanzheng Song <songyuanzheng@huawei.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] tools/vm/slabinfo: indicates the cause of the EACCES error
+Date:   Tue,  8 Nov 2022 20:47:57 +0800
+X-OQ-MSGID: <20221108124758.33198-1-rtoax@foxmail.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH] mm: fix compiler warning with make W=1
-Content-Language: en-US
-To:     Charan Teja Kalla <quic_charante@quicinc.com>,
-        akpm@linux-foundation.org, linux-mm@kvack.org
-Cc:     linux-kernel@vger.kernel.org
-References: <1667884582-2465-1-git-send-email-quic_charante@quicinc.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <1667884582-2465-1-git-send-email-quic_charante@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,RDNS_DYNAMIC,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/8/22 06:16, Charan Teja Kalla wrote:
-> Fix the below compiler warnings reported with 'make W=1 mm/'.
-> mm/page_ext.c:178: warning: Function parameter or member 'page_ext' not
-> described in 'page_ext_put'.
-> 
-> Reported-by: Vlastimil Babka <vbabka@suse.cz>
+From: Rong Tao <rongtao@cestc.cn>
 
-Reported-and-tested-by: Vlastimil Babka <vbabka@suse.cz>
+If you don't run slabinfo with a superuser, return 0 when read_slab_dir()
+reads get_obj_and_str("slabs", &t), because fopen() fails (sometimes
+EACCES), causing slabcache() to return directly, without any error during
+this time, we should tell the user about the EACCES problem instead of
+running successfully($?=0) without any error printing.
 
-> Signed-off-by: Charan Teja Kalla <quic_charante@quicinc.com>
+ For example:
+ $ ./slabinfo
+ Permission denied, Try using superuser  <== What this submission did
+ $ sudo ./slabinfo
+ Name            Objects Objsize   Space Slabs/Part/Cpu  O/S O %Fr %Ef Flg
+ Acpi-Namespace     5950      48  286.7K         65/0/5   85 0   0  99
+ Acpi-Operand      13664      72  999.4K       231/0/13   56 0   0  98
+ ...
 
-Thanks!
+Signed-off-by: Rong Tao <rongtao@cestc.cn>
+---
+ tools/vm/slabinfo.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-> ---
->   mm/page_ext.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/mm/page_ext.c b/mm/page_ext.c
-> index affe8024..ddf1968 100644
-> --- a/mm/page_ext.c
-> +++ b/mm/page_ext.c
-> @@ -166,7 +166,7 @@ struct page_ext *page_ext_get(struct page *page)
->   
->   /**
->    * page_ext_put() - Working with page extended information is done.
-> - * @page_ext - Page extended information received from page_ext_get().
-> + * @page_ext: Page extended information received from page_ext_get().
->    *
->    * The page extended information of the page may not be valid after this
->    * function is called.
+diff --git a/tools/vm/slabinfo.c b/tools/vm/slabinfo.c
+index 0fffaeedee76..cfaeaea71042 100644
+--- a/tools/vm/slabinfo.c
++++ b/tools/vm/slabinfo.c
+@@ -157,9 +157,11 @@ static unsigned long read_obj(const char *name)
+ {
+ 	FILE *f = fopen(name, "r");
+ 
+-	if (!f)
++	if (!f) {
+ 		buffer[0] = 0;
+-	else {
++		if (errno == EACCES)
++			fatal("%s, Try using superuser\n", strerror(errno));
++	} else {
+ 		if (!fgets(buffer, sizeof(buffer), f))
+ 			buffer[0] = 0;
+ 		fclose(f);
+-- 
+2.31.1
 
