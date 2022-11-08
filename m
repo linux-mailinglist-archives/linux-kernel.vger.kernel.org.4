@@ -2,123 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FF30621B65
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 19:03:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79157621B69
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 19:05:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234206AbiKHSDo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 13:03:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55612 "EHLO
+        id S234478AbiKHSFB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 13:05:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233627AbiKHSDm (ORCPT
+        with ESMTP id S234320AbiKHSE5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 13:03:42 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4F7245A04
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 10:02:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667930563;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=X/6YPcfQ3OHCxcTVYe00PAa4barWuyYRCkyxGpkjxyY=;
-        b=IKhn8EFDGQ6vFiMq5oSNSmc29Tj2F1Hq8CQTPPoJCiC3h2FSHE2Je5zSaCSvLUj8rZPyLi
-        gRYPH8xKOdj/eY7oZG63e2cuJz8ytoYUb/pJgqXX6fD1wHwHbbHf5qDaW0l350Y4RN66aX
-        xxk/EfY3X3d99aXsoxcoEoq66IdgTb8=
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
- [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-373-DviGj2n_MsCvXH1wwDG1kg-1; Tue, 08 Nov 2022 13:02:41 -0500
-X-MC-Unique: DviGj2n_MsCvXH1wwDG1kg-1
-Received: by mail-qk1-f197.google.com with SMTP id i17-20020a05620a249100b006fa2e10a2ecso13528818qkn.16
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 10:02:41 -0800 (PST)
+        Tue, 8 Nov 2022 13:04:57 -0500
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 967531EC7C
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 10:04:56 -0800 (PST)
+Received: by mail-lj1-x22e.google.com with SMTP id d3so22309657ljl.1
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 10:04:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=d8lLQrLa9lfgAhLWiz3+cGR1Ww6pJngs3/YRtX20tqU=;
+        b=sZTVQpeTSHFjr+vC32q4RN/mHfcdVDA7xMdjOfiBBiyUhOyrcNX8kulqsn9u47xJDy
+         7g2p9vwgCTeTO32/qyifA0JKI49z7XHqzY84Xt6sPThEcTr/xLABqlKtdGPbTQifVLKB
+         S4UrFVqJ+46VhcGCprDLY/KOmDBQ4l7O42VgEcaz+xcNPP3z1UBHAAt3YnQEYB/frwpW
+         +RurAV5t7YFtRvczfhQgFKZJgy04tQsKUHFFCGLmcz0xzHnezTR2PtoQfkMJIyN4zsoE
+         Vm88ikl9RysO6sqVxgD+/pYjn5o9CBP25LlHWaXD88BkLVtfPq291940TOPU+77Sa3yJ
+         A4ng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=X/6YPcfQ3OHCxcTVYe00PAa4barWuyYRCkyxGpkjxyY=;
-        b=YvIWM3f+8j+L/v2k27oJjX3g2S5QGyeTaeWqMdnPqc4t4pdF+yM5yzoe/JPtZbvc4Y
-         K1huHiagpKCf+/g8/fIf15XfBuRx7O6YBy13KPgiwHosHGoFyv4axK+emvcvJpHt+rZp
-         QrrD+jIAILlkiNKcMdP1OzQ6tZLA/u4mNl6NqThqnL7n0EqCJDqow+nBDlwA4i8xPeKF
-         31hdoLF4UTnj1+BVyaGs8SXgeaVxqnpDmG0jILLel9QwTWsHbQA4k/DwVP0bTy2rRHTI
-         Yz7R7MD8Zv5gr75u8oTmrP8Z1Acc2cRKZ0R3ftWI0Gs16mGyF+vC59lFNsgHI9gzcMMZ
-         nndw==
-X-Gm-Message-State: ACrzQf3QrDIVxoSYlvA5zp3DV+roEA4ENbPn1YJZigIHjVAMEkMXj/5s
-        e163h3bTDW8szOkLZWQsdeDnFwrxyxGOi1+5uLgILgqu/dHEJFzL99Z5PvTWhoYTLwrv5m7hAUA
-        2jEGCAcH20N8MojdHLAhnd8lk
-X-Received: by 2002:ac8:785:0:b0:3a5:46b0:ffd7 with SMTP id l5-20020ac80785000000b003a546b0ffd7mr26189392qth.632.1667930560884;
-        Tue, 08 Nov 2022 10:02:40 -0800 (PST)
-X-Google-Smtp-Source: AMsMyM4eVKiHfOBQwciLJy4AwZpVqIFR506igUyNWrvRf/5jIesFD5LUP07eh3jEWVya/YWWbgFORA==
-X-Received: by 2002:ac8:785:0:b0:3a5:46b0:ffd7 with SMTP id l5-20020ac80785000000b003a546b0ffd7mr26189363qth.632.1667930560614;
-        Tue, 08 Nov 2022 10:02:40 -0800 (PST)
-Received: from redhat.com ([185.195.59.50])
-        by smtp.gmail.com with ESMTPSA id l21-20020a37f915000000b006fa9d101775sm9815931qkj.33.2022.11.08.10.02.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Nov 2022 10:02:40 -0800 (PST)
-Date:   Tue, 8 Nov 2022 13:02:35 -0500
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, Wei Gong <gongwei833x@gmail.com>,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org
-Subject: Re: [PATCH v2] pci: fix device presence detection for VFs
-Message-ID: <20221108130203-mutt-send-email-mst@kernel.org>
-References: <20221108101209-mutt-send-email-mst@kernel.org>
- <20221108175853.GA484920@bhelgaas>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=d8lLQrLa9lfgAhLWiz3+cGR1Ww6pJngs3/YRtX20tqU=;
+        b=PPO8wTPTmSxtbE0upDIhGPNsuU4HFeF9YntEPfCsiNpOhlO1iTQnbhJxPD72vacORc
+         oUkOnE1w/MtQxrR3am+KUSdOhrnHTvq7p5bjUk8ZHjTUzSAe6hCPA1bSULydodx+AfJI
+         J9BZlGwm9XRYpH8q4vIbN6FMSVAYhXi8FFYMtlpG2u2VYkfPi5vWmHdv2fqn04kMjNSt
+         M6LXDLNQyamnStydfmHWEnF7LkSoRQzoHWzo60efxapzWzRDJBdJCNkHG1pZvVK6QvfH
+         X8PFQ76nHSh9O0NjDnuoWni6xum2P+EANFIhomwRblmD4buRdfihXbknvGpugLzpjRQz
+         jpYQ==
+X-Gm-Message-State: ACrzQf3eh6rqeezJJO90rN9JVyQJzmxAxn+RfUzf3eoXufOxewqhWy05
+        baU+cQTuNGh3BdbCvNdvtKU4gQ==
+X-Google-Smtp-Source: AMsMyM4N+JvIZIj0O9kVtpNaG937zWm4KuV/52/nYkXR3qUQ3hkYMoNVIoxbh4ec7Z8LvK6zCWW6LQ==
+X-Received: by 2002:a2e:9d5a:0:b0:25e:2c67:edaf with SMTP id y26-20020a2e9d5a000000b0025e2c67edafmr19844245ljj.437.1667930693415;
+        Tue, 08 Nov 2022 10:04:53 -0800 (PST)
+Received: from [192.168.0.20] (088156142199.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.199])
+        by smtp.gmail.com with ESMTPSA id f4-20020a056512228400b00498f570aef2sm1868606lfu.209.2022.11.08.10.04.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Nov 2022 10:04:52 -0800 (PST)
+Message-ID: <357a9396-57b2-ce55-5825-eed14ff3c14e@linaro.org>
+Date:   Tue, 8 Nov 2022 19:04:52 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221108175853.GA484920@bhelgaas>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 4/5] arm64: dts: rockchip: Add rk3588-evb1 board
+Content-Language: en-US
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Heiko Stuebner <heiko@sntech.de>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Kever Yang <kever.yang@rock-chips.com>, kernel@collabora.com
+References: <20221108171500.99599-1-sebastian.reichel@collabora.com>
+ <20221108171500.99599-5-sebastian.reichel@collabora.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221108171500.99599-5-sebastian.reichel@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 08, 2022 at 11:58:53AM -0600, Bjorn Helgaas wrote:
-> On Tue, Nov 08, 2022 at 10:19:07AM -0500, Michael S. Tsirkin wrote:
-> > On Tue, Nov 08, 2022 at 09:02:28AM -0600, Bjorn Helgaas wrote:
-> > > On Tue, Nov 08, 2022 at 08:53:00AM -0600, Bjorn Helgaas wrote:
-> > > > On Wed, Oct 26, 2022 at 02:11:21AM -0400, Michael S. Tsirkin wrote:
-> > > > > virtio uses the same driver for VFs and PFs.  Accordingly,
-> > > > > pci_device_is_present is used to detect device presence. This function
-> > > > > isn't currently working properly for VFs since it attempts reading
-> > > > > device and vendor ID.
-> > > > 
-> > > > > As VFs are present if and only if PF is present,
-> > > > > just return the value for that device.
-> > > > 
-> > > > VFs are only present when the PF is present *and* the PF has VF Enable
-> > > > set.  Do you care about the possibility that VF Enable has been
-> > > > cleared?
+On 08/11/2022 18:14, Sebastian Reichel wrote:
+> From: Kever Yang <kever.yang@rock-chips.com>
 > 
-> I think you missed this question.
+> Add board file for the RK3588 evaluation board. While the hardware
+> offers plenty of peripherals and connectivity this basic implementation
+> just handles things required to successfully boot Linux from eMMC,
+> connect via UART or Ethernet.
+> 
+> Signed-off-by: Kever Yang <kever.yang@rock-chips.com>
+> [rebase, update commit message, use EVB1 for SoC bringup]
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-I was hoping Wei will answer that, I don't have the hardware.
+I acked something very different. This has several new stuff with things
+to fix, so please drop my ack.
 
-> > > Can you also include a hint about how the problem manifests, and a URL
-> > > to the report if available?
-> > 
-> > Here you go:
-> > lore.kernel.org/all/20221108044819.GA861843%40zander/t.mbox.gz
-> > 
-> > is it enough to include this link or do you want me
-> > to repost copying the text from there?
+> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+> ---
+>  .../devicetree/bindings/arm/rockchip.yaml     |   5 +
+>  arch/arm64/boot/dts/rockchip/Makefile         |   1 +
+>  .../boot/dts/rockchip/rk3588-evb1-v10.dts     | 156 ++++++++++++++++++
+>  3 files changed, 162 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/rockchip/rk3588-evb1-v10.dts
 > 
-> Uh, well, OK, I guess I could dig through that and figure what what's
-> relevant.  I'd like the commit log to contain a hint of what the
-> problem looks like and some justification for why it should be
-> backported to stable.
-> 
-> I still look at Documentation/process/stable-kernel-rules.rst
-> occasionally to decide things like this, but I get the feeling that
-> it's a little out-of-date and more restrictive than current practice.
-> 
-> But I do think the "PF exists but VF disabled" situation needs to be
-> clarified somehow, too.
-> 
-> Bjorn
+> diff --git a/Documentation/devicetree/bindings/arm/rockchip.yaml b/Documentation/devicetree/bindings/arm/rockchip.yaml
+> index c6c69a4e3777..4230881371fa 100644
+> --- a/Documentation/devicetree/bindings/arm/rockchip.yaml
+> +++ b/Documentation/devicetree/bindings/arm/rockchip.yaml
+> @@ -739,6 +739,11 @@ properties:
+>            - const: rockchip,rk3568-bpi-r2pro
+>            - const: rockchip,rk3568
+>  
+> +      - description: Rockchip RK3588 Evaluation board
+> +        items:
+> +          - const: rockchip,rk3588-evb1-v10
+> +          - const: rockchip,rk3588
+> +
+>  additionalProperties: true
+>  
+>  ...
+> diff --git a/arch/arm64/boot/dts/rockchip/Makefile b/arch/arm64/boot/dts/rockchip/Makefile
+> index 8c15593c0ca4..12ed53de11eb 100644
+> --- a/arch/arm64/boot/dts/rockchip/Makefile
+> +++ b/arch/arm64/boot/dts/rockchip/Makefile
+> @@ -72,3 +72,4 @@ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3566-soquartz-cm4.dtb
+>  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3568-bpi-r2-pro.dtb
+>  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3568-evb1-v10.dtb
+>  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3568-rock-3a.dtb
+> +dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3588-evb1-v10.dtb
+> diff --git a/arch/arm64/boot/dts/rockchip/rk3588-evb1-v10.dts b/arch/arm64/boot/dts/rockchip/rk3588-evb1-v10.dts
+> new file mode 100644
+> index 000000000000..a9b8e0ed1125
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/rockchip/rk3588-evb1-v10.dts
+> @@ -0,0 +1,156 @@
+> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+> +/*
+> + * Copyright (c) 2021 Rockchip Electronics Co., Ltd.
+> + *
+> + */
+> +
+> +/dts-v1/;
+> +
+> +#include <dt-bindings/pinctrl/rockchip.h>
+> +#include <dt-bindings/gpio/gpio.h>
+> +#include "rk3588.dtsi"
+> +
+> +/ {
+> +	model = "Rockchip RK3588 EVB1 V10 Board";
+> +	compatible = "rockchip,rk3588-evb1-v10", "rockchip,rk3588";
+> +
+> +	chosen {
+> +		stdout-path = "serial2:1500000n8";
+> +	};
+> +
+> +	vcc12v_dcin: vcc12v-dcin {
+
+Node names should be generic, so at least regualtor prefix or suffix
+https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
+
+> +		compatible = "regulator-fixed";
+> +		regulator-name = "vcc12v_dcin";
+> +		regulator-always-on;
+> +		regulator-boot-on;
+> +		regulator-min-microvolt = <12000000>;
+> +		regulator-max-microvolt = <12000000>;
+> +	};
+> +
+> +	vcc5v0_sys: vcc5v0-sys {
+> +		compatible = "regulator-fixed";
+> +		regulator-name = "vcc5v0_sys";
+> +		regulator-always-on;
+> +		regulator-boot-on;
+> +		regulator-min-microvolt = <5000000>;
+> +		regulator-max-microvolt = <5000000>;
+> +		vin-supply = <&vcc12v_dcin>;
+> +	};
+> +
+Best regards,
+Krzysztof
 
