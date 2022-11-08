@@ -2,150 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D84FA621D69
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 21:07:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B19D8621D71
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 21:14:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229827AbiKHUHk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 15:07:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60726 "EHLO
+        id S229841AbiKHUOb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 15:14:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229649AbiKHUHh (ORCPT
+        with ESMTP id S229637AbiKHUO2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 15:07:37 -0500
-Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9764B60EB3;
-        Tue,  8 Nov 2022 12:07:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-        s=smtpout1; t=1667938055;
-        bh=2YjYNBDqhLy3uADbeMp1P3aHSxfJP3jjX9skYBBOTF8=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=WQ0fUS7O2LZBWNGgFF80xUg98NuQStaICXq4CeaFKXRP37pRB00VE9cBYQRd7SHqZ
-         UhFNmn5cBzmXXMdDQ7rNSs17pzVHJlamaHmqsSvYLew9vVDfgGaYxotc47IfcL/ytU
-         wva/GxcNATQqmcA55gpxsJAinnhnnnmlVBdUdox9xx3rJP85WIr/EpHtZ36X3lDmgE
-         JlakrdHEW2+gTAOmpTTeA3eUl5R3eb1q+jRP4n4XJ50XdZg3OMsBAKKboOnvoPHwp+
-         esbrPxSsG8/U7yTCxPc6vYf3lSPnqr7wRgBmSYTxjeYZNIbrNtvTiYBCGKEAeZGe1k
-         9w4Lnf20tUpOw==
-Received: from [172.16.0.153] (192-222-180-24.qc.cable.ebox.net [192.222.180.24])
-        by smtpout.efficios.com (Postfix) with ESMTPSA id 4N6Jzq2RB4zgTw;
-        Tue,  8 Nov 2022 15:07:35 -0500 (EST)
-Message-ID: <580eec2b-f204-2eb1-806d-8282b8b60bf2@efficios.com>
-Date:   Tue, 8 Nov 2022 15:07:42 -0500
+        Tue, 8 Nov 2022 15:14:28 -0500
+Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5203265853
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 12:14:27 -0800 (PST)
+Received: by mail-io1-xd29.google.com with SMTP id b2so12358161iof.12
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 12:14:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=cLWjdLjmwzQQilsftQhHY/hR2bx8uTMFOs2rhKH1YPE=;
+        b=YRBngXpRdtdEe3A8XhDZUTjOoK2eZhkHlSkI4drBQRDO0jX04QTbncQtee4R4qegJg
+         FUZAnvanRT4NlSSR10S7xfZYCoIYpTzMnghJJaCwHOf2CslN5ED4TmtWjCm0TFAcQo4O
+         XOnJ19g/KmVauNQ1DTegdJzcKsX4j/94ftOdj4yYjxAr5/uDaIADGZMRLardoyCXhWQA
+         OfbEm8bVlAF3Lcwt3QFULZvoR+Gcmw1Fd7xqxpY3/P9Hqr6qbE8uxxqcPRxR/tT0u9pC
+         YQrxFPUwNkkznI/ZH/OLF76G6uTVfRDDO0LRNeISHYgD7lseIiAyR5uZcop+xoH30ciH
+         G23A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=cLWjdLjmwzQQilsftQhHY/hR2bx8uTMFOs2rhKH1YPE=;
+        b=oTurWDfmt1YPycdsrIK8oI4n5BGqo2ngIzjX1tRfkfRJE0YDdaIffuM9nQQWhrGr14
+         dc7W4/J59qphKv5cW6kcG8NSk3gpoJa/hIYxTsQ3CsO4NouPJMrxrVYww4FEdTMz71IS
+         HfB1L2WLRq6sX0zxqDMsvuYXMXK5raGLGV4N0UBQiYe+DTYtjlLEDM29JiOWm3tOfqev
+         TXPWtIGl/NojdjHxyIRXqPAhhF5scTpsHwGc21mr3q6XzUdRtOV7fynTJCLVwl5O9obT
+         KrjpDdH2AEYmCwr3EWvEtsa4snfEpYYjapbaUVmmbDE7GVdsG8/SOjwI4d4zjC3G5YYC
+         YM5w==
+X-Gm-Message-State: ACrzQf35nS/Ngz9hZAUoJZ1o/7v9RQULKot5V5gRTAI+sbr5oujP8mww
+        zMT/JCttnmZ6RDIcw8FQ7hH9TKqqgSdBlYnRQwI/HZXNfsE=
+X-Google-Smtp-Source: AMsMyM5ExF/2VttM79JVD++K1Lr4AMVrYSFbQ19H3vn10hr/KQooHoLXMJ7fCqXnIqoOCJUdAAueNvvvOb4yfaCcTAM=
+X-Received: by 2002:a02:900a:0:b0:35a:84e4:39aa with SMTP id
+ w10-20020a02900a000000b0035a84e439aamr34355472jaf.191.1667938466436; Tue, 08
+ Nov 2022 12:14:26 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH v5 08/24] sched: Introduce per memory space current
- virtual cpu id
-Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        "H . Peter Anvin" <hpa@zytor.com>, Paul Turner <pjt@google.com>,
-        linux-api@vger.kernel.org, Christian Brauner <brauner@kernel.org>,
-        Florian Weimer <fw@deneb.enyo.de>, David.Laight@aculab.com,
-        carlos@redhat.com, Peter Oskolkov <posk@posk.io>,
-        Alexander Mikhalitsyn <alexander@mihalicyn.com>,
-        Chris Kennelly <ckennelly@google.com>
-References: <20221103200359.328736-1-mathieu.desnoyers@efficios.com>
- <20221103200359.328736-9-mathieu.desnoyers@efficios.com>
- <Y2pT7ij/TcI4EmH6@hirez.programming.kicks-ass.net>
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-In-Reply-To: <Y2pT7ij/TcI4EmH6@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <b35c3f82-f67b-2103-7d82-7a7ba7521439@suse.cz> <Y2qkIrk+a9v7tAQZ@P9FQF9L96D.lan>
+In-Reply-To: <Y2qkIrk+a9v7tAQZ@P9FQF9L96D.lan>
+From:   Yosry Ahmed <yosryahmed@google.com>
+Date:   Tue, 8 Nov 2022 12:13:50 -0800
+Message-ID: <CAJD7tkaqrz8sGqgbyfQHU_NM3O=a_0bqSHB0gGYRB7Kj+w_05w@mail.gmail.com>
+Subject: Re: Deprecating and removing SLOB
+To:     Roman Gushchin <roman.gushchin@linux.dev>,
+        David Rientjes <rientjes@google.com>,
+        Greg Thelen <gthelen@google.com>
+Cc:     Vlastimil Babka <vbabka@suse.cz>, Christoph Lameter <cl@linux.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Rustam Kovhaev <rkovhaev@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-11-08 08:04, Peter Zijlstra wrote:
-> On Thu, Nov 03, 2022 at 04:03:43PM -0400, Mathieu Desnoyers wrote:
-> 
->> The credit goes to Paul Turner (Google) for the vcpu_id idea. This
->> feature is implemented based on the discussions with Paul Turner and
->> Peter Oskolkov (Google), but I took the liberty to implement scheduler
->> fast-path optimizations and my own NUMA-awareness scheme. The rumor has
->> it that Google have been running a rseq vcpu_id extension internally at
->> Google in production for a year. The tcmalloc source code indeed has
->> comments hinting at a vcpu_id prototype extension to the rseq system
->> call [1].
-> 
-> Re NUMA thing -- that means that on a 512 node system a single threaded
-> task can still observe 512 separate vcpu-ids, right?
+On Tue, Nov 8, 2022 at 10:47 AM Roman Gushchin <roman.gushchin@linux.dev> wrote:
+>
+> On Tue, Nov 08, 2022 at 04:55:29PM +0100, Vlastimil Babka wrote:
+> > Hi,
+> >
+> > as we all know, we currently have three slab allocators. As we discussed at
+> > LPC [1], it is my hope that one of these allocators has a future, and two of
+> > them do not.
+> >
+> > The unsurprising reasons include code maintenance burden, other features
+> > compatible with only a subset of allocators (or more effort spent on the
+> > features), blocking API improvements (more on that below), and my inability
+> > to pronounce SLAB and SLUB in a properly distinguishable way, without
+> > resorting to spelling out the letters.
+> >
+> > I think (but may be proven wrong) that SLOB is the easier target of the two
+> > to be removed, so I'd like to focus on it first.
+>
+> Great!
+>
+> SLOB is not supported by the kernel memory accounting code, so if we'll
+> deprecate SLOB, we can remove all those annoying ifndefs.
+>
+> But I wonder if we can deprecate SLAB too? Or at least use the moment to
+> ask every non-SLUB user on why they can't/don't want to use SLUB.
+> Are there any known advantages of SLAB over SLUB?
 
-Yes, that's correct.
+We use SLAB at Google, but I am not the right person to answer the
+question of why we can't/don't use SLUB. Adding Greg here who recently
+looked into this and might have answers. I see David is already
+tagged, he might have a good answer as well.
 
-> 
-> Also, said space won't be dense.
-
-Indeed, this can be inefficient if the data structure within the 
-single-threaded task is not NUMA-aware *and* that task is free to bounce 
-all over the 512 numa nodes.
-
-> 
-> The main selling point of the whole vcpu-id scheme was that the id space
-> is dense and not larger than min(nr_cpus, nr_threads), which then gives
-> useful properties.
-> 
-> But I'm not at all seeing how the NUMA thing preserves that.
-
-If a userspace per-vcpu data structure is implemented with NUMA-local 
-allocations, then it becomes really interesting to guarantee that the 
-per-vcpu-id accesses are always numa-local for performance reasons.
-
-If a userspace per-vcpu data structure is not numa-aware, then we have 
-two scenarios:
-
-A) The cpuset/sched affinity under which it runs pins it to a set of 
-cores belonging to a specific NUMA node. In this case, even with 
-numa-aware vcpu id allocation, the ids will stay as close to 0 as if not 
-numa-aware.
-
-B) No specific cpuset/sched affinity set, which means the task is free 
-to bounce all over. In this case I agree that having the indexing 
-numa-aware, but the per-vcpu data structure not numa-aware, is inefficient.
-
-I wonder whether scenarios with 512 nodes systems, with containers using 
-few cores, but without using cpusets/sched affinity to pin the workload 
-to specific numa nodes is a workload we should optimize for ? It looks 
-like the lack of numa locality due to lack of allowed cores restriction 
-is a userspace configuration issue.
-
-We also must keep in mind that we can expect a single task to load a mix 
-of executable/shared libraries where some pieces may be numa-aware, and 
-others may not. This means we should ideally support a numa-aware 
-vcpu-id allocation scheme and non-numa-aware vcpu-id allocation scheme 
-within the same task.
-
-This could be achieved by exposing two struct rseq fields rather than 
-one, e.g.:
-
-vm_vcpu_id -> flat indexing, not numa-aware.
-vm_numa_vcpu_id -> numa-aware vcpu id indexing.
-
-This would allow data structures that are inherently numa-aware to 
-benefit from numa-locality, without hurting non-numa-aware data structures.
-
-> 
-> Also; given the utter mind-bendiness of the NUMA thing; should it go
-> into it's own patch; introduce the regular plain old vcpu first, and
-> then add things to it -- that also allows pushing those weird cpumask
-> ops you've created later into the series.
-
-Good idea. I can do that once we agree on the way forward for flat vs 
-numa-aware vcpu-id rseq fields.
-
-Thanks,
-
-Mathieu
-
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-https://www.efficios.com
-
+>
+> Also, for memory-constrained users we might want to add some guide on how
+> to configure SLUB to minimize the memory footprint.
+>
+> Thank you!
+>
+> Roman
+>
