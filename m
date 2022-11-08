@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25CA26218C3
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 16:50:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41C426218C4
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 16:50:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234551AbiKHPt6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 10:49:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37804 "EHLO
+        id S234503AbiKHPuI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 10:50:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234534AbiKHPtr (ORCPT
+        with ESMTP id S234532AbiKHPt5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 10:49:47 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A4CD59FD1;
-        Tue,  8 Nov 2022 07:49:47 -0800 (PST)
+        Tue, 8 Nov 2022 10:49:57 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A11645C764;
+        Tue,  8 Nov 2022 07:49:56 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CADA6B81B4E;
-        Tue,  8 Nov 2022 15:49:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1BD1C433C1;
-        Tue,  8 Nov 2022 15:49:42 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 1D2F7CE1BD9;
+        Tue,  8 Nov 2022 15:49:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AE6AC433D6;
+        Tue,  8 Nov 2022 15:49:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667922584;
-        bh=uMXIDE3N6tRBHy0qXfA/qokcfkSD+HhNMwAWfevtvoA=;
+        s=k20201202; t=1667922593;
+        bh=F/6mNWeMxsAl5sO9bPrQ/z7sSueL8mpIe+JI9wyTpYI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FnpNtXzDxAK2M6pLW9kmncWOhCnju9bsKZbgWOiCYcpFvFaxcReDv/KxBA48ZcWoA
-         QgQ22yAHHLYksfvtv3faGTRtAXU3szPKsmiwM9dWyjY2ZHT8DPV6lzDViNIkGrJP/t
-         J8Eu1mvbAg+TAxIVnT2BWKwiTjID7VJOgVZL8TB9StnjE0iuJ03B9E3/oK+c73qgnS
-         yODE9YrDGn0CTGkarxF6xdONjbxk/vzDo9v9aoNxIAzTlkie4gw6AY4+n1Fa2ZDgew
-         TQPL2XiuTg0694xRAGAOsQXJFYmRkqn1nSr89f6NOZbN4It7+xs1Msl5VT89kYL5nr
-         hInTg/gdFVQgA==
+        b=U8FmuCdMpK+lpMhQo9J82CHO7rwMk1BCa7U0M97ydkONfEyQEEyVVpxw4oSF+EgPK
+         yKv6X0HxVdO+8VeIRCG1fWqO+MaQsTAVxBDt7HTRWsAg7iVWw1UX86cgLng8RY1YrY
+         aOzQxaQ/I3sKuBojHDCq7T3Yvk8cAj3YrOai2l5mK6mFZV+yZj5hXpKOAfYbK4IsSC
+         8U15dj5bTc1ehQVQlVBNHWbzUod08f//omP9ZKLjJuwtHPcP6qBg9ATuRGdk8+5n1O
+         ycPdUV4siXqESznuqvTwSmcEG7tmcKJkhRQ1qdzLRuJ77VTtqwLG/ffMUTWDnXdnpS
+         1ucBLdHPd4q9w==
 From:   "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
 To:     linux-trace-kernel@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
         mhiramat@kernel.org, Florent Revest <revest@chromium.org>,
         Mark Rutland <mark.rutland@arm.com>,
         Will Deacon <will@kernel.org>
-Subject: [RFC PATCH 3/9] fprobe: Add nr_maxactive to specify rethook_node pool size
-Date:   Wed,  9 Nov 2022 00:49:40 +0900
-Message-Id: <166792258067.919356.10757785431344618724.stgit@devnote3>
+Subject: [RFC PATCH 4/9] lib/test_fprobe: Add a test case for nr_maxactive
+Date:   Wed,  9 Nov 2022 00:49:49 +0900
+Message-Id: <166792258988.919356.1550112303992706866.stgit@devnote3>
 X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
 In-Reply-To: <166792255429.919356.14116090269057513181.stgit@devnote3>
 References: <166792255429.919356.14116090269057513181.stgit@devnote3>
@@ -59,51 +59,104 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
-Add nr_maxactive to specify rethook_node pool size. This means
-the maximum number of actively running target functions concurrently
-for probing by exit_handler. Note that if the running function is
-preempted or sleep, it is still counted as 'active'.
+Add a test case for nr_maxactive. If the number of active
+functions is more than nr_maxactive, it must be skipped.
 
 Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 ---
- include/linux/fprobe.h |    2 ++
- kernel/trace/fprobe.c  |    5 ++++-
- 2 files changed, 6 insertions(+), 1 deletion(-)
+ lib/test_fprobe.c |   42 ++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 42 insertions(+)
 
-diff --git a/include/linux/fprobe.h b/include/linux/fprobe.h
-index e0d4e6136249..678f741a7b33 100644
---- a/include/linux/fprobe.h
-+++ b/include/linux/fprobe.h
-@@ -14,6 +14,7 @@
-  * @flags: The status flag.
-  * @rethook: The rethook data structure. (internal data)
-  * @entry_data_size: The private data storage size.
-+ * @nr_maxactive: The max number of active functions.
-  * @entry_handler: The callback function for function entry.
-  * @exit_handler: The callback function for function exit.
-  */
-@@ -31,6 +32,7 @@ struct fprobe {
- 	unsigned int		flags;
- 	struct rethook		*rethook;
- 	size_t			entry_data_size;
-+	int			nr_maxactive;
+diff --git a/lib/test_fprobe.c b/lib/test_fprobe.c
+index 941bf5234c31..976fb3f7cb01 100644
+--- a/lib/test_fprobe.c
++++ b/lib/test_fprobe.c
+@@ -17,8 +17,10 @@ static u32 rand1, entry_val, exit_val;
+ /* Use indirect calls to avoid inlining the target functions */
+ static u32 (*target)(u32 value);
+ static u32 (*target2)(u32 value);
++static u32 (*target_nest)(u32 value, u32 (*nest)(u32));
+ static unsigned long target_ip;
+ static unsigned long target2_ip;
++static unsigned long target_nest_ip;
  
- 	void (*entry_handler)(struct fprobe *fp, unsigned long entry_ip,
- 			      struct pt_regs *regs, void *entry_data);
-diff --git a/kernel/trace/fprobe.c b/kernel/trace/fprobe.c
-index fa25d09c9d57..f222848571f2 100644
---- a/kernel/trace/fprobe.c
-+++ b/kernel/trace/fprobe.c
-@@ -143,7 +143,10 @@ static int fprobe_init_rethook(struct fprobe *fp, int num)
- 	}
+ static noinline u32 fprobe_selftest_target(u32 value)
+ {
+@@ -30,6 +32,11 @@ static noinline u32 fprobe_selftest_target2(u32 value)
+ 	return (value / div_factor) + 1;
+ }
  
- 	/* Initialize rethook if needed */
--	size = num * num_possible_cpus() * 2;
-+	if (fp->nr_maxactive)
-+		size = fp->nr_maxactive;
-+	else
-+		size = num * num_possible_cpus() * 2;
- 	if (size < 0)
- 		return -E2BIG;
++static noinline u32 fprobe_selftest_nest_target(u32 value, u32 (*nest)(u32))
++{
++	return nest(value + 2);
++}
++
+ static notrace void fp_entry_handler(struct fprobe *fp, unsigned long ip,
+ 				     struct pt_regs *regs, void *data)
+ {
+@@ -67,6 +74,19 @@ static notrace void fp_exit_handler(struct fprobe *fp, unsigned long ip,
+ 		KUNIT_EXPECT_NULL(current_test, data);
+ }
+ 
++static notrace void nest_entry_handler(struct fprobe *fp, unsigned long ip,
++				     struct pt_regs *regs, void *data)
++{
++	KUNIT_EXPECT_FALSE(current_test, preemptible());
++}
++
++static notrace void nest_exit_handler(struct fprobe *fp, unsigned long ip,
++				    struct pt_regs *regs, void *data)
++{
++	KUNIT_EXPECT_FALSE(current_test, preemptible());
++	KUNIT_EXPECT_EQ(current_test, ip, target_nest_ip);
++}
++
+ /* Test entry only (no rethook) */
+ static void test_fprobe_entry(struct kunit *test)
+ {
+@@ -163,6 +183,25 @@ static void test_fprobe_data(struct kunit *test)
+ 	KUNIT_EXPECT_EQ(test, 0, unregister_fprobe(&fp));
+ }
+ 
++/* Test nr_maxactive */
++static void test_fprobe_nest(struct kunit *test)
++{
++	static const char *syms[] = {"fprobe_selftest_target", "fprobe_selftest_nest_target"};
++	struct fprobe fp = {
++		.entry_handler = nest_entry_handler,
++		.exit_handler = nest_exit_handler,
++		.nr_maxactive = 1,
++	};
++
++	current_test = test;
++	KUNIT_EXPECT_EQ(test, 0, register_fprobe_syms(&fp, syms, 2));
++
++	target_nest(rand1, target);
++	KUNIT_EXPECT_EQ(test, 1, fp.nmissed);
++
++	KUNIT_EXPECT_EQ(test, 0, unregister_fprobe(&fp));
++}
++
+ static unsigned long get_ftrace_location(void *func)
+ {
+ 	unsigned long size, addr = (unsigned long)func;
+@@ -181,8 +220,10 @@ static int fprobe_test_init(struct kunit *test)
+ 
+ 	target = fprobe_selftest_target;
+ 	target2 = fprobe_selftest_target2;
++	target_nest = fprobe_selftest_nest_target;
+ 	target_ip = get_ftrace_location(target);
+ 	target2_ip = get_ftrace_location(target2);
++	target_nest_ip = get_ftrace_location(target_nest);
+ 
+ 	return 0;
+ }
+@@ -192,6 +233,7 @@ static struct kunit_case fprobe_testcases[] = {
+ 	KUNIT_CASE(test_fprobe),
+ 	KUNIT_CASE(test_fprobe_syms),
+ 	KUNIT_CASE(test_fprobe_data),
++	KUNIT_CASE(test_fprobe_nest),
+ 	{}
+ };
  
 
