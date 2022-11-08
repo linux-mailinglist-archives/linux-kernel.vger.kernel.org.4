@@ -2,658 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22DAA621930
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 17:14:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68E8D621934
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 17:15:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234561AbiKHQOm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 11:14:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51952 "EHLO
+        id S234604AbiKHQPa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 11:15:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233665AbiKHQOj (ORCPT
+        with ESMTP id S233665AbiKHQP2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 11:14:39 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 034212317C
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 08:14:37 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8340D61518
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 16:14:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3D43C4314A
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 16:14:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667924075;
-        bh=joKDBdRcwU/4G60+U4O7ITiaDkaQ9x0N3nsp6pijk6M=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=DDI40uxjsBu8d5GUwg1vx30PqkA86UAj9fGTc5LhZDaVQ/2fGEVW+2Q9nemcr8XaO
-         eH9rxmJCKBdL4D9BgSplufNrELgExX6pY6R69tLzZJokan0TnOYDfW7a4gfI1SF8qw
-         2tnU4RWIQ0Z6L4h8D0KTmC2DgVwy+JxwiPdxaj4k0PzH4zJ/bc624xZWeXn4mhO9AJ
-         02NPSG2Q+7Orf9LGuA23DAjfrOPX+rKENBa19+SkTzEPeillMEnRbXNUUKY/wm0GcC
-         s/5H6KuLaeqDjR2fL9sp5zw9OcwB+TGdmLbo5v7t8CtyW6S/C09GqRV/DCMOa5slaI
-         zvf1055PQ22aw==
-Received: by mail-yb1-f181.google.com with SMTP id e123so13653765ybh.11
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 08:14:35 -0800 (PST)
-X-Gm-Message-State: ACrzQf2UDEA0Y0llYhOBnDYtN0c0ebiFYth5vV93JySp9T0oNjNpD3BL
-        Pys2VAVwLuQ9PamlVfFL8ka0ftGLzuwUTYKN2uo=
-X-Google-Smtp-Source: AMsMyM5aMBXulfSSUdeSMwaM++n3fPAtT+56HfhPJnlTX8/ewTelfXYhqcWvq74HSIgCvJ4fd13WQJOLenW7EOMFs6w=
-X-Received: by 2002:a25:1e89:0:b0:6bf:9e55:5cb4 with SMTP id
- e131-20020a251e89000000b006bf9e555cb4mr56017753ybe.642.1667924074309; Tue, 08
- Nov 2022 08:14:34 -0800 (PST)
+        Tue, 8 Nov 2022 11:15:28 -0500
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C356253EE5
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 08:15:25 -0800 (PST)
+Received: by mail-io1-xd2a.google.com with SMTP id b2so11806933iof.12
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 08:15:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=GOOfSEYU17x7lW1mqeOYHAxqV1vrJzMhRnJ6jcrQTOI=;
+        b=e1St1Y9udR0/nj90z94foyJrJ/mzlShjP0N/7N59idoPMW0xoxVnf78HiR/g27DNSZ
+         aFXhVhqtYn4CTSteWZ3rV47He+PsRhYJun05Eon387RDHJWbkybD/Op7gGQ/9r03/uJZ
+         Rs/hKzJwlBobB9uDkXqPRD8XMbuB8DKkper16UEVKQq80r9Jx3y4W7KoqGZ6xsX4rATr
+         Uu2kESsANla5KtnfNMfgR6WsgmpCl6uAhXd4P8CZNhttOrHxu0LtnKoTRAwdO9ZpYA6n
+         Joc5N8E7eZnC3MAqhz3bin82Ncb6lXmpNk856eHdFD2slFU7fWMPOnF5EykNUAZF7RsX
+         8Ltw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=GOOfSEYU17x7lW1mqeOYHAxqV1vrJzMhRnJ6jcrQTOI=;
+        b=kP4Yw4uLBr02oB7OG7rFs3DWjAkmrVCAe5pRvHGSmDprjC2PrQnyXkEwpWUTilmohJ
+         +teR9il+Vh2XIWT6HyimpknzYzB/LFYwVfyyjq2HHX9Cusd5/81ld5PF/nTi0Lvo0V1H
+         sKaE82NWbOmTBig5T98TVeJs33iDl9qciiH4xDMTYGKy+IwvoBG5KimSrF0BFSLy5J5J
+         KjbPd6D5TLlXwInI5+UFxq2pJrFGRUXbIbkUwsBUfSvFD4TZelK38XB8K+ThNXcscJAy
+         VqxbYnNhjNe1bTJ+wfAxbK5F3MCiJRf+77IJC4B/4I5tZLCcmoq7Pelnn3D3ZcCgsDYf
+         Uveg==
+X-Gm-Message-State: ACrzQf1ywz4uqujF3i6dDBrj4aywR361p6OguElQfReXuvPITmbQbx4v
+        dnMLfxWex3B2rlNZlYjNvzQH24S2E6vQjfMu
+X-Google-Smtp-Source: AMsMyM61Zi2wQyEOc95fNAuneImn5zVZickePKLuvqc2EAZe7l/PZ02Y5H7fKVGqSQbuo1veAuYQaQ==
+X-Received: by 2002:a6b:4417:0:b0:6ca:d30a:913d with SMTP id r23-20020a6b4417000000b006cad30a913dmr34357226ioa.180.1667924125121;
+        Tue, 08 Nov 2022 08:15:25 -0800 (PST)
+Received: from [192.168.1.94] ([207.135.234.126])
+        by smtp.gmail.com with ESMTPSA id y9-20020a029509000000b003758390c97esm3914291jah.83.2022.11.08.08.15.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Nov 2022 08:15:24 -0800 (PST)
+Message-ID: <75c8f5fe-6d5f-32a9-1417-818246126789@kernel.dk>
+Date:   Tue, 8 Nov 2022 09:15:23 -0700
 MIME-Version: 1.0
-References: <20221106210225.2065371-1-ogabbay@kernel.org> <20221106210225.2065371-3-ogabbay@kernel.org>
- <222554f4-c3b0-8375-2ed6-175d4b2c52cb@linux.intel.com>
-In-Reply-To: <222554f4-c3b0-8375-2ed6-175d4b2c52cb@linux.intel.com>
-From:   Oded Gabbay <ogabbay@kernel.org>
-Date:   Tue, 8 Nov 2022 18:14:07 +0200
-X-Gmail-Original-Message-ID: <CAFCwf10=4i4asCmMP9O-Lk6mvgVt0p-_LWMau5tBaQ20aWn5Ag@mail.gmail.com>
-Message-ID: <CAFCwf10=4i4asCmMP9O-Lk6mvgVt0p-_LWMau5tBaQ20aWn5Ag@mail.gmail.com>
-Subject: Re: [RFC PATCH v3 2/3] accel: add dedicated minor for accelerator devices
-To:     Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-Cc:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>,
-        Jeffrey Hugo <quic_jhugo@quicinc.com>,
-        Jiho Chu <jiho.chu@samsung.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>,
-        Maciej Kwapulinski <maciej.kwapulinski@linux.intel.com>,
-        Jagan Teki <jagan@amarulasolutions.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCHSET v3 0/5] Add support for epoll min_wait
+To:     Stefan Hajnoczi <stefanha@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+References: <Y2lw4Qc1uI+Ep+2C@fedora>
+ <4281b354-d67d-2883-d966-a7816ed4f811@kernel.dk> <Y2phEZKYuSmPL5B5@fedora>
+ <93fa2da5-c81a-d7f8-115c-511ed14dcdbb@kernel.dk> <Y2p/YcUFhFDUnLGq@fedora>
+Content-Language: en-US
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <Y2p/YcUFhFDUnLGq@fedora>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 8, 2022 at 3:13 PM Tvrtko Ursulin
-<tvrtko.ursulin@linux.intel.com> wrote:
->
->
-> On 06/11/2022 21:02, Oded Gabbay wrote:
-> > The accelerator devices are exposed to user-space using a dedicated
-> > major. In addition, they are represented in /dev with new, dedicated
-> > device char names: /dev/accel/accel*. This is done to make sure any
-> > user-space software that tries to open a graphic card won't open
-> > the accelerator device by mistake.
-> >
-> > The above implies that the minor numbering should be separated from
-> > the rest of the DRM devices. However, to avoid code duplication, we
-> > want the drm_minor structure to be able to represent the accelerator
-> > device.
-> >
-> > To achieve this, we add a new drm_minor* to drm_device that represents
-> > the accelerator device. This pointer is initialized for drivers that
-> > declare they handle compute accelerator, using a new driver feature
-> > flag called DRIVER_COMPUTE_ACCEL. It is important to note that this
-> > driver feature is mutually exclusive with DRIVER_RENDER. Devices that
-> > want to expose both graphics and compute device char files should be
-> > handled by two drivers that are connected using the auxiliary bus
-> > framework.
-> >
-> > In addition, we define a different IDR to handle the accelerators
-> > minors. This is done to make the minor's index be identical to the
-> > device index in /dev/. Any access to the IDR is done solely
-> > by functions in accel_drv.c, as the IDR is define as static. The
-> > DRM core functions call those functions in case they detect the minor's
-> > type is DRM_MINOR_ACCEL.
-> >
-> > We define a separate accel_open function (from drm_open) that the
-> > accel drivers should set as their open callback function. Both these
-> > functions eventually call the same drm_open_helper(), which had to be
-> > changed to be non-static so it can be called from accel_drv.c.
-> > accel_open() only partially duplicates drm_open as I removed some code
-> > from it that handles legacy devices.
-> >
-> > To help new drivers, I defined DEFINE_DRM_ACCEL_FOPS macro to easily
-> > set the required function operations pointers structure.
-> >
-> > Signed-off-by: Oded Gabbay <ogabbay@kernel.org>
-> > ---
-> > Changes in v3:
-> >   - Remove useless DRM_DEBUG("\n") at accel_stub_open()
-> >   - Add function of accel_debugfs_init() as accel_debugfs_root is static
-> >     member in drm_accel.c
-> >   - Add DRM_ACCEL_FOPS and DEFINE_DRM_ACCEL_FOPS macros
-> >   - Replace minor handling from xarray back to idr, as xarray doesn't handle
-> >     well exchanging content of a NULL entry to non-NULL. This should be handled
-> >     in a different patch that will either fix xarray code or change DRM minor
-> >     init flow.
-> >   - Make accel_minor_replace() to return void.
-> >
-> >   drivers/accel/drm_accel.c  | 242 ++++++++++++++++++++++++++++++++++++-
-> >   drivers/gpu/drm/drm_file.c |   2 +-
-> >   include/drm/drm_accel.h    |  68 ++++++++++-
-> >   include/drm/drm_device.h   |   3 +
-> >   include/drm/drm_drv.h      |   8 ++
-> >   include/drm/drm_file.h     |  21 +++-
-> >   6 files changed, 340 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/drivers/accel/drm_accel.c b/drivers/accel/drm_accel.c
-> > index 943d960ddefc..05167c929866 100644
-> > --- a/drivers/accel/drm_accel.c
-> > +++ b/drivers/accel/drm_accel.c
-> > @@ -8,14 +8,25 @@
-> >
-> >   #include <linux/debugfs.h>
-> >   #include <linux/device.h>
-> > +#include <linux/xarray.h>
-> >
-> >   #include <drm/drm_accel.h>
-> > +#include <drm/drm_debugfs.h>
-> > +#include <drm/drm_drv.h>
-> > +#include <drm/drm_file.h>
-> >   #include <drm/drm_ioctl.h>
-> >   #include <drm/drm_print.h>
-> >
-> > +static DEFINE_SPINLOCK(accel_minor_lock);
-> > +static struct idr accel_minors_idr;
-> > +
-> >   static struct dentry *accel_debugfs_root;
-> >   static struct class *accel_class;
-> >
-> > +static struct device_type accel_sysfs_device_minor = {
-> > +     .name = "accel_minor"
-> > +};
-> > +
-> >   static char *accel_devnode(struct device *dev, umode_t *mode)
-> >   {
-> >       return kasprintf(GFP_KERNEL, "accel/%s", dev_name(dev));
-> > @@ -40,9 +51,235 @@ static void accel_sysfs_destroy(void)
-> >       accel_class = NULL;
-> >   }
-> >
-> > +static int accel_name_info(struct seq_file *m, void *data)
-> > +{
-> > +     struct drm_info_node *node = (struct drm_info_node *) m->private;
-> > +     struct drm_minor *minor = node->minor;
-> > +     struct drm_device *dev = minor->dev;
-> > +     struct drm_master *master;
-> > +
-> > +     mutex_lock(&dev->master_mutex);
-> > +     master = dev->master;
-> > +     seq_printf(m, "%s", dev->driver->name);
-> > +     if (dev->dev)
-> > +             seq_printf(m, " dev=%s", dev_name(dev->dev));
-> > +     if (master && master->unique)
-> > +             seq_printf(m, " master=%s", master->unique);
->
-> Does the all drm_master business apply with accel?
-No, it was left by mistake, I'll remove it.
+On 11/8/22 9:10 AM, Stefan Hajnoczi wrote:
+> On Tue, Nov 08, 2022 at 07:09:30AM -0700, Jens Axboe wrote:
+>> On 11/8/22 7:00 AM, Stefan Hajnoczi wrote:
+>>> On Mon, Nov 07, 2022 at 02:38:52PM -0700, Jens Axboe wrote:
+>>>> On 11/7/22 1:56 PM, Stefan Hajnoczi wrote:
+>>>>> Hi Jens,
+>>>>> NICs and storage controllers have interrupt mitigation/coalescing
+>>>>> mechanisms that are similar.
+>>>>
+>>>> Yep
+>>>>
+>>>>> NVMe has an Aggregation Time (timeout) and an Aggregation Threshold
+>>>>> (counter) value. When a completion occurs, the device waits until the
+>>>>> timeout or until the completion counter value is reached.
+>>>>>
+>>>>> If I've read the code correctly, min_wait is computed at the beginning
+>>>>> of epoll_wait(2). NVMe's Aggregation Time is computed from the first
+>>>>> completion.
+>>>>>
+>>>>> It makes me wonder which approach is more useful for applications. With
+>>>>> the Aggregation Time approach applications can control how much extra
+>>>>> latency is added. What do you think about that approach?
+>>>>
+>>>> We only tested the current approach, which is time noted from entry, not
+>>>> from when the first event arrives. I suspect the nvme approach is better
+>>>> suited to the hw side, the epoll timeout helps ensure that we batch
+>>>> within xx usec rather than xx usec + whatever the delay until the first
+>>>> one arrives. Which is why it's handled that way currently. That gives
+>>>> you a fixed batch latency.
+>>>
+>>> min_wait is fine when the goal is just maximizing throughput without any
+>>> latency targets.
+>>
+>> That's not true at all, I think you're in different time scales than
+>> this would be used for.
+>>
+>>> The min_wait approach makes it hard to set a useful upper bound on
+>>> latency because unlucky requests that complete early experience much
+>>> more latency than requests that complete later.
+>>
+>> As mentioned in the cover letter or the main patch, this is most useful
+>> for the medium load kind of scenarios. For high load, the min_wait time
+>> ends up not mattering because you will hit maxevents first anyway. For
+>> the testing that we did, the target was 2-300 usec, and 200 usec was
+>> used for the actual test. Depending on what the kind of traffic the
+>> server is serving, that's usually not much of a concern. From your
+>> reply, I'm guessing you're thinking of much higher min_wait numbers. I
+>> don't think those would make sense. If your rate of arrival is low
+>> enough that min_wait needs to be high to make a difference, then the
+>> load is low enough anyway that it doesn't matter. Hence I'd argue that
+>> it is indeed NOT hard to set a useful upper bound on latency, because
+>> that is very much what min_wait is.
+>>
+>> I'm happy to argue merits of one approach over another, but keep in mind
+>> that this particular approach was not pulled out of thin air AND it has
+>> actually been tested and verified successfully on a production workload.
+>> This isn't a hypothetical benchmark kind of setup.
+> 
+> Fair enough. I just wanted to make sure the syscall interface that gets
+> merged is as useful as possible.
 
->
-> > +     if (dev->unique)
-> > +             seq_printf(m, " unique=%s", dev->unique);
-> > +     seq_puts(m, "\n");
-> > +     mutex_unlock(&dev->master_mutex);
-> > +
-> > +     return 0;
-> > +}
-> > +
-> > +static const struct drm_info_list accel_debugfs_list[] = {
-> > +     {"name", accel_name_info, 0}
-> > +};
-> > +#define ACCEL_DEBUGFS_ENTRIES ARRAY_SIZE(accel_debugfs_list)
-> > +
-> > +/**
-> > + * accel_debugfs_init() - Initialize debugfs for accel minor
-> > + * @minor: Pointer to the drm_minor instance.
-> > + * @minor_id: The minor's id
-> > + *
-> > + * This function initializes the drm minor's debugfs members and creates
-> > + * a root directory for the minor in debugfs. It also creates common files
-> > + * for accelerators and calls the driver's debugfs init callback.
-> > + */
-> > +void accel_debugfs_init(struct drm_minor *minor, int minor_id)
-> > +{
-> > +     struct drm_device *dev = minor->dev;
-> > +     char name[64];
-> > +
-> > +     INIT_LIST_HEAD(&minor->debugfs_list);
-> > +     mutex_init(&minor->debugfs_lock);
-> > +     sprintf(name, "%d", minor_id);
-> > +     minor->debugfs_root = debugfs_create_dir(name, accel_debugfs_root);
-> > +
-> > +     drm_debugfs_create_files(accel_debugfs_list, ACCEL_DEBUGFS_ENTRIES,
-> > +                              minor->debugfs_root, minor);
-> > +
-> > +     if (dev->driver->debugfs_init)
-> > +             dev->driver->debugfs_init(minor);
-> > +}
-> > +
-> > +/**
-> > + * accel_set_device_instance_params() - Set some device parameters for accel device
-> > + * @kdev: Pointer to the device instance.
-> > + * @index: The minor's index
-> > + *
-> > + * This function creates the dev_t of the device using the accel major and
-> > + * the device's minor number. In addition, it sets the class and type of the
-> > + * device instance to the accel sysfs class and device type, respectively.
-> > + */
-> > +void accel_set_device_instance_params(struct device *kdev, int index)
-> > +{
-> > +     kdev->devt = MKDEV(ACCEL_MAJOR, index);
-> > +     kdev->class = accel_class;
-> > +     kdev->type = &accel_sysfs_device_minor;
-> > +}
-> > +
-> > +/**
-> > + * accel_minor_alloc() - Allocates a new accel minor
-> > + *
-> > + * This function access the accel minors idr and allocates from it
-> > + * a new id to represent a new accel minor
-> > + *
-> > + * Return: A new id on success or error code in case idr_alloc failed
-> > + */
-> > +int accel_minor_alloc(void)
-> > +{
-> > +     unsigned long flags;
-> > +     int r;
-> > +
-> > +     spin_lock_irqsave(&accel_minor_lock, flags);
-> > +     r = idr_alloc(&accel_minors_idr, NULL, 0, ACCEL_MAX_MINORS, GFP_NOWAIT);
-> > +     spin_unlock_irqrestore(&accel_minor_lock, flags);
-> > +
-> > +     return r;
-> > +}
-> > +
-> > +/**
-> > + * accel_minor_remove() - Remove an accel minor
-> > + * @index: The minor id to remove.
-> > + *
-> > + * This function access the accel minors idr and removes from
-> > + * it the member with the id that is passed to this function.
-> > + */
-> > +void accel_minor_remove(int index)
-> > +{
-> > +     unsigned long flags;
-> > +
-> > +     spin_lock_irqsave(&accel_minor_lock, flags);
-> > +     idr_remove(&accel_minors_idr, index);
-> > +     spin_unlock_irqrestore(&accel_minor_lock, flags);
-> > +}
-> > +
-> > +/**
-> > + * accel_minor_replace() - Replace minor pointer in accel minors idr.
-> > + * @minor: Pointer to the new minor.
-> > + * @index: The minor id to replace.
-> > + *
-> > + * This function access the accel minors idr structure and replaces the pointer
-> > + * that is associated with an existing id. Because the minor pointer can be
-> > + * NULL, we need to explicitly pass the index.
-> > + *
-> > + * Return: 0 for success, negative value for error
-> > + */
-> > +void accel_minor_replace(struct drm_minor *minor, int index)
-> > +{
-> > +     unsigned long flags;
-> > +
-> > +     spin_lock_irqsave(&accel_minor_lock, flags);
-> > +     idr_replace(&accel_minors_idr, minor, index);
-> > +     spin_unlock_irqrestore(&accel_minor_lock, flags);
-> > +}
-> > +
-> > +/*
-> > + * Looks up the given minor-ID and returns the respective DRM-minor object. The
-> > + * refence-count of the underlying device is increased so you must release this
-> > + * object with accel_minor_release().
-> > + *
-> > + * The object can be only a drm_minor that represents an accel device.
-> > + *
-> > + * As long as you hold this minor, it is guaranteed that the object and the
-> > + * minor->dev pointer will stay valid! However, the device may get unplugged and
-> > + * unregistered while you hold the minor.
-> > + */
-> > +static struct drm_minor *accel_minor_acquire(unsigned int minor_id)
-> > +{
-> > +     struct drm_minor *minor;
-> > +     unsigned long flags;
-> > +
-> > +     spin_lock_irqsave(&accel_minor_lock, flags);
-> > +     minor = idr_find(&accel_minors_idr, minor_id);
-> > +     if (minor)
-> > +             drm_dev_get(minor->dev);
-> > +     spin_unlock_irqrestore(&accel_minor_lock, flags);
-> > +
-> > +     if (!minor) {
-> > +             return ERR_PTR(-ENODEV);
-> > +     } else if (drm_dev_is_unplugged(minor->dev)) {
-> > +             drm_dev_put(minor->dev);
-> > +             return ERR_PTR(-ENODEV);
-> > +     }
-> > +
-> > +     return minor;
-> > +}
-> > +
-> > +static void accel_minor_release(struct drm_minor *minor)
-> > +{
-> > +     drm_dev_put(minor->dev);
-> > +}
-> > +
-> > +/**
-> > + * accel_open - open method for ACCEL file
-> > + * @inode: device inode
-> > + * @filp: file pointer.
-> > + *
-> > + * This function must be used by drivers as their &file_operations.open method.
-> > + * It looks up the correct ACCEL device and instantiates all the per-file
-> > + * resources for it. It also calls the &drm_driver.open driver callback.
-> > + *
-> > + * Return: 0 on success or negative errno value on failure.
-> > + */
-> > +int accel_open(struct inode *inode, struct file *filp)
-> > +{
-> > +     struct drm_device *dev;
-> > +     struct drm_minor *minor;
-> > +     int retcode;
-> > +
-> > +     minor = accel_minor_acquire(iminor(inode));
-> > +     if (IS_ERR(minor))
-> > +             return PTR_ERR(minor);
-> > +
-> > +     dev = minor->dev;
-> > +
-> > +     atomic_fetch_inc(&dev->open_count);
->
-> Why fetch and could you even only increment once everything worked (to
-> avoid having to decrement on the error unwind)?
-It was copied from drm_open. I tried to not do any changes that
-weren't mandatory to make it work, to minimize the chance of me
-breaking things.
-I guess I can do what you suggested. From the drm code, doesn't seem
-moving it will cause any harm.
->
-> > +
-> > +     /* share address_space across all char-devs of a single device */
-> > +     filp->f_mapping = dev->anon_inode->i_mapping;
-> > +
-> > +     retcode = drm_open_helper(filp, minor);
-> > +     if (retcode)
-> > +             goto err_undo;
-> > +
-> > +     return 0;
-> > +
-> > +err_undo:
-> > +     atomic_dec(&dev->open_count);
-> > +     accel_minor_release(minor);
-> > +     return retcode;
-> > +}
-> > +EXPORT_SYMBOL_GPL(accel_open);
-> > +
-> >   static int accel_stub_open(struct inode *inode, struct file *filp)
-> >   {
-> > -     return -EOPNOTSUPP;
-> > +     const struct file_operations *new_fops;
-> > +     struct drm_minor *minor;
-> > +     int err;
-> > +
-> > +     minor = accel_minor_acquire(iminor(inode));
-> > +     if (IS_ERR(minor))
-> > +             return PTR_ERR(minor);
-> > +
-> > +     new_fops = fops_get(minor->dev->driver->fops);
-> > +     if (!new_fops) {
-> > +             err = -ENODEV;
-> > +             goto out;
-> > +     }
-> > +
-> > +     replace_fops(filp, new_fops);
-> > +     if (filp->f_op->open)
-> > +             err = filp->f_op->open(inode, filp);
-> > +     else
-> > +             err = 0;
-> > +
-> > +out:
-> > +     accel_minor_release(minor);
-> > +
-> > +     return err;
-> >   }
-> >
-> >   static const struct file_operations accel_stub_fops = {
-> > @@ -56,12 +293,15 @@ void accel_core_exit(void)
-> >       unregister_chrdev(ACCEL_MAJOR, "accel");
-> >       debugfs_remove(accel_debugfs_root);
-> >       accel_sysfs_destroy();
-> > +     idr_destroy(&accel_minors_idr);
-> >   }
-> >
-> >   int __init accel_core_init(void)
-> >   {
-> >       int ret;
-> >
-> > +     idr_init(&accel_minors_idr);
-> > +
-> >       ret = accel_sysfs_init();
-> >       if (ret < 0) {
-> >               DRM_ERROR("Cannot create ACCEL class: %d\n", ret);
-> > diff --git a/drivers/gpu/drm/drm_file.c b/drivers/gpu/drm/drm_file.c
-> > index a8b4d918e9a3..64b4a3a87fbb 100644
-> > --- a/drivers/gpu/drm/drm_file.c
-> > +++ b/drivers/gpu/drm/drm_file.c
-> > @@ -326,7 +326,7 @@ static int drm_cpu_valid(void)
-> >    * Creates and initializes a drm_file structure for the file private data in \p
-> >    * filp and add it into the double linked list in \p dev.
-> >    */
-> > -static int drm_open_helper(struct file *filp, struct drm_minor *minor)
-> > +int drm_open_helper(struct file *filp, struct drm_minor *minor)
-> >   {
-> >       struct drm_device *dev = minor->dev;
-> >       struct drm_file *priv;
-> > diff --git a/include/drm/drm_accel.h b/include/drm/drm_accel.h
-> > index 31b42d3d6a15..b0c20367faad 100644
-> > --- a/include/drm/drm_accel.h
-> > +++ b/include/drm/drm_accel.h
-> > @@ -8,12 +8,56 @@
-> >   #ifndef DRM_ACCEL_H_
-> >   #define DRM_ACCEL_H_
-> >
-> > -#define ACCEL_MAJOR     261
-> > +#include <drm/drm_file.h>
-> > +
-> > +#define ACCEL_MAJOR          261
-> > +#define ACCEL_MAX_MINORS     256
-> > +
-> > +/**
-> > + * DRM_ACCEL_FOPS - Default drm accelerators file operations
-> > + *
-> > + * This macro provides a shorthand for setting the accelerator file ops in the
-> > + * &file_operations structure.  If all you need are the default ops, use
-> > + * DEFINE_DRM_ACCEL_FOPS instead.
-> > + */
-> > +#define DRM_ACCEL_FOPS \
-> > +     .open           = accel_open,\
-> > +     .release        = drm_release,\
-> > +     .unlocked_ioctl = drm_ioctl,\
-> > +     .compat_ioctl   = drm_compat_ioctl,\
-> > +     .poll           = drm_poll,\
-> > +     .read           = drm_read,\
-> > +     .llseek         = noop_llseek
-> > +
-> > +/**
-> > + * DEFINE_DRM_ACCEL_FOPS() - macro to generate file operations for accelerators drivers
-> > + * @name: name for the generated structure
-> > + *
-> > + * This macro autogenerates a suitable &struct file_operations for accelerators based
-> > + * drivers, which can be assigned to &drm_driver.fops. Note that this structure
-> > + * cannot be shared between drivers, because it contains a reference to the
-> > + * current module using THIS_MODULE.
-> > + *
-> > + * Note that the declaration is already marked as static - if you need a
-> > + * non-static version of this you're probably doing it wrong and will break the
-> > + * THIS_MODULE reference by accident.
-> > + */
-> > +#define DEFINE_DRM_ACCEL_FOPS(name) \
-> > +     static const struct file_operations name = {\
-> > +             .owner          = THIS_MODULE,\
-> > +             DRM_ACCEL_FOPS,\
-> > +     }
-> >
-> >   #if IS_ENABLED(CONFIG_DRM_ACCEL)
-> >
-> >   void accel_core_exit(void);
-> >   int accel_core_init(void);
-> > +void accel_minor_remove(int index);
-> > +int accel_minor_alloc(void);
-> > +void accel_minor_replace(struct drm_minor *minor, int index);
-> > +void accel_set_device_instance_params(struct device *kdev, int index);
-> > +int accel_open(struct inode *inode, struct file *filp);
-> > +void accel_debugfs_init(struct drm_minor *minor, int minor_id);
-> >
-> >   #else
-> >
-> > @@ -23,9 +67,31 @@ static inline void accel_core_exit(void)
-> >
-> >   static inline int __init accel_core_init(void)
-> >   {
-> > +     /* Return 0 to allow drm_core_init to complete successfully */
-> >       return 0;
-> >   }
-> >
-> > +static inline void accel_minor_remove(int index)
-> > +{
-> > +}
-> > +
-> > +static inline int accel_minor_alloc(void)
-> > +{
-> > +     return -EOPNOTSUPP;
-> > +}
-> > +
-> > +static inline void accel_minor_replace(struct drm_minor *minor, int index)
-> > +{
-> > +}
-> > +
-> > +static inline void accel_set_device_instance_params(struct device *kdev, int index)
-> > +{
-> > +}
-> > +
-> > +static inline void accel_debugfs_init(struct drm_minor *minor, int minor_id)
-> > +{
-> > +
-> > +
-> >   #endif /* IS_ENABLED(CONFIG_DRM_ACCEL) */
-> >
-> >   #endif /* DRM_ACCEL_H_ */
-> > diff --git a/include/drm/drm_device.h b/include/drm/drm_device.h
-> > index 9923c7a6885e..933ce2048e20 100644
-> > --- a/include/drm/drm_device.h
-> > +++ b/include/drm/drm_device.h
-> > @@ -93,6 +93,9 @@ struct drm_device {
-> >       /** @render: Render node */
-> >       struct drm_minor *render;
-> >
-> > +     /** @accel: Compute Acceleration node */
-> > +     struct drm_minor *accel;
-> > +
-> >       /**
-> >        * @registered:
-> >        *
-> > diff --git a/include/drm/drm_drv.h b/include/drm/drm_drv.h
-> > index f6159acb8856..706e68ca5116 100644
-> > --- a/include/drm/drm_drv.h
-> > +++ b/include/drm/drm_drv.h
-> > @@ -94,6 +94,14 @@ enum drm_driver_feature {
-> >        * synchronization of command submission.
-> >        */
-> >       DRIVER_SYNCOBJ_TIMELINE         = BIT(6),
-> > +     /**
-> > +      * @DRIVER_COMPUTE_ACCEL:
-> > +      *
-> > +      * Driver supports compute acceleration devices. This flag is mutually exclusive with
-> > +      * @DRIVER_RENDER and @DRIVER_MODESET. Devices that support both graphics and compute
-> > +      * acceleration should be handled by two drivers that are connected using auxiliry bus.
-> > +      */
-> > +     DRIVER_COMPUTE_ACCEL            = BIT(7),
-> >
-> >       /* IMPORTANT: Below are all the legacy flags, add new ones above. */
-> >
-> > diff --git a/include/drm/drm_file.h b/include/drm/drm_file.h
-> > index d780fd151789..0d1f853092ab 100644
-> > --- a/include/drm/drm_file.h
-> > +++ b/include/drm/drm_file.h
-> > @@ -51,11 +51,15 @@ struct file;
-> >
-> >   /* Note that the order of this enum is ABI (it determines
-> >    * /dev/dri/renderD* numbers).
-> > + *
-> > + * Setting DRM_MINOR_ACCEL to 32 gives enough space for more drm minors to
-> > + * be implemented before we hit any future
-> >    */
-> >   enum drm_minor_type {
-> >       DRM_MINOR_PRIMARY,
-> >       DRM_MINOR_CONTROL,
-> >       DRM_MINOR_RENDER,
-> > +     DRM_MINOR_ACCEL = 32,
->
-> Didn't patch 1/3 say it's a standalone character device major? Are there
-> two ways to open the same thing?
->
-We do use a new, dedicated major number. But one of the main points
-that was agreed was we should leverage the drm code.
-And from how I look at things, the best way to do that was to decide
-that the accel device is just a new drm minor type.
-This way, accel code will seamlessly integrate into the current drm core code.
+That is indeed the main discussion as far as I'm concerned - syscall,
+ctl, or both? At this point I'm inclined to just push forward with the
+ctl addition. A new syscall can always be added, and if we do, then it'd
+be nice to make one that will work going forward so we don't have to
+keep adding epoll_wait variants...
 
-> >   };
-> >
-> >   /**
-> > @@ -70,7 +74,7 @@ enum drm_minor_type {
-> >   struct drm_minor {
-> >       /* private: */
-> >       int index;                      /* Minor device number */
-> > -     int type;                       /* Control or render */
-> > +     int type;                       /* Control or render or accel */
->
-> Could this be self documenting if type was enum drm_minor_type?
-Again, I preferred to change as little as possible existing code in
-drm, to make sure I don't do any regressions in this basic patch-set.
-I really want to keep drm changes to an absolute minimum and any such
-change should come in a separate patch.
-
-Thanks,
-Oded
->
-> >       struct device *kdev;            /* Linux device */
-> >       struct drm_device *dev;
-> >
-> > @@ -397,7 +401,22 @@ static inline bool drm_is_render_client(const struct drm_file *file_priv)
-> >       return file_priv->minor->type == DRM_MINOR_RENDER;
-> >   }
-> >
-> > +/**
-> > + * drm_is_accel_client - is this an open file of the compute acceleration node
-> > + * @file_priv: DRM file
-> > + *
-> > + * Returns true if this is an open file of the compute acceleration node, i.e.
-> > + * &drm_file.minor of @file_priv is a accel minor.
-> > + *
-> > + * See also the :ref:`section on accel nodes <drm_accel_node>`.
-> > + */
-> > +static inline bool drm_is_accel_client(const struct drm_file *file_priv)
-> > +{
-> > +     return file_priv->minor->type == DRM_MINOR_ACCEL;
-> > +}
-> > +
-> >   int drm_open(struct inode *inode, struct file *filp);
-> > +int drm_open_helper(struct file *filp, struct drm_minor *minor);
-> >   ssize_t drm_read(struct file *filp, char __user *buffer,
-> >                size_t count, loff_t *offset);
-> >   int drm_release(struct inode *inode, struct file *filp);
-> > --
-> > 2.25.1
-> >
->
-> Regards,
->
-> Tvrtko
+-- 
+Jens Axboe
