@@ -2,141 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 067676219CA
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 17:50:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7F486219CD
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 17:51:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234306AbiKHQuY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 11:50:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37044 "EHLO
+        id S234333AbiKHQvh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 11:51:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234286AbiKHQuV (ORCPT
+        with ESMTP id S233816AbiKHQvg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 11:50:21 -0500
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EE6157B5A;
-        Tue,  8 Nov 2022 08:50:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1667926210;
-    s=strato-dkim-0002; d=iokpp.de;
-    h=References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=7c4OzQgE338JFPjKcpP/KZGKw9KzVGPVi+wsbrwESPg=;
-    b=H9qX5HGT08ageoyoTrM/5eynuJeG3sAEVlIi7FvCgDS8VD9gsoHUgQfxpGx3AYK/2b
-    xsJMTuotiETPquVvJxHcU507L7HJ4+y7TSMH2eZREDQmjeA4em5wg+DrkhXLhF1z6dBB
-    5AIUyQ6dWpRyeuxfWamda+dPINM/QPdNUB5LjPlvjeYeqfrJ++6H2a0shYYpmaTScZ01
-    bGPfx9kAdrZmVSeITfBc6lS7ffGQsqa6CrLUkEkauZTP87/07VsoG9gDg3nASP0Va1cV
-    051KDIJku4X5oJl2WiAGImQfbGjUMgp+5L9tSY54KCzwYhSZXJFo5IX2DXlH0nO2nhou
-    rUEQ==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":LmkFe0i9dN8c2t4QQyGBB/NDXvjDB6pBSeBwhhSxarlUcu05JCAPyj3VPAceccYJs0uz"
-X-RZG-CLASS-ID: mo00
-Received: from blinux
-    by smtp.strato.de (RZmta 48.2.1 AUTH)
-    with ESMTPSA id z9cfbfyA8Go7p2k
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Tue, 8 Nov 2022 17:50:07 +0100 (CET)
-Message-ID: <1eda1c55fdf8292c2912c6d0adb741d8dd7f0a20.camel@iokpp.de>
-Subject: Re: [RFC PATCH v1 1/2] ufs: core: Advanced RPMB detection
-From:   Bean Huo <beanhuo@iokpp.de>
-To:     Avri Altman <Avri.Altman@wdc.com>,
-        "alim.akhtar@samsung.com" <alim.akhtar@samsung.com>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "stanley.chu@mediatek.com" <stanley.chu@mediatek.com>,
-        "beanhuo@micron.com" <beanhuo@micron.com>,
-        "bvanassche@acm.org" <bvanassche@acm.org>,
-        "tomas.winkler@intel.com" <tomas.winkler@intel.com>,
-        "daejun7.park@samsung.com" <daejun7.park@samsung.com>,
-        "quic_cang@quicinc.com" <quic_cang@quicinc.com>,
-        "quic_nguyenb@quicinc.com" <quic_nguyenb@quicinc.com>,
-        "quic_xiaosenh@quicinc.com" <quic_xiaosenh@quicinc.com>,
-        "quic_richardp@quicinc.com" <quic_richardp@quicinc.com>,
-        "quic_asutoshd@quicinc.com" <quic_asutoshd@quicinc.com>,
-        "hare@suse.de" <hare@suse.de>
-Cc:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Date:   Tue, 08 Nov 2022 17:50:06 +0100
-In-Reply-To: <DM6PR04MB6575145B168BB80F3D2910A7FC3F9@DM6PR04MB6575.namprd04.prod.outlook.com>
-References: <20221107131038.201724-1-beanhuo@iokpp.de>
-         <20221107131038.201724-2-beanhuo@iokpp.de>
-         <DM6PR04MB6575145B168BB80F3D2910A7FC3F9@DM6PR04MB6575.namprd04.prod.outlook.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        Tue, 8 Nov 2022 11:51:36 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9487157B5A
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 08:51:35 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2EC87616A8
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 16:51:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C4CCC433C1;
+        Tue,  8 Nov 2022 16:51:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667926294;
+        bh=APtEjyH5Uack2UlY2blKatc3e2SEGTBkQlXBZhgLgdY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fFNRGEXktsRgRKW7p+I5y/E+TxHHTTEaKtritc0XZpTq/Rcs4PdFb1zX//7H84Ey+
+         Tf6cKTBr5oC3eL2uhuTwCYdzJ1XfwupQGDo7iC9BlKVesekdBK+XhkfAuA39x3Ozzu
+         Rj4qHwkuEFqZ0ifDHb/T9wjKqJxV2BM3zayHDnurCqP4O9dKxnyOKf5hPy3kTWUnC1
+         JUDNE9ywMENTyiz6FkI220QNWrU317LO0lggox4F0eTK2IeplRGcb55tkQn3/zY8FG
+         ZhSaNB6kFkEUFgR6OiL/BO48vvp5tLekmSlGivNFx9Hov2/MRovRloVCnP1Ty5V+7j
+         GQ2B5yhTMkEVQ==
+Date:   Tue, 8 Nov 2022 09:51:31 -0700
+From:   Keith Busch <kbusch@kernel.org>
+To:     Francesco Ruggeri <fruggeri@arista.com>
+Cc:     linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
+        sagi@grimberg.me, hch@lst.de, axboe@fb.com
+Subject: Re: nvme: hung task in blk_mq_freeze_queue_wait
+Message-ID: <Y2qJE2Bpbvnf5Ejb@kbusch-mbp>
+References: <20221108025602.E48005EC04F9@us226.sjc.aristanetworks.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221108025602.E48005EC04F9@us226.sjc.aristanetworks.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Avri, 
+On Mon, Nov 07, 2022 at 06:56:02PM -0800, Francesco Ruggeri wrote:
+> [ 4390.119745] INFO: task kworker/u80:2:8279 blocked for more than 300 seconds.
+> [ 4390.471456]       Tainted: P           O      4.19.142.Ar-29007847.buytenhb7335070 #1
 
-thanks for your review.
+That is an old kernel, I think it'd be worth trying something newer to
+confirm if this observation isn't already fixed. Specifically, it looks
+like you have multiple namespaces timing out IO near simultaneously, and
+causing a mismatched handling. That kind of thing was fixed after the
+follow (plus some prior dependencies): 
 
-On Tue, 2022-11-08 at 13:40 +0000, Avri Altman wrote:
-> > From: Bean Huo <beanhuo@micron.com>
-> > 
-> > Check UFS Advanced RPMB LU enablement during ufshcd_lu_init().
-> > 
-> > Signed-off-by: Bean Huo <beanhuo@micron.com>
-> > ---
-> >  drivers/ufs/core/ufshcd.c | 4 ++++
-> >  include/ufs/ufs.h         | 3 +++
-> >  2 files changed, 7 insertions(+)
-> > 
-> > diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
-> > index
-> > ee73d7036133..d49e7a0b82ca 100644
-> > --- a/drivers/ufs/core/ufshcd.c
-> > +++ b/drivers/ufs/core/ufshcd.c
-> > @@ -4940,6 +4940,10 @@ static void ufshcd_lu_init(struct ufs_hba
-> > *hba,
-> > struct scsi_device *sdev)
-> >             desc_buf[UNIT_DESC_PARAM_LU_WR_PROTECT] ==
-> > UFS_LU_POWER_ON_WP)
-> >                 hba->dev_info.is_lu_power_on_wp = true;
-> > 
-> > +       if (desc_buf[UNIT_DESC_PARAM_UNIT_INDEX] == UFS_RPMB_UNIT
-> > &&
-> Please remind me why do we need both UFS_RPMB_UNIT and
-> UFS_UPIU_RPMB_WLUN ?
-
-I see. they are the same value, we should remove one, will change it in
-next version.
-> 
-> > +           desc_buf[UNIT_DESC_PARAM_RPMB_REGION_EN] & 1 << 4)
-> (1 << 4) or BIT(4) ?
-> 
-> > +                       hba->dev_info.b_advanced_rpmb_en = true;
-> > +
-> >         kfree(desc_buf);
-> >  set_qdepth:
-> >         /*
-> > diff --git a/include/ufs/ufs.h b/include/ufs/ufs.h index
-> > 1bba3fead2ce..2e617ab87750 100644
-> > --- a/include/ufs/ufs.h
-> > +++ b/include/ufs/ufs.h
-> > @@ -199,6 +199,7 @@ enum unit_desc_param {
-> >         UNIT_DESC_PARAM_PSA_SENSITIVE           = 0x7,
-> >         UNIT_DESC_PARAM_MEM_TYPE                = 0x8,
-> >         UNIT_DESC_PARAM_DATA_RELIABILITY        = 0x9,
-> > +       UNIT_DESC_PARAM_RPMB_REGION_EN          = 0x9,
-> This is awkward.  Better to define it, or - 
-> Maybe it's time for rpmb to have its own unit descriptor - it surely
-> deserve it.
->  
-
-no problem, let me think about it, will add in the next version.
-
-
-
-
-Kind regards,
-Bean
-
+  commit d6135c3a1ec0cddda7b8b8e1b5b4abeeafd98289
+  Author: Keith Busch <kbusch@kernel.org>
+  Date:   Tue May 14 14:46:09 2019 -0600
+  
+      nvme-pci: Sync queues on reset
