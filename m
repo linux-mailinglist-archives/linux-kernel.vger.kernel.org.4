@@ -2,170 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22B9C620BAA
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 10:01:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB1FA620BAF
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 10:02:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233425AbiKHJBF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 04:01:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57724 "EHLO
+        id S233354AbiKHJCd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 04:02:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233413AbiKHJBA (ORCPT
+        with ESMTP id S232958AbiKHJCb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 04:01:00 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF5171EAC7
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 01:00:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667898058; x=1699434058;
-  h=from:to:subject:in-reply-to:references:date:message-id:
-   mime-version;
-  bh=dqUc1q8prxlKmVN2pBzwuH9UNa0QagrT3ecK4s6e0aY=;
-  b=RMLJBAp3NA3dJsYlewSqTzwTybebK2hWK/Wbg1qkbWmuujUGTRyIl6G5
-   Pctqgs8pX3s5ETi8pKxTLZlV8+4F78br/QEh0Pj+RPXEEWexExy8dUbyi
-   PoGuqKe8LO28FPx+wUqLcyu3lU3y82/GHuhQpiVVlwyCkzatb7zb2TtWX
-   5oOaMy99fH8H9xDgj8myb3BumLow93BrIj3eiy03IMxBeY4Jb+238lE+6
-   Rr+v7vPw/+ClaW39nVtLTpAmGundjl7E8GnPKE9HUImg0H9flrknyp69/
-   mdJGepjm95jTxckWdd+wI2t1vliXyTqzJ0WQ4gb6pZb07kEgk4/UNnGH3
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10524"; a="294015689"
-X-IronPort-AV: E=Sophos;i="5.96,147,1665471600"; 
-   d="scan'208";a="294015689"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2022 01:00:52 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10524"; a="881445112"
-X-IronPort-AV: E=Sophos;i="5.96,147,1665471600"; 
-   d="scan'208";a="881445112"
-Received: from smoriord-mobl.ger.corp.intel.com (HELO localhost) ([10.252.16.110])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2022 01:00:47 -0800
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     Won Chung <wonchung@google.com>, wonchung@google.com,
-        bleung@google.com, pmalani@chromium.org,
-        heikki.krogerus@linux.intel.com, imre.deak@intel.com,
-        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
-        tzimmermann@suse.de, airlied@linux.ie, airlied@gmail.com,
-        daniel@ffwll.ch, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] drm/sysfs: Link DRM connectors to corresponding
- Type-C connectors
-In-Reply-To: <20221027212854.1083686-1-wonchung@google.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20221027212854.1083686-1-wonchung@google.com>
-Date:   Tue, 08 Nov 2022 11:00:45 +0200
-Message-ID: <87k045akhu.fsf@intel.com>
+        Tue, 8 Nov 2022 04:02:31 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CF4013D2B
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 01:02:30 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AF49AB819BA
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 09:02:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F38E7C433C1;
+        Tue,  8 Nov 2022 09:02:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667898147;
+        bh=40as9zy58r8i/rJfR7Z6TRRJsKNmmDmW8cmLv1ORktE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=pkfJDph7m26p588lRvKtcu20kjCZlELls26LoNAh2HMA5oPn4okhu+02A9B5HV3wA
+         B6jM2Tx5CPm9N/P5lhalCJiQt42kptl2J5hRuWT6HjMUqjW08sO3Em22n0jZyCU3gJ
+         3y9HFKaL+e090LM91K1PI1j8enY9F0ucXaXMlQ25o6WheVnYeHLtcWhY9C7SyVvLV3
+         T5jrQqwTCPLZXTF3Ul4a7NHJKrq3Wu5wN/ILrFsxine91hKQh6vZkmLS5IKP41nWYk
+         0BcrifcoSpgRNaQ4cHm2cr3ey405LJ8I60X1f5QlJcKSat60uEUcgeT/9qfz17kjmd
+         95rwf8jqrAZfA==
+From:   guoren@kernel.org
+To:     anup@brainfault.org, paul.walmsley@sifive.com, palmer@dabbelt.com,
+        alexandre.ghiti@canonical.com, conor.dooley@microchip.com,
+        heiko@sntech.de, philipp.tomsich@vrull.eu
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Guo Ren <guoren@linux.alibaba.com>,
+        Guo Ren <guoren@kernel.org>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Palmer Dabbelt <palmer@rivosinc.com>
+Subject: [PATCH] riscv: asid: Fixup stale TLB entry cause application crash
+Date:   Tue,  8 Nov 2022 04:02:19 -0500
+Message-Id: <20221108090219.3285030-1-guoren@kernel.org>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 27 Oct 2022, Won Chung <wonchung@google.com> wrote:
-> Create a symlink pointing to USB Type-C connector for DRM connectors
-> when they are created. The link will be created only if the firmware is
-> able to describe the connection beween the two connectors.
+From: Guo Ren <guoren@linux.alibaba.com>
 
-The commit messages should explain the *why*.
+When use_asid_allocator is enabled, the userspace application would
+crash by stale tlb entry. Because only using cpumask_clear_cpu without
+local_flush_tlb_all couldn't guarantee CPU's tlb contains fresh mapping
+entry. Then set_mm_asid would cause user space application get a stale
+value by stale tlb entry, but set_mm_noasid is okay.
 
-BR,
-Jani.
+Here is the symptom of the bug:
+unhandled signal 11 code 0x1 (coredump)
+   0x0000003fd6d22524 <+4>:     auipc   s0,0x70
+   0x0000003fd6d22528 <+8>:     ld      s0,-148(s0) # 0x3fd6d92490
+=> 0x0000003fd6d2252c <+12>:    ld      a5,0(s0)
+(gdb) i r s0
+s0          0x8082ed1cc3198b21       0x8082ed1cc3198b21
+(gdb) x/16 0x3fd6d92490
+0x3fd6d92490:   0xd80ac8a8      0x0000003f
+The core dump file show us the value of register s0 is wrong, but the
+value in memory is right.
 
+When task run on CPU0, the task loaded/speculative-loaded the value of
+address-0x3fd6d92490, the first version tlb mapping enter in CPU0's tlb.
+When the task switched from CPU0 to CPU1 without local_tlb_flush_all
+(because of asid), the task happened to write a value on address:
+0x3fd6d92490 that caused do_page_fault -> wp_page_copy ->
+ptep_clear_flush -> ptep_get_and_clear & flush_tlb_page.
+The flush_tlb_page would use mm_cpumask(mm) to determine which CPUs need
+tlb flush, but CPU0 cleared the CPU0's mm_cpumask in previous switch_mm.
+So we only flushed the CPU1's tlb entry, and setted second version mapping
+of the pte. When the task switch from CPU1 to CPU0 again, it still used a
+stale tlb entry on CPU0 which contained a wrong target physical address.
+When the task happened to read that value, the bug would be raised.
 
->
-> Signed-off-by: Won Chung <wonchung@google.com>
-> Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> ---
-> Changes from v2:
-> - Resending the patch to dri-devel list
->
-> Changes from v1:
-> - Fix multiple lines to single line
->
->
->  drivers/gpu/drm/drm_sysfs.c | 40 +++++++++++++++++++++++++++++++++++++
->  1 file changed, 40 insertions(+)
->
-> diff --git a/drivers/gpu/drm/drm_sysfs.c b/drivers/gpu/drm/drm_sysfs.c
-> index 430e00b16eec..6a9904fa9186 100644
-> --- a/drivers/gpu/drm/drm_sysfs.c
-> +++ b/drivers/gpu/drm/drm_sysfs.c
-> @@ -11,12 +11,14 @@
->   */
->  
->  #include <linux/acpi.h>
-> +#include <linux/component.h>
->  #include <linux/device.h>
->  #include <linux/err.h>
->  #include <linux/export.h>
->  #include <linux/gfp.h>
->  #include <linux/i2c.h>
->  #include <linux/kdev_t.h>
-> +#include <linux/property.h>
->  #include <linux/slab.h>
->  
->  #include <drm/drm_connector.h>
-> @@ -95,6 +97,34 @@ static char *drm_devnode(struct device *dev, umode_t *mode)
->  	return kasprintf(GFP_KERNEL, "dri/%s", dev_name(dev));
->  }
->  
-> +static int typec_connector_bind(struct device *dev,
-> +	struct device *typec_connector, void *data)
-> +{
-> +	int ret;
-> +
-> +	ret = sysfs_create_link(&dev->kobj, &typec_connector->kobj, "typec_connector");
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = sysfs_create_link(&typec_connector->kobj, &dev->kobj, "drm_connector");
-> +	if (ret)
-> +		sysfs_remove_link(&dev->kobj, "typec_connector");
-> +
-> +	return ret;
-> +}
-> +
-> +static void typec_connector_unbind(struct device *dev,
-> +	struct device *typec_connector, void *data)
-> +{
-> +	sysfs_remove_link(&typec_connector->kobj, "drm_connector");
-> +	sysfs_remove_link(&dev->kobj, "typec_connector");
-> +}
-> +
-> +static const struct component_ops typec_connector_ops = {
-> +	.bind = typec_connector_bind,
-> +	.unbind = typec_connector_unbind,
-> +};
-> +
->  static CLASS_ATTR_STRING(version, S_IRUGO, "drm 1.1.0 20060810");
->  
->  /**
-> @@ -355,6 +385,13 @@ int drm_sysfs_connector_add(struct drm_connector *connector)
->  	if (connector->ddc)
->  		return sysfs_create_link(&connector->kdev->kobj,
->  				 &connector->ddc->dev.kobj, "ddc");
-> +
-> +	if (dev_fwnode(kdev)) {
-> +		r = component_add(kdev, &typec_connector_ops);
-> +		if (r)
-> +			drm_err(dev, "failed to add component\n");
-> +	}
-> +
->  	return 0;
->  
->  err_free:
-> @@ -367,6 +404,9 @@ void drm_sysfs_connector_remove(struct drm_connector *connector)
->  	if (!connector->kdev)
->  		return;
->  
-> +	if (dev_fwnode(connector->kdev))
-> +		component_del(connector->kdev, &typec_connector_ops);
-> +
->  	if (connector->ddc)
->  		sysfs_remove_link(&connector->kdev->kobj, "ddc");
+Fixes: 65d4b9c53017 ("RISC-V: Implement ASID allocator")
+Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+Signed-off-by: Guo Ren <guoren@kernel.org>
+Cc: Anup Patel <apatel@ventanamicro.com>
+Cc: Palmer Dabbelt <palmer@rivosinc.com>
+---
+ arch/riscv/mm/context.c | 1 -
+ 1 file changed, 1 deletion(-)
 
+diff --git a/arch/riscv/mm/context.c b/arch/riscv/mm/context.c
+index 7acbfbd14557..843e86b63532 100644
+--- a/arch/riscv/mm/context.c
++++ b/arch/riscv/mm/context.c
+@@ -317,7 +317,6 @@ void switch_mm(struct mm_struct *prev, struct mm_struct *next,
+ 	 */
+ 	cpu = smp_processor_id();
+ 
+-	cpumask_clear_cpu(cpu, mm_cpumask(prev));
+ 	cpumask_set_cpu(cpu, mm_cpumask(next));
+ 
+ 	set_mm(next, cpu);
 -- 
-Jani Nikula, Intel Open Source Graphics Center
+2.36.1
+
