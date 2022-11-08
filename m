@@ -2,110 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2100620633
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 02:36:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8988620635
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 02:36:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233350AbiKHBge (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 20:36:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60748 "EHLO
+        id S233354AbiKHBgt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 20:36:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233274AbiKHBgb (ORCPT
+        with ESMTP id S232918AbiKHBgq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 20:36:31 -0500
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17426FCD
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 17:36:29 -0800 (PST)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.53])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4N5rKY40SMz15MKV;
-        Tue,  8 Nov 2022 09:36:17 +0800 (CST)
-Received: from [10.174.151.185] (10.174.151.185) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 8 Nov 2022 09:36:27 +0800
-Subject: Re: [PATCH v1] arch/x86/mm/hugetlbpage.c: pud_huge() returns 0 when
- using 2-level paging
-To:     Naoya Horiguchi <naoya.horiguchi@linux.dev>, <linux-mm@kvack.org>
-CC:     =?UTF-8?B?VmlsbGUgU3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Liu Shixin <liushixin2@huawei.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        <linux-kernel@vger.kernel.org>
-References: <20221107021010.2449306-1-naoya.horiguchi@linux.dev>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <60d8bdb2-4d51-7b67-1b0d-df54d9403062@huawei.com>
-Date:   Tue, 8 Nov 2022 09:36:27 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Mon, 7 Nov 2022 20:36:46 -0500
+Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9E1CBE36
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 17:36:45 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0VUGoARA_1667871402;
+Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0VUGoARA_1667871402)
+          by smtp.aliyun-inc.com;
+          Tue, 08 Nov 2022 09:36:43 +0800
+From:   Yang Li <yang.lee@linux.alibaba.com>
+To:     jani.nikula@linux.intel.com
+Cc:     joonas.lahtinen@linux.intel.com, tvrtko.ursulin@linux.intel.com,
+        rodrigo.vivi@intel.com, airlied@gmail.com, daniel@ffwll.ch,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, Yang Li <yang.lee@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH -next] drm/i915: Fix some kernel-doc comments
+Date:   Tue,  8 Nov 2022 09:36:39 +0800
+Message-Id: <20221108013639.110513-1-yang.lee@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
-In-Reply-To: <20221107021010.2449306-1-naoya.horiguchi@linux.dev>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.151.185]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/11/7 10:10, Naoya Horiguchi wrote:
-> From: Naoya Horiguchi <naoya.horiguchi@nec.com>
-> 
-> The following bug is reported to be triggered when starting X on x86-32
-> system with i915:
-> 
->   [  225.777375] kernel BUG at mm/memory.c:2664!
->   [  225.777391] invalid opcode: 0000 [#1] PREEMPT SMP
->   [  225.777405] CPU: 0 PID: 2402 Comm: Xorg Not tainted 6.1.0-rc3-bdg+ #86
->   [  225.777415] Hardware name:  /8I865G775-G, BIOS F1 08/29/2006
->   [  225.777421] EIP: __apply_to_page_range+0x24d/0x31c
->   [  225.777437] Code: ff ff 8b 55 e8 8b 45 cc e8 0a 11 ec ff 89 d8 83 c4 28 5b 5e 5f 5d c3 81 7d e0 a0 ef 96 c1 74 ad 8b 45 d0 e8 2d 83 49 00 eb a3 <0f> 0b 25 00 f0 ff ff 81 eb 00 00 00 40 01 c3 8b 45 ec 8b 00 e8 76
->   [  225.777446] EAX: 00000001 EBX: c53a3b58 ECX: b5c00000 EDX: c258aa00
->   [  225.777454] ESI: b5c00000 EDI: b5900000 EBP: c4b0fdb4 ESP: c4b0fd80
->   [  225.777462] DS: 007b ES: 007b FS: 00d8 GS: 0033 SS: 0068 EFLAGS: 00010202
->   [  225.777470] CR0: 80050033 CR2: b5900000 CR3: 053a3000 CR4: 000006d0
->   [  225.777479] Call Trace:
->   [  225.777486]  ? i915_memcpy_init_early+0x63/0x63 [i915]
->   [  225.777684]  apply_to_page_range+0x21/0x27
->   [  225.777694]  ? i915_memcpy_init_early+0x63/0x63 [i915]
->   [  225.777870]  remap_io_mapping+0x49/0x75 [i915]
->   [  225.778046]  ? i915_memcpy_init_early+0x63/0x63 [i915]
->   [  225.778220]  ? mutex_unlock+0xb/0xd
->   [  225.778231]  ? i915_vma_pin_fence+0x6d/0xf7 [i915]
->   [  225.778420]  vm_fault_gtt+0x2a9/0x8f1 [i915]
->   [  225.778644]  ? lock_is_held_type+0x56/0xe7
->   [  225.778655]  ? lock_is_held_type+0x7a/0xe7
->   [  225.778663]  ? 0xc1000000
->   [  225.778670]  __do_fault+0x21/0x6a
->   [  225.778679]  handle_mm_fault+0x708/0xb21
->   [  225.778686]  ? mt_find+0x21e/0x5ae
->   [  225.778696]  exc_page_fault+0x185/0x705
->   [  225.778704]  ? doublefault_shim+0x127/0x127
->   [  225.778715]  handle_exception+0x130/0x130
->   [  225.778723] EIP: 0xb700468a
-> 
-> Recently pud_huge() got aware of non-present entry by commit 3a194f3f8ad0
-> ("mm/hugetlb: make pud_huge() and follow_huge_pud() aware of non-present
-> pud entry") to handle some special states of gigantic page.  However, it's
-> overlooked that pud_none() always returns false when running with 2-level
-> paging, and as a result pmd_huge() can return true pointlessly.
+Fixs the function name in kernel-doc comments to clear the below
+warnings:
 
-LGTM. Thanks for your fixing.
+drivers/gpu/drm/i915/gt/intel_engine_cs.c:1295: warning: expecting prototype for intel_engines_init_common(). Prototype was for engine_init_common() instead
+drivers/gpu/drm/i915/gt/intel_engine_cs.c:1377: warning: expecting prototype for intel_engines_cleanup_common(). Prototype was for intel_engine_cleanup_common() instead
 
-Reviewed-by: Miaohe Lin <linmiaohe@huawei.com>
+Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=2741
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+---
+ drivers/gpu/drm/i915/gt/intel_engine_cs.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Thanks,
-Miaohe Lin
-
+diff --git a/drivers/gpu/drm/i915/gt/intel_engine_cs.c b/drivers/gpu/drm/i915/gt/intel_engine_cs.c
+index 3b7d750ad054..ebd2c21b3f47 100644
+--- a/drivers/gpu/drm/i915/gt/intel_engine_cs.c
++++ b/drivers/gpu/drm/i915/gt/intel_engine_cs.c
+@@ -1281,7 +1281,7 @@ create_kernel_context(struct intel_engine_cs *engine)
+ }
+ 
+ /**
+- * intel_engines_init_common - initialize cengine state which might require hw access
++ * engine_init_common - initialize cengine state which might require hw access
+  * @engine: Engine to initialize.
+  *
+  * Initializes @engine@ structure members shared between legacy and execlists
+@@ -1367,7 +1367,7 @@ int intel_engines_init(struct intel_gt *gt)
+ }
+ 
+ /**
+- * intel_engines_cleanup_common - cleans up the engine state created by
++ * intel_engine_cleanup_common - cleans up the engine state created by
+  *                                the common initiailizers.
+  * @engine: Engine to cleanup.
+  *
+-- 
+2.20.1.7.g153144c
 
