@@ -2,68 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 099C3621AAD
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 18:31:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EEFCD621ABB
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 18:33:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234136AbiKHRbi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 12:31:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34928 "EHLO
+        id S234188AbiKHRc5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 12:32:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234522AbiKHRbf (ORCPT
+        with ESMTP id S233657AbiKHRcz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 12:31:35 -0500
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A911E21827;
-        Tue,  8 Nov 2022 09:31:34 -0800 (PST)
-Received: by mail-pg1-x532.google.com with SMTP id r18so13961501pgr.12;
-        Tue, 08 Nov 2022 09:31:34 -0800 (PST)
+        Tue, 8 Nov 2022 12:32:55 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E15D120991
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 09:32:54 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id d59-20020a17090a6f4100b00213202d77e1so18527316pjk.2
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 09:32:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=google.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=t0H4adOijjNqijdNgVvvEHYfjJqDCB5srsjIOvFZOw0=;
-        b=ZqTEJ90xelHKa0fL8oXwDT466llWgiuptNThuod1N2qyEisflmX8u8/pUTGhy3Q5a1
-         FR70sscCsHno1LY6f/q05V9ooUBuIrULhSHzNkSlKkvgEWd2JsEmCfxo2wRL8hlWd3Cc
-         ZborFQi0eXqqsnMvH/1nn4gL3rdukb3TcHK/uUFFqVFJqgmCUZ+O9a7UZgaP9EpZoRjD
-         t4/PbBogqan5ehmBHBT9RWMINqUbPCtWC7AzUe9qX5Me/zGxCd2fo3PTMdKWAp1DN/mh
-         VDqTy0PY1u1cnqEetIpEiUU0ZuArVgTNLOEeaIjvjAaob3JxRveUgluvwbH2y2S1WR3t
-         Rwig==
+        bh=MZQogisLwSbHOyDO71y6h2hjs6z+bsUaVgj9CQLEAfY=;
+        b=mWSwnjPBmtefrBI+Iv0duFPnOzCbI+xLnGb4gIOhNj2oRlYQHCAXeGHSxCrCIXib4F
+         TcYlVNSWew3+4v/Vh/tEbzFmhwQQpFIKb2Io7uDDcDbX/a77BF9FSjaMXeEU++5fPhS4
+         wV4oFDAIzEo4EbvvedPbLZpon8RpRn/+aywB0ORZKFjnFf5anz1VRyEl9E1MinpaOmFu
+         HoIxULC2Ncxn6Cydk2NciCR03SQQcgMlG8IRliTbt+7wN9gxJE1SFOnATOKg+Yh8S/d3
+         7OqLqoru/4rMnjq8YknOH+EwinZ+wY/uWT+vIB1gXFy8QjyiLQKuuOgBM/Lmb19aGxjj
+         VQNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=t0H4adOijjNqijdNgVvvEHYfjJqDCB5srsjIOvFZOw0=;
-        b=jq2XIjM3AhPeqKJEbOIIye+XF0UcIKvv+wXKQ+28msXMCk7m7WNcH+uGrIvvRv7C7o
-         /STshA8xugvfnLSJk11ZVbdwqy6LqIiD3H0gDXc9iSGkRC3ftlp2ZA0s28swz4DfBAZB
-         pRLE1UtZgJrKP9aqJwlMjeW/y/dGCo57kht1It51Y8Xd0u3bQWSbW6PIYFmX5KGnQ73x
-         llGoHWKdLUPKRX+QUD/1Oob/2CxMmMNwFhImi34BoSsGgNtGb05SelVMh8L9gDCwh4Of
-         QPVSontl9nNfhzWbHkI8R797EMvsW9hW8kH8PrJfpossdcL6wW8J03ZCBmDvztsKbU7I
-         Reyw==
-X-Gm-Message-State: ACrzQf3W9fMD1FW+WMObxUv0Q5cU9xVr9qiNRWj1DzigdC9PA8CI/74M
-        etP/Xx6j/T4Z6uXbgnX64bg=
-X-Google-Smtp-Source: AMsMyM75+JkMtPaXuOEkZdNu3ya8LG6mkj6PpvauFxRCX50MGK1eRYMW2kWqxAU3LRUVg21M9a1w5g==
-X-Received: by 2002:a63:82c3:0:b0:470:9d9:c2a9 with SMTP id w186-20020a6382c3000000b0047009d9c2a9mr30084096pgd.255.1667928693898;
-        Tue, 08 Nov 2022 09:31:33 -0800 (PST)
-Received: from google.com ([2620:15c:9d:2:fb10:b5b0:232e:4afb])
-        by smtp.gmail.com with ESMTPSA id t17-20020a17090a5d9100b00209a12b3879sm6282247pji.37.2022.11.08.09.31.32
+        bh=MZQogisLwSbHOyDO71y6h2hjs6z+bsUaVgj9CQLEAfY=;
+        b=oYBjNhYBLQ3sQAToa0kHHj/sg4Tryb83BUP8rhpgQ8yp+wQV4nILzmnIySeponzM+J
+         5MVMhCxKFIw8DzTbsuXM31RCw8EGBdXW+fK+u8li+jfyupNuzuIAEE1smeQBdj2aDERX
+         vFX5foLXq5IAcl8v2w6ca1Q0kNY1It8GyUGq8kXVw34cS3jQ6C7jgNDJSwY6y06ebuBt
+         sfRAU+qCdaIssYntgH/peirINfLq1qhpgIjF5/tPnUuOA3CaiuS1+QTH79dkHwNqqj51
+         oCMj919kvnHlXk4PX1GjBYseJ+f9CsE9F0sZ3Dc5tYF3zkZ4iFUllPUtShxlmf3jceHG
+         fMFQ==
+X-Gm-Message-State: ACrzQf1mjc11wybX9oNmLWiDUPuP6tuXFpMjTEmh0MFvhsnZompFSUvX
+        EdwbFmsDY37tmv3Nkx7rg2wekA==
+X-Google-Smtp-Source: AMsMyM4SbHj0OwMh/2EDaILPZtJz4V8czRxVapV6b6KiX6mxR2ahLNCtnWToon3uWrPRYLECAa+7uw==
+X-Received: by 2002:a17:903:32c8:b0:187:2718:5313 with SMTP id i8-20020a17090332c800b0018727185313mr44861840plr.82.1667928774219;
+        Tue, 08 Nov 2022 09:32:54 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id 21-20020a170902c11500b00174c1855cd9sm7172411pli.267.2022.11.08.09.32.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Nov 2022 09:31:33 -0800 (PST)
-Date:   Tue, 8 Nov 2022 09:31:30 -0800
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Takashi Iwai <tiwai@suse.de>
-Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RESEND] Input: i8042 - Apply probe defer to more ASUS
- ZenBook models
-Message-ID: <Y2qScl9UeyBHteh3@google.com>
-References: <20221108142027.28480-1-tiwai@suse.de>
+        Tue, 08 Nov 2022 09:32:53 -0800 (PST)
+Date:   Tue, 8 Nov 2022 17:32:50 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Yan Zhao <yan.y.zhao@intel.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        pbonzini@redhat.com
+Subject: Re: [PATCH] KVM: move memslot invalidation later than possible
+ failures
+Message-ID: <Y2qSwlN26qWi3ZqH@google.com>
+References: <20221108084416.11447-1-yan.y.zhao@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221108142027.28480-1-tiwai@suse.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+In-Reply-To: <20221108084416.11447-1-yan.y.zhao@intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,16 +73,153 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 08, 2022 at 03:20:27PM +0100, Takashi Iwai wrote:
-> There are yet a few more ASUS ZenBook models that require the deferred
-> probe.  At least, there are different ZenBook UX325x and UX425x
-> models.  Let's extend the DMI matching table entries for adapting
-> those missing models.
+On Tue, Nov 08, 2022, Yan Zhao wrote:
+> For memslot delete and move, kvm_invalidate_memslot() is required before
+> the real changes committed.
+> Besides swapping to an inactive slot, kvm_invalidate_memslot() will call
+> kvm_arch_flush_shadow_memslot() and further kvm_page_track_flush_slot() in
+> arch x86.
+> And according to the definition in kvm_page_track_notifier_node, users can
+> drop write-protection for the pages in the memory slot on receiving
+> .track_flush_slot.
+
+Ugh, that's a terrible API.  The entire page track API is a mess, e.g. KVMGT is
+forced to grab its own references to KVM and also needs to manually acquire/release
+mmu_lock in some flows but not others.
+
+Anyways, this is a flaw in the page track API that should be fixed.  Flushing a
+slot should not be overloaded to imply "this slot is gone", it should be a flush
+command, no more, no less.
+
+AFAICT, KVMGT never flushes anything, so fixing the bug should be a simple matter
+of adding another hook that's invoked when the memory region change is committed.
+
+That would allow KVMGT to fix another bug.  If a memory region is moved and the
+new region partially overlaps the old region, KVMGT technically probably wants to
+retain its write-protection scheme.  Though that's probably not worth supporting,
+might be better to say "don't move memory regions if KVMGT is enabled", because
+AFAIK there is no VMM that actually moves memory regions (KVM's MOVE support was
+broken for years and no one noticed).
+
+Actually, given that MOVE + KVMGT probably doesn't work regardless of where the
+region is moved to, maybe we can get away with rejecting MOVE if an external
+page tracker cares about the slot in question.
+
+> However, if kvm_prepare_memory_region() fails, the later
+> kvm_activate_memslot() will only swap back the original slot, leaving
+> previous write protection not recovered.
 > 
-> Link: https://bugzilla.suse.com/show_bug.cgi?id=1190256
-> Signed-off-by: Takashi Iwai <tiwai@suse.de>
+> This may not be a problem for kvm itself as a page tracker user, but may
+> cause problem to other page tracker users, e.g. kvmgt, whose
+> write-protected pages are removed from the write-protected list and not
+> added back.
+> 
+> So call kvm_prepare_memory_region first for meta data preparation before
+> the slot invalidation so as to avoid failure and recovery.
 
-Applied, thank you.
+IIUC, this is purely a theoretical bug and practically speaking can't be a problem
+in practice, at least not without completely breaking KVMGT.
 
--- 
-Dmitry
+On DELETE, kvm_prepare_memory_region() will never fail on x86 (s390's ultravisor
+protected VM case is the only scenario where DELETE can fail on any architecture).
+The common code in kvm_prepare_memory_region() does nothing for DELETE, ditto for
+kvm_arch_prepare_memory_region().
+
+And for MOVE, it can only fail in two scenarios: (1) the end gfn is beyond the
+max gfn, i.e. userspace gave bad input or (2) the new memslot is unaligned but
+the old memslot was not, and so KVM needs to allocate new metadata due to the new
+memslot needed larger arrays.
+
+As above MOVE is not handled correctly by KVMGT, so I highly doubt there is a VMM
+that supports KVMGT and moves relevant memory regions, let alove does something
+that can result in MOVE failing _and_ moves the memslot that KVMGT is shadowing.
+
+Heh, and MOVE + KVM_MEM_LOG_DIRTY_PAGES is also arguably broken, as KVM reuses
+the existing dirty bitmap but doesn't shift the dirty bits.  This is likely
+another combination that KVM can simply reject.
+
+Assuming this is indeed purely theoretical, that should be called out in the
+changelog.  Or as above, simply disallow MOVE in this case, which probably has
+my vote.
+
+> Signed-off-by: Yan Zhao <yan.y.zhao@intel.com>
+> ---
+>  virt/kvm/kvm_main.c | 40 +++++++++++++++-------------------------
+>  1 file changed, 15 insertions(+), 25 deletions(-)
+> 
+> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> index 25d7872b29c1..5f29011f432d 100644
+> --- a/virt/kvm/kvm_main.c
+> +++ b/virt/kvm/kvm_main.c
+> @@ -1827,45 +1827,35 @@ static int kvm_set_memslot(struct kvm *kvm,
+>  	 */
+>  	mutex_lock(&kvm->slots_arch_lock);
+>  
+> -	/*
+> -	 * Invalidate the old slot if it's being deleted or moved.  This is
+> -	 * done prior to actually deleting/moving the memslot to allow vCPUs to
+> -	 * continue running by ensuring there are no mappings or shadow pages
+> -	 * for the memslot when it is deleted/moved.  Without pre-invalidation
+> -	 * (and without a lock), a window would exist between effecting the
+> -	 * delete/move and committing the changes in arch code where KVM or a
+> -	 * guest could access a non-existent memslot.
+> -	 *
+> -	 * Modifications are done on a temporary, unreachable slot.  The old
+> -	 * slot needs to be preserved in case a later step fails and the
+> -	 * invalidation needs to be reverted.
+> -	 */
+>  	if (change == KVM_MR_DELETE || change == KVM_MR_MOVE) {
+>  		invalid_slot = kzalloc(sizeof(*invalid_slot), GFP_KERNEL_ACCOUNT);
+>  		if (!invalid_slot) {
+>  			mutex_unlock(&kvm->slots_arch_lock);
+>  			return -ENOMEM;
+>  		}
+> -		kvm_invalidate_memslot(kvm, old, invalid_slot);
+>  	}
+>  
+>  	r = kvm_prepare_memory_region(kvm, old, new, change);
+>  	if (r) {
+> -		/*
+> -		 * For DELETE/MOVE, revert the above INVALID change.  No
+> -		 * modifications required since the original slot was preserved
+> -		 * in the inactive slots.  Changing the active memslots also
+> -		 * release slots_arch_lock.
+> -		 */
+> -		if (change == KVM_MR_DELETE || change == KVM_MR_MOVE) {
+> -			kvm_activate_memslot(kvm, invalid_slot, old);
+> +		if (change == KVM_MR_DELETE || change == KVM_MR_MOVE)
+>  			kfree(invalid_slot);
+> -		} else {
+> -			mutex_unlock(&kvm->slots_arch_lock);
+> -		}
+> +
+> +		mutex_unlock(&kvm->slots_arch_lock);
+>  		return r;
+>  	}
+>  
+> +	/*
+> +	 * Invalidate the old slot if it's being deleted or moved.  This is
+> +	 * done prior to actually deleting/moving the memslot to allow vCPUs to
+> +	 * continue running by ensuring there are no mappings or shadow pages
+> +	 * for the memslot when it is deleted/moved.  Without pre-invalidation
+> +	 * (and without a lock), a window would exist between effecting the
+> +	 * delete/move and committing the changes in arch code where KVM or a
+> +	 * guest could access a non-existent memslot.
+> +	 */
+> +	if (change == KVM_MR_DELETE || change == KVM_MR_MOVE)
+> +		kvm_invalidate_memslot(kvm, old, invalid_slot);
+
+I'm not 100% sure that simply moving kvm_invalidate_memslot() is functionally
+correct.  It might be, but there are so many subtleties in this code that I don't
+want to change this ordering unless absolutely necessary, or at least not without
+an in-depth analysis and a pile of tests.  E.g. it's possible one or more
+architectures relies on unmapping, flushing, and invalidating the old region
+prior to preparing the new region, e.g. to reuse arch memslot data.
+
+> +
+>  	/*
+>  	 * For DELETE and MOVE, the working slot is now active as the INVALID
+>  	 * version of the old slot.  MOVE is particularly special as it reuses
+> -- 
+> 2.17.1
+> 
