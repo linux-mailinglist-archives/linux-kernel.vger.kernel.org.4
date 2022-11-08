@@ -2,104 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01952621390
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 14:51:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 13DE062139A
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 14:52:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234751AbiKHNvg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 08:51:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51448 "EHLO
+        id S234698AbiKHNwE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 08:52:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234669AbiKHNvY (ORCPT
+        with ESMTP id S234707AbiKHNvj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 08:51:24 -0500
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06AA162385
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 05:51:18 -0800 (PST)
-Received: by mail-ej1-x62e.google.com with SMTP id b2so38754901eja.6
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 05:51:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=A7/QEu2TvHXhOSYbtw3o8zbJW2eMLja/d3Fk5yvRrPo=;
-        b=f1JCxMsx0M8HqwDkU6lPwPysCMC5ZPsDr6Jp/wS5hGVNoGqE1t/5/jeioXRGCABh3x
-         ql48ZwD2xI3RMDLry2HobRimhA42BGuupXzKcdCO5jgTGOlZZ/7ayqBMZ/HjKupSQSBR
-         mmdmuISZbdqN8sy9IOyMbtulIFa7pm79Ipwr+vmfIxyCsga2AjvIIqK5eEpA1wsC3Etw
-         FQy8UB+7AwA9LiCC9vnMj7hjE8m9rpw9U/BAg79Xe3Ote8+Z2M7Wr+caV4fAAGwChEpg
-         A8XyRK55MyQk06bdE9xrNCdweuokE6wuaq7XgHJro4juHaptTbn8yzhujMZPVFBiYr5C
-         3rmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=A7/QEu2TvHXhOSYbtw3o8zbJW2eMLja/d3Fk5yvRrPo=;
-        b=Zv7IchRObG3BhgtelI+hhaq99Dkh5Q3FFba1uGodPhq6kU8rGdkbF3dC0JldhGFazy
-         nh5qnIJINFYrDVYu9SIVygWQXl76ok+K+FdVdDaWZZsNAj3SkCwmPBWGycxzu8htCoIG
-         yDqVTVyPEDGSuihyeeJDi4xW49WfDZ5vlL9Z4nAaKomROyAKx/ZyXrWSRaq74lGf6uPP
-         G5mU+wsy2Uboh2gQSvXE9Jk1TD3QocSj8nmAsB0I4QHJpK5N7Sf4a1x8qVlOMnPLEkQZ
-         ECCYyPvpa9qQpw+Qjy4k/KtVnPymKCvLybgqQKQZ/jtgTc9JtsHMHasKFsfFnt/0RPWf
-         XYvA==
-X-Gm-Message-State: ACrzQf1JTthHHHNKBLNkiqPBr5q3t3nEMBHi+4YwV4PR54FsE5ub7QIt
-        xhI9Tg7eiWmysvLDXa8HBqCn374vpGXOn+3MoR4y7ZNRN9s=
-X-Google-Smtp-Source: AMsMyM79KvOsxzfjetEB86Sdu7VIJROuy3ZeVkMSVcKuj87bYFpXtSO7RTOBFnXl8dhumxgQwYgoMmCddx5YulhrVUQ=
-X-Received: by 2002:a17:906:4c4b:b0:7ad:a197:b58e with SMTP id
- d11-20020a1709064c4b00b007ada197b58emr54144312ejw.203.1667915476425; Tue, 08
- Nov 2022 05:51:16 -0800 (PST)
+        Tue, 8 Nov 2022 08:51:39 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96A5E62398;
+        Tue,  8 Nov 2022 05:51:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667915498; x=1699451498;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=p3XVuiiHhYj4CpYcd/oIbXMmkx4DNUaNvQifZc4324s=;
+  b=LrHwvaIz2CjC7Ji7RH6yvKpqkXHu4A4wvbXFoHO13czbvx71zAmrTPQA
+   wWv/YsryWjlDDMLS5ffpHhFiPZJIEXmaF+GXmDtLYIlwnkoIDxUqdxUjA
+   xPiNN6vR8qR3UIWLfaDBwZ4988LOLQIVlHlX/hBTKq2e5yicoWRVrnWpE
+   xIKcMWd2esua1a8TFjsyP/+6grh9EuVxw2BaJarkcNGGuoD+fFHewjvQv
+   0XbpwNKceCXMY7V3P76G+zqdyaeohTRYm65LOJT5mYjjVzOPEnHyQ8iZe
+   lG89eGy5WnfQ4gpCiKJMKurb5AM1rGflCjUtkmauqkzJkoIDRgZoB72jn
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10524"; a="298212296"
+X-IronPort-AV: E=Sophos;i="5.96,147,1665471600"; 
+   d="scan'208";a="298212296"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2022 05:51:38 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10524"; a="638794697"
+X-IronPort-AV: E=Sophos;i="5.96,147,1665471600"; 
+   d="scan'208";a="638794697"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga007.fm.intel.com with ESMTP; 08 Nov 2022 05:51:35 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1osP0n-0099gl-0Q;
+        Tue, 08 Nov 2022 15:51:33 +0200
+Date:   Tue, 8 Nov 2022 15:51:32 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Andrew Lunn <andrew@lunn.ch>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH v1 1/1] mac_pton: Don't access memory over expected length
+Message-ID: <Y2pe5JqTbTykO5Qf@smile.fi.intel.com>
+References: <20221005164301.14381-1-andriy.shevchenko@linux.intel.com>
+ <Y0R+ZU6kdbeUER1c@lunn.ch>
+ <20221010173809.5f863ea6@kernel.org>
 MIME-Version: 1.0
-References: <CA+G9fYv5-og6kr8PgGCg-wYUK3PGCQmvbY1YYews5-C8XwxSww@mail.gmail.com>
-In-Reply-To: <CA+G9fYv5-og6kr8PgGCg-wYUK3PGCQmvbY1YYews5-C8XwxSww@mail.gmail.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Tue, 8 Nov 2022 14:51:04 +0100
-Message-ID: <CACRpkdb8ynRrXZ0O4cxoGSn2zQ1rr7zkDiTz78Pm+GPc30p_Nw@mail.gmail.com>
-Subject: Re: KASAN / KUNIT: testing ran on qemu-arm and list of failures
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     open list <linux-kernel@vger.kernel.org>,
-        linux-stable <stable@vger.kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        David Gow <davidgow@google.com>,
-        Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>,
-        Vitor Massaru Iha <vitor@massaru.org>,
-        Arnd Bergmann <arnd@arndb.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221010173809.5f863ea6@kernel.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 2, 2022 at 3:15 PM Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
+On Mon, Oct 10, 2022 at 05:38:09PM -0700, Jakub Kicinski wrote:
+> On Mon, 10 Oct 2022 22:19:49 +0200 Andrew Lunn wrote:
+> > On Wed, Oct 05, 2022 at 07:43:01PM +0300, Andy Shevchenko wrote:
+> > > The strlen() may go too far when estimating the length of
+> > > the given string. In some cases it may go over the boundary
+> > > and crash the system which is the case according to the commit
+> > > 13a55372b64e ("ARM: orion5x: Revert commit 4904dbda41c8.").
+> > > 
+> > > Rectify this by switching to strnlen() for the expected
+> > > maximum length of the string.  
+> > 
+> > This seems like something which should have a fixes: tag, and be
+> > against net, not net-next.
+> 
+> Quoting DaveM's revert mentioned in the commit message:
+> 
+>     First of all, the orion5x buffer is not NULL terminated.  mac_pton()
+>     has no business operating on non-NULL terminated buffers because
+>     only the caller can know that this is valid and in what manner it
+>     is ok to parse this NULL'less buffer.
+>     
+>     Second of all, orion5x operates on an __iomem pointer, which cannot
+>     be dereferenced using normal C pointer operations.  Accesses to
+>     such areas much be performed with the proper iomem accessors.
+> 
+> So AFAICT only null-terminated strings are expected here, this patch
+> does not fix any known issue. No need to put it in net (if it's needed
+> at all).
 
-> This is a report to get a quick update on kasan on qemu-arm.
->
-> The KASAN / KUNIT testing ran on qemu-arm and the following test cases failed
-> and the kernel crashed.
->
-> Following tests failed,
->     kasan_strings - FAILED
->     vmalloc_oob - FAILED
->     kasan_memchr - FAILED
->     kasan - FAILED
->     kasan_bitops_generic - FAILED
->
-> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+So, what is the decision with this patch? Should I resend that with net-next
+in the subject?
 
-Which isn't very strange since:
+-- 
+With Best Regards,
+Andy Shevchenko
 
-> [  429.920201] Insufficient stack space to handle exception!
 
-the system ran out of stack. With VMAP stack and IRQSTACKS
-there is really not much more memory we can provide.
-
-When I discussed this with syzbot it seemed they were using some
-really big userspace program written in Go that just used up all
-the virtual memory :P
-
-I don't know the nature of this test though. Using a lot of memory??
-
-Yours,
-Linus Walleij
