@@ -2,64 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EE1F62052E
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 01:53:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0743D620578
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 01:58:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233121AbiKHAxA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 19:53:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33188 "EHLO
+        id S233116AbiKHA6o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 19:58:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232926AbiKHAw6 (ORCPT
+        with ESMTP id S232850AbiKHA6l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 19:52:58 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50969252A2;
-        Mon,  7 Nov 2022 16:52:57 -0800 (PST)
-Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4N5qMN3GlBzRp4C;
-        Tue,  8 Nov 2022 08:52:48 +0800 (CST)
-Received: from kwepemm600003.china.huawei.com (7.193.23.202) by
- dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 8 Nov 2022 08:52:55 +0800
-Received: from [10.67.111.205] (10.67.111.205) by
- kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 8 Nov 2022 08:52:54 +0800
-Subject: Re: [PATCH bpf v2 4/5] bpf: Add kernel function call support in
- 32-bit ARM for EABI
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
-        <martin.lau@linux.dev>, <song@kernel.org>, <yhs@fb.com>,
-        <john.fastabend@gmail.com>, <kpsingh@kernel.org>, <sdf@google.com>,
-        <haoluo@google.com>, <jolsa@kernel.org>,
-        <illusionist.neo@gmail.com>, <davem@davemloft.net>,
-        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <mykolal@fb.com>, <shuah@kernel.org>,
-        <benjamin.tissoires@redhat.com>, <memxor@gmail.com>,
-        <asavkov@redhat.com>, <delyank@fb.com>, <bpf@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>
-References: <20221107092032.178235-1-yangjihong1@huawei.com>
- <20221107092032.178235-5-yangjihong1@huawei.com>
- <Y2j7J9mJxmKJ4ZpP@shell.armlinux.org.uk>
-From:   Yang Jihong <yangjihong1@huawei.com>
-Message-ID: <8469b2d5-276b-9715-cf62-a5a724d438d7@huawei.com>
-Date:   Tue, 8 Nov 2022 08:52:54 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
+        Mon, 7 Nov 2022 19:58:41 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE01712D1D
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 16:58:40 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id gw22so12331225pjb.3
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 16:58:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Gubzl0YEUi8edKts0iVkW8bTbZEcmyzMNwtHakxV1DQ=;
+        b=dnNam+nry5paMbo3UhYDeo/STVJh4H5BuTwjCI76NrtplJI7JqDyeEYROKEPqeT9oT
+         ed0uXqiPoZnORUBfHIkxzM9Ldr4BsXz1AWtdU/mIcfNRD0MBaW47mMX9V6kqA5sZ4P2M
+         YrnFIkRyJzi7yQf8D7ScxFGwCMHvLrtKqw16lutgdyO3GT34MCgL0ISHOFifBfy0/xzt
+         0xRO1VXi2rczB/9+Joe5Z0HQYpuikBW0qGt6GGBT8ZPGqzkvvB2AHEmEeWL/a46Y1RTp
+         Ty/bRRE8F9LtETbB34IAZVnYqBhnTAr+GB2MctMnNAEzDGC2AvXZ1vJJP0VmoVYDtkUw
+         Cydg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Gubzl0YEUi8edKts0iVkW8bTbZEcmyzMNwtHakxV1DQ=;
+        b=aDS3I6N30kj9xnWDIe2F+ddgDW2BVg0pD4QqldNAOcogQTNeDEx88GujtBYpPLKeK1
+         qerqlZsV9zI33NbOYB5dgFCZ54RUTgzC8DECBqQ26SdRfThespY+B0/ZNpD3K1ghyxEp
+         BJ4MaIsPOiggQoszxiugcQY88Ie2Ow8EeligFdXcCAYe4grL5gSMkSachIgAKCt+/T5D
+         z15K0NT5zgHFh7KWecrix736x+RcDeETv/QGGoKCpVa5yl94FYDPb7aPYYkTshR37SGl
+         qqDTmQmpZhnMtqFE4s2kXHUOZeD7TKvHNB2PYaepahGvNW1UwYsgXqjVN+xMqrBxbca1
+         yUYA==
+X-Gm-Message-State: ACrzQf2FIrSs7jCCJFDEjW8gqwv4LAxVtAPoCVnNJglOfIzDDjohoHIH
+        PbXeA9SL5rtfaUTrs7AcKu0QBQ==
+X-Google-Smtp-Source: AMsMyM6mBXg5PMqnQ7JzOldZSxkf7Q7kodUfnLZHCgQVvF9iOVj9puqqGr5N9Whvxfeyk9FFn0M/qA==
+X-Received: by 2002:a17:902:e352:b0:187:c4c:26ff with SMTP id p18-20020a170902e35200b001870c4c26ffmr50260985plc.162.1667869120007;
+        Mon, 07 Nov 2022 16:58:40 -0800 (PST)
+Received: from google.com (33.5.83.34.bc.googleusercontent.com. [34.83.5.33])
+        by smtp.gmail.com with ESMTPSA id w10-20020a17090a460a00b00213202d77d9sm4882094pjg.43.2022.11.07.16.58.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Nov 2022 16:58:39 -0800 (PST)
+Date:   Mon, 7 Nov 2022 16:58:36 -0800
+From:   Zach O'Keefe <zokeefe@google.com>
+To:     Yang Shi <shy828301@gmail.com>
+Cc:     Michal Hocko <mhocko@suse.com>, akpm@linux-foundation.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [v2 PATCH 2/2] mm: don't warn if the node is offlined
+Message-ID: <Y2mpvAy2W0hhI7Yl@google.com>
+References: <20221103213641.7296-1-shy828301@gmail.com>
+ <20221103213641.7296-2-shy828301@gmail.com>
+ <Y2Tc2JNeFWXmZbQ1@dhcp22.suse.cz>
+ <Y2ThtYKSxoP9S44i@dhcp22.suse.cz>
+ <CAHbLzkpvZ05+xSGWLCYKJntsLGzdda449XpjCH7sRE-3S8h+0g@mail.gmail.com>
+ <Y2VtNfkwciJ5hHF6@dhcp22.suse.cz>
+ <CAHbLzkrcqc4rcH4iq3tU81=AsFi6MMpkwAFbdJf2vVPDy5HoXA@mail.gmail.com>
+ <Y2i6Bway4H/tKkuf@dhcp22.suse.cz>
+ <CAHbLzkp=fq5qeuMBxiN14Y1F945N4DiNmArgi4nEACse5b9dWQ@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <Y2j7J9mJxmKJ4ZpP@shell.armlinux.org.uk>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.111.205]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemm600003.china.huawei.com (7.193.23.202)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHbLzkp=fq5qeuMBxiN14Y1F945N4DiNmArgi4nEACse5b9dWQ@mail.gmail.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,22 +80,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Nov 07 10:48, Yang Shi wrote:
+> On Sun, Nov 6, 2022 at 11:55 PM Michal Hocko <mhocko@suse.com> wrote:
+> >
+> > On Fri 04-11-22 13:52:52, Yang Shi wrote:
+> > > On Fri, Nov 4, 2022 at 12:51 PM Michal Hocko <mhocko@suse.com> wrote:
+> > > >
+> > > > On Fri 04-11-22 10:42:45, Yang Shi wrote:
+> > > > > On Fri, Nov 4, 2022 at 2:56 AM Michal Hocko <mhocko@suse.com> wrote:
+> > > > > >
+> > > > > > On Fri 04-11-22 10:35:21, Michal Hocko wrote:
+> > > > > > [...]
+> > > > > > > diff --git a/include/linux/gfp.h b/include/linux/gfp.h
+> > > > > > > index ef4aea3b356e..308daafc4871 100644
+> > > > > > > --- a/include/linux/gfp.h
+> > > > > > > +++ b/include/linux/gfp.h
+> > > > > > > @@ -227,7 +227,10 @@ static inline
+> > > > > > >  struct folio *__folio_alloc_node(gfp_t gfp, unsigned int order, int nid)
+> > > > > > >  {
+> > > > > > >       VM_BUG_ON(nid < 0 || nid >= MAX_NUMNODES);
+> > > > > > > -     VM_WARN_ON((gfp & __GFP_THISNODE) && !node_online(nid));
+> > > > > > > +     if((gfp & __GFP_THISNODE) && !node_online(nid)) {
+> > > > > >
+> > > > > > or maybe even better
+> > > > > >         if ((gfp & (__GFP_THISNODE|__GFP_NOWARN) == __GFP_THISNODE|__GFP_NOWARN) && !node_online(nid))
+> > > > > >
+> > > > > > because it doesn't really make much sense to dump this information if
+> > > > > > the allocation failure is going to provide sufficient (and even more
+> > > > > > comprehensive) context for the failure. It looks more hairy but this can
+> > > > > > be hidden in a nice little helper shared between the two callers.
+> > > > >
+> > > > > Thanks a lot for the suggestion, printing warning if the gfp flag
+> > > > > allows sounds like a good idea to me. Will adopt it. But the check
+> > > > > should look like:
+> > > > >
+> > > > > if ((gfp & __GFP_THISNODE) && !(gfp & __GFP_NOWARN) && !node_online(nid))
+> > > >
+> > > > The idea was to warn if __GFP_NOWARN _was_ specified. Otherwise we will
+> > > > get an allocation failure splat from the page allocator and there it
+> > > > will be clear that the node doesn't have any memory associated. It is
+> > > > exactly __GFP_NOWARN case that would be a silent failure and potentially
+> > > > a buggy code (like this THP collapse path). See my point?
+> > >
+> > > Aha, yeah, see your point now. I didn't see the splat from the
+> > > allocator from the bug report, then I realized it had not called into
+> > > allocator yet before the warning was triggered.
+> >
+> > And it would trigger even if it did because GFP_TRANSHUGE has
+> > __GFP_NOWARN
+> 
+> Yeah, the syzbot has panic on warn set, so kernel just panicked before
+> entering the allocator.
+> 
 
-On 2022/11/7 20:33, Russell King (Oracle) wrote:
-> On Mon, Nov 07, 2022 at 05:20:31PM +0800, Yang Jihong wrote:
->> +bool bpf_jit_supports_kfunc_call(void)
->> +{
->> +	return true;
-> 
-> It would be far cleaner to make this:
-> 
-> 	return IS_ENABLED(CONFIG_AEABI);
-> 
-> So userspace knows that it isn't supported on OABI.
-> 
-Thanks for the suggestion, will change.
+Sorry I'm late to the party here.  I think Michal's suggestion is sound --
+catches instances like we saw with MADV_COLLAPSE, but no risk of panic-on-warn.
+Thanks for the suggestion.
 
-Thanks,
-Yang
-.
+Best,
+Zach
+
+> > --
+> > Michal Hocko
+> > SUSE Labs
