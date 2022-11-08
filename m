@@ -2,101 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB585621ED0
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 23:06:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF595621ED5
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 23:07:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229935AbiKHWGi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 17:06:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39058 "EHLO
+        id S229615AbiKHWHa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 17:07:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229551AbiKHWGh (ORCPT
+        with ESMTP id S229624AbiKHWH1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 17:06:37 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74C451FFBA;
-        Tue,  8 Nov 2022 14:06:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667945196; x=1699481196;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=fqgDL/xn1/PN4O0PG4nRGxzUZ83zDyTOgC7cLxxyXro=;
-  b=SDleToGnfpctdKq9RMjenhVvzTu4eK6o9PpZIGCXpGpdmmj3IY6a1XW8
-   lSWtal+rzcwHhirC8jvqAOYGngTwciOsijuBqhjOmvOUCxRGCGOMGnXta
-   dVZV2TxNIuOkTgxkJBdezxYXtD6+685BZNgz14sF6TH+//1Hzs1e3s0kE
-   fT492NtnYha8GElXZpH9pCFHlLRNsQmRyGHzCiJ2hJIWMPjt5b+PW7gp7
-   PGrWW3Z42BaaZlf2WhZ18lmqT8dGBjgcM9NMiam6ssAazBGqDdPTL0Pb5
-   W/BY6rXkjzd9dKCPejH5hp3MmLwOOkZbnG4uAocohc/wNy+3zJwzXGO4D
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10525"; a="337552622"
-X-IronPort-AV: E=Sophos;i="5.96,148,1665471600"; 
-   d="scan'208";a="337552622"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2022 14:06:36 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10525"; a="881675147"
-X-IronPort-AV: E=Sophos;i="5.96,148,1665471600"; 
-   d="scan'208";a="881675147"
-Received: from ehartman-mobl.amr.corp.intel.com (HELO desk) ([10.212.198.244])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2022 14:06:35 -0800
-Date:   Tue, 8 Nov 2022 14:06:33 -0800
-From:   Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>,
-        Andrew Cooper <Andrew.Cooper3@citrix.com>, degoede@redhat.com,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
-        antonio.gomez.iglesias@linux.intel.com
-Subject: Re: [PATCH 1/3] x86/tsx: Add feature bit for TSX control MSR support
-Message-ID: <20221108220633.2vfazpun6bgiiglw@desk>
-References: <cover.1663025154.git.pawan.kumar.gupta@linux.intel.com>
- <8592af5e3b95b197231445beb8c3123948ced15a.1663025154.git.pawan.kumar.gupta@linux.intel.com>
- <9eb8f395-c77f-a0bf-96b7-f1a3bb178c48@intel.com>
+        Tue, 8 Nov 2022 17:07:27 -0500
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CC6C4B9B4
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 14:07:24 -0800 (PST)
+Received: by mail-wm1-x335.google.com with SMTP id ja4-20020a05600c556400b003cf6e77f89cso1755982wmb.0
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 14:07:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=oZa2XsBC7LSTs3tg2Aekhd4AeoshIZpxVnZl6SEC4lk=;
+        b=KxBQ4KUBSA33jXcR3gUddQwWIISKgRvrB4BVa64HjRHCGWzmit4A9fuj7o0bS0O32j
+         CmvZ6prPCzADMDdPDl1qyf/nXRqvi9Ayg561y+JRo08oheNEq+pzV92L7gnMQPbKT2+B
+         gGjE0IDl/8gAxB+fL4VPyLAq+KdUhcL1tkBXc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=oZa2XsBC7LSTs3tg2Aekhd4AeoshIZpxVnZl6SEC4lk=;
+        b=6xZUUqHx4rVSosNh8ylBJUz5PxbD5vF9Q6baLZk8SdpYxROs3+PRALO2yol4xejcX+
+         Nt7OZD8uL4GEUgDUMnw1olwZ6jeR46CP4eFbUhYwEnu8XVqgYWC1iZ0kBn39ojmGy6N4
+         qLBvaoh6fwxQiA0NL7nRwE1r9s1/LU/HGn9lA1WcMym8no8kxAlXNr8EGGljFgvPpJgh
+         YrZT4JrYk2Q1nXc1B1290ZAM65RtLLPnk2/JueMnzGtdPLv7jeN5SUN5swBjzAAwzMD7
+         vFvDggOZ1xCZg1JNzxIA2iUCrFk5dbLwSJHT1WJlcr/989GTeet4/LsZbr66HG9LD2d/
+         7IjQ==
+X-Gm-Message-State: ACrzQf1ndSzgg9tOuB2EODWdyKOqYbzlSgqx3tJlAfNIj3k56wFkqGA5
+        oFh76Vv6eEwKv+tbb1JyIb8iJw==
+X-Google-Smtp-Source: AMsMyM5pJq+k2FsxumM1/v0O/EpJeObWC2YCk8fWIOp9a76FfNHAaKBpgJmd4Nw45KOA7D3JTGizpQ==
+X-Received: by 2002:a05:600c:3587:b0:3cf:9aab:ab4a with SMTP id p7-20020a05600c358700b003cf9aabab4amr16653350wmq.155.1667945242563;
+        Tue, 08 Nov 2022 14:07:22 -0800 (PST)
+Received: from revest.zrh.corp.google.com ([2a00:79e0:9d:6:8b01:3c16:212f:91df])
+        by smtp.gmail.com with ESMTPSA id bw9-20020a0560001f8900b00236c1f2cecesm14001004wrb.81.2022.11.08.14.07.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Nov 2022 14:07:21 -0800 (PST)
+From:   Florent Revest <revest@chromium.org>
+To:     bpf@vger.kernel.org
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        kpsingh@kernel.org, jackmanb@google.com, markowsky@google.com,
+        mark.rutland@arm.com, mhiramat@kernel.org, rostedt@goodmis.org,
+        xukuohai@huawei.com, linux-kernel@vger.kernel.org,
+        Florent Revest <revest@chromium.org>
+Subject: [RFC 0/1] BPF tracing for arm64 using fprobe
+Date:   Tue,  8 Nov 2022 23:06:50 +0100
+Message-Id: <20221108220651.24492-1-revest@chromium.org>
+X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <9eb8f395-c77f-a0bf-96b7-f1a3bb178c48@intel.com>
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 08, 2022 at 10:27:56AM -0800, Dave Hansen wrote:
->On 9/12/22 16:39, Pawan Gupta wrote:
->> Support for TSX control MSR is enumerated in MSR_IA32_ARCH_CAPABILITIES.
->> This is different from how other CPU features are enumerated i.e. via
->> CPUID. Enumerating support for TSX control currently has an overhead of
->> reading the MSR every time which can be avoided.
->
->I only see tsx_ctrl_is_supported() getting called in three places:
->
->> 1 tsx.c tsx_clear_cpuid       138 } else if (tsx_ctrl_is_supported()) {
->> 2 tsx.c tsx_dev_mode_disable  161 if (!boot_cpu_has_bug(X86_BUG_TAA) || !tsx_ctrl_is_supported() ||
->> 3 tsx.c tsx_init              194 if (!tsx_ctrl_is_supported()) {
->
->Those all look like boot-time things to me.
+Hi!
 
-Except tsx_clear_cpuid() could be called during S3 resume as part of
-secondary CPU's init, but still its not too often.
+With this RFC, I'd like to revive the conversation between BPF, ARM and tracing
+folks on what BPF tracing (fentry/fexit/fmod_ret) could/should look like on
+arm64.
 
->Why does the overhead matter?
+Current status of BPF tracing
+=============================
 
-This patch is mainly needed for patch 3/3 that relies on feature bits to
-decide which MSRs to save/restore during suspend/resume.
+On currently supported architectures (like x86), BPF tracing programs are
+called from a JITted BPF trampoline, itself called from the ftrace patch site
+thanks to the ftrace "direct call" API. (or from the end of the ftrace
+trampoline if a ftrace ops is also tracing that function, but this is
+transparent to BPF)
 
-I just gave a hint about it in the commit message:
+Thanks to Xu's work [1], we now have BPF trampolines on arm64 (these can be
+used for struct ops programs already), but Xu's attempts at getting ftrace
+direct calls support [2][3] on arm64 have been unsucessful so far so we still
+do not support BPF tracing programs. This prompted me to try a different
+approach. I'd like to collect feedback on it here.
 
-     This will also be useful for any code that wants to use the feature bit
-     instead of a calling tsx_ctrl_is_supported().
+Why not direct calls ?
+======================
 
-I will fix the commit message with this as the main reason for adding
-the feature bit.
+Mark and Steven have not been too keen on getting direct calls on arm64 because:
+- working around BL instruction's limited range introduces complexity [4]
+- it's difficult to get reliable stacktraces right with direct calls [5]
+- direct calls are complex to maintain on the arch/ftrace side [5]
+
+In the absence of ftrace direct calls support, BPF tracing programs would need
+to be called from an ftrace ops instead. Note that the BPF callback signature
+would have to be different, so we can't re-use trampolines (direct called
+callbacks receive arguments in registers whereas ftrace ops callbacks receive
+arguments in a struct ftrace_regs pointer)
+
+Why fprobe ?
+============
+
+Ftrace ops per-se only expose an API to hook before a function. There are two
+systems built on top of ftrace ops that also allow hooking the function exit:
+fprobe (using rethook) and the function graph tracer. There are plans from
+Masami and Steven to unify these two systems but, as they stand, only fprobe
+gives enough flexibility to implement BPF tracing.
+
+In order not to reinvent the wheel, if direct calls aren't available on the
+arch, BPF could leverage fprobe to hook before and after the traced function.
+Note that return hooking is implemented a bit differently than it is in BPF
+trampolines. Instead of keeping arguments on a stack frame and calling the
+traced function, rethook saves arguments in a memory pool and returns to the
+traced function with a hijacked return pointer that will have its ret jump back
+to the rethook trampoline.
+
+What about performances ?
+=========================
+
+In its current state, a fprobe callback on arm64 is very expensive because:
+1- the ftrace trampoline saves all registers (including many unnecessary ones)
+2- it calls ftrace_ops_list_func which iterates over all ops and is very slow
+3- the fprobe ops unconditionally hooks a rethook
+4- rethook grabs memory from a freelist which is slow under high contention
+
+However, all the above points are currently being addressed:
+1- by Mark's series to save argument registers only [6]
+2- by Mark's series to call single ops directly [7]
+3- by Masami's patch to skip rethooks if not needed [8]
+4- Masami said the rethook freelist would be replaced by a per-task stack as
+   part of its unification with the function graph tracer [9]
+
+I measured the costs of BPF on different approaches on my RPi4 here: [10]
+tl;dr: the BPF "bench" takes a performance hit of:
+- 28.6% w/ BPF tracing on direct calls (best case scenario for reference) [11]
+- 66.8% w/ BPF on kprobe (just for reference)
+- 62.6% w/ BPF tracing on fprobe without any optimizations (current state) [12]
+- 34.1% w/ BPF tracing on fprobe with all optimizations (near-future state) [13]
+
+On top of Mark's and Masami's existing and planned work, BPF tracing programs
+called from a fprobe callback become much closer to the performances of direct
+calls but there's still a hit. If we want to try optimizing even further, we
+could potentially go even one step further by JITting the fprobe callbacks.
+This would let us unroll the argument loop and use direct calls instead of
+indirect calls. However this would introduce quite some complexity and I expect
+the performance impact should be fairly minimal. (arm64 doesn't have repotlines
+so it doesn't suffer too much from indirect calls anyway)
+
+Two other performance discrepancies I can think of, that would stay anyway are:
+1- the ftrace trampoline saves all argument registers while BPF trampolines can
+   get away with only saving the number of arguments that are actually used by
+   that function (thanks to BTF info), consequentially, we need to convert the
+   ftrace_regs structure into a BPF "ctx" array which inevitably takes some
+   cycles
+2- When a fexit program is attached, going through the rethook trampoline means
+   that we need to save argument registers a second time while BPF trampolines
+   can just rely on arguments kept on the stack
+
+How to apply this RFC ?
+=======================
+
+This RFC only brings up to discussion the eventual patch that would
+touch the BPF subsystem because the ftrace and fprobe optimizations it
+is built on are not as controversial and already on the way. However,
+this patch is meant to apply on top of Mark's and Masami's work. If
+you'd like to run this patch you can use my branch. [13]
+
+Links
+=====
+
+1: https://lore.kernel.org/bpf/20220711144722.2100039-1-xukuohai@huawei.com/
+2: https://lore.kernel.org/bpf/20220518131638.3401509-2-xukuohai@huawei.com/
+3: https://lore.kernel.org/bpf/20220913162732.163631-1-xukuohai@huaweicloud.com/
+4: https://lore.kernel.org/bpf/Yo4xb2w+FHhUtJNw@FVFF77S0Q05N/
+5: https://lore.kernel.org/bpf/YzR5WSLux4mmFIXg@FVFF77S0Q05N/
+6: https://lore.kernel.org/all/20221103170520.931305-1-mark.rutland@arm.com/
+7: https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/log/?h=arm64/ftrace/per-callsite-ops
+8: https://lore.kernel.org/all/166792255429.919356.14116090269057513181.stgit@devnote3/T/#m9d43fbdc91f48b03d644be77ac18017963a08df5
+9: https://lore.kernel.org/bpf/20221024220008.48780b0f58903afed2dc8d4a@kernel.org/
+10: https://paste.debian.net/1260011/
+11: https://github.com/FlorentRevest/linux/commits/bpf-direct-calls
+12: https://github.com/FlorentRevest/linux/commits/bpf-fprobe-slow
+13: https://github.com/FlorentRevest/linux/commits/bpf-fprobe-rfc
+
+Florent Revest (1):
+  bpf: Invoke tracing progs using fprobe on archs without direct call
+
+ include/linux/bpf.h     |   5 ++
+ kernel/bpf/trampoline.c | 120 ++++++++++++++++++++++++++++++++++++++--
+ 2 files changed, 121 insertions(+), 4 deletions(-)
+
+-- 
+2.38.1.431.g37b22c650d-goog
+
