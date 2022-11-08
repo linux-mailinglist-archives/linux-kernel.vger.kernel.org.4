@@ -2,78 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CE76620C6B
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 10:38:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 112EF620C6F
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 10:40:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233795AbiKHJic (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 04:38:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52818 "EHLO
+        id S233737AbiKHJj5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 04:39:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233793AbiKHJi1 (ORCPT
+        with ESMTP id S233804AbiKHJjx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 04:38:27 -0500
-Received: from smtp.domeneshop.no (smtp.domeneshop.no [IPv6:2a01:5b40:0:3005::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98E662AC7
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 01:38:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tronnes.org
-        ; s=ds202112; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=Gn2jtnurXeLoR+JBbYdWEKBeFwgIy7nQqvoCoWdGcMU=; b=Jm48u4quUIM9AnE2eAVOPXlszN
-        dHIUCxlanP3myizyV6x9HL+VzqOJBcIng+jIcCrV+ZPLX2GL3s239g7CE2I26KDmGGx0zkpumAvjA
-        EALkEKyh8Ho0vrR7//I1jF65jvIy8wwm/jayyESeeHlMso6Zu6yM2QoKn9j4hydIZxrtVraX1dJju
-        ItknqiWPduNMuNnrVezLIeZgNrbbgi5Djw/QrHpTXb6ozVvWRQxu6EbXp+RHmjSdNmEqARyimQjcf
-        DksOaOcw0fZ51OKSvj6zbrlcXCFUinsfBUGO2lO/rodVYogF86aGh3Q5y9/zFg8ENVbG/phX+5Kod
-        UAKOOx1A==;
-Received: from [2a01:799:95a:cb00:cca0:57ac:c55d:a485] (port=57639)
-        by smtp.domeneshop.no with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <noralf@tronnes.org>)
-        id 1osL3l-0008OX-8y; Tue, 08 Nov 2022 10:38:21 +0100
-Message-ID: <ba532387-6329-c57a-1fa2-627b2cf40281@tronnes.org>
-Date:   Tue, 8 Nov 2022 10:38:12 +0100
+        Tue, 8 Nov 2022 04:39:53 -0500
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E2A527176
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 01:39:51 -0800 (PST)
+Received: by mail-lf1-x134.google.com with SMTP id be13so20429388lfb.4
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 01:39:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=kSwog5ERxG3EokF124vpEbubj3vdn0vtr+WUZpZ5SIc=;
+        b=gdeDy+kVAls2tF3+8sTJ9fVAWpvclXEl/RcjTan6GjLB1bEPXlpzRWWD0uXdzu1vWt
+         A9zjjA8AiNshAQJha7dQq6pslJ8AKFoE61X7ry6GdgkBi2l4ef4jJJzdChn12qckcqBV
+         S4w7wKz4e0ZYehkm8WUcCsJW+M94nMoOJ17Ae872c1lt7U9O+H1W25wcR6hYUffJYNVg
+         YSnT8wyAo6SF7rmfLLi/6kMhx6zIBVZW7Wo1At5CiBc/vF+C1ceE0ejDpJo1rhNoNMGO
+         n/nQCb8A1WmlLy8/+dN7yL8k85KRYFzmKVWRtZbfj3/PLlqvIGQ9NAgMMEh4oxjBa0qs
+         31Rg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=kSwog5ERxG3EokF124vpEbubj3vdn0vtr+WUZpZ5SIc=;
+        b=fe6k7edEXpWyvreA9u5KNw3JBIIw7VSisk9uyyk5t5QvovSXi2niwu8lRRshPTe44P
+         ZvKey4WjdCP4BgSL+iX06Nm292RwnyyD1GTxwzrWuNpz1iivUoaymT0Fi+ZgSTXru+MT
+         +DyaMOy/0thPpjZCYoCAyOImef2A71yC2MUplbpRy5obahbhjxPnAPeHPdg6xf7PCgwD
+         nSe/AsY/xNk7T40GP7ARXcHfdqxSnIetQwYqxKr5zRoo94ZiOEfa6U5//8RzDaWzUvIN
+         FRSe6C76FmDbmgu4xoMrRVluUrXVqkmjtQhYZsex9siZ0vXAlru4N5RlvjonfmvLKI0C
+         mPmg==
+X-Gm-Message-State: ACrzQf3UyOAbF+YJNuBXF5GOMzxj/sHJQ2kMYVYKifOlCe+BPVEVrVFr
+        18wmdp8FNapCgRKpPQv782/3yg==
+X-Google-Smtp-Source: AMsMyM6aCyd7GLTchlaoL+Cpdzc6zcZSwGdB4+XrqFm7lPITXo+4Eqv8OHH2Ff2W8eeXs7CVhE7+RA==
+X-Received: by 2002:a19:dc48:0:b0:4a8:d24b:d78 with SMTP id f8-20020a19dc48000000b004a8d24b0d78mr20399524lfj.351.1667900389861;
+        Tue, 08 Nov 2022 01:39:49 -0800 (PST)
+Received: from [192.168.0.20] (088156142199.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.199])
+        by smtp.gmail.com with ESMTPSA id t3-20020a19ad03000000b004a459799bc3sm1700025lfc.283.2022.11.08.01.39.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Nov 2022 01:39:49 -0800 (PST)
+Message-ID: <32f42513-0c55-042e-2530-c58d980a9ce0@linaro.org>
+Date:   Tue, 8 Nov 2022 10:39:48 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.2
-Subject: Re: [PATCH v7 15/23] drm/modes: Introduce more named modes
-To:     Maxime Ripard <maxime@cerno.tech>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Samuel Holland <samuel@sholland.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Emma Anholt <emma@anholt.net>,
-        Karol Herbst <kherbst@redhat.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Chen-Yu Tsai <wens@csie.org>,
-        Lyude Paul <lyude@redhat.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>
-Cc:     Phil Elwell <phil@raspberrypi.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Dom Cobley <dom@raspberrypi.com>,
-        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
-        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        nouveau@lists.freedesktop.org,
-        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
-References: <20220728-rpi-analog-tv-properties-v7-0-7072a478c6b3@cerno.tech>
- <20220728-rpi-analog-tv-properties-v7-15-7072a478c6b3@cerno.tech>
- <262f0953-1e05-e68e-3e96-2ac2132a1e57@tronnes.org>
-From:   =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
-In-Reply-To: <262f0953-1e05-e68e-3e96-2ac2132a1e57@tronnes.org>
+Subject: Re: Coverity: gpmc_is_valid_waitpin(): Control flow issues
+Content-Language: en-US
+To:     "Niedermayr, BENEDIKT" <benedikt.niedermayr@siemens.com>,
+        "rogerq@kernel.org" <rogerq@kernel.org>,
+        "keescook@chromium.org" <keescook@chromium.org>
+Cc:     "gustavo@embeddedor.com" <gustavo@embeddedor.com>,
+        "tony@atomide.com" <tony@atomide.com>,
+        "linux-next@vger.kernel.org" <linux-next@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-omap@vger.kernel.org" <linux-omap@vger.kernel.org>,
+        "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>
+References: <202211041233.4D45359E7@keescook>
+ <7cdf3d14-3f1b-7cd4-e8b9-e94b5359bf82@kernel.org>
+ <e4e4c4f0-782b-9f89-d7a2-859c7759ca66@kernel.org>
+ <b18cddde778ada5030f6a80308854cf9c0dc4d23.camel@siemens.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <b18cddde778ada5030f6a80308854cf9c0dc4d23.camel@siemens.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,53 +83,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-Den 07.11.2022 19.03, skrev Noralf Trønnes:
-> 
-> 
-> Den 07.11.2022 15.16, skrev Maxime Ripard:
->> Now that we can easily extend the named modes list, let's add a few more
->> analog TV modes that were used in the wild, and some unit tests to make
->> sure it works as intended.
+On 08/11/2022 09:02, Niedermayr, BENEDIKT wrote:
+> On Mon, 2022-11-07 at 10:56 +0200, Roger Quadros wrote:
 >>
->> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+>> On 07/11/2022 10:53, Roger Quadros wrote:
+>>> Hi Benedikt,
+>>>
+>>> On 04/11/2022 21:33, coverity-bot wrote:
+>>>> Hello!
+>>>>
+>>>> This is an experimental semi-automated report about issues detected by
+>>>> Coverity from a scan of next-20221104 as part of the linux-next scan project:
+>>>> https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fscan.coverity.com%2Fprojects%2Flinux-next-weekly-scan&amp;data=05%7C01%7Cbenedikt.niedermayr%40siemens.com%7C1a25cc8704524f24224108dac09dfab7%7C38ae3bcd95794fd4addab42e1495d55a%7C1%7C0%7C638034081994087461%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=W1KlBKg9nwEDfFAbqW6Jw7v1d46HQLj8RX8wlZ9RHyc%3D&amp;reserved=0
+>>>>
+>>>> You're getting this email because you were associated with the identified
+>>>> lines of code (noted below) that were touched by commits:
+>>>>
+>>>>   Wed Nov 2 10:02:39 2022 -0400
+>>>>     89aed3cd5cb9 ("memory: omap-gpmc: wait pin additions")
+>>>>
+>>>> Coverity reported the following:
+>>>>
+>>>> *** CID 1527139:  Control flow issues  (NO_EFFECT)
+>>>> drivers/memory/omap-gpmc.c:1048 in gpmc_is_valid_waitpin()
+>>>> 1042     	spin_unlock(&gpmc_mem_lock);
+>>>> 1043     }
+>>>> 1044     EXPORT_SYMBOL(gpmc_cs_free);
+>>>> 1045
+>>>> 1046     static bool gpmc_is_valid_waitpin(u32 waitpin)
+>>>
+>>> We will need to change this waitpin argument to int.
+>>> In addition we will also need to change
+>>> struct gpmc_waitpin->pin and struct gpmc_setting->wait_pin
+>>> to int as in the code we are relying on GPMC_WAITPIN_INVALID logic which is -1.
 >>
->> ---
->> Changes in v6:
->> - Renamed the tests to follow DRM test naming convention
->>
->> Changes in v5:
->> - Switched to KUNIT_ASSERT_NOT_NULL
->> ---
->>  drivers/gpu/drm/drm_modes.c                     |  2 +
->>  drivers/gpu/drm/tests/drm_client_modeset_test.c | 54 +++++++++++++++++++++++++
->>  2 files changed, 56 insertions(+)
->>
->> diff --git a/drivers/gpu/drm/drm_modes.c b/drivers/gpu/drm/drm_modes.c
->> index 49441cabdd9d..17c5b6108103 100644
->> --- a/drivers/gpu/drm/drm_modes.c
->> +++ b/drivers/gpu/drm/drm_modes.c
->> @@ -2272,7 +2272,9 @@ struct drm_named_mode {
->>  
->>  static const struct drm_named_mode drm_named_modes[] = {
->>  	NAMED_MODE("NTSC", 13500, 720, 480, DRM_MODE_FLAG_INTERLACE, DRM_MODE_TV_MODE_NTSC),
->> +	NAMED_MODE("NTSC-J", 13500, 720, 480, DRM_MODE_FLAG_INTERLACE, DRM_MODE_TV_MODE_NTSC_J),
->>  	NAMED_MODE("PAL", 13500, 720, 576, DRM_MODE_FLAG_INTERLACE, DRM_MODE_TV_MODE_PAL),
->> +	NAMED_MODE("PAL-M", 13500, 720, 480, DRM_MODE_FLAG_INTERLACE, DRM_MODE_TV_MODE_PAL_M),
->>  };
-> 
-> I'm now having second thoughts about the tv_mode commandline option. Can
-> we just add all the variants to this table and drop the tv_mode option?
-> IMO this will be more user friendly and less confusing.
-> 
+>> Another alternative with less churn is to leave them as u32
+>> but make GPMC_WAITPIN_INVALID set to a large positive number.
+> Ok, I will fix that. 
+> Do I need to send a new fix-patch on top the current patch series? 
+> Or should I just send only the bugfix-patch for the coverity-bot? 
+>
 
-One downside of this is that it's not possible to force connector status
-when using named modes, but I think it would be better to have a force
-option than a tv_mode option. A lot of userspace treats unknown status
-as disconnected.
+A bugfix patch on current next is ok.
 
-Anyone know if it's possible to set the connector status sysfs file
-using a udev rule?
+Best regards,
+Krzysztof
 
-Noralf.
