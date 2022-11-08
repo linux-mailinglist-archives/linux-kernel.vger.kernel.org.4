@@ -2,47 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8376F6205D4
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 02:28:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA2B06205E3
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 02:28:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233240AbiKHB2A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 20:28:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49970 "EHLO
+        id S233346AbiKHB2K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 20:28:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232887AbiKHB1v (ORCPT
+        with ESMTP id S233089AbiKHB1w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 20:27:51 -0500
+        Mon, 7 Nov 2022 20:27:52 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 894CC28733;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D0602AE05;
         Mon,  7 Nov 2022 17:27:50 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 34116B81716;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 40744B81711;
         Tue,  8 Nov 2022 01:27:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DC3BC433D7;
-        Tue,  8 Nov 2022 01:27:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B381C43470;
+        Tue,  8 Nov 2022 01:27:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667870867;
-        bh=0TXBwQrSlPJZArSBgz+4MwrNnxL7OCGqH6k4Ht3vkjw=;
+        s=k20201202; t=1667870868;
+        bh=mj2CkqKyrRQCE9gS8pWPHxCMQuCruAUEPSa++i1xp3M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=N7Rbr9XQ4X/9+qkumFZpMhuT11KyNHQ+kThx6Vtf2Hjvi16NfuoqdIPpXMyoMh9mC
-         gXbIrCRgsz5ldhfUORE80/54jTOtUDgzDYdFfEnSA6EhJr4+oy1fp6tsU+emf/GZmN
-         P1J0HyVcyxYBJTF6QbP1GG0s92PjleSOy67b/OUVbB/3GrD49+7UMqdVWTwBv/nXrd
-         bJyN/1WntlDok1DdYlP05m1F0n7ID7z/ijVwQ3fd7KapOA3qyruVxamJa3gNnFUZxz
-         Ughdqvti9DHgngKGujBmHeKRiusYzIR6e5Qfz/BfgRqW5V8h9NC4yCiwtalC9uuRJ2
-         Kw4nRQTef6qcg==
+        b=cr35a+xs2w/8+cGkqD0nD61brwWBEi8TkXzrG09mUXa9erv8r3sSrsds5ZnETLOtl
+         jwM0vtUqcMhv0+V6nK9+MD26k6KpdTcuXtj5J2ZOoyaj0wr9Y1CXxKGCZBQ27KBw2y
+         bSFqWmacuSODc5MEkSOBT93BuePhWOD9wGx2VEUl1t7yxJQFB4XSnoj2VexptbZtuD
+         x8nRHna9gZ5FHaq/UfEeGyF3veU05cSP2yNPkMKPRnHyyh1IWVupLnaMy2S2ksgtrJ
+         MHs/7eATxS8xy0pTSyaX7AURd319TZb+I510MDu89OQ6H1k7nRF2busULZW28jjhpI
+         fgNf563tht2eQ==
 From:   Bjorn Andersson <andersson@kernel.org>
-To:     jiasheng@iscas.ac.cn
-Cc:     quic_jjohnson@quicinc.com, konrad.dybcio@somainline.org,
+To:     johan+linaro@kernel.org
+Cc:     devicetree@vger.kernel.org, robh+dt@kernel.org,
+        konrad.dybcio@somainline.org, krzysztof.kozlowski+dt@linaro.org,
         agross@kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH v6] soc: qcom: apr: Add check for idr_alloc and of_property_read_string_index
-Date:   Mon,  7 Nov 2022 19:27:20 -0600
-Message-Id: <166787084685.599230.7554750931145257916.b4-ty@kernel.org>
+Subject: Re: [PATCH] arm64: dts: qcom: sc8280xp: fix USB MP QMP PHY nodes
+Date:   Mon,  7 Nov 2022 19:27:21 -0600
+Message-Id: <166787084686.599230.4516103701135899392.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20221107014403.3606-1-jiasheng@iscas.ac.cn>
-References: <20221107014403.3606-1-jiasheng@iscas.ac.cn>
+In-Reply-To: <20221107081705.18446-1-johan+linaro@kernel.org>
+References: <20221107081705.18446-1-johan+linaro@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -55,20 +56,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 7 Nov 2022 09:44:03 +0800, Jiasheng Jiang wrote:
-> As idr_alloc() and of_property_read_string_index() can return negative
-> numbers, it should be better to check the return value and deal with
-> the exception.
-> Therefore, it should be better to use goto statement to stop and return
-> error.
+On Mon, 7 Nov 2022 09:17:05 +0100, Johan Hovold wrote:
+> Update the USB MP QMP PHY nodes to match the new binding which
+> specifically includes the missing register regions (e.g. PCS_USB).
 > 
 > 
-> [...]
 
 Applied, thanks!
 
-[1/1] soc: qcom: apr: Add check for idr_alloc and of_property_read_string_index
-      commit: 6d7860f5750d73da2fa1a1f6c9405058a593fa32
+[1/1] arm64: dts: qcom: sc8280xp: fix USB MP QMP PHY nodes
+      commit: 0d0be9d88bf2b1c36146712761ab04623a855647
 
 Best regards,
 -- 
