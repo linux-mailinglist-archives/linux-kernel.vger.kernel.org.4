@@ -2,234 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6682C620B6D
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 09:44:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7EFA620B75
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 09:46:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233653AbiKHIow (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 03:44:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50420 "EHLO
+        id S233602AbiKHIqh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 03:46:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233480AbiKHIou (ORCPT
+        with ESMTP id S232654AbiKHIqf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 03:44:50 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A783418361;
-        Tue,  8 Nov 2022 00:44:47 -0800 (PST)
-Received: from canpemm500009.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4N61lk2PRVzpWKG;
-        Tue,  8 Nov 2022 16:41:06 +0800 (CST)
-Received: from [10.174.178.165] (10.174.178.165) by
- canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 8 Nov 2022 16:44:45 +0800
-Message-ID: <65863340-b32f-a2fe-67ae-f1079b19eee4@huawei.com>
-Date:   Tue, 8 Nov 2022 16:44:44 +0800
+        Tue, 8 Nov 2022 03:46:35 -0500
+Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com [209.85.222.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34F886328;
+        Tue,  8 Nov 2022 00:46:35 -0800 (PST)
+Received: by mail-qk1-f178.google.com with SMTP id g10so8697775qkl.6;
+        Tue, 08 Nov 2022 00:46:35 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=BFaOixIsnZB6xQs+v+v1PC0UnPOGoBPbA99XLP2d//4=;
+        b=r1BvGxGhsEKJ0CtZAyIY3Oklp5eBfkr221XBOxriBIAaTtpe02QtuPCCAdqKVdAZ53
+         yWTPljVS235e7FYabNmxgpMiD0NbcEtrqPafqan7LVg3S49iOrpVEeacglhPZI1/3rHT
+         VgHw7Yup/AfiPMromzkHAyl+V2DQPIGYRO/qOnIlSpPzMH9ijHCegI3dh2f98na+v6tV
+         D7C5S/vI05Sjvj2KVIW3+VJDpKAeZWPZDQEF7tpaGYyO8xZqvllF1My5ogXU3DX9tDIw
+         TJCDbPx+nxca960kKbmOWbL6oy+QLwXuESG9YVbGofoGiNxP/5VrOtlzAP/dyyc7+Lpx
+         nzcg==
+X-Gm-Message-State: ANoB5pmjsBapCdT5WEBOh8xpqur8gIJmVoCvKIBnjElbbO/OBTfZCs9T
+        UDAGYO62p5Q5+lFe6zKgQmIARlWQvQf347rV
+X-Google-Smtp-Source: AA0mqf7JVMnD9YVCtiPej7HiTR2ho/IJ0963D9akB9Oxol1Lnn4D0t/2KVeYaN8+aiT1QO+t2L0Cag==
+X-Received: by 2002:ae9:f008:0:b0:6fa:d7db:72b4 with SMTP id l8-20020ae9f008000000b006fad7db72b4mr6818918qkg.473.1667897194205;
+        Tue, 08 Nov 2022 00:46:34 -0800 (PST)
+Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com. [209.85.219.179])
+        by smtp.gmail.com with ESMTPSA id u12-20020a05620a084c00b006fa4cefccd6sm8643966qku.13.2022.11.08.00.46.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Nov 2022 00:46:32 -0800 (PST)
+Received: by mail-yb1-f179.google.com with SMTP id 131so12189162ybl.3;
+        Tue, 08 Nov 2022 00:46:31 -0800 (PST)
+X-Received: by 2002:a05:6902:503:b0:6cf:c510:6a23 with SMTP id
+ x3-20020a056902050300b006cfc5106a23mr34694308ybs.380.1667897191488; Tue, 08
+ Nov 2022 00:46:31 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH v2] mm: fix unexpected changes to
- {failslab|fail_page_alloc}.attr
-To:     Qi Zheng <zhengqi.arch@bytedance.com>, <dvyukov@google.com>,
-        <jgg@nvidia.com>, <willy@infradead.org>, <akinobu.mita@gmail.com>
-CC:     <akpm@linux-foundation.org>, <linux-kernel@vger.kernel.org>,
-        <linux-mm@kvack.org>, <linux-fsdevel@vger.kernel.org>,
-        <stable@vger.kernel.org>
-References: <Y2kxrerISWIxQsFO@nvidia.com>
- <20221108035232.87180-1-zhengqi.arch@bytedance.com>
-From:   Wei Yongjun <weiyongjun1@huawei.com>
-In-Reply-To: <20221108035232.87180-1-zhengqi.arch@bytedance.com>
+References: <20221107141638.3790965-1-john.ogness@linutronix.de> <20221107141638.3790965-24-john.ogness@linutronix.de>
+In-Reply-To: <20221107141638.3790965-24-john.ogness@linutronix.de>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 8 Nov 2022 09:46:20 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdXuBh1PznFggpwSanBtHu9=ngJkVCRzdZVnjxWs2+cbxw@mail.gmail.com>
+Message-ID: <CAMuHMdXuBh1PznFggpwSanBtHu9=ngJkVCRzdZVnjxWs2+cbxw@mail.gmail.com>
+Subject: Re: [PATCH printk v3 23/40] serial_core: replace uart_console_enabled()
+ with uart_console_registered()
+To:     John Ogness <john.ogness@linutronix.de>
+Cc:     Petr Mladek <pmladek@suse.com>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Tony Lindgren <tony@atomide.com>,
+        Lukas Wunner <lukas@wunner.de>, linux-serial@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.165]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- canpemm500009.china.huawei.com (7.192.105.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Zheng Qi,
+Hi John,
 
-On 2022/11/8 11:52, Qi Zheng wrote:
-> When we specify __GFP_NOWARN, we only expect that no warnings
-> will be issued for current caller. But in the __should_failslab()
-> and __should_fail_alloc_page(), the local GFP flags alter the
-> global {failslab|fail_page_alloc}.attr, which is persistent and
-> shared by all tasks. This is not what we expected, let's fix it.
-> 
-> Cc: stable@vger.kernel.org
-> Fixes: 3f913fc5f974 ("mm: fix missing handler for __GFP_NOWARN")
-> Reported-by: Dmitry Vyukov <dvyukov@google.com>
-> Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
-> ---
->  v1: https://lore.kernel.org/lkml/20221107033109.59709-1-zhengqi.arch@bytedance.com/
-> 
->  Changelog in v1 -> v2:
->   - add comment for __should_failslab() and __should_fail_alloc_page()
->     (suggested by Jason)
-> 
->  include/linux/fault-inject.h |  7 +++++--
->  lib/fault-inject.c           | 14 +++++++++-----
->  mm/failslab.c                | 12 ++++++++++--
->  mm/page_alloc.c              |  7 +++++--
->  4 files changed, 29 insertions(+), 11 deletions(-)
-> 
-> diff --git a/include/linux/fault-inject.h b/include/linux/fault-inject.h
-> index 9f6e25467844..444236dadcf0 100644
-> --- a/include/linux/fault-inject.h
-> +++ b/include/linux/fault-inject.h
-> @@ -20,7 +20,6 @@ struct fault_attr {
->  	atomic_t space;
->  	unsigned long verbose;
->  	bool task_filter;
-> -	bool no_warn;
->  	unsigned long stacktrace_depth;
->  	unsigned long require_start;
->  	unsigned long require_end;
-> @@ -32,6 +31,10 @@ struct fault_attr {
->  	struct dentry *dname;
->  };
->  
-> +enum fault_flags {
-> +	FAULT_NOWARN =	1 << 0,
-> +};
-> +
->  #define FAULT_ATTR_INITIALIZER {					\
->  		.interval = 1,						\
->  		.times = ATOMIC_INIT(1),				\
-> @@ -40,11 +43,11 @@ struct fault_attr {
->  		.ratelimit_state = RATELIMIT_STATE_INIT_DISABLED,	\
->  		.verbose = 2,						\
->  		.dname = NULL,						\
-> -		.no_warn = false,					\
+On Mon, Nov 7, 2022 at 3:16 PM John Ogness <john.ogness@linutronix.de> wrote:
+> All users of uart_console_enabled() really want to know if a console
+> is registered. It is not reliable to check for CON_ENABLED in order
+> to identify if a console is registered. Use console_is_registered()
+> instead.
+>
+> A _locked() variant is provided because uart_set_options() is always
+> called with the console_list_lock held and must check if a console
+> is registered in order to synchronize with kgdboc.
+>
+> Signed-off-by: John Ogness <john.ogness@linutronix.de>
 
-How about keep no_warn attr as it be, and export it to user?
-
-When testing with fault injection, and each fault will print an backtrace.
-but not all of the testsuit can tell us which one is fault injection
-message or other is a real warning/crash like syzkaller do.
-
-In my case, to make things simple, we usually used a regex to detect whether
-wanring/error happend. So we disabled the slab/page fault warning message by
-default, and only enable it when debug real issue.
-
-Regards,
-
-
->  	}
->  
->  #define DECLARE_FAULT_ATTR(name) struct fault_attr name = FAULT_ATTR_INITIALIZER
->  int setup_fault_attr(struct fault_attr *attr, char *str);
-> +bool should_fail_ex(struct fault_attr *attr, ssize_t size, int flags);
->  bool should_fail(struct fault_attr *attr, ssize_t size);
->  
->  #ifdef CONFIG_FAULT_INJECTION_DEBUG_FS
-> diff --git a/lib/fault-inject.c b/lib/fault-inject.c
-> index 4b8fafce415c..5971f7c3e49e 100644
-> --- a/lib/fault-inject.c
-> +++ b/lib/fault-inject.c
-> @@ -41,9 +41,6 @@ EXPORT_SYMBOL_GPL(setup_fault_attr);
->  
->  static void fail_dump(struct fault_attr *attr)
+> --- a/include/linux/serial_core.h
+> +++ b/include/linux/serial_core.h
+> @@ -743,9 +743,20 @@ static const bool earlycon_acpi_spcr_enable EARLYCON_USED_OR_UNUSED;
+>  static inline int setup_earlycon(char *buf) { return 0; }
+>  #endif
+>
+> -static inline bool uart_console_enabled(struct uart_port *port)
+> +/* Variant of uart_console_registered() when the console_list_lock is held. */
+> +static inline bool uart_console_registered_locked(struct uart_port *port)
 >  {
-> -	if (attr->no_warn)
-> -		return;
-> -
->  	if (attr->verbose > 0 && __ratelimit(&attr->ratelimit_state)) {
->  		printk(KERN_NOTICE "FAULT_INJECTION: forcing a failure.\n"
->  		       "name %pd, interval %lu, probability %lu, "
-> @@ -103,7 +100,7 @@ static inline bool fail_stacktrace(struct fault_attr *attr)
->   * http://www.nongnu.org/failmalloc/
->   */
->  
-> -bool should_fail(struct fault_attr *attr, ssize_t size)
-> +bool should_fail_ex(struct fault_attr *attr, ssize_t size, int flags)
->  {
->  	bool stack_checked = false;
->  
-> @@ -152,13 +149,20 @@ bool should_fail(struct fault_attr *attr, ssize_t size)
->  		return false;
->  
->  fail:
-> -	fail_dump(attr);
-> +	if (!(flags & FAULT_NOWARN))
-> +		fail_dump(attr);
->  
->  	if (atomic_read(&attr->times) != -1)
->  		atomic_dec_not_zero(&attr->times);
->  
->  	return true;
->  }
-> +EXPORT_SYMBOL_GPL(should_fail_ex);
-> +
-> +bool should_fail(struct fault_attr *attr, ssize_t size)
-> +{
-> +	return should_fail_ex(attr, size, 0);
+> -       return uart_console(port) && (port->cons->flags & CON_ENABLED);
+> +       return uart_console(port) && console_is_registered_locked(port->cons);
 > +}
->  EXPORT_SYMBOL_GPL(should_fail);
->  
->  #ifdef CONFIG_FAULT_INJECTION_DEBUG_FS
-> diff --git a/mm/failslab.c b/mm/failslab.c
-> index 58df9789f1d2..ffc420c0e767 100644
-> --- a/mm/failslab.c
-> +++ b/mm/failslab.c
-> @@ -16,6 +16,8 @@ static struct {
->  
->  bool __should_failslab(struct kmem_cache *s, gfp_t gfpflags)
->  {
-> +	int flags = 0;
 > +
->  	/* No fault-injection for bootstrap cache */
->  	if (unlikely(s == kmem_cache))
->  		return false;
-> @@ -30,10 +32,16 @@ bool __should_failslab(struct kmem_cache *s, gfp_t gfpflags)
->  	if (failslab.cache_filter && !(s->flags & SLAB_FAILSLAB))
->  		return false;
->  
-> +	/*
-> +	 * In some cases, it expects to specify __GFP_NOWARN
-> +	 * to avoid printing any information(not just a warning),
-> +	 * thus avoiding deadlocks. See commit 6b9dbedbe349 for
-> +	 * details.
-> +	 */
->  	if (gfpflags & __GFP_NOWARN)
-> -		failslab.attr.no_warn = true;
-> +		flags |= FAULT_NOWARN;
->  
-> -	return should_fail(&failslab.attr, s->object_size);
-> +	return should_fail_ex(&failslab.attr, s->object_size, flags);
->  }
->  
->  static int __init setup_failslab(char *str)
-> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> index 7192ded44ad0..cb6fe715d983 100644
-> --- a/mm/page_alloc.c
-> +++ b/mm/page_alloc.c
-> @@ -3902,6 +3902,8 @@ __setup("fail_page_alloc=", setup_fail_page_alloc);
->  
->  static bool __should_fail_alloc_page(gfp_t gfp_mask, unsigned int order)
->  {
-> +	int flags = 0;
+> +static inline bool uart_console_registered(struct uart_port *port)
+> +{
+> +       bool ret;
 > +
->  	if (order < fail_page_alloc.min_order)
->  		return false;
->  	if (gfp_mask & __GFP_NOFAIL)
-> @@ -3912,10 +3914,11 @@ static bool __should_fail_alloc_page(gfp_t gfp_mask, unsigned int order)
->  			(gfp_mask & __GFP_DIRECT_RECLAIM))
->  		return false;
->  
-> +	/* See comment in __should_failslab() */
->  	if (gfp_mask & __GFP_NOWARN)
-> -		fail_page_alloc.attr.no_warn = true;
-> +		flags |= FAULT_NOWARN;
->  
-> -	return should_fail(&fail_page_alloc.attr, 1 << order);
-> +	return should_fail_ex(&fail_page_alloc.attr, 1 << order, flags);
+> +       console_list_lock();
+> +       ret = uart_console_registered_locked(port);
+> +       console_list_unlock();
+> +       return ret;
+
+Perhaps
+
+    return uart_console(port) && console_is_registered();
+
+to avoid locking the list when the first condition is not true?
+
 >  }
->  
->  #ifdef CONFIG_FAULT_INJECTION_DEBUG_FS
+
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
