@@ -2,181 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D42A7620EFD
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 12:25:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BD0C620EC5
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 12:22:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234089AbiKHLZa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 06:25:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35768 "EHLO
+        id S233383AbiKHLWw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 06:22:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233517AbiKHLZA (ORCPT
+        with ESMTP id S233098AbiKHLWR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 06:25:00 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB2653207A;
-        Tue,  8 Nov 2022 03:24:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667906700; x=1699442700;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=bZWtWPh8AjDaSa0OzVSrWb7bd/MpGa9wkljck/k+riw=;
-  b=YOobgmPx3OSwZmIIbOP8gI+zi33HhP62I+Y1qguvqL7FfV0WQdRDhxsL
-   y0kY4PpmkScML6YRfd2XI/PFSBzfREHm9Etpjt5lz+67iYQc6vcurTaEq
-   PNSuM+18uJGkwQ1ziv1oMCjyHrgN6GSIEQ15jr34skLW79RMFwvGbOvbq
-   X6A7nrhdm1PFK1od619gkz5pW10PLaZ1oLCuMasgHVIyyuH2nmUmqQ4Ik
-   4UyX1FWHkTqHv1wRhseLfX83kEdZlGeGu5V+1VAWGPLVfIXR7fmnmPmCl
-   hT2XbkUZPfq78bhEos81/j9DO0VRBFuAHYMEn7ytwqLUZj5OYJgT3PpX7
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10524"; a="294040903"
-X-IronPort-AV: E=Sophos;i="5.96,147,1665471600"; 
-   d="scan'208";a="294040903"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2022 03:24:59 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10524"; a="965555581"
-X-IronPort-AV: E=Sophos;i="5.96,147,1665471600"; 
-   d="scan'208";a="965555581"
-Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by fmsmga005.fm.intel.com with ESMTP; 08 Nov 2022 03:24:56 -0800
-Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 2A8BOsMT010189;
-        Tue, 8 Nov 2022 11:24:54 GMT
-From:   Alexander Lobakin <alexandr.lobakin@intel.com>
-To:     Horatiu Vultur <horatiu.vultur@microchip.com>
-Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, ast@kernel.org,
-        daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
-        linux@armlinux.org.uk
-Subject: Re: [PATCH net-next v2 2/4] net: lan966x: Split function lan966x_fdma_rx_get_frame
-Date:   Tue,  8 Nov 2022 12:21:46 +0100
-Message-Id: <20221108112146.605140-1-alexandr.lobakin@intel.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221107212415.pwkdyyrdlbndb7ob@soft-dev3-1>
-References: <20221106211154.3225784-1-horatiu.vultur@microchip.com> <20221106211154.3225784-3-horatiu.vultur@microchip.com> <20221107160656.556195-1-alexandr.lobakin@intel.com> <20221107212415.pwkdyyrdlbndb7ob@soft-dev3-1>
+        Tue, 8 Nov 2022 06:22:17 -0500
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A79D44C26E
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 03:22:11 -0800 (PST)
+Received: by mail-lf1-x12a.google.com with SMTP id c1so19130661lfi.7
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 03:22:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=6S31b1GgAuSZeRVi3aE6k9Lv1kYy2JgOJdueU/WrfPk=;
+        b=FQVTX03+/jYDhFiJtnC4PlzY3j6O7eqRrURGbxCj9uxURjFPxqXVMZP/7fLhWbImBm
+         JdC6fC+nWdrCet4LQal83kXfuzLLawXKFxu/oLYv8Kh2r6x559FfrsvfHjCmy2lBT2pa
+         QV3OVJL19Mn4gyrzkg6t6afH5exahrLMKp49Zciw9Ta4DwOEluePqPBp/VNPXU+77weK
+         lmit955EmN4VKHGupVAVSjMQxm/PKGzojOJMymAfU8+zG2QjMYaXztogXBUZ6oJAEr9X
+         BXxZOLcPkDq8/wEIfmqbcQ9xMX56E55y+wwH5Tx8zJ331BBicVaEbuCsdYGaIZWrHAOU
+         7t/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=6S31b1GgAuSZeRVi3aE6k9Lv1kYy2JgOJdueU/WrfPk=;
+        b=xYWZfdAoTV7tLtNDj2Yt720uubQzy5+c7/VxXGVUs9mVXKsIpH137nyg9stf+7WqrP
+         09z7gDT+wt1McvWAiRT+txKtH6W8uyCQGjqLn2/gXOxUBKlif96tYhTOO5UtNofhAWpJ
+         DbfRKrfNA3XTQvenfVYA3mDU7GVcLGkC79QdhA3s/OEwtrKLvCZjZMQSgXwngwshmd4p
+         4Lh+PSC56XyvX9Y54gbv2gHtka+WE4CdtRWBvYDZtkuIGxtedqqHlxI11X6T8n89m2pG
+         KLVHA8FtQuMTU4lYaA/y30dqX5ZpL3RCyI4561RXofBWVRTGOD82w1ECQGXgVxBTAFzA
+         qJ8g==
+X-Gm-Message-State: ANoB5pl20GJRXLicWooknz16KY5Wi8+Iuyc5XR3bTS6yxjgNG8xcvNKv
+        loN7w92ETD7yitokd6CMJwpbFA==
+X-Google-Smtp-Source: AA0mqf71iUpqb4+BI/4RUZw1laBPRBQU7iqH2g/sTobl9bST23hwOoH26omyo1cgyvEyZZV9JTdQ2Q==
+X-Received: by 2002:ac2:43b0:0:b0:4b2:805:f5cb with SMTP id t16-20020ac243b0000000b004b20805f5cbmr5885841lfl.204.1667906530035;
+        Tue, 08 Nov 2022 03:22:10 -0800 (PST)
+Received: from [192.168.0.20] (088156142199.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.199])
+        by smtp.gmail.com with ESMTPSA id q7-20020ac25107000000b004b40c2fccfdsm221399lfb.59.2022.11.08.03.22.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Nov 2022 03:22:09 -0800 (PST)
+Message-ID: <95f588d2-04f3-0be6-ebce-cb6957f5aa1a@linaro.org>
+Date:   Tue, 8 Nov 2022 12:22:08 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v1 3/6] dt-bindings: hwmon: Add hpe,gxp-fan-ctrl
+Content-Language: en-US
+To:     "Hawkins, Nick" <nick.hawkins@hpe.com>,
+        "jdelvare@suse.com" <jdelvare@suse.com>,
+        "linux@roeck-us.net" <linux@roeck-us.net>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "Verdun, Jean-Marie" <verdun@hpe.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+References: <20221104193657.105130-1-nick.hawkins@hpe.com>
+ <20221104193657.105130-4-nick.hawkins@hpe.com>
+ <1b90f86c-9c0f-225b-38b5-6f37a4eded69@linaro.org>
+ <236F9C0A-797D-41C6-B342-4C32DF28C426@hpe.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <236F9C0A-797D-41C6-B342-4C32DF28C426@hpe.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Horatiu Vultur <horatiu.vultur@microchip.com>
-Date: Mon, 7 Nov 2022 22:24:15 +0100
-
-> The 11/07/2022 17:06, Alexander Lobakin wrote:
+On 07/11/2022 23:36, Hawkins, Nick wrote:
 > 
-> Hi Olek,
-
-Hey,
-
+>     > > This provides the base registers address, programmable logic registers
+>     > > address, and the function 2 registers to allow control access of the HPE
+>     > > fans on the GXP SoC.
 > 
-> > 
-> > From: Horatiu Vultur <horatiu.vultur@microchip.com>
-> > Date: Sun, 6 Nov 2022 22:11:52 +0100
-> > 
-> > > The function lan966x_fdma_rx_get_frame was unmapping the frame from
-> > > device and check also if the frame was received on a valid port. And
-> > > only after that it tried to generate the skb.
-> > > Move this check in a different function, in preparation for xdp
-> > > support. Such that xdp to be added here and the
-> > > lan966x_fdma_rx_get_frame to be used only when giving the skb to upper
-> > > layers.
-
-[...]
-
-> > > +     lan966x_ifh_get_src_port(page_address(page), src_port);
-> > > +     if (WARN_ON(*src_port >= lan966x->num_phys_ports))
-> > > +             return FDMA_ERROR;
-> > > +
-> > > +     return FDMA_PASS;
-> > 
-> > How about making this function return s64, which would be "src_port
-> > or negative error", and dropping the second argument @src_port (the
-> > example of calling it below)?
+>     > What is "This"? If "This patch", then drop it.
+>     > https://elixir.bootlin.com/linux/v5.17.1/source/Documentation/process/submitting-patches.rst#L95
 > 
-> That was also my first thought.
-> But the thing is, I am also adding FDMA_DROP in the next patch of this
-> series(3/4). And I am planning to add also FDMA_TX and FDMA_REDIRECT in
-> a next patch series.
-
-Yeah, I was reviewing the patches one by one and found out you're
-adding more return values later :S
-
-> Should they(FDMA_DROP, FDMA_TX, FDMA_REDIRECT) also be some negative
-> numbers? And then have something like you proposed belowed:
-> ---
-> src_port = lan966x_fdma_rx_check_frame(rx);
-> if (unlikely(src_port < 0)) {
+>     > If "This hardware" then please instead describe the hardware, not it
+>     components. What are its features? If it controls the fan, then why
+>     there are no PWM-related cells? How do you set the speed?
 > 
->         switch(src_port) {
->         case FDMA_ERROR:
->              ...
->              goto allocate_new
->         case FDMA_DROP:
->              ...
->              continue;
->         case FDMA_TX:
->         case FDMA_REDIRECT:
->         }
-
-It's okay to make them negative, but I wouldn't place them under
-`unlikely`. It could be something like:
-
-	src_port = lan966x_fdma_rx_check_frame(rx);
-	if (unlikely(src_port == FDMA_ERROR))
-		goto allocate_new;
-
-	switch (src_port) {
-	case 0 ... S64_MAX:
-		// do PASS;
-		break;
-	case FDMA_TX:
-		// do TX;
-		break;
-	case FDMA_REDIRECT:
-	// and so on
-	}
-
-where
-
-enum {
-	FDMA_ERROR = -1, // only this one is "unlikely"
-	FDMA_TX = -2,
-	...
-};
-
-It's all just personal taste, so up to you :) Making
-rx_check_frame() writing src_port to a pointer is fine as well.
-
-> }
-> ---
+> Greetings Krzysztof,
 > 
-> > 
-> > > +}
-> > > +
-> > > +static struct sk_buff *lan966x_fdma_rx_get_frame(struct lan966x_rx *rx,
-> > > +                                              u64 src_port)
-> > > +{
+>     Thank you for the feedback. The intention was this binding.. however, that was an error on my part, and I will correct it to reflect the hardware situation of the GXP with the fan controller and how each of the mapped registers provide control to the system. To answer your questions: The fans speeds are controlled through an external CPLD device which we provide a PWM value (0-255) using the "base" register to the CIF interface. 
 
-[...]
+Wrap your emails, it's impossible to simply reply to it.
 
-> > > --
-> > > 2.38.0
-> > 
-> > Thanks,
-> > Olek
+Then your CIF interface is a PWM device?
+
+
+> This interface provides access to the CPLD. The CPLD then drives the fan. The CPLD can generate up to 8 unique different PWMs to multiple fans. 
+
+So you have other CPLD (not external) which generates PWM based on first
+CPLD base register? Hm, I think it's one CPLD.
+
+> The CPLD monitors the fans and reports the status back to the SoC through the CIF interface to the "plreg base". The plreg includes the installation, failed, and identification statuses. The function 2 register base is used to check the power state of the system as that influences the PWM values read back.
+
+> As the PWM generation happens outside the SoC do we still need pwm-cells? If so, should we have a custom compatible for that?
 > 
-> -- 
-> /Horatiu
 
-Thanks,
-Olek
+Depends, if these are actually tightly coupled and you cannot use PWM
+for anything else, then you do not need.
+
+> Thanks,
+> 
+> -Nick
+> 
+> 
+
+Best regards,
+Krzysztof
+
