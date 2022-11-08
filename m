@@ -2,94 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC353621FFC
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 00:05:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7E5B622004
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 00:05:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229660AbiKHXFW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 18:05:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50186 "EHLO
+        id S230046AbiKHXFn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 18:05:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229499AbiKHXFU (ORCPT
+        with ESMTP id S229951AbiKHXFe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 18:05:20 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F83163140;
-        Tue,  8 Nov 2022 15:05:20 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id h14so15127048pjv.4;
-        Tue, 08 Nov 2022 15:05:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Gcur06YXVkpMCUTbS1b/OnVOrutrgJBtjqG3uOLRXak=;
-        b=Kq4NEanaCGU52P7s3v3jGRzbSfwCAVDjno72X8vKFdqCzVRZrgtjrUA870eQKayPeh
-         M4zl2U8Rn0ov/0D01FgYWSkWBXu5b1SvtNxG5wZ1BzKIOB/W/c9p7LeRcyYfdMM+i8ZF
-         7gdDUY5kMhf7HA+BPFwsuQJaNsaEb9q7IDB7GJfY7wh5TEhBtLrfs9VG5KpEn41+lWl6
-         HGcyXKv27IGU2/TZyQOrV83e0fAxVtgvSFv8/s8rn0hUypZHyHdH0TM9rOAyzHegSEWF
-         2KktVwcvAFzF7MXDvAcVLplnS4jawB/BCrd97ticupTb0U1lypXrCfh3lSbpXXPm+rNz
-         y1Pw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Gcur06YXVkpMCUTbS1b/OnVOrutrgJBtjqG3uOLRXak=;
-        b=AZyzsk9dh0+X98m/CbZ0Noc/fEcElPWI5xKPuFERDEdacRhuAbFLi7WchNXShQXWp2
-         4zn0wPM1rhQefl3X5DUpl/+KBEBm6eil+uAdf9T3+zd9VylkSj/Y2HBjCG57X5fg80WD
-         xu9AnI4tSVn/cMe/iq/nUYVOHhlOhLe0MDuYdnOzpjZEbDqoev4KXkN8vDuUbYqZvLjC
-         Np/EAwX9rNP9Q4ybRT4GSKzuGOeCb0q1vkADCnfWO6c8e6WRqK10DALgh8vECVxYinwu
-         Lk2MTru30Fyrjb9Vf8FYXD52W+djAy5bzPjKuwReMvM8Ypt41uD8r9rzMVRhuCmh6vm/
-         HyAg==
-X-Gm-Message-State: ACrzQf3NuowA9nZ29kO7oJbnIv35utMgoQdXVKf6nfLNoN1XevOVyUK5
-        9eekk03ezjiC4UFJmph+B2npJyXg2YRvryNpnxQ+Qk6XFZk=
-X-Google-Smtp-Source: AMsMyM7SqemD9JPp8GWfXJpXFIGp1dsxWi8Tw+x49gjJjHiIH4LM61lJcXMaFVFEWLwJYXtbpuclxFRPJUxYWxskNEw=
-X-Received: by 2002:a17:903:1211:b0:178:a692:b1e3 with SMTP id
- l17-20020a170903121100b00178a692b1e3mr60279037plh.48.1667948719734; Tue, 08
- Nov 2022 15:05:19 -0800 (PST)
+        Tue, 8 Nov 2022 18:05:34 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE61464A24;
+        Tue,  8 Nov 2022 15:05:33 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6DF80B81CAB;
+        Tue,  8 Nov 2022 23:05:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B438C433B5;
+        Tue,  8 Nov 2022 23:05:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667948731;
+        bh=RBLgHBB0Z3W4Iw18n+o0/QOG1f2tnCKMfYYaH7jkj5w=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=dlEmXrcMPbRbe/ejLgWCGuZYEdN5+BzhVdEgBqTnyEFcJZEC3qBZKrz9TSUcsJtWp
+         ohTRXgXqws+b0TPDebnTHVR2HS5qbPIA4pZw6wQvtiZYa4cR4OQliZneH4ISeQx9S/
+         7lcdiMi9DhUxUoBgSqpXH9PBOeki/JsJEWECl76yZWI2/wOsHdZxFdjtIAINFvVVhQ
+         qAYN1XBb+Jbu6s0AqqFtDX7Xxx1rcCcBxHw7bmShnWLy4D+a0eFMTdLbO+yPdIdttB
+         pg6DGnEYo5/U8h3zpITxXE7Gj/u/TPGSTI9fIAGK80NK6SavCJm2qo+bN63z+oMWFy
+         ctoevZsKQPbRw==
+Date:   Tue, 8 Nov 2022 15:05:29 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Leon Romanovsky <leon@kernel.org>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Paolo Abeni <pabeni@redhat.com>, edumazet@google.com,
+        longli@microsoft.com, "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>, shiraz.saleem@intel.com,
+        Ajay Sharma <sharmaajay@microsoft.com>,
+        linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org
+Subject: Re: [Patch v10 00/12] Introduce Microsoft Azure Network Adapter
+ (MANA) RDMA driver
+Message-ID: <20221108150529.764b5ab8@kernel.org>
+In-Reply-To: <Y2qqq9/N65tfYyP0@unreal>
+References: <1667502990-2559-1-git-send-email-longli@linuxonhyperv.com>
+        <Y2qqq9/N65tfYyP0@unreal>
 MIME-Version: 1.0
-References: <20221108133354.787209461@linuxfoundation.org>
-In-Reply-To: <20221108133354.787209461@linuxfoundation.org>
-From:   Allen Pais <stable.kernel.dev@gmail.com>
-Date:   Tue, 8 Nov 2022 15:05:08 -0800
-Message-ID: <CAJq+SaCAUWM=ErYEesXQ5PNSsy6AxJWUpHhKcN0MH5X92azxEw@mail.gmail.com>
-Subject: Re: [PATCH 6.0 000/197] 6.0.8-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> This is the start of the stable review cycle for the 6.0.8 release.
-> There are 197 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Thu, 10 Nov 2022 13:33:17 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.0.8-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.0.y
-> and the diffstat can be found below.
->
+On Tue, 8 Nov 2022 21:14:51 +0200 Leon Romanovsky wrote:
+> Can you please ACK/comment on eth part of this series? And how should
+> we proceed? Should we take this driver through shared branch or apply
+> directly to RDMA tree?
 
-
-Compiled and booted on my x86_64 and ARM64 test systems. No errors or
-regressions.
-
-Tested-by: Allen Pais <apais@linux.microsoft.com>
-
-Thanks.
+LGTM. Is it possible to get patches 1-11 thry a shared branch and then
+you can apply 12 directly to RDMA? That seems optimal to me.
