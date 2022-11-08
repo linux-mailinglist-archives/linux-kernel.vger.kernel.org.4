@@ -2,234 +2,278 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42C54620B9B
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 09:57:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77DCC620BA2
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 09:58:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233670AbiKHI5M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 03:57:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55732 "EHLO
+        id S233687AbiKHI6X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 03:58:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233397AbiKHI5J (ORCPT
+        with ESMTP id S233397AbiKHI6T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 03:57:09 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBC852F646;
-        Tue,  8 Nov 2022 00:57:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667897827; x=1699433827;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=DnY4GI4ctszLsVyKYIzppkno7Bey8nguHWmA/kMLyHw=;
-  b=DnrZ40FLZNp4HpAOUhYdGvXO856o+JOn8VvgUs8Gm3UVoSohheiIIdmm
-   WynVzysj7QeZT9cTgRATmJCpCicDboVEyrfsuQny0G5M0UiZBiBgQTXVP
-   NxGeUG6O46nV93bt+kBVtn2w5T9Y1f4FXx0xGxDBWYalT2LOE54Qg9q7V
-   ZryMEEhN/ClzDtYmfpRxESUIz+FMjVzcCrNNe2+a7QhNEjmwwJXEcyko/
-   5VuaIxToeMoGDiKeDodCVXruzjPkTaUvSKUw0qBzFMgy11GEPw/KjQtWX
-   DYhM8FF9qBMUu5vOp3dn83FJfNzHi6xKyMggEkFJdnmapkINL/c52hDxX
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10524"; a="309354310"
-X-IronPort-AV: E=Sophos;i="5.96,147,1665471600"; 
-   d="scan'208";a="309354310"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2022 00:57:06 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10524"; a="965511553"
-X-IronPort-AV: E=Sophos;i="5.96,147,1665471600"; 
-   d="scan'208";a="965511553"
-Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
-  by fmsmga005.fm.intel.com with ESMTP; 08 Nov 2022 00:57:06 -0800
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 8 Nov 2022 00:57:05 -0800
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Tue, 8 Nov 2022 00:57:05 -0800
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.105)
- by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Tue, 8 Nov 2022 00:57:05 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DZ4VpC3xHD5YXm+1/4TWyZLRZz6g1OZ1GoaUKaDFinx4hoFhI1wg1oivcgcsLOH/NbPIxRBNfwHDz1ufiIBVxDowSgbERVipkGl03tPCaJ4QsDQua9MZ6q4c3vzRVFT20Qwlku+s4TTAZQeighcKbzgCzPDIyJFuzVlQWPJ++QZUOXhysITneIVaBgJW3FzgJk7zca6OQqx05p6c2+xAmvCWRZos7Dj8UVGADggvnqV3K2KrmQqSJiCIGILDnX3+jhlz2zZ/8G9MLyNT3Wr6qKqfLolm98JPhYKFsuJcrwiXNN0cFscpjpQ+vfKXoTVwBbgiPBpIUUIRzLSlFwmGhQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=DnY4GI4ctszLsVyKYIzppkno7Bey8nguHWmA/kMLyHw=;
- b=E5xosGtt2mMZNgjxHHH54sQ3F/w8nHfcXgRPO0VVAPgvlJ7MoVyXMp09wBEgmLTdAFevaOYnJfBZcrkxQlDVzziEKeTUs5hJCq00KLouTJaWxSlAHWRvF9pSCOvXumkVxH5DB+QUzR2lFiRyH7aMrzLjuIrMFnESFdLZRvvMl3poYxOTUGbvvIjEh8/qqVB+ePFr3A1R89TIE994i5ci/SoBnB2T3/P67jaFuVDJtgvAOtvD52k3g95u5YRPQQWfR3BJ3zP+q6aFVI8CGa1DvFYKRfk48Ev6TmVwj40JVGkphmszvw4VEYeyou0XIcuybYXivO3WpVorm9a+2NunoQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BL1PR11MB5978.namprd11.prod.outlook.com (2603:10b6:208:385::18)
- by CO6PR11MB5651.namprd11.prod.outlook.com (2603:10b6:5:356::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.25; Tue, 8 Nov
- 2022 08:56:58 +0000
-Received: from BL1PR11MB5978.namprd11.prod.outlook.com
- ([fe80::6eb:99bf:5c45:a94b]) by BL1PR11MB5978.namprd11.prod.outlook.com
- ([fe80::6eb:99bf:5c45:a94b%3]) with mapi id 15.20.5791.026; Tue, 8 Nov 2022
- 08:56:58 +0000
-From:   "Huang, Kai" <kai.huang@intel.com>
-To:     "isaku.yamahata@gmail.com" <isaku.yamahata@gmail.com>
-CC:     "borntraeger@linux.ibm.com" <borntraeger@linux.ibm.com>,
-        "Yao, Yuan" <yuan.yao@intel.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "kvm-riscv@lists.infradead.org" <kvm-riscv@lists.infradead.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
-        "suzuki.poulose@arm.com" <suzuki.poulose@arm.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "david@redhat.com" <david@redhat.com>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
-        "oliver.upton@linux.dev" <oliver.upton@linux.dev>,
-        "farosas@linux.ibm.com" <farosas@linux.ibm.com>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "palmer@dabbelt.com" <palmer@dabbelt.com>,
-        "chenhuacai@kernel.org" <chenhuacai@kernel.org>,
-        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
-        "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
-        "alexandru.elisei@arm.com" <alexandru.elisei@arm.com>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        "vkuznets@redhat.com" <vkuznets@redhat.com>,
-        "maz@kernel.org" <maz@kernel.org>,
-        "anup@brainfault.org" <anup@brainfault.org>,
-        "frankja@linux.ibm.com" <frankja@linux.ibm.com>,
-        "farman@linux.ibm.com" <farman@linux.ibm.com>,
-        "james.morse@arm.com" <james.morse@arm.com>,
-        "kvmarm@lists.cs.columbia.edu" <kvmarm@lists.cs.columbia.edu>,
-        "aleksandar.qemu.devel@gmail.com" <aleksandar.qemu.devel@gmail.com>,
-        "paul.walmsley@sifive.com" <paul.walmsley@sifive.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "atishp@atishpatra.org" <atishp@atishpatra.org>,
-        "imbrenda@linux.ibm.com" <imbrenda@linux.ibm.com>,
-        "Gao, Chao" <chao.gao@intel.com>
-Subject: Re: [PATCH 00/44] KVM: Rework kvm_init() and hardware enabling
-Thread-Topic: [PATCH 00/44] KVM: Rework kvm_init() and hardware enabling
-Thread-Index: AQHY7xGUTp4lUVPML0yWgaOmsA79Vq4uXPOAgADckACABM0oAIAAOK8AgABMrwCAADXwgA==
-Date:   Tue, 8 Nov 2022 08:56:58 +0000
-Message-ID: <9890f67846f1c2c6a12bd086fc822f0762966223.camel@intel.com>
-References: <20221102231911.3107438-1-seanjc@google.com>
-         <20221104071749.GC1063309@ls.amr.corp.intel.com>
-         <Y2V1oslbw24/2Opd@google.com>
-         <20221107214634.GE1063309@ls.amr.corp.intel.com>
-         <bf29fe1ac84cae8ddb06e566b56c653600a1901c.camel@intel.com>
-         <20221108054354.GA1708572@ls.amr.corp.intel.com>
-In-Reply-To: <20221108054354.GA1708572@ls.amr.corp.intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Evolution 3.44.4 (3.44.4-2.fc36) 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BL1PR11MB5978:EE_|CO6PR11MB5651:EE_
-x-ms-office365-filtering-correlation-id: c7ea250f-9f74-4ffc-8590-08dac1673194
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: z8nILbfukv/920VsX9+cBmYnKv1pe5rhWpxDdbeHsz2bdBNnYR8XEUMbCMol3xC1PvdRMOCi9DRl3JV46wzn5El+0J1Ks9sgAXGwaKpyidPeiPswCDk2efKhLHFjStJro2F3ruM4H6PFpRIensyqYYKhXgxETtbOqais72q1CrqmXTZoUIK6WC9m8PmiYbU2hBUM6MgbHkpxH00thDxr+chaMyN54JSVxjWKGUx88ja0xs8R8a59Dqj9De8uzSt4LX2fB7sbWmi5FaTjL8FeSwEDiZt2g7dBDA2rZ7GqzfrX1WyfL5wS7xVAZZbSHQtf8w7GaTq8+Kr9bXb8NbZ7279GS3PNUxhTVj75BHLOEvnOGXnTkWcv69DR2WIofuRLkIHxcle07Lddw4AL5Mzgw1PUzIQ42PLoNHUXu+7R0tGMpCwHHC9lPB89w2zsP11rhZ9s0uGHBYuyXAmYWQ7AweebaFNTJ4CsEb7D0SLmqbXAsRej1FpJgdAizKUKIH7P6eyJufBCdj5ihdjB6pYUGaC8cc3ahwO2fUzOH2sVVD3310YZ3UI79Cehqppc6bvjNeFsJtm8aw9J/byEcezH0vJnzHvL0rRdv27QeYJ72e8QDdxFsV1R/kmaWJg9VrUryY8JaEUIxtnMqWJIDETR6xEIbuuiNbWLm5V6HxdqTh2SM46JVZix+2g/u63GwetXhnKPKeXMF7MULkOqonPkKKE8bJb7EcZCoZnMxSt3fa61T40ZNuEFJN98LBJm3/TJ
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR11MB5978.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(366004)(396003)(136003)(376002)(39860400002)(346002)(451199015)(2906002)(66946007)(478600001)(64756008)(8676002)(76116006)(66556008)(66476007)(8936002)(41300700001)(6486002)(7416002)(71200400001)(6512007)(7406005)(5660300002)(6916009)(4326008)(91956017)(66446008)(83380400001)(38070700005)(316002)(122000001)(82960400001)(86362001)(6506007)(107886003)(2616005)(38100700002)(26005)(54906003)(186003)(36756003);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?QUNlWDZLWk9USzhQaDBCNm01RDhLV2YvYllqRGo1dFk3bDR1ckpEUkNmbVBx?=
- =?utf-8?B?QlBoaFVqelBReGRVNzV0TXp6R2hJZmN3cWZKdjJOcVBNU0RDeFBoMEFLZnBt?=
- =?utf-8?B?bjVxeS9lWFZIOThWRWxrRVZBck1mSGl4V1o2WGRpcWVzTzVHZU00YnNUYkIr?=
- =?utf-8?B?bmIzQkZVMEhqU2o2Tnhnc2ladXpocUJPZVAxdWgrVDIrVGx3Q3E5dmNNVjhu?=
- =?utf-8?B?djA1TVlPbkgwR1pkSmo3d09aWkt6Q1RZWUY0cjlac2QrWlAvQUk3OFVGVm5w?=
- =?utf-8?B?dFcxVTRJWWRpSWVSSGhBNjY3VUhTQjZrNDZ4U3FkSUF6ZVQ0ZnJzaDVaNlY4?=
- =?utf-8?B?Q2tScUdPME1sdm9IR1VPQlV6OHpwNFczcC8rL0E4WldKMnRXWEROaWNRdW1K?=
- =?utf-8?B?cHlacGNkVWEwaFNwa0FlcklBVm93MmRWOUlTSDZKKzhJcjQ2eWkrRGZVTkcv?=
- =?utf-8?B?TlgzK3k2STZwb3BzMHc4ZUJiU1U2TkdaUWgyREFteGVFWmFqYUJ2V1BWU3BO?=
- =?utf-8?B?TVhFSWRIVm5jelFWVDJSZm0vSGVFcEJRamVUM3lIdzRPdGZZNCtDa29YaUlp?=
- =?utf-8?B?VWxsV0dYRlVud1o5aTdMcVI4TWo2aUtPWk5HVzRXdkZIVlcweWRVNlZmL2Ix?=
- =?utf-8?B?QXNycmVpQlJiOUJWZTllV1RINTZ5OGRkMUt5NWNzMkVvZUJpdm9rUlpwZkZ1?=
- =?utf-8?B?by9uaTZ6a1ZRVEFBa3J3M1UyZ0V3UmNlUTlqS2VxSzZjcFBoZVljbWtYM3Vn?=
- =?utf-8?B?Z3B4QzZIZnVRTFJqMFg0SzNKdW5abjE1YWNodjNvbERXc3lSNFFSTlA3VFdR?=
- =?utf-8?B?bFBybWVVQ3lSNE1vSlVBcmpKOXNpWkk0T0s3dEUvY20wTldUa2tKSWx0VEdK?=
- =?utf-8?B?M2VGY0lFZXJnZXo0ekFseFdUREFzM1RVZVRBVERhWkt3REhIQVRtZmZLN3E0?=
- =?utf-8?B?RyswajF3MjZkWFdBYzY5ZzhDS0ZaSXlEeDBweUZJMDkrU0JTQUlUNVJGNCt3?=
- =?utf-8?B?UVR6dzBxQWRTd1dhdVY4WjU3ekVwRHBaR2VRQU9WeUErSGJRd3NCemM1K08v?=
- =?utf-8?B?NGlqemFuTWpENFdyODlBUi8xTmlNbFU5QkxhSXBlNm1scTFFQzdBTHFYUnI1?=
- =?utf-8?B?WVVZa0RvVVR1LzE2ck40RHl0RkVQQUhnbUtLdHlDMVVZdy9LSUFQMzZ5UnlH?=
- =?utf-8?B?QzFWZzRQMEVZU3drUWM5alFJOVJnVTZ5a0Z5dUpRYmxKVFM2K3AwTm5iMnJH?=
- =?utf-8?B?REZtRWdqbzJEN3MwRnlMbUg3Ymh3TGlINzRtVUlSM3BkTkxOdnhUWWpXRU5L?=
- =?utf-8?B?cVhDTE9EWlRvcmNJY24zdFlBamF6cDZPN2tTZThVTnNZcHZXc2lWeXN0MGY4?=
- =?utf-8?B?STZJQU9vMWxzK3I0VGtCL2xOYm9rTUZDL3ZsYWhKT3VDbGZOSE1JUTVNQjV2?=
- =?utf-8?B?bnR3OCt2dmNJNHQzelB1WDVZSDVTUmttRXNjSGlyK2s4T3ZZRDZkdlpoZzgr?=
- =?utf-8?B?Tnp1d0RSVUt4VjNrR2Jyemk4NUgzTjdZaUZLRzd4b0l4bVVTdktNWUZlc0pH?=
- =?utf-8?B?Tjc3dWJZVmxFb29GRFVHNjlXZ3lNL2QwbnY0WWN1Rkd6RU9kMkdzeng3MEEx?=
- =?utf-8?B?V1FJT3ZZeEtjL0hFQklWdUtaa0ExWU5yUlZvbmEwT2lmWDVGblZJbEQ3cFo4?=
- =?utf-8?B?ejU4RzdURlYwUXlWR3RCSTUzRHpOcGd0cmFNSUhwNGpoQ2ZOMkR5YmJqalJi?=
- =?utf-8?B?bU8wKzZ5aGNxRGtPRjIrdWprNGpOYlMwK1NENjZDa1V2aUdlRTFoa3I0SnN6?=
- =?utf-8?B?RjNMR0ZXQUhxR1Noa3BPL2lxZ3JXU01oelJBMjNsaVZBRWg2cDNRMUJDdk5M?=
- =?utf-8?B?dVJGM1plSDlya1RCbjRwQWNwalFGRDhOdEVtMkRyb2FsM2daYnZQRXR5TjQv?=
- =?utf-8?B?dElTZ3EzNzNmQzJIRlVLTGVuRHVSOTNnS2VSTkxISEJwSGVJSzJHaTd3c1pC?=
- =?utf-8?B?TDkwWVkwd1lyQ1VxT2dEMFVBL0JlVTh4SmVxaVFYSzV4dWhieDhWbHlSOWZP?=
- =?utf-8?B?TXozeUliVWtFenRFYUhWbDArcjdVbFZldTlUcjR6VEl6T01DdTZsd0NwV2xW?=
- =?utf-8?B?bnQ0RnU2VnRIMWprL2xsSVVycG1KYytIMllWekI1TkhSK2lUVENxNks5Z2gw?=
- =?utf-8?B?clE9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <343C7E70FD73E4469ABC157AAE8098A5@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Tue, 8 Nov 2022 03:58:19 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FB742F390
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 00:58:17 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id m14-20020a17090a3f8e00b00212dab39bcdso17340912pjc.0
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 00:58:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=R6zHKniDXHG6psc3MbF8qS0f79e5oPRG+XQe4V39iSs=;
+        b=jS3wKBZTZZjWrd+5/yh1fiJS8luDkuQZXwWeJsuFlhHPl01Cvyz5APoOukAAgI5lxs
+         DkuHUcU++n7RPoCR5ixF17Im6S/TU67bUB+ba16tg6x/NoNaOTJ1SB31OKfd2PYfxJxX
+         StTJ82K9eSLLCd3Zi4k04h9KiqqqZP4IfuOuiyGsu+MUaid2q6g0+c4mp+GJ44jcPi6d
+         TraPOjlIKGIttFjOk5l+4uO3IyflnI/bZZRxUAplwf5M3iRBdYyIzZXOmrKXxS5kByne
+         2icF1Hr+B+aXrBoF3AuPwMePm8XLFYRovOQACqLd1rDjzjyirYzLyhXhWl73y0fX72nu
+         qAJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=R6zHKniDXHG6psc3MbF8qS0f79e5oPRG+XQe4V39iSs=;
+        b=SSpdhNBdNIbfT0irsr0KkNk7YAs5aGeiCMpGE6qnluCK5O54TjB5zAhrY9YNR9/4mM
+         VATjV4M/25VFP3M/289PoEW8Ib3I0QNp4ds6mtkzLN9ZaN6voEWdrxFJaa6BPw9MRMLg
+         6Hf0fQaEmhSi60w/nC6neMfK6IS4Egc1WWfTmQiKaiSs/fuo/oCDHaL6uR5lBzC50RPH
+         bD0UlZgKJB1RDd1/SBs9keMVuERVDll/K/vyr8m1M00tXzrz0SjlEqIrI+kMCDv62aVL
+         tS2LmuTOqeUyh6EKJ+nY3cxOMOyDMWoUovG9XS3dXl7lGCrxAUrMw4ODDgrHlE6dyN6z
+         GIvA==
+X-Gm-Message-State: ACrzQf2w6oOb21Aqm8mvcKDCCgEQtnSTxrvmRDvvv9WI1mr2o5Ob7UaV
+        izCzb253djgv+11gBwzE0aotig==
+X-Google-Smtp-Source: AMsMyM6r+usVnhZ3DbQ0cit9SiOGzAR3uWWMZHRWXcqL1ZL/jpn3eb4zm7GKPG327wPwDjQuXvKb6g==
+X-Received: by 2002:a17:90b:3504:b0:214:199e:7e6d with SMTP id ls4-20020a17090b350400b00214199e7e6dmr38032578pjb.192.1667897896983;
+        Tue, 08 Nov 2022 00:58:16 -0800 (PST)
+Received: from [10.255.93.192] ([139.177.225.251])
+        by smtp.gmail.com with ESMTPSA id k21-20020a628415000000b0056bb06ce1cfsm6044022pfd.97.2022.11.08.00.58.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Nov 2022 00:58:16 -0800 (PST)
+Message-ID: <70dfbac1-4c84-9567-30be-1e2594157e62@bytedance.com>
+Date:   Tue, 8 Nov 2022 16:58:04 +0800
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BL1PR11MB5978.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c7ea250f-9f74-4ffc-8590-08dac1673194
-X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Nov 2022 08:56:58.3487
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 2EoLGI5I2s7IBJ7vuf8qI4LOuhPlDlK4Gw8r59e1QyEl68UA007LGgukLW24AJNbiYINjkB8n2c+UY4WaliWqg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO6PR11MB5651
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.3.3
+Subject: Re: [PATCH v2] mm: fix unexpected changes to
+ {failslab|fail_page_alloc}.attr
+Content-Language: en-US
+To:     Wei Yongjun <weiyongjun1@huawei.com>, dvyukov@google.com,
+        jgg@nvidia.com, willy@infradead.org, akinobu.mita@gmail.com
+Cc:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        stable@vger.kernel.org
+References: <Y2kxrerISWIxQsFO@nvidia.com>
+ <20221108035232.87180-1-zhengqi.arch@bytedance.com>
+ <65863340-b32f-a2fe-67ae-f1079b19eee4@huawei.com>
+From:   Qi Zheng <zhengqi.arch@bytedance.com>
+In-Reply-To: <65863340-b32f-a2fe-67ae-f1079b19eee4@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gTW9uLCAyMDIyLTExLTA3IGF0IDIxOjQzIC0wODAwLCBJc2FrdSBZYW1haGF0YSB3cm90ZToN
-Cj4gT24gVHVlLCBOb3YgMDgsIDIwMjIgYXQgMDE6MDk6MjdBTSArMDAwMCwNCj4gIkh1YW5nLCBL
-YWkiIDxrYWkuaHVhbmdAaW50ZWwuY29tPiB3cm90ZToNCj4gDQo+ID4gT24gTW9uLCAyMDIyLTEx
-LTA3IGF0IDEzOjQ2IC0wODAwLCBJc2FrdSBZYW1haGF0YSB3cm90ZToNCj4gPiA+ID4gT24gRnJp
-LCBOb3YgMDQsIDIwMjIsIElzYWt1IFlhbWFoYXRhIHdyb3RlOg0KPiA+ID4gPiA+IFRoYW5rcyBm
-b3IgdGhlIHBhdGNoIHNlcmllcy4gSSB0aGUgcmViYXNlZCBURFggS1ZNIHBhdGNoIHNlcmllcyBh
-bmQgaXQNCj4gPiA+ID4gPiB3b3JrZWQuDQo+ID4gPiA+ID4gU2luY2UgY3B1IG9mZmxpbmUgbmVl
-ZHMgdG8gYmUgcmVqZWN0ZWQgaW4gc29tZSBjYXNlcyhUbyBrZWVwIGF0IGxlYXN0IG9uZQ0KPiA+
-ID4gPiA+IGNwdQ0KPiA+ID4gPiA+IG9uIGEgcGFja2FnZSksIGFyY2ggaG9vayBmb3IgY3B1IG9m
-ZmxpbmUgaXMgbmVlZGVkLg0KPiA+ID4gPiANCj4gPiA+ID4gSSBoYXRlIHRvIGJyaW5nIHRoaXMg
-dXAgYmVjYXVzZSBJIGRvdWJ0IHRoZXJlJ3MgYSByZWFsIHVzZSBjYXNlIGZvciBTVVNQRU5EDQo+
-ID4gPiA+IHdpdGgNCj4gPiA+ID4gVERYLCBidXQgdGhlIENQVSBvZmZsaW5lIHBhdGggaXNuJ3Qg
-anVzdCBmb3IgdHJ1ZSBvZmZsaW5pbmcgb2YgQ1BVcy7CoCBXaGVuDQo+ID4gPiA+IHRoZQ0KPiA+
-ID4gPiBzeXN0ZW0gZW50ZXJzIFNVU1BFTkQsIG9ubHkgdGhlIGluaXRpYXRpbmcgQ1BVIGdvZXMg
-dGhyb3VnaA0KPiA+ID4gPiBrdm1fc3VzcGVuZCgpK2t2bV9yZXN1bWUoKSwNCj4gPiA+ID4gYWxs
-IHJlc3BvbmRpbmcgQ1BVcyBnbyB0aHJvdWdoIENQVSBvZmZsaW5lK29ubGluZS7CoCBJLmUuIGRp
-c2FsbG93aW5nIGFsbA0KPiA+ID4gPiBDUFVzIGZyb20NCj4gPiA+ID4gZ29pbmcgIm9mZmxpbmUi
-IHdpbGwgcHJldmVudCBzdXNwZW5kaW5nIHRoZSBzeXN0ZW0uDQo+ID4gPiANCj4gPiA+IFRoZSBj
-dXJyZW50IFREWCBLVk0gaW1wbGVtZW50YXRpb24gZGlzYWxsb3dzIENQVSBwYWNrYWdlIGZyb20g
-b2ZmbGluZSBvbmx5DQo+ID4gPiB3aGVuDQo+ID4gPiBURHMgYXJlIHJ1bm5pbmcuwqAgSWYgbm8g
-VEQgaXMgcnVubmluZywgQ1BVIG9mZmxpbmUgaXMgYWxsb3dlZC7CoCBTbyBiZWZvcmUNCj4gPiA+
-IFNVU1BFTkQsIFREcyBuZWVkIHRvIGJlIGtpbGxlZCB2aWEgc3lzdGVtZCBvciBzb21ldGhpbmcu
-wqAgQWZ0ZXIga2lsbGluZyBURHMsDQo+ID4gPiB0aGUNCj4gPiA+IHN5c3RlbSBjYW4gZW50ZXIg
-aW50byBTVVNQRU5EIHN0YXRlLg0KPiA+IA0KPiA+IFRoaXMgc2VlbXMgbm90IGNvcnJlY3QuICBZ
-b3UgbmVlZCBvbmUgY3B1IGZvciBlYWNoIHRvIGJlIG9ubGluZSBpbiBvcmRlciB0bw0KPiA+IGNy
-ZWF0ZSBURCBhcyB3ZWxsLCBhcyBUREguTU5HLktFWS5DT05GSUcgbmVlZHMgdG8gYmUgY2FsbGVk
-IG9uIGFsbCBwYWNrYWdlcywNCj4gPiBjb3JyZWN0Pw0KPiANCj4gVGhhdCdzIGNvcnJlY3QuIElu
-IHN1Y2ggY2FzZSwgdGhlIGNyZWF0aW9uIG9mIFREIGZhaWxzLiAgVEQgY3JlYXRpb24gY2hlY2tz
-IGlmDQo+IGF0IGxlYXN0IG9uZSBjcHUgaXMgb25saW5lIG9uIGFsbCBDUFUgcGFja2FnZXMuICBJ
-ZiBubywgZXJyb3IuDQoNCkkgdGhpbmsgd2UgY2FuIGp1c3QgYWx3YXlzIHJlZnVzZSB0byBvZmZs
-aW5lIHRoZSBsYXN0IGNwdSBmb3IgZWFjaCBwYWNrYWdlIHdoZW4NClREWCBpcyBlbmFibGVkLiAg
-SXQncyBzaW1wbGVyIEkgZ3Vlc3MuDQo=
+
+
+On 2022/11/8 16:44, Wei Yongjun wrote:
+> Hi Zheng Qi,
+> 
+> On 2022/11/8 11:52, Qi Zheng wrote:
+>> When we specify __GFP_NOWARN, we only expect that no warnings
+>> will be issued for current caller. But in the __should_failslab()
+>> and __should_fail_alloc_page(), the local GFP flags alter the
+>> global {failslab|fail_page_alloc}.attr, which is persistent and
+>> shared by all tasks. This is not what we expected, let's fix it.
+>>
+>> Cc: stable@vger.kernel.org
+>> Fixes: 3f913fc5f974 ("mm: fix missing handler for __GFP_NOWARN")
+>> Reported-by: Dmitry Vyukov <dvyukov@google.com>
+>> Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
+>> ---
+>>   v1: https://lore.kernel.org/lkml/20221107033109.59709-1-zhengqi.arch@bytedance.com/
+>>
+>>   Changelog in v1 -> v2:
+>>    - add comment for __should_failslab() and __should_fail_alloc_page()
+>>      (suggested by Jason)
+>>
+>>   include/linux/fault-inject.h |  7 +++++--
+>>   lib/fault-inject.c           | 14 +++++++++-----
+>>   mm/failslab.c                | 12 ++++++++++--
+>>   mm/page_alloc.c              |  7 +++++--
+>>   4 files changed, 29 insertions(+), 11 deletions(-)
+>>
+>> diff --git a/include/linux/fault-inject.h b/include/linux/fault-inject.h
+>> index 9f6e25467844..444236dadcf0 100644
+>> --- a/include/linux/fault-inject.h
+>> +++ b/include/linux/fault-inject.h
+>> @@ -20,7 +20,6 @@ struct fault_attr {
+>>   	atomic_t space;
+>>   	unsigned long verbose;
+>>   	bool task_filter;
+>> -	bool no_warn;
+>>   	unsigned long stacktrace_depth;
+>>   	unsigned long require_start;
+>>   	unsigned long require_end;
+>> @@ -32,6 +31,10 @@ struct fault_attr {
+>>   	struct dentry *dname;
+>>   };
+>>   
+>> +enum fault_flags {
+>> +	FAULT_NOWARN =	1 << 0,
+>> +};
+>> +
+>>   #define FAULT_ATTR_INITIALIZER {					\
+>>   		.interval = 1,						\
+>>   		.times = ATOMIC_INIT(1),				\
+>> @@ -40,11 +43,11 @@ struct fault_attr {
+>>   		.ratelimit_state = RATELIMIT_STATE_INIT_DISABLED,	\
+>>   		.verbose = 2,						\
+>>   		.dname = NULL,						\
+>> -		.no_warn = false,					\
+> 
+> How about keep no_warn attr as it be, and export it to user?
+> 
+> When testing with fault injection, and each fault will print an backtrace.
+> but not all of the testsuit can tell us which one is fault injection
+> message or other is a real warning/crash like syzkaller do.
+> 
+> In my case, to make things simple, we usually used a regex to detect whether
+> wanring/error happend. So we disabled the slab/page fault warning message by
+> default, and only enable it when debug real issue.
+
+So you want to set/clear this no_warn attr through the procfs or sysfs
+interface, so that you can easily disable/enable the slab/page fault
+warning message from the user mode. Right?
+
+Seems reasonable to me. Anyone else has an opinion on this? If it is
+really needed, I can do it later.
+
+Thanks,
+Qi
+
+> 
+> Regards,
+> 
+> 
+>>   	}
+>>   
+>>   #define DECLARE_FAULT_ATTR(name) struct fault_attr name = FAULT_ATTR_INITIALIZER
+>>   int setup_fault_attr(struct fault_attr *attr, char *str);
+>> +bool should_fail_ex(struct fault_attr *attr, ssize_t size, int flags);
+>>   bool should_fail(struct fault_attr *attr, ssize_t size);
+>>   
+>>   #ifdef CONFIG_FAULT_INJECTION_DEBUG_FS
+>> diff --git a/lib/fault-inject.c b/lib/fault-inject.c
+>> index 4b8fafce415c..5971f7c3e49e 100644
+>> --- a/lib/fault-inject.c
+>> +++ b/lib/fault-inject.c
+>> @@ -41,9 +41,6 @@ EXPORT_SYMBOL_GPL(setup_fault_attr);
+>>   
+>>   static void fail_dump(struct fault_attr *attr)
+>>   {
+>> -	if (attr->no_warn)
+>> -		return;
+>> -
+>>   	if (attr->verbose > 0 && __ratelimit(&attr->ratelimit_state)) {
+>>   		printk(KERN_NOTICE "FAULT_INJECTION: forcing a failure.\n"
+>>   		       "name %pd, interval %lu, probability %lu, "
+>> @@ -103,7 +100,7 @@ static inline bool fail_stacktrace(struct fault_attr *attr)
+>>    * http://www.nongnu.org/failmalloc/
+>>    */
+>>   
+>> -bool should_fail(struct fault_attr *attr, ssize_t size)
+>> +bool should_fail_ex(struct fault_attr *attr, ssize_t size, int flags)
+>>   {
+>>   	bool stack_checked = false;
+>>   
+>> @@ -152,13 +149,20 @@ bool should_fail(struct fault_attr *attr, ssize_t size)
+>>   		return false;
+>>   
+>>   fail:
+>> -	fail_dump(attr);
+>> +	if (!(flags & FAULT_NOWARN))
+>> +		fail_dump(attr);
+>>   
+>>   	if (atomic_read(&attr->times) != -1)
+>>   		atomic_dec_not_zero(&attr->times);
+>>   
+>>   	return true;
+>>   }
+>> +EXPORT_SYMBOL_GPL(should_fail_ex);
+>> +
+>> +bool should_fail(struct fault_attr *attr, ssize_t size)
+>> +{
+>> +	return should_fail_ex(attr, size, 0);
+>> +}
+>>   EXPORT_SYMBOL_GPL(should_fail);
+>>   
+>>   #ifdef CONFIG_FAULT_INJECTION_DEBUG_FS
+>> diff --git a/mm/failslab.c b/mm/failslab.c
+>> index 58df9789f1d2..ffc420c0e767 100644
+>> --- a/mm/failslab.c
+>> +++ b/mm/failslab.c
+>> @@ -16,6 +16,8 @@ static struct {
+>>   
+>>   bool __should_failslab(struct kmem_cache *s, gfp_t gfpflags)
+>>   {
+>> +	int flags = 0;
+>> +
+>>   	/* No fault-injection for bootstrap cache */
+>>   	if (unlikely(s == kmem_cache))
+>>   		return false;
+>> @@ -30,10 +32,16 @@ bool __should_failslab(struct kmem_cache *s, gfp_t gfpflags)
+>>   	if (failslab.cache_filter && !(s->flags & SLAB_FAILSLAB))
+>>   		return false;
+>>   
+>> +	/*
+>> +	 * In some cases, it expects to specify __GFP_NOWARN
+>> +	 * to avoid printing any information(not just a warning),
+>> +	 * thus avoiding deadlocks. See commit 6b9dbedbe349 for
+>> +	 * details.
+>> +	 */
+>>   	if (gfpflags & __GFP_NOWARN)
+>> -		failslab.attr.no_warn = true;
+>> +		flags |= FAULT_NOWARN;
+>>   
+>> -	return should_fail(&failslab.attr, s->object_size);
+>> +	return should_fail_ex(&failslab.attr, s->object_size, flags);
+>>   }
+>>   
+>>   static int __init setup_failslab(char *str)
+>> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+>> index 7192ded44ad0..cb6fe715d983 100644
+>> --- a/mm/page_alloc.c
+>> +++ b/mm/page_alloc.c
+>> @@ -3902,6 +3902,8 @@ __setup("fail_page_alloc=", setup_fail_page_alloc);
+>>   
+>>   static bool __should_fail_alloc_page(gfp_t gfp_mask, unsigned int order)
+>>   {
+>> +	int flags = 0;
+>> +
+>>   	if (order < fail_page_alloc.min_order)
+>>   		return false;
+>>   	if (gfp_mask & __GFP_NOFAIL)
+>> @@ -3912,10 +3914,11 @@ static bool __should_fail_alloc_page(gfp_t gfp_mask, unsigned int order)
+>>   			(gfp_mask & __GFP_DIRECT_RECLAIM))
+>>   		return false;
+>>   
+>> +	/* See comment in __should_failslab() */
+>>   	if (gfp_mask & __GFP_NOWARN)
+>> -		fail_page_alloc.attr.no_warn = true;
+>> +		flags |= FAULT_NOWARN;
+>>   
+>> -	return should_fail(&fail_page_alloc.attr, 1 << order);
+>> +	return should_fail_ex(&fail_page_alloc.attr, 1 << order, flags);
+>>   }
+>>   
+>>   #ifdef CONFIG_FAULT_INJECTION_DEBUG_FS
+
+-- 
+Thanks,
+Qi
