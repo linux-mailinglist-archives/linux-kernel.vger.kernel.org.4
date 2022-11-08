@@ -2,119 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3B1C620E0E
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 12:03:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EA85620E15
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 12:04:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233935AbiKHLCx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 06:02:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48086 "EHLO
+        id S233976AbiKHLEH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 06:04:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233479AbiKHLCu (ORCPT
+        with ESMTP id S233658AbiKHLED (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 06:02:50 -0500
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34980450B3;
-        Tue,  8 Nov 2022 03:02:49 -0800 (PST)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.west.internal (Postfix) with ESMTP id E87E732003D3;
-        Tue,  8 Nov 2022 06:02:44 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Tue, 08 Nov 2022 06:02:46 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1667905364; x=1667991764; bh=nP2DN9huvRZCwj+EeirHvDaYlV3K
-        zWuv19wsVeFnYlg=; b=nPTarOnIxrW/zamDmNXsZG4ai+ApYSZmmzu+BhtbT5rw
-        mtbLXtnZ91Wsx6cYX7aQe4jZNZCZsGJC2Mla0GEjFkbCGOJ0KBcJtDMhDKwLl2qA
-        xaOoirLqqKZ47HBzkKP2M5j76dDIFWFnVqIqsP9aY5MXXANWgjOnEYn4r2NdpYtA
-        eIrKIfH3WTwPLnB+RkwhAu7gPi2pBocGLuYYuCxZ37Yy0ZkfWkf3aIyWlg2KfItI
-        fMMe5Ex/coTrt3s6VoIfzZS7AryQmV2ko/ZWtQmxKcO8hjv2Nz70dTdz6ifpHEZp
-        1rdY7PjtxERy0Q0Niv606EEZIHGhJMdtMiFBZqSRHw==
-X-ME-Sender: <xms:UzdqY1hDCSISO_-tueqlv65Y-WT_by5RX-iY4Ks0vXO6BVm1TInShQ>
-    <xme:UzdqY6DYiH1jBu5p3i9vMHEdK2-4ppT4mhYlRGf9-8zqlnPHTBDTgXN0NbEFsvbtS
-    zLCMQh0zQpRTRU>
-X-ME-Received: <xmr:UzdqY1FUxNDg1EKaGIKEFlwu8n9f0aHEgH_ktHJyHrIG3Nfq7Pts_ecTuHbXqhjLAVUYSbUIN1n-K5SXRB-pYNAEYQQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrfedtgddvfecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefkughoucfu
-    tghhihhmmhgvlhcuoehiughoshgthhesihguohhstghhrdhorhhgqeenucggtffrrghtth
-    gvrhhnpeehhfdtjedviefffeduuddvffegteeiieeguefgudffvdfftdefheeijedthfej
-    keenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptd
-    enucfrrghrrghmpehmrghilhhfrhhomhepihguohhstghhsehiughoshgthhdrohhrgh
-X-ME-Proxy: <xmx:VDdqY6QY6IRVvS7SoRrZrc9OVQxuCMX-yqC-_VGfglqi2aj1Iptghg>
-    <xmx:VDdqYyyaaUhuHCuo7VOmKuyeUPaPEquhT5Xgch_f2n0DWNtfriLfFQ>
-    <xmx:VDdqYw7J8H6KkbKUGE7Dk_PaNtjh_YA5u9eNYUPoWMDKw7x29dzckg>
-    <xmx:VDdqY3Lw9EuSetC5HmwinjJF4KgSYqFnlwzwvtxQZtZHdjcE_Ao8bg>
-Feedback-ID: i494840e7:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 8 Nov 2022 06:02:43 -0500 (EST)
-Date:   Tue, 8 Nov 2022 13:02:38 +0200
-From:   Ido Schimmel <idosch@idosch.org>
-To:     Andy Ren <andy.ren@getcruise.com>
-Cc:     netdev@vger.kernel.org, richardbgobert@gmail.com,
-        davem@davemloft.net, wsa+renesas@sang-engineering.com,
-        edumazet@google.com, petrm@nvidia.com, kuba@kernel.org,
-        pabeni@redhat.com, corbet@lwn.net, andrew@lunn.ch,
-        dsahern@gmail.com, sthemmin@microsoft.com,
-        sridhar.samudrala@intel.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, roman.gushchin@linux.dev
-Subject: Re: [PATCH net-next v3] net/core: Allow live renaming when an
- interface is up
-Message-ID: <Y2o3ThYXNADKiwRT@shredder>
-References: <20221107174242.1947286-1-andy.ren@getcruise.com>
+        Tue, 8 Nov 2022 06:04:03 -0500
+Received: from mail-vs1-xe29.google.com (mail-vs1-xe29.google.com [IPv6:2607:f8b0:4864:20::e29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81F1148754
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 03:04:02 -0800 (PST)
+Received: by mail-vs1-xe29.google.com with SMTP id z189so13290792vsb.4
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 03:04:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XaBdxRjUZjWiYi/UU6XdULmnAXVS96JTxTikA1au8DU=;
+        b=ZkzY5ETtu0PETYIEUH10nOly3VcuJtkSlDZS4QtrJ3TMoZG09BAH7UKvNhtr6bh4EI
+         KgjB+YXYUVdVddL2B+f84CKvmXVF8qoy/AF5DZ8jppLG+33w9qiiQBCNQkLY2IoGfkiV
+         BkKz2ggOccQfHZpvxNc4nAQm22PLy6uKIt+SA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=XaBdxRjUZjWiYi/UU6XdULmnAXVS96JTxTikA1au8DU=;
+        b=TOruQDeHcjW59Z4RX/wnr4GZIvOZLVzb1LiQ8Dbp1tDk2uKT/FbuFvuD+FduHvwpQ0
+         /2pd6qnUjh5t7MGAQhSwfwf8xEUAVHaSLz/TDjo0wNPpaFCCxo7+1UX1eBMfD5hnRZNm
+         vUFHHmi0gPsclJYQG+E3nvCSoet0ocx8VMOLH/1TC0pfX2Jl1ItYvQkGhPy9hmJQoAMx
+         JwZvIZ7s44mzU7hsROpM3mDCRyyl5gGIF2yy+klWSNj6xQXl6mDcDscaLhAPkRHmEQZF
+         ys4cGQooywoUBUVGusdnz61pmn4K5P6odNBZbUYf5YipnoeBMHkEso4FofcakbfzYV5t
+         /pFQ==
+X-Gm-Message-State: ACrzQf242llWSuTW+d1RmkJYBa6lrVpuz26Y+l+yeDRvGUs/5E0oPB+m
+        9T+XJ3D7+fGr5huxqwGxoPEECFTH2isH0UQP5FIMVg==
+X-Google-Smtp-Source: AMsMyM6t0mPbG4ToZz5l/tO1gDfCULSYa4MknrJDh9MS6I1IEkQHqfasxxjvZuxONegx0VxazFgJwfSXzMjsEheapQg=
+X-Received: by 2002:a05:6102:3c83:b0:3ac:7ce4:1bc0 with SMTP id
+ c3-20020a0561023c8300b003ac7ce41bc0mr27621104vsv.65.1667905441651; Tue, 08
+ Nov 2022 03:04:01 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221107174242.1947286-1-andy.ren@getcruise.com>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20221107160437.740353-1-nfraprado@collabora.com>
+ <20221107160437.740353-9-nfraprado@collabora.com> <b5b61326-298c-9845-eec0-15542f096225@collabora.com>
+In-Reply-To: <b5b61326-298c-9845-eec0-15542f096225@collabora.com>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Tue, 8 Nov 2022 19:03:50 +0800
+Message-ID: <CAGXv+5EwsqE+npF4QYpwWMLb55JMGaXANxo87dyDpYwBxD-E4g@mail.gmail.com>
+Subject: Re: [PATCH 8/9] ASoC: mediatek: mt8192-mt6359: Register to module
+ device table
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
+        <nfraprado@collabora.com>, Mark Brown <broonie@kernel.org>,
+        kernel@collabora.com, Akihiko Odaki <akihiko.odaki@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Jiaxin Yu <jiaxin.yu@mediatek.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Miaoqian Lin <linmq006@gmail.com>,
+        Takashi Iwai <tiwai@suse.com>,
+        Tzung-Bi Shih <tzungbi@kernel.org>,
+        alsa-devel@alsa-project.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 07, 2022 at 09:42:42AM -0800, Andy Ren wrote:
-> Allow a network interface to be renamed when the interface
-> is up.
-> 
-> As described in the netconsole documentation [1], when netconsole is
-> used as a built-in, it will bring up the specified interface as soon as
-> possible. As a result, user space will not be able to rename the
-> interface since the kernel disallows renaming of interfaces that are
-> administratively up unless the 'IFF_LIVE_RENAME_OK' private flag was set
-> by the kernel.
-> 
-> The original solution [2] to this problem was to add a new parameter to
-> the netconsole configuration parameters that allows renaming of
-> the interface used by netconsole while it is administratively up.
-> However, during the discussion that followed, it became apparent that we
-> have no reason to keep the current restriction and instead we should
-> allow user space to rename interfaces regardless of their administrative
-> state:
-> 
-> 1. The restriction was put in place over 20 years ago when renaming was
-> only possible via IOCTL and before rtnetlink started notifying user
-> space about such changes like it does today.
-> 
-> 2. The 'IFF_LIVE_RENAME_OK' flag was added over 3 years ago in version
-> 5.2 and no regressions were reported.
-> 
-> 3. In-kernel listeners to 'NETDEV_CHANGENAME' do not seem to care about
-> the administrative state of interface.
-> 
-> Therefore, allow user space to rename running interfaces by removing the
-> restriction and the associated 'IFF_LIVE_RENAME_OK' flag. Help in
-> possible triage by emitting a message to the kernel log that an
-> interface was renamed while UP.
-> 
-> [1] https://www.kernel.org/doc/Documentation/networking/netconsole.rst
-> [2] https://lore.kernel.org/netdev/20221102002420.2613004-1-andy.ren@getcruise.com/
-> 
-> Signed-off-by: Andy Ren <andy.ren@getcruise.com>
+On Tue, Nov 8, 2022 at 4:44 PM AngeloGioacchino Del Regno
+<angelogioacchino.delregno@collabora.com> wrote:
+>
+> Il 07/11/22 17:04, N=C3=ADcolas F. R. A. Prado ha scritto:
+> > Register the compatibles for this module on the module device table so
+> > it can be automatically loaded when a matching device is found on the
+> > system.
+> >
+> > Signed-off-by: N=C3=ADcolas F. R. A. Prado <nfraprado@collabora.com>
+>
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collab=
+ora.com>
 
-Reviewed-by: Ido Schimmel <idosch@nvidia.com>
+Tested-by: Chen-Yu Tsai <wenst@chromium.org>
