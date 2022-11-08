@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD3C3621B12
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 18:48:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57A64621B13
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 18:48:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234728AbiKHRsa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 12:48:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44562 "EHLO
+        id S234682AbiKHRsj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 12:48:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234683AbiKHRsP (ORCPT
+        with ESMTP id S234661AbiKHRsT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 12:48:15 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB4845655A
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 09:47:17 -0800 (PST)
+        Tue, 8 Nov 2022 12:48:19 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6C8C5B846
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 09:47:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667929637;
+        s=mimecast20190719; t=1667929639;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=NDs1IzHuZwBiKepSKbrZlERPsRkua37TGdaig5O5yJI=;
-        b=TaALZR1vtLa1pgmm7Eb+0kDsG7aHaN5qPjpRvK3aryYR6xWAX06JOcmyarUGFCquegBugr
-        JxgM9eBKC+DJhyuL6n9vNg1oLrqjvhdACDHKeX0B40FtqpdqbVtc0MqqsCG91RCgGZHhlD
-        R2CCIrPFNukW8+/Bp1nL08RBMZ3WN90=
+        bh=38MUyfY75dlZXD6vpb40hXjC6++exqwh71jAXDbCRZc=;
+        b=L7Jm2WmjL8gKBAlK4f5yHsCYJEGPoShDjjYkRRYZig1FUZE5zEvTg6/C2syldVSx5H13ZS
+        eZwTIJtQ49qgIH78Nkivn3qeG3E97fqWsexUvFkpmQkMyChbqhJV0WIFyFRDisLyjRsEzS
+        Q63ICjBRVONqqwvNsUbyR8YofvT8vjE=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-15-wU7JcHhbNo6cqAi4ce8Eog-1; Tue, 08 Nov 2022 12:47:12 -0500
-X-MC-Unique: wU7JcHhbNo6cqAi4ce8Eog-1
+ us-mta-396-55uJzxynM92kRGlc8OpujA-1; Tue, 08 Nov 2022 12:47:16 -0500
+X-MC-Unique: 55uJzxynM92kRGlc8OpujA-1
 Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E2F97811E67;
-        Tue,  8 Nov 2022 17:47:11 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4B6E5101A56D;
+        Tue,  8 Nov 2022 17:47:15 +0000 (UTC)
 Received: from t480s.fritz.box (unknown [10.39.194.18])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id D5E6CC15BB5;
-        Tue,  8 Nov 2022 17:47:08 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 4E830C15BB5;
+        Tue,  8 Nov 2022 17:47:12 +0000 (UTC)
 From:   David Hildenbrand <david@redhat.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     linux-mm@kvack.org, linuxppc-dev@lists.ozlabs.org,
@@ -54,9 +54,9 @@ Cc:     linux-mm@kvack.org, linuxppc-dev@lists.ozlabs.org,
         Nicholas Piggin <npiggin@gmail.com>,
         Mike Rapoport <rppt@kernel.org>,
         Anshuman Khandual <anshuman.khandual@arm.com>
-Subject: [PATCH v2 4/7] mm/mprotect: factor out check whether manual PTE write upgrades are required
-Date:   Tue,  8 Nov 2022 18:46:49 +0100
-Message-Id: <20221108174652.198904-5-david@redhat.com>
+Subject: [PATCH v2 5/7] mm/autonuma: use can_change_(pte|pmd)_writable() to replace savedwrite
+Date:   Tue,  8 Nov 2022 18:46:50 +0100
+Message-Id: <20221108174652.198904-6-david@redhat.com>
 In-Reply-To: <20221108174652.198904-1-david@redhat.com>
 References: <20221108174652.198904-1-david@redhat.com>
 MIME-Version: 1.0
@@ -72,87 +72,291 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Let's factor the check out into vma_wants_manual_pte_write_upgrade(), to be
-reused in NUMA hinting fault context soon.
+commit b191f9b106ea ("mm: numa: preserve PTE write permissions across a
+NUMA hinting fault") added remembering write permissions using ordinary
+pte_write() for PROT_NONE mapped pages to avoid write faults when
+remapping the page !PROT_NONE on NUMA hinting faults.
+
+That commit noted:
+
+    The patch looks hacky but the alternatives looked worse. The tidest was
+    to rewalk the page tables after a hinting fault but it was more complex
+    than this approach and the performance was worse. It's not generally
+    safe to just mark the page writable during the fault if it's a write
+    fault as it may have been read-only for COW so that approach was
+    discarded.
+
+Later, commit 288bc54949fc ("mm/autonuma: let architecture override how
+the write bit should be stashed in a protnone pte.") introduced a family
+of savedwrite PTE functions that didn't necessarily improve the whole
+situation.
+
+One confusing thing is that nowadays, if a page is pte_protnone()
+and pte_savedwrite() then also pte_write() is true. Another source of
+confusion is that there is only a single pte_mk_savedwrite() call in the
+kernel. All other write-protection code seems to silently rely on
+pte_wrprotect().
+
+Ever since PageAnonExclusive was introduced and we started using it in
+mprotect context via commit 64fe24a3e05e ("mm/mprotect: try avoiding write
+faults for exclusive anonymous pages when changing protection"), we do
+have machinery in place to avoid write faults when changing protection,
+which is exactly what we want to do here.
+
+Let's similarly do what ordinary mprotect() does nowadays when upgrading
+write permissions and reuse can_change_pte_writable() and
+can_change_pmd_writable() to detect if we can upgrade PTE permissions to be
+writable.
+
+For anonymous pages there should be absolutely no change: if an
+anonymous page is not exclusive, it could not have been mapped writable --
+because only exclusive anonymous pages can be mapped writable.
+
+However, there *might* be a change for writable shared mappings that
+require writenotify: if they are not dirty, we cannot map them writable.
+While it might not matter in practice, we'd need a different way to
+identify whether writenotify is actually required -- and ordinary mprotect
+would benefit from that as well.
+
+Note that we don't optimize for the actual migration case:
+(1) When migration succeeds the new PTE will not be writable because the
+    source PTE was not writable (protnone); in the future we
+    might just optimize that case similarly by reusing
+    can_change_pte_writable()/can_change_pmd_writable() when removing
+    migration PTEs.
+(2) When migration fails, we'd have to recalculate the "writable" flag
+    because we temporarily dropped the PT lock; for now keep it simple and
+    set "writable=false".
+
+We'll remove all savedwrite leftovers next.
 
 Signed-off-by: David Hildenbrand <david@redhat.com>
 ---
- include/linux/mm.h | 16 ++++++++++++++--
- mm/mprotect.c      | 17 ++++-------------
- 2 files changed, 18 insertions(+), 15 deletions(-)
+ include/linux/mm.h |  2 ++
+ mm/huge_memory.c   | 26 +++++++++++++++-----------
+ mm/ksm.c           |  9 ++++-----
+ mm/memory.c        | 16 +++++++++++++---
+ mm/mprotect.c      |  7 ++-----
+ 5 files changed, 36 insertions(+), 24 deletions(-)
 
 diff --git a/include/linux/mm.h b/include/linux/mm.h
-index 517c8cc8ccb9..4a7c10bed8bd 100644
+index 4a7c10bed8bd..0637de13aa82 100644
 --- a/include/linux/mm.h
 +++ b/include/linux/mm.h
-@@ -1975,6 +1975,20 @@ extern unsigned long move_page_tables(struct vm_area_struct *vma,
- #define  MM_CP_UFFD_WP_ALL                 (MM_CP_UFFD_WP | \
- 					    MM_CP_UFFD_WP_RESOLVE)
+@@ -1989,6 +1989,8 @@ static inline bool vma_wants_manual_pte_write_upgrade(struct vm_area_struct *vma
+ 	return !!(vma->vm_flags & VM_WRITE);
  
-+int vma_wants_writenotify(struct vm_area_struct *vma, pgprot_t vm_page_prot);
-+static inline bool vma_wants_manual_pte_write_upgrade(struct vm_area_struct *vma)
-+{
-+	/*
-+	 * We want to check manually if we can change individual PTEs writable
-+	 * if we can't do that automatically for all PTEs in a mapping. For
-+	 * private mappings, that's always the case when we have write
-+	 * permissions as we properly have to handle COW.
-+	 */
-+	if (vma->vm_flags & VM_SHARED)
-+		return vma_wants_writenotify(vma, vma->vm_page_prot);
-+	return !!(vma->vm_flags & VM_WRITE);
-+
-+}
+ }
++bool can_change_pte_writable(struct vm_area_struct *vma, unsigned long addr,
++			     pte_t pte);
  extern unsigned long change_protection(struct mmu_gather *tlb,
  			      struct vm_area_struct *vma, unsigned long start,
  			      unsigned long end, pgprot_t newprot,
-@@ -2114,8 +2128,6 @@ static inline int pte_devmap(pte_t pte)
- }
- #endif
+diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+index eeba9c00df62..1ea76240dda6 100644
+--- a/mm/huge_memory.c
++++ b/mm/huge_memory.c
+@@ -1465,8 +1465,7 @@ vm_fault_t do_huge_pmd_numa_page(struct vm_fault *vmf)
+ 	unsigned long haddr = vmf->address & HPAGE_PMD_MASK;
+ 	int page_nid = NUMA_NO_NODE;
+ 	int target_nid, last_cpupid = (-1 & LAST_CPUPID_MASK);
+-	bool migrated = false;
+-	bool was_writable = pmd_savedwrite(oldpmd);
++	bool migrated = false, writable = false;
+ 	int flags = 0;
  
--int vma_wants_writenotify(struct vm_area_struct *vma, pgprot_t vm_page_prot);
--
- extern pte_t *__get_locked_pte(struct mm_struct *mm, unsigned long addr,
- 			       spinlock_t **ptl);
- static inline pte_t *get_locked_pte(struct mm_struct *mm, unsigned long addr,
-diff --git a/mm/mprotect.c b/mm/mprotect.c
-index 72aabffb7871..fe22db2c9cdd 100644
---- a/mm/mprotect.c
-+++ b/mm/mprotect.c
-@@ -558,8 +558,8 @@ mprotect_fixup(struct mmu_gather *tlb, struct vm_area_struct *vma,
+ 	vmf->ptl = pmd_lock(vma->vm_mm, vmf->pmd);
+@@ -1476,12 +1475,22 @@ vm_fault_t do_huge_pmd_numa_page(struct vm_fault *vmf)
+ 	}
+ 
+ 	pmd = pmd_modify(oldpmd, vma->vm_page_prot);
++
++	/*
++	 * Detect now whether the PMD could be writable; this information
++	 * is only valid while holding the PT lock.
++	 */
++	writable = pmd_write(pmd);
++	if (!writable && vma_wants_manual_pte_write_upgrade(vma) &&
++	    can_change_pmd_writable(vma, vmf->address, pmd))
++		writable = true;
++
+ 	page = vm_normal_page_pmd(vma, haddr, pmd);
+ 	if (!page)
+ 		goto out_map;
+ 
+ 	/* See similar comment in do_numa_page for explanation */
+-	if (!was_writable)
++	if (!writable)
+ 		flags |= TNF_NO_GROUP;
+ 
+ 	page_nid = page_to_nid(page);
+@@ -1500,6 +1509,7 @@ vm_fault_t do_huge_pmd_numa_page(struct vm_fault *vmf)
+ 	}
+ 
+ 	spin_unlock(vmf->ptl);
++	writable = false;
+ 
+ 	migrated = migrate_misplaced_page(page, vma, target_nid);
+ 	if (migrated) {
+@@ -1526,7 +1536,7 @@ vm_fault_t do_huge_pmd_numa_page(struct vm_fault *vmf)
+ 	/* Restore the PMD */
+ 	pmd = pmd_modify(oldpmd, vma->vm_page_prot);
+ 	pmd = pmd_mkyoung(pmd);
+-	if (was_writable)
++	if (writable)
+ 		pmd = pmd_mkwrite(pmd);
+ 	set_pmd_at(vma->vm_mm, haddr, vmf->pmd, pmd);
+ 	update_mmu_cache_pmd(vma, vmf->address, vmf->pmd);
+@@ -1767,11 +1777,10 @@ int change_huge_pmd(struct mmu_gather *tlb, struct vm_area_struct *vma,
  	struct mm_struct *mm = vma->vm_mm;
- 	unsigned long oldflags = vma->vm_flags;
- 	long nrpages = (end - start) >> PAGE_SHIFT;
-+	unsigned int mm_cp_flags = 0;
- 	unsigned long charged = 0;
--	bool try_change_writable;
- 	pgoff_t pgoff;
- 	int error;
+ 	spinlock_t *ptl;
+ 	pmd_t oldpmd, entry;
+-	bool preserve_write;
+-	int ret;
+ 	bool prot_numa = cp_flags & MM_CP_PROT_NUMA;
+ 	bool uffd_wp = cp_flags & MM_CP_UFFD_WP;
+ 	bool uffd_wp_resolve = cp_flags & MM_CP_UFFD_WP_RESOLVE;
++	int ret = 1;
  
-@@ -637,20 +637,11 @@ mprotect_fixup(struct mmu_gather *tlb, struct vm_area_struct *vma,
- 	 * held in write mode.
- 	 */
- 	vma->vm_flags = newflags;
--	/*
--	 * We want to check manually if we can change individual PTEs writable
--	 * if we can't do that automatically for all PTEs in a mapping. For
--	 * private mappings, that's always the case when we have write
--	 * permissions as we properly have to handle COW.
--	 */
--	if (vma->vm_flags & VM_SHARED)
--		try_change_writable = vma_wants_writenotify(vma, vma->vm_page_prot);
--	else
--		try_change_writable = !!(vma->vm_flags & VM_WRITE);
-+	if (vma_wants_manual_pte_write_upgrade(vma))
-+		mm_cp_flags |= MM_CP_TRY_CHANGE_WRITABLE;
- 	vma_set_page_prot(vma);
+ 	tlb_change_page_size(tlb, HPAGE_PMD_SIZE);
  
--	change_protection(tlb, vma, start, end, vma->vm_page_prot,
--			  try_change_writable ? MM_CP_TRY_CHANGE_WRITABLE : 0);
-+	change_protection(tlb, vma, start, end, vma->vm_page_prot, mm_cp_flags);
+@@ -1782,9 +1791,6 @@ int change_huge_pmd(struct mmu_gather *tlb, struct vm_area_struct *vma,
+ 	if (!ptl)
+ 		return 0;
+ 
+-	preserve_write = prot_numa && pmd_write(*pmd);
+-	ret = 1;
+-
+ #ifdef CONFIG_ARCH_ENABLE_THP_MIGRATION
+ 	if (is_swap_pmd(*pmd)) {
+ 		swp_entry_t entry = pmd_to_swp_entry(*pmd);
+@@ -1864,8 +1870,6 @@ int change_huge_pmd(struct mmu_gather *tlb, struct vm_area_struct *vma,
+ 	oldpmd = pmdp_invalidate_ad(vma, addr, pmd);
+ 
+ 	entry = pmd_modify(oldpmd, newprot);
+-	if (preserve_write)
+-		entry = pmd_mk_savedwrite(entry);
+ 	if (uffd_wp) {
+ 		entry = pmd_wrprotect(entry);
+ 		entry = pmd_mkuffd_wp(entry);
+diff --git a/mm/ksm.c b/mm/ksm.c
+index dc15c4a2a6ff..dd02780c387f 100644
+--- a/mm/ksm.c
++++ b/mm/ksm.c
+@@ -1069,7 +1069,6 @@ static int write_protect_page(struct vm_area_struct *vma, struct page *page,
+ 
+ 	anon_exclusive = PageAnonExclusive(page);
+ 	if (pte_write(*pvmw.pte) || pte_dirty(*pvmw.pte) ||
+-	    (pte_protnone(*pvmw.pte) && pte_savedwrite(*pvmw.pte)) ||
+ 	    anon_exclusive || mm_tlb_flush_pending(mm)) {
+ 		pte_t entry;
+ 
+@@ -1107,11 +1106,11 @@ static int write_protect_page(struct vm_area_struct *vma, struct page *page,
+ 
+ 		if (pte_dirty(entry))
+ 			set_page_dirty(page);
++		entry = pte_mkclean(entry);
++
++		if (pte_write(entry))
++			entry = pte_wrprotect(entry);
+ 
+-		if (pte_protnone(entry))
+-			entry = pte_mkclean(pte_clear_savedwrite(entry));
+-		else
+-			entry = pte_mkclean(pte_wrprotect(entry));
+ 		set_pte_at_notify(mm, pvmw.address, pvmw.pte, entry);
+ 	}
+ 	*orig_pte = *pvmw.pte;
+diff --git a/mm/memory.c b/mm/memory.c
+index 78e2c58f6f31..eb76705f7739 100644
+--- a/mm/memory.c
++++ b/mm/memory.c
+@@ -4684,10 +4684,10 @@ static vm_fault_t do_numa_page(struct vm_fault *vmf)
+ 	struct vm_area_struct *vma = vmf->vma;
+ 	struct page *page = NULL;
+ 	int page_nid = NUMA_NO_NODE;
++	bool writable = false;
+ 	int last_cpupid;
+ 	int target_nid;
+ 	pte_t pte, old_pte;
+-	bool was_writable = pte_savedwrite(vmf->orig_pte);
+ 	int flags = 0;
  
  	/*
- 	 * Private VM_LOCKED VMA becoming writable: trigger COW to avoid major
+@@ -4706,6 +4706,15 @@ static vm_fault_t do_numa_page(struct vm_fault *vmf)
+ 	old_pte = ptep_get(vmf->pte);
+ 	pte = pte_modify(old_pte, vma->vm_page_prot);
+ 
++	/*
++	 * Detect now whether the PTE could be writable; this information
++	 * is only valid while holding the PT lock.
++	 */
++	writable = pte_write(pte);
++	if (!writable && vma_wants_manual_pte_write_upgrade(vma) &&
++	    can_change_pte_writable(vma, vmf->address, pte))
++		writable = true;
++
+ 	page = vm_normal_page(vma, vmf->address, pte);
+ 	if (!page || is_zone_device_page(page))
+ 		goto out_map;
+@@ -4722,7 +4731,7 @@ static vm_fault_t do_numa_page(struct vm_fault *vmf)
+ 	 * pte_dirty has unpredictable behaviour between PTE scan updates,
+ 	 * background writeback, dirty balancing and application behaviour.
+ 	 */
+-	if (!was_writable)
++	if (!writable)
+ 		flags |= TNF_NO_GROUP;
+ 
+ 	/*
+@@ -4749,6 +4758,7 @@ static vm_fault_t do_numa_page(struct vm_fault *vmf)
+ 		goto out_map;
+ 	}
+ 	pte_unmap_unlock(vmf->pte, vmf->ptl);
++	writable = false;
+ 
+ 	/* Migrate to the requested node */
+ 	if (migrate_misplaced_page(page, vma, target_nid)) {
+@@ -4777,7 +4787,7 @@ static vm_fault_t do_numa_page(struct vm_fault *vmf)
+ 	old_pte = ptep_modify_prot_start(vma, vmf->address, vmf->pte);
+ 	pte = pte_modify(old_pte, vma->vm_page_prot);
+ 	pte = pte_mkyoung(pte);
+-	if (was_writable)
++	if (writable)
+ 		pte = pte_mkwrite(pte);
+ 	ptep_modify_prot_commit(vma, vmf->address, vmf->pte, old_pte, pte);
+ 	update_mmu_cache(vma, vmf->address, vmf->pte);
+diff --git a/mm/mprotect.c b/mm/mprotect.c
+index fe22db2c9cdd..093cb50f2fc4 100644
+--- a/mm/mprotect.c
++++ b/mm/mprotect.c
+@@ -39,8 +39,8 @@
+ 
+ #include "internal.h"
+ 
+-static inline bool can_change_pte_writable(struct vm_area_struct *vma,
+-					   unsigned long addr, pte_t pte)
++bool can_change_pte_writable(struct vm_area_struct *vma, unsigned long addr,
++			     pte_t pte)
+ {
+ 	struct page *page;
+ 
+@@ -121,7 +121,6 @@ static unsigned long change_pte_range(struct mmu_gather *tlb,
+ 		oldpte = *pte;
+ 		if (pte_present(oldpte)) {
+ 			pte_t ptent;
+-			bool preserve_write = prot_numa && pte_write(oldpte);
+ 
+ 			/*
+ 			 * Avoid trapping faults against the zero or KSM
+@@ -177,8 +176,6 @@ static unsigned long change_pte_range(struct mmu_gather *tlb,
+ 
+ 			oldpte = ptep_modify_prot_start(vma, addr, pte);
+ 			ptent = pte_modify(oldpte, newprot);
+-			if (preserve_write)
+-				ptent = pte_mk_savedwrite(ptent);
+ 
+ 			if (uffd_wp) {
+ 				ptent = pte_wrprotect(ptent);
 -- 
 2.38.1
 
