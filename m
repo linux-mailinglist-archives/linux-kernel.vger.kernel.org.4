@@ -2,64 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DA95621F31
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 23:24:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EAC8F621F3E
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 23:28:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230323AbiKHWXp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 17:23:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46222 "EHLO
+        id S230229AbiKHW2p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 17:28:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230296AbiKHWWq (ORCPT
+        with ESMTP id S230222AbiKHW2Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 17:22:46 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27B7C66CAC
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 14:20:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667946042;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=3D1ia0m8AB/mDYS6FkJb9nbysD705Rdesn/URHcv754=;
-        b=YHDOZTwlne0KN2TMBz7Yz5dW5FE7EW9WDobRuMxRYwJjMYjMW0S9bIvQmv9P19DPxv7v2/
-        yrJgLyZQJV2KJTHoQeczxgFxFd8jMFylc9x5qmVZryvIyVc/k+jWrAV/43tOY4dyJbxM6x
-        BB2heCtCbWWAS395Zmg/Yvze7tgFgPw=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-373-URkEfA27MPqAzUYusPKYnw-1; Tue, 08 Nov 2022 17:20:41 -0500
-X-MC-Unique: URkEfA27MPqAzUYusPKYnw-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 13F6F811E75;
-        Tue,  8 Nov 2022 22:20:41 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.37.22])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 6FC3C492B05;
-        Tue,  8 Nov 2022 22:20:40 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-Subject: [PATCH net-next 26/26] rxrpc: Allocate an skcipher each time needed
- rather than reusing
-From:   David Howells <dhowells@redhat.com>
-To:     netdev@vger.kernel.org
-Cc:     dhowells@redhat.com, linux-afs@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Date:   Tue, 08 Nov 2022 22:20:39 +0000
-Message-ID: <166794603977.2389296.8740762925692565028.stgit@warthog.procyon.org.uk>
-In-Reply-To: <166794587113.2389296.16484814996876530222.stgit@warthog.procyon.org.uk>
-References: <166794587113.2389296.16484814996876530222.stgit@warthog.procyon.org.uk>
-User-Agent: StGit/1.5
+        Tue, 8 Nov 2022 17:28:25 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 97F3668ADB;
+        Tue,  8 Nov 2022 14:25:04 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D57701FB;
+        Tue,  8 Nov 2022 14:24:37 -0800 (PST)
+Received: from [10.57.68.207] (unknown [10.57.68.207])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0CC4E3F73D;
+        Tue,  8 Nov 2022 14:24:29 -0800 (PST)
+Message-ID: <ce50327b-d42c-713f-2529-74eac8d1e5b9@arm.com>
+Date:   Tue, 8 Nov 2022 22:24:28 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.4.1
+Subject: Re: [PATCH v5 05/14] coresight: etm4x: Update ETM4 driver to use
+ Trace ID API
+To:     Mike Leach <mike.leach@linaro.org>, coresight@lists.linaro.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     mathieu.poirier@linaro.org, peterz@infradead.org, mingo@redhat.com,
+        acme@kernel.org, linux-perf-users@vger.kernel.org,
+        leo.yan@linaro.org, quic_jinlmao@quicinc.com
+References: <20221101163103.17921-1-mike.leach@linaro.org>
+ <20221101163103.17921-6-mike.leach@linaro.org>
+From:   Suzuki K Poulose <suzuki.poulose@arm.com>
+In-Reply-To: <20221101163103.17921-6-mike.leach@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,173 +48,141 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In the rxkad security class, allocate the skcipher used to do packet
-encryption and decription rather than allocating one up front and reusing
-it for each packet.  Reusing the skcipher precludes doing crypto in
-parallel.
+On 01/11/2022 16:30, Mike Leach wrote:
+> The trace ID API is now used to allocate trace IDs for ETM4.x / ETE
+> devices.
+> 
+> For perf sessions, these will be allocated on enable, and released on
+> disable.
+> 
+> For sysfs sessions, these will be allocated on enable, but only released
+> on reset. This allows the sysfs session to interrogate the Trace ID used
+> after the session is over - maintaining functional consistency with the
+> previous allocation scheme.
+> 
+> The trace ID will also be allocated on read of the mgmt/trctraceid file.
+> This ensures that if perf or sysfs read this before enabling trace, the
+> value will be the one used for the trace session.
+> 
+> Trace ID initialisation is removed from the _probe() function.
+> 
+> Signed-off-by: Mike Leach <mike.leach@linaro.org>
+> ---
+>   .../coresight/coresight-etm4x-core.c          | 70 +++++++++++++++++--
+>   .../coresight/coresight-etm4x-sysfs.c         | 27 ++++++-
+>   drivers/hwtracing/coresight/coresight-etm4x.h |  3 +
+>   3 files changed, 90 insertions(+), 10 deletions(-)
+> 
+> diff --git a/drivers/hwtracing/coresight/coresight-etm4x-core.c b/drivers/hwtracing/coresight/coresight-etm4x-core.c
+> index 80fefaba58ee..0e361d35c611 100644
+> --- a/drivers/hwtracing/coresight/coresight-etm4x-core.c
+> +++ b/drivers/hwtracing/coresight/coresight-etm4x-core.c
+> @@ -42,6 +42,7 @@
+>   #include "coresight-etm4x-cfg.h"
+>   #include "coresight-self-hosted-trace.h"
+>   #include "coresight-syscfg.h"
+> +#include "coresight-trace-id.h"
+>   
+>   static int boot_enable;
+>   module_param(boot_enable, int, 0444);
+> @@ -234,6 +235,30 @@ static int etm4_trace_id(struct coresight_device *csdev)
+>   	return drvdata->trcid;
+>   }
+>   
+> +int etm4_read_alloc_trace_id(struct etmv4_drvdata *drvdata)
+> +{
+> +	int trace_id;
+> +
+> +	/*
+> +	 * This will allocate a trace ID to the cpu,
+> +	 * or return the one currently allocated.
+> +	 * The trace id function has its own lock
+> +	 */
+> +	trace_id = coresight_trace_id_get_cpu_id(drvdata->cpu);
+> +	if (IS_VALID_ID(trace_id))
+> +		drvdata->trcid = (u8)trace_id;
+> +	else
+> +		dev_err(&drvdata->csdev->dev,
+> +			"Failed to allocate trace ID for %s on CPU%d\n",
+> +			dev_name(&drvdata->csdev->dev), drvdata->cpu);
+> +	return trace_id;
+> +}
+> +
+> +void etm4_release_trace_id(struct etmv4_drvdata *drvdata)
+> +{
+> +	coresight_trace_id_put_cpu_id(drvdata->cpu);
+> +}
+> +
+>   struct etm4_enable_arg {
+>   	struct etmv4_drvdata *drvdata;
+>   	int rc;
+> @@ -717,7 +742,7 @@ static int etm4_parse_event_config(struct coresight_device *csdev,
+>   static int etm4_enable_perf(struct coresight_device *csdev,
+>   			    struct perf_event *event)
+>   {
+> -	int ret = 0;
+> +	int ret = 0, trace_id;
+>   	struct etmv4_drvdata *drvdata = dev_get_drvdata(csdev->dev.parent);
+>   
+>   	if (WARN_ON_ONCE(drvdata->cpu != smp_processor_id())) {
+> @@ -729,6 +754,24 @@ static int etm4_enable_perf(struct coresight_device *csdev,
+>   	ret = etm4_parse_event_config(csdev, event);
+>   	if (ret)
+>   		goto out;
+> +
+> +	/*
+> +	 * perf allocates cpu ids as part of _setup_aux() - device needs to use
+> +	 * the allocated ID. This reads the current version without allocation.
+> +	 *
+> +	 * This does not use the trace id lock to prevent lock_dep issues
+> +	 * with perf locks - we know the ID cannot change until perf shuts down
+> +	 * the session
+> +	 */
+> +	trace_id = coresight_trace_id_read_cpu_id(drvdata->cpu);
+> +	if (!IS_VALID_ID(trace_id)) {
+> +		dev_err(&drvdata->csdev->dev, "Failed to set trace ID for %s on CPU%d\n",
+> +			dev_name(&drvdata->csdev->dev), drvdata->cpu);
+> +		ret = -EINVAL;
+> +		goto out;
+> +	}
+> +	drvdata->trcid = (u8)trace_id;
+> +
+>   	/* And enable it */
+>   	ret = etm4_enable_hw(drvdata);
+>   
+> @@ -753,6 +796,11 @@ static int etm4_enable_sysfs(struct coresight_device *csdev)
+>   
+>   	spin_lock(&drvdata->spinlock);
+>   
+> +	/* sysfs needs to read and allocate a trace ID */
+> +	ret = etm4_read_alloc_trace_id(drvdata);
+> +	if (ret < 0)
+> +		goto unlock_sysfs_enable;
+> +
+>   	/*
+>   	 * Executing etm4_enable_hw on the cpu whose ETM is being enabled
+>   	 * ensures that register writes occur when cpu is powered.
+> @@ -764,6 +812,11 @@ static int etm4_enable_sysfs(struct coresight_device *csdev)
+>   		ret = arg.rc;
+>   	if (!ret)
+>   		drvdata->sticky_enable = true;
+> +
+> +	if (ret)
+> +		etm4_release_trace_id(drvdata);
+> +
+> +unlock_sysfs_enable:
+>   	spin_unlock(&drvdata->spinlock);
+>   
+>   	if (!ret)
+> @@ -895,6 +948,8 @@ static int etm4_disable_perf(struct coresight_device *csdev,
+>   	/* TRCVICTLR::SSSTATUS, bit[9] */
+>   	filters->ssstatus = (control & BIT(9));
+>   
+> +	/* perf will release trace ids when _free_aux() is called at the end of the session */
 
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: Marc Dionne <marc.dionne@auristor.com>
-cc: linux-afs@lists.infradead.org
----
+minor nit: Please split this to multi-line.
 
- net/rxrpc/ar-internal.h |    2 --
- net/rxrpc/rxkad.c       |   52 +++++++++++++++++++++++++----------------------
- 2 files changed, 28 insertions(+), 26 deletions(-)
+With that:
 
-diff --git a/net/rxrpc/ar-internal.h b/net/rxrpc/ar-internal.h
-index 6bbe28ecf583..0273a9029229 100644
---- a/net/rxrpc/ar-internal.h
-+++ b/net/rxrpc/ar-internal.h
-@@ -583,7 +583,6 @@ struct rxrpc_call {
- 	unsigned long		expect_term_by;	/* When we expect call termination by */
- 	u32			next_rx_timo;	/* Timeout for next Rx packet (jif) */
- 	u32			next_req_timo;	/* Timeout for next Rx request packet (jif) */
--	struct skcipher_request	*cipher_req;	/* Packet cipher request buffer */
- 	struct timer_list	timer;		/* Combined event timer */
- 	struct work_struct	processor;	/* Event processor */
- 	rxrpc_notify_rx_t	notify_rx;	/* kernel service Rx notification function */
-@@ -597,7 +596,6 @@ struct rxrpc_call {
- 	struct rxrpc_txbuf	*tx_pending;	/* Tx buffer being filled */
- 	wait_queue_head_t	waitq;		/* Wait queue for channel or Tx */
- 	s64			tx_total_len;	/* Total length left to be transmitted (or -1) */
--	__be32			crypto_buf[2];	/* Temporary packet crypto buffer */
- 	unsigned long		user_call_ID;	/* user-defined call ID */
- 	unsigned long		flags;
- 	unsigned long		events;
-diff --git a/net/rxrpc/rxkad.c b/net/rxrpc/rxkad.c
-index 8fc055587f0e..2706e59bf992 100644
---- a/net/rxrpc/rxkad.c
-+++ b/net/rxrpc/rxkad.c
-@@ -233,16 +233,8 @@ static int rxkad_prime_packet_security(struct rxrpc_connection *conn,
- static struct skcipher_request *rxkad_get_call_crypto(struct rxrpc_call *call)
- {
- 	struct crypto_skcipher *tfm = &call->conn->rxkad.cipher->base;
--	struct skcipher_request	*cipher_req = call->cipher_req;
- 
--	if (!cipher_req) {
--		cipher_req = skcipher_request_alloc(tfm, GFP_NOFS);
--		if (!cipher_req)
--			return NULL;
--		call->cipher_req = cipher_req;
--	}
--
--	return cipher_req;
-+	return skcipher_request_alloc(tfm, GFP_NOFS);
- }
- 
- /*
-@@ -250,9 +242,6 @@ static struct skcipher_request *rxkad_get_call_crypto(struct rxrpc_call *call)
-  */
- static void rxkad_free_call_crypto(struct rxrpc_call *call)
- {
--	if (call->cipher_req)
--		skcipher_request_free(call->cipher_req);
--	call->cipher_req = NULL;
- }
- 
- /*
-@@ -348,6 +337,9 @@ static int rxkad_secure_packet(struct rxrpc_call *call, struct rxrpc_txbuf *txb)
- 	struct skcipher_request	*req;
- 	struct rxrpc_crypt iv;
- 	struct scatterlist sg;
-+	union {
-+		__be32 buf[2];
-+	} crypto __aligned(8);
- 	u32 x, y;
- 	int ret;
- 
-@@ -372,17 +364,17 @@ static int rxkad_secure_packet(struct rxrpc_call *call, struct rxrpc_txbuf *txb)
- 	/* calculate the security checksum */
- 	x = (ntohl(txb->wire.cid) & RXRPC_CHANNELMASK) << (32 - RXRPC_CIDSHIFT);
- 	x |= txb->seq & 0x3fffffff;
--	call->crypto_buf[0] = txb->wire.callNumber;
--	call->crypto_buf[1] = htonl(x);
-+	crypto.buf[0] = txb->wire.callNumber;
-+	crypto.buf[1] = htonl(x);
- 
--	sg_init_one(&sg, call->crypto_buf, 8);
-+	sg_init_one(&sg, crypto.buf, 8);
- 	skcipher_request_set_sync_tfm(req, call->conn->rxkad.cipher);
- 	skcipher_request_set_callback(req, 0, NULL, NULL);
- 	skcipher_request_set_crypt(req, &sg, &sg, 8, iv.x);
- 	crypto_skcipher_encrypt(req);
- 	skcipher_request_zero(req);
- 
--	y = ntohl(call->crypto_buf[1]);
-+	y = ntohl(crypto.buf[1]);
- 	y = (y >> 16) & 0xffff;
- 	if (y == 0)
- 		y = 1; /* zero checksums are not permitted */
-@@ -403,6 +395,7 @@ static int rxkad_secure_packet(struct rxrpc_call *call, struct rxrpc_txbuf *txb)
- 		break;
- 	}
- 
-+	skcipher_request_free(req);
- 	_leave(" = %d [set %x]", ret, y);
- 	return ret;
- }
-@@ -593,8 +586,12 @@ static int rxkad_verify_packet(struct rxrpc_call *call, struct sk_buff *skb)
- 	struct skcipher_request	*req;
- 	struct rxrpc_crypt iv;
- 	struct scatterlist sg;
-+	union {
-+		__be32 buf[2];
-+	} crypto __aligned(8);
- 	rxrpc_seq_t seq = sp->hdr.seq;
- 	bool aborted;
-+	int ret;
- 	u16 cksum;
- 	u32 x, y;
- 
-@@ -614,17 +611,17 @@ static int rxkad_verify_packet(struct rxrpc_call *call, struct sk_buff *skb)
- 	/* validate the security checksum */
- 	x = (call->cid & RXRPC_CHANNELMASK) << (32 - RXRPC_CIDSHIFT);
- 	x |= seq & 0x3fffffff;
--	call->crypto_buf[0] = htonl(call->call_id);
--	call->crypto_buf[1] = htonl(x);
-+	crypto.buf[0] = htonl(call->call_id);
-+	crypto.buf[1] = htonl(x);
- 
--	sg_init_one(&sg, call->crypto_buf, 8);
-+	sg_init_one(&sg, crypto.buf, 8);
- 	skcipher_request_set_sync_tfm(req, call->conn->rxkad.cipher);
- 	skcipher_request_set_callback(req, 0, NULL, NULL);
- 	skcipher_request_set_crypt(req, &sg, &sg, 8, iv.x);
- 	crypto_skcipher_encrypt(req);
- 	skcipher_request_zero(req);
- 
--	y = ntohl(call->crypto_buf[1]);
-+	y = ntohl(crypto.buf[1]);
- 	cksum = (y >> 16) & 0xffff;
- 	if (cksum == 0)
- 		cksum = 1; /* zero checksums are not permitted */
-@@ -637,15 +634,22 @@ static int rxkad_verify_packet(struct rxrpc_call *call, struct sk_buff *skb)
- 
- 	switch (call->conn->params.security_level) {
- 	case RXRPC_SECURITY_PLAIN:
--		return 0;
-+		ret = 0;
-+		break;
- 	case RXRPC_SECURITY_AUTH:
--		return rxkad_verify_packet_1(call, skb, seq, req);
-+		ret = rxkad_verify_packet_1(call, skb, seq, req);
-+		break;
- 	case RXRPC_SECURITY_ENCRYPT:
--		return rxkad_verify_packet_2(call, skb, seq, req);
-+		ret = rxkad_verify_packet_2(call, skb, seq, req);
-+		break;
- 	default:
--		return -ENOANO;
-+		ret = -ENOANO;
-+		break;
- 	}
- 
-+	skcipher_request_free(req);
-+	return ret;
-+
- protocol_error:
- 	if (aborted)
- 		rxrpc_send_abort_packet(call);
-
+Reviewed-by: Suzuki K Poulose <suzuki.poulose@arm.com>
 
