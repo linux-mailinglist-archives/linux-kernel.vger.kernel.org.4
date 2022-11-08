@@ -2,181 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0E78621A6C
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 18:25:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34A0F621A66
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 18:24:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234476AbiKHRZO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 12:25:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57068 "EHLO
+        id S234334AbiKHRYp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 12:24:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234108AbiKHRZM (ORCPT
+        with ESMTP id S234454AbiKHRYm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 12:25:12 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D5E6EAF
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 09:24:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667928256;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=jaxJz/zVXTLSHM/FX5ogpiQ4fyPxyR99ZK0ufiiW1NY=;
-        b=faXUYWMpiPveNOKcLprQijaYFfSTFkVpeVtVpo7VOF6hDdS1QmtfAr5mTnpSGPK6Y9W8S3
-        lG4pq16est6lYulVIBJJqgTTY49j88ixV2KqD3M7lQrSmQM+OPiNakNjt2Akb4D4eHNZsB
-        6xBIN9L2alPQlnVpAIhuq7GSDqE9bnM=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-261-zSt8iAHUMaOs1HYu3Wzv0Q-1; Tue, 08 Nov 2022 12:24:13 -0500
-X-MC-Unique: zSt8iAHUMaOs1HYu3Wzv0Q-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A2AD43C43B21;
-        Tue,  8 Nov 2022 17:24:12 +0000 (UTC)
-Received: from localhost (unknown [10.39.195.193])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 1D93C2166B29;
-        Tue,  8 Nov 2022 17:24:11 +0000 (UTC)
-Date:   Tue, 8 Nov 2022 12:24:10 -0500
-From:   Stefan Hajnoczi <stefanha@redhat.com>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCHSET v3 0/5] Add support for epoll min_wait
-Message-ID: <Y2qQuiZvuML14wX0@fedora>
-References: <Y2lw4Qc1uI+Ep+2C@fedora>
- <4281b354-d67d-2883-d966-a7816ed4f811@kernel.dk>
- <Y2phEZKYuSmPL5B5@fedora>
- <93fa2da5-c81a-d7f8-115c-511ed14dcdbb@kernel.dk>
- <Y2p/YcUFhFDUnLGq@fedora>
- <75c8f5fe-6d5f-32a9-1417-818246126789@kernel.dk>
+        Tue, 8 Nov 2022 12:24:42 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 090DE1DA72
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 09:24:42 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id v4-20020a17090a088400b00212cb0ed97eso14003186pjc.5
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 09:24:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=2jXnwrdOctEAg+6kVY9hCNzqeQ8ppwfCq8v7ax8XLyc=;
+        b=h6D/IhT6OiuD6Oz+6iB4e635Qux6H+f6qBbBPVTGtHvODhDFB2CnQs8vlNB+Nsbafg
+         03RtBAuw9ByoFQs980ux+z2LmzPfeAtYXLRCq6JM5hxHViWryYtF8bTcTb7X1FEzY/K6
+         UORYYY6hBNReHXNzkYb6gfgK1E2XkcDT9Na40=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2jXnwrdOctEAg+6kVY9hCNzqeQ8ppwfCq8v7ax8XLyc=;
+        b=vASO1pYww3EpgB4bmVxn1Gpid9GvqYo3hax5ZDmEg/zyRzlHHtlci816/jPNi9lMqb
+         F7h68siVqbylZ/UBkL4+cYGybQnCRN0YF5c4TDgANrUYZvpup8ziRx0OmKmLAl2PoVVI
+         VR/rTMkvSrD/ZJ8fkRaSyM0YIM9+oK3ebKIjtrp0rdSwyg9Eh+opa1KBn4jy2oJqQdhm
+         I4sbT7sFM2XfBaAc3gaZ8+3fYYPv25eHHCfQZnMMfyvuZ0h9Z08wNUfURT3mR5GazNla
+         0ZgnHlIG9mkMePX8kg7nnjz3nxTX30vxdgLrsjnrMgllIfYnkYLavs616gIdOxbegayb
+         A0eA==
+X-Gm-Message-State: ACrzQf1D9VSuYuuHPMxoSUkuc6ek7VOv/FTrJCQGfTEcU2i91cxlyZoP
+        m6i9ZmXYiLF3O8hLGJFmWBXzWQ==
+X-Google-Smtp-Source: AMsMyM7BM+yOcGq3Phx6Hb1U5oS2KniFsbemmzg1XGdqd6aw4Uxv40mr3JOyoKudrTJspDw0hxUsMA==
+X-Received: by 2002:a17:90a:d24d:b0:213:d3e4:677a with SMTP id o13-20020a17090ad24d00b00213d3e4677amr49640405pjw.101.1667928281513;
+        Tue, 08 Nov 2022 09:24:41 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id g12-20020aa796ac000000b00561b02e3118sm6611648pfk.106.2022.11.08.09.24.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Nov 2022 09:24:41 -0800 (PST)
+Date:   Tue, 8 Nov 2022 09:24:40 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Jann Horn <jannh@google.com>
+Cc:     Solar Designer <solar@openwall.com>,
+        linux-hardening@vger.kernel.org,
+        kernel-hardening@lists.openwall.com,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Linus Torvalds <torvalds@linuxfoundation.org>,
+        Seth Jenkins <sethjenkins@google.com>,
+        "Eric W . Biederman" <ebiederm@xmission.com>,
+        Andy Lutomirski <luto@kernel.org>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] exit: Put an upper limit on how often we can oops
+Message-ID: <202211080923.8BAEA9980@keescook>
+References: <20221107201317.324457-1-jannh@google.com>
+ <20221107211440.GA4233@openwall.com>
+ <CAG48ez2-xUawSs4ji_+0Bnyn_QTiS930UiOypXreU_RhwhVo_w@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="O0PSbzeHbyNIUTpg"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <75c8f5fe-6d5f-32a9-1417-818246126789@kernel.dk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+In-Reply-To: <CAG48ez2-xUawSs4ji_+0Bnyn_QTiS930UiOypXreU_RhwhVo_w@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Nov 07, 2022 at 10:48:20PM +0100, Jann Horn wrote:
+> On Mon, Nov 7, 2022 at 10:15 PM Solar Designer <solar@openwall.com> wrote:
+> > On Mon, Nov 07, 2022 at 09:13:17PM +0100, Jann Horn wrote:
+> > > +oops_limit
+> > > +==========
+> > > +
+> > > +Number of kernel oopses after which the kernel should panic when
+> > > +``panic_on_oops`` is not set.
+> >
+> > Rather than introduce this separate oops_limit, how about making
+> > panic_on_oops (and maybe all panic_on_*) take the limit value(s) instead
+> > of being Boolean?  I think this would preserve the current behavior at
+> > panic_on_oops = 0 and panic_on_oops = 1, but would introduce your
+> > desired behavior at panic_on_oops = 10000.  We can make 10000 the new
+> > default.  If a distro overrides panic_on_oops, it probably sets it to 1
+> > like RHEL does.
+> >
+> > Are there distros explicitly setting panic_on_oops to 0?  If so, that
+> > could be a reason to introduce the separate oops_limit.
+> >
+> > I'm not advocating one way or the other - I just felt this should be
+> > explicitly mentioned and decided on.
+> 
+> I think at least internally in the kernel, it probably works better to
+> keep those two concepts separate? For example, sparc has a function
+> die_nmi() that uses panic_on_oops to determine whether the system
+> should panic when a watchdog detects a lockup.
 
---O0PSbzeHbyNIUTpg
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Internally, yes, the kernel should keep "panic_on_oops" to mean "panic
+_NOW_ on oops?" but I would agree with Solar -- this is a counter as far
+as userspace is concerned. "Panic on Oops" after 1 oops, 2, oopses, etc.
+I would like to see this for panic_on_warn too, actually.
 
-On Tue, Nov 08, 2022 at 09:15:23AM -0700, Jens Axboe wrote:
-> On 11/8/22 9:10 AM, Stefan Hajnoczi wrote:
-> > On Tue, Nov 08, 2022 at 07:09:30AM -0700, Jens Axboe wrote:
-> >> On 11/8/22 7:00 AM, Stefan Hajnoczi wrote:
-> >>> On Mon, Nov 07, 2022 at 02:38:52PM -0700, Jens Axboe wrote:
-> >>>> On 11/7/22 1:56 PM, Stefan Hajnoczi wrote:
-> >>>>> Hi Jens,
-> >>>>> NICs and storage controllers have interrupt mitigation/coalescing
-> >>>>> mechanisms that are similar.
-> >>>>
-> >>>> Yep
-> >>>>
-> >>>>> NVMe has an Aggregation Time (timeout) and an Aggregation Threshold
-> >>>>> (counter) value. When a completion occurs, the device waits until t=
-he
-> >>>>> timeout or until the completion counter value is reached.
-> >>>>>
-> >>>>> If I've read the code correctly, min_wait is computed at the beginn=
-ing
-> >>>>> of epoll_wait(2). NVMe's Aggregation Time is computed from the first
-> >>>>> completion.
-> >>>>>
-> >>>>> It makes me wonder which approach is more useful for applications. =
-With
-> >>>>> the Aggregation Time approach applications can control how much ext=
-ra
-> >>>>> latency is added. What do you think about that approach?
-> >>>>
-> >>>> We only tested the current approach, which is time noted from entry,=
- not
-> >>>> from when the first event arrives. I suspect the nvme approach is be=
-tter
-> >>>> suited to the hw side, the epoll timeout helps ensure that we batch
-> >>>> within xx usec rather than xx usec + whatever the delay until the fi=
-rst
-> >>>> one arrives. Which is why it's handled that way currently. That gives
-> >>>> you a fixed batch latency.
-> >>>
-> >>> min_wait is fine when the goal is just maximizing throughput without =
-any
-> >>> latency targets.
-> >>
-> >> That's not true at all, I think you're in different time scales than
-> >> this would be used for.
-> >>
-> >>> The min_wait approach makes it hard to set a useful upper bound on
-> >>> latency because unlucky requests that complete early experience much
-> >>> more latency than requests that complete later.
-> >>
-> >> As mentioned in the cover letter or the main patch, this is most useful
-> >> for the medium load kind of scenarios. For high load, the min_wait time
-> >> ends up not mattering because you will hit maxevents first anyway. For
-> >> the testing that we did, the target was 2-300 usec, and 200 usec was
-> >> used for the actual test. Depending on what the kind of traffic the
-> >> server is serving, that's usually not much of a concern. From your
-> >> reply, I'm guessing you're thinking of much higher min_wait numbers. I
-> >> don't think those would make sense. If your rate of arrival is low
-> >> enough that min_wait needs to be high to make a difference, then the
-> >> load is low enough anyway that it doesn't matter. Hence I'd argue that
-> >> it is indeed NOT hard to set a useful upper bound on latency, because
-> >> that is very much what min_wait is.
-> >>
-> >> I'm happy to argue merits of one approach over another, but keep in mi=
-nd
-> >> that this particular approach was not pulled out of thin air AND it has
-> >> actually been tested and verified successfully on a production workloa=
-d.
-> >> This isn't a hypothetical benchmark kind of setup.
-> >=20
-> > Fair enough. I just wanted to make sure the syscall interface that gets
-> > merged is as useful as possible.
->=20
-> That is indeed the main discussion as far as I'm concerned - syscall,
-> ctl, or both? At this point I'm inclined to just push forward with the
-> ctl addition. A new syscall can always be added, and if we do, then it'd
-> be nice to make one that will work going forward so we don't have to
-> keep adding epoll_wait variants...
-
-epoll_wait3() would be consistent with how maxevents and timeout work.
-It does not suffer from extra ctl syscall overhead when applications
-need to change min_wait.
-
-The way the current patches add min_wait into epoll_ctl() seems hacky to
-me. struct epoll_event was meant for file descriptor event entries. It
-won't necessarily be large enough for future extensions (luckily
-min_wait only needs a uint64_t value). It's turning epoll_ctl() into an
-ioctl()/setsockopt()-style interface, which is bad for anything that
-needs to understand syscalls, like seccomp. A properly typed
-epoll_wait3() seems cleaner to me.
-
-Stefan
-
---O0PSbzeHbyNIUTpg
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEhpWov9P5fNqsNXdanKSrs4Grc8gFAmNqkLoACgkQnKSrs4Gr
-c8jMTwgAh6tsZz93MQq2mnRSH6XAQo+Ph8jToGrOwVvszEAkUWVuU43QLvwenksK
-1qKC6u6XF67qTJFEuv0GranpsTrkrthQblxDd+MZjFd9XwWg3/JlmEqsqPM7BnJs
-zKsO3vAf7FH6kn5EN2lW3CVZPQm/9M5aZjpkYZR9RGJInqLgG5yf686ZV1gXQx+F
-AId8I4UVY2iQIpbtOewVDs92y6kZCU5GbTv5eZffU+r0a+nS/heGghbTY0BfNcix
-ZBPffReBZOIWnXyC5gPMH0tRGkc8exm8ZIMPvm21eXqaCo2vwT5EVPkYup19OyEk
-27EdGvpWh6p8WHDZydntmVkLqcD87w==
-=/P5y
------END PGP SIGNATURE-----
-
---O0PSbzeHbyNIUTpg--
-
+-- 
+Kees Cook
