@@ -2,126 +2,436 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82F12621D8A
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 21:19:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BBFB621D90
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 21:21:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229639AbiKHUTP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 15:19:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37612 "EHLO
+        id S229841AbiKHUVu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 15:21:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229573AbiKHUTN (ORCPT
+        with ESMTP id S229492AbiKHUVs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 15:19:13 -0500
-Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EA2669DCC
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 12:19:12 -0800 (PST)
-Received: by mail-qt1-x830.google.com with SMTP id x15so9308829qtv.9
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 12:19:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=rYTJsr3y3DSpzuW7jbv9zORF+HiPBsmrV3dtI+qjb2g=;
-        b=RktMLy/W0Aalvj/azaMLVb1FNgDV1yEPtRfoOCAalX5a3JOa/QZKm/gQYlMeehBILF
-         Z8FRelGTxwLlt2r/PHfGWfm7hcJhjQ+Ccxx9+6hwjwDVkjbRbmOXWEwQ5Og3WEMnSrUe
-         jvI9rMDLZTywmAFs2PxsTOcuGTZL45ITlqnps=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rYTJsr3y3DSpzuW7jbv9zORF+HiPBsmrV3dtI+qjb2g=;
-        b=lZgVVTkGpCxXl6f2lkNOey1F/J4T/ctd3UIR5xuG0kKGaTC+AiqaQ3eoUVUl7XhrBd
-         DRIHvYS+LN9ZpxmyQOyBQggoxtBxt27GEWz6o0pXrkgcYbQJGwZPH5ojLM8g3gKMhcH6
-         EKUatB9gOeNajyB83KPcNScrCEEAuad0xGAAQEexbNYUg0MoK3J1P4q2JZffUXTpT2uf
-         kLDcrScAuVYhlvCRLzU47PiSdfhx919msPhYEFwf3foioza9mAm4yXGyvTHoUY8BkRCK
-         KspSDyPhNW5qg0vkWlWm7ZL6ZDCT/8Pb3LAaaiYoBpHdju5lgQFEu/zUloHZ/983iA48
-         vsvg==
-X-Gm-Message-State: ACrzQf2J/86neq2eUhHz1KDcM7LrWC5ZEQ66LCAsJxV10086M/px4rH8
-        YN0cSAyJR4RBKw+2Cnxe/fscm0HhZdP1uA==
-X-Google-Smtp-Source: AMsMyM46k3yEwpNJZNPNP7PmWkYeoxWQR8AqofyB1UQCM0Z3u3dFLIqRyQ32G41orCZ0MZ0kiSxJBg==
-X-Received: by 2002:a05:622a:1f9b:b0:3a5:2425:baac with SMTP id cb27-20020a05622a1f9b00b003a52425baacmr38443529qtb.56.1667938751520;
-        Tue, 08 Nov 2022 12:19:11 -0800 (PST)
-Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com. [209.85.128.171])
-        by smtp.gmail.com with ESMTPSA id w5-20020a05620a424500b006f84ee3a4f3sm9680224qko.48.2022.11.08.12.19.03
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Nov 2022 12:19:06 -0800 (PST)
-Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-3704852322fso144053047b3.8
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 12:19:03 -0800 (PST)
-X-Received: by 2002:a0d:ef07:0:b0:373:5257:f897 with SMTP id
- y7-20020a0def07000000b003735257f897mr35789530ywe.401.1667938743084; Tue, 08
- Nov 2022 12:19:03 -0800 (PST)
+        Tue, 8 Nov 2022 15:21:48 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 464C069DC9;
+        Tue,  8 Nov 2022 12:21:46 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CA023B81C1C;
+        Tue,  8 Nov 2022 20:21:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C23CC433D6;
+        Tue,  8 Nov 2022 20:21:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667938903;
+        bh=7H5cOjKdvFC+65oS59R3haDUTaZKrPGn0ZayGQxAldg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=i7ACygnbq0Sinui6YfAqoeldYq4ZLJ4S9f1TxRCFMo7NrXA1tZX/dCkNXo21ZOLlm
+         uSRpamtTT1nk+YhJ1l+eJm0njG//BEnqHe7TRaUwyEIY1UFrRkdfKsuA+9Auy5bdDE
+         7725pT4mgzp9DuA70idKmnZk6urM3irp1W0YqGbZXkRyvPQFbVAjjkp/KqBd8fTOQ5
+         DvlCIlAwGJv+3zFxIOm0h1g8w5jJ0dg5GPTZ+gPez3292r5WCZIkxNgRZ+o8GT6EQL
+         gRf35++l7nWuDv5SI9xHBURvhRGGyIb71c6RBSuEibaHT1hU4L5o9eLqo6I8vQKp3H
+         upvE6I8aXzFGw==
+Date:   Tue, 8 Nov 2022 14:21:24 -0600
+From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To:     Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     netdev@vger.kernel.org, linux-wireless@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        linux-hardening@vger.kernel.org
+Subject: [PATCH v3 1/7] wifi: orinoco: Avoid clashing function prototypes
+Message-ID: <e564003608a1f2ad86283370ef816805c92b30f6.1667934775.git.gustavoars@kernel.org>
+References: <cover.1667934775.git.gustavoars@kernel.org>
 MIME-Version: 1.0
-References: <CAHk-=wjnvPA7mi-E3jVEfCWXCNJNZEUjm6XODbbzGOh9c8mhgw@mail.gmail.com>
- <CAHk-=wjjXQP7PTEXO4R76WPy1zfQad_DLKw1GKU_4yWW1N4n7w@mail.gmail.com>
- <Y2SyJuohLFLqIhlZ@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
- <CAHk-=wjzp65=-QE1dg8KfqG-tVHiT+yAfHXGx9sro=8yOceELg@mail.gmail.com>
- <8a1e97c9-bd5-7473-6da8-2aa75198fbe8@google.com> <Y2llcRiDLHc2kg/N@cmpxchg.org>
- <CAHk-=whw1Oo0eJ7fFjy_Fus80CM8CnA4Lb5BrrCdot3Rc1ZZRQ@mail.gmail.com>
- <CAHk-=wh6MxaCA4pXpt1F5Bn2__6MxCq0Dr-rES4i=MOL9ibjpg@mail.gmail.com>
- <CAHk-=whi2BB9FviYiuUWV0KHibP_Lx_CWDWkxxv3SXA1PKV0Lg@mail.gmail.com>
- <CAHk-=wivgyfywteXoO7K0Mj_KoCRF-RyXDH-eGW0A_fev+dGug@mail.gmail.com> <20221108200345.xxcvnsnwgjyb7w3a@meerkat.local>
-In-Reply-To: <20221108200345.xxcvnsnwgjyb7w3a@meerkat.local>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 8 Nov 2022 12:18:47 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wjFdzHxB+f9WOTM1jZKBig9sY0s_-ASCZEUGsQ1mirjgQ@mail.gmail.com>
-Message-ID: <CAHk-=wjFdzHxB+f9WOTM1jZKBig9sY0s_-ASCZEUGsQ1mirjgQ@mail.gmail.com>
-Subject: Re: mm: delay rmap removal until after TLB flush
-To:     Konstantin Ryabitsev <mricon@kernel.org>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>,
-        Hugh Dickins <hughd@google.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>,
-        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
-        Nick Piggin <npiggin@gmail.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Jann Horn <jannh@google.com>,
-        John Hubbard <jhubbard@nvidia.com>, X86 ML <x86@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        kernel list <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Joerg Roedel <jroedel@suse.de>,
-        Uros Bizjak <ubizjak@gmail.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        linux-arch <linux-arch@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1667934775.git.gustavoars@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 8, 2022 at 12:03 PM Konstantin Ryabitsev <mricon@kernel.org> wrote:
->
-> Yes, --no-parent.
+When built with Control Flow Integrity, function prototypes between
+caller and function declaration must match. These mismatches are visible
+at compile time with the new -Wcast-function-type-strict in Clang[1].
 
-Ahh, that's new. I guess I need to update my ancient b4-0.8.0 install..
+Fix a total of 43 warnings like these:
 
-But yes, with that, and the manual parent lookup (because otherwise
-"--no-parent" will fetch *just* the patch itself, not even walking up
-the single parent chain). it works.
+drivers/net/wireless/intersil/orinoco/wext.c:1379:27: warning: cast from 'int (*)(struct net_device *, struct iw_request_info *, struct iw_param *, char *)' to 'iw_handler' (aka 'int (*)(struct net_device *, struct iw_request_info *, union iwreq_data *, char *)') converts to incompatible function type [-Wcast-function-type-strict]
+        IW_HANDLER(SIOCGIWPOWER,        (iw_handler)orinoco_ioctl_getpower),
+                                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Maybe a "--single-parent" or "--deadbeat-parent" option would be a good idea?
+The orinoco Wireless Extension handler callbacks (iw_handler) use a
+union for the data argument. Actually use the union and perform explicit
+member selection in the function body instead of having a function
+prototype mismatch. No significant binary differences were seen
+before/after changes.
 
-Anyway, with a more recent b4 version, the command
+These changes were made partly manually and partly with the help of
+Coccinelle.
 
-   b4 am --no-parent
-CAHk-=wh6MxaCA4pXpt1F5Bn2__6MxCq0Dr-rES4i=MOL9ibjpg@mail.gmail.com
+Link: https://github.com/KSPP/linux/issues/234
+Link: https://reviews.llvm.org/D134831 [1]
+Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+---
+Changes in v3:
+ - Split patch out of cfg80211.
+ - Remove iw_handler casts from orinoco_private_handler[].
+ - Update changelog text.
 
-gets that series and only that series.
+Changes in v2:
+ - Use IW_HANDLER in cfg80211_handlers instead of open-coded
+        [IW_IOCTL_IDX(SIOCGIWRETRY)]    = cfg80211_wext_giwretry, ...
+ - This patch was merged into cfg80211.
+ - Link: https://lore.kernel.org/linux-hardening/c8239f5813dec6e5cfb554ca92b1783a18ac5537.1666894751.git.gustavoars@kernel.org/
 
-              Linus
+v1:
+ - Link: https://lore.kernel.org/linux-hardening/2387e02ae7f31388f24041cae8d02d5e12151708.1666038048.git.gustavoars@kernel.org/
+
+ drivers/net/wireless/intersil/orinoco/wext.c | 109 +++++++++++--------
+ 1 file changed, 62 insertions(+), 47 deletions(-)
+
+diff --git a/drivers/net/wireless/intersil/orinoco/wext.c b/drivers/net/wireless/intersil/orinoco/wext.c
+index 4a01260027bc..b8eb5d60192f 100644
+--- a/drivers/net/wireless/intersil/orinoco/wext.c
++++ b/drivers/net/wireless/intersil/orinoco/wext.c
+@@ -154,9 +154,10 @@ static struct iw_statistics *orinoco_get_wireless_stats(struct net_device *dev)
+ 
+ static int orinoco_ioctl_setwap(struct net_device *dev,
+ 				struct iw_request_info *info,
+-				struct sockaddr *ap_addr,
++				union iwreq_data *wrqu,
+ 				char *extra)
+ {
++	struct sockaddr *ap_addr = &wrqu->ap_addr;
+ 	struct orinoco_private *priv = ndev_priv(dev);
+ 	int err = -EINPROGRESS;		/* Call commit handler */
+ 	unsigned long flags;
+@@ -213,9 +214,10 @@ static int orinoco_ioctl_setwap(struct net_device *dev,
+ 
+ static int orinoco_ioctl_getwap(struct net_device *dev,
+ 				struct iw_request_info *info,
+-				struct sockaddr *ap_addr,
++				union iwreq_data *wrqu,
+ 				char *extra)
+ {
++	struct sockaddr *ap_addr = &wrqu->ap_addr;
+ 	struct orinoco_private *priv = ndev_priv(dev);
+ 
+ 	int err = 0;
+@@ -234,9 +236,10 @@ static int orinoco_ioctl_getwap(struct net_device *dev,
+ 
+ static int orinoco_ioctl_setiwencode(struct net_device *dev,
+ 				     struct iw_request_info *info,
+-				     struct iw_point *erq,
++				     union iwreq_data *wrqu,
+ 				     char *keybuf)
+ {
++	struct iw_point *erq = &wrqu->encoding;
+ 	struct orinoco_private *priv = ndev_priv(dev);
+ 	int index = (erq->flags & IW_ENCODE_INDEX) - 1;
+ 	int setindex = priv->tx_key;
+@@ -325,9 +328,10 @@ static int orinoco_ioctl_setiwencode(struct net_device *dev,
+ 
+ static int orinoco_ioctl_getiwencode(struct net_device *dev,
+ 				     struct iw_request_info *info,
+-				     struct iw_point *erq,
++				     union iwreq_data *wrqu,
+ 				     char *keybuf)
+ {
++	struct iw_point *erq = &wrqu->encoding;
+ 	struct orinoco_private *priv = ndev_priv(dev);
+ 	int index = (erq->flags & IW_ENCODE_INDEX) - 1;
+ 	unsigned long flags;
+@@ -361,9 +365,10 @@ static int orinoco_ioctl_getiwencode(struct net_device *dev,
+ 
+ static int orinoco_ioctl_setessid(struct net_device *dev,
+ 				  struct iw_request_info *info,
+-				  struct iw_point *erq,
++				  union iwreq_data *wrqu,
+ 				  char *essidbuf)
+ {
++	struct iw_point *erq = &wrqu->essid;
+ 	struct orinoco_private *priv = ndev_priv(dev);
+ 	unsigned long flags;
+ 
+@@ -392,9 +397,10 @@ static int orinoco_ioctl_setessid(struct net_device *dev,
+ 
+ static int orinoco_ioctl_getessid(struct net_device *dev,
+ 				  struct iw_request_info *info,
+-				  struct iw_point *erq,
++				  union iwreq_data *wrqu,
+ 				  char *essidbuf)
+ {
++	struct iw_point *erq = &wrqu->essid;
+ 	struct orinoco_private *priv = ndev_priv(dev);
+ 	int active;
+ 	int err = 0;
+@@ -420,9 +426,10 @@ static int orinoco_ioctl_getessid(struct net_device *dev,
+ 
+ static int orinoco_ioctl_setfreq(struct net_device *dev,
+ 				 struct iw_request_info *info,
+-				 struct iw_freq *frq,
++				 union iwreq_data *wrqu,
+ 				 char *extra)
+ {
++	struct iw_freq *frq = &wrqu->freq;
+ 	struct orinoco_private *priv = ndev_priv(dev);
+ 	int chan = -1;
+ 	unsigned long flags;
+@@ -469,9 +476,10 @@ static int orinoco_ioctl_setfreq(struct net_device *dev,
+ 
+ static int orinoco_ioctl_getfreq(struct net_device *dev,
+ 				 struct iw_request_info *info,
+-				 struct iw_freq *frq,
++				 union iwreq_data *wrqu,
+ 				 char *extra)
+ {
++	struct iw_freq *frq = &wrqu->freq;
+ 	struct orinoco_private *priv = ndev_priv(dev);
+ 	int tmp;
+ 
+@@ -488,9 +496,10 @@ static int orinoco_ioctl_getfreq(struct net_device *dev,
+ 
+ static int orinoco_ioctl_getsens(struct net_device *dev,
+ 				 struct iw_request_info *info,
+-				 struct iw_param *srq,
++				 union iwreq_data *wrqu,
+ 				 char *extra)
+ {
++	struct iw_param *srq = &wrqu->sens;
+ 	struct orinoco_private *priv = ndev_priv(dev);
+ 	struct hermes *hw = &priv->hw;
+ 	u16 val;
+@@ -517,9 +526,10 @@ static int orinoco_ioctl_getsens(struct net_device *dev,
+ 
+ static int orinoco_ioctl_setsens(struct net_device *dev,
+ 				 struct iw_request_info *info,
+-				 struct iw_param *srq,
++				 union iwreq_data *wrqu,
+ 				 char *extra)
+ {
++	struct iw_param *srq = &wrqu->sens;
+ 	struct orinoco_private *priv = ndev_priv(dev);
+ 	int val = srq->value;
+ 	unsigned long flags;
+@@ -540,9 +550,10 @@ static int orinoco_ioctl_setsens(struct net_device *dev,
+ 
+ static int orinoco_ioctl_setrate(struct net_device *dev,
+ 				 struct iw_request_info *info,
+-				 struct iw_param *rrq,
++				 union iwreq_data *wrqu,
+ 				 char *extra)
+ {
++	struct iw_param *rrq = &wrqu->bitrate;
+ 	struct orinoco_private *priv = ndev_priv(dev);
+ 	int ratemode;
+ 	int bitrate; /* 100s of kilobits */
+@@ -574,9 +585,10 @@ static int orinoco_ioctl_setrate(struct net_device *dev,
+ 
+ static int orinoco_ioctl_getrate(struct net_device *dev,
+ 				 struct iw_request_info *info,
+-				 struct iw_param *rrq,
++				 union iwreq_data *wrqu,
+ 				 char *extra)
+ {
++	struct iw_param *rrq = &wrqu->bitrate;
+ 	struct orinoco_private *priv = ndev_priv(dev);
+ 	int err = 0;
+ 	int bitrate, automatic;
+@@ -610,9 +622,10 @@ static int orinoco_ioctl_getrate(struct net_device *dev,
+ 
+ static int orinoco_ioctl_setpower(struct net_device *dev,
+ 				  struct iw_request_info *info,
+-				  struct iw_param *prq,
++				  union iwreq_data *wrqu,
+ 				  char *extra)
+ {
++	struct iw_param *prq = &wrqu->power;
+ 	struct orinoco_private *priv = ndev_priv(dev);
+ 	int err = -EINPROGRESS;		/* Call commit handler */
+ 	unsigned long flags;
+@@ -664,9 +677,10 @@ static int orinoco_ioctl_setpower(struct net_device *dev,
+ 
+ static int orinoco_ioctl_getpower(struct net_device *dev,
+ 				  struct iw_request_info *info,
+-				  struct iw_param *prq,
++				  union iwreq_data *wrqu,
+ 				  char *extra)
+ {
++	struct iw_param *prq = &wrqu->power;
+ 	struct orinoco_private *priv = ndev_priv(dev);
+ 	struct hermes *hw = &priv->hw;
+ 	int err = 0;
+@@ -1097,7 +1111,7 @@ static int orinoco_ioctl_set_mlme(struct net_device *dev,
+ 
+ static int orinoco_ioctl_reset(struct net_device *dev,
+ 			       struct iw_request_info *info,
+-			       void *wrqu,
++			       union iwreq_data *wrqu,
+ 			       char *extra)
+ {
+ 	struct orinoco_private *priv = ndev_priv(dev);
+@@ -1121,7 +1135,7 @@ static int orinoco_ioctl_reset(struct net_device *dev,
+ 
+ static int orinoco_ioctl_setibssport(struct net_device *dev,
+ 				     struct iw_request_info *info,
+-				     void *wrqu,
++				     union iwreq_data *wrqu,
+ 				     char *extra)
+ 
+ {
+@@ -1143,7 +1157,7 @@ static int orinoco_ioctl_setibssport(struct net_device *dev,
+ 
+ static int orinoco_ioctl_getibssport(struct net_device *dev,
+ 				     struct iw_request_info *info,
+-				     void *wrqu,
++				     union iwreq_data *wrqu,
+ 				     char *extra)
+ {
+ 	struct orinoco_private *priv = ndev_priv(dev);
+@@ -1155,7 +1169,7 @@ static int orinoco_ioctl_getibssport(struct net_device *dev,
+ 
+ static int orinoco_ioctl_setport3(struct net_device *dev,
+ 				  struct iw_request_info *info,
+-				  void *wrqu,
++				  union iwreq_data *wrqu,
+ 				  char *extra)
+ {
+ 	struct orinoco_private *priv = ndev_priv(dev);
+@@ -1201,7 +1215,7 @@ static int orinoco_ioctl_setport3(struct net_device *dev,
+ 
+ static int orinoco_ioctl_getport3(struct net_device *dev,
+ 				  struct iw_request_info *info,
+-				  void *wrqu,
++				  union iwreq_data *wrqu,
+ 				  char *extra)
+ {
+ 	struct orinoco_private *priv = ndev_priv(dev);
+@@ -1213,7 +1227,7 @@ static int orinoco_ioctl_getport3(struct net_device *dev,
+ 
+ static int orinoco_ioctl_setpreamble(struct net_device *dev,
+ 				     struct iw_request_info *info,
+-				     void *wrqu,
++				     union iwreq_data *wrqu,
+ 				     char *extra)
+ {
+ 	struct orinoco_private *priv = ndev_priv(dev);
+@@ -1245,7 +1259,7 @@ static int orinoco_ioctl_setpreamble(struct net_device *dev,
+ 
+ static int orinoco_ioctl_getpreamble(struct net_device *dev,
+ 				     struct iw_request_info *info,
+-				     void *wrqu,
++				     union iwreq_data *wrqu,
+ 				     char *extra)
+ {
+ 	struct orinoco_private *priv = ndev_priv(dev);
+@@ -1265,9 +1279,10 @@ static int orinoco_ioctl_getpreamble(struct net_device *dev,
+  * For Wireless Tools 25 and 26 append "dummy" are the end. */
+ static int orinoco_ioctl_getrid(struct net_device *dev,
+ 				struct iw_request_info *info,
+-				struct iw_point *data,
++				union iwreq_data *wrqu,
+ 				char *extra)
+ {
++	struct iw_point *data = &wrqu->data;
+ 	struct orinoco_private *priv = ndev_priv(dev);
+ 	struct hermes *hw = &priv->hw;
+ 	int rid = data->flags;
+@@ -1303,7 +1318,7 @@ static int orinoco_ioctl_getrid(struct net_device *dev,
+ /* Commit handler, called after set operations */
+ static int orinoco_ioctl_commit(struct net_device *dev,
+ 				struct iw_request_info *info,
+-				void *wrqu,
++				union iwreq_data *wrqu,
+ 				char *extra)
+ {
+ 	struct orinoco_private *priv = ndev_priv(dev);
+@@ -1347,36 +1362,36 @@ static const struct iw_priv_args orinoco_privtab[] = {
+  */
+ 
+ static const iw_handler	orinoco_handler[] = {
+-	IW_HANDLER(SIOCSIWCOMMIT,	(iw_handler)orinoco_ioctl_commit),
++	IW_HANDLER(SIOCSIWCOMMIT,	orinoco_ioctl_commit),
+ 	IW_HANDLER(SIOCGIWNAME,		(iw_handler)cfg80211_wext_giwname),
+-	IW_HANDLER(SIOCSIWFREQ,		(iw_handler)orinoco_ioctl_setfreq),
+-	IW_HANDLER(SIOCGIWFREQ,		(iw_handler)orinoco_ioctl_getfreq),
++	IW_HANDLER(SIOCSIWFREQ,		orinoco_ioctl_setfreq),
++	IW_HANDLER(SIOCGIWFREQ,		orinoco_ioctl_getfreq),
+ 	IW_HANDLER(SIOCSIWMODE,		(iw_handler)cfg80211_wext_siwmode),
+ 	IW_HANDLER(SIOCGIWMODE,		(iw_handler)cfg80211_wext_giwmode),
+-	IW_HANDLER(SIOCSIWSENS,		(iw_handler)orinoco_ioctl_setsens),
+-	IW_HANDLER(SIOCGIWSENS,		(iw_handler)orinoco_ioctl_getsens),
++	IW_HANDLER(SIOCSIWSENS,		orinoco_ioctl_setsens),
++	IW_HANDLER(SIOCGIWSENS,		orinoco_ioctl_getsens),
+ 	IW_HANDLER(SIOCGIWRANGE,	(iw_handler)cfg80211_wext_giwrange),
+ 	IW_HANDLER(SIOCSIWSPY,		iw_handler_set_spy),
+ 	IW_HANDLER(SIOCGIWSPY,		iw_handler_get_spy),
+ 	IW_HANDLER(SIOCSIWTHRSPY,	iw_handler_set_thrspy),
+ 	IW_HANDLER(SIOCGIWTHRSPY,	iw_handler_get_thrspy),
+-	IW_HANDLER(SIOCSIWAP,		(iw_handler)orinoco_ioctl_setwap),
+-	IW_HANDLER(SIOCGIWAP,		(iw_handler)orinoco_ioctl_getwap),
++	IW_HANDLER(SIOCSIWAP,		orinoco_ioctl_setwap),
++	IW_HANDLER(SIOCGIWAP,		orinoco_ioctl_getwap),
+ 	IW_HANDLER(SIOCSIWSCAN,		(iw_handler)cfg80211_wext_siwscan),
+ 	IW_HANDLER(SIOCGIWSCAN,		(iw_handler)cfg80211_wext_giwscan),
+-	IW_HANDLER(SIOCSIWESSID,	(iw_handler)orinoco_ioctl_setessid),
+-	IW_HANDLER(SIOCGIWESSID,	(iw_handler)orinoco_ioctl_getessid),
+-	IW_HANDLER(SIOCSIWRATE,		(iw_handler)orinoco_ioctl_setrate),
+-	IW_HANDLER(SIOCGIWRATE,		(iw_handler)orinoco_ioctl_getrate),
++	IW_HANDLER(SIOCSIWESSID,	orinoco_ioctl_setessid),
++	IW_HANDLER(SIOCGIWESSID,	orinoco_ioctl_getessid),
++	IW_HANDLER(SIOCSIWRATE,		orinoco_ioctl_setrate),
++	IW_HANDLER(SIOCGIWRATE,		orinoco_ioctl_getrate),
+ 	IW_HANDLER(SIOCSIWRTS,		(iw_handler)cfg80211_wext_siwrts),
+ 	IW_HANDLER(SIOCGIWRTS,		(iw_handler)cfg80211_wext_giwrts),
+ 	IW_HANDLER(SIOCSIWFRAG,		(iw_handler)cfg80211_wext_siwfrag),
+ 	IW_HANDLER(SIOCGIWFRAG,		(iw_handler)cfg80211_wext_giwfrag),
+ 	IW_HANDLER(SIOCGIWRETRY,	(iw_handler)cfg80211_wext_giwretry),
+-	IW_HANDLER(SIOCSIWENCODE,	(iw_handler)orinoco_ioctl_setiwencode),
+-	IW_HANDLER(SIOCGIWENCODE,	(iw_handler)orinoco_ioctl_getiwencode),
+-	IW_HANDLER(SIOCSIWPOWER,	(iw_handler)orinoco_ioctl_setpower),
+-	IW_HANDLER(SIOCGIWPOWER,	(iw_handler)orinoco_ioctl_getpower),
++	IW_HANDLER(SIOCSIWENCODE,	orinoco_ioctl_setiwencode),
++	IW_HANDLER(SIOCGIWENCODE,	orinoco_ioctl_getiwencode),
++	IW_HANDLER(SIOCSIWPOWER,	orinoco_ioctl_setpower),
++	IW_HANDLER(SIOCGIWPOWER,	orinoco_ioctl_getpower),
+ 	IW_HANDLER(SIOCSIWGENIE,	orinoco_ioctl_set_genie),
+ 	IW_HANDLER(SIOCGIWGENIE,	orinoco_ioctl_get_genie),
+ 	IW_HANDLER(SIOCSIWMLME,		orinoco_ioctl_set_mlme),
+@@ -1391,15 +1406,15 @@ static const iw_handler	orinoco_handler[] = {
+   Added typecasting since we no longer use iwreq_data -- Moustafa
+  */
+ static const iw_handler	orinoco_private_handler[] = {
+-	[0] = (iw_handler)orinoco_ioctl_reset,
+-	[1] = (iw_handler)orinoco_ioctl_reset,
+-	[2] = (iw_handler)orinoco_ioctl_setport3,
+-	[3] = (iw_handler)orinoco_ioctl_getport3,
+-	[4] = (iw_handler)orinoco_ioctl_setpreamble,
+-	[5] = (iw_handler)orinoco_ioctl_getpreamble,
+-	[6] = (iw_handler)orinoco_ioctl_setibssport,
+-	[7] = (iw_handler)orinoco_ioctl_getibssport,
+-	[9] = (iw_handler)orinoco_ioctl_getrid,
++	[0] = orinoco_ioctl_reset,
++	[1] = orinoco_ioctl_reset,
++	[2] = orinoco_ioctl_setport3,
++	[3] = orinoco_ioctl_getport3,
++	[4] = orinoco_ioctl_setpreamble,
++	[5] = orinoco_ioctl_getpreamble,
++	[6] = orinoco_ioctl_setibssport,
++	[7] = orinoco_ioctl_getibssport,
++	[9] = orinoco_ioctl_getrid,
+ };
+ 
+ const struct iw_handler_def orinoco_handler_def = {
+-- 
+2.34.1
+
