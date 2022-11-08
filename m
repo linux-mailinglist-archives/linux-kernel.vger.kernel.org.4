@@ -2,235 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B304A620C68
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 10:38:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CE76620C6B
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 10:38:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233791AbiKHJh6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 04:37:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51544 "EHLO
+        id S233795AbiKHJic (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 04:38:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233641AbiKHJhv (ORCPT
+        with ESMTP id S233793AbiKHJi1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 04:37:51 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 543D62183E;
-        Tue,  8 Nov 2022 01:37:50 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2008E1FB;
-        Tue,  8 Nov 2022 01:37:56 -0800 (PST)
-Received: from [10.57.67.115] (unknown [10.57.67.115])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7F7853F534;
-        Tue,  8 Nov 2022 01:37:47 -0800 (PST)
-Message-ID: <9072665a-f019-975b-7b3b-d3f37ea71425@arm.com>
-Date:   Tue, 8 Nov 2022 09:37:45 +0000
+        Tue, 8 Nov 2022 04:38:27 -0500
+Received: from smtp.domeneshop.no (smtp.domeneshop.no [IPv6:2a01:5b40:0:3005::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98E662AC7
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 01:38:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tronnes.org
+        ; s=ds202112; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=Gn2jtnurXeLoR+JBbYdWEKBeFwgIy7nQqvoCoWdGcMU=; b=Jm48u4quUIM9AnE2eAVOPXlszN
+        dHIUCxlanP3myizyV6x9HL+VzqOJBcIng+jIcCrV+ZPLX2GL3s239g7CE2I26KDmGGx0zkpumAvjA
+        EALkEKyh8Ho0vrR7//I1jF65jvIy8wwm/jayyESeeHlMso6Zu6yM2QoKn9j4hydIZxrtVraX1dJju
+        ItknqiWPduNMuNnrVezLIeZgNrbbgi5Djw/QrHpTXb6ozVvWRQxu6EbXp+RHmjSdNmEqARyimQjcf
+        DksOaOcw0fZ51OKSvj6zbrlcXCFUinsfBUGO2lO/rodVYogF86aGh3Q5y9/zFg8ENVbG/phX+5Kod
+        UAKOOx1A==;
+Received: from [2a01:799:95a:cb00:cca0:57ac:c55d:a485] (port=57639)
+        by smtp.domeneshop.no with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <noralf@tronnes.org>)
+        id 1osL3l-0008OX-8y; Tue, 08 Nov 2022 10:38:21 +0100
+Message-ID: <ba532387-6329-c57a-1fa2-627b2cf40281@tronnes.org>
+Date:   Tue, 8 Nov 2022 10:38:12 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.4.1
-Subject: Re: [PATCH v14 0/9] Coresight: Add support for TPDM and TPDA
-To:     Jinlong Mao <quic_jinlmao@quicinc.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Konrad Dybcio <konradybcio@gmail.com>,
-        Mike Leach <mike.leach@linaro.org>
-Cc:     Leo Yan <leo.yan@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Tingwei Zhang <quic_tingweiz@quicinc.com>,
-        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
-        Tao Zhang <quic_taozha@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Hao Zhang <quic_hazha@quicinc.com>,
-        linux-arm-msm@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-References: <20221102091915.15281-1-quic_jinlmao@quicinc.com>
- <69a3cd4b-c4b0-b998-b4c1-70a928690972@arm.com>
- <102a8c21-2b78-56ca-874a-194e878dff8f@quicinc.com>
-From:   Suzuki K Poulose <suzuki.poulose@arm.com>
-In-Reply-To: <102a8c21-2b78-56ca-874a-194e878dff8f@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v7 15/23] drm/modes: Introduce more named modes
+To:     Maxime Ripard <maxime@cerno.tech>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Samuel Holland <samuel@sholland.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Emma Anholt <emma@anholt.net>,
+        Karol Herbst <kherbst@redhat.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Chen-Yu Tsai <wens@csie.org>,
+        Lyude Paul <lyude@redhat.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>
+Cc:     Phil Elwell <phil@raspberrypi.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Dom Cobley <dom@raspberrypi.com>,
+        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
+        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        nouveau@lists.freedesktop.org,
+        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
+References: <20220728-rpi-analog-tv-properties-v7-0-7072a478c6b3@cerno.tech>
+ <20220728-rpi-analog-tv-properties-v7-15-7072a478c6b3@cerno.tech>
+ <262f0953-1e05-e68e-3e96-2ac2132a1e57@tronnes.org>
+From:   =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
+In-Reply-To: <262f0953-1e05-e68e-3e96-2ac2132a1e57@tronnes.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/11/2022 05:54, Jinlong Mao wrote:
+
+
+Den 07.11.2022 19.03, skrev Noralf Trønnes:
 > 
-> On 11/8/2022 2:38 AM, Suzuki K Poulose wrote:
->> On 02/11/2022 09:19, Mao Jinlong wrote:
->>> This series adds support for the trace performance monitoring and
->>> diagnostics hardware (TPDM and TPDA). It is composed of two major
->>> elements.
->>> a) Changes for original coresight framework to support for TPDM and 
->>> TPDA.
->>> b) Add driver code for TPDM and TPDA.
->>>
->>> Introduction of changes for original coresight framework
->>> Support TPDM as new coresight source.
->>> Since only STM and ETM are supported as coresight source originally.
->>> TPDM is a newly added coresight source. We need to change
->>> the original way of saving coresight path to support more types source
->>> for coresight driver.
->>> The following patch is to add support more coresight sources.
->>>      coresight: core: Use IDR for non-cpu bound sources' paths.
->>>
->> ---8>---
+> 
+> Den 07.11.2022 15.16, skrev Maxime Ripard:
+>> Now that we can easily extend the named modes list, let's add a few more
+>> analog TV modes that were used in the wild, and some unit tests to make
+>> sure it works as intended.
 >>
->>> Introduction of TPDM and TPDA
->>> TPDM - The trace performance monitoring and diagnostics monitor or 
->>> TPDM in
->>> short serves as data collection component for various dataset types
->>> specified in the QPMDA(Qualcomm performance monitoring and diagnostics
->>> architecture) spec. The primary use case of the TPDM is to collect data
->>> from different data sources and send it to a TPDA for packetization,
->>> timestamping and funneling.
->>>       Coresight: Add coresight TPDM source driver
->>>       dt-bindings: arm: Adds CoreSight TPDM hardware definitions
->>>       coresight-tpdm: Add DSB dataset support
->>>       coresight-tpdm: Add integration test support
->>>       docs: sysfs: coresight: Add sysfs ABI documentation for TPDM
->>>
->>> TPDA - The trace performance monitoring and diagnostics aggregator or
->>> TPDA in short serves as an arbitration and packetization engine for the
->>> performance monitoring and diagnostics network as specified in the QPMDA
->>> (Qualcomm performance monitoring and diagnostics architecture)
->>> specification. The primary use case of the TPDA is to provide
->>> packetization, funneling and timestamping of Monitor data as specified
->>> in the QPMDA specification.
->>> The following patch is to add driver for TPDA.
->>>       Coresight: Add TPDA link driver
->>>       dt-bindings: arm: Adds CoreSight TPDA hardware definitions
->>>
->>> The last patch of this series is a device tree modification, which add
->>> the TPDM and TPDA configuration to device tree for validating.
->>>      ARM: dts: msm: Add coresight components for SM8250
->>>      ARM: dts: msm: Add tpdm mm/prng for sm8250
->>>
->>> Once this series patches are applied properly, the tpdm and tpda nodes
->>> should be observed at the coresight path /sys/bus/coresight/devices
->>> e.g.
->>> /sys/bus/coresight/devices # ls -l | grep tpd
->>> tpda0 -> ../../../devices/platform/soc@0/6004000.tpda/tpda0
->>> tpdm0 -> ../../../devices/platform/soc@0/6c08000.mm.tpdm/tpdm0
->>>
->>> We can use the commands are similar to the below to validate TPDMs.
->>> Enable coresight sink first.
->>>
->>> echo 1 > /sys/bus/coresight/devices/tmc_etf0/enable_sink
->>> echo 1 > /sys/bus/coresight/devices/tpdm0/enable_source
->>> echo 1 > /sys/bus/coresight/devices/tpdm0/integration_test
->>> echo 2 > /sys/bus/coresight/devices/tpdm0/integration_test
->>> The test data will be collected in the coresight sink which is enabled.
->>> If rwp register of the sink is keeping updating when do
->>> integration_test (by cat tmc_etf0/mgmt/rwp), it means there is data
->>> generated from TPDM to sink.
->>>
->>> There must be a tpda between tpdm and the sink. When there are some
->>> other trace event hw components in the same HW block with tpdm, tpdm
->>> and these hw components will connect to the coresight funnel. When
->>> there is only tpdm trace hw in the HW block, tpdm will connect to
->>> tpda directly.
->>>         +---------------+                +-------------+
->>>      |  tpdm@6c08000 |                |tpdm@684C000 |
->>>      +-------|-------+                +------|------+
->>>              |                               |
->>>      +-------|-------+                       |
->>>      | funnel@6c0b000|                       |
->>>      +-------|-------+                       |
->>>              |                               |
->>>      +-------|-------+                       |
->>>      |funnel@6c2d000 |                       |
->>>      +-------|-------+                       |
->>>              |                               |
->>>              |    +---------------+          |
->>>              +----- tpda@6004000  -----------+
->>>                   +-------|-------+
->>>                           |
->>>                   +-------|-------+
->>>                   |funnel@6005000 |
->>>                   +---------------+
->>>
+>> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
 >>
->> --8<--
+>> ---
+>> Changes in v6:
+>> - Renamed the tests to follow DRM test naming convention
 >>
->> Please could you add the above to a Documentation file (Of course
->> skip the description of patches).
-> Sure. I will add them to the Documentation file.
+>> Changes in v5:
+>> - Switched to KUNIT_ASSERT_NOT_NULL
+>> ---
+>>  drivers/gpu/drm/drm_modes.c                     |  2 +
+>>  drivers/gpu/drm/tests/drm_client_modeset_test.c | 54 +++++++++++++++++++++++++
+>>  2 files changed, 56 insertions(+)
 >>
->>
->>> This patch series depends on patch series:
->>> "[v5,00/14] coresight: Add new API to allocate trace source ID values"
->>> https://patchwork.kernel.org/project/linux-arm-kernel/cover/20221101163103.17921-1-mike.leach@linaro.org/
->>
->> So, is there a strict binding between a TPDM and a TPDA ?
->> i.e., Multiple TPDMs could never end up reaching the sam
->> TPDA ? I see that the TPDMs could be connected to funnels
->> and thus other TPDMs could be connected to the same funnels
->> and thus reach the same TPDA.
-> There is no strict binding between TPDM and TPDA.
-> TPDA can have multiple TPDMs connect to it.
-> But There must be only one TPDA in the path from the TPDM source to TMC 
-> sink.
-> TPDM can directly connect to TPDA's inport
-> or connect to funnel which will connect to TPDA's inport.
->>
->> Also, the trace-id is bound to TPDA and not TPDM. So, if
->> we have multiple TPDMs, trace decoding is going to be
->> impossible.
-> The TPDMs which are connected to same TPDA shares the same
-> trace-id. When TPDA does packetization, different port will have
-> unique channel number for decoding.
->>
+>> diff --git a/drivers/gpu/drm/drm_modes.c b/drivers/gpu/drm/drm_modes.c
+>> index 49441cabdd9d..17c5b6108103 100644
+>> --- a/drivers/gpu/drm/drm_modes.c
+>> +++ b/drivers/gpu/drm/drm_modes.c
+>> @@ -2272,7 +2272,9 @@ struct drm_named_mode {
+>>  
+>>  static const struct drm_named_mode drm_named_modes[] = {
+>>  	NAMED_MODE("NTSC", 13500, 720, 480, DRM_MODE_FLAG_INTERLACE, DRM_MODE_TV_MODE_NTSC),
+>> +	NAMED_MODE("NTSC-J", 13500, 720, 480, DRM_MODE_FLAG_INTERLACE, DRM_MODE_TV_MODE_NTSC_J),
+>>  	NAMED_MODE("PAL", 13500, 720, 576, DRM_MODE_FLAG_INTERLACE, DRM_MODE_TV_MODE_PAL),
+>> +	NAMED_MODE("PAL-M", 13500, 720, 480, DRM_MODE_FLAG_INTERLACE, DRM_MODE_TV_MODE_PAL_M),
+>>  };
+> 
+> I'm now having second thoughts about the tv_mode commandline option. Can
+> we just add all the variants to this table and drop the tv_mode option?
+> IMO this will be more user friendly and less confusing.
+> 
 
-Thanks, please update the above in the TPDA code in a comment
-and also in the recommended document above.
+One downside of this is that it's not possible to force connector status
+when using named modes, but I think it would be better to have a force
+option than a tv_mode option. A lot of userspace treats unknown status
+as disconnected.
 
-Thanks
-Suzuki
->> Thanks
->> Suzuki
->>
->>>
->>> Mao Jinlong (9):
->>>    coresight: core: Use IDR for non-cpu bound sources' paths.
->>>    Coresight: Add coresight TPDM source driver
->>>    dt-bindings: arm: Adds CoreSight TPDM hardware
->>>    coresight-tpdm: Add DSB dataset support
->>>    coresight-tpdm: Add integration test support
->>>    Coresight: Add TPDA link driver
->>>    dt-bindings: arm: Adds CoreSight TPDA hardware definitions
->>>    arm64: dts: qcom: sm8250: Add coresight components
->>>    arm64: dts: qcom: sm8250: Add tpdm mm/prng
->>>
->>>   .../testing/sysfs-bus-coresight-devices-tpdm  |  13 +
->>>   .../bindings/arm/qcom,coresight-tpda.yaml     | 111 +++
->>>   .../bindings/arm/qcom,coresight-tpdm.yaml     |  93 +++
->>>   MAINTAINERS                                   |   1 +
->>>   arch/arm64/boot/dts/qcom/sm8250.dtsi          | 671 ++++++++++++++++++
->>>   drivers/hwtracing/coresight/Kconfig           |  23 +
->>>   drivers/hwtracing/coresight/Makefile          |   2 +
->>>   drivers/hwtracing/coresight/coresight-core.c  |  42 +-
->>>   drivers/hwtracing/coresight/coresight-tpda.c  | 208 ++++++
->>>   drivers/hwtracing/coresight/coresight-tpda.h  |  35 +
->>>   drivers/hwtracing/coresight/coresight-tpdm.c  | 259 +++++++
->>>   drivers/hwtracing/coresight/coresight-tpdm.h  |  62 ++
->>>   include/linux/coresight.h                     |   1 +
->>>   13 files changed, 1509 insertions(+), 12 deletions(-)
->>>   create mode 100644 
->>> Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
->>>   create mode 100644 
->>> Documentation/devicetree/bindings/arm/qcom,coresight-tpda.yaml
->>>   create mode 100644 
->>> Documentation/devicetree/bindings/arm/qcom,coresight-tpdm.yaml
->>>   create mode 100644 drivers/hwtracing/coresight/coresight-tpda.c
->>>   create mode 100644 drivers/hwtracing/coresight/coresight-tpda.h
->>>   create mode 100644 drivers/hwtracing/coresight/coresight-tpdm.c
->>>   create mode 100644 drivers/hwtracing/coresight/coresight-tpdm.h
->>>
->>
+Anyone know if it's possible to set the connector status sysfs file
+using a udev rule?
 
+Noralf.
