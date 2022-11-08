@@ -2,66 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51888621E8E
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 22:32:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F518621E91
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 22:33:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229909AbiKHVci (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 16:32:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52458 "EHLO
+        id S229944AbiKHVdI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 16:33:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229675AbiKHVcd (ORCPT
+        with ESMTP id S229955AbiKHVdE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 16:32:33 -0500
-Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A39476176A
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 13:32:32 -0800 (PST)
-Received: by mail-pl1-x649.google.com with SMTP id o7-20020a170902d4c700b001868cdac9adso12000992plg.13
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 13:32:32 -0800 (PST)
+        Tue, 8 Nov 2022 16:33:04 -0500
+Received: from 002.mia.mailroute.net (002.mia.mailroute.net [199.89.3.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C1A66177B
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 13:33:03 -0800 (PST)
+Received: from localhost (002.mia.mailroute.net [127.0.0.1])
+        by 002.mia.mailroute.net (Postfix) with ESMTP id 4N6LtQ46y5z25j0x
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 21:33:02 +0000 (UTC)
+X-Virus-Scanned: by MailRoute
+Received: from 002.mia.mailroute.net ([199.89.3.5])
+        by localhost (002.mia [127.0.0.1]) (mroute_mailscanner, port 10026)
+        with LMTP id 0CM0EMVOn62A for <linux-kernel@vger.kernel.org>;
+        Tue,  8 Nov 2022 21:33:00 +0000 (UTC)
+Received: from mail-pl1-f198.google.com (mail-pl1-f198.google.com [209.85.214.198])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by 002.mia.mailroute.net (Postfix) with ESMTPS id 4N6LtN2rjCz25hXw
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 21:33:00 +0000 (UTC)
+Received: by mail-pl1-f198.google.com with SMTP id x18-20020a170902ec9200b001869f20da7eso12036879plg.10
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 13:33:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=6KVCLfVygq1k3xfQxWHSpnj24cxWuIfItMrTfQREV0k=;
-        b=guRac4bj6Iv5ovM6ORxT521q3mfUZ0Tw298MV6FSMx2DHp6RxZCINoP7Z7+2mogaQ6
-         Owwyx9TNQ0DLSm8uEYjFw1y1WoxdUs5EkJy+jEz/6da2ikpgHlK0iclhaScwSfBlbabG
-         3A3IMDaWGTYiok5PTWkshF01dwRDrMG/4P/nafPV6y+zMRnB4V2uoG15EMANyWwp/r6f
-         JUzVtVsjYCHOg9HyKN4Q23M1/9wwvC1Y99B/AC4qgy4xzdVZ8scMOn0Xgb4OncRWZ/AU
-         snQcdJEBLTd+FB32kGnmtURFHBi2oSK+gGlBEYUVYneKk0SCELU3W/LeabjeZ4aj6mz5
-         9D5A==
+        d=sladewatkins.net; s=googled;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=XvzS6IZtUmkiQUDObZubbiGEND3E6ynZXlDGWsaowMs=;
+        b=l7c4lds6IThIy6cpCrJ8JMAWwePfEggJx2upPpc3rjIqN8y6Z7TTt3Do7NRhw8L5bt
+         A5VacmPLn8vYrVg2Wm1+czEn3xk2Yh1DWhTJRfG5sk98G/xwwKhV4/v0dywSgk0Phfua
+         GrHug2zpEuIkf4ghy1X197/cseDQCwSsfXIJEoP9p+ZZHZEwIVzgz+OO1qhCLJbNkf0f
+         Y0t7LpoND24vEM6snXgeh5SK+NwJ0lrrLMDrhWQs6JuiKhTyvW38PklAgc1RBKMRSY9k
+         DNTcxUeVwKpmIlUHRdBRuOizfXY40Czy99sshCHdA4s9gdwD8GxptqkHvUBRB6PI3q4l
+         t1qA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6KVCLfVygq1k3xfQxWHSpnj24cxWuIfItMrTfQREV0k=;
-        b=jb9hnWGy/9RK2W0Zg2l1BLPC8NRHI9Y6S2h07S+p0pnvrVDUKzRwO39fCvOfZXcooj
-         MOICY+dCGuguZA1+CUHtgA68TCAuocOF9xMo83IOZvA18Bbsu8LCfPI92oe/JX7a61ss
-         K1wylONMP/bRhytHfX/fRL9tLnG4AlwVZBjfeEtU7ZOCaULUrU1ACRgHt1taDmiZsubb
-         GXjDAKq+aoH6aFGnLQXeYLU+t/og/9kb3P1Tm+w9wMoL1XWyps5tFKtp/knFFm/SnO37
-         O4lKa3tCygPYjBwwDuZJCfiGze/njrn/5VUm741z5q/wnaBpu0+MtJD1pQ/KXenzoE7O
-         TcYg==
-X-Gm-Message-State: ACrzQf3WXm1V5vJvdPlDCSki3HTdRZ/C0+qldYPVq6Llsgx74FutgWls
-        JLLkncnb2u3a0EtLgR8ZbqGKmpLmn4Ix+kmpycndxT2LPg9tXOaA7+SoROAvIoZ3o8vvxip1wGD
-        dYOaKCX/S2r9zizzno3eZ+VpAZovhlD3vvsIjbQYlbSEAEpkc2JFZefiKV4Ubb3GXtBYngtRXwi
-        r+sEL4/Jc=
-X-Google-Smtp-Source: AMsMyM4Bgk6d+ZWIBxyGcsbyvwL6TLevGQSeE3B6pICu5ZNDC+EAOoHxEbrFuKY8j6N35LVoE50Me6DY03uXkNFRpg==
-X-Received: from dionnaglaze.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:2ee6])
- (user=dionnaglaze job=sendgmr) by 2002:a17:903:264b:b0:186:af7a:391d with
- SMTP id je11-20020a170903264b00b00186af7a391dmr58090859plb.19.1667943152082;
- Tue, 08 Nov 2022 13:32:32 -0800 (PST)
-Date:   Tue,  8 Nov 2022 21:32:26 +0000
-In-Reply-To: <20221108213226.3340496-1-dionnaglaze@google.com>
-Mime-Version: 1.0
-References: <20221108213226.3340496-1-dionnaglaze@google.com>
-X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
-Message-ID: <20221108213226.3340496-3-dionnaglaze@google.com>
-Subject: [PATCH 2/2] kvm: sev: If ccp is busy, report throttled to guest
-From:   Dionna Glaze <dionnaglaze@google.com>
-To:     linux-kernel@vger.kernel.org, x86@kernel.org
-Cc:     Dionna Glaze <dionnaglaze@google.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XvzS6IZtUmkiQUDObZubbiGEND3E6ynZXlDGWsaowMs=;
+        b=gbFBKsafRw1qr5lNlhvOJ1KHWtUi7VVNL8EpPjzN5nefaS3BPR5QhGO//2BsCqjTkX
+         TYzvnjn/7NeiqIq3o/25DY0YvgEcUKi5KS/UsY8htP4OuM8Sdp6a1GDQAAnlUTntFbsb
+         aIyv73z5ir5yZoBSFngv3u3rprvbZa2cuElnEi+cztOOpDeFz4lVHvoMZ+wxa4CJdQnG
+         3XFyPHiwvZyE2bRuUxtUj4aOcd9102cJ9XSFos4mKwgJ0DeCreFSP0LSrWyTgG97Ls0r
+         GscjFrf8pdnOKlBxK2yiO6hhAxecL8y2ICaT7WDuiFzHZzQUgzfyCdNNoYGRK1VgaWUV
+         W8wA==
+X-Gm-Message-State: ACrzQf0sTKjLsfWTs/f/hE+G/AFdZ9jx2jCQ9lpCyqJo7+0ZMasZFTTG
+        E5NjKRzzsiJRVVEC0GGF/LoiBpnWsCjGVTQSFWEGx98jAKHaI6srEU/mICpEaz/2QvaQkPjRY2e
+        G8hBs90FjTzw9kqEQo7/ezEMP6FPaBtJ7Rgn2FL+wPQq3qbOpSqzkDmo=
+X-Received: by 2002:a17:902:9b88:b0:188:620d:90fc with SMTP id y8-20020a1709029b8800b00188620d90fcmr27845606plp.61.1667943179059;
+        Tue, 08 Nov 2022 13:32:59 -0800 (PST)
+X-Google-Smtp-Source: AMsMyM74u/1SS2WCRO6VZM04gxufQf/tkIwogn2aFn4BzsnsFTbOeo04Kfkbq/L5Z9sbrGMnJiqbRFzjakLsbFoktOU=
+X-Received: by 2002:a17:902:9b88:b0:188:620d:90fc with SMTP id
+ y8-20020a1709029b8800b00188620d90fcmr27845580plp.61.1667943178750; Tue, 08
+ Nov 2022 13:32:58 -0800 (PST)
+MIME-Version: 1.0
+References: <20221108133345.346704162@linuxfoundation.org>
+In-Reply-To: <20221108133345.346704162@linuxfoundation.org>
+From:   Slade Watkins <srw@sladewatkins.net>
+Date:   Tue, 8 Nov 2022 16:32:47 -0500
+Message-ID: <CA+pv=HOud9PMz7e9N=ffyF14OeDWU0ddDrZJADaqTPP-q7k6-g@mail.gmail.com>
+Subject: Re: [PATCH 5.15 000/144] 5.15.78-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,55 +87,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The ccp driver can be overloaded even with 1 HZ throttling. The return
-value of -EBUSY means that there is no firmware error to report back to
-user space, so the guest VM would see this as exitinfo2 = 0. The false
-success can trick the guest to update its the message sequence number
-when it shouldn't have.
+Hi,
 
-Instead, when ccp returns -EBUSY, we report that to userspace as the
-throttling return value.
+On Tue, Nov 8, 2022 at 8:59 AM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.15.78 release.
+> There are 144 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Thu, 10 Nov 2022 13:33:17 +0000.
+> Anything received after that time might be too late.
 
-Signed-off-by: Dionna Glaze <dionnaglaze@google.com>
----
- arch/x86/kvm/svm/sev.c | 17 +++++++++++++++--
- 1 file changed, 15 insertions(+), 2 deletions(-)
+5.15.78-rc1 compiled and booted on my x86_64 test system. No errors or
+regressions.
 
-diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
-index a9f67bfd60d9..6493fb527110 100644
---- a/arch/x86/kvm/svm/sev.c
-+++ b/arch/x86/kvm/svm/sev.c
-@@ -3641,7 +3641,13 @@ static void snp_handle_guest_request(struct vcpu_svm *svm, gpa_t req_gpa, gpa_t
- 		goto unlock;
- 
- 	rc = sev_issue_cmd(kvm, SEV_CMD_SNP_GUEST_REQUEST, &data, &err);
--	if (rc)
-+	/*
-+	 * The ccp driver can return -EBUSY if the PSP is overloaded, so
-+	 * we offer that as a throttling signal too.
-+	 */
-+	if (rc == -EBUSY)
-+		rc = SNP_GUEST_REQ_THROTTLED;
-+	else if (rc)
- 		/* use the firmware error code */
- 		rc = err;
- 
-@@ -3698,7 +3704,14 @@ static void snp_handle_ext_guest_request(struct vcpu_svm *svm, gpa_t req_gpa, gp
- 
- 	rc = snp_guest_ext_guest_request(&req, (unsigned long)sev->snp_certs_data,
- 					 &data_npages, &err);
--	if (rc) {
-+	/*
-+	 * The ccp driver can return -EBUSY if the PSP is overloaded, so
-+	 * we offer that as a throttling signal too.
-+	 */
-+	if (rc == -EBUSY) {
-+               rc = SNP_GUEST_REQ_THROTTLED;
-+	       goto cleanup;
-+	} else if (rc) {
- 		/*
- 		 * If buffer length is small then return the expected
- 		 * length in rbx.
--- 
-2.38.1.431.g37b22c650d-goog
+Tested-by: Slade Watkins <srw@sladewatkins.net>
 
+Best,
+-srw
