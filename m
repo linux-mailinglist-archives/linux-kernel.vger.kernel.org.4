@@ -2,95 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5287E62082C
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 05:16:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C53B2620835
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 05:21:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232654AbiKHEQF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 23:16:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45388 "EHLO
+        id S232723AbiKHEVP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 23:21:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233371AbiKHEPi (ORCPT
+        with ESMTP id S232270AbiKHEVM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 23:15:38 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5160731EF8
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 20:15:36 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E23E261422
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 04:15:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F233AC433C1;
-        Tue,  8 Nov 2022 04:15:34 +0000 (UTC)
-Date:   Mon, 7 Nov 2022 23:15:32 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     linux-kernel@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
+        Mon, 7 Nov 2022 23:21:12 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9858518B34
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 20:21:03 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id l6so12687826pjj.0
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 20:21:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=3SfqLAbIddyq76wOhovHVJdZznkWEzSpDefKEM7fw48=;
+        b=JIPRYFMoxy3GfAJ8By4TEu05YaVP1ntog5Y9wfjBHbFI1pS5m1s0/JiB9eBWyuxgRs
+         0d4P4UZ4vPDsNtFUnv4GxztfLBlFtpjOiBeHFieTSpPDV2eF6EeOrHaJX6plPhQ34F3w
+         NDtQwNc7pWMxanGPjLm8ziu+H56nHbzmXNyTJm/MiMdm4aGS/2EnyHjpHA41vfCOcdkk
+         PZYkoCZKIO9P2X7ul2+Brtdrn31FQo4Aagnu5OsEx780t6woauhvhYEAvhfUjk8RRfFn
+         Y1i98rgs9vswK1e9wRByWf0TlSpa1oD0/+RnVPkKSHpOqiPHpkhoezw0CyhuWqJvao1G
+         dkcQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3SfqLAbIddyq76wOhovHVJdZznkWEzSpDefKEM7fw48=;
+        b=lnuIvVprmJfU+LabKJxjfROkWOMXBJ8j56uhgkQsbCPmZKQ99PpOyDPqBMhmYpFWAz
+         nQzGSbrYgjWP7srzj+TD9I7G9TQuzuTs7mr63tE++gET1CQXAHRbMnGyRan9H2NDRkfQ
+         /RLBXt9K3id+zh514OQDYmvAU2PzTku+dvqyD77LAZBWMDaNzbiDnC1lGNwd3/M9wmZk
+         w0bwqc7FyWKfqLdu2l3z/EM0JTnpSvcGWNVe4QKZM5qV9RXKplwChXxKshK++XsDPlul
+         1IZacBAZi7++gBwX9XK4R0Eu790xzjK1JDFKcowgZUVs8fOjDVj/E93E52qg4OZ7L88s
+         dLFQ==
+X-Gm-Message-State: ACrzQf189eKMA+DhSkh1ce6c6VmL6xWRhFti8SGRLDXq9w3UiyfTRspg
+        XM661hkLiqWdE9Ja0j/QrTOatg==
+X-Google-Smtp-Source: AMsMyM6rouWEqC5wyKoVUJdp0gW7NIB8ViQoUIR9P8lG8d913aUjGMtR7fXDusx8RWaiFC72isNXQA==
+X-Received: by 2002:a17:90b:33d0:b0:213:137b:1343 with SMTP id lk16-20020a17090b33d000b00213137b1343mr55451053pjb.128.1667881263179;
+        Mon, 07 Nov 2022 20:21:03 -0800 (PST)
+Received: from localhost ([122.172.84.80])
+        by smtp.gmail.com with ESMTPSA id k4-20020a17090a39c400b00211d5f93029sm6873798pjf.24.2022.11.07.20.21.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Nov 2022 20:21:02 -0800 (PST)
+Date:   Tue, 8 Nov 2022 09:50:58 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
         Stephen Boyd <sboyd@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Anna-Maria Gleixner <anna-maria@linutronix.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Julia Lawall <Julia.Lawall@inria.fr>
-Subject: Re: [for-linus][PATCH 4/5] timers: Add timer_shutdown_sync() and
- timer_shutdown() to be called before freeing timers
-Message-ID: <20221107231532.4bbfce5c@rorschach.local.home>
-In-Reply-To: <87y1sm8h1o.ffs@tglx>
-References: <20221106233037.815236769@goodmis.org>
-        <20221106233434.425162916@goodmis.org>
-        <87sfivvy91.ffs@tglx>
-        <87mt93vwv4.ffs@tglx>
-        <F93A06C1-6188-4787-9563-8F5676A5A098@goodmis.org>
-        <87y1sm8h1o.ffs@tglx>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Rob Herring <robh@kernel.org>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: opp-v2: Fix clock-latency-ns prop in example
+Message-ID: <20221108042058.o7xuzkuokykv5xcs@vireshk-i7>
+References: <20221107204355.31971-1-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221107204355.31971-1-Sergey.Semin@baikalelectronics.ru>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 08 Nov 2022 00:45:55 +0100
-Thomas Gleixner <tglx@linutronix.de> wrote:
-
-> > Sure, but I'm traveling this week and may not get to it until Friday.  
+On 07-11-22, 23:43, Serge Semin wrote:
+> Accidentally discovered a hidden typo in the DT-nodes defined in the
+> opp-v2 bindings example. Instead of specifying the "clock-latency-ns"
+> property the DT-node has been created with the "lock-latency-ns" property
+> in it, which doesn't exist neither in opp-v2 nor in the base schemas.
+> Let's fix the name to having the "clock-" prefix as it was originally
+> implied and as the rest of the similar nodes has.
 > 
-> That's fine as I think this whole approach is wrong to begin with.
-> 
-> We are not doing a tree wide change at rc4 just to scratch an itch which
-> is there for ages and has been debated for months.
-> 
-> Q: Did you try a merge of the result against -next?
-> A: Definitely not.
+> Fixes: 94274f20f6bf ("dt-bindings: opp: Convert to DT schema")
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 
-OK, Yep, I was only working with Linus's tree, not next, something I
-overlooked.
+Applied. Thanks.
 
-> 
-> The proper approach is to provide all the infrastructure, i.e. the new
-> interfaces and merge them during the next merge window. Right before rc1
-> provide a script or a script converted tree to Linus which switches the
-> tree over to the new world order.
-
-Well, actually this was my original plan, but Linus asked for the
-treewide script to be done in this -rc release, and that part was only
-done on his request.
-
-  https://lore.kernel.org/all/CAHk-=whKE5UL+AuCC2wK8oq8D_ueSO_T7-9Acx4POouqVi8ZHg@mail.gmail.com/
-
-
-> 
-> How long have you been around doing kernel development and how much fuzz
-> do you make about even trivial changes to ftrace?
-
-This is my first "treewide" change I'm doing, so I'm going to make
-mistakes. Hence why I started this all off with RFC.
-
-I'll rebase this on next and break this patch up into more comprehensible bits.
-
--- Steve
+-- 
+viresh
