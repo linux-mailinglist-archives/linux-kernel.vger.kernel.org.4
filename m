@@ -2,172 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20998621BDD
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 19:27:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0C39621BE1
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 19:27:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229882AbiKHS1N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 13:27:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43708 "EHLO
+        id S229861AbiKHS1l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 13:27:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229835AbiKHS1K (ORCPT
+        with ESMTP id S229884AbiKHS1j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 13:27:10 -0500
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B74721A390
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 10:27:08 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id l39-20020a05600c1d2700b003cf93c8156dso8103454wms.4
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 10:27:08 -0800 (PST)
+        Tue, 8 Nov 2022 13:27:39 -0500
+Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C08651AD9C
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 10:27:37 -0800 (PST)
+Received: by mail-io1-xd2b.google.com with SMTP id b2so12117942iof.12
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 10:27:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=cAQdX1ILMh9aXeRd7w9Jd8jntvfrZSZnbFs6WkiPpO8=;
-        b=XlmvxCc+lyBnTAGJpAjr4RWWAW5baexaFDH+jXn8compF5Jqub8MYiRJQl14IcKygg
-         PiM40PLcAwukpeIPuL7A6upDD9B/fV17HXYfKe2pbCapku4qoyJT9IhmKGMpYsM0gZhK
-         ftbf0JsXiCPUl9FcE2927lMbNkl+qMrQ4u9sh+w/Oh1G90tnXjUG14zFmdkYCEPhRsdR
-         xEvNe+F/lTNohVHEearplxXSLsT8bU9RG4ens9JverkqL/xNPDZuRa1silwBLqB2GJY9
-         VAXgq9S4XS5viaoBvVrtNr60FpFHRr/NP2kRrCb0mo4+hTg/bvzgdUvGk6yA16vDMQnB
-         q6xg==
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=jf9WajsSrjJ+WBtuoM/CpRnwctyi+9OwrkPgKP+pwEs=;
+        b=TQ6GCM2ZX3ATNDOT1a3PVgvZMVBdxJafFMx8wGqde06tEytrAox7rS8LG5d092Pe44
+         p1C4VNGKKKeNwC3dvgOUUFSy67+N8PBrntcWv6hZwEfll8Esox+En7rKccC88K0NkbqH
+         Jpwdv+MDM3k/WuztnZnjCOONej93KjlplrZWI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=cAQdX1ILMh9aXeRd7w9Jd8jntvfrZSZnbFs6WkiPpO8=;
-        b=VbqKyDvOdCFJEPPmc6+PUzW3G3S4Cz8WAYNanYHhn++h8CD7wg6Z6cWpWwLl4Rv1iR
-         ecyfR6AW9FcohMy+D/n+BSt2kW8yPJ4QMzOni/i4h7CIzxLGWOsAxPp+Fr1tAy0ihY2E
-         +o9SwSCox9pGclSXhK4pbAk+2o18UdjI+xShTV3O6hBpRE87y+5lEYky+KeH7chokBHA
-         V8WZiHxVxtUa/yXosuBEKmOWnhLmZRmfsIvelx95YXjlv7C3PRjEGzaKzq0XZ7U0Q/RS
-         rym7WXQONy5lkJ4vT0daPfGvrIK+IpjiSgraXDR/bx7XdLZVdq9qGEuzxtXRxhlkhgFB
-         8y5w==
-X-Gm-Message-State: ACrzQf1hPp0/3DUDvKiL8lNdTk5djmRn/tXDbgafeq72QvxLhfzmwDFw
-        j7lGvPYFnOjez4VwECVV2Gs=
-X-Google-Smtp-Source: AMsMyM7ZE2dSGreeyFtOSVNEf8QxTSoAAIhu8Fbx1MWvcj/SQe7+XTB3J/7Xjj5rqCWYXDG0uNg23A==
-X-Received: by 2002:a05:600c:1ca5:b0:3cf:550f:0 with SMTP id k37-20020a05600c1ca500b003cf550f0000mr39520633wms.23.1667932027075;
-        Tue, 08 Nov 2022 10:27:07 -0800 (PST)
-Received: from [192.168.0.25] ([37.222.251.204])
-        by smtp.gmail.com with ESMTPSA id bh23-20020a05600c3d1700b003a83ca67f73sm12464531wmb.3.2022.11.08.10.27.05
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jf9WajsSrjJ+WBtuoM/CpRnwctyi+9OwrkPgKP+pwEs=;
+        b=c0QBUlcFlNpNsqfYgWLG6chN/PPvI3ZucLFfB9ggqmjulvFiCEY+M9jj6cc0lhOnlo
+         VOX08hyakv1VJE++zFWCWzN+iFv+q38dOUbkxJt9DlgbcHIoS6Al/TJxcMBHLHUjXtuT
+         pwgrWNspig03Q501wG3x7pZtCTJIe7bQLbwZQJirvBmtcy0OcMOSxSc2VO3az7r5nwy9
+         5oY17ftt1xJR3a3P9wWTMX5FdZrUiZmIyu+IMYY3s3JF1trka5hVaDo+YN4ilN6mypEy
+         5xMcchrpuIVDstxRyjQ/5Twu2e+otAUa/XQJJ8xGOiqoPU3tc9xom1MqKuNnCo+X9X7b
+         BLwQ==
+X-Gm-Message-State: ACrzQf3bBRLmoF6Pf8ouFfunFNREnBj2hgIC5IRq47Uyb2/AXFIXgWDh
+        +3v+tPjK82cH+lzFxu6YxPJBPQ==
+X-Google-Smtp-Source: AMsMyM4wQ+H9Ug7agqUznRjmIm264rk28jmElmlQ86/RFNioHxizEbgv6+UCugSdMK5ZPgNbYj0cAA==
+X-Received: by 2002:a02:cc71:0:b0:373:1604:274d with SMTP id j17-20020a02cc71000000b003731604274dmr32211390jaq.119.1667932057170;
+        Tue, 08 Nov 2022 10:27:37 -0800 (PST)
+Received: from localhost (30.23.70.34.bc.googleusercontent.com. [34.70.23.30])
+        by smtp.gmail.com with UTF8SMTPSA id f24-20020a056638113800b0036371872137sm4022229jar.11.2022.11.08.10.27.36
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Nov 2022 10:27:06 -0800 (PST)
-Message-ID: <c9228b64-c786-fa24-ff96-376eacfb1816@gmail.com>
-Date:   Tue, 8 Nov 2022 19:27:04 +0100
+        Tue, 08 Nov 2022 10:27:36 -0800 (PST)
+Date:   Tue, 8 Nov 2022 18:27:36 +0000
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     andersson@kernel.org, viresh.kumar@linaro.org,
+        krzysztof.kozlowski+dt@linaro.org, rafael@kernel.org,
+        robh+dt@kernel.org, johan@kernel.org, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH v5 3/3] cpufreq: qcom-hw: Add CPU clock provider support
+Message-ID: <Y2qfmFVK665b1Nbw@google.com>
+References: <20221108154037.111794-1-manivannan.sadhasivam@linaro.org>
+ <20221108154037.111794-4-manivannan.sadhasivam@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH v13,0/3] Add dpi output format control for MT8186
-Content-Language: en-US
-To:     xinlei.lee@mediatek.com, rex-bc.chen@mediatek.com,
-        angelogioacchino.delregno@collabora.com, jason-jh.lin@mediatek.com,
-        nfraprado@collabora.com, chunkuang.hu@kernel.org,
-        p.zabel@pengutronix.de, airlied@linux.ie, daniel@ffwll.ch
-Cc:     dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <1666577099-3859-1-git-send-email-xinlei.lee@mediatek.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <1666577099-3859-1-git-send-email-xinlei.lee@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20221108154037.111794-4-manivannan.sadhasivam@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Xinlei,
+Hi,
 
-Somehow b4 broke with your thread but I was able to apply patch 1 and 2 by hand.
+On Tue, Nov 08, 2022 at 09:10:37PM +0530, Manivannan Sadhasivam wrote:
+> Qcom CPUFreq hardware (EPSS/OSM) controls clock and voltage to the CPU
+> cores. But this relationship is not represented with the clk framework
+> so far.
+> 
+> So, let's make the qcom-cpufreq-hw driver a clock provider. This makes the
+> clock producer/consumer relationship cleaner and is also useful for CPU
+> related frameworks like OPP to know the frequency at which the CPUs are
+> running.
+> 
+> The clock frequency provided by the driver is for each frequency domain.
+> We cannot get the frequency of each CPU core because, not all platforms
+> support per-core DCVS feature.
+> 
+> Also the frequency supplied by the driver is the actual frequency that
+> comes out of the EPSS/OSM block after the DCVS operation. This frequency is
+> not same as what the CPUFreq framework has set but it is the one that gets
+> supplied to the CPUs after throttling by LMh.
+> 
+> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> ---
+>  drivers/cpufreq/qcom-cpufreq-hw.c | 43 +++++++++++++++++++++++++++++++
+>  1 file changed, 43 insertions(+)
+> 
+> diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
+> index 5e0598730a04..86bb11de347f 100644
+> --- a/drivers/cpufreq/qcom-cpufreq-hw.c
+> +++ b/drivers/cpufreq/qcom-cpufreq-hw.c
+> @@ -4,6 +4,7 @@
+>   */
+>  
+>  #include <linux/bitfield.h>
+> +#include <linux/clk-provider.h>
+>  #include <linux/cpufreq.h>
+>  #include <linux/init.h>
+>  #include <linux/interconnect.h>
+> @@ -54,6 +55,7 @@ struct qcom_cpufreq_data {
+>  	bool cancel_throttle;
+>  	struct delayed_work throttle_work;
+>  	struct cpufreq_policy *policy;
+> +	struct clk_hw cpu_clk;
+>  
+>  	bool per_core_dcvs;
+>  
+> @@ -615,8 +617,20 @@ static struct cpufreq_driver cpufreq_qcom_hw_driver = {
+>  	.ready		= qcom_cpufreq_ready,
+>  };
+>  
+> +static unsigned long qcom_cpufreq_hw_recalc_rate(struct clk_hw *hw, unsigned long parent_rate)
+> +{
+> +	struct qcom_cpufreq_data *data = container_of(hw, struct qcom_cpufreq_data, cpu_clk);
+> +
+> +	return qcom_lmh_get_throttle_freq(data);
+> +}
+> +
+> +static const struct clk_ops qcom_cpufreq_hw_clk_ops = {
+> +	.recalc_rate = qcom_cpufreq_hw_recalc_rate,
+> +};
+> +
+>  static int qcom_cpufreq_hw_driver_probe(struct platform_device *pdev)
+>  {
+> +	struct clk_hw_onecell_data *clk_data;
+>  	struct device *dev = &pdev->dev;
+>  	struct device *cpu_dev;
+>  	struct clk *clk;
+> @@ -659,8 +673,16 @@ static int qcom_cpufreq_hw_driver_probe(struct platform_device *pdev)
+>  
+>  	qcom_cpufreq.soc_data = of_device_get_match_data(dev);
+>  
+> +	clk_data = devm_kzalloc(dev, struct_size(clk_data, hws, num_domains), GFP_KERNEL);
+> +	if (!clk_data)
+> +		return -ENOMEM;
+> +
+> +	clk_data->num = num_domains;
+> +
+>  	for (i = 0; i < num_domains; i++) {
+>  		struct qcom_cpufreq_data *data = &qcom_cpufreq.data[i];
+> +		struct clk_init_data init = {};
+> +		const char *clk_name;
+>  		struct resource *res;
+>  		void __iomem *base;
+>  
+> @@ -672,6 +694,27 @@ static int qcom_cpufreq_hw_driver_probe(struct platform_device *pdev)
+>  
+>  		data->base = base;
+>  		data->res = res;
+> +
+> +		/* Register CPU clock for each frequency domain */
+> +		clk_name = devm_kasprintf(dev, GFP_KERNEL, "qcom_cpufreq%d", i);
+> +		init.name = clk_name;
 
-Thanks
-Matthias
+nit: 'clk_name' isn't really needed, the result of devm_kasprintf() could be
+assigned directly to 'init.name'. 'init' could be renamed to 'clk_init' if
+the purpose of using 'clk_name' is to make clear that this is the name of a
+clock.
 
-On 24/10/2022 04:04, xinlei.lee@mediatek.com wrote:
-> From: Xinlei Lee <xinlei.lee@mediatek.com>
-> 
-> Base on the branch of linus/master v6.1 rc1.
-> 
-> Change since v12:
-> 1. Add MT8186_ prefix to variables added in mt8186-mmsys.h file.
-> 
-> Change since v11:
-> 1. Rebase on v6.1-rc1. Change nothing.
-> 
-> Change since v10:
-> 1. Modify patch title and add review tag.
-> 
-> Change since v9:
-> 1. Modify the location of the mmsys_dev member variable.
-> 
-> Change since v8:
-> 1. Modified the title and some description information.
-> 
-> Changes since v7:
-> 1. This series is based on the following patch:
->     [1] soc: mediatek: Add mmsys func to adapt to dpi output for MT8186
->     https://patchwork.kernel.org/project/linux-mediatek/patch/1663161662-1598-2-git-send-email-xinlei.lee@mediatek.com/
-> 2. Modify the DPI_FORMAT_MASK macro definition to GENMASK(1, 0);
-> 3. Add all settings to mtk_mmsys_ddp_dpi_fmt_config;
-> 4. Modify the commit title to Add mt8186 dpi compatibles and platform
-> data.
-> 
-> Changes since v6:
-> 1. Different from other ICs, when mt8186 DPI changes the output format,
-> the mmsys_base+400 register needs to be set to be valid at the same
-> time.
->     In this series, all the situations that mmsys need to be set up are
-> perfected (not necessarily used in practice).
-> 2. Put the value that controls the mmsys function in mtk-mmsys.h.
-> 3. Encountered the sink ic switched between dual edge and single edge,
-> perfected setting and clearing mmsys bit operations in mtk_dpi.c.
-> 
-> Changes since v5:
-> 1. Separate the patch that adds edge_cfg_in_mmsys from the patch that
-> adds mt8186 dpi support.
-> 2. Move the mmsys register definition to mmsys driver.
->   
-> Changes since v4:
-> 1. This series of cancellations is based on the following patches:
->     [1] Add MediaTek SoC(vdosys1) support for mt8195
->     https://patchwork.kernel.org/project/linux-mediatek/cover/20220711075245.10492-1-nancy.lin@mediatek.com/
->     [2] Add MediaTek SoC DRM (vdosys1) support for mt8195
->     https://patchwork.kernel.org/project/linux-mediatek/cover/20220804072827.22383-1-nancy.lin@mediatek.com/
-> 2. Added mtk_mmsys_update_bits function in mtk-mmsys.c;
-> 3. MMSYS 0x400 register is modified to MT8186_MMSYS_DPI_OUTPUT_FORMAT;
-> 4. Fix formatting issues.
-> 
-> Changes since v3:
-> 1. Fix formatting issues;
-> 2. Modify the edge output control name & description;
-> 3. Fix the threading problem.
-> 
-> Changes since v2:
-> 1. Modify key nouns in the description;
-> 2. Add the label of jitao to Co-developed-by;
-> 3. Macro definition address lowercase problem and function naming;
-> 4. Add missing a description of this property in the mtk_dpi_conf.
-> 
-> Change since v1:
-> 1. Modify mt8186 compatiable location.
-> 2. Modify MT8186_DPI_OUTPUT_FORMAT name.
-> 
-> When MT8186 outputs dpi signal, it is necessary to add dual edge output
-> format control in mmsys.
-> 
-> Xinlei Lee (3):
->    soc: mediatek: Add all settings to mtk_mmsys_ddp_dpi_fmt_config func
->    drm: mediatek: Set dpi format in mmsys
->    drm: mediatek: Add mt8186 dpi compatibles and platform data
-> 
->   drivers/gpu/drm/mediatek/mtk_dpi.c     | 32 ++++++++++++++++++++++++++
->   drivers/gpu/drm/mediatek/mtk_drm_drv.c |  2 ++
->   drivers/soc/mediatek/mt8186-mmsys.h    |  8 ++++---
->   drivers/soc/mediatek/mtk-mmsys.c       | 27 +++++++++++++++++-----
->   include/linux/soc/mediatek/mtk-mmsys.h |  7 ++++++
->   5 files changed, 67 insertions(+), 9 deletions(-)
+> +		init.flags = CLK_GET_RATE_NOCACHE;
+> +		init.ops = &qcom_cpufreq_hw_clk_ops;
+> +		data->cpu_clk.init = &init;
+> +
+> +		ret = devm_clk_hw_register(dev, &data->cpu_clk);
+> +		if (ret < 0) {
+> +			dev_err(dev, "Failed to register Qcom CPUFreq clock\n");
+> +			return ret;
+> +		}
+> +
+> +		clk_data->hws[i] = &data->cpu_clk;
+> +	}
+> +
+> +	ret = devm_of_clk_add_hw_provider(dev, of_clk_hw_onecell_get, clk_data);
+> +	if (ret < 0) {
+> +		dev_err(dev, "Failed to add Qcom CPUFreq clock provider\n");
+> +		return ret;
+>  	}
+>  
+>  	ret = cpufreq_register_driver(&cpufreq_qcom_hw_driver);
+> -- 
+> 2.25.1
 > 
