@@ -2,103 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7096D620D03
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 11:19:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 596BA620D1E
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 11:21:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233856AbiKHKTN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 05:19:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46412 "EHLO
+        id S233885AbiKHKU6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 05:20:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233858AbiKHKTI (ORCPT
+        with ESMTP id S229843AbiKHKUz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 05:19:08 -0500
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC13A140A3
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 02:19:04 -0800 (PST)
-Received: by mail-pf1-x42b.google.com with SMTP id v28so13377691pfi.12
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 02:19:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=mzN5KFd2Y8I/q67uNmUdKzDvTfRtrUq0Ss4XZ+RPexg=;
-        b=Y762+Z7+yJXkYybXyvsdCWsLlLawNmZSVHud6lRjtqz/U1O/w89HGZ17E085oW1TX+
-         MugDWPz5mhnEuoCvYo6FU4REmALXzFFFb88J0A6iKutYsHiXdoByrsWdiRzR9dUbYa9L
-         nb9oXGH9Epohl+7s1/7gvl3mW2mh7vKCJ4acMh05S50XWyF/1OEmtEhJbKQUA5HFUZq1
-         FoNn/iaZPISGLVEFWaXaTkh/pgJoppSiaOXQFWBft6KzZkCERrXjTHDR2hHnWAtBtJt7
-         cToPq3/W2gm4tLBjQ0df7HXVS2AfQhaFJbe+YCZmXM5GWCw6247kEQDNVktHfitQMq3G
-         cy/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mzN5KFd2Y8I/q67uNmUdKzDvTfRtrUq0Ss4XZ+RPexg=;
-        b=J8oF3lkHpG8KqbX+VMovTqkkaB0wNifBkRMyw81IfRSW4N5B1hW95tuxQ8FpjnTnx6
-         xFTQFBXrbqc2aFe2aIuvI+D0iAgKHkTevYG4Z7vGCHyB5ACYd8xckeZJ6GoBFyIOMGtV
-         f77IGP6FQ1DwIWn9EhVITmyn/PoeonJqUtkiAdepyGjAHStESARU2fj5MabKHFxqRsY/
-         zV8rginoOd+EGJBoo5Hd8TcGu3Jj4tdTuy9k4TWSZO1JGjBYLk02QwFnqdy+5UuqLT5C
-         0HAbyvtkdaJiSDOXmIAk9neJpFXaj9cpln/Y/hE5khkFBMYC+8fTnCSuQnazWHlLdGJg
-         CL2g==
-X-Gm-Message-State: ACrzQf2V1YsNch4HNguydCg/KNAVDv9pNfj+SgQHopAizc+tuZy4ErIX
-        wlpip8uKt4nhxfWHKRViFyl2KsJTJx53QaNFbG4Nb/wPAeM=
-X-Google-Smtp-Source: AMsMyM7vNqP5xj1WaQF2hJQ70H9fGNDZKo70toyjGFxR5FLwldoGzpWM/PBOrVNOYQG3pn0UbkBMDCGyPh1OOl1Hh1w=
-X-Received: by 2002:a63:464d:0:b0:441:5968:cd0e with SMTP id
- v13-20020a63464d000000b004415968cd0emr48838238pgk.595.1667902744501; Tue, 08
- Nov 2022 02:19:04 -0800 (PST)
+        Tue, 8 Nov 2022 05:20:55 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47834BC1E
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 02:20:55 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CF16C614E6
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 10:20:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60360C433D6;
+        Tue,  8 Nov 2022 10:20:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667902854;
+        bh=F/nbJavY2ngyv2qilaghZTRYq7104XTI4SbSBrKfj6A=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Vv2jY7ePU9EU+XlBjjUeNuBt5yQSJOzSP/YPK7SREsFQis+UviJOQbecC/xfk84/C
+         SDNd3+tEafVEd3BNGlCAmLsS/URxu1YJPSeBz5qNio0yggJDeLt4enGuXQammItIy5
+         p3cBEbPhi10OXvzBJJNeMvhTJHmNQ5dXaTGpQrlswdxaoGurbudiCiFO0f5g96x1Dp
+         +susVOPCtC5aqyFbVA57huKXFTJ1YuwPZzcvbZQJpLJxzz8mgrZzkz5pMWQPrNngEN
+         wL3RcyDHpMNCrK5WX8whHqCRVS1BE69i41nKqBWZlf9UNo1u9WR20SMUowOq9IR8P/
+         366T4Qs0iYubw==
+From:   guoren@kernel.org
+To:     anup@brainfault.org, paul.walmsley@sifive.com, palmer@dabbelt.com,
+        conor.dooley@microchip.com, heiko@sntech.de,
+        philipp.tomsich@vrull.eu
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Guo Ren <guoren@linux.alibaba.com>,
+        Guo Ren <guoren@kernel.org>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Palmer Dabbelt <palmer@rivosinc.com>
+Subject: [PATCH RESEND] riscv: asid: Fixup stale TLB entry cause application crash
+Date:   Tue,  8 Nov 2022 05:20:44 -0500
+Message-Id: <20221108102044.3317793-1-guoren@kernel.org>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-References: <20221018152837.619426-7-ulf.hansson@linaro.org>
- <202210190144.WIiituiJ-lkp@intel.com> <20221107170127.i5bfkx45egaf2oh4@builder.lan>
-In-Reply-To: <20221107170127.i5bfkx45egaf2oh4@builder.lan>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Tue, 8 Nov 2022 11:18:27 +0100
-Message-ID: <CAPDyKFpsPk5uhva2F+=b0r7FeO-8n9+tMAA9iaxGmZZgrtoZUw@mail.gmail.com>
-Subject: Re: [PATCH v3 6/6] soc: qcom: rpmh-rsc: Write CONTROL_TCS with next
- timer wakeup
-To:     Bjorn Andersson <andersson@kernel.org>
-Cc:     kernel test robot <lkp@intel.com>, Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        kbuild-all@lists.01.org,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Maulik Shah <quic_mkshah@quicinc.com>,
-        Rajendra Nayak <quic_rjendra@quicinc.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Amit Pundir <amit.pundir@linaro.org>,
-        linux-arm-msm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 7 Nov 2022 at 18:01, Bjorn Andersson <andersson@kernel.org> wrote:
->
-> On Wed, Oct 19, 2022 at 01:47:17AM +0800, kernel test robot wrote:
-> [..]
-> >    155        #define USECS_TO_CYCLES(time_usecs)                     \
-> >    156                xloops_to_cycles((time_usecs) * 0x10C7UL)
-> >    157
-> >    158        static inline unsigned long xloops_to_cycles(unsigned long xloops)
->
-> Any objections to me changing the type to u64 while applying the
-> patches?
+From: Guo Ren <guoren@linux.alibaba.com>
 
-No objections. Thanks for making the improvement!
+After use_asid_allocator enabled, the userspace application will
+crash for stale tlb entry. Because only using cpumask_clear_cpu without
+local_flush_tlb_all couldn't guarantee CPU's tlb entries fresh. Then
+set_mm_asid would cause user space application get a stale value by
+the stale tlb entry, but set_mm_noasid is okay.
 
->
-> Regards,
-> Bjorn
->
-> >    159        {
-> >  > 160                return (xloops * loops_per_jiffy * HZ) >> 32;
-> >    161        }
-> >    162
+Here is the symptom of the bug:
+unhandled signal 11 code 0x1 (coredump)
+   0x0000003fd6d22524 <+4>:     auipc   s0,0x70
+   0x0000003fd6d22528 <+8>:     ld      s0,-148(s0) # 0x3fd6d92490
+=> 0x0000003fd6d2252c <+12>:    ld      a5,0(s0)
+(gdb) i r s0
+s0          0x8082ed1cc3198b21       0x8082ed1cc3198b21
+(gdb) x/16 0x3fd6d92490
+0x3fd6d92490:   0xd80ac8a8      0x0000003f
+The core dump file shows that the value of register s0 is wrong, but the
+value in memory is right. This is because 'ld s0, -148(s0)' use a stale
+mapping entry in TLB and got a wrong value from a stale physical
+address.
 
-Kind regards
-Uffe
+When task run on CPU0, the task loaded/speculative-loaded the value of
+address(0x3fd6d92490), and the first version of tlb mapping entry was
+PTWed into CPU0's tlb.
+When the task switched from CPU0 to CPU1 without local_tlb_flush_all
+(because of asid), the task happened to write a value on address
+(0x3fd6d92490). It caused do_page_fault -> wp_page_copy ->
+ptep_clear_flush -> ptep_get_and_clear & flush_tlb_page.
+The flush_tlb_page used mm_cpumask(mm) to determine which CPUs need
+tlb flush, but CPU0 had cleared the CPU0's mm_cpumask in previous switch_mm.
+So we only flushed the CPU1 tlb, and setted second version mapping
+of the pte. When the task switch from CPU1 to CPU0 again, CPU0 still used a
+stale tlb mapping entry which contained a wrong target physical address.
+When the task happened to read that value, the bug would be raised.
+
+Fixes: 65d4b9c53017 ("RISC-V: Implement ASID allocator")
+Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+Signed-off-by: Guo Ren <guoren@kernel.org>
+Cc: Anup Patel <apatel@ventanamicro.com>
+Cc: Palmer Dabbelt <palmer@rivosinc.com>
+---
+ arch/riscv/mm/context.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/arch/riscv/mm/context.c b/arch/riscv/mm/context.c
+index 7acbfbd14557..8ad6c2493e93 100644
+--- a/arch/riscv/mm/context.c
++++ b/arch/riscv/mm/context.c
+@@ -317,7 +317,9 @@ void switch_mm(struct mm_struct *prev, struct mm_struct *next,
+ 	 */
+ 	cpu = smp_processor_id();
+ 
+-	cpumask_clear_cpu(cpu, mm_cpumask(prev));
++	if (!static_branch_unlikely(&use_asid_allocator))
++		cpumask_clear_cpu(cpu, mm_cpumask(prev));
++
+ 	cpumask_set_cpu(cpu, mm_cpumask(next));
+ 
+ 	set_mm(next, cpu);
+-- 
+2.36.1
+
