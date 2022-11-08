@@ -2,120 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 596BA620D1E
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 11:21:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54F1C620D22
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 11:21:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233885AbiKHKU6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 05:20:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48280 "EHLO
+        id S233910AbiKHKV2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 05:21:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229843AbiKHKUz (ORCPT
+        with ESMTP id S233841AbiKHKV0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 05:20:55 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47834BC1E
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 02:20:55 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CF16C614E6
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 10:20:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60360C433D6;
-        Tue,  8 Nov 2022 10:20:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667902854;
-        bh=F/nbJavY2ngyv2qilaghZTRYq7104XTI4SbSBrKfj6A=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Vv2jY7ePU9EU+XlBjjUeNuBt5yQSJOzSP/YPK7SREsFQis+UviJOQbecC/xfk84/C
-         SDNd3+tEafVEd3BNGlCAmLsS/URxu1YJPSeBz5qNio0yggJDeLt4enGuXQammItIy5
-         p3cBEbPhi10OXvzBJJNeMvhTJHmNQ5dXaTGpQrlswdxaoGurbudiCiFO0f5g96x1Dp
-         +susVOPCtC5aqyFbVA57huKXFTJ1YuwPZzcvbZQJpLJxzz8mgrZzkz5pMWQPrNngEN
-         wL3RcyDHpMNCrK5WX8whHqCRVS1BE69i41nKqBWZlf9UNo1u9WR20SMUowOq9IR8P/
-         366T4Qs0iYubw==
-From:   guoren@kernel.org
-To:     anup@brainfault.org, paul.walmsley@sifive.com, palmer@dabbelt.com,
-        conor.dooley@microchip.com, heiko@sntech.de,
-        philipp.tomsich@vrull.eu
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Guo Ren <guoren@kernel.org>,
-        Anup Patel <apatel@ventanamicro.com>,
-        Palmer Dabbelt <palmer@rivosinc.com>
-Subject: [PATCH RESEND] riscv: asid: Fixup stale TLB entry cause application crash
-Date:   Tue,  8 Nov 2022 05:20:44 -0500
-Message-Id: <20221108102044.3317793-1-guoren@kernel.org>
-X-Mailer: git-send-email 2.36.1
+        Tue, 8 Nov 2022 05:21:26 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6718E14D13;
+        Tue,  8 Nov 2022 02:21:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667902885; x=1699438885;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=c+lMi5TLW44CIVNMGAR0QpVGssYLNZmbLqtwnbDV/Cw=;
+  b=mHSWlzMWMUJLzOYEiAgQGIR4EO23ptEMpCGwOWkBCrcoofByNIHOrlFo
+   pPN2ivxFOOuwsgzInssh5YDTfxlKp0VKvVF7EiCokoG4xPvZt3ZsgfQel
+   pfaJy9AhsBLVlxEMlCbnappL5U+GxsYXp2cMASbCaZ1D9TvZIrH4UIuKi
+   5NPVrfYKg9cOWqYNMhnLrxpjK41LrrpkaVcoiMIqrRcSfd0ZunL5CXiHb
+   Lpuf5eEHrx3Ic8DXstKn4RDd+IEUzT0F61q8ZqTCT/VwyRQRsrDY6xA7Z
+   MlNxI7qdLN4lsEEafczYSS95A5TCnNzl+iT/iHPmltUG4mf/vjzpxaUEI
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10524"; a="309369613"
+X-IronPort-AV: E=Sophos;i="5.96,147,1665471600"; 
+   d="scan'208";a="309369613"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2022 02:21:24 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10524"; a="614229830"
+X-IronPort-AV: E=Sophos;i="5.96,147,1665471600"; 
+   d="scan'208";a="614229830"
+Received: from wanglin4-mobl.ccr.corp.intel.com (HELO localhost) ([10.249.173.199])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2022 02:21:20 -0800
+Date:   Tue, 8 Nov 2022 18:21:20 +0800
+From:   Yu Zhang <yu.c.zhang@linux.intel.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Eric Li <ercli@ucdavis.edu>,
+        David Matlack <dmatlack@google.com>,
+        Oliver Upton <oupton@google.com>,
+        Liu Jingqi <jingqi.liu@intel.com>
+Subject: Re: [PATCH v5 05/15] KVM: nVMX: Let userspace set nVMX MSR to any
+ _host_ supported value
+Message-ID: <20221108102120.qdlgqlgvdi6wi22u@linux.intel.com>
+References: <20220607213604.3346000-1-seanjc@google.com>
+ <20220607213604.3346000-6-seanjc@google.com>
+ <20221031163907.w64vyg5twzvv2nho@linux.intel.com>
+ <Y2ABrnRzg729ZZNI@google.com>
+ <20221101101801.zxcjswoesg2gltri@linux.intel.com>
+ <Y2FePYteNrEfZ7D5@google.com>
+ <20221102085414.fk2xss74jvtzs6mr@linux.intel.com>
+ <Y2Px90RQydMUoiRH@google.com>
+ <20221107082714.fq3sw7qii4unlcn2@linux.intel.com>
+ <Y2kfCz02tQSUkMKS@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y2kfCz02tQSUkMKS@google.com>
+User-Agent: NeoMutt/20171215
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Guo Ren <guoren@linux.alibaba.com>
+On Mon, Nov 07, 2022 at 03:06:51PM +0000, Sean Christopherson wrote:
+> On Mon, Nov 07, 2022, Yu Zhang wrote:
+> > On Thu, Nov 03, 2022 at 04:53:11PM +0000, Sean Christopherson wrote:
+> > > Ideally, KVM should NEVER manipulate VMX MSRs in response to guest CPUID changes.
+> > > That's what I was referring to earlier by commits:
+> 
+> ...
+> 
+> > Thanks Sean. Let me try to rephrase my understandings of your statement(
+> > and pls feel free to correct me):
+> > 
+> > 1> For now, what vmx_adjust_secondary_exec_control() does, is to enable/
+> > disable a feature in VMX MSR(and nVMX MSR) based on cpuid changes.
+> > 2> What makes sense is, if a feature is 
+> > 	a. disabled by guest CPUID, it shall not be exposed in guest VMX MSR;
+> > 	b. enabled by guest CPUID, it could be either exposed or hidden in
+> > 	guest VMX MSR.
+> > 3> So your previous change is to guarantee 2.a, and userspace VMM can choose
+> > to follow follow either choices in 2.b(depending on whether it believes this
+> > feature is correctly supported by KVM in nested). 
+> > 
+> > Is above understanding correct? 
+> 
+> Not quite.  Again, in an ideal world, KVM would not modify the VMX MSRs based on
+> guest CPUID.  But it's possible userspace is relying on KVM to hide a feature from
+> L2 if it's hidden from L1, so to avoid breaking an otherwise valide userspace config,
+> it's worth enforcing that in KVM.
+> 
 
-After use_asid_allocator enabled, the userspace application will
-crash for stale tlb entry. Because only using cpumask_clear_cpu without
-local_flush_tlb_all couldn't guarantee CPU's tlb entries fresh. Then
-set_mm_asid would cause user space application get a stale value by
-the stale tlb entry, but set_mm_noasid is okay.
+Sorry, maybe I should understand this way:
 
-Here is the symptom of the bug:
-unhandled signal 11 code 0x1 (coredump)
-   0x0000003fd6d22524 <+4>:     auipc   s0,0x70
-   0x0000003fd6d22528 <+8>:     ld      s0,-148(s0) # 0x3fd6d92490
-=> 0x0000003fd6d2252c <+12>:    ld      a5,0(s0)
-(gdb) i r s0
-s0          0x8082ed1cc3198b21       0x8082ed1cc3198b21
-(gdb) x/16 0x3fd6d92490
-0x3fd6d92490:   0xd80ac8a8      0x0000003f
-The core dump file shows that the value of register s0 is wrong, but the
-value in memory is right. This is because 'ld s0, -148(s0)' use a stale
-mapping entry in TLB and got a wrong value from a stale physical
-address.
+In theroy, KVM shall not modify guest VMX MSRs in response to the guest CPUID
+updates. Therefore we shall not enforce the exposure of a feature in guest VMX
+MSR, just because it is enabled in guest CPUID (e.g., userspace VMM can choose
+to hide such feature so long as it believes KVM can not provide correct nested
+support for this feature). 
 
-When task run on CPU0, the task loaded/speculative-loaded the value of
-address(0x3fd6d92490), and the first version of tlb mapping entry was
-PTWed into CPU0's tlb.
-When the task switched from CPU0 to CPU1 without local_tlb_flush_all
-(because of asid), the task happened to write a value on address
-(0x3fd6d92490). It caused do_page_fault -> wp_page_copy ->
-ptep_clear_flush -> ptep_get_and_clear & flush_tlb_page.
-The flush_tlb_page used mm_cpumask(mm) to determine which CPUs need
-tlb flush, but CPU0 had cleared the CPU0's mm_cpumask in previous switch_mm.
-So we only flushed the CPU1 tlb, and setted second version mapping
-of the pte. When the task switch from CPU1 to CPU0 again, CPU0 still used a
-stale tlb mapping entry which contained a wrong target physical address.
-When the task happened to read that value, the bug would be raised.
+But in reverse, it is not reasonable for userspace VMM to expose a feature in
+guest VMX MSR settings, if such feature is disabled in this guest's CPUID. So
+KVM shall help to make sure such feature is hidden when guest CPUID changes.
 
-Fixes: 65d4b9c53017 ("RISC-V: Implement ASID allocator")
-Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-Signed-off-by: Guo Ren <guoren@kernel.org>
-Cc: Anup Patel <apatel@ventanamicro.com>
-Cc: Palmer Dabbelt <palmer@rivosinc.com>
----
- arch/riscv/mm/context.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/arch/riscv/mm/context.c b/arch/riscv/mm/context.c
-index 7acbfbd14557..8ad6c2493e93 100644
---- a/arch/riscv/mm/context.c
-+++ b/arch/riscv/mm/context.c
-@@ -317,7 +317,9 @@ void switch_mm(struct mm_struct *prev, struct mm_struct *next,
- 	 */
- 	cpu = smp_processor_id();
- 
--	cpumask_clear_cpu(cpu, mm_cpumask(prev));
-+	if (!static_branch_unlikely(&use_asid_allocator))
-+		cpumask_clear_cpu(cpu, mm_cpumask(prev));
-+
- 	cpumask_set_cpu(cpu, mm_cpumask(next));
- 
- 	set_mm(next, cpu);
--- 
-2.36.1
+BTW, I found my previous understanding of what vmx_adjust_secondary_exec_control()
+currently does was also wrong. It could also be used for EXITING controls. And
+for such flags(e.g., SECONDARY_EXEC_RDRAND_EXITING), values for the nested settings
+(vmx->nested.msrs.secondary_ctls_high) and for the L1 execution controls(*exec_control)
+could be opposite. So the statement:
+	"1> For now, what vmx_adjust_secondary_exec_control() does, is to enable/
+	 disable a feature in VMX MSR(and nVMX MSR) based on cpuid changes."
+is wrong.
 
+Hopefully we are gonna change vmx_adjust_secondary_exec_control() soon...
+
+B.R.
+Yu
