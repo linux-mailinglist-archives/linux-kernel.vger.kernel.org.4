@@ -2,66 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6256A6219B9
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 17:47:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D6286219AD
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 17:42:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233704AbiKHQrY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 11:47:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35418 "EHLO
+        id S233577AbiKHQmC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 11:42:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233410AbiKHQrW (ORCPT
+        with ESMTP id S234476AbiKHQl7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 11:47:22 -0500
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 124BB1C416
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 08:47:21 -0800 (PST)
-Received: by mail-ej1-x632.google.com with SMTP id ud5so40186952ejc.4
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 08:47:20 -0800 (PST)
+        Tue, 8 Nov 2022 11:41:59 -0500
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B5CA57B50
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 08:41:58 -0800 (PST)
+Received: by mail-ej1-x62e.google.com with SMTP id k2so40162974ejr.2
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 08:41:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=O2Ws9Qx69GuD1J9J9bmsI82Gf3KYLXPK5jGr7y6CVC4=;
-        b=VALpYz56XXVunOxbSeS184Gb3GWoGIO0NvdwMmt4TbW2If0Yr5HY1eyLJ1rJSxVb5D
-         zw/A2a/LhqueQSmD37NaaOlRNFez3SbH1Ca0cG5pjDq67X0vV6xnwl8k65n/U3exReM2
-         2O5uiZxjcc1kz5FhU8CmntwfP11xhwHSiY72c=
+        bh=JAuu4hWloYmftBKHb/d+/mSKClNOAP3hfPN38eMhM00=;
+        b=ZMIJpDBTGymi73YrPFNDvi2rGWDySW0Kd9h0+KHCimcFqASahQoW5nTZcBF508L018
+         8xtPVYDlnFYpkmLiVpZWmtDMxNdUntN3QiwlBsfgfIm0O4AYoci8I+aHOEXKlWKnaeig
+         zT3nFZD+5XTHmnIaoPUtapkA4RHxF/xAEH4NI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=O2Ws9Qx69GuD1J9J9bmsI82Gf3KYLXPK5jGr7y6CVC4=;
-        b=Hsorrb+EmBdVN5a9M0ilEyZ7OoXzp2bdexcFlbzZ1KL/zQ1r92zMeel1xFzlDKL37D
-         okZfdInsL7La7X5bh9PIYrKGFrQLifyFDSLN/jmXNtv+keEylQ5OXNxNBBpOyzeRl7sI
-         +GFFEkNvz2Hg1zifQ6RFuLPYhVS0Ka8t0tgyoFUedJFWLbNbKDHcSMSojypp6/SZggyD
-         AYMP9sA4DksOyi+jPfCYcbCTQupm3CTofj6ciSiXEO4YyvMiMEbOLf2f2uEcnz6Y8Kkl
-         kFt952gxRmWbvXZTlHyoQ3xQ66dwaaCr6TBsyuAcjC0E+XHmMwTOZlOyFwSB3k6YmRNY
-         7jCQ==
-X-Gm-Message-State: ACrzQf3oem+Aj9hcFLml3C8uXyU29lP+xu/Zl5jpVoVZ5uwjuFQBA5nx
-        zI1FmQJLGbnUni6T4jtm4BpW3YMehHFi8y6C
-X-Google-Smtp-Source: AMsMyM5llfQge1L/YX9lg6KTNyNZsCKu6uMkI96vyJvy3e4Sr5lOWFKMj5btzu/wIJLHfa3KqHw+AQ==
-X-Received: by 2002:a17:907:75d0:b0:7ad:8a7a:1a53 with SMTP id jl16-20020a17090775d000b007ad8a7a1a53mr53129931ejc.47.1667926039295;
-        Tue, 08 Nov 2022 08:47:19 -0800 (PST)
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com. [209.85.128.42])
-        by smtp.gmail.com with ESMTPSA id q8-20020aa7da88000000b004619f024864sm5749356eds.81.2022.11.08.08.47.18
+        bh=JAuu4hWloYmftBKHb/d+/mSKClNOAP3hfPN38eMhM00=;
+        b=yz+5e7bH5+A1hgW6gx9rDMGw2R9km7qNqTPx7I1BzPyeNdmomIYLMcbPg8E34rfWMX
+         wh0dh/SvPWE6nHI04EdDP/4czhzUDh364ypLDm5rK5INgb7HHFu7jW0iIEK0ZglbNFJ1
+         i9yT4JdU/IGpnDQcrmHlyn6yvF/DXQvO8MER+kAX6ExRhjh6Jia5shiPjWWLU+0OlJhx
+         TNI3/ulecHD6Q33HD+YDLqBXUza2xwVhJJM+TmGcgvDs8Tbx+etvPKnE4xydXrKx4PAI
+         oYtKFUnK1qekAZVeVtfn/g1dbp6VWzDCD0nj3GHjRKmOCPfgIjnTd3DrINzCRW3iTrok
+         fIaA==
+X-Gm-Message-State: ANoB5pnkenoeNUQlGrvgeDwl1B6AisoSKmPappxM3jvigjLbJdaZtXIn
+        Wy++Ye8k2Z5OjwkuLZsJjG32N61AxawtMyFT
+X-Google-Smtp-Source: AA0mqf5+7Muvw7yYGP2j2hpzzNbFeXPg8HZJcU0fRskfBrNfosv6qCu5wkoZzezp0+gSNqshzqIZBA==
+X-Received: by 2002:a17:907:7422:b0:7ae:7993:ae06 with SMTP id gj34-20020a170907742200b007ae7993ae06mr5104757ejc.226.1667925717493;
+        Tue, 08 Nov 2022 08:41:57 -0800 (PST)
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com. [209.85.221.41])
+        by smtp.gmail.com with ESMTPSA id w19-20020a1709064a1300b007ad9adabcd4sm4803407eju.213.2022.11.08.08.41.49
         for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Nov 2022 08:47:18 -0800 (PST)
-Received: by mail-wm1-f42.google.com with SMTP id v124-20020a1cac82000000b003cf7a4ea2caso12078691wme.5
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 08:47:18 -0800 (PST)
-X-Received: by 2002:a1c:4c16:0:b0:3cf:6f1a:9038 with SMTP id
- z22-20020a1c4c16000000b003cf6f1a9038mr34826018wmf.151.1667925693341; Tue, 08
- Nov 2022 08:41:33 -0800 (PST)
+        Tue, 08 Nov 2022 08:41:52 -0800 (PST)
+Received: by mail-wr1-f41.google.com with SMTP id o4so21887757wrq.6
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 08:41:49 -0800 (PST)
+X-Received: by 2002:a5d:6488:0:b0:22b:3b0b:5e72 with SMTP id
+ o8-20020a5d6488000000b0022b3b0b5e72mr36416288wri.138.1667925709225; Tue, 08
+ Nov 2022 08:41:49 -0800 (PST)
 MIME-Version: 1.0
-References: <20221107235654.1769462-1-bryan.odonoghue@linaro.org>
- <20221107235654.1769462-14-bryan.odonoghue@linaro.org> <CAD=FV=XZ79JjmCW7wYoc0eEhMsAtqxb+p40x2f4mH+kdb0byow@mail.gmail.com>
- <7a0c6afd-e757-46f6-5837-576070e966ec@linaro.org>
-In-Reply-To: <7a0c6afd-e757-46f6-5837-576070e966ec@linaro.org>
+References: <20221107235654.1769462-1-bryan.odonoghue@linaro.org> <20221107235654.1769462-15-bryan.odonoghue@linaro.org>
+In-Reply-To: <20221107235654.1769462-15-bryan.odonoghue@linaro.org>
 From:   Doug Anderson <dianders@chromium.org>
-Date:   Tue, 8 Nov 2022 08:41:21 -0800
-X-Gmail-Original-Message-ID: <CAD=FV=Up7yFEG_5JRBOOzpeQWBhXhoceWszO7G91zJKOUDSMpQ@mail.gmail.com>
-Message-ID: <CAD=FV=Up7yFEG_5JRBOOzpeQWBhXhoceWszO7G91zJKOUDSMpQ@mail.gmail.com>
-Subject: Re: [PATCH v2 13/18] arm64: dts: qcom: sc7180: Add compat qcom,mdss-dsi-ctrl-sc7180
+Date:   Tue, 8 Nov 2022 08:41:37 -0800
+X-Gmail-Original-Message-ID: <CAD=FV=XToQPNKwvY0K3kr0c+zAdTSsR2fvzHZJxa8ryJtC8xFQ@mail.gmail.com>
+Message-ID: <CAD=FV=XToQPNKwvY0K3kr0c+zAdTSsR2fvzHZJxa8ryJtC8xFQ@mail.gmail.com>
+Subject: Re: [PATCH v2 14/18] arm64: dts: qcom: sc7280: Add compat qcom,mdss-dsi-ctrl-sc7280
 To:     "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>
 Cc:     robdclark@gmail.com, quic_abhinavk@quicinc.com,
         dmitry.baryshkov@linaro.org, krzysztof.kozlowski+dt@linaro.org,
@@ -70,13 +68,12 @@ Cc:     robdclark@gmail.com, quic_abhinavk@quicinc.com,
         Bjorn Andersson <andersson@kernel.org>,
         Konrad Dybcio <konrad.dybcio@somainline.org>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Rajendra Nayak <rnayak@codeaurora.org>,
+        Sibi Sankar <sibis@codeaurora.org>,
         Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -85,46 +82,27 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi,
 
-On Tue, Nov 8, 2022 at 4:16 AM Bryan O'Donoghue
+On Mon, Nov 7, 2022 at 3:57 PM Bryan O'Donoghue
 <bryan.odonoghue@linaro.org> wrote:
 >
-> On 08/11/2022 00:24, Doug Anderson wrote:
-> > This seems fine, but I don't think it matches your bindings. Your
-> > bindings says you can have one compatible string. It could be
-> > "qcom,mdss-dsi-ctrl-sc7180" or it could be "qcom,mdss-dsi-ctrl".
-> > ...but your device tree has two compatible strings: the SoC specific
-> > one and the fallback one. You need to change your bindings to make
-> > this work.
+> Add silicon specific compatible qcom,mdss-dsi-ctrl-sc7280 to the
+> mdss-dsi-ctrl block. This allows us to differentiate the specific bindings
+> for sc7280 against the yaml documentation.
 >
-> With the update in this series the binding has a required const.
->
-> If you drop back to just "qcom,mdss-dsi-ctrl-sc7180" you get a warning
-> like this.
->
-> arch/arm64/boot/dts/qcom/sc7180-trogdor-homestar-r4.dtb: dsi@ae94000:
-> compatible: ['qcom,mdss-dsi-ctrl-sc7180'] is too short
->
-> If you just have 'qcom,mdss-dsi-ctrl' you get
->
-> arch/arm64/boot/dts/qcom/sc7180-trogdor-homestar-r4.dtb: dsi@ae94000:
-> compatible:0: 'qcom,mdss-dsi-ctrl' is not one of
-> ['qcom,dsi-ctrl-6g-qcm2290', 'qcom,mdss-dsi-ctrl-apq8064',
-> 'qcom,mdss-dsi-ctrl-msm8916', 'qcom,mdss-dsi-ctrl-msm8974',
-> 'qcom,mdss-dsi-ctrl-msm8996', 'qcom,mdss-dsi-ctrl-sc7180',
-> 'qcom,mdss-dsi-ctrl-sc7280', 'qcom,mdss-dsi-ctrl-sdm630',
-> 'qcom,mdss-dsi-ctrl-sdm660', 'qcom,mdss-dsi-ctrl-sdm845',
-> 'qcom,mdss-dsi-ctrl-sm8250']
-
-Huh. I must have missed something then. Ah, I see the problem. Since
-you didn't CC me on the bindings change I searched myself. I found
-patch #7 in your series ("dt-bindings: msm: dsi-controller-main: Add
-compatible strings for every current SoC"). In that patch everything
-is flat. I didn't notice patch #8 in your series which changes this. I
-would just get the compatibles right the right time. Looking at patch
-#8 I see that Dmitry already suggested this.
-
-So that means this is fine with me. A slight nit that I suspect Bjorn
-would prefer you to blow past the 80 column limit and put both
-compatibles on one line, but it's not huge in my mind.
+> Cc: Andy Gross <agross@kernel.org>
+> Cc: Bjorn Andersson <andersson@kernel.org>
+> Cc: Konrad Dybcio <konrad.dybcio@somainline.org>
+> Cc: Rob Herring <robh+dt@kernel.org>
+> Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+> Cc: linux-arm-msm@vger.kernel.org
+> Cc: devicetree@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Cc: Douglas Anderson <dianders@chromium.org>
+> Cc: Sibi Sankar <sibis@codeaurora.org>
+> Cc: Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>
+> Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+> ---
+>  arch/arm64/boot/dts/qcom/sc7280.dtsi | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 
 Reviewed-by: Douglas Anderson <dianders@chromium.org>
