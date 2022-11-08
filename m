@@ -2,98 +2,328 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 828606216D1
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 15:32:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 048A86216DD
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 15:34:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234139AbiKHOcU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 09:32:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38764 "EHLO
+        id S234399AbiKHOdu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 09:33:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234452AbiKHObW (ORCPT
+        with ESMTP id S234121AbiKHOdc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 09:31:22 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50CA910FF0
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 06:31:15 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id q1-20020a17090a750100b002139ec1e999so13521364pjk.1
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 06:31:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SzBlYeGeT15Xra75w9IZDBjQ7Da3XKSmRdlnDJDYrko=;
-        b=plCZMl07mNxOy4FwEnJyPWecERqsJQyrHYHIsHPByWrtU1k24II845ABLvzsZ/utuV
-         xrfZ6D/e/ZRoyRjpbZ5oMDY9h9ndbu6gtWFiQs/CjHcVVSqci/vjYPMMyy1pnVJ69u5N
-         OM2Kwkcs/9db1KNzWi4t4Kki8xmdjDy37F969+9phg4q7Iutyq/zyteGqROU9T6wdO4n
-         lS/c2RFkn8H1h3UlswE5jNY6oMt5wQG8oq965L41J8fDh6fe1zek7KZifUk151Do70De
-         k9oKwcRkEhDvguAg4zcTYagV5rrGsvTLwyNtdWlzI5EY/CPrjAga8S7nNTzf3DHImH9S
-         a/jQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SzBlYeGeT15Xra75w9IZDBjQ7Da3XKSmRdlnDJDYrko=;
-        b=GF6xlltKIPbEAcsf6PEwJXNjTi10FySTVy/Y1XN1zBmVhtrWzS5go2TS4twvRWiPij
-         ctLrOJSSR63/r+Nflz9O9j4+sqE2a7ZBSuGRDnnQFySYODlMWjxwNQF+nsc74oIr6VS2
-         OViYctRWjLP/mJuSWN9U/v5yAgXfAbosUmrVEQYh9S8xAN/1fcn8RxgD+MlQdUkFuuSL
-         rpNW2ngWdkhWcIIHaU2cmxY25oyAGlAl4ZWbUu2+FRO7t8kOFkQkrqLMKAafARTYLLe7
-         neIfANS5c7zd8hxyUdU+uQIw75YJKS0jt8mt240PIEnKcmUGUgcW281R+MyEexFhBXHU
-         X4Eg==
-X-Gm-Message-State: ACrzQf0xY3nuqGgDX0WjwV9nEwIlI3XbKqC8rTZW8SH6rBpYJAeGp6jK
-        KbDTulqKL+s+pQhP7WjWTpqt4rnQQ8TLcBLSdiXqnHanpKu9Tg==
-X-Google-Smtp-Source: AMsMyM5cpw1VKvG8gEasOMmG4UhkblJY7gBReqfbYX80x9OXEWSZokzXOm90JDY4L5h3JbfU+3ckCU+QNWhG8SGrNVo=
-X-Received: by 2002:a05:6a00:1da6:b0:56c:318a:f8ab with SMTP id
- z38-20020a056a001da600b0056c318af8abmr56843835pfw.82.1667917864342; Tue, 08
- Nov 2022 06:31:04 -0800 (PST)
+        Tue, 8 Nov 2022 09:33:32 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A384DBCA4
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 06:33:31 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3E5B1615BF
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 14:33:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66D6FC433C1;
+        Tue,  8 Nov 2022 14:33:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667918010;
+        bh=LpJVLp97jcdOXa81wZN9DO/QFx5S3xej7QgRvzwTmIQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=XBwAY1mHTP45LHRwG1sDQ3yLSPOdBRH6RPNt9i7+4NCtsXMPxEE8ToVkfKXq8n+Lz
+         4RxG2UzsmUSw0SJedGm0+7+G/DgEA94cXER2wEvTsCJ4O5t9XL9qHKzNIX4BA9YDIZ
+         BDG3Gie0LByMK29SV01b42B6IB556MseYbgdSVkLe3vAqm9+853IqQuQRA8vKqTxMY
+         SdlfDMbYUwel6bNXiQvlTLRK1bdTsgPEbNEedLFb8NBZ0lFBpLEKR4ezlvjXOlEkea
+         MNEinbhSN1O0diGSRKWrNqPbl9JM14p9iQVedrNueMKzD+W5o9cci9g93jjqIveHhE
+         SyWuX8sNXKBYA==
+From:   Chao Yu <chao@kernel.org>
+To:     jaegeuk@kernel.org
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, Chao Yu <chao@kernel.org>,
+        Wei Chen <harperchen1110@gmail.com>,
+        Eric Biggers <ebiggers@google.com>
+Subject: [PATCH v2] f2fs: optimize iteration over sparse directories
+Date:   Tue,  8 Nov 2022 22:33:21 +0800
+Message-Id: <20221108143321.147697-1-chao@kernel.org>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Received: by 2002:ac4:c8c2:0:b0:56a:d900:eb11 with HTTP; Tue, 8 Nov 2022
- 06:31:03 -0800 (PST)
-Reply-To: mr.abraham022@gmail.com
-From:   "Mr.Abraham" <davidbraddy01@gmail.com>
-Date:   Tue, 8 Nov 2022 14:31:03 +0000
-Message-ID: <CAHGOU4PvdrNhE2KifzdPkFxZTCG5gy+23qf130PwnSmJcLRSew@mail.gmail.com>
-Subject: Greeting
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.0 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:102d listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4863]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [mr.abraham022[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [davidbraddy01[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [davidbraddy01[at]gmail.com]
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
-        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-My Greeting, Did you receive the letter i sent to you. Please answer me.
-Regard, Mr.Abraham
+Wei Chen reports a kernel bug as blew:
+
+INFO: task syz-executor.0:29056 blocked for more than 143 seconds.
+      Not tainted 5.15.0-rc5 #1
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:syz-executor.0  state:D stack:14632 pid:29056 ppid:  6574 flags:0x00000004
+Call Trace:
+ __schedule+0x4a1/0x1720
+ schedule+0x36/0xe0
+ rwsem_down_write_slowpath+0x322/0x7a0
+ fscrypt_ioctl_set_policy+0x11f/0x2a0
+ __f2fs_ioctl+0x1a9f/0x5780
+ f2fs_ioctl+0x89/0x3a0
+ __x64_sys_ioctl+0xe8/0x140
+ do_syscall_64+0x34/0xb0
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+
+Eric did some investigation on this issue, quoted from reply of Eric:
+
+"Well, the quality of this bug report has a lot to be desired (not on
+upstream kernel, reproducer is full of totally irrelevant stuff, not
+sent to the mailing list of the filesystem whose disk image is being
+fuzzed, etc.).  But what is going on is that f2fs_empty_dir() doesn't
+consider the case of a directory with an extremely large i_size on a
+malicious disk image.
+
+Specifically, the reproducer mounts an f2fs image with a directory
+that has an i_size of 14814520042850357248, then calls
+FS_IOC_SET_ENCRYPTION_POLICY on it.
+
+That results in a call to f2fs_empty_dir() to check whether the
+directory is empty.  f2fs_empty_dir() then iterates through all
+3616826182336513 blocks the directory allegedly contains to check
+whether any contain anything.  i_rwsem is held during this, so
+anything else that tries to take it will hang."
+
+In order to solve this issue, let's use f2fs_get_next_page_offset()
+to speed up iteration by skipping holes for all below functions:
+- f2fs_empty_dir
+- f2fs_readdir
+- find_in_level
+
+The way why we can speed up iteration was described in
+'commit 3cf4574705b4 ("f2fs: introduce get_next_page_offset to speed
+up SEEK_DATA")'.
+
+Meanwhile, in f2fs_empty_dir(), let's use f2fs_find_data_page()
+instead f2fs_get_lock_data_page(), due to i_rwsem was held in
+caller of f2fs_empty_dir(), there shouldn't be any races, so it's
+fine to not lock dentry page during lookuping dirents in the page.
+
+Link: https://lore.kernel.org/lkml/536944df-a0ae-1dd8-148f-510b476e1347@kernel.org/T/
+Reported-by: Wei Chen <harperchen1110@gmail.com>
+Cc: Eric Biggers <ebiggers@google.com>
+Signed-off-by: Chao Yu <chao@kernel.org>
+---
+v2:
+- update commit title suggested by Eric.
+ fs/f2fs/data.c | 17 ++++++++++++-----
+ fs/f2fs/dir.c  | 34 ++++++++++++++++++++++++----------
+ fs/f2fs/f2fs.h |  5 +++--
+ fs/f2fs/gc.c   |  4 ++--
+ 4 files changed, 41 insertions(+), 19 deletions(-)
+
+diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
+index 51f7ae777711..560fa80590e9 100644
+--- a/fs/f2fs/data.c
++++ b/fs/f2fs/data.c
+@@ -1206,7 +1206,8 @@ int f2fs_get_block(struct dnode_of_data *dn, pgoff_t index)
+ }
+ 
+ struct page *f2fs_get_read_data_page(struct inode *inode, pgoff_t index,
+-				     blk_opf_t op_flags, bool for_write)
++				     blk_opf_t op_flags, bool for_write,
++				     pgoff_t *next_pgofs)
+ {
+ 	struct address_space *mapping = inode->i_mapping;
+ 	struct dnode_of_data dn;
+@@ -1232,12 +1233,17 @@ struct page *f2fs_get_read_data_page(struct inode *inode, pgoff_t index,
+ 
+ 	set_new_dnode(&dn, inode, NULL, NULL, 0);
+ 	err = f2fs_get_dnode_of_data(&dn, index, LOOKUP_NODE);
+-	if (err)
++	if (err) {
++		if (err == -ENOENT && next_pgofs)
++			*next_pgofs = f2fs_get_next_page_offset(&dn, index);
+ 		goto put_err;
++	}
+ 	f2fs_put_dnode(&dn);
+ 
+ 	if (unlikely(dn.data_blkaddr == NULL_ADDR)) {
+ 		err = -ENOENT;
++		if (next_pgofs)
++			*next_pgofs = index + 1;
+ 		goto put_err;
+ 	}
+ 	if (dn.data_blkaddr != NEW_ADDR &&
+@@ -1281,7 +1287,8 @@ struct page *f2fs_get_read_data_page(struct inode *inode, pgoff_t index,
+ 	return ERR_PTR(err);
+ }
+ 
+-struct page *f2fs_find_data_page(struct inode *inode, pgoff_t index)
++struct page *f2fs_find_data_page(struct inode *inode, pgoff_t index,
++					pgoff_t *next_pgofs)
+ {
+ 	struct address_space *mapping = inode->i_mapping;
+ 	struct page *page;
+@@ -1291,7 +1298,7 @@ struct page *f2fs_find_data_page(struct inode *inode, pgoff_t index)
+ 		return page;
+ 	f2fs_put_page(page, 0);
+ 
+-	page = f2fs_get_read_data_page(inode, index, 0, false);
++	page = f2fs_get_read_data_page(inode, index, 0, false, next_pgofs);
+ 	if (IS_ERR(page))
+ 		return page;
+ 
+@@ -1317,7 +1324,7 @@ struct page *f2fs_get_lock_data_page(struct inode *inode, pgoff_t index,
+ 	struct address_space *mapping = inode->i_mapping;
+ 	struct page *page;
+ repeat:
+-	page = f2fs_get_read_data_page(inode, index, 0, for_write);
++	page = f2fs_get_read_data_page(inode, index, 0, for_write, NULL);
+ 	if (IS_ERR(page))
+ 		return page;
+ 
+diff --git a/fs/f2fs/dir.c b/fs/f2fs/dir.c
+index 21960a899b6a..030b7fd4142f 100644
+--- a/fs/f2fs/dir.c
++++ b/fs/f2fs/dir.c
+@@ -340,6 +340,7 @@ static struct f2fs_dir_entry *find_in_level(struct inode *dir,
+ 	unsigned int bidx, end_block;
+ 	struct page *dentry_page;
+ 	struct f2fs_dir_entry *de = NULL;
++	pgoff_t next_pgofs;
+ 	bool room = false;
+ 	int max_slots;
+ 
+@@ -350,12 +351,13 @@ static struct f2fs_dir_entry *find_in_level(struct inode *dir,
+ 			       le32_to_cpu(fname->hash) % nbucket);
+ 	end_block = bidx + nblock;
+ 
+-	for (; bidx < end_block; bidx++) {
++	while (bidx < end_block) {
+ 		/* no need to allocate new dentry pages to all the indices */
+-		dentry_page = f2fs_find_data_page(dir, bidx);
++		dentry_page = f2fs_find_data_page(dir, bidx, &next_pgofs);
+ 		if (IS_ERR(dentry_page)) {
+ 			if (PTR_ERR(dentry_page) == -ENOENT) {
+ 				room = true;
++				bidx = next_pgofs;
+ 				continue;
+ 			} else {
+ 				*res_page = dentry_page;
+@@ -376,6 +378,8 @@ static struct f2fs_dir_entry *find_in_level(struct inode *dir,
+ 		if (max_slots >= s)
+ 			room = true;
+ 		f2fs_put_page(dentry_page, 0);
++
++		bidx++;
+ 	}
+ 
+ 	if (!de && room && F2FS_I(dir)->chash != fname->hash) {
+@@ -956,7 +960,7 @@ void f2fs_delete_entry(struct f2fs_dir_entry *dentry, struct page *page,
+ 
+ bool f2fs_empty_dir(struct inode *dir)
+ {
+-	unsigned long bidx;
++	unsigned long bidx = 0;
+ 	struct page *dentry_page;
+ 	unsigned int bit_pos;
+ 	struct f2fs_dentry_block *dentry_blk;
+@@ -965,13 +969,17 @@ bool f2fs_empty_dir(struct inode *dir)
+ 	if (f2fs_has_inline_dentry(dir))
+ 		return f2fs_empty_inline_dir(dir);
+ 
+-	for (bidx = 0; bidx < nblock; bidx++) {
+-		dentry_page = f2fs_get_lock_data_page(dir, bidx, false);
++	while (bidx < nblock) {
++		pgoff_t next_pgofs;
++
++		dentry_page = f2fs_find_data_page(dir, bidx, &next_pgofs);
+ 		if (IS_ERR(dentry_page)) {
+-			if (PTR_ERR(dentry_page) == -ENOENT)
++			if (PTR_ERR(dentry_page) == -ENOENT) {
++				bidx = next_pgofs;
+ 				continue;
+-			else
++			} else {
+ 				return false;
++			}
+ 		}
+ 
+ 		dentry_blk = page_address(dentry_page);
+@@ -983,10 +991,12 @@ bool f2fs_empty_dir(struct inode *dir)
+ 						NR_DENTRY_IN_BLOCK,
+ 						bit_pos);
+ 
+-		f2fs_put_page(dentry_page, 1);
++		f2fs_put_page(dentry_page, 0);
+ 
+ 		if (bit_pos < NR_DENTRY_IN_BLOCK)
+ 			return false;
++
++		bidx++;
+ 	}
+ 	return true;
+ }
+@@ -1104,7 +1114,8 @@ static int f2fs_readdir(struct file *file, struct dir_context *ctx)
+ 		goto out_free;
+ 	}
+ 
+-	for (; n < npages; n++, ctx->pos = n * NR_DENTRY_IN_BLOCK) {
++	for (; n < npages; ctx->pos = n * NR_DENTRY_IN_BLOCK) {
++		pgoff_t next_pgofs;
+ 
+ 		/* allow readdir() to be interrupted */
+ 		if (fatal_signal_pending(current)) {
+@@ -1118,11 +1129,12 @@ static int f2fs_readdir(struct file *file, struct dir_context *ctx)
+ 			page_cache_sync_readahead(inode->i_mapping, ra, file, n,
+ 				min(npages - n, (pgoff_t)MAX_DIR_RA_PAGES));
+ 
+-		dentry_page = f2fs_find_data_page(inode, n);
++		dentry_page = f2fs_find_data_page(inode, n, &next_pgofs);
+ 		if (IS_ERR(dentry_page)) {
+ 			err = PTR_ERR(dentry_page);
+ 			if (err == -ENOENT) {
+ 				err = 0;
++				n = next_pgofs;
+ 				continue;
+ 			} else {
+ 				goto out_free;
+@@ -1141,6 +1153,8 @@ static int f2fs_readdir(struct file *file, struct dir_context *ctx)
+ 		}
+ 
+ 		f2fs_put_page(dentry_page, 0);
++
++		n++;
+ 	}
+ out_free:
+ 	fscrypt_fname_free_buffer(&fstr);
+diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+index c767cc714958..473f2902435d 100644
+--- a/fs/f2fs/f2fs.h
++++ b/fs/f2fs/f2fs.h
+@@ -3820,8 +3820,9 @@ int f2fs_reserve_new_block(struct dnode_of_data *dn);
+ int f2fs_get_block(struct dnode_of_data *dn, pgoff_t index);
+ int f2fs_reserve_block(struct dnode_of_data *dn, pgoff_t index);
+ struct page *f2fs_get_read_data_page(struct inode *inode, pgoff_t index,
+-			blk_opf_t op_flags, bool for_write);
+-struct page *f2fs_find_data_page(struct inode *inode, pgoff_t index);
++			blk_opf_t op_flags, bool for_write, pgoff_t *next_pgofs);
++struct page *f2fs_find_data_page(struct inode *inode, pgoff_t index,
++							pgoff_t *next_pgofs);
+ struct page *f2fs_get_lock_data_page(struct inode *inode, pgoff_t index,
+ 			bool for_write);
+ struct page *f2fs_get_new_data_page(struct inode *inode,
+diff --git a/fs/f2fs/gc.c b/fs/f2fs/gc.c
+index 72f165048a3c..69d7d8db3daa 100644
+--- a/fs/f2fs/gc.c
++++ b/fs/f2fs/gc.c
+@@ -1562,8 +1562,8 @@ static int gc_data_segment(struct f2fs_sb_info *sbi, struct f2fs_summary *sum,
+ 				continue;
+ 			}
+ 
+-			data_page = f2fs_get_read_data_page(inode,
+-						start_bidx, REQ_RAHEAD, true);
++			data_page = f2fs_get_read_data_page(inode, start_bidx,
++							REQ_RAHEAD, true, NULL);
+ 			f2fs_up_write(&F2FS_I(inode)->i_gc_rwsem[WRITE]);
+ 			if (IS_ERR(data_page)) {
+ 				iput(inode);
+-- 
+2.36.1
+
