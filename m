@@ -2,91 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57089621A47
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 18:18:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 92325621A49
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 18:19:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234311AbiKHRS2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 12:18:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52644 "EHLO
+        id S233727AbiKHRTL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 12:19:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234154AbiKHRSY (ORCPT
+        with ESMTP id S233988AbiKHRTI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 12:18:24 -0500
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20A1358020;
-        Tue,  8 Nov 2022 09:18:17 -0800 (PST)
-Received: by mail-yb1-xb30.google.com with SMTP id y186so13487904yby.10;
-        Tue, 08 Nov 2022 09:18:17 -0800 (PST)
+        Tue, 8 Nov 2022 12:19:08 -0500
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E43C2634
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 09:19:07 -0800 (PST)
+Received: by mail-wr1-x434.google.com with SMTP id bk15so21973463wrb.13
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 09:19:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=nN5NpQCUpCrNFjmHjL5ONWMsPKFEDUAp7grcotZhonw=;
-        b=J4yoSQKrdz2XPEPQBXUpt95WeNr6DcCo8dk6C0heLTAmfSlIMQgbywc+w5e+WRSFRT
-         8kDEiSSmCQ0iga9tszf3YAHC7HTpyBHlNO+LSKucBKQ9BQICJy9VN9y6z1slZRqWGV+M
-         7L6uQGF0dlg8mJLrV4Jb4xr/9BiqANIYSOQ29ZeFSLsYs7MgUAMguwNv6dgcM4EseOpf
-         13V4223l73iNPHedPeVPmtGYccIcf2Cc9ulM+ch6FHR/0CTmg+l8ycIK3pz1ZTvaK/KP
-         Ww/oVEIKpX/Brp3S+I51F1UgnLAzCWX6vGVumOl4yF/iAMORj+aT1qeL98tmJTD4STHZ
-         KAxA==
+        d=newflow-co-uk.20210112.gappssmtp.com; s=20210112;
+        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=GFf56fXHcN5swktvY+aK0n5WX8IgDNtgChpp7Zn/EMw=;
+        b=LZMzqP8OhgAalFg41YjuQEN/hi06EX3F9dRAqZ1u3mSJ6u9jA4wLIE2oOZ6seXnmku
+         7mzHOseABc++gWBA7DUwRzIRI68A6mgdGZuJQKzcd1mSUtTEs5rijiRX3pQTybsIpgFa
+         NUyD82SmKVrKzRm/Jp1PcD7faXGL4EjoRQnFnRl8aw3qkdjsk3xwm1F882I4LKGT47GR
+         hNQUTChfpzwtJiJ+dol3gjpiZg1m0intCt4g9IHnKLLkSXkdJK0kxANh72y9VsEOeXIA
+         8k9HvWs+Sa3djYZpo+LilxIt+32lXTRshYrrEGO3zWtD4n4a5x2P9Y3ri4mam0UrTyYt
+         jreA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=nN5NpQCUpCrNFjmHjL5ONWMsPKFEDUAp7grcotZhonw=;
-        b=wHQgcmLzV+qDZfQY8RBiT618bvUbyq5N3MmoRkg6AhydJ67xu4byUK4ZorN/aY6YVJ
-         ngNJ9rYX1V3bHnuEBN8JiC73u1qNs+W21vdeB14Y8vGTkh5U/1giA9djmr3eT82S/sXh
-         JkwF0dPas99jn18kNe/7/hDJGWBhbMh+/zYSHjpBmwN5ZRldmsGuLYu6YLzK8sPI7Tim
-         APgXvUIQOcs1N05hpKA28QOdNRFOGh5Lg8zsbCc4w2gfWRzc/Vnvv4I/iGvn69C5oj5v
-         U9LkSJrWe4XqRSJP2Qg0cDRejnIdz2YnTEHKvX7JieswkJjUTPvOC4p60AGw6nFQlEQs
-         Lyng==
-X-Gm-Message-State: ACrzQf1xuzksVRzw3vFLUk1FOE73ouZ9FXNY9OMqBGd6FZ7tEDxV+DI6
-        YugBaKLAeGxI4xuPui7jBZNZ6uHmPRZ8eLgYliOyDvt0eExC8dTwGyc=
-X-Google-Smtp-Source: AMsMyM5FZ4kTRtsawAU+tP4boYiUWOGe6vBLGALChoywQx/ctlIO0pYyAxOglAglSTAoLoVYoZOY5KOAD6gd9tLQYc0=
-X-Received: by 2002:a25:b215:0:b0:6cb:f84f:b1c5 with SMTP id
- i21-20020a25b215000000b006cbf84fb1c5mr57293918ybj.579.1667927896213; Tue, 08
- Nov 2022 09:18:16 -0800 (PST)
+        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=GFf56fXHcN5swktvY+aK0n5WX8IgDNtgChpp7Zn/EMw=;
+        b=W4v9W2A9e0MjQT05xUh27W1f583abJUG3TT7fUugPf9ZRRp79u7C/NvYQhA1iZ0KnZ
+         AGmJf86QfzeNxNjcAP4bT7N/qwnGDIWjqnEmUJ3Jmm697c991XXZFdAu0UBaa2jFnldh
+         6kJaWUdHwXMxiyzwEWxI+XuMqBvpsiBzzj3mwW1qoiWpZKT0ikukNBQyuheZmY07EX6m
+         mknl/48+uA4dphBCKUObbOBb7HwzcvEh6Y1SJVaBZkCeJ1j1lWeUZzLs46ltZvUnAC2R
+         HW5Wnzc+a7tq6J0AklkUH9gRWnBo1uOzHcs0Gefzn2dis8DD9s6mYrWi6fyx5+NAWcoy
+         ed7w==
+X-Gm-Message-State: ACrzQf3EGaZgCRb/qC4fsk+G1HJKM0FWa5BRkYMN/VRw0nQ/TNW+rTye
+        nyVl81d/Pwm/UgNf2B4OODrtoX+uM1Sd7f1b21IcSAsL/25yhMHA
+X-Google-Smtp-Source: AMsMyM7Jkn0gWL5gs0/xf6bPZllJz9C5ZuFICxylcZ1ZTH0lc04ZzghM3sDGh/E7Ux3hMxpwSdZCpit2TagIefqQTm0=
+X-Received: by 2002:adf:f88b:0:b0:236:7134:d4ec with SMTP id
+ u11-20020adff88b000000b002367134d4ecmr34382445wrp.669.1667927945417; Tue, 08
+ Nov 2022 09:19:05 -0800 (PST)
 MIME-Version: 1.0
-From:   Dennis Dai <dzy.0424thu@gmail.com>
-Date:   Wed, 9 Nov 2022 01:18:05 +0800
-Message-ID: <CACMswuMd18=nhvLK2Tw3H84GnDPnhuS_YRNFEDZ5T4B5DJQtBQ@mail.gmail.com>
-Subject: nvme driver: possible missing `unregister_irq`
-To:     Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@google.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     "baijiaju1990@gmail.com" <baijiaju1990@gmail.com>
+References: <20221004143901.130935-1-mpfj@newflow.co.uk>
+In-Reply-To: <20221004143901.130935-1-mpfj@newflow.co.uk>
+From:   Mark Jackson <mpfj@newflow.co.uk>
+Date:   Tue, 8 Nov 2022 17:18:54 +0000
+Message-ID: <CAAbcLfiCoa=-20cydPG9=42G9npaeBOCRXPPPTwkNFU-3yGoCg@mail.gmail.com>
+Subject: Re: [PATCH] Update Nanobone
+To:     linux-kernel@vger.kernel.org, linux-omap@vger.kernel.org,
+        tony@atomide.com, mpfj@newflow.co.uk
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
+Any update on this patch ?
+Did it ever get through ?
+Do I need to re-submit for some reason ?
 
-I was inspecting the rust nvme driver [1] and would like know if the following
-code contains a missing unregister or I missed anything
-
-// nvme.rs:180, in NvmeDevice::setup_io_queues
-        admin_queue.register_irq(pci_dev)?;
-// nvme.rs:186, in NvmeDevice::setup_io_queues
-        let q_depth = core::cmp::min(...).try_into()?;
-// nvme.rs:190, in NvmeDevice::setup_io_queues
-        let tagset = mq::TagSet::try_new(...)?; //TODO: 1 or 3 on
-demand, depending on polling enabled
-
-Line 186 and 190 could abort the execution of
-NvmeDevice::setup_io_queues without calling `unregister_irq`.
-In the end this could result in an `request_threaded_irq` without a
-pairing `free_irq` on failure.
-Or is the job done by Rust by auto dropping?
-
-Thank you very much!
-
-[1] https://github.com/metaspace/rust-linux/commit/d88c3744d6cbdf11767e08bad56cbfb67c4c96d0
+Regards
+Mark J.
