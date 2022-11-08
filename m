@@ -2,164 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5229E621B7F
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 19:11:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38159621B7C
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 19:10:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234347AbiKHSKx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 13:10:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59108 "EHLO
+        id S234745AbiKHSKv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 13:10:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234739AbiKHSKt (ORCPT
+        with ESMTP id S234268AbiKHSKs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 13:10:49 -0500
-Received: from msg-1.mailo.com (msg-1.mailo.com [213.182.54.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1858E1C423
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 10:10:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
-        t=1667931037; bh=oGtExssGV7LHMlhkrkJ4t/rQVhHQzwTERr7TlBc+xv0=;
-        h=X-EA-Auth:Date:From:To:Subject:Message-ID:References:MIME-Version:
-         Content-Type:In-Reply-To;
-        b=O+a0JuJdi9TOLCDEQGKCsdnfX+q9sYWV6JgBpgeil5tkR+FJIoJ2VnNF0DOmscaG7
-         aPmFsqmAh4niq1cwVroz5ZIeapHKZTv8h2lVrunZD3L0c0yT3dZC7/pWj+YSElF9I0
-         5C8MoUpi8pSGEM+didiU1oKM0whfAcMCf1bXSay4=
-Received: by b-6.in.mailobj.net [192.168.90.16] with ESMTP
-        via ip-206.mailobj.net [213.182.55.206]
-        Tue,  8 Nov 2022 19:10:36 +0100 (CET)
-X-EA-Auth: jRsr2yFHIAty5Q1EnNGuaHmLSfrZgKKr4kToJcOFecmtUnzTvIRX4KbwOskOW0oQ1rEqgEenenbxTHP4gBxXMY3WJr3+JRfw
-Date:   Tue, 8 Nov 2022 23:39:56 +0530
-From:   Deepak R Varma <drv@mailo.com>
-To:     outreachy@lists.linux.dev, gregkh@linuxfoundation.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH v5 1/1] staging: rtl8192u: remove redundant macro definitions
-Message-ID: <17f69a042e215c484931a0327fdf7775eea5f918.1667930292.git.drv@mailo.com>
-References: <cover.1667930291.git.drv@mailo.com>
+        Tue, 8 Nov 2022 13:10:48 -0500
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 246564B99F
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 10:10:44 -0800 (PST)
+Received: by mail-pl1-x629.google.com with SMTP id b21so14872541plc.9
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 10:10:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=eWhULAO1PGhpQ+ChwOYcLNZC3f58WMaAVvC3B9Ax33I=;
+        b=OgzPo8mpGNo5exrre/OhRCO+v816mE1waYy6787p/nQN/NFFZsxn5irwVZFL5r59nK
+         x7EWvXlhyznmWuDdfthA2yb4OyR11IASvIamkj1DwgqiZa+qLYaOJi2eEilaUrVEKzk8
+         BmUYdSjxJ+fmBVou4WlXk29qTxMPYZ11FG5aI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=eWhULAO1PGhpQ+ChwOYcLNZC3f58WMaAVvC3B9Ax33I=;
+        b=gAW8GBO4NN4sI/qd5y/gfCEE8hmkbYs30B3S1N9pLqeSxo2NxzXkD3TxSfcyarRPcL
+         1XovDjxlIzXduHsR3OSVqI6xnsbZv/BrhEn3Z0mRtwkITIELTpTrmIOPkLr9Io8DAY/A
+         Nnzlo8DJrcajmiThwMJmXR+ucxHG7si+oPS7NEKYOo6kl6BICE+Q0zAl8PNECdNoNKp9
+         7Mv29Ypchzw+gVVBVvHH1PfBCRC1OEUDRpCtJNvFZADCnpkCrmewN+hyhtWPdaM1b9ER
+         Fl7rjVCY6xxE50k7W7ZrNRhY+9HieDt7jUJZw8ilIwiqhzsRqs7EJ+oQAQUvWI/Qapdq
+         iBTA==
+X-Gm-Message-State: ACrzQf32mvhET+JAOP/KEsIH1T9jM2tRsBf6OlMzF2FaJ2t4R1sCfink
+        b/8x60YYGF2pwj0XJq2TU/M+6g==
+X-Google-Smtp-Source: AMsMyM5JdjlJDsuzUS3rfn2V0Wd1PJvEuFBmM2cCCPRZeXudLibia2TOoUKOYyUhYKZB+L6OntvxEg==
+X-Received: by 2002:a17:902:ecc1:b0:186:b57e:d229 with SMTP id a1-20020a170902ecc100b00186b57ed229mr58084545plh.167.1667931043637;
+        Tue, 08 Nov 2022 10:10:43 -0800 (PST)
+Received: from khazhy-linux.svl.corp.google.com ([2620:15c:2d4:203:21f:525:beef:f928])
+        by smtp.gmail.com with ESMTPSA id h3-20020a63df43000000b0046fd180640asm6048754pgj.24.2022.11.08.10.10.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Nov 2022 10:10:43 -0800 (PST)
+From:   Khazhismel Kumykov <khazhy@chromium.org>
+X-Google-Original-From: Khazhismel Kumykov <khazhy@google.com>
+To:     Paolo Valente <paolo.valente@linaro.org>,
+        Jens Axboe <axboe@kernel.dk>
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yu Kuai <yukuai1@huaweicloud.com>, Jan Kara <jack@suse.cz>,
+        Khazhismel Kumykov <khazhy@google.com>
+Subject: [PATCH 1/2] bfq: fix waker_bfqq inconsistency crash
+Date:   Tue,  8 Nov 2022 10:10:29 -0800
+Message-Id: <20221108181030.1611703-1-khazhy@google.com>
+X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
+In-Reply-To: <20221103013937.603626-1-khazhy@google.com>
+References: <20221103013937.603626-1-khazhy@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1667930291.git.drv@mailo.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Several ieee80211_* symbol names are extended with _rsl tag using
-macros. This is done to avoid a conflict when a similar symbol is
-already in use in another part of kernel and may lead to conflicts.
-However, most of these base symbol names are not found to being used
-anywhere in the code and hence are not useful today. These symbols
-are not used outside of the module and hence can be safely removed.
-The code continues to use the original symbol names.
+This fixes crashes in bfq_add_bfqq_busy due to waker_bfqq being NULL,
+but woken_list_node still being hashed. This would happen when
+bfq_init_rq() expects a brand new allocated queue to be returned from
+bfq_get_bfqq_handle_split() and unconditionally updates waker_bfqq
+without resetting woken_list_node. Since we can always return oom_bfqq
+when attempting to allocate, we cannot assume waker_bfqq starts as NULL.
 
-Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Deepak R Varma <drv@mailo.com>
+Avoid setting woken_bfqq for oom_bfqq entirely, as it's not useful.
+
+Crashes would have a stacktrace like:
+[160595.656560]  bfq_add_bfqq_busy+0x110/0x1ec
+[160595.661142]  bfq_add_request+0x6bc/0x980
+[160595.666602]  bfq_insert_request+0x8ec/0x1240
+[160595.671762]  bfq_insert_requests+0x58/0x9c
+[160595.676420]  blk_mq_sched_insert_request+0x11c/0x198
+[160595.682107]  blk_mq_submit_bio+0x270/0x62c
+[160595.686759]  __submit_bio_noacct_mq+0xec/0x178
+[160595.691926]  submit_bio+0x120/0x184
+[160595.695990]  ext4_mpage_readpages+0x77c/0x7c8
+[160595.701026]  ext4_readpage+0x60/0xb0
+[160595.705158]  filemap_read_page+0x54/0x114
+[160595.711961]  filemap_fault+0x228/0x5f4
+[160595.716272]  do_read_fault+0xe0/0x1f0
+[160595.720487]  do_fault+0x40/0x1c8
+
+Tested by injecting random failures into bfq_get_queue, crashes go away
+completely.
+
+Fixes: 8ef3fc3a043c ("block, bfq: make shared queues inherit wakers")
+Signed-off-by: Khazhismel Kumykov <khazhy@google.com>
 ---
+ block/bfq-iosched.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-Changes in v5:
-   1. None. Resubmitting as the mail threading had issues.
-
-Changes in v4:
-   1. Resubmit patch set with the remaining only patch. Update patch subject,
-      version and patch sequence number to avoid confusion.
-      Suggested by gregkh@linuxfoundation.org.
-
-Changes in v3:
-   1. The patch caused a build failure due to EXPORT_SYMBOL conflict across
-      modules. Retain macro defines for ieee80211_wake_queue and ieee80211_stop_queue
-      to avoid EXPORT_SYMBOL conflict caused by similar function names from
-      net/mac80211 module.
-      Correction and resubmission asked by gregkh@linuxfoundation.org
-
-Changes in v2:
-   1. Review other similar macro defines and clean those up as well.
-      Suggested by gregkh@linuxfoundation.org
-   2. Revise patch log to explain impact of the patch
-      Suggested by julia.lawall@inria.fr
-
- .../staging/rtl8192u/ieee80211/ieee80211.h    | 61 -------------------
- 1 file changed, 61 deletions(-)
-
-diff --git a/drivers/staging/rtl8192u/ieee80211/ieee80211.h b/drivers/staging/rtl8192u/ieee80211/ieee80211.h
-index 00c07455cbb3..c5c43d2fb93e 100644
---- a/drivers/staging/rtl8192u/ieee80211/ieee80211.h
-+++ b/drivers/staging/rtl8192u/ieee80211/ieee80211.h
-@@ -223,71 +223,10 @@ struct cb_desc {
- #define MAX_IE_LEN  0xff
-
- // added for kernel conflict
--#define ieee80211_crypt_deinit_entries	ieee80211_crypt_deinit_entries_rsl
--#define ieee80211_crypt_deinit_handler	ieee80211_crypt_deinit_handler_rsl
--#define ieee80211_crypt_delayed_deinit	ieee80211_crypt_delayed_deinit_rsl
--#define ieee80211_register_crypto_ops	ieee80211_register_crypto_ops_rsl
--#define ieee80211_unregister_crypto_ops ieee80211_unregister_crypto_ops_rsl
--#define ieee80211_get_crypto_ops	ieee80211_get_crypto_ops_rsl
--
--#define ieee80211_ccmp_null		ieee80211_ccmp_null_rsl
--
--#define free_ieee80211			free_ieee80211_rsl
--#define alloc_ieee80211			alloc_ieee80211_rsl
--
--#define ieee80211_rx			ieee80211_rx_rsl
--#define ieee80211_rx_mgt		ieee80211_rx_mgt_rsl
--
--#define ieee80211_get_beacon		ieee80211_get_beacon_rsl
- #define ieee80211_wake_queue		ieee80211_wake_queue_rsl
- #define ieee80211_stop_queue		ieee80211_stop_queue_rsl
--#define ieee80211_reset_queue		ieee80211_reset_queue_rsl
--#define ieee80211_softmac_stop_protocol	ieee80211_softmac_stop_protocol_rsl
--#define ieee80211_softmac_start_protocol ieee80211_softmac_start_protocol_rsl
--#define ieee80211_is_shortslot		ieee80211_is_shortslot_rsl
--#define ieee80211_is_54g		ieee80211_is_54g_rsl
--#define ieee80211_wpa_supplicant_ioctl	ieee80211_wpa_supplicant_ioctl_rsl
--#define ieee80211_ps_tx_ack		ieee80211_ps_tx_ack_rsl
--#define ieee80211_softmac_xmit		ieee80211_softmac_xmit_rsl
--#define ieee80211_stop_send_beacons	ieee80211_stop_send_beacons_rsl
- #define notify_wx_assoc_event		notify_wx_assoc_event_rsl
- #define SendDisassociation		SendDisassociation_rsl
--#define ieee80211_disassociate		ieee80211_disassociate_rsl
--#define ieee80211_start_send_beacons	ieee80211_start_send_beacons_rsl
--#define ieee80211_stop_scan		ieee80211_stop_scan_rsl
--#define ieee80211_send_probe_requests	ieee80211_send_probe_requests_rsl
--#define ieee80211_softmac_scan_syncro	ieee80211_softmac_scan_syncro_rsl
--#define ieee80211_start_scan_syncro	ieee80211_start_scan_syncro_rsl
--
--#define ieee80211_wx_get_essid		ieee80211_wx_get_essid_rsl
--#define ieee80211_wx_set_essid		ieee80211_wx_set_essid_rsl
--#define ieee80211_wx_set_rate		ieee80211_wx_set_rate_rsl
--#define ieee80211_wx_get_rate		ieee80211_wx_get_rate_rsl
--#define ieee80211_wx_set_wap		ieee80211_wx_set_wap_rsl
--#define ieee80211_wx_get_wap		ieee80211_wx_get_wap_rsl
--#define ieee80211_wx_set_mode		ieee80211_wx_set_mode_rsl
--#define ieee80211_wx_get_mode		ieee80211_wx_get_mode_rsl
--#define ieee80211_wx_set_scan		ieee80211_wx_set_scan_rsl
--#define ieee80211_wx_get_freq		ieee80211_wx_get_freq_rsl
--#define ieee80211_wx_set_freq		ieee80211_wx_set_freq_rsl
--#define ieee80211_wx_set_rawtx		ieee80211_wx_set_rawtx_rsl
--#define ieee80211_wx_get_name		ieee80211_wx_get_name_rsl
--#define ieee80211_wx_set_power		ieee80211_wx_set_power_rsl
--#define ieee80211_wx_get_power		ieee80211_wx_get_power_rsl
--#define ieee80211_wlan_frequencies	ieee80211_wlan_frequencies_rsl
--#define ieee80211_wx_set_rts		ieee80211_wx_set_rts_rsl
--#define ieee80211_wx_get_rts		ieee80211_wx_get_rts_rsl
--
--#define ieee80211_txb_free		ieee80211_txb_free_rsl
--
--#define ieee80211_wx_set_gen_ie		ieee80211_wx_set_gen_ie_rsl
--#define ieee80211_wx_get_scan		ieee80211_wx_get_scan_rsl
--#define ieee80211_wx_set_encode		ieee80211_wx_set_encode_rsl
--#define ieee80211_wx_get_encode		ieee80211_wx_get_encode_rsl
--#define ieee80211_wx_set_mlme		ieee80211_wx_set_mlme_rsl
--#define ieee80211_wx_set_auth		ieee80211_wx_set_auth_rsl
--#define ieee80211_wx_set_encode_ext	ieee80211_wx_set_encode_ext_rsl
--#define ieee80211_wx_get_encode_ext	ieee80211_wx_get_encode_ext_rsl
-
-
- struct ieee_param {
---
-2.34.1
-
-
+diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
+index 7ea427817f7f..ca04ec868c40 100644
+--- a/block/bfq-iosched.c
++++ b/block/bfq-iosched.c
+@@ -6784,6 +6784,12 @@ static struct bfq_queue *bfq_init_rq(struct request *rq)
+ 				bfqq = bfq_get_bfqq_handle_split(bfqd, bic, bio,
+ 								 true, is_sync,
+ 								 NULL);
++				if (unlikely(bfqq == &bfqd->oom_bfqq))
++					bfqq_already_existing = true;
++			} else
++				bfqq_already_existing = true;
++
++			if (!bfqq_already_existing) {
+ 				bfqq->waker_bfqq = old_bfqq->waker_bfqq;
+ 				bfqq->tentative_waker_bfqq = NULL;
+ 
+@@ -6797,8 +6803,7 @@ static struct bfq_queue *bfq_init_rq(struct request *rq)
+ 				if (bfqq->waker_bfqq)
+ 					hlist_add_head(&bfqq->woken_list_node,
+ 						       &bfqq->waker_bfqq->woken_list);
+-			} else
+-				bfqq_already_existing = true;
++			}
+ 		}
+ 	}
+ 
+-- 
+2.38.1.431.g37b22c650d-goog
 
