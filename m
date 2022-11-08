@@ -2,69 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6188621E1A
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 21:55:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37DFA621E23
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 21:57:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229907AbiKHUzf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 15:55:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60598 "EHLO
+        id S229640AbiKHU46 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 15:56:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229640AbiKHUzc (ORCPT
+        with ESMTP id S229977AbiKHU4w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 15:55:32 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11DB258014
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 12:55:31 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id c15-20020a17090a1d0f00b0021365864446so14510888pjd.4
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 12:55:31 -0800 (PST)
+        Tue, 8 Nov 2022 15:56:52 -0500
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BE255D6B7
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 12:56:52 -0800 (PST)
+Received: by mail-pl1-x629.google.com with SMTP id l2so15214235pld.13
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 12:56:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Z2mthpjvK4gnLPCZq1fjuVoG/GO6J8GGaVa0/UK/7WI=;
-        b=rSPdVdM+wWBDfrvsyALHP/8vY+i7Mbc0Ftkoz2fvFpK5vVtsCQ2AWcpVmnP7dCSvZg
-         a57nA4LRRPQdK87SL/8iCWF1ebr3uKEXNubg2GMdiP4JHNDiTsVwjC+dwGSbo7JZMsz6
-         HCOiR9aWz3Enqjs/vxy7Px/fKibxF8t35ljpHWa7RvSv9yOSzuCM2HckFJXfYTGyD60C
-         6DhQHhyEdZ3DqtXpQjJH8OZc0BinVQ2T6YI99xdMa1ixC/VLmFaPOG947GOudwvvNbJY
-         6cSS2xxu7Z3gzwPfrnlE24q6i0xhw/CAdD6gCZZj+t5OYoV4NhZ7rYU5u4a+/eTw7tTF
-         hmlQ==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=0onMt+air2lNK6el66wGss5pMPyUXTVLi3zz0gmD1tU=;
+        b=Bkzc2mkmAhE0IfooRK3Sqm+LJEDbscvB/8Mtcavis1yMpw3YbvTuzd92c69U6SDhz2
+         0MXN/D7PjXKOaohVDWk/7fK9jeU08WfIQmlPOI/ud26TW1vpPFga1JJzVlCPvMYvhOgt
+         MCBYFHAwDkAlYxK7K3LzL4j2BlVZdQ49bT+GWcXBxmB6NnWkKBiy1H6Z4X+uoiI4MTpZ
+         YrdywVH2mQ90EIROULO3rnpsZomcMQQDis7SVMhTv+UmvTJzAn4nFOivziiLKPEX1iMZ
+         B1GWw8h1SDgPWA0A6IFvzoRnF6OJpu9hzjTPRSr4gkXKcmdrCPSI4FuBql/IMc3IhCtB
+         EBZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Z2mthpjvK4gnLPCZq1fjuVoG/GO6J8GGaVa0/UK/7WI=;
-        b=gVb+jOiZO/Wsn11IMm7NxXITcEFPg3PkBvYq7geTueVxmuSIuh4zSCIq0wExsDyyeJ
-         HVjvjK9rsUUSf7N2yRMDr5pSe2rdYTcYRNqXRYsv+lUubpBwSzc6sfwvzj2wCtvClcX2
-         ziEL6LFUtXaxmQ7yaPFt0RgTtWB3dqZaReL2PVCn253hSDBnQlxmLHyXZUbO2ocMZ71o
-         EBfIueHetEDDVGlDhOw2hj1P/hLSbsLsruXNHS3ClJbwRfMrKPJT8gbNJV6UvAUuQLD5
-         wV6EoZWhMq1wkIm5KKw2YTqk5RV4K098dzHAo09CL8ILFm5iwtFDId4bi2DpEVP3gVfZ
-         mZVQ==
-X-Gm-Message-State: ACrzQf3X8xCsdnOOctFGzE6mjvZJ5wglJ6O5CHrLdJg/HE53cGMv5ZCP
-        aw03zMnhngI+J8PM8087DVqO2g==
-X-Google-Smtp-Source: AMsMyM6c4vEFLv0196hVNd5ZzBqZtwGaapqgO01cDzVF+69R6dVWv1fbWsEuFgxaMqK10G5WpWQ5Og==
-X-Received: by 2002:a17:902:aa46:b0:186:e220:11d4 with SMTP id c6-20020a170902aa4600b00186e22011d4mr58090281plr.163.1667940930470;
-        Tue, 08 Nov 2022 12:55:30 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id e19-20020a170902ed9300b00186acb14c4asm7384944plj.67.2022.11.08.12.55.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Nov 2022 12:55:30 -0800 (PST)
-Date:   Tue, 8 Nov 2022 20:55:26 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        nathan@kernel.org, thomas.lendacky@amd.com,
-        andrew.cooper3@citrix.com, peterz@infradead.org,
-        jmattson@google.com, stable@vger.kernel.org
-Subject: Re: [PATCH v2 3/8] KVM: SVM: adjust register allocation for
- __svm_vcpu_run
-Message-ID: <Y2rCPuBGdtXv2ILs@google.com>
-References: <20221108151532.1377783-1-pbonzini@redhat.com>
- <20221108151532.1377783-4-pbonzini@redhat.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=0onMt+air2lNK6el66wGss5pMPyUXTVLi3zz0gmD1tU=;
+        b=DRZsVyNa6CswBhvI48g4iEv1pq8lm+anOHmeCrGetp5R5HxyU8v5wgPZqQrmNHh0xy
+         P5UrlFHJgxdaLbiqarfdxq3l7y4R0WAMnYkm1Xen9SRrIA4LVNvckVTwfTvq6dewDU9v
+         w0/oZeAx92d4gVVduBtkMrNl4DiAi3Vr13c81zCBI61d2QkBfASTl23bD7VNHv68UD93
+         9KoGz3BXA4Hn3BBOANkilCg3f1yLjELETAlUUcokMYNBBkZr0/mvCQw1E1R2ylVUwNgo
+         YrvY/xdnIJ5aYtGrIJwmGOU5pvI3hEcb5P1W0//O46jSRsBCqLdgnQyykGPHsJh0Hfqk
+         UMgg==
+X-Gm-Message-State: ACrzQf0y5odyEQvR40hLDoh7PbPNdh0UcFuhfgdx37zn/3j5ecJo3oy6
+        NPChoGu+CsgNUFJ0FofS5ASU07L3zRdgJut8oQvINw==
+X-Google-Smtp-Source: AMsMyM4gITR694JEoUnHOm2v2lMU0mdPEvB4EDyjuKZCqRozgFfRmPYW4lW2mOdcVea8X79bo6W2zY2H2Bz1Z24VxCA=
+X-Received: by 2002:a17:902:f786:b0:180:6f9e:23b with SMTP id
+ q6-20020a170902f78600b001806f9e023bmr58978856pln.37.1667941011429; Tue, 08
+ Nov 2022 12:56:51 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221108151532.1377783-4-pbonzini@redhat.com>
+References: <20221103210650.2325784-1-sean.anderson@seco.com>
+ <20221103210650.2325784-9-sean.anderson@seco.com> <20221107201010.GA1525628-robh@kernel.org>
+ <20221107202223.ihdk4ubbqpro5w5y@skbuf> <7caf2d6a-3be9-4261-9e92-db55fe161f7e@seco.com>
+ <CAL_JsqKw=1iP6KUj=c6stgCMo7V6hGO9iB+MgixA5tiackeNnA@mail.gmail.com>
+In-Reply-To: <CAL_JsqKw=1iP6KUj=c6stgCMo7V6hGO9iB+MgixA5tiackeNnA@mail.gmail.com>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Tue, 8 Nov 2022 12:56:15 -0800
+Message-ID: <CAGETcx-=Z4wo8JaYJN=SjxirbgRoRvobN8zxm+BSHjwouHzeJg@mail.gmail.com>
+Subject: Re: [PATCH net-next v2 08/11] of: property: Add device link support
+ for PCS
+To:     Rob Herring <robh@kernel.org>
+Cc:     Sean Anderson <sean.anderson@seco.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>, netdev@vger.kernel.org,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
+        Andrew Lunn <andrew@lunn.ch>,
+        Ioana Ciornei <ioana.ciornei@nxp.com>,
+        Madalin Bucur <madalin.bucur@nxp.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Frank Rowand <frowand.list@gmail.com>,
+        devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -76,15 +83,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 08, 2022, Paolo Bonzini wrote:
-> In preparation for moving vmload/vmsave to __svm_vcpu_run,
-> keep the pointer to the struct vcpu_svm in %rdi.  This way
-> it is possible to load svm->vmcb01.pa in %rax without
-> clobbering the pointer to svm itself.
-> 
-> No functional change intended.
-> 
-> Cc: stable@vger.kernel.org
-> Fixes: f14eec0a3203 ("KVM: SVM: move more vmentry code to assembly")
+On Mon, Nov 7, 2022 at 1:36 PM Rob Herring <robh@kernel.org> wrote:
+>
+> On Mon, Nov 7, 2022 at 2:50 PM Sean Anderson <sean.anderson@seco.com> wrote:
+> >
+> > On 11/7/22 15:22, Vladimir Oltean wrote:
+> > > On Mon, Nov 07, 2022 at 02:10:10PM -0600, Rob Herring wrote:
+> > >> On Thu, Nov 03, 2022 at 05:06:47PM -0400, Sean Anderson wrote:
+> > >> > This adds device link support for PCS devices. Both the recommended
+> > >> > pcs-handle and the deprecated pcsphy-handle properties are supported.
+> > >> > This should provide better probe ordering.
+> > >> >
+> > >> > Signed-off-by: Sean Anderson <sean.anderson@seco.com>
+> > >> > ---
+> > >> >
+> > >> > (no changes since v1)
+> > >> >
+> > >> >  drivers/of/property.c | 4 ++++
+> > >> >  1 file changed, 4 insertions(+)
+> > >>
+> > >> Seems like no dependency on the rest of the series, so I can take this
+> > >> patch?
+> > >
+> > > Is fw_devlink well-behaved these days, so as to not break (forever defer)
+> > > the probing of the device having the pcs-handle, if no driver probed on
+> > > the referenced PCS? Because the latter is what will happen if no one
+> > > picks up Sean's patches to probe PCS devices in the usual device model
+> > > way, I think.
+> >
+> > Last time [1], Saravana suggested to move this to the end of the series to
+> > avoid such problems. FWIW, I just tried booting a LS1046A with the
+> > following patches applied
+> >
+> > 01/11 (compatibles) 05/11 (device) 08/11 (link) 09/11 (consumer)
+> > =================== ============== ============ ================
+> > Y                   N              Y            N
+> > Y                   Y              Y            Y
+> > Y                   Y              Y            N
+> > N                   Y              Y            N
+> > N                   N              Y            N
+> >
+> > and all interfaces probed each time. So maybe it is safe to pick
+> > this patch.
+>
+> Maybe? Just take it with the rest of the series.
+>
+> Acked-by: Rob Herring <robh@kernel.org>
 
-Same nit, Fixes: shouldn't be provided.
+Let's have Vladimir ack this. I'm not sure if it's fully safe yet. I
+haven't done the necessary fixes for phy-handle yet, but I don't know
+how pcs-handle and pcsphy-handle are used or if none of their uses
+will hit the chicken and egg problem that some uses of phy-handle hit.
+
+-Saravana
