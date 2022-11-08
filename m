@@ -2,365 +2,427 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28B01621541
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 15:09:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 226DF621538
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 15:09:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235218AbiKHOJs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 09:09:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46132 "EHLO
+        id S235166AbiKHOJU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 09:09:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235168AbiKHOJm (ORCPT
+        with ESMTP id S235143AbiKHOJQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 09:09:42 -0500
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DF31F02E
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 06:09:38 -0800 (PST)
-Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.57])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4N68zJ0NV2zHnYL;
-        Tue,  8 Nov 2022 22:06:36 +0800 (CST)
-Received: from dggpemm500014.china.huawei.com (7.185.36.153) by
- dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 8 Nov 2022 22:09:36 +0800
-Received: from huawei.com (7.220.126.23) by dggpemm500014.china.huawei.com
- (7.185.36.153) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Tue, 8 Nov
- 2022 22:09:35 +0800
-From:   Song Zhang <zhangsong34@huawei.com>
-To:     <mingo@redhat.com>, <peterz@infradead.org>,
-        <juri.lelli@redhat.com>, <vincent.guittot@linaro.org>
-CC:     <dietmar.eggemann@arm.com>, <rostedt@goodmis.org>,
-        <bsegall@google.com>, <mgorman@suse.de>, <bristot@redhat.com>,
-        <vschneid@redhat.com>, <linux-kernel@vger.kernel.org>,
-        Song Zhang <zhangsong34@huawei.com>
-Subject: [PATCH v3] sched/fair: Introduce priority load balance for CFS
-Date:   Tue, 8 Nov 2022 22:08:38 +0800
-Message-ID: <20221108140838.106088-1-zhangsong34@huawei.com>
-X-Mailer: git-send-email 2.27.0
+        Tue, 8 Nov 2022 09:09:16 -0500
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B370BF7
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 06:09:14 -0800 (PST)
+Received: by mail-lf1-x133.google.com with SMTP id r12so21408374lfp.1
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 06:09:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=0FgsPe/szodLK49SrQwNRX+hLhmwVotdsMjQ6Dk684k=;
+        b=ZJGFhvLAWxExMH2sPyGUriHe/nFMCRz1O2/TEtviPmJ37PGxllvQP3kEF8aDO2lKH9
+         NlpeiQaCzlIqlpspuAICgEifaFUjgHV8XmKqO97HPW/FF5LXIg5/vyUyQgG0VL4yVMh8
+         yePBQuQ7y/jpB6hBV5SEVPjxQ4wzF9TeLvj+tW5Tb575q4kyEPbQ9nVvK2F64Ocamzzq
+         /BrwcY+DjXIuIFW617WBkda81a3qI0zsfi7QxsORrU9jPykRmp/neYoDC7Wq/vbMiJ7A
+         Vr0f4XjgTdCNBNoYrUHnDemOONgerlSIgsbAb+QBTqfrYlndpQiGakyFZrJ41bj00tOR
+         sXEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=0FgsPe/szodLK49SrQwNRX+hLhmwVotdsMjQ6Dk684k=;
+        b=AcvROYi74IVfrSI74LM2C7Nv4tZXrZTEFTi6NPxtJH6cslRdQZbCOO+6juMrifVST2
+         Jb+WQ60r9ILxQtZM3lLRxngVEkoU9BEBAPvdd4WAPjw3dWB3YGpERFwR5+E5/LjutJxe
+         +CAEZqd0xxsdvUGfon2UN8nafgHwr4+q8U8Oz/EVqPPqwwNQIf7ffVqwZMN/uc9jK6qD
+         lLpAPN9m862bFVIuqOJk+oc278sBj1rNxVAVJiskuuwDyyxj72uNgRUcDhFDgetAtNwV
+         syiivMf6CMDuUwoKIVDjiqoiXfi5Bu4LCYt/XthjyhyOGt5SF/sTfK8IEbDdkc+oVrL+
+         kiXw==
+X-Gm-Message-State: ACrzQf3sdwAl3UToDn8cwdiZTcvFyXC5WjRjOqkzqOw+SM6UY6b3zvwV
+        rk0L2a0ogGQ0qbYEOXBAkHtw5g==
+X-Google-Smtp-Source: AMsMyM628TNUiqY7CeXh8ulWmBa1i/FBfpt9UV5mqz+dNB6YpQEnA4Lv38oXpDvZEQRO+Oyv9Afzug==
+X-Received: by 2002:a05:6512:10d0:b0:4a2:ad92:2990 with SMTP id k16-20020a05651210d000b004a2ad922990mr21116941lfg.276.1667916552498;
+        Tue, 08 Nov 2022 06:09:12 -0800 (PST)
+Received: from krzk-bin.NAT.warszawa.vectranet.pl (088156142199.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.199])
+        by smtp.gmail.com with ESMTPSA id o25-20020ac25e39000000b0048af3c090f8sm1800517lfg.13.2022.11.08.06.09.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Nov 2022 06:09:11 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] dt-bindings: pinctrl: qcom,msm8976: convert to dtschema
+Date:   Tue,  8 Nov 2022 15:09:09 +0100
+Message-Id: <20221108140909.51422-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [7.220.126.23]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpemm500014.china.huawei.com (7.185.36.153)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For co-location with idle and non-idle tasks, when CFS do load balance,
-it is reasonable to prefer migrating non-idle tasks and migrating idle
-tasks lastly to improve QoS of non-idle(Latency Sensitive) tasks.
+Convert Qualcomm MSM8976 pin controller bindings to DT schema.  Keep the
+parsing of pin configuration subnodes consistent with other Qualcomm
+schemas (children named with '-state' suffix, their children with
+'-pins').
 
-However, the migrate_{load|util|task} difference between env->src_rq
-and env->dst_rq should also be considered. So we should add some
-restrictions before migrating non-idle tasks.
+Changes during conversion: update the list of non-mux pins (like sdc1)
+to match Linux driver.
 
-Let's deal with the following cases by env->migration_type.
-
-case migrate_load:
-	load_diff = sum_load(non-idle cfs tasks of env->src_rq) -
-		sum_load(non-idle cfs tasks of env->dst_rq);
-	if (load_diff < env->imbalance)
-		goto migrate_cfs_idle_tasks;
-
-case migrate_util:
-	util_diff = sum_util(non-idle cfs tasks of env->src_rq) -
-		sum_util(non-idle cfs tasks of env->dst_rq);
-	if (util_diff < env->imbalance)
-		goto migrate_cfs_idle_tasks;
-
-case migrate_task:
-	nr_diff = sum_nr(non-idle cfs tasks of env->src_rq) -
-		sum_nr(non-idle cfs tasks of env->dst_rq);
-	if (nr_diff < 1)
-		goto migrate_cfs_idle_tasks;
-
-Signed-off-by: Song Zhang <zhangsong34@huawei.com>
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
-v2->v3:
- - Fix can_migrate_cfs_tasks() for detach_one_task.
+ .../bindings/pinctrl/qcom,msm8976-pinctrl.txt | 183 ------------------
+ .../pinctrl/qcom,msm8976-pinctrl.yaml         | 137 +++++++++++++
+ 2 files changed, 137 insertions(+), 183 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,msm8976-pinctrl.txt
+ create mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,msm8976-pinctrl.yaml
 
-v1->v2:
- - Remove sysctl knob and add LB_PRIO sched feature.
- - Migrating tasks consider non-idle migrate_{load|util|task} difference
-   between env->src_rq and env->dst_rq, and if the difference smaller than
-   env->imbalance, change to migrate idle tasks instead.
----
- kernel/sched/core.c     |   1 +
- kernel/sched/fair.c     | 132 ++++++++++++++++++++++++++++++++++++++--
- kernel/sched/features.h |   1 +
- kernel/sched/sched.h    |   1 +
- 4 files changed, 131 insertions(+), 4 deletions(-)
-
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 5800b0623ff3..fa4174ecd111 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -9731,6 +9731,7 @@ void __init sched_init(void)
- 		rq->max_idle_balance_cost = sysctl_sched_migration_cost;
- 
- 		INIT_LIST_HEAD(&rq->cfs_tasks);
-+		INIT_LIST_HEAD(&rq->cfs_idle_tasks);
- 
- 		rq_attach_root(rq, &def_root_domain);
- #ifdef CONFIG_NO_HZ_COMMON
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index e4a0b8bd941c..db99127fcaca 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -3199,6 +3199,20 @@ static inline void update_scan_period(struct task_struct *p, int new_cpu)
- 
- #endif /* CONFIG_NUMA_BALANCING */
- 
-+#ifdef CONFIG_SMP
-+static void
-+adjust_rq_cfs_tasks(
-+	void (*list_op)(struct list_head *, struct list_head *),
-+	struct rq *rq,
-+	struct sched_entity *se)
-+{
-+	if (sched_feat(LB_PRIO) && task_has_idle_policy(task_of(se)))
-+		(*list_op)(&se->group_node, &rq->cfs_idle_tasks);
-+	else
-+		(*list_op)(&se->group_node, &rq->cfs_tasks);
-+}
-+#endif
+diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,msm8976-pinctrl.txt b/Documentation/devicetree/bindings/pinctrl/qcom,msm8976-pinctrl.txt
+deleted file mode 100644
+index 70d04d12f136..000000000000
+--- a/Documentation/devicetree/bindings/pinctrl/qcom,msm8976-pinctrl.txt
++++ /dev/null
+@@ -1,183 +0,0 @@
+-Qualcomm MSM8976 TLMM block
+-
+-This binding describes the Top Level Mode Multiplexer block found in the
+-MSM8956 and MSM8976 platforms.
+-
+-- compatible:
+-	Usage: required
+-	Value type: <string>
+-	Definition: must be "qcom,msm8976-pinctrl"
+-
+-- reg:
+-	Usage: required
+-	Value type: <prop-encoded-array>
+-	Definition: the base address and size of the TLMM register space.
+-
+-- interrupts:
+-	Usage: required
+-	Value type: <prop-encoded-array>
+-	Definition: should specify the TLMM summary IRQ.
+-
+-- interrupt-controller:
+-	Usage: required
+-	Value type: <none>
+-	Definition: identifies this node as an interrupt controller
+-
+-- #interrupt-cells:
+-	Usage: required
+-	Value type: <u32>
+-	Definition: must be 2. Specifying the pin number and flags, as defined
+-		    in <dt-bindings/interrupt-controller/irq.h>
+-
+-- gpio-controller:
+-	Usage: required
+-	Value type: <none>
+-	Definition: identifies this node as a gpio controller
+-
+-- #gpio-cells:
+-	Usage: required
+-	Value type: <u32>
+-	Definition: must be 2. Specifying the pin number and flags, as defined
+-		    in <dt-bindings/gpio/gpio.h>
+-
+-- gpio-ranges:
+-	Usage: required
+-	Definition:  see ../gpio/gpio.txt
+-
+-- gpio-reserved-ranges:
+-	Usage: optional
+-	Definition: see ../gpio/gpio.txt
+-
+-Please refer to ../gpio/gpio.txt and ../interrupt-controller/interrupts.txt for
+-a general description of GPIO and interrupt bindings.
+-
+-Please refer to pinctrl-bindings.txt in this directory for details of the
+-common pinctrl bindings used by client devices, including the meaning of the
+-phrase "pin configuration node".
+-
+-The pin configuration nodes act as a container for an arbitrary number of
+-subnodes. Each of these subnodes represents some desired configuration for a
+-pin, a group, or a list of pins or groups. This configuration can include the
+-mux function to select on those pin(s)/group(s), and various pin configuration
+-parameters, such as pull-up, drive strength, etc.
+-
+-
+-PIN CONFIGURATION NODES:
+-
+-The name of each subnode is not important; all subnodes should be enumerated
+-and processed purely based on their content.
+-
+-Each subnode only affects those parameters that are explicitly listed. In
+-other words, a subnode that lists a mux function but no pin configuration
+-parameters implies no information about any pin configuration parameters.
+-Similarly, a pin subnode that describes a pullup parameter implies no
+-information about e.g. the mux function.
+-
+-
+-The following generic properties as defined in pinctrl-bindings.txt are valid
+-to specify in a pin configuration subnode:
+-
+-- pins:
+-	Usage: required
+-	Value type: <string-array>
+-	Definition: List of gpio pins affected by the properties specified in
+-		    this subnode.
+-
+-		    Valid pins are:
+-		      gpio0-gpio145
+-		        Supports mux, bias and drive-strength
+-
+-		      sdc1_clk, sdc1_cmd, sdc1_data,
+-		      sdc2_clk, sdc2_cmd, sdc2_data,
+-		      sdc3_clk, sdc3_cmd, sdc3_data
+-		        Supports bias and drive-strength
+-
+-- function:
+-	Usage: required
+-	Value type: <string>
+-	Definition: Specify the alternative function to be configured for the
+-		    specified pins. Functions are only valid for gpio pins.
+-		    Valid values are:
+-
+-		    gpio, blsp_uart1, blsp_spi1, smb_int, blsp_i2c1, blsp_spi2,
+-		    blsp_uart2, blsp_i2c2, gcc_gp1_clk_b, blsp_spi3,
+-		    qdss_tracedata_b, blsp_i2c3, gcc_gp2_clk_b, gcc_gp3_clk_b,
+-		    blsp_spi4, cap_int, blsp_i2c4, blsp_spi5, blsp_uart5,
+-		    qdss_traceclk_a, m_voc, blsp_i2c5, qdss_tracectl_a,
+-		    qdss_tracedata_a, blsp_spi6, blsp_uart6, qdss_tracectl_b,
+-		    blsp_i2c6, qdss_traceclk_b, mdp_vsync, pri_mi2s_mclk_a,
+-		    sec_mi2s_mclk_a, cam_mclk, cci0_i2c, cci1_i2c, blsp1_spi,
+-		    blsp3_spi, gcc_gp1_clk_a, gcc_gp2_clk_a, gcc_gp3_clk_a,
+-		    uim_batt, sd_write, uim1_data, uim1_clk, uim1_reset,
+-		    uim1_present, uim2_data, uim2_clk, uim2_reset,
+-		    uim2_present, ts_xvdd, mipi_dsi0, us_euro, ts_resout,
+-		    ts_sample, sec_mi2s_mclk_b, pri_mi2s, codec_reset,
+-		    cdc_pdm0, us_emitter, pri_mi2s_mclk_b, pri_mi2s_mclk_c,
+-		    lpass_slimbus, lpass_slimbus0, lpass_slimbus1, codec_int1,
+-		    codec_int2, wcss_bt, sdc3, wcss_wlan2, wcss_wlan1,
+-		    wcss_wlan0, wcss_wlan, wcss_fm, key_volp, key_snapshot,
+-		    key_focus, key_home, pwr_down, dmic0_clk, hdmi_int,
+-		    dmic0_data, wsa_vi, wsa_en, blsp_spi8, wsa_irq, blsp_i2c8,
+-		    pa_indicator, modem_tsync, ssbi_wtr1, gsm1_tx, gsm0_tx,
+-		    sdcard_det, sec_mi2s, ss_switch,
+-
+-- bias-disable:
+-	Usage: optional
+-	Value type: <none>
+-	Definition: The specified pins should be configured as no pull.
+-
+-- bias-pull-down:
+-	Usage: optional
+-	Value type: <none>
+-	Definition: The specified pins should be configured as pull down.
+-
+-- bias-pull-up:
+-	Usage: optional
+-	Value type: <none>
+-	Definition: The specified pins should be configured as pull up.
+-
+-- output-high:
+-	Usage: optional
+-	Value type: <none>
+-	Definition: The specified pins are configured in output mode, driven
+-		    high.
+-		    Not valid for sdc pins.
+-
+-- output-low:
+-	Usage: optional
+-	Value type: <none>
+-	Definition: The specified pins are configured in output mode, driven
+-		    low.
+-		    Not valid for sdc pins.
+-
+-- drive-strength:
+-	Usage: optional
+-	Value type: <u32>
+-	Definition: Selects the drive strength for the specified pins, in mA.
+-		    Valid values are: 2, 4, 6, 8, 10, 12, 14 and 16
+-
+-Example:
+-
+-	tlmm: pinctrl@1000000 {
+-		compatible = "qcom,msm8976-pinctrl";
+-		reg = <0x1000000 0x300000>;
+-		interrupts = <GIC_SPI 208 IRQ_TYPE_LEVEL_HIGH>;
+-		gpio-controller;
+-		#gpio-cells = <2>;
+-		gpio-ranges = <&tlmm 0 0 145>;
+-		interrupt-controller;
+-		#interrupt-cells = <2>;
+-
+-		blsp1_uart2_active: blsp1_uart2_active {
+-			mux {
+-				pins = "gpio4", "gpio5", "gpio6", "gpio7";
+-				function = "blsp_uart2";
+-			};
+-
+-			config {
+-				pins = "gpio4", "gpio5", "gpio6", "gpio7";
+-				drive-strength = <2>;
+-				bias-disable;
+-			};
+-		};
+-	};
+diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,msm8976-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/qcom,msm8976-pinctrl.yaml
+new file mode 100644
+index 000000000000..1002a57248f6
+--- /dev/null
++++ b/Documentation/devicetree/bindings/pinctrl/qcom,msm8976-pinctrl.yaml
+@@ -0,0 +1,137 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/pinctrl/qcom,msm8976-pinctrl.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
- static void
- account_entity_enqueue(struct cfs_rq *cfs_rq, struct sched_entity *se)
- {
-@@ -3208,7 +3222,7 @@ account_entity_enqueue(struct cfs_rq *cfs_rq, struct sched_entity *se)
- 		struct rq *rq = rq_of(cfs_rq);
- 
- 		account_numa_enqueue(rq, task_of(se));
--		list_add(&se->group_node, &rq->cfs_tasks);
-+		adjust_rq_cfs_tasks(list_add, rq, se);
- 	}
- #endif
- 	cfs_rq->nr_running++;
-@@ -7631,7 +7645,7 @@ done: __maybe_unused;
- 	 * the list, so our cfs_tasks list becomes MRU
- 	 * one.
- 	 */
--	list_move(&p->se.group_node, &rq->cfs_tasks);
-+	adjust_rq_cfs_tasks(list_move, rq, &p->se);
- #endif
- 
- 	if (hrtick_enabled_fair(rq))
-@@ -8147,6 +8161,63 @@ static void detach_task(struct task_struct *p, struct lb_env *env)
- 	set_task_cpu(p, env->dst_cpu);
- }
- 
-+/*
-+ * update_cfs_tasks_diff() -- update migrate_{load|util|task} diff
-+ * between src_rq->cfs and dst_rq->cfs.
-+ */
-+static void update_cfs_tasks_diff(struct lb_env *env,
-+				  long *load_diff,
-+				  long *util_diff,
-+				  int *nr_diff)
-+{
-+	unsigned long src_load = 0, src_util = 0,
-+		dst_load = 0, dst_util = 0;
++title: Qualcomm MSM8976 TLMM pin controller
 +
-+	struct list_head *src_tasks = &env->src_rq->cfs_tasks;
-+	struct list_head *dst_tasks = &env->dst_rq->cfs_tasks;
++maintainers:
++  - Bjorn Andersson <andersson@kernel.org>
++  - Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 +
-+	int nr_src_tasks = &env->src_rq->cfs.h_nr_running -
-+		&env->src_rq->cfs.idle_h_nr_running;
++description:
++  Top Level Mode Multiplexer pin controller in Qualcomm MSM8976 SoC.
 +
-+	int nr_dst_tasks = &env->dst_rq->cfs.h_nr_running -
-+		&env->dst_rq->cfs.idle_h_nr_running;
++properties:
++  compatible:
++    const: qcom,msm8976-pinctrl
 +
-+	struct task_struct *p;
++  reg:
++    maxItems: 1
 +
-+	list_for_each_entry(p, src_tasks, se.group_node) {
-+		src_util += task_util_est(p);
-+		src_load += max_t(unsigned long, task_h_load(p), 1);
-+	}
++  interrupts: true
++  interrupt-controller: true
++  "#interrupt-cells": true
++  gpio-controller: true
++  "#gpio-cells": true
++  gpio-ranges: true
++  wakeup-parent: true
 +
-+	list_for_each_entry(p, dst_tasks, se.group_node) {
-+		dst_util += task_util_est(p);
-+		dst_load += max_t(unsigned long, task_h_load(p), 1);
-+	}
++  gpio-reserved-ranges:
++    minItems: 1
++    maxItems: 73
 +
-+	*load_diff = src_load - dst_load;
-+	*util_diff = src_util - dst_util;
-+	*nr_diff = nr_src_tasks - nr_dst_tasks;
-+}
++  gpio-line-names:
++    maxItems: 145
 +
-+/*
-+ * can_migrate_cfs_tasks() -- compare migrate_{load|util|task} diff
-+ * with env->imbalance.
-+ *
-+ * Returns true if rq->cfs_tasks can be migrated.
-+ */
-+static bool can_migrate_cfs_tasks(struct lb_env *env,
-+				  long load_diff,
-+				  long util_diff,
-+				  int nr_diff)
-+{
-+	return (env->migration_type == migrate_load &&
-+		load_diff >= env->imbalance) ||
-+		(env->migration_type == migrate_util &&
-+		util_diff >= env->imbalance) ||
-+		(env->migration_type == migrate_task &&
-+		nr_diff >= 1);
-+}
++patternProperties:
++  "-state$":
++    oneOf:
++      - $ref: "#/$defs/qcom-msm8976-tlmm-state"
++      - patternProperties:
++          "-pins$":
++            $ref: "#/$defs/qcom-msm8976-tlmm-state"
++        additionalProperties: false
 +
- /*
-  * detach_one_task() -- tries to dequeue exactly one task from env->src_rq, as
-  * part of active balancing operations within "domain".
-@@ -8156,11 +8227,24 @@ static void detach_task(struct task_struct *p, struct lb_env *env)
- static struct task_struct *detach_one_task(struct lb_env *env)
- {
- 	struct task_struct *p;
-+	struct list_head *tasks = &env->src_rq->cfs_tasks;
-+	bool has_detach_idle_tasks = false;
-+	long load_diff = 0, util_diff = 0;
-+	int nr_diff = 0;
- 
- 	lockdep_assert_rq_held(env->src_rq);
- 
-+	if (sched_feat(LB_PRIO)) {
-+		update_cfs_tasks_diff(env, &load_diff, &util_diff, &nr_diff);
-+		if (!can_migrate_cfs_tasks(env, load_diff, util_diff, nr_diff)) {
-+			has_detach_idle_tasks = true;
-+			tasks = &env->src_rq->cfs_idle_tasks;
-+		}
-+	}
++$defs:
++  qcom-msm8976-tlmm-state:
++    type: object
++    description:
++      Pinctrl node's client devices use subnodes for desired pin configuration.
++      Client device subnodes use below standard properties.
++    $ref: qcom,tlmm-common.yaml#/$defs/qcom-tlmm-state
 +
-+again:
- 	list_for_each_entry_reverse(p,
--			&env->src_rq->cfs_tasks, se.group_node) {
-+			tasks, se.group_node) {
- 		if (!can_migrate_task(p, env))
- 			continue;
- 
-@@ -8175,6 +8259,13 @@ static struct task_struct *detach_one_task(struct lb_env *env)
- 		schedstat_inc(env->sd->lb_gained[env->idle]);
- 		return p;
- 	}
++    properties:
++      pins:
++        description:
++          List of gpio pins affected by the properties specified in this
++          subnode.
++        items:
++          oneOf:
++            - pattern: "^gpio([0-9]|[1-9][0-9]|1[0-3][0-9]|14[0-4])$"
++            - enum: [ qdsd_clk, qdsd_cmd, qdsd_data0, qdsd_data1, qdsd_data2,
++                      qdsd_data3 sdc1_clk, sdc1_cmd, sdc1_data, sdc1_rclk,
++                      sdc2_clk, sdc2_cmd, sdc2_data ]
++        minItems: 1
++        maxItems: 36
 +
-+	if (sched_feat(LB_PRIO) && !has_detach_idle_tasks) {
-+		has_detach_idle_tasks = true;
-+		tasks = &env->src_rq->cfs_idle_tasks;
-+		goto again;
-+	}
++      function:
++        description:
++          Specify the alternative function to be configured for the specified
++          pins.
 +
- 	return NULL;
- }
- 
-@@ -8190,6 +8281,9 @@ static int detach_tasks(struct lb_env *env)
- 	unsigned long util, load;
- 	struct task_struct *p;
- 	int detached = 0;
-+	bool has_detach_idle_tasks = false;
-+	long load_diff = 0, util_diff = 0;
-+	int nr_diff = 0;
- 
- 	lockdep_assert_rq_held(env->src_rq);
- 
-@@ -8205,6 +8299,10 @@ static int detach_tasks(struct lb_env *env)
- 	if (env->imbalance <= 0)
- 		return 0;
- 
-+	if (sched_feat(LB_PRIO))
-+		update_cfs_tasks_diff(env, &load_diff, &util_diff, &nr_diff);
++        enum: [ gpio, blsp_uart1, blsp_spi1, smb_int, blsp_i2c1, blsp_spi2,
++                blsp_uart2, blsp_i2c2, gcc_gp1_clk_b, blsp_spi3,
++                qdss_tracedata_b, blsp_i2c3, gcc_gp2_clk_b, gcc_gp3_clk_b,
++                blsp_spi4, cap_int, blsp_i2c4, blsp_spi5, blsp_uart5,
++                qdss_traceclk_a, m_voc, blsp_i2c5, qdss_tracectl_a,
++                qdss_tracedata_a, blsp_spi6, blsp_uart6, qdss_tracectl_b,
++                blsp_i2c6, qdss_traceclk_b, mdp_vsync, pri_mi2s_mclk_a,
++                sec_mi2s_mclk_a, cam_mclk, cci0_i2c, cci1_i2c, blsp1_spi,
++                blsp3_spi, gcc_gp1_clk_a, gcc_gp2_clk_a, gcc_gp3_clk_a,
++                uim_batt, sd_write, uim1_data, uim1_clk, uim1_reset,
++                uim1_present, uim2_data, uim2_clk, uim2_reset, uim2_present,
++                ts_xvdd, mipi_dsi0, us_euro, ts_resout, ts_sample,
++                sec_mi2s_mclk_b, pri_mi2s, codec_reset, cdc_pdm0, us_emitter,
++                pri_mi2s_mclk_b, pri_mi2s_mclk_c, lpass_slimbus,
++                lpass_slimbus0, lpass_slimbus1, codec_int1, codec_int2,
++                wcss_bt, sdc3, wcss_wlan2, wcss_wlan1, wcss_wlan0, wcss_wlan,
++                wcss_fm, key_volp, key_snapshot, key_focus, key_home, pwr_down,
++                dmic0_clk, hdmi_int, dmic0_data, wsa_vi, wsa_en, blsp_spi8,
++                wsa_irq, blsp_i2c8, pa_indicator, modem_tsync, ssbi_wtr1,
++                gsm1_tx, gsm0_tx, sdcard_det, sec_mi2s, ss_switch ]
 +
-+again:
- 	while (!list_empty(tasks)) {
- 		/*
- 		 * We don't want to steal all, otherwise we may be treated likewise,
-@@ -8258,6 +8356,12 @@ static int detach_tasks(struct lb_env *env)
- 			if (shr_bound(load, env->sd->nr_balance_failed) > env->imbalance)
- 				goto next;
- 
-+			if (sched_feat(LB_PRIO) && !has_detach_idle_tasks) {
-+				if (load_diff < env->imbalance)
-+					goto detach_idle;
-+				load_diff -= load;
-+			}
++      bias-pull-down: true
++      bias-pull-up: true
++      bias-disable: true
++      drive-strength: true
++      input-enable: true
++      output-high: true
++      output-low: true
 +
- 			env->imbalance -= load;
- 			break;
- 
-@@ -8267,10 +8371,22 @@ static int detach_tasks(struct lb_env *env)
- 			if (util > env->imbalance)
- 				goto next;
- 
-+			if (sched_feat(LB_PRIO) && !has_detach_idle_tasks) {
-+				if (util_diff < env->imbalance)
-+					goto detach_idle;
-+				util_diff -= util;
-+			}
++    required:
++      - pins
 +
- 			env->imbalance -= util;
- 			break;
- 
- 		case migrate_task:
-+			if (sched_feat(LB_PRIO) && !has_detach_idle_tasks) {
-+				if (nr_diff < 1)
-+					goto detach_idle;
-+				nr_diff--;
-+			}
++    additionalProperties: false
 +
- 			env->imbalance--;
- 			break;
- 
-@@ -8310,6 +8426,14 @@ static int detach_tasks(struct lb_env *env)
- 		list_move(&p->se.group_node, tasks);
- 	}
- 
-+detach_idle:
-+	if (sched_feat(LB_PRIO) &&
-+		!has_detach_idle_tasks && env->imbalance > 0) {
-+		has_detach_idle_tasks = true;
-+		tasks = &env->src_rq->cfs_idle_tasks;
-+		goto again;
-+	}
++allOf:
++  - $ref: /schemas/pinctrl/qcom,tlmm-common.yaml#
 +
- 	/*
- 	 * Right now, this is one of only two places we collect this stat
- 	 * so we can safely collect detach_one_task() stats here rather
-@@ -11814,7 +11938,7 @@ static void set_next_task_fair(struct rq *rq, struct task_struct *p, bool first)
- 		 * Move the next running task to the front of the list, so our
- 		 * cfs_tasks list becomes MRU one.
- 		 */
--		list_move(&se->group_node, &rq->cfs_tasks);
-+		adjust_rq_cfs_tasks(list_move, rq, se);
- 	}
- #endif
- 
-diff --git a/kernel/sched/features.h b/kernel/sched/features.h
-index ee7f23c76bd3..bc4a85f839b4 100644
---- a/kernel/sched/features.h
-+++ b/kernel/sched/features.h
-@@ -85,6 +85,7 @@ SCHED_FEAT(RT_PUSH_IPI, true)
- 
- SCHED_FEAT(RT_RUNTIME_SHARE, false)
- SCHED_FEAT(LB_MIN, false)
-+SCHED_FEAT(LB_PRIO, false)
- SCHED_FEAT(ATTACH_AGE_LOAD, true)
- 
- SCHED_FEAT(WA_IDLE, true)
-diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-index 1644242ecd11..bf6c2a3eea6c 100644
---- a/kernel/sched/sched.h
-+++ b/kernel/sched/sched.h
-@@ -1053,6 +1053,7 @@ struct rq {
- 	int			online;
- 
- 	struct list_head cfs_tasks;
-+	struct list_head cfs_idle_tasks;
- 
- 	struct sched_avg	avg_rt;
- 	struct sched_avg	avg_dl;
++required:
++  - compatible
++  - reg
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++
++    tlmm: pinctrl@1000000 {
++        compatible = "qcom,msm8976-pinctrl";
++        reg = <0x1000000 0x300000>;
++        interrupts = <GIC_SPI 208 IRQ_TYPE_LEVEL_HIGH>;
++        gpio-controller;
++        #gpio-cells = <2>;
++        gpio-ranges = <&tlmm 0 0 145>;
++        interrupt-controller;
++        #interrupt-cells = <2>;
++
++        blsp1-uart2-active-state {
++            pins = "gpio4", "gpio5", "gpio6", "gpio7";
++            function = "blsp_uart2";
++            drive-strength = <2>;
++            bias-disable;
++        };
++    };
 -- 
-2.33.0
+2.34.1
 
