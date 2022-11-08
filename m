@@ -2,403 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 391AE621EE8
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 23:14:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C88D9621EEA
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 23:15:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229634AbiKHWOQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 17:14:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43172 "EHLO
+        id S229586AbiKHWPL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 17:15:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229554AbiKHWOO (ORCPT
+        with ESMTP id S229503AbiKHWPJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 17:14:14 -0500
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DE40205E2
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 14:14:12 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id m200-20020a25d4d1000000b006cb7e26b93cso15109516ybf.1
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 14:14:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=gwp7L+qQKXaqA7geIZEuwP4QfHGnl4DLTQFp6ghNvT8=;
-        b=aLjQa8qfPqpvZwoTS5O6mxtwWHfK4/McRlefvIGwFcCVxaC45Wy+SJAOivIcoPknB7
-         hrhoGLezDmVYA1dJ8KwFOJDTgW/tbNO9xW+kWEpd938+BVGRg8ouIl4EiBR4P4f2NyAt
-         hLd6oYkaRLItw4mfDNG6F6qr5g7oqIXegTbE+XIXb3iaB5c+zpyMWbWwr2lJSoZ38Cdv
-         FLFhECl1iZLWkHj0FBX8sA4Gk3eSP5mrnKBOa/55Jcw4hR50PfWvN+9qQx4pDYUef9W3
-         j7cHNCycwHPHu3d5BT97S/w2+tn8OdSjQ5XaEXibNvUU8lkb0fUsk90jpAV7fgoZnAqp
-         r3Ng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gwp7L+qQKXaqA7geIZEuwP4QfHGnl4DLTQFp6ghNvT8=;
-        b=eA/iuDjFeletrHuLzzVaboWwy6vy81TtB8lMy1Aax8VZwEW6hb9xp4WY77A4uHpYo7
-         SkxxTgdMW5la1VPB6FIqaFwT2BafFilJFv+tkHEZgBW9csE+pcFJ/4VVRl6Llw1MrPut
-         wnNZyZWIMCpY4P762+33aMrrYAqtU2EBsvHB/cwjf9klvaFSEgRCXQbzZo7KFBWi+ey9
-         beg9bgXK0ezTM8m7+bREQNyX14Hz1g4dkUmrFq0ecYlKeqgqSSF+ITGgo6k9OQSOWZLc
-         vJS0xduGifObJ14DCGjxiyb+0q7zlboa4HeCWppdVWK0CmWIZa2JGHX8LjF+yjngBX1T
-         RnUg==
-X-Gm-Message-State: ACrzQf1DlC8xVnLKGamdhtZRydPPg8NpvgdI2V6a7HqlHMcHpnkuYXNo
-        ImHT9OCSdqlzmNOseHllFx1XKPhR3W4=
-X-Google-Smtp-Source: AMsMyM5lZrMM39odaW022CEg0155nBEULeUYazvbQYuwJW9HmNWQ0vzydbEGgsojtBDT2wIOh4OyXjENvNw=
-X-Received: from soheil4.nyc.corp.google.com ([2620:0:1003:32a:131c:366c:edb3:a050])
- (user=soheil job=sendgmr) by 2002:a25:1d43:0:b0:6ca:1935:f928 with SMTP id
- d64-20020a251d43000000b006ca1935f928mr53408703ybd.589.1667945651744; Tue, 08
- Nov 2022 14:14:11 -0800 (PST)
-Date:   Tue, 8 Nov 2022 17:14:10 -0500
-In-Reply-To: <20221030220203.31210-7-axboe@kernel.dk>
-Mime-Version: 1.0
-References: <20221030220203.31210-1-axboe@kernel.dk> <20221030220203.31210-7-axboe@kernel.dk>
-Message-ID: <Y2rUsi5yrhDZYpf/@google.com>
-Subject: Re: [PATCH 6/6] eventpoll: add support for min-wait
-From:   Soheil Hassas Yeganeh <soheil@google.com>
-To:     Jens Axboe <axboe@kernel.dk>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Cc:     Willem de Bruijn <willemb@google.com>,
-        Shakeel Butt <shakeelb@google.com>
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 8 Nov 2022 17:15:09 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24FFF6068F
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 14:15:06 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 9331422705;
+        Tue,  8 Nov 2022 22:15:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1667945705; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=KGw9hUTJJhpAj6IJzhX+AXsNfcXbeLF/Lzm5TXyUezI=;
+        b=JVCYSGuD3gAluN5sya1jiBWpSf6dQfbkyzODuUDMvkUeckY4lABDZoyf7StSfgVmJIv6bD
+        tG4/UytksTnTiO5d9sYikg0UfurNfT8H4vEL86MojGi52kG50UWGRf+UCK1GnLBvsySmii
+        tDYpAtzGb1Ik3pY7tyf0EaO0i/wLmqo=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7844F13398;
+        Tue,  8 Nov 2022 22:15:05 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id IDbtGunUamOaKAAAMHmgww
+        (envelope-from <mhocko@suse.com>); Tue, 08 Nov 2022 22:15:05 +0000
+Date:   Tue, 8 Nov 2022 23:15:04 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     Yang Shi <shy828301@gmail.com>
+Cc:     zokeefe@google.com, akpm@linux-foundation.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        syzbot+0044b22d177870ee974f@syzkaller.appspotmail.com
+Subject: Re: [mm-unstable v3 PATCH 3/3] mm: replace VM_WARN_ON to pr_warn if
+ the node is offline with __GFP_THISNODE
+Message-ID: <Y2rU6BHD9eePn8IN@dhcp22.suse.cz>
+References: <20221108184357.55614-1-shy828301@gmail.com>
+ <20221108184357.55614-3-shy828301@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221108184357.55614-3-shy828301@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Oct 30, 2022 at 04:02:03PM -0600, Jens Axboe wrote:
-> Rather than just have a timeout value for waiting on events, add
-> EPOLL_CTL_MIN_WAIT to allow setting a minimum time that epoll_wait()
-> should always wait for events to arrive.
+On Tue 08-11-22 10:43:57, Yang Shi wrote:
+> Syzbot reported the below splat:
 > 
-> For medium workload efficiencies, some production workloads inject
-> artificial timers or sleeps before calling epoll_wait() to get
-> better batching and higher efficiencies. While this does help, it's
-> not as efficient as it could be. By adding support for epoll_wait()
-> for this directly, we can avoids extra context switches and scheduler
-> and timer overhead.
+> WARNING: CPU: 1 PID: 3646 at include/linux/gfp.h:221 __alloc_pages_node
+> include/linux/gfp.h:221 [inline]
+> WARNING: CPU: 1 PID: 3646 at include/linux/gfp.h:221
+> hpage_collapse_alloc_page mm/khugepaged.c:807 [inline]
+> WARNING: CPU: 1 PID: 3646 at include/linux/gfp.h:221
+> alloc_charge_hpage+0x802/0xaa0 mm/khugepaged.c:963
+> Modules linked in:
+> CPU: 1 PID: 3646 Comm: syz-executor210 Not tainted
+> 6.1.0-rc1-syzkaller-00454-ga70385240892 #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS
+> Google 10/11/2022
+> RIP: 0010:__alloc_pages_node include/linux/gfp.h:221 [inline]
+> RIP: 0010:hpage_collapse_alloc_page mm/khugepaged.c:807 [inline]
+> RIP: 0010:alloc_charge_hpage+0x802/0xaa0 mm/khugepaged.c:963
+> Code: e5 01 4c 89 ee e8 6e f9 ae ff 4d 85 ed 0f 84 28 fc ff ff e8 70 fc
+> ae ff 48 8d 6b ff 4c 8d 63 07 e9 16 fc ff ff e8 5e fc ae ff <0f> 0b e9
+> 96 fa ff ff 41 bc 1a 00 00 00 e9 86 fd ff ff e8 47 fc ae
+> RSP: 0018:ffffc90003fdf7d8 EFLAGS: 00010293
+> RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+> RDX: ffff888077f457c0 RSI: ffffffff81cd8f42 RDI: 0000000000000001
+> RBP: ffff888079388c0c R08: 0000000000000001 R09: 0000000000000000
+> R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000000
+> R13: dffffc0000000000 R14: 0000000000000000 R15: 0000000000000000
+> FS:  00007f6b48ccf700(0000) GS:ffff8880b9b00000(0000)
+> knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 00007f6b48a819f0 CR3: 00000000171e7000 CR4: 00000000003506e0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> Call Trace:
+>  <TASK>
+>  collapse_file+0x1ca/0x5780 mm/khugepaged.c:1715
+>  hpage_collapse_scan_file+0xd6c/0x17a0 mm/khugepaged.c:2156
+>  madvise_collapse+0x53a/0xb40 mm/khugepaged.c:2611
+>  madvise_vma_behavior+0xd0a/0x1cc0 mm/madvise.c:1066
+>  madvise_walk_vmas+0x1c7/0x2b0 mm/madvise.c:1240
+>  do_madvise.part.0+0x24a/0x340 mm/madvise.c:1419
+>  do_madvise mm/madvise.c:1432 [inline]
+>  __do_sys_madvise mm/madvise.c:1432 [inline]
+>  __se_sys_madvise mm/madvise.c:1430 [inline]
+>  __x64_sys_madvise+0x113/0x150 mm/madvise.c:1430
+>  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+>  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> RIP: 0033:0x7f6b48a4eef9
+> Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 b1 15 00 00 90 48 89 f8 48 89
+> f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01
+> f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+> RSP: 002b:00007f6b48ccf318 EFLAGS: 00000246 ORIG_RAX: 000000000000001c
+> RAX: ffffffffffffffda RBX: 00007f6b48af0048 RCX: 00007f6b48a4eef9
+> RDX: 0000000000000019 RSI: 0000000000600003 RDI: 0000000020000000
+> RBP: 00007f6b48af0040 R08: 0000000000000000 R09: 0000000000000000
+> R10: 0000000000000000 R11: 0000000000000246 R12: 00007f6b48aa53a4
+> R13: 00007f6b48bffcbf R14: 00007f6b48ccf400 R15: 0000000000022000
+>  </TASK>
 > 
-> As an example, running an AB test on an identical workload at about
-> ~370K reqs/second, without this change and with the sleep hack
-> mentioned above (using 200 usec as the timeout), we're doing 310K-340K
-> non-voluntary context switches per second. Idle CPU on the host is 27-34%.
-> With the the sleep hack removed and epoll set to the same 200 usec
-> value, we're handling the exact same load but at 292K-315k non-voluntary
-> context switches and idle CPU of 33-41%, a substantial win.
+> It is because khugepaged allocates pages with __GFP_THISNODE, but the
+> preferred node is bogus.  The previous patch fixed the khugepaged
+> code to avoid allocating page from non-existing node.  But it is still
+> racy against memory hotremove.  There is no synchronization with the
+> memory hotplug so it is possible that memory gets offline during a
+> longer taking scanning.
 > 
-> Basic test case:
+> So this warning still seems not quite helpful because:
+>   * There is no guarantee the node is online for __GFP_THISNODE context
+>     for all the callsites.
+>   * Kernel just fails the allocation regardless the warning, and it looks
+>     all callsites handle the allocation failure gracefully.
 > 
-> struct d {
->         int p1, p2;
-> };
+> Although while the warning has helped to identify a buggy code, it is not
+> safe in general and this warning could panic the system with panic-on-warn
+> configuration which tends to be used surprisingly often.  So replace
+> VM_WARN_ON to pr_warn().  And the warning will be triggered if
+> __GFP_NOWARN is set since the allocator would print out warning for such
+> case if __GFP_NOWARN is not set.
 > 
-> static void *fn(void *data)
-> {
->         struct d *d = data;
->         char b = 0x89;
-> 
-> 	/* Generate 2 events 20 msec apart */
->         usleep(10000);
->         write(d->p1, &b, sizeof(b));
->         usleep(10000);
->         write(d->p2, &b, sizeof(b));
-> 
->         return NULL;
-> }
-> 
-> int main(int argc, char *argv[])
-> {
->         struct epoll_event ev, events[2];
->         pthread_t thread;
->         int p1[2], p2[2];
->         struct d d;
->         int efd, ret;
-> 
->         efd = epoll_create1(0);
->         if (efd < 0) {
->                 perror("epoll_create");
->                 return 1;
->         }
-> 
->         if (pipe(p1) < 0) {
->                 perror("pipe");
->                 return 1;
->         }
->         if (pipe(p2) < 0) {
->                 perror("pipe");
->                 return 1;
->         }
-> 
->         ev.events = EPOLLIN;
->         ev.data.fd = p1[0];
->         if (epoll_ctl(efd, EPOLL_CTL_ADD, p1[0], &ev) < 0) {
->                 perror("epoll add");
->                 return 1;
->         }
->         ev.events = EPOLLIN;
->         ev.data.fd = p2[0];
->         if (epoll_ctl(efd, EPOLL_CTL_ADD, p2[0], &ev) < 0) {
->                 perror("epoll add");
->                 return 1;
->         }
-> 
-> 	/* always wait 200 msec for events */
->         ev.data.u64 = 200000;
->         if (epoll_ctl(efd, EPOLL_CTL_MIN_WAIT, -1, &ev) < 0) {
->                 perror("epoll add set timeout");
->                 return 1;
->         }
-> 
->         d.p1 = p1[1];
->         d.p2 = p2[1];
->         pthread_create(&thread, NULL, fn, &d);
-> 
-> 	/* expect to get 2 events here rather than just 1 */
->         ret = epoll_wait(efd, events, 2, -1);
->         printf("epoll_wait=%d\n", ret);
-> 
->         return 0;
-> }
+> Reported-by: syzbot+0044b22d177870ee974f@syzkaller.appspotmail.com
+> Signed-off-by: Yang Shi <shy828301@gmail.com>
+> Suggested-by: Michal Hocko <mhocko@suse.com>
+> Cc: Zach O'Keefe <zokeefe@google.com>
 
-It might be worth adding a note in the commit message stating that
-EPOLL_CTL_MIN_WAIT is a no-op when timeout is 0. This is a desired
-behavior but it's not easy to see in the flow.
+Acked-by: Michal Hocko <mhocko@suse.com>
 
-> Signed-off-by: Jens Axboe <axboe@kernel.dk>
+minor nit
+
 > ---
->  fs/eventpoll.c                 | 97 +++++++++++++++++++++++++++++-----
->  include/linux/eventpoll.h      |  2 +-
->  include/uapi/linux/eventpoll.h |  1 +
->  3 files changed, 85 insertions(+), 15 deletions(-)
+> v3: * Reverted the old commit from mm-unstable which remove the VM_WARN
+>       (patch 1/3).
+>     * Incorporated the suggestion from Michal to use pr_warn.
 > 
-> diff --git a/fs/eventpoll.c b/fs/eventpoll.c
-> index 962d897bbfc6..9e00f8780ec5 100644
-> --- a/fs/eventpoll.c
-> +++ b/fs/eventpoll.c
-> @@ -117,6 +117,9 @@ struct eppoll_entry {
->  	/* The "base" pointer is set to the container "struct epitem" */
->  	struct epitem *base;
->  
-> +	/* min wait time if (min_wait_ts) & 1 != 0 */
-> +	ktime_t min_wait_ts;
-> +
->  	/*
->  	 * Wait queue item that will be linked to the target file wait
->  	 * queue head.
-> @@ -217,6 +220,9 @@ struct eventpoll {
->  	u64 gen;
->  	struct hlist_head refs;
->  
-> +	/* min wait for epoll_wait() */
-> +	unsigned int min_wait_ts;
-> +
->  #ifdef CONFIG_NET_RX_BUSY_POLL
->  	/* used to track busy poll napi_id */
->  	unsigned int napi_id;
-> @@ -1747,6 +1753,32 @@ static struct timespec64 *ep_timeout_to_timespec(struct timespec64 *to, long ms)
->  	return to;
+> v2: * Added patch 1/2.
+>     * Reworded the commit log per Michal.
+> 
+>  include/linux/gfp.h | 14 ++++++++++++--
+>  1 file changed, 12 insertions(+), 2 deletions(-)
+> 
+> diff --git a/include/linux/gfp.h b/include/linux/gfp.h
+> index ef4aea3b356e..60a1c70ec85c 100644
+> --- a/include/linux/gfp.h
+> +++ b/include/linux/gfp.h
+> @@ -210,6 +210,16 @@ alloc_pages_bulk_array_node(gfp_t gfp, int nid, unsigned long nr_pages, struct p
+>  	return __alloc_pages_bulk(gfp, nid, NULL, nr_pages, NULL, page_array);
 >  }
 >  
-> +struct epoll_wq {
-> +	wait_queue_entry_t wait;
-> +	struct hrtimer timer;
-> +	ktime_t timeout_ts;
-> +	ktime_t min_wait_ts;
-> +	struct eventpoll *ep;
-> +	bool timed_out;
-> +	int maxevents;
-> +	int wakeups;
-> +};
-> +
-> +static bool ep_should_min_wait(struct epoll_wq *ewq)
+> +static inline void warn_if_node_offline(int nid, gfp_t gfp_mask)
 > +{
-> +	if (ewq->min_wait_ts & 1) {
-> +		/* just an approximation */
-> +		if (++ewq->wakeups >= ewq->maxevents)
-> +			goto stop_wait;
+> +	gfp_t gfp = gfp_mask & (__GFP_THISNODE|__GFP_NOWARN);
 
-Is there a way to short cut the wait if the process is being terminated?
+I would use rather this_node or similarly descriptive name. gfp sounds
+like a pasm but this is only a subset of it. If you really want to
+improve the readability then you can restructure the condition a bit
 
-We issues in production systems in the past where too many threads were
-in epoll_wait and the process got terminated.  It'd be nice if these
-threads could exit the syscall as fast as possible.
+	if (gfp_mask & (__GFP_THISNODE|__GFP_NOWARN)) != (__GFP_THISNODE|__GFP_NOWARN))
+		return;
+	
+	if (node_online(nid)) 
+		return;
+	
+	pr_warn("%pGg allocation from offline node %d\n", &gfp, nid);
+	dump_stack();
 
-> +		if (ktime_before(ktime_get_ns(), ewq->min_wait_ts))
-> +			return true;
-> +	}
 > +
-> +stop_wait:
-> +	ewq->min_wait_ts &= ~(u64) 1;
-> +	return false;
+> +	if ((gfp == (__GFP_THISNODE|__GFP_NOWARN)) && !node_online(nid)) {
+> +		pr_warn("%pGg allocation from offline node %d\n", &gfp, nid);
+> +		dump_stack();
+> +	}
 > +}
 > +
->  /*
->   * autoremove_wake_function, but remove even on failure to wake up, because we
->   * know that default_wake_function/ttwu will only fail if the thread is already
-> @@ -1756,27 +1788,37 @@ static struct timespec64 *ep_timeout_to_timespec(struct timespec64 *to, long ms)
->  static int ep_autoremove_wake_function(struct wait_queue_entry *wq_entry,
->  				       unsigned int mode, int sync, void *key)
->  {
-> -	int ret = default_wake_function(wq_entry, mode, sync, key);
-> +	struct epoll_wq *ewq = container_of(wq_entry, struct epoll_wq, wait);
-> +	int ret;
-> +
-> +	/*
-> +	 * If min wait time hasn't been satisfied yet, keep waiting
-> +	 */
-> +	if (ep_should_min_wait(ewq))
-> +		return 0;
->  
-> +	ret = default_wake_function(wq_entry, mode, sync, key);
->  	list_del_init(&wq_entry->entry);
->  	return ret;
->  }
->  
-> -struct epoll_wq {
-> -	wait_queue_entry_t wait;
-> -	struct hrtimer timer;
-> -	ktime_t timeout_ts;
-> -	bool timed_out;
-> -};
-> -
->  static enum hrtimer_restart ep_timer(struct hrtimer *timer)
->  {
->  	struct epoll_wq *ewq = container_of(timer, struct epoll_wq, timer);
->  	struct task_struct *task = ewq->wait.private;
-> +	const bool is_min_wait = ewq->min_wait_ts & 1;
-> +
-> +	if (!is_min_wait || ep_events_available(ewq->ep)) {
-> +		if (!is_min_wait)
-> +			ewq->timed_out = true;
-> +		ewq->min_wait_ts &= ~(u64) 1;
-> +		wake_up_process(task);
-> +		return HRTIMER_NORESTART;
-> +	}
->  
-> -	ewq->timed_out = true;
-> -	wake_up_process(task);
-> -	return HRTIMER_NORESTART;
-> +	ewq->min_wait_ts &= ~(u64) 1;
-> +	hrtimer_set_expires_range_ns(&ewq->timer, ewq->timeout_ts, 0);
-> +	return HRTIMER_RESTART;
->  }
->  
->  static void ep_schedule(struct eventpoll *ep, struct epoll_wq *ewq, ktime_t *to,
-> @@ -1831,12 +1873,16 @@ static int ep_poll(struct eventpoll *ep, struct epoll_event __user *events,
->  
->  	lockdep_assert_irqs_enabled();
->  
-> +	ewq.min_wait_ts = 0;
-> +	ewq.ep = ep;
-> +	ewq.maxevents = maxevents;
->  	ewq.timed_out = false;
-> +	ewq.wakeups = 0;
->  
->  	if (timeout && (timeout->tv_sec | timeout->tv_nsec)) {
->  		slack = select_estimate_accuracy(timeout);
-> +		ewq.timeout_ts = timespec64_to_ktime(*timeout);
->  		to = &ewq.timeout_ts;
-> -		*to = timespec64_to_ktime(*timeout);
->  	} else if (timeout) {
->  		/*
->  		 * Avoid the unnecessary trip to the wait queue loop, if the
-> @@ -1845,6 +1891,18 @@ static int ep_poll(struct eventpoll *ep, struct epoll_event __user *events,
->  		ewq.timed_out = true;
->  	}
->  
-> +	/*
-> +	 * If min_wait is set for this epoll instance, note the min_wait
-> +	 * time. Ensure the lowest bit is set in ewq.min_wait_ts, that's
-> +	 * the state bit for whether or not min_wait is enabled.
-> +	 */
-> +	if (ep->min_wait_ts) {
-
-Can we limit this block to "ewq.timed_out && ep->min_wait_ts"?
-AFAICT, the code we run here is completely wasted if timeout is 0.
-
-> +		ewq.min_wait_ts = ktime_add_us(ktime_get_ns(),
-> +						ep->min_wait_ts);
-> +		ewq.min_wait_ts |= (u64) 1;
-> +		to = &ewq.min_wait_ts;
-> +	}
-> +
->  	/*
->  	 * This call is racy: We may or may not see events that are being added
->  	 * to the ready list under the lock (e.g., in IRQ callbacks). For cases
-> @@ -1913,7 +1971,7 @@ static int ep_poll(struct eventpoll *ep, struct epoll_event __user *events,
->  		 * important.
->  		 */
->  		eavail = ep_events_available(ep);
-> -		if (!eavail) {
-> +		if (!eavail || ewq.min_wait_ts & 1) {
->  			__add_wait_queue_exclusive(&ep->wq, &ewq.wait);
->  			write_unlock_irq(&ep->lock);
->  			ep_schedule(ep, &ewq, to, slack);
-> @@ -2125,6 +2183,17 @@ int do_epoll_ctl(int epfd, int op, int fd, struct epoll_event *epds,
->  	 */
->  	ep = f.file->private_data;
->  
-> +	/*
-> +	 * Handle EPOLL_CTL_MIN_WAIT upfront as we don't need to care about
-> +	 * the fd being passed in.
-> +	 */
-> +	if (op == EPOLL_CTL_MIN_WAIT) {
-> +		/* return old value */
-> +		error = ep->min_wait_ts;
-> +		ep->min_wait_ts = epds->data;
-> +		goto error_fput;
-> +	}
-> +
->  	/* Get the "struct file *" for the target file */
->  	tf = fdget(fd);
->  	if (!tf.file)
-> @@ -2257,7 +2326,7 @@ SYSCALL_DEFINE4(epoll_ctl, int, epfd, int, op, int, fd,
->  {
->  	struct epoll_event epds;
->  
-> -	if (ep_op_has_event(op) &&
-> +	if ((ep_op_has_event(op) || op == EPOLL_CTL_MIN_WAIT) &&
->  	    copy_from_user(&epds, event, sizeof(struct epoll_event)))
->  		return -EFAULT;
->  
-> diff --git a/include/linux/eventpoll.h b/include/linux/eventpoll.h
-> index 3337745d81bd..cbef635cb7e4 100644
-> --- a/include/linux/eventpoll.h
-> +++ b/include/linux/eventpoll.h
-> @@ -59,7 +59,7 @@ int do_epoll_ctl(int epfd, int op, int fd, struct epoll_event *epds,
->  /* Tells if the epoll_ctl(2) operation needs an event copy from userspace */
->  static inline int ep_op_has_event(int op)
->  {
-> -	return op != EPOLL_CTL_DEL;
-> +	return op != EPOLL_CTL_DEL && op != EPOLL_CTL_MIN_WAIT;
->  }
->  
->  #else
-> diff --git a/include/uapi/linux/eventpoll.h b/include/uapi/linux/eventpoll.h
-> index 8a3432d0f0dc..81ecb1ca36e0 100644
-> --- a/include/uapi/linux/eventpoll.h
-> +++ b/include/uapi/linux/eventpoll.h
-> @@ -26,6 +26,7 @@
->  #define EPOLL_CTL_ADD 1
->  #define EPOLL_CTL_DEL 2
->  #define EPOLL_CTL_MOD 3
-> +#define EPOLL_CTL_MIN_WAIT	4
-
-Have you considered introducing another epoll_pwait sycall variant?
-
-That has a major benefit that min wait can be different per poller,
-on the different epollfd.  The usage would also be more readable:
-
-"epoll for X amount of time but don't return sooner than Y."
-
-This would be similar to the approach that willemb@google.com used
-when introducing epoll_pwait2.
-
->  
->  /* Epoll event masks */
->  #define EPOLLIN		(__force __poll_t)0x00000001
-> -- 
-> 2.35.1
-> 
+-- 
+Michal Hocko
+SUSE Labs
