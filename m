@@ -2,120 +2,245 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04888621A74
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 18:26:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CBEA621A99
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 18:29:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234297AbiKHRZ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 12:25:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58032 "EHLO
+        id S234448AbiKHR3D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 12:29:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234454AbiKHRZx (ORCPT
+        with ESMTP id S234521AbiKHR24 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 12:25:53 -0500
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 679971E705
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 09:25:50 -0800 (PST)
-Received: by mail-pl1-x636.google.com with SMTP id u6so14753636plq.12
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 09:25:50 -0800 (PST)
+        Tue, 8 Nov 2022 12:28:56 -0500
+Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD0912181A
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 09:28:52 -0800 (PST)
+Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-1322d768ba7so16992548fac.5
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 09:28:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=mck3R94LhYNk406NiNL9I97e3U5JD8+7t2CAdhzICvI=;
-        b=41hH195DPKgo007bMbrxjr9I0oWip9wXLMeY4vGMz89oEGfbItSBF2r72B8+mLwh5b
-         LwQCRcDOZH/lcNU73TgDtXor+9cughyeUTNpwysFf+d4LqWiPx1Nl7p8kPiIkb3Oxzvi
-         zOA+04XqAjEun79374OtU70Z4SEy0yWffqehBwUNjhc+7R1vc9g8P6PnFiu17/Hpsfda
-         2o96k0JqekD/GggiS+gnmBELi5Q1wiunCxZ0F3Lv9to/uS8JGY54ikzjWwcR40Hs8GHo
-         3Qr9gwjw3mew3Xu/NN1f7raqX5krmfawwRprhT1Z0fOVQK4onQgPF0CAYNQgcmQCFWcd
-         hbsw==
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=oDWWLDxoPnzZ6USIzm5f9SEA4GEDZRpuNi854PScv4A=;
+        b=pDP+u9yNB+44jg7gz5IsifqKrthEEdk1MWJZ4aHL46qqKHQNtD/IJzKRHMYQtPLq0Y
+         9lTP2PGthqd6TQsIoEp6SrHO8Ryp6BUaALlKurVo/xGLOaHS3y2wurD3urtu6ChkKtYW
+         x6PFBinhAtDMuMGHntgkGy9FH4lhId1Iog3ijuZmJQaPp6GYUyRNwdcLR5lxGbMu1Xrj
+         bTgpSM6VErvf8N+A/6jjKq7Hzh5hV1YaX7yTNhSNUWoLER9Bpl+QzfpYJx67V8YkhzlQ
+         WDvcoGKXJFU+gYBfHjBAOAzAO8CJTrbkV6r4mg1zXUxwTiD+Dl2YVnp49tnAaXliWSYe
+         LoTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mck3R94LhYNk406NiNL9I97e3U5JD8+7t2CAdhzICvI=;
-        b=PSxV5OXvSUG47u80kiZA73ftTr+4trBguXntHaD65LQAL1aOPpgBIG5qCMGNt2+uxC
-         xUzEIrm3ruPgzRZCvId9NAxzWX/hZJkpHRu2vZhGxLs+bfIjJ6L0+116gWA6RCN0Wc6H
-         EMXc8z8sB1ADifbOXdkhigaBgWEnlQgshBY4hVO4tAZ6kKd0AgnS/kCJ+HnwecgawAtT
-         IHALujA+AXjTlcaZbRJUaBrr9OP5cfPTFNmBkyxhS0YRmyYBdIre84omvpsnbwGBlnt4
-         qd9rZ4VwkklvMSoBlyfakfSqmdc0sOkK+UHm/mvvM1B5JevArgJmlEUm/9DDomodx3Pd
-         1ypw==
-X-Gm-Message-State: ACrzQf1mCTJzhh7JZ3kiM0CfVKut30zYf2Y5ORsUYY0R19MDLQ4Hd/PE
-        2KMxN4Eupd49RQGX5pqpRGd3nQ==
-X-Google-Smtp-Source: AMsMyM6sTBnxvY/NsG71n933NQZ67F/l2/Icp154DLO0ppLjfuN27MFxKkBOhJfyYluxvAX3KJcKeA==
-X-Received: by 2002:a17:902:b94c:b0:178:336f:13d6 with SMTP id h12-20020a170902b94c00b00178336f13d6mr58156215pls.64.1667928350306;
-        Tue, 08 Nov 2022 09:25:50 -0800 (PST)
-Received: from [192.168.50.116] (c-24-4-73-83.hsd1.ca.comcast.net. [24.4.73.83])
-        by smtp.gmail.com with ESMTPSA id p64-20020a625b43000000b0056bdc3f5b29sm6581656pfb.186.2022.11.08.09.25.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Nov 2022 09:25:49 -0800 (PST)
-Message-ID: <d3dc1dac-a17a-4e5d-2584-88bd7645ac1d@rivosinc.com>
-Date:   Tue, 8 Nov 2022 09:25:47 -0800
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=oDWWLDxoPnzZ6USIzm5f9SEA4GEDZRpuNi854PScv4A=;
+        b=DgVULE0tAtrWUZAJ7cXmsDuU0G26QVbyVaG1Pl3qwU2Qb8ToCMzZlC0m4XaeuEHpK4
+         OP2B00WBw0eETrtB7LXxzHotInmB4g5P1wCzCFwUpw6h6jkQXLj7owssnmdle0K4brcX
+         DDDBZFY9djGFWqxldEEpzaJ9TMBGdhA2ajv35jJDFcJI5DMI3/u0QrLnMDudTY6sO61E
+         8aze0ZRvngjEk27Xfzy+tK6u2ZhWekYe6OrOo/0xrN4rlc7vVyucd8UVt4hT7JwYz4vZ
+         eSvg9TfKBH9DlLMsr+mQJlvdFSFhS7WyJQ804sRe+WlmqGbwCVwdhd/rJUvd437cDgmF
+         2z+g==
+X-Gm-Message-State: ACrzQf0IO24qN+82p2nh0MZSKw0ufFpHrWr4pbDFUxeunmlflBsRTEoA
+        4RKlwBeWWsznPfx5JmWHlpkokH3RI4Kb7EE7HUzX1RLrDVY=
+X-Google-Smtp-Source: AMsMyM6uevInzOtAMKTohNAr/s1boPWTvilzBwSUQMAAdyDL/DFaeAww6r5/PKcLT1D69uX035BfHA3BDx3Idt7LQ5w=
+X-Received: by 2002:a05:6871:7a1:b0:131:946a:7b30 with SMTP id
+ o33-20020a05687107a100b00131946a7b30mr42802578oap.67.1667928532149; Tue, 08
+ Nov 2022 09:28:52 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v10 05/16] riscv: Add has_vector/riscv_vsize to save
- vector features.
-Content-Language: en-US
-To:     Christoph Hellwig <hch@infradead.org>,
-        Greentime Hu <greentime.hu@sifive.com>
-Cc:     palmer@dabbelt.com, paul.walmsley@sifive.com,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        aou@eecs.berkeley.edu,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
-        Guo Ren <guoren@kernel.org>,
-        Conor Dooley <Conor.Dooley@microchip.com>
-References: <cover.1652257230.git.greentime.hu@sifive.com>
- <221f72a2ee62cd5350edb5d6a7e8ebb17a7bc321.1652257230.git.greentime.hu@sifive.com>
- <YoHzkxDmMegp5oOz@infradead.org>
-From:   Vineet Gupta <vineetg@rivosinc.com>
-In-Reply-To: <YoHzkxDmMegp5oOz@infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221005144116.2256580-1-catalin.marinas@arm.com>
+ <CAMi1Hd38YB2m_r=m0wuDz+wErii37fUq1BJnvN9=y6opDzo_Fw@mail.gmail.com>
+ <Y0aq8y5mEZi14lJ/@arm.com> <CAMi1Hd3Y9AibeVnh9_KYJ2EXar7bBSypKm4Tixj47htM7ZOURw@mail.gmail.com>
+In-Reply-To: <CAMi1Hd3Y9AibeVnh9_KYJ2EXar7bBSypKm4Tixj47htM7ZOURw@mail.gmail.com>
+From:   Amit Pundir <amit.pundir@linaro.org>
+Date:   Tue, 8 Nov 2022 22:58:16 +0530
+Message-ID: <CAMi1Hd1VBCFhf7+EXWHQWcGy4k=tcyLa7RGiFdprtRnegSG0Mw@mail.gmail.com>
+Subject: Re: [GIT PULL] arm64 updates for 6.1-rc1
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Sibi Sankar <quic_sibis@quicinc.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     Will Deacon <will@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/15/22 23:47, Christoph Hellwig wrote:
-> On Wed, May 11, 2022 at 08:31:15AM +0000, Greentime Hu wrote:
->> +#ifdef CONFIG_VECTOR
->> +#include <asm/vector.h>
->> +EXPORT_SYMBOL(rvv_enable);
->> +EXPORT_SYMBOL(rvv_disable);
->> +#endif
-> 
-> As far as I can tell these are not used by any modular code, just by
-> the later added kernel mode vector enable helpers.
-> 
-> Even if they were used this would need to be EXPORT_SYMBOL_GPL.
+On Tue, 25 Oct 2022 at 18:08, Amit Pundir <amit.pundir@linaro.org> wrote:
+>
+> On Wed, 12 Oct 2022 at 17:24, Catalin Marinas <catalin.marinas@arm.com> wrote:
+> >
+> > Hi Amit,
+> >
+> > On Sat, Oct 08, 2022 at 08:28:26PM +0530, Amit Pundir wrote:
+> > > On Wed, 5 Oct 2022 at 20:11, Catalin Marinas <catalin.marinas@arm.com> wrote:
+> > > > Will Deacon (2):
+> > > >       arm64: dma: Drop cache invalidation from arch_dma_prep_coherent()
+> > >
+> > > Hi Will,
+> > >
+> > > This patch broke AOSP on Dragonboard 845c (SDM845). I don't see any
+> > > relevant crash in the attached log and device silently reboots into
+> > > USB crash dump mode. The crash is fairly reproducible on db845c. I
+> > > could trigger it twice in 5 reboots and it always crash at the same
+> > > point during the boot process. Reverting this patch fixes the crash.
+> > >
+> > > I'm happy to test run any debug patche(s), that would help narrow
+> > > down this breakage.
+> >
+> > Cc'ing Robin, maybe he has a better idea (that's commit c44094eee32f).
+> > Architecturally the change shouldn't make any difference since the cache
+> > lines can be brought in via the linear mapping at any point. It's just
+> > less likely to hit a real bug (software or hardware). It's also possible
+> > that arch_dma_prep_coherent() is used outside the DMA API (if you have
+> > out of tree drivers).
+> >
+> > Leaving the original log in place for Robin. A question I have, with a
+> > successful boot, what's normally after the bpfloader lines are printed?
+> > We should try to pinpoint which device/driver causes this. It looks like
+> > it's well into user-space at that point (graphics about to start?)
+>
+> Further narrowed down the breakage to the userspace daemon rmtfs
+> https://github.com/andersson/rmtfs. Is there anything specific in the
+> userspace code that I should be paying attention to?
+>
+> console:/ #
+> console:/ # start rmtfs
+> [   56.425631][    T1] init: starting service 'rmtfs'...
+> [   56.455541][    T1] init: Control message: Processed ctl.start for
+> 'rmtfs' from pid: 1819 (start rmtfs)
+> [   56.487524][  T344] type=1400 audit(1666698550.979:267): avc:
+> denied { read } for comm="rmtfs" name="modalias" dev="sysfs" ino=6325
+> scontext=u:r:rmtfs:s0 tcontext=u:object_r:sysfs:s0 tclass=file
+> permissive=1
+> [   56.487662][ T1821] remoteproc remoteproc0: powering up 4080000.remoteproc
+> [   56.506365][  T344] type=1400 audit(1666698550.979:268): avc:
+> denied { open } for comm="rmtfs"
+> path="/sys/devices/platform/remoteproc-cdsp/modalias" dev="sysfs"
+> ino=6325 scontext=u:r:rmtfs:s0 tcontext=u:object_r:sysfs:s0
+> tclass=file permissive=1
+> [   56.515137][ T1821] remoteproc remoteproc0: Booting fw image
+> qcom/sdm845/mba.mbn, size 242400
+> [   56.535020][  T344] type=1400 audit(1666698550.979:269): avc:
+> denied { read } for comm="rmtfs" name="modalias" dev="sysfs" ino=7200
+> scontext=u:r:rmtfs:s0 tcontext=u:object_r:sysfs_remoteproc:s0
+> tclass=file permissive=1
+> [   56.621541][ T1821] qcom-q6v5-mss 4080000.remoteproc: MBA booted
+> without debug policy, loading mpss
 
-In the new version, I've made them static inline given the size and 
-frequency of them being called. So this becomes moot.
+Hi, I can reproduce this crash on v6.1-rc4 as well and would really
+appreciate some help here.
+I could narrow down the db845c crash into USB crash dump mode to:
 
-> 
->> +/* SPDX-License-Identifier: GPL-2.0 */
->> +/*
->> + * Copyright (C) 2012 Regents of the University of California
->> + * Copyright (C) 2017 SiFive
->> + * Copyright (C) 2019 Alibaba Group Holding Limited
->> + *
->> + *   This program is free software; you can redistribute it and/or
->> + *   modify it under the terms of the GNU General Public License
->> + *   as published by the Free Software Foundation, version 2.
->> + *
->> + *   This program is distributed in the hope that it will be useful,
->> + *   but WITHOUT ANY WARRANTY; without even the implied warranty of
->> + *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
->> + *   GNU General Public License for more details.
->> + */
-> 
-> No need for all the GPL boilerplate text when you have an SPDX tag.
+# echo "start" > /sys/class/remoteproc/remoteproc0/state
+[   50.987035][  T431] remoteproc remoteproc0: powering up 4080000.remoteproc
+[   50.999628][  T431] remoteproc remoteproc0: Booting fw image
+qcom/sdm845/mba.mbn, size 242400
+[   51.095967][  T431] qcom-q6v5-mss 4080000.remoteproc: MBA booted
+without debug policy, loading mpss
 
-OK.
 
+Format: Log Type - Time(microsec) - Message - Optional Info
+Log Type: B - Since Boot(Power On Reset),  D - Delta,  S - Statistic
+S - QC_IMAGE_VERSION_STRING=BOOT.XF.2.0-00371-SDM845LZB-1
+S - IMAGE_VARIANT_STRING=SDM845LA
+S - OEM_IMAGE_VERSION_STRING=TSBJ-FA-PC-02170
+S - Boot Interface: UFS
+S - Secure Boot: Off
+S - Boot Config @ 0x00786070 = 0x000000c1
+S - JTAG ID @ 0x00786130 = 0x2008e0e1
+S - OEM ID @ 0x00786138 = 0x00000000
+S - Serial Number @ 0x00784138 = 0x710cee0b
+S - OEM Config Row 0 @ 0x00784188 = 0x0000000400000000
+S - OEM Config Row 1 @ 0x00784190 = 0x0000000000000000
+S - Feature Config Row 0 @ 0x007841a0 = 0x0050200080000400
+S - Feature Config Row 1 @ 0x007841a8 = 0xe000ffff00007fff
+S - Core 0 Frequency, 1516 MHz
+S - PBL Patch Ver: 1
+S - PBL freq: 600 MHZ
+B -        94 - PBL, Start
+B -      5279 - bootable_media_detect_entry
+B -     44106 - bootable_media_detect_success
+B -     44483 - elf_loader_entry
+B -     45046 - auth_hash_seg_entry
+B -     45242 - auth_hash_seg_exit
+B -     51093 - elf_segs_hash_verify_entry
+B -     57888 - elf_segs_hash_verify_exit
+B -     58515 - auth_xbl_sec_hash_seg_entry
+B -     65894 - auth_xbl_sec_hash_seg_exit
+B -     65896 - xbl_sec_segs_hash_verify_entry
+B -     66654 - xbl_sec_segs_hash_verify_exit
+B -     66679 - PBL, End
+B -     81191 - SBL1, Start
+B -    205082 - boot_flash_init, Start
+D -         0 - boot_flash_init, Delta
+B -    208620 - xblconfig_init, Start
+D -       549 - Auth Metadata
+D -    188459 - xblconfig_init, Delta
+B -    402051 - sbl1_ddr_set_default_params, Start
+D -         0 - sbl1_ddr_set_default_params, Delta
+B -    410042 - boot_config_data_table_init, Start
+B -    414708 - CDT not programmed, using default
+D -      4544 - boot_config_data_table_init, Delta - (54 Bytes)
+B -    429226 - CDT Version:3,Platform ID:8,Major ID:1,Minor ID:0,Subtype:0
+B -    434930 - pm_device_init, Start
+B -   1514660 - PM: PON REASON: PM0=0x8000024000020021:0x0
+PM1=0x8000084000080020:0x0 PM2=0x8000084000080020:0x0
+B -   1574837 - PM: SET_VAL:Skip
+D -   1140425 - pm_device_init, Delta
+B -   1577826 - pm_driver_init, Start
+D -      5337 - pm_driver_init, Delta
+B -   1586610 - PM: Trigger FG IMA Reset
+B -   1590239 - PM: Trigger FG IMA Reset.Completed
+B -   1599450 - PM: EntryVbat: 4221; EntrySOC: -1
+B -   1599481 - PM: ADSP result: 0
+B -   1604025 - PM: Manually set ICL 500mA
+B -   1607106 - PM: BATT TEMP: 29 DegC
+B -   1611132 - vsense_init, Start
+D -         0 - vsense_init, Delta
+B -   1647762 - Pre_DDR_clock_init, Start
+D -        61 - Pre_DDR_clock_init, Delta
+D -   1651575 - sbl1_ddr_set_params, Delta
+B -   1655326 - sbl1_ddr_init, Start
+B -   1659261 - Freeze IOs = 0x1, 0x1, 0x1, 0x1, DBG PDC Tr = 0x0,
+First Pass expire = 0x0, First Pass complete = 0x1
+D -      9058 - sbl1_ddr_init, Delta
+B -   1673169 - do_ddr_training, Start
+D -         0 - do_ddr_training, Delta
+B -   1679787 - pImem Init Start
+D -      4422 - pImem Init End, Delta
+B -   1691743 - clock_init, Start
+D -       244 - clock_init, Delta
+B -   1695037 - Image Load, Start
+D -      2867 - APDP Image Loaded, Delta - (0 Bytes)
+B -   1707024 - usb: chgr -  SDP_CHARGER
+B -   1707359 - usb: qusb2_1: hstx , 0x5
+B -   1710836 - usb: PLL1 locked , 0x5
+B -   1714435 - TCSR reg value 0x10
+B -   1718034 - Image Load, Start
+D -       457 - Auth Metadata
+D -      2837 - Segments hash check
+D -     13664 - XBLRamDump Image Loaded, Delta - (582427 Bytes)
+B -   1811090 - DisplayLib: LAB/IBB GetStatus(LabVregOk) failed after 25ms
+
+B -   1818166 - DisplayDxe: Resolution 1440x2560 (2 intf)
+
+B -   2129632 - usb: init start
+B -   2130760 - usb: ss_lane_1st
+B -   2132834 - usb: usb_lane
+B -   2136708 - usb: qusb2_1: hstx , 0x5
+B -   2138385 - usb: PLL1 locked , 0x5
+B -   2142137 - usb: id_p , 0x1009b
+B -   2145461 - usb: VBUS High!
+B -   2245898 - usb: suspended
+B -   2435120 - usb: HIGH , 0x900e
+B -   2567246 - usb: HIGH , 0x900e
+B -   2670702 - usb: ENUM success
