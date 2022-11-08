@@ -2,196 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 400556212B5
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 14:42:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C15E6212BE
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 14:42:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234395AbiKHNmG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 08:42:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40888 "EHLO
+        id S234422AbiKHNmU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 08:42:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234442AbiKHNlu (ORCPT
+        with ESMTP id S234442AbiKHNmR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 08:41:50 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B621D51C38;
-        Tue,  8 Nov 2022 05:41:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667914909; x=1699450909;
-  h=message-id:date:mime-version:from:subject:to:cc:
-   references:in-reply-to:content-transfer-encoding;
-  bh=FmRgVS4cTjgYRBdIR1Sl5CCtDj0f4AUy7bzdc1murYw=;
-  b=NZUJPMEMU0skIf1/6SkrAr9OYPhY+PZblPx6Mxqwt1c2BBC4j/oIXuGw
-   w+xRjB0eLpbE1KoK28549yF8P7xUSqfQQmHwtL+U2+a/Y/2uKiVxLAe2+
-   1adGBI7/Ld2TkaVcikvDEWKQCKozAzrOy0POOkHi1Bh4NM98WosJ9DHDk
-   s65aDuh57oeTYitOWFq8QGYx2Mcqb7M9BfFmu/vJskVHUj68e3Ap9+YPg
-   dha1EJt3L10lcxgPUj9ldrHUAA9Itl/aBh9q6l00LFeUoA0pjaDTs/TkD
-   SrOFjMSbnfKoLBeez4LK8IV3u+lHlfb/4PxKKzyFFKibenXRv8qL6kQK/
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10524"; a="310692476"
-X-IronPort-AV: E=Sophos;i="5.96,147,1665471600"; 
-   d="scan'208";a="310692476"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2022 05:41:49 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10524"; a="811243110"
-X-IronPort-AV: E=Sophos;i="5.96,147,1665471600"; 
-   d="scan'208";a="811243110"
-Received: from binbinwu-mobl.ccr.corp.intel.com (HELO [10.255.28.143]) ([10.255.28.143])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2022 05:41:46 -0800
-Message-ID: <30be6d64-31bd-bfc8-72f7-fb57999e4566@linux.intel.com>
-Date:   Tue, 8 Nov 2022 21:41:44 +0800
+        Tue, 8 Nov 2022 08:42:17 -0500
+Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07F054FF8A
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 05:42:16 -0800 (PST)
+Received: by mail-qt1-f173.google.com with SMTP id z6so8643327qtv.5
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 05:42:15 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rbRh/ro3AF7kveHByL39OkW+4w9BfWleF28OTQj/Mw0=;
+        b=bng3mk3jYBDPQwLqyqEvjde3EKQRyfbGkm/qGihCRLHXMxprART83jNODqi2HzVEuL
+         zOtnCK3TI2F29GAOKKAIg6lE1L854XqT09BrwHxrfXCnH2EmAphy4z0HHILGi5Sgj0Ft
+         7yXJ4/acXey0dmhUGKgRpKw/WnS2VOPm8S9YNzA82aRZxTNCeWMQCK+Z+IYR+uZBMntZ
+         JtKo3+lv9zsbc5P6POpnGw8zry5NdwYQs6aV1zRahSIXQK6xmZrJmQ5dU8p/83kY23Nh
+         a2NWrzSA5yRPcxZM/WErKt8mnPhDNP8IOkoMeap7KTQ6xo/S8JwaHa8afZTnvxPTzL6Z
+         A5gA==
+X-Gm-Message-State: ACrzQf1L5z840BOvY3IXzrdpNOQXOGNQYq6SEOcYUYnpx5qZprIE3RCl
+        O8aRGtEP9o4PyG9uiCqQs9BrnzQTKr6nGVPE
+X-Google-Smtp-Source: AMsMyM6tBzmFGlC0Lzie5A1mA3deG/CZVlLzd4JSpr856y0/ALQZxY/2ZAGIHjFLB1Sj1GQePgSPAg==
+X-Received: by 2002:a05:622a:d4:b0:39c:c755:45bd with SMTP id p20-20020a05622a00d400b0039cc75545bdmr42882691qtw.112.1667914935032;
+        Tue, 08 Nov 2022 05:42:15 -0800 (PST)
+Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com. [209.85.128.178])
+        by smtp.gmail.com with ESMTPSA id f39-20020a05622a1a2700b003a586888a20sm5240324qtb.79.2022.11.08.05.42.12
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Nov 2022 05:42:13 -0800 (PST)
+Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-368edbc2c18so133587267b3.13
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 05:42:12 -0800 (PST)
+X-Received: by 2002:a0d:e301:0:b0:374:a8ba:99b0 with SMTP id
+ m1-20020a0de301000000b00374a8ba99b0mr7181781ywe.358.1667914932477; Tue, 08
+ Nov 2022 05:42:12 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-From:   Binbin Wu <binbin.wu@linux.intel.com>
-Subject: Re: [PATCH v10 049/108] KVM: x86/tdp_mmu: Support TDX private mapping
- for TDP MMU
-To:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     isaku.yamahata@gmail.com, Paolo Bonzini <pbonzini@redhat.com>,
-        erdemaktas@google.com, Sean Christopherson <seanjc@google.com>,
-        Sagi Shahar <sagis@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Kai Huang <kai.huang@intel.com>
-References: <cover.1667110240.git.isaku.yamahata@intel.com>
- <9d5595dfe1b5ab77bcb5650bc4d940dd977b0a32.1667110240.git.isaku.yamahata@intel.com>
-In-Reply-To: <9d5595dfe1b5ab77bcb5650bc4d940dd977b0a32.1667110240.git.isaku.yamahata@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220728-rpi-analog-tv-properties-v7-0-7072a478c6b3@cerno.tech> <CAEFVmOKCTc_ZrFyCxiSwCmhtjJj_fzr6n99cWtb9aECFzzYVXg@mail.gmail.com>
+In-Reply-To: <CAEFVmOKCTc_ZrFyCxiSwCmhtjJj_fzr6n99cWtb9aECFzzYVXg@mail.gmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 8 Nov 2022 14:42:00 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdXDK6-wDjpx27KJd4_gwoXQWcP6qctN-zvG6OrUgYtGAA@mail.gmail.com>
+Message-ID: <CAMuHMdXDK6-wDjpx27KJd4_gwoXQWcP6qctN-zvG6OrUgYtGAA@mail.gmail.com>
+Subject: Re: [Nouveau] [PATCH v7 00/23] drm: Analog TV Improvements
+To:     Lukas Satin <luke.satin@gmail.com>
+Cc:     Maxime Ripard <maxime@cerno.tech>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Samuel Holland <samuel@sholland.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Emma Anholt <emma@anholt.net>,
+        Karol Herbst <kherbst@redhat.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Chen-Yu Tsai <wens@csie.org>,
+        Lyude Paul <lyude@redhat.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Dom Cobley <dom@raspberrypi.com>,
+        nouveau@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Phil Elwell <phil@raspberrypi.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        =?UTF-8?Q?Noralf_Tr=C3=B8nnes?= <noralf@tronnes.org>,
+        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
+        linux-sunxi@lists.linux.dev, linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Lukas,
 
-On 2022/10/30 14:22, isaku.yamahata@intel.com wrote:
-> From: Isaku Yamahata<isaku.yamahata@intel.com>
+On Tue, Nov 8, 2022 at 2:20 PM Lukas Satin <luke.satin@gmail.com> wrote:
+> One can switch from NTSC to PAL now using (on vc4)
 >
-> Allocate protected page table for private page table, and add hooks to
-> operate on protected page table.  This patch adds allocation/free of
-> protected page tables and hooks.  When calling hooks to update SPTE entry,
-> freeze the entry, call hooks and unfree
+> modetest -M vc4  -s 53:720x480i -w 53:'TV mode':1 # NTSC
+> modetest -M vc4  -s 53:720x576i -w 53:'TV mode':4 # PAL
+>
+> NTSC should be 640x480i, not 720. It will probably work on most TV's, but NTSC by the spec is 640x480i.
 
-unfreeze
+The above are actually the digital ("DVD Video") variants, which have 720
+horizontal pixels (incl. overscan).
+The analog variants do not have a fixed horizontal resolution, except
+for bandwidth limitations.
 
+Gr{oetje,eeting}s,
 
->   the entry to allow concurrent
-> updates on page tables.  Which is the advantage of TDP MMU.  As
-> kvm_gfn_shared_mask() returns false always, those hooks aren't called yet
-> with this patch.
->
-> When the faulting GPA is private, the KVM fault is called private.  When
-> resolving private KVM,
+                        Geert
 
-private KVM fault？
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-
-> allocate protected page table and call hooks to
-> operate on protected page table. On the change of the private PTE entry,
-> invoke kvm_x86_ops hook in __handle_changed_spte() to propagate the change
-> to protected page table. The following depicts the relationship.
->
->    private KVM page fault   |
->        |                    |
->        V                    |
->   private GPA               |     CPU protected EPTP
->        |                    |           |
->        V                    |           V
->   private PT root           |     protected PT root
->        |                    |           |
->        V                    |           V
->     private PT --hook to propagate-->protected PT
->        |                    |           |
->        \--------------------+------\    |
->                             |      |    |
->                             |      V    V
->                             |    private guest page
->                             |
->                             |
->       non-encrypted memory  |    encrypted memory
->                             |
-> PT: page table
->
-> The existing KVM TDP MMU code uses atomic update of SPTE.  On populating
-> the EPT entry, atomically set the entry.  However, it requires TLB
-> shootdown to zap SPTE.  To address it, the entry is frozen with the special
-> SPTE value that clears the present bit. After the TLB shootdown, the entry
-> is set to the eventual value (unfreeze).
->
-> For protected page table, hooks are called to update protected page table
-> in addition to direct access to the private SPTE. For the zapping case, it
-> works to freeze the SPTE. It can call hooks in addition to TLB shootdown.
-> For populating the private SPTE entry, there can be a race condition
-> without further protection
->
->    vcpu 1: populating 2M private SPTE
->    vcpu 2: populating 4K private SPTE
->    vcpu 2: TDX SEAMCALL to update 4K protected SPTE => error
->    vcpu 1: TDX SEAMCALL to update 2M protected SPTE
->
-> To avoid the race, the frozen SPTE is utilized.  Instead of atomic update
-> of the private entry, freeze the entry, call the hook that update protected
-> SPTE, set the entry to the final value.
->
-> Support 4K page only at this stage.  2M page support can be done in future
-> patches.
->
-> Co-developed-by: Kai Huang<kai.huang@intel.com>
-> Signed-off-by: Kai Huang<kai.huang@intel.com>
-> Signed-off-by: Isaku Yamahata<isaku.yamahata@intel.com>
-> ---
->   arch/x86/include/asm/kvm-x86-ops.h |   5 +
->   arch/x86/include/asm/kvm_host.h    |  11 ++
->   arch/x86/kvm/mmu/mmu.c             |  15 +-
->   arch/x86/kvm/mmu/mmu_internal.h    |  32 ++++
->   arch/x86/kvm/mmu/tdp_iter.h        |   2 +-
->   arch/x86/kvm/mmu/tdp_mmu.c         | 244 +++++++++++++++++++++++++----
->   arch/x86/kvm/mmu/tdp_mmu.h         |   2 +-
->   virt/kvm/kvm_main.c                |   1 +
->   8 files changed, 280 insertions(+), 32 deletions(-)
->
-> diff --git a/arch/x86/include/asm/kvm-x86-ops.h b/arch/x86/include/asm/kvm-x86-ops.h
-> index f28c9fd72ac4..1b01dc2098b0 100644
-> --- a/arch/x86/include/asm/kvm-x86-ops.h
-> +++ b/arch/x86/include/asm/kvm-x86-ops.h
-> @@ -94,6 +94,11 @@ KVM_X86_OP_OPTIONAL_RET0(set_tss_addr)
->   KVM_X86_OP_OPTIONAL_RET0(set_identity_map_addr)
->   KVM_X86_OP_OPTIONAL_RET0(get_mt_mask)
->   KVM_X86_OP(load_mmu_pgd)
-> +KVM_X86_OP_OPTIONAL(link_private_spt)
-> +KVM_X86_OP_OPTIONAL(free_private_spt)
-> +KVM_X86_OP_OPTIONAL(set_private_spte)
-> +KVM_X86_OP_OPTIONAL(remove_private_spte)
-> +KVM_X86_OP_OPTIONAL(zap_private_spte)
->   KVM_X86_OP(has_wbinvd_exit)
->   KVM_X86_OP(get_l2_tsc_offset)
->   KVM_X86_OP(get_l2_tsc_multiplier)
->
-> @@ -509,9 +524,81 @@ static void handle_removed_pt(struct kvm *kvm, tdp_ptep_t pt, bool shared)
->   		WARN_ON_ONCE(ret);
->   	}
->   
-> +	if (is_private_sp(sp) &&
-> +	    WARN_ON(static_call(kvm_x86_free_private_spt)(kvm, sp->gfn, sp->role.level,
-> +							  kvm_mmu_private_spt(sp)))) {
-> +		/*
-> +		 * Failed to unlink Secure EPT page and there is nothing to do
-> +		 * further.  Intentionally leak the page to prevent the kernel
-> +		 * from accessing the encrypted page.
-> +		 */
-> +		kvm_mmu_init_private_spt(sp, NULL);
-
-Do you think is it better to add some statistics for the intentinal 
-leakage?
-
-
-> +	}
-> +
->   	call_rcu(&sp->rcu_head, tdp_mmu_free_sp_rcu_callback);
->   }
->   
-> pu, until a matching vcpu_put()
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
