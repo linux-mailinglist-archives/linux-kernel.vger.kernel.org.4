@@ -2,67 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90DAB621D7F
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 21:16:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC336621D89
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 21:18:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229595AbiKHUQd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 15:16:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36092 "EHLO
+        id S229837AbiKHUSd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 15:18:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbiKHUQa (ORCPT
+        with ESMTP id S229496AbiKHUSa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 15:16:30 -0500
-Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83F735D6A5
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 12:16:29 -0800 (PST)
-Received: by mail-io1-xd31.google.com with SMTP id n191so12362188iod.13
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 12:16:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=iZL9srUYm8qmU4/FGTGof/OySI+4UbOQj7L2fQbN1sI=;
-        b=CDFFxztqq6mhzCPdtfW4JJg3QOm7EMi6hGG5Yry3ADwdYoF2vO2TPDRnK66d/3116k
-         nfbXDUrPdMPOynGMIG9tHOiEmt3ta+usBbTZ6WV+P+QS7Q2op2KuLPMPrIbkQgl47Y8r
-         CcP34WQmJajuu7TBroN8BFLtr978c/1YYjEe5TOXEbtouP8Zg+tBqUlQ1XvaLEIC92Rg
-         liwQkLASTMuzN+Ln+p3RmjZO6j6fylBFVKf7JUIf/gONAOhjMSLWRMwAPpxfkyLSzYzg
-         q13k3eYjeRJ0GW+fn460z88GPR4DhtR/g1A+L+1W0ljPf9ultQOMByTk5xdhqeyNcOEd
-         ZQ8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=iZL9srUYm8qmU4/FGTGof/OySI+4UbOQj7L2fQbN1sI=;
-        b=DmA+kv2yYww6I6fk5VC5rUd7SoUFUhImmktXnWNQsbiPd6EjhjGO6OvC9aQtpieCEZ
-         kDy3e4UgvVuppKa35cUDuPl54e9ocyZZpFQjaaDeBV6k0qCsLJtOC53kSgL3fU3d6u/a
-         mYiWxRmDGHls0jrkFPxC4uf5OLpUJJ7RCoNnJNmGxO92diikITNI1o3Nn2tvoCh1jVDs
-         fZGffX6IC9S43u6ayGuI0Xov3IWwMIQ5qDsobOhO6kDvbijdpwxaC+TINhSU+vWkjSxc
-         b6FHwDaYXUJCMU+huWSb4MHmZ6otPSpZ34uWctsmEtS9FC4zB1NmVjoTzRDW7llHub1C
-         mCfA==
-X-Gm-Message-State: ACrzQf3CTfzoAfEY9VReCLCyPmlYLczdFqRbtAgvvhYphu9S2Jzlc3hE
-        MtVPdnEYTT9SJK2EF7JfvcssBg==
-X-Google-Smtp-Source: AMsMyM5zJHQuPeZjfXFFodGZ7T4ec0rBiVo+SMqROvXdTkdzlXO/khfbfd4fv0FPelgR+nGQ+m/xKQ==
-X-Received: by 2002:a5e:9e0a:0:b0:6c0:dbd0:cfac with SMTP id i10-20020a5e9e0a000000b006c0dbd0cfacmr34479162ioq.106.1667938588762;
-        Tue, 08 Nov 2022 12:16:28 -0800 (PST)
-Received: from presto.localdomain ([98.61.227.136])
-        by smtp.gmail.com with ESMTPSA id m14-20020a0566022ace00b006c720d63356sm4646865iov.33.2022.11.08.12.16.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Nov 2022 12:16:28 -0800 (PST)
-From:   Alex Elder <elder@linaro.org>
-To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        andersson@kernel.org, konrad.dybcio@somainline.org,
-        agross@kernel.org
-Cc:     devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] arm64: dts: qcom: sc7280-idp: don't modify &ipa twice
-Date:   Tue,  8 Nov 2022 14:16:25 -0600
-Message-Id: <20221108201625.1220919-1-elder@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        Tue, 8 Nov 2022 15:18:30 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66D5A14D32;
+        Tue,  8 Nov 2022 12:18:28 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 32837B81C4B;
+        Tue,  8 Nov 2022 20:18:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E718C433D7;
+        Tue,  8 Nov 2022 20:18:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667938705;
+        bh=WyEheEiq/StleYaLyY18Lb8AoLR/BnuFGuWyCblPpM0=;
+        h=Date:From:To:Cc:Subject:From;
+        b=OLRidf0kOhpEWgDiOV7yjBHXPJhY9INixXclz9UkmID5M9jezvI6lu6pbNuP5Pwce
+         xQ/rrXK/4jbLOXFwOZXSblpsjVTWQeHnEohV18pr1q2Nstl7UoK50fN/im1Wbw/drD
+         hzqJsxrvUFwwVigS8btuokqYU/dHJIhb4t1JJEfNuxt8XTTEoO2foZVL60YfzMhgXz
+         7Jo8U6a61wPTynDFkNBEdVOPhPTgzQTCQnmZ7qJyEuPYPfYzswbpaG7/aJ1CQOqeFa
+         8/ITYLygMmWChmrxQfzE20FVJjA1WbL5EnIzEK5TDp6AA5lgA+KJ7ou86ukkXr4WtM
+         0AxNtxcaXycTw==
+Date:   Tue, 8 Nov 2022 14:18:05 -0600
+From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To:     Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jouni Malinen <j@w1.fi>,
+        Stanislav Yakovlev <stas.yakovlev@gmail.com>,
+        Johannes Berg <johannes@sipsolutions.net>
+Cc:     netdev@vger.kernel.org, linux-wireless@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        linux-hardening@vger.kernel.org
+Subject: [PATCH v3 0/7] Avoid clashing function prototypes
+Message-ID: <cover.1667934775.git.gustavoars@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,32 +61,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In "sc7280-idp.dts", the IPA node is modified after being defined.
-However that file includes "sc7280-idp.dtsi", which also modifies
-the IPA node (in the same way).  This only needs to be done in
-"sc7280-idp.dtsi".
+When built with Control Flow Integrity, function prototypes between
+caller and function declaration must match. These mismatches are visible
+at compile time with the new -Wcast-function-type-strict in Clang[1].
 
-Signed-off-by: Alex Elder <elder@linaro.org>
----
- arch/arm64/boot/dts/qcom/sc7280-idp.dts | 5 -----
- 1 file changed, 5 deletions(-)
+This series fixes a total of 424 -Wcast-function-type-strict warnings.
 
-diff --git a/arch/arm64/boot/dts/qcom/sc7280-idp.dts b/arch/arm64/boot/dts/qcom/sc7280-idp.dts
-index 7559164cdda08..9ddfdfdd354ee 100644
---- a/arch/arm64/boot/dts/qcom/sc7280-idp.dts
-+++ b/arch/arm64/boot/dts/qcom/sc7280-idp.dts
-@@ -61,11 +61,6 @@ &bluetooth {
- 	vddio-supply = <&vreg_l19b_1p8>;
- };
- 
--&ipa {
--	status = "okay";
--	modem-init;
--};
--
- &pmk8350_rtc {
- 	status = "okay";
- };
+Link: https://reviews.llvm.org/D134831 [1]
+
+Changes in v3:
+ - Split non-related orinoco changes out of cgf80211 into a separate
+   patch.
+ - Mention Coccinelle in some of the patches where it was used
+   to make some changes.
+ - Add RB tags to a couple of patches.
+
+Changes in v2:
+ - Squash patches 1, 2 and 3 into a single patch cfg80211.
+ - Add a couple more patches: bna and staging.
+ - Fix 254 (227 in bna and 27 in staging) more
+   -Wcast-function-type-strict warnings.
+ - Link: https://lore.kernel.org/linux-hardening/cover.1666894751.git.gustavoars@kernel.org/
+
+v1:
+ - Link: https://lore.kernel.org/linux-hardening/cover.1666038048.git.gustavoars@kernel.org/
+
+Gustavo A. R. Silva (7):
+  wifi: orinoco: Avoid clashing function prototypes
+  cfg80211: Avoid clashing function prototypes
+  wifi: hostap: Avoid clashing function prototypes
+  wifi: zd1201: Avoid clashing function prototypes
+  wifi: airo: Avoid clashing function prototypes
+  bna: Avoid clashing function prototypes
+  staging: ks7010: Avoid clashing function prototypes
+
+ drivers/net/ethernet/brocade/bna/bfa_cs.h     |  60 +++--
+ drivers/net/ethernet/brocade/bna/bfa_ioc.c    |  10 +-
+ drivers/net/ethernet/brocade/bna/bfa_ioc.h    |   8 +-
+ drivers/net/ethernet/brocade/bna/bfa_msgq.h   |   8 +-
+ drivers/net/ethernet/brocade/bna/bna_enet.c   |   6 +-
+ drivers/net/ethernet/brocade/bna/bna_tx_rx.c  |   6 +-
+ drivers/net/ethernet/brocade/bna/bna_types.h  |  27 +-
+ drivers/net/wireless/cisco/airo.c             | 204 +++++++-------
+ drivers/net/wireless/intel/ipw2x00/ipw2200.c  |   2 +-
+ .../wireless/intersil/hostap/hostap_ioctl.c   | 244 +++++++++--------
+ drivers/net/wireless/intersil/orinoco/wext.c  | 131 +++++----
+ drivers/net/wireless/zydas/zd1201.c           | 174 ++++++------
+ drivers/staging/ks7010/ks_wlan_net.c          | 248 +++++++++---------
+ include/net/cfg80211-wext.h                   |  20 +-
+ net/wireless/scan.c                           |   3 +-
+ net/wireless/wext-compat.c                    | 180 ++++++-------
+ net/wireless/wext-compat.h                    |   8 +-
+ net/wireless/wext-sme.c                       |   5 +-
+ 18 files changed, 713 insertions(+), 631 deletions(-)
+
 -- 
 2.34.1
 
