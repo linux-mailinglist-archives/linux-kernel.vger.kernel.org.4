@@ -2,76 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 209EE62192D
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 17:13:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F65162192F
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 17:14:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234522AbiKHQNW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 11:13:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50692 "EHLO
+        id S234282AbiKHQOU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 11:14:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233789AbiKHQNU (ORCPT
+        with ESMTP id S233789AbiKHQOS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 11:13:20 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B1003BE35;
-        Tue,  8 Nov 2022 08:13:19 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9C66B1FB;
-        Tue,  8 Nov 2022 08:13:25 -0800 (PST)
-Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6D3373F73D;
-        Tue,  8 Nov 2022 08:13:17 -0800 (PST)
-Date:   Tue, 8 Nov 2022 16:13:15 +0000
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Pierre Gondois <pierre.gondois@arm.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Gavin Shan <gshan@redhat.com>,
-        Peter Chen <peter.chen@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-riscv@lists.infradead.org, linux-acpi@vger.kernel.org
-Subject: Re: [PATCH 3/5] ACPI: PPTT: Remove acpi_find_cache_levels()
-Message-ID: <20221108161315.lmm3sakza5quyzlv@bogus>
-References: <20221108110424.166896-1-pierre.gondois@arm.com>
- <20221108110424.166896-4-pierre.gondois@arm.com>
+        Tue, 8 Nov 2022 11:14:18 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 193FF13CE0;
+        Tue,  8 Nov 2022 08:14:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667924058; x=1699460058;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=+SalQDIftpGV1y96eUwtO7Aw99Xo9hl/udl63LYREOE=;
+  b=LA6CCH7eVnXsSk3juolWP6c1uTnhq+EYBU4HNIuxPaFajiSiVGGQ7U/A
+   PDIjDHded0FOkGwqJE3EoJ6q1WOIcpaq2kW6sJZrSeJHegNoIQSduaQ8+
+   CIDr+S5NHWO2RnnRqiHcSpf7GID0lk8ykqJCQkVFChX6jmzcF7uvjN7FD
+   MpubVnG8BEMLlYngs3vs8a8nNIvrqFXctRnrxeOXNarBz7z26cpn68h1F
+   51Zz/GFigUA25PTNRtoGRti5srgvOoGuQmKlQ5Kq2iKXdsFWIyNFLghTy
+   G3+/gIXfSjWYZF2hDgZ3EVL/t2ONSU6PESQETYLb4/K1RjymbF1V2W6Lp
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10525"; a="291122765"
+X-IronPort-AV: E=Sophos;i="5.96,148,1665471600"; 
+   d="scan'208";a="291122765"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2022 08:13:59 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10525"; a="630921892"
+X-IronPort-AV: E=Sophos;i="5.96,148,1665471600"; 
+   d="scan'208";a="630921892"
+Received: from djiang5-mobl2.amr.corp.intel.com (HELO [10.212.98.44]) ([10.212.98.44])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2022 08:13:58 -0800
+Message-ID: <b7527fc3-8750-69b8-40fa-214962ef50ed@intel.com>
+Date:   Tue, 8 Nov 2022 08:13:57 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221108110424.166896-4-pierre.gondois@arm.com>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.4.1
+Subject: Re: [PATCH 1/3] dmaengine: idxd: Add descriptor definitions for 16
+ bytes of pattern in memory fill operation
+Content-Language: en-US
+To:     Fenghua Yu <fenghua.yu@intel.com>, Vinod Koul <vkoul@kernel.org>
+Cc:     dmaengine@vger.kernel.org,
+        linux-kernel <linux-kernel@vger.kernel.org>
+References: <20221108003944.2095567-1-fenghua.yu@intel.com>
+ <20221108003944.2095567-2-fenghua.yu@intel.com>
+From:   Dave Jiang <dave.jiang@intel.com>
+In-Reply-To: <20221108003944.2095567-2-fenghua.yu@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 08, 2022 at 12:04:19PM +0100, Pierre Gondois wrote:
-> acpi_find_cache_levels() is used at a single place and is short
-> enough to be merged into the calling function. The removal allows
-> an easier renaming of the calling function in the next patch.
->
-> Also reorder the parameters in the 'reversed Christmas tree' order.
-
-Not sure if the above is worth mentioning explicitly. Even if you do,
-'parameters' sounds very confusing to at-least me. I was searching for
-the changes is some function parameters to understand what it was and
-finally realised you meant the stack variable declaration order here.
-Right ?
 
 
-Other than that, it looks good.
+On 11/7/2022 4:39 PM, Fenghua Yu wrote:
+> The memory fill operation (0x04) can fill in memory with either 8 bytes
+> or 16 bytes of pattern. To fill in memory with 16 bytes of pattern, the
+> first 8 bytes are provided in pattern lower in bytes 16-23 and the next
+> 8 bytes are in pattern upper in bytes 40-47 in the descriptor. Currently
+> only 8 bytes of pattern is enabled.
+> 
+> Add descriptor definitions for pattern lower and pattern upper so that
+> user can use 16 bytes of pattern to fill memory.
+> 
+> Signed-off-by: Fenghua Yu <fenghua.yu@intel.com>
+> Reviewed-by: Dave Jiang <dave.jiang@intel.com>
+> ---
+>   include/uapi/linux/idxd.h | 6 ++++++
+>   1 file changed, 6 insertions(+)
+> 
+> diff --git a/include/uapi/linux/idxd.h b/include/uapi/linux/idxd.h
+> index 095299c75828..04a2f6411820 100644
+> --- a/include/uapi/linux/idxd.h
+> +++ b/include/uapi/linux/idxd.h
+> @@ -179,6 +179,7 @@ struct dsa_hw_desc {
+>   		uint64_t	rdback_addr;
+>   		uint64_t	pattern;
+>   		uint64_t	desc_list_addr;
+> +		uint64_t	pattern_lower;
+>   	};
+>   	union {
+>   		uint64_t	dst_addr;
+> @@ -243,6 +244,11 @@ struct dsa_hw_desc {
+>   			uint16_t	dest_app_tag_seed;
+>   		};
+>   
+> +		/* Fill */
+> +		struct {
 
-Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
+I don't think the anon struct is needed here. If there are others, that 
+can be added later with the next patch that needs it.
 
--- 
-Regards,
-Sudeep
+> +			uint64_t	pattern_upper;
+> +		};
+> +
+>   		uint8_t		op_specific[24];
+>   	};
+>   } __attribute__((packed));
