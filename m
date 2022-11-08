@@ -2,112 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12CB8620967
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 07:14:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9A73620969
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 07:15:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232956AbiKHGN7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 01:13:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35784 "EHLO
+        id S233213AbiKHGP5 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 8 Nov 2022 01:15:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229660AbiKHGN5 (ORCPT
+        with ESMTP id S229498AbiKHGPy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 01:13:57 -0500
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 869F063C2;
-        Mon,  7 Nov 2022 22:13:56 -0800 (PST)
-Received: by mail-pl1-x635.google.com with SMTP id d20so12216267plr.10;
-        Mon, 07 Nov 2022 22:13:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=JX8vpBAhEPvSt1OhZU+reIbz1YtH+hIe7fUISAFUShE=;
-        b=SM/vWxZTraSrV/v0BlwwX8bt91xcPBxY3QrouPIrkHI0YxPj3GjvN1lD9Attu5fxPJ
-         h/Y0eq8oV4SKlMt7BvDmXKEPyr/bCAScGD6fR9JCTw6FXExTLarpAuFn0OrR0aW/TX1Z
-         pLPXaG4wK8XVd8XlHXyLDzurQ5E+gOJjmiE4+CglliTOqUWhIpPfFMnr2riTZdu0uD1L
-         UiEyS41YO4c6CixfTdHp97XZHfBqZa5AtANwF704hOERS6P8GZN4eUHxKgzce+ykMx9a
-         86MDKkbbdta3t0oSML2mw81cO7xfmoK2Ib8HM2hTmAYOXro7/dUzkE48nTmFRyaHgHm0
-         VTVQ==
+        Tue, 8 Nov 2022 01:15:54 -0500
+Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B013CEE12;
+        Mon,  7 Nov 2022 22:15:53 -0800 (PST)
+Received: by mail-pj1-f43.google.com with SMTP id u8-20020a17090a5e4800b002106dcdd4a0so16999903pji.1;
+        Mon, 07 Nov 2022 22:15:53 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=JX8vpBAhEPvSt1OhZU+reIbz1YtH+hIe7fUISAFUShE=;
-        b=XrONpfMyH8QBiOc4rXaO5hUphC3Le+dUICGMbt2rYFs9JtCVuQh2+5ki1wMPt1ZZup
-         cXI6Y4FPsS8s4I2SRdq7alcRIwdGgawTDw+bplYA+36ORJ4LWOjYgyIc2UJiaAsOycjd
-         Och5CN6t0XOpPhcEHQDCjtuxmk5anl94gV+LKQTZKM6tfqc3pgL0D8PtJExc4ofei+62
-         eW8O5divCoxYbOyD2Nl1WpQj4iyEIziqtQSN5PFM65jheCEw6n7J6oKxe8lLcZaen9DA
-         DQ+0g+M1KULYiUKnHEDz5bQBhP9ZcZRE5+jJRuaYz/7MQRNAlKEgmHwDX6B+kLc9Io9B
-         0ekw==
-X-Gm-Message-State: ACrzQf2p0XoH7LT72qgZYdbPwFgHW4zbo2doq8kTXz/VrIpLVLFIj2Gi
-        C4fKhirvZSH3OoGtjmu1rUoWV52+nChaYztgvgs=
-X-Google-Smtp-Source: AMsMyM6KKESqyvJU86mzQNQh1K6dBtWqiValwvnSMJ3R7swKmxjxJTeLjwDJho9Wz5ChwzSm/S6T/1zCTB/USBPpUWM=
-X-Received: by 2002:a17:90b:1113:b0:216:616c:5fa0 with SMTP id
- gi19-20020a17090b111300b00216616c5fa0mr25717145pjb.225.1667888036052; Mon, 07
- Nov 2022 22:13:56 -0800 (PST)
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=dXJtUy05+C7un676W8scGbm8GkeZwqkjF2mv8wCWTzQ=;
+        b=u9QNYNrpLRZR2Lr0KDI4CqhQAjs6lSjF3tD9DsvUvtyNdYYk8bNhZFLxCt6LuX1I1o
+         DIbq8PujgWJHIOrkriU5xlPwIptUGQAQbdxtbTlhSAvsntePGqORdm3D10jxcv5CQ8+6
+         3Jx7hQR4msB/S663s92suug74hr0oe9vTBGtBa/zn1ZBnnVcgNbVqjxDj8OJNF+R8uMF
+         J8c/6yjPFqpjP2m0xOZS5vBGnbQL+8AOrIojL5byi4q+nYTWM7ZRbZCv3xRJCS3LpxIp
+         qC0Yro6X/IO471rxadvRBmvKtC80NeoVu7ub3NhniVqhTYEvV+T3kQM1cVYhtUskB8kH
+         kEjw==
+X-Gm-Message-State: ACrzQf18H1bokkrxSP1CFZrfAjf/QPgYcWAXAUS/QaUODt/FyE735XqM
+        tfVsrNDJ5HIxwOZHihqYAzbGrzS0B8PiOIKmq0aNY6TqfYw=
+X-Google-Smtp-Source: AMsMyM7qVTp0wkYGW+FJZg54WTZgsic/z0B/rKaZ0SgCB+Es1GlyTwiSBPi/J+r841xcqZZs3LEt1TED0fASyprVFs8=
+X-Received: by 2002:a17:903:185:b0:187:2430:d39e with SMTP id
+ z5-20020a170903018500b001872430d39emr45168485plg.65.1667888152914; Mon, 07
+ Nov 2022 22:15:52 -0800 (PST)
 MIME-Version: 1.0
-References: <20221106021657.1145519-1-pedro.falcato@gmail.com> <202211061948.46D3F78@keescook>
-In-Reply-To: <202211061948.46D3F78@keescook>
-From:   Pedro Falcato <pedro.falcato@gmail.com>
-Date:   Tue, 8 Nov 2022 06:13:44 +0000
-Message-ID: <CAKbZUD3=4qZJJSDf7GfDRnunoJ_RETEi+iuu3oZewENhC+3i_A@mail.gmail.com>
-Subject: Re: [PATCH] fs/binfmt_elf: Fix memsz > filesz handling
-To:     Kees Cook <keescook@chromium.org>
-Cc:     David Gow <davidgow@google.com>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, sam@gentoo.org,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Eric Biederman <ebiederm@xmission.com>,
-        linux-fsdevel@vger.kernel.org, Rich Felker <dalias@libc.org>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
+References: <20221106100120.849735-1-mailhol.vincent@wanadoo.fr> <20221106125546.855266-1-mailhol.vincent@wanadoo.fr>
+In-Reply-To: <20221106125546.855266-1-mailhol.vincent@wanadoo.fr>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Tue, 8 Nov 2022 15:15:41 +0900
+Message-ID: <CAMZ6RqKZJcSq=dMh84gacY3yh_4=XnW=Hupq4dZztE681ZACHg@mail.gmail.com>
+Subject: Re: [PATCH v2] can: etas_es58x: sort the includes by alphabetic order
+To:     linux-can@vger.kernel.org
+Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 7, 2022 at 3:59 AM Kees Cook <keescook@chromium.org> wrote:
-> Thanks for the patch! I need to triple-check this logic, as there have
-> been some overlapping (or out-of-order) LOAD bugs in the past too, and I
-> want to make sure we don't accidentally zero things that already got
-> loaded, etc.
-Hi Kees,
-
-Thanks for looking at my patch. I've submitted an (unprompted) v2 with
-an additional fix for
-a loading bug that could load segments after a .bss on top of .bss
-itself, which would
-overwrite any bss zeroing efforts. Note that this bug was already
-present in load_elf_binary.
-
-See a repro at https://github.com/heatd/elf-bug-questionmark, and the
-comments on the patch/repro for more info.
-Most ELF loading operating systems out there seem to fail on this one.
-
-As for overlapping/out-of-order LOAD segments, what kind of handling
-do we want here?
-The ELF spec (http://www.sco.com/developers/gabi/latest/ch5.pheader.html)
-says that
-"Loadable segment entries in the program header table appear in
-ascending order, sorted on the p_vaddr member.",
-so do we really want to support that? My -v2 was substantially
-simplified based on assuming ELF-compliant executables.
-
-> David, has there been any work on adding a way to instantiate
-> userspace VMAs in a KUnit test? I tried to write this myself, but I
-> couldn't figure out how to make the userspace memory mappings appear.
-> Here's my fumbling attempt:
-> https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git/log/?h=devel/kunit/usercopy
+On Sun. 6 Nov. 2022 at 21:56, Vincent Mailhol
+<mailhol.vincent@wanadoo.fr> wrote:
+> Follow the best practices, reorder the includes.
 >
-> I really wish KUnit had userspace mapping support -- I have a bunch of
-> unit tests that need to get built up around checking for regressions
-> here, etc.
-+1 on getting this unit-tested, this is a bit of a minefield
+> While doing so, bump up copyright year of each modified files.
+>
+> Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+> ---
+>
+> Changelog:
+>
+> v1 -> v2:
+>
+>   * rebase on linux-can-next/testing. v1 was based on a local branch
+>     and did not apply (sorry for the noise).
+>
+>   * add the copyright bump. That was initially of this patch:
+>     https://lore.kernel.org/linux-can/20221104073659.414147-1-mailhol.vincent@wanadoo.fr/raw
+>     but figured out that it is better to put this next to the
+>     modifications of the includes.
+> ---
+>  drivers/net/can/usb/etas_es58x/es581_4.c    | 4 ++--
+>  drivers/net/can/usb/etas_es58x/es58x_core.c | 6 +++---
+>  drivers/net/can/usb/etas_es58x/es58x_fd.c   | 4 ++--
 
-Thanks,
-Pedro
+The header file es58x_core.h also has some includes which are not
+sorted correctly...
+
+This was meant to be a trivial patch, but finally, it will need a
+third revision. Please don’t take it, I will resend. And sorry for the
+noise.
+
+>  3 files changed, 7 insertions(+), 7 deletions(-)
+>
+> diff --git a/drivers/net/can/usb/etas_es58x/es581_4.c b/drivers/net/can/usb/etas_es58x/es581_4.c
+> index 1bcdcece5ec7..4151b18fd045 100644
+> --- a/drivers/net/can/usb/etas_es58x/es581_4.c
+> +++ b/drivers/net/can/usb/etas_es58x/es581_4.c
+> @@ -6,12 +6,12 @@
+>   *
+>   * Copyright (c) 2019 Robert Bosch Engineering and Business Solutions. All rights reserved.
+>   * Copyright (c) 2020 ETAS K.K.. All rights reserved.
+> - * Copyright (c) 2020, 2021 Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+> + * Copyright (c) 2020-2022 Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+>   */
+>
+> +#include <asm/unaligned.h>
+>  #include <linux/kernel.h>
+>  #include <linux/units.h>
+> -#include <asm/unaligned.h>
+>
+>  #include "es58x_core.h"
+>  #include "es581_4.h"
+> diff --git a/drivers/net/can/usb/etas_es58x/es58x_core.c b/drivers/net/can/usb/etas_es58x/es58x_core.c
+> index 51294b717040..7d6e688f2b46 100644
+> --- a/drivers/net/can/usb/etas_es58x/es58x_core.c
+> +++ b/drivers/net/can/usb/etas_es58x/es58x_core.c
+> @@ -7,15 +7,15 @@
+>   *
+>   * Copyright (c) 2019 Robert Bosch Engineering and Business Solutions. All rights reserved.
+>   * Copyright (c) 2020 ETAS K.K.. All rights reserved.
+> - * Copyright (c) 2020, 2021 Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+> + * Copyright (c) 2020-2022 Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+>   */
+>
+> +#include <asm/unaligned.h>
+> +#include <linux/crc16.h>
+>  #include <linux/ethtool.h>
+>  #include <linux/kernel.h>
+>  #include <linux/module.h>
+>  #include <linux/usb.h>
+> -#include <linux/crc16.h>
+> -#include <asm/unaligned.h>
+>
+>  #include "es58x_core.h"
+>
+> diff --git a/drivers/net/can/usb/etas_es58x/es58x_fd.c b/drivers/net/can/usb/etas_es58x/es58x_fd.c
+> index c97ffa71fd75..fa87b0b78e3e 100644
+> --- a/drivers/net/can/usb/etas_es58x/es58x_fd.c
+> +++ b/drivers/net/can/usb/etas_es58x/es58x_fd.c
+> @@ -8,12 +8,12 @@
+>   *
+>   * Copyright (c) 2019 Robert Bosch Engineering and Business Solutions. All rights reserved.
+>   * Copyright (c) 2020 ETAS K.K.. All rights reserved.
+> - * Copyright (c) 2020, 2021 Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+> + * Copyright (c) 2020-2022 Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+>   */
+>
+> +#include <asm/unaligned.h>
+>  #include <linux/kernel.h>
+>  #include <linux/units.h>
+> -#include <asm/unaligned.h>
+>
+>  #include "es58x_core.h"
+>  #include "es58x_fd.h"
+> --
+> 2.37.4
+>
