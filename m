@@ -2,241 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B724620638
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 02:38:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96A94620649
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 02:45:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233152AbiKHBiN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 20:38:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33374 "EHLO
+        id S233178AbiKHBpu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 20:45:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231796AbiKHBiM (ORCPT
+        with ESMTP id S233405AbiKHBpr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 20:38:12 -0500
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F642FC8
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 17:38:11 -0800 (PST)
-Received: by mail-pf1-x431.google.com with SMTP id y13so12466771pfp.7
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 17:38:11 -0800 (PST)
+        Mon, 7 Nov 2022 20:45:47 -0500
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 035701D66D
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 17:45:45 -0800 (PST)
+Received: by mail-wr1-x434.google.com with SMTP id bk15so18704601wrb.13
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 17:45:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=pdA0+o4nyWXXtAJUwdO+TLMgOFzpgSrlvCyZWaWI2z4=;
-        b=uUF3kWMxyWjpSj4fV0JBu57jdZdaitSPay1bfIGp0XFYDlcqtKIDm772KToGoDVuY4
-         k9NhItfI5Xy02zSY93Cz8FaCrS8XLcp/MtGhI5bT5m8nQWCfpGn+phXjMMcRfr+8pxZV
-         7bxnR51fohdrg2TI+WnAznLqy/w9xciGNh4WQzz/Tn/ccnE40nq6giHICh8zn/xqyAnz
-         DDvNBkZWpZI2cm/EKxjqsUV2dtHsRYfVlcokfFJOGJOnzOL4uUUogUKcH7jWFUqRjNCh
-         CVLoFVFMOaqlboAbAGKERaafeEe8W3UR9dHov2alPnaf+DPx++C5qIsxy2K0caHLXR6l
-         jkyA==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=47ST8kmmDbEPRBRn6r6aMdT2x8GHsd3FK/EUSGxsYEE=;
+        b=GFo6RS8mX1NNIO37+zsamL4bAjKLInJP+o1MsxgHfDyXO8FU50vpd+4idKcfhIEBjJ
+         1OYuuRLm96Q6JiQYQKWDL3W4nr6eGD1SWisIAE9t9a+lBPIGccolUpNQx0IN/DVdAsC2
+         eAk0rx0hplA/+bslZDWEmW/4/z0V7AD8hVCUfex9TVh7MHsF2XPU/90iwu5kEcg2Drv2
+         yv0dq7Huslmzhw/h0JKS2cWzDegl5Thx7oIluPuZKkySPUYQo7ixYE0KgvTNKuHXnINJ
+         bvBF5TMVL8S2dC+xNzGd8rXP4KKqgrsuLukHHA/F+st/XYZzE0a6cLkFA5w4pBEf8BBh
+         2EWg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=pdA0+o4nyWXXtAJUwdO+TLMgOFzpgSrlvCyZWaWI2z4=;
-        b=HqTGQ4Ydhzj4MTJn7UxMEUPRDBjZJApUtD8yTap/V59W7zjs46uIuaLSkASQ0Xy+0v
-         MLzRf3Rv79hntONLVydUcz4ztOeMy9yWWTeGZuR+BGbYSIXXTJk6V9VXG2D97g4nwUmZ
-         m9PoN5hshPZERYXTu0jbFv5GK02p3jhjkepaLLyQgovNctKTd1JH5Id2Ip4y6V41zg3v
-         CUBvvf3JRuALAOeN3UJoVP7aDA4Ys7ih32JFbrr53bHEJ2t/lxseFKQmLtp5+D8C6O8m
-         k3c6BZwQs+ikYpJAWIA++6gJabF3x+XE7GRQEXqU6PjWYh5cvV15vyIGAqM2OcPp+27M
-         7Sdg==
-X-Gm-Message-State: ACrzQf2MA1WAGBvGJjF3zOEA9H5fhyaVgDjfBpfC6Me7ZvF6yKhlnAKQ
-        eFLwza8KCZ7bLYM/1kz6j712ew==
-X-Google-Smtp-Source: AMsMyM45kxmMVB29FW11WfTPJoOy/nQGourjL5hLHSIUpug+JZdQcZpcSqfddvvyRg+/HMEccH5/cA==
-X-Received: by 2002:a63:d90c:0:b0:462:cfa2:285b with SMTP id r12-20020a63d90c000000b00462cfa2285bmr45569279pgg.202.1667871490747;
-        Mon, 07 Nov 2022 17:38:10 -0800 (PST)
-Received: from [192.168.50.116] (c-24-4-73-83.hsd1.ca.comcast.net. [24.4.73.83])
-        by smtp.gmail.com with ESMTPSA id p18-20020a170902ebd200b00176b63535adsm5560623plg.260.2022.11.07.17.38.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Nov 2022 17:38:10 -0800 (PST)
-Message-ID: <1634d6c4-40fa-1298-efa2-c606b1e57fd7@rivosinc.com>
-Date:   Mon, 7 Nov 2022 17:38:08 -0800
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=47ST8kmmDbEPRBRn6r6aMdT2x8GHsd3FK/EUSGxsYEE=;
+        b=Ii7AgYHjIjJRvgjmzSmglqqWWom5ZxOE6a06Hi0RNYK3BbZcESYj7lgK8gEiYcttE6
+         OsZyW7rmlMOaPMYDAm49p3ziYLZW2OJZPm5Ab6aBXXve8uDyyjC/LqrLzGajW0mOmaKS
+         U1R3g+cqyXyMHE6JsS5LfZ2RXEYOnoa8I1jhaFisbDIIN6ovtqECsYFEOcLS1gr+oOGr
+         sPxdND3tvFoJo8T5broVlG1GSUNNrZR63zKP6b2EYpNoGIZXzhVtiFp4S5POXzGA+oOi
+         A657cW8EJKzuDF2rFtwFSBSpBaAYQGjSR+/+nsHYeCjXPDh+TzLVkHQoIR5WaewIP9LE
+         PKdw==
+X-Gm-Message-State: ACrzQf23VVrHhorPScX3o0QpRl2fcCeip1nHJ7RTv31cAKgMLCiPO2La
+        +erebVlaRIIYy7KQAeNGJ20VLGvqks3QUboicBd+VA==
+X-Google-Smtp-Source: AMsMyM41/Ipz6FXAw0YtKeEUFBdvrb4zqjfz6bOYn6APrx5qRd9/xTI2L0wcE4cG9+BPXcI51leUYjvlb02/J6i2HJo=
+X-Received: by 2002:a5d:47a1:0:b0:236:6f4d:1db3 with SMTP id
+ 1-20020a5d47a1000000b002366f4d1db3mr32991491wrb.383.1667871943348; Mon, 07
+ Nov 2022 17:45:43 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v12 09/17] riscv: Add ptrace vector support
-Content-Language: en-US
-To:     Chris Stillson <stillson@rivosinc.com>
-Cc:     Greentime Hu <greentime.hu@sifive.com>,
-        Vincent Chen <vincent.chen@sifive.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Guo Ren <guoren@kernel.org>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Andy Chiu <andy.chiu@sifive.com>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>
-References: <20220921214439.1491510-1-stillson@rivosinc.com>
- <20220921214439.1491510-9-stillson@rivosinc.com>
-From:   Vineet Gupta <vineetg@rivosinc.com>
-In-Reply-To: <20220921214439.1491510-9-stillson@rivosinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221105045704.2315186-1-vipinsh@google.com> <20221105045704.2315186-5-vipinsh@google.com>
+ <Y2lXld6G+Hp0FW3A@google.com>
+In-Reply-To: <Y2lXld6G+Hp0FW3A@google.com>
+From:   Vipin Sharma <vipinsh@google.com>
+Date:   Mon, 7 Nov 2022 17:45:07 -0800
+Message-ID: <CAHVum0ewgeA81T2ttPGB0V-2njdc1oqTjQWziKzTu_pzN+srxw@mail.gmail.com>
+Subject: Re: [PATCH 4/6] KVM: selftests: Make Hyper-V guest OS ID common
+To:     David Matlack <dmatlack@google.com>
+Cc:     seanjc@google.com, pbonzini@redhat.com, vkuznets@redhat.com,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Trimmed CC list
+On Mon, Nov 7, 2022 at 11:08 AM David Matlack <dmatlack@google.com> wrote:
+>
+> On Fri, Nov 04, 2022 at 09:57:02PM -0700, Vipin Sharma wrote:
+> > Make guest OS ID calculation common to all hyperv tests and similar to
+> > hv_generate_guest_id().
+>
+> This commit makes the HV_LINUX_VENDOR_ID and adds LINUX_VERSION_CODE
+> to existing tests. Can you split out the latter to a separate commit?
+> Also what's the reason to add LINUX_VERSION_CODE to the mix?
+>
 
-On 9/21/22 14:43, Chris Stillson wrote:
-> From: Greentime Hu <greentime.hu@sifive.com>
-> 
-> This patch adds ptrace support for riscv vector. The vector registers will
-> be saved in datap pointer of __riscv_v_state. This pointer will be set
-> right after the __riscv_v_state data structure then it will be put in ubuf
-> for ptrace system call to get or set. It will check if the datap got from
-> ubuf is set to the correct address or not when the ptrace system call is
-> trying to set the vector registers.
-> 
-> Co-developed-by: Vincent Chen <vincent.chen@sifive.com>
-> Signed-off-by: Vincent Chen <vincent.chen@sifive.com>
-> Signed-off-by: Greentime Hu <greentime.hu@sifive.com>
-> ---
->   arch/riscv/include/uapi/asm/ptrace.h |  6 +++
->   arch/riscv/kernel/ptrace.c           | 71 ++++++++++++++++++++++++++++
->   include/uapi/linux/elf.h             |  1 +
->   3 files changed, 78 insertions(+)
-> 
-> diff --git a/arch/riscv/include/uapi/asm/ptrace.h b/arch/riscv/include/uapi/asm/ptrace.h
-> index 6ee1ca2edfa7..2491875be80d 100644
-> --- a/arch/riscv/include/uapi/asm/ptrace.h
-> +++ b/arch/riscv/include/uapi/asm/ptrace.h
-> @@ -94,6 +94,12 @@ struct __riscv_v_state {
->   	 */
->   };
->   
-> +/*
-> + * According to spec: The number of bits in a single vector register,
-> + * VLEN >= ELEN, which must be a power of 2, and must be no greater than
-> + * 2^16 = 65536bits = 8192bytes
-> + */
-> +#define RISCV_MAX_VLENB (8192)
+I looked at the implementation in selftest and what is in the
+include/asm-generic/mshyperv.h for the hv_generate_guest_id()
+function, both looked different. I thought it would be nice to have
+consistent logic at both places.
 
-Need a line here.
+I can remove LINUX_VERISON_CODE if you prefer.
 
->   #endif /* __ASSEMBLY__ */
->   
->   #endif /* _UAPI_ASM_RISCV_PTRACE_H */
-> diff --git a/arch/riscv/kernel/ptrace.c b/arch/riscv/kernel/ptrace.c
-> index 2ae8280ae475..cce459ff551d 100644
-> --- a/arch/riscv/kernel/ptrace.c
-> +++ b/arch/riscv/kernel/ptrace.c
-> @@ -27,6 +27,9 @@ enum riscv_regset {
->   #ifdef CONFIG_FPU
->   	REGSET_F,
->   #endif
-> +#ifdef CONFIG_VECTOR
-> +	REGSET_V,
-> +#endif
->   };
->   
->   static int riscv_gpr_get(struct task_struct *target,
-> @@ -83,6 +86,64 @@ static int riscv_fpr_set(struct task_struct *target,
->   }
->   #endif
->   
-> +#ifdef CONFIG_VECTOR
-> +static int riscv_vr_get(struct task_struct *target,
-> +			const struct user_regset *regset,
-> +			struct membuf to)
-> +{
-> +	struct __riscv_v_state *vstate = &target->thread.vstate;
-> +
-> +	/*
-> +	 * Ensure the vector registers have been saved to the memory before
-> +	 * copying them to membuf.
-> +	 */
-> +	if (target == current)
-> +		vstate_save(current, task_pt_regs(current));
-> +
-> +	/* Copy vector header from vstate. */
-> +	membuf_write(&to, vstate, RISCV_V_STATE_DATAP);
-> +	membuf_zero(&to, sizeof(void *));
-> +#if __riscv_xlen == 32
-> +	membuf_zero(&to, sizeof(__u32));
-> +#endif
-> +
-> +	/* Copy all the vector registers from vstate. */
-> +	return membuf_write(&to, vstate->datap, riscv_vsize);
-> +}
-> +
-> +static int riscv_vr_set(struct task_struct *target,
-> +			 const struct user_regset *regset,
-> +			 unsigned int pos, unsigned int count,
-> +			 const void *kbuf, const void __user *ubuf)
-> +{
-> +	int ret, size;
-> +	struct __riscv_v_state *vstate = &target->thread.vstate;
-> +
-> +	/* Copy rest of the vstate except datap and __padding. */
-> +	ret = user_regset_copyin(&pos, &count, &kbuf, &ubuf, vstate, 0,
-> +				 RISCV_V_STATE_DATAP);
-> +	if (unlikely(ret))
-> +		return ret;
-> +
-> +	/* Skip copy datap. */
-> +	size = sizeof(vstate->datap);
-> +	count -= size;
-> +	ubuf += size;
-> +#if __riscv_xlen == 32
-> +	/* Skip copy _padding. */
-> +	size = sizeof(vstate->__padding);
-> +	count -= size;
-> +	ubuf += size;
-> +#endif
-> +
-> +	/* Copy all the vector registers. */
-> +	pos = 0;
-> +	ret = user_regset_copyin(&pos, &count, &kbuf, &ubuf, vstate->datap,
-> +				 0, riscv_vsize);
-> +	return ret;
-> +}
-> +#endif
-> +
->   static const struct user_regset riscv_user_regset[] = {
->   	[REGSET_X] = {
->   		.core_note_type = NT_PRSTATUS,
-> @@ -102,6 +163,16 @@ static const struct user_regset riscv_user_regset[] = {
->   		.set = riscv_fpr_set,
->   	},
->   #endif
-> +#ifdef CONFIG_VECTOR
-> +	[REGSET_V] = {
-> +		.core_note_type = NT_RISCV_VECTOR,
-> +		.align = 16,
-> +		.n = (32 * RISCV_MAX_VLENB)/sizeof(__u32),
-> +		.size = sizeof(__u32),
-> +		.regset_get = riscv_vr_get,
-> +		.set = riscv_vr_set,
-> +	},
-> +#endif
->   };
->   
->   static const struct user_regset_view riscv_user_native_view = {
-> diff --git a/include/uapi/linux/elf.h b/include/uapi/linux/elf.h
-> index c7b056af9ef0..5a5056c6a2a1 100644
-> --- a/include/uapi/linux/elf.h
-> +++ b/include/uapi/linux/elf.h
-> @@ -439,6 +439,7 @@ typedef struct elf64_shdr {
->   #define NT_MIPS_DSP	0x800		/* MIPS DSP ASE registers */
->   #define NT_MIPS_FP_MODE	0x801		/* MIPS floating-point mode */
->   #define NT_MIPS_MSA	0x802		/* MIPS SIMD registers */
-> +#define NT_RISCV_VECTOR	0x900		/* RISC-V vector registers */
->   #define NT_LOONGARCH_CPUCFG	0xa00	/* LoongArch CPU config registers */
->   #define NT_LOONGARCH_CSR	0xa01	/* LoongArch control and status registers */
->   #define NT_LOONGARCH_LSX	0xa02	/* LoongArch Loongson SIMD Extension registers */
+> >
+> > Signed-off-by: Vipin Sharma <vipinsh@google.com>
+> > ---
+> >  tools/testing/selftests/kvm/include/x86_64/hyperv.h  | 10 ++++++++++
+> >  tools/testing/selftests/kvm/x86_64/hyperv_clock.c    |  2 +-
+> >  tools/testing/selftests/kvm/x86_64/hyperv_features.c |  6 ++----
+> >  tools/testing/selftests/kvm/x86_64/hyperv_svm_test.c |  2 +-
+> >  4 files changed, 14 insertions(+), 6 deletions(-)
+> >
+> > diff --git a/tools/testing/selftests/kvm/include/x86_64/hyperv.h b/tools/testing/selftests/kvm/include/x86_64/hyperv.h
+> > index 075fd29071a6..9d8c325af1d9 100644
+> > --- a/tools/testing/selftests/kvm/include/x86_64/hyperv.h
+> > +++ b/tools/testing/selftests/kvm/include/x86_64/hyperv.h
+> > @@ -9,6 +9,10 @@
+> >  #ifndef SELFTEST_KVM_HYPERV_H
+> >  #define SELFTEST_KVM_HYPERV_H
+> >
+> > +#include <linux/version.h>
+> > +
+> > +#define HV_LINUX_VENDOR_ID                   0x8100
+> > +
+> >  #define HYPERV_CPUID_VENDOR_AND_MAX_FUNCTIONS        0x40000000
+> >  #define HYPERV_CPUID_INTERFACE                       0x40000001
+> >  #define HYPERV_CPUID_VERSION                 0x40000002
+> > @@ -189,4 +193,10 @@
+> >  /* hypercall options */
+> >  #define HV_HYPERCALL_FAST_BIT                BIT(16)
+> >
+> > +static inline uint64_t hv_linux_guest_id(void)
+> > +{
+> > +     return ((uint64_t)HV_LINUX_VENDOR_ID << 48) |
+> > +            ((uint64_t)LINUX_VERSION_CODE << 16);
+>
+> This can be a compile-time constant (i.e. macro).
+>
 
-I think we should break this one out as a seperate patch to be applied 
-independently, avoid merge conflicts (but this file doesn't change much 
-anyways. @Arnd or is it ok to carry with riscv change ?
+Yes, I will make it a macro in the next version.
 
+> > +}
+> > +
+> >  #endif /* !SELFTEST_KVM_HYPERV_H */
+> > diff --git a/tools/testing/selftests/kvm/x86_64/hyperv_clock.c b/tools/testing/selftests/kvm/x86_64/hyperv_clock.c
+> > index d576bc8ce823..f9112c5dc3f7 100644
+> > --- a/tools/testing/selftests/kvm/x86_64/hyperv_clock.c
+> > +++ b/tools/testing/selftests/kvm/x86_64/hyperv_clock.c
+> > @@ -104,7 +104,7 @@ static void guest_main(struct ms_hyperv_tsc_page *tsc_page, vm_paddr_t tsc_page_
+> >
+> >       /* Set Guest OS id to enable Hyper-V emulation */
+> >       GUEST_SYNC(1);
+> > -     wrmsr(HV_X64_MSR_GUEST_OS_ID, (u64)0x8100 << 48);
+> > +     wrmsr(HV_X64_MSR_GUEST_OS_ID, hv_linux_guest_id());
+> >       GUEST_SYNC(2);
+> >
+> >       check_tsc_msr_rdtsc();
+> > diff --git a/tools/testing/selftests/kvm/x86_64/hyperv_features.c b/tools/testing/selftests/kvm/x86_64/hyperv_features.c
+> > index 6b443ce456b6..b5a42cf1ad9d 100644
+> > --- a/tools/testing/selftests/kvm/x86_64/hyperv_features.c
+> > +++ b/tools/testing/selftests/kvm/x86_64/hyperv_features.c
+> > @@ -13,8 +13,6 @@
+> >  #include "processor.h"
+> >  #include "hyperv.h"
+> >
+> > -#define LINUX_OS_ID ((u64)0x8100 << 48)
+> > -
+> >  static inline uint8_t hypercall(u64 control, vm_vaddr_t input_address,
+> >                               vm_vaddr_t output_address, uint64_t *hv_status)
+> >  {
+> > @@ -71,7 +69,7 @@ static void guest_hcall(vm_vaddr_t pgs_gpa, struct hcall_data *hcall)
+> >
+> >       GUEST_ASSERT(hcall->control);
+> >
+> > -     wrmsr(HV_X64_MSR_GUEST_OS_ID, LINUX_OS_ID);
+> > +     wrmsr(HV_X64_MSR_GUEST_OS_ID, hv_linux_guest_id());
+> >       wrmsr(HV_X64_MSR_HYPERCALL, pgs_gpa);
+> >
+> >       if (!(hcall->control & HV_HYPERCALL_FAST_BIT)) {
+> > @@ -169,7 +167,7 @@ static void guest_test_msrs_access(void)
+> >                        */
+> >                       msr->idx = HV_X64_MSR_GUEST_OS_ID;
+> >                       msr->write = 1;
+> > -                     msr->write_val = LINUX_OS_ID;
+> > +                     msr->write_val = hv_linux_guest_id();
+> >                       msr->available = 1;
+> >                       break;
+> >               case 3:
+> > diff --git a/tools/testing/selftests/kvm/x86_64/hyperv_svm_test.c b/tools/testing/selftests/kvm/x86_64/hyperv_svm_test.c
+> > index a380ad7bb9b3..2c13a144b04c 100644
+> > --- a/tools/testing/selftests/kvm/x86_64/hyperv_svm_test.c
+> > +++ b/tools/testing/selftests/kvm/x86_64/hyperv_svm_test.c
+> > @@ -69,7 +69,7 @@ static void __attribute__((__flatten__)) guest_code(struct svm_test_data *svm)
+> >
+> >       GUEST_SYNC(1);
+> >
+> > -     wrmsr(HV_X64_MSR_GUEST_OS_ID, (u64)0x8100 << 48);
+> > +     wrmsr(HV_X64_MSR_GUEST_OS_ID, hv_linux_guest_id());
+> >
+> >       GUEST_ASSERT(svm->vmcb_gpa);
+> >       /* Prepare for L2 execution. */
+> > --
+> > 2.38.1.273.g43a17bfeac-goog
+> >
