@@ -2,72 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00182620BDF
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 10:15:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 26715620BE3
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 10:15:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233682AbiKHJPJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 04:15:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35870 "EHLO
+        id S233704AbiKHJPZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 04:15:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233651AbiKHJPH (ORCPT
+        with ESMTP id S233679AbiKHJPV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 04:15:07 -0500
+        Tue, 8 Nov 2022 04:15:21 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C428327DD1
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 01:14:04 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B32F1A839
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 01:14:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667898844;
+        s=mimecast20190719; t=1667898865;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=V76xZRdJF90cto+eNTfmdr62lIvdE2c1NcFAYSKdle4=;
-        b=M+Wrl7VnA3XfGnJi9Ob7CZxtP1KHuJHGsNEFTiKi6GM4mYOCPhWdLcTcKHJ75aF+oVhGBh
-        AcQ60aDcYJW+V1mM5EkrIOaEyBf+rwNVrV8PtYX8bSzrO8EEjarkwayo5aWkBoNaSpmu4P
-        HmaypbOycwqohhFx1wcfjyrvl3xoPiQ=
-Received: from mail-oo1-f71.google.com (mail-oo1-f71.google.com
- [209.85.161.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-26-LDM0JV4TN9eB0s2ry5ptjA-1; Tue, 08 Nov 2022 04:14:02 -0500
-X-MC-Unique: LDM0JV4TN9eB0s2ry5ptjA-1
-Received: by mail-oo1-f71.google.com with SMTP id x6-20020a4a2a46000000b0049ca27b1507so3487530oox.5
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 01:14:02 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=V76xZRdJF90cto+eNTfmdr62lIvdE2c1NcFAYSKdle4=;
-        b=yw3zJYLMnkyFx47bjL3586pJI6YSMyiZmltVJ5um/TPxCXo3KoDfryQUvYI25APex1
-         T8T2Ns3W/inNpILrnVc7tksYn6VcgiYWx85NOgSVWLxRTDt3KwwFNc2qkg/i+qCHaERo
-         2T7du1HSffclX6pOZfC2iajqGzwlXLS4zzymDAn2vZ/rF3+Vz3TyXtw6oEQbENQ3lfHg
-         zapFp9k+QQ18AYiNQA6L1A4ayu+li3WjgRr+VKDeNeVvG3v5CItAqGjgU46z5RWfGQWo
-         A0fohWyOjaKSMd09zjylnBEvVopOjUNdjvgeFmDUGEZFBcHLXGbXDRxulS+lsZ+mVxQt
-         IQEQ==
-X-Gm-Message-State: ACrzQf2kLCO/mSHlJr+RpT/VAGW9sWqgbVSEu8HW5HSmx/ria7Yc9xQL
-        sD5rQX7h6MdC+kqmD8bW28O3bny45t4xNbagkTiR3qFDD7S6i72Bz4K7m8P+9YRe7huJmMP0kyc
-        4+mcVQfqdwa4bNW54ms6uY2MwYA+eks6ZK91HbfOz
-X-Received: by 2002:a05:6808:181e:b0:35a:5959:5909 with SMTP id bh30-20020a056808181e00b0035a59595909mr12605627oib.35.1667898842133;
-        Tue, 08 Nov 2022 01:14:02 -0800 (PST)
-X-Google-Smtp-Source: AMsMyM4BhHQXBK0rCa4T6dbx0EVI/Ylq8zyZOMDMURFlkMUxZJxMkfdr0MI6/RWsCNdB4MxuJjGKjU+X+8yWsgsh5K0=
-X-Received: by 2002:a05:6808:181e:b0:35a:5959:5909 with SMTP id
- bh30-20020a056808181e00b0035a59595909mr12605616oib.35.1667898841877; Tue, 08
- Nov 2022 01:14:01 -0800 (PST)
+        bh=KP+tiCnk9vCKqrx4wl6vmjk9CSIgAcrzK2YQ6PLAxpU=;
+        b=U5BhrQ0GPBx8j4qAKqYhSTdiq/srCQpwy/0t5n5wRaBp46nQVqYML15OXhSVBMH1V3T01C
+        OlQvq5+RZLnyLV3SzDjziqEd7zhxiIeDi3tTb48vzH4xs9ogJiN8Yn9iyef3BCBuFU2OT+
+        I+29FUNfjGNUtXT6TrlcAxvjp5fjO1U=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-178-Ut-AJcnsP0m_xLQD9tcXTQ-1; Tue, 08 Nov 2022 04:14:23 -0500
+X-MC-Unique: Ut-AJcnsP0m_xLQD9tcXTQ-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1C9E41C06EE9;
+        Tue,  8 Nov 2022 09:14:22 +0000 (UTC)
+Received: from oldenburg.str.redhat.com (unknown [10.2.16.65])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id B29FC4B3FC6;
+        Tue,  8 Nov 2022 09:14:14 +0000 (UTC)
+From:   Florian Weimer <fweimer@redhat.com>
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+Cc:     "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "bsingharora@gmail.com" <bsingharora@gmail.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "Syromiatnikov, Eugene" <esyr@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
+        "Eranian, Stephane" <eranian@google.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
+        "jannh@google.com" <jannh@google.com>,
+        "dethoma@microsoft.com" <dethoma@microsoft.com>,
+        "kcc@google.com" <kcc@google.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "bp@alien8.de" <bp@alien8.de>, "oleg@redhat.com" <oleg@redhat.com>,
+        "Yang, Weijiang" <weijiang.yang@intel.com>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "pavel@ucw.cz" <pavel@ucw.cz>,
+        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "john.allen@amd.com" <john.allen@amd.com>,
+        "rppt@kernel.org" <rppt@kernel.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "gorcunov@gmail.com" <gorcunov@gmail.com>
+Subject: Re: [RFC 37/37] fs/binfmt_elf: Block old shstk elf bit
+References: <20221104223604.29615-1-rick.p.edgecombe@intel.com>
+        <20221104223604.29615-38-rick.p.edgecombe@intel.com>
+        <CAMe9rOpfSccXVWmgK6E0Y0DXC=VX3PpdxXookN1Ty8soeAxrKw@mail.gmail.com>
+        <87iljs4ecp.fsf@oldenburg.str.redhat.com>
+        <ca106fe1b5005f54525e7a644684108f6a823e14.camel@intel.com>
+        <87h6zaiu05.fsf@oldenburg.str.redhat.com>
+        <f60f1138813f850d52dd92bc6b3df067c021a197.camel@intel.com>
+        <CAMe9rOpVUwCccRb5DAyraEKO48rix+Xfiamfp_Vc_aHhjp7=LQ@mail.gmail.com>
+        <73b8f726c424db1af1c10a48e101bf74703a186a.camel@intel.com>
+Date:   Tue, 08 Nov 2022 10:14:12 +0100
+In-Reply-To: <73b8f726c424db1af1c10a48e101bf74703a186a.camel@intel.com> (Rick
+        P. Edgecombe's message of "Mon, 7 Nov 2022 21:10:52 +0000")
+Message-ID: <87leolkduj.fsf@oldenburg.str.redhat.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
 MIME-Version: 1.0
-References: <20221107203431.368306-1-eric.auger@redhat.com>
- <20221107153924-mutt-send-email-mst@kernel.org> <b8487793-d7b8-0557-a4c2-b62754e14830@redhat.com>
- <20221107180022-mutt-send-email-mst@kernel.org> <CACGkMEsYyH5P2h6XkBgrW4O-xJXxdzzRa1+T2zjJ07OHiYObVA@mail.gmail.com>
- <20221108035142-mutt-send-email-mst@kernel.org>
-In-Reply-To: <20221108035142-mutt-send-email-mst@kernel.org>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Tue, 8 Nov 2022 17:13:50 +0800
-Message-ID: <CACGkMEtFhmgKrKwTT8MdQG26wbi20Z5cTn69ycBtE17V+Kupuw@mail.gmail.com>
-Subject: Re: [RFC] vhost: Clear the pending messages on vhost_init_device_iotlb()
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     Eric Auger <eric.auger@redhat.com>, eric.auger.pro@gmail.com,
-        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        peterx@redhat.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
@@ -78,98 +103,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 8, 2022 at 4:56 PM Michael S. Tsirkin <mst@redhat.com> wrote:
->
-> On Tue, Nov 08, 2022 at 11:09:36AM +0800, Jason Wang wrote:
-> > On Tue, Nov 8, 2022 at 7:06 AM Michael S. Tsirkin <mst@redhat.com> wrote:
-> > >
-> > > On Mon, Nov 07, 2022 at 10:10:06PM +0100, Eric Auger wrote:
-> > > > Hi Michael,
-> > > > On 11/7/22 21:42, Michael S. Tsirkin wrote:
-> > > > > On Mon, Nov 07, 2022 at 09:34:31PM +0100, Eric Auger wrote:
-> > > > >> When the vhost iotlb is used along with a guest virtual iommu
-> > > > >> and the guest gets rebooted, some MISS messages may have been
-> > > > >> recorded just before the reboot and spuriously executed by
-> > > > >> the virtual iommu after the reboot. Despite the device iotlb gets
-> > > > >> re-initialized, the messages are not cleared. Fix that by calling
-> > > > >> vhost_clear_msg() at the end of vhost_init_device_iotlb().
-> > > > >>
-> > > > >> Signed-off-by: Eric Auger <eric.auger@redhat.com>
-> > > > >> ---
-> > > > >>  drivers/vhost/vhost.c | 1 +
-> > > > >>  1 file changed, 1 insertion(+)
-> > > > >>
-> > > > >> diff --git a/drivers/vhost/vhost.c b/drivers/vhost/vhost.c
-> > > > >> index 40097826cff0..422a1fdee0ca 100644
-> > > > >> --- a/drivers/vhost/vhost.c
-> > > > >> +++ b/drivers/vhost/vhost.c
-> > > > >> @@ -1751,6 +1751,7 @@ int vhost_init_device_iotlb(struct vhost_dev *d, bool enabled)
-> > > > >>    }
-> > > > >>
-> > > > >>    vhost_iotlb_free(oiotlb);
-> > > > >> +  vhost_clear_msg(d);
-> > > > >>
-> > > > >>    return 0;
-> > > > >>  }
-> > > > > Hmm.  Can't messages meanwhile get processes and affect the
-> > > > > new iotlb?
-> > > > Isn't the msg processing stopped at the moment this function is called
-> > > > (VHOST_SET_FEATURES)?
-> > > >
-> > > > Thanks
-> > > >
-> > > > Eric
-> > >
-> > > It's pretty late here I'm not sure.  You tell me what prevents it.
-> >
-> > So the proposed code assumes that Qemu doesn't process device IOTLB
-> > before VHOST_SET_FEAETURES. Consider there's no reset in the general
-> > vhost uAPI,  I wonder if it's better to move the clear to device code
-> > like VHOST_NET_SET_BACKEND. So we can clear it per vq?
->
-> Hmm this makes no sense to me. iommu sits between backend
-> and frontend. Tying one to another is going to backfire.
+* Rick P. Edgecombe:
 
-I think we need to emulate what real devices are doing. Device should
-clear the page fault message during reset, so the driver won't read
-anything after reset. But we don't have a per device stop or reset
-message for vhost-net. That's why the VHOST_NET_SET_BACKEND came into
-my mind.
+> When we have everything in place, the problems would be much more
+> obvious when distros started turning it on. But we can't turn it on as
+> planned without breaking things for existing binaries. We can have both
+> by:
+> 1. Choosing a new bit, adding it to the tools, and never supporting the
+> old bit in glibc.
+> 2. Providing the option to have the kernel block the old bit, so
+> upgraded users can decide what experience they would like. Then distros
+> can find the problems and adjust their packages. I'm starting to think
+> a default off sysctl toggle might be better than a Kconfig.
+> 3. Any other ideas?
 
->
-> I'm thinking more along the lines of doing everything
-> under iotlb_lock.
+This problem is fairly common nowadays for new system calls.  Before
+glibc can use them internally, we need to port userspace first,
+otherwise key applications fail to work.  Yet we do not require ELF
+markup to make the new system call available to glibc.
 
-I think the problem is we need to find a proper place to clear the
-message. So I don't get how iotlb_lock can help: the message could be
-still read from user space after the backend is set to NULL.
+The situation here seems similar: before deploying a new glibc, we need
+to upgrade parts of userspace.
 
-Thanks
-
->
->
->
-> > >
-> > > BTW vhost_init_device_iotlb gets enabled parameter but ignores
-> > > it, we really should drop that.
-> >
-> > Yes.
-> >
-> > >
-> > > Also, it looks like if features are set with VIRTIO_F_ACCESS_PLATFORM
-> > > and then cleared, iotlb is not properly cleared - bug?
-> >
-> > Not sure, old IOTLB may still work. But for safety, we need to disable
-> > device IOTLB in this case.
-> >
-> > Thanks
-> >
-> > >
-> > >
-> > > > >
-> > > > >
-> > > > >> --
-> > > > >> 2.37.3
-> > >
->
+Thanks,
+Florian
 
