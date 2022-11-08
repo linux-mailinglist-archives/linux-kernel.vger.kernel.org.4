@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E5EC620B38
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 09:32:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1B74620B3A
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 09:33:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233544AbiKHIcu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 03:32:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43704 "EHLO
+        id S233578AbiKHIcz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 03:32:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232798AbiKHIcp (ORCPT
+        with ESMTP id S233506AbiKHIcr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 03:32:45 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AAA827B2B
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 00:32:45 -0800 (PST)
-Received: from kwepemi500016.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4N61Yb5TKZzHvk0;
-        Tue,  8 Nov 2022 16:32:19 +0800 (CST)
+        Tue, 8 Nov 2022 03:32:47 -0500
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0858327B39
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 00:32:46 -0800 (PST)
+Received: from kwepemi500016.china.huawei.com (unknown [172.30.72.56])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4N61Ys1XZmz15MMJ;
+        Tue,  8 Nov 2022 16:32:33 +0800 (CST)
 Received: from huawei.com (10.175.100.227) by kwepemi500016.china.huawei.com
  (7.221.188.220) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Tue, 8 Nov
- 2022 16:32:42 +0800
+ 2022 16:32:43 +0800
 From:   Shang XiaoJing <shangxiaojing@huawei.com>
 To:     <rostedt@goodmis.org>, <mhiramat@kernel.org>, <zanussi@kernel.org>,
         <fengguang.wu@intel.com>, <linux-kernel@vger.kernel.org>
 CC:     <shangxiaojing@huawei.com>
-Subject: [PATCH 1/2] tracing: Fix memory leak in test_gen_synth_cmd() and test_empty_synth_event()
-Date:   Tue, 8 Nov 2022 16:31:22 +0800
-Message-ID: <20221108083124.27218-2-shangxiaojing@huawei.com>
+Subject: [PATCH 2/2] tracing: Fix wild-memory-access in register_synth_event()
+Date:   Tue, 8 Nov 2022 16:31:23 +0800
+Message-ID: <20221108083124.27218-3-shangxiaojing@huawei.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20221108083124.27218-1-shangxiaojing@huawei.com>
 References: <20221108083124.27218-1-shangxiaojing@huawei.com>
@@ -46,67 +46,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-test_gen_synth_cmd() only free buf in fail path, hence buf will leak
-when there is no failure. Add kfree(buf) to prevent the memleak. The
-same reason and solution in test_empty_synth_event().
+In register_synth_event(), if set_synth_event_print_fmt() failed, then
+both trace_remove_event_call() and unregister_trace_event() will be
+called. If call->event.funcs is not NULL, then the trace_event_call will
+call __unregister_trace_event() twice. As the result, the second
+__unregister_trace_event() will causes the wild-memory-access.
 
-unreferenced object 0xffff8881127de000 (size 2048):
-  comm "modprobe", pid 247, jiffies 4294972316 (age 78.756s)
-  hex dump (first 32 bytes):
-    20 67 65 6e 5f 73 79 6e 74 68 5f 74 65 73 74 20   gen_synth_test
-    20 70 69 64 5f 74 20 6e 65 78 74 5f 70 69 64 5f   pid_t next_pid_
-  backtrace:
-    [<000000004254801a>] kmalloc_trace+0x26/0x100
-    [<0000000039eb1cf5>] 0xffffffffa00083cd
-    [<000000000e8c3bc8>] 0xffffffffa00086ba
-    [<00000000c293d1ea>] do_one_initcall+0xdb/0x480
-    [<00000000aa189e6d>] do_init_module+0x1cf/0x680
-    [<00000000d513222b>] load_module+0x6a50/0x70a0
-    [<000000001fd4d529>] __do_sys_finit_module+0x12f/0x1c0
-    [<00000000b36c4c0f>] do_syscall_64+0x3f/0x90
-    [<00000000bbf20cf3>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
-unreferenced object 0xffff8881127df000 (size 2048):
-  comm "modprobe", pid 247, jiffies 4294972324 (age 78.728s)
-  hex dump (first 32 bytes):
-    20 65 6d 70 74 79 5f 73 79 6e 74 68 5f 74 65 73   empty_synth_tes
-    74 20 20 70 69 64 5f 74 20 6e 65 78 74 5f 70 69  t  pid_t next_pi
-  backtrace:
-    [<000000004254801a>] kmalloc_trace+0x26/0x100
-    [<00000000d4db9a3d>] 0xffffffffa0008071
-    [<00000000c31354a5>] 0xffffffffa00086ce
-    [<00000000c293d1ea>] do_one_initcall+0xdb/0x480
-    [<00000000aa189e6d>] do_init_module+0x1cf/0x680
-    [<00000000d513222b>] load_module+0x6a50/0x70a0
-    [<000000001fd4d529>] __do_sys_finit_module+0x12f/0x1c0
-    [<00000000b36c4c0f>] do_syscall_64+0x3f/0x90
-    [<00000000bbf20cf3>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
+register_synth_event
+    set_synth_event_print_fmt failed
+    trace_remove_event_call
+        event_remove
+            if call->event.funcs then
+            __unregister_trace_event (first call)
+    unregister_trace_event
+        __unregister_trace_event (second call)
 
-Fixes: 9fe41efaca08 ("tracing: Add synth event generation test module")
+Fix the bug by avoiding to call the second __unregister_trace_event() by
+checking if the first one is called.
+
+general protection fault, probably for non-canonical address
+	0xfbd59c0000000024: 0000 [#1] SMP KASAN PTI
+KASAN: maybe wild-memory-access in range
+[0xdead000000000120-0xdead000000000127]
+CPU: 0 PID: 3807 Comm: modprobe Not tainted
+6.1.0-rc1-00186-g76f33a7eedb4 #299
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
+rel-1.15.0-0-g2dd4b9b3f840-prebuilt.qemu.org 04/01/2014
+RIP: 0010:unregister_trace_event+0x6e/0x280
+Code: 00 fc ff df 4c 89 ea 48 c1 ea 03 80 3c 02 00 0f 85 0e 02 00 00 48
+b8 00 00 00 00 00 fc ff df 4c 8b 63 08 4c 89 e2 48 c1 ea 03 <80> 3c 02
+00 0f 85 e2 01 00 00 49 89 2c 24 48 85 ed 74 28 e8 7a 9b
+RSP: 0018:ffff88810413f370 EFLAGS: 00010a06
+RAX: dffffc0000000000 RBX: ffff888105d050b0 RCX: 0000000000000000
+RDX: 1bd5a00000000024 RSI: ffff888119e276e0 RDI: ffffffff835a8b20
+RBP: dead000000000100 R08: 0000000000000000 R09: fffffbfff0913481
+R10: ffffffff8489a407 R11: fffffbfff0913480 R12: dead000000000122
+R13: ffff888105d050b8 R14: 0000000000000000 R15: ffff888105d05028
+FS:  00007f7823e8d540(0000) GS:ffff888119e00000(0000)
+knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f7823e7ebec CR3: 000000010a058002 CR4: 0000000000330ef0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ __create_synth_event+0x1e37/0x1eb0
+ create_or_delete_synth_event+0x110/0x250
+ synth_event_run_command+0x2f/0x110
+ test_gen_synth_cmd+0x170/0x2eb [synth_event_gen_test]
+ synth_event_gen_test_init+0x76/0x9bc [synth_event_gen_test]
+ do_one_initcall+0xdb/0x480
+ do_init_module+0x1cf/0x680
+ load_module+0x6a50/0x70a0
+ __do_sys_finit_module+0x12f/0x1c0
+ do_syscall_64+0x3f/0x90
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+Fixes: 4b147936fa50 ("tracing: Add support for 'synthetic' events")
 Signed-off-by: Shang XiaoJing <shangxiaojing@huawei.com>
+Cc: stable@vger.kernel.org
 ---
- kernel/trace/synth_event_gen_test.c | 2 ++
+ kernel/trace/trace_events_synth.c | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/kernel/trace/synth_event_gen_test.c b/kernel/trace/synth_event_gen_test.c
-index 0b15e975d2c2..db1ec4809ad1 100644
---- a/kernel/trace/synth_event_gen_test.c
-+++ b/kernel/trace/synth_event_gen_test.c
-@@ -120,6 +120,7 @@ static int __init test_gen_synth_cmd(void)
- 
- 	/* Now generate a gen_synth_test event */
- 	ret = synth_event_trace_array(gen_synth_test, vals, ARRAY_SIZE(vals));
-+	kfree(buf);
+diff --git a/kernel/trace/trace_events_synth.c b/kernel/trace/trace_events_synth.c
+index e310052dc83c..a51280a153e3 100644
+--- a/kernel/trace/trace_events_synth.c
++++ b/kernel/trace/trace_events_synth.c
+@@ -830,6 +830,8 @@ static int register_synth_event(struct synth_event *event)
+ 	ret = set_synth_event_print_fmt(call);
+ 	if (ret < 0) {
+ 		trace_remove_event_call(call);
++		if (call->event.funcs)
++			return ret;
+ 		goto err;
+ 	}
   out:
- 	return ret;
-  delete:
-@@ -227,6 +228,7 @@ static int __init test_empty_synth_event(void)
- 
- 	/* Now trace an empty_synth_test event */
- 	ret = synth_event_trace_array(empty_synth_test, vals, ARRAY_SIZE(vals));
-+	kfree(buf);
-  out:
- 	return ret;
-  delete:
 -- 
 2.17.1
 
