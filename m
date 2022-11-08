@@ -2,66 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D61A8621B47
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 18:57:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 305C9621B4F
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 18:58:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234516AbiKHR5b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 12:57:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52216 "EHLO
+        id S233627AbiKHR6q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 12:58:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234174AbiKHR51 (ORCPT
+        with ESMTP id S234387AbiKHR6l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 12:57:27 -0500
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65F7E1A04A
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 09:57:25 -0800 (PST)
-Received: by mail-yb1-xb29.google.com with SMTP id y186so13607641yby.10
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 09:57:25 -0800 (PST)
+        Tue, 8 Nov 2022 12:58:41 -0500
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E70E41FF80;
+        Tue,  8 Nov 2022 09:58:39 -0800 (PST)
+Received: by mail-wr1-x42f.google.com with SMTP id bs21so22224053wrb.4;
+        Tue, 08 Nov 2022 09:58:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=yq6SxkaZozukMrO18EMGqMBbnexsg8nmoacOgG58fTU=;
-        b=QScNn0Kp+hzyQhI7j3OHVC3ZpGfVww8KjVkmD7X2+zcn5ZVnkcYxIZLnHRr3uHL09Y
-         Eh6U8QLplXpfKJwW2PUO0ot67x9sW6/LuDaeFxiqOyT9N8CHQGrZugmNiImBTIPPWFrm
-         gKBdO70LZ3dNocFhsoFy54RWoUfWhkl/ZnEH/AI0AgoMl3augkKlcAb1f9v2fcGqMDbg
-         k/igdO7FTbVidXZT+j8CTA1fTr/UvT4i/LxmoDCF13ivGqHdyQo0AR/wlcb2/RSVQ/Vz
-         BVycsu1e+y0EPuVnlCBviEZSvh2eqGx5Zfzrp4Iux5/gX0Ar2y9RMPFDwiR9b3/pEMxY
-         58Sw==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=TxXsdnnL/UQNns1x2IBQo7m3t5OBViQXtLwqC2rEvOw=;
+        b=NxU888jiud/7ecZiCvco7myv3EfLdXpQ9tPwc93NbqMk5MDDIqEqutoKEPdIS0h8SN
+         78/kByCUTbZplqFD1n499+ddQZbIAQEQ6v4z1Lc+cPwZqBQPyMnDX5w3vzuN85S4VAmN
+         uBEooUC8wb65TOp0reOEyJDNe9xPvkVfE5Qd5D3nU1TEIGyy8edrmAinFywc8eoDO7AG
+         bzDI/hEcLNaEl9EugjZ5xSOuqyrd2WGPzbd8z9AOmxeQLDWDoWeVC5UKjrM7itNDgTdy
+         w6UZd2lhIJ+68mgCHOkt5EJBQVj2nus3dUPPja88lSWgQbcfjwIyzGRByJ08BNp2DNUU
+         +6rg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=yq6SxkaZozukMrO18EMGqMBbnexsg8nmoacOgG58fTU=;
-        b=5k9u6b/NOuEQQsaHO3aj/wOWAhDA3ZDdSmwSEaTUIWwJzZN8CPwcjEspVhYZ1u0U9E
-         5qz6uOsP4QbPzNTkodvYrU0kHYa+lPCz9yPO7Zkl2nTOWstbb30w088yi8x9XSwG7smZ
-         pp0aT6vuYhfpg+rB6PhxbLnWfxLDD1taOHcGXIiMgYoaHUmmspDZCBtfkmKap+D48RYo
-         4NggASUzGPNZ9X5YXD14GwhY6JUTcJOzddomwtud61s//ZQ1xO2UT66f5NqYFOUz/w96
-         RdnhcoBtEpr559BuKl7s93EkdQv7npeIur882pcA499DM5g6S+JClqRvJmNGT7P0WpEH
-         T4Hw==
-X-Gm-Message-State: ANoB5pnmVCIpU0pkfEz/V8CgUGGHGSY/jeFJF5FxBdM5ciXAXlTune8s
-        APKrtgM22I3ilta9PLxu+bkemh3EB6407g1dsQM5SQ==
-X-Google-Smtp-Source: AA0mqf4iqNsh5zLKqxE4owqIb5QivOPugZlsrSsWEsxhRGWffbKB62V6hcwEJxpvqyz9F2REc5qZ0rAi+mKHTqa21yU=
-X-Received: by 2002:a25:5888:0:b0:6d5:1100:5dcc with SMTP id
- m130-20020a255888000000b006d511005dccmr17158056ybb.0.1667930244512; Tue, 08
- Nov 2022 09:57:24 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=TxXsdnnL/UQNns1x2IBQo7m3t5OBViQXtLwqC2rEvOw=;
+        b=3fk8TKAgGs/ApHTnyl/BtpK6WJhzd9utrRgxUGlITvDDJFsWgelu+RLkNYCHk4hVvR
+         jBMAOdR3T2y7vdvUX5uQXXRonDNhf90I3FrBZFhR4k2JzsrEFeqCpiVKrJrWx4x3tkHQ
+         xYbdIlyyRzXzFZLEBjgLZzG4+e3NGqYA/XjBDrRPAG4vGbXeLUfsYw7vYOwnTH55KG/8
+         zb0VNvLgDgrDWK2o009O7SwRPwGdYw/kTVwUB+bPv7csdRwuvJ8t9laLlceh93/ZWv57
+         RtzylQA+V4RwDMtHtxF6M6TpHN2x35tayjO4ZgxvheQXN7KqZomXW6t/etRsCp8cv8f8
+         9R0A==
+X-Gm-Message-State: ACrzQf1YWnvhhzvkfU3g5ymMKxTHet+vNDopKabfTRQrmOiAnuARkXPo
+        MOmG1ZHCBBIEJNuflzCQR7xex/IN4D0=
+X-Google-Smtp-Source: AMsMyM7Y9ycxjh29Wcsn/2Zha12t1j7LsVM+JYAuJhSO0rAgP9BOAUO1qG8eGat4P3yF7OJx02NCbw==
+X-Received: by 2002:adf:dbc5:0:b0:22c:c605:3b81 with SMTP id e5-20020adfdbc5000000b0022cc6053b81mr36178453wrj.218.1667930318419;
+        Tue, 08 Nov 2022 09:58:38 -0800 (PST)
+Received: from [192.168.0.105] ([77.126.19.155])
+        by smtp.gmail.com with ESMTPSA id k4-20020a5d6e84000000b00236722ebe66sm11054650wrz.75.2022.11.08.09.58.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Nov 2022 09:58:37 -0800 (PST)
+Message-ID: <febe8f20-626a-02d6-c8ed-f0dcf6cd607f@gmail.com>
+Date:   Tue, 8 Nov 2022 19:58:33 +0200
 MIME-Version: 1.0
-References: <20221105045704.2315186-1-vipinsh@google.com> <20221105045704.2315186-5-vipinsh@google.com>
- <Y2lXld6G+Hp0FW3A@google.com> <CAHVum0ewgeA81T2ttPGB0V-2njdc1oqTjQWziKzTu_pzN+srxw@mail.gmail.com>
-In-Reply-To: <CAHVum0ewgeA81T2ttPGB0V-2njdc1oqTjQWziKzTu_pzN+srxw@mail.gmail.com>
-From:   David Matlack <dmatlack@google.com>
-Date:   Tue, 8 Nov 2022 09:56:57 -0800
-Message-ID: <CALzav=djtqYAchW0x=riSEtvoQAbpotjBeibBLWVQg4J2T5iiA@mail.gmail.com>
-Subject: Re: [PATCH 4/6] KVM: selftests: Make Hyper-V guest OS ID common
-To:     Vipin Sharma <vipinsh@google.com>
-Cc:     seanjc@google.com, pbonzini@redhat.com, vkuznets@redhat.com,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH v2] net/mlx5e: Use kvfree() in mlx5e_accel_fs_tcp_create()
+Content-Language: en-US
+To:     YueHaibing <yuehaibing@huawei.com>, borisp@nvidia.com,
+        saeedm@nvidia.com, leon@kernel.org, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        lkayal@nvidia.com, tariqt@nvidia.com, markzhang@nvidia.com
+Cc:     netdev@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221108140614.12968-1-yuehaibing@huawei.com>
+From:   Tariq Toukan <ttoukan.linux@gmail.com>
+In-Reply-To: <20221108140614.12968-1-yuehaibing@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,139 +78,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 7, 2022 at 5:45 PM Vipin Sharma <vipinsh@google.com> wrote:
->
-> On Mon, Nov 7, 2022 at 11:08 AM David Matlack <dmatlack@google.com> wrote:
-> >
-> > On Fri, Nov 04, 2022 at 09:57:02PM -0700, Vipin Sharma wrote:
-> > > Make guest OS ID calculation common to all hyperv tests and similar to
-> > > hv_generate_guest_id().
-> >
-> > This commit makes the HV_LINUX_VENDOR_ID and adds LINUX_VERSION_CODE
-> > to existing tests. Can you split out the latter to a separate commit?
-> > Also what's the reason to add LINUX_VERSION_CODE to the mix?
-> >
->
-> I looked at the implementation in selftest and what is in the
-> include/asm-generic/mshyperv.h for the hv_generate_guest_id()
-> function, both looked different. I thought it would be nice to have
-> consistent logic at both places.
->
-> I can remove LINUX_VERISON_CODE if you prefer.
-
-Using LINUX_VERSION_CODE here assumes the selftest will run on the
-same kernel that it was compiled with. This might not be the case in
-practice, e.g. if anyone runs the latest upstream selftests against
-their internal kernel (something we've discussed doing recently).
-
-The right way to incorporate the Linux version code would be for the
-selftest to query it from the host dynamically and use that (at which
-point hv_linux_guest_id() would actually have to be a function).
-
-But since you don't strictly need it, it's probably best to just omit
-it for the time being.
 
 
+On 11/8/2022 4:06 PM, YueHaibing wrote:
+> 'accel_tcp' is allocted by kvzalloc(), which should freed by kvfree().
+> 
+> Fixes: f52f2faee581 ("net/mlx5e: Introduce flow steering API")
+> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+> ---
+> v2: fix the same issue in mlx5e_accel_fs_tcp_destroy() and a commit log typo
+> ---
+>   drivers/net/ethernet/mellanox/mlx5/core/en_accel/fs_tcp.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_accel/fs_tcp.c b/drivers/net/ethernet/mellanox/mlx5/core/en_accel/fs_tcp.c
+> index 285d32d2fd08..d7c020f72401 100644
+> --- a/drivers/net/ethernet/mellanox/mlx5/core/en_accel/fs_tcp.c
+> +++ b/drivers/net/ethernet/mellanox/mlx5/core/en_accel/fs_tcp.c
+> @@ -365,7 +365,7 @@ void mlx5e_accel_fs_tcp_destroy(struct mlx5e_flow_steering *fs)
+>   	for (i = 0; i < ACCEL_FS_TCP_NUM_TYPES; i++)
+>   		accel_fs_tcp_destroy_table(fs, i);
+>   
+> -	kfree(accel_tcp);
+> +	kvfree(accel_tcp);
+>   	mlx5e_fs_set_accel_tcp(fs, NULL);
+>   }
+>   
+> @@ -397,7 +397,7 @@ int mlx5e_accel_fs_tcp_create(struct mlx5e_flow_steering *fs)
+>   err_destroy_tables:
+>   	while (--i >= 0)
+>   		accel_fs_tcp_destroy_table(fs, i);
+> -	kfree(accel_tcp);
+> +	kvfree(accel_tcp);
+>   	mlx5e_fs_set_accel_tcp(fs, NULL);
+>   	return err;
+>   }
 
->
-> > >
-> > > Signed-off-by: Vipin Sharma <vipinsh@google.com>
-> > > ---
-> > >  tools/testing/selftests/kvm/include/x86_64/hyperv.h  | 10 ++++++++++
-> > >  tools/testing/selftests/kvm/x86_64/hyperv_clock.c    |  2 +-
-> > >  tools/testing/selftests/kvm/x86_64/hyperv_features.c |  6 ++----
-> > >  tools/testing/selftests/kvm/x86_64/hyperv_svm_test.c |  2 +-
-> > >  4 files changed, 14 insertions(+), 6 deletions(-)
-> > >
-> > > diff --git a/tools/testing/selftests/kvm/include/x86_64/hyperv.h b/tools/testing/selftests/kvm/include/x86_64/hyperv.h
-> > > index 075fd29071a6..9d8c325af1d9 100644
-> > > --- a/tools/testing/selftests/kvm/include/x86_64/hyperv.h
-> > > +++ b/tools/testing/selftests/kvm/include/x86_64/hyperv.h
-> > > @@ -9,6 +9,10 @@
-> > >  #ifndef SELFTEST_KVM_HYPERV_H
-> > >  #define SELFTEST_KVM_HYPERV_H
-> > >
-> > > +#include <linux/version.h>
-> > > +
-> > > +#define HV_LINUX_VENDOR_ID                   0x8100
-> > > +
-> > >  #define HYPERV_CPUID_VENDOR_AND_MAX_FUNCTIONS        0x40000000
-> > >  #define HYPERV_CPUID_INTERFACE                       0x40000001
-> > >  #define HYPERV_CPUID_VERSION                 0x40000002
-> > > @@ -189,4 +193,10 @@
-> > >  /* hypercall options */
-> > >  #define HV_HYPERCALL_FAST_BIT                BIT(16)
-> > >
-> > > +static inline uint64_t hv_linux_guest_id(void)
-> > > +{
-> > > +     return ((uint64_t)HV_LINUX_VENDOR_ID << 48) |
-> > > +            ((uint64_t)LINUX_VERSION_CODE << 16);
-> >
-> > This can be a compile-time constant (i.e. macro).
-> >
->
-> Yes, I will make it a macro in the next version.
->
-> > > +}
-> > > +
-> > >  #endif /* !SELFTEST_KVM_HYPERV_H */
-> > > diff --git a/tools/testing/selftests/kvm/x86_64/hyperv_clock.c b/tools/testing/selftests/kvm/x86_64/hyperv_clock.c
-> > > index d576bc8ce823..f9112c5dc3f7 100644
-> > > --- a/tools/testing/selftests/kvm/x86_64/hyperv_clock.c
-> > > +++ b/tools/testing/selftests/kvm/x86_64/hyperv_clock.c
-> > > @@ -104,7 +104,7 @@ static void guest_main(struct ms_hyperv_tsc_page *tsc_page, vm_paddr_t tsc_page_
-> > >
-> > >       /* Set Guest OS id to enable Hyper-V emulation */
-> > >       GUEST_SYNC(1);
-> > > -     wrmsr(HV_X64_MSR_GUEST_OS_ID, (u64)0x8100 << 48);
-> > > +     wrmsr(HV_X64_MSR_GUEST_OS_ID, hv_linux_guest_id());
-> > >       GUEST_SYNC(2);
-> > >
-> > >       check_tsc_msr_rdtsc();
-> > > diff --git a/tools/testing/selftests/kvm/x86_64/hyperv_features.c b/tools/testing/selftests/kvm/x86_64/hyperv_features.c
-> > > index 6b443ce456b6..b5a42cf1ad9d 100644
-> > > --- a/tools/testing/selftests/kvm/x86_64/hyperv_features.c
-> > > +++ b/tools/testing/selftests/kvm/x86_64/hyperv_features.c
-> > > @@ -13,8 +13,6 @@
-> > >  #include "processor.h"
-> > >  #include "hyperv.h"
-> > >
-> > > -#define LINUX_OS_ID ((u64)0x8100 << 48)
-> > > -
-> > >  static inline uint8_t hypercall(u64 control, vm_vaddr_t input_address,
-> > >                               vm_vaddr_t output_address, uint64_t *hv_status)
-> > >  {
-> > > @@ -71,7 +69,7 @@ static void guest_hcall(vm_vaddr_t pgs_gpa, struct hcall_data *hcall)
-> > >
-> > >       GUEST_ASSERT(hcall->control);
-> > >
-> > > -     wrmsr(HV_X64_MSR_GUEST_OS_ID, LINUX_OS_ID);
-> > > +     wrmsr(HV_X64_MSR_GUEST_OS_ID, hv_linux_guest_id());
-> > >       wrmsr(HV_X64_MSR_HYPERCALL, pgs_gpa);
-> > >
-> > >       if (!(hcall->control & HV_HYPERCALL_FAST_BIT)) {
-> > > @@ -169,7 +167,7 @@ static void guest_test_msrs_access(void)
-> > >                        */
-> > >                       msr->idx = HV_X64_MSR_GUEST_OS_ID;
-> > >                       msr->write = 1;
-> > > -                     msr->write_val = LINUX_OS_ID;
-> > > +                     msr->write_val = hv_linux_guest_id();
-> > >                       msr->available = 1;
-> > >                       break;
-> > >               case 3:
-> > > diff --git a/tools/testing/selftests/kvm/x86_64/hyperv_svm_test.c b/tools/testing/selftests/kvm/x86_64/hyperv_svm_test.c
-> > > index a380ad7bb9b3..2c13a144b04c 100644
-> > > --- a/tools/testing/selftests/kvm/x86_64/hyperv_svm_test.c
-> > > +++ b/tools/testing/selftests/kvm/x86_64/hyperv_svm_test.c
-> > > @@ -69,7 +69,7 @@ static void __attribute__((__flatten__)) guest_code(struct svm_test_data *svm)
-> > >
-> > >       GUEST_SYNC(1);
-> > >
-> > > -     wrmsr(HV_X64_MSR_GUEST_OS_ID, (u64)0x8100 << 48);
-> > > +     wrmsr(HV_X64_MSR_GUEST_OS_ID, hv_linux_guest_id());
-> > >
-> > >       GUEST_ASSERT(svm->vmcb_gpa);
-> > >       /* Prepare for L2 execution. */
-> > > --
-> > > 2.38.1.273.g43a17bfeac-goog
-> > >
+Reviewed-by: Tariq Toukan <tariqt@nvidia.com>
+
+Thanks for your patch.
