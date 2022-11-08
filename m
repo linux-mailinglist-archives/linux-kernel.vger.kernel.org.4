@@ -2,144 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 985A3621D63
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 21:03:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D84FA621D69
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 21:07:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229794AbiKHUDy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 15:03:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57242 "EHLO
+        id S229827AbiKHUHk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 15:07:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229797AbiKHUDv (ORCPT
+        with ESMTP id S229649AbiKHUHh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 15:03:51 -0500
-Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 282DA3C6DD
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 12:03:49 -0800 (PST)
-Received: by mail-qv1-xf2f.google.com with SMTP id o8so10970127qvw.5
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 12:03:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=nL0asLvlwl9giKA9UGTHJNcZfeM0NFLRZL9VMviIdpQ=;
-        b=IOKkCDTIpUpxSMaRhG1HFNbcwYu+PEBJ+mUJ8Wr4Y3q9YzVktrJ0Ro6T06x6yTcVRo
-         /oaNbicnQNvOi+BcBQbkylbpBU2WS5TRf1OC+Gh5E7PEqm0JAj5fmW5FUn2Q+s7VT4iF
-         c2BMZ1ahH6YGuUTO6PW8yxp6BKdcQoorRbGm8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=nL0asLvlwl9giKA9UGTHJNcZfeM0NFLRZL9VMviIdpQ=;
-        b=WK2rENS1tZ1TJu2lYirMR0RpDZMzzRHgJzr1NDvZk/9TNogeqvgwv8hkO7kMwcFOjj
-         OR3bkvgMlEi4jZwt68QP8eg7XTMoq+LjXsXER+b8ZogpjA1BotEHcunfF/GOCx+TxXPH
-         rFR8e+X2t77ib/KKCj09krmSrEwOofNn5omOx1J+nnQZ4vZYP6eLzrziyrdMGDA+p+uA
-         msOkNgg58Bgy3CvA2ALuh3ZNiQ65hn/+ncGDCa1bZeIuA5WUSXlHFp2hBYwIE93oUUkx
-         rePpjpHaLKnf5fcNUDtczNiayq7JHOBqWpBbpBzJcfN25g86FH97AKxQCdbsenuqJzqC
-         /xcg==
-X-Gm-Message-State: ACrzQf10FVACeae2Re4Jq+Ac5M23Nv29rVF48UdxogVQH2iM48Iou8hr
-        +PdH1yZ+M7PpKMnXW0x1qN0P1Q==
-X-Google-Smtp-Source: AMsMyM6rEDtWEBWAQcaTFfwCNgKArFwSlYHL/s0WwHcHNkYUSaH5x6Z0HBtzbns4+gyUTJ4h8ARXpg==
-X-Received: by 2002:ad4:5dc6:0:b0:4bb:798f:5272 with SMTP id m6-20020ad45dc6000000b004bb798f5272mr51061523qvh.131.1667937828083;
-        Tue, 08 Nov 2022 12:03:48 -0800 (PST)
-Received: from meerkat.local (bras-base-mtrlpq5031w-grc-33-142-113-79-147.dsl.bell.ca. [142.113.79.147])
-        by smtp.gmail.com with ESMTPSA id t19-20020a05620a451300b006ce2c3c48ebsm10087338qkp.77.2022.11.08.12.03.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Nov 2022 12:03:47 -0800 (PST)
-Sender: Konstantin Ryabitsev <konstantin@linuxfoundation.org>
-Date:   Tue, 8 Nov 2022 15:03:45 -0500
-From:   Konstantin Ryabitsev <mricon@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>,
-        Hugh Dickins <hughd@google.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>,
-        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
-        Nick Piggin <npiggin@gmail.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Jann Horn <jannh@google.com>,
-        John Hubbard <jhubbard@nvidia.com>, X86 ML <x86@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        kernel list <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Joerg Roedel <jroedel@suse.de>,
-        Uros Bizjak <ubizjak@gmail.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        linux-arch <linux-arch@vger.kernel.org>
-Subject: Re: mm: delay rmap removal until after TLB flush
-Message-ID: <20221108200345.xxcvnsnwgjyb7w3a@meerkat.local>
-References: <CAHk-=wjnvPA7mi-E3jVEfCWXCNJNZEUjm6XODbbzGOh9c8mhgw@mail.gmail.com>
- <CAHk-=wjjXQP7PTEXO4R76WPy1zfQad_DLKw1GKU_4yWW1N4n7w@mail.gmail.com>
- <Y2SyJuohLFLqIhlZ@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
- <CAHk-=wjzp65=-QE1dg8KfqG-tVHiT+yAfHXGx9sro=8yOceELg@mail.gmail.com>
- <8a1e97c9-bd5-7473-6da8-2aa75198fbe8@google.com>
- <Y2llcRiDLHc2kg/N@cmpxchg.org>
- <CAHk-=whw1Oo0eJ7fFjy_Fus80CM8CnA4Lb5BrrCdot3Rc1ZZRQ@mail.gmail.com>
- <CAHk-=wh6MxaCA4pXpt1F5Bn2__6MxCq0Dr-rES4i=MOL9ibjpg@mail.gmail.com>
- <CAHk-=whi2BB9FviYiuUWV0KHibP_Lx_CWDWkxxv3SXA1PKV0Lg@mail.gmail.com>
- <CAHk-=wivgyfywteXoO7K0Mj_KoCRF-RyXDH-eGW0A_fev+dGug@mail.gmail.com>
+        Tue, 8 Nov 2022 15:07:37 -0500
+Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9764B60EB3;
+        Tue,  8 Nov 2022 12:07:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
+        s=smtpout1; t=1667938055;
+        bh=2YjYNBDqhLy3uADbeMp1P3aHSxfJP3jjX9skYBBOTF8=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=WQ0fUS7O2LZBWNGgFF80xUg98NuQStaICXq4CeaFKXRP37pRB00VE9cBYQRd7SHqZ
+         UhFNmn5cBzmXXMdDQ7rNSs17pzVHJlamaHmqsSvYLew9vVDfgGaYxotc47IfcL/ytU
+         wva/GxcNATQqmcA55gpxsJAinnhnnnmlVBdUdox9xx3rJP85WIr/EpHtZ36X3lDmgE
+         JlakrdHEW2+gTAOmpTTeA3eUl5R3eb1q+jRP4n4XJ50XdZg3OMsBAKKboOnvoPHwp+
+         esbrPxSsG8/U7yTCxPc6vYf3lSPnqr7wRgBmSYTxjeYZNIbrNtvTiYBCGKEAeZGe1k
+         9w4Lnf20tUpOw==
+Received: from [172.16.0.153] (192-222-180-24.qc.cable.ebox.net [192.222.180.24])
+        by smtpout.efficios.com (Postfix) with ESMTPSA id 4N6Jzq2RB4zgTw;
+        Tue,  8 Nov 2022 15:07:35 -0500 (EST)
+Message-ID: <580eec2b-f204-2eb1-806d-8282b8b60bf2@efficios.com>
+Date:   Tue, 8 Nov 2022 15:07:42 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wivgyfywteXoO7K0Mj_KoCRF-RyXDH-eGW0A_fev+dGug@mail.gmail.com>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH v5 08/24] sched: Introduce per memory space current
+ virtual cpu id
+Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        "H . Peter Anvin" <hpa@zytor.com>, Paul Turner <pjt@google.com>,
+        linux-api@vger.kernel.org, Christian Brauner <brauner@kernel.org>,
+        Florian Weimer <fw@deneb.enyo.de>, David.Laight@aculab.com,
+        carlos@redhat.com, Peter Oskolkov <posk@posk.io>,
+        Alexander Mikhalitsyn <alexander@mihalicyn.com>,
+        Chris Kennelly <ckennelly@google.com>
+References: <20221103200359.328736-1-mathieu.desnoyers@efficios.com>
+ <20221103200359.328736-9-mathieu.desnoyers@efficios.com>
+ <Y2pT7ij/TcI4EmH6@hirez.programming.kicks-ass.net>
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+In-Reply-To: <Y2pT7ij/TcI4EmH6@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 08, 2022 at 11:56:13AM -0800, Linus Torvalds wrote:
-> On Mon, Nov 7, 2022 at 8:28 PM Linus Torvalds
-> <torvalds@linux-foundation.org> wrote:
-> >
-> > I'm sending this out because I'm stepping away from the keyboard,
-> > because that whole "let's massage it into something legible" was
-> > really somewhat exhausting. You don't see all the small side turns it
-> > took only to go "that's ugly, let's try again" ;)
+On 2022-11-08 08:04, Peter Zijlstra wrote:
+> On Thu, Nov 03, 2022 at 04:03:43PM -0400, Mathieu Desnoyers wrote:
 > 
-> Ok, I actually sent the individual patches with 'git-send-email',
-> although I only sent them to the mailing list and to people that were
-> mentioned in the commit descriptions.
+>> The credit goes to Paul Turner (Google) for the vcpu_id idea. This
+>> feature is implemented based on the discussions with Paul Turner and
+>> Peter Oskolkov (Google), but I took the liberty to implement scheduler
+>> fast-path optimizations and my own NUMA-awareness scheme. The rumor has
+>> it that Google have been running a rseq vcpu_id extension internally at
+>> Google in production for a year. The tcmalloc source code indeed has
+>> comments hinting at a vcpu_id prototype extension to the rseq system
+>> call [1].
 > 
-> I hope that makes review easier.
-> 
-> See
-> 
->    https://lore.kernel.org/all/20221108194139.57604-1-torvalds@linux-foundation.org
-> 
-> for the series if you weren't mentioned and are interested.
-> 
-> Oh, and because I decided to just use the email in this thread as the
-> reference and cover letter, it turns out that this all confuses 'b4',
-> because it actually walks up the whole thread all the way to the
-> original 13-patch series by PeterZ that started this whole discussion.
-> 
-> I've seen that before with other peoples patch series, but now that it
-> happened to my own, I'm cc'ing Konstantine here too to see if there's
-> some magic for b4 to say "look, I pointed you to a msg-id that is
-> clearly a new series, don't walk all the way up and then take patches
-> from a completely different one.
+> Re NUMA thing -- that means that on a 512 node system a single threaded
+> task can still observe 512 separate vcpu-ids, right?
 
-Yes, --no-parent.
+Yes, that's correct.
 
-It's slightly more complicated in your case because the patches aren't
-threaded to the first patch/cover letter, but you can choose an arbitrary
-msgid upthread and tell b4 to ignore anything that came before it. E.g.:
+> 
+> Also, said space won't be dense.
 
-b4 am -o/tmp --no-parent 20221108194139.57604-1-torvalds@linux-foundation.org
+Indeed, this can be inefficient if the data structure within the 
+single-threaded task is not NUMA-aware *and* that task is free to bounce 
+all over the 512 numa nodes.
 
--K
+> 
+> The main selling point of the whole vcpu-id scheme was that the id space
+> is dense and not larger than min(nr_cpus, nr_threads), which then gives
+> useful properties.
+> 
+> But I'm not at all seeing how the NUMA thing preserves that.
+
+If a userspace per-vcpu data structure is implemented with NUMA-local 
+allocations, then it becomes really interesting to guarantee that the 
+per-vcpu-id accesses are always numa-local for performance reasons.
+
+If a userspace per-vcpu data structure is not numa-aware, then we have 
+two scenarios:
+
+A) The cpuset/sched affinity under which it runs pins it to a set of 
+cores belonging to a specific NUMA node. In this case, even with 
+numa-aware vcpu id allocation, the ids will stay as close to 0 as if not 
+numa-aware.
+
+B) No specific cpuset/sched affinity set, which means the task is free 
+to bounce all over. In this case I agree that having the indexing 
+numa-aware, but the per-vcpu data structure not numa-aware, is inefficient.
+
+I wonder whether scenarios with 512 nodes systems, with containers using 
+few cores, but without using cpusets/sched affinity to pin the workload 
+to specific numa nodes is a workload we should optimize for ? It looks 
+like the lack of numa locality due to lack of allowed cores restriction 
+is a userspace configuration issue.
+
+We also must keep in mind that we can expect a single task to load a mix 
+of executable/shared libraries where some pieces may be numa-aware, and 
+others may not. This means we should ideally support a numa-aware 
+vcpu-id allocation scheme and non-numa-aware vcpu-id allocation scheme 
+within the same task.
+
+This could be achieved by exposing two struct rseq fields rather than 
+one, e.g.:
+
+vm_vcpu_id -> flat indexing, not numa-aware.
+vm_numa_vcpu_id -> numa-aware vcpu id indexing.
+
+This would allow data structures that are inherently numa-aware to 
+benefit from numa-locality, without hurting non-numa-aware data structures.
+
+> 
+> Also; given the utter mind-bendiness of the NUMA thing; should it go
+> into it's own patch; introduce the regular plain old vcpu first, and
+> then add things to it -- that also allows pushing those weird cpumask
+> ops you've created later into the series.
+
+Good idea. I can do that once we agree on the way forward for flat vs 
+numa-aware vcpu-id rseq fields.
+
+Thanks,
+
+Mathieu
+
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+https://www.efficios.com
+
