@@ -2,89 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28520621B04
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 18:47:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F77C621B14
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 18:49:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234623AbiKHRrK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 12:47:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44254 "EHLO
+        id S234726AbiKHRtA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 12:49:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234618AbiKHRq5 (ORCPT
+        with ESMTP id S234705AbiKHRsZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 12:46:57 -0500
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0DA7554D7;
-        Tue,  8 Nov 2022 09:46:55 -0800 (PST)
-Received: by mail-wr1-x42d.google.com with SMTP id g12so22105041wrs.10;
-        Tue, 08 Nov 2022 09:46:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=eCAW19E5l681mF+R72oFht/CQ2wMh6AzLr3NL86vzHU=;
-        b=KTzmBk0JE13err2vSnXrAVtcQ2rrmE9bBZw+gTbDrZaw1ZzmWcNDqIUhdizIQPUY0+
-         01GwSZa+t7UD/xjc4ZcdcUKdd+6rE57pOaEEe7IwMe0sDKjs7LuKZNHgfEBjHQD479bp
-         CWxHXfzO4cGP8hQtsTxMSk0npAaqN3ZJdUoY7heJBXk2/OgquAvBHVPX+TLCcx6mOtzc
-         KVmLyXcOCRGJF0v7c08dE1A5tH5g35g+qXdKSYVrBJNgHB0Vu8eOEx4hqXSrb+SYzPFf
-         8UuAKeRynC02FfwxxhK9D27/GX9FI45AJp6rCyD7j1Sfocv6icDNwsdFi87SDJ4bpccR
-         /Euw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=eCAW19E5l681mF+R72oFht/CQ2wMh6AzLr3NL86vzHU=;
-        b=ZMyTG+eIO8ADFMOwnRARIemdzThG6Ndgq7pg/YC4wuu3bQtMt2SZFLhlMAV9OCgaJx
-         xa7QIWL6x3symps/ARW8agaKVsmMiTShjia6vT2ddr1NH4ZZmWe3GDKY/ptKym/JGZDM
-         SxrCTU7a95b2TWRCXd9AJ4yQxJoIXzcLLsju87qwUbHxFdlbehkno0cMHEZAqkMnfO/s
-         EtGxQ4E9zF+RWwTatO8F7ADEa7mgdoliHmFhS/ZbdGWoGs55trtAWZ9cj7kiBg+/YTk1
-         8ezSEfdCoAOf/WNnfc2XmBfI3Mg1NsAWF0qjkB9JJ4La5KPncnFqRMMrPiGQIE5/FUsn
-         X5EQ==
-X-Gm-Message-State: ACrzQf1arRr5NhdwhHuTiyxwiAIVAhITb/OKvNxj9MQ4QPhGiho4vTJ1
-        RQaThB2TMiZqb2msK28SAgQ=
-X-Google-Smtp-Source: AMsMyM7wysQrxo4qkni3Qar3s+rAjvxOzJif1WlMKCVrxnJjxUAX/BfYxsSJWY/0BdqiVCNkMtPmBA==
-X-Received: by 2002:a5d:5942:0:b0:225:7425:4e39 with SMTP id e2-20020a5d5942000000b0022574254e39mr35607783wri.566.1667929614298;
-        Tue, 08 Nov 2022 09:46:54 -0800 (PST)
-Received: from [192.168.0.25] ([37.222.251.204])
-        by smtp.gmail.com with ESMTPSA id s1-20020a7bc381000000b003c6b874a0dfsm13993940wmj.14.2022.11.08.09.46.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Nov 2022 09:46:53 -0800 (PST)
-Message-ID: <32ae4104-673b-1b34-5efb-dc1317e80530@gmail.com>
-Date:   Tue, 8 Nov 2022 18:46:51 +0100
+        Tue, 8 Nov 2022 12:48:25 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D99715B86B
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 09:47:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1667929643;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=oG73sr0tgN0FOFIU5VbItTzL5MpyEbutOOG4W8LKcXk=;
+        b=ZvbeP5342zsfZJHfOmmsBqyqWk0D4tmVG0hS7ePGs8Pu+eoiEr+U236BKxJKl3OtjxY1wS
+        pa1ldjQkG9KruPZy2e7inQwq6ShqY8sxTC3urritRJy/QkPaob5qQYw6BD03GHJPFI3lkh
+        9UVQUO8LdjpADvsmABW4lJCdYZDIOoQ=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-487-MVOniqjjPC2Up2bMBAXNcQ-1; Tue, 08 Nov 2022 12:47:19 -0500
+X-MC-Unique: MVOniqjjPC2Up2bMBAXNcQ-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D98388027EC;
+        Tue,  8 Nov 2022 17:47:18 +0000 (UTC)
+Received: from t480s.fritz.box (unknown [10.39.194.18])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id AB74BC15BB5;
+        Tue,  8 Nov 2022 17:47:15 +0000 (UTC)
+From:   David Hildenbrand <david@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-mm@kvack.org, linuxppc-dev@lists.ozlabs.org,
+        David Hildenbrand <david@redhat.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Dave Chinner <david@fromorbit.com>,
+        Nadav Amit <namit@vmware.com>, Peter Xu <peterx@redhat.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Hugh Dickins <hughd@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Anshuman Khandual <anshuman.khandual@arm.com>
+Subject: [PATCH v2 6/7] mm: remove unused savedwrite infrastructure
+Date:   Tue,  8 Nov 2022 18:46:51 +0100
+Message-Id: <20221108174652.198904-7-david@redhat.com>
+In-Reply-To: <20221108174652.198904-1-david@redhat.com>
+References: <20221108174652.198904-1-david@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Content-Language: en-US
-To:     "Nancy.Lin" <nancy.lin@mediatek.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>, wim@linux-watchdog.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, linux@roeck-us.net,
-        nfraprado@collabora.com
-Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        "jason-jh . lin" <jason-jh.lin@mediatek.com>,
-        Yongqiang Niu <yongqiang.niu@mediatek.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        dri-devel@lists.freedesktop.org, llvm@lists.linux.dev,
-        singo.chang@mediatek.com,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20221107072243.15748-1-nancy.lin@mediatek.com>
- <20221107072243.15748-7-nancy.lin@mediatek.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-Subject: Re: [PATCH v28 06/11] soc: mediatek: add mtk-mmsys config API for
- mt8195 vdosys1
-In-Reply-To: <20221107072243.15748-7-nancy.lin@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,119 +72,274 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+NUMA hinting no longer uses savedwrite, let's rip it out.
 
+... and while at it, drop __pte_write() and __pmd_write() on ppc64.
 
-On 07/11/2022 08:22, Nancy.Lin wrote:
-> Add four mmsys config APIs. The config APIs are used for config
-> mmsys reg. Some mmsys regs need to be set according to the
-> HW engine binding to the mmsys simultaneously.
-> 
-> 1. mtk_mmsys_merge_async_config: config merge async width/height.
->     async is used for cross-clock domain synchronization.
-> 2. mtk_mmsys_hdr_confing: config hdr backend async width/height.
-> 3. mtk_mmsys_mixer_in_config and mtk_mmsys_mixer_in_config:
->     config mixer related settings.
-> 
-> Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
-> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> Reviewed-by: CK Hu <ck.hu@mediatek.com>
-> Tested-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> Tested-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
+Signed-off-by: David Hildenbrand <david@redhat.com>
+---
+ arch/powerpc/include/asm/book3s/64/pgtable.h | 80 +-------------------
+ arch/powerpc/kvm/book3s_hv_rm_mmu.c          |  2 +-
+ include/linux/pgtable.h                      | 24 ------
+ mm/debug_vm_pgtable.c                        | 32 --------
+ 4 files changed, 5 insertions(+), 133 deletions(-)
 
-Not something we need to fix in this series, but it would make sense instead of 
-adding all the EXPORTS to pass the functions as callbacks in the 
-platform_device_register_data. But I realize you don't pass the VDOSYS number to 
-the DRM driver to distinguish between the different MMSYS devices that created 
-the platform device. I hadn't had a deep look on the DRM implementation but I 
-suppose it will be challenge...
+diff --git a/arch/powerpc/include/asm/book3s/64/pgtable.h b/arch/powerpc/include/asm/book3s/64/pgtable.h
+index c436d8422654..cb4c67bf45d7 100644
+--- a/arch/powerpc/include/asm/book3s/64/pgtable.h
++++ b/arch/powerpc/include/asm/book3s/64/pgtable.h
+@@ -401,35 +401,9 @@ static inline int __ptep_test_and_clear_young(struct mm_struct *mm,
+ #define __HAVE_ARCH_PMDP_CLEAR_YOUNG_FLUSH
+ #define pmdp_clear_flush_young pmdp_test_and_clear_young
+ 
+-static inline int __pte_write(pte_t pte)
+-{
+-	return !!(pte_raw(pte) & cpu_to_be64(_PAGE_WRITE));
+-}
+-
+-#ifdef CONFIG_NUMA_BALANCING
+-#define pte_savedwrite pte_savedwrite
+-static inline bool pte_savedwrite(pte_t pte)
+-{
+-	/*
+-	 * Saved write ptes are prot none ptes that doesn't have
+-	 * privileged bit sit. We mark prot none as one which has
+-	 * present and pviliged bit set and RWX cleared. To mark
+-	 * protnone which used to have _PAGE_WRITE set we clear
+-	 * the privileged bit.
+-	 */
+-	return !(pte_raw(pte) & cpu_to_be64(_PAGE_RWX | _PAGE_PRIVILEGED));
+-}
+-#else
+-#define pte_savedwrite pte_savedwrite
+-static inline bool pte_savedwrite(pte_t pte)
+-{
+-	return false;
+-}
+-#endif
+-
+ static inline int pte_write(pte_t pte)
+ {
+-	return __pte_write(pte) || pte_savedwrite(pte);
++	return !!(pte_raw(pte) & cpu_to_be64(_PAGE_WRITE));
+ }
+ 
+ static inline int pte_read(pte_t pte)
+@@ -441,24 +415,16 @@ static inline int pte_read(pte_t pte)
+ static inline void ptep_set_wrprotect(struct mm_struct *mm, unsigned long addr,
+ 				      pte_t *ptep)
+ {
+-	if (__pte_write(*ptep))
++	if (pte_write(*ptep))
+ 		pte_update(mm, addr, ptep, _PAGE_WRITE, 0, 0);
+-	else if (unlikely(pte_savedwrite(*ptep)))
+-		pte_update(mm, addr, ptep, 0, _PAGE_PRIVILEGED, 0);
+ }
+ 
+ #define __HAVE_ARCH_HUGE_PTEP_SET_WRPROTECT
+ static inline void huge_ptep_set_wrprotect(struct mm_struct *mm,
+ 					   unsigned long addr, pte_t *ptep)
+ {
+-	/*
+-	 * We should not find protnone for hugetlb, but this complete the
+-	 * interface.
+-	 */
+-	if (__pte_write(*ptep))
++	if (pte_write(*ptep))
+ 		pte_update(mm, addr, ptep, _PAGE_WRITE, 0, 1);
+-	else if (unlikely(pte_savedwrite(*ptep)))
+-		pte_update(mm, addr, ptep, 0, _PAGE_PRIVILEGED, 1);
+ }
+ 
+ #define __HAVE_ARCH_PTEP_GET_AND_CLEAR
+@@ -535,36 +501,6 @@ static inline int pte_protnone(pte_t pte)
+ 	return (pte_raw(pte) & cpu_to_be64(_PAGE_PRESENT | _PAGE_PTE | _PAGE_RWX)) ==
+ 		cpu_to_be64(_PAGE_PRESENT | _PAGE_PTE);
+ }
+-
+-#define pte_mk_savedwrite pte_mk_savedwrite
+-static inline pte_t pte_mk_savedwrite(pte_t pte)
+-{
+-	/*
+-	 * Used by Autonuma subsystem to preserve the write bit
+-	 * while marking the pte PROT_NONE. Only allow this
+-	 * on PROT_NONE pte
+-	 */
+-	VM_BUG_ON((pte_raw(pte) & cpu_to_be64(_PAGE_PRESENT | _PAGE_RWX | _PAGE_PRIVILEGED)) !=
+-		  cpu_to_be64(_PAGE_PRESENT | _PAGE_PRIVILEGED));
+-	return __pte_raw(pte_raw(pte) & cpu_to_be64(~_PAGE_PRIVILEGED));
+-}
+-
+-#define pte_clear_savedwrite pte_clear_savedwrite
+-static inline pte_t pte_clear_savedwrite(pte_t pte)
+-{
+-	/*
+-	 * Used by KSM subsystem to make a protnone pte readonly.
+-	 */
+-	VM_BUG_ON(!pte_protnone(pte));
+-	return __pte_raw(pte_raw(pte) | cpu_to_be64(_PAGE_PRIVILEGED));
+-}
+-#else
+-#define pte_clear_savedwrite pte_clear_savedwrite
+-static inline pte_t pte_clear_savedwrite(pte_t pte)
+-{
+-	VM_WARN_ON(1);
+-	return __pte_raw(pte_raw(pte) & cpu_to_be64(~_PAGE_WRITE));
+-}
+ #endif /* CONFIG_NUMA_BALANCING */
+ 
+ static inline bool pte_hw_valid(pte_t pte)
+@@ -641,8 +577,6 @@ static inline unsigned long pte_pfn(pte_t pte)
+ /* Generic modifiers for PTE bits */
+ static inline pte_t pte_wrprotect(pte_t pte)
+ {
+-	if (unlikely(pte_savedwrite(pte)))
+-		return pte_clear_savedwrite(pte);
+ 	return __pte_raw(pte_raw(pte) & cpu_to_be64(~_PAGE_WRITE));
+ }
+ 
+@@ -1139,8 +1073,6 @@ static inline pte_t *pmdp_ptep(pmd_t *pmd)
+ #define pmd_mkclean(pmd)	pte_pmd(pte_mkclean(pmd_pte(pmd)))
+ #define pmd_mkyoung(pmd)	pte_pmd(pte_mkyoung(pmd_pte(pmd)))
+ #define pmd_mkwrite(pmd)	pte_pmd(pte_mkwrite(pmd_pte(pmd)))
+-#define pmd_mk_savedwrite(pmd)	pte_pmd(pte_mk_savedwrite(pmd_pte(pmd)))
+-#define pmd_clear_savedwrite(pmd)	pte_pmd(pte_clear_savedwrite(pmd_pte(pmd)))
+ 
+ #ifdef CONFIG_HAVE_ARCH_SOFT_DIRTY
+ #define pmd_soft_dirty(pmd)    pte_soft_dirty(pmd_pte(pmd))
+@@ -1162,8 +1094,6 @@ static inline int pmd_protnone(pmd_t pmd)
+ #endif /* CONFIG_NUMA_BALANCING */
+ 
+ #define pmd_write(pmd)		pte_write(pmd_pte(pmd))
+-#define __pmd_write(pmd)	__pte_write(pmd_pte(pmd))
+-#define pmd_savedwrite(pmd)	pte_savedwrite(pmd_pte(pmd))
+ 
+ #define pmd_access_permitted pmd_access_permitted
+ static inline bool pmd_access_permitted(pmd_t pmd, bool write)
+@@ -1241,10 +1171,8 @@ static inline int __pmdp_test_and_clear_young(struct mm_struct *mm,
+ static inline void pmdp_set_wrprotect(struct mm_struct *mm, unsigned long addr,
+ 				      pmd_t *pmdp)
+ {
+-	if (__pmd_write((*pmdp)))
++	if (pmd_write(*pmdp))
+ 		pmd_hugepage_update(mm, addr, pmdp, _PAGE_WRITE, 0);
+-	else if (unlikely(pmd_savedwrite(*pmdp)))
+-		pmd_hugepage_update(mm, addr, pmdp, 0, _PAGE_PRIVILEGED);
+ }
+ 
+ /*
+diff --git a/arch/powerpc/kvm/book3s_hv_rm_mmu.c b/arch/powerpc/kvm/book3s_hv_rm_mmu.c
+index 5a05953ae13f..9182324dbef9 100644
+--- a/arch/powerpc/kvm/book3s_hv_rm_mmu.c
++++ b/arch/powerpc/kvm/book3s_hv_rm_mmu.c
+@@ -265,7 +265,7 @@ long kvmppc_do_h_enter(struct kvm *kvm, unsigned long flags,
+ 		}
+ 		pte = kvmppc_read_update_linux_pte(ptep, writing);
+ 		if (pte_present(pte) && !pte_protnone(pte)) {
+-			if (writing && !__pte_write(pte))
++			if (writing && !pte_write(pte))
+ 				/* make the actual HPTE be read-only */
+ 				ptel = hpte_make_readonly(ptel);
+ 			is_ci = pte_ci(pte);
+diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
+index a108b60a6962..35c80f4f06ec 100644
+--- a/include/linux/pgtable.h
++++ b/include/linux/pgtable.h
+@@ -485,30 +485,6 @@ static inline pte_t pte_sw_mkyoung(pte_t pte)
+ #define pte_sw_mkyoung	pte_sw_mkyoung
+ #endif
+ 
+-#ifndef pte_savedwrite
+-#define pte_savedwrite pte_write
+-#endif
+-
+-#ifndef pte_mk_savedwrite
+-#define pte_mk_savedwrite pte_mkwrite
+-#endif
+-
+-#ifndef pte_clear_savedwrite
+-#define pte_clear_savedwrite pte_wrprotect
+-#endif
+-
+-#ifndef pmd_savedwrite
+-#define pmd_savedwrite pmd_write
+-#endif
+-
+-#ifndef pmd_mk_savedwrite
+-#define pmd_mk_savedwrite pmd_mkwrite
+-#endif
+-
+-#ifndef pmd_clear_savedwrite
+-#define pmd_clear_savedwrite pmd_wrprotect
+-#endif
+-
+ #ifndef __HAVE_ARCH_PMDP_SET_WRPROTECT
+ #ifdef CONFIG_TRANSPARENT_HUGEPAGE
+ static inline void pmdp_set_wrprotect(struct mm_struct *mm,
+diff --git a/mm/debug_vm_pgtable.c b/mm/debug_vm_pgtable.c
+index 2b61fde8c38c..c631ade3f1d2 100644
+--- a/mm/debug_vm_pgtable.c
++++ b/mm/debug_vm_pgtable.c
+@@ -171,18 +171,6 @@ static void __init pte_advanced_tests(struct pgtable_debug_args *args)
+ 	ptep_get_and_clear_full(args->mm, args->vaddr, args->ptep, 1);
+ }
+ 
+-static void __init pte_savedwrite_tests(struct pgtable_debug_args *args)
+-{
+-	pte_t pte = pfn_pte(args->fixed_pte_pfn, args->page_prot_none);
+-
+-	if (!IS_ENABLED(CONFIG_NUMA_BALANCING))
+-		return;
+-
+-	pr_debug("Validating PTE saved write\n");
+-	WARN_ON(!pte_savedwrite(pte_mk_savedwrite(pte_clear_savedwrite(pte))));
+-	WARN_ON(pte_savedwrite(pte_clear_savedwrite(pte_mk_savedwrite(pte))));
+-}
+-
+ #ifdef CONFIG_TRANSPARENT_HUGEPAGE
+ static void __init pmd_basic_tests(struct pgtable_debug_args *args, int idx)
+ {
+@@ -302,22 +290,6 @@ static void __init pmd_leaf_tests(struct pgtable_debug_args *args)
+ 	WARN_ON(!pmd_leaf(pmd));
+ }
+ 
+-static void __init pmd_savedwrite_tests(struct pgtable_debug_args *args)
+-{
+-	pmd_t pmd;
+-
+-	if (!IS_ENABLED(CONFIG_NUMA_BALANCING))
+-		return;
+-
+-	if (!has_transparent_hugepage())
+-		return;
+-
+-	pr_debug("Validating PMD saved write\n");
+-	pmd = pfn_pmd(args->fixed_pmd_pfn, args->page_prot_none);
+-	WARN_ON(!pmd_savedwrite(pmd_mk_savedwrite(pmd_clear_savedwrite(pmd))));
+-	WARN_ON(pmd_savedwrite(pmd_clear_savedwrite(pmd_mk_savedwrite(pmd))));
+-}
+-
+ #ifdef CONFIG_HAVE_ARCH_TRANSPARENT_HUGEPAGE_PUD
+ static void __init pud_basic_tests(struct pgtable_debug_args *args, int idx)
+ {
+@@ -451,7 +423,6 @@ static void __init pmd_advanced_tests(struct pgtable_debug_args *args) { }
+ static void __init pud_advanced_tests(struct pgtable_debug_args *args) { }
+ static void __init pmd_leaf_tests(struct pgtable_debug_args *args) { }
+ static void __init pud_leaf_tests(struct pgtable_debug_args *args) { }
+-static void __init pmd_savedwrite_tests(struct pgtable_debug_args *args) { }
+ #endif /* CONFIG_TRANSPARENT_HUGEPAGE */
+ 
+ #ifdef CONFIG_HAVE_ARCH_HUGE_VMAP
+@@ -1288,9 +1259,6 @@ static int __init debug_vm_pgtable(void)
+ 	pmd_leaf_tests(&args);
+ 	pud_leaf_tests(&args);
+ 
+-	pte_savedwrite_tests(&args);
+-	pmd_savedwrite_tests(&args);
+-
+ 	pte_special_tests(&args);
+ 	pte_protnone_tests(&args);
+ 	pmd_protnone_tests(&args);
+-- 
+2.38.1
 
-Regards,
-Matthias
-
-> ---
->   drivers/soc/mediatek/mt8195-mmsys.h    |  6 +++++
->   drivers/soc/mediatek/mtk-mmsys.c       | 35 ++++++++++++++++++++++++++
->   include/linux/soc/mediatek/mtk-mmsys.h |  9 +++++++
->   3 files changed, 50 insertions(+)
-> 
-> diff --git a/drivers/soc/mediatek/mt8195-mmsys.h b/drivers/soc/mediatek/mt8195-mmsys.h
-> index fd7b455bd675..454944a9409c 100644
-> --- a/drivers/soc/mediatek/mt8195-mmsys.h
-> +++ b/drivers/soc/mediatek/mt8195-mmsys.h
-> @@ -75,6 +75,12 @@
->   #define MT8195_SOUT_DSC_WRAP1_OUT_TO_SINA_VIRTUAL0		(2 << 16)
->   #define MT8195_SOUT_DSC_WRAP1_OUT_TO_VPP_MERGE			(3 << 16)
->   
-> +#define MT8195_VDO1_MERGE0_ASYNC_CFG_WD				0xe30
-> +#define MT8195_VDO1_HDRBE_ASYNC_CFG_WD				0xe70
-> +#define MT8195_VDO1_HDR_TOP_CFG					0xd00
-> +#define MT8195_VDO1_MIXER_IN1_ALPHA				0xd30
-> +#define MT8195_VDO1_MIXER_IN1_PAD				0xd40
-> +
->   #define MT8195_VDO1_VPP_MERGE0_P0_SEL_IN			0xf04
->   #define MT8195_VPP_MERGE0_P0_SEL_IN_FROM_MDP_RDMA0			1
->   
-> diff --git a/drivers/soc/mediatek/mtk-mmsys.c b/drivers/soc/mediatek/mtk-mmsys.c
-> index 73c8bd27e6ae..6040a3cff6f8 100644
-> --- a/drivers/soc/mediatek/mtk-mmsys.c
-> +++ b/drivers/soc/mediatek/mtk-mmsys.c
-> @@ -137,6 +137,41 @@ void mtk_mmsys_ddp_disconnect(struct device *dev,
->   }
->   EXPORT_SYMBOL_GPL(mtk_mmsys_ddp_disconnect);
->   
-> +void mtk_mmsys_merge_async_config(struct device *dev, int idx, int width, int height)
-> +{
-> +	mtk_mmsys_update_bits(dev_get_drvdata(dev), MT8195_VDO1_MERGE0_ASYNC_CFG_WD + 0x10 * idx,
-> +			      ~0, height << 16 | width);
-> +}
-> +EXPORT_SYMBOL_GPL(mtk_mmsys_merge_async_config);
-> +
-> +void mtk_mmsys_hdr_config(struct device *dev, int be_width, int be_height)
-> +{
-> +	mtk_mmsys_update_bits(dev_get_drvdata(dev), MT8195_VDO1_HDRBE_ASYNC_CFG_WD, ~0,
-> +			      be_height << 16 | be_width);
-> +}
-> +EXPORT_SYMBOL_GPL(mtk_mmsys_hdr_config);
-> +
-> +void mtk_mmsys_mixer_in_config(struct device *dev, int idx, bool alpha_sel, u16 alpha,
-> +			       u8 mode, u32 biwidth)
-> +{
-> +	struct mtk_mmsys *mmsys = dev_get_drvdata(dev);
-> +
-> +	mtk_mmsys_update_bits(mmsys, MT8195_VDO1_MIXER_IN1_ALPHA + (idx - 1) * 4, ~0,
-> +			      alpha << 16 | alpha);
-> +	mtk_mmsys_update_bits(mmsys, MT8195_VDO1_HDR_TOP_CFG, BIT(19 + idx),
-> +			      alpha_sel << (19 + idx));
-> +	mtk_mmsys_update_bits(mmsys, MT8195_VDO1_MIXER_IN1_PAD + (idx - 1) * 4,
-> +			      GENMASK(31, 16) | GENMASK(1, 0), biwidth << 16 | mode);
-> +}
-> +EXPORT_SYMBOL_GPL(mtk_mmsys_mixer_in_config);
-> +
-> +void mtk_mmsys_mixer_in_channel_swap(struct device *dev, int idx, bool channel_swap)
-> +{
-> +	mtk_mmsys_update_bits(dev_get_drvdata(dev), MT8195_VDO1_MIXER_IN1_PAD + (idx - 1) * 4,
-> +			      BIT(4), channel_swap << 4);
-> +}
-> +EXPORT_SYMBOL_GPL(mtk_mmsys_mixer_in_channel_swap);
-> +
->   void mtk_mmsys_ddp_dpi_fmt_config(struct device *dev, u32 val)
->   {
->   	if (val)
-> diff --git a/include/linux/soc/mediatek/mtk-mmsys.h b/include/linux/soc/mediatek/mtk-mmsys.h
-> index 127f1b888ace..a4708859c188 100644
-> --- a/include/linux/soc/mediatek/mtk-mmsys.h
-> +++ b/include/linux/soc/mediatek/mtk-mmsys.h
-> @@ -75,4 +75,13 @@ void mtk_mmsys_ddp_disconnect(struct device *dev,
->   
->   void mtk_mmsys_ddp_dpi_fmt_config(struct device *dev, u32 val);
->   
-> +void mtk_mmsys_merge_async_config(struct device *dev, int idx, int width, int height);
-> +
-> +void mtk_mmsys_hdr_config(struct device *dev, int be_width, int be_height);
-> +
-> +void mtk_mmsys_mixer_in_config(struct device *dev, int idx, bool alpha_sel, u16 alpha,
-> +			       u8 mode, u32 biwidth);
-> +
-> +void mtk_mmsys_mixer_in_channel_swap(struct device *dev, int idx, bool channel_swap);
-> +
->   #endif /* __MTK_MMSYS_H */
