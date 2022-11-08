@@ -2,174 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 606B66208A9
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 06:00:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 473746208AE
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 06:01:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233191AbiKHFAt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 00:00:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34756 "EHLO
+        id S233284AbiKHFBG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 00:01:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233339AbiKHFAb (ORCPT
+        with ESMTP id S233035AbiKHFAx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 00:00:31 -0500
-Received: from esa1.hgst.iphmx.com (esa1.hgst.iphmx.com [68.232.141.245])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CC4A1B9EE
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 21:00:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1667883626; x=1699419626;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=HTEaAiQT/0sM9OlJyF8YSNMgHbvHRt9juzHymCJh6i4=;
-  b=PVRmCDGB8RA1I9+XLoVieonfM/ciPEWKSiLYAG3dad07v4G8zpIdtevE
-   Vj8UuA8eRQqkiLKoS9JMOTX21KZ9doeg/ybVrbC4FaBbFa0QQESyR3bGX
-   NIMc/GUbEzy1lPWC2wc0yXGaMEwoDAJsjinaYQdfZjasZM6x44S+X9kpM
-   PJBz4Mb6gSz0JMkzaTCvnlsu8xRxAku7AabeAs/BKp9Lvnl1Na/ATCi4y
-   vpoWQYGO9CE4MsSncDrgzwQxrrz/pAIEFrtGggNfJDnCMt/YcTNhCgk+c
-   881bm5kqNRC8JeIDeu8Cka37h4z+nvo3jRwjDvmsjTPNAZkOQ4Ec/18t1
-   A==;
-X-IronPort-AV: E=Sophos;i="5.96,145,1665417600"; 
-   d="scan'208";a="327828038"
-Received: from h199-255-45-14.hgst.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 08 Nov 2022 13:00:20 +0800
-IronPort-SDR: PvJmxUm7J5qzr7hairSdk8ULT7ogmgugbWNCKP+fFUwXuWtTRIe9BDejcZR42wVIMWdyFpSlOa
- Aw/F4gejt+LuqbDF9HTRS2zyFpP1T4jRSRxOt/HJtSanlCECiZOxTghgFUMaJ24ietuS3s7VHY
- vQoH0tveGcxnQ6u01TrzTih+lpjH97S2Q1khkNzZ3sxP4iuP/6INIAH3D6d4rkhOAAFqeV42um
- 8aLDhmSYq+LlyiIk5kt9qXtbG0AVJ8QBRt05Fr2dHIdwg28FbIb7RuIbysUi1mRrZB/pIsP7w7
- N9g=
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 07 Nov 2022 20:19:26 -0800
-IronPort-SDR: 1KpeIplROeJT1jh0PraMM6SAPymSTYlZmhCcPPfB4V81yXn3nIjH4LwfuC1HOMW92Bq9z6i2/q
- aZlXxbKs7K0egaRd7lzq9Ms8Z4IGCPJAhS/RLciOJDcVH+FlTkdIzcXWk0sB+NOp7RDmsQ+4CC
- fFZxC3CDaQCsCMcmQcYYaIirl8CHrWwEQwHiR6TOK1iuKoddlGm8iUrgJF4FqZ+nmloHFyy2yB
- +Iltt+OUNivnL5OquDMX9ek83gfXaiqmYn1YH6YdreQF12Og0ZwEBuER8FPzeDuBqHt2xWo1sA
- GeA=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 07 Nov 2022 21:00:21 -0800
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4N5wrz4m30z1Rwrq
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 21:00:19 -0800 (PST)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1667883618; x=1670475619; bh=HTEaAiQT/0sM9OlJyF8YSNMgHbvHRt9juzH
-        ymCJh6i4=; b=oVteIAlkGW0DZqrM2ohximDz813sOF5IOOHEtcVKlFOYFM3vn2M
-        Yjp9t73ZeUq8mjkozqo8/IvWZRUWF2O3FgZrrPy5xYwe3H/VTPhjvHmn9BG+JVEE
-        432ndmk+jL8V2knK8Ynp9SnK8N3j8KK+zNkCkj8FzCbinJSoJyDTGn0B7kpCA1Zs
-        FAVUyibs4x7yj55aOMA20K93hC2SZICeKDXM1TUrkXMOnRxhzIX8BI2barFy9CUZ
-        0CKhlVociBifVY444+GfgJErjPF7UIQXgAra8RSPfttfyHzoHxTuEkrxb+2WusF3
-        IvKSq/bCepT4mS7Au7MlEvvRhGUX4fogiXg==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id k0w-qyFFo25A for <linux-kernel@vger.kernel.org>;
-        Mon,  7 Nov 2022 21:00:18 -0800 (PST)
-Received: from [10.149.53.254] (washi.fujisawa.hgst.com [10.149.53.254])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4N5wry25lnz1RvLy;
-        Mon,  7 Nov 2022 21:00:18 -0800 (PST)
-Message-ID: <b3ececcf-d16a-6ff1-d71d-dfcaec0098a7@opensource.wdc.com>
-Date:   Tue, 8 Nov 2022 14:00:17 +0900
+        Tue, 8 Nov 2022 00:00:53 -0500
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2055.outbound.protection.outlook.com [40.107.95.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4309926ED;
+        Mon,  7 Nov 2022 21:00:52 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=lCzYCn4fs9OUzd74DxNYvnZv/s1Pb0IyQV2QLeai2XOaRpmZLK2CcPI50GJl2tvFUK/ddH+ysPDEq5FAN3oa+NYPJeju0iKcW+9EVeO4/1qoSdc4T80rlk58ZbNdn8tBGiakIXfBSUjIFx+g+y2bV8tFdio40yWV5ccsZ6VvJ4fpyLW55ukNcVK/+HK+0bY+IFc6fHnDzu+yD1TRtgxTEfwLhCNaGL1CvmZRmUEAVWtLjYWqMStgiEhxqwyn0Ej2Ie7NdElWpEc77jwwTiNnUmSwEn7uFshcK3j/uFJ2FiqvsiV+LEDDg8QOV2fds3WSblhBmbHzObIbyIzBegBytA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=RwoecyA6nfM2pTprTeqU0eUBVNOmadX4DEObW7GmXQs=;
+ b=nMxGpSpj6du2/jJz31AxkkAWXPAazybANZplSZY67+CW1i5ZpIz9YFf+lzIT07J9HqGNUx0YbmISYkbbLn8y/o+W3JsANj57NpSj2UBGY1hHGoyK3DvuUjdsUDFUiYvOoqYTEOZ8bF0lZtY0JmnvdM+jN3O6SRL5NxezhvEKhUN4LaeIEOL4MNH3zYoXOsmGP5F+40fmQJFeUcegM7ge9Sbpes6KrR6Ag7fVhEw9zaLVJvZ0SwzNfOvuvlcfr4anhDGJxP5ktm7wvW7/96D89osKCrasx6RNH251d6P1WPU6UDr89yATrqVs3lcI8paP8Rlbp2gslITrq5V2VvEVEw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=roeck-us.net smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=RwoecyA6nfM2pTprTeqU0eUBVNOmadX4DEObW7GmXQs=;
+ b=s6Nhf1XW/fajkJxiq4/mydI9BLdyAykJkbw+PHake1u5rXOlpAjVJuJQMaMhSBZnhmev4rzxahawEX+WUh7YURXBHsMONu9r1/qv4QAwNj+KFzOnpqyKnpOFJp+/uHvWkHCNJPJz7cbfdDRC4orMJTl1xR248cu6hEWc2mjiUfO9I+Ju/BKQ5mQn5/6Zv3VCB0Kd8/2DzU9MeJ8ilmnrg70/7U7wqgo0rG658thzCTo2uDdFYP4ZhOjMN7hSuW7qlN78G9OL3wSQ8cN9CBkzRvpIUdKzZYKpiTGbl/wjKXjYA4zK4/YehmqKClNh+GZ36adGX4YGWasN3g1u423pbQ==
+Received: from BN9PR03CA0035.namprd03.prod.outlook.com (2603:10b6:408:fb::10)
+ by MN0PR12MB5713.namprd12.prod.outlook.com (2603:10b6:208:370::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.22; Tue, 8 Nov
+ 2022 05:00:49 +0000
+Received: from BN8NAM11FT007.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:fb:cafe::17) by BN9PR03CA0035.outlook.office365.com
+ (2603:10b6:408:fb::10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.26 via Frontend
+ Transport; Tue, 8 Nov 2022 05:00:49 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ BN8NAM11FT007.mail.protection.outlook.com (10.13.177.109) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5791.20 via Frontend Transport; Tue, 8 Nov 2022 05:00:49 +0000
+Received: from rnnvmail204.nvidia.com (10.129.68.6) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.26; Mon, 7 Nov 2022
+ 21:00:34 -0800
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by rnnvmail204.nvidia.com
+ (10.129.68.6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Mon, 7 Nov 2022
+ 21:00:33 -0800
+Received: from nmalwade-dt.nvidia.com (10.127.8.9) by mail.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server id 15.2.986.29 via Frontend
+ Transport; Mon, 7 Nov 2022 21:00:32 -0800
+From:   Ninad Malwade <nmalwade@nvidia.com>
+To:     <nmalwade@nvidia.com>, <treding@nvidia.com>,
+        <jonathanh@nvidia.com>, <linux@roeck-us.net>, <jdelvare@suse.com>,
+        <nicolinc@nvidia.com>, <rkasirajan@nvidia.com>
+CC:     <linux-hwmon@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>
+Subject: [PATCH] ina3221: correct the update_interval value
+Date:   Tue, 8 Nov 2022 13:00:29 +0800
+Message-ID: <20221108050029.24576-1-nmalwade@nvidia.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH 2/2] ata: ahci (gcc13): use U suffix for enum definitions
-Content-Language: en-US
-To:     "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, Martin Liska <mliska@suse.cz>,
-        linux-ide@vger.kernel.org
-References: <20221031114310.10337-1-jirislaby@kernel.org>
- <20221031114310.10337-2-jirislaby@kernel.org>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <20221031114310.10337-2-jirislaby@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+X-NVConfidentiality: public
+Content-Transfer-Encoding: 8bit
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT007:EE_|MN0PR12MB5713:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4ceb3794-2a15-41f0-c2e2-08dac146344e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: GzFgEPEBGEGB+NRK4WClRUALLeki3SDU/SY6+3lEqeF1t1D/nHLXrF8oTSJLMZTsPzdTVfLH1HaYJMFzs5PTT1nJ5SCcb0DTgpQLta+9pLY/QUos+W9ynrqvWDvAD9RZ/URngDinSudlsCQTVRjGG7ogUn2NUdNuYYsR8flSm6Sq8A/3HyQO7CMato70TX4puLQZRdNgAJkTFgqmSQaiqah9LyCM4L6K+jGPUVaKerO8Ua1zUUQQY4H5n1l1VvG/wgErSfMw4sX5sjL25XSOW696e4N8NkonRCfedGDQikbJnMXKo1LkkSVcJ1gxQghoMZ857VQrOl127c33EbZKpzT2VZM3TU6GPyXYOjmn4tGWZO2jHDi7GvPCRSuVlZi1/hdFM4gFS+Kn4mZ7ymC9Ub9i6i/mDqemQpQae5+RB+aWMp2GwlESQpQYibVJHxN+9WaNqb9HRbDwOhyrvPwoztEyX3ECJ9EoGDuTlY//Kw4xS9Ks2DXWBgw82Z8L49XudbYsGXKOprOo/zNJwbLGBNkbWqZGIeKwXZi03AVLXpMGWxREIh+oUPOvEuYygqvUBHkwNDOYnFDgIDQDrghdVlPdZXgAl1XTgutACMENIai2oxwe3Qxqfx5f11uli3g9xp/gPkydsKwkYvJtSFU0oBUVvOJ8wNdniWcEp3+OqbsdvchK7mT7dmQ7MRwt8BL3r8PW607JU5aXLC6QxPSmVSodsFe62PgTMbxmuvf4EY2xYSGR5lCFfI4SCUwn89bDXvpUmAWkF6p8Wwp7LK0mgQ==
+X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(136003)(376002)(39860400002)(346002)(396003)(451199015)(36840700001)(40470700004)(46966006)(356005)(7636003)(36860700001)(41300700001)(86362001)(82310400005)(40480700001)(40460700003)(36756003)(8676002)(70206006)(4326008)(26005)(70586007)(186003)(7696005)(336012)(15650500001)(2616005)(8936002)(6636002)(1076003)(54906003)(478600001)(110136005)(5660300002)(82740400003)(6666004)(316002)(426003)(2906002)(83380400001)(47076005);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Nov 2022 05:00:49.3763
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4ceb3794-2a15-41f0-c2e2-08dac146344e
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT007.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB5713
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/31/22 20:43, Jiri Slaby (SUSE) wrote:
-> gcc13 now uses the type of the enum for all its members [1]. Given the
-> ata enum defines its members using both unsigned and signed ints, the
-> type of the enum is promoted to long.
-> 
-> Make sure the rest of the members are unsigned ints using U suffix.
-> 
-> The error in question is for example this:
->   drivers/block/mtip32xx/mtip32xx.c:722:25: error: format '%x' expects argument of type 'unsigned int', but argument 3 has type 'long in'
+As per the INA3221 datasheet the samples value should not be
+considered while calculating the update_interval value.
+Section 8.4.2.2 from datasheet says - "The conversion-time
+settings, along with the programmable-averaging mode, enable
+the INA3221 to optimize available timing requirements in a given
+application. For example, if a system requires data to be read
+every 2 ms with all three channels monitored, configure the INA3221
+with the conversion times for the shunt- and bus-voltage
+measurements set to 332 μs"
 
-Same comment as for patch 1. Also please add a cover letter for multiple
-patches series.
+As per above only conversion time and number of channels are
+required to set the update_interval value. Correcting the same in
+the driver.
 
-> 
-> [1] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=36113
-> 
-> Cc: Martin Liska <mliska@suse.cz>
-> Cc: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-> Cc: linux-ide@vger.kernel.org
-> Signed-off-by: Jiri Slaby (SUSE) <jirislaby@kernel.org>
-> ---
->  drivers/ata/ahci.h | 14 +++++++-------
->  1 file changed, 7 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/ata/ahci.h b/drivers/ata/ahci.h
-> index 94b5c81f08dd..14eb6e97f6f7 100644
-> --- a/drivers/ata/ahci.h
-> +++ b/drivers/ata/ahci.h
-> @@ -39,7 +39,7 @@
->  enum {
->  	AHCI_MAX_PORTS		= 32,
->  	AHCI_MAX_SG		= 168, /* hardware max is 64K */
-> -	AHCI_DMA_BOUNDARY	= 0xffffffff,
-> +	AHCI_DMA_BOUNDARY	= ~0U,
->  	AHCI_MAX_CMDS		= 32,
->  	AHCI_CMD_SZ		= 32,
->  	AHCI_CMD_SLOT_SZ	= AHCI_MAX_CMDS * AHCI_CMD_SZ,
-> @@ -178,10 +178,10 @@ enum {
->  	PORT_CMD_SPIN_UP	= BIT(1), /* Spin up device */
->  	PORT_CMD_START		= BIT(0), /* Enable port DMA engine */
->  
-> -	PORT_CMD_ICC_MASK	= (0xf << 28), /* i/f ICC state mask */
-> -	PORT_CMD_ICC_ACTIVE	= (0x1 << 28), /* Put i/f in active state */
-> -	PORT_CMD_ICC_PARTIAL	= (0x2 << 28), /* Put i/f in partial state */
-> -	PORT_CMD_ICC_SLUMBER	= (0x6 << 28), /* Put i/f in slumber state */
-> +	PORT_CMD_ICC_MASK	= (0xfU << 28), /* i/f ICC state mask */
-> +	PORT_CMD_ICC_ACTIVE	= (0x1U << 28), /* Put i/f in active state */
-> +	PORT_CMD_ICC_PARTIAL	= (0x2U << 28), /* Put i/f in partial state */
-> +	PORT_CMD_ICC_SLUMBER	= (0x6U << 28), /* Put i/f in slumber state */
->  
->  	/* PORT_CMD capabilities mask */
->  	PORT_CMD_CAP		= PORT_CMD_HPCP | PORT_CMD_MPSP |
-> @@ -191,14 +191,14 @@ enum {
->  	PORT_FBS_DWE_OFFSET	= 16, /* FBS device with error offset */
->  	PORT_FBS_ADO_OFFSET	= 12, /* FBS active dev optimization offset */
->  	PORT_FBS_DEV_OFFSET	= 8,  /* FBS device to issue offset */
-> -	PORT_FBS_DEV_MASK	= (0xf << PORT_FBS_DEV_OFFSET),  /* FBS.DEV */
-> +	PORT_FBS_DEV_MASK	= (0xfU << PORT_FBS_DEV_OFFSET),  /* FBS.DEV */
->  	PORT_FBS_SDE		= BIT(2), /* FBS single device error */
->  	PORT_FBS_DEC		= BIT(1), /* FBS device error clear */
->  	PORT_FBS_EN		= BIT(0), /* Enable FBS */
->  
->  	/* PORT_DEVSLP bits */
->  	PORT_DEVSLP_DM_OFFSET	= 25,             /* DITO multiplier offset */
-> -	PORT_DEVSLP_DM_MASK	= (0xf << 25),    /* DITO multiplier mask */
-> +	PORT_DEVSLP_DM_MASK	= (0xfU << 25),    /* DITO multiplier mask */
->  	PORT_DEVSLP_DITO_OFFSET	= 15,             /* DITO offset */
->  	PORT_DEVSLP_MDAT_OFFSET	= 10,             /* Minimum assertion time */
->  	PORT_DEVSLP_DETO_OFFSET	= 2,              /* DevSlp exit timeout */
+Signed-off-by: Ninad Malwade <nmalwade@nvidia.com>
+---
+ Documentation/hwmon/ina3221.rst | 3 +--
+ drivers/hwmon/ina3221.c         | 4 +---
+ 2 files changed, 2 insertions(+), 5 deletions(-)
 
+diff --git a/Documentation/hwmon/ina3221.rst b/Documentation/hwmon/ina3221.rst
+index 8c12c54d2c24..a4f107d1e489 100644
+--- a/Documentation/hwmon/ina3221.rst
++++ b/Documentation/hwmon/ina3221.rst
+@@ -61,10 +61,9 @@ samples                 Number of samples using in the averaging mode.
+ 
+ update_interval         Data conversion time in millisecond, following:
+ 
+-                          update_interval = C x S x (BC + SC)
++                          update_interval = C x (BC + SC)
+ 
+                           * C:	number of enabled channels
+-                          * S:	number of samples
+                           * BC:	bus-voltage conversion time in millisecond
+                           * SC:	shunt-voltage conversion time in millisecond
+ 
+diff --git a/drivers/hwmon/ina3221.c b/drivers/hwmon/ina3221.c
+index 2a57f4b60c29..e3aa57e3b039 100644
+--- a/drivers/hwmon/ina3221.c
++++ b/drivers/hwmon/ina3221.c
+@@ -183,11 +183,9 @@ static const int ina3221_avg_samples[] = {
+ static inline u32 ina3221_interval_ms_to_conv_time(u16 config, int interval)
+ {
+ 	u32 channels = hweight16(config & INA3221_CONFIG_CHs_EN_MASK);
+-	u32 samples_idx = INA3221_CONFIG_AVG(config);
+-	u32 samples = ina3221_avg_samples[samples_idx];
+ 
+ 	/* Bisect the result to Bus and Shunt conversion times */
+-	return DIV_ROUND_CLOSEST(interval * 1000 / 2, channels * samples);
++	return DIV_ROUND_CLOSEST(interval / 2, channels);
+ }
+ 
+ /* Converting CONFIG register value to update_interval in usec */
 -- 
-Damien Le Moal
-Western Digital Research
+2.17.1
 
