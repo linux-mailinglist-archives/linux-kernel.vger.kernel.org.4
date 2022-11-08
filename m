@@ -2,51 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5D4F6206DC
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 03:42:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69F506206E3
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 03:45:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232776AbiKHCmL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 21:42:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59376 "EHLO
+        id S233040AbiKHCpI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 21:45:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbiKHCmI (ORCPT
+        with ESMTP id S232748AbiKHCpE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 21:42:08 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2335913D1B;
-        Mon,  7 Nov 2022 18:42:06 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4N5snR6Qmpz4xFs;
-        Tue,  8 Nov 2022 13:42:03 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1667875324;
-        bh=39799bZTxzFpwRGI33rpfYdDnnGPoa52HeOweuv0d00=;
-        h=Date:From:To:Cc:Subject:From;
-        b=E2TLOGOxgV2/K9qK7fTBiIFxbK96EY403EPq47LTXp4QT5BcGbt/QNfRvDAK38nzi
-         2NT06hmna9dRaYhCOErJtjV5sab3iJWXFOc22k7kuD7DKUoJ9GVGo3FZl3fb4e0cTH
-         /6o1UG0JmzFArjSJxQbSrb4kDfFuibplPWINpycFEsAbNO+Nz5t636jW79sMSeZx6+
-         jLNjPhp5syrGYRvASEi5kAO1Ot2Ye3dGAjG+GK14z3azsaSZqPLfhdMHYK2WWmDmsq
-         iEp3/WX7twf0snOmaEwb5yDKJKfQCGx6CGYONEAaAvG12bcubEdmcXbnBvkSTcr6/z
-         blAr8BV5YML6A==
-Date:   Tue, 8 Nov 2022 13:41:59 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Christian Borntraeger <borntraeger@de.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Nico Boehr <nrb@linux.ibm.com>
-Subject: linux-next: manual merge of the kvms390 tree with the s390 tree
-Message-ID: <20221108134159.11d09c7a@canb.auug.org.au>
+        Mon, 7 Nov 2022 21:45:04 -0500
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE2C22E9EB;
+        Mon,  7 Nov 2022 18:45:02 -0800 (PST)
+Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.55])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4N5srf2Yq8z15MNw;
+        Tue,  8 Nov 2022 10:44:50 +0800 (CST)
+Received: from kwepemm600003.china.huawei.com (7.193.23.202) by
+ dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 8 Nov 2022 10:45:00 +0800
+Received: from [10.67.111.205] (10.67.111.205) by
+ kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 8 Nov 2022 10:44:59 +0800
+Subject: Re: [PATCH bpf v2 3/5] libbpf: Skip adjust mem size for load pointer
+ in 32-bit arch in CO_RE
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
+        <martin.lau@linux.dev>, <song@kernel.org>, <yhs@fb.com>,
+        <john.fastabend@gmail.com>, <kpsingh@kernel.org>, <sdf@google.com>,
+        <haoluo@google.com>, <jolsa@kernel.org>,
+        <illusionist.neo@gmail.com>, <linux@armlinux.org.uk>,
+        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <mykolal@fb.com>, <shuah@kernel.org>,
+        <benjamin.tissoires@redhat.com>, <memxor@gmail.com>,
+        <asavkov@redhat.com>, <delyank@fb.com>, <bpf@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>
+References: <20221107092032.178235-1-yangjihong1@huawei.com>
+ <20221107092032.178235-4-yangjihong1@huawei.com>
+ <CAEf4BzZd+hzeRhLD6DaDVx67fySd+KaTP6eOJid-u9mqnQwigg@mail.gmail.com>
+From:   Yang Jihong <yangjihong1@huawei.com>
+Message-ID: <8911eeb0-d9a9-4592-34b5-e6e0a9efe692@huawei.com>
+Date:   Tue, 8 Nov 2022 10:44:59 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/ehBp9xr0n=GXISeXXd9c3Jp";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+In-Reply-To: <CAEf4BzZd+hzeRhLD6DaDVx67fySd+KaTP6eOJid-u9mqnQwigg@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.111.205]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemm600003.china.huawei.com (7.193.23.202)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,55 +67,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/ehBp9xr0n=GXISeXXd9c3Jp
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hello,
 
-Hi all,
+On 2022/11/8 9:22, Andrii Nakryiko wrote:
+> On Mon, Nov 7, 2022 at 1:23 AM Yang Jihong <yangjihong1@huawei.com> wrote:
+>>
+>> bpf_core_patch_insn modifies load's mem size from 8 bytes to 4 bytes.
+>> As a result, the bpf check fails, we need to skip adjust mem size to fit
+>> the verifier.
+>>
+>> Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
+>> ---
+>>   tools/lib/bpf/libbpf.c | 34 +++++++++++++++++++++++++++++-----
+>>   1 file changed, 29 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+>> index 184ce1684dcd..e1c21b631a0b 100644
+>> --- a/tools/lib/bpf/libbpf.c
+>> +++ b/tools/lib/bpf/libbpf.c
+>> @@ -5634,6 +5634,28 @@ static int bpf_core_resolve_relo(struct bpf_program *prog,
+>>                                         targ_res);
+>>   }
+>>
+>> +static bool
+>> +bpf_core_patch_insn_skip(const struct btf *local_btf, const struct bpf_insn *insn,
+>> +                        const struct bpf_core_relo_res *res)
+>> +{
+>> +       __u8 class;
+>> +       const struct btf_type *orig_t;
+>> +
+>> +       class = BPF_CLASS(insn->code);
+>> +       orig_t = btf_type_by_id(local_btf, res->orig_type_id);
+>> +
+>> +       /*
+>> +        * verifier has to see a load of a pointer as a 8-byte load,
+>> +        * CO_RE should not screws up access, bpf_core_patch_insn modifies
+>> +        * load's mem size from 8 bytes to 4 bytes in 32-bit arch,
+>> +        * so we skip adjust mem size.
+>> +        */
+> 
+> Nope, this is only for BPF UAPI context types like __sk_buff (right
+> now). fentry/fexit/raw_tp_btf programs traversing kernel types and
+> following pointers actually need this to work correctly. Don't do
+> this.
+Distinguishing BPF UAPI context from kernel type requires some work. 
+According to current situation, the solution of patch2 is relatively simple.
 
-Today's linux-next merge of the kvms390 tree got a conflict in:
-
-  arch/s390/mm/init.c
-
-between commit:
-
-  2ce7a18211b0 ("s390/mm: fix virtual-physical address confusion for swiotl=
-b")
-
-from the s390 tree and commit:
-
-  58635d6615f1 ("s390/mm: fix virtual-physical address confusion for swiotl=
-b")
-
-from the kvms390 tree.
-
-I fixed it up (I just used the latter version) and can carry the fix as
-necessary. This is now fixed as far as linux-next is concerned, but any
-non trivial conflicts should be mentioned to your upstream maintainer
-when your tree is submitted for merging.  You may also want to consider
-cooperating with the maintainer of the conflicting tree to minimise any
-particularly complex conflicts.
-
-
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/ehBp9xr0n=GXISeXXd9c3Jp
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNpwfcACgkQAVBC80lX
-0GyCAwf8CQD3RWFZ8YxkBEYktdm9TVi7PxH6Mwr+ZV/HzFUx5iQ8mZNRA9VbeT2A
-SauhgsfFw9Q82nf1D+8P+uZbe6PHIGcHTCuEAcUFuAJjDkAVnziiWZJancs/DzUu
-I/CeHIPJttjgBCcpB+Ir+6vUJdEQLMWjM1KFC06Pcuwx9j1sLXPMhJfKWqLEDLK9
-xhozXSShrcGsfRSCOxjTdhWIfgVM2IaIzUDZL59AWACBM7nhKXMvgxGYYxqRXv8n
-ligetF4dIQaPBUwtPL5Kte/njxLE1XODdMMPcXPidmOVYD+BalJDvW0tEVNrGGMc
-trh75qqFj8+oodSJfLK7IZagA88HCw==
-=siR6
------END PGP SIGNATURE-----
-
---Sig_/ehBp9xr0n=GXISeXXd9c3Jp--
+Thanks,
+Yang
