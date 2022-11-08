@@ -2,137 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 723CB621772
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 15:54:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE6E062177A
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 15:54:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233938AbiKHOyC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 09:54:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57664 "EHLO
+        id S233410AbiKHOy3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 09:54:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234285AbiKHOxw (ORCPT
+        with ESMTP id S234328AbiKHOyT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 09:53:52 -0500
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F72018E0C;
-        Tue,  8 Nov 2022 06:53:51 -0800 (PST)
-Received: by mail-pl1-x633.google.com with SMTP id j12so14390293plj.5;
-        Tue, 08 Nov 2022 06:53:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=iPWTM5bctppQrEhT8PhLH/n0wnwXqhBeZrZRWfQFk6Y=;
-        b=IFSc9rcTe5NRbcWLMfSJ4CqwAQk9sDNFD/xyAot5VYfdbTZ2hxB6yakJcevKzWEHu0
-         xRno1uKyAhpxqkPvfsBXilff1tCNQ+QmyDif5bt01gE1aiT8fZfADLRWzZdcL4pAjFfB
-         Irj29iU6KywmdtoUDu3iJxR4oZNscSeCyi4Biaq2yKFJJcsG2mgCdJvHDiGfldp3/O1l
-         lWhzqP3x2mWhl/zTzedyULoseUB/vAgw8Jl2tFWiESsYZ70CljZwdet9gcNuJXulG9h6
-         c3OEal4GGhdvE24tP913AWfuznGbLEO/hluY1PvetFaUN9icFyV58RC+rmjkG18CcZws
-         Uvrw==
+        Tue, 8 Nov 2022 09:54:19 -0500
+Received: from mail-qv1-f49.google.com (mail-qv1-f49.google.com [209.85.219.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 010FA43849;
+        Tue,  8 Nov 2022 06:54:17 -0800 (PST)
+Received: by mail-qv1-f49.google.com with SMTP id x13so10366519qvn.6;
+        Tue, 08 Nov 2022 06:54:17 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=iPWTM5bctppQrEhT8PhLH/n0wnwXqhBeZrZRWfQFk6Y=;
-        b=HSmbTTd35gWv+oaLPzWTmpRDnCn/8hdPE4fUXcC6MJUEPJOcLnWRwq7S8gKrVyc4gL
-         3MBm8jGygAmXnGyD4lD5ZSHvsm0C7PDiNeaQwq2/JeQ73uCF1q3KqdqBirUymYxXGtC1
-         Zn7axkgu90eBkI+v0EcMtqtRe+LEzVmmFrMa1NIBjswGPcW0p17YdSW9jKTi4Zkesef9
-         f+7xhebQtd3QXHdRRTciwO+hekOWh3HYmMnH0iI4Ce5BhiwU4Ze4tqTpArFGe8a1HP8i
-         RZIkqCWrcuG4PzL6vi6O1mAEaneReDbwh4MTbSU/WFCml1ESH6RrEj0PDsBb1R+VEAlP
-         OwiQ==
-X-Gm-Message-State: ANoB5pk8hbd18x9zUKtG5ZjNSYRVoh7d4mIlN+gkx/loW0usWpMfORVD
-        vm2TNgxWhiwU0pT2g195JxKbU2sIh04=
-X-Google-Smtp-Source: AA0mqf5rkTlutTfPxsW2hru2NT6RkXbIajNdPSnXJv2RClDTXMhDdnd9C9N5Rnimq+6rkNpPFQlUgA==
-X-Received: by 2002:a17:902:6b4a:b0:188:867a:e079 with SMTP id g10-20020a1709026b4a00b00188867ae079mr7466801plt.158.1667919230982;
-        Tue, 08 Nov 2022 06:53:50 -0800 (PST)
-Received: from [192.168.11.9] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
-        by smtp.gmail.com with ESMTPSA id x190-20020a6231c7000000b0056abfa74eddsm6701169pfx.147.2022.11.08.06.53.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Nov 2022 06:53:50 -0800 (PST)
-Message-ID: <fd1903d4-a721-931e-c928-1818cd650490@gmail.com>
-Date:   Tue, 8 Nov 2022 23:53:46 +0900
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=QF12oZt8AZ44/sdT+3QD1AGRv3vT5XnqG2NmIMvCMaw=;
+        b=8Mob5Apdy2I0+S5WmtQGynQ2oQ2420U9zneAhvlJ+Q9He3aMpwgyu1nIwKU9QKAPXP
+         ehr/BiWPi6FfaJupCo7vBSxa1ccpzTsHrJhNGUn5Ebd4hObOsu8TMRFyCmd+l1IteG6d
+         owDax5cd9B+gWoaHkKz1WBEKs4zP3/S2H5ocTv8ROKomzZfAYX7a4T2fWVrt4cwEzKVl
+         yUFlzHy0j6LwMUJpu23XpY6OuxZjI1YZ1dcKVvkvO8ZAbsDpj8coR9xS9+K050seldFC
+         POSPyUB7MOzOgfYJZCe2VFcvT+8ym2oD4MwuTLzNtdc+XaSwGnCIVsr3nKwF00hWA/sN
+         M49A==
+X-Gm-Message-State: ACrzQf1h/cIwFYQ4kh2QKTiOtnLrfyMkIp+Vt8uLYjnWhEWEAA7t13Eu
+        aa4FJjWKMD/uM6J0seIWlyUuKGVE2GgT57cdIIc=
+X-Google-Smtp-Source: AMsMyM7GtWyaiX2oLjca/bNy3xuAt3+ZcvrX8C8jVXQBaDZP9TLtB6uEYX98TnhmfHqefXV6eqOyRQfkIkEImBP6fMU=
+X-Received: by 2002:a05:6214:f63:b0:4b8:c0bc:c43e with SMTP id
+ iy3-20020a0562140f6300b004b8c0bcc43emr49934995qvb.119.1667919257095; Tue, 08
+ Nov 2022 06:54:17 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-From:   Akira Yokosawa <akiyks@gmail.com>
-Subject: Re: [PATCH] Documentation: RCU: use code blocks with autogenerated
- line (was: Re: linux-next: build warning after merge of the rcu tree)
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     corbet@lwn.net, linux-kernel@vger.kernel.org,
-        linux-next@vger.kernel.org, paulmck@kernel.org, rcu@vger.kernel.org
-References: <Y2jWAR1QESe3OrhH@debian.me>
- <af3ec8bf-310e-69ea-9d32-f7aec740b306@gmail.com>
- <206a95eb-5430-f9bf-15ad-4e644393255e@gmail.com>
-Content-Language: en-US
-In-Reply-To: <206a95eb-5430-f9bf-15ad-4e644393255e@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <2276401.ElGaqSPkdT@kreacher> <2219830.iZASKD2KPV@kreacher> <Y2l2hid1SSAzpKhS@smile.fi.intel.com>
+In-Reply-To: <Y2l2hid1SSAzpKhS@smile.fi.intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 8 Nov 2022 15:54:06 +0100
+Message-ID: <CAJZ5v0gnRNe+k2BEJGnJiWHmWTyb0cxgZ9pMLwMUtU2f=VJv2Q@mail.gmail.com>
+Subject: Re: [PATCH v1 5/5] rtc: rtc-cmos: Disable ACPI RTC event on removal
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-rtc@vger.kernel.org, Linux ACPI <linux-acpi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Alessandro Zummo <a.zummo@towertech.it>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[Dropping most CCs]
+On Mon, Nov 7, 2022 at 10:21 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> On Mon, Nov 07, 2022 at 09:03:06PM +0100, Rafael J. Wysocki wrote:
+> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> >
+> > Make cmos_do_remove() drop the ACPI RTC fixed event handler so as to
+> > prevent it from operating on stale data in case the event triggers
+> > after driver removal.
+> >
+> > While at it, make cmos_do_remove() also clear the driver data pointer
+> > of the device and make cmos_acpi_wake_setup() do that in the error path
+> > too.
+>
+> ...
+>
+> > +     dev_set_drvdata(dev, NULL);
+>
+> > +     dev_set_drvdata(dev, NULL);
+>
+> Maybe I'm missing something, but the cmos_do_remove() is called by ->remove()
+> callback of the real drivers (pnp and platform) and device core is already
+> doing this. So, don't know why you need these calls to be explicit.
 
-On Tue, 8 Nov 2022 09:29:01 +0700, Bagas Sanjaya wrote:
-> On 11/7/22 18:48, Akira Yokosawa wrote:
->> That might be true if all you care about were the generated documents,
->> but we need to pay attention to readers of .rst files as plain-text.
->>
->> There are a bunch of references to line numbers in RCU documents.
->> If explicit line numbers are removed from snippets, such readers need
->> to count the lines by themselves, which doesn't sound reasonable to me.
->>
-> 
-> I think only rcubarrier.rst have explicit references to line numbers.
-
-Oh, I find such references in (not limited to):
-
-  - Documentation/RCU/Design/Requirements/Requirements.rst
-  - Documentation/RCU/Design/Data-Structures/Data-Structures.rst
-
-> 
-> Also, besides manual line counting, readers seeing rst sources can deduce
-> where actually the lines are from explanation of the snippet.
-
-Maybe, maybe not... Deducing may take time.
-
->                                                               Of course
-> they can make htmldocs and seeing the output if they want.
-
-There can be situations where you can't afford such luxuries.
-
-Remember there is a note in Documentation/doc-guide/sphinx.rst
-which reads:
-
-  Please don't go overboard with reStructuredText markup. Keep it simple.
-  For the most part the documentation should be plain text with just enough
-  consistency in formatting that it can be converted to other formats.
-
-My interpretation of above:
-
-  .rst sources should be kept as close to plain-text which can be
-  easily understood in dumb terminals, as far as possible.
-
-> 
->> If you can put labels to referenced lines within code snippets, auto
->> generation of line numbers might work, but as far as I know, Sphinx
->> doesn't provide such a nice feature.
->>
-> 
-> There's also :emphasize-lines: option to highlight selected line numbers.
-
-But that option doesn't do any highlighting while viewing .rst files
-as plain-text. What am I missing?
-
-        Thanks, Akira
-
-> 
-> Thanks.
-> 
+Good point, but then I guess I should move this patch to the front,
+because the issue fixed by it may trigger a use-after-free in
+rtc_handler() already.
