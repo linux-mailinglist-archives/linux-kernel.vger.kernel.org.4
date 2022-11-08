@@ -2,109 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E541620BCC
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 10:10:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70560620BD1
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 10:12:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233339AbiKHJKJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 04:10:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33662 "EHLO
+        id S233602AbiKHJMN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 04:12:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233358AbiKHJKH (ORCPT
+        with ESMTP id S233479AbiKHJMK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 04:10:07 -0500
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D47451A047;
-        Tue,  8 Nov 2022 01:10:06 -0800 (PST)
-Received: by mail-ed1-x52a.google.com with SMTP id 21so21485716edv.3;
-        Tue, 08 Nov 2022 01:10:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=wxg9R63E/LdpcjaJ1QXBZQ2mfpoLnn2CNR5q0txR95Q=;
-        b=ogCSi5jgLyz06Qj/c6EJv9UE5I5iKSMxLytwg1lrGusO+4y+j4+AxQscA2mU30i42a
-         JIASDnnCHv4STIP+XYOVQvGqZm7L6cWat+SmVGKGiJbMht7ZO33lSuaMyM+yy2s4TWZw
-         smqOj19N4qK+Pf3tloAaYEq3NZ/ybhbC9BNxMW7VR2uIzLiOODeIKwGIaQrGoFEMrL1k
-         jpKv/Xtx7iEzkApoe0yPfXaQr+B6ExWMiZD0vivjZzLMC4k/UpdQg0mcNU5J3tuZ0nzm
-         Cda232w0MQ4cXFptnNwidf4Vsxb39ivcI1B3MIIrGBLa1J8bGKR5q+XR9AxG0VMoa8cZ
-         dLtA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=wxg9R63E/LdpcjaJ1QXBZQ2mfpoLnn2CNR5q0txR95Q=;
-        b=DA+3K1PPBIgiWTuC4sJuxODGTLrEhuv8piuhRGouCob8FLVhB30gFJW1c+c96F1x9M
-         8lMxZTDQTA+nYL0jVl1JXtCvYHt0gcfdoE2jhRfmxf4GcZefgtRJjtez8agoqHHZnSxk
-         /Yl3GRq856pF9BhXmESrYnI58D65OcFRaESuJJUpJ1tdQ5RHWBc7YMXCrrm+vlR36ICv
-         VuxzKk02o1lOwNw9BF8Qqq+ZOryhcPYpRbA2kjwaML0gezSdeGP1HL4CrwVYtGOvCrw/
-         nOMjFB8xzLmf3tAtKSiUE0ZiAJ1AhMhaUOma5LVePRApzGlQ/f332NLEObIxUWM3vvET
-         xmNA==
-X-Gm-Message-State: ACrzQf36ruLK6+c3e67SsJSm/5UAd8Pd9/rtR97bHAmDcoTMdab6k0Vf
-        AZkjbANkyPtX6vaqAHvcTKBtO9xsSGSQPMoV0Gw=
-X-Google-Smtp-Source: AMsMyM6T8HbMBQWOPhacutnHoVxAwoc4LO6/Vkb+hKjPKYPLcf66oY+UO8xaFlbDTqs1tDwpCp3vAWrQhbUfzdh3GJs=
-X-Received: by 2002:a05:6402:3217:b0:461:d6d7:7f19 with SMTP id
- g23-20020a056402321700b00461d6d77f19mr33389993eda.109.1667898605416; Tue, 08
- Nov 2022 01:10:05 -0800 (PST)
+        Tue, 8 Nov 2022 04:12:10 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB8461A047
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 01:12:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=+L/9dtMbqdIQkXmyQjmXU+Bv7A5Ip/ZUV5v9AJeWvdA=; b=i6J4QiqFKt2S5y/erZgdrIbf+b
+        7C8W67leFhjWW3MYu6Ph/rgnCOdiIKRlmGAfyi+4HhgBl1G0hEmeODoeBXFpbCBzr7k7ThyyVM/JK
+        taVN4724jugudKyyhWhAG0PU7vB1WveBl2xnvH7D0r2h0ewLXJX1K85sBALGP3DeCFaSgsEFDfHeF
+        KH28FZ7xlK/pKoR6jKnYrD6MgX4ZcZBkwwOeNQEOGJ0XZFMF/h2zJ37m/Lqe1G2ccMU7f+QtbefAw
+        L1cKRbrxTJJECJeLz+cwEtNtCY4PKimYqOm7F27UYkEUrAMUIo0KaxO8z0TicRx7XABF00GQ88MVi
+        bRqq6bEw==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1osKeI-00A8g3-8b; Tue, 08 Nov 2022 09:12:02 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 7E56C300110;
+        Tue,  8 Nov 2022 10:11:49 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 5A2532B87854E; Tue,  8 Nov 2022 10:11:49 +0100 (CET)
+Date:   Tue, 8 Nov 2022 10:11:49 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Valentin Schneider <vschneid@redhat.com>
+Cc:     Chengming Zhou <zhouchengming@bytedance.com>, mingo@redhat.com,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] sched/core: Minor optimize ttwu_runnable()
+Message-ID: <Y2odVSwrCSI2LW2m@hirez.programming.kicks-ass.net>
+References: <20221102102343.57845-1-zhouchengming@bytedance.com>
+ <xhsmhr0yivazl.mognet@vschneid.remote.csb>
+ <7b8bd69a-39cb-a1f0-6ccd-7b0810ef0db7@bytedance.com>
+ <xhsmhwn86ncrs.mognet@vschneid.remote.csb>
+ <346228d3-8b80-4e9b-0157-662429b11a05@bytedance.com>
+ <xhsmhtu3an4jl.mognet@vschneid.remote.csb>
 MIME-Version: 1.0
-References: <20221107175305.63975-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20221107175305.63975-3-prabhakar.mahadev-lad.rj@bp.renesas.com> <OS0PR01MB592295C7DBA5E0A85B4D26AF863F9@OS0PR01MB5922.jpnprd01.prod.outlook.com>
-In-Reply-To: <OS0PR01MB592295C7DBA5E0A85B4D26AF863F9@OS0PR01MB5922.jpnprd01.prod.outlook.com>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Tue, 8 Nov 2022 09:09:39 +0000
-Message-ID: <CA+V-a8u6J3+OkANOQYec9-Xe6voAiNTkLo_Zvy6dkC03EYp-4Q@mail.gmail.com>
-Subject: Re: [PATCH RFC 2/5] pinctrl: renesas: rzg2l: Fix configuring the GPIO
- pins as interrupts
-To:     Biju Das <biju.das.jz@bp.renesas.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <xhsmhtu3an4jl.mognet@vschneid.remote.csb>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Biju,
+On Mon, Nov 07, 2022 at 03:54:38PM +0000, Valentin Schneider wrote:
 
-On Tue, Nov 8, 2022 at 7:14 AM Biju Das <biju.das.jz@bp.renesas.com> wrote:
->
-> Hi Prabhakar,
->
->
-> > Subject: [PATCH RFC 2/5] pinctrl: renesas: rzg2l: Fix configuring the GPIO
-> > pins as interrupts
-> >
-> > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> >
-> > On the RZ/G2UL SoC we have less number of pins compared to RZ/G2L and also
-> > the pin configs are completely different. This patch makes sure we use the
-> > appropriate pin configs for each SoC (which is passed as part of the OF
-> > data) while configuring the GPIO pin as interrupts instead of using
-> > rzg2l_gpio_configs[] for all the SoCs.
-> >
->
-> Looks like you are missing fixes tag.
-> Fixes: db2e5f21a48ed ("pinctrl: renesas: pinctrl-rzg2l: Add IRQ domain to handle GPIO interrupt")
->
-I did think about but then I realised this fixes the GPIO IRQ
-functions only and we didn't support IRQC and GPIO interrupts up until
-now so I hadn't added the fixes tag.
+> So that's the part for the p->sched_class->task_woken() callback, which
+> only affects RT and DL (and only does something when !p->on_cpu). I *think*
+> it's fine to remove it from ttwu_runnable() as any push/pull should have
+> happened when other tasks were enqueued on the same CPU - with that said,
+> it wouldn't hurt to double check this :-)
+> 
+> 
+> As for the check_preempt_curr(), since per the above p can be preempted,
+> you could have scenarios right now with CFS tasks where
+> ttwu_runnable()->check_preempt_curr() causes NEED_RESCHED to be set.
+> 
+> e.g. p0 does
+> 
+>   set_current_state(TASK_UNINTERRUPTIBLE)
+> 
+> but then gets interrupted by the tick, a p1 gets selected to run instead
+> because of check_preempt_tick(), and then runs long enough to have
+> check_preempt_curr() decide to let p0 preempt p1.
+> 
+> That does require specific timing (lower tick frequency should make this
+> more likely) and probably task niceness distribution too, but isn't
+> impossible.
+> 
+> Maybe try reading p->on_cpu, and only do the quick task state update if
+> it's still the current task, otherwise do the preemption checks?
 
-Cheers,
-Prabhakar
+I'm confused...
+
+So all relevant parties take rq->lock:
+
+ - __schedule()
+ - scheduler_tick()
+ - ttwu_runnable()
+
+So if ttwu_runnable() sees on_rq and switches state back to RUNNING then
+neither check_preempt_curr() nor task_woken() make any sense.
+
+Specifically:
+
+ - you can't very well preempt yourself (which is what
+   check_preempt_curr() is trying to determine -- if the woken task
+   should preempt the running task, they're both the same in this case);
+
+ - the task did not actually wake up, because it was still on the
+   runqueue to begin with. This path prevents a sleep, rather than
+   issues a wakeup.
+
+So yes, I think the patch as proposed is ok.
+
