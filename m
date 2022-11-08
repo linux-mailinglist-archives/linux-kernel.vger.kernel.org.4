@@ -2,166 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AA1D62207F
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 00:55:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B09FB622085
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 00:58:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229556AbiKHXzA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 18:55:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49996 "EHLO
+        id S229871AbiKHX56 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 18:57:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229511AbiKHXy7 (ORCPT
+        with ESMTP id S229556AbiKHX54 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 18:54:59 -0500
-Received: from gw.atmark-techno.com (gw.atmark-techno.com [13.115.124.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98EED21812
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 15:54:57 -0800 (PST)
-Received: from gw.atmark-techno.com (localhost [127.0.0.1])
-        by gw.atmark-techno.com (Postfix) with ESMTP id 62737600D2
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 08:54:56 +0900 (JST)
-Received: from mail-pf1-f199.google.com (mail-pf1-f199.google.com [209.85.210.199])
-        by gw.atmark-techno.com (Postfix) with ESMTPS id 067E6600F5
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 08:54:55 +0900 (JST)
-Received: by mail-pf1-f199.google.com with SMTP id bw25-20020a056a00409900b0056bdd4f8818so7977735pfb.15
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 15:54:54 -0800 (PST)
+        Tue, 8 Nov 2022 18:57:56 -0500
+Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84DCB5EF8D
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 15:57:55 -0800 (PST)
+Received: by mail-oi1-x233.google.com with SMTP id l127so17226268oia.8
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 15:57:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=JiWDvOMLwtx+qPtph++uEc23arTX0z6pKT8ouEUAZKA=;
+        b=VhaLnrVOPlT9+AiF3gjA4pZdCY1AUaJK+gXTX87j1/FvwXegXEM7fcg7DdgAU9OJ0H
+         p7kdQDggNPDYuEqWv01Kzj0p9aKeVPNQSNrAGL3b+ZZMXf/6fjNVzJsOe32I+w/uu9Af
+         sN0d+/VDQbYNLOxI/jeEeg4saTLX/vXEVN58Vb7g0vr9Euyka4tV/Ga6/k/BqcWCMArU
+         X00lBhVoOAuiECivbh/ZelqIzR9qJ8lq680sfxko6PBoMRRgYOoNrHOOoJ9/dkTPTLJY
+         uw/xVOXAkr0y8iSUdIgXMr4fv7CaqSfi6VuMrlzwf2Wq0tAbNU4537GrOMEtMsqLJVKk
+         v1Cw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=KnksoYaM8c4ehrc9G/4XJM9Rzso4aSMZWSvfC6plin4=;
-        b=wcDw0BWfivubsc2Thw+umINuVEhfnlQE9nhxHekEqjkJ9W2vPk6sm9Xg9WWYE28A8d
-         FcPN0tdqf8zgc8HZGCY3cT9EDk152kVzh6EIjYbGM7ENktK3BCYd7rtnEaSXR6pSRIrH
-         mzKv9Z8XyokdTWsiFkjthm+nR8jPdbsJde4bq9clnI5eA1s7CCz+84+aRx2LJsU9gdqB
-         rC3oLninBPhCpgm1eFCsik1YJUgEdLTc2HJfXcXFCemzGvjSYhH9hG4mtwA7aMbuorXZ
-         h2QFh5L6KlQkk28ZpD9IkTuMLi57ZY+M5An6IEPfZZoWeWQa1GEtfA9WWyb0B9ES11lr
-         7+9Q==
-X-Gm-Message-State: ANoB5plqTHLHkRDT9uhbsYzmULXDosMuvvupA0uwWYF+8M9C8XQr709E
-        WY7hrQi7JPy28xL1RR4B389nGOJVcnZs6Sj8c72oQV9EVOq0nxJpzDLTXED76GC73B/HYCB8LVg
-        Jf/58KLUuht+HaQ6ZkMRwnPEKKTHD
-X-Received: by 2002:a17:90a:49c9:b0:217:c5f6:4092 with SMTP id l9-20020a17090a49c900b00217c5f64092mr17169909pjm.33.1667951694114;
-        Tue, 08 Nov 2022 15:54:54 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf7lkcyT6KvvbkCMvIGHyAcNSvH+64wkGaI4+wTqhrX3TWqblxAynjwlMg46xqVUO1hbqGJEPw==
-X-Received: by 2002:a17:90a:49c9:b0:217:c5f6:4092 with SMTP id l9-20020a17090a49c900b00217c5f64092mr17169877pjm.33.1667951693797;
-        Tue, 08 Nov 2022 15:54:53 -0800 (PST)
-Received: from pc-zest.atmarktech (162.198.187.35.bc.googleusercontent.com. [35.187.198.162])
-        by smtp.gmail.com with ESMTPSA id c1-20020a170902b68100b00186a2444a43sm7469812pls.27.2022.11.08.15.54.53
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 08 Nov 2022 15:54:53 -0800 (PST)
-Received: from martinet by pc-zest.atmarktech with local (Exim 4.96)
-        (envelope-from <martinet@pc-zest>)
-        id 1osYQe-00C2iT-1F;
-        Wed, 09 Nov 2022 08:54:52 +0900
-Date:   Wed, 9 Nov 2022 08:54:42 +0900
-From:   Dominique Martinet <dominique.martinet@atmark-techno.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Marcel Holtmann <marcel@holtmann.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-bluetooth@vger.kernel.org,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S . Miller" <davem@davemloft.net>, mizo@atmark-techno.com
-Subject: Re: [RFC PATCH 1/2] dt-bindings: net: h4-bluetooth: add new bindings
- for hci_h4
-Message-ID: <Y2rsQowbtvOdmQO9@atmark-techno.com>
+        bh=JiWDvOMLwtx+qPtph++uEc23arTX0z6pKT8ouEUAZKA=;
+        b=hYiKuMHPE4Bvd9lnmAjsPtNaYgBhVVLqZyYhpRxzpZiqxAcwdJYD/s4DkyEffju+XO
+         /GbFJDjG3TvksYihMTIo2YAPBdQbkHhrSRf/EGUruenx7IDw9JkHPnjWDyroLJrW2gS9
+         xtuFc4D/OHRIaY56uOt6fJZYEnas3A3/+dR/5hpvA2AIai7Xszjok765N1tMWzB+xIir
+         Fh95iQFb3jGnziEoij9dI51EQBKG5LuXF2/EkTnKeODQVUFjCoyed2BqhnLVFMlELBBe
+         +rEgEFJTx1/ZKImDzkX0Asod6ZrMExnn23NaJkT3rU1OCReyUDqHFk8xfd3XG5zyeU9g
+         3BRg==
+X-Gm-Message-State: ACrzQf0o337ailU4CbvCwKpCVC9CcTGTki2Ur4fIb7Y1VvPufWW/58I8
+        TUjzL/aufSmulthmM/UOO8T9wFAJGT0=
+X-Google-Smtp-Source: AMsMyM5xmoES1i0QIvQLNLj35NsWKoYedHY6JpYljmcdg4PXbhxcx+hYvVqG+qE4wi6uQNhJeAT8GQ==
+X-Received: by 2002:a05:6808:1488:b0:35a:5eed:f5b4 with SMTP id e8-20020a056808148800b0035a5eedf5b4mr13117557oiw.73.1667951874760;
+        Tue, 08 Nov 2022 15:57:54 -0800 (PST)
+Received: from macondo.. ([2804:431:e7cc:805:20d8:ca0b:7b1e:63d3])
+        by smtp.gmail.com with ESMTPSA id t12-20020a056870f20c00b001375188dae9sm5333818oao.16.2022.11.08.15.57.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Nov 2022 15:57:54 -0800 (PST)
+From:   Rafael Mendonca <rafaelmendsr@gmail.com>
+To:     Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Rafael Mendonca <rafaelmendsr@gmail.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] tracing/eprobe: Fix memory leak of filter string
+Date:   Tue,  8 Nov 2022 20:57:38 -0300
+Message-Id: <20221108235738.1021467-1-rafaelmendsr@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAL_JsqKCb2ZA+CLTVnGBMjp6zu0yw-rSFjWRg2S3hA7S6h-XEA@mail.gmail.com>
- <6a4f7104-8b6f-7dcd-a7ac-f866956e31d6@linaro.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks for all the replies!
+The filter string doesn't get freed when a dynamic event is deleted. If a
+filter is set, then memory is leaked:
 
-All remarks make sense, I'll do my homework and send a v2 once extra
-questions have been answered.
+root@localhost:/sys/kernel/tracing# echo 'e:egroup/stat_runtime_4core \
+        sched/sched_stat_runtime runtime=$runtime:u32 if cpu < 4' >> dynamic_events
+root@localhost:/sys/kernel/tracing# echo "-:egroup/stat_runtime_4core"  >> dynamic_events
+root@localhost:/sys/kernel/tracing# echo scan > /sys/kernel/debug/kmemleak
+[  224.416373] kmemleak: 1 new suspected memory leaks (see /sys/kernel/debug/kmemleak)
+root@localhost:/sys/kernel/tracing# cat /sys/kernel/debug/kmemleak
+unreferenced object 0xffff88810156f1b8 (size 8):
+  comm "bash", pid 224, jiffies 4294935612 (age 55.800s)
+  hex dump (first 8 bytes):
+    63 70 75 20 3c 20 34 00                          cpu < 4.
+  backtrace:
+    [<000000009f880725>] __kmem_cache_alloc_node+0x18e/0x720
+    [<0000000042492946>] __kmalloc+0x57/0x240
+    [<0000000034ea7995>] __trace_eprobe_create+0x1214/0x1d30
+    [<00000000d70ef730>] trace_probe_create+0xf6/0x110
+    [<00000000915c7b16>] eprobe_dyn_event_create+0x21/0x30
+    [<000000000d894386>] create_dyn_event+0xf3/0x1a0
+    [<00000000e9af57d5>] trace_parse_run_command+0x1a9/0x2e0
+    [<0000000080777f18>] dyn_event_write+0x39/0x50
+    [<0000000089f0ec73>] vfs_write+0x311/0xe50
+    [<000000003da1bdda>] ksys_write+0x158/0x2a0
+    [<00000000bb1e616e>] __x64_sys_write+0x7c/0xc0
+    [<00000000e8aef1f7>] do_syscall_64+0x60/0x90
+    [<00000000fe7fe8ba>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
-Rob Herring wrote on Tue, Nov 08, 2022 at 07:59:33AM -0600:
-> On Mon, Nov 7, 2022 at 11:56 PM Dominique Martinet
-> <dominique.martinet@atmark-techno.com> wrote:
-> > Add devicetree binding to support defining a bluetooth device using the h4
-> > uart protocol
-> 
-> The protocol is mostly irrelevant to the binding. The binding is for a
-> particular device even if the driver is shared.
+Additionally, in __trace_eprobe_create() function, if an error occurs after
+the call to trace_eprobe_parse_filter(), which allocates the filter string,
+then memory is also leaked. That can be reproduced by creating the same
+event probe twice:
 
-This echoes the point below: I wanted to make this a bit more generic
-for other adapters, question at the end of my first reply to Krzysztof
-below.
+root@localhost:/sys/kernel/tracing# echo 'e:egroup/stat_runtime_4core \
+        sched/sched_stat_runtime runtime=$runtime:u32 if cpu < 4' >> dynamic_events
+root@localhost:/sys/kernel/tracing# echo 'e:egroup/stat_runtime_4core \
+        sched/sched_stat_runtime runtime=$runtime:u32 if cpu < 4' >> dynamic_events
+-bash: echo: write error: File exists
+root@localhost:/sys/kernel/tracing# echo scan > /sys/kernel/debug/kmemleak
+[  207.871584] kmemleak: 1 new suspected memory leaks (see /sys/kernel/debug/kmemleak)
+root@localhost:/sys/kernel/tracing# cat /sys/kernel/debug/kmemleak
+unreferenced object 0xffff8881020d17a8 (size 8):
+  comm "bash", pid 223, jiffies 4294938308 (age 31.000s)
+  hex dump (first 8 bytes):
+    63 70 75 20 3c 20 34 00                          cpu < 4.
+  backtrace:
+    [<000000000e4f5f31>] __kmem_cache_alloc_node+0x18e/0x720
+    [<0000000024f0534b>] __kmalloc+0x57/0x240
+    [<000000002930a28e>] __trace_eprobe_create+0x1214/0x1d30
+    [<0000000028387903>] trace_probe_create+0xf6/0x110
+    [<00000000a80d6a9f>] eprobe_dyn_event_create+0x21/0x30
+    [<000000007168698c>] create_dyn_event+0xf3/0x1a0
+    [<00000000f036bf6a>] trace_parse_run_command+0x1a9/0x2e0
+    [<00000000014bde8b>] dyn_event_write+0x39/0x50
+    [<0000000078a097f7>] vfs_write+0x311/0xe50
+    [<00000000996cb208>] ksys_write+0x158/0x2a0
+    [<00000000a3c2acb0>] __x64_sys_write+0x7c/0xc0
+    [<0000000006b5d698>] do_syscall_64+0x60/0x90
+    [<00000000780e8ecf>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
-> There's now a pending (in linux-next) net/bluetooth/ directory and a
-> bluetooth-controller.yaml schema which you should reference.
+Fix both issues by releasing the filter string in
+trace_event_probe_cleanup().
 
-Will check it out and add that.
+Fixes: 752be5c5c910 ("tracing/eprobe: Add eprobe filter support")
+Signed-off-by: Rafael Mendonca <rafaelmendsr@gmail.com>
+---
+ kernel/trace/trace_eprobe.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Krzysztof Kozlowski wrote on Tue, Nov 08, 2022 at 12:37:39PM +0100:
-> > diff --git a/Documentation/devicetree/bindings/net/h4-bluetooth.yaml b/Documentation/devicetree/bindings/net/h4-bluetooth.yaml
-> > new file mode 100644
-> > index 000000000000..5d11b89ca386
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/net/h4-bluetooth.yaml
-> 
-> If the schema is for one specific device, then filename matching the
-> compatible, so nxp,aw-xm458-bt.yaml... but I understand you want to
-> describe here class of devices using H4 Bluetooth? Won't they need their
-> own specific properties?
-
-H4 bluetooth itself has very little configurable elements, from what I
-can see about the device I'm using the actual configuration is done by
-the wifi driver that uploads a "combo" firmware over the PCI side
-(it's based on mwifiex, so for example mrvl/pcieuart8997_combo_v4.bin
-upstream works the same way afaik)
-
-This is a pretty terrible design, as the Bluetooth side cannot actually
-know when the device is ready as the initialization takes place, but
-that means there really aren't any property to give here
-
-(I haven't reproduced during normal boot, but in particular if I run
-bluetoothd before loading the wifi driver, I need to unbind/bind the
-serial device from the hci_uart_h4 driver to recover bluetooth...
-With that in mind it might actually be best to try to coordinate this
-from userspace with btattach after all, and I'd be happy with that if I
-didn't have to fight our init system so much, but as things stand having
-it autoloaded by the kernel is more convenient for us... Which is
-admitedly a weak reason for you all, feel free to tell me this isn't
-viable)
-
-
-Anyway, there probably would be other devices benefiting from this, at
-the very least other cards in the mwifiex family, but I'm doing this as
-a end user so I'm not comfortable adding devices I cannot test.
-
-So with all of this (sorry for the wall of text), should I try to keep
-this generic, or just give up and make it specific to nxp,aw-xm458-bt
-and let whoever adds the next device rename the file?
-
-
-> > +examples:
-> > +  - |
-> > +    #include <dt-bindings/gpio/gpio.h>
-> > +    #include <dt-bindings/clock/imx8mp-clock.h>
-> > +
-> > +    uart {
-> > +        fsl,dte-mode = <1>;
-> > +        fsl,uart-has-rtscts;
-> 
-> Are these two related to this hardware?
-
-I'd say it's related to my soc rather than the Bluetooth adapter; I
-tried to give a full example but it's unrelated and I'll drop this as
-well.
-
+diff --git a/kernel/trace/trace_eprobe.c b/kernel/trace/trace_eprobe.c
+index c2153bf59936..e888446d80fa 100644
+--- a/kernel/trace/trace_eprobe.c
++++ b/kernel/trace/trace_eprobe.c
+@@ -52,6 +52,7 @@ static void trace_event_probe_cleanup(struct trace_eprobe *ep)
+ 	kfree(ep->event_system);
+ 	if (ep->event)
+ 		trace_event_put_ref(ep->event);
++	kfree(ep->filter_str);
+ 	kfree(ep);
+ }
+ 
 -- 
-Dominique Martinet
-
+2.34.1
 
