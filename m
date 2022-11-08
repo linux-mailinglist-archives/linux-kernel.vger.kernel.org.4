@@ -2,67 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D9586217F8
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 16:21:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC59D62182D
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 16:26:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234070AbiKHPVW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 10:21:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45574 "EHLO
+        id S234084AbiKHP0Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 10:26:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234106AbiKHPVU (ORCPT
+        with ESMTP id S233784AbiKHP0L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 10:21:20 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCB2C38AC
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 07:21:14 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2EA5D61633
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 15:21:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 385FAC433C1;
-        Tue,  8 Nov 2022 15:21:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1667920873;
-        bh=Ig3E3BtNkG1UvTcoImrclXzJXrA+uPW4+Ymp9OZw0Ww=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=EFLiQsEWJ4mjLLdRMdJmUxZIxwD3v+96jSt4qs5sR+YeWVU22ahr7TFVv/MWcb5Tu
-         D4STTxO2gr8LxHsarvCqKE9YY6W553yTWtNbBxQcdZsGP9+b/6bk/Gx/TUtvvFL+RW
-         eidBAfoPNxslsOXISQowailiu9JlJq9znA78/Z7M=
-Date:   Tue, 8 Nov 2022 16:21:10 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Jerom van der Sar <jerom.vandersar@gmail.com>
-Cc:     philipp.g.hortmann@gmail.com, error27@gmail.com,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4] staging: rtl8192e: space formatting fixes in rtl_cam.c
-Message-ID: <Y2pz5twhWN2eJT24@kroah.com>
-References: <Y2IbI8ib5+k+bVRo@kroah.com>
- <20221102200057.397-1-jerom.vandersar@gmail.com>
+        Tue, 8 Nov 2022 10:26:11 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86C4B1B1ED
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 07:26:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667921170; x=1699457170;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=2sNOy9ulPORYB52wRvqD0fPlkyq4EYoVkq0/22yT/SM=;
+  b=MPtEhowioTpNuwpMo6kBdQYNpfXfAx3apk2Dv6J2FdC2RLWprHlnFcDX
+   y5oLyFDgxwyMKzV4A2+jLG8VwXBagBb3FvmXyNTrW7U7rkjzXLfm3yhEr
+   mo7FSoPIjUMegwldP+PFy6fDI09Wbib2feqkc2IZDIuoZpUsanM8t0l55
+   ks62C7Y9ObPKM0d7pp5MeBgGa6rJv8HUM91rnxiRDI/Ny58bzLXI1hAdl
+   jx4gTprsq9RalzYOA2O4EOdR/KV9QFp8iAU1ERjPESPURp0fbKFAPKzDP
+   nntaFaJaDSPekrrEXx9hYeXQEwfBa2gSj9ArhKYGqZQfJaNWt7MABa5KC
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10525"; a="337449522"
+X-IronPort-AV: E=Sophos;i="5.96,148,1665471600"; 
+   d="scan'208";a="337449522"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2022 07:21:16 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10525"; a="811274538"
+X-IronPort-AV: E=Sophos;i="5.96,148,1665471600"; 
+   d="scan'208";a="811274538"
+Received: from aavneri-mobl1.amr.corp.intel.com (HELO [10.212.24.169]) ([10.212.24.169])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2022 07:21:15 -0800
+Message-ID: <7996e8b5-9783-29c3-0027-f7bf933d75a0@linux.intel.com>
+Date:   Tue, 8 Nov 2022 09:21:14 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221102200057.397-1-jerom.vandersar@gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.2.2
+Subject: Re: [PATCH linux-next] ASoC: SOF: remove duplicated included
+ sof-audio.h
+Content-Language: en-US
+To:     yang.yang29@zte.com.cn, Mark Brown <broonie@kernel.org>,
+        Takashi Iwai <tiwai@suse.com>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>
+Cc:     lgirdwood@gmail.com, peter.ujfalusi@linux.intel.com,
+        linux-kernel@vger.kernel.org, xu.panda668@gmail.com
+References: <202211081931524521356@zte.com.cn>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <202211081931524521356@zte.com.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 02, 2022 at 09:00:58PM +0100, Jerom van der Sar wrote:
-> Fixed a few coding style issues in rtl_cam.c: two times lack of
-> spaces around binary operators. Some other warnings still remain.
-> These issues were found by scripts/checkpatch.pl.
-> 
-> This patch helps clean up the rtl8192e driver in staging, making it
-> easier to read and maintain.
-> 
-> Signed-off-by: Jerom van der Sar <jerom.vandersar@gmail.com>
-> ---
-> Changes in v4:
->  - Reverted more double blank line formatting fixes to make the patch
->    even smaller.
+You need to CC: maintainers and the alsa-devel mailing list in a v2
 
-Does not apply to my tree :(
+On 11/8/22 05:31, yang.yang29@zte.com.cn wrote:
+> From: Xu Panda <xu.panda@zte.com.cn>
+> 
+> The sof-audio.h is included more than once.
+> 
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
+> Signed-off-by: Xu Panda <xu.panda@zte.com.cn>
+> Signed-off-by: Yang Yang <yang.yang29@zte.com>
+
+Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+
+> ---
+>  sound/soc/sof/amd/acp-common.c | 1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/sound/soc/sof/amd/acp-common.c b/sound/soc/sof/amd/acp-common.c
+> index 27b95187356e..348e70dfe2a5 100644
+> --- a/sound/soc/sof/amd/acp-common.c
+> +++ b/sound/soc/sof/amd/acp-common.c
+> @@ -13,7 +13,6 @@
+>  #include "../sof-priv.h"
+>  #include "../sof-audio.h"
+>  #include "../ops.h"
+> -#include "../sof-audio.h"
+>  #include "acp.h"
+>  #include "acp-dsp-offset.h"
+> 
