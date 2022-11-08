@@ -2,508 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E78CF620490
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 01:16:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51E47620489
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 01:15:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233095AbiKHAQN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 19:16:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47068 "EHLO
+        id S232953AbiKHAPz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 19:15:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233023AbiKHAQD (ORCPT
+        with ESMTP id S232083AbiKHAPy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 19:16:03 -0500
-Received: from thorn.bewilderbeest.net (thorn.bewilderbeest.net [IPv6:2605:2700:0:5::4713:9cab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A17D124959;
-        Mon,  7 Nov 2022 16:16:01 -0800 (PST)
-Received: from hatter.bewilderbeest.net (97-113-250-99.tukw.qwest.net [97.113.250.99])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: zev)
-        by thorn.bewilderbeest.net (Postfix) with ESMTPSA id 12B2DB76;
-        Mon,  7 Nov 2022 16:16:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bewilderbeest.net;
-        s=thorn; t=1667866561;
-        bh=3VhOcEvxFccvRIos7On0Hck2TyHvd6rH+W1YQcByc3w=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Tp7F6FChc19LJVnti4xee0My7n/ntUElyCrEZiGdUs4Q8g9aouJkNtfDWwcHsMaa3
-         4QaD+QWF9dR0lHHzpWVVEXcKm+PZ2h4K8bLcZj8mtC52cw446WUvlqVdxzyODhEseQ
-         K0I8tD1AYTE//ergGoK/7EjHhWmQyYNz4wxJUYXo=
-From:   Zev Weiss <zev@bewilderbeest.net>
-To:     linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, soc@kernel.org
-Cc:     Zev Weiss <zev@bewilderbeest.net>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Arnd Bergmann <arnd@arndb.de>, Joel Stanley <joel@jms.id.au>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Olof Johansson <olof@lixom.net>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org
-Subject: [PATCH v2 2/2] ARM: dts: aspeed: Add Delta AHE-50DC BMC
-Date:   Mon,  7 Nov 2022 16:15:51 -0800
-Message-Id: <20221108001551.18175-3-zev@bewilderbeest.net>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221108001551.18175-1-zev@bewilderbeest.net>
-References: <20221108001551.18175-1-zev@bewilderbeest.net>
+        Mon, 7 Nov 2022 19:15:54 -0500
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75852240BD
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 16:15:53 -0800 (PST)
+Received: by mail-il1-f198.google.com with SMTP id h20-20020a056e021d9400b00300581edaa5so9986279ila.12
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 16:15:53 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=kVNNuLLGgelV/9xzO4pFlRh5Pn9rCXjBZ2XsV4Ryk3I=;
+        b=GPZlQf+SG9G/Vm6Tq5y81LGwVN2dC4IXz8T3A7TTZmafbMjStxihSngB6bPsWJD4SK
+         OnlaFszVYCy57BTxHeJdvlFJm6ooEivkojcE623zTukKVnZ+VDfqmHVXR1q/G+xMoJGL
+         vHHU4Z3IWp9QzUflBvzbE/wDUTQXCp627sk943r9KAVwE15m44PyjSwPG/RXxDY4ftfP
+         JSuTRsz+DZssSntDp8AfXfETTU6S3XbxtOZpvgjTee0U8EEfz2mIDHXyjRRsAw5ZqQ8n
+         EJSNNpVdyu1wfBaF6eOrrFzyQZX8uL/13uvwbgRYC0qreuVDvVYrRZ4Io6FWRCl3U8Pj
+         mElw==
+X-Gm-Message-State: ACrzQf0Cr8+xdeVVmkyfXKHCrsg/H4nFfH2e4yhZcA9kcNfr/oaSoxJa
+        Uxk4K9a05Ht0/qXJmxJaBk/KqbOQ5FcFa0A+aSUl4JBdF7Tl
+X-Google-Smtp-Source: AMsMyM6OKtM8oYKG9ke6xzQflEt4ODd1XHnCWjZXS34r+2HSVycQZAadI+H46F6ygEMqHaE7poT1gp/8+bppizoJYOLw6oPTneNV
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6e02:1bc4:b0:300:61e9:69af with SMTP id
+ x4-20020a056e021bc400b0030061e969afmr30785458ilv.191.1667866552859; Mon, 07
+ Nov 2022 16:15:52 -0800 (PST)
+Date:   Mon, 07 Nov 2022 16:15:52 -0800
+In-Reply-To: <0000000000007edb6605ecbb6442@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000006a83e705ecea7171@google.com>
+Subject: Re: [syzbot] INFO: trying to register non-static key in f2fs_handle_error
+From:   syzbot <syzbot+40642be9b7e0bb28e0df@syzkaller.appspotmail.com>
+To:     chao@kernel.org, jaegeuk@kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        terrelln@fb.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is a 1U Open19 power shelf with six PSUs and 50 12VDC outputs via
-LM25066 efuses.  It's managed by a pair of AST1250 BMCs in a redundant
-active/active configuration using a PCA9541 on each I2C bus to
-arbitrate access between the two.
+syzbot has found a reproducer for the following issue on:
 
-Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
----
- arch/arm/boot/dts/Makefile                    |   1 +
- .../arm/boot/dts/aspeed-bmc-delta-ahe50dc.dts | 418 ++++++++++++++++++
- 2 files changed, 419 insertions(+)
- create mode 100644 arch/arm/boot/dts/aspeed-bmc-delta-ahe50dc.dts
+HEAD commit:    f0c4d9fc9cc9 Linux 6.1-rc4
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+console output: https://syzkaller.appspot.com/x/log.txt?x=15e494fe880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=ff27f0c8b406726e
+dashboard link: https://syzkaller.appspot.com/bug?extid=40642be9b7e0bb28e0df
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: arm64
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10822271880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14f4cd51880000
 
-diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index 6aa7dc4db2fc..8961fbb2c0bc 100644
---- a/arch/arm/boot/dts/Makefile
-+++ b/arch/arm/boot/dts/Makefile
-@@ -1588,6 +1588,7 @@ dtb-$(CONFIG_ARCH_ASPEED) += \
- 	aspeed-bmc-asrock-e3c246d4i.dtb \
- 	aspeed-bmc-asrock-romed8hm3.dtb \
- 	aspeed-bmc-bytedance-g220a.dtb \
-+	aspeed-bmc-delta-ahe50dc.dtb \
- 	aspeed-bmc-facebook-bletchley.dtb \
- 	aspeed-bmc-facebook-cloudripper.dtb \
- 	aspeed-bmc-facebook-cmm.dtb \
-diff --git a/arch/arm/boot/dts/aspeed-bmc-delta-ahe50dc.dts b/arch/arm/boot/dts/aspeed-bmc-delta-ahe50dc.dts
-new file mode 100644
-index 000000000000..6600f7e9bf5e
---- /dev/null
-+++ b/arch/arm/boot/dts/aspeed-bmc-delta-ahe50dc.dts
-@@ -0,0 +1,418 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+/dts-v1/;
-+
-+#include "aspeed-g4.dtsi"
-+#include <dt-bindings/gpio/aspeed-gpio.h>
-+
-+#define EFUSE_OUTPUT(n)					\
-+	efuse##n {					\
-+		compatible = "regulator-output";	\
-+		vout-supply = <&efuse##n>;		\
-+	}
-+
-+#define __stringify(x) #x
-+
-+#define EFUSE(hexaddr, num)							\
-+	efuse@##hexaddr {							\
-+		compatible = "lm25066";						\
-+		reg = <0x##hexaddr>;						\
-+		shunt-resistor-micro-ohms = <675>;				\
-+		regulators {							\
-+			efuse##num: vout0 {					\
-+				regulator-name = __stringify(efuse##num##-reg);	\
-+			};							\
-+		};								\
-+	}
-+
-+/{
-+	model = "Delta Power AHE-50DC";
-+	compatible = "delta,ahe50dc-bmc", "aspeed,ast2400";
-+
-+	aliases {
-+		serial4 = &uart5;
-+
-+		/*
-+		 * pca9541-arbitrated logical i2c buses are numbered as the
-+		 * corresponding physical bus plus 20
-+		 */
-+		i2c20 = &i2carb0;
-+		i2c21 = &i2carb1;
-+		i2c22 = &i2carb2;
-+		i2c23 = &i2carb3;
-+		i2c24 = &i2carb4;
-+		i2c26 = &i2carb6;
-+		i2c27 = &i2carb7;
-+		i2c28 = &i2carb8;
-+		i2c32 = &i2carb12;
-+	};
-+
-+	chosen {
-+		stdout-path = &uart3;
-+		bootargs = "console=ttyS2,115200n8 earlycon";
-+	};
-+
-+	memory@40000000 {
-+		reg = <0x40000000 0x10000000>;
-+	};
-+
-+	leds {
-+		compatible = "gpio-leds";
-+
-+		heartbeat {
-+			gpios = <&gpio ASPEED_GPIO(P, 0) GPIO_ACTIVE_HIGH>;
-+			linux,default-trigger = "heartbeat";
-+		};
-+
-+		panic {
-+			gpios = <&gpio ASPEED_GPIO(P, 2) GPIO_ACTIVE_HIGH>;
-+			linux,default-trigger = "panic";
-+		};
-+	};
-+
-+	iio-hwmon {
-+		compatible = "iio-hwmon";
-+		io-channels = <&adc 0>, <&adc 1>, <&adc 2>, <&adc 3>, <&adc 4>,
-+			<&adc 5>, <&adc 6>, <&adc 7>, <&adc 8>, <&adc 9>;
-+	};
-+
-+	EFUSE_OUTPUT(01);
-+	EFUSE_OUTPUT(02);
-+	EFUSE_OUTPUT(03);
-+	EFUSE_OUTPUT(04);
-+	EFUSE_OUTPUT(05);
-+	EFUSE_OUTPUT(06);
-+	EFUSE_OUTPUT(07);
-+	EFUSE_OUTPUT(08);
-+	EFUSE_OUTPUT(09);
-+	EFUSE_OUTPUT(10);
-+	EFUSE_OUTPUT(11);
-+	EFUSE_OUTPUT(12);
-+	EFUSE_OUTPUT(13);
-+	EFUSE_OUTPUT(14);
-+	EFUSE_OUTPUT(15);
-+	EFUSE_OUTPUT(16);
-+	EFUSE_OUTPUT(17);
-+	EFUSE_OUTPUT(18);
-+	EFUSE_OUTPUT(19);
-+	EFUSE_OUTPUT(20);
-+	EFUSE_OUTPUT(21);
-+	EFUSE_OUTPUT(22);
-+	EFUSE_OUTPUT(23);
-+	EFUSE_OUTPUT(24);
-+	EFUSE_OUTPUT(25);
-+	EFUSE_OUTPUT(26);
-+	EFUSE_OUTPUT(27);
-+	EFUSE_OUTPUT(28);
-+	EFUSE_OUTPUT(29);
-+	EFUSE_OUTPUT(30);
-+	EFUSE_OUTPUT(31);
-+	EFUSE_OUTPUT(32);
-+	EFUSE_OUTPUT(33);
-+	EFUSE_OUTPUT(34);
-+	EFUSE_OUTPUT(35);
-+	EFUSE_OUTPUT(36);
-+	EFUSE_OUTPUT(37);
-+	EFUSE_OUTPUT(38);
-+	EFUSE_OUTPUT(39);
-+	EFUSE_OUTPUT(40);
-+	EFUSE_OUTPUT(41);
-+	EFUSE_OUTPUT(42);
-+	EFUSE_OUTPUT(43);
-+	EFUSE_OUTPUT(44);
-+	EFUSE_OUTPUT(45);
-+	EFUSE_OUTPUT(46);
-+	EFUSE_OUTPUT(47);
-+	EFUSE_OUTPUT(48);
-+	EFUSE_OUTPUT(49);
-+	EFUSE_OUTPUT(50);
-+
-+};
-+
-+&fmc {
-+	status = "okay";
-+
-+	flash@0 {
-+		status = "okay";
-+		m25p,fast-read;
-+		label = "flash0";
-+		spi-max-frequency = <50000000>; // 50 MHz
-+#include "openbmc-flash-layout.dtsi"
-+	};
-+};
-+
-+&uart3 {
-+	status = "okay";
-+};
-+
-+&mac1 {
-+	status = "okay";
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_rgmii2_default &pinctrl_mdio2_default>;
-+};
-+
-+&i2c0 {
-+	status = "okay";
-+	bus-frequency = <200000>;
-+
-+	pca9541@79 {
-+		compatible = "nxp,pca9541";
-+		reg = <0x79>;
-+
-+		i2carb0: i2c-arb {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+
-+			/* lm25066 efuses @ 10-17, 40-47, 50-57 */
-+			EFUSE(10, 03);
-+			EFUSE(11, 04);
-+			EFUSE(12, 01);
-+			EFUSE(13, 02);
-+			EFUSE(14, 13);
-+			EFUSE(15, 14);
-+			EFUSE(16, 15);
-+			EFUSE(17, 16);
-+			EFUSE(40, 12);
-+			EFUSE(41, 11);
-+			EFUSE(42, 10);
-+			EFUSE(43, 09);
-+			EFUSE(44, 08);
-+			EFUSE(45, 07);
-+			EFUSE(46, 05);
-+			EFUSE(47, 06);
-+			EFUSE(50, 17);
-+			EFUSE(51, 18);
-+			EFUSE(52, 20);
-+			EFUSE(53, 19);
-+			EFUSE(54, 22);
-+			EFUSE(55, 21);
-+			EFUSE(56, 24);
-+			EFUSE(57, 23);
-+		};
-+	};
-+};
-+
-+&i2c1 {
-+	status = "okay";
-+	bus-frequency = <200000>;
-+
-+	pca9541@72 {
-+		compatible = "nxp,pca9541";
-+		reg = <0x72>;
-+
-+		i2carb1: i2c-arb {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+		};
-+	};
-+};
-+
-+&i2c2 {
-+	status = "okay";
-+	bus-frequency = <200000>;
-+
-+	pca9541@73 {
-+		compatible = "nxp,pca9541";
-+		reg = <0x73>;
-+
-+		i2carb2: i2c-arb {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+		};
-+	};
-+};
-+
-+&i2c3 {
-+	status = "okay";
-+	bus-frequency = <200000>;
-+
-+	pca9541@74 {
-+		compatible = "nxp,pca9541";
-+		reg = <0x74>;
-+
-+		i2carb3: i2c-arb {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+		};
-+	};
-+};
-+
-+&i2c4 {
-+	status = "okay";
-+	bus-frequency = <200000>;
-+
-+	pca9541@7a {
-+		compatible = "nxp,pca9541";
-+		reg = <0x7a>;
-+
-+		i2carb4: i2c-arb {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+
-+			gpio@20 {
-+				compatible = "nxp,pca9534";
-+				reg = <0x20>;
-+				gpio-controller;
-+				#gpio-cells = <2>;
-+			};
-+
-+			/* lm25066 efuses @ 10-17, 40-47, 50-57, 59, 5a */
-+			EFUSE(10, 27);
-+			EFUSE(11, 28);
-+			EFUSE(12, 25);
-+			EFUSE(13, 26);
-+			EFUSE(14, 37);
-+			EFUSE(15, 38);
-+			EFUSE(16, 39);
-+			EFUSE(17, 40);
-+			EFUSE(40, 36);
-+			EFUSE(41, 35);
-+			EFUSE(42, 34);
-+			EFUSE(43, 33);
-+			EFUSE(44, 32);
-+			EFUSE(45, 31);
-+			EFUSE(46, 29);
-+			EFUSE(47, 30);
-+			EFUSE(50, 41);
-+			EFUSE(51, 42);
-+			EFUSE(52, 44);
-+			EFUSE(53, 43);
-+			EFUSE(54, 46);
-+			EFUSE(55, 45);
-+			EFUSE(56, 48);
-+			EFUSE(57, 47);
-+			EFUSE(59, 49);
-+			EFUSE(5a, 50);
-+		};
-+	};
-+};
-+
-+&i2c6 {
-+	status = "okay";
-+	bus-frequency = <200000>;
-+
-+	pca9541@75 {
-+		compatible = "nxp,pca9541";
-+		reg = <0x75>;
-+
-+		i2carb6: i2c-arb {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+		};
-+	};
-+};
-+
-+&i2c7 {
-+	status = "okay";
-+	bus-frequency = <200000>;
-+
-+	pca9541@76 {
-+		compatible = "nxp,pca9541";
-+		reg = <0x76>;
-+
-+		i2carb7: i2c-arb {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+		};
-+	};
-+};
-+
-+&i2c8 {
-+	status = "okay";
-+	bus-frequency = <200000>;
-+
-+	pca9541@7c {
-+		compatible = "nxp,pca9541";
-+		reg = <0x7c>;
-+
-+		i2carb8: i2c-arb {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+
-+			fancontrol@30 {
-+				compatible = "delta,ahe50dc-fan";
-+				reg = <0x30>;
-+			};
-+
-+			/* Baseboard FRU eeprom */
-+			eeprom@50 {
-+				compatible = "atmel,24c02";
-+				reg = <0x50>;
-+			};
-+		};
-+	};
-+};
-+
-+&i2c12 {
-+	status = "okay";
-+	bus-frequency = <200000>;
-+
-+	pca9541@71 {
-+		compatible = "nxp,pca9541";
-+		reg = <0x71>;
-+
-+		i2carb12: i2c-arb {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+		};
-+	};
-+};
-+
-+&gpio {
-+	status = "okay";
-+	gpio-line-names =
-+		/*  A */ "", "", "", "", "", "", "", "",
-+		/*  B */ "", "", "", "", "", "", "", "",
-+		/*  C */ "RESET_PEER_N", "HEARTBEAT_OUT", "", "", "", "", "", "",
-+		/*  D */ "", "", "", "", "", "", "", "",
-+		/*  E */ "DOOM_N", "", "", "", "", "LED_PWR_BLUE", "", "",
-+		/*  F */ "", "", "", "", "", "", "", "",
-+		/*  G */ "", "", "", "", "", "", "", "",
-+		/*  H */ "", "", "", "", "", "", "", "",
-+		/*  I */ "", "", "", "", "", "", "", "",
-+		/*  J */ "", "", "BMC_ID", "", "", "", "", "",
-+		/*  K */ "", "", "", "", "", "", "", "",
-+		/*  L */ "", "", "", "", "", "", "", "",
-+		/*  M */ "", "", "", "", "", "", "", "",
-+		/*  N */ "", "", "", "", "", "", "", "",
-+		/*  O */ "", "", "", "", "", "", "", "",
-+		/*  P */ "LED_GREEN", "", "LED_RED", "", "", "", "", "",
-+		/*  Q */ "", "", "", "", "", "", "", "",
-+		/*  R */ "", "", "", "", "", "", "", "",
-+		/*  S */ "", "", "", "", "", "", "", "",
-+		/*  T */ "", "", "", "", "", "", "", "",
-+		/*  U */ "", "", "", "", "", "", "", "",
-+		/*  V */ "", "", "", "", "", "", "", "",
-+		/*  W */ "", "", "", "", "", "", "", "",
-+		/*  X */ "", "", "", "", "", "", "", "",
-+		/*  Y */ "HEARTBEAT_IN", "BOARDREV0", "BOARDREV1", "",
-+		/*  Z */ "", "", "", "", "", "", "", "",
-+		/* AA */ "", "", "", "", "", "", "", "",
-+		/* AB */ "", "", "", "";
-+
-+	/*
-+	 * I don't rightly know what this GPIO really *is*, but setting it to
-+	 * zero causes the fans to run at full speed, after which setting it
-+	 * back to one causes a power output glitch, so install a hog to keep
-+	 * it at one as a failsafe to ensure nothing accidentally touches it.
-+	 */
-+	doom-guardrail {
-+		gpio-hog;
-+		gpios = <ASPEED_GPIO(E, 0) GPIO_ACTIVE_LOW>;
-+		output-low;
-+	};
-+};
-+
-+&adc {
-+	status = "okay";
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_adc0_default
-+		&pinctrl_adc1_default
-+		&pinctrl_adc2_default
-+		&pinctrl_adc3_default
-+		&pinctrl_adc4_default
-+		&pinctrl_adc5_default
-+		&pinctrl_adc6_default
-+		&pinctrl_adc7_default
-+		&pinctrl_adc8_default
-+		&pinctrl_adc9_default>;
-+};
--- 
-2.38.1
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/92c7e839ac32/disk-f0c4d9fc.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/b7bedbc08fb4/vmlinux-f0c4d9fc.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/3fe25e2dfdb7/Image-f0c4d9fc.gz.xz
+mounted in repro #1: https://storage.googleapis.com/syzbot-assets/1f9d740f89a9/mount_1.gz
+mounted in repro #2: https://storage.googleapis.com/syzbot-assets/6c6db4f39192/mount_2.gz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+40642be9b7e0bb28e0df@syzkaller.appspotmail.com
+
+F2FS-fs (loop0): Invalid log_blocksize (16), supports only 12
+F2FS-fs (loop0): Can't find valid F2FS filesystem in 1th superblock
+F2FS-fs (loop0): inaccessible inode: 2, run fsck to repair
+INFO: trying to register non-static key.
+The code is fine but needs lockdep annotation, or maybe
+you didn't initialize this object before use?
+turning off the locking correctness validator.
+CPU: 1 PID: 3141 Comm: syz-executor147 Not tainted 6.1.0-rc4-syzkaller-31833-gf0c4d9fc9cc9 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/30/2022
+Call trace:
+ dump_backtrace+0x1c4/0x1f0 arch/arm64/kernel/stacktrace.c:156
+ show_stack+0x2c/0x54 arch/arm64/kernel/stacktrace.c:163
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x104/0x16c lib/dump_stack.c:106
+ dump_stack+0x1c/0x58 lib/dump_stack.c:113
+ assign_lock_key+0x134/0x140 kernel/locking/lockdep.c:981
+ register_lock_class+0xc4/0x2f8 kernel/locking/lockdep.c:1294
+ __lock_acquire+0xa8/0x3084 kernel/locking/lockdep.c:4934
+ lock_acquire+0x100/0x1f8 kernel/locking/lockdep.c:5668
+ __raw_spin_lock include/linux/spinlock_api_smp.h:133 [inline]
+ _raw_spin_lock+0x54/0x6c kernel/locking/spinlock.c:154
+ spin_lock include/linux/spinlock.h:350 [inline]
+ f2fs_save_errors fs/f2fs/super.c:3868 [inline]
+ f2fs_handle_error+0x38/0x17c fs/f2fs/super.c:3896
+ f2fs_iget+0x138/0x538 fs/f2fs/inode.c:516
+ f2fs_fill_super+0x10fc/0x1e90 fs/f2fs/super.c:4222
+ mount_bdev+0x1b8/0x210 fs/super.c:1401
+ f2fs_mount+0x44/0x58 fs/f2fs/super.c:4580
+ legacy_get_tree+0x30/0x74 fs/fs_context.c:610
+ vfs_get_tree+0x40/0x140 fs/super.c:1531
+ do_new_mount+0x1dc/0x4e4 fs/namespace.c:3040
+ path_mount+0x358/0x890 fs/namespace.c:3370
+ do_mount fs/namespace.c:3383 [inline]
+ __do_sys_mount fs/namespace.c:3591 [inline]
+ __se_sys_mount fs/namespace.c:3568 [inline]
+ __arm64_sys_mount+0x2c4/0x3c4 fs/namespace.c:3568
+ __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+ invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
+ el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
+ do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
+ el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:637
+ el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
+ el0t_64_sync+0x18c/0x190 arch/arm64/kernel/entry.S:581
+F2FS-fs (loop0): Failed to read F2FS meta data inode
+loop0: detected capacity change from 0 to 8192
+REISERFS warning:  read_super_block: reiserfs filesystem is deprecated and scheduled to be removed from the kernel in 2025
+REISERFS (device loop0): found reiserfs format "3.6" with non-standard journal
+REISERFS (device loop0): using ordered data mode
+reiserfs: using flush barriers
+REISERFS (device loop0): journal params: device loop0, size 512, journal first block 18, max trans len 256, max batch 225, max commit age 30, max trans age 30
+REISERFS (device loop0): checking transaction log (loop0)
+REISERFS (device loop0): Using rupasov hash to sort names
+REISERFS warning (device loop0): jdm-20006 create_privroot: xattrs/ACLs enabled and couldn't find/create .reiserfs_priv. Failing mount.
 
