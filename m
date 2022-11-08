@@ -2,251 +2,624 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9397D620CC8
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 11:01:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65683620CCD
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 11:03:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233813AbiKHKBS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 05:01:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37476 "EHLO
+        id S233819AbiKHKCm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 05:02:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233816AbiKHKBQ (ORCPT
+        with ESMTP id S233835AbiKHKCd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 05:01:16 -0500
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D6BE2B24F
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 02:01:14 -0800 (PST)
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2A89SSnP025369;
-        Tue, 8 Nov 2022 10:00:57 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=7iB60qJUvL4Ren5jwx4wWRI4fo2YZAcZYJ+1rXNr2g8=;
- b=jYAqvmmHDiN67EARPe1M9nr66bA/ZVdNM4VWuYVl5979oeamRwwopmyF/fC3TkY+znzz
- JRrWrVhyA/8WqAGUGv2vWB1CcIvMXu4q87LvxXsNdUGxZCxNOXm/TsWuuljO80/GwhJJ
- G0p/zymXHvxFGBZwYkzolzRkXT2XP3ecYNVa79HdYJsqpyT3kN9RyWAD2bfagH5boOIj
- uewylOH0QArJR9xG/SNHmucp0UZSBvPni8AZnD8j4hA6ejGYFp9ZW3wIwbxy9FVEoKCO
- 1pJm+jpPgjs9Jr4QeclstGTyeIQ8VtTiLvVMDq4Z5mkFdhS8EC2YCMJjxvfMIRLD32mj RA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kqkmx2hb8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 08 Nov 2022 10:00:57 +0000
-Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2A89rwWa014216;
-        Tue, 8 Nov 2022 10:00:56 GMT
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kqkmx2ha4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 08 Nov 2022 10:00:56 +0000
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2A89oP98010000;
-        Tue, 8 Nov 2022 10:00:54 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma03fra.de.ibm.com with ESMTP id 3kngp5jtr2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 08 Nov 2022 10:00:54 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2A8A0pJ02491130
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 8 Nov 2022 10:00:51 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8D82FA4055;
-        Tue,  8 Nov 2022 10:00:51 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id DF8DFA4053;
-        Tue,  8 Nov 2022 10:00:48 +0000 (GMT)
-Received: from li-05afa54c-330e-11b2-a85c-e3f3aa0db1e9.ibm.com (unknown [9.204.207.240])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Tue,  8 Nov 2022 10:00:48 +0000 (GMT)
-Date:   Tue, 8 Nov 2022 15:30:46 +0530
-From:   Vishal Chourasia <vishalc@linux.vnet.ibm.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, mingo@redhat.com,
-        vincent.guittot@linaro.org, vschneid@redhat.com,
-        srikar@linux.vnet.ibm.com, sshegde@linux.ibm.com,
-        linuxppc-dev@lists.ozlabs.org, ritesh.list@gmail.com,
-        aneesh.kumar@linux.ibm.com
-Subject: Re: sched/debug: CPU hotplug operation suffers in a large cpu systems
-Message-ID: <Y2oozs/YgqqRV5hq@li-05afa54c-330e-11b2-a85c-e3f3aa0db1e9.ibm.com>
-References: <Y01UWQL2y2r69sBX@li-05afa54c-330e-11b2-a85c-e3f3aa0db1e9.ibm.com>
- <Y01kc4g9CVmoyOxj@hirez.programming.kicks-ass.net>
- <Y01sk3l8yCMvhvYm@kroah.com>
- <Y06B0pr8hpwzxEzI@li-05afa54c-330e-11b2-a85c-e3f3aa0db1e9.ibm.com>
- <Y06ISBWhJflnV+NI@kroah.com>
- <Y1jVjX9FUuUilcjA@li-05afa54c-330e-11b2-a85c-e3f3aa0db1e9.ibm.com>
- <Y1jbhCYfktL51zNB@kroah.com>
- <Y1j5cqbyZCDlyaTn@hirez.programming.kicks-ass.net>
+        Tue, 8 Nov 2022 05:02:33 -0500
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DDFC2871E
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 02:02:31 -0800 (PST)
+Received: by mail-lf1-x12f.google.com with SMTP id j4so20568971lfk.0
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 02:02:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=EHNjQqKpTzK+fEHFihMcLQbytKyXJaAokofqYVuV5wA=;
+        b=f85zp0xvskFQs6eDSsm9sGJ4sEVBcwAiIqc558ZScZ4Yn+2/z4pNFHdcuuv3HvK8qC
+         iGcjgoIkfZK/EqVv9aKkdlRe0CJhurh5MRXZtPkgnfvZK3VJtWiJWtFmXMIKcASshUfr
+         xyw1DFkkSWrQiqvWk/ft854ZYZfr/lk0PEjxs52vM4Y9ZJ6NPZpHKk/WvVse7PnjerHn
+         z+8zzjS5Ukpw3VTkAOTr/GGm/qODRsnhBGfJBSG7d3hymD+twapfeix7EcdQDAG6x5r9
+         +FE7igQb1BQZ0xSzjdDKlCdoMM57GgB3FptPUUOW8z1vKx/n2nsKtt1Ard4HlT2oEwBt
+         SV3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=EHNjQqKpTzK+fEHFihMcLQbytKyXJaAokofqYVuV5wA=;
+        b=csOmf33e16OhOcw1t2ZXT6ilO/wRtVpBWbjf4W472z8E8r0xSYS8QUNSJB9CDNtn6E
+         mOgqjHCoPxYieZ9Fcrz5J7gxsUlFBKJpiFkuJjfXfR2P4YWqNmWOj5caZkQF+c7hfPX7
+         X25UV2TG1duCZc+tN8iXdHzkvFpR7HUGfnTxRq4n3iN/J7E+moPvU4SZviE8pXYSVl6j
+         pq/m5U0uFubCbRqZBC7XYD5ddAmBEPuK7rProdDs65ApdzCKCBGXiG2HFvU8PsGSKPm4
+         28wXMsmgZlAqRND9+nIaqg83XL1pamzv1aU8OtclzYhkcZAssR5M6S3fRCR4w2CT6Ywh
+         b6RQ==
+X-Gm-Message-State: ACrzQf1yajFqLZEbt7svdAco7+eVtWJm/DPg1jEPS965PnFNQYzqAmVg
+        6mYyTKK5jrtKug9IY42UbxOEeQ==
+X-Google-Smtp-Source: AMsMyM5jPJ5kxg3fGIpaqiQgN+hS5YgpEZHRkTfYuVrNQHj2/36SpHFHuyzVb7LjBRkKTr5gFoWR+g==
+X-Received: by 2002:a05:6512:2144:b0:4a2:3c2b:f694 with SMTP id s4-20020a056512214400b004a23c2bf694mr20770760lfr.642.1667901749862;
+        Tue, 08 Nov 2022 02:02:29 -0800 (PST)
+Received: from [192.168.0.20] (088156142199.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.199])
+        by smtp.gmail.com with ESMTPSA id v2-20020ac258e2000000b0048af397c827sm1711096lfo.218.2022.11.08.02.02.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Nov 2022 02:02:29 -0800 (PST)
+Message-ID: <c2535843-f05e-256a-65dc-59b2325f247b@linaro.org>
+Date:   Tue, 8 Nov 2022 11:02:28 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="UBpU2kI7vuMERruO"
-Content-Disposition: inline
-In-Reply-To: <Y1j5cqbyZCDlyaTn@hirez.programming.kicks-ass.net>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: uUo2UJkkFOI1n3ZZkVZmmpoWRPKICybp
-X-Proofpoint-ORIG-GUID: ghyKGEPRvZc5JBabE61avI6_p-ueX0mL
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-07_11,2022-11-07_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 adultscore=0
- lowpriorityscore=0 phishscore=0 priorityscore=1501 mlxlogscore=999
- suspectscore=0 bulkscore=0 clxscore=1015 impostorscore=0 spamscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211080051
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH] arm64: dts: mediatek: Initial mt8365-evk support
+Content-Language: en-US
+To:     =?UTF-8?Q?Bernhard_Rosenkr=c3=a4nzer?= <bero@baylibre.com>,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com
+References: <20221107211001.257393-1-bero@baylibre.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221107211001.257393-1-bero@baylibre.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 07/11/2022 22:10, Bernhard Rosenkränzer wrote:
+> From: Fabien Parent <fparent@baylibre.com>
+> 
+> This adds minimal support for the MediaTek 8365 SOC and the EVK reference
+> board, allowing the board to boot to initramfs with serial port I/O.
+> 
+> GPIO keys are supported, MMC is partially supported (needs the clocks
+> driver for full support).
+> 
+> Signed-off-by: Fabien Parent <fparent@baylibre.com>
+> [bero@baylibre.com: Removed parts depending on drivers that aren't upstream yet, cleanups]
+> Signed-off-by: Bernhard Rosenkränzer <bero@baylibre.com>
+> ---
+> 
+> Compared to the previous version of the patch submitted by Fabien
+> Parent, this removes dependencies on drivers/patches that are not yet in
+> mainline (obviously this comes with some reduced functionality for now;
+> this will be added back as drivers are accepted), and addresses some
+> feedback from reviewers.
+> 
+>  arch/arm64/boot/dts/mediatek/Makefile       |   1 +
+>  arch/arm64/boot/dts/mediatek/mt8365-evk.dts | 344 +++++++++++
+>  arch/arm64/boot/dts/mediatek/mt8365.dtsi    | 602 ++++++++++++++++++++
+>  3 files changed, 947 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/mediatek/mt8365-evk.dts
+>  create mode 100644 arch/arm64/boot/dts/mediatek/mt8365.dtsi
+> 
+> diff --git a/arch/arm64/boot/dts/mediatek/Makefile b/arch/arm64/boot/dts/mediatek/Makefile
+> index 0ec90cb3ef289..e668fd50a3326 100644
+> --- a/arch/arm64/boot/dts/mediatek/Makefile
+> +++ b/arch/arm64/boot/dts/mediatek/Makefile
+> @@ -46,4 +46,5 @@ dtb-$(CONFIG_ARCH_MEDIATEK) += mt8195-cherry-tomato-r2.dtb
+>  dtb-$(CONFIG_ARCH_MEDIATEK) += mt8195-cherry-tomato-r3.dtb
+>  dtb-$(CONFIG_ARCH_MEDIATEK) += mt8195-demo.dtb
+>  dtb-$(CONFIG_ARCH_MEDIATEK) += mt8195-evb.dtb
+> +dtb-$(CONFIG_ARCH_MEDIATEK) += mt8365-evk.dtb
+>  dtb-$(CONFIG_ARCH_MEDIATEK) += mt8516-pumpkin.dtb
+> diff --git a/arch/arm64/boot/dts/mediatek/mt8365-evk.dts b/arch/arm64/boot/dts/mediatek/mt8365-evk.dts
+> new file mode 100644
+> index 0000000000000..a24e478fff51f
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/mediatek/mt8365-evk.dts
+> @@ -0,0 +1,344 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (c) 2021-2022 BayLibre, SAS.
+> + * Authors:
+> + * Fabien Parent <fparent@baylibre.com>
+> + * Bernhard Rosenkränzer <bero@baylibre.com>
+> + */
+> +
+> +/dts-v1/;
+> +
+> +#include <dt-bindings/gpio/gpio.h>
+> +#include <dt-bindings/input/input.h>
+> +#include <dt-bindings/pinctrl/mt8365-pinfunc.h>
+> +#include "mt8365.dtsi"
+> +
+> +/ {
+> +	model = "MediaTek MT8365 Open Platform EVK";
+> +	compatible = "mediatek,mt8365-evk", "mediatek,mt8365";
 
---UBpU2kI7vuMERruO
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Missing documentation.
+
+Run checkpatch on your patches. It will print several warnings, which
+must be fixed.
 
 
-Thanks Greg & Peter for your direction.=20
+> +
+> +	aliases {
+> +		serial0 = &uart0;
+> +	};
+> +
+> +	chosen {
+> +		stdout-path = "serial0:921600n8";
+> +	};
+> +
+> +	firmware {
+> +		optee {
+> +			compatible = "linaro,optee-tz";
+> +			method = "smc";
+> +		};
+> +	};
+> +
+> +	gpio-keys {
+> +		compatible = "gpio-keys";
+> +		input-name = "gpio-keys";
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&gpio_keys>;
+> +
+> +		key-volume-up {
+> +			gpios = <&pio 24 GPIO_ACTIVE_LOW>;
+> +			label = "volume_up";
+> +			linux,code = <KEY_VOLUMEUP>;
+> +			wakeup-source;
+> +			debounce-interval = <15>;
+> +		};
+> +	};
+> +
+> +	memory@40000000 {
+> +		device_type = "memory";
+> +		reg = <0 0x40000000 0 0xc0000000>;
+> +	};
+> +
+> +	usb_otg_vbus: regulator-2 {
 
-While we pursue the idea of having debugfs based on kernfs, we thought about
-having a boot time parameter which would disable creating and updating of t=
-he
-sched_domain debugfs files and this would also be useful even when the kern=
-fs
-solution kicks in, as users who may not care about these debugfs files would
-benefit from a faster CPU hotplug operation.
+Where are regulators 0 and 1 (or just 1)?
 
-However, these sched_domain debugfs files are created by default.
+> +		compatible = "regulator-fixed";
+> +		regulator-name = "otg_vbus";
+> +		regulator-min-microvolt = <5000000>;
+> +		regulator-max-microvolt = <5000000>;
+> +		gpio = <&pio 16 GPIO_ACTIVE_HIGH>;
+> +		enable-active-high;
+> +	};
+> +
 
--- vishal.c
+(...)
 
------->8-----------------------------------------------------8<------------=
---
+> +
+> +		mcucfg: syscon@10200000 {
+> +			compatible = "mediatek,mt8365-mcucfg", "syscon";
+> +			reg = <0 0x10200000 0 0x2000>;
+> +			#clock-cells = <1>;
+> +		};
+> +
+> +		sysirq: interrupt-controller@10200a80 {
+> +			compatible = "mediatek,mt8365-sysirq",
+> +				     "mediatek,mt6577-sysirq";
+> +			interrupt-controller;
+> +			#interrupt-cells = <3>;
+> +			interrupt-parent = <&gic>;
+> +			reg = <0 0x10200a80 0 0x20>;
+> +		};
+> +
+> +		infracfg_nao: infracfg-nao@1020e000 {
 
-=46rom f66f66ee05a9f719b58822d13e501d65391dd9d3 Mon Sep 17 00:00:00 2001
-=46rom: Vishal Chourasia <vishalc@linux.vnet.ibm.com>
-Date: Tue, 8 Nov 2022 14:21:15 +0530
-Subject: [PATCH] Add kernel parameter to disable creation of sched_domain
- files
+Node names should be generic.
+https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
 
-For large systems, creation of sched_domain debug files takes unusually long
-time. In which case, sched_sd_export can be passed as kernel command line
-parameter during boot time to prevent kernel from creating sched_domain fil=
-es.
+> +			compatible = "syscon";
 
-This commit adds a kernel command line parameter, sched_sd_export, which ca=
-n be
-used to, optionally, disable the creation of sched_domain debug files.=20
----
- kernel/sched/debug.c    |  9 ++++++---
- kernel/sched/sched.h    |  1 +
- kernel/sched/topology.c | 11 ++++++++++-
- 3 files changed, 17 insertions(+), 4 deletions(-)
+Not allowed on its own.
 
-diff --git a/kernel/sched/debug.c b/kernel/sched/debug.c
-index bb3d63bdf4ae..bd307847b76a 100644
---- a/kernel/sched/debug.c
-+++ b/kernel/sched/debug.c
-@@ -279,6 +279,7 @@ static const struct file_operations sched_dynamic_fops =
-=3D {
- #endif /* CONFIG_PREEMPT_DYNAMIC */
-=20
- __read_mostly bool sched_debug_verbose;
-+__read_mostly int sched_debug_export =3D 1;
-=20
- static const struct seq_operations sched_debug_sops;
-=20
-@@ -321,9 +322,11 @@ static __init int sched_init_debug(void)
- 	debugfs_create_u32("migration_cost_ns", 0644, debugfs_sched, &sysctl_sche=
-d_migration_cost);
- 	debugfs_create_u32("nr_migrate", 0644, debugfs_sched, &sysctl_sched_nr_mi=
-grate);
-=20
--	mutex_lock(&sched_domains_mutex);
--	update_sched_domain_debugfs();
--	mutex_unlock(&sched_domains_mutex);
-+	if (likely(sched_debug_export)) {
-+		mutex_lock(&sched_domains_mutex);
-+		update_sched_domain_debugfs();
-+		mutex_unlock(&sched_domains_mutex);
-+	}
- #endif
-=20
- #ifdef CONFIG_NUMA_BALANCING
-diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-index e26688d387ae..a4d06588d876 100644
---- a/kernel/sched/sched.h
-+++ b/kernel/sched/sched.h
-@@ -2738,6 +2738,7 @@ extern struct sched_entity *__pick_last_entity(struct=
- cfs_rq *cfs_rq);
-=20
- #ifdef	CONFIG_SCHED_DEBUG
- extern bool sched_debug_verbose;
-+extern int sched_debug_export;
-=20
- extern void print_cfs_stats(struct seq_file *m, int cpu);
- extern void print_rt_stats(struct seq_file *m, int cpu);
-diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
-index 8739c2a5a54e..7bcdbc2f856d 100644
---- a/kernel/sched/topology.c
-+++ b/kernel/sched/topology.c
-@@ -19,6 +19,13 @@ static int __init sched_debug_setup(char *str)
- }
- early_param("sched_verbose", sched_debug_setup);
-=20
-+static int __init sched_debug_disable_export(char *str)
-+{
-+	sched_debug_export =3D 0;
-+	return 0;
-+}
-+early_param("sched_sd_export", sched_debug_disable_export);
-+
- static inline bool sched_debug(void)
- {
- 	return sched_debug_verbose;
-@@ -152,6 +159,7 @@ static void sched_domain_debug(struct sched_domain *sd,=
- int cpu)
- #else /* !CONFIG_SCHED_DEBUG */
-=20
- # define sched_debug_verbose 0
-+# define sched_debug_export 1
- # define sched_domain_debug(sd, cpu) do { } while (0)
- static inline bool sched_debug(void)
- {
-@@ -2632,7 +2640,8 @@ void partition_sched_domains_locked(int ndoms_new, cp=
-umask_var_t doms_new[],
- 	dattr_cur =3D dattr_new;
- 	ndoms_cur =3D ndoms_new;
-=20
--	update_sched_domain_debugfs();
-+	if (likely(sched_debug_export))
-+		update_sched_domain_debugfs();
- }
-=20
- /*
+> +			reg = <0 0x1020e000 0 0x1000>;
+> +		};
+> +
+> +		rng: rng@1020f000 {
+> +			compatible = "mediatek,mt8365-rng",
+> +				     "mediatek,mt7623-rng";
+> +			reg = <0 0x1020f000 0 0x100>;
+> +			clocks = <&infracfg CLK_IFR_TRNG>;
+> +			clock-names = "rng";
+> +		};
+> +
+> +		apdma: dma-controller@11000280 {
+> +			compatible = "mediatek,mt8365-uart-dma",
+> +				     "mediatek,mt6577-uart-dma";
+> +			reg = <0 0x11000280 0 0x80>,
+> +			      <0 0x11000300 0 0x80>,
+> +			      <0 0x11000380 0 0x80>,
+> +			      <0 0x11000400 0 0x80>,
+> +			      <0 0x11000580 0 0x80>,
+> +			      <0 0x11000600 0 0x80>;
+> +			interrupts = <GIC_SPI 45 IRQ_TYPE_LEVEL_LOW>,
+> +				     <GIC_SPI 46 IRQ_TYPE_LEVEL_LOW>,
+> +				     <GIC_SPI 47 IRQ_TYPE_LEVEL_LOW>,
+> +				     <GIC_SPI 48 IRQ_TYPE_LEVEL_LOW>,
+> +				     <GIC_SPI 51 IRQ_TYPE_LEVEL_LOW>,
+> +				     <GIC_SPI 52 IRQ_TYPE_LEVEL_LOW>;
+> +			dma-requests = <6>;
+> +			clocks = <&infracfg CLK_IFR_AP_DMA>;
+> +			clock-names = "apdma";
+> +			#dma-cells = <1>;
+> +		};
+> +
+> +		auxadc: adc@11001000 {
+> +			compatible = "mediatek,mt8365-auxadc",
+> +				     "mediatek,mt8173-auxadc";
+> +			reg = <0 0x11001000 0 0x1000>;
+> +			clocks = <&infracfg CLK_IFR_AUXADC>;
+> +			clock-names = "main";
+> +			#io-channel-cells = <1>;
+> +		};
+> +
+> +		uart0: serial@11002000 {
+> +			compatible = "mediatek,mt8365-uart",
+> +				     "mediatek,mt6577-uart";
+> +			reg = <0 0x11002000 0 0x1000>;
+> +			interrupts = <GIC_SPI 35 IRQ_TYPE_LEVEL_LOW>;
+> +			clocks = <&clk26m>, <&infracfg CLK_IFR_UART0>;
+> +			clock-names = "baud", "bus";
+> +			dmas = <&apdma 0>, <&apdma 1>;
+> +			dma-names = "tx", "rx";
+> +			status = "disabled";
+> +		};
+> +
+> +		uart1: serial@11003000 {
+> +			compatible = "mediatek,mt8365-uart",
+> +				     "mediatek,mt6577-uart";
+> +			reg = <0 0x11003000 0 0x1000>;
+> +			interrupts = <GIC_SPI 36 IRQ_TYPE_LEVEL_LOW>;
+> +			clocks = <&clk26m>, <&infracfg CLK_IFR_UART1>;
+> +			clock-names = "baud", "bus";
+> +			dmas = <&apdma 2>, <&apdma 3>;
+> +			dma-names = "tx", "rx";
+> +			status = "disabled";
+> +		};
+> +
+> +		uart2: serial@11004000 {
+> +			compatible = "mediatek,mt8365-uart",
+> +				     "mediatek,mt6577-uart";
+> +			reg = <0 0x11004000 0 0x1000>;
+> +			interrupts = <GIC_SPI 37 IRQ_TYPE_LEVEL_LOW>;
+> +			clocks = <&clk26m>, <&infracfg CLK_IFR_UART2>;
+> +			clock-names = "baud", "bus";
+> +			dmas = <&apdma 4>, <&apdma 5>;
+> +			dma-names = "tx", "rx";
+> +			status = "disabled";
+> +		};
+> +
+> +		pwm: pwm@11006000 {
+> +			compatible = "mediatek,mt8365-pwm";
+> +			reg = <0 0x11006000 0 0x1000>;
+> +			#pwm-cells = <2>;
+> +			interrupts = <GIC_SPI 76 IRQ_TYPE_LEVEL_LOW>;
+> +			clocks = <&infracfg CLK_IFR_PWM_HCLK>,
+> +				 <&infracfg CLK_IFR_PWM>,
+> +				 <&infracfg CLK_IFR_PWM1>,
+> +				 <&infracfg CLK_IFR_PWM2>,
+> +				 <&infracfg CLK_IFR_PWM3>;
+> +			clock-names = "top", "main", "pwm1", "pwm2", "pwm3";
+> +		};
+> +
+> +		i2c0: i2c@11007000 {
+> +			compatible = "mediatek,mt8365-i2c",
+> +				     "mediatek,mt8168-i2c";
+> +			reg = <0 0x11007000 0 0xa0>,
+> +			      <0 0x11000080 0 0x80>;
+> +			interrupts = <GIC_SPI 28 IRQ_TYPE_LEVEL_LOW>;
+> +			clock-div = <1>;
+> +			clocks = <&infracfg CLK_IFR_I2C0_AXI>,
+> +				 <&infracfg CLK_IFR_AP_DMA>;
+> +			clock-names = "main", "dma";
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +			status = "disabled";
+> +		};
+> +
+> +		i2c1: i2c@11008000 {
+> +			compatible = "mediatek,mt8365-i2c",
+> +				     "mediatek,mt8168-i2c";
+> +			reg = <0 0x11008000 0 0xa0>,
+> +			      <0 0x11000100 0 0x80>;
+> +			interrupts = <GIC_SPI 29 IRQ_TYPE_LEVEL_LOW>;
+> +			clock-div = <1>;
+> +			clocks = <&infracfg CLK_IFR_I2C1_AXI>,
+> +				 <&infracfg CLK_IFR_AP_DMA>;
+> +			clock-names = "main", "dma";
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +			status = "disabled";
+> +		};
+> +
+> +		i2c2: i2c@11009000 {
+> +			compatible = "mediatek,mt8365-i2c",
+> +				     "mediatek,mt8168-i2c";
+> +			reg = <0 0x11009000 0 0xa0>,
+> +			      <0 0x11000180 0 0x80>;
+> +			interrupts = <GIC_SPI 30 IRQ_TYPE_LEVEL_LOW>;
+> +			clock-div = <1>;
+> +			clocks = <&infracfg CLK_IFR_I2C2_AXI>,
+> +				 <&infracfg CLK_IFR_AP_DMA>;
+> +			clock-names = "main", "dma";
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +			status = "disabled";
+> +		};
+> +
+> +		spi: spi@1100a000 {
+> +			compatible = "mediatek,mt8365-spi",
+> +				     "mediatek,mt7622-spi";
+> +			reg = <0 0x1100a000 0 0x100>;
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +			interrupts = <GIC_SPI 62 IRQ_TYPE_LEVEL_LOW>;
+> +			clocks = <&topckgen CLK_TOP_UNIVPLL2_D4>,
+> +				 <&topckgen CLK_TOP_SPI_SEL>,
+> +				 <&infracfg CLK_IFR_SPI0>;
+> +			clock-names = "parent-clk", "sel-clk", "spi-clk";
+> +			status = "disabled";
+> +		};
+> +
+> +		thermal: thermal@1100b000 {
+> +			compatible = "mediatek,mt8365-thermal";
+> +			reg = <0 0x1100b000 0 0x1000>;
+> +			interrupts = <GIC_SPI 22 IRQ_TYPE_LEVEL_LOW>;
+> +			clocks = <&infracfg CLK_IFR_THERM>,
+> +				 <&infracfg CLK_IFR_AUXADC>;
+> +			clock-names = "therm", "auxadc";
+> +			mediatek,auxadc = <&auxadc>;
+> +			mediatek,apmixedsys = <&apmixedsys>;
+> +			nvmem-cells = <&thermal_calibration>;
+> +			nvmem-cell-names = "calibration-data";
+> +			#thermal-sensor-cells = <1>;
+> +		};
+> +
+> +		i2c3: i2c@1100f000 {
+> +			compatible = "mediatek,mt8365-i2c",
+> +				     "mediatek,mt8168-i2c";
+> +			reg = <0 0x1100f000 0 0xa0>,
+> +			      <0 0x11000200 0 0x80>;
+> +			interrupts = <GIC_SPI 31 IRQ_TYPE_LEVEL_LOW>;
+> +			clock-div = <1>;
+> +			clocks = <&infracfg CLK_IFR_I2C3_AXI>,
+> +				 <&infracfg CLK_IFR_AP_DMA>;
+> +			clock-names = "main", "dma";
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +			status = "disabled";
+> +		};
+> +
+> +		ssusb: usb@11201000 {
+> +			compatible = "mediatek,mt8365-mtu3", "mediatek,mtu3";
+> +			reg = <0 0x11201000 0 0x2e00>,
+> +			      <0 0x11203e00 0 0x0100>;
+> +			reg-names = "mac", "ippc";
+> +			interrupts = <GIC_SPI 16 IRQ_TYPE_LEVEL_LOW>;
+> +			phys = <&u2port0 PHY_TYPE_USB2>,
+> +			       <&u2port1 PHY_TYPE_USB2>;
+> +			clocks = <&topckgen CLK_TOP_SSUSB_TOP_CK_EN>,
+> +				 <&infracfg CLK_IFR_SSUSB_REF>,
+> +				 <&infracfg CLK_IFR_SSUSB_SYS>,
+> +				 <&infracfg CLK_IFR_ICUSB>;
+> +			clock-names = "sys_ck", "ref_ck", "mcu_ck",
+> +				      "dma_ck";
+> +			#address-cells = <2>;
+> +			#size-cells = <2>;
+> +			ranges;
+> +			status = "disabled";
+> +
+> +			usb_host: usb@11200000 {
+> +				compatible = "mediatek,mt8365-xhci",
+> +					     "mediatek,mtk-xhci";
+> +				reg = <0 0x11200000 0 0x1000>;
+> +				reg-names = "mac";
+> +				interrupts = <GIC_SPI 67 IRQ_TYPE_LEVEL_LOW>;
+> +				clocks = <&topckgen CLK_TOP_SSUSB_TOP_CK_EN>,
+> +					 <&infracfg CLK_IFR_SSUSB_REF>,
+> +					 <&infracfg CLK_IFR_SSUSB_SYS>,
+> +					 <&infracfg CLK_IFR_ICUSB>,
+> +					 <&infracfg CLK_IFR_SSUSB_XHCI>;
+> +				clock-names = "sys_ck", "ref_ck", "mcu_ck",
+> +					      "dma_ck", "xhci_ck";
+> +				status = "disabled";
+> +			};
+> +		};
+> +
+> +		mmc0: mmc@11230000 {
+> +			compatible = "mediatek,mt8365-mmc", "mediatek,mt8183-mmc";
+> +			reg = <0 0x11230000 0 0x1000>,
+> +			      <0 0x11cd0000 0 0x1000>;
+> +			interrupts = <GIC_SPI 23 IRQ_TYPE_LEVEL_LOW>;
+> +			clocks = <&topckgen CLK_TOP_MSDC50_0_SEL>,
+> +				 <&infracfg CLK_IFR_MSDC0_HCLK>,
+> +				 <&infracfg CLK_IFR_MSDC0_SRC>;
+> +			clock-names = "source", "hclk", "source_cg";
+> +			status = "disabled";
+> +		};
+> +
+> +		mmc1: mmc@11240000 {
+> +			compatible = "mediatek,mt8365-mmc", "mediatek,mt8183-mmc";
+> +			reg = <0 0x11240000 0 0x1000>,
+> +			      <0 0x11c90000 0 0x1000>;
+> +			interrupts = <GIC_SPI 24 IRQ_TYPE_LEVEL_LOW>;
+> +			clocks = <&topckgen CLK_TOP_MSDC30_1_SEL>,
+> +				 <&infracfg CLK_IFR_MSDC1_HCLK>,
+> +				 <&infracfg CLK_IFR_MSDC1_SRC>;
+> +			clock-names = "source", "hclk", "source_cg";
+> +			status = "disabled";
+> +		};
+> +
+> +		ethernet: ethernet@112a0000 {
+> +			compatible = "mediatek,mt8365-eth";
+> +			reg = <0 0x112a0000 0 0x1000>;
+> +			mediatek,pericfg = <&infracfg>;
+> +			interrupts = <GIC_SPI 25 IRQ_TYPE_LEVEL_HIGH>;
+> +			clocks = <&topckgen CLK_TOP_ETH_SEL>,
+> +				 <&infracfg CLK_IFR_NIC_AXI>,
+> +				 <&infracfg CLK_IFR_NIC_SLV_AXI>;
+> +			clock-names = "core", "reg", "trans";
+> +			status = "disabled";
+> +		};
+> +
+> +		mipi_tx0: dsi-phy@11c00000 {
+> +			compatible = "mediatek,mt8365-mipi-tx",
+> +				     "mediatek,mt8183-mipi-tx";
+> +			reg = <0 0x11c00000 0 0x800>;
+> +			clocks = <&clk26m>;
+> +			clock-names = "ref_clk";
+> +			#clock-cells = <0>;
+> +			#phy-cells = <0>;
+> +			clock-output-names = "mipi_tx0_pll";
+> +		};
+> +
+> +		efuse: efuse@11c50000 {
+> +			compatible = "mediatek,mt8365-efuse", "mediatek,efuse";
+> +			reg = <0 0x11c50000 0 0x1000>;
+> +			#address-cells = <1>;
+> +			#size-cells = <1>;
+> +
+> +			thermal_calibration: calib@180 {
+> +				reg = <0x180 0xc>;
+> +			};
+> +		};
+> +
+> +		u3phy: t-phy@11cc0000 {
 
-base-commit: 7e18e42e4b280c85b76967a9106a13ca61c16179
---=20
-2.31.1
+Node names should be generic, so just phy
+https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
 
- =20
+> +			compatible = "mediatek,mt8365-tphy",
+> +				     "mediatek,generic-tphy-v2";
+> +			#address-cells = <2>;
+> +			#size-cells = <2>;
+> +			#phy-cells = <1>;
+> +			ranges;
+> +
+> +			u2port0: usb-phy@11cc0000 {
+> +				reg = <0 0x11cc0000 0 0x400>;
+> +				clocks = <&topckgen CLK_TOP_SSUSB_PHY_CK_EN>,
+> +					 <&topckgen CLK_TOP_USB20_48M_EN>;
+> +				clock-names = "ref", "da_ref";
+> +				#phy-cells = <1>;
+> +			};
+> +
+> +			u2port1: usb-phy@11cc1000 {
+> +				reg = <0 0x11cc1000 0 0x400>;
+> +				clocks = <&topckgen CLK_TOP_SSUSB_PHY_CK_EN>,
+> +					 <&topckgen CLK_TOP_USB20_48M_EN>;
+> +				clock-names = "ref", "da_ref";
+> +				#phy-cells = <1>;
+> +			};
+> +		};
+> +
+> +		mfgcfg: syscon@13000000 {
+> +			compatible = "mediatek,mt8365-mfgcfg", "syscon";
+> +			reg = <0 0x13000000 0 0x1000>;
+> +			#clock-cells = <1>;
+> +		};
+> +
+> +		mmsys: syscon@14000000 {
+> +			compatible = "mediatek,mt8365-mmsys", "syscon";
+> +			reg = <0 0x14000000 0 0x1000>;
+> +			#clock-cells = <1>;
+> +		};
+> +
+> +		camsys: syscon@15000000 {
+> +			compatible = "mediatek,mt8365-imgsys", "syscon";
+> +			reg = <0 0x15000000 0 0x1000>;
+> +			#clock-cells = <1>;
+> +		};
+> +
+> +		vdecsys: syscon@16000000 {
+> +			compatible = "mediatek,mt8365-vdecsys", "syscon";
+> +			reg = <0 0x16000000 0 0x1000>;
+> +			#clock-cells = <1>;
+> +		};
+> +
+> +		vencsys: syscon@17000000 {
+> +			compatible = "mediatek,mt8365-vencsys", "syscon";
+> +			reg = <0 0x17000000 0 0x1000>;
+> +			#clock-cells = <1>;
+> +		};
+> +
+> +		apu: syscon@19020000 {
+> +			compatible = "mediatek,mt8365-apu", "syscon";
+> +			reg = <0 0x19020000 0 0x1000>;
+> +			#clock-cells = <1>;
+> +		};
+> +	};
+> +
+> +	thermal-zones {
+> +		cpu_thermal: cpu-thermal {
+> +			polling-delay-passive = <1000>; /* milliseconds */
+> +			polling-delay = <1000>; /* milliseconds */
+> +			thermal-sensors = <&thermal 0>;
+> +
+> +			trips {
+> +				threshold: trip-point0 {
+> +					temperature = <95000>;
+> +					hysteresis = <2000>;
+> +					type = "passive";
+> +				};
+> +
+> +				target: trip-point1 {
+> +					temperature = <105000>;
+> +					hysteresis = <2000>;
+> +					type = "passive";
+> +				};
+> +
+> +				cpu_crit: cpu_crit0 {
+> +					temperature = <117000>;
+> +					hysteresis = <2000>;
+> +					type = "critical";
+> +				};
+> +			};
+> +
+> +			cooling-maps {
+> +				map0 {
+> +					trip = <&target>;
+> +					cooling-device =
+> +						<&cpu0
+> +						 THERMAL_NO_LIMIT
+> +						 THERMAL_NO_LIMIT>,
+> +						<&cpu1
+> +						 THERMAL_NO_LIMIT
+> +						 THERMAL_NO_LIMIT>,
+> +						<&cpu2
+> +						 THERMAL_NO_LIMIT
+> +						 THERMAL_NO_LIMIT>,
+> +						<&cpu3
+> +						 THERMAL_NO_LIMIT
+> +						 THERMAL_NO_LIMIT>;
+> +					contribution = <100>;
+> +				};
+> +			};
+> +		};
+> +	};
+> +
+> +
 
---UBpU2kI7vuMERruO
-Content-Type: application/pgp-signature; name="signature.asc"
+Only one blank line.
 
------BEGIN PGP SIGNATURE-----
+> +	timer {
+> +		compatible = "arm,armv8-timer";
+> +		interrupt-parent = <&gic>;
+> +		interrupts = <GIC_PPI 13 IRQ_TYPE_LEVEL_LOW 0>,
+> +			     <GIC_PPI 14 IRQ_TYPE_LEVEL_LOW 0>,
+> +			     <GIC_PPI 11 IRQ_TYPE_LEVEL_LOW 0>,
+> +			     <GIC_PPI 10 IRQ_TYPE_LEVEL_LOW 0>;
+> +	};
+> +};
 
-iQEzBAEBCAAdFiEEyetz6oh8pzQ87ZNz8y5vG2Pik+wFAmNqKMIACgkQ8y5vG2Pi
-k+xZTgf+O4+TVrSssEu9R1VM/1n9SjLRJkgmuRNOKW0mIxLPcZ55qWYN0kD/4Mb+
-jUnHWFPF1X5yC1E3ntmd6sEa2wNbkBF76CH1BMavTU8cvwhcZ34GuJtGp6MYaJ6s
-xNGbtxzcRuSVosPW1FloESNhlYmL0x8jXySEYoaAHkyW1teBwvfg6lEAPMeEaUkT
-DasNW8FWw0MfjwVtj9lf1k7XAUutQRG3f/Jcmpc7lmYAHfZcbxldBDuTJTdNo62S
-k09BYcMI1+0zR1sX7pM9nciPVrWFblfmxyiVlXBNqKeDyl+dBxkKaGP5iW0QLlFS
-nTttuQ73QeT8/FRlsWbxwTUsYzzRqQ==
-=JIfg
------END PGP SIGNATURE-----
-
---UBpU2kI7vuMERruO--
+Best regards,
+Krzysztof
 
