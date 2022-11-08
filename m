@@ -2,95 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E1F0621904
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 17:04:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7F08621905
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 17:04:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234615AbiKHQEm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 11:04:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46446 "EHLO
+        id S234497AbiKHQEo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 11:04:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234576AbiKHQEi (ORCPT
+        with ESMTP id S233873AbiKHQEj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 11:04:38 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FB9F554DD
+        Tue, 8 Nov 2022 11:04:39 -0500
+Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64CEA5E3F7
         for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 08:04:37 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id u8-20020a17090a5e4800b002106dcdd4a0so18310640pji.1
+Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-13b103a3e5dso16731231fac.2
         for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 08:04:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=4L0lpxFgO08elzxEtFZTCq5Rc3ge2xMVqe4z2m5l5wc=;
-        b=A0oz87VXTZAnhZ0m8CQYGaqCJt7I/iJ8VMWO7Ia8ixaAVV/jaPgBA8zDBTUNOjQnor
-         3uaqGwKOL+9R7cp5RIWfK8Afcv5w4MyShRoWwpc0ne358Y9HQ1qNykYG+u9bgM4Y7y2C
-         bfGtaHk+YPidVzxOFydB83w26Enpi9jWnWJFiucubh1PtHx8DeURE3jfDqwGPkKr4sn3
-         +HscKsItoi4gn5ym3DhSG1E57kcMGHsRLjN79ss3cj9omuT/hNhnbXn9JJen57WUW/OG
-         2w6pTXB/65shmdOKkoEI++p+Y6FX9L89/ds+2xZS+31CJY9FEMxLDaTJ6PANfyTdJUQn
-         aOPg==
+        bh=V9WW/Du0LmflcuOKD72qp9hdgPApATYBjvbbNnooJNM=;
+        b=pvW3ul5TA2U+eZJ2wXA2kdXoN89zJU48kYrRmknFgRokK0CzXywAVNV2Hxfj2PCFxN
+         0rlLlWF6j/zEF9vfJdObccLk+GeRboCIP0gxau8ghbh6+zBR1GcYQWLzQelP9sEjjRxV
+         2h9juXWNHAlGyabhFRGdTFYjXDL94RLaAtQfNemCBmfJU7e2xGs+Fatm5KgkLu6max91
+         0gSL21e5n5Xci4zcn3DdLNJ+wtZlOTtBBA1z31+OpDcXSkIPCE1tnglr04qEHqONbbBw
+         +gi3ivWbEb0ezhYncRCP/P5sG8GubGDBP/RsJJsC+nhYDKeh7e7pqf8y7d1yQoqiux/g
+         QqwA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=4L0lpxFgO08elzxEtFZTCq5Rc3ge2xMVqe4z2m5l5wc=;
-        b=dkYzw96E0ecJykTPjTW/nDSyrSnzxYN3bZ7YS5gUYnrhifpKY59U1mVOn8ZQ8HeSVl
-         tQF1WDWuanQ518oiEOddSxCE0h+t+8MrkAmfCTP4ggl71JVOzx0+20GsG7q0LKCb6q+H
-         0gA9o4C3RtMKZSlp+wDUl0eZ0otN5FLr+YctPnsP0Q/6gazCjNKvK3WRDzhkZ3pIgFwN
-         ixuzGiNlwSOJyQ+FmFKDaLGI7zMaINTeSkDx2GgS9kkgPkvqvmetVfHB7E9wM1IBTzWb
-         +xr7qX3UvYV9/ZZzkWS/LZ3fsfx8GnvwdavxVGCxooHnYKSilbpixIri0mJPU4RdDWd3
-         Tp5g==
-X-Gm-Message-State: ACrzQf3DX5BjrTDXwLJQ6xxj13oIZ0NwRx4wiTjGglZDVTKhSd6Aadi5
-        FZSa26L8eMEdRgO8wHinJyS0SiQMGZonEmaRHpX91g==
-X-Google-Smtp-Source: AMsMyM7TbT/aYwtVR4cqz4woE5o/71SJRXngQtG6YCrAh1dB18sTimWfSWV0k2qjNcC6qDEuFLBx2IAPwVGpiyKgIDA=
-X-Received: by 2002:a17:902:8c92:b0:178:29d4:600f with SMTP id
- t18-20020a1709028c9200b0017829d4600fmr57171112plo.40.1667923417870; Tue, 08
- Nov 2022 08:03:37 -0800 (PST)
+        bh=V9WW/Du0LmflcuOKD72qp9hdgPApATYBjvbbNnooJNM=;
+        b=UN6UcNbW1fKRTckYo8W2+OX2xKve+11KFeBKQtzukD3OB4wdFZKqI2QXpGp5Fmnthk
+         rv+IUGen2VVaYVoH6OLb/ZDcTFjra+B+8d+k5oN0GXvjcVdOuCcFH9OlyKCVjDu5eG84
+         nWzWRjFNTqjUx3fLeIn0rjAgqzyKRj8ggkxj3tS1u5howpWHikwpxsDtme5rSpbFEgyM
+         pleXZpjacrPCqOtWgeM4Pj6h40LZXjbMEpAN7tUMSO0GMkcR/xAzC7GgtyVUSLiK/fNC
+         dXpus65v9RyzDoimZ+LYEKQ0qC/6o4oHm1UcujHHMGULFBXclJ/zZwImHaf7dAOFPHi+
+         gRiw==
+X-Gm-Message-State: ACrzQf2ahmXhGdheZV/rVM0NShU95BQWKIf5NXmyqNKi3li6s4z3+M+C
+        DT1W63QlOF+0+VFTeTuPAPPsq7bDhUqrEZYcXnQ=
+X-Google-Smtp-Source: AMsMyM6BjPUKTgkeMdt975a7Gbd69NCGhbEeA3cnlPUJ5xqBsVxxF7ICZN+CcqXY0kaFQ3uibC2Wj5qVLNIBu6aorwQ=
+X-Received: by 2002:a05:6870:a7a4:b0:136:7c39:979e with SMTP id
+ x36-20020a056870a7a400b001367c39979emr33934235oao.96.1667923451842; Tue, 08
+ Nov 2022 08:04:11 -0800 (PST)
 MIME-Version: 1.0
-References: <20221108082533.21384-1-hayashi.kunihiko@socionext.com> <20221108082533.21384-5-hayashi.kunihiko@socionext.com>
-In-Reply-To: <20221108082533.21384-5-hayashi.kunihiko@socionext.com>
-From:   Jassi Brar <jaswinder.singh@linaro.org>
-Date:   Tue, 8 Nov 2022 10:03:27 -0600
-Message-ID: <CAJe_ZhfMq1ET+TonauySxfCUv2n=xrsEf9T4o9zePwS5feeGMg@mail.gmail.com>
-Subject: Re: [PATCH 4/4] mmc: f-sdh30: Add compatible string for Socionext F_SDH30_E51
-To:     Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-Cc:     Adrian Hunter <adrian.hunter@intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221104092931.20226-1-tanglongjun@kylinos.cn>
+In-Reply-To: <20221104092931.20226-1-tanglongjun@kylinos.cn>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Tue, 8 Nov 2022 11:03:59 -0500
+Message-ID: <CADnq5_Pxh8G=xguW=wa9x2W_c67RD+5EGJXcTC99_sbUqsVLBA@mail.gmail.com>
+Subject: Re: [PATCH v1] drm/amd/display: Have risk for memory exhaustion
+To:     LongJun Tang <tanglongjun@kylinos.cn>
+Cc:     alexander.deucher@amd.com, Rodrigo.Siqueira@amd.com,
+        harry.wentland@amd.com, aurabindo.pillai@amd.com,
+        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+        lange_tang@163.com
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 8 Nov 2022 at 02:25, Kunihiko Hayashi
-<hayashi.kunihiko@socionext.com> wrote:
-....
-> @@ -228,6 +229,7 @@ static int sdhci_f_sdh30_remove(struct platform_device *pdev)
->  #ifdef CONFIG_OF
->  static const struct of_device_id f_sdh30_dt_ids[] = {
->         { .compatible = "fujitsu,mb86s70-sdhci-3.0" },
-> +       { .compatible = "socionext,f-sdh30-e51-mmc" },
+On Fri, Nov 4, 2022 at 10:06 AM LongJun Tang <tanglongjun@kylinos.cn> wrote:
 >
-This also needs to be specified in the dt bindings, not just in the driver.
-And if this patchset is for the "e51-mmc" type controller, introduce
-the compatible first and apply the changes for that controller.
-
-
-> @@ -258,4 +260,5 @@ module_platform_driver(sdhci_f_sdh30_driver);
->  MODULE_DESCRIPTION("F_SDH30 SD Card Controller driver");
->  MODULE_LICENSE("GPL v2");
->  MODULE_AUTHOR("FUJITSU SEMICONDUCTOR LTD.");
-> +MODULE_AUTHOR("Socionext Inc.");
+> In dcn*_clock_source_create when dcn*_clk_src_construct fails allocated
+> clk_src needs release. A local attack could use this to cause memory
+> exhaustion.
 >
-Socionext now is what Fujitsu was when this code was written, so this
-addition seems ok.
-So may be add it as
-    MODULE_AUTHOR("FUJITSU SEMICONDUCTOR LTD., SOCIONEXT INC.");
+> Signed-off-by: LongJun Tang <tanglongjun@kylinos.cn>
 
-cheers.
+Applied.  Thanks!
+
+Alex
+
+> ---
+>  drivers/gpu/drm/amd/display/dc/dcn30/dcn30_resource.c   | 1 +
+>  drivers/gpu/drm/amd/display/dc/dcn301/dcn301_resource.c | 1 +
+>  drivers/gpu/drm/amd/display/dc/dcn302/dcn302_resource.c | 1 +
+>  drivers/gpu/drm/amd/display/dc/dcn303/dcn303_resource.c | 1 +
+>  drivers/gpu/drm/amd/display/dc/dcn31/dcn31_resource.c   | 1 +
+>  drivers/gpu/drm/amd/display/dc/dcn315/dcn315_resource.c | 1 +
+>  drivers/gpu/drm/amd/display/dc/dcn32/dcn32_resource.c   | 1 +
+>  drivers/gpu/drm/amd/display/dc/dcn321/dcn321_resource.c | 1 +
+>  8 files changed, 8 insertions(+)
+>
+> diff --git a/drivers/gpu/drm/amd/display/dc/dcn30/dcn30_resource.c b/drivers/gpu/drm/amd/display/dc/dcn30/dcn30_resource.c
+> index 020f512e9690..9b7e786bd4a2 100644
+> --- a/drivers/gpu/drm/amd/display/dc/dcn30/dcn30_resource.c
+> +++ b/drivers/gpu/drm/amd/display/dc/dcn30/dcn30_resource.c
+> @@ -1323,6 +1323,7 @@ static struct clock_source *dcn30_clock_source_create(
+>                 return &clk_src->base;
+>         }
+>
+> +       kfree(clk_src);
+>         BREAK_TO_DEBUGGER();
+>         return NULL;
+>  }
+> diff --git a/drivers/gpu/drm/amd/display/dc/dcn301/dcn301_resource.c b/drivers/gpu/drm/amd/display/dc/dcn301/dcn301_resource.c
+> index f04595b750ab..7c1225046544 100644
+> --- a/drivers/gpu/drm/amd/display/dc/dcn301/dcn301_resource.c
+> +++ b/drivers/gpu/drm/amd/display/dc/dcn301/dcn301_resource.c
+> @@ -1288,6 +1288,7 @@ static struct clock_source *dcn301_clock_source_create(
+>                 return &clk_src->base;
+>         }
+>
+> +       kfree(clk_src);
+>         BREAK_TO_DEBUGGER();
+>         return NULL;
+>  }
+> diff --git a/drivers/gpu/drm/amd/display/dc/dcn302/dcn302_resource.c b/drivers/gpu/drm/amd/display/dc/dcn302/dcn302_resource.c
+> index b925b6ddde5a..73ae1146dad5 100644
+> --- a/drivers/gpu/drm/amd/display/dc/dcn302/dcn302_resource.c
+> +++ b/drivers/gpu/drm/amd/display/dc/dcn302/dcn302_resource.c
+> @@ -458,6 +458,7 @@ static struct clock_source *dcn302_clock_source_create(struct dc_context *ctx, s
+>                 return &clk_src->base;
+>         }
+>
+> +       kfree(clk_src);
+>         BREAK_TO_DEBUGGER();
+>         return NULL;
+>  }
+> diff --git a/drivers/gpu/drm/amd/display/dc/dcn303/dcn303_resource.c b/drivers/gpu/drm/amd/display/dc/dcn303/dcn303_resource.c
+> index 527d5c902878..0ea97eeec5a6 100644
+> --- a/drivers/gpu/drm/amd/display/dc/dcn303/dcn303_resource.c
+> +++ b/drivers/gpu/drm/amd/display/dc/dcn303/dcn303_resource.c
+> @@ -425,6 +425,7 @@ static struct clock_source *dcn303_clock_source_create(struct dc_context *ctx, s
+>                 return &clk_src->base;
+>         }
+>
+> +       kfree(clk_src);
+>         BREAK_TO_DEBUGGER();
+>         return NULL;
+>  }
+> diff --git a/drivers/gpu/drm/amd/display/dc/dcn31/dcn31_resource.c b/drivers/gpu/drm/amd/display/dc/dcn31/dcn31_resource.c
+> index fddc21a5a04c..b02aa8874efb 100644
+> --- a/drivers/gpu/drm/amd/display/dc/dcn31/dcn31_resource.c
+> +++ b/drivers/gpu/drm/amd/display/dc/dcn31/dcn31_resource.c
+> @@ -1625,6 +1625,7 @@ static struct clock_source *dcn31_clock_source_create(
+>                 return &clk_src->base;
+>         }
+>
+> +       kfree(clk_src);
+>         BREAK_TO_DEBUGGER();
+>         return NULL;
+>  }
+> diff --git a/drivers/gpu/drm/amd/display/dc/dcn315/dcn315_resource.c b/drivers/gpu/drm/amd/display/dc/dcn315/dcn315_resource.c
+> index 58746c437554..b2ff29e5f93c 100644
+> --- a/drivers/gpu/drm/amd/display/dc/dcn315/dcn315_resource.c
+> +++ b/drivers/gpu/drm/amd/display/dc/dcn315/dcn315_resource.c
+> @@ -1623,6 +1623,7 @@ static struct clock_source *dcn31_clock_source_create(
+>                 return &clk_src->base;
+>         }
+>
+> +       kfree(clk_src);
+>         BREAK_TO_DEBUGGER();
+>         return NULL;
+>  }
+> diff --git a/drivers/gpu/drm/amd/display/dc/dcn32/dcn32_resource.c b/drivers/gpu/drm/amd/display/dc/dcn32/dcn32_resource.c
+> index a88dd7b3d1c1..71730b6666b0 100644
+> --- a/drivers/gpu/drm/amd/display/dc/dcn32/dcn32_resource.c
+> +++ b/drivers/gpu/drm/amd/display/dc/dcn32/dcn32_resource.c
+> @@ -829,6 +829,7 @@ static struct clock_source *dcn32_clock_source_create(
+>                 return &clk_src->base;
+>         }
+>
+> +       kfree(clk_src);
+>         BREAK_TO_DEBUGGER();
+>         return NULL;
+>  }
+> diff --git a/drivers/gpu/drm/amd/display/dc/dcn321/dcn321_resource.c b/drivers/gpu/drm/amd/display/dc/dcn321/dcn321_resource.c
+> index 61087f2385a9..d3980fc243c9 100644
+> --- a/drivers/gpu/drm/amd/display/dc/dcn321/dcn321_resource.c
+> +++ b/drivers/gpu/drm/amd/display/dc/dcn321/dcn321_resource.c
+> @@ -828,6 +828,7 @@ static struct clock_source *dcn321_clock_source_create(
+>                 return &clk_src->base;
+>         }
+>
+> +       kfree(clk_src);
+>         BREAK_TO_DEBUGGER();
+>         return NULL;
+>  }
+> --
+> 2.17.1
+>
+>
+> No virus found
+>                 Checked by Hillstone Network AntiVirus
