@@ -2,48 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F376C620C89
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 10:43:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DB49620C88
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 10:42:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233841AbiKHJnE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 04:43:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55844 "EHLO
+        id S233728AbiKHJmr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 04:42:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233862AbiKHJmW (ORCPT
+        with ESMTP id S233487AbiKHJmG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 04:42:22 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B03A930541
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 01:42:21 -0800 (PST)
-Received: from zn.tnic (p200300ea9733e764329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e764:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id E03971EC0391;
-        Tue,  8 Nov 2022 10:42:19 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1667900540;
+        Tue, 8 Nov 2022 04:42:06 -0500
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2D7432BBE
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 01:42:04 -0800 (PST)
+Received: (Authenticated sender: clement.leger@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id B325160015;
+        Tue,  8 Nov 2022 09:42:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1667900523;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=aLpFfV2D89BsWZs9Fn618JtVOW7PZU0ZA1fa1+VqPf8=;
-        b=HZeoy2eYGNmQv7BqZpn/O0V+/41vMra0QIa9Kif7mCzgi1S6qe9NXX4m5l5kEct2bSo0R0
-        1vYnED4PFPdhuwYOtrXeFXakSJKHiWs0iMBpKG3+Q/B/BK39hCeRV90sHo8jJEX/5FcuAH
-        1zoZzUrykaRGsp3Cxk0b6TASVIB2Wk4=
-Date:   Tue, 8 Nov 2022 10:42:15 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     X86 ML <x86@kernel.org>, LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] x86/cpu: Start documenting what the X86_FEATURE_ flag
- testing macros do
-Message-ID: <Y2okdzF60XHLCK2v@zn.tnic>
-References: <20221107211505.8572-1-bp@alien8.de>
- <50b2113d-d6a8-ab36-028d-b78c41142c18@intel.com>
+         content-transfer-encoding:content-transfer-encoding;
+        bh=1m/wXqz3m3Z8KOPX0vHt3R2SNBbCLX0ZfbTz9ZhUWoo=;
+        b=WftMKg6BPP2Xu50Spqn4fVqH8JY5SYueG8mkI4sNRhCrcIymX/IkKiz7Snk79xhcQq3wmX
+        bx0wVbb2MP5kIZ34j20Bkdm1FceSW3SoNSH8qpOkix14H70mWIxPSuO+l51ZeRBBXHWcRm
+        5ybD9wO7PzvD6dFvUAaj4Itl4BYy2qHs/Q3XmfMCC2QjzU57R7lbIiJ4Xtn1/ADhjHzJA2
+        ehrefxKU7Hj+LC595rHJzkVdKfYyZEm6KanGmErVIqSWsj2x00ceBakndAHQWGJ0vMqeDy
+        jsRd4ueswMbaPhlj9E60Y91wG2SS5rwlT4pVCmHz9Xz20E4hUT863b+YhkNuYA==
+From:   =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <clement.leger@bootlin.com>
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <clement.leger@bootlin.com>
+Subject: [PATCH] mm/kmemleak: use %pK to display kernel pointers in backtrace
+Date:   Tue,  8 Nov 2022 10:43:22 +0100
+Message-Id: <20221108094322.73492-1-clement.leger@bootlin.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <50b2113d-d6a8-ab36-028d-b78c41142c18@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,31 +53,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 07, 2022 at 02:13:52PM -0800, Dave Hansen wrote:
-> It seems to be mildly warning against using _static_cpu_has()
-> indiscriminately.  Should we tone that down a bit if we're recommending
-> implicit use of static_cpu_has() via cpu_feature_enabled() everywhere?
+Currently, %p is used to display kernel pointers in backtrace which result
+in a hashed value that is not usable to correlate the address for debug.
+Use %pK which will respect the kptr_restrict configuration value and thus
+allow to extract meaningful information from the backtrace.
 
-Yeah, that comment is mine AFAIR. I was thinking of simply removing
-it as part of a long-term effort of converting everything to
-cpu_feature_enabled() and hiding static_cpu_has() eventually...
+Signed-off-by: Clément Léger <clement.leger@bootlin.com>
+---
+ mm/kmemleak.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> I was also thinking that some longer-form stuff in Documentation/ might
-> be a good idea, along with some examples.  I'd be happy to follow this
-> up with another patch that added Documentation/ like:
-
-The problem with this is, it'll go out of sync with the code. So how
-about we make this a kernel-doc thing so that it gets updated in
-parallel?
-
-Also look at Documentation/x86/cpuinfo.rst
-
-It basically has most of what you wanna add.
-
-:-)
-
+diff --git a/mm/kmemleak.c b/mm/kmemleak.c
+index 646e2979641f..b16be8891ae3 100644
+--- a/mm/kmemleak.c
++++ b/mm/kmemleak.c
+@@ -358,7 +358,7 @@ static void print_unreferenced(struct seq_file *seq,
+ 
+ 	for (i = 0; i < object->trace_len; i++) {
+ 		void *ptr = (void *)object->trace[i];
+-		warn_or_seq_printf(seq, "    [<%p>] %pS\n", ptr, ptr);
++		warn_or_seq_printf(seq, "    [<%pK>] %pS\n", ptr, ptr);
+ 	}
+ }
+ 
 -- 
-Regards/Gruss,
-    Boris.
+2.38.1
 
-https://people.kernel.org/tglx/notes-about-netiquette
