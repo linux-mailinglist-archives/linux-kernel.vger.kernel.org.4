@@ -2,83 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17DF9621ADB
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 18:37:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1BDE621ADF
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 18:39:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232170AbiKHRhr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 12:37:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38326 "EHLO
+        id S231357AbiKHRjF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 12:39:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234596AbiKHRhk (ORCPT
+        with ESMTP id S233945AbiKHRjD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 12:37:40 -0500
-Received: from msg-2.mailo.com (msg-2.mailo.com [213.182.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5116654B28
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 09:37:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
-        t=1667929048; bh=Q1+7UmqKBu+Y+X7DFQZw3y1YtFosOJkcKhbS2OpqI38=;
-        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:References:
-         MIME-Version:Content-Type:In-Reply-To;
-        b=Jhy2bw8hxW6RrxZj1NGtQ2NsA7J/qKV1L1LXHW3ssLg3Uqxftww2XWWiRd+qDv08v
-         o4MkgY+2NdYODWIlstVBDveNgcw478oXS5BNEwKxTH3Vnv5s/IBYjq2e1FCcJKpQyT
-         UBt9vwFQFMPBLRkRWi7tmtIzCXdx4KMMGTIpER5U=
-Received: by b-3.in.mailobj.net [192.168.90.13] with ESMTP
-        via ip-206.mailobj.net [213.182.55.206]
-        Tue,  8 Nov 2022 18:37:28 +0100 (CET)
-X-EA-Auth: 2jlnkKun69RFoBqslVp9cVErIP+oD3aiqt0KNyu8yB4BP9nE7nAw/ipHx31HlDL3SrScidGnsX+ZGsSPuBXx6R148nTAceWX
-Date:   Tue, 8 Nov 2022 23:07:23 +0530
-From:   Deepak R Varma <drv@mailo.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: staging/wlan-ng query: convert to flexible array member
-Message-ID: <Y2qT0zSlhtQrYwl+@qemulion>
-References: <Y2px+zOGjkpGh6qC@qemulion>
- <Y2p29zc/TeX8OFWU@kroah.com>
- <Y2p5hqdFo5UZoHUY@qemulion>
- <Y2p7TOeg8vzK0rvB@kroah.com>
+        Tue, 8 Nov 2022 12:39:03 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AAB751C12
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 09:39:02 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 34797B81BE5
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 17:39:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80979C433D6;
+        Tue,  8 Nov 2022 17:38:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667929139;
+        bh=mqfsf17//0/isn+/08NYUF61MiAk4w+15OSNUwJdrUk=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=SSSt7S5aOsKgn8a1phdxK9wMKdROSc9snNrfjs6YLlf0r0U9Jo/JI/zCASw4bPQC6
+         HIVDlaEY5lfcy3z5c2g20JrxjzDEUj02IGNd7sh1OQIR2PKLEzVTYewH20Su0Ipgb4
+         l+CLCjQl9Q8xdtJQnNgGyJqsxggsSXpXGJXIPjWnROHP/9HlMh0ian7hfBbQFlHSSf
+         8Yn6obn6PgplH113YSsRlpTrfeM1yet0bc/EgKBmtS7rWuWrIo/dUH0t6jQLEZTGZv
+         MepqA48AdfIQpMlTIsF6F4tZZHVqqH1qAJMREV4ljaQHXRZcX7ITr2DUbOIrbctz52
+         ZKfmUFEASUyMw==
+From:   Will Deacon <will@kernel.org>
+To:     linux-arm-kernel@lists.infradead.org,
+        Ard Biesheuvel <ardb@kernel.org>
+Cc:     catalin.marinas@arm.com, kernel-team@android.com,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Eric Biggers <ebiggers@kernel.org>,
+        "Jason A . Donenfeld" <Jason@zx2c4.com>,
+        Adam Langley <agl@google.com>, Marc Zyngier <maz@kernel.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Kees Cook <keescook@chromium.org>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] arm64: Enable data independent timing (DIT) in the kernel
+Date:   Tue,  8 Nov 2022 17:38:39 +0000
+Message-Id: <166791912755.763730.5286516806941074687.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20221107172400.1851434-1-ardb@kernel.org>
+References: <20221107172400.1851434-1-ardb@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y2p7TOeg8vzK0rvB@kroah.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 08, 2022 at 04:52:44PM +0100, Greg Kroah-Hartman wrote:
-> On Tue, Nov 08, 2022 at 09:15:10PM +0530, Deepak R Varma wrote:
-> > On Tue, Nov 08, 2022 at 04:34:15PM +0100, Greg Kroah-Hartman wrote:
-> > 	  MODPOST drivers/staging/wlan-ng/Module.symvers
-> > 	  LD [M]  drivers/staging/wlan-ng/prism2_usb.ko
-> > 	  BTF [M] drivers/staging/wlan-ng/prism2_usb.ko
-> > 	drv@qemulion:~/git/kernels/staging$
-> > </snip>
-> >
->
-> Test the device to make sure it still works?
+On Mon, 7 Nov 2022 18:24:00 +0100, Ard Biesheuvel wrote:
+> The ARM architecture revision v8.4 introduces a data independent timing
+> control (DIT) which can be set at any exception level, and instructs the
+> CPU to avoid optimizations that may result in a correlation between the
+> execution time of certain instructions and the value of the data they
+> operate on.
+> 
+> The DIT bit is part of PSTATE, and is therefore context switched as
+> usual, given that it becomes part of the saved program state (SPSR) when
+> taking an exception. We have also defined a hwcap for DIT, and so user
+> space can discover already whether or nor DIT is available. This means
+> that, as far as user space is concerned, DIT is wired up and fully
+> functional.
+> 
+> [...]
 
-I was able to build and load the driver on my machine. I do not have p54 device
-to test. Is there another way to test it? Some sort of a udev program???
+Applied to arm64 (for-next/cpufeature), thanks!
 
-<snip>
-	 static struct usb_driver prism2_usb_driver = {
-	-       .name = "prism2_usb",
-	+       .name = "prism2_usb_dvk",
-		.probe = prism2sta_probe_usb,
-		.disconnect = prism2sta_disconnect_usb,
-		.id_table = usb_prism_tbl,
-	drv@qemulion:~/git/kernels/staging$ sudo dmesg
-	[  948.476144] prism2_usb: module is from the staging directory, the quality is unknown, you have been warned.
-	[  948.478631] usbcore: registered new interface driver prism2_usb_dvk
-</snip>
+[1/1] arm64: Enable data independent timing (DIT) in the kernel
+      https://git.kernel.org/arm64/c/01ab991fc0ee 
 
-Thank you,
-./drv
+Cheers,
+-- 
+Will
 
->
-
-
+https://fixes.arm64.dev
+https://next.arm64.dev
+https://will.arm64.dev
