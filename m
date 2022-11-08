@@ -2,66 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9DB7621AEA
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 18:40:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37421621AEE
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 18:40:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234435AbiKHRkE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 12:40:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40416 "EHLO
+        id S234601AbiKHRku (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 12:40:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233961AbiKHRkA (ORCPT
+        with ESMTP id S234583AbiKHRkj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 12:40:00 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F18D51C00;
-        Tue,  8 Nov 2022 09:39:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-        t=1667929197; bh=S3rF+pfBjLpz8Q9K3XfYcC+6WnQNrztthBp4ESHbh0A=;
-        h=X-UI-Sender-Class:Date:From:To:Cc:Subject;
-        b=TntNkcbdPHFsnq6JZOV59gK+XzEF4sZmoT6gmQXEwQjnvEwxoPZkdO9Ks6Tkk55d1
-         k5IBSnH2kS5IA88Nc3VsL3loOSTJmkavH1RHCg6WL2Ey3BZ4wpyCAt9U/7tVCATXj/
-         uBV+q5BIaF8T62XwQKNO4l3ttphpPm91K6ZvpMH1Qv1Pp5GnN8uFSUhElYqSdQhK1X
-         A5Woq/X4qKN3Lkjr2TET9VvMIDZxmGLfpB9HCd0smCPBdGcVaEtJ7naamC5xcVS+RB
-         n2NQkgGsoKCDfqBqOCLuAaND+ai87ZjtSYEA6AdMvcSvxI6MV2VqJGEuPPkSdnJtl9
-         XmhcnCxWTb33Q==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.100.20] ([46.142.35.29]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MQvCv-1og8Uc37x9-00NxZ7; Tue, 08
- Nov 2022 18:39:57 +0100
-Message-ID: <2c38e9f6-382c-0bdc-78d8-c4e07cb2ca1a@gmx.de>
-Date:   Tue, 8 Nov 2022 18:39:57 +0100
+        Tue, 8 Nov 2022 12:40:39 -0500
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE7DA528B3
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 09:40:37 -0800 (PST)
+Received: by mail-yb1-xb33.google.com with SMTP id e123so13936578ybh.11
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 09:40:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=0pEFENNnYPCzo/HA8HAcobUswxlB4sH3bwnAUXJdnmc=;
+        b=L+o7B57z8N1w+FGZgs9tFm9SQ2vS6AajEJXJ0wxuQOrY214HHpcysobwIuPNofDBLD
+         Z+aq3/u2+84ZSqJ90xy6PFc7XWrKcUhyP8syDeJ6X2gl2l74Zsjf/SxvNPKp+sCAl+I1
+         dFCPnjVyidM95nmRzd+MH1K6cmRD5IIihyXRCf2jAON8f+AKJKQ77TKO4HA/+JCsV+E5
+         Bu2GFucBVVmj0wM0pk0/t8PSZxRwnxtwi4KnXM+zf5/OY+YXHXDSufR1qo+gm8EYxbXF
+         jzd0ytFDznJYTh0TfZwSVnXc0C6dwyYFOwQduL1TQsmRDqN9HYlOrofECHWNuMtPSLvV
+         Vzmw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=0pEFENNnYPCzo/HA8HAcobUswxlB4sH3bwnAUXJdnmc=;
+        b=XQNwBFJdDPFjFDKQ4tD85DwRzwtzd8pfrOAmX22nLMqEVSsMtAe0WpGgIsIY7D4Ffm
+         Qp2plB5/AeGycsromXT/d5z8HdQecHUFeb6aTTH4xw8x4yRq4qJR7K8ha2nCkjtG9rBJ
+         BLRvrDgxTeNVAgLIWzMl7gMLJRdXsjpGTJyBIH/uf3kPWyEW7VsWQmG65WwRiuQWKeTI
+         c8gVu/g9O/ufWK7Sw6ivfre2ihSzrCUqYi3jyri3gZ5UuVBfhGnROuYCeWvnhJiVjQFr
+         0RIuz6XMk5bpe8N7+EoVkzG4pdfPc3M6NiR4EfWTmjAa5Qj+kvtOzzXsnOw0JDHiYykE
+         tLLA==
+X-Gm-Message-State: ACrzQf1UPvf0+lSyUaidZ2yzhwSiINAOFy+tHClTHS5TmFj+XgNjvRW9
+        rzWNrnVQqQNyimXN37b5fp6l9MsYY8cAlUJ7Tgg6+g==
+X-Google-Smtp-Source: AMsMyM630slUuwA2yHI+5rrzisOZS6FXFWCgSpSU9LF0QRHhGi2OWrBHDhkUlz/mi1RtxLC9qc3tSdn4j4mxidhkaFU=
+X-Received: by 2002:a25:fb07:0:b0:6d1:a9c:3580 with SMTP id
+ j7-20020a25fb07000000b006d10a9c3580mr30897999ybe.191.1667929236877; Tue, 08
+ Nov 2022 09:40:36 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-From:   Ronald Warsow <rwarsow@gmx.de>
-To:     linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org
-Content-Language: de-DE
-Subject: Re: [PATCH 6.0 000/197] 6.0.8-rc1 review
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:NI7BUi7f0GvjKAW3TwyeGNCvC7HjcRmcp8GvXLzA+Uv41f7NW9t
- t3JLRnuuV3eeqA0lPV4Zteaiw8AcXxhB9xCCuBKszFnMkZnw8r/WSI05j9mNkkbzzxZ9L5e
- HCEooO8PQny74nSGzBwPzRY9wm0EW82Tx5KNjc+vQTZSX14jTPsGr7T7Bp5QZfE1P/Q7NK3
- jWge4O0wXATZrFxgrfMLg==
-UI-OutboundReport: notjunk:1;M01:P0:KhYwIgTVvbk=;4W+TSIoPN2TuKYnOrLd5TciZ2Zc
- keVmQX78eYDej7mx9rjbCQ0+ZL4qDsJY6MDD1gwJwFV1lM+bFq2nU7sF9astoui1Q/XHSVk4u
- wSaUU7nGji/WKvMeDp546cTgZV3J+ggMkPPLuG+lqyF9Y4XbwE4N/EQjm7VmNsnO0jkh21oAE
- FrT8T77ZjuAS8d1+1NxL9KYwRRnnPO8jCwDwHSiO1e7aO3cRkY7OARIglMZqttxFX8UcQDWcR
- 0/XFXZ1e/GHPGcEImtvLql7VtZ2qq8WXXojr+XG4UphG5JCsxicT4iagcfoBhkiOMdb4Au+hN
- IwPR0fh/oRCZBV9jYNxi7nGnnQOCYJ9CwUCHw5QP1X3rBYSPhJ9ijLfh/FodLlvM0moDJA7yU
- UZTzPrFkjmD8oR3waoOl51PszJ4EzTX07vhhRhhjK99uubZYn4SztcfsASn5RpRm4MntZkEOc
- uRqe1TKDQqVIEvLB50uquhzq4CdATaA0fSesgY/8DetrVKwkfm1ucRvrh6zgW/gw6BUpGniW/
- GwLfYoMstmMJJYSKKEes1yJzRBjJye0UPe8umygV5/DV9dl/x3umGrMSq+Frww5AW/w8R2OHc
- J4CrdyY1VrpKhcE4ebH+FmAHEtjlJXJwG9QSTKOWU08wcpEJNoJwXcvkCeNPfZF5R1gb3Srpi
- YUk43P68ODGXOheW541L+EyDACSN5bXdEXSAVi2Lxa/cQvIWYRN3SvrJch8Xsr2J/r0mnTri8
- v7HemFNhdB2mIYADZR+QveNv3IulzBjN1lvHjkI8VcjAqf8K4VCCaXBSxaT1eMCHeNeaiSGKj
- pTAQhT1DqG00A2EsH0X+Dic0GUQwpei19+GiFwPD8JAQtHppOEYyT38oU9R0o0dNT4IQTyygf
- 0u/nf4SxdZ10v0OCHX54pPLP/VGNeIzf4RcaYfVv5hXWIyxDIwaJSBFOZqrMCN9d1ABwghRUc
- g9DIbQ==
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20221105045704.2315186-1-vipinsh@google.com> <20221105045704.2315186-6-vipinsh@google.com>
+ <Y2lO1HQtaMBCGpcZ@google.com> <CAHVum0c2QVyuxQxOQHOxmU2csgE1RHtJ7nLBWCHt6=ywuB-Tmw@mail.gmail.com>
+In-Reply-To: <CAHVum0c2QVyuxQxOQHOxmU2csgE1RHtJ7nLBWCHt6=ywuB-Tmw@mail.gmail.com>
+From:   David Matlack <dmatlack@google.com>
+Date:   Tue, 8 Nov 2022 09:40:09 -0800
+Message-ID: <CALzav=cS+WAiG63g=YCev5oKi-3MAe2HxDHrjRTk-6aOpzE-ag@mail.gmail.com>
+Subject: Re: [PATCH 5/6] KVM: selftests: Move hypercall() to hyper.h
+To:     Vipin Sharma <vipinsh@google.com>
+Cc:     seanjc@google.com, pbonzini@redhat.com, vkuznets@redhat.com,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,14 +69,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg
+On Mon, Nov 7, 2022 at 5:49 PM Vipin Sharma <vipinsh@google.com> wrote:
+>
+> On Mon, Nov 7, 2022 at 10:30 AM David Matlack <dmatlack@google.com> wrote:
+> >
+> > On Fri, Nov 04, 2022 at 09:57:03PM -0700, Vipin Sharma wrote:
+> > > hypercall() can be used by other hyperv tests, move it to hyperv.h.
+> > >
+> > > Signed-off-by: Vipin Sharma <vipinsh@google.com>
+> > > ---
+> > >  .../selftests/kvm/include/x86_64/hyperv.h       | 17 +++++++++++++++++
+> > >  .../selftests/kvm/x86_64/hyperv_features.c      | 17 -----------------
+> > >  2 files changed, 17 insertions(+), 17 deletions(-)
+> > >
+> > > diff --git a/tools/testing/selftests/kvm/include/x86_64/hyperv.h b/tools/testing/selftests/kvm/include/x86_64/hyperv.h
+> > > index 9d8c325af1d9..87d8d9e444f7 100644
+> > > --- a/tools/testing/selftests/kvm/include/x86_64/hyperv.h
+> > > +++ b/tools/testing/selftests/kvm/include/x86_64/hyperv.h
+> > > @@ -199,4 +199,21 @@ static inline uint64_t hv_linux_guest_id(void)
+> > >              ((uint64_t)LINUX_VERSION_CODE << 16);
+> > >  }
+> > >
+> > > +static inline uint8_t hypercall(u64 control, vm_vaddr_t input_address,
+> > > +                             vm_vaddr_t output_address, uint64_t *hv_status)
+> > > +{
+> > > +     uint8_t vector;
+> > > +
+> > > +     /* Note both the hypercall and the "asm safe" clobber r9-r11. */
+> > > +     asm volatile("mov %[output_address], %%r8\n\t"
+> > > +                  KVM_ASM_SAFE("vmcall")
+> > > +                  : "=a" (*hv_status),
+> > > +                    "+c" (control), "+d" (input_address),
+> > > +                    KVM_ASM_SAFE_OUTPUTS(vector)
+> > > +                  : [output_address] "r"(output_address),
+> > > +                    "a" (-EFAULT)
+> > > +                  : "cc", "memory", "r8", KVM_ASM_SAFE_CLOBBERS);
+> > > +     return vector;
+> > > +}
+> >
+> > Since this function is Hyper-V specific it probably makes sense to
+> > rename it to hyperv_hypercall() as part of moving it to library, e.g. to
+> > differentiate it from kvm_hypercall().
+> >
+>
+> Sounds good. Does it keeping it in header file "hyperv.h" seems fine
+> or should I create a new "hyperv.c" lib file and move function
+> definition there?
 
-6.0.8-rc1
-
-compiles, boots and runs here on x86_64
-(Intel i5-11400, Fedora 37 Beta)
-
-Thanks
-
-Tested-by: Ronald Warsow <rwarsow@gmx.de>
-
+I think it's fine to keep in hyperv.h. It seems like the type of
+function we'd want to be inlined anyway, and the implementation is
+short.
